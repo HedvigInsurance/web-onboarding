@@ -11,6 +11,8 @@ import * as React from 'react'
 import { renderToString } from 'react-dom/server'
 
 import { App } from './App'
+import { reactPageRoutes } from './routes'
+import { StaticRouter, StaticRouterContext } from 'react-router'
 
 const scriptLocation = getScriptLocation({
   statsLocation: path.resolve(__dirname, 'assets'),
@@ -34,7 +36,20 @@ const template = (body: string) => `
 `
 
 const getPage: Koa.Middleware = async (ctx) => {
-  const reactBody = renderStylesToString(renderToString(<App />))
+  const routerContext: StaticRouterContext = {}
+  const reactBody = renderStylesToString(
+    renderToString(
+      <StaticRouter location={ctx.request.originalUrl} context={routerContext}>
+        <App />
+      </StaticRouter>,
+    ),
+  )
+
+  if (routerContext.url) {
+    ctx.redirect(routerContext.url)
+    return
+  }
+
   ctx.body = template(reactBody)
 }
 const getPort = () => (process.env.PORT ? Number(process.env.PORT) : 8080)
@@ -46,7 +61,9 @@ const server = createKoaServer({
   assetLocation: __dirname + '/assets',
 })
 
-server.router.get('/', getPage)
+reactPageRoutes.forEach((route) => {
+  server.router.get(route.path, getPage)
+})
 
 server.app.listen(getPort(), () => {
   console.log(`Server started 🚀 listening on port ${getPort()}`) // tslint:disable-line no-console
