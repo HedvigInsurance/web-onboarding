@@ -9,10 +9,10 @@ import * as Koa from 'koa'
 import * as path from 'path'
 import * as React from 'react'
 import { renderToString } from 'react-dom/server'
+import { StaticRouter, StaticRouterContext } from 'react-router'
 
 import { App } from './App'
 import { reactPageRoutes } from './routes'
-import { StaticRouter, StaticRouterContext } from 'react-router'
 
 const scriptLocation = getScriptLocation({
   statsLocation: path.resolve(__dirname, 'assets'),

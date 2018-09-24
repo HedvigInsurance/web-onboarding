@@ -1,7 +1,7 @@
 import * as React from 'react'
-import { reactPageRoutes } from './routes'
-import { Route } from 'react-router-dom'
 import { hot } from 'react-hot-loader'
+import { Route } from 'react-router-dom'
+import { reactPageRoutes } from './routes'
 
 export const App: React.SFC = () => (
   <>
