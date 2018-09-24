@@ -1,3 +1,3 @@
-import { Hedvig } from './pages/Hedvig'
+import { Chat } from './pages/Chat'
 
-export const reactPageRoutes = [{ path: '/hedvig', Component: Hedvig, exact: true }]
+export const reactPageRoutes = [{ path: '/hedvig', Component: Chat, exact: true }]
