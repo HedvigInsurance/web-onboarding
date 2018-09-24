@@ -8,6 +8,7 @@ cache:
   - node_modules
 
 install:
+- npm i -g yarn@1.9.1
 - yarn install
 
 script:
@@ -18,5 +19,3 @@ script:
 
 notifications:
   email: false
-  webhooks: https://www.travisbuddy.com
-  on_success: never
