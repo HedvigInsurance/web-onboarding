@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { ChatMessage } from '../../components/hedvig/ChatMessage'
 import { TimedMount } from '../../utils/TimedMount'
+import { FadeIn, FadeUp } from '../../components/animations/appearings'
 
 export const Chat: React.SFC = () => (
   <div>
@@ -22,14 +23,16 @@ export const Chat: React.SFC = () => (
             <TimedMount duration={1500}>
               {({ hasFired }) =>
                 hasFired && (
-                  <>
-                    <div>
-                      Jag heter <input type="text" />
-                    </div>
-                    <div>
-                      Jag är <input type="number" pattern="\d+" /> år gammal
-                    </div>
-                  </>
+                  <FadeIn>
+                    <FadeUp>
+                      <div>
+                        Jag heter <input type="text" />
+                      </div>
+                      <div>
+                        Jag är <input type="number" pattern="\d+" /> år gammal
+                      </div>
+                    </FadeUp>
+                  </FadeIn>
                 )
               }
             </TimedMount>

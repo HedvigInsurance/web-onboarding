@@ -9,29 +9,14 @@ import {
   EXITING,
   EXITED,
 } from 'react-transition-group/Transition'
+import { fadeIn, fadeUp } from '../animations/appearings'
 
-const fadeIn = keyframes({
-  from: {
-    opacity: 0,
-  },
-  to: {
-    opacity: 1,
-  },
-})
 const fadeOut = keyframes({
   from: {
     opacity: 1,
   },
   to: {
     opacity: 0,
-  },
-})
-const fadeUp = keyframes({
-  from: {
-    transform: 'translateY(20%)',
-  },
-  to: {
-    transform: 'translateY(0%)',
   },
 })
 
