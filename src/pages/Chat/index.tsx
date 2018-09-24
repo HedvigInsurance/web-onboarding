@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { ChatMessage } from '../../components/hedvig/ChatMessage'
+import { ChatMessage } from '../../components/hedvig/chat'
 import { TimedMount } from '../../utils/TimedMount'
 import { FadeIn, FadeUp } from '../../components/animations/appearings'
 

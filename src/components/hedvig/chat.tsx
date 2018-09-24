@@ -9,7 +9,7 @@ import {
   EXITING,
   EXITED,
 } from 'react-transition-group/Transition'
-import { fadeIn, fadeUp } from '../animations/appearings'
+import { FadeIn, fadeIn, fadeUp } from '../animations/appearings'
 
 const fadeOut = keyframes({
   from: {
@@ -20,9 +20,21 @@ const fadeOut = keyframes({
   },
 })
 
+const ChatWrapper = styled('div')({
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'flex-end',
+  marginBottom: 10,
+})
+const Hedvig = styled('img')({
+  height: 40,
+})
+const HedvigWrapper = styled(FadeIn)({
+  paddingRight: 20,
+})
+
 const ChatMessageWrapper = styled('div')({
   position: 'relative',
-  marginBottom: 10,
 })
 
 const TypingWrapper = styled('div')(
@@ -34,7 +46,7 @@ const TypingWrapper = styled('div')(
         ? `${fadeOut} 200ms forwards`
         : `${fadeIn} 300ms forwards`,
     position: 'absolute',
-    top: 0,
+    bottom: 0,
     left: 0,
   }),
 )
@@ -69,16 +81,21 @@ export const ChatMessage: React.SFC<ChatMessageProps> = ({
   children,
   typingDuration = 500,
 }) => (
-  <TimedMount duration={typingDuration}>
-    {({ hasFired }) => (
-      <ChatMessageWrapper>
-        <Transition timeout={500} appear in={!hasFired}>
-          {(status) => status !== EXITED && <Typing status={status} />}
-        </Transition>
-        <ChatMessageTextWrapper isVisible={hasFired}>
-          {children}
-        </ChatMessageTextWrapper>
-      </ChatMessageWrapper>
-    )}
-  </TimedMount>
+  <ChatWrapper>
+    <HedvigWrapper>
+      <Hedvig src="/assets/graphics/identity/hedvig-symbol-color.svg" />
+    </HedvigWrapper>
+    <TimedMount duration={typingDuration}>
+      {({ hasFired }) => (
+        <ChatMessageWrapper>
+          <Transition timeout={500} appear in={!hasFired}>
+            {(status) => status !== EXITED && <Typing status={status} />}
+          </Transition>
+          <ChatMessageTextWrapper isVisible={hasFired}>
+            {children}
+          </ChatMessageTextWrapper>
+        </ChatMessageWrapper>
+      )}
+    </TimedMount>
+  </ChatWrapper>
 )
