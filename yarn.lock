@@ -650,21 +650,22 @@
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-1.3.1.tgz#ae75a400aba7ad89b5eea0766e152832a6f00796"
 
-"@hedviginsurance/cli@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/cli/-/cli-1.2.0.tgz#f2a9ed6278ba409800ea3837e7db91b0497a73d4"
+"@hedviginsurance/cli@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/cli/-/cli-1.3.0.tgz#5ed8be2a3072be9e93b59b2af1fb3b7a4ebe5b2b"
   dependencies:
-    "@hedviginsurance/web-survival-kit" "^1.2.0"
+    "@hedviginsurance/web-survival-kit" "^1.3.0"
     chalk "^2.4.1"
     prompt-sync "^4.1.6"
     webpack "^4.19.1"
     webpack-dev-server "^3.1.8"
 
-"@hedviginsurance/web-survival-kit@^1.0.0", "@hedviginsurance/web-survival-kit@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/web-survival-kit/-/web-survival-kit-1.2.0.tgz#f3e457cc8f34d341ef7c265d62d6fba8e46aa51e"
+"@hedviginsurance/web-survival-kit@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/web-survival-kit/-/web-survival-kit-1.3.0.tgz#f3ee05c1135e572f9ee6dca6e6a23b9ac60f2c9b"
   dependencies:
     "@babel/core" "^7.1.0"
+    "@babel/plugin-syntax-dynamic-import" "^7.0.0"
     "@babel/plugin-transform-modules-commonjs" "^7.1.0"
     "@babel/polyfill" "^7.0.0"
     "@babel/preset-env" "^7.1.0"
@@ -673,6 +674,7 @@
     "@types/koa" "^2.0.46"
     "@types/koa-router" "^7.0.32"
     babel-loader "^8.0.2"
+    copy-webpack-plugin "^4.5.2"
     es6-promise "^4.2.5"
     jest "^23.6.0"
     koa "^2.5.3"
@@ -2021,6 +2023,19 @@ copy-descriptor@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/copy-descriptor/-/copy-descriptor-0.1.1.tgz#676f6eb3c39997c2ee1ac3a924fd6124748f578d"
 
+copy-webpack-plugin@^4.5.2:
+  version "4.5.2"
+  resolved "https://registry.yarnpkg.com/copy-webpack-plugin/-/copy-webpack-plugin-4.5.2.tgz#d53444a8fea2912d806e78937390ddd7e632ee5c"
+  dependencies:
+    cacache "^10.0.4"
+    find-cache-dir "^1.0.0"
+    globby "^7.1.1"
+    is-glob "^4.0.0"
+    loader-utils "^1.1.0"
+    minimatch "^3.0.4"
+    p-limit "^1.0.0"
+    serialize-javascript "^1.4.0"
+
 core-js@^2.4.0, core-js@^2.5.0, core-js@^2.5.7:
   version "2.5.7"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.5.7.tgz#f972608ff0cead68b841a16a932d0b183791814e"
@@ -2347,6 +2362,13 @@ diffie-hellman@^5.0.0:
     bn.js "^4.1.0"
     miller-rabin "^4.0.0"
     randombytes "^2.0.0"
+
+dir-glob@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/dir-glob/-/dir-glob-2.0.0.tgz#0b205d2b6aef98238ca286598a8204d29d0a0034"
+  dependencies:
+    arrify "^1.0.1"
+    path-type "^3.0.0"
 
 discontinuous-range@1.0.0:
   version "1.0.0"
@@ -3177,6 +3199,17 @@ globby@^6.1.0:
     pify "^2.0.0"
     pinkie-promise "^2.0.0"
 
+globby@^7.1.1:
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/globby/-/globby-7.1.1.tgz#fb2ccff9401f8600945dfada97440cca972b8680"
+  dependencies:
+    array-union "^1.0.1"
+    dir-glob "^2.0.0"
+    glob "^7.1.2"
+    ignore "^3.3.5"
+    pify "^3.0.0"
+    slash "^1.0.0"
+
 got@^6.7.1:
   version "6.7.1"
   resolved "http://registry.npmjs.org/got/-/got-6.7.1.tgz#240cd05785a9a18e561dc1b44b41c763ef1e8db0"
@@ -3481,6 +3514,10 @@ ignore-walk@^3.0.1:
   resolved "https://registry.yarnpkg.com/ignore-walk/-/ignore-walk-3.0.1.tgz#a83e62e7d272ac0e3b551aaa82831a19b69f82f8"
   dependencies:
     minimatch "^3.0.4"
+
+ignore@^3.3.5:
+  version "3.3.10"
+  resolved "https://registry.yarnpkg.com/ignore/-/ignore-3.3.10.tgz#0a97fb876986e8081c631160f8f9f389157f0043"
 
 import-lazy@^2.1.0:
   version "2.1.0"
@@ -5361,7 +5398,7 @@ p-is-promise@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/p-is-promise/-/p-is-promise-1.1.0.tgz#9c9456989e9f6588017b0434d56097675c3da05e"
 
-p-limit@^1.1.0:
+p-limit@^1.0.0, p-limit@^1.1.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/p-limit/-/p-limit-1.3.0.tgz#b86bd5f0c25690911c7590fcbfc2010d54b3ccb8"
   dependencies:
@@ -5519,6 +5556,12 @@ path-type@^1.0.0:
     graceful-fs "^4.1.2"
     pify "^2.0.0"
     pinkie-promise "^2.0.0"
+
+path-type@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/path-type/-/path-type-3.0.0.tgz#cef31dc8e0a1a3bb0d105c0cd97cf3bf47f4e36f"
+  dependencies:
+    pify "^3.0.0"
 
 pause-stream@^0.0.11:
   version "0.0.11"
