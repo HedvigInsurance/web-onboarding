@@ -83,7 +83,7 @@ export const ChatMessage: React.SFC<ChatMessageProps> = ({
 }) => (
   <ChatWrapper>
     <HedvigWrapper>
-      <Hedvig src="/assets/graphics/identity/hedvig-symbol-color.svg" />
+      <Hedvig src="/assets/identity/graphics/hedvig-symbol-color.svg" />
     </HedvigWrapper>
     <TimedMount duration={typingDuration}>
       {({ hasFired }) => (
