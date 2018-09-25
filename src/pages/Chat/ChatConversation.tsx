@@ -1,8 +1,8 @@
 import { Container, Provider, StateUpdater } from 'constate'
 import { always, ifElse } from 'ramda'
 import * as React from 'react'
+import Transition, { ENTERED } from 'react-transition-group/Transition'
 import { ChatMessage } from '../../components/hedvig/chat'
-import { TimedMount } from '../../components/utils/TimedMount'
 import { Greet } from './steps/Greet'
 import { NameAgeInput } from './steps/NameAgeInput'
 import { ChatWrapper } from './styles'
@@ -83,12 +83,15 @@ export const ChatConversation: React.SFC<WithMessagesProps> = ({
           {messages.slice(0, currentMessage + 1).map(
             (message, index) =>
               message.delay ? (
-                <TimedMount duration={message.delay} key={message.key}>
-                  {({ hasFired }) =>
-                    hasFired &&
-                    message.render(nextOrNoop(next)(currentMessage, index))
+                <Transition timeout={message.delay} appear in key={message.key}>
+                  {(status) =>
+                    status === ENTERED ? (
+                      message.render(nextOrNoop(next)(currentMessage, index))
+                    ) : (
+                      <div /> // noop but needs to be here for the animation to work
+                    )
                   }
-                </TimedMount>
+                </Transition>
               ) : (
                 message.render(nextOrNoop(next)(currentMessage, index))
               ),

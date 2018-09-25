@@ -3,13 +3,14 @@ import * as React from 'react'
 import styled, { keyframes } from 'react-emotion'
 import { Transition } from 'react-transition-group'
 import {
+  ENTERED,
+  ENTERING,
   EXITED,
   EXITING,
   TransitionStatus,
 } from 'react-transition-group/Transition'
 import { fadeIn, FadeIn, fadeUp } from '../animations/appearings'
 import { LazyLottie } from '../animations/LazyLottie'
-import { TimedMount } from '../utils/TimedMount'
 
 const fadeOut = keyframes({
   from: {
@@ -89,17 +90,23 @@ export const ChatMessage: React.SFC<ChatMessageProps> = ({
     <HedvigWrapper>
       <Hedvig src="/assets/identity/graphics/hedvig-symbol-color.svg" />
     </HedvigWrapper>
-    <TimedMount duration={typingDuration} onFire={onTyped}>
-      {({ hasFired }) => (
+    <Transition timeout={typingDuration} appear in onEntered={onTyped}>
+      {(appearStatus) => (
         <ChatMessageWrapper>
-          <Transition timeout={500} appear in={!hasFired}>
-            {(status) => status !== EXITED && <Typing status={status} />}
+          <Transition timeout={500} appear in={appearStatus === ENTERING}>
+            {(typingTransitionStatus) =>
+              typingTransitionStatus !== EXITED && (
+                <Typing status={typingTransitionStatus} />
+              )
+            }
           </Transition>
-          <ChatMessageTextWrapper isVisible={hasFired}>
+          <ChatMessageTextWrapper
+            isVisible={[ENTERED, EXITING].includes(appearStatus)}
+          >
             {children}
           </ChatMessageTextWrapper>
         </ChatMessageWrapper>
       )}
-    </TimedMount>
+    </Transition>
   </ChatWrapper>
 )
