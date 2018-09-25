@@ -66,6 +66,7 @@ const ChatMessageTextWrapper = styled('div')(
     backgroundColor: colors.OFF_WHITE,
     color: colors.OFF_BLACK,
     padding: '1rem 2rem',
+    fontSize: '.9rem',
     borderRadius: 8,
     opacity: 0,
     animation: isVisible

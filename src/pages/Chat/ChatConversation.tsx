@@ -31,7 +31,9 @@ export const chatMessages = (): Message[] => [
     ),
   },
   {
-    render: (next) => <NameAgeInput onSubmit={next} key="hello-response" />,
+    delay: 500,
+    key: 'hello-response',
+    render: (next) => <NameAgeInput onSubmit={next} />,
   },
   {
     delay: 500,
