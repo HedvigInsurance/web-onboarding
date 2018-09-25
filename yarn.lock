@@ -243,6 +243,12 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.0.0"
 
+"@babel/plugin-syntax-dynamic-import@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-dynamic-import/-/plugin-syntax-dynamic-import-7.0.0.tgz#6dfb7d8b6c3be14ce952962f658f3b7eb54c33ee"
+  dependencies:
+    "@babel/helper-plugin-utils" "^7.0.0"
+
 "@babel/plugin-syntax-json-strings@^7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-json-strings/-/plugin-syntax-json-strings-7.0.0.tgz#0d259a68090e15b383ce3710e01d5b23f3770cbd"
@@ -1341,6 +1347,13 @@ babel-messages@^6.23.0:
   dependencies:
     babel-runtime "^6.22.0"
 
+babel-plugin-dynamic-import-node@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/babel-plugin-dynamic-import-node/-/babel-plugin-dynamic-import-node-2.1.0.tgz#ce874a6a1b97091ae0f56fedef0237c0951ee553"
+  dependencies:
+    babel-plugin-syntax-dynamic-import "^6.18.0"
+    object.assign "^4.1.0"
+
 babel-plugin-emotion@^9.2.10:
   version "9.2.10"
   resolved "https://registry.yarnpkg.com/babel-plugin-emotion/-/babel-plugin-emotion-9.2.10.tgz#983c288106cece7ce761df0513683ef0d241c466"
@@ -1377,6 +1390,10 @@ babel-plugin-macros@^2.0.0:
   resolved "https://registry.yarnpkg.com/babel-plugin-macros/-/babel-plugin-macros-2.4.1.tgz#f6f7d9551270b2669660ed38f88ca0dc83363734"
   dependencies:
     cosmiconfig "^5.0.5"
+
+babel-plugin-syntax-dynamic-import@^6.18.0:
+  version "6.18.0"
+  resolved "http://registry.npmjs.org/babel-plugin-syntax-dynamic-import/-/babel-plugin-syntax-dynamic-import-6.18.0.tgz#8d6a26229c83745a9982a441051572caa179b1da"
 
 babel-plugin-syntax-jsx@^6.18.0:
   version "6.18.0"
@@ -1978,6 +1995,10 @@ console-control-strings@^1.0.0, console-control-strings@~1.1.0:
 constants-browserify@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/constants-browserify/-/constants-browserify-1.0.0.tgz#c20b96d8c617748aaf1c16021760cd27fcb8cb75"
+
+constate@^0.8.2:
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/constate/-/constate-0.8.2.tgz#36974aa47d5243f0f07a92da46eb8c3df40179d8"
 
 content-disposition@0.5.2, content-disposition@~0.5.2:
   version "0.5.2"
@@ -5874,6 +5895,10 @@ react-hot-loader@^4.3.11:
 react-is@^16.4.2, react-is@^16.5.2:
   version "16.5.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.5.2.tgz#e2a7b7c3f5d48062eb769fcb123505eb928722e3"
+
+react-lifecycle-components@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/react-lifecycle-components/-/react-lifecycle-components-1.1.1.tgz#24880e809228f50da604d4907e5d957340895adf"
 
 react-lifecycles-compat@^3.0.4:
   version "3.0.4"

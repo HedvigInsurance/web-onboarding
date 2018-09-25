@@ -57,7 +57,7 @@ const getPort = () => (process.env.PORT ? Number(process.env.PORT) : 8080)
 console.log(`Booting server on ${getPort()} 👢`) // tslint:disable-line no-console
 
 const server = createKoaServer({
-  publicPath: process.env.WEBPACK_PUBLIC_PATH || '',
+  publicPath: '/assets',
   assetLocation: __dirname + '/assets',
 })
 
