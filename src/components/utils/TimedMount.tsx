@@ -7,11 +7,9 @@ interface State {
   hasFired: boolean
   timer?: Timer
 }
-interface Actions {
-  abort: () => StateUpdater<State>
-}
 
 interface Effects {
+  abort: () => StateUpdater<State>
   initiateTimer: () => (props: EffectProps<State>) => void
 }
 
@@ -26,18 +24,15 @@ export const TimedMount: React.SFC<Props> = ({
   duration,
   onFire,
 }) => (
-  <Container<State, Actions, {}, Effects>
+  <Container<State, {}, {}, Effects>
     initialState={{ hasFired: !duration }}
-    actions={{
-      abort: () => (state) => {
-        if (state.timer) {
-          state.timer.abort()
-        }
-        return {}
-      },
-    }}
     effects={
       {
+        abort: () => ({ state }: EffectProps<State>) => {
+          if (state.timer) {
+            state.timer.abort()
+          }
+        },
         initiateTimer: () => ({ setState }: EffectProps<State>) => {
           setState(() => ({
             timer: createTimer(duration)(() => {

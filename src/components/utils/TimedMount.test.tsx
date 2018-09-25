@@ -18,3 +18,17 @@ it('mounts after fire', () => {
   expect(wrapper.find('div').contains('true')).toBe(true)
   expect(onFire).toHaveBeenCalled()
 })
+
+it('never fires if aborted', () => {
+  const onFire = jest.fn()
+  const wrapper = mount(
+    <TimedMount duration={100} onFire={onFire}>
+      {({ hasFired }) => (hasFired ? <div>true</div> : <div>false</div>)}
+    </TimedMount>,
+  )
+
+  expect(onFire).not.toHaveBeenCalled()
+  wrapper.unmount()
+  jest.runAllTimers()
+  expect(onFire).not.toHaveBeenCalled()
+})
