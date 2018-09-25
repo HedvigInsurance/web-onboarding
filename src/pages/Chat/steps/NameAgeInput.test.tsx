@@ -1,11 +1,17 @@
 import { Provider } from 'constate'
 import { mount } from 'enzyme'
 import * as React from 'react'
-import { NameAgeInput } from './NameAgeInput'
 import { ChatContainer } from '../state'
+import { NameAgeInput } from './NameAgeInput'
 
 it('handles form changes', () => {
-  const wrapper = mount(<NameAgeInput onSubmit={() => {}} />)
+  const wrapper = mount(
+    <NameAgeInput
+      onSubmit={() => {
+        /* noop */
+      }}
+    />,
+  )
   ;[0, 1].forEach((index) => {
     wrapper
       .find('input')
