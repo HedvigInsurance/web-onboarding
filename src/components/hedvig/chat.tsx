@@ -1,15 +1,15 @@
+import { colors } from '@hedviginsurance/brand'
 import * as React from 'react'
 import styled, { keyframes } from 'react-emotion'
-import { colors } from '@hedviginsurance/brand'
 import { Transition } from 'react-transition-group'
-import { LazyLottie } from '../animations/LazyLottie'
-import { TimedMount } from '../../utils/TimedMount'
 import {
-  TransitionStatus,
-  EXITING,
   EXITED,
+  EXITING,
+  TransitionStatus,
 } from 'react-transition-group/Transition'
-import { FadeIn, fadeIn, fadeUp } from '../animations/appearings'
+import { fadeIn, FadeIn, fadeUp } from '../animations/appearings'
+import { LazyLottie } from '../animations/LazyLottie'
+import { TimedMount } from '../utils/TimedMount'
 
 const fadeOut = keyframes({
   from: {
@@ -64,6 +64,7 @@ const ChatMessageTextWrapper = styled('div')(
   ({ isVisible }: { isVisible: boolean }) => ({
     display: 'inline-block',
     backgroundColor: colors.OFF_WHITE,
+    color: colors.OFF_BLACK,
     padding: '1rem 2rem',
     borderRadius: 8,
     opacity: 0,
@@ -75,17 +76,19 @@ const ChatMessageTextWrapper = styled('div')(
 
 export interface ChatMessageProps {
   typingDuration?: number
+  onTyped?: () => void
 }
 
 export const ChatMessage: React.SFC<ChatMessageProps> = ({
   children,
   typingDuration = 500,
+  onTyped,
 }) => (
   <ChatWrapper>
     <HedvigWrapper>
       <Hedvig src="/assets/identity/graphics/hedvig-symbol-color.svg" />
     </HedvigWrapper>
-    <TimedMount duration={typingDuration}>
+    <TimedMount duration={typingDuration} onFire={onTyped}>
       {({ hasFired }) => (
         <ChatMessageWrapper>
           <Transition timeout={500} appear in={!hasFired}>

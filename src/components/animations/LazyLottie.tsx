@@ -1,8 +1,8 @@
+import { Action, Container, StateUpdater } from 'constate'
+import { always, ifElse, isNil, path, pipe } from 'ramda'
 import * as React from 'react'
-import { Action, StateUpdater, Container } from 'constate'
+import { Mount } from 'react-lifecycle-components'
 import ReactLottieComponent, { ReactLottieProps } from 'react-lottie'
-import { Mount } from 'react-lifecycle-components/dist'
-import { pipe, path, isNil, always, ifElse } from 'ramda'
 
 interface State {
   animationData: any | null

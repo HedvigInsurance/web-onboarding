@@ -1,7 +1,7 @@
 import { Container, EffectProps, StateUpdater } from 'constate'
 import * as React from 'react'
 import { Mount, Unmount } from 'react-lifecycle-components'
-import { createTimer, Timer } from './timer'
+import { createTimer, Timer } from '../../utils/timer'
 
 interface State {
   hasFired: boolean
@@ -12,15 +12,20 @@ interface Actions {
 }
 
 interface Effects {
-  initiateTyping: () => (props: EffectProps<State>) => void
+  initiateTimer: () => (props: EffectProps<State>) => void
 }
 
 interface Props {
   duration: number
   children: (props: { hasFired: boolean }) => React.ReactNode
+  onFire?: () => void
 }
 
-export const TimedMount: React.SFC<Props> = ({ children, duration }) => (
+export const TimedMount: React.SFC<Props> = ({
+  children,
+  duration,
+  onFire,
+}) => (
   <Container<State, Actions, {}, Effects>
     initialState={{ hasFired: !duration }}
     actions={{
@@ -33,16 +38,21 @@ export const TimedMount: React.SFC<Props> = ({ children, duration }) => (
     }}
     effects={
       {
-        initiateTyping: () => ({ setState }: EffectProps<State>) => {
+        initiateTimer: () => ({ setState }: EffectProps<State>) => {
           setState(() => ({
-            timer: createTimer(duration)(() => setState({ hasFired: true })),
+            timer: createTimer(duration)(() => {
+              if (onFire) {
+                onFire()
+              }
+              setState({ hasFired: true })
+            }),
           }))
         },
-      } as any
+      } as any // `effects` are incorrectly typed in the lib
     }
   >
-    {({ hasFired, initiateTyping, abort }: State & Actions & Effects) => (
-      <Mount on={initiateTyping}>
+    {({ hasFired, initiateTimer, abort }: State & Actions & Effects) => (
+      <Mount on={initiateTimer}>
         <Unmount on={abort}>{children({ hasFired })}</Unmount>
       </Mount>
     )}
