@@ -36,9 +36,7 @@ export const chatMessages = (): Message[] => [
     render: (next) => <NameAgeInput onSubmit={next} />,
   },
   {
-    delay: 500,
-    key: 'greet',
-    render: (next) => <Greet onTyped={next} />,
+    render: (next) => <Greet onTyped={next} key="greet" />,
   },
   {
     render: () => (
