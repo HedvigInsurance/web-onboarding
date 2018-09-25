@@ -51,7 +51,7 @@ const TypingWrapper = styled('div')(
   }),
 )
 
-const Typing: React.SFC<{ status: TransitionStatus }> = ({ status }) => (
+export const Typing: React.SFC<{ status: TransitionStatus }> = ({ status }) => (
   <TypingWrapper status={status}>
     <LazyLottie
       width={60}
@@ -60,7 +60,7 @@ const Typing: React.SFC<{ status: TransitionStatus }> = ({ status }) => (
   </TypingWrapper>
 )
 
-const ChatMessageTextWrapper = styled('div')(
+export const ChatMessageTextWrapper = styled('div')(
   ({ isVisible }: { isVisible: boolean }) => ({
     display: 'inline-block',
     backgroundColor: colors.OFF_WHITE,
