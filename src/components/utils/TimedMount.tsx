@@ -46,7 +46,7 @@ export const TimedMount: React.SFC<Props> = ({
       } as any // `effects` are incorrectly typed in the lib
     }
   >
-    {({ hasFired, initiateTimer, abort }: State & Actions & Effects) => (
+    {({ hasFired, initiateTimer, abort }: State & Effects) => (
       <Mount on={initiateTimer}>
         <Unmount on={abort}>{children({ hasFired })}</Unmount>
       </Mount>
