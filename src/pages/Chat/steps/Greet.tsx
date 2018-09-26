@@ -1,5 +1,5 @@
+import { ChatMessage, ChatMessageProps } from 'components/hedvig/chat'
 import * as React from 'react'
-import { ChatMessage, ChatMessageProps } from '../../../components/hedvig/chat'
 import { ChatContainer } from '../state'
 
 export const Greet: React.SFC<ChatMessageProps> = ({ onTyped }) => (
