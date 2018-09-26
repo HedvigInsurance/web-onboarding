@@ -8,7 +8,7 @@ export const App: React.SFC = () => (
   <>
     <GlobalCss />
     {reactPageRoutes.map(({ path, exact, Component }) => (
-      <Route key={path} exact={exact} component={Component} />
+      <Route key={path} path={path} exact={exact} component={Component} />
     ))}
   </>
 )
