@@ -89,7 +89,7 @@ export const ChatMessage: React.SFC<ChatMessageProps> = ({
 }) => (
   <ChatWrapper>
     <HedvigWrapper>
-      <Hedvig src="/assets/identity/graphics/hedvig-symbol-color.svg" />
+      <Hedvig src="https://cdn.hedvig.com/identity/graphics/hedvig-symbol-color.svg" />
     </HedvigWrapper>
     <Transition timeout={typingDuration} appear in onEntered={onTyped}>
       {(appearStatus) => (
