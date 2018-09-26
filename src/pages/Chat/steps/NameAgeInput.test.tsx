@@ -12,38 +12,18 @@ it('handles form changes', () => {
       }}
     />,
   )
-  ;[0, 1].forEach((index) => {
-    wrapper
-      .find('input')
-      .at(index)
-      .simulate('change', { target: { value: 'hello' + index } })
-    expect(
-      wrapper
-        .find('input')
-        .at(index)
-        .prop('value'),
-    ).toBe('hello' + index)
-  })
   wrapper
-    .find('input')
-    .at(2)
-    .simulate('change', { target: { value: '12' } })
-  expect(
-    wrapper
-      .find('input')
-      .at(2)
-      .prop('value'),
-  ).toBe('12')
+    .find('input#firstName')
+    .simulate('change', { target: { value: 'hello0', id: 'firstName' } })
+  expect(wrapper.find('input#firstName').prop('value')).toBe('hello0')
   wrapper
-    .find('input')
-    .at(2)
-    .simulate('change', { target: { value: '111111' } })
-  expect(
-    wrapper
-      .find('input')
-      .at(2)
-      .prop('value'),
-  ).toBe('12')
+    .find('input#lastName')
+    .simulate('change', { target: { value: 'hello1', id: 'lastName' } })
+  expect(wrapper.find('input#lastName').prop('value')).toBe('hello1')
+  wrapper
+    .find('input#age')
+    .simulate('change', { target: { value: 12, id: 'age' } })
+  expect(wrapper.find('input#age').prop('value')).toBe(12)
 })
 
 it("doesn't submit empty forms", () => {
@@ -51,9 +31,8 @@ it("doesn't submit empty forms", () => {
   const wrapper = mount(<NameAgeInput onSubmit={handleSubmit} />)
 
   wrapper
-    .find('input')
-    .at(2)
-    .simulate('change', { target: { value: '1' } })
+    .find('input#age')
+    .simulate('change', { target: { value: 1, id: 'age' } })
 
   const preventDefault = jest.fn()
   wrapper.find('form').simulate('submit', { preventDefault })
@@ -82,23 +61,20 @@ it('submits form and updates state', () => {
     </Provider>,
   )
 
-  wrapper
-    .find('input')
-    .at(0)
-    .simulate('change', { target: { value: 'John' } })
-  wrapper
-    .find('input')
-    .at(1)
-    .simulate('change', { target: { value: 'Doe' } })
-  wrapper
-    .find('input')
-    .at(2)
-    .simulate('change', { target: { value: '42' } })
+  wrapper.find('input#firstName').simulate('change', {
+    target: { value: 'John', id: 'firstName' },
+  })
+  wrapper.find('input#lastName').simulate('change', {
+    target: { value: 'Doe', id: 'lastName' },
+  })
+  wrapper.find('input#age').simulate('change', {
+    target: { value: 12, id: 'age' },
+  })
 
   const preventDefault = jest.fn()
   wrapper.find('form').simulate('submit', { preventDefault })
 
   expect(preventDefault).toHaveBeenCalled()
   expect(handleSubmit).toHaveBeenCalled()
-  expect(wrapper.find('.test-state-shower').contains('John Doe 42'))
+  expect(wrapper.find('.test-state-shower').contains('John Doe 42')).toBe(true)
 })

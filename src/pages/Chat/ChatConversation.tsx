@@ -62,7 +62,11 @@ interface Actions {
 const nextOrNoop = (next: () => void) => (
   currentMessage: number,
   index: number,
-) => ifElse(() => currentMessage <= index, always(next), always(null))(null)
+) =>
+  ifElse(() => currentMessage <= index, always(next), always(always(null)))(
+    null,
+  )
+
 export const ChatConversation: React.SFC<WithMessagesProps> = ({
   messages,
 }) => (
