@@ -41,13 +41,15 @@ it("doesn't submit empty forms", () => {
   expect(handleSubmit).not.toHaveBeenCalled()
 })
 
-it('submits form and updates state', () => {
+it('submits form and updates state', (done) => {
   const StateShower = () => (
     <ChatContainer>
       {({ step1 }) =>
         step1 ? (
           <div className="test-state-shower">
-            {step1.firstName} {step1.lastName} {step1.age}
+            <div className="firstName">{step1.firstName}</div>
+            <div className="lastName">{step1.lastName}</div>
+            <div className="age">{step1.age}</div>
           </div>
         ) : null
       }
@@ -75,6 +77,16 @@ it('submits form and updates state', () => {
   wrapper.find('form').simulate('submit', { preventDefault })
 
   expect(preventDefault).toHaveBeenCalled()
-  expect(handleSubmit).toHaveBeenCalled()
-  expect(wrapper.find('.test-state-shower').contains('John Doe 42')).toBe(true)
+  process.nextTick(() => {
+    try {
+      wrapper.update()
+      expect(handleSubmit).toHaveBeenCalled()
+      expect(wrapper.find('div.firstName').contains('John')).toBe(true)
+      expect(wrapper.find('div.lastName').contains('Doe')).toBe(true)
+      expect(wrapper.find('div.age').contains(12 as any)).toBe(true)
+      done()
+    } catch (e) {
+      done.fail(e)
+    }
+  })
 })
