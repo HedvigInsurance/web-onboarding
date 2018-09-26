@@ -1,4 +1,4 @@
-import { colors } from '@hedviginsurance/brand'
+import { colors, fonts } from '@hedviginsurance/brand'
 import * as React from 'react'
 import styled, { keyframes } from 'react-emotion'
 import { Transition } from 'react-transition-group'
@@ -66,6 +66,7 @@ export const ChatMessageTextWrapper = styled('div')(
     display: 'inline-block',
     backgroundColor: colors.OFF_WHITE,
     color: colors.OFF_BLACK,
+    fontFamily: fonts.MERRIWEATHER,
     padding: '1rem 2rem',
     fontSize: '.9rem',
     borderRadius: 8,

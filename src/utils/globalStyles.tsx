@@ -1,3 +1,4 @@
+import { fonts } from '@hedviginsurance/brand'
 import { injectGlobal } from 'emotion'
 import * as React from 'react'
 
@@ -53,7 +54,7 @@ ${Object.keys(fontFlavours).map((fontName) =>
 }  
 
 body {
-  font-family: CircularStd, serif;
+  font-family: ${fonts.CIRCULAR}, serif;
   font-size: 18px;
   line-height: 1.5;
 }
