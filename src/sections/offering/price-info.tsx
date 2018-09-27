@@ -13,7 +13,6 @@ const BackgroundImage = styled('div')({
   backgroundSize: 'cover',
   marginLeft: '20px',
   marginRight: '20px',
-  backgroundImage: 'url(assets/offering/map-background.png)',
   '@media (max-width: 640px)': {
     width: '100%',
     marginLeft: '0px',
@@ -50,7 +49,7 @@ export const Header = styled('h1')({
   },
 });
 
-const Adress = styled('p')({
+export const SubTitle = styled('p')({
   marginTop: '0px',
   fontSize: '16px',
   textAlign: 'center',
@@ -67,6 +66,7 @@ const Price = styled('p')({
 });
 
 const Time = styled('p')({
+  marginBottom: '20px',
   marginTop: '0px',
   fontSize: '16px',
   fontWeight: 100,
@@ -74,8 +74,14 @@ const Time = styled('p')({
   color: colors.BLACK_PURPLE,
 });
 
+const Line = styled('div')({
+  width: '100%',
+  backgroundColor: colors.LIGHT_GRAY,
+  height: '1px',
+});
+
 const StartContainer = styled('div')({
-  marginTop: '40px',
+  marginTop: '20px',
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'center',
@@ -133,6 +139,18 @@ const LinkTag = styled('a')({
 
 interface Props {
   alreadyInsured: boolean,
+  header: string,
+  subTitle: string,
+  price: string,
+  subscriptionTime: string,
+  startDate: string,
+  coverage: string,
+  getInsured: string,
+  iconWorld: any, /*TODO: type fix*/
+  iconClock: any, /*TODO: type fix*/
+  BackgroundImage: any, /*TODO: type fix*/
+  alreadyInsuredLabel: string,
+  todayLabel: string,
 }
 
 class PriceInfo extends React.Component<Props> {
@@ -141,27 +159,30 @@ class PriceInfo extends React.Component<Props> {
     return (
       /*TODO: Change strings to be handled by cms */
       <Container>
-        <BackgroundImage>
+        <BackgroundImage style={{backgroundImage: this.props.BackgroundImage}}>
           <Card>
-            <Header>Min hemförsäkring</Header>
-            <Adress>Krukmakargatn 5</Adress>
-            <Price>299 kr/mån</Price>
-            <Time>Ingen bindningstid</Time>
+            <Header>{this.props.header}</Header>
+            <SubTitle>{this.props.subTitle}</SubTitle>
+            <Price>{this.props.price}</Price>
+            <Time>{this.props.subscriptionTime}</Time>
+            <Line/>
 
             <StartContainer>
-              <ImageIcon src={'/assets/offering/start-date.png'}/>
-              <Label>Startdatum:</Label>
-              <InsuredLabel>{this.props.alreadyInsured ? 'Gamla försäkringens slutdatum' : 'Idag'}</InsuredLabel>
+              <ImageIcon src={this.props.iconClock}/>
+              <Label>{this.props.startDate}</Label>
+              <InsuredLabel>
+                {this.props.alreadyInsured ? this.props.alreadyInsuredLabel: this.props.todayLabel}
+              </InsuredLabel>
             </StartContainer>
 
             <AppliedContainer>
-              <ImageIcon src={'/assets/offering/world.png'}/>
-              <Label>Gäller i hela världen</Label>
+              <ImageIcon src={this.props.iconWorld}/>
+              <Label>{this.props.coverage}</Label>
             </AppliedContainer>
 
             <GetInsuredButton>
               <LinkTag href="/">
-                Bli försäkrad
+                {this.props.getInsured}
               </LinkTag>
             </GetInsuredButton>
 
