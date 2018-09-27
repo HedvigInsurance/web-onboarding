@@ -1,6 +1,6 @@
-import * as React from 'react'
-import styled from 'react-emotion'
-import { colors, fonts } from '@hedviginsurance/brand'
+import * as React from 'react';
+import styled from 'react-emotion';
+import { colors, fonts } from '@hedviginsurance/brand';
 
 const Container = styled('div')({
   width: '100%',
@@ -34,8 +34,9 @@ const Card = styled('div')({
   },
 });
 
-const Header = styled('h1')({
+export const Header = styled('h1')({
   fontFamily: fonts.MERRIWEATHER,
+  fontSize: '32px',
   marginBottom: '10px',
   fontWeight: 'normal',
   textAlign: 'center',
@@ -127,10 +128,7 @@ const LinkTag = styled('a')({
   color: colors.WHITE,
   textDecoration: 'none',
   borderRadius: '50px',
-  padding: '15px 75px',
-  '@media (max-width: 640px)': {
-    padding: '15px 60px',
-  },
+  padding: '15px 30px',
 });
 
 interface Props {
