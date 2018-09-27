@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { PriceInfo } from '../sections/offering/price-info';
 import { InsuranceCoverage } from '../sections/offering/insurance-coverage';
 import styled from 'react-emotion';
@@ -13,6 +14,8 @@ export class Offering extends React.Component {
 
       /*TODO: graphql data */
       <Container>
+
+        {/* Pice Info Section */}
         <PriceInfo
           alreadyInsured={false}
           header={"Min hemförsäkring"}
@@ -28,12 +31,17 @@ export class Offering extends React.Component {
           alreadyInsuredLabel={'Gamla försäkringens slutdatum'}
           todayLabel={'Idag'}
         />
+
+        {/* Insurance Coverage Section */}
         <InsuranceCoverage
           headline={"Vad försäkringen täcker"}
-          subTitle={"Klicka på ikonerna för mer info"}
+          subTitle={"Klicka på ikonerna för mer info."}
         />
+
       </Container>
     );
   }
 
 }
+
+/* TODO: Add proptypes check */

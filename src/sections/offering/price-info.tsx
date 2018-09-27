@@ -105,7 +105,7 @@ const ImageIcon = styled('img')({
   height:'17px',
 });
 
-const Label = styled('p')({
+export const Label = styled('p')({
   marginBottom: '0px',
   marginTop: '0px',
   fontSize: '16px',
@@ -131,6 +131,7 @@ const GetInsuredButton = styled('div')({
 
 const LinkTag = styled('a')({
   backgroundColor: colors.GREEN,
+  fontSize: '18px',
   color: colors.WHITE,
   textDecoration: 'none',
   borderRadius: '50px',
