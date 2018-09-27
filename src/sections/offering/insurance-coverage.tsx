@@ -9,7 +9,7 @@ interface Props {
 }
 
 const Container = styled('div')({
-  paddingTop: '80px',
+  paddingTop: '20px',
   backgroundColor: colors.OFF_WHITE,
 })
 

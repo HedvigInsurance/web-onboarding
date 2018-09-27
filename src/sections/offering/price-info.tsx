@@ -74,7 +74,7 @@ const Time = styled('p')({
   color: colors.BLACK_PURPLE,
 });
 
-const Line = styled('div')({
+export const Line = styled('div')({
   width: '100%',
   backgroundColor: colors.LIGHT_GRAY,
   height: '1px',
@@ -154,44 +154,38 @@ interface Props {
   todayLabel: string,
 }
 
-class PriceInfo extends React.Component<Props> {
+export const PriceInfo: React.SFC<Props> = (props) => (
 
-  render() {
-    return (
       /*TODO: Change strings to be handled by cms */
       <Container>
-        <BackgroundImage style={{backgroundImage: this.props.BackgroundImage}}>
+        <BackgroundImage style={{backgroundImage: props.BackgroundImage}}>
           <Card>
-            <Header>{this.props.header}</Header>
-            <SubTitle>{this.props.subTitle}</SubTitle>
-            <Price>{this.props.price}</Price>
-            <Time>{this.props.subscriptionTime}</Time>
+            <Header>{props.header}</Header>
+            <SubTitle>{props.subTitle}</SubTitle>
+            <Price>{props.price}</Price>
+            <Time>{props.subscriptionTime}</Time>
             <Line/>
 
             <StartContainer>
-              <ImageIcon src={this.props.iconClock}/>
-              <Label>{this.props.startDate}</Label>
+              <ImageIcon src={props.iconClock}/>
+              <Label>{props.startDate}</Label>
               <InsuredLabel>
-                {this.props.alreadyInsured ? this.props.alreadyInsuredLabel: this.props.todayLabel}
+                {props.alreadyInsured ? props.alreadyInsuredLabel: props.todayLabel}
               </InsuredLabel>
             </StartContainer>
 
             <AppliedContainer>
-              <ImageIcon src={this.props.iconWorld}/>
-              <Label>{this.props.coverage}</Label>
+              <ImageIcon src={props.iconWorld}/>
+              <Label>{props.coverage}</Label>
             </AppliedContainer>
 
             <GetInsuredButton>
               <LinkTag href="/">
-                {this.props.getInsured}
+                {props.getInsured}
               </LinkTag>
             </GetInsuredButton>
 
           </Card>
         </BackgroundImage>
       </Container>
-    )
-  }
-}
-
-export { PriceInfo }
+    );

@@ -2,7 +2,9 @@ import * as React from 'react';
 
 import { PriceInfo } from '../sections/offering/price-info';
 import { InsuranceCoverage } from '../sections/offering/insurance-coverage';
+import { TopBar } from '../sections/offering/top-bar';
 import styled from 'react-emotion';
+
 const Container = styled('div')({
 
 });
@@ -14,6 +16,9 @@ export class Offering extends React.Component {
 
       /*TODO: graphql data */
       <Container>
+
+        {/* Top Bar */}
+        <TopBar/>
 
         {/* Pice Info Section */}
         <PriceInfo
