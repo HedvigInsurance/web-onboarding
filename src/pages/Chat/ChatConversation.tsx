@@ -1,6 +1,6 @@
+import { ChatMessage } from 'components/hedvig/chat'
+import { Conversation, Message } from 'components/hedvig/conversation'
 import * as React from 'react'
-import { ChatMessage } from '../../components/hedvig/chat'
-import { Conversation, Message } from '../../components/hedvig/conversation'
 import { Greet } from './steps/Greet'
 import { NameAgeInput } from './steps/NameAgeInput'
 

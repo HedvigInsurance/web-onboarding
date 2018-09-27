@@ -1,10 +1,7 @@
+import { UserResponse, UserTextInput } from 'components/userInput/UserResponse'
 import { Container, StateUpdater } from 'constate'
 import { Formik } from 'formik'
 import * as React from 'react'
-import {
-  UserResponse,
-  UserTextInput,
-} from '../../../components/userInput/UserResponse'
 import { ChatContainer } from '../state'
 
 interface FormValues {
