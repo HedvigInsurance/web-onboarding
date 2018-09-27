@@ -1,6 +1,8 @@
 import * as React from 'react'
 import styled from 'react-emotion'
 import { colors, fonts } from '@hedviginsurance/brand'
+import { format } from 'date-fns'
+var parse = require('date-fns/parse')
 
 const Container = styled('div')({
   width: '100%',
@@ -11,9 +13,10 @@ const Container = styled('div')({
 const BackgroundImage = styled('div')({
   display: 'flex',
   alignItems: 'center',
+  backgroundSize: 'contain',
   marginLeft: '20px',
   marginRight: '20px',
-  backgroundColor: colors.LIGHT_GRAY,
+  backgroundImage: 'url(assets/offering/map-background.png)',
   '@media (max-width: 640px)': {
     width: '100%',
     marginLeft: '0px',
@@ -78,6 +81,7 @@ const StartContainer = styled('div')({
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'center',
+  alignItems: 'center',
 });
 
 const AppliedContainer = styled('div')({
@@ -86,13 +90,15 @@ const AppliedContainer = styled('div')({
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'center',
+  alignItems: 'center',
 });
 
 const ImageIcon = styled('img')({
   marginBottom: '0px',
   marginTop: '0px',
-  width:'20px',
-  height:'20px',
+  marginRight: '6px',
+  width:'17px',
+  height:'17px',
 });
 
 const Icon = styled('p')({
@@ -130,8 +136,32 @@ const LinkTag = styled('a')({
   },
 });
 
+const Input = styled('input')({
+  marginLeft: '10px',
+});
 
-class PriceInfo extends React.Component {
+class PriceInfo extends React.Component<{}, { date: String }> {
+
+  handleDateChange(event:any){
+    console.log(event.target.value);
+    this.setState({date: event.target.value});
+  }
+
+  handleClick(){
+    alert(this.state.date)
+  }
+
+  constructor(props: any){
+    super(props);
+    const today = format(new Date(), 'YYYY-MM-DD');
+
+    this.state = {
+      date: today,
+    };
+
+    this.handleDateChange = this.handleDateChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+  }
 
   render() {
     return (
@@ -144,16 +174,18 @@ class PriceInfo extends React.Component {
             <Time>Ingen bindningstid</Time>
 
             <StartContainer>
-              <ImageIcon src="../../img/offering/start-date.png"/>
-              <Label>Startdatum: </Label>
-              <Icon> []</Icon>
+              <ImageIcon src={'/assets/offering/start-date.png'}/>
+              <Label>Startdatum:</Label>
+              <Input id={"date"} type={"date"} value={this.state.date} onChange={this.handleDateChange}/>
             </StartContainer>
+
             <AppliedContainer>
-              <ImageIcon src=""/>
+              <ImageIcon src={'/assets/offering/world.png'}/>
               <Label>Gäller i hela världen</Label>
             </AppliedContainer>
+
             <GetInsuredButton>
-              <LinkTag href="/hedvig">
+              <LinkTag onClick={this.handleClick} href="/hedvig">
                 Bli försäkrad
               </LinkTag>
             </GetInsuredButton>
