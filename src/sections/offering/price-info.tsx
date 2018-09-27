@@ -13,7 +13,7 @@ const Container = styled('div')({
 const BackgroundImage = styled('div')({
   display: 'flex',
   alignItems: 'center',
-  backgroundSize: 'contain',
+  backgroundSize: 'cover',
   marginLeft: '20px',
   marginRight: '20px',
   backgroundImage: 'url(assets/offering/map-background.png)',
