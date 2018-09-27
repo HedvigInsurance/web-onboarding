@@ -1,7 +1,6 @@
 import * as React from 'react'
 import styled from 'react-emotion'
 import { colors, fonts } from '@hedviginsurance/brand'
-import { format } from 'date-fns'
 
 const Container = styled('div')({
   width: '100%',
@@ -99,7 +98,7 @@ const ImageIcon = styled('img')({
   height:'17px',
 });
 
-const Icon = styled('p')({
+const Label = styled('p')({
   marginBottom: '0px',
   marginTop: '0px',
   fontSize: '16px',
@@ -107,8 +106,8 @@ const Icon = styled('p')({
   color: colors.DARK_GRAY,
 });
 
-
-const Label = styled('p')({
+const InsuredLabel = styled('p')({
+  marginLeft: '5px',
   marginBottom: '0px',
   marginTop: '0px',
   fontSize: '16px',
@@ -134,32 +133,11 @@ const LinkTag = styled('a')({
   },
 });
 
-const Input = styled('input')({
-  marginLeft: '10px',
-});
+interface Props {
+  alreadyInsured: boolean,
+}
 
-class PriceInfo extends React.Component<{}, { date: String }> {
-
-  handleDateChange(event:any){
-    console.log(event.target.value);
-    this.setState({date: event.target.value});
-  }
-
-  handleClick(){
-    alert(this.state.date)
-  }
-
-  constructor(props: any){
-    super(props);
-    const today = format(new Date(), 'YYYY-MM-DD');
-
-    this.state = {
-      date: today,
-    };
-
-    this.handleDateChange = this.handleDateChange.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-  }
+class PriceInfo extends React.Component<Props> {
 
   render() {
     return (
@@ -175,7 +153,7 @@ class PriceInfo extends React.Component<{}, { date: String }> {
             <StartContainer>
               <ImageIcon src={'/assets/offering/start-date.png'}/>
               <Label>Startdatum:</Label>
-              <Input id={"date"} type={"date"} value={this.state.date} onChange={this.handleDateChange}/>
+              <InsuredLabel>{this.props.alreadyInsured ? 'Gamla försäkringens slutdatum' : 'Idag'}</InsuredLabel>
             </StartContainer>
 
             <AppliedContainer>
@@ -184,7 +162,7 @@ class PriceInfo extends React.Component<{}, { date: String }> {
             </AppliedContainer>
 
             <GetInsuredButton>
-              <LinkTag onClick={this.handleClick} href="/hedvig">
+              <LinkTag href="/">
                 Bli försäkrad
               </LinkTag>
             </GetInsuredButton>

@@ -5,7 +5,7 @@ export class Offering extends React.Component {
 
   render(){
     return(
-      <PriceInfo/>
+      <PriceInfo alreadyInsured={false}/>
     );
   }
 
