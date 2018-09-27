@@ -2,14 +2,12 @@ import * as React from 'react'
 import styled from 'react-emotion'
 import { colors, fonts } from '@hedviginsurance/brand'
 import { format } from 'date-fns'
-var parse = require('date-fns/parse')
 
 const Container = styled('div')({
   width: '100%',
   backgroundColor: colors.OFF_WHITE,
 });
 
-/* TODO: change to img and use img source instead*/
 const BackgroundImage = styled('div')({
   display: 'flex',
   alignItems: 'center',
@@ -165,6 +163,7 @@ class PriceInfo extends React.Component<{}, { date: String }> {
 
   render() {
     return (
+      /*TODO: Change strings to be handled by cms */
       <Container>
         <BackgroundImage>
           <Card>
