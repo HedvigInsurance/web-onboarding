@@ -13,9 +13,16 @@ export const UserTextInput = styled('input')(
     lineHeight: 'inherit',
     fontSize: 'inherit',
     width: `${maxWidth}ch`,
-    appearance: 'none',
     borderRadius: 0,
     fontWeight: 600,
+
+    '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
+      appearance: 'none',
+      margin: 0,
+    },
+    '&[type="number"]': {
+      appearance: 'textfield' as any, // unsure why but emotion cries when this isnt any
+    },
 
     '&:focus': {
       outline: 'none',
