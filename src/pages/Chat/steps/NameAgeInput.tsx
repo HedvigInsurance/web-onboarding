@@ -1,13 +1,13 @@
 import { UserResponse, UserTextInput } from 'components/userInput/UserResponse'
 import { Container, StateUpdater } from 'constate'
 import { Formik } from 'formik'
+import { pathOr } from 'ramda'
 import * as React from 'react'
 import {
   Actions as ChatActions,
   ChatContainer,
   State as ChatState,
 } from '../state'
-import { pathOr } from 'ramda'
 
 interface FormValues {
   firstName: string

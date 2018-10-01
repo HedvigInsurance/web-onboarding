@@ -2359,6 +2359,7 @@ cookie-signature@1.0.6:
 cookie-storage@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/cookie-storage/-/cookie-storage-3.2.0.tgz#ada5f23152eb76f2a1d48777e921ebc2789535b4"
+  integrity sha512-E2IlZrqJ00Y+9GLugfqyumcjXBtCkNWvX0opx0RUqaqvB67i6zzngrrFjeWNkJVhw0cO/ixThKLRDgDOak9eCw==
 
 cookie@0.3.1:
   version "0.3.1"
