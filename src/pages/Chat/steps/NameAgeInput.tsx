@@ -2,7 +2,12 @@ import { UserResponse, UserTextInput } from 'components/userInput/UserResponse'
 import { Container, StateUpdater } from 'constate'
 import { Formik } from 'formik'
 import * as React from 'react'
-import { ChatContainer } from '../state'
+import {
+  Actions as ChatActions,
+  ChatContainer,
+  State as ChatState,
+} from '../state'
+import { pathOr } from 'ramda'
 
 interface FormValues {
   firstName: string
@@ -29,16 +34,20 @@ const isDone = (values: FormValues) =>
 
 export const NameAgeInput: React.SFC<Props> = ({ onSubmit }) => (
   <ChatContainer>
-    {({ setStep1 }) => (
+    {(chatState: ChatState & ChatActions) => (
       <Container<State, Actions>
         initialState={{ hasFocused: false }}
         actions={{ setFocused: () => (_) => ({ hasFocused: true }) }}
       >
         {(state) => (
           <Formik<FormValues>
-            initialValues={{ firstName: '', lastName: '', age: '' }}
+            initialValues={{
+              firstName: pathOr('', ['step1', 'firstName'], chatState),
+              lastName: pathOr('', ['step1', 'firstName'], chatState),
+              age: pathOr('', ['step1', 'age'], chatState),
+            }}
             onSubmit={({ firstName, lastName, age }) => {
-              setStep1(firstName, lastName, Number(age))
+              chatState.setStep1(firstName, lastName, Number(age))
               onSubmit({ firstName, lastName, age })
             }}
           >

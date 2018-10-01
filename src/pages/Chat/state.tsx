@@ -1,5 +1,7 @@
 import { Container, ContainerProps, StateUpdater } from 'constate'
 import * as React from 'react'
+import { StorageContainer } from '../../utils/StorageContainer'
+import { propOr } from 'ramda'
 
 export interface State {
   step1?: {
@@ -20,14 +22,25 @@ export interface Actions {
 export const ChatContainer: React.SFC<ContainerProps<State, Actions>> = (
   props,
 ) => (
-  <Container<State, Actions>
-    context="chatConversation"
-    {...props}
-    initialState={{}}
-    actions={{
-      setStep1: (firstName, lastName, age) => (_) => ({
-        step1: { firstName, lastName, age },
-      }),
-    }}
-  />
+  <StorageContainer>
+    {(storageState) => (
+      <Container<State, Actions>
+        context="chatConversation"
+        onUpdate={({ state }) => {
+          console.log(state)
+          storageState.session.setSession({
+            ...storageState.session.getSession(),
+            chat: state,
+          })
+        }}
+        {...props}
+        initialState={propOr({}, 'chat', storageState.session.getSession())}
+        actions={{
+          setStep1: (firstName, lastName, age) => (_) => ({
+            step1: { firstName, lastName, age },
+          }),
+        }}
+      />
+    )}
+  </StorageContainer>
 )
