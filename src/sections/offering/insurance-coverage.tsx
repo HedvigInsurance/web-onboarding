@@ -9,7 +9,6 @@ interface Props {
 }
 
 const Container = styled('div')({
-  paddingTop: '20px',
   backgroundColor: colors.OFF_WHITE,
 })
 
@@ -20,11 +19,11 @@ const InnerContainer = styled('div')({
 })
 
 const Card = styled('div')({
-  marginTop: '20px',
-  marginBottom: '20px',
+  marginTop: '70px',
   marginLeft: 'auto',
   marginRight: 'auto',
   backgroundColor: colors.WHITE,
+  // minWidth: '792px',
   '@media (max-width: 640px)': {
     minWidth: '100%',
     marginLeft: '0px',
@@ -32,17 +31,25 @@ const Card = styled('div')({
   },
 })
 
-const Row = styled('div')({
+const TitleRow = styled('div')({
+  marginTop: '30px',
   display: 'flex',
   alignItems: 'center',
   flexDirection: 'row',
-  marginBottom: '20px',
+})
+
+const Row = styled('div')({
+  marginBottom: '30px',
+  display: 'flex',
+  alignItems: 'center',
+  flexDirection: 'row',
 })
 
 const Col = styled('div')({
   display: 'flex',
   alignItems: 'center',
   flexDirection: 'column',
+   marginBottom: '30px',
 })
 
 export const CardHeader = styled('h2')({
@@ -62,18 +69,35 @@ const ImageIcon = styled('img')({
 
 export const InsuranceCoverage: React.SFC<Props> = (props) => (
   <Container>
-    <Header>{props.headline}</Header>
-    <SubTitle>{props.subTitle}</SubTitle>
+
     <InnerContainer>
+      <Card>
+        <Header>{props.headline}</Header>
+        <SubTitle>{props.subTitle}</SubTitle>
       {/* TODO: Use the same components for the three sections, and map the content*/}
       {CARDS.map((card, index) => (
-        <Card key={index}>
-          <Row>
+
+          <div key={index}>
+          <TitleRow>
             <ImageIcon src={card.icon} />
             <CardHeader>{card.name}</CardHeader>
-          </Row>
+          </TitleRow>
           <Row>
-
+            {/* {console.log(Object.keys(card.icons))}
+              {Object.keys(card.icons).map((column, index) => (
+                <Col>
+                  <ImageIcon src={card.icons.one.image} />
+                  {card.icons.one.title == 'Hidden' ? (
+                    <Label style={{ visibility: 'hidden' }}>
+                      {card.icons.one.title}
+                    </Label>
+                  ) : (
+                    <Label style={{ visibility: 'visible' }}>
+                      {card.icons.one.title}
+                    </Label>
+                  )}
+                </Col>
+              ))} */}
             <Col>
               <ImageIcon src={card.icons.one.image} />
               {card.icons.one.title == 'Hidden' ? (
@@ -151,10 +175,11 @@ export const InsuranceCoverage: React.SFC<Props> = (props) => (
                 </Label>
               )}
             </Col>
-          </Row>
-          <Row />
-        </Card>
+          </Row>          
+          </div>
+
       ))}
+      </Card>
     </InnerContainer>
   </Container>
 )

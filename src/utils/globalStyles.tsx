@@ -50,12 +50,14 @@ ${Object.keys(fontFlavours).map((fontName) =>
 
 * {
   box-sizing: border-box;
-}  
+}
 
 body {
   font-family: CircularStd, serif;
   font-size: 18px;
   line-height: 1.5;
+  margin: 0;
+  padding: 0;
 }
 `
   return <>{children}</>
