@@ -7,7 +7,9 @@ export class ServerCookieStorage implements MinimalStorage {
   constructor(private readonly requestCtx: Context) {}
 
   public getItem(item: string): string | null {
-    return this.requestCtx.cookies.get(item, { signed: false })
+    return decodeURIComponent(
+      this.requestCtx.cookies.get(item, { signed: false }),
+    )
   }
 
   // tslint:disable-next-line variable-name

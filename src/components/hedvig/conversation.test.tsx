@@ -14,7 +14,7 @@ it('renders a conversation on message at a time', () => {
 
   const wrapper = mount(
     <Conversation>
-      <Message>{(next) => <Message1 next={next} />}</Message>
+      <Message>{({ next }) => <Message1 next={next} />}</Message>
       <Message delay={500}>{(_) => <Message2 />}</Message>
     </Conversation>,
   )

@@ -4,8 +4,8 @@ import { Formik } from 'formik'
 import { pathOr } from 'ramda'
 import * as React from 'react'
 import {
-  Actions as ChatActions,
   ChatContainer,
+  Effects as ChatActions,
   State as ChatState,
 } from '../state'
 
@@ -23,6 +23,7 @@ interface Actions {
 }
 
 interface Props {
+  appear?: boolean
   onSubmit: (state?: FormValues) => void
 }
 
@@ -32,7 +33,7 @@ const isDone = (values: FormValues) =>
   String(values.age).length >= 2 &&
   values.age > 0
 
-export const NameAgeInput: React.SFC<Props> = ({ onSubmit }) => (
+export const NameAgeInput: React.SFC<Props> = ({ onSubmit, appear }) => (
   <ChatContainer>
     {(chatState: ChatState & ChatActions) => (
       <Container<State, Actions>
@@ -43,7 +44,7 @@ export const NameAgeInput: React.SFC<Props> = ({ onSubmit }) => (
           <Formik<FormValues>
             initialValues={{
               firstName: pathOr('', ['step1', 'firstName'], chatState),
-              lastName: pathOr('', ['step1', 'firstName'], chatState),
+              lastName: pathOr('', ['step1', 'lastName'], chatState),
               age: pathOr('', ['step1', 'age'], chatState),
             }}
             onSubmit={({ firstName, lastName, age }) => {
@@ -52,7 +53,7 @@ export const NameAgeInput: React.SFC<Props> = ({ onSubmit }) => (
             }}
           >
             {(props) => (
-              <UserResponse>
+              <UserResponse appear={appear}>
                 <form
                   onSubmit={(e) => {
                     e.preventDefault()

@@ -30,7 +30,7 @@ const ChatWrapper = styled('div')({
 const Hedvig = styled('img')({
   height: 40,
 })
-const HedvigWrapper = styled(FadeIn)({
+const HedvigWrapper = styled('div')({
   paddingRight: 20,
 })
 
@@ -62,7 +62,7 @@ export const Typing: React.SFC<{ status: TransitionStatus }> = ({ status }) => (
 )
 
 export const ChatMessageTextWrapper = styled('div')(
-  ({ isVisible }: { isVisible: boolean }) => ({
+  ({ isVisible, appear }: { isVisible: boolean; appear: boolean }) => ({
     display: 'inline-block',
     backgroundColor: colors.OFF_WHITE,
     color: colors.OFF_BLACK,
@@ -70,31 +70,53 @@ export const ChatMessageTextWrapper = styled('div')(
     padding: '1rem 2rem',
     fontSize: '.9rem',
     borderRadius: 8,
-    opacity: 0,
-    animation: isVisible
-      ? `${fadeUp} 200ms forwards, ${fadeIn} 300ms forwards`
-      : 'none',
+    opacity: appear ? 1 : 0,
+    animation:
+      isVisible && !appear
+        ? `${fadeUp} 200ms forwards, ${fadeIn} 300ms forwards`
+        : 'none',
   }),
 )
 
 export interface ChatMessageProps {
+  appear?: boolean
   typingDuration?: number
   onTyped?: () => void
 }
 
+const HedvigIcon: React.SFC = () => (
+  <HedvigWrapper>
+    <Hedvig src="https://cdn.hedvig.com/identity/graphics/hedvig-symbol-color.svg" />
+  </HedvigWrapper>
+)
+
 export const ChatMessage: React.SFC<ChatMessageProps> = ({
   children,
+  appear = false,
   typingDuration = 500,
   onTyped,
 }) => (
   <ChatWrapper>
-    <HedvigWrapper>
-      <Hedvig src="https://cdn.hedvig.com/identity/graphics/hedvig-symbol-color.svg" />
-    </HedvigWrapper>
-    <Transition timeout={typingDuration} appear in onEntered={onTyped}>
+    {appear ? (
+      <HedvigIcon />
+    ) : (
+      <FadeIn>
+        <HedvigIcon />
+      </FadeIn>
+    )}
+    <Transition
+      timeout={appear ? 0 : typingDuration}
+      appear
+      in
+      onEntered={onTyped}
+    >
       {(appearStatus) => (
         <ChatMessageWrapper>
-          <Transition timeout={500} appear in={appearStatus === ENTERING}>
+          <Transition
+            timeout={500}
+            appear
+            in={appearStatus === ENTERING && !appear}
+          >
             {(typingTransitionStatus) =>
               typingTransitionStatus !== EXITED && (
                 <Typing status={typingTransitionStatus} />
@@ -102,6 +124,7 @@ export const ChatMessage: React.SFC<ChatMessageProps> = ({
             }
           </Transition>
           <ChatMessageTextWrapper
+            appear={appear}
             isVisible={[ENTERED, EXITING].includes(appearStatus)}
           >
             {children}

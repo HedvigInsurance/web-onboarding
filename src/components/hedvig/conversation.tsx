@@ -19,13 +19,23 @@ const nextOrNoop = (next: () => void) => (
   )
 
 export interface MessageProps {
+  appear?: boolean
   next?: () => void
   delay?: number
-  children: (next: () => void) => React.ReactNode
+  children: (props: { next: () => void; appear: boolean }) => React.ReactNode
 }
 
-export const Message: React.SFC<MessageProps> = ({ children, next }) => (
-  <>{children(defaultTo(always(null), next))}</>
+export const Message: React.SFC<MessageProps> = ({
+  children,
+  next,
+  appear = false,
+}) => (
+  <>
+    {children({
+      next: defaultTo(always(null), next),
+      appear,
+    })}
+  </>
 )
 
 interface State {
@@ -40,9 +50,13 @@ interface ConversationProps {
   children:
     | React.ReactElement<MessageProps>
     | Array<React.ReactElement<MessageProps>>
+  initialStep?: number
 }
 
-export const Conversation: React.SFC<ConversationProps> = ({ children }) => {
+export const Conversation: React.SFC<ConversationProps> = ({
+  children,
+  initialStep,
+}) => {
   React.Children.forEach(children, (child, index) => {
     if (!React.isValidElement(child)) {
       throw new Error(`Child at index ${index} must be a Message`)
@@ -50,7 +64,7 @@ export const Conversation: React.SFC<ConversationProps> = ({ children }) => {
   })
   return (
     <Container<State, Actions>
-      initialState={{ currentMessage: 0 }}
+      initialState={{ currentMessage: initialStep || 0 }}
       actions={{
         next: () => ({ currentMessage }) => ({
           currentMessage:
@@ -66,7 +80,8 @@ export const Conversation: React.SFC<ConversationProps> = ({ children }) => {
             .slice(0, currentMessage + 1)
             .map(
               (child, index) =>
-                React.Children.only(child).props.delay ? (
+                React.Children.only(child).props.delay &&
+                !React.Children.only(child).props.appear ? (
                   <Transition
                     timeout={React.Children.only(child).props.delay}
                     appear

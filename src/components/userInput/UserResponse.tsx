@@ -30,14 +30,17 @@ export const UserTextInput = styled('input')(
   }),
 )
 
-const UserResponseWrapper: React.SFC<{ className?: string }> = ({
-  className,
-  children,
-}) => (
-  <FadeIn className={className}>
-    <FadeUp>{children}</FadeUp>
-  </FadeIn>
-)
+const UserResponseWrapper: React.SFC<{
+  className?: string
+  appear?: boolean
+}> = ({ className, children, appear }) =>
+  appear ? (
+    <div className={className}>{children}</div>
+  ) : (
+    <FadeIn className={className}>
+      <FadeUp>{children}</FadeUp>
+    </FadeIn>
+  )
 
 export const UserResponse = styled(UserResponseWrapper)({
   textAlign: 'right',
