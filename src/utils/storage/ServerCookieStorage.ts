@@ -17,6 +17,7 @@ export class ServerCookieStorage implements MinimalStorage {
     this.requestCtx.cookies.set(item, value, {
       ...omit(['date'], options),
       signed: false,
+      expires: undefined,
     })
   }
 }

@@ -7,7 +7,7 @@ import { createSession } from './utils/cookieStorage'
 
 ReactDOM.hydrate(
   <BrowserRouter>
-    <HotApp session={createSession(new CookieStorage())} />
+    <HotApp session={createSession(new CookieStorage({ expires: null }))} />
   </BrowserRouter>,
   document.getElementById('react-root'),
 )
