@@ -32,8 +32,8 @@
   },
   "dependencies": {
     "@hedviginsurance/brand": "^1.4.1",
-    "@hedviginsurance/cli": "^1.4.1",
-    "@hedviginsurance/web-survival-kit": "^1.4.0",
+    "@hedviginsurance/cli": "^2.1.0",
+    "@hedviginsurance/web-survival-kit": "^1.5.0",
     "@types/koa": "^2.0.46",
     "@types/koa-basic-auth": "^2.0.3",
     "@types/koa-router": "^7.0.32",
