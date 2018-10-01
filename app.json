@@ -1,0 +1,25 @@
+{
+  "name": "web-onboarding",
+  "description": "",
+  "scripts": {},
+  "env": {
+    "USE_AUTH": "true",
+    "AUTH_NAME": {
+      "required": true
+    },
+    "AUTH_PASS": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "addons": [],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
+}
