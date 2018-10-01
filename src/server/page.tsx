@@ -6,6 +6,8 @@ import * as React from 'react'
 import { renderToString } from 'react-dom/server'
 import { StaticRouter, StaticRouterContext } from 'react-router'
 import { App } from '../App'
+import { createSession } from '../utils/cookieStorage'
+import { ServerCookieStorage } from '../utils/storage/ServerCookieStorage'
 
 const scriptLocation = getScriptLocation({
   statsLocation: path.resolve(__dirname, 'assets'),
@@ -33,7 +35,7 @@ export const getPage: Koa.Middleware = async (ctx) => {
   const reactBody = renderStylesToString(
     renderToString(
       <StaticRouter location={ctx.request.originalUrl} context={routerContext}>
-        <App />
+        <App session={createSession(new ServerCookieStorage(ctx))} />
       </StaticRouter>,
     ),
   )
