@@ -1,12 +1,12 @@
 import { UserResponse, UserTextInput } from 'components/userInput/UserResponse'
 import { Container, StateUpdater } from 'constate'
-import { Formik } from 'formik'
-import { pathOr } from 'ramda'
+import { pathOr, pipe } from 'ramda'
 import * as React from 'react'
 import {
   ChatContainer,
   Effects as ChatActions,
   State as ChatState,
+  Step1State,
 } from '../state'
 
 interface FormValues {
@@ -27,7 +27,18 @@ interface Props {
   onSubmit: (state?: FormValues) => void
 }
 
-const isDone = (values: FormValues) =>
+const handleChange = <K extends keyof Step1State>(
+  field: K,
+  chatState: ChatActions,
+) =>
+  pipe<React.ChangeEvent<HTMLInputElement>, Step1State[K], void>(
+    pathOr<string>('', ['target', 'value']),
+    (val: string | number) => chatState.setStep1Prop(field, val),
+  )
+
+const isDone = (
+  values: FormValues = { firstName: '', lastName: '', age: '' },
+) =>
   values.firstName.length > 0 &&
   values.lastName.length > 0 &&
   String(values.age).length >= 2 &&
@@ -41,73 +52,67 @@ export const NameAgeInput: React.SFC<Props> = ({ onSubmit, appear }) => (
         actions={{ setFocused: () => (_) => ({ hasFocused: true }) }}
       >
         {(state) => (
-          <Formik<FormValues>
-            initialValues={{
-              firstName: pathOr('', ['step1', 'firstName'], chatState),
-              lastName: pathOr('', ['step1', 'lastName'], chatState),
-              age: pathOr('', ['step1', 'age'], chatState),
-            }}
-            onSubmit={({ firstName, lastName, age }) => {
-              chatState.setStep1(firstName, lastName, Number(age))
-              onSubmit({ firstName, lastName, age })
-            }}
-          >
-            {(props) => (
-              <UserResponse appear={appear}>
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault()
-                    if (!isDone(props.values)) {
+          <UserResponse appear={appear}>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault()
+                if (!isDone(chatState.step1)) {
+                  return
+                }
+                if (onSubmit) {
+                  onSubmit(chatState.step1)
+                }
+              }}
+            >
+              <div>
+                Jag heter{' '}
+                <UserTextInput
+                  type="text"
+                  id="firstName"
+                  value={pathOr('', ['step1', 'firstName'], chatState)}
+                  onChange={handleChange('firstName', chatState)}
+                  maxWidth={Math.max(
+                    pathOr(0, ['step1', 'firstName', 'length'], chatState),
+                    10,
+                  )}
+                  innerRef={(ref) => {
+                    if (state.hasFocused || !ref) {
                       return
                     }
-                    props.handleSubmit(e)
+                    ref.focus()
+                    state.setFocused()
                   }}
-                >
+                />{' '}
+                <UserTextInput
+                  type="text"
+                  id="lastName"
+                  value={pathOr('', ['step1', 'lastName'], chatState)}
+                  onChange={handleChange('lastName', chatState)}
+                  maxWidth={Math.max(
+                    pathOr(0, ['step1', 'lastName', 'length'], chatState),
+                    15,
+                  )}
+                />
+              </div>
+              <div>
+                och är{' '}
+                <UserTextInput
+                  type="number"
+                  id="age"
+                  step={1}
+                  value={pathOr('', ['step1', 'age'], chatState)}
+                  onChange={handleChange('age', chatState)}
+                  maxWidth={4.5}
+                />{' '}
+                år gammal
+                {isDone(chatState.step1) && (
                   <div>
-                    Jag heter{' '}
-                    <UserTextInput
-                      type="text"
-                      id="firstName"
-                      value={props.values.firstName}
-                      onChange={props.handleChange}
-                      maxWidth={Math.max(props.values.firstName.length, 10)}
-                      innerRef={(ref) => {
-                        if (state.hasFocused || !ref) {
-                          return
-                        }
-                        ref.focus()
-                        state.setFocused()
-                      }}
-                    />{' '}
-                    <UserTextInput
-                      type="text"
-                      id="lastName"
-                      value={props.values.lastName}
-                      onChange={props.handleChange}
-                      maxWidth={Math.max(props.values.lastName.length, 15)}
-                    />
+                    <button type="submit">Ok</button>
                   </div>
-                  <div>
-                    och är{' '}
-                    <UserTextInput
-                      type="number"
-                      id="age"
-                      step={1}
-                      value={props.values.age}
-                      onChange={props.handleChange}
-                      maxWidth={4.5}
-                    />{' '}
-                    år gammal
-                    {isDone(props.values) && (
-                      <div>
-                        <button type="submit">Ok</button>
-                      </div>
-                    )}
-                  </div>
-                </form>
-              </UserResponse>
-            )}
-          </Formik>
+                )}
+              </div>
+            </form>
+          </UserResponse>
         )}
       </Container>
     )}
