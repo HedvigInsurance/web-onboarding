@@ -7,6 +7,8 @@ import { InsuredAmount } from '../sections/offering/insured-amount';
 import styled from 'react-emotion';
 import { HedvigInfo } from '../sections/offering/hedvig-info';
 import { HedvigSwitch } from '../sections/offering/hedvig-switch';
+import { GetInsured } from '../sections/offering/get-insured';
+import { Legal } from '../sections/offering/legal';
 
 const Container = styled('div')({
 
@@ -39,6 +41,7 @@ export class Offering extends React.Component {
           iconWorld={'/assets/offering/world.png'}
           alreadyInsuredLabel={'Gamla försäkringens slutdatum'}
           todayLabel={'Idag'}
+          protection={'Med skydd för'}
         />
 
         {/* Hedvig Info Section */}
@@ -55,6 +58,9 @@ export class Offering extends React.Component {
         {/* Insured Amount Section */}
         <InsuredAmount title={'Försäkrade belopp'} info={'Läs mer'}/>
 
+        {/* Get Insured Section */}
+        <GetInsured title={'Försäkra'} name={'Fantastiska Gatan'} getInsured={"Bli försäkrad"}/>
+        <Legal legalText={'Genom att trycka på ”Bli försäkrad” godkänner jag att jag har tagit del av förköpsinformation, villkor och att mina personuppgifter behandlas enligt GDPR'}/>
       </Container>
     );
   }

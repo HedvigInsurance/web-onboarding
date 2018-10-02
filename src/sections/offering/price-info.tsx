@@ -20,6 +20,7 @@ const Card = styled('div')({
   marginRight: 'auto',
   backgroundColor: colors.WHITE,
   minWidth: '700px',
+  paddingBottom: 40,
   '@media (max-width: 700px)': {
     minWidth: '0px',
     width: '100%',
@@ -38,13 +39,11 @@ export const Header = styled('h1')({
   fontWeight: 'normal',
   textAlign: 'center',
   '@media (max-width: 640px)': {
-    maxWidth: '60%',
     paddingLeft: '0px',
     paddingRight: '0px',
   },
   '@media (max-width: 400px)': {
     fontSize: '25px',
-    maxWidth: '50%',
   },
 })
 
@@ -57,9 +56,6 @@ export const SubTitle = styled('p')({
   textAlign: 'center',
   maxWidth: '100%',
   color: colors.DARK_GRAY,
-  '@media (max-width: 400px)': {
-    maxWidth: '20%',
-  },
 })
 
 const Price = styled('p')({
@@ -86,6 +82,14 @@ export const Label = styled('p')({
   fontSize: '16px',
   textAlign: 'center',
   color: colors.DARK_GRAY,
+})
+
+export const ProtectionLabel = styled('p')({
+  marginBottom: '0px',
+  marginTop: '0px',
+  fontSize: '16px',
+  textAlign: 'center',
+  color: colors.BLACK,
 })
 
 export const Row = styled('div')({
@@ -124,7 +128,6 @@ export const Title = styled('label')({
 });
 
 export const GetInsuredButton = styled('div')({
-  paddingBottom: 40,
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'center',
@@ -154,6 +157,7 @@ interface Props {
   BackgroundImage: any /*TODO: type fix*/
   alreadyInsuredLabel: string
   todayLabel: string
+  protection: string
 }
 
 interface MyComponentState { buttonIsHidden :  boolean }
@@ -200,7 +204,7 @@ export class PriceInfo extends React.Component<Props, MyComponentState> {
             <SubTitle>{this.props.subTitle2}</SubTitle>
             <Price>{this.props.price}</Price>
             <Time>{this.props.subscriptionTime}</Time>
-
+            <ProtectionLabel>{this.props.protection}</ProtectionLabel>
             <Row>
               {COLUMNS.map((col, index) =>
                 <Col key={index}>

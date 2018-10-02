@@ -17,14 +17,9 @@ const InnerContainer = styled('div')({
   display: 'flex',
   alignItems: 'center',
   flexDirection: 'column',
-
 })
 
-const BigRow = styled('div')({
-  '@media (max-width: 700px)': {
-
-  },
-})
+const BigRow = styled('div')({})
 
 const TitleRow = styled('div')({
   marginTop: '30px',
@@ -51,7 +46,7 @@ const Col = styled('div')({
   display: 'flex',
   alignItems: 'center',
   flexDirection: 'column',
-   marginBottom: '30px',
+  marginBottom: '30px',
 })
 
 export const CardHeader = styled('h2')({
@@ -82,35 +77,30 @@ const Label = styled('p')({
   color: colors.DARK_GRAY,
 })
 
-
 export const InsuranceCoverage: React.SFC<Props> = (props) => (
   <Container>
-
     <InnerContainer>
       <Card>
         <Header>{props.headline}</Header>
         <SubTitle>{props.subTitle}</SubTitle>
-      {CARDS.map((card, index) => (
-
+        {CARDS.map((card, index) => (
           <BigRow key={index}>
-          <TitleRow>
-            <Col>
-              <ImageIcon src={card.icon} />
-              <CardHeader>{card.name}</CardHeader>
-            </Col>
-          </TitleRow>
-          <Row>
+            <TitleRow>
+              <Col>
+                <ImageIcon src={card.icon} />
+                <CardHeader>{card.name}</CardHeader>
+              </Col>
+            </TitleRow>
+            <Row>
               {card.icons.map((column, index) => (
                 <Col key={index}>
                   <ImageIcon src={column.image} />
-                    <Label>
-                      {column.title}
-                    </Label>
+                  <Label>{column.title}</Label>
                 </Col>
               ))}
-          </Row>
+            </Row>
           </BigRow>
-      ))}
+        ))}
       </Card>
     </InnerContainer>
   </Container>
@@ -120,58 +110,75 @@ const CARDS = [
   {
     name: 'Dig och din familj',
     icon: '/assets/offering/du_och_din_familj.png',
-    icons: [{
-      title: 'Juridisk tvist',
-      image: '/assets/offering/juridisk_tvist.png',
-    },{
-      title: 'Överfall',
-      image: '/assets/offering/overfall_2.png',
-    },{
-      title: 'Sjuk på resa',
-      image: '/assets/offering/sjuk_pa_resa.png',
-    },{
-      title: 'Försenad resa',
-      image: '/assets/offering/forsenad_resa.png',
-    },{
-      title: 'Försenat bagage',
-      image: '/assets/offering/forsenad_resa.png',
-    }]
+    icons: [
+      {
+        title: 'Juridisk tvist',
+        image: '/assets/offering/juridisk_tvist.png',
+      },
+      {
+        title: 'Överfall',
+        image: '/assets/offering/overfall_2.png',
+      },
+      {
+        title: 'Sjuk på resa',
+        image: '/assets/offering/sjuk_pa_resa.png',
+      },
+      {
+        title: 'Försenad resa',
+        image: '/assets/offering/forsenad_resa.png',
+      },
+      {
+        title: 'Försenat bagage',
+        image: '/assets/offering/forsenad_resa.png',
+      },
+    ],
   },
   {
     name: 'Din lägenhet',
     icon: '/assets/offering/lagenhet.png',
-    icons: [{
-      title: 'Eldsvåda',
-      image: '/assets/offering/eldsvada.png',
-    },{
-      title: 'Inbrott',
-      image: '/assets/offering/inbrott.png',
-    },{
-      title: 'Oväder',
-      image: '/assets/offering/ovader.png',
-    },{
-      title: 'Skadedjur',
-      image: '/assets/offering/skadedjur.png',
-    }]
+    icons: [
+      {
+        title: 'Eldsvåda',
+        image: '/assets/offering/eldsvada.png',
+      },
+      {
+        title: 'Inbrott',
+        image: '/assets/offering/inbrott.png',
+      },
+      {
+        title: 'Oväder',
+        image: '/assets/offering/ovader.png',
+      },
+      {
+        title: 'Skadedjur',
+        image: '/assets/offering/skadedjur.png',
+      },
+    ],
   },
   {
     name: 'Dina prylar',
     icon: '/assets/offering/prylar.png',
-    icons: [{
+    icons: [
+      {
         title: 'Drulle',
         image: '/assets/offering/Drulle.png',
-      },{
+      },
+      {
         title: 'Eldsvåda',
         image: '/assets/offering/eldsvada_green.png',
-      },{
+      },
+      {
         title: 'Oväder',
         image: '/assets/offering/ovader_green.png',
-      },{
+      },
+      {
         title: 'Stöld',
         image: '/assets/offering/stold.png',
-      },{
+      },
+      {
         title: 'Vattenläcka',
         image: '/assets/offering/vattenlacka.png',
-      }]
-    },
+      },
+    ],
+  },
 ]

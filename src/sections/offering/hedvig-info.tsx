@@ -12,7 +12,7 @@ export const Row = styled('div')({
   display: 'flex',
   flexDirection: 'row',
   justifyContent:'center',
-  alignItems: 'center',
+  alignItems: 'baseline',
   '@media (max-width: 710px)':{
     flexDirection: 'column',
     alignItems: 'center',
