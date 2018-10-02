@@ -57,7 +57,7 @@ export class Offering extends React.Component<{}, MyComponentState> {
         <HedvigInfo title={'Det här är Hedvig'} />
 
         {/* Hedvig Switch Section */}
-        {!this.alreadyInsured ? (
+        {this.alreadyInsured ? (
           <HedvigSwitch
             title={'Hedvig sköter bytet från din gamla försäkring'}
           />

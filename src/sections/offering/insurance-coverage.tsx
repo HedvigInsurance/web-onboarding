@@ -52,9 +52,9 @@ const Col = styled('div')({
 
 export const CardHeader = styled('h2')({
   fontFamily: fonts.MERRIWEATHER,
-  fontSize: '20px',
+  fontSize: '18px',
   fontWeight: 'normal',
-  maxWidth: '100px',
+  maxWidth: '120px',
   textAlign: 'center',
   marginBottom: '0px',
   marginTop: '0px',
