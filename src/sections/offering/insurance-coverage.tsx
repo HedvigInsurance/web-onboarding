@@ -77,34 +77,57 @@ const Label = styled('p')({
   color: colors.DARK_GRAY,
 })
 
-export const InsuranceCoverage: React.SFC<Props> = (props) => (
-  <Container>
-    <InnerContainer>
-      <Card>
-        <Header>{props.headline}</Header>
-        <SubTitle>{props.subTitle}</SubTitle>
-        {CARDS.map((card, index) => (
-          <BigRow key={index}>
-            <TitleRow>
-              <Col>
-                <ImageIcon src={card.icon} />
-                <CardHeader>{card.name}</CardHeader>
-              </Col>
-            </TitleRow>
-            <Row>
-              {card.icons.map((column, index) => (
-                <Col key={index}>
-                  <ImageIcon src={column.image} />
-                  <Label>{column.title}</Label>
-                </Col>
-              ))}
-            </Row>
-          </BigRow>
-        ))}
-      </Card>
-    </InnerContainer>
-  </Container>
-)
+export class InsuranceCoverage extends React.Component<Props> {
+  constructor() {
+    super()
+    this.state = {
+      showInfo: false,
+    }
+
+    this.togglePopup = this.togglePopup.bind(this)
+  }
+
+  togglePopup() {
+    this.setState({
+      showInfo: !this.state.showInfo,
+    })
+    console.log(this.state.showInfo)
+  }
+
+  render() {
+    return (
+      <Container>
+        <InnerContainer>
+          <Card>
+            <Header>{this.props.headline}</Header>
+            <SubTitle>{this.props.subTitle}</SubTitle>
+            {CARDS.map((card, index) => (
+              <BigRow key={index}>
+                <TitleRow>
+                  <Col>
+                    <ImageIcon src={card.icon} />
+                    <CardHeader>{card.name}</CardHeader>
+                  </Col>
+                </TitleRow>
+                <Row>
+                  {card.icons.map((column, index) => (
+                    <Col key={index}>
+                      <ImageIcon
+                        src={column.image}
+                        onClick={this.togglePopup}
+                      />
+                      <Label>{column.title}</Label>
+                    </Col>
+                  ))}
+                </Row>
+              </BigRow>
+            ))}
+          </Card>
+        </InnerContainer>
+      </Container>
+    )
+  }
+}
 
 const CARDS = [
   {

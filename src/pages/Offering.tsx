@@ -36,10 +36,7 @@ export class Offering extends React.Component<Props, MyComponentState> {
       /*TODO: graphql data */
       <Container>
         {/* Top Bar */}
-        <TopBar
-          progress={1}
-          getInsured={'Bli försäkrad'}
-        />
+        <TopBar progress={1} getInsured={'Bli försäkrad'} />
 
         {/* Pice Info Section */}
         <PriceInfo
@@ -96,6 +93,5 @@ export class Offering extends React.Component<Props, MyComponentState> {
     )
   }
 }
-
 
 /* TODO: Add proptypes check */

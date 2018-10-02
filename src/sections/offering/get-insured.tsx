@@ -1,7 +1,7 @@
-import * as React from 'react';
-import { Container, InnerContainer } from './insured-amount';
+import * as React from 'react'
+import { Container, InnerContainer } from './insured-amount'
 import { GetInsuredButton, LinkTag } from './price-info'
-import { colors,fonts } from '@hedviginsurance/brand'
+import { colors, fonts } from '@hedviginsurance/brand'
 import styled from 'react-emotion'
 
 interface Props {
@@ -21,13 +21,11 @@ const Header = styled('h1')({
   textAlign: 'center',
   paddingBottom: '10px',
   '@media (max-width: 640px)': {
-
     paddingLeft: '0px',
     paddingRight: '0px',
   },
   '@media (max-width: 400px)': {
     fontSize: '25px',
-
   },
 })
 
@@ -38,7 +36,7 @@ const Card = styled('div')({
   marginBottom: '70px',
   backgroundColor: colors.WHITE,
   minWidth: '550px',
-  paddingBottom:'30px',
+  paddingBottom: '30px',
   '@media (max-width: 550px)': {
     minWidth: '0px',
     width: '100%',
@@ -47,17 +45,17 @@ const Card = styled('div')({
   },
 })
 
-export const GetInsured:React.SFC<Props> = (props) => (
-
+export const GetInsured: React.SFC<Props> = (props) => (
   <Container>
     <InnerContainer>
       <Card>
-        <Header>{props.title} {props.name}</Header>
+        <Header>
+          {props.title} {props.name}
+        </Header>
         <GetInsuredButton>
           <LinkTag href="/">{props.getInsured}</LinkTag>
         </GetInsuredButton>
       </Card>
     </InnerContainer>
   </Container>
-
-);
+)

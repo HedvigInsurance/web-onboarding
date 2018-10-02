@@ -96,7 +96,7 @@ export const Row = styled('div')({
   display: 'flex',
   alignItems: 'baseline',
   flexDirection: 'row',
-  justifyContent:'center',
+  justifyContent: 'center',
   '@media (max-width: 400px)': {
     flexDirection: 'column',
     alignItems: 'center',
@@ -107,7 +107,7 @@ export const Col = styled('div')({
   display: 'flex',
   alignItems: 'center',
   flexDirection: 'column',
-   marginBottom: '30px',
+  marginBottom: '30px',
 })
 
 const Image = styled('img')({
@@ -117,7 +117,7 @@ const Image = styled('img')({
     margin: '0px',
     maxWidth: '150px',
   },
-});
+})
 
 export const Title = styled('label')({
   marginBottom: '10px',
@@ -125,7 +125,7 @@ export const Title = styled('label')({
   textAlign: 'center',
   color: colors.DARK_GRAY,
   maxWidth: '150px',
-});
+})
 
 export const GetInsuredButton = styled('div')({
   display: 'flex',
@@ -160,22 +160,22 @@ interface Props {
   protection: string
 }
 
-interface MyComponentState { buttonIsHidden :  boolean }
-
+interface MyComponentState {
+  buttonIsHidden: boolean
+}
 
 export class PriceInfo extends React.Component<Props, MyComponentState> {
-
   componentDidMount() {
-      window.addEventListener('scroll', this.hideButton);
-    }
+    window.addEventListener('scroll', this.hideButton)
+  }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.hideButton);
+    window.removeEventListener('scroll', this.hideButton)
   }
 
   constructor(props: Props) {
     super(props)
-    this.hideButton = this.hideButton.bind(this);
+    this.hideButton = this.hideButton.bind(this)
     this.state = {
       buttonIsHidden: false,
     }
@@ -186,11 +186,11 @@ export class PriceInfo extends React.Component<Props, MyComponentState> {
     if (window.scrollY > 532) {
       this.setState({
         buttonIsHidden: true,
-      });
-    }else if (window.scrollY < 532){
+      })
+    } else if (window.scrollY < 532) {
       this.setState({
         buttonIsHidden: false,
-      });
+      })
     }
   }
 
@@ -206,14 +206,18 @@ export class PriceInfo extends React.Component<Props, MyComponentState> {
             <Time>{this.props.subscriptionTime}</Time>
             <ProtectionLabel>{this.props.protection}</ProtectionLabel>
             <Row>
-              {COLUMNS.map((col, index) =>
+              {COLUMNS.map((col, index) => (
                 <Col key={index}>
-                  <Image src={col.image}/>
+                  <Image src={col.image} />
                   <Title>{col.title}</Title>
                 </Col>
-              )}
+              ))}
             </Row>
-            <GetInsuredButton style={{visibility: this.state.buttonIsHidden ? 'hidden' : 'visible'}}>
+            <GetInsuredButton
+              style={{
+                visibility: this.state.buttonIsHidden ? 'hidden' : 'visible',
+              }}
+            >
               <LinkTag href="/">{this.props.getInsured}</LinkTag>
             </GetInsuredButton>
           </Card>

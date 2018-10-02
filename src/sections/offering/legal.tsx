@@ -1,9 +1,9 @@
-import * as React from 'react';
-import styled from 'react-emotion';
+import * as React from 'react'
+import styled from 'react-emotion'
 import { colors } from '@hedviginsurance/brand'
 
 interface Props {
-    legalText: string
+  legalText: string
 }
 
 const Container = styled('div')({
@@ -21,9 +21,8 @@ const Para = styled('p')({
   maxWidth: '400px',
 })
 
-export const Legal:React.SFC<Props> = props => (
+export const Legal: React.SFC<Props> = (props) => (
   <Container>
     <Para>{props.legalText}</Para>
   </Container>
-
-);
+)

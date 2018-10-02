@@ -17,7 +17,7 @@ const Bar = styled('div')({
   alignItems: 'center',
   backgroundColor: colors.WHITE,
   // justifyContent: 'space-between',
-  borderBottom: '1px solid ' + colors.LIGHT_GRAY
+  borderBottom: '1px solid ' + colors.LIGHT_GRAY,
 })
 
 const Logo = styled('img')({
@@ -68,40 +68,41 @@ const BarContainer = styled('div')({
 const BarProgressContainer = styled('div')({
   display: 'flex',
   width: '60%',
-  justifyContent:'center',
+  justifyContent: 'center',
 })
 
 const BarButtonContainer = styled('div')({
   width: '20%',
-  justifyContent:'flex-end',
+  justifyContent: 'flex-end',
 })
 
-interface MyComponentState { navButtonIsHidden :  boolean, active: number }
+interface MyComponentState {
+  navButtonIsHidden: boolean
+  active: number
+}
 
 interface Props {
-    getInsured: string,
-    progress: number,
+  getInsured: string
+  progress: number
+}
+
+export class TopBar extends React.Component<Props, MyComponentState> {
+  componentDidMount() {
+    window.addEventListener('scroll', this.hideButton)
   }
 
-export class TopBar extends React.Component<Props,MyComponentState>  {
-
-  componentDidMount() {
-      window.addEventListener('scroll', this.hideButton);
-    }
-
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.hideButton);
+    window.removeEventListener('scroll', this.hideButton)
   }
 
   constructor(props: any) {
     super(props)
-    this.hideButton = this.hideButton.bind(this);
+    this.hideButton = this.hideButton.bind(this)
 
-    this.state = ({
+    this.state = {
       navButtonIsHidden: true,
       active: this.props.progress,
-    });
-
+    }
   }
 
   /*TODO: use refs instead of fixed height*/
@@ -109,47 +110,51 @@ export class TopBar extends React.Component<Props,MyComponentState>  {
     if (window.scrollY > 532) {
       this.setState({
         navButtonIsHidden: false,
-      });
-    }else if (window.scrollY < 532){
+      })
+    } else if (window.scrollY < 532) {
       this.setState({
         navButtonIsHidden: true,
-      });
+      })
     }
   }
 
-  checkProgress(index: number){
-    if (index == this.state.active){
-      return colors.BLACK;
-    }else{
-      return colors.DARK_GRAY;
+  checkProgress(index: number) {
+    if (index == this.state.active) {
+      return colors.BLACK
+    } else {
+      return colors.DARK_GRAY
     }
   }
 
-  render(){
-    return(
+  render() {
+    return (
       <Container>
         <Bar>
           <BarContainer>
-            <Logo src="/assets/offering/logo.png"/>
+            <Logo src="/assets/offering/logo.png" />
           </BarContainer>
           <BarProgressContainer>
-            {progressStrings.map((string, index) =>
-              <ProgressLabel key={index} style={{color: this.checkProgress(index)}}
-                >
+            {progressStrings.map((string, index) => (
+              <ProgressLabel
+                key={index}
+                style={{ color: this.checkProgress(index) }}
+              >
                 {string.progressText}
               </ProgressLabel>
-            )}
-
-
+            ))}
           </BarProgressContainer>
           <BarButtonContainer>
-            <GetInsuredButton style={{visibility: this.state.navButtonIsHidden ? 'hidden' : 'visible'}}>
+            <GetInsuredButton
+              style={{
+                visibility: this.state.navButtonIsHidden ? 'hidden' : 'visible',
+              }}
+            >
               <LinkTag href="/">{this.props.getInsured}</LinkTag>
             </GetInsuredButton>
           </BarButtonContainer>
         </Bar>
       </Container>
-    );
+    )
   }
 }
 

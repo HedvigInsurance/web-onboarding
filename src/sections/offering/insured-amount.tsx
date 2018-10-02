@@ -1,22 +1,22 @@
-import * as React from 'react';
-import styled from 'react-emotion';
-import { colors } from '@hedviginsurance/brand';
+import * as React from 'react'
+import styled from 'react-emotion'
+import { colors } from '@hedviginsurance/brand'
 import { Header } from './price-info'
 
 interface Props {
-  title: string,
-  info: string,
+  title: string
+  info: string
 }
 export const Container = styled('div')({
   width: '100%',
   backgroundColor: colors.OFF_WHITE,
-});
+})
 
 export const InnerContainer = styled('div')({
   display: 'flex',
   alignItems: 'center',
   flexDirection: 'column',
-});
+})
 
 export const Card = styled('div')({
   marginTop: '70px',
@@ -30,12 +30,12 @@ export const Card = styled('div')({
     marginLeft: '0px',
     marginRight: '0px',
   },
-});
+})
 
 const Table = styled('div')({
   marginTop: '20',
   marginBottom: '40',
-});
+})
 
 const Row = styled('div')({
   display: 'flex',
@@ -46,7 +46,7 @@ const Row = styled('div')({
   borderBottom: '1px solid ' + colors.LIGHT_GRAY,
   marginLeft: '40px',
   marginRight: '40px',
-});
+})
 
 const TextCol = styled('label')({
   display: 'flex',
@@ -62,24 +62,25 @@ const ReadCol = styled('a')({
   fontSize: '16px',
 })
 
-export const InsuredAmount:React.SFC<Props> = (props) =>(
-<Container>
-  <InnerContainer>
-    <Card>
-      <Header>{props.title}</Header>
-      <Table>
-      {AMOUNTS.map((amount, index) =>
-        <Row key={index}>
-          <TextCol>{amount.title} {amount.amount}</TextCol>
-          <ReadCol href="/">{props.info}</ReadCol>
-        </Row>
-      )}
-      </Table>
-    </Card>
-  </InnerContainer>
-</Container>
-);
-
+export const InsuredAmount: React.SFC<Props> = (props) => (
+  <Container>
+    <InnerContainer>
+      <Card>
+        <Header>{props.title}</Header>
+        <Table>
+          {AMOUNTS.map((amount, index) => (
+            <Row key={index}>
+              <TextCol>
+                {amount.title} {amount.amount}
+              </TextCol>
+              <ReadCol href="/">{props.info}</ReadCol>
+            </Row>
+          ))}
+        </Table>
+      </Card>
+    </InnerContainer>
+  </Container>
+)
 
 const AMOUNTS = [
   {
