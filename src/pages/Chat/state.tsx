@@ -58,6 +58,7 @@ export const ChatContainer: React.SFC<
                 ...storageState.session.getSession(),
                 chat: {},
               })
+              window.location.reload()
             },
           } as any
         }

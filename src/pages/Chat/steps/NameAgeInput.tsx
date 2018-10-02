@@ -39,10 +39,10 @@ const handleChange = <K extends keyof Step1State>(
 const isDone = (
   values: FormValues = { firstName: '', lastName: '', age: '' },
 ) =>
-  values.firstName.length > 0 &&
-  values.lastName.length > 0 &&
-  String(values.age).length >= 2 &&
-  values.age > 0
+  pathOr(0, ['firstName', 'length'], values) > 0 &&
+  pathOr(0, ['lastName', 'length'], values) > 0 &&
+  String(pathOr(0, ['age'], values)).length >= 2 &&
+  pathOr(0, ['age'], values) > 0
 
 export const NameAgeInput: React.SFC<Props> = ({ onSubmit, appear }) => (
   <ChatContainer>
