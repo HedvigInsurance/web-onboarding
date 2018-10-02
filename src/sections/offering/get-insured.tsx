@@ -1,8 +1,8 @@
+import { colors, fonts } from '@hedviginsurance/brand'
 import * as React from 'react'
+import styled from 'react-emotion'
 import { Container, InnerContainer } from './insured-amount'
 import { GetInsuredButton, LinkTag } from './price-info'
-import { colors, fonts } from '@hedviginsurance/brand'
-import styled from 'react-emotion'
 
 interface Props {
   title: string

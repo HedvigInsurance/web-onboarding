@@ -1,8 +1,8 @@
 import * as React from 'react'
 import styled from 'react-emotion'
+import { Col, Row, SubTitle, Title } from './hedvig-info'
+import { Card, Container, InnerContainer } from './insured-amount'
 import { Header } from './price-info'
-import { Container, InnerContainer, Card } from './insured-amount'
-import { Row, Col, Title, SubTitle } from './hedvig-info'
 
 interface Props {
   title: string

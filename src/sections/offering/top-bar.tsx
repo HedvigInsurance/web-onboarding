@@ -1,6 +1,6 @@
+import { colors } from '@hedviginsurance/brand'
 import * as React from 'react'
 import styled from 'react-emotion'
-import { colors } from '@hedviginsurance/brand'
 
 const Container = styled('div')({
   width: '100%',
@@ -87,14 +87,6 @@ interface Props {
 }
 
 export class TopBar extends React.Component<Props, MyComponentState> {
-  componentDidMount() {
-    window.addEventListener('scroll', this.hideButton)
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('scroll', this.hideButton)
-  }
-
   constructor(props: any) {
     super(props)
     this.hideButton = this.hideButton.bind(this)
@@ -104,9 +96,16 @@ export class TopBar extends React.Component<Props, MyComponentState> {
       active: this.props.progress,
     }
   }
+  public componentDidMount() {
+    window.addEventListener('scroll', this.hideButton)
+  }
+
+  public componentWillUnmount() {
+    window.removeEventListener('scroll', this.hideButton)
+  }
 
   /*TODO: use refs instead of fixed height*/
-  hideButton() {
+  public hideButton() {
     if (window.scrollY > 532) {
       this.setState({
         navButtonIsHidden: false,
@@ -118,7 +117,7 @@ export class TopBar extends React.Component<Props, MyComponentState> {
     }
   }
 
-  checkProgress(index: number) {
+  public checkProgress(index: number) {
     if (index === this.state.active) {
       return colors.BLACK
     } else {
@@ -126,7 +125,7 @@ export class TopBar extends React.Component<Props, MyComponentState> {
     }
   }
 
-  render() {
+  public render() {
     return (
       <Container>
         <Bar>

@@ -1,7 +1,8 @@
+import { colors, fonts } from '@hedviginsurance/brand'
 import * as React from 'react'
 import styled from 'react-emotion'
 import { Header, SubTitle } from './price-info'
-import { colors, fonts } from '@hedviginsurance/brand'
+
 import { Card } from './insured-amount'
 
 interface Props {
@@ -82,7 +83,7 @@ export class InsuranceCoverage extends React.Component<Props> {
     super(props)
   }
 
-  render() {
+  public render() {
     return (
       <Container>
         <InnerContainer>
@@ -98,8 +99,8 @@ export class InsuranceCoverage extends React.Component<Props> {
                   </Col>
                 </TitleRow>
                 <Row>
-                  {card.icons.map((column, index) => (
-                    <Col key={index}>
+                  {card.icons.map((column, ind) => (
+                    <Col key={ind}>
                       <ImageIcon src={column.image} />
                       <Label>{column.title}</Label>
                     </Col>

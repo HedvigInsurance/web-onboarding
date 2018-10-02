@@ -1,6 +1,6 @@
+import { colors, fonts } from '@hedviginsurance/brand'
 import * as React from 'react'
 import styled from 'react-emotion'
-import { colors, fonts } from '@hedviginsurance/brand'
 
 const Container = styled('div')({
   marginTop: '70px',
@@ -165,14 +165,6 @@ interface MyComponentState {
 }
 
 export class PriceInfo extends React.Component<Props, MyComponentState> {
-  componentDidMount() {
-    window.addEventListener('scroll', this.hideButton)
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('scroll', this.hideButton)
-  }
-
   constructor(props: any) {
     super(props)
     this.hideButton = this.hideButton.bind(this)
@@ -180,9 +172,16 @@ export class PriceInfo extends React.Component<Props, MyComponentState> {
       buttonIsHidden: false,
     }
   }
+  public componentDidMount() {
+    window.addEventListener('scroll', this.hideButton)
+  }
+
+  public componentWillUnmount() {
+    window.removeEventListener('scroll', this.hideButton)
+  }
 
   /*TODO: use refs instead of fixed height*/
-  hideButton() {
+  public hideButton() {
     if (window.scrollY > 532) {
       this.setState({
         buttonIsHidden: true,
@@ -194,7 +193,7 @@ export class PriceInfo extends React.Component<Props, MyComponentState> {
     }
   }
 
-  render() {
+  public render() {
     return (
       <Container onScroll={this.hideButton}>
         <InnerContainer>

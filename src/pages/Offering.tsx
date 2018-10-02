@@ -1,14 +1,14 @@
 import * as React from 'react'
 
-import { PriceInfo } from '../sections/offering/price-info'
-import { InsuranceCoverage } from '../sections/offering/insurance-coverage'
-import { TopBar } from '../sections/offering/top-bar'
-import { InsuredAmount } from '../sections/offering/insured-amount'
 import styled from 'react-emotion'
+import { GetInsured } from '../sections/offering/get-insured'
 import { HedvigInfo } from '../sections/offering/hedvig-info'
 import { HedvigSwitch } from '../sections/offering/hedvig-switch'
-import { GetInsured } from '../sections/offering/get-insured'
+import { InsuranceCoverage } from '../sections/offering/insurance-coverage'
+import { InsuredAmount } from '../sections/offering/insured-amount'
 import { Legal } from '../sections/offering/legal'
+import { PriceInfo } from '../sections/offering/price-info'
+import { TopBar } from '../sections/offering/top-bar'
 
 export const Container = styled('div')({})
 
@@ -27,11 +27,7 @@ export class Offering extends React.Component<{}, MyComponentState> {
     this.alreadyInsured = this.alreadyInsured.bind(this)
   }
 
-  protected alreadyInsured() {
-    return this.state.alreadyInsured
-  }
-
-  render() {
+  public render() {
     return (
       /*TODO: graphql data */
       <Container>
@@ -91,6 +87,10 @@ export class Offering extends React.Component<{}, MyComponentState> {
         />
       </Container>
     )
+  }
+
+  protected alreadyInsured() {
+    return this.state.alreadyInsured
   }
 }
 

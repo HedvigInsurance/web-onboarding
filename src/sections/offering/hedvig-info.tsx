@@ -1,8 +1,8 @@
+import { colors } from '@hedviginsurance/brand'
 import * as React from 'react'
 import styled from 'react-emotion'
-import { colors } from '@hedviginsurance/brand'
+import { Card, Container, InnerContainer } from './insured-amount'
 import { Header } from './price-info'
-import { Container, InnerContainer, Card } from './insured-amount'
 
 interface Props {
   title: string
