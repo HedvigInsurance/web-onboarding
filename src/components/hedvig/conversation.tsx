@@ -55,7 +55,7 @@ interface ConversationProps {
 
 export const Conversation: React.SFC<ConversationProps> = ({
   children,
-  initialStep,
+  initialStep = 0,
 }) => {
   React.Children.forEach(children, (child, index) => {
     if (!React.isValidElement(child)) {
@@ -81,7 +81,7 @@ export const Conversation: React.SFC<ConversationProps> = ({
             .map(
               (child, index) =>
                 React.Children.only(child).props.delay &&
-                !React.Children.only(child).props.appear ? (
+                initialStep <= index ? (
                   <Transition
                     timeout={React.Children.only(child).props.delay}
                     appear
@@ -92,7 +92,10 @@ export const Conversation: React.SFC<ConversationProps> = ({
                       status === ENTERED ? (
                         React.cloneElement<MessageProps>(
                           React.Children.only(child),
-                          { next: nextOrNoop(next)(currentMessage, index) },
+                          {
+                            next: nextOrNoop(next)(currentMessage, index),
+                            appear: initialStep < index,
+                          },
                         )
                       ) : (
                         <div /> // noop but needs to be here for the animation to work
@@ -102,6 +105,7 @@ export const Conversation: React.SFC<ConversationProps> = ({
                 ) : (
                   React.cloneElement<MessageProps>(React.Children.only(child), {
                     next: nextOrNoop(next)(currentMessage, index),
+                    appear: initialStep <= index,
                   })
                 ),
             )}

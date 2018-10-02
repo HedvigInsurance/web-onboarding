@@ -1,16 +1,16 @@
 import { Provider } from 'constate'
 import { mount } from 'enzyme'
 import * as React from 'react'
+import { createSession } from 'utils/sessionStorage'
+import { MockStorage } from 'utils/storage/MockStorage'
 import { WithStorageProps } from '../../../App'
-import { createSession } from '../../../utils/cookieStorage'
-import { NoopStorage } from '../../../utils/storage/NoopStorage'
 import { ChatContainer } from '../state'
 import { NameAgeInput } from './NameAgeInput'
 
 it('handles form changes', () => {
   const wrapper = mount(
     <Provider<WithStorageProps>
-      initialState={{ storage: { session: createSession(new NoopStorage()) } }}
+      initialState={{ storage: { session: createSession(new MockStorage()) } }}
     >
       <NameAgeInput
         onSubmit={() => {
@@ -38,7 +38,7 @@ it("doesn't submit empty forms", () => {
   const handleSubmit = jest.fn()
   const wrapper = mount(
     <Provider<WithStorageProps>
-      initialState={{ storage: { session: createSession(new NoopStorage()) } }}
+      initialState={{ storage: { session: createSession(new MockStorage()) } }}
     >
       <NameAgeInput onSubmit={handleSubmit} />
     </Provider>,
@@ -72,7 +72,7 @@ it('submits form and updates state', (done) => {
   const handleSubmit = jest.fn()
   const wrapper = mount(
     <Provider<WithStorageProps>
-      initialState={{ storage: { session: createSession(new NoopStorage()) } }}
+      initialState={{ storage: { session: createSession(new MockStorage()) } }}
     >
       <NameAgeInput onSubmit={handleSubmit} />
       <StateShower />

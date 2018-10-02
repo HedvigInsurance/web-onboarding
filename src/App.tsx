@@ -3,11 +3,11 @@ import * as React from 'react'
 import { hot } from 'react-hot-loader'
 import { Route } from 'react-router-dom'
 import { reactPageRoutes } from './routes'
-import { IsomorphicSessionStorage } from './utils/cookieStorage'
 import { GlobalCss } from './utils/globalStyles'
+import { IsomorphicSessionStorage, Session } from './utils/sessionStorage'
 
 export interface StorageState {
-  session: IsomorphicSessionStorage<{}>
+  session: IsomorphicSessionStorage<Session>
 }
 
 export interface WithStorageProps {

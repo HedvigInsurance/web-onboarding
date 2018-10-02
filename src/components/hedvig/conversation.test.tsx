@@ -30,3 +30,22 @@ it('renders a conversation on message at a time', () => {
   wrapper.update()
   expect(wrapper.find('#goodbye').contains('goodbye')).toBe(true)
 })
+
+it('renders initial steps', () => {
+  const Message1: React.SFC<{ next: () => void }> = ({ next }) => (
+    <div>
+      <div id={'hello'}>hello</div>
+      <button onClick={next}>next</button>
+    </div>
+  )
+  const Message2 = () => <div id="goodbye">goodbye</div>
+
+  const wrapper = mount(
+    <Conversation initialStep={2}>
+      <Message>{({ next }) => <Message1 next={next} />}</Message>
+      <Message delay={500}>{(_) => <Message2 />}</Message>
+    </Conversation>,
+  )
+
+  expect(wrapper.find(Message)).toHaveLength(2)
+})

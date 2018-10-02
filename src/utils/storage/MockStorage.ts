@@ -1,8 +1,11 @@
+import { defaultTo } from 'ramda'
 import { MinimalStorage } from './MinimalStorage'
 
-export class NoopStorage implements MinimalStorage {
+export class MockStorage implements MinimalStorage {
+  constructor(private readonly mockState?: string) {}
+
   public getItem(_: string) {
-    return '{}'
+    return defaultTo('{}', this.mockState)
   }
 
   // tslint:disable-next-line variable-name

@@ -6,7 +6,7 @@ import * as React from 'react'
 import { renderToString } from 'react-dom/server'
 import { StaticRouter, StaticRouterContext } from 'react-router'
 import { App } from '../App'
-import { createSession } from '../utils/cookieStorage'
+import { createSession } from '../utils/sessionStorage'
 import { ServerCookieStorage } from '../utils/storage/ServerCookieStorage'
 
 const scriptLocation = getScriptLocation({

@@ -12,7 +12,6 @@ export class ServerCookieStorage implements MinimalStorage {
     )
   }
 
-  // tslint:disable-next-line variable-name
   public setItem(item: string, value: string, options?: CookieOptions): void {
     this.requestCtx.cookies.set(item, value, {
       ...omit(['date'], options),

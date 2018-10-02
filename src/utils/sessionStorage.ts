@@ -1,7 +1,13 @@
 import { CookieStorage } from 'cookie-storage'
+import { defaultTo, pipe } from 'ramda'
+import { State as ChatState } from '../pages/Chat/state'
 import { MinimalStorage } from './storage/MinimalStorage'
 
 const SESSION_KEY = '_hvsession'
+
+export interface Session {
+  chat: ChatState
+}
 
 export interface IsomorphicSessionStorage<T> {
   setSession: (value: T) => void
@@ -16,7 +22,10 @@ export const createSession = <T>(
   },
   getSession: (): T | undefined => {
     try {
-      return JSON.parse(storage.getItem(SESSION_KEY) || '{}')
+      return pipe(
+        defaultTo('{}') as (thing: string | null | undefined) => string,
+        JSON.parse,
+      )(storage.getItem(SESSION_KEY))
     } catch (e) {
       return undefined
     }
