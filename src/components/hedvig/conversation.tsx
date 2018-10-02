@@ -40,6 +40,7 @@ export const Message: React.SFC<MessageProps> = ({
 
 interface State {
   currentMessage: number
+  stateInitialStep: number
 }
 
 interface Actions {
@@ -64,7 +65,10 @@ export const Conversation: React.SFC<ConversationProps> = ({
   })
   return (
     <Container<State, Actions>
-      initialState={{ currentMessage: initialStep || 0 }}
+      initialState={{
+        stateInitialStep: initialStep,
+        currentMessage: initialStep,
+      }}
       actions={{
         next: () => ({ currentMessage }) => ({
           currentMessage:
@@ -74,14 +78,14 @@ export const Conversation: React.SFC<ConversationProps> = ({
         }),
       }}
     >
-      {({ currentMessage, next }) => (
+      {({ currentMessage, stateInitialStep, next }) => (
         <ConversationWrapper>
           {React.Children.toArray(children)
             .slice(0, currentMessage + 1)
             .map(
               (child, index) =>
                 React.Children.only(child).props.delay &&
-                initialStep <= index ? (
+                stateInitialStep + 1 <= index ? (
                   <Transition
                     timeout={React.Children.only(child).props.delay}
                     appear
@@ -94,7 +98,7 @@ export const Conversation: React.SFC<ConversationProps> = ({
                           React.Children.only(child),
                           {
                             next: nextOrNoop(next)(currentMessage, index),
-                            appear: initialStep < index,
+                            appear: stateInitialStep > index,
                           },
                         )
                       ) : (
@@ -105,7 +109,7 @@ export const Conversation: React.SFC<ConversationProps> = ({
                 ) : (
                   React.cloneElement<MessageProps>(React.Children.only(child), {
                     next: nextOrNoop(next)(currentMessage, index),
-                    appear: initialStep <= index,
+                    appear: stateInitialStep > index,
                   })
                 ),
             )}

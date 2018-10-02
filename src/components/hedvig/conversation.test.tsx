@@ -41,7 +41,7 @@ it('renders initial steps', () => {
   const Message2 = () => <div id="goodbye">goodbye</div>
 
   const wrapper = mount(
-    <Conversation initialStep={2}>
+    <Conversation initialStep={1}>
       <Message>{({ next }) => <Message1 next={next} />}</Message>
       <Message delay={500}>{(_) => <Message2 />}</Message>
     </Conversation>,

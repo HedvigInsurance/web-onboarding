@@ -1,10 +1,20 @@
 import { ChatMessage } from 'components/hedvig/chat'
 import { Conversation, Message } from 'components/hedvig/conversation'
+import { Container } from 'constate'
 import { allPass, isNil, not, path, pipe, prop } from 'ramda'
 import * as React from 'react'
+import { Mount } from 'react-lifecycle-components'
 import { ChatContainer, State as ChatState } from './state'
 import { Greet } from './steps/Greet'
 import { NameAgeInput } from './steps/NameAgeInput'
+
+interface InitialStepState {
+  hasSetInitialStep: boolean
+}
+
+interface InitialStepActions {
+  setInitialStep: () => void
+}
 
 const step1PropIsntNil = (step1Prop: string) => (steps: ChatState) =>
   pipe(
@@ -26,48 +36,67 @@ const getInitialStep = (steps: ChatState) => {
       step1PropIsntNil('age'),
     ])(steps)
   ) {
-    return 6
+    return 5
   }
 
   return 0
 }
 
 export const ChatConversation: React.SFC = () => (
-  <ChatContainer>
-    {(chatState) => (
-      <Conversation initialStep={getInitialStep(chatState)}>
-        <Message>
-          {({ next, appear }) => (
-            <ChatMessage appear={appear} typingDuration={2500} onTyped={next}>
-              Hej! Det är jag som är Hedvig! 👋
-            </ChatMessage>
-          )}
-        </Message>
-        <Message>
-          {({ next, appear }) => (
-            <ChatMessage appear={appear} typingDuration={1500} onTyped={next}>
-              Berätta lite om dig själv...
-            </ChatMessage>
-          )}
-        </Message>
+  <Container<InitialStepState, InitialStepActions>
+    initialState={{ hasSetInitialStep: false }}
+    actions={{ setInitialStep: () => (_) => ({ hasSetInitialStep: true }) }}
+  >
+    {({ hasSetInitialStep, setInitialStep }) => (
+      <Mount on={setInitialStep}>
+        <ChatContainer>
+          {(chatState) => (
+            <Conversation
+              initialStep={hasSetInitialStep ? 0 : getInitialStep(chatState)}
+            >
+              <Message>
+                {({ next, appear }) => (
+                  <ChatMessage
+                    appear={appear}
+                    typingDuration={2500}
+                    onTyped={next}
+                  >
+                    Hej! Det är jag som är Hedvig! 👋
+                  </ChatMessage>
+                )}
+              </Message>
+              <Message>
+                {({ next, appear }) => (
+                  <ChatMessage
+                    appear={appear}
+                    typingDuration={1500}
+                    onTyped={next}
+                  >
+                    Berätta lite om dig själv...
+                  </ChatMessage>
+                )}
+              </Message>
 
-        <Message delay={500}>
-          {({ next, appear }) => (
-            <NameAgeInput onSubmit={next} appear={appear} />
-          )}
-        </Message>
+              <Message delay={500}>
+                {({ next, appear }) => (
+                  <NameAgeInput onSubmit={next} appear={appear} />
+                )}
+              </Message>
 
-        <Message>
-          {({ next, appear }) => <Greet appear={appear} onTyped={next} />}
-        </Message>
-        <Message>
-          {({ appear }) => (
-            <ChatMessage appear={appear} typingDuration={500}>
-              Och berätta lite om hur du bor...
-            </ChatMessage>
+              <Message>
+                {({ next, appear }) => <Greet appear={appear} onTyped={next} />}
+              </Message>
+              <Message>
+                {({ appear }) => (
+                  <ChatMessage appear={appear} typingDuration={500}>
+                    Och berätta lite om hur du bor...
+                  </ChatMessage>
+                )}
+              </Message>
+            </Conversation>
           )}
-        </Message>
-      </Conversation>
+        </ChatContainer>
+      </Mount>
     )}
-  </ChatContainer>
+  </Container>
 )
