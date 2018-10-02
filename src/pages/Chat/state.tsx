@@ -13,6 +13,7 @@ export interface State {
 
 export interface Effects {
   setStep1: (firstName: string, lastName: string, age: number) => void
+  reset: () => void
 }
 
 export const ChatContainer: React.SFC<
@@ -36,6 +37,13 @@ export const ChatContainer: React.SFC<
               storageState.session.setSession({
                 ...storageState.session.getSession(),
                 chat: newState,
+              })
+            },
+            reset: () => ({ setState }: EffectProps<State>) => {
+              setState({ step1: undefined })
+              storageState.session.setSession({
+                ...storageState.session.getSession(),
+                chat: {},
               })
             },
           } as any
