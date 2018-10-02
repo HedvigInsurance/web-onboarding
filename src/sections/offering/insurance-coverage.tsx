@@ -78,25 +78,17 @@ const Label = styled('p')({
 })
 
 export class InsuranceCoverage extends React.Component<Props> {
-  constructor() {
-    super()
-    this.state = {
-      showInfo: false,
-    }
 
-    this.togglePopup = this.togglePopup.bind(this)
+  constructor(props:any) {
+    super(props)
+
   }
 
-  togglePopup() {
-    this.setState({
-      showInfo: !this.state.showInfo,
-    })
-    console.log(this.state.showInfo)
-  }
 
   render() {
     return (
       <Container>
+        {/* {this.state.showInfo ? <div>true</div> : null} */}
         <InnerContainer>
           <Card>
             <Header>{this.props.headline}</Header>
@@ -114,13 +106,11 @@ export class InsuranceCoverage extends React.Component<Props> {
                     <Col key={index}>
                       <ImageIcon
                         src={column.image}
-                        onClick={this.togglePopup}
                       />
                       <Label>{column.title}</Label>
                     </Col>
                   ))}
                 </Row>
-                {this.state.showInfo ? <div>true</div> : null}
               </BigRow>
             ))}
           </Card>
