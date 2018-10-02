@@ -12,6 +12,27 @@ const Spacer = styled('div')({
   marginTop: '40px',
 })
 
+const COLUMNS = [
+  {
+    key: 0,
+    title: '1',
+    subTitle:
+      'Hedvig kontaktar ditt försäkringsbolag och säger upp din gamla försäkring',
+  },
+  {
+    key: 1,
+    title: '2',
+    subTitle:
+      'Vi håller dig uppdaterad och så fort vi vet när din bindningstid tar slut meddlar vi dig',
+  },
+  {
+    key: 2,
+    title: '3',
+    subTitle:
+      'Din Hedvig-försäkring aktiveras samma dag som din gamla försäkring går ut',
+  },
+]
+
 export const HedvigSwitch: React.SFC<Props> = (props) => (
   <Container>
     <InnerContainer>
@@ -19,8 +40,8 @@ export const HedvigSwitch: React.SFC<Props> = (props) => (
         <Header>{props.title}</Header>
         <Spacer />
         <Row>
-          {COLUMNS.map((col, index) => (
-            <Col key={index}>
+          {COLUMNS.map((col) => (
+            <Col key={col.key}>
               <Title>{col.title}</Title>
               <SubTitle>{col.subTitle}</SubTitle>
             </Col>
@@ -30,21 +51,3 @@ export const HedvigSwitch: React.SFC<Props> = (props) => (
     </InnerContainer>
   </Container>
 )
-
-const COLUMNS = [
-  {
-    title: '1',
-    subTitle:
-      'Hedvig kontaktar ditt försäkringsbolag och säger upp din gamla försäkring',
-  },
-  {
-    title: '2',
-    subTitle:
-      'Vi håller dig uppdaterad och så fort vi vet när din bindningstid tar slut meddlar vi dig',
-  },
-  {
-    title: '3',
-    subTitle:
-      'Din Hedvig-försäkring aktiveras samma dag som din gamla försäkring går ut',
-  },
-]

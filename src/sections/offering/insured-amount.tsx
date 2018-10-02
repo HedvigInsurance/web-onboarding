@@ -63,14 +63,42 @@ const ReadCol = styled('a')({
   fontSize: '16px',
 })
 
+const AMOUNTS = [
+  {
+    key: 0,
+    title: 'Lägenheten:',
+    amount: 'Fullvärde',
+  },
+  {
+    key: 1,
+    title: 'Dina prylar totalt:',
+    amount: '1 000 000 kr',
+  },
+  {
+    key: 2,
+    title: 'Drulle gäller för:',
+    amount: 'Prylar upp till 50 000 kr',
+  },
+  {
+    key: 3,
+    title: 'Självrisk:',
+    amount: '1 500 kr',
+  },
+  {
+    key: 4,
+    title: 'Gäller i:',
+    amount: 'Hela världen',
+  },
+]
+
 export const InsuredAmount: React.SFC<Props> = (props) => (
   <Container>
     <InnerContainer>
       <Card>
         <Header>{props.title}</Header>
         <Table>
-          {AMOUNTS.map((amount, index) => (
-            <Row key={index}>
+          {AMOUNTS.map((amount) => (
+            <Row key={amount.key}>
               <TextCol>
                 {amount.title} {amount.amount}
               </TextCol>
@@ -82,26 +110,3 @@ export const InsuredAmount: React.SFC<Props> = (props) => (
     </InnerContainer>
   </Container>
 )
-
-const AMOUNTS = [
-  {
-    title: 'Lägenheten:',
-    amount: 'Fullvärde',
-  },
-  {
-    title: 'Dina prylar totalt:',
-    amount: '1 000 000 kr',
-  },
-  {
-    title: 'Drulle gäller för:',
-    amount: 'Prylar upp till 50 000 kr',
-  },
-  {
-    title: 'Självrisk:',
-    amount: '1 500 kr',
-  },
-  {
-    title: 'Gäller i:',
-    amount: 'Hela världen',
-  },
-]

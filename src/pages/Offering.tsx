@@ -21,7 +21,7 @@ export class Offering extends React.Component<{}, MyComponentState> {
     super(props)
 
     this.setState({
-      alreadyInsured: false,
+      alreadyInsured: true,
     })
 
     this.alreadyInsured = this.alreadyInsured.bind(this)

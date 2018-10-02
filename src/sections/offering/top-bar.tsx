@@ -87,6 +87,20 @@ interface Props {
 }
 
 export class TopBar extends React.Component<Props, MyComponentState> {
+  public progressStrings = [
+    {
+      key: 0,
+      progressText: '1. Berätta om dig själv',
+    },
+    {
+      key: 1,
+      progressText: '2. Se din försäkring',
+    },
+    {
+      key: 2,
+      progressText: '3.Signera med BankID',
+    },
+  ]
   constructor(props: any) {
     super(props)
     this.hideButton = this.hideButton.bind(this)
@@ -133,7 +147,7 @@ export class TopBar extends React.Component<Props, MyComponentState> {
             <Logo src="/assets/offering/logo.png" />
           </BarContainer>
           <BarProgressContainer>
-            {progressStrings.map((text, index) => (
+            {this.progressStrings.map((text, index) => (
               <ProgressLabel
                 key={index}
                 style={{ color: this.checkProgress(index) }}
@@ -160,15 +174,3 @@ export class TopBar extends React.Component<Props, MyComponentState> {
     )
   }
 }
-
-const progressStrings = [
-  {
-    progressText: '1. Berätta om dig själv',
-  },
-  {
-    progressText: '2. Se din försäkring',
-  },
-  {
-    progressText: '3.Signera med BankID',
-  },
-]
