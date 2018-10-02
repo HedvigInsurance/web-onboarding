@@ -78,42 +78,34 @@ const Label = styled('p')({
   color: colors.DARK_GRAY,
 })
 
-export class InsuranceCoverage extends React.Component<Props> {
-  constructor(props: any) {
-    super(props)
-  }
-
-  public render() {
-    return (
-      <Container>
-        <InnerContainer>
-          <Card>
-            <Header>{this.props.headline}</Header>
-            <SubTitle>{this.props.subTitle}</SubTitle>
-            {CARDS.map((card, index) => (
-              <BigRow key={index}>
-                <TitleRow>
-                  <Col>
-                    <ImageIcon src={card.icon} />
-                    <CardHeader>{card.name}</CardHeader>
-                  </Col>
-                </TitleRow>
-                <Row>
-                  {card.icons.map((column, ind) => (
-                    <Col key={ind}>
-                      <ImageIcon src={column.image} />
-                      <Label>{column.title}</Label>
-                    </Col>
-                  ))}
-                </Row>
-              </BigRow>
-            ))}
-          </Card>
-        </InnerContainer>
-      </Container>
-    )
-  }
-}
+export const InsuranceCoverage: React.SFC<Props> = (props) => (
+  <Container>
+    <InnerContainer>
+      <Card>
+        <Header>{props.headline}</Header>
+        <SubTitle>{props.subTitle}</SubTitle>
+        {CARDS.map((card, index) => (
+          <BigRow key={index}>
+            <TitleRow>
+              <Col>
+                <ImageIcon src={card.icon} />
+                <CardHeader>{card.name}</CardHeader>
+              </Col>
+            </TitleRow>
+            <Row>
+              {card.icons.map((column, ind) => (
+                <Col key={ind}>
+                  <ImageIcon src={column.image} />
+                  <Label>{column.title}</Label>
+                </Col>
+              ))}
+            </Row>
+          </BigRow>
+        ))}
+      </Card>
+    </InnerContainer>
+  </Container>
+)
 
 const CARDS = [
   {
