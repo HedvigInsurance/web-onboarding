@@ -16,7 +16,7 @@ const Bar = styled('div')({
   flexDirection: 'row',
   alignItems: 'center',
   backgroundColor: colors.WHITE,
-  justifyContent: 'space-between',
+  // justifyContent: 'space-between',
   borderBottom: '1px solid ' + colors.LIGHT_GRAY
 })
 
@@ -47,6 +47,7 @@ export const LinkTag = styled('a')({
   textDecoration: 'none',
   borderRadius: '50px',
   padding: '15px 30px',
+  width: 'max-content',
   '@media (max-width: 350px)': {
     textAlign: 'center',
     marginRight: 0,
@@ -54,11 +55,33 @@ export const LinkTag = styled('a')({
   },
 })
 
-interface MyComponentState { navButtonIsHidden :  boolean }
+const ProgressLabel = styled('div')({
+  marginLeft: '10px',
+  marginRight: '10px',
+  fontSize: '14px',
+})
+
+const BarContainer = styled('div')({
+  width: '20%',
+})
+
+const BarProgressContainer = styled('div')({
+  display: 'flex',
+  width: '60%',
+  justifyContent:'center',
+})
+
+const BarButtonContainer = styled('div')({
+  width: '20%',
+  justifyContent:'flex-end',
+})
+
+interface MyComponentState { navButtonIsHidden :  boolean, active: number }
 
 interface Props {
     getInsured: string,
-}
+    progress: number,
+  }
 
 export class TopBar extends React.Component<Props,MyComponentState>  {
 
@@ -74,9 +97,11 @@ export class TopBar extends React.Component<Props,MyComponentState>  {
     super(props)
     this.hideButton = this.hideButton.bind(this);
 
-    this.state = {
+    this.state = ({
       navButtonIsHidden: true,
-    }
+      active: this.props.progress,
+    });
+
   }
 
   /*TODO: use refs instead of fixed height*/
@@ -92,16 +117,50 @@ export class TopBar extends React.Component<Props,MyComponentState>  {
     }
   }
 
+  checkProgress(index: number){
+    if (index == this.state.active){
+      return colors.BLACK;
+    }else{
+      return colors.DARK_GRAY;
+    }
+  }
+
   render(){
     return(
       <Container>
         <Bar>
-          <Logo src="/assets/offering/logo.png"/>
+          <BarContainer>
+            <Logo src="/assets/offering/logo.png"/>
+          </BarContainer>
+          <BarProgressContainer>
+            {progressStrings.map((string, index) =>
+              <ProgressLabel key={index} style={{color: this.checkProgress(index)}}
+                >
+                {string.progressText}
+              </ProgressLabel>
+            )}
+
+
+          </BarProgressContainer>
+          <BarButtonContainer>
             <GetInsuredButton style={{visibility: this.state.navButtonIsHidden ? 'hidden' : 'visible'}}>
               <LinkTag href="/">{this.props.getInsured}</LinkTag>
             </GetInsuredButton>
+          </BarButtonContainer>
         </Bar>
       </Container>
     );
   }
 }
+
+const progressStrings = [
+  {
+    progressText: '1. Berätta om dig själv',
+  },
+  {
+    progressText: '2. Se din försäkring',
+  },
+  {
+    progressText: '3.Signera med BankID',
+  },
+]
