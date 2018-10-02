@@ -164,24 +164,25 @@ interface MyComponentState {
   buttonIsHidden: boolean
 }
 
+const COLUMNS = [
+  {
+    key: 0,
+    title: 'Din bostad',
+    image: '/assets/offering/Placeholder.png',
+  },
+  {
+    key: 1,
+    title: 'Dig och din familj',
+    image: '/assets/offering/Placeholder.png',
+  },
+  {
+    key: 2,
+    title: 'Dina prylar',
+    image: '/assets/offering/Placeholder.png',
+  },
+]
+
 export class PriceInfo extends React.Component<Props, MyComponentState> {
-  public COLUMNS = [
-    {
-      key: 0,
-      title: 'Din bostad',
-      image: '/assets/offering/Placeholder.png',
-    },
-    {
-      key: 1,
-      title: 'Dig och din familj',
-      image: '/assets/offering/Placeholder.png',
-    },
-    {
-      key: 2,
-      title: 'Dina prylar',
-      image: '/assets/offering/Placeholder.png',
-    },
-  ]
   constructor(props: any) {
     super(props)
     this.hideButton = this.hideButton.bind(this)
@@ -222,7 +223,7 @@ export class PriceInfo extends React.Component<Props, MyComponentState> {
             <Time>{this.props.subscriptionTime}</Time>
             <ProtectionLabel>{this.props.protection}</ProtectionLabel>
             <Row>
-              {this.COLUMNS.map((col) => (
+              {COLUMNS.map((col) => (
                 <Col key={col.key}>
                   <Image src={col.image} />
                   <Title>{col.title}</Title>
