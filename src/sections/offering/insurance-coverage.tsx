@@ -120,6 +120,7 @@ export class InsuranceCoverage extends React.Component<Props> {
                     </Col>
                   ))}
                 </Row>
+                {this.state.showInfo ? <div>true</div> : null}
               </BigRow>
             ))}
           </Card>

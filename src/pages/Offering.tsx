@@ -11,9 +11,11 @@ import { GetInsured } from '../sections/offering/get-insured'
 import { Legal } from '../sections/offering/legal'
 
 const Container = styled('div')({})
+
 interface MyComponentState {
   alreadyInsured: boolean
 }
+
 interface Props {}
 
 export class Offering extends React.Component<Props, MyComponentState> {
@@ -27,7 +29,7 @@ export class Offering extends React.Component<Props, MyComponentState> {
     this.alreadyInsured = this.alreadyInsured.bind(this)
   }
 
-  alreadyInsured() {
+  protected alreadyInsured() {
     return this.state.alreadyInsured
   }
 

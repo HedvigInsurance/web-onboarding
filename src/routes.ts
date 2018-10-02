@@ -1,5 +1,5 @@
-import { Chat } from './pages/Chat';
-import { Offering } from './pages/Offering';
+import { Chat } from './pages/Chat'
+import { Offering } from './pages/Offering'
 
 export const reactPageRoutes = [
   { path: '/hedvig', Component: Chat, exact: true },
