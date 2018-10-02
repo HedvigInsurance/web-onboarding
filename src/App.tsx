@@ -1,3 +1,4 @@
+import { Provider } from 'constate'
 import * as React from 'react'
 import { hot } from 'react-hot-loader'
 import { Route } from 'react-router-dom'
@@ -7,9 +8,11 @@ import { GlobalCss } from './utils/globalStyles'
 export const App: React.SFC = () => (
   <>
     <GlobalCss />
-    {reactPageRoutes.map(({ path, exact, Component }) => (
-      <Route key={path} path={path} exact={exact} component={Component} />
-    ))}
+    <Provider>
+      {reactPageRoutes.map(({ path, exact, Component }) => (
+        <Route key={path} path={path} exact={exact} component={Component} />
+      ))}
+    </Provider>
   </>
 )
 
