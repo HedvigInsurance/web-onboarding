@@ -26,8 +26,9 @@ export class Offering extends React.Component {
         {/* Pice Info Section */}
         <PriceInfo
           alreadyInsured={false}
-          header={"Min hemförsäkring"}
-          subTitle={"Krukmakargatn 5"}
+          header={"Hej Zak, det här är din hemförsäkring hos Hedvig!"}
+          subTitle1={"Zak Kjellin  23 år gammal"}
+          subTitle2={"Fantastiska Gatan 23B, 112 34 Stockholm"}
           price={"299 kr/mån"}
           subscriptionTime={"Ingen bindningstid"}
           startDate={"Startdatum:"}

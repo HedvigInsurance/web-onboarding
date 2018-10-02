@@ -10,9 +10,13 @@ interface Props {
 
 export const Row = styled('div')({
   display: 'flex',
-  alignItems: 'baseline',
   flexDirection: 'row',
   justifyContent:'center',
+  alignItems: 'center',
+  '@media (max-width: 710px)':{
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
 })
 
 export const Col = styled('div')({
@@ -25,6 +29,12 @@ export const Col = styled('div')({
 const Image = styled('img')({
   margin: '20px',
   maxWidth: '200px',
+  '@media (max-width: 710px)':{
+    maxWidth: '300px',
+  },
+  '@media (max-width: 400px)':{
+    maxWidth: '200px',
+  },
 });
 
 export const Title = styled('label')({
@@ -35,7 +45,7 @@ export const Title = styled('label')({
   maxWidth: '200px',
 });
 
-export const SubTitle = styled('label')({    
+export const SubTitle = styled('label')({
   fontSize: '16px',
   textAlign: 'center',
   color: colors.DARK_GRAY,

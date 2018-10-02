@@ -19,8 +19,9 @@ const Card = styled('div')({
   marginLeft: 'auto',
   marginRight: 'auto',
   backgroundColor: colors.WHITE,
-  minWidth: '500px',
-  '@media (max-width: 640px)': {
+  minWidth: '700px',
+  '@media (max-width: 700px)': {
+    minWidth: '0px',
     width: '100%',
     marginLeft: '0px',
     marginRight: '0px',
@@ -28,29 +29,42 @@ const Card = styled('div')({
 })
 
 export const Header = styled('h1')({
+  maxWidth: '400px',
+  marginLeft: 'auto',
+  marginRight: 'auto',
   fontFamily: fonts.MERRIWEATHER,
   fontSize: '32px',
   marginBottom: '10px',
   fontWeight: 'normal',
   textAlign: 'center',
   '@media (max-width: 640px)': {
-    fontSize: '30px',
-    width: '100%',
+    maxWidth: '60%',
     paddingLeft: '0px',
     paddingRight: '0px',
+  },
+  '@media (max-width: 400px)': {
+    fontSize: '25px',
+    maxWidth: '50%',
   },
 })
 
 export const SubTitle = styled('p')({
   marginTop: '0px',
+  marginBottom: '0px',
+  marginLeft: 'auto',
+  marginRight: 'auto',
   fontSize: '16px',
   textAlign: 'center',
+  maxWidth: '100%',
   color: colors.DARK_GRAY,
+  '@media (max-width: 400px)': {
+    maxWidth: '20%',
+  },
 })
 
 const Price = styled('p')({
   marginBottom: '0px',
-  marginTop: '40px',
+  marginTop: '30px',
   fontSize: '20px',
   fontWeight: 100,
   textAlign: 'center',
@@ -58,43 +72,12 @@ const Price = styled('p')({
 })
 
 const Time = styled('p')({
-  marginBottom: '20px',
+  marginBottom: '30px',
   marginTop: '0px',
   fontSize: '16px',
   fontWeight: 100,
   textAlign: 'center',
   color: colors.BLACK_PURPLE,
-})
-
-export const Line = styled('div')({
-  width: '100%',
-  backgroundColor: colors.LIGHT_GRAY,
-  height: '1px',
-})
-
-const StartContainer = styled('div')({
-  marginTop: '20px',
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'center',
-  alignItems: 'center',
-})
-
-const AppliedContainer = styled('div')({
-  marginBottom: '20px',
-  marginTop: '10px',
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'center',
-  alignItems: 'center',
-})
-
-const ImageIcon = styled('img')({
-  marginBottom: '0px',
-  marginTop: '0px',
-  marginRight: '6px',
-  width: '17px',
-  height: '17px',
 })
 
 export const Label = styled('p')({
@@ -105,14 +88,40 @@ export const Label = styled('p')({
   color: colors.DARK_GRAY,
 })
 
-const InsuredLabel = styled('p')({
-  marginLeft: '5px',
-  marginBottom: '0px',
-  marginTop: '0px',
+export const Row = styled('div')({
+  display: 'flex',
+  alignItems: 'baseline',
+  flexDirection: 'row',
+  justifyContent:'center',
+  '@media (max-width: 400px)': {
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+})
+
+export const Col = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  flexDirection: 'column',
+   marginBottom: '30px',
+})
+
+const Image = styled('img')({
+  margin: '30px',
+  maxWidth: '70px',
+  '@media (max-width: 400px)': {
+    margin: '0px',
+    maxWidth: '150px',
+  },
+});
+
+export const Title = styled('label')({
+  marginBottom: '10px',
   fontSize: '16px',
   textAlign: 'center',
   color: colors.DARK_GRAY,
-})
+  maxWidth: '150px',
+});
 
 export const GetInsuredButton = styled('div')({
   paddingBottom: 40,
@@ -133,7 +142,8 @@ export const LinkTag = styled('a')({
 interface Props {
   alreadyInsured: boolean
   header: string
-  subTitle: string
+  subTitle1: string
+  subTitle2: string
   price: string
   subscriptionTime: string
   startDate: string
@@ -167,13 +177,13 @@ export class PriceInfo extends React.Component<Props, MyComponentState> {
     }
   }
 
+  /*TODO: use refs instead of fixed height*/
   hideButton() {
-    console.log(window.scrollY);
-    if (window.scrollY > 415) {
+    if (window.scrollY > 532) {
       this.setState({
         buttonIsHidden: true,
       });
-    }else if (window.scrollY < 415){
+    }else if (window.scrollY < 532){
       this.setState({
         buttonIsHidden: false,
       });
@@ -182,31 +192,23 @@ export class PriceInfo extends React.Component<Props, MyComponentState> {
 
   render() {
     return (
-      /*TODO: Change strings to be handled by cms */
       <Container onScroll={this.hideButton}>
         <InnerContainer>
           <Card>
             <Header>{this.props.header}</Header>
-            <SubTitle>{this.props.subTitle}</SubTitle>
+            <SubTitle>{this.props.subTitle1}</SubTitle>
+            <SubTitle>{this.props.subTitle2}</SubTitle>
             <Price>{this.props.price}</Price>
             <Time>{this.props.subscriptionTime}</Time>
-            <Line />
 
-            <StartContainer>
-              <ImageIcon src={this.props.iconClock} />
-              <Label>{this.props.startDate}</Label>
-              <InsuredLabel>
-                {this.props.alreadyInsured
-                  ? this.props.alreadyInsuredLabel
-                  : this.props.todayLabel}
-              </InsuredLabel>
-            </StartContainer>
-
-            <AppliedContainer>
-              <ImageIcon src={this.props.iconWorld} />
-              <Label>{this.props.coverage}</Label>
-            </AppliedContainer>
-
+            <Row>
+              {COLUMNS.map((col, index) =>
+                <Col key={index}>
+                  <Image src={col.image}/>
+                  <Title>{col.title}</Title>
+                </Col>
+              )}
+            </Row>
             <GetInsuredButton style={{visibility: this.state.buttonIsHidden ? 'hidden' : 'visible'}}>
               <LinkTag href="/">{this.props.getInsured}</LinkTag>
             </GetInsuredButton>
@@ -216,3 +218,18 @@ export class PriceInfo extends React.Component<Props, MyComponentState> {
     )
   }
 }
+
+const COLUMNS = [
+  {
+    title: 'Din bostad',
+    image: '/assets/offering/Placeholder.png',
+  },
+  {
+    title: 'Dig och din familj',
+    image: '/assets/offering/Placeholder.png',
+  },
+  {
+    title: 'Dina prylar',
+    image: '/assets/offering/Placeholder.png',
+  },
+]

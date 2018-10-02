@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styled from 'react-emotion';
-import { colors } from '@hedviginsurance/brand';
 import { Header } from './price-info';
 import { Container, InnerContainer, Card } from './insured-amount';
 import { Row, Col, Title, SubTitle } from './hedvig-info'

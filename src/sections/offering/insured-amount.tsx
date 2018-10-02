@@ -23,9 +23,10 @@ export const Card = styled('div')({
   marginLeft: 'auto',
   marginRight: 'auto',
   backgroundColor: colors.WHITE,
-  minWidth: '792px',
-  '@media (max-width: 640px)': {
+  minWidth: '1000px',
+  '@media (max-width: 1000px)': {
     width: '100%',
+    minWidth: '0%',
     marginLeft: '0px',
     marginRight: '0px',
   },

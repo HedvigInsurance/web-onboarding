@@ -9,8 +9,9 @@ const Container = styled('div')({
 
 const Bar = styled('div')({
   position: 'fixed',
-  width: '100%',
   top: 0,
+  left: 0,
+  right: 0,
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
@@ -24,6 +25,9 @@ const Logo = styled('img')({
   marginTop: '25px',
   marginBottom: '25px',
   marginLeft: '40px',
+  '@media (max-width: 350px)': {
+    marginLeft: '20px',
+  },
 })
 
 export const GetInsuredButton = styled('div')({
@@ -31,6 +35,9 @@ export const GetInsuredButton = styled('div')({
   flexDirection: 'row',
   justifyContent: 'center',
   marginRight: '40px',
+  '@media (max-width: 350px)': {
+    marginRight: '20px',
+  },
 })
 
 export const LinkTag = styled('a')({
@@ -40,6 +47,11 @@ export const LinkTag = styled('a')({
   textDecoration: 'none',
   borderRadius: '50px',
   padding: '15px 30px',
+  '@media (max-width: 350px)': {
+    textAlign: 'center',
+    marginRight: 0,
+    maxWidth: '250px',
+  },
 })
 
 interface MyComponentState { navButtonIsHidden :  boolean }
@@ -67,12 +79,13 @@ export class TopBar extends React.Component<Props,MyComponentState>  {
     }
   }
 
+  /*TODO: use refs instead of fixed height*/
   hideButton() {
-    if (window.scrollY > 415) {
+    if (window.scrollY > 532) {
       this.setState({
         navButtonIsHidden: false,
       });
-    }else if (window.scrollY < 415){
+    }else if (window.scrollY < 532){
       this.setState({
         navButtonIsHidden: true,
       });
