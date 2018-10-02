@@ -10,15 +10,13 @@ import { HedvigSwitch } from '../sections/offering/hedvig-switch'
 import { GetInsured } from '../sections/offering/get-insured'
 import { Legal } from '../sections/offering/legal'
 
-const Container = styled('div')({})
+export const Container = styled('div')({})
 
 interface MyComponentState {
   alreadyInsured: boolean
 }
 
-interface Props {}
-
-export class Offering extends React.Component<Props, MyComponentState> {
+export class Offering extends React.Component<{}, MyComponentState> {
   constructor(props: any) {
     super(props)
 
@@ -37,7 +35,7 @@ export class Offering extends React.Component<Props, MyComponentState> {
     return (
       /*TODO: graphql data */
       <Container>
-        {/* Top Bar */}
+        {/* Top Bar Section*/}
         <TopBar progress={1} getInsured={'Bli försäkrad'} />
 
         {/* Pice Info Section */}

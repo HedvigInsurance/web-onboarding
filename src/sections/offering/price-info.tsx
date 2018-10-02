@@ -173,7 +173,7 @@ export class PriceInfo extends React.Component<Props, MyComponentState> {
     window.removeEventListener('scroll', this.hideButton)
   }
 
-  constructor(props: Props) {
+  constructor(props: any) {
     super(props)
     this.hideButton = this.hideButton.bind(this)
     this.state = {

@@ -78,17 +78,13 @@ const Label = styled('p')({
 })
 
 export class InsuranceCoverage extends React.Component<Props> {
-
-  constructor(props:any) {
+  constructor(props: any) {
     super(props)
-
   }
-
 
   render() {
     return (
       <Container>
-        {/* {this.state.showInfo ? <div>true</div> : null} */}
         <InnerContainer>
           <Card>
             <Header>{this.props.headline}</Header>
@@ -104,9 +100,7 @@ export class InsuranceCoverage extends React.Component<Props> {
                 <Row>
                   {card.icons.map((column, index) => (
                     <Col key={index}>
-                      <ImageIcon
-                        src={column.image}
-                      />
+                      <ImageIcon src={column.image} />
                       <Label>{column.title}</Label>
                     </Col>
                   ))}

@@ -82,7 +82,7 @@ interface MyComponentState {
 }
 
 interface Props {
-  getInsured: string
+  getInsured?: string
   progress: number
 }
 
@@ -119,7 +119,7 @@ export class TopBar extends React.Component<Props, MyComponentState> {
   }
 
   checkProgress(index: number) {
-    if (index == this.state.active) {
+    if (index === this.state.active) {
       return colors.BLACK
     } else {
       return colors.DARK_GRAY
@@ -134,23 +134,27 @@ export class TopBar extends React.Component<Props, MyComponentState> {
             <Logo src="/assets/offering/logo.png" />
           </BarContainer>
           <BarProgressContainer>
-            {progressStrings.map((string, index) => (
+            {progressStrings.map((text, index) => (
               <ProgressLabel
                 key={index}
                 style={{ color: this.checkProgress(index) }}
               >
-                {string.progressText}
+                {text.progressText}
               </ProgressLabel>
             ))}
           </BarProgressContainer>
           <BarButtonContainer>
-            <GetInsuredButton
-              style={{
-                visibility: this.state.navButtonIsHidden ? 'hidden' : 'visible',
-              }}
-            >
-              <LinkTag href="/">{this.props.getInsured}</LinkTag>
-            </GetInsuredButton>
+            {this.props.getInsured ? (
+              <GetInsuredButton
+                style={{
+                  visibility: this.state.navButtonIsHidden
+                    ? 'hidden'
+                    : 'visible',
+                }}
+              >
+                <LinkTag href="/">{this.props.getInsured}</LinkTag>
+              </GetInsuredButton>
+            ) : null}
           </BarButtonContainer>
         </Bar>
       </Container>
