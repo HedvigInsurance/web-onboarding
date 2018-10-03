@@ -10,6 +10,7 @@ import { SubTitle } from 'components/offering/sub-title'
 import { Title } from 'components/offering/title'
 import * as React from 'react'
 import styled from 'react-emotion'
+import * as VisibilitySensor from 'react-visibility-sensor'
 
 const Container = styled('div')({
   marginTop: '70px',
@@ -79,6 +80,7 @@ const Image = styled('img')({
 })
 
 interface Props {
+  update: (isVisible: boolean) => void
   alreadyInsured: boolean
   header: string
   subTitle1: string
@@ -112,28 +114,37 @@ const COLUMNS = [
   },
 ]
 
-export const PriceInfo: React.SFC<Props> = (props) => (
-  <Container>
-    <InnerContainer>
-      <Card>
-        <Header>{props.header}</Header>
-        <SubTitle>{props.subTitle1}</SubTitle>
-        <SubTitle>{props.subTitle2}</SubTitle>
-        <Price>{props.price}</Price>
-        <Time>{props.subscriptionTime}</Time>
-        <ProtectionLabel>{props.protection}</ProtectionLabel>
-        <Row>
-          {COLUMNS.map((col) => (
-            <Col key={col.key}>
-              <Image src={col.image} />
-              <Title>{col.title}</Title>
-            </Col>
-          ))}
-        </Row>
-        <GetInsuredButton>
-          <LinkTag to={'/hedvig'}>{props.getInsured}</LinkTag>
-        </GetInsuredButton>
-      </Card>
-    </InnerContainer>
-  </Container>
-)
+export const PriceInfo: React.SFC<Props> = (props) => {
+  const handleChange = (isVisible: boolean) => {
+    props.update(isVisible)
+  }
+  return (
+    <Container>
+      <InnerContainer>
+        <Card>
+          <Header>{props.header}</Header>
+          <SubTitle>{props.subTitle1}</SubTitle>
+          <SubTitle>{props.subTitle2}</SubTitle>
+          <Price>{props.price}</Price>
+          <Time>{props.subscriptionTime}</Time>
+          <ProtectionLabel>{props.protection}</ProtectionLabel>
+          <Row>
+            {COLUMNS.map((col) => (
+              <Col key={col.key}>
+                <Image src={col.image} />
+                <Title>{col.title}</Title>
+              </Col>
+            ))}
+          </Row>
+          <VisibilitySensor partialVisibility onChange={handleChange}>
+            {() => (
+              <GetInsuredButton>
+                <LinkTag to={'/hedvig'}>{props.getInsured}</LinkTag>
+              </GetInsuredButton>
+            )}
+          </VisibilitySensor>
+        </Card>
+      </InnerContainer>
+    </Container>
+  )
+}

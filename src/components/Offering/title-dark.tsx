@@ -1,5 +1,5 @@
-import styled from 'react-emotion'
 import { colors } from '@hedviginsurance/brand'
+import styled from 'react-emotion'
 
 export const TitleDarkWide = styled('label')({
   marginBottom: '10px',

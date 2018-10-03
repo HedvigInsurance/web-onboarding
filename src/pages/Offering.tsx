@@ -14,11 +14,20 @@ export const Container = styled('div')({})
 
 interface MyComponentState {
   alreadyInsured: boolean
+  getStartedButtonVisible: boolean
 }
 
 export class Offering extends React.Component<{}, MyComponentState> {
   constructor(props: any) {
     super(props)
+    this.state = {
+      alreadyInsured: false,
+      getStartedButtonVisible: true,
+    }
+  }
+
+  public handleChange(visible: boolean) {
+    this.setState({ getStartedButtonVisible: visible })
   }
 
   public render() {
@@ -27,10 +36,15 @@ export class Offering extends React.Component<{}, MyComponentState> {
       /*TODO: graphql data */
       <Container>
         {/* Top Bar Section*/}
-        <TopBar progress={1} getInsured={'Bli försäkrad'} />
+        <TopBar
+          progress={1}
+          getInsured={'Bli försäkrad'}
+          state={this.state.getStartedButtonVisible}
+        />
 
         {/* Pice Info Section */}
         <PriceInfo
+          update={this.handleChange.bind(this)}
           alreadyInsured={false}
           header={'Hej Zak, det här är din hemförsäkring hos Hedvig!'}
           subTitle1={'Zak Kjellin  23 år gammal'}
