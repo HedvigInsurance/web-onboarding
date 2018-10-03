@@ -8,7 +8,13 @@ import { NameAgeInput } from './steps/NameAgeInput'
 
 export const ChatConversation: React.SFC = () => (
   <ChatContainer>
-    {({ initialVisibleSteps, visibleSteps, currentStep, goToStep }) => (
+    {({
+      initialVisibleSteps,
+      visibleSteps,
+      currentStep,
+      goToStep,
+      livingSituation,
+    }) => (
       <Conversation
         initialVisibleSteps={initialVisibleSteps}
         visibleSteps={visibleSteps}
@@ -59,7 +65,9 @@ export const ChatConversation: React.SFC = () => (
         <Message id="current-insurance-question">
           {({ appear }) => (
             <ChatMessage appear={appear}>
-              Trevligt! Hoppas du trivs. Har du någon hemförsäkring redan?
+              {livingSituation.numberOfPeople > 1
+                ? 'Trevligt! Hoppas ni trivs. Har du någon hemförsäkring redan?'
+                : 'Trevligt! Hoppas du trivs. Har du någon hemförsäkring redan?'}
             </ChatMessage>
           )}
         </Message>
