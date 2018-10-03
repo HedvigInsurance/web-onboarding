@@ -1,9 +1,9 @@
 import { Middleware } from 'koa'
-import * as uuidV1 from 'uuid/v1'
+import * as uuidV4 from 'uuid/v4'
 import { loggerFactory } from '../logging'
 
 export const setRequestUuidMiddleware: Middleware = async (ctx, next) => {
-  ctx.state.requestUuid = uuidV1()
+  ctx.state.requestUuid = uuidV4()
 
   await next()
 }
