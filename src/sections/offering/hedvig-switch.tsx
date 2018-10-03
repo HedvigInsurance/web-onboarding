@@ -1,8 +1,13 @@
+import { colors } from '@hedviginsurance/brand'
+import { Card } from 'components/offering/card'
+import { Col } from 'components/offering/col'
+import { Container } from 'components/offering/container'
+import { Header } from 'components/offering/header'
+import { InnerContainer } from 'components/offering/inner-container'
+import { Row } from 'components/offering/row'
+import { TitleDarkWide } from 'components/offering/title-dark'
 import * as React from 'react'
 import styled from 'react-emotion'
-import { Col, Row, SubTitle, Title } from './hedvig-info'
-import { Card, Container, InnerContainer } from './insured-amount'
-import { Header } from './price-info'
 
 interface Props {
   title: string
@@ -10,6 +15,15 @@ interface Props {
 
 const Spacer = styled('div')({
   marginTop: '40px',
+})
+
+const Paragraph = styled('p')({
+  marginTop: '0px',
+  marginBottom: '0px',
+  fontSize: '16px',
+  textAlign: 'center',
+  maxWidth: '250px',
+  color: colors.DARK_GRAY,
 })
 
 const COLUMNS = [
@@ -42,8 +56,8 @@ export const HedvigSwitch: React.SFC<Props> = (props) => (
         <Row>
           {COLUMNS.map((col) => (
             <Col key={col.key}>
-              <Title>{col.title}</Title>
-              <SubTitle>{col.subTitle}</SubTitle>
+              <TitleDarkWide>{col.title}</TitleDarkWide>
+              <Paragraph>{col.subTitle}</Paragraph>
             </Col>
           ))}
         </Row>

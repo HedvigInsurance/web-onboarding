@@ -1,9 +1,9 @@
 import { colors, fonts } from '@hedviginsurance/brand'
+import { Card } from 'components/offering/card'
+import { Header } from 'components/offering/header'
+import { SubTitle } from 'components/offering/sub-title'
 import * as React from 'react'
 import styled from 'react-emotion'
-import { Header, SubTitle } from './price-info'
-
-import { Card } from './insured-amount'
 
 interface Props {
   headline: string
@@ -50,7 +50,7 @@ const Col = styled('div')({
   marginBottom: '30px',
 })
 
-export const CardHeader = styled('h2')({
+const CardHeader = styled('h2')({
   fontFamily: fonts.MERRIWEATHER,
   fontSize: '18px',
   fontWeight: 'normal',

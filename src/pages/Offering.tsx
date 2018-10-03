@@ -19,15 +19,10 @@ interface MyComponentState {
 export class Offering extends React.Component<{}, MyComponentState> {
   constructor(props: any) {
     super(props)
-
-    this.setState({
-      alreadyInsured: true,
-    })
-
-    this.alreadyInsured = this.alreadyInsured.bind(this)
   }
 
   public render() {
+    const alreadyInsured = true
     return (
       /*TODO: graphql data */
       <Container>
@@ -45,9 +40,7 @@ export class Offering extends React.Component<{}, MyComponentState> {
           startDate={'Startdatum:'}
           coverage={'Gäller i hela världen'}
           getInsured={'Bli försäkrad'}
-          BackgroundImage={'url(assets/offering/map-background.png)'}
-          iconClock={'/assets/offering/start-date.png'}
-          iconWorld={'/assets/offering/world.png'}
+          backgroundImage={'url(assets/offering/map-background.png)'}
           alreadyInsuredLabel={'Gamla försäkringens slutdatum'}
           todayLabel={'Idag'}
           protection={'Med skydd för'}
@@ -57,7 +50,7 @@ export class Offering extends React.Component<{}, MyComponentState> {
         <HedvigInfo title={'Det här är Hedvig'} />
 
         {/* Hedvig Switch Section */}
-        {this.alreadyInsured ? (
+        {alreadyInsured ? (
           <HedvigSwitch
             title={'Hedvig sköter bytet från din gamla försäkring'}
           />

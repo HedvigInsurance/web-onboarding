@@ -14,7 +14,7 @@ const Container = styled('div')({
   paddingBottom: '70px',
 })
 
-const Para = styled('p')({
+const Paragraph = styled('p')({
   color: colors.BLACK,
   fontSize: '14px',
   textAlign: 'center',
@@ -23,6 +23,6 @@ const Para = styled('p')({
 
 export const Legal: React.SFC<Props> = (props) => (
   <Container>
-    <Para>{props.legalText}</Para>
+    <Paragraph>{props.legalText}</Paragraph>
   </Container>
 )

@@ -1,37 +1,16 @@
 import { colors } from '@hedviginsurance/brand'
+import { Card } from 'components/offering/card'
+import { Container } from 'components/offering/container'
+import { Header } from 'components/offering/header'
+import { InnerContainer } from 'components/offering/inner-container'
 import * as React from 'react'
 import styled from 'react-emotion'
-
-import { Header } from './price-info'
+import { Link } from 'react-router-dom'
 
 interface Props {
   title: string
   info: string
 }
-export const Container = styled('div')({
-  width: '100%',
-  backgroundColor: colors.OFF_WHITE,
-})
-
-export const InnerContainer = styled('div')({
-  display: 'flex',
-  alignItems: 'center',
-  flexDirection: 'column',
-})
-
-export const Card = styled('div')({
-  marginTop: '70px',
-  marginLeft: 'auto',
-  marginRight: 'auto',
-  backgroundColor: colors.WHITE,
-  minWidth: '1000px',
-  '@media (max-width: 1000px)': {
-    width: '100%',
-    minWidth: '0%',
-    marginLeft: '0px',
-    marginRight: '0px',
-  },
-})
 
 const Table = styled('div')({
   marginTop: '20',
@@ -56,7 +35,7 @@ const TextCol = styled('label')({
   fontSize: '16px',
 })
 
-const ReadCol = styled('a')({
+const ReadCol = styled(Link)({
   display: 'flex',
   flexDirection: 'column',
   color: colors.LIGHT_GRAY,
@@ -102,7 +81,7 @@ export const InsuredAmount: React.SFC<Props> = (props) => (
               <TextCol>
                 {amount.title} {amount.amount}
               </TextCol>
-              <ReadCol href="/">{props.info}</ReadCol>
+              <ReadCol to={'/hedvig'}>{props.info}</ReadCol>
             </Row>
           ))}
         </Table>

@@ -1,6 +1,7 @@
 import { colors } from '@hedviginsurance/brand'
 import * as React from 'react'
 import styled from 'react-emotion'
+import { Link } from 'react-router-dom'
 
 const Container = styled('div')({
   width: '100%',
@@ -16,7 +17,6 @@ const Bar = styled('div')({
   flexDirection: 'row',
   alignItems: 'center',
   backgroundColor: colors.WHITE,
-  // justifyContent: 'space-between',
   borderBottom: '1px solid ' + colors.LIGHT_GRAY,
 })
 
@@ -30,7 +30,7 @@ const Logo = styled('img')({
   },
 })
 
-export const GetInsuredButton = styled('div')({
+const GetInsuredButton = styled('div')({
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'center',
@@ -40,7 +40,7 @@ export const GetInsuredButton = styled('div')({
   },
 })
 
-export const LinkTag = styled('a')({
+const LinkTag = styled(Link)({
   backgroundColor: colors.GREEN,
   fontSize: '18px',
   color: colors.WHITE,
@@ -76,11 +76,6 @@ const BarButtonContainer = styled('div')({
   justifyContent: 'flex-end',
 })
 
-interface MyComponentState {
-  navButtonIsHidden: boolean
-  active: number
-}
-
 interface Props {
   getInsured?: string
   progress: number
@@ -101,77 +96,33 @@ const progressStrings = [
   },
 ]
 
-export class TopBar extends React.Component<Props, MyComponentState> {
-  constructor(props: any) {
-    super(props)
-    this.hideButton = this.hideButton.bind(this)
-
-    this.state = {
-      navButtonIsHidden: true,
-      active: this.props.progress,
-    }
-  }
-  public componentDidMount() {
-    window.addEventListener('scroll', this.hideButton)
-  }
-
-  public componentWillUnmount() {
-    window.removeEventListener('scroll', this.hideButton)
-  }
-
-  /*TODO: use refs instead of fixed height*/
-  public hideButton() {
-    if (window.scrollY > 532) {
-      this.setState({
-        navButtonIsHidden: false,
-      })
-    } else if (window.scrollY < 532) {
-      this.setState({
-        navButtonIsHidden: true,
-      })
-    }
-  }
-
-  public checkProgress(index: number) {
-    if (index === this.state.active) {
-      return colors.BLACK
-    } else {
-      return colors.DARK_GRAY
-    }
-  }
-
-  public render() {
-    return (
-      <Container>
-        <Bar>
-          <BarContainer>
-            <Logo src="/assets/offering/logo.png" />
-          </BarContainer>
-          <BarProgressContainer>
-            {progressStrings.map((text, index) => (
-              <ProgressLabel
-                key={index}
-                style={{ color: this.checkProgress(index) }}
-              >
-                {text.progressText}
-              </ProgressLabel>
-            ))}
-          </BarProgressContainer>
-          <BarButtonContainer>
-            {this.props.getInsured ? (
-              <GetInsuredButton
-                style={{
-                  visibility: this.state.navButtonIsHidden
-                    ? 'hidden'
-                    : 'visible',
-                }}
-              >
-                <LinkTag href="/">{this.props.getInsured}</LinkTag>
-              </GetInsuredButton>
-            ) : null}
-          </BarButtonContainer>
-        </Bar>
-      </Container>
-    )
-  }
-}
+export const TopBar: React.SFC<Props> = (props) => (
+  <Container>
+    <Bar>
+      <BarContainer>
+        <Logo src="/assets/offering/logo.png" />
+      </BarContainer>
+      <BarProgressContainer>
+        {progressStrings.map((text) => (
+          <ProgressLabel
+            key={text.key}
+            style={{
+              color:
+                text.key === props.progress ? colors.BLACK : colors.DARK_GRAY,
+            }}
+          >
+            {text.progressText}
+          </ProgressLabel>
+        ))}
+      </BarProgressContainer>
+      {/* TODO: Visability Sensor */}
+      <BarButtonContainer>
+        {props.getInsured ? (
+          <GetInsuredButton>
+            <LinkTag to={'/hedvig'}>{props.getInsured}</LinkTag>
+          </GetInsuredButton>
+        ) : null}
+      </BarButtonContainer>
+    </Bar>
+  </Container>
+)

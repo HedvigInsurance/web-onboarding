@@ -1,33 +1,19 @@
-import { colors, fonts } from '@hedviginsurance/brand'
+import { colors } from '@hedviginsurance/brand'
+import { Container } from 'components/offering/container'
+import {
+  GetInsuredButton,
+  LinkTag,
+} from 'components/offering/get-insured-button'
+import { Header } from 'components/offering/header'
+import { InnerContainer } from 'components/offering/inner-container'
 import * as React from 'react'
 import styled from 'react-emotion'
-import { Container, InnerContainer } from './insured-amount'
-import { GetInsuredButton, LinkTag } from './price-info'
 
 interface Props {
   title: string
   name: string
   getInsured: string
 }
-
-const Header = styled('h1')({
-  maxWidth: '400px',
-  marginLeft: 'auto',
-  marginRight: 'auto',
-  fontFamily: fonts.MERRIWEATHER,
-  fontSize: '32px',
-  marginBottom: '10px',
-  fontWeight: 'normal',
-  textAlign: 'center',
-  paddingBottom: '10px',
-  '@media (max-width: 640px)': {
-    paddingLeft: '0px',
-    paddingRight: '0px',
-  },
-  '@media (max-width: 400px)': {
-    fontSize: '25px',
-  },
-})
 
 const Card = styled('div')({
   marginTop: '70px',
@@ -53,7 +39,7 @@ export const GetInsured: React.SFC<Props> = (props) => (
           {props.title} {props.name}
         </Header>
         <GetInsuredButton>
-          <LinkTag href="/">{props.getInsured}</LinkTag>
+          <LinkTag to={'/'}>{props.getInsured}</LinkTag>
         </GetInsuredButton>
       </Card>
     </InnerContainer>
