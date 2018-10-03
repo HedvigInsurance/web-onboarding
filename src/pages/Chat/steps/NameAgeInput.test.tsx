@@ -1,16 +1,24 @@
 import { Provider } from 'constate'
 import { mount } from 'enzyme'
 import * as React from 'react'
+import { createSession } from 'utils/sessionStorage'
+import { MockStorage } from 'utils/storage/MockStorage'
+import { WithStorageProps } from '../../../App'
 import { ChatContainer } from '../state'
 import { NameAgeInput } from './NameAgeInput'
 
 it('handles form changes', () => {
   const wrapper = mount(
-    <NameAgeInput
-      onSubmit={() => {
-        /* noop */
-      }}
-    />,
+    <Provider<WithStorageProps>
+      initialState={{ storage: { session: createSession(new MockStorage()) } }}
+    >
+      <NameAgeInput
+        onSubmit={() => {
+          /* noop */
+        }}
+      />
+      ,
+    </Provider>,
   )
   wrapper
     .find('input#firstName')
@@ -28,7 +36,13 @@ it('handles form changes', () => {
 
 it("doesn't submit empty forms", () => {
   const handleSubmit = jest.fn()
-  const wrapper = mount(<NameAgeInput onSubmit={handleSubmit} />)
+  const wrapper = mount(
+    <Provider<WithStorageProps>
+      initialState={{ storage: { session: createSession(new MockStorage()) } }}
+    >
+      <NameAgeInput onSubmit={handleSubmit} />
+    </Provider>,
+  )
 
   wrapper
     .find('input#age')
@@ -44,12 +58,12 @@ it("doesn't submit empty forms", () => {
 it('submits form and updates state', (done) => {
   const StateShower = () => (
     <ChatContainer>
-      {({ step1 }) =>
-        step1 ? (
+      {({ nameAge }) =>
+        nameAge ? (
           <div className="test-state-shower">
-            <div className="firstName">{step1.firstName}</div>
-            <div className="lastName">{step1.lastName}</div>
-            <div className="age">{step1.age}</div>
+            <div className="firstName">{nameAge.firstName}</div>
+            <div className="lastName">{nameAge.lastName}</div>
+            <div className="age">{nameAge.age}</div>
           </div>
         ) : null
       }
@@ -57,7 +71,9 @@ it('submits form and updates state', (done) => {
   )
   const handleSubmit = jest.fn()
   const wrapper = mount(
-    <Provider initialState={{}}>
+    <Provider<WithStorageProps>
+      initialState={{ storage: { session: createSession(new MockStorage()) } }}
+    >
       <NameAgeInput onSubmit={handleSubmit} />
       <StateShower />
     </Provider>,

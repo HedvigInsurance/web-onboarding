@@ -1,5 +1,4 @@
-import { Container, StateUpdater } from 'constate'
-import { always, defaultTo, ifElse } from 'ramda'
+import { defaultTo } from 'ramda'
 import * as React from 'react'
 import styled from 'react-emotion'
 import Transition, { ENTERED } from 'react-transition-group/Transition'
@@ -10,88 +9,75 @@ export const ConversationWrapper = styled('div')({
   margin: '0 auto',
 })
 
-const nextOrNoop = (next: () => void) => (
-  currentMessage: number,
-  index: number,
-) =>
-  ifElse(() => currentMessage <= index, always(next), always(always(null)))(
-    null,
-  )
+const getId = (child: React.ReactChild) => React.Children.only(child).props.id
 
 export interface MessageProps {
-  next?: () => void
+  id: string
+  appear?: boolean
   delay?: number
-  children: (next: () => void) => React.ReactNode
+  children: (props: { appear: boolean; id: string }) => React.ReactNode
 }
 
-export const Message: React.SFC<MessageProps> = ({ children, next }) => (
-  <>{children(defaultTo(always(null), next))}</>
-)
-
-interface State {
-  currentMessage: number
-}
-
-interface Actions {
-  next: () => StateUpdater<State>
-}
+export const Message: React.SFC<MessageProps> = ({
+  children,
+  id,
+  appear = false,
+}) => <>{children({ appear, id })}</>
 
 interface ConversationProps {
   children:
     | React.ReactElement<MessageProps>
     | Array<React.ReactElement<MessageProps>>
+  currentStep?: string
+  visibleSteps?: string[]
+  initialVisibleSteps?: string[]
 }
 
-export const Conversation: React.SFC<ConversationProps> = ({ children }) => {
+export const Conversation: React.SFC<ConversationProps> = ({
+  children,
+  currentStep,
+  visibleSteps = [],
+  initialVisibleSteps = [],
+}) => {
   React.Children.forEach(children, (child, index) => {
     if (!React.isValidElement(child)) {
       throw new Error(`Child at index ${index} must be a Message`)
     }
   })
   return (
-    <Container<State, Actions>
-      initialState={{ currentMessage: 0 }}
-      actions={{
-        next: () => ({ currentMessage }) => ({
-          currentMessage:
-            currentMessage < React.Children.count(children) - 1
-              ? currentMessage + 1
-              : undefined,
-        }),
-      }}
-    >
-      {({ currentMessage, next }) => (
-        <ConversationWrapper>
-          {React.Children.toArray(children)
-            .slice(0, currentMessage + 1)
-            .map(
-              (child, index) =>
-                React.Children.only(child).props.delay ? (
-                  <Transition
-                    timeout={React.Children.only(child).props.delay}
-                    appear
-                    in
-                    key={defaultTo(undefined, React.Children.only(child).key)}
-                  >
-                    {(status) =>
-                      status === ENTERED ? (
-                        React.cloneElement<MessageProps>(
-                          React.Children.only(child),
-                          { next: nextOrNoop(next)(currentMessage, index) },
-                        )
-                      ) : (
-                        <div /> // noop but needs to be here for the animation to work
-                      )
-                    }
-                  </Transition>
-                ) : (
-                  React.cloneElement<MessageProps>(React.Children.only(child), {
-                    next: nextOrNoop(next)(currentMessage, index),
-                  })
-                ),
-            )}
-        </ConversationWrapper>
-      )}
-    </Container>
+    <ConversationWrapper>
+      {React.Children.toArray(children)
+        .filter((message) => visibleSteps.includes(getId(message)))
+        .map(
+          (message) =>
+            React.Children.only(message).props.delay &&
+            currentStep === getId(message) &&
+            !initialVisibleSteps.includes(getId(message)) ? (
+              <Transition
+                timeout={React.Children.only(message).props.delay}
+                appear
+                in
+                key={defaultTo(undefined, React.Children.only(message).key)}
+              >
+                {(status) =>
+                  status === ENTERED ? (
+                    React.cloneElement<MessageProps>(
+                      React.Children.only(message),
+                      {
+                        appear: false,
+                      },
+                    )
+                  ) : (
+                    <div /> // noop but needs to be here for the animation to work
+                  )
+                }
+              </Transition>
+            ) : (
+              React.cloneElement<MessageProps>(React.Children.only(message), {
+                appear: initialVisibleSteps.includes(getId(message)),
+              })
+            ),
+        )}
+    </ConversationWrapper>
   )
 }
