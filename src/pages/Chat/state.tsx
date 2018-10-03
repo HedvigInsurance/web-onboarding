@@ -3,10 +3,22 @@ import { propOr } from 'ramda'
 import * as React from 'react'
 import { StorageContainer } from '../../utils/StorageContainer'
 
+export enum ApartmentType {
+  RENT = 'RENT',
+  OWN = 'OWN',
+}
+
 export interface NameAgeState {
   firstName: string
   lastName: string
   age: number | string
+}
+export interface LivingSituationState {
+  streetAddress: string
+  postalCode: string
+  apartmentType?: ApartmentType
+  size?: number | string
+  numberOfPeople?: number
 }
 
 export interface State {
@@ -14,12 +26,17 @@ export interface State {
   initialVisibleSteps: string[]
   visibleSteps: string[]
   nameAge?: NameAgeState
+  livingSituation?: LivingSituationState
 }
 
 export interface Effects {
   setNameAgeProp: <K extends keyof NameAgeState>(
     prop: K,
     value: NameAgeState[K],
+  ) => void
+  setLivingSituationProp: <K extends keyof LivingSituationState>(
+    prop: K,
+    value: LivingSituationState[K],
   ) => void
   reset: () => void
   goToStep: (step: string) => void
@@ -67,11 +84,33 @@ export const ChatContainer: React.SFC<
                 },
               })
             },
+            setLivingSituationProp: <K extends keyof LivingSituationState>(
+              key: K,
+              value: LivingSituationState[K],
+            ) => ({ state, setState }: EffectProps<State>) => {
+              const newState: Partial<State> = {
+                livingSituation: {
+                  ...propOr<LivingSituationState, State, LivingSituationState>(
+                    { streetAddress: '', postalCode: '' },
+                    'livingSituation',
+                    state,
+                  ),
+                  [key]: value,
+                },
+              }
+              setState(newState)
+              storageState.session.setSession({
+                ...storageState.session.getSession(),
+                chat: {
+                  ...propOr({}, 'chat', storageState.session.getSession()),
+                  ...newState,
+                },
+              })
+            },
             reset: () => ({ setState }: EffectProps<State>) => {
               storageState.session.setSession({
                 ...storageState.session.getSession(),
                 chat: {
-                  nameAge: undefined,
                   currentStep: 'initial',
                   visibleSteps: ['initial'],
                   initialVisibleSteps: [],
@@ -80,6 +119,7 @@ export const ChatContainer: React.SFC<
               // Force 2 state updates to make sure first step is re-mounted
               setState({
                 nameAge: undefined,
+                livingSituation: undefined,
                 currentStep: undefined,
                 visibleSteps: [],
                 initialVisibleSteps: [],

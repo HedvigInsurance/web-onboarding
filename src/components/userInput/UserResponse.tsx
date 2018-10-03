@@ -3,32 +3,43 @@ import * as React from 'react'
 import styled from 'react-emotion'
 import { FadeIn, FadeUp } from '../animations/appearings'
 
-export const UserTextInput = styled('input')(
-  ({ maxWidth }: { maxWidth: number }) => ({
-    fontFamily: fonts.CIRCULAR,
-    color: colors.PURPLE,
-    border: 0,
-    borderBottom: `2px solid ${colors.PURPLE}`,
-    padding: 0,
-    lineHeight: 'inherit',
-    fontSize: 'inherit',
-    width: `${maxWidth}ch`,
-    borderRadius: 0,
-    fontWeight: 600,
+interface WithMaxWidth {
+  maxWidth?: number
+}
 
-    '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
-      appearance: 'none',
-      margin: 0,
-    },
-    '&[type="number"]': {
-      appearance: 'textfield' as any, // unsure why but emotion cries when this isnt any
-    },
+export const UserTextInput = styled('input')(({ maxWidth }: WithMaxWidth) => ({
+  fontFamily: fonts.CIRCULAR,
+  color: colors.PURPLE,
+  border: 0,
+  borderBottom: `2px solid ${colors.PURPLE}`,
+  padding: 0,
+  lineHeight: 'inherit',
+  fontSize: 'inherit',
+  width: maxWidth !== undefined ? `${maxWidth}ch` : undefined,
+  borderRadius: 0,
+  fontWeight: 600,
 
-    '&:focus': {
-      outline: 'none',
-    },
-  }),
-)
+  '&::placeholder': {
+    fontWeight: 400,
+    fontStyle: 'italic',
+  },
+
+  '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
+    appearance: 'none',
+    margin: 0,
+  },
+  '&[type="number"]': {
+    appearance: 'textfield' as any, // unsure why but emotion cries when this isnt any
+  },
+
+  '&:focus': {
+    outline: 'none',
+  },
+}))
+
+export const UserSelectInput = styled(UserTextInput)(
+  (_: WithMaxWidth) => ({}),
+).withComponent('select')
 
 const UserResponseWrapper: React.SFC<{
   className?: string

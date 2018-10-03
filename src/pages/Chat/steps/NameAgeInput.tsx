@@ -1,5 +1,5 @@
 import { UserResponse, UserTextInput } from 'components/userInput/UserResponse'
-import { Container, StateUpdater } from 'constate'
+import { SingletonAction } from 'components/utils/SingletonAction'
 import { pathOr, pipe } from 'ramda'
 import * as React from 'react'
 import * as yup from 'yup'
@@ -15,16 +15,10 @@ interface FormValues {
   lastName: string
   age: number | string
 }
-interface State {
-  hasFocused: boolean
-}
-
-interface Actions {
-  setFocused: () => StateUpdater<State>
-}
 
 interface Props {
   appear?: boolean
+  isCurrentMessage?: boolean
   onSubmit: (state?: FormValues) => void
 }
 
@@ -54,15 +48,16 @@ const validationSchema = () =>
 const isDone = (values: Partial<NameAgeState> = {}) =>
   validationSchema().isValidSync(values)
 
-export const NameAgeInput: React.SFC<Props> = ({ onSubmit, appear }) => (
-  <ChatContainer>
-    {(chatState: ChatState & ChatActions) => (
-      <Container<State, Actions>
-        initialState={{ hasFocused: false }}
-        actions={{ setFocused: () => (_) => ({ hasFocused: true }) }}
-      >
-        {(state) => (
-          <UserResponse appear={appear}>
+export const NameAgeInput: React.SFC<Props> = ({
+  onSubmit,
+  appear,
+  isCurrentMessage = false,
+}) => (
+  <UserResponse appear={appear}>
+    <SingletonAction>
+      {(focusState) => (
+        <ChatContainer>
+          {(chatState: ChatState & ChatActions) => (
             <form
               onSubmit={(e) => {
                 e.preventDefault()
@@ -71,6 +66,10 @@ export const NameAgeInput: React.SFC<Props> = ({ onSubmit, appear }) => (
                 }
                 if (onSubmit) {
                   onSubmit(chatState.nameAge)
+                }
+                // JSDOM weirdness writes to console.error if one runs window.blur
+                if (process.env.NODE_ENV !== 'test') {
+                  window.blur()
                 }
               }}
             >
@@ -86,11 +85,11 @@ export const NameAgeInput: React.SFC<Props> = ({ onSubmit, appear }) => (
                     10,
                   )}
                   innerRef={(ref) => {
-                    if (state.hasFocused || !ref) {
+                    if (!ref || focusState.isActionDone || !isCurrentMessage) {
                       return
                     }
                     ref.focus()
-                    state.setFocused()
+                    focusState.doAction()
                   }}
                 />{' '}
                 <UserTextInput
@@ -113,6 +112,7 @@ export const NameAgeInput: React.SFC<Props> = ({ onSubmit, appear }) => (
                   value={pathOr('', ['nameAge', 'age'], chatState)}
                   onChange={handleChange('age', chatState)}
                   maxWidth={4.5}
+                  pattern="[0-9]*"
                 />{' '}
                 år gammal
                 {isDone(chatState.nameAge) && (
@@ -122,9 +122,9 @@ export const NameAgeInput: React.SFC<Props> = ({ onSubmit, appear }) => (
                 )}
               </div>
             </form>
-          </UserResponse>
-        )}
-      </Container>
-    )}
-  </ChatContainer>
+          )}
+        </ChatContainer>
+      )}
+    </SingletonAction>
+  </UserResponse>
 )

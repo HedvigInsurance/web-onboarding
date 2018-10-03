@@ -35,7 +35,6 @@ interface ConversationProps {
 
 export const Conversation: React.SFC<ConversationProps> = ({
   children,
-  currentStep,
   visibleSteps = [],
   initialVisibleSteps = [],
 }) => {
@@ -51,7 +50,6 @@ export const Conversation: React.SFC<ConversationProps> = ({
         .map(
           (message) =>
             React.Children.only(message).props.delay &&
-            currentStep === getId(message) &&
             !initialVisibleSteps.includes(getId(message)) ? (
               <Transition
                 timeout={React.Children.only(message).props.delay}

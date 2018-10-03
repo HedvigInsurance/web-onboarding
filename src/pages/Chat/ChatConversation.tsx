@@ -3,6 +3,7 @@ import { Conversation, Message } from 'components/hedvig/conversation'
 import * as React from 'react'
 import { ChatContainer } from './state'
 import { Greet } from './steps/Greet'
+import { LivingSituationInput } from './steps/LivingSituationInput'
 import { NameAgeInput } from './steps/NameAgeInput'
 
 export const ChatConversation: React.SFC = () => (
@@ -18,20 +19,10 @@ export const ChatConversation: React.SFC = () => (
             <ChatMessage
               appear={appear}
               typingDuration={2500}
-              onTyped={() => goToStep('initial-2')}
-            >
-              Hej! Det är jag som är Hedvig! 👋
-            </ChatMessage>
-          )}
-        </Message>
-        <Message id="initial-2">
-          {({ appear }) => (
-            <ChatMessage
-              appear={appear}
-              typingDuration={1500}
               onTyped={() => goToStep('name-age-input')}
             >
-              Berätta lite om dig själv...
+              Hej! Det är jag som är Hedvig! 👋 <br />
+              Berätta om dig själv!
             </ChatMessage>
           )}
         </Message>
@@ -39,21 +30,36 @@ export const ChatConversation: React.SFC = () => (
         <Message delay={500} id="name-age-input">
           {({ appear }) => (
             <NameAgeInput
-              onSubmit={() => goToStep('greet-1')}
+              onSubmit={() => goToStep('greet')}
               appear={appear}
+              isCurrentMessage={currentStep === 'name-age-input'}
             />
           )}
         </Message>
 
-        <Message id="greet-1">
+        <Message id="greet">
           {({ appear }) => (
-            <Greet appear={appear} onTyped={() => goToStep('greet-2')} />
+            <Greet
+              appear={appear}
+              onTyped={() => goToStep('living-situation-input')}
+            />
           )}
         </Message>
-        <Message id="greet-2">
+
+        <Message id="living-situation-input" delay={300}>
           {({ appear }) => (
-            <ChatMessage appear={appear} typingDuration={500}>
-              Och berätta lite om hur du bor...
+            <LivingSituationInput
+              appear={appear}
+              onSubmit={() => goToStep('current-insurance-question')}
+              isCurrentMessage={currentStep === 'living-situation-input'}
+            />
+          )}
+        </Message>
+
+        <Message id="current-insurance-question">
+          {({ appear }) => (
+            <ChatMessage appear={appear}>
+              Trevligt! Hoppas du trivs. Har du någon hemförsäkring redan?
             </ChatMessage>
           )}
         </Message>
