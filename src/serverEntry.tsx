@@ -1,21 +1,31 @@
 import 'source-map-support/register'
 import { createKoaServer } from '@hedviginsurance/web-survival-kit' // tslint:disable-line ordered-imports
 import { reactPageRoutes } from './routes'
+import { appLogger } from './server/logging'
 import { getPage } from './server/page'
 import { notNullable } from './utils/nullables'
+import {
+  logRequestMiddleware,
+  setLoggerMiddleware,
+  setRequestUuidMiddleware,
+} from './server/middleware/enhancers'
 
 const getPort = () => (process.env.PORT ? Number(process.env.PORT) : 8080)
 
-console.log(`Booting server on ${getPort()} 👢`) // tslint:disable-line no-console
+appLogger.info(`Booting server on ${getPort()} 👢`)
 
 const server = createKoaServer({
   publicPath: '/assets',
   assetLocation: __dirname + '/assets',
 })
-
+server.app.use(setRequestUuidMiddleware)
+server.app.use(setLoggerMiddleware)
+server.app.use(logRequestMiddleware)
+server.router.use(setRequestUuidMiddleware)
+server.router.use(setLoggerMiddleware)
+server.router.use(logRequestMiddleware)
 if (process.env.USE_AUTH) {
-  // tslint:disable-next-line no-console
-  console.log(
+  appLogger.info(
     `Protecting server using basic auth with user ${process.env.AUTH_NAME} 💂‍`,
   )
   const basicAuth = require('koa-basic-auth') // tslint:disable-line no-var-requires
@@ -26,8 +36,7 @@ if (process.env.USE_AUTH) {
   server.app.use(basicAuthMidleware)
   server.router.use(basicAuthMidleware)
 } else {
-  // tslint:disable-next-line no-console
-  console.log('Not using any auth, server is open to the public')
+  appLogger.info('Not using any auth, server is open to the public')
 }
 
 reactPageRoutes.forEach((route) => {
@@ -35,5 +44,5 @@ reactPageRoutes.forEach((route) => {
 })
 
 server.app.listen(getPort(), () => {
-  console.log(`Server started 🚀 listening on port ${getPort()}`) // tslint:disable-line no-console
+  appLogger.info(`Server started 🚀 listening on port ${getPort()}`)
 })
