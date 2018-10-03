@@ -58,12 +58,12 @@ it("doesn't submit empty forms", () => {
 it('submits form and updates state', (done) => {
   const StateShower = () => (
     <ChatContainer>
-      {({ step1 }) =>
-        step1 ? (
+      {({ nameAge }) =>
+        nameAge ? (
           <div className="test-state-shower">
-            <div className="firstName">{step1.firstName}</div>
-            <div className="lastName">{step1.lastName}</div>
-            <div className="age">{step1.age}</div>
+            <div className="firstName">{nameAge.firstName}</div>
+            <div className="lastName">{nameAge.lastName}</div>
+            <div className="age">{nameAge.age}</div>
           </div>
         ) : null
       }

@@ -49,6 +49,7 @@
     "@types/react-router": "^4.0.31",
     "@types/react-router-dom": "^4.3.1",
     "@types/react-transition-group": "^2.0.14",
+    "@types/yup": "^0.24.9",
     "constate": "^0.8.2",
     "cookie-storage": "^3.2.0",
     "emotion": "^9.2.10",
@@ -68,7 +69,8 @@
     "react-router-dom": "^4.3.1",
     "react-transition-group": "^2.4.0",
     "source-map-support": "^0.5.9",
-    "typescript": "^3.0.3"
+    "typescript": "^3.0.3",
+    "yup": "^0.26.6"
   },
   "husky": {
     "hooks": {

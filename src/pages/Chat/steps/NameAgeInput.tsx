@@ -2,11 +2,12 @@ import { UserResponse, UserTextInput } from 'components/userInput/UserResponse'
 import { Container, StateUpdater } from 'constate'
 import { pathOr, pipe } from 'ramda'
 import * as React from 'react'
+import * as yup from 'yup'
 import {
   ChatContainer,
   Effects as ChatActions,
+  NameAgeState,
   State as ChatState,
-  Step1State,
 } from '../state'
 
 interface FormValues {
@@ -27,22 +28,31 @@ interface Props {
   onSubmit: (state?: FormValues) => void
 }
 
-const handleChange = <K extends keyof Step1State>(
+const handleChange = <K extends keyof NameAgeState>(
   field: K,
   chatState: ChatActions,
 ) =>
-  pipe<React.ChangeEvent<HTMLInputElement>, Step1State[K], void>(
+  pipe<React.ChangeEvent<HTMLInputElement>, NameAgeState[K], void>(
     pathOr<string>('', ['target', 'value']),
-    (val: string | number) => chatState.setStep1Prop(field, val),
+    (val: string | number) => chatState.setNameAgeProp(field, val),
   )
 
-const isDone = (
-  values: FormValues = { firstName: '', lastName: '', age: '' },
-) =>
-  pathOr(0, ['firstName', 'length'], values) > 0 &&
-  pathOr(0, ['lastName', 'length'], values) > 0 &&
-  String(pathOr(0, ['age'], values)).length >= 2 &&
-  pathOr(0, ['age'], values) > 0
+const validationSchema = () =>
+  yup
+    .object<Partial<NameAgeState>>({
+      firstName: yup.string().required(),
+      lastName: yup.string().required(),
+      age: yup
+        .number()
+        .positive()
+        .moreThan(10)
+        .lessThan(199)
+        .required(),
+    })
+    .required()
+
+const isDone = (values: Partial<NameAgeState> = {}) =>
+  validationSchema().isValidSync(values)
 
 export const NameAgeInput: React.SFC<Props> = ({ onSubmit, appear }) => (
   <ChatContainer>
@@ -56,11 +66,11 @@ export const NameAgeInput: React.SFC<Props> = ({ onSubmit, appear }) => (
             <form
               onSubmit={(e) => {
                 e.preventDefault()
-                if (!isDone(chatState.step1)) {
+                if (!isDone(chatState.nameAge)) {
                   return
                 }
                 if (onSubmit) {
-                  onSubmit(chatState.step1)
+                  onSubmit(chatState.nameAge)
                 }
               }}
             >
@@ -69,10 +79,10 @@ export const NameAgeInput: React.SFC<Props> = ({ onSubmit, appear }) => (
                 <UserTextInput
                   type="text"
                   id="firstName"
-                  value={pathOr('', ['step1', 'firstName'], chatState)}
+                  value={pathOr('', ['nameAge', 'firstName'], chatState)}
                   onChange={handleChange('firstName', chatState)}
                   maxWidth={Math.max(
-                    pathOr(0, ['step1', 'firstName', 'length'], chatState),
+                    pathOr(0, ['nameAge', 'firstName', 'length'], chatState),
                     10,
                   )}
                   innerRef={(ref) => {
@@ -86,10 +96,10 @@ export const NameAgeInput: React.SFC<Props> = ({ onSubmit, appear }) => (
                 <UserTextInput
                   type="text"
                   id="lastName"
-                  value={pathOr('', ['step1', 'lastName'], chatState)}
+                  value={pathOr('', ['nameAge', 'lastName'], chatState)}
                   onChange={handleChange('lastName', chatState)}
                   maxWidth={Math.max(
-                    pathOr(0, ['step1', 'lastName', 'length'], chatState),
+                    pathOr(0, ['nameAge', 'lastName', 'length'], chatState),
                     15,
                   )}
                 />
@@ -100,12 +110,12 @@ export const NameAgeInput: React.SFC<Props> = ({ onSubmit, appear }) => (
                   type="number"
                   id="age"
                   step={1}
-                  value={pathOr('', ['step1', 'age'], chatState)}
+                  value={pathOr('', ['nameAge', 'age'], chatState)}
                   onChange={handleChange('age', chatState)}
                   maxWidth={4.5}
                 />{' '}
                 år gammal
-                {isDone(chatState.step1) && (
+                {isDone(chatState.nameAge) && (
                   <div>
                     <button type="submit">Ok</button>
                   </div>

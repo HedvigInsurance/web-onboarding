@@ -26,7 +26,7 @@ it('shows first messages on initial render', () => {
 it('shows all messages when initial session is set', () => {
   const initialSession = JSON.stringify({
     chat: {
-      step1: {
+      nameAge: {
         firstName: 'blargh',
         lastName: 'blarghson',
         age: 12,

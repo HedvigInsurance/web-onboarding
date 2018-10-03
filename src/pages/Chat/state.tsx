@@ -3,7 +3,7 @@ import { propOr } from 'ramda'
 import * as React from 'react'
 import { StorageContainer } from '../../utils/StorageContainer'
 
-export interface Step1State {
+export interface NameAgeState {
   firstName: string
   lastName: string
   age: number | string
@@ -13,13 +13,13 @@ export interface State {
   currentStep: string
   initialVisibleSteps: string[]
   visibleSteps: string[]
-  step1?: Step1State
+  nameAge?: NameAgeState
 }
 
 export interface Effects {
-  setStep1Prop: <K extends keyof Step1State>(
+  setNameAgeProp: <K extends keyof NameAgeState>(
     prop: K,
-    value: Step1State[K],
+    value: NameAgeState[K],
   ) => void
   reset: () => void
   goToStep: (step: string) => void
@@ -44,15 +44,15 @@ export const ChatContainer: React.SFC<
         )}
         effects={
           {
-            setStep1Prop: <K extends keyof Step1State>(
+            setNameAgeProp: <K extends keyof NameAgeState>(
               key: K,
-              value: Step1State[K],
+              value: NameAgeState[K],
             ) => ({ state, setState }: EffectProps<State>) => {
               const newState: Partial<State> = {
-                step1: {
-                  ...propOr<Step1State, State, Step1State>(
+                nameAge: {
+                  ...propOr<NameAgeState, State, NameAgeState>(
                     { firstName: '', lastName: '', age: '' },
-                    'step1',
+                    'nameAge',
                     state,
                   ),
                   [key]: value,
@@ -71,7 +71,7 @@ export const ChatContainer: React.SFC<
               storageState.session.setSession({
                 ...storageState.session.getSession(),
                 chat: {
-                  step1: undefined,
+                  nameAge: undefined,
                   currentStep: 'initial',
                   visibleSteps: ['initial'],
                   initialVisibleSteps: [],
@@ -79,7 +79,7 @@ export const ChatContainer: React.SFC<
               })
               // Force 2 state updates to make sure first step is re-mounted
               setState({
-                step1: undefined,
+                nameAge: undefined,
                 currentStep: undefined,
                 visibleSteps: [],
                 initialVisibleSteps: [],
