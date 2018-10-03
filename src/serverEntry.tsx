@@ -1,14 +1,14 @@
-import 'source-map-support/register'
 import { createKoaServer } from '@hedviginsurance/web-survival-kit' // tslint:disable-line ordered-imports
+import 'source-map-support/register'
 import { reactPageRoutes } from './routes'
 import { appLogger } from './server/logging'
-import { getPage } from './server/page'
-import { notNullable } from './utils/nullables'
 import {
   logRequestMiddleware,
   setLoggerMiddleware,
   setRequestUuidMiddleware,
 } from './server/middleware/enhancers'
+import { getPage } from './server/page'
+import { notNullable } from './utils/nullables'
 
 const getPort = () => (process.env.PORT ? Number(process.env.PORT) : 8080)
 
