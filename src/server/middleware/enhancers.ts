@@ -31,8 +31,8 @@ export const logRequestMiddleware: Middleware = async (ctx, next) => {
     await next()
     log()
   } catch (e) {
-    log(e)
     ctx.state.getLogger('request').error('Uncaught error in request', e)
+    log(e)
     throw e
   }
 }
