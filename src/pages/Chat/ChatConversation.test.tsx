@@ -31,6 +31,21 @@ it('shows all messages when initial session is set', () => {
         lastName: 'blarghson',
         age: 12,
       },
+      currentStep: 'greet-2',
+      visibleSteps: [
+        'initial',
+        'initial-2',
+        'name-age-input',
+        'greet-1',
+        'greet-2',
+      ],
+      initialVisibleSteps: [
+        'initial',
+        'initial-2',
+        'name-age-input',
+        'greet-1',
+        'greet-2',
+      ],
     },
   })
   const wrapper = mount(
