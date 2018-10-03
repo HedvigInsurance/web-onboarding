@@ -1,4 +1,4 @@
-import { Container, ContainerProps, EffectMap } from 'constate'
+import { Container, ContainerProps, EffectMap, EffectProps } from 'constate'
 import * as React from 'react'
 
 interface State {
@@ -14,13 +14,13 @@ export const SingletonAction: React.SFC<
   <Container<State, {}, {}, EffectMap<State, Effects>>
     initialState={{ isActionDone: false }}
     effects={
-      ({
-        doAction: () => ({ setState }) => {
+      {
+        doAction: () => ({ setState }: EffectProps<State>) => {
           setTimeout(() => {
             setState({ isActionDone: true }) // cant set state during render so we need to do it async
           }, 0)
         },
-      } as EffectMap<State, Effects>) as any
+      } as any
     }
     {...props}
   />
