@@ -38,6 +38,7 @@ const Row = styled('div')({
   display: 'flex',
   alignItems: 'baseline',
   flexDirection: 'row',
+  flexWrap: 'wrap',
   '@media (max-width: 700px)': {
     flexFlow: 'wrap',
     justifyContent: 'flex-start',
@@ -52,7 +53,7 @@ const Col = styled('div')({
 })
 
 const CardHeader = styled('h2')({
-  fontFamily: fonts.MERRIWEATHER,
+  fontFamily: fonts.SORAY,
   fontSize: '18px',
   fontWeight: 'normal',
   maxWidth: '120px',
@@ -85,7 +86,7 @@ const DropDownText = styled('div')({
   marginBottom: '60px',
   marginTop: '0px',
   fontSize: '16px',
-  maxWidth: '700px',
+  maxWidth: '100px',
   color: colors.DARK_GRAY,
 })
 
@@ -229,14 +230,14 @@ const PERILS = [
           '2,2. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
       },
       {
-        key: 7,
+        key: 8,
         title: 'Stöld',
         image: '/assets/offering/stold.png',
         expandableText:
           '2,3. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
       },
       {
-        key: 8,
+        key: 9,
         title: 'Vattenläcka',
         image: '/assets/offering/vattenlacka.png',
         expandableText:
@@ -254,7 +255,6 @@ const Switcher = styled('div')({
   width: 'max-content',
   marginLeft: 'auto',
   marginRight: 'auto',
-  flexWrap: 'wrap',
 })
 const SwitcherItem = styled('div')({
   borderRadius: '30px',
@@ -263,6 +263,7 @@ const SwitcherItem = styled('div')({
   paddingRight: '20px',
   paddingLeft: '20px',
   fontSize: '14px',
+  fontFamily: fonts.CIRCULAR,
 })
 
 interface State {
@@ -300,6 +301,7 @@ export const InsuranceCoverage: React.SFC<Props> = (props) => (
               <Switcher>
                 {PERILS.map((peril) => (
                   <SwitcherItem
+                    key={peril.key}
                     style={{
                       backgroundColor:
                         state.activeTab === peril.key
@@ -332,75 +334,24 @@ export const InsuranceCoverage: React.SFC<Props> = (props) => (
                           }
                         >
                           <ImageIcon src={column.image} />
-                          <Label>{column.title}</Label>
+                          <Label
+                            style={{
+                              color:
+                                state.showPerilNumber === peril.key &&
+                                state.showIconNumber === column.key
+                                  ? colors.BLACK
+                                  : colors.DARK_GRAY,
+                            }}
+                          >
+                            {column.title}
+                          </Label>
+                          {state.showPerilNumber === peril.key &&
+                          state.showIconNumber === column.key ? (
+                            <DropDownText>{state.textToShow}</DropDownText>
+                          ) : null}
                         </Col>
                       ))}
                     </Row>
-                  ) : null}
-                  {state.activeTab === peril.key ? (
-                    <DropDownText>{state.textToShow}</DropDownText>
-                  ) : null}
-                </BigCol>
-              ))}
-            </Card>
-          </InnerContainer>
-        </OuterContainer>
-      )}
-    </Container>
-  </OuterContainer>
-)
-
-export const InsuranceCoverageOld: React.SFC<Props> = (props) => (
-  <OuterContainer>
-    <Container<State, ActionMap<State, Actions>>
-      initialState={{ showPerilNumber: undefined, activeTab: 0 }}
-      actions={{
-        handleIconClick: (peril: number, icon: number, text: string) => () => ({
-          showPerilNumber: peril,
-          showIconNumber: icon,
-          textToShow: text,
-        }),
-        handleActiveTab: (tab: number) => () => ({
-          activeTab: tab,
-          showPerilNumber: undefined,
-        }),
-      }}
-    >
-      {(state) => (
-        <OuterContainer>
-          <InnerContainer>
-            <Card>
-              <Header>{props.headline}</Header>
-              <SubTitle>{props.subTitle}</SubTitle>
-              {PERILS.map((peril) => (
-                <BigCol key={peril.key}>
-                  <TitleRow>
-                    <Col onClick={() => state.handleActiveTab(peril.key)}>
-                      <ImageIcon src={peril.icon} />
-                      <CardHeader>{peril.name}</CardHeader>
-                    </Col>
-                  </TitleRow>
-                  {state.activeTab === peril.key ? (
-                    <Row>
-                      {peril.icons.map((column) => (
-                        <Col
-                          key={column.key}
-                          onClick={() =>
-                            state.handleIconClick(
-                              peril.key,
-                              column.key,
-                              column.expandableText,
-                            )
-                          }
-                        >
-                          <ImageIcon src={column.image} />
-                          <Label>{column.title}</Label>
-                        </Col>
-                      ))}
-                    </Row>
-                  ) : null}
-                  {state.activeTab === peril.key ? (
-                    <DropDownText>{state.textToShow}</DropDownText>
                   ) : null}
                 </BigCol>
               ))}

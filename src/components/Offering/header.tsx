@@ -5,7 +5,7 @@ export const Header = styled('h1')({
   maxWidth: '400px',
   marginLeft: 'auto',
   marginRight: 'auto',
-  fontFamily: fonts.MERRIWEATHER,
+  fontFamily: fonts.SORAY,
   fontSize: '28px',
   marginBottom: '10px',
   fontWeight: 'normal',
