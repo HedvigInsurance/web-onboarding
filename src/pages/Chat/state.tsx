@@ -50,7 +50,7 @@ const initialState: State = {
   },
   livingSituation: {
     size: '',
-    numberOfPeople: 1,
+    numberOfPeople: 0,
     postalCode: '',
     streetAddress: '',
   },
