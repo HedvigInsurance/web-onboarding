@@ -1,5 +1,5 @@
 import { Container, ContainerProps, EffectProps } from 'constate'
-import { propOr, equals, cond, always } from 'ramda'
+import { always, cond, equals, propOr } from 'ramda'
 import * as React from 'react'
 import { StorageContainer } from '../../utils/StorageContainer'
 
