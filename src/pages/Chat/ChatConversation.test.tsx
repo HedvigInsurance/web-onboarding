@@ -20,7 +20,7 @@ it('shows first messages on initial render', () => {
   jest.runAllTimers()
   wrapper.update()
 
-  expect(wrapper.find(Message)).toHaveLength(3)
+  expect(wrapper.find(Message)).toHaveLength(2)
 })
 
 it('shows all messages when initial session is set', () => {
@@ -31,21 +31,9 @@ it('shows all messages when initial session is set', () => {
         lastName: 'blarghson',
         age: 12,
       },
-      currentStep: 'greet-2',
-      visibleSteps: [
-        'initial',
-        'initial-2',
-        'name-age-input',
-        'greet-1',
-        'greet-2',
-      ],
-      initialVisibleSteps: [
-        'initial',
-        'initial-2',
-        'name-age-input',
-        'greet-1',
-        'greet-2',
-      ],
+      currentStep: 'greet',
+      visibleSteps: ['initial', 'name-age-input', 'greet'],
+      initialVisibleSteps: ['initial', 'name-age-input', 'greet'],
     },
   })
   const wrapper = mount(
@@ -60,5 +48,5 @@ it('shows all messages when initial session is set', () => {
     </Provider>,
   )
 
-  expect(wrapper.find(Message)).toHaveLength(5)
+  expect(wrapper.find(Message)).toHaveLength(3)
 })

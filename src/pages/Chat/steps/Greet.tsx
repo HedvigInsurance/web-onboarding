@@ -7,7 +7,8 @@ export const Greet: React.SFC<ChatMessageProps> = ({ onTyped, appear }) => (
   <ChatContainer>
     {({ nameAge }) => (
       <ChatMessage appear={appear} typingDuration={500} onTyped={onTyped}>
-        Trevligt att träffas {propOr('', 'firstName', nameAge)} 😄
+        Kul att ha dig här {propOr('', 'firstName', nameAge)}!<br />
+        Hur bor du?
       </ChatMessage>
     )}
   </ChatContainer>
