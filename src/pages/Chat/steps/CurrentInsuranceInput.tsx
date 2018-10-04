@@ -64,6 +64,7 @@ export const CurrentInsuranceInput: React.SFC<CurrentInsuranceInputProps> = ({
               [equals(false), always('no')],
               [equals(true), always('yes')],
             ])(chatState.currentInsurance.hasCurrentInsurance)}
+            id="hasCurrentInsurance"
           >
             <option value="select" disabled />
             <option value="yes">Ja</option>
@@ -84,6 +85,7 @@ export const CurrentInsuranceInput: React.SFC<CurrentInsuranceInputProps> = ({
                       chatState,
                     )}
                     onChange={chatState.setCurrentInsurer}
+                    id="currentInsurer"
                   >
                     <option value="select" disabled />
                     {(Object.keys(Insurer) as Array<keyof Insurer>).map(
