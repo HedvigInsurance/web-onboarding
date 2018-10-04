@@ -67,6 +67,7 @@ export interface Effects {
     value: LivingSituationState[K],
   ) => void
   setHasCurrentInsurance: (event: React.ChangeEvent<HTMLSelectElement>) => void
+  setCurrentInsurer: (event: React.ChangeEvent<HTMLSelectElement>) => void
   reset: () => void
   goToStep: (step: string) => void
 }
@@ -150,6 +151,27 @@ export const ChatContainer: React.SFC<
                   ],
                   [equals('no'), always({ hasCurrentInsurance: false })],
                 ])(event.target.value),
+              }
+              setState(newState)
+              storageState.session.setSession({
+                ...storageState.session.getSession(),
+                chat: {
+                  ...propOr({}, 'chat', storageState.session.getSession()),
+                  ...newState,
+                },
+              })
+            },
+            setCurrentInsurer: (
+              event: React.ChangeEvent<HTMLSelectElement>,
+            ) => ({ setState }: EffectProps<State>) => {
+              const newState: Partial<State> = {
+                currentInsurance: {
+                  hasCurrentInsurance: true,
+                  currentInsurer:
+                    event.target.value === 'select'
+                      ? undefined
+                      : (event.target.value as Insurer),
+                },
               }
               setState(newState)
               storageState.session.setSession({
