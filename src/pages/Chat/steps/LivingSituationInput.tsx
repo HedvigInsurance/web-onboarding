@@ -1,10 +1,20 @@
 import {
+  InputValidationError,
   UserResponse,
   UserSelectInput,
   UserTextInput,
 } from 'components/userInput/UserResponse'
 import { SingletonAction } from 'components/utils/SingletonAction'
-import { pathOr, pipe } from 'ramda'
+import {
+  allPass,
+  always,
+  equals,
+  ifElse,
+  isNil,
+  not,
+  pathOr,
+  pipe,
+} from 'ramda'
 import * as React from 'react'
 import * as yup from 'yup'
 import {
@@ -58,15 +68,78 @@ const validationSchema = yup
       .oneOf(Object.keys(ApartmentType))
       .required(),
     size: yup
-      .number()
-      .moreThan(0)
-      .lessThan(250, 'TOO BIG APARTMENT') // TODO improve message
-      .required(),
+      .mixed()
+      .test({
+        name: 'isntTooBig',
+        test: (value) => !isNaN(Number(value)) && value < 250,
+        message: 'TOO BIG APARTMENT',
+      })
+      .test({
+        test: (value) =>
+          value === '' || (!isNaN(Number(value)) && Number(value) > 0),
+        message: 'MUST BE VALID NUMBER',
+      })
+      .test({
+        test: (value) => value !== '',
+        message: 'noop',
+      }),
   })
+
   .required()
 
-const isDone = (values: Partial<LivingSituationState> = {}) =>
-  validationSchema.isValidSync(values)
+const isDone = (values: Partial<LivingSituationState> = {}) => {
+  try {
+    validationSchema.validateSync(values)
+    return true
+  } catch (e) {
+    return false
+  }
+}
+const getValidationError = (
+  values: Partial<LivingSituationState> = {},
+): [string, string] | null => {
+  try {
+    validationSchema.validateSync(values)
+    return null
+  } catch (e) {
+    return [e.params.path, e.message]
+  }
+}
+
+const hasValidationErrorForKey = (key: keyof LivingSituationState) => (
+  validationError: yup.ValidationError,
+) =>
+  allPass([
+    pipe(
+      isNil,
+      not,
+    ),
+    pipe(
+      pathOr('', [0]),
+      equals(key),
+    ),
+    pipe(
+      pathOr('', [1]),
+      equals('noop'),
+      not,
+    ),
+  ])(validationError)
+
+const renderValidationError = (key: keyof LivingSituationState) => (
+  values: Partial<LivingSituationState>,
+): React.ReactNode =>
+  pipe(
+    getValidationError,
+    ifElse(
+      hasValidationErrorForKey(key),
+      (validationError) => (
+        <InputValidationError>
+          {pathOr('', [1], validationError)}
+        </InputValidationError>
+      ),
+      always(null),
+    ),
+  )(values)
 
 export const LivingSituationInput: React.SFC<LivingSituationInputProps> = ({
   appear,
@@ -175,6 +248,7 @@ export const LivingSituationInput: React.SFC<LivingSituationInputProps> = ({
                   pattern="[0-9]*"
                 />
                 kvadratmeter
+                {renderValidationError('size')(chatState.livingSituation)}
               </div>
               <div>
                 och där bor{' '}
