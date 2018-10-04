@@ -1,5 +1,5 @@
+import { ActionMap, Container } from 'constate'
 import * as React from 'react'
-
 import styled from 'react-emotion'
 import { GetInsured } from '../sections/offering/get-insured'
 import { HedvigInfo } from '../sections/offering/hedvig-info'
@@ -10,95 +10,84 @@ import { Legal } from '../sections/offering/legal'
 import { PriceInfo } from '../sections/offering/price-info'
 import { TopBar } from '../sections/offering/top-bar'
 
-export const Container = styled('div')({})
+export const OuterContainer = styled('div')({})
 
 interface MyComponentState {
   alreadyInsured: boolean
   getStartedButtonVisible: boolean
 }
 
-export class Offering extends React.Component<{}, MyComponentState> {
-  constructor(props: any) {
-    super(props)
-    this.state = {
-      alreadyInsured: false,
-      getStartedButtonVisible: true,
-    }
-  }
-
-  public handleChange(visible: boolean) {
-    this.setState({ getStartedButtonVisible: visible })
-  }
-
-  public render() {
-    const alreadyInsured = true
-    return (
-      /*TODO: graphql data */
-      <Container>
-        {/* Top Bar Section*/}
-        <TopBar
-          progress={1}
-          getInsured={'Bli försäkrad'}
-          state={this.state.getStartedButtonVisible}
-        />
-
-        {/* Pice Info Section */}
-        <PriceInfo
-          update={this.handleChange.bind(this)}
-          alreadyInsured={false}
-          header={'Hej Zak, det här är din hemförsäkring hos Hedvig!'}
-          subTitle1={'Zak Kjellin  23 år gammal'}
-          subTitle2={'Fantastiska Gatan 23B, 112 34 Stockholm'}
-          price={'299 kr/mån'}
-          subscriptionTime={'Ingen bindningstid'}
-          startDate={'Startdatum:'}
-          coverage={'Gäller i hela världen'}
-          getInsured={'Bli försäkrad'}
-          backgroundImage={'url(assets/offering/map-background.png)'}
-          alreadyInsuredLabel={'Gamla försäkringens slutdatum'}
-          todayLabel={'Idag'}
-          protection={'Med skydd för'}
-        />
-
-        {/* Hedvig Info Section */}
-        <HedvigInfo title={'Det här är Hedvig'} />
-
-        {/* Hedvig Switch Section */}
-        {alreadyInsured ? (
-          <HedvigSwitch
-            title={'Hedvig sköter bytet från din gamla försäkring'}
-          />
-        ) : null}
-
-        {/* Insurance Coverage Section */}
-        <InsuranceCoverage
-          headline={'Vad försäkringen täcker'}
-          subTitle={'Klicka på ikonerna för mer info.'}
-        />
-
-        {/* Insured Amount Section */}
-        <InsuredAmount title={'Försäkrade belopp'} info={'Läs mer'} />
-
-        {/* Get Insured Section */}
-        <GetInsured
-          title={'Försäkra'}
-          name={'Fantastiska Gatan'}
-          getInsured={'Bli försäkrad'}
-        />
-
-        {/* Legal Section */}
-        <Legal
-          legalText={
-            'Genom att trycka på ”Bli försäkrad” godkänner jag att jag har tagit del av förköpsinformation, villkor och att mina personuppgifter behandlas enligt GDPR'
-          }
-        />
-      </Container>
-    )
-  }
-
-  protected alreadyInsured() {
-    return this.state.alreadyInsured
-  }
+interface State {
+  getStartedButtonVisible: boolean
+  alreadyInsured: boolean
 }
+interface Actions {
+  handleChange: (visible: boolean) => void
+}
+
+export const Offering: React.SFC<{}> = () => (
+  <OuterContainer>
+    <Container<State, ActionMap<State, Actions>>
+      initialState={{ getStartedButtonVisible: true, alreadyInsured: true }}
+      actions={{
+        handleChange: (visible: boolean) => (_) => ({
+          getStartedButtonVisible: visible,
+        }),
+      }}
+    >
+      {(state) => (
+        <OuterContainer>
+          <TopBar
+            progress={1}
+            getInsured={'Bli försäkrad'}
+            state={state.getStartedButtonVisible}
+          />
+
+          <PriceInfo
+            update={state.handleChange}
+            alreadyInsured={false}
+            header={'Hej Zak, det här är din hemförsäkring hos Hedvig!'}
+            subTitle1={'Zak Kjellin  23 år gammal'}
+            subTitle2={'Fantastiska Gatan 23B, 112 34 Stockholm'}
+            price={'299 kr/mån'}
+            subscriptionTime={'Ingen bindningstid'}
+            startDate={'Startdatum:'}
+            coverage={'Gäller i hela världen'}
+            getInsured={'Bli försäkrad'}
+            backgroundImage={'url(assets/offering/map-background.png)'}
+            alreadyInsuredLabel={'Gamla försäkringens slutdatum'}
+            todayLabel={'Idag'}
+            protection={'Med skydd för'}
+          />
+
+          <HedvigInfo title={'Det här är Hedvig'} />
+          {state.alreadyInsured ? (
+            <HedvigSwitch
+              title={'Hedvig sköter bytet från din gamla försäkring'}
+            />
+          ) : null}
+
+          <InsuranceCoverage
+            headline={'Vad försäkringen täcker'}
+            subTitle={'Klicka på ikonerna för mer info.'}
+          />
+
+          <InsuredAmount title={'Försäkrade belopp'} info={'Läs mer'} />
+
+          <GetInsured
+            title={'Försäkra'}
+            name={'Fantastiska Gatan'}
+            getInsured={'Bli försäkrad'}
+          />
+          <Legal
+            legalText={
+              'Genom att trycka på ”Bli försäkrad” godkänner jag att jag har tagit del av förköpsinformation, villkor och att mina personuppgifter behandlas enligt GDPR'
+            }
+          />
+        </OuterContainer>
+      )}
+    </Container>
+  </OuterContainer>
+)
 
 /* TODO: Add proptypes check */
