@@ -1,3 +1,4 @@
+import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { ChatMessage } from 'components/hedvig/chat'
 import { Conversation, Message } from 'components/hedvig/conversation'
 import * as React from 'react'
@@ -28,8 +29,9 @@ export const ChatConversation: React.SFC = () => (
               typingDuration={2500}
               onTyped={() => goToStep('name-age-input')}
             >
-              Hej! Det är jag som är Hedvig! 👋 <br />
-              Berätta om dig själv!
+              <TranslationsConsumer textKey="CHAT_FIRST_GREET">
+                {(firstGreet) => firstGreet}
+              </TranslationsConsumer>
             </ChatMessage>
           )}
         </Message>
