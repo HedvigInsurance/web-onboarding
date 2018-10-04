@@ -12,11 +12,6 @@ import { TopBar } from '../sections/offering/top-bar'
 
 export const OuterContainer = styled('div')({})
 
-interface MyComponentState {
-  alreadyInsured: boolean
-  getStartedButtonVisible: boolean
-}
-
 interface State {
   getStartedButtonVisible: boolean
   alreadyInsured: boolean
