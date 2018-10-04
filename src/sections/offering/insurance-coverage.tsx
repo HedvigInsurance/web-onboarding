@@ -21,7 +21,7 @@ const InnerContainer = styled('div')({
   flexDirection: 'column',
 })
 
-const BigRow = styled('div')({})
+const BigCol = styled('div')({})
 
 const TitleRow = styled('div')({
   marginTop: '30px',
@@ -85,12 +85,11 @@ const DropDownText = styled('div')({
   marginBottom: '60px',
   marginTop: '0px',
   fontSize: '16px',
-  textAlign: 'center',
   maxWidth: '700px',
   color: colors.DARK_GRAY,
 })
 
-const CARDS = [
+const PERILS = [
   {
     key: 0,
     name: 'Dig och din familj',
@@ -208,28 +207,88 @@ const CARDS = [
         expandableText:
           '2,4. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
       },
+      {
+        key: 5,
+        title: 'Drulle',
+        image: '/assets/offering/Drulle.png',
+        expandableText:
+          '2,5. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
+      },
+      {
+        key: 6,
+        title: 'Eldsvåda',
+        image: '/assets/offering/eldsvada_green.png',
+        expandableText:
+          '2,6. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
+      },
+      {
+        key: 7,
+        title: 'Oväder',
+        image: '/assets/offering/ovader_green.png',
+        expandableText:
+          '2,2. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
+      },
+      {
+        key: 7,
+        title: 'Stöld',
+        image: '/assets/offering/stold.png',
+        expandableText:
+          '2,3. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
+      },
+      {
+        key: 8,
+        title: 'Vattenläcka',
+        image: '/assets/offering/vattenlacka.png',
+        expandableText:
+          '2,8. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
+      },
     ],
   },
 ]
 
+const Switcher = styled('div')({
+  backgroundColor: colors.LIGHT_GRAY,
+  borderRadius: '20px',
+  display: 'flex',
+  flexDirection: 'row',
+  width: 'max-content',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  flexWrap: 'wrap',
+})
+const SwitcherItem = styled('div')({
+  borderRadius: '30px',
+  paddingTop: '10px',
+  paddingBottom: '10px',
+  paddingRight: '20px',
+  paddingLeft: '20px',
+  fontSize: '14px',
+})
+
 interface State {
+  activeTab: number
   showIconNumber: number
   showPerilNumber: number
   textToShow: string
 }
 interface Actions {
   handleIconClick: (peril: number, icon: number, text: string) => void
+  handleActiveTab: (activeTab: number) => void
 }
 
 export const InsuranceCoverage: React.SFC<Props> = (props) => (
   <OuterContainer>
     <Container<State, ActionMap<State, Actions>>
-      initialState={{ showPerilNumber: undefined }}
+      initialState={{ showPerilNumber: undefined, activeTab: 0 }}
       actions={{
         handleIconClick: (peril: number, icon: number, text: string) => () => ({
           showPerilNumber: peril,
           showIconNumber: icon,
           textToShow: text,
+        }),
+        handleActiveTab: (tab: number) => () => ({
+          activeTab: tab,
+          showPerilNumber: undefined,
         }),
       }}
     >
@@ -238,36 +297,50 @@ export const InsuranceCoverage: React.SFC<Props> = (props) => (
           <InnerContainer>
             <Card>
               <Header>{props.headline}</Header>
-              <SubTitle>{props.subTitle}</SubTitle>
-              {CARDS.map((card) => (
-                <BigRow key={card.key}>
-                  <TitleRow>
-                    <Col>
-                      <ImageIcon src={card.icon} />
-                      <CardHeader>{card.name}</CardHeader>
-                    </Col>
-                  </TitleRow>
-                  <Row>
-                    {card.icons.map((column) => (
-                      <Col
-                        key={column.key}
-                        onClick={() =>
-                          state.handleIconClick(
-                            card.key,
-                            column.key,
-                            column.expandableText,
-                          )
-                        }
-                      >
-                        <ImageIcon src={column.image} />
-                        <Label>{column.title}</Label>
-                      </Col>
-                    ))}
-                  </Row>
-                  {state.showPerilNumber === card.key ? (
+              <Switcher>
+                {PERILS.map((peril) => (
+                  <SwitcherItem
+                    style={{
+                      backgroundColor:
+                        state.activeTab === peril.key
+                          ? colors.DARK_PURPLE
+                          : colors.LIGHT_GRAY,
+                      color:
+                        state.activeTab === peril.key
+                          ? colors.WHITE
+                          : colors.DARK_PURPLE,
+                    }}
+                    onClick={() => state.handleActiveTab(peril.key)}
+                  >
+                    {peril.name}
+                  </SwitcherItem>
+                ))}
+              </Switcher>
+              {PERILS.map((peril) => (
+                <BigCol key={peril.key}>
+                  {state.activeTab === peril.key ? (
+                    <Row>
+                      {peril.icons.map((column) => (
+                        <Col
+                          key={column.key}
+                          onClick={() =>
+                            state.handleIconClick(
+                              peril.key,
+                              column.key,
+                              column.expandableText,
+                            )
+                          }
+                        >
+                          <ImageIcon src={column.image} />
+                          <Label>{column.title}</Label>
+                        </Col>
+                      ))}
+                    </Row>
+                  ) : null}
+                  {state.activeTab === peril.key ? (
                     <DropDownText>{state.textToShow}</DropDownText>
                   ) : null}
-                </BigRow>
+                </BigCol>
               ))}
             </Card>
           </InnerContainer>
@@ -277,33 +350,64 @@ export const InsuranceCoverage: React.SFC<Props> = (props) => (
   </OuterContainer>
 )
 
-export const InsuranceCoverageOld: React.SFC<Props> = (props) => {
-  return (
-    <OuterContainer>
-      <InnerContainer>
-        <Card>
-          <Header>{props.headline}</Header>
-          <SubTitle>{props.subTitle}</SubTitle>
-          {CARDS.map((card) => (
-            <BigRow key={card.key}>
-              <TitleRow>
-                <Col>
-                  <ImageIcon src={card.icon} />
-                  <CardHeader>{card.name}</CardHeader>
-                </Col>
-              </TitleRow>
-              <Row>
-                {card.icons.map((column) => (
-                  <Col key={column.key}>
-                    <ImageIcon src={column.image} />
-                    <Label>{column.title}</Label>
-                  </Col>
-                ))}
-              </Row>
-            </BigRow>
-          ))}
-        </Card>
-      </InnerContainer>
-    </OuterContainer>
-  )
-}
+export const InsuranceCoverageOld: React.SFC<Props> = (props) => (
+  <OuterContainer>
+    <Container<State, ActionMap<State, Actions>>
+      initialState={{ showPerilNumber: undefined, activeTab: 0 }}
+      actions={{
+        handleIconClick: (peril: number, icon: number, text: string) => () => ({
+          showPerilNumber: peril,
+          showIconNumber: icon,
+          textToShow: text,
+        }),
+        handleActiveTab: (tab: number) => () => ({
+          activeTab: tab,
+          showPerilNumber: undefined,
+        }),
+      }}
+    >
+      {(state) => (
+        <OuterContainer>
+          <InnerContainer>
+            <Card>
+              <Header>{props.headline}</Header>
+              <SubTitle>{props.subTitle}</SubTitle>
+              {PERILS.map((peril) => (
+                <BigCol key={peril.key}>
+                  <TitleRow>
+                    <Col onClick={() => state.handleActiveTab(peril.key)}>
+                      <ImageIcon src={peril.icon} />
+                      <CardHeader>{peril.name}</CardHeader>
+                    </Col>
+                  </TitleRow>
+                  {state.activeTab === peril.key ? (
+                    <Row>
+                      {peril.icons.map((column) => (
+                        <Col
+                          key={column.key}
+                          onClick={() =>
+                            state.handleIconClick(
+                              peril.key,
+                              column.key,
+                              column.expandableText,
+                            )
+                          }
+                        >
+                          <ImageIcon src={column.image} />
+                          <Label>{column.title}</Label>
+                        </Col>
+                      ))}
+                    </Row>
+                  ) : null}
+                  {state.activeTab === peril.key ? (
+                    <DropDownText>{state.textToShow}</DropDownText>
+                  ) : null}
+                </BigCol>
+              ))}
+            </Card>
+          </InnerContainer>
+        </OuterContainer>
+      )}
+    </Container>
+  </OuterContainer>
+)
