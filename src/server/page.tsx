@@ -3,9 +3,11 @@ import { renderStylesToString } from 'emotion-server'
 import * as Koa from 'koa'
 import * as path from 'path'
 import * as React from 'react'
+import { ApolloProvider, getDataFromTree } from 'react-apollo'
 import { renderToString } from 'react-dom/server'
 import { StaticRouter, StaticRouterContext } from 'react-router'
 import { App } from '../App'
+import { createApolloClient } from '../utils/apolloClient'
 import { createSession } from '../utils/sessionStorage'
 import { ServerCookieStorage } from '../utils/storage/ServerCookieStorage'
 
@@ -13,7 +15,7 @@ const scriptLocation = getScriptLocation({
   statsLocation: path.resolve(__dirname, 'assets'),
   webpackPublicPath: process.env.WEBPACK_PUBLIC_PATH || '',
 })
-const template = (body: string) => `
+const template = (body: string, initialState: any) => `
 <!doctype html>
 <html lang="en">
 <head>
@@ -25,25 +27,31 @@ const template = (body: string) => `
 <body>
   <div id="react-root">${body}</div>
   
+  <script>
+    window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
+  </script>
   <script src="${scriptLocation}"></script>
 </body>
 </html>
 `
 
 export const getPage: Koa.Middleware = async (ctx) => {
+  const apolloClient = createApolloClient(true)
   const routerContext: StaticRouterContext = {}
-  const reactBody = renderStylesToString(
-    renderToString(
-      <StaticRouter location={ctx.request.originalUrl} context={routerContext}>
+  const serverApp = (
+    <StaticRouter location={ctx.request.originalUrl} context={routerContext}>
+      <ApolloProvider client={apolloClient}>
         <App session={createSession(new ServerCookieStorage(ctx))} />
-      </StaticRouter>,
-    ),
+      </ApolloProvider>
+    </StaticRouter>
   )
+  await getDataFromTree(serverApp)
+  const reactBody = renderStylesToString(renderToString(serverApp))
 
   if (routerContext.url) {
     ctx.redirect(routerContext.url)
     return
   }
 
-  ctx.body = template(reactBody)
+  ctx.body = template(reactBody, apolloClient.extract())
 }
