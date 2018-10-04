@@ -9,6 +9,7 @@ import { ChatContainer, CurrentInsuranceState, Insurer } from '../state'
 
 interface CurrentInsuranceInputProps {
   appear?: boolean
+  onSubmit?: () => void
 }
 
 const insurerNames = new Map<Insurer, string>([
@@ -39,11 +40,23 @@ const isDone = (values: Partial<CurrentInsuranceState> = {}) =>
 
 export const CurrentInsuranceInput: React.SFC<CurrentInsuranceInputProps> = ({
   appear,
+  onSubmit = () => {
+    /* noop */
+  },
 }) => (
   <UserResponse appear={appear}>
     <ChatContainer>
       {(chatState) => (
-        <form>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            if (!isDone(chatState.currentInsurance)) {
+              return
+            }
+
+            onSubmit()
+          }}
+        >
           <UserSelectInput
             onChange={chatState.setHasCurrentInsurance}
             value={cond([

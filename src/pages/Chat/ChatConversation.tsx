@@ -77,8 +77,15 @@ export const ChatConversation: React.SFC = () => (
         </Message>
 
         <Message id="current-insurance-input" delay={300}>
-          {({ appear }) => <CurrentInsuranceInput appear={appear} />}
+          {({ appear }) => (
+            <CurrentInsuranceInput
+              appear={appear}
+              onSubmit={() => goToStep('show-offer')}
+            />
+          )}
         </Message>
+
+        <Message id="show-offer">{() => 'Visa erbjudande'}</Message>
       </Conversation>
     )}
   </ChatContainer>
