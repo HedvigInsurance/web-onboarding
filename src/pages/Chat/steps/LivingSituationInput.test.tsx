@@ -4,9 +4,9 @@ import * as React from 'react'
 import { createSession } from 'utils/sessionStorage'
 import { MockStorage } from 'utils/storage/MockStorage'
 import { WithStorageProps } from '../../../App'
+import { InputValidationError } from '../../../components/userInput/UserResponse'
 import { ApartmentType } from '../state'
 import { LivingSituationInput } from './LivingSituationInput'
-import { InputValidationError } from '../../../components/userInput/UserResponse'
 
 it('handles form changes', () => {
   const wrapper = mount(
