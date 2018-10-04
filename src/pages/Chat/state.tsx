@@ -1,11 +1,16 @@
 import { Container, ContainerProps, EffectProps } from 'constate'
-import { propOr } from 'ramda'
+import { propOr, equals, cond, always } from 'ramda'
 import * as React from 'react'
 import { StorageContainer } from '../../utils/StorageContainer'
 
 export enum ApartmentType {
   RENT = 'RENT',
   OWN = 'OWN',
+}
+
+export enum Insurer {
+  FOLKSAM = 'FOLKSAM',
+  TRYGG_HANSA = 'TRYGG_HANSA',
 }
 
 export interface NameAgeState {
@@ -20,6 +25,10 @@ export interface LivingSituationState {
   size: number | string
   numberOfPeople: number
 }
+export interface CurrentInsuranceState {
+  hasCurrentInsurance?: boolean
+  currentInsurer?: Insurer
+}
 
 export interface State {
   currentStep: string
@@ -27,6 +36,7 @@ export interface State {
   visibleSteps: string[]
   nameAge: NameAgeState
   livingSituation: LivingSituationState
+  currentInsurance: CurrentInsuranceState
 }
 
 const initialState: State = {
@@ -44,6 +54,7 @@ const initialState: State = {
     postalCode: '',
     streetAddress: '',
   },
+  currentInsurance: {},
 }
 
 export interface Effects {
@@ -55,6 +66,7 @@ export interface Effects {
     prop: K,
     value: LivingSituationState[K],
   ) => void
+  setHasCurrentInsurance: (event: React.ChangeEvent<HTMLSelectElement>) => void
   reset: () => void
   goToStep: (step: string) => void
 }
@@ -110,6 +122,34 @@ export const ChatContainer: React.SFC<
                   ),
                   [key]: value,
                 },
+              }
+              setState(newState)
+              storageState.session.setSession({
+                ...storageState.session.getSession(),
+                chat: {
+                  ...propOr({}, 'chat', storageState.session.getSession()),
+                  ...newState,
+                },
+              })
+            },
+            setHasCurrentInsurance: (
+              event: React.ChangeEvent<HTMLSelectElement>,
+            ) => ({ state, setState }: EffectProps<State>) => {
+              const newState: Partial<State> = {
+                currentInsurance: cond([
+                  [
+                    equals('select'),
+                    always({ hasCurrentInsurance: undefined }),
+                  ],
+                  [
+                    equals('yes'),
+                    always({
+                      currentInsurer: state.currentInsurance.currentInsurer,
+                      hasCurrentInsurance: true,
+                    }),
+                  ],
+                  [equals('no'), always({ hasCurrentInsurance: false })],
+                ])(event.target.value),
               }
               setState(newState)
               storageState.session.setSession({

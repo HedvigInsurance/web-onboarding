@@ -2,6 +2,7 @@ import { ChatMessage } from 'components/hedvig/chat'
 import { Conversation, Message } from 'components/hedvig/conversation'
 import * as React from 'react'
 import { ChatContainer } from './state'
+import { CurrentInsuranceInput } from './steps/CurrentInsuranceInput'
 import { Greet } from './steps/Greet'
 import { LivingSituationInput } from './steps/LivingSituationInput'
 import { NameAgeInput } from './steps/NameAgeInput'
@@ -64,12 +65,19 @@ export const ChatConversation: React.SFC = () => (
 
         <Message id="current-insurance-question">
           {({ appear }) => (
-            <ChatMessage appear={appear}>
+            <ChatMessage
+              appear={appear}
+              onTyped={() => goToStep('current-insurance-input')}
+            >
               {livingSituation.numberOfPeople > 1
                 ? 'Trevligt! Hoppas ni trivs. Har du någon hemförsäkring redan?'
                 : 'Trevligt! Hoppas du trivs. Har du någon hemförsäkring redan?'}
             </ChatMessage>
           )}
+        </Message>
+
+        <Message id="current-insurance-input" delay={300}>
+          {({ appear }) => <CurrentInsuranceInput appear={appear} />}
         </Message>
       </Conversation>
     )}
