@@ -8,11 +8,13 @@ import {
   setRequestUuidMiddleware,
 } from './server/middleware/enhancers'
 import { getPage } from './server/page'
+import { GIRAFFE_ENDPOINT } from './utils/apolloClient'
 import { notNullable } from './utils/nullables'
 
 const getPort = () => (process.env.PORT ? Number(process.env.PORT) : 8080)
 
 appLogger.info(`Booting server on ${getPort()} 👢`)
+appLogger.info(`Using giraffe at"${GIRAFFE_ENDPOINT}" 🦒`)
 
 const server = createKoaServer({
   publicPath: '/assets',
