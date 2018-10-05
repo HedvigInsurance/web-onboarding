@@ -3,25 +3,25 @@ import { ApolloClient } from 'apollo-client'
 import { BatchHttpLink } from 'apollo-link-batch-http'
 import { notNullable } from './nullables'
 
-let realGiraffeEndpoint: string
-if (
-  typeof window !== 'undefined' &&
-  (window as any).GIRAFFE_ENDPOINT !== undefined
-) {
-  realGiraffeEndpoint = (window as any).GIRAFFE_ENDPOINT
-} else if (process.env.NODE_ENV === 'development') {
-  realGiraffeEndpoint =
-    process.env.GIRAFFE_ENDPOINT || 'https://graphql.dev.hedvigit.com/graphql'
-} else if (
-  process.env.NODE_ENV !== 'development' &&
-  !process.env.GIRAFFE_ENDPOINT
-) {
-  throw new Error('Unable to find giraffe endpoint 🦒')
-} else {
-  realGiraffeEndpoint = notNullable(process.env.GIRAFFE_ENDPOINT)
+export const getGiraffeEndpoint = (): string => {
+  if (
+    typeof window !== 'undefined' &&
+    (window as any).GIRAFFE_ENDPOINT !== undefined
+  ) {
+    return (window as any).GIRAFFE_ENDPOINT
+  } else if (process.env.NODE_ENV === 'development') {
+    return (
+      process.env.GIRAFFE_ENDPOINT || 'https://graphql.dev.hedvigit.com/graphql'
+    )
+  } else if (
+    process.env.NODE_ENV !== 'development' &&
+    !process.env.GIRAFFE_ENDPOINT
+  ) {
+    throw new Error('Unable to find giraffe endpoint 🦒')
+  } else {
+    return notNullable(process.env.GIRAFFE_ENDPOINT)
+  }
 }
-
-export const GIRAFFE_ENDPOINT = realGiraffeEndpoint
 
 export const cache = (ssrMode: boolean) => {
   if (ssrMode) {
@@ -32,7 +32,7 @@ export const cache = (ssrMode: boolean) => {
 
 export const link = (ssrMode: boolean) =>
   new BatchHttpLink({
-    uri: GIRAFFE_ENDPOINT,
+    uri: getGiraffeEndpoint(),
     fetch: ssrMode ? require('node-fetch') : undefined,
   })
 
