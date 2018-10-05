@@ -7,6 +7,7 @@ import { HedvigSwitch } from '../sections/offering/hedvig-switch'
 import { InsuranceCoverage } from '../sections/offering/insurance-coverage'
 import { InsuredAmount } from '../sections/offering/insured-amount'
 import { Legal } from '../sections/offering/legal'
+import { PageDown } from '../sections/offering/page-down'
 import { PriceInfo } from '../sections/offering/price-info'
 import { TopBar } from '../sections/offering/top-bar'
 
@@ -55,6 +56,8 @@ export const Offering: React.SFC<{}> = () => (
             todayLabel={'Idag'}
             protection={'Självrisk: 1500 kr'}
           />
+
+          <PageDown />
 
           <HedvigInfo title={'Det här är Hedvig'} />
           {state.alreadyInsured ? (
