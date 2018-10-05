@@ -6,6 +6,7 @@ import { WithStorageProps } from '../../App'
 import { createSession } from '../../utils/sessionStorage'
 import { MockStorage } from '../../utils/storage/MockStorage'
 import { ChatConversation } from './ChatConversation'
+import { ChatStep } from './state'
 
 jest.useFakeTimers()
 it('shows first messages on initial render', () => {
@@ -31,9 +32,13 @@ it('shows all messages when initial session is set', () => {
         lastName: 'blarghson',
         age: 12,
       },
-      currentStep: 'greet',
-      visibleSteps: ['initial', 'name-age-input', 'greet'],
-      initialVisibleSteps: ['initial', 'name-age-input', 'greet'],
+      currentStep: ChatStep.GREET,
+      visibleSteps: [ChatStep.INITIAL, ChatStep.NAME_AGE_INPUT, ChatStep.GREET],
+      initialVisibleSteps: [
+        ChatStep.INITIAL,
+        ChatStep.NAME_AGE_INPUT,
+        ChatStep.GREET,
+      ],
     },
   })
   const wrapper = mount(

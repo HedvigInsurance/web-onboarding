@@ -3,6 +3,16 @@ import { propOr } from 'ramda'
 import * as React from 'react'
 import { StorageContainer } from '../../utils/StorageContainer'
 
+export enum ChatStep {
+  INITIAL,
+  NAME_AGE_INPUT,
+  GREET,
+  LIVING_SITUATION_INPUT,
+  CURRENT_INSURANCE_QUESTION,
+  CURRENT_INSURANCE_INPUT,
+  SHOW_OFFER,
+}
+
 export enum ApartmentType {
   RENT = 'RENT',
   OWN = 'OWN',
@@ -31,17 +41,17 @@ export interface CurrentInsuranceState {
 }
 
 export interface State {
-  currentStep: string
-  initialVisibleSteps: string[]
-  visibleSteps: string[]
+  currentStep: ChatStep
+  initialVisibleSteps: ChatStep[]
+  visibleSteps: ChatStep[]
   nameAge: NameAgeState
   livingSituation: LivingSituationState
   currentInsurance: CurrentInsuranceState
 }
 
 const initialState: State = {
-  visibleSteps: ['initial'],
-  currentStep: 'initial',
+  visibleSteps: [ChatStep.INITIAL],
+  currentStep: ChatStep.INITIAL,
   initialVisibleSteps: [],
   nameAge: {
     firstName: '',
@@ -69,7 +79,7 @@ export interface Effects {
   setHasCurrentInsurance: (event: React.ChangeEvent<HTMLSelectElement>) => void
   setCurrentInsurer: (event: React.ChangeEvent<HTMLSelectElement>) => void
   reset: () => void
-  goToStep: (step: string) => void
+  goToStep: (step: ChatStep) => void
 }
 
 export const ChatContainer: React.SFC<
@@ -196,10 +206,13 @@ export const ChatContainer: React.SFC<
                 visibleSteps: [],
               })
               setTimeout(() => {
-                setState({ currentStep: 'initial', visibleSteps: ['initial'] })
+                setState({
+                  currentStep: ChatStep.INITIAL,
+                  visibleSteps: [ChatStep.INITIAL],
+                })
               }, 0)
             },
-            goToStep: (step: string) => ({
+            goToStep: (step: ChatStep) => ({
               state,
               setState,
             }: EffectProps<State>) => {
