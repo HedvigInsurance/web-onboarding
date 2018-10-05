@@ -5,16 +5,7 @@ import {
   UserTextInput,
 } from 'components/userInput/UserResponse'
 import { SingletonAction } from 'components/utils/SingletonAction'
-import {
-  allPass,
-  always,
-  equals,
-  ifElse,
-  isNil,
-  not,
-  pathOr,
-  pipe,
-} from 'ramda'
+import { pathOr, pipe } from 'ramda'
 import * as React from 'react'
 import * as yup from 'yup'
 import {
@@ -106,40 +97,42 @@ const getValidationError = (
   }
 }
 
-const hasValidationErrorForKey = (key: keyof LivingSituationState) => (
-  validationError: yup.ValidationError,
-) =>
-  allPass([
-    pipe(
-      isNil,
-      not,
-    ),
-    pipe(
-      pathOr('', [0]),
-      equals(key),
-    ),
-    pipe(
-      pathOr('', [1]),
-      equals('noop'),
-      not,
-    ),
-  ])(validationError)
+const hasValidationErrorForKey = (
+  key: keyof LivingSituationState,
+  validationError: [string, string] | null,
+) => {
+  if (validationError === null || validationError === undefined) {
+    return false
+  }
+  if (validationError[0] !== key) {
+    return false
+  }
 
-const renderValidationError = (key: keyof LivingSituationState) => (
-  values: Partial<LivingSituationState>,
-): React.ReactNode =>
-  pipe(
-    getValidationError,
-    ifElse(
-      hasValidationErrorForKey(key),
-      (validationError) => (
-        <InputValidationError>
-          {pathOr('', [1], validationError)}
-        </InputValidationError>
-      ),
-      always(null),
-    ),
-  )(values)
+  if (validationError[1] === 'noop') {
+    return false
+  }
+
+  return true
+}
+
+interface ValidationErrorMaybeProps {
+  field: keyof LivingSituationState
+  values: Partial<LivingSituationState>
+}
+
+const ValidationErrorMaybe: React.SFC<ValidationErrorMaybeProps> = ({
+  field,
+  values,
+}) => {
+  const validationError = getValidationError(values)
+  if (
+    validationError !== null &&
+    hasValidationErrorForKey(field, validationError)
+  ) {
+    return <InputValidationError>{validationError[1]}</InputValidationError>
+  }
+  return null
+}
 
 export const LivingSituationInput: React.SFC<LivingSituationInputProps> = ({
   appear,
@@ -248,7 +241,10 @@ export const LivingSituationInput: React.SFC<LivingSituationInputProps> = ({
                   pattern="[0-9]*"
                 />
                 kvadratmeter
-                {renderValidationError('size')(chatState.livingSituation)}
+                <ValidationErrorMaybe
+                  field="size"
+                  values={chatState.livingSituation}
+                />
               </div>
               <div>
                 och där bor{' '}
