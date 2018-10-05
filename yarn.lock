@@ -768,6 +768,18 @@
   resolved "https://registry.yarnpkg.com/@hedviginsurance/libkit/-/libkit-1.0.1.tgz#efe04ae3c88b302a30d44fd191f259ba57d19487"
   integrity sha512-7JR0IlMJPN6PhR5BZVqex4rcVyyTzDwvjcnvGTDS2JDECOuDiVi9/I4F4OQvlceuEB+SRNbiZp6516Q9Ie+j4Q==
 
+"@hedviginsurance/textkeyfy@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/textkeyfy/-/textkeyfy-1.0.0.tgz#9487f419d25b5339b92fb2945a159dbff6eecfbb"
+  integrity sha512-PRwc+EzcYJMmGyuWr/PddOMcnr26QoLB5SXxKc6rODQLwjMcVz1EHx7bVNEkN2BaGSVFm2ECwTeKdkhQGdPfKA==
+  dependencies:
+    apollo-cache-inmemory "^1.2.10"
+    apollo-client "^2.4.2"
+    graphql "^14.0.2"
+    graphql-tag "^2.10.0"
+    react "^16.5.2"
+    react-apollo "^2.2.4"
+
 "@hedviginsurance/web-survival-kit@^1.5.0":
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@hedviginsurance/web-survival-kit/-/web-survival-kit-1.5.0.tgz#458d32e02909bf592d93e1c52f423931574f3d4b"
