@@ -1,9 +1,10 @@
+import { WithStorageProps } from 'App'
+import { InputValidationError } from 'components/userInput/UserResponse'
 import { Provider } from 'constate'
 import { mount } from 'enzyme'
 import * as React from 'react'
 import { createSession } from 'utils/sessionStorage'
 import { MockStorage } from 'utils/storage/MockStorage'
-import { WithStorageProps } from '../../../App'
 import { ApartmentType } from '../state'
 import { LivingSituationInput } from './LivingSituationInput'
 
@@ -35,4 +36,19 @@ it('handles form changes', () => {
     .find('select#numberOfPeople')
     .simulate('change', { target: { value: 3 } })
   expect(wrapper.find('select#numberOfPeople').prop('value')).toBe(3)
+})
+
+it('handles too big apartment', () => {
+  const wrapper = mount(
+    <Provider<WithStorageProps>
+      initialState={{ storage: { session: createSession(new MockStorage()) } }}
+    >
+      <LivingSituationInput />,
+    </Provider>,
+  )
+
+  expect(wrapper.find(InputValidationError)).toHaveLength(0)
+  wrapper.find('input#size').simulate('change', { target: { value: 1337 } })
+  expect(wrapper.find('input#size').prop('value')).toBe(1337)
+  expect(wrapper.find(InputValidationError)).toHaveLength(1)
 })

@@ -53,6 +53,10 @@ const UserResponseWrapper: React.SFC<{
     </FadeIn>
   )
 
+export const InputValidationError = styled('div')({
+  color: 'red',
+})
+
 export const UserResponse = styled(UserResponseWrapper)({
   textAlign: 'right',
 })

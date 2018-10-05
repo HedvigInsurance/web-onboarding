@@ -1,4 +1,5 @@
 import {
+  InputValidationError,
   UserResponse,
   UserSelectInput,
   UserTextInput,
@@ -58,15 +59,80 @@ const validationSchema = yup
       .oneOf(Object.keys(ApartmentType))
       .required(),
     size: yup
-      .number()
-      .moreThan(0)
-      .lessThan(250, 'TOO BIG APARTMENT') // TODO improve message
-      .required(),
+      .mixed()
+      .test({
+        name: 'isntTooBig',
+        test: (value) => !isNaN(Number(value)) && value < 250,
+        message: 'TOO BIG APARTMENT',
+      })
+      .test({
+        test: (value) =>
+          value === '' || (!isNaN(Number(value)) && Number(value) > 0),
+        message: 'MUST BE VALID NUMBER',
+      })
+      .test({
+        test: (value) => value !== '',
+        message: 'noop',
+      }),
   })
+
   .required()
 
-const isDone = (values: Partial<LivingSituationState> = {}) =>
-  validationSchema.isValidSync(values)
+const isDone = (values: Partial<LivingSituationState> = {}) => {
+  try {
+    validationSchema.validateSync(values)
+    return true
+  } catch (e) {
+    return false
+  }
+}
+const getValidationError = (
+  values: Partial<LivingSituationState> = {},
+): [string, string] | null => {
+  try {
+    validationSchema.validateSync(values)
+    return null
+  } catch (e) {
+    return [e.params.path, e.message]
+  }
+}
+
+const hasValidationErrorForKey = (
+  key: keyof LivingSituationState,
+  validationError: [string, string] | null,
+) => {
+  if (validationError === null || validationError === undefined) {
+    return false
+  }
+  if (validationError[0] !== key) {
+    return false
+  }
+
+  if (validationError[1] === 'noop') {
+    return false
+  }
+
+  return true
+}
+
+interface ValidationErrorMaybeProps {
+  field: keyof LivingSituationState
+  values: Partial<LivingSituationState>
+}
+
+const ValidationErrorMaybe: React.SFC<ValidationErrorMaybeProps> = ({
+  field,
+  values,
+}) => {
+  const validationError = getValidationError(values)
+  if (
+    validationError !== null &&
+    hasValidationErrorForKey(field, validationError)
+  ) {
+    return <InputValidationError>{validationError[1]}</InputValidationError>
+  }
+  return null
+}
 
 export const LivingSituationInput: React.SFC<LivingSituationInputProps> = ({
   appear,
@@ -175,6 +241,10 @@ export const LivingSituationInput: React.SFC<LivingSituationInputProps> = ({
                   pattern="[0-9]*"
                 />
                 kvadratmeter
+                <ValidationErrorMaybe
+                  field="size"
+                  values={chatState.livingSituation}
+                />
               </div>
               <div>
                 och där bor{' '}
