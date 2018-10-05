@@ -80,6 +80,10 @@ const Switcher = styled('div')({
   width: 'max-content',
   marginLeft: 'auto',
   marginRight: 'auto',
+  '@media (max-width: 400px)': {
+    width: '90%',
+    borderRadius: '40px',
+  },
 })
 
 const SwitcherItem = styled('div')({
@@ -92,6 +96,7 @@ const SwitcherItem = styled('div')({
   fontFamily: fonts.CIRCULAR,
   cursor: 'pointer',
   userSelect: 'none',
+  textAlign: 'center',
 })
 
 const PERILS = [

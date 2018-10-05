@@ -18,6 +18,9 @@ const Bar = styled('div')({
   alignItems: 'center',
   backgroundColor: colors.WHITE,
   borderBottom: '1px solid ' + colors.LIGHT_GRAY,
+  '@media (max-width: 710px)': {
+    justifyContent: 'space-evenly',
+  },
 })
 
 const Logo = styled('img')({
@@ -63,17 +66,28 @@ const ProgressLabel = styled('div')({
 
 const BarContainer = styled('div')({
   width: '20%',
+  '@media (max-width: 710px)': {
+    width: '33%',
+  },
 })
 
 const BarProgressContainer = styled('div')({
   display: 'flex',
   width: '60%',
   justifyContent: 'center',
+  flexDirection: 'row',
+  '@media (max-width: 710px)': {
+    flexDirection: 'column',
+    width: '33%',
+  },
 })
 
 const BarButtonContainer = styled('div')({
   width: '20%',
   justifyContent: 'flex-end',
+  '@media (max-width: 710px)': {
+    width: '33%',
+  },
 })
 
 interface Props {
