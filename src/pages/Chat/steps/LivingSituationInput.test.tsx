@@ -1,10 +1,10 @@
+import { WithStorageProps } from 'App'
+import { InputValidationError } from 'components/userInput/UserResponse'
 import { Provider } from 'constate'
 import { mount } from 'enzyme'
 import * as React from 'react'
 import { createSession } from 'utils/sessionStorage'
 import { MockStorage } from 'utils/storage/MockStorage'
-import { WithStorageProps } from '../../../App'
-import { InputValidationError } from '../../../components/userInput/UserResponse'
 import { ApartmentType } from '../state'
 import { LivingSituationInput } from './LivingSituationInput'
 
