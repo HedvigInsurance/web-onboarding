@@ -5,7 +5,6 @@ import { InnerWrapper } from 'components/offering/inner-wrapper'
 import { Wrapper } from 'components/offering/wrapper'
 import * as React from 'react'
 import styled from 'react-emotion'
-import { Link } from 'react-router-dom'
 
 interface Props {
   title: string
@@ -68,7 +67,6 @@ export const InsuredAmount: React.SFC<Props> = (props) => (
           {AMOUNTS.map((amount) => (
             <Row key={amount.key}>
               <TextCol>{amount.title}</TextCol>
-
               <TextCol>{amount.amount}</TextCol>
             </Row>
           ))}
