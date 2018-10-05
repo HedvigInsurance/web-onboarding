@@ -8,11 +8,14 @@ import { InnerWrapper } from 'components/offering/inner-wrapper'
 import { Wrapper } from 'components/offering/wrapper'
 import * as React from 'react'
 import styled from 'react-emotion'
+import * as VisibilitySensor from 'react-visibility-sensor'
 
 interface Props {
   title: string
   name: string
   getInsured: string
+  state: boolean
+  update: (isVisible: boolean) => void
 }
 
 const Card = styled('div')({
@@ -33,17 +36,26 @@ const Card = styled('div')({
   },
 })
 
-export const GetInsured: React.SFC<Props> = (props) => (
-  <Wrapper>
-    <InnerWrapper>
-      <Card>
-        <Header>
-          {props.title} {props.name}
-        </Header>
-        <GetInsuredButton>
-          <LinkTag to={'/'}>{props.getInsured}</LinkTag>
-        </GetInsuredButton>
-      </Card>
-    </InnerWrapper>
-  </Wrapper>
-)
+export const GetInsured: React.SFC<Props> = (props) => {
+  const handleChange = (isVisible: boolean) => {
+    props.update(isVisible)
+  }
+  return (
+    <Wrapper>
+      <InnerWrapper>
+        <Card>
+          <Header>
+            {props.title} {props.name}
+          </Header>
+          <VisibilitySensor partialVisibility onChange={handleChange}>
+            {() => (
+              <GetInsuredButton>
+                <LinkTag to={'/'}>{props.getInsured}</LinkTag>
+              </GetInsuredButton>
+            )}
+          </VisibilitySensor>
+        </Card>
+      </InnerWrapper>
+    </Wrapper>
+  )
+}

@@ -77,6 +77,7 @@ export const Offering: React.SFC<{}> = () => (
             title={'Försäkra'}
             name={'Fantastiska Gatan'}
             getInsured={'Bli försäkrad'}
+            update={state.handleChange}
           />
           <Legal
             legalText={
