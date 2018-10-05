@@ -10,7 +10,7 @@ export const GetInsuredButton = styled('div')({
 
 export const LinkTag = styled(Link)({
   backgroundColor: colors.GREEN,
-  fontSize: '18px',
+  fontSize: '16px',
   color: colors.WHITE,
   textDecoration: 'none',
   borderRadius: '50px',

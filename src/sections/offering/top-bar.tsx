@@ -33,7 +33,7 @@ const Logo = styled('img')({
 const GetInsuredButton = styled('div')({
   display: 'flex',
   flexDirection: 'row',
-  justifyContent: 'center',
+  justifyContent: 'inherit',
   marginRight: '40px',
   '@media (max-width: 350px)': {
     marginRight: '20px',
@@ -42,7 +42,7 @@ const GetInsuredButton = styled('div')({
 
 const LinkTag = styled(Link)({
   backgroundColor: colors.GREEN,
-  fontSize: '18px',
+  fontSize: '16px',
   color: colors.WHITE,
   textDecoration: 'none',
   borderRadius: '50px',
