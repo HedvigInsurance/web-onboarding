@@ -28,7 +28,7 @@ const template = (body: string, initialState: any) => `
   <div id="react-root">${body}</div>
   
   <script>
-    window.getGiraffeEndpoint = ${JSON.stringify(getGiraffeEndpoint())}
+    window.GIRAFFE_ENDPOINT= ${JSON.stringify(getGiraffeEndpoint())}
     window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
   </script>
   <script src="${scriptLocation}"></script>
