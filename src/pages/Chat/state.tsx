@@ -1,7 +1,7 @@
 import { Container, ContainerProps, EffectProps } from 'constate'
 import * as React from 'react'
-import { StorageContainer } from '../../utils/StorageContainer'
 import { notNullable } from '../../utils/nullables'
+import { StorageContainer } from '../../utils/StorageContainer'
 
 export enum ChatStep {
   INITIAL,

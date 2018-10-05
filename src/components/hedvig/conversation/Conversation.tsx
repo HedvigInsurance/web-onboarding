@@ -1,4 +1,3 @@
-import { defaultTo } from 'ramda'
 import * as React from 'react'
 import styled from 'react-emotion'
 import Transition, { ENTERED } from 'react-transition-group/Transition'
@@ -43,7 +42,7 @@ export class Conversation<TId> extends React.Component<ConversationProps<TId>> {
                   timeout={React.Children.only(message).props.delay}
                   appear
                   in
-                  key={defaultTo(undefined, React.Children.only(message).key)}
+                  key={React.Children.only(message).key || undefined}
                 >
                   {(status) =>
                     status === ENTERED ? (

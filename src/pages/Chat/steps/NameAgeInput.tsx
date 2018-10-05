@@ -8,7 +8,6 @@ import {
   NameAgeState,
   State as ChatState,
 } from '../state'
-import { ChangeEvent } from 'react'
 
 interface FormValues {
   firstName: string
@@ -25,7 +24,7 @@ interface Props {
 const handleChange = <K extends keyof NameAgeState>(
   field: K,
   chatState: ChatActions,
-) => (event: ChangeEvent<HTMLInputElement>) => {
+) => (event: React.ChangeEvent<HTMLInputElement>) => {
   chatState.setNameAgeProp(field, event.target.value)
 }
 
