@@ -1,5 +1,5 @@
 import { Container, ContainerProps, EffectProps } from 'constate'
-import { always, cond, equals, propOr } from 'ramda'
+import { propOr } from 'ramda'
 import * as React from 'react'
 import { StorageContainer } from '../../utils/StorageContainer'
 
@@ -136,21 +136,23 @@ export const ChatContainer: React.SFC<
             setHasCurrentInsurance: (
               event: React.ChangeEvent<HTMLSelectElement>,
             ) => ({ state, setState }: EffectProps<State>) => {
+              const getCurrentInsurance = (): CurrentInsuranceState => {
+                if (event.target.value === 'yes') {
+                  return {
+                    hasCurrentInsurance: true,
+                    currentInsurer: state.currentInsurance.currentInsurer,
+                  }
+                }
+                if (event.target.value === 'no') {
+                  return { hasCurrentInsurance: false }
+                }
+                return {
+                  hasCurrentInsurance: undefined,
+                  currentInsurer: undefined,
+                }
+              }
               const newState: Partial<State> = {
-                currentInsurance: cond([
-                  [
-                    equals('select'),
-                    always({ hasCurrentInsurance: undefined }),
-                  ],
-                  [
-                    equals('yes'),
-                    always({
-                      currentInsurer: state.currentInsurance.currentInsurer,
-                      hasCurrentInsurance: true,
-                    }),
-                  ],
-                  [equals('no'), always({ hasCurrentInsurance: false })],
-                ])(event.target.value),
+                currentInsurance: getCurrentInsurance(),
               }
               setState(newState)
               storageState.session.setSession({

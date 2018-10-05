@@ -2,10 +2,16 @@ import {
   UserResponse,
   UserSelectInput,
 } from 'components/userInput/UserResponse'
-import { always, cond, equals, pathOr } from 'ramda'
+import { pathOr } from 'ramda'
 import * as React from 'react'
 import * as yup from 'yup'
-import { ChatContainer, CurrentInsuranceState, Insurer } from '../state'
+import {
+  ChatContainer,
+  CurrentInsuranceState,
+  Effects as ChatEffects,
+  Insurer,
+  State as ChatState,
+} from '../state'
 
 interface CurrentInsuranceInputProps {
   appear?: boolean
@@ -22,6 +28,40 @@ const insuranceOption = (insurer: keyof Insurer) => (
     {insurerNames.get(Insurer[insurer as number] as Insurer)}
   </option>
 )
+
+const getHasCurrentInsuranceInputValue = (chatState: ChatState) => {
+  if (chatState.currentInsurance.hasCurrentInsurance === true) {
+    return 'yes'
+  }
+  if (chatState.currentInsurance.hasCurrentInsurance === false) {
+    return 'no'
+  }
+
+  return undefined
+}
+
+const getCurrentInsuranceInputMaybe = (chatState: ChatState & ChatEffects) => {
+  if (chatState.currentInsurance.hasCurrentInsurance === true) {
+    return (
+      <div>
+        <UserSelectInput
+          value={pathOr(
+            'select',
+            ['currentInsurance', 'currentInsurer'],
+            chatState,
+          )}
+          onChange={chatState.setCurrentInsurer}
+          id="currentInsurer"
+        >
+          <option value="select" disabled />
+          {(Object.keys(Insurer) as Array<keyof Insurer>).map(insuranceOption)}
+        </UserSelectInput>
+      </div>
+    )
+  }
+
+  return null
+}
 
 const validationSchema = yup.object<CurrentInsuranceState>({
   hasCurrentInsurance: yup.boolean().required(),
@@ -59,11 +99,7 @@ export const CurrentInsuranceInput: React.SFC<CurrentInsuranceInputProps> = ({
         >
           <UserSelectInput
             onChange={chatState.setHasCurrentInsurance}
-            value={cond([
-              [equals(undefined), always('select')],
-              [equals(false), always('no')],
-              [equals(true), always('yes')],
-            ])(chatState.currentInsurance.hasCurrentInsurance)}
+            value={getHasCurrentInsuranceInputValue(chatState)}
             id="hasCurrentInsurance"
           >
             <option value="select" disabled />
@@ -71,31 +107,7 @@ export const CurrentInsuranceInput: React.SFC<CurrentInsuranceInputProps> = ({
             <option value="no">Nej</option>
           </UserSelectInput>
 
-          {cond([
-            [equals(undefined), always(null)],
-            [equals(false), always(null)],
-            [
-              equals(true),
-              () => (
-                <div>
-                  <UserSelectInput
-                    value={pathOr(
-                      'select',
-                      ['currentInsurance', 'currentInsurer'],
-                      chatState,
-                    )}
-                    onChange={chatState.setCurrentInsurer}
-                    id="currentInsurer"
-                  >
-                    <option value="select" disabled />
-                    {(Object.keys(Insurer) as Array<keyof Insurer>).map(
-                      insuranceOption,
-                    )}
-                  </UserSelectInput>
-                </div>
-              ),
-            ],
-          ])(chatState.currentInsurance.hasCurrentInsurance)}
+          {getCurrentInsuranceInputMaybe(chatState)}
 
           {isDone(chatState.currentInsurance) && (
             <button type="submit">Ok</button>
