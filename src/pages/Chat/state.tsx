@@ -3,9 +3,24 @@ import { propOr } from 'ramda'
 import * as React from 'react'
 import { StorageContainer } from '../../utils/StorageContainer'
 
+export enum ChatStep {
+  INITIAL,
+  NAME_AGE_INPUT,
+  GREET,
+  LIVING_SITUATION_INPUT,
+  CURRENT_INSURANCE_QUESTION,
+  CURRENT_INSURANCE_INPUT,
+  SHOW_OFFER,
+}
+
 export enum ApartmentType {
   RENT = 'RENT',
   OWN = 'OWN',
+}
+
+export enum Insurer {
+  FOLKSAM = 'FOLKSAM',
+  TRYGG_HANSA = 'TRYGG_HANSA',
 }
 
 export interface NameAgeState {
@@ -20,18 +35,23 @@ export interface LivingSituationState {
   size: number | string
   numberOfPeople: number
 }
+export interface CurrentInsuranceState {
+  hasCurrentInsurance?: boolean
+  currentInsurer?: Insurer
+}
 
 export interface State {
-  currentStep: string
-  initialVisibleSteps: string[]
-  visibleSteps: string[]
+  currentStep: ChatStep
+  initialVisibleSteps: ChatStep[]
+  visibleSteps: ChatStep[]
   nameAge: NameAgeState
   livingSituation: LivingSituationState
+  currentInsurance: CurrentInsuranceState
 }
 
 const initialState: State = {
-  visibleSteps: ['initial'],
-  currentStep: 'initial',
+  visibleSteps: [ChatStep.INITIAL],
+  currentStep: ChatStep.INITIAL,
   initialVisibleSteps: [],
   nameAge: {
     firstName: '',
@@ -40,10 +60,11 @@ const initialState: State = {
   },
   livingSituation: {
     size: '',
-    numberOfPeople: 1,
+    numberOfPeople: 0,
     postalCode: '',
     streetAddress: '',
   },
+  currentInsurance: {},
 }
 
 export interface Effects {
@@ -55,8 +76,10 @@ export interface Effects {
     prop: K,
     value: LivingSituationState[K],
   ) => void
+  setHasCurrentInsurance: (event: React.ChangeEvent<HTMLSelectElement>) => void
+  setCurrentInsurer: (event: React.ChangeEvent<HTMLSelectElement>) => void
   reset: () => void
-  goToStep: (step: string) => void
+  goToStep: (step: ChatStep) => void
 }
 
 export const ChatContainer: React.SFC<
@@ -120,6 +143,57 @@ export const ChatContainer: React.SFC<
                 },
               })
             },
+            setHasCurrentInsurance: (
+              event: React.ChangeEvent<HTMLSelectElement>,
+            ) => ({ state, setState }: EffectProps<State>) => {
+              const getCurrentInsurance = (): CurrentInsuranceState => {
+                if (event.target.value === 'yes') {
+                  return {
+                    hasCurrentInsurance: true,
+                    currentInsurer: state.currentInsurance.currentInsurer,
+                  }
+                }
+                if (event.target.value === 'no') {
+                  return { hasCurrentInsurance: false }
+                }
+                return {
+                  hasCurrentInsurance: undefined,
+                  currentInsurer: undefined,
+                }
+              }
+              const newState: Partial<State> = {
+                currentInsurance: getCurrentInsurance(),
+              }
+              setState(newState)
+              storageState.session.setSession({
+                ...storageState.session.getSession(),
+                chat: {
+                  ...propOr({}, 'chat', storageState.session.getSession()),
+                  ...newState,
+                },
+              })
+            },
+            setCurrentInsurer: (
+              event: React.ChangeEvent<HTMLSelectElement>,
+            ) => ({ setState }: EffectProps<State>) => {
+              const newState: Partial<State> = {
+                currentInsurance: {
+                  hasCurrentInsurance: true,
+                  currentInsurer:
+                    event.target.value === 'select'
+                      ? undefined
+                      : (event.target.value as Insurer),
+                },
+              }
+              setState(newState)
+              storageState.session.setSession({
+                ...storageState.session.getSession(),
+                chat: {
+                  ...propOr({}, 'chat', storageState.session.getSession()),
+                  ...newState,
+                },
+              })
+            },
             reset: () => ({ setState }: EffectProps<State>) => {
               storageState.session.setSession({
                 ...storageState.session.getSession(),
@@ -132,10 +206,13 @@ export const ChatContainer: React.SFC<
                 visibleSteps: [],
               })
               setTimeout(() => {
-                setState({ currentStep: 'initial', visibleSteps: ['initial'] })
+                setState({
+                  currentStep: ChatStep.INITIAL,
+                  visibleSteps: [ChatStep.INITIAL],
+                })
               }, 0)
             },
-            goToStep: (step: string) => ({
+            goToStep: (step: ChatStep) => ({
               state,
               setState,
             }: EffectProps<State>) => {

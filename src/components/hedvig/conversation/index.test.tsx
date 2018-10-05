@@ -1,7 +1,7 @@
 import { Container } from 'constate'
 import { mount } from 'enzyme'
 import * as React from 'react'
-import { Conversation, Message } from './conversation'
+import { Conversation, Message } from '.'
 
 const StateContainer: React.SFC<any> = ({ children, initialState }) => (
   <Container<any, any>

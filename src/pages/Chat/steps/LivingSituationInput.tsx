@@ -218,8 +218,8 @@ export const LivingSituationInput: React.SFC<LivingSituationInputProps> = ({
                   )}
                   onChange={handleChange('apartmentType', chatState)}
                 >
-                  <option value={'select'} disabled>
-                    lägenhetstyp
+                  <option value="select" disabled>
+                    {' '}
                   </option>
                   {apartmentOptions.map((apartmentOption) => (
                     <option
@@ -235,7 +235,7 @@ export const LivingSituationInput: React.SFC<LivingSituationInputProps> = ({
                   type="number"
                   maxWidth={4}
                   id="size"
-                  placeholder="54"
+                  placeholder="42"
                   value={pathOr('', ['livingSituation', 'size'], chatState)}
                   onChange={handleChange('size', chatState)}
                   pattern="[0-9]*"
@@ -251,12 +251,15 @@ export const LivingSituationInput: React.SFC<LivingSituationInputProps> = ({
                 <UserSelectInput
                   id="numberOfPeople"
                   value={pathOr(
-                    1,
+                    0,
                     ['livingSituation', 'numberOfPeople'],
                     chatState,
                   )}
                   onChange={handleChange('numberOfPeople', chatState)}
                 >
+                  <option value={0} disabled>
+                    {' '}
+                  </option>
                   <option value={1}>jag själv</option>
                   {[2, 3, 4, 5, 6, 7].map((numberOfPeople) => (
                     <option value={numberOfPeople} key={numberOfPeople}>
