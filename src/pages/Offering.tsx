@@ -11,7 +11,7 @@ import { PageDown } from '../sections/offering/page-down'
 import { PriceInfo } from '../sections/offering/price-info'
 import { TopBar } from '../sections/offering/top-bar'
 
-export const OuterContainer = styled('div')({})
+export const Wrapper = styled('div')({})
 
 interface State {
   getStartedButtonVisible: boolean
@@ -22,7 +22,7 @@ interface Actions {
 }
 
 export const Offering: React.SFC<{}> = () => (
-  <OuterContainer>
+  <Wrapper>
     <Container<State, ActionMap<State, Actions>>
       initialState={{ getStartedButtonVisible: true, alreadyInsured: true }}
       actions={{
@@ -32,7 +32,7 @@ export const Offering: React.SFC<{}> = () => (
       }}
     >
       {(state) => (
-        <OuterContainer>
+        <Wrapper>
           <TopBar
             progress={1}
             getInsured={'Bli försäkrad'}
@@ -83,10 +83,10 @@ export const Offering: React.SFC<{}> = () => (
               'Genom att trycka på ”Bli försäkrad” godkänner jag att jag har tagit del av förköpsinformation, villkor och att mina personuppgifter behandlas enligt GDPR'
             }
           />
-        </OuterContainer>
+        </Wrapper>
       )}
     </Container>
-  </OuterContainer>
+  </Wrapper>
 )
 
 /* TODO: Add proptypes check */
