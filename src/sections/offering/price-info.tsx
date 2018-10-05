@@ -5,13 +5,13 @@ import {
   LinkTag,
 } from 'components/offering/get-insured-button'
 import { Header } from 'components/offering/header'
-import { InnerContainer } from 'components/offering/inner-container'
+import { InnerWrapper } from 'components/offering/inner-wrapper'
 import { SubTitle } from 'components/offering/sub-title'
 import * as React from 'react'
 import styled from 'react-emotion'
 import * as VisibilitySensor from 'react-visibility-sensor'
 
-const Container = styled('div')({
+const Wrapper = styled('div')({
   marginTop: '70px',
   width: '100%',
   backgroundColor: colors.OFF_WHITE,
@@ -24,6 +24,8 @@ const Card = styled('div')({
   backgroundColor: colors.WHITE,
   minWidth: '700px',
   paddingBottom: 40,
+  boxShadow: '0px 8px 40px -12px rgba(0,0,0,0.67)',
+  borderRadius: '10px',
   '@media (max-width: 700px)': {
     minWidth: '0px',
     width: '100%',
@@ -35,25 +37,16 @@ const Card = styled('div')({
 const Price = styled('p')({
   marginBottom: '0px',
   marginTop: '30px',
-
   fontSize: '32px',
   textAlign: 'center',
   color: colors.BLACK,
-  fontFamily: fonts.SORAY,
+  fontFamily: fonts.CIRCULAR,
 })
 
-const StartDate = styled('p')({
-  marginTop: '0px',
-  fontSize: '16px',
-  fontWeight: 100,
-  textAlign: 'center',
-  color: colors.DARK_GRAY,
-})
-
-const ProtectionLabel = styled('p')({
+const InfoText = styled('p')({
   marginBottom: '0px',
   marginTop: '0px',
-  fontSize: '16px',
+  fontSize: '14px',
   textAlign: 'center',
   color: colors.DARK_GRAY,
 })
@@ -70,7 +63,8 @@ const Row = styled('div')({
 })
 
 const Image = styled('img')({
-  margin: '30px',
+  marginTop: '30px',
+  marginBottom: '10px',
   maxWidth: '70px',
   '@media (max-width: 400px)': {
     margin: '0px',
@@ -78,9 +72,9 @@ const Image = styled('img')({
   },
 })
 
-export const ImageText = styled('label')({
+export const ImageText = styled('p')({
   marginBottom: '10px',
-  fontSize: '16px',
+  fontSize: '14px',
   textAlign: 'center',
   color: colors.DARK_GRAY,
   maxWidth: '200px',
@@ -127,18 +121,18 @@ export const PriceInfo: React.SFC<Props> = (props) => {
     props.update(isVisible)
   }
   return (
-    <Container>
-      <InnerContainer>
+    <Wrapper>
+      <InnerWrapper>
         <Card>
           <Header>{props.header}</Header>
           <SubTitle>
             {props.subTitle1} • {props.subTitle2} • {props.subTitle3}
           </SubTitle>
           <Price>{props.price}</Price>
-          <ProtectionLabel>{props.protection}</ProtectionLabel>
-          <StartDate>
+          <InfoText>{props.protection}</InfoText>
+          <InfoText>
             {props.startDate} {props.start}
-          </StartDate>
+          </InfoText>
           <Row>
             {COLUMNS.map((col) => (
               <Col key={col.key}>
@@ -155,7 +149,7 @@ export const PriceInfo: React.SFC<Props> = (props) => {
             )}
           </VisibilitySensor>
         </Card>
-      </InnerContainer>
-    </Container>
+      </InnerWrapper>
+    </Wrapper>
   )
 }

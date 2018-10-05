@@ -5,7 +5,7 @@ import styled from 'react-emotion'
 export const Label = styled('p')({
   marginBottom: '0px',
   marginTop: '0px',
-  fontSize: '16px',
+  fontSize: '14px',
   textAlign: 'center',
   color: colors.DARK_GRAY,
 })

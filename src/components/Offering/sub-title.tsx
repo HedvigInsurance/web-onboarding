@@ -6,7 +6,7 @@ export const SubTitle = styled('p')({
   marginBottom: '0px',
   marginLeft: 'auto',
   marginRight: 'auto',
-  fontSize: '16px',
+  fontSize: '14px',
   textAlign: 'center',
   maxWidth: '100%',
   color: colors.DARK_GRAY,

@@ -1,11 +1,9 @@
 import { colors } from '@hedviginsurance/brand'
 import { Card } from 'components/offering/card'
-import { Col } from 'components/offering/col'
-import { Container } from 'components/offering/container'
 import { Header } from 'components/offering/header'
-import { InnerContainer } from 'components/offering/inner-container'
+import { InnerWrapper } from 'components/offering/inner-wrapper'
 import { Row } from 'components/offering/row'
-import { TitleDarkWide } from 'components/offering/title-dark'
+import { Wrapper } from 'components/offering/wrapper'
 import * as React from 'react'
 import styled from 'react-emotion'
 
@@ -14,8 +12,8 @@ interface Props {
 }
 
 const Image = styled('img')({
-  margin: '20px',
-  maxWidth: '210px',
+  marginBottom: '20px',
+  maxWidth: '240px',
   '@media (max-width: 710px)': {
     maxWidth: '300px',
   },
@@ -24,11 +22,23 @@ const Image = styled('img')({
   },
 })
 
-const SubTitle = styled('label')({
-  fontSize: '16px',
-  textAlign: 'center',
+const Col = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  marginBottom: '30px',
+})
+
+const Title = styled('h3')({
+  margin: '0px',
+  fontSize: '14px',
+  color: colors.BLACK,
+  maxWidth: '240px',
+})
+
+const InfoText = styled('p')({
+  fontSize: '14px',
   color: colors.DARK_GRAY,
-  maxWidth: '250px',
+  maxWidth: '240px',
 })
 
 const COLUMNS = [
@@ -56,20 +66,20 @@ const COLUMNS = [
 ]
 
 export const HedvigInfo: React.SFC<Props> = (props) => (
-  <Container>
-    <InnerContainer>
+  <Wrapper>
+    <InnerWrapper>
       <Card>
         <Header>{props.title}</Header>
         <Row>
           {COLUMNS.map((col) => (
             <Col key={col.key}>
               <Image src={col.image} />
-              <TitleDarkWide>{col.title}</TitleDarkWide>
-              <SubTitle>{col.subTitle}</SubTitle>
+              <Title>{col.title}</Title>
+              <InfoText>{col.subTitle}</InfoText>
             </Col>
           ))}
         </Row>
       </Card>
-    </InnerContainer>
-  </Container>
+    </InnerWrapper>
+  </Wrapper>
 )

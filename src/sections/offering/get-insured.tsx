@@ -1,11 +1,11 @@
 import { colors } from '@hedviginsurance/brand'
-import { Container } from 'components/offering/container'
 import {
   GetInsuredButton,
   LinkTag,
 } from 'components/offering/get-insured-button'
 import { Header } from 'components/offering/header'
-import { InnerContainer } from 'components/offering/inner-container'
+import { InnerWrapper } from 'components/offering/inner-wrapper'
+import { Wrapper } from 'components/offering/wrapper'
 import * as React from 'react'
 import styled from 'react-emotion'
 
@@ -23,6 +23,8 @@ const Card = styled('div')({
   backgroundColor: colors.WHITE,
   minWidth: '550px',
   paddingBottom: '30px',
+  boxShadow: '0px 8px 40px -12px rgba(0,0,0,0.67)',
+  borderRadius: '10px',
   '@media (max-width: 550px)': {
     minWidth: '0px',
     width: '100%',
@@ -32,8 +34,8 @@ const Card = styled('div')({
 })
 
 export const GetInsured: React.SFC<Props> = (props) => (
-  <Container>
-    <InnerContainer>
+  <Wrapper>
+    <InnerWrapper>
       <Card>
         <Header>
           {props.title} {props.name}
@@ -42,6 +44,6 @@ export const GetInsured: React.SFC<Props> = (props) => (
           <LinkTag to={'/'}>{props.getInsured}</LinkTag>
         </GetInsuredButton>
       </Card>
-    </InnerContainer>
-  </Container>
+    </InnerWrapper>
+  </Wrapper>
 )

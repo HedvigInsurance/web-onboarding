@@ -24,6 +24,8 @@ const BigCol = styled('div')({})
 
 const Row = styled('div')({
   marginBottom: '30px',
+  marginLeft: '104px',
+  marginRight: '104px',
   display: 'flex',
   alignItems: 'baseline',
   flexDirection: 'row',
@@ -54,7 +56,7 @@ const ImageIcon = styled('img')({
 const Label = styled('p')({
   marginBottom: '0px',
   marginTop: '0px',
-  fontSize: '16px',
+  fontSize: '14px',
   textAlign: 'center',
   maxWidth: '100px',
   color: colors.DARK_GRAY,
@@ -65,7 +67,7 @@ const DropDownText = styled('div')({
   marginRight: 'auto',
   marginBottom: '60px',
   marginTop: '0px',
-  fontSize: '16px',
+  fontSize: '14px',
   maxWidth: '100px',
   color: colors.DARK_GRAY,
 })
@@ -95,6 +97,41 @@ const SwitcherItem = styled('div')({
 const PERILS = [
   {
     key: 0,
+    name: 'Din Bostad',
+    icon: '/assets/offering/lagenhet.png',
+    icons: [
+      {
+        key: 0,
+        title: 'Eldsvåda',
+        image: '/assets/offering/eldsvada.png',
+        expandableText:
+          '1,0. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
+      },
+      {
+        key: 1,
+        title: 'Inbrott',
+        image: '/assets/offering/inbrott.png',
+        expandableText:
+          '1,1. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
+      },
+      {
+        key: 2,
+        title: 'Oväder',
+        image: '/assets/offering/ovader.png',
+        expandableText:
+          '1,2. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
+      },
+      {
+        key: 3,
+        title: 'Skadedjur',
+        image: '/assets/offering/skadedjur.png',
+        expandableText:
+          '1,3. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
+      },
+    ],
+  },
+  {
+    key: 1,
     name: 'Dig och din familj',
     icon: '/assets/offering/du_och_din_familj.png',
     icons: [
@@ -132,41 +169,6 @@ const PERILS = [
         image: '/assets/offering/forsenad_resa.png',
         expandableText:
           '0,4. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
-      },
-    ],
-  },
-  {
-    key: 1,
-    name: 'Din lägenhet',
-    icon: '/assets/offering/lagenhet.png',
-    icons: [
-      {
-        key: 0,
-        title: 'Eldsvåda',
-        image: '/assets/offering/eldsvada.png',
-        expandableText:
-          '1,0. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
-      },
-      {
-        key: 1,
-        title: 'Inbrott',
-        image: '/assets/offering/inbrott.png',
-        expandableText:
-          '1,1. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
-      },
-      {
-        key: 2,
-        title: 'Oväder',
-        image: '/assets/offering/ovader.png',
-        expandableText:
-          '1,2. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
-      },
-      {
-        key: 3,
-        title: 'Skadedjur',
-        image: '/assets/offering/skadedjur.png',
-        expandableText:
-          '1,3. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
       },
     ],
   },
@@ -237,13 +239,6 @@ const PERILS = [
         image: '/assets/offering/stold.png',
         expandableText:
           '2,3. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
-      },
-      {
-        key: 9,
-        title: 'Vattenläcka',
-        image: '/assets/offering/vattenlacka.png',
-        expandableText:
-          '2,8. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
       },
     ],
   },
