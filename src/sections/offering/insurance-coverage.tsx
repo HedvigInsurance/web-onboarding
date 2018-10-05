@@ -10,11 +10,11 @@ interface Props {
   subTitle: string
 }
 
-const OuterContainer = styled('div')({
+const Wrapper = styled('div')({
   backgroundColor: colors.OFF_WHITE,
 })
 
-const InnerContainer = styled('div')({
+const InnerWrapper = styled('div')({
   display: 'flex',
   alignItems: 'center',
   flexDirection: 'column',
@@ -261,7 +261,7 @@ interface Actions {
 }
 
 export const InsuranceCoverage: React.SFC<Props> = (props) => (
-  <OuterContainer>
+  <Wrapper>
     <Container<State, ActionMap<State, Actions>>
       initialState={{ showPerilNumber: undefined, activeTab: 0 }}
       actions={{
@@ -276,8 +276,8 @@ export const InsuranceCoverage: React.SFC<Props> = (props) => (
       }}
     >
       {(state) => (
-        <OuterContainer>
-          <InnerContainer>
+        <Wrapper>
+          <InnerWrapper>
             <Card>
               <Header>{props.headline}</Header>
               <Switcher>
@@ -338,9 +338,9 @@ export const InsuranceCoverage: React.SFC<Props> = (props) => (
                 </BigCol>
               ))}
             </Card>
-          </InnerContainer>
-        </OuterContainer>
+          </InnerWrapper>
+        </Wrapper>
       )}
     </Container>
-  </OuterContainer>
+  </Wrapper>
 )
