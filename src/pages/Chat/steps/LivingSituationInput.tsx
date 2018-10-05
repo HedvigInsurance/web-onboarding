@@ -5,7 +5,6 @@ import {
   UserTextInput,
 } from 'components/userInput/UserResponse'
 import { SingletonAction } from 'components/utils/SingletonAction'
-import { pathOr, pipe } from 'ramda'
 import * as React from 'react'
 import * as yup from 'yup'
 import {
@@ -31,16 +30,9 @@ const handleChange = <K extends keyof LivingSituationState>(
   chatState: ChatActions,
   format: (val?: string | number) => undefined | string | number = (value) =>
     value,
-) =>
-  pipe<
-    React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-    LivingSituationState[K],
-    void
-  >(
-    pathOr<string>('', ['target', 'value']),
-    (val: string | number | undefined) =>
-      chatState.setLivingSituationProp(field, format(val)),
-  )
+) => (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  chatState.setLivingSituationProp(field, format(event.target.value))
+}
 
 const validationSchema = yup
   .object<Partial<LivingSituationState>>({
@@ -166,20 +158,12 @@ export const LivingSituationInput: React.SFC<LivingSituationInputProps> = ({
                 <UserTextInput
                   type="text"
                   maxWidth={Math.max(
-                    pathOr(
-                      0,
-                      ['livingSituation', 'streetAddress', 'length'],
-                      chatState,
-                    ),
+                    chatState.livingSituation.streetAddress.length || 0,
                     20,
                   )}
                   id="streetAddress"
                   placeholder="Storgatan 1"
-                  value={pathOr(
-                    '',
-                    ['livingSituation', 'streetAddress'],
-                    chatState,
-                  )}
+                  value={chatState.livingSituation.streetAddress}
                   onChange={handleChange('streetAddress', chatState)}
                   innerRef={(ref) => {
                     if (!ref || focusState.isActionDone || !isCurrentMessage) {
@@ -195,11 +179,7 @@ export const LivingSituationInput: React.SFC<LivingSituationInputProps> = ({
                   maxWidth={6}
                   id="postalCode"
                   placeholder="123 45"
-                  value={pathOr(
-                    '',
-                    ['livingSituation', 'postalCode'],
-                    chatState,
-                  )}
+                  value={chatState.livingSituation.postalCode}
                   onChange={handleChange('postalCode', chatState, (value) =>
                     String(value).replace(/[^\d\s]/g, ''),
                   )}
@@ -211,11 +191,7 @@ export const LivingSituationInput: React.SFC<LivingSituationInputProps> = ({
                 Jag{' '}
                 <UserSelectInput
                   id="apartmentType"
-                  value={pathOr(
-                    'select',
-                    ['livingSituation', 'apartmentType'],
-                    chatState,
-                  )}
+                  value={chatState.livingSituation.apartmentType || 'select'}
                   onChange={handleChange('apartmentType', chatState)}
                 >
                   <option value="select" disabled>
@@ -236,7 +212,7 @@ export const LivingSituationInput: React.SFC<LivingSituationInputProps> = ({
                   maxWidth={4}
                   id="size"
                   placeholder="42"
-                  value={pathOr('', ['livingSituation', 'size'], chatState)}
+                  value={chatState.livingSituation.size}
                   onChange={handleChange('size', chatState)}
                   pattern="[0-9]*"
                 />
@@ -250,11 +226,7 @@ export const LivingSituationInput: React.SFC<LivingSituationInputProps> = ({
                 och där bor{' '}
                 <UserSelectInput
                   id="numberOfPeople"
-                  value={pathOr(
-                    0,
-                    ['livingSituation', 'numberOfPeople'],
-                    chatState,
-                  )}
+                  value={chatState.livingSituation.numberOfPeople}
                   onChange={handleChange('numberOfPeople', chatState)}
                 >
                   <option value={0} disabled>

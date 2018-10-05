@@ -1,5 +1,4 @@
 import { Action, Container, StateUpdater } from 'constate'
-import { always, ifElse, isNil, path, pipe } from 'ramda'
 import * as React from 'react'
 import { Mount } from 'react-lifecycle-components'
 import ReactLottieComponent, { ReactLottieProps } from 'react-lottie'
@@ -36,12 +35,13 @@ export const LazyLottie: React.SFC<ReactLottieProps> = (props) =>
         <Mount
           on={() => {
             props.options.animationData.then(setLoadedAnimationData)
-            import('react-lottie').then(
-              pipe(
-                path(['default']),
-                ifElse(isNil, always(null), setLoadedLottie),
-              ),
-            )
+            import('react-lottie').then((lottieModule) => {
+              if (!lottieModule || !lottieModule.default) {
+                return
+              }
+
+              setLoadedLottie(lottieModule.default)
+            })
           }}
         >
           {animationData !== null && ReactLottie !== null ? (
