@@ -14,7 +14,6 @@ interface Props {
   title: string
   name: string
   getInsured: string
-  state: boolean
   update: (isVisible: boolean) => void
 }
 
