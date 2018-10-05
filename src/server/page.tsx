@@ -7,7 +7,7 @@ import { ApolloProvider, getDataFromTree } from 'react-apollo'
 import { renderToString } from 'react-dom/server'
 import { StaticRouter, StaticRouterContext } from 'react-router'
 import { App } from '../App'
-import { createApolloClient } from '../utils/apolloClient'
+import { createApolloClient, GIRAFFE_ENDPOINT } from '../utils/apolloClient'
 import { createSession } from '../utils/sessionStorage'
 import { ServerCookieStorage } from '../utils/storage/ServerCookieStorage'
 
@@ -28,6 +28,7 @@ const template = (body: string, initialState: any) => `
   <div id="react-root">${body}</div>
   
   <script>
+    window.GIRAFFE_ENDPOINT = ${JSON.stringify(GIRAFFE_ENDPOINT)}
     window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
   </script>
   <script src="${scriptLocation}"></script>
