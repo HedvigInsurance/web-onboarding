@@ -1,7 +1,7 @@
 import { Container, ContainerProps, EffectProps } from 'constate'
-import { propOr } from 'ramda'
 import * as React from 'react'
 import { StorageContainer } from '../../utils/StorageContainer'
+import { notNullable } from '../../utils/nullables'
 
 export enum ChatStep {
   INITIAL,
@@ -90,11 +90,11 @@ export const ChatContainer: React.SFC<
       <Container<State, {}, {}, Effects>
         context="chatConversation"
         {...props}
-        initialState={propOr(
-          initialState,
-          'chat',
-          storageState.session.getSession(),
-        )}
+        initialState={
+          (storageState.session.getSession() &&
+            notNullable(storageState.session.getSession()).chat) ||
+          initialState
+        }
         effects={
           {
             setNameAgeProp: <K extends keyof NameAgeState>(
@@ -103,11 +103,7 @@ export const ChatContainer: React.SFC<
             ) => ({ state, setState }: EffectProps<State>) => {
               const newState: Partial<State> = {
                 nameAge: {
-                  ...propOr<NameAgeState, State, NameAgeState>(
-                    initialState.nameAge,
-                    'nameAge',
-                    state,
-                  ),
+                  ...(state.nameAge || initialState.nameAge),
                   [key]: value,
                 },
               }
@@ -115,7 +111,9 @@ export const ChatContainer: React.SFC<
               storageState.session.setSession({
                 ...storageState.session.getSession(),
                 chat: {
-                  ...propOr({}, 'chat', storageState.session.getSession()),
+                  ...((storageState.session.getSession() &&
+                    notNullable(storageState.session.getSession()).chat) ||
+                    initialState),
                   ...newState,
                 },
               })
@@ -126,11 +124,7 @@ export const ChatContainer: React.SFC<
             ) => ({ state, setState }: EffectProps<State>) => {
               const newState: Partial<State> = {
                 livingSituation: {
-                  ...propOr<LivingSituationState, State, LivingSituationState>(
-                    initialState.livingSituation,
-                    'livingSituation',
-                    state,
-                  ),
+                  ...(state.livingSituation || initialState.livingSituation),
                   [key]: value,
                 },
               }
@@ -138,7 +132,9 @@ export const ChatContainer: React.SFC<
               storageState.session.setSession({
                 ...storageState.session.getSession(),
                 chat: {
-                  ...propOr({}, 'chat', storageState.session.getSession()),
+                  ...((storageState.session.getSession() &&
+                    notNullable(storageState.session.getSession()).chat) ||
+                    initialState),
                   ...newState,
                 },
               })
@@ -168,7 +164,9 @@ export const ChatContainer: React.SFC<
               storageState.session.setSession({
                 ...storageState.session.getSession(),
                 chat: {
-                  ...propOr({}, 'chat', storageState.session.getSession()),
+                  ...((storageState.session.getSession() &&
+                    notNullable(storageState.session.getSession()).chat) ||
+                    initialState),
                   ...newState,
                 },
               })
@@ -189,7 +187,9 @@ export const ChatContainer: React.SFC<
               storageState.session.setSession({
                 ...storageState.session.getSession(),
                 chat: {
-                  ...propOr({}, 'chat', storageState.session.getSession()),
+                  ...((storageState.session.getSession() &&
+                    notNullable(storageState.session.getSession()).chat) ||
+                    initialState),
                   ...newState,
                 },
               })
@@ -223,7 +223,9 @@ export const ChatContainer: React.SFC<
               storageState.session.setSession({
                 ...storageState.session.getSession(),
                 chat: {
-                  ...propOr({}, 'chat', storageState.session.getSession()),
+                  ...((storageState.session.getSession() &&
+                    notNullable(storageState.session.getSession()).chat) ||
+                    initialState),
                   ...newState,
                   initialVisibleSteps: newState.visibleSteps,
                 },

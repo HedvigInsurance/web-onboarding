@@ -1,5 +1,4 @@
 import { CookieStorage } from 'cookie-storage'
-import { defaultTo, pipe } from 'ramda'
 import { State as ChatState } from '../pages/Chat/state'
 import { MinimalStorage } from './storage/MinimalStorage'
 
@@ -22,10 +21,7 @@ export const createSession = <T>(
   },
   getSession: (): T | undefined => {
     try {
-      return pipe(
-        defaultTo('{}') as (thing: string | null | undefined) => string,
-        JSON.parse,
-      )(storage.getItem(SESSION_KEY))
+      return JSON.parse(storage.getItem(SESSION_KEY) || '{}')
     } catch (e) {
       return undefined
     }

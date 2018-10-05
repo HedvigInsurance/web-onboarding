@@ -1,6 +1,5 @@
 import { CookieOptions } from 'cookie-storage/lib/cookie-options'
 import { Context } from 'koa'
-import { omit } from 'ramda'
 import { MinimalStorage } from './MinimalStorage'
 
 export class ServerCookieStorage implements MinimalStorage {
@@ -14,7 +13,7 @@ export class ServerCookieStorage implements MinimalStorage {
 
   public setItem(item: string, value: string, options?: CookieOptions): void {
     this.requestCtx.cookies.set(item, value, {
-      ...omit(['date'], options),
+      ...({ ...options, date: undefined } as any),
       signed: false,
       expires: undefined,
     })

@@ -1,6 +1,5 @@
 import { UserResponse, UserTextInput } from 'components/userInput/UserResponse'
 import { SingletonAction } from 'components/utils/SingletonAction'
-import { pathOr, pipe } from 'ramda'
 import * as React from 'react'
 import * as yup from 'yup'
 import {
@@ -9,6 +8,7 @@ import {
   NameAgeState,
   State as ChatState,
 } from '../state'
+import { ChangeEvent } from 'react'
 
 interface FormValues {
   firstName: string
@@ -25,11 +25,9 @@ interface Props {
 const handleChange = <K extends keyof NameAgeState>(
   field: K,
   chatState: ChatActions,
-) =>
-  pipe<React.ChangeEvent<HTMLInputElement>, NameAgeState[K], void>(
-    pathOr<string>('', ['target', 'value']),
-    (val: string | number) => chatState.setNameAgeProp(field, val),
-  )
+) => (event: ChangeEvent<HTMLInputElement>) => {
+  chatState.setNameAgeProp(field, event.target.value)
+}
 
 const validationSchema = () =>
   yup
@@ -78,10 +76,10 @@ export const NameAgeInput: React.SFC<Props> = ({
                 <UserTextInput
                   type="text"
                   id="firstName"
-                  value={pathOr('', ['nameAge', 'firstName'], chatState)}
+                  value={chatState.nameAge.firstName}
                   onChange={handleChange('firstName', chatState)}
                   maxWidth={Math.max(
-                    pathOr(0, ['nameAge', 'firstName', 'length'], chatState),
+                    chatState.nameAge.firstName.length || 0,
                     10,
                   )}
                   innerRef={(ref) => {
@@ -95,10 +93,11 @@ export const NameAgeInput: React.SFC<Props> = ({
                 <UserTextInput
                   type="text"
                   id="lastName"
-                  value={pathOr('', ['nameAge', 'lastName'], chatState)}
+                  value={chatState.nameAge.lastName}
                   onChange={handleChange('lastName', chatState)}
                   maxWidth={Math.max(
-                    pathOr(0, ['nameAge', 'lastName', 'length'], chatState),
+                    chatState.nameAge.lastName.length || 0,
+
                     15,
                   )}
                 />
@@ -109,7 +108,7 @@ export const NameAgeInput: React.SFC<Props> = ({
                   type="number"
                   id="age"
                   step={1}
-                  value={pathOr('', ['nameAge', 'age'], chatState)}
+                  value={chatState.nameAge.age}
                   onChange={handleChange('age', chatState)}
                   maxWidth={4.5}
                   pattern="[0-9]*"

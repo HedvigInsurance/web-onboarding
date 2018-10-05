@@ -2,7 +2,6 @@ import {
   UserResponse,
   UserSelectInput,
 } from 'components/userInput/UserResponse'
-import { pathOr } from 'ramda'
 import * as React from 'react'
 import * as yup from 'yup'
 import {
@@ -37,7 +36,7 @@ const getHasCurrentInsuranceInputValue = (chatState: ChatState) => {
     return 'no'
   }
 
-  return undefined
+  return 'select'
 }
 
 const getCurrentInsuranceInputMaybe = (chatState: ChatState & ChatEffects) => {
@@ -45,11 +44,11 @@ const getCurrentInsuranceInputMaybe = (chatState: ChatState & ChatEffects) => {
     return (
       <div>
         <UserSelectInput
-          value={pathOr(
-            'select',
-            ['currentInsurance', 'currentInsurer'],
-            chatState,
-          )}
+          value={
+            chatState.currentInsurance.currentInsurer === undefined
+              ? 'select'
+              : chatState.currentInsurance.currentInsurer
+          }
           onChange={chatState.setCurrentInsurer}
           id="currentInsurer"
         >
