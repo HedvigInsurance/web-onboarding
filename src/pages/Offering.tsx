@@ -43,16 +43,17 @@ export const Offering: React.SFC<{}> = () => (
             alreadyInsured={false}
             header={'Hej Zak, det här är din hemförsäkring hos Hedvig!'}
             subTitle1={'Zak Kjellin  23 år gammal'}
-            subTitle2={'Fantastiska Gatan 23B, 112 34 Stockholm'}
+            subTitle2={'Fantastiska Gatan 23B'}
+            subTitle3={'112 34 Stockholm'}
             price={'299 kr/mån'}
-            subscriptionTime={'Ingen bindningstid'}
             startDate={'Startdatum:'}
+            start={'När din gamla försäkring går ut'}
             coverage={'Gäller i hela världen'}
             getInsured={'Bli försäkrad'}
             backgroundImage={'url(assets/offering/map-background.png)'}
             alreadyInsuredLabel={'Gamla försäkringens slutdatum'}
             todayLabel={'Idag'}
-            protection={'Med skydd för'}
+            protection={'Självrisk: 1500 kr'}
           />
 
           <HedvigInfo title={'Det här är Hedvig'} />

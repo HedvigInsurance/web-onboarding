@@ -1,4 +1,4 @@
-import { colors } from '@hedviginsurance/brand'
+import { colors, fonts } from '@hedviginsurance/brand'
 import { Col } from 'components/offering/col'
 import {
   GetInsuredButton,
@@ -7,7 +7,6 @@ import {
 import { Header } from 'components/offering/header'
 import { InnerContainer } from 'components/offering/inner-container'
 import { SubTitle } from 'components/offering/sub-title'
-import { Title } from 'components/offering/title'
 import * as React from 'react'
 import styled from 'react-emotion'
 import * as VisibilitySensor from 'react-visibility-sensor'
@@ -36,19 +35,19 @@ const Card = styled('div')({
 const Price = styled('p')({
   marginBottom: '0px',
   marginTop: '30px',
-  fontSize: '20px',
-  fontWeight: 100,
+
+  fontSize: '32px',
   textAlign: 'center',
-  color: colors.PURPLE,
+  color: colors.BLACK,
+  fontFamily: fonts.SORAY,
 })
 
-const Time = styled('p')({
-  marginBottom: '30px',
+const StartDate = styled('p')({
   marginTop: '0px',
   fontSize: '16px',
   fontWeight: 100,
   textAlign: 'center',
-  color: colors.BLACK_PURPLE,
+  color: colors.DARK_GRAY,
 })
 
 const ProtectionLabel = styled('p')({
@@ -56,14 +55,14 @@ const ProtectionLabel = styled('p')({
   marginTop: '0px',
   fontSize: '16px',
   textAlign: 'center',
-  color: colors.BLACK,
+  color: colors.DARK_GRAY,
 })
 
 const Row = styled('div')({
   display: 'flex',
   alignItems: 'baseline',
   flexDirection: 'row',
-  justifyContent: 'center',
+  justifyContent: 'space-evenly',
   '@media (max-width: 400px)': {
     flexDirection: 'column',
     alignItems: 'center',
@@ -79,15 +78,24 @@ const Image = styled('img')({
   },
 })
 
+export const ImageText = styled('label')({
+  marginBottom: '10px',
+  fontSize: '16px',
+  textAlign: 'center',
+  color: colors.DARK_GRAY,
+  maxWidth: '200px',
+})
+
 interface Props {
   update: (isVisible: boolean) => void
   alreadyInsured: boolean
   header: string
   subTitle1: string
   subTitle2: string
+  subTitle3: string
   price: string
-  subscriptionTime: string
   startDate: string
+  start: string
   coverage: string
   getInsured: string
   backgroundImage: string
@@ -99,18 +107,18 @@ interface Props {
 const COLUMNS = [
   {
     key: 0,
-    title: 'Din bostad',
-    image: '/assets/offering/Placeholder.png',
+    title: 'Inget pappersarbete',
+    image: '/assets/offering/oval-light-purple.svg',
   },
   {
     key: 1,
-    title: 'Dig och din familj',
-    image: '/assets/offering/Placeholder.png',
+    title: 'Ingen bindningstid',
+    image: '/assets/offering/oval-orange.svg',
   },
   {
     key: 2,
-    title: 'Dina prylar',
-    image: '/assets/offering/Placeholder.png',
+    title: 'Blixtsnabb ersättning',
+    image: '/assets/offering/oval-dark-purple.svg',
   },
 ]
 
@@ -123,16 +131,19 @@ export const PriceInfo: React.SFC<Props> = (props) => {
       <InnerContainer>
         <Card>
           <Header>{props.header}</Header>
-          <SubTitle>{props.subTitle1}</SubTitle>
-          <SubTitle>{props.subTitle2}</SubTitle>
+          <SubTitle>
+            {props.subTitle1} • {props.subTitle2} • {props.subTitle3}
+          </SubTitle>
           <Price>{props.price}</Price>
-          <Time>{props.subscriptionTime}</Time>
           <ProtectionLabel>{props.protection}</ProtectionLabel>
+          <StartDate>
+            {props.startDate} {props.start}
+          </StartDate>
           <Row>
             {COLUMNS.map((col) => (
               <Col key={col.key}>
                 <Image src={col.image} />
-                <Title>{col.title}</Title>
+                <ImageText>{col.title}</ImageText>
               </Col>
             ))}
           </Row>

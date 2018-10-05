@@ -1,7 +1,6 @@
 import { colors, fonts } from '@hedviginsurance/brand'
 import { Card } from 'components/offering/card'
 import { Header } from 'components/offering/header'
-import { SubTitle } from 'components/offering/sub-title'
 import { ActionMap, Container } from 'constate'
 import * as React from 'react'
 import styled from 'react-emotion'
@@ -23,16 +22,6 @@ const InnerContainer = styled('div')({
 
 const BigCol = styled('div')({})
 
-const TitleRow = styled('div')({
-  marginTop: '30px',
-  display: 'flex',
-  alignItems: 'baseline',
-  flexDirection: 'row',
-  '@media (max-width: 700px)': {
-    flexDirection: 'column',
-  },
-})
-
 const Row = styled('div')({
   marginBottom: '30px',
   display: 'flex',
@@ -50,16 +39,7 @@ const Col = styled('div')({
   alignItems: 'center',
   flexDirection: 'column',
   marginBottom: '30px',
-})
-
-const CardHeader = styled('h2')({
-  fontFamily: fonts.SORAY,
-  fontSize: '18px',
-  fontWeight: 'normal',
-  maxWidth: '120px',
-  textAlign: 'center',
-  marginBottom: '0px',
-  marginTop: '0px',
+  cursor: 'pointer',
 })
 
 const ImageIcon = styled('img')({
@@ -88,6 +68,28 @@ const DropDownText = styled('div')({
   fontSize: '16px',
   maxWidth: '100px',
   color: colors.DARK_GRAY,
+})
+
+const Switcher = styled('div')({
+  backgroundColor: colors.LIGHT_GRAY,
+  borderRadius: '20px',
+  display: 'flex',
+  flexDirection: 'row',
+  width: 'max-content',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+})
+
+const SwitcherItem = styled('div')({
+  borderRadius: '30px',
+  paddingTop: '10px',
+  paddingBottom: '10px',
+  paddingRight: '20px',
+  paddingLeft: '20px',
+  fontSize: '14px',
+  fontFamily: fonts.CIRCULAR,
+  cursor: 'pointer',
+  userSelect: 'none',
 })
 
 const PERILS = [
@@ -247,25 +249,6 @@ const PERILS = [
   },
 ]
 
-const Switcher = styled('div')({
-  backgroundColor: colors.LIGHT_GRAY,
-  borderRadius: '20px',
-  display: 'flex',
-  flexDirection: 'row',
-  width: 'max-content',
-  marginLeft: 'auto',
-  marginRight: 'auto',
-})
-const SwitcherItem = styled('div')({
-  borderRadius: '30px',
-  paddingTop: '10px',
-  paddingBottom: '10px',
-  paddingRight: '20px',
-  paddingLeft: '20px',
-  fontSize: '14px',
-  fontFamily: fonts.CIRCULAR,
-})
-
 interface State {
   activeTab: number
   showIconNumber: number
@@ -289,7 +272,6 @@ export const InsuranceCoverage: React.SFC<Props> = (props) => (
         }),
         handleActiveTab: (tab: number) => () => ({
           activeTab: tab,
-          showPerilNumber: undefined,
         }),
       }}
     >
