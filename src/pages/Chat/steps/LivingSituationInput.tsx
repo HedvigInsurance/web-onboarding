@@ -1,4 +1,8 @@
 import {
+  TranslationsConsumer,
+  TranslationsPlaceholderConsumer,
+} from '@hedviginsurance/textkeyfy'
+import {
   InputValidationError,
   UserResponse,
   UserSelectInput,
@@ -20,11 +24,6 @@ interface LivingSituationInputProps {
   isCurrentMessage?: boolean
 }
 
-const apartmentOptions = [
-  { type: ApartmentType.OWN, label: 'äger' },
-  { type: ApartmentType.RENT, label: 'hyr' },
-]
-
 const handleChange = <K extends keyof LivingSituationState>(
   field: K,
   chatState: ChatActions,
@@ -44,7 +43,7 @@ const validationSchema = yup
     numberOfPeople: yup
       .number()
       .moreThan(0)
-      .lessThan(7, 'TOO MANY PEEPS') // TODO improve message
+      .lessThan(7, 'UNKNOWN_ERROR') // This should never happen since it s a dropdown
       .required(),
     apartmentType: yup
       .mixed()
@@ -55,12 +54,12 @@ const validationSchema = yup
       .test({
         name: 'isntTooBig',
         test: (value) => !isNaN(Number(value)) && value < 250,
-        message: 'TOO BIG APARTMENT',
+        message: 'CHAT_INPUT_LIVING_SITUATION_APARTMENT_SIZE_TOO_BIG',
       })
       .test({
         test: (value) =>
           value === '' || (!isNaN(Number(value)) && Number(value) > 0),
-        message: 'MUST BE VALID NUMBER',
+        message: 'UNKNOWN_ERROR',
       })
       .test({
         test: (value) => value !== '',
@@ -121,7 +120,13 @@ const ValidationErrorMaybe: React.SFC<ValidationErrorMaybeProps> = ({
     validationError !== null &&
     hasValidationErrorForKey(field, validationError)
   ) {
-    return <InputValidationError>{validationError[1]}</InputValidationError>
+    return (
+      <InputValidationError>
+        <TranslationsConsumer textKey={validationError[1]}>
+          {(t) => t}
+        </TranslationsConsumer>
+      </InputValidationError>
+    )
   }
   return null
 }
@@ -153,96 +158,144 @@ export const LivingSituationInput: React.SFC<LivingSituationInputProps> = ({
                 }
               }}
             >
-              <div>
-                Jag bor på{' '}
-                <UserTextInput
-                  type="text"
-                  maxWidth={Math.max(
-                    chatState.livingSituation.streetAddress.length || 0,
-                    20,
-                  )}
-                  id="streetAddress"
-                  placeholder="Storgatan 1"
-                  value={chatState.livingSituation.streetAddress}
-                  onChange={handleChange('streetAddress', chatState)}
-                  innerRef={(ref) => {
-                    if (!ref || focusState.isActionDone || !isCurrentMessage) {
-                      return
-                    }
-                    ref.focus()
-                    focusState.doAction()
-                  }}
-                />{' '}
-                på postnummer{' '}
-                <UserTextInput
-                  type="number"
-                  maxWidth={6}
-                  id="postalCode"
-                  placeholder="123 45"
-                  value={chatState.livingSituation.postalCode}
-                  onChange={handleChange('postalCode', chatState, (value) =>
-                    String(value).replace(/[^\d\s]/g, ''),
-                  )}
-                  maxLength={6}
-                  pattern="[0-9]*"
-                />
-              </div>
-              <div>
-                Jag{' '}
-                <UserSelectInput
-                  id="apartmentType"
-                  value={chatState.livingSituation.apartmentType || 'select'}
-                  onChange={handleChange('apartmentType', chatState)}
-                >
-                  <option value="select" disabled>
-                    {' '}
-                  </option>
-                  {apartmentOptions.map((apartmentOption) => (
-                    <option
-                      key={apartmentOption.type}
-                      value={apartmentOption.type}
-                    >
-                      {apartmentOption.label}
-                    </option>
-                  ))}
-                </UserSelectInput>
-                en lägenhet på{' '}
-                <UserTextInput
-                  type="number"
-                  maxWidth={4}
-                  id="size"
-                  placeholder="42"
-                  value={chatState.livingSituation.size}
-                  onChange={handleChange('size', chatState)}
-                  pattern="[0-9]*"
-                />
-                kvadratmeter
-                <ValidationErrorMaybe
-                  field="size"
-                  values={chatState.livingSituation}
-                />
-              </div>
-              <div>
-                och där bor{' '}
-                <UserSelectInput
-                  id="numberOfPeople"
-                  value={chatState.livingSituation.numberOfPeople}
-                  onChange={handleChange('numberOfPeople', chatState)}
-                >
-                  <option value={0} disabled>
-                    {' '}
-                  </option>
-                  <option value={1}>jag själv</option>
-                  {[2, 3, 4, 5, 6, 7].map((numberOfPeople) => (
-                    <option value={numberOfPeople} key={numberOfPeople}>
-                      vi {numberOfPeople} personer
-                    </option>
-                  ))}
-                </UserSelectInput>
-              </div>
+              <TranslationsPlaceholderConsumer
+                textKey="CHAT_INPUT_LIVING_SITUATION_TEXT"
+                replacements={{
+                  streetAddress: (
+                    <TranslationsConsumer textKey="CHAT_INPUT_LIVING_SITUATION_STREET_ADDRESS_PLACEHOLDER">
+                      {(placeholder) => (
+                        <UserTextInput
+                          type="text"
+                          maxWidth={Math.max(
+                            chatState.livingSituation.streetAddress.length || 0,
+                            20,
+                          )}
+                          id="streetAddress"
+                          placeholder={placeholder}
+                          value={chatState.livingSituation.streetAddress}
+                          onChange={handleChange('streetAddress', chatState)}
+                          innerRef={(ref) => {
+                            if (
+                              !ref ||
+                              focusState.isActionDone ||
+                              !isCurrentMessage
+                            ) {
+                              return
+                            }
+                            ref.focus()
+                            focusState.doAction()
+                          }}
+                        />
+                      )}
+                    </TranslationsConsumer>
+                  ),
+                  postalCode: (
+                    <TranslationsConsumer textKey="CHAT_INPUT_LIVING_SITUATION_POSTAL_CODE_PLACEHOLDER">
+                      {(placeholder) => (
+                        <UserTextInput
+                          type="number"
+                          maxWidth={6}
+                          id="postalCode"
+                          placeholder={placeholder}
+                          value={chatState.livingSituation.postalCode}
+                          onChange={handleChange(
+                            'postalCode',
+                            chatState,
+                            (value) => String(value).replace(/[^\d\s]/g, ''),
+                          )}
+                          maxLength={6}
+                          pattern="[0-9]*"
+                        />
+                      )}
+                    </TranslationsConsumer>
+                  ),
+                  apartmentType: (
+                    <TranslationsConsumer textKey="CHAT_INPUT_LIVING_SITUATION_APARTMENT_TYPE_RENT">
+                      {(rentLabel) => (
+                        <TranslationsConsumer textKey="CHAT_INPUT_LIVING_SITUATION_APARTMENT_TYPE_OWN">
+                          {(ownLabel) => (
+                            <UserSelectInput
+                              id="apartmentType"
+                              value={
+                                chatState.livingSituation.apartmentType ||
+                                'select'
+                              }
+                              onChange={handleChange(
+                                'apartmentType',
+                                chatState,
+                              )}
+                            >
+                              <option value="select" disabled>
+                                {' '}
+                              </option>
+                              <option value={ApartmentType.RENT}>
+                                {rentLabel}
+                              </option>
+                              <option value={ApartmentType.OWN}>
+                                {ownLabel}
+                              </option>
+                            </UserSelectInput>
+                          )}
+                        </TranslationsConsumer>
+                      )}
+                    </TranslationsConsumer>
+                  ),
+                  size: (
+                    <UserTextInput
+                      type="number"
+                      maxWidth={4}
+                      placeholder="42"
+                      value={chatState.livingSituation.size}
+                      onChange={handleChange('size', chatState)}
+                      pattern="[0-9]*"
+                    />
+                  ),
+                  sizeValidationErrorMaybe: (
+                    <ValidationErrorMaybe
+                      field="size"
+                      values={chatState.livingSituation}
+                    />
+                  ),
+                  numberOfPeople: (
+                    <TranslationsConsumer textKey="CHAT_INPUT_LIVING_SITUATION_NUMBER_OF_PEOPLE_SELF">
+                      {(selfLabel) => (
+                        <UserSelectInput
+                          id="numberOfPeople"
+                          value={chatState.livingSituation.numberOfPeople}
+                          onChange={handleChange('numberOfPeople', chatState)}
+                        >
+                          <option value={0} disabled>
+                            {' '}
+                          </option>
+                          <option value={1}>{selfLabel}</option>
+                          {[2, 3, 4, 5, 6, 7].map((numberOfPeople) => (
+                            <TranslationsConsumer
+                              textKey="CHAT_INPUT_LIVING_SITUATION_NUMBER_OF_PEOPLE_MULTIPLE"
+                              key={numberOfPeople}
+                            >
+                              {(label) => (
+                                <option value={numberOfPeople}>
+                                  {label.replace(
+                                    '{numberOfPeople}',
+                                    String(numberOfPeople),
+                                  )}
+                                </option>
+                              )}
+                            </TranslationsConsumer>
+                          ))}
+                        </UserSelectInput>
+                      )}
+                    </TranslationsConsumer>
+                  ),
+                }}
+              >
+                {(nodes) => nodes}
+              </TranslationsPlaceholderConsumer>
               {isDone(chatState.livingSituation) && (
                 <div>
-                  <button type="submit">Ok</button>
+                  <TranslationsConsumer textKey="CHAT_INPUT_NEXT_LABEL">
+                    {(text) => <button type="submit">{text}</button>}
+                  </TranslationsConsumer>
                 </div>
               )}
             </form>

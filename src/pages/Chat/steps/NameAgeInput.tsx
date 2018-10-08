@@ -1,10 +1,10 @@
+import {
+  TranslationsConsumer,
+  TranslationsPlaceholderConsumer,
+} from '@hedviginsurance/textkeyfy'
 import { UserResponse, UserTextInput } from 'components/userInput/UserResponse'
 import { SingletonAction } from 'components/utils/SingletonAction'
 import * as React from 'react'
-import {
-  TranslationsPlaceholderConsumer,
-  TranslationsConsumer,
-} from '@hedviginsurance/textkeyfy'
 import * as yup from 'yup'
 import {
   ChatContainer,

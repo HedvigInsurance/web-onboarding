@@ -29,7 +29,7 @@ export const ChatConversation: React.SFC = () => (
               typingDuration={2500}
               onTyped={() => goToStep(ChatStep.NAME_AGE_INPUT)}
             >
-              <TranslationsConsumer textKey="CHAT_FIRST_GREET">
+              <TranslationsConsumer textKey="CHAT_HEDVIG_FIRST_GREET">
                 {(firstGreet) => firstGreet}
               </TranslationsConsumer>
             </ChatMessage>
