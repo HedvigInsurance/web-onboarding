@@ -26,7 +26,7 @@ export const Offering: React.SFC<{}> = () => (
     <Container<State, ActionMap<State, Actions>>
       initialState={{ getStartedButtonVisible: true, alreadyInsured: true }}
       actions={{
-        handleChange: (visible: boolean) => (_) => ({
+        updateVisibility: (visible: boolean) => (_) => ({
           getStartedButtonVisible: visible,
         }),
       }}
@@ -40,8 +40,8 @@ export const Offering: React.SFC<{}> = () => (
           />
 
           <Offer
-            buttonVisibility={state.handleChange}
-            alreadyInsured={false}
+            buttonVisibility={state.updateVisibility}
+            alreadyInsured={state.alreadyInsured}
             header={'Hej Zak, det här är din hemförsäkring hos Hedvig!'}
             subTitle1={'Zak Kjellin  23 år gammal'}
             subTitle2={'Fantastiska Gatan 23B'}
@@ -60,6 +60,7 @@ export const Offering: React.SFC<{}> = () => (
           <PageDown />
 
           <HedvigInfo title={'Det här är Hedvig'} />
+
           {state.alreadyInsured ? (
             <HedvigSwitch
               title={'Hedvig sköter bytet från din gamla försäkring'}
@@ -77,7 +78,7 @@ export const Offering: React.SFC<{}> = () => (
             title={'Försäkra'}
             name={'Fantastiska Gatan'}
             buttonText={'Bli försäkrad'}
-            buttonVisibility={state.handleChange}
+            buttonVisibility={state.updateVisibility}
           />
           <Legal
             legalText={
