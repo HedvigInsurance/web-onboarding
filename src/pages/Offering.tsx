@@ -18,7 +18,7 @@ interface State {
   alreadyInsured: boolean
 }
 interface Actions {
-  handleChange: (visible: boolean) => void
+  updateVisibility: (visible: boolean) => void
 }
 
 export const Offering: React.SFC<{}> = () => (
