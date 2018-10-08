@@ -3,6 +3,7 @@ import styled from 'react-emotion'
 
 export const Header = styled('h1')({
   maxWidth: '400px',
+  marginTop: '30px',
   marginLeft: 'auto',
   marginRight: 'auto',
   fontFamily: fonts.SORAY,
@@ -10,7 +11,6 @@ export const Header = styled('h1')({
   marginBottom: '10px',
   fontWeight: 'normal',
   textAlign: 'center',
-  paddingBottom: '10px',
   '@media (max-width: 640px)': {
     paddingLeft: '0px',
     paddingRight: '0px',

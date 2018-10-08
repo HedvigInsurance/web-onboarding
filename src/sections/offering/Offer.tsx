@@ -1,6 +1,5 @@
 import { colors, fonts } from '@hedviginsurance/brand'
 import { GetInsuredButton, LinkTag } from 'components/get-insured-button'
-import { Header } from 'components/offering/Header'
 import { InnerWrapper } from 'components/offering/InnerWrapper'
 import * as React from 'react'
 import styled from 'react-emotion'
@@ -29,15 +28,43 @@ const Card = styled('div')({
   },
 })
 
+const Header = styled('h1')({
+  color: colors.WHITE,
+  marginTop: '0px',
+  maxWidth: '400px',
+  paddingTop: '30px',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  fontFamily: fonts.SORAY,
+  fontSize: '28px',
+  marginBottom: '10px',
+  fontWeight: 'normal',
+  textAlign: 'center',
+  lineHeight: '40px',
+  '@media (max-width: 640px)': {
+    paddingLeft: '0px',
+    paddingRight: '0px',
+  },
+  '@media (max-width: 400px)': {
+    fontSize: '25px',
+  },
+})
+
+const HeaderBackground = styled('div')({
+  backgroundColor: colors.PURPLE,
+})
+
 const PersonalInfo = styled('div')({
   marginTop: '0px',
   marginBottom: '0px',
   marginLeft: 'auto',
   marginRight: 'auto',
+  paddingBottom: '30px',
   fontSize: '14px',
+  lineHeight: '22px',
   textAlign: 'center',
   maxWidth: '100%',
-  color: colors.DARK_GRAY,
+  color: colors.WHITE,
 })
 
 const Price = styled('h1')({
@@ -133,10 +160,12 @@ export const Offer: React.SFC<Props> = (props) => (
   <Wrapper>
     <InnerWrapper>
       <Card>
-        <Header>{props.header}</Header>
-        <PersonalInfo>
-          {props.subTitle1} • {props.subTitle2} • {props.subTitle3}
-        </PersonalInfo>
+        <HeaderBackground>
+          <Header>{props.header}</Header>
+          <PersonalInfo>
+            {props.subTitle1} • {props.subTitle2} • {props.subTitle3}
+          </PersonalInfo>
+        </HeaderBackground>
         <Price>{props.price}</Price>
         <InfoText>{props.protection}</InfoText>
         <InfoText>
