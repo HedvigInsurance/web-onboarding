@@ -60,6 +60,9 @@ const PerilTitle = styled('div')({
   textAlign: 'center',
   maxWidth: '100px',
   color: colors.DARK_GRAY,
+  borderRadius: '30px',
+  padding: '5px',
+  backgroundColor: colors.WHITE,
 })
 
 const DropDownText = styled('div')({
@@ -68,8 +71,12 @@ const DropDownText = styled('div')({
   marginBottom: '60px',
   marginTop: '0px',
   fontSize: '14px',
-  maxWidth: '100px',
+  textAlign: 'center',
   color: colors.DARK_GRAY,
+  '@media (max-width: 800px)': {
+    marginLeft: '50px',
+    marginRight: '50px',
+  },
 })
 
 const Switcher = styled('div')({
@@ -80,6 +87,7 @@ const Switcher = styled('div')({
   width: 'max-content',
   marginLeft: 'auto',
   marginRight: 'auto',
+  marginBottom: '30px',
   '@media (max-width: 400px)': {
     width: '90%',
     borderRadius: '40px',
@@ -236,14 +244,14 @@ const PERILS = [
         title: 'Oväder',
         icon: '/assets/offering/ovader_green.png',
         expandableText:
-          '2,2. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
+          '2,7. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
       },
       {
         key: 8,
         title: 'Stöld',
         icon: '/assets/offering/stold.png',
         expandableText:
-          '2,3. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
+          '2,8. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
       },
     ],
   },
@@ -272,6 +280,9 @@ export const InsuranceCoverage: React.SFC<Props> = (props) => (
         }),
         handleActiveTab: (tab: number) => () => ({
           activeTab: tab,
+          showPerilNumber: undefined,
+          showIconNumber: undefined,
+          textToShow: undefined,
         }),
       }}
     >
@@ -321,22 +332,27 @@ export const InsuranceCoverage: React.SFC<Props> = (props) => (
                               color:
                                 state.showPerilNumber === peril.key &&
                                 state.showIconNumber === column.key
-                                  ? colors.BLACK
+                                  ? colors.WHITE
                                   : colors.DARK_GRAY,
+                              backgroundColor:
+                                state.showPerilNumber === peril.key &&
+                                state.showIconNumber === column.key
+                                  ? colors.DARK_PURPLE
+                                  : colors.WHITE,
                             }}
                           >
                             {column.title}
                           </PerilTitle>
-                          {state.showPerilNumber === peril.key &&
-                          state.showIconNumber === column.key ? (
-                            <DropDownText>{state.textToShow}</DropDownText>
-                          ) : null}
                         </Col>
                       ))}
                     </Row>
                   ) : null}
                 </BigCol>
               ))}
+              {state.showPerilNumber !== undefined &&
+              state.showIconNumber !== undefined ? (
+                <DropDownText>{state.textToShow}</DropDownText>
+              ) : null}
             </Card>
           </InnerWrapper>
         </Wrapper>

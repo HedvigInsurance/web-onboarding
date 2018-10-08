@@ -4,11 +4,11 @@ import styled from 'react-emotion'
 export const Header = styled('h1')({
   maxWidth: '400px',
   marginTop: '30px',
+  marginBottom: '30px',
   marginLeft: 'auto',
   marginRight: 'auto',
   fontFamily: fonts.SORAY,
   fontSize: '28px',
-  marginBottom: '10px',
   fontWeight: 'normal',
   textAlign: 'center',
   '@media (max-width: 640px)': {

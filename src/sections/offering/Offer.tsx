@@ -16,11 +16,11 @@ const Card = styled('div')({
   marginLeft: 'auto',
   marginRight: 'auto',
   backgroundColor: colors.WHITE,
-  minWidth: '700px',
+  minWidth: '788px',
   paddingBottom: 40,
   boxShadow: '0px 8px 40px -12px rgba(0,0,0,0.67)',
   borderRadius: '10px',
-  '@media (max-width: 700px)': {
+  '@media (max-width: 788px)': {
     minWidth: '0px',
     width: '100%',
     marginLeft: '0px',

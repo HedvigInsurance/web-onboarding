@@ -16,6 +16,7 @@ export const Wrapper = styled('div')({})
 interface State {
   getStartedButtonVisible: boolean
   alreadyInsured: boolean
+  price: string
 }
 interface Actions {
   updateVisibility: (visible: boolean) => void
@@ -24,7 +25,11 @@ interface Actions {
 export const Offering: React.SFC<{}> = () => (
   <Wrapper>
     <Container<State, ActionMap<State, Actions>>
-      initialState={{ getStartedButtonVisible: true, alreadyInsured: true }}
+      initialState={{
+        getStartedButtonVisible: true,
+        alreadyInsured: true,
+        price: '299 kr/mån',
+      }}
       actions={{
         updateVisibility: (visible: boolean) => (_) => ({
           getStartedButtonVisible: visible,
@@ -46,7 +51,7 @@ export const Offering: React.SFC<{}> = () => (
             subTitle1={'Zak Kjellin  23 år gammal'}
             subTitle2={'Fantastiska Gatan 23B'}
             subTitle3={'112 34 Stockholm'}
-            price={'299 kr/mån'}
+            price={state.price}
             startDate={'Startdatum:'}
             start={'När din gamla försäkring går ut'}
             coverage={'Gäller i hela världen'}
@@ -78,7 +83,11 @@ export const Offering: React.SFC<{}> = () => (
             title={'Försäkra'}
             name={'Fantastiska Gatan'}
             buttonText={'Bli försäkrad'}
+            subTitle1={'Zak Kjellin  23 år gammal'}
+            subTitle2={'Fantastiska Gatan 23B'}
+            subTitle3={'112 34 Stockholm'}
             buttonVisibility={state.updateVisibility}
+            price={state.price}
           />
           <Legal
             legalText={
