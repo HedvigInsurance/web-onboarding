@@ -71,9 +71,15 @@ export const ChatConversation: React.SFC = () => (
               appear={appear}
               onTyped={() => goToStep(ChatStep.CURRENT_INSURANCE_INPUT)}
             >
-              {livingSituation.numberOfPeople > 1
-                ? 'Trevligt! Hoppas ni trivs. Har du någon hemförsäkring redan?'
-                : 'Trevligt! Hoppas du trivs. Har du någon hemförsäkring redan?'}
+              <TranslationsConsumer
+                textKey={
+                  livingSituation.numberOfPeople > 1
+                    ? 'CHAT_HEDVIG_CURRENT_INSURANCE_QUESTION_PLURAL'
+                    : 'CHAT_HEDVIG_CURRENT_INSURANCE_QUESTION_SINGULAR'
+                }
+              >
+                {(t) => t}
+              </TranslationsConsumer>
             </ChatMessage>
           )}
         </Message>
