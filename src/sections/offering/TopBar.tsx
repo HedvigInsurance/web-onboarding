@@ -17,6 +17,7 @@ const Bar = styled('div')({
   flexDirection: 'row',
   alignItems: 'center',
   backgroundColor: colors.WHITE,
+  zIndex: 5,
   borderBottom: '1px solid ' + colors.LIGHT_GRAY,
   '@media (max-width: 710px)': {
     justifyContent: 'space-evenly',
