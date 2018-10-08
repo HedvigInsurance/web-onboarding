@@ -1,6 +1,10 @@
 import { UserResponse, UserTextInput } from 'components/userInput/UserResponse'
 import { SingletonAction } from 'components/utils/SingletonAction'
 import * as React from 'react'
+import {
+  TranslationsPlaceholderConsumer,
+  TranslationsConsumer,
+} from '@hedviginsurance/textkeyfy'
 import * as yup from 'yup'
 import {
   ChatContainer,
@@ -71,52 +75,80 @@ export const NameAgeInput: React.SFC<Props> = ({
               }}
             >
               <div>
-                Jag heter{' '}
-                <UserTextInput
-                  type="text"
-                  id="firstName"
-                  value={chatState.nameAge.firstName}
-                  onChange={handleChange('firstName', chatState)}
-                  maxWidth={Math.max(
-                    chatState.nameAge.firstName.length || 0,
-                    10,
-                  )}
-                  innerRef={(ref) => {
-                    if (!ref || focusState.isActionDone || !isCurrentMessage) {
-                      return
-                    }
-                    ref.focus()
-                    focusState.doAction()
+                <TranslationsPlaceholderConsumer
+                  textKey="CHAT_INPUT_NAME_AGE_TEXT"
+                  replacements={{
+                    firstName: (
+                      <TranslationsConsumer textKey="CHAT_INPUT_NAME_AGE_FIRST_NAME_PLACEHOLDER">
+                        {(placeholder) => (
+                          <UserTextInput
+                            type="text"
+                            id="firstName"
+                            placeholder={placeholder}
+                            value={chatState.nameAge.firstName}
+                            onChange={handleChange('firstName', chatState)}
+                            maxWidth={Math.max(
+                              chatState.nameAge.firstName.length || 0,
+                              10,
+                            )}
+                            innerRef={(ref) => {
+                              if (
+                                !ref ||
+                                focusState.isActionDone ||
+                                !isCurrentMessage
+                              ) {
+                                return
+                              }
+                              ref.focus()
+                              focusState.doAction()
+                            }}
+                          />
+                        )}
+                      </TranslationsConsumer>
+                    ),
+                    lastName: (
+                      <TranslationsConsumer textKey="CHAT_INPUT_NAME_AGE_LAST_NAME_PLACEHOLDER">
+                        {(placeholder) => (
+                          <UserTextInput
+                            type="text"
+                            id="lastName"
+                            value={chatState.nameAge.lastName}
+                            placeholder={placeholder}
+                            onChange={handleChange('lastName', chatState)}
+                            maxWidth={Math.max(
+                              chatState.nameAge.lastName.length || 0,
+                              15,
+                            )}
+                          />
+                        )}
+                      </TranslationsConsumer>
+                    ),
+                    age: (
+                      <TranslationsConsumer textKey="CHAT_INPUT_NAME_AGE_AGE_PLACEHOLDER">
+                        {(placeholder) => (
+                          <UserTextInput
+                            type="number"
+                            id="age"
+                            placeholder={placeholder}
+                            step={1}
+                            value={chatState.nameAge.age}
+                            onChange={handleChange('age', chatState)}
+                            maxWidth={4.5}
+                            pattern="[0-9]*"
+                          />
+                        )}
+                      </TranslationsConsumer>
+                    ),
                   }}
-                />{' '}
-                <UserTextInput
-                  type="text"
-                  id="lastName"
-                  value={chatState.nameAge.lastName}
-                  onChange={handleChange('lastName', chatState)}
-                  maxWidth={Math.max(
-                    chatState.nameAge.lastName.length || 0,
-
-                    15,
-                  )}
-                />
+                >
+                  {(nodes) => nodes}
+                </TranslationsPlaceholderConsumer>
               </div>
               <div>
-                och är{' '}
-                <UserTextInput
-                  type="number"
-                  id="age"
-                  step={1}
-                  value={chatState.nameAge.age}
-                  onChange={handleChange('age', chatState)}
-                  maxWidth={4.5}
-                  pattern="[0-9]*"
-                />{' '}
-                år gammal
                 {isDone(chatState.nameAge) && (
-                  <div>
-                    <button type="submit">Ok</button>
-                  </div>
+                  <TranslationsConsumer textKey="CHAT_INPUT_NEXT_LABEL">
+                    {(text) => <button type="submit">{text}</button>}
+                  </TranslationsConsumer>
                 )}
               </div>
             </form>
