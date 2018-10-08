@@ -4,6 +4,7 @@ import * as React from 'react'
 import { createSession } from 'utils/sessionStorage'
 import { MockStorage } from 'utils/storage/MockStorage'
 import { WithStorageProps } from '../../../App'
+import { MockTextKeyProvider } from '../../../utils/MockTextKeyProvider'
 import { ChatContainer } from '../state'
 import { NameAgeInput } from './NameAgeInput'
 
@@ -12,12 +13,17 @@ it('handles form changes', () => {
     <Provider<WithStorageProps>
       initialState={{ storage: { session: createSession(new MockStorage()) } }}
     >
-      <NameAgeInput
-        onSubmit={() => {
-          /* noop */
+      <MockTextKeyProvider
+        textKeys={{
+          CHAT_INPUT_NAME_AGE_TEXT: '{firstName} {lastName} {age}',
         }}
-      />
-      ,
+      >
+        <NameAgeInput
+          onSubmit={() => {
+            /* noop */
+          }}
+        />
+      </MockTextKeyProvider>
     </Provider>,
   )
   wrapper
@@ -40,7 +46,13 @@ it("doesn't submit empty forms", () => {
     <Provider<WithStorageProps>
       initialState={{ storage: { session: createSession(new MockStorage()) } }}
     >
-      <NameAgeInput onSubmit={handleSubmit} />
+      <MockTextKeyProvider
+        textKeys={{
+          CHAT_INPUT_NAME_AGE_TEXT: '{firstName} {lastName} {age}',
+        }}
+      >
+        <NameAgeInput onSubmit={handleSubmit} />
+      </MockTextKeyProvider>
     </Provider>,
   )
 
@@ -74,8 +86,14 @@ it('submits form and updates state', (done) => {
     <Provider<WithStorageProps>
       initialState={{ storage: { session: createSession(new MockStorage()) } }}
     >
-      <NameAgeInput onSubmit={handleSubmit} />
-      <StateShower />
+      <MockTextKeyProvider
+        textKeys={{
+          CHAT_INPUT_NAME_AGE_TEXT: '{firstName} {lastName} {age}',
+        }}
+      >
+        <NameAgeInput onSubmit={handleSubmit} />
+        <StateShower />
+      </MockTextKeyProvider>
     </Provider>,
   )
 

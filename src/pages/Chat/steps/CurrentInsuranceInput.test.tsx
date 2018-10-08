@@ -1,6 +1,7 @@
 import { Provider } from 'constate'
 import { mount } from 'enzyme'
 import * as React from 'react'
+import { MockTextKeyProvider } from 'utils/MockTextKeyProvider'
 import { createSession } from 'utils/sessionStorage'
 import { MockStorage } from 'utils/storage/MockStorage'
 import { WithStorageProps } from '../../../App'
@@ -12,7 +13,15 @@ it('handles form changes', () => {
     <Provider<WithStorageProps>
       initialState={{ storage: { session: createSession(new MockStorage()) } }}
     >
-      <CurrentInsuranceInput />,
+      <MockTextKeyProvider
+        textKeys={{
+          CHAT_INPUT_CURRENT_INSURANCE_TEXT: '{toggle}',
+          CHAT_INPUT_CURRENT_INSURANCE_TEXT_HAS_INSURANCE:
+            '{toggle} {currentInsurerMaybe}',
+        }}
+      >
+        <CurrentInsuranceInput />
+      </MockTextKeyProvider>
     </Provider>,
   )
   wrapper

@@ -243,6 +243,7 @@ export const LivingSituationInput: React.SFC<LivingSituationInputProps> = ({
                   size: (
                     <UserTextInput
                       type="number"
+                      id="size"
                       maxWidth={4}
                       placeholder="42"
                       value={chatState.livingSituation.size}
