@@ -10,7 +10,6 @@ import {
   TransitionStatus,
 } from 'react-transition-group/Transition'
 import { fadeIn, FadeIn, fadeUp } from '../animations/appearings'
-import { LazyLottie } from '../animations/LazyLottie'
 
 const fadeOut = keyframes({
   from: {
@@ -52,12 +51,45 @@ const TypingWrapper = styled('div')(
   }),
 )
 
-export const Typing: React.SFC<{ status: TransitionStatus }> = ({ status }) => (
+const TypingBubble = styled('div')({
+  display: 'inline-block',
+  background: colors.OFF_WHITE,
+  padding: '5px 10px',
+  borderRadius: 3,
+  whiteSpace: 'nowrap',
+})
+
+const bounce = keyframes({
+  '0%': { transform: 'translateY(0)' },
+  '25%': { transform: 'translateY(-10px)' },
+  '50%': { transform: 'translateY(0)' },
+  '100%': { transform: 'translateY(0)' },
+})
+
+const TypingBall = styled('div')(({ delay }: { delay: number }) => ({
+  display: 'inline-block',
+  marginLeft: 10,
+  '&:first-of-type': {
+    marginLeft: 0,
+  },
+  width: 9,
+  height: 9,
+  borderRadius: 10,
+  backgroundColor: '#C9DCDF',
+  animation: `${bounce} 750ms cubic-bezier(0.35, 0.00, 0.00, 0.7)`,
+  animationIterationCount: 'infinite',
+  animationDelay: `${delay}ms`,
+}))
+
+export const Typing: React.SFC<{ status: TransitionStatus }> = ({
+  status,
+}) => (
   <TypingWrapper status={status}>
-    <LazyLottie
-      width={60}
-      options={{ animationData: import('./typing.json') }}
-    />
+    <TypingBubble>
+      <TypingBall delay={0} />
+      <TypingBall delay={100} />
+      <TypingBall delay={200} />
+    </TypingBubble>
   </TypingWrapper>
 )
 
