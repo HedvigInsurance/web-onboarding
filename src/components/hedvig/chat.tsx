@@ -81,9 +81,7 @@ const TypingBall = styled('div')(({ delay }: { delay: number }) => ({
   animationDelay: `${delay}ms`,
 }))
 
-export const Typing: React.SFC<{ status: TransitionStatus }> = ({
-  status,
-}) => (
+export const Typing: React.SFC<{ status: TransitionStatus }> = ({ status }) => (
   <TypingWrapper status={status}>
     <TypingBubble>
       <TypingBall delay={0} />
