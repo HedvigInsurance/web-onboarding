@@ -1,12 +1,7 @@
 import { colors, fonts } from '@hedviginsurance/brand'
-import { Col } from 'components/offering/col'
-import {
-  GetInsuredButton,
-  LinkTag,
-} from 'components/offering/get-insured-button'
-import { Header } from 'components/offering/header'
-import { InnerWrapper } from 'components/offering/inner-wrapper'
-import { SubTitle } from 'components/offering/sub-title'
+import { GetInsuredButton, LinkTag } from 'components/get-insured-button'
+import { Header } from 'components/offering/Header'
+import { InnerWrapper } from 'components/offering/InnerWrapper'
 import * as React from 'react'
 import styled from 'react-emotion'
 import * as VisibilitySensor from 'react-visibility-sensor'
@@ -34,7 +29,18 @@ const Card = styled('div')({
   },
 })
 
-const Price = styled('p')({
+const PersonalInfo = styled('div')({
+  marginTop: '0px',
+  marginBottom: '0px',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  fontSize: '14px',
+  textAlign: 'center',
+  maxWidth: '100%',
+  color: colors.DARK_GRAY,
+})
+
+const Price = styled('h1')({
   marginBottom: '0px',
   marginTop: '30px',
   fontSize: '32px',
@@ -43,12 +49,19 @@ const Price = styled('p')({
   fontFamily: fonts.CIRCULAR,
 })
 
-const InfoText = styled('p')({
+const InfoText = styled('div')({
   marginBottom: '0px',
   marginTop: '0px',
   fontSize: '14px',
   textAlign: 'center',
   color: colors.DARK_GRAY,
+})
+
+const Col = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  flexDirection: 'column',
+  marginBottom: '30px',
 })
 
 const Row = styled('div')({
@@ -62,7 +75,7 @@ const Row = styled('div')({
   },
 })
 
-const Image = styled('img')({
+const Icon = styled('img')({
   marginTop: '30px',
   marginBottom: '10px',
   maxWidth: '70px',
@@ -72,7 +85,7 @@ const Image = styled('img')({
   },
 })
 
-export const ImageText = styled('p')({
+const IconTitle = styled('p')({
   marginBottom: '10px',
   fontSize: '14px',
   textAlign: 'center',
@@ -81,7 +94,7 @@ export const ImageText = styled('p')({
 })
 
 interface Props {
-  update: (isVisible: boolean) => void
+  buttonVisibility: (isVisible: boolean) => void
   alreadyInsured: boolean
   header: string
   subTitle1: string
@@ -102,54 +115,54 @@ const COLUMNS = [
   {
     key: 0,
     title: 'Inget pappersarbete',
-    image: '/assets/offering/oval-light-purple.svg',
+    icon: '/assets/offering/oval-light-purple.svg',
   },
   {
     key: 1,
     title: 'Ingen bindningstid',
-    image: '/assets/offering/oval-orange.svg',
+    icon: '/assets/offering/oval-orange.svg',
   },
   {
     key: 2,
     title: 'Blixtsnabb ersättning',
-    image: '/assets/offering/oval-dark-purple.svg',
+    icon: '/assets/offering/oval-dark-purple.svg',
   },
 ]
 
-export const PriceInfo: React.SFC<Props> = (props) => {
-  const handleChange = (isVisible: boolean) => {
-    props.update(isVisible)
-  }
-  return (
-    <Wrapper>
-      <InnerWrapper>
-        <Card>
-          <Header>{props.header}</Header>
-          <SubTitle>
-            {props.subTitle1} • {props.subTitle2} • {props.subTitle3}
-          </SubTitle>
-          <Price>{props.price}</Price>
-          <InfoText>{props.protection}</InfoText>
-          <InfoText>
-            {props.startDate} {props.start}
-          </InfoText>
-          <Row>
-            {COLUMNS.map((col) => (
-              <Col key={col.key}>
-                <Image src={col.image} />
-                <ImageText>{col.title}</ImageText>
-              </Col>
-            ))}
-          </Row>
-          <VisibilitySensor partialVisibility onChange={handleChange}>
-            {() => (
-              <GetInsuredButton>
-                <LinkTag to={'/hedvig'}>{props.getInsured}</LinkTag>
-              </GetInsuredButton>
-            )}
-          </VisibilitySensor>
-        </Card>
-      </InnerWrapper>
-    </Wrapper>
-  )
-}
+export const Offer: React.SFC<Props> = (props) => (
+  <Wrapper>
+    <InnerWrapper>
+      <Card>
+        <Header>{props.header}</Header>
+        <PersonalInfo>
+          {props.subTitle1} • {props.subTitle2} • {props.subTitle3}
+        </PersonalInfo>
+        <Price>{props.price}</Price>
+        <InfoText>{props.protection}</InfoText>
+        <InfoText>
+          {props.startDate} {props.start}
+        </InfoText>
+        <Row>
+          {COLUMNS.map((col) => (
+            <Col key={col.key}>
+              <Icon src={col.icon} />
+              <IconTitle>{col.title}</IconTitle>
+            </Col>
+          ))}
+        </Row>
+        <VisibilitySensor
+          partialVisibility
+          onChange={(isVisible: boolean) => {
+            props.buttonVisibility(isVisible)
+          }}
+        >
+          {() => (
+            <GetInsuredButton>
+              <LinkTag to={'/hedvig'}>{props.getInsured}</LinkTag>
+            </GetInsuredButton>
+          )}
+        </VisibilitySensor>
+      </Card>
+    </InnerWrapper>
+  </Wrapper>
+)

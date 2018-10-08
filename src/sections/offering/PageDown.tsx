@@ -1,4 +1,4 @@
-import { Wrapper } from 'components/offering/wrapper'
+import { Wrapper } from 'components/offering/Wrapper'
 
 import * as React from 'react'
 import styled from 'react-emotion'

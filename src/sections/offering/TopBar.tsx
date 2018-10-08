@@ -91,9 +91,9 @@ const BarButtonContainer = styled('div')({
 })
 
 interface Props {
-  getInsured?: string
+  buttonText?: string
   progress: number
-  state: boolean
+  showButton: boolean
 }
 
 const progressStrings = [
@@ -130,11 +130,11 @@ export const TopBar: React.SFC<Props> = (props) => (
           </ProgressLabel>
         ))}
       </BarProgressContainer>
-      {!props.state ? (
+      {!props.showButton ? (
         <BarButtonContainer>
-          {props.getInsured ? (
+          {props.buttonText ? (
             <GetInsuredButton>
-              <LinkTag to={'/hedvig'}>{props.getInsured}</LinkTag>
+              <LinkTag to={'/hedvig'}>{props.buttonText}</LinkTag>
             </GetInsuredButton>
           ) : null}
         </BarButtonContainer>

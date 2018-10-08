@@ -1,6 +1,6 @@
 import { colors, fonts } from '@hedviginsurance/brand'
-import { Card } from 'components/offering/card'
-import { Header } from 'components/offering/header'
+import { Card } from 'components/offering/Card'
+import { Header } from 'components/offering/Header'
 import { ActionMap, Container } from 'constate'
 import * as React from 'react'
 import styled from 'react-emotion'
@@ -44,7 +44,7 @@ const Col = styled('div')({
   cursor: 'pointer',
 })
 
-const ImageIcon = styled('img')({
+const PerilIcon = styled('img')({
   marginBottom: '10px',
   marginTop: '10px',
   marginRight: '30px',
@@ -53,7 +53,7 @@ const ImageIcon = styled('img')({
   height: '72px',
 })
 
-const Label = styled('p')({
+const PerilTitle = styled('div')({
   marginBottom: '0px',
   marginTop: '0px',
   fontSize: '14px',
@@ -108,28 +108,28 @@ const PERILS = [
       {
         key: 0,
         title: 'Eldsvåda',
-        image: '/assets/offering/eldsvada.png',
+        icon: '/assets/offering/eldsvada.png',
         expandableText:
           '1,0. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
       },
       {
         key: 1,
         title: 'Inbrott',
-        image: '/assets/offering/inbrott.png',
+        icon: '/assets/offering/inbrott.png',
         expandableText:
           '1,1. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
       },
       {
         key: 2,
         title: 'Oväder',
-        image: '/assets/offering/ovader.png',
+        icon: '/assets/offering/ovader.png',
         expandableText:
           '1,2. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
       },
       {
         key: 3,
         title: 'Skadedjur',
-        image: '/assets/offering/skadedjur.png',
+        icon: '/assets/offering/skadedjur.png',
         expandableText:
           '1,3. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
       },
@@ -143,35 +143,35 @@ const PERILS = [
       {
         key: 0,
         title: 'Juridisk tvist',
-        image: '/assets/offering/juridisk_tvist.png',
+        icon: '/assets/offering/juridisk_tvist.png',
         expandableText:
           '0,0. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
       },
       {
         key: 1,
         title: 'Överfall',
-        image: '/assets/offering/overfall_2.png',
+        icon: '/assets/offering/overfall_2.png',
         expandableText:
           '0,1. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
       },
       {
         key: 2,
         title: 'Sjuk på resa',
-        image: '/assets/offering/sjuk_pa_resa.png',
+        icon: '/assets/offering/sjuk_pa_resa.png',
         expandableText:
           '0,2. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
       },
       {
         key: 3,
         title: 'Försenad resa',
-        image: '/assets/offering/forsenad_resa.png',
+        icon: '/assets/offering/forsenad_resa.png',
         expandableText:
           '0,3. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
       },
       {
         key: 4,
         title: 'Försenat bagage',
-        image: '/assets/offering/forsenad_resa.png',
+        icon: '/assets/offering/forsenad_resa.png',
         expandableText:
           '0,4. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
       },
@@ -185,63 +185,63 @@ const PERILS = [
       {
         key: 0,
         title: 'Drulle',
-        image: '/assets/offering/Drulle.png',
+        icon: '/assets/offering/Drulle.png',
         expandableText:
           '2,0. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
       },
       {
         key: 1,
         title: 'Eldsvåda',
-        image: '/assets/offering/eldsvada_green.png',
+        icon: '/assets/offering/eldsvada_green.png',
         expandableText:
           '2,1. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
       },
       {
         key: 2,
         title: 'Oväder',
-        image: '/assets/offering/ovader_green.png',
+        icon: '/assets/offering/ovader_green.png',
         expandableText:
           '2,2. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
       },
       {
         key: 3,
         title: 'Stöld',
-        image: '/assets/offering/stold.png',
+        icon: '/assets/offering/stold.png',
         expandableText:
           '2,3. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
       },
       {
         key: 4,
         title: 'Vattenläcka',
-        image: '/assets/offering/vattenlacka.png',
+        icon: '/assets/offering/vattenlacka.png',
         expandableText:
           '2,4. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
       },
       {
         key: 5,
         title: 'Drulle',
-        image: '/assets/offering/Drulle.png',
+        icon: '/assets/offering/Drulle.png',
         expandableText:
           '2,5. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
       },
       {
         key: 6,
         title: 'Eldsvåda',
-        image: '/assets/offering/eldsvada_green.png',
+        icon: '/assets/offering/eldsvada_green.png',
         expandableText:
           '2,6. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
       },
       {
         key: 7,
         title: 'Oväder',
-        image: '/assets/offering/ovader_green.png',
+        icon: '/assets/offering/ovader_green.png',
         expandableText:
           '2,2. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
       },
       {
         key: 8,
         title: 'Stöld',
-        image: '/assets/offering/stold.png',
+        icon: '/assets/offering/stold.png',
         expandableText:
           '2,3. Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.',
       },
@@ -315,8 +315,8 @@ export const InsuranceCoverage: React.SFC<Props> = (props) => (
                             )
                           }
                         >
-                          <ImageIcon src={column.image} />
-                          <Label
+                          <PerilIcon src={column.icon} />
+                          <PerilTitle
                             style={{
                               color:
                                 state.showPerilNumber === peril.key &&
@@ -326,7 +326,7 @@ export const InsuranceCoverage: React.SFC<Props> = (props) => (
                             }}
                           >
                             {column.title}
-                          </Label>
+                          </PerilTitle>
                           {state.showPerilNumber === peril.key &&
                           state.showIconNumber === column.key ? (
                             <DropDownText>{state.textToShow}</DropDownText>

@@ -1,8 +1,8 @@
 import { colors } from '@hedviginsurance/brand'
-import { Card } from 'components/offering/card'
-import { Header } from 'components/offering/header'
-import { InnerWrapper } from 'components/offering/inner-wrapper'
-import { Wrapper } from 'components/offering/wrapper'
+import { Card } from 'components/offering/Card'
+import { Header } from 'components/offering/Header'
+import { InnerWrapper } from 'components/offering/InnerWrapper'
+import { Wrapper } from 'components/offering/Wrapper'
 import * as React from 'react'
 import styled from 'react-emotion'
 
@@ -27,7 +27,7 @@ const Row = styled('div')({
   marginRight: '40px',
 })
 
-const TextCol = styled('label')({
+const Col = styled('div')({
   display: 'flex',
   paddingBottom: '10px',
   flexDirection: 'column',
@@ -66,8 +66,8 @@ export const InsuredAmount: React.SFC<Props> = (props) => (
         <Table>
           {AMOUNTS.map((amount) => (
             <Row key={amount.key}>
-              <TextCol>{amount.title}</TextCol>
-              <TextCol>{amount.amount}</TextCol>
+              <Col>{amount.title}</Col>
+              <Col>{amount.amount}</Col>
             </Row>
           ))}
         </Table>

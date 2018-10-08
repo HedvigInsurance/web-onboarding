@@ -1,8 +1,7 @@
 import { colors } from '@hedviginsurance/brand'
-import { Header } from 'components/offering/header'
-import { InnerWrapper } from 'components/offering/inner-wrapper'
-import { Row } from 'components/offering/row'
-import { Wrapper } from 'components/offering/wrapper'
+import { Header } from 'components/offering/Header'
+import { InnerWrapper } from 'components/offering/InnerWrapper'
+import { Wrapper } from 'components/offering/Wrapper'
 import * as React from 'react'
 import styled from 'react-emotion'
 
@@ -44,6 +43,18 @@ const Col = styled('div')({
   marginBottom: '30px',
 })
 
+const Row = styled('div')({
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'space-evenly',
+  alignItems: 'baseline',
+  maxWidth: '1000px',
+  '@media (max-width: 710px)': {
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+})
+
 const Title = styled('h3')({
   margin: '0px',
   fontSize: '14px',
@@ -51,7 +62,7 @@ const Title = styled('h3')({
   maxWidth: '240px',
 })
 
-const InfoText = styled('p')({
+const Paragraph = styled('p')({
   fontSize: '14px',
   color: colors.DARK_GRAY,
   maxWidth: '240px',
@@ -61,21 +72,21 @@ const COLUMNS = [
   {
     key: 0,
     title: 'Anmäl skador och få betalt på nolltid',
-    subTitle:
+    paragraph:
       'Med vår smarta chattbot baserad på AI och maskininlärning kan vi snabbt göra bedömningar av skador och betala ut pengarna till dig utan krångliga formulär eller väntetider.',
     image: '/assets/offering/Placeholder.svg',
   },
   {
     key: 1,
     title: 'Schysstare affärsmodell',
-    subTitle:
+    paragraph:
       'Hedvig gör saker annorlunda än andra försäkringsbolag, istället för att överskottet från alla premier går till vår vinst tar vi en månatlig fast avgift. Därför har vi inget incitament till att hålla inne med pengar!',
     image: '/assets/offering/Placeholder.svg',
   },
   {
     key: 2,
     title: 'Överskottet går till välgörenhet',
-    subTitle:
+    paragraph:
       'Det som blir över efter årets skadeutbetalningar går till en välgörenhetsorganisation som du själv  väljer.',
     image: '/assets/offering/Placeholder.svg',
   },
@@ -91,7 +102,7 @@ export const HedvigInfo: React.SFC<Props> = (props) => (
             <Col key={col.key}>
               <Image src={col.image} />
               <Title>{col.title}</Title>
-              <InfoText>{col.subTitle}</InfoText>
+              <Paragraph>{col.paragraph}</Paragraph>
             </Col>
           ))}
         </Row>

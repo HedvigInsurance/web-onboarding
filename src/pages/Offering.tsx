@@ -1,15 +1,15 @@
 import { ActionMap, Container } from 'constate'
 import * as React from 'react'
 import styled from 'react-emotion'
-import { GetInsured } from '../sections/offering/get-insured'
-import { HedvigInfo } from '../sections/offering/hedvig-info'
-import { HedvigSwitch } from '../sections/offering/hedvig-switch'
-import { InsuranceCoverage } from '../sections/offering/insurance-coverage'
-import { InsuredAmount } from '../sections/offering/insured-amount'
-import { Legal } from '../sections/offering/legal'
-import { PageDown } from '../sections/offering/page-down'
-import { PriceInfo } from '../sections/offering/price-info'
-import { TopBar } from '../sections/offering/top-bar'
+import { GetInsured } from '../sections/offering/GetInsured'
+import { HedvigInfo } from '../sections/offering/HedvigInfo'
+import { HedvigSwitch } from '../sections/offering/HedvigSwitch'
+import { InsuranceCoverage } from '../sections/offering/InsuranceCoverage'
+import { InsuredAmount } from '../sections/offering/InsuredAmount'
+import { Legal } from '../sections/offering/LegalText'
+import { Offer } from '../sections/offering/Offer'
+import { PageDown } from '../sections/offering/PageDown'
+import { TopBar } from '../sections/offering/TopBar'
 
 export const Wrapper = styled('div')({})
 
@@ -35,12 +35,12 @@ export const Offering: React.SFC<{}> = () => (
         <Wrapper>
           <TopBar
             progress={1}
-            getInsured={'Bli försäkrad'}
-            state={state.getStartedButtonVisible}
+            buttonText={'Bli försäkrad'}
+            showButton={state.getStartedButtonVisible}
           />
 
-          <PriceInfo
-            update={state.handleChange}
+          <Offer
+            buttonVisibility={state.handleChange}
             alreadyInsured={false}
             header={'Hej Zak, det här är din hemförsäkring hos Hedvig!'}
             subTitle1={'Zak Kjellin  23 år gammal'}
@@ -76,8 +76,8 @@ export const Offering: React.SFC<{}> = () => (
           <GetInsured
             title={'Försäkra'}
             name={'Fantastiska Gatan'}
-            getInsured={'Bli försäkrad'}
-            update={state.handleChange}
+            buttonText={'Bli försäkrad'}
+            buttonVisibility={state.handleChange}
           />
           <Legal
             legalText={
