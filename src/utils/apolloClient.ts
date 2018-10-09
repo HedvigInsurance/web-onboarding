@@ -2,7 +2,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloClient } from 'apollo-client'
 import { ApolloLink, concat } from 'apollo-link'
 import { BatchHttpLink } from 'apollo-link-batch-http'
-import uuidV4 from 'uuid/v4'
+import * as uuidV4 from 'uuid/v4'
 import { notNullable } from './nullables'
 
 export const getGiraffeEndpoint = (): string => {
