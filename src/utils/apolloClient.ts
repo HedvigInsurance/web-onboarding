@@ -3,6 +3,7 @@ import { ApolloClient } from 'apollo-client'
 import { ApolloLink, concat } from 'apollo-link'
 import { BatchHttpLink } from 'apollo-link-batch-http'
 import { WebSocketLink } from 'apollo-link-ws'
+import * as React from 'react'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 import * as uuidV4 from 'uuid/v4'
 import { notNullable } from './nullables'
@@ -72,13 +73,41 @@ export const link = (ssrMode: boolean, requestId?: string) =>
       : new WebSocketLink(
           new SubscriptionClient(getGiraffeWsEndpoint(), {
             reconnect: true,
+            connectionParams: () => ({ Authorization: Math.random() }), // FIXME
           }),
         ),
   )
 
-export const createApolloClient = (ssrMode: boolean, requestId?: string) =>
+export const createServerApolloClient = (requestId?: string) =>
   new ApolloClient({
-    ssrMode,
-    cache: cache(ssrMode),
-    link: link(ssrMode, requestId),
+    ssrMode: true,
+    cache: new InMemoryCache(),
+    link: concat(
+      requestIdMiddleware(requestId),
+      new BatchHttpLink({
+        uri: getGiraffeEndpoint(),
+        fetch: require('node-fetch'),
+      }),
+    ),
   })
+
+export const createClientApolloClient = () => {
+  const subscriptionClient = new SubscriptionClient(getGiraffeWsEndpoint(), {
+    reconnect: true,
+    connectionParams: () => ({ Authorization: 'blargh' }),
+  })
+  const apolloClient = new ApolloClient({
+    cache: new InMemoryCache().restore((window as any).__INITIAL_STATE),
+    link: new WebSocketLink(subscriptionClient),
+  })
+
+  return { subscriptionClient, apolloClient }
+}
+
+export const createApolloSubscriptionContext = () =>
+  React.createContext<
+    Partial<{
+      subscriptionClient: SubscriptionClient
+      apolloClient: ApolloClient<any>
+    }>
+  >(createClientApolloClient())

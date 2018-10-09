@@ -9,7 +9,7 @@ import { FilledContext, HelmetProvider } from 'react-helmet-async'
 import { StaticRouter, StaticRouterContext } from 'react-router'
 import { App } from '../App'
 import {
-  createApolloClient,
+  createServerApolloClient,
   getGiraffeEndpoint,
   getGiraffeWsEndpoint,
 } from '../utils/apolloClient'
@@ -49,9 +49,9 @@ const template = (
 `
 
 export const getPage: Koa.Middleware = async (ctx) => {
-  const apolloClient = createApolloClient(true, ctx.state.requestUuid)
-  const routerContext: StaticRouterContext & { statusCode?: number } = {}
-  const helmetContext = {}
+  const apolloClient = createServerApolloClient(ctx.state.requestUuid)
+const routerContext: StaticRouterContext & { statusCode?: number } = {}
+const helmetContext = {}
   const serverApp = (
     <StaticRouter location={ctx.request.originalUrl} context={routerContext}>
       <HelmetProvider context={helmetContext}>
