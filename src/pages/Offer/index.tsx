@@ -1,3 +1,4 @@
+import { TopBar } from 'components/TopBar'
 import { ActionMap, Container } from 'constate'
 import * as React from 'react'
 import styled from 'react-emotion'
@@ -9,7 +10,6 @@ import { InsuredAmount } from './sections/InsuredAmount'
 import { Legal } from './sections/LegalText'
 import { Offer } from './sections/Offer'
 import { PageDown } from './sections/PageDown'
-import { TopBar } from './sections/TopBar'
 
 export const Wrapper = styled('div')({})
 
