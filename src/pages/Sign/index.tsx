@@ -14,6 +14,9 @@ export const Sign: React.SFC<{}> = () => (
       buttonText={'Signera med BankID'}
       inputTitleEmail={'Email'}
       inputTitlePersonalNumber={'Personnummer'}
+      errorMessage={
+        'Något verkar ha gått snett :( Är du säker på att du fyllt i alla uppgifter rätt?'
+      }
     />
   </Wrapper>
 )

@@ -95,17 +95,26 @@ const GetInsuredButton = styled('div')({
   justifyContent: 'center',
 })
 
+const ErrorText = styled('div')({
+  textAlign: 'center',
+  marginTop: '20px',
+  color: 'red',
+  fontSize: '16px',
+})
+
 interface Props {
   title: string
   adress: string
   buttonText: string
   inputTitleEmail: string
   inputTitlePersonalNumber: string
+  errorMessage: string
 }
 
 interface State {
   email: string
   personalNumber: number
+  signUpError: string
 }
 
 interface Actions {
@@ -120,6 +129,7 @@ export const SignUp: React.SFC<Props> = (props) => (
       initialState={{
         email: undefined,
         personalNumber: undefined,
+        signUpError: undefined,
       }}
       actions={{
         handleSignup: () => () => ({}),
@@ -158,6 +168,9 @@ export const SignUp: React.SFC<Props> = (props) => (
               <GetInsuredButton>
                 <InputSubmit type="submit" value={props.buttonText} />
               </GetInsuredButton>
+              {state.signUpError ? (
+                <ErrorText>{props.errorMessage}</ErrorText>
+              ) : null}
             </Form>
           </Card>
         </CardWrapper>
