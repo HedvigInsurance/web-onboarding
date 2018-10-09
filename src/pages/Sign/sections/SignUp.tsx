@@ -5,10 +5,7 @@ import styled from 'react-emotion'
 
 const CARDWIDTH = 788
 const HEADERWIDTH = 400
-const MOBILESMALL = 640
-const MOBILETINY = 400
-const INPUTFIELDMINWIDTH = 300
-const FORMWIDTH = 260
+const FORMWIDTH = 300
 
 const OuterWrapper = styled('div')({
   width: '100%',
@@ -16,12 +13,6 @@ const OuterWrapper = styled('div')({
   backgroundColor: colors.OFF_WHITE,
   position: 'absolute',
   bottom: 0,
-})
-
-const InnerWrapper = styled('div')({
-  display: 'flex',
-  alignItems: 'center',
-  flexDirection: 'column',
 })
 
 const CardWrapper = styled('div')({
@@ -53,13 +44,6 @@ const HeaderWrapper = styled('div')({
   fontWeight: 'normal',
   lineHeight: '40px',
   textAlign: 'center',
-  [`@media (max-width: ${MOBILESMALL}px)`]: {
-    paddingLeft: '0px',
-    paddingRight: '0px',
-  },
-  [`@media (max-width: ${MOBILETINY}px)`]: {
-    fontSize: '25px',
-  },
 })
 
 const Header = styled('h1')({
@@ -76,7 +60,7 @@ const InputTitle = styled('div')({
   fontSize: '20px',
 })
 
-const Form = styled('div')({
+const Form = styled('form')({
   display: 'flex',
   flexDirection: 'column',
   maxWidth: FORMWIDTH,
@@ -87,7 +71,7 @@ const Form = styled('div')({
 const InputField = styled('input')({
   marginTop: '10px',
   marginBottom: '10px',
-  minWidth: INPUTFIELDMINWIDTH,
+  minWidth: FORMWIDTH,
   lineHeight: '23px',
   fontSize: '20px',
 })
@@ -115,17 +99,21 @@ interface Props {
   title: string
   adress: string
   buttonText: string
+  inputTitleEmail: string
+  inputTitlePersonalNumber: string
 }
 
 interface State {
   email: string
   personalNumber: number
 }
+
 interface Actions {
   handleSignup: () => void
   updateEmail: (value: string) => void
   updatePersonalNumber: (value: number) => void
 }
+
 export const SignUp: React.SFC<Props> = (props) => (
   <OuterWrapper>
     <Container<State, ActionMap<State, Actions>>
@@ -144,37 +132,35 @@ export const SignUp: React.SFC<Props> = (props) => (
       }}
     >
       {(state) => (
-        <InnerWrapper>
-          <CardWrapper>
-            <Card>
-              <HeaderWrapper>
-                <Header>
-                  {props.title} {props.adress}
-                </Header>
-              </HeaderWrapper>
-              <Form onSubmit={state.handleSignup}>
-                <InputTitle>Email</InputTitle>
-                <InputField
-                  type="text"
-                  value={state.email}
-                  onChange={() => state.updateEmail(state.email)}
-                />
-                <InputTitle>Personnummer</InputTitle>
-                <InputField
-                  type="text"
-                  placeholder="åååmmdd-nnn"
-                  value={state.personalNumber}
-                  onChange={() =>
-                    state.updatePersonalNumber(state.personalNumber)
-                  }
-                />
-                <GetInsuredButton>
-                  <InputSubmit type="submit" value={props.buttonText} />
-                </GetInsuredButton>
-              </Form>
-            </Card>
-          </CardWrapper>
-        </InnerWrapper>
+        <CardWrapper>
+          <Card>
+            <HeaderWrapper>
+              <Header>
+                {props.title} {props.adress}
+              </Header>
+            </HeaderWrapper>
+            <Form onSubmit={state.handleSignup}>
+              <InputTitle>{props.inputTitleEmail}</InputTitle>
+              <InputField
+                type="text"
+                value={state.email}
+                onChange={() => state.updateEmail(state.email)}
+              />
+              <InputTitle>{props.inputTitlePersonalNumber}</InputTitle>
+              <InputField
+                type="text"
+                placeholder="ååååmmdd-nnnn"
+                value={state.personalNumber}
+                onChange={() =>
+                  state.updatePersonalNumber(state.personalNumber)
+                }
+              />
+              <GetInsuredButton>
+                <InputSubmit type="submit" value={props.buttonText} />
+              </GetInsuredButton>
+            </Form>
+          </Card>
+        </CardWrapper>
       )}
     </Container>
   </OuterWrapper>

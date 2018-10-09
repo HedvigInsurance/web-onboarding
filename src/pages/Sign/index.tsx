@@ -12,6 +12,8 @@ export const Sign: React.SFC<{}> = () => (
       title={'Hemförsäkring för'}
       adress={'Fantastiska Gatan 23B'}
       buttonText={'Signera med BankID'}
+      inputTitleEmail={'Email'}
+      inputTitlePersonalNumber={'Personnummer'}
     />
   </Wrapper>
 )
