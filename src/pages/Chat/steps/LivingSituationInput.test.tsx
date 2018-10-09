@@ -3,6 +3,7 @@ import { InputValidationError } from 'components/userInput/UserResponse'
 import { Provider } from 'constate'
 import { mount } from 'enzyme'
 import * as React from 'react'
+import { MockTextKeyProvider } from 'utils/MockTextKeyProvider'
 import { createSession } from 'utils/sessionStorage'
 import { MockStorage } from 'utils/storage/MockStorage'
 import { ApartmentType } from '../state'
@@ -13,7 +14,14 @@ it('handles form changes', () => {
     <Provider<WithStorageProps>
       initialState={{ storage: { session: createSession(new MockStorage()) } }}
     >
-      <LivingSituationInput />,
+      <MockTextKeyProvider
+        textKeys={{
+          CHAT_INPUT_LIVING_SITUATION_TEXT:
+            '{streetAddress} {postalCode} {apartmentType} {size} {sizeValidationErrorMaybe} {numberOfPeople}',
+        }}
+      >
+        <LivingSituationInput />
+      </MockTextKeyProvider>
     </Provider>,
   )
   wrapper
@@ -43,7 +51,14 @@ it('handles too big apartment', () => {
     <Provider<WithStorageProps>
       initialState={{ storage: { session: createSession(new MockStorage()) } }}
     >
-      <LivingSituationInput />,
+      <MockTextKeyProvider
+        textKeys={{
+          CHAT_INPUT_LIVING_SITUATION_TEXT:
+            '{streetAddress} {postalCode} {apartmentType} {size} {sizeValidationErrorMaybe} {numberOfPeople}',
+        }}
+      >
+        <LivingSituationInput />
+      </MockTextKeyProvider>
     </Provider>,
   )
 
