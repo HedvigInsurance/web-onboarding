@@ -3,7 +3,13 @@ import { GetInsuredButton, LinkTag } from 'components/get-insured-button'
 import * as React from 'react'
 import styled from 'react-emotion'
 import * as VisibilitySensor from 'react-visibility-sensor'
-import { InnerWrapper } from '.././components/InnerWrapper'
+import { CardWrapperSmall } from '../components/CardWrapperSmall'
+import { HeaderWrapper } from '../components/HeaderWrapper'
+import { InnerWrapper } from '../components/InnerWrapper'
+
+const ICONWIDTH = 70
+const ICONWIDTHMOBILE = 150
+const ICONTITLEWIDTH = 200
 
 const Wrapper = styled('div')({
   marginTop: '70px',
@@ -13,41 +19,18 @@ const Wrapper = styled('div')({
 
 const Card = styled('div')({
   marginTop: '70px',
-  marginLeft: 'auto',
-  marginRight: 'auto',
   backgroundColor: colors.WHITE,
-  minWidth: '788px',
-  paddingBottom: 40,
+  paddingBottom: '30px',
   boxShadow: '0px 8px 40px -12px rgba(0,0,0,0.67)',
   borderRadius: '10px',
-  '@media (max-width: 788px)': {
-    minWidth: '0px',
-    width: '100%',
-    marginLeft: '0px',
-    marginRight: '0px',
-  },
 })
 
 const Header = styled('h1')({
   color: colors.WHITE,
   marginTop: '0px',
-  maxWidth: '400px',
   paddingTop: '30px',
-  marginLeft: 'auto',
-  marginRight: 'auto',
-  fontFamily: fonts.SORAY,
-  fontSize: '28px',
   marginBottom: '10px',
-  fontWeight: 'normal',
-  textAlign: 'center',
-  lineHeight: '40px',
-  '@media (max-width: 640px)': {
-    paddingLeft: '0px',
-    paddingRight: '0px',
-  },
-  '@media (max-width: 400px)': {
-    fontSize: '25px',
-  },
+  fontSize: '32px',
 })
 
 const HeaderBackground = styled('div')({
@@ -105,10 +88,10 @@ const Row = styled('div')({
 const Icon = styled('img')({
   marginTop: '30px',
   marginBottom: '10px',
-  maxWidth: '70px',
+  maxWidth: ICONWIDTH,
   '@media (max-width: 400px)': {
     margin: '0px',
-    maxWidth: '150px',
+    maxWidth: ICONWIDTHMOBILE,
   },
 })
 
@@ -117,7 +100,7 @@ const IconTitle = styled('p')({
   fontSize: '14px',
   textAlign: 'center',
   color: colors.DARK_GRAY,
-  maxWidth: '200px',
+  maxWidth: ICONTITLEWIDTH,
 })
 
 interface Props {
@@ -159,39 +142,43 @@ const COLUMNS = [
 export const Offer: React.SFC<Props> = (props) => (
   <Wrapper>
     <InnerWrapper>
-      <Card>
-        <HeaderBackground>
-          <Header>{props.header}</Header>
-          <PersonalInfo>
-            {props.subTitle1} • {props.subTitle2} • {props.subTitle3}
-          </PersonalInfo>
-        </HeaderBackground>
-        <Price>{props.price}</Price>
-        <InfoText>{props.protection}</InfoText>
-        <InfoText>
-          {props.startDate} {props.start}
-        </InfoText>
-        <Row>
-          {COLUMNS.map((col) => (
-            <Col key={col.key}>
-              <Icon src={col.icon} />
-              <IconTitle>{col.title}</IconTitle>
-            </Col>
-          ))}
-        </Row>
-        <VisibilitySensor
-          partialVisibility
-          onChange={(isVisible: boolean) => {
-            props.buttonVisibility(isVisible)
-          }}
-        >
-          {() => (
-            <GetInsuredButton>
-              <LinkTag to={'/hedvig'}>{props.getInsured}</LinkTag>
-            </GetInsuredButton>
-          )}
-        </VisibilitySensor>
-      </Card>
+      <CardWrapperSmall>
+        <Card>
+          <HeaderBackground>
+            <HeaderWrapper>
+              <Header>{props.header}</Header>
+            </HeaderWrapper>
+            <PersonalInfo>
+              {props.subTitle1} • {props.subTitle2} • {props.subTitle3}
+            </PersonalInfo>
+          </HeaderBackground>
+          <Price>{props.price}</Price>
+          <InfoText>{props.protection}</InfoText>
+          <InfoText>
+            {props.startDate} {props.start}
+          </InfoText>
+          <Row>
+            {COLUMNS.map((col) => (
+              <Col key={col.key}>
+                <Icon src={col.icon} />
+                <IconTitle>{col.title}</IconTitle>
+              </Col>
+            ))}
+          </Row>
+          <VisibilitySensor
+            partialVisibility
+            onChange={(isVisible: boolean) => {
+              props.buttonVisibility(isVisible)
+            }}
+          >
+            {() => (
+              <GetInsuredButton>
+                <LinkTag to={'/hedvig'}>{props.getInsured}</LinkTag>
+              </GetInsuredButton>
+            )}
+          </VisibilitySensor>
+        </Card>
+      </CardWrapperSmall>
     </InnerWrapper>
   </Wrapper>
 )

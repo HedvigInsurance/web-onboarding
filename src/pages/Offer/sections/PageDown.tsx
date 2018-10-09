@@ -1,23 +1,23 @@
-import { Wrapper } from '.././components/Wrapper'
+import { InnerWrapper } from '../components/InnerWrapper'
+import { Wrapper } from '../components/Wrapper'
 
 import * as React from 'react'
 import styled from 'react-emotion'
 
+const ICONWIDTH = 30
+const ICONHEIGHT = 47
+
 const PageDownIcon = styled('img')({
-  width: '30px',
-  height: '47px',
+  width: ICONWIDTH,
+  height: ICONHEIGHT,
   marginTop: '30px',
   marginBottom: '30px',
 })
 
-const CenterWrapper = styled('div')({
-  display: 'flex',
-  justifyContent: 'center',
-})
 export const PageDown: React.SFC<{}> = () => (
   <Wrapper>
-    <CenterWrapper>
+    <InnerWrapper>
       <PageDownIcon src={'assets/offering/arrow-down.svg'} />
-    </CenterWrapper>
+    </InnerWrapper>
   </Wrapper>
 )

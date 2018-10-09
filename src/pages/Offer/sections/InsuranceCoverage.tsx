@@ -2,16 +2,34 @@ import { colors, fonts } from '@hedviginsurance/brand'
 import { ActionMap, Container } from 'constate'
 import * as React from 'react'
 import styled from 'react-emotion'
-import { Card } from '.././components/Card'
-import { Header } from '.././components/Header'
+import { CardWrapper } from '../components/CardWrapper'
+import { HeaderWrapper } from '../components/HeaderWrapper'
 
 interface Props {
   headline: string
   subTitle: string
 }
 
+const PERILSIDE = 72
+
+const Card = styled('div')({
+  marginTop: '70px',
+  paddingTop: '30px',
+  paddingBottom: '30px',
+  backgroundColor: colors.WHITE,
+  boxShadow: '0px 8px 15px -13px rgba(0,0,0,0.67)',
+  borderRadius: '10px',
+})
+
 const Wrapper = styled('div')({
   backgroundColor: colors.OFF_WHITE,
+})
+
+const Header = styled('h1')({
+  color: colors.BLACK,
+  marginTop: '30px',
+  marginBottom: '30px',
+  fontSize: '32px',
 })
 
 const InnerWrapper = styled('div')({
@@ -23,7 +41,6 @@ const InnerWrapper = styled('div')({
 const BigCol = styled('div')({})
 
 const Row = styled('div')({
-  marginBottom: '30px',
   marginLeft: '104px',
   marginRight: '104px',
   display: 'flex',
@@ -48,8 +65,8 @@ const PerilIcon = styled('img')({
   marginTop: '10px',
   marginRight: '30px',
   marginLeft: '30px',
-  width: '72px',
-  height: '72px',
+  width: PERILSIDE,
+  height: PERILSIDE,
 })
 
 const PerilTitle = styled('div')({
@@ -308,73 +325,77 @@ export const InsuranceCoverage: React.SFC<Props> = (props) => (
       {(state) => (
         <Wrapper>
           <InnerWrapper>
-            <Card>
-              <Header>{props.headline}</Header>
-              <Switcher>
+            <CardWrapper>
+              <Card>
+                <HeaderWrapper>
+                  <Header>{props.headline}</Header>
+                </HeaderWrapper>
+                <Switcher>
+                  {PERILS.map((peril) => (
+                    <SwitcherItem
+                      key={peril.key}
+                      style={{
+                        backgroundColor:
+                          state.activeTab === peril.key
+                            ? colors.DARK_PURPLE
+                            : colors.LIGHT_GRAY,
+                        color:
+                          state.activeTab === peril.key
+                            ? colors.WHITE
+                            : colors.DARK_PURPLE,
+                      }}
+                      onClick={() => state.handleActiveTab(peril.key)}
+                    >
+                      {peril.name}
+                    </SwitcherItem>
+                  ))}
+                </Switcher>
                 {PERILS.map((peril) => (
-                  <SwitcherItem
-                    key={peril.key}
-                    style={{
-                      backgroundColor:
-                        state.activeTab === peril.key
-                          ? colors.DARK_PURPLE
-                          : colors.LIGHT_GRAY,
-                      color:
-                        state.activeTab === peril.key
-                          ? colors.WHITE
-                          : colors.DARK_PURPLE,
-                    }}
-                    onClick={() => state.handleActiveTab(peril.key)}
-                  >
-                    {peril.name}
-                  </SwitcherItem>
-                ))}
-              </Switcher>
-              {PERILS.map((peril) => (
-                <BigCol key={peril.key}>
-                  {state.activeTab === peril.key ? (
-                    <Row>
-                      {peril.icons.map((column) => (
-                        <Col
-                          key={column.key}
-                          onClick={() =>
-                            state.handleIconClick(
-                              peril.key,
-                              column.key,
-                              column.expandableText,
-                            )
-                          }
-                        >
-                          <PerilIcon
-                            src={
-                              state.showPerilNumber === peril.key &&
-                              state.showIconNumber === column.key
-                                ? column.icon
-                                : column.iconGrey
+                  <BigCol key={peril.key}>
+                    {state.activeTab === peril.key ? (
+                      <Row>
+                        {peril.icons.map((column) => (
+                          <Col
+                            key={column.key}
+                            onClick={() =>
+                              state.handleIconClick(
+                                peril.key,
+                                column.key,
+                                column.expandableText,
+                              )
                             }
-                          />
-                          <PerilTitle
-                            style={{
-                              color:
+                          >
+                            <PerilIcon
+                              src={
                                 state.showPerilNumber === peril.key &&
                                 state.showIconNumber === column.key
-                                  ? colors.DARK_PURPLE
-                                  : colors.DARK_GRAY,
-                            }}
-                          >
-                            {column.title}
-                          </PerilTitle>
-                        </Col>
-                      ))}
-                    </Row>
-                  ) : null}
-                </BigCol>
-              ))}
-              {state.showPerilNumber !== undefined &&
-              state.showIconNumber !== undefined ? (
-                <DropDownText>{state.textToShow}</DropDownText>
-              ) : null}
-            </Card>
+                                  ? column.icon
+                                  : column.iconGrey
+                              }
+                            />
+                            <PerilTitle
+                              style={{
+                                color:
+                                  state.showPerilNumber === peril.key &&
+                                  state.showIconNumber === column.key
+                                    ? colors.DARK_PURPLE
+                                    : colors.DARK_GRAY,
+                              }}
+                            >
+                              {column.title}
+                            </PerilTitle>
+                          </Col>
+                        ))}
+                      </Row>
+                    ) : null}
+                  </BigCol>
+                ))}
+                {state.showPerilNumber !== undefined &&
+                state.showIconNumber !== undefined ? (
+                  <DropDownText>{state.textToShow}</DropDownText>
+                ) : null}
+              </Card>
+            </CardWrapper>
           </InnerWrapper>
         </Wrapper>
       )}

@@ -1,19 +1,34 @@
 import { colors } from '@hedviginsurance/brand'
 import * as React from 'react'
 import styled from 'react-emotion'
-import { Card } from '.././components/Card'
-import { Header } from '.././components/Header'
-import { InnerWrapper } from '.././components/InnerWrapper'
-import { Wrapper } from '.././components/Wrapper'
+import { CardWrapper } from '../components/CardWrapper'
+import { HeaderWrapper } from '../components/HeaderWrapper'
+import { InnerWrapper } from '../components/InnerWrapper'
+import { Wrapper } from '../components/Wrapper'
 
 interface Props {
   title: string
   info: string
 }
 
+const Card = styled('div')({
+  marginTop: '70px',
+  paddingTop: '30px',
+  paddingBottom: '30px',
+  backgroundColor: colors.WHITE,
+  boxShadow: '0px 8px 15px -13px rgba(0,0,0,0.67)',
+  borderRadius: '10px',
+})
+
 const Table = styled('div')({
-  marginTop: '20',
-  marginBottom: '40',
+  marginTop: '20px',
+})
+
+const Header = styled('h1')({
+  color: colors.BLACK,
+  marginTop: '30px',
+  marginBottom: '30px',
+  fontSize: '32px',
 })
 
 const Row = styled('div')({
@@ -61,17 +76,21 @@ const AMOUNTS = [
 export const InsuredAmount: React.SFC<Props> = (props) => (
   <Wrapper>
     <InnerWrapper>
-      <Card>
-        <Header>{props.title}</Header>
-        <Table>
-          {AMOUNTS.map((amount) => (
-            <Row key={amount.key}>
-              <Col>{amount.title}</Col>
-              <Col>{amount.amount}</Col>
-            </Row>
-          ))}
-        </Table>
-      </Card>
+      <CardWrapper>
+        <Card>
+          <HeaderWrapper>
+            <Header>{props.title}</Header>
+          </HeaderWrapper>
+          <Table>
+            {AMOUNTS.map((amount) => (
+              <Row key={amount.key}>
+                <Col>{amount.title}</Col>
+                <Col>{amount.amount}</Col>
+              </Row>
+            ))}
+          </Table>
+        </Card>
+      </CardWrapper>
     </InnerWrapper>
   </Wrapper>
 )

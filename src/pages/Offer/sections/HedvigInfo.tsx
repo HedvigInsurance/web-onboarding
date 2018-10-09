@@ -1,28 +1,31 @@
 import { colors } from '@hedviginsurance/brand'
 import * as React from 'react'
 import styled from 'react-emotion'
-import { Header } from '.././components/Header'
-import { InnerWrapper } from '.././components/InnerWrapper'
-import { Wrapper } from '.././components/Wrapper'
+import { CardWrapper } from '../components/CardWrapper'
+import { HeaderWrapper } from '../components/HeaderWrapper'
+import { InnerWrapper } from '../components/InnerWrapper'
+import { Wrapper } from '../components/Wrapper'
 
 interface Props {
   title: string
 }
 
+const ROWWIDTH = 1200
+const PARAGRAPHWIDTH = 240
+
 const Card = styled('div')({
-  marginLeft: 'auto',
-  marginRight: 'auto',
+  paddingTop: '30px',
+  paddingBottom: '30px',
   backgroundColor: colors.WHITE,
-  minWidth: '1200px',
-  maxWidth: '1200px',
   boxShadow: '0px 8px 15px -13px rgba(0,0,0,0.67)',
   borderRadius: '10px',
-  '@media (max-width: 1200px)': {
-    width: '100%',
-    minWidth: '0%',
-    marginLeft: '0px',
-    marginRight: '0px',
-  },
+})
+
+const Header = styled('h1')({
+  color: colors.BLACK,
+  marginTop: '30px',
+  marginBottom: '30px',
+  fontSize: '32px',
 })
 
 const Image = styled('img')({
@@ -39,7 +42,6 @@ const Image = styled('img')({
 const Col = styled('div')({
   display: 'flex',
   flexDirection: 'column',
-  marginBottom: '30px',
 })
 
 const Row = styled('div')({
@@ -47,7 +49,7 @@ const Row = styled('div')({
   flexDirection: 'row',
   justifyContent: 'space-evenly',
   alignItems: 'baseline',
-  maxWidth: '1200px',
+  maxWidth: ROWWIDTH,
   '@media (max-width: 710px)': {
     flexDirection: 'column',
     alignItems: 'center',
@@ -64,7 +66,7 @@ const Title = styled('h3')({
 const Paragraph = styled('p')({
   fontSize: '14px',
   color: colors.DARK_GRAY,
-  maxWidth: '240px',
+  maxWidth: PARAGRAPHWIDTH,
 })
 
 const COLUMNS = [
@@ -94,18 +96,22 @@ const COLUMNS = [
 export const HedvigInfo: React.SFC<Props> = (props) => (
   <Wrapper>
     <InnerWrapper>
-      <Card>
-        <Header>{props.title}</Header>
-        <Row>
-          {COLUMNS.map((col) => (
-            <Col key={col.key}>
-              <Image src={col.image} />
-              <Title>{col.title}</Title>
-              <Paragraph>{col.paragraph}</Paragraph>
-            </Col>
-          ))}
-        </Row>
-      </Card>
+      <CardWrapper>
+        <Card>
+          <HeaderWrapper>
+            <Header>{props.title}</Header>
+          </HeaderWrapper>
+          <Row>
+            {COLUMNS.map((col) => (
+              <Col key={col.key}>
+                <Image src={col.image} />
+                <Title>{col.title}</Title>
+                <Paragraph>{col.paragraph}</Paragraph>
+              </Col>
+            ))}
+          </Row>
+        </Card>
+      </CardWrapper>
     </InnerWrapper>
   </Wrapper>
 )
