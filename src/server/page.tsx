@@ -37,7 +37,7 @@ const template = (body: string, initialState: any) => `
 `
 
 export const getPage: Koa.Middleware = async (ctx) => {
-  const apolloClient = createApolloClient(true)
+  const apolloClient = createApolloClient(true, ctx.state.requestUuid)
   const routerContext: StaticRouterContext = {}
   const serverApp = (
     <StaticRouter location={ctx.request.originalUrl} context={routerContext}>
