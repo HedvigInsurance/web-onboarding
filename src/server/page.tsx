@@ -8,7 +8,11 @@ import { renderToString } from 'react-dom/server'
 import { FilledContext, HelmetProvider } from 'react-helmet-async'
 import { StaticRouter, StaticRouterContext } from 'react-router'
 import { App } from '../App'
-import { createApolloClient, getGiraffeEndpoint } from '../utils/apolloClient'
+import {
+  createApolloClient,
+  getGiraffeEndpoint,
+  getGiraffeWsEndpoint,
+} from '../utils/apolloClient'
 import { createSession } from '../utils/sessionStorage'
 import { ServerCookieStorage } from '../utils/storage/ServerCookieStorage'
 
@@ -35,6 +39,7 @@ const template = (
   <div id="react-root">${body}</div>
   
   <script>
+    window.GIRAFFE_WS_ENDPOINT= ${JSON.stringify(getGiraffeWsEndpoint())}
     window.GIRAFFE_ENDPOINT= ${JSON.stringify(getGiraffeEndpoint())}
     window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
   </script>
