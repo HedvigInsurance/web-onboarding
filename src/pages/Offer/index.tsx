@@ -11,7 +11,7 @@ import { Legal } from './sections/LegalText'
 import { Offer } from './sections/Offer'
 import { PageDown } from './sections/PageDown'
 
-export const Wrapper = styled('div')({})
+const Wrapper = styled('div')({})
 
 interface State {
   getStartedButtonVisible: boolean
