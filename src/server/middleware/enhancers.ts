@@ -3,7 +3,7 @@ import * as uuidV4 from 'uuid/v4'
 import { loggerFactory } from '../logging'
 
 export const setRequestUuidMiddleware: Middleware = async (ctx, next) => {
-  ctx.state.requestUuid = uuidV4()
+  ctx.state.requestUuid = ctx.get('x-request-id') || uuidV4()
 
   await next()
 }
