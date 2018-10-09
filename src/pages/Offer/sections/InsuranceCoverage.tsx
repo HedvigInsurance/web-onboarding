@@ -80,8 +80,7 @@ const PerilTitle = styled('div')({
 })
 
 const DropDownText = styled('div')({
-  marginBottom: '60px',
-  marginTop: '0px',
+  marginTop: '30px',
   fontSize: '14px',
   textAlign: 'center',
   color: colors.DARK_GRAY,
