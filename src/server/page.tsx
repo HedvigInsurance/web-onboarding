@@ -22,7 +22,7 @@ const template = (body: string, initialState: any) => `
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Example web app</title>
+  <title>Bli Hedvigmedlem</title>
 </head>
 <body>
   <div id="react-root">${body}</div>
@@ -37,7 +37,7 @@ const template = (body: string, initialState: any) => `
 `
 
 export const getPage: Koa.Middleware = async (ctx) => {
-  const apolloClient = createApolloClient(true)
+  const apolloClient = createApolloClient(true, ctx.state.requestUuid)
   const routerContext: StaticRouterContext = {}
   const serverApp = (
     <StaticRouter location={ctx.request.originalUrl} context={routerContext}>

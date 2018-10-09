@@ -1,6 +1,8 @@
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloClient } from 'apollo-client'
+import { ApolloLink, concat } from 'apollo-link'
 import { BatchHttpLink } from 'apollo-link-batch-http'
+import * as uuidV4 from 'uuid/v4'
 import { notNullable } from './nullables'
 
 export const getGiraffeEndpoint = (): string => {
@@ -30,15 +32,24 @@ export const cache = (ssrMode: boolean) => {
   return new InMemoryCache().restore((window as any).__INITIAL_STATE__)
 }
 
-export const link = (ssrMode: boolean) =>
-  new BatchHttpLink({
-    uri: getGiraffeEndpoint(),
-    fetch: ssrMode ? require('node-fetch') : undefined,
+const requestIdMiddleware = (requestId?: string) =>
+  new ApolloLink((operation, forward) => {
+    operation.setContext({ headers: { 'x-request-id': requestId || uuidV4() } })
+    return notNullable(forward)(operation)
   })
 
-export const createApolloClient = (ssrMode: boolean) =>
+export const link = (ssrMode: boolean, requestId?: string) =>
+  concat(
+    requestIdMiddleware(requestId),
+    new BatchHttpLink({
+      uri: getGiraffeEndpoint(),
+      fetch: ssrMode ? require('node-fetch') : undefined,
+    }),
+  )
+
+export const createApolloClient = (ssrMode: boolean, requestId?: string) =>
   new ApolloClient({
     ssrMode,
     cache: cache(ssrMode),
-    link: link(ssrMode),
+    link: link(ssrMode, requestId),
   })

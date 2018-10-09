@@ -55,6 +55,7 @@
     "@types/yup": "^0.24.9",
     "apollo-cache-inmemory": "^1.2.10",
     "apollo-client": "^2.4.2",
+    "apollo-link": "^1.2.3",
     "apollo-link-batch-http": "^1.2.3",
     "constate": "^0.8.2",
     "cookie-storage": "^3.2.0",
@@ -94,5 +95,6 @@
       "prettier --write",
       "git add"
     ]
-  }
+  },
+  "sideEffects": false
 }
