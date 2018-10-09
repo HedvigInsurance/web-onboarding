@@ -108,15 +108,23 @@ export const CurrentInsuranceInput: React.SFC<CurrentInsuranceInputProps> = ({
             }
             replacements={{
               toggle: (
-                <UserSelectInput
-                  onChange={chatState.setHasCurrentInsurance}
-                  value={getHasCurrentInsuranceInputValue(chatState)}
-                  id="hasCurrentInsurance"
-                >
-                  <option value="select" disabled />
-                  <option value="yes">Ja</option>
-                  <option value="no">Nej</option>
-                </UserSelectInput>
+                <TranslationsConsumer textKey="CHAT_INPUT_CURRENT_INSURANCE_HAS_CURRENT_INSURANCE_TRUE">
+                  {(yesLabel) => (
+                    <TranslationsConsumer textKey="CHAT_INPUT_CURRENT_INSURANCE_HAS_CURRENT_INSURANCE_FALSE">
+                      {(noLabel) => (
+                        <UserSelectInput
+                          onChange={chatState.setHasCurrentInsurance}
+                          value={getHasCurrentInsuranceInputValue(chatState)}
+                          id="hasCurrentInsurance"
+                        >
+                          <option value="select" disabled />
+                          <option value="yes">{yesLabel}</option>
+                          <option value="no">{noLabel}</option>
+                        </UserSelectInput>
+                      )}
+                    </TranslationsConsumer>
+                  )}
+                </TranslationsConsumer>
               ),
               currentInsurerMaybe:
                 getCurrentInsuranceInputMaybe(chatState) || ' ',
