@@ -1,10 +1,10 @@
+import { WithStorageProps } from 'App'
 import { Provider } from 'constate'
 import { mount } from 'enzyme'
 import * as React from 'react'
 import { MockTextKeyProvider } from 'utils/MockTextKeyProvider'
 import { createSession } from 'utils/sessionStorage'
 import { MockStorage } from 'utils/storage/MockStorage'
-import { WithStorageProps } from '../../../App'
 import { Insurer } from '../state'
 import { CurrentInsuranceInput } from './CurrentInsuranceInput'
 

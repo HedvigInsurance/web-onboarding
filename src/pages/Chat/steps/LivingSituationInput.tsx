@@ -43,7 +43,7 @@ const validationSchema = yup
     numberOfPeople: yup
       .number()
       .moreThan(0)
-      .lessThan(7, 'UNKNOWN_ERROR') // This should never happen since it s a dropdown
+      .lessThan(7)
       .required(),
     apartmentType: yup
       .mixed()
