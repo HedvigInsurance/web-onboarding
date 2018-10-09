@@ -199,7 +199,7 @@ const PERILS = [
       {
         key: 0,
         title: 'Juridisk tvist',
-        icon: '/assets/offering/juridisk_tvist.svg',
+        icon: '/assets/offering/juridisk-tvist.svg',
         iconGrey: '/assets/offering/juridisk-tvist-grey.svg',
         expandableText:
           'Om du hamnar i domstol så täcker Hedvig kostnaden för ditt ombud, och andra rättegångskostnader. Hedvig täcker också om någon skulle kräva dig på skadestånd för att du har skadat någon, eller någons saker.',
