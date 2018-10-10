@@ -107,9 +107,7 @@ it('creates a session and an offer', async () => {
 
   await mockNetworkWait()
   await mockNetworkWait()
-  await new Promise((resolve) => {
-    process.nextTick(resolve)
-  })
+  await mockNetworkWait(2)
   wrapper.update()
 
   expect(wrapper.find('div').contains('success')).toBe(true)
@@ -163,6 +161,7 @@ it('creates an offer when already has a session token', async () => {
   wrapper.find('button').simulate('click')
 
   await mockNetworkWait()
+  await mockNetworkWait(2)
   wrapper.update()
 
   expect(wrapper.find('div').contains('success')).toBe(true)
