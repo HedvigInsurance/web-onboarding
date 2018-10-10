@@ -107,7 +107,7 @@ it('creates a session and an offer', async () => {
   wrapper.update()
 
   expect(wrapper.find('div').contains('success')).toBe(true)
-  expect(apolloClient.subscriptionClient.close).toHaveBeenCalledTimes(1)
+  expect(apolloClient!.subscriptionClient.close).toHaveBeenCalledTimes(1)
 })
 
 it('creates an offer when already has a session token', async () => {

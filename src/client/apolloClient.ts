@@ -1,11 +1,15 @@
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import ApolloClient from 'apollo-client/ApolloClient'
+import { ApolloClient } from 'apollo-client'
 import { WebSocketLink } from 'apollo-link-ws'
 import { CookieStorage } from 'cookie-storage'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { createSession, Session } from '../utils/sessionStorage'
 
 export const apolloClient = (() => {
+  if (typeof window === 'undefined') {
+    return undefined
+  }
+
   if (typeof WebSocket === 'undefined') {
     throw new Error("typeof WebSocket is undefined, can't connect to remote")
   }
@@ -19,10 +23,10 @@ export const apolloClient = (() => {
       }),
     },
   )
-  const apolloClient = new ApolloClient({
+  const client = new ApolloClient({
     cache: new InMemoryCache().restore((window as any).__INITIAL_STATE__),
     link: new WebSocketLink(subscriptionClient),
   })
 
-  return { subscriptionClient, apolloClient }
+  return { subscriptionClient, client }
 })()

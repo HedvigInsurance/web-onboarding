@@ -11,7 +11,7 @@ import { createSession } from './utils/sessionStorage'
 ReactDOM.hydrate(
   <BrowserRouter>
 <HelmetProvider>
-    <ApolloProvider client={apolloClient.apolloClient!}>
+    <ApolloProvider client={apolloClient!.apolloClient!}>
       <HotApp session={createSession(new CookieStorage({ expires: null }))} />
     </ApolloProvider>
 </HelmetProvider>

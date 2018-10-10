@@ -8,6 +8,8 @@ import { WithStorageProps } from 'utils/StorageContainer'
 import { ChatConversation } from './ChatConversation'
 import { ChatStep } from './state'
 
+jest.mock('client/apolloClient', () => ({ apolloClient: {} }))
+
 jest.useFakeTimers()
 it('shows first messages on initial render', () => {
   const wrapper = mount(

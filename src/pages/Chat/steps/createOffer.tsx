@@ -119,7 +119,10 @@ export const CreateOffer: React.SFC<{ children: CreateOfferChild }> = ({
                             storageState.setToken(data.createSession)
                             // async magic to not interrupt connection while doing updating store
                             setTimeout(() => {
-                              apolloClient.subscriptionClient!.close(true, true)
+                              apolloClient!.subscriptionClient!.close(
+                                true,
+                                true,
+                              )
                               actualCreateOffer()
                             }, 0)
                           },

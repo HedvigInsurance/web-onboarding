@@ -1,5 +1,5 @@
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import ApolloClient from 'apollo-client/ApolloClient'
+import { ApolloClient } from 'apollo-client'
 import { ApolloLink, concat } from 'apollo-link'
 import { BatchHttpLink } from 'apollo-link-batch-http'
 import * as uuidV4 from 'uuid/v4'
