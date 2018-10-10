@@ -11,7 +11,6 @@ import { App } from '../App'
 import {
   createServerApolloClient,
   getGiraffeEndpoint,
-  getGiraffeWsEndpoint,
 } from '../utils/apolloClient'
 import { createSession } from '../utils/sessionStorage'
 import { ServerCookieStorage } from '../utils/storage/ServerCookieStorage'
@@ -39,8 +38,18 @@ const template = (
   <div id="react-root">${body}</div>
   
   <script>
-    window.GIRAFFE_WS_ENDPOINT= ${JSON.stringify(getGiraffeWsEndpoint())}
-    window.GIRAFFE_ENDPOINT= ${JSON.stringify(getGiraffeEndpoint())}
+    window.GIRAFFE_WS_ENDPOINT= ${JSON.stringify(
+      getGiraffeEndpoint(
+        'GIRAFFE_WS_ENDPOINT',
+        'wss://graphql.dev.hedvigit.com/subscriptions',
+      ),
+    )}
+    window.GIRAFFE_ENDPOINT= ${JSON.stringify(
+      getGiraffeEndpoint(
+        'GIRAFFE_ENDPOINT',
+        'https://graphql.dev.hedvigit.com/graphql',
+      ),
+    )}
     window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
   </script>
   <script src="${scriptLocation}"></script>

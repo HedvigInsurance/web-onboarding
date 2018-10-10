@@ -9,14 +9,20 @@ import {
   setRequestUuidMiddleware,
 } from './server/middleware/enhancers'
 import { getPage } from './server/page'
-import { getGiraffeEndpoint, getGiraffeWsEndpoint } from './utils/apolloClient'
+import { getGiraffeEndpoint } from './utils/apolloClient'
 import { notNullable } from './utils/nullables'
 
 const getPort = () => (process.env.PORT ? Number(process.env.PORT) : 8080)
 
 appLogger.info(`Booting server on ${getPort()} 👢`)
 appLogger.info(
-  `Using giraffe at batchHttp:"${getGiraffeEndpoint()}" ws:"${getGiraffeWsEndpoint()}" 🦒`,
+  `Using giraffe at batchHttp:"${getGiraffeEndpoint(
+    'GIRAFFE_ENDPOINT',
+    'https://graphql.dev.hedvigit.com/graphql',
+  )}" ws:"${getGiraffeEndpoint(
+    'GIRAFFE_WS_ENDPOINT',
+    'wss://graphql.dev.hedvigit.com/subscriptions',
+  )}" 🦒`,
 )
 
 const server = createKoaServer({
