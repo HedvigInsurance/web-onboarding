@@ -3,10 +3,12 @@ import { ApolloClient } from 'apollo-client'
 import { ApolloLink, concat } from 'apollo-link'
 import { BatchHttpLink } from 'apollo-link-batch-http'
 import { WebSocketLink } from 'apollo-link-ws'
+import { CookieStorage } from 'cookie-storage'
 import * as React from 'react'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 import * as uuidV4 from 'uuid/v4'
 import { notNullable } from './nullables'
+import { createSession, Session } from './sessionStorage'
 
 export const getGiraffeEndpoint = (): string => {
   if (
@@ -92,9 +94,15 @@ export const createServerApolloClient = (requestId?: string) =>
   })
 
 export const createClientApolloClient = () => {
+  if (typeof WebSocket === 'undefined' || process.env.NODE_ENV === 'test') {
+    return undefined
+  }
   const subscriptionClient = new SubscriptionClient(getGiraffeWsEndpoint(), {
     reconnect: true,
-    connectionParams: () => ({ Authorization: 'blargh' }),
+    connectionParams: () => ({
+      Authorization: createSession<Session>(new CookieStorage()).getSession()!
+        .token,
+    }),
   })
   const apolloClient = new ApolloClient({
     cache: new InMemoryCache().restore((window as any).__INITIAL_STATE),
@@ -106,8 +114,11 @@ export const createClientApolloClient = () => {
 
 export const createApolloSubscriptionContext = () =>
   React.createContext<
-    Partial<{
-      subscriptionClient: SubscriptionClient
-      apolloClient: ApolloClient<any>
-    }>
+    Partial<
+      | {
+          subscriptionClient: SubscriptionClient
+          apolloClient: ApolloClient<any>
+        }
+      | undefined
+    >
   >(createClientApolloClient())

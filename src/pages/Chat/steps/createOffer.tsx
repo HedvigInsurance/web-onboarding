@@ -1,0 +1,187 @@
+import { ApolloError } from 'apollo-client'
+import { ApolloSubscriptionContext } from 'client/ApolloSubscriptionContext'
+import { DocumentNode } from 'graphql'
+import gql from 'graphql-tag'
+import * as React from 'react'
+import { Mutation } from 'react-apollo'
+import { StorageContainer } from '../../../utils/StorageContainer'
+import { ChatContainer } from '../state'
+
+export interface CreateOfferMutationVariables {
+  firstName: string
+  lastName: string
+  age: number
+  address: string
+  postalNumber: string
+  city: string
+  insuranceType: string
+  squareMeters: number
+  personsInHousehold: number
+  previousInsurer?: string
+}
+
+export const CREATE_OFFER_MUTATION: DocumentNode = gql`
+  mutation CreateOffer(
+    $firstName: String!
+    $lastName: String!
+    $age: Int!
+    $address: String!
+    $postalNumber: String!
+    $city: String!
+    $insuranceType: InsuranceType!
+    $squareMeters: Int!
+    $personsInHousehold: Int!
+    $previousInsurer: String
+  ) {
+    createOffer(
+      details: {
+        firstName: $firstName
+        lastName: $lastName
+        age: $age
+        address: $address
+        postalNumber: $postalNumber
+        city: $city
+        insuranceType: $insuranceType
+        squareMeters: $squareMeters
+        personsInHousehold: $personsInHousehold
+        previousInsurer: $previousInsurer
+      }
+    )
+  }
+`
+
+export const CREATE_SESSION_TOKEN_MUTATION: DocumentNode = gql`
+  mutation CreateSessionToken {
+    createSession
+  }
+`
+
+export type CreateOfferChild = (
+  mutate: () => void,
+  props: {
+    data?: string
+    error?: ApolloError
+    called: boolean
+    loading: boolean
+  },
+) => React.ReactNode
+
+export const CreateOffer: React.SFC<{ children: CreateOfferChild }> = ({
+  children,
+}) => (
+  <ApolloSubscriptionContext.Consumer>
+    {(apolloSubscriptionContextMaybe) => (
+      <StorageContainer>
+        {(storageState) => (
+          <ChatContainer>
+            {(chatState) => (
+              <Mutation<{ createSession: string }, void>
+                mutation={CREATE_SESSION_TOKEN_MUTATION}
+              >
+                {(createSession, createSessionProps) => (
+                  <Mutation<
+                    { createOffer: string },
+                    CreateOfferMutationVariables
+                  >
+                    mutation={CREATE_OFFER_MUTATION}
+                  >
+                    {(createOffer, createOfferProps) =>
+                      children(
+                        () => {
+                          const actualCreateOffer = () =>
+                            createOffer({
+                              variables: {
+                                firstName: chatState.nameAge.firstName,
+                                lastName: chatState.nameAge.lastName,
+                                age: Number(chatState.nameAge.age),
+                                address:
+                                  chatState.livingSituation.streetAddress,
+                                postalNumber:
+                                  chatState.livingSituation.postalCode,
+                                city: 'Storstan',
+                                personsInHousehold: Number(
+                                  chatState.livingSituation.numberOfPeople,
+                                ),
+                                squareMeters: Number(
+                                  chatState.livingSituation.size,
+                                ),
+                                insuranceType: chatState.livingSituation
+                                  .apartmentType!,
+                                previousInsurer: chatState.currentInsurance
+                                  .hasCurrentInsurance
+                                  ? chatState.currentInsurance.currentInsurer
+                                  : undefined,
+                              },
+                            })
+
+                          if (
+                            !storageState.session.getSession()!.token &&
+                            !createSessionProps.called
+                          ) {
+                            createSession({
+                              update: (_, { data }) => {
+                                if (!data) {
+                                  return
+                                }
+                                storageState.setToken(data.createSession)
+                                // async magic to not interrupt connection while doing updateing store
+                                setTimeout(() => {
+                                  apolloSubscriptionContextMaybe!.subscriptionClient!.close(
+                                    true,
+                                    true,
+                                  )
+                                  actualCreateOffer()
+                                }, 0)
+                              },
+                            })
+                            return
+                          }
+
+                          actualCreateOffer()
+                        },
+                        {
+                          data: Boolean(createOfferProps.data)
+                            ? createOfferProps.data!.createOffer
+                            : undefined,
+                          called: createOfferProps.called,
+                          error:
+                            createOfferProps.error || createSessionProps.error,
+                          loading:
+                            createOfferProps.loading ||
+                            createSessionProps.loading,
+                        },
+                      )
+                    }
+                  </Mutation>
+                )}
+              </Mutation>
+            )}
+          </ChatContainer>
+        )}
+      </StorageContainer>
+    )}
+  </ApolloSubscriptionContext.Consumer>
+)
+
+export const CreateOfferComponent = () => (
+  <CreateOffer>
+    {(mutate, { data, error, loading, called }) => {
+      switch (true) {
+        case (data === null || data === undefined) && !loading:
+          return <button onClick={() => mutate()}>Create offer</button>
+
+        case loading:
+          return <div>loading</div>
+
+        case Boolean(error):
+          return <div>error</div>
+
+        case called && Boolean(data):
+          return <div>success</div>
+
+        default:
+          return null
+      }
+    }}
+  </CreateOffer>
+)

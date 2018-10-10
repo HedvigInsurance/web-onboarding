@@ -7,7 +7,6 @@ import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter } from 'react-router-dom'
 import { HotApp } from './App'
 import { createClientApolloClient } from './utils/apolloClient'
-import { notNullable } from './utils/nullables'
 import { createSession } from './utils/sessionStorage'
 
 ReactDOM.hydrate(
@@ -15,8 +14,8 @@ ReactDOM.hydrate(
 <HelmetProvider>
     <ApolloSubscriptionContext.Provider value={createClientApolloClient()}>
       <ApolloSubscriptionContext.Consumer>
-        {({ apolloClient }) => (
-          <ApolloProvider client={notNullable(apolloClient)}>
+        {(subscriptionContext) => (
+          <ApolloProvider client={subscriptionContext!.apolloClient!}>
             <HotApp
               session={createSession(new CookieStorage({ expires: null }))}
             />
