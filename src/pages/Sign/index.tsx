@@ -5,7 +5,7 @@ import { SignUp } from './sections/SignUp'
 
 const Wrapper = styled('div')({})
 
-export const Sign: React.SFC<{}> = () => (
+export const Sign: React.SFC = () => (
   <Wrapper>
     <TopBar progress={2} showButton={false} />
     <SignUp
