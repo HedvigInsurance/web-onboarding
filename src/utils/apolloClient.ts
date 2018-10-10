@@ -76,7 +76,7 @@ export const createClientApolloClient = () => {
     },
   )
   const apolloClient = new ApolloClient({
-    cache: new InMemoryCache().restore((window as any).__INITIAL_STATE),
+    cache: new InMemoryCache().restore((window as any).__INITIAL_STATE__),
     link: new WebSocketLink(subscriptionClient),
   })
 
