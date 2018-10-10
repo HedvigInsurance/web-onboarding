@@ -9,6 +9,8 @@ import { Greet } from './steps/Greet'
 import { LivingSituationInput } from './steps/LivingSituationInput'
 import { NameAgeInput } from './steps/NameAgeInput'
 
+jest.mock('client/apolloClient', () => ({ apolloClient: {} }))
+
 export const ChatConversation: React.SFC = () => (
   <ChatContainer>
     {({

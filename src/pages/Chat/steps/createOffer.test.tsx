@@ -1,9 +1,8 @@
-import { ApolloSubscriptionContext } from 'client/ApolloSubscriptionContext'
+import { apolloClient } from 'client/apolloClient'
 import { Provider } from 'constate'
 import { mount } from 'enzyme'
 import * as React from 'react'
 import { MockedProvider, MockedResponse } from 'react-apollo/test-utils'
-import { SubscriptionClient } from 'subscriptions-transport-ws'
 import {
   createSession,
   IsomorphicSessionStorage,
@@ -42,12 +41,15 @@ const mockState = (): ChatState => ({
   visibleSteps: [],
 })
 
-it('creates a session and an offer', async () => {
-  const closeStub = jest.fn()
-  const subscriptionClientStub = {
-    close: closeStub,
-  }
+jest.mock('client/apolloClient', () => ({
+  apolloClient: {
+    subscriptionClient: {
+      close: jest.fn(),
+    },
+  },
+}))
 
+it('creates a session and an offer', async () => {
   const mockedRequests: MockedResponse[] = [
     {
       request: {
@@ -80,27 +82,21 @@ it('creates a session and an offer', async () => {
     },
   ]
   const wrapper = mount(
-    <ApolloSubscriptionContext.Provider
-      value={{
-        subscriptionClient: (subscriptionClientStub as any) as SubscriptionClient,
-      }}
-    >
-      <MockedProvider mocks={mockedRequests}>
-        <Provider<{
-          chatConversation: ChatState
-          storage: { session: IsomorphicSessionStorage<Session> }
-        }>
-          initialState={{
-            chatConversation: mockState(),
-            storage: {
-              session: createSession(new MockStorage({})),
-            },
-          }}
-        >
-          <CreateOfferComponent />
-        </Provider>
-      </MockedProvider>
-    </ApolloSubscriptionContext.Provider>,
+    <MockedProvider mocks={mockedRequests}>
+      <Provider<{
+        chatConversation: ChatState
+        storage: { session: IsomorphicSessionStorage<Session> }
+      }>
+        initialState={{
+          chatConversation: mockState(),
+          storage: {
+            session: createSession(new MockStorage({})),
+          },
+        }}
+      >
+        <CreateOfferComponent />
+      </Provider>
+    </MockedProvider>,
   )
 
   wrapper.find('button').simulate('click')
@@ -111,6 +107,7 @@ it('creates a session and an offer', async () => {
   wrapper.update()
 
   expect(wrapper.find('div').contains('success')).toBe(true)
+  expect(apolloClient.subscriptionClient.close).toHaveBeenCalledTimes(1)
 })
 
 it('creates an offer when already has a session token', async () => {

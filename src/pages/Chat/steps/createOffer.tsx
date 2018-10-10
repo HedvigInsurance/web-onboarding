@@ -1,5 +1,5 @@
 import { ApolloError } from 'apollo-client'
-import { ApolloSubscriptionContext } from 'client/ApolloSubscriptionContext'
+import { apolloClient } from 'client/apolloClient'
 import { DocumentNode } from 'graphql'
 import gql from 'graphql-tag'
 import * as React from 'react'
@@ -69,98 +69,84 @@ export type CreateOfferChild = (
 export const CreateOffer: React.SFC<{ children: CreateOfferChild }> = ({
   children,
 }) => (
-  <ApolloSubscriptionContext.Consumer>
-    {(apolloSubscriptionContextMaybe) => (
-      <StorageContainer>
-        {(storageState) => (
-          <ChatContainer>
-            {(chatState) => (
-              <Mutation<{ createSession: string }, void>
-                mutation={CREATE_SESSION_TOKEN_MUTATION}
+  <StorageContainer>
+    {(storageState) => (
+      <ChatContainer>
+        {(chatState) => (
+          <Mutation<{ createSession: string }, void>
+            mutation={CREATE_SESSION_TOKEN_MUTATION}
+          >
+            {(createSession, createSessionProps) => (
+              <Mutation<{ createOffer: string }, CreateOfferMutationVariables>
+                mutation={CREATE_OFFER_MUTATION}
               >
-                {(createSession, createSessionProps) => (
-                  <Mutation<
-                    { createOffer: string },
-                    CreateOfferMutationVariables
-                  >
-                    mutation={CREATE_OFFER_MUTATION}
-                  >
-                    {(createOffer, createOfferProps) =>
-                      children(
-                        () => {
-                          const actualCreateOffer = () =>
-                            createOffer({
-                              variables: {
-                                firstName: chatState.nameAge.firstName,
-                                lastName: chatState.nameAge.lastName,
-                                age: Number(chatState.nameAge.age),
-                                address:
-                                  chatState.livingSituation.streetAddress,
-                                postalNumber:
-                                  chatState.livingSituation.postalCode,
-                                city: 'Storstan',
-                                personsInHousehold: Number(
-                                  chatState.livingSituation.numberOfPeople,
-                                ),
-                                squareMeters: Number(
-                                  chatState.livingSituation.size,
-                                ),
-                                insuranceType: chatState.livingSituation
-                                  .apartmentType!,
-                                previousInsurer: chatState.currentInsurance
-                                  .hasCurrentInsurance
-                                  ? chatState.currentInsurance.currentInsurer
-                                  : undefined,
-                              },
-                            })
+                {(createOffer, createOfferProps) =>
+                  children(
+                    () => {
+                      const actualCreateOffer = () =>
+                        createOffer({
+                          variables: {
+                            firstName: chatState.nameAge.firstName,
+                            lastName: chatState.nameAge.lastName,
+                            age: Number(chatState.nameAge.age),
+                            address: chatState.livingSituation.streetAddress,
+                            postalNumber: chatState.livingSituation.postalCode,
+                            city: 'Storstan',
+                            personsInHousehold: Number(
+                              chatState.livingSituation.numberOfPeople,
+                            ),
+                            squareMeters: Number(
+                              chatState.livingSituation.size,
+                            ),
+                            insuranceType: chatState.livingSituation
+                              .apartmentType!,
+                            previousInsurer: chatState.currentInsurance
+                              .hasCurrentInsurance
+                              ? chatState.currentInsurance.currentInsurer
+                              : undefined,
+                          },
+                        })
 
-                          if (
-                            !storageState.session.getSession()!.token &&
-                            !createSessionProps.called
-                          ) {
-                            createSession({
-                              update: (_, { data }) => {
-                                if (!data) {
-                                  return
-                                }
-                                storageState.setToken(data.createSession)
-                                // async magic to not interrupt connection while doing updateing store
-                                setTimeout(() => {
-                                  apolloSubscriptionContextMaybe!.subscriptionClient!.close(
-                                    true,
-                                    true,
-                                  )
-                                  actualCreateOffer()
-                                }, 0)
-                              },
-                            })
-                            return
-                          }
+                      if (
+                        !storageState.session.getSession()!.token &&
+                        !createSessionProps.called
+                      ) {
+                        createSession({
+                          update: (_, { data }) => {
+                            if (!data) {
+                              return
+                            }
+                            storageState.setToken(data.createSession)
+                            // async magic to not interrupt connection while doing updating store
+                            setTimeout(() => {
+                              apolloClient.subscriptionClient!.close(true, true)
+                              actualCreateOffer()
+                            }, 0)
+                          },
+                        })
+                        return
+                      }
 
-                          actualCreateOffer()
-                        },
-                        {
-                          data: Boolean(createOfferProps.data)
-                            ? createOfferProps.data!.createOffer
-                            : undefined,
-                          called: createOfferProps.called,
-                          error:
-                            createOfferProps.error || createSessionProps.error,
-                          loading:
-                            createOfferProps.loading ||
-                            createSessionProps.loading,
-                        },
-                      )
-                    }
-                  </Mutation>
-                )}
+                      actualCreateOffer()
+                    },
+                    {
+                      data: Boolean(createOfferProps.data)
+                        ? createOfferProps.data!.createOffer
+                        : undefined,
+                      called: createOfferProps.called,
+                      error: createOfferProps.error || createSessionProps.error,
+                      loading:
+                        createOfferProps.loading || createSessionProps.loading,
+                    },
+                  )
+                }
               </Mutation>
             )}
-          </ChatContainer>
+          </Mutation>
         )}
-      </StorageContainer>
+      </ChatContainer>
     )}
-  </ApolloSubscriptionContext.Consumer>
+  </StorageContainer>
 )
 
 export const CreateOfferComponent = () => (

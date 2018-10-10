@@ -8,12 +8,10 @@ import { renderToString } from 'react-dom/server'
 import { FilledContext, HelmetProvider } from 'react-helmet-async'
 import { StaticRouter, StaticRouterContext } from 'react-router'
 import { App } from '../App'
-import {
-  createServerApolloClient,
-  getGiraffeEndpoint,
-} from '../utils/apolloClient'
+import { getGiraffeEndpoint } from '../utils/apolloClient'
 import { createSession } from '../utils/sessionStorage'
 import { ServerCookieStorage } from '../utils/storage/ServerCookieStorage'
+import { createServerApolloClient } from './apolloClient'
 
 const scriptLocation = getScriptLocation({
   statsLocation: path.resolve(__dirname, 'assets'),
