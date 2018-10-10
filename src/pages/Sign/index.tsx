@@ -13,7 +13,7 @@ export const Sign: React.SFC<{}> = () => (
       adress={'Fantastiska Gatan 23B'}
       buttonText={'Signera med BankID'}
       inputTitleEmail={'Email'}
-      inputTitlePersonalNumber={'Personnummer'}
+      inputTitlePersonalNumber={'Personnummer (10 siffror)'}
       errorMessage={
         'Något verkar ha gått snett :( Är du säker på att du fyllt i alla uppgifter rätt?'
       }

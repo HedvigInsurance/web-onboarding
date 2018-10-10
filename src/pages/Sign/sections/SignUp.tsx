@@ -1,5 +1,5 @@
 import { colors, fonts } from '@hedviginsurance/brand'
-import { ActionMap, Container } from 'constate'
+import { Field, Form, Formik } from 'formik'
 import * as React from 'react'
 import styled from 'react-emotion'
 
@@ -60,7 +60,7 @@ const InputTitle = styled('div')({
   fontSize: '20px',
 })
 
-const Form = styled('form')({
+const CustomForm = styled(Form)({
   display: 'flex',
   flexDirection: 'column',
   maxWidth: FORMWIDTH,
@@ -68,7 +68,7 @@ const Form = styled('form')({
   marginRight: 'auto',
 })
 
-const InputField = styled('input')({
+const InputField = styled(Field)({
   marginTop: '10px',
   marginBottom: '10px',
   minWidth: FORMWIDTH,
@@ -102,79 +102,81 @@ const ErrorText = styled('div')({
   fontSize: '16px',
 })
 
+const ErrorMessage = styled('div')({
+  minHeight: '20px',
+  fontSize: '16px',
+})
+
 interface Props {
   title: string
   adress: string
   buttonText: string
   inputTitleEmail: string
   inputTitlePersonalNumber: string
-  errorMessage: string
+  errorMessage?: string
 }
 
-interface State {
-  email: string
-  personalNumber: number
-  signUpError: string
+const validatePersonalNumber = (value: any) => {
+  let errorMessage
+  if (!/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/i.test(value)) {
+    errorMessage = 'Whops! Är personnummret 10 siffor?'
+  }
+  return errorMessage
 }
 
-interface Actions {
-  handleSignup: () => void
-  updateEmail: (value: string) => void
-  updatePersonalNumber: (value: number) => void
+const validateEmail = (value: any) => {
+  let errorMessage
+  if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
+    errorMessage = 'Whops! Formatet verkar vara fel på angiven email.'
+  }
+  return errorMessage
 }
 
 export const SignUp: React.SFC<Props> = (props) => (
   <OuterWrapper>
-    <Container<State, ActionMap<State, Actions>>
-      initialState={{
-        email: undefined,
-        personalNumber: undefined,
-        signUpError: undefined,
-      }}
-      actions={{
-        handleSignup: () => () => ({}),
-        updateEmail: (value: string) => () => ({
-          email: value,
-        }),
-        updatePersonalNumber: (value: number) => () => ({
-          personalNumber: value,
-        }),
-      }}
-    >
-      {(state) => (
-        <CardWrapper>
-          <Card>
-            <HeaderWrapper>
-              <Header>
-                {props.title} {props.adress}
-              </Header>
-            </HeaderWrapper>
-            <Form onSubmit={state.handleSignup}>
+    <CardWrapper>
+      <Card>
+        <HeaderWrapper>
+          <Header>
+            {props.title} {props.adress}
+          </Header>
+        </HeaderWrapper>
+        <Formik
+          initialValues={{
+            email: '',
+            personalNumber: '',
+          }}
+          onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
+        >
+          {({ errors, touched }) => (
+            <CustomForm>
               <InputTitle>{props.inputTitleEmail}</InputTitle>
-              <InputField
-                type="text"
-                value={state.email}
-                onChange={() => state.updateEmail(state.email)}
-              />
+              <InputField validate={validateEmail} name="email" />
+              {errors.email && touched.email ? (
+                <ErrorMessage>{errors.email}</ErrorMessage>
+              ) : (
+                <ErrorMessage />
+              )}
               <InputTitle>{props.inputTitlePersonalNumber}</InputTitle>
               <InputField
-                type="text"
-                placeholder="ååååmmdd-nnnn"
-                value={state.personalNumber}
-                onChange={() =>
-                  state.updatePersonalNumber(state.personalNumber)
-                }
+                validate={validatePersonalNumber}
+                name="personalNumber"
               />
+              {errors.personalNumber && touched.personalNumber ? (
+                <ErrorMessage>{errors.personalNumber}</ErrorMessage>
+              ) : (
+                <ErrorMessage />
+              )}
               <GetInsuredButton>
                 <InputSubmit type="submit" value={props.buttonText} />
               </GetInsuredButton>
-              {state.signUpError ? (
+              {props.errorMessage ? (
                 <ErrorText>{props.errorMessage}</ErrorText>
               ) : null}
-            </Form>
-          </Card>
-        </CardWrapper>
-      )}
-    </Container>
+            </CustomForm>
+          )}
+        </Formik>
+      </Card>
+    </CardWrapper>
   </OuterWrapper>
 )
