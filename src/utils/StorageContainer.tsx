@@ -10,7 +10,7 @@ export interface WithStorageProps {
   storage: StorageState
 }
 
-interface StorageEffects {
+export interface StorageEffects {
   setToken: (token: string) => void
 }
 

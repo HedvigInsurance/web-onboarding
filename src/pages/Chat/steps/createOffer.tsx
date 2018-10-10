@@ -3,9 +3,13 @@ import { apolloClient } from 'client/apolloClient'
 import { DocumentNode } from 'graphql'
 import gql from 'graphql-tag'
 import * as React from 'react'
-import { Mutation } from 'react-apollo'
-import { StorageContainer } from '../../../utils/StorageContainer'
-import { ChatContainer } from '../state'
+import { Mutation, MutationFn } from 'react-apollo'
+import {
+  StorageContainer,
+  StorageEffects,
+  StorageState,
+} from 'utils/StorageContainer'
+import { ChatContainer, State as ChatState } from '../state'
 
 export interface CreateOfferMutationVariables {
   firstName: string
@@ -55,6 +59,41 @@ export const CREATE_SESSION_TOKEN_MUTATION: DocumentNode = gql`
     createSession
   }
 `
+const getCreateOfferParamsFromChatState = (
+  chatState: ChatState,
+): CreateOfferMutationVariables => ({
+  firstName: chatState.nameAge.firstName,
+  lastName: chatState.nameAge.lastName,
+  age: Number(chatState.nameAge.age),
+  address: chatState.livingSituation.streetAddress,
+  postalNumber: chatState.livingSituation.postalCode,
+  city: 'Storstan',
+  personsInHousehold: Number(chatState.livingSituation.numberOfPeople),
+  squareMeters: Number(chatState.livingSituation.size),
+  insuranceType: chatState.livingSituation.apartmentType!,
+  previousInsurer: chatState.currentInsurance.hasCurrentInsurance
+    ? chatState.currentInsurance.currentInsurer
+    : undefined,
+})
+
+const onSessionUpdate = (
+  storageState: StorageState & StorageEffects,
+  createOffer: MutationFn<
+    { createOffer: string },
+    CreateOfferMutationVariables
+  >,
+  chatState: ChatState,
+) => (_: any, { data }: { data?: { createSession: string } }) => {
+  if (!data) {
+    return
+  }
+  storageState.setToken(data.createSession)
+  // async magic to not interrupt connection while updating the store
+  setTimeout(() => {
+    apolloClient!.subscriptionClient!.close(true, true)
+    createOffer({ variables: getCreateOfferParamsFromChatState(chatState) })
+  }, 0)
+}
 
 export type CreateOfferChild = (
   mutate: () => void,
@@ -83,54 +122,23 @@ export const CreateOffer: React.SFC<{ children: CreateOfferChild }> = ({
                 {(createOffer, createOfferProps) =>
                   children(
                     () => {
-                      const actualCreateOffer = () =>
-                        createOffer({
-                          variables: {
-                            firstName: chatState.nameAge.firstName,
-                            lastName: chatState.nameAge.lastName,
-                            age: Number(chatState.nameAge.age),
-                            address: chatState.livingSituation.streetAddress,
-                            postalNumber: chatState.livingSituation.postalCode,
-                            city: 'Storstan',
-                            personsInHousehold: Number(
-                              chatState.livingSituation.numberOfPeople,
-                            ),
-                            squareMeters: Number(
-                              chatState.livingSituation.size,
-                            ),
-                            insuranceType: chatState.livingSituation
-                              .apartmentType!,
-                            previousInsurer: chatState.currentInsurance
-                              .hasCurrentInsurance
-                              ? chatState.currentInsurance.currentInsurer
-                              : undefined,
-                          },
-                        })
-
                       if (
                         !storageState.session.getSession()!.token &&
                         !createSessionProps.called
                       ) {
                         createSession({
-                          update: (_, { data }) => {
-                            if (!data) {
-                              return
-                            }
-                            storageState.setToken(data.createSession)
-                            // async magic to not interrupt connection while doing updating store
-                            setTimeout(() => {
-                              apolloClient!.subscriptionClient!.close(
-                                true,
-                                true,
-                              )
-                              actualCreateOffer()
-                            }, 0)
-                          },
+                          update: onSessionUpdate(
+                            storageState,
+                            createOffer,
+                            chatState,
+                          ),
                         })
                         return
                       }
 
-                      actualCreateOffer()
+                      createOffer({
+                        variables: getCreateOfferParamsFromChatState(chatState),
+                      })
                     },
                     {
                       data: Boolean(createOfferProps.data)
