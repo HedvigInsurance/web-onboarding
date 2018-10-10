@@ -93,7 +93,7 @@ const BarButtonContainer = styled('div')({
 
 interface Props {
   buttonText?: string
-  progress: number
+  progress?: number
   showButton: boolean
 }
 
@@ -119,17 +119,21 @@ export const TopBar: React.SFC<Props> = (props) => (
         <Logo src="/assets/offering/logo.png" />
       </BarContainer>
       <BarProgressContainer>
-        {progressStrings.map((text) => (
-          <ProgressLabel
-            key={text.key}
-            style={{
-              color:
-                text.key === props.progress ? colors.BLACK : colors.DARK_GRAY,
-            }}
-          >
-            {text.progressText}
-          </ProgressLabel>
-        ))}
+        {props.progress
+          ? progressStrings.map((text) => (
+              <ProgressLabel
+                key={text.key}
+                style={{
+                  color:
+                    text.key === props.progress
+                      ? colors.BLACK
+                      : colors.DARK_GRAY,
+                }}
+              >
+                {text.progressText}
+              </ProgressLabel>
+            ))
+          : null}
       </BarProgressContainer>
       {!props.showButton ? (
         <BarButtonContainer>
