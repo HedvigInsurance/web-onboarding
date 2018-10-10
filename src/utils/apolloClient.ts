@@ -16,18 +16,15 @@ export const getGiraffeEndpoint = (
 ) => {
   if (
     typeof window !== 'undefined' &&
-    (window as any).GIRAFFE_ENDPOINT !== undefined
+    (window as any)[constant] !== undefined
   ) {
     return (window as any)[constant]
   } else if (process.env.NODE_ENV === 'development') {
     return process.env[constant] || defaultEndpoint
-  } else if (
-    process.env.NODE_ENV !== 'development' &&
-    !process.env.GIRAFFE_ENDPOINT
-  ) {
+  } else if (process.env.NODE_ENV !== 'development' && !process.env[constant]) {
     throw new Error('Unable to find giraffe endpoint 🦒')
   } else {
-    return notNullable(process.env.GIRAFFE_ENDPOINT)
+    return notNullable(process.env[constant])
   }
 }
 
@@ -54,8 +51,16 @@ export const createServerApolloClient = (requestId?: string) =>
   })
 
 export const createClientApolloClient = () => {
-  if (typeof WebSocket === 'undefined' || process.env.NODE_ENV === 'test') {
+  if (process.env.NODE_ENV === 'test') {
     return undefined
+  }
+
+  if (typeof window === 'undefined') {
+    return undefined
+  }
+
+  if (typeof WebSocket === 'undefined') {
+    throw new Error("typeof WebSocket is undefined, can't connect to remote")
   }
   const subscriptionClient = new SubscriptionClient(
     getGiraffeEndpoint(
