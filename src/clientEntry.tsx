@@ -11,9 +11,17 @@ import { createSession } from './utils/sessionStorage'
 ReactDOM.hydrate(
   <BrowserRouter>
 <HelmetProvider>
-    <ApolloProvider client={createClientApolloClient()!.apolloClient}>
-      <HotApp session={createSession(new CookieStorage({ expires: null }))} />
-    </ApolloProvider>
+    <ApolloSubscriptionContext.Provider value={createClientApolloClient()}>
+      <ApolloSubscriptionContext.Consumer>
+        {(subscriptionContext) => (
+          <ApolloProvider client={subscriptionContext!.apolloClient!}>
+            <HotApp
+              session={createSession(new CookieStorage({ expires: null }))}
+            />
+          </ApolloProvider>
+        )}
+      </ApolloSubscriptionContext.Consumer>
+    </ApolloSubscriptionContext.Provider>
 </HelmetProvider>
   </BrowserRouter>,
   document.getElementById('react-root'),
