@@ -112,7 +112,6 @@ const ErrorMessage = styled('div')({
   fontSize: '16px',
 })
 
-// TODO: Handle yup validation text with textkeys or similar? Don't show a message at all here?
 const UserSchema = Yup.object().shape({
   email: Yup.string()
     .email('SIGN_EMAIL_CHECK')
