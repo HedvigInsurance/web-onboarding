@@ -51,6 +51,7 @@ export const inCaseOfEmergency: Middleware = async (ctx, next) => {
   try {
     await next()
   } catch (e) {
+    ctx.status = 500
     try {
       ;(ctx.state.getLogger('emergency') as Logger).error(
         'Uncaught error in request, requesting 500 page',
