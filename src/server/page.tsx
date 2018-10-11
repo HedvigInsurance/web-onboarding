@@ -5,6 +5,7 @@ import * as path from 'path'
 import * as React from 'react'
 import { ApolloProvider, getDataFromTree } from 'react-apollo'
 import { renderToString } from 'react-dom/server'
+import { FilledContext, HelmetProvider } from 'react-helmet-async'
 import { StaticRouter, StaticRouterContext } from 'react-router'
 import { App } from '../App'
 import { createApolloClient, getGiraffeEndpoint } from '../utils/apolloClient'
@@ -15,14 +16,20 @@ const scriptLocation = getScriptLocation({
   statsLocation: path.resolve(__dirname, 'assets'),
   webpackPublicPath: process.env.WEBPACK_PUBLIC_PATH || '',
 })
-const template = (body: string, initialState: any) => `
+const template = (
+  body: string,
+  helmetContext: FilledContext['helmet'],
+  initialState: any,
+) => `
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Bli Hedvigmedlem</title>
+  ${helmetContext.title}
+  ${helmetContext.link}
+  ${helmetContext.meta}
 </head>
 <body>
   <div id="react-root">${body}</div>
@@ -39,11 +46,14 @@ const template = (body: string, initialState: any) => `
 export const getPage: Koa.Middleware = async (ctx) => {
   const apolloClient = createApolloClient(true, ctx.state.requestUuid)
   const routerContext: StaticRouterContext & { statusCode?: number } = {}
+  const helmetContext = {}
   const serverApp = (
     <StaticRouter location={ctx.request.originalUrl} context={routerContext}>
-      <ApolloProvider client={apolloClient}>
-        <App session={createSession(new ServerCookieStorage(ctx))} />
-      </ApolloProvider>
+      <HelmetProvider context={helmetContext}>
+        <ApolloProvider client={apolloClient}>
+          <App session={createSession(new ServerCookieStorage(ctx))} />
+        </ApolloProvider>
+      </HelmetProvider>
     </StaticRouter>
   )
   await getDataFromTree(serverApp)
@@ -57,5 +67,9 @@ export const getPage: Koa.Middleware = async (ctx) => {
     return
   }
 
-  ctx.body = template(reactBody, apolloClient.extract())
+  ctx.body = template(
+    reactBody,
+    (helmetContext as FilledContext).helmet,
+    apolloClient.extract(),
+  )
 }
