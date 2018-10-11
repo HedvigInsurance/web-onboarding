@@ -149,7 +149,7 @@ export const SignUp: React.SFC = () => (
           {({ errors, touched }) => (
             <CustomForm>
               <InputTitle>
-                <TranslationsConsumer textKey="INPUT_ONE_TITLE">
+                <TranslationsConsumer textKey="SIGN_INPUT_ONE_TITLE">
                   {(title) => title}
                 </TranslationsConsumer>
               </InputTitle>
@@ -161,7 +161,7 @@ export const SignUp: React.SFC = () => (
                 <ErrorMessage />
               )}
               <InputTitle>
-                <TranslationsConsumer textKey="INPUT_TWO_TITLE">
+                <TranslationsConsumer textKey="SIGN_INPUT_TWO_TITLE">
                   {(title) => title}
                 </TranslationsConsumer>
               </InputTitle>
@@ -178,7 +178,7 @@ export const SignUp: React.SFC = () => (
                   )}
                 </TranslationsConsumer>
               </GetInsuredButton>
-              <TranslationsConsumer textKey="BANKID_ERROR_MESSAGE">
+              <TranslationsConsumer textKey="SIGN_BANKID_ERROR_MESSAGE">
                 {(errorMessage) =>
                   errorMessage ? <ErrorText>{errorMessage}</ErrorText> : null
                 }
