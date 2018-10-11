@@ -6,6 +6,6 @@ import { Sign } from './pages/Sign'
 export const reactPageRoutes = [
   { path: '/hedvig', Component: Chat, exact: true },
   { path: '/offer', Component: Offering, exact: true },
-  { path: '/*', Component: FourOhFour },
   { path: '/sign', Component: Sign, exact: true },
+  { path: '/*', Component: FourOhFour },
 ]

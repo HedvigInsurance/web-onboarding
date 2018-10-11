@@ -1,4 +1,8 @@
 import { colors, fonts } from '@hedviginsurance/brand'
+import {
+  TranslationsConsumer,
+  TranslationsPlaceholderConsumer,
+} from '@hedviginsurance/textkeyfy'
 import { Field, Form, Formik } from 'formik'
 import * as React from 'react'
 import styled from 'react-emotion'
@@ -108,15 +112,7 @@ const ErrorMessage = styled('div')({
   fontSize: '16px',
 })
 
-interface Props {
-  title: string
-  adress: string
-  buttonText: string
-  inputTitleEmail: string
-  inputTitlePersonalNumber: string
-  errorMessage?: string
-}
-
+// TODO: Handle yup validation text with textkeys or similar? Don't show a message at all here?
 const UserSchema = Yup.object().shape({
   personalNumber: Yup.string()
     .matches(/^\d{6,8}[\s\-]?\d{4}$/, 'Whops! Är ditt personnummer korrekt?')
@@ -126,13 +122,20 @@ const UserSchema = Yup.object().shape({
     .required('Krävs för att skicka bekräftelse'),
 })
 
-export const SignUp: React.SFC<Props> = (props) => (
+export const SignUp: React.SFC = () => (
   <OuterWrapper>
     <CardWrapper>
       <Card>
         <HeaderWrapper>
           <Header>
-            {props.title} {props.adress}
+            <TranslationsPlaceholderConsumer
+              textKey="SIGN_HEADER_TITLE"
+              replacements={{
+                address: 'Fantastiska Gatan 23B',
+              }}
+            >
+              {(title) => title}
+            </TranslationsPlaceholderConsumer>
           </Header>
         </HeaderWrapper>
         <Formik
@@ -145,14 +148,23 @@ export const SignUp: React.SFC<Props> = (props) => (
         >
           {({ errors, touched }) => (
             <CustomForm>
-              <InputTitle>{props.inputTitleEmail}</InputTitle>
+              <InputTitle>
+                <TranslationsConsumer textKey="INPUT_ONE_TITLE">
+                  {(title) => title}
+                </TranslationsConsumer>
+              </InputTitle>
+
               <InputField name="email" />
               {errors.email && touched.email ? (
                 <ErrorMessage>{errors.email}</ErrorMessage>
               ) : (
                 <ErrorMessage />
               )}
-              <InputTitle>{props.inputTitlePersonalNumber}</InputTitle>
+              <InputTitle>
+                <TranslationsConsumer textKey="INPUT_TWO_TITLE">
+                  {(title) => title}
+                </TranslationsConsumer>
+              </InputTitle>
               <InputField name="personalNumber" />
               {errors.personalNumber && touched.personalNumber ? (
                 <ErrorMessage>{errors.personalNumber}</ErrorMessage>
@@ -160,11 +172,17 @@ export const SignUp: React.SFC<Props> = (props) => (
                 <ErrorMessage />
               )}
               <GetInsuredButton>
-                <InputSubmit type="submit" value={props.buttonText} />
+                <TranslationsConsumer textKey="SIGN_BUTTON_TEXT">
+                  {(buttonText) => (
+                    <InputSubmit type="submit" value={buttonText} />
+                  )}
+                </TranslationsConsumer>
               </GetInsuredButton>
-              {props.errorMessage ? (
-                <ErrorText>{props.errorMessage}</ErrorText>
-              ) : null}
+              <TranslationsConsumer textKey="BANKID_ERROR_MESSAGE">
+                {(errorMessage) =>
+                  errorMessage ? <ErrorText>{errorMessage}</ErrorText> : null
+                }
+              </TranslationsConsumer>
             </CustomForm>
           )}
         </Formik>
