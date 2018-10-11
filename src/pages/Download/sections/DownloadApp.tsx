@@ -93,10 +93,12 @@ export const DownloadApp: React.SFC = () => (
         </TranslationsConsumer>
       </InsuredText>
       <GetInsuredButton>
-        <TranslationsConsumer textKey="DOWNLOAD_BUTTON_TEXT">
-          {(buttonText) => (
-            <DownloadButton href="https://hedvig.app.link/?utm_source=webonboarding&utm_medium=webonboarding&utm_campaign=webonboarding&utm_term=webonboarding&utm_content=webonboarding">
-              {buttonText}
+        <TranslationsConsumer textKey="DOWNLOAD_LINK">
+          {(downloadLink) => (
+            <DownloadButton href={downloadLink}>
+              <TranslationsConsumer textKey="DOWNLOAD_BUTTON_TEXT">
+                {(buttonText) => buttonText}
+              </TranslationsConsumer>
             </DownloadButton>
           )}
         </TranslationsConsumer>

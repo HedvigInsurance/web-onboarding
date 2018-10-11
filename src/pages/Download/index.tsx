@@ -1,5 +1,5 @@
+import { TopBar } from 'components/TopBar'
 import * as React from 'react'
-import { TopBar } from '../Offer/sections/TopBar'
 import { DownloadApp } from './sections/DownloadApp'
 
 export const Download: React.SFC<{}> = () => (
