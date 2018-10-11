@@ -3,6 +3,7 @@ import { GetInsuredButton } from 'components/get-insured-button'
 import { Field, Form, Formik } from 'formik'
 import * as React from 'react'
 import styled from 'react-emotion'
+import * as yup from 'yup'
 
 const IMAGEWIDTH = 450
 const CONTENTWIDTH = 1000
@@ -130,7 +131,7 @@ interface Props {
   headerTwo: string
 }
 
-export const Download: React.SFC<Props> = (props) => (
+export const DownloadApp: React.SFC<Props> = (props) => (
   <Wrapper>
     <InnerWrapper>
       <DownloadImage src={'/assets/offering/placeholder.svg'} />

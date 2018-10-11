@@ -1,13 +1,13 @@
 import * as React from 'react'
 import styled from 'react-emotion'
 import { TopBar } from '../Offer/sections/TopBar'
-import { Download } from './sections/Download'
+import { DownloadApp } from './sections/DownloadApp'
 const Wrapper = styled('div')({})
 
-export const DownloadApp: React.SFC<{}> = () => (
+export const Download: React.SFC<{}> = () => (
   <Wrapper>
     <TopBar showButton={false} />
-    <Download
+    <DownloadApp
       buttonText={'Få nedladdningslänk'}
       phoneNumberLabel={'Telefonnummer'}
       insuredText={
