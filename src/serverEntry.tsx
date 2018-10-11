@@ -44,14 +44,14 @@ if (process.env.USE_AUTH) {
   appLogger.info('Not using any auth, server is open to the public')
 }
 
-reactPageRoutes.forEach((route) => {
-  server.router.get(route.path, getPage)
-})
-
 server.router.get('/panic-room', async () => {
   throw new Error(
     'Entered the panic room, this is an expected error. Carry on 👜',
   )
+})
+
+reactPageRoutes.forEach((route) => {
+  server.router.get(route.path, getPage)
 })
 
 server.app.listen(getPort(), () => {
