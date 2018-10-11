@@ -1,7 +1,7 @@
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
+import { TopBar } from 'components/TopBar'
 import { ActionMap, Container } from 'constate'
 import * as React from 'react'
-import styled from 'react-emotion'
 import Helmet from 'react-helmet-async'
 import { GetInsured } from './sections/GetInsured'
 import { HedvigInfo } from './sections/HedvigInfo'
@@ -11,9 +11,6 @@ import { InsuredAmount } from './sections/InsuredAmount'
 import { Legal } from './sections/LegalText'
 import { Offer } from './sections/Offer'
 import { PageDown } from './sections/PageDown'
-import { TopBar } from './sections/TopBar'
-
-export const Wrapper = styled('div')({})
 
 interface State {
   getStartedButtonVisible: boolean
@@ -34,7 +31,7 @@ export const Offering: React.SFC<{}> = () => (
       )}
     </TranslationsConsumer>
 
-    <Wrapper>
+    <>
       <Container<State, ActionMap<State, Actions>>
         initialState={{
           getStartedButtonVisible: true,
@@ -48,7 +45,7 @@ export const Offering: React.SFC<{}> = () => (
         }}
       >
         {(state) => (
-          <Wrapper>
+          <>
             <TopBar
               progress={1}
               buttonText={'Bli försäkrad'}
@@ -105,10 +102,10 @@ export const Offering: React.SFC<{}> = () => (
                 'Genom att trycka på ”Bli försäkrad” godkänner jag att jag har tagit del av förköpsinformation, villkor och att mina personuppgifter behandlas enligt GDPR'
               }
             />
-          </Wrapper>
+          </>
         )}
       </Container>
-    </Wrapper>
+    </>
   </>
 )
 
