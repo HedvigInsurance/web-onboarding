@@ -2,6 +2,7 @@ import { colors, fonts } from '@hedviginsurance/brand'
 import { Field, Form, Formik } from 'formik'
 import * as React from 'react'
 import styled from 'react-emotion'
+import * as Yup from 'yup'
 
 const CARDWIDTH = 788
 const HEADERWIDTH = 400
@@ -116,21 +117,15 @@ interface Props {
   errorMessage?: string
 }
 
-const validatePersonalNumber = (value: any) => {
-  let errorMessage
-  if (!/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/i.test(value)) {
-    errorMessage = 'Whops! Är personnummret 10 siffor?'
-  }
-  return errorMessage
-}
-
-const validateEmail = (value: any) => {
-  let errorMessage
-  if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
-    errorMessage = 'Whops! Formatet verkar vara fel på angiven email.'
-  }
-  return errorMessage
-}
+const UserSchema = Yup.object().shape({
+  personalNumber: Yup.string()
+    .min(12, 'Personnumret måste vara 12 siffor')
+    .max(12, 'Whops! Är det endast 12 siffor?')
+    .required('Krävs för signering'),
+  email: Yup.string()
+    .email('Whops! Är din email skriven korrekt?')
+    .required('Krävs för att skicka bekräftelse'),
+})
 
 export const SignUp: React.SFC<Props> = (props) => (
   <OuterWrapper>
@@ -146,22 +141,20 @@ export const SignUp: React.SFC<Props> = (props) => (
             email: '',
             personalNumber: '',
           }}
+          validationSchema={UserSchema}
           onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
         >
           {({ errors, touched }) => (
             <CustomForm>
               <InputTitle>{props.inputTitleEmail}</InputTitle>
-              <InputField validate={validateEmail} name="email" />
+              <InputField name="email" />
               {errors.email && touched.email ? (
                 <ErrorMessage>{errors.email}</ErrorMessage>
               ) : (
                 <ErrorMessage />
               )}
               <InputTitle>{props.inputTitlePersonalNumber}</InputTitle>
-              <InputField
-                validate={validatePersonalNumber}
-                name="personalNumber"
-              />
+              <InputField name="personalNumber" />
               {errors.personalNumber && touched.personalNumber ? (
                 <ErrorMessage>{errors.personalNumber}</ErrorMessage>
               ) : (
