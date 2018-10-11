@@ -117,7 +117,7 @@ const UserSchema = Yup.object().shape({
     .email('SIGN_EMAIL_CHECK')
     .required('SIGN_EMAIL_REQUIRED'),
   personalNumber: Yup.string()
-    .matches(/^\d{6,8}[\s\-]?\d{4}$/, 'SIGN_PERSONAL_NUMBER_CHECK')
+    .matches(/^\d{8}[\s\-]?\d{4}$/, 'SIGN_PERSONAL_NUMBER_CHECK')
     .required('SIGN_PERSONAL_NUMBER_REQUIRED'),
 })
 
