@@ -1,10 +1,8 @@
 import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { GetInsuredButton } from 'components/get-insured-button'
-import { Field, Form, Formik } from 'formik'
 import * as React from 'react'
 import styled from 'react-emotion'
-import * as yup from 'yup'
 const IMAGEWIDTH = 450
 const CONTENTWIDTH = 1000
 
@@ -32,7 +30,7 @@ const InnerWrapper = styled('div')({
   },
 })
 
-const DownloadButton = styled('button')({
+const DownloadButton = styled('a')({
   backgroundColor: colors.GREEN,
   fontSize: '16px',
   color: colors.WHITE,
@@ -43,17 +41,6 @@ const DownloadButton = styled('button')({
   border: 'none',
   outlineStyle: 'none',
   marginTop: '10px',
-})
-
-const CustomForm = styled(Form)({
-  display: 'flex',
-  width: IMAGEWIDTH,
-  flexDirection: 'column',
-})
-
-const InputField = styled(Field)({
-  fontSize: '16px',
-  marginBottom: '10px',
 })
 
 const DownloadImage = styled('img')({
@@ -81,55 +68,6 @@ const InsuredText = styled('div')({
   marginBottom: '30px',
 })
 
-const PhoneNumberTitle = styled('div')({
-  fontSize: '16px',
-  color: colors.DARK_GRAY,
-})
-
-const ErrorMessage = styled('div')({
-  minHeight: '20px',
-  textAlign: 'center',
-  fontSize: '16px',
-})
-
-const StoreWrapper = styled('div')({
-  marginTop: '130px',
-})
-
-const StoreLink = styled('a')({
-  marginLeft: '10px',
-  marginRight: '10px',
-})
-
-const StoreImage = styled('img')({})
-
-const DOWNLOADSTORES = [
-  {
-    key: 0,
-    image: '/assets/download/app-store-badge.svg',
-    downloadURL: 'https://itunes.apple.com/se/app/hedvig/id1303668531?mt=8',
-  },
-  {
-    key: 1,
-    image: '/assets/download/google-play-badge.svg',
-    downloadURL: 'https://play.google.com/store/apps/details?id=com.hedvig.app',
-  },
-]
-
-const DownloadSchema = yup.object().shape({
-  phoneNumber: yup
-    .mixed()
-    .test({
-      test: (value) =>
-        value === '' || (!isNaN(Number(value)) && Number(value) > 0),
-      message: 'DOWNLOAD_MUST_BE_A_NUMBER',
-    })
-    .test({
-      test: (value) => value !== '',
-      message: 'noop',
-    }),
-})
-
 export const DownloadApp: React.SFC = () => (
   <Wrapper>
     <InnerWrapper>
@@ -154,46 +92,15 @@ export const DownloadApp: React.SFC = () => (
           {(insuredText) => insuredText}
         </TranslationsConsumer>
       </InsuredText>
-      <PhoneNumberTitle>
-        <TranslationsConsumer textKey="DOWNLOAD_INPUT_TITLE">
-          {(phoneNumberLabel) => phoneNumberLabel}
+      <GetInsuredButton>
+        <TranslationsConsumer textKey="DOWNLOAD_BUTTON_TEXT">
+          {(buttonText) => (
+            <DownloadButton href="https://hedvig.app.link/?utm_source=webonboarding&utm_medium=webonboarding&utm_campaign=webonboarding&utm_term=webonboarding&utm_content=webonboarding">
+              {buttonText}
+            </DownloadButton>
+          )}
         </TranslationsConsumer>
-      </PhoneNumberTitle>
-      <Formik
-        initialValues={{ phoneNumber: '' }}
-        // TODO: Make onsubmit send sms with download link to phone number
-        validationSchema={DownloadSchema}
-        onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
-      >
-        {({ errors, touched }) => (
-          <CustomForm>
-            <InputField name="phoneNumber" />
-            {errors.phoneNumber && touched.phoneNumber ? (
-              <ErrorMessage>
-                <TranslationsConsumer textKey={errors.phoneNumber}>
-                  {(errorMessage) => errorMessage}
-                </TranslationsConsumer>
-              </ErrorMessage>
-            ) : (
-              <ErrorMessage />
-            )}
-            <GetInsuredButton>
-              <TranslationsConsumer textKey="DOWNLOAD_BUTTON_TEXT">
-                {(buttonText) => (
-                  <DownloadButton type="submit">{buttonText}</DownloadButton>
-                )}
-              </TranslationsConsumer>
-            </GetInsuredButton>
-          </CustomForm>
-        )}
-      </Formik>
-      <StoreWrapper>
-        {DOWNLOADSTORES.map((store) => (
-          <StoreLink key={store.key} target="_blank" href={store.downloadURL}>
-            <StoreImage src={store.image} />
-          </StoreLink>
-        ))}
-      </StoreWrapper>
+      </GetInsuredButton>
     </InnerWrapper>
   </Wrapper>
 )
