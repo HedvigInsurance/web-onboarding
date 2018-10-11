@@ -1,11 +1,9 @@
 import * as React from 'react'
-import styled from 'react-emotion'
 import { TopBar } from '../Offer/sections/TopBar'
 import { DownloadApp } from './sections/DownloadApp'
-const Wrapper = styled('div')({})
 
 export const Download: React.SFC<{}> = () => (
-  <Wrapper>
+  <>
     <TopBar showButton={false} />
     <DownloadApp
       buttonText={'Få nedladdningslänk'}
@@ -17,5 +15,5 @@ export const Download: React.SFC<{}> = () => (
       headerOne={'Yaay!'}
       headerTwo={'Välkommer till Hedvig!'}
     />
-  </Wrapper>
+  </>
 )

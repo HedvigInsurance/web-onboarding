@@ -3,7 +3,7 @@ import { GetInsuredButton } from 'components/get-insured-button'
 import { Field, Form, Formik } from 'formik'
 import * as React from 'react'
 import styled from 'react-emotion'
-import * as yup from 'yup'
+import * as Yup from 'yup'
 
 const IMAGEWIDTH = 450
 const CONTENTWIDTH = 1000
@@ -114,13 +114,9 @@ const DOWNLOADSTORES = [
   },
 ]
 
-const validate = (value: any) => {
-  let errorMessage
-  if (!/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/i.test(value)) {
-    errorMessage = 'Whops! Är numret korrekt?'
-  }
-  return errorMessage
-}
+const DownloadSchema = Yup.object().shape({
+  phoneNumber: Yup.number().required('Krävs för nedladdningslänk'),
+})
 
 interface Props {
   buttonText: string
@@ -143,11 +139,12 @@ export const DownloadApp: React.SFC<Props> = (props) => (
       <Formik
         initialValues={{ phoneNumber: '' }}
         // TODO: Make onsubmit send sms with download link to phone number
+        validationSchema={DownloadSchema}
         onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
       >
         {({ errors, touched }) => (
           <CustomForm>
-            <InputField validate={validate} name="phoneNumber" />
+            <InputField name="phoneNumber" />
             {errors.phoneNumber && touched.phoneNumber ? (
               <ErrorMessage>{errors.phoneNumber}</ErrorMessage>
             ) : (
