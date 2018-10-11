@@ -3,6 +3,7 @@ import 'source-map-support/register'
 import { reactPageRoutes } from './routes'
 import { appLogger } from './server/logging'
 import {
+  inCaseOfEmergency,
   logRequestMiddleware,
   setLoggerMiddleware,
   setRequestUuidMiddleware,
@@ -26,6 +27,8 @@ server.app.use(logRequestMiddleware)
 server.router.use(setRequestUuidMiddleware)
 server.router.use(setLoggerMiddleware)
 server.router.use(logRequestMiddleware)
+server.app.use(inCaseOfEmergency)
+server.router.use(inCaseOfEmergency)
 if (process.env.USE_AUTH) {
   appLogger.info(
     `Protecting server using basic auth with user ${process.env.AUTH_NAME} 💂‍`,
@@ -43,6 +46,12 @@ if (process.env.USE_AUTH) {
 
 reactPageRoutes.forEach((route) => {
   server.router.get(route.path, getPage)
+})
+
+server.router.get('/panic-room', async () => {
+  throw new Error(
+    'Entered the panic room, this is an expected error. Carry on 👜',
+  )
 })
 
 server.app.listen(getPort(), () => {
