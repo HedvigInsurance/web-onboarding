@@ -1,10 +1,13 @@
 import { colors } from '@hedviginsurance/brand'
+import {
+  TranslationsConsumer,
+  TranslationsPlaceholderConsumer,
+} from '@hedviginsurance/textkeyfy'
 import { GetInsuredButton } from 'components/get-insured-button'
 import { Field, Form, Formik } from 'formik'
 import * as React from 'react'
 import styled from 'react-emotion'
 import * as Yup from 'yup'
-
 const IMAGEWIDTH = 450
 const CONTENTWIDTH = 1000
 
@@ -131,7 +134,11 @@ export const DownloadApp: React.SFC<Props> = (props) => (
   <Wrapper>
     <InnerWrapper>
       <DownloadImage src={'/assets/offering/placeholder.svg'} />
-      <Header>{props.headerOne}</Header>
+      <Header>
+        <TranslationsConsumer textKey="DOWNLOAD_HEADER_ONE">
+          {(header) => header}
+        </TranslationsConsumer>
+      </Header>
       <Header>{props.headerTwo}</Header>
       <DownloadHeader>{props.downloadHeader}</DownloadHeader>
       <InsuredText>{props.insuredText}</InsuredText>
