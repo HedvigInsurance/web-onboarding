@@ -119,8 +119,7 @@ interface Props {
 
 const UserSchema = Yup.object().shape({
   personalNumber: Yup.string()
-    .min(12, 'Personnumret måste vara 12 siffor')
-    .max(12, 'Whops! Är det endast 12 siffor?')
+    .matches(/^\d{6,8}[\s\-]?\d{4}$/, 'Whops! Är ditt personnummer korrekt?')
     .required('Krävs för signering'),
   email: Yup.string()
     .email('Whops! Är din email skriven korrekt?')
