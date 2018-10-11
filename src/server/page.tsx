@@ -38,7 +38,7 @@ const template = (body: string, initialState: any) => `
 
 export const getPage: Koa.Middleware = async (ctx) => {
   const apolloClient = createApolloClient(true, ctx.state.requestUuid)
-  const routerContext: StaticRouterContext = {}
+  const routerContext: StaticRouterContext & { statusCode?: number } = {}
   const serverApp = (
     <StaticRouter location={ctx.request.originalUrl} context={routerContext}>
       <ApolloProvider client={apolloClient}>
@@ -49,6 +49,9 @@ export const getPage: Koa.Middleware = async (ctx) => {
   await getDataFromTree(serverApp)
   const reactBody = renderStylesToString(renderToString(serverApp))
 
+  if (routerContext.statusCode) {
+    ctx.status = routerContext.statusCode
+  }
   if (routerContext.url) {
     ctx.redirect(routerContext.url)
     return
