@@ -1,13 +1,10 @@
 import { colors } from '@hedviginsurance/brand'
-import {
-  TranslationsConsumer,
-  TranslationsPlaceholderConsumer,
-} from '@hedviginsurance/textkeyfy'
+import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { GetInsuredButton } from 'components/get-insured-button'
 import { Field, Form, Formik } from 'formik'
 import * as React from 'react'
 import styled from 'react-emotion'
-import * as Yup from 'yup'
+import * as yup from 'yup'
 const IMAGEWIDTH = 450
 const CONTENTWIDTH = 1000
 
@@ -50,6 +47,7 @@ const DownloadButton = styled('button')({
 
 const CustomForm = styled(Form)({
   display: 'flex',
+  width: IMAGEWIDTH,
   flexDirection: 'column',
 })
 
@@ -90,6 +88,7 @@ const PhoneNumberTitle = styled('div')({
 
 const ErrorMessage = styled('div')({
   minHeight: '20px',
+  textAlign: 'center',
   fontSize: '16px',
 })
 
@@ -117,20 +116,21 @@ const DOWNLOADSTORES = [
   },
 ]
 
-const DownloadSchema = Yup.object().shape({
-  phoneNumber: Yup.number().required('Krävs för nedladdningslänk'),
+const DownloadSchema = yup.object().shape({
+  phoneNumber: yup
+    .mixed()
+    .test({
+      test: (value) =>
+        value === '' || (!isNaN(Number(value)) && Number(value) > 0),
+      message: 'DOWNLOAD_MUST_BE_A_NUMBER',
+    })
+    .test({
+      test: (value) => value !== '',
+      message: 'noop',
+    }),
 })
 
-interface Props {
-  buttonText: string
-  phoneNumberLabel: string
-  insuredText: string
-  downloadHeader: string
-  headerOne: string
-  headerTwo: string
-}
-
-export const DownloadApp: React.SFC<Props> = (props) => (
+export const DownloadApp: React.SFC = () => (
   <Wrapper>
     <InnerWrapper>
       <DownloadImage src={'/assets/offering/placeholder.svg'} />
@@ -139,10 +139,26 @@ export const DownloadApp: React.SFC<Props> = (props) => (
           {(header) => header}
         </TranslationsConsumer>
       </Header>
-      <Header>{props.headerTwo}</Header>
-      <DownloadHeader>{props.downloadHeader}</DownloadHeader>
-      <InsuredText>{props.insuredText}</InsuredText>
-      <PhoneNumberTitle>{props.phoneNumberLabel}</PhoneNumberTitle>
+      <Header>
+        <TranslationsConsumer textKey="DOWNLOAD_HEADER_TWO">
+          {(header) => header}
+        </TranslationsConsumer>
+      </Header>
+      <DownloadHeader>
+        <TranslationsConsumer textKey="DOWNLOAD_HEADER_THREE">
+          {(header) => header}
+        </TranslationsConsumer>
+      </DownloadHeader>
+      <InsuredText>
+        <TranslationsConsumer textKey="DOWNLOAD_INFO">
+          {(insuredText) => insuredText}
+        </TranslationsConsumer>
+      </InsuredText>
+      <PhoneNumberTitle>
+        <TranslationsConsumer textKey="DOWNLOAD_INPUT_TITLE">
+          {(phoneNumberLabel) => phoneNumberLabel}
+        </TranslationsConsumer>
+      </PhoneNumberTitle>
       <Formik
         initialValues={{ phoneNumber: '' }}
         // TODO: Make onsubmit send sms with download link to phone number
@@ -153,12 +169,20 @@ export const DownloadApp: React.SFC<Props> = (props) => (
           <CustomForm>
             <InputField name="phoneNumber" />
             {errors.phoneNumber && touched.phoneNumber ? (
-              <ErrorMessage>{errors.phoneNumber}</ErrorMessage>
+              <ErrorMessage>
+                <TranslationsConsumer textKey={errors.phoneNumber}>
+                  {(errorMessage) => errorMessage}
+                </TranslationsConsumer>
+              </ErrorMessage>
             ) : (
               <ErrorMessage />
             )}
             <GetInsuredButton>
-              <DownloadButton type="submit">{props.buttonText}</DownloadButton>
+              <TranslationsConsumer textKey="DOWNLOAD_BUTTON_TEXT">
+                {(buttonText) => (
+                  <DownloadButton type="submit">{buttonText}</DownloadButton>
+                )}
+              </TranslationsConsumer>
             </GetInsuredButton>
           </CustomForm>
         )}
