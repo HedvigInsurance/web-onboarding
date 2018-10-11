@@ -108,18 +108,18 @@ const ErrorText = styled('div')({
 })
 
 const ErrorMessage = styled('div')({
-  minHeight: '20px',
+  minHeight: '24px',
   fontSize: '16px',
 })
 
 // TODO: Handle yup validation text with textkeys or similar? Don't show a message at all here?
 const UserSchema = Yup.object().shape({
-  personalNumber: Yup.string()
-    .matches(/^\d{6,8}[\s\-]?\d{4}$/, 'Whops! Är ditt personnummer korrekt?')
-    .required('Krävs för signering'),
   email: Yup.string()
-    .email('Whops! Är din email skriven korrekt?')
-    .required('Krävs för att skicka bekräftelse'),
+    .email('SIGN_EMAIL_CHECK')
+    .required('SIGN_EMAIL_REQUIRED'),
+  personalNumber: Yup.string()
+    .matches(/^\d{6,8}[\s\-]?\d{4}$/, 'SIGN_PERSONAL_NUMBER_CHECK')
+    .required('SIGN_PERSONAL_NUMBER_REQUIRED'),
 })
 
 export const SignUp: React.SFC = () => (
@@ -156,7 +156,11 @@ export const SignUp: React.SFC = () => (
 
               <InputField name="email" />
               {errors.email && touched.email ? (
-                <ErrorMessage>{errors.email}</ErrorMessage>
+                <ErrorMessage>
+                  <TranslationsConsumer textKey={errors.email}>
+                    {(errorMessage) => errorMessage}
+                  </TranslationsConsumer>
+                </ErrorMessage>
               ) : (
                 <ErrorMessage />
               )}
@@ -167,7 +171,11 @@ export const SignUp: React.SFC = () => (
               </InputTitle>
               <InputField name="personalNumber" />
               {errors.personalNumber && touched.personalNumber ? (
-                <ErrorMessage>{errors.personalNumber}</ErrorMessage>
+                <ErrorMessage>
+                  <TranslationsConsumer textKey={errors.personalNumber}>
+                    {(errorMessage) => errorMessage}
+                  </TranslationsConsumer>
+                </ErrorMessage>
               ) : (
                 <ErrorMessage />
               )}
