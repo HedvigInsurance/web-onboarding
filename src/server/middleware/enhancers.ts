@@ -20,13 +20,15 @@ export const setLoggerMiddleware: Middleware = async (ctx, next) => {
 }
 
 export const logRequestMiddleware: Middleware = async (ctx, next) => {
-  const log = (e?: Error) =>
+  const log = (e?: Error & { status?: number }) =>
     ctx.state
       .getLogger('request')
       .info(
         `${ctx.get('x-forwarded-proto') || ctx.request.protocol} ${
           ctx.request.method
-        } ${ctx.request.originalUrl} - ${e !== undefined ? 500 : ctx.status}`,
+        } ${ctx.request.originalUrl} - ${
+          e && e.status ? e.status : ctx.status
+        }`,
       )
 
   try {
@@ -51,6 +53,9 @@ export const inCaseOfEmergency: Middleware = async (ctx, next) => {
   try {
     await next()
   } catch (e) {
+    if (e.status) {
+      throw e
+    }
     ctx.status = 500
     try {
       ;(ctx.state.getLogger('emergency') as Logger).error(
