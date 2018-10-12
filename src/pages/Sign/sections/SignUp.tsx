@@ -246,6 +246,7 @@ export const SignUp: React.SFC = () => (
                             subscription={SIGN_SUBSCRIPTION}
                           >
                             {({ data, loading, error }) => {
+                              const object = JSON.parse(data)
                               if (loading) {
                                 return <div>Loading</div>
                               }
@@ -254,25 +255,22 @@ export const SignUp: React.SFC = () => (
                                   <div>
                                     Error:{' '}
                                     <pre>{JSON.stringify(error, null, 2)}</pre>
+                                    <ErrorText>{error}</ErrorText>
                                   </div>
                                 )
                               }
 
                               return (
                                 <div>
+                                  {/*TODO: status: pending, code: X -> "Öppna BankID"
+                                  status: pending, code: userSign -> "Väntar på BankID
+                                  status: failed, code: userCancel -> "Öppna BankID"*/}
                                   Data:{' '}
                                   <pre>{JSON.stringify(data, null, 2)}</pre>
                                 </div>
                               )
                             }}
                           </Subscription>
-                          <TranslationsConsumer textKey="SIGN_BANKID_ERROR_MESSAGE">
-                            {(errorMessage) =>
-                              errorMessage ? (
-                                <ErrorText>{errorMessage}</ErrorText>
-                              ) : null
-                            }
-                          </TranslationsConsumer>
                         </CustomForm>
                       )}
                     </Formik>
