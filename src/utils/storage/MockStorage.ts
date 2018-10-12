@@ -1,14 +1,13 @@
 import { MinimalStorage } from './MinimalStorage'
 
 export class MockStorage implements MinimalStorage {
-  constructor(private readonly mockState?: string) {}
+  constructor(private mockState: any = {}) {}
 
-  public getItem(_: string) {
-    return this.mockState || '{}'
+  public getItem(field: string) {
+    return this.mockState[field]
   }
 
-  // tslint:disable-next-line variable-name
-  public setItem(_noop: string, _noop2: string) {
-    /* noop */
+  public setItem(field: string, value: string) {
+    this.mockState = { ...this.mockState, [field]: value }
   }
 }

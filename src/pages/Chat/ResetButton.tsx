@@ -5,9 +5,11 @@ import { ChatContainer } from './state'
 export const ResetButton = () => (
   <ChatContainer>
     {({ reset }) => (
-      <TranslationsConsumer textKey="CHAT_RESET_LABEL">
-        {(label) => <button onClick={reset}>{label}</button>}
-      </TranslationsConsumer>
+      <button onClick={reset}>
+        <TranslationsConsumer textKey="CHAT_RESET_LABEL">
+          {(label) => label}
+        </TranslationsConsumer>
+      </button>
     )}
   </ChatContainer>
 )

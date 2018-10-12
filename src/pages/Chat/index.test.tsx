@@ -6,6 +6,8 @@ import { Chat } from '.'
 import { createSession } from '../../utils/sessionStorage'
 import { MockStorage } from '../../utils/storage/MockStorage'
 
+jest.mock('client/apolloClient', () => ({ apolloClient: {} }))
+
 it('renders without 💥', () => {
   mount(
     <HelmetProvider>

@@ -2,11 +2,13 @@ import { Message } from 'components/hedvig/conversation'
 import { Provider } from 'constate'
 import { mount } from 'enzyme'
 import * as React from 'react'
-import { WithStorageProps } from '../../App'
-import { createSession } from '../../utils/sessionStorage'
-import { MockStorage } from '../../utils/storage/MockStorage'
+import { createSession, SESSION_KEY } from 'utils/sessionStorage'
+import { MockStorage } from 'utils/storage/MockStorage'
+import { WithStorageProps } from 'utils/StorageContainer'
 import { ChatConversation } from './ChatConversation'
 import { ChatStep } from './state'
+
+jest.mock('client/apolloClient', () => ({ apolloClient: {} }))
 
 jest.useFakeTimers()
 it('shows first messages on initial render', () => {
@@ -45,7 +47,9 @@ it('shows all messages when initial session is set', () => {
     <Provider<WithStorageProps>
       initialState={{
         storage: {
-          session: createSession(new MockStorage(initialSession)),
+          session: createSession(
+            new MockStorage({ [SESSION_KEY]: initialSession }),
+          ),
         },
       }}
     >
