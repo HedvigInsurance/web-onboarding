@@ -242,6 +242,30 @@ export const SignUp: React.SFC = () => (
                               )}
                             </TranslationsConsumer>
                           </GetInsuredButton>
+                          <Subscription<SignStatusData>
+                            subscription={SIGN_SUBSCRIPTION}
+                          >
+                            {({ data, loading, error }) => {
+                              if (loading) {
+                                return <div>Loading</div>
+                              }
+                              if (error) {
+                                return (
+                                  <div>
+                                    Error:{' '}
+                                    <pre>{JSON.stringify(error, null, 2)}</pre>
+                                  </div>
+                                )
+                              }
+
+                              return (
+                                <div>
+                                  Data:{' '}
+                                  <pre>{JSON.stringify(data, null, 2)}</pre>
+                                </div>
+                              )
+                            }}
+                          </Subscription>
                           <TranslationsConsumer textKey="SIGN_BANKID_ERROR_MESSAGE">
                             {(errorMessage) =>
                               errorMessage ? (
@@ -254,26 +278,6 @@ export const SignUp: React.SFC = () => (
                     </Formik>
                   )}
                 </Mutation>
-                <Subscription<SignStatusData> subscription={SIGN_SUBSCRIPTION}>
-                  {({ data, loading, error }) => {
-                    if (loading) {
-                      return <div>Loading</div>
-                    }
-                    if (error) {
-                      return (
-                        <div>
-                          Error: <pre>{JSON.stringify(error, null, 2)}</pre>
-                        </div>
-                      )
-                    }
-
-                    return (
-                      <div>
-                        Data: <pre>{JSON.stringify(data, null, 2)}</pre>
-                      </div>
-                    )
-                  }}
-                </Subscription>
               </>
             ) : (
               'loading :('
