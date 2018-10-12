@@ -15,11 +15,11 @@ import {
   MockLink,
   MockSubscriptionLink,
 } from 'utils/react-apollo-test-links'
-import { createSession } from 'utils/sessionStorage'
+import { createSession, SESSION_KEY } from 'utils/sessionStorage'
 import { MockStorage } from 'utils/storage/MockStorage'
 import { StorageState } from 'utils/StorageContainer'
 import { mockNetworkWait } from 'utils/test-utils'
-import { createCreateOfferMutationMock } from '../utils/test-utils'
+import { createCreateOfferMutationMock, mockState } from '../utils/test-utils'
 import { CreateOffer } from './CreateOffer'
 
 jest.mock('client/apolloClient', () => ({
@@ -60,7 +60,11 @@ it('creates an offer without 💥', async () => {
       <Provider<{ storage: StorageState }>
         initialState={{
           storage: {
-            session: createSession(new MockStorage({})),
+            session: createSession(
+              new MockStorage({
+                [SESSION_KEY]: JSON.stringify({ chat: mockState() }),
+              }),
+            ),
           },
         }}
       >

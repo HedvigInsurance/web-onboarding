@@ -6,6 +6,7 @@ import {
 } from '../containers/CreateOfferContainer'
 import { OfferCreationSubscription } from '../containers/OfferCreationSubscription'
 import { mockState } from '../utils/test-utils'
+import { ChatContainer } from '../state'
 
 export const CreateOffer: React.SFC = () => (
   <SessionContainer>
@@ -13,32 +14,36 @@ export const CreateOffer: React.SFC = () => (
       !sessionToken ? (
         'loading'
       ) : (
-        <OfferCreationSubscription>
-          {(subscriptionMaybe) => (
-            <>
-              <CreateOfferContainer>
-                {(createOffer, { called }) => (
-                  <>
-                    <button
-                      onClick={() =>
-                        createOffer(
-                          getCreateOfferVariablesFromChatState(mockState()),
-                        )
-                      }
-                    />
-                    <div>
-                      {subscriptionMaybe
-                        ? subscriptionMaybe.offer.status
-                        : called || !sessionToken
-                          ? 'loading'
-                          : null}
-                    </div>
-                  </>
-                )}
-              </CreateOfferContainer>
-            </>
+        <ChatContainer>
+          {(chatState) => (
+            <OfferCreationSubscription>
+              {(subscriptionMaybe) => (
+                <>
+                  <CreateOfferContainer>
+                    {(createOffer, { called }) => (
+                      <>
+                        <button
+                          onClick={() =>
+                            createOffer(
+                              getCreateOfferVariablesFromChatState(chatState),
+                            )
+                          }
+                        />
+                        <div>
+                          {subscriptionMaybe
+                            ? subscriptionMaybe.offer.status
+                            : called || !sessionToken
+                              ? 'loading'
+                              : null}
+                        </div>
+                      </>
+                    )}
+                  </CreateOfferContainer>
+                </>
+              )}
+            </OfferCreationSubscription>
           )}
-        </OfferCreationSubscription>
+        </ChatContainer>
       )
     }
   </SessionContainer>
