@@ -4,7 +4,7 @@ import { mount } from 'enzyme'
 import * as React from 'react'
 import { ApolloProvider } from 'react-apollo'
 import { MockSubscriptionLink } from 'utils/react-apollo-test-links'
-import { mockNetworkWait } from '../../../utils/test-utils'
+import { mockNetworkWait } from 'utils/test-utils'
 import { OfferCreationSubscription } from './OfferCreationSubscription'
 
 const createApolloClient = () => {
