@@ -144,13 +144,15 @@ export const NameAgeInput: React.SFC<Props> = ({
                   {(nodes) => nodes}
                 </TranslationsPlaceholderConsumer>
               </div>
-              <div>
-                {isDone(chatState.nameAge) && (
-                  <TranslationsConsumer textKey="CHAT_INPUT_NEXT_LABEL">
-                    {(text) => <button type="submit">{text}</button>}
-                  </TranslationsConsumer>
-                )}
-              </div>
+              {isDone(chatState.nameAge) && (
+                <div>
+                  <button type="submit">
+                    <TranslationsConsumer textKey="CHAT_INPUT_NEXT_LABEL">
+                      {(text) => text}
+                    </TranslationsConsumer>
+                  </button>
+                </div>
+              )}
             </form>
           )}
         </ChatContainer>

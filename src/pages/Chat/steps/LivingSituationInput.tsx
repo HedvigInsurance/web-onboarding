@@ -294,9 +294,11 @@ export const LivingSituationInput: React.SFC<LivingSituationInputProps> = ({
               </TranslationsPlaceholderConsumer>
               {isDone(chatState.livingSituation) && (
                 <div>
-                  <TranslationsConsumer textKey="CHAT_INPUT_NEXT_LABEL">
-                    {(text) => <button type="submit">{text}</button>}
-                  </TranslationsConsumer>
+                  <button type="submit">
+                    <TranslationsConsumer textKey="CHAT_INPUT_NEXT_LABEL">
+                      {(text) => text}
+                    </TranslationsConsumer>
+                  </button>
                 </div>
               )}
             </form>

@@ -4,13 +4,13 @@ import { notNullable } from '../../utils/nullables'
 import { StorageContainer } from '../../utils/StorageContainer'
 
 export enum ChatStep {
-  INITIAL,
-  NAME_AGE_INPUT,
-  GREET,
-  LIVING_SITUATION_INPUT,
-  CURRENT_INSURANCE_QUESTION,
-  CURRENT_INSURANCE_INPUT,
-  SHOW_OFFER,
+  INITIAL = 'INITIAL',
+  NAME_AGE_INPUT = 'NAME_AGE_INPUT',
+  GREET = 'GREET',
+  LIVING_SITUATION_INPUT = 'LIVING_SITUATION_INPUT',
+  CURRENT_INSURANCE_QUESTION = 'CURRENT_INSURANCE_QUESTION',
+  CURRENT_INSURANCE_INPUT = 'CURRENT_INSURANCE_INPUT',
+  SHOW_OFFER = 'SHOW_OFFER',
 }
 
 export enum ApartmentType {
@@ -198,6 +198,7 @@ export const ChatContainer: React.SFC<
               storageState.session.setSession({
                 ...storageState.session.getSession(),
                 chat: initialState,
+                token: undefined,
               })
               // Force 2 state updates to make sure first step is re-mounted
               setState({
@@ -205,6 +206,7 @@ export const ChatContainer: React.SFC<
                 currentStep: undefined,
                 visibleSteps: [],
               })
+              storageState.setToken(undefined)
               setTimeout(() => {
                 setState({
                   currentStep: ChatStep.INITIAL,

@@ -12,6 +12,9 @@
     },
     "GIRAFFE_ENDPOINT": {
       "required": true
+    },
+    "GIRAFFE_WS_ENDPOINT": {
+      "required": true
     }
   },
   "formation": {

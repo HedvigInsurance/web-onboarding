@@ -2,10 +2,11 @@ import { CookieStorage } from 'cookie-storage'
 import { State as ChatState } from '../pages/Chat/state'
 import { MinimalStorage } from './storage/MinimalStorage'
 
-const SESSION_KEY = '_hvsession'
+export const SESSION_KEY = '_hvsession'
 
 export interface Session {
   chat: ChatState
+  token?: string
 }
 
 export interface IsomorphicSessionStorage<T> {

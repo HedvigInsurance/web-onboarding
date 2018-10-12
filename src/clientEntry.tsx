@@ -5,13 +5,13 @@ import * as ReactDOM from 'react-dom'
 import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter } from 'react-router-dom'
 import { HotApp } from './App'
-import { createApolloClient } from './utils/apolloClient'
+import { apolloClient } from './client/apolloClient'
 import { createSession } from './utils/sessionStorage'
 
 ReactDOM.hydrate(
   <BrowserRouter>
     <HelmetProvider>
-      <ApolloProvider client={createApolloClient(false)}>
+      <ApolloProvider client={apolloClient!.client!}>
         <HotApp session={createSession(new CookieStorage({ expires: null }))} />
       </ApolloProvider>
     </HelmetProvider>

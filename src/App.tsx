@@ -5,15 +5,7 @@ import { hot } from 'react-hot-loader'
 import { Route, Switch } from 'react-router-dom'
 import { reactPageRoutes } from './routes'
 import { GlobalCss } from './utils/globalStyles'
-import { IsomorphicSessionStorage, Session } from './utils/sessionStorage'
-
-export interface StorageState {
-  session: IsomorphicSessionStorage<Session>
-}
-
-export interface WithStorageProps {
-  storage: StorageState
-}
+import { StorageState, WithStorageProps } from './utils/StorageContainer'
 
 export const App: React.SFC<StorageState> = ({ session }) => (
   <>
