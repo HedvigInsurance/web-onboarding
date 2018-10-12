@@ -198,12 +198,14 @@ export const ChatContainer: React.SFC<
               storageState.session.setSession({
                 ...storageState.session.getSession(),
                 chat: initialState,
+                token: undefined,
               })
               // Force 2 state updates to make sure first step is re-mounted
               setState({
                 ...initialState,
                 currentStep: undefined,
                 visibleSteps: [],
+                token: undefined,
               })
               setTimeout(() => {
                 setState({
