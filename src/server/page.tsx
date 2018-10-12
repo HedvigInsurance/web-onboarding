@@ -57,8 +57,8 @@ const template = (
 
 export const getPage: Koa.Middleware = async (ctx) => {
   const apolloClient = createServerApolloClient(ctx.state.requestUuid)
-const routerContext: StaticRouterContext & { statusCode?: number } = {}
-const helmetContext = {}
+  const routerContext: StaticRouterContext & { statusCode?: number } = {}
+  const helmetContext = {}
   const serverApp = (
     <StaticRouter location={ctx.request.originalUrl} context={routerContext}>
       <HelmetProvider context={helmetContext}>

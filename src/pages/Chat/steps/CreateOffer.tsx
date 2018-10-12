@@ -1,11 +1,11 @@
 import * as React from 'react'
+import { SessionContainer } from '../../../containers/SessionContainer'
 import {
   CreateOfferContainer,
   getCreateOfferVariablesFromChatState,
 } from '../containers/CreateOfferContainer'
 import { OfferCreationSubscription } from '../containers/OfferCreationSubscription'
 import { mockState } from '../utils/test-utils'
-import { SessionContainer } from '../../../containers/SessionContainer'
 
 export const CreateOffer: React.SFC = () => (
   <SessionContainer>
