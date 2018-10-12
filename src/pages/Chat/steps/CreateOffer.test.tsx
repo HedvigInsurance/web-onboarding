@@ -1,23 +1,48 @@
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloClient } from 'apollo-client'
 import { split } from 'apollo-link'
+import { apolloClient } from 'client/apolloClient'
 import { Provider } from 'constate'
+import {
+  CREATE_SESSION_TOKEN_MUTATION,
+  SessionContainer,
+} from 'containers/SessionContainer'
 import { mount } from 'enzyme'
 import * as React from 'react'
 import { ApolloProvider } from 'react-apollo'
-import { MockLink, MockSubscriptionLink } from 'utils/react-apollo-test-links'
+import {
+  MockedResponse,
+  MockLink,
+  MockSubscriptionLink,
+} from 'utils/react-apollo-test-links'
+import { createSession } from 'utils/sessionStorage'
+import { MockStorage } from 'utils/storage/MockStorage'
+import { StorageState } from 'utils/StorageContainer'
 import { mockNetworkWait } from 'utils/test-utils'
-import { createSession, SESSION_KEY } from '../../../utils/sessionStorage'
-import { MockStorage } from '../../../utils/storage/MockStorage'
-import { StorageState } from '../../../utils/StorageContainer'
 import { createCreateOfferMutationMock } from '../utils/test-utils'
 import { CreateOffer } from './CreateOffer'
 
 jest.mock('client/apolloClient', () => ({
-  apolloClient: { subscriptionClient: {} },
+  apolloClient: {
+    subscriptionClient: {
+      close: jest.fn(),
+    },
+  },
 }))
 it('creates an offer without 💥', async () => {
-  const mocks = createCreateOfferMutationMock()
+  const mocks: MockedResponse[] = [
+    {
+      request: {
+        query: CREATE_SESSION_TOKEN_MUTATION,
+      },
+      result: {
+        data: {
+          createSession: 'abc123',
+        },
+      },
+    },
+    ...createCreateOfferMutationMock(),
+  ]
   const subscriptionLink = new MockSubscriptionLink()
   const mockLink = new MockLink(mocks)
   const link = split(
@@ -35,11 +60,7 @@ it('creates an offer without 💥', async () => {
       <Provider<{ storage: StorageState }>
         initialState={{
           storage: {
-            session: createSession(
-              new MockStorage({
-                [SESSION_KEY]: JSON.stringify({ token: 'abc123' }),
-              }),
-            ),
+            session: createSession(new MockStorage({})),
           },
         }}
       >
@@ -48,6 +69,11 @@ it('creates an offer without 💥', async () => {
     </ApolloProvider>,
   )
 
+  expect(wrapper.find(SessionContainer).contains('loading')).toBe(true)
+  await mockNetworkWait(3)
+  await mockNetworkWait(3)
+  expect(apolloClient!.subscriptionClient.close).toHaveBeenCalledTimes(1)
+  wrapper.update()
   wrapper.find('button').simulate('click')
   expect(wrapper.find('div').contains('loading')).toBe(true)
 
@@ -59,7 +85,7 @@ it('creates an offer without 💥', async () => {
       data: {
         offer: {
           __typename: 'OfferEvent',
-          status: 'PENDING ',
+          status: 'SUCCESS',
           insurance: {
             __typename: 'Insurance',
             status: 'PENDING',
@@ -70,5 +96,5 @@ it('creates an offer without 💥', async () => {
   })
   await mockNetworkWait()
   wrapper.update()
-  expect(wrapper.containsMatchingElement(<div>PENDING</div>)).toBe(true)
+  expect(wrapper.containsMatchingElement(<div>SUCCESS</div>)).toBe(true)
 })

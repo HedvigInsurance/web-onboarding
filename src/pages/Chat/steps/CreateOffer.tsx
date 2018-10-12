@@ -9,33 +9,37 @@ import { mockState } from '../utils/test-utils'
 
 export const CreateOffer: React.SFC = () => (
   <SessionContainer>
-    {(sessionToken) => (
-      <OfferCreationSubscription>
-        {(subscriptionMaybe) => (
-          <>
-            <CreateOfferContainer>
-              {(createOffer, { called }) => (
-                <>
-                  <button
-                    onClick={() =>
-                      createOffer(
-                        getCreateOfferVariablesFromChatState(mockState()),
-                      )
-                    }
-                  />
-                  <div>
-                    {subscriptionMaybe
-                      ? subscriptionMaybe.offer.status
-                      : called || !sessionToken
-                        ? 'loading'
-                        : null}
-                  </div>
-                </>
-              )}
-            </CreateOfferContainer>
-          </>
-        )}
-      </OfferCreationSubscription>
-    )}
+    {(sessionToken) =>
+      !sessionToken ? (
+        'loading'
+      ) : (
+        <OfferCreationSubscription>
+          {(subscriptionMaybe) => (
+            <>
+              <CreateOfferContainer>
+                {(createOffer, { called }) => (
+                  <>
+                    <button
+                      onClick={() =>
+                        createOffer(
+                          getCreateOfferVariablesFromChatState(mockState()),
+                        )
+                      }
+                    />
+                    <div>
+                      {subscriptionMaybe
+                        ? subscriptionMaybe.offer.status
+                        : called || !sessionToken
+                          ? 'loading'
+                          : null}
+                    </div>
+                  </>
+                )}
+              </CreateOfferContainer>
+            </>
+          )}
+        </OfferCreationSubscription>
+      )
+    }
   </SessionContainer>
 )

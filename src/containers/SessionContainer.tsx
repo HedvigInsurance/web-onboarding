@@ -34,10 +34,10 @@ export const SessionContainer: React.SFC<SessionContainerProps> = ({
                 createSession({
                   update: (_, { data }) => {
                     if (data && data.createSession) {
-                      storageState.setToken(data.createSession)
                       // async magic to let apollo reconnect after session has been updated
                       setTimeout(() => {
                         apolloClient!.subscriptionClient!.close(true, true)
+                        storageState.setToken(data.createSession)
                       }, 0)
                     }
                   },
