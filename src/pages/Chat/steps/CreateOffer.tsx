@@ -5,7 +5,6 @@ import {
   getCreateOfferVariablesFromChatState,
 } from '../containers/CreateOfferContainer'
 import { OfferCreationSubscription } from '../containers/OfferCreationSubscription'
-import { mockState } from '../utils/test-utils'
 import { ChatContainer } from '../state'
 
 export const CreateOffer: React.SFC = () => (
