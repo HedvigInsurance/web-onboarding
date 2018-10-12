@@ -3,7 +3,7 @@ import { ChatMessage } from 'components/hedvig/chat'
 import { Conversation, Message } from 'components/hedvig/conversation'
 import * as React from 'react'
 import { ChatContainer, ChatStep } from './state'
-import { CreateOfferComponent } from './steps/createOffer'
+import { CreateOffer } from './steps/CreateOffer'
 import { CurrentInsuranceInput } from './steps/CurrentInsuranceInput'
 import { Greet } from './steps/Greet'
 import { LivingSituationInput } from './steps/LivingSituationInput'
@@ -94,9 +94,7 @@ export const ChatConversation: React.SFC = () => (
           )}
         </Message>
 
-        <Message id={ChatStep.SHOW_OFFER}>
-          {() => <CreateOfferComponent />}
-        </Message>
+        <Message id={ChatStep.SHOW_OFFER}>{() => <CreateOffer />}</Message>
       </Conversation>
     )}
   </ChatContainer>

@@ -1,7 +1,7 @@
 import { Provider } from 'constate'
 import { mount } from 'enzyme'
 import * as React from 'react'
-import { MockedProvider, MockedResponse } from 'react-apollo/test-utils'
+import { MockedProvider } from 'react-apollo/test-utils'
 import { MockStorage } from 'utils/storage/MockStorage'
 import { mockNetworkWait } from 'utils/test-utils'
 import {
@@ -10,17 +10,10 @@ import {
   Session,
   SESSION_KEY,
 } from '../../../utils/sessionStorage'
+import { ChatContainer } from '../state'
+import { createCreateOfferMutationMock, mockState } from '../utils/test-utils'
 import {
-  ApartmentType,
-  ChatContainer,
-  ChatStep,
-  Insurer,
-  State as ChatState,
-} from '../state'
-import {
-  CREATE_OFFER_MUTATION,
   CreateOfferContainer,
-  CreateOfferMutationVariables,
   getCreateOfferVariablesFromChatState,
 } from './CreateOfferContainer'
 
@@ -30,52 +23,8 @@ jest.mock('client/apolloClient', () => ({
   },
 }))
 
-const mockState = (): ChatState => ({
-  nameAge: {
-    firstName: 'John',
-    lastName: 'Doe',
-    age: 42,
-  },
-  livingSituation: {
-    postalCode: '12345',
-    streetAddress: 'Storgatan 1',
-    apartmentType: ApartmentType.RENT,
-    size: 37,
-    numberOfPeople: 1,
-  },
-  currentInsurance: {
-    currentInsurer: Insurer.FOLKSAM,
-    hasCurrentInsurance: true,
-  },
-  currentStep: ChatStep.SHOW_OFFER,
-  initialVisibleSteps: [],
-  visibleSteps: [],
-})
-
 it('creates an offer when HAS initial session', async () => {
-  const mockedRequests: MockedResponse[] = [
-    {
-      request: {
-        query: CREATE_OFFER_MUTATION,
-        // tslint:disable-next-line no-object-literal-type-assertion
-        variables: {
-          firstName: mockState().nameAge.firstName,
-          lastName: mockState().nameAge.lastName,
-          age: mockState().nameAge.age,
-          address: mockState().livingSituation.streetAddress,
-          postalNumber: mockState().livingSituation.postalCode,
-          city: 'Storstan',
-          squareMeters: mockState().livingSituation.size,
-          insuranceType: mockState().livingSituation.apartmentType,
-          personsInHousehold: mockState().livingSituation.numberOfPeople,
-          previousInsurer: mockState().currentInsurance.currentInsurer,
-        } as CreateOfferMutationVariables,
-      },
-      result: {
-        data: { createOffer: 'abc123' },
-      },
-    },
-  ]
+  const mockedRequests = createCreateOfferMutationMock()
 
   const wrapper = mount(
     <MockedProvider mocks={mockedRequests}>
@@ -130,29 +79,7 @@ it('creates an offer when HAS initial session', async () => {
 })
 
 it('creates an offer when has NO initial session', async () => {
-  const mockedRequests: MockedResponse[] = [
-    {
-      request: {
-        query: CREATE_OFFER_MUTATION,
-        // tslint:disable-next-line no-object-literal-type-assertion
-        variables: {
-          firstName: mockState().nameAge.firstName,
-          lastName: mockState().nameAge.lastName,
-          age: mockState().nameAge.age,
-          address: mockState().livingSituation.streetAddress,
-          postalNumber: mockState().livingSituation.postalCode,
-          city: 'Storstan',
-          squareMeters: mockState().livingSituation.size,
-          insuranceType: mockState().livingSituation.apartmentType,
-          personsInHousehold: mockState().livingSituation.numberOfPeople,
-          previousInsurer: mockState().currentInsurance.currentInsurer,
-        } as CreateOfferMutationVariables,
-      },
-      result: {
-        data: { createOffer: 'abc123' },
-      },
-    },
-  ]
+  const mockedRequests = createCreateOfferMutationMock()
 
   const wrapper = mount(
     <MockedProvider mocks={mockedRequests}>
