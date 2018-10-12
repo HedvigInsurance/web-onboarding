@@ -9,14 +9,16 @@ import { InnerWrapper } from '../components/InnerWrapper'
 import { Wrapper } from '../components/Wrapper'
 
 interface Props {
+  insuranceOffer: {
+    insuredAtOtherCompany: boolean
+    monthlyCost: number
+    name: string
+    address: string
+    zip: string
+  }
   title: string
-  name: string
   buttonText: string
   buttonVisibility: (isVisible: boolean) => void
-  price: number
-  subTitle1: string
-  subTitle2: string
-  subTitle3: string
 }
 
 const Card = styled('div')({
@@ -34,19 +36,6 @@ const Header = styled('h1')({
   paddingTop: '30px',
   marginBottom: '10px',
   fontSize: '32px',
-})
-
-const PersonalInfo = styled('div')({
-  marginTop: '0px',
-  marginBottom: '0px',
-  marginLeft: 'auto',
-  marginRight: 'auto',
-  paddingBottom: '30px',
-  fontSize: '14px',
-  lineHeight: '22px',
-  textAlign: 'center',
-  maxWidth: '100%',
-  color: colors.WHITE,
 })
 
 const HeaderBackground = styled('div')({
@@ -69,15 +58,10 @@ export const GetInsured: React.SFC<Props> = (props) => (
         <Card>
           <HeaderBackground>
             <HeaderWrapper>
-              <Header>
-                {props.title} {props.name}
-              </Header>
+              <Header>{props.title}</Header>
             </HeaderWrapper>
-            <PersonalInfo>
-              {props.subTitle1} • {props.subTitle2} • {props.subTitle3}
-            </PersonalInfo>
           </HeaderBackground>
-          <Price>{props.price} kr/mån</Price>
+          <Price>{props.insuranceOffer.monthlyCost} kr/mån</Price>
           <VisibilitySensor
             partialVisibility
             onChange={(isVisible: boolean) => {

@@ -1,4 +1,5 @@
 import { colors, fonts } from '@hedviginsurance/brand'
+import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { GetInsuredButton, LinkTag } from 'components/get-insured-button'
 import * as React from 'react'
 import styled from 'react-emotion'
@@ -107,6 +108,7 @@ const IconTitle = styled('p')({
 
 interface Props {
   buttonVisibility: (isVisible: boolean) => void
+  buttonText: string
   insuranceOffer: {
     insuredAtOtherCompany: boolean
     monthlyCost: number
@@ -116,10 +118,11 @@ interface Props {
   }
 }
 
+// TODO: TEXT KEY THIS
 const COLUMNS = [
   {
     key: 0,
-    title: 'lagenhetsskydd',
+    title: 'Lagenhetsskydd',
     icon: '/assets/offering/lagenhetsskyddet.svg',
   },
   {
@@ -134,7 +137,16 @@ const COLUMNS = [
   },
 ]
 
-// TODO: NOW USING OFFER DATA. ADD TEXT KEYS FOR THE REST
+// TODO: TEXT KEY THIS
+const tktemp = {
+  OFFER_HEADER: 'Här är din hemförsäkring hos Hedvig!',
+  OFFER_PRICE_LABEL: 'kr/mån',
+  OFFER_RISK_LABEL: 'Självrisk: 1500 kr',
+  OFFER_START_LATER: 'När din gamla försäkring går ut',
+  OFFER_START_NOW: 'Idag',
+}
+
+// TODO: ADD TEXT KEYS
 export const Offer: React.SFC<Props> = (props) => (
   <Wrapper>
     <InnerWrapper>
@@ -142,7 +154,11 @@ export const Offer: React.SFC<Props> = (props) => (
         <Card>
           <HeaderBackground>
             <HeaderWrapper>
-              <Header>Här är din hemförsäkring hos Hedvig!</Header>
+              <Header>
+                <TranslationsConsumer textKey="OFFER_HEADER">
+                  {(title) => title}
+                </TranslationsConsumer>
+              </Header>
             </HeaderWrapper>
             <PersonalInfo>
               {props.insuranceOffer.name}
@@ -152,13 +168,29 @@ export const Offer: React.SFC<Props> = (props) => (
               {props.insuranceOffer.zip}
             </PersonalInfo>
           </HeaderBackground>
-          <Price>{props.insuranceOffer.monthlyCost} kr/mån</Price>
-          <InfoText>Självrisk: 1500 kr</InfoText>
+          <TranslationsConsumer textKey="OFFER_HEADER">
+            {(priceLabel) => (
+              <Price>
+                {props.insuranceOffer.monthlyCost} {priceLabel}
+              </Price>
+            )}
+          </TranslationsConsumer>
+          <InfoText>
+            <TranslationsConsumer textKey="OFFER_RISK_LABEL">
+              {(riskLabel) => riskLabel}
+            </TranslationsConsumer>
+          </InfoText>
           <InfoText>
             Startdatum:{' '}
-            {props.insuranceOffer.insuredAtOtherCompany
-              ? 'När din gamla försäkring går ut'
-              : 'Idag'}
+            {props.insuranceOffer.insuredAtOtherCompany ? (
+              <TranslationsConsumer textKey="OFFER_START_LATER">
+                {(riskLabel) => riskLabel}
+              </TranslationsConsumer>
+            ) : (
+              <TranslationsConsumer textKey="OFFER_START_NOW">
+                {(riskLabel) => riskLabel}
+              </TranslationsConsumer>
+            )}
           </InfoText>
           <Row>
             {COLUMNS.map((col) => (
@@ -176,7 +208,7 @@ export const Offer: React.SFC<Props> = (props) => (
           >
             {() => (
               <GetInsuredButton>
-                <LinkTag to={'/hedvig'}>Signera med BankID</LinkTag>
+                <LinkTag to={'/hedvig'}>{props.buttonText}</LinkTag>
               </GetInsuredButton>
             )}
           </VisibilitySensor>

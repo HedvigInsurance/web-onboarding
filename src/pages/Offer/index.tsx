@@ -52,6 +52,7 @@ export const Offering: React.SFC<{}> = () => (
             <Offer
               insuranceOffer={InsuranceOffer}
               buttonVisibility={state.updateVisibility}
+              buttonText={'Signera med BankID'}
             />
 
             <PageDown />
@@ -74,14 +75,10 @@ export const Offering: React.SFC<{}> = () => (
             <Terms />
 
             <GetInsured
-              title={'Försäkra'}
-              name={'Fantastiska Gatan'}
-              buttonText={'Bli försäkrad'}
-              subTitle1={'Zak Kjellin  23 år gammal'}
-              subTitle2={'Fantastiska Gatan 23B'}
-              subTitle3={'112 34 Stockholm'}
+              title={'Skaffa Sveriges smidigaste hemförsäkring'}
+              insuranceOffer={InsuranceOffer}
               buttonVisibility={state.updateVisibility}
-              price={InsuranceOffer.monthlyCost}
+              buttonText={'Signera med BankID'}
             />
             <Legal
               legalText={
