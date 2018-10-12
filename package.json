@@ -36,6 +36,7 @@
     "webpack-dev-server": "^3.1.8"
   },
   "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@hedviginsurance/brand": "^1.4.1",
     "@hedviginsurance/cli": "^2.1.0",
     "@hedviginsurance/textkeyfy": "^1.0.0",

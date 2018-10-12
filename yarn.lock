@@ -235,6 +235,18 @@
     "@babel/helper-remap-async-to-generator" "^7.1.0"
     "@babel/plugin-syntax-async-generators" "^7.0.0"
 
+"@babel/plugin-proposal-class-properties@^7.1.0":
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-class-properties/-/plugin-proposal-class-properties-7.1.0.tgz#9af01856b1241db60ec8838d84691aa0bd1e8df4"
+  integrity sha512-/PCJWN+CKt5v1xcGn4vnuu13QDoV+P7NcICP44BoonAJoPSGwVkgrXihFIQGiEjjPlUDBIw1cM7wYFLARS2/hw==
+  dependencies:
+    "@babel/helper-function-name" "^7.1.0"
+    "@babel/helper-member-expression-to-functions" "^7.0.0"
+    "@babel/helper-optimise-call-expression" "^7.0.0"
+    "@babel/helper-plugin-utils" "^7.0.0"
+    "@babel/helper-replace-supers" "^7.1.0"
+    "@babel/plugin-syntax-class-properties" "^7.0.0"
+
 "@babel/plugin-proposal-json-strings@^7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-json-strings/-/plugin-proposal-json-strings-7.0.0.tgz#3b4d7b5cf51e1f2e70f52351d28d44fc2970d01e"
@@ -272,6 +284,13 @@
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-async-generators/-/plugin-syntax-async-generators-7.0.0.tgz#bf0891dcdbf59558359d0c626fdc9490e20bc13c"
   integrity sha512-im7ged00ddGKAjcZgewXmp1vxSZQQywuQXe2B1A7kajjZmDeY/ekMPmWr9zJgveSaQH0k7BcGrojQhcK06l0zA==
+  dependencies:
+    "@babel/helper-plugin-utils" "^7.0.0"
+
+"@babel/plugin-syntax-class-properties@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-class-properties/-/plugin-syntax-class-properties-7.0.0.tgz#e051af5d300cbfbcec4a7476e37a803489881634"
+  integrity sha512-cR12g0Qzn4sgkjrbrzWy2GE7m9vMl/sFkqZ3gIpAQdrvPDnLM8180i+ANDFIXfjHo9aqp0ccJlQ0QNZcFUbf9w==
   dependencies:
     "@babel/helper-plugin-utils" "^7.0.0"
 
@@ -755,12 +774,12 @@
   integrity sha512-DTOdWlkx11argYVwl40FGrAV9H/ZC3nJWxiIHjcE8PKBg7ywsLIgO+kfLJf2vGDg3vDVwxNygpNn3nJGH4D6Vw==
 
 "@hedviginsurance/cli@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/cli/-/cli-2.1.0.tgz#bb046750d9c6b97bdbcb99de050f8987c80eefc1"
-  integrity sha512-tvyvQuzeJGo4tN/PSQir8jsFIuHG8GM/560R7ZCxqTQJgkepe7IEcwBGtBLCi5pB232haDi+QTPbcrYA+Npaag==
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/cli/-/cli-2.1.1.tgz#b4416d0200725736e5117320828c4a1c294b0f59"
+  integrity sha512-xLxd1vW6QijJudqQcEvR0YwXzG0yIAa2YoxWLL+HvevmuXW/nNGAvGfnUmbmJIPsjJA/AUhbmVbfJYZKznD2ig==
   dependencies:
     "@hedviginsurance/libkit" "^1.0.1"
-    "@hedviginsurance/web-survival-kit" "^1.5.0"
+    "@hedviginsurance/web-survival-kit" "^1.5.1"
     chalk "^2.4.1"
     fs-extra "^7.0.0"
     prompt-sync "^4.1.6"
@@ -788,6 +807,35 @@
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@hedviginsurance/web-survival-kit/-/web-survival-kit-1.5.0.tgz#458d32e02909bf592d93e1c52f423931574f3d4b"
   integrity sha512-M8V1a0RxXG2gggOrGsOA4k4MZWzboFRTUO4y2nDDUwzt+AumLgxfdVJv94P8WtH9DFUt/4X4FeAGtgjRKVSzEw==
+  dependencies:
+    "@babel/core" "^7.1.0"
+    "@babel/plugin-syntax-dynamic-import" "^7.0.0"
+    "@babel/plugin-transform-modules-commonjs" "^7.1.0"
+    "@babel/polyfill" "^7.0.0"
+    "@babel/preset-env" "^7.1.0"
+    "@babel/preset-react" "^7.0.0"
+    "@babel/preset-typescript" "^7.1.0"
+    "@types/koa" "^2.0.46"
+    "@types/koa-router" "^7.0.32"
+    babel-loader "^8.0.2"
+    copy-webpack-plugin "^4.5.2"
+    es6-promise "^4.2.5"
+    jest "^23.6.0"
+    koa "^2.5.3"
+    koa-mount "^3.0.0"
+    koa-router "^7.4.0"
+    koa-static "^5.0.0"
+    nodemon "^1.18.4"
+    ts-jest "^23.10.0"
+    typescript "^3.0.3"
+    webpack "^4.19.1"
+    webpack-node-externals "^1.7.2"
+    webpack-stats-plugin "^0.2.1"
+
+"@hedviginsurance/web-survival-kit@^1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/web-survival-kit/-/web-survival-kit-1.5.1.tgz#993bd43cdf6473a291147650f7b0dca0781eff94"
+  integrity sha512-kHusBJI2IsPKNK5E74tRKePkFL7Hstbc0BCP0qoyVGf90Q0YPPkl4vB7myLAfPpDwRk8MIPwAuD0/W0DavPfHg==
   dependencies:
     "@babel/core" "^7.1.0"
     "@babel/plugin-syntax-dynamic-import" "^7.0.0"
