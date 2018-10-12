@@ -11,7 +11,6 @@ export interface CreateOfferMutationVariables {
   age: number
   address: string
   postalNumber: string
-  city: string
   insuranceType: string
   squareMeters: number
   personsInHousehold: number
@@ -25,7 +24,6 @@ export const CREATE_OFFER_MUTATION: DocumentNode = gql`
     $age: Int!
     $address: String!
     $postalNumber: String!
-    $city: String!
     $insuranceType: InsuranceType!
     $squareMeters: Int!
     $personsInHousehold: Int!
@@ -38,7 +36,6 @@ export const CREATE_OFFER_MUTATION: DocumentNode = gql`
         age: $age
         address: $address
         postalNumber: $postalNumber
-        city: $city
         insuranceType: $insuranceType
         squareMeters: $squareMeters
         personsInHousehold: $personsInHousehold
@@ -56,7 +53,6 @@ export const getCreateOfferVariablesFromChatState = (
   age: Number(chatState.nameAge.age),
   address: chatState.livingSituation.streetAddress,
   postalNumber: chatState.livingSituation.postalCode,
-  city: 'Storstan',
   personsInHousehold: Number(chatState.livingSituation.numberOfPeople),
   squareMeters: Number(chatState.livingSituation.size),
   insuranceType: chatState.livingSituation.apartmentType!,

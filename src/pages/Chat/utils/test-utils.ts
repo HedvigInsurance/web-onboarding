@@ -38,7 +38,6 @@ export const createCreateOfferMutationMock = (): MockedResponse[] => [
         age: mockState().nameAge.age,
         address: mockState().livingSituation.streetAddress,
         postalNumber: mockState().livingSituation.postalCode,
-        city: 'Storstan',
         squareMeters: mockState().livingSituation.size,
         insuranceType: mockState().livingSituation.apartmentType,
         personsInHousehold: mockState().livingSituation.numberOfPeople,
