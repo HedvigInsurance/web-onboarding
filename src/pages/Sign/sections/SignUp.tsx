@@ -3,8 +3,11 @@ import {
   TranslationsConsumer,
   TranslationsPlaceholderConsumer,
 } from '@hedviginsurance/textkeyfy'
+import { SessionContainer } from 'containers/SessionContainer'
 import { Field, Form, Formik } from 'formik'
+import gql from 'graphql-tag'
 import * as React from 'react'
+import { Mutation, Subscription } from 'react-apollo'
 import styled from 'react-emotion'
 import * as Yup from 'yup'
 
@@ -121,6 +124,43 @@ const UserSchema = Yup.object().shape({
     .required('SIGN_PERSONAL_NUMBER_REQUIRED'),
 })
 
+const SIGN_MUTATION = gql`
+  mutation SignOffer($personalNumber: String!, $email: String!) {
+    signOffer(details: { personalNumber: $personalNumber, email: $email })
+  }
+`
+
+interface SignOfferMutationVariables {
+  personalNumber: string
+  email: string
+}
+
+const SIGN_SUBSCRIPTION = gql`
+  subscription SignStatus {
+    signStatus {
+      status {
+        signState
+        collectStatus {
+          status
+          code
+        }
+      }
+    }
+  }
+`
+
+interface SignStatusData {
+  signStatus: {
+    status: {
+      signState: string
+      collectStatus: {
+        status: string
+        code: string
+      }
+    }
+  }
+}
+
 export const SignUp: React.SFC = () => (
   <OuterWrapper>
     <CardWrapper>
@@ -137,62 +177,109 @@ export const SignUp: React.SFC = () => (
             </TranslationsPlaceholderConsumer>
           </Header>
         </HeaderWrapper>
-        <Formik
-          initialValues={{
-            email: '',
-            personalNumber: '',
-          }}
-          validationSchema={UserSchema}
-          onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
-        >
-          {({ errors, touched }) => (
-            <CustomForm>
-              <InputTitle>
-                <TranslationsConsumer textKey="SIGN_INPUT_ONE_TITLE">
-                  {(title) => title}
-                </TranslationsConsumer>
-              </InputTitle>
+        <SessionContainer>
+          {(token) =>
+            token ? (
+              <>
+                <Mutation<boolean, SignOfferMutationVariables>
+                  mutation={SIGN_MUTATION}
+                >
+                  {(signOffer) => (
+                    <Formik
+                      initialValues={{
+                        email: '',
+                        personalNumber: '',
+                      }}
+                      validationSchema={UserSchema}
+                      onSubmit={(values) =>
+                        signOffer({
+                          variables: {
+                            personalNumber: values.personalNumber,
+                            email: values.email,
+                          },
+                        })
+                      }
+                    >
+                      {({ errors, touched }) => (
+                        <CustomForm>
+                          <InputTitle>
+                            <TranslationsConsumer textKey="SIGN_INPUT_ONE_TITLE">
+                              {(title) => title}
+                            </TranslationsConsumer>
+                          </InputTitle>
 
-              <InputField name="email" />
-              {errors.email && touched.email ? (
-                <ErrorMessage>
-                  <TranslationsConsumer textKey={errors.email}>
-                    {(errorMessage) => errorMessage}
-                  </TranslationsConsumer>
-                </ErrorMessage>
-              ) : (
-                <ErrorMessage />
-              )}
-              <InputTitle>
-                <TranslationsConsumer textKey="SIGN_INPUT_TWO_TITLE">
-                  {(title) => title}
-                </TranslationsConsumer>
-              </InputTitle>
-              <InputField name="personalNumber" />
-              {errors.personalNumber && touched.personalNumber ? (
-                <ErrorMessage>
-                  <TranslationsConsumer textKey={errors.personalNumber}>
-                    {(errorMessage) => errorMessage}
-                  </TranslationsConsumer>
-                </ErrorMessage>
-              ) : (
-                <ErrorMessage />
-              )}
-              <GetInsuredButton>
-                <TranslationsConsumer textKey="SIGN_BUTTON_TEXT">
-                  {(buttonText) => (
-                    <InputSubmit type="submit" value={buttonText} />
+                          <InputField name="email" />
+                          {errors.email && touched.email ? (
+                            <ErrorMessage>
+                              <TranslationsConsumer textKey={errors.email}>
+                                {(errorMessage) => errorMessage}
+                              </TranslationsConsumer>
+                            </ErrorMessage>
+                          ) : (
+                            <ErrorMessage />
+                          )}
+                          <InputTitle>
+                            <TranslationsConsumer textKey="SIGN_INPUT_TWO_TITLE">
+                              {(title) => title}
+                            </TranslationsConsumer>
+                          </InputTitle>
+                          <InputField name="personalNumber" />
+                          {errors.personalNumber && touched.personalNumber ? (
+                            <ErrorMessage>
+                              <TranslationsConsumer
+                                textKey={errors.personalNumber}
+                              >
+                                {(errorMessage) => errorMessage}
+                              </TranslationsConsumer>
+                            </ErrorMessage>
+                          ) : (
+                            <ErrorMessage />
+                          )}
+                          <GetInsuredButton>
+                            <TranslationsConsumer textKey="SIGN_BUTTON_TEXT">
+                              {(buttonText) => (
+                                <InputSubmit type="submit" value={buttonText} />
+                              )}
+                            </TranslationsConsumer>
+                          </GetInsuredButton>
+                          <TranslationsConsumer textKey="SIGN_BANKID_ERROR_MESSAGE">
+                            {(errorMessage) =>
+                              errorMessage ? (
+                                <ErrorText>{errorMessage}</ErrorText>
+                              ) : null
+                            }
+                          </TranslationsConsumer>
+                        </CustomForm>
+                      )}
+                    </Formik>
                   )}
-                </TranslationsConsumer>
-              </GetInsuredButton>
-              <TranslationsConsumer textKey="SIGN_BANKID_ERROR_MESSAGE">
-                {(errorMessage) =>
-                  errorMessage ? <ErrorText>{errorMessage}</ErrorText> : null
-                }
-              </TranslationsConsumer>
-            </CustomForm>
-          )}
-        </Formik>
+                </Mutation>
+                <Subscription<SignStatusData> subscription={SIGN_SUBSCRIPTION}>
+                  {({ data, loading, error }) => {
+                    if (loading) {
+                      return <div>Loading</div>
+                    }
+                    if (error) {
+                      return (
+                        <div>
+                          Error: <pre>{JSON.stringify(error, null, 2)}</pre>
+                        </div>
+                      )
+                    }
+
+                    return (
+                      <div>
+                        Data: <pre>{JSON.stringify(data, null, 2)}</pre>
+                      </div>
+                    )
+                  }}
+                </Subscription>
+              </>
+            ) : (
+              'loading :('
+            )
+          }
+        </SessionContainer>
       </Card>
     </CardWrapper>
   </OuterWrapper>
