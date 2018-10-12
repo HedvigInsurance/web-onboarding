@@ -1,7 +1,10 @@
 import { colors, fonts } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { GetInsuredButton, LinkTag } from 'components/get-insured-button'
+import { SessionContainer } from 'containers/SessionContainer'
+import gql from 'graphql-tag'
 import * as React from 'react'
+import { Query } from 'react-apollo'
 import styled from 'react-emotion'
 import * as VisibilitySensor from 'react-visibility-sensor'
 import { CardWrapperSmall } from '../components/CardWrapperSmall'
@@ -146,74 +149,121 @@ const tktemp = {
   OFFER_START_NOW: 'Idag',
 }
 
+const OFFER_QUERY = gql`
+  query Offer {
+    insurance {
+      address
+      monthlyCost
+      insuredAtOtherCompany
+      type
+    }
+  }
+`
+
+interface OfferData {
+  insurance: {
+    address: string
+    monthlyCost: number
+    insuredAtOtherCompany: boolean
+    type: string
+  }
+}
+
 // TODO: ADD TEXT KEYS
 export const Offer: React.SFC<Props> = (props) => (
-  <Wrapper>
-    <InnerWrapper>
-      <CardWrapperSmall>
-        <Card>
-          <HeaderBackground>
-            <HeaderWrapper>
-              <Header>
-                <TranslationsConsumer textKey="OFFER_HEADER">
-                  {(title) => title}
-                </TranslationsConsumer>
-              </Header>
-            </HeaderWrapper>
-            <PersonalInfo>
-              {props.insuranceOffer.name}
-              {' • '}
-              {props.insuranceOffer.address}
-              {' • '}
-              {props.insuranceOffer.zip}
-            </PersonalInfo>
-          </HeaderBackground>
-          <TranslationsConsumer textKey="OFFER_HEADER">
-            {(priceLabel) => (
-              <Price>
-                {props.insuranceOffer.monthlyCost} {priceLabel}
-              </Price>
-            )}
-          </TranslationsConsumer>
-          <InfoText>
-            <TranslationsConsumer textKey="OFFER_RISK_LABEL">
-              {(riskLabel) => riskLabel}
-            </TranslationsConsumer>
-          </InfoText>
-          <InfoText>
-            Startdatum:{' '}
-            {props.insuranceOffer.insuredAtOtherCompany ? (
-              <TranslationsConsumer textKey="OFFER_START_LATER">
-                {(riskLabel) => riskLabel}
-              </TranslationsConsumer>
-            ) : (
-              <TranslationsConsumer textKey="OFFER_START_NOW">
-                {(riskLabel) => riskLabel}
-              </TranslationsConsumer>
-            )}
-          </InfoText>
-          <Row>
-            {COLUMNS.map((col) => (
-              <Col key={col.key}>
-                <Icon src={col.icon} />
-                <IconTitle>{col.title}</IconTitle>
-              </Col>
-            ))}
-          </Row>
-          <VisibilitySensor
-            partialVisibility
-            onChange={(isVisible: boolean) => {
-              props.buttonVisibility(isVisible)
-            }}
-          >
-            {() => (
-              <GetInsuredButton>
-                <LinkTag to={'/hedvig'}>{props.buttonText}</LinkTag>
-              </GetInsuredButton>
-            )}
-          </VisibilitySensor>
-        </Card>
-      </CardWrapperSmall>
-    </InnerWrapper>
-  </Wrapper>
+  <SessionContainer>
+    {(token) =>
+      token ? (
+        <Query<OfferData> query={OFFER_QUERY}>
+          {({ loading, error, data }) => {
+            if (loading) {
+              return <div>Loading</div>
+            }
+            if (error || !data) {
+              return <pre>{JSON.stringify(error, null, 2)}</pre>
+            }
+
+            const {
+              address,
+              monthlyCost,
+              insuredAtOtherCompany,
+              type,
+            } = data.insurance
+            return (
+              <Wrapper>
+                <InnerWrapper>
+                  <CardWrapperSmall>
+                    <Card>
+                      <HeaderBackground>
+                        <HeaderWrapper>
+                          <Header>
+                            <TranslationsConsumer textKey="OFFER_HEADER">
+                              {(title) => title}
+                            </TranslationsConsumer>
+                          </Header>
+                        </HeaderWrapper>
+                        <PersonalInfo>
+                          {'TODO REPLACE WITH NAME'}
+                          {' • '}
+                          {address}
+                          {' • '}
+                          {'TODO REPLACE WITH POSTAL NUMBER'}
+                        </PersonalInfo>
+                      </HeaderBackground>
+                      <TranslationsConsumer textKey="OFFER_HEADER">
+                        {(priceLabel) => (
+                          <Price>
+                            {monthlyCost} {priceLabel}
+                          </Price>
+                        )}
+                      </TranslationsConsumer>
+                      <InfoText>
+                        <TranslationsConsumer textKey="OFFER_RISK_LABEL">
+                          {(riskLabel) => riskLabel}
+                        </TranslationsConsumer>
+                      </InfoText>
+                      <InfoText>
+                        Startdatum:{' '}
+                        {insuredAtOtherCompany ? (
+                          <TranslationsConsumer textKey="OFFER_START_LATER">
+                            {(riskLabel) => riskLabel}
+                          </TranslationsConsumer>
+                        ) : (
+                          <TranslationsConsumer textKey="OFFER_START_NOW">
+                            {(riskLabel) => riskLabel}
+                          </TranslationsConsumer>
+                        )}
+                      </InfoText>
+                      <Row>
+                        {COLUMNS.map((col) => (
+                          <Col key={col.key}>
+                            <Icon src={col.icon} />
+                            <IconTitle>{col.title}</IconTitle>
+                          </Col>
+                        ))}
+                      </Row>
+                      <VisibilitySensor
+                        partialVisibility
+                        onChange={(isVisible: boolean) => {
+                          props.buttonVisibility(isVisible)
+                        }}
+                      >
+                        {() => (
+                          <GetInsuredButton>
+                            <LinkTag to={'/hedvig'}>{props.buttonText}</LinkTag>
+                          </GetInsuredButton>
+                        )}
+                      </VisibilitySensor>
+                    </Card>
+                  </CardWrapperSmall>
+                </InnerWrapper>
+              </Wrapper>
+            )
+          }}
+        </Query>
+      ) : (
+        'no token :('
+      )
+    }
+  </SessionContainer>
 )

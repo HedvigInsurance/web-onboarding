@@ -12,7 +12,7 @@ const requestIdMiddleware = (requestId?: string) =>
     return notNullable(forward)(operation)
   })
 
-export const createServerApolloClient = (requestId?: string) =>
+export const createServerApolloClient = (requestId?: string, token?: string) =>
   new ApolloClient({
     ssrMode: true,
     cache: new InMemoryCache(),
@@ -24,6 +24,9 @@ export const createServerApolloClient = (requestId?: string) =>
           'https://graphql.dev.hedvigit.com/graphql',
         ),
         fetch: require('node-fetch'),
+        headers: token && {
+          Authorization: token,
+        },
       }),
     ),
   })
