@@ -5,7 +5,8 @@ import { StorageContainer } from '../../utils/StorageContainer'
 
 export enum ChatStep {
   INITIAL = 'INITIAL',
-  NAME_AGE_INPUT = 'NAME_AGE_INPUT',
+  NAME_INPUT = 'NAME_INPUT',
+  AGE_INPUT = 'AGE_INPUT',
   GREET = 'GREET',
   LIVING_SITUATION_INPUT = 'LIVING_SITUATION_INPUT',
   CURRENT_INSURANCE_QUESTION = 'CURRENT_INSURANCE_QUESTION',

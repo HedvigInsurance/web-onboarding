@@ -3,11 +3,12 @@ import { ChatMessage } from 'components/hedvig/chat'
 import { Conversation, Message } from 'components/hedvig/conversation'
 import * as React from 'react'
 import { ChatContainer, ChatStep } from './state'
+import { AgeInput } from './steps/AgeInput'
 import { CreateOffer } from './steps/CreateOffer'
 import { CurrentInsuranceInput } from './steps/CurrentInsuranceInput'
 import { Greet } from './steps/Greet'
 import { LivingSituationInput } from './steps/LivingSituationInput'
-import { NameAgeInput } from './steps/NameAgeInput'
+import { NameInput } from './steps/NameInput'
 
 export const ChatConversation: React.SFC = () => (
   <ChatContainer>
@@ -28,7 +29,7 @@ export const ChatConversation: React.SFC = () => (
             <ChatMessage
               appear={appear}
               typingDuration={2500}
-              onTyped={() => goToStep(ChatStep.NAME_AGE_INPUT)}
+              onTyped={() => goToStep(ChatStep.NAME_INPUT)}
             >
               <TranslationsConsumer textKey="CHAT_HEDVIG_FIRST_GREET">
                 {(firstGreet) => firstGreet}
@@ -36,17 +37,24 @@ export const ChatConversation: React.SFC = () => (
             </ChatMessage>
           )}
         </Message>
-
-        <Message delay={500} id={ChatStep.NAME_AGE_INPUT}>
+        <Message delay={500} id={ChatStep.NAME_INPUT}>
           {({ appear }) => (
-            <NameAgeInput
-              onSubmit={() => goToStep(ChatStep.GREET)}
+            <NameInput
+              onSubmit={() => goToStep(ChatStep.AGE_INPUT)}
               appear={appear}
-              isCurrentMessage={currentStep === ChatStep.NAME_AGE_INPUT}
+              isCurrentMessage={currentStep === ChatStep.NAME_INPUT}
             />
           )}
         </Message>
-
+        <Message id={ChatStep.AGE_INPUT}>
+          {({ appear }) => (
+            <AgeInput
+              onSubmit={() => goToStep(ChatStep.GREET)}
+              appear={appear}
+              isCurrentMessage={currentStep === ChatStep.AGE_INPUT}
+            />
+          )}
+        </Message>
         <Message id={ChatStep.GREET}>
           {({ appear }) => (
             <Greet
@@ -55,7 +63,6 @@ export const ChatConversation: React.SFC = () => (
             />
           )}
         </Message>
-
         <Message id={ChatStep.LIVING_SITUATION_INPUT} delay={300}>
           {({ appear }) => (
             <LivingSituationInput
@@ -65,7 +72,6 @@ export const ChatConversation: React.SFC = () => (
             />
           )}
         </Message>
-
         <Message id={ChatStep.CURRENT_INSURANCE_QUESTION}>
           {({ appear }) => (
             <ChatMessage
@@ -84,7 +90,6 @@ export const ChatConversation: React.SFC = () => (
             </ChatMessage>
           )}
         </Message>
-
         <Message id={ChatStep.CURRENT_INSURANCE_INPUT} delay={300}>
           {({ appear }) => (
             <CurrentInsuranceInput
@@ -93,7 +98,6 @@ export const ChatConversation: React.SFC = () => (
             />
           )}
         </Message>
-
         <Message id={ChatStep.SHOW_OFFER}>{() => <CreateOffer />}</Message>
       </Conversation>
     )}

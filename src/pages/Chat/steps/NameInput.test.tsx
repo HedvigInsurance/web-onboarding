@@ -6,7 +6,7 @@ import { createSession } from 'utils/sessionStorage'
 import { MockStorage } from 'utils/storage/MockStorage'
 import { WithStorageProps } from 'utils/StorageContainer'
 import { ChatContainer } from '../state'
-import { NameAgeInput } from './NameAgeInput'
+import { NameInput } from './NameInput'
 
 it('handles form changes', () => {
   const wrapper = mount(
@@ -15,10 +15,10 @@ it('handles form changes', () => {
     >
       <MockTextKeyProvider
         textKeys={{
-          CHAT_INPUT_NAME_AGE_TEXT: '{firstName} {lastName} {age}',
+          CHAT_INPUT_NAME_TEXT: '{firstName} {lastName} {age}',
         }}
       >
-        <NameAgeInput
+        <NameInput
           onSubmit={() => {
             /* noop */
           }}
@@ -34,10 +34,6 @@ it('handles form changes', () => {
     .find('input#lastName')
     .simulate('change', { target: { value: 'hello1', id: 'lastName' } })
   expect(wrapper.find('input#lastName').prop('value')).toBe('hello1')
-  wrapper
-    .find('input#age')
-    .simulate('change', { target: { value: 12, id: 'age' } })
-  expect(wrapper.find('input#age').prop('value')).toBe(12)
 })
 
 it("doesn't submit empty forms", () => {
@@ -48,17 +44,13 @@ it("doesn't submit empty forms", () => {
     >
       <MockTextKeyProvider
         textKeys={{
-          CHAT_INPUT_NAME_AGE_TEXT: '{firstName} {lastName} {age}',
+          CHAT_INPUT_NAME_TEXT: '{firstName} {lastName} {age}',
         }}
       >
-        <NameAgeInput onSubmit={handleSubmit} />
+        <NameInput onSubmit={handleSubmit} />
       </MockTextKeyProvider>
     </Provider>,
   )
-
-  wrapper
-    .find('input#age')
-    .simulate('change', { target: { value: 1, id: 'age' } })
 
   const preventDefault = jest.fn()
   wrapper.find('form').simulate('submit', { preventDefault })
@@ -75,7 +67,6 @@ it('submits form and updates state', (done) => {
           <div className="test-state-shower">
             <div className="firstName">{nameAge.firstName}</div>
             <div className="lastName">{nameAge.lastName}</div>
-            <div className="age">{nameAge.age}</div>
           </div>
         ) : null
       }
@@ -88,10 +79,10 @@ it('submits form and updates state', (done) => {
     >
       <MockTextKeyProvider
         textKeys={{
-          CHAT_INPUT_NAME_AGE_TEXT: '{firstName} {lastName} {age}',
+          CHAT_INPUT_NAME_TEXT: '{firstName} {lastName} {age}',
         }}
       >
-        <NameAgeInput onSubmit={handleSubmit} />
+        <NameInput onSubmit={handleSubmit} />
         <StateShower />
       </MockTextKeyProvider>
     </Provider>,
@@ -102,9 +93,6 @@ it('submits form and updates state', (done) => {
   })
   wrapper.find('input#lastName').simulate('change', {
     target: { value: 'Doe', id: 'lastName' },
-  })
-  wrapper.find('input#age').simulate('change', {
-    target: { value: 12, id: 'age' },
   })
 
   const preventDefault = jest.fn()
@@ -117,7 +105,6 @@ it('submits form and updates state', (done) => {
       expect(handleSubmit).toHaveBeenCalled()
       expect(wrapper.find('div.firstName').contains('John')).toBe(true)
       expect(wrapper.find('div.lastName').contains('Doe')).toBe(true)
-      expect(wrapper.find('div.age').contains(12 as any)).toBe(true)
       done()
     } catch (e) {
       done.fail(e)
