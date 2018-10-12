@@ -11,7 +11,7 @@ export interface WithStorageProps {
 }
 
 export interface StorageEffects {
-  setToken: (token: string) => void
+  setToken: (token?: string) => void
 }
 
 export const StorageContainer: React.SFC<

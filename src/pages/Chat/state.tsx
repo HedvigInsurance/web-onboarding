@@ -205,8 +205,8 @@ export const ChatContainer: React.SFC<
                 ...initialState,
                 currentStep: undefined,
                 visibleSteps: [],
-                token: undefined,
               })
+              storageState.setToken(undefined)
               setTimeout(() => {
                 setState({
                   currentStep: ChatStep.INITIAL,
