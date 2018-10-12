@@ -15,7 +15,7 @@ const PARAGRAPHWIDTH = 240
 
 const Card = styled('div')({
   paddingTop: '30px',
-  paddingBottom: '30px',
+  paddingBottom: '60px',
   backgroundColor: colors.WHITE,
   boxShadow: '0px 8px 15px -13px rgba(0,0,0,0.67)',
   borderRadius: '10px',

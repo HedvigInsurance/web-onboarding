@@ -13,7 +13,7 @@ interface Props {
   name: string
   buttonText: string
   buttonVisibility: (isVisible: boolean) => void
-  price: string
+  price: number
   subTitle1: string
   subTitle2: string
   subTitle3: string
@@ -77,7 +77,7 @@ export const GetInsured: React.SFC<Props> = (props) => (
               {props.subTitle1} • {props.subTitle2} • {props.subTitle3}
             </PersonalInfo>
           </HeaderBackground>
-          <Price>{props.price}</Price>
+          <Price>{props.price} kr/mån</Price>
           <VisibilitySensor
             partialVisibility
             onChange={(isVisible: boolean) => {

@@ -11,11 +11,10 @@ import { InsuredAmount } from './sections/InsuredAmount'
 import { Legal } from './sections/LegalText'
 import { Offer } from './sections/Offer'
 import { PageDown } from './sections/PageDown'
+import { Terms } from './sections/Terms'
 
 interface State {
   getStartedButtonVisible: boolean
-  alreadyInsured: boolean
-  price: string
 }
 interface Actions {
   updateVisibility: (visible: boolean) => void
@@ -35,8 +34,6 @@ export const Offering: React.SFC<{}> = () => (
       <Container<State, ActionMap<State, Actions>>
         initialState={{
           getStartedButtonVisible: true,
-          alreadyInsured: true,
-          price: '299 kr/mån',
         }}
         actions={{
           updateVisibility: (visible: boolean) => (_) => ({
@@ -53,28 +50,15 @@ export const Offering: React.SFC<{}> = () => (
             />
 
             <Offer
+              insuranceOffer={InsuranceOffer}
               buttonVisibility={state.updateVisibility}
-              alreadyInsured={state.alreadyInsured}
-              header={'Hej Zak, det här är din hemförsäkring hos Hedvig!'}
-              subTitle1={'Zak Kjellin  23 år gammal'}
-              subTitle2={'Fantastiska Gatan 23B'}
-              subTitle3={'112 34 Stockholm'}
-              price={state.price}
-              startDate={'Startdatum:'}
-              start={'När din gamla försäkring går ut'}
-              coverage={'Gäller i hela världen'}
-              getInsured={'Bli försäkrad'}
-              backgroundImage={'url(assets/offering/map-background.png)'}
-              alreadyInsuredLabel={'Gamla försäkringens slutdatum'}
-              todayLabel={'Idag'}
-              protection={'Självrisk: 1500 kr'}
             />
 
             <PageDown />
 
             <HedvigInfo title={'Det här är Hedvig'} />
 
-            {state.alreadyInsured ? (
+            {InsuranceOffer.insuredAtOtherCompany ? (
               <HedvigSwitch
                 title={'Hedvig sköter bytet från din gamla försäkring'}
               />
@@ -87,6 +71,8 @@ export const Offering: React.SFC<{}> = () => (
 
             <InsuredAmount title={'Försäkrade belopp'} info={'Läs mer'} />
 
+            <Terms />
+
             <GetInsured
               title={'Försäkra'}
               name={'Fantastiska Gatan'}
@@ -95,7 +81,7 @@ export const Offering: React.SFC<{}> = () => (
               subTitle2={'Fantastiska Gatan 23B'}
               subTitle3={'112 34 Stockholm'}
               buttonVisibility={state.updateVisibility}
-              price={state.price}
+              price={InsuranceOffer.monthlyCost}
             />
             <Legal
               legalText={
@@ -108,5 +94,12 @@ export const Offering: React.SFC<{}> = () => (
     </>
   </>
 )
+const InsuranceOffer = {
+  insuredAtOtherCompany: true,
+  monthlyCost: 199,
+  name: 'Zak Kjellin',
+  address: 'Fantastiska Gatan 23B',
+  zip: '112 34 Stockholm',
+}
 
 /* TODO: Add proptypes check */

@@ -75,6 +75,8 @@ const Col = styled('div')({
 })
 
 const Row = styled('div')({
+  marginLeft: '100px',
+  marginRight: '100px',
   display: 'flex',
   alignItems: 'baseline',
   flexDirection: 'row',
@@ -105,40 +107,34 @@ const IconTitle = styled('p')({
 
 interface Props {
   buttonVisibility: (isVisible: boolean) => void
-  alreadyInsured: boolean
-  header: string
-  subTitle1: string
-  subTitle2: string
-  subTitle3: string
-  price: string
-  startDate: string
-  start: string
-  coverage: string
-  getInsured: string
-  backgroundImage: string
-  alreadyInsuredLabel: string
-  todayLabel: string
-  protection: string
+  insuranceOffer: {
+    insuredAtOtherCompany: boolean
+    monthlyCost: number
+    name: string
+    address: string
+    zip: string
+  }
 }
 
 const COLUMNS = [
   {
     key: 0,
-    title: 'Inget pappersarbete',
-    icon: '/assets/offering/oval-light-purple.svg',
+    title: 'lagenhetsskydd',
+    icon: '/assets/offering/lagenhetsskyddet.svg',
   },
   {
     key: 1,
-    title: 'Ingen bindningstid',
-    icon: '/assets/offering/oval-orange.svg',
+    title: 'Personskydd',
+    icon: '/assets/offering/familjeskyddet.svg',
   },
   {
     key: 2,
-    title: 'Blixtsnabb ersättning',
-    icon: '/assets/offering/oval-dark-purple.svg',
+    title: 'Prylskydd',
+    icon: '/assets/offering/prylskyddet.svg',
   },
 ]
 
+// TODO: NOW USING OFFER DATA. ADD TEXT KEYS FOR THE REST
 export const Offer: React.SFC<Props> = (props) => (
   <Wrapper>
     <InnerWrapper>
@@ -146,16 +142,23 @@ export const Offer: React.SFC<Props> = (props) => (
         <Card>
           <HeaderBackground>
             <HeaderWrapper>
-              <Header>{props.header}</Header>
+              <Header>Här är din hemförsäkring hos Hedvig!</Header>
             </HeaderWrapper>
             <PersonalInfo>
-              {props.subTitle1} • {props.subTitle2} • {props.subTitle3}
+              {props.insuranceOffer.name}
+              {' • '}
+              {props.insuranceOffer.address}
+              {' • '}
+              {props.insuranceOffer.zip}
             </PersonalInfo>
           </HeaderBackground>
-          <Price>{props.price}</Price>
-          <InfoText>{props.protection}</InfoText>
+          <Price>{props.insuranceOffer.monthlyCost} kr/mån</Price>
+          <InfoText>Självrisk: 1500 kr</InfoText>
           <InfoText>
-            {props.startDate} {props.start}
+            Startdatum:{' '}
+            {props.insuranceOffer.insuredAtOtherCompany
+              ? 'När din gamla försäkring går ut'
+              : 'Idag'}
           </InfoText>
           <Row>
             {COLUMNS.map((col) => (
@@ -173,7 +176,7 @@ export const Offer: React.SFC<Props> = (props) => (
           >
             {() => (
               <GetInsuredButton>
-                <LinkTag to={'/hedvig'}>{props.getInsured}</LinkTag>
+                <LinkTag to={'/hedvig'}>Signera med BankID</LinkTag>
               </GetInsuredButton>
             )}
           </VisibilitySensor>
