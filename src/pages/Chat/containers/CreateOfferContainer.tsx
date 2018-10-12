@@ -85,16 +85,16 @@ export const CreateOfferContainer: React.SFC<CreateOfferContainerProps> = ({
   <Mutation<{ createOffer: string }, CreateOfferMutationVariables>
     mutation={CREATE_OFFER_MUTATION}
   >
-    {(mutate, props) =>
+    {(mutate, { data, loading, error, called }) =>
       children(
         (variables) => {
           mutate({ variables })
         },
         {
-          data: props.data && props.data.createOffer,
-          loading: props.loading,
-          error: props.error,
-          called: props.called,
+          data: data && data.createOffer,
+          loading,
+          error,
+          called,
         },
       )
     }
