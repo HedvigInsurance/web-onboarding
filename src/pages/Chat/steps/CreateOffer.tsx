@@ -1,3 +1,4 @@
+import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import { SessionContainer } from '../../../containers/SessionContainer'
 import {
@@ -6,7 +7,6 @@ import {
 } from '../containers/CreateOfferContainer'
 import { OfferCreationSubscription } from '../containers/OfferCreationSubscription'
 import { ChatContainer } from '../state'
-import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 
 export const CreateOffer: React.SFC = () => (
   <SessionContainer>
