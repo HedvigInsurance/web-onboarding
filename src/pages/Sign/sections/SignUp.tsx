@@ -9,7 +9,6 @@ import gql from 'graphql-tag'
 import * as React from 'react'
 import { Mutation, Subscription } from 'react-apollo'
 import styled from 'react-emotion'
-import { Redirect, Route } from 'react-router'
 import * as Yup from 'yup'
 
 const CARDWIDTH = 788
@@ -255,13 +254,13 @@ export const SignUp: React.SFC = () => (
                           >
                             {({ data, loading, error }) => {
                               if (loading) {
-                                return <div />
+                                return null
                               }
                               if (error) {
                                 return (
                                   <div>
                                     <ErrorText>
-                                      <TranslationsConsumer textKey="SIGN_BUTTON_TEXT">
+                                      <TranslationsConsumer textKey="SIGN_BANKID_STANDARD_ERROR_MESSAGE">
                                         {(errorText) => errorText}
                                       </TranslationsConsumer>
                                     </ErrorText>
@@ -272,23 +271,30 @@ export const SignUp: React.SFC = () => (
                                 const dataStatus =
                                   data.signStatus.status.collectStatus
                                 if (dataStatus.status === 'pending') {
-                                  return (
-                                    <RegularText>Väntar på BankID</RegularText>
-                                  )
+                                  if (dataStatus.code === 'userSign') {
+                                    return (
+                                      <RegularText>
+                                        <TranslationsConsumer textKey="SIGN_BANKID_WAITING_FOR_BANKID">
+                                          {(message) => message}
+                                        </TranslationsConsumer>
+                                      </RegularText>
+                                    )
+                                  }
                                 } else if (dataStatus.status === 'complete') {
                                   window.location.href = '/download'
                                 } else if (dataStatus.status === 'failed') {
                                   if (dataStatus.code === 'userCancel') {
                                     return (
                                       <RegularText>
-                                        Signering avbruten. Klicka på Singera
-                                        med BankID för att försöka igen.
+                                        <TranslationsConsumer textKey="SIGN_BANKID_CANCELLED_BY_USER">
+                                          {(message) => message}
+                                        </TranslationsConsumer>
                                       </RegularText>
                                     )
                                   }
                                 }
                               }
-                              return <div />
+                              return null
                             }}
                           </Subscription>
                         </CustomForm>
@@ -297,9 +303,7 @@ export const SignUp: React.SFC = () => (
                   )}
                 </Mutation>
               </>
-            ) : (
-              'loading :('
-            )
+            ) : null
           }
         </SessionContainer>
       </Card>
