@@ -180,10 +180,6 @@ interface SignStatusData {
   }
 }
 
-// interface Props {
-//   isSubmitting: boolean
-// }
-
 export const SignUp: React.SFC = () => (
   <OuterWrapper>
     <CardWrapper>
