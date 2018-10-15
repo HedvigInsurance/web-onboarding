@@ -22,16 +22,15 @@ const fadeOut = keyframes({
 
 const ChatWrapper = styled('div')({
   display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'flex-end',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
   marginBottom: 10,
+  opacity: 1,
 })
 const Hedvig = styled('img')({
-  height: 40,
+  height: 33,
 })
-const HedvigWrapper = styled('div')({
-  paddingRight: 20,
-})
+const HedvigWrapper = styled('div')({})
 
 const ChatMessageWrapper = styled('div')({
   position: 'relative',
@@ -46,7 +45,7 @@ const TypingWrapper = styled('div')(
         ? `${fadeOut} 200ms forwards`
         : `${fadeIn} 300ms forwards`,
     position: 'absolute',
-    bottom: 0,
+    top: 0,
     left: 0,
   }),
 )
@@ -94,11 +93,13 @@ export const Typing: React.SFC<{ status: TransitionStatus }> = ({ status }) => (
 export const ChatMessageTextWrapper = styled('div')(
   ({ isVisible, appear }: { isVisible: boolean; appear: boolean }) => ({
     display: 'inline-block',
-    backgroundColor: colors.OFF_WHITE,
-    color: colors.OFF_BLACK,
-    fontFamily: fonts.MERRIWEATHER,
+    maxWidth: '75%',
     padding: '1rem 2rem',
-    fontSize: '.9rem',
+    backgroundColor: colors.OFF_WHITE,
+    color: colors.BLACK_PURPLE,
+    fontFamily: fonts.MERRIWEATHER,
+    fontSize: '0.95em',
+    fontWeight: 300,
     borderRadius: 8,
     opacity: appear ? 1 : 0,
     animation:

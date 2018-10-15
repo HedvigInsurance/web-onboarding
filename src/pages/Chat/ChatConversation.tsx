@@ -1,4 +1,5 @@
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
+import { Mufflable } from 'components/animations/Mufflable'
 import { ChatMessage } from 'components/hedvig/chat'
 import { Conversation, Message } from 'components/hedvig/conversation'
 import * as React from 'react'
@@ -28,103 +29,172 @@ export const ChatConversation: React.SFC = () => (
       >
         <Message id={ChatStep.INITIAL}>
           {({ appear }) => (
-            <ChatMessage
-              appear={appear}
-              typingDuration={2500}
-              onTyped={() => goToStep(ChatStep.NAME_INPUT)}
+            <Mufflable
+              muffled={
+                ![
+                  ChatStep.INITIAL,
+                  ChatStep.NAME_INPUT,
+                  ChatStep.AGE_INPUT,
+                ].includes(currentStep)
+              }
             >
-              <TranslationsConsumer textKey="CHAT_HEDVIG_FIRST_GREET">
-                {(firstGreet) => firstGreet}
-              </TranslationsConsumer>
-            </ChatMessage>
+              <ChatMessage
+                appear={appear}
+                typingDuration={2500}
+                onTyped={() => goToStep(ChatStep.NAME_INPUT)}
+              >
+                <TranslationsConsumer textKey="CHAT_HEDVIG_FIRST_GREET">
+                  {(firstGreet) => firstGreet}
+                </TranslationsConsumer>
+              </ChatMessage>
+            </Mufflable>
           )}
         </Message>
         <Message delay={500} id={ChatStep.NAME_INPUT}>
           {({ appear }) => (
-            <NameInput
-              onSubmit={() => goToStep(ChatStep.AGE_INPUT)}
-              appear={appear}
-              isCurrentMessage={currentStep === ChatStep.NAME_INPUT}
-            />
+            <Mufflable
+              muffled={currentStep !== ChatStep.NAME_INPUT}
+              direction="right"
+            >
+              <NameInput
+                onSubmit={() => goToStep(ChatStep.AGE_INPUT)}
+                appear={appear}
+                isCurrentMessage={currentStep === ChatStep.NAME_INPUT}
+              />
+            </Mufflable>
           )}
         </Message>
         <Message id={ChatStep.AGE_INPUT}>
           {({ appear }) => (
-            <AgeInput
-              onSubmit={() => goToStep(ChatStep.GREET)}
-              appear={appear}
-              isCurrentMessage={currentStep === ChatStep.AGE_INPUT}
-            />
+            <Mufflable
+              muffled={currentStep !== ChatStep.AGE_INPUT}
+              direction="right"
+            >
+              <AgeInput
+                onSubmit={() => goToStep(ChatStep.GREET)}
+                appear={appear}
+                isCurrentMessage={currentStep === ChatStep.AGE_INPUT}
+              />
+            </Mufflable>
           )}
         </Message>
 
         <Message id={ChatStep.GREET}>
           {({ appear }) => (
-            <Greet
-              appear={appear}
-              onTyped={() => goToStep(ChatStep.ADDRESS_INPUT)}
-            />
+            <Mufflable
+              muffled={
+                ![
+                  ChatStep.GREET,
+                  ChatStep.ADDRESS_INPUT,
+                  ChatStep.APARTMENT_TYPE_INPUT,
+                  ChatStep.NUMBER_OF_PEOPLE,
+                ].includes(currentStep)
+              }
+            >
+              <Greet
+                appear={appear}
+                onTyped={() => goToStep(ChatStep.ADDRESS_INPUT)}
+              />
+            </Mufflable>
           )}
         </Message>
 
         <Message id={ChatStep.ADDRESS_INPUT}>
           {({ appear }) => (
-            <AddressInput
-              appear={appear}
-              isCurrentMessage={currentStep === ChatStep.ADDRESS_INPUT}
-              onSubmit={() => goToStep(ChatStep.APARTMENT_TYPE_INPUT)}
-            />
+            <Mufflable
+              muffled={currentStep !== ChatStep.ADDRESS_INPUT}
+              direction="right"
+            >
+              <AddressInput
+                appear={appear}
+                isCurrentMessage={currentStep === ChatStep.ADDRESS_INPUT}
+                onSubmit={() => goToStep(ChatStep.APARTMENT_TYPE_INPUT)}
+              />
+            </Mufflable>
           )}
         </Message>
         <Message id={ChatStep.APARTMENT_TYPE_INPUT}>
           {({ appear }) => (
-            <ApartmentTypeInput
-              appear={appear}
-              isCurrentMessage={currentStep === ChatStep.APARTMENT_TYPE_INPUT}
-              onSubmit={() => goToStep(ChatStep.NUMBER_OF_PEOPLE)}
-            />
+            <Mufflable
+              muffled={currentStep !== ChatStep.APARTMENT_TYPE_INPUT}
+              direction="right"
+            >
+              <ApartmentTypeInput
+                appear={appear}
+                isCurrentMessage={currentStep === ChatStep.APARTMENT_TYPE_INPUT}
+                onSubmit={() => goToStep(ChatStep.NUMBER_OF_PEOPLE)}
+              />
+            </Mufflable>
           )}
         </Message>
         <Message id={ChatStep.NUMBER_OF_PEOPLE}>
           {({ appear }) => (
-            <NumberOfPeopleInput
-              appear={appear}
-              isCurrentMessage={currentStep === ChatStep.NUMBER_OF_PEOPLE}
-              onSubmit={() => goToStep(ChatStep.CURRENT_INSURANCE_QUESTION)}
-            />
+            <Mufflable
+              muffled={currentStep !== ChatStep.NUMBER_OF_PEOPLE}
+              direction="right"
+            >
+              <NumberOfPeopleInput
+                appear={appear}
+                isCurrentMessage={currentStep === ChatStep.NUMBER_OF_PEOPLE}
+                onSubmit={() => goToStep(ChatStep.CURRENT_INSURANCE_QUESTION)}
+              />
+            </Mufflable>
           )}
         </Message>
 
         <Message id={ChatStep.CURRENT_INSURANCE_QUESTION}>
           {({ appear }) => (
-            <ChatMessage
-              appear={appear}
-              onTyped={() => goToStep(ChatStep.CURRENT_INSURANCE_INPUT)}
+            <Mufflable
+              muffled={
+                ![
+                  ChatStep.CURRENT_INSURANCE_QUESTION,
+                  ChatStep.CURRENT_INSURANCE_INPUT,
+                ].includes(currentStep)
+              }
             >
-              <TranslationsConsumer
-                textKey={
-                  livingSituation.numberOfPeople > 1
-                    ? 'CHAT_HEDVIG_CURRENT_INSURANCE_QUESTION_PLURAL'
-                    : 'CHAT_HEDVIG_CURRENT_INSURANCE_QUESTION_SINGULAR'
-                }
+              <ChatMessage
+                appear={appear}
+                onTyped={() => goToStep(ChatStep.CURRENT_INSURANCE_INPUT)}
               >
-                {(t) => t}
-              </TranslationsConsumer>
-            </ChatMessage>
+                <TranslationsConsumer
+                  textKey={
+                    livingSituation.numberOfPeople > 1
+                      ? 'CHAT_HEDVIG_CURRENT_INSURANCE_QUESTION_PLURAL'
+                      : 'CHAT_HEDVIG_CURRENT_INSURANCE_QUESTION_SINGULAR'
+                  }
+                >
+                  {(t) => t}
+                </TranslationsConsumer>
+              </ChatMessage>
+            </Mufflable>
           )}
         </Message>
         <Message id={ChatStep.CURRENT_INSURANCE_INPUT} delay={300}>
           {({ appear }) => (
-            <CurrentInsuranceInput
-              appear={appear}
-              onSubmit={() => goToStep(ChatStep.SHOW_OFFER)}
-              isCurrentMessage={
-                currentStep === ChatStep.CURRENT_INSURANCE_INPUT
-              }
-            />
+            <Mufflable
+              muffled={currentStep !== ChatStep.CURRENT_INSURANCE_INPUT}
+              direction="right"
+            >
+              <CurrentInsuranceInput
+                appear={appear}
+                onSubmit={() => goToStep(ChatStep.SHOW_OFFER)}
+                isCurrentMessage={
+                  currentStep === ChatStep.CURRENT_INSURANCE_INPUT
+                }
+              />
+            </Mufflable>
           )}
         </Message>
-        <Message id={ChatStep.SHOW_OFFER}>{() => <CreateOffer />}</Message>
+        <Message id={ChatStep.SHOW_OFFER}>
+          {() => (
+            <Mufflable
+              muffled={currentStep !== ChatStep.SHOW_OFFER}
+              direction="right"
+            >
+              <CreateOffer />
+            </Mufflable>
+          )}
+        </Message>
       </Conversation>
     )}
   </ChatContainer>
