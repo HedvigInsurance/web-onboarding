@@ -155,18 +155,34 @@ const SIGN_SUBSCRIPTION = gql`
     }
   }
 `
+enum SIGNSTATE {
+  INITIATED = 'INITIATED',
+  IN_PROGRESS = 'IN_PROGRESS',
+  FAILED = 'FAILED',
+  COMPLETED = 'COMPLETED',
+}
+
+enum BANKIDSTATUS {
+  PENDING = 'pending',
+  FAILED = 'failed',
+  COMPLETE = 'complete',
+}
 
 interface SignStatusData {
   signStatus: {
     status: {
-      signState: string
+      signState: SIGNSTATE
       collectStatus: {
-        status: string
+        status: BANKIDSTATUS
         code: string
       }
     }
   }
 }
+
+// interface Props {
+//   isSubmitting: boolean
+// }
 
 export const SignUp: React.SFC = () => (
   <OuterWrapper>
@@ -270,27 +286,114 @@ export const SignUp: React.SFC = () => (
                               if (data) {
                                 const dataStatus =
                                   data.signStatus.status.collectStatus
-                                if (dataStatus.status === 'pending') {
-                                  if (dataStatus.code === 'userSign') {
-                                    return (
-                                      <SigningStatusText>
-                                        <TranslationsConsumer textKey="SIGN_BANKID_WAITING_FOR_BANKID">
-                                          {(message) => message}
-                                        </TranslationsConsumer>
-                                      </SigningStatusText>
-                                    )
+                                const signingState =
+                                  data.signStatus.status.signState
+                                if (signingState === SIGNSTATE.INITIATED) {
+                                  return (
+                                    <div>
+                                      *BankID signing initated, open bankid*
+                                    </div>
+                                  )
+                                } else if (
+                                  signingState === SIGNSTATE.IN_PROGRESS
+                                ) {
+                                  if (
+                                    dataStatus.status === BANKIDSTATUS.PENDING
+                                  ) {
+                                    if (dataStatus.code === 'started') {
+                                      return (
+                                        <SigningStatusText>
+                                          Bankid signing: started
+                                        </SigningStatusText>
+                                      )
+                                    } else if (dataStatus.code === 'userSign') {
+                                      return (
+                                        <SigningStatusText>
+                                          <TranslationsConsumer textKey="SIGN_BANKID_USER_SIGN">
+                                            {(message) => message}
+                                          </TranslationsConsumer>
+                                        </SigningStatusText>
+                                      )
+                                    } else if (dataStatus.code === 'noClient') {
+                                      return (
+                                        <SigningStatusText>
+                                          Bankid signing: noClient
+                                        </SigningStatusText>
+                                      )
+                                    } else if (
+                                      dataStatus.code ===
+                                      'outstandingTransaction'
+                                    ) {
+                                      return (
+                                        <SigningStatusText>
+                                          Bankid signing: outstandingTransaction
+                                        </SigningStatusText>
+                                      )
+                                    }
                                   }
-                                } else if (dataStatus.status === 'complete') {
-                                  window.location.href = '/download'
-                                } else if (dataStatus.status === 'failed') {
-                                  if (dataStatus.code === 'userCancel') {
-                                    return (
-                                      <SigningStatusText>
-                                        <TranslationsConsumer textKey="SIGN_BANKID_CANCELLED_BY_USER">
-                                          {(message) => message}
-                                        </TranslationsConsumer>
-                                      </SigningStatusText>
-                                    )
+                                } else if (
+                                  signingState === SIGNSTATE.COMPLETED
+                                ) {
+                                  if (
+                                    dataStatus.status === BANKIDSTATUS.COMPLETE
+                                  ) {
+                                    window.location.href = '/download'
+                                  }
+                                } else if (signingState === SIGNSTATE.FAILED) {
+                                  if (
+                                    dataStatus.status === BANKIDSTATUS.FAILED
+                                  ) {
+                                    if (
+                                      dataStatus.code === 'expiredTransaction'
+                                    ) {
+                                      return (
+                                        <SigningStatusText>
+                                          <TranslationsConsumer textKey="SIGN_BANKID_EXPIRED_TRANSACTION">
+                                            {(message) => message}
+                                          </TranslationsConsumer>
+                                        </SigningStatusText>
+                                      )
+                                    } else if (
+                                      dataStatus.code === 'certificateErr'
+                                    ) {
+                                      return (
+                                        <SigningStatusText>
+                                          <TranslationsConsumer textKey="SIGN_BANKID_CERTIFICATE_ERR">
+                                            {(message) => message}
+                                          </TranslationsConsumer>
+                                        </SigningStatusText>
+                                      )
+                                    } else if (
+                                      dataStatus.code === 'userCancel'
+                                    ) {
+                                      return (
+                                        <SigningStatusText>
+                                          <TranslationsConsumer textKey="SIGN_BANKID_USER_CANCEL">
+                                            {(message) => message}
+                                          </TranslationsConsumer>
+                                        </SigningStatusText>
+                                      )
+                                    } else if (
+                                      dataStatus.code === 'cancelled'
+                                    ) {
+                                      return (
+                                        <SigningStatusText>
+                                          <TranslationsConsumer textKey="SIGN_BANKID_CANCELLED">
+                                            {(message) => message}
+                                          </TranslationsConsumer>
+                                        </SigningStatusText>
+                                      )
+                                    } else if (
+                                      dataStatus.code === 'startFailed'
+                                    ) {
+                                      return (
+                                        <SigningStatusText>
+                                          <TranslationsConsumer textKey="SIGN_BANKID_START_FAILED">
+                                            {(message) => message}
+                                          </TranslationsConsumer>
+                                        </SigningStatusText>
+                                      )
+                                    }
                                   }
                                 }
                               }
