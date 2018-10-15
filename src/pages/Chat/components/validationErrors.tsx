@@ -1,7 +1,7 @@
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
+import { InputValidationError } from 'components/userInput/UserResponse'
 import * as React from 'react'
 import * as yup from 'yup'
-import { InputValidationError } from '../../../components/userInput/UserResponse'
 import { LivingSituationState } from '../state'
 
 const getValidationError = (
