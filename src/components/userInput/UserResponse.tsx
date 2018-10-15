@@ -43,9 +43,40 @@ export const UserTextInput = styled('input')(
   }),
 )
 
-export const UserSelectInput = styled(UserTextInput)(
-  (_: WithMaxWidth) => ({}),
-).withComponent('select')
+const ActualSelectInput = styled('select')({
+  appearance: 'none',
+  background: 'transparent',
+  fontSize: 'inherit',
+  fontWeight: 'inherit',
+  paddingRight: '1.5em',
+  border: 'none',
+})
+
+const UserSelectInputWrapper = styled(UserTextInput)((_: WithMaxWidth) => ({
+  appearance: 'none',
+  cursor: 'pointer',
+  position: 'relative',
+  '&::after': {
+    borderStyle: 'solid',
+    borderWidth: '.1em .1em 0 0',
+    borderColor: colors.OFF_BLACK,
+    content: '" "',
+    position: 'absolute',
+    height: '.45em',
+    width: '.45em',
+    right: '.3em',
+    top: '15%',
+    transform: 'rotate(135deg) translateY(-15%)',
+  },
+})).withComponent('label')
+
+export const UserSelectInput = (
+  props: React.SelectHTMLAttributes<HTMLSelectElement>,
+) => (
+  <UserSelectInputWrapper>
+    <ActualSelectInput {...props} />
+  </UserSelectInputWrapper>
+)
 
 const UserResponseWrapper: React.SFC<{
   className?: string
