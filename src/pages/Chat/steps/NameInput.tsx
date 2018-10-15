@@ -6,6 +6,7 @@ import { UserResponse, UserTextInput } from 'components/userInput/UserResponse'
 import { SingletonAction } from 'components/utils/SingletonAction'
 import * as React from 'react'
 import * as yup from 'yup'
+import { NextButton } from '../components/NextButton'
 import {
   ChatContainer,
   Effects as ChatActions,
@@ -121,16 +122,7 @@ export const NameInput: React.SFC<Props> = ({
                   {(nodes) => nodes}
                 </TranslationsPlaceholderConsumer>
               </div>
-              {isDone(chatState.nameAge) &&
-                isCurrentMessage && (
-                  <div>
-                    <button type="submit">
-                      <TranslationsConsumer textKey="CHAT_INPUT_NEXT_LABEL">
-                        {(text) => text}
-                      </TranslationsConsumer>
-                    </button>
-                  </div>
-                )}
+              {isDone(chatState.nameAge) && isCurrentMessage && <NextButton />}
             </form>
           )}
         </ChatContainer>

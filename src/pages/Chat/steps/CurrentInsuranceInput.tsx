@@ -8,6 +8,7 @@ import {
 } from 'components/userInput/UserResponse'
 import * as React from 'react'
 import * as yup from 'yup'
+import { NextButton } from '../components/NextButton'
 import {
   ChatContainer,
   CurrentInsuranceState,
@@ -132,11 +133,7 @@ export const CurrentInsuranceInput: React.SFC<CurrentInsuranceInputProps> = ({
           </TranslationsPlaceholderConsumer>
 
           {isDone(chatState.currentInsurance) &&
-            isCurrentMessage && (
-              <TranslationsConsumer textKey="CHAT_INPUT_NEXT_LABEL">
-                {(t) => <button type="submit">{t}</button>}
-              </TranslationsConsumer>
-            )}
+            isCurrentMessage && <NextButton />}
         </form>
       )}
     </ChatContainer>

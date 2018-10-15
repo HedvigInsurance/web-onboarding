@@ -8,6 +8,7 @@ import {
 } from 'components/userInput/UserResponse'
 import * as React from 'react'
 import * as yup from 'yup'
+import { NextButton } from '../components/NextButton'
 import {
   ChatContainer,
   Effects as ChatActions,
@@ -113,15 +114,7 @@ export const NumberOfPeopleInput: React.SFC<NumberOfPeopleInputProps> = ({
             {(nodes) => nodes}
           </TranslationsPlaceholderConsumer>
           {isDone(chatState.livingSituation) &&
-            isCurrentMessage && (
-              <div>
-                <button type="submit">
-                  <TranslationsConsumer textKey="CHAT_INPUT_NEXT_LABEL">
-                    {(text) => text}
-                  </TranslationsConsumer>
-                </button>
-              </div>
-            )}
+            isCurrentMessage && <NextButton />}
         </form>
       )}
     </ChatContainer>
