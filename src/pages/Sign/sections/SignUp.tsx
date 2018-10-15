@@ -234,9 +234,7 @@ export const SignUp: React.SFC = () => (
                                 {(errorMessage) => errorMessage}
                               </TranslationsConsumer>
                             </ErrorMessage>
-                          ) : (
-                            <ErrorMessage />
-                          )}
+                          ) : null}
                           <InputTitle>
                             <TranslationsConsumer textKey="SIGN_INPUT_TWO_TITLE">
                               {(title) => title}
@@ -251,9 +249,7 @@ export const SignUp: React.SFC = () => (
                                 {(errorMessage) => errorMessage}
                               </TranslationsConsumer>
                             </ErrorMessage>
-                          ) : (
-                            <ErrorMessage />
-                          )}
+                          ) : null}
                           <GetInsuredButton>
                             <TranslationsConsumer textKey="SIGN_BUTTON_TEXT">
                               {(buttonText) => (
