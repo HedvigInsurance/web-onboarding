@@ -284,113 +284,118 @@ export const SignUp: React.SFC = () => (
                                   data.signStatus.status.collectStatus
                                 const signingState =
                                   data.signStatus.status.signState
-                                if (signingState === SIGNSTATE.INITIATED) {
-                                  return (
-                                    <div>
-                                      *BankID signing initated, open bankid*
-                                    </div>
-                                  )
-                                } else if (
-                                  signingState === SIGNSTATE.IN_PROGRESS
-                                ) {
-                                  if (
-                                    dataStatus.status === BANKIDSTATUS.PENDING
-                                  ) {
-                                    if (dataStatus.code === 'started') {
-                                      return (
-                                        <SigningStatusText>
-                                          Bankid signing: started
-                                        </SigningStatusText>
-                                      )
-                                    } else if (dataStatus.code === 'userSign') {
-                                      return (
-                                        <SigningStatusText>
-                                          <TranslationsConsumer textKey="SIGN_BANKID_USER_SIGN">
-                                            {(message) => message}
-                                          </TranslationsConsumer>
-                                        </SigningStatusText>
-                                      )
-                                    } else if (dataStatus.code === 'noClient') {
-                                      return (
-                                        <SigningStatusText>
-                                          Bankid signing: noClient
-                                        </SigningStatusText>
-                                      )
-                                    } else if (
-                                      dataStatus.code ===
-                                      'outstandingTransaction'
-                                    ) {
-                                      return (
-                                        <SigningStatusText>
-                                          Bankid signing: outstandingTransaction
-                                        </SigningStatusText>
-                                      )
-                                    }
-                                  }
-                                } else if (
-                                  signingState === SIGNSTATE.COMPLETED
-                                ) {
-                                  if (
-                                    dataStatus.status === BANKIDSTATUS.COMPLETE
-                                  ) {
-                                    window.location.href = '/download'
-                                  }
-                                } else if (signingState === SIGNSTATE.FAILED) {
-                                  if (
-                                    dataStatus.status === BANKIDSTATUS.FAILED
-                                  ) {
+                                switch (signingState) {
+                                  case SIGNSTATE.INITIATED:
+                                    return (
+                                      <SigningStatusText>
+                                        <TranslationsConsumer textKey="SIGN_BANKID_INITIATED">
+                                          {(message) => message}
+                                        </TranslationsConsumer>
+                                      </SigningStatusText>
+                                    )
+                                  case SIGNSTATE.IN_PROGRESS:
                                     if (
-                                      dataStatus.code === 'expiredTransaction'
+                                      dataStatus.status === BANKIDSTATUS.PENDING
                                     ) {
-                                      return (
-                                        <SigningStatusText>
-                                          <TranslationsConsumer textKey="SIGN_BANKID_EXPIRED_TRANSACTION">
-                                            {(message) => message}
-                                          </TranslationsConsumer>
-                                        </SigningStatusText>
-                                      )
-                                    } else if (
-                                      dataStatus.code === 'certificateErr'
-                                    ) {
-                                      return (
-                                        <SigningStatusText>
-                                          <TranslationsConsumer textKey="SIGN_BANKID_CERTIFICATE_ERR">
-                                            {(message) => message}
-                                          </TranslationsConsumer>
-                                        </SigningStatusText>
-                                      )
-                                    } else if (
-                                      dataStatus.code === 'userCancel'
-                                    ) {
-                                      return (
-                                        <SigningStatusText>
-                                          <TranslationsConsumer textKey="SIGN_BANKID_USER_CANCEL">
-                                            {(message) => message}
-                                          </TranslationsConsumer>
-                                        </SigningStatusText>
-                                      )
-                                    } else if (
-                                      dataStatus.code === 'cancelled'
-                                    ) {
-                                      return (
-                                        <SigningStatusText>
-                                          <TranslationsConsumer textKey="SIGN_BANKID_CANCELLED">
-                                            {(message) => message}
-                                          </TranslationsConsumer>
-                                        </SigningStatusText>
-                                      )
-                                    } else if (
-                                      dataStatus.code === 'startFailed'
-                                    ) {
-                                      return (
-                                        <SigningStatusText>
-                                          <TranslationsConsumer textKey="SIGN_BANKID_START_FAILED">
-                                            {(message) => message}
-                                          </TranslationsConsumer>
-                                        </SigningStatusText>
-                                      )
+                                      switch (dataStatus.code) {
+                                        case 'started':
+                                          return (
+                                            <SigningStatusText>
+                                              <TranslationsConsumer textKey="SIGN_BANKID_CODE_STARTED">
+                                                {(message) => message}
+                                              </TranslationsConsumer>
+                                            </SigningStatusText>
+                                          )
+                                        case 'userSign':
+                                          return (
+                                            <SigningStatusText>
+                                              <TranslationsConsumer textKey="SIGN_BANKID_CODE_USER_SIGN">
+                                                {(message) => message}
+                                              </TranslationsConsumer>
+                                            </SigningStatusText>
+                                          )
+                                        case 'noClient':
+                                          return (
+                                            <SigningStatusText>
+                                              <TranslationsConsumer textKey="SIGN_BANKID_CODE_NO_CLIENT">
+                                                {(message) => message}
+                                              </TranslationsConsumer>
+                                            </SigningStatusText>
+                                          )
+                                        case 'outstandingTransaction':
+                                          return (
+                                            <SigningStatusText>
+                                              <TranslationsConsumer textKey="SIGN_BANKID_CODE_OUTSTANDING_TRANSACTION">
+                                                {(message) => message}
+                                              </TranslationsConsumer>
+                                            </SigningStatusText>
+                                          )
+                                        default:
+                                          return null
+                                      }
+                                    } else {
+                                      return null
                                     }
-                                  }
+                                  case SIGNSTATE.COMPLETED: // TODO: backend sets this to null atm
+                                    if (
+                                      dataStatus.status ===
+                                      BANKIDSTATUS.COMPLETE
+                                    ) {
+                                      window.location.href = '/download'
+                                    } else {
+                                      return null
+                                    }
+                                  case SIGNSTATE.FAILED:
+                                    if (
+                                      dataStatus.status === BANKIDSTATUS.FAILED
+                                    ) {
+                                      switch (dataStatus.code) {
+                                        case 'expiredTransaction':
+                                          return (
+                                            <SigningStatusText>
+                                              <TranslationsConsumer textKey="SIGN_BANKID_CODE_EXPIRED_TRANSACTION">
+                                                {(message) => message}
+                                              </TranslationsConsumer>
+                                            </SigningStatusText>
+                                          )
+                                        case 'certificateErr':
+                                          return (
+                                            <SigningStatusText>
+                                              <TranslationsConsumer textKey="SIGN_BANKID_CODE_CERTIFICATE_ERR">
+                                                {(message) => message}
+                                              </TranslationsConsumer>
+                                            </SigningStatusText>
+                                          )
+                                        case 'userCancel':
+                                          return (
+                                            <SigningStatusText>
+                                              <TranslationsConsumer textKey="SIGN_BANKID_CODE_USER_CANCEL">
+                                                {(message) => message}
+                                              </TranslationsConsumer>
+                                            </SigningStatusText>
+                                          )
+                                        case 'cancelled':
+                                          return (
+                                            <SigningStatusText>
+                                              <TranslationsConsumer textKey="SIGN_BANKID_CODE_CANCELLED">
+                                                {(message) => message}
+                                              </TranslationsConsumer>
+                                            </SigningStatusText>
+                                          )
+                                        case 'startFailed':
+                                          return (
+                                            <SigningStatusText>
+                                              <TranslationsConsumer textKey="SIGN_BANKID_CODE_START_FAILED">
+                                                {(message) => message}
+                                              </TranslationsConsumer>
+                                            </SigningStatusText>
+                                          )
+                                        default:
+                                          return null
+                                      }
+                                    }
+                                  default:
+                                    return null
                                 }
                               }
                               return null
