@@ -9,6 +9,7 @@ import gql from 'graphql-tag'
 import * as React from 'react'
 import { Mutation, Subscription } from 'react-apollo'
 import styled from 'react-emotion'
+import { Redirect, Route } from 'react-router'
 import * as Yup from 'yup'
 
 const CARDWIDTH = 788
@@ -101,6 +102,13 @@ const GetInsuredButton = styled('div')({
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'center',
+})
+
+const RegularText = styled('div')({
+  textAlign: 'center',
+  marginTop: '20px',
+  color: colors.DARK_GRAY,
+  fontSize: '16px',
 })
 
 const ErrorText = styled('div')({
@@ -246,29 +254,41 @@ export const SignUp: React.SFC = () => (
                             subscription={SIGN_SUBSCRIPTION}
                           >
                             {({ data, loading, error }) => {
-                              const object = JSON.parse(data)
                               if (loading) {
-                                return <div>Loading</div>
+                                return <div />
                               }
                               if (error) {
                                 return (
                                   <div>
-                                    Error:{' '}
-                                    <pre>{JSON.stringify(error, null, 2)}</pre>
-                                    <ErrorText>{error}</ErrorText>
+                                    <ErrorText>
+                                      <TranslationsConsumer textKey="SIGN_BUTTON_TEXT">
+                                        {(errorText) => errorText}
+                                      </TranslationsConsumer>
+                                    </ErrorText>
                                   </div>
                                 )
                               }
-
-                              return (
-                                <div>
-                                  {/*TODO: status: pending, code: X -> "Öppna BankID"
-                                  status: pending, code: userSign -> "Väntar på BankID
-                                  status: failed, code: userCancel -> "Öppna BankID"*/}
-                                  Data:{' '}
-                                  <pre>{JSON.stringify(data, null, 2)}</pre>
-                                </div>
-                              )
+                              if (data) {
+                                const dataStatus =
+                                  data.signStatus.status.collectStatus
+                                if (dataStatus.status === 'pending') {
+                                  return (
+                                    <RegularText>Väntar på BankID</RegularText>
+                                  )
+                                } else if (dataStatus.status === 'complete') {
+                                  window.location.href = '/download'
+                                } else if (dataStatus.status === 'failed') {
+                                  if (dataStatus.code === 'userCancel') {
+                                    return (
+                                      <RegularText>
+                                        Signering avbruten. Klicka på Singera
+                                        med BankID för att försöka igen.
+                                      </RegularText>
+                                    )
+                                  }
+                                }
+                              }
+                              return <div />
                             }}
                           </Subscription>
                         </CustomForm>
