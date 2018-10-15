@@ -9,9 +9,9 @@ interface WithMaxWidth {
 
 export const UserTextInput = styled('input')(({ maxWidth }: WithMaxWidth) => ({
   fontFamily: fonts.CIRCULAR,
-  color: colors.PURPLE,
+  color: colors.OFF_BLACK,
   border: 0,
-  borderBottom: `2px solid ${colors.PURPLE}`,
+  borderBottom: `2px solid ${colors.OFF_BLACK}`,
   padding: 0,
   lineHeight: 'inherit',
   fontSize: 'inherit',
