@@ -2,7 +2,9 @@ import {
   TranslationsConsumer,
   TranslationsPlaceholderConsumer,
 } from '@hedviginsurance/textkeyfy'
+import { FadeIn } from 'components/animations/appearings'
 import {
+  InputValidationError,
   UserResponse,
   UserSelectInput,
   UserTextInput,
@@ -10,7 +12,6 @@ import {
 import * as React from 'react'
 import * as yup from 'yup'
 import { NextButton } from '../components/NextButton'
-import { ValidationErrorMaybe } from '../components/validationErrors'
 import {
   ApartmentType,
   ChatContainer,
@@ -66,6 +67,62 @@ const isDone = (values: Partial<LivingSituationState> = {}) => {
   } catch (e) {
     return false
   }
+}
+
+const getValidationError = (
+  values: Partial<LivingSituationState> = {},
+): [string, string] | null => {
+  try {
+    validationSchema.validateSync(values)
+    return null
+  } catch (e) {
+    return [e.params.path, e.message]
+  }
+}
+
+const hasValidationErrorForKey = (
+  key: keyof LivingSituationState,
+  validationError: [string, string] | null,
+) => {
+  if (validationError === null || validationError === undefined) {
+    return false
+  }
+  if (validationError[0] !== key) {
+    return false
+  }
+
+  if (validationError[1] === 'noop') {
+    return false
+  }
+
+  return true
+}
+
+interface ValidationErrorMaybeProps {
+  field: keyof LivingSituationState
+  values: Partial<LivingSituationState>
+}
+
+const ValidationErrorMaybe: React.SFC<ValidationErrorMaybeProps> = ({
+  field,
+  values,
+}) => {
+  const validationError = getValidationError(values)
+  if (
+    validationError !== null &&
+    hasValidationErrorForKey(field, validationError)
+  ) {
+    return (
+      <FadeIn>
+        <InputValidationError>
+          <TranslationsConsumer textKey={validationError[1]}>
+            {(t) => t}
+          </TranslationsConsumer>
+        </InputValidationError>
+      </FadeIn>
+    )
+  }
+  return null
 }
 
 export const ApartmentTypeInput: React.SFC<ApartmentTypeInputProps> = ({
@@ -129,6 +186,10 @@ export const ApartmentTypeInput: React.SFC<ApartmentTypeInputProps> = ({
                   value={chatState.livingSituation.size}
                   onChange={handleChange('size', chatState)}
                   pattern="[0-9]*"
+                  hasError={hasValidationErrorForKey(
+                    'size',
+                    getValidationError(chatState.livingSituation),
+                  )}
                 />
               ),
             }}
@@ -138,7 +199,6 @@ export const ApartmentTypeInput: React.SFC<ApartmentTypeInputProps> = ({
           <ValidationErrorMaybe
             field="size"
             values={chatState.livingSituation}
-            schema={validationSchema}
           />
           {isDone(chatState.livingSituation) &&
             isCurrentMessage && <NextButton />}

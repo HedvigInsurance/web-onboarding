@@ -3,39 +3,45 @@ import * as React from 'react'
 import styled from 'react-emotion'
 import { FadeIn, FadeUp } from '../animations/appearings'
 
+interface InputProps {
+  hasError?: boolean
+}
+
 interface WithMaxWidth {
   maxWidth?: number
 }
 
-export const UserTextInput = styled('input')(({ maxWidth }: WithMaxWidth) => ({
-  fontFamily: fonts.CIRCULAR,
-  color: colors.OFF_BLACK,
-  border: 0,
-  borderBottom: `2px solid ${colors.OFF_BLACK}`,
-  padding: 0,
-  lineHeight: 'inherit',
-  fontSize: 'inherit',
-  width: maxWidth !== undefined ? `${maxWidth}ch` : undefined,
-  borderRadius: 0,
-  fontWeight: 600,
+export const UserTextInput = styled('input')(
+  ({ hasError, maxWidth }: WithMaxWidth & InputProps) => ({
+    fontFamily: fonts.CIRCULAR,
+    color: hasError ? colors.PINK : colors.OFF_BLACK,
+    border: 0,
+    borderBottom: `2px solid ${hasError ? colors.PINK : colors.OFF_BLACK}`,
+    padding: 0,
+    lineHeight: 'inherit',
+    fontSize: 'inherit',
+    width: maxWidth !== undefined ? `${maxWidth}ch` : undefined,
+    borderRadius: 0,
+    fontWeight: 600,
 
-  '&::placeholder': {
-    fontWeight: 400,
-    fontStyle: 'italic',
-  },
+    '&::placeholder': {
+      fontWeight: 400,
+      fontStyle: 'italic',
+    },
 
-  '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
-    appearance: 'none',
-    margin: 0,
-  },
-  '&[type="number"]': {
-    appearance: 'textfield' as any, // unsure why but emotion cries when this isnt any
-  },
+    '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
+      appearance: 'none',
+      margin: 0,
+    },
+    '&[type="number"]': {
+      appearance: 'textfield' as any, // unsure why but emotion cries when this isnt any
+    },
 
-  '&:focus': {
-    outline: 'none',
-  },
-}))
+    '&:focus': {
+      outline: 'none',
+    },
+  }),
+)
 
 export const UserSelectInput = styled(UserTextInput)(
   (_: WithMaxWidth) => ({}),
