@@ -103,7 +103,7 @@ const GetInsuredButton = styled('div')({
   justifyContent: 'center',
 })
 
-const RegularText = styled('div')({
+const SigningStatusText = styled('div')({
   textAlign: 'center',
   marginTop: '20px',
   color: colors.DARK_GRAY,
@@ -273,11 +273,11 @@ export const SignUp: React.SFC = () => (
                                 if (dataStatus.status === 'pending') {
                                   if (dataStatus.code === 'userSign') {
                                     return (
-                                      <RegularText>
+                                      <SigningStatusText>
                                         <TranslationsConsumer textKey="SIGN_BANKID_WAITING_FOR_BANKID">
                                           {(message) => message}
                                         </TranslationsConsumer>
-                                      </RegularText>
+                                      </SigningStatusText>
                                     )
                                   }
                                 } else if (dataStatus.status === 'complete') {
@@ -285,11 +285,11 @@ export const SignUp: React.SFC = () => (
                                 } else if (dataStatus.status === 'failed') {
                                   if (dataStatus.code === 'userCancel') {
                                     return (
-                                      <RegularText>
+                                      <SigningStatusText>
                                         <TranslationsConsumer textKey="SIGN_BANKID_CANCELLED_BY_USER">
                                           {(message) => message}
                                         </TranslationsConsumer>
-                                      </RegularText>
+                                      </SigningStatusText>
                                     )
                                   }
                                 }
