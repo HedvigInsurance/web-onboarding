@@ -1,12 +1,10 @@
 import { colors, fonts } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { GetInsuredButton, LinkTag } from 'components/get-insured-button'
-import { SessionContainer } from 'containers/SessionContainer'
-import gql from 'graphql-tag'
 import * as React from 'react'
-import { Query } from 'react-apollo'
 import styled from 'react-emotion'
 import * as VisibilitySensor from 'react-visibility-sensor'
+import { OfferData } from '..'
 import { CardWrapperSmall } from '../components/CardWrapperSmall'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 import { InnerWrapper } from '../components/InnerWrapper'
@@ -112,13 +110,7 @@ const IconTitle = styled('p')({
 interface Props {
   buttonVisibility: (isVisible: boolean) => void
   buttonText: string
-  insuranceOffer: {
-    insuredAtOtherCompany: boolean
-    monthlyCost: number
-    name: string
-    address: string
-    zip: string
-  }
+  offer: OfferData
 }
 
 // TODO: TEXT KEY THIS
@@ -140,130 +132,77 @@ const COLUMNS = [
   },
 ]
 
-// TODO: TEXT KEY THIS
-const tktemp = {
-  OFFER_HEADER: 'Här är din hemförsäkring hos Hedvig!',
-  OFFER_PRICE_LABEL: 'kr/mån',
-  OFFER_RISK_LABEL: 'Självrisk: 1500 kr',
-  OFFER_START_LATER: 'När din gamla försäkring går ut',
-  OFFER_START_NOW: 'Idag',
-}
-
-const OFFER_QUERY = gql`
-  query Offer {
-    insurance {
-      address
-      monthlyCost
-      insuredAtOtherCompany
-      type
-    }
-  }
-`
-
-interface OfferData {
-  insurance: {
-    address: string
-    monthlyCost: number
-    insuredAtOtherCompany: boolean
-    type: string
-  }
-}
-
-// TODO: ADD TEXT KEYS
-export const Offer: React.SFC<Props> = (props) => (
-  <SessionContainer>
-    {(token) =>
-      token ? (
-        <Query<OfferData> query={OFFER_QUERY}>
-          {({ loading, error, data }) => {
-            if (loading) {
-              return <div>Loading</div>
-            }
-            if (error || !data) {
-              return <pre>{JSON.stringify(error, null, 2)}</pre>
-            }
-
-            const {
-              address,
-              monthlyCost,
-              insuredAtOtherCompany,
-              type,
-            } = data.insurance
-            return (
-              <Wrapper>
-                <InnerWrapper>
-                  <CardWrapperSmall>
-                    <Card>
-                      <HeaderBackground>
-                        <HeaderWrapper>
-                          <Header>
-                            <TranslationsConsumer textKey="OFFER_HEADER">
-                              {(title) => title}
-                            </TranslationsConsumer>
-                          </Header>
-                        </HeaderWrapper>
-                        <PersonalInfo>
-                          {'TODO REPLACE WITH NAME'}
-                          {' • '}
-                          {address}
-                          {' • '}
-                          {'TODO REPLACE WITH POSTAL NUMBER'}
-                        </PersonalInfo>
-                      </HeaderBackground>
-                      <TranslationsConsumer textKey="OFFER_HEADER">
-                        {(priceLabel) => (
-                          <Price>
-                            {monthlyCost} {priceLabel}
-                          </Price>
-                        )}
-                      </TranslationsConsumer>
-                      <InfoText>
-                        <TranslationsConsumer textKey="OFFER_RISK_LABEL">
-                          {(riskLabel) => riskLabel}
-                        </TranslationsConsumer>
-                      </InfoText>
-                      <InfoText>
-                        Startdatum:{' '}
-                        {insuredAtOtherCompany ? (
-                          <TranslationsConsumer textKey="OFFER_START_LATER">
-                            {(riskLabel) => riskLabel}
-                          </TranslationsConsumer>
-                        ) : (
-                          <TranslationsConsumer textKey="OFFER_START_NOW">
-                            {(riskLabel) => riskLabel}
-                          </TranslationsConsumer>
-                        )}
-                      </InfoText>
-                      <Row>
-                        {COLUMNS.map((col) => (
-                          <Col key={col.key}>
-                            <Icon src={col.icon} />
-                            <IconTitle>{col.title}</IconTitle>
-                          </Col>
-                        ))}
-                      </Row>
-                      <VisibilitySensor
-                        partialVisibility
-                        onChange={(isVisible: boolean) => {
-                          props.buttonVisibility(isVisible)
-                        }}
-                      >
-                        {() => (
-                          <GetInsuredButton>
-                            <LinkTag to={'/hedvig'}>{props.buttonText}</LinkTag>
-                          </GetInsuredButton>
-                        )}
-                      </VisibilitySensor>
-                    </Card>
-                  </CardWrapperSmall>
-                </InnerWrapper>
-              </Wrapper>
-            )
-          }}
-        </Query>
-      ) : (
-        'no token :('
-      )
-    }
-  </SessionContainer>
+export const Offer: React.SFC<Props> = ({
+  buttonVisibility,
+  buttonText,
+  offer,
+}) => (
+  <Wrapper>
+    <InnerWrapper>
+      <CardWrapperSmall>
+        <Card>
+          <HeaderBackground>
+            <HeaderWrapper>
+              <Header>
+                <TranslationsConsumer textKey="OFFER_HEADER">
+                  {(title) => title}
+                </TranslationsConsumer>
+              </Header>
+            </HeaderWrapper>
+            <PersonalInfo>
+              {`${offer.member.firstName} ${offer.member.lastName}`}
+              {' • '}
+              {offer.insurance.address}
+              {' • '}
+              {offer.insurance.postalNumber}
+            </PersonalInfo>
+          </HeaderBackground>
+          <TranslationsConsumer textKey="OFFER_HEADER">
+            {(priceLabel) => (
+              <Price>
+                {offer.insurance.monthlyCost} {priceLabel}
+              </Price>
+            )}
+          </TranslationsConsumer>
+          <InfoText>
+            <TranslationsConsumer textKey="OFFER_RISK_LABEL">
+              {(riskLabel) => riskLabel}
+            </TranslationsConsumer>
+          </InfoText>
+          <InfoText>
+            Startdatum:{' '}
+            {offer.insurance.insuredAtOtherCompany ? (
+              <TranslationsConsumer textKey="OFFER_START_LATER">
+                {(riskLabel) => riskLabel}
+              </TranslationsConsumer>
+            ) : (
+              <TranslationsConsumer textKey="OFFER_START_NOW">
+                {(riskLabel) => riskLabel}
+              </TranslationsConsumer>
+            )}
+          </InfoText>
+          <Row>
+            {COLUMNS.map((col) => (
+              <Col key={col.key}>
+                <Icon src={col.icon} />
+                <IconTitle>{col.title}</IconTitle>
+              </Col>
+            ))}
+          </Row>
+          <VisibilitySensor
+            partialVisibility
+            onChange={(isVisible: boolean) => {
+              buttonVisibility(isVisible)
+            }}
+          >
+            {() => (
+              <GetInsuredButton>
+                <LinkTag to={'/hedvig'}>{buttonText}</LinkTag>
+              </GetInsuredButton>
+            )}
+          </VisibilitySensor>
+        </Card>
+      </CardWrapperSmall>
+    </InnerWrapper>
+  </Wrapper>
 )

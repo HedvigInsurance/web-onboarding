@@ -3,19 +3,14 @@ import { GetInsuredButton, LinkTag } from 'components/get-insured-button'
 import * as React from 'react'
 import styled from 'react-emotion'
 import * as VisibilitySensor from 'react-visibility-sensor'
+import { OfferData } from '..'
 import { CardWrapperSmall } from '../components/CardWrapperSmall'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 import { InnerWrapper } from '../components/InnerWrapper'
 import { Wrapper } from '../components/Wrapper'
 
 interface Props {
-  insuranceOffer: {
-    insuredAtOtherCompany: boolean
-    monthlyCost: number
-    name: string
-    address: string
-    zip: string
-  }
+  offer: OfferData
   title: string
   buttonText: string
   buttonVisibility: (isVisible: boolean) => void
@@ -51,26 +46,31 @@ const Price = styled('h1')({
   fontFamily: fonts.CIRCULAR,
 })
 
-export const GetInsured: React.SFC<Props> = (props) => (
+export const GetInsured: React.SFC<Props> = ({
+  title,
+  offer,
+  buttonVisibility,
+  buttonText,
+}) => (
   <Wrapper>
     <InnerWrapper>
       <CardWrapperSmall>
         <Card>
           <HeaderBackground>
             <HeaderWrapper>
-              <Header>{props.title}</Header>
+              <Header>{title}</Header>
             </HeaderWrapper>
           </HeaderBackground>
-          <Price>{props.insuranceOffer.monthlyCost} kr/mån</Price>
+          <Price>{offer.insurance.monthlyCost} kr/mån</Price>
           <VisibilitySensor
             partialVisibility
             onChange={(isVisible: boolean) => {
-              props.buttonVisibility(isVisible)
+              buttonVisibility(isVisible)
             }}
           >
             {() => (
               <GetInsuredButton>
-                <LinkTag to={'/'}>{props.buttonText}</LinkTag>
+                <LinkTag to={'/'}>{buttonText}</LinkTag>
               </GetInsuredButton>
             )}
           </VisibilitySensor>
