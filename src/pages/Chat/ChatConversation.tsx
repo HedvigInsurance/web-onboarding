@@ -3,12 +3,14 @@ import { ChatMessage } from 'components/hedvig/chat'
 import { Conversation, Message } from 'components/hedvig/conversation'
 import * as React from 'react'
 import { ChatContainer, ChatStep } from './state'
+import { AddressInput } from './steps/AddressInput'
 import { AgeInput } from './steps/AgeInput'
+import { ApartmentTypeInput } from './steps/ApartmentTypeInput'
 import { CreateOffer } from './steps/CreateOffer'
 import { CurrentInsuranceInput } from './steps/CurrentInsuranceInput'
 import { Greet } from './steps/Greet'
-import { LivingSituationInput } from './steps/LivingSituationInput'
 import { NameInput } from './steps/NameInput'
+import { NumberOfPeopleInput } from './steps/NumberOfPeopleInput'
 
 export const ChatConversation: React.SFC = () => (
   <ChatContainer>
@@ -55,23 +57,44 @@ export const ChatConversation: React.SFC = () => (
             />
           )}
         </Message>
+
         <Message id={ChatStep.GREET}>
           {({ appear }) => (
             <Greet
               appear={appear}
-              onTyped={() => goToStep(ChatStep.LIVING_SITUATION_INPUT)}
+              onTyped={() => goToStep(ChatStep.ADDRESS_INPUT)}
             />
           )}
         </Message>
-        <Message id={ChatStep.LIVING_SITUATION_INPUT} delay={300}>
+
+        <Message id={ChatStep.ADDRESS_INPUT}>
           {({ appear }) => (
-            <LivingSituationInput
+            <AddressInput
               appear={appear}
-              onSubmit={() => goToStep(ChatStep.CURRENT_INSURANCE_QUESTION)}
-              isCurrentMessage={currentStep === ChatStep.LIVING_SITUATION_INPUT}
+              isCurrentMessage={currentStep === ChatStep.ADDRESS_INPUT}
+              onSubmit={() => goToStep(ChatStep.APARTMENT_TYPE_INPUT)}
             />
           )}
         </Message>
+        <Message id={ChatStep.APARTMENT_TYPE_INPUT}>
+          {({ appear }) => (
+            <ApartmentTypeInput
+              appear={appear}
+              isCurrentMessage={currentStep === ChatStep.APARTMENT_TYPE_INPUT}
+              onSubmit={() => goToStep(ChatStep.NUMBER_OF_PEOPLE)}
+            />
+          )}
+        </Message>
+        <Message id={ChatStep.NUMBER_OF_PEOPLE}>
+          {({ appear }) => (
+            <NumberOfPeopleInput
+              appear={appear}
+              isCurrentMessage={currentStep === ChatStep.NUMBER_OF_PEOPLE}
+              onSubmit={() => goToStep(ChatStep.CURRENT_INSURANCE_QUESTION)}
+            />
+          )}
+        </Message>
+
         <Message id={ChatStep.CURRENT_INSURANCE_QUESTION}>
           {({ appear }) => (
             <ChatMessage
@@ -95,6 +118,9 @@ export const ChatConversation: React.SFC = () => (
             <CurrentInsuranceInput
               appear={appear}
               onSubmit={() => goToStep(ChatStep.SHOW_OFFER)}
+              isCurrentMessage={
+                currentStep === ChatStep.CURRENT_INSURANCE_INPUT
+              }
             />
           )}
         </Message>

@@ -5,8 +5,7 @@ import { MockTextKeyProvider } from 'utils/MockTextKeyProvider'
 import { createSession } from 'utils/sessionStorage'
 import { MockStorage } from 'utils/storage/MockStorage'
 import { WithStorageProps } from 'utils/StorageContainer'
-import { Insurer } from '../state'
-import { CurrentInsuranceInput } from './CurrentInsuranceInput'
+import { NumberOfPeopleInput } from './NumberOfPeopleInput'
 
 it('handles form changes', () => {
   const wrapper = mount(
@@ -15,12 +14,10 @@ it('handles form changes', () => {
     >
       <MockTextKeyProvider
         textKeys={{
-          CHAT_INPUT_CURRENT_INSURANCE_TEXT: '{toggle}',
-          CHAT_INPUT_CURRENT_INSURANCE_TEXT_HAS_INSURANCE:
-            '{toggle} {currentInsurerMaybe}',
+          CHAT_INPUT_NUMBER_OF_PEOPLE_TEXT: '{numberOfPeople}',
         }}
       >
-        <CurrentInsuranceInput isCurrentMessage />
+        <NumberOfPeopleInput isCurrentMessage />
       </MockTextKeyProvider>
     </Provider>,
   )
@@ -28,14 +25,9 @@ it('handles form changes', () => {
   expect(wrapper.find('button')).toHaveLength(0)
 
   wrapper
-    .find('select#hasCurrentInsurance')
-    .simulate('change', { target: { value: 'yes' } })
-  expect(wrapper.find('select#hasCurrentInsurance').prop('value')).toBe('yes')
-  wrapper
-    .find('select#currentInsurer')
-    .simulate('change', { target: { value: Insurer.FOLKSAM } })
-  expect(wrapper.find('select#currentInsurer').prop('value')).toBe(
-    Insurer.FOLKSAM,
-  )
+    .find('select#numberOfPeople')
+    .simulate('change', { target: { value: 3 } })
+  expect(wrapper.find('select#numberOfPeople').prop('value')).toBe(3)
+
   expect(wrapper.find('button')).toHaveLength(1)
 })
