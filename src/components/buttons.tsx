@@ -16,3 +16,19 @@ export const LinkTag = styled(Link)({
   borderRadius: '50px',
   padding: '15px 30px',
 })
+
+export const Button = styled('button')(
+  ({ background, foreground }: { background: string; foreground: string }) => ({
+    appearance: 'none',
+    padding: '10px 16px',
+    border: 'none',
+    fontSize: 16,
+    borderRadius: '50px',
+    color: foreground,
+    background,
+
+    '&:focus': {
+      outlineColor: background,
+    },
+  }),
+)
