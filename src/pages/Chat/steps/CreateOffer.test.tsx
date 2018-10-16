@@ -76,7 +76,7 @@ it('creates an offer without 💥', async () => {
   expect(apolloClient!.subscriptionClient.close).toHaveBeenCalledTimes(1)
   wrapper.update()
   wrapper.find('button').simulate('click')
-  expect(wrapper.find('div').contains('loading')).toBe(true)
+  expect(wrapper.find('button').prop('disabled')).toBe(true)
 
   await mockNetworkWait()
   wrapper.update()
