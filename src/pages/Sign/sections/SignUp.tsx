@@ -9,6 +9,7 @@ import gql from 'graphql-tag'
 import * as React from 'react'
 import { Mutation, Subscription } from 'react-apollo'
 import styled from 'react-emotion'
+import { Redirect } from 'react-router'
 import * as Yup from 'yup'
 
 const CARDWIDTH = 788
@@ -93,7 +94,6 @@ const InputSubmit = styled('input')({
   padding: '15px 30px',
   cursor: 'pointer',
   border: 'none',
-  outlineStyle: 'none',
 })
 
 const GetInsuredButton = styled('div')({
@@ -122,7 +122,7 @@ const ErrorMessage = styled('div')({
   fontSize: '16px',
 })
 
-const UserSchema = Yup.object().shape({
+const userSchema = Yup.object().shape({
   email: Yup.string()
     .email('SIGN_EMAIL_CHECK')
     .required('SIGN_EMAIL_REQUIRED'),
@@ -130,6 +130,25 @@ const UserSchema = Yup.object().shape({
     .matches(/^\d{8}[\s\-]?\d{4}$/, 'SIGN_PERSONAL_NUMBER_CHECK')
     .required('SIGN_PERSONAL_NUMBER_REQUIRED'),
 })
+
+const handleMessage = (
+  textkeys: { [key: string]: string },
+  message: string,
+) => {
+  return textkeys[message]
+}
+
+const CODETEXTKEYS = {
+  started: 'SIGN_BANKID_CODE_STARTED',
+  userSign: 'SIGN_BANKID_CODE_USER_SIGN',
+  noClient: 'SIGN_BANKID_CODE_NO_CLIENT',
+  outstandingTransaction: 'SIGN_BANKID_CODE_OUTSTANDING_TRANSACTION',
+  expiredTransaction: 'SIGN_BANKID_CODE_EXPIRED_TRANSACTION',
+  certificateErr: 'SIGN_BANKID_CODE_CERTIFICATE_ERR',
+  outstauserCancelndingTransaction: 'SIGN_BANKID_CODE_USER_CANCEL',
+  cancelled: 'SIGN_BANKID_CODE_CANCELLED',
+  startFailed: 'SIGN_BANKID_CODE_START_FAILED',
+}
 
 const SIGN_MUTATION = gql`
   mutation SignOffer($personalNumber: String!, $email: String!) {
@@ -155,6 +174,7 @@ const SIGN_SUBSCRIPTION = gql`
     }
   }
 `
+
 enum SIGNSTATE {
   INITIATED = 'INITIATED',
   IN_PROGRESS = 'IN_PROGRESS',
@@ -174,7 +194,16 @@ interface SignStatusData {
       signState: SIGNSTATE
       collectStatus: {
         status: BANKIDSTATUS
-        code: string
+        code:
+          | 'started'
+          | 'userSign'
+          | 'noClient'
+          | 'outstandingTransaction'
+          | 'expiredTransaction'
+          | 'certificateErr'
+          | 'userCancel'
+          | 'cancelled'
+          | 'startFailed'
       }
     }
   }
@@ -209,7 +238,7 @@ export const SignUp: React.SFC = () => (
                         email: '',
                         personalNumber: '',
                       }}
-                      validationSchema={UserSchema}
+                      validationSchema={userSchema}
                       onSubmit={(values) =>
                         signOffer({
                           variables: {
@@ -280,6 +309,7 @@ export const SignUp: React.SFC = () => (
                                   data.signStatus.status.collectStatus
                                 const signingState =
                                   data.signStatus.status.signState
+
                                 switch (signingState) {
                                   case SIGNSTATE.INITIATED:
                                     return (
@@ -293,51 +323,20 @@ export const SignUp: React.SFC = () => (
                                     if (
                                       dataStatus.status === BANKIDSTATUS.PENDING
                                     ) {
-                                      switch (dataStatus.code) {
-                                        case 'started':
-                                          return (
-                                            <SigningStatusText>
-                                              <TranslationsConsumer textKey="SIGN_BANKID_CODE_STARTED">
-                                                {(message) => message}
-                                              </TranslationsConsumer>
-                                            </SigningStatusText>
-                                          )
-                                        case 'userSign':
-                                          return (
-                                            <SigningStatusText>
-                                              <TranslationsConsumer textKey="SIGN_BANKID_CODE_USER_SIGN">
-                                                {(message) => message}
-                                              </TranslationsConsumer>
-                                            </SigningStatusText>
-                                          )
-                                        case 'noClient':
-                                          return (
-                                            <SigningStatusText>
-                                              <TranslationsConsumer textKey="SIGN_BANKID_CODE_NO_CLIENT">
-                                                {(message) => message}
-                                              </TranslationsConsumer>
-                                            </SigningStatusText>
-                                          )
-                                        case 'outstandingTransaction':
-                                          return (
-                                            <SigningStatusText>
-                                              <TranslationsConsumer textKey="SIGN_BANKID_CODE_OUTSTANDING_TRANSACTION">
-                                                {(message) => message}
-                                              </TranslationsConsumer>
-                                            </SigningStatusText>
-                                          )
-                                        default:
-                                          return null
-                                      }
+                                      return (
+                                        <BankidStatus
+                                          message={dataStatus.code}
+                                        />
+                                      )
                                     } else {
                                       return null
                                     }
-                                  case SIGNSTATE.COMPLETED: // TODO: backend sets this to null atm
+                                  case SIGNSTATE.COMPLETED:
                                     if (
                                       dataStatus.status ===
                                       BANKIDSTATUS.COMPLETE
                                     ) {
-                                      window.location.href = '/download'
+                                      return <Redirect to="/download" />
                                     } else {
                                       return null
                                     }
@@ -345,50 +344,13 @@ export const SignUp: React.SFC = () => (
                                     if (
                                       dataStatus.status === BANKIDSTATUS.FAILED
                                     ) {
-                                      switch (dataStatus.code) {
-                                        case 'expiredTransaction':
-                                          return (
-                                            <SigningStatusText>
-                                              <TranslationsConsumer textKey="SIGN_BANKID_CODE_EXPIRED_TRANSACTION">
-                                                {(message) => message}
-                                              </TranslationsConsumer>
-                                            </SigningStatusText>
-                                          )
-                                        case 'certificateErr':
-                                          return (
-                                            <SigningStatusText>
-                                              <TranslationsConsumer textKey="SIGN_BANKID_CODE_CERTIFICATE_ERR">
-                                                {(message) => message}
-                                              </TranslationsConsumer>
-                                            </SigningStatusText>
-                                          )
-                                        case 'userCancel':
-                                          return (
-                                            <SigningStatusText>
-                                              <TranslationsConsumer textKey="SIGN_BANKID_CODE_USER_CANCEL">
-                                                {(message) => message}
-                                              </TranslationsConsumer>
-                                            </SigningStatusText>
-                                          )
-                                        case 'cancelled':
-                                          return (
-                                            <SigningStatusText>
-                                              <TranslationsConsumer textKey="SIGN_BANKID_CODE_CANCELLED">
-                                                {(message) => message}
-                                              </TranslationsConsumer>
-                                            </SigningStatusText>
-                                          )
-                                        case 'startFailed':
-                                          return (
-                                            <SigningStatusText>
-                                              <TranslationsConsumer textKey="SIGN_BANKID_CODE_START_FAILED">
-                                                {(message) => message}
-                                              </TranslationsConsumer>
-                                            </SigningStatusText>
-                                          )
-                                        default:
-                                          return null
-                                      }
+                                      return (
+                                        <BankidStatus
+                                          message={dataStatus.code}
+                                        />
+                                      )
+                                    } else {
+                                      return null
                                     }
                                   default:
                                     return null
@@ -409,4 +371,20 @@ export const SignUp: React.SFC = () => (
       </Card>
     </CardWrapper>
   </OuterWrapper>
+)
+
+interface StatusProps {
+  message: string
+}
+
+const BankidStatus: React.SFC<StatusProps> = (props) => (
+  <div>
+    <SigningStatusText>
+      <TranslationsConsumer
+        textKey={handleMessage(CODETEXTKEYS, props.message)}
+      >
+        {(message) => message}
+      </TranslationsConsumer>
+    </SigningStatusText>
+  </div>
 )
