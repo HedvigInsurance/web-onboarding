@@ -213,7 +213,7 @@ export const ChatConversation: React.SFC = () => (
             </Mufflable>
           )}
         </Message>
-        <Message id={ChatStep.SHOW_OFFER} delay={1000}>
+        <Message id={ChatStep.SHOW_OFFER} delay={500}>
           {() => (
             <Mufflable
               muffled={currentStep !== ChatStep.SHOW_OFFER}
