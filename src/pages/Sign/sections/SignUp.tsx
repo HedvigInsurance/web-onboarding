@@ -297,9 +297,7 @@ export const SignUp: React.SFC = () => (
                               borderBottom: touched.email
                                 ? errors.email
                                   ? '3px solid red'
-                                  : isValid
-                                    ? [`3px solid ${colors.DARK_PURPLE}`]
-                                    : [`3px solid ${colors.GREEN}`]
+                                  : [`3px solid ${colors.GREEN}`]
                                 : [`3px solid ${colors.DARK_PURPLE}`],
                             }}
                           />
@@ -318,12 +316,10 @@ export const SignUp: React.SFC = () => (
                           <InputField
                             name="personalNumber"
                             style={{
-                              borderBottom: touched.personalNumber
-                                ? errors.personalNumber
+                              borderBottom: touched.email
+                                ? errors.email
                                   ? '3px solid red'
-                                  : isValid
-                                    ? [`3px solid ${colors.DARK_PURPLE}`]
-                                    : [`3px solid ${colors.GREEN}`]
+                                  : [`3px solid ${colors.GREEN}`]
                                 : [`3px solid ${colors.DARK_PURPLE}`],
                             }}
                           />
