@@ -283,7 +283,7 @@ export const SignUp: React.SFC = () => (
                         })
                       }
                     >
-                      {({ errors, touched, isValid }) => (
+                      {({ errors, touched }) => (
                         <CustomForm>
                           <InputTitle>
                             <TranslationsConsumer textKey="SIGN_INPUT_ONE_TITLE">
