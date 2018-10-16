@@ -366,13 +366,11 @@ const SubscriptionComponent: React.SFC = () => (
       }
       if (error) {
         return (
-          <div>
-            <ErrorText>
-              <TranslationsConsumer textKey="SIGN_BANKID_STANDARD_ERROR_MESSAGE">
-                {(errorText) => errorText}
-              </TranslationsConsumer>
-            </ErrorText>
-          </div>
+          <ErrorText>
+            <TranslationsConsumer textKey="SIGN_BANKID_STANDARD_ERROR_MESSAGE">
+              {(errorText) => errorText}
+            </TranslationsConsumer>
+          </ErrorText>
         )
       }
       if (data) {
@@ -395,6 +393,7 @@ const SubscriptionComponent: React.SFC = () => (
               return null
             }
           case SIGNSTATE.COMPLETED:
+            // return <pre>{JSON.stringify(data, null, 2)}</pre>
             if (dataStatus.status === BANKIDSTATUS.COMPLETE) {
               return <Redirect to="/download" />
             } else {
