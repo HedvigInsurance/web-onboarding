@@ -14,8 +14,6 @@ import {
 } from '../state'
 
 interface FormValues {
-  firstName: string
-  lastName: string
   age: number | string
 }
 
@@ -35,8 +33,6 @@ const handleChange = <K extends keyof NameAgeState>(
 const validationSchema = () =>
   yup
     .object<Partial<NameAgeState>>({
-      firstName: yup.string().required(),
-      lastName: yup.string().required(),
       age: yup
         .number()
         .positive()
@@ -49,7 +45,7 @@ const validationSchema = () =>
 const isDone = (values: Partial<NameAgeState> = {}) =>
   validationSchema().isValidSync(values)
 
-export const NameAgeInput: React.SFC<Props> = ({
+export const AgeInput: React.SFC<Props> = ({
   onSubmit,
   appear,
   isCurrentMessage = false,
@@ -76,21 +72,20 @@ export const NameAgeInput: React.SFC<Props> = ({
             >
               <div>
                 <TranslationsPlaceholderConsumer
-                  textKey="CHAT_INPUT_NAME_AGE_TEXT"
+                  textKey="CHAT_INPUT_AGE_TEXT"
                   replacements={{
-                    firstName: (
-                      <TranslationsConsumer textKey="CHAT_INPUT_NAME_AGE_FIRST_NAME_PLACEHOLDER">
+                    age: (
+                      <TranslationsConsumer textKey="CHAT_INPUT_AGE_AGE_PLACEHOLDER">
                         {(placeholder) => (
                           <UserTextInput
-                            type="text"
-                            id="firstName"
+                            type="number"
+                            id="age"
                             placeholder={placeholder}
-                            value={chatState.nameAge.firstName}
-                            onChange={handleChange('firstName', chatState)}
-                            maxWidth={Math.max(
-                              chatState.nameAge.firstName.length || 0,
-                              10,
-                            )}
+                            step={1}
+                            value={chatState.nameAge.age}
+                            onChange={handleChange('age', chatState)}
+                            maxWidth={4.5}
+                            pattern="[0-9]*"
                             innerRef={(ref) => {
                               if (
                                 !ref ||
@@ -106,53 +101,21 @@ export const NameAgeInput: React.SFC<Props> = ({
                         )}
                       </TranslationsConsumer>
                     ),
-                    lastName: (
-                      <TranslationsConsumer textKey="CHAT_INPUT_NAME_AGE_LAST_NAME_PLACEHOLDER">
-                        {(placeholder) => (
-                          <UserTextInput
-                            type="text"
-                            id="lastName"
-                            value={chatState.nameAge.lastName}
-                            placeholder={placeholder}
-                            onChange={handleChange('lastName', chatState)}
-                            maxWidth={Math.max(
-                              chatState.nameAge.lastName.length || 0,
-                              15,
-                            )}
-                          />
-                        )}
-                      </TranslationsConsumer>
-                    ),
-                    age: (
-                      <TranslationsConsumer textKey="CHAT_INPUT_NAME_AGE_AGE_PLACEHOLDER">
-                        {(placeholder) => (
-                          <UserTextInput
-                            type="number"
-                            id="age"
-                            placeholder={placeholder}
-                            step={1}
-                            value={chatState.nameAge.age}
-                            onChange={handleChange('age', chatState)}
-                            maxWidth={4.5}
-                            pattern="[0-9]*"
-                          />
-                        )}
-                      </TranslationsConsumer>
-                    ),
                   }}
                 >
                   {(nodes) => nodes}
                 </TranslationsPlaceholderConsumer>
               </div>
-              {isDone(chatState.nameAge) && (
-                <div>
-                  <button type="submit">
-                    <TranslationsConsumer textKey="CHAT_INPUT_NEXT_LABEL">
-                      {(text) => text}
-                    </TranslationsConsumer>
-                  </button>
-                </div>
-              )}
+              {isDone(chatState.nameAge) &&
+                isCurrentMessage && (
+                  <div>
+                    <button type="submit">
+                      <TranslationsConsumer textKey="CHAT_INPUT_NEXT_LABEL">
+                        {(text) => text}
+                      </TranslationsConsumer>
+                    </button>
+                  </div>
+                )}
             </form>
           )}
         </ChatContainer>

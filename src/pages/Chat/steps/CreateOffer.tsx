@@ -1,3 +1,4 @@
+import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import { SessionContainer } from '../../../containers/SessionContainer'
 import {
@@ -27,7 +28,11 @@ export const CreateOffer: React.SFC = () => (
                               getCreateOfferVariablesFromChatState(chatState),
                             )
                           }
-                        />
+                        >
+                          <TranslationsConsumer textKey="CHAT_INPUT_CREATE_OFFER">
+                            {(text) => text}
+                          </TranslationsConsumer>
+                        </button>
                         <div>
                           {subscriptionMaybe
                             ? subscriptionMaybe.offer.status

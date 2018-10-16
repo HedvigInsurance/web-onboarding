@@ -138,7 +138,13 @@ export const ChatMessage: React.SFC<ChatMessageProps> = ({
       timeout={appear ? 0 : typingDuration}
       appear
       in
-      onEntered={onTyped}
+      onEntered={
+        appear
+          ? () => {
+              /* noop */
+            }
+          : onTyped
+      }
     >
       {(appearStatus) => (
         <ChatMessageWrapper>

@@ -19,6 +19,7 @@ import {
 interface CurrentInsuranceInputProps {
   appear?: boolean
   onSubmit?: () => void
+  isCurrentMessage?: boolean
 }
 
 const insurerNames = new Map<Insurer, string>([
@@ -86,6 +87,7 @@ export const CurrentInsuranceInput: React.SFC<CurrentInsuranceInputProps> = ({
   onSubmit = () => {
     /* noop */
   },
+  isCurrentMessage,
 }) => (
   <UserResponse appear={appear}>
     <ChatContainer>
@@ -129,11 +131,12 @@ export const CurrentInsuranceInput: React.SFC<CurrentInsuranceInputProps> = ({
             {(t) => t}
           </TranslationsPlaceholderConsumer>
 
-          {isDone(chatState.currentInsurance) && (
-            <TranslationsConsumer textKey="CHAT_INPUT_NEXT_LABEL">
-              {(t) => <button type="submit">{t}</button>}
-            </TranslationsConsumer>
-          )}
+          {isDone(chatState.currentInsurance) &&
+            isCurrentMessage && (
+              <TranslationsConsumer textKey="CHAT_INPUT_NEXT_LABEL">
+                {(t) => <button type="submit">{t}</button>}
+              </TranslationsConsumer>
+            )}
         </form>
       )}
     </ChatContainer>

@@ -35,11 +35,11 @@ it('shows all messages when initial session is set', () => {
         age: 12,
       },
       currentStep: ChatStep.GREET,
-      visibleSteps: [ChatStep.INITIAL, ChatStep.NAME_AGE_INPUT, ChatStep.GREET],
+      visibleSteps: [ChatStep.INITIAL, ChatStep.NAME_INPUT, ChatStep.AGE_INPUT],
       initialVisibleSteps: [
         ChatStep.INITIAL,
-        ChatStep.NAME_AGE_INPUT,
-        ChatStep.GREET,
+        ChatStep.NAME_INPUT,
+        ChatStep.AGE_INPUT,
       ],
     },
   })

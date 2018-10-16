@@ -3,11 +3,14 @@ import { ChatMessage } from 'components/hedvig/chat'
 import { Conversation, Message } from 'components/hedvig/conversation'
 import * as React from 'react'
 import { ChatContainer, ChatStep } from './state'
+import { AddressInput } from './steps/AddressInput'
+import { AgeInput } from './steps/AgeInput'
+import { ApartmentTypeInput } from './steps/ApartmentTypeInput'
 import { CreateOffer } from './steps/CreateOffer'
 import { CurrentInsuranceInput } from './steps/CurrentInsuranceInput'
 import { Greet } from './steps/Greet'
-import { LivingSituationInput } from './steps/LivingSituationInput'
-import { NameAgeInput } from './steps/NameAgeInput'
+import { NameInput } from './steps/NameInput'
+import { NumberOfPeopleInput } from './steps/NumberOfPeopleInput'
 
 export const ChatConversation: React.SFC = () => (
   <ChatContainer>
@@ -28,7 +31,7 @@ export const ChatConversation: React.SFC = () => (
             <ChatMessage
               appear={appear}
               typingDuration={2500}
-              onTyped={() => goToStep(ChatStep.NAME_AGE_INPUT)}
+              onTyped={() => goToStep(ChatStep.NAME_INPUT)}
             >
               <TranslationsConsumer textKey="CHAT_HEDVIG_FIRST_GREET">
                 {(firstGreet) => firstGreet}
@@ -36,13 +39,21 @@ export const ChatConversation: React.SFC = () => (
             </ChatMessage>
           )}
         </Message>
-
-        <Message delay={500} id={ChatStep.NAME_AGE_INPUT}>
+        <Message delay={500} id={ChatStep.NAME_INPUT}>
           {({ appear }) => (
-            <NameAgeInput
+            <NameInput
+              onSubmit={() => goToStep(ChatStep.AGE_INPUT)}
+              appear={appear}
+              isCurrentMessage={currentStep === ChatStep.NAME_INPUT}
+            />
+          )}
+        </Message>
+        <Message id={ChatStep.AGE_INPUT}>
+          {({ appear }) => (
+            <AgeInput
               onSubmit={() => goToStep(ChatStep.GREET)}
               appear={appear}
-              isCurrentMessage={currentStep === ChatStep.NAME_AGE_INPUT}
+              isCurrentMessage={currentStep === ChatStep.AGE_INPUT}
             />
           )}
         </Message>
@@ -51,17 +62,35 @@ export const ChatConversation: React.SFC = () => (
           {({ appear }) => (
             <Greet
               appear={appear}
-              onTyped={() => goToStep(ChatStep.LIVING_SITUATION_INPUT)}
+              onTyped={() => goToStep(ChatStep.ADDRESS_INPUT)}
             />
           )}
         </Message>
 
-        <Message id={ChatStep.LIVING_SITUATION_INPUT} delay={300}>
+        <Message id={ChatStep.ADDRESS_INPUT}>
           {({ appear }) => (
-            <LivingSituationInput
+            <AddressInput
               appear={appear}
+              isCurrentMessage={currentStep === ChatStep.ADDRESS_INPUT}
+              onSubmit={() => goToStep(ChatStep.APARTMENT_TYPE_INPUT)}
+            />
+          )}
+        </Message>
+        <Message id={ChatStep.APARTMENT_TYPE_INPUT}>
+          {({ appear }) => (
+            <ApartmentTypeInput
+              appear={appear}
+              isCurrentMessage={currentStep === ChatStep.APARTMENT_TYPE_INPUT}
+              onSubmit={() => goToStep(ChatStep.NUMBER_OF_PEOPLE)}
+            />
+          )}
+        </Message>
+        <Message id={ChatStep.NUMBER_OF_PEOPLE}>
+          {({ appear }) => (
+            <NumberOfPeopleInput
+              appear={appear}
+              isCurrentMessage={currentStep === ChatStep.NUMBER_OF_PEOPLE}
               onSubmit={() => goToStep(ChatStep.CURRENT_INSURANCE_QUESTION)}
-              isCurrentMessage={currentStep === ChatStep.LIVING_SITUATION_INPUT}
             />
           )}
         </Message>
@@ -84,16 +113,17 @@ export const ChatConversation: React.SFC = () => (
             </ChatMessage>
           )}
         </Message>
-
         <Message id={ChatStep.CURRENT_INSURANCE_INPUT} delay={300}>
           {({ appear }) => (
             <CurrentInsuranceInput
               appear={appear}
               onSubmit={() => goToStep(ChatStep.SHOW_OFFER)}
+              isCurrentMessage={
+                currentStep === ChatStep.CURRENT_INSURANCE_INPUT
+              }
             />
           )}
         </Message>
-
         <Message id={ChatStep.SHOW_OFFER}>{() => <CreateOffer />}</Message>
       </Conversation>
     )}
