@@ -4,9 +4,15 @@ import Transition, { ENTERED } from 'react-transition-group/Transition'
 import { MessageProps } from './Message'
 
 export const ConversationWrapper = styled('div')({
-  maxWidth: 800,
+  maxWidth: 1000,
   padding: '0 20px',
   margin: '0 auto',
+  fontSize: 24,
+  paddingBottom: '25vh',
+  minHeight: '75vh',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'flex-end',
 })
 
 const getId = (child: React.ReactChild) => React.Children.only(child).props.id

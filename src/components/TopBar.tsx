@@ -108,7 +108,7 @@ const progressStrings = [
   },
   {
     key: 2,
-    progressText: '3.Signera med BankID',
+    progressText: '3. Signera med BankID',
   },
 ]
 
@@ -119,7 +119,7 @@ export const TopBar: React.SFC<Props> = (props) => (
         <Logo src="/assets/offering/logo.png" />
       </BarContainer>
       <BarProgressContainer>
-        {props.progress
+        {props.progress !== undefined
           ? progressStrings.map((text) => (
               <ProgressLabel
                 key={text.key}
@@ -147,3 +147,7 @@ export const TopBar: React.SFC<Props> = (props) => (
     </Bar>
   </Container>
 )
+
+export const TopBarFiller = styled('div')({
+  paddingTop: 100,
+})

@@ -3,7 +3,7 @@ import {
   TranslationsConsumer,
   TranslationsPlaceholderConsumer,
 } from '@hedviginsurance/textkeyfy'
-import { GetInsuredButton, LinkTag } from 'components/get-insured-button'
+import { GetInsuredButton, LinkTag } from 'components/buttons'
 import * as React from 'react'
 import styled from 'react-emotion'
 import * as VisibilitySensor from 'react-visibility-sensor'
