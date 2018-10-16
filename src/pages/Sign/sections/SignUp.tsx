@@ -9,12 +9,13 @@ import gql from 'graphql-tag'
 import * as React from 'react'
 import { Mutation, Subscription } from 'react-apollo'
 import styled from 'react-emotion'
-import { Redirect } from 'react-router'
+import { Redirect } from 'react-router-dom'
 import * as Yup from 'yup'
 
 const CARDWIDTH = 788
 const HEADERWIDTH = 400
 const FORMWIDTH = 300
+const FORMWIDTHSMALL = 100
 
 const OuterWrapper = styled('div')({
   width: '100%',
@@ -61,12 +62,20 @@ const Header = styled('h1')({
   paddingTop: '30px',
   marginBottom: '10px',
   fontSize: '32px',
+  '@media (max-width: 300px)': {
+    fontSize: '26px',
+  },
 })
 
 const InputTitle = styled('div')({
   marginTop: '20px',
   lineHeight: '23px',
   fontSize: '20px',
+  '@media (max-width: 300px)': {
+    marginLeft: '10px',
+    marginRight: '10px',
+    fontSize: '18px',
+  },
 })
 
 const CustomForm = styled(Form)({
@@ -75,14 +84,27 @@ const CustomForm = styled(Form)({
   maxWidth: FORMWIDTH,
   marginLeft: 'auto',
   marginRight: 'auto',
+  '@media (max-width: 300px)': {
+    minWidth: FORMWIDTHSMALL,
+  },
 })
 
 const InputField = styled(Field)({
   marginTop: '10px',
   marginBottom: '10px',
   minWidth: FORMWIDTH,
-  lineHeight: '23px',
+  lineHeight: '48px',
   fontSize: '20px',
+  backgroundColor: colors.OFF_WHITE,
+  borderRadius: '5px',
+  border: 'none',
+  outline: 'none',
+  '@media (max-width: 300px)': {
+    marginLeft: '10px',
+    marginRight: '10px',
+    minWidth: FORMWIDTHSMALL,
+    fontSize: '18px',
+  },
 })
 
 const InputSubmit = styled('input')({
@@ -94,6 +116,9 @@ const InputSubmit = styled('input')({
   padding: '15px 30px',
   cursor: 'pointer',
   border: 'none',
+  '@media (max-width: 300px)': {
+    fontSize: '14px',
+  },
 })
 
 const GetInsuredButton = styled('div')({
@@ -115,11 +140,21 @@ const ErrorText = styled('div')({
   marginTop: '20px',
   color: 'red',
   fontSize: '16px',
+  '@media (max-width: 300px)': {
+    marginLeft: '10px',
+    marginRight: '10px',
+    fontSize: '14px',
+  },
 })
 
 const ErrorMessage = styled('div')({
   minHeight: '24px',
   fontSize: '16px',
+  '@media (max-width: 300px)': {
+    marginLeft: '10px',
+    marginRight: '10px',
+    fontSize: '14px',
+  },
 })
 
 const userSchema = Yup.object().shape({
@@ -248,7 +283,7 @@ export const SignUp: React.SFC = () => (
                         })
                       }
                     >
-                      {({ errors, touched }) => (
+                      {({ errors, touched, isValid }) => (
                         <CustomForm>
                           <InputTitle>
                             <TranslationsConsumer textKey="SIGN_INPUT_ONE_TITLE">
@@ -256,7 +291,18 @@ export const SignUp: React.SFC = () => (
                             </TranslationsConsumer>
                           </InputTitle>
 
-                          <InputField name="email" />
+                          <InputField
+                            name="email"
+                            style={{
+                              borderBottom: touched.email
+                                ? errors.email
+                                  ? '3px solid red'
+                                  : isValid
+                                    ? [`3px solid ${colors.DARK_PURPLE}`]
+                                    : [`3px solid ${colors.GREEN}`]
+                                : [`3px solid ${colors.DARK_PURPLE}`],
+                            }}
+                          />
                           {errors.email && touched.email ? (
                             <ErrorMessage>
                               <TranslationsConsumer textKey={errors.email}>
@@ -269,7 +315,18 @@ export const SignUp: React.SFC = () => (
                               {(title) => title}
                             </TranslationsConsumer>
                           </InputTitle>
-                          <InputField name="personalNumber" />
+                          <InputField
+                            name="personalNumber"
+                            style={{
+                              borderBottom: touched.personalNumber
+                                ? errors.personalNumber
+                                  ? '3px solid red'
+                                  : isValid
+                                    ? [`3px solid ${colors.DARK_PURPLE}`]
+                                    : [`3px solid ${colors.GREEN}`]
+                                : [`3px solid ${colors.DARK_PURPLE}`],
+                            }}
+                          />
                           {errors.personalNumber && touched.personalNumber ? (
                             <ErrorMessage>
                               <TranslationsConsumer
@@ -286,79 +343,7 @@ export const SignUp: React.SFC = () => (
                               )}
                             </TranslationsConsumer>
                           </GetInsuredButton>
-                          <Subscription<SignStatusData>
-                            subscription={SIGN_SUBSCRIPTION}
-                          >
-                            {({ data, loading, error }) => {
-                              if (loading) {
-                                return null
-                              }
-                              if (error) {
-                                return (
-                                  <div>
-                                    <ErrorText>
-                                      <TranslationsConsumer textKey="SIGN_BANKID_STANDARD_ERROR_MESSAGE">
-                                        {(errorText) => errorText}
-                                      </TranslationsConsumer>
-                                    </ErrorText>
-                                  </div>
-                                )
-                              }
-                              if (data) {
-                                const dataStatus =
-                                  data.signStatus.status.collectStatus
-                                const signingState =
-                                  data.signStatus.status.signState
-
-                                switch (signingState) {
-                                  case SIGNSTATE.INITIATED:
-                                    return (
-                                      <SigningStatusText>
-                                        <TranslationsConsumer textKey="SIGN_BANKID_INITIATED">
-                                          {(message) => message}
-                                        </TranslationsConsumer>
-                                      </SigningStatusText>
-                                    )
-                                  case SIGNSTATE.IN_PROGRESS:
-                                    if (
-                                      dataStatus.status === BANKIDSTATUS.PENDING
-                                    ) {
-                                      return (
-                                        <BankidStatus
-                                          message={dataStatus.code}
-                                        />
-                                      )
-                                    } else {
-                                      return null
-                                    }
-                                  case SIGNSTATE.COMPLETED:
-                                    if (
-                                      dataStatus.status ===
-                                      BANKIDSTATUS.COMPLETE
-                                    ) {
-                                      return <Redirect to="/download" />
-                                    } else {
-                                      return null
-                                    }
-                                  case SIGNSTATE.FAILED:
-                                    if (
-                                      dataStatus.status === BANKIDSTATUS.FAILED
-                                    ) {
-                                      return (
-                                        <BankidStatus
-                                          message={dataStatus.code}
-                                        />
-                                      )
-                                    } else {
-                                      return null
-                                    }
-                                  default:
-                                    return null
-                                }
-                              }
-                              return null
-                            }}
-                          </Subscription>
+                          <SubscriptionComponent />
                         </CustomForm>
                       )}
                     </Formik>
@@ -371,6 +356,63 @@ export const SignUp: React.SFC = () => (
       </Card>
     </CardWrapper>
   </OuterWrapper>
+)
+
+const SubscriptionComponent: React.SFC = () => (
+  <Subscription<SignStatusData> subscription={SIGN_SUBSCRIPTION}>
+    {({ data, loading, error }) => {
+      if (loading) {
+        return null
+      }
+      if (error) {
+        return (
+          <div>
+            <ErrorText>
+              <TranslationsConsumer textKey="SIGN_BANKID_STANDARD_ERROR_MESSAGE">
+                {(errorText) => errorText}
+              </TranslationsConsumer>
+            </ErrorText>
+          </div>
+        )
+      }
+      if (data) {
+        const dataStatus = data.signStatus.status.collectStatus
+        const signingState = data.signStatus.status.signState
+
+        switch (signingState) {
+          case SIGNSTATE.INITIATED:
+            return (
+              <SigningStatusText>
+                <TranslationsConsumer textKey="SIGN_BANKID_INITIATED">
+                  {(message) => message}
+                </TranslationsConsumer>
+              </SigningStatusText>
+            )
+          case SIGNSTATE.IN_PROGRESS:
+            if (dataStatus.status === BANKIDSTATUS.PENDING) {
+              return <BankidStatus message={dataStatus.code} />
+            } else {
+              return null
+            }
+          case SIGNSTATE.COMPLETED:
+            if (dataStatus.status === BANKIDSTATUS.COMPLETE) {
+              return <Redirect to="/download" />
+            } else {
+              return null
+            }
+          case SIGNSTATE.FAILED:
+            if (dataStatus.status === BANKIDSTATUS.FAILED) {
+              return <BankidStatus message={dataStatus.code} />
+            } else {
+              return null
+            }
+          default:
+            return null
+        }
+      }
+      return null
+    }}
+  </Subscription>
 )
 
 interface StatusProps {
