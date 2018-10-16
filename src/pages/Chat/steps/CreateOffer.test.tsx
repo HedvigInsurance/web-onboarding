@@ -3,10 +3,7 @@ import { ApolloClient } from 'apollo-client'
 import { split } from 'apollo-link'
 import { apolloClient } from 'client/apolloClient'
 import { Provider } from 'constate'
-import {
-  CREATE_SESSION_TOKEN_MUTATION,
-  SessionContainer,
-} from 'containers/SessionContainer'
+import { CREATE_SESSION_TOKEN_MUTATION } from 'containers/SessionContainer'
 import { mount } from 'enzyme'
 import * as React from 'react'
 import { ApolloProvider } from 'react-apollo'
@@ -73,7 +70,7 @@ it('creates an offer without 💥', async () => {
     </ApolloProvider>,
   )
 
-  expect(wrapper.find(SessionContainer).contains('loading')).toBe(true)
+  expect(wrapper.find('div').text()).toBe('') // loading state = empty
   await mockNetworkWait(3)
   await mockNetworkWait(3)
   expect(apolloClient!.subscriptionClient.close).toHaveBeenCalledTimes(1)
@@ -83,7 +80,6 @@ it('creates an offer without 💥', async () => {
 
   await mockNetworkWait()
   wrapper.update()
-  expect(wrapper.find('div').contains('loading')).toBe(true)
   subscriptionLink.simulateResult({
     result: {
       data: {

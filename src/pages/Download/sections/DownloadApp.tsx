@@ -1,6 +1,6 @@
 import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
-import { GetInsuredButton } from 'components/get-insured-button'
+import { GetInsuredButton } from 'components/buttons'
 import * as React from 'react'
 import styled from 'react-emotion'
 const IMAGEWIDTH = 450
