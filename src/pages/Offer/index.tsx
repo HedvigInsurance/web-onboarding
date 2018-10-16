@@ -1,12 +1,12 @@
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { TopBar } from 'components/TopBar'
 import { ActionMap, Container } from 'constate'
-import { SessionContainer } from 'containers/SessionContainer'
 import gql from 'graphql-tag'
 import * as React from 'react'
 import { Query } from 'react-apollo'
 import Helmet from 'react-helmet-async'
 import { Redirect } from 'react-router-dom'
+import { StorageContainer } from 'utils/StorageContainer'
 import { GetInsured } from './sections/GetInsured'
 import { HedvigInfo } from './sections/HedvigInfo'
 import { HedvigSwitch } from './sections/HedvigSwitch'
@@ -24,7 +24,7 @@ interface Actions {
   updateVisibility: (visible: boolean) => void
 }
 
-const OFFER_QUERY = gql`
+export const OFFER_QUERY = gql`
   query Offer {
     insurance {
       address
@@ -56,9 +56,9 @@ export interface OfferData {
 }
 
 export const Offering: React.SFC<{}> = () => (
-  <SessionContainer>
-    {(token) =>
-      token ? (
+  <StorageContainer>
+    {(storageState) =>
+      storageState.session.getSession()!.token ? (
         <Query<OfferData> query={OFFER_QUERY}>
           {({ loading, error, data }) => {
             if (loading) {
@@ -123,5 +123,5 @@ export const Offering: React.SFC<{}> = () => (
         <Redirect to="/hedvig" />
       )
     }
-  </SessionContainer>
+  </StorageContainer>
 )
