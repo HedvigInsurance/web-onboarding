@@ -122,7 +122,9 @@ export const NameInput: React.SFC<Props> = ({
                   {(nodes) => nodes}
                 </TranslationsPlaceholderConsumer>
               </div>
-              {isDone(chatState.nameAge) && isCurrentMessage && <NextButton />}
+              <NextButton
+                disabled={!isDone(chatState.nameAge) || !isCurrentMessage}
+              />
             </form>
           )}
         </ChatContainer>

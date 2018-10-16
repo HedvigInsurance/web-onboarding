@@ -113,8 +113,9 @@ export const NumberOfPeopleInput: React.SFC<NumberOfPeopleInputProps> = ({
           >
             {(nodes) => nodes}
           </TranslationsPlaceholderConsumer>
-          {isDone(chatState.livingSituation) &&
-            isCurrentMessage && <NextButton />}
+          <NextButton
+            disabled={!isDone(chatState.livingSituation) || !isCurrentMessage}
+          />
         </form>
       )}
     </ChatContainer>

@@ -129,8 +129,11 @@ export const AddressInput: React.SFC<AddressInputProps> = ({
               >
                 {(nodes) => nodes}
               </TranslationsPlaceholderConsumer>
-              {isDone(chatState.livingSituation) &&
-                isCurrentMessage && <NextButton />}
+              <NextButton
+                disabled={
+                  !isDone(chatState.livingSituation) || !isCurrentMessage
+                }
+              />
             </form>
           )}
         </ChatContainer>

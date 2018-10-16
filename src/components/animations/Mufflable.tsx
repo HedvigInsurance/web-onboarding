@@ -11,6 +11,6 @@ export const Mufflable = styled('div')(
     opacity: muffled ? 0.5 : 1,
     fontSize: muffled ? 16 : 20,
     transformOrigin: `top ${direction}`,
-    transition: 'opacity 200ms, font 200ms',
+    transition: 'opacity 200ms, font 200ms, maxHeight: 300ms',
   }),
 )

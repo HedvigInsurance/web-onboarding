@@ -200,8 +200,9 @@ export const ApartmentTypeInput: React.SFC<ApartmentTypeInputProps> = ({
             field="size"
             values={chatState.livingSituation}
           />
-          {isDone(chatState.livingSituation) &&
-            isCurrentMessage && <NextButton />}
+          <NextButton
+            disabled={!isDone(chatState.livingSituation) || !isCurrentMessage}
+          />
         </form>
       )}
     </ChatContainer>

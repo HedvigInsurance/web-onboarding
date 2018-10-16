@@ -8,6 +8,11 @@ export const ConversationWrapper = styled('div')({
   padding: '0 20px',
   margin: '0 auto',
   fontSize: 24,
+  paddingBottom: '25vh',
+  minHeight: '75vh',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'flex-end',
 })
 
 const getId = (child: React.ReactChild) => React.Children.only(child).props.id
