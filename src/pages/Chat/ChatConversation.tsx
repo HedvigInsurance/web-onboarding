@@ -21,6 +21,7 @@ export const ChatConversation: React.SFC = () => (
       currentStep,
       goToStep,
       livingSituation,
+      currentInsurance,
     }) => (
       <Conversation<ChatStep>
         initialVisibleSteps={initialVisibleSteps}
@@ -177,7 +178,7 @@ export const ChatConversation: React.SFC = () => (
             >
               <CurrentInsuranceInput
                 appear={appear}
-                onSubmit={() => goToStep(ChatStep.SHOW_OFFER)}
+                onSubmit={() => goToStep(ChatStep.SHOW_OFFER_QUESTION)}
                 isCurrentMessage={
                   currentStep === ChatStep.CURRENT_INSURANCE_INPUT
                 }
@@ -185,7 +186,34 @@ export const ChatConversation: React.SFC = () => (
             </Mufflable>
           )}
         </Message>
-        <Message id={ChatStep.SHOW_OFFER}>
+
+        <Message id={ChatStep.SHOW_OFFER_QUESTION}>
+          {({ appear }) => (
+            <Mufflable
+              muffled={
+                ![ChatStep.SHOW_OFFER_QUESTION, ChatStep.SHOW_OFFER].includes(
+                  currentStep,
+                )
+              }
+            >
+              <ChatMessage
+                appear={appear}
+                onTyped={() => goToStep(ChatStep.SHOW_OFFER)}
+              >
+                <TranslationsConsumer
+                  textKey={
+                    currentInsurance.hasCurrentInsurance
+                      ? 'CHAT_HEDVIG_SHOW_OFFER_HAS_INSURANCE'
+                      : 'CHAT_HEDVIG_SHOW_OFFER_NO_INSURANCE'
+                  }
+                >
+                  {(t) => t}
+                </TranslationsConsumer>
+              </ChatMessage>
+            </Mufflable>
+          )}
+        </Message>
+        <Message id={ChatStep.SHOW_OFFER} delay={1000}>
           {() => (
             <Mufflable
               muffled={currentStep !== ChatStep.SHOW_OFFER}
