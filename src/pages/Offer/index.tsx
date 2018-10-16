@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 import * as React from 'react'
 import { Query } from 'react-apollo'
 import Helmet from 'react-helmet-async'
+import { Redirect } from 'react-router-dom'
 import { GetInsured } from './sections/GetInsured'
 import { HedvigInfo } from './sections/HedvigInfo'
 import { HedvigSwitch } from './sections/HedvigSwitch'
@@ -119,7 +120,7 @@ export const Offering: React.SFC<{}> = () => (
           }}
         </Query>
       ) : (
-        'no token :('
+        <Redirect to="/hedvig" />
       )
     }
   </SessionContainer>
