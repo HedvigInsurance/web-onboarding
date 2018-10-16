@@ -1,4 +1,8 @@
 import { colors, fonts } from '@hedviginsurance/brand'
+import {
+  TranslationsConsumer,
+  TranslationsPlaceholderConsumer,
+} from '@hedviginsurance/textkeyfy'
 import { GetInsuredButton, LinkTag } from 'components/get-insured-button'
 import * as React from 'react'
 import styled from 'react-emotion'
@@ -11,8 +15,6 @@ import { Wrapper } from '../components/Wrapper'
 
 interface Props {
   offer: OfferData
-  title: string
-  buttonText: string
   buttonVisibility: (isVisible: boolean) => void
 }
 
@@ -46,22 +48,26 @@ const Price = styled('h1')({
   fontFamily: fonts.CIRCULAR,
 })
 
-export const GetInsured: React.SFC<Props> = ({
-  title,
-  offer,
-  buttonVisibility,
-  buttonText,
-}) => (
+export const GetInsured: React.SFC<Props> = ({ offer, buttonVisibility }) => (
   <Wrapper>
     <InnerWrapper>
       <CardWrapperSmall>
         <Card>
           <HeaderBackground>
             <HeaderWrapper>
-              <Header>{title}</Header>
+              <TranslationsConsumer textKey="OFFER_GET_INSURED_TITLE">
+                {(title) => <Header>{title}</Header>}
+              </TranslationsConsumer>
             </HeaderWrapper>
           </HeaderBackground>
-          <Price>{offer.insurance.monthlyCost} kr/mån</Price>
+          <TranslationsPlaceholderConsumer
+            textKey="OFFER_SUMMARY_PRICE"
+            replacements={{
+              price: offer.insurance.monthlyCost,
+            }}
+          >
+            {(priceText) => <Price>{priceText}</Price>}
+          </TranslationsPlaceholderConsumer>
           <VisibilitySensor
             partialVisibility
             onChange={(isVisible: boolean) => {
@@ -69,9 +75,13 @@ export const GetInsured: React.SFC<Props> = ({
             }}
           >
             {() => (
-              <GetInsuredButton>
-                <LinkTag to={'/'}>{buttonText}</LinkTag>
-              </GetInsuredButton>
+              <TranslationsConsumer textKey="OFFER_SIGN_CTA_BOTTOM">
+                {(ctaText) => (
+                  <GetInsuredButton>
+                    <LinkTag to={'/sign'}>{ctaText}</LinkTag>
+                  </GetInsuredButton>
+                )}
+              </TranslationsConsumer>
             )}
           </VisibilitySensor>
         </Card>

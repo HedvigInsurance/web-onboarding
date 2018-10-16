@@ -1,5 +1,8 @@
 import { colors, fonts } from '@hedviginsurance/brand'
-import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
+import {
+  TranslationsConsumer,
+  TranslationsPlaceholderConsumer,
+} from '@hedviginsurance/textkeyfy'
 import { GetInsuredButton, LinkTag } from 'components/get-insured-button'
 import * as React from 'react'
 import styled from 'react-emotion'
@@ -109,7 +112,6 @@ const IconTitle = styled('p')({
 
 interface Props {
   buttonVisibility: (isVisible: boolean) => void
-  buttonText: string
   offer: OfferData
 }
 
@@ -132,11 +134,7 @@ const COLUMNS = [
   },
 ]
 
-export const Offer: React.SFC<Props> = ({
-  buttonVisibility,
-  buttonText,
-  offer,
-}) => (
+export const Offer: React.SFC<Props> = ({ buttonVisibility, offer }) => (
   <Wrapper>
     <InnerWrapper>
       <CardWrapperSmall>
@@ -157,13 +155,12 @@ export const Offer: React.SFC<Props> = ({
               {offer.insurance.postalNumber}
             </PersonalInfo>
           </HeaderBackground>
-          <TranslationsConsumer textKey="OFFER_HEADER">
-            {(priceLabel) => (
-              <Price>
-                {offer.insurance.monthlyCost} {priceLabel}
-              </Price>
-            )}
-          </TranslationsConsumer>
+          <TranslationsPlaceholderConsumer
+            textKey="OFFER_SUMMARY_PRICE"
+            replacements={{ price: offer.insurance.monthlyCost }}
+          >
+            {(priceText) => <Price>{priceText}</Price>}
+          </TranslationsPlaceholderConsumer>
           <InfoText>
             <TranslationsConsumer textKey="OFFER_RISK_LABEL">
               {(riskLabel) => riskLabel}
@@ -197,7 +194,9 @@ export const Offer: React.SFC<Props> = ({
           >
             {() => (
               <GetInsuredButton>
-                <LinkTag to={'/hedvig'}>{buttonText}</LinkTag>
+                <TranslationsConsumer textKey="OFFER_SUMMARY_SIGN_CTA">
+                  {(ctaText) => <LinkTag to={'/sign'}>{ctaText}</LinkTag>}
+                </TranslationsConsumer>
               </GetInsuredButton>
             )}
           </VisibilitySensor>

@@ -7,6 +7,21 @@ import { HeaderWrapper } from '../components/HeaderWrapper'
 import { InnerWrapper } from '../components/InnerWrapper'
 import { Wrapper } from '../components/Wrapper'
 
+enum InsuranceType {
+  RENT = 'RENT',
+  BRF = 'BRF',
+  STUDENT_RENT = 'STUDENT_RENT',
+  STUDENT_BRF = 'STUDENT_BRF',
+}
+
+const isApartmentOwner = (insuranceType: InsuranceType): boolean =>
+  insuranceType === InsuranceType.BRF ||
+  insuranceType === InsuranceType.STUDENT_BRF
+
+interface TermsProps {
+  insuranceType: string
+}
+
 const PERILSIDE = 72
 
 const Card = styled('div')({
@@ -66,7 +81,7 @@ const PerilTitle = styled('div')({
   lineHeight: 'normal',
 })
 
-export const Terms: React.SFC = () => (
+export const Terms: React.SFC<TermsProps> = ({ insuranceType }) => (
   <Wrapper>
     <InnerWrapper>
       <CardWrapper>
@@ -79,7 +94,13 @@ export const Terms: React.SFC = () => (
             </Header>
             <Row>
               <Col>
-                <TranslationsConsumer textKey="TERMS_PDF_PREBUY_OWNER_URL">
+                <TranslationsConsumer
+                  textKey={
+                    isApartmentOwner(insuranceType as InsuranceType)
+                      ? 'TERMS_PDF_PREBUY_OWNER_URL'
+                      : 'TERMS_PDF_PREBUY_RENT_URL'
+                  }
+                >
                   {(url) => (
                     <PerilLink href={url} target="_blank">
                       <PerilIcon src="/assets/offering/forkopsinformation.svg" />
@@ -92,7 +113,13 @@ export const Terms: React.SFC = () => (
                 </TranslationsConsumer>
               </Col>
               <Col>
-                <TranslationsConsumer textKey="TERMS_PDF_INSURANCE_OWNER_URL">
+                <TranslationsConsumer
+                  textKey={
+                    isApartmentOwner(insuranceType as InsuranceType)
+                      ? 'TERMS_PDF_INSURANCE_OWNER_URL'
+                      : 'TERMS_PDF_INSURANCE_RENT_URL'
+                  }
+                >
                   {(url) => (
                     <PerilLink href={url} target="_blank">
                       <PerilIcon src="/assets/offering/forkopsinformation.svg" />

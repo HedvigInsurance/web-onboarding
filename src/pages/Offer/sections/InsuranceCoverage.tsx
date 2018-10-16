@@ -1,14 +1,10 @@
 import { colors, fonts } from '@hedviginsurance/brand'
+import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { ActionMap, Container } from 'constate'
 import * as React from 'react'
 import styled from 'react-emotion'
 import { CardWrapper } from '../components/CardWrapper'
 import { HeaderWrapper } from '../components/HeaderWrapper'
-
-interface Props {
-  headline: string
-  subTitle: string
-}
 
 const PERILSIDE = 72
 
@@ -285,7 +281,7 @@ interface Actions {
   handleActiveTab: (activeTab: number) => void
 }
 
-export const InsuranceCoverage: React.SFC<Props> = (props) => (
+export const InsuranceCoverage: React.SFC = () => (
   <Wrapper>
     <Container<State, ActionMap<State, Actions>>
       initialState={{
@@ -314,7 +310,9 @@ export const InsuranceCoverage: React.SFC<Props> = (props) => (
             <CardWrapper>
               <Card>
                 <HeaderWrapper>
-                  <Header>{props.headline}</Header>
+                  <TranslationsConsumer textKey="OFFER_INSURANCE_COVERAGE_TITLE">
+                    {(title) => <Header>{title}</Header>}
+                  </TranslationsConsumer>
                 </HeaderWrapper>
                 <Switcher>
                   {PERILS.map((peril) => (

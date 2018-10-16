@@ -96,48 +96,21 @@ export const Offering: React.SFC<{}> = () => (
                         buttonText={'Bli försäkrad'}
                         showButton={state.getStartedButtonVisible}
                       />
-
                       <Offer
                         offer={data}
                         buttonVisibility={state.updateVisibility}
-                        buttonText={'Signera med BankID'}
                       />
-
                       <PageDown />
-
-                      <HedvigInfo title={'Det här är Hedvig'} />
-
-                      {insuredAtOtherCompany ? (
-                        <HedvigSwitch
-                          title={
-                            'Hedvig sköter bytet från din gamla försäkring'
-                          }
-                        />
-                      ) : null}
-
-                      <InsuranceCoverage
-                        headline={'Vad försäkringen täcker'}
-                        subTitle={'Klicka på ikonerna för mer info.'}
-                      />
-
-                      <InsuredAmount
-                        title={'Försäkrade belopp'}
-                        info={'Läs mer'}
-                      />
-
-                      <Terms />
-
+                      <HedvigInfo />
+                      {insuredAtOtherCompany ? <HedvigSwitch /> : null}
+                      <InsuranceCoverage />
+                      <InsuredAmount />
+                      <Terms insuranceType={data.insurance.type} />
                       <GetInsured
-                        title={'Skaffa Sveriges smidigaste hemförsäkring'}
                         offer={data}
                         buttonVisibility={state.updateVisibility}
-                        buttonText={'Signera med BankID'}
                       />
-                      <Legal
-                        legalText={
-                          'Genom att trycka på ”Bli försäkrad” godkänner jag att jag har tagit del av förköpsinformation, villkor och att mina personuppgifter behandlas enligt GDPR'
-                        }
-                      />
+                      <Legal />
                     </>
                   )}
                 </Container>

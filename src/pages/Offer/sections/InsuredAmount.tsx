@@ -1,15 +1,11 @@
 import { colors } from '@hedviginsurance/brand'
+import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import styled from 'react-emotion'
 import { CardWrapper } from '../components/CardWrapper'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 import { InnerWrapper } from '../components/InnerWrapper'
 import { Wrapper } from '../components/Wrapper'
-
-interface Props {
-  title: string
-  info: string
-}
 
 const Card = styled('div')({
   marginTop: '70px',
@@ -73,13 +69,15 @@ const AMOUNTS = [
   },
 ]
 
-export const InsuredAmount: React.SFC<Props> = (props) => (
+export const InsuredAmount: React.SFC = () => (
   <Wrapper>
     <InnerWrapper>
       <CardWrapper>
         <Card>
           <HeaderWrapper>
-            <Header>{props.title}</Header>
+            <TranslationsConsumer textKey="OFFER_INSURED_AMOUNT_TITLE">
+              {(title) => <Header>{title}</Header>}
+            </TranslationsConsumer>
           </HeaderWrapper>
           <Table>
             {AMOUNTS.map((amount) => (
