@@ -32,7 +32,9 @@ const GdprLink = styled('a')({
 export const CreateOffer: React.SFC = () => (
   <SessionContainer>
     {(sessionToken) =>
-      !sessionToken ? null : (
+      !sessionToken ? (
+        <div />
+      ) : (
         <FadeIn>
           <ChatContainer>
             {(chatState) => (
