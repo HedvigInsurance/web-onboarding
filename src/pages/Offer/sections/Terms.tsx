@@ -6,20 +6,14 @@ import { CardWrapper } from '../components/CardWrapper'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 import { InnerWrapper } from '../components/InnerWrapper'
 import { Wrapper } from '../components/Wrapper'
-
-enum InsuranceType {
-  RENT = 'RENT',
-  BRF = 'BRF',
-  STUDENT_RENT = 'STUDENT_RENT',
-  STUDENT_BRF = 'STUDENT_BRF',
-}
+import { InsuranceType } from '../index'
 
 const isApartmentOwner = (insuranceType: InsuranceType): boolean =>
   insuranceType === InsuranceType.BRF ||
   insuranceType === InsuranceType.STUDENT_BRF
 
 interface TermsProps {
-  insuranceType: string
+  insuranceType: InsuranceType
 }
 
 const PERILSIDE = 72
@@ -96,7 +90,7 @@ export const Terms: React.SFC<TermsProps> = ({ insuranceType }) => (
               <Col>
                 <TranslationsConsumer
                   textKey={
-                    isApartmentOwner(insuranceType as InsuranceType)
+                    isApartmentOwner(insuranceType)
                       ? 'TERMS_PDF_PREBUY_OWNER_URL'
                       : 'TERMS_PDF_PREBUY_RENT_URL'
                   }
@@ -115,7 +109,7 @@ export const Terms: React.SFC<TermsProps> = ({ insuranceType }) => (
               <Col>
                 <TranslationsConsumer
                   textKey={
-                    isApartmentOwner(insuranceType as InsuranceType)
+                    isApartmentOwner(insuranceType)
                       ? 'TERMS_PDF_INSURANCE_OWNER_URL'
                       : 'TERMS_PDF_INSURANCE_RENT_URL'
                   }

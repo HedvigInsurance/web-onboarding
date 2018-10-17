@@ -41,12 +41,19 @@ export const OFFER_QUERY = gql`
   }
 `
 
+export enum InsuranceType {
+  RENT = 'RENT',
+  BRF = 'BRF',
+  STUDENT_RENT = 'STUDENT_RENT',
+  STUDENT_BRF = 'STUDENT_BRF',
+}
+
 export interface OfferData {
   insurance: {
     address: string
     monthlyCost: number
     insuredAtOtherCompany: boolean
-    type: string
+    type: InsuranceType
     postalNumber: string
   }
   member: {
