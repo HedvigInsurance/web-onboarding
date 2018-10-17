@@ -52,7 +52,7 @@ export const getCreateOfferVariablesFromChatState = (
   lastName: chatState.nameAge.lastName,
   age: Number(chatState.nameAge.age),
   address: chatState.livingSituation.streetAddress,
-  postalNumber: chatState.livingSituation.postalCode,
+  postalNumber: chatState.livingSituation.postalNumber,
   personsInHousehold: Number(chatState.livingSituation.numberOfPeople),
   squareMeters: Number(chatState.livingSituation.size),
   insuranceType: chatState.livingSituation.apartmentType!,

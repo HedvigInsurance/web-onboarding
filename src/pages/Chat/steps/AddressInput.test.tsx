@@ -14,7 +14,7 @@ it('handles form changes', () => {
     >
       <MockTextKeyProvider
         textKeys={{
-          CHAT_INPUT_ADDRESS_TEXT: '{streetAddress} {postalCode}',
+          CHAT_INPUT_ADDRESS_TEXT: '{streetAddress} {postalNumber}',
         }}
       >
         <AddressInput isCurrentMessage />
@@ -29,9 +29,9 @@ it('handles form changes', () => {
     .simulate('change', { target: { value: 'Storgatan 1' } })
   expect(wrapper.find('input#streetAddress').prop('value')).toBe('Storgatan 1')
   wrapper
-    .find('input#postalCode')
+    .find('input#postalNumber')
     .simulate('change', { target: { value: '12345' } })
-  expect(wrapper.find('input#postalCode').prop('value')).toBe('12345')
+  expect(wrapper.find('input#postalNumber').prop('value')).toBe('12345')
 
   expect(wrapper.find('button')).toHaveLength(1)
 })
