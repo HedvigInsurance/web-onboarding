@@ -8,14 +8,17 @@ import { createSession, SESSION_KEY } from 'utils/sessionStorage'
 import { MockStorage } from 'utils/storage/MockStorage'
 import { mockNetworkWait } from 'utils/test-utils'
 import { OFFER_QUERY, Offering } from '.'
-import { Offer } from './sections/Offer'
+import { MockTextKeyProvider } from '../../utils/MockTextKeyProvider'
+import { HedvigSwitch } from './sections/HedvigSwitch'
+import { PersonalInfo, Price } from './sections/Offer'
+
 jest.mock('client/apolloClient', () => ({
   apolloClient: {
     subscriptionClient: { close: jest.fn() },
   },
 }))
 
-it('Redirects when there is no session', () => {
+it('redirects when there is no session', () => {
   const wrapper = mount(
     <StaticRouter context={{}}>
       <MockedProvider>
@@ -33,7 +36,66 @@ it('Redirects when there is no session', () => {
   expect(wrapper.find(Redirect).prop('to')).toBe('/hedvig')
 })
 
-it('Queries when it has a session', async () => {
+it('queries when it has a session', async () => {
+  const mocks: MockedResponse[] = [
+    {
+      request: {
+        query: OFFER_QUERY,
+      },
+      result: {
+        data: {
+          insurance: {
+            address: 'Testvägen 1',
+            monthlyCost: 99,
+            insuredAtOtherCompany: false,
+            type: 'RENT',
+            postalNumber: '12345',
+            __typename: 'Insurance',
+          },
+          member: {
+            firstName: 'Test',
+            lastName: 'Testerson',
+            __typename: 'Member',
+          },
+        },
+      },
+    },
+  ]
+  const wrapper = mount(
+    <HelmetProvider>
+      <StaticRouter context={{}}>
+        <MockedProvider mocks={mocks}>
+          <Provider
+            initialState={{
+              storage: {
+                session: createSession(
+                  new MockStorage({
+                    [SESSION_KEY]: JSON.stringify({ token: 'test-token' }),
+                  }),
+                ),
+              },
+            }}
+          >
+            <MockTextKeyProvider
+              textKeys={{ OFFER_SUMMARY_PRICE: '{price} kr/mån' }}
+            >
+              <Offering />
+            </MockTextKeyProvider>
+          </Provider>
+        </MockedProvider>
+      </StaticRouter>
+    </HelmetProvider>,
+  )
+
+  await mockNetworkWait()
+  wrapper.update()
+  expect(wrapper.find(Redirect)).toHaveLength(0)
+  expect(wrapper.find(Price).text()).toBe('99 kr/mån')
+  expect(wrapper.find(PersonalInfo).text()).toContain('Testerson')
+  expect(wrapper.find(HedvigSwitch)).toHaveLength(0)
+})
+
+it('shows information about switching if you have an insurance', async () => {
   const mocks: MockedResponse[] = [
     {
       request: {
@@ -83,6 +145,5 @@ it('Queries when it has a session', async () => {
   await mockNetworkWait()
   wrapper.update()
   expect(wrapper.find(Redirect)).toHaveLength(0)
-  console.log(wrapper.debug())
-  expect(wrapper.find(Offer)).toHaveLength(1)
+  expect(wrapper.find(HedvigSwitch)).toHaveLength(1)
 })

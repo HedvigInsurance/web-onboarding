@@ -6,7 +6,7 @@ import {
 import { GetInsuredButton, LinkTag } from 'components/buttons'
 import * as React from 'react'
 import styled from 'react-emotion'
-import * as VisibilitySensor from 'react-visibility-sensor'
+import VisibilitySensor from 'react-visibility-sensor'
 import { OfferData } from '..'
 import { CardWrapperSmall } from '../components/CardWrapperSmall'
 import { HeaderWrapper } from '../components/HeaderWrapper'
@@ -42,7 +42,7 @@ const HeaderBackground = styled('div')({
   backgroundColor: colors.PURPLE,
 })
 
-const PersonalInfo = styled('div')({
+export const PersonalInfo = styled('div')({
   marginTop: '0px',
   marginBottom: '0px',
   marginLeft: 'auto',
@@ -55,7 +55,7 @@ const PersonalInfo = styled('div')({
   color: colors.WHITE,
 })
 
-const Price = styled('h1')({
+export const Price = styled('h1')({
   marginBottom: '0px',
   marginTop: '30px',
   fontSize: '32px',
