@@ -214,6 +214,7 @@ export const SignUp: React.SFC = () => (
 
                             <InputField
                               name="email"
+                              id="email"
                               style={{
                                 borderBottom: touched.email
                                   ? errors.email
@@ -236,6 +237,7 @@ export const SignUp: React.SFC = () => (
                             </InputTitle>
                             <InputField
                               name="personalNumber"
+                              id="personalNumber"
                               style={{
                                 borderBottom: touched.personalNumber
                                   ? errors.personalNumber
