@@ -25,7 +25,7 @@ const handleChange = <K extends keyof LivingSituationState>(
 const validationSchema = yup
   .object<Partial<LivingSituationState>>({
     streetAddress: yup.string().required(),
-    postalCode: yup
+    postalNumber: yup
       .string()
       .matches(/^[0-9]{3}\s?[0-9]{2}$/)
       .required(),
@@ -105,17 +105,17 @@ export const AddressInput: React.SFC<AddressInputProps> = ({
                       )}
                     </TranslationsConsumer>
                   ),
-                  postalCode: (
-                    <TranslationsConsumer textKey="CHAT_INPUT_ADDRESS_POSTAL_CODE_PLACEHOLDER">
+                  postalNumber: (
+                    <TranslationsConsumer textKey="CHAT_INPUT_ADDRESS_POSTAL_NUMBER_PLACEHOLDER">
                       {(placeholder) => (
                         <UserTextInput
                           type="number"
                           maxWidth={6}
-                          id="postalCode"
+                          id="postalNumber"
                           placeholder={placeholder}
-                          value={chatState.livingSituation.postalCode}
+                          value={chatState.livingSituation.postalNumber}
                           onChange={handleChange(
-                            'postalCode',
+                            'postalNumber',
                             chatState,
                             (value) => String(value).replace(/[^\d\s]/g, ''),
                           )}
