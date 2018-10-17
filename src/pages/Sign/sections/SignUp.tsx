@@ -4,13 +4,14 @@ import {
   TranslationsPlaceholderConsumer,
 } from '@hedviginsurance/textkeyfy'
 import { SessionContainer } from 'containers/SessionContainer'
+import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import { Field, Form, Formik } from 'formik'
 import gql from 'graphql-tag'
 import * as React from 'react'
-import { Mutation, Subscription } from 'react-apollo'
+import { Mutation } from 'react-apollo'
 import styled from 'react-emotion'
-import { Redirect } from 'react-router-dom'
 import * as Yup from 'yup'
+import { SubscriptionComponent } from './SignSubscription'
 
 const CARDWIDTH = 788
 const HEADERWIDTH = 400
@@ -128,25 +129,6 @@ const GetInsuredButton = styled('div')({
   justifyContent: 'center',
 })
 
-const SigningStatusText = styled('div')({
-  textAlign: 'center',
-  marginTop: '20px',
-  color: colors.DARK_GRAY,
-  fontSize: '16px',
-})
-
-const ErrorText = styled('div')({
-  textAlign: 'center',
-  marginTop: '20px',
-  color: 'red',
-  fontSize: '16px',
-  '@media (max-width: 300px)': {
-    marginLeft: '10px',
-    marginRight: '10px',
-    fontSize: '14px',
-  },
-})
-
 const ErrorMessage = styled('div')({
   minHeight: '24px',
   fontSize: '16px',
@@ -166,25 +148,6 @@ const userSchema = Yup.object().shape({
     .required('SIGN_PERSONAL_NUMBER_REQUIRED'),
 })
 
-const handleMessage = (
-  textkeys: { [key: string]: string },
-  message: string,
-) => {
-  return textkeys[message]
-}
-
-const CODETEXTKEYS = {
-  started: 'SIGN_BANKID_CODE_STARTED',
-  userSign: 'SIGN_BANKID_CODE_USER_SIGN',
-  noClient: 'SIGN_BANKID_CODE_NO_CLIENT',
-  outstandingTransaction: 'SIGN_BANKID_CODE_OUTSTANDING_TRANSACTION',
-  expiredTransaction: 'SIGN_BANKID_CODE_EXPIRED_TRANSACTION',
-  certificateErr: 'SIGN_BANKID_CODE_CERTIFICATE_ERR',
-  outstauserCancelndingTransaction: 'SIGN_BANKID_CODE_USER_CANCEL',
-  cancelled: 'SIGN_BANKID_CODE_CANCELLED',
-  startFailed: 'SIGN_BANKID_CODE_START_FAILED',
-}
-
 const SIGN_MUTATION = gql`
   mutation SignOffer($personalNumber: String!, $email: String!) {
     signOffer(details: { personalNumber: $personalNumber, email: $email })
@@ -196,233 +159,117 @@ interface SignOfferMutationVariables {
   email: string
 }
 
-const SIGN_SUBSCRIPTION = gql`
-  subscription SignStatus {
-    signStatus {
-      status {
-        signState
-        collectStatus {
-          status
-          code
-        }
-      }
-    }
-  }
-`
-
-enum SIGNSTATE {
-  INITIATED = 'INITIATED',
-  IN_PROGRESS = 'IN_PROGRESS',
-  FAILED = 'FAILED',
-  COMPLETED = 'COMPLETED',
-}
-
-enum BANKIDSTATUS {
-  PENDING = 'pending',
-  FAILED = 'failed',
-  COMPLETE = 'complete',
-}
-
-interface SignStatusData {
-  signStatus: {
-    status: {
-      signState: SIGNSTATE
-      collectStatus: {
-        status: BANKIDSTATUS
-        code:
-          | 'started'
-          | 'userSign'
-          | 'noClient'
-          | 'outstandingTransaction'
-          | 'expiredTransaction'
-          | 'certificateErr'
-          | 'userCancel'
-          | 'cancelled'
-          | 'startFailed'
-      }
-    }
-  }
-}
-
 export const SignUp: React.SFC = () => (
-  <OuterWrapper>
-    <CardWrapper>
-      <Card>
-        <HeaderWrapper>
-          <Header>
-            <TranslationsPlaceholderConsumer
-              textKey="SIGN_HEADER_TITLE"
-              replacements={{
-                address: 'Fantastiska Gatan 23B', // TODO: use address from input/offer
-              }}
-            >
-              {(title) => title}
-            </TranslationsPlaceholderConsumer>
-          </Header>
-        </HeaderWrapper>
-        <SessionContainer>
-          {(token) =>
-            token ? (
-              <>
-                <Mutation<boolean, SignOfferMutationVariables>
-                  mutation={SIGN_MUTATION}
-                >
-                  {(signOffer) => (
-                    <Formik
-                      initialValues={{
-                        email: '',
-                        personalNumber: '',
-                      }}
-                      validationSchema={userSchema}
-                      onSubmit={(values) =>
-                        signOffer({
-                          variables: {
-                            personalNumber: values.personalNumber,
-                            email: values.email,
-                          },
-                        })
-                      }
-                    >
-                      {({ errors, touched }) => (
-                        <CustomForm>
-                          <InputTitle>
-                            <TranslationsConsumer textKey="SIGN_INPUT_ONE_TITLE">
-                              {(title) => title}
-                            </TranslationsConsumer>
-                          </InputTitle>
-
-                          <InputField
-                            name="email"
-                            style={{
-                              borderBottom: touched.email
-                                ? errors.email
-                                  ? '3px solid red'
-                                  : [`3px solid ${colors.GREEN}`]
-                                : [`3px solid ${colors.DARK_PURPLE}`],
-                            }}
-                          />
-                          {errors.email && touched.email ? (
-                            <ErrorMessage>
-                              <TranslationsConsumer textKey={errors.email}>
-                                {(errorMessage) => errorMessage}
+  <SessionTokenGuard>
+    <OuterWrapper>
+      <CardWrapper>
+        <Card>
+          <HeaderWrapper>
+            <Header>
+              <TranslationsPlaceholderConsumer
+                textKey="SIGN_HEADER_TITLE"
+                replacements={{
+                  address: 'Fantastiska Gatan 23B', // TODO: use address from input/offer
+                }}
+              >
+                {(title) => title}
+              </TranslationsPlaceholderConsumer>
+            </Header>
+          </HeaderWrapper>
+          <SessionContainer>
+            {(token) =>
+              token ? (
+                <>
+                  <Mutation<boolean, SignOfferMutationVariables>
+                    mutation={SIGN_MUTATION}
+                  >
+                    {(signOffer) => (
+                      <Formik
+                        initialValues={{
+                          email: '',
+                          personalNumber: '',
+                        }}
+                        validationSchema={userSchema}
+                        onSubmit={(values) =>
+                          signOffer({
+                            variables: {
+                              personalNumber: values.personalNumber,
+                              email: values.email,
+                            },
+                          })
+                        }
+                      >
+                        {({ errors, touched }) => (
+                          <CustomForm>
+                            <InputTitle>
+                              <TranslationsConsumer textKey="SIGN_INPUT_ONE_TITLE">
+                                {(title) => title}
                               </TranslationsConsumer>
-                            </ErrorMessage>
-                          ) : null}
-                          <InputTitle>
-                            <TranslationsConsumer textKey="SIGN_INPUT_TWO_TITLE">
-                              {(title) => title}
-                            </TranslationsConsumer>
-                          </InputTitle>
-                          <InputField
-                            name="personalNumber"
-                            style={{
-                              borderBottom: touched.personalNumber
-                                ? errors.personalNumber
-                                  ? '3px solid red'
-                                  : [`3px solid ${colors.GREEN}`]
-                                : [`3px solid ${colors.DARK_PURPLE}`],
-                            }}
-                          />
-                          {errors.personalNumber && touched.personalNumber ? (
-                            <ErrorMessage>
-                              <TranslationsConsumer
-                                textKey={errors.personalNumber}
-                              >
-                                {(errorMessage) => errorMessage}
+                            </InputTitle>
+
+                            <InputField
+                              name="email"
+                              style={{
+                                borderBottom: touched.email
+                                  ? errors.email
+                                    ? '3px solid red'
+                                    : [`3px solid ${colors.GREEN}`]
+                                  : [`3px solid ${colors.DARK_PURPLE}`],
+                              }}
+                            />
+                            {errors.email && touched.email ? (
+                              <ErrorMessage>
+                                <TranslationsConsumer textKey={errors.email}>
+                                  {(errorMessage) => errorMessage}
+                                </TranslationsConsumer>
+                              </ErrorMessage>
+                            ) : null}
+                            <InputTitle>
+                              <TranslationsConsumer textKey="SIGN_INPUT_TWO_TITLE">
+                                {(title) => title}
                               </TranslationsConsumer>
-                            </ErrorMessage>
-                          ) : null}
-                          <GetInsuredButton>
-                            <TranslationsConsumer textKey="SIGN_BUTTON_TEXT">
-                              {(buttonText) => (
-                                <InputSubmit type="submit" value={buttonText} />
-                              )}
-                            </TranslationsConsumer>
-                            {/* <BankidIcon src="/assets/sign/bankid-logo-white.svg" /> */}
-                          </GetInsuredButton>
-                          <SubscriptionComponent />
-                        </CustomForm>
-                      )}
-                    </Formik>
-                  )}
-                </Mutation>
-              </>
-            ) : null
-          }
-        </SessionContainer>
-      </Card>
-    </CardWrapper>
-  </OuterWrapper>
-)
-
-const SubscriptionComponent: React.SFC = () => (
-  <Subscription<SignStatusData> subscription={SIGN_SUBSCRIPTION}>
-    {({ data, loading, error }) => {
-      if (loading) {
-        return null
-      }
-      if (error) {
-        return (
-          <ErrorText>
-            <TranslationsConsumer textKey="SIGN_BANKID_STANDARD_ERROR_MESSAGE">
-              {(errorText) => errorText}
-            </TranslationsConsumer>
-          </ErrorText>
-        )
-      }
-      if (data) {
-        const dataStatus = data.signStatus.status.collectStatus
-        const signingState = data.signStatus.status.signState
-
-        switch (signingState) {
-          case SIGNSTATE.INITIATED:
-            return (
-              <SigningStatusText>
-                <TranslationsConsumer textKey="SIGN_BANKID_INITIATED">
-                  {(message) => message}
-                </TranslationsConsumer>
-              </SigningStatusText>
-            )
-          case SIGNSTATE.IN_PROGRESS:
-            if (dataStatus.status === BANKIDSTATUS.PENDING) {
-              return <BankidStatus message={dataStatus.code} />
-            } else {
-              return null
+                            </InputTitle>
+                            <InputField
+                              name="personalNumber"
+                              style={{
+                                borderBottom: touched.personalNumber
+                                  ? errors.personalNumber
+                                    ? '3px solid red'
+                                    : [`3px solid ${colors.GREEN}`]
+                                  : [`3px solid ${colors.DARK_PURPLE}`],
+                              }}
+                            />
+                            {errors.personalNumber && touched.personalNumber ? (
+                              <ErrorMessage>
+                                <TranslationsConsumer
+                                  textKey={errors.personalNumber}
+                                >
+                                  {(errorMessage) => errorMessage}
+                                </TranslationsConsumer>
+                              </ErrorMessage>
+                            ) : null}
+                            <GetInsuredButton>
+                              <TranslationsConsumer textKey="SIGN_BUTTON_TEXT">
+                                {(buttonText) => (
+                                  <InputSubmit
+                                    type="submit"
+                                    value={buttonText}
+                                  />
+                                )}
+                              </TranslationsConsumer>
+                            </GetInsuredButton>
+                            <SubscriptionComponent />
+                          </CustomForm>
+                        )}
+                      </Formik>
+                    )}
+                  </Mutation>
+                </>
+              ) : null
             }
-          case SIGNSTATE.COMPLETED:
-            // return <pre>{JSON.stringify(data, null, 2)}</pre>
-            if (dataStatus.status === BANKIDSTATUS.COMPLETE) {
-              return <Redirect to="/download" />
-            } else {
-              return null
-            }
-          case SIGNSTATE.FAILED:
-            if (dataStatus.status === BANKIDSTATUS.FAILED) {
-              return <BankidStatus message={dataStatus.code} />
-            } else {
-              return null
-            }
-          default:
-            return null
-        }
-      }
-      return null
-    }}
-  </Subscription>
-)
-
-interface StatusProps {
-  message: string
-}
-
-const BankidStatus: React.SFC<StatusProps> = (props) => (
-  <div>
-    <SigningStatusText>
-      <TranslationsConsumer
-        textKey={handleMessage(CODETEXTKEYS, props.message)}
-      >
-        {(message) => message}
-      </TranslationsConsumer>
-    </SigningStatusText>
-  </div>
+          </SessionContainer>
+        </Card>
+      </CardWrapper>
+    </OuterWrapper>
+  </SessionTokenGuard>
 )
