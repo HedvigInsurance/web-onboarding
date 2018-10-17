@@ -34,7 +34,7 @@ export interface NameAgeState {
 }
 export interface LivingSituationState {
   streetAddress: string
-  postalCode: string
+  postalNumber: string
   apartmentType?: ApartmentType
   size: number | string
   numberOfPeople: number
@@ -65,7 +65,7 @@ const initialState: State = {
   livingSituation: {
     size: '',
     numberOfPeople: 0,
-    postalCode: '',
+    postalNumber: '',
     streetAddress: '',
   },
   currentInsurance: {},
