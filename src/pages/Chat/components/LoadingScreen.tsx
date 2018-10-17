@@ -26,4 +26,4 @@ const Wrapper = styled('div')({
   zIndex: 999,
 })
 
-export const LoadingScreen = () => <Wrapper>hello</Wrapper>
+export const LoadingScreen = () => <Wrapper>loading</Wrapper>

@@ -2,10 +2,10 @@ import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { FadeIn } from 'components/animations/appearings'
 import { Button } from 'components/buttons'
+import { SessionContainer } from 'containers/SessionContainer'
 import * as React from 'react'
 import styled from 'react-emotion'
-import { Unmount, Update } from 'react-lifecycle-components'
-import { SessionContainer } from '../../../containers/SessionContainer'
+import { Update } from 'react-lifecycle-components'
 import {
   ChatScreenContainer,
   LoadingState,
@@ -54,7 +54,6 @@ export const CreateOffer: React.SFC = () => (
                               watched={{
                                 called: createOfferProps.called,
                                 data: subscriptionMaybe,
-                                hasSessionToken: Boolean(sessionToken),
                               }}
                               was={(_, newWatched) => {
                                 if (
@@ -64,61 +63,45 @@ export const CreateOffer: React.SFC = () => (
                                 ) {
                                   chatScreenState.createOfferSuccess()
                                 }
-
-                                if (
-                                  newWatched.called &&
-                                  !newWatched.data &&
-                                  chatScreenState.offerCreationDebounceState !==
-                                    LoadingState.LOADING
-                                ) {
-                                  chatScreenState.beginDebounce()
-                                  return
-                                }
                               }}
                             >
-                              <Unmount
-                                on={() => {
-                                  chatScreenState.abortDebounce()
-                                }}
-                              >
-                                <Wrapper>
-                                  <CreateOfferCtaWrapper>
-                                    <Button
-                                      background={colors.GREEN}
-                                      foreground={colors.WHITE}
-                                      disabled={
-                                        chatScreenState.offerCreationDebounceState ===
-                                          LoadingState.LOADING ||
-                                        chatScreenState.offerCreationLoadingState ===
-                                          LoadingState.LOADING
-                                      }
-                                      onClick={() => {
-                                        chatScreenState.beginDebounce()
-                                        createOffer(
-                                          getCreateOfferVariablesFromChatState(
-                                            chatState,
-                                          ),
-                                        )
-                                      }}
-                                    >
-                                      <TranslationsConsumer textKey="CHAT_INPUT_CREATE_OFFER">
-                                        {(text) => text}
-                                      </TranslationsConsumer>
-                                    </Button>
-                                  </CreateOfferCtaWrapper>
-                                  <GdprWrapper>
-                                    <TranslationsConsumer textKey="CHAT_INPUT_PERSONAL_DATA_LINK">
-                                      {(link) => (
-                                        <GdprLink href={link} target="_blank">
-                                          <TranslationsConsumer textKey="CHAT_INPUT_PERSONAL_DATA_LABEL">
-                                            {(t) => t}
-                                          </TranslationsConsumer>
-                                        </GdprLink>
-                                      )}
+                              <Wrapper>
+                                <CreateOfferCtaWrapper>
+                                  <Button
+                                    background={colors.GREEN}
+                                    foreground={colors.WHITE}
+                                    disabled={
+                                      chatScreenState.offerCreationDebounceState ===
+                                        LoadingState.LOADING ||
+                                      chatScreenState.offerCreationLoadingState ===
+                                        LoadingState.LOADING
+                                    }
+                                    onClick={() => {
+                                      chatScreenState.beginDebounce()
+                                      createOffer(
+                                        getCreateOfferVariablesFromChatState(
+                                          chatState,
+                                        ),
+                                      )
+                                    }}
+                                  >
+                                    <TranslationsConsumer textKey="CHAT_INPUT_CREATE_OFFER">
+                                      {(text) => text}
                                     </TranslationsConsumer>
-                                  </GdprWrapper>
-                                </Wrapper>
-                              </Unmount>
+                                  </Button>
+                                </CreateOfferCtaWrapper>
+                                <GdprWrapper>
+                                  <TranslationsConsumer textKey="CHAT_INPUT_PERSONAL_DATA_LINK">
+                                    {(link) => (
+                                      <GdprLink href={link} target="_blank">
+                                        <TranslationsConsumer textKey="CHAT_INPUT_PERSONAL_DATA_LABEL">
+                                          {(t) => t}
+                                        </TranslationsConsumer>
+                                      </GdprLink>
+                                    )}
+                                  </TranslationsConsumer>
+                                </GdprWrapper>
+                              </Wrapper>
                             </Update>
                           )}
                         </ChatScreenContainer>

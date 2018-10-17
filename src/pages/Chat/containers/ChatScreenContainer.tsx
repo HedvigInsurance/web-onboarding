@@ -33,7 +33,10 @@ export const ChatScreenContainer: React.SFC<ChatContainerProps> = ({
   children,
 }) => (
   <Container<State, ActionMap<State, Actions>, {}, Effects>
-    initialState={{ offerCreationDebounceState: LoadingState.NOT_LOADING }}
+    initialState={{
+      offerCreationDebounceState: LoadingState.NOT_LOADING,
+      offerCreationLoadingState: LoadingState.NOT_LOADING,
+    }}
     actions={{
       beginCreateOffer: () => ({
         offerCreationLoadingState: LoadingState.LOADING,
