@@ -253,7 +253,7 @@ export const SignUp: React.SFC = () => (
             <TranslationsPlaceholderConsumer
               textKey="SIGN_HEADER_TITLE"
               replacements={{
-                address: 'Fantastiska Gatan 23B',
+                address: 'Fantastiska Gatan 23B', // TODO: use address from input/offer
               }}
             >
               {(title) => title}
@@ -316,8 +316,8 @@ export const SignUp: React.SFC = () => (
                           <InputField
                             name="personalNumber"
                             style={{
-                              borderBottom: touched.email
-                                ? errors.email
+                              borderBottom: touched.personalNumber
+                                ? errors.personalNumber
                                   ? '3px solid red'
                                   : [`3px solid ${colors.GREEN}`]
                                 : [`3px solid ${colors.DARK_PURPLE}`],
@@ -338,6 +338,7 @@ export const SignUp: React.SFC = () => (
                                 <InputSubmit type="submit" value={buttonText} />
                               )}
                             </TranslationsConsumer>
+                            {/* <BankidIcon src="/assets/sign/bankid-logo-white.svg" /> */}
                           </GetInsuredButton>
                           <SubscriptionComponent />
                         </CustomForm>
