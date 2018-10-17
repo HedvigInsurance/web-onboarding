@@ -1,8 +1,12 @@
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { TopBar } from 'components/TopBar'
 import { ActionMap, Container } from 'constate'
+import gql from 'graphql-tag'
 import * as React from 'react'
+import { Query } from 'react-apollo'
 import Helmet from 'react-helmet-async'
+import { Redirect } from 'react-router-dom'
+import { StorageContainer } from 'utils/StorageContainer'
 import { GetInsured } from './sections/GetInsured'
 import { HedvigInfo } from './sections/HedvigInfo'
 import { HedvigSwitch } from './sections/HedvigSwitch'
@@ -11,102 +15,120 @@ import { InsuredAmount } from './sections/InsuredAmount'
 import { Legal } from './sections/LegalText'
 import { Offer } from './sections/Offer'
 import { PageDown } from './sections/PageDown'
+import { Terms } from './sections/Terms'
 
 interface State {
   getStartedButtonVisible: boolean
-  alreadyInsured: boolean
-  price: string
 }
 interface Actions {
   updateVisibility: (visible: boolean) => void
 }
 
+export const OFFER_QUERY = gql`
+  query Offer {
+    insurance {
+      address
+      monthlyCost
+      insuredAtOtherCompany
+      type
+      postalNumber
+    }
+
+    member {
+      firstName
+      lastName
+    }
+  }
+`
+
+export enum InsuranceType {
+  RENT = 'RENT',
+  BRF = 'BRF',
+  STUDENT_RENT = 'STUDENT_RENT',
+  STUDENT_BRF = 'STUDENT_BRF',
+}
+
+export interface OfferData {
+  insurance: {
+    address: string
+    monthlyCost: number
+    insuredAtOtherCompany: boolean
+    type: InsuranceType
+    postalNumber: string
+  }
+  member: {
+    firstName: string
+    lastName: string
+  }
+}
+
 export const Offering: React.SFC<{}> = () => (
-  <>
-    <TranslationsConsumer textKey="OFFER_PAGE_TITLE">
-      {(title) => (
-        <Helmet>
-          <title>{title}</title>
-        </Helmet>
-      )}
-    </TranslationsConsumer>
+  <StorageContainer>
+    {(storageState) =>
+      storageState.session.getSession()!.token ? (
+        <Query<OfferData> query={OFFER_QUERY}>
+          {({ loading, error, data }) => {
+            if (loading) {
+              return <div>Loading</div>
+            }
+            if (error || !data) {
+              return <pre>{JSON.stringify(error, null, 2)}</pre>
+            }
 
-    <>
-      <Container<State, ActionMap<State, Actions>>
-        initialState={{
-          getStartedButtonVisible: true,
-          alreadyInsured: true,
-          price: '299 kr/mån',
-        }}
-        actions={{
-          updateVisibility: (visible: boolean) => (_) => ({
-            getStartedButtonVisible: visible,
-          }),
-        }}
-      >
-        {(state) => (
-          <>
-            <TopBar
-              progress={1}
-              buttonText={'Bli försäkrad'}
-              showButton={state.getStartedButtonVisible}
-            />
+            const { insuredAtOtherCompany } = data.insurance
 
-            <Offer
-              buttonVisibility={state.updateVisibility}
-              alreadyInsured={state.alreadyInsured}
-              header={'Hej Zak, det här är din hemförsäkring hos Hedvig!'}
-              subTitle1={'Zak Kjellin  23 år gammal'}
-              subTitle2={'Fantastiska Gatan 23B'}
-              subTitle3={'112 34 Stockholm'}
-              price={state.price}
-              startDate={'Startdatum:'}
-              start={'När din gamla försäkring går ut'}
-              coverage={'Gäller i hela världen'}
-              getInsured={'Bli försäkrad'}
-              backgroundImage={'url(assets/offering/map-background.png)'}
-              alreadyInsuredLabel={'Gamla försäkringens slutdatum'}
-              todayLabel={'Idag'}
-              protection={'Självrisk: 1500 kr'}
-            />
+            return (
+              <>
+                <TranslationsConsumer textKey="OFFER_PAGE_TITLE">
+                  {(title) => (
+                    <Helmet>
+                      <title>{title}</title>
+                    </Helmet>
+                  )}
+                </TranslationsConsumer>
 
-            <PageDown />
-
-            <HedvigInfo title={'Det här är Hedvig'} />
-
-            {state.alreadyInsured ? (
-              <HedvigSwitch
-                title={'Hedvig sköter bytet från din gamla försäkring'}
-              />
-            ) : null}
-
-            <InsuranceCoverage
-              headline={'Vad försäkringen täcker'}
-              subTitle={'Klicka på ikonerna för mer info.'}
-            />
-
-            <InsuredAmount title={'Försäkrade belopp'} info={'Läs mer'} />
-
-            <GetInsured
-              title={'Försäkra'}
-              name={'Fantastiska Gatan'}
-              buttonText={'Bli försäkrad'}
-              subTitle1={'Zak Kjellin  23 år gammal'}
-              subTitle2={'Fantastiska Gatan 23B'}
-              subTitle3={'112 34 Stockholm'}
-              buttonVisibility={state.updateVisibility}
-              price={state.price}
-            />
-            <Legal
-              legalText={
-                'Genom att trycka på ”Bli försäkrad” godkänner jag att jag har tagit del av förköpsinformation, villkor och att mina personuppgifter behandlas enligt GDPR'
-              }
-            />
-          </>
-        )}
-      </Container>
-    </>
-  </>
+                <Container<State, ActionMap<State, Actions>>
+                  initialState={{
+                    getStartedButtonVisible: true,
+                  }}
+                  actions={{
+                    updateVisibility: (visible: boolean) => (_) => ({
+                      getStartedButtonVisible: visible,
+                    }),
+                  }}
+                >
+                  {(state) => (
+                    <>
+                      <TopBar
+                        progress={1}
+                        buttonText={'Bli försäkrad'}
+                        showButton={state.getStartedButtonVisible}
+                      />
+                      <Offer
+                        offer={data}
+                        buttonVisibility={state.updateVisibility}
+                      />
+                      <PageDown />
+                      <HedvigInfo />
+                      {insuredAtOtherCompany ? <HedvigSwitch /> : null}
+                      <InsuranceCoverage />
+                      <InsuredAmount />
+                      <Terms insuranceType={data.insurance.type} />
+                      <GetInsured
+                        offer={data}
+                        buttonVisibility={state.updateVisibility}
+                      />
+                      <Legal />
+                    </>
+                  )}
+                </Container>
+              </>
+            )
+          }}
+        </Query>
+      ) : (
+        <Redirect to="/hedvig" />
+      )
+    }
+  </StorageContainer>
 )
-
-/* TODO: Add proptypes check */

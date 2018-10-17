@@ -30,5 +30,9 @@ export const Button = styled('button')(
     '&:focus': {
       outlineColor: background,
     },
+
+    '&:disabled': {
+      backgroundColor: colors.LIGHT_GRAY,
+    },
   }),
 )
