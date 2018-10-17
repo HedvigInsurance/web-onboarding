@@ -3,6 +3,7 @@ import {
   TranslationsConsumer,
   TranslationsPlaceholderConsumer,
 } from '@hedviginsurance/textkeyfy'
+import { OfferContainer } from 'containers/OfferContainer'
 import { SessionContainer } from 'containers/SessionContainer'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import { Field, Form, Formik } from 'formik'
@@ -166,14 +167,18 @@ export const SignUp: React.SFC = () => (
         <Card>
           <HeaderWrapper>
             <Header>
-              <TranslationsPlaceholderConsumer
-                textKey="SIGN_HEADER_TITLE"
-                replacements={{
-                  address: 'Fantastiska Gatan 23B', // TODO: use address from input/offer
-                }}
-              >
-                {(title) => title}
-              </TranslationsPlaceholderConsumer>
+              <OfferContainer>
+                {(offer) => (
+                  <TranslationsPlaceholderConsumer
+                    textKey="SIGN_HEADER_TITLE"
+                    replacements={{
+                      address: offer.insurance.address,
+                    }}
+                  >
+                    {(title) => title}
+                  </TranslationsPlaceholderConsumer>
+                )}
+              </OfferContainer>
             </Header>
           </HeaderWrapper>
           <SessionContainer>
