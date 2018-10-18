@@ -27,7 +27,7 @@ const Bar = styled('div')({
 
 const BarContainer = styled('div')({
   height: '100%',
-  width: '20%',
+  width: '25%',
   '@media (max-width: 800px)': {
     width: '33%',
   },
@@ -63,7 +63,7 @@ const LinkTag = styled(Link)({
   '@media (max-width: 350px)': {
     textAlign: 'center',
     marginRight: 0,
-    maxWidth: '250px',
+    padding: '15px 20px',
   },
 })
 
@@ -75,7 +75,7 @@ const ProgressLabel = styled('div')({
 
 const BarProgressContainer = styled('div')({
   display: 'flex',
-  width: '60%',
+  width: '50%',
   justifyContent: 'center',
   flexDirection: 'row',
   '@media (max-width: 800px)': {
@@ -88,7 +88,7 @@ const BarProgressContainer = styled('div')({
 
 const CollapsedProgressContainer = styled('div')({
   display: 'none',
-  width: '20%',
+  width: '25%',
   justifyContent: 'center',
   flexDirection: 'row',
   textAlign: 'center',
@@ -105,7 +105,7 @@ const CollapsedProgressContainer = styled('div')({
 })
 
 const BarButtonContainer = styled('div')({
-  width: '20%',
+  width: '25%',
   justifyContent: 'flex-end',
   '@media (max-width: 800px)': {
     width: '33%',
