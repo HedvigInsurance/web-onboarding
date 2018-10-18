@@ -36,7 +36,3 @@ export const Button = styled('button')(
     },
   }),
 )
-
-export const RefreshButton = styled('button')({})
-
-export const RefreshImage = styled('img')({})

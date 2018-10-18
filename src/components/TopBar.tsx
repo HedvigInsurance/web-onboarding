@@ -140,7 +140,7 @@ export const TopBar: React.SFC<Props> = (props) => (
   <Container>
     <Bar>
       <BarContainer>
-        <EscapeLink href="/hedvig">
+        <EscapeLink href="https://hedvig.com">
           <Logo src="/assets/topbar/hedvig-wordmark-solid.svg" />
         </EscapeLink>
       </BarContainer>
@@ -170,7 +170,7 @@ export const TopBar: React.SFC<Props> = (props) => (
         <BarButtonContainer>
           {props.buttonText ? (
             <GetInsuredButton>
-              <LinkTag to={'/hedvig'}>{props.buttonText}</LinkTag>
+              <LinkTag to={'/sign'}>{props.buttonText}</LinkTag>
             </GetInsuredButton>
           ) : null}
         </BarButtonContainer>
