@@ -45,6 +45,7 @@ export const SlideUp = styled('div')(
     maxHeight?: number
     initialMaxHeight?: number
   }) => ({
+    willChange: 'max-height',
     maxHeight: initialMaxHeight,
     animation: `${slideUp(maxHeight, initialMaxHeight)} 500ms forwards`,
   }),
