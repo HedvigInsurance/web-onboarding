@@ -1,7 +1,7 @@
 import { colors, fonts } from '@hedviginsurance/brand'
 import * as React from 'react'
 import styled from 'react-emotion'
-import { FadeIn, FadeUp, AnimateHeight } from '../animations/appearings'
+import { AnimateHeight, FadeIn, FadeUp } from '../animations/appearings'
 
 interface InputProps {
   hasError?: boolean

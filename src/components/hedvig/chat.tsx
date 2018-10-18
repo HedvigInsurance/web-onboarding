@@ -9,7 +9,7 @@ import {
   EXITING,
   TransitionStatus,
 } from 'react-transition-group/Transition'
-import { fadeIn, FadeIn, fadeUp, AnimateHeight } from '../animations/appearings'
+import { AnimateHeight, fadeIn, FadeIn, fadeUp } from '../animations/appearings'
 
 const fadeOut = keyframes({
   from: {
