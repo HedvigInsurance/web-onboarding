@@ -18,6 +18,7 @@ import {
   Effects as ChatActions,
   LivingSituationState,
 } from '../state'
+import { Focusable } from './base'
 
 interface InsuranceTypeInputProps {
   appear?: boolean
@@ -60,7 +61,9 @@ const validationSchema = yup
 
   .required()
 
-const isDone = (values: Partial<LivingSituationState> = {}) => {
+export const isInsuranceTypeDone = (
+  values: Partial<LivingSituationState> = {},
+) => {
   try {
     validationSchema.validateSync(values)
     return true
@@ -125,12 +128,16 @@ const ValidationErrorMaybe: React.SFC<ValidationErrorMaybeProps> = ({
   return null
 }
 
-export const InsuranceTypeInput: React.SFC<InsuranceTypeInputProps> = ({
+export const InsuranceTypeInput: React.SFC<
+  InsuranceTypeInputProps & Focusable
+> = ({
   appear,
   onSubmit = () => {
     /* noop */
   },
   isCurrentMessage,
+  onFocus = () => {}, // tslint:disable-line no-empty
+  onBlur = () => {}, // tslint:disable-line no-empty
 }) => (
   <UserResponse appear={appear}>
     <ChatContainer>
@@ -139,7 +146,7 @@ export const InsuranceTypeInput: React.SFC<InsuranceTypeInputProps> = ({
           onSubmit={(e) => {
             e.preventDefault()
 
-            if (!isDone(chatState.livingSituation)) {
+            if (!isInsuranceTypeDone(chatState.livingSituation)) {
               return
             }
 
@@ -164,6 +171,8 @@ export const InsuranceTypeInput: React.SFC<InsuranceTypeInputProps> = ({
                             chatState.livingSituation.insuranceType || 'select'
                           }
                           onChange={handleChange('insuranceType', chatState)}
+                          onFocus={onFocus}
+                          onBlur={onBlur}
                         >
                           <option value="select" disabled>
                             {' '}
@@ -190,6 +199,8 @@ export const InsuranceTypeInput: React.SFC<InsuranceTypeInputProps> = ({
                     'size',
                     getValidationError(chatState.livingSituation),
                   )}
+                  onFocus={onFocus}
+                  onBlur={onBlur}
                 />
               ),
             }}
@@ -201,7 +212,10 @@ export const InsuranceTypeInput: React.SFC<InsuranceTypeInputProps> = ({
             values={chatState.livingSituation}
           />
           <NextButton
-            disabled={!isDone(chatState.livingSituation) || !isCurrentMessage}
+            disabled={
+              !isInsuranceTypeDone(chatState.livingSituation) ||
+              !isCurrentMessage
+            }
           />
         </form>
       )}

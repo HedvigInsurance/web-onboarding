@@ -16,6 +16,7 @@ import {
   Insurer,
   State as ChatState,
 } from '../state'
+import { Focusable } from './base'
 
 interface CurrentInsuranceInputProps {
   appear?: boolean
@@ -45,7 +46,10 @@ const getHasCurrentInsuranceInputValue = (chatState: ChatState) => {
   return 'select'
 }
 
-const getCurrentInsuranceInputMaybe = (chatState: ChatState & ChatEffects) => {
+const getCurrentInsuranceInputMaybe = (
+  chatState: ChatState & ChatEffects,
+  { onFocus, onBlur }: Focusable,
+) => {
   if (chatState.currentInsurance.hasCurrentInsurance === true) {
     return (
       <div>
@@ -57,6 +61,8 @@ const getCurrentInsuranceInputMaybe = (chatState: ChatState & ChatEffects) => {
           }
           onChange={chatState.setCurrentInsurer}
           id="currentInsurer"
+          onFocus={onFocus}
+          onBlur={onBlur}
         >
           <option value="select" disabled />
           {(Object.keys(Insurer) as Array<keyof Insurer>).map(insuranceOption)}
@@ -80,15 +86,20 @@ const validationSchema = yup.object<CurrentInsuranceState>({
   }),
 })
 
-const isDone = (values: Partial<CurrentInsuranceState> = {}) =>
-  validationSchema.isValidSync(values)
+export const isCurrentInsuranceDone = (
+  values: Partial<CurrentInsuranceState> = {},
+) => validationSchema.isValidSync(values)
 
-export const CurrentInsuranceInput: React.SFC<CurrentInsuranceInputProps> = ({
+export const CurrentInsuranceInput: React.SFC<
+  CurrentInsuranceInputProps & Focusable
+> = ({
   appear,
   onSubmit = () => {
     /* noop */
   },
   isCurrentMessage,
+  onFocus = () => {}, // tslint:disable-line no-empty
+  onBlur = () => {}, // tslint:disable-line no-empty
 }) => (
   <UserResponse appear={appear}>
     <ChatContainer>
@@ -96,7 +107,7 @@ export const CurrentInsuranceInput: React.SFC<CurrentInsuranceInputProps> = ({
         <form
           onSubmit={(e) => {
             e.preventDefault()
-            if (!isDone(chatState.currentInsurance)) {
+            if (!isCurrentInsuranceDone(chatState.currentInsurance)) {
               return
             }
 
@@ -115,6 +126,8 @@ export const CurrentInsuranceInput: React.SFC<CurrentInsuranceInputProps> = ({
                   onChange={chatState.setHasCurrentInsurance}
                   value={getHasCurrentInsuranceInputValue(chatState)}
                   id="hasCurrentInsurance"
+                  onFocus={onFocus}
+                  onBlur={onBlur}
                 >
                   <option value="select" disabled />
                   <TranslationsConsumer textKey="CHAT_INPUT_CURRENT_INSURANCE_HAS_CURRENT_INSURANCE_TRUE">
@@ -126,14 +139,18 @@ export const CurrentInsuranceInput: React.SFC<CurrentInsuranceInputProps> = ({
                 </UserSelectInput>
               ),
               currentInsurerMaybe:
-                getCurrentInsuranceInputMaybe(chatState) || ' ',
+                getCurrentInsuranceInputMaybe(chatState, { onFocus, onBlur }) ||
+                ' ',
             }}
           >
             {(t) => t}
           </TranslationsPlaceholderConsumer>
 
           <NextButton
-            disabled={!isDone(chatState.currentInsurance) || !isCurrentMessage}
+            disabled={
+              !isCurrentInsuranceDone(chatState.currentInsurance) ||
+              !isCurrentMessage
+            }
           />
         </form>
       )}

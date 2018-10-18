@@ -13,6 +13,7 @@ import {
   NameAgeState,
   State as ChatState,
 } from '../state'
+import { Focusable } from './base'
 
 interface FormValues {
   firstName: string
@@ -40,12 +41,14 @@ const validationSchema = () =>
     })
     .required()
 
-const isDone = (values: Partial<NameAgeState> = {}) =>
+export const isNameDone = (values: Partial<NameAgeState> = {}) =>
   validationSchema().isValidSync(values)
 
-export const NameInput: React.SFC<Props> = ({
+export const NameInput: React.SFC<Props & Focusable> = ({
   onSubmit,
   appear,
+  onFocus = () => {}, // tslint:disable-line no-empty
+  onBlur = () => {}, // tslint:disable-line no-empty
   isCurrentMessage = false,
 }) => (
   <UserResponse appear={appear}>
@@ -56,7 +59,7 @@ export const NameInput: React.SFC<Props> = ({
             <form
               onSubmit={(e) => {
                 e.preventDefault()
-                if (!isDone(chatState.nameAge)) {
+                if (!isNameDone(chatState.nameAge)) {
                   return
                 }
                 if (onSubmit) {
@@ -96,6 +99,8 @@ export const NameInput: React.SFC<Props> = ({
                               ref.focus()
                               focusState.doAction()
                             }}
+                            onFocus={onFocus}
+                            onBlur={onBlur}
                           />
                         )}
                       </TranslationsConsumer>
@@ -113,6 +118,8 @@ export const NameInput: React.SFC<Props> = ({
                               chatState.nameAge.lastName.length || 0,
                               15,
                             )}
+                            onFocus={onFocus}
+                            onBlur={onBlur}
                           />
                         )}
                       </TranslationsConsumer>
@@ -123,7 +130,7 @@ export const NameInput: React.SFC<Props> = ({
                 </TranslationsPlaceholderConsumer>
               </div>
               <NextButton
-                disabled={!isDone(chatState.nameAge) || !isCurrentMessage}
+                disabled={!isNameDone(chatState.nameAge) || !isCurrentMessage}
               />
             </form>
           )}

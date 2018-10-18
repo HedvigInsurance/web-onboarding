@@ -13,6 +13,7 @@ import {
   NameAgeState,
   State as ChatState,
 } from '../state'
+import { Focusable } from './base'
 
 interface FormValues {
   age: number | string
@@ -43,13 +44,15 @@ const validationSchema = () =>
     })
     .required()
 
-const isDone = (values: Partial<NameAgeState> = {}) =>
+export const isAgeDone = (values: Partial<NameAgeState> = {}) =>
   validationSchema().isValidSync(values)
 
-export const AgeInput: React.SFC<Props> = ({
+export const AgeInput: React.SFC<Props & Focusable> = ({
   onSubmit,
   appear,
   isCurrentMessage = false,
+  onFocus = () => {}, // tslint:disable-line no-empty
+  onBlur = () => {}, // tslint:disable-line no-empty
 }) => (
   <UserResponse appear={appear}>
     <SingletonAction>
@@ -59,7 +62,7 @@ export const AgeInput: React.SFC<Props> = ({
             <form
               onSubmit={(e) => {
                 e.preventDefault()
-                if (!isDone(chatState.nameAge)) {
+                if (!isAgeDone(chatState.nameAge)) {
                   return
                 }
                 if (onSubmit) {
@@ -98,6 +101,8 @@ export const AgeInput: React.SFC<Props> = ({
                               ref.focus()
                               focusState.doAction()
                             }}
+                            onFocus={onFocus}
+                            onBlur={onBlur}
                           />
                         )}
                       </TranslationsConsumer>
@@ -108,7 +113,7 @@ export const AgeInput: React.SFC<Props> = ({
                 </TranslationsPlaceholderConsumer>
               </div>
               <NextButton
-                disabled={!isDone(chatState.nameAge) || !isCurrentMessage}
+                disabled={!isAgeDone(chatState.nameAge) || !isCurrentMessage}
               />
             </form>
           )}

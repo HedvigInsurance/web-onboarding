@@ -12,6 +12,7 @@ import {
   Effects as ChatActions,
   LivingSituationState,
 } from '../state'
+import { Focusable } from './base'
 
 const handleChange = <K extends keyof LivingSituationState>(
   field: K,
@@ -33,7 +34,7 @@ const validationSchema = yup
 
   .required()
 
-const isDone = (values: Partial<LivingSituationState> = {}) => {
+export const isAddressDone = (values: Partial<LivingSituationState> = {}) => {
   try {
     validationSchema.validateSync(values)
     return true
@@ -47,12 +48,14 @@ interface AddressInputProps {
   isCurrentMessage?: boolean
 }
 
-export const AddressInput: React.SFC<AddressInputProps> = ({
+export const AddressInput: React.SFC<AddressInputProps & Focusable> = ({
   appear,
   onSubmit = () => {
     /* noop */
   },
   isCurrentMessage,
+  onFocus = () => {}, // tslint:disable-line no-empty
+  onBlur = () => {}, // tslint:disable-line no-empty
 }) => (
   <UserResponse appear={appear}>
     <SingletonAction>
@@ -63,7 +66,7 @@ export const AddressInput: React.SFC<AddressInputProps> = ({
               onSubmit={(e) => {
                 e.preventDefault()
 
-                if (!isDone(chatState.livingSituation)) {
+                if (!isAddressDone(chatState.livingSituation)) {
                   return
                 }
 
@@ -101,6 +104,8 @@ export const AddressInput: React.SFC<AddressInputProps> = ({
                             ref.focus()
                             focusState.doAction()
                           }}
+                          onFocus={onFocus}
+                          onBlur={onBlur}
                         />
                       )}
                     </TranslationsConsumer>
@@ -121,6 +126,8 @@ export const AddressInput: React.SFC<AddressInputProps> = ({
                           )}
                           maxLength={6}
                           pattern="[0-9]*"
+                          onFocus={onFocus}
+                          onBlur={onBlur}
                         />
                       )}
                     </TranslationsConsumer>
@@ -131,7 +138,7 @@ export const AddressInput: React.SFC<AddressInputProps> = ({
               </TranslationsPlaceholderConsumer>
               <NextButton
                 disabled={
-                  !isDone(chatState.livingSituation) || !isCurrentMessage
+                  !isAddressDone(chatState.livingSituation) || !isCurrentMessage
                 }
               />
             </form>

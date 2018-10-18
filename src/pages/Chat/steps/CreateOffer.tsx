@@ -15,7 +15,12 @@ import {
   getCreateOfferVariablesFromChatState,
 } from '../containers/CreateOfferContainer'
 import { OfferCreationSubscription } from '../containers/OfferCreationSubscription'
-import { ChatContainer } from '../state'
+import { ChatContainer, State as ChatState } from '../state'
+import { isAddressDone } from './AddressInput'
+import { isAgeDone } from './AgeInput'
+import { isCurrentInsuranceDone } from './CurrentInsuranceInput'
+import { isNameDone } from './NameInput'
+import { isInsuranceTypeDone } from './InsuranceTypeInput'
 
 const Wrapper = styled('div')({
   paddingTop: 60,
@@ -33,6 +38,13 @@ const GdprLink = styled('a')({
   textDecoration: 'none',
   fontSize: 12,
 })
+
+const canSubmit = (chatState: ChatState) =>
+  isAddressDone(chatState.livingSituation) &&
+  isCurrentInsuranceDone(chatState.currentInsurance) &&
+  isInsuranceTypeDone(chatState.livingSituation) &&
+  isNameDone(chatState.nameAge) &&
+  isAgeDone(chatState.nameAge)
 
 export const CreateOffer: React.SFC = () => (
   <SessionContainer>
@@ -71,12 +83,16 @@ export const CreateOffer: React.SFC = () => (
                                     background={colors.GREEN}
                                     foreground={colors.WHITE}
                                     disabled={
+                                      !canSubmit(chatState) ||
                                       chatScreenState.offerCreationDebounceState ===
                                         LoadingState.LOADING ||
                                       chatScreenState.offerCreationLoadingState ===
                                         LoadingState.LOADING
                                     }
                                     onClick={() => {
+                                      if (!canSubmit(chatState)) {
+                                        return
+                                      }
                                       chatScreenState.beginDebounce()
                                       createOffer(
                                         getCreateOfferVariablesFromChatState(
