@@ -12,7 +12,7 @@ export const Chat: React.SFC = () => (
       {(title) => <Helmet>{<title>{title}</title>}</Helmet>}
     </TranslationsConsumer>
 
-    <TopBar progress={0} showButton={false} />
+    <TopBar progress={0} buttonOneVisible={false} buttonTwoVisible={false} />
     <TopBarFiller />
     <ResetButton />
     <ChatConversation />
