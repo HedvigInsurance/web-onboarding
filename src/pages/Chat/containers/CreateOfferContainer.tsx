@@ -57,7 +57,7 @@ export const getCreateOfferVariablesFromChatState = (
   postalNumber: chatState.livingSituation.postalNumber,
   personsInHousehold: Number(chatState.livingSituation.numberOfPeople),
   squareMeters: Number(chatState.livingSituation.size),
-  insuranceType: chatState.livingSituation.apartmentType!,
+  insuranceType: chatState.livingSituation.insuranceType!,
   previousInsurer: chatState.currentInsurance.hasCurrentInsurance
     ? chatState.currentInsurance.currentInsurer
     : undefined,

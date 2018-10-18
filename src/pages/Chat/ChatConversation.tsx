@@ -6,10 +6,10 @@ import * as React from 'react'
 import { ChatContainer, ChatStep } from './state'
 import { AddressInput } from './steps/AddressInput'
 import { AgeInput } from './steps/AgeInput'
-import { ApartmentTypeInput } from './steps/ApartmentTypeInput'
 import { CreateOffer } from './steps/CreateOffer'
 import { CurrentInsuranceInput } from './steps/CurrentInsuranceInput'
 import { Greet } from './steps/Greet'
+import { InsuranceTypeInput } from './steps/InsuranceTypeInput'
 import { NameInput } from './steps/NameInput'
 import { NumberOfPeopleInput } from './steps/NumberOfPeopleInput'
 
@@ -87,7 +87,7 @@ export const ChatConversation: React.SFC = () => (
                 ![
                   ChatStep.GREET,
                   ChatStep.ADDRESS_INPUT,
-                  ChatStep.APARTMENT_TYPE_INPUT,
+                  ChatStep.INSURANCE_TYPE_INPUT,
                   ChatStep.NUMBER_OF_PEOPLE,
                 ].includes(currentStep)
               }
@@ -109,20 +109,20 @@ export const ChatConversation: React.SFC = () => (
               <AddressInput
                 appear={appear}
                 isCurrentMessage={currentStep === ChatStep.ADDRESS_INPUT}
-                onSubmit={() => goToStep(ChatStep.APARTMENT_TYPE_INPUT)}
+                onSubmit={() => goToStep(ChatStep.INSURANCE_TYPE_INPUT)}
               />
             </Mufflable>
           )}
         </Message>
-        <Message id={ChatStep.APARTMENT_TYPE_INPUT}>
+        <Message id={ChatStep.INSURANCE_TYPE_INPUT}>
           {({ appear }) => (
             <Mufflable
-              muffled={currentStep !== ChatStep.APARTMENT_TYPE_INPUT}
+              muffled={currentStep !== ChatStep.INSURANCE_TYPE_INPUT}
               direction="right"
             >
-              <ApartmentTypeInput
+              <InsuranceTypeInput
                 appear={appear}
-                isCurrentMessage={currentStep === ChatStep.APARTMENT_TYPE_INPUT}
+                isCurrentMessage={currentStep === ChatStep.INSURANCE_TYPE_INPUT}
                 onSubmit={() => goToStep(ChatStep.NUMBER_OF_PEOPLE)}
               />
             </Mufflable>
