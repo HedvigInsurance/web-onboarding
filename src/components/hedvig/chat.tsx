@@ -9,7 +9,7 @@ import {
   EXITING,
   TransitionStatus,
 } from 'react-transition-group/Transition'
-import { fadeIn, FadeIn, fadeUp } from '../animations/appearings'
+import { fadeIn, FadeIn, fadeUp, SlideUp } from '../animations/appearings'
 
 const fadeOut = keyframes({
   from: {
@@ -128,46 +128,48 @@ export const ChatMessage: React.SFC<ChatMessageProps> = ({
   onTyped,
 }) => (
   <ChatWrapper>
-    {appear ? (
-      <HedvigIcon />
-    ) : (
-      <FadeIn>
+    <SlideUp initialMaxHeight={appear ? 300 : undefined}>
+      {appear ? (
         <HedvigIcon />
-      </FadeIn>
-    )}
-    <Transition
-      timeout={appear ? 0 : typingDuration}
-      appear
-      in
-      onEntered={
-        appear
-          ? () => {
-              /* noop */
-            }
-          : onTyped
-      }
-    >
-      {(appearStatus) => (
-        <ChatMessageWrapper>
-          <Transition
-            timeout={500}
-            appear
-            in={appearStatus === ENTERING && !appear}
-          >
-            {(typingTransitionStatus) =>
-              typingTransitionStatus !== EXITED && (
-                <Typing status={typingTransitionStatus} />
-              )
-            }
-          </Transition>
-          <ChatMessageTextWrapper
-            appear={appear}
-            isVisible={[ENTERED, EXITING].includes(appearStatus)}
-          >
-            {children}
-          </ChatMessageTextWrapper>
-        </ChatMessageWrapper>
+      ) : (
+        <FadeIn>
+          <HedvigIcon />
+        </FadeIn>
       )}
-    </Transition>
+      <Transition
+        timeout={appear ? 0 : typingDuration}
+        appear
+        in
+        onEntered={
+          appear
+            ? () => {
+                /* noop */
+              }
+            : onTyped
+        }
+      >
+        {(appearStatus) => (
+          <ChatMessageWrapper>
+            <Transition
+              timeout={500}
+              appear
+              in={appearStatus === ENTERING && !appear}
+            >
+              {(typingTransitionStatus) =>
+                typingTransitionStatus !== EXITED && (
+                  <Typing status={typingTransitionStatus} />
+                )
+              }
+            </Transition>
+            <ChatMessageTextWrapper
+              appear={appear}
+              isVisible={[ENTERED, EXITING].includes(appearStatus)}
+            >
+              {children}
+            </ChatMessageTextWrapper>
+          </ChatMessageWrapper>
+        )}
+      </Transition>
+    </SlideUp>
   </ChatWrapper>
 )
