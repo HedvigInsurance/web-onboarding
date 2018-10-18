@@ -22,12 +22,12 @@ it('handles form changes', () => {
     </Provider>,
   )
 
-  expect(wrapper.find('button')).toHaveLength(0)
+  expect(wrapper.find('button').prop('disabled')).toBe(true)
 
   wrapper
     .find('select#numberOfPeople')
     .simulate('change', { target: { value: 3 } })
   expect(wrapper.find('select#numberOfPeople').prop('value')).toBe(3)
 
-  expect(wrapper.find('button')).toHaveLength(1)
+  expect(wrapper.find('button').prop('disabled')).toBe(false)
 })
