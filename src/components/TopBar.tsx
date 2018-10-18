@@ -1,7 +1,9 @@
 import { colors } from '@hedviginsurance/brand'
+import { Button } from 'components/buttons'
 import * as React from 'react'
 import styled from 'react-emotion'
 import { Link } from 'react-router-dom'
+const TOPBARHEIGHT = 70
 
 const Container = styled('div')({
   width: '100%',
@@ -9,39 +11,45 @@ const Container = styled('div')({
 })
 
 const Bar = styled('div')({
+  height: TOPBARHEIGHT,
+  maxHeight: TOPBARHEIGHT,
   position: 'fixed',
-  top: 0,
-  left: 0,
-  right: 0,
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
+  top: 0,
+  left: 0,
+  right: 0,
   backgroundColor: colors.WHITE,
   zIndex: 5,
-  borderBottom: '1px solid ' + colors.LIGHT_GRAY,
-  '@media (max-width: 710px)': {
-    justifyContent: 'space-evenly',
+  boxShadow: '0 1px 11px 1px rgba(0,0,0,.15)',
+})
+
+const BarContainer = styled('div')({
+  height: '100%',
+  width: '20%',
+  '@media (max-width: 800px)': {
+    width: '33%',
+  },
+  '@media (max-width: 600px)': {
+    width: '50%',
   },
 })
 
+const EscapeLink = styled('a')({
+  display: 'flex',
+})
+
 const Logo = styled('img')({
-  height: '26px',
-  marginTop: '25px',
-  marginBottom: '25px',
-  marginLeft: '40px',
-  '@media (max-width: 350px)': {
-    marginLeft: '20px',
-  },
+  marginLeft: '26px',
+  marginTop: '24px',
 })
 
 const GetInsuredButton = styled('div')({
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'inherit',
-  marginRight: '40px',
-  '@media (max-width: 350px)': {
-    marginRight: '20px',
-  },
+  marginRight: '26px',
 })
 
 const LinkTag = styled(Link)({
@@ -65,29 +73,45 @@ const ProgressLabel = styled('div')({
   fontSize: '14px',
 })
 
-const BarContainer = styled('div')({
-  width: '20%',
-  '@media (max-width: 710px)': {
-    width: '33%',
-  },
-})
-
 const BarProgressContainer = styled('div')({
   display: 'flex',
   width: '60%',
   justifyContent: 'center',
   flexDirection: 'row',
-  '@media (max-width: 710px)': {
-    flexDirection: 'column',
+  '@media (max-width: 800px)': {
     width: '33%',
+    display: 'none',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+})
+
+const CollapsedProgressContainer = styled('div')({
+  display: 'none',
+  width: '20%',
+  justifyContent: 'center',
+  flexDirection: 'row',
+  textAlign: 'center',
+  '@media (max-width: 800px)': {
+    width: '33%',
+    display: 'flex',
+    visibility: 'visible',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  '@media (max-width: 600px)': {
+    display: 'none',
   },
 })
 
 const BarButtonContainer = styled('div')({
   width: '20%',
   justifyContent: 'flex-end',
-  '@media (max-width: 710px)': {
+  '@media (max-width: 800px)': {
     width: '33%',
+  },
+  '@media (max-width: 600px)': {
+    width: '50%',
   },
 })
 
@@ -116,7 +140,9 @@ export const TopBar: React.SFC<Props> = (props) => (
   <Container>
     <Bar>
       <BarContainer>
-        <Logo src="/assets/offering/logo.png" />
+        <EscapeLink href="/hedvig">
+          <Logo src="/assets/topbar/hedvig-wordmark-solid.svg" />
+        </EscapeLink>
       </BarContainer>
       <BarProgressContainer>
         {props.progress !== undefined
@@ -135,6 +161,13 @@ export const TopBar: React.SFC<Props> = (props) => (
             ))
           : null}
       </BarProgressContainer>
+      <CollapsedProgressContainer>
+        <ProgressLabel>
+          {props.progress !== undefined
+            ? progressStrings[props.progress].progressText
+            : null}
+        </ProgressLabel>
+      </CollapsedProgressContainer>
       {!props.showButton ? (
         <BarButtonContainer>
           {props.buttonText ? (
