@@ -5,6 +5,8 @@ import { OfferContainer } from 'containers/OfferContainer'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import * as React from 'react'
 import Helmet from 'react-helmet-async'
+import { Mount } from 'react-lifecycle-components'
+import { trackEvent } from 'utils/tracking'
 import { GetInsured } from './sections/GetInsured'
 import { HedvigInfo } from './sections/HedvigInfo'
 import { HedvigSwitch } from './sections/HedvigSwitch'
@@ -29,7 +31,14 @@ export const Offering: React.SFC<{}> = () => (
         const { insuredAtOtherCompany } = offer.insurance
 
         return (
-          <>
+          <Mount
+            on={() =>
+              trackEvent('Product Viewed', {
+                category: 'offer',
+                value: offer.insurance.monthlyCost,
+              })
+            }
+          >
             <TranslationsConsumer textKey="OFFER_PAGE_TITLE">
               {(title) => (
                 <Helmet>
@@ -73,7 +82,7 @@ export const Offering: React.SFC<{}> = () => (
                 </>
               )}
             </Container>
-          </>
+          </Mount>
         )
       }}
     </OfferContainer>

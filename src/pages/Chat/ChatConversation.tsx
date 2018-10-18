@@ -3,6 +3,7 @@ import { Mufflable } from 'components/animations/Mufflable'
 import { ChatMessage } from 'components/hedvig/chat'
 import { Conversation, Message } from 'components/hedvig/conversation'
 import * as React from 'react'
+import { trackEvent } from 'utils/tracking'
 import { ChatContainer, ChatStep } from './state'
 import { AddressInput } from './steps/AddressInput'
 import { AgeInput } from './steps/AgeInput'
@@ -12,6 +13,9 @@ import { Greet } from './steps/Greet'
 import { InsuranceTypeInput } from './steps/InsuranceTypeInput'
 import { NameInput } from './steps/NameInput'
 import { NumberOfPeopleInput } from './steps/NumberOfPeopleInput'
+
+const trackOnboardingStep = (step: string) =>
+  trackEvent('completed', { category: 'web-onboarding-steps', label: step })
 
 export const ChatConversation: React.SFC = () => (
   <ChatContainer>
@@ -58,7 +62,10 @@ export const ChatConversation: React.SFC = () => (
               direction="right"
             >
               <NameInput
-                onSubmit={() => goToStep(ChatStep.AGE_INPUT)}
+                onSubmit={() => {
+                  trackOnboardingStep('name')
+                  goToStep(ChatStep.AGE_INPUT)
+                }}
                 appear={appear}
                 isCurrentMessage={currentStep === ChatStep.NAME_INPUT}
               />
@@ -72,7 +79,10 @@ export const ChatConversation: React.SFC = () => (
               direction="right"
             >
               <AgeInput
-                onSubmit={() => goToStep(ChatStep.GREET)}
+                onSubmit={() => {
+                  trackOnboardingStep('age')
+                  goToStep(ChatStep.GREET)
+                }}
                 appear={appear}
                 isCurrentMessage={currentStep === ChatStep.AGE_INPUT}
               />
@@ -109,7 +119,10 @@ export const ChatConversation: React.SFC = () => (
               <AddressInput
                 appear={appear}
                 isCurrentMessage={currentStep === ChatStep.ADDRESS_INPUT}
-                onSubmit={() => goToStep(ChatStep.INSURANCE_TYPE_INPUT)}
+                onSubmit={() => {
+                  trackOnboardingStep('address')
+                  goToStep(ChatStep.INSURANCE_TYPE_INPUT)
+                }}
               />
             </Mufflable>
           )}
@@ -123,7 +136,10 @@ export const ChatConversation: React.SFC = () => (
               <InsuranceTypeInput
                 appear={appear}
                 isCurrentMessage={currentStep === ChatStep.INSURANCE_TYPE_INPUT}
-                onSubmit={() => goToStep(ChatStep.NUMBER_OF_PEOPLE)}
+                onSubmit={() => {
+                  trackOnboardingStep('insurance-type')
+                  goToStep(ChatStep.NUMBER_OF_PEOPLE)
+                }}
               />
             </Mufflable>
           )}
@@ -137,7 +153,10 @@ export const ChatConversation: React.SFC = () => (
               <NumberOfPeopleInput
                 appear={appear}
                 isCurrentMessage={currentStep === ChatStep.NUMBER_OF_PEOPLE}
-                onSubmit={() => goToStep(ChatStep.CURRENT_INSURANCE_QUESTION)}
+                onSubmit={() => {
+                  trackOnboardingStep('number-of-people')
+                  goToStep(ChatStep.CURRENT_INSURANCE_QUESTION)
+                }}
               />
             </Mufflable>
           )}
@@ -178,7 +197,10 @@ export const ChatConversation: React.SFC = () => (
             >
               <CurrentInsuranceInput
                 appear={appear}
-                onSubmit={() => goToStep(ChatStep.SHOW_OFFER_QUESTION)}
+                onSubmit={() => {
+                  trackOnboardingStep('has-current-insurance')
+                  goToStep(ChatStep.SHOW_OFFER_QUESTION)
+                }}
                 isCurrentMessage={
                   currentStep === ChatStep.CURRENT_INSURANCE_INPUT
                 }
