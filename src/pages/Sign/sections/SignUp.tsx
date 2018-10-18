@@ -3,14 +3,20 @@ import {
   TranslationsConsumer,
   TranslationsPlaceholderConsumer,
 } from '@hedviginsurance/textkeyfy'
+import { OfferContainer } from 'containers/OfferContainer'
+import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import { Field, Form, Formik } from 'formik'
+import gql from 'graphql-tag'
 import * as React from 'react'
+import { Mutation } from 'react-apollo'
 import styled from 'react-emotion'
 import * as Yup from 'yup'
+import { SubscriptionComponent } from './SignSubscription'
 
 const CARDWIDTH = 788
 const HEADERWIDTH = 400
 const FORMWIDTH = 300
+const FORMWIDTHSMALL = 100
 
 const OuterWrapper = styled('div')({
   width: '100%',
@@ -57,12 +63,20 @@ const Header = styled('h1')({
   paddingTop: '30px',
   marginBottom: '10px',
   fontSize: '32px',
+  '@media (max-width: 300px)': {
+    fontSize: '26px',
+  },
 })
 
 const InputTitle = styled('div')({
   marginTop: '20px',
   lineHeight: '23px',
   fontSize: '20px',
+  '@media (max-width: 300px)': {
+    marginLeft: '10px',
+    marginRight: '10px',
+    fontSize: '18px',
+  },
 })
 
 const CustomForm = styled(Form)({
@@ -71,17 +85,30 @@ const CustomForm = styled(Form)({
   maxWidth: FORMWIDTH,
   marginLeft: 'auto',
   marginRight: 'auto',
+  '@media (max-width: 300px)': {
+    minWidth: FORMWIDTHSMALL,
+  },
 })
 
 const InputField = styled(Field)({
   marginTop: '10px',
   marginBottom: '10px',
   minWidth: FORMWIDTH,
-  lineHeight: '23px',
+  lineHeight: '48px',
   fontSize: '20px',
+  backgroundColor: colors.OFF_WHITE,
+  borderRadius: '5px',
+  border: 'none',
+  outline: 'none',
+  '@media (max-width: 300px)': {
+    marginLeft: '10px',
+    marginRight: '10px',
+    minWidth: FORMWIDTHSMALL,
+    fontSize: '18px',
+  },
 })
 
-const InputSubmit = styled('input')({
+const SubmitButton = styled('button')({
   backgroundColor: colors.GREEN,
   fontSize: '16px',
   color: colors.WHITE,
@@ -90,7 +117,9 @@ const InputSubmit = styled('input')({
   padding: '15px 30px',
   cursor: 'pointer',
   border: 'none',
-  outlineStyle: 'none',
+  '@media (max-width: 300px)': {
+    fontSize: '14px',
+  },
 })
 
 const GetInsuredButton = styled('div')({
@@ -100,19 +129,17 @@ const GetInsuredButton = styled('div')({
   justifyContent: 'center',
 })
 
-const ErrorText = styled('div')({
-  textAlign: 'center',
-  marginTop: '20px',
-  color: 'red',
-  fontSize: '16px',
-})
-
 const ErrorMessage = styled('div')({
   minHeight: '24px',
   fontSize: '16px',
+  '@media (max-width: 300px)': {
+    marginLeft: '10px',
+    marginRight: '10px',
+    fontSize: '14px',
+  },
 })
 
-const UserSchema = Yup.object().shape({
+const userSchema = Yup.object().shape({
   email: Yup.string()
     .email('SIGN_EMAIL_CHECK')
     .required('SIGN_EMAIL_REQUIRED'),
@@ -121,79 +148,137 @@ const UserSchema = Yup.object().shape({
     .required('SIGN_PERSONAL_NUMBER_REQUIRED'),
 })
 
-export const SignUp: React.SFC = () => (
-  <OuterWrapper>
-    <CardWrapper>
-      <Card>
-        <HeaderWrapper>
-          <Header>
-            <TranslationsPlaceholderConsumer
-              textKey="SIGN_HEADER_TITLE"
-              replacements={{
-                address: 'Fantastiska Gatan 23B',
-              }}
-            >
-              {(title) => title}
-            </TranslationsPlaceholderConsumer>
-          </Header>
-        </HeaderWrapper>
-        <Formik
-          initialValues={{
-            email: '',
-            personalNumber: '',
-          }}
-          validationSchema={UserSchema}
-          onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
-        >
-          {({ errors, touched }) => (
-            <CustomForm>
-              <InputTitle>
-                <TranslationsConsumer textKey="SIGN_INPUT_ONE_TITLE">
-                  {(title) => title}
-                </TranslationsConsumer>
-              </InputTitle>
+export const SIGN_MUTATION = gql`
+  mutation SignOffer($personalNumber: String!, $email: String!) {
+    signOffer(details: { personalNumber: $personalNumber, email: $email })
+  }
+`
 
-              <InputField name="email" />
-              {errors.email && touched.email ? (
-                <ErrorMessage>
-                  <TranslationsConsumer textKey={errors.email}>
-                    {(errorMessage) => errorMessage}
-                  </TranslationsConsumer>
-                </ErrorMessage>
-              ) : (
-                <ErrorMessage />
-              )}
-              <InputTitle>
-                <TranslationsConsumer textKey="SIGN_INPUT_TWO_TITLE">
-                  {(title) => title}
-                </TranslationsConsumer>
-              </InputTitle>
-              <InputField name="personalNumber" />
-              {errors.personalNumber && touched.personalNumber ? (
-                <ErrorMessage>
-                  <TranslationsConsumer textKey={errors.personalNumber}>
-                    {(errorMessage) => errorMessage}
-                  </TranslationsConsumer>
-                </ErrorMessage>
-              ) : (
-                <ErrorMessage />
-              )}
-              <GetInsuredButton>
-                <TranslationsConsumer textKey="SIGN_BUTTON_TEXT">
-                  {(buttonText) => (
-                    <InputSubmit type="submit" value={buttonText} />
+const inputBorderCheck = (
+  touched: boolean | undefined,
+  errors: string | undefined,
+) =>
+  touched
+    ? errors
+      ? '3px solid red'
+      : [`3px solid ${colors.GREEN}`]
+    : [`3px solid ${colors.DARK_PURPLE}`]
+
+interface SignOfferMutationVariables {
+  personalNumber: string
+  email: string
+}
+
+export const SignUp: React.SFC = () => (
+  <SessionTokenGuard>
+    <OuterWrapper>
+      <CardWrapper>
+        <Card>
+          <HeaderWrapper>
+            <Header>
+              <OfferContainer>
+                {(offer) => (
+                  <TranslationsPlaceholderConsumer
+                    textKey="SIGN_HEADER_TITLE"
+                    replacements={{
+                      address: offer.insurance.address,
+                    }}
+                  >
+                    {(title) => title}
+                  </TranslationsPlaceholderConsumer>
+                )}
+              </OfferContainer>
+            </Header>
+          </HeaderWrapper>
+          <>
+            <Mutation<boolean, SignOfferMutationVariables>
+              mutation={SIGN_MUTATION}
+            >
+              {(signOffer, signProps) => (
+                <Formik
+                  initialValues={{
+                    email: '',
+                    personalNumber: '',
+                  }}
+                  validationSchema={userSchema}
+                  onSubmit={(values) =>
+                    signOffer({
+                      variables: {
+                        personalNumber: values.personalNumber,
+                        email: values.email,
+                      },
+                    })
+                  }
+                >
+                  {({ errors, touched }) => (
+                    <CustomForm>
+                      <InputTitle>
+                        <TranslationsConsumer textKey="SIGN_INPUT_ONE_TITLE">
+                          {(title) => title}
+                        </TranslationsConsumer>
+                      </InputTitle>
+
+                      <InputField
+                        name="email"
+                        id="email"
+                        style={{
+                          borderBottom: inputBorderCheck(
+                            touched.email,
+                            errors.email,
+                          ),
+                        }}
+                      />
+                      {errors.email && touched.email ? (
+                        <ErrorMessage>
+                          <TranslationsConsumer textKey={errors.email}>
+                            {(errorMessage) => errorMessage}
+                          </TranslationsConsumer>
+                        </ErrorMessage>
+                      ) : null}
+                      <InputTitle>
+                        <TranslationsConsumer textKey="SIGN_INPUT_TWO_TITLE">
+                          {(title) => title}
+                        </TranslationsConsumer>
+                      </InputTitle>
+                      <InputField
+                        name="personalNumber"
+                        id="personalNumber"
+                        style={{
+                          borderBottom: inputBorderCheck(
+                            touched.personalNumber,
+                            errors.personalNumber,
+                          ),
+                        }}
+                      />
+                      {errors.personalNumber && touched.personalNumber ? (
+                        <ErrorMessage>
+                          <TranslationsConsumer textKey={errors.personalNumber}>
+                            {(errorMessage) => errorMessage}
+                          </TranslationsConsumer>
+                        </ErrorMessage>
+                      ) : null}
+                      <GetInsuredButton>
+                        <TranslationsConsumer textKey="SIGN_BUTTON_TEXT">
+                          {(buttonText) => (
+                            <SubmitButton
+                              type="submit"
+                              value={buttonText}
+                              disabled={signProps.called}
+                            >
+                              {buttonText}
+                            </SubmitButton>
+                          )}
+                        </TranslationsConsumer>
+                      </GetInsuredButton>
+                      <SubscriptionComponent />
+                    </CustomForm>
                   )}
-                </TranslationsConsumer>
-              </GetInsuredButton>
-              <TranslationsConsumer textKey="SIGN_BANKID_ERROR_MESSAGE">
-                {(errorMessage) =>
-                  errorMessage ? <ErrorText>{errorMessage}</ErrorText> : null
-                }
-              </TranslationsConsumer>
-            </CustomForm>
-          )}
-        </Formik>
-      </Card>
-    </CardWrapper>
-  </OuterWrapper>
+                </Formik>
+              )}
+            </Mutation>
+          </>
+        </Card>
+      </CardWrapper>
+    </OuterWrapper>
+  </SessionTokenGuard>
 )

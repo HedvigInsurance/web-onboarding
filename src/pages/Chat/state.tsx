@@ -1,8 +1,8 @@
 import { Container, ContainerProps, EffectProps } from 'constate'
+import { InsuranceType } from 'containers/OfferContainer'
 import * as React from 'react'
 import { notNullable } from '../../utils/nullables'
 import { StorageContainer } from '../../utils/StorageContainer'
-import { InsuranceType } from '../Offer'
 
 export enum ChatStep {
   NUMBER_OF_PEOPLE = 'NUMBER_OF_PEOPLE',
