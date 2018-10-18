@@ -6,8 +6,8 @@ import { MockTextKeyProvider } from 'utils/MockTextKeyProvider'
 import { createSession } from 'utils/sessionStorage'
 import { MockStorage } from 'utils/storage/MockStorage'
 import { WithStorageProps } from 'utils/StorageContainer'
-import { ApartmentType } from '../state'
-import { ApartmentTypeInput } from './ApartmentTypeInput'
+import { InsuranceType } from '../../Offer'
+import { InsuranceTypeInput } from './InsuranceTypeInput'
 
 it('handles form changes', () => {
   const wrapper = mount(
@@ -16,10 +16,10 @@ it('handles form changes', () => {
     >
       <MockTextKeyProvider
         textKeys={{
-          CHAT_INPUT_APARTMENT_TYPE_TEXT: '{apartmentType} {size}',
+          CHAT_INPUT_INSURANCE_TYPE_TEXT: '{insuranceType} {size}',
         }}
       >
-        <ApartmentTypeInput isCurrentMessage />
+        <InsuranceTypeInput isCurrentMessage />
       </MockTextKeyProvider>
     </Provider>,
   )
@@ -27,10 +27,10 @@ it('handles form changes', () => {
   expect(wrapper.find('button')).toHaveLength(0)
 
   wrapper
-    .find('select#apartmentType')
-    .simulate('change', { target: { value: ApartmentType.RENT } })
-  expect(wrapper.find('select#apartmentType').prop('value')).toBe(
-    ApartmentType.RENT,
+    .find('select#insuranceType')
+    .simulate('change', { target: { value: InsuranceType.RENT } })
+  expect(wrapper.find('select#insuranceType').prop('value')).toBe(
+    InsuranceType.RENT,
   )
   wrapper.find('input#size').simulate('change', { target: { value: 42 } })
   expect(wrapper.find('input#size').prop('value')).toBe(42)
@@ -45,10 +45,10 @@ it('handles too big apartment', () => {
     >
       <MockTextKeyProvider
         textKeys={{
-          CHAT_INPUT_APARTMENT_TYPE_TEXT: '{apartmentType} {size}',
+          CHAT_INPUT_INSURANCE_TYPE_TEXT: '{insuranceType} {size}',
         }}
       >
-        <ApartmentTypeInput />
+        <InsuranceTypeInput />
       </MockTextKeyProvider>
     </Provider>,
   )
