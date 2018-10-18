@@ -213,6 +213,9 @@ export const ChatContainer: React.SFC<
             }, 0)
           },
           goToStep: (step) => ({ state, setState }) => {
+            if (state.visibleSteps.includes(step)) {
+              return
+            }
             const newState = {
               currentStep: step,
               visibleSteps: [...state.visibleSteps, step],

@@ -235,14 +235,7 @@ export const ChatConversation: React.SFC = () => (
           )}
         </Message>
         <Message id={ChatStep.SHOW_OFFER} delay={500}>
-          {() => (
-            <Mufflable
-              muffled={currentStep !== ChatStep.SHOW_OFFER}
-              direction="right"
-            >
-              <CreateOffer />
-            </Mufflable>
-          )}
+          {() => <CreateOffer />}
         </Message>
       </Conversation>
     )}

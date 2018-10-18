@@ -147,9 +147,10 @@ export const CurrentInsuranceInput: React.SFC<
           </TranslationsPlaceholderConsumer>
 
           <NextButton
-            disabled={
-              !isCurrentInsuranceDone(chatState.currentInsurance) ||
-              !isCurrentMessage
+            disabled={!isCurrentInsuranceDone(chatState.currentInsurance)}
+            hidden={
+              !isCurrentMessage ||
+              !isCurrentInsuranceDone(chatState.currentInsurance)
             }
           />
         </form>

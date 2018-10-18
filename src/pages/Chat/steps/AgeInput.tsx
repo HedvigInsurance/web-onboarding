@@ -113,7 +113,8 @@ export const AgeInput: React.SFC<Props & Focusable> = ({
                 </TranslationsPlaceholderConsumer>
               </div>
               <NextButton
-                disabled={!isAgeDone(chatState.nameAge) || !isCurrentMessage}
+                disabled={!isAgeDone(chatState.nameAge)}
+                hidden={!isCurrentMessage || !isAgeDone(chatState.nameAge)}
               />
             </form>
           )}

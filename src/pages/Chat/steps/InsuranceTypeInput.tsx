@@ -212,9 +212,10 @@ export const InsuranceTypeInput: React.SFC<
             values={chatState.livingSituation}
           />
           <NextButton
-            disabled={
-              !isInsuranceTypeDone(chatState.livingSituation) ||
-              !isCurrentMessage
+            disabled={!isInsuranceTypeDone(chatState.livingSituation)}
+            hidden={
+              !isCurrentMessage ||
+              !isInsuranceTypeDone(chatState.livingSituation)
             }
           />
         </form>

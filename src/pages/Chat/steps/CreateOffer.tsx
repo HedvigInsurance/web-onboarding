@@ -21,6 +21,7 @@ import { isAgeDone } from './AgeInput'
 import { isCurrentInsuranceDone } from './CurrentInsuranceInput'
 import { isInsuranceTypeDone } from './InsuranceTypeInput'
 import { isNameDone } from './NameInput'
+import { isNumberOfPeopleDone } from './NumberOfPeopleInput'
 
 const Wrapper = styled('div')({
   paddingTop: 60,
@@ -41,10 +42,11 @@ const GdprLink = styled('a')({
 
 const canSubmit = (chatState: ChatState) =>
   isAddressDone(chatState.livingSituation) &&
+  isAgeDone(chatState.nameAge) &&
   isCurrentInsuranceDone(chatState.currentInsurance) &&
   isInsuranceTypeDone(chatState.livingSituation) &&
   isNameDone(chatState.nameAge) &&
-  isAgeDone(chatState.nameAge)
+  isNumberOfPeopleDone(chatState.livingSituation)
 
 export const CreateOffer: React.SFC = () => (
   <SessionContainer>

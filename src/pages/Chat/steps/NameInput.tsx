@@ -130,7 +130,8 @@ export const NameInput: React.SFC<Props & Focusable> = ({
                 </TranslationsPlaceholderConsumer>
               </div>
               <NextButton
-                disabled={!isNameDone(chatState.nameAge) || !isCurrentMessage}
+                disabled={!isNameDone(chatState.nameAge)}
+                hidden={!isCurrentMessage || !isNameDone(chatState.nameAge)}
               />
             </form>
           )}

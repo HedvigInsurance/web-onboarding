@@ -42,7 +42,9 @@ const validationSchema = yup
 
   .required()
 
-const isDone = (values: Partial<LivingSituationState> = {}) => {
+export const isNumberOfPeopleDone = (
+  values: Partial<LivingSituationState> = {},
+) => {
   try {
     validationSchema.validateSync(values)
     return true
@@ -69,7 +71,7 @@ export const NumberOfPeopleInput: React.SFC<
           onSubmit={(e) => {
             e.preventDefault()
 
-            if (!isDone(chatState.livingSituation)) {
+            if (!isNumberOfPeopleDone(chatState.livingSituation)) {
               return
             }
 
@@ -121,7 +123,11 @@ export const NumberOfPeopleInput: React.SFC<
             {(nodes) => nodes}
           </TranslationsPlaceholderConsumer>
           <NextButton
-            disabled={!isDone(chatState.livingSituation) || !isCurrentMessage}
+            disabled={!isNumberOfPeopleDone(chatState.livingSituation)}
+            hidden={
+              !isCurrentMessage ||
+              !isNumberOfPeopleDone(chatState.livingSituation)
+            }
           />
         </form>
       )}
