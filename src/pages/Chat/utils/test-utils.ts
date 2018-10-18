@@ -1,5 +1,5 @@
+import { InsuranceType } from 'containers/OfferContainer'
 import { MockedResponse } from 'react-apollo/test-links'
-import { InsuranceType } from '../../Offer'
 import {
   CREATE_OFFER_MUTATION,
   CreateOfferMutationVariables,
