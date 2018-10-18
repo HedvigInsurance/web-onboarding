@@ -19,8 +19,8 @@ import { ChatContainer, State as ChatState } from '../state'
 import { isAddressDone } from './AddressInput'
 import { isAgeDone } from './AgeInput'
 import { isCurrentInsuranceDone } from './CurrentInsuranceInput'
-import { isNameDone } from './NameInput'
 import { isInsuranceTypeDone } from './InsuranceTypeInput'
+import { isNameDone } from './NameInput'
 
 const Wrapper = styled('div')({
   paddingTop: 60,
