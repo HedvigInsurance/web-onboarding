@@ -57,10 +57,6 @@ const BottomHeadline = styled('h2')({
     fontSize: 30,
   },
 })
-const spin = keyframes({
-  from: { transform: 'rotate(0deg)' },
-  to: { transform: 'rotate(360deg)' },
-})
 
 const BottomSpacer = styled('div')({
   paddingBottom: '15vh',
