@@ -1,12 +1,12 @@
 import { colors, fonts } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
+import { InsuranceType } from 'containers/OfferContainer'
 import * as React from 'react'
 import styled from 'react-emotion'
 import { CardWrapper } from '../components/CardWrapper'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 import { InnerWrapper } from '../components/InnerWrapper'
 import { Wrapper } from '../components/Wrapper'
-import { InsuranceType } from '../index'
 
 const isApartmentOwner = (insuranceType: InsuranceType): boolean =>
   insuranceType === InsuranceType.BRF ||
