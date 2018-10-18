@@ -27,7 +27,7 @@ export const FadeUp = styled('div')({
   animation: `${fadeUp} 300ms forwards`,
 })
 
-export const slideUp = (maxHeight: number, initialMaxHeight = 0) =>
+export const animateHeight = (maxHeight: number, initialMaxHeight = 0) =>
   keyframes({
     from: {
       maxHeight: initialMaxHeight,
@@ -37,7 +37,7 @@ export const slideUp = (maxHeight: number, initialMaxHeight = 0) =>
     },
   })
 
-export const SlideUp = styled('div')(
+export const AnimateHeight = styled('div')(
   ({
     maxHeight = 300,
     initialMaxHeight = 0,
@@ -47,6 +47,6 @@ export const SlideUp = styled('div')(
   }) => ({
     willChange: 'max-height',
     maxHeight: initialMaxHeight,
-    animation: `${slideUp(maxHeight, initialMaxHeight)} 500ms forwards`,
+    animation: `${animateHeight(maxHeight, initialMaxHeight)} 500ms forwards`,
   }),
 )

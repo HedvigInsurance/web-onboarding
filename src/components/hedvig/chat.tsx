@@ -9,7 +9,7 @@ import {
   EXITING,
   TransitionStatus,
 } from 'react-transition-group/Transition'
-import { fadeIn, FadeIn, fadeUp, SlideUp } from '../animations/appearings'
+import { fadeIn, FadeIn, fadeUp, AnimateHeight } from '../animations/appearings'
 
 const fadeOut = keyframes({
   from: {
@@ -128,7 +128,7 @@ export const ChatMessage: React.SFC<ChatMessageProps> = ({
   onTyped,
 }) => (
   <ChatWrapper>
-    <SlideUp initialMaxHeight={appear ? 300 : undefined}>
+    <AnimateHeight initialMaxHeight={appear ? 300 : undefined}>
       {appear ? (
         <HedvigIcon />
       ) : (
@@ -170,6 +170,6 @@ export const ChatMessage: React.SFC<ChatMessageProps> = ({
           </ChatMessageWrapper>
         )}
       </Transition>
-    </SlideUp>
+    </AnimateHeight>
   </ChatWrapper>
 )
