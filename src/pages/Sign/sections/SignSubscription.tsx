@@ -95,7 +95,7 @@ const handleMessage = (
 export const SubscriptionComponent: React.SFC = () => (
   <Subscription<SignStatusData> subscription={SIGN_SUBSCRIPTION}>
     {({ data, loading, error }) => {
-      if (loading) {
+      if (loading || !data) {
         return null
       }
       if (error) {
@@ -107,43 +107,39 @@ export const SubscriptionComponent: React.SFC = () => (
           </ErrorText>
         )
       }
-      if (data) {
-        const dataStatus = data.signStatus.status.collectStatus
-        const signingState = data.signStatus.status.signState
+      const dataStatus = data.signStatus.status.collectStatus
+      const signingState = data.signStatus.status.signState
 
-        switch (signingState) {
-          case SIGNSTATE.INITIATED:
-            return (
-              <SigningStatusText>
-                <TranslationsConsumer textKey="SIGN_BANKID_INITIATED">
-                  {(message) => message}
-                </TranslationsConsumer>
-              </SigningStatusText>
-            )
-          case SIGNSTATE.IN_PROGRESS:
-            if (dataStatus.status === BANKIDSTATUS.PENDING) {
-              return <BankidStatus message={dataStatus.code} />
-            } else {
-              return null
-            }
-          case SIGNSTATE.COMPLETED:
-            // return <pre>{JSON.stringify(data, null, 2)}</pre>
-            if (dataStatus.status === BANKIDSTATUS.COMPLETE) {
-              return <Redirect to="/download" />
-            } else {
-              return null
-            }
-          case SIGNSTATE.FAILED:
-            if (dataStatus.status === BANKIDSTATUS.FAILED) {
-              return <BankidStatus message={dataStatus.code} />
-            } else {
-              return null
-            }
-          default:
+      switch (signingState) {
+        case SIGNSTATE.INITIATED:
+          return (
+            <SigningStatusText>
+              <TranslationsConsumer textKey="SIGN_BANKID_INITIATED">
+                {(message) => message}
+              </TranslationsConsumer>
+            </SigningStatusText>
+          )
+        case SIGNSTATE.IN_PROGRESS:
+          if (dataStatus.status === BANKIDSTATUS.PENDING) {
+            return <BankidStatus message={dataStatus.code} />
+          } else {
             return null
-        }
+          }
+        case SIGNSTATE.COMPLETED:
+          if (dataStatus.status === BANKIDSTATUS.COMPLETE) {
+            return <Redirect to="/download" />
+          } else {
+            return null
+          }
+        case SIGNSTATE.FAILED:
+          if (dataStatus.status === BANKIDSTATUS.FAILED) {
+            return <BankidStatus message={dataStatus.code} />
+          } else {
+            return null
+          }
+        default:
+          return null
       }
-      return null
     }}
   </Subscription>
 )
@@ -152,7 +148,7 @@ interface StatusProps {
   message: string
 }
 
-const BankidStatus: React.SFC<StatusProps> = (props) => (
+export const BankidStatus: React.SFC<StatusProps> = (props) => (
   <div>
     <SigningStatusText>
       <TranslationsConsumer

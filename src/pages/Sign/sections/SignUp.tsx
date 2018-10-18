@@ -109,7 +109,7 @@ const InputField = styled(Field)({
   },
 })
 
-const InputSubmit = styled('input')({
+const SubmitButton = styled('button')({
   backgroundColor: colors.GREEN,
   fontSize: '16px',
   color: colors.WHITE,
@@ -149,7 +149,7 @@ const userSchema = Yup.object().shape({
     .required('SIGN_PERSONAL_NUMBER_REQUIRED'),
 })
 
-const SIGN_MUTATION = gql`
+export const SIGN_MUTATION = gql`
   mutation SignOffer($personalNumber: String!, $email: String!) {
     signOffer(details: { personalNumber: $personalNumber, email: $email })
   }
@@ -188,7 +188,7 @@ export const SignUp: React.SFC = () => (
                   <Mutation<boolean, SignOfferMutationVariables>
                     mutation={SIGN_MUTATION}
                   >
-                    {(signOffer) => (
+                    {(signOffer, signProps) => (
                       <Formik
                         initialValues={{
                           email: '',
@@ -258,10 +258,13 @@ export const SignUp: React.SFC = () => (
                             <GetInsuredButton>
                               <TranslationsConsumer textKey="SIGN_BUTTON_TEXT">
                                 {(buttonText) => (
-                                  <InputSubmit
+                                  <SubmitButton
                                     type="submit"
                                     value={buttonText}
-                                  />
+                                    disabled={signProps.called}
+                                  >
+                                    {buttonText}
+                                  </SubmitButton>
                                 )}
                               </TranslationsConsumer>
                             </GetInsuredButton>
