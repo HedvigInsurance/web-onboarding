@@ -25,7 +25,7 @@ it('handles form changes', () => {
     </Provider>,
   )
 
-  expect(wrapper.find('button')).toHaveLength(0)
+  expect(wrapper.find('button').prop('disabled')).toBe(true)
 
   wrapper
     .find('select#hasCurrentInsurance')
@@ -37,5 +37,5 @@ it('handles form changes', () => {
   expect(wrapper.find('select#currentInsurer').prop('value')).toBe(
     Insurer.FOLKSAM,
   )
-  expect(wrapper.find('button')).toHaveLength(1)
+  expect(wrapper.find('button').prop('disabled')).toBe(false)
 })

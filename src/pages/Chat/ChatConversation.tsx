@@ -23,6 +23,9 @@ export const ChatConversation: React.SFC = () => (
       initialVisibleSteps,
       visibleSteps,
       currentStep,
+      peekStep,
+      unpeek,
+      currentlyPeeking,
       goToStep,
       livingSituation,
       currentInsurance,
@@ -59,6 +62,7 @@ export const ChatConversation: React.SFC = () => (
           {({ appear }) => (
             <Mufflable
               muffled={currentStep !== ChatStep.NAME_INPUT}
+              unMuffled={currentlyPeeking === ChatStep.NAME_INPUT}
               direction="right"
             >
               <NameInput
@@ -68,6 +72,8 @@ export const ChatConversation: React.SFC = () => (
                 }}
                 appear={appear}
                 isCurrentMessage={currentStep === ChatStep.NAME_INPUT}
+                onFocus={() => peekStep(ChatStep.NAME_INPUT)}
+                onBlur={() => unpeek()}
               />
             </Mufflable>
           )}
@@ -76,6 +82,7 @@ export const ChatConversation: React.SFC = () => (
           {({ appear }) => (
             <Mufflable
               muffled={currentStep !== ChatStep.AGE_INPUT}
+              unMuffled={currentlyPeeking === ChatStep.AGE_INPUT}
               direction="right"
             >
               <AgeInput
@@ -85,6 +92,8 @@ export const ChatConversation: React.SFC = () => (
                 }}
                 appear={appear}
                 isCurrentMessage={currentStep === ChatStep.AGE_INPUT}
+                onFocus={() => peekStep(ChatStep.AGE_INPUT)}
+                onBlur={() => unpeek()}
               />
             </Mufflable>
           )}
@@ -114,6 +123,7 @@ export const ChatConversation: React.SFC = () => (
           {({ appear }) => (
             <Mufflable
               muffled={currentStep !== ChatStep.ADDRESS_INPUT}
+              unMuffled={currentlyPeeking === ChatStep.ADDRESS_INPUT}
               direction="right"
             >
               <AddressInput
@@ -123,6 +133,8 @@ export const ChatConversation: React.SFC = () => (
                   trackOnboardingStep('address')
                   goToStep(ChatStep.INSURANCE_TYPE_INPUT)
                 }}
+                onFocus={() => peekStep(ChatStep.ADDRESS_INPUT)}
+                onBlur={() => unpeek()}
               />
             </Mufflable>
           )}
@@ -131,6 +143,7 @@ export const ChatConversation: React.SFC = () => (
           {({ appear }) => (
             <Mufflable
               muffled={currentStep !== ChatStep.INSURANCE_TYPE_INPUT}
+              unMuffled={currentlyPeeking === ChatStep.INSURANCE_TYPE_INPUT}
               direction="right"
             >
               <InsuranceTypeInput
@@ -140,6 +153,8 @@ export const ChatConversation: React.SFC = () => (
                   trackOnboardingStep('insurance-type')
                   goToStep(ChatStep.NUMBER_OF_PEOPLE)
                 }}
+                onFocus={() => peekStep(ChatStep.INSURANCE_TYPE_INPUT)}
+                onBlur={() => unpeek()}
               />
             </Mufflable>
           )}
@@ -148,6 +163,7 @@ export const ChatConversation: React.SFC = () => (
           {({ appear }) => (
             <Mufflable
               muffled={currentStep !== ChatStep.NUMBER_OF_PEOPLE}
+              unMuffled={currentlyPeeking === ChatStep.NUMBER_OF_PEOPLE}
               direction="right"
             >
               <NumberOfPeopleInput
@@ -157,6 +173,8 @@ export const ChatConversation: React.SFC = () => (
                   trackOnboardingStep('number-of-people')
                   goToStep(ChatStep.CURRENT_INSURANCE_QUESTION)
                 }}
+                onFocus={() => peekStep(ChatStep.NUMBER_OF_PEOPLE)}
+                onBlur={() => unpeek()}
               />
             </Mufflable>
           )}
@@ -193,6 +211,7 @@ export const ChatConversation: React.SFC = () => (
           {({ appear }) => (
             <Mufflable
               muffled={currentStep !== ChatStep.CURRENT_INSURANCE_INPUT}
+              unMuffled={currentlyPeeking === ChatStep.CURRENT_INSURANCE_INPUT}
               direction="right"
             >
               <CurrentInsuranceInput
@@ -201,6 +220,8 @@ export const ChatConversation: React.SFC = () => (
                   trackOnboardingStep('has-current-insurance')
                   goToStep(ChatStep.SHOW_OFFER_QUESTION)
                 }}
+                onFocus={() => peekStep(ChatStep.CURRENT_INSURANCE_INPUT)}
+                onBlur={() => unpeek()}
                 isCurrentMessage={
                   currentStep === ChatStep.CURRENT_INSURANCE_INPUT
                 }
@@ -236,14 +257,7 @@ export const ChatConversation: React.SFC = () => (
           )}
         </Message>
         <Message id={ChatStep.SHOW_OFFER} delay={500}>
-          {() => (
-            <Mufflable
-              muffled={currentStep !== ChatStep.SHOW_OFFER}
-              direction="right"
-            >
-              <CreateOffer />
-            </Mufflable>
-          )}
+          {() => <CreateOffer />}
         </Message>
       </Conversation>
     )}

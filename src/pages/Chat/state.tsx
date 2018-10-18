@@ -1,4 +1,4 @@
-import { Container, ContainerProps, EffectProps } from 'constate'
+import { Container, ContainerProps } from 'constate'
 import { InsuranceType } from 'containers/OfferContainer'
 import * as React from 'react'
 import { notNullable } from '../../utils/nullables'
@@ -42,6 +42,7 @@ export interface CurrentInsuranceState {
 
 export interface State {
   currentStep: ChatStep
+  currentlyPeeking?: ChatStep
   initialVisibleSteps: ChatStep[]
   visibleSteps: ChatStep[]
   nameAge: NameAgeState
@@ -80,6 +81,8 @@ export interface Effects {
   setCurrentInsurer: (event: React.ChangeEvent<HTMLSelectElement>) => void
   reset: () => void
   goToStep: (step: ChatStep) => void
+  peekStep: (step: ChatStep) => void
+  unpeek: () => void
 }
 
 export const ChatContainer: React.SFC<
@@ -95,147 +98,147 @@ export const ChatContainer: React.SFC<
             notNullable(storageState.session.getSession()).chat) ||
           initialState
         }
-        effects={
-          {
-            setNameAgeProp: <K extends keyof NameAgeState>(
-              key: K,
-              value: NameAgeState[K],
-            ) => ({ state, setState }: EffectProps<State>) => {
-              const newState: Partial<State> = {
-                nameAge: {
-                  ...(state.nameAge || initialState.nameAge),
-                  [key]: value,
-                },
-              }
-              setState(newState)
-              storageState.session.setSession({
-                ...storageState.session.getSession(),
-                chat: {
-                  ...((storageState.session.getSession() &&
-                    notNullable(storageState.session.getSession()).chat) ||
-                    initialState),
-                  ...newState,
-                },
-              })
-            },
-            setLivingSituationProp: <K extends keyof LivingSituationState>(
-              key: K,
-              value: LivingSituationState[K],
-            ) => ({ state, setState }: EffectProps<State>) => {
-              const newState: Partial<State> = {
-                livingSituation: {
-                  ...(state.livingSituation || initialState.livingSituation),
-                  [key]: value,
-                },
-              }
-              setState(newState)
-              storageState.session.setSession({
-                ...storageState.session.getSession(),
-                chat: {
-                  ...((storageState.session.getSession() &&
-                    notNullable(storageState.session.getSession()).chat) ||
-                    initialState),
-                  ...newState,
-                },
-              })
-            },
-            setHasCurrentInsurance: (
-              event: React.ChangeEvent<HTMLSelectElement>,
-            ) => ({ state, setState }: EffectProps<State>) => {
-              const getCurrentInsurance = (): CurrentInsuranceState => {
-                if (event.target.value === 'yes') {
-                  return {
-                    hasCurrentInsurance: true,
-                    currentInsurer: state.currentInsurance.currentInsurer,
-                  }
-                }
-                if (event.target.value === 'no') {
-                  return { hasCurrentInsurance: false }
-                }
+        effects={{
+          setNameAgeProp: <K extends keyof NameAgeState>(
+            key: K,
+            value: NameAgeState[K],
+          ) => ({ state, setState }) => {
+            const newState: Partial<State> = {
+              nameAge: {
+                ...(state.nameAge || initialState.nameAge),
+                [key]: value,
+              },
+            }
+            setState(newState)
+            storageState.session.setSession({
+              ...storageState.session.getSession(),
+              chat: {
+                ...((storageState.session.getSession() &&
+                  notNullable(storageState.session.getSession()).chat) ||
+                  initialState),
+                ...newState,
+              },
+            })
+          },
+          setLivingSituationProp: <K extends keyof LivingSituationState>(
+            key: K,
+            value: LivingSituationState[K],
+          ) => ({ state, setState }) => {
+            const newState: Partial<State> = {
+              livingSituation: {
+                ...(state.livingSituation || initialState.livingSituation),
+                [key]: value,
+              },
+            }
+            setState(newState)
+            storageState.session.setSession({
+              ...storageState.session.getSession(),
+              chat: {
+                ...((storageState.session.getSession() &&
+                  notNullable(storageState.session.getSession()).chat) ||
+                  initialState),
+                ...newState,
+              },
+            })
+          },
+          setHasCurrentInsurance: (event) => ({ state, setState }) => {
+            const getCurrentInsurance = (): CurrentInsuranceState => {
+              if (event.target.value === 'yes') {
                 return {
-                  hasCurrentInsurance: undefined,
-                  currentInsurer: undefined,
+                  hasCurrentInsurance: true,
+                  currentInsurer: state.currentInsurance.currentInsurer,
                 }
               }
-              const newState: Partial<State> = {
-                currentInsurance: getCurrentInsurance(),
+              if (event.target.value === 'no') {
+                return { hasCurrentInsurance: false }
               }
-              setState(newState)
-              storageState.session.setSession({
-                ...storageState.session.getSession(),
-                chat: {
-                  ...((storageState.session.getSession() &&
-                    notNullable(storageState.session.getSession()).chat) ||
-                    initialState),
-                  ...newState,
-                },
-              })
-            },
-            setCurrentInsurer: (
-              event: React.ChangeEvent<HTMLSelectElement>,
-            ) => ({ setState }: EffectProps<State>) => {
-              const newState: Partial<State> = {
-                currentInsurance: {
-                  hasCurrentInsurance: true,
-                  currentInsurer:
-                    event.target.value === 'select'
-                      ? undefined
-                      : (event.target.value as Insurer),
-                },
+              return {
+                hasCurrentInsurance: undefined,
+                currentInsurer: undefined,
               }
-              setState(newState)
-              storageState.session.setSession({
-                ...storageState.session.getSession(),
-                chat: {
-                  ...((storageState.session.getSession() &&
-                    notNullable(storageState.session.getSession()).chat) ||
-                    initialState),
-                  ...newState,
-                },
-              })
-            },
-            reset: () => ({ setState }: EffectProps<State>) => {
-              storageState.session.setSession({
-                ...storageState.session.getSession(),
-                chat: initialState,
-                token: undefined,
-              })
-              // Force 2 state updates to make sure first step is re-mounted
+            }
+            const newState: Partial<State> = {
+              currentInsurance: getCurrentInsurance(),
+            }
+            setState(newState)
+            storageState.session.setSession({
+              ...storageState.session.getSession(),
+              chat: {
+                ...((storageState.session.getSession() &&
+                  notNullable(storageState.session.getSession()).chat) ||
+                  initialState),
+                ...newState,
+              },
+            })
+          },
+          setCurrentInsurer: (event) => ({ setState }) => {
+            const newState: Partial<State> = {
+              currentInsurance: {
+                hasCurrentInsurance: true,
+                currentInsurer:
+                  event.target.value === 'select'
+                    ? undefined
+                    : (event.target.value as Insurer),
+              },
+            }
+            setState(newState)
+            storageState.session.setSession({
+              ...storageState.session.getSession(),
+              chat: {
+                ...((storageState.session.getSession() &&
+                  notNullable(storageState.session.getSession()).chat) ||
+                  initialState),
+                ...newState,
+              },
+            })
+          },
+          reset: () => ({ setState }) => {
+            storageState.session.setSession({
+              ...storageState.session.getSession(),
+              chat: initialState,
+              token: undefined,
+            })
+            // Force 2 state updates to make sure first step is re-mounted
+            setState({
+              ...initialState,
+              currentStep: undefined,
+              visibleSteps: [],
+            })
+            storageState.setToken(undefined)
+            setTimeout(() => {
               setState({
-                ...initialState,
-                currentStep: undefined,
-                visibleSteps: [],
+                currentStep: ChatStep.INITIAL,
+                visibleSteps: [ChatStep.INITIAL],
               })
-              storageState.setToken(undefined)
-              setTimeout(() => {
-                setState({
-                  currentStep: ChatStep.INITIAL,
-                  visibleSteps: [ChatStep.INITIAL],
-                })
-              }, 0)
-            },
-            goToStep: (step: ChatStep) => ({
-              state,
-              setState,
-            }: EffectProps<State>) => {
-              const newState = {
-                currentStep: step,
-                visibleSteps: [...state.visibleSteps, step],
-              }
-              storageState.session.setSession({
-                ...storageState.session.getSession(),
-                chat: {
-                  ...((storageState.session.getSession() &&
-                    notNullable(storageState.session.getSession()).chat) ||
-                    initialState),
-                  ...newState,
-                  initialVisibleSteps: newState.visibleSteps,
-                },
-              })
-              setState(newState)
-            },
-          } as any
-        }
+            }, 0)
+          },
+          goToStep: (step) => ({ state, setState }) => {
+            if (state.visibleSteps.includes(step)) {
+              return
+            }
+            const newState = {
+              currentStep: step,
+              visibleSteps: [...state.visibleSteps, step],
+            }
+            storageState.session.setSession({
+              ...storageState.session.getSession(),
+              chat: {
+                ...((storageState.session.getSession() &&
+                  notNullable(storageState.session.getSession()).chat) ||
+                  initialState),
+                ...newState,
+                initialVisibleSteps: newState.visibleSteps,
+              },
+            })
+            setState(newState)
+          },
+          peekStep: (step) => ({ setState }) => {
+            setState({ currentlyPeeking: step })
+          },
+          unpeek: () => ({ setState }) => {
+            setState({ currentlyPeeking: undefined })
+          },
+        }}
       />
     )}
   </StorageContainer>
