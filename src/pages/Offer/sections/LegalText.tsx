@@ -1,10 +1,7 @@
 import { colors } from '@hedviginsurance/brand'
+import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import styled from 'react-emotion'
-
-interface Props {
-  legalText: string
-}
 
 const LEGALWIDTH = 400
 
@@ -23,8 +20,12 @@ const LegalText = styled('div')({
   maxWidth: LEGALWIDTH,
 })
 
-export const Legal: React.SFC<Props> = (props) => (
+export const Legal: React.SFC = () => (
   <Container>
-    <LegalText>{props.legalText}</LegalText>
+    <LegalText>
+      <TranslationsConsumer textKey="OFFER_FOOTER_LEGAL_TEXT">
+        {(legalText) => legalText}
+      </TranslationsConsumer>
+    </LegalText>
   </Container>
 )

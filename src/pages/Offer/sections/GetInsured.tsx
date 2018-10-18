@@ -1,22 +1,21 @@
 import { colors, fonts } from '@hedviginsurance/brand'
+import {
+  TranslationsConsumer,
+  TranslationsPlaceholderConsumer,
+} from '@hedviginsurance/textkeyfy'
 import { GetInsuredButton, LinkTag } from 'components/buttons'
+import { OfferData } from 'containers/OfferContainer'
 import * as React from 'react'
 import styled from 'react-emotion'
-import * as VisibilitySensor from 'react-visibility-sensor'
+import VisibilitySensor from 'react-visibility-sensor'
 import { CardWrapperSmall } from '../components/CardWrapperSmall'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 import { InnerWrapper } from '../components/InnerWrapper'
 import { Wrapper } from '../components/Wrapper'
 
 interface Props {
-  title: string
-  name: string
-  buttonText: string
+  offer: OfferData
   buttonVisibility: (isVisible: boolean) => void
-  price: string
-  subTitle1: string
-  subTitle2: string
-  subTitle3: string
 }
 
 const Card = styled('div')({
@@ -36,19 +35,6 @@ const Header = styled('h1')({
   fontSize: '32px',
 })
 
-const PersonalInfo = styled('div')({
-  marginTop: '0px',
-  marginBottom: '0px',
-  marginLeft: 'auto',
-  marginRight: 'auto',
-  paddingBottom: '30px',
-  fontSize: '14px',
-  lineHeight: '22px',
-  textAlign: 'center',
-  maxWidth: '100%',
-  color: colors.WHITE,
-})
-
 const HeaderBackground = styled('div')({
   backgroundColor: colors.PURPLE,
 })
@@ -62,32 +48,40 @@ const Price = styled('h1')({
   fontFamily: fonts.CIRCULAR,
 })
 
-export const GetInsured: React.SFC<Props> = (props) => (
+export const GetInsured: React.SFC<Props> = ({ offer, buttonVisibility }) => (
   <Wrapper>
     <InnerWrapper>
       <CardWrapperSmall>
         <Card>
           <HeaderBackground>
             <HeaderWrapper>
-              <Header>
-                {props.title} {props.name}
-              </Header>
+              <TranslationsConsumer textKey="OFFER_GET_INSURED_TITLE">
+                {(title) => <Header>{title}</Header>}
+              </TranslationsConsumer>
             </HeaderWrapper>
-            <PersonalInfo>
-              {props.subTitle1} • {props.subTitle2} • {props.subTitle3}
-            </PersonalInfo>
           </HeaderBackground>
-          <Price>{props.price}</Price>
+          <TranslationsPlaceholderConsumer
+            textKey="OFFER_SUMMARY_PRICE"
+            replacements={{
+              price: offer.insurance.monthlyCost,
+            }}
+          >
+            {(priceText) => <Price>{priceText}</Price>}
+          </TranslationsPlaceholderConsumer>
           <VisibilitySensor
             partialVisibility
             onChange={(isVisible: boolean) => {
-              props.buttonVisibility(isVisible)
+              buttonVisibility(isVisible)
             }}
           >
             {() => (
-              <GetInsuredButton>
-                <LinkTag to={'/'}>{props.buttonText}</LinkTag>
-              </GetInsuredButton>
+              <TranslationsConsumer textKey="OFFER_SIGN_CTA_BOTTOM">
+                {(ctaText) => (
+                  <GetInsuredButton>
+                    <LinkTag to={'/sign'}>{ctaText}</LinkTag>
+                  </GetInsuredButton>
+                )}
+              </TranslationsConsumer>
             )}
           </VisibilitySensor>
         </Card>

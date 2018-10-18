@@ -3,7 +3,9 @@ import { DocumentNode } from 'graphql'
 import gql from 'graphql-tag'
 import * as React from 'react'
 import { Mutation } from 'react-apollo'
+import { Unmount } from 'react-lifecycle-components'
 import { State as ChatState } from '../state'
+import { ChatScreenContainer } from './ChatScreenContainer'
 
 export interface CreateOfferMutationVariables {
   firstName: string
@@ -52,7 +54,7 @@ export const getCreateOfferVariablesFromChatState = (
   lastName: chatState.nameAge.lastName,
   age: Number(chatState.nameAge.age),
   address: chatState.livingSituation.streetAddress,
-  postalNumber: chatState.livingSituation.postalCode,
+  postalNumber: chatState.livingSituation.postalNumber,
   personsInHousehold: Number(chatState.livingSituation.numberOfPeople),
   squareMeters: Number(chatState.livingSituation.size),
   insuranceType: chatState.livingSituation.apartmentType!,
@@ -78,21 +80,33 @@ interface CreateOfferContainerProps {
 export const CreateOfferContainer: React.SFC<CreateOfferContainerProps> = ({
   children,
 }) => (
-  <Mutation<{ createOffer: string }, CreateOfferMutationVariables>
-    mutation={CREATE_OFFER_MUTATION}
-  >
-    {(mutate, { data, loading, error, called }) =>
-      children(
-        (variables) => {
-          mutate({ variables })
-        },
-        {
-          data: data && data.createOffer,
-          loading,
-          error,
-          called,
-        },
-      )
-    }
-  </Mutation>
+  <ChatScreenContainer>
+    {(chatScreenState) => (
+      <Unmount
+        on={() => {
+          chatScreenState.abortDebounce()
+        }}
+      >
+        <Mutation<{ createOffer: string }, CreateOfferMutationVariables>
+          mutation={CREATE_OFFER_MUTATION}
+        >
+          {(mutate, { data, loading, error, called }) =>
+            children(
+              (variables) => {
+                mutate({ variables })
+                chatScreenState.beginCreateOffer()
+                chatScreenState.beginDebounce()
+              },
+              {
+                data: data && data.createOffer,
+                loading,
+                error,
+                called,
+              },
+            )
+          }
+        </Mutation>
+      </Unmount>
+    )}
+  </ChatScreenContainer>
 )

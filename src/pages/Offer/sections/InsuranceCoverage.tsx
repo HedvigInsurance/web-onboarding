@@ -1,21 +1,17 @@
 import { colors, fonts } from '@hedviginsurance/brand'
+import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { ActionMap, Container } from 'constate'
 import * as React from 'react'
 import styled from 'react-emotion'
 import { CardWrapper } from '../components/CardWrapper'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 
-interface Props {
-  headline: string
-  subTitle: string
-}
-
 const PERILSIDE = 72
 
 const Card = styled('div')({
   marginTop: '70px',
   paddingTop: '30px',
-  paddingBottom: '30px',
+  paddingBottom: '60px',
   backgroundColor: colors.WHITE,
   boxShadow: '0px 8px 15px -13px rgba(0,0,0,0.67)',
   borderRadius: '10px',
@@ -170,25 +166,12 @@ const PERILS = [
           'Plötsligt tackar din spis för sig eller så blir det kortslutning i din prisbelönta kaffemaskin. Hedvig ersätter skador på dina vitvaror, så länge det inte rör sig om skador som din hyresvärd är skyldig att ersätta.',
       },
       {
-        key: 6,
-        title: 'Förköpsinfo',
-        icon: '/assets/offering/forkopsinformation.svg',
-        iconGrey: '/assets/offering/forkopsinformation-grey.svg',
-        expandableText: 'Open pdf here instead.',
-      },
-      {
-        key: 7,
-        title: 'Försäkringsvillkor',
-        icon: '/assets/offering/forsakringsvillkor.svg',
-        iconGrey: '/assets/offering/forsakringsvillkor-grey.svg',
-        expandableText: 'Open pdf here instead.',
-      },
-      {
         key: 8,
         title: 'Bostadsrättstillägg',
-        icon: '/assets/offering/oval.svg',
-        iconGrey: '/assets/offering/oval.svg',
-        expandableText: 'No text here yet.',
+        icon: '/assets/offering/bostadsrattstillagg.svg',
+        iconGrey: '/assets/offering/bostadsrattstillagg-grey.svg',
+        expandableText:
+          'Om man äger sin lägenhet är det skönt att ha en försäkring som täcker själva lägenheten också, inte bara prylarna som finns däri. På försäkringsspråk kallas det för bostadsrättstillägg. Med det täcks skador på fast inredning (typ ditt nya kök) och ytskikt (typ dina nyfixade golv, tak eller väggar). Om du har sagt till Hedvig att du äger din lägenhet ingår bostadsrättstillägget automatiskt. Hedvig ersätter kostnaden för att reparera skador på din lägenhet utan beloppsbegränsning - oavsett om du bor i studentlya eller paradvåning. Skönt!',
       },
     ],
   },
@@ -298,7 +281,7 @@ interface Actions {
   handleActiveTab: (activeTab: number) => void
 }
 
-export const InsuranceCoverage: React.SFC<Props> = (props) => (
+export const InsuranceCoverage: React.SFC = () => (
   <Wrapper>
     <Container<State, ActionMap<State, Actions>>
       initialState={{
@@ -327,7 +310,9 @@ export const InsuranceCoverage: React.SFC<Props> = (props) => (
             <CardWrapper>
               <Card>
                 <HeaderWrapper>
-                  <Header>{props.headline}</Header>
+                  <TranslationsConsumer textKey="OFFER_INSURANCE_COVERAGE_TITLE">
+                    {(title) => <Header>{title}</Header>}
+                  </TranslationsConsumer>
                 </HeaderWrapper>
                 <Switcher>
                   {PERILS.map((peril) => (

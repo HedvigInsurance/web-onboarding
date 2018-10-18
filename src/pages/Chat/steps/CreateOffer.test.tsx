@@ -16,6 +16,10 @@ import { createSession, SESSION_KEY } from 'utils/sessionStorage'
 import { MockStorage } from 'utils/storage/MockStorage'
 import { StorageState } from 'utils/StorageContainer'
 import { mockNetworkWait } from 'utils/test-utils'
+import {
+  ChatScreenContainer,
+  LoadingState,
+} from '../containers/ChatScreenContainer'
 import { createCreateOfferMutationMock, mockState } from '../utils/test-utils'
 import { CreateOffer } from './CreateOffer'
 
@@ -66,20 +70,37 @@ it('creates an offer without 💥', async () => {
         }}
       >
         <CreateOffer />
+        <ChatScreenContainer>
+          {(state) => (
+            <div id="loading-state">{state.offerCreationLoadingState}</div>
+          )}
+        </ChatScreenContainer>
       </Provider>
     </ApolloProvider>,
   )
 
-  expect(wrapper.find('div').text()).toBe('') // loading state = empty
-  await mockNetworkWait(3)
+  expect(
+    wrapper
+      .find('div')
+      .at(0)
+      .text(),
+  ).toBe('') // session loading state = empty
+  await mockNetworkWait()
   await mockNetworkWait(3)
   expect(apolloClient!.subscriptionClient.close).toHaveBeenCalledTimes(1)
   wrapper.update()
+  expect(wrapper.find('#loading-state').text()).toBe(
+    String(LoadingState.NOT_LOADING),
+  )
   wrapper.find('button').simulate('click')
-  expect(wrapper.find('div').contains('loading')).toBe(true)
+  expect(wrapper.find('button').prop('disabled')).toBe(true)
 
   await mockNetworkWait()
   wrapper.update()
+  expect(wrapper.find('#loading-state').text()).toBe(
+    String(LoadingState.LOADING),
+  )
+
   subscriptionLink.simulateResult({
     result: {
       data: {
@@ -96,5 +117,7 @@ it('creates an offer without 💥', async () => {
   })
   await mockNetworkWait()
   wrapper.update()
-  expect(wrapper.containsMatchingElement(<div>SUCCESS</div>)).toBe(true)
+  expect(wrapper.find('#loading-state').text()).toBe(
+    String(LoadingState.COMPLETED),
+  )
 })

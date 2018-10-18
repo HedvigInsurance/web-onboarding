@@ -1,8 +1,13 @@
 import { colors, fonts } from '@hedviginsurance/brand'
+import {
+  TranslationsConsumer,
+  TranslationsPlaceholderConsumer,
+} from '@hedviginsurance/textkeyfy'
 import { GetInsuredButton, LinkTag } from 'components/buttons'
+import { OfferData } from 'containers/OfferContainer'
 import * as React from 'react'
 import styled from 'react-emotion'
-import * as VisibilitySensor from 'react-visibility-sensor'
+import VisibilitySensor from 'react-visibility-sensor'
 import { CardWrapperSmall } from '../components/CardWrapperSmall'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 import { InnerWrapper } from '../components/InnerWrapper'
@@ -37,7 +42,7 @@ const HeaderBackground = styled('div')({
   backgroundColor: colors.PURPLE,
 })
 
-const PersonalInfo = styled('div')({
+export const PersonalInfo = styled('div')({
   marginTop: '0px',
   marginBottom: '0px',
   marginLeft: 'auto',
@@ -50,7 +55,7 @@ const PersonalInfo = styled('div')({
   color: colors.WHITE,
 })
 
-const Price = styled('h1')({
+export const Price = styled('h1')({
   marginBottom: '0px',
   marginTop: '30px',
   fontSize: '32px',
@@ -75,6 +80,8 @@ const Col = styled('div')({
 })
 
 const Row = styled('div')({
+  marginLeft: '100px',
+  marginRight: '100px',
   display: 'flex',
   alignItems: 'baseline',
   flexDirection: 'row',
@@ -105,57 +112,71 @@ const IconTitle = styled('p')({
 
 interface Props {
   buttonVisibility: (isVisible: boolean) => void
-  alreadyInsured: boolean
-  header: string
-  subTitle1: string
-  subTitle2: string
-  subTitle3: string
-  price: string
-  startDate: string
-  start: string
-  coverage: string
-  getInsured: string
-  backgroundImage: string
-  alreadyInsuredLabel: string
-  todayLabel: string
-  protection: string
+  offer: OfferData
 }
 
+// TODO: TEXT KEY THIS
 const COLUMNS = [
   {
     key: 0,
-    title: 'Inget pappersarbete',
-    icon: '/assets/offering/oval-light-purple.svg',
+    title: 'Lagenhetsskydd',
+    icon: '/assets/offering/lagenhetsskyddet.svg',
   },
   {
     key: 1,
-    title: 'Ingen bindningstid',
-    icon: '/assets/offering/oval-orange.svg',
+    title: 'Personskydd',
+    icon: '/assets/offering/familjeskyddet.svg',
   },
   {
     key: 2,
-    title: 'Blixtsnabb ersättning',
-    icon: '/assets/offering/oval-dark-purple.svg',
+    title: 'Prylskydd',
+    icon: '/assets/offering/prylskyddet.svg',
   },
 ]
 
-export const Offer: React.SFC<Props> = (props) => (
+export const Offer: React.SFC<Props> = ({ buttonVisibility, offer }) => (
   <Wrapper>
     <InnerWrapper>
       <CardWrapperSmall>
         <Card>
           <HeaderBackground>
             <HeaderWrapper>
-              <Header>{props.header}</Header>
+              <Header>
+                <TranslationsConsumer textKey="OFFER_HEADER">
+                  {(title) => title}
+                </TranslationsConsumer>
+              </Header>
             </HeaderWrapper>
             <PersonalInfo>
-              {props.subTitle1} • {props.subTitle2} • {props.subTitle3}
+              {`${offer.member.firstName} ${offer.member.lastName}`}
+              {' • '}
+              {offer.insurance.address}
+              {' • '}
+              {offer.insurance.postalNumber}
             </PersonalInfo>
           </HeaderBackground>
-          <Price>{props.price}</Price>
-          <InfoText>{props.protection}</InfoText>
+          <TranslationsPlaceholderConsumer
+            textKey="OFFER_SUMMARY_PRICE"
+            replacements={{ price: offer.insurance.monthlyCost }}
+          >
+            {(priceText) => <Price>{priceText}</Price>}
+          </TranslationsPlaceholderConsumer>
           <InfoText>
-            {props.startDate} {props.start}
+            <TranslationsConsumer textKey="OFFER_RISK_LABEL">
+              {(riskLabel) => riskLabel}
+            </TranslationsConsumer>
+          </InfoText>
+          <InfoText>
+            Startdatum:{' '}
+            {offer.insurance.insuredAtOtherCompany ? (
+              <TranslationsConsumer textKey="OFFER_START_LATER">
+                {(riskLabel) => riskLabel}
+              </TranslationsConsumer>
+            ) : (
+              <TranslationsConsumer textKey="OFFER_START_NOW">
+                {(riskLabel) => riskLabel}
+              </TranslationsConsumer>
+            )}
           </InfoText>
           <Row>
             {COLUMNS.map((col) => (
@@ -168,12 +189,14 @@ export const Offer: React.SFC<Props> = (props) => (
           <VisibilitySensor
             partialVisibility
             onChange={(isVisible: boolean) => {
-              props.buttonVisibility(isVisible)
+              buttonVisibility(isVisible)
             }}
           >
             {() => (
               <GetInsuredButton>
-                <LinkTag to={'/hedvig'}>{props.getInsured}</LinkTag>
+                <TranslationsConsumer textKey="OFFER_SUMMARY_SIGN_CTA">
+                  {(ctaText) => <LinkTag to={'/sign'}>{ctaText}</LinkTag>}
+                </TranslationsConsumer>
               </GetInsuredButton>
             )}
           </VisibilitySensor>

@@ -1,4 +1,5 @@
 import { colors } from '@hedviginsurance/brand'
+import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import styled from 'react-emotion'
 import { CardWrapper } from '../components/CardWrapper'
@@ -6,16 +7,12 @@ import { HeaderWrapper } from '../components/HeaderWrapper'
 import { InnerWrapper } from '../components/InnerWrapper'
 import { Wrapper } from '../components/Wrapper'
 
-interface Props {
-  title: string
-}
-
 const ROWWIDTH = 1200
 const PARAGRAPHWIDTH = 240
 
 const Card = styled('div')({
   paddingTop: '30px',
-  paddingBottom: '30px',
+  paddingBottom: '60px',
   backgroundColor: colors.WHITE,
   boxShadow: '0px 8px 15px -13px rgba(0,0,0,0.67)',
   borderRadius: '10px',
@@ -93,13 +90,17 @@ const COLUMNS = [
   },
 ]
 
-export const HedvigInfo: React.SFC<Props> = (props) => (
+export const HedvigInfo: React.SFC = () => (
   <Wrapper>
     <InnerWrapper>
       <CardWrapper>
         <Card>
           <HeaderWrapper>
-            <Header>{props.title}</Header>
+            <Header>
+              <TranslationsConsumer textKey="OFFER_HEDVIG_INFO_TITLE">
+                {(title) => title}
+              </TranslationsConsumer>
+            </Header>
           </HeaderWrapper>
           <Row>
             {COLUMNS.map((col) => (
