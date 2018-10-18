@@ -117,7 +117,8 @@ const BarButtonContainer = styled('div')({
 interface Props {
   buttonText?: string
   progress?: number
-  showButton: boolean
+  buttonOneVisible: boolean
+  buttonTwoVisible: boolean
 }
 
 const progressStrings = [
@@ -165,7 +166,7 @@ export const TopBar: React.SFC<Props> = (props) => (
           </ProgressLabel>
         </CollapsedProgressContainer>
       ) : null}
-      {!props.showButton ? (
+      {props.buttonOneVisible && props.buttonTwoVisible ? (
         <BarButtonContainer>
           {props.buttonText ? (
             <GetInsuredButton>

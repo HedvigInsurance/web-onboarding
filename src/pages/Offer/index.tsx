@@ -16,10 +16,12 @@ import { PageDown } from './sections/PageDown'
 import { Terms } from './sections/Terms'
 
 interface State {
-  getStartedButtonVisible: boolean
+  signButtonOneVisible: boolean
+  signButtonTwoVisible: boolean
 }
 interface Actions {
-  updateVisibility: (visible: boolean) => void
+  updateVisibilityOne: (visible: boolean) => void
+  updateVisibilityTwo: (visible: boolean) => void
 }
 
 export const Offering: React.SFC<{}> = () => (
@@ -40,11 +42,15 @@ export const Offering: React.SFC<{}> = () => (
 
             <Container<State, ActionMap<State, Actions>>
               initialState={{
-                getStartedButtonVisible: true,
+                signButtonOneVisible: true,
+                signButtonTwoVisible: false,
               }}
               actions={{
-                updateVisibility: (visible: boolean) => (_) => ({
-                  getStartedButtonVisible: visible,
+                updateVisibilityOne: (visible: boolean) => (_) => ({
+                  signButtonOneVisible: visible,
+                }),
+                updateVisibilityTwo: (visible: boolean) => (_) => ({
+                  signButtonTwoVisible: visible,
                 }),
               }}
             >
@@ -53,11 +59,12 @@ export const Offering: React.SFC<{}> = () => (
                   <TopBar
                     progress={1}
                     buttonText={'Bli försäkrad'}
-                    showButton={state.getStartedButtonVisible}
+                    buttonOneVisible={!state.signButtonOneVisible}
+                    buttonTwoVisible={!state.signButtonTwoVisible}
                   />
                   <Offer
                     offer={offer}
-                    buttonVisibility={state.updateVisibility}
+                    buttonVisibility={state.updateVisibilityOne}
                   />
                   <PageDown />
                   <HedvigInfo />
@@ -67,7 +74,7 @@ export const Offering: React.SFC<{}> = () => (
                   <Terms insuranceType={offer.insurance.type} />
                   <GetInsured
                     offer={offer}
-                    buttonVisibility={state.updateVisibility}
+                    buttonVisibility={state.updateVisibilityTwo}
                   />
                   <Legal />
                 </>
