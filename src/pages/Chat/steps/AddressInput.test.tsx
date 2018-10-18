@@ -22,7 +22,7 @@ it('handles form changes', () => {
     </Provider>,
   )
 
-  expect(wrapper.find('button')).toHaveLength(0)
+  expect(wrapper.find('button').prop('disabled')).toBe(true)
 
   wrapper
     .find('input#streetAddress')
@@ -33,5 +33,5 @@ it('handles form changes', () => {
     .simulate('change', { target: { value: '12345' } })
   expect(wrapper.find('input#postalNumber').prop('value')).toBe('12345')
 
-  expect(wrapper.find('button')).toHaveLength(1)
+  expect(wrapper.find('button').prop('disabled')).toBe(false)
 })

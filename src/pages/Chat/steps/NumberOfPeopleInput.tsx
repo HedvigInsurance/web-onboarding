@@ -14,6 +14,7 @@ import {
   Effects as ChatActions,
   LivingSituationState,
 } from '../state'
+import { Focusable } from './base'
 
 interface NumberOfPeopleInputProps {
   appear?: boolean
@@ -35,13 +36,15 @@ const validationSchema = yup
     numberOfPeople: yup
       .number()
       .moreThan(0)
-      .lessThan(7)
+      .lessThan(8)
       .required(),
   })
 
   .required()
 
-const isDone = (values: Partial<LivingSituationState> = {}) => {
+export const isNumberOfPeopleDone = (
+  values: Partial<LivingSituationState> = {},
+) => {
   try {
     validationSchema.validateSync(values)
     return true
@@ -50,12 +53,16 @@ const isDone = (values: Partial<LivingSituationState> = {}) => {
   }
 }
 
-export const NumberOfPeopleInput: React.SFC<NumberOfPeopleInputProps> = ({
+export const NumberOfPeopleInput: React.SFC<
+  NumberOfPeopleInputProps & Focusable
+> = ({
   appear,
   onSubmit = () => {
     /* noop */
   },
   isCurrentMessage,
+  onFocus = () => {}, // tslint:disable-line no-empty
+  onBlur = () => {}, // tslint:disable-line no-empty
 }) => (
   <UserResponse appear={appear}>
     <ChatContainer>
@@ -64,7 +71,7 @@ export const NumberOfPeopleInput: React.SFC<NumberOfPeopleInputProps> = ({
           onSubmit={(e) => {
             e.preventDefault()
 
-            if (!isDone(chatState.livingSituation)) {
+            if (!isNumberOfPeopleDone(chatState.livingSituation)) {
               return
             }
 
@@ -85,6 +92,8 @@ export const NumberOfPeopleInput: React.SFC<NumberOfPeopleInputProps> = ({
                       id="numberOfPeople"
                       value={chatState.livingSituation.numberOfPeople}
                       onChange={handleChange('numberOfPeople', chatState)}
+                      onFocus={onFocus}
+                      onBlur={onBlur}
                     >
                       <option value={0} disabled>
                         {' '}
@@ -114,7 +123,11 @@ export const NumberOfPeopleInput: React.SFC<NumberOfPeopleInputProps> = ({
             {(nodes) => nodes}
           </TranslationsPlaceholderConsumer>
           <NextButton
-            disabled={!isDone(chatState.livingSituation) || !isCurrentMessage}
+            disabled={!isNumberOfPeopleDone(chatState.livingSituation)}
+            hidden={
+              !isCurrentMessage ||
+              !isNumberOfPeopleDone(chatState.livingSituation)
+            }
           />
         </form>
       )}
