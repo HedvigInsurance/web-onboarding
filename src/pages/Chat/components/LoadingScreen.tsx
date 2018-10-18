@@ -1,4 +1,5 @@
 import { colors } from '@hedviginsurance/brand'
+import { LazyLottie } from 'components/animations/LazyLottie'
 import * as React from 'react'
 import styled, { keyframes } from 'react-emotion'
 
@@ -56,23 +57,7 @@ const BottomHeadline = styled('h2')({
     fontSize: 30,
   },
 })
-const spin = keyframes({
-  from: { transform: 'rotate(0deg)' },
-  to: { transform: 'rotate(360deg)' },
-})
-const Spinner = styled('div')({
-  width: 75,
-  height: 75,
-  borderRadius: 75,
-  border: `3px solid ${colors.WHITE}`,
-  borderTopColor: 'transparent',
-  animation: `${spin} 700ms linear infinite`,
 
-  [MEDIA_QUERY_MAX_WIDTH]: {
-    width: 40,
-    height: 40,
-  },
-})
 const BottomSpacer = styled('div')({
   paddingBottom: '15vh',
 })
@@ -82,7 +67,13 @@ export const LoadingScreen = () => (
     <InnerWrapper>
       <TopHeadline>Tack!</TopHeadline>
       <BottomHeadline>Jag håller på att ta fram ditt förslag</BottomHeadline>
-      <Spinner />
+      <LazyLottie
+        options={{
+          animationData: import('components/animations/lottie/loading.json'),
+        }}
+        width={300}
+        height={100}
+      />
       <BottomSpacer />
     </InnerWrapper>
   </Wrapper>

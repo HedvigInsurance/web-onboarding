@@ -11,15 +11,15 @@ import {
 } from 'components/userInput/UserResponse'
 import * as React from 'react'
 import * as yup from 'yup'
+import { InsuranceType } from '../../Offer'
 import { NextButton } from '../components/NextButton'
 import {
-  ApartmentType,
   ChatContainer,
   Effects as ChatActions,
   LivingSituationState,
 } from '../state'
 
-interface ApartmentTypeInputProps {
+interface InsuranceTypeInputProps {
   appear?: boolean
   onSubmit?: () => void
   isCurrentMessage?: boolean
@@ -36,16 +36,16 @@ const handleChange = <K extends keyof LivingSituationState>(
 
 const validationSchema = yup
   .object<Partial<LivingSituationState>>({
-    apartmentType: yup
+    insuranceType: yup
       .mixed()
-      .oneOf(Object.keys(ApartmentType))
+      .oneOf(Object.values(InsuranceType))
       .required(),
     size: yup
       .mixed()
       .test({
         name: 'isntTooBig',
         test: (value) => !isNaN(Number(value)) && value < 250,
-        message: 'CHAT_INPUT_APARTMENT_TYPE_SIZE_TOO_BIG',
+        message: 'CHAT_INPUT_INSURANCE_TYPE_SIZE_TOO_BIG',
       })
       .test({
         test: (value) =>
@@ -125,7 +125,7 @@ const ValidationErrorMaybe: React.SFC<ValidationErrorMaybeProps> = ({
   return null
 }
 
-export const ApartmentTypeInput: React.SFC<ApartmentTypeInputProps> = ({
+export const InsuranceTypeInput: React.SFC<InsuranceTypeInputProps> = ({
   appear,
   onSubmit = () => {
     /* noop */
@@ -151,27 +151,27 @@ export const ApartmentTypeInput: React.SFC<ApartmentTypeInputProps> = ({
           }}
         >
           <TranslationsPlaceholderConsumer
-            textKey="CHAT_INPUT_APARTMENT_TYPE_TEXT"
+            textKey="CHAT_INPUT_INSURANCE_TYPE_TEXT"
             replacements={{
-              apartmentType: (
-                <TranslationsConsumer textKey="CHAT_INPUT_APARTMENT_TYPE_TYPE_RENT">
+              insuranceType: (
+                <TranslationsConsumer textKey="CHAT_INPUT_INSURANCE_TYPE_TYPE_RENT">
                   {(rentLabel) => (
-                    <TranslationsConsumer textKey="CHAT_INPUT_APARTMENT_TYPE_TYPE_OWN">
-                      {(ownLabel) => (
+                    <TranslationsConsumer textKey="CHAT_INPUT_INSURANCE_TYPE_TYPE_BRF">
+                      {(brfLabel) => (
                         <UserSelectInput
-                          id="apartmentType"
+                          id="insuranceType"
                           value={
-                            chatState.livingSituation.apartmentType || 'select'
+                            chatState.livingSituation.insuranceType || 'select'
                           }
-                          onChange={handleChange('apartmentType', chatState)}
+                          onChange={handleChange('insuranceType', chatState)}
                         >
                           <option value="select" disabled>
                             {' '}
                           </option>
-                          <option value={ApartmentType.RENT}>
+                          <option value={InsuranceType.RENT}>
                             {rentLabel}
                           </option>
-                          <option value={ApartmentType.OWN}>{ownLabel}</option>
+                          <option value={InsuranceType.BRF}>{brfLabel}</option>
                         </UserSelectInput>
                       )}
                     </TranslationsConsumer>

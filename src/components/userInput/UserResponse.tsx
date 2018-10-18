@@ -1,7 +1,7 @@
 import { colors, fonts } from '@hedviginsurance/brand'
 import * as React from 'react'
 import styled from 'react-emotion'
-import { FadeIn, FadeUp } from '../animations/appearings'
+import { AnimateHeight, FadeIn, FadeUp } from '../animations/appearings'
 
 interface InputProps {
   hasError?: boolean
@@ -85,9 +85,11 @@ const UserResponseWrapper: React.SFC<{
   appear ? (
     <div className={className}>{children}</div>
   ) : (
-    <FadeIn className={className}>
-      <FadeUp>{children}</FadeUp>
-    </FadeIn>
+    <AnimateHeight initialMaxHeight={appear ? 300 : undefined}>
+      <FadeIn className={className}>
+        <FadeUp>{children}</FadeUp>
+      </FadeIn>
+    </AnimateHeight>
   )
 
 export const InputValidationError = styled('div')({
