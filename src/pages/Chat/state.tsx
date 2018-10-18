@@ -2,6 +2,7 @@ import { Container, ContainerProps, EffectProps } from 'constate'
 import * as React from 'react'
 import { notNullable } from '../../utils/nullables'
 import { StorageContainer } from '../../utils/StorageContainer'
+import { InsuranceType } from '../Offer'
 
 export enum ChatStep {
   NUMBER_OF_PEOPLE = 'NUMBER_OF_PEOPLE',
@@ -10,16 +11,11 @@ export enum ChatStep {
   AGE_INPUT = 'AGE_INPUT',
   GREET = 'GREET',
   ADDRESS_INPUT = 'ADDRESS_INPUT',
-  APARTMENT_TYPE_INPUT = 'APARTMENT_TYPE_INPUT',
+  INSURANCE_TYPE_INPUT = 'INSURANCE_TYPE_INPUT',
   CURRENT_INSURANCE_QUESTION = 'CURRENT_INSURANCE_QUESTION',
   CURRENT_INSURANCE_INPUT = 'CURRENT_INSURANCE_INPUT',
   SHOW_OFFER_QUESTION = 'SHOW_OFFER_QUESTION',
   SHOW_OFFER = 'SHOW_OFFER',
-}
-
-export enum ApartmentType {
-  RENT = 'RENT',
-  OWN = 'OWN',
 }
 
 export enum Insurer {
@@ -35,7 +31,7 @@ export interface NameAgeState {
 export interface LivingSituationState {
   streetAddress: string
   postalNumber: string
-  apartmentType?: ApartmentType
+  insuranceType?: InsuranceType
   size: number | string
   numberOfPeople: number
 }
