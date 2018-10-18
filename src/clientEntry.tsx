@@ -6,15 +6,20 @@ import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter } from 'react-router-dom'
 import { HotApp } from './App'
 import { apolloClient } from './client/apolloClient'
+import { PageTracker } from './components/PageTracker'
 import { createSession } from './utils/sessionStorage'
 
 ReactDOM.hydrate(
   <BrowserRouter>
-    <HelmetProvider>
-      <ApolloProvider client={apolloClient!.client!}>
-        <HotApp session={createSession(new CookieStorage({ expires: null }))} />
-      </ApolloProvider>
-    </HelmetProvider>
+    <PageTracker>
+      <HelmetProvider>
+        <ApolloProvider client={apolloClient!.client!}>
+          <HotApp
+            session={createSession(new CookieStorage({ expires: null }))}
+          />
+        </ApolloProvider>
+      </HelmetProvider>
+    </PageTracker>
   </BrowserRouter>,
   document.getElementById('react-root'),
 )

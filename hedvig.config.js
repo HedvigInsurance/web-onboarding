@@ -15,5 +15,6 @@ module.exports = {
     'AUTH_PASS',
     'GIRAFFE_ENDPOINT',
     'GIRAFFE_WS_ENDPOINT',
+    'SEGMENT_API_KEY'
   ],
 }
