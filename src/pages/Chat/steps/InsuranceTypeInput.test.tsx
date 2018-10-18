@@ -1,12 +1,12 @@
 import { InputValidationError } from 'components/userInput/UserResponse'
 import { Provider } from 'constate'
+import { InsuranceType } from 'containers/OfferContainer'
 import { mount } from 'enzyme'
 import * as React from 'react'
 import { MockTextKeyProvider } from 'utils/MockTextKeyProvider'
 import { createSession } from 'utils/sessionStorage'
 import { MockStorage } from 'utils/storage/MockStorage'
 import { WithStorageProps } from 'utils/StorageContainer'
-import { InsuranceType } from '../../Offer'
 import { InsuranceTypeInput } from './InsuranceTypeInput'
 
 it('handles form changes', () => {

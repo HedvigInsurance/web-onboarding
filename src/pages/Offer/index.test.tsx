@@ -1,14 +1,15 @@
 import { Provider } from 'constate'
+import { OFFER_QUERY } from 'containers/OfferContainer'
 import { mount } from 'enzyme'
 import * as React from 'react'
 import { MockedProvider, MockedResponse } from 'react-apollo/test-utils'
 import { HelmetProvider } from 'react-helmet-async'
 import { Redirect, StaticRouter } from 'react-router-dom'
+import { MockTextKeyProvider } from 'utils/MockTextKeyProvider'
 import { createSession, SESSION_KEY } from 'utils/sessionStorage'
 import { MockStorage } from 'utils/storage/MockStorage'
 import { mockNetworkWait } from 'utils/test-utils'
-import { OFFER_QUERY, Offering } from '.'
-import { MockTextKeyProvider } from '../../utils/MockTextKeyProvider'
+import { Offering } from '.'
 import { HedvigSwitch } from './sections/HedvigSwitch'
 import { PersonalInfo, Price } from './sections/Offer'
 
@@ -17,24 +18,6 @@ jest.mock('client/apolloClient', () => ({
     subscriptionClient: { close: jest.fn() },
   },
 }))
-
-it('redirects when there is no session', () => {
-  const wrapper = mount(
-    <StaticRouter context={{}}>
-      <MockedProvider>
-        <Provider
-          initialState={{
-            storage: { session: createSession(new MockStorage()) },
-          }}
-        >
-          <Offering />
-        </Provider>
-      </MockedProvider>
-    </StaticRouter>,
-  )
-
-  expect(wrapper.find(Redirect).prop('to')).toBe('/hedvig')
-})
 
 it('queries when it has a session', async () => {
   const mocks: MockedResponse[] = [

@@ -4,10 +4,10 @@ import {
   TranslationsPlaceholderConsumer,
 } from '@hedviginsurance/textkeyfy'
 import { GetInsuredButton, LinkTag } from 'components/buttons'
+import { OfferData } from 'containers/OfferContainer'
 import * as React from 'react'
 import styled from 'react-emotion'
 import VisibilitySensor from 'react-visibility-sensor'
-import { OfferData } from '..'
 import { CardWrapperSmall } from '../components/CardWrapperSmall'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 import { InnerWrapper } from '../components/InnerWrapper'
