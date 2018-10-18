@@ -4,7 +4,7 @@ import { DownloadApp } from './sections/DownloadApp'
 
 export const Download: React.SFC<{}> = () => (
   <>
-    <TopBar showButton={false} />
+    <TopBar />
     <DownloadApp />
   </>
 )

@@ -1,7 +1,6 @@
 import { colors } from '@hedviginsurance/brand'
 import * as React from 'react'
 import styled from 'react-emotion'
-import { Link } from 'react-router-dom'
 
 const Container = styled('div')({
   width: '100%',
@@ -34,31 +33,6 @@ const Logo = styled('img')({
   },
 })
 
-const GetInsuredButton = styled('div')({
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'inherit',
-  marginRight: '40px',
-  '@media (max-width: 350px)': {
-    marginRight: '20px',
-  },
-})
-
-const LinkTag = styled(Link)({
-  backgroundColor: colors.GREEN,
-  fontSize: '16px',
-  color: colors.WHITE,
-  textDecoration: 'none',
-  borderRadius: '50px',
-  padding: '15px 30px',
-  width: 'max-content',
-  '@media (max-width: 350px)': {
-    textAlign: 'center',
-    marginRight: 0,
-    maxWidth: '250px',
-  },
-})
-
 const ProgressLabel = styled('div')({
   marginLeft: '10px',
   marginRight: '10px',
@@ -83,18 +57,9 @@ const BarProgressContainer = styled('div')({
   },
 })
 
-const BarButtonContainer = styled('div')({
-  width: '20%',
-  justifyContent: 'flex-end',
-  '@media (max-width: 710px)': {
-    width: '33%',
-  },
-})
-
 interface Props {
-  buttonText?: string
   progress?: number
-  showButton: boolean
+  button?: React.ReactNode
 }
 
 const progressStrings = [
@@ -112,22 +77,20 @@ const progressStrings = [
   },
 ]
 
-export const TopBar: React.SFC<Props> = (props) => (
+export const TopBar: React.SFC<Props> = ({ progress, button }) => (
   <Container>
     <Bar>
       <BarContainer>
         <Logo src="/assets/offering/logo.png" />
       </BarContainer>
       <BarProgressContainer>
-        {props.progress !== undefined
+        {progress !== undefined
           ? progressStrings.map((text) => (
               <ProgressLabel
                 key={text.key}
                 style={{
                   color:
-                    text.key === props.progress
-                      ? colors.BLACK
-                      : colors.DARK_GRAY,
+                    text.key === progress ? colors.BLACK : colors.DARK_GRAY,
                 }}
               >
                 {text.progressText}
@@ -135,15 +98,7 @@ export const TopBar: React.SFC<Props> = (props) => (
             ))
           : null}
       </BarProgressContainer>
-      {!props.showButton ? (
-        <BarButtonContainer>
-          {props.buttonText ? (
-            <GetInsuredButton>
-              <LinkTag to={'/hedvig'}>{props.buttonText}</LinkTag>
-            </GetInsuredButton>
-          ) : null}
-        </BarButtonContainer>
-      ) : null}
+      {button}
     </Bar>
   </Container>
 )

@@ -1,11 +1,14 @@
+import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { TopBar } from 'components/TopBar'
 import { ActionMap, Container } from 'constate'
 import { OfferContainer } from 'containers/OfferContainer'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import * as React from 'react'
+import styled from 'react-emotion'
 import Helmet from 'react-helmet-async'
 import { Mount } from 'react-lifecycle-components'
+import { Link } from 'react-router-dom'
 import { trackEvent } from 'utils/tracking'
 import { GetInsured } from './sections/GetInsured'
 import { HedvigInfo } from './sections/HedvigInfo'
@@ -23,6 +26,38 @@ interface State {
 interface Actions {
   updateVisibility: (visible: boolean) => void
 }
+
+const BarButtonContainer = styled('div')({
+  width: '20%',
+  justifyContent: 'flex-end',
+  '@media (max-width: 710px)': {
+    width: '33%',
+  },
+})
+const GetInsuredButton = styled('div')({
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'inherit',
+  marginRight: '40px',
+  '@media (max-width: 350px)': {
+    marginRight: '20px',
+  },
+})
+
+const LinkTag = styled(Link)({
+  backgroundColor: colors.GREEN,
+  fontSize: '16px',
+  color: colors.WHITE,
+  textDecoration: 'none',
+  borderRadius: '50px',
+  padding: '15px 30px',
+  width: 'max-content',
+  '@media (max-width: 350px)': {
+    textAlign: 'center',
+    marginRight: 0,
+    maxWidth: '250px',
+  },
+})
 
 export const Offering: React.SFC<{}> = () => (
   <SessionTokenGuard>
@@ -61,8 +96,26 @@ export const Offering: React.SFC<{}> = () => (
                 <>
                   <TopBar
                     progress={1}
-                    buttonText={'Bli försäkrad'}
-                    showButton={state.getStartedButtonVisible}
+                    button={
+                      state.getStartedButtonVisible && (
+                        <BarButtonContainer>
+                          <GetInsuredButton>
+                            <LinkTag
+                              to={'/hedvig'}
+                              onClick={() =>
+                                trackEvent('Checkout Started', {
+                                  category: 'offer',
+                                  value: offer.insurance.monthlyCost,
+                                  label: 'TopBar',
+                                })
+                              }
+                            >
+                              Bli försäkrad
+                            </LinkTag>
+                          </GetInsuredButton>
+                        </BarButtonContainer>
+                      )
+                    }
                   />
                   <Offer
                     offer={offer}
