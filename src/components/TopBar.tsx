@@ -1,5 +1,4 @@
 import { colors } from '@hedviginsurance/brand'
-import { Button } from 'components/buttons'
 import * as React from 'react'
 import styled from 'react-emotion'
 import { Link } from 'react-router-dom'
@@ -144,30 +143,28 @@ export const TopBar: React.SFC<Props> = (props) => (
           <Logo src="/assets/topbar/hedvig-wordmark-solid.svg" />
         </EscapeLink>
       </BarContainer>
-      <BarProgressContainer>
-        {props.progress !== undefined
-          ? progressStrings.map((text) => (
-              <ProgressLabel
-                key={text.key}
-                style={{
-                  color:
-                    text.key === props.progress
-                      ? colors.BLACK
-                      : colors.DARK_GRAY,
-                }}
-              >
-                {text.progressText}
-              </ProgressLabel>
-            ))
-          : null}
-      </BarProgressContainer>
-      <CollapsedProgressContainer>
-        <ProgressLabel>
-          {props.progress !== undefined
-            ? progressStrings[props.progress].progressText
-            : null}
-        </ProgressLabel>
-      </CollapsedProgressContainer>
+      {props.progress !== undefined ? (
+        <BarProgressContainer>
+          {progressStrings.map((text) => (
+            <ProgressLabel
+              key={text.key}
+              style={{
+                color:
+                  text.key === props.progress ? colors.BLACK : colors.DARK_GRAY,
+              }}
+            >
+              {text.progressText}
+            </ProgressLabel>
+          ))}
+        </BarProgressContainer>
+      ) : null}
+      {props.progress !== undefined ? (
+        <CollapsedProgressContainer>
+          <ProgressLabel>
+            {progressStrings[props.progress].progressText}
+          </ProgressLabel>
+        </CollapsedProgressContainer>
+      ) : null}
       {!props.showButton ? (
         <BarButtonContainer>
           {props.buttonText ? (
