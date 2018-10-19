@@ -16,12 +16,12 @@ import { PageDown } from './sections/PageDown'
 import { Terms } from './sections/Terms'
 
 interface State {
-  signButtonOneVisible: boolean
-  signButtonTwoVisible: boolean
+  upperSignButtonVisible: boolean
+  lowerSignButtonVisible: boolean
 }
 interface Actions {
-  updateVisibilityOne: (visible: boolean) => void
-  updateVisibilityTwo: (visible: boolean) => void
+  updateUpperButtonVisibility: (visible: boolean) => void
+  updateLowerButtonVisibility: (visible: boolean) => void
 }
 
 export const Offering: React.SFC<{}> = () => (
@@ -42,15 +42,15 @@ export const Offering: React.SFC<{}> = () => (
 
             <Container<State, ActionMap<State, Actions>>
               initialState={{
-                signButtonOneVisible: true,
-                signButtonTwoVisible: false,
+                upperSignButtonVisible: true,
+                lowerSignButtonVisible: false,
               }}
               actions={{
-                updateVisibilityOne: (visible: boolean) => (_) => ({
-                  signButtonOneVisible: visible,
+                updateUpperButtonVisibility: (visible: boolean) => (_) => ({
+                  upperSignButtonVisible: visible,
                 }),
-                updateVisibilityTwo: (visible: boolean) => (_) => ({
-                  signButtonTwoVisible: visible,
+                updateLowerButtonVisibility: (visible: boolean) => (_) => ({
+                  lowerSignButtonVisible: visible,
                 }),
               }}
             >
@@ -59,12 +59,12 @@ export const Offering: React.SFC<{}> = () => (
                   <TopBar
                     progress={1}
                     buttonText={'Bli försäkrad'}
-                    buttonOneVisible={!state.signButtonOneVisible}
-                    buttonTwoVisible={!state.signButtonTwoVisible}
+                    upperSignButtonVisible={!state.upperSignButtonVisible}
+                    lowerSignButtonVisible={!state.lowerSignButtonVisible}
                   />
                   <Offer
                     offer={offer}
-                    buttonVisibility={state.updateVisibilityOne}
+                    signButtonVisibility={state.updateUpperButtonVisibility}
                   />
                   <PageDown />
                   <HedvigInfo />
@@ -74,7 +74,7 @@ export const Offering: React.SFC<{}> = () => (
                   <Terms insuranceType={offer.insurance.type} />
                   <GetInsured
                     offer={offer}
-                    buttonVisibility={state.updateVisibilityTwo}
+                    signButtonVisibility={state.updateLowerButtonVisibility}
                   />
                   <Legal />
                 </>

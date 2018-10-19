@@ -4,7 +4,7 @@ import { SignUp } from './sections/SignUp'
 
 export const Sign: React.SFC = () => (
   <>
-    <TopBar progress={2} buttonOneVisible={false} buttonTwoVisible={false} />
+    <TopBar progress={2} />
     <SignUp />
   </>
 )
