@@ -1,4 +1,5 @@
 import { getScriptLocation } from '@hedviginsurance/web-survival-kit'
+import { min as createMinifiedSegmentSnippet } from '@segment/snippet'
 import { renderStylesToString } from 'emotion-server'
 import * as Koa from 'koa'
 import * as path from 'path'
@@ -17,6 +18,12 @@ const scriptLocation = getScriptLocation({
   statsLocation: path.resolve(__dirname, 'assets'),
   webpackPublicPath: process.env.WEBPACK_PUBLIC_PATH || '',
 })
+
+const segmentSnippet = createMinifiedSegmentSnippet({
+  apiKey: process.env.SEGMENT_API_KEY || '',
+  page: true,
+  load: true,
+})
 const template = (
   body: string,
   helmetContext: FilledContext['helmet'],
@@ -31,10 +38,11 @@ const template = (
   ${helmetContext.title}
   ${helmetContext.link}
   ${helmetContext.meta}
+  <script key="segment-snippet">${segmentSnippet}</script>
 </head>
 <body>
   <div id="react-root">${body}</div>
-  
+
   <script>
     window.GIRAFFE_WS_ENDPOINT= ${JSON.stringify(
       getGiraffeEndpoint(
