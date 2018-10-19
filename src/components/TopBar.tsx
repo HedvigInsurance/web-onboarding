@@ -46,7 +46,6 @@ const Logo = styled('img')({
 
 const GetInsuredButton = styled('div')({
   display: 'flex',
-  flexDirection: 'row',
   justifyContent: 'inherit',
   marginRight: '26px',
 })
@@ -59,9 +58,8 @@ const LinkTag = styled(Link)({
   borderRadius: '50px',
   padding: '15px 30px',
   width: 'max-content',
+  textAlign: 'center',
   '@media (max-width: 350px)': {
-    textAlign: 'center',
-    marginRight: 0,
     padding: '8px 20px',
   },
 })
@@ -78,25 +76,16 @@ const BarProgressWrapper = styled('div')({
   justifyContent: 'center',
   flexDirection: 'row',
   '@media (max-width: 800px)': {
-    width: '33%',
     display: 'none',
-    flexDirection: 'column',
-    alignItems: 'center',
   },
 })
 
 const CollapsedProgressWrapper = styled('div')({
   display: 'none',
-  width: '25%',
-  justifyContent: 'center',
-  flexDirection: 'row',
-  textAlign: 'center',
   '@media (max-width: 800px)': {
     width: '33%',
     display: 'flex',
-    visibility: 'visible',
-    flexDirection: 'column',
-    alignItems: 'center',
+    justifyContent: 'center',
   },
   '@media (max-width: 600px)': {
     display: 'none',
