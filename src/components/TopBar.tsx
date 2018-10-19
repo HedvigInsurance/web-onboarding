@@ -4,7 +4,7 @@ import styled from 'react-emotion'
 import { Link } from 'react-router-dom'
 const TOPBARHEIGHT = 70
 
-const Container = styled('div')({
+const Wrapper = styled('div')({
   width: '100%',
   backgroundColor: colors.OFF_WHITE,
 })
@@ -24,7 +24,7 @@ const Bar = styled('div')({
   boxShadow: '0 1px 11px 1px rgba(0,0,0,.15)',
 })
 
-const BarContainer = styled('div')({
+const BarWrapper = styled('div')({
   height: '100%',
   width: '25%',
   '@media (max-width: 800px)': {
@@ -62,7 +62,7 @@ const LinkTag = styled(Link)({
   '@media (max-width: 350px)': {
     textAlign: 'center',
     marginRight: 0,
-    padding: '15px 20px',
+    padding: '8px 20px',
   },
 })
 
@@ -72,7 +72,7 @@ const ProgressLabel = styled('div')({
   fontSize: '14px',
 })
 
-const BarProgressContainer = styled('div')({
+const BarProgressWrapper = styled('div')({
   display: 'flex',
   width: '50%',
   justifyContent: 'center',
@@ -85,7 +85,7 @@ const BarProgressContainer = styled('div')({
   },
 })
 
-const CollapsedProgressContainer = styled('div')({
+const CollapsedProgressWrapper = styled('div')({
   display: 'none',
   width: '25%',
   justifyContent: 'center',
@@ -103,7 +103,7 @@ const CollapsedProgressContainer = styled('div')({
   },
 })
 
-const BarButtonContainer = styled('div')({
+const BarButtonWrapper = styled('div')({
   width: '25%',
   justifyContent: 'flex-end',
   '@media (max-width: 800px)': {
@@ -117,8 +117,8 @@ const BarButtonContainer = styled('div')({
 interface Props {
   buttonText?: string
   progress?: number
-  buttonOneVisible: boolean
-  buttonTwoVisible: boolean
+  upperSignButtonVisible?: boolean
+  lowerSignButtonVisible?: boolean
 }
 
 const progressStrings = [
@@ -137,15 +137,15 @@ const progressStrings = [
 ]
 
 export const TopBar: React.SFC<Props> = (props) => (
-  <Container>
+  <Wrapper>
     <Bar>
-      <BarContainer>
+      <BarWrapper>
         <EscapeLink href="https://hedvig.com">
           <Logo src="/assets/topbar/hedvig-wordmark-solid.svg" />
         </EscapeLink>
-      </BarContainer>
+      </BarWrapper>
       {props.progress !== undefined ? (
-        <BarProgressContainer>
+        <BarProgressWrapper>
           {progressStrings.map((text) => (
             <ProgressLabel
               key={text.key}
@@ -157,26 +157,26 @@ export const TopBar: React.SFC<Props> = (props) => (
               {text.progressText}
             </ProgressLabel>
           ))}
-        </BarProgressContainer>
+        </BarProgressWrapper>
       ) : null}
       {props.progress !== undefined ? (
-        <CollapsedProgressContainer>
+        <CollapsedProgressWrapper>
           <ProgressLabel>
             {progressStrings[props.progress].progressText}
           </ProgressLabel>
-        </CollapsedProgressContainer>
+        </CollapsedProgressWrapper>
       ) : null}
-      {props.buttonOneVisible && props.buttonTwoVisible ? (
-        <BarButtonContainer>
+      {props.upperSignButtonVisible && props.lowerSignButtonVisible ? (
+        <BarButtonWrapper>
           {props.buttonText ? (
             <GetInsuredButton>
               <LinkTag to={'/sign'}>{props.buttonText}</LinkTag>
             </GetInsuredButton>
           ) : null}
-        </BarButtonContainer>
+        </BarButtonWrapper>
       ) : null}
     </Bar>
-  </Container>
+  </Wrapper>
 )
 
 export const TopBarFiller = styled('div')({
