@@ -1,7 +1,12 @@
 import { colors } from '@hedviginsurance/brand'
-import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
+import {
+  TranslationsConsumer,
+  TranslationsPlaceholderConsumer,
+} from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import styled from 'react-emotion'
+import { InsuranceType, isStudentInsurance } from 'utils/insuranceDomainUtils'
+import { CardWrapper } from '../components/CardWrapper'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 
 const Card = styled('div')({

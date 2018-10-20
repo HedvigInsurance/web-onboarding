@@ -1,5 +1,5 @@
-import { InsuranceType } from 'containers/OfferContainer'
 import { MockedResponse } from 'react-apollo/test-links'
+import { InsuranceType } from 'utils/insuranceDomainUtils'
 import {
   CREATE_OFFER_MUTATION,
   CreateOfferMutationVariables,
@@ -19,6 +19,7 @@ export const mockState = (): ChatState => ({
     size: 37,
     numberOfPeople: 1,
   },
+  isStudent: 'false',
   currentInsurance: {
     currentInsurer: Insurer.FOLKSAM,
     hasCurrentInsurance: true,

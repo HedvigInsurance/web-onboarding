@@ -6,6 +6,7 @@ import { Mufflable } from 'components/animations/Mufflable'
 import { ChatMessage } from 'components/hedvig/chat'
 import { Conversation, Message } from 'components/hedvig/conversation'
 import * as React from 'react'
+import { qualifiesForStudentInsurance } from 'utils/insuranceDomainUtils'
 import { trackEvent } from 'utils/tracking'
 import { ChatContainer, ChatStep } from './state'
 import { AddressInput } from './steps/AddressInput'
@@ -14,6 +15,7 @@ import { CreateOffer } from './steps/CreateOffer'
 import { CurrentInsuranceInput } from './steps/CurrentInsuranceInput'
 import { Greet } from './steps/Greet'
 import { InsuranceTypeInput } from './steps/InsuranceTypeInput'
+import { IsStudentInput } from './steps/IsStudentInput'
 import { NameInput } from './steps/NameInput'
 import { NumberOfPeopleInput } from './steps/NumberOfPeopleInput'
 
@@ -30,7 +32,9 @@ export const ChatConversation: React.SFC = () => (
       unpeek,
       currentlyPeeking,
       goToStep,
+      nameAge,
       livingSituation,
+      isStudent,
       currentInsurance,
       nameAge,
     }) => (
@@ -191,9 +195,59 @@ export const ChatConversation: React.SFC = () => (
                 isCurrentMessage={currentStep === ChatStep.NUMBER_OF_PEOPLE}
                 onSubmit={() => {
                   trackOnboardingStep('number-of-people')
+                  if (
+                    qualifiesForStudentInsurance({
+                      age: Number(nameAge.age),
+                      squareMeters: Number(livingSituation.size),
+                      numberOfPeople: livingSituation.numberOfPeople,
+                    })
+                  ) {
+                    goToStep(ChatStep.IS_STUDENT_QUESTION)
+                    return
+                  }
                   goToStep(ChatStep.CURRENT_INSURANCE_QUESTION)
                 }}
                 onFocus={() => peekStep(ChatStep.NUMBER_OF_PEOPLE)}
+                onBlur={() => unpeek()}
+              />
+            </Mufflable>
+          )}
+        </Message>
+        <Message id={ChatStep.IS_STUDENT_QUESTION}>
+          {({ appear }) => (
+            <Mufflable
+              muffled={
+                ![
+                  ChatStep.IS_STUDENT_QUESTION,
+                  ChatStep.IS_STUDENT_INPUT,
+                ].includes(currentStep)
+              }
+            >
+              <ChatMessage
+                appear={appear}
+                onTyped={() => goToStep(ChatStep.IS_STUDENT_INPUT)}
+              >
+                Trevligt! Är du kanske student? Jag har ett extra grymt
+                erbjudande för studenter!
+              </ChatMessage>
+            </Mufflable>
+          )}
+        </Message>
+        <Message id={ChatStep.IS_STUDENT_INPUT}>
+          {({ appear }) => (
+            <Mufflable
+              muffled={currentStep !== ChatStep.IS_STUDENT_INPUT}
+              unMuffled={currentlyPeeking === ChatStep.IS_STUDENT_INPUT}
+            >
+              <IsStudentInput
+                appear={appear}
+                isCurrentMessage={currentStep === ChatStep.IS_STUDENT_INPUT}
+                onSubmit={() => {
+                  // TODO Logic for student response
+                  trackOnboardingStep('is-student')
+                  goToStep(ChatStep.CURRENT_INSURANCE_QUESTION)
+                }}
+                onFocus={() => peekStep(ChatStep.IS_STUDENT_QUESTION)}
                 onBlur={() => unpeek()}
               />
             </Mufflable>

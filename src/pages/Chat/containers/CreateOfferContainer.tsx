@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 import * as React from 'react'
 import { Mutation } from 'react-apollo'
 import { Unmount } from 'react-lifecycle-components'
+import { mapToStudentVariant } from 'utils/insuranceDomainUtils'
 import { sanitizePostalNumber } from 'utils/postalNumbers'
 import { Insurer, State as ChatState } from '../state'
 import { ChatScreenContainer } from './ChatScreenContainer'
@@ -68,8 +69,12 @@ export const getCreateOfferVariablesFromChatState = (
   postalNumber: sanitizePostalNumber(chatState.livingSituation.postalNumber),
   personsInHousehold: Number(chatState.livingSituation.numberOfPeople),
   squareMeters: Number(chatState.livingSituation.size),
-  insuranceType: chatState.livingSituation.insuranceType!,
-  previousInsurer: getPreviousInsurer(chatState),
+  insuranceType:
+    chatState.isStudent === 'true'
+      ? mapToStudentVariant(chatState.livingSituation.insuranceType!)
+      : chatState.livingSituation.insuranceType!,
+previousInsurer: getPreviousInsurer(chatState),
+
 })
 
 export type CreateOfferChild = (
