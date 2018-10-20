@@ -11,7 +11,10 @@ export const App: React.SFC<StorageState> = ({ session }) => (
   <>
     <GlobalCss />
     <TranslationsProvider code="sv_SE" project={Project.WebOnboarding}>
-      <Provider<WithStorageProps> initialState={{ storage: { session } }}>
+      <Provider<WithStorageProps>
+        initialState={{ storage: { session } }}
+        devtools={process.env.NODE_ENV !== 'production'}
+      >
         <Switch>
           {reactPageRoutes.map(({ path, exact, Component }) => (
             <Route key={path} path={path} exact={exact} component={Component} />
