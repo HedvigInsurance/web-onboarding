@@ -1,7 +1,6 @@
 import { colors } from '@hedviginsurance/brand'
 import * as React from 'react'
 import styled from 'react-emotion'
-import { Link } from 'react-router-dom'
 const TOPBARHEIGHT = 70
 
 const Wrapper = styled('div')({
@@ -92,22 +91,9 @@ const CollapsedProgressWrapper = styled('div')({
   },
 })
 
-const BarButtonWrapper = styled('div')({
-  width: '25%',
-  justifyContent: 'flex-end',
-  '@media (max-width: 800px)': {
-    width: '33%',
-  },
-  '@media (max-width: 600px)': {
-    width: '50%',
-  },
-})
-
 interface Props {
-  buttonText?: string
   progress?: number
-  upperSignButtonVisible?: boolean
-  lowerSignButtonVisible?: boolean
+  button?: React.ReactNode
 }
 
 const progressStrings = [
@@ -125,45 +111,28 @@ const progressStrings = [
   },
 ]
 
-export const TopBar: React.SFC<Props> = (props) => (
+export const TopBar: React.SFC<Props> = ({ progress, button }) => (
   <Wrapper>
     <Bar>
       <BarWrapper>
-        <EscapeLink href="https://hedvig.com">
-          <Logo src="/assets/topbar/hedvig-wordmark-solid.svg" />
-        </EscapeLink>
+        <Logo src="/assets/offering/logo.png" />
       </BarWrapper>
-      {props.progress !== undefined ? (
-        <BarProgressWrapper>
-          {progressStrings.map((text) => (
-            <ProgressLabel
-              key={text.key}
-              style={{
-                color:
-                  text.key === props.progress ? colors.BLACK : colors.DARK_GRAY,
-              }}
-            >
-              {text.progressText}
-            </ProgressLabel>
-          ))}
-        </BarProgressWrapper>
-      ) : null}
-      {props.progress !== undefined ? (
-        <CollapsedProgressWrapper>
-          <ProgressLabel>
-            {progressStrings[props.progress].progressText}
-          </ProgressLabel>
-        </CollapsedProgressWrapper>
-      ) : null}
-      {props.upperSignButtonVisible && props.lowerSignButtonVisible ? (
-        <BarButtonWrapper>
-          {props.buttonText ? (
-            <GetInsuredButton>
-              <LinkTag to={'/sign'}>{props.buttonText}</LinkTag>
-            </GetInsuredButton>
-          ) : null}
-        </BarButtonWrapper>
-      ) : null}
+      <BarProgressWrapper>
+        {progress !== undefined
+          ? progressStrings.map((text) => (
+              <ProgressLabel
+                key={text.key}
+                style={{
+                  color:
+                    text.key === progress ? colors.BLACK : colors.DARK_GRAY,
+                }}
+              >
+                {text.progressText}
+              </ProgressLabel>
+            ))
+          : null}
+      </BarProgressWrapper>
+      {button}
     </Bar>
   </Wrapper>
 )

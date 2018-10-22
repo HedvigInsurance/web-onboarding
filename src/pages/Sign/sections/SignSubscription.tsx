@@ -5,6 +5,7 @@ import * as React from 'react'
 import { Subscription } from 'react-apollo'
 import styled from 'react-emotion'
 import { Redirect } from 'react-router-dom'
+import { trackEvent } from 'utils/tracking'
 
 const ErrorText = styled('div')({
   textAlign: 'center',
@@ -125,6 +126,7 @@ export const SubscriptionComponent: React.SFC = () => (
           }
         case SIGNSTATE.COMPLETED:
           if (dataStatus.status === BANKIDSTATUS.COMPLETE) {
+            trackEvent('Order Completed', { category: 'sign-up' })
             return <Redirect to="/download" />
           }
         case SIGNSTATE.FAILED:

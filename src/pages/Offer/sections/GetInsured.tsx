@@ -8,6 +8,7 @@ import { OfferData } from 'containers/OfferContainer'
 import * as React from 'react'
 import styled from 'react-emotion'
 import VisibilitySensor from 'react-visibility-sensor'
+import { trackEvent } from 'utils/tracking'
 import { CardWrapperSmall } from '../components/CardWrapperSmall'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 import { InnerWrapper } from '../components/InnerWrapper'
@@ -81,7 +82,18 @@ export const GetInsured: React.SFC<Props> = ({
               <TranslationsConsumer textKey="OFFER_SUMMARY_SIGN_CTA">
                 {(ctaText) => (
                   <GetInsuredButton>
-                    <LinkTag to={'/sign'}>{ctaText}</LinkTag>
+                    <LinkTag
+                      to={'/sign'}
+                      onClick={() =>
+                        trackEvent('Checkout Started', {
+                          category: 'offer',
+                          value: offer.insurance.monthlyCost,
+                          label: 'GetInsured',
+                        })
+                      }
+                    >
+                      {ctaText}
+                    </LinkTag>
                   </GetInsuredButton>
                 )}
               </TranslationsConsumer>
