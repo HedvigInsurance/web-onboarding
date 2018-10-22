@@ -43,26 +43,6 @@ const Logo = styled('img')({
   marginTop: '24px',
 })
 
-const GetInsuredButton = styled('div')({
-  display: 'flex',
-  justifyContent: 'inherit',
-  marginRight: '26px',
-})
-
-const LinkTag = styled(Link)({
-  backgroundColor: colors.GREEN,
-  fontSize: '16px',
-  color: colors.WHITE,
-  textDecoration: 'none',
-  borderRadius: '50px',
-  padding: '15px 30px',
-  width: 'max-content',
-  textAlign: 'center',
-  '@media (max-width: 350px)': {
-    padding: '8px 20px',
-  },
-})
-
 const ProgressLabel = styled('div')({
   marginLeft: '10px',
   marginRight: '10px',
@@ -115,23 +95,31 @@ export const TopBar: React.SFC<Props> = ({ progress, button }) => (
   <Wrapper>
     <Bar>
       <BarWrapper>
-        <Logo src="/assets/offering/logo.png" />
+        <EscapeLink href="https://hedvig.com">
+          <Logo src="/assets/topbar/hedvig-wordmark-solid.svg" />
+        </EscapeLink>
       </BarWrapper>
-      <BarProgressWrapper>
-        {progress !== undefined
-          ? progressStrings.map((text) => (
-              <ProgressLabel
-                key={text.key}
-                style={{
-                  color:
-                    text.key === progress ? colors.BLACK : colors.DARK_GRAY,
-                }}
-              >
-                {text.progressText}
-              </ProgressLabel>
-            ))
-          : null}
-      </BarProgressWrapper>
+      {progress !== undefined ? (
+        <BarProgressWrapper>
+          {progressStrings.map((text) => (
+            <ProgressLabel
+              key={text.key}
+              style={{
+                color: text.key === progress ? colors.BLACK : colors.DARK_GRAY,
+              }}
+            >
+              {text.progressText}
+            </ProgressLabel>
+          ))}
+        </BarProgressWrapper>
+      ) : null}
+      {progress !== undefined ? (
+        <CollapsedProgressWrapper>
+          <ProgressLabel>
+            {progressStrings[progress].progressText}
+          </ProgressLabel>
+        </CollapsedProgressWrapper>
+      ) : null}
       {button}
     </Bar>
   </Wrapper>

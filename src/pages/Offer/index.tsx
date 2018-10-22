@@ -29,21 +29,20 @@ interface Actions {
   updateLowerButtonVisibility: (visible: boolean) => void
 }
 
-const BarButtonContainer = styled('div')({
-  width: '20%',
+const BarButtonWrapper = styled('div')({
+  width: '25%',
   justifyContent: 'flex-end',
-  '@media (max-width: 710px)': {
+  '@media (max-width: 800px)': {
     width: '33%',
+  },
+  '@media (max-width: 600px)': {
+    width: '50%',
   },
 })
 const GetInsuredButton = styled('div')({
   display: 'flex',
-  flexDirection: 'row',
   justifyContent: 'inherit',
-  marginRight: '40px',
-  '@media (max-width: 350px)': {
-    marginRight: '20px',
-  },
+  marginRight: '26px',
 })
 
 const LinkTag = styled(Link)({
@@ -54,10 +53,9 @@ const LinkTag = styled(Link)({
   borderRadius: '50px',
   padding: '15px 30px',
   width: 'max-content',
+  textAlign: 'center',
   '@media (max-width: 350px)': {
-    textAlign: 'center',
-    marginRight: 0,
-    maxWidth: '250px',
+    padding: '15px 15px',
   },
 })
 
@@ -103,8 +101,9 @@ export const Offering: React.SFC<{}> = () => (
                   <TopBar
                     progress={1}
                     button={
-                      state.getStartedButtonVisible && (
-                        <BarButtonContainer>
+                      !state.upperSignButtonVisible &&
+                      !state.lowerSignButtonVisible && (
+                        <BarButtonWrapper>
                           <GetInsuredButton>
                             <LinkTag
                               to={'/hedvig'}
@@ -119,7 +118,7 @@ export const Offering: React.SFC<{}> = () => (
                               Bli försäkrad
                             </LinkTag>
                           </GetInsuredButton>
-                        </BarButtonContainer>
+                        </BarButtonWrapper>
                       )
                     }
                   />
