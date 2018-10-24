@@ -30,9 +30,9 @@ interface Actions {
 }
 
 const BarButtonWrapper = styled('div')({
-  width: '25%',
+  width: '20%',
   justifyContent: 'flex-end',
-  '@media (max-width: 800px)': {
+  '@media (max-width: 850px)': {
     width: '33%',
   },
   '@media (max-width: 600px)': {
@@ -51,12 +51,8 @@ const LinkTag = styled(Link)({
   color: colors.WHITE,
   textDecoration: 'none',
   borderRadius: '50px',
-  padding: '15px 30px',
-  width: 'max-content',
+  padding: '10px 24px',
   textAlign: 'center',
-  '@media (max-width: 350px)': {
-    padding: '15px 15px',
-  },
 })
 
 export const Offering: React.SFC<{}> = () => (
@@ -115,7 +111,9 @@ export const Offering: React.SFC<{}> = () => (
                                 })
                               }
                             >
-                              Bli försäkrad
+                              <TranslationsConsumer textKey="TOP_BAR_SIGN_BUTTON">
+                                {(text) => text}
+                              </TranslationsConsumer>
                             </LinkTag>
                           </GetInsuredButton>
                         </BarButtonWrapper>

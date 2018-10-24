@@ -1,7 +1,10 @@
 import { colors } from '@hedviginsurance/brand'
+import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import styled from 'react-emotion'
+
 const TOPBARHEIGHT = 70
+const ICONWIDTH = 16
 
 const Wrapper = styled('div')({
   width: '100%',
@@ -10,11 +13,11 @@ const Wrapper = styled('div')({
 
 const Bar = styled('div')({
   height: TOPBARHEIGHT,
-  maxHeight: TOPBARHEIGHT,
   position: 'fixed',
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
+  justifyContent: 'end',
   top: 0,
   left: 0,
   right: 0,
@@ -23,10 +26,20 @@ const Bar = styled('div')({
   boxShadow: '0 1px 11px 1px rgba(0,0,0,.15)',
 })
 
-const BarWrapper = styled('div')({
+const ProgressLine = styled('div')({
+  backgroundColor: colors.GREEN,
+  height: '4px',
+  zIndex: 10,
+  top: 0,
+  left: 0,
+  right: 0,
+  position: 'fixed',
+})
+
+const LogoWrapper = styled('div')({
   height: '100%',
-  width: '25%',
-  '@media (max-width: 800px)': {
+  width: '20%',
+  '@media (max-width: 850px)': {
     width: '33%',
   },
   '@media (max-width: 600px)': {
@@ -34,34 +47,46 @@ const BarWrapper = styled('div')({
   },
 })
 
-const EscapeLink = styled('a')({
-  display: 'flex',
-})
+const EscapeLink = styled('a')({})
 
 const Logo = styled('img')({
   marginLeft: '26px',
   marginTop: '24px',
 })
 
-const ProgressLabel = styled('div')({
+const CheckmarkIcon = styled('img')({
+  width: ICONWIDTH,
+})
+
+const ProgressText = styled('div')({
   marginLeft: '10px',
   marginRight: '10px',
   fontSize: '14px',
 })
 
-const BarProgressWrapper = styled('div')({
+const ProgressStages = styled('div')({
   display: 'flex',
-  width: '50%',
-  justifyContent: 'center',
   flexDirection: 'row',
-  '@media (max-width: 800px)': {
+  justifyContent: 'space-around',
+  width: '60%',
+  '@media (max-width: 850px)': {
     display: 'none',
   },
 })
 
-const CollapsedProgressWrapper = styled('div')({
+const StageCol = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+})
+
+const StageRow = styled('div')({
+  display: 'flex',
+  flexDirection: 'row',
+})
+
+const CollapsedProgressStages = styled('div')({
   display: 'none',
-  '@media (max-width: 800px)': {
+  '@media (max-width: 850px)': {
     width: '33%',
     display: 'flex',
     justifyContent: 'center',
@@ -76,49 +101,101 @@ interface Props {
   button?: React.ReactNode
 }
 
-const progressStrings = [
+const progressInfo = [
   {
     key: 0,
-    progressText: '1. Berätta om dig själv',
+    progressPercentage: '30%',
+    textKey: 'PROGRESS_TEXT_ONE',
   },
   {
     key: 1,
-    progressText: '2. Se din försäkring',
+    progressPercentage: '50%',
+    textKey: 'PROGRESS_TEXT_TWO',
   },
   {
     key: 2,
-    progressText: '3. Signera med BankID',
+    progressPercentage: '70%',
+    textKey: 'PROGRESS_TEXT_THREE',
   },
 ]
 
+const getTextColor = (progress: number, key: number) => {
+  return progress >= key ? colors.BLACK : colors.DARK_GRAY
+}
+
 export const TopBar: React.SFC<Props> = ({ progress, button }) => (
   <Wrapper>
+    {progress !== undefined ? (
+      <ProgressLine
+        style={{
+          width:
+            progress < 3 ? progressInfo[progress].progressPercentage : '100%',
+        }}
+      />
+    ) : null}
+
     <Bar>
-      <BarWrapper>
+      <LogoWrapper>
         <EscapeLink href="https://hedvig.com">
           <Logo src="/assets/topbar/hedvig-wordmark-solid.svg" />
         </EscapeLink>
-      </BarWrapper>
+      </LogoWrapper>
       {progress !== undefined ? (
-        <BarProgressWrapper>
-          {progressStrings.map((text) => (
-            <ProgressLabel
-              key={text.key}
-              style={{
-                color: text.key === progress ? colors.BLACK : colors.DARK_GRAY,
-              }}
-            >
-              {text.progressText}
-            </ProgressLabel>
+        <ProgressStages>
+          {progressInfo.map((stage) => (
+            <StageCol key={stage.key}>
+              <StageRow>
+                <ProgressText
+                  style={{
+                    color: getTextColor(progress, stage.key),
+                  }}
+                >
+                  {stage.key + 1}.
+                </ProgressText>
+              </StageRow>
+              <StageRow>
+                <TranslationsConsumer textKey={stage.textKey}>
+                  {(text) => (
+                    <ProgressText
+                      style={{
+                        color: getTextColor(progress, stage.key),
+                      }}
+                    >
+                      {text}
+                    </ProgressText>
+                  )}
+                </TranslationsConsumer>
+                <CheckmarkIcon
+                  src="assets/topbar/checkmark.svg"
+                  style={{
+                    visibility: progress <= stage.key ? 'hidden' : 'visible',
+                  }}
+                />
+              </StageRow>
+            </StageCol>
           ))}
-        </BarProgressWrapper>
+        </ProgressStages>
       ) : null}
-      {progress !== undefined ? (
-        <CollapsedProgressWrapper>
-          <ProgressLabel>
-            {progressStrings[progress].progressText}
-          </ProgressLabel>
-        </CollapsedProgressWrapper>
+      {progress !== undefined && progress < 3 ? (
+        <CollapsedProgressStages>
+          <StageCol>
+            <StageRow>
+              <ProgressText
+                style={{
+                  color: colors.BLACK,
+                }}
+              >
+                {progressInfo[progress].key + 1}
+                {'.'}
+              </ProgressText>
+            </StageRow>
+            <StageRow>
+              <TranslationsConsumer textKey={progressInfo[progress].textKey}>
+                {(text) => <ProgressText>{text}</ProgressText>}
+              </TranslationsConsumer>
+            </StageRow>
+          </StageCol>
+        </CollapsedProgressStages>
       ) : null}
       {button}
     </Bar>
