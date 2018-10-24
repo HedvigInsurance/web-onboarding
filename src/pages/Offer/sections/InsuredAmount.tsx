@@ -80,12 +80,54 @@ export const InsuredAmount: React.SFC = () => (
             </TranslationsConsumer>
           </HeaderWrapper>
           <Table>
-            {AMOUNTS.map((amount) => (
-              <Row key={amount.key}>
-                <Col>{amount.title}</Col>
-                <Col>{amount.amount}</Col>
-              </Row>
-            ))}
+            <Row>
+              <Col>
+                <TranslationsConsumer textKey="OFFER_INSURED_AMOUNT_COL_ONE_TITLE">
+                  {(title) => title}
+                </TranslationsConsumer>
+              </Col>
+              <Col>
+                <TranslationsConsumer textKey="OFFER_INSURED_AMOUNT_COL_ONE_AMOUNT">
+                  {(amount) => amount}
+                </TranslationsConsumer>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <TranslationsConsumer textKey="OFFER_INSURED_AMOUNT_COL_TWO_TITLE">
+                  {(title) => title}
+                </TranslationsConsumer>
+              </Col>
+              <Col>
+                <TranslationsConsumer textKey="OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT">
+                  {(amount) => amount}
+                </TranslationsConsumer>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <TranslationsConsumer textKey="OFFER_INSURED_AMOUNT_COL_THREE_TITLE">
+                  {(title) => title}
+                </TranslationsConsumer>
+              </Col>
+              <Col>
+                <TranslationsConsumer textKey="OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT">
+                  {(amount) => amount}
+                </TranslationsConsumer>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <TranslationsConsumer textKey="OFFER_INSURED_AMOUNT_COL_FOUR_TITLE">
+                  {(title) => title}
+                </TranslationsConsumer>
+              </Col>
+              <Col>
+                <TranslationsConsumer textKey="OFFER_INSURED_AMOUNT_COL_FOUR_AMOUNT">
+                  {(amount) => amount}
+                </TranslationsConsumer>
+              </Col>
+            </Row>
           </Table>
         </Card>
       </CardWrapper>
