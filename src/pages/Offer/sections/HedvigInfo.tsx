@@ -66,30 +66,6 @@ const Paragraph = styled('p')({
   maxWidth: PARAGRAPHWIDTH,
 })
 
-const COLUMNS = [
-  {
-    key: 0,
-    title: 'Anmäl skador och få betalt på nolltid',
-    paragraph:
-      'Med vår smarta chattbot baserad på AI och maskininlärning kan vi snabbt göra bedömningar av skador och betala ut pengarna till dig utan krångliga formulär eller väntetider.',
-    image: '/assets/offering/placeholder.svg',
-  },
-  {
-    key: 1,
-    title: 'Schysstare affärsmodell',
-    paragraph:
-      'Hedvig gör saker annorlunda än andra försäkringsbolag, istället för att överskottet från alla premier går till vår vinst tar vi en månatlig fast avgift. Därför har vi inget incitament till att hålla inne med pengar!',
-    image: '/assets/offering/placeholder.svg',
-  },
-  {
-    key: 2,
-    title: 'Överskottet går till välgörenhet',
-    paragraph:
-      'Det som blir över efter årets skadeutbetalningar går till en välgörenhetsorganisation som du själv  väljer.',
-    image: '/assets/offering/placeholder.svg',
-  },
-]
-
 export const HedvigInfo: React.SFC = () => (
   <Wrapper>
     <InnerWrapper>
@@ -103,13 +79,45 @@ export const HedvigInfo: React.SFC = () => (
             </Header>
           </HeaderWrapper>
           <Row>
-            {COLUMNS.map((col) => (
-              <Col key={col.key}>
-                <Image src={col.image} />
-                <Title>{col.title}</Title>
-                <Paragraph>{col.paragraph}</Paragraph>
-              </Col>
-            ))}
+            <Col>
+              <Image src="/assets/offering/placeholder.svg" />
+              <Title>
+                <TranslationsConsumer textKey="OFFER_INFO_COL_ONE_TITLE">
+                  {(title) => title}
+                </TranslationsConsumer>
+              </Title>
+              <Paragraph>
+                <TranslationsConsumer textKey="OFFER_INFO_COL_ONE_PARAGRAPH">
+                  {(paragraph) => paragraph}
+                </TranslationsConsumer>
+              </Paragraph>
+            </Col>
+            <Col>
+              <Image src="/assets/offering/placeholder.svg" />
+              <Title>
+                <TranslationsConsumer textKey="OFFER_INFO_COL_TWO_TITLE">
+                  {(title) => title}
+                </TranslationsConsumer>
+              </Title>
+              <Paragraph>
+                <TranslationsConsumer textKey="OFFER_INFO_COL_TWO_PARAGRAPH">
+                  {(paragraph) => paragraph}
+                </TranslationsConsumer>
+              </Paragraph>
+            </Col>
+            <Col>
+              <Image src="/assets/offering/placeholder.svg" />
+              <Title>
+                <TranslationsConsumer textKey="OFFER_INFO_COL_THREE_TITLE">
+                  {(title) => title}
+                </TranslationsConsumer>
+              </Title>
+              <Paragraph>
+                <TranslationsConsumer textKey="OFFER_INFO_COL_THREE_PARAGRAPH">
+                  {(paragraph) => paragraph}
+                </TranslationsConsumer>
+              </Paragraph>
+            </Col>
           </Row>
         </Card>
       </CardWrapper>
