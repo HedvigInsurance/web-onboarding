@@ -46,29 +46,6 @@ const Col = styled('div')({
   fontSize: '14px',
 })
 
-const AMOUNTS = [
-  {
-    key: 0,
-    title: 'Bostaden:',
-    amount: 'Fullvärde',
-  },
-  {
-    key: 1,
-    title: 'Dina prylar totalt:',
-    amount: '1 000 000 kr',
-  },
-  {
-    key: 2,
-    title: 'Drulle gäller för prylar upp till:',
-    amount: '50 000 kr',
-  },
-  {
-    key: 3,
-    title: 'Självrisk:',
-    amount: '1 500 kr',
-  },
-]
-
 export const InsuredAmount: React.SFC = () => (
   <Wrapper>
     <InnerWrapper>
