@@ -76,30 +76,6 @@ const ImageIcon = styled('img')({
   position: 'relative',
 })
 
-const COLUMNS = [
-  {
-    key: 0,
-    title: '1',
-    image: 'assets/offering/hedvig-dot-1.svg',
-    paragraph:
-      'Hedvig kontaktar ditt försäkringsbolag och säger upp din gamla försäkring',
-  },
-  {
-    key: 1,
-    title: '2',
-    image: 'assets/offering/hedvig-dot-2.svg',
-    paragraph:
-      'Vi håller dig uppdaterad och så fort vi vet när din bindningstid tar slut meddlar vi dig',
-  },
-  {
-    key: 2,
-    title: '3',
-    image: 'assets/offering/hedvig-dot-3.svg',
-    paragraph:
-      'Din Hedvig-försäkring aktiveras samma dag som din gamla försäkring går ut',
-  },
-]
-
 export const HedvigSwitch: React.SFC = () => (
   <Wrapper>
     <InnerWrapper>
@@ -113,13 +89,33 @@ export const HedvigSwitch: React.SFC = () => (
             </Header>
           </HeaderWrapper>
           <Row>
-            {COLUMNS.map((col) => (
-              <Col key={col.key}>
-                <ImageIcon src={col.image} />
-                <Title>{col.title}</Title>
-                <Paragraph>{col.paragraph}</Paragraph>
-              </Col>
-            ))}
+            <Col>
+              <ImageIcon src="assets/offering/hedvig-dot-1.svg" />
+              <Title>1</Title>
+              <Paragraph>
+                <TranslationsConsumer textKey="OFFER_SWITCH_COL_ONE_PARAGRAPH">
+                  {(paragraph) => paragraph}
+                </TranslationsConsumer>
+              </Paragraph>
+            </Col>
+            <Col>
+              <ImageIcon src="assets/offering/hedvig-dot-2.svg" />
+              <Title>2</Title>
+              <Paragraph>
+                <TranslationsConsumer textKey="OFFER_SWITCH_COL_TWO_PARAGRAPH">
+                  {(paragraph) => paragraph}
+                </TranslationsConsumer>
+              </Paragraph>
+            </Col>
+            <Col>
+              <ImageIcon src="assets/offering/hedvig-dot-3.svg" />
+              <Title>3</Title>
+              <Paragraph>
+                <TranslationsConsumer textKey="OFFER_SWITCH_COL_THREE_PARAGRAPH">
+                  {(paragraph) => paragraph}
+                </TranslationsConsumer>
+              </Paragraph>
+            </Col>
           </Row>
         </Card>
       </CardWrapper>
