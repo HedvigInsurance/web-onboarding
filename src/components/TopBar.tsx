@@ -105,17 +105,17 @@ const progressInfo = [
   {
     key: 0,
     progressPercentage: '30%',
-    textKey: 'PROGRESS_TEXT_ONE',
+    textKey: 'PROGRESS_TEXT_HEDVIG',
   },
   {
     key: 1,
     progressPercentage: '50%',
-    textKey: 'PROGRESS_TEXT_TWO',
+    textKey: 'PROGRESS_TEXT_OFFER',
   },
   {
     key: 2,
     progressPercentage: '70%',
-    textKey: 'PROGRESS_TEXT_THREE',
+    textKey: 'PROGRESS_TEXT_SIGN',
   },
 ]
 
@@ -166,7 +166,7 @@ export const TopBar: React.SFC<Props> = ({ progress, button }) => (
                   )}
                 </TranslationsConsumer>
                 <CheckmarkIcon
-                  src="assets/topbar/checkmark.svg"
+                  src="/assets/topbar/checkmark.svg"
                   style={{
                     visibility: progress <= stage.key ? 'hidden' : 'visible',
                   }}
