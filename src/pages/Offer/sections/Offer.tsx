@@ -135,6 +135,10 @@ const COLUMNS = [
   },
 ]
 
+const addSpace = (postalNumber: string) => {
+  return postalNumber.substr(0, 3) + ' ' + postalNumber.substr(3, 4)
+}
+
 export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
   <Wrapper>
     <InnerWrapper>
@@ -150,10 +154,10 @@ export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
             </HeaderWrapper>
             <PersonalInfo>
               {`${offer.member.firstName} ${offer.member.lastName}`}
-              {' • '}
+              {' · '}
               {offer.insurance.address}
-              {' • '}
-              {offer.insurance.postalNumber}
+              {' · '}
+              {addSpace(offer.insurance.postalNumber)}
             </PersonalInfo>
           </HeaderBackground>
           <TranslationsPlaceholderConsumer
