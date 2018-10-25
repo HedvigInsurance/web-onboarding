@@ -38,6 +38,8 @@ const Header = styled('h1')({
 
 const HeaderBackground = styled('div')({
   backgroundColor: colors.PURPLE,
+  borderTopLeftRadius: '10px',
+  borderTopRightRadius: '10px',
 })
 
 const Price = styled('h1')({

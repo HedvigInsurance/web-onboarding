@@ -8,16 +8,14 @@ const ICONWIDTH = 30
 const ICONHEIGHT = 47
 
 const PageDownIcon = styled('img')({
-  width: ICONWIDTH,
-  height: ICONHEIGHT,
-  marginTop: '30px',
-  marginBottom: '30px',
+  marginTop: '40px',
+  marginBottom: '88px',
 })
 
 export const PageDown: React.SFC<{}> = () => (
   <Wrapper>
     <InnerWrapper>
-      <PageDownIcon src={'assets/offering/arrow-down.svg'} />
+      <PageDownIcon src={'assets/offering/scroll-down.svg'} />
     </InnerWrapper>
   </Wrapper>
 )
