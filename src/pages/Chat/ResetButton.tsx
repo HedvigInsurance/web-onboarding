@@ -3,7 +3,7 @@ import styled from 'react-emotion'
 import { ChatContainer } from './state'
 
 const Wrapper = styled('div')({
-  paddingRight: 24,
+  marginRight: 26,
   textAlign: 'right',
 })
 
@@ -11,6 +11,7 @@ const Button = styled('button')({
   appearence: 'none',
   background: 'transparent',
   border: 'none',
+  cursor: 'pointer',
 })
 
 const Icon = styled('img')({
