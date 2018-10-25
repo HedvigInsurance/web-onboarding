@@ -31,7 +31,7 @@ export const ResetButton = () => (
     {({ reset }) => (
       <Wrapper>
         <Button onClick={reset}>
-          <Icon src="/assets/topbar/reload.svg" />
+          <Icon src="/new-member-assets/topbar/reload.svg" />
         </Button>
       </Wrapper>
     )}

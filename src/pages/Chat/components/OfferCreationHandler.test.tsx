@@ -47,5 +47,5 @@ it('does nothing when no correct state is set', () => {
   jest.runAllTimers()
   wrapper.update()
 
-  expect(wrapper.find(Redirect).prop('to')).toBe('/offer')
+  expect(wrapper.find(Redirect).prop('to')).toBe('/new-member/offer')
 })

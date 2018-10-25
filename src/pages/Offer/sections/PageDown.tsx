@@ -12,7 +12,7 @@ const PageDownIcon = styled('img')({
 export const PageDown: React.SFC<{}> = () => (
   <Wrapper>
     <InnerWrapper>
-      <PageDownIcon src={'assets/offering/scroll-down.svg'} />
+      <PageDownIcon src={'/new-member-assets/offering/scroll-down.svg'} />
     </InnerWrapper>
   </Wrapper>
 )
