@@ -90,7 +90,7 @@ export const HedvigSwitch: React.SFC = () => (
           </HeaderWrapper>
           <Row>
             <Col>
-              <ImageIcon src="assets/offering/hedvig-dot-1.svg" />
+              <ImageIcon src="/assets/offering/hedvig-dot-1.svg" />
               <Title>1</Title>
               <Paragraph>
                 <TranslationsConsumer textKey="OFFER_SWITCH_COL_ONE_PARAGRAPH">
@@ -99,7 +99,7 @@ export const HedvigSwitch: React.SFC = () => (
               </Paragraph>
             </Col>
             <Col>
-              <ImageIcon src="assets/offering/hedvig-dot-2.svg" />
+              <ImageIcon src="/assets/offering/hedvig-dot-2.svg" />
               <Title>2</Title>
               <Paragraph>
                 <TranslationsConsumer textKey="OFFER_SWITCH_COL_TWO_PARAGRAPH">
@@ -108,7 +108,7 @@ export const HedvigSwitch: React.SFC = () => (
               </Paragraph>
             </Col>
             <Col>
-              <ImageIcon src="assets/offering/hedvig-dot-3.svg" />
+              <ImageIcon src="/assets/offering/hedvig-dot-3.svg" />
               <Title>3</Title>
               <Paragraph>
                 <TranslationsConsumer textKey="OFFER_SWITCH_COL_THREE_PARAGRAPH">
