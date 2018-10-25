@@ -17,7 +17,7 @@ const Bar = styled('div')({
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
-  justifyContent: 'end',
+  justifyContent: 'space-between',
   top: 0,
   left: 0,
   right: 0,
