@@ -18,7 +18,7 @@ import { MockTextKeyProvider } from 'utils/MockTextKeyProvider'
 import { createSession, SESSION_KEY } from 'utils/sessionStorage'
 import { MockStorage } from 'utils/storage/MockStorage'
 import { mockNetworkWait } from 'utils/test-utils'
-import { BankidStatus } from './SignSubscription'
+import { BankidStatus, SIGN_QUERY, SIGN_SUBSCRIPTION } from './SignSubscription'
 import { SIGN_MUTATION, SignUp } from './SignUp'
 
 jest.mock('client/apolloClient', () => ({
@@ -49,6 +49,22 @@ it('queries when it has a session', async () => {
             __typename: 'Member',
           },
         },
+      },
+    },
+    {
+      request: {
+        query: SIGN_QUERY,
+      },
+      result: {
+        data: { signStatus: null },
+      },
+    },
+    {
+      request: {
+        query: SIGN_SUBSCRIPTION,
+      },
+      result: {
+        data: { signStatus: null },
       },
     },
   ]
@@ -108,6 +124,14 @@ it('signs without 💥', async () => {
     },
     {
       request: {
+        query: SIGN_QUERY,
+      },
+      result: {
+        data: { signStatus: null },
+      },
+    },
+    {
+      request: {
         query: SIGN_MUTATION,
         variables: {
           personalNumber: '201212121212',
@@ -124,7 +148,7 @@ it('signs without 💥', async () => {
   const queryMutationLink = new MockLink(mocks)
   const subscriptionLink = new MockSubscriptionLink()
   const link = split(
-    (op) => op.operationName === 'SignStatus',
+    (op) => op.operationName === 'SignStatusListener',
     subscriptionLink,
     queryMutationLink,
   )
@@ -215,6 +239,14 @@ it('shows an error when bankid errors', async () => {
     },
     {
       request: {
+        query: SIGN_QUERY,
+      },
+      result: {
+        data: { signStatus: null },
+      },
+    },
+    {
+      request: {
         query: SIGN_MUTATION,
         variables: {
           personalNumber: '201212121212',
@@ -231,7 +263,7 @@ it('shows an error when bankid errors', async () => {
   const queryMutationLink = new MockLink(mocks)
   const subscriptionLink = new MockSubscriptionLink()
   const link = split(
-    (op) => op.operationName === 'SignStatus',
+    (op) => op.operationName === 'SignStatusListener',
     subscriptionLink,
     queryMutationLink,
   )
@@ -293,6 +325,89 @@ it('shows an error when bankid errors', async () => {
   })
   await mockNetworkWait()
   wrapper.update()
+  expect(wrapper.find(BankidStatus).text()).toContain(
+    'SIGN_BANKID_CODE_START_FAILED',
+  )
+})
+
+it('renders correct status when sign status query has a status', async () => {
+  const mocks: MockedResponse[] = [
+    {
+      request: {
+        query: OFFER_QUERY,
+      },
+      result: {
+        data: {
+          insurance: {
+            address: 'Testvägen 1',
+            monthlyCost: 99,
+            insuredAtOtherCompany: false,
+            type: 'RENT',
+            postalNumber: '12345',
+            __typename: 'Insurance',
+          },
+          member: {
+            firstName: 'Test',
+            lastName: 'Testerson',
+            __typename: 'Member',
+          },
+        },
+      },
+    },
+    {
+      request: {
+        query: SIGN_QUERY,
+      },
+      result: {
+        data: {
+          signStatus: {
+            signState: 'FAILED',
+            collectStatus: {
+              status: 'failed',
+              code: 'startFailed',
+              __typename: 'CollectData',
+            },
+            __typename: 'SignStatus',
+          },
+        },
+      },
+    },
+  ]
+  const queryMutationLink = new MockLink(mocks)
+  const subscriptionLink = new MockSubscriptionLink()
+  const link = split(
+    (op) => op.operationName === 'SignStatusListener',
+    subscriptionLink,
+    queryMutationLink,
+  )
+  const client = new ApolloClient({ link, cache: new InMemoryCache() })
+  const wrapper = mount(
+    <HelmetProvider>
+      <StaticRouter context={{}} location="/sign">
+        <ApolloProvider client={client}>
+          <Provider
+            initialState={{
+              storage: {
+                session: createSession(
+                  new MockStorage({
+                    [SESSION_KEY]: JSON.stringify({ token: 'test-token' }),
+                  }),
+                ),
+              },
+            }}
+          >
+            <MockTextKeyProvider textKeys={{ SIGN_HEADER_TITLE: '{address}' }}>
+              <SignUp />
+            </MockTextKeyProvider>
+          </Provider>
+        </ApolloProvider>
+      </StaticRouter>
+    </HelmetProvider>,
+  )
+
+  await mockNetworkWait()
+  wrapper.update()
+
   expect(wrapper.find(BankidStatus).text()).toContain(
     'SIGN_BANKID_CODE_START_FAILED',
   )

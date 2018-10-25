@@ -112,7 +112,7 @@ const IconTitle = styled('p')({
 })
 
 interface Props {
-  buttonVisibility: (isVisible: boolean) => void
+  signButtonVisibility: (isVisible: boolean) => void
   offer: OfferData
 }
 
@@ -135,7 +135,7 @@ const COLUMNS = [
   },
 ]
 
-export const Offer: React.SFC<Props> = ({ buttonVisibility, offer }) => (
+export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
   <Wrapper>
     <InnerWrapper>
       <CardWrapperSmall>
@@ -190,7 +190,7 @@ export const Offer: React.SFC<Props> = ({ buttonVisibility, offer }) => (
           <VisibilitySensor
             partialVisibility
             onChange={(isVisible: boolean) => {
-              buttonVisibility(isVisible)
+              signButtonVisibility(isVisible)
             }}
           >
             {() => (
