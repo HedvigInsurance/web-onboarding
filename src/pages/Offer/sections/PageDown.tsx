@@ -4,9 +4,6 @@ import { Wrapper } from '../components/Wrapper'
 import * as React from 'react'
 import styled from 'react-emotion'
 
-const ICONWIDTH = 30
-const ICONHEIGHT = 47
-
 const PageDownIcon = styled('img')({
   marginTop: '40px',
   marginBottom: '88px',
