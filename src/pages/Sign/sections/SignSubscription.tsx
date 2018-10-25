@@ -4,10 +4,54 @@ import { ApolloError } from 'apollo-client'
 import gql from 'graphql-tag'
 import * as React from 'react'
 import { Query } from 'react-apollo'
-import styled from 'react-emotion'
+import styled, { keyframes } from 'react-emotion'
 import { Mount } from 'react-lifecycle-components/dist'
 import { Redirect } from 'react-router-dom'
 import { trackEvent } from 'utils/tracking'
+
+const spin = keyframes({
+  from: { transform: 'rotate(0deg)' },
+  to: { transform: 'rotate(360deg)' },
+})
+
+const Spinner = styled('span')({
+  display: 'inline-block',
+  width: '1em',
+  height: '1em',
+  marginLeft: '1em',
+  border: `2px solid ${colors.WHITE}`,
+  borderTopColor: 'transparent',
+  borderRadius: '1em',
+  animation: `${spin} 500ms linear infinite`,
+})
+
+const SubmitButton = styled('button')({
+  display: 'inline-flex',
+  alignItems: 'center',
+  backgroundColor: colors.GREEN,
+  fontSize: '16px',
+  color: colors.WHITE,
+  textDecoration: 'none',
+  borderRadius: '50px',
+  padding: '15px 30px',
+  cursor: 'pointer',
+  border: 'none',
+  '@media (max-width: 300px)': {
+    fontSize: '14px',
+  },
+
+  '&:disabled': {
+    backgroundColor: colors.LIGHT_GRAY,
+    cursor: 'default',
+  },
+})
+
+const GetInsuredButton = styled('div')({
+  marginTop: '30px',
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'center',
+})
 
 const ErrorText = styled('div')({
   textAlign: 'center',
@@ -157,7 +201,18 @@ const StateComponent: React.SFC<StateComponentProps> = ({
   }
 }
 
-export const SubscriptionComponent: React.SFC = () => (
+interface SubscriptionComponentProps {
+  isSignLoading: boolean
+}
+
+const getIsSignPending = (data: SignStatusData | undefined) =>
+  ([SIGNSTATE.INITIATED, SIGNSTATE.IN_PROGRESS] as Array<
+    SIGNSTATE | undefined
+  >).includes(data && data.signStatus && data.signStatus.signState)
+
+export const SubscriptionComponent: React.SFC<SubscriptionComponentProps> = ({
+  isSignLoading,
+}) => (
   <Query<SignStatusData> query={SIGN_QUERY} fetchPolicy="network-only">
     {({ data, error, subscribeToMore }) => (
       <Mount
@@ -178,6 +233,21 @@ export const SubscriptionComponent: React.SFC = () => (
           })
         }}
       >
+        <GetInsuredButton>
+          <TranslationsConsumer textKey="SIGN_BUTTON_TEXT">
+            {(buttonText) => (
+              <SubmitButton
+                type="submit"
+                value={buttonText}
+                disabled={getIsSignPending(data) || isSignLoading}
+              >
+                {buttonText}
+                {(getIsSignPending(data) || isSignLoading) && <Spinner />}
+              </SubmitButton>
+            )}
+          </TranslationsConsumer>
+        </GetInsuredButton>
+
         <StateComponent
           signState={data && data.signStatus && data.signStatus.signState}
           collectStatus={

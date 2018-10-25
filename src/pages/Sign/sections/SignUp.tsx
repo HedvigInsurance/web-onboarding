@@ -108,27 +108,6 @@ const InputField = styled(Field)({
   },
 })
 
-const SubmitButton = styled('button')({
-  backgroundColor: colors.GREEN,
-  fontSize: '16px',
-  color: colors.WHITE,
-  textDecoration: 'none',
-  borderRadius: '50px',
-  padding: '15px 30px',
-  cursor: 'pointer',
-  border: 'none',
-  '@media (max-width: 300px)': {
-    fontSize: '14px',
-  },
-})
-
-const GetInsuredButton = styled('div')({
-  marginTop: '30px',
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'center',
-})
-
 const ErrorMessage = styled('div')({
   minHeight: '24px',
   fontSize: '16px',
@@ -194,7 +173,7 @@ export const SignUp: React.SFC = () => (
             <Mutation<boolean, SignOfferMutationVariables>
               mutation={SIGN_MUTATION}
             >
-              {(signOffer, signProps) => (
+              {(signOffer, { loading }) => (
                 <Formik
                   initialValues={{
                     email: '',
@@ -257,20 +236,7 @@ export const SignUp: React.SFC = () => (
                           </TranslationsConsumer>
                         </ErrorMessage>
                       ) : null}
-                      <GetInsuredButton>
-                        <TranslationsConsumer textKey="SIGN_BUTTON_TEXT">
-                          {(buttonText) => (
-                            <SubmitButton
-                              type="submit"
-                              value={buttonText}
-                              disabled={signProps.called}
-                            >
-                              {buttonText}
-                            </SubmitButton>
-                          )}
-                        </TranslationsConsumer>
-                      </GetInsuredButton>
-                      <SubscriptionComponent />
+                      <SubscriptionComponent isSignLoading={loading} />
                     </CustomForm>
                   )}
                 </Formik>
