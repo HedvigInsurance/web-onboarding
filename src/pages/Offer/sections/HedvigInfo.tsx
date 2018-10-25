@@ -8,7 +8,9 @@ import { InnerWrapper } from '../components/InnerWrapper'
 import { Wrapper } from '../components/Wrapper'
 
 const ROWWIDTH = 1200
-const PARAGRAPHWIDTH = 240
+const COLWIDTH = 300
+const COLWIDTHSMALL = 250
+const COLWIDTHCOLLAPSED = 350
 
 const Card = styled('div')({
   paddingTop: '30px',
@@ -27,18 +29,32 @@ const Header = styled('h1')({
 
 const Image = styled('img')({
   marginBottom: '20px',
-  maxWidth: '240px',
-  '@media (max-width: 710px)': {
-    maxWidth: '300px',
+  width: COLWIDTH,
+  '@media (max-width: 1000px)': {
+    width: COLWIDTHSMALL,
+  },
+  '@media (max-width: 800px)': {
+    width: COLWIDTHCOLLAPSED,
   },
   '@media (max-width: 400px)': {
-    maxWidth: '210px',
+    width: COLWIDTHSMALL,
   },
 })
 
 const Col = styled('div')({
   display: 'flex',
   flexDirection: 'column',
+  alignItems: 'center',
+  width: COLWIDTH,
+  '@media (max-width: 1000px)': {
+    width: COLWIDTHSMALL,
+  },
+  '@media (max-width: 800px)': {
+    width: COLWIDTHCOLLAPSED,
+  },
+  '@media (max-width: 400px)': {
+    width: COLWIDTHSMALL,
+  },
 })
 
 const Row = styled('div')({
@@ -47,7 +63,7 @@ const Row = styled('div')({
   justifyContent: 'space-evenly',
   alignItems: 'baseline',
   maxWidth: ROWWIDTH,
-  '@media (max-width: 710px)': {
+  '@media (max-width: 800px)': {
     flexDirection: 'column',
     alignItems: 'center',
   },
@@ -57,36 +73,33 @@ const Title = styled('h3')({
   margin: '0px',
   fontSize: '14px',
   color: colors.BLACK,
-  maxWidth: '240px',
 })
 
 const Paragraph = styled('p')({
   fontSize: '14px',
   color: colors.DARK_GRAY,
-  maxWidth: PARAGRAPHWIDTH,
 })
 
 const COLUMNS = [
   {
     key: 0,
-    title: 'Anmäl skador och få betalt på nolltid',
-    paragraph:
-      'Med vår smarta chattbot baserad på AI och maskininlärning kan vi snabbt göra bedömningar av skador och betala ut pengarna till dig utan krångliga formulär eller väntetider.',
-    image: '/assets/offering/placeholder.svg',
+    title: 'Enkel överblick',
+    paragraph: 'Sköt alla ärenden enkelt och snabbt via Hedvigs app.',
+    image: '/assets/offering/enkel_overblick.svg',
   },
   {
     key: 1,
-    title: 'Schysstare affärsmodell',
+    title: 'Få snabbt svar på frågor',
     paragraph:
-      'Hedvig gör saker annorlunda än andra försäkringsbolag, istället för att överskottet från alla premier går till vår vinst tar vi en månatlig fast avgift. Därför har vi inget incitament till att hålla inne med pengar!',
-    image: '/assets/offering/placeholder.svg',
+      'Sveriges mest tillgängliga försäkrings-support. Oavsett vad du behöver hjälp med finns vi bara ett knapptryck bort.',
+    image: '/assets/offering/snabbt_svar.svg',
   },
   {
     key: 2,
-    title: 'Överskottet går till välgörenhet',
+    title: 'Anmäl skador direkt i chatten',
     paragraph:
-      'Det som blir över efter årets skadeutbetalningar går till en välgörenhetsorganisation som du själv  väljer.',
-    image: '/assets/offering/placeholder.svg',
+      'Rapportera dina ärenden genom att spela in ett meddelande i vår app.',
+    image: '/assets/offering/anmal_skador.svg',
   },
 ]
 
