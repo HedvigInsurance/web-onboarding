@@ -5,6 +5,7 @@ import {
 import {
   UserResponse,
   UserSelectInput,
+  UserTextInput,
 } from 'components/userInput/UserResponse'
 import * as React from 'react'
 import * as yup from 'yup'
@@ -25,8 +26,15 @@ interface CurrentInsuranceInputProps {
 }
 
 const insurerNames = new Map<Insurer, string>([
+  [Insurer.IF, 'If'],
   [Insurer.FOLKSAM, 'Folksam'],
   [Insurer.TRYGG_HANSA, 'Trygg Hansa'],
+  [Insurer.LANSFORSAKRINGAR, 'Länsförsäkringar'],
+  [Insurer.MODERNA, 'Moderna'],
+  [Insurer.ICA, 'ICA'],
+  [Insurer.GJENSIDIGE, 'Gjensidige'],
+  [Insurer.VARDIA, 'Vardia'],
+  [Insurer.OTHER, 'Ett annat bolag'],
 ])
 
 const insuranceOption = (insurer: keyof Insurer) => (
@@ -74,6 +82,26 @@ const getCurrentInsuranceInputMaybe = (
   return null
 }
 
+const getOtherInsuranceInputMaybe = (
+  chatState: ChatState & ChatEffects,
+  { onFocus, onBlur }: Focusable,
+) => {
+  if (chatState.currentInsurance.currentInsurer === Insurer.OTHER) {
+    return (
+      <>
+        <UserTextInput
+          value={chatState.currentInsurance.otherInsurer || ''}
+          onChange={chatState.setOtherInsurer}
+          id="otherInsurer"
+          onFocus={onFocus}
+          onBlur={onBlur}
+        />
+      </>
+    )
+  }
+  return null
+}
+
 const validationSchema = yup.object<CurrentInsuranceState>({
   hasCurrentInsurance: yup.boolean().required(),
   currentInsurer: yup.mixed().when('hasCurrentInsurance', {
@@ -84,7 +112,22 @@ const validationSchema = yup.object<CurrentInsuranceState>({
       .required(),
     otherwise: yup.mixed().nullable(true),
   }),
+  otherInsurer: yup.mixed().when('currentInsurer', {
+    is: Insurer.OTHER,
+    then: yup.string().required(),
+    otherwise: yup.mixed().nullable(true),
+  }),
 })
+
+const getTextKey = (chatState: ChatState): string => {
+  if (!chatState.currentInsurance.hasCurrentInsurance) {
+    return 'CHAT_INPUT_CURRENT_INSURANCE_TEXT'
+  }
+  if (chatState.currentInsurance.currentInsurer !== Insurer.OTHER) {
+    return 'CHAT_INPUT_CURRENT_INSURANCE_TEXT_HAS_INSURANCE'
+  }
+  return 'CHAT_INPUT_CURRENT_INSURANCE_TEXT_HAS_INSURANCE_OTHER'
+}
 
 export const isCurrentInsuranceDone = (
   values: Partial<CurrentInsuranceState> = {},
@@ -115,11 +158,7 @@ export const CurrentInsuranceInput: React.SFC<
           }}
         >
           <TranslationsPlaceholderConsumer
-            textKey={
-              chatState.currentInsurance.hasCurrentInsurance
-                ? 'CHAT_INPUT_CURRENT_INSURANCE_TEXT_HAS_INSURANCE'
-                : 'CHAT_INPUT_CURRENT_INSURANCE_TEXT'
-            }
+            textKey={getTextKey(chatState)}
             replacements={{
               toggle: (
                 <UserSelectInput
@@ -140,6 +179,9 @@ export const CurrentInsuranceInput: React.SFC<
               ),
               currentInsurerMaybe:
                 getCurrentInsuranceInputMaybe(chatState, { onFocus, onBlur }) ||
+                ' ',
+              otherInsurerMaybe:
+                getOtherInsuranceInputMaybe(chatState, { onFocus, onBlur }) ||
                 ' ',
             }}
           >
