@@ -100,6 +100,8 @@ const InputField = styled(Field)({
   borderRadius: '5px',
   border: 'none',
   outline: 'none',
+  paddingLeft: 10,
+  paddingRight: 10,
   '@media (max-width: 300px)': {
     marginLeft: '10px',
     marginRight: '10px',
