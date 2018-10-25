@@ -37,8 +37,8 @@ const InnerWrapper = styled('div')({
 const BigCol = styled('div')({})
 
 const Row = styled('div')({
-  marginLeft: '104px',
-  marginRight: '104px',
+  marginLeft: '138px',
+  marginRight: '138px',
   display: 'flex',
   alignItems: 'baseline',
   flexDirection: 'row',
@@ -78,10 +78,10 @@ const PerilTitle = styled('div')({
 const DropDownText = styled('div')({
   marginTop: '30px',
   fontSize: '14px',
-  textAlign: 'center',
-  color: colors.DARK_GRAY,
-  marginLeft: '104px',
-  marginRight: '104px',
+  textAlign: 'left',
+  color: colors.BLACK_PURPLE,
+  marginLeft: '138px',
+  marginRight: '138px',
 })
 
 const Switcher = styled('div')({
@@ -279,6 +279,7 @@ interface State {
 interface Actions {
   handleIconClick: (peril: number, icon: number, text: string) => void
   handleActiveTab: (activeTab: number) => void
+  handleSameIconClick: () => void
 }
 
 export const InsuranceCoverage: React.SFC = () => (
@@ -295,6 +296,11 @@ export const InsuranceCoverage: React.SFC = () => (
           showPerilNumber: peril,
           showIconNumber: icon,
           textToShow: text,
+        }),
+        handleSameIconClick: () => () => ({
+          showPerilNumber: undefined,
+          showIconNumber: undefined,
+          textToShow: undefined,
         }),
         handleActiveTab: (tab: number) => () => ({
           activeTab: tab,
@@ -342,28 +348,35 @@ export const InsuranceCoverage: React.SFC = () => (
                           <Col
                             key={column.key}
                             onClick={() =>
-                              state.handleIconClick(
-                                peril.key,
-                                column.key,
-                                column.expandableText,
-                              )
+                              state.showIconNumber === column.key &&
+                              state.showPerilNumber === peril.key
+                                ? state.handleSameIconClick()
+                                : state.handleIconClick(
+                                    peril.key,
+                                    column.key,
+                                    column.expandableText,
+                                  )
                             }
                           >
                             <PerilIcon
                               src={
-                                state.showPerilNumber === peril.key &&
-                                state.showIconNumber === column.key
-                                  ? column.icon
-                                  : column.iconGrey
+                                state.showIconNumber !== undefined
+                                  ? state.showPerilNumber === peril.key &&
+                                    state.showIconNumber === column.key
+                                    ? column.icon
+                                    : column.iconGrey
+                                  : column.icon
                               }
                             />
                             <PerilTitle
                               style={{
                                 color:
-                                  state.showPerilNumber === peril.key &&
-                                  state.showIconNumber === column.key
-                                    ? colors.DARK_PURPLE
-                                    : colors.DARK_GRAY,
+                                  state.showIconNumber !== undefined
+                                    ? state.showPerilNumber === peril.key &&
+                                      state.showIconNumber === column.key
+                                      ? colors.DARK_PURPLE
+                                      : colors.DARK_GRAY
+                                    : colors.DARK_PURPLE,
                               }}
                             >
                               {column.title}
