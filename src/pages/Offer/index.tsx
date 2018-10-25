@@ -21,27 +21,28 @@ import { PageDown } from './sections/PageDown'
 import { Terms } from './sections/Terms'
 
 interface State {
-  getStartedButtonVisible: boolean
+  upperSignButtonVisible: boolean
+  lowerSignButtonVisible: boolean
 }
 interface Actions {
-  updateVisibility: (visible: boolean) => void
+  updateUpperButtonVisibility: (visible: boolean) => void
+  updateLowerButtonVisibility: (visible: boolean) => void
 }
 
-const BarButtonContainer = styled('div')({
+const BarButtonWrapper = styled('div')({
   width: '20%',
   justifyContent: 'flex-end',
-  '@media (max-width: 710px)': {
+  '@media (max-width: 850px)': {
     width: '33%',
+  },
+  '@media (max-width: 600px)': {
+    width: '50%',
   },
 })
 const GetInsuredButton = styled('div')({
   display: 'flex',
-  flexDirection: 'row',
   justifyContent: 'inherit',
-  marginRight: '40px',
-  '@media (max-width: 350px)': {
-    marginRight: '20px',
-  },
+  marginRight: '26px',
 })
 
 const LinkTag = styled(Link)({
@@ -50,13 +51,8 @@ const LinkTag = styled(Link)({
   color: colors.WHITE,
   textDecoration: 'none',
   borderRadius: '50px',
-  padding: '15px 30px',
-  width: 'max-content',
-  '@media (max-width: 350px)': {
-    textAlign: 'center',
-    marginRight: 0,
-    maxWidth: '250px',
-  },
+  padding: '10px 24px',
+  textAlign: 'center',
 })
 
 export const Offering: React.SFC<{}> = () => (
@@ -84,11 +80,15 @@ export const Offering: React.SFC<{}> = () => (
 
             <Container<State, ActionMap<State, Actions>>
               initialState={{
-                getStartedButtonVisible: true,
+                upperSignButtonVisible: true,
+                lowerSignButtonVisible: false,
               }}
               actions={{
-                updateVisibility: (visible: boolean) => (_) => ({
-                  getStartedButtonVisible: visible,
+                updateUpperButtonVisibility: (visible: boolean) => (_) => ({
+                  upperSignButtonVisible: visible,
+                }),
+                updateLowerButtonVisibility: (visible: boolean) => (_) => ({
+                  lowerSignButtonVisible: visible,
                 }),
               }}
             >
@@ -97,8 +97,9 @@ export const Offering: React.SFC<{}> = () => (
                   <TopBar
                     progress={1}
                     button={
-                      state.getStartedButtonVisible && (
-                        <BarButtonContainer>
+                      !state.upperSignButtonVisible &&
+                      !state.lowerSignButtonVisible && (
+                        <BarButtonWrapper>
                           <GetInsuredButton>
                             <LinkTag
                               to={'/hedvig'}
@@ -110,16 +111,18 @@ export const Offering: React.SFC<{}> = () => (
                                 })
                               }
                             >
-                              Bli försäkrad
+                              <TranslationsConsumer textKey="TOP_BAR_SIGN_BUTTON">
+                                {(text) => text}
+                              </TranslationsConsumer>
                             </LinkTag>
                           </GetInsuredButton>
-                        </BarButtonContainer>
+                        </BarButtonWrapper>
                       )
                     }
                   />
                   <Offer
                     offer={offer}
-                    buttonVisibility={state.updateVisibility}
+                    signButtonVisibility={state.updateUpperButtonVisibility}
                   />
                   <PageDown />
                   <HedvigInfo />
@@ -129,7 +132,7 @@ export const Offering: React.SFC<{}> = () => (
                   <Terms insuranceType={offer.insurance.type} />
                   <GetInsured
                     offer={offer}
-                    buttonVisibility={state.updateVisibility}
+                    signButtonVisibility={state.updateLowerButtonVisibility}
                   />
                   <Legal />
                 </>
