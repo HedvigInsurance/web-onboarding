@@ -88,15 +88,13 @@ const getOtherInsuranceInputMaybe = (
 ) => {
   if (chatState.currentInsurance.currentInsurer === Insurer.OTHER) {
     return (
-      <>
-        <UserTextInput
-          value={chatState.currentInsurance.otherInsurer || ''}
-          onChange={chatState.setOtherInsurer}
-          id="otherInsurer"
-          onFocus={onFocus}
-          onBlur={onBlur}
-        />
-      </>
+      <UserTextInput
+        value={chatState.currentInsurance.otherInsurer || ''}
+        onChange={chatState.setOtherInsurer}
+        id="otherInsurer"
+        onFocus={onFocus}
+        onBlur={onBlur}
+      />
     )
   }
   return null
