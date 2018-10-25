@@ -85,21 +85,21 @@ const COLUMNS = [
     key: 0,
     title: 'Enkel överblick',
     paragraph: 'Sköt alla ärenden enkelt och snabbt via Hedvigs app.',
-    image: '/assets/offering/enkel_overblick.svg',
+    image: '/assets/offering/enkel-overblick.svg',
   },
   {
     key: 1,
     title: 'Få snabbt svar på frågor',
     paragraph:
       'Sveriges mest tillgängliga försäkrings-support. Oavsett vad du behöver hjälp med finns vi bara ett knapptryck bort.',
-    image: '/assets/offering/snabbt_svar.svg',
+    image: '/assets/offering/snabbt-svar.svg',
   },
   {
     key: 2,
     title: 'Anmäl skador direkt i chatten',
     paragraph:
       'Rapportera dina ärenden genom att spela in ett meddelande i vår app.',
-    image: '/assets/offering/anmal_skador.svg',
+    image: '/assets/offering/anmal-skador.svg',
   },
 ]
 
