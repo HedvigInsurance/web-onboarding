@@ -121,17 +121,17 @@ const COLUMNS = [
   {
     key: 0,
     title: 'Lagenhetsskydd',
-    icon: '/assets/offering/lagenhetsskyddet.svg',
+    icon: '/new-member-assets/offering/lagenhetsskyddet.svg',
   },
   {
     key: 1,
     title: 'Personskydd',
-    icon: '/assets/offering/familjeskyddet.svg',
+    icon: '/new-member-assets/offering/familjeskyddet.svg',
   },
   {
     key: 2,
     title: 'Prylskydd',
-    icon: '/assets/offering/prylskyddet.svg',
+    icon: '/new-member-assets/offering/prylskyddet.svg',
   },
 ]
 

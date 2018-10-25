@@ -44,7 +44,7 @@ appLogger.info(
 )
 
 const server = createKoaServer({
-  publicPath: '/assets',
+  publicPath: '/new-member-assets',
   assetLocation: __dirname + '/assets',
 })
 server.app.use(setRequestUuidMiddleware)

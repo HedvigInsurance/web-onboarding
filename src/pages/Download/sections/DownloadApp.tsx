@@ -71,7 +71,7 @@ const InsuredText = styled('div')({
 export const DownloadApp: React.SFC = () => (
   <Wrapper>
     <InnerWrapper>
-      <DownloadImage src={'/assets/download/success_image.svg'} />
+      <DownloadImage src={'/new-member-assets/download/success_image.svg'} />
       <Header>
         <TranslationsConsumer textKey="DOWNLOAD_HEADER_ONE">
           {(header) => header}
