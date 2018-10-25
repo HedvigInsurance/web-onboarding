@@ -135,9 +135,8 @@ const COLUMNS = [
   },
 ]
 
-const addSpace = (postalNumber: string) => {
-  return postalNumber.substr(0, 3) + ' ' + postalNumber.substr(3, 4)
-}
+const addSpace = (postalNumber: string) =>
+  postalNumber.substr(0, 3) + ' ' + postalNumber.substr(3, 4)
 
 export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
   <Wrapper>
