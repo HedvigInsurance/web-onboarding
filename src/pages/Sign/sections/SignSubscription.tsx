@@ -1,9 +1,11 @@
 import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
+import { ApolloError } from 'apollo-client'
 import gql from 'graphql-tag'
 import * as React from 'react'
-import { Subscription } from 'react-apollo'
+import { Query } from 'react-apollo'
 import styled from 'react-emotion'
+import { Mount } from 'react-lifecycle-components/dist'
 import { Redirect } from 'react-router-dom'
 import { trackEvent } from 'utils/tracking'
 
@@ -39,8 +41,8 @@ enum BANKIDSTATUS {
   COMPLETE = 'complete',
 }
 
-const SIGN_SUBSCRIPTION = gql`
-  subscription SignStatus {
+export const SIGN_SUBSCRIPTION = gql`
+  subscription SignStatusListener {
     signStatus {
       status {
         signState
@@ -52,25 +54,36 @@ const SIGN_SUBSCRIPTION = gql`
     }
   }
 `
+export const SIGN_QUERY = gql`
+  query SignStatus {
+    signStatus {
+      collectStatus {
+        status
+        code
+      }
+      signState
+    }
+  }
+`
+
+interface CollectStatus {
+  status: BANKIDSTATUS
+  code:
+    | 'started'
+    | 'userSign'
+    | 'noClient'
+    | 'outstandingTransaction'
+    | 'expiredTransaction'
+    | 'certificateErr'
+    | 'userCancel'
+    | 'cancelled'
+    | 'startFailed'
+}
 
 interface SignStatusData {
-  signStatus: {
-    status: {
-      signState: SIGNSTATE
-      collectStatus: {
-        status: BANKIDSTATUS
-        code:
-          | 'started'
-          | 'userSign'
-          | 'noClient'
-          | 'outstandingTransaction'
-          | 'expiredTransaction'
-          | 'certificateErr'
-          | 'userCancel'
-          | 'cancelled'
-          | 'startFailed'
-      }
-    }
+  signStatus?: {
+    signState: SIGNSTATE
+    collectStatus: CollectStatus
   }
 }
 
@@ -93,51 +106,88 @@ const handleMessage = (
   return textkeys[message]
 }
 
-export const SubscriptionComponent: React.SFC = () => (
-  <Subscription<SignStatusData> subscription={SIGN_SUBSCRIPTION}>
-    {({ data, loading, error }) => {
-      if (loading || !data) {
-        return null
-      }
-      if (error) {
-        return (
-          <ErrorText>
-            <TranslationsConsumer textKey="SIGN_BANKID_STANDARD_ERROR_MESSAGE">
-              {(errorText) => errorText}
-            </TranslationsConsumer>
-          </ErrorText>
-        )
-      }
-      const dataStatus = data.signStatus.status.collectStatus
-      const signingState = data.signStatus.status.signState
+interface StateComponentProps {
+  signState?: SIGNSTATE
+  collectStatus?: CollectStatus
+  error?: ApolloError
+}
 
-      switch (signingState) {
-        case SIGNSTATE.INITIATED:
-          return (
-            <SigningStatusText>
-              <TranslationsConsumer textKey="SIGN_BANKID_INITIATED">
-                {(message) => message}
-              </TranslationsConsumer>
-            </SigningStatusText>
-          )
-        case SIGNSTATE.IN_PROGRESS:
-          if (dataStatus.status === BANKIDSTATUS.PENDING) {
-            return <BankidStatus message={dataStatus.code} />
-          }
-        case SIGNSTATE.COMPLETED:
-          if (dataStatus.status === BANKIDSTATUS.COMPLETE) {
-            trackEvent('Order Completed', { category: 'sign-up' })
-            return <Redirect to="/download" />
-          }
-        case SIGNSTATE.FAILED:
-          if (dataStatus.status === BANKIDSTATUS.FAILED) {
-            return <BankidStatus message={dataStatus.code} />
-          }
-        default:
-          return null
+const StateComponent: React.SFC<StateComponentProps> = ({
+  signState,
+  collectStatus,
+  error,
+}) => {
+  if (!signState || !collectStatus) {
+    return null
+  }
+
+  if (error) {
+    return (
+      <ErrorText>
+        <TranslationsConsumer textKey="SIGN_BANKID_STANDARD_ERROR_MESSAGE">
+          {(errorText) => errorText}
+        </TranslationsConsumer>
+      </ErrorText>
+    )
+  }
+  switch (signState) {
+    case SIGNSTATE.INITIATED:
+      return (
+        <SigningStatusText>
+          <TranslationsConsumer textKey="SIGN_BANKID_INITIATED">
+            {(message) => message}
+          </TranslationsConsumer>
+        </SigningStatusText>
+      )
+    case SIGNSTATE.IN_PROGRESS:
+      if (collectStatus.status === BANKIDSTATUS.PENDING) {
+        return <BankidStatus message={collectStatus.code} />
       }
-    }}
-  </Subscription>
+    case SIGNSTATE.COMPLETED:
+      if (collectStatus.status === BANKIDSTATUS.COMPLETE) {
+        trackEvent('Order Completed', { category: 'sign-up' })
+        return <Redirect to="/download" />
+      }
+    case SIGNSTATE.FAILED:
+      if (collectStatus.status === BANKIDSTATUS.FAILED) {
+        return <BankidStatus message={collectStatus.code} />
+      }
+    default:
+      return null
+  }
+}
+
+export const SubscriptionComponent: React.SFC = () => (
+  <Query<SignStatusData> query={SIGN_QUERY} fetchPolicy="network-only">
+    {({ data, error, subscribeToMore }) => (
+      <Mount
+        on={() => {
+          subscribeToMore({
+            document: SIGN_SUBSCRIPTION,
+            // tslint:disable-next-line variable-name
+            updateQuery: (_prev, next) => {
+              return {
+                signStatus:
+                  (next.subscriptionData.data &&
+                    next.subscriptionData.data.signStatus &&
+                    // @ts-ignore
+                    next.subscriptionData.data.signStatus.status) ||
+                  null,
+              }
+            },
+          })
+        }}
+      >
+        <StateComponent
+          signState={data && data.signStatus && data.signStatus.signState}
+          collectStatus={
+            data && data.signStatus && data.signStatus.collectStatus
+          }
+          error={error}
+        />
+      </Mount>
+    )}
+  </Query>
 )
 
 interface StatusProps {
