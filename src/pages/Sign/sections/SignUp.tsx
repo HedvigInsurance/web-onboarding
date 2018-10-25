@@ -100,6 +100,8 @@ const InputField = styled(Field)({
   borderRadius: '5px',
   border: 'none',
   outline: 'none',
+  paddingLeft: 10,
+  paddingRight: 10,
   '@media (max-width: 300px)': {
     marginLeft: '10px',
     marginRight: '10px',
@@ -197,16 +199,21 @@ export const SignUp: React.SFC = () => (
                         </TranslationsConsumer>
                       </InputTitle>
 
-                      <InputField
-                        name="email"
-                        id="email"
-                        style={{
-                          borderBottom: inputBorderCheck(
-                            touched.email,
-                            errors.email,
-                          ),
-                        }}
-                      />
+                      <TranslationsConsumer textKey="SIGN_INPUT_EMAIL_PLACEHOLDER">
+                        {(placeholder) => (
+                          <InputField
+                            name="email"
+                            id="email"
+                            style={{
+                              borderBottom: inputBorderCheck(
+                                touched.email,
+                                errors.email,
+                              ),
+                            }}
+                            placeholder={placeholder}
+                          />
+                        )}
+                      </TranslationsConsumer>
                       {errors.email && touched.email ? (
                         <ErrorMessage>
                           <TranslationsConsumer textKey={errors.email}>
@@ -219,16 +226,21 @@ export const SignUp: React.SFC = () => (
                           {(title) => title}
                         </TranslationsConsumer>
                       </InputTitle>
-                      <InputField
-                        name="personalNumber"
-                        id="personalNumber"
-                        style={{
-                          borderBottom: inputBorderCheck(
-                            touched.personalNumber,
-                            errors.personalNumber,
-                          ),
-                        }}
-                      />
+                      <TranslationsConsumer textKey="SIGN_INPUT_PERSONAL_NUMBER_PLACEHOLDER">
+                        {(placeholder) => (
+                          <InputField
+                            name="personalNumber"
+                            id="personalNumber"
+                            style={{
+                              borderBottom: inputBorderCheck(
+                                touched.personalNumber,
+                                errors.personalNumber,
+                              ),
+                            }}
+                            placeholder={placeholder}
+                          />
+                        )}
+                      </TranslationsConsumer>
                       {errors.personalNumber && touched.personalNumber ? (
                         <ErrorMessage>
                           <TranslationsConsumer textKey={errors.personalNumber}>
