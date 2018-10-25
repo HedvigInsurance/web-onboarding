@@ -16,7 +16,7 @@ import { Wrapper } from '../components/Wrapper'
 
 interface Props {
   offer: OfferData
-  buttonVisibility: (isVisible: boolean) => void
+  signButtonVisibility: (isVisible: boolean) => void
 }
 
 const Card = styled('div')({
@@ -49,7 +49,10 @@ const Price = styled('h1')({
   fontFamily: fonts.CIRCULAR,
 })
 
-export const GetInsured: React.SFC<Props> = ({ offer, buttonVisibility }) => (
+export const GetInsured: React.SFC<Props> = ({
+  offer,
+  signButtonVisibility,
+}) => (
   <Wrapper>
     <InnerWrapper>
       <CardWrapperSmall>
@@ -72,11 +75,11 @@ export const GetInsured: React.SFC<Props> = ({ offer, buttonVisibility }) => (
           <VisibilitySensor
             partialVisibility
             onChange={(isVisible: boolean) => {
-              buttonVisibility(isVisible)
+              signButtonVisibility(isVisible)
             }}
           >
             {() => (
-              <TranslationsConsumer textKey="OFFER_SIGN_CTA_BOTTOM">
+              <TranslationsConsumer textKey="OFFER_SUMMARY_SIGN_CTA">
                 {(ctaText) => (
                   <GetInsuredButton>
                     <LinkTag
