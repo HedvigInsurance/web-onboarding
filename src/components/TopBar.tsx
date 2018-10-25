@@ -125,14 +125,14 @@ const getTextColor = (progress: number, key: number) => {
 
 export const TopBar: React.SFC<Props> = ({ progress, button }) => (
   <Wrapper>
-    {progress !== undefined ? (
+    {progress !== undefined && (
       <ProgressLine
         style={{
           width:
             progress < 3 ? progressInfo[progress].progressPercentage : '100%',
         }}
       />
-    ) : null}
+    )}
 
     <Bar>
       <LogoWrapper>
@@ -140,7 +140,7 @@ export const TopBar: React.SFC<Props> = ({ progress, button }) => (
           <Logo src="/assets/topbar/hedvig-wordmark-solid.svg" />
         </EscapeLink>
       </LogoWrapper>
-      {progress !== undefined ? (
+      {progress !== undefined && (
         <ProgressStages>
           {progressInfo.map((stage) => (
             <StageCol key={stage.key}>
@@ -175,28 +175,29 @@ export const TopBar: React.SFC<Props> = ({ progress, button }) => (
             </StageCol>
           ))}
         </ProgressStages>
-      ) : null}
-      {progress !== undefined && progress < 3 ? (
-        <CollapsedProgressStages>
-          <StageCol>
-            <StageRow>
-              <ProgressText
-                style={{
-                  color: colors.BLACK,
-                }}
-              >
-                {progressInfo[progress].key + 1}
-                {'.'}
-              </ProgressText>
-            </StageRow>
-            <StageRow>
-              <TranslationsConsumer textKey={progressInfo[progress].textKey}>
-                {(text) => <ProgressText>{text}</ProgressText>}
-              </TranslationsConsumer>
-            </StageRow>
-          </StageCol>
-        </CollapsedProgressStages>
-      ) : null}
+      )}
+      {progress !== undefined &&
+        progress < 3 && (
+          <CollapsedProgressStages>
+            <StageCol>
+              <StageRow>
+                <ProgressText
+                  style={{
+                    color: colors.BLACK,
+                  }}
+                >
+                  {progressInfo[progress].key + 1}
+                  {'.'}
+                </ProgressText>
+              </StageRow>
+              <StageRow>
+                <TranslationsConsumer textKey={progressInfo[progress].textKey}>
+                  {(text) => <ProgressText>{text}</ProgressText>}
+                </TranslationsConsumer>
+              </StageRow>
+            </StageCol>
+          </CollapsedProgressStages>
+        )}
       {button}
     </Bar>
   </Wrapper>
