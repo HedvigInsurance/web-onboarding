@@ -50,6 +50,7 @@ const ActualSelectInput = styled('select')({
   fontWeight: 'inherit',
   paddingRight: '1.5em',
   border: 'none',
+  cursor: 'pointer',
 })
 
 const UserSelectInputWrapper = styled(UserTextInput)((_: WithMaxWidth) => ({
@@ -62,6 +63,7 @@ const UserSelectInputWrapper = styled(UserTextInput)((_: WithMaxWidth) => ({
     borderColor: colors.OFF_BLACK,
     content: '" "',
     position: 'absolute',
+    zIndex: -1,
     height: '.45em',
     width: '.45em',
     right: '.3em',
