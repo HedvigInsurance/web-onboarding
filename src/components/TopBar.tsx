@@ -137,7 +137,7 @@ export const TopBar: React.SFC<Props> = ({ progress, button }) => (
     <Bar>
       <LogoWrapper>
         <EscapeLink href="https://hedvig.com">
-          <Logo src="/assets/topbar/hedvig-wordmark-solid.svg" />
+          <Logo src="/new-member-assets/topbar/hedvig-wordmark-solid.svg" />
         </EscapeLink>
       </LogoWrapper>
       {progress !== undefined && (
@@ -166,7 +166,7 @@ export const TopBar: React.SFC<Props> = ({ progress, button }) => (
                   )}
                 </TranslationsConsumer>
                 <CheckmarkIcon
-                  src="/assets/topbar/checkmark.svg"
+                  src="/new-member-assets/topbar/checkmark.svg"
                   style={{
                     visibility: progress <= stage.key ? 'hidden' : 'visible',
                   }}
