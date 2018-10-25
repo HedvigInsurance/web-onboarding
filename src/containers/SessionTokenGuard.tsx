@@ -8,7 +8,7 @@ export const SessionTokenGuard: React.SFC = ({ children }) => (
       storageState.session.getSession()!.token ? (
         <>{children}</>
       ) : (
-        <Redirect to="/hedvig" />
+        <Redirect to="/new-member/hedvig" />
       )
     }
   </StorageContainer>

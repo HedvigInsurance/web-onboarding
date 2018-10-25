@@ -102,7 +102,7 @@ export const Offering: React.SFC<{}> = () => (
                         <BarButtonWrapper>
                           <GetInsuredButton>
                             <LinkTag
-                              to={'/hedvig'}
+                              to={'/new-member/hedvig'}
                               onClick={() =>
                                 trackEvent('Checkout Started', {
                                   category: 'offer',

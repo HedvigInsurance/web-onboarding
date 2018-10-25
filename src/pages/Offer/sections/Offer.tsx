@@ -201,7 +201,7 @@ export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
                 <TranslationsConsumer textKey="OFFER_SUMMARY_SIGN_CTA">
                   {(ctaText) => (
                     <LinkTag
-                      to={'/sign'}
+                      to={'/new-member/sign'}
                       onClick={() =>
                         trackEvent('Checkout Started', {
                           category: 'offer',

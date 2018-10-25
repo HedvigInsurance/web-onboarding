@@ -5,9 +5,9 @@ import { Offering } from './pages/Offer'
 import { Sign } from './pages/Sign'
 
 export const reactPageRoutes = [
-  { path: '/hedvig', Component: Chat, exact: true },
-  { path: '/offer', Component: Offering, exact: true },
-  { path: '/download', Component: Download, exact: true },
-  { path: '/sign', Component: Sign, exact: true },
+  { path: '/new-member/hedvig', Component: Chat, exact: true },
+  { path: '/new-member/offer', Component: Offering, exact: true },
+  { path: '/new-member/download', Component: Download, exact: true },
+  { path: '/new-member/sign', Component: Sign, exact: true },
   { path: '/*', Component: FourOhFour },
 ]
