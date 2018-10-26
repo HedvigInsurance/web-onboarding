@@ -92,7 +92,7 @@ export const DownloadApp: React.SFC = () => (
           {(insuredText) => insuredText}
         </TranslationsConsumer>
       </InsuredText>
-      <GetInsuredButton>
+      <GetInsuredButton margin="0px">
         <TranslationsConsumer textKey="DOWNLOAD_LINK">
           {(downloadLink) => (
             <DownloadButton href={downloadLink}>
