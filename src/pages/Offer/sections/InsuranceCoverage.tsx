@@ -92,7 +92,6 @@ const Switcher = styled('div')({
   width: 'max-content',
   marginLeft: 'auto',
   marginRight: 'auto',
-  marginBottom: '30px',
   '@media (max-width: 400px)': {
     width: '90%',
     borderRadius: '40px',
@@ -109,6 +108,13 @@ const SwitcherItem = styled('div')({
   cursor: 'pointer',
   userSelect: 'none',
   textAlign: 'center',
+})
+
+const PerilInfo = styled('div')({
+  textAlign: 'center',
+  fontSize: '14px',
+  marginBottom: '20px',
+  marginTop: '10px',
 })
 
 const PERILS = [
@@ -339,6 +345,7 @@ export const InsuranceCoverage: React.SFC = () => (
                     </SwitcherItem>
                   ))}
                 </Switcher>
+                <PerilInfo>(Klicka på ikonerna för mer information)</PerilInfo>
                 {PERILS.map((peril) => (
                   <BigCol key={peril.key}>
                     {state.activeTab === peril.key ? (
