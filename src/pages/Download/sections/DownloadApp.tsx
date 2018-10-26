@@ -1,28 +1,47 @@
 import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
-import { GetInsuredButton } from 'components/buttons'
 import * as React from 'react'
 import styled from 'react-emotion'
 
-const IMAGEWIDTH = 450
+const SITEWRAPPER = 1200
+const BP = 800
 
-const Wrapper = styled('div')({
-  marginTop: '70px',
-  width: '100%',
-  backgroundColor: colors.OFF_WHITE,
-  position: 'absolute',
+const Background = styled('div')({
+  position: 'fixed',
   top: 0,
+  right: 0,
   bottom: 0,
+  left: 0,
+  backgroundColor: colors.OFF_WHITE,
+  zIndex: -1,
 })
 
 const InnerWrapper = styled('div')({
-  width: IMAGEWIDTH,
-  textAlign: 'center',
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'center',
+  maxWidth: SITEWRAPPER,
   margin: 'auto',
-  '@media (max-width: 450px)': {
+  paddingLeft: '10px',
+  paddingRight: '10px',
+  paddingTop: '20vh',
+  [`@media (max-width: ${BP}px)`]: {
     maxWidth: '100%',
-    paddingLeft: '10px',
-    paddingRight: '10px',
+    flexDirection: 'column',
+    paddingTop: 20 + 70,
+  },
+})
+
+const Column = styled('div')({
+  width: '50%',
+  paddingRight: 20,
+  paddingLeft: 20,
+  paddingBottom: 40,
+
+  [`@media (max-width: ${BP}px)`]: {
+    width: '100%',
+    textAlign: 'center',
   },
 })
 
@@ -41,13 +60,13 @@ const DownloadButton = styled('a')({
 })
 
 const DownloadImage = styled('img')({
-  width: IMAGEWIDTH,
   marginBottom: '30px',
   marginTop: '30px',
-  '@media (max-width: 450px)': {
-    width: '300px',
-    marginLeft: 'auto',
+  marginLeft: 'auto',
+  width: '100%',
+  '@media (max-width: 800px)': {
     marginRight: 'auto',
+    width: '80%',
   },
 })
 
@@ -69,30 +88,30 @@ const InsuredText = styled('div')({
 })
 
 export const DownloadApp: React.SFC = () => (
-  <Wrapper>
+  <>
+    <Background />
     <InnerWrapper>
-      <DownloadImage src={'/new-member-assets/download/success_image.svg'} />
-      <Header>
-        <TranslationsConsumer textKey="DOWNLOAD_HEADER_ONE">
-          {(header) => header}
-        </TranslationsConsumer>
-      </Header>
-      <Header>
-        <TranslationsConsumer textKey="DOWNLOAD_HEADER_TWO">
-          {(header) => header}
-        </TranslationsConsumer>
-      </Header>
-      <DownloadHeader>
-        <TranslationsConsumer textKey="DOWNLOAD_HEADER_THREE">
-          {(header) => header}
-        </TranslationsConsumer>
-      </DownloadHeader>
-      <InsuredText>
-        <TranslationsConsumer textKey="DOWNLOAD_INFO">
-          {(insuredText) => insuredText}
-        </TranslationsConsumer>
-      </InsuredText>
-      <GetInsuredButton>
+      <Column>
+        <Header>
+          <TranslationsConsumer textKey="DOWNLOAD_HEADER_ONE">
+            {(header) => header}
+          </TranslationsConsumer>
+        </Header>
+        <Header>
+          <TranslationsConsumer textKey="DOWNLOAD_HEADER_TWO">
+            {(header) => header}
+          </TranslationsConsumer>
+        </Header>
+        <DownloadHeader>
+          <TranslationsConsumer textKey="DOWNLOAD_HEADER_THREE">
+            {(header) => header}
+          </TranslationsConsumer>
+        </DownloadHeader>
+        <InsuredText>
+          <TranslationsConsumer textKey="DOWNLOAD_INFO">
+            {(insuredText) => insuredText}
+          </TranslationsConsumer>
+        </InsuredText>
         <TranslationsConsumer textKey="DOWNLOAD_LINK">
           {(downloadLink) => (
             <DownloadButton href={downloadLink}>
@@ -102,7 +121,10 @@ export const DownloadApp: React.SFC = () => (
             </DownloadButton>
           )}
         </TranslationsConsumer>
-      </GetInsuredButton>
+      </Column>
+      <Column>
+        <DownloadImage src={'/new-member-assets/download/success_image.svg'} />
+      </Column>
     </InnerWrapper>
-  </Wrapper>
+  </>
 )
