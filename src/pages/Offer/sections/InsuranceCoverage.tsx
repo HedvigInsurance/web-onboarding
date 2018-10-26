@@ -37,8 +37,8 @@ const InnerWrapper = styled('div')({
 const BigCol = styled('div')({})
 
 const Row = styled('div')({
-  marginLeft: '138px',
-  marginRight: '138px',
+  marginLeft: '115px',
+  marginRight: '115px',
   display: 'flex',
   alignItems: 'baseline',
   flexDirection: 'row',
