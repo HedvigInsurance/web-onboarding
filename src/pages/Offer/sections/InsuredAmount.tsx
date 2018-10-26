@@ -32,40 +32,56 @@ const Row = styled('div')({
   justifyContent: 'space-between',
   alignItems: 'center',
   flexDirection: 'row',
-  marginBottom: '20px',
-  borderBottom: '1px solid ' + colors.LIGHT_GRAY,
-  marginLeft: '40px',
-  marginRight: '40px',
+  marginLeft: '150px',
+  marginRight: '150px',
+  '@media (max-width: 700px)': {
+    marginLeft: '30px',
+    marginRight: '30px',
+  },
 })
 
 const Col = styled('div')({
   display: 'flex',
-  paddingBottom: '10px',
+  paddingTop: '20px',
+  paddingBottom: '20px',
+  paddingRight: '5px',
+  paddingLeft: '5px',
   flexDirection: 'column',
   color: colors.BLACK,
   fontSize: '14px',
 })
 
+const BoldInfoText = styled('div')({
+  fontSize: '16px',
+  color: colors.BLACK,
+  display: 'inline',
+})
+const InfoText = styled('div')({
+  fontSize: '16px',
+  color: colors.DARK_GRAY,
+  display: 'inline',
+})
+
 const AMOUNTS = [
   {
     key: 0,
-    title: 'Bostaden:',
-    amount: 'Fullvärde',
+    title: 'OFFER_INSURED_AMOUNT_LIVING',
+    amount: 'OFFER_INSURED_AMOUNT_LIVING_AMOUNT',
   },
   {
     key: 1,
-    title: 'Dina prylar totalt:',
-    amount: '1 000 000 kr',
+    title: 'OFFER_INSURED_AMOUNT_TOTAL',
+    amount: 'OFFER_INSURED_AMOUNT_TOTAL_AMOUNT',
   },
   {
     key: 2,
-    title: 'Drulle gäller för prylar upp till:',
-    amount: '50 000 kr',
+    title: 'OFFER_INSURED_AMOUNT_CLUMSY',
+    amount: 'OFFER_INSURED_AMOUNT_CLUMSY_AMOUNT',
   },
   {
     key: 3,
-    title: 'Självrisk:',
-    amount: '1 500 kr',
+    title: 'OFFER_INSURED_AMOUNT_SELF_RISK',
+    amount: 'OFFER_INSURED_AMOUNT_SELF_RISK_AMOUNT',
   },
 ]
 
@@ -81,9 +97,27 @@ export const InsuredAmount: React.SFC = () => (
           </HeaderWrapper>
           <Table>
             {AMOUNTS.map((amount) => (
-              <Row key={amount.key}>
-                <Col>{amount.title}</Col>
-                <Col>{amount.amount}</Col>
+              <Row
+                style={{
+                  backgroundColor:
+                    amount.key % 2 === 0 ? colors.OFF_WHITE : colors.WHITE,
+                }}
+                key={amount.key}
+              >
+                <Col>
+                  <BoldInfoText>
+                    <TranslationsConsumer textKey={amount.title}>
+                      {(text) => text}
+                    </TranslationsConsumer>
+                  </BoldInfoText>
+                </Col>
+                <Col>
+                  <InfoText>
+                    <TranslationsConsumer textKey={amount.amount}>
+                      {(text) => text}
+                    </TranslationsConsumer>
+                  </InfoText>
+                </Col>
               </Row>
             ))}
           </Table>

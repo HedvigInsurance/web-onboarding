@@ -46,6 +46,8 @@ const Row = styled('div')({
   '@media (max-width: 700px)': {
     flexFlow: 'wrap',
     justifyContent: 'flex-start',
+    marginLeft: '30px',
+    marginRight: '30px',
   },
 })
 
