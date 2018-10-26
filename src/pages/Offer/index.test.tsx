@@ -33,6 +33,7 @@ it('queries when it has a session', async () => {
             insuredAtOtherCompany: false,
             type: 'RENT',
             postalNumber: '12345',
+            personsInHousehold: 1,
             __typename: 'Insurance',
           },
           member: {
@@ -92,6 +93,7 @@ it('shows information about switching if you have an insurance', async () => {
             insuredAtOtherCompany: true,
             type: 'RENT',
             postalNumber: '12345',
+            personsInHousehold: 1,
             __typename: 'Insurance',
           },
           member: {
