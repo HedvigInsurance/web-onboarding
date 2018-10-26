@@ -76,6 +76,28 @@ const ImageIcon = styled('img')({
   position: 'relative',
 })
 
+const cols: ReadonlyArray<{
+  imageUrl: string
+  title: string
+  paragraphKey: string
+}> = [
+  {
+    imageUrl: 'assets/offering/hedvig-dot-1.svg',
+    title: '1',
+    paragraphKey: 'OFFER_SWITCH_COL_ONE_PARAGRAPH',
+  },
+  {
+    imageUrl: 'assets/offering/hedvig-dot-2.svg',
+    title: '2',
+    paragraphKey: 'OFFER_SWITCH_COL_TWO_PARAGRAPH',
+  },
+  {
+    imageUrl: 'assets/offering/hedvig-dot-3.svg',
+    title: '3',
+    paragraphKey: 'OFFER_SWITCH_COL_THREE_PARAGRAPH',
+  },
+]
+
 export const HedvigSwitch: React.SFC = () => (
   <Wrapper>
     <InnerWrapper>
@@ -89,33 +111,17 @@ export const HedvigSwitch: React.SFC = () => (
             </Header>
           </HeaderWrapper>
           <Row>
-            <Col>
-              <ImageIcon src="assets/offering/hedvig-dot-1.svg" />
-              <Title>1</Title>
-              <Paragraph>
-                <TranslationsConsumer textKey="OFFER_SWITCH_COL_ONE_PARAGRAPH">
-                  {(paragraph) => paragraph}
-                </TranslationsConsumer>
-              </Paragraph>
-            </Col>
-            <Col>
-              <ImageIcon src="assets/offering/hedvig-dot-2.svg" />
-              <Title>2</Title>
-              <Paragraph>
-                <TranslationsConsumer textKey="OFFER_SWITCH_COL_TWO_PARAGRAPH">
-                  {(paragraph) => paragraph}
-                </TranslationsConsumer>
-              </Paragraph>
-            </Col>
-            <Col>
-              <ImageIcon src="assets/offering/hedvig-dot-3.svg" />
-              <Title>3</Title>
-              <Paragraph>
-                <TranslationsConsumer textKey="OFFER_SWITCH_COL_THREE_PARAGRAPH">
-                  {(paragraph) => paragraph}
-                </TranslationsConsumer>
-              </Paragraph>
-            </Col>
+            {cols.map((col) => (
+              <Col key={col.title + col.paragraphKey}>
+                <ImageIcon src={col.imageUrl} />
+                <Title>{col.title}</Title>
+                <Paragraph>
+                  <TranslationsConsumer textKey={col.paragraphKey}>
+                    {(paragraph) => paragraph}
+                  </TranslationsConsumer>
+                </Paragraph>
+              </Col>
+            ))}
           </Row>
         </Card>
       </CardWrapper>
