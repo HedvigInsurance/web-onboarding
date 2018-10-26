@@ -48,17 +48,14 @@ const Col = styled('div')({
   paddingLeft: '5px',
   flexDirection: 'column',
   color: colors.BLACK,
-  fontSize: '14px',
 })
 
 const BoldInfoText = styled('div')({
-  fontSize: '16px',
   color: colors.BLACK,
   display: 'inline',
 })
 const InfoText = styled('div')({
-  fontSize: '16px',
-  color: colors.DARK_GRAY,
+  color: colors.OFF_BLACK,
   display: 'inline',
 })
 

@@ -31,10 +31,9 @@ const Header = styled('h1')({
 const Paragraph = styled('p')({
   marginTop: '0px',
   marginBottom: '0px',
-  fontSize: '14px',
   textAlign: 'center',
   maxWidth: PARAGRAPHWIDTH,
-  color: colors.DARK_GRAY,
+  color: colors.OFF_BLACK,
 })
 
 const Title = styled('h3')({

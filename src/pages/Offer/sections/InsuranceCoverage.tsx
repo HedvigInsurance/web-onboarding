@@ -70,7 +70,6 @@ const PerilIcon = styled('img')({
 const PerilTitle = styled('div')({
   marginBottom: '0px',
   marginTop: '0px',
-  fontSize: '14px',
   textAlign: 'center',
   color: colors.DARK_GRAY,
   borderRadius: '30px',
@@ -79,7 +78,6 @@ const PerilTitle = styled('div')({
 
 const DropDownText = styled('div')({
   marginTop: '30px',
-  fontSize: '14px',
   textAlign: 'left',
   color: colors.BLACK_PURPLE,
   marginLeft: '138px',
@@ -107,7 +105,6 @@ const SwitcherItem = styled('div')({
   paddingBottom: '10px',
   paddingRight: '20px',
   paddingLeft: '20px',
-  fontSize: '14px',
   fontFamily: fonts.CIRCULAR,
   cursor: 'pointer',
   userSelect: 'none',
@@ -117,7 +114,7 @@ const SwitcherItem = styled('div')({
 const PERILS = [
   {
     key: 0,
-    name: 'Din Bostad',
+    name: 'Din bostad',
     icons: [
       {
         key: 0,

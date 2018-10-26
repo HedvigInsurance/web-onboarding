@@ -35,7 +35,6 @@ const Header = styled('h1')({
   paddingTop: '30px',
   paddingBottom: '30px',
   fontSize: '32px',
-  maxWidth: '350px',
 })
 
 const InsuranceInfo = styled('div')({
@@ -43,14 +42,12 @@ const InsuranceInfo = styled('div')({
 })
 
 const BoldInfoText = styled('div')({
-  fontSize: '14px',
   color: colors.BLACK,
   display: 'inline',
 })
 
 const InfoText = styled('div')({
-  fontSize: '14px',
-  color: colors.DARK_GRAY,
+  color: colors.OFF_BLACK,
   display: 'inline',
 })
 

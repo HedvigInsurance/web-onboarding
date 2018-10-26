@@ -50,8 +50,8 @@ const Col = styled('div')({
   display: 'flex',
   alignItems: 'center',
   flexDirection: 'column',
-  marginRight: '10px',
-  marginLeft: '10px',
+  marginRight: '15px',
+  marginLeft: '15px',
 })
 
 const PDFTag = styled('h3')({
@@ -80,10 +80,9 @@ const PerilLink = styled('a')({
 const PerilTitle = styled('div')({
   marginBottom: '0px',
   marginTop: '10px',
-  fontSize: '14px',
   fontFamily: fonts.CIRCULAR,
   textAlign: 'center',
-  color: colors.DARK_PURPLE,
+  color: colors.OFF_BLACK,
   lineHeight: 'normal',
 })
 

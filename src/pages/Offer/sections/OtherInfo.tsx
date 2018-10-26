@@ -62,21 +62,19 @@ const CheckIcon = styled('img')({
 const IconTitle = styled('div')({
   marginBottom: '0px',
   marginTop: '10px',
-  fontSize: '14px',
   fontFamily: fonts.CIRCULAR,
   textAlign: 'center',
   color: colors.DARK_PURPLE,
   lineHeight: 'normal',
-  maxWidth: '110px',
+  maxWidth: '120px',
 })
 
 const IconInfo = styled('div')({
   marginBottom: '0px',
   marginTop: '0px',
-  fontSize: '14px',
   fontFamily: fonts.CIRCULAR,
   textAlign: 'center',
-  color: colors.DARK_GRAY,
+  color: colors.OFF_BLACK,
   lineHeight: 'normal',
 })
 

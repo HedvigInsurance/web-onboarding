@@ -28,7 +28,6 @@ const InnerWrapper = styled('div')({
 
 const DownloadButton = styled('a')({
   backgroundColor: colors.GREEN,
-  fontSize: '16px',
   color: colors.WHITE,
   textDecoration: 'none',
   borderRadius: '50px',
@@ -64,7 +63,6 @@ const DownloadHeader = styled('h1')({
 })
 
 const InsuredText = styled('div')({
-  fontSize: '16px',
   marginBottom: '30px',
 })
 

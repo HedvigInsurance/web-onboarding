@@ -8,7 +8,7 @@ import { InnerWrapper } from '../components/InnerWrapper'
 import { Wrapper } from '../components/Wrapper'
 
 const ROWWIDTH = 1200
-const COLWIDTH = 300
+const COLWIDTH = 270
 const COLWIDTHSMALL = 250
 const COLWIDTHCOLLAPSED = 350
 
@@ -44,7 +44,6 @@ const Image = styled('img')({
 const Col = styled('div')({
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center',
   width: COLWIDTH,
   '@media (max-width: 1000px)': {
     width: COLWIDTHSMALL,
@@ -69,15 +68,14 @@ const Row = styled('div')({
   },
 })
 
-const Title = styled('h3')({
+const Title = styled('p')({
   margin: '0px',
-  fontSize: '14px',
-  color: colors.BLACK,
+  color: colors.OFF_BLACK,
 })
 
 const Paragraph = styled('p')({
-  fontSize: '14px',
   color: colors.DARK_GRAY,
+  marginTop: '10px',
 })
 
 const cols: ReadonlyArray<{

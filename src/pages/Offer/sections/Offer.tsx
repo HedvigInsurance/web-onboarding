@@ -28,7 +28,7 @@ const Wrapper = styled('div')({
 const Card = styled('div')({
   marginTop: '70px',
   backgroundColor: colors.WHITE,
-  paddingBottom: '30px',
+  paddingBottom: '50px',
   boxShadow: '0px 8px 40px -12px rgba(0,0,0,0.67)',
   borderRadius: '10px',
 })
@@ -48,12 +48,9 @@ const HeaderBackground = styled('div')({
 })
 
 export const PersonalInfo = styled('div')({
-  marginTop: '0px',
-  marginBottom: '0px',
   marginLeft: 'auto',
   marginRight: 'auto',
   paddingBottom: '30px',
-  fontSize: '14px',
   lineHeight: '22px',
   textAlign: 'center',
   maxWidth: '100%',
@@ -61,9 +58,10 @@ export const PersonalInfo = styled('div')({
 })
 
 export const Price = styled('h1')({
-  marginBottom: '0px',
+  marginBottom: '10px',
   marginTop: '30px',
   fontSize: '32px',
+  lineHeight: '42px',
   textAlign: 'center',
   color: colors.BLACK,
   fontFamily: fonts.CIRCULAR,
@@ -74,14 +72,12 @@ const InsuranceInfo = styled('div')({
 })
 
 const BoldInfoText = styled('div')({
-  fontSize: '14px',
   color: colors.BLACK,
   display: 'inline',
 })
 
 const InfoText = styled('div')({
-  fontSize: '14px',
-  color: colors.DARK_GRAY,
+  color: colors.OFF_BLACK,
   display: 'inline',
 })
 
@@ -89,11 +85,12 @@ const Col = styled('div')({
   display: 'flex',
   alignItems: 'center',
   flexDirection: 'column',
-  marginBottom: '30px',
   width: COLWIDTH,
 })
 
 const Row = styled('div')({
+  marginTop: '30px',
+  marginBottom: '40px',
   marginLeft: '100px',
   marginRight: '100px',
   display: 'flex',
@@ -107,8 +104,6 @@ const Row = styled('div')({
 })
 
 const Icon = styled('img')({
-  marginTop: '30px',
-  marginBottom: '10px',
   maxWidth: ICONWIDTH,
   '@media (max-width: 400px)': {
     margin: '0px',
@@ -117,10 +112,10 @@ const Icon = styled('img')({
 })
 
 const IconTitle = styled('p')({
+  marginTop: '10px',
   marginBottom: '10px',
-  fontSize: '14px',
   textAlign: 'center',
-  color: colors.DARK_GRAY,
+  color: colors.OFF_BLACK,
   maxWidth: ICONTITLEWIDTH,
 })
 
@@ -133,7 +128,7 @@ interface Props {
 const COLUMNS = [
   {
     key: 0,
-    title: 'Lagenhetsskydd',
+    title: 'Lägenhetsskydd',
     icon: '/new-member-assets/offering/lagenhetsskyddet.svg',
   },
   {
@@ -156,9 +151,12 @@ export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
           <HeaderBackground>
             <HeaderWrapper>
               <Header>
-                <TranslationsConsumer textKey="OFFER_HEADER">
+                <TranslationsPlaceholderConsumer
+                  textKey="OFFER_HEADER"
+                  replacements={{ name: offer.member.firstName }}
+                >
                   {(title) => title}
-                </TranslationsConsumer>
+                </TranslationsPlaceholderConsumer>
               </Header>
             </HeaderWrapper>
             <PersonalInfo>
