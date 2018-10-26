@@ -90,6 +90,8 @@ export const AddressInput: React.SFC<AddressInputProps & Focusable> = ({
                             20,
                           )}
                           id="streetAddress"
+                          autoComplete="street-address"
+                          autoFocus
                           placeholder={placeholder}
                           value={chatState.livingSituation.streetAddress}
                           onChange={handleChange('streetAddress', chatState)}
@@ -117,6 +119,7 @@ export const AddressInput: React.SFC<AddressInputProps & Focusable> = ({
                           type="number"
                           maxWidth={6}
                           id="postalNumber"
+                          autoComplete="postal-code"
                           placeholder={placeholder}
                           value={chatState.livingSituation.postalNumber}
                           onChange={handleChange(
