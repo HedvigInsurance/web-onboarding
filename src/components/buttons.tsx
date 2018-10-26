@@ -18,14 +18,23 @@ export const LinkTag = styled(Link)({
 })
 
 export const Button = styled('button')(
-  ({ background, foreground }: { background: string; foreground: string }) => ({
+  ({
+    background,
+    foreground,
+    size = 'sm',
+  }: {
+    background: string
+    foreground: string
+    size?: 'sm' | 'lg'
+  }) => ({
     appearance: 'none',
-    padding: '10px 16px',
+    padding: size === 'sm' ? '10px 16px' : '16px 20px',
     border: 'none',
-    fontSize: 16,
+    fontSize: size === 'sm' ? 16 : 20,
     borderRadius: '50px',
     color: foreground,
     background,
+    cursor: 'pointer',
 
     '&:focus': {
       outlineColor: background,
@@ -33,6 +42,7 @@ export const Button = styled('button')(
 
     '&:disabled': {
       backgroundColor: colors.LIGHT_GRAY,
+      cursor: 'default',
     },
   }),
 )

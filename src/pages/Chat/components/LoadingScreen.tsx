@@ -16,7 +16,11 @@ const popIn = keyframes({
   },
 })
 
-const Wrapper = styled('div')({
+interface WithAppear {
+  appear?: boolean
+}
+
+const Wrapper = styled('div')(({ appear }: WithAppear) => ({
   position: 'fixed',
   top: 0,
   right: 0,
@@ -24,10 +28,10 @@ const Wrapper = styled('div')({
   left: 0,
   backgroundColor: colors.GREEN,
   color: colors.WHITE,
-  animation: `${popIn} 300ms forwards`,
+  animation: appear ? 'none' : `${popIn} 300ms forwards`,
   transformOrigin: 'bottom center',
   zIndex: 999,
-})
+}))
 
 const InnerWrapper = styled('div')({
   display: 'flex',
@@ -62,8 +66,8 @@ const BottomSpacer = styled('div')({
   paddingBottom: '15vh',
 })
 
-export const LoadingScreen = () => (
-  <Wrapper>
+export const LoadingScreen: React.SFC<WithAppear> = ({ appear }) => (
+  <Wrapper appear={appear}>
     <InnerWrapper>
       <TopHeadline>Tack!</TopHeadline>
       <BottomHeadline>Jag håller på att ta fram ditt förslag</BottomHeadline>
