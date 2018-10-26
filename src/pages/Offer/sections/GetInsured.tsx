@@ -35,6 +35,7 @@ const Header = styled('h1')({
   paddingTop: '30px',
   paddingBottom: '30px',
   fontSize: '32px',
+  maxWidth: '350px',
 })
 
 const InsuranceInfo = styled('div')({
