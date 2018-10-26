@@ -117,7 +117,7 @@ const SwitcherItem = styled('div')({
 const PERILS = [
   {
     key: 0,
-    name: 'Din Bostad',
+    name: 'Din bostad',
     icons: [
       {
         key: 0,
