@@ -2,6 +2,8 @@ import { Provider } from 'constate'
 import { mount } from 'enzyme'
 import * as React from 'react'
 import { Redirect, StaticRouter } from 'react-router'
+import { createSession } from 'utils/sessionStorage'
+import { MockStorage } from 'utils/storage/MockStorage'
 import { ChatScreenContainer } from '../containers/ChatScreenContainer'
 import { LoadingScreen } from './LoadingScreen'
 import { OfferCreationHandler } from './OfferCreationHandler'
@@ -10,7 +12,13 @@ jest.useFakeTimers()
 it('does nothing when no correct state is set', () => {
   const wrapper = mount(
     <StaticRouter context={{}}>
-      <Provider initialState={{}}>
+      <Provider
+        initialState={{
+          storage: {
+            session: createSession(new MockStorage({})),
+          },
+        }}
+      >
         <OfferCreationHandler />
         <ChatScreenContainer>
           {(state) => (

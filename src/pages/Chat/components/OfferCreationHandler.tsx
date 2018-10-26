@@ -1,5 +1,7 @@
 import * as React from 'react'
 import { Redirect } from 'react-router-dom'
+import { OfferContainer } from '../../../containers/OfferContainer'
+import { StorageContainer } from '../../../utils/StorageContainer'
 import {
   ChatScreenContainer,
   LoadingState,
@@ -23,7 +25,30 @@ export const OfferCreationHandler = () => (
         return <Redirect to="/new-member/offer" />
       }
 
-      return null
+      return (
+        <StorageContainer>
+          {(storage) => {
+            if (
+              storage.session.getSession() &&
+              storage.session.getSession()!.token
+            ) {
+              return (
+                <OfferContainer>
+                  {(offer) => {
+                    if (offer) {
+                      return <Redirect to="/new-member/offer" />
+                    }
+
+                    return null
+                  }}
+                </OfferContainer>
+              )
+            }
+
+            return null
+          }}
+        </StorageContainer>
+      )
     }}
   </ChatScreenContainer>
 )
