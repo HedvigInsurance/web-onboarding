@@ -63,27 +63,22 @@ const InfoText = styled('div')({
 })
 
 const rows: ReadonlyArray<{
-  key: number
   titleKey: string
   amountKey: string
 }> = [
   {
-    key: 0,
     titleKey: 'OFFER_INSURED_AMOUNT_COL_ONE_TITLE',
     amountKey: 'OFFER_INSURED_AMOUNT_COL_ONE_AMOUNT',
   },
   {
-    key: 1,
     titleKey: 'OFFER_INSURED_AMOUNT_COL_TWO_TITLE',
     amountKey: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT',
   },
   {
-    key: 2,
     titleKey: 'OFFER_INSURED_AMOUNT_COL_THREE_TITLE',
     amountKey: 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT',
   },
   {
-    key: 3,
     titleKey: 'OFFER_INSURED_AMOUNT_COL_FOUR_TITLE',
     amountKey: 'OFFER_INSURED_AMOUNT_COL_FOUR_AMOUNT',
   },
@@ -100,13 +95,13 @@ export const InsuredAmount: React.SFC = () => (
             </TranslationsConsumer>
           </HeaderWrapper>
           <Table>
-            {rows.map((row) => (
+            {rows.map((row, index) => (
               <Row
+                key={row.titleKey + row.amountKey}
                 style={{
                   backgroundColor:
-                    row.key % 2 === 0 ? colors.OFF_WHITE : colors.WHITE,
+                    index % 2 === 0 ? colors.OFF_WHITE : colors.WHITE,
                 }}
-                key={row.key}
               >
                 <Col>
                   <BoldInfoText>
