@@ -16,6 +16,7 @@ import { InnerWrapper } from '../components/InnerWrapper'
 const ICONWIDTH = 70
 const ICONWIDTHMOBILE = 150
 const ICONTITLEWIDTH = 200
+const COLWIDTH = 100
 
 const Wrapper = styled('div')({
   marginTop: '70px',
@@ -88,6 +89,7 @@ const Col = styled('div')({
   alignItems: 'center',
   flexDirection: 'column',
   marginBottom: '30px',
+  width: COLWIDTH,
 })
 
 const Row = styled('div')({
