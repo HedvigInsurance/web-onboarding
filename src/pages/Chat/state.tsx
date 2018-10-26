@@ -68,7 +68,7 @@ const initialState: State = {
     lastName: '',
   },
   livingSituation: {
-    size: '',
+    size: 0,
     numberOfPeople: 0,
     postalNumber: '',
     streetAddress: '',
