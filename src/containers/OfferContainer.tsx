@@ -10,6 +10,7 @@ export const OFFER_QUERY = gql`
       insuredAtOtherCompany
       type
       postalNumber
+      personsInHousehold
     }
 
     member {
@@ -33,6 +34,7 @@ export interface OfferData {
     insuredAtOtherCompany: boolean
     type: InsuranceType
     postalNumber: string
+    personsInHousehold: number
   }
   member: {
     firstName: string
