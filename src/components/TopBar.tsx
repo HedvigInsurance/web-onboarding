@@ -166,7 +166,7 @@ export const TopBar: React.SFC<Props> = ({ progress, button }) => (
                   )}
                 </TranslationsConsumer>
                 <CheckmarkIcon
-                  src="/new-member-assets/topbar/checkmark.svg"
+                  src="/new-member-assets/offering/checkmark.svg"
                   style={{
                     visibility: progress <= stage.key ? 'hidden' : 'visible',
                   }}
