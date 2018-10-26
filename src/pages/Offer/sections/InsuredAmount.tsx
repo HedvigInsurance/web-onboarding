@@ -32,34 +32,58 @@ const Row = styled('div')({
   justifyContent: 'space-between',
   alignItems: 'center',
   flexDirection: 'row',
-  marginBottom: '20px',
-  borderBottom: '1px solid ' + colors.LIGHT_GRAY,
-  marginLeft: '40px',
-  marginRight: '40px',
+  marginLeft: '150px',
+  marginRight: '150px',
+  '@media (max-width: 700px)': {
+    marginLeft: '30px',
+    marginRight: '30px',
+  },
 })
 
 const Col = styled('div')({
   display: 'flex',
-  paddingBottom: '10px',
+  paddingTop: '20px',
+  paddingBottom: '20px',
+  paddingRight: '5px',
+  paddingLeft: '5px',
   flexDirection: 'column',
   color: colors.BLACK,
   fontSize: '14px',
 })
 
-const rows: ReadonlyArray<{ titleKey: string; amountKey: string }> = [
+const BoldInfoText = styled('div')({
+  fontSize: '16px',
+  color: colors.BLACK,
+  display: 'inline',
+})
+const InfoText = styled('div')({
+  fontSize: '16px',
+  color: colors.DARK_GRAY,
+  display: 'inline',
+})
+
+const rows: ReadonlyArray<{
+  key: number
+  titleKey: string
+  amountKey: string
+}> = [
   {
+    key: 0,
     titleKey: 'OFFER_INSURED_AMOUNT_COL_ONE_TITLE',
     amountKey: 'OFFER_INSURED_AMOUNT_COL_ONE_AMOUNT',
   },
   {
+    key: 1,
     titleKey: 'OFFER_INSURED_AMOUNT_COL_TWO_TITLE',
     amountKey: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT',
   },
   {
+    key: 2,
     titleKey: 'OFFER_INSURED_AMOUNT_COL_THREE_TITLE',
     amountKey: 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT',
   },
   {
+    key: 3,
     titleKey: 'OFFER_INSURED_AMOUNT_COL_FOUR_TITLE',
     amountKey: 'OFFER_INSURED_AMOUNT_COL_FOUR_AMOUNT',
   },
@@ -77,16 +101,26 @@ export const InsuredAmount: React.SFC = () => (
           </HeaderWrapper>
           <Table>
             {rows.map((row) => (
-              <Row key={row.titleKey + row.amountKey}>
+              <Row
+                style={{
+                  backgroundColor:
+                    row.key % 2 === 0 ? colors.OFF_WHITE : colors.WHITE,
+                }}
+                key={row.key}
+              >
                 <Col>
-                  <TranslationsConsumer textKey={row.titleKey}>
-                    {(title) => title}
-                  </TranslationsConsumer>
+                  <BoldInfoText>
+                    <TranslationsConsumer textKey={row.titleKey}>
+                      {(text) => text}
+                    </TranslationsConsumer>
+                  </BoldInfoText>
                 </Col>
                 <Col>
-                  <TranslationsConsumer textKey={row.amountKey}>
-                    {(amount) => amount}
-                  </TranslationsConsumer>
+                  <InfoText>
+                    <TranslationsConsumer textKey={row.amountKey}>
+                      {(text) => text}
+                    </TranslationsConsumer>
+                  </InfoText>
                 </Col>
               </Row>
             ))}
