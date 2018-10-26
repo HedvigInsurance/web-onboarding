@@ -1,6 +1,7 @@
 import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { TopBar } from 'components/TopBar'
+import { Page } from 'components/utils/Page'
 import { ActionMap, Container } from 'constate'
 import { OfferContainer } from 'containers/OfferContainer'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
@@ -56,96 +57,98 @@ const LinkTag = styled(Link)({
 })
 
 export const Offering: React.SFC<{}> = () => (
-  <SessionTokenGuard>
-    <OfferContainer>
-      {(offer) => {
-        if (!offer || !offer.insurance.type) {
-          return null
-        }
+  <Page>
+    <SessionTokenGuard>
+      <OfferContainer>
+        {(offer) => {
+          if (!offer || !offer.insurance.type) {
+            return null
+          }
 
-        const { insuredAtOtherCompany } = offer.insurance
+          const { insuredAtOtherCompany } = offer.insurance
 
-        return (
-          <Mount
-            on={() =>
-              trackEvent('Product Viewed', {
-                category: 'offer',
-                value: offer.insurance.monthlyCost,
-              })
-            }
-          >
-            <TranslationsConsumer textKey="OFFER_PAGE_TITLE">
-              {(title) => (
-                <Helmet>
-                  <title>{title}</title>
-                </Helmet>
-              )}
-            </TranslationsConsumer>
-
-            <Container<State, ActionMap<State, Actions>>
-              initialState={{
-                upperSignButtonVisible: true,
-                lowerSignButtonVisible: false,
-              }}
-              actions={{
-                updateUpperButtonVisibility: (visible: boolean) => (_) => ({
-                  upperSignButtonVisible: visible,
-                }),
-                updateLowerButtonVisibility: (visible: boolean) => (_) => ({
-                  lowerSignButtonVisible: visible,
-                }),
-              }}
+          return (
+            <Mount
+              on={() =>
+                trackEvent('Product Viewed', {
+                  category: 'offer',
+                  value: offer.insurance.monthlyCost,
+                })
+              }
             >
-              {(state) => (
-                <>
-                  <TopBar
-                    progress={1}
-                    button={
-                      !state.upperSignButtonVisible &&
-                      !state.lowerSignButtonVisible && (
-                        <BarButtonWrapper>
-                          <GetInsuredButton>
-                            <LinkTag
-                              to={'/new-member/sign'}
-                              onClick={() =>
-                                trackEvent('Checkout Started', {
-                                  category: 'offer',
-                                  value: offer.insurance.monthlyCost,
-                                  label: 'TopBar',
-                                })
-                              }
-                            >
-                              <TranslationsConsumer textKey="TOP_BAR_SIGN_BUTTON">
-                                {(text) => text}
-                              </TranslationsConsumer>
-                            </LinkTag>
-                          </GetInsuredButton>
-                        </BarButtonWrapper>
-                      )
-                    }
-                  />
-                  <Offer
-                    offer={offer}
-                    signButtonVisibility={state.updateUpperButtonVisibility}
-                  />
-                  <PageDown />
-                  <HedvigInfo />
-                  {insuredAtOtherCompany ? <HedvigSwitch /> : null}
-                  <InsuranceCoverage />
-                  <InsuredAmount />
-                  <OtherInfo offer={offer} />
-                  <Terms insuranceType={offer.insurance.type} />
-                  <GetInsured
-                    offer={offer}
-                    signButtonVisibility={state.updateLowerButtonVisibility}
-                  />
-                  <Legal />
-                </>
-              )}
-            </Container>
-          </Mount>
-        )
-      }}
-    </OfferContainer>
-  </SessionTokenGuard>
+              <TranslationsConsumer textKey="OFFER_PAGE_TITLE">
+                {(title) => (
+                  <Helmet>
+                    <title>{title}</title>
+                  </Helmet>
+                )}
+              </TranslationsConsumer>
+
+              <Container<State, ActionMap<State, Actions>>
+                initialState={{
+                  upperSignButtonVisible: true,
+                  lowerSignButtonVisible: false,
+                }}
+                actions={{
+                  updateUpperButtonVisibility: (visible: boolean) => (_) => ({
+                    upperSignButtonVisible: visible,
+                  }),
+                  updateLowerButtonVisibility: (visible: boolean) => (_) => ({
+                    lowerSignButtonVisible: visible,
+                  }),
+                }}
+              >
+                {(state) => (
+                  <>
+                    <TopBar
+                      progress={1}
+                      button={
+                        !state.upperSignButtonVisible &&
+                        !state.lowerSignButtonVisible && (
+                          <BarButtonWrapper>
+                            <GetInsuredButton>
+                              <LinkTag
+                                to={'/new-member/sign'}
+                                onClick={() =>
+                                  trackEvent('Checkout Started', {
+                                    category: 'offer',
+                                    value: offer.insurance.monthlyCost,
+                                    label: 'TopBar',
+                                  })
+                                }
+                              >
+                                <TranslationsConsumer textKey="TOP_BAR_SIGN_BUTTON">
+                                  {(text) => text}
+                                </TranslationsConsumer>
+                              </LinkTag>
+                            </GetInsuredButton>
+                          </BarButtonWrapper>
+                        )
+                      }
+                    />
+                    <Offer
+                      offer={offer}
+                      signButtonVisibility={state.updateUpperButtonVisibility}
+                    />
+                    <PageDown />
+                    <HedvigInfo />
+                    {insuredAtOtherCompany ? <HedvigSwitch /> : null}
+                    <InsuranceCoverage />
+                    <InsuredAmount />
+                    <OtherInfo offer={offer} />
+                    <Terms insuranceType={offer.insurance.type} />
+                    <GetInsured
+                      offer={offer}
+                      signButtonVisibility={state.updateLowerButtonVisibility}
+                    />
+                    <Legal />
+                  </>
+                )}
+              </Container>
+            </Mount>
+          )
+        }}
+      </OfferContainer>
+    </SessionTokenGuard>
+  </Page>
 )

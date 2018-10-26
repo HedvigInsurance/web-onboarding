@@ -38,7 +38,7 @@ const insurerNames = new Map<Insurer, string>([
 ])
 
 const insuranceOption = (insurer: keyof Insurer) => (
-  <option value={insurer} key={insurer}>
+  <option value={Insurer[insurer as number]} key={insurer}>
     {insurerNames.get(Insurer[insurer as number] as Insurer)}
   </option>
 )
