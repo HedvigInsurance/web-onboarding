@@ -7,7 +7,7 @@ export const GetInsuredButton = styled('div')(
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: margin ? margin : 0,
+    marginTop: margin || 0,
   }),
 )
 
