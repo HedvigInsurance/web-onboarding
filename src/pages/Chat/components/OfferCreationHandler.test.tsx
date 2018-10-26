@@ -1,4 +1,5 @@
 import { Provider } from 'constate'
+import { OFFER_QUERY } from 'containers/OfferContainer'
 import { mount } from 'enzyme'
 import * as React from 'react'
 import { MockedProvider, MockedResponse } from 'react-apollo/test-utils'
@@ -8,7 +9,6 @@ import { MockStorage } from 'utils/storage/MockStorage'
 import { ChatScreenContainer } from '../containers/ChatScreenContainer'
 import { LoadingScreen } from './LoadingScreen'
 import { OfferCreationHandler } from './OfferCreationHandler'
-import { OFFER_QUERY } from '../../../containers/OfferContainer'
 
 jest.useFakeTimers()
 it('does nothing when no correct state is set', () => {
