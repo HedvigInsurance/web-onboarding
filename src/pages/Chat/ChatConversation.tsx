@@ -1,4 +1,7 @@
-import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
+import {
+  TranslationsConsumer,
+  TranslationsPlaceholderConsumer,
+} from '@hedviginsurance/textkeyfy'
 import { Mufflable } from 'components/animations/Mufflable'
 import { ChatMessage } from 'components/hedvig/chat'
 import { Conversation, Message } from 'components/hedvig/conversation'
@@ -29,6 +32,7 @@ export const ChatConversation: React.SFC = () => (
       goToStep,
       livingSituation,
       currentInsurance,
+      nameAge,
     }) => (
       <Conversation<ChatStep>
         initialVisibleSteps={initialVisibleSteps}
@@ -243,15 +247,16 @@ export const ChatConversation: React.SFC = () => (
                 appear={appear}
                 onTyped={() => goToStep(ChatStep.SHOW_OFFER)}
               >
-                <TranslationsConsumer
+                <TranslationsPlaceholderConsumer
                   textKey={
                     currentInsurance.hasCurrentInsurance
                       ? 'CHAT_HEDVIG_SHOW_OFFER_HAS_INSURANCE'
                       : 'CHAT_HEDVIG_SHOW_OFFER_NO_INSURANCE'
                   }
+                  replacements={{ firstName: nameAge.firstName }}
                 >
                   {(t) => t}
-                </TranslationsConsumer>
+                </TranslationsPlaceholderConsumer>
               </ChatMessage>
             </Mufflable>
           )}
