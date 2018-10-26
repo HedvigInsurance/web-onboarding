@@ -130,7 +130,7 @@ export const GetInsured: React.SFC<Props> = ({
             {() => (
               <TranslationsConsumer textKey="OFFER_SUMMARY_SIGN_CTA">
                 {(ctaText) => (
-                  <GetInsuredButton style={{ marginTop: '30px' }}>
+                  <GetInsuredButton margin={'30px'}>
                     <LinkTag
                       to={'/new-member/sign'}
                       onClick={() =>
