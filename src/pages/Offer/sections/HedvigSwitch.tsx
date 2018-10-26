@@ -8,7 +8,7 @@ import { InnerWrapper } from '../components/InnerWrapper'
 import { Wrapper } from '../components/Wrapper'
 
 const ROWWIDTH = 1200
-const PARAGRAPHWIDTH = 250
+const PARAGRAPHWIDTH = 290
 const TITLEWIDTH = 210
 const IMAGESIDE = 72
 

@@ -44,6 +44,7 @@ const InsuranceInfo = styled('div')({
 const BoldInfoText = styled('div')({
   color: colors.BLACK,
   display: 'inline',
+  fontWeight: 600,
 })
 
 const InfoText = styled('div')({
