@@ -17,6 +17,7 @@ import { InsuranceCoverage } from './sections/InsuranceCoverage'
 import { InsuredAmount } from './sections/InsuredAmount'
 import { Legal } from './sections/LegalText'
 import { Offer } from './sections/Offer'
+import { OtherInfo } from './sections/OtherInfo'
 import { PageDown } from './sections/PageDown'
 import { Terms } from './sections/Terms'
 
@@ -129,6 +130,7 @@ export const Offering: React.SFC<{}> = () => (
                   {insuredAtOtherCompany ? <HedvigSwitch /> : null}
                   <InsuranceCoverage />
                   <InsuredAmount />
+                  <OtherInfo offer={offer} />
                   <Terms insuranceType={offer.insurance.type} />
                   <GetInsured
                     offer={offer}
