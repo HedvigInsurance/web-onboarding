@@ -17,6 +17,7 @@ import { InnerWrapper } from '../components/InnerWrapper'
 const ICONWIDTH = 70
 const ICONWIDTHMOBILE = 150
 const ICONTITLEWIDTH = 200
+const COLWIDTH = 100
 
 const Wrapper = styled('div')({
   marginTop: '70px',
@@ -68,12 +69,20 @@ export const Price = styled('h1')({
   fontFamily: fonts.CIRCULAR,
 })
 
-const InfoText = styled('div')({
-  marginBottom: '0px',
-  marginTop: '0px',
-  fontSize: '14px',
+const InsuranceInfo = styled('div')({
   textAlign: 'center',
+})
+
+const BoldInfoText = styled('div')({
+  fontSize: '14px',
+  color: colors.BLACK,
+  display: 'inline',
+})
+
+const InfoText = styled('div')({
+  fontSize: '14px',
   color: colors.DARK_GRAY,
+  display: 'inline',
 })
 
 const Col = styled('div')({
@@ -81,6 +90,7 @@ const Col = styled('div')({
   alignItems: 'center',
   flexDirection: 'column',
   marginBottom: '30px',
+  width: COLWIDTH,
 })
 
 const Row = styled('div')({
@@ -165,23 +175,36 @@ export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
           >
             {(priceText) => <Price>{priceText}</Price>}
           </TranslationsPlaceholderConsumer>
-          <InfoText>
-            <TranslationsConsumer textKey="OFFER_RISK_LABEL">
-              {(riskLabel) => riskLabel}
-            </TranslationsConsumer>
-          </InfoText>
-          <InfoText>
-            Startdatum:{' '}
-            {offer.insurance.insuredAtOtherCompany ? (
-              <TranslationsConsumer textKey="OFFER_START_LATER">
-                {(riskLabel) => riskLabel}
+          <InsuranceInfo>
+            <BoldInfoText>
+              <TranslationsConsumer textKey="OFFER_SELF_RISK_LABEL">
+                {(text) => text}
               </TranslationsConsumer>
-            ) : (
-              <TranslationsConsumer textKey="OFFER_START_NOW">
-                {(riskLabel) => riskLabel}
+            </BoldInfoText>
+            <InfoText>
+              <TranslationsConsumer textKey="OFFER_SELF_RISK_VALUE">
+                {(text) => text}
               </TranslationsConsumer>
-            )}
-          </InfoText>
+            </InfoText>
+          </InsuranceInfo>
+          <InsuranceInfo>
+            <BoldInfoText>
+              <TranslationsConsumer textKey="OFFER_START_DATE_LABEL">
+                {(text) => text}
+              </TranslationsConsumer>
+            </BoldInfoText>
+            <InfoText>
+              {offer.insurance.insuredAtOtherCompany ? (
+                <TranslationsConsumer textKey="OFFER_START_LATER">
+                  {(riskLabel) => riskLabel}
+                </TranslationsConsumer>
+              ) : (
+                <TranslationsConsumer textKey="OFFER_START_NOW">
+                  {(riskLabel) => riskLabel}
+                </TranslationsConsumer>
+              )}
+            </InfoText>
+          </InsuranceInfo>
           <Row>
             {COLUMNS.map((col) => (
               <Col key={col.key}>

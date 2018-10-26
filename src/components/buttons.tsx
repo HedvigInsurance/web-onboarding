@@ -2,11 +2,14 @@ import { colors } from '@hedviginsurance/brand'
 import styled from 'react-emotion'
 import { Link } from 'react-router-dom'
 
-export const GetInsuredButton = styled('div')({
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'center',
-})
+export const GetInsuredButton = styled('div')(
+  ({ margin }: { margin?: string }) => ({
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: margin || 0,
+  }),
+)
 
 export const LinkTag = styled(Link)({
   backgroundColor: colors.GREEN,

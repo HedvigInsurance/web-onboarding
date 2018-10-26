@@ -23,7 +23,7 @@ const Card = styled('div')({
   marginTop: '70px',
   marginBottom: '70px',
   backgroundColor: colors.WHITE,
-  paddingBottom: '30px',
+  paddingBottom: '48px',
   boxShadow: '0px 8px 40px -12px rgba(0,0,0,0.67)',
   borderRadius: '10px',
 })
@@ -31,9 +31,27 @@ const Card = styled('div')({
 const Header = styled('h1')({
   color: colors.WHITE,
   marginTop: '0px',
+  marginBottom: '30px',
   paddingTop: '30px',
-  marginBottom: '10px',
+  paddingBottom: '30px',
   fontSize: '32px',
+  maxWidth: '350px',
+})
+
+const InsuranceInfo = styled('div')({
+  textAlign: 'center',
+})
+
+const BoldInfoText = styled('div')({
+  fontSize: '14px',
+  color: colors.BLACK,
+  display: 'inline',
+})
+
+const InfoText = styled('div')({
+  fontSize: '14px',
+  color: colors.DARK_GRAY,
+  display: 'inline',
 })
 
 const HeaderBackground = styled('div')({
@@ -42,9 +60,8 @@ const HeaderBackground = styled('div')({
   borderTopRightRadius: '10px',
 })
 
-const Price = styled('h1')({
-  marginBottom: '20px',
-  marginTop: '20px',
+const PriceHeader = styled('h1')({
+  marginBottom: '0px',
   fontSize: '32px',
   textAlign: 'center',
   color: colors.BLACK,
@@ -72,8 +89,38 @@ export const GetInsured: React.SFC<Props> = ({
               price: offer.insurance.monthlyCost,
             }}
           >
-            {(priceText) => <Price>{priceText}</Price>}
+            {(priceText) => <PriceHeader>{priceText}</PriceHeader>}
           </TranslationsPlaceholderConsumer>
+          <InsuranceInfo>
+            <BoldInfoText>
+              <TranslationsConsumer textKey="OFFER_SELF_RISK_LABEL">
+                {(text) => text}
+              </TranslationsConsumer>
+            </BoldInfoText>
+            <InfoText>
+              <TranslationsConsumer textKey="OFFER_SELF_RISK_VALUE">
+                {(text) => text}
+              </TranslationsConsumer>
+            </InfoText>
+          </InsuranceInfo>
+          <InsuranceInfo>
+            <BoldInfoText>
+              <TranslationsConsumer textKey="OFFER_START_DATE_LABEL">
+                {(text) => text}
+              </TranslationsConsumer>
+            </BoldInfoText>
+            <InfoText>
+              {offer.insurance.insuredAtOtherCompany ? (
+                <TranslationsConsumer textKey="OFFER_START_LATER">
+                  {(riskLabel) => riskLabel}
+                </TranslationsConsumer>
+              ) : (
+                <TranslationsConsumer textKey="OFFER_START_NOW">
+                  {(riskLabel) => riskLabel}
+                </TranslationsConsumer>
+              )}
+            </InfoText>
+          </InsuranceInfo>
           <VisibilitySensor
             partialVisibility
             onChange={(isVisible: boolean) => {
@@ -83,7 +130,7 @@ export const GetInsured: React.SFC<Props> = ({
             {() => (
               <TranslationsConsumer textKey="OFFER_SUMMARY_SIGN_CTA">
                 {(ctaText) => (
-                  <GetInsuredButton>
+                  <GetInsuredButton margin={'30px'}>
                     <LinkTag
                       to={'/new-member/sign'}
                       onClick={() =>
