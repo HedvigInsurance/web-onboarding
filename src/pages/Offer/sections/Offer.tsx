@@ -154,7 +154,7 @@ export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
               <Header>
                 <TranslationsPlaceholderConsumer
                   textKey="OFFER_HEADER"
-                  replacements={{ name: offer.member.firstName }}
+                  replacements={{ firstName: offer.member.firstName }}
                 >
                   {(title) => title}
                 </TranslationsPlaceholderConsumer>

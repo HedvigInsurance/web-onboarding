@@ -66,7 +66,8 @@ const IconTitle = styled('div')({
   textAlign: 'center',
   color: colors.DARK_PURPLE,
   lineHeight: 'normal',
-  maxWidth: '120px',
+  maxWidth: '130px',
+  fontWeight: 600,
 })
 
 const IconInfo = styled('div')({
