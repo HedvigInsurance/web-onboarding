@@ -42,21 +42,11 @@ const validationSchema = yup
       .oneOf(Object.values(InsuranceType))
       .required(),
     size: yup
-      .mixed()
-      .test({
-        name: 'isntTooBig',
-        test: (value) => !isNaN(Number(value)) && value < 250,
-        message: 'CHAT_INPUT_INSURANCE_TYPE_SIZE_TOO_BIG',
-      })
-      .test({
-        test: (value) =>
-          value === '' || (!isNaN(Number(value)) && Number(value) > 0),
-        message: 'UNKNOWN_ERROR',
-      })
-      .test({
-        test: (value) => value !== '',
-        message: 'noop',
-      }),
+      .number()
+      .integer('noop')
+      .min(5, 'noop')
+      .max(250, 'CHAT_INPUT_INSURANCE_TYPE_SIZE_TOO_BIG')
+      .required('noop'),
   })
 
   .required()
@@ -128,6 +118,12 @@ const ValidationErrorMaybe: React.SFC<ValidationErrorMaybeProps> = ({
   return null
 }
 
+const formatSquareMeters = (value?: string | number): number =>
+  !value ? 0 : Number(value)
+
+const displaySquareMeters = (value: string | number): string | number =>
+  value === 0 ? '' : value
+
 export const InsuranceTypeInput: React.SFC<
   InsuranceTypeInputProps & Focusable
 > = ({
@@ -192,8 +188,8 @@ export const InsuranceTypeInput: React.SFC<
                   type="number"
                   id="size"
                   maxWidth={4}
-                  value={chatState.livingSituation.size}
-                  onChange={handleChange('size', chatState)}
+                  value={displaySquareMeters(chatState.livingSituation.size)}
+                  onChange={handleChange('size', chatState, formatSquareMeters)}
                   pattern="[0-9]*"
                   hasError={hasValidationErrorForKey(
                     'size',
