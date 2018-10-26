@@ -5,6 +5,7 @@ import { StorageContainer } from '../utils/StorageContainer'
 export const SessionTokenGuard: React.SFC = ({ children }) => (
   <StorageContainer>
     {(storageState) =>
+      storageState.session.getSession() &&
       storageState.session.getSession()!.token ? (
         <>{children}</>
       ) : (

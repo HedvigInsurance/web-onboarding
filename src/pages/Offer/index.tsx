@@ -59,6 +59,10 @@ export const Offering: React.SFC<{}> = () => (
   <SessionTokenGuard>
     <OfferContainer>
       {(offer) => {
+        if (!offer || !offer.insurance.type) {
+          return null
+        }
+
         const { insuredAtOtherCompany } = offer.insurance
 
         return (

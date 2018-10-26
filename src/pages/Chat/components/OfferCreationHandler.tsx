@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { Mount } from 'react-lifecycle-components'
 import { Redirect } from 'react-router-dom'
 import { OfferContainer } from '../../../containers/OfferContainer'
 import { StorageContainer } from '../../../utils/StorageContainer'
@@ -22,7 +23,25 @@ export const OfferCreationHandler = () => (
         state.offerCreationDebounceState === LoadingState.COMPLETED &&
         state.offerCreationLoadingState === LoadingState.COMPLETED
       ) {
-        return <Redirect to="/new-member/offer" />
+        return (
+          <OfferContainer>
+            {(offer, { refetch }) => {
+              if (offer && offer.insurance.type) {
+                return <Redirect to="/new-member/offer" />
+              }
+
+              return (
+                <Mount
+                  on={() => {
+                    refetch()
+                  }}
+                >
+                  <LoadingScreen appear />
+                </Mount>
+              )
+            }}
+          </OfferContainer>
+        )
       }
 
       return (
@@ -35,7 +54,7 @@ export const OfferCreationHandler = () => (
               return (
                 <OfferContainer>
                   {(offer) => {
-                    if (offer) {
+                    if (offer && offer.insurance.type) {
                       return <Redirect to="/new-member/offer" />
                     }
 

@@ -41,21 +41,21 @@ export interface OfferData {
 }
 
 interface OfferContainerProps {
-  children: (offer: OfferData) => React.ReactNode
+  children: (offer: OfferData, props: { refetch: any }) => React.ReactNode
 }
 
 export const OfferContainer: React.SFC<OfferContainerProps> = ({
   children,
 }) => (
   <Query<OfferData> query={OFFER_QUERY}>
-    {({ loading, error, data }) => {
+    {({ loading, error, data, refetch }) => {
       if (loading || !data) {
-        return <div>Loading</div>
+        return null
       }
       if (error) {
         return <div>Error</div>
       }
-      return children(data)
+      return children(data, { refetch })
     }}
   </Query>
 )
