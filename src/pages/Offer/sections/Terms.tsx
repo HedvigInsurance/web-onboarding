@@ -52,6 +52,16 @@ const Col = styled('div')({
   flexDirection: 'column',
 })
 
+const PDFTag = styled('h3')({
+  fontSize: '10px',
+  color: colors.DARK_PURPLE,
+  zIndex: 2,
+  position: 'absolute',
+  margin: 0,
+  top: 0,
+  right: 15,
+})
+
 const PerilIcon = styled('img')({
   marginBottom: '0px',
   marginTop: '10px',
@@ -63,6 +73,7 @@ const PerilIcon = styled('img')({
 
 const PerilLink = styled('a')({
   textDecoration: 'none',
+  position: 'relative',
 })
 
 const PerilTitle = styled('div')({
@@ -97,6 +108,7 @@ export const Terms: React.SFC<TermsProps> = ({ insuranceType }) => (
                 >
                   {(url) => (
                     <PerilLink href={url} target="_blank">
+                      <PDFTag>PDF</PDFTag>
                       <PerilIcon src="/new-member-assets/offering/forkopsinformation.svg" />
 
                       <TranslationsConsumer textKey="TERMS_PERIL_ONE_TITLE">
@@ -116,8 +128,8 @@ export const Terms: React.SFC<TermsProps> = ({ insuranceType }) => (
                 >
                   {(url) => (
                     <PerilLink href={url} target="_blank">
+                      <PDFTag>PDF</PDFTag>
                       <PerilIcon src="/new-member-assets/offering/forkopsinformation.svg" />
-
                       <TranslationsConsumer textKey="TERMS_PERIL_TWO_TITLE">
                         {(title) => <PerilTitle>{title}</PerilTitle>}
                       </TranslationsConsumer>
