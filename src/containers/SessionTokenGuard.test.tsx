@@ -30,7 +30,7 @@ it('redirects when there is no session', () => {
     </StaticRouter>,
   )
 
-  expect(wrapper.find(Redirect).prop('to')).toBe('/hedvig')
+  expect(wrapper.find(Redirect).prop('to')).toBe('/new-member/hedvig')
 })
 
 it('does not redirect when there is a session token', () => {

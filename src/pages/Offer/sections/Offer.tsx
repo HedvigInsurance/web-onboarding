@@ -121,19 +121,22 @@ const COLUMNS = [
   {
     key: 0,
     title: 'Lagenhetsskydd',
-    icon: '/assets/offering/lagenhetsskyddet.svg',
+    icon: '/new-member-assets/offering/lagenhetsskyddet.svg',
   },
   {
     key: 1,
     title: 'Personskydd',
-    icon: '/assets/offering/familjeskyddet.svg',
+    icon: '/new-member-assets/offering/familjeskyddet.svg',
   },
   {
     key: 2,
     title: 'Prylskydd',
-    icon: '/assets/offering/prylskyddet.svg',
+    icon: '/new-member-assets/offering/prylskyddet.svg',
   },
 ]
+
+const addSpace = (postalNumber: string) =>
+  postalNumber.substr(0, 3) + ' ' + postalNumber.substr(3, 4)
 
 export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
   <Wrapper>
@@ -150,10 +153,10 @@ export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
             </HeaderWrapper>
             <PersonalInfo>
               {`${offer.member.firstName} ${offer.member.lastName}`}
-              {' • '}
+              {' · '}
               {offer.insurance.address}
-              {' • '}
-              {offer.insurance.postalNumber}
+              {' · '}
+              {addSpace(offer.insurance.postalNumber)}
             </PersonalInfo>
           </HeaderBackground>
           <TranslationsPlaceholderConsumer
@@ -198,7 +201,7 @@ export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
                 <TranslationsConsumer textKey="OFFER_SUMMARY_SIGN_CTA">
                   {(ctaText) => (
                     <LinkTag
-                      to={'/sign'}
+                      to={'/new-member/sign'}
                       onClick={() =>
                         trackEvent('Checkout Started', {
                           category: 'offer',

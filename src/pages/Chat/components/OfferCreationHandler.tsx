@@ -20,7 +20,7 @@ export const OfferCreationHandler = () => (
         state.offerCreationDebounceState === LoadingState.COMPLETED &&
         state.offerCreationLoadingState === LoadingState.COMPLETED
       ) {
-        return <Redirect to="/offer" />
+        return <Redirect to="/new-member/offer" />
       }
 
       return null

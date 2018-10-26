@@ -8,7 +8,9 @@ import { InnerWrapper } from '../components/InnerWrapper'
 import { Wrapper } from '../components/Wrapper'
 
 const ROWWIDTH = 1200
-const PARAGRAPHWIDTH = 240
+const COLWIDTH = 300
+const COLWIDTHSMALL = 250
+const COLWIDTHCOLLAPSED = 350
 
 const Card = styled('div')({
   paddingTop: '30px',
@@ -27,18 +29,32 @@ const Header = styled('h1')({
 
 const Image = styled('img')({
   marginBottom: '20px',
-  maxWidth: '240px',
-  '@media (max-width: 710px)': {
-    maxWidth: '300px',
+  width: COLWIDTH,
+  '@media (max-width: 1000px)': {
+    width: COLWIDTHSMALL,
+  },
+  '@media (max-width: 800px)': {
+    width: COLWIDTHCOLLAPSED,
   },
   '@media (max-width: 400px)': {
-    maxWidth: '210px',
+    width: COLWIDTHSMALL,
   },
 })
 
 const Col = styled('div')({
   display: 'flex',
   flexDirection: 'column',
+  alignItems: 'center',
+  width: COLWIDTH,
+  '@media (max-width: 1000px)': {
+    width: COLWIDTHSMALL,
+  },
+  '@media (max-width: 800px)': {
+    width: COLWIDTHCOLLAPSED,
+  },
+  '@media (max-width: 400px)': {
+    width: COLWIDTHSMALL,
+  },
 })
 
 const Row = styled('div')({
@@ -47,7 +63,7 @@ const Row = styled('div')({
   justifyContent: 'space-evenly',
   alignItems: 'baseline',
   maxWidth: ROWWIDTH,
-  '@media (max-width: 710px)': {
+  '@media (max-width: 800px)': {
     flexDirection: 'column',
     alignItems: 'center',
   },
@@ -57,13 +73,11 @@ const Title = styled('h3')({
   margin: '0px',
   fontSize: '14px',
   color: colors.BLACK,
-  maxWidth: '240px',
 })
 
 const Paragraph = styled('p')({
   fontSize: '14px',
   color: colors.DARK_GRAY,
-  maxWidth: PARAGRAPHWIDTH,
 })
 
 export const HedvigInfo: React.SFC = () => (
@@ -80,7 +94,7 @@ export const HedvigInfo: React.SFC = () => (
           </HeaderWrapper>
           <Row>
             <Col>
-              <Image src="/assets/offering/placeholder.svg" />
+              <Image src="/new-member-assets/offering/enkel-overblick.svg" />
               <Title>
                 <TranslationsConsumer textKey="OFFER_INFO_COL_ONE_TITLE">
                   {(title) => title}
@@ -93,7 +107,7 @@ export const HedvigInfo: React.SFC = () => (
               </Paragraph>
             </Col>
             <Col>
-              <Image src="/assets/offering/placeholder.svg" />
+              <Image src="/new-member-assets/offering/snabbt-svar.svg" />
               <Title>
                 <TranslationsConsumer textKey="OFFER_INFO_COL_TWO_TITLE">
                   {(title) => title}
@@ -106,7 +120,7 @@ export const HedvigInfo: React.SFC = () => (
               </Paragraph>
             </Col>
             <Col>
-              <Image src="/assets/offering/placeholder.svg" />
+              <Image src="/new-member-assets/offering/anmal-skador.svg" />
               <Title>
                 <TranslationsConsumer textKey="OFFER_INFO_COL_THREE_TITLE">
                   {(title) => title}

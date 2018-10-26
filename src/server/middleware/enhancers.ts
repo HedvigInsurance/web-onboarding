@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/node'
 import * as https from 'https'
 import { Context, Middleware } from 'koa'
 import { Logger } from 'typescript-logging'
@@ -46,12 +47,13 @@ const handleSuperFatalError = (ctx: Context) => (superFatalError: Error) => {
     'SUPER-FATAL ERROR! Uncaught error in request, but failed to get error page. Throwing error again to trigger super-fatal error page',
     superFatalError,
   )
+  Sentry.captureException(superFatalError)
   return superFatalError
 }
 
 export const inCaseOfEmergency: Middleware = async (ctx, next) => {
   try {
-    await next()
+    await nextWithSentry(ctx, next)
   } catch (e) {
     if (e.status) {
       throw e
@@ -79,5 +81,21 @@ export const inCaseOfEmergency: Middleware = async (ctx, next) => {
     } catch (superFatalError) {
       throw handleSuperFatalError(ctx)(superFatalError)
     }
+  }
+}
+
+export const nextWithSentry: Middleware = async (ctx, next) => {
+  const sentry = new Sentry.Hub(
+    Sentry.getCurrentHub().getClient(),
+    new Sentry.Scope(),
+  )
+  sentry.configureScope((scope) => {
+    scope.setExtra('requestUuid', ctx.state.requestUuid)
+  })
+  try {
+    await next()
+  } catch (e) {
+    sentry.captureException(e)
+    throw e
   }
 }

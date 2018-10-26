@@ -3,11 +3,11 @@ import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { GetInsuredButton } from 'components/buttons'
 import * as React from 'react'
 import styled from 'react-emotion'
+
 const IMAGEWIDTH = 450
-const CONTENTWIDTH = 1000
 
 const Wrapper = styled('div')({
-  marginTop: '84px',
+  marginTop: '70px',
   width: '100%',
   backgroundColor: colors.OFF_WHITE,
   position: 'absolute',
@@ -16,17 +16,13 @@ const Wrapper = styled('div')({
 })
 
 const InnerWrapper = styled('div')({
-  display: 'flex',
-  alignItems: 'center',
-  flexDirection: 'column',
-  marginLeft: 'auto',
-  marginRight: 'auto',
-  minWidth: CONTENTWIDTH,
-  maxWidth: CONTENTWIDTH,
-  [`@media (max-width: ${CONTENTWIDTH}px)`]: {
-    minWidth: '100%',
-    marginLeft: '0px',
-    marginRight: '0px',
+  width: IMAGEWIDTH,
+  textAlign: 'center',
+  margin: 'auto',
+  '@media (max-width: 450px)': {
+    maxWidth: '100%',
+    paddingLeft: '10px',
+    paddingRight: '10px',
   },
 })
 
@@ -41,12 +37,18 @@ const DownloadButton = styled('a')({
   border: 'none',
   outlineStyle: 'none',
   marginTop: '10px',
+  marginBottom: '30px',
 })
 
 const DownloadImage = styled('img')({
   width: IMAGEWIDTH,
   marginBottom: '30px',
   marginTop: '30px',
+  '@media (max-width: 450px)': {
+    width: '300px',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
 })
 
 const Header = styled('h1')({
@@ -63,15 +65,13 @@ const DownloadHeader = styled('h1')({
 
 const InsuredText = styled('div')({
   fontSize: '16px',
-  maxWidth: IMAGEWIDTH,
-  textAlign: 'center',
   marginBottom: '30px',
 })
 
 export const DownloadApp: React.SFC = () => (
   <Wrapper>
     <InnerWrapper>
-      <DownloadImage src={'/assets/offering/placeholder.svg'} />
+      <DownloadImage src={'/new-member-assets/download/success_image.svg'} />
       <Header>
         <TranslationsConsumer textKey="DOWNLOAD_HEADER_ONE">
           {(header) => header}

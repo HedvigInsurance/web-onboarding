@@ -1,5 +1,18 @@
-import { createKoaServer } from '@hedviginsurance/web-survival-kit' // tslint:disable-line ordered-imports
 import 'source-map-support/register'
+import { createKoaServer } from '@hedviginsurance/web-survival-kit' // tslint:disable-line ordered-imports
+import * as Sentry from '@sentry/node' // tslint:disable-line ordered-imports
+
+const sentryDsn = process.env.SENTRY_DSN
+const sentryEnvironment = process.env.SENTRY_ENVIRONMENT || 'dev'
+Sentry.init({
+  dsn: sentryDsn,
+  enabled: Boolean(sentryDsn),
+  environment: sentryEnvironment,
+  release: process.env.HEROKU_SLUG_COMMIT,
+  serverName: process.env.HEROKU_DYNO_ID,
+  attachStacktrace: true,
+})
+
 import { reactPageRoutes } from './routes'
 import { appLogger } from './server/logging'
 import {
@@ -16,6 +29,11 @@ const getPort = () => (process.env.PORT ? Number(process.env.PORT) : 8080)
 
 appLogger.info(`Booting server on ${getPort()} 👢`)
 appLogger.info(
+  `Sentry is ${
+    Boolean(sentryDsn) ? 'enabled' : 'disabled'
+  }, with environment "${sentryEnvironment}"`,
+)
+appLogger.info(
   `Using giraffe at batchHttp:"${getGiraffeEndpoint(
     'GIRAFFE_ENDPOINT',
     'https://graphql.dev.hedvigit.com/graphql',
@@ -26,7 +44,7 @@ appLogger.info(
 )
 
 const server = createKoaServer({
-  publicPath: '/assets',
+  publicPath: '/new-member-assets',
   assetLocation: __dirname + '/assets',
 })
 server.app.use(setRequestUuidMiddleware)
