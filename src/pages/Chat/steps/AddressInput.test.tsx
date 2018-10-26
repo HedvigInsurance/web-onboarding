@@ -30,8 +30,8 @@ it('handles form changes', () => {
   expect(wrapper.find('input#streetAddress').prop('value')).toBe('Storgatan 1')
   wrapper
     .find('input#postalNumber')
-    .simulate('change', { target: { value: '12345' } })
-  expect(wrapper.find('input#postalNumber').prop('value')).toBe('12345')
+    .simulate('change', { target: { value: '123 45' } })
+  expect(wrapper.find('input#postalNumber').prop('value')).toBe('123 45')
 
   expect(wrapper.find('button').prop('disabled')).toBe(false)
 })
