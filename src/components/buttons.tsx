@@ -25,7 +25,7 @@ export const Button = styled('button')(
   }: {
     background: string
     foreground: string
-    size: 'sm' | 'lg'
+    size?: 'sm' | 'lg'
   }) => ({
     appearance: 'none',
     padding: size === 'sm' ? '10px 16px' : '16px 20px',

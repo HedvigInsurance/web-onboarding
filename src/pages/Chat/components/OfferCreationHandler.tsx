@@ -24,9 +24,9 @@ export const OfferCreationHandler = () => (
         state.offerCreationLoadingState === LoadingState.COMPLETED
       ) {
         return (
-          <OfferContainer>
+          <OfferContainer childrenHandlesLoadingState>
             {(offer, { refetch }) => {
-              if (offer && offer.insurance.type) {
+              if (offer && offer.insurance && offer.insurance.type) {
                 return <Redirect to="/new-member/offer" />
               }
 
@@ -52,9 +52,9 @@ export const OfferCreationHandler = () => (
               storage.session.getSession()!.token
             ) {
               return (
-                <OfferContainer>
+                <OfferContainer childrenHandlesLoadingState>
                   {(offer) => {
-                    if (offer && offer.insurance.type) {
+                    if (offer && offer.insurance && offer.insurance.type) {
                       return <Redirect to="/new-member/offer" />
                     }
 

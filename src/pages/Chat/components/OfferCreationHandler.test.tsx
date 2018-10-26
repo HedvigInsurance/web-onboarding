@@ -1,44 +1,72 @@
 import { Provider } from 'constate'
 import { mount } from 'enzyme'
 import * as React from 'react'
+import { MockedProvider, MockedResponse } from 'react-apollo/test-utils'
 import { Redirect, StaticRouter } from 'react-router'
 import { createSession } from 'utils/sessionStorage'
 import { MockStorage } from 'utils/storage/MockStorage'
 import { ChatScreenContainer } from '../containers/ChatScreenContainer'
 import { LoadingScreen } from './LoadingScreen'
 import { OfferCreationHandler } from './OfferCreationHandler'
+import { OFFER_QUERY } from '../../../containers/OfferContainer'
 
 jest.useFakeTimers()
 it('does nothing when no correct state is set', () => {
+  const mocks: MockedResponse[] = [
+    {
+      request: {
+        query: OFFER_QUERY,
+      },
+      result: {
+        data: {
+          insurance: {
+            address: 'Testvägen 1',
+            monthlyCost: 99,
+            insuredAtOtherCompany: false,
+            type: 'RENT',
+            postalNumber: '12345',
+            __typename: 'Insurance',
+          },
+          member: {
+            firstName: 'Test',
+            lastName: 'Testerson',
+            __typename: 'Member',
+          },
+        },
+      },
+    },
+  ]
   const wrapper = mount(
     <StaticRouter context={{}}>
-      <Provider
-        initialState={{
-          storage: {
-            session: createSession(new MockStorage({})),
-          },
-        }}
-      >
-        <OfferCreationHandler />
-        <ChatScreenContainer>
-          {(state) => (
-            <>
-              <button
-                id="trigger-debounce"
-                onClick={() => state.beginDebounce()}
-              />
-              <button
-                id="trigger-loading"
-                onClick={() => state.beginCreateOffer()}
-              />
-              <button
-                id="trigger-finished"
-                onClick={() => state.createOfferSuccess()}
-              />
-            </>
-          )}
-        </ChatScreenContainer>
-      </Provider>
+      <MockedProvider mocks={mocks}>
+        <Provider
+          initialState={{
+            storage: {
+              session: createSession(new MockStorage({})),
+            },
+          }}
+        >
+          <OfferCreationHandler />
+          <ChatScreenContainer>
+            {(state) => (
+              <>
+                <button
+                  id="trigger-debounce"
+                  onClick={() => state.beginDebounce()}
+                />
+                <button
+                  id="trigger-loading"
+                  onClick={() => state.beginCreateOffer()}
+                />
+                <button
+                  id="trigger-finished"
+                  onClick={() => state.createOfferSuccess()}
+                />
+              </>
+            )}
+          </ChatScreenContainer>
+        </Provider>
+      </MockedProvider>
     </StaticRouter>,
   )
 
