@@ -46,26 +46,22 @@ const Col = styled('div')({
   fontSize: '14px',
 })
 
-const AMOUNTS = [
+const rows: ReadonlyArray<{ titleKey: string; amountKey: string }> = [
   {
-    key: 0,
-    title: 'Bostaden:',
-    amount: 'Fullvärde',
+    titleKey: 'OFFER_INSURED_AMOUNT_COL_ONE_TITLE',
+    amountKey: 'OFFER_INSURED_AMOUNT_COL_ONE_AMOUNT',
   },
   {
-    key: 1,
-    title: 'Dina prylar totalt:',
-    amount: '1 000 000 kr',
+    titleKey: 'OFFER_INSURED_AMOUNT_COL_TWO_TITLE',
+    amountKey: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT',
   },
   {
-    key: 2,
-    title: 'Drulle gäller för prylar upp till:',
-    amount: '50 000 kr',
+    titleKey: 'OFFER_INSURED_AMOUNT_COL_THREE_TITLE',
+    amountKey: 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT',
   },
   {
-    key: 3,
-    title: 'Självrisk:',
-    amount: '1 500 kr',
+    titleKey: 'OFFER_INSURED_AMOUNT_COL_FOUR_TITLE',
+    amountKey: 'OFFER_INSURED_AMOUNT_COL_FOUR_AMOUNT',
   },
 ]
 
@@ -80,10 +76,18 @@ export const InsuredAmount: React.SFC = () => (
             </TranslationsConsumer>
           </HeaderWrapper>
           <Table>
-            {AMOUNTS.map((amount) => (
-              <Row key={amount.key}>
-                <Col>{amount.title}</Col>
-                <Col>{amount.amount}</Col>
+            {rows.map((row) => (
+              <Row key={row.titleKey + row.amountKey}>
+                <Col>
+                  <TranslationsConsumer textKey={row.titleKey}>
+                    {(title) => title}
+                  </TranslationsConsumer>
+                </Col>
+                <Col>
+                  <TranslationsConsumer textKey={row.amountKey}>
+                    {(amount) => amount}
+                  </TranslationsConsumer>
+                </Col>
               </Row>
             ))}
           </Table>
