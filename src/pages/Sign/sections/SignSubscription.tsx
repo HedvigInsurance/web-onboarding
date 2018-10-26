@@ -190,7 +190,7 @@ const StateComponent: React.SFC<StateComponentProps> = ({
     case SIGNSTATE.COMPLETED:
       if (collectStatus.status === BANKIDSTATUS.COMPLETE) {
         trackEvent('Order Completed', { category: 'sign-up' })
-        return <Redirect to="/download" />
+        return <Redirect to="/new-member/download" />
       }
     case SIGNSTATE.FAILED:
       if (collectStatus.status === BANKIDSTATUS.FAILED) {

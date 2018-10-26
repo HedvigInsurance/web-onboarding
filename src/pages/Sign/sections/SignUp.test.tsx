@@ -41,6 +41,7 @@ it('queries when it has a session', async () => {
             insuredAtOtherCompany: false,
             type: 'RENT',
             postalNumber: '12345',
+            personsInHousehold: 1,
             __typename: 'Insurance',
           },
           member: {
@@ -112,6 +113,7 @@ it('signs without 💥', async () => {
             insuredAtOtherCompany: false,
             type: 'RENT',
             postalNumber: '12345',
+            personsInHousehold: 1,
             __typename: 'Insurance',
           },
           member: {
@@ -155,7 +157,7 @@ it('signs without 💥', async () => {
   const client = new ApolloClient({ link, cache: new InMemoryCache() })
   const wrapper = mount(
     <HelmetProvider>
-      <StaticRouter context={{}} location="/sign">
+      <StaticRouter context={{}} location="/new-member/sign">
         <ApolloProvider client={client}>
           <Provider
             initialState={{
@@ -210,7 +212,7 @@ it('signs without 💥', async () => {
   })
   await mockNetworkWait()
   wrapper.update()
-  expect(wrapper.find(Redirect).prop('to')).toBe('/download')
+  expect(wrapper.find(Redirect).prop('to')).toBe('/new-member/download')
 })
 
 it('shows an error when bankid errors', async () => {
@@ -227,6 +229,7 @@ it('shows an error when bankid errors', async () => {
             insuredAtOtherCompany: false,
             type: 'RENT',
             postalNumber: '12345',
+            personsInHousehold: 1,
             __typename: 'Insurance',
           },
           member: {
@@ -270,7 +273,7 @@ it('shows an error when bankid errors', async () => {
   const client = new ApolloClient({ link, cache: new InMemoryCache() })
   const wrapper = mount(
     <HelmetProvider>
-      <StaticRouter context={{}} location="/sign">
+      <StaticRouter context={{}} location="/new-member/sign">
         <ApolloProvider client={client}>
           <Provider
             initialState={{
@@ -344,6 +347,7 @@ it('renders correct status when sign status query has a status', async () => {
             insuredAtOtherCompany: false,
             type: 'RENT',
             postalNumber: '12345',
+            personsInHousehold: 1,
             __typename: 'Insurance',
           },
           member: {
@@ -383,7 +387,7 @@ it('renders correct status when sign status query has a status', async () => {
   const client = new ApolloClient({ link, cache: new InMemoryCache() })
   const wrapper = mount(
     <HelmetProvider>
-      <StaticRouter context={{}} location="/sign">
+      <StaticRouter context={{}} location="/new-member/sign">
         <ApolloProvider client={client}>
           <Provider
             initialState={{

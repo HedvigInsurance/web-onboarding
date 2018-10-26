@@ -94,7 +94,7 @@ export const HedvigInfo: React.SFC = () => (
           </HeaderWrapper>
           <Row>
             <Col>
-              <Image src="/assets/offering/enkel-overblick.svg" />
+              <Image src="/new-member-assets/offering/enkel-overblick.svg" />
               <Title>
                 <TranslationsConsumer textKey="OFFER_INFO_COL_ONE_TITLE">
                   {(title) => title}
@@ -107,7 +107,7 @@ export const HedvigInfo: React.SFC = () => (
               </Paragraph>
             </Col>
             <Col>
-              <Image src="/assets/offering/snabbt-svar.svg" />
+              <Image src="/new-member-assets/offering/snabbt-svar.svg" />
               <Title>
                 <TranslationsConsumer textKey="OFFER_INFO_COL_TWO_TITLE">
                   {(title) => title}
@@ -120,7 +120,7 @@ export const HedvigInfo: React.SFC = () => (
               </Paragraph>
             </Col>
             <Col>
-              <Image src="/assets/offering/anmal-skador.svg" />
+              <Image src="/new-member-assets/offering/anmal-skador.svg" />
               <Title>
                 <TranslationsConsumer textKey="OFFER_INFO_COL_THREE_TITLE">
                   {(title) => title}
