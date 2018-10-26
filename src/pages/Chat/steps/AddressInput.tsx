@@ -5,6 +5,7 @@ import {
 import { UserResponse, UserTextInput } from 'components/userInput/UserResponse'
 import { SingletonAction } from 'components/utils/SingletonAction'
 import * as React from 'react'
+import { formatPostalNumber } from 'utils/postalNumbers'
 import * as yup from 'yup'
 import { NextButton } from '../components/NextButton'
 import {
@@ -23,15 +24,16 @@ const handleChange = <K extends keyof LivingSituationState>(
   chatState.setLivingSituationProp(field, format(event.target.value))
 }
 
+const POSTAL_NUMBER_REGEX = '^[0-9]{3}[\\s]?[0-9]{2}$'
+
 const validationSchema = yup
   .object<Partial<LivingSituationState>>({
     streetAddress: yup.string().required(),
     postalNumber: yup
       .string()
-      .matches(/^[0-9]{3}\s?[0-9]{2}$/)
+      .matches(RegExp(POSTAL_NUMBER_REGEX))
       .required(),
   })
-
   .required()
 
 export const isAddressDone = (values: Partial<LivingSituationState> = {}) => {
@@ -116,19 +118,25 @@ export const AddressInput: React.SFC<AddressInputProps & Focusable> = ({
                     <TranslationsConsumer textKey="CHAT_INPUT_ADDRESS_POSTAL_NUMBER_PLACEHOLDER">
                       {(placeholder) => (
                         <UserTextInput
-                          type="number"
+                          type="text"
                           maxWidth={6}
                           id="postalNumber"
                           autoComplete="postal-code"
                           placeholder={placeholder}
-                          value={chatState.livingSituation.postalNumber}
+                          value={formatPostalNumber(
+                            chatState.livingSituation.postalNumber,
+                          )}
                           onChange={handleChange(
                             'postalNumber',
                             chatState,
-                            (value) => String(value).replace(/[^\d\s]/g, ''),
+                            (value) =>
+                              formatPostalNumber(String(value)).replace(
+                                /[^\d\s]/g,
+                                '',
+                              ),
                           )}
                           maxLength={6}
-                          pattern="[0-9]*"
+                          pattern={POSTAL_NUMBER_REGEX}
                           onFocus={onFocus}
                           onBlur={onBlur}
                         />

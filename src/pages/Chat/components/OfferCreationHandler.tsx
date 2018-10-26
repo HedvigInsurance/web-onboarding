@@ -1,5 +1,8 @@
 import * as React from 'react'
+import { Mount } from 'react-lifecycle-components'
 import { Redirect } from 'react-router-dom'
+import { OfferContainer } from '../../../containers/OfferContainer'
+import { StorageContainer } from '../../../utils/StorageContainer'
 import {
   ChatScreenContainer,
   LoadingState,
@@ -20,10 +23,51 @@ export const OfferCreationHandler = () => (
         state.offerCreationDebounceState === LoadingState.COMPLETED &&
         state.offerCreationLoadingState === LoadingState.COMPLETED
       ) {
-        return <Redirect to="/new-member/offer" />
+        return (
+          <OfferContainer childrenHandlesLoadingState>
+            {(offer, { refetch }) => {
+              if (offer && offer.insurance && offer.insurance.type) {
+                return <Redirect to="/new-member/offer" />
+              }
+
+              return (
+                <Mount
+                  on={() => {
+                    refetch()
+                  }}
+                >
+                  <LoadingScreen appear />
+                </Mount>
+              )
+            }}
+          </OfferContainer>
+        )
       }
 
-      return null
+      return (
+        <StorageContainer>
+          {(storage) => {
+            if (
+              storage.session.getSession() &&
+              storage.session.getSession()!.token
+            ) {
+              return (
+                <OfferContainer childrenHandlesLoadingState>
+                  {(offer) => {
+                    if (offer && offer.insurance && offer.insurance.type) {
+                      return <Redirect to="/new-member/offer" />
+                    }
+
+                    return null
+                  }}
+                </OfferContainer>
+              )
+            }
+
+            return null
+          }}
+        </StorageContainer>
+      )
     }}
   </ChatScreenContainer>
 )

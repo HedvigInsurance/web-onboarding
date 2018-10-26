@@ -84,6 +84,7 @@ export const CreateOffer: React.SFC = () => (
                                   <Button
                                     background={colors.GREEN}
                                     foreground={colors.WHITE}
+                                    size="lg"
                                     disabled={
                                       !canSubmit(chatState) ||
                                       chatScreenState.offerCreationDebounceState ===
