@@ -222,7 +222,7 @@ export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
             }}
           >
             {() => (
-              <GetInsuredButton margin="0px">
+              <GetInsuredButton>
                 <TranslationsConsumer textKey="OFFER_SUMMARY_SIGN_CTA">
                   {(ctaText) => (
                     <LinkTag

@@ -3,11 +3,11 @@ import styled from 'react-emotion'
 import { Link } from 'react-router-dom'
 
 export const GetInsuredButton = styled('div')(
-  ({ margin }: { margin: string }) => ({
+  ({ margin }: { margin?: string }) => ({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: margin,
+    marginTop: margin ? margin : 0,
   }),
 )
 
