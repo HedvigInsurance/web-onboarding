@@ -87,12 +87,12 @@ const cols: ReadonlyArray<{
     paragraphKey: 'OFFER_SWITCH_COL_ONE_PARAGRAPH',
   },
   {
-    imageUrl: '/assets/offering/hedvig-dot-2.svg',
+    imageUrl: '/new-member-assets/offering/hedvig-dot-2.svg',
     title: '2',
     paragraphKey: 'OFFER_SWITCH_COL_TWO_PARAGRAPH',
   },
   {
-    imageUrl: '/assets/offering/hedvig-dot-3.svg',
+    imageUrl: '/new-member-assets/offering/hedvig-dot-3.svg',
     title: '3',
     paragraphKey: 'OFFER_SWITCH_COL_THREE_PARAGRAPH',
   },
