@@ -8,6 +8,7 @@ import { OfferData } from 'containers/OfferContainer'
 import * as React from 'react'
 import styled from 'react-emotion'
 import VisibilitySensor from 'react-visibility-sensor'
+import { formatPostalNumber } from 'utils/postalNumbers'
 import { trackEvent } from 'utils/tracking'
 import { CardWrapperSmall } from '../components/CardWrapperSmall'
 import { HeaderWrapper } from '../components/HeaderWrapper'
@@ -137,9 +138,6 @@ const COLUMNS = [
   },
 ]
 
-const addSpace = (postalNumber: string) =>
-  postalNumber.substr(0, 3) + ' ' + postalNumber.substr(3, 4)
-
 export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
   <Wrapper>
     <InnerWrapper>
@@ -158,7 +156,7 @@ export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
               {' · '}
               {offer.insurance.address}
               {' · '}
-              {addSpace(offer.insurance.postalNumber)}
+              {formatPostalNumber(offer.insurance.postalNumber)}
             </PersonalInfo>
           </HeaderBackground>
           <TranslationsPlaceholderConsumer
