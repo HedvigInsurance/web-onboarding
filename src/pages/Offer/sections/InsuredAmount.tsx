@@ -46,6 +46,25 @@ const Col = styled('div')({
   fontSize: '14px',
 })
 
+const rows: ReadonlyArray<{ titleKey: string; amountKey: string }> = [
+  {
+    titleKey: 'OFFER_INSURED_AMOUNT_COL_ONE_TITLE',
+    amountKey: 'OFFER_INSURED_AMOUNT_COL_ONE_AMOUNT',
+  },
+  {
+    titleKey: 'OFFER_INSURED_AMOUNT_COL_TWO_TITLE',
+    amountKey: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT',
+  },
+  {
+    titleKey: 'OFFER_INSURED_AMOUNT_COL_THREE_TITLE',
+    amountKey: 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT',
+  },
+  {
+    titleKey: 'OFFER_INSURED_AMOUNT_COL_FOUR_TITLE',
+    amountKey: 'OFFER_INSURED_AMOUNT_COL_FOUR_AMOUNT',
+  },
+]
+
 export const InsuredAmount: React.SFC = () => (
   <Wrapper>
     <InnerWrapper>
@@ -57,54 +76,20 @@ export const InsuredAmount: React.SFC = () => (
             </TranslationsConsumer>
           </HeaderWrapper>
           <Table>
-            <Row>
-              <Col>
-                <TranslationsConsumer textKey="OFFER_INSURED_AMOUNT_COL_ONE_TITLE">
-                  {(title) => title}
-                </TranslationsConsumer>
-              </Col>
-              <Col>
-                <TranslationsConsumer textKey="OFFER_INSURED_AMOUNT_COL_ONE_AMOUNT">
-                  {(amount) => amount}
-                </TranslationsConsumer>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <TranslationsConsumer textKey="OFFER_INSURED_AMOUNT_COL_TWO_TITLE">
-                  {(title) => title}
-                </TranslationsConsumer>
-              </Col>
-              <Col>
-                <TranslationsConsumer textKey="OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT">
-                  {(amount) => amount}
-                </TranslationsConsumer>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <TranslationsConsumer textKey="OFFER_INSURED_AMOUNT_COL_THREE_TITLE">
-                  {(title) => title}
-                </TranslationsConsumer>
-              </Col>
-              <Col>
-                <TranslationsConsumer textKey="OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT">
-                  {(amount) => amount}
-                </TranslationsConsumer>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <TranslationsConsumer textKey="OFFER_INSURED_AMOUNT_COL_FOUR_TITLE">
-                  {(title) => title}
-                </TranslationsConsumer>
-              </Col>
-              <Col>
-                <TranslationsConsumer textKey="OFFER_INSURED_AMOUNT_COL_FOUR_AMOUNT">
-                  {(amount) => amount}
-                </TranslationsConsumer>
-              </Col>
-            </Row>
+            {rows.map((row) => (
+              <Row key={row.titleKey + row.amountKey}>
+                <Col>
+                  <TranslationsConsumer textKey={row.titleKey}>
+                    {(title) => title}
+                  </TranslationsConsumer>
+                </Col>
+                <Col>
+                  <TranslationsConsumer textKey={row.amountKey}>
+                    {(amount) => amount}
+                  </TranslationsConsumer>
+                </Col>
+              </Row>
+            ))}
           </Table>
         </Card>
       </CardWrapper>
