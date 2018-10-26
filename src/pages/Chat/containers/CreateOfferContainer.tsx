@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 import * as React from 'react'
 import { Mutation } from 'react-apollo'
 import { Unmount } from 'react-lifecycle-components'
-import { State as ChatState } from '../state'
+import { Insurer, State as ChatState } from '../state'
 import { ChatScreenContainer } from './ChatScreenContainer'
 
 export interface CreateOfferMutationVariables {
@@ -47,6 +47,16 @@ export const CREATE_OFFER_MUTATION: DocumentNode = gql`
   }
 `
 
+const getPreviousInsurer = (chatState: ChatState) => {
+  if (!chatState.currentInsurance.hasCurrentInsurance) {
+    return undefined
+  }
+  if (chatState.currentInsurance.currentInsurer !== Insurer.OTHER) {
+    return chatState.currentInsurance.currentInsurer
+  }
+  return chatState.currentInsurance.otherInsurer
+}
+
 export const getCreateOfferVariablesFromChatState = (
   chatState: ChatState,
 ): CreateOfferMutationVariables => ({
@@ -58,9 +68,7 @@ export const getCreateOfferVariablesFromChatState = (
   personsInHousehold: Number(chatState.livingSituation.numberOfPeople),
   squareMeters: Number(chatState.livingSituation.size),
   insuranceType: chatState.livingSituation.insuranceType!,
-  previousInsurer: chatState.currentInsurance.hasCurrentInsurance
-    ? chatState.currentInsurance.currentInsurer
-    : undefined,
+  previousInsurer: getPreviousInsurer(chatState),
 })
 
 export type CreateOfferChild = (
