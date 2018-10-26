@@ -55,6 +55,8 @@ const InfoText = styled('div')({
 
 const HeaderBackground = styled('div')({
   backgroundColor: colors.PURPLE,
+  borderTopLeftRadius: '10px',
+  borderTopRightRadius: '10px',
 })
 
 const PriceHeader = styled('h1')({

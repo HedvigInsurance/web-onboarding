@@ -81,6 +81,8 @@ export const NameInput: React.SFC<Props & Focusable> = ({
                           <UserTextInput
                             type="text"
                             id="firstName"
+                            autoComplete="given-name"
+                            autoFocus
                             placeholder={placeholder}
                             value={chatState.nameAge.firstName}
                             onChange={handleChange('firstName', chatState)}
@@ -111,6 +113,7 @@ export const NameInput: React.SFC<Props & Focusable> = ({
                           <UserTextInput
                             type="text"
                             id="lastName"
+                            autoComplete="family-name"
                             value={chatState.nameAge.lastName}
                             placeholder={placeholder}
                             onChange={handleChange('lastName', chatState)}

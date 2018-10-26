@@ -4,20 +4,15 @@ import { Wrapper } from '../components/Wrapper'
 import * as React from 'react'
 import styled from 'react-emotion'
 
-const ICONWIDTH = 30
-const ICONHEIGHT = 47
-
 const PageDownIcon = styled('img')({
-  width: ICONWIDTH,
-  height: ICONHEIGHT,
-  marginTop: '30px',
-  marginBottom: '30px',
+  marginTop: '40px',
+  marginBottom: '88px',
 })
 
 export const PageDown: React.SFC<{}> = () => (
   <Wrapper>
     <InnerWrapper>
-      <PageDownIcon src={'/new-member-assets/offering/arrow-down.svg'} />
+      <PageDownIcon src={'/new-member-assets/offering/scroll-down.svg'} />
     </InnerWrapper>
   </Wrapper>
 )

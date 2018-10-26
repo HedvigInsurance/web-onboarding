@@ -41,6 +41,8 @@ const Header = styled('h1')({
 
 const HeaderBackground = styled('div')({
   backgroundColor: colors.PURPLE,
+  borderTopLeftRadius: '10px',
+  borderTopRightRadius: '10px',
 })
 
 export const PersonalInfo = styled('div')({
