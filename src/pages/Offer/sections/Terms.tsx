@@ -50,6 +50,8 @@ const Col = styled('div')({
   display: 'flex',
   alignItems: 'center',
   flexDirection: 'column',
+  marginRight: '10px',
+  marginLeft: '10px',
 })
 
 const PDFTag = styled('h3')({
@@ -64,7 +66,6 @@ const PDFTag = styled('h3')({
 
 const PerilIcon = styled('img')({
   marginBottom: '0px',
-  marginTop: '10px',
   marginRight: '30px',
   marginLeft: '30px',
   width: PERILSIDE,
@@ -78,7 +79,7 @@ const PerilLink = styled('a')({
 
 const PerilTitle = styled('div')({
   marginBottom: '0px',
-  marginTop: '0px',
+  marginTop: '10px',
   fontSize: '14px',
   fontFamily: fonts.CIRCULAR,
   textAlign: 'center',
@@ -97,48 +98,48 @@ export const Terms: React.SFC<TermsProps> = ({ insuranceType }) => (
                 {(header) => header}
               </TranslationsConsumer>
             </Header>
-            <Row>
-              <Col>
-                <TranslationsConsumer
-                  textKey={
-                    isApartmentOwner(insuranceType)
-                      ? 'TERMS_PDF_PREBUY_OWNER_URL'
-                      : 'TERMS_PDF_PREBUY_RENT_URL'
-                  }
-                >
-                  {(url) => (
-                    <PerilLink href={url} target="_blank">
-                      <PDFTag>PDF</PDFTag>
-                      <PerilIcon src="/new-member-assets/offering/forkopsinformation.svg" />
-
-                      <TranslationsConsumer textKey="TERMS_PERIL_ONE_TITLE">
-                        {(title) => <PerilTitle>{title}</PerilTitle>}
-                      </TranslationsConsumer>
-                    </PerilLink>
-                  )}
-                </TranslationsConsumer>
-              </Col>
-              <Col>
-                <TranslationsConsumer
-                  textKey={
-                    isApartmentOwner(insuranceType)
-                      ? 'TERMS_PDF_INSURANCE_OWNER_URL'
-                      : 'TERMS_PDF_INSURANCE_RENT_URL'
-                  }
-                >
-                  {(url) => (
-                    <PerilLink href={url} target="_blank">
-                      <PDFTag>PDF</PDFTag>
-                      <PerilIcon src="/new-member-assets/offering/forkopsinformation.svg" />
-                      <TranslationsConsumer textKey="TERMS_PERIL_TWO_TITLE">
-                        {(title) => <PerilTitle>{title}</PerilTitle>}
-                      </TranslationsConsumer>
-                    </PerilLink>
-                  )}
-                </TranslationsConsumer>
-              </Col>
-            </Row>
           </HeaderWrapper>
+          <Row>
+            <Col>
+              <TranslationsConsumer
+                textKey={
+                  isApartmentOwner(insuranceType)
+                    ? 'TERMS_PDF_PREBUY_OWNER_URL'
+                    : 'TERMS_PDF_PREBUY_RENT_URL'
+                }
+              >
+                {(url) => (
+                  <PerilLink href={url} target="_blank">
+                    <PDFTag>PDF</PDFTag>
+                    <PerilIcon src="/new-member-assets/offering/forkopsinformation.svg" />
+
+                    <TranslationsConsumer textKey="TERMS_PERIL_ONE_TITLE">
+                      {(title) => <PerilTitle>{title}</PerilTitle>}
+                    </TranslationsConsumer>
+                  </PerilLink>
+                )}
+              </TranslationsConsumer>
+            </Col>
+            <Col>
+              <TranslationsConsumer
+                textKey={
+                  isApartmentOwner(insuranceType)
+                    ? 'TERMS_PDF_INSURANCE_OWNER_URL'
+                    : 'TERMS_PDF_INSURANCE_RENT_URL'
+                }
+              >
+                {(url) => (
+                  <PerilLink href={url} target="_blank">
+                    <PDFTag>PDF</PDFTag>
+                    <PerilIcon src="/new-member-assets/offering/forkopsinformation.svg" />
+                    <TranslationsConsumer textKey="TERMS_PERIL_TWO_TITLE">
+                      {(title) => <PerilTitle>{title}</PerilTitle>}
+                    </TranslationsConsumer>
+                  </PerilLink>
+                )}
+              </TranslationsConsumer>
+            </Col>
+          </Row>
         </Card>
       </CardWrapper>
     </InnerWrapper>
