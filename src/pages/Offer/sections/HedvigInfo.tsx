@@ -68,12 +68,12 @@ const Row = styled('div')({
   },
 })
 
-const Title = styled('p')({
+const Title = styled('div')({
   margin: '0px',
   color: colors.OFF_BLACK,
 })
 
-const Paragraph = styled('p')({
+const Paragraph = styled('div')({
   color: colors.DARK_GRAY,
   marginTop: '10px',
 })
