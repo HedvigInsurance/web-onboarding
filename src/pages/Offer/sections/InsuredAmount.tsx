@@ -32,56 +32,36 @@ const Row = styled('div')({
   justifyContent: 'space-between',
   alignItems: 'center',
   flexDirection: 'row',
-  marginLeft: '150px',
-  marginRight: '150px',
-  '@media (max-width: 700px)': {
-    marginLeft: '30px',
-    marginRight: '30px',
-  },
+  marginBottom: '20px',
+  borderBottom: '1px solid ' + colors.LIGHT_GRAY,
+  marginLeft: '40px',
+  marginRight: '40px',
 })
 
 const Col = styled('div')({
   display: 'flex',
-  paddingTop: '20px',
-  paddingBottom: '20px',
-  paddingRight: '5px',
-  paddingLeft: '5px',
+  paddingBottom: '10px',
   flexDirection: 'column',
   color: colors.BLACK,
   fontSize: '14px',
 })
 
-const BoldInfoText = styled('div')({
-  fontSize: '16px',
-  color: colors.BLACK,
-  display: 'inline',
-})
-const InfoText = styled('div')({
-  fontSize: '16px',
-  color: colors.DARK_GRAY,
-  display: 'inline',
-})
-
-const AMOUNTS = [
+const rows: ReadonlyArray<{ titleKey: string; amountKey: string }> = [
   {
-    key: 0,
-    title: 'OFFER_INSURED_AMOUNT_LIVING',
-    amount: 'OFFER_INSURED_AMOUNT_LIVING_AMOUNT',
+    titleKey: 'OFFER_INSURED_AMOUNT_COL_ONE_TITLE',
+    amountKey: 'OFFER_INSURED_AMOUNT_COL_ONE_AMOUNT',
   },
   {
-    key: 1,
-    title: 'OFFER_INSURED_AMOUNT_TOTAL',
-    amount: 'OFFER_INSURED_AMOUNT_TOTAL_AMOUNT',
+    titleKey: 'OFFER_INSURED_AMOUNT_COL_TWO_TITLE',
+    amountKey: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT',
   },
   {
-    key: 2,
-    title: 'OFFER_INSURED_AMOUNT_CLUMSY',
-    amount: 'OFFER_INSURED_AMOUNT_CLUMSY_AMOUNT',
+    titleKey: 'OFFER_INSURED_AMOUNT_COL_THREE_TITLE',
+    amountKey: 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT',
   },
   {
-    key: 3,
-    title: 'OFFER_INSURED_AMOUNT_SELF_RISK',
-    amount: 'OFFER_INSURED_AMOUNT_SELF_RISK_AMOUNT',
+    titleKey: 'OFFER_INSURED_AMOUNT_COL_FOUR_TITLE',
+    amountKey: 'OFFER_INSURED_AMOUNT_COL_FOUR_AMOUNT',
   },
 ]
 
@@ -96,27 +76,17 @@ export const InsuredAmount: React.SFC = () => (
             </TranslationsConsumer>
           </HeaderWrapper>
           <Table>
-            {AMOUNTS.map((amount) => (
-              <Row
-                style={{
-                  backgroundColor:
-                    amount.key % 2 === 0 ? colors.OFF_WHITE : colors.WHITE,
-                }}
-                key={amount.key}
-              >
+            {rows.map((row) => (
+              <Row key={row.titleKey + row.amountKey}>
                 <Col>
-                  <BoldInfoText>
-                    <TranslationsConsumer textKey={amount.title}>
-                      {(text) => text}
-                    </TranslationsConsumer>
-                  </BoldInfoText>
+                  <TranslationsConsumer textKey={row.titleKey}>
+                    {(title) => title}
+                  </TranslationsConsumer>
                 </Col>
                 <Col>
-                  <InfoText>
-                    <TranslationsConsumer textKey={amount.amount}>
-                      {(text) => text}
-                    </TranslationsConsumer>
-                  </InfoText>
+                  <TranslationsConsumer textKey={row.amountKey}>
+                    {(amount) => amount}
+                  </TranslationsConsumer>
                 </Col>
               </Row>
             ))}

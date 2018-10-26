@@ -19,8 +19,15 @@ export enum ChatStep {
 }
 
 export enum Insurer {
-  FOLKSAM = 'FOLKSAM',
-  TRYGG_HANSA = 'TRYGG_HANSA',
+  IF = 'if',
+  FOLKSAM = 'Folksam',
+  TRYGG_HANSA = 'Trygg-Hansa',
+  LANSFORSAKRINGAR = 'Länsförsäkringar',
+  MODERNA = 'Moderna',
+  ICA = 'ICA',
+  GJENSIDIGE = 'Gjensidige',
+  VARDIA = 'Vardia',
+  OTHER = 'OTHER',
 }
 
 export interface NameAgeState {
@@ -38,6 +45,7 @@ export interface LivingSituationState {
 export interface CurrentInsuranceState {
   hasCurrentInsurance?: boolean
   currentInsurer?: Insurer
+  otherInsurer?: string
 }
 
 export interface State {
@@ -79,6 +87,7 @@ export interface Effects {
   ) => void
   setHasCurrentInsurance: (event: React.ChangeEvent<HTMLSelectElement>) => void
   setCurrentInsurer: (event: React.ChangeEvent<HTMLSelectElement>) => void
+  setOtherInsurer: (event: React.ChangeEvent<HTMLInputElement>) => void
   reset: () => void
   goToStep: (step: ChatStep) => void
   peekStep: (step: ChatStep) => void
@@ -181,6 +190,26 @@ export const ChatContainer: React.SFC<
                     : (event.target.value as Insurer),
               },
             }
+            setState(newState)
+            storageState.session.setSession({
+              ...storageState.session.getSession(),
+              chat: {
+                ...((storageState.session.getSession() &&
+                  notNullable(storageState.session.getSession()).chat) ||
+                  initialState),
+                ...newState,
+              },
+            })
+          },
+          setOtherInsurer: (event) => ({ setState }) => {
+            const newState: Partial<State> = {
+              currentInsurance: {
+                hasCurrentInsurance: true,
+                currentInsurer: Insurer.OTHER,
+                otherInsurer: event.target.value,
+              },
+            }
+
             setState(newState)
             storageState.session.setSession({
               ...storageState.session.getSession(),
