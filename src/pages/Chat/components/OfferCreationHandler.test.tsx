@@ -11,7 +11,7 @@ import { LoadingScreen } from './LoadingScreen'
 import { OfferCreationHandler } from './OfferCreationHandler'
 
 jest.useFakeTimers()
-it('does nothing when no correct state is set', () => {
+it('does nothing when no correct state is set', async () => {
   const mocks: MockedResponse[] = [
     {
       request: {
@@ -25,6 +25,7 @@ it('does nothing when no correct state is set', () => {
             insuredAtOtherCompany: false,
             type: 'RENT',
             postalNumber: '12345',
+            personsInHousehold: 1,
             __typename: 'Insurance',
           },
           member: {
