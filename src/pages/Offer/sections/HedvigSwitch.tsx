@@ -82,17 +82,17 @@ const cols: ReadonlyArray<{
   paragraphKey: string
 }> = [
   {
-    imageUrl: 'assets/offering/hedvig-dot-1.svg',
+    imageUrl: '/assets/offering/hedvig-dot-1.svg',
     title: '1',
     paragraphKey: 'OFFER_SWITCH_COL_ONE_PARAGRAPH',
   },
   {
-    imageUrl: 'assets/offering/hedvig-dot-2.svg',
+    imageUrl: '/assets/offering/hedvig-dot-2.svg',
     title: '2',
     paragraphKey: 'OFFER_SWITCH_COL_TWO_PARAGRAPH',
   },
   {
-    imageUrl: 'assets/offering/hedvig-dot-3.svg',
+    imageUrl: '/assets/offering/hedvig-dot-3.svg',
     title: '3',
     paragraphKey: 'OFFER_SWITCH_COL_THREE_PARAGRAPH',
   },
