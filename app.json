@@ -1,6 +1,4 @@
 {
-  "name": "web-onboarding",
-  "description": "",
   "scripts": {},
   "env": {
     "USE_AUTH": "true",
@@ -15,11 +13,6 @@
     },
     "GIRAFFE_WS_ENDPOINT": {
       "required": true
-    }
-  },
-  "formation": {
-    "web": {
-      "quantity": 1
     }
   },
   "addons": [],
