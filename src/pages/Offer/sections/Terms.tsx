@@ -52,6 +52,7 @@ const Col = styled('div')({
   flexDirection: 'column',
   marginRight: '15px',
   marginLeft: '15px',
+  width: '140px',
 })
 
 const PDFTag = styled('h3')({
