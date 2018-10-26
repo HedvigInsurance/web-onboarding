@@ -80,6 +80,28 @@ const Paragraph = styled('p')({
   color: colors.DARK_GRAY,
 })
 
+const cols: ReadonlyArray<{
+  imageUrl: string
+  titleKey: string
+  paragraphKey: string
+}> = [
+  {
+    imageUrl: '/new-member-assets/offering/enkel-overblick.svg',
+    titleKey: 'OFFER_INFO_COL_ONE_TITLE',
+    paragraphKey: 'OFFER_INFO_COL_ONE_PARAGRAPH',
+  },
+  {
+    imageUrl: '/new-member-assets/offering/snabbt-svar.svg',
+    titleKey: 'OFFER_INFO_COL_TWO_TITLE',
+    paragraphKey: 'OFFER_INFO_COL_TWO_PARAGRAPH',
+  },
+  {
+    imageUrl: '/new-member-assets/offering/anmal-skador.svg',
+    titleKey: 'OFFER_INFO_COL_THREE_TITLE',
+    paragraphKey: 'OFFER_INFO_COL_THREE_PARAGRAPH',
+  },
+]
+
 export const HedvigInfo: React.SFC = () => (
   <Wrapper>
     <InnerWrapper>
@@ -93,45 +115,21 @@ export const HedvigInfo: React.SFC = () => (
             </Header>
           </HeaderWrapper>
           <Row>
-            <Col>
-              <Image src="/new-member-assets/offering/enkel-overblick.svg" />
-              <Title>
-                <TranslationsConsumer textKey="OFFER_INFO_COL_ONE_TITLE">
-                  {(title) => title}
-                </TranslationsConsumer>
-              </Title>
-              <Paragraph>
-                <TranslationsConsumer textKey="OFFER_INFO_COL_ONE_PARAGRAPH">
-                  {(paragraph) => paragraph}
-                </TranslationsConsumer>
-              </Paragraph>
-            </Col>
-            <Col>
-              <Image src="/new-member-assets/offering/snabbt-svar.svg" />
-              <Title>
-                <TranslationsConsumer textKey="OFFER_INFO_COL_TWO_TITLE">
-                  {(title) => title}
-                </TranslationsConsumer>
-              </Title>
-              <Paragraph>
-                <TranslationsConsumer textKey="OFFER_INFO_COL_TWO_PARAGRAPH">
-                  {(paragraph) => paragraph}
-                </TranslationsConsumer>
-              </Paragraph>
-            </Col>
-            <Col>
-              <Image src="/new-member-assets/offering/anmal-skador.svg" />
-              <Title>
-                <TranslationsConsumer textKey="OFFER_INFO_COL_THREE_TITLE">
-                  {(title) => title}
-                </TranslationsConsumer>
-              </Title>
-              <Paragraph>
-                <TranslationsConsumer textKey="OFFER_INFO_COL_THREE_PARAGRAPH">
-                  {(paragraph) => paragraph}
-                </TranslationsConsumer>
-              </Paragraph>
-            </Col>
+            {cols.map((col) => (
+              <Col key={col.titleKey + col.paragraphKey}>
+                <Image src={col.imageUrl} />
+                <Title>
+                  <TranslationsConsumer textKey={col.titleKey}>
+                    {(title) => title}
+                  </TranslationsConsumer>
+                </Title>
+                <Paragraph>
+                  <TranslationsConsumer textKey={col.paragraphKey}>
+                    {(paragraph) => paragraph}
+                  </TranslationsConsumer>
+                </Paragraph>
+              </Col>
+            ))}
           </Row>
         </Card>
       </CardWrapper>
