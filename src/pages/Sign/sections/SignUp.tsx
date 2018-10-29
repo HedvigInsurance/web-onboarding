@@ -110,11 +110,7 @@ const InputField = styled(Field)(
       minWidth: FORMWIDTHSMALL,
     },
     '&:focus': {
-      borderBottom: touched
-        ? errors
-          ? `3px solid ${colors.PINK}`
-          : `3px solid ${colors.GREEN}`
-        : `3px solid ${colors.DARK_PURPLE}`,
+      borderBottom: `3px solid ${colors.DARK_PURPLE}`,
     },
   }),
 )
