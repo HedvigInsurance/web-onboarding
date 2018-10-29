@@ -2,14 +2,14 @@ import { Provider } from 'constate'
 import { mount } from 'enzyme'
 import * as React from 'react'
 import { MockedProvider } from 'react-apollo/test-utils'
-import { MockStorage } from 'utils/storage/MockStorage'
-import { mockNetworkWait } from 'utils/test-utils'
 import {
   createSession,
   IsomorphicSessionStorage,
   Session,
   SESSION_KEY,
-} from '../../../utils/sessionStorage'
+} from 'utils/sessionStorage'
+import { MockStorage } from 'utils/storage/MockStorage'
+import { mockNetworkWait } from 'utils/test-utils'
 import { ChatContainer } from '../state'
 import { createCreateOfferMutationMock, mockState } from '../utils/test-utils'
 import {

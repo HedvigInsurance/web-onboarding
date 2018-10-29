@@ -13,7 +13,7 @@ export const mockState = (): ChatState => ({
     age: 42,
   },
   livingSituation: {
-    postalNumber: '12345',
+    postalNumber: '123 45',
     streetAddress: 'Storgatan 1',
     insuranceType: InsuranceType.RENT,
     size: 37,
@@ -38,7 +38,7 @@ export const createCreateOfferMutationMock = (): MockedResponse[] => [
         lastName: mockState().nameAge.lastName,
         age: mockState().nameAge.age,
         address: mockState().livingSituation.streetAddress,
-        postalNumber: mockState().livingSituation.postalNumber,
+        postalNumber: '12345',
         squareMeters: mockState().livingSituation.size,
         insuranceType: mockState().livingSituation.insuranceType,
         personsInHousehold: mockState().livingSituation.numberOfPeople,

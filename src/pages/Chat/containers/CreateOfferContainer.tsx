@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 import * as React from 'react'
 import { Mutation } from 'react-apollo'
 import { Unmount } from 'react-lifecycle-components'
+import { sanitizePostalNumber } from 'utils/postalNumbers'
 import { Insurer, State as ChatState } from '../state'
 import { ChatScreenContainer } from './ChatScreenContainer'
 
@@ -64,7 +65,7 @@ export const getCreateOfferVariablesFromChatState = (
   lastName: chatState.nameAge.lastName,
   age: Number(chatState.nameAge.age),
   address: chatState.livingSituation.streetAddress,
-  postalNumber: chatState.livingSituation.postalNumber,
+  postalNumber: sanitizePostalNumber(chatState.livingSituation.postalNumber),
   personsInHousehold: Number(chatState.livingSituation.numberOfPeople),
   squareMeters: Number(chatState.livingSituation.size),
   insuranceType: chatState.livingSituation.insuranceType!,
