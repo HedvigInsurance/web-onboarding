@@ -15,6 +15,7 @@ module.exports = {
     'AUTH_PASS',
     'GIRAFFE_ENDPOINT',
     'GIRAFFE_WS_ENDPOINT',
+    'USE_HELMET',
     'SEGMENT_API_KEY',
     'SENTRY_DSN',
     'SENTRY_ENVIRONMENT',
