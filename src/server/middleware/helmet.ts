@@ -1,11 +1,12 @@
 import * as koaHelmet from 'koa-helmet'
 import * as uuidV4 from 'uuid/v4'
+import { GIRAFFE_ENDPOINT, GIRAFFE_WS_ENDPOINT } from '../config'
 
 const defaultSrc = [
   "'self'",
   'cdn.hedvig.com',
-  process.env.GIRAFFE_ENDPOINT as string,
-  process.env.GIRAFFE_WS_ENDPOINT as string,
+  GIRAFFE_ENDPOINT,
+  GIRAFFE_WS_ENDPOINT,
 ]
 
 export const helmet = koaHelmet({

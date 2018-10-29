@@ -9,11 +9,11 @@ import { renderToString } from 'react-dom/server'
 import { FilledContext, HelmetProvider } from 'react-helmet-async'
 import { StaticRouter, StaticRouterContext } from 'react-router'
 import { App } from '../App'
-import { getGiraffeEndpoint } from '../utils/apolloClient'
 import { sentryConfig } from '../utils/sentry'
 import { createSession, Session } from '../utils/sessionStorage'
 import { ServerCookieStorage } from '../utils/storage/ServerCookieStorage'
 import { createServerApolloClient } from './apolloClient'
+import { GIRAFFE_ENDPOINT, GIRAFFE_WS_ENDPOINT } from './config'
 
 const scriptLocation = getScriptLocation({
   statsLocation: path.resolve(__dirname, 'assets'),
@@ -50,18 +50,8 @@ const template = (
   <div id="react-root">${body}</div>
 
   <script nonce="${cspNonce}">
-    window.GIRAFFE_WS_ENDPOINT= ${JSON.stringify(
-      getGiraffeEndpoint(
-        'GIRAFFE_WS_ENDPOINT',
-        'wss://graphql.dev.hedvigit.com/subscriptions',
-      ),
-    )}
-    window.GIRAFFE_ENDPOINT= ${JSON.stringify(
-      getGiraffeEndpoint(
-        'GIRAFFE_ENDPOINT',
-        'https://graphql.dev.hedvigit.com/graphql',
-      ),
-    )}
+    window.GIRAFFE_WS_ENDPOINT= ${JSON.stringify(GIRAFFE_WS_ENDPOINT)}
+    window.GIRAFFE_ENDPOINT= ${JSON.stringify(GIRAFFE_ENDPOINT)}
     window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
   </script>
   <script src="${scriptLocation}"></script>
