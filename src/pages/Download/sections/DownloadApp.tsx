@@ -70,19 +70,17 @@ const DownloadImage = styled('img')({
 })
 
 const Header = styled('h1')({
-  fontSize: '32px',
   marginTop: '0px',
   marginBottom: '0px',
 })
 
-const DownloadHeader = styled('h1')({
-  fontSize: '32px',
+const DownloadHeader = styled('div')({
   marginTop: '30px',
   marginBottom: '30px',
 })
 
 const InsuredText = styled('div')({
-  marginBottom: '30px',
+  marginBottom: '45px',
 })
 
 export const DownloadApp: React.SFC = () => (
