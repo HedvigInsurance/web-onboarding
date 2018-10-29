@@ -37,9 +37,10 @@ const validationSchema = () =>
     .object<Partial<NameAgeState>>({
       age: yup
         .number()
+        .integer()
         .positive()
         .moreThan(10)
-        .lessThan(199)
+        .lessThan(117)
         .required(),
     })
     .required()

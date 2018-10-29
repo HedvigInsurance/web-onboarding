@@ -3,10 +3,10 @@ import styled from 'react-emotion'
 import { Link } from 'react-router-dom'
 
 export const GetInsuredButton = styled('div')(
-  ({ margin }: { margin?: string }) => ({
+  ({ margin, centered }: { margin?: string; centered?: boolean }) => ({
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: centered ? 'center' : undefined,
     marginTop: margin || 0,
   }),
 )
