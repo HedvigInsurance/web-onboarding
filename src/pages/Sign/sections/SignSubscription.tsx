@@ -131,7 +131,7 @@ const CODETEXTKEYS = {
   outstandingTransaction: 'SIGN_BANKID_CODE_OUTSTANDING_TRANSACTION',
   expiredTransaction: 'SIGN_BANKID_CODE_EXPIRED_TRANSACTION',
   certificateErr: 'SIGN_BANKID_CODE_CERTIFICATE_ERR',
-  outstauserCancelndingTransaction: 'SIGN_BANKID_CODE_USER_CANCEL',
+  userCancel: 'SIGN_BANKID_CODE_USER_CANCEL',
   cancelled: 'SIGN_BANKID_CODE_CANCELLED',
   startFailed: 'SIGN_BANKID_CODE_START_FAILED',
 }
