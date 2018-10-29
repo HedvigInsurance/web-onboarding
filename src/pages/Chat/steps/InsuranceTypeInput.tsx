@@ -187,7 +187,7 @@ export const InsuranceTypeInput: React.SFC<
                 <UserTextInput
                   type="number"
                   id="size"
-                  maxWidth={4}
+                  maxWidth={3}
                   value={displaySquareMeters(chatState.livingSituation.size)}
                   onChange={handleChange('size', chatState, formatSquareMeters)}
                   pattern="[0-9]*"

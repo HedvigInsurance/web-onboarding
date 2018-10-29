@@ -89,7 +89,7 @@ export const AddressInput: React.SFC<AddressInputProps & Focusable> = ({
                           type="text"
                           maxWidth={Math.max(
                             chatState.livingSituation.streetAddress.length || 0,
-                            20,
+                            15,
                           )}
                           id="streetAddress"
                           autoComplete="street-address"
