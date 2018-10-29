@@ -67,6 +67,7 @@ export const inCaseOfEmergency: Middleware = async (ctx, next) => {
       try {
         await new Promise((resolve, reject) => {
           https.get('https://cdn.hedvig.com/500.html', (errorPageResponse) => {
+            ctx.set('content-type', 'text/html')
             errorPageResponse
               .pipe(ctx.res)
               .on('error', (superFatalError) => {
