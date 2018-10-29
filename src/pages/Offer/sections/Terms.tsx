@@ -31,7 +31,6 @@ const Header = styled('h1')({
   color: colors.BLACK,
   marginTop: '30px',
   marginBottom: '30px',
-  fontSize: '32px',
 })
 
 const Row = styled('div')({
@@ -52,7 +51,7 @@ const Col = styled('div')({
   flexDirection: 'column',
   marginRight: '15px',
   marginLeft: '15px',
-  width: '140px',
+  textAlign: 'center',
 })
 
 const PDFTag = styled('h3')({
@@ -84,7 +83,7 @@ const PerilTitle = styled('div')({
   fontFamily: fonts.CIRCULAR,
   textAlign: 'center',
   color: colors.OFF_BLACK,
-  lineHeight: 'normal',
+  width: '141px',
 })
 
 export const Terms: React.SFC<TermsProps> = ({ insuranceType }) => (

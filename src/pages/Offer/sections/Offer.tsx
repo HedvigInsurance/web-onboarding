@@ -38,7 +38,6 @@ const Header = styled('h1')({
   marginTop: '0px',
   paddingTop: '30px',
   marginBottom: '10px',
-  fontSize: '32px',
 })
 
 const HeaderBackground = styled('div')({
@@ -51,7 +50,6 @@ export const PersonalInfo = styled('div')({
   marginLeft: 'auto',
   marginRight: 'auto',
   paddingBottom: '30px',
-  lineHeight: '22px',
   textAlign: 'center',
   maxWidth: '100%',
   color: colors.WHITE,
@@ -60,8 +58,6 @@ export const PersonalInfo = styled('div')({
 export const Price = styled('h1')({
   marginBottom: '10px',
   marginTop: '30px',
-  fontSize: '32px',
-  lineHeight: '42px',
   textAlign: 'center',
   color: colors.BLACK,
   fontFamily: fonts.CIRCULAR,
@@ -129,7 +125,7 @@ interface Props {
 const COLUMNS = [
   {
     key: 0,
-    title: 'OFFER_PERIL_TITLE_LIVING_PROTECTION',
+    title: 'OFFER_PERIL_TITLE_APARTMENT_PROTECTION',
     icon: '/new-member-assets/offering/lagenhetsskyddet.svg',
   },
   {

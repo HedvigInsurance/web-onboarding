@@ -34,7 +34,6 @@ const Header = styled('h1')({
   marginBottom: '30px',
   paddingTop: '30px',
   paddingBottom: '30px',
-  fontSize: '32px',
 })
 
 const InsuranceInfo = styled('div')({
@@ -60,7 +59,6 @@ const HeaderBackground = styled('div')({
 
 const PriceHeader = styled('h1')({
   marginBottom: '0px',
-  fontSize: '32px',
   textAlign: 'center',
   color: colors.BLACK,
   fontFamily: fonts.CIRCULAR,
