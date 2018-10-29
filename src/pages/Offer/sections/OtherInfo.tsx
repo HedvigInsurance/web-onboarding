@@ -47,6 +47,7 @@ const Col = styled('div')({
   flexDirection: 'column',
   marginRight: '20px',
   marginLeft: '20px',
+  width: '130px',
 })
 
 const CheckIcon = styled('img')({

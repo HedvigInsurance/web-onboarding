@@ -72,6 +72,7 @@ const DownloadImage = styled('img')({
 const Header = styled('h1')({
   marginTop: '0px',
   marginBottom: '0px',
+  fontSize: '55px',
 })
 
 const InsuredText = styled('div')({
