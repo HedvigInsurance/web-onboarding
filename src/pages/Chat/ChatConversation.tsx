@@ -53,6 +53,11 @@ export const ChatConversation: React.SFC = () => (
               <ChatMessage
                 appear={appear}
                 typingDuration={2500}
+                isCurrentMessage={[
+                  ChatStep.INITIAL,
+                  ChatStep.NAME_INPUT,
+                  ChatStep.AGE_INPUT,
+                ].includes(currentStep)}
                 onTyped={() => goToStep(ChatStep.NAME_INPUT)}
               >
                 <TranslationsConsumer textKey="CHAT_HEDVIG_FIRST_GREET">
@@ -117,6 +122,12 @@ export const ChatConversation: React.SFC = () => (
             >
               <Greet
                 appear={appear}
+                isCurrentMessage={[
+                  ChatStep.GREET,
+                  ChatStep.ADDRESS_INPUT,
+                  ChatStep.INSURANCE_TYPE_INPUT,
+                  ChatStep.NUMBER_OF_PEOPLE,
+                ].includes(currentStep)}
                 onTyped={() => goToStep(ChatStep.ADDRESS_INPUT)}
               />
             </Mufflable>
@@ -197,6 +208,10 @@ export const ChatConversation: React.SFC = () => (
               <ChatMessage
                 appear={appear}
                 onTyped={() => goToStep(ChatStep.CURRENT_INSURANCE_INPUT)}
+                isCurrentMessage={[
+                  ChatStep.CURRENT_INSURANCE_QUESTION,
+                  ChatStep.CURRENT_INSURANCE_INPUT,
+                ].includes(currentStep)}
               >
                 <TranslationsConsumer
                   textKey={
@@ -246,6 +261,10 @@ export const ChatConversation: React.SFC = () => (
               <ChatMessage
                 appear={appear}
                 onTyped={() => goToStep(ChatStep.SHOW_OFFER)}
+                isCurrentMessage={[
+                  ChatStep.SHOW_OFFER_QUESTION,
+                  ChatStep.SHOW_OFFER,
+                ].includes(currentStep)}
               >
                 <TranslationsPlaceholderConsumer
                   textKey={

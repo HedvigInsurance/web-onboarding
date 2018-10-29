@@ -89,7 +89,7 @@ export const AgeInput: React.SFC<Props & Focusable> = ({
                             step={1}
                             value={chatState.nameAge.age}
                             onChange={handleChange('age', chatState)}
-                            maxWidth={4.5}
+                            maxWidth={2}
                             pattern="[0-9]*"
                             innerRef={(ref) => {
                               if (
