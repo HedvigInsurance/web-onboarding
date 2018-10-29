@@ -2,6 +2,7 @@
   "scripts": {},
   "env": {
     "USE_AUTH": "true",
+    "USE_HELMET": "true",
     "AUTH_NAME": {
       "required": true
     },
