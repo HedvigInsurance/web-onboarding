@@ -38,7 +38,7 @@ export const helmet = koaHelmet({
       connectSrc: [
         ...defaultSrc,
         'https://api.segment.io',
-        'https://sentry.io/api',
+        'https://sentry.io',
       ],
       styleSrc: ["'self'", "'unsafe-inline'", 'cdn.hedvig.com'],
       upgradeInsecureRequests: true,
