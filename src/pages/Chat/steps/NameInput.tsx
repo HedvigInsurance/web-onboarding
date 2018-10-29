@@ -88,7 +88,7 @@ export const NameInput: React.SFC<Props & Focusable> = ({
                             onChange={handleChange('firstName', chatState)}
                             maxWidth={Math.max(
                               chatState.nameAge.firstName.length || 0,
-                              10,
+                              15,
                             )}
                             innerRef={(ref) => {
                               if (

@@ -35,8 +35,9 @@ const validationSchema = yup
   .object<Partial<LivingSituationState>>({
     numberOfPeople: yup
       .number()
+      .integer()
       .moreThan(0)
-      .lessThan(8)
+      .lessThan(7)
       .required(),
   })
 
@@ -99,7 +100,7 @@ export const NumberOfPeopleInput: React.SFC<
                         {' '}
                       </option>
                       <option value={1}>{selfLabel}</option>
-                      {[2, 3, 4, 5, 6, 7].map((numberOfPeople) => (
+                      {[2, 3, 4, 5, 6].map((numberOfPeople) => (
                         <TranslationsConsumer
                           textKey="CHAT_INPUT_NUMBER_OF_PEOPLE_MULTIPLE"
                           key={numberOfPeople}

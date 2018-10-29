@@ -29,16 +29,12 @@ const SubmitButton = styled('button')({
   display: 'inline-flex',
   alignItems: 'center',
   backgroundColor: colors.GREEN,
-  fontSize: '16px',
   color: colors.WHITE,
   textDecoration: 'none',
   borderRadius: '50px',
   padding: '15px 30px',
   cursor: 'pointer',
   border: 'none',
-  '@media (max-width: 300px)': {
-    fontSize: '14px',
-  },
 
   '&:disabled': {
     backgroundColor: colors.LIGHT_GRAY,
@@ -57,11 +53,9 @@ const ErrorText = styled('div')({
   textAlign: 'center',
   marginTop: '20px',
   color: 'red',
-  fontSize: '16px',
   '@media (max-width: 300px)': {
     marginLeft: '10px',
     marginRight: '10px',
-    fontSize: '14px',
   },
 })
 
@@ -69,7 +63,6 @@ const SigningStatusText = styled('div')({
   textAlign: 'center',
   marginTop: '20px',
   color: colors.DARK_GRAY,
-  fontSize: '16px',
 })
 
 enum SIGNSTATE {

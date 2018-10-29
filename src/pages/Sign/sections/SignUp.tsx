@@ -112,11 +112,9 @@ const InputField = styled(Field)({
 
 const ErrorMessage = styled('div')({
   minHeight: '24px',
-  fontSize: '16px',
   '@media (max-width: 300px)': {
     marginLeft: '10px',
     marginRight: '10px',
-    fontSize: '14px',
   },
 })
 

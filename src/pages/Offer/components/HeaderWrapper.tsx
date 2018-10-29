@@ -1,7 +1,7 @@
 import { fonts } from '@hedviginsurance/brand'
 import styled from 'react-emotion'
 
-const HEADERWIDTH = 350
+const HEADERWIDTH = 400
 const MOBILESMALL = 640
 const MOBILETINY = 400
 
