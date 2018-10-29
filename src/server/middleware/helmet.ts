@@ -23,9 +23,8 @@ export const helmet = koaHelmet({
     directives: {
       defaultSrc,
       scriptSrc: [
-        "'self'",
+        ...defaultSrc,
         "'unsafe-eval'",
-        'cdn.hedvig.com',
         'browser.sentry-cdn.com',
         'cdn.segment.com',
         'www.googletagmanager.com',
@@ -40,7 +39,7 @@ export const helmet = koaHelmet({
         'https://api.segment.io',
         'https://sentry.io',
       ],
-      styleSrc: ["'self'", "'unsafe-inline'", 'cdn.hedvig.com'],
+      styleSrc: [...defaultSrc, "'unsafe-inline'"],
       upgradeInsecureRequests: true,
       objectSrc: ["'none'"],
       reportUri: '/new-member/_report-csp-violation',
