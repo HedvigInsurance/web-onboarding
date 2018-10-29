@@ -28,7 +28,7 @@ const Wrapper = styled('div')({
 const Card = styled('div')({
   marginTop: '70px',
   backgroundColor: colors.WHITE,
-  paddingBottom: '30px',
+  paddingBottom: '50px',
   boxShadow: '0px 8px 40px -12px rgba(0,0,0,0.67)',
   borderRadius: '10px',
 })
@@ -38,7 +38,6 @@ const Header = styled('h1')({
   marginTop: '0px',
   paddingTop: '30px',
   marginBottom: '10px',
-  fontSize: '32px',
 })
 
 const HeaderBackground = styled('div')({
@@ -48,22 +47,17 @@ const HeaderBackground = styled('div')({
 })
 
 export const PersonalInfo = styled('div')({
-  marginTop: '0px',
-  marginBottom: '0px',
   marginLeft: 'auto',
   marginRight: 'auto',
   paddingBottom: '30px',
-  fontSize: '14px',
-  lineHeight: '22px',
   textAlign: 'center',
   maxWidth: '100%',
   color: colors.WHITE,
 })
 
 export const Price = styled('h1')({
-  marginBottom: '0px',
+  marginBottom: '10px',
   marginTop: '30px',
-  fontSize: '32px',
   textAlign: 'center',
   color: colors.BLACK,
   fontFamily: fonts.CIRCULAR,
@@ -74,14 +68,13 @@ const InsuranceInfo = styled('div')({
 })
 
 const BoldInfoText = styled('div')({
-  fontSize: '14px',
   color: colors.BLACK,
   display: 'inline',
+  fontWeight: 600,
 })
 
 const InfoText = styled('div')({
-  fontSize: '14px',
-  color: colors.DARK_GRAY,
+  color: colors.OFF_BLACK,
   display: 'inline',
 })
 
@@ -89,11 +82,12 @@ const Col = styled('div')({
   display: 'flex',
   alignItems: 'center',
   flexDirection: 'column',
-  marginBottom: '30px',
   width: COLWIDTH,
 })
 
 const Row = styled('div')({
+  marginTop: '30px',
+  marginBottom: '40px',
   marginLeft: '100px',
   marginRight: '100px',
   display: 'flex',
@@ -107,8 +101,6 @@ const Row = styled('div')({
 })
 
 const Icon = styled('img')({
-  marginTop: '30px',
-  marginBottom: '10px',
   maxWidth: ICONWIDTH,
   '@media (max-width: 400px)': {
     margin: '0px',
@@ -117,10 +109,10 @@ const Icon = styled('img')({
 })
 
 const IconTitle = styled('p')({
+  marginTop: '10px',
   marginBottom: '10px',
-  fontSize: '14px',
   textAlign: 'center',
-  color: colors.DARK_GRAY,
+  color: colors.OFF_BLACK,
   maxWidth: ICONTITLEWIDTH,
 })
 
@@ -133,17 +125,17 @@ interface Props {
 const COLUMNS = [
   {
     key: 0,
-    title: 'Lagenhetsskydd',
+    title: 'OFFER_PERIL_TITLE_APARTMENT_PROTECTION',
     icon: '/new-member-assets/offering/lagenhetsskyddet.svg',
   },
   {
     key: 1,
-    title: 'Personskydd',
+    title: 'OFFER_PERIL_TITLE_PERSONAL_PROTECTION',
     icon: '/new-member-assets/offering/familjeskyddet.svg',
   },
   {
     key: 2,
-    title: 'Prylskydd',
+    title: 'OFFER_PERIL_TITLE_STUFF_PROTECTION',
     icon: '/new-member-assets/offering/prylskyddet.svg',
   },
 ]
@@ -156,9 +148,12 @@ export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
           <HeaderBackground>
             <HeaderWrapper>
               <Header>
-                <TranslationsConsumer textKey="OFFER_HEADER">
+                <TranslationsPlaceholderConsumer
+                  textKey="OFFER_HEADER"
+                  replacements={{ firstName: offer.member.firstName }}
+                >
                   {(title) => title}
-                </TranslationsConsumer>
+                </TranslationsPlaceholderConsumer>
               </Header>
             </HeaderWrapper>
             <PersonalInfo>
@@ -209,7 +204,11 @@ export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
             {COLUMNS.map((col) => (
               <Col key={col.key}>
                 <Icon src={col.icon} />
-                <IconTitle>{col.title}</IconTitle>
+                <IconTitle>
+                  <TranslationsConsumer textKey={col.title}>
+                    {(title) => title}
+                  </TranslationsConsumer>
+                </IconTitle>
               </Col>
             ))}
           </Row>

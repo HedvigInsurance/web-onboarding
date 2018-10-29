@@ -15,7 +15,6 @@ const Container = styled('div')({
 
 const LegalText = styled('div')({
   color: colors.DARK_GRAY,
-  fontSize: '14px',
   textAlign: 'center',
   maxWidth: LEGALWIDTH,
 })

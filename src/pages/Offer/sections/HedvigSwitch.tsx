@@ -8,7 +8,7 @@ import { InnerWrapper } from '../components/InnerWrapper'
 import { Wrapper } from '../components/Wrapper'
 
 const ROWWIDTH = 1200
-const PARAGRAPHWIDTH = 250
+const PARAGRAPHWIDTH = 290
 const TITLEWIDTH = 210
 const IMAGESIDE = 72
 
@@ -25,16 +25,14 @@ const Header = styled('h1')({
   color: colors.BLACK,
   marginTop: '30px',
   marginBottom: '30px',
-  fontSize: '32px',
 })
 
 const Paragraph = styled('p')({
   marginTop: '0px',
   marginBottom: '0px',
-  fontSize: '14px',
   textAlign: 'center',
   maxWidth: PARAGRAPHWIDTH,
-  color: colors.DARK_GRAY,
+  color: colors.OFF_BLACK,
 })
 
 const Title = styled('h3')({

@@ -49,7 +49,6 @@ const GetInsuredButton = styled('div')({
 
 const LinkTag = styled(Link)({
   backgroundColor: colors.GREEN,
-  fontSize: '16px',
   color: colors.WHITE,
   textDecoration: 'none',
   borderRadius: '50px',
