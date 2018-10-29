@@ -62,20 +62,14 @@ const Header = styled('h1')({
   marginTop: '0px',
   paddingTop: '30px',
   marginBottom: '10px',
-  fontSize: '32px',
-  '@media (max-width: 300px)': {
-    fontSize: '26px',
-  },
 })
 
 const InputTitle = styled('div')({
   marginTop: '20px',
   lineHeight: '23px',
-  fontSize: '20px',
   '@media (max-width: 300px)': {
     marginLeft: '10px',
     marginRight: '10px',
-    fontSize: '18px',
   },
 })
 
@@ -92,10 +86,10 @@ const CustomForm = styled(Form)({
 
 const InputField = styled(Field)({
   marginTop: '10px',
+  fontSize: '16px',
   marginBottom: '10px',
   minWidth: FORMWIDTH,
   lineHeight: '48px',
-  fontSize: '20px',
   backgroundColor: colors.OFF_WHITE,
   borderRadius: '5px',
   border: 'none',
@@ -106,17 +100,14 @@ const InputField = styled(Field)({
     marginLeft: '10px',
     marginRight: '10px',
     minWidth: FORMWIDTHSMALL,
-    fontSize: '18px',
   },
 })
 
 const ErrorMessage = styled('div')({
   minHeight: '24px',
-  fontSize: '16px',
   '@media (max-width: 300px)': {
     marginLeft: '10px',
     marginRight: '10px',
-    fontSize: '14px',
   },
 })
 
@@ -141,9 +132,9 @@ const inputBorderCheck = (
 ) =>
   touched
     ? errors
-      ? '3px solid red'
+      ? [`3px solid ${colors.PINK}`]
       : [`3px solid ${colors.GREEN}`]
-    : [`3px solid ${colors.DARK_PURPLE}`]
+    : [`3px solid ${colors.PURPLE}`]
 
 interface SignOfferMutationVariables {
   personalNumber: string
