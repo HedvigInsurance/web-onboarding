@@ -1,17 +1,10 @@
-import 'source-map-support/register'
 import { createKoaServer } from '@hedviginsurance/web-survival-kit' // tslint:disable-line ordered-imports
 import * as Sentry from '@sentry/node' // tslint:disable-line ordered-imports
-import { sentryConfig } from './utils/sentry'
-
-Sentry.init({
-  ...sentryConfig(),
-  serverName: process.env.HEROKU_DYNO_ID,
-  attachStacktrace: true,
-})
-
 import * as bodyParser from 'koa-bodyparser'
+import 'source-map-support/register'
 import { Logger } from 'typescript-logging'
 import { reactPageRoutes } from './routes'
+import { GIRAFFE_ENDPOINT, GIRAFFE_WS_ENDPOINT } from './server/config'
 import { appLogger } from './server/logging'
 import {
   inCaseOfEmergency,
@@ -21,8 +14,14 @@ import {
 } from './server/middleware/enhancers'
 import { helmet } from './server/middleware/helmet'
 import { getPage } from './server/page'
-import { getGiraffeEndpoint } from './utils/apolloClient'
 import { notNullable } from './utils/nullables'
+import { sentryConfig } from './utils/sentry'
+
+Sentry.init({
+  ...sentryConfig(),
+  serverName: process.env.HEROKU_DYNO_ID,
+  attachStacktrace: true,
+})
 
 const getPort = () => (process.env.PORT ? Number(process.env.PORT) : 8080)
 
@@ -33,13 +32,7 @@ appLogger.info(
   }, with environment "${sentryConfig().environment}"`,
 )
 appLogger.info(
-  `Using giraffe at batchHttp:"${getGiraffeEndpoint(
-    'GIRAFFE_ENDPOINT',
-    'https://graphql.dev.hedvigit.com/graphql',
-  )}" ws:"${getGiraffeEndpoint(
-    'GIRAFFE_WS_ENDPOINT',
-    'wss://graphql.dev.hedvigit.com/subscriptions',
-  )}" 🦒`,
+  `Using giraffe at batchHttp:"${GIRAFFE_ENDPOINT}" ws:"${GIRAFFE_WS_ENDPOINT}" 🦒`,
 )
 
 const server = createKoaServer({
