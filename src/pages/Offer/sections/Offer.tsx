@@ -129,17 +129,17 @@ interface Props {
 const COLUMNS = [
   {
     key: 0,
-    title: 'Lägenhetsskydd',
+    title: 'OFFER_PERIL_TITLE_LIVING_PROTECTION',
     icon: '/new-member-assets/offering/lagenhetsskyddet.svg',
   },
   {
     key: 1,
-    title: 'Personskydd',
+    title: 'OFFER_PERIL_TITLE_PERSONAL_PROTECTION',
     icon: '/new-member-assets/offering/familjeskyddet.svg',
   },
   {
     key: 2,
-    title: 'Prylskydd',
+    title: 'OFFER_PERIL_TITLE_STUFF_PROTECTION',
     icon: '/new-member-assets/offering/prylskyddet.svg',
   },
 ]
@@ -208,7 +208,11 @@ export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
             {COLUMNS.map((col) => (
               <Col key={col.key}>
                 <Icon src={col.icon} />
-                <IconTitle>{col.title}</IconTitle>
+                <IconTitle>
+                  <TranslationsConsumer textKey={col.title}>
+                    {(title) => title}
+                  </TranslationsConsumer>
+                </IconTitle>
               </Col>
             ))}
           </Row>

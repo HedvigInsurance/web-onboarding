@@ -345,7 +345,11 @@ export const InsuranceCoverage: React.SFC = () => (
                     </SwitcherItem>
                   ))}
                 </Switcher>
-                <PerilInfo>(Klicka på ikonerna för mer information)</PerilInfo>
+                <PerilInfo>
+                  <TranslationsConsumer textKey="OFFER_INSURANCE_COVERAGE_PERILS_INFO">
+                    {(text) => text}
+                  </TranslationsConsumer>
+                </PerilInfo>
                 {PERILS.map((peril) => (
                   <BigCol key={peril.key}>
                     {state.activeTab === peril.key ? (
