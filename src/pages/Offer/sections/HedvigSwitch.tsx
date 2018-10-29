@@ -48,7 +48,7 @@ const Title = styled('h3')({
 const Row = styled('div')({
   display: 'flex',
   flexDirection: 'row',
-  justifyContent: 'space-evenly',
+  justifyContent: 'space-around',
   alignItems: 'baseline',
   maxWidth: ROWWIDTH,
   '@media (max-width: 710px)': {

@@ -15,6 +15,7 @@ const Card = styled('div')({
   backgroundColor: colors.WHITE,
   boxShadow: '0px 8px 15px -13px rgba(0,0,0,0.67)',
   borderRadius: '10px',
+  textAlign: 'center',
 })
 
 const Wrapper = styled('div')({
@@ -86,9 +87,8 @@ const DropDownText = styled('div')({
 const Switcher = styled('div')({
   backgroundColor: colors.LIGHT_GRAY,
   borderRadius: '20px',
-  display: 'flex',
+  display: 'inline-flex',
   flexDirection: 'row',
-  width: 'max-content',
   marginLeft: 'auto',
   marginRight: 'auto',
   '@media (max-width: 400px)': {
