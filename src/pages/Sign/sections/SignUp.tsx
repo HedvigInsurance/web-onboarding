@@ -138,16 +138,6 @@ export const SIGN_MUTATION = gql`
   }
 `
 
-const inputBorderCheck = (
-  touched: boolean | undefined,
-  errors: string | undefined,
-) =>
-  touched
-    ? errors
-      ? `3px solid ${colors.PINK}`
-      : `3px solid ${colors.GREEN}`
-    : `3px solid ${colors.PURPLE}`
-
 interface SignOfferMutationVariables {
   personalNumber: string
   email: string
