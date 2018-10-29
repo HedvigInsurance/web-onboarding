@@ -29,6 +29,7 @@ const template = (
   body: string,
   helmetContext: FilledContext['helmet'],
   initialState: any,
+  cspNonce: string,
 ) => `
 <!doctype html>
 <html lang="en">
@@ -39,16 +40,16 @@ const template = (
   ${helmetContext.title}
   ${helmetContext.link}
   ${helmetContext.meta}
-<script src="https://browser.sentry-cdn.com/4.2.3/bundle.min.js" crossorigin="anonymous"></script>
-  <script>
-  Sentry.init(${JSON.stringify(sentryConfig())})
-</script>
-  <script key="segment-snippet">${segmentSnippet}</script>
+  <script src="https://browser.sentry-cdn.com/4.2.3/bundle.min.js" crossorigin="anonymous"></script>
+  <script nonce="${cspNonce}">
+    Sentry.init(${JSON.stringify(sentryConfig())})
+  </script>
+  <script key="segment-snippet" nonce="${cspNonce}">${segmentSnippet}</script>
 </head>
 <body>
   <div id="react-root">${body}</div>
 
-  <script>
+  <script nonce="${cspNonce}">
     window.GIRAFFE_WS_ENDPOINT= ${JSON.stringify(
       getGiraffeEndpoint(
         'GIRAFFE_WS_ENDPOINT',
@@ -101,5 +102,6 @@ export const getPage: Koa.Middleware = async (ctx) => {
     reactBody,
     (helmetContext as FilledContext).helmet,
     apolloClient.extract(),
+    (ctx.res as any).cspNonce,
   )
 }

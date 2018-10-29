@@ -9,6 +9,8 @@ Sentry.init({
   attachStacktrace: true,
 })
 
+import * as bodyParser from 'koa-bodyparser'
+import { Logger } from 'typescript-logging'
 import { reactPageRoutes } from './routes'
 import { appLogger } from './server/logging'
 import {
@@ -17,6 +19,7 @@ import {
   setLoggerMiddleware,
   setRequestUuidMiddleware,
 } from './server/middleware/enhancers'
+import { helmet } from './server/middleware/helmet'
 import { getPage } from './server/page'
 import { getGiraffeEndpoint } from './utils/apolloClient'
 import { notNullable } from './utils/nullables'
@@ -43,6 +46,22 @@ const server = createKoaServer({
   publicPath: '/new-member-assets',
   assetLocation: __dirname + '/assets',
 })
+
+server.router.use(
+  bodyParser({
+    extendTypes: { json: ['application/csp-report'] },
+  }),
+)
+
+if (process.env.USE_HELMET === 'true') {
+  appLogger.info('Using helmet and strict CSP ⛑')
+  server.app.use(helmet)
+  server.router.use(helmet)
+} else if (process.env.NODE_ENV !== 'development') {
+  appLogger.warn(
+    'NOT using any helmet or CSP headers. This is not recommended for production usage',
+  )
+}
 server.app.use(setRequestUuidMiddleware)
 server.app.use(setLoggerMiddleware)
 server.app.use(logRequestMiddleware)
@@ -70,6 +89,13 @@ server.router.get('/panic-room', async () => {
   throw new Error(
     'Entered the panic room, this is an expected error. Carry on 👜',
   )
+})
+
+server.router.post('/new-member/_report-csp-violation', (ctx) => {
+  ;(ctx.state.getLogger('cspViolation') as Logger).error(
+    `CSP VIOLATION: ${JSON.stringify(ctx.request.body)}`,
+  )
+  ctx.status = 204
 })
 
 reactPageRoutes.forEach((route) => {
