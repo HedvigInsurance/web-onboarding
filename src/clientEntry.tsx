@@ -15,7 +15,9 @@ ReactDOM.hydrate(
       <HelmetProvider>
         <ApolloProvider client={apolloClient!.client!}>
           <HotApp
-            session={createSession(new CookieStorage({ expires: null }))}
+            session={createSession(
+              new CookieStorage({ expires: null, path: '/new-member' }),
+            )}
           />
         </ApolloProvider>
       </HelmetProvider>

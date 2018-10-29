@@ -16,6 +16,7 @@ export class ServerCookieStorage implements MinimalStorage {
       ...({ ...options, date: undefined } as any),
       signed: false,
       expires: undefined,
+      path: '/new-member',
     })
   }
 }
