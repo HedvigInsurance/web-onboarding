@@ -34,6 +34,7 @@ const HedvigWrapper = styled('div')({})
 
 const ChatMessageWrapper = styled('div')({
   position: 'relative',
+  paddingTop: 20,
 })
 
 const TypingWrapper = styled('div')(
@@ -45,7 +46,7 @@ const TypingWrapper = styled('div')(
         ? `${fadeOut} 200ms forwards`
         : `${fadeIn} 300ms forwards`,
     position: 'absolute',
-    top: 0,
+    top: 20,
     left: 0,
   }),
 )
@@ -111,6 +112,7 @@ export const ChatMessageTextWrapper = styled('div')(
 
 export interface ChatMessageProps {
   appear?: boolean
+  isCurrentMessage?: boolean
   typingDuration?: number
   onTyped?: () => void
 }
@@ -124,18 +126,26 @@ const HedvigIcon: React.SFC = () => (
 export const ChatMessage: React.SFC<ChatMessageProps> = ({
   children,
   appear = false,
+  isCurrentMessage = false,
   typingDuration = 500,
   onTyped,
 }) => (
   <ChatWrapper>
     <AnimateHeight initialMaxHeight={appear ? 300 : undefined}>
-      {appear ? (
-        <HedvigIcon />
-      ) : (
-        <FadeIn>
+      <AnimateHeight
+        maxHeight={isCurrentMessage ? 33 : 0}
+        initialMaxHeight={isCurrentMessage && appear ? 33 : 0}
+        time={200}
+        hideOverflow
+      >
+        {appear ? (
           <HedvigIcon />
-        </FadeIn>
-      )}
+        ) : (
+          <FadeIn>
+            <HedvigIcon />
+          </FadeIn>
+        )}
+      </AnimateHeight>
       <Transition
         timeout={appear ? 0 : typingDuration}
         appear

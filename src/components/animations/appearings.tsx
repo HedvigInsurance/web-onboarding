@@ -41,12 +41,17 @@ export const AnimateHeight = styled('div')(
   ({
     maxHeight = 300,
     initialMaxHeight = 0,
+    hideOverflow = false,
+    time = 500,
   }: {
     maxHeight?: number
     initialMaxHeight?: number
+    hideOverflow?: boolean
+    time?: number
   }) => ({
     willChange: 'max-height',
     maxHeight: initialMaxHeight,
-    animation: `${animateHeight(maxHeight, initialMaxHeight)} 500ms forwards`,
+    animation: `${animateHeight(maxHeight, initialMaxHeight)} ${time}ms forwards`,
+    overflow: hideOverflow ? 'hidden' : undefined,
   }),
 )
