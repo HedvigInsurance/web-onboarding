@@ -5,6 +5,15 @@ import { GIRAFFE_ENDPOINT, GIRAFFE_WS_ENDPOINT } from '../config'
 const defaultSrc = [
   "'self'",
   'cdn.hedvig.com',
+  'www.googletagmanager.com',
+  'https://*.hotjar.com',
+  'wss://*.hotjar.com',
+  '*.intercom.io',
+  '*.intercomcdn.com',
+  '*.intercomassets.com',
+  '*.intercomusercontent.com',
+  'app.getsentry.com',
+  'www.google-analytics.com',
   GIRAFFE_ENDPOINT,
   GIRAFFE_WS_ENDPOINT,
 ]
@@ -29,7 +38,7 @@ export const helmet = koaHelmet({
       connectSrc: [
         ...defaultSrc,
         'https://api.segment.io',
-        'https://sentry.io/api',
+        'https://sentry.io',
       ],
       styleSrc: ["'self'", "'unsafe-inline'", 'cdn.hedvig.com'],
       upgradeInsecureRequests: true,
