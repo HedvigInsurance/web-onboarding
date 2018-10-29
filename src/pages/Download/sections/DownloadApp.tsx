@@ -83,7 +83,13 @@ const InsuredText = styled('div')({
   marginBottom: '45px',
 })
 
-export const DownloadApp: React.SFC = () => (
+interface DownloadAppProps {
+  hasCurrentInsurer?: boolean
+}
+
+export const DownloadApp: React.SFC<DownloadAppProps> = ({
+  hasCurrentInsurer,
+}) => (
   <>
     <Background />
     <InnerWrapper>
@@ -104,7 +110,13 @@ export const DownloadApp: React.SFC = () => (
           </TranslationsConsumer>
         </DownloadHeader>
         <InsuredText>
-          <TranslationsConsumer textKey="DOWNLOAD_INFO">
+          <TranslationsConsumer
+            textKey={
+              hasCurrentInsurer
+                ? 'DOWNLOAD_INFO_INSURED'
+                : 'DOWNLOAD_INFO_NOT_INSURED'
+            }
+          >
             {(insuredText) => insuredText}
           </TranslationsConsumer>
         </InsuredText>
