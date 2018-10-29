@@ -27,7 +27,6 @@ const Header = styled('h1')({
   color: colors.BLACK,
   marginTop: '30px',
   marginBottom: '30px',
-  fontSize: '32px',
 })
 
 const Row = styled('div')({
@@ -62,21 +61,20 @@ const CheckIcon = styled('img')({
 const IconTitle = styled('div')({
   marginBottom: '0px',
   marginTop: '10px',
-  fontSize: '14px',
   fontFamily: fonts.CIRCULAR,
   textAlign: 'center',
   color: colors.DARK_PURPLE,
   lineHeight: 'normal',
-  maxWidth: '110px',
+  maxWidth: '130px',
+  fontWeight: 600,
 })
 
 const IconInfo = styled('div')({
   marginBottom: '0px',
   marginTop: '0px',
-  fontSize: '14px',
   fontFamily: fonts.CIRCULAR,
   textAlign: 'center',
-  color: colors.DARK_GRAY,
+  color: colors.OFF_BLACK,
   lineHeight: 'normal',
 })
 

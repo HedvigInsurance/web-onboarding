@@ -34,8 +34,6 @@ const Header = styled('h1')({
   marginBottom: '30px',
   paddingTop: '30px',
   paddingBottom: '30px',
-  fontSize: '32px',
-  maxWidth: '350px',
 })
 
 const InsuranceInfo = styled('div')({
@@ -43,14 +41,13 @@ const InsuranceInfo = styled('div')({
 })
 
 const BoldInfoText = styled('div')({
-  fontSize: '14px',
   color: colors.BLACK,
   display: 'inline',
+  fontWeight: 600,
 })
 
 const InfoText = styled('div')({
-  fontSize: '14px',
-  color: colors.DARK_GRAY,
+  color: colors.OFF_BLACK,
   display: 'inline',
 })
 
@@ -62,7 +59,6 @@ const HeaderBackground = styled('div')({
 
 const PriceHeader = styled('h1')({
   marginBottom: '0px',
-  fontSize: '32px',
   textAlign: 'center',
   color: colors.BLACK,
   fontFamily: fonts.CIRCULAR,

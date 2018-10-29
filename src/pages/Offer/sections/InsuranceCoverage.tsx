@@ -25,7 +25,6 @@ const Header = styled('h1')({
   color: colors.BLACK,
   marginTop: '30px',
   marginBottom: '30px',
-  fontSize: '32px',
 })
 
 const InnerWrapper = styled('div')({
@@ -37,8 +36,8 @@ const InnerWrapper = styled('div')({
 const BigCol = styled('div')({})
 
 const Row = styled('div')({
-  marginLeft: '138px',
-  marginRight: '138px',
+  marginLeft: '115px',
+  marginRight: '115px',
   display: 'flex',
   alignItems: 'baseline',
   flexDirection: 'row',
@@ -70,7 +69,6 @@ const PerilIcon = styled('img')({
 const PerilTitle = styled('div')({
   marginBottom: '0px',
   marginTop: '0px',
-  fontSize: '14px',
   textAlign: 'center',
   color: colors.DARK_GRAY,
   borderRadius: '30px',
@@ -79,9 +77,8 @@ const PerilTitle = styled('div')({
 
 const DropDownText = styled('div')({
   marginTop: '30px',
-  fontSize: '14px',
   textAlign: 'left',
-  color: colors.BLACK_PURPLE,
+  color: colors.OFF_BLACK,
   marginLeft: '138px',
   marginRight: '138px',
 })
@@ -94,7 +91,6 @@ const Switcher = styled('div')({
   width: 'max-content',
   marginLeft: 'auto',
   marginRight: 'auto',
-  marginBottom: '30px',
   '@media (max-width: 400px)': {
     width: '90%',
     borderRadius: '40px',
@@ -107,11 +103,17 @@ const SwitcherItem = styled('div')({
   paddingBottom: '10px',
   paddingRight: '20px',
   paddingLeft: '20px',
-  fontSize: '14px',
   fontFamily: fonts.CIRCULAR,
   cursor: 'pointer',
   userSelect: 'none',
   textAlign: 'center',
+})
+
+const PerilInfo = styled('div')({
+  textAlign: 'center',
+  fontSize: '14px',
+  marginBottom: '20px',
+  marginTop: '10px',
 })
 
 const PERILS = [
@@ -342,6 +344,11 @@ export const InsuranceCoverage: React.SFC = () => (
                     </SwitcherItem>
                   ))}
                 </Switcher>
+                <PerilInfo>
+                  <TranslationsConsumer textKey="OFFER_INSURANCE_COVERAGE_PERILS_INFO">
+                    {(text) => text}
+                  </TranslationsConsumer>
+                </PerilInfo>
                 {PERILS.map((peril) => (
                   <BigCol key={peril.key}>
                     {state.activeTab === peril.key ? (
