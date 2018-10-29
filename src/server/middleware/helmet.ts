@@ -18,6 +18,8 @@ const defaultSrc = [
   'wss://*.intercomusercontent.com',
   'app.getsentry.com',
   'www.google-analytics.com',
+  '*.facebook.net',
+  '*.dobuleclick.net',
   GIRAFFE_ENDPOINT,
   GIRAFFE_WS_ENDPOINT,
 ]
