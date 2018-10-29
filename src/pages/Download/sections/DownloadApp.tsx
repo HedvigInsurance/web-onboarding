@@ -74,11 +74,6 @@ const Header = styled('h1')({
   marginBottom: '0px',
 })
 
-const DownloadHeader = styled('div')({
-  marginTop: '30px',
-  marginBottom: '30px',
-})
-
 const InsuredText = styled('div')({
   marginBottom: '45px',
 })
@@ -104,11 +99,6 @@ export const DownloadApp: React.SFC<DownloadAppProps> = ({
             {(header) => header}
           </TranslationsConsumer>
         </Header>
-        <DownloadHeader>
-          <TranslationsConsumer textKey="DOWNLOAD_HEADER_THREE">
-            {(header) => header}
-          </TranslationsConsumer>
-        </DownloadHeader>
         <InsuredText>
           <TranslationsConsumer
             textKey={
