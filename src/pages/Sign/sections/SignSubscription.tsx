@@ -35,6 +35,7 @@ const SubmitButton = styled('button')({
   padding: '15px 30px',
   cursor: 'pointer',
   border: 'none',
+  fontSize: '16px',
 
   '&:disabled': {
     backgroundColor: colors.LIGHT_GRAY,

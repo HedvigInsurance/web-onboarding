@@ -62,20 +62,14 @@ const Header = styled('h1')({
   marginTop: '0px',
   paddingTop: '30px',
   marginBottom: '10px',
-  fontSize: '32px',
-  '@media (max-width: 300px)': {
-    fontSize: '26px',
-  },
 })
 
 const InputTitle = styled('div')({
   marginTop: '20px',
   lineHeight: '23px',
-  fontSize: '20px',
   '@media (max-width: 300px)': {
     marginLeft: '10px',
     marginRight: '10px',
-    fontSize: '18px',
   },
 })
 
@@ -90,25 +84,36 @@ const CustomForm = styled(Form)({
   },
 })
 
-const InputField = styled(Field)({
-  marginTop: '10px',
-  marginBottom: '10px',
-  minWidth: FORMWIDTH,
-  lineHeight: '48px',
-  fontSize: '20px',
-  backgroundColor: colors.OFF_WHITE,
-  borderRadius: '5px',
-  border: 'none',
-  outline: 'none',
-  paddingLeft: 10,
-  paddingRight: 10,
-  '@media (max-width: 300px)': {
-    marginLeft: '10px',
-    marginRight: '10px',
-    minWidth: FORMWIDTHSMALL,
-    fontSize: '18px',
-  },
-})
+const InputField = styled(Field)(
+  ({ touched, errors }: { touched?: boolean; errors?: string }) => ({
+    marginTop: '10px',
+    fontSize: '16px',
+    marginBottom: '10px',
+    minWidth: FORMWIDTH,
+    lineHeight: '48px',
+    backgroundColor: colors.OFF_WHITE,
+    borderRadius: '5px',
+    borderRight: 'none',
+    borderLeft: 'none',
+    borderTop: 'none',
+    outline: 'none',
+    paddingLeft: 10,
+    paddingRight: 10,
+    borderBottom: touched
+      ? errors
+        ? `3px solid ${colors.PINK}`
+        : `3px solid ${colors.GREEN}`
+      : `3px solid ${colors.PURPLE}`,
+    '@media (max-width: 300px)': {
+      marginLeft: '10px',
+      marginRight: '10px',
+      minWidth: FORMWIDTHSMALL,
+    },
+    '&:focus': {
+      borderBottom: `3px solid ${colors.DARK_PURPLE}`,
+    },
+  }),
+)
 
 const ErrorMessage = styled('div')({
   minHeight: '24px',
@@ -132,16 +137,6 @@ export const SIGN_MUTATION = gql`
     signOffer(details: { personalNumber: $personalNumber, email: $email })
   }
 `
-
-const inputBorderCheck = (
-  touched: boolean | undefined,
-  errors: string | undefined,
-) =>
-  touched
-    ? errors
-      ? '3px solid red'
-      : [`3px solid ${colors.GREEN}`]
-    : [`3px solid ${colors.DARK_PURPLE}`]
 
 interface SignOfferMutationVariables {
   personalNumber: string
@@ -202,12 +197,8 @@ export const SignUp: React.SFC = () => (
                           <InputField
                             name="email"
                             id="email"
-                            style={{
-                              borderBottom: inputBorderCheck(
-                                touched.email,
-                                errors.email,
-                              ),
-                            }}
+                            touched={touched.email}
+                            errors={errors.email}
                             placeholder={placeholder}
                           />
                         )}
@@ -229,12 +220,8 @@ export const SignUp: React.SFC = () => (
                           <InputField
                             name="personalNumber"
                             id="personalNumber"
-                            style={{
-                              borderBottom: inputBorderCheck(
-                                touched.personalNumber,
-                                errors.personalNumber,
-                              ),
-                            }}
+                            touched={touched.personalNumber}
+                            errors={errors.personalNumber}
                             placeholder={placeholder}
                           />
                         )}

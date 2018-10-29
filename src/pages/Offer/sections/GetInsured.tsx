@@ -8,6 +8,7 @@ import { OfferData } from 'containers/OfferContainer'
 import * as React from 'react'
 import styled from 'react-emotion'
 import VisibilitySensor from 'react-visibility-sensor'
+import { formatPostalNumber } from 'utils/postalNumbers'
 import { trackEvent } from 'utils/tracking'
 import { CardWrapperSmall } from '../components/CardWrapperSmall'
 import { HeaderWrapper } from '../components/HeaderWrapper'
@@ -31,9 +32,17 @@ const Card = styled('div')({
 const Header = styled('h1')({
   color: colors.WHITE,
   marginTop: '0px',
-  marginBottom: '30px',
+  marginBottom: '10px',
   paddingTop: '30px',
+})
+
+const PersonalInfo = styled('div')({
+  marginLeft: 'auto',
+  marginRight: 'auto',
   paddingBottom: '30px',
+  textAlign: 'center',
+  maxWidth: '100%',
+  color: colors.WHITE,
 })
 
 const InsuranceInfo = styled('div')({
@@ -78,6 +87,13 @@ export const GetInsured: React.SFC<Props> = ({
                 {(title) => <Header>{title}</Header>}
               </TranslationsConsumer>
             </HeaderWrapper>
+            <PersonalInfo>
+              {`${offer.member.firstName} ${offer.member.lastName}`}
+              {' · '}
+              {offer.insurance.address}
+              {' · '}
+              {formatPostalNumber(offer.insurance.postalNumber)}
+            </PersonalInfo>
           </HeaderBackground>
           <TranslationsPlaceholderConsumer
             textKey="OFFER_SUMMARY_PRICE"
