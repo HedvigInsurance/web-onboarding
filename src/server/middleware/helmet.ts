@@ -19,6 +19,7 @@ const defaultSrc = [
   'app.getsentry.com',
   'www.google-analytics.com',
   '*.facebook.net',
+  '*.facebook.com',
   '*.doubleclick.net',
   GIRAFFE_ENDPOINT,
   GIRAFFE_WS_ENDPOINT,
