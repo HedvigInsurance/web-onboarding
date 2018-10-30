@@ -1,7 +1,10 @@
 import { colors, fonts } from '@hedviginsurance/brand'
+import { Container } from 'constate'
 import * as React from 'react'
+import AnimateHeight from 'react-animate-height'
 import styled from 'react-emotion'
-import { AnimateHeight, FadeIn, FadeUp } from '../animations/appearings'
+import { Mount } from 'react-lifecycle-components'
+import { FadeIn, FadeUp } from '../animations/appearings'
 
 interface InputProps {
   hasError?: boolean
@@ -87,11 +90,20 @@ const UserResponseWrapper: React.SFC<{
   appear ? (
     <div className={className}>{children}</div>
   ) : (
-    <AnimateHeight initialMaxHeight={appear ? 300 : undefined}>
-      <FadeIn className={className}>
-        <FadeUp>{children}</FadeUp>
-      </FadeIn>
-    </AnimateHeight>
+    <Container<{ hasMounted: boolean }, { mount: () => void }>
+      initialState={{ hasMounted: appear }}
+      actions={{ mount: () => () => ({ hasMounted: true }) }}
+    >
+      {({ hasMounted, mount }) => (
+        <Mount on={mount}>
+          <AnimateHeight height={hasMounted ? 'auto' : 0}>
+            <FadeIn className={className}>
+              <FadeUp>{children}</FadeUp>
+            </FadeIn>
+          </AnimateHeight>
+        </Mount>
+      )}
+    </Container>
   )
 
 export const InputValidationError = styled('div')({
