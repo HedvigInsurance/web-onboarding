@@ -1,8 +1,8 @@
 import { colors, fonts } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
-import { InsuranceType } from 'containers/OfferContainer'
 import * as React from 'react'
 import styled from 'react-emotion'
+import { InsuranceType } from 'utils/insuranceDomainUtils'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 
 const isApartmentOwner = (insuranceType: InsuranceType): boolean =>

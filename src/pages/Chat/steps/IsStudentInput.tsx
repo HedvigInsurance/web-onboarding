@@ -18,14 +18,21 @@ export const IsStudentInput: React.SFC<IsStudentInputProps & Focusable> = ({
   onSubmit = () => {
     /* noop */
   },
+  onFocus = () => {
+    /* noop */
+  },
+  onBlur = () => {
+    /* noop */
+  },
   isCurrentMessage,
 }) => (
   <UserResponse appear={appear}>
     <ChatContainer>
       {(chatState) => (
         <form
-          onSubmit={() => {
-            if (true) {
+          onSubmit={(e) => {
+            e.preventDefault()
+            if (chatState.isStudent !== '' && onSubmit) {
               onSubmit()
             }
           }}
@@ -33,6 +40,8 @@ export const IsStudentInput: React.SFC<IsStudentInputProps & Focusable> = ({
           <UserSelectInput
             onChange={chatState.setIsStudent}
             value={chatState.isStudent}
+            onFocus={onFocus}
+            onBlur={onBlur}
           >
             <option value="" disabled>
               {' '}
@@ -40,7 +49,10 @@ export const IsStudentInput: React.SFC<IsStudentInputProps & Focusable> = ({
             <option value="true">Ja</option>
             <option value="false">Nej</option>
           </UserSelectInput>
-          <NextButton disabled={false} hidden={!isCurrentMessage} />
+          <NextButton
+            disabled={chatState.isStudent === ''}
+            hidden={!isCurrentMessage || chatState.isStudent === ''}
+          />
         </form>
       )}
     </ChatContainer>

@@ -73,8 +73,7 @@ export const getCreateOfferVariablesFromChatState = (
     chatState.isStudent === 'true'
       ? mapToStudentVariant(chatState.livingSituation.insuranceType!)
       : chatState.livingSituation.insuranceType!,
-previousInsurer: getPreviousInsurer(chatState),
-
+  previousInsurer: getPreviousInsurer(chatState),
 })
 
 export type CreateOfferChild = (

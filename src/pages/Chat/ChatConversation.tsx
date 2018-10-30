@@ -36,7 +36,6 @@ export const ChatConversation: React.SFC = () => (
       livingSituation,
       isStudent,
       currentInsurance,
-      nameAge,
     }) => (
       <Conversation<ChatStep>
         initialVisibleSteps={initialVisibleSteps}
@@ -245,11 +244,33 @@ export const ChatConversation: React.SFC = () => (
                 onSubmit={() => {
                   // TODO Logic for student response
                   trackOnboardingStep('is-student')
-                  goToStep(ChatStep.CURRENT_INSURANCE_QUESTION)
+                  goToStep(ChatStep.IS_STUDENT_RESPONSE)
                 }}
                 onFocus={() => peekStep(ChatStep.IS_STUDENT_QUESTION)}
                 onBlur={() => unpeek()}
               />
+            </Mufflable>
+          )}
+        </Message>
+
+        <Message id={ChatStep.IS_STUDENT_RESPONSE}>
+          {({ appear }) => (
+            <Mufflable
+              muffled={
+                ![
+                  ChatStep.IS_STUDENT_RESPONSE,
+                  ChatStep.CURRENT_INSURANCE_QUESTION,
+                  ChatStep.CURRENT_INSURANCE_INPUT,
+                ].includes(currentStep)
+              }
+            >
+              <ChatMessage
+                appear={appear}
+                onTyped={() => goToStep(ChatStep.CURRENT_INSURANCE_QUESTION)}
+                isCurrentMessage={currentStep === ChatStep.IS_STUDENT_RESPONSE}
+              >
+                {isStudent === 'true' ? 'yup' : 'nope'}
+              </ChatMessage>
             </Mufflable>
           )}
         </Message>
