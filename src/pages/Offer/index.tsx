@@ -11,6 +11,9 @@ import Helmet from 'react-helmet-async'
 import { Mount } from 'react-lifecycle-components'
 import { Link } from 'react-router-dom'
 import { trackEvent } from 'utils/tracking'
+import { CardWrapper } from './components/CardWrapper'
+import { InnerWrapper } from './components/InnerWrapper'
+import { Wrapper } from './components/Wrapper'
 import { GetInsured } from './sections/GetInsured'
 import { HedvigInfo } from './sections/HedvigInfo'
 import { HedvigSwitch } from './sections/HedvigSwitch'
@@ -54,6 +57,15 @@ const LinkTag = styled(Link)({
   borderRadius: '50px',
   padding: '10px 24px',
   textAlign: 'center',
+})
+
+const BigCard = styled('div')({
+  marginTop: '70px',
+  paddingTop: '30px',
+  paddingBottom: '60px',
+  backgroundColor: colors.WHITE,
+  boxShadow: '0px 8px 15px -13px rgba(0,0,0,0.67)',
+  borderRadius: '10px',
 })
 
 export const Offering: React.SFC<{}> = () => (
@@ -133,10 +145,18 @@ export const Offering: React.SFC<{}> = () => (
                     <PageDown />
                     <HedvigInfo />
                     {insuredAtOtherCompany ? <HedvigSwitch /> : null}
-                    <InsuranceCoverage />
-                    <InsuredAmount />
-                    <OtherInfo offer={offer} />
-                    <Terms insuranceType={offer.insurance.type} />
+                    <Wrapper>
+                      <InnerWrapper>
+                        <CardWrapper>
+                          <BigCard>
+                            <InsuranceCoverage />
+                            <InsuredAmount />
+                            <OtherInfo offer={offer} />
+                            <Terms insuranceType={offer.insurance.type} />
+                          </BigCard>
+                        </CardWrapper>
+                      </InnerWrapper>
+                    </Wrapper>
                     <GetInsured
                       offer={offer}
                       signButtonVisibility={state.updateLowerButtonVisibility}
