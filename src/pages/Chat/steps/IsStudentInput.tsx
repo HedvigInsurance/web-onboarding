@@ -1,3 +1,4 @@
+import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { FadeIn } from 'components/animations/appearings'
 import {
   InputValidationError,
@@ -9,7 +10,6 @@ import { qualifiesForStudentInsurance } from 'utils/insuranceDomainUtils'
 import { NextButton } from '../components/NextButton'
 import { ChatContainer, State as ChatState } from '../state'
 import { Focusable } from './base'
-import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 
 interface IsStudentInputProps {
   appear?: boolean
