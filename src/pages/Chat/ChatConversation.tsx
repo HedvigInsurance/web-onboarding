@@ -6,7 +6,10 @@ import { Mufflable } from 'components/animations/Mufflable'
 import { ChatMessage } from 'components/hedvig/chat'
 import { Conversation, Message } from 'components/hedvig/conversation'
 import * as React from 'react'
-import { qualifiesForStudentInsurance } from 'utils/insuranceDomainUtils'
+import {
+  InsuranceType,
+  qualifiesForStudentInsurance,
+} from 'utils/insuranceDomainUtils'
 import { trackEvent } from 'utils/tracking'
 import { ChatContainer, ChatStep } from './state'
 import { AddressInput } from './steps/AddressInput'
@@ -226,8 +229,9 @@ export const ChatConversation: React.SFC = () => (
                 appear={appear}
                 onTyped={() => goToStep(ChatStep.IS_STUDENT_INPUT)}
               >
-                Trevligt! Är du kanske student? Jag har ett extra grymt
-                erbjudande för studenter!
+                <TranslationsConsumer textKey="CHAT_INPUT_IS_STUDENT_QUESTION">
+                  {(t) => t}
+                </TranslationsConsumer>
               </ChatMessage>
             </Mufflable>
           )}
@@ -269,7 +273,21 @@ export const ChatConversation: React.SFC = () => (
                 onTyped={() => goToStep(ChatStep.CURRENT_INSURANCE_QUESTION)}
                 isCurrentMessage={currentStep === ChatStep.IS_STUDENT_RESPONSE}
               >
-                {isStudent === 'true' ? 'yup' : 'nope'}
+                <TranslationsPlaceholderConsumer
+                  textKey={
+                    isStudent === 'true'
+                      ? 'CHAT_INPUT_IS_STUDENT_RESPONSE_TRUE'
+                      : 'CHAT_INPUT_IS_STUDENT_RESPONSE_FALSE'
+                  }
+                  replacements={{
+                    price:
+                      livingSituation.insuranceType === InsuranceType.BRF
+                        ? '99'
+                        : '79',
+                  }}
+                >
+                  {(t) => t}
+                </TranslationsPlaceholderConsumer>
               </ChatMessage>
             </Mufflable>
           )}
