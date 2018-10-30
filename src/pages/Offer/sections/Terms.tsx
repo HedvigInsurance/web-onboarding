@@ -32,9 +32,6 @@ const Row = styled('div')({
   alignItems: 'baseline',
   justifyContent: 'center',
   flexDirection: 'row',
-  '@media (max-width: 700px)': {
-    justifyContent: 'flex-start',
-  },
 })
 
 const Col = styled('div')({
