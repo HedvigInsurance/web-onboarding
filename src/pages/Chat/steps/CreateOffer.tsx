@@ -113,7 +113,11 @@ export const CreateOffer: React.SFC = () => (
                                 <GdprWrapper>
                                   <TranslationsConsumer textKey="CHAT_INPUT_PERSONAL_DATA_LINK">
                                     {(link) => (
-                                      <GdprLink href={link} target="_blank">
+                                      <GdprLink
+                                        href={link}
+                                        rel="noreferrer noopener"
+                                        target="_blank"
+                                      >
                                         <TranslationsConsumer textKey="CHAT_INPUT_PERSONAL_DATA_LABEL">
                                           {(t) => t}
                                         </TranslationsConsumer>

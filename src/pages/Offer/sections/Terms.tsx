@@ -94,7 +94,7 @@ export const Terms: React.SFC<TermsProps> = ({ insuranceType }) => (
           }
         >
           {(url) => (
-            <PerilLink href={url} target="_blank">
+            <PerilLink href={url} rel="noreferrer noopener" target="_blank">
               <PDFTag>PDF</PDFTag>
               <PerilIcon src="/new-member-assets/offering/forkopsinformation.svg" />
 
@@ -114,7 +114,7 @@ export const Terms: React.SFC<TermsProps> = ({ insuranceType }) => (
           }
         >
           {(url) => (
-            <PerilLink href={url} target="_blank">
+            <PerilLink href={url} rel="noreferrer noopener" target="_blank">
               <PDFTag>PDF</PDFTag>
               <PerilIcon src="/new-member-assets/offering/forkopsinformation.svg" />
               <TranslationsConsumer textKey="TERMS_PERIL_TWO_TITLE">

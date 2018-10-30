@@ -45,7 +45,7 @@ export const Legal: React.SFC<TermsProps> = ({ insuranceType }) => (
           gdpr: (
             <TranslationsConsumer textKey="CHAT_INPUT_PERSONAL_DATA_LINK">
               {(url) => (
-                <Link href={url} target="_blank">
+                <Link href={url} rel="noreferrer noopener" target="_blank">
                   <TranslationsConsumer textKey="OFFER_FOOTER_GDPR">
                     {(t) => t}
                   </TranslationsConsumer>
@@ -62,7 +62,7 @@ export const Legal: React.SFC<TermsProps> = ({ insuranceType }) => (
               }
             >
               {(url) => (
-                <Link href={url} target="_blank">
+                <Link href={url} rel="noreferrer noopener" target="_blank">
                   <TranslationsConsumer textKey="OFFER_FOOTER_PREBUY">
                     {(t) => t}
                   </TranslationsConsumer>
@@ -79,7 +79,7 @@ export const Legal: React.SFC<TermsProps> = ({ insuranceType }) => (
               }
             >
               {(url) => (
-                <Link href={url} target="_blank">
+                <Link href={url} rel="noreferrer noopener" target="_blank">
                   <TranslationsConsumer textKey="OFFER_FOOTER_TERMS">
                     {(t) => t}
                   </TranslationsConsumer>
