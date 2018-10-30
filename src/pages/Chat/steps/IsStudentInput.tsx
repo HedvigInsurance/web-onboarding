@@ -9,6 +9,7 @@ import { qualifiesForStudentInsurance } from 'utils/insuranceDomainUtils'
 import { NextButton } from '../components/NextButton'
 import { ChatContainer, State as ChatState } from '../state'
 import { Focusable } from './base'
+import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 
 interface IsStudentInputProps {
   appear?: boolean
@@ -82,8 +83,9 @@ export const IsStudentInput: React.SFC<IsStudentInputProps & Focusable> = ({
           {isInvalidStudentInput(chatState) && (
             <FadeIn>
               <InputValidationError>
-                Ojdå, tyvärr kan vi inte ge dig studentpris. Men fortsätt gärna
-                ändå, vi kan fortfarande försäkra dig bla bla bla
+                <TranslationsConsumer textKey="CHAT_INPUT_IS_STUDENT_INVALID">
+                  {(t) => t}
+                </TranslationsConsumer>
               </InputValidationError>
             </FadeIn>
           )}
