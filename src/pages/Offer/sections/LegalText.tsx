@@ -63,7 +63,7 @@ export const Legal: React.SFC<TermsProps> = ({ insuranceType }) => (
             >
               {(url) => (
                 <Link href={url} target="_blank">
-                  <TranslationsConsumer textKey="OFFER_FOOTER_GDPR">
+                  <TranslationsConsumer textKey="OFFER_FOOTER_PREBUY">
                     {(t) => t}
                   </TranslationsConsumer>
                 </Link>
@@ -80,7 +80,7 @@ export const Legal: React.SFC<TermsProps> = ({ insuranceType }) => (
             >
               {(url) => (
                 <Link href={url} target="_blank">
-                  <TranslationsConsumer textKey="OFFER_FOOTER_GDPR">
+                  <TranslationsConsumer textKey="OFFER_FOOTER_TERMS">
                     {(t) => t}
                   </TranslationsConsumer>
                 </Link>
