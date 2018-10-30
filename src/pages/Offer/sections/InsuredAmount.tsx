@@ -70,8 +70,8 @@ const rows = (
   },
   {
     titleKey: 'OFFER_INSURED_AMOUNT_COL_TWO_TITLE',
-    amountKey: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT',
-    replacements: {},
+    amountKey: 'OFFER_MONETARY_VALUE_TEMPLATE',
+    replacements: { amount: isStudent ? '250 000' : '1 000 000' },
   },
   {
     titleKey: 'OFFER_INSURED_AMOUNT_COL_THREE_TITLE',
