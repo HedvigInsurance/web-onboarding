@@ -30,5 +30,7 @@ export const mapToStudentVariant = (insuranceType: InsuranceType) => {
     return InsuranceType.STUDENT_BRF
   }
 
-  throw new Error('Unreachable state') // I dont like this, is there a better way?
+  throw new Error(
+    `Unreachable state when mapping student variant, expected either "RENT" or "BRF" but got "${insuranceType}"`,
+  )
 }
