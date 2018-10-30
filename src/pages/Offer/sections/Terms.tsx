@@ -3,10 +3,7 @@ import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { InsuranceType } from 'containers/OfferContainer'
 import * as React from 'react'
 import styled from 'react-emotion'
-import { CardWrapper } from '../components/CardWrapper'
 import { HeaderWrapper } from '../components/HeaderWrapper'
-import { InnerWrapper } from '../components/InnerWrapper'
-import { Wrapper } from '../components/Wrapper'
 
 const isApartmentOwner = (insuranceType: InsuranceType): boolean =>
   insuranceType === InsuranceType.BRF ||
@@ -19,12 +16,7 @@ interface TermsProps {
 const PERILSIDE = 72
 
 const Card = styled('div')({
-  marginTop: '70px',
-  paddingTop: '30px',
-  paddingBottom: '60px',
   backgroundColor: colors.WHITE,
-  boxShadow: '0px 8px 15px -13px rgba(0,0,0,0.67)',
-  borderRadius: '10px',
 })
 
 const Header = styled('h1')({
@@ -40,9 +32,6 @@ const Row = styled('div')({
   alignItems: 'baseline',
   justifyContent: 'center',
   flexDirection: 'row',
-  '@media (max-width: 700px)': {
-    justifyContent: 'flex-start',
-  },
 })
 
 const Col = styled('div')({
@@ -87,60 +76,54 @@ const PerilTitle = styled('div')({
 })
 
 export const Terms: React.SFC<TermsProps> = ({ insuranceType }) => (
-  <Wrapper>
-    <InnerWrapper>
-      <CardWrapper>
-        <Card>
-          <HeaderWrapper>
-            <Header>
-              <TranslationsConsumer textKey="TERMS_TITLE">
-                {(header) => header}
-              </TranslationsConsumer>
-            </Header>
-          </HeaderWrapper>
-          <Row>
-            <Col>
-              <TranslationsConsumer
-                textKey={
-                  isApartmentOwner(insuranceType)
-                    ? 'TERMS_PDF_PREBUY_OWNER_URL'
-                    : 'TERMS_PDF_PREBUY_RENT_URL'
-                }
-              >
-                {(url) => (
-                  <PerilLink href={url} target="_blank">
-                    <PDFTag>PDF</PDFTag>
-                    <PerilIcon src="/new-member-assets/offering/forkopsinformation.svg" />
+  <Card>
+    <HeaderWrapper>
+      <Header>
+        <TranslationsConsumer textKey="TERMS_TITLE">
+          {(header) => header}
+        </TranslationsConsumer>
+      </Header>
+    </HeaderWrapper>
+    <Row>
+      <Col>
+        <TranslationsConsumer
+          textKey={
+            isApartmentOwner(insuranceType)
+              ? 'TERMS_PDF_PREBUY_OWNER_URL'
+              : 'TERMS_PDF_PREBUY_RENT_URL'
+          }
+        >
+          {(url) => (
+            <PerilLink href={url} target="_blank">
+              <PDFTag>PDF</PDFTag>
+              <PerilIcon src="/new-member-assets/offering/forkopsinformation.svg" />
 
-                    <TranslationsConsumer textKey="TERMS_PERIL_ONE_TITLE">
-                      {(title) => <PerilTitle>{title}</PerilTitle>}
-                    </TranslationsConsumer>
-                  </PerilLink>
-                )}
+              <TranslationsConsumer textKey="TERMS_PERIL_ONE_TITLE">
+                {(title) => <PerilTitle>{title}</PerilTitle>}
               </TranslationsConsumer>
-            </Col>
-            <Col>
-              <TranslationsConsumer
-                textKey={
-                  isApartmentOwner(insuranceType)
-                    ? 'TERMS_PDF_INSURANCE_OWNER_URL'
-                    : 'TERMS_PDF_INSURANCE_RENT_URL'
-                }
-              >
-                {(url) => (
-                  <PerilLink href={url} target="_blank">
-                    <PDFTag>PDF</PDFTag>
-                    <PerilIcon src="/new-member-assets/offering/forkopsinformation.svg" />
-                    <TranslationsConsumer textKey="TERMS_PERIL_TWO_TITLE">
-                      {(title) => <PerilTitle>{title}</PerilTitle>}
-                    </TranslationsConsumer>
-                  </PerilLink>
-                )}
+            </PerilLink>
+          )}
+        </TranslationsConsumer>
+      </Col>
+      <Col>
+        <TranslationsConsumer
+          textKey={
+            isApartmentOwner(insuranceType)
+              ? 'TERMS_PDF_INSURANCE_OWNER_URL'
+              : 'TERMS_PDF_INSURANCE_RENT_URL'
+          }
+        >
+          {(url) => (
+            <PerilLink href={url} target="_blank">
+              <PDFTag>PDF</PDFTag>
+              <PerilIcon src="/new-member-assets/offering/forkopsinformation.svg" />
+              <TranslationsConsumer textKey="TERMS_PERIL_TWO_TITLE">
+                {(title) => <PerilTitle>{title}</PerilTitle>}
               </TranslationsConsumer>
-            </Col>
-          </Row>
-        </Card>
-      </CardWrapper>
-    </InnerWrapper>
-  </Wrapper>
+            </PerilLink>
+          )}
+        </TranslationsConsumer>
+      </Col>
+    </Row>
+  </Card>
 )

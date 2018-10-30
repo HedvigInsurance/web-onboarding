@@ -3,10 +3,7 @@ import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { OfferData } from 'containers/OfferContainer'
 import * as React from 'react'
 import styled from 'react-emotion'
-import { CardWrapper } from '../components/CardWrapper'
 import { HeaderWrapper } from '../components/HeaderWrapper'
-import { InnerWrapper } from '../components/InnerWrapper'
-import { Wrapper } from '../components/Wrapper'
 
 interface Props {
   offer: OfferData
@@ -15,12 +12,8 @@ interface Props {
 const ICONSIDE = 32
 
 const Card = styled('div')({
-  marginTop: '70px',
-  paddingTop: '30px',
   paddingBottom: '60px',
   backgroundColor: colors.WHITE,
-  boxShadow: '0px 8px 15px -13px rgba(0,0,0,0.67)',
-  borderRadius: '10px',
 })
 
 const Header = styled('h1')({
@@ -85,56 +78,50 @@ const IconInfo = styled('div')({
 })
 
 export const OtherInfo: React.SFC<Props> = ({ offer }) => (
-  <Wrapper>
-    <InnerWrapper>
-      <CardWrapper>
-        <Card>
-          <HeaderWrapper>
-            <Header>
-              <TranslationsConsumer textKey="OFFER_OTHER_INFORMATION_TITLE">
-                {(header) => header}
-              </TranslationsConsumer>
-            </Header>
-          </HeaderWrapper>
-          <Row>
-            <Col>
-              <CheckIcon src="/new-member-assets/offering/checkmark.svg" />
-              <TranslationsConsumer textKey="OFFER_PERSONS_INSURED_LABEL">
-                {(title) => <IconTitle>{title}</IconTitle>}
-              </TranslationsConsumer>
-              <IconInfo>
-                {offer.member.firstName}
-                {offer.insurance.personsInHousehold > 1 &&
-                  ` + ${offer.insurance.personsInHousehold - 1}`}
-              </IconInfo>
-            </Col>
-            <Col>
-              <CheckIcon src="/new-member-assets/offering/checkmark.svg" />
-              <TranslationsConsumer textKey="OFFER_PAYMENT_LABEL">
-                {(title) => <IconTitle>{title}</IconTitle>}
-              </TranslationsConsumer>
-              <TranslationsConsumer textKey="OFFER_AUTOGIRO_LABEL">
-                {(title) => <IconInfo>{title}</IconInfo>}
-              </TranslationsConsumer>
-            </Col>
-            <Col>
-              <CheckIcon src="/new-member-assets/offering/checkmark.svg" />
-              <TranslationsConsumer textKey="OFFER_TRAVEL_PROTECTION_LABEL">
-                {(title) => <IconTitle>{title}</IconTitle>}
-              </TranslationsConsumer>
-              <TranslationsConsumer textKey="OFFER_TRAVEL_PROTECTION_TIME_VALUE">
-                {(title) => <IconInfo>{title}</IconInfo>}
-              </TranslationsConsumer>
-            </Col>
-            <Col>
-              <CheckIcon src="/new-member-assets/offering/checkmark.svg" />
-              <TranslationsConsumer textKey="OFFER_SUBSCRIPTION_TIME_LABEL">
-                {(title) => <IconTitle>{title}</IconTitle>}
-              </TranslationsConsumer>
-            </Col>
-          </Row>
-        </Card>
-      </CardWrapper>
-    </InnerWrapper>
-  </Wrapper>
+  <Card>
+    <HeaderWrapper>
+      <Header>
+        <TranslationsConsumer textKey="OFFER_OTHER_INFORMATION_TITLE">
+          {(header) => header}
+        </TranslationsConsumer>
+      </Header>
+    </HeaderWrapper>
+    <Row>
+      <Col>
+        <CheckIcon src="/new-member-assets/offering/checkmark.svg" />
+        <TranslationsConsumer textKey="OFFER_PERSONS_INSURED_LABEL">
+          {(title) => <IconTitle>{title}</IconTitle>}
+        </TranslationsConsumer>
+        <IconInfo>
+          {offer.member.firstName}
+          {offer.insurance.personsInHousehold > 1 &&
+            ` + ${offer.insurance.personsInHousehold - 1}`}
+        </IconInfo>
+      </Col>
+      <Col>
+        <CheckIcon src="/new-member-assets/offering/checkmark.svg" />
+        <TranslationsConsumer textKey="OFFER_PAYMENT_LABEL">
+          {(title) => <IconTitle>{title}</IconTitle>}
+        </TranslationsConsumer>
+        <TranslationsConsumer textKey="OFFER_AUTOGIRO_LABEL">
+          {(title) => <IconInfo>{title}</IconInfo>}
+        </TranslationsConsumer>
+      </Col>
+      <Col>
+        <CheckIcon src="/new-member-assets/offering/checkmark.svg" />
+        <TranslationsConsumer textKey="OFFER_TRAVEL_PROTECTION_LABEL">
+          {(title) => <IconTitle>{title}</IconTitle>}
+        </TranslationsConsumer>
+        <TranslationsConsumer textKey="OFFER_TRAVEL_PROTECTION_TIME_VALUE">
+          {(title) => <IconInfo>{title}</IconInfo>}
+        </TranslationsConsumer>
+      </Col>
+      <Col>
+        <CheckIcon src="/new-member-assets/offering/checkmark.svg" />
+        <TranslationsConsumer textKey="OFFER_SUBSCRIPTION_TIME_LABEL">
+          {(title) => <IconTitle>{title}</IconTitle>}
+        </TranslationsConsumer>
+      </Col>
+    </Row>
+  </Card>
 )
