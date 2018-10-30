@@ -38,6 +38,7 @@ const Row = styled('div')({
   flexDirection: 'row',
   '@media (max-width: 700px)': {
     justifyContent: 'flex-start',
+    flexWrap: 'wrap',
   },
 })
 
@@ -48,6 +49,10 @@ const Col = styled('div')({
   marginRight: '20px',
   marginLeft: '20px',
   width: '130px',
+  '@media (max-width: 700px)': {
+    width: 'calc(50% - 40px)',
+    marginBottom: '20px',
+  },
 })
 
 const CheckIcon = styled('img')({

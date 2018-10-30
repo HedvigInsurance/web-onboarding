@@ -7,12 +7,12 @@ export const ConversationWrapper = styled('div')({
   maxWidth: 1000,
   padding: '0 20px',
   margin: '0 auto',
+  paddingBottom: 20 + 40, // Nice padding + room for the absolute next button
   fontSize: 24,
-  paddingBottom: '25vh',
   minHeight: '75vh',
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'flex-end',
+  justifyContent: 'center',
 })
 
 const getId = (child: React.ReactChild) => React.Children.only(child).props.id

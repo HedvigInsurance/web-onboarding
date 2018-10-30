@@ -33,6 +33,7 @@ const CreateOfferCtaWrapper = styled('div')({
 const GdprWrapper = styled('div')({
   display: 'flex',
   justifyContent: 'center',
+  paddingTop: '3rem',
 })
 const GdprLink = styled('a')({
   color: colors.PURPLE,

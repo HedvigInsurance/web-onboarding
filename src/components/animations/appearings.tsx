@@ -26,35 +26,3 @@ export const fadeUp = keyframes({
 export const FadeUp = styled('div')({
   animation: `${fadeUp} 300ms forwards`,
 })
-
-export const animateHeight = (maxHeight: number, initialMaxHeight = 0) =>
-  keyframes({
-    from: {
-      maxHeight: initialMaxHeight,
-    },
-    to: {
-      maxHeight,
-    },
-  })
-
-export const AnimateHeight = styled('div')(
-  ({
-    maxHeight = 300,
-    initialMaxHeight = 0,
-    hideOverflow = false,
-    time = 500,
-  }: {
-    maxHeight?: number
-    initialMaxHeight?: number
-    hideOverflow?: boolean
-    time?: number
-  }) => ({
-    willChange: 'max-height',
-    maxHeight: initialMaxHeight,
-    animation: `${animateHeight(
-      maxHeight,
-      initialMaxHeight,
-    )} ${time}ms forwards`,
-    overflow: hideOverflow ? 'hidden' : undefined,
-  }),
-)

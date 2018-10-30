@@ -78,6 +78,7 @@
     "koa-router": "^7.4.0",
     "node-fetch": "^2.2.0",
     "react": "^16.5.2",
+    "react-animate-height": "^2.0.6",
     "react-apollo": "^2.2.4",
     "react-dom": "^16.5.2",
     "react-emotion": "^9.2.10",

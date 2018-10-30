@@ -1,6 +1,9 @@
 import { colors, fonts } from '@hedviginsurance/brand'
+import { Container } from 'constate'
 import * as React from 'react'
+import AnimateHeight from 'react-animate-height'
 import styled, { keyframes } from 'react-emotion'
+import { Mount } from 'react-lifecycle-components'
 import { Transition } from 'react-transition-group'
 import {
   ENTERED,
@@ -9,7 +12,7 @@ import {
   EXITING,
   TransitionStatus,
 } from 'react-transition-group/Transition'
-import { AnimateHeight, fadeIn, FadeIn, fadeUp } from '../animations/appearings'
+import { fadeIn, FadeIn, fadeUp } from '../animations/appearings'
 
 const fadeOut = keyframes({
   from: {
@@ -131,55 +134,59 @@ export const ChatMessage: React.SFC<ChatMessageProps> = ({
   onTyped,
 }) => (
   <ChatWrapper>
-    <AnimateHeight initialMaxHeight={appear ? 300 : undefined}>
-      <AnimateHeight
-        maxHeight={isCurrentMessage ? 33 : 0}
-        initialMaxHeight={isCurrentMessage && appear ? 33 : 0}
-        time={200}
-        hideOverflow
-      >
-        {appear ? (
-          <HedvigIcon />
-        ) : (
-          <FadeIn>
-            <HedvigIcon />
-          </FadeIn>
-        )}
-      </AnimateHeight>
-      <Transition
-        timeout={appear ? 0 : typingDuration}
-        appear
-        in
-        onEntered={
-          appear
-            ? () => {
-                /* noop */
-              }
-            : onTyped
-        }
-      >
-        {(appearStatus) => (
-          <ChatMessageWrapper>
+    <Container<{ hasMounted: boolean }, { mount: () => void }>
+      initialState={{ hasMounted: appear }}
+      actions={{ mount: () => () => ({ hasMounted: true }) }}
+    >
+      {({ hasMounted, mount }) => (
+        <Mount on={mount}>
+          <AnimateHeight height={hasMounted ? 'auto' : 0}>
+            <AnimateHeight height={isCurrentMessage && hasMounted ? 33 : 0}>
+              {appear ? (
+                <HedvigIcon />
+              ) : (
+                <FadeIn>
+                  <HedvigIcon />
+                </FadeIn>
+              )}
+            </AnimateHeight>
             <Transition
-              timeout={500}
+              timeout={appear ? 0 : typingDuration}
               appear
-              in={appearStatus === ENTERING && !appear}
-            >
-              {(typingTransitionStatus) =>
-                typingTransitionStatus !== EXITED && (
-                  <Typing status={typingTransitionStatus} />
-                )
+              in
+              onEntered={
+                appear
+                  ? () => {
+                      /* noop */
+                    }
+                  : onTyped
               }
-            </Transition>
-            <ChatMessageTextWrapper
-              appear={appear}
-              isVisible={[ENTERED, EXITING].includes(appearStatus)}
             >
-              {children}
-            </ChatMessageTextWrapper>
-          </ChatMessageWrapper>
-        )}
-      </Transition>
-    </AnimateHeight>
+              {(appearStatus) => (
+                <ChatMessageWrapper>
+                  <Transition
+                    timeout={500}
+                    appear
+                    in={appearStatus === ENTERING && !appear}
+                  >
+                    {(typingTransitionStatus) =>
+                      typingTransitionStatus !== EXITED && (
+                        <Typing status={typingTransitionStatus} />
+                      )
+                    }
+                  </Transition>
+                  <ChatMessageTextWrapper
+                    appear={appear}
+                    isVisible={[ENTERED, EXITING].includes(appearStatus)}
+                  >
+                    {children}
+                  </ChatMessageTextWrapper>
+                </ChatMessageWrapper>
+              )}
+            </Transition>
+          </AnimateHeight>
+        </Mount>
+      )}
+    </Container>
   </ChatWrapper>
 )
