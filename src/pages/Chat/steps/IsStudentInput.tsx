@@ -1,16 +1,45 @@
+import { FadeIn } from 'components/animations/appearings'
 import {
+  InputValidationError,
   UserResponse,
   UserSelectInput,
 } from 'components/userInput/UserResponse'
 import * as React from 'react'
+import { qualifiesForStudentInsurance } from 'utils/insuranceDomainUtils'
 import { NextButton } from '../components/NextButton'
-import { ChatContainer } from '../state'
+import { ChatContainer, State as ChatState } from '../state'
 import { Focusable } from './base'
 
 interface IsStudentInputProps {
   appear?: boolean
   onSubmit?: () => void
   isCurrentMessage?: boolean
+}
+
+const isInvalidStudentInput = (chatState: ChatState) =>
+  !qualifiesForStudentInsurance({
+    squareMeters: Number(chatState.livingSituation.size),
+    age: Number(chatState.nameAge.age),
+    numberOfPeople: chatState.livingSituation.numberOfPeople,
+  }) && chatState.isStudent === 'true'
+
+export const isIsStudentInputDone = (chatState: ChatState) => {
+  const isQualified = qualifiesForStudentInsurance({
+    numberOfPeople: chatState.livingSituation.numberOfPeople,
+    age: Number(chatState.nameAge.age),
+    squareMeters: Number(chatState.livingSituation.size),
+  })
+  const hasFilledInStudent =
+    chatState.isStudent === 'true' || chatState.isStudent === 'false'
+
+  if (isInvalidStudentInput(chatState)) {
+    return false
+  }
+  if (!isQualified) {
+    return true
+  }
+
+  return hasFilledInStudent
 }
 
 export const IsStudentInput: React.SFC<IsStudentInputProps & Focusable> = ({
@@ -42,6 +71,7 @@ export const IsStudentInput: React.SFC<IsStudentInputProps & Focusable> = ({
             value={chatState.isStudent}
             onFocus={onFocus}
             onBlur={onBlur}
+            hasError={isInvalidStudentInput(chatState)}
           >
             <option value="" disabled>
               {' '}
@@ -49,9 +79,17 @@ export const IsStudentInput: React.SFC<IsStudentInputProps & Focusable> = ({
             <option value="true">Ja</option>
             <option value="false">Nej</option>
           </UserSelectInput>
+          {isInvalidStudentInput(chatState) && (
+            <FadeIn>
+              <InputValidationError>
+                Ojdå, tyvärr kan vi inte ge dig studentpris. Men fortsätt gärna
+                ändå, vi kan fortfarande försäkra dig bla bla bla
+              </InputValidationError>
+            </FadeIn>
+          )}
           <NextButton
             disabled={chatState.isStudent === ''}
-            hidden={!isCurrentMessage || chatState.isStudent === ''}
+            hidden={!isCurrentMessage || !isIsStudentInputDone(chatState)}
           />
         </form>
       )}

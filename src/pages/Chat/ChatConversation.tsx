@@ -246,7 +246,7 @@ export const ChatConversation: React.SFC = () => (
                   trackOnboardingStep('is-student')
                   goToStep(ChatStep.IS_STUDENT_RESPONSE)
                 }}
-                onFocus={() => peekStep(ChatStep.IS_STUDENT_QUESTION)}
+                onFocus={() => peekStep(ChatStep.IS_STUDENT_INPUT)}
                 onBlur={() => unpeek()}
               />
             </Mufflable>

@@ -46,7 +46,7 @@ export const UserTextInput = styled('input')(
   }),
 )
 
-const ActualSelectInput = styled('select')({
+const ActualSelectInput = styled('select')(({ hasError }: InputProps) => ({
   appearance: 'none',
   background: 'transparent',
   fontSize: 'inherit',
@@ -54,31 +54,34 @@ const ActualSelectInput = styled('select')({
   paddingRight: '1.5em',
   border: 'none',
   cursor: 'pointer',
-})
+  color: hasError ? colors.PINK : undefined,
+}))
 
-const UserSelectInputWrapper = styled(UserTextInput)((_: WithMaxWidth) => ({
-  appearance: 'none',
-  cursor: 'pointer',
-  position: 'relative',
-  '&::after': {
-    borderStyle: 'solid',
-    borderWidth: '.1em .1em 0 0',
-    borderColor: colors.OFF_BLACK,
-    content: '" "',
-    position: 'absolute',
-    zIndex: -1,
-    height: '.45em',
-    width: '.45em',
-    right: '.3em',
-    top: '15%',
-    transform: 'rotate(135deg) translateY(-15%)',
-  },
-})).withComponent('label')
+const UserSelectInputWrapper = styled(UserTextInput)(
+  ({ hasError }: WithMaxWidth & InputProps) => ({
+    appearance: 'none',
+    cursor: 'pointer',
+    position: 'relative',
+    '&::after': {
+      borderStyle: 'solid',
+      borderWidth: '.1em .1em 0 0',
+      borderColor: hasError ? colors.PINK : colors.OFF_BLACK,
+      content: '" "',
+      position: 'absolute',
+      zIndex: -1,
+      height: '.45em',
+      width: '.45em',
+      right: '.3em',
+      top: '15%',
+      transform: 'rotate(135deg) translateY(-15%)',
+    },
+  }),
+).withComponent('label')
 
 export const UserSelectInput = (
-  props: React.SelectHTMLAttributes<HTMLSelectElement>,
+  props: React.SelectHTMLAttributes<HTMLSelectElement> & InputProps,
 ) => (
-  <UserSelectInputWrapper>
+  <UserSelectInputWrapper hasError={props.hasError}>
     <ActualSelectInput {...props} />
   </UserSelectInputWrapper>
 )
