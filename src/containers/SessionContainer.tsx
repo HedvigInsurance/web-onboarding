@@ -5,9 +5,10 @@ import { Mutation } from 'react-apollo'
 import { Mount } from 'react-lifecycle-components'
 import { apolloClient } from '../client/apolloClient'
 import { StorageContainer } from '../utils/StorageContainer'
+import { getUtmParamsFromCookie, UtmParams } from '../utils/tracking'
 
 export const CREATE_SESSION_TOKEN_MUTATION: DocumentNode = gql`
-  mutation CreateSessionToken {
+  mutation CreateSessionToken($campaign: CampaignInput) {
     createSession
   }
 `
@@ -21,8 +22,9 @@ export const SessionContainer: React.SFC<SessionContainerProps> = ({
 }) => (
   <StorageContainer>
     {(storageState) => (
-      <Mutation<{ createSession: string }, void>
+      <Mutation<{ createSession: string }, { campaign?: UtmParams }>
         mutation={CREATE_SESSION_TOKEN_MUTATION}
+        variables={{ campaign: getUtmParamsFromCookie() }}
       >
         {(createSession, createSessionProps) => (
           <Mount

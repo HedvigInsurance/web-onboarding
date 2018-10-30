@@ -1,3 +1,21 @@
+import { CookieStorage } from 'cookie-storage'
+import * as merge from 'deepmerge'
+
+const cookie = new CookieStorage()
+
+export interface UtmParams {
+  source?: string
+  medium?: string
+  term?: string
+  content?: string
+  name?: string
+}
+
+export const getUtmParamsFromCookie = (): UtmParams => {
+  const params = cookie.getItem('utm-params')
+  return params && JSON.parse(params)
+}
+
 export const trackEvent = (
   eventName: string,
   properties?: { [key: string]: any },
@@ -5,6 +23,10 @@ export const trackEvent = (
 ) => {
   const castedWindow = window as any
   if (castedWindow && castedWindow.analytics) {
-    castedWindow.analytics.track(eventName, properties, options)
+    castedWindow.analytics.track(
+      eventName,
+      merge(properties || {}, { context: { ...getUtmParamsFromCookie() } }),
+      options,
+    )
   }
 }
