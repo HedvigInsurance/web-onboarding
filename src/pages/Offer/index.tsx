@@ -161,7 +161,7 @@ export const Offering: React.SFC<{}> = () => (
                       offer={offer}
                       signButtonVisibility={state.updateLowerButtonVisibility}
                     />
-                    <Legal />
+                    <Legal insuranceType={offer.insurance.type} />
                   </>
                 )}
               </Container>
