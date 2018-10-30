@@ -9,7 +9,7 @@ const INTERCOM_SPACING = 80
 
 export const ConversationWrapper = styled('div')({
   maxWidth: 1000,
-  padding: '0 20px',
+  padding: `0 ${CONTAINER_PADDING}px`,
   margin: '0 auto',
   paddingBottom: CONTAINER_PADDING + NEXT_BUTTON_SPACING + INTERCOM_SPACING,
   fontSize: 24,
