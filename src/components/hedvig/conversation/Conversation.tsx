@@ -7,7 +7,7 @@ export const ConversationWrapper = styled('div')({
   maxWidth: 1000,
   padding: '0 20px',
   margin: '0 auto',
-  paddingBottom: 20 + 40, // Nice padding + room for the absolute next button
+  paddingBottom: 20 + 40 + 80, // Nice padding + room for the absolute next button + intercom
   fontSize: 24,
   minHeight: '75vh',
   display: 'flex',
