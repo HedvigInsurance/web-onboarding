@@ -128,7 +128,6 @@ export const Terms: React.SFC<TermsProps> = ({ insuranceType }) => (
       </Col>
       <Col>
         <TranslationsConsumer textKey={getInsuranceTextKey(insuranceType)}>
-
           {(url) => (
             <PerilLink href={url} target="_blank">
               <PDFTag>PDF</PDFTag>
