@@ -94,10 +94,32 @@ const CheckboxWrapper = styled('span')(
     alignItems: 'center',
   }),
 )
+const CheckboxInputContainer = styled('span')({
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  cursor: 'pointer',
+  position: 'relative',
+})
+const Tick = styled('svg')({
+  opacity: 0,
+  transition: 'opacity 150ms',
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  width: '.6em',
+  transform: 'translateX(-50%) translateY(-50%)',
+  fill: colors.WHITE,
+
+  'input:checked + &': {
+    opacity: 1,
+  },
+})
 const CheckboxInput = styled('input')({
   appearance: 'none',
-  width: '2em',
-  height: '2em',
+  fontSize: 'inherit',
+  width: '1em',
+  height: '1em',
   border: `2px solid ${colors.DARK_GRAY}`,
   position: 'relative',
   borderRadius: 5,
@@ -112,16 +134,6 @@ const CheckboxInput = styled('input')({
     backgroundColor: colors.GREEN,
     borderColor: colors.GREEN,
   },
-
-  '&:checked:before': {
-    display: 'block',
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translateX(-50%) translateY(-50%)',
-    content: '"x"',
-    color: '#fff',
-  },
 })
 const CheckboxLabel = styled('label')({
   paddingLeft: '0.5em',
@@ -131,7 +143,12 @@ export const UserCheckbox = (
   props: React.InputHTMLAttributes<HTMLInputElement>,
 ) => (
   <CheckboxWrapper disabled={props.disabled}>
-    <CheckboxInput type="checkbox" {...{ ...props, children: undefined }} />
+    <CheckboxInputContainer>
+      <CheckboxInput type="checkbox" {...{ ...props, children: undefined }} />
+      <Tick viewBox="0 0 490.434 490.433">
+        <path d="M472.003 58.36l-13.132-11.282c-21.798-18.732-54.554-16.644-73.799 4.697L165.39 295.359l-66.312-57.112c-21.775-18.753-54.536-16.707-73.804 4.611l-11.611 12.848a52.934 52.934 0 0 0-13.595 38.18 52.938 52.938 0 0 0 17.402 36.6l121.553 111.311a52.936 52.936 0 0 0 76.355-4.057l262.245-304.71a52.915 52.915 0 0 0 12.661-38.496 52.92 52.92 0 0 0-18.281-36.174z" />
+      </Tick>
+    </CheckboxInputContainer>
     <CheckboxLabel htmlFor={props.id}>{props.children}</CheckboxLabel>
   </CheckboxWrapper>
 )

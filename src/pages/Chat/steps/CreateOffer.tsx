@@ -2,15 +2,16 @@ import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { FadeIn } from 'components/animations/appearings'
 import { Button } from 'components/buttons'
+import {
+  InputValidationError,
+  UserCheckbox,
+} from 'components/userInput/UserResponse'
+import { Size, Spacing } from 'components/utils/Spacing'
 import { SessionContainer } from 'containers/SessionContainer'
 import * as React from 'react'
 import styled from 'react-emotion'
 import { Update } from 'react-lifecycle-components'
 import { qualifiesForStudentInsurance } from 'utils/insuranceDomainUtils'
-import {
-  InputValidationError,
-  UserCheckbox,
-} from '../../../components/userInput/UserResponse'
 import {
   ChatScreenContainer,
   LoadingState,
@@ -39,7 +40,7 @@ const CreateOfferCtaWrapper = styled('div')({
 })
 const CreateOfferCtaWrapperRow = styled('div')({
   paddingBottom: 20,
-  maxWidth: '50%',
+  maxWidth: '80%',
   textAlign: 'right',
 })
 
@@ -106,34 +107,6 @@ export const CreateOffer: React.SFC = () => (
                               >
                                 <Wrapper>
                                   <CreateOfferCtaWrapper>
-                                    {(isQualifiedStudent ||
-                                      chatState.isStudent !== undefined) && (
-                                      <CreateOfferCtaWrapperRow>
-                                        <UserCheckbox
-                                          onChange={chatState.setIsStudent}
-                                          checked={Boolean(
-                                            isQualifiedStudent &&
-                                              chatState.isStudent,
-                                          )}
-                                          disabled={!isQualifiedStudent}
-                                          id="is-student-input"
-                                        >
-                                          <TranslationsConsumer textKey="CHAT_INPUT_IS_STUDENT_CHECKBOX_LABEL">
-                                            {(t) => t}
-                                          </TranslationsConsumer>
-                                        </UserCheckbox>
-                                        {!isQualifiedStudent &&
-                                          chatState.isStudent && (
-                                            <FadeIn>
-                                              <InputValidationError>
-                                                <TranslationsConsumer textKey="CHAT_INPUT_IS_STUDENT_INVALID">
-                                                  {(t) => t}
-                                                </TranslationsConsumer>
-                                              </InputValidationError>
-                                            </FadeIn>
-                                          )}
-                                      </CreateOfferCtaWrapperRow>
-                                    )}
                                     <CreateOfferCtaWrapperRow>
                                       <Button
                                         background={colors.GREEN}
@@ -163,6 +136,37 @@ export const CreateOffer: React.SFC = () => (
                                         </TranslationsConsumer>
                                       </Button>
                                     </CreateOfferCtaWrapperRow>
+
+                                    {(isQualifiedStudent ||
+                                      chatState.isStudent !== undefined) && (
+                                      <CreateOfferCtaWrapperRow>
+                                        <UserCheckbox
+                                          onChange={chatState.setIsStudent}
+                                          checked={Boolean(
+                                            isQualifiedStudent &&
+                                              chatState.isStudent,
+                                          )}
+                                          disabled={!isQualifiedStudent}
+                                          id="is-student-input"
+                                        >
+                                          <TranslationsConsumer textKey="CHAT_INPUT_IS_STUDENT_CHECKBOX_LABEL">
+                                            {(t) => t}
+                                          </TranslationsConsumer>
+                                        </UserCheckbox>
+                                        {!isQualifiedStudent &&
+                                          chatState.isStudent && (
+                                            <FadeIn>
+                                              <Spacing paddingTop={Size.SM}>
+                                                <InputValidationError>
+                                                  <TranslationsConsumer textKey="CHAT_INPUT_IS_STUDENT_INVALID">
+                                                    {(t) => t}
+                                                  </TranslationsConsumer>
+                                                </InputValidationError>
+                                              </Spacing>
+                                            </FadeIn>
+                                          )}
+                                      </CreateOfferCtaWrapperRow>
+                                    )}
                                   </CreateOfferCtaWrapper>
                                   <GdprWrapper>
                                     <TranslationsConsumer textKey="CHAT_INPUT_PERSONAL_DATA_LINK">
