@@ -86,6 +86,56 @@ export const UserSelectInput = (
   </UserSelectInputWrapper>
 )
 
+const CheckboxWrapper = styled('span')(
+  ({ disabled }: { disabled?: boolean }) => ({
+    opacity: disabled ? 0.3 : 1,
+    display: 'inline-flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  }),
+)
+const CheckboxInput = styled('input')({
+  appearance: 'none',
+  width: '2em',
+  height: '2em',
+  border: `2px solid ${colors.DARK_GRAY}`,
+  position: 'relative',
+  borderRadius: 5,
+  cursor: 'pointer',
+  transition: 'background 150ms, border 150ms',
+
+  '&:focus': {
+    outline: 'none',
+  },
+
+  '&:checked': {
+    backgroundColor: colors.GREEN,
+    borderColor: colors.GREEN,
+  },
+
+  '&:checked:before': {
+    display: 'block',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translateX(-50%) translateY(-50%)',
+    content: '"x"',
+    color: '#fff',
+  },
+})
+const CheckboxLabel = styled('label')({
+  paddingLeft: '0.5em',
+  cursor: 'pointer',
+})
+export const UserCheckbox = (
+  props: React.InputHTMLAttributes<HTMLInputElement>,
+) => (
+  <CheckboxWrapper disabled={props.disabled}>
+    <CheckboxInput type="checkbox" {...{ ...props, children: undefined }} />
+    <CheckboxLabel htmlFor={props.id}>{props.children}</CheckboxLabel>
+  </CheckboxWrapper>
+)
+
 const UserResponseWrapper: React.SFC<{
   className?: string
   appear?: boolean

@@ -12,9 +12,6 @@ export enum ChatStep {
   GREET = 'GREET',
   ADDRESS_INPUT = 'ADDRESS_INPUT',
   INSURANCE_TYPE_INPUT = 'INSURANCE_TYPE_INPUT',
-  IS_STUDENT_QUESTION = 'IS_STUDENT_QUESTION',
-  IS_STUDENT_INPUT = 'IS_STUDENT_INPUT',
-  IS_STUDENT_RESPONSE = 'IS_STUDENT_RESPONSE',
   CURRENT_INSURANCE_QUESTION = 'CURRENT_INSURANCE_QUESTION',
   CURRENT_INSURANCE_INPUT = 'CURRENT_INSURANCE_INPUT',
   SHOW_OFFER_QUESTION = 'SHOW_OFFER_QUESTION',
@@ -58,7 +55,7 @@ export interface State {
   visibleSteps: ChatStep[]
   nameAge: NameAgeState
   livingSituation: LivingSituationState
-  isStudent: string
+  isStudent?: boolean
   currentInsurance: CurrentInsuranceState
 }
 
@@ -77,7 +74,7 @@ const initialState: State = {
     postalNumber: '',
     streetAddress: '',
   },
-  isStudent: '',
+  isStudent: undefined,
   currentInsurance: {},
 }
 
@@ -93,7 +90,7 @@ export interface Effects {
   setHasCurrentInsurance: (event: React.ChangeEvent<HTMLSelectElement>) => void
   setCurrentInsurer: (event: React.ChangeEvent<HTMLSelectElement>) => void
   setOtherInsurer: (event: React.ChangeEvent<HTMLInputElement>) => void
-  setIsStudent: (event: React.ChangeEvent<HTMLSelectElement>) => void
+  setIsStudent: (event: React.ChangeEvent<HTMLInputElement>) => void
   reset: () => void
   goToStep: (step: ChatStep) => void
   peekStep: (step: ChatStep) => void
@@ -209,7 +206,7 @@ export const ChatContainer: React.SFC<
           },
           setIsStudent: (event) => ({ setState }) => {
             const newState: Partial<State> = {
-              isStudent: event.target.value,
+              isStudent: event.target.checked,
             }
             setState(newState)
             storageState.session.setSession({
