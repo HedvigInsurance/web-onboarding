@@ -5,10 +5,6 @@ import styled from 'react-emotion'
 import { InsuranceType } from 'utils/insuranceDomainUtils'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 
-const isApartmentOwner = (insuranceType: InsuranceType): boolean =>
-  insuranceType === InsuranceType.BRF ||
-  insuranceType === InsuranceType.STUDENT_BRF
-
 interface TermsProps {
   insuranceType: InsuranceType
 }
