@@ -1,5 +1,6 @@
 import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
+import { InsuranceType } from 'containers/OfferContainer'
 import * as React from 'react'
 import styled from 'react-emotion'
 import { HeaderWrapper } from '../components/HeaderWrapper'
@@ -55,6 +56,7 @@ const InfoText = styled('div')({
 const rows: ReadonlyArray<{
   titleKey: string
   amountKey: string
+  studentKey?: string
 }> = [
   {
     titleKey: 'OFFER_INSURED_AMOUNT_COL_ONE_TITLE',
@@ -63,10 +65,12 @@ const rows: ReadonlyArray<{
   {
     titleKey: 'OFFER_INSURED_AMOUNT_COL_TWO_TITLE',
     amountKey: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT',
+    studentKey: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT_STUDENT',
   },
   {
     titleKey: 'OFFER_INSURED_AMOUNT_COL_THREE_TITLE',
     amountKey: 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT',
+    studentKey: 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT_STUDENT',
   },
   {
     titleKey: 'OFFER_INSURED_AMOUNT_COL_FOUR_TITLE',
@@ -74,7 +78,15 @@ const rows: ReadonlyArray<{
   },
 ]
 
-export const InsuredAmount: React.SFC = () => (
+interface Props {
+  insuranceType: InsuranceType
+}
+
+const isStudent = (insuranceType: InsuranceType): boolean =>
+  insuranceType === InsuranceType.STUDENT_RENT ||
+  insuranceType === InsuranceType.STUDENT_BRF
+
+export const InsuredAmount: React.SFC<Props> = ({ insuranceType }) => (
   <Card>
     <HeaderWrapper>
       <TranslationsConsumer textKey="OFFER_INSURED_AMOUNT_TITLE">
@@ -98,7 +110,13 @@ export const InsuredAmount: React.SFC = () => (
           </Col>
           <Col>
             <InfoText>
-              <TranslationsConsumer textKey={row.amountKey}>
+              <TranslationsConsumer
+                textKey={
+                  row.studentKey !== undefined && isStudent(insuranceType)
+                    ? row.studentKey
+                    : row.amountKey
+                }
+              >
                 {(text) => text}
               </TranslationsConsumer>
             </InfoText>
