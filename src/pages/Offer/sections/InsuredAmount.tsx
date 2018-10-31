@@ -1,8 +1,5 @@
 import { colors } from '@hedviginsurance/brand'
-import {
-  TranslationsConsumer,
-  TranslationsPlaceholderConsumer,
-} from '@hedviginsurance/textkeyfy'
+import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import styled from 'react-emotion'
 import { InsuranceType, isStudentInsurance } from 'utils/insuranceDomainUtils'
@@ -61,27 +58,26 @@ const rows = (
 ): ReadonlyArray<{
   titleKey: string
   amountKey: string
-  replacements: { [key: string]: React.ReactNode }
 }> => [
   {
     titleKey: 'OFFER_INSURED_AMOUNT_COL_ONE_TITLE',
     amountKey: 'OFFER_INSURED_AMOUNT_COL_ONE_AMOUNT',
-    replacements: {},
   },
   {
     titleKey: 'OFFER_INSURED_AMOUNT_COL_TWO_TITLE',
-    amountKey: 'OFFER_MONETARY_VALUE_TEMPLATE',
-    replacements: { amount: isStudent ? '200 000' : '1 000 000' },
+    amountKey: isStudent
+      ? 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT_STUDENT'
+      : 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT',
   },
   {
     titleKey: 'OFFER_INSURED_AMOUNT_COL_THREE_TITLE',
-    amountKey: 'OFFER_MONETARY_VALUE_TEMPLATE',
-    replacements: { amount: isStudent ? '25 000' : '50 000' },
+    amountKey: isStudent
+      ? 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT_STUDENT'
+      : 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT',
   },
   {
     titleKey: 'OFFER_INSURED_AMOUNT_COL_FOUR_TITLE',
     amountKey: 'OFFER_INSURED_AMOUNT_COL_FOUR_AMOUNT',
-    replacements: {},
   },
 ]
 
@@ -111,12 +107,9 @@ export const InsuredAmount: React.SFC<{ insuranceType: InsuranceType }> = ({
           </Col>
           <Col>
             <InfoText>
-              <TranslationsPlaceholderConsumer
-                textKey={row.amountKey}
-                replacements={row.replacements || {}}
-              >
+              <TranslationsConsumer textKey={row.amountKey}>
                 {(text) => text}
-              </TranslationsPlaceholderConsumer>
+              </TranslationsConsumer>
             </InfoText>
           </Col>
         </Row>
