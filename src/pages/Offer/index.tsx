@@ -6,7 +6,7 @@ import { ActionMap, Container } from 'constate'
 import { OfferContainer } from 'containers/OfferContainer'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import * as React from 'react'
-import styled from 'react-emotion'
+import styled, { keyframes } from 'react-emotion'
 import Helmet from 'react-helmet-async'
 import { Mount } from 'react-lifecycle-components'
 import { Link } from 'react-router-dom'
@@ -34,8 +34,18 @@ interface Actions {
   updateLowerButtonVisibility: (visible: boolean) => void
 }
 
+export const keyFrameExampleOne = keyframes`
+  0% {
+    transform: translateX(50%)
+  }
+  100% {
+    transform: translateX(0%)
+  }
+`
+
 const BarButtonWrapper = styled('div')({
   width: '20%',
+  animation: `${keyFrameExampleOne} 0.2s ease-in-out forwards`,
   justifyContent: 'flex-end',
   '@media (max-width: 850px)': {
     width: '33%',
@@ -44,6 +54,7 @@ const BarButtonWrapper = styled('div')({
     width: '50%',
   },
 })
+
 const GetInsuredButton = styled('div')({
   display: 'flex',
   justifyContent: 'inherit',
