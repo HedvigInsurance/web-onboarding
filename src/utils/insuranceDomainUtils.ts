@@ -19,7 +19,7 @@ export const qualifiesForStudentInsurance = (details: {
   numberOfPeople: number
 }): boolean => {
   const { age, squareMeters, numberOfPeople } = details
-  return age < 30 && squareMeters < 50 && numberOfPeople < 3
+  return age <= 30 && squareMeters <= 50 && numberOfPeople <= 2
 }
 
 export const mapToStudentVariant = (insuranceType: InsuranceType) => {
