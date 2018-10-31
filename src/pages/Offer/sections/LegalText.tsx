@@ -1,5 +1,6 @@
 import { colors } from '@hedviginsurance/brand'
 import {
+  MarkdownConsumer,
   TranslationsConsumer,
   TranslationsPlaceholderConsumer,
 } from '@hedviginsurance/textkeyfy'

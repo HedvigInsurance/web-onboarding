@@ -39,7 +39,7 @@
     "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@hedviginsurance/brand": "^1.4.1",
     "@hedviginsurance/cli": "^2.2.0",
-    "@hedviginsurance/textkeyfy": "^1.0.0",
+    "@hedviginsurance/textkeyfy": "^1.1.0",
     "@hedviginsurance/web-survival-kit": "^1.6.0",
     "@segment/snippet": "^4.4.0",
     "@sentry/node": "^4.2.2",
