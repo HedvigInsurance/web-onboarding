@@ -9,7 +9,7 @@ import { getUtmParamsFromCookie, UtmParams } from '../utils/tracking'
 
 export const CREATE_SESSION_TOKEN_MUTATION: DocumentNode = gql`
   mutation CreateSessionToken($campaign: CampaignInput) {
-    createSession
+    createSession(campaign: $campaign)
   }
 `
 

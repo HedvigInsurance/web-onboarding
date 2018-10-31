@@ -54,6 +54,7 @@ it('creates a new session', async () => {
     {
       request: {
         query: CREATE_SESSION_TOKEN_MUTATION,
+        variables: { campaign: undefined },
       },
       result: {
         data: { createSession: 'abc123' },
