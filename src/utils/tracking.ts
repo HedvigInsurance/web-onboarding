@@ -11,9 +11,9 @@ export interface UtmParams {
   name?: string
 }
 
-export const getUtmParamsFromCookie = (): UtmParams => {
+export const getUtmParamsFromCookie = (): UtmParams | undefined => {
   const params = cookie.getItem('utm-params')
-  return params && JSON.parse(params)
+  return params ? JSON.parse(params) : undefined
 }
 
 export const trackEvent = (
