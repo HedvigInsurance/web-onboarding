@@ -40,7 +40,7 @@ export const Legal: React.SFC<TermsProps> = ({ insuranceType }) => (
   <Container>
     <LegalText>
       <TranslationsPlaceholderConsumer
-        textKey="OFFER_FOOTER_LEGAL_TEXT"
+        textKey="OFFER_FOOTER_LEGAL_TEXT_TEST"
         replacements={{
           gdpr: (
             <TranslationsConsumer textKey="CHAT_INPUT_PERSONAL_DATA_LINK">
