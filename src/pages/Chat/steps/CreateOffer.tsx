@@ -42,6 +42,7 @@ const CreateOfferCtaWrapperRow = styled('div')({
   paddingBottom: 20,
   maxWidth: '80%',
   textAlign: 'right',
+  fontSize: 18,
 })
 
 const GdprWrapper = styled('div')({
