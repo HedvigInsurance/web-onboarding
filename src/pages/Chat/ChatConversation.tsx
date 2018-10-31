@@ -72,6 +72,7 @@ export const ChatConversation: React.SFC = () => (
             <Mufflable
               muffled={currentStep !== ChatStep.NAME_INPUT}
               unMuffled={currentlyPeeking === ChatStep.NAME_INPUT}
+              unMufflable
               direction="right"
             >
               <NameInput
@@ -92,6 +93,7 @@ export const ChatConversation: React.SFC = () => (
             <Mufflable
               muffled={currentStep !== ChatStep.AGE_INPUT}
               unMuffled={currentlyPeeking === ChatStep.AGE_INPUT}
+              unMufflable
               direction="right"
             >
               <AgeInput
@@ -139,6 +141,7 @@ export const ChatConversation: React.SFC = () => (
             <Mufflable
               muffled={currentStep !== ChatStep.ADDRESS_INPUT}
               unMuffled={currentlyPeeking === ChatStep.ADDRESS_INPUT}
+              unMufflable
               direction="right"
             >
               <AddressInput
@@ -159,6 +162,7 @@ export const ChatConversation: React.SFC = () => (
             <Mufflable
               muffled={currentStep !== ChatStep.INSURANCE_TYPE_INPUT}
               unMuffled={currentlyPeeking === ChatStep.INSURANCE_TYPE_INPUT}
+              unMufflable
               direction="right"
             >
               <InsuranceTypeInput
@@ -179,6 +183,7 @@ export const ChatConversation: React.SFC = () => (
             <Mufflable
               muffled={currentStep !== ChatStep.NUMBER_OF_PEOPLE}
               unMuffled={currentlyPeeking === ChatStep.NUMBER_OF_PEOPLE}
+              unMufflable
               direction="right"
             >
               <NumberOfPeopleInput
@@ -231,6 +236,7 @@ export const ChatConversation: React.SFC = () => (
             <Mufflable
               muffled={currentStep !== ChatStep.CURRENT_INSURANCE_INPUT}
               unMuffled={currentlyPeeking === ChatStep.CURRENT_INSURANCE_INPUT}
+              unMufflable
               direction="right"
             >
               <CurrentInsuranceInput
