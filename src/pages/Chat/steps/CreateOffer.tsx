@@ -122,15 +122,16 @@ export const CreateOffer: React.SFC = () => (
                                             {(t) => t}
                                           </TranslationsConsumer>
                                         </UserCheckbox>
-                                        {!isQualifiedStudent && (
-                                          <FadeIn>
-                                            <InputValidationError>
-                                              <TranslationsConsumer textKey="CHAT_INPUT_IS_STUDENT_INVALID">
-                                                {(t) => t}
-                                              </TranslationsConsumer>
-                                            </InputValidationError>
-                                          </FadeIn>
-                                        )}
+                                        {!isQualifiedStudent &&
+                                          chatState.isStudent && (
+                                            <FadeIn>
+                                              <InputValidationError>
+                                                <TranslationsConsumer textKey="CHAT_INPUT_IS_STUDENT_INVALID">
+                                                  {(t) => t}
+                                                </TranslationsConsumer>
+                                              </InputValidationError>
+                                            </FadeIn>
+                                          )}
                                       </CreateOfferCtaWrapperRow>
                                     )}
                                     <CreateOfferCtaWrapperRow>
