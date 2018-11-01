@@ -5,11 +5,15 @@ import { Mutation } from 'react-apollo'
 import { Mount } from 'react-lifecycle-components'
 import { apolloClient } from '../client/apolloClient'
 import { StorageContainer } from '../utils/StorageContainer'
-import { getUtmParamsFromCookie, UtmParams } from '../utils/tracking'
+import {
+  getUtmParamsFromCookie,
+  setTrackingId,
+  UtmParams,
+} from '../utils/tracking'
 
 export const CREATE_SESSION_TOKEN_MUTATION: DocumentNode = gql`
-  mutation CreateSessionToken($campaign: CampaignInput) {
-    createSession(campaign: $campaign)
+  mutation CreateSessionToken($campaign: CampaignInput, $trackingId: UUID) {
+    createSession(campaign: $campaign, trackingId: $trackingId)
   }
 `
 
@@ -22,7 +26,10 @@ export const SessionContainer: React.SFC<SessionContainerProps> = ({
 }) => (
   <StorageContainer>
     {(storageState) => (
-      <Mutation<{ createSession: string }, { campaign?: UtmParams }>
+      <Mutation<
+        { createSession: string },
+        { campaign?: UtmParams; trackingId?: string }
+      >
         mutation={CREATE_SESSION_TOKEN_MUTATION}
         variables={{ campaign: getUtmParamsFromCookie() }}
       >
@@ -33,6 +40,7 @@ export const SessionContainer: React.SFC<SessionContainerProps> = ({
                 !storageState.session.getSession()!.token &&
                 !createSessionProps.called
               ) {
+                const trackingId = setTrackingId()
                 createSession({
                   update: (_, { data }) => {
                     if (data && data.createSession) {
@@ -43,6 +51,7 @@ export const SessionContainer: React.SFC<SessionContainerProps> = ({
                       }, 0)
                     }
                   },
+                  variables: { trackingId },
                 })
               }
             }}
