@@ -30,9 +30,9 @@ export const ChatConversation: React.SFC = () => (
       unpeek,
       currentlyPeeking,
       goToStep,
+      nameAge,
       livingSituation,
       currentInsurance,
-      nameAge,
     }) => (
       <Conversation<ChatStep>
         initialVisibleSteps={initialVisibleSteps}

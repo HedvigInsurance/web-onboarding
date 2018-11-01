@@ -2,6 +2,7 @@ import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import styled from 'react-emotion'
+import { InsuranceType, isStudentInsurance } from 'utils/insuranceDomainUtils'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 
 const Card = styled('div')({
@@ -52,21 +53,27 @@ const InfoText = styled('div')({
   display: 'inline',
 })
 
-const rows: ReadonlyArray<{
+const rows = (
+  isStudent: boolean,
+): ReadonlyArray<{
   titleKey: string
   amountKey: string
-}> = [
+}> => [
   {
     titleKey: 'OFFER_INSURED_AMOUNT_COL_ONE_TITLE',
     amountKey: 'OFFER_INSURED_AMOUNT_COL_ONE_AMOUNT',
   },
   {
     titleKey: 'OFFER_INSURED_AMOUNT_COL_TWO_TITLE',
-    amountKey: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT',
+    amountKey: isStudent
+      ? 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT_STUDENT'
+      : 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT',
   },
   {
     titleKey: 'OFFER_INSURED_AMOUNT_COL_THREE_TITLE',
-    amountKey: 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT',
+    amountKey: isStudent
+      ? 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT_STUDENT'
+      : 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT',
   },
   {
     titleKey: 'OFFER_INSURED_AMOUNT_COL_FOUR_TITLE',
@@ -74,7 +81,9 @@ const rows: ReadonlyArray<{
   },
 ]
 
-export const InsuredAmount: React.SFC = () => (
+export const InsuredAmount: React.SFC<{ insuranceType: InsuranceType }> = ({
+  insuranceType,
+}) => (
   <Card>
     <HeaderWrapper>
       <TranslationsConsumer textKey="OFFER_INSURED_AMOUNT_TITLE">
@@ -82,7 +91,7 @@ export const InsuredAmount: React.SFC = () => (
       </TranslationsConsumer>
     </HeaderWrapper>
     <Table>
-      {rows.map((row, index) => (
+      {rows(isStudentInsurance(insuranceType)).map((row, index) => (
         <Row
           key={row.titleKey + row.amountKey}
           style={{
