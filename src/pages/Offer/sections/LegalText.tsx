@@ -4,9 +4,9 @@ import {
   TranslationsConsumer,
   TranslationsPlaceholderConsumer,
 } from '@hedviginsurance/textkeyfy'
-import { InsuranceType } from 'containers/OfferContainer'
 import * as React from 'react'
 import styled from 'react-emotion'
+import { InsuranceType } from 'utils/insuranceDomainUtils'
 
 const isApartmentOwner = (insuranceType: InsuranceType): boolean =>
   insuranceType === InsuranceType.BRF ||
