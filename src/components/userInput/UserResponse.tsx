@@ -86,7 +86,7 @@ export const UserSelectInput = (
   </UserSelectInputWrapper>
 )
 
-const CheckboxWrapper = styled('span')(
+const CheckboxWrapper = styled('label')(
   ({ disabled }: { disabled?: boolean }) => ({
     opacity: disabled ? 0.3 : 1,
     display: 'inline-flex',
@@ -135,7 +135,7 @@ const CheckboxInput = styled('input')({
     borderColor: colors.GREEN,
   },
 })
-const CheckboxLabel = styled('label')({
+const CheckboxLabel = styled('span')({
   paddingLeft: '0.5em',
   cursor: 'pointer',
 })
@@ -149,7 +149,7 @@ export const UserCheckbox = (
         <path d="M472.003 58.36l-13.132-11.282c-21.798-18.732-54.554-16.644-73.799 4.697L165.39 295.359l-66.312-57.112c-21.775-18.753-54.536-16.707-73.804 4.611l-11.611 12.848a52.934 52.934 0 0 0-13.595 38.18 52.938 52.938 0 0 0 17.402 36.6l121.553 111.311a52.936 52.936 0 0 0 76.355-4.057l262.245-304.71a52.915 52.915 0 0 0 12.661-38.496 52.92 52.92 0 0 0-18.281-36.174z" />
       </Tick>
     </CheckboxInputContainer>
-    <CheckboxLabel htmlFor={props.id}>{props.children}</CheckboxLabel>
+    <CheckboxLabel>{props.children}</CheckboxLabel>
   </CheckboxWrapper>
 )
 
