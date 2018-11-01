@@ -6,10 +6,9 @@ import { ActionMap, Container } from 'constate'
 import { OfferContainer } from 'containers/OfferContainer'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import * as React from 'react'
-import styled, { keyframes } from 'react-emotion'
+import styled from 'react-emotion'
 import Helmet from 'react-helmet-async'
 import { Mount } from 'react-lifecycle-components'
-import { Link } from 'react-router-dom'
 import { trackEvent } from 'utils/tracking'
 import { CardWrapper } from './components/CardWrapper'
 import { InnerWrapper } from './components/InnerWrapper'
@@ -33,42 +32,6 @@ interface Actions {
   updateUpperButtonVisibility: (visible: boolean) => void
   updateLowerButtonVisibility: (visible: boolean) => void
 }
-
-export const keyFrameExampleOne = keyframes`
-  0% {
-    transform: translateX(50%)
-  }
-  100% {
-    transform: translateX(0%)
-  }
-`
-
-const BarButtonWrapper = styled('div')({
-  width: '20%',
-  animation: `${keyFrameExampleOne} 0.2s ease-in-out forwards`,
-  justifyContent: 'flex-end',
-  '@media (max-width: 850px)': {
-    width: '33%',
-  },
-  '@media (max-width: 600px)': {
-    width: '50%',
-  },
-})
-
-const GetInsuredButton = styled('div')({
-  display: 'flex',
-  justifyContent: 'inherit',
-  marginRight: '26px',
-})
-
-const LinkTag = styled(Link)({
-  backgroundColor: colors.GREEN,
-  color: colors.WHITE,
-  textDecoration: 'none',
-  borderRadius: '50px',
-  padding: '10px 24px',
-  textAlign: 'center',
-})
 
 const BigCard = styled('div')({
   marginTop: '70px',
@@ -125,29 +88,8 @@ export const Offering: React.SFC<{}> = () => (
                   <>
                     <TopBar
                       progress={1}
-                      button={
-                        !state.upperSignButtonVisible &&
-                        !state.lowerSignButtonVisible && (
-                          <BarButtonWrapper>
-                            <GetInsuredButton>
-                              <LinkTag
-                                to={'/new-member/sign'}
-                                onClick={() =>
-                                  trackEvent('Checkout Started', {
-                                    category: 'offer',
-                                    value: offer.insurance.monthlyCost,
-                                    label: 'TopBar',
-                                  })
-                                }
-                              >
-                                <TranslationsConsumer textKey="TOP_BAR_SIGN_BUTTON">
-                                  {(text) => text}
-                                </TranslationsConsumer>
-                              </LinkTag>
-                            </GetInsuredButton>
-                          </BarButtonWrapper>
-                        )
-                      }
+                      upperSignButtonVisible={!state.upperSignButtonVisible}
+                      lowerSignButtonVisible={!state.lowerSignButtonVisible}
                     />
                     <Offer
                       offer={offer}

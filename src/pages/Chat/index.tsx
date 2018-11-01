@@ -4,7 +4,6 @@ import Helmet from 'react-helmet-async'
 import { TopBar, TopBarFiller } from '../../components/TopBar'
 import { ChatConversation } from './ChatConversation'
 import { OfferCreationHandler } from './components/OfferCreationHandler'
-import { ResetButton } from './ResetButton'
 
 export const Chat: React.SFC = () => (
   <>
@@ -12,7 +11,7 @@ export const Chat: React.SFC = () => (
       {(title) => <Helmet>{<title>{title}</title>}</Helmet>}
     </TranslationsConsumer>
 
-    <TopBar progress={0} button={<ResetButton />} />
+    <TopBar progress={0} />
     <TopBarFiller />
     <ChatConversation />
     <OfferCreationHandler />

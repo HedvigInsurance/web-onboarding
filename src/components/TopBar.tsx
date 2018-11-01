@@ -1,7 +1,11 @@
 import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
+import { OfferContainer } from 'containers/OfferContainer'
 import * as React from 'react'
-import styled from 'react-emotion'
+import styled, { keyframes } from 'react-emotion'
+import { Link } from 'react-router-dom'
+import { trackEvent } from 'utils/tracking'
+import { ResetButton } from '../pages/Chat/ResetButton'
 
 const TOPBARHEIGHT = 70
 const ICONWIDTH = 16
@@ -96,9 +100,50 @@ const CollapsedProgressStages = styled('div')({
   },
 })
 
+const BarButtonWrapper = styled('div')(
+  ({
+    upperSignButtonVisible,
+    lowerSignButtonVisible,
+  }: {
+    upperSignButtonVisible: boolean
+    lowerSignButtonVisible: boolean
+  }) => ({
+    width: '20%',
+    transition: 'transform 250ms 100ms',
+    transform:
+      upperSignButtonVisible === true && lowerSignButtonVisible === true
+        ? `translateX(0)`
+        : `translateX(100%)`,
+    willChange: 'transform',
+    justifyContent: 'flex-end',
+    '@media (max-width: 850px)': {
+      width: '33%',
+    },
+    '@media (max-width: 600px)': {
+      width: '50%',
+    },
+  }),
+)
+
+const GetInsuredButton = styled('div')({
+  display: 'flex',
+  justifyContent: 'inherit',
+  marginRight: '26px',
+})
+
+const LinkTag = styled(Link)({
+  backgroundColor: colors.GREEN,
+  color: colors.WHITE,
+  textDecoration: 'none',
+  borderRadius: '50px',
+  padding: '10px 24px',
+  textAlign: 'center',
+})
+
 interface Props {
   progress?: number
-  button?: React.ReactNode
+  upperSignButtonVisible?: boolean
+  lowerSignButtonVisible?: boolean
 }
 
 const progressInfo = [
@@ -123,7 +168,11 @@ const getTextColor = (progress: number, key: number) => {
   return progress >= key ? colors.BLACK : colors.DARK_GRAY
 }
 
-export const TopBar: React.SFC<Props> = ({ progress, button }) => (
+export const TopBar: React.SFC<Props> = ({
+  progress,
+  lowerSignButtonVisible,
+  upperSignButtonVisible,
+}) => (
   <Wrapper>
     {progress !== undefined && (
       <ProgressLine
@@ -198,7 +247,42 @@ export const TopBar: React.SFC<Props> = ({ progress, button }) => (
             </StageCol>
           </CollapsedProgressStages>
         )}
-      {button}
+      {progress === 1 &&
+      lowerSignButtonVisible !== undefined &&
+      upperSignButtonVisible !== undefined ? (
+        <OfferContainer>
+          {(offer) => {
+            if (!offer || !offer.insurance.type) {
+              return null
+            }
+            return (
+              <BarButtonWrapper
+                lowerSignButtonVisible={lowerSignButtonVisible}
+                upperSignButtonVisible={upperSignButtonVisible}
+              >
+                <GetInsuredButton>
+                  <LinkTag
+                    to={'/new-member/sign'}
+                    onClick={() =>
+                      trackEvent('Checkout Started', {
+                        category: 'offer',
+                        value: offer.insurance.monthlyCost,
+                        label: 'TopBar',
+                      })
+                    }
+                  >
+                    <TranslationsConsumer textKey="TOP_BAR_SIGN_BUTTON">
+                      {(text) => text}
+                    </TranslationsConsumer>
+                  </LinkTag>
+                </GetInsuredButton>
+              </BarButtonWrapper>
+            )
+          }}
+        </OfferContainer>
+      ) : (
+        progress === 0 && <ResetButton />
+      )}
     </Bar>
   </Wrapper>
 )
