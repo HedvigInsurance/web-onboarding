@@ -1,6 +1,6 @@
 import { Container, ContainerProps } from 'constate'
-import { InsuranceType } from 'containers/OfferContainer'
 import * as React from 'react'
+import { InsuranceType } from 'utils/insuranceDomainUtils'
 import { notNullable } from '../../utils/nullables'
 import { StorageContainer } from '../../utils/StorageContainer'
 
@@ -55,6 +55,7 @@ export interface State {
   visibleSteps: ChatStep[]
   nameAge: NameAgeState
   livingSituation: LivingSituationState
+  isStudent?: boolean
   currentInsurance: CurrentInsuranceState
 }
 
@@ -73,6 +74,7 @@ const initialState: State = {
     postalNumber: '',
     streetAddress: '',
   },
+  isStudent: undefined,
   currentInsurance: {},
 }
 
@@ -88,6 +90,7 @@ export interface Effects {
   setHasCurrentInsurance: (event: React.ChangeEvent<HTMLSelectElement>) => void
   setCurrentInsurer: (event: React.ChangeEvent<HTMLSelectElement>) => void
   setOtherInsurer: (event: React.ChangeEvent<HTMLInputElement>) => void
+  setIsStudent: (event: React.ChangeEvent<HTMLInputElement>) => void
   reset: () => void
   goToStep: (step: ChatStep) => void
   peekStep: (step: ChatStep) => void
@@ -189,6 +192,21 @@ export const ChatContainer: React.SFC<
                     ? undefined
                     : (event.target.value as Insurer),
               },
+            }
+            setState(newState)
+            storageState.session.setSession({
+              ...storageState.session.getSession(),
+              chat: {
+                ...((storageState.session.getSession() &&
+                  notNullable(storageState.session.getSession()).chat) ||
+                  initialState),
+                ...newState,
+              },
+            })
+          },
+          setIsStudent: (event) => ({ setState }) => {
+            const newState: Partial<State> = {
+              isStudent: event.target.checked,
             }
             setState(newState)
             storageState.session.setSession({

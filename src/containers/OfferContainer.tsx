@@ -1,6 +1,7 @@
 import gql from 'graphql-tag'
 import * as React from 'react'
 import { Query } from 'react-apollo'
+import { InsuranceType } from 'utils/insuranceDomainUtils'
 
 export const OFFER_QUERY = gql`
   query Offer {
@@ -19,13 +20,6 @@ export const OFFER_QUERY = gql`
     }
   }
 `
-
-export enum InsuranceType {
-  RENT = 'RENT',
-  BRF = 'BRF',
-  STUDENT_RENT = 'STUDENT_RENT',
-  STUDENT_BRF = 'STUDENT_BRF',
-}
 
 export interface OfferData {
   insurance: {

@@ -1,5 +1,5 @@
-import { InsuranceType } from 'containers/OfferContainer'
 import { MockedResponse } from 'react-apollo/test-links'
+import { InsuranceType } from 'utils/insuranceDomainUtils'
 import {
   CREATE_OFFER_MUTATION,
   CreateOfferMutationVariables,
@@ -10,7 +10,7 @@ export const mockState = (): ChatState => ({
   nameAge: {
     firstName: 'John',
     lastName: 'Doe',
-    age: 42,
+    age: 22,
   },
   livingSituation: {
     postalNumber: '123 45',
@@ -19,6 +19,7 @@ export const mockState = (): ChatState => ({
     size: 37,
     numberOfPeople: 1,
   },
+  isStudent: false,
   currentInsurance: {
     currentInsurer: Insurer.FOLKSAM,
     hasCurrentInsurance: true,
@@ -28,7 +29,9 @@ export const mockState = (): ChatState => ({
   visibleSteps: [],
 })
 
-export const createCreateOfferMutationMock = (): MockedResponse[] => [
+export const createCreateOfferMutationMock = (
+  isStudent: boolean = false,
+): MockedResponse[] => [
   {
     request: {
       query: CREATE_OFFER_MUTATION,
@@ -40,7 +43,9 @@ export const createCreateOfferMutationMock = (): MockedResponse[] => [
         address: mockState().livingSituation.streetAddress,
         postalNumber: '12345',
         squareMeters: mockState().livingSituation.size,
-        insuranceType: mockState().livingSituation.insuranceType,
+        insuranceType: isStudent
+          ? InsuranceType.STUDENT_RENT
+          : InsuranceType.RENT,
         personsInHousehold: mockState().livingSituation.numberOfPeople,
         previousInsurer: mockState().currentInsurance.currentInsurer,
       } as CreateOfferMutationVariables,

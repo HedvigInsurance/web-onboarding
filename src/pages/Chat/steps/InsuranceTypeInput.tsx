@@ -9,8 +9,8 @@ import {
   UserSelectInput,
   UserTextInput,
 } from 'components/userInput/UserResponse'
-import { InsuranceType } from 'containers/OfferContainer'
 import * as React from 'react'
+import { InsuranceType } from 'utils/insuranceDomainUtils'
 import * as yup from 'yup'
 import { NextButton } from '../components/NextButton'
 import {

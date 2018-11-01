@@ -103,7 +103,9 @@ export const Offering: React.SFC<{}> = () => (
                         <CardWrapper>
                           <BigCard>
                             <InsuranceCoverage />
-                            <InsuredAmount />
+                            <InsuredAmount
+                              insuranceType={offer.insurance.type}
+                            />
                             <OtherInfo offer={offer} />
                             <Terms insuranceType={offer.insurance.type} />
                           </BigCard>
