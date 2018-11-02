@@ -150,13 +150,17 @@ export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
               <Header>
                 <TranslationsPlaceholderConsumer
                   textKey="OFFER_HEADER"
-                  replacements={{ firstName: offer.member.firstName }}
+                  replacements={{
+                    firstName: (
+                      <span data-hj-supress>{offer.member.firstName}</span>
+                    ),
+                  }}
                 >
                   {(title) => title}
                 </TranslationsPlaceholderConsumer>
               </Header>
             </HeaderWrapper>
-            <PersonalInfo>
+            <PersonalInfo data-hj-supress>
               {`${offer.member.firstName} ${offer.member.lastName}`}
               {' · '}
               {offer.insurance.address}
