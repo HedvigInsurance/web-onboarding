@@ -1,8 +1,8 @@
 import { CookieStorage } from 'cookie-storage'
 // @ts-ignore
-import * as merge from 'deepmerge/dist/umd'
-import * as uuid from 'uuid/v4'
+import merge from 'deepmerge'
 import { logInDev } from './log'
+const uuid = require('uuid/v4') // tslint:disable-line no-var-requires
 
 const cookie = new CookieStorage()
 
