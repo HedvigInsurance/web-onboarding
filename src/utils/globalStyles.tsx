@@ -1,4 +1,4 @@
-import { colors, fonts } from '@hedviginsurance/brand'
+import { fonts } from '@hedviginsurance/brand'
 import { injectGlobal } from 'emotion'
 import * as React from 'react'
 
@@ -68,11 +68,6 @@ h1, h2, h3, h4, h5, h6 {
 
 img {
   max-width: 100%;
-}
-
-a {
-  color: ${colors.PURPLE};
-  textDecoration: 'none';
 }
 `
   return <>{children}</>

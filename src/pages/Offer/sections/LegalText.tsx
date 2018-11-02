@@ -24,62 +24,34 @@ const LegalText = styled('div')({
   maxWidth: LEGALWIDTH,
 })
 
-export const Legal: React.SFC<TermsProps> = ({}) => (
+const Link = styled('a')({
+  color: colors.PURPLE,
+  textDecoration: 'none',
+})
+
+const getInsuranceTextKey = (insuranceType: InsuranceType): string => {
+  const map = {
+    [InsuranceType.RENT]: 'LEGAL_TEXT_RENT_TEXT',
+    [InsuranceType.BRF]: 'LEGAL_TEXT_BRF_TEXT',
+    [InsuranceType.STUDENT_RENT]: 'LEGAL_TEXT_STUDENT_RENT_TEXT',
+    [InsuranceType.STUDENT_BRF]: 'LEGAL_TEXT_STUDENT_BRF_TEXT',
+  }
+
+  if (!map[insuranceType]) {
+    throw new Error(`Invalid insurance type ${insuranceType}`)
+  }
+  return map[insuranceType]
+}
+
+export const Legal: React.SFC<TermsProps> = ({ insuranceType }) => (
   <Container>
     <LegalText>
       <MarkdownTranslation
-        textKey="OFFER_FOOTER_LEGAL_TEXT_TEST"
-        replacements={{}}
-
-        //   replacements={{
-        //     gdpr: (
-        //       <TranslationsConsumer textKey="CHAT_INPUT_PERSONAL_DATA_LINK">
-        //         {(url) => (
-        //           <Link href={url} rel="noreferrer noopener" target="_blank">
-        //             <TranslationsConsumer textKey="OFFER_FOOTER_GDPR">
-        //               {(t) => t}
-        //             </TranslationsConsumer>
-        //           </Link>
-        //         )}
-        //       </TranslationsConsumer>
-        //     ),
-        //     preBuy: (
-        //       <TranslationsConsumer
-        //         textKey={
-        //           isApartmentOwner(insuranceType)
-        //             ? 'TERMS_PDF_PREBUY_OWNER_URL'
-        //             : 'TERMS_PDF_PREBUY_RENT_URL'
-        //         }
-        //       >
-        //         {(url) => (
-        //           <Link href={url} rel="noreferrer noopener" target="_blank">
-        //             <TranslationsConsumer textKey="OFFER_FOOTER_PREBUY">
-        //               {(t) => t}
-        //             </TranslationsConsumer>
-        //           </Link>
-        //         )}
-        //       </TranslationsConsumer>
-        //     ),
-        //     terms: (
-        //       <TranslationsConsumer
-        //         textKey={
-        //           isApartmentOwner(insuranceType)
-        //             ? 'TERMS_PDF_INSURANCE_OWNER_URL'
-        //             : 'TERMS_PDF_INSURANCE_RENT_URL'
-        //         }
-        //       >
-        //         {(url) => (
-        //           <Link href={url} rel="noreferrer noopener" target="_blank">
-        //             <TranslationsConsumer textKey="OFFER_FOOTER_TERMS">
-        //               {(t) => t}
-        //             </TranslationsConsumer>
-        //           </Link>
-        //         )}
-        //       </TranslationsConsumer>
-        //     ),
-        //   }}
-        // >
-        //   {(legalText) => legalText}
+        textKey={getInsuranceTextKey(insuranceType)}
+        markdownProps={{
+          renderers: { link: Link },
+          linkTarget: '_blank',
+        }}
       />
     </LegalText>
   </Container>
