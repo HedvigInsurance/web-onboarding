@@ -34,16 +34,31 @@ interface Actions {
   updateLowerButtonVisibility: (visible: boolean) => void
 }
 
-const BarButtonWrapper = styled('div')({
-  width: '20%',
-  justifyContent: 'flex-end',
-  '@media (max-width: 850px)': {
-    width: '33%',
-  },
-  '@media (max-width: 600px)': {
-    width: '50%',
-  },
-})
+const BarButtonWrapper = styled('div')(
+  ({
+    upperSignButtonVisible,
+    lowerSignButtonVisible,
+  }: {
+    upperSignButtonVisible: boolean
+    lowerSignButtonVisible: boolean
+  }) => ({
+    width: '20%',
+    transition: 'transform 250ms 100ms',
+    transform:
+      upperSignButtonVisible === true && lowerSignButtonVisible === true
+        ? `translateX(0)`
+        : `translateX(100%)`,
+    willChange: 'transform',
+    justifyContent: 'flex-end',
+    '@media (max-width: 850px)': {
+      width: '33%',
+    },
+    '@media (max-width: 600px)': {
+      width: '50%',
+    },
+  }),
+)
+
 const GetInsuredButton = styled('div')({
   display: 'flex',
   justifyContent: 'inherit',
@@ -115,27 +130,27 @@ export const Offering: React.SFC<{}> = () => (
                     <TopBar
                       progress={1}
                       button={
-                        !state.upperSignButtonVisible &&
-                        !state.lowerSignButtonVisible && (
-                          <BarButtonWrapper>
-                            <GetInsuredButton>
-                              <LinkTag
-                                to={'/new-member/sign'}
-                                onClick={() =>
-                                  trackEvent('Checkout Started', {
-                                    category: 'offer',
-                                    value: offer.insurance.monthlyCost,
-                                    label: 'TopBar',
-                                  })
-                                }
-                              >
-                                <TranslationsConsumer textKey="TOP_BAR_SIGN_BUTTON">
-                                  {(text) => text}
-                                </TranslationsConsumer>
-                              </LinkTag>
-                            </GetInsuredButton>
-                          </BarButtonWrapper>
-                        )
+                        <BarButtonWrapper
+                          upperSignButtonVisible={!state.upperSignButtonVisible}
+                          lowerSignButtonVisible={!state.lowerSignButtonVisible}
+                        >
+                          <GetInsuredButton>
+                            <LinkTag
+                              to={'/new-member/sign'}
+                              onClick={() =>
+                                trackEvent('Checkout Started', {
+                                  category: 'offer',
+                                  value: offer.insurance.monthlyCost,
+                                  label: 'TopBar',
+                                })
+                              }
+                            >
+                              <TranslationsConsumer textKey="TOP_BAR_SIGN_BUTTON">
+                                {(text) => text}
+                              </TranslationsConsumer>
+                            </LinkTag>
+                          </GetInsuredButton>
+                        </BarButtonWrapper>
                       }
                     />
                     <Offer

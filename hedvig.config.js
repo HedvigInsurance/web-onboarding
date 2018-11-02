@@ -13,6 +13,7 @@ module.exports = {
     'USE_AUTH',
     'AUTH_NAME',
     'AUTH_PASS',
+    'CSP_REPORT_ENDPOINT',
     'GIRAFFE_ENDPOINT',
     'GIRAFFE_WS_ENDPOINT',
     'USE_HELMET',
