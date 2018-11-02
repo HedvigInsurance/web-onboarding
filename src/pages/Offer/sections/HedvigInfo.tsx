@@ -58,7 +58,7 @@ const Col = styled('div')({
 const Row = styled('div')({
   display: 'flex',
   flexDirection: 'row',
-  justifyContent: 'space-evenly',
+  justifyContent: 'space-around',
   alignItems: 'baseline',
   maxWidth: ROWWIDTH,
   '@media (max-width: 800px)': {

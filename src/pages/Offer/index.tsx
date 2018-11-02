@@ -11,6 +11,9 @@ import Helmet from 'react-helmet-async'
 import { Mount } from 'react-lifecycle-components'
 import { Link } from 'react-router-dom'
 import { trackEvent } from 'utils/tracking'
+import { CardWrapper } from './components/CardWrapper'
+import { InnerWrapper } from './components/InnerWrapper'
+import { Wrapper } from './components/Wrapper'
 import { GetInsured } from './sections/GetInsured'
 import { HedvigInfo } from './sections/HedvigInfo'
 import { HedvigSwitch } from './sections/HedvigSwitch'
@@ -31,16 +34,31 @@ interface Actions {
   updateLowerButtonVisibility: (visible: boolean) => void
 }
 
-const BarButtonWrapper = styled('div')({
-  width: '20%',
-  justifyContent: 'flex-end',
-  '@media (max-width: 850px)': {
-    width: '33%',
-  },
-  '@media (max-width: 600px)': {
-    width: '50%',
-  },
-})
+const BarButtonWrapper = styled('div')(
+  ({
+    upperSignButtonVisible,
+    lowerSignButtonVisible,
+  }: {
+    upperSignButtonVisible: boolean
+    lowerSignButtonVisible: boolean
+  }) => ({
+    width: '20%',
+    transition: 'transform 250ms 100ms',
+    transform:
+      upperSignButtonVisible === true && lowerSignButtonVisible === true
+        ? `translateX(0)`
+        : `translateX(100%)`,
+    willChange: 'transform',
+    justifyContent: 'flex-end',
+    '@media (max-width: 850px)': {
+      width: '33%',
+    },
+    '@media (max-width: 600px)': {
+      width: '50%',
+    },
+  }),
+)
+
 const GetInsuredButton = styled('div')({
   display: 'flex',
   justifyContent: 'inherit',
@@ -54,6 +72,15 @@ const LinkTag = styled(Link)({
   borderRadius: '50px',
   padding: '10px 24px',
   textAlign: 'center',
+})
+
+const BigCard = styled('div')({
+  marginTop: '70px',
+  paddingTop: '30px',
+  paddingBottom: '60px',
+  backgroundColor: colors.WHITE,
+  boxShadow: '0px 8px 15px -13px rgba(0,0,0,0.67)',
+  borderRadius: '10px',
 })
 
 export const Offering: React.SFC<{}> = () => (
@@ -103,27 +130,27 @@ export const Offering: React.SFC<{}> = () => (
                     <TopBar
                       progress={1}
                       button={
-                        !state.upperSignButtonVisible &&
-                        !state.lowerSignButtonVisible && (
-                          <BarButtonWrapper>
-                            <GetInsuredButton>
-                              <LinkTag
-                                to={'/new-member/sign'}
-                                onClick={() =>
-                                  trackEvent('Checkout Started', {
-                                    category: 'offer',
-                                    value: offer.insurance.monthlyCost,
-                                    label: 'TopBar',
-                                  })
-                                }
-                              >
-                                <TranslationsConsumer textKey="TOP_BAR_SIGN_BUTTON">
-                                  {(text) => text}
-                                </TranslationsConsumer>
-                              </LinkTag>
-                            </GetInsuredButton>
-                          </BarButtonWrapper>
-                        )
+                        <BarButtonWrapper
+                          upperSignButtonVisible={!state.upperSignButtonVisible}
+                          lowerSignButtonVisible={!state.lowerSignButtonVisible}
+                        >
+                          <GetInsuredButton>
+                            <LinkTag
+                              to={'/new-member/sign'}
+                              onClick={() =>
+                                trackEvent('Checkout Started', {
+                                  category: 'offer',
+                                  value: offer.insurance.monthlyCost,
+                                  label: 'TopBar',
+                                })
+                              }
+                            >
+                              <TranslationsConsumer textKey="TOP_BAR_SIGN_BUTTON">
+                                {(text) => text}
+                              </TranslationsConsumer>
+                            </LinkTag>
+                          </GetInsuredButton>
+                        </BarButtonWrapper>
                       }
                     />
                     <Offer
@@ -133,10 +160,20 @@ export const Offering: React.SFC<{}> = () => (
                     <PageDown />
                     <HedvigInfo />
                     {insuredAtOtherCompany ? <HedvigSwitch /> : null}
-                    <InsuranceCoverage />
-                    <InsuredAmount />
-                    <OtherInfo offer={offer} />
-                    <Terms insuranceType={offer.insurance.type} />
+                    <Wrapper>
+                      <InnerWrapper>
+                        <CardWrapper>
+                          <BigCard>
+                            <InsuranceCoverage />
+                            <InsuredAmount
+                              insuranceType={offer.insurance.type}
+                            />
+                            <OtherInfo offer={offer} />
+                            <Terms insuranceType={offer.insurance.type} />
+                          </BigCard>
+                        </CardWrapper>
+                      </InnerWrapper>
+                    </Wrapper>
                     <GetInsured
                       offer={offer}
                       signButtonVisibility={state.updateLowerButtonVisibility}

@@ -93,7 +93,7 @@ const Row = styled('div')({
   display: 'flex',
   alignItems: 'baseline',
   flexDirection: 'row',
-  justifyContent: 'space-evenly',
+  justifyContent: 'space-around',
   '@media (max-width: 400px)': {
     flexDirection: 'column',
     alignItems: 'center',

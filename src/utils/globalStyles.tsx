@@ -65,6 +65,10 @@ h1, h2, h3, h4, h5, h6 {
   font-family: ${fonts.SORAY}, sans-serif;
   font-kerning: none;
 }
+
+img {
+  max-width: 100%;
+}
 `
   return <>{children}</>
 }

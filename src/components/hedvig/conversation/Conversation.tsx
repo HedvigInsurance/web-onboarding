@@ -3,16 +3,20 @@ import styled from 'react-emotion'
 import Transition, { ENTERED } from 'react-transition-group/Transition'
 import { MessageProps } from './Message'
 
+const CONTAINER_PADDING = 20
+const NEXT_BUTTON_SPACING = 40
+const INTERCOM_SPACING = 80
+
 export const ConversationWrapper = styled('div')({
   maxWidth: 1000,
-  padding: '0 20px',
+  padding: `0 ${CONTAINER_PADDING}px`,
   margin: '0 auto',
+  paddingBottom: CONTAINER_PADDING + NEXT_BUTTON_SPACING + INTERCOM_SPACING,
   fontSize: 24,
-  paddingBottom: '25vh',
   minHeight: '75vh',
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'flex-end',
+  justifyContent: 'center',
 })
 
 const getId = (child: React.ReactChild) => React.Children.only(child).props.id
