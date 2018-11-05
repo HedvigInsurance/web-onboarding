@@ -5,8 +5,11 @@ import {
 } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import styled from 'react-emotion'
-import { getInsurancePDFTextKey, getPrebuyPDFTextKey } from 'utils/cdnFilesURL'
-import { InsuranceType } from 'utils/insuranceDomainUtils'
+import {
+  getInsurancePDFTextKey,
+  getPrebuyPDFTextKey,
+  InsuranceType,
+} from 'utils/insuranceDomainUtils'
 
 interface TermsProps {
   insuranceType: InsuranceType

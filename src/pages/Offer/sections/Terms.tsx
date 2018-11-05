@@ -2,8 +2,11 @@ import { colors, fonts } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import styled from 'react-emotion'
-import { getInsurancePDFTextKey, getPrebuyPDFTextKey } from 'utils/cdnFilesURL'
-import { InsuranceType } from 'utils/insuranceDomainUtils'
+import {
+  getInsurancePDFTextKey,
+  getPrebuyPDFTextKey,
+  InsuranceType,
+} from 'utils/insuranceDomainUtils'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 
 interface TermsProps {
