@@ -36,30 +36,28 @@ const Link = styled('a')({
   textDecoration: 'none',
 })
 
+const getInsuranceURLTextKey = (insuranceType: InsuranceType): string => {
+  const map = {
+    [InsuranceType.RENT]: 'LEGAL_TEXT_RENT_TEXT',
+    [InsuranceType.BRF]: 'LEGAL_TEXT_BRF_TEXT',
+    [InsuranceType.STUDENT_RENT]: 'LEGAL_TEXT_STUDENT_RENT_TEXT',
+    [InsuranceType.STUDENT_BRF]: 'LEGAL_TEXT_STUDENT_BRF_TEXT',
+  }
+  if (!map[insuranceType]) {
+    throw new Error(`Invalid insurance type ${insuranceType}`)
+  }
+  return map[insuranceType]
+}
+
 export const Legal: React.SFC<TermsProps> = ({ insuranceType }) => (
   <Container>
     <LegalText>
       <TranslationsPlaceholderConsumer
         textKey="OFFER_FOOTER_LEGAL_TEXT_TEST"
         replacements={{
-          gdpr: (
-            <TranslationsConsumer textKey="CHAT_INPUT_PERSONAL_DATA_LINK">
-              {(url) => (
-                <Link href={url} rel="noreferrer noopener" target="_blank">
-                  <TranslationsConsumer textKey="OFFER_FOOTER_GDPR">
-                    {(t) => t}
-                  </TranslationsConsumer>
-                </Link>
-              )}
-            </TranslationsConsumer>
-          ),
           preBuy: (
             <TranslationsConsumer
-              textKey={
-                isApartmentOwner(insuranceType)
-                  ? 'TERMS_PDF_PREBUY_OWNER_URL'
-                  : 'TERMS_PDF_PREBUY_RENT_URL'
-              }
+              textKey={getInsuranceURLTextKey(insuranceType)}
             >
               {(url) => (
                 <Link href={url} rel="noreferrer noopener" target="_blank">
@@ -72,15 +70,22 @@ export const Legal: React.SFC<TermsProps> = ({ insuranceType }) => (
           ),
           terms: (
             <TranslationsConsumer
-              textKey={
-                isApartmentOwner(insuranceType)
-                  ? 'TERMS_PDF_INSURANCE_OWNER_URL'
-                  : 'TERMS_PDF_INSURANCE_RENT_URL'
-              }
+              textKey={getInsuranceURLTextKey(insuranceType)}
             >
               {(url) => (
                 <Link href={url} rel="noreferrer noopener" target="_blank">
                   <TranslationsConsumer textKey="OFFER_FOOTER_TERMS">
+                    {(t) => t}
+                  </TranslationsConsumer>
+                </Link>
+              )}
+            </TranslationsConsumer>
+          ),
+          gdpr: (
+            <TranslationsConsumer textKey="CHAT_INPUT_PERSONAL_DATA_LINK">
+              {(url) => (
+                <Link href={url} rel="noreferrer noopener" target="_blank">
+                  <TranslationsConsumer textKey="OFFER_FOOTER_GDPR">
                     {(t) => t}
                   </TranslationsConsumer>
                 </Link>
