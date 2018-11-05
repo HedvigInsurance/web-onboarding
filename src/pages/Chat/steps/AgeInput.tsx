@@ -28,9 +28,8 @@ interface Props {
 const handleChange = <K extends keyof NameAgeState>(
   field: K,
   chatState: ChatActions,
-  format: (val: string | number) => string | number = (value) => value,
 ) => (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-  chatState.setNameAgeProp(field, format(event.target.value))
+  chatState.setNameAgeProp(field, event.target.value)
 }
 
 const validationSchema = () =>
@@ -93,13 +92,7 @@ export const AgeInput: React.SFC<Props & Focusable> = ({
                               '',
                             )}
                             // onChange={handleChange('age', chatState)}
-                            onChange={handleChange(
-                              'age',
-                              chatState,
-                              (value) => {
-                                return value
-                              },
-                            )}
+                            onChange={handleChange('age', chatState)}
                             maxWidth={2}
                             pattern="[0-9]*"
                             innerRef={(ref) => {
