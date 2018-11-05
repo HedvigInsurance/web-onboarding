@@ -8,13 +8,13 @@ import { OfferData } from 'containers/OfferContainer'
 import * as React from 'react'
 import styled from 'react-emotion'
 import VisibilitySensor from 'react-visibility-sensor'
+import { isStudentInsurance } from 'utils/insuranceDomainUtils'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { trackEvent } from 'utils/tracking'
 import { CardWrapperSmall } from '../components/CardWrapperSmall'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 import { InnerWrapper } from '../components/InnerWrapper'
 import { StudentBadge } from '../components/StudentOfferBadge'
-import { isStudentInsurance } from '../../../utils/insuranceDomainUtils'
 
 const ICONWIDTH = 70
 const ICONWIDTHMOBILE = 150

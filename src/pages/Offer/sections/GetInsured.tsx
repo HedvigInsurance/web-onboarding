@@ -10,12 +10,12 @@ import styled from 'react-emotion'
 import VisibilitySensor from 'react-visibility-sensor'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { trackEvent } from 'utils/tracking'
+import { isStudentInsurance } from '../../../utils/insuranceDomainUtils'
 import { CardWrapperSmall } from '../components/CardWrapperSmall'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 import { InnerWrapper } from '../components/InnerWrapper'
 import { StudentBadge } from '../components/StudentOfferBadge'
 import { Wrapper } from '../components/Wrapper'
-import { isStudentInsurance } from '../../../utils/insuranceDomainUtils'
 
 interface Props {
   offer: OfferData
