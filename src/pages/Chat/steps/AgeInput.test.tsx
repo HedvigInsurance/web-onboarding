@@ -8,6 +8,31 @@ import { WithStorageProps } from 'utils/StorageContainer'
 import { ChatContainer } from '../state'
 import { AgeInput } from './AgeInput'
 
+it('swallows chars in age input', () => {
+  const handleSubmit = jest.fn()
+  const wrapper = mount(
+    <Provider<WithStorageProps>
+      initialState={{ storage: { session: createSession(new MockStorage()) } }}
+    >
+      <MockTextKeyProvider
+        textKeys={{
+          CHAT_INPUT_AGE_TEXT: '{age}',
+        }}
+      >
+        <AgeInput onSubmit={handleSubmit} />
+      </MockTextKeyProvider>
+    </Provider>,
+  )
+  wrapper
+    .find('input#age')
+    .simulate('change', { target: { value: 'string', id: 'age' } })
+  expect(wrapper.find('input#age').prop('value')).toBe('')
+  wrapper
+    .find('input#age')
+    .simulate('change', { target: { value: '12', id: 'age' } })
+  expect(wrapper.find('input#age').prop('value')).toBe('12')
+})
+
 it('handles form changes', () => {
   const wrapper = mount(
     <Provider<WithStorageProps>
@@ -28,8 +53,8 @@ it('handles form changes', () => {
   )
   wrapper
     .find('input#age')
-    .simulate('change', { target: { value: 12, id: 'age' } })
-  expect(wrapper.find('input#age').prop('value')).toBe(12)
+    .simulate('change', { target: { value: '12', id: 'age' } })
+  expect(wrapper.find('input#age').prop('value')).toBe('12')
 })
 
 it("doesn't submit empty forms", () => {
