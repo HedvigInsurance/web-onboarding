@@ -87,7 +87,7 @@ export const GetInsured: React.SFC<Props> = ({
                 {(title) => <Header>{title}</Header>}
               </TranslationsConsumer>
             </HeaderWrapper>
-            <PersonalInfo>
+            <PersonalInfo data-hj-supress>
               {`${offer.member.firstName} ${offer.member.lastName}`}
               {' · '}
               {offer.insurance.address}
