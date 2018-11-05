@@ -14,7 +14,9 @@ export const getPrebuyPDFTextKey = (insuranceType: InsuranceType): string => {
   return map[insuranceType]
 }
 
-export const getInsuranceTextKey = (insuranceType: InsuranceType): string => {
+export const getInsurancePDFTextKey = (
+  insuranceType: InsuranceType,
+): string => {
   const map = {
     [InsuranceType.RENT]: 'TERMS_PDF_INSURANCE_RENT_URL',
     [InsuranceType.BRF]: 'TERMS_PDF_INSURANCE_BRF_URL',

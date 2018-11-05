@@ -5,7 +5,7 @@ import {
 } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import styled from 'react-emotion'
-import { getInsuranceTextKey, getPrebuyPDFTextKey } from 'utils/cdnFilesURL'
+import { getInsurancePDFTextKey, getPrebuyPDFTextKey } from 'utils/cdnFilesURL'
 import { InsuranceType } from 'utils/insuranceDomainUtils'
 
 interface TermsProps {
@@ -44,18 +44,20 @@ export const Legal: React.SFC<TermsProps> = ({ insuranceType }) => (
               {(url) => (
                 <Link href={url} rel="noreferrer noopener" target="_blank">
                   <TranslationsConsumer textKey="OFFER_FOOTER_PREBUY">
-                    {(t) => t}
+                    {(linkText) => linkText}
                   </TranslationsConsumer>
                 </Link>
               )}
             </TranslationsConsumer>
           ),
           terms: (
-            <TranslationsConsumer textKey={getInsuranceTextKey(insuranceType)}>
+            <TranslationsConsumer
+              textKey={getInsurancePDFTextKey(insuranceType)}
+            >
               {(url) => (
                 <Link href={url} rel="noreferrer noopener" target="_blank">
                   <TranslationsConsumer textKey="OFFER_FOOTER_TERMS">
-                    {(t) => t}
+                    {(linkText) => linkText}
                   </TranslationsConsumer>
                 </Link>
               )}
@@ -66,7 +68,7 @@ export const Legal: React.SFC<TermsProps> = ({ insuranceType }) => (
               {(url) => (
                 <Link href={url} rel="noreferrer noopener" target="_blank">
                   <TranslationsConsumer textKey="OFFER_FOOTER_GDPR">
-                    {(t) => t}
+                    {(linkText) => linkText}
                   </TranslationsConsumer>
                 </Link>
               )}

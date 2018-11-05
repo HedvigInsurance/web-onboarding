@@ -2,7 +2,7 @@ import { colors, fonts } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import styled from 'react-emotion'
-import { getInsuranceTextKey, getPrebuyPDFTextKey } from 'utils/cdnFilesURL'
+import { getInsurancePDFTextKey, getPrebuyPDFTextKey } from 'utils/cdnFilesURL'
 import { InsuranceType } from 'utils/insuranceDomainUtils'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 
@@ -97,7 +97,7 @@ export const Terms: React.SFC<TermsProps> = ({ insuranceType }) => (
         </TranslationsConsumer>
       </Col>
       <Col>
-        <TranslationsConsumer textKey={getInsuranceTextKey(insuranceType)}>
+        <TranslationsConsumer textKey={getInsurancePDFTextKey(insuranceType)}>
           {(url) => (
             <PerilLink href={url} rel="noreferrer noopener" target="_blank">
               <PDFTag>PDF</PDFTag>
