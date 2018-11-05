@@ -49,7 +49,8 @@ export const helmet = koaHelmet({
       styleSrc: [...defaultSrc, "'unsafe-inline'"],
       upgradeInsecureRequests: true,
       objectSrc: ["'none'"],
-      reportUri: '/new-member/_report-csp-violation',
+      reportUri:
+        process.env.CSP_REPORT_ENDPOINT || '/new-member/_report-csp-violation',
     },
   },
 })

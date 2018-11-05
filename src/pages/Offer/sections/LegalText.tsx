@@ -3,13 +3,10 @@ import {
   TranslationsConsumer,
   TranslationsPlaceholderConsumer,
 } from '@hedviginsurance/textkeyfy'
-import { InsuranceType } from 'containers/OfferContainer'
 import * as React from 'react'
 import styled from 'react-emotion'
-
-const isApartmentOwner = (insuranceType: InsuranceType): boolean =>
-  insuranceType === InsuranceType.BRF ||
-  insuranceType === InsuranceType.STUDENT_BRF
+import { getInsuranceTextKey, getPrebuyPDFTextKey } from 'utils/cdnFilesURL'
+import { InsuranceType } from 'utils/insuranceDomainUtils'
 
 interface TermsProps {
   insuranceType: InsuranceType
@@ -36,19 +33,6 @@ const Link = styled('a')({
   textDecoration: 'none',
 })
 
-const getInsuranceURLTextKey = (insuranceType: InsuranceType): string => {
-  const map = {
-    [InsuranceType.RENT]: 'LEGAL_TEXT_RENT_TEXT',
-    [InsuranceType.BRF]: 'LEGAL_TEXT_BRF_TEXT',
-    [InsuranceType.STUDENT_RENT]: 'LEGAL_TEXT_STUDENT_RENT_TEXT',
-    [InsuranceType.STUDENT_BRF]: 'LEGAL_TEXT_STUDENT_BRF_TEXT',
-  }
-  if (!map[insuranceType]) {
-    throw new Error(`Invalid insurance type ${insuranceType}`)
-  }
-  return map[insuranceType]
-}
-
 export const Legal: React.SFC<TermsProps> = ({ insuranceType }) => (
   <Container>
     <LegalText>
@@ -56,9 +40,7 @@ export const Legal: React.SFC<TermsProps> = ({ insuranceType }) => (
         textKey="OFFER_FOOTER_LEGAL_TEXT_TEST"
         replacements={{
           preBuy: (
-            <TranslationsConsumer
-              textKey={getInsuranceURLTextKey(insuranceType)}
-            >
+            <TranslationsConsumer textKey={getPrebuyPDFTextKey(insuranceType)}>
               {(url) => (
                 <Link href={url} rel="noreferrer noopener" target="_blank">
                   <TranslationsConsumer textKey="OFFER_FOOTER_PREBUY">
@@ -69,9 +51,7 @@ export const Legal: React.SFC<TermsProps> = ({ insuranceType }) => (
             </TranslationsConsumer>
           ),
           terms: (
-            <TranslationsConsumer
-              textKey={getInsuranceURLTextKey(insuranceType)}
-            >
+            <TranslationsConsumer textKey={getInsuranceTextKey(insuranceType)}>
               {(url) => (
                 <Link href={url} rel="noreferrer noopener" target="_blank">
                   <TranslationsConsumer textKey="OFFER_FOOTER_TERMS">

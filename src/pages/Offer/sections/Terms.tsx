@@ -1,13 +1,10 @@
 import { colors, fonts } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
-import { InsuranceType } from 'containers/OfferContainer'
 import * as React from 'react'
 import styled from 'react-emotion'
+import { getInsuranceTextKey, getPrebuyPDFTextKey } from 'utils/cdnFilesURL'
+import { InsuranceType } from 'utils/insuranceDomainUtils'
 import { HeaderWrapper } from '../components/HeaderWrapper'
-
-const isApartmentOwner = (insuranceType: InsuranceType): boolean =>
-  insuranceType === InsuranceType.BRF ||
-  insuranceType === InsuranceType.STUDENT_BRF
 
 interface TermsProps {
   insuranceType: InsuranceType
@@ -86,13 +83,7 @@ export const Terms: React.SFC<TermsProps> = ({ insuranceType }) => (
     </HeaderWrapper>
     <Row>
       <Col>
-        <TranslationsConsumer
-          textKey={
-            isApartmentOwner(insuranceType)
-              ? 'TERMS_PDF_PREBUY_OWNER_URL'
-              : 'TERMS_PDF_PREBUY_RENT_URL'
-          }
-        >
+        <TranslationsConsumer textKey={getPrebuyPDFTextKey(insuranceType)}>
           {(url) => (
             <PerilLink href={url} rel="noreferrer noopener" target="_blank">
               <PDFTag>PDF</PDFTag>
@@ -106,13 +97,7 @@ export const Terms: React.SFC<TermsProps> = ({ insuranceType }) => (
         </TranslationsConsumer>
       </Col>
       <Col>
-        <TranslationsConsumer
-          textKey={
-            isApartmentOwner(insuranceType)
-              ? 'TERMS_PDF_INSURANCE_OWNER_URL'
-              : 'TERMS_PDF_INSURANCE_RENT_URL'
-          }
-        >
+        <TranslationsConsumer textKey={getInsuranceTextKey(insuranceType)}>
           {(url) => (
             <PerilLink href={url} rel="noreferrer noopener" target="_blank">
               <PDFTag>PDF</PDFTag>
