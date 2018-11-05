@@ -23,7 +23,6 @@ jest.mock('../client/apolloClient', () => ({
     },
   },
 }))
-jest.mock('uuid/v4', () => () => '1')
 it('picks up any stored session token in session without actually creating a new session', () => {
   const wrapper = mount(
     <MockedProvider>
