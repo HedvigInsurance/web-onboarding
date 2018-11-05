@@ -18,7 +18,7 @@ const StudentBadgeWrapper = styled('div')(
     borderRadius: '50%',
 
     '@media (max-width: 560px)': {
-      display: 'none', // TOOD fixme (this is a quick hack to get it working on desktop but not break mobile completely)
+      display: 'none', // TODO fixme (this is a quick hack to get it working on desktop but not break mobile completely)
     },
   }),
 )
