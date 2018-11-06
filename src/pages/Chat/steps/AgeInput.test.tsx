@@ -8,7 +8,7 @@ import { WithStorageProps } from 'utils/StorageContainer'
 import { ChatContainer } from '../state'
 import { AgeInput } from './AgeInput'
 
-it('swallows chars in age input', () => {
+it('only allows chars in age input', () => {
   const handleSubmit = jest.fn()
   const wrapper = mount(
     <Provider<WithStorageProps>
@@ -30,6 +30,10 @@ it('swallows chars in age input', () => {
   wrapper
     .find('input#age')
     .simulate('change', { target: { value: '12', id: 'age' } })
+  expect(wrapper.find('input#age').prop('value')).toBe('12')
+  wrapper
+    .find('input#age')
+    .simulate('change', { target: { value: '1afds2', id: 'age' } })
   expect(wrapper.find('input#age').prop('value')).toBe('12')
 })
 
