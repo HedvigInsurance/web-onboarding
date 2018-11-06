@@ -13,6 +13,7 @@ import {
   TransitionStatus,
 } from 'react-transition-group/Transition'
 import { fadeIn, FadeIn, fadeUp } from '../animations/appearings'
+import { HEIGHT_AND_SCROLL_ANIMATION_TIME } from './conversation'
 
 const fadeOut = keyframes({
   from: {
@@ -140,8 +141,14 @@ export const ChatMessage: React.SFC<ChatMessageProps> = ({
     >
       {({ hasMounted, mount }) => (
         <Mount on={mount}>
-          <AnimateHeight height={hasMounted ? 'auto' : 0}>
-            <AnimateHeight height={isCurrentMessage && hasMounted ? 33 : 0}>
+          <AnimateHeight
+            duration={HEIGHT_AND_SCROLL_ANIMATION_TIME}
+            height={hasMounted ? 'auto' : 0}
+          >
+            <AnimateHeight
+              duration={HEIGHT_AND_SCROLL_ANIMATION_TIME}
+              height={isCurrentMessage && hasMounted ? 33 : 0}
+            >
               {appear ? (
                 <HedvigIcon />
               ) : (
