@@ -170,7 +170,8 @@ export const SignUp: React.SFC = () => (
             <Mutation<boolean, SignOfferMutationVariables>
               mutation={SIGN_MUTATION}
             >
-              {(signOffer, { loading }) => (
+              {(signOffer, { loading, error }) => (
+                /*TODO: HANDLE error 403*/
                 <Formik
                   initialValues={{
                     email: '',
