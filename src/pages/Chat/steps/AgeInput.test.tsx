@@ -25,7 +25,7 @@ it('swallows chars in age input', () => {
   )
   wrapper
     .find('input#age')
-    .simulate('change', { target: { value: 'string', id: 'age' } })
+    .simulate('change', { target: { value: 'characters', id: 'age' } })
   expect(wrapper.find('input#age').prop('value')).toBe('')
   wrapper
     .find('input#age')

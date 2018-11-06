@@ -91,7 +91,6 @@ export const AgeInput: React.SFC<Props & Focusable> = ({
                               /[^\d]/g,
                               '',
                             )}
-                            // onChange={handleChange('age', chatState)}
                             onChange={handleChange('age', chatState)}
                             maxWidth={2}
                             pattern="[0-9]*"
