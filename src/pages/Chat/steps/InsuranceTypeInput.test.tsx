@@ -28,7 +28,10 @@ it('handles form changes', () => {
     .find('input#size')
     .simulate('change', { target: { value: 'characters' } })
   expect(wrapper.find('input#size').prop('value')).toBe('')
-
+  wrapper
+    .find('input#size')
+    .simulate('change', { target: { value: 'fwe31dq123' } })
+  expect(wrapper.find('input#size').prop('value')).toBe('31123')
   expect(wrapper.find('button').prop('disabled')).toBe(true)
 
   wrapper
@@ -39,7 +42,6 @@ it('handles form changes', () => {
   )
   wrapper.find('input#size').simulate('change', { target: { value: '42' } })
   expect(wrapper.find('input#size').prop('value')).toBe('42')
-
   expect(wrapper.find('button').prop('disabled')).toBe(false)
 })
 
