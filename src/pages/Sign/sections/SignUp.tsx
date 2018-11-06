@@ -171,7 +171,6 @@ export const SignUp: React.SFC = () => (
               mutation={SIGN_MUTATION}
             >
               {(signOffer, { loading, error }) => (
-                /*TODO: HANDLE error 403*/
                 <Formik
                   initialValues={{
                     email: '',
@@ -194,7 +193,6 @@ export const SignUp: React.SFC = () => (
                           {(title) => title}
                         </TranslationsConsumer>
                       </InputTitle>
-
                       <TranslationsConsumer textKey="SIGN_INPUT_EMAIL_PLACEHOLDER">
                         {(placeholder) => (
                           <InputField
@@ -237,6 +235,20 @@ export const SignUp: React.SFC = () => (
                         </ErrorMessage>
                       ) : null}
                       <SubscriptionComponent isSignLoading={loading} />
+
+                      {error !== undefined ? (
+                        <pre>
+                          {error.graphQLErrors.map(
+                            ({ message }, i) =>
+                              message === 'Failed to fetch, status: 403' && (
+                                /*TODO: Styled component*/
+                                <div key={i}>
+                                  Du verkar redan vara medlem hos Hedvig.
+                                </div>
+                              ),
+                          )}
+                        </pre>
+                      ) : null}
                     </CustomForm>
                   )}
                 </Formik>
