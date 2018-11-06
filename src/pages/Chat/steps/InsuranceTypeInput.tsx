@@ -116,9 +116,6 @@ const ValidationErrorMaybe: React.SFC<ValidationErrorMaybeProps> = ({
 const formatSquareMeters = (value?: string): string =>
   String(value).replace(/[^\d]/g, '')
 
-const displaySquareMeters = (value: string | number): string | number =>
-  value === 0 ? '' : value
-
 export const InsuranceTypeInput: React.SFC<
   InsuranceTypeInputProps & Focusable
 > = ({
