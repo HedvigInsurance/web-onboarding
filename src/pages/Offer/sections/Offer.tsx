@@ -8,11 +8,13 @@ import { OfferData } from 'containers/OfferContainer'
 import * as React from 'react'
 import styled from 'react-emotion'
 import VisibilitySensor from 'react-visibility-sensor'
+import { isStudentInsurance } from 'utils/insuranceDomainUtils'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { trackEvent } from 'utils/tracking'
 import { CardWrapperSmall } from '../components/CardWrapperSmall'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 import { InnerWrapper } from '../components/InnerWrapper'
+import { StudentBadge } from '../components/StudentOfferBadge'
 
 const ICONWIDTH = 70
 const ICONWIDTHMOBILE = 150
@@ -23,6 +25,7 @@ const Wrapper = styled('div')({
   marginTop: '70px',
   width: '100%',
   backgroundColor: colors.OFF_WHITE,
+  textAlign: 'center',
 })
 
 const Card = styled('div')({
@@ -55,6 +58,11 @@ export const PersonalInfo = styled('div')({
   color: colors.WHITE,
 })
 
+const PriceWrapper = styled('div')({
+  display: 'inline-block',
+  position: 'relative',
+  margin: '0 auto',
+})
 export const Price = styled('h1')({
   marginBottom: '10px',
   marginTop: '30px',
@@ -168,12 +176,17 @@ export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
               {formatPostalNumber(offer.insurance.postalNumber)}
             </PersonalInfo>
           </HeaderBackground>
-          <TranslationsPlaceholderConsumer
-            textKey="OFFER_SUMMARY_PRICE"
-            replacements={{ price: offer.insurance.monthlyCost }}
-          >
-            {(priceText) => <Price>{priceText}</Price>}
-          </TranslationsPlaceholderConsumer>
+          <PriceWrapper>
+            <TranslationsPlaceholderConsumer
+              textKey="OFFER_SUMMARY_PRICE"
+              replacements={{ price: offer.insurance.monthlyCost }}
+            >
+              {(priceText) => <Price>{priceText}</Price>}
+            </TranslationsPlaceholderConsumer>
+            {isStudentInsurance(offer.insurance.type) && (
+              <StudentBadge placement="right" />
+            )}
+          </PriceWrapper>
           <InsuranceInfo>
             <BoldInfoText>
               <TranslationsConsumer textKey="OFFER_SELF_RISK_LABEL">
