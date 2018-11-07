@@ -19,7 +19,7 @@ export const Greet: React.SFC<ChatMessageProps> = ({
         <TranslationsPlaceholderConsumer
           textKey="CHAT_HEDVIG_GREET"
           replacements={{
-            name: nameAge.firstName,
+            name: <span data-hj-supress>{nameAge.firstName}</span>,
           }}
         >
           {(text) => text}

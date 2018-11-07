@@ -278,7 +278,9 @@ export const ChatConversation: React.SFC = () => (
                       ? 'CHAT_HEDVIG_SHOW_OFFER_HAS_INSURANCE'
                       : 'CHAT_HEDVIG_SHOW_OFFER_NO_INSURANCE'
                   }
-                  replacements={{ firstName: nameAge.firstName }}
+                  replacements={{
+                    firstName: <span data-hj-supress>{nameAge.firstName}</span>,
+                  }}
                 >
                   {(t) => t}
                 </TranslationsPlaceholderConsumer>

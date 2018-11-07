@@ -2,7 +2,11 @@ import { colors, fonts } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import styled from 'react-emotion'
-import { InsuranceType } from 'utils/insuranceDomainUtils'
+import {
+  getInsurancePDFTextKey,
+  getPrebuyPDFTextKey,
+  InsuranceType,
+} from 'utils/insuranceDomainUtils'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 
 interface TermsProps {
@@ -71,33 +75,6 @@ const PerilTitle = styled('div')({
   width: '141px',
 })
 
-const getPrebuyPDFTextKey = (insuranceType: InsuranceType): string => {
-  const map = {
-    [InsuranceType.RENT]: 'TERMS_PDF_PREBUY_RENT_URL',
-    [InsuranceType.BRF]: 'TERMS_PDF_PREBUY_BRF_URL',
-    [InsuranceType.STUDENT_RENT]: 'TERMS_PDF_PREBUY_STUDENT_RENT_URL',
-    [InsuranceType.STUDENT_BRF]: 'TERMS_PDF_PREBUY_STUDENT_BRF_URL',
-  }
-
-  if (!map[insuranceType]) {
-    throw new Error(`Invalid insurance type ${insuranceType}`)
-  }
-  return map[insuranceType]
-}
-
-const getInsuranceTextKey = (insuranceType: InsuranceType): string => {
-  const map = {
-    [InsuranceType.RENT]: 'TERMS_PDF_INSURANCE_RENT_URL',
-    [InsuranceType.BRF]: 'TERMS_PDF_INSURANCE_BRF_URL',
-    [InsuranceType.STUDENT_RENT]: 'TERMS_PDF_INSURANCE_STUDENT_RENT_URL',
-    [InsuranceType.STUDENT_BRF]: 'TERMS_PDF_INSURANCE_STUDENT_BRF_URL',
-  }
-
-  if (!map[insuranceType]) {
-    throw new Error(`Invalid insurance type ${insuranceType}`)
-  }
-  return map[insuranceType]
-}
 export const Terms: React.SFC<TermsProps> = ({ insuranceType }) => (
   <Card>
     <HeaderWrapper>
@@ -111,7 +88,7 @@ export const Terms: React.SFC<TermsProps> = ({ insuranceType }) => (
       <Col>
         <TranslationsConsumer textKey={getPrebuyPDFTextKey(insuranceType)}>
           {(url) => (
-            <PerilLink href={url} target="_blank">
+            <PerilLink href={url} rel="noreferrer noopener" target="_blank">
               <PDFTag>PDF</PDFTag>
               <PerilIcon src="/new-member-assets/offering/forkopsinformation.svg" />
 
@@ -123,9 +100,9 @@ export const Terms: React.SFC<TermsProps> = ({ insuranceType }) => (
         </TranslationsConsumer>
       </Col>
       <Col>
-        <TranslationsConsumer textKey={getInsuranceTextKey(insuranceType)}>
+        <TranslationsConsumer textKey={getInsurancePDFTextKey(insuranceType)}>
           {(url) => (
-            <PerilLink href={url} target="_blank">
+            <PerilLink href={url} rel="noreferrer noopener" target="_blank">
               <PDFTag>PDF</PDFTag>
               <PerilIcon src="/new-member-assets/offering/forkopsinformation.svg" />
               <TranslationsConsumer textKey="TERMS_PERIL_TWO_TITLE">

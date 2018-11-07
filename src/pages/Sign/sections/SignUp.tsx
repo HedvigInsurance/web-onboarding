@@ -155,7 +155,9 @@ export const SignUp: React.SFC = () => (
                   <TranslationsPlaceholderConsumer
                     textKey="SIGN_HEADER_TITLE"
                     replacements={{
-                      address: offer.insurance.address,
+                      address: (
+                        <span data-hj-supress>{offer.insurance.address}</span>
+                      ),
                     }}
                   >
                     {(title) => title}
