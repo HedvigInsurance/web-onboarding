@@ -40,7 +40,7 @@ export const Legal: React.SFC<TermsProps> = ({ insuranceType }) => (
   <Container>
     <LegalText>
       <TranslationsPlaceholderConsumer
-        textKey="OFFER_FOOTER_LEGAL_TEXT_TEST"
+        textKey="OFFER_FOOTER_LEGAL_TEXT"
         replacements={{
           preBuy: (
             <TranslationsConsumer textKey={getPrebuyPDFTextKey(insuranceType)}>
