@@ -115,6 +115,12 @@ const InputField = styled(Field)(
   }),
 )
 
+const BankIdError = styled('div')({
+  color: colors.PINK,
+  marginTop: '20px',
+  textAlign: 'center',
+})
+
 const ErrorMessage = styled('div')({
   minHeight: '24px',
   '@media (max-width: 300px)': {
@@ -237,17 +243,17 @@ export const SignUp: React.SFC = () => (
                       <SubscriptionComponent isSignLoading={loading} />
 
                       {error !== undefined ? (
-                        <pre>
+                        <div>
                           {error.graphQLErrors.map(
                             ({ message }, i) =>
                               message === 'Failed to fetch, status: 403' && (
                                 /*TODO: Styled component*/
-                                <div key={i}>
+                                <BankIdError key={i}>
                                   Du verkar redan vara medlem hos Hedvig.
-                                </div>
+                                </BankIdError>
                               ),
                           )}
-                        </pre>
+                        </div>
                       ) : null}
                     </CustomForm>
                   )}
