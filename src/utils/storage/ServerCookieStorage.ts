@@ -19,4 +19,8 @@ export class ServerCookieStorage implements MinimalStorage {
       path: '/new-member',
     })
   }
+
+  public removeItem(item: string, options?: CookieOptions): void {
+    this.setItem(item, '', options)
+  }
 }
