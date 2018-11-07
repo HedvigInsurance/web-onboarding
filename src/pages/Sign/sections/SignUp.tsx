@@ -3,6 +3,7 @@ import {
   TranslationsConsumer,
   TranslationsPlaceholderConsumer,
 } from '@hedviginsurance/textkeyfy'
+import { InputValidationError } from 'components/userInput/UserResponse'
 import { OfferContainer } from 'containers/OfferContainer'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import { Field, Form, Formik } from 'formik'
@@ -12,7 +13,6 @@ import { Mutation } from 'react-apollo'
 import styled from 'react-emotion'
 import * as Yup from 'yup'
 import { SubscriptionComponent } from './SignSubscription'
-
 const CARDWIDTH = 788
 const HEADERWIDTH = 400
 const FORMWIDTH = 300
@@ -114,12 +114,6 @@ const InputField = styled(Field)(
     },
   }),
 )
-
-const BankIdError = styled('div')({
-  color: colors.PINK,
-  marginTop: '20px',
-  textAlign: 'center',
-})
 
 const ErrorMessage = styled('div')({
   minHeight: '24px',
@@ -242,19 +236,26 @@ export const SignUp: React.SFC = () => (
                       ) : null}
                       <SubscriptionComponent isSignLoading={loading} />
 
-                      {error !== undefined ? (
-                        <div>
-                          {error.graphQLErrors.map(
-                            ({ message }, i) =>
-                              message === 'Failed to fetch, status: 403' && (
-                                /*TODO: Styled component*/
-                                <BankIdError key={i}>
-                                  Du verkar redan vara medlem hos Hedvig.
-                                </BankIdError>
-                              ),
-                          )}
-                        </div>
-                      ) : null}
+                      {error !== undefined && (
+                        <InputValidationError
+                          style={{ paddingTop: '20px', textAlign: 'center' }}
+                        >
+                          <TranslationsConsumer textKey="SIGN_BANKID_GENERIC_ERROR">
+                            {(text) => text}
+                          </TranslationsConsumer>
+                        </InputValidationError>
+                      ) // <div>
+                      //   {error.graphQLErrors.map(
+                      //     ({ message }, i) =>
+                      //       message === 'Failed to fetch, status: 403' && (
+                      //         /*TODO: Styled component*/
+                      //         <BankIdError key={i}>
+                      //           Du verkar redan vara medlem hos Hedvig.
+                      //         </BankIdError>
+                      //       ),
+                      //   )}
+                      // </div>
+                      }
                     </CustomForm>
                   )}
                 </Formik>
