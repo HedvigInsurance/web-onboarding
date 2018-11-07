@@ -116,6 +116,9 @@ const ValidationErrorMaybe: React.SFC<ValidationErrorMaybeProps> = ({
 const formatSquareMeters = (value?: string): string =>
   String(value).replace(/[^\d]/g, '')
 
+const displaySquareMeters = (value: string | number): string | number =>
+  value === 0 ? '' : value
+
 export const InsuranceTypeInput: React.SFC<
   InsuranceTypeInputProps & Focusable
 > = ({
@@ -180,7 +183,7 @@ export const InsuranceTypeInput: React.SFC<
                   type="text"
                   id="size"
                   maxWidth={3}
-                  value={chatState.livingSituation.size}
+                  value={displaySquareMeters(chatState.livingSituation.size)}
                   onChange={handleChange('size', chatState, formatSquareMeters)}
                   pattern="[0-9]*"
                   hasError={hasValidationErrorForKey(
