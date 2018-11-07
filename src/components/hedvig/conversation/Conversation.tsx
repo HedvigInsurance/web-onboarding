@@ -6,6 +6,7 @@ import { MessageProps } from './Message'
 const CONTAINER_PADDING = 20
 const NEXT_BUTTON_SPACING = 40
 const INTERCOM_SPACING = 80
+export const HEIGHT_AND_SCROLL_ANIMATION_TIME = 250
 
 export const ConversationWrapper = styled('div')({
   maxWidth: 1000,
