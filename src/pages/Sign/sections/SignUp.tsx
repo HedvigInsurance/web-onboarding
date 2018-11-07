@@ -244,18 +244,7 @@ export const SignUp: React.SFC = () => (
                             {(text) => text}
                           </TranslationsConsumer>
                         </InputValidationError>
-                      ) // <div>
-                      //   {error.graphQLErrors.map(
-                      //     ({ message }, i) =>
-                      //       message === 'Failed to fetch, status: 403' && (
-                      //         /*TODO: Styled component*/
-                      //         <BankIdError key={i}>
-                      //           Du verkar redan vara medlem hos Hedvig.
-                      //         </BankIdError>
-                      //       ),
-                      //   )}
-                      // </div>
-                      }
+                      )}
                     </CustomForm>
                   )}
                 </Formik>
