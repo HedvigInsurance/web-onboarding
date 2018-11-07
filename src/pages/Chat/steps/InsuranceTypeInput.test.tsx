@@ -24,6 +24,14 @@ it('handles form changes', () => {
     </Provider>,
   )
 
+  wrapper
+    .find('input#size')
+    .simulate('change', { target: { value: 'characters' } })
+  expect(wrapper.find('input#size').prop('value')).toBe('')
+  wrapper
+    .find('input#size')
+    .simulate('change', { target: { value: 'fwe31dq123' } })
+  expect(wrapper.find('input#size').prop('value')).toBe('31123')
   expect(wrapper.find('button').prop('disabled')).toBe(true)
 
   wrapper
@@ -32,9 +40,8 @@ it('handles form changes', () => {
   expect(wrapper.find('select#insuranceType').prop('value')).toBe(
     InsuranceType.RENT,
   )
-  wrapper.find('input#size').simulate('change', { target: { value: 42 } })
-  expect(wrapper.find('input#size').prop('value')).toBe(42)
-
+  wrapper.find('input#size').simulate('change', { target: { value: '42' } })
+  expect(wrapper.find('input#size').prop('value')).toBe('42')
   expect(wrapper.find('button').prop('disabled')).toBe(false)
 })
 
@@ -53,8 +60,8 @@ it('handles too big apartment', () => {
     </Provider>,
   )
 
-  wrapper.find('input#size').simulate('change', { target: { value: 1337 } })
-  expect(wrapper.find('input#size').prop('value')).toBe(1337)
+  wrapper.find('input#size').simulate('change', { target: { value: '1337' } })
+  expect(wrapper.find('input#size').prop('value')).toBe('1337')
   expect(wrapper.find('button').prop('disabled')).toBe(true)
   expect(wrapper.find(InputValidationError)).toHaveLength(1)
 })
