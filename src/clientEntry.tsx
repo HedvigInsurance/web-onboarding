@@ -13,9 +13,7 @@ const session = createSession<Session>(
   new CookieStorage({ expires: null, path: '/new-member' }),
 )
 
-window.setTimeout(() => {
-  window.setInterval(() => session.keepAlive(), 60 * 1000)
-}, 60 * 1000)
+window.setInterval(() => session.keepAlive(), 5 * 1000)
 
 ReactDOM.hydrate(
   <BrowserRouter>

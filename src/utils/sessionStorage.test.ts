@@ -21,20 +21,11 @@ it('keeps session alive and expires once it times out', () => {
 
   const storage2 = new MockStorage({
     [SESSION_KEY]: '{"hello":"world"}',
-    [KA_SESSION_KEY]: Date.now() - 31 * 60 * 1000,
+    [KA_SESSION_KEY]: Date.now() - (30 * 60 * 1000 + 1),
   })
   const expiredSession = createSession(storage2)
   expect(expiredSession.getSession()).toEqual({})
 
   expiredSession.keepAlive()
   expect(expiredSession.getSession()).toEqual({})
-
-  const storage3 = new MockStorage({
-    [SESSION_KEY]: '{"hello":"world"}',
-    [KA_SESSION_KEY]: Date.now() - 31 * 60 * 1000,
-  })
-  const expiredSession2 = createSession(storage3)
-  expiredSession2.keepAlive()
-
-  expect(expiredSession2.getSession()).toEqual({ hello: 'world' })
 })
