@@ -28,8 +28,16 @@ it('handles form changes', () => {
   )
   wrapper
     .find('input#age')
-    .simulate('change', { target: { value: 12, id: 'age' } })
-  expect(wrapper.find('input#age').prop('value')).toBe(12)
+    .simulate('change', { target: { value: 'characters', id: 'age' } })
+  expect(wrapper.find('input#age').prop('value')).toBe('')
+  wrapper
+    .find('input#age')
+    .simulate('change', { target: { value: '1afds2', id: 'age' } })
+  expect(wrapper.find('input#age').prop('value')).toBe('12')
+  wrapper
+    .find('input#age')
+    .simulate('change', { target: { value: '12', id: 'age' } })
+  expect(wrapper.find('input#age').prop('value')).toBe('12')
 })
 
 it("doesn't submit empty forms", () => {

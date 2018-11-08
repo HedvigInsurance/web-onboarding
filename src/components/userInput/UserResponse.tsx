@@ -5,6 +5,7 @@ import AnimateHeight from 'react-animate-height'
 import styled from 'react-emotion'
 import { Mount } from 'react-lifecycle-components'
 import { FadeIn, FadeUp } from '../animations/appearings'
+import { HEIGHT_AND_SCROLL_ANIMATION_TIME } from '../hedvig/conversation'
 
 interface InputProps {
   hasError?: boolean
@@ -166,7 +167,10 @@ const UserResponseWrapper: React.SFC<{
     >
       {({ hasMounted, mount }) => (
         <Mount on={mount}>
-          <AnimateHeight height={hasMounted ? 'auto' : 0}>
+          <AnimateHeight
+            duration={HEIGHT_AND_SCROLL_ANIMATION_TIME}
+            height={hasMounted ? 'auto' : 0}
+          >
             <FadeIn className={className}>
               <FadeUp>{children}</FadeUp>
             </FadeIn>

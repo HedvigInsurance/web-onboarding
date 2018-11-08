@@ -29,8 +29,7 @@ interface InsuranceTypeInputProps {
 const handleChange = <K extends keyof LivingSituationState>(
   field: K,
   chatState: ChatActions,
-  format: (val?: string | number) => undefined | string | number = (value) =>
-    value,
+  format: (val?: string) => undefined | string = (value) => value,
 ) => (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
   chatState.setLivingSituationProp(field, format(event.target.value))
 }
@@ -48,25 +47,22 @@ const validationSchema = yup
       .max(250, 'CHAT_INPUT_INSURANCE_TYPE_SIZE_TOO_BIG')
       .required('noop'),
   })
-
   .required()
 
 export const isInsuranceTypeDone = (
   values: Partial<LivingSituationState> = {},
 ) => {
-  try {
-    validationSchema.validateSync(values)
-    return true
-  } catch (e) {
-    return false
-  }
+  return !getValidationError(values)
 }
 
 const getValidationError = (
   values: Partial<LivingSituationState> = {},
 ): [string, string] | null => {
   try {
-    validationSchema.validateSync(values)
+    validationSchema.validateSync({
+      insuranceType: values.insuranceType,
+      size: Number(values.size),
+    })
     return null
   } catch (e) {
     return [e.params.path, e.message]
@@ -83,7 +79,6 @@ const hasValidationErrorForKey = (
   if (validationError[0] !== key) {
     return false
   }
-
   if (validationError[1] === 'noop') {
     return false
   }
@@ -118,8 +113,8 @@ const ValidationErrorMaybe: React.SFC<ValidationErrorMaybeProps> = ({
   return null
 }
 
-const formatSquareMeters = (value?: string | number): number =>
-  !value ? 0 : Number(value)
+const formatSquareMeters = (value?: string): string =>
+  String(value).replace(/[^\d]/g, '')
 
 const displaySquareMeters = (value: string | number): string | number =>
   value === 0 ? '' : value
@@ -185,7 +180,7 @@ export const InsuranceTypeInput: React.SFC<
               ),
               size: (
                 <UserTextInput
-                  type="number"
+                  type="text"
                   id="size"
                   maxWidth={3}
                   value={displaySquareMeters(chatState.livingSituation.size)}

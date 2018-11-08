@@ -28,7 +28,7 @@ interface Props {
 const handleChange = <K extends keyof NameAgeState>(
   field: K,
   chatState: ChatActions,
-) => (event: React.ChangeEvent<HTMLInputElement>) => {
+) => (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
   chatState.setNameAgeProp(field, event.target.value)
 }
 
@@ -83,11 +83,14 @@ export const AgeInput: React.SFC<Props & Focusable> = ({
                       <TranslationsConsumer textKey="CHAT_INPUT_AGE_AGE_PLACEHOLDER">
                         {(placeholder) => (
                           <UserTextInput
-                            type="number"
+                            type="text"
                             id="age"
                             placeholder={placeholder}
                             step={1}
-                            value={chatState.nameAge.age}
+                            value={String(chatState.nameAge.age).replace(
+                              /[^\d]/g,
+                              '',
+                            )}
                             onChange={handleChange('age', chatState)}
                             maxWidth={2}
                             pattern="[0-9]*"
