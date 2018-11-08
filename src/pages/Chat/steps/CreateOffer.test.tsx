@@ -149,6 +149,7 @@ it('creates an offer without 💥', async () => {
     {
       request: {
         query: CREATE_SESSION_TOKEN_MUTATION,
+        variables: { campaign: undefined, trackingId: '1' },
       },
       result: {
         data: {
