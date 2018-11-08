@@ -33,15 +33,15 @@ export const mockState = (): ChatState => ({
 export const mockOffer: OfferData = {
   insurance: {
     address: 'Testvägen 1',
-    monthlyCost: 170,
-    insuredAtOtherCompany: true,
-    type: InsuranceType.BRF,
-    postalNumber: '132 32',
+    monthlyCost: 99,
+    insuredAtOtherCompany: false,
+    type: InsuranceType.RENT,
+    postalNumber: '12345',
     personsInHousehold: 1,
   },
   member: {
-    firstName: 'Testar',
-    lastName: 'Testsson',
+    firstName: 'Test',
+    lastName: 'Testerson',
   },
 }
 

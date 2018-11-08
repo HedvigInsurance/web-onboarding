@@ -2,7 +2,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import ApolloClient from 'apollo-client'
 import { split } from 'apollo-link'
 import { Provider } from 'constate'
-import { OFFER_QUERY, OfferContainer } from 'containers/OfferContainer'
+import { OFFER_QUERY } from 'containers/OfferContainer'
 import { mount } from 'enzyme'
 import { mockOffer } from 'pages/Chat/utils/test-utils'
 import * as React from 'react'
@@ -97,7 +97,7 @@ it('queries when it has a session', async () => {
   await mockNetworkWait()
   wrapper.update()
   expect(wrapper.find(Redirect)).toHaveLength(0)
-  expect(wrapper.find(OfferContainer).text()).toBe('Testvägen 1')
+  expect(wrapper.find(SignUp).text()).toContain('Testvägen 1')
 })
 
 it('signs without 💥', async () => {
