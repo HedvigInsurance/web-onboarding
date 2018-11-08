@@ -3,6 +3,7 @@ import {
   TranslationsConsumer,
   TranslationsPlaceholderConsumer,
 } from '@hedviginsurance/textkeyfy'
+import { InputValidationError } from 'components/userInput/UserResponse'
 import { OfferContainer } from 'containers/OfferContainer'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import { Field, Form, Formik } from 'formik'
@@ -12,7 +13,6 @@ import { Mutation } from 'react-apollo'
 import styled from 'react-emotion'
 import * as Yup from 'yup'
 import { SubscriptionComponent } from './SignSubscription'
-
 const CARDWIDTH = 788
 const HEADERWIDTH = 400
 const FORMWIDTH = 300
@@ -82,6 +82,11 @@ const CustomForm = styled(Form)({
   '@media (max-width: 300px)': {
     minWidth: FORMWIDTHSMALL,
   },
+})
+
+const BankIDError = styled(InputValidationError)({
+  paddingTop: '20px',
+  textAlign: 'center',
 })
 
 const InputField = styled(Field)(
@@ -170,7 +175,7 @@ export const SignUp: React.SFC = () => (
             <Mutation<boolean, SignOfferMutationVariables>
               mutation={SIGN_MUTATION}
             >
-              {(signOffer, { loading }) => (
+              {(signOffer, { loading, error }) => (
                 <Formik
                   initialValues={{
                     email: '',
@@ -193,7 +198,6 @@ export const SignUp: React.SFC = () => (
                           {(title) => title}
                         </TranslationsConsumer>
                       </InputTitle>
-
                       <TranslationsConsumer textKey="SIGN_INPUT_EMAIL_PLACEHOLDER">
                         {(placeholder) => (
                           <InputField
@@ -236,6 +240,14 @@ export const SignUp: React.SFC = () => (
                         </ErrorMessage>
                       ) : null}
                       <SubscriptionComponent isSignLoading={loading} />
+
+                      {error !== undefined && (
+                        <BankIDError>
+                          <TranslationsConsumer textKey="SIGN_BANKID_GENERIC_ERROR">
+                            {(text) => text}
+                          </TranslationsConsumer>
+                        </BankIDError>
+                      )}
                     </CustomForm>
                   )}
                 </Formik>
