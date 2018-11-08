@@ -4,6 +4,7 @@ import { split } from 'apollo-link'
 import { Provider } from 'constate'
 import { OFFER_QUERY, OfferContainer } from 'containers/OfferContainer'
 import { mount } from 'enzyme'
+import { mockOffer } from 'pages/Chat/utils/test-utils'
 import * as React from 'react'
 import { ApolloProvider } from 'react-apollo'
 import {
@@ -85,7 +86,7 @@ it('queries when it has a session', async () => {
             }}
           >
             <MockTextKeyProvider textKeys={{ SIGN_HEADER_TITLE: '{address}' }}>
-              <SignUp />
+              <SignUp offer={mockOffer} />
             </MockTextKeyProvider>
           </Provider>
         </MockedProvider>
@@ -171,7 +172,7 @@ it('signs without 💥', async () => {
             }}
           >
             <MockTextKeyProvider textKeys={{ SIGN_HEADER_TITLE: '{address}' }}>
-              <SignUp />
+              <SignUp offer={mockOffer} />
             </MockTextKeyProvider>
           </Provider>
         </ApolloProvider>
@@ -287,7 +288,7 @@ it('shows an error when bankid errors', async () => {
             }}
           >
             <MockTextKeyProvider textKeys={{ SIGN_HEADER_TITLE: '{address}' }}>
-              <SignUp />
+              <SignUp offer={mockOffer} />
             </MockTextKeyProvider>
           </Provider>
         </ApolloProvider>
@@ -401,7 +402,7 @@ it('renders correct status when sign status query has a status', async () => {
             }}
           >
             <MockTextKeyProvider textKeys={{ SIGN_HEADER_TITLE: '{address}' }}>
-              <SignUp />
+              <SignUp offer={mockOffer} />
             </MockTextKeyProvider>
           </Provider>
         </ApolloProvider>

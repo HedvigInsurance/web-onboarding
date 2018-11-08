@@ -3,13 +3,13 @@ import {
   TranslationsConsumer,
   TranslationsPlaceholderConsumer,
 } from '@hedviginsurance/textkeyfy'
-import { OfferContainer } from 'containers/OfferContainer'
-import { SessionTokenGuard } from 'containers/SessionTokenGuard'
+import { OfferData } from 'containers/OfferContainer'
 import { Field, Form, Formik } from 'formik'
 import gql from 'graphql-tag'
 import * as React from 'react'
 import { Mutation } from 'react-apollo'
 import styled from 'react-emotion'
+import { formatPostalNumber } from 'utils/postalNumbers'
 import * as Yup from 'yup'
 import { SubscriptionComponent } from './SignSubscription'
 
@@ -18,17 +18,10 @@ const HEADERWIDTH = 400
 const FORMWIDTH = 300
 const FORMWIDTHSMALL = 100
 
-const OuterWrapper = styled('div')({
-  width: '100%',
-  height: '100%',
-  backgroundColor: colors.OFF_WHITE,
-  position: 'absolute',
-  bottom: 0,
-})
-
 const CardWrapper = styled('div')({
   marginLeft: 'auto',
   marginRight: 'auto',
+  marginBottom: '30px',
   minWidth: CARDWIDTH,
   maxWidth: CARDWIDTH,
   [`@media (max-width: ${CARDWIDTH}px)`]: {
@@ -40,11 +33,16 @@ const CardWrapper = styled('div')({
 
 const Card = styled('div')({
   marginTop: '140px',
-  paddingTop: '30px',
   paddingBottom: '30px',
   backgroundColor: colors.WHITE,
   boxShadow: '0px 8px 40px -12px rgba(0,0,0,0.67)',
   borderRadius: '10px',
+})
+
+const HeaderBackground = styled('div')({
+  backgroundColor: colors.PURPLE,
+  borderTopLeftRadius: '10px',
+  borderTopRightRadius: '10px',
 })
 
 const HeaderWrapper = styled('div')({
@@ -53,12 +51,12 @@ const HeaderWrapper = styled('div')({
   marginRight: 'auto',
   fontFamily: fonts.SORAY,
   fontWeight: 'normal',
-  lineHeight: '40px',
+  lineHeight: 1.3,
   textAlign: 'center',
 })
 
 const Header = styled('h1')({
-  color: colors.BLACK,
+  color: colors.WHITE,
   marginTop: '0px',
   paddingTop: '30px',
   marginBottom: '10px',
@@ -123,6 +121,15 @@ const ErrorMessage = styled('div')({
   },
 })
 
+export const PersonalInfo = styled('div')({
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  paddingBottom: '30px',
+  textAlign: 'center',
+  maxWidth: '100%',
+  color: colors.WHITE,
+})
+
 const userSchema = Yup.object().shape({
   email: Yup.string()
     .email('SIGN_EMAIL_CHECK')
@@ -143,107 +150,109 @@ interface SignOfferMutationVariables {
   email: string
 }
 
-export const SignUp: React.SFC = () => (
-  <SessionTokenGuard>
-    <OuterWrapper>
-      <CardWrapper>
-        <Card>
-          <HeaderWrapper>
-            <Header>
-              <OfferContainer>
-                {(offer) => (
-                  <TranslationsPlaceholderConsumer
-                    textKey="SIGN_HEADER_TITLE"
-                    replacements={{
-                      address: (
-                        <span data-hj-supress>{offer.insurance.address}</span>
-                      ),
-                    }}
-                  >
-                    {(title) => title}
-                  </TranslationsPlaceholderConsumer>
-                )}
-              </OfferContainer>
-            </Header>
-          </HeaderWrapper>
-          <>
-            <Mutation<boolean, SignOfferMutationVariables>
-              mutation={SIGN_MUTATION}
-            >
-              {(signOffer, { loading }) => (
-                <Formik
-                  initialValues={{
-                    email: '',
-                    personalNumber: '',
-                  }}
-                  validationSchema={userSchema}
-                  onSubmit={(values) =>
-                    signOffer({
-                      variables: {
-                        personalNumber: values.personalNumber,
-                        email: values.email,
-                      },
-                    })
-                  }
-                >
-                  {({ errors, touched }) => (
-                    <CustomForm>
-                      <InputTitle>
-                        <TranslationsConsumer textKey="SIGN_INPUT_ONE_TITLE">
-                          {(title) => title}
-                        </TranslationsConsumer>
-                      </InputTitle>
+interface SignUpProps {
+  offer: OfferData
+}
 
-                      <TranslationsConsumer textKey="SIGN_INPUT_EMAIL_PLACEHOLDER">
-                        {(placeholder) => (
-                          <InputField
-                            name="email"
-                            id="email"
-                            touched={touched.email}
-                            errors={errors.email}
-                            placeholder={placeholder}
-                          />
-                        )}
+export const SignUp: React.SFC<SignUpProps> = ({ offer }) => (
+  <CardWrapper>
+    <Card>
+      <HeaderBackground>
+        <HeaderWrapper>
+          <Header>
+            <TranslationsPlaceholderConsumer
+              textKey="SIGN_HEADER_TITLE"
+              replacements={{
+                address: <span data-hj-supress>{offer.insurance.address}</span>,
+              }}
+            >
+              {(title) => title}
+            </TranslationsPlaceholderConsumer>
+          </Header>
+        </HeaderWrapper>
+        <PersonalInfo data-hj-supress>
+          {`${offer.member.firstName} ${offer.member.lastName}`}
+          {' · '}
+          {offer.insurance.address}
+          {' · '}
+          {formatPostalNumber(offer.insurance.postalNumber)}
+        </PersonalInfo>
+      </HeaderBackground>
+
+      <>
+        <Mutation<boolean, SignOfferMutationVariables> mutation={SIGN_MUTATION}>
+          {(signOffer, { loading }) => (
+            <Formik
+              initialValues={{
+                email: '',
+                personalNumber: '',
+              }}
+              validationSchema={userSchema}
+              onSubmit={(values) =>
+                signOffer({
+                  variables: {
+                    personalNumber: values.personalNumber,
+                    email: values.email,
+                  },
+                })
+              }
+            >
+              {({ errors, touched }) => (
+                <CustomForm>
+                  <InputTitle>
+                    <TranslationsConsumer textKey="SIGN_INPUT_ONE_TITLE">
+                      {(title) => title}
+                    </TranslationsConsumer>
+                  </InputTitle>
+
+                  <TranslationsConsumer textKey="SIGN_INPUT_EMAIL_PLACEHOLDER">
+                    {(placeholder) => (
+                      <InputField
+                        name="email"
+                        id="email"
+                        touched={touched.email}
+                        errors={errors.email}
+                        placeholder={placeholder}
+                      />
+                    )}
+                  </TranslationsConsumer>
+                  {errors.email && touched.email ? (
+                    <ErrorMessage>
+                      <TranslationsConsumer textKey={errors.email}>
+                        {(errorMessage) => errorMessage}
                       </TranslationsConsumer>
-                      {errors.email && touched.email ? (
-                        <ErrorMessage>
-                          <TranslationsConsumer textKey={errors.email}>
-                            {(errorMessage) => errorMessage}
-                          </TranslationsConsumer>
-                        </ErrorMessage>
-                      ) : null}
-                      <InputTitle>
-                        <TranslationsConsumer textKey="SIGN_INPUT_TWO_TITLE">
-                          {(title) => title}
-                        </TranslationsConsumer>
-                      </InputTitle>
-                      <TranslationsConsumer textKey="SIGN_INPUT_PERSONAL_NUMBER_PLACEHOLDER">
-                        {(placeholder) => (
-                          <InputField
-                            name="personalNumber"
-                            id="personalNumber"
-                            touched={touched.personalNumber}
-                            errors={errors.personalNumber}
-                            placeholder={placeholder}
-                          />
-                        )}
+                    </ErrorMessage>
+                  ) : null}
+                  <InputTitle>
+                    <TranslationsConsumer textKey="SIGN_INPUT_TWO_TITLE">
+                      {(title) => title}
+                    </TranslationsConsumer>
+                  </InputTitle>
+                  <TranslationsConsumer textKey="SIGN_INPUT_PERSONAL_NUMBER_PLACEHOLDER">
+                    {(placeholder) => (
+                      <InputField
+                        name="personalNumber"
+                        id="personalNumber"
+                        touched={touched.personalNumber}
+                        errors={errors.personalNumber}
+                        placeholder={placeholder}
+                      />
+                    )}
+                  </TranslationsConsumer>
+                  {errors.personalNumber && touched.personalNumber ? (
+                    <ErrorMessage>
+                      <TranslationsConsumer textKey={errors.personalNumber}>
+                        {(errorMessage) => errorMessage}
                       </TranslationsConsumer>
-                      {errors.personalNumber && touched.personalNumber ? (
-                        <ErrorMessage>
-                          <TranslationsConsumer textKey={errors.personalNumber}>
-                            {(errorMessage) => errorMessage}
-                          </TranslationsConsumer>
-                        </ErrorMessage>
-                      ) : null}
-                      <SubscriptionComponent isSignLoading={loading} />
-                    </CustomForm>
-                  )}
-                </Formik>
+                    </ErrorMessage>
+                  ) : null}
+                  <SubscriptionComponent isSignLoading={loading} />
+                </CustomForm>
               )}
-            </Mutation>
-          </>
-        </Card>
-      </CardWrapper>
-    </OuterWrapper>
-  </SessionTokenGuard>
+            </Formik>
+          )}
+        </Mutation>
+      </>
+    </Card>
+  </CardWrapper>
 )

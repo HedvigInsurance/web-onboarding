@@ -1,3 +1,4 @@
+import { OfferData } from 'containers/OfferContainer'
 import { MockedResponse } from 'react-apollo/test-links'
 import { InsuranceType } from 'utils/insuranceDomainUtils'
 import {
@@ -28,6 +29,21 @@ export const mockState = (): ChatState => ({
   initialVisibleSteps: [],
   visibleSteps: [],
 })
+
+export const mockOffer: OfferData = {
+  insurance: {
+    address: 'Testvägen 1',
+    monthlyCost: 170,
+    insuredAtOtherCompany: true,
+    type: InsuranceType.BRF,
+    postalNumber: '132 32',
+    personsInHousehold: 1,
+  },
+  member: {
+    firstName: 'Testar',
+    lastName: 'Testsson',
+  },
+}
 
 export const createCreateOfferMutationMock = (
   isStudent: boolean = false,
