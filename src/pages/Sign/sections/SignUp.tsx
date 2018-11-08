@@ -84,6 +84,11 @@ const CustomForm = styled(Form)({
   },
 })
 
+const BankIDError = styled(InputValidationError)({
+  paddingTop: '20px',
+  textAlign: 'center',
+})
+
 const InputField = styled(Field)(
   ({ touched, errors }: { touched?: boolean; errors?: string }) => ({
     marginTop: '10px',
@@ -237,13 +242,11 @@ export const SignUp: React.SFC = () => (
                       <SubscriptionComponent isSignLoading={loading} />
 
                       {error !== undefined && (
-                        <InputValidationError
-                          style={{ paddingTop: '20px', textAlign: 'center' }}
-                        >
+                        <BankIDError>
                           <TranslationsConsumer textKey="SIGN_BANKID_GENERIC_ERROR">
                             {(text) => text}
                           </TranslationsConsumer>
-                        </InputValidationError>
+                        </BankIDError>
                       )}
                     </CustomForm>
                   )}
