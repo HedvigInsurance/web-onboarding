@@ -5,12 +5,12 @@ import { Page } from 'components/utils/Page'
 import { ActionMap, Container } from 'constate'
 import { OfferContainer } from 'containers/OfferContainer'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
+import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
 import styled from 'react-emotion'
 import Helmet from 'react-helmet-async'
-import { Mount } from 'react-lifecycle-components'
 import { Link } from 'react-router-dom'
-import { trackEvent } from 'utils/tracking'
+import { getUtmParamsFromCookie, Track, TrackAction } from 'utils/tracking'
 import { CardWrapper } from './components/CardWrapper'
 import { InnerWrapper } from './components/InnerWrapper'
 import { Wrapper } from './components/Wrapper'
@@ -95,13 +95,15 @@ export const Offering: React.SFC<{}> = () => (
           const { insuredAtOtherCompany } = offer.insurance
 
           return (
-            <Mount
-              on={() =>
-                trackEvent('Product Viewed', {
+            <Track
+              event={{
+                name: SemanticEvents.Ecommerce.ProductViewed,
+                properties: {
                   category: 'offer',
                   value: offer.insurance.monthlyCost,
-                })
-              }
+                  ...getUtmParamsFromCookie(),
+                },
+              }}
             >
               <TranslationsConsumer textKey="OFFER_PAGE_TITLE">
                 {(title) => (
@@ -135,20 +137,28 @@ export const Offering: React.SFC<{}> = () => (
                           lowerSignButtonVisible={!state.lowerSignButtonVisible}
                         >
                           <GetInsuredButton>
-                            <LinkTag
-                              to={'/new-member/sign'}
-                              onClick={() =>
-                                trackEvent('Checkout Started', {
+                            <TrackAction
+                              event={{
+                                name: SemanticEvents.Ecommerce.CheckoutStarted,
+                                properties: {
                                   category: 'offer',
                                   value: offer.insurance.monthlyCost,
                                   label: 'TopBar',
-                                })
-                              }
+                                  ...getUtmParamsFromCookie(),
+                                },
+                              }}
                             >
-                              <TranslationsConsumer textKey="TOP_BAR_SIGN_BUTTON">
-                                {(text) => text}
-                              </TranslationsConsumer>
-                            </LinkTag>
+                              {({ track }) => (
+                                <LinkTag
+                                  to={'/new-member/sign'}
+                                  onClick={() => track()}
+                                >
+                                  <TranslationsConsumer textKey="TOP_BAR_SIGN_BUTTON">
+                                    {(text) => text}
+                                  </TranslationsConsumer>
+                                </LinkTag>
+                              )}
+                            </TrackAction>
                           </GetInsuredButton>
                         </BarButtonWrapper>
                       }
@@ -182,7 +192,7 @@ export const Offering: React.SFC<{}> = () => (
                   </>
                 )}
               </Container>
-            </Mount>
+            </Track>
           )
         }}
       </OfferContainer>

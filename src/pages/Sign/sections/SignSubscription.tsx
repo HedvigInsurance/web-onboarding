@@ -2,12 +2,13 @@ import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { ApolloError } from 'apollo-client'
 import gql from 'graphql-tag'
+import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
 import { Query } from 'react-apollo'
 import styled, { keyframes } from 'react-emotion'
 import { Mount } from 'react-lifecycle-components/dist'
 import { Redirect } from 'react-router-dom'
-import { trackEvent } from 'utils/tracking'
+import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
 
 const spin = keyframes({
   from: { transform: 'rotate(0deg)' },
@@ -148,12 +149,14 @@ interface StateComponentProps {
   signState?: SIGNSTATE
   collectStatus?: CollectStatus
   error?: ApolloError
+  trackSignCompleted: () => void
 }
 
 const StateComponent: React.SFC<StateComponentProps> = ({
   signState,
   collectStatus,
   error,
+  trackSignCompleted,
 }) => {
   if (!signState || !collectStatus) {
     return null
@@ -183,7 +186,7 @@ const StateComponent: React.SFC<StateComponentProps> = ({
       }
     case SIGNSTATE.COMPLETED:
       if (collectStatus.status === BANKIDSTATUS.COMPLETE) {
-        trackEvent('Order Completed', { category: 'sign-up' })
+        trackSignCompleted()
         return <Redirect to="/new-member/download" />
       }
     case SIGNSTATE.FAILED:
@@ -242,13 +245,26 @@ export const SubscriptionComponent: React.SFC<SubscriptionComponentProps> = ({
           </TranslationsConsumer>
         </GetInsuredButton>
 
-        <StateComponent
-          signState={data && data.signStatus && data.signStatus.signState}
-          collectStatus={
-            data && data.signStatus && data.signStatus.collectStatus
-          }
-          error={error}
-        />
+        <TrackAction
+          event={{
+            name: SemanticEvents.Ecommerce.OrderCompleted,
+            properties: {
+              category: 'sign-up',
+              ...getUtmParamsFromCookie(),
+            },
+          }}
+        >
+          {({ track }) => (
+            <StateComponent
+              signState={data && data.signStatus && data.signStatus.signState}
+              collectStatus={
+                data && data.signStatus && data.signStatus.collectStatus
+              }
+              error={error}
+              trackSignCompleted={track}
+            />
+          )}
+        </TrackAction>
       </Mount>
     )}
   </Query>

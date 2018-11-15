@@ -6,7 +6,11 @@ import { Mufflable } from 'components/animations/Mufflable'
 import { ChatMessage } from 'components/hedvig/chat'
 import { Conversation, Message } from 'components/hedvig/conversation'
 import * as React from 'react'
-import { trackEvent } from 'utils/tracking'
+import {
+  CustomEvents,
+  getUtmParamsFromCookie,
+  TrackAction,
+} from 'utils/tracking'
 import { ChatContainer, ChatStep } from './state'
 import { AddressInput } from './steps/AddressInput'
 import { AgeInput } from './steps/AgeInput'
@@ -16,9 +20,6 @@ import { Greet } from './steps/Greet'
 import { InsuranceTypeInput } from './steps/InsuranceTypeInput'
 import { NameInput } from './steps/NameInput'
 import { NumberOfPeopleInput } from './steps/NumberOfPeopleInput'
-
-const trackOnboardingStep = (step: string) =>
-  trackEvent('completed', { category: 'web-onboarding-steps', label: step })
 
 export const ChatConversation: React.SFC = () => (
   <ChatContainer>
@@ -75,16 +76,29 @@ export const ChatConversation: React.SFC = () => (
               unMufflable
               direction="right"
             >
-              <NameInput
-                onSubmit={() => {
-                  trackOnboardingStep('name')
-                  goToStep(ChatStep.AGE_INPUT)
+              <TrackAction
+                event={{
+                  name: CustomEvents.COMPLETED,
+                  properties: {
+                    category: 'web-onboarding-steps',
+                    label: 'name',
+                    ...getUtmParamsFromCookie(),
+                  },
                 }}
-                appear={appear}
-                isCurrentMessage={currentStep === ChatStep.NAME_INPUT}
-                onFocus={() => peekStep(ChatStep.NAME_INPUT)}
-                onBlur={() => unpeek()}
-              />
+              >
+                {({ track }) => (
+                  <NameInput
+                    onSubmit={() => {
+                      track()
+                      goToStep(ChatStep.AGE_INPUT)
+                    }}
+                    appear={appear}
+                    isCurrentMessage={currentStep === ChatStep.NAME_INPUT}
+                    onFocus={() => peekStep(ChatStep.NAME_INPUT)}
+                    onBlur={() => unpeek()}
+                  />
+                )}
+              </TrackAction>
             </Mufflable>
           )}
         </Message>
@@ -96,16 +110,29 @@ export const ChatConversation: React.SFC = () => (
               unMufflable
               direction="right"
             >
-              <AgeInput
-                onSubmit={() => {
-                  trackOnboardingStep('age')
-                  goToStep(ChatStep.GREET)
+              <TrackAction
+                event={{
+                  name: CustomEvents.COMPLETED,
+                  properties: {
+                    category: 'web-onboarding-steps',
+                    label: 'age',
+                    ...getUtmParamsFromCookie(),
+                  },
                 }}
-                appear={appear}
-                isCurrentMessage={currentStep === ChatStep.AGE_INPUT}
-                onFocus={() => peekStep(ChatStep.AGE_INPUT)}
-                onBlur={() => unpeek()}
-              />
+              >
+                {({ track }) => (
+                  <AgeInput
+                    onSubmit={() => {
+                      track()
+                      goToStep(ChatStep.GREET)
+                    }}
+                    appear={appear}
+                    isCurrentMessage={currentStep === ChatStep.AGE_INPUT}
+                    onFocus={() => peekStep(ChatStep.AGE_INPUT)}
+                    onBlur={() => unpeek()}
+                  />
+                )}
+              </TrackAction>
             </Mufflable>
           )}
         </Message>
@@ -144,16 +171,29 @@ export const ChatConversation: React.SFC = () => (
               unMufflable
               direction="right"
             >
-              <AddressInput
-                appear={appear}
-                isCurrentMessage={currentStep === ChatStep.ADDRESS_INPUT}
-                onSubmit={() => {
-                  trackOnboardingStep('address')
-                  goToStep(ChatStep.INSURANCE_TYPE_INPUT)
+              <TrackAction
+                event={{
+                  name: CustomEvents.COMPLETED,
+                  properties: {
+                    category: 'web-onboarding-steps',
+                    label: 'address',
+                    ...getUtmParamsFromCookie(),
+                  },
                 }}
-                onFocus={() => peekStep(ChatStep.ADDRESS_INPUT)}
-                onBlur={() => unpeek()}
-              />
+              >
+                {({ track }) => (
+                  <AddressInput
+                    appear={appear}
+                    isCurrentMessage={currentStep === ChatStep.ADDRESS_INPUT}
+                    onSubmit={() => {
+                      track()
+                      goToStep(ChatStep.INSURANCE_TYPE_INPUT)
+                    }}
+                    onFocus={() => peekStep(ChatStep.ADDRESS_INPUT)}
+                    onBlur={() => unpeek()}
+                  />
+                )}
+              </TrackAction>
             </Mufflable>
           )}
         </Message>
@@ -165,16 +205,31 @@ export const ChatConversation: React.SFC = () => (
               unMufflable
               direction="right"
             >
-              <InsuranceTypeInput
-                appear={appear}
-                isCurrentMessage={currentStep === ChatStep.INSURANCE_TYPE_INPUT}
-                onSubmit={() => {
-                  trackOnboardingStep('insurance-type')
-                  goToStep(ChatStep.NUMBER_OF_PEOPLE)
+              <TrackAction
+                event={{
+                  name: CustomEvents.COMPLETED,
+                  properties: {
+                    category: 'web-onboarding-steps',
+                    label: 'insurance-type',
+                    ...getUtmParamsFromCookie(),
+                  },
                 }}
-                onFocus={() => peekStep(ChatStep.INSURANCE_TYPE_INPUT)}
-                onBlur={() => unpeek()}
-              />
+              >
+                {({ track }) => (
+                  <InsuranceTypeInput
+                    appear={appear}
+                    isCurrentMessage={
+                      currentStep === ChatStep.INSURANCE_TYPE_INPUT
+                    }
+                    onSubmit={() => {
+                      track()
+                      goToStep(ChatStep.NUMBER_OF_PEOPLE)
+                    }}
+                    onFocus={() => peekStep(ChatStep.INSURANCE_TYPE_INPUT)}
+                    onBlur={() => unpeek()}
+                  />
+                )}
+              </TrackAction>
             </Mufflable>
           )}
         </Message>
@@ -186,16 +241,29 @@ export const ChatConversation: React.SFC = () => (
               unMufflable
               direction="right"
             >
-              <NumberOfPeopleInput
-                appear={appear}
-                isCurrentMessage={currentStep === ChatStep.NUMBER_OF_PEOPLE}
-                onSubmit={() => {
-                  trackOnboardingStep('number-of-people')
-                  goToStep(ChatStep.CURRENT_INSURANCE_QUESTION)
+              <TrackAction
+                event={{
+                  name: CustomEvents.COMPLETED,
+                  properties: {
+                    category: 'web-onboarding-steps',
+                    label: 'number-of-people',
+                    ...getUtmParamsFromCookie(),
+                  },
                 }}
-                onFocus={() => peekStep(ChatStep.NUMBER_OF_PEOPLE)}
-                onBlur={() => unpeek()}
-              />
+              >
+                {({ track }) => (
+                  <NumberOfPeopleInput
+                    appear={appear}
+                    isCurrentMessage={currentStep === ChatStep.NUMBER_OF_PEOPLE}
+                    onSubmit={() => {
+                      track()
+                      goToStep(ChatStep.CURRENT_INSURANCE_QUESTION)
+                    }}
+                    onFocus={() => peekStep(ChatStep.NUMBER_OF_PEOPLE)}
+                    onBlur={() => unpeek()}
+                  />
+                )}
+              </TrackAction>
             </Mufflable>
           )}
         </Message>
@@ -239,18 +307,31 @@ export const ChatConversation: React.SFC = () => (
               unMufflable
               direction="right"
             >
-              <CurrentInsuranceInput
-                appear={appear}
-                onSubmit={() => {
-                  trackOnboardingStep('has-current-insurance')
-                  goToStep(ChatStep.SHOW_OFFER_QUESTION)
+              <TrackAction
+                event={{
+                  name: CustomEvents.COMPLETED,
+                  properties: {
+                    category: 'web-onboarding-steps',
+                    label: 'has-current-insurance',
+                    ...getUtmParamsFromCookie(),
+                  },
                 }}
-                onFocus={() => peekStep(ChatStep.CURRENT_INSURANCE_INPUT)}
-                onBlur={() => unpeek()}
-                isCurrentMessage={
-                  currentStep === ChatStep.CURRENT_INSURANCE_INPUT
-                }
-              />
+              >
+                {({ track }) => (
+                  <CurrentInsuranceInput
+                    appear={appear}
+                    onSubmit={() => {
+                      track()
+                      goToStep(ChatStep.SHOW_OFFER_QUESTION)
+                    }}
+                    onFocus={() => peekStep(ChatStep.CURRENT_INSURANCE_INPUT)}
+                    onBlur={() => unpeek()}
+                    isCurrentMessage={
+                      currentStep === ChatStep.CURRENT_INSURANCE_INPUT
+                    }
+                  />
+                )}
+              </TrackAction>
             </Mufflable>
           )}
         </Message>
