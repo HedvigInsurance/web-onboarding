@@ -8,7 +8,7 @@ import { HeaderWrapper } from '../components/HeaderWrapper'
 const PERILSIDE = 72
 
 const Card = styled('div')({
-  paddingBottom: '60px',
+  paddingBottom: '40px',
   backgroundColor: colors.WHITE,
   textAlign: 'center',
 })
@@ -19,8 +19,8 @@ const Wrapper = styled('div')({
 
 const Header = styled('h1')({
   color: colors.BLACK,
-  marginTop: '30px',
-  marginBottom: '30px',
+  margin: 0,
+  paddingBottom: '30px',
 })
 
 const BigCol = styled('div')({})

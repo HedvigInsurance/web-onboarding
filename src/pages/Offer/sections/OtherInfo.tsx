@@ -12,14 +12,15 @@ interface Props {
 const ICONSIDE = 32
 
 const Card = styled('div')({
-  paddingBottom: '60px',
+  paddingBottom: '40px',
   backgroundColor: colors.WHITE,
 })
 
 const Header = styled('h1')({
   color: colors.BLACK,
-  marginTop: '30px',
-  marginBottom: '30px',
+  margin: 0,
+  paddingTop: '40px',
+  paddingBottom: '30px',
 })
 
 const Row = styled('div')({

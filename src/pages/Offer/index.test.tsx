@@ -11,7 +11,7 @@ import { MockStorage } from 'utils/storage/MockStorage'
 import { mockNetworkWait } from 'utils/test-utils'
 import { Offering } from '.'
 import { HedvigSwitch } from './sections/HedvigSwitch'
-import { PersonalInfo, Price } from './sections/Offer'
+import { PersonalInfo } from './sections/Offer'
 
 jest.mock('client/apolloClient', () => ({
   apolloClient: {
@@ -74,7 +74,6 @@ it('queries when it has a session', async () => {
   await mockNetworkWait()
   wrapper.update()
   expect(wrapper.find(Redirect)).toHaveLength(0)
-  expect(wrapper.find(Price).text()).toBe('99 kr/mån')
   expect(wrapper.find(PersonalInfo).text()).toContain('Testerson')
   expect(wrapper.find(HedvigSwitch)).toHaveLength(0)
 })

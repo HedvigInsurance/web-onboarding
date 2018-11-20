@@ -15,11 +15,6 @@ import { HeaderWrapper } from '../components/HeaderWrapper'
 import { InnerWrapper } from '../components/InnerWrapper'
 import { PriceAndInclusions } from '../components/PriceAndInclusions'
 
-const ICONWIDTH = 70
-const ICONWIDTHMOBILE = 150
-const ICONTITLEWIDTH = 200
-const COLWIDTH = 100
-
 const Wrapper = styled('div')({
   marginTop: '70px',
   width: '100%',
@@ -30,16 +25,15 @@ const Wrapper = styled('div')({
 const Card = styled('div')({
   marginTop: '70px',
   backgroundColor: colors.WHITE,
-  paddingBottom: '50px',
+  paddingBottom: '40px',
   boxShadow: '0px 8px 40px -12px rgba(0,0,0,0.67)',
   borderRadius: '10px',
 })
 
 const Header = styled('h1')({
   color: colors.WHITE,
-  marginTop: '0px',
-  paddingTop: '30px',
-  marginBottom: '10px',
+  margin: 0,
+  paddingTop: '40px',
 })
 
 const HeaderBackground = styled('div')({
@@ -57,67 +51,10 @@ export const PersonalInfo = styled('div')({
   color: colors.WHITE,
 })
 
-const Col = styled('div')({
-  display: 'flex',
-  alignItems: 'center',
-  flexDirection: 'column',
-  width: COLWIDTH,
-})
-
-const Row = styled('div')({
-  marginTop: '30px',
-  marginBottom: '40px',
-  marginLeft: '100px',
-  marginRight: '100px',
-  display: 'flex',
-  alignItems: 'baseline',
-  flexDirection: 'row',
-  justifyContent: 'space-around',
-  '@media (max-width: 400px)': {
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-})
-
-const Icon = styled('img')({
-  maxWidth: ICONWIDTH,
-  '@media (max-width: 400px)': {
-    margin: '0px',
-    maxWidth: ICONWIDTHMOBILE,
-  },
-})
-
-const IconTitle = styled('p')({
-  marginTop: '10px',
-  marginBottom: '10px',
-  textAlign: 'center',
-  color: colors.OFF_BLACK,
-  maxWidth: ICONTITLEWIDTH,
-})
-
 interface Props {
   signButtonVisibility: (isVisible: boolean) => void
   offer: OfferData
 }
-
-// TODO: TEXT KEY THIS
-const COLUMNS = [
-  {
-    key: 0,
-    title: 'OFFER_PERIL_TITLE_APARTMENT_PROTECTION',
-    icon: '/new-member-assets/offering/lagenhetsskyddet.svg',
-  },
-  {
-    key: 1,
-    title: 'OFFER_PERIL_TITLE_PERSONAL_PROTECTION',
-    icon: '/new-member-assets/offering/familjeskyddet.svg',
-  },
-  {
-    key: 2,
-    title: 'OFFER_PERIL_TITLE_STUFF_PROTECTION',
-    icon: '/new-member-assets/offering/prylskyddet.svg',
-  },
-]
 
 export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
   <Wrapper>
@@ -148,18 +85,6 @@ export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
             </PersonalInfo>
           </HeaderBackground>
           <PriceAndInclusions offer={offer} />
-          <Row>
-            {COLUMNS.map((col) => (
-              <Col key={col.key}>
-                <Icon src={col.icon} />
-                <IconTitle>
-                  <TranslationsConsumer textKey={col.title}>
-                    {(title) => title}
-                  </TranslationsConsumer>
-                </IconTitle>
-              </Col>
-            ))}
-          </Row>
           <VisibilitySensor
             partialVisibility
             onChange={(isVisible: boolean) => {

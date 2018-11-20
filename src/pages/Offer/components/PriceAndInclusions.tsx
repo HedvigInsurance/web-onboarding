@@ -9,6 +9,8 @@ import styled from 'react-emotion'
 import { isStudentInsurance } from 'utils/insuranceDomainUtils'
 import { StudentBadge } from '../components/StudentOfferBadge'
 
+const ICONSIDE = 16
+
 const PriceWrapper = styled('div')({
   display: 'inline-block',
   position: 'relative',
@@ -27,17 +29,35 @@ export const Price = styled('h1')({
 
 const InsuranceInfo = styled('div')({
   textAlign: 'center',
+  justifyContent: 'center',
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  marginTop: 2,
+  marginBottom: 2,
 })
 
 const BoldInfoText = styled('div')({
   color: colors.BLACK,
   display: 'inline',
   fontWeight: 600,
+  marginRight: 3,
 })
 
 const InfoText = styled('div')({
   color: colors.OFF_BLACK,
   display: 'inline',
+})
+
+const CheckIcon = styled('img')({
+  marginRight: 6,
+  width: ICONSIDE,
+  height: ICONSIDE,
+})
+
+const CheckBoxTable = styled('div')({
+  marginTop: 20,
+  marginBottom: 20,
 })
 
 interface Props {
@@ -87,5 +107,36 @@ export const PriceAndInclusions: React.SFC<Props> = ({ offer }) => (
         )}
       </InfoText>
     </InsuranceInfo>
+    <CheckBoxTable>
+      <InsuranceInfo>
+        <CheckIcon src="/new-member-assets/offering/checkmark.svg" />
+        <BoldInfoText>
+          <TranslationsConsumer textKey="Antal försökrade:">
+            {(text) => text}
+          </TranslationsConsumer>
+        </BoldInfoText>
+        <InfoText>
+          <TranslationsConsumer textKey="Zak + 1">
+            {(text) => text}
+          </TranslationsConsumer>
+        </InfoText>
+      </InsuranceInfo>
+      <InsuranceInfo>
+        <CheckIcon src="/new-member-assets/offering/checkmark.svg" />
+        <BoldInfoText>
+          <TranslationsConsumer textKey="Bostadsrättstillägg ingår!">
+            {(text) => text}
+          </TranslationsConsumer>
+        </BoldInfoText>
+      </InsuranceInfo>
+      <InsuranceInfo>
+        <CheckIcon src="/new-member-assets/offering/checkmark.svg" />
+        <BoldInfoText>
+          <TranslationsConsumer textKey="Ingen bindningstid!">
+            {(text) => text}
+          </TranslationsConsumer>
+        </BoldInfoText>
+      </InsuranceInfo>
+    </CheckBoxTable>
   </>
 )

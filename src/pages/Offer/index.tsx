@@ -74,9 +74,8 @@ const LinkTag = styled(Link)({
 })
 
 const BigCard = styled('div')({
-  marginTop: '70px',
-  paddingTop: '30px',
-  paddingBottom: '60px',
+  paddingTop: '40px',
+  paddingBottom: '40px',
   backgroundColor: colors.WHITE,
   boxShadow: '0px 8px 15px -13px rgba(0,0,0,0.67)',
   borderRadius: '10px',
@@ -157,8 +156,7 @@ export const Offering: React.SFC<{}> = () => (
                       signButtonVisibility={state.updateUpperButtonVisibility}
                     />
                     <PageDown />
-                    <HedvigInfo />
-                    {insuredAtOtherCompany ? <HedvigSwitch /> : null}
+
                     <Wrapper>
                       <InnerWrapper>
                         <CardWrapper>
@@ -173,6 +171,8 @@ export const Offering: React.SFC<{}> = () => (
                         </CardWrapper>
                       </InnerWrapper>
                     </Wrapper>
+                    <HedvigInfo />
+                    {insuredAtOtherCompany ? <HedvigSwitch /> : null}
                     <GetInsured
                       offer={offer}
                       signButtonVisibility={state.updateLowerButtonVisibility}

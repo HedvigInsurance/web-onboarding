@@ -64,7 +64,6 @@ const Header = styled('h1')({
 })
 
 const InputTitle = styled('div')({
-  marginTop: '20px',
   lineHeight: '23px',
   '@media (max-width: 300px)': {
     marginLeft: '10px',
