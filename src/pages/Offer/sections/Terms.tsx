@@ -16,7 +16,6 @@ interface TermsProps {
 const PERILSIDE = 72
 
 const Card = styled('div')({
-  paddingBottom: '40px',
   backgroundColor: colors.WHITE,
 })
 

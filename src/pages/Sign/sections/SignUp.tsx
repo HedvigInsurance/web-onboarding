@@ -18,6 +18,7 @@ const CARDWIDTH = 788
 const HEADERWIDTH = 400
 const FORMWIDTH = 300
 const FORMWIDTHSMALL = 100
+const ICONSIDE = 16
 
 const CardWrapper = styled('div')({
   marginLeft: 'auto',
@@ -122,6 +123,7 @@ export const Price = styled('h1')({
 })
 
 const ErrorMessage = styled('div')({
+  color: colors.PINK,
   minHeight: '24px',
   '@media (max-width: 300px)': {
     marginLeft: '10px',
@@ -136,6 +138,20 @@ export const PersonalInfo = styled('div')({
   textAlign: 'center',
   maxWidth: '100%',
   color: colors.WHITE,
+})
+
+const VerificationIcon = styled('img')({
+  width: ICONSIDE,
+  height: ICONSIDE,
+  position: 'absolute',
+  right: 16,
+})
+
+const InputRow = styled('div')({
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  position: 'relative',
 })
 
 const userSchema = Yup.object().shape({
@@ -212,16 +228,24 @@ export const SignUp: React.SFC<SignUpProps> = ({ offer }) => (
                       {(title) => title}
                     </TranslationsConsumer>
                   </InputTitle>
-
                   <TranslationsConsumer textKey="SIGN_INPUT_EMAIL_PLACEHOLDER">
                     {(placeholder) => (
-                      <InputField
-                        name="email"
-                        id="email"
-                        touched={touched.email}
-                        errors={errors.email}
-                        placeholder={placeholder}
-                      />
+                      <InputRow>
+                        <InputField
+                          name="email"
+                          id="email"
+                          touched={touched.email}
+                          errors={errors.email}
+                          placeholder={placeholder}
+                        />
+                        {touched.email ? (
+                          errors.email ? (
+                            <VerificationIcon src="/new-member-assets/offering/not_insured.svg" />
+                          ) : (
+                            <VerificationIcon src="/new-member-assets/offering/checkmark.svg" />
+                          )
+                        ) : null}
+                      </InputRow>
                     )}
                   </TranslationsConsumer>
                   {errors.email && touched.email ? (
@@ -238,13 +262,22 @@ export const SignUp: React.SFC<SignUpProps> = ({ offer }) => (
                   </InputTitle>
                   <TranslationsConsumer textKey="SIGN_INPUT_PERSONAL_NUMBER_PLACEHOLDER">
                     {(placeholder) => (
-                      <InputField
-                        name="personalNumber"
-                        id="personalNumber"
-                        touched={touched.personalNumber}
-                        errors={errors.personalNumber}
-                        placeholder={placeholder}
-                      />
+                      <InputRow>
+                        <InputField
+                          name="personalNumber"
+                          id="personalNumber"
+                          touched={touched.personalNumber}
+                          errors={errors.personalNumber}
+                          placeholder={placeholder}
+                        />
+                        {touched.personalNumber ? (
+                          errors.personalNumber ? (
+                            <VerificationIcon src="/new-member-assets/offering/not_insured.svg" />
+                          ) : (
+                            <VerificationIcon src="/new-member-assets/offering/checkmark.svg" />
+                          )
+                        ) : null}
+                      </InputRow>
                     )}
                   </TranslationsConsumer>
                   {errors.personalNumber && touched.personalNumber ? (
