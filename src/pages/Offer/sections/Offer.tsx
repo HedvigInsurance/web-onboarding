@@ -1,4 +1,4 @@
-import { colors, fonts } from '@hedviginsurance/brand'
+import { colors } from '@hedviginsurance/brand'
 import {
   TranslationsConsumer,
   TranslationsPlaceholderConsumer,
@@ -8,13 +8,12 @@ import { OfferData } from 'containers/OfferContainer'
 import * as React from 'react'
 import styled from 'react-emotion'
 import VisibilitySensor from 'react-visibility-sensor'
-import { isStudentInsurance } from 'utils/insuranceDomainUtils'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { trackEvent } from 'utils/tracking'
 import { CardWrapperSmall } from '../components/CardWrapperSmall'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 import { InnerWrapper } from '../components/InnerWrapper'
-import { StudentBadge } from '../components/StudentOfferBadge'
+import { PriceAndInclusions } from '../components/PriceAndInclusions'
 
 const ICONWIDTH = 70
 const ICONWIDTHMOBILE = 150
@@ -56,34 +55,6 @@ export const PersonalInfo = styled('div')({
   textAlign: 'center',
   maxWidth: '100%',
   color: colors.WHITE,
-})
-
-const PriceWrapper = styled('div')({
-  display: 'inline-block',
-  position: 'relative',
-  margin: '0 auto',
-})
-export const Price = styled('h1')({
-  marginBottom: '10px',
-  marginTop: '30px',
-  textAlign: 'center',
-  color: colors.BLACK,
-  fontFamily: fonts.CIRCULAR,
-})
-
-const InsuranceInfo = styled('div')({
-  textAlign: 'center',
-})
-
-const BoldInfoText = styled('div')({
-  color: colors.BLACK,
-  display: 'inline',
-  fontWeight: 600,
-})
-
-const InfoText = styled('div')({
-  color: colors.OFF_BLACK,
-  display: 'inline',
 })
 
 const Col = styled('div')({
@@ -176,47 +147,7 @@ export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
               {formatPostalNumber(offer.insurance.postalNumber)}
             </PersonalInfo>
           </HeaderBackground>
-          <PriceWrapper>
-            <TranslationsPlaceholderConsumer
-              textKey="OFFER_SUMMARY_PRICE"
-              replacements={{ price: offer.insurance.monthlyCost }}
-            >
-              {(priceText) => <Price>{priceText}</Price>}
-            </TranslationsPlaceholderConsumer>
-            {isStudentInsurance(offer.insurance.type) && (
-              <StudentBadge placement="right" />
-            )}
-          </PriceWrapper>
-          <InsuranceInfo>
-            <BoldInfoText>
-              <TranslationsConsumer textKey="OFFER_SELF_RISK_LABEL">
-                {(text) => text}
-              </TranslationsConsumer>
-            </BoldInfoText>
-            <InfoText>
-              <TranslationsConsumer textKey="OFFER_SELF_RISK_VALUE">
-                {(text) => text}
-              </TranslationsConsumer>
-            </InfoText>
-          </InsuranceInfo>
-          <InsuranceInfo>
-            <BoldInfoText>
-              <TranslationsConsumer textKey="OFFER_START_DATE_LABEL">
-                {(text) => text}
-              </TranslationsConsumer>
-            </BoldInfoText>
-            <InfoText>
-              {offer.insurance.insuredAtOtherCompany ? (
-                <TranslationsConsumer textKey="OFFER_START_LATER">
-                  {(riskLabel) => riskLabel}
-                </TranslationsConsumer>
-              ) : (
-                <TranslationsConsumer textKey="OFFER_START_NOW">
-                  {(riskLabel) => riskLabel}
-                </TranslationsConsumer>
-              )}
-            </InfoText>
-          </InsuranceInfo>
+          <PriceAndInclusions offer={offer} />
           <Row>
             {COLUMNS.map((col) => (
               <Col key={col.key}>

@@ -6,6 +6,7 @@ import {
 import { OfferData } from 'containers/OfferContainer'
 import { Field, Form, Formik } from 'formik'
 import gql from 'graphql-tag'
+import { PriceAndInclusions } from 'pages/Offer/components/PriceAndInclusions'
 import * as React from 'react'
 import { Mutation } from 'react-apollo'
 import styled from 'react-emotion'
@@ -113,6 +114,14 @@ const InputField = styled(Field)(
   }),
 )
 
+export const Price = styled('h1')({
+  marginBottom: '10px',
+  marginTop: '30px',
+  textAlign: 'center',
+  color: colors.BLACK,
+  fontFamily: fonts.CIRCULAR,
+})
+
 const ErrorMessage = styled('div')({
   minHeight: '24px',
   '@media (max-width: 300px)': {
@@ -178,7 +187,7 @@ export const SignUp: React.SFC<SignUpProps> = ({ offer }) => (
           {formatPostalNumber(offer.insurance.postalNumber)}
         </PersonalInfo>
       </HeaderBackground>
-
+      <PriceAndInclusions offer={offer} />
       <>
         <Mutation<boolean, SignOfferMutationVariables> mutation={SIGN_MUTATION}>
           {(signOffer, { loading }) => (
