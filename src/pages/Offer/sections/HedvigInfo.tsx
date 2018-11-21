@@ -25,6 +25,8 @@ const Header = styled('h1')({
   margin: 0,
   paddingTop: '40px',
   paddingBottom: '30px',
+  paddingLeft: '10px',
+  paddingRight: '10px',
 })
 
 const Image = styled('img')({

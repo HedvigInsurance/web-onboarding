@@ -23,6 +23,8 @@ const Container = styled('div')({
   alignItems: 'center',
   backgroundColor: colors.OFF_WHITE,
   paddingBottom: '70px',
+  paddingLeft: '10px',
+  paddingRight: '10px',
 })
 
 const LegalText = styled('div')({

@@ -21,6 +21,8 @@ const Header = styled('h1')({
   color: colors.BLACK,
   margin: 0,
   paddingBottom: '30px',
+  paddingLeft: '10px',
+  paddingRight: '10px',
 })
 
 const BigCol = styled('div')({})
@@ -35,8 +37,8 @@ const Row = styled('div')({
   '@media (max-width: 700px)': {
     flexFlow: 'wrap',
     justifyContent: 'flex-start',
-    marginLeft: '30px',
-    marginRight: '30px',
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
 })
 
@@ -71,6 +73,15 @@ const DropDownText = styled('div')({
   color: colors.OFF_BLACK,
   marginLeft: '138px',
   marginRight: '138px',
+  '@media (max-width: 700px)': {
+    textAlign: 'center',
+    marginLeft: '30px',
+    marginRight: '30px',
+  },
+  '@media (max-width: 500px)': {
+    marginLeft: '10px',
+    marginRight: '10px',
+  },
 })
 
 const Switcher = styled('div')({
@@ -80,9 +91,8 @@ const Switcher = styled('div')({
   flexDirection: 'row',
   marginLeft: 'auto',
   marginRight: 'auto',
-  '@media (max-width: 400px)': {
-    width: '90%',
-    borderRadius: '40px',
+  '@media (max-width: 410px)': {
+    flexDirection: 'column',
   },
 })
 

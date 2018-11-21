@@ -45,6 +45,8 @@ const HeaderBackground = styled('div')({
   backgroundColor: colors.PURPLE,
   borderTopLeftRadius: '10px',
   borderTopRightRadius: '10px',
+  paddingLeft: '10px',
+  paddingRight: '10px',
 })
 
 const HeaderWrapper = styled('div')({

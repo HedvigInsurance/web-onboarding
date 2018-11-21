@@ -27,7 +27,7 @@ export const Price = styled('h1')({
   fontFamily: fonts.CIRCULAR,
 })
 
-const InsuranceInfo = styled('div')(({ width }: { width?: boolean }) => ({
+const InsuranceInfo = styled('div')(({ wide }: { wide?: boolean }) => ({
   textAlign: 'center',
   justifyContent: 'center',
   display: 'flex',
@@ -36,8 +36,7 @@ const InsuranceInfo = styled('div')(({ width }: { width?: boolean }) => ({
   marginTop: 2,
   marginBottom: 2,
   '@media (max-width: 350px)': {
-    alignItems: width ? 'baseline' : 'center',
-    textAlign: width ? 'left' : 'center',
+    flexDirection: wide ? 'column' : 'row',
   },
 }))
 
@@ -48,13 +47,10 @@ const BoldInfoText = styled('div')({
   marginRight: 3,
 })
 
-const InfoText = styled('div')(({ width }: { width?: boolean }) => ({
+const InfoText = styled('div')({
   color: colors.OFF_BLACK,
   display: 'inline',
-  '@media (max-width: 350px)': {
-    maxWidth: width ? '200px' : 'none',
-  },
-}))
+})
 
 const CheckIcon = styled('img')({
   marginRight: 6,
@@ -97,13 +93,13 @@ export const PriceAndInclusions: React.SFC<Props> = ({ offer }) => (
         </TranslationsConsumer>
       </InfoText>
     </InsuranceInfo>
-    <InsuranceInfo width={true}>
+    <InsuranceInfo wide={true}>
       <BoldInfoText>
         <TranslationsConsumer textKey="OFFER_START_DATE_LABEL">
           {(text) => text}
         </TranslationsConsumer>
       </BoldInfoText>
-      <InfoText width={true}>
+      <InfoText>
         {offer.insurance.insuredAtOtherCompany ? (
           <TranslationsConsumer textKey="OFFER_START_LATER">
             {(riskLabel) => riskLabel}
