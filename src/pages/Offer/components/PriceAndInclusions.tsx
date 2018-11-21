@@ -21,13 +21,13 @@ const PriceWrapper = styled('div')({
 
 export const Price = styled('h1')({
   marginBottom: '10px',
-  marginTop: '30px',
+  marginTop: '20px',
   textAlign: 'center',
   color: colors.BLACK,
   fontFamily: fonts.CIRCULAR,
 })
 
-const InsuranceInfo = styled('div')({
+const InsuranceInfo = styled('div')(({ width }: { width?: boolean }) => ({
   textAlign: 'center',
   justifyContent: 'center',
   display: 'flex',
@@ -35,7 +35,11 @@ const InsuranceInfo = styled('div')({
   alignItems: 'center',
   marginTop: 2,
   marginBottom: 2,
-})
+  '@media (max-width: 350px)': {
+    alignItems: width ? 'baseline' : 'center',
+    textAlign: width ? 'left' : 'center',
+  },
+}))
 
 const BoldInfoText = styled('div')({
   color: colors.BLACK,
@@ -44,10 +48,13 @@ const BoldInfoText = styled('div')({
   marginRight: 3,
 })
 
-const InfoText = styled('div')({
+const InfoText = styled('div')(({ width }: { width?: boolean }) => ({
   color: colors.OFF_BLACK,
   display: 'inline',
-})
+  '@media (max-width: 350px)': {
+    maxWidth: width ? '200px' : 'none',
+  },
+}))
 
 const CheckIcon = styled('img')({
   marginRight: 6,
@@ -77,6 +84,7 @@ export const PriceAndInclusions: React.SFC<Props> = ({ offer }) => (
         <StudentBadge placement="right" />
       )}
     </PriceWrapper>
+
     <InsuranceInfo>
       <BoldInfoText>
         <TranslationsConsumer textKey="OFFER_SELF_RISK_LABEL">
@@ -89,13 +97,13 @@ export const PriceAndInclusions: React.SFC<Props> = ({ offer }) => (
         </TranslationsConsumer>
       </InfoText>
     </InsuranceInfo>
-    <InsuranceInfo>
+    <InsuranceInfo width={true}>
       <BoldInfoText>
         <TranslationsConsumer textKey="OFFER_START_DATE_LABEL">
           {(text) => text}
         </TranslationsConsumer>
       </BoldInfoText>
-      <InfoText>
+      <InfoText width={true}>
         {offer.insurance.insuredAtOtherCompany ? (
           <TranslationsConsumer textKey="OFFER_START_LATER">
             {(riskLabel) => riskLabel}
@@ -107,6 +115,7 @@ export const PriceAndInclusions: React.SFC<Props> = ({ offer }) => (
         )}
       </InfoText>
     </InsuranceInfo>
+
     <CheckBoxTable>
       <InsuranceInfo>
         <CheckIcon src="/new-member-assets/offering/checkmark.svg" />

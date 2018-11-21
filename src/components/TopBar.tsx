@@ -52,6 +52,9 @@ const EscapeLink = styled('a')({})
 const Logo = styled('img')({
   marginLeft: '26px',
   marginTop: '24px',
+  '@media (max-width: 350px)': {
+    marginLeft: '10px',
+  },
 })
 
 const CheckmarkIcon = styled('img')({

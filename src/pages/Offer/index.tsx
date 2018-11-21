@@ -62,6 +62,9 @@ const GetInsuredButton = styled('div')({
   display: 'flex',
   justifyContent: 'inherit',
   marginRight: '26px',
+  '@media (max-width: 350px)': {
+    marginRight: '10px',
+  },
 })
 
 const LinkTag = styled(Link)({
@@ -71,6 +74,9 @@ const LinkTag = styled(Link)({
   borderRadius: '50px',
   padding: '10px 24px',
   textAlign: 'center',
+  '@media (max-width: 289px)': {
+    padding: '10px 12px',
+  },
 })
 
 const BigCard = styled('div')({
