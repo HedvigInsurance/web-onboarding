@@ -111,20 +111,20 @@ export const PriceAndInclusions: React.SFC<Props> = ({ offer }) => (
       <InsuranceInfo>
         <CheckIcon src="/new-member-assets/offering/checkmark.svg" />
         <BoldInfoText>
-          <TranslationsConsumer textKey="Antal försökrade:">
+          <TranslationsConsumer textKey="OFFER_PRICE_INCLUSION_PEOPLE_INSURED_LABEL">
             {(text) => text}
           </TranslationsConsumer>
         </BoldInfoText>
         <InfoText>
-          <TranslationsConsumer textKey="Zak + 1">
-            {(text) => text}
-          </TranslationsConsumer>
+          {offer.member.firstName}
+          {offer.insurance.personsInHousehold > 1 &&
+            ` + ${offer.insurance.personsInHousehold - 1}`}
         </InfoText>
       </InsuranceInfo>
       <InsuranceInfo>
         <CheckIcon src="/new-member-assets/offering/checkmark.svg" />
         <BoldInfoText>
-          <TranslationsConsumer textKey="Bostadsrättstillägg ingår!">
+          <TranslationsConsumer textKey="OFFER_PRICE_INCLUSION_ADDITION">
             {(text) => text}
           </TranslationsConsumer>
         </BoldInfoText>
@@ -132,7 +132,7 @@ export const PriceAndInclusions: React.SFC<Props> = ({ offer }) => (
       <InsuranceInfo>
         <CheckIcon src="/new-member-assets/offering/checkmark.svg" />
         <BoldInfoText>
-          <TranslationsConsumer textKey="Ingen bindningstid!">
+          <TranslationsConsumer textKey="OFFER_PRICE_INCLUSION_NO_SUBSCRIPTION">
             {(text) => text}
           </TranslationsConsumer>
         </BoldInfoText>
