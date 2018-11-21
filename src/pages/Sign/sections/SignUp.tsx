@@ -59,9 +59,8 @@ const HeaderWrapper = styled('div')({
 
 const Header = styled('h1')({
   color: colors.WHITE,
-  marginTop: '0px',
-  paddingTop: '30px',
-  marginBottom: '10px',
+  margin: 0,
+  paddingTop: '40px',
 })
 
 const InputTitle = styled('div')({
