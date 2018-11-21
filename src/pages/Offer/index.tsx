@@ -74,7 +74,7 @@ const LinkTag = styled(Link)({
   borderRadius: '50px',
   padding: '10px 24px',
   textAlign: 'center',
-  '@media (max-width: 289px)': {
+  '@media (max-width: 300px)': {
     padding: '10px 12px',
   },
 })

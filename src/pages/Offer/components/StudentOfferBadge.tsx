@@ -7,7 +7,7 @@ const StudentBadgeWrapper = styled('div')(
   ({ placement }: { placement: 'left' | 'right' }) => ({
     position: 'absolute',
     [placement === 'left' ? 'right' : 'left']: '70%',
-    top: -30,
+    top: -35,
     padding: 20,
     width: 140,
     height: 140,
@@ -16,9 +16,16 @@ const StudentBadgeWrapper = styled('div')(
     backgroundColor: colors.PINK,
     color: colors.WHITE,
     borderRadius: '50%',
-
-    '@media (max-width: 560px)': {
-      display: 'none', // TODO fixme (this is a quick hack to get it working on desktop but not break mobile completely)
+    fontSize: '1em',
+    '@media (max-width: 620px)': {
+      fontSize: '0.9em',
+      top: -30,
+      padding: 20,
+      width: 120,
+      height: 120,
+    },
+    '@media (max-width: 420px)': {
+      display: 'none',
     },
   }),
 )
