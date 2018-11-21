@@ -27,6 +27,8 @@ const Row = styled('div')({
   marginLeft: '150px',
   marginRight: '150px',
   borderRadius: '8px',
+  paddingLeft: 16,
+  paddingRight: 16,
   '@media (max-width: 700px)': {
     marginLeft: '30px',
     marginRight: '30px',
