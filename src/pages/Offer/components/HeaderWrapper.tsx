@@ -1,13 +1,11 @@
 import { fonts } from '@hedviginsurance/brand'
 import styled from 'react-emotion'
 
-const HEADERWIDTH = 400
 const MOBILESMALL = 640
 
 export const HeaderWrapper = styled('div')({
-  maxWidth: HEADERWIDTH,
-  marginLeft: 'auto',
-  marginRight: 'auto',
+  marginLeft: '20px',
+  marginRight: '20px',
   fontFamily: fonts.SORAY,
   fontWeight: 'normal',
   lineHeight: 1.3,

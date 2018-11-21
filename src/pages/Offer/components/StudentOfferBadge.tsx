@@ -6,7 +6,7 @@ import styled from 'react-emotion'
 const StudentBadgeWrapper = styled('div')(
   ({ placement }: { placement: 'left' | 'right' }) => ({
     position: 'absolute',
-    [placement === 'left' ? 'right' : 'left']: '65%',
+    [placement === 'left' ? 'right' : 'left']: '70%',
     top: -30,
     padding: 20,
     width: 140,

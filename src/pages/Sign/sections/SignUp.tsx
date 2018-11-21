@@ -15,7 +15,6 @@ import * as Yup from 'yup'
 import { SubscriptionComponent } from './SignSubscription'
 
 const CARDWIDTH = 788
-const HEADERWIDTH = 400
 const FORMWIDTH = 300
 const FORMWIDTHSMALL = 100
 const ICONSIDE = 16
@@ -50,9 +49,8 @@ const HeaderBackground = styled('div')({
 })
 
 const HeaderWrapper = styled('div')({
-  maxWidth: HEADERWIDTH,
-  marginLeft: 'auto',
-  marginRight: 'auto',
+  marginLeft: '20px',
+  marginRight: '20px',
   fontFamily: fonts.SORAY,
   fontWeight: 'normal',
   lineHeight: 1.3,

@@ -20,8 +20,8 @@ const PriceWrapper = styled('div')({
 })
 
 export const Price = styled('h1')({
-  marginBottom: '10px',
-  marginTop: '20px',
+  marginBottom: '0px',
+  marginTop: '10px',
   textAlign: 'center',
   color: colors.BLACK,
   fontFamily: fonts.CIRCULAR,
