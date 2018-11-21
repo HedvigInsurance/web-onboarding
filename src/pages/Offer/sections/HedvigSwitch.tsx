@@ -27,6 +27,9 @@ const Header = styled('h1')({
   paddingBottom: '30px',
   paddingLeft: '10px',
   paddingRight: '10px',
+  maxWidth: '400px',
+  marginLeft: 'auto',
+  marginRight: 'auto',
 })
 
 const Paragraph = styled('p')({
