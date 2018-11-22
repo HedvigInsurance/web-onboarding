@@ -5,116 +5,6 @@ import * as React from 'react'
 import styled from 'react-emotion'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 
-const PERILSIDE = 72
-
-const Card = styled('div')({
-  paddingBottom: '40px',
-  backgroundColor: colors.WHITE,
-  textAlign: 'center',
-})
-
-const Wrapper = styled('div')({
-  backgroundColor: colors.OFF_WHITE,
-})
-
-const Header = styled('h1')({
-  color: colors.BLACK,
-  margin: 0,
-  paddingBottom: '30px',
-  paddingLeft: '10px',
-  paddingRight: '10px',
-})
-
-const BigCol = styled('div')({})
-
-const Row = styled('div')({
-  marginLeft: '115px',
-  marginRight: '115px',
-  display: 'flex',
-  alignItems: 'baseline',
-  flexDirection: 'row',
-  flexWrap: 'wrap',
-  '@media (max-width: 700px)': {
-    flexFlow: 'wrap',
-    justifyContent: 'flex-start',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-  },
-})
-
-const Col = styled('div')({
-  display: 'flex',
-  alignItems: 'center',
-  flexDirection: 'column',
-  cursor: 'pointer',
-})
-
-const PerilIcon = styled('img')({
-  marginBottom: '10px',
-  marginTop: '10px',
-  marginRight: '30px',
-  marginLeft: '30px',
-  width: PERILSIDE,
-  height: PERILSIDE,
-})
-
-const PerilTitle = styled('div')({
-  marginBottom: '0px',
-  marginTop: '0px',
-  textAlign: 'center',
-  color: colors.DARK_GRAY,
-  borderRadius: '30px',
-  padding: '5px',
-})
-
-const DropDownText = styled('div')({
-  marginTop: '30px',
-  textAlign: 'left',
-  color: colors.OFF_BLACK,
-  marginLeft: '138px',
-  marginRight: '138px',
-  '@media (max-width: 700px)': {
-    textAlign: 'center',
-    marginLeft: '30px',
-    marginRight: '30px',
-  },
-  '@media (max-width: 500px)': {
-    marginLeft: '10px',
-    marginRight: '10px',
-  },
-})
-
-const Switcher = styled('div')({
-  backgroundColor: colors.LIGHT_GRAY,
-  borderRadius: '20px',
-  display: 'inline-flex',
-  flexDirection: 'row',
-  marginLeft: 'auto',
-  marginRight: 'auto',
-  '@media (max-width: 410px)': {
-    flexDirection: 'column',
-  },
-})
-
-const SwitcherItem = styled('div')({
-  borderRadius: '30px',
-  paddingTop: '10px',
-  paddingBottom: '10px',
-  paddingRight: '20px',
-  paddingLeft: '20px',
-  fontFamily: fonts.CIRCULAR,
-  cursor: 'pointer',
-  userSelect: 'none',
-  textAlign: 'center',
-})
-
-const PerilInfo = styled('div')({
-  textAlign: 'center',
-  fontSize: '14px',
-  marginBottom: '20px',
-  marginTop: '10px',
-})
-
 const PERILS = [
   {
     key: 0,
@@ -169,7 +59,7 @@ const PERILS = [
           'Plötsligt tackar din spis för sig eller så blir det kortslutning i din prisbelönta kaffemaskin. Hedvig ersätter skador på dina vitvaror, så länge det inte rör sig om skador som din hyresvärd är skyldig att ersätta.',
       },
       {
-        key: 8,
+        key: 6,
         title: 'Bostadsrättstillägg',
         icon: '/new-member-assets/offering/bostadsrattstillagg.svg',
         iconGrey: '/new-member-assets/offering/bostadsrattstillagg-grey.svg',
@@ -273,6 +163,115 @@ const PERILS = [
   },
 ]
 
+const PERILSIDE = 72
+
+const Card = styled('div')({
+  paddingBottom: '40px',
+  backgroundColor: colors.WHITE,
+  textAlign: 'center',
+})
+
+const Wrapper = styled('div')({
+  backgroundColor: colors.OFF_WHITE,
+})
+
+const Header = styled('h1')({
+  color: colors.BLACK,
+  margin: 0,
+  paddingBottom: '30px',
+  paddingLeft: '10px',
+  paddingRight: '10px',
+})
+
+const Table = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+})
+
+const Row = styled('div')({
+  maxWidth: '660px',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  flexDirection: 'column',
+  marginBottom: '30px',
+  alignItems: 'baseline',
+  flexWrap: 'wrap',
+  '@media (max-width: 700px)': {
+    flexFlow: 'wrap',
+    justifyContent: 'flex-start',
+  },
+})
+
+const Col = styled('div')({
+  display: 'inline-block',
+  alignItems: 'center',
+  flexDirection: 'column',
+  cursor: 'pointer',
+})
+
+const PerilIcon = styled('img')({
+  marginBottom: '10px',
+  marginTop: '10px',
+  marginRight: '30px',
+  marginLeft: '30px',
+  width: PERILSIDE,
+  height: PERILSIDE,
+})
+
+const PerilTitle = styled('div')({
+  marginBottom: '0px',
+  marginTop: '0px',
+  textAlign: 'center',
+  color: colors.DARK_GRAY,
+  borderRadius: '30px',
+  padding: '5px',
+})
+
+const DropDownText = styled('div')({
+  textAlign: 'left',
+  color: colors.OFF_BLACK,
+  '@media (max-width: 700px)': {
+    textAlign: 'center',
+    marginLeft: '30px',
+    marginRight: '30px',
+  },
+  '@media (max-width: 500px)': {
+    marginLeft: '10px',
+    marginRight: '10px',
+  },
+})
+
+const Switcher = styled('div')({
+  backgroundColor: colors.LIGHT_GRAY,
+  borderRadius: '20px',
+  display: 'inline-flex',
+  flexDirection: 'row',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  '@media (max-width: 410px)': {
+    flexDirection: 'column',
+  },
+})
+
+const SwitcherItem = styled('div')({
+  borderRadius: '30px',
+  paddingTop: '10px',
+  paddingBottom: '10px',
+  paddingRight: '20px',
+  paddingLeft: '20px',
+  fontFamily: fonts.CIRCULAR,
+  cursor: 'pointer',
+  userSelect: 'none',
+  textAlign: 'center',
+})
+
+const PerilInfo = styled('div')({
+  textAlign: 'center',
+  fontSize: '14px',
+  marginBottom: '20px',
+  marginTop: '10px',
+})
+
 interface State {
   activeTab: number
   showIconNumber: number
@@ -345,57 +344,116 @@ export const InsuranceCoverage: React.SFC = () => (
               {(text) => text}
             </TranslationsConsumer>
           </PerilInfo>
-          {PERILS.map((peril) => (
-            <BigCol key={peril.key}>
-              {state.activeTab === peril.key ? (
-                <Row>
-                  {peril.icons.map((column) => (
-                    <Col
-                      key={column.key}
-                      onClick={() =>
-                        state.showIconNumber === column.key &&
-                        state.showPerilNumber === peril.key
-                          ? state.handleSameIconClick()
-                          : state.handleIconClick(
-                              peril.key,
-                              column.key,
-                              column.expandableText,
-                            )
-                      }
-                    >
-                      <PerilIcon
-                        src={
-                          state.showIconNumber !== undefined
-                            ? state.showPerilNumber === peril.key &&
-                              state.showIconNumber === column.key
-                              ? column.icon
-                              : column.iconGrey
-                            : column.icon
-                        }
-                      />
-                      <PerilTitle
-                        style={{
-                          color:
-                            state.showIconNumber !== undefined
-                              ? state.showPerilNumber === peril.key &&
-                                state.showIconNumber === column.key
-                                ? colors.DARK_PURPLE
-                                : colors.DARK_GRAY
-                              : colors.DARK_PURPLE,
-                        }}
-                      >
-                        {column.title}
-                      </PerilTitle>
-                    </Col>
-                  ))}
-                </Row>
-              ) : null}
-            </BigCol>
-          ))}
-          {state.showPerilNumber !== undefined &&
-          state.showIconNumber !== undefined ? (
-            <DropDownText>{state.textToShow}</DropDownText>
-          ) : null}
+
+          {PERILS.map(
+            (peril) =>
+              state.activeTab === peril.key ? (
+                <Table key={peril.key}>
+                  <Row>
+                    {peril.icons.map(
+                      (column) =>
+                        column.key < 5 ? (
+                          <Col
+                            key={column.key}
+                            onClick={() =>
+                              state.showIconNumber === column.key &&
+                              state.showPerilNumber === peril.key
+                                ? state.handleSameIconClick()
+                                : state.handleIconClick(
+                                    peril.key,
+                                    column.key,
+                                    column.expandableText,
+                                  )
+                            }
+                          >
+                            <PerilIcon
+                              src={
+                                state.showIconNumber !== undefined
+                                  ? state.showPerilNumber === peril.key &&
+                                    state.showIconNumber === column.key
+                                    ? column.icon
+                                    : column.iconGrey
+                                  : column.icon
+                              }
+                            />
+                            <PerilTitle
+                              style={{
+                                color:
+                                  state.showIconNumber !== undefined
+                                    ? state.showPerilNumber === peril.key &&
+                                      state.showIconNumber === column.key
+                                      ? colors.DARK_PURPLE
+                                      : colors.DARK_GRAY
+                                    : colors.DARK_PURPLE,
+                              }}
+                            >
+                              {column.title}
+                            </PerilTitle>
+                          </Col>
+                        ) : null,
+                    )}
+                  </Row>
+                  {state.showIconNumber < 5 &&
+                  state.showPerilNumber !== undefined &&
+                  state.showIconNumber !== undefined ? (
+                    <Row>
+                      <DropDownText>{state.textToShow}</DropDownText>
+                    </Row>
+                  ) : null}
+                  <Row>
+                    {peril.icons.map(
+                      (column) =>
+                        column.key >= 5 ? (
+                          <Col
+                            key={column.key}
+                            onClick={() =>
+                              state.showIconNumber === column.key &&
+                              state.showPerilNumber === peril.key
+                                ? state.handleSameIconClick()
+                                : state.handleIconClick(
+                                    peril.key,
+                                    column.key,
+                                    column.expandableText,
+                                  )
+                            }
+                          >
+                            <PerilIcon
+                              src={
+                                state.showIconNumber !== undefined
+                                  ? state.showPerilNumber === peril.key &&
+                                    state.showIconNumber === column.key
+                                    ? column.icon
+                                    : column.iconGrey
+                                  : column.icon
+                              }
+                            />
+                            <PerilTitle
+                              style={{
+                                color:
+                                  state.showIconNumber !== undefined
+                                    ? state.showPerilNumber === peril.key &&
+                                      state.showIconNumber === column.key
+                                      ? colors.DARK_PURPLE
+                                      : colors.DARK_GRAY
+                                    : colors.DARK_PURPLE,
+                              }}
+                            >
+                              {column.title}
+                            </PerilTitle>
+                          </Col>
+                        ) : null,
+                    )}
+                  </Row>
+                  {state.showIconNumber >= 5 &&
+                  state.showPerilNumber !== undefined &&
+                  state.showIconNumber !== undefined ? (
+                    <Row>
+                      <DropDownText>{state.textToShow}</DropDownText>
+                    </Row>
+                  ) : null}
+                </Table>
+              ) : null,
+          )}
         </Card>
       )}
     </Container>
