@@ -22,7 +22,6 @@ const ICONSIDE = 16
 const CardWrapper = styled('div')({
   marginLeft: 'auto',
   marginRight: 'auto',
-  marginBottom: '30px',
   minWidth: CARDWIDTH,
   maxWidth: CARDWIDTH,
   [`@media (max-width: ${CARDWIDTH}px)`]: {

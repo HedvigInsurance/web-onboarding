@@ -6,7 +6,10 @@ import {
 import { OfferData } from 'containers/OfferContainer'
 import * as React from 'react'
 import styled from 'react-emotion'
-import { isStudentInsurance } from 'utils/insuranceDomainUtils'
+import {
+  isApartmentOwner,
+  isStudentInsurance,
+} from 'utils/insuranceDomainUtils'
 import { StudentBadge } from '../components/StudentOfferBadge'
 
 const ICONSIDE = 16
@@ -129,7 +132,13 @@ export const PriceAndInclusions: React.SFC<Props> = ({ offer }) => (
       <InsuranceInfo>
         <CheckIcon src="/new-member-assets/offering/checkmark.svg" />
         <BoldInfoText>
-          <TranslationsConsumer textKey="OFFER_PRICE_INCLUSION_ADDITION">
+          <TranslationsConsumer
+            textKey={
+              isApartmentOwner(offer.insurance.type)
+                ? 'OFFER_PRICE_INCLUSION_ADDITION'
+                : 'OFFER_PRICE_INCLUSION_ADDITION_RENT'
+            }
+          >
             {(text) => text}
           </TranslationsConsumer>
         </BoldInfoText>

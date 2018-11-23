@@ -15,6 +15,7 @@ const OuterWrapper = styled('div')({
   height: '100%',
   backgroundColor: colors.OFF_WHITE,
   position: 'absolute',
+  top: 0,
   bottom: 0,
 })
 
@@ -37,7 +38,11 @@ export const Sign: React.SFC = () => (
                 )}
               </TranslationsConsumer>
               <TopBar progress={2} />
-              <SignUp offer={offer} />
+              <div
+                style={{ backgroundColor: colors.OFF_WHITE, paddingBottom: 30 }}
+              >
+                <SignUp offer={offer} />
+              </div>
               <Legal insuranceType={offer.insurance.type} />
             </OuterWrapper>
           )
