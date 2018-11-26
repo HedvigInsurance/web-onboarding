@@ -85,9 +85,7 @@ it('queries when it has a session', async () => {
               },
             }}
           >
-            <MockTextKeyProvider textKeys={{ SIGN_HEADER_TITLE: '{address}' }}>
-              <SignUp offer={mockOffer} />
-            </MockTextKeyProvider>
+            <SignUp offer={mockOffer} />
           </Provider>
         </MockedProvider>
       </StaticRouter>

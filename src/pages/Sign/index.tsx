@@ -19,6 +19,11 @@ const OuterWrapper = styled('div')({
   bottom: 0,
 })
 
+const InnerWrapper = styled('div')({
+  backgroundColor: colors.OFF_WHITE,
+  paddingBottom: 30,
+})
+
 export const Sign: React.SFC = () => (
   <Page>
     <SessionTokenGuard>
@@ -29,7 +34,6 @@ export const Sign: React.SFC = () => (
           }
           return (
             <OuterWrapper>
-              {' '}
               <TranslationsConsumer textKey="SIGN_PAGE_TITLE">
                 {(t) => (
                   <Helmet>
@@ -38,11 +42,9 @@ export const Sign: React.SFC = () => (
                 )}
               </TranslationsConsumer>
               <TopBar progress={2} />
-              <div
-                style={{ backgroundColor: colors.OFF_WHITE, paddingBottom: 30 }}
-              >
+              <InnerWrapper>
                 <SignUp offer={offer} />
-              </div>
+              </InnerWrapper>
               <Legal insuranceType={offer.insurance.type} />
             </OuterWrapper>
           )
