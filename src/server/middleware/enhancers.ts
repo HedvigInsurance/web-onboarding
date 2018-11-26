@@ -88,11 +88,9 @@ export const inCaseOfEmergency: Middleware = async (ctx, next) => {
 export const nextWithSentry: Middleware = async (ctx, next) => {
   const sentry = new Sentry.Hub(
     Sentry.getCurrentHub().getClient(),
-    new Sentry.Scope(),
+    new Sentry.Scope().setTag('requestUuid', ctx.state.requestUuid),
   )
-  sentry.configureScope((scope) => {
-    scope.setExtra('requestUuid', ctx.state.requestUuid)
-  })
+
   try {
     await next()
   } catch (e) {
