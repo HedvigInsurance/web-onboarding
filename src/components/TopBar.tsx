@@ -136,7 +136,7 @@ export const TopBar: React.SFC<Props> = ({ progress, button }) => (
 
     <Bar>
       <LogoWrapper>
-        <EscapeLink href="https://hedvig.com">
+        <EscapeLink href="/">
           <Logo src="/new-member-assets/topbar/hedvig-wordmark-solid.svg" />
         </EscapeLink>
       </LogoWrapper>
