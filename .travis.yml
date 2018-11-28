@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-- 'v10.13.0'
+- 'v10.14.0'
 
 cache:
   directories:
