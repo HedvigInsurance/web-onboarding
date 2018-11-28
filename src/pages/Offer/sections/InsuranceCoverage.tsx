@@ -243,18 +243,15 @@ const DropDownText = styled('div')({
 
 const Switcher = styled('div')({
   backgroundColor: colors.LIGHT_GRAY,
-  borderRadius: '20px',
+  borderRadius: '50px',
   display: 'inline-flex',
   flexDirection: 'row',
-  marginLeft: 'auto',
-  marginRight: 'auto',
-  '@media (max-width: 410px)': {
-    flexDirection: 'column',
-  },
+  marginLeft: '10px',
+  marginRight: '10px',
 })
 
 const SwitcherItem = styled('div')({
-  borderRadius: '30px',
+  borderRadius: '50px',
   paddingTop: '10px',
   paddingBottom: '10px',
   paddingRight: '20px',
