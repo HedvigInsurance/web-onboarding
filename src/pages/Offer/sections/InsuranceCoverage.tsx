@@ -5,6 +5,112 @@ import * as React from 'react'
 import styled from 'react-emotion'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 
+const PERILSIDE = 72
+
+const Card = styled('div')({
+  paddingBottom: '40px',
+  backgroundColor: colors.WHITE,
+  textAlign: 'center',
+})
+
+const Wrapper = styled('div')({
+  backgroundColor: colors.OFF_WHITE,
+})
+
+const Header = styled('h1')({
+  color: colors.BLACK,
+  margin: 0,
+  paddingBottom: '30px',
+  paddingLeft: '10px',
+  paddingRight: '10px',
+})
+
+const BigCol = styled('div')({})
+
+const Row = styled('div')({
+  maxWidth: '792px',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  marginBottom: '30px',
+  display: 'flex',
+  alignItems: 'baseline',
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  '@media (max-width: 527px)': {
+    justifyContent: 'center',
+  },
+})
+
+const Col = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  flexDirection: 'column',
+  cursor: 'pointer',
+})
+
+const PerilIcon = styled('img')({
+  marginBottom: '10px',
+  marginTop: '10px',
+  marginRight: '30px',
+  marginLeft: '30px',
+  width: PERILSIDE,
+  height: PERILSIDE,
+})
+
+const PerilTitle = styled('div')({
+  marginBottom: '0px',
+  marginTop: '0px',
+  textAlign: 'center',
+  color: colors.DARK_GRAY,
+  borderRadius: '30px',
+  padding: '5px',
+})
+
+const DropDownText = styled('div')({
+  maxWidth: '792px',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  textAlign: 'left',
+  color: colors.OFF_BLACK,
+  '@media (max-width:792px)': {
+    marginLeft: '30px',
+    marginRight: '30px',
+  },
+  '@media (max-width: 527px)': {
+    textAlign: 'center',
+    marginLeft: '10px',
+    marginRight: '10px',
+  },
+})
+
+const Switcher = styled('div')({
+  backgroundColor: colors.LIGHT_GRAY,
+  borderRadius: '50px',
+  display: 'inline-flex',
+  flexDirection: 'row',
+  marginLeft: '10px',
+  marginRight: '10px',
+})
+
+const SwitcherItem = styled('div')({
+  borderRadius: '50px',
+  paddingTop: '10px',
+  paddingBottom: '10px',
+  paddingRight: '20px',
+  paddingLeft: '20px',
+  fontFamily: fonts.CIRCULAR,
+  cursor: 'pointer',
+  userSelect: 'none',
+  textAlign: 'center',
+})
+
+const PerilInfo = styled('div')({
+  textAlign: 'center',
+  fontSize: '14px',
+  marginBottom: '20px',
+  marginTop: '10px',
+})
+
 const PERILS = [
   {
     key: 0,
@@ -162,112 +268,6 @@ const PERILS = [
     ],
   },
 ]
-
-const PERILSIDE = 72
-
-const Card = styled('div')({
-  paddingBottom: '40px',
-  backgroundColor: colors.WHITE,
-  textAlign: 'center',
-})
-
-const Wrapper = styled('div')({
-  backgroundColor: colors.OFF_WHITE,
-})
-
-const Header = styled('h1')({
-  color: colors.BLACK,
-  margin: 0,
-  paddingBottom: '30px',
-  paddingLeft: '10px',
-  paddingRight: '10px',
-})
-
-const BigCol = styled('div')({})
-
-const Row = styled('div')({
-  maxWidth: '792px',
-  marginLeft: 'auto',
-  marginRight: 'auto',
-  marginBottom: '30px',
-  display: 'flex',
-  alignItems: 'baseline',
-  flexDirection: 'row',
-  flexWrap: 'wrap',
-  '@media (max-width: 527px)': {
-    justifyContent: 'center',
-  },
-})
-
-const Col = styled('div')({
-  display: 'flex',
-  alignItems: 'center',
-  flexDirection: 'column',
-  cursor: 'pointer',
-})
-
-const PerilIcon = styled('img')({
-  marginBottom: '10px',
-  marginTop: '10px',
-  marginRight: '30px',
-  marginLeft: '30px',
-  width: PERILSIDE,
-  height: PERILSIDE,
-})
-
-const PerilTitle = styled('div')({
-  marginBottom: '0px',
-  marginTop: '0px',
-  textAlign: 'center',
-  color: colors.DARK_GRAY,
-  borderRadius: '30px',
-  padding: '5px',
-})
-
-const DropDownText = styled('div')({
-  maxWidth: '792px',
-  marginLeft: 'auto',
-  marginRight: 'auto',
-  textAlign: 'left',
-  color: colors.OFF_BLACK,
-  '@media (max-width:792px)': {
-    marginLeft: '30px',
-    marginRight: '30px',
-  },
-  '@media (max-width: 527px)': {
-    textAlign: 'center',
-    marginLeft: '10px',
-    marginRight: '10px',
-  },
-})
-
-const Switcher = styled('div')({
-  backgroundColor: colors.LIGHT_GRAY,
-  borderRadius: '50px',
-  display: 'inline-flex',
-  flexDirection: 'row',
-  marginLeft: '10px',
-  marginRight: '10px',
-})
-
-const SwitcherItem = styled('div')({
-  borderRadius: '50px',
-  paddingTop: '10px',
-  paddingBottom: '10px',
-  paddingRight: '20px',
-  paddingLeft: '20px',
-  fontFamily: fonts.CIRCULAR,
-  cursor: 'pointer',
-  userSelect: 'none',
-  textAlign: 'center',
-})
-
-const PerilInfo = styled('div')({
-  textAlign: 'center',
-  fontSize: '14px',
-  marginBottom: '20px',
-  marginTop: '10px',
-})
 
 interface State {
   activeTab: number
