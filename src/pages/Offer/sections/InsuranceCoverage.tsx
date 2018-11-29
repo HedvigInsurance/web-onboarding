@@ -183,27 +183,24 @@ const Header = styled('h1')({
   paddingRight: '10px',
 })
 
-const Table = styled('div')({
-  display: 'flex',
-  flexDirection: 'column',
-})
+const BigCol = styled('div')({})
 
 const Row = styled('div')({
-  maxWidth: '660px',
+  maxWidth: '792px',
   marginLeft: 'auto',
   marginRight: 'auto',
-  flexDirection: 'column',
   marginBottom: '30px',
+  display: 'flex',
   alignItems: 'baseline',
+  flexDirection: 'row',
   flexWrap: 'wrap',
-  '@media (max-width: 700px)': {
-    flexFlow: 'wrap',
-    justifyContent: 'flex-start',
+  '@media (max-width: 527px)': {
+    justifyContent: 'center',
   },
 })
 
 const Col = styled('div')({
-  display: 'inline-block',
+  display: 'flex',
   alignItems: 'center',
   flexDirection: 'column',
   cursor: 'pointer',
@@ -228,14 +225,17 @@ const PerilTitle = styled('div')({
 })
 
 const DropDownText = styled('div')({
+  maxWidth: '792px',
+  marginLeft: 'auto',
+  marginRight: 'auto',
   textAlign: 'left',
   color: colors.OFF_BLACK,
-  '@media (max-width: 700px)': {
-    textAlign: 'center',
+  '@media (max-width:792px)': {
     marginLeft: '30px',
     marginRight: '30px',
   },
-  '@media (max-width: 500px)': {
+  '@media (max-width: 527px)': {
+    textAlign: 'center',
     marginLeft: '10px',
     marginRight: '10px',
   },
@@ -341,116 +341,57 @@ export const InsuranceCoverage: React.SFC = () => (
               {(text) => text}
             </TranslationsConsumer>
           </PerilInfo>
-
-          {PERILS.map(
-            (peril) =>
-              state.activeTab === peril.key ? (
-                <Table key={peril.key}>
-                  <Row>
-                    {peril.icons.map(
-                      (column) =>
-                        column.key < 5 ? (
-                          <Col
-                            key={column.key}
-                            onClick={() =>
-                              state.showIconNumber === column.key &&
-                              state.showPerilNumber === peril.key
-                                ? state.handleSameIconClick()
-                                : state.handleIconClick(
-                                    peril.key,
-                                    column.key,
-                                    column.expandableText,
-                                  )
-                            }
-                          >
-                            <PerilIcon
-                              src={
-                                state.showIconNumber !== undefined
-                                  ? state.showPerilNumber === peril.key &&
-                                    state.showIconNumber === column.key
-                                    ? column.icon
-                                    : column.iconGrey
-                                  : column.icon
-                              }
-                            />
-                            <PerilTitle
-                              style={{
-                                color:
-                                  state.showIconNumber !== undefined
-                                    ? state.showPerilNumber === peril.key &&
-                                      state.showIconNumber === column.key
-                                      ? colors.DARK_PURPLE
-                                      : colors.DARK_GRAY
-                                    : colors.DARK_PURPLE,
-                              }}
-                            >
-                              {column.title}
-                            </PerilTitle>
-                          </Col>
-                        ) : null,
-                    )}
-                  </Row>
-                  {state.showIconNumber < 5 &&
-                  state.showPerilNumber !== undefined &&
-                  state.showIconNumber !== undefined ? (
-                    <Row>
-                      <DropDownText>{state.textToShow}</DropDownText>
-                    </Row>
-                  ) : null}
-                  <Row>
-                    {peril.icons.map(
-                      (column) =>
-                        column.key >= 5 ? (
-                          <Col
-                            key={column.key}
-                            onClick={() =>
-                              state.showIconNumber === column.key &&
-                              state.showPerilNumber === peril.key
-                                ? state.handleSameIconClick()
-                                : state.handleIconClick(
-                                    peril.key,
-                                    column.key,
-                                    column.expandableText,
-                                  )
-                            }
-                          >
-                            <PerilIcon
-                              src={
-                                state.showIconNumber !== undefined
-                                  ? state.showPerilNumber === peril.key &&
-                                    state.showIconNumber === column.key
-                                    ? column.icon
-                                    : column.iconGrey
-                                  : column.icon
-                              }
-                            />
-                            <PerilTitle
-                              style={{
-                                color:
-                                  state.showIconNumber !== undefined
-                                    ? state.showPerilNumber === peril.key &&
-                                      state.showIconNumber === column.key
-                                      ? colors.DARK_PURPLE
-                                      : colors.DARK_GRAY
-                                    : colors.DARK_PURPLE,
-                              }}
-                            >
-                              {column.title}
-                            </PerilTitle>
-                          </Col>
-                        ) : null,
-                    )}
-                  </Row>
-                  {state.showIconNumber >= 5 &&
-                  state.showPerilNumber !== undefined &&
-                  state.showIconNumber !== undefined ? (
-                    <Row>
-                      <DropDownText>{state.textToShow}</DropDownText>
-                    </Row>
-                  ) : null}
-                </Table>
-              ) : null,
-          )}
+          {PERILS.map((peril) => (
+            <BigCol key={peril.key}>
+              {state.activeTab === peril.key ? (
+                <Row>
+                  {peril.icons.map((column) => (
+                    <Col
+                      key={column.key}
+                      onClick={() =>
+                        state.showIconNumber === column.key &&
+                        state.showPerilNumber === peril.key
+                          ? state.handleSameIconClick()
+                          : state.handleIconClick(
+                              peril.key,
+                              column.key,
+                              column.expandableText,
+                            )
+                      }
+                    >
+                      <PerilIcon
+                        src={
+                          state.showIconNumber !== undefined
+                            ? state.showPerilNumber === peril.key &&
+                              state.showIconNumber === column.key
+                              ? column.icon
+                              : column.iconGrey
+                            : column.icon
+                        }
+                      />
+                      <PerilTitle
+                        style={{
+                          color:
+                            state.showIconNumber !== undefined
+                              ? state.showPerilNumber === peril.key &&
+                                state.showIconNumber === column.key
+                                ? colors.DARK_PURPLE
+                                : colors.DARK_GRAY
+                              : colors.DARK_PURPLE,
+                        }}
+                      >
+                        {column.title}
+                      </PerilTitle>
+                    </Col>
+                  ))}
+                </Row>
+              ) : null}
+            </BigCol>
+          ))}
+          {state.showPerilNumber !== undefined &&
+          state.showIconNumber !== undefined ? (
+            <DropDownText>{state.textToShow}</DropDownText>
+          ) : null}
         </Card>
       )}
     </Container>
