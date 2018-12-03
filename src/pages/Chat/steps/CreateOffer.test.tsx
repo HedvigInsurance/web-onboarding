@@ -41,7 +41,13 @@ const renderCreateOffer = (mockedState: any) => (
           query: CREATE_SESSION_TOKEN_MUTATION,
         },
         result: {
-          data: { createSession: 'blargh' },
+          data: {
+            createSessionV2: {
+              token: 'blargh',
+              memberId: '1',
+              __typename: 'SessionInformation',
+            },
+          },
         },
       },
     ]}
@@ -105,7 +111,13 @@ it('toggles student', () => {
             query: CREATE_SESSION_TOKEN_MUTATION,
           },
           result: {
-            data: { createSession: 'blargh' },
+            data: {
+              createSessionV2: {
+                token: 'blargh',
+                memberId: '1',
+                __typename: 'SessionInformation',
+              },
+            },
           },
         },
       ]}
@@ -152,7 +164,11 @@ it('creates an offer without 💥', async () => {
       },
       result: {
         data: {
-          createSession: 'abc123',
+          createSessionV2: {
+            token: 'abc123',
+            memberId: '1',
+            __typename: 'SessionInformation',
+          },
         },
       },
     },
