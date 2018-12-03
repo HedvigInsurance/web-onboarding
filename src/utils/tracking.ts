@@ -1,6 +1,5 @@
 import { CookieStorage } from 'cookie-storage'
-import { setupTrackers } from 'quepasa'
-import { SegmentAnalyticsJs } from 'quepasa/dist/interfaces'
+import { SegmentAnalyticsJs, setupTrackers } from 'quepasa'
 
 const cookie = new CookieStorage()
 
