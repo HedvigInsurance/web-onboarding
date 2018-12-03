@@ -176,28 +176,27 @@ export const TopBar: React.SFC<Props> = ({ progress, button }) => (
           ))}
         </ProgressStages>
       )}
-      {progress !== undefined &&
-        progress < 3 && (
-          <CollapsedProgressStages>
-            <StageCol>
-              <StageRow>
-                <ProgressText
-                  style={{
-                    color: colors.BLACK,
-                  }}
-                >
-                  {progressInfo[progress].key + 1}
-                  {'.'}
-                </ProgressText>
-              </StageRow>
-              <StageRow>
-                <TranslationsConsumer textKey={progressInfo[progress].textKey}>
-                  {(text) => <ProgressText>{text}</ProgressText>}
-                </TranslationsConsumer>
-              </StageRow>
-            </StageCol>
-          </CollapsedProgressStages>
-        )}
+      {progress !== undefined && progress < 3 && (
+        <CollapsedProgressStages>
+          <StageCol>
+            <StageRow>
+              <ProgressText
+                style={{
+                  color: colors.BLACK,
+                }}
+              >
+                {progressInfo[progress].key + 1}
+                {'.'}
+              </ProgressText>
+            </StageRow>
+            <StageRow>
+              <TranslationsConsumer textKey={progressInfo[progress].textKey}>
+                {(text) => <ProgressText>{text}</ProgressText>}
+              </TranslationsConsumer>
+            </StageRow>
+          </StageCol>
+        </CollapsedProgressStages>
+      )}
       {button}
     </Bar>
   </Wrapper>
