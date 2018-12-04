@@ -6,7 +6,7 @@ import styled from 'react-emotion'
 
 const PageDownIcon = styled('img')({
   marginTop: '40px',
-  marginBottom: '88px',
+  marginBottom: '40px',
 })
 
 export const PageDown: React.SFC<{}> = () => (

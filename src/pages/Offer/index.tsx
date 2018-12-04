@@ -19,7 +19,6 @@ import { HedvigInfo } from './sections/HedvigInfo'
 import { HedvigSwitch } from './sections/HedvigSwitch'
 import { InsuranceCoverage } from './sections/InsuranceCoverage'
 import { InsuredAmount } from './sections/InsuredAmount'
-import { Legal } from './sections/LegalText'
 import { Offer } from './sections/Offer'
 import { OtherInfo } from './sections/OtherInfo'
 import { PageDown } from './sections/PageDown'
@@ -63,6 +62,9 @@ const GetInsuredButton = styled('div')({
   display: 'flex',
   justifyContent: 'inherit',
   marginRight: '26px',
+  '@media (max-width: 350px)': {
+    marginRight: '10px',
+  },
 })
 
 const LinkTag = styled(Link)({
@@ -72,12 +74,14 @@ const LinkTag = styled(Link)({
   borderRadius: '50px',
   padding: '10px 24px',
   textAlign: 'center',
+  '@media (max-width: 300px)': {
+    padding: '10px 12px',
+  },
 })
 
 const BigCard = styled('div')({
-  marginTop: '70px',
-  paddingTop: '30px',
-  paddingBottom: '60px',
+  paddingTop: '40px',
+  paddingBottom: '40px',
   backgroundColor: colors.WHITE,
   boxShadow: '0px 8px 15px -13px rgba(0,0,0,0.67)',
   borderRadius: '10px',
@@ -158,8 +162,7 @@ export const Offering: React.SFC<{}> = () => (
                       signButtonVisibility={state.updateUpperButtonVisibility}
                     />
                     <PageDown />
-                    <HedvigInfo />
-                    {insuredAtOtherCompany ? <HedvigSwitch /> : null}
+
                     <Wrapper>
                       <InnerWrapper>
                         <CardWrapper>
@@ -174,11 +177,12 @@ export const Offering: React.SFC<{}> = () => (
                         </CardWrapper>
                       </InnerWrapper>
                     </Wrapper>
+                    <HedvigInfo />
+                    {insuredAtOtherCompany ? <HedvigSwitch /> : null}
                     <GetInsured
                       offer={offer}
                       signButtonVisibility={state.updateLowerButtonVisibility}
                     />
-                    <Legal insuranceType={offer.insurance.type} />
                   </>
                 )}
               </Container>
