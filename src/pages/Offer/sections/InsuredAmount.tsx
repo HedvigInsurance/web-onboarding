@@ -6,18 +6,19 @@ import { InsuranceType, isStudentInsurance } from 'utils/insuranceDomainUtils'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 
 const Card = styled('div')({
-  paddingBottom: '60px',
+  paddingBottom: '40px',
   backgroundColor: colors.WHITE,
 })
 
-const Table = styled('div')({
-  marginTop: '20px',
-})
+const Table = styled('div')({})
 
 const Header = styled('h1')({
   color: colors.BLACK,
-  marginTop: '30px',
-  marginBottom: '30px',
+  margin: 0,
+  paddingTop: '40px',
+  paddingBottom: '30px',
+  paddingLeft: '10px',
+  paddingRight: '10px',
 })
 
 const Row = styled('div')({
@@ -27,6 +28,9 @@ const Row = styled('div')({
   flexDirection: 'row',
   marginLeft: '150px',
   marginRight: '150px',
+  borderRadius: '8px',
+  paddingLeft: 16,
+  paddingRight: 16,
   '@media (max-width: 700px)': {
     marginLeft: '30px',
     marginRight: '30px',
@@ -41,6 +45,7 @@ const Col = styled('div')({
   paddingLeft: '5px',
   flexDirection: 'column',
   color: colors.BLACK,
+  maxWidth: '50%',
 })
 
 const BoldInfoText = styled('div')({

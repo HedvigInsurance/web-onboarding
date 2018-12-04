@@ -14,8 +14,7 @@ const IMAGESIDE = 72
 
 const Card = styled('div')({
   marginTop: '70px',
-  paddingTop: '30px',
-  paddingBottom: '60px',
+  paddingBottom: '40px',
   backgroundColor: colors.WHITE,
   boxShadow: '0px 8px 15px -13px rgba(0,0,0,0.67)',
   borderRadius: '10px',
@@ -23,8 +22,14 @@ const Card = styled('div')({
 
 const Header = styled('h1')({
   color: colors.BLACK,
-  marginTop: '30px',
-  marginBottom: '30px',
+  margin: 0,
+  paddingTop: '40px',
+  paddingBottom: '30px',
+  paddingLeft: '10px',
+  paddingRight: '10px',
+  maxWidth: '400px',
+  marginLeft: 'auto',
+  marginRight: 'auto',
 })
 
 const Paragraph = styled('p')({

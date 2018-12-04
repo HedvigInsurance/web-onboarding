@@ -28,12 +28,15 @@ const ChatWrapper = styled('div')({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
-  marginBottom: 10,
+  marginBottom: 30,
   opacity: 1,
+  maxWidth: '65%',
 })
+
 const Hedvig = styled('img')({
   height: 33,
 })
+
 const HedvigWrapper = styled('div')({})
 
 const ChatMessageWrapper = styled('div')({
@@ -98,8 +101,8 @@ export const Typing: React.SFC<{ status: TransitionStatus }> = ({ status }) => (
 export const ChatMessageTextWrapper = styled('div')(
   ({ isVisible, appear }: { isVisible: boolean; appear: boolean }) => ({
     display: 'inline-block',
-    maxWidth: '75%',
-    padding: '1rem 2rem',
+    maxWidth: '100%',
+    padding: '15px 18px',
     backgroundColor: colors.OFF_WHITE,
     color: colors.BLACK_PURPLE,
     fontFamily: fonts.MERRIWEATHER,
