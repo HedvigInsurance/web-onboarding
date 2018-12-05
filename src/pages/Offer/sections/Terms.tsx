@@ -21,8 +21,11 @@ const Card = styled('div')({
 
 const Header = styled('h1')({
   color: colors.BLACK,
-  marginTop: '30px',
-  marginBottom: '30px',
+  margin: 0,
+  paddingTop: '40px',
+  paddingBottom: '30px',
+  paddingLeft: '10px',
+  paddingRight: '10px',
 })
 
 const Row = styled('div')({
@@ -32,14 +35,20 @@ const Row = styled('div')({
   alignItems: 'baseline',
   justifyContent: 'center',
   flexDirection: 'row',
+  '@media (max-width: 320px)': {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: '250px',
+  },
 })
 
 const Col = styled('div')({
   display: 'flex',
   alignItems: 'center',
   flexDirection: 'column',
-  marginRight: '15px',
-  marginLeft: '15px',
+  marginRight: '10px',
+  marginLeft: '10px',
   textAlign: 'center',
 })
 
@@ -50,7 +59,7 @@ const PDFTag = styled('h3')({
   position: 'absolute',
   margin: 0,
   top: 0,
-  right: 15,
+  right: 20,
 })
 
 const PerilIcon = styled('img')({
@@ -64,6 +73,7 @@ const PerilIcon = styled('img')({
 const PerilLink = styled('a')({
   textDecoration: 'none',
   position: 'relative',
+  width: 145,
 })
 
 const PerilTitle = styled('div')({
@@ -72,7 +82,6 @@ const PerilTitle = styled('div')({
   fontFamily: fonts.CIRCULAR,
   textAlign: 'center',
   color: colors.OFF_BLACK,
-  width: '141px',
 })
 
 export const Terms: React.SFC<TermsProps> = ({ insuranceType }) => (
@@ -104,7 +113,7 @@ export const Terms: React.SFC<TermsProps> = ({ insuranceType }) => (
           {(url) => (
             <PerilLink href={url} rel="noreferrer noopener" target="_blank">
               <PDFTag>PDF</PDFTag>
-              <PerilIcon src="/new-member-assets/offering/forkopsinformation.svg" />
+              <PerilIcon src="/new-member-assets/offering/forsakringsvillkor.svg" />
               <TranslationsConsumer textKey="TERMS_PERIL_TWO_TITLE">
                 {(title) => <PerilTitle>{title}</PerilTitle>}
               </TranslationsConsumer>

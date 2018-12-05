@@ -8,7 +8,7 @@ import { HeaderWrapper } from '../components/HeaderWrapper'
 const PERILSIDE = 72
 
 const Card = styled('div')({
-  paddingBottom: '60px',
+  paddingBottom: '40px',
   backgroundColor: colors.WHITE,
   textAlign: 'center',
 })
@@ -19,24 +19,25 @@ const Wrapper = styled('div')({
 
 const Header = styled('h1')({
   color: colors.BLACK,
-  marginTop: '30px',
-  marginBottom: '30px',
+  margin: 0,
+  paddingBottom: '30px',
+  paddingLeft: '10px',
+  paddingRight: '10px',
 })
 
 const BigCol = styled('div')({})
 
 const Row = styled('div')({
-  marginLeft: '115px',
-  marginRight: '115px',
+  maxWidth: '792px',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  marginBottom: '30px',
   display: 'flex',
   alignItems: 'baseline',
   flexDirection: 'row',
   flexWrap: 'wrap',
-  '@media (max-width: 700px)': {
-    flexFlow: 'wrap',
-    justifyContent: 'flex-start',
-    marginLeft: '30px',
-    marginRight: '30px',
+  '@media (max-width: 527px)': {
+    justifyContent: 'center',
   },
 })
 
@@ -66,28 +67,33 @@ const PerilTitle = styled('div')({
 })
 
 const DropDownText = styled('div')({
-  marginTop: '30px',
+  maxWidth: '792px',
+  marginLeft: 'auto',
+  marginRight: 'auto',
   textAlign: 'left',
   color: colors.OFF_BLACK,
-  marginLeft: '138px',
-  marginRight: '138px',
+  '@media (max-width:792px)': {
+    marginLeft: '30px',
+    marginRight: '30px',
+  },
+  '@media (max-width: 527px)': {
+    textAlign: 'center',
+    marginLeft: '10px',
+    marginRight: '10px',
+  },
 })
 
 const Switcher = styled('div')({
   backgroundColor: colors.LIGHT_GRAY,
-  borderRadius: '20px',
+  borderRadius: '50px',
   display: 'inline-flex',
   flexDirection: 'row',
-  marginLeft: 'auto',
-  marginRight: 'auto',
-  '@media (max-width: 400px)': {
-    width: '90%',
-    borderRadius: '40px',
-  },
+  marginLeft: '10px',
+  marginRight: '10px',
 })
 
 const SwitcherItem = styled('div')({
-  borderRadius: '30px',
+  borderRadius: '50px',
   paddingTop: '10px',
   paddingBottom: '10px',
   paddingRight: '20px',
@@ -159,7 +165,7 @@ const PERILS = [
           'Plötsligt tackar din spis för sig eller så blir det kortslutning i din prisbelönta kaffemaskin. Hedvig ersätter skador på dina vitvaror, så länge det inte rör sig om skador som din hyresvärd är skyldig att ersätta.',
       },
       {
-        key: 8,
+        key: 6,
         title: 'Bostadsrättstillägg',
         icon: '/new-member-assets/offering/bostadsrattstillagg.svg',
         iconGrey: '/new-member-assets/offering/bostadsrattstillagg-grey.svg',
