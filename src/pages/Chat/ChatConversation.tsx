@@ -7,7 +7,7 @@ import { ChatMessage } from 'components/hedvig/chat'
 import { Conversation, Message } from 'components/hedvig/conversation'
 import * as React from 'react'
 import {
-  CustomEvents,
+  ApplicationSpecificEvents,
   getUtmParamsFromCookie,
   TrackAction,
 } from 'utils/tracking'
@@ -78,7 +78,7 @@ export const ChatConversation: React.SFC = () => (
             >
               <TrackAction
                 event={{
-                  name: CustomEvents.COMPLETED,
+                  name: ApplicationSpecificEvents.COMPLETED,
                   properties: {
                     category: 'web-onboarding-steps',
                     label: 'name',
@@ -112,7 +112,7 @@ export const ChatConversation: React.SFC = () => (
             >
               <TrackAction
                 event={{
-                  name: CustomEvents.COMPLETED,
+                  name: ApplicationSpecificEvents.COMPLETED,
                   properties: {
                     category: 'web-onboarding-steps',
                     label: 'age',
@@ -173,7 +173,7 @@ export const ChatConversation: React.SFC = () => (
             >
               <TrackAction
                 event={{
-                  name: CustomEvents.COMPLETED,
+                  name: ApplicationSpecificEvents.COMPLETED,
                   properties: {
                     category: 'web-onboarding-steps',
                     label: 'address',
@@ -207,7 +207,7 @@ export const ChatConversation: React.SFC = () => (
             >
               <TrackAction
                 event={{
-                  name: CustomEvents.COMPLETED,
+                  name: ApplicationSpecificEvents.COMPLETED,
                   properties: {
                     category: 'web-onboarding-steps',
                     label: 'insurance-type',
@@ -243,7 +243,7 @@ export const ChatConversation: React.SFC = () => (
             >
               <TrackAction
                 event={{
-                  name: CustomEvents.COMPLETED,
+                  name: ApplicationSpecificEvents.COMPLETED,
                   properties: {
                     category: 'web-onboarding-steps',
                     label: 'number-of-people',
@@ -309,7 +309,7 @@ export const ChatConversation: React.SFC = () => (
             >
               <TrackAction
                 event={{
-                  name: CustomEvents.COMPLETED,
+                  name: ApplicationSpecificEvents.COMPLETED,
                   properties: {
                     category: 'web-onboarding-steps',
                     label: 'has-current-insurance',

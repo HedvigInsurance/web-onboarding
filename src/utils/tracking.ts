@@ -16,14 +16,14 @@ export const getUtmParamsFromCookie = (): UtmParams | undefined => {
   return params ? JSON.parse(params) : undefined
 }
 
-export enum CustomEvents {
+export enum ApplicationSpecificEvents {
   COMPLETED = 'completed',
 }
 
 const NOOP = () => {} // tslint:disable-line
 
 export const { Track, TrackAction, Identify, IdentifyAction } = setupTrackers<
-  CustomEvents
+  ApplicationSpecificEvents
 >(
   () => {
     if (typeof window !== 'undefined') {
