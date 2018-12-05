@@ -54,10 +54,15 @@ it('creates a new session', async () => {
     {
       request: {
         query: CREATE_SESSION_TOKEN_MUTATION,
-        variables: { campaign: undefined, trackingId: '1' },
       },
       result: {
-        data: { createSession: 'abc123' },
+        data: {
+          createSessionV2: {
+            token: 'abc123',
+            memberId: '1',
+            __typename: 'SessionInformation',
+          },
+        },
       },
     },
   ]

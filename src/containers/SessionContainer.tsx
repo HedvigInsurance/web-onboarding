@@ -5,15 +5,14 @@ import { Mutation } from 'react-apollo'
 import { Mount } from 'react-lifecycle-components'
 import { apolloClient } from '../client/apolloClient'
 import { StorageContainer } from '../utils/StorageContainer'
-import {
-  getUtmParamsFromCookie,
-  setTrackingId,
-  UtmParams,
-} from '../utils/tracking'
+import { IdentifyAction } from '../utils/tracking'
 
 export const CREATE_SESSION_TOKEN_MUTATION: DocumentNode = gql`
-  mutation CreateSessionToken($campaign: CampaignInput, $trackingId: UUID) {
-    createSession(campaign: $campaign, trackingId: $trackingId)
+  mutation CreateSessionToken {
+    createSessionV2 {
+      token
+      memberId
+    }
   }
 `
 
@@ -26,38 +25,37 @@ export const SessionContainer: React.SFC<SessionContainerProps> = ({
 }) => (
   <StorageContainer>
     {(storageState) => (
-      <Mutation<
-        { createSession: string },
-        { campaign?: UtmParams; trackingId?: string }
-      >
+      <Mutation<{ createSessionV2: { token: string; memberId: string } }>
         mutation={CREATE_SESSION_TOKEN_MUTATION}
-        variables={{ campaign: getUtmParamsFromCookie() }}
       >
         {(createSession, createSessionProps) => (
-          <Mount
-            on={() => {
-              if (
-                !storageState.session.getSession()!.token &&
-                !createSessionProps.called
-              ) {
-                const trackingId = setTrackingId()
-                createSession({
-                  update: (_, { data }) => {
-                    if (data && data.createSession) {
-                      // async magic to let apollo reconnect after session has been updated
-                      setTimeout(() => {
-                        apolloClient!.subscriptionClient!.close(true, true)
-                        storageState.setToken(data.createSession)
-                      }, 0)
-                    }
-                  },
-                  variables: { trackingId },
-                })
-              }
-            }}
-          >
-            {children(storageState.session.getSession()!.token || null)}
-          </Mount>
+          <IdentifyAction identity={{}}>
+            {({ identify }) => (
+              <Mount
+                on={() => {
+                  if (
+                    !storageState.session.getSession()!.token &&
+                    !createSessionProps.called
+                  ) {
+                    createSession({
+                      update: (_, { data }) => {
+                        if (data && data.createSessionV2) {
+                          // async magic to let apollo reconnect after session has been updated
+                          setTimeout(() => {
+                            apolloClient!.subscriptionClient!.close(true, true)
+                            storageState.setToken(data.createSessionV2.token)
+                            identify({ userId: data.createSessionV2.memberId })
+                          }, 0)
+                        }
+                      },
+                    })
+                  }
+                }}
+              >
+                {children(storageState.session.getSession()!.token || null)}
+              </Mount>
+            )}
+          </IdentifyAction>
         )}
       </Mutation>
     )}

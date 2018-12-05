@@ -5,11 +5,12 @@ import {
 } from '@hedviginsurance/textkeyfy'
 import { GetInsuredButton, LinkTag } from 'components/buttons'
 import { OfferData } from 'containers/OfferContainer'
+import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
 import styled from 'react-emotion'
 import VisibilitySensor from 'react-visibility-sensor'
 import { formatPostalNumber } from 'utils/postalNumbers'
-import { trackEvent } from 'utils/tracking'
+import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
 import { CardWrapperSmall } from '../components/CardWrapperSmall'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 import { InnerWrapper } from '../components/InnerWrapper'
@@ -97,18 +98,25 @@ export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
               <GetInsuredButton centered>
                 <TranslationsConsumer textKey="OFFER_SUMMARY_SIGN_CTA">
                   {(ctaText) => (
-                    <LinkTag
-                      to={'/new-member/sign'}
-                      onClick={() =>
-                        trackEvent('Checkout Started', {
-                          category: 'offer',
+                    <TrackAction
+                      event={{
+                        name: SemanticEvents.Ecommerce.CheckoutStarted,
+                        properties: {
                           value: offer.insurance.monthlyCost,
                           label: 'Offer',
-                        })
-                      }
+                          ...getUtmParamsFromCookie(),
+                        },
+                      }}
                     >
-                      {ctaText}
-                    </LinkTag>
+                      {({ track }) => (
+                        <LinkTag
+                          to={'/new-member/sign'}
+                          onClick={() => track()}
+                        >
+                          {ctaText}
+                        </LinkTag>
+                      )}
+                    </TrackAction>
                   )}
                 </TranslationsConsumer>
               </GetInsuredButton>
