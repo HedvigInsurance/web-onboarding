@@ -13,7 +13,16 @@ export interface UtmParams {
 
 export const getUtmParamsFromCookie = (): UtmParams | undefined => {
   const params = cookie.getItem('utm-params')
-  return params ? JSON.parse(params) : undefined
+  try {
+    return params ? JSON.parse(params) : undefined
+  } catch (e) {
+    if (typeof window !== 'undefined' && (window as any).Sentry) {
+      ;(window as any).Sentry.captureMessage(
+        'Error parsing UTM-parameters: ' + params,
+      )
+    }
+    return undefined
+  }
 }
 
 export enum ApplicationSpecificEvents {
