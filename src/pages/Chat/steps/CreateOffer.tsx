@@ -108,36 +108,6 @@ export const CreateOffer: React.SFC = () => (
                               >
                                 <Wrapper>
                                   <CreateOfferCtaWrapper>
-                                    <CreateOfferCtaWrapperRow>
-                                      <Button
-                                        background={colors.GREEN}
-                                        foreground={colors.WHITE}
-                                        size="lg"
-                                        disabled={
-                                          !canSubmit(chatState) ||
-                                          chatScreenState.offerCreationDebounceState ===
-                                            LoadingState.LOADING ||
-                                          chatScreenState.offerCreationLoadingState ===
-                                            LoadingState.LOADING
-                                        }
-                                        onClick={() => {
-                                          if (!canSubmit(chatState)) {
-                                            return
-                                          }
-                                          chatScreenState.beginDebounce()
-                                          createOffer(
-                                            getCreateOfferVariablesFromChatState(
-                                              chatState,
-                                            ),
-                                          )
-                                        }}
-                                      >
-                                        <TranslationsConsumer textKey="CHAT_INPUT_CREATE_OFFER">
-                                          {(text) => text}
-                                        </TranslationsConsumer>
-                                      </Button>
-                                    </CreateOfferCtaWrapperRow>
-
                                     {(isQualifiedStudent ||
                                       chatState.isStudent !== undefined) && (
                                       <CreateOfferCtaWrapperRow>
@@ -168,6 +138,36 @@ export const CreateOffer: React.SFC = () => (
                                           )}
                                       </CreateOfferCtaWrapperRow>
                                     )}
+
+                                    <CreateOfferCtaWrapperRow>
+                                      <Button
+                                        background={colors.GREEN}
+                                        foreground={colors.WHITE}
+                                        size="lg"
+                                        disabled={
+                                          !canSubmit(chatState) ||
+                                          chatScreenState.offerCreationDebounceState ===
+                                            LoadingState.LOADING ||
+                                          chatScreenState.offerCreationLoadingState ===
+                                            LoadingState.LOADING
+                                        }
+                                        onClick={() => {
+                                          if (!canSubmit(chatState)) {
+                                            return
+                                          }
+                                          chatScreenState.beginDebounce()
+                                          createOffer(
+                                            getCreateOfferVariablesFromChatState(
+                                              chatState,
+                                            ),
+                                          )
+                                        }}
+                                      >
+                                        <TranslationsConsumer textKey="CHAT_INPUT_CREATE_OFFER">
+                                          {(text) => text}
+                                        </TranslationsConsumer>
+                                      </Button>
+                                    </CreateOfferCtaWrapperRow>
                                   </CreateOfferCtaWrapper>
                                   <GdprWrapper>
                                     <TranslationsConsumer textKey="CHAT_INPUT_PERSONAL_DATA_LINK">
