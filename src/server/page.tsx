@@ -61,6 +61,10 @@ const template = (
 
 export const getPage: Koa.Middleware = async (ctx) => {
   const session = createSession<Session>(new ServerCookieStorage(ctx))
+  const dontPanicSession = createSession<any>(
+    new ServerCookieStorage(ctx),
+    '_hv_dp',
+  )
   const unwrappedSession = session.getSession()
   const apolloClient = createServerApolloClient(
     ctx.state.requestUuid,
@@ -72,7 +76,7 @@ export const getPage: Koa.Middleware = async (ctx) => {
     <StaticRouter location={ctx.request.originalUrl} context={routerContext}>
       <HelmetProvider context={helmetContext}>
         <ApolloProvider client={apolloClient}>
-          <App session={session} />
+          <App session={session} dontPanicSession={dontPanicSession} />
         </ApolloProvider>
       </HelmetProvider>
     </StaticRouter>
@@ -94,4 +98,7 @@ export const getPage: Koa.Middleware = async (ctx) => {
     apolloClient.extract(),
     (ctx.res as any).cspNonce,
   )
+
+  ctx.response.set('Access-Control-Allow-Origin', '*')
+  ctx.response.set('Access-Control-Allow-Headers', 'content-type')
 }

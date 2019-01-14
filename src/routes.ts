@@ -1,4 +1,5 @@
 import { Chat } from './pages/Chat'
+import { DontPanic } from './pages/DontPanic'
 import { Download } from './pages/Download'
 import { FourOhFour } from './pages/FourOhFour'
 import { NewMemberLanding } from './pages/NewMemberLanding'
@@ -11,5 +12,6 @@ export const reactPageRoutes = [
   { path: '/new-member/offer', Component: Offering, exact: true },
   { path: '/new-member/download', Component: Download, exact: true },
   { path: '/new-member/sign', Component: Sign, exact: true },
+  { path: '/dont-panic', Component: DontPanic, exact: true },
   { path: '/*', Component: FourOhFour },
 ]

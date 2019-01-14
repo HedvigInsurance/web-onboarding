@@ -17,27 +17,31 @@ export interface IsomorphicSessionStorage<T> {
   keepAlive: () => void
 }
 
-const clearExpiredSession = (storage: MinimalStorage | CookieStorage) => {
+const clearExpiredSession = (
+  storage: MinimalStorage | CookieStorage,
+  sessionKey: string = SESSION_KEY,
+) => {
   const kaTimestamp = storage.getItem(KA_SESSION_KEY)
   if (
     kaTimestamp &&
     Date.now() - SESSION_EXPIRY_TIMEOUT > Number(kaTimestamp)
   ) {
-    storage.removeItem(SESSION_KEY)
+    storage.removeItem(sessionKey)
     storage.removeItem(KA_SESSION_KEY)
   }
 }
 
 export const createSession = <T>(
   storage: MinimalStorage | CookieStorage,
+  storageKey: string = SESSION_KEY,
 ): IsomorphicSessionStorage<T> => ({
   setSession: (value: T): void => {
-    storage.setItem(SESSION_KEY, JSON.stringify(value))
+    storage.setItem(storageKey, JSON.stringify(value))
   },
   getSession: (): T | undefined => {
     try {
       clearExpiredSession(storage)
-      return JSON.parse(storage.getItem(SESSION_KEY) || '{}')
+      return JSON.parse(storage.getItem(storageKey) || '{}')
     } catch (e) {
       return undefined
     }
