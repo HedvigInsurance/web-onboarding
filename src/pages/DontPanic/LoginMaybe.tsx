@@ -75,8 +75,8 @@ export const LoginMaybe = (props: { reload: () => void }) => (
   <StorageContainer>
     {({ dontPanicSession }) => {
       if (
-        dontPanicSession.getSession() &&
-        dontPanicSession.getSession().fbData
+        dontPanicSession!.getSession() &&
+        dontPanicSession!.getSession().fbData
       ) {
         return null
       }
@@ -95,8 +95,8 @@ export const LoginMaybe = (props: { reload: () => void }) => (
                 if (!fbData || !fbData.id) {
                   return
                 }
-                dontPanicSession.setSession({
-                  ...dontPanicSession.getSession(),
+                dontPanicSession!.setSession({
+                  ...dontPanicSession!.getSession(),
                   fbData,
                 })
                 props.reload()

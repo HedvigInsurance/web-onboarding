@@ -57,12 +57,12 @@ export const LoggedInMaybe: React.FunctionComponent = () => (
   <StorageContainer>
     {({ dontPanicSession }) => {
       if (
-        !dontPanicSession.getSession() ||
-        !dontPanicSession.getSession().fbData
+        !dontPanicSession!.getSession() ||
+        !dontPanicSession!.getSession().fbData
       ) {
         return null
       }
-      const { fbData } = dontPanicSession.getSession()
+      const { fbData } = dontPanicSession!.getSession()
       return (
         <ConversationWrapper>
           <Container<
@@ -87,8 +87,9 @@ export const LoggedInMaybe: React.FunctionComponent = () => (
             initialState={{
               currentMessage: '',
               es:
-                typeof EventSource !== 'undefined' &&
-                new EventSource('http://localhost:1337/sse'),
+                typeof EventSource !== 'undefined'
+                  ? new EventSource('http://localhost:1337/sse')
+                  : undefined,
             }}
             actions={{
               setCurrentMessage: (currentMessage) => () => ({ currentMessage }),

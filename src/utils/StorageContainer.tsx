@@ -4,7 +4,7 @@ import { IsomorphicSessionStorage, Session } from './sessionStorage'
 
 export interface StorageState {
   session: IsomorphicSessionStorage<Session>
-  dontPanicSession: IsomorphicSessionStorage<any>
+  dontPanicSession?: IsomorphicSessionStorage<any>
 }
 
 export interface WithStorageProps {
