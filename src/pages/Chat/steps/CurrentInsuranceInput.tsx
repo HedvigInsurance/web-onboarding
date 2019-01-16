@@ -25,7 +25,7 @@ interface CurrentInsuranceInputProps {
   isCurrentMessage?: boolean
 }
 
-const insurerNames = new Map<Insurer, string>([
+export const insurerNames = new Map<Insurer, string>([
   [Insurer.IF, 'If'],
   [Insurer.FOLKSAM, 'Folksam'],
   [Insurer.TRYGG_HANSA, 'Trygg Hansa'],

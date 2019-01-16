@@ -29,6 +29,7 @@ interface ConversationProps<TId> {
   currentStep?: TId
   visibleSteps?: TId[]
   initialVisibleSteps?: TId[]
+  className?: string
 }
 
 export class Conversation<TId> extends React.Component<ConversationProps<TId>> {
@@ -42,7 +43,7 @@ export class Conversation<TId> extends React.Component<ConversationProps<TId>> {
     const visibleSteps = this.props.visibleSteps || []
     const initialVisibleSteps = this.props.initialVisibleSteps || []
     return (
-      <ConversationWrapper>
+      <ConversationWrapper className={this.props.className}>
         {React.Children.toArray(this.props.children)
           .filter((message) => visibleSteps.includes(getId(message)))
           .map((message) =>
