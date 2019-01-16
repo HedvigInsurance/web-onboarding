@@ -131,6 +131,8 @@ export class DontPanic extends React.Component {
             setCurrentInsurer,
             sessionId,
             setSessionId,
+            isChatActive,
+            makeChatActive,
           }) => (
             <>
               <Conversation<string>
@@ -170,7 +172,7 @@ export class DontPanic extends React.Component {
                   {({ appear }) => (
                     <UserResponse appear={appear}>
                       <Button
-                        background={colors.PURPLE}
+                        background={colors.GREEN}
                         foreground={colors.WHITE}
                         size="lg"
                         onClick={() => goToStep({ id: 'name', isHedvig: true })}
@@ -320,11 +322,10 @@ export class DontPanic extends React.Component {
                     >
                       {(createChatSession) => (
                         <ChatMessage
-                          isCurrentMessage={isCurrentStep(
-                            true,
-                            'first-message',
-                            steps,
-                          )}
+                          isCurrentMessage={
+                            isCurrentStep(true, 'first-message', steps) &&
+                            !isChatActive
+                          }
                           typingDuration={1500}
                           appear={appear}
                           onTyped={() => {
@@ -359,53 +360,71 @@ export class DontPanic extends React.Component {
                     variables={{ id: sessionId }}
                   >
                     {({ data, error }) => (
-                      <>
-                        {error && (
-                          <Error>
-                            Ojdå... Något gick visst fel konversationen skulle
-                            laddas :(
-                          </Error>
-                        )}
-                        {Boolean(data && data.dontPanicSession) && (
-                          <BottomConversation
-                            visibleSteps={data!.dontPanicSession!.chatMessages.map(
-                              ({ id }) => id,
+                      <Container<{ initialVisibleConversationSteps: string[] }>
+                        initialState={{
+                          initialVisibleConversationSteps:
+                            (data &&
+                              data.dontPanicSession &&
+                              data.dontPanicSession.chatMessages.map(
+                                ({ id }) => id,
+                              )) ||
+                            [],
+                        }}
+                      >
+                        {({ initialVisibleConversationSteps }) => (
+                          <>
+                            {error && (
+                              <Error>
+                                Ojdå... Något gick visst fel konversationen
+                                skulle laddas :(
+                              </Error>
                             )}
-                            initialVisibleSteps={[]}
-                            currentStep={
-                              data!.dontPanicSession!.chatMessages.length > 0
-                                ? data!.dontPanicSession!.chatMessages[
-                                    data!.dontPanicSession!.chatMessages
-                                      .length - 1
-                                  ].id
-                                : ''
-                            }
-                          >
-                            {data!.dontPanicSession!.chatMessages.map(
-                              (message) => (
-                                <Message id={message.id} key={message.id}>
-                                  {({ appear }) => (
-                                    <ChatMessage
-                                      isCurrentMessage={isCurrentStep(
-                                        true,
-                                        message.id,
-                                        data!.dontPanicSession!.chatMessages,
+                            {Boolean(data && data.dontPanicSession) && (
+                              <BottomConversation
+                                visibleSteps={data!.dontPanicSession!.chatMessages.map(
+                                  ({ id }) => id,
+                                )}
+                                initialVisibleSteps={
+                                  initialVisibleConversationSteps
+                                }
+                                currentStep={
+                                  data!.dontPanicSession!.chatMessages.length >
+                                  0
+                                    ? data!.dontPanicSession!.chatMessages[
+                                        data!.dontPanicSession!.chatMessages
+                                          .length - 1
+                                      ].id
+                                    : ''
+                                }
+                              >
+                                {data!.dontPanicSession!.chatMessages.map(
+                                  (message) => (
+                                    <Message id={message.id} key={message.id}>
+                                      {({ appear }) => (
+                                        <ChatMessage
+                                          isCurrentMessage={isCurrentStep(
+                                            true,
+                                            message.id,
+                                            data!.dontPanicSession!
+                                              .chatMessages,
+                                          )}
+                                          typingDuration={
+                                            message.isHedvig ? 500 : 0
+                                          }
+                                          appear={appear}
+                                          isHedvig={message.isHedvig}
+                                        >
+                                          {message.text}
+                                        </ChatMessage>
                                       )}
-                                      typingDuration={
-                                        message.isHedvig ? 500 : 0
-                                      }
-                                      appear={appear}
-                                      isHedvig={message.isHedvig}
-                                    >
-                                      {message.text}
-                                    </ChatMessage>
-                                  )}
-                                </Message>
-                              ),
+                                    </Message>
+                                  ),
+                                )}
+                              </BottomConversation>
                             )}
-                          </BottomConversation>
+                          </>
                         )}
-                      </>
+                      </Container>
                     )}
                   </Query>
                   <MessageBoxWrapper>
@@ -433,10 +452,14 @@ export class DontPanic extends React.Component {
                               onSubmit={(e) => {
                                 e.preventDefault()
                                 sendMessage({
-                                  variables: { sessionId, text: messageText },
+                                  variables: {
+                                    sessionId,
+                                    text: messageText,
+                                  },
                                   awaitRefetchQueries: true,
                                 }).then((_) => {
                                   setMessageText('')
+                                  makeChatActive()
                                 })
                               }}
                             >
@@ -445,7 +468,7 @@ export class DontPanic extends React.Component {
                                 onChange={(e) => setMessageText(e.target.value)}
                               />
                               <Button
-                                background={colors.PURPLE}
+                                background={colors.GREEN}
                                 foreground={colors.WHITE}
                                 type="submit"
                                 disabled={loading}

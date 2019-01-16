@@ -1,6 +1,6 @@
-import { StorageContainer } from '../../utils/StorageContainer'
 import { Container } from 'constate'
 import * as React from 'react'
+import { StorageContainer } from '../../utils/StorageContainer'
 
 export interface Step {
   id: string
@@ -13,6 +13,7 @@ interface State {
   name?: string
   currentInsurer?: string
   sessionId?: string
+  isChatActive: boolean
 }
 
 interface Effects {
@@ -20,6 +21,7 @@ interface Effects {
   setName: (name: string) => void
   setCurrentInsurer: (currentInsurer: string) => void
   setSessionId: (sessionId: string) => void
+  makeChatActive: () => void
 }
 
 export const DontPanicContainer: React.FunctionComponent<{
@@ -47,6 +49,9 @@ export const DontPanicContainer: React.FunctionComponent<{
           sessionId:
             dontPanicSession!.getSession() &&
             dontPanicSession!.getSession().sessionId,
+          isChatActive:
+            dontPanicSession!.getSession() &&
+            dontPanicSession!.getSession().isChatActive,
         }}
         effects={{
           goToStep: (step) => ({ state, setState }) => {
@@ -81,6 +86,13 @@ export const DontPanicContainer: React.FunctionComponent<{
               sessionId,
             })
             setState({ sessionId })
+          },
+          makeChatActive: () => ({ setState }) => {
+            dontPanicSession!.setSession({
+              ...dontPanicSession!.getSession(),
+              isChatActive: true,
+            })
+            setState({ isChatActive: true })
           },
         }}
         {...props}
