@@ -229,10 +229,11 @@ export class DontPanic extends React.Component {
                         </Spacing>
                         {steps[steps.length - 1].id === 'name-response' && (
                           <Button
-                            background={colors.PURPLE}
+                            background={colors.GREEN}
                             foreground={colors.WHITE}
                             size="lg"
                             type="submit"
+                            disabled={!Boolean(name)}
                           >
                             Nästa
                           </Button>
@@ -299,7 +300,7 @@ export class DontPanic extends React.Component {
                         {steps[steps.length - 1].id ===
                           'current-insurer-response' && (
                           <Button
-                            background={colors.PURPLE}
+                            background={colors.GREEN}
                             foreground={colors.WHITE}
                             size="lg"
                             type="submit"

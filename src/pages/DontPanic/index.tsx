@@ -1,6 +1,4 @@
-import { Container } from 'constate'
 import * as React from 'react'
-import { Mount } from 'react-lifecycle-components'
 import { DontPanic } from './DontPanic'
 
 // export const LazyDontPanic = () => (
