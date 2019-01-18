@@ -7,13 +7,21 @@ import { BrowserRouter } from 'react-router-dom'
 import { HotApp } from './App'
 import { apolloClient } from './client/apolloClient'
 import { PageTracker } from './components/PageTracker'
-import { createSession, Session } from './utils/sessionStorage'
+import {
+  createSession,
+  SavingCookieStorage,
+  Session,
+} from './utils/sessionStorage'
 
 const session = createSession<Session>(
-  new CookieStorage({ expires: null, path: '/new-member' }),
+  new SavingCookieStorage(
+    new CookieStorage({ expires: null, path: '/new-member' }),
+  ),
 )
 const dontPanicSession = createSession<any>(
-  new CookieStorage({ expires: null, path: '/dont-panic' }),
+  new SavingCookieStorage(
+    new CookieStorage({ expires: null, path: '/dont-panic' }),
+  ),
   '_hv_dp',
 )
 

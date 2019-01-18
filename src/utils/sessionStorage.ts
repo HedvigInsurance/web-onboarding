@@ -1,4 +1,5 @@
 import { CookieStorage } from 'cookie-storage'
+import { CookieOptions } from 'cookie-storage/lib/cookie-options'
 import { State as ChatState } from '../pages/Chat/state'
 import { MinimalStorage } from './storage/MinimalStorage'
 
@@ -15,6 +16,30 @@ export interface IsomorphicSessionStorage<T> {
   setSession: (value: T) => void
   getSession: () => T | undefined
   keepAlive: () => void
+}
+
+export class SavingCookieStorage implements MinimalStorage {
+  private inMemoryStore: Record<string, string> = {}
+
+  constructor(private cookieStorage: CookieStorage) {}
+
+  public getItem(item: string): string | null {
+    if (Object.keys(this.inMemoryStore).includes(item)) {
+      return this.inMemoryStore[item]
+    }
+
+    return this.cookieStorage.getItem(item)
+  }
+
+  public removeItem(item: string, options?: CookieOptions): void {
+    delete this.inMemoryStore[item]
+    this.cookieStorage.removeItem(item, options)
+  }
+
+  public setItem(item: string, value: string, options?: CookieOptions): void {
+    this.inMemoryStore[item] = value
+    this.cookieStorage.setItem(item, value, options)
+  }
 }
 
 const clearExpiredSession = (

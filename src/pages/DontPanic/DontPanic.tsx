@@ -19,6 +19,7 @@ import { Size, Spacing } from '../../components/utils/Spacing'
 import { insurerNames } from '../Chat/steps/CurrentInsuranceInput'
 import { DontPanicContainer, Step } from './DontPanicContainer'
 import { Container } from 'constate'
+import { Link } from 'react-router-dom'
 
 const Wrapper = styled('div')(() => ({
   display: 'flex',
@@ -66,7 +67,12 @@ interface Session {
   id: string
   name: string
   currentInsurer: string
-  chatMessages: Array<{ id: string; text: string; isHedvig: boolean }>
+  chatMessages: Array<{
+    id: string
+    text: string
+    isHedvig: boolean
+    type: 'text' | 'onboard'
+  }>
 }
 
 const SESSION_QUERY = gql`
@@ -79,6 +85,7 @@ const SESSION_QUERY = gql`
         id
         text
         isHedvig
+        type
       }
     }
   }
@@ -416,6 +423,16 @@ export class DontPanic extends React.Component {
                                           isHedvig={message.isHedvig}
                                         >
                                           {message.text}
+                                          {message.type === 'onboard' && (
+                                            <>
+                                              <br />
+                                              <Link
+                                                to={`/new-member/hedvig?firstName=${name}&initialInsurer=${currentInsurer}`}
+                                              >
+                                                Gå till onboarding
+                                              </Link>
+                                            </>
+                                          )}
                                         </ChatMessage>
                                       )}
                                     </Message>

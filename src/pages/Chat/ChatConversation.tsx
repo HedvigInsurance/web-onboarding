@@ -68,6 +68,39 @@ export const ChatConversation: React.SFC = () => (
             </Mufflable>
           )}
         </Message>
+
+        <Message id={ChatStep.INITIAL_NAME}>
+          {({ appear }) => (
+            <Mufflable
+              muffled={
+                ![
+                  ChatStep.INITIAL_NAME,
+                  ChatStep.NAME_INPUT,
+                  ChatStep.AGE_INPUT,
+                ].includes(currentStep)
+              }
+            >
+              <ChatMessage
+                appear={appear}
+                typingDuration={2500}
+                isCurrentMessage={[
+                  ChatStep.INITIAL_NAME,
+                  ChatStep.NAME_INPUT,
+                  ChatStep.AGE_INPUT,
+                ].includes(currentStep)}
+                onTyped={() => goToStep(ChatStep.NAME_INPUT)}
+              >
+                <TranslationsPlaceholderConsumer
+                  textKey="CHAT_HEDVIG_FIRST_GREET_NAME"
+                  replacements={{ name: nameAge.firstName }}
+                >
+                  {(t) => t}
+                </TranslationsPlaceholderConsumer>
+              </ChatMessage>
+            </Mufflable>
+          )}
+        </Message>
+
         <Message delay={500} id={ChatStep.NAME_INPUT}>
           {({ appear }) => (
             <Mufflable
