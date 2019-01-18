@@ -18,6 +18,9 @@ export const ConversationWrapper = styled('div')({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
+  '@media (max-width: 500px)': {
+    fontSize: 20,
+  },
 })
 
 const getId = (child: React.ReactChild) => React.Children.only(child).props.id

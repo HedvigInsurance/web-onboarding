@@ -25,7 +25,7 @@ const DontPanicButtonWrapper = styled('div')({
   display: 'flex',
   justifyContent: 'center',
   width: '100%',
-  paddingBottom: 50,
+  padding: '50px 0',
 })
 
 const slideUp = keyframes({
@@ -69,23 +69,51 @@ const MessageBoxWrapper = styled(ConversationWrapper)({
   flexDirection: 'row',
   justifyContent: 'flex-end',
   width: '100%',
-  paddingTop: '3rem',
-  paddingBottom: '3rem',
+  padding: 0,
   minHeight: 0,
+})
+const MessageFormFiller = styled('div')({
+  height: 200,
+})
+const MessageFormWrapper = styled('div')({
+  background: colors.WHITE,
+  position: 'fixed',
+  bottom: 0,
+  left: 0,
+  right: 0,
 })
 const MessageForm = styled('form')({
   display: 'flex',
   flexDirection: 'row',
-  width: '75%',
+  alignItems: 'flex-start',
+  width: '100%',
+  maxWidth: 1000,
+  borderTop: '1px solid ' + colors.LIGHT_GRAY,
+  padding: '20px',
 })
 const MessageTextarea = styled('textarea')({
-  width: '100%',
-  border: '1px solid ' + colors.LIGHT_GRAY,
+  width: 'calc(100% - 100px)',
+  border: 0,
   borderRadius: 7,
   padding: '.5rem 1rem',
+  paddingLeft: 0,
   fontSize: 'inherit',
   color: 'inherit',
   fontFamily: 'inherit',
+  resize: 'none',
+})
+
+const MessageSendButton = styled(Button)({
+  border: 0,
+  background: 'transparent',
+  textAlign: 'center',
+  fontSize: 'inherit',
+  transition: 'opacity 200ms',
+
+  '&:disabled': {
+    background: 'transparent',
+    opacity: 0.1,
+  },
 })
 
 const HedvigH = () => (
@@ -93,8 +121,8 @@ const HedvigH = () => (
     viewBox="0 0 29 38"
     xmlns="http://www.w3.org/2000/svg"
     fill={colors.WHITE}
-    width="60px"
-    height="60px"
+    width="25%"
+    height="25%"
   >
     <path
       fillRule="evenodd"
@@ -527,7 +555,16 @@ export class DontPanic extends React.Component {
                                           appear={appear}
                                           isHedvig={message.isHedvig}
                                         >
-                                          {message.text}
+                                          {message.text
+                                            .split('\n')
+                                            .map((text, i, { length }) => {
+                                              return (
+                                                <React.Fragment key={i}>
+                                                  {text}
+                                                  {i < length - 1 && <br />}
+                                                </React.Fragment>
+                                              )
+                                            })}
                                           {message.type === 'onboard' && (
                                             <>
                                               <br />
@@ -550,60 +587,93 @@ export class DontPanic extends React.Component {
                       </Container>
                     )}
                   </Query>
-                  <MessageBoxWrapper>
-                    <Container<
-                      { messageText: string },
-                      { setMessageText: (messageText: string) => void }
-                    >
-                      initialState={{ messageText: '' }}
-                      actions={{
-                        setMessageText: (messageText) => ({ messageText }),
-                      }}
-                    >
-                      {({ messageText, setMessageText }) => (
-                        <Mutation
-                          mutation={ADD_MESSAGE_MUTATION}
-                          refetchQueries={() => [
-                            {
-                              query: SESSION_QUERY,
-                              variables: { id: sessionId },
-                            },
-                          ]}
-                        >
-                          {(sendMessage, { loading }) => (
-                            <MessageForm
-                              onSubmit={(e) => {
-                                e.preventDefault()
-                                sendMessage({
-                                  variables: {
-                                    sessionId,
-                                    text: messageText,
-                                  },
-                                  awaitRefetchQueries: true,
-                                }).then((_) => {
+
+                  <MessageFormFiller />
+                  <MessageFormWrapper>
+                    <MessageBoxWrapper>
+                      <Container<
+                        { messageText: string },
+                        { setMessageText: (messageText: string) => void }
+                      >
+                        initialState={{ messageText: '' }}
+                        actions={{
+                          setMessageText: (messageText) => ({ messageText }),
+                        }}
+                      >
+                        {({ messageText, setMessageText }) => (
+                          <Mutation
+                            mutation={ADD_MESSAGE_MUTATION}
+                            refetchQueries={() => [
+                              {
+                                query: SESSION_QUERY,
+                                variables: { id: sessionId },
+                              },
+                            ]}
+                          >
+                            {(mutate, { loading }) => {
+                              const sendMessage = (vars: any) => {
+                                if (messageText.trim().length === 0) {
+                                  return
+                                }
+                                return mutate(vars).then((_) => {
                                   setMessageText('')
                                   makeChatActive()
                                 })
-                              }}
-                            >
-                              <MessageTextarea
-                                value={messageText}
-                                onChange={(e) => setMessageText(e.target.value)}
-                              />
-                              <Button
-                                background={colors.GREEN}
-                                foreground={colors.WHITE}
-                                type="submit"
-                                disabled={loading}
-                              >
-                                Skicka
-                              </Button>
-                            </MessageForm>
-                          )}
-                        </Mutation>
-                      )}
-                    </Container>
-                  </MessageBoxWrapper>
+                              }
+                              return (
+                                <MessageForm
+                                  onSubmit={(e) => {
+                                    e.preventDefault()
+                                    sendMessage({
+                                      variables: {
+                                        sessionId,
+                                        text: messageText,
+                                      },
+                                      awaitRefetchQueries: true,
+                                    })
+                                  }}
+                                >
+                                  <MessageTextarea
+                                    value={messageText}
+                                    onChange={(e) =>
+                                      setMessageText(e.target.value)
+                                    }
+                                    placeholder="Skriv ditt meddelande..."
+                                    rows={4}
+                                    onKeyDown={(e) => {
+                                      if (e.keyCode !== 13) {
+                                        return
+                                      }
+                                      if (e.shiftKey) {
+                                        return
+                                      }
+
+                                      e.preventDefault()
+                                      sendMessage({
+                                        variables: {
+                                          sessionId,
+                                          text: messageText,
+                                        },
+                                        awaitRefetchQueries: true,
+                                      })
+                                    }}
+                                  />
+                                  <MessageSendButton
+                                    background="transparent"
+                                    foreground={colors.GREEN}
+                                    type="submit"
+                                    disabled={loading}
+                                  >
+                                    Skicka
+                                  </MessageSendButton>
+                                </MessageForm>
+                              )
+                            }}
+                          </Mutation>
+                        )}
+                      </Container>
+                    </MessageBoxWrapper>
+                  </MessageFormWrapper>
                 </>
               )}
             </>

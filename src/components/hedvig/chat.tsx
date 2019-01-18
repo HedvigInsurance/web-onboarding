@@ -32,6 +32,9 @@ const ChatWrapper = styled('div')(({ isHedvig }: { isHedvig: boolean }) => ({
   marginBottom: 30,
   opacity: 1,
   maxWidth: '65%',
+  '@media (max-width: 500px)': {
+    maxWidth: '80%',
+  },
 }))
 
 const Hedvig = styled('img')({
