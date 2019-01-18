@@ -40,14 +40,14 @@ export const createSession = <T>(
   },
   getSession: (): T | undefined => {
     try {
-      clearExpiredSession(storage)
+      clearExpiredSession(storage, storageKey)
       return JSON.parse(storage.getItem(storageKey) || '{}')
     } catch (e) {
       return undefined
     }
   },
   keepAlive: () => {
-    clearExpiredSession(storage)
+    clearExpiredSession(storage, storageKey)
     storage.setItem(KA_SESSION_KEY, String(Date.now()))
   },
 })
