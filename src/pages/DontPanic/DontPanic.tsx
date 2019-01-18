@@ -1,8 +1,10 @@
 import { colors } from '@hedviginsurance/brand'
+import { Container } from 'constate'
 import gql from 'graphql-tag'
 import * as React from 'react'
 import { Mutation, Query } from 'react-apollo'
-import styled from 'react-emotion'
+import styled, { keyframes } from 'react-emotion'
+import { Link } from 'react-router-dom'
 import { Button } from '../../components/buttons'
 import { ChatMessage } from '../../components/hedvig/chat'
 import {
@@ -18,8 +20,31 @@ import {
 import { Size, Spacing } from '../../components/utils/Spacing'
 import { insurerNames } from '../Chat/steps/CurrentInsuranceInput'
 import { DontPanicContainer, Step } from './DontPanicContainer'
-import { Container } from 'constate'
-import { Link } from 'react-router-dom'
+
+const DontPanicButtonWrapper = styled('div')({
+  display: 'flex',
+  justifyContent: 'center',
+  width: '100%',
+  paddingBottom: 50,
+})
+
+const slideUp = keyframes({
+  from: { transform: 'translateY(50%)', opacity: 0 },
+  to: { transform: 'translateY(0)', opacity: 1 },
+})
+
+const DontPanicButton = styled(Button)(
+  ({ appear, currentStep }: { appear: boolean; currentStep: boolean }) => ({
+    width: '20vh',
+    height: '20vh',
+    fontWeight: 'bold',
+    borderRadius: 500,
+    cursor: currentStep ? 'pointer' : 'default',
+    opacity: currentStep ? 1 : 0.5,
+    animation: appear ? undefined : `${slideUp} 1000ms forwards`,
+    transition: 'opacity 300ms',
+  }),
+)
 
 const Wrapper = styled('div')(() => ({
   display: 'flex',
@@ -62,6 +87,37 @@ const MessageTextarea = styled('textarea')({
   color: 'inherit',
   fontFamily: 'inherit',
 })
+
+const HedvigH = () => (
+  <svg
+    viewBox="0 0 29 38"
+    xmlns="http://www.w3.org/2000/svg"
+    fill={colors.WHITE}
+    width="60px"
+    height="60px"
+  >
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M23.0625 37.997H28.748V24.7198H23.0625V37.997Z"
+    />
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M28.7499 24.7199H23.0644C23.0644 20.2238 19.3906 16.5636 14.8757 16.5636C10.3594 16.5636 6.68553 20.2238 6.68553 24.7199H1C1 17.1017 7.22432 10.9031 14.8757 10.9031C22.5256 10.9031 28.7499 17.1017 28.7499 24.7199Z"
+    />
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M1 24.7198H6.68553V0H1V24.7198Z"
+    />
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M1 37.997H6.68553V24.7198H1V37.997Z"
+    />
+  </svg>
+)
 
 interface Session {
   id: string
@@ -150,9 +206,31 @@ export class DontPanic extends React.Component {
                 currentStep={
                   steps[steps.length - 1]
                     ? steps[steps.length - 1].id
-                    : 'initial'
+                    : 'dont-panic'
                 }
               >
+                <Message id="dont-panic">
+                  {({ appear }) => (
+                    <DontPanicButtonWrapper>
+                      <DontPanicButton
+                        foreground={colors.WHITE}
+                        background={colors.GREEN}
+                        size="lg"
+                        onClick={() => {
+                          if (isCurrentStep(true, 'dont-panic', steps)) {
+                            goToStep({ id: 'initial', isHedvig: true })
+                          }
+                        }}
+                        appear={appear}
+                        currentStep={isCurrentStep(true, 'dont-panic', steps)}
+                      >
+                        <HedvigH />
+                        <br />
+                        Don't panic!
+                      </DontPanicButton>
+                    </DontPanicButtonWrapper>
+                  )}
+                </Message>
                 <Message id="initial">
                   {({ appear }) => (
                     <ChatMessage
@@ -330,15 +408,20 @@ export class DontPanic extends React.Component {
                     >
                       {(createChatSession) => (
                         <ChatMessage
-                          isCurrentMessage={
-                            isCurrentStep(true, 'first-message', steps) &&
-                            !isChatActive
-                          }
+                          isCurrentMessage={isCurrentStep(
+                            true,
+                            'first-message',
+                            steps,
+                          )}
                           typingDuration={1500}
                           appear={appear}
                           onTyped={() => {
                             createChatSession({
                               variables: { name, currentInsurer },
+                            })
+                            goToStep({
+                              id: 'question-examples',
+                              isHedvig: true,
                             })
                           }}
                         >
@@ -356,6 +439,28 @@ export class DontPanic extends React.Component {
                         </ChatMessage>
                       )}
                     </Mutation>
+                  )}
+                </Message>
+
+                <Message id="question-examples" delay={500}>
+                  {({ appear }) => (
+                    <ChatMessage
+                      isCurrentMessage={
+                        isCurrentStep(true, 'first-message', steps) &&
+                        !isChatActive
+                      }
+                      typingDuration={2000}
+                      appear={appear}
+                    >
+                      Några saker du kan fråga mig är exempelvis:
+                      <ul>
+                        <li>
+                          Vad gäller på min försäkring när jag reser utomlands?
+                        </li>
+                        <li>Jag har råkat ut för XYZ - kan jag bli ersatt?</li>
+                        <li>Vilken flyttfirma ska jag anlita?</li>
+                      </ul>
+                    </ChatMessage>
                   )}
                 </Message>
               </Conversation>

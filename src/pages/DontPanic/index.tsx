@@ -1,4 +1,5 @@
 import * as React from 'react'
+import Helmet from 'react-helmet-async'
 import { DontPanic } from './DontPanic'
 
 // export const LazyDontPanic = () => (
@@ -26,4 +27,11 @@ import { DontPanic } from './DontPanic'
 //     )}
 //   </Container>
 // )
-export const LazyDontPanic = () => <DontPanic />
+export const LazyDontPanic = () => (
+  <>
+    <Helmet>
+      <title>Don't Panic by Hedvig</title>
+    </Helmet>
+    <DontPanic />
+  </>
+)
