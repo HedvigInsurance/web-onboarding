@@ -157,13 +157,16 @@ const PREMADE_QUESTIONS = [
   { id: 3, question: 'Vilken flyttfirma ska jag anlita?' },
 ]
 
-const HedvigH = () => (
+export const HedvigH: React.FunctionComponent<{ className?: string }> = ({
+  className,
+}) => (
   <svg
     viewBox="0 0 29 38"
     xmlns="http://www.w3.org/2000/svg"
     fill={colors.WHITE}
     width="25%"
     height="25%"
+    className={className}
   >
     <path
       fillRule="evenodd"
