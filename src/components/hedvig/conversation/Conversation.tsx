@@ -14,7 +14,7 @@ export const ConversationWrapper = styled('div')({
   margin: '0 auto',
   paddingBottom: CONTAINER_PADDING + NEXT_BUTTON_SPACING + INTERCOM_SPACING,
   fontSize: 24,
-  minHeight: '75vh',
+  minHeight: '90vh',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',

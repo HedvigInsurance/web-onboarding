@@ -14,6 +14,7 @@ interface State {
   currentInsurer?: string
   sessionId?: string
   isChatActive: boolean
+  selectedPremadeQuestion?: number
 }
 
 interface Effects {
@@ -22,6 +23,7 @@ interface Effects {
   setCurrentInsurer: (currentInsurer: string) => void
   setSessionId: (sessionId: string) => void
   makeChatActive: () => void
+  selectPremadeQuestion: (selectedPremadeQuestion: number) => void
 }
 
 export const DontPanicContainer: React.FunctionComponent<{
@@ -52,6 +54,9 @@ export const DontPanicContainer: React.FunctionComponent<{
           isChatActive:
             dontPanicSession!.getSession() &&
             dontPanicSession!.getSession().isChatActive,
+          selectedPremadeQuestion:
+            dontPanicSession!.getSession() &&
+            dontPanicSession!.getSession().selectedPremadeQuestion,
         }}
         effects={{
           goToStep: (step) => ({ state, setState }) => {
@@ -93,6 +98,15 @@ export const DontPanicContainer: React.FunctionComponent<{
               isChatActive: true,
             })
             setState({ isChatActive: true })
+          },
+          selectPremadeQuestion: (selectedPremadeQuestion) => ({
+            setState,
+          }) => {
+            dontPanicSession!.setSession({
+              ...dontPanicSession!.getSession(),
+              selectedPremadeQuestion,
+            })
+            setState({ selectedPremadeQuestion })
           },
         }}
         {...props}

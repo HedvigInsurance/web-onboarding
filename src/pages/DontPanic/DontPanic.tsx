@@ -23,15 +23,29 @@ import { DontPanicContainer, Step } from './DontPanicContainer'
 
 const DontPanicButtonWrapper = styled('div')({
   display: 'flex',
+  flexDirection: 'column',
   justifyContent: 'center',
+  alignItems: 'center',
   width: '100%',
   padding: '50px 0',
+})
+
+const fadeIn = keyframes({
+  from: { opacity: 0 },
+  to: { opacity: 1 },
 })
 
 const slideUp = keyframes({
   from: { transform: 'translateY(50%)', opacity: 0 },
   to: { transform: 'translateY(0)', opacity: 1 },
 })
+
+const Heading = styled('h1')(({ appear }: { appear: boolean }) => ({
+  color: colors.BLACK_PURPLE,
+  animation: appear ? undefined : `${fadeIn} 2500ms forwards`,
+  animationDelay: '500ms',
+  opacity: appear ? 1 : 0,
+}))
 
 const DontPanicButton = styled(Button)(
   ({ appear, currentStep }: { appear: boolean; currentStep: boolean }) => ({
@@ -40,11 +54,19 @@ const DontPanicButton = styled(Button)(
     fontWeight: 'bold',
     borderRadius: 500,
     cursor: currentStep ? 'pointer' : 'default',
-    opacity: currentStep ? 1 : 0.5,
-    animation: appear ? undefined : `${slideUp} 1000ms forwards`,
+    opacity: appear || !currentStep ? ('0.5 !important' as any) : 0,
+    animation: appear ? undefined : `${slideUp} 750ms forwards`,
+    animationDelay: '2000ms',
     transition: 'opacity 300ms',
   }),
 )
+
+const Paragraph = styled('p')(({ appear }: { appear: boolean }) => ({
+  color: colors.BLACK_PURPLE,
+  opacity: appear ? 1 : 0,
+  animation: appear ? undefined : `${fadeIn} 1000ms forwards`,
+  animationDelay: '2500ms',
+}))
 
 const Wrapper = styled('div')(() => ({
   display: 'flex',
@@ -53,6 +75,17 @@ const Wrapper = styled('div')(() => ({
   flexDirection: 'column',
   minHeight: '100vh',
 }))
+const PremadeQuestionButtonWrapper = styled('div')({
+  paddingBottom: 12,
+  '&:last-of-type': {
+    paddingBottom: 0,
+  },
+})
+const PremadeQuestionButton = styled(Button)({
+  textAlign: 'left',
+  paddingLeft: 30,
+  paddingRight: 30,
+})
 
 const BottomConversation = styled(Conversation)({
   minHeight: 0,
@@ -85,6 +118,7 @@ const MessageFormWrapper = styled('div')({
 const MessageForm = styled('form')({
   display: 'flex',
   flexDirection: 'row',
+  justifyContent: 'space-between',
   alignItems: 'flex-start',
   width: '100%',
   maxWidth: 1000,
@@ -101,6 +135,7 @@ const MessageTextarea = styled('textarea')({
   color: 'inherit',
   fontFamily: 'inherit',
   resize: 'none',
+  height: 80,
 })
 
 const MessageSendButton = styled(Button)({
@@ -115,6 +150,12 @@ const MessageSendButton = styled(Button)({
     opacity: 0.1,
   },
 })
+
+const PREMADE_QUESTIONS = [
+  { id: 1, question: 'Vad gäller på min försäkring när jag reser utomlands?' },
+  { id: 2, question: 'Jag har råkat ut för XYZ - kan jag bli ersatt?' },
+  { id: 3, question: 'Vilken flyttfirma ska jag anlita?' },
+]
 
 const HedvigH = () => (
   <svg
@@ -224,383 +265,447 @@ export class DontPanic extends React.Component {
             setSessionId,
             isChatActive,
             makeChatActive,
+            selectedPremadeQuestion,
+            selectPremadeQuestion,
           }) => (
-            <>
-              <Conversation<string>
-                initialVisibleSteps={initialVisibleSteps.map(
-                  ({ id }: Step) => id,
-                )}
-                visibleSteps={steps.map(({ id }) => id)}
-                currentStep={
-                  steps[steps.length - 1]
-                    ? steps[steps.length - 1].id
-                    : 'dont-panic'
-                }
-              >
-                <Message id="dont-panic">
-                  {({ appear }) => (
-                    <DontPanicButtonWrapper>
-                      <DontPanicButton
-                        foreground={colors.WHITE}
-                        background={colors.GREEN}
-                        size="lg"
-                        onClick={() => {
-                          if (isCurrentStep(true, 'dont-panic', steps)) {
-                            goToStep({ id: 'initial', isHedvig: true })
-                          }
-                        }}
-                        appear={appear}
-                        currentStep={isCurrentStep(true, 'dont-panic', steps)}
-                      >
-                        <HedvigH />
-                        <br />
-                        Don't panic!
-                      </DontPanicButton>
-                    </DontPanicButtonWrapper>
-                  )}
-                </Message>
-                <Message id="initial">
-                  {({ appear }) => (
-                    <ChatMessage
-                      isCurrentMessage={isCurrentStep(true, 'initial', steps)}
-                      typingDuration={2000}
-                      appear={appear}
-                      onTyped={() => {
-                        goToStep({
-                          id: 'initial-response',
-                          isHedvig: false,
-                        })
-                      }}
-                    >
-                      Hej 👋
-                      <br />
-                      Det är jag som är Hedvig. Här hjälper jag dig med allt vad
-                      hem och försäkring innebär. Innan jag kan hälpa dig skulle
-                      behöva ställa ett par frågor dock. Men don't panic! Det
-                      tar några sekunder bara.
-                    </ChatMessage>
-                  )}
-                </Message>
-                <Message id="initial-response" delay={500}>
-                  {({ appear }) => (
-                    <UserResponse appear={appear}>
-                      <Button
-                        background={colors.GREEN}
-                        foreground={colors.WHITE}
-                        size="lg"
-                        onClick={() => goToStep({ id: 'name', isHedvig: true })}
-                      >
-                        Okej, shoot!
-                      </Button>
-                    </UserResponse>
-                  )}
-                </Message>
-
-                <Message id="name">
-                  {({ appear }) => (
-                    <ChatMessage
-                      isCurrentMessage={isCurrentStep(true, 'name', steps)}
-                      typingDuration={1000}
-                      appear={appear}
-                      onTyped={() => {
-                        goToStep({ id: 'name-response', isHedvig: false })
-                      }}
-                    >
-                      Alright, vad heter du?
-                    </ChatMessage>
-                  )}
-                </Message>
-                <Message id="name-response" delay={300}>
-                  {({ appear }) => (
-                    <UserResponse appear={appear}>
-                      <form
-                        onSubmit={(e) => {
-                          e.preventDefault()
-                          if (!name) {
-                            return
-                          }
-                          goToStep({
-                            id: 'current-insurer',
-                            isHedvig: true,
-                          })
-                        }}
-                      >
-                        <Spacing paddingBottom={Size.SM}>
-                          Jag heter{' '}
-                          <UserTextInput
-                            placeholder="Namn"
-                            size={Math.max(10, name ? name.length : 0)}
-                            value={name || ''}
-                            onChange={(e) => {
-                              if (
-                                steps[steps.length - 1].id === 'name-response'
-                              ) {
-                                setName(e.currentTarget.value)
-                              }
-                            }}
-                          />
-                        </Spacing>
-                        {steps[steps.length - 1].id === 'name-response' && (
-                          <Button
-                            background={colors.GREEN}
+            <Container<
+              { messageText: string },
+              { setMessageText: (messageText: string) => void }
+            >
+              initialState={{ messageText: '' }}
+              actions={{
+                setMessageText: (messageText) => ({ messageText }),
+              }}
+            >
+              {({ messageText, setMessageText }) => (
+                <>
+                  <Conversation<string>
+                    initialVisibleSteps={initialVisibleSteps.map(
+                      ({ id }: Step) => id,
+                    )}
+                    visibleSteps={steps.map(({ id }) => id)}
+                    currentStep={
+                      steps[steps.length - 1]
+                        ? steps[steps.length - 1].id
+                        : 'dont-panic'
+                    }
+                  >
+                    <Message id="dont-panic">
+                      {({ appear }) => (
+                        <DontPanicButtonWrapper>
+                          <Heading appear={appear}>Har något hänt?</Heading>
+                          <DontPanicButton
                             foreground={colors.WHITE}
+                            background={colors.GREEN}
                             size="lg"
-                            type="submit"
-                            disabled={!Boolean(name)}
-                          >
-                            Nästa
-                          </Button>
-                        )}
-                      </form>
-                    </UserResponse>
-                  )}
-                </Message>
-                <Message id="current-insurer">
-                  {({ appear }) => (
-                    <ChatMessage
-                      isCurrentMessage={isCurrentStep(
-                        true,
-                        'current-insurer',
-                        steps,
-                      )}
-                      typingDuration={2000}
-                      appear={appear}
-                      onTyped={() => {
-                        goToStep({
-                          id: 'current-insurer-response',
-                          isHedvig: false,
-                        })
-                      }}
-                    >
-                      Hej {name}, trevligt att träffas! Är du försäkrad idag?
-                    </ChatMessage>
-                  )}
-                </Message>
-                <Message id="current-insurer-response" delay={300}>
-                  {({ appear }) => (
-                    <UserResponse appear={appear}>
-                      <form
-                        onSubmit={(e) => {
-                          e.preventDefault()
-                          goToStep({ id: 'first-message', isHedvig: true })
-                        }}
-                      >
-                        <Spacing paddingBottom={Size.SM}>
-                          <UserSelectInput
-                            onChange={(e) => {
-                              if (
-                                steps[steps.length - 1].id !==
-                                'current-insurer-response'
-                              ) {
-                                return
+                            onClick={() => {
+                              if (isCurrentStep(true, 'dont-panic', steps)) {
+                                goToStep({ id: 'initial', isHedvig: true })
                               }
-                              setCurrentInsurer(e.target.value)
                             }}
-                            value={currentInsurer}
-                          >
-                            <option value="NO">Nej</option>
-                            <option value="Hedvig">Ja, med Hedvig</option>
-                            {Array.from(insurerNames.entries()).map(
-                              ([key, val]) => (
-                                <option key={key} value={key}>
-                                  Ja, med {val}
-                                </option>
-                              ),
+                            appear={appear}
+                            currentStep={isCurrentStep(
+                              true,
+                              'dont-panic',
+                              steps,
                             )}
-                          </UserSelectInput>
-                        </Spacing>
-
-                        {steps[steps.length - 1].id ===
-                          'current-insurer-response' && (
-                          <Button
-                            background={colors.GREEN}
-                            foreground={colors.WHITE}
-                            size="lg"
-                            type="submit"
                           >
-                            Nästa
-                          </Button>
-                        )}
-                      </form>
-                    </UserResponse>
-                  )}
-                </Message>
-
-                <Message id="first-message">
-                  {({ appear }) => (
-                    <Mutation
-                      mutation={CREATE_SESSION_MUTATION}
-                      onCompleted={(data) => {
-                        setSessionId(data.createDontPanicSession.id)
-                      }}
-                    >
-                      {(createChatSession) => (
+                            <HedvigH />
+                            <br />
+                            Don't panic!
+                          </DontPanicButton>
+                          <Paragraph appear={appear}>
+                            Livet händer. Låt Hedvig hjälpa dig.
+                          </Paragraph>
+                        </DontPanicButtonWrapper>
+                      )}
+                    </Message>
+                    <Message id="initial">
+                      {({ appear }) => (
                         <ChatMessage
                           isCurrentMessage={isCurrentStep(
                             true,
-                            'first-message',
+                            'initial',
                             steps,
                           )}
-                          typingDuration={1500}
+                          typingDuration={2000}
                           appear={appear}
                           onTyped={() => {
-                            createChatSession({
-                              variables: { name, currentInsurer },
-                            })
                             goToStep({
-                              id: 'question-examples',
-                              isHedvig: true,
+                              id: 'initial-response',
+                              isHedvig: false,
                             })
                           }}
                         >
-                          {currentInsurer !== 'NO' &&
-                          currentInsurer !== 'Hedvig' ? (
-                            <>
-                              👀
-                              <br />
-                              Okej! Vi svarar såklart på dina frågor ändå. Vad
-                              har du på hjärtat?
-                            </>
-                          ) : (
-                            <>Cool! Vad är det du undrar över?</>
-                          )}
+                          Hej 👋
+                          <br />
+                          Det är jag som är Hedvig. Här hjälper jag dig med allt
+                          vad hem och försäkring innebär. Innan jag kan hälpa
+                          dig skulle behöva ställa ett par frågor dock. Men
+                          don't panic! Det tar några sekunder bara.
                         </ChatMessage>
                       )}
-                    </Mutation>
-                  )}
-                </Message>
+                    </Message>
+                    <Message id="initial-response" delay={500}>
+                      {({ appear }) => (
+                        <UserResponse appear={appear}>
+                          <Button
+                            background={colors.GREEN}
+                            foreground={colors.WHITE}
+                            size="lg"
+                            onClick={() =>
+                              goToStep({ id: 'name', isHedvig: true })
+                            }
+                          >
+                            Okej, shoot!
+                          </Button>
+                        </UserResponse>
+                      )}
+                    </Message>
 
-                <Message id="question-examples" delay={500}>
-                  {({ appear }) => (
-                    <ChatMessage
-                      isCurrentMessage={
-                        isCurrentStep(true, 'first-message', steps) &&
-                        !isChatActive
-                      }
-                      typingDuration={2000}
-                      appear={appear}
-                    >
-                      Några saker du kan fråga mig är exempelvis:
-                      <ul>
-                        <li>
-                          Vad gäller på min försäkring när jag reser utomlands?
-                        </li>
-                        <li>Jag har råkat ut för XYZ - kan jag bli ersatt?</li>
-                        <li>Vilken flyttfirma ska jag anlita?</li>
-                      </ul>
-                    </ChatMessage>
-                  )}
-                </Message>
-              </Conversation>
-
-              {Boolean(sessionId) && (
-                <>
-                  <Query<{ dontPanicSession?: Session }>
-                    query={SESSION_QUERY}
-                    pollInterval={1000}
-                    variables={{ id: sessionId }}
-                  >
-                    {({ data, error }) => (
-                      <Container<{ initialVisibleConversationSteps: string[] }>
-                        initialState={{
-                          initialVisibleConversationSteps:
-                            (data &&
-                              data.dontPanicSession &&
-                              data.dontPanicSession.chatMessages.map(
-                                ({ id }) => id,
-                              )) ||
-                            [],
-                        }}
-                      >
-                        {({ initialVisibleConversationSteps }) => (
-                          <>
-                            {error && (
-                              <Error>
-                                Ojdå... Något gick visst fel konversationen
-                                skulle laddas :(
-                              </Error>
-                            )}
-                            {Boolean(data && data.dontPanicSession) && (
-                              <BottomConversation
-                                visibleSteps={data!.dontPanicSession!.chatMessages.map(
-                                  ({ id }) => id,
-                                )}
-                                initialVisibleSteps={
-                                  initialVisibleConversationSteps
-                                }
-                                currentStep={
-                                  data!.dontPanicSession!.chatMessages.length >
-                                  0
-                                    ? data!.dontPanicSession!.chatMessages[
-                                        data!.dontPanicSession!.chatMessages
-                                          .length - 1
-                                      ].id
-                                    : ''
-                                }
+                    <Message id="name">
+                      {({ appear }) => (
+                        <ChatMessage
+                          isCurrentMessage={isCurrentStep(true, 'name', steps)}
+                          typingDuration={1000}
+                          appear={appear}
+                          onTyped={() => {
+                            goToStep({ id: 'name-response', isHedvig: false })
+                          }}
+                        >
+                          Alright, vad heter du?
+                        </ChatMessage>
+                      )}
+                    </Message>
+                    <Message id="name-response" delay={300}>
+                      {({ appear }) => (
+                        <UserResponse appear={appear}>
+                          <form
+                            onSubmit={(e) => {
+                              e.preventDefault()
+                              if (!name) {
+                                return
+                              }
+                              goToStep({
+                                id: 'current-insurer',
+                                isHedvig: true,
+                              })
+                            }}
+                          >
+                            <Spacing paddingBottom={Size.SM}>
+                              Jag heter{' '}
+                              <UserTextInput
+                                placeholder="Hedvig"
+                                size={Math.max(10, name ? name.length : 0)}
+                                value={name || ''}
+                                onChange={(e) => {
+                                  if (
+                                    steps[steps.length - 1].id ===
+                                    'name-response'
+                                  ) {
+                                    setName(e.currentTarget.value)
+                                  }
+                                }}
+                                name="first-name"
+                              />
+                            </Spacing>
+                            {steps[steps.length - 1].id === 'name-response' && (
+                              <Button
+                                background={colors.GREEN}
+                                foreground={colors.WHITE}
+                                size="lg"
+                                type="submit"
+                                disabled={!Boolean(name)}
                               >
-                                {data!.dontPanicSession!.chatMessages.map(
-                                  (message) => (
-                                    <Message id={message.id} key={message.id}>
-                                      {({ appear }) => (
-                                        <ChatMessage
-                                          isCurrentMessage={isCurrentStep(
-                                            true,
-                                            message.id,
-                                            data!.dontPanicSession!
-                                              .chatMessages,
-                                          )}
-                                          typingDuration={
-                                            message.isHedvig ? 500 : 0
-                                          }
-                                          appear={appear}
-                                          isHedvig={message.isHedvig}
-                                        >
-                                          {message.text
-                                            .split('\n')
-                                            .map((text, i, { length }) => {
-                                              return (
-                                                <React.Fragment key={i}>
-                                                  {text}
-                                                  {i < length - 1 && <br />}
-                                                </React.Fragment>
-                                              )
-                                            })}
-                                          {message.type === 'onboard' && (
-                                            <>
-                                              <br />
-                                              <Link
-                                                to={`/new-member/hedvig?firstName=${name}&initialInsurer=${currentInsurer}`}
-                                              >
-                                                Gå till onboarding
-                                              </Link>
-                                            </>
-                                          )}
-                                        </ChatMessage>
-                                      )}
-                                    </Message>
+                                Nästa
+                              </Button>
+                            )}
+                          </form>
+                        </UserResponse>
+                      )}
+                    </Message>
+                    <Message id="current-insurer">
+                      {({ appear }) => (
+                        <ChatMessage
+                          isCurrentMessage={isCurrentStep(
+                            true,
+                            'current-insurer',
+                            steps,
+                          )}
+                          typingDuration={2000}
+                          appear={appear}
+                          onTyped={() => {
+                            goToStep({
+                              id: 'current-insurer-response',
+                              isHedvig: false,
+                            })
+                          }}
+                        >
+                          Hej {name}, trevligt att träffas! Är du försäkrad
+                          idag?
+                        </ChatMessage>
+                      )}
+                    </Message>
+                    <Message id="current-insurer-response" delay={300}>
+                      {({ appear }) => (
+                        <UserResponse appear={appear}>
+                          <form
+                            onSubmit={(e) => {
+                              e.preventDefault()
+                              goToStep({ id: 'first-message', isHedvig: true })
+                            }}
+                          >
+                            <Spacing paddingBottom={Size.SM}>
+                              <UserSelectInput
+                                onChange={(e) => {
+                                  if (
+                                    steps[steps.length - 1].id !==
+                                    'current-insurer-response'
+                                  ) {
+                                    return
+                                  }
+                                  setCurrentInsurer(e.target.value)
+                                }}
+                                value={currentInsurer}
+                              >
+                                <option value="NO">Nej</option>
+                                <option value="Hedvig">Ja, med Hedvig</option>
+                                {Array.from(insurerNames.entries()).map(
+                                  ([key, val]) => (
+                                    <option key={key} value={key}>
+                                      Ja, med {val}
+                                    </option>
                                   ),
                                 )}
-                              </BottomConversation>
-                            )}
-                          </>
-                        )}
-                      </Container>
-                    )}
-                  </Query>
+                              </UserSelectInput>
+                            </Spacing>
 
-                  <MessageFormFiller />
-                  <MessageFormWrapper>
-                    <MessageBoxWrapper>
-                      <Container<
-                        { messageText: string },
-                        { setMessageText: (messageText: string) => void }
+                            {steps[steps.length - 1].id ===
+                              'current-insurer-response' && (
+                              <Button
+                                background={colors.GREEN}
+                                foreground={colors.WHITE}
+                                size="lg"
+                                type="submit"
+                              >
+                                Nästa
+                              </Button>
+                            )}
+                          </form>
+                        </UserResponse>
+                      )}
+                    </Message>
+
+                    <Message id="first-message">
+                      {({ appear }) => (
+                        <Mutation
+                          mutation={CREATE_SESSION_MUTATION}
+                          onCompleted={(data) => {
+                            setSessionId(data.createDontPanicSession.id)
+                          }}
+                        >
+                          {(createChatSession) => (
+                            <ChatMessage
+                              isCurrentMessage={isCurrentStep(
+                                true,
+                                'first-message',
+                                steps,
+                              )}
+                              typingDuration={1500}
+                              appear={appear}
+                              onTyped={() => {
+                                createChatSession({
+                                  variables: { name, currentInsurer },
+                                })
+                                goToStep({
+                                  id: 'question-examples',
+                                  isHedvig: true,
+                                })
+                              }}
+                            >
+                              {currentInsurer !== 'NO' &&
+                              currentInsurer !== 'Hedvig' ? (
+                                <>
+                                  👀
+                                  <br />
+                                  Okej! Vi svarar såklart på dina frågor ändå.
+                                  Vad har du på hjärtat?
+                                </>
+                              ) : (
+                                <>Cool! Vad är det du undrar över?</>
+                              )}
+                            </ChatMessage>
+                          )}
+                        </Mutation>
+                      )}
+                    </Message>
+
+                    <Message id="question-examples" delay={500}>
+                      {({ appear }) => (
+                        <>
+                          <ChatMessage
+                            isCurrentMessage={
+                              isCurrentStep(true, 'question-examples', steps) &&
+                              !isChatActive
+                            }
+                            typingDuration={2000}
+                            appear={appear}
+                          >
+                            Självklart kan du{' '}
+                            <strong>
+                              fråga vad som helst som rör hem och försäkring
+                            </strong>
+                            , men här är <strong>några exempel</strong> på saker
+                            jag kan besvara:
+                          </ChatMessage>
+                          <UserResponse appear={appear} delay={3000}>
+                            {PREMADE_QUESTIONS.map((premadeQuestion) => (
+                              <PremadeQuestionButtonWrapper
+                                key={premadeQuestion.id}
+                              >
+                                <PremadeQuestionButton
+                                  type="button"
+                                  border={`1px solid ${colors.GREEN}`}
+                                  background={
+                                    selectedPremadeQuestion ===
+                                    premadeQuestion.id
+                                      ? colors.GREEN
+                                      : 'transparent'
+                                  }
+                                  foreground={
+                                    selectedPremadeQuestion ===
+                                    premadeQuestion.id
+                                      ? colors.WHITE
+                                      : colors.GREEN
+                                  }
+                                  onClick={(e) => {
+                                    if (selectedPremadeQuestion !== undefined) {
+                                      return
+                                    }
+                                    e.preventDefault()
+                                    setMessageText(
+                                      (
+                                        messageText +
+                                        ' ' +
+                                        premadeQuestion.question
+                                      ).trim(),
+                                    )
+                                    selectPremadeQuestion(premadeQuestion.id)
+                                  }}
+                                >
+                                  {premadeQuestion.question}
+                                </PremadeQuestionButton>
+                              </PremadeQuestionButtonWrapper>
+                            ))}
+                          </UserResponse>
+                        </>
+                      )}
+                    </Message>
+                  </Conversation>
+
+                  {Boolean(sessionId) && (
+                    <>
+                      <Query<{ dontPanicSession?: Session }>
+                        query={SESSION_QUERY}
+                        pollInterval={1000}
+                        variables={{ id: sessionId }}
                       >
-                        initialState={{ messageText: '' }}
-                        actions={{
-                          setMessageText: (messageText) => ({ messageText }),
-                        }}
-                      >
-                        {({ messageText, setMessageText }) => (
+                        {({ data, error }) => (
+                          <Container<{
+                            initialVisibleConversationSteps: string[]
+                          }>
+                            initialState={{
+                              initialVisibleConversationSteps:
+                                (data &&
+                                  data.dontPanicSession &&
+                                  data.dontPanicSession.chatMessages.map(
+                                    ({ id }) => id,
+                                  )) ||
+                                [],
+                            }}
+                          >
+                            {({ initialVisibleConversationSteps }) => (
+                              <>
+                                {error && (
+                                  <Error>
+                                    Ojdå... Något gick visst fel konversationen
+                                    skulle laddas :(
+                                  </Error>
+                                )}
+                                {Boolean(data && data.dontPanicSession) && (
+                                  <BottomConversation
+                                    visibleSteps={data!.dontPanicSession!.chatMessages.map(
+                                      ({ id }) => id,
+                                    )}
+                                    initialVisibleSteps={
+                                      initialVisibleConversationSteps
+                                    }
+                                    currentStep={
+                                      data!.dontPanicSession!.chatMessages
+                                        .length > 0
+                                        ? data!.dontPanicSession!.chatMessages[
+                                            data!.dontPanicSession!.chatMessages
+                                              .length - 1
+                                          ].id
+                                        : ''
+                                    }
+                                  >
+                                    {data!.dontPanicSession!.chatMessages.map(
+                                      (message) => (
+                                        <Message
+                                          id={message.id}
+                                          key={message.id}
+                                        >
+                                          {({ appear }) => (
+                                            <ChatMessage
+                                              isCurrentMessage={isCurrentStep(
+                                                true,
+                                                message.id,
+                                                data!.dontPanicSession!
+                                                  .chatMessages,
+                                              )}
+                                              typingDuration={
+                                                message.isHedvig ? 500 : 0
+                                              }
+                                              appear={appear}
+                                              isHedvig={message.isHedvig}
+                                            >
+                                              {message.text
+                                                .split('\n')
+                                                .map((text, i, { length }) => {
+                                                  return (
+                                                    <React.Fragment key={i}>
+                                                      {text}
+                                                      {i < length - 1 && <br />}
+                                                    </React.Fragment>
+                                                  )
+                                                })}
+                                              {message.type === 'onboard' && (
+                                                <>
+                                                  <br />
+                                                  <Link
+                                                    to={`/new-member/hedvig?firstName=${name}&initialInsurer=${currentInsurer}`}
+                                                  >
+                                                    Gå till onboarding
+                                                  </Link>
+                                                </>
+                                              )}
+                                            </ChatMessage>
+                                          )}
+                                        </Message>
+                                      ),
+                                    )}
+                                  </BottomConversation>
+                                )}
+                              </>
+                            )}
+                          </Container>
+                        )}
+                      </Query>
+
+                      <MessageFormFiller />
+                      <MessageFormWrapper>
+                        <MessageBoxWrapper>
                           <Mutation
                             mutation={ADD_MESSAGE_MUTATION}
                             refetchQueries={() => [
@@ -639,8 +744,13 @@ export class DontPanic extends React.Component {
                                       setMessageText(e.target.value)
                                     }
                                     placeholder="Skriv ditt meddelande..."
-                                    rows={4}
                                     onKeyDown={(e) => {
+                                      if (
+                                        window.matchMedia('(max-width: 800px)')
+                                          .matches
+                                      ) {
+                                        return
+                                      }
                                       if (e.keyCode !== 13) {
                                         return
                                       }
@@ -670,13 +780,13 @@ export class DontPanic extends React.Component {
                               )
                             }}
                           </Mutation>
-                        )}
-                      </Container>
-                    </MessageBoxWrapper>
-                  </MessageFormWrapper>
+                        </MessageBoxWrapper>
+                      </MessageFormWrapper>
+                    </>
+                  )}
                 </>
               )}
-            </>
+            </Container>
           )}
         </DontPanicContainer>
       </Wrapper>
