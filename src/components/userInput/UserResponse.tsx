@@ -6,6 +6,7 @@ import styled from 'react-emotion'
 import { Mount } from 'react-lifecycle-components'
 import { FadeIn, FadeUp } from '../animations/appearings'
 import { HEIGHT_AND_SCROLL_ANIMATION_TIME } from '../hedvig/conversation'
+import animateScrollTo from 'animated-scroll-to'
 
 interface InputProps {
   hasError?: boolean
@@ -173,7 +174,12 @@ const UserResponseWrapper: React.SFC<{
               mount()
               return
             }
-            setTimeout(() => mount(), delay)
+            setTimeout(() => {
+              mount()
+              setTimeout(() => {
+                animateScrollTo(document.body.scrollHeight)
+              }, HEIGHT_AND_SCROLL_ANIMATION_TIME)
+            }, delay)
           }}
         >
           <AnimateHeight
