@@ -199,7 +199,7 @@ interface Session {
     id: string
     text: string
     isHedvig: boolean
-    type: 'text' | 'onboard'
+    type: 'text' | 'onboard' | 'link'
   }>
 }
 
@@ -676,6 +676,18 @@ export class DontPanic extends React.Component {
                                               {message.text
                                                 .split('\n')
                                                 .map((text, i, { length }) => {
+                                                  if (message.type === 'link') {
+                                                    return (
+                                                      <a
+                                                        key={i}
+                                                        href={message.text}
+                                                        target="_blank"
+                                                      >
+                                                        {message.text}
+                                                      </a>
+                                                    )
+                                                  }
+
                                                   return (
                                                     <React.Fragment key={i}>
                                                       {text}

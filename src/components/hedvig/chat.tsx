@@ -126,6 +126,7 @@ export const ChatMessageTextWrapper = styled('div')(
       isVisible && !appear
         ? `${fadeUp} 200ms forwards, ${fadeIn} 300ms forwards`
         : 'none',
+    wordBreak: 'break-word',
   }),
 )
 
