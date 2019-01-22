@@ -12,6 +12,6 @@ export const reactPageRoutes = [
   { path: '/new-member/offer', Component: Offering, exact: true },
   { path: '/new-member/download', Component: Download, exact: true },
   { path: '/new-member/sign', Component: Sign, exact: true },
-  { path: '/dont-panic', Component: LazyDontPanic, exact: true },
+  { path: '/dont-panic/hedvig', Component: LazyDontPanic, exact: true },
   { path: '/*', Component: FourOhFour },
 ]
