@@ -11,7 +11,7 @@ export class Notifier extends React.Component<{
     chatMessages: [],
   }
   componentDidMount(): void {
-    if (!('Notification' in window || Notification.permission === 'granted')) {
+    if (!('Notification' in window) || Notification.permission === 'granted') {
       return
     }
 
@@ -24,7 +24,7 @@ export class Notifier extends React.Component<{
     const notificationAudio = new Audio(
       '/new-member-assets/audio/notification.mp3',
     )
-    notificationAudio.volume = 0.3
+    notificationAudio.volume = 0.5
     if (!nextProps.chatMessages) {
       return
     }
@@ -36,21 +36,22 @@ export class Notifier extends React.Component<{
     window.setTimeout(() => {
       if (newMessages.map(({ isHedvig }) => isHedvig).includes(true)) {
         if (
+          !('Notification' in window) ||
           Notification.permission !== 'granted' ||
-          window.document.hasFocus()
+          document.hasFocus()
         ) {
           notificationAudio.play()
-        } else {
-          const lastMessage = [...newMessages]
-            .reverse()
-            .find(({ isHedvig }) => isHedvig)
-          // tslint:disable-next-line no-unused-expression
-          new Notification('Nytt meddelande från hedvig', {
-            silent: true,
-            body: lastMessage && lastMessage.text,
-            icon: HEDVIG_ICON_PNG,
-          })
+          return
         }
+        const lastMessage = [...newMessages]
+          .reverse()
+          .find(({ isHedvig }) => isHedvig)
+        // tslint:disable-next-line no-unused-expression
+        new Notification('Nytt meddelande från hedvig', {
+          silent: true,
+          body: lastMessage && lastMessage.text,
+          icon: HEDVIG_ICON_PNG,
+        })
       }
     }, 500)
   }

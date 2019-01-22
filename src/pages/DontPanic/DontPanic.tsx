@@ -821,7 +821,7 @@ export class DontPanic extends React.Component {
                                     const popAudio = new Audio(
                                       '/new-member-assets/audio/pop.mp3',
                                     )
-                                    popAudio.volume = 0.2
+                                    popAudio.volume = 0.5
                                     return popAudio.play()
                                   })
                                 }
