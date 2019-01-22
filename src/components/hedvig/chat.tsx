@@ -24,18 +24,20 @@ const fadeOut = keyframes({
   },
 })
 
-const ChatWrapper = styled('div')(({ isHedvig }: { isHedvig: boolean }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: isHedvig ? 'flex-start' : 'flex-end',
-  marginLeft: isHedvig ? undefined : 'auto',
-  marginBottom: 30,
-  opacity: 1,
-  maxWidth: '65%',
-  '@media (max-width: 500px)': {
-    maxWidth: '80%',
-  },
-}))
+export const ChatWrapper = styled('div')(
+  ({ isHedvig }: { isHedvig: boolean }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: isHedvig ? 'flex-start' : 'flex-end',
+    marginLeft: isHedvig ? undefined : 'auto',
+    marginBottom: 30,
+    opacity: 1,
+    maxWidth: '65%',
+    '@media (max-width: 500px)': {
+      maxWidth: '80%',
+    },
+  }),
+)
 
 const Hedvig = styled('img')({
   height: 33,

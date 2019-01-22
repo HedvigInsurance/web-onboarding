@@ -40,11 +40,16 @@ export const Button = styled('button')(
     color: foreground,
     background,
     cursor: 'pointer',
+    textDecoration: 'none',
 
     transition: 'background 300ms, border 300ms, color 300ms',
 
     '&:focus': {
       outlineColor: background,
+    },
+
+    '&:hover, &:focus': {
+      textDecoration: 'none',
     },
 
     '&:disabled': {
