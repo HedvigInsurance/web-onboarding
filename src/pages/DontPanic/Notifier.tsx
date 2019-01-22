@@ -10,7 +10,7 @@ export class Notifier extends React.Component<{
   public static defaultProps = {
     chatMessages: [],
   }
-  componentDidMount(): void {
+  public componentDidMount(): void {
     if (!('Notification' in window) || Notification.permission === 'granted') {
       return
     }

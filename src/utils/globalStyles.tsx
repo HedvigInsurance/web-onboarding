@@ -30,24 +30,24 @@ export const GlobalCss: React.SFC = ({ children }) => {
   // tslint:disable-next-line no-unused-expression
   injectGlobal`
 ${Object.keys(fontFlavours).map((fontName) =>
-    fontFlavours[fontName].map(
-      (flavour) => `
+  fontFlavours[fontName].map(
+    (flavour) => `
   @font-face {
     font-family: "${fontName}";
   font-style: ${flavour.style};
   font-weight: ${flavour.weight};
   src:
     url("https://cdn.hedvig.com/identity/fonts/${fontName}-${
-        flavour.flavorName
-      }.woff2") format("woff2"),
+      flavour.flavorName
+    }.woff2") format("woff2"),
     url("https://cdn.hedvig.com/identity/fonts/${fontName}-${
-        flavour.flavorName
-      }.woff") format("woff")
+      flavour.flavorName
+    }.woff") format("woff")
   ;
   }
 `,
-    ),
-  )}
+  ),
+)}
 
 * {
   box-sizing: border-box;

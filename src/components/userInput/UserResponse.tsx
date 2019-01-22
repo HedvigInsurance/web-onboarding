@@ -1,4 +1,5 @@
 import { colors, fonts } from '@hedviginsurance/brand'
+import animateScrollTo from 'animated-scroll-to'
 import { Container } from 'constate'
 import * as React from 'react'
 import AnimateHeight from 'react-animate-height'
@@ -6,7 +7,6 @@ import styled from 'react-emotion'
 import { Mount } from 'react-lifecycle-components'
 import { FadeIn, FadeUp } from '../animations/appearings'
 import { HEIGHT_AND_SCROLL_ANIMATION_TIME } from '../hedvig/conversation'
-import animateScrollTo from 'animated-scroll-to'
 
 interface InputProps {
   hasError?: boolean
