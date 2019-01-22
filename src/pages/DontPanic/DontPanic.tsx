@@ -21,6 +21,7 @@ import {
 import { Size, Spacing } from '../../components/utils/Spacing'
 import { insurerNames } from '../Chat/steps/CurrentInsuranceInput'
 import { DontPanicContainer, Step } from './DontPanicContainer'
+import { Notifier } from './Notifier'
 
 const DontPanicButtonWrapper = styled('div')({
   display: 'flex',
@@ -224,7 +225,7 @@ export const HedvigH: React.FunctionComponent<{ className?: string }> = ({
   </svg>
 )
 
-interface Session {
+export interface Session {
   id: string
   name: string
   currentInsurer: string
@@ -312,9 +313,7 @@ export class DontPanic extends React.Component {
                 { setMessageText: (messageText: string) => void }
               >
                 initialState={{ messageText: '' }}
-                actions={{
-                  setMessageText: (messageText) => ({ messageText }),
-                }}
+                actions={{ setMessageText: (messageText) => ({ messageText }) }}
               >
                 {({ messageText, setMessageText }) => (
                   <>
@@ -339,7 +338,10 @@ export class DontPanic extends React.Component {
                               size="lg"
                               onClick={() => {
                                 if (isCurrentStep(true, 'dont-panic', steps)) {
-                                  goToStep({ id: 'initial', isHedvig: true })
+                                  goToStep({
+                                    id: 'initial',
+                                    isHedvig: true,
+                                  })
                                 }
                               }}
                               appear={appear}
@@ -413,7 +415,10 @@ export class DontPanic extends React.Component {
                             typingDuration={1000}
                             appear={appear}
                             onTyped={() => {
-                              goToStep({ id: 'name-response', isHedvig: false })
+                              goToStep({
+                                id: 'name-response',
+                                isHedvig: false,
+                              })
                             }}
                           >
                             Alright, vad heter du?
@@ -674,10 +679,22 @@ export class DontPanic extends React.Component {
                                       ({ id }) => id,
                                     )) ||
                                   [],
+                                latestConversationSteps:
+                                  data &&
+                                  data.dontPanicSession &&
+                                  data.dontPanicSession.chatMessages,
                               }}
                             >
                               {({ initialVisibleConversationSteps }) => (
                                 <>
+                                  <Notifier
+                                    chatMessages={
+                                      (data &&
+                                        data.dontPanicSession &&
+                                        data.dontPanicSession.chatMessages) ||
+                                      []
+                                    }
+                                  />
                                   {error && (
                                     <Error>
                                       Ojdå... Något gick visst fel
@@ -801,6 +818,11 @@ export class DontPanic extends React.Component {
                                   return mutate(vars).then((_) => {
                                     setMessageText('')
                                     makeChatActive()
+                                    const popAudio = new Audio(
+                                      '/new-member-assets/audio/pop.mp3',
+                                    )
+                                    popAudio.volume = 0.2
+                                    return popAudio.play()
                                   })
                                 }
                                 return (
