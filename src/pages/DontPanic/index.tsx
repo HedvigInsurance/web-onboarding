@@ -22,6 +22,15 @@ export const LazyDontPanic = () => (
         <>
           <Helmet>
             <title>Don't Panic by Hedvig</title>
+            <meta name="title" content="Don't Panic by Hedvig" />
+            <meta
+              name="description"
+              content="Livet händer. Låt Hedvig hjälpa dig. Hedvig svarar på allt som rör ditt hem och hemförsäkringar."
+            />
+            <meta
+              property="og:image"
+              content="https://www.hedvig.com/new-member-assets/dont-panic/dont-panic.png"
+            />
           </Helmet>
           {isHedvigAwake && <DontPanic />}
           {!isHedvigAwake && <HedvigIsSleeping />}

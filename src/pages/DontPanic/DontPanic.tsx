@@ -61,6 +61,9 @@ const DontPanicButton = styled(Button)(
     animation: appear ? undefined : `${slideUp} 750ms forwards`,
     animationDelay: '2000ms',
     transition: 'opacity 300ms',
+    '&:focus': {
+      outline: 'none',
+    },
   }),
 )
 
@@ -86,6 +89,10 @@ const facebookButtonClass = css({
     opacity: 0.5,
     cursor: 'unset',
   },
+
+  '&:focus': {
+    outline: 'none',
+  },
 })
 
 const ContinueWithoutFacebook = styled('button')({
@@ -99,6 +106,10 @@ const ContinueWithoutFacebook = styled('button')({
 
   '&:disabled': {
     cursor: 'unset',
+  },
+
+  '&:focus': {
+    outline: 'none',
   },
 })
 
@@ -214,6 +225,10 @@ const MessageSendButton = styled(Button)({
   '&:disabled': {
     background: 'transparent',
     opacity: 0.1,
+  },
+
+  '&:focus': {
+    outline: 'none',
   },
 })
 
