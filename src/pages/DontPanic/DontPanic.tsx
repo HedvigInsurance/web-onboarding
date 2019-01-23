@@ -218,9 +218,13 @@ const MessageSendButton = styled(Button)({
 })
 
 const PREMADE_QUESTIONS = [
-  { id: 1, question: 'Vad gäller på min försäkring när jag reser utomlands?' },
-  { id: 2, question: 'Jag har råkat ut för XYZ - kan jag bli ersatt?' },
-  { id: 3, question: 'Vilken flyttfirma ska jag anlita?' },
+  {
+    id: 1,
+    question:
+      'Hur funkar det egentligen med hemförsäkring när man hyr eller hyr ut sin bostad? 🧐',
+  },
+  { id: 2, question: 'Vad kostar er försäkring?' },
+  { id: 3, question: 'Var går jag för att laga min telefonskärm?' },
 ]
 
 export const HedvigH: React.FunctionComponent<{ className?: string }> = ({
@@ -442,7 +446,8 @@ export class DontPanic extends React.Component {
                       <Message id="initial-response" delay={500}>
                         {({ appear }) => (
                           <UserResponse appear={appear}>
-                            {isCurrentStep(false, 'initial-response', steps) ? (
+                            {isCurrentStep(false, 'initial-response', steps) &&
+                            !email ? (
                               <div>
                                 <ReactFacebookLogin
                                   fields="first_name,last_name,email"
@@ -774,7 +779,10 @@ export class DontPanic extends React.Component {
                       </Message>
                     </Conversation>
 
-                    {Boolean(sessionId) && (
+                    {(Boolean(sessionId) ||
+                      steps
+                        .map(({ id }) => id)
+                        .includes('question-examples')) && (
                       <>
                         <Query<{ dontPanicSession?: Session }>
                           query={SESSION_QUERY}
@@ -861,7 +869,7 @@ export class DontPanic extends React.Component {
                                                       .chatMessages,
                                                   )}
                                                   typingDuration={
-                                                    message.isHedvig ? 500 : 0
+                                                    message.isHedvig ? 2000 : 0
                                                   }
                                                   appear={appear}
                                                   isHedvig={message.isHedvig}
@@ -936,7 +944,7 @@ export class DontPanic extends React.Component {
                                     const popAudio = new Audio(
                                       '/new-member-assets/audio/pop.mp3',
                                     )
-                                    popAudio.volume = 0.5
+                                    popAudio.volume = 0.3
                                     return popAudio.play()
                                   })
                                 }

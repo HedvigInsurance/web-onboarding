@@ -24,7 +24,7 @@ export class Notifier extends React.Component<{
     const notificationAudio = new Audio(
       '/new-member-assets/audio/notification.mp3',
     )
-    notificationAudio.volume = 0.5
+    notificationAudio.volume = 0.3
     if (!nextProps.chatMessages) {
       return
     }
@@ -53,7 +53,7 @@ export class Notifier extends React.Component<{
           icon: HEDVIG_ICON_PNG,
         })
       }
-    }, 500)
+    }, 1800)
   }
 
   public render() {

@@ -54,7 +54,7 @@ export const DontPanicContainer: React.FunctionComponent<{
             '',
           email:
             (dontPanicSession!.getSession() &&
-              dontPanicSession!.getSession().emaill) ||
+              dontPanicSession!.getSession().email) ||
             '',
           currentInsurer:
             (dontPanicSession!.getSession() &&
