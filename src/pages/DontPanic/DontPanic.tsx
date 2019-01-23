@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 import * as React from 'react'
 import { Mutation, Query } from 'react-apollo'
 import styled, { css, keyframes } from 'react-emotion'
+import ReactFacebookLogin from 'react-facebook-login'
 import { Link } from 'react-router-dom'
 import { Button } from '../../components/buttons'
 import { ChatMessage, ChatWrapper } from '../../components/hedvig/chat'
@@ -22,7 +23,6 @@ import { Size, Spacing } from '../../components/utils/Spacing'
 import { insurerNames } from '../Chat/steps/CurrentInsuranceInput'
 import { DontPanicContainer, Step } from './DontPanicContainer'
 import { Notifier } from './Notifier'
-import ReactFacebookLogin from 'react-facebook-login'
 
 const DontPanicButtonWrapper = styled('div')({
   display: 'flex',
@@ -453,7 +453,12 @@ export class DontPanic extends React.Component {
                                       : '523826788131113'
                                   }
                                   callback={(fbData) => {
-                                    if (!fbData) {
+                                    if (
+                                      !fbData ||
+                                      !(fbData as any).first_name ||
+                                      !(fbData as any).last_name ||
+                                      !(fbData as any).email
+                                    ) {
                                       return
                                     }
 
