@@ -3,7 +3,7 @@ import { Container } from 'constate'
 import gql from 'graphql-tag'
 import * as React from 'react'
 import { Mutation, Query } from 'react-apollo'
-import styled, { keyframes } from 'react-emotion'
+import styled, { css, keyframes } from 'react-emotion'
 import { Link } from 'react-router-dom'
 import { Button } from '../../components/buttons'
 import { ChatMessage, ChatWrapper } from '../../components/hedvig/chat'
@@ -22,6 +22,7 @@ import { Size, Spacing } from '../../components/utils/Spacing'
 import { insurerNames } from '../Chat/steps/CurrentInsuranceInput'
 import { DontPanicContainer, Step } from './DontPanicContainer'
 import { Notifier } from './Notifier'
+import ReactFacebookLogin from 'react-facebook-login'
 
 const DontPanicButtonWrapper = styled('div')({
   display: 'flex',
@@ -69,6 +70,37 @@ const Paragraph = styled('p')(({ appear }: { appear: boolean }) => ({
   animation: appear ? undefined : `${fadeIn} 1000ms forwards`,
   animationDelay: '2500ms',
 }))
+
+const facebookButtonClass = css({
+  appearance: 'none',
+  borderRadius: 100,
+  background: '#3b5998',
+  border: 0,
+  padding: '1rem 2rem',
+  color: colors.WHITE,
+  fontSize: '1.1rem',
+  fontFamily: 'inherit',
+  cursor: 'pointer',
+
+  '&:disabled': {
+    opacity: 0.5,
+    cursor: 'unset',
+  },
+})
+
+const ContinueWithoutFacebook = styled('button')({
+  appearance: 'none',
+  border: 0,
+  padding: 10,
+  background: 'transparent',
+  color: colors.OFF_BLACK,
+  fontSize: '0.7rem',
+  cursor: 'pointer',
+
+  '&:disabled': {
+    cursor: 'unset',
+  },
+})
 
 const Wrapper = styled('div')(() => ({
   display: 'flex',
@@ -228,6 +260,8 @@ export const HedvigH: React.FunctionComponent<{ className?: string }> = ({
 export interface Session {
   id: string
   name: string
+  lastName?: string
+  email?: string
   currentInsurer: string
   chatMessages: Array<{
     id: string
@@ -242,6 +276,8 @@ const SESSION_QUERY = gql`
     dontPanicSession(id: $id) {
       id
       name
+      lastName
+      email
       currentInsurer
       chatMessages {
         id
@@ -254,8 +290,18 @@ const SESSION_QUERY = gql`
 `
 
 const CREATE_SESSION_MUTATION = gql`
-  mutation CreateDontPanicSession($name: String!, $currentInsurer: String!) {
-    createDontPanicSession(name: $name, currentInsurer: $currentInsurer) {
+  mutation CreateDontPanicSession(
+    $name: String!
+    $lastName: String
+    $email: String
+    $currentInsurer: String!
+  ) {
+    createDontPanicSession(
+      name: $name
+      lastName: $lastName
+      email: $email
+      currentInsurer: $currentInsurer
+    ) {
       id
     }
   }
@@ -299,6 +345,10 @@ export class DontPanic extends React.Component {
               goToStep,
               name,
               setName,
+              lastName,
+              setLastName,
+              email,
+              setEmail,
               currentInsurer,
               setCurrentInsurer,
               sessionId,
@@ -313,7 +363,9 @@ export class DontPanic extends React.Component {
                 { setMessageText: (messageText: string) => void }
               >
                 initialState={{ messageText: '' }}
-                actions={{ setMessageText: (messageText) => ({ messageText }) }}
+                actions={{
+                  setMessageText: (messageText) => ({ messageText }),
+                }}
               >
                 {({ messageText, setMessageText }) => (
                   <>
@@ -390,16 +442,68 @@ export class DontPanic extends React.Component {
                       <Message id="initial-response" delay={500}>
                         {({ appear }) => (
                           <UserResponse appear={appear}>
-                            <Button
-                              background={colors.GREEN}
-                              foreground={colors.WHITE}
-                              size="lg"
-                              onClick={() =>
-                                goToStep({ id: 'name', isHedvig: true })
-                              }
-                            >
-                              Okej, shoot!
-                            </Button>
+                            {isCurrentStep(false, 'initial-response', steps) ? (
+                              <div>
+                                <ReactFacebookLogin
+                                  fields="first_name,last_name,email"
+                                  textButton="Fortsätt med Facebook"
+                                  appId={
+                                    process.env.NODE_ENV === 'production'
+                                      ? '221855442096816'
+                                      : '523826788131113'
+                                  }
+                                  callback={(fbData) => {
+                                    if (!fbData) {
+                                      return
+                                    }
+
+                                    setName((fbData as any).first_name)
+                                    setLastName((fbData as any).last_name)
+                                    setEmail((fbData as any).email)
+                                    goToStep({
+                                      id: 'current-insurer',
+                                      isHedvig: true,
+                                    })
+                                  }}
+                                  cssClass={facebookButtonClass}
+                                />
+                              </div>
+                            ) : (
+                              email && (
+                                <button
+                                  className={facebookButtonClass}
+                                  disabled
+                                >
+                                  Fortsätt med Facebook
+                                </button>
+                              )
+                            )}
+                            {!email && (
+                              <div>
+                                <ContinueWithoutFacebook
+                                  onClick={() => {
+                                    if (
+                                      isCurrentStep(
+                                        false,
+                                        'initial-response',
+                                        steps,
+                                      )
+                                    ) {
+                                      goToStep({ id: 'name', isHedvig: true })
+                                    }
+                                  }}
+                                  disabled={
+                                    !isCurrentStep(
+                                      false,
+                                      'initial-response',
+                                      steps,
+                                    )
+                                  }
+                                >
+                                  Jag har inte Facebook
+                                </ContinueWithoutFacebook>
+                              </div>
+                            )}
                           </UserResponse>
                         )}
                       </Message>
@@ -567,7 +671,12 @@ export class DontPanic extends React.Component {
                                 appear={appear}
                                 onTyped={() => {
                                   createChatSession({
-                                    variables: { name, currentInsurer },
+                                    variables: {
+                                      name,
+                                      lastName: lastName || '',
+                                      email: email || '',
+                                      currentInsurer,
+                                    },
                                   })
                                   goToStep({
                                     id: 'question-examples',
@@ -730,7 +839,8 @@ export class DontPanic extends React.Component {
                                               if (message.type === 'onboard') {
                                                 return (
                                                   <OnboardingMessage
-                                                    to={`/new-member/hedvig?firstName=${name}&initialInsurer=${currentInsurer}`}
+                                                    to={`/new-member/hedvig?firstName=${name}&lastName=${lastName ||
+                                                      ''}&initialInsurer=${currentInsurer}`}
                                                   >
                                                     {message.text}
                                                   </OnboardingMessage>

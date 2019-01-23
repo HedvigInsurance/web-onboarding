@@ -62,9 +62,11 @@ export interface State {
 
 export const initialState = ({
   initialFirstName,
+  initialLastName,
   initialInsurer,
 }: {
   initialFirstName?: string
+  initialLastName?: string
   initialInsurer?: Insurer
 } = {}): State => ({
   visibleSteps: [initialFirstName ? ChatStep.INITIAL_NAME : ChatStep.INITIAL],
@@ -73,7 +75,7 @@ export const initialState = ({
   nameAge: {
     firstName: initialFirstName || '',
     age: '',
-    lastName: '',
+    lastName: initialLastName || '',
   },
   livingSituation: {
     size: 0,

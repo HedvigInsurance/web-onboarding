@@ -11,6 +11,8 @@ interface State {
   steps: ReadonlyArray<Step>
   initialVisibleSteps: ReadonlyArray<Step>
   name?: string
+  lastName?: string
+  email?: string
   currentInsurer?: string
   sessionId?: string
   isChatActive: boolean
@@ -20,6 +22,8 @@ interface State {
 interface Effects {
   goToStep: (step: Step) => void
   setName: (name: string) => void
+  setLastName: (lastName: string) => void
+  setEmail: (email: string) => void
   setCurrentInsurer: (currentInsurer: string) => void
   setSessionId: (sessionId: string) => void
   makeChatActive: () => void
@@ -44,6 +48,14 @@ export const DontPanicContainer: React.FunctionComponent<{
           name:
             dontPanicSession!.getSession() &&
             dontPanicSession!.getSession().name,
+          lastName:
+            (dontPanicSession!.getSession() &&
+              dontPanicSession!.getSession().lastName) ||
+            '',
+          email:
+            (dontPanicSession!.getSession() &&
+              dontPanicSession!.getSession().emaill) ||
+            '',
           currentInsurer:
             (dontPanicSession!.getSession() &&
               dontPanicSession!.getSession().currentInsurer) ||
@@ -77,6 +89,20 @@ export const DontPanicContainer: React.FunctionComponent<{
               name,
             })
             setState({ name })
+          },
+          setLastName: (lastName) => ({ setState }) => {
+            dontPanicSession!.setSession({
+              ...dontPanicSession!.getSession(),
+              lastName,
+            })
+            setState({ lastName })
+          },
+          setEmail: (email) => ({ setState }) => {
+            dontPanicSession!.setSession({
+              ...dontPanicSession!.getSession(),
+              email,
+            })
+            setState({ email })
           },
           setCurrentInsurer: (currentInsurer) => ({ setState }) => {
             dontPanicSession!.setSession({

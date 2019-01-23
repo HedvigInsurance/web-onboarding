@@ -20,6 +20,7 @@ export const Chat: React.ComponentType = withRouter(({ location }) => {
           session.setSession({
             chat: initialState({
               initialFirstName: query.firstName as string,
+              initialLastName: query.lastName as string,
               initialInsurer: (query.initialInsurer as string) as Insurer,
             }),
           })
