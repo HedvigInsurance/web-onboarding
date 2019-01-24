@@ -236,10 +236,10 @@ const PREMADE_QUESTIONS = [
   {
     id: 1,
     question:
-      'Hur funkar det egentligen med hemförsäkring när man hyr eller hyr ut sin bostad? 🧐',
+      'Hur funkar det egentligen med hemförsäkring när man hyr ut sin bostad? 🧐',
   },
   { id: 2, question: 'Vad kostar er försäkring?' },
-  { id: 3, question: 'Var går jag för att laga min telefonskärm?' },
+  { id: 3, question: 'Min telefonskärm har gått sönder! Vad gör jag?' },
 ]
 
 export const HedvigH: React.FunctionComponent<{ className?: string }> = ({
@@ -754,18 +754,18 @@ export class DontPanic extends React.Component {
                                 >
                                   <PremadeQuestionButton
                                     type="button"
-                                    border={`1px solid ${colors.GREEN}`}
+                                    border={`1px solid ${colors.BLACK_PURPLE}`}
                                     background={
                                       selectedPremadeQuestion ===
                                       premadeQuestion.id
-                                        ? colors.GREEN
+                                        ? colors.BLACK_PURPLE
                                         : 'transparent'
                                     }
                                     foreground={
                                       selectedPremadeQuestion ===
                                       premadeQuestion.id
                                         ? colors.WHITE
-                                        : colors.GREEN
+                                        : colors.BLACK_PURPLE
                                     }
                                     onClick={(e) => {
                                       if (
