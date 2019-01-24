@@ -7,12 +7,12 @@ import { reactPageRoutes } from './routes'
 import { GlobalCss } from './utils/globalStyles'
 import { StorageState, WithStorageProps } from './utils/StorageContainer'
 
-export const App: React.SFC<StorageState> = ({ session }) => (
+export const App: React.SFC<StorageState> = ({ session, dontPanicSession }) => (
   <>
     <GlobalCss />
     <TranslationsProvider code="sv_SE" project={Project.WebOnboarding}>
       <Provider<WithStorageProps>
-        initialState={{ storage: { session } }}
+        initialState={{ storage: { session, dontPanicSession } }}
         devtools={process.env.NODE_ENV !== 'production'}
       >
         <Switch>

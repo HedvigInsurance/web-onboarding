@@ -24,23 +24,32 @@ export const Button = styled('button')(
   ({
     background,
     foreground,
+    border = '1px solid transparent',
     size = 'sm',
   }: {
     background: string
     foreground: string
+    border?: string
     size?: 'sm' | 'lg'
   }) => ({
     appearance: 'none',
     padding: size === 'sm' ? '10px 16px' : '16px 20px',
-    border: 'none',
+    border,
     fontSize: size === 'sm' ? 16 : 20,
     borderRadius: '50px',
     color: foreground,
     background,
     cursor: 'pointer',
+    textDecoration: 'none',
+
+    transition: 'background 300ms, border 300ms, color 300ms',
 
     '&:focus': {
       outlineColor: background,
+    },
+
+    '&:hover, &:focus': {
+      textDecoration: 'none',
     },
 
     '&:disabled': {

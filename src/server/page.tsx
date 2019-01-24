@@ -35,7 +35,7 @@ const template = (
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1.0, maximum-scale=1.2, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   ${helmetContext.title}
   ${helmetContext.link}
@@ -61,6 +61,10 @@ const template = (
 
 export const getPage: Koa.Middleware = async (ctx) => {
   const session = createSession<Session>(new ServerCookieStorage(ctx))
+  const dontPanicSession = createSession<any>(
+    new ServerCookieStorage(ctx),
+    '_hv_dp',
+  )
   const unwrappedSession = session.getSession()
   const apolloClient = createServerApolloClient(
     ctx.state.requestUuid,
@@ -72,7 +76,7 @@ export const getPage: Koa.Middleware = async (ctx) => {
     <StaticRouter location={ctx.request.originalUrl} context={routerContext}>
       <HelmetProvider context={helmetContext}>
         <ApolloProvider client={apolloClient}>
-          <App session={session} />
+          <App session={session} dontPanicSession={dontPanicSession} />
         </ApolloProvider>
       </HelmetProvider>
     </StaticRouter>
@@ -94,4 +98,7 @@ export const getPage: Koa.Middleware = async (ctx) => {
     apolloClient.extract(),
     (ctx.res as any).cspNonce,
   )
+
+  ctx.response.set('Access-Control-Allow-Origin', '*')
+  ctx.response.set('Access-Control-Allow-Headers', 'content-type')
 }

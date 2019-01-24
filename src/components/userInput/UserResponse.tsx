@@ -1,4 +1,5 @@
 import { colors, fonts } from '@hedviginsurance/brand'
+import animateScrollTo from 'animated-scroll-to'
 import { Container } from 'constate'
 import * as React from 'react'
 import AnimateHeight from 'react-animate-height'
@@ -157,7 +158,8 @@ export const UserCheckbox = (
 const UserResponseWrapper: React.SFC<{
   className?: string
   appear?: boolean
-}> = ({ className, children, appear }) =>
+  delay?: number
+}> = ({ className, children, appear, delay }) =>
   appear ? (
     <div className={className}>{children}</div>
   ) : (
@@ -166,7 +168,20 @@ const UserResponseWrapper: React.SFC<{
       actions={{ mount: () => () => ({ hasMounted: true }) }}
     >
       {({ hasMounted, mount }) => (
-        <Mount on={mount}>
+        <Mount
+          on={() => {
+            if (!delay) {
+              mount()
+              return
+            }
+            setTimeout(() => {
+              mount()
+              setTimeout(() => {
+                animateScrollTo(document.body.scrollHeight)
+              }, HEIGHT_AND_SCROLL_ANIMATION_TIME)
+            }, delay)
+          }}
+        >
           <AnimateHeight
             duration={HEIGHT_AND_SCROLL_ANIMATION_TIME}
             height={hasMounted ? 'auto' : 0}

@@ -205,6 +205,22 @@ export const TopBar: React.SFC<Props> = ({ progress, button }) => (
   </Wrapper>
 )
 
+const EmptyBar = styled(Bar)({
+  justifyContent: 'flex-start',
+})
+export const EmptyTopBar: React.FunctionComponent = () => (
+  <Wrapper>
+    <EmptyBar>
+      <LogoWrapper>
+        <EscapeLink href="/">
+          <Logo src="/new-member-assets/topbar/hedvig-wordmark-solid.svg" />
+        </EscapeLink>
+      </LogoWrapper>
+      <div />
+    </EmptyBar>
+  </Wrapper>
+)
+
 export const TopBarFiller = styled('div')({
   paddingTop: 100,
 })

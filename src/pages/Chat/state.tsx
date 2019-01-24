@@ -5,6 +5,7 @@ import { notNullable } from '../../utils/nullables'
 import { StorageContainer } from '../../utils/StorageContainer'
 
 export enum ChatStep {
+  INITIAL_NAME = 'INITIAL_NAME',
   NUMBER_OF_PEOPLE = 'NUMBER_OF_PEOPLE',
   INITIAL = 'INITIAL',
   NAME_INPUT = 'NAME_INPUT',
@@ -59,14 +60,22 @@ export interface State {
   currentInsurance: CurrentInsuranceState
 }
 
-const initialState: State = {
-  visibleSteps: [ChatStep.INITIAL],
-  currentStep: ChatStep.INITIAL,
+export const initialState = ({
+  initialFirstName,
+  initialLastName,
+  initialInsurer,
+}: {
+  initialFirstName?: string
+  initialLastName?: string
+  initialInsurer?: Insurer
+} = {}): State => ({
+  visibleSteps: [initialFirstName ? ChatStep.INITIAL_NAME : ChatStep.INITIAL],
+  currentStep: initialFirstName ? ChatStep.INITIAL_NAME : ChatStep.INITIAL,
   initialVisibleSteps: [],
   nameAge: {
-    firstName: '',
+    firstName: initialFirstName || '',
     age: '',
-    lastName: '',
+    lastName: initialLastName || '',
   },
   livingSituation: {
     size: 0,
@@ -75,8 +84,13 @@ const initialState: State = {
     streetAddress: '',
   },
   isStudent: undefined,
-  currentInsurance: {},
-}
+  currentInsurance: Object.values(Insurer).includes(initialInsurer)
+    ? {
+        hasCurrentInsurance: true,
+        currentInsurer: initialInsurer,
+      }
+    : {},
+})
 
 export interface Effects {
   setNameAgeProp: <K extends keyof NameAgeState>(
@@ -108,7 +122,7 @@ export const ChatContainer: React.SFC<
         initialState={
           (storageState.session.getSession() &&
             notNullable(storageState.session.getSession()).chat) ||
-          initialState
+          initialState()
         }
         effects={{
           setNameAgeProp: <K extends keyof NameAgeState>(
@@ -117,7 +131,7 @@ export const ChatContainer: React.SFC<
           ) => ({ state, setState }) => {
             const newState: Partial<State> = {
               nameAge: {
-                ...(state.nameAge || initialState.nameAge),
+                ...(state.nameAge || initialState().nameAge),
                 [key]: value,
               },
             }
@@ -127,7 +141,7 @@ export const ChatContainer: React.SFC<
               chat: {
                 ...((storageState.session.getSession() &&
                   notNullable(storageState.session.getSession()).chat) ||
-                  initialState),
+                  initialState()),
                 ...newState,
               },
             })
@@ -138,7 +152,7 @@ export const ChatContainer: React.SFC<
           ) => ({ state, setState }) => {
             const newState: Partial<State> = {
               livingSituation: {
-                ...(state.livingSituation || initialState.livingSituation),
+                ...(state.livingSituation || initialState().livingSituation),
                 [key]: value,
               },
             }
@@ -148,7 +162,7 @@ export const ChatContainer: React.SFC<
               chat: {
                 ...((storageState.session.getSession() &&
                   notNullable(storageState.session.getSession()).chat) ||
-                  initialState),
+                  initialState()),
                 ...newState,
               },
             })
@@ -178,7 +192,7 @@ export const ChatContainer: React.SFC<
               chat: {
                 ...((storageState.session.getSession() &&
                   notNullable(storageState.session.getSession()).chat) ||
-                  initialState),
+                  initialState()),
                 ...newState,
               },
             })
@@ -199,7 +213,7 @@ export const ChatContainer: React.SFC<
               chat: {
                 ...((storageState.session.getSession() &&
                   notNullable(storageState.session.getSession()).chat) ||
-                  initialState),
+                  initialState()),
                 ...newState,
               },
             })
@@ -214,7 +228,7 @@ export const ChatContainer: React.SFC<
               chat: {
                 ...((storageState.session.getSession() &&
                   notNullable(storageState.session.getSession()).chat) ||
-                  initialState),
+                  initialState()),
                 ...newState,
               },
             })
@@ -234,7 +248,7 @@ export const ChatContainer: React.SFC<
               chat: {
                 ...((storageState.session.getSession() &&
                   notNullable(storageState.session.getSession()).chat) ||
-                  initialState),
+                  initialState()),
                 ...newState,
               },
             })
@@ -242,7 +256,7 @@ export const ChatContainer: React.SFC<
           reset: () => ({ setState }) => {
             storageState.session.setSession({
               ...storageState.session.getSession(),
-              chat: initialState,
+              chat: initialState(),
               token: undefined,
             })
             // Force 2 state updates to make sure first step is re-mounted
@@ -272,7 +286,7 @@ export const ChatContainer: React.SFC<
               chat: {
                 ...((storageState.session.getSession() &&
                   notNullable(storageState.session.getSession()).chat) ||
-                  initialState),
+                  initialState()),
                 ...newState,
                 initialVisibleSteps: newState.visibleSteps,
               },

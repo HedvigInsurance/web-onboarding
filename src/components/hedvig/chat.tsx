@@ -24,14 +24,20 @@ const fadeOut = keyframes({
   },
 })
 
-const ChatWrapper = styled('div')({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  marginBottom: 30,
-  opacity: 1,
-  maxWidth: '65%',
-})
+export const ChatWrapper = styled('div')(
+  ({ isHedvig }: { isHedvig: boolean }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: isHedvig ? 'flex-start' : 'flex-end',
+    marginLeft: isHedvig ? undefined : 'auto',
+    marginBottom: 30,
+    opacity: 1,
+    maxWidth: '65%',
+    '@media (max-width: 500px)': {
+      maxWidth: '80%',
+    },
+  }),
+)
 
 const Hedvig = styled('img')({
   height: 33,
@@ -99,13 +105,21 @@ export const Typing: React.SFC<{ status: TransitionStatus }> = ({ status }) => (
 )
 
 export const ChatMessageTextWrapper = styled('div')(
-  ({ isVisible, appear }: { isVisible: boolean; appear: boolean }) => ({
+  ({
+    isVisible,
+    appear,
+    isHedvig,
+  }: {
+    isVisible: boolean
+    appear: boolean
+    isHedvig: boolean
+  }) => ({
     display: 'inline-block',
     maxWidth: '100%',
     padding: '15px 18px',
-    backgroundColor: colors.OFF_WHITE,
-    color: colors.BLACK_PURPLE,
-    fontFamily: fonts.MERRIWEATHER,
+    backgroundColor: isHedvig ? colors.OFF_WHITE : colors.PURPLE,
+    color: isHedvig ? colors.BLACK_PURPLE : colors.WHITE,
+    fontFamily: isHedvig ? fonts.MERRIWEATHER : undefined,
     fontSize: '0.95em',
     fontWeight: 300,
     borderRadius: 8,
@@ -114,6 +128,7 @@ export const ChatMessageTextWrapper = styled('div')(
       isVisible && !appear
         ? `${fadeUp} 200ms forwards, ${fadeIn} 300ms forwards`
         : 'none',
+    wordBreak: 'break-word',
   }),
 )
 
@@ -122,6 +137,7 @@ export interface ChatMessageProps {
   isCurrentMessage?: boolean
   typingDuration?: number
   onTyped?: () => void
+  isHedvig?: boolean
 }
 
 const HedvigIcon: React.SFC = () => (
@@ -135,9 +151,10 @@ export const ChatMessage: React.SFC<ChatMessageProps> = ({
   appear = false,
   isCurrentMessage = false,
   typingDuration = 500,
+  isHedvig = true,
   onTyped,
 }) => (
-  <ChatWrapper>
+  <ChatWrapper isHedvig={isHedvig}>
     <Container<{ hasMounted: boolean }, { mount: () => void }>
       initialState={{ hasMounted: appear }}
       actions={{ mount: () => () => ({ hasMounted: true }) }}
@@ -148,18 +165,20 @@ export const ChatMessage: React.SFC<ChatMessageProps> = ({
             duration={HEIGHT_AND_SCROLL_ANIMATION_TIME}
             height={hasMounted ? 'auto' : 0}
           >
-            <AnimateHeight
-              duration={HEIGHT_AND_SCROLL_ANIMATION_TIME}
-              height={isCurrentMessage && hasMounted ? 33 : 0}
-            >
-              {appear ? (
-                <HedvigIcon />
-              ) : (
-                <FadeIn>
+            {isHedvig && (
+              <AnimateHeight
+                duration={HEIGHT_AND_SCROLL_ANIMATION_TIME}
+                height={isCurrentMessage && hasMounted ? 33 : 0}
+              >
+                {appear ? (
                   <HedvigIcon />
-                </FadeIn>
-              )}
-            </AnimateHeight>
+                ) : (
+                  <FadeIn>
+                    <HedvigIcon />
+                  </FadeIn>
+                )}
+              </AnimateHeight>
+            )}
             <Transition
               timeout={appear ? 0 : typingDuration}
               appear
@@ -188,6 +207,7 @@ export const ChatMessage: React.SFC<ChatMessageProps> = ({
                   <ChatMessageTextWrapper
                     appear={appear}
                     isVisible={[ENTERED, EXITING].includes(appearStatus)}
+                    isHedvig={isHedvig}
                   >
                     {children}
                   </ChatMessageTextWrapper>

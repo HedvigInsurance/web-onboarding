@@ -14,10 +14,13 @@ export const ConversationWrapper = styled('div')({
   margin: '0 auto',
   paddingBottom: CONTAINER_PADDING + NEXT_BUTTON_SPACING + INTERCOM_SPACING,
   fontSize: 24,
-  minHeight: '75vh',
+  minHeight: '90vh',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
+  '@media (max-width: 500px)': {
+    fontSize: 20,
+  },
 })
 
 const getId = (child: React.ReactChild) => React.Children.only(child).props.id
@@ -29,6 +32,7 @@ interface ConversationProps<TId> {
   currentStep?: TId
   visibleSteps?: TId[]
   initialVisibleSteps?: TId[]
+  className?: string
 }
 
 export class Conversation<TId> extends React.Component<ConversationProps<TId>> {
@@ -42,7 +46,7 @@ export class Conversation<TId> extends React.Component<ConversationProps<TId>> {
     const visibleSteps = this.props.visibleSteps || []
     const initialVisibleSteps = this.props.initialVisibleSteps || []
     return (
-      <ConversationWrapper>
+      <ConversationWrapper className={this.props.className}>
         {React.Children.toArray(this.props.children)
           .filter((message) => visibleSteps.includes(getId(message)))
           .map((message) =>
