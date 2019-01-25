@@ -20,6 +20,11 @@ import {
   UserTextInput,
 } from '../../components/userInput/UserResponse'
 import { Size, Spacing } from '../../components/utils/Spacing'
+import {
+  ApplicationSpecificEvents,
+  getUtmParamsFromCookie,
+  TrackAction,
+} from '../../utils/tracking'
 import { insurerNames } from '../Chat/steps/CurrentInsuranceInput'
 import { DontPanicContainer, Step } from './DontPanicContainer'
 import { Notifier } from './Notifier'
@@ -157,10 +162,10 @@ const OnboardingMessageText = styled('div')({
   paddingBottom: '1rem',
 })
 const OnboardingButton = Button.withComponent(Link)
-const OnboardingMessage: React.FunctionComponent<{ to: string }> = ({
-  children,
-  to,
-}) => (
+const OnboardingMessage: React.FunctionComponent<{
+  to: string
+  onClick: () => void
+}> = ({ children, to, onClick }) => (
   <ChatWrapper isHedvig={true}>
     <OnboardingMessageBody>
       <OnboardingMessageText>{children}</OnboardingMessageText>
@@ -168,6 +173,7 @@ const OnboardingMessage: React.FunctionComponent<{ to: string }> = ({
         foreground={colors.WHITE}
         background={colors.GREEN}
         to={to}
+        onClick={onClick}
       >
         Skaffa Hedvig
       </OnboardingButton>
@@ -403,29 +409,45 @@ export class DontPanic extends React.Component {
                         {({ appear }) => (
                           <DontPanicButtonWrapper>
                             <Heading appear={appear}>Har något hänt?</Heading>
-                            <DontPanicButton
-                              foreground={colors.WHITE}
-                              background={colors.GREEN}
-                              size="lg"
-                              onClick={() => {
-                                if (isCurrentStep(true, 'dont-panic', steps)) {
-                                  goToStep({
-                                    id: 'initial',
-                                    isHedvig: true,
-                                  })
-                                }
+                            <TrackAction
+                              event={{
+                                name: ApplicationSpecificEvents.COMPLETED,
+                                properties: {
+                                  category: 'dont-panic-steps',
+                                  label: 'initiate-flow',
+                                  ...getUtmParamsFromCookie(),
+                                },
                               }}
-                              appear={appear}
-                              currentStep={isCurrentStep(
-                                true,
-                                'dont-panic',
-                                steps,
-                              )}
                             >
-                              <HedvigH />
-                              <br />
-                              Don't panic!
-                            </DontPanicButton>
+                              {({ track }) => (
+                                <DontPanicButton
+                                  foreground={colors.WHITE}
+                                  background={colors.GREEN}
+                                  size="lg"
+                                  onClick={() => {
+                                    if (
+                                      isCurrentStep(true, 'dont-panic', steps)
+                                    ) {
+                                      goToStep({
+                                        id: 'initial',
+                                        isHedvig: true,
+                                      })
+                                      track()
+                                    }
+                                  }}
+                                  appear={appear}
+                                  currentStep={isCurrentStep(
+                                    true,
+                                    'dont-panic',
+                                    steps,
+                                  )}
+                                >
+                                  <HedvigH />
+                                  <br />
+                                  Don't panic!
+                                </DontPanicButton>
+                              )}
+                            </TrackAction>
                             <Paragraph appear={appear}>
                               Livet händer. Låt Hedvig hjälpa dig.
                             </Paragraph>
@@ -464,34 +486,48 @@ export class DontPanic extends React.Component {
                             {isCurrentStep(false, 'initial-response', steps) &&
                             !email ? (
                               <div>
-                                <ReactFacebookLogin
-                                  fields="first_name,last_name,email"
-                                  textButton="Fortsätt med Facebook"
-                                  appId={
-                                    process.env.NODE_ENV === 'production'
-                                      ? '221855442096816'
-                                      : '523826788131113'
-                                  }
-                                  callback={(fbData) => {
-                                    if (
-                                      !fbData ||
-                                      !(fbData as any).first_name ||
-                                      !(fbData as any).last_name ||
-                                      !(fbData as any).email
-                                    ) {
-                                      return
-                                    }
-
-                                    setName((fbData as any).first_name)
-                                    setLastName((fbData as any).last_name)
-                                    setEmail((fbData as any).email)
-                                    goToStep({
-                                      id: 'current-insurer',
-                                      isHedvig: true,
-                                    })
+                                <TrackAction
+                                  event={{
+                                    name: ApplicationSpecificEvents.COMPLETED,
+                                    properties: {
+                                      category: 'dont-panic-steps',
+                                      label: 'facebook-login',
+                                      ...getUtmParamsFromCookie(),
+                                    },
                                   }}
-                                  cssClass={facebookButtonClass}
-                                />
+                                >
+                                  {({ track }) => (
+                                    <ReactFacebookLogin
+                                      fields="first_name,last_name,email"
+                                      textButton="Fortsätt med Facebook"
+                                      appId={
+                                        process.env.NODE_ENV === 'production'
+                                          ? '221855442096816'
+                                          : '523826788131113'
+                                      }
+                                      callback={(fbData) => {
+                                        if (
+                                          !fbData ||
+                                          !(fbData as any).first_name ||
+                                          !(fbData as any).last_name ||
+                                          !(fbData as any).email
+                                        ) {
+                                          return
+                                        }
+
+                                        setName((fbData as any).first_name)
+                                        setLastName((fbData as any).last_name)
+                                        setEmail((fbData as any).email)
+                                        goToStep({
+                                          id: 'current-insurer',
+                                          isHedvig: true,
+                                        })
+                                        track()
+                                      }}
+                                      cssClass={facebookButtonClass}
+                                    />
+                                  )}
+                                </TrackAction>
                               </div>
                             ) : (
                               email && (
@@ -505,28 +541,45 @@ export class DontPanic extends React.Component {
                             )}
                             {!email && (
                               <div>
-                                <ContinueWithoutFacebook
-                                  onClick={() => {
-                                    if (
-                                      isCurrentStep(
-                                        false,
-                                        'initial-response',
-                                        steps,
-                                      )
-                                    ) {
-                                      goToStep({ id: 'name', isHedvig: true })
-                                    }
+                                <TrackAction
+                                  event={{
+                                    name: ApplicationSpecificEvents.COMPLETED,
+                                    properties: {
+                                      category: 'dont-panic-steps',
+                                      label: 'continue-without-facebook',
+                                      ...getUtmParamsFromCookie(),
+                                    },
                                   }}
-                                  disabled={
-                                    !isCurrentStep(
-                                      false,
-                                      'initial-response',
-                                      steps,
-                                    )
-                                  }
                                 >
-                                  Jag har inte Facebook
-                                </ContinueWithoutFacebook>
+                                  {({ track }) => (
+                                    <ContinueWithoutFacebook
+                                      onClick={() => {
+                                        if (
+                                          isCurrentStep(
+                                            false,
+                                            'initial-response',
+                                            steps,
+                                          )
+                                        ) {
+                                          goToStep({
+                                            id: 'name',
+                                            isHedvig: true,
+                                          })
+                                          track()
+                                        }
+                                      }}
+                                      disabled={
+                                        !isCurrentStep(
+                                          false,
+                                          'initial-response',
+                                          steps,
+                                        )
+                                      }
+                                    >
+                                      Jag har inte Facebook
+                                    </ContinueWithoutFacebook>
+                                  )}
+                                </TrackAction>
                               </div>
                             )}
                           </UserResponse>
@@ -679,50 +732,64 @@ export class DontPanic extends React.Component {
 
                       <Message id="first-message">
                         {({ appear }) => (
-                          <Mutation
-                            mutation={CREATE_SESSION_MUTATION}
-                            onCompleted={(data) => {
-                              setSessionId(data.createDontPanicSession.id)
+                          <TrackAction
+                            event={{
+                              name: ApplicationSpecificEvents.COMPLETED,
+                              properties: {
+                                category: 'dont-panic-steps',
+                                label: 'session-initiated',
+                                ...getUtmParamsFromCookie(),
+                              },
                             }}
                           >
-                            {(createChatSession) => (
-                              <ChatMessage
-                                isCurrentMessage={isCurrentStep(
-                                  true,
-                                  'first-message',
-                                  steps,
-                                )}
-                                typingDuration={1500}
-                                appear={appear}
-                                onTyped={() => {
-                                  createChatSession({
-                                    variables: {
-                                      name,
-                                      lastName: lastName || '',
-                                      email: email || '',
-                                      currentInsurer,
-                                    },
-                                  })
-                                  goToStep({
-                                    id: 'question-examples',
-                                    isHedvig: true,
-                                  })
+                            {({ track }) => (
+                              <Mutation
+                                mutation={CREATE_SESSION_MUTATION}
+                                onCompleted={(data) => {
+                                  setSessionId(data.createDontPanicSession.id)
                                 }}
                               >
-                                {currentInsurer !== 'NO' &&
-                                currentInsurer !== 'Hedvig' ? (
-                                  <>
-                                    👀
-                                    <br />
-                                    Okej! Vi svarar såklart på dina frågor ändå.
-                                    Vad har du på hjärtat?
-                                  </>
-                                ) : (
-                                  <>Cool! Vad är det du undrar över?</>
+                                {(createChatSession) => (
+                                  <ChatMessage
+                                    isCurrentMessage={isCurrentStep(
+                                      true,
+                                      'first-message',
+                                      steps,
+                                    )}
+                                    typingDuration={1500}
+                                    appear={appear}
+                                    onTyped={() => {
+                                      createChatSession({
+                                        variables: {
+                                          name,
+                                          lastName: lastName || '',
+                                          email: email || '',
+                                          currentInsurer,
+                                        },
+                                      })
+                                      goToStep({
+                                        id: 'question-examples',
+                                        isHedvig: true,
+                                      })
+                                      track()
+                                    }}
+                                  >
+                                    {currentInsurer !== 'NO' &&
+                                    currentInsurer !== 'Hedvig' ? (
+                                      <>
+                                        👀
+                                        <br />
+                                        Okej! Vi svarar såklart på dina frågor
+                                        ändå. Vad har du på hjärtat?
+                                      </>
+                                    ) : (
+                                      <>Cool! Vad är det du undrar över?</>
+                                    )}
+                                  </ChatMessage>
                                 )}
-                              </ChatMessage>
+                              </Mutation>
                             )}
-                          </Mutation>
+                          </TrackAction>
                         )}
                       </Message>
 
@@ -866,12 +933,29 @@ export class DontPanic extends React.Component {
                                             {({ appear }) => {
                                               if (message.type === 'onboard') {
                                                 return (
-                                                  <OnboardingMessage
-                                                    to={`/new-member/hedvig?firstName=${name}&lastName=${lastName ||
-                                                      ''}&initialInsurer=${currentInsurer}`}
+                                                  <TrackAction
+                                                    event={{
+                                                      name:
+                                                        ApplicationSpecificEvents.COMPLETED,
+                                                      properties: {
+                                                        category:
+                                                          'dont-panic-steps',
+                                                        label:
+                                                          'onboarding-clicked',
+                                                        ...getUtmParamsFromCookie(),
+                                                      },
+                                                    }}
                                                   >
-                                                    {message.text}
-                                                  </OnboardingMessage>
+                                                    {({ track }) => (
+                                                      <OnboardingMessage
+                                                        to={`/new-member/hedvig?firstName=${name}&lastName=${lastName ||
+                                                          ''}&initialInsurer=${currentInsurer}`}
+                                                        onClick={track}
+                                                      >
+                                                        {message.text}
+                                                      </OnboardingMessage>
+                                                    )}
+                                                  </TrackAction>
                                                 )
                                               }
 
@@ -939,86 +1023,100 @@ export class DontPanic extends React.Component {
                         <MessageFormFiller />
                         <MessageFormWrapper>
                           <MessageBoxWrapper>
-                            <Mutation
-                              mutation={ADD_MESSAGE_MUTATION}
-                              refetchQueries={() => [
-                                {
-                                  query: SESSION_QUERY,
-                                  variables: { id: sessionId },
+                            <TrackAction
+                              event={{
+                                name: ApplicationSpecificEvents.COMPLETED,
+                                properties: {
+                                  category: 'dont-panic-steps',
+                                  label: 'message-sent',
+                                  ...getUtmParamsFromCookie(),
                                 },
-                              ]}
-                            >
-                              {(mutate, { loading }) => {
-                                const sendMessage = (vars: any) => {
-                                  if (messageText.trim().length === 0) {
-                                    return
-                                  }
-                                  return mutate(vars).then((_) => {
-                                    setMessageText('')
-                                    makeChatActive()
-                                    const popAudio = new Audio(
-                                      '/new-member-assets/audio/pop.mp3',
-                                    )
-                                    popAudio.volume = 0.3
-                                    return popAudio.play()
-                                  })
-                                }
-                                return (
-                                  <MessageForm
-                                    onSubmit={(e) => {
-                                      e.preventDefault()
-                                      sendMessage({
-                                        variables: {
-                                          sessionId,
-                                          text: messageText,
-                                        },
-                                        awaitRefetchQueries: true,
-                                      })
-                                    }}
-                                  >
-                                    <MessageTextarea
-                                      value={messageText}
-                                      onChange={(e) =>
-                                        setMessageText(e.target.value)
-                                      }
-                                      placeholder="Skriv ditt meddelande..."
-                                      onKeyDown={(e) => {
-                                        if (
-                                          window.matchMedia(
-                                            '(max-width: 800px)',
-                                          ).matches
-                                        ) {
-                                          return
-                                        }
-                                        if (e.keyCode !== 13) {
-                                          return
-                                        }
-                                        if (e.shiftKey) {
-                                          return
-                                        }
-
-                                        e.preventDefault()
-                                        sendMessage({
-                                          variables: {
-                                            sessionId,
-                                            text: messageText,
-                                          },
-                                          awaitRefetchQueries: true,
-                                        })
-                                      }}
-                                    />
-                                    <MessageSendButton
-                                      background="transparent"
-                                      foreground={colors.GREEN}
-                                      type="submit"
-                                      disabled={loading}
-                                    >
-                                      Skicka
-                                    </MessageSendButton>
-                                  </MessageForm>
-                                )
                               }}
-                            </Mutation>
+                            >
+                              {({ track }) => (
+                                <Mutation
+                                  mutation={ADD_MESSAGE_MUTATION}
+                                  refetchQueries={() => [
+                                    {
+                                      query: SESSION_QUERY,
+                                      variables: { id: sessionId },
+                                    },
+                                  ]}
+                                >
+                                  {(mutate, { loading }) => {
+                                    const sendMessage = (vars: any) => {
+                                      if (messageText.trim().length === 0) {
+                                        return
+                                      }
+                                      return mutate(vars).then((_) => {
+                                        setMessageText('')
+                                        makeChatActive()
+                                        track()
+                                        const popAudio = new Audio(
+                                          '/new-member-assets/audio/pop.mp3',
+                                        )
+                                        popAudio.volume = 0.3
+                                        return popAudio.play()
+                                      })
+                                    }
+                                    return (
+                                      <MessageForm
+                                        onSubmit={(e) => {
+                                          e.preventDefault()
+                                          sendMessage({
+                                            variables: {
+                                              sessionId,
+                                              text: messageText,
+                                            },
+                                            awaitRefetchQueries: true,
+                                          })
+                                        }}
+                                      >
+                                        <MessageTextarea
+                                          value={messageText}
+                                          onChange={(e) =>
+                                            setMessageText(e.target.value)
+                                          }
+                                          placeholder="Skriv ditt meddelande..."
+                                          onKeyDown={(e) => {
+                                            if (
+                                              window.matchMedia(
+                                                '(max-width: 800px)',
+                                              ).matches
+                                            ) {
+                                              return
+                                            }
+                                            if (e.keyCode !== 13) {
+                                              return
+                                            }
+                                            if (e.shiftKey) {
+                                              return
+                                            }
+
+                                            e.preventDefault()
+                                            sendMessage({
+                                              variables: {
+                                                sessionId,
+                                                text: messageText,
+                                              },
+                                              awaitRefetchQueries: true,
+                                            })
+                                          }}
+                                        />
+                                        <MessageSendButton
+                                          background="transparent"
+                                          foreground={colors.GREEN}
+                                          type="submit"
+                                          disabled={loading}
+                                        >
+                                          Skicka
+                                        </MessageSendButton>
+                                      </MessageForm>
+                                    )
+                                  }}
+                                </Mutation>
+                              )}
+                            </TrackAction>
                           </MessageBoxWrapper>
                         </MessageFormWrapper>
                       </>
