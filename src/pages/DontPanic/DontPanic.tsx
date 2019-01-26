@@ -475,8 +475,8 @@ export class DontPanic extends React.Component {
                             <br />
                             Det är jag som är Hedvig. Här hjälper jag dig med
                             allt vad hem och försäkring innebär. Innan jag kan
-                            hälpa dig skulle behöva ställa ett par frågor dock.
-                            Men don't panic! Det tar några sekunder bara.
+                            hjälpa dig skulle behöva ställa ett par frågor dock.
+                            Men don't panic! Det tar bara några sekunder.
                           </ChatMessage>
                         )}
                       </Message>
@@ -505,6 +505,8 @@ export class DontPanic extends React.Component {
                                           ? '221855442096816'
                                           : '523826788131113'
                                       }
+                                      // tslint:disable-next-line
+                                      onFalure={console.log}
                                       callback={(fbData) => {
                                         if (
                                           !fbData ||
