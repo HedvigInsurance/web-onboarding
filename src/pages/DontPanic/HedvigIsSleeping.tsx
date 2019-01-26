@@ -18,7 +18,7 @@ const Wrapper = styled('div')({
 const HedvigWrapper = styled('div')({
   position: 'relative',
   width: '15vh',
-  padding: '1rem 0',
+  padding: '1rem',
 })
 const Hedvig = styled('img')({})
 
