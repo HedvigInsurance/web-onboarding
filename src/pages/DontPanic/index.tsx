@@ -6,8 +6,8 @@ import { HedvigIsSleeping } from './HedvigIsSleeping'
 
 const isSleepingHours = () => {
   const now = new Date()
-  const isBefore9 = now.getHours() + now.getTimezoneOffset() / 60 < 8 // 9 CET
-  const isAfter23 = now.getHours() + now.getTimezoneOffset() / 60 >= 22 //  23 CET
+  const isBefore9 = now.getHours() + now.getTimezoneOffset() / 60 < 8 // after 9 CET
+  const isAfter23 = now.getHours() + now.getTimezoneOffset() / 60 >= 21 //  before 23 CET
 
   return isBefore9 || isAfter23
 }
