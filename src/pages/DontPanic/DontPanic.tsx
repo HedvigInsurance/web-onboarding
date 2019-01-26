@@ -505,8 +505,14 @@ export class DontPanic extends React.Component {
                                           ? '221855442096816'
                                           : '523826788131113'
                                       }
-                                      // tslint:disable-next-line
-                                      onFalure={console.log}
+                                      redirectUri={
+                                        typeof window !== 'undefined'
+                                          ? window.location.protocol +
+                                            '//' +
+                                            window.location.host +
+                                            '/dont-panic/hedvig'
+                                          : undefined
+                                      }
                                       callback={(fbData) => {
                                         if (
                                           !fbData ||
@@ -514,7 +520,6 @@ export class DontPanic extends React.Component {
                                           !(fbData as any).last_name ||
                                           !(fbData as any).email
                                         ) {
-                                          console.log('error')
                                           return
                                         }
 
