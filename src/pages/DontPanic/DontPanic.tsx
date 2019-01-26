@@ -514,6 +514,7 @@ export class DontPanic extends React.Component {
                                           !(fbData as any).last_name ||
                                           !(fbData as any).email
                                         ) {
+                                          console.log('error')
                                           return
                                         }
 
