@@ -3,7 +3,7 @@ import { Container } from 'constate'
 import gql from 'graphql-tag'
 import * as React from 'react'
 import { Mutation, Query } from 'react-apollo'
-import styled, { css, keyframes } from 'react-emotion'
+import styled, { css } from 'react-emotion'
 import ReactFacebookLogin from 'react-facebook-login'
 import { Link } from 'react-router-dom'
 import { Button } from '../../components/buttons'
@@ -28,56 +28,6 @@ import {
 import { insurerNames } from '../Chat/steps/CurrentInsuranceInput'
 import { DontPanicContainer, Step } from './DontPanicContainer'
 import { Notifier } from './Notifier'
-
-const DontPanicButtonWrapper = styled('div')({
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  width: '100%',
-  padding: '50px 0',
-})
-
-const fadeIn = keyframes({
-  from: { opacity: 0 },
-  to: { opacity: 1 },
-})
-
-const slideUp = keyframes({
-  from: { transform: 'translateY(50%)', opacity: 0 },
-  to: { transform: 'translateY(0)', opacity: 1 },
-})
-
-const Heading = styled('h1')(({ appear }: { appear: boolean }) => ({
-  color: colors.BLACK_PURPLE,
-  animation: appear ? undefined : `${fadeIn} 2500ms forwards`,
-  animationDelay: '500ms',
-  opacity: appear ? 1 : 0,
-}))
-
-const DontPanicButton = styled(Button)(
-  ({ appear, currentStep }: { appear: boolean; currentStep: boolean }) => ({
-    width: '20vh',
-    height: '20vh',
-    fontWeight: 'bold',
-    borderRadius: 500,
-    cursor: currentStep ? 'pointer' : 'default',
-    opacity: appear || !currentStep ? ('0.5 !important' as any) : 0,
-    animation: appear ? undefined : `${slideUp} 750ms forwards`,
-    animationDelay: '2000ms',
-    transition: 'opacity 300ms',
-    '&:focus': {
-      outline: 'none',
-    },
-  }),
-)
-
-const Paragraph = styled('p')(({ appear }: { appear: boolean }) => ({
-  color: colors.BLACK_PURPLE,
-  opacity: appear ? 1 : 0,
-  animation: appear ? undefined : `${fadeIn} 1000ms forwards`,
-  animationDelay: '2500ms',
-}))
 
 const facebookButtonClass = css({
   appearance: 'none',
@@ -254,9 +204,9 @@ export const HedvigH: React.FunctionComponent<{ className?: string }> = ({
   <svg
     viewBox="0 0 29 38"
     xmlns="http://www.w3.org/2000/svg"
-    fill={colors.WHITE}
-    width="25%"
-    height="25%"
+    fill="currentColor"
+    width="30%"
+    height="30%"
     className={className}
   >
     <path
@@ -402,58 +352,9 @@ export class DontPanic extends React.Component {
                       currentStep={
                         steps[steps.length - 1]
                           ? steps[steps.length - 1].id
-                          : 'dont-panic'
+                          : 'initial'
                       }
                     >
-                      <Message id="dont-panic">
-                        {({ appear }) => (
-                          <DontPanicButtonWrapper>
-                            <Heading appear={appear}>Har något hänt?</Heading>
-                            <TrackAction
-                              event={{
-                                name: ApplicationSpecificEvents.COMPLETED,
-                                properties: {
-                                  category: 'dont-panic-steps',
-                                  label: 'initiate-flow',
-                                  ...getUtmParamsFromCookie(),
-                                },
-                              }}
-                            >
-                              {({ track }) => (
-                                <DontPanicButton
-                                  foreground={colors.WHITE}
-                                  background={colors.GREEN}
-                                  size="lg"
-                                  onClick={() => {
-                                    if (
-                                      isCurrentStep(true, 'dont-panic', steps)
-                                    ) {
-                                      goToStep({
-                                        id: 'initial',
-                                        isHedvig: true,
-                                      })
-                                      track()
-                                    }
-                                  }}
-                                  appear={appear}
-                                  currentStep={isCurrentStep(
-                                    true,
-                                    'dont-panic',
-                                    steps,
-                                  )}
-                                >
-                                  <HedvigH />
-                                  <br />
-                                  Don't panic!
-                                </DontPanicButton>
-                              )}
-                            </TrackAction>
-                            <Paragraph appear={appear}>
-                              Livet händer. Låt Hedvig hjälpa dig.
-                            </Paragraph>
-                          </DontPanicButtonWrapper>
-                        )}
-                      </Message>
                       <Message id="initial">
                         {({ appear }) => (
                           <ChatMessage
@@ -473,10 +374,10 @@ export class DontPanic extends React.Component {
                           >
                             Hej 👋
                             <br />
-                            Det är jag som är Hedvig. Här hjälper jag dig med
-                            allt vad hem och försäkring innebär. Innan jag kan
-                            hjälpa dig skulle behöva ställa ett par frågor dock.
-                            Men don't panic! Det tar bara några sekunder.
+                            Det är jag som är Hedvig. Här försöker jag hjälpa
+                            dig med allt vad hem och försäkring innebär. Innan
+                            jag kan det skulle behöva ställa ett par frågor
+                            dock. Men don't panic! Det tar bara några sekunder.
                           </ChatMessage>
                         )}
                       </Message>
