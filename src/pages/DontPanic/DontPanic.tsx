@@ -35,7 +35,20 @@ const DontPanicButtonWrapper = styled('div')({
   justifyContent: 'center',
   alignItems: 'center',
   width: '100%',
-  padding: '50px 0',
+  paddingBottom: '50px',
+})
+
+const DontPanicButtonInnerWrapper = styled('div')({
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  textAlign: 'center',
+  padding: '2rem',
+  minWidth: '50%',
+  width: '100%',
+  borderRadius: 10,
+  background: colors.PURPLE,
+  color: colors.WHITE,
 })
 
 const fadeIn = keyframes({
@@ -43,37 +56,58 @@ const fadeIn = keyframes({
   to: { opacity: 1 },
 })
 
-const slideUp = keyframes({
-  from: { transform: 'translateY(50%)', opacity: 0 },
-  to: { transform: 'translateY(0)', opacity: 1 },
+const pulsate = keyframes({
+  '0%': { transform: 'scale(1)', opacity: 1 },
+  '25%': { transform: 'scale(1)', opacity: 1 },
+  '50%': { transform: 'scale(1.05)', opacity: 0.9 },
+  '75%': { transform: 'scale(1)', opacity: 1 },
+  '100%': { transform: 'scale(1)', opacity: 1 },
 })
 
 const Heading = styled('h1')(({ appear }: { appear: boolean }) => ({
-  color: colors.BLACK_PURPLE,
   animation: appear ? undefined : `${fadeIn} 2500ms forwards`,
   animationDelay: '500ms',
+  marginTop: 0,
   opacity: appear ? 1 : 0,
+}))
+
+const DontPanicLogo = styled('div')(({ appear }: { appear: boolean }) => ({
+  display: 'inline-flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  flexDirection: 'column',
+  padding: '.5rem',
+  borderRadius: 500,
+  border: '1px solid ' + colors.WHITE,
+  height: '20vh',
+  width: '20vh',
+  opacity: appear ? 1 : 0,
+  animation: appear ? undefined : `${fadeIn} 2000ms forwards`,
+  animationDelay: '1000ms',
 }))
 
 const DontPanicButton = styled(Button)(
   ({ appear, currentStep }: { appear: boolean; currentStep: boolean }) => ({
-    width: '20vh',
-    height: '20vh',
     fontWeight: 'bold',
-    borderRadius: 500,
     cursor: currentStep ? 'pointer' : 'default',
-    opacity: appear || !currentStep ? ('0.5 !important' as any) : 0,
-    animation: appear ? undefined : `${slideUp} 750ms forwards`,
+    opacity: appear ? 1 : 0,
+    marginTop: '2rem',
+    animation: appear
+      ? undefined
+      : `${pulsate} 2000ms infinite, ${fadeIn} 750ms forwards`,
     animationDelay: '2000ms',
-    transition: 'opacity 300ms',
-    '&:focus': {
+    transition: 'opacity 200ms, color 200ms, background 200ms, transform 300ms',
+    '&:hover, &:focus': {
       outline: 'none',
+      color: appear ? undefined : colors.PURPLE,
+      background: appear ? undefined : colors.WHITE,
+      transform: appear ? undefined : 'scale(1.05) !important',
     },
   }),
 )
 
 const Paragraph = styled('p')(({ appear }: { appear: boolean }) => ({
-  color: colors.BLACK_PURPLE,
+  marginBottom: 0,
   opacity: appear ? 1 : 0,
   animation: appear ? undefined : `${fadeIn} 1000ms forwards`,
   animationDelay: '2500ms',
@@ -254,9 +288,9 @@ export const HedvigH: React.FunctionComponent<{ className?: string }> = ({
   <svg
     viewBox="0 0 29 38"
     xmlns="http://www.w3.org/2000/svg"
-    fill={colors.WHITE}
-    width="25%"
-    height="25%"
+    fill="currentColor"
+    width="30%"
+    height="30%"
     className={className}
   >
     <path
@@ -408,49 +442,55 @@ export class DontPanic extends React.Component {
                       <Message id="dont-panic">
                         {({ appear }) => (
                           <DontPanicButtonWrapper>
-                            <Heading appear={appear}>Har något hänt?</Heading>
-                            <TrackAction
-                              event={{
-                                name: ApplicationSpecificEvents.COMPLETED,
-                                properties: {
-                                  category: 'dont-panic-steps',
-                                  label: 'initiate-flow',
-                                  ...getUtmParamsFromCookie(),
-                                },
-                              }}
-                            >
-                              {({ track }) => (
-                                <DontPanicButton
-                                  foreground={colors.WHITE}
-                                  background={colors.GREEN}
-                                  size="lg"
-                                  onClick={() => {
-                                    if (
-                                      isCurrentStep(true, 'dont-panic', steps)
-                                    ) {
-                                      goToStep({
-                                        id: 'initial',
-                                        isHedvig: true,
-                                      })
-                                      track()
-                                    }
-                                  }}
-                                  appear={appear}
-                                  currentStep={isCurrentStep(
-                                    true,
-                                    'dont-panic',
-                                    steps,
-                                  )}
-                                >
-                                  <HedvigH />
-                                  <br />
-                                  Don't panic!
-                                </DontPanicButton>
-                              )}
-                            </TrackAction>
-                            <Paragraph appear={appear}>
-                              Livet händer. Låt Hedvig hjälpa dig.
-                            </Paragraph>
+                            <DontPanicButtonInnerWrapper>
+                              <Heading appear={appear}>Har något hänt?</Heading>
+                              <DontPanicLogo appear={appear}>
+                                <HedvigH />
+                                <br />
+                                Don't panic!
+                              </DontPanicLogo>
+                              <Paragraph appear={appear}>
+                                Livet händer. Låt Hedvig hjälpa dig.
+                              </Paragraph>
+                              <TrackAction
+                                event={{
+                                  name: ApplicationSpecificEvents.COMPLETED,
+                                  properties: {
+                                    category: 'dont-panic-steps',
+                                    label: 'initiate-flow',
+                                    ...getUtmParamsFromCookie(),
+                                  },
+                                }}
+                              >
+                                {({ track }) => (
+                                  <DontPanicButton
+                                    foreground={colors.WHITE}
+                                    background={colors.PURPLE}
+                                    border={`1px solid ${colors.WHITE}`}
+                                    size="lg"
+                                    onClick={() => {
+                                      if (
+                                        isCurrentStep(true, 'dont-panic', steps)
+                                      ) {
+                                        goToStep({
+                                          id: 'initial',
+                                          isHedvig: true,
+                                        })
+                                        track()
+                                      }
+                                    }}
+                                    appear={appear}
+                                    currentStep={isCurrentStep(
+                                      true,
+                                      'dont-panic',
+                                      steps,
+                                    )}
+                                  >
+                                    Fråga Hedvig
+                                  </DontPanicButton>
+                                )}
+                              </TrackAction>
+                            </DontPanicButtonInnerWrapper>
                           </DontPanicButtonWrapper>
                         )}
                       </Message>
