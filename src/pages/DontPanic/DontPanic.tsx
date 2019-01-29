@@ -374,10 +374,10 @@ export class DontPanic extends React.Component {
                           >
                             Hej 👋
                             <br />
-                            Det är jag som är Hedvig. Här hjälper jag dig med
-                            allt vad hem och försäkring innebär. Innan jag kan
-                            hjälpa dig skulle behöva ställa ett par frågor dock.
-                            Men don't panic! Det tar bara några sekunder.
+                            Det är jag som är Hedvig. Här försöker jag hjälpa
+                            dig med allt vad hem och försäkring innebär. Innan
+                            jag kan det skulle behöva ställa ett par frågor
+                            dock. Men don't panic! Det tar bara några sekunder.
                           </ChatMessage>
                         )}
                       </Message>
