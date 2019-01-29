@@ -551,7 +551,7 @@ export class DontPanic extends React.Component {
                               {steps[steps.length - 1].id ===
                                 'name-response' && (
                                 <Button
-                                  background={colors.GREEN}
+                                  background={colors.PURPLE}
                                   foreground={colors.WHITE}
                                   size="lg"
                                   type="submit"
@@ -626,7 +626,7 @@ export class DontPanic extends React.Component {
                               {steps[steps.length - 1].id ===
                                 'current-insurer-response' && (
                                 <Button
-                                  background={colors.GREEN}
+                                  background={colors.PURPLE}
                                   foreground={colors.WHITE}
                                   size="lg"
                                   type="submit"
@@ -1014,7 +1014,7 @@ export class DontPanic extends React.Component {
                                         />
                                         <MessageSendButton
                                           background="transparent"
-                                          foreground={colors.GREEN}
+                                          foreground={colors.PURPLE}
                                           type="submit"
                                           disabled={loading}
                                         >
