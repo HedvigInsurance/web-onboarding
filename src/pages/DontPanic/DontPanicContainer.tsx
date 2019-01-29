@@ -39,7 +39,7 @@ export const DontPanicContainer: React.FunctionComponent<{
         initialState={{
           steps: (dontPanicSession!.getSession() &&
             dontPanicSession!.getSession().steps) || [
-            { id: 'dont-panic', isHedvig: true },
+            { id: 'initial', isHedvig: true },
           ],
           initialVisibleSteps:
             (dontPanicSession!.getSession() &&

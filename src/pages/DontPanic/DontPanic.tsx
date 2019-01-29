@@ -3,7 +3,7 @@ import { Container } from 'constate'
 import gql from 'graphql-tag'
 import * as React from 'react'
 import { Mutation, Query } from 'react-apollo'
-import styled, { css, keyframes } from 'react-emotion'
+import styled, { css } from 'react-emotion'
 import ReactFacebookLogin from 'react-facebook-login'
 import { Link } from 'react-router-dom'
 import { Button } from '../../components/buttons'
@@ -28,90 +28,6 @@ import {
 import { insurerNames } from '../Chat/steps/CurrentInsuranceInput'
 import { DontPanicContainer, Step } from './DontPanicContainer'
 import { Notifier } from './Notifier'
-
-const DontPanicButtonWrapper = styled('div')({
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  width: '100%',
-  paddingBottom: '50px',
-})
-
-const DontPanicButtonInnerWrapper = styled('div')({
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  textAlign: 'center',
-  padding: '2rem',
-  minWidth: '50%',
-  width: '100%',
-  borderRadius: 10,
-  background: colors.PURPLE,
-  color: colors.WHITE,
-})
-
-const fadeIn = keyframes({
-  from: { opacity: 0 },
-  to: { opacity: 1 },
-})
-
-const pulsate = keyframes({
-  '0%': { transform: 'scale(1)', opacity: 1 },
-  '25%': { transform: 'scale(1)', opacity: 1 },
-  '50%': { transform: 'scale(1.05)', opacity: 0.9 },
-  '75%': { transform: 'scale(1)', opacity: 1 },
-  '100%': { transform: 'scale(1)', opacity: 1 },
-})
-
-const Heading = styled('h1')(({ appear }: { appear: boolean }) => ({
-  animation: appear ? undefined : `${fadeIn} 2500ms forwards`,
-  animationDelay: '500ms',
-  marginTop: 0,
-  opacity: appear ? 1 : 0,
-}))
-
-const DontPanicLogo = styled('div')(({ appear }: { appear: boolean }) => ({
-  display: 'inline-flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  flexDirection: 'column',
-  padding: '.5rem',
-  borderRadius: 500,
-  border: '1px solid ' + colors.WHITE,
-  height: '20vh',
-  width: '20vh',
-  opacity: appear ? 1 : 0,
-  animation: appear ? undefined : `${fadeIn} 2000ms forwards`,
-  animationDelay: '1000ms',
-}))
-
-const DontPanicButton = styled(Button)(
-  ({ appear, currentStep }: { appear: boolean; currentStep: boolean }) => ({
-    fontWeight: 'bold',
-    cursor: currentStep ? 'pointer' : 'default',
-    opacity: appear ? 1 : 0,
-    marginTop: '2rem',
-    animation: appear
-      ? undefined
-      : `${pulsate} 2000ms infinite, ${fadeIn} 750ms forwards`,
-    animationDelay: '2000ms',
-    transition: 'opacity 200ms, color 200ms, background 200ms, transform 300ms',
-    '&:hover, &:focus': {
-      outline: 'none',
-      color: appear ? undefined : colors.PURPLE,
-      background: appear ? undefined : colors.WHITE,
-      transform: appear ? undefined : 'scale(1.05) !important',
-    },
-  }),
-)
-
-const Paragraph = styled('p')(({ appear }: { appear: boolean }) => ({
-  marginBottom: 0,
-  opacity: appear ? 1 : 0,
-  animation: appear ? undefined : `${fadeIn} 1000ms forwards`,
-  animationDelay: '2500ms',
-}))
 
 const facebookButtonClass = css({
   appearance: 'none',
@@ -436,64 +352,9 @@ export class DontPanic extends React.Component {
                       currentStep={
                         steps[steps.length - 1]
                           ? steps[steps.length - 1].id
-                          : 'dont-panic'
+                          : 'initial'
                       }
                     >
-                      <Message id="dont-panic">
-                        {({ appear }) => (
-                          <DontPanicButtonWrapper>
-                            <DontPanicButtonInnerWrapper>
-                              <Heading appear={appear}>Har något hänt?</Heading>
-                              <DontPanicLogo appear={appear}>
-                                <HedvigH />
-                                <br />
-                                Don't panic!
-                              </DontPanicLogo>
-                              <Paragraph appear={appear}>
-                                Livet händer. Låt Hedvig hjälpa dig.
-                              </Paragraph>
-                              <TrackAction
-                                event={{
-                                  name: ApplicationSpecificEvents.COMPLETED,
-                                  properties: {
-                                    category: 'dont-panic-steps',
-                                    label: 'initiate-flow',
-                                    ...getUtmParamsFromCookie(),
-                                  },
-                                }}
-                              >
-                                {({ track }) => (
-                                  <DontPanicButton
-                                    foreground={colors.WHITE}
-                                    background={colors.PURPLE}
-                                    border={`1px solid ${colors.WHITE}`}
-                                    size="lg"
-                                    onClick={() => {
-                                      if (
-                                        isCurrentStep(true, 'dont-panic', steps)
-                                      ) {
-                                        goToStep({
-                                          id: 'initial',
-                                          isHedvig: true,
-                                        })
-                                        track()
-                                      }
-                                    }}
-                                    appear={appear}
-                                    currentStep={isCurrentStep(
-                                      true,
-                                      'dont-panic',
-                                      steps,
-                                    )}
-                                  >
-                                    Fråga Hedvig
-                                  </DontPanicButton>
-                                )}
-                              </TrackAction>
-                            </DontPanicButtonInnerWrapper>
-                          </DontPanicButtonWrapper>
-                        )}
-                      </Message>
                       <Message id="initial">
                         {({ appear }) => (
                           <ChatMessage
