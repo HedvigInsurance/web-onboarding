@@ -11,6 +11,14 @@ import { LoadingScreen } from './LoadingScreen'
 import { OfferCreationHandler } from './OfferCreationHandler'
 
 jest.useFakeTimers()
+jest.mock('client/apolloClient', () => ({
+  apolloClient: {
+    subscriptionClient: {
+      close: jest.fn(),
+    },
+  },
+}))
+
 it('does nothing when no correct state is set', async () => {
   const mocks: MockedResponse[] = [
     {
@@ -38,7 +46,7 @@ it('does nothing when no correct state is set', async () => {
     },
   ]
   const wrapper = mount(
-    <StaticRouter context={{}}>
+    <StaticRouter context={{}} location="/new-member/hedvig">
       <MockedProvider mocks={mocks}>
         <Provider
           initialState={{
