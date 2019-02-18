@@ -1,6 +1,7 @@
 import { Container } from 'constate'
 import * as React from 'react'
 import styled from 'react-emotion'
+import { withRouter } from 'react-router'
 
 const LocalizationIconSvg: React.FunctionComponent<{ className?: string }> = ({
   className,
@@ -62,7 +63,19 @@ const LanguageLink = styled('a')({
   },
 })
 
-export const LanguageSwitcher = () => (
+const LOCALE_PATTERN = /^\/(en\/)/
+const getLocalizedPath = (locale: string, path: string) => {
+  if ((locale === '' || locale === 'sv') && !LOCALE_PATTERN.test(path)) {
+    return path
+  }
+
+  return (`/${locale}/` + path.replace(LOCALE_PATTERN, '')).replace(
+    /\/{2,}/,
+    '/',
+  )
+}
+
+export const LanguageSwitcher = withRouter(({ location }) => (
   <Container<{ isOpen: boolean }, { open: () => void; close: () => void }>
     initialState={{ isOpen: false }}
     actions={{
@@ -78,14 +91,18 @@ export const LanguageSwitcher = () => (
         {isOpen && (
           <LanguageSwitcherDropdown>
             <Language>
-              <LanguageLink href="/en/new-member">English</LanguageLink>
+              <LanguageLink href={getLocalizedPath('en', location.pathname)}>
+                English
+              </LanguageLink>
             </Language>
             <Language>
-              <LanguageLink href="/new-member">Svenska</LanguageLink>
+              <LanguageLink href={getLocalizedPath('', location.pathname)}>
+                Svenska
+              </LanguageLink>
             </Language>
           </LanguageSwitcherDropdown>
         )}
       </LanguageSwitcherWrapper>
     )}
   </Container>
-)
+))
