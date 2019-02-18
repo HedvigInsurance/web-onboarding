@@ -7,11 +7,23 @@ import { Offering } from './pages/Offer'
 import { Sign } from './pages/Sign'
 
 export const reactPageRoutes = [
-  { path: '/new-member', Component: NewMemberLanding, exact: true },
-  { path: '/new-member/hedvig', Component: Chat, exact: true },
-  { path: '/new-member/offer', Component: Offering, exact: true },
-  { path: '/new-member/download', Component: Download, exact: true },
-  { path: '/new-member/sign', Component: Sign, exact: true },
+  {
+    path: '/:language(en)?/new-member',
+    Component: NewMemberLanding,
+    exact: true,
+  },
+  { path: '/:language(en)?/new-member/hedvig', Component: Chat, exact: true },
+  {
+    path: '/:language(en)?/new-member/offer',
+    Component: Offering,
+    exact: true,
+  },
+  {
+    path: '/:language(en)?/new-member/download',
+    Component: Download,
+    exact: true,
+  },
+  { path: '/:language(en)?/new-member/sign', Component: Sign, exact: true },
   { path: '/dont-panic/hedvig', Component: LazyDontPanic, exact: true },
   { path: '/*', Component: FourOhFour },
 ]

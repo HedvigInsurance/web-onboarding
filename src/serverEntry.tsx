@@ -13,6 +13,7 @@ import {
   setRequestUuidMiddleware,
 } from './server/middleware/enhancers'
 import { helmet } from './server/middleware/helmet'
+import { languageRedirect } from './server/middleware/languageRedirect'
 import { getPage } from './server/page'
 import { notNullable } from './utils/nullables'
 import { sentryConfig } from './utils/sentry'
@@ -58,6 +59,7 @@ if (process.env.USE_HELMET === 'true') {
 server.app.use(setRequestUuidMiddleware)
 server.app.use(setLoggerMiddleware)
 server.app.use(logRequestMiddleware)
+server.router.use(languageRedirect)
 server.router.use(setRequestUuidMiddleware)
 server.router.use(setLoggerMiddleware)
 server.router.use(logRequestMiddleware)
