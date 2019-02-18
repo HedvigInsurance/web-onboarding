@@ -57,7 +57,6 @@ const BarButtonWrapper = styled('div')(
 const GetInsuredButton = styled('div')({
   display: 'flex',
   justifyContent: 'inherit',
-  marginRight: '26px',
   '@media (max-width: 350px)': {
     marginRight: '10px',
   },

@@ -2,6 +2,7 @@ import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import styled from 'react-emotion'
+import { CurrentLanguage } from '../../../components/utils/CurrentLanguage'
 import { CardWrapper } from '../components/CardWrapper'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 import { InnerWrapper } from '../components/InnerWrapper'
@@ -80,23 +81,28 @@ const Paragraph = styled('div')({
   marginTop: '10px',
 })
 
-const cols: ReadonlyArray<{
+const cols = (
+  lang: string,
+): ReadonlyArray<{
   imageUrl: string
   titleKey: string
   paragraphKey: string
-}> = [
+}> => [
   {
-    imageUrl: '/new-member-assets/offering/enkel-overblick.svg',
+    imageUrl: `/new-member-assets/offering/enkel-overblick${lang &&
+      '-' + lang}.svg`,
     titleKey: 'OFFER_INFO_COL_ONE_TITLE',
     paragraphKey: 'OFFER_INFO_COL_ONE_PARAGRAPH',
   },
   {
-    imageUrl: '/new-member-assets/offering/snabbt-svar.svg',
+    imageUrl: `/new-member-assets/offering/snabbt-svar${lang &&
+      '-' + lang}.svg`,
     titleKey: 'OFFER_INFO_COL_TWO_TITLE',
     paragraphKey: 'OFFER_INFO_COL_TWO_PARAGRAPH',
   },
   {
-    imageUrl: '/new-member-assets/offering/anmal-skador.svg',
+    imageUrl: `/new-member-assets/offering/anmal-skador${lang &&
+      '-' + lang}.svg`,
     titleKey: 'OFFER_INFO_COL_THREE_TITLE',
     paragraphKey: 'OFFER_INFO_COL_THREE_PARAGRAPH',
   },
@@ -115,21 +121,25 @@ export const HedvigInfo: React.SFC = () => (
             </Header>
           </HeaderWrapper>
           <Row>
-            {cols.map((col) => (
-              <Col key={col.titleKey + col.paragraphKey}>
-                <Image src={col.imageUrl} />
-                <Title>
-                  <TranslationsConsumer textKey={col.titleKey}>
-                    {(title) => title}
-                  </TranslationsConsumer>
-                </Title>
-                <Paragraph>
-                  <TranslationsConsumer textKey={col.paragraphKey}>
-                    {(paragraph) => paragraph}
-                  </TranslationsConsumer>
-                </Paragraph>
-              </Col>
-            ))}
+            <CurrentLanguage>
+              {({ currentLanguage }) =>
+                cols(currentLanguage).map((col) => (
+                  <Col key={col.titleKey + col.paragraphKey}>
+                    <Image src={col.imageUrl} />
+                    <Title>
+                      <TranslationsConsumer textKey={col.titleKey}>
+                        {(title) => title}
+                      </TranslationsConsumer>
+                    </Title>
+                    <Paragraph>
+                      <TranslationsConsumer textKey={col.paragraphKey}>
+                        {(paragraph) => paragraph}
+                      </TranslationsConsumer>
+                    </Paragraph>
+                  </Col>
+                ))
+              }
+            </CurrentLanguage>
           </Row>
         </Card>
       </CardWrapper>

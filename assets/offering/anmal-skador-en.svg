@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="270px" height="258px" viewBox="0 0 270 258" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.1 (72631) - https://sketchapp.com -->
+    <title>report_claims</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M6.28363636,0 L228.536131,8.8817842e-16 C232.006488,2.50684266e-16 234.819767,2.81327983 234.819767,6.28363636 L234.819767,56.5527273 C234.819767,60.0230838 232.006488,62.8363636 228.536131,62.8363636 L6.28363636,62.8363636 C2.81327983,62.8363636 1.19713156e-14,60.0230838 1.15463195e-14,56.5527273 L0,6.28363636 C-4.24996103e-16,2.81327983 2.81327983,-2.02704111e-15 6.28363636,-2.66453526e-15 Z" id="path-1"></path>
+        <filter x="-2.1%" y="-6.4%" width="104.3%" height="115.9%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="1.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="English-Translations" transform="translate(-947.000000, -304.000000)">
+            <g id="report_claims" transform="translate(947.000000, 304.000000)">
+                <path d="M10.2555408,-4.14336123e-16 L259.744459,4.14336123e-16 C263.310534,-2.4074122e-16 264.603679,0.371302445 265.907383,1.06853082 C267.211087,1.76575919 268.234241,2.78891348 268.931469,4.09261719 C269.628698,5.39632089 270,6.68946584 270,10.2555408 L270,247.744459 C270,251.310534 269.628698,252.603679 268.931469,253.907383 C268.234241,255.211087 267.211087,256.234241 265.907383,256.931469 C264.603679,257.628698 263.310534,258 259.744459,258 L10.2555408,258 C6.68946584,258 5.39632089,257.628698 4.09261719,256.931469 C2.78891348,256.234241 1.76575919,255.211087 1.06853082,253.907383 C0.371302445,252.603679 1.60494146e-16,251.310534 -2.76224082e-16,247.744459 L2.76224082e-16,10.2555408 C-1.60494146e-16,6.68946584 0.371302445,5.39632089 1.06853082,4.09261719 C1.76575919,2.78891348 2.78891348,1.76575919 4.09261719,1.06853082 C5.39632089,0.371302445 6.68946584,2.4074122e-16 10.2555408,-4.14336123e-16 Z" id="Rectangle-Copy-2" fill="#FFFFFF" fill-rule="nonzero"></path>
+                <path d="M78.7375296,208 C100.964445,208 133.508716,155.430711 148.429189,106.025151 C163.349661,56.6195921 94.455059,37 64.56971,37 C34.6843609,37 24,73.5604807 24,125.303583 C24,177.046686 56.510614,208 78.7375296,208 Z" id="Oval-Copy" fill="#0F007A"></path>
+                <g id="UI/Hej,-det-är-jag-som-är-Hedvig.-Component-Copy-3" transform="translate(5.000000, 91.000000)">
+                    <g id="BG">
+                        <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                        <use fill="#F9FAFC" fill-rule="evenodd" xlink:href="#path-1"></use>
+                    </g>
+                    <text id="11:16:13:14" font-family="Merriweather-Light, Merriweather" font-size="15.7090909" font-weight="300" line-spacing="21.9927273" fill="#0F007A">
+                        <tspan x="10.9883721" y="23.64">Record a voice message and </tspan>
+                        <tspan x="10.9883721" y="45.6327273">tell us what happened.</tspan>
+                    </text>
+                    <g id="icons/chat/record_audio" transform="translate(228.604651, 86.400000)">
+                        <circle id="Oval" fill="#651EFF" cx="15.7090909" cy="15.7090909" r="15.7090909"></circle>
+                        <circle id="Oval" fill="#FFFFFF" cx="15.7090909" cy="15.7090909" r="6.28363636"></circle>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

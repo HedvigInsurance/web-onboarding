@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="40px" viewBox="0 0 320 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.1 (72631) - https://sketchapp.com -->
+    <title>Scroll-down</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="English-Translations" transform="translate(-560.000000, -83.000000)">
+            <g id="Scroll-down" transform="translate(560.000000, 83.000000)">
+                <rect id="Rectangle" fill="#F1F3F7" fill-rule="nonzero" x="0" y="0" width="320" height="40" rx="8"></rect>
+                <text id="10:20:10:20" font-family="Merriweather-Light, Merriweather" font-size="16" font-weight="300" line-spacing="20">
+                    <tspan x="16" y="29" fill="#0F007A">Scroll down to see what's covered</tspan>
+                    <tspan x="284.256" y="29" font-family="CircularStd-Book, Circular Std" fill="#414150"> </tspan>
+                    <tspan x="288.642" y="26" font-family="AppleColorEmoji, Apple Color Emoji" font-weight="normal" fill="#414150">👇</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -4,6 +4,7 @@ import * as React from 'react'
 import Helmet from 'react-helmet-async'
 import { withRouter } from 'react-router'
 import { Redirect } from 'react-router-dom'
+import { LanguageSwitcher } from '../../components/LanguageSwitcher'
 import { TopBar, TopBarFiller } from '../../components/TopBar'
 import { CurrentLanguage } from '../../components/utils/CurrentLanguage'
 import { StorageContainer } from '../../utils/StorageContainer'
@@ -47,7 +48,15 @@ export const Chat: React.ComponentType = withRouter(({ location }) => {
         {(title) => <Helmet>{<title>{title}</title>}</Helmet>}
       </TranslationsConsumer>
 
-      <TopBar progress={0} button={<ResetButton />} />
+      <TopBar
+        progress={0}
+        button={
+          <>
+            <LanguageSwitcher />
+            <ResetButton />
+          </>
+        }
+      />
       <TopBarFiller />
       <ChatConversation />
       <OfferCreationHandler />

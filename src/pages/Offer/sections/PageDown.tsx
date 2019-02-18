@@ -3,6 +3,7 @@ import { Wrapper } from '../components/Wrapper'
 
 import * as React from 'react'
 import styled from 'react-emotion'
+import { CurrentLanguage } from '../../../components/utils/CurrentLanguage'
 
 const PageDownIcon = styled('img')({
   marginTop: '40px',
@@ -12,7 +13,14 @@ const PageDownIcon = styled('img')({
 export const PageDown: React.SFC<{}> = () => (
   <Wrapper>
     <InnerWrapper>
-      <PageDownIcon src={'/new-member-assets/offering/scroll-down.svg'} />
+      <CurrentLanguage>
+        {({ currentLanguage }) => (
+          <PageDownIcon
+            src={`/new-member-assets/offering/scroll-down${currentLanguage &&
+              '-' + currentLanguage}.svg`}
+          />
+        )}
+      </CurrentLanguage>
     </InnerWrapper>
   </Wrapper>
 )

@@ -2,7 +2,6 @@ import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import styled from 'react-emotion'
-import { LanguageSwitcher } from './LanguageSwitcher'
 
 export const TOP_BAR_HEIGHT = 70
 export const ICON_WIDTH = 16
@@ -218,10 +217,7 @@ export const TopBar: React.SFC<Props> = ({ progress, button }) => (
           </StageCol>
         </CollapsedProgressStages>
       )}
-      <ButtonWrapper>
-        <LanguageSwitcher />
-        {button}
-      </ButtonWrapper>
+      <ButtonWrapper>{button}</ButtonWrapper>
     </Bar>
   </Wrapper>
 )
