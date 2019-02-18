@@ -42,20 +42,15 @@ const BarButtonWrapper = styled('div')(
     upperSignButtonVisible: boolean
     lowerSignButtonVisible: boolean
   }) => ({
-    width: '20%',
+    display: 'flex',
+    alignItems: 'center',
     transition: 'transform 250ms 100ms',
     transform:
       upperSignButtonVisible === true && lowerSignButtonVisible === true
         ? `translateX(0)`
-        : `translateX(100%)`,
+        : `translateX(calc(100% + 26px))`,
     willChange: 'transform',
     justifyContent: 'flex-end',
-    '@media (max-width: 850px)': {
-      width: '33%',
-    },
-    '@media (max-width: 600px)': {
-      width: '50%',
-    },
   }),
 )
 

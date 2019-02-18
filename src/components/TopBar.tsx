@@ -2,9 +2,10 @@ import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import styled from 'react-emotion'
+import { LanguageSwitcher } from './LanguageSwitcher'
 
-const TOPBARHEIGHT = 70
-const ICONWIDTH = 16
+export const TOP_BAR_HEIGHT = 70
+export const ICON_WIDTH = 16
 
 const Wrapper = styled('div')({
   width: '100%',
@@ -12,7 +13,7 @@ const Wrapper = styled('div')({
 })
 
 const Bar = styled('div')({
-  height: TOPBARHEIGHT,
+  height: TOP_BAR_HEIGHT,
   position: 'fixed',
   display: 'flex',
   flexDirection: 'row',
@@ -58,7 +59,7 @@ const Logo = styled('img')({
 })
 
 const CheckmarkIcon = styled('img')({
-  width: ICONWIDTH,
+  width: ICON_WIDTH,
 })
 
 const ProgressText = styled('div')({
@@ -96,6 +97,23 @@ const CollapsedProgressStages = styled('div')({
   },
   '@media (max-width: 600px)': {
     display: 'none',
+  },
+})
+
+const ButtonWrapper = styled('div')({
+  display: 'flex',
+  justifyContent: 'flex-end',
+  textAlign: 'right',
+  width: '20%',
+  '@media (max-width: 850px)': {
+    width: '33%',
+  },
+  '@media (max-width: 600px)': {
+    width: '50%',
+  },
+
+  '& > *:last-of-type': {
+    marginRight: 26,
   },
 })
 
@@ -200,7 +218,10 @@ export const TopBar: React.SFC<Props> = ({ progress, button }) => (
           </StageCol>
         </CollapsedProgressStages>
       )}
-      {button}
+      <ButtonWrapper>
+        <LanguageSwitcher />
+        {button}
+      </ButtonWrapper>
     </Bar>
   </Wrapper>
 )

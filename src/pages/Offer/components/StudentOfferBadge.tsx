@@ -7,6 +7,8 @@ const StudentBadgeWrapper = styled('div')(
   ({ placement }: { placement: 'left' | 'right' }) => ({
     position: 'absolute',
     [placement === 'left' ? 'right' : 'left']: '70%',
+    display: 'flex',
+    alignItems: 'center',
     top: -35,
     padding: 20,
     width: 140,
