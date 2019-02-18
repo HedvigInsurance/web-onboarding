@@ -14,14 +14,10 @@ import {
 } from './utils/sessionStorage'
 
 const session = createSession<Session>(
-  new SavingCookieStorage(
-    new CookieStorage({ expires: null, path: '/new-member' }),
-  ),
+  new SavingCookieStorage(new CookieStorage({ expires: null, path: '/' })),
 )
 const dontPanicSession = createSession<any>(
-  new SavingCookieStorage(
-    new CookieStorage({ expires: null, path: '/dont-panic' }),
-  ),
+  new SavingCookieStorage(new CookieStorage({ expires: null, path: '/' })),
   '_hv_dp',
 )
 
