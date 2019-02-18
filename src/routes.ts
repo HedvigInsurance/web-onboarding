@@ -6,24 +6,33 @@ import { NewMemberLanding } from './pages/NewMemberLanding'
 import { Offering } from './pages/Offer'
 import { Sign } from './pages/Sign'
 
+export const LANGUAGE_PATH_PATTERN = '/:language(en)?'
 export const reactPageRoutes = [
   {
-    path: '/:language(en)?/new-member',
+    path: LANGUAGE_PATH_PATTERN + '/new-member',
     Component: NewMemberLanding,
     exact: true,
   },
-  { path: '/:language(en)?/new-member/hedvig', Component: Chat, exact: true },
   {
-    path: '/:language(en)?/new-member/offer',
+    path: LANGUAGE_PATH_PATTERN + '/new-member/hedvig',
+    Component: Chat,
+    exact: true,
+  },
+  {
+    path: LANGUAGE_PATH_PATTERN + '/new-member/offer',
     Component: Offering,
     exact: true,
   },
   {
-    path: '/:language(en)?/new-member/download',
+    path: LANGUAGE_PATH_PATTERN + '/new-member/download',
     Component: Download,
     exact: true,
   },
-  { path: '/:language(en)?/new-member/sign', Component: Sign, exact: true },
+  {
+    path: LANGUAGE_PATH_PATTERN + '/new-member/sign',
+    Component: Sign,
+    exact: true,
+  },
   { path: '/dont-panic/hedvig', Component: LazyDontPanic, exact: true },
   { path: '/*', Component: FourOhFour },
 ]

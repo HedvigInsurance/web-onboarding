@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { matchPath, RouteComponentProps, withRouter } from 'react-router'
+import { LANGUAGE_PATH_PATTERN } from '../../routes'
 
 export const getLanguageIsoCode = (language: string) => {
   switch (language) {
@@ -11,7 +12,9 @@ export const getLanguageIsoCode = (language: string) => {
   }
 }
 const getLanguageFromPath = (path: string) => {
-  const match = matchPath<WithLanguage>(path, { path: '/:language(en)?/*' })
+  const match = matchPath<WithLanguage>(path, {
+    path: LANGUAGE_PATH_PATTERN + '/*',
+  })
   return (match && match.params.language) || ''
 }
 
