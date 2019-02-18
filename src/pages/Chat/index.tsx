@@ -5,6 +5,7 @@ import Helmet from 'react-helmet-async'
 import { withRouter } from 'react-router'
 import { Redirect } from 'react-router-dom'
 import { TopBar, TopBarFiller } from '../../components/TopBar'
+import { CurrentLanguage } from '../../components/utils/CurrentLanguage'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { ChatConversation } from './ChatConversation'
 import { OfferCreationHandler } from './components/OfferCreationHandler'
@@ -25,7 +26,16 @@ export const Chat: React.ComponentType = withRouter(({ location }) => {
             }),
           })
 
-          return <Redirect to="/new-member/hedvig" />
+          return (
+            <CurrentLanguage>
+              {({ currentLanguage }) => (
+                <Redirect
+                  to={`/${currentLanguage &&
+                    currentLanguage + '/'}new-member/hedvig`}
+                />
+              )}
+            </CurrentLanguage>
+          )
         }}
       </StorageContainer>
     )

@@ -9,6 +9,7 @@ import styled, { keyframes } from 'react-emotion'
 import { Mount } from 'react-lifecycle-components/dist'
 import { Redirect } from 'react-router-dom'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
+import { CurrentLanguage } from '../../../components/utils/CurrentLanguage'
 
 const spin = keyframes({
   from: { transform: 'rotate(0deg)' },
@@ -187,7 +188,16 @@ const StateComponent: React.SFC<StateComponentProps> = ({
     case SIGNSTATE.COMPLETED:
       if (collectStatus.status === BANKIDSTATUS.COMPLETE) {
         trackSignCompleted()
-        return <Redirect to="/new-member/download" />
+        return (
+          <CurrentLanguage>
+            {({ currentLanguage }) => (
+              <Redirect
+                to={`/${currentLanguage &&
+                  currentLanguage + '/'}new-member/download`}
+              />
+            )}
+          </CurrentLanguage>
+        )
       }
     case SIGNSTATE.FAILED:
       if (collectStatus.status === BANKIDSTATUS.FAILED) {

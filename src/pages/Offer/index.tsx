@@ -11,6 +11,7 @@ import styled from 'react-emotion'
 import Helmet from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 import { getUtmParamsFromCookie, Track, TrackAction } from 'utils/tracking'
+import { CurrentLanguage } from '../../components/utils/CurrentLanguage'
 import { CardWrapper } from './components/CardWrapper'
 import { InnerWrapper } from './components/InnerWrapper'
 import { Wrapper } from './components/Wrapper'
@@ -153,14 +154,19 @@ export const Offering: React.SFC<{}> = () => (
                               }}
                             >
                               {({ track }) => (
-                                <LinkTag
-                                  to={'/new-member/sign'}
-                                  onClick={() => track()}
-                                >
-                                  <TranslationsConsumer textKey="TOP_BAR_SIGN_BUTTON">
-                                    {(text) => text}
-                                  </TranslationsConsumer>
-                                </LinkTag>
+                                <CurrentLanguage>
+                                  {({ currentLanguage }) => (
+                                    <LinkTag
+                                      to={`/${currentLanguage &&
+                                        currentLanguage + '/'}new-member/sign`}
+                                      onClick={() => track()}
+                                    >
+                                      <TranslationsConsumer textKey="TOP_BAR_SIGN_BUTTON">
+                                        {(text) => text}
+                                      </TranslationsConsumer>
+                                    </LinkTag>
+                                  )}
+                                </CurrentLanguage>
                               )}
                             </TrackAction>
                           </GetInsuredButton>
@@ -177,7 +183,14 @@ export const Offering: React.SFC<{}> = () => (
                       <InnerWrapper>
                         <CardWrapper>
                           <BigCard>
-                            <InsuranceCoverage />
+                            <CurrentLanguage>
+                              {({ currentLanguage }) =>
+                                (currentLanguage === '' ||
+                                  currentLanguage === 'sv') && (
+                                  <InsuranceCoverage />
+                                )
+                              }
+                            </CurrentLanguage>
                             <InsuredAmount
                               insuranceType={offer.insurance.type}
                             />

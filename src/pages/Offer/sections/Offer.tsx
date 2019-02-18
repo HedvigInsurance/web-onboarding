@@ -11,6 +11,7 @@ import styled from 'react-emotion'
 import VisibilitySensor from 'react-visibility-sensor'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
+import { CurrentLanguage } from '../../../components/utils/CurrentLanguage'
 import { CardWrapperSmall } from '../components/CardWrapperSmall'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 import { InnerWrapper } from '../components/InnerWrapper'
@@ -109,12 +110,17 @@ export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
                       }}
                     >
                       {({ track }) => (
-                        <LinkTag
-                          to={'/new-member/sign'}
-                          onClick={() => track()}
-                        >
-                          {ctaText}
-                        </LinkTag>
+                        <CurrentLanguage>
+                          {({ currentLanguage }) => (
+                            <LinkTag
+                              to={`/${currentLanguage &&
+                                currentLanguage + '/'}new-member/sign`}
+                              onClick={() => track()}
+                            >
+                              {ctaText}
+                            </LinkTag>
+                          )}
+                        </CurrentLanguage>
                       )}
                     </TrackAction>
                   )}

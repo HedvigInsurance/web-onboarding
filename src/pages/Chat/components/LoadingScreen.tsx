@@ -1,4 +1,5 @@
 import { colors } from '@hedviginsurance/brand'
+import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { LazyLottie } from 'components/animations/LazyLottie'
 import * as React from 'react'
 import styled, { keyframes } from 'react-emotion'
@@ -69,8 +70,12 @@ const BottomSpacer = styled('div')({
 export const LoadingScreen: React.SFC<WithAppear> = ({ appear }) => (
   <Wrapper appear={appear}>
     <InnerWrapper>
-      <TopHeadline>Tack!</TopHeadline>
-      <BottomHeadline>Jag håller på att ta fram ditt förslag</BottomHeadline>
+      <TranslationsConsumer textKey="CREATE_OFFER_LOADING_HEADLINE">
+        {(t) => <TopHeadline>{t}</TopHeadline>}
+      </TranslationsConsumer>
+      <TranslationsConsumer textKey="CREATE_OFFER_LOADING_TEXT">
+        {(t) => <BottomHeadline>{t}</BottomHeadline>}
+      </TranslationsConsumer>
       <LazyLottie
         options={{
           animationData: import('components/animations/lottie/loading.json'),
