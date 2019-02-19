@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Mount } from 'react-lifecycle-components'
 import { Redirect } from 'react-router-dom'
+import { CurrentLanguage } from '../../../components/utils/CurrentLanguage'
 import { OfferContainer } from '../../../containers/OfferContainer'
 import { StorageContainer } from '../../../utils/StorageContainer'
 import {
@@ -27,7 +28,16 @@ export const OfferCreationHandler = () => (
           <OfferContainer childrenHandlesLoadingState>
             {(offer, { refetch }) => {
               if (offer && offer.insurance && offer.insurance.type) {
-                return <Redirect to="/new-member/offer" />
+                return (
+                  <CurrentLanguage>
+                    {({ currentLanguage }) => (
+                      <Redirect
+                        to={`/${currentLanguage &&
+                          currentLanguage + '/'}new-member/offer`}
+                      />
+                    )}
+                  </CurrentLanguage>
+                )
               }
 
               return (
@@ -55,7 +65,16 @@ export const OfferCreationHandler = () => (
                 <OfferContainer childrenHandlesLoadingState>
                   {(offer) => {
                     if (offer && offer.insurance && offer.insurance.type) {
-                      return <Redirect to="/new-member/offer" />
+                      return (
+                        <CurrentLanguage>
+                          {({ currentLanguage }) => (
+                            <Redirect
+                              to={`/${currentLanguage &&
+                                currentLanguage + '/'}new-member/offer`}
+                            />
+                          )}
+                        </CurrentLanguage>
+                      )
                     }
 
                     return null
