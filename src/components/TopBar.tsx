@@ -2,6 +2,7 @@ import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import styled from 'react-emotion'
+import { CurrentLanguage } from './utils/CurrentLanguage'
 
 export const TOP_BAR_HEIGHT = 70
 export const ICON_WIDTH = 16
@@ -156,9 +157,13 @@ export const TopBar: React.SFC<Props> = ({ progress, button }) => (
 
     <Bar>
       <LogoWrapper>
-        <EscapeLink href="/">
-          <Logo src="/new-member-assets/topbar/hedvig-wordmark-solid.svg" />
-        </EscapeLink>
+        <CurrentLanguage>
+          {({ currentLanguage }) => (
+            <EscapeLink href={'/' + currentLanguage}>
+              <Logo src="/new-member-assets/topbar/hedvig-wordmark-solid.svg" />
+            </EscapeLink>
+          )}
+        </CurrentLanguage>
       </LogoWrapper>
       {progress !== undefined && (
         <ProgressStages>
