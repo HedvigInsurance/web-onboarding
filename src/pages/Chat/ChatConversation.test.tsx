@@ -5,6 +5,7 @@ import * as React from 'react'
 import { createSession, SESSION_KEY } from 'utils/sessionStorage'
 import { MockStorage } from 'utils/storage/MockStorage'
 import { WithStorageProps } from 'utils/StorageContainer'
+import { TrafficSourceProvider } from '../../utils/storage/trafficSource'
 import { ChatConversation } from './ChatConversation'
 import { ChatStep } from './state'
 
@@ -16,7 +17,11 @@ it('shows first messages on initial render', () => {
     <Provider<WithStorageProps>
       initialState={{ storage: { session: createSession(new MockStorage()) } }}
     >
-      <ChatConversation />
+      <TrafficSourceProvider
+        value={{ trafficSourceStorage: new MockStorage() }}
+      >
+        <ChatConversation />
+      </TrafficSourceProvider>
     </Provider>,
   )
 
@@ -53,7 +58,11 @@ it('shows all messages when initial session is set', () => {
         },
       }}
     >
-      <ChatConversation />
+      <TrafficSourceProvider
+        value={{ trafficSourceStorage: new MockStorage() }}
+      >
+        <ChatConversation />
+      </TrafficSourceProvider>
     </Provider>,
   )
 

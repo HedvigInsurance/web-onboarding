@@ -21,7 +21,7 @@ export interface IsomorphicSessionStorage<T> {
 export class SavingCookieStorage implements MinimalStorage {
   private inMemoryStore: Record<string, string> = {}
 
-  constructor(private cookieStorage: CookieStorage) {}
+  constructor(private cookieStorage: MinimalStorage) {}
 
   public getItem(item: string): string | null {
     if (Object.keys(this.inMemoryStore).includes(item)) {

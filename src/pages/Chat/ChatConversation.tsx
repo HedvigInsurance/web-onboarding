@@ -11,6 +11,10 @@ import {
   getUtmParamsFromCookie,
   TrackAction,
 } from 'utils/tracking'
+import {
+  getTrafficSource,
+  TrafficSourceConsumer,
+} from '../../utils/storage/trafficSource'
 import { ChatContainer, ChatStep } from './state'
 import { AddressInput } from './steps/AddressInput'
 import { AgeInput } from './steps/AgeInput'
@@ -61,9 +65,19 @@ export const ChatConversation: React.SFC = () => (
                 ].includes(currentStep)}
                 onTyped={() => goToStep(ChatStep.NAME_INPUT)}
               >
-                <TranslationsConsumer textKey="CHAT_HEDVIG_FIRST_GREET">
-                  {(firstGreet) => firstGreet}
-                </TranslationsConsumer>
+                <TrafficSourceConsumer>
+                  {({ trafficSourceStorage }) => (
+                    <TranslationsConsumer
+                      textKey={
+                        getTrafficSource(trafficSourceStorage!) === 'Minut'
+                          ? 'CHAT_HEDVIG_FIRST_GREET_MINUT'
+                          : 'CHAT_HEDVIG_FIRST_GREET'
+                      }
+                    >
+                      {(firstGreet) => firstGreet}
+                    </TranslationsConsumer>
+                  )}
+                </TrafficSourceConsumer>
               </ChatMessage>
             </Mufflable>
           )}

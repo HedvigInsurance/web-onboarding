@@ -15,7 +15,7 @@ import { initialState, Insurer } from './state'
 
 export const Chat: React.ComponentType = withRouter(({ location }) => {
   const query = queryString.parse(location.search.replace(/^\?/, ''))
-  if (query.firstName || query.initialInsurer) {
+  if (query.firstName || query.lastName || query.initialInsurer) {
     return (
       <StorageContainer>
         {({ session }) => {

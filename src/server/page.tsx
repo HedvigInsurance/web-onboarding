@@ -10,7 +10,11 @@ import { FilledContext, HelmetProvider } from 'react-helmet-async'
 import { StaticRouter, StaticRouterContext } from 'react-router'
 import { App } from '../App'
 import { sentryConfig } from '../utils/sentry'
-import { createSession, Session } from '../utils/sessionStorage'
+import {
+  createSession,
+  SavingCookieStorage,
+  Session,
+} from '../utils/sessionStorage'
 import { ServerCookieStorage } from '../utils/storage/ServerCookieStorage'
 import { createServerApolloClient } from './apolloClient'
 import { GIRAFFE_ENDPOINT, GIRAFFE_WS_ENDPOINT } from './config'
@@ -72,11 +76,19 @@ export const getPage: Koa.Middleware = async (ctx) => {
   )
   const routerContext: StaticRouterContext & { statusCode?: number } = {}
   const helmetContext = {}
+  const trafficSourceStorage = new SavingCookieStorage(
+    new ServerCookieStorage(ctx),
+  )
+
   const serverApp = (
     <StaticRouter location={ctx.request.originalUrl} context={routerContext}>
       <HelmetProvider context={helmetContext}>
         <ApolloProvider client={apolloClient}>
-          <App session={session} dontPanicSession={dontPanicSession} />
+          <App
+            session={session}
+            dontPanicSession={dontPanicSession}
+            trafficSourceStorage={trafficSourceStorage}
+          />
         </ApolloProvider>
       </HelmetProvider>
     </StaticRouter>

@@ -20,6 +20,12 @@ const dontPanicSession = createSession<any>(
   new SavingCookieStorage(new CookieStorage({ expires: null, path: '/' })),
   '_hv_dp',
 )
+const trafficSourceStorage = new SavingCookieStorage(
+  new CookieStorage({
+    expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+    path: '/',
+  }),
+)
 
 window.setInterval(() => session.keepAlive(), 5 * 1000)
 
@@ -28,7 +34,11 @@ ReactDOM.hydrate(
     <PageTracker>
       <HelmetProvider>
         <ApolloProvider client={apolloClient!.client!}>
-          <HotApp session={session} dontPanicSession={dontPanicSession} />
+          <HotApp
+            session={session}
+            dontPanicSession={dontPanicSession}
+            trafficSourceStorage={trafficSourceStorage}
+          />
         </ApolloProvider>
       </HelmetProvider>
     </PageTracker>
