@@ -7,12 +7,12 @@ import { CREATE_SESSION_TOKEN_MUTATION } from 'containers/SessionContainer'
 import { mount } from 'enzyme'
 import * as React from 'react'
 import { ApolloProvider } from 'react-apollo'
-import { MockedProvider } from 'react-apollo/test-utils'
 import {
   MockedResponse,
   MockLink,
   MockSubscriptionLink,
-} from 'utils/react-apollo-test-links'
+} from 'react-apollo/test-links'
+import { MockedProvider } from 'react-apollo/test-utils'
 import { createSession, SESSION_KEY } from 'utils/sessionStorage'
 import { MockStorage } from 'utils/storage/MockStorage'
 import { StorageState } from 'utils/StorageContainer'
@@ -24,6 +24,7 @@ import {
 import { ChatContainer } from '../state'
 import { createCreateOfferMutationMock, mockState } from '../utils/test-utils'
 import { CreateOffer } from './CreateOffer'
+import { OFFER_CREATION_SUBSCRIPTION } from 'pages/Chat/containers/OfferCreationSubscription'
 
 jest.mock('client/apolloClient', () => ({
   apolloClient: {
@@ -32,6 +33,17 @@ jest.mock('client/apolloClient', () => ({
     },
   },
 }))
+
+const mockOfferEmptySubscription = () => ({
+  request: {
+    query: OFFER_CREATION_SUBSCRIPTION,
+  },
+  result: {
+    data: {
+      offer: null,
+    },
+  },
+})
 
 const renderCreateOffer = (mockedState: any) => (
   <MockedProvider
@@ -50,6 +62,7 @@ const renderCreateOffer = (mockedState: any) => (
           },
         },
       },
+      { ...mockOfferEmptySubscription() },
     ]}
   >
     <Provider<{ storage: StorageState }>
@@ -120,6 +133,7 @@ it('toggles student', () => {
             },
           },
         },
+        { ...mockOfferEmptySubscription() },
       ]}
     >
       <Provider<{ storage: StorageState }>

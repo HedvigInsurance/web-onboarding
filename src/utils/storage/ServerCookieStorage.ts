@@ -12,7 +12,7 @@ export class ServerCookieStorage implements MinimalStorage {
     }
 
     return decodeURIComponent(
-      this.requestCtx.cookies.get(item, { signed: false }),
+      this.requestCtx.cookies.get(item, { signed: false })!,
     )
   }
 

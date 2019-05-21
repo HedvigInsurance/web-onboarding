@@ -23,7 +23,9 @@ export const ConversationWrapper = styled('div')({
   },
 })
 
-const getId = (child: React.ReactChild) => React.Children.only(child).props.id
+const getId = <TId extends {}>(
+  child: React.ReactElement<MessageProps<TId>>,
+): TId => React.Children.only(child).props.id
 
 interface ConversationProps<TId> {
   children:
@@ -47,13 +49,15 @@ export class Conversation<TId> extends React.Component<ConversationProps<TId>> {
     const initialVisibleSteps = this.props.initialVisibleSteps || []
     return (
       <ConversationWrapper className={this.props.className}>
-        {React.Children.toArray(this.props.children)
+        {React.Children.toArray<React.ReactElement<MessageProps<TId>>>(
+          this.props.children,
+        )
           .filter((message) => visibleSteps.includes(getId(message)))
           .map((message) =>
             React.Children.only(message).props.delay &&
             !initialVisibleSteps.includes(getId(message)) ? (
               <Transition
-                timeout={React.Children.only(message).props.delay}
+                timeout={React.Children.only(message).props.delay!}
                 appear
                 in
                 key={React.Children.only(message).key || undefined}
