@@ -5,6 +5,7 @@ import { apolloClient } from 'client/apolloClient'
 import { Provider } from 'constate'
 import { CREATE_SESSION_TOKEN_MUTATION } from 'containers/SessionContainer'
 import { mount } from 'enzyme'
+import { OFFER_CREATION_SUBSCRIPTION } from 'pages/Chat/containers/OfferCreationSubscription'
 import * as React from 'react'
 import { ApolloProvider } from 'react-apollo'
 import {
@@ -24,7 +25,6 @@ import {
 import { ChatContainer } from '../state'
 import { createCreateOfferMutationMock, mockState } from '../utils/test-utils'
 import { CreateOffer } from './CreateOffer'
-import { OFFER_CREATION_SUBSCRIPTION } from 'pages/Chat/containers/OfferCreationSubscription'
 
 jest.mock('client/apolloClient', () => ({
   apolloClient: {
