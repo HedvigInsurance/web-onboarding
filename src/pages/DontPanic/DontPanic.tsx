@@ -654,11 +654,11 @@ export class DontPanic extends React.Component {
                             {({ track }) => (
                               <Mutation
                                 mutation={CREATE_SESSION_MUTATION}
-                                onCompleted={(data) => {
+                                onCompleted={(data: any) => {
                                   setSessionId(data.createDontPanicSession.id)
                                 }}
                               >
-                                {(createChatSession) => (
+                                {(createChatSession: any) => (
                                   <ChatMessage
                                     isCurrentMessage={isCurrentStep(
                                       true,
@@ -952,12 +952,12 @@ export class DontPanic extends React.Component {
                                     },
                                   ]}
                                 >
-                                  {(mutate, { loading }) => {
+                                  {(mutate: any, { loading }: any) => {
                                     const sendMessage = (vars: any) => {
                                       if (messageText.trim().length === 0) {
                                         return
                                       }
-                                      return mutate(vars).then((_) => {
+                                      return mutate(vars).then((_: any) => {
                                         setMessageText('')
                                         makeChatActive()
                                         track()
