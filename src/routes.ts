@@ -4,6 +4,7 @@ import { Download } from './pages/Download'
 import { FourOhFour } from './pages/FourOhFour'
 import { NewMemberLanding } from './pages/NewMemberLanding'
 import { Offering } from './pages/Offer'
+import { Referral } from './pages/Referral'
 import { Sign } from './pages/Sign'
 
 export const LANGUAGE_PATH_PATTERN = '/:language(en)?'
@@ -34,5 +35,6 @@ export const reactPageRoutes = [
     exact: true,
   },
   { path: '/dont-panic/hedvig', Component: LazyDontPanic, exact: true },
+  { path: '/referrals/:code', Component: Referral, exact: true },
   { path: '/*', Component: FourOhFour },
 ]

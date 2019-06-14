@@ -826,10 +826,10 @@
   resolved "https://registry.yarnpkg.com/@hedviginsurance/libkit/-/libkit-1.0.1.tgz#efe04ae3c88b302a30d44fd191f259ba57d19487"
   integrity sha512-7JR0IlMJPN6PhR5BZVqex4rcVyyTzDwvjcnvGTDS2JDECOuDiVi9/I4F4OQvlceuEB+SRNbiZp6516Q9Ie+j4Q==
 
-"@hedviginsurance/textkeyfy@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/textkeyfy/-/textkeyfy-1.2.1.tgz#2ae81a9d24725acf9321b7dc97c09e70b286f22d"
-  integrity sha512-MmgSlIDFAV8wW2dbbFWaoVPfnWe3IS8ybJPh4AtwalxVh2XdNnjZqGDccXQwHtQx0KGgWR1tX4g4dJ7biquFRQ==
+"@hedviginsurance/textkeyfy@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/textkeyfy/-/textkeyfy-1.2.2.tgz#a3633d693838c9a427ba85d299925661e3bf9701"
+  integrity sha512-40WLQY7RcSTKDHNpI3AkxMjSZSTBMPOarKogq9xHyHqhW7IBahAesjpj3Ynord0sNgTWDJ6Qp7tVS0wKAYYilw==
   dependencies:
     apollo-cache-inmemory "^1.2.10"
     apollo-client "^2.4.2"
