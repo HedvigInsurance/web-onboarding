@@ -22,6 +22,6 @@ module.exports = {
     'SENTRY_ENVIRONMENT',
     'HEROKU_SLUG_COMMIT',
     'HEROKU_DYNO_ID',
-    'FIREBASE_LINK_DOMAIN'
+    'FIREBASE_LINK_DOMAIN',
   ],
 }

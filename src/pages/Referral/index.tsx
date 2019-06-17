@@ -34,7 +34,7 @@ interface Data {
 }
 
 const Illustration = styled('img')({
-  marginTop: 35,
+  marginTop: '2.25rem',
   marginLeft: 'auto',
   marginRight: 'auto',
   display: 'block',
@@ -43,16 +43,16 @@ const Illustration = styled('img')({
 const Title = styled('h1')({
   textAlign: 'center',
   fontSize: '1.5rem',
-  marginLeft: 16,
-  marginRight: 16,
+  marginLeft: '1rem',
+  marginRight: '1rem',
 })
 
 const Paragraph = styled('p')({
   textAlign: 'center',
   color: colors.OFF_BLACK,
   fontSize: '1rem',
-  marginLeft: 16,
-  marginRight: 16,
+  marginLeft: '1rem',
+  marginRight: '1rem',
 })
 
 const Centered = styled('div')({
@@ -65,14 +65,10 @@ const LinkButton = styled(Button.withComponent('a'))({
   padding: '16px 32px',
 })
 
-const PageContent: React.FunctionComponent<{ data: Data; code: string }> = ({
-  data: {
-    referralCampaignMemberInformation: {
-      incentive: { amount },
-    },
-  },
-  code,
-}) => (
+const PageContent: React.FunctionComponent<{
+  incentive: number
+  code: string
+}> = ({ incentive, code }) => (
   <>
     <Illustration src="/new-member-assets/referrals/invite_success.svg" />
     <Title>
@@ -83,7 +79,7 @@ const PageContent: React.FunctionComponent<{ data: Data; code: string }> = ({
     <Paragraph>
       <TranslationsPlaceholderConsumer
         textKey="REFERRAL_LANDINGPAGE_BODY"
-        replacements={{ REFERRAL_VALUE: amount }}
+        replacements={{ REFERRAL_VALUE: incentive }}
       >
         {(text) => text}
       </TranslationsPlaceholderConsumer>
@@ -92,7 +88,9 @@ const PageContent: React.FunctionComponent<{ data: Data; code: string }> = ({
       <LinkButton
         background={colors.PURPLE}
         foreground={colors.WHITE}
-        href={`${getFirebaseLinkDomain()}/referrals?code=${code}`}
+        href={`${getFirebaseLinkDomain()}/referrals?code=${encodeURIComponent(
+          code,
+        )}`}
       >
         <TranslationsConsumer textKey="REFERRAL_LANDINGPAGE_BTN_CTA">
           {(text) => text}
@@ -120,7 +118,12 @@ export const Referral: React.FunctionComponent<ReferralProps> = ({
   code ? (
     <Page>
       {MOCKED ? (
-        <PageContent data={MOCK_DATA} code={code} />
+        <PageContent
+          incentive={
+            MOCK_DATA.referralCampaignMemberInformation.incentive.amount
+          }
+          code={code}
+        />
       ) : (
         <Query<Data> query={query} variables={{ code }}>
           {({ data, loading, error }) => {
@@ -128,7 +131,14 @@ export const Referral: React.FunctionComponent<ReferralProps> = ({
               return <div>Loading...</div>
             }
 
-            return <PageContent data={data} code={code} />
+            return (
+              <PageContent
+                incentive={
+                  data.referralCampaignMemberInformation.incentive.amount
+                }
+                code={code}
+              />
+            )
           }}
         </Query>
       )}
