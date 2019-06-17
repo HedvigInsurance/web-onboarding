@@ -62,6 +62,7 @@ const Centered = styled('div')({
 
 const LinkButton = styled(Button.withComponent('a'))({
   fontWeight: 400,
+  padding: '16px 32px',
 })
 
 const PageContent: React.FunctionComponent<{ data: Data; code: string }> = ({
