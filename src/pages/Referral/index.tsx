@@ -91,9 +91,7 @@ const PageContent: React.FunctionComponent<{ data: Data; code: string }> = ({
       <LinkButton
         background={colors.PURPLE}
         foreground={colors.WHITE}
-        href={`${getFirebaseLinkDomain()}/referrals?code=${code}${
-          process.env.NODE_ENV !== 'production' ? '&d=1' : undefined
-        }`}
+        href={`${getFirebaseLinkDomain()}/referrals?code=${code}`}
       >
         <TranslationsConsumer textKey="REFERRAL_LANDINGPAGE_BTN_CTA">
           {(text) => text}
