@@ -10,6 +10,7 @@ import * as React from 'react'
 import { Query } from 'react-apollo'
 import styled from 'react-emotion'
 import { Redirect, RouteComponentProps } from 'react-router'
+import { getFirebaseLinkDomain } from './util'
 
 const query = gql`
   query ReferralCampaign($code: String!) {
@@ -90,7 +91,7 @@ const PageContent: React.FunctionComponent<{ data: Data; code: string }> = ({
       <LinkButton
         background={colors.PURPLE}
         foreground={colors.WHITE}
-        href={`https://hedvigtest.page.link/referrals?code=${code}${
+        href={`${getFirebaseLinkDomain()}/referrals?code=${code}${
           process.env.NODE_ENV !== 'production' ? '&d=1' : undefined
         }`}
       >

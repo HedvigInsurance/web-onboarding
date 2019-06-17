@@ -13,7 +13,11 @@ import { sentryConfig } from '../utils/sentry'
 import { createSession, Session } from '../utils/sessionStorage'
 import { ServerCookieStorage } from '../utils/storage/ServerCookieStorage'
 import { createServerApolloClient } from './apolloClient'
-import { GIRAFFE_ENDPOINT, GIRAFFE_WS_ENDPOINT } from './config'
+import {
+  FIREBASE_LINK_DOMAIN,
+  GIRAFFE_ENDPOINT,
+  GIRAFFE_WS_ENDPOINT,
+} from './config'
 
 const scriptLocation = getScriptLocation({
   statsLocation: path.resolve(__dirname, 'assets'),
@@ -53,6 +57,7 @@ const template = (
     window.GIRAFFE_WS_ENDPOINT= ${JSON.stringify(GIRAFFE_WS_ENDPOINT)}
     window.GIRAFFE_ENDPOINT= ${JSON.stringify(GIRAFFE_ENDPOINT)}
     window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
+    window.FIREBASE_LINK_DOMAIN=${JSON.stringify(FIREBASE_LINK_DOMAIN)}
   </script>
   <script src="${scriptLocation}"></script>
 </body>
