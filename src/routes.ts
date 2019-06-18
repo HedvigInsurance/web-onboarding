@@ -35,6 +35,10 @@ export const reactPageRoutes = [
     exact: true,
   },
   { path: '/dont-panic/hedvig', Component: LazyDontPanic, exact: true },
-  { path: '/referrals/:code', Component: Referral, exact: true },
+  {
+    path: LANGUAGE_PATH_PATTERN + '/referrals/:code',
+    Component: Referral,
+    exact: true,
+  },
   { path: '/*', Component: FourOhFour },
 ]

@@ -5,33 +5,22 @@ import {
 } from '@hedviginsurance/textkeyfy'
 import { Button } from 'components/buttons'
 import { Page } from 'components/utils/Page'
-import gql from 'graphql-tag'
 import * as React from 'react'
-import { Query } from 'react-apollo'
 import styled from 'react-emotion'
 import { Redirect, RouteComponentProps } from 'react-router'
+import { MobileContext } from 'utils/mobileContext'
 import { getFirebaseLinkDomain } from './util'
-
-const query = gql`
-  query ReferralCampaign($code: String!) {
-    referralCampaignMemberInformation(code: $code) {
-      incentive
-    }
-  }
-`
 
 type ReferralProps = RouteComponentProps<{
   code: string
 }>
 
-interface Data {
-  referralCampaignMemberInformation: {
-    incentive: {
-      amount: number
-      currency: string
-    }
-  }
-}
+const PageWrapper = styled('div')({
+  ['@media (min-width: 700px)']: {
+    margin: '0 auto',
+    maxWidth: 540,
+  },
+})
 
 const Illustration = styled('img')({
   marginTop: '2.25rem',
@@ -45,6 +34,10 @@ const Title = styled('h1')({
   fontSize: '1.5rem',
   marginLeft: '1rem',
   marginRight: '1rem',
+  lineHeight: 1.2,
+  ['@media (min-width: 700px)']: {
+    fontSize: '3.5rem',
+  },
 })
 
 const Paragraph = styled('p')({
@@ -60,55 +53,36 @@ const Centered = styled('div')({
   textAlign: 'center',
 })
 
+const CodeWrapper = styled('div')({
+  textAlign: 'center',
+})
+
+const Code = styled('p')({
+  borderRadius: 16,
+  border: `solid 1px ${colors.OFF_WHITE}`,
+  padding: '8px 16px',
+  backgroundColor: colors.OFF_WHITE,
+  display: 'inline-block',
+  marginTop: 8,
+  marginBottom: 8,
+  color: colors.PURPLE,
+  fontWeight: 600,
+  lineHeight: 1.5,
+  textAlign: 'center',
+})
+
 const LinkButton = styled(Button.withComponent('a'))({
   fontWeight: 400,
   padding: '16px 32px',
 })
 
-const PageContent: React.FunctionComponent<{
-  incentive: number
-  code: string
-}> = ({ incentive, code }) => (
-  <>
-    <Illustration src="/new-member-assets/referrals/invite_success.svg" />
-    <Title>
-      <TranslationsConsumer textKey="REFERRAL_LANDINGPAGE_HEADLINE">
-        {(text) => text}
-      </TranslationsConsumer>
-    </Title>
-    <Paragraph>
-      <TranslationsPlaceholderConsumer
-        textKey="REFERRAL_LANDINGPAGE_BODY"
-        replacements={{ REFERRAL_VALUE: incentive }}
-      >
-        {(text) => text}
-      </TranslationsPlaceholderConsumer>
-    </Paragraph>
-    <Centered>
-      <LinkButton
-        background={colors.PURPLE}
-        foreground={colors.WHITE}
-        href={`${getFirebaseLinkDomain()}/referrals?code=${encodeURIComponent(
-          code,
-        )}`}
-      >
-        <TranslationsConsumer textKey="REFERRAL_LANDINGPAGE_BTN_CTA">
-          {(text) => text}
-        </TranslationsConsumer>
-      </LinkButton>
-    </Centered>
-  </>
-)
-
-const MOCKED = true
-const MOCK_DATA: Data = {
-  referralCampaignMemberInformation: {
-    incentive: {
-      amount: 10,
-      currency: 'SEK',
-    },
-  },
-}
+const AppStoreContainer = styled('div')({
+  display: 'flex',
+  justifyContent: 'space-evenly',
+  flexDirection: 'row',
+  marginLeft: '2rem',
+  marginRight: '2rem',
+})
 
 export const Referral: React.FunctionComponent<ReferralProps> = ({
   match: {
@@ -117,31 +91,67 @@ export const Referral: React.FunctionComponent<ReferralProps> = ({
 }) =>
   code ? (
     <Page>
-      {MOCKED ? (
-        <PageContent
-          incentive={
-            MOCK_DATA.referralCampaignMemberInformation.incentive.amount
-          }
-          code={code}
-        />
-      ) : (
-        <Query<Data> query={query} variables={{ code }}>
-          {({ data, loading, error }) => {
-            if (loading || error || !data) {
-              return <div>Loading...</div>
-            }
-
-            return (
-              <PageContent
-                incentive={
-                  data.referralCampaignMemberInformation.incentive.amount
-                }
-                code={code}
-              />
+      <PageWrapper>
+        <Illustration src="/new-member-assets/referrals/invite_success.svg" />
+        <Title>
+          <TranslationsConsumer textKey="REFERRAL_LANDINGPAGE_HEADLINE">
+            {(text) => text}
+          </TranslationsConsumer>
+        </Title>
+        <MobileContext.Consumer>
+          {(isMobile) =>
+            isMobile ? (
+              <>
+                <Paragraph>
+                  <TranslationsPlaceholderConsumer
+                    textKey="REFERRAL_LANDINGPAGE_BODY"
+                    replacements={{ REFERRAL_VALUE: 10 }}
+                  >
+                    {(text) => text}
+                  </TranslationsPlaceholderConsumer>
+                </Paragraph>
+                <Centered>
+                  <LinkButton
+                    background={colors.PURPLE}
+                    foreground={colors.WHITE}
+                    href={`${getFirebaseLinkDomain()}/referrals?code=${encodeURIComponent(
+                      code,
+                    )}`}
+                  >
+                    <TranslationsConsumer textKey="REFERRAL_LANDINGPAGE_BTN_CTA">
+                      {(text) => text}
+                    </TranslationsConsumer>
+                  </LinkButton>
+                </Centered>
+              </>
+            ) : (
+              <>
+                <Paragraph>
+                  <TranslationsConsumer textKey="REFERRAL_LANDING_PAGE_DESKTOP_PARAGRAPH_ONE">
+                    {(text) => text}
+                  </TranslationsConsumer>
+                </Paragraph>
+                <CodeWrapper>
+                  <Code>{code}</Code>
+                </CodeWrapper>
+                <Paragraph>
+                  <TranslationsConsumer textKey="REFERRAL_LANDING_PAGE_DESKTOP_PARAGRAPH_TWO">
+                    {(text) => text}
+                  </TranslationsConsumer>
+                </Paragraph>
+                <AppStoreContainer>
+                  <a href="https://apps.apple.com/se/app/hedvig-f%C3%B6rs%C3%A4kring/id1303668531">
+                    <img src="https://cdn.hedvig.com/www/appstores/app-store-badge.svg" />
+                  </a>
+                  <a href="https://play.google.com/store/apps/details?id=com.hedvig.app">
+                    <img src="https://cdn.hedvig.com/www/appstores/google-play-badge.svg" />
+                  </a>
+                </AppStoreContainer>
+              </>
             )
-          }}
-        </Query>
-      )}
+          }
+        </MobileContext.Consumer>
+      </PageWrapper>
     </Page>
   ) : (
     <Redirect to="/404" />

@@ -1,6 +1,7 @@
 import { getScriptLocation } from '@hedviginsurance/web-survival-kit'
 import { min as createMinifiedSegmentSnippet } from '@segment/snippet'
 import { renderStylesToString } from 'emotion-server'
+import { isMobile } from 'is-mobile'
 import * as Koa from 'koa'
 import * as path from 'path'
 import * as React from 'react'
@@ -8,6 +9,7 @@ import { ApolloProvider, getDataFromTree } from 'react-apollo'
 import { renderToString } from 'react-dom/server'
 import { FilledContext, HelmetProvider } from 'react-helmet-async'
 import { StaticRouter, StaticRouterContext } from 'react-router'
+import { MobileContext } from 'utils/mobileContext'
 import { App } from '../App'
 import { sentryConfig } from '../utils/sentry'
 import { createSession, Session } from '../utils/sessionStorage'
@@ -81,7 +83,11 @@ export const getPage: Koa.Middleware = async (ctx) => {
     <StaticRouter location={ctx.request.originalUrl} context={routerContext}>
       <HelmetProvider context={helmetContext}>
         <ApolloProvider client={apolloClient}>
-          <App session={session} dontPanicSession={dontPanicSession} />
+          <MobileContext.Provider
+            value={isMobile({ ua: ctx.req.headers['user-agent'] })}
+          >
+            <App session={session} dontPanicSession={dontPanicSession} />
+          </MobileContext.Provider>
         </ApolloProvider>
       </HelmetProvider>
     </StaticRouter>
