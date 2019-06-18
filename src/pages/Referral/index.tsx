@@ -7,7 +7,7 @@ import { Button } from 'components/buttons'
 import { Page } from 'components/utils/Page'
 import * as React from 'react'
 import styled from 'react-emotion'
-import { Redirect, RouteComponentProps } from 'react-router'
+import { RouteComponentProps } from 'react-router'
 import { MobileContext } from 'utils/mobileContext'
 import { getFirebaseLinkDomain } from './util'
 
@@ -88,71 +88,68 @@ export const Referral: React.FunctionComponent<ReferralProps> = ({
   match: {
     params: { code },
   },
-}) =>
-  code ? (
-    <Page>
-      <PageWrapper>
-        <Illustration src="/new-member-assets/referrals/invite_success.svg" />
-        <Title>
-          <TranslationsConsumer textKey="REFERRAL_LANDINGPAGE_HEADLINE">
-            {(text) => text}
-          </TranslationsConsumer>
-        </Title>
-        <MobileContext.Consumer>
-          {(isMobile) =>
-            isMobile ? (
-              <>
-                <Paragraph>
-                  <TranslationsPlaceholderConsumer
-                    textKey="REFERRAL_LANDINGPAGE_BODY"
-                    replacements={{ REFERRAL_VALUE: 10 }}
-                  >
-                    {(text) => text}
-                  </TranslationsPlaceholderConsumer>
-                </Paragraph>
-                <Centered>
-                  <LinkButton
-                    background={colors.PURPLE}
-                    foreground={colors.WHITE}
-                    href={`${getFirebaseLinkDomain()}/referrals?code=${encodeURIComponent(
-                      code,
-                    )}`}
-                  >
-                    <TranslationsConsumer textKey="REFERRAL_LANDINGPAGE_BTN_CTA">
-                      {(text) => text}
-                    </TranslationsConsumer>
-                  </LinkButton>
-                </Centered>
-              </>
-            ) : (
-              <>
-                <Paragraph>
-                  <TranslationsConsumer textKey="REFERRAL_LANDING_PAGE_DESKTOP_PARAGRAPH_ONE">
+}) => (
+  <Page>
+    <PageWrapper>
+      <Illustration src="/new-member-assets/referrals/invite_success.svg" />
+      <Title>
+        <TranslationsConsumer textKey="REFERRAL_LANDINGPAGE_HEADLINE">
+          {(text) => text}
+        </TranslationsConsumer>
+      </Title>
+      <MobileContext.Consumer>
+        {(isMobile) =>
+          isMobile ? (
+            <>
+              <Paragraph>
+                <TranslationsPlaceholderConsumer
+                  textKey="REFERRAL_LANDINGPAGE_BODY"
+                  replacements={{ REFERRAL_VALUE: 10 }}
+                >
+                  {(text) => text}
+                </TranslationsPlaceholderConsumer>
+              </Paragraph>
+              <Centered>
+                <LinkButton
+                  background={colors.PURPLE}
+                  foreground={colors.WHITE}
+                  href={`${getFirebaseLinkDomain()}/referrals?code=${encodeURIComponent(
+                    code,
+                  )}`}
+                >
+                  <TranslationsConsumer textKey="REFERRAL_LANDINGPAGE_BTN_CTA">
                     {(text) => text}
                   </TranslationsConsumer>
-                </Paragraph>
-                <CodeWrapper>
-                  <Code>{code}</Code>
-                </CodeWrapper>
-                <Paragraph>
-                  <TranslationsConsumer textKey="REFERRAL_LANDING_PAGE_DESKTOP_PARAGRAPH_TWO">
-                    {(text) => text}
-                  </TranslationsConsumer>
-                </Paragraph>
-                <AppStoreContainer>
-                  <a href="https://apps.apple.com/se/app/hedvig-f%C3%B6rs%C3%A4kring/id1303668531">
-                    <img src="https://cdn.hedvig.com/www/appstores/app-store-badge.svg" />
-                  </a>
-                  <a href="https://play.google.com/store/apps/details?id=com.hedvig.app">
-                    <img src="https://cdn.hedvig.com/www/appstores/google-play-badge.svg" />
-                  </a>
-                </AppStoreContainer>
-              </>
-            )
-          }
-        </MobileContext.Consumer>
-      </PageWrapper>
-    </Page>
-  ) : (
-    <Redirect to="/404" />
-  )
+                </LinkButton>
+              </Centered>
+            </>
+          ) : (
+            <>
+              <Paragraph>
+                <TranslationsConsumer textKey="REFERRAL_LANDING_PAGE_DESKTOP_PARAGRAPH_ONE">
+                  {(text) => text}
+                </TranslationsConsumer>
+              </Paragraph>
+              <CodeWrapper>
+                <Code>{code}</Code>
+              </CodeWrapper>
+              <Paragraph>
+                <TranslationsConsumer textKey="REFERRAL_LANDING_PAGE_DESKTOP_PARAGRAPH_TWO">
+                  {(text) => text}
+                </TranslationsConsumer>
+              </Paragraph>
+              <AppStoreContainer>
+                <a href="https://apps.apple.com/se/app/hedvig-f%C3%B6rs%C3%A4kring/id1303668531">
+                  <img src="https://cdn.hedvig.com/www/appstores/app-store-badge.svg" />
+                </a>
+                <a href="https://play.google.com/store/apps/details?id=com.hedvig.app">
+                  <img src="https://cdn.hedvig.com/www/appstores/google-play-badge.svg" />
+                </a>
+              </AppStoreContainer>
+            </>
+          )
+        }
+      </MobileContext.Consumer>
+    </PageWrapper>
+  </Page>
+)
