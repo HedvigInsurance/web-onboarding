@@ -1,4 +1,9 @@
-import { getFirebaseLinkDomain } from 'pages/Referral/util'
+import {
+  getAndroidPackageName,
+  getAppleBundleId,
+  getAppStoreId,
+  getFirebaseLinkDomain,
+} from 'pages/Referral/util'
 import { getGiraffeEndpoint } from '../utils/apolloClient'
 
 export const GIRAFFE_ENDPOINT = getGiraffeEndpoint(
@@ -12,3 +17,6 @@ export const GIRAFFE_WS_ENDPOINT = getGiraffeEndpoint(
 )
 
 export const FIREBASE_LINK_DOMAIN = getFirebaseLinkDomain()
+export const ANDROID_PACKAGE_NAME = getAndroidPackageName()
+export const APPLE_BUNDLE_ID = getAppleBundleId()
+export const APP_STORE_ID = getAppStoreId()
