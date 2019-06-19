@@ -16,7 +16,7 @@ type ReferralProps = RouteComponentProps<{
 }>
 
 const PageWrapper = styled('div')({
-  ['@media (min-width: 700px)']: {
+  '@media (min-width: 700px)': {
     margin: '0 auto',
     maxWidth: 540,
   },
@@ -35,7 +35,7 @@ const Title = styled('h1')({
   marginLeft: '1rem',
   marginRight: '1rem',
   lineHeight: 1.2,
-  ['@media (min-width: 700px)']: {
+  '@media (min-width: 700px)': {
     fontSize: '3.5rem',
   },
 })
