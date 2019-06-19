@@ -1,3 +1,4 @@
+import { getFirebaseLinkDomain } from 'pages/Referral/util'
 import { getGiraffeEndpoint } from '../utils/apolloClient'
 
 export const GIRAFFE_ENDPOINT = getGiraffeEndpoint(
@@ -9,3 +10,5 @@ export const GIRAFFE_WS_ENDPOINT = getGiraffeEndpoint(
   'GIRAFFE_WS_ENDPOINT',
   'wss://graphql.dev.hedvigit.com/subscriptions',
 )
+
+export const FIREBASE_LINK_DOMAIN = getFirebaseLinkDomain()
