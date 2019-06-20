@@ -23,5 +23,8 @@ module.exports = {
     'HEROKU_SLUG_COMMIT',
     'HEROKU_DYNO_ID',
     'FIREBASE_LINK_DOMAIN',
+    'ANDROID_PACKAGE_NAME',
+    'APPLE_BUNDLE_ID',
+    'APP_STORE_ID'
   ],
 }

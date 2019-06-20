@@ -9,7 +9,7 @@ import * as React from 'react'
 import styled from 'react-emotion'
 import { RouteComponentProps } from 'react-router'
 import { MobileContext } from 'utils/mobileContext'
-import { getFirebaseLinkDomain } from './util'
+import { createFirebaseLink } from './util'
 
 type ReferralProps = RouteComponentProps<{
   code: string
@@ -113,9 +113,7 @@ export const Referral: React.FunctionComponent<ReferralProps> = ({
                 <LinkButton
                   background={colors.PURPLE}
                   foreground={colors.WHITE}
-                  href={`${getFirebaseLinkDomain()}/referrals?code=${encodeURIComponent(
-                    code,
-                  )}`}
+                  href={createFirebaseLink(code)}
                 >
                   <TranslationsConsumer textKey="REFERRAL_LANDINGPAGE_BTN_CTA">
                     {(text) => text}

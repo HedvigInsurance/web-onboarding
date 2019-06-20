@@ -16,6 +16,9 @@ import { createSession, Session } from '../utils/sessionStorage'
 import { ServerCookieStorage } from '../utils/storage/ServerCookieStorage'
 import { createServerApolloClient } from './apolloClient'
 import {
+  ANDROID_PACKAGE_NAME,
+  APP_STORE_ID,
+  APPLE_BUNDLE_ID,
   FIREBASE_LINK_DOMAIN,
   GIRAFFE_ENDPOINT,
   GIRAFFE_WS_ENDPOINT,
@@ -60,6 +63,9 @@ const template = (
     window.GIRAFFE_ENDPOINT= ${JSON.stringify(GIRAFFE_ENDPOINT)}
     window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
     window.FIREBASE_LINK_DOMAIN=${JSON.stringify(FIREBASE_LINK_DOMAIN)}
+    window.ANDROID_PACKAGE_NAME=${JSON.stringify(ANDROID_PACKAGE_NAME)}
+    window.APPLE_BUNDLE_ID=${JSON.stringify(APPLE_BUNDLE_ID)}
+    window.APP_STORE_ID=${JSON.stringify(APP_STORE_ID)}
   </script>
   <script src="${scriptLocation}"></script>
 </body>
