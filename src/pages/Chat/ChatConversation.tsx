@@ -11,7 +11,7 @@ import {
   getUtmParamsFromCookie,
   TrackAction,
 } from 'utils/tracking'
-import { ChatContainer, ChatStep } from './state'
+import { ChatContainer, ChatStep, Insurer } from './state'
 import { AddressInput } from './steps/AddressInput'
 import { AgeInput } from './steps/AgeInput'
 import { CreateOffer } from './steps/CreateOffer'
@@ -20,6 +20,13 @@ import { Greet } from './steps/Greet'
 import { InsuranceTypeInput } from './steps/InsuranceTypeInput'
 import { NameInput } from './steps/NameInput'
 import { NumberOfPeopleInput } from './steps/NumberOfPeopleInput'
+import { SwitchableInsurers } from './state'
+
+const currentInsurerSwitchable = (currentInsurer: Insurer) => {
+  return Object.values(SwitchableInsurers).includes(currentInsurer)
+    ? 'CHAT_HEDVIG_SHOW_OFFER_HAS_INSURANCE'
+    : 'CHAT_HEDVIG_SHOW_OFFER_HAS_INSURANCE_BUT_NOT_SWITCHABLE'
+}
 
 export const ChatConversation: React.SFC = () => (
   <ChatContainer>
@@ -389,7 +396,9 @@ export const ChatConversation: React.SFC = () => (
                 <TranslationsPlaceholderConsumer
                   textKey={
                     currentInsurance.hasCurrentInsurance
-                      ? 'CHAT_HEDVIG_SHOW_OFFER_HAS_INSURANCE'
+                      ? currentInsurerSwitchable(
+                          currentInsurance.currentInsurer!,
+                        )
                       : 'CHAT_HEDVIG_SHOW_OFFER_NO_INSURANCE'
                   }
                   replacements={{

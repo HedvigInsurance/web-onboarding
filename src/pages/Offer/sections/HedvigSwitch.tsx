@@ -6,6 +6,8 @@ import { CardWrapper } from '../components/CardWrapper'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 import { InnerWrapper } from '../components/InnerWrapper'
 import { Wrapper } from '../components/Wrapper'
+import { SwitchableInsurers, Insurer } from '../../Chat/state'
+import { CurrentInsuranceState } from '../../Chat/state'
 
 const ROWWIDTH = 1200
 const PARAGRAPHWIDTH = 290
@@ -79,6 +81,28 @@ const ImageIcon = styled('img')({
   position: 'relative',
 })
 
+const colsNonSwitchable: ReadonlyArray<{
+  imageUrl: string
+  title: string
+  paragraphKey: string
+}> = [
+  {
+    imageUrl: '/new-member-assets/offering/hedvig-dot-1.svg',
+    title: '1',
+    paragraphKey: 'OFFER_NON_SWITCHABLE_COL_ONE_PARAGRAPH',
+  },
+  {
+    imageUrl: '/new-member-assets/offering/hedvig-dot-2.svg',
+    title: '2',
+    paragraphKey: 'OFFER_NON_SWITCHABLE_COL_TWO_PARAGRAPH',
+  },
+  {
+    imageUrl: '/new-member-assets/offering/hedvig-dot-3.svg',
+    title: '3',
+    paragraphKey: 'OFFER_NON_SWITCHABLE_COL_THREE_PARAGRAPH',
+  },
+]
+
 const cols: ReadonlyArray<{
   imageUrl: string
   title: string
@@ -101,20 +125,42 @@ const cols: ReadonlyArray<{
   },
 ]
 
-export const HedvigSwitch: React.SFC = () => (
+interface Props {
+  currentInsuranceState: CurrentInsuranceState
+}
+
+const getOfferSwitchTitle = (currentInsuranceState: CurrentInsuranceState) => {
+  return Object.keys(SwitchableInsurers).includes(
+    currentInsuranceState.currentInsurer!,
+  )
+    ? 'OFFER_SWITCH_TITLE'
+    : 'OFFER_SWITCH_TITLE_NON_SWITCHABLE'
+}
+
+const getColumns = (currentInsuranceState: CurrentInsuranceState) => {
+  return Object.keys(SwitchableInsurers).includes(
+    currentInsuranceState.currentInsurer!,
+  )
+    ? cols
+    : colsNonSwitchable
+}
+
+export const HedvigSwitch: React.SFC<Props> = (props) => (
   <Wrapper>
     <InnerWrapper>
       <CardWrapper>
         <Card>
           <HeaderWrapper>
             <Header>
-              <TranslationsConsumer textKey="OFFER_SWITCH_TITLE">
+              <TranslationsConsumer
+                textKey={getOfferSwitchTitle(props.currentInsuranceState)}
+              >
                 {(title) => title}
               </TranslationsConsumer>
             </Header>
           </HeaderWrapper>
           <Row>
-            {cols.map((col) => (
+            {getColumns(props.currentInsuranceState).map((col) => (
               <Col key={col.title + col.paragraphKey}>
                 <ImageIcon src={col.imageUrl} />
                 <Title>{col.title}</Title>
