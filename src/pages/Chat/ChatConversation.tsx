@@ -11,7 +11,7 @@ import {
   getUtmParamsFromCookie,
   TrackAction,
 } from 'utils/tracking'
-import { ChatContainer, ChatStep, Insurer } from './state'
+import { ChatContainer, ChatStep, Insurer, SwitchableInsurers } from './state'
 import { AddressInput } from './steps/AddressInput'
 import { AgeInput } from './steps/AgeInput'
 import { CreateOffer } from './steps/CreateOffer'
@@ -20,12 +20,20 @@ import { Greet } from './steps/Greet'
 import { InsuranceTypeInput } from './steps/InsuranceTypeInput'
 import { NameInput } from './steps/NameInput'
 import { NumberOfPeopleInput } from './steps/NumberOfPeopleInput'
-import { SwitchableInsurers } from './state'
 
-const currentInsurerSwitchable = (currentInsurer: Insurer) => {
-  return Object.values(SwitchableInsurers).includes(currentInsurer)
-    ? 'CHAT_HEDVIG_SHOW_OFFER_HAS_INSURANCE'
-    : 'CHAT_HEDVIG_SHOW_OFFER_HAS_INSURANCE_BUT_NOT_SWITCHABLE'
+const getOfferQuestionTextKey = (
+  hasCurrentInsurance?: boolean,
+  currentInsurer?: Insurer,
+) => {
+  if (!hasCurrentInsurance) {
+    return 'CHAT_HEDVIG_SHOW_OFFER_NO_INSURANCE'
+  }
+
+  if (Object.values(SwitchableInsurers).includes(currentInsurer!)) {
+    return 'CHAT_HEDVIG_SHOW_OFFER_HAS_INSURANCE'
+  }
+
+  return 'CHAT_HEDVIG_SHOW_OFFER_HAS_INSURANCE_BUT_NOT_SWITCHABLE'
 }
 
 export const ChatConversation: React.SFC = () => (
@@ -394,13 +402,10 @@ export const ChatConversation: React.SFC = () => (
                 ].includes(currentStep)}
               >
                 <TranslationsPlaceholderConsumer
-                  textKey={
-                    currentInsurance.hasCurrentInsurance
-                      ? currentInsurerSwitchable(
-                          currentInsurance.currentInsurer!,
-                        )
-                      : 'CHAT_HEDVIG_SHOW_OFFER_NO_INSURANCE'
-                  }
+                  textKey={getOfferQuestionTextKey(
+                    currentInsurance.hasCurrentInsurance,
+                    currentInsurance.currentInsurer,
+                  )}
                   replacements={{
                     firstName: <span data-hj-supress>{nameAge.firstName}</span>,
                   }}

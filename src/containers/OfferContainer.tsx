@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 import * as React from 'react'
 import { Query } from 'react-apollo'
-import { InsuranceType } from 'utils/insuranceDomainUtils'
 import { Insurer } from 'src/pages/Chat/state'
+import { InsuranceType } from 'utils/insuranceDomainUtils'
 
 export const OFFER_QUERY = gql`
   query Offer {

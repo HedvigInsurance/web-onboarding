@@ -2,12 +2,11 @@ import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import styled from 'react-emotion'
+import { CurrentInsuranceState, SwitchableInsurers } from '../../Chat/state'
 import { CardWrapper } from '../components/CardWrapper'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 import { InnerWrapper } from '../components/InnerWrapper'
 import { Wrapper } from '../components/Wrapper'
-import { SwitchableInsurers, Insurer } from '../../Chat/state'
-import { CurrentInsuranceState } from '../../Chat/state'
 
 const ROWWIDTH = 1200
 const PARAGRAPHWIDTH = 290
@@ -81,7 +80,7 @@ const ImageIcon = styled('img')({
   position: 'relative',
 })
 
-const colsNonSwitchable: ReadonlyArray<{
+const nonSwitchableCols: ReadonlyArray<{
   imageUrl: string
   title: string
   paragraphKey: string
@@ -103,7 +102,7 @@ const colsNonSwitchable: ReadonlyArray<{
   },
 ]
 
-const cols: ReadonlyArray<{
+const switchableCols: ReadonlyArray<{
   imageUrl: string
   title: string
   paragraphKey: string
@@ -129,21 +128,19 @@ interface Props {
   currentInsuranceState: CurrentInsuranceState
 }
 
-const getOfferSwitchTitle = (currentInsuranceState: CurrentInsuranceState) => {
-  return Object.keys(SwitchableInsurers).includes(
+const getOfferSwitchTitle = (currentInsuranceState: CurrentInsuranceState) =>
+  Object.keys(SwitchableInsurers).includes(
     currentInsuranceState.currentInsurer!,
   )
     ? 'OFFER_SWITCH_TITLE'
     : 'OFFER_SWITCH_TITLE_NON_SWITCHABLE'
-}
 
-const getColumns = (currentInsuranceState: CurrentInsuranceState) => {
-  return Object.keys(SwitchableInsurers).includes(
+const getColumns = (currentInsuranceState: CurrentInsuranceState) =>
+  Object.keys(SwitchableInsurers).includes(
     currentInsuranceState.currentInsurer!,
   )
-    ? cols
-    : colsNonSwitchable
-}
+    ? switchableCols
+    : nonSwitchableCols
 
 export const HedvigSwitch: React.SFC<Props> = (props) => (
   <Wrapper>
