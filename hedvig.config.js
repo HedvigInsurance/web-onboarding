@@ -24,7 +24,9 @@ module.exports = {
     'HEROKU_DYNO_ID',
     'FIREBASE_LINK_DOMAIN',
     'ANDROID_PACKAGE_NAME',
+    'ANDROID_MINIMUM_VERSION',
     'APPLE_BUNDLE_ID',
-    'APP_STORE_ID'
+    'APP_STORE_ID',
+    'IOS_MINIMUM_VERSION'
   ],
 }
