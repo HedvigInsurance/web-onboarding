@@ -3,10 +3,12 @@ export const createFirebaseLink = (code: string) => {
     `https://www.hedvig.com/referrals?code=${code}`,
   )
   const encodedApn = encodeURIComponent(getAndroidPackageName())
+  const encodedAmv = encodeURIComponent(getAndroidMinimumVersion())
   const encodedIbi = encodeURIComponent(getAppleBundleId())
   const encodedIsi = encodeURIComponent(getAppStoreId())
+  const encodedImv = encodeURIComponent(getIosMinimumVersion())
 
-  return `${getFirebaseLinkDomain()}/?link=${encodedLink}&apn=${encodedApn}&ibi=${encodedIbi}&isi=${encodedIsi}`
+  return `${getFirebaseLinkDomain()}/?link=${encodedLink}&apn=${encodedApn}&amv=${encodedAmv}&ibi=${encodedIbi}&isi=${encodedIsi}&imv=${encodedImv}`
 }
 export const getFirebaseLinkDomain = () => {
   if (
@@ -95,5 +97,53 @@ export const getAppStoreId = () => {
 
   throw Error(
     'Unable to find apple bundle id - specify with envvar `APPLE_BUNDLE_ID`',
+  )
+}
+
+export const getIosMinimumVersion = () => {
+  if (
+    typeof window !== 'undefined' &&
+    (window as any).IOS_MINIMUM_VERSION !== undefined
+  ) {
+    return (window as any).IOS_MINIMUM_VERSION
+  }
+
+  if (process.env.NODE_ENV === 'development') {
+    return process.env.IOS_MINIMUM_VERSION || '2.8.0'
+  }
+
+  if (
+    process.env.NODE_ENV !== 'development' &&
+    process.env.IOS_MINIMUM_VERSION
+  ) {
+    return process.env.IOS_MINIMUM_VERSION
+  }
+
+  throw Error(
+    'Unable to find iOS minimum version - specify with envvar `IOS_MINIMUM_VERSION`',
+  )
+}
+
+export const getAndroidMinimumVersion = () => {
+  if (
+    typeof window !== 'undefined' &&
+    (window as any).ANDROID_MINIMUM_VERSION !== undefined
+  ) {
+    return (window as any).ANDROID_MINIMUM_VERSION
+  }
+
+  if (process.env.NODE_ENV === 'development') {
+    return process.env.ANDROID_MINIMUM_VERSION || '1558010199'
+  }
+
+  if (
+    process.env.NODE_ENV !== 'development' &&
+    process.env.ANDROID_MINIMUM_VERSION
+  ) {
+    return process.env.ANDROID_MINIMUM_VERSION
+  }
+
+  throw Error(
+    'Unable to find Android minimum version - specify with envvar `ANDROID_MINIMUM_VERSION`',
   )
 }
