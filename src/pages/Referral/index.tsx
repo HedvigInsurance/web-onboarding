@@ -20,6 +20,7 @@ const PageWrapper = styled('div')({
     margin: '0 auto',
     maxWidth: 540,
   },
+  paddingBottom: 50,
 })
 
 const Illustration = styled('img')({

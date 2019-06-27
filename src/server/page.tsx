@@ -94,7 +94,10 @@ export const getPage: Koa.Middleware = async (ctx) => {
       <HelmetProvider context={helmetContext}>
         <ApolloProvider client={apolloClient}>
           <MobileContext.Provider
-            value={isMobile({ ua: ctx.req.headers['user-agent'] })}
+            value={isMobile({
+              ua: ctx.req.headers['user-agent'],
+              tablet: true,
+            })}
           >
             <App session={session} dontPanicSession={dontPanicSession} />
           </MobileContext.Provider>
