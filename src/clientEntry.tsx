@@ -30,7 +30,7 @@ ReactDOM.hydrate(
     <PageTracker>
       <HelmetProvider>
         <ApolloProvider client={apolloClient!.client!}>
-          <MobileContext.Provider value={isMobile()}>
+          <MobileContext.Provider value={isMobile({ tablet: true })}>
             <HotApp session={session} dontPanicSession={dontPanicSession} />
           </MobileContext.Provider>
         </ApolloProvider>
