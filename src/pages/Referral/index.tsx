@@ -10,6 +10,7 @@ import styled from 'react-emotion'
 import { RouteComponentProps } from 'react-router'
 import { MobileContext } from 'utils/mobileContext'
 import { createFirebaseLink } from './util'
+import Helmet from 'react-helmet-async'
 
 type ReferralProps = RouteComponentProps<{
   code: string
@@ -23,11 +24,23 @@ const PageWrapper = styled('div')({
   paddingBottom: 50,
 })
 
-const Illustration = styled('img')({
+const Logo = styled('img')({
   marginTop: '2.25rem',
   marginLeft: 'auto',
   marginRight: 'auto',
   display: 'block',
+  maxWidth: 100,
+  width: '100%',
+})
+const HeroImageWrapper = styled('div')({
+  padding: '0 1rem',
+})
+const HeroImage = styled('img')({
+  marginTop: '2.25rem',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  display: 'block',
+  borderRadius: 5,
 })
 
 const Title = styled('h1')({
@@ -90,65 +103,82 @@ export const Referral: React.FunctionComponent<ReferralProps> = ({
     params: { code },
   },
 }) => (
-  <Page>
-    <PageWrapper>
-      <Illustration src="/new-member-assets/referrals/invite_success.svg" />
-      <Title>
-        <TranslationsConsumer textKey="REFERRAL_LANDINGPAGE_HEADLINE">
-          {(text) => text}
-        </TranslationsConsumer>
-      </Title>
-      <MobileContext.Consumer>
-        {(isMobile) =>
-          isMobile ? (
-            <>
-              <Paragraph>
-                <TranslationsPlaceholderConsumer
-                  textKey="REFERRAL_LANDINGPAGE_BODY"
-                  replacements={{ REFERRAL_VALUE: 10 }}
-                >
-                  {(text) => text}
-                </TranslationsPlaceholderConsumer>
-              </Paragraph>
-              <Centered>
-                <LinkButton
-                  background={colors.PURPLE}
-                  foreground={colors.WHITE}
-                  href={createFirebaseLink(code)}
-                >
-                  <TranslationsConsumer textKey="REFERRAL_LANDINGPAGE_BTN_CTA">
+  <>
+    <TranslationsConsumer textKey="REFERRAL_LANDINGPAGE_TITLE">
+      {(title) => (
+        <Helmet>
+          <title>{title}</title>
+          <meta property="og:title" content={title} />
+          <meta
+            property="og:image"
+            content="/new-member-assets/referrals/referrals-hero.jpg"
+          />
+        </Helmet>
+      )}
+    </TranslationsConsumer>
+    <Page>
+      <PageWrapper>
+        <Logo src="/new-member-assets/topbar/hedvig-wordmark-color.svg" />
+        <HeroImageWrapper>
+          <HeroImage src="/new-member-assets/referrals/referrals-hero.jpg" />
+        </HeroImageWrapper>
+        <Title>
+          <TranslationsConsumer textKey="REFERRAL_LANDINGPAGE_HEADLINE">
+            {(text) => text}
+          </TranslationsConsumer>
+        </Title>
+        <MobileContext.Consumer>
+          {(isMobile) =>
+            isMobile ? (
+              <>
+                <Paragraph>
+                  <TranslationsPlaceholderConsumer
+                    textKey="REFERRAL_LANDINGPAGE_BODY"
+                    replacements={{ REFERRAL_VALUE: 10 }}
+                  >
+                    {(text) => text}
+                  </TranslationsPlaceholderConsumer>
+                </Paragraph>
+                <Centered>
+                  <LinkButton
+                    background={colors.PURPLE}
+                    foreground={colors.WHITE}
+                    href={createFirebaseLink(code)}
+                  >
+                    <TranslationsConsumer textKey="REFERRAL_LANDINGPAGE_BTN_CTA">
+                      {(text) => text}
+                    </TranslationsConsumer>
+                  </LinkButton>
+                </Centered>
+              </>
+            ) : (
+              <>
+                <Paragraph>
+                  <TranslationsConsumer textKey="REFERRAL_LANDING_PAGE_DESKTOP_PARAGRAPH_ONE">
                     {(text) => text}
                   </TranslationsConsumer>
-                </LinkButton>
-              </Centered>
-            </>
-          ) : (
-            <>
-              <Paragraph>
-                <TranslationsConsumer textKey="REFERRAL_LANDING_PAGE_DESKTOP_PARAGRAPH_ONE">
-                  {(text) => text}
-                </TranslationsConsumer>
-              </Paragraph>
-              <CodeWrapper>
-                <Code>{code}</Code>
-              </CodeWrapper>
-              <Paragraph>
-                <TranslationsConsumer textKey="REFERRAL_LANDING_PAGE_DESKTOP_PARAGRAPH_TWO">
-                  {(text) => text}
-                </TranslationsConsumer>
-              </Paragraph>
-              <AppStoreContainer>
-                <a href="https://apps.apple.com/se/app/hedvig-f%C3%B6rs%C3%A4kring/id1303668531">
-                  <img src="https://cdn.hedvig.com/www/appstores/app-store-badge.svg" />
-                </a>
-                <a href="https://play.google.com/store/apps/details?id=com.hedvig.app">
-                  <img src="https://cdn.hedvig.com/www/appstores/google-play-badge.svg" />
-                </a>
-              </AppStoreContainer>
-            </>
-          )
-        }
-      </MobileContext.Consumer>
-    </PageWrapper>
-  </Page>
+                </Paragraph>
+                <CodeWrapper>
+                  <Code>{code}</Code>
+                </CodeWrapper>
+                <Paragraph>
+                  <TranslationsConsumer textKey="REFERRAL_LANDING_PAGE_DESKTOP_PARAGRAPH_TWO">
+                    {(text) => text}
+                  </TranslationsConsumer>
+                </Paragraph>
+                <AppStoreContainer>
+                  <a href="https://apps.apple.com/se/app/hedvig-f%C3%B6rs%C3%A4kring/id1303668531">
+                    <img src="https://cdn.hedvig.com/www/appstores/app-store-badge.svg" />
+                  </a>
+                  <a href="https://play.google.com/store/apps/details?id=com.hedvig.app">
+                    <img src="https://cdn.hedvig.com/www/appstores/google-play-badge.svg" />
+                  </a>
+                </AppStoreContainer>
+              </>
+            )
+          }
+        </MobileContext.Consumer>
+      </PageWrapper>
+    </Page>
+  </>
 )
