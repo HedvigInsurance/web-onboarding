@@ -106,14 +106,19 @@ export const Referral: React.FunctionComponent<ReferralProps> = ({
   <>
     <TranslationsConsumer textKey="REFERRAL_LANDINGPAGE_TITLE">
       {(title) => (
-        <Helmet>
-          <title>{title}</title>
-          <meta property="og:title" content={title} />
-          <meta
-            property="og:image"
-            content="/new-member-assets/referrals/referrals-hero.jpg"
-          />
-        </Helmet>
+        <TranslationsConsumer textKey="REFERRAL_LANDINGPAGE_DESCRIPTION">
+          {(description) => (
+            <Helmet>
+              <title>{title}</title>
+              <meta property="og:title" content={title} />
+              <meta property="og:description" content={description} />
+              <meta
+                property="og:image"
+                content="/new-member-assets/referrals/referrals-hero.jpg"
+              />
+            </Helmet>
+          )}
+        </TranslationsConsumer>
       )}
     </TranslationsConsumer>
     <Page>
