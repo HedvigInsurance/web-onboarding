@@ -7,10 +7,10 @@ import { Button } from 'components/buttons'
 import { Page } from 'components/utils/Page'
 import * as React from 'react'
 import styled from 'react-emotion'
+import Helmet from 'react-helmet-async'
 import { RouteComponentProps } from 'react-router'
 import { MobileContext } from 'utils/mobileContext'
 import { createFirebaseLink } from './util'
-import Helmet from 'react-helmet-async'
 
 type ReferralProps = RouteComponentProps<{
   code: string
