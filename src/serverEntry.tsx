@@ -13,10 +13,10 @@ import {
   setRequestUuidMiddleware,
 } from './server/middleware/enhancers'
 import { helmet } from './server/middleware/helmet'
+import { forceHost, permanentRedirect } from './server/middleware/redirects'
 import { getPage } from './server/page'
 import { notNullable } from './utils/nullables'
 import { sentryConfig } from './utils/sentry'
-import { permanentRedirect, forceHost } from './server/middleware/redirects'
 
 Sentry.init({
   ...sentryConfig(),
