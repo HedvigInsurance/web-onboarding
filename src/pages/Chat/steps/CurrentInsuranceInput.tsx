@@ -34,6 +34,7 @@ export const insurerNames = new Map<Insurer, string>([
   [Insurer.ICA, 'ICA'],
   [Insurer.GJENSIDIGE, 'Gjensidige'],
   [Insurer.VARDIA, 'Vardia'],
+  [Insurer.TRE_KRONOR, 'Tre Kronor'],
   [Insurer.OTHER, 'Ett annat bolag'],
 ])
 

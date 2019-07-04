@@ -43,6 +43,7 @@ it('queries when it has a session', async () => {
             type: 'RENT',
             postalNumber: '12345',
             personsInHousehold: 1,
+            currentInsurerName: 'FOLKSAM',
             __typename: 'Insurance',
           },
           member: {
@@ -113,6 +114,7 @@ it('signs without 💥', async () => {
             type: 'RENT',
             postalNumber: '12345',
             personsInHousehold: 1,
+            currentInsurerName: 'FOLKSAM',
             __typename: 'Insurance',
           },
           member: {
@@ -229,6 +231,7 @@ it('shows an error when bankid errors', async () => {
             type: 'RENT',
             postalNumber: '12345',
             personsInHousehold: 1,
+            currentInsurerName: 'FOLKSAM',
             __typename: 'Insurance',
           },
           member: {
@@ -347,6 +350,7 @@ it('renders correct status when sign status query has a status', async () => {
             type: 'RENT',
             postalNumber: '12345',
             personsInHousehold: 1,
+            currentInsurerName: 'FOLKSAM',
             __typename: 'Insurance',
           },
           member: {

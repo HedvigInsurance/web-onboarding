@@ -28,7 +28,15 @@ export enum Insurer {
   ICA = 'ICA',
   GJENSIDIGE = 'Gjensidige',
   VARDIA = 'Vardia',
+  TRE_KRONOR = 'Tre Kronor',
   OTHER = 'OTHER',
+}
+
+export enum SwitchableInsurers {
+  FOLKSAM = 'Folksam',
+  TRYGG_HANSA = 'Trygg-Hansa',
+  TRE_KRONOR = 'Tre Kronor',
+  ICA = 'ICA',
 }
 
 export interface NameAgeState {

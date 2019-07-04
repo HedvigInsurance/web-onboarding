@@ -1,6 +1,7 @@
 import gql from 'graphql-tag'
 import * as React from 'react'
 import { Query } from 'react-apollo'
+import { Insurer } from 'src/pages/Chat/state'
 import { InsuranceType } from 'utils/insuranceDomainUtils'
 
 export const OFFER_QUERY = gql`
@@ -12,6 +13,7 @@ export const OFFER_QUERY = gql`
       type
       postalNumber
       personsInHousehold
+      currentInsurerName
     }
 
     member {
@@ -29,6 +31,7 @@ export interface OfferData {
     type: InsuranceType
     postalNumber: string
     personsInHousehold: number
+    currentInsurerName: Insurer
   }
   member: {
     firstName: string

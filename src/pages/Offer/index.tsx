@@ -195,7 +195,16 @@ export const Offering: React.SFC<{}> = () => (
                       </InnerWrapper>
                     </Wrapper>
                     <HedvigInfo />
-                    {insuredAtOtherCompany ? <HedvigSwitch /> : null}
+                    {insuredAtOtherCompany ? (
+                      <HedvigSwitch
+                        currentInsuranceState={{
+                          hasCurrentInsurance:
+                            offer.insurance.insuredAtOtherCompany,
+                          currentInsurer: offer.insurance.currentInsurerName,
+                          otherInsurer: offer.insurance.currentInsurerName,
+                        }}
+                      />
+                    ) : null}
                     <GetInsured
                       offer={offer}
                       signButtonVisibility={state.updateLowerButtonVisibility}

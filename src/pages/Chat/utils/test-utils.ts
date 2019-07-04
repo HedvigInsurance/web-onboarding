@@ -38,6 +38,7 @@ export const mockOffer: OfferData = {
     type: InsuranceType.RENT,
     postalNumber: '12345',
     personsInHousehold: 1,
+    currentInsurerName: Insurer.FOLKSAM,
   },
   member: {
     firstName: 'Test',

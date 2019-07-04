@@ -34,6 +34,7 @@ it('does nothing when no correct state is set', async () => {
             type: 'RENT',
             postalNumber: '12345',
             personsInHousehold: 1,
+            currentInsurerName: 'FOLKSAM',
             __typename: 'Insurance',
           },
           member: {

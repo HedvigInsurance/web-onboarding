@@ -2,6 +2,7 @@ import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import styled from 'react-emotion'
+import { CurrentInsuranceState, SwitchableInsurers } from '../../Chat/state'
 import { CardWrapper } from '../components/CardWrapper'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 import { InnerWrapper } from '../components/InnerWrapper'
@@ -27,7 +28,7 @@ const Header = styled('h1')({
   paddingBottom: '30px',
   paddingLeft: '10px',
   paddingRight: '10px',
-  maxWidth: '400px',
+  maxWidth: '425px',
   marginLeft: 'auto',
   marginRight: 'auto',
 })
@@ -79,7 +80,29 @@ const ImageIcon = styled('img')({
   position: 'relative',
 })
 
-const cols: ReadonlyArray<{
+const nonSwitchableCols: ReadonlyArray<{
+  imageUrl: string
+  title: string
+  paragraphKey: string
+}> = [
+  {
+    imageUrl: '/new-member-assets/offering/hedvig-dot-1.svg',
+    title: '1',
+    paragraphKey: 'OFFER_NON_SWITCHABLE_COL_ONE_PARAGRAPH',
+  },
+  {
+    imageUrl: '/new-member-assets/offering/hedvig-dot-2.svg',
+    title: '2',
+    paragraphKey: 'OFFER_NON_SWITCHABLE_COL_TWO_PARAGRAPH',
+  },
+  {
+    imageUrl: '/new-member-assets/offering/hedvig-dot-3.svg',
+    title: '3',
+    paragraphKey: 'OFFER_NON_SWITCHABLE_COL_THREE_PARAGRAPH',
+  },
+]
+
+const switchableCols: ReadonlyArray<{
   imageUrl: string
   title: string
   paragraphKey: string
@@ -101,20 +124,40 @@ const cols: ReadonlyArray<{
   },
 ]
 
-export const HedvigSwitch: React.SFC = () => (
+interface Props {
+  currentInsuranceState: CurrentInsuranceState
+}
+
+const getOfferSwitchTitle = (currentInsuranceState: CurrentInsuranceState) =>
+  Object.keys(SwitchableInsurers).includes(
+    currentInsuranceState.currentInsurer!,
+  )
+    ? 'OFFER_SWITCH_TITLE'
+    : 'OFFER_SWITCH_TITLE_NON_SWITCHABLE'
+
+const getColumns = (currentInsuranceState: CurrentInsuranceState) =>
+  Object.keys(SwitchableInsurers).includes(
+    currentInsuranceState.currentInsurer!,
+  )
+    ? switchableCols
+    : nonSwitchableCols
+
+export const HedvigSwitch: React.SFC<Props> = (props) => (
   <Wrapper>
     <InnerWrapper>
       <CardWrapper>
         <Card>
           <HeaderWrapper>
             <Header>
-              <TranslationsConsumer textKey="OFFER_SWITCH_TITLE">
+              <TranslationsConsumer
+                textKey={getOfferSwitchTitle(props.currentInsuranceState)}
+              >
                 {(title) => title}
               </TranslationsConsumer>
             </Header>
           </HeaderWrapper>
           <Row>
-            {cols.map((col) => (
+            {getColumns(props.currentInsuranceState).map((col) => (
               <Col key={col.title + col.paragraphKey}>
                 <ImageIcon src={col.imageUrl} />
                 <Title>{col.title}</Title>
