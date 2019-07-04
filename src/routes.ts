@@ -8,6 +8,9 @@ import { Referral } from './pages/Referral'
 import { Sign } from './pages/Sign'
 
 export const LANGUAGE_PATH_PATTERN = '/:language(en)?'
+export const serverSideRedirects = [
+  { from: '/referrals/terms', to: '/invite/terms' },
+]
 export const reactPageRoutes = [
   {
     path: LANGUAGE_PATH_PATTERN + '/new-member',

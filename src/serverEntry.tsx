@@ -3,7 +3,7 @@ import * as Sentry from '@sentry/node' // tslint:disable-line ordered-imports
 import * as bodyParser from 'koa-bodyparser'
 import 'source-map-support/register'
 import { Logger } from 'typescript-logging'
-import { reactPageRoutes } from './routes'
+import { reactPageRoutes, serverSideRedirects } from './routes'
 import { GIRAFFE_ENDPOINT, GIRAFFE_WS_ENDPOINT } from './server/config'
 import { appLogger } from './server/logging'
 import {
@@ -13,6 +13,7 @@ import {
   setRequestUuidMiddleware,
 } from './server/middleware/enhancers'
 import { helmet } from './server/middleware/helmet'
+import { forceHost, permanentRedirect } from './server/middleware/redirects'
 import { getPage } from './server/page'
 import { notNullable } from './utils/nullables'
 import { sentryConfig } from './utils/sentry'
@@ -38,6 +39,15 @@ appLogger.info(
 const server = createKoaServer({
   publicPath: '/new-member-assets',
   assetLocation: __dirname + '/assets',
+})
+
+if (process.env.FORCE_HOST) {
+  appLogger.info(`Forcing host to be ${process.env.FORCE_HOST}`)
+  server.router.use(forceHost({ host: process.env.FORCE_HOST! }))
+}
+
+serverSideRedirects.forEach(({ from, to }) => {
+  server.router.use(from, permanentRedirect(to))
 })
 
 server.router.use(
