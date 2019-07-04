@@ -28,7 +28,7 @@ const Header = styled('h1')({
   paddingBottom: '30px',
   paddingLeft: '10px',
   paddingRight: '10px',
-  maxWidth: '400px',
+  maxWidth: '425px',
   marginLeft: 'auto',
   marginRight: 'auto',
 })
