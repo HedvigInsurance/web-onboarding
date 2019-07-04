@@ -1,4 +1,5 @@
 import { CookieStorage } from 'cookie-storage'
+import { isMobile } from 'is-mobile'
 import * as React from 'react'
 import { ApolloProvider } from 'react-apollo'
 import * as ReactDOM from 'react-dom'
@@ -7,6 +8,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { HotApp } from './App'
 import { apolloClient } from './client/apolloClient'
 import { PageTracker } from './components/PageTracker'
+import { MobileContext } from './utils/mobileContext'
 import {
   createSession,
   SavingCookieStorage,
@@ -28,7 +30,9 @@ ReactDOM.hydrate(
     <PageTracker>
       <HelmetProvider>
         <ApolloProvider client={apolloClient!.client!}>
-          <HotApp session={session} dontPanicSession={dontPanicSession} />
+          <MobileContext.Provider value={isMobile({ tablet: true })}>
+            <HotApp session={session} dontPanicSession={dontPanicSession} />
+          </MobileContext.Provider>
         </ApolloProvider>
       </HelmetProvider>
     </PageTracker>

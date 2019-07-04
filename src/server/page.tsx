@@ -1,6 +1,7 @@
 import { getScriptLocation } from '@hedviginsurance/web-survival-kit'
 import { min as createMinifiedSegmentSnippet } from '@segment/snippet'
 import { renderStylesToString } from 'emotion-server'
+import { isMobile } from 'is-mobile'
 import * as Koa from 'koa'
 import * as path from 'path'
 import * as React from 'react'
@@ -8,12 +9,22 @@ import { ApolloProvider, getDataFromTree } from 'react-apollo'
 import { renderToString } from 'react-dom/server'
 import { FilledContext, HelmetProvider } from 'react-helmet-async'
 import { StaticRouter, StaticRouterContext } from 'react-router'
+import { MobileContext } from 'utils/mobileContext'
 import { App } from '../App'
 import { sentryConfig } from '../utils/sentry'
 import { createSession, Session } from '../utils/sessionStorage'
 import { ServerCookieStorage } from '../utils/storage/ServerCookieStorage'
 import { createServerApolloClient } from './apolloClient'
-import { GIRAFFE_ENDPOINT, GIRAFFE_WS_ENDPOINT } from './config'
+import {
+  ANDROID_MINIMUM_VERSION,
+  ANDROID_PACKAGE_NAME,
+  APP_STORE_ID,
+  APPLE_BUNDLE_ID,
+  FIREBASE_LINK_DOMAIN,
+  GIRAFFE_ENDPOINT,
+  GIRAFFE_WS_ENDPOINT,
+  IOS_MINIMUM_VERSION,
+} from './config'
 
 const scriptLocation = getScriptLocation({
   statsLocation: path.resolve(__dirname, 'assets'),
@@ -53,6 +64,12 @@ const template = (
     window.GIRAFFE_WS_ENDPOINT= ${JSON.stringify(GIRAFFE_WS_ENDPOINT)}
     window.GIRAFFE_ENDPOINT= ${JSON.stringify(GIRAFFE_ENDPOINT)}
     window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
+    window.FIREBASE_LINK_DOMAIN=${JSON.stringify(FIREBASE_LINK_DOMAIN)}
+    window.ANDROID_PACKAGE_NAME=${JSON.stringify(ANDROID_PACKAGE_NAME)}
+    window.ANDROID_MINIMUM_VERSION=${JSON.stringify(ANDROID_MINIMUM_VERSION)}
+    window.APPLE_BUNDLE_ID=${JSON.stringify(APPLE_BUNDLE_ID)}
+    window.APP_STORE_ID=${JSON.stringify(APP_STORE_ID)}
+    window.IOS_MINIMUM_VERSION=${JSON.stringify(IOS_MINIMUM_VERSION)}
   </script>
   <script src="${scriptLocation}"></script>
 </body>
@@ -76,7 +93,14 @@ export const getPage: Koa.Middleware = async (ctx) => {
     <StaticRouter location={ctx.request.originalUrl} context={routerContext}>
       <HelmetProvider context={helmetContext}>
         <ApolloProvider client={apolloClient}>
-          <App session={session} dontPanicSession={dontPanicSession} />
+          <MobileContext.Provider
+            value={isMobile({
+              ua: ctx.req.headers['user-agent'],
+              tablet: true,
+            })}
+          >
+            <App session={session} dontPanicSession={dontPanicSession} />
+          </MobileContext.Provider>
         </ApolloProvider>
       </HelmetProvider>
     </StaticRouter>

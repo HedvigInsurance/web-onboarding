@@ -14,6 +14,24 @@
     },
     "GIRAFFE_WS_ENDPOINT": {
       "required": true
+    },
+    "FIREBASE_LINK_DOMAIN": {
+      "required": true
+    },
+    "ANDROID_PACKAGE_NAME": {
+      "required": true
+    },
+    "ANDROID_MINIMUM_VERSION": {
+      "required": true
+    },
+    "APPLE_BUNDLE_ID": {
+      "required": true
+    },
+    "APP_STORE_ID": {
+      "required": true
+    },
+    "IOS_MINIMUM_VERSION": {
+      "required": true
     }
   },
   "addons": [],
