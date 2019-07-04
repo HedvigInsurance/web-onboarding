@@ -1,6 +1,6 @@
 export const createFirebaseLink = (code: string) => {
   const encodedLink = encodeURIComponent(
-    `https://www.hedvig.com/referrals?code=${code}`,
+    `https://app.hedvig.com/referrals?code=${code}`,
   )
   const encodedApn = encodeURIComponent(getAndroidPackageName())
   const encodedAmv = encodeURIComponent(getAndroidMinimumVersion())
