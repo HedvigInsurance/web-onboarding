@@ -17,6 +17,7 @@ module.exports = {
     'GIRAFFE_ENDPOINT',
     'GIRAFFE_WS_ENDPOINT',
     'USE_HELMET',
+    'FORCE_HOST',
     'SEGMENT_API_KEY',
     'SENTRY_DSN',
     'SENTRY_ENVIRONMENT',
@@ -27,6 +28,6 @@ module.exports = {
     'ANDROID_MINIMUM_VERSION',
     'APPLE_BUNDLE_ID',
     'APP_STORE_ID',
-    'IOS_MINIMUM_VERSION'
+    'IOS_MINIMUM_VERSION',
   ],
 }
