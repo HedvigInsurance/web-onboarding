@@ -9,7 +9,6 @@ interface Flavor {
 }
 
 const fontFlavours: { [fontName: string]: Flavor[] } = {
-  SoRay: [{ flavorName: 'ExtraBold', weight: 800, style: 'normal' }],
   CircularStd: [
     { flavorName: 'Bold', weight: 600, style: 'normal' },
     { flavorName: 'BoldItalic', weight: 600, style: 'italic' },
@@ -62,7 +61,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: ${fonts.SORAY}, sans-serif;
+  font-family: ${fonts.GEOMANIST}, sans-serif;
   font-kerning: none;
 }
 

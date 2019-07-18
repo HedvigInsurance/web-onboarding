@@ -105,7 +105,7 @@ const OnboardingMessageBody = styled('div')({
   borderRadius: 8,
   textAlign: 'center',
   width: '100%',
-  fontFamily: fonts.SORAY,
+  fontFamily: fonts.GEOMANIST,
   fontWeight: 600,
 })
 const OnboardingMessageText = styled('div')({
