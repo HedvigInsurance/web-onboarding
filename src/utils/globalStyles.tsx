@@ -24,6 +24,14 @@ h1, h2, h3, h4, h5, h6 {
   font-kerning: none;
 }
 
+h1, h2, h3 {
+  font-weight: 600;
+}
+
+h4 {
+  font-weight: 500;
+}
+
 img {
   max-width: 100%;
 }
