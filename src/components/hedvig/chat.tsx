@@ -1,4 +1,4 @@
-import { colors, fonts } from '@hedviginsurance/brand'
+import { colors } from '@hedviginsurance/brand'
 import { Container } from 'constate'
 import * as React from 'react'
 import AnimateHeight from 'react-animate-height'
@@ -119,7 +119,6 @@ export const ChatMessageTextWrapper = styled('div')(
     padding: '15px 18px',
     backgroundColor: isHedvig ? colors.OFF_WHITE : colors.PURPLE,
     color: isHedvig ? colors.BLACK_PURPLE : colors.WHITE,
-    fontFamily: isHedvig ? fonts.MERRIWEATHER : undefined,
     fontSize: '0.95em',
     fontWeight: 300,
     borderRadius: 8,
