@@ -31,7 +31,7 @@ const defaultSrc = [
   'sc-static.net',
   'analytics.twitter.com',
   'online.adservicemedia.dk',
-  'online.adservicemedia.dk.*',
+  '*.9270fc4b.id.opendns.com',
   '*.doubleclick.net',
   GIRAFFE_ENDPOINT,
   GIRAFFE_WS_ENDPOINT,
