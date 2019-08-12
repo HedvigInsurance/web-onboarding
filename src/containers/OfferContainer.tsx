@@ -3,17 +3,42 @@ import * as React from 'react'
 import { Query } from 'react-apollo'
 import { Insurer } from 'src/pages/Chat/state'
 import { InsuranceType } from 'utils/insuranceDomainUtils'
+import { Incentive, MonetaryAmount } from './types'
 
 export const OFFER_QUERY = gql`
   query Offer {
     insurance {
       address
-      monthlyCost
       insuredAtOtherCompany
       type
       postalNumber
       personsInHousehold
       currentInsurerName
+      cost {
+        monthlyDiscount {
+          amount
+        }
+        monthlyNet {
+          amount
+        }
+        monthlyGross {
+          amount
+        }
+      }
+    }
+
+    redeemedCampaigns {
+      incentive {
+        ... on FreeMonths {
+          quantity
+        }
+        ... on MonthlyCostDeduction {
+          amount {
+            amount
+            currency
+          }
+        }
+      }
     }
 
     member {
@@ -26,13 +51,20 @@ export const OFFER_QUERY = gql`
 export interface OfferData {
   insurance: {
     address: string
-    monthlyCost: number
     insuredAtOtherCompany: boolean
     type: InsuranceType
     postalNumber: string
     personsInHousehold: number
     currentInsurerName: Insurer
+    cost: {
+      monthlyGross: MonetaryAmount
+      monthlyNet: MonetaryAmount
+      monthylDiscount: MonetaryAmount
+    }
   }
+  redeemedCampaigns: Array<{
+    incentive: Incentive
+  }>
   member: {
     firstName: string
     lastName: string
@@ -42,7 +74,7 @@ export interface OfferData {
 interface OfferContainerProps {
   children: (
     offer: OfferData,
-    props: { refetch: any; loading: boolean },
+    props: { refetch: () => void; loading: boolean },
   ) => React.ReactNode
   childrenHandlesLoadingState?: boolean
 }

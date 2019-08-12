@@ -20,7 +20,7 @@ import { HedvigInfo } from './sections/HedvigInfo'
 import { HedvigSwitch } from './sections/HedvigSwitch'
 import { InsuranceCoverage } from './sections/InsuranceCoverage'
 import { InsuredAmount } from './sections/InsuredAmount'
-import { Offer } from './sections/Offer'
+import { Offer } from './sections/offer'
 import { OtherInfo } from './sections/OtherInfo'
 import { PageDown } from './sections/PageDown'
 import { Terms } from './sections/Terms'
@@ -86,7 +86,7 @@ export const Offering: React.SFC<{}> = () => (
   <Page>
     <SessionTokenGuard>
       <OfferContainer>
-        {(offer) => {
+        {(offer, { refetch }) => {
           if (!offer || !offer.insurance.type) {
             return null
           }
@@ -99,7 +99,7 @@ export const Offering: React.SFC<{}> = () => (
                 name: SemanticEvents.Ecommerce.ProductViewed,
                 properties: {
                   category: 'offer',
-                  value: offer.insurance.monthlyCost,
+                  value: Number(offer.insurance.cost.monthlyNet.amount),
                   ...getUtmParamsFromCookie(),
                 },
               }}
@@ -141,7 +141,9 @@ export const Offering: React.SFC<{}> = () => (
                                 name: SemanticEvents.Ecommerce.CheckoutStarted,
                                 properties: {
                                   category: 'offer',
-                                  value: offer.insurance.monthlyCost,
+                                  value: Number(
+                                    offer.insurance.cost.monthlyNet.amount,
+                                  ),
                                   label: 'TopBar',
                                   ...getUtmParamsFromCookie(),
                                 },
@@ -168,6 +170,7 @@ export const Offering: React.SFC<{}> = () => (
                       }
                     />
                     <Offer
+                      refetch={refetch}
                       offer={offer}
                       signButtonVisibility={state.updateUpperButtonVisibility}
                     />

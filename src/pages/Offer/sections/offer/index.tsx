@@ -4,6 +4,7 @@ import {
   TranslationsPlaceholderConsumer,
 } from '@hedviginsurance/textkeyfy'
 import { GetInsuredButton, LinkTag } from 'components/buttons'
+import { CurrentLanguage } from 'components/utils/CurrentLanguage'
 import { OfferData } from 'containers/OfferContainer'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
@@ -11,11 +12,12 @@ import styled from 'react-emotion'
 import VisibilitySensor from 'react-visibility-sensor'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
-import { CurrentLanguage } from '../../../components/utils/CurrentLanguage'
-import { CardWrapperSmall } from '../components/CardWrapperSmall'
-import { HeaderWrapper } from '../components/HeaderWrapper'
-import { InnerWrapper } from '../components/InnerWrapper'
-import { PriceAndInclusions } from '../components/PriceAndInclusions'
+import { CardWrapperSmall } from '../../components/CardWrapperSmall'
+import { HeaderWrapper } from '../../components/HeaderWrapper'
+import { InnerWrapper } from '../../components/InnerWrapper'
+import { PriceAndInclusions } from '../../components/PriceAndInclusions'
+import { Discount } from './Discount'
+import { DiscountBubble } from './DiscountBubble'
 
 const Wrapper = styled('div')({
   marginTop: '70px',
@@ -27,9 +29,9 @@ const Wrapper = styled('div')({
 const Card = styled('div')({
   marginTop: '70px',
   backgroundColor: colors.WHITE,
-  paddingBottom: '40px',
   boxShadow: '0px 8px 40px -12px rgba(0,0,0,0.67)',
   borderRadius: '10px',
+  paddingBottom: 40,
 })
 
 const Header = styled('h1')({
@@ -58,13 +60,19 @@ export const PersonalInfo = styled('div')({
 interface Props {
   signButtonVisibility: (isVisible: boolean) => void
   offer: OfferData
+  refetch: () => void
 }
 
-export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
+export const Offer: React.SFC<Props> = ({
+  signButtonVisibility,
+  offer,
+  refetch,
+}) => (
   <Wrapper>
     <InnerWrapper>
       <CardWrapperSmall>
         <Card>
+          <DiscountBubble offer={offer} />
           <HeaderBackground>
             <HeaderWrapper>
               <Header>
@@ -103,7 +111,7 @@ export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
                       event={{
                         name: SemanticEvents.Ecommerce.CheckoutStarted,
                         properties: {
-                          value: offer.insurance.monthlyCost,
+                          value: Number(offer.insurance.cost.monthlyNet.amount),
                           label: 'Offer',
                           ...getUtmParamsFromCookie(),
                         },
@@ -128,6 +136,7 @@ export const Offer: React.SFC<Props> = ({ signButtonVisibility, offer }) => (
               </GetInsuredButton>
             )}
           </VisibilitySensor>
+          <Discount refetch={refetch} offer={offer} />
         </Card>
       </CardWrapperSmall>
     </InnerWrapper>
