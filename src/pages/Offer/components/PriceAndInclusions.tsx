@@ -4,6 +4,7 @@ import {
   TranslationsPlaceholderConsumer,
 } from '@hedviginsurance/textkeyfy'
 import { OfferData } from 'containers/OfferContainer'
+import { isMonthlyCostDeduction } from 'containers/types'
 import * as React from 'react'
 import styled from 'react-emotion'
 import {
@@ -66,6 +67,11 @@ const CheckBoxTable = styled('div')({
   marginBottom: 20,
 })
 
+const GrossPrice = styled('div')({
+  textDecoration: 'line-through',
+  color: colors.DARK_GRAY,
+})
+
 interface Props {
   offer: OfferData
 }
@@ -75,7 +81,7 @@ export const PriceAndInclusions: React.SFC<Props> = ({ offer }) => (
     <PriceWrapper>
       <TranslationsPlaceholderConsumer
         textKey="OFFER_SUMMARY_PRICE"
-        replacements={{ price: offer.insurance.monthlyCost }}
+        replacements={{ price: Number(offer.insurance.cost.monthlyNet.amount) }}
       >
         {(priceText) => <Price>{priceText}</Price>}
       </TranslationsPlaceholderConsumer>
@@ -83,6 +89,20 @@ export const PriceAndInclusions: React.SFC<Props> = ({ offer }) => (
         <StudentBadge placement="right" />
       )}
     </PriceWrapper>
+    {offer.redeemedCampaigns.length > 0 && (
+      <>
+        {isMonthlyCostDeduction(offer.redeemedCampaigns[0].incentive) && (
+          <TranslationsPlaceholderConsumer
+            textKey="OFFER_SUMMARY_PRICE"
+            replacements={{
+              price: Number(offer.insurance.cost.monthlyGross.amount),
+            }}
+          >
+            {(grossPrice) => <GrossPrice>{grossPrice}</GrossPrice>}
+          </TranslationsPlaceholderConsumer>
+        )}
+      </>
+    )}
 
     <InsuranceInfo>
       <BoldInfoText>

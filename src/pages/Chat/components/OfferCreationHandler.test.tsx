@@ -29,7 +29,24 @@ it('does nothing when no correct state is set', async () => {
         data: {
           insurance: {
             address: 'Testvägen 1',
-            monthlyCost: 99,
+            cost: {
+              monthlyNet: {
+                amount: '99.00',
+                currency: 'SEK',
+                __typename: 'MonetaryAmount',
+              },
+              monthlyGross: {
+                amount: '99.00',
+                currency: 'SEK',
+                __typename: 'MonetaryAmount',
+              },
+              monthlyDiscount: {
+                amount: '0.00',
+                currency: 'SEK',
+                __typename: 'MonetaryAmount',
+              },
+              __typename: 'InsuranceCost',
+            },
             insuredAtOtherCompany: false,
             type: 'RENT',
             postalNumber: '12345',
@@ -37,6 +54,7 @@ it('does nothing when no correct state is set', async () => {
             currentInsurerName: 'FOLKSAM',
             __typename: 'Insurance',
           },
+          redeemedCampaigns: [],
           member: {
             firstName: 'Test',
             lastName: 'Testerson',

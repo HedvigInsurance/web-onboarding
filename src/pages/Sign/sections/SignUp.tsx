@@ -3,8 +3,13 @@ import {
   TranslationsConsumer,
   TranslationsPlaceholderConsumer,
 } from '@hedviginsurance/textkeyfy'
+import {
+  FORMWIDTH,
+  FORMWIDTHSMALL,
+  InputField,
+} from 'components/userInput/InputField'
 import { OfferData } from 'containers/OfferContainer'
-import { Field, Form, Formik } from 'formik'
+import { Form, Formik } from 'formik'
 import gql from 'graphql-tag'
 import { PriceAndInclusions } from 'pages/Offer/components/PriceAndInclusions'
 import * as React from 'react'
@@ -15,8 +20,6 @@ import * as Yup from 'yup'
 import { SubscriptionComponent } from './SignSubscription'
 
 const CARDWIDTH = 788
-const FORMWIDTH = 300
-const FORMWIDTHSMALL = 100
 const ICONSIDE = 16
 
 const CardWrapper = styled('div')({
@@ -79,37 +82,6 @@ const CustomForm = styled(Form)({
     minWidth: FORMWIDTHSMALL,
   },
 })
-
-const InputField = styled(Field)(
-  ({ touched, errors }: { touched?: boolean; errors?: string }) => ({
-    marginTop: '10px',
-    fontSize: '16px',
-    marginBottom: '10px',
-    minWidth: FORMWIDTH,
-    lineHeight: '48px',
-    backgroundColor: colors.OFF_WHITE,
-    borderRadius: '5px',
-    borderRight: 'none',
-    borderLeft: 'none',
-    borderTop: 'none',
-    outline: 'none',
-    paddingLeft: 10,
-    paddingRight: 10,
-    borderBottom: touched
-      ? errors
-        ? `3px solid ${colors.PINK}`
-        : `3px solid ${colors.GREEN}`
-      : `3px solid ${colors.PURPLE}`,
-    '@media (max-width: 300px)': {
-      marginLeft: '10px',
-      marginRight: '10px',
-      minWidth: FORMWIDTHSMALL,
-    },
-    '&:focus': {
-      borderBottom: `3px solid ${colors.DARK_PURPLE}`,
-    },
-  }),
-)
 
 export const Price = styled('h1')({
   marginBottom: '10px',
