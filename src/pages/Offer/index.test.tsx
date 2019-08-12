@@ -12,7 +12,6 @@ import { mockNetworkWait } from 'utils/test-utils'
 import { Offering } from '.'
 import { Price } from './components/PriceAndInclusions'
 import { HedvigSwitch } from './sections/HedvigSwitch'
-import { PersonalInfo } from './sections/Offer'
 
 jest.mock('client/apolloClient', () => ({
   apolloClient: {
@@ -30,7 +29,24 @@ it('queries when it has a session', async () => {
         data: {
           insurance: {
             address: 'Testvägen 1',
-            monthlyCost: 99,
+            cost: {
+              monthlyNet: {
+                amount: '99.00',
+                currency: 'SEK',
+                __typename: 'MonetaryAmount',
+              },
+              monthlyGross: {
+                amount: '99.00',
+                currency: 'SEK',
+                __typename: 'MonetaryAmount',
+              },
+              monthlyDiscount: {
+                amount: '0.00',
+                currency: 'SEK',
+                __typename: 'MonetaryAmount',
+              },
+              __typename: 'InsuranceCost',
+            },
             insuredAtOtherCompany: false,
             type: 'RENT',
             postalNumber: '12345',
@@ -38,6 +54,7 @@ it('queries when it has a session', async () => {
             currentInsurerName: 'FOLKSAM',
             __typename: 'Insurance',
           },
+          redeemedCampaigns: [],
           member: {
             firstName: 'Test',
             lastName: 'Testerson',
@@ -88,7 +105,6 @@ it('queries when it has a session', async () => {
       .text(),
   ).toBe('99 kr/mån')
   expect(wrapper.find(Redirect)).toHaveLength(0)
-  expect(wrapper.find(PersonalInfo).text()).toContain('Testerson')
   expect(wrapper.find(HedvigSwitch)).toHaveLength(0)
 })
 
@@ -102,7 +118,24 @@ it('shows information about switching if you have an insurance', async () => {
         data: {
           insurance: {
             address: 'Testvägen 1',
-            monthlyCost: 99,
+            cost: {
+              monthlyNet: {
+                amount: '99.00',
+                currency: 'SEK',
+                __typename: 'MonetaryAmount',
+              },
+              monthlyGross: {
+                amount: '99.00',
+                currency: 'SEK',
+                __typename: 'MonetaryAmount',
+              },
+              monthlyDiscount: {
+                amount: '0.00',
+                currency: 'SEK',
+                __typename: 'MonetaryAmount',
+              },
+              __typename: 'InsuranceCost',
+            },
             insuredAtOtherCompany: true,
             type: 'RENT',
             postalNumber: '12345',
@@ -110,6 +143,7 @@ it('shows information about switching if you have an insurance', async () => {
             currentInsurerName: 'FOLKSAM',
             __typename: 'Insurance',
           },
+          redeemedCampaigns: [],
           member: {
             firstName: 'Test',
             lastName: 'Testerson',

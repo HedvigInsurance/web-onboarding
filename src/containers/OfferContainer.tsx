@@ -59,7 +59,7 @@ export interface OfferData {
     cost: {
       monthlyGross: MonetaryAmount
       monthlyNet: MonetaryAmount
-      monthylDiscount: MonetaryAmount
+      monthlyDiscount: MonetaryAmount
     }
   }
   redeemedCampaigns: Array<{

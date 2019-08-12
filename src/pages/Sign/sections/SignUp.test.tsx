@@ -38,7 +38,24 @@ it('queries when it has a session', async () => {
         data: {
           insurance: {
             address: 'Testvägen 1',
-            monthlyCost: 99,
+            cost: {
+              monthlyNet: {
+                amount: '99.00',
+                currency: 'SEK',
+                __typename: 'MonetaryAmount',
+              },
+              monthlyGross: {
+                amount: '99.00',
+                currency: 'SEK',
+                __typename: 'MonetaryAmount',
+              },
+              monthlyDiscount: {
+                amount: '0.00',
+                currency: 'SEK',
+                __typename: 'MonetaryAmount',
+              },
+              __typename: 'InsuranceCost',
+            },
             insuredAtOtherCompany: false,
             type: 'RENT',
             postalNumber: '12345',
@@ -46,6 +63,7 @@ it('queries when it has a session', async () => {
             currentInsurerName: 'FOLKSAM',
             __typename: 'Insurance',
           },
+          redeemedCampaigns: [],
           member: {
             firstName: 'Test',
             lastName: 'Testerson',
@@ -109,7 +127,24 @@ it('signs without 💥', async () => {
         data: {
           insurance: {
             address: 'Testvägen 1',
-            monthlyCost: 99,
+            cost: {
+              monthlyNet: {
+                amount: '99.00',
+                currency: 'SEK',
+                __typename: 'MonetaryAmount',
+              },
+              monthlyGross: {
+                amount: '99.00',
+                currency: 'SEK',
+                __typename: 'MonetaryAmount',
+              },
+              monthlyDiscount: {
+                amount: '0.00',
+                currency: 'SEK',
+                __typename: 'MonetaryAmount',
+              },
+              __typename: 'InsuranceCost',
+            },
             insuredAtOtherCompany: false,
             type: 'RENT',
             postalNumber: '12345',
@@ -117,6 +152,7 @@ it('signs without 💥', async () => {
             currentInsurerName: 'FOLKSAM',
             __typename: 'Insurance',
           },
+          redeemedCampaigns: [],
           member: {
             firstName: 'Test',
             lastName: 'Testerson',
@@ -226,7 +262,24 @@ it('shows an error when bankid errors', async () => {
         data: {
           insurance: {
             address: 'Testvägen 1',
-            monthlyCost: 99,
+            cost: {
+              monthlyNet: {
+                amount: '99.00',
+                currency: 'SEK',
+                __typename: 'MonetaryAmount',
+              },
+              monthlyGross: {
+                amount: '99.00',
+                currency: 'SEK',
+                __typename: 'MonetaryAmount',
+              },
+              monthlyDiscount: {
+                amount: '0.00',
+                currency: 'SEK',
+                __typename: 'MonetaryAmount',
+              },
+              __typename: 'InsuranceCost',
+            },
             insuredAtOtherCompany: false,
             type: 'RENT',
             postalNumber: '12345',
@@ -234,6 +287,7 @@ it('shows an error when bankid errors', async () => {
             currentInsurerName: 'FOLKSAM',
             __typename: 'Insurance',
           },
+          redeemedCampaigns: [],
           member: {
             firstName: 'Test',
             lastName: 'Testerson',
@@ -345,7 +399,24 @@ it('renders correct status when sign status query has a status', async () => {
         data: {
           insurance: {
             address: 'Testvägen 1',
-            monthlyCost: 99,
+            cost: {
+              monthlyNet: {
+                amount: '99.00',
+                currency: 'SEK',
+                __typename: 'MonetaryAmount',
+              },
+              monthlyGross: {
+                amount: '99.00',
+                currency: 'SEK',
+                __typename: 'MonetaryAmount',
+              },
+              monthlyDiscount: {
+                amount: '0.00',
+                currency: 'SEK',
+                __typename: 'MonetaryAmount',
+              },
+              __typename: 'InsuranceCost',
+            },
             insuredAtOtherCompany: false,
             type: 'RENT',
             postalNumber: '12345',
@@ -353,6 +424,7 @@ it('renders correct status when sign status query has a status', async () => {
             currentInsurerName: 'FOLKSAM',
             __typename: 'Insurance',
           },
+          redeemedCampaigns: [],
           member: {
             firstName: 'Test',
             lastName: 'Testerson',

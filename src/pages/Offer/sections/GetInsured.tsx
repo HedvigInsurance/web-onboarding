@@ -92,7 +92,7 @@ export const GetInsured: React.SFC<Props> = ({
                         name: SemanticEvents.Ecommerce.CheckoutStarted,
                         properties: {
                           category: 'offer',
-                          value: offer.insurance.monthlyCost,
+                          value: Number(offer.insurance.cost.monthlyNet.amount),
                           label: 'GetInsured',
                           ...getUtmParamsFromCookie(),
                         },
