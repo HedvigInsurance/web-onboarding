@@ -35,6 +35,7 @@ const DiscountBubbleTitle = styled('p')({
   fontWeight: 'normal',
   lineHeight: 1,
   margin: 0,
+  textAlign: 'center',
 })
 
 const DiscountBubbleText = styled('p')({
