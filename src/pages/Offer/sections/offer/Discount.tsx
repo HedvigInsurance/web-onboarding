@@ -1,5 +1,8 @@
 import { colors } from '@hedviginsurance/brand'
-import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
+import {
+  TranslationsConsumer,
+  TranslationsPlaceholderConsumer,
+} from '@hedviginsurance/textkeyfy'
 import { Button } from 'components/buttons'
 import { InputField } from 'components/userInput/InputField'
 import { ActionMap, Container } from 'constate'
@@ -14,10 +17,12 @@ import * as Yup from 'yup'
 
 const DiscountButton = styled(Button)({
   marginTop: '1rem',
+  fontSize: '0.875em',
 })
 
 const SubmitButton = styled(Button)({
   marginTop: 16,
+  fontSize: '0.875em',
 })
 
 const DiscountContainer = styled('div')({
@@ -34,6 +39,16 @@ const DiscountInput = styled(InputField)({
 
 const ErrorText = styled('p')({
   color: colors.PINK,
+})
+
+const TermsParagraph = styled('p')({
+  fontSize: '0.75em',
+  color: colors.DARK_GRAY,
+})
+
+const TermsLink = styled('a')({
+  textDecoration: 'none',
+  color: colors.PURPLE,
 })
 
 const REMOVE_CODE_MUTATION = gql`
@@ -185,6 +200,28 @@ export const Discount: React.FunctionComponent<Props> = ({ offer, refetch }) =>
                       </Form>
                     )}
                   </Formik>
+                  <TermsParagraph>
+                    <TranslationsPlaceholderConsumer
+                      textKey="WEB_REFERRAL_ADDCOUPON_TC"
+                      replacements={{
+                        TERMS_AND_CONDITIONS_LINK: (
+                          <TranslationsConsumer textKey="WEB_REFERRAL_ADDCOUPON_TC_LINK">
+                            {(terms) => (
+                              <TranslationsConsumer textKey="WEB_REFERRAL_MORE_INFO_LINK">
+                                {(termsLink) => (
+                                  <TermsLink href={termsLink}>
+                                    {terms}
+                                  </TermsLink>
+                                )}
+                              </TranslationsConsumer>
+                            )}
+                          </TranslationsConsumer>
+                        ),
+                      }}
+                    >
+                      {(text) => text}
+                    </TranslationsPlaceholderConsumer>
+                  </TermsParagraph>
                 </DiscountContainer>
               )}
             </>

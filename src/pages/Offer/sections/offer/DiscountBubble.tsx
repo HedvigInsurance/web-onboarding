@@ -2,7 +2,18 @@ import { colors } from '@hedviginsurance/brand'
 import { OfferData } from 'containers/OfferContainer'
 import { isFreeMonths, isMonthlyCostDeduction } from 'containers/types'
 import * as React from 'react'
-import styled from 'react-emotion'
+import styled, { keyframes } from 'react-emotion'
+
+const bubbleKeyframe = keyframes`
+  from {
+    transform: translateX(-50px) translateY(-50px) scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50px) translateY(-50px);
+    opacity: 1
+  }
+`
 
 const DiscountBubbleWrapper = styled('div')({
   position: 'absolute',
@@ -10,11 +21,12 @@ const DiscountBubbleWrapper = styled('div')({
   width: 100,
   backgroundColor: colors.PINK,
   boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
-  transform: 'translateX(-50px) translateY(-50px)',
+  transform: 'translateX(0px) translateY(0px)',
   borderRadius: 50,
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
+  animation: `${bubbleKeyframe} 0.3s ease-out forwards`,
 })
 
 const DiscountBubbleTitle = styled('p')({
@@ -23,6 +35,7 @@ const DiscountBubbleTitle = styled('p')({
   fontWeight: 'normal',
   lineHeight: 1,
   margin: 0,
+  textAlign: 'center',
 })
 
 const DiscountBubbleText = styled('p')({

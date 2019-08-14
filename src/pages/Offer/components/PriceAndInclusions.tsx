@@ -68,6 +68,7 @@ const CheckBoxTable = styled('div')({
 })
 
 const GrossPrice = styled('div')({
+  textAlign: 'center',
   textDecoration: 'line-through',
   color: colors.DARK_GRAY,
 })
