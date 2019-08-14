@@ -12,6 +12,7 @@ import { OfferData } from 'containers/OfferContainer'
 import { Form, Formik } from 'formik'
 import gql from 'graphql-tag'
 import { PriceAndInclusions } from 'pages/Offer/components/PriceAndInclusions'
+import { DiscountBubble } from 'pages/Offer/sections/offer/DiscountBubble'
 import * as React from 'react'
 import { Mutation } from 'react-apollo'
 import styled from 'react-emotion'
@@ -150,6 +151,7 @@ interface SignUpProps {
 export const SignUp: React.SFC<SignUpProps> = ({ offer }) => (
   <CardWrapper>
     <Card>
+      <DiscountBubble offer={offer} />
       <HeaderBackground>
         <HeaderWrapper>
           <Header>
