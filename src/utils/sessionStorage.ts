@@ -10,6 +10,7 @@ const SESSION_EXPIRY_TIMEOUT = 30 * 60 * 1000
 export interface Session {
   chat: ChatState
   token?: string
+  discountCode?: string
 }
 
 export interface IsomorphicSessionStorage<T> {
