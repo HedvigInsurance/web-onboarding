@@ -4,7 +4,7 @@ import {
   TranslationsPlaceholderConsumer,
 } from '@hedviginsurance/textkeyfy'
 import { OfferData } from 'containers/OfferContainer'
-import { isMonthlyCostDeduction } from 'containers/types'
+import { isFreeMonths, isMonthlyCostDeduction } from 'containers/types'
 import * as React from 'react'
 import styled from 'react-emotion'
 import {
@@ -73,6 +73,17 @@ const GrossPrice = styled('div')({
   color: colors.DARK_GRAY,
 })
 
+const CampaignOwner = styled('p')({
+  textAlign: 'center',
+  color: '#cc6e66',
+  marginTop: 0,
+  fontSize: '0.875em',
+})
+
+const CampaignOwnerBold = styled('span')({
+  fontWeight: 600,
+})
+
 interface Props {
   offer: OfferData
 }
@@ -100,6 +111,21 @@ export const PriceAndInclusions: React.SFC<Props> = ({ offer }) => (
             }}
           >
             {(grossPrice) => <GrossPrice>{grossPrice}</GrossPrice>}
+          </TranslationsPlaceholderConsumer>
+        )}
+        {isFreeMonths(offer.redeemedCampaigns[0].incentive) && (
+          <TranslationsPlaceholderConsumer
+            textKey="WEB_VOUCHER_ADDEDPERK"
+            replacements={{
+              FREE_MONTHS: offer.redeemedCampaigns[0].incentive.quantity,
+              CAMPAIGN_NAME: (
+                <CampaignOwnerBold>
+                  {offer.redeemedCampaigns[0].owner.displayName}
+                </CampaignOwnerBold>
+              ),
+            }}
+          >
+            {(campaignOwner) => <CampaignOwner>{campaignOwner}</CampaignOwner>}
           </TranslationsPlaceholderConsumer>
         )}
       </>

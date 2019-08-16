@@ -39,6 +39,9 @@ export const OFFER_QUERY = gql`
           }
         }
       }
+      owner {
+        displayName
+      }
     }
 
     member {
@@ -64,6 +67,9 @@ export interface OfferData {
   }
   redeemedCampaigns: Array<{
     incentive: Incentive
+    owner: {
+      displayName: string
+    }
   }>
   member: {
     firstName: string
