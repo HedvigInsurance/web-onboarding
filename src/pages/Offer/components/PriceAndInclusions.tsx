@@ -75,8 +75,13 @@ const GrossPrice = styled('div')({
 
 const CampaignOwner = styled('p')({
   textAlign: 'center',
-  color: colors.PINK,
+  color: '#cc6e66',
   marginTop: 0,
+  fontSize: '0.875em',
+})
+
+const CampaignOwnerBold = styled('span')({
+  fontWeight: 600,
 })
 
 interface Props {
@@ -113,7 +118,11 @@ export const PriceAndInclusions: React.SFC<Props> = ({ offer }) => (
             textKey="WEB_VOUCHER_ADDEDPERK"
             replacements={{
               FREE_MONTHS: offer.redeemedCampaigns[0].incentive.quantity,
-              CAMPAIGN_NAME: offer.redeemedCampaigns[0].owner.displayName,
+              CAMPAIGN_NAME: (
+                <CampaignOwnerBold>
+                  {offer.redeemedCampaigns[0].owner.displayName}
+                </CampaignOwnerBold>
+              ),
             }}
           >
             {(campaignOwner) => <CampaignOwner>{campaignOwner}</CampaignOwner>}
