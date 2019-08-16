@@ -6,7 +6,6 @@ import {
 import { Button } from 'components/buttons'
 import { InputField } from 'components/userInput/InputField'
 import { ActionMap, Container } from 'constate'
-import { Incentive, MonetaryAmount } from 'containers/types'
 import { Form, Formik } from 'formik'
 import gql from 'graphql-tag'
 import * as React from 'react'
@@ -14,6 +13,7 @@ import { Mutation } from 'react-apollo'
 import styled from 'react-emotion'
 import { OfferData } from 'src/containers/OfferContainer'
 import * as Yup from 'yup'
+import { RedeemCodeMutation } from '../../containers/RedeemCodeMutation'
 
 const DiscountButton = styled(Button)({
   marginTop: '1rem',
@@ -67,55 +67,9 @@ interface DiscountActions {
   setVisibility: (visibile: boolean) => void
 }
 
-const REDEEM_CODE_MUTATION = gql`
-  mutation RedeemCode($code: String!) {
-    redeemCode(code: $code) {
-      campaigns {
-        incentive {
-          ... on MonthlyCostDeduction {
-            amount {
-              amount
-              currency
-            }
-          }
-          ... on FreeMonths {
-            quantity
-          }
-        }
-      }
-      cost {
-        monthlyGross {
-          amount
-          currency
-        }
-        monthlyNet {
-          amount
-          currency
-        }
-      }
-    }
-  }
-`
-
 const discountSchema = Yup.object({
   code: Yup.string().required('WEB_REFERRAL_ERROR_INVALIDCODE_BODY'),
 })
-
-interface RedeemCodeData {
-  redeemCode: {
-    campaigns: Array<{
-      incentive: Incentive
-    }>
-    cost: {
-      monthlyGross: MonetaryAmount
-      monthlyNet: MonetaryAmount
-    }
-  }
-}
-
-interface RedeemCodeVariables {
-  code: string
-}
 
 interface Props {
   refetch: () => void
@@ -124,9 +78,7 @@ interface Props {
 
 export const Discount: React.FunctionComponent<Props> = ({ offer, refetch }) =>
   offer.redeemedCampaigns.length === 0 ? (
-    <Mutation<RedeemCodeData, RedeemCodeVariables>
-      mutation={REDEEM_CODE_MUTATION}
-    >
+    <RedeemCodeMutation>
       {(mutate) => (
         <Container<DiscountState, ActionMap<DiscountState, DiscountActions>>
           initialState={{ visible: false }}
@@ -228,7 +180,7 @@ export const Discount: React.FunctionComponent<Props> = ({ offer, refetch }) =>
           )}
         </Container>
       )}
-    </Mutation>
+    </RedeemCodeMutation>
   ) : (
     <Mutation<{ __typename: string }> mutation={REMOVE_CODE_MUTATION}>
       {(mutate) => (

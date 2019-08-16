@@ -15,6 +15,7 @@ import { CurrentLanguage } from '../../components/utils/CurrentLanguage'
 import { CardWrapper } from './components/CardWrapper'
 import { InnerWrapper } from './components/InnerWrapper'
 import { Wrapper } from './components/Wrapper'
+import { DiscountAutoConsumer } from './DiscountAutoConsumer'
 import { GetInsured } from './sections/GetInsured'
 import { HedvigInfo } from './sections/HedvigInfo'
 import { HedvigSwitch } from './sections/HedvigSwitch'
@@ -104,6 +105,7 @@ export const Offering: React.SFC<{}> = () => (
                 },
               }}
             >
+              <DiscountAutoConsumer refetch={refetch} />
               <TranslationsConsumer textKey="OFFER_PAGE_TITLE">
                 {(title) => (
                   <Helmet>
