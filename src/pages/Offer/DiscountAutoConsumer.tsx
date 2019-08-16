@@ -17,9 +17,9 @@ export const DiscountAutoConsumer: React.FunctionComponent<Props> = ({
           <Mount
             on={() => {
               const sess = session.getSession()
-              if (sess && sess.discountCode) {
-                mutate({ variables: { code: sess.discountCode } }).then(() => {
-                  session.setSession({ ...sess, discountCode: undefined })
+              if (sess && sess.code) {
+                mutate({ variables: { code: sess.code } }).then(() => {
+                  session.setSession({ ...sess, code: undefined })
                   refetch()
                 })
               }
