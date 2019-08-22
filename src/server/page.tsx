@@ -87,9 +87,12 @@ export const getPage: Koa.Middleware = async (ctx) => {
   const unwrappedSession = session.getSession()
 
   if (ctx.query.partner) {
-    serverCookieStorage.setItem('_hvpartner', ctx.query.partner)
+    serverCookieStorage.setItem('_hvpartner', ctx.query.partner.toLowerCase())
   }
-  if (serverCookieStorage.getItem('_hvpartner')) {
+  if (
+    serverCookieStorage.getItem('_hvpartner') &&
+    serverCookieStorage.getItem('_hvpartner') !== 'undefined'
+  ) {
     session.setSession({
       ...(unwrappedSession || ({} as any)),
       partner: serverCookieStorage.getItem('_hvpartner'),

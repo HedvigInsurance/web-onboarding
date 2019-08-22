@@ -75,6 +75,6 @@ export const createSession = <T>(
   },
   keepAlive: () => {
     clearExpiredSession(storage, storageKey)
-    storage.setItem(KA_SESSION_KEY, String(Date.now()))
+    storage.setItem(KA_SESSION_KEY, String(Date.now()), { path: '/' })
   },
 })
