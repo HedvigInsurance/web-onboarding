@@ -56,6 +56,7 @@ const Logo = styled('img')({
   '@media (max-width: 350px)': {
     marginLeft: '10px',
   },
+  maxWidth: 'calc(100% - 26px)',
 })
 
 const CheckmarkIcon = styled('img')({
@@ -120,6 +121,7 @@ const ButtonWrapper = styled('div')({
 interface Props {
   progress?: number
   button?: React.ReactNode
+  partner?: string
 }
 
 const progressInfo = [
@@ -144,7 +146,7 @@ const getTextColor = (progress: number, key: number) => {
   return progress >= key ? colors.BLACK : colors.DARK_GRAY
 }
 
-export const TopBar: React.SFC<Props> = ({ progress, button }) => (
+export const TopBar: React.SFC<Props> = ({ progress, button, partner }) => (
   <Wrapper>
     {progress !== undefined && (
       <ProgressLine
@@ -160,7 +162,10 @@ export const TopBar: React.SFC<Props> = ({ progress, button }) => (
         <CurrentLanguage>
           {({ currentLanguage }) => (
             <EscapeLink href={'/' + currentLanguage}>
-              <Logo src="/new-member-assets/topbar/hedvig-wordmark-solid.svg" />
+              <Logo
+                src={`/new-member-assets/topbar/hedvig-wordmark-${partner ||
+                  'solid'}.svg`}
+              />
             </EscapeLink>
           )}
         </CurrentLanguage>

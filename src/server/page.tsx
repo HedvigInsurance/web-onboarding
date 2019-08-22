@@ -77,12 +77,25 @@ const template = (
 `
 
 export const getPage: Koa.Middleware = async (ctx) => {
-  const session = createSession<Session>(new ServerCookieStorage(ctx))
+  const serverCookieStorage = new ServerCookieStorage(ctx)
+  const session = createSession<Session>(serverCookieStorage)
+
   const dontPanicSession = createSession<any>(
     new ServerCookieStorage(ctx),
     '_hv_dp',
   )
   const unwrappedSession = session.getSession()
+
+  if (ctx.query.partner) {
+    serverCookieStorage.setItem('_hvpartner', ctx.query.partner)
+  }
+  if (serverCookieStorage.getItem('_hvpartner')) {
+    session.setSession({
+      ...(unwrappedSession || ({} as any)),
+      partner: serverCookieStorage.getItem('_hvpartner'),
+    })
+  }
+
   const apolloClient = createServerApolloClient(
     ctx.state.requestUuid,
     unwrappedSession && unwrappedSession.token,

@@ -11,6 +11,7 @@ export interface Session {
   chat: ChatState
   token?: string
   code?: string
+  partner?: string
 }
 
 export interface IsomorphicSessionStorage<T> {
