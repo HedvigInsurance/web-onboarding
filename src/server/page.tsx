@@ -12,7 +12,11 @@ import { StaticRouter, StaticRouterContext } from 'react-router'
 import { MobileContext } from 'utils/mobileContext'
 import { App } from '../App'
 import { sentryConfig } from '../utils/sentry'
-import { createSession, Session } from '../utils/sessionStorage'
+import {
+  createSession,
+  SavingCookieStorage,
+  Session,
+} from '../utils/sessionStorage'
 import { ServerCookieStorage } from '../utils/storage/ServerCookieStorage'
 import { createServerApolloClient } from './apolloClient'
 import {
@@ -77,7 +81,9 @@ const template = (
 `
 
 export const getPage: Koa.Middleware = async (ctx) => {
-  const serverCookieStorage = new ServerCookieStorage(ctx)
+  const serverCookieStorage = new SavingCookieStorage(
+    new ServerCookieStorage(ctx),
+  )
   const session = createSession<Session>(serverCookieStorage)
 
   const dontPanicSession = createSession<any>(
