@@ -100,7 +100,7 @@ export const getPage: Koa.Middleware = async (ctx) => {
     serverCookieStorage.getItem('_hvpartner') !== 'undefined'
   ) {
     session.setSession({
-      ...(unwrappedSession || ({} as any)),
+      ...(session.getSession() || ({} as any)),
       partner: serverCookieStorage.getItem('_hvpartner'),
     })
   }
@@ -109,7 +109,7 @@ export const getPage: Koa.Middleware = async (ctx) => {
     serverCookieStorage.getItem('_hvcode') !== 'undefined'
   ) {
     session.setSession({
-      ...(unwrappedSession || ({} as any)),
+      ...(session.getSession() || ({} as any)),
       code: serverCookieStorage.getItem('_hvcode'),
     })
   }
