@@ -104,6 +104,16 @@ export const getPage: Koa.Middleware = async (ctx) => {
       partner: serverCookieStorage.getItem('_hvpartner'),
     })
   }
+  if (
+    serverCookieStorage.getItem('_hvcode') &&
+    serverCookieStorage.getItem('_hvcode') !== 'undefined'
+  ) {
+    session.setSession({
+      ...(unwrappedSession || ({} as any)),
+      code: serverCookieStorage.getItem('_hvcode'),
+    })
+  }
+
 
   const apolloClient = createServerApolloClient(
     ctx.state.requestUuid,
