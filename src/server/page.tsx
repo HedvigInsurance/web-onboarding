@@ -12,7 +12,11 @@ import { StaticRouter, StaticRouterContext } from 'react-router'
 import { MobileContext } from 'utils/mobileContext'
 import { App } from '../App'
 import { sentryConfig } from '../utils/sentry'
-import { createSession, Session } from '../utils/sessionStorage'
+import {
+  createSession,
+  SavingCookieStorage,
+  Session,
+} from '../utils/sessionStorage'
 import { ServerCookieStorage } from '../utils/storage/ServerCookieStorage'
 import { createServerApolloClient } from './apolloClient'
 import {
@@ -77,12 +81,39 @@ const template = (
 `
 
 export const getPage: Koa.Middleware = async (ctx) => {
-  const session = createSession<Session>(new ServerCookieStorage(ctx))
+  const serverCookieStorage = new SavingCookieStorage(
+    new ServerCookieStorage(ctx),
+  )
+  const session = createSession<Session>(serverCookieStorage)
+
   const dontPanicSession = createSession<any>(
     new ServerCookieStorage(ctx),
     '_hv_dp',
   )
   const unwrappedSession = session.getSession()
+
+  if (ctx.query.partner) {
+    serverCookieStorage.setItem('_hvpartner', ctx.query.partner.toLowerCase())
+  }
+  if (
+    serverCookieStorage.getItem('_hvpartner') &&
+    serverCookieStorage.getItem('_hvpartner') !== 'undefined'
+  ) {
+    session.setSession({
+      ...(session.getSession() || ({} as any)),
+      partner: serverCookieStorage.getItem('_hvpartner'),
+    })
+  }
+  if (
+    serverCookieStorage.getItem('_hvcode') &&
+    serverCookieStorage.getItem('_hvcode') !== 'undefined'
+  ) {
+    session.setSession({
+      ...(session.getSession() || ({} as any)),
+      code: serverCookieStorage.getItem('_hvcode'),
+    })
+  }
+
   const apolloClient = createServerApolloClient(
     ctx.state.requestUuid,
     unwrappedSession && unwrappedSession.token,

@@ -16,6 +16,7 @@ import { AddressInput } from './steps/AddressInput'
 import { AgeInput } from './steps/AgeInput'
 import { CreateOffer } from './steps/CreateOffer'
 import { CurrentInsuranceInput } from './steps/CurrentInsuranceInput'
+import { FirstGreet } from './steps/FirstGreet'
 import { Greet } from './steps/Greet'
 import { InsuranceTypeInput } from './steps/InsuranceTypeInput'
 import { NameInput } from './steps/NameInput'
@@ -76,9 +77,7 @@ export const ChatConversation: React.SFC = () => (
                 ].includes(currentStep)}
                 onTyped={() => goToStep(ChatStep.NAME_INPUT)}
               >
-                <TranslationsConsumer textKey="CHAT_HEDVIG_FIRST_GREET">
-                  {(firstGreet) => firstGreet}
-                </TranslationsConsumer>
+                <FirstGreet />
               </ChatMessage>
             </Mufflable>
           )}

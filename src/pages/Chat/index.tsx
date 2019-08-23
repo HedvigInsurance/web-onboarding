@@ -49,18 +49,27 @@ export const Chat: React.ComponentType = withRouter(({ location }) => {
         {(title) => <Helmet>{<title>{title}</title>}</Helmet>}
       </TranslationsConsumer>
 
-      <TopBar
-        progress={0}
-        button={
+      <StorageContainer>
+        {({ session }) => (
           <>
-            <LanguageSwitcher />
-            <ResetButton />
+            <TopBar
+              progress={0}
+              button={
+                <>
+                  <LanguageSwitcher />
+                  <ResetButton />
+                </>
+              }
+              partner={
+                session && session.getSession() && session.getSession()!.partner
+              }
+            />
+            <TopBarFiller />
+            <ChatConversation />
+            <OfferCreationHandler />
           </>
-        }
-      />
-      <TopBarFiller />
-      <ChatConversation />
-      <OfferCreationHandler />
+        )}
+      </StorageContainer>
     </>
   )
 })

@@ -11,6 +11,7 @@ export interface Session {
   chat: ChatState
   token?: string
   code?: string
+  partner?: string
 }
 
 export interface IsomorphicSessionStorage<T> {
@@ -22,7 +23,7 @@ export interface IsomorphicSessionStorage<T> {
 export class SavingCookieStorage implements MinimalStorage {
   private inMemoryStore: Record<string, string> = {}
 
-  constructor(private cookieStorage: CookieStorage) {}
+  constructor(private cookieStorage: MinimalStorage) {}
 
   public getItem(item: string): string | null {
     if (Object.keys(this.inMemoryStore).includes(item)) {
@@ -62,7 +63,7 @@ export const createSession = <T>(
   storageKey: string = SESSION_KEY,
 ): IsomorphicSessionStorage<T> => ({
   setSession: (value: T): void => {
-    storage.setItem(storageKey, JSON.stringify(value))
+    storage.setItem(storageKey, JSON.stringify(value), { path: '/' })
   },
   getSession: (): T | undefined => {
     try {
@@ -74,6 +75,6 @@ export const createSession = <T>(
   },
   keepAlive: () => {
     clearExpiredSession(storage, storageKey)
-    storage.setItem(KA_SESSION_KEY, String(Date.now()))
+    storage.setItem(KA_SESSION_KEY, String(Date.now()), { path: '/' })
   },
 })
