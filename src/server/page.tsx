@@ -114,7 +114,6 @@ export const getPage: Koa.Middleware = async (ctx) => {
     })
   }
 
-
   const apolloClient = createServerApolloClient(
     ctx.state.requestUuid,
     unwrappedSession && unwrappedSession.token,
