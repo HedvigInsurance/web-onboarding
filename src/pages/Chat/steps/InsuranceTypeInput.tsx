@@ -29,7 +29,8 @@ interface InsuranceTypeInputProps {
 const handleChange = <K extends keyof LivingSituationState>(
   field: K,
   chatState: ChatActions,
-  format: (val?: string) => undefined | string = (value) => value,
+  format: (val?: string) => LivingSituationState[K] = (value) =>
+    value as LivingSituationState[K],
 ) => (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
   chatState.setLivingSituationProp(field, format(event.target.value))
 }

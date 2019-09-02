@@ -38,9 +38,9 @@ export const insurerNames = new Map<Insurer, string>([
   [Insurer.OTHER, 'Ett annat bolag'],
 ])
 
-const insuranceOption = (insurer: keyof Insurer) => (
-  <option value={Insurer[insurer as number]} key={insurer}>
-    {insurerNames.get(Insurer[insurer as number] as Insurer)}
+const insuranceOption = (insurer: keyof typeof Insurer) => (
+  <option value={Insurer[insurer]} key={insurer}>
+    {insurerNames.get(Insurer[insurer] as Insurer)}
   </option>
 )
 
@@ -74,7 +74,9 @@ const getCurrentInsuranceInputMaybe = (
           onBlur={onBlur}
         >
           <option value="select" disabled />
-          {(Object.keys(Insurer) as Array<keyof Insurer>).map(insuranceOption)}
+          {(Object.keys(Insurer) as Array<keyof typeof Insurer>).map(
+            insuranceOption,
+          )}
         </UserSelectInput>
       </div>
     )
@@ -112,7 +114,7 @@ const validationSchema = yup.object<CurrentInsuranceState>({
     otherwise: yup.mixed().nullable(true),
   }),
   otherInsurer: yup.mixed().when('currentInsurer', {
-    is: Insurer.OTHER,
+    is: (thing) => thing === Insurer.OTHER,
     then: yup.string().required(),
     otherwise: yup.mixed().nullable(true),
   }),

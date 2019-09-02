@@ -92,7 +92,9 @@ export const initialState = ({
     streetAddress: '',
   },
   isStudent: undefined,
-  currentInsurance: Object.values(Insurer).includes(initialInsurer)
+  currentInsurance: (Object.values(Insurer) as Array<
+    Insurer | undefined
+  >).includes(initialInsurer)
     ? {
         hasCurrentInsurance: true,
         currentInsurer: initialInsurer,

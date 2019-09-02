@@ -25,8 +25,8 @@ interface NumberOfPeopleInputProps {
 const handleChange = <K extends keyof LivingSituationState>(
   field: K,
   chatState: ChatActions,
-  format: (val?: string | number) => undefined | string | number = (value) =>
-    value,
+  format: (val?: string | number) => LivingSituationState[K] = (value) =>
+    value as LivingSituationState[K],
 ) => (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
   chatState.setLivingSituationProp(field, format(event.target.value))
 }

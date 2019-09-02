@@ -30,7 +30,11 @@ const getOfferQuestionTextKey = (
     return 'CHAT_HEDVIG_SHOW_OFFER_NO_INSURANCE'
   }
 
-  if (Object.values(SwitchableInsurers).includes(currentInsurer!)) {
+  if (
+    Object.values((SwitchableInsurers as any) as Insurer).includes(
+      currentInsurer!,
+    )
+  ) {
     return 'CHAT_HEDVIG_SHOW_OFFER_HAS_INSURANCE'
   }
 
