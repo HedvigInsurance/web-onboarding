@@ -792,6 +792,7 @@ export class DontPanic extends React.Component {
                                       ({ id }) => id,
                                     )) ||
                                   [],
+                                // @ts-ignore
                                 latestConversationSteps:
                                   data &&
                                   data.dontPanicSession &&

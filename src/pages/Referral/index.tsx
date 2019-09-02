@@ -24,12 +24,14 @@ const PageWrapper = styled('div')({
   paddingBottom: 50,
 })
 
-const Logo = styled('img')({
+const LogoWrapper = styled('a')({
   marginTop: '2.25rem',
   marginLeft: 'auto',
   marginRight: 'auto',
   display: 'block',
   maxWidth: 100,
+})
+const Logo = styled('img')({
   width: '100%',
 })
 const HeroImageWrapper = styled('div')({
@@ -123,7 +125,9 @@ export const Referral: React.FunctionComponent<ReferralProps> = ({
     </TranslationsConsumer>
     <Page>
       <PageWrapper>
-        <Logo src="/new-member-assets/topbar/hedvig-wordmark-color.svg" />
+        <LogoWrapper href="/">
+          <Logo src="/new-member-assets/topbar/hedvig-wordmark-color.svg" />
+        </LogoWrapper>
         <HeroImageWrapper>
           <HeroImage src="/new-member-assets/referrals/referrals-hero.jpg" />
         </HeroImageWrapper>
