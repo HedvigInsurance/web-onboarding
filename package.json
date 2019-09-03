@@ -116,5 +116,6 @@
       "git add"
     ]
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "version": "1.16.0"
 }
