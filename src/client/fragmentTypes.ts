@@ -1,5 +1,5 @@
 export default {
-  schema: {
+  __schema: {
     types: [
       {
         kind: 'UNION',
