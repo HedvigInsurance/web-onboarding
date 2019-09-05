@@ -6,8 +6,8 @@ import { ApolloClient } from 'apollo-client'
 import { WebSocketLink } from 'apollo-link-ws'
 import { CookieStorage } from 'cookie-storage'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
-import { createSession, Session } from '../utils/sessionStorage'
 import introspectionData from '../fragmentTypes'
+import { createSession, Session } from '../utils/sessionStorage'
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData: introspectionData,
