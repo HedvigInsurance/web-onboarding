@@ -15,9 +15,17 @@ import { OfferData } from 'src/containers/OfferContainer'
 import * as Yup from 'yup'
 import { RedeemCodeMutation } from '../../containers/RedeemCodeMutation'
 
-const DiscountButton = styled(Button)({
+const DiscountButtonLink = styled("button")({
   marginTop: '1rem',
   fontSize: '0.875em',
+  appearance: 'none',
+  textDecoration: 'none',
+  border: '0',
+  color: colors.OFF_BLACK,
+  paddingBottom: 2,
+  borderBottom: `2px solid ${colors.LIGHT_GRAY}`,
+  outline: 0,
+  cursor: "pointer"
 })
 
 const SubmitButton = styled(Button)({
@@ -86,15 +94,11 @@ export const Discount: React.FunctionComponent<Props> = ({ offer, refetch }) =>
         >
           {({ visible, setVisibility }) => (
             <>
-              <DiscountButton
-                background={colors.LIGHT_GRAY}
-                foreground={colors.OFF_BLACK_DARK}
-                onClick={() => setVisibility(!visible)}
-              >
+              <DiscountButtonLink onClick={() => setVisibility(!visible)}>
                 <TranslationsConsumer textKey="WEB_OFFER_ADD_DISCOUNT_BUTTON">
                   {(text) => text}
                 </TranslationsConsumer>
-              </DiscountButton>
+              </DiscountButtonLink>
               {visible && (
                 <DiscountContainer>
                   <Formik
@@ -182,21 +186,21 @@ export const Discount: React.FunctionComponent<Props> = ({ offer, refetch }) =>
       )}
     </RedeemCodeMutation>
   ) : (
-    <Mutation<{ __typename: string }> mutation={REMOVE_CODE_MUTATION}>
-      {(mutate) => (
-        <DiscountButton
-          background={colors.LIGHT_GRAY}
-          foreground={colors.OFF_BLACK_DARK}
-          onClick={() => {
-            mutate().then(() => {
-              refetch()
-            })
-          }}
-        >
-          <TranslationsConsumer textKey="WEB_OFFER_REMOVE_DISCOUNT_BUTTON">
-            {(text) => text}
-          </TranslationsConsumer>
-        </DiscountButton>
-      )}
-    </Mutation>
-  )
+      <Mutation<{ __typename: string }> mutation={REMOVE_CODE_MUTATION}>
+        {(mutate) => (
+          <DiscountButton
+            background={colors.LIGHT_GRAY}
+            foreground={colors.OFF_BLACK_DARK}
+            onClick={() => {
+              mutate().then(() => {
+                refetch()
+              })
+            }}
+          >
+            <TranslationsConsumer textKey="WEB_OFFER_REMOVE_DISCOUNT_BUTTON">
+              {(text) => text}
+            </TranslationsConsumer>
+          </DiscountButton>
+        )}
+      </Mutation>
+    )
