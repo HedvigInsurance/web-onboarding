@@ -188,9 +188,7 @@ export const Discount: React.FunctionComponent<Props> = ({ offer, refetch }) =>
   ) : (
       <Mutation<{ __typename: string }> mutation={REMOVE_CODE_MUTATION}>
         {(mutate) => (
-          <DiscountButton
-            background={colors.LIGHT_GRAY}
-            foreground={colors.OFF_BLACK_DARK}
+          <DiscountButtonLink
             onClick={() => {
               mutate().then(() => {
                 refetch()
@@ -200,7 +198,7 @@ export const Discount: React.FunctionComponent<Props> = ({ offer, refetch }) =>
             <TranslationsConsumer textKey="WEB_OFFER_REMOVE_DISCOUNT_BUTTON">
               {(text) => text}
             </TranslationsConsumer>
-          </DiscountButton>
+          </DiscountButtonLink>
         )}
       </Mutation>
     )
