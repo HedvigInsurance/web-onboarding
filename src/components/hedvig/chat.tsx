@@ -39,6 +39,10 @@ export const ChatWrapper = styled('div')(
   }),
 )
 
+const ChatInnerWrapper = styled('div')({
+  maxWidth: "100%"
+})
+
 const Hedvig = styled('img')({
   height: 33,
 })
@@ -110,25 +114,25 @@ export const ChatMessageTextWrapper = styled('div')(
     appear,
     isHedvig,
   }: {
-    isVisible: boolean
-    appear: boolean
-    isHedvig: boolean
-  }) => ({
-    display: 'inline-block',
-    maxWidth: '100%',
-    padding: '15px 18px',
-    backgroundColor: isHedvig ? colors.OFF_WHITE : colors.PURPLE,
-    color: isHedvig ? colors.BLACK_PURPLE : colors.WHITE,
-    fontSize: '0.95em',
-    fontWeight: 300,
-    borderRadius: 8,
-    opacity: appear ? 1 : 0,
-    animation:
-      isVisible && !appear
-        ? `${fadeUp} 200ms forwards, ${fadeIn} 300ms forwards`
-        : 'none',
-    wordBreak: 'break-word',
-  }),
+      isVisible: boolean
+      appear: boolean
+      isHedvig: boolean
+    }) => ({
+      display: 'inline-block',
+      maxWidth: '100%',
+      padding: '15px 18px',
+      backgroundColor: isHedvig ? colors.OFF_WHITE : colors.PURPLE,
+      color: isHedvig ? colors.BLACK_PURPLE : colors.WHITE,
+      fontSize: '0.95em',
+      fontWeight: 300,
+      borderRadius: 8,
+      opacity: appear ? 1 : 0,
+      animation:
+        isVisible && !appear
+          ? `${fadeUp} 200ms forwards, ${fadeIn} 300ms forwards`
+          : 'none',
+      wordBreak: 'break-word',
+    }),
 )
 
 export interface ChatMessageProps {
@@ -153,69 +157,71 @@ export const ChatMessage: React.SFC<ChatMessageProps> = ({
   isHedvig = true,
   onTyped,
 }) => (
-  <ChatWrapper isHedvig={isHedvig}>
-    <Container<{ hasMounted: boolean }, { mount: () => void }>
-      initialState={{ hasMounted: appear }}
-      actions={{ mount: () => () => ({ hasMounted: true }) }}
-    >
-      {({ hasMounted, mount }) => (
-        <Mount on={mount}>
-          <AnimateHeight
-            duration={HEIGHT_AND_SCROLL_ANIMATION_TIME}
-            height={hasMounted ? 'auto' : 0}
-          >
-            {isHedvig && (
+    <ChatWrapper isHedvig={isHedvig}>
+      <ChatInnerWrapper>
+        <Container<{ hasMounted: boolean }, { mount: () => void }>
+          initialState={{ hasMounted: appear }}
+          actions={{ mount: () => () => ({ hasMounted: true }) }}
+        >
+          {({ hasMounted, mount }) => (
+            <Mount on={mount}>
               <AnimateHeight
                 duration={HEIGHT_AND_SCROLL_ANIMATION_TIME}
-                height={isCurrentMessage && hasMounted ? 33 : 0}
+                height={hasMounted ? 'auto' : 0}
               >
-                {appear ? (
-                  <HedvigIcon />
-                ) : (
-                  <FadeIn>
-                    <HedvigIcon />
-                  </FadeIn>
+                {isHedvig && (
+                  <AnimateHeight
+                    duration={HEIGHT_AND_SCROLL_ANIMATION_TIME}
+                    height={isCurrentMessage && hasMounted ? 33 : 0}
+                  >
+                    {appear ? (
+                      <HedvigIcon />
+                    ) : (
+                        <FadeIn>
+                          <HedvigIcon />
+                        </FadeIn>
+                      )}
+                  </AnimateHeight>
                 )}
-              </AnimateHeight>
-            )}
-            <Transition
-              timeout={appear ? 0 : typingDuration}
-              appear
-              in
-              onEntered={
-                appear
-                  ? () => {
-                      /* noop */
-                    }
-                  : onTyped
-              }
-            >
-              {(appearStatus) => (
-                <ChatMessageWrapper>
-                  <Transition
-                    timeout={500}
+                <Transition
+                  timeout={appear ? 0 : typingDuration}
+                  appear
+                  in
+                  onEntered={
                     appear
-                    in={appearStatus === ENTERING && !appear}
-                  >
-                    {(typingTransitionStatus) =>
-                      typingTransitionStatus !== EXITED && (
-                        <Typing status={typingTransitionStatus} />
-                      )
-                    }
-                  </Transition>
-                  <ChatMessageTextWrapper
-                    appear={appear}
-                    isVisible={[ENTERED, EXITING].includes(appearStatus)}
-                    isHedvig={isHedvig}
-                  >
-                    {children}
-                  </ChatMessageTextWrapper>
-                </ChatMessageWrapper>
-              )}
-            </Transition>
-          </AnimateHeight>
-        </Mount>
-      )}
-    </Container>
-  </ChatWrapper>
-)
+                      ? () => {
+                        /* noop */
+                      }
+                      : onTyped
+                  }
+                >
+                  {(appearStatus) => (
+                    <ChatMessageWrapper>
+                      <Transition
+                        timeout={500}
+                        appear
+                        in={appearStatus === ENTERING && !appear}
+                      >
+                        {(typingTransitionStatus) =>
+                          typingTransitionStatus !== EXITED && (
+                            <Typing status={typingTransitionStatus} />
+                          )
+                        }
+                      </Transition>
+                      <ChatMessageTextWrapper
+                        appear={appear}
+                        isVisible={[ENTERED, EXITING].includes(appearStatus)}
+                        isHedvig={isHedvig}
+                      >
+                        {children}
+                      </ChatMessageTextWrapper>
+                    </ChatMessageWrapper>
+                  )}
+                </Transition>
+              </AnimateHeight>
+            </Mount>
+          )}
+        </Container>
+      </ChatInnerWrapper>
+    </ChatWrapper>
+  )
