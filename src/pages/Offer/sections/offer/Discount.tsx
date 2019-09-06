@@ -15,7 +15,7 @@ import { OfferData } from 'src/containers/OfferContainer'
 import * as Yup from 'yup'
 import { RedeemCodeMutation } from '../../containers/RedeemCodeMutation'
 
-const DiscountButtonLink = styled("button")({
+const DiscountButtonLink = styled('button')({
   marginTop: '1rem',
   fontSize: '0.875em',
   appearance: 'none',
@@ -25,7 +25,7 @@ const DiscountButtonLink = styled("button")({
   paddingBottom: 2,
   borderBottom: `2px solid ${colors.LIGHT_GRAY}`,
   outline: 0,
-  cursor: "pointer"
+  cursor: 'pointer',
 })
 
 const SubmitButton = styled(Button)({
@@ -186,19 +186,19 @@ export const Discount: React.FunctionComponent<Props> = ({ offer, refetch }) =>
       )}
     </RedeemCodeMutation>
   ) : (
-      <Mutation<{ __typename: string }> mutation={REMOVE_CODE_MUTATION}>
-        {(mutate) => (
-          <DiscountButtonLink
-            onClick={() => {
-              mutate().then(() => {
-                refetch()
-              })
-            }}
-          >
-            <TranslationsConsumer textKey="WEB_OFFER_REMOVE_DISCOUNT_BUTTON">
-              {(text) => text}
-            </TranslationsConsumer>
-          </DiscountButtonLink>
-        )}
-      </Mutation>
-    )
+    <Mutation<{ __typename: string }> mutation={REMOVE_CODE_MUTATION}>
+      {(mutate) => (
+        <DiscountButtonLink
+          onClick={() => {
+            mutate().then(() => {
+              refetch()
+            })
+          }}
+        >
+          <TranslationsConsumer textKey="WEB_OFFER_REMOVE_DISCOUNT_BUTTON">
+            {(text) => text}
+          </TranslationsConsumer>
+        </DiscountButtonLink>
+      )}
+    </Mutation>
+  )
