@@ -15,8 +15,9 @@ import { OfferData } from 'src/containers/OfferContainer'
 import * as Yup from 'yup'
 import { RedeemCodeMutation } from '../../containers/RedeemCodeMutation'
 
-const DiscountButtonLink = styled('button')({
+const DiscountButtonLink = styled('a')({
   marginTop: '1rem',
+  display: 'inline-block',
   fontSize: '0.875em',
   appearance: 'none',
   textDecoration: 'none',
