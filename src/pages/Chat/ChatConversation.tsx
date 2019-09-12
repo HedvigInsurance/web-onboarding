@@ -73,7 +73,7 @@ export const ChatConversation: React.SFC = () => (
             >
               <ChatMessage
                 appear={appear}
-                typingDuration={2500}
+                typingDuration={200}
                 isCurrentMessage={[
                   ChatStep.INITIAL,
                   ChatStep.NAME_INPUT,
