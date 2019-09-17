@@ -28,10 +28,16 @@ const CardWrapper = styled('div')({
   marginRight: 'auto',
   minWidth: CARDWIDTH,
   maxWidth: CARDWIDTH,
+  paddingLeft: '20px',
+  paddingRight: '20px',
   [`@media (max-width: ${CARDWIDTH}px)`]: {
     minWidth: '100%',
     marginLeft: '0px',
     marginRight: '0px',
+  },
+  '@media (max-width: 350px)': {
+    paddingLeft: '10px',
+    paddingRight: '10px',
   },
 })
 
@@ -41,6 +47,13 @@ const Card = styled('div')({
   backgroundColor: colors.WHITE,
   boxShadow: '0px 8px 40px -12px rgba(0,0,0,0.67)',
   borderRadius: '10px',
+  position: 'relative',
+  '@media (max-width: 900px)': {
+    marginTop: '120px',
+  },
+  '@media (max-width: 350px)': {
+    boxShadow: '0px 8px 22px -12px rgba(0, 0, 0, 0.40)',
+  },
 })
 
 const HeaderBackground = styled('div')({
