@@ -24,14 +24,27 @@ const Wrapper = styled('div')({
   width: '100%',
   backgroundColor: colors.OFF_WHITE,
   textAlign: 'center',
+  paddingLeft: '20px',
+  paddingRight: '20px',
+  '@media (max-width: 900px)': {
+    marginTop: '50px',
+  },
+  '@media (max-width: 350px)': {
+    paddingLeft: '10px',
+    paddingRight: '10px',
+  },
 })
 
 const Card = styled('div')({
   marginTop: '70px',
   backgroundColor: colors.WHITE,
-  boxShadow: '0px 8px 40px -12px rgba(0,0,0,0.67)',
+  boxShadow: '0px 8px 40px -12px rgba(0, 0, 0, 0.67)',
   borderRadius: '10px',
   paddingBottom: 40,
+  position: 'relative',
+  '@media (max-width: 350px)': {
+    boxShadow: '0px 8px 22px -12px rgba(0, 0, 0, 0.40)',
+  },
 })
 
 const Header = styled('h1')({
