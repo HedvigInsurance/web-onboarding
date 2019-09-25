@@ -152,6 +152,7 @@ interface StateComponentProps {
   collectStatus?: CollectStatus
   error?: ApolloError
   trackSignCompleted: () => void
+  signEmail: string
 }
 
 const StateComponent: React.SFC<StateComponentProps> = ({
@@ -159,6 +160,7 @@ const StateComponent: React.SFC<StateComponentProps> = ({
   collectStatus,
   error,
   trackSignCompleted,
+  signEmail,
 }) => {
   if (!signState || !collectStatus) {
     return null
@@ -197,11 +199,12 @@ const StateComponent: React.SFC<StateComponentProps> = ({
                 adtraction(
                   parseFloat(offer.insurance.cost.monthlyGross.amount),
                   offer.member.id,
-                  offer.member.email,
+                  signEmail,
                   offer.redeemedCampaigns !== null &&
                     offer.redeemedCampaigns.length !== 0
                     ? offer.redeemedCampaigns[0].code
                     : null,
+                  offer.insurance.type,
                 )
                 return (
                   <CurrentLanguage>
@@ -240,6 +243,7 @@ const StateComponent: React.SFC<StateComponentProps> = ({
 
 interface SubscriptionComponentProps {
   isSignLoading: boolean
+  signEmail: string
 }
 
 const getIsSignPending = (data: SignStatusData | undefined) =>
@@ -249,6 +253,7 @@ const getIsSignPending = (data: SignStatusData | undefined) =>
 
 export const SubscriptionComponent: React.SFC<SubscriptionComponentProps> = ({
   isSignLoading,
+  signEmail,
 }) => (
   <Query<SignStatusData> query={SIGN_QUERY} fetchPolicy="network-only">
     {({ data, error, subscribeToMore }) => (
@@ -302,6 +307,7 @@ export const SubscriptionComponent: React.SFC<SubscriptionComponentProps> = ({
               }
               error={error}
               trackSignCompleted={track}
+              signEmail={signEmail}
             />
           )}
         </TrackAction>
