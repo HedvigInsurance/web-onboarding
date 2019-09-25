@@ -229,30 +229,29 @@ const StateComponent: React.SFC<StateComponentProps> = ({
       if (collectStatus.status === BANKIDSTATUS.COMPLETE) {
         trackSignCompleted()
         return (
-          <>
-            <OfferContainer>
-              {(offer) => {
-                adtraction(
-                  parseFloat(offer.insurance.cost.monthlyGross.amount),
-                  offer.member.id,
-                  offer.member.email,
-                  offer.redeemedCampaigns !== null &&
-                    offer.redeemedCampaigns.length !== 0
-                    ? offer.redeemedCampaigns[0].code
-                    : null,
-                )
-                return null
-              }}
-            </OfferContainer>
-            <CurrentLanguage>
-              {({ currentLanguage }) => (
-                <Redirect
-                  to={`/${currentLanguage &&
-                    currentLanguage + '/'}new-member/download`}
-                />
-              )}
-            </CurrentLanguage>
-          </>
+          <OfferContainer>
+            {(offer) => {
+              adtraction(
+                parseFloat(offer.insurance.cost.monthlyGross.amount),
+                offer.member.id,
+                offer.member.email,
+                offer.redeemedCampaigns !== null &&
+                  offer.redeemedCampaigns.length !== 0
+                  ? offer.redeemedCampaigns[0].code
+                  : null,
+              )
+              return (
+                <CurrentLanguage>
+                  {({ currentLanguage }) => (
+                    <Redirect
+                      to={`/${currentLanguage &&
+                        currentLanguage + '/'}new-member/download`}
+                    />
+                  )}
+                </CurrentLanguage>
+              )
+            }}
+          </OfferContainer>
         )
       }
     case SIGNSTATE.FAILED:
