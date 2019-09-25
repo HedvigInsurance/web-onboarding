@@ -20,7 +20,6 @@ const InnerWrapper = styled('div')({
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
-  justifyContent: 'center',
   maxWidth: SITEWRAPPER,
   margin: 'auto',
   paddingLeft: '10px',
@@ -34,7 +33,7 @@ const InnerWrapper = styled('div')({
 })
 
 const Column = styled('div')({
-  width: '50%',
+  width: '60%',
   paddingRight: 20,
   paddingLeft: 20,
   paddingBottom: 40,
@@ -45,37 +44,14 @@ const Column = styled('div')({
   },
 })
 
-const DownloadButton = styled('a')({
-  backgroundColor: colors.GREEN,
-  color: colors.WHITE,
-  textDecoration: 'none',
-  borderRadius: '50px',
-  padding: '15px 30px',
-  cursor: 'pointer',
-  border: 'none',
-  outlineStyle: 'none',
-  marginTop: '10px',
-  marginBottom: '30px',
-})
-
-const DownloadImage = styled('img')({
-  marginBottom: '30px',
-  marginTop: '30px',
-  marginLeft: 'auto',
-  width: '100%',
-  '@media (max-width: 800px)': {
-    marginRight: 'auto',
-    width: '80%',
-  },
-})
-
 const Header = styled('h1')({
   marginTop: '0px',
   marginBottom: '0px',
   fontSize: '55px',
+  lineHeight: '60px',
 })
 
-const InsuredText = styled('div')({
+const ConnectText = styled('div')({
   marginBottom: '45px',
 })
 
@@ -83,7 +59,14 @@ export const ConnectPaymentPage: React.SFC<{}> = () => (
   <>
     <Background />
     <InnerWrapper>
-      <h1>Om du vill ha cash fort, koppla ditt bankkonto</h1>
+      <Column>
+        <Header>Om du vill ha cash fort, koppla ditt bankkonto</Header>
+        <ConnectText>
+          För att din försäkring ska gälla framöver behöver du koppla autogiro
+          från din bank så att du kan betala och få utbetalt. Vi sköter det med
+          Trustly.
+        </ConnectText>
+      </Column>
     </InnerWrapper>
   </>
 )
