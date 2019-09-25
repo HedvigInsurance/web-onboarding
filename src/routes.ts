@@ -6,6 +6,7 @@ import { NewMemberLanding } from './pages/NewMemberLanding'
 import { Offering } from './pages/Offer'
 import { Referral } from './pages/Referral'
 import { Sign } from './pages/Sign'
+import { ConnectPayment } from './pages/ConnectPayment'
 
 export const LANGUAGE_PATH_PATTERN = '/:language(en)?'
 export const serverSideRedirects = [
@@ -35,6 +36,11 @@ export const reactPageRoutes = [
   {
     path: LANGUAGE_PATH_PATTERN + '/new-member/sign',
     Component: Sign,
+    exact: true,
+  },
+  {
+    path: LANGUAGE_PATH_PATTERN + '/new-member/connect-payment',
+    Component: ConnectPayment,
     exact: true,
   },
   { path: '/dont-panic/hedvig', Component: LazyDontPanic, exact: true },
