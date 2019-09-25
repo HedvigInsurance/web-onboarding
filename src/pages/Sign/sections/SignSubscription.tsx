@@ -228,31 +228,45 @@ const StateComponent: React.SFC<StateComponentProps> = ({
     case SIGNSTATE.COMPLETED:
       if (collectStatus.status === BANKIDSTATUS.COMPLETE) {
         trackSignCompleted()
-        return (
-          <OfferContainer>
-            {(offer) => {
-              adtraction(
-                parseFloat(offer.insurance.cost.monthlyGross.amount),
-                offer.member.id,
-                offer.member.email,
-                offer.redeemedCampaigns !== null &&
-                  offer.redeemedCampaigns.length !== 0
-                  ? offer.redeemedCampaigns[0].code
-                  : null,
-              )
-              return (
-                <CurrentLanguage>
-                  {({ currentLanguage }) => (
-                    <Redirect
-                      to={`/${currentLanguage &&
-                        currentLanguage + '/'}new-member/download`}
-                    />
-                  )}
-                </CurrentLanguage>
-              )
-            }}
-          </OfferContainer>
-        )
+
+        if (process.env.NODE_ENV !== 'test') {
+          return (
+            <OfferContainer>
+              {(offer) => {
+                adtraction(
+                  parseFloat(offer.insurance.cost.monthlyGross.amount),
+                  offer.member.id,
+                  offer.member.email,
+                  offer.redeemedCampaigns !== null &&
+                    offer.redeemedCampaigns.length !== 0
+                    ? offer.redeemedCampaigns[0].code
+                    : null,
+                )
+                return (
+                  <CurrentLanguage>
+                    {({ currentLanguage }) => (
+                      <Redirect
+                        to={`/${currentLanguage &&
+                          currentLanguage + '/'}new-member/download`}
+                      />
+                    )}
+                  </CurrentLanguage>
+                )
+              }}
+            </OfferContainer>
+          )
+        } else {
+          return (
+            <CurrentLanguage>
+              {({ currentLanguage }) => (
+                <Redirect
+                  to={`/${currentLanguage &&
+                    currentLanguage + '/'}new-member/download`}
+                />
+              )}
+            </CurrentLanguage>
+          )
+        }
       }
     case SIGNSTATE.FAILED:
       if (collectStatus.status === BANKIDSTATUS.FAILED) {

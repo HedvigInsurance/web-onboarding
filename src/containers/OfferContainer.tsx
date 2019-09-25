@@ -14,7 +14,6 @@ export const OFFER_QUERY = gql`
       postalNumber
       personsInHousehold
       currentInsurerName
-      status
       cost {
         monthlyDiscount {
           amount
