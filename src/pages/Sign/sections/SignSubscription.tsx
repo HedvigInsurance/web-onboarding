@@ -2,14 +2,13 @@ import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { ApolloError } from 'apollo-client'
 import gql from 'graphql-tag'
-import * as md5 from 'md5'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
 import { Query } from 'react-apollo'
 import styled, { keyframes } from 'react-emotion'
 import { Mount } from 'react-lifecycle-components/dist'
 import { Redirect } from 'react-router-dom'
-import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
+import { adtraction, getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
 import { CurrentLanguage } from '../../../components/utils/CurrentLanguage'
 import { OfferContainer } from '../../../containers/OfferContainer'
 
@@ -146,44 +145,6 @@ const handleMessage = (
   message: string,
 ) => {
   return textkeys[message]
-}
-
-interface Adt {
-  Tag: AdtTag
-}
-
-interface AdtTag {
-  t: number
-  c: string
-  tp: number
-  am: number
-  ti: string
-  xd: string
-  cpn?: string
-  doEvent: () => void
-}
-
-const adtraction = (
-  orderValue: number,
-  orderId: string,
-  emailAddress: string,
-  couponCode: string | null,
-) => {
-  // @ts-ignore
-  const adt: Adt = ADT
-  adt.Tag = adt.Tag || {}
-  adt.Tag.t = 3
-  adt.Tag.c = 'SEK'
-  adt.Tag.tp = 1412601108
-  adt.Tag.am = orderValue
-  adt.Tag.ti = orderId
-  adt.Tag.xd = md5(emailAddress)
-
-  if (couponCode !== null) {
-    adt.Tag.cpn = couponCode
-  }
-
-  adt.Tag.doEvent()
 }
 
 interface StateComponentProps {

@@ -1,4 +1,5 @@
 import { CookieStorage } from 'cookie-storage'
+import * as md5 from 'md5'
 import { SegmentAnalyticsJs, setupTrackers } from 'quepasa'
 
 const cookie = new CookieStorage()
@@ -43,3 +44,41 @@ export const { Track, TrackAction, Identify, IdentifyAction } = setupTrackers<
   },
   { debug: process.env.NODE_ENV === 'development' },
 )
+
+interface Adt {
+  Tag: AdtTag
+}
+
+interface AdtTag {
+  t: number
+  c: string
+  tp: number
+  am: number
+  ti: string
+  xd: string
+  cpn?: string
+  doEvent: () => void
+}
+
+export const adtraction = (
+  orderValue: number,
+  orderId: string,
+  emailAddress: string,
+  couponCode: string | null,
+) => {
+  // @ts-ignore
+  const adt: Adt = ADT
+  adt.Tag = adt.Tag || {}
+  adt.Tag.t = 3
+  adt.Tag.c = 'SEK'
+  adt.Tag.tp = 1412601108
+  adt.Tag.am = orderValue
+  adt.Tag.ti = orderId
+  adt.Tag.xd = md5(emailAddress)
+
+  if (couponCode !== null) {
+    adt.Tag.cpn = couponCode
+  }
+
+  adt.Tag.doEvent()
+}
