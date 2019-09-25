@@ -8,9 +8,10 @@ import { Query } from 'react-apollo'
 import styled, { keyframes } from 'react-emotion'
 import { Mount } from 'react-lifecycle-components/dist'
 import { Redirect } from 'react-router-dom'
-import { adtraction, getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
+import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
 import { CurrentLanguage } from '../../../components/utils/CurrentLanguage'
 import { OfferContainer } from '../../../containers/OfferContainer'
+import { adtraction } from '../../../utils/tracking'
 
 const spin = keyframes({
   from: { transform: 'rotate(0deg)' },
@@ -152,7 +153,7 @@ interface StateComponentProps {
   collectStatus?: CollectStatus
   error?: ApolloError
   trackSignCompleted: () => void
-  signEmail: string
+  runAdtraction: () => void
 }
 
 const StateComponent: React.SFC<StateComponentProps> = ({
@@ -160,7 +161,7 @@ const StateComponent: React.SFC<StateComponentProps> = ({
   collectStatus,
   error,
   trackSignCompleted,
-  signEmail,
+  runAdtraction,
 }) => {
   if (!signState || !collectStatus) {
     return null
@@ -193,44 +194,19 @@ const StateComponent: React.SFC<StateComponentProps> = ({
         trackSignCompleted()
 
         if (process.env.NODE_ENV !== 'test') {
-          return (
-            <OfferContainer>
-              {(offer) => {
-                adtraction(
-                  parseFloat(offer.insurance.cost.monthlyGross.amount),
-                  offer.member.id,
-                  signEmail,
-                  offer.redeemedCampaigns !== null &&
-                    offer.redeemedCampaigns.length !== 0
-                    ? offer.redeemedCampaigns[0].code
-                    : null,
-                  offer.insurance.type,
-                )
-                return (
-                  <CurrentLanguage>
-                    {({ currentLanguage }) => (
-                      <Redirect
-                        to={`/${currentLanguage &&
-                          currentLanguage + '/'}new-member/download`}
-                      />
-                    )}
-                  </CurrentLanguage>
-                )
-              }}
-            </OfferContainer>
-          )
-        } else {
-          return (
-            <CurrentLanguage>
-              {({ currentLanguage }) => (
-                <Redirect
-                  to={`/${currentLanguage &&
-                    currentLanguage + '/'}new-member/download`}
-                />
-              )}
-            </CurrentLanguage>
-          )
+          runAdtraction()
         }
+
+        return (
+          <CurrentLanguage>
+            {({ currentLanguage }) => (
+              <Redirect
+                to={`/${currentLanguage &&
+                  currentLanguage + '/'}new-member/download`}
+              />
+            )}
+          </CurrentLanguage>
+        )
       }
     case SIGNSTATE.FAILED:
       if (collectStatus.status === BANKIDSTATUS.FAILED) {
@@ -300,15 +276,34 @@ export const SubscriptionComponent: React.SFC<SubscriptionComponentProps> = ({
           }}
         >
           {({ track }) => (
-            <StateComponent
-              signState={data && data.signStatus && data.signStatus.signState}
-              collectStatus={
-                data && data.signStatus && data.signStatus.collectStatus
-              }
-              error={error}
-              trackSignCompleted={track}
-              signEmail={signEmail}
-            />
+            <OfferContainer>
+              {(currentOffer) => (
+                <StateComponent
+                  signState={
+                    data && data.signStatus && data.signStatus.signState
+                  }
+                  collectStatus={
+                    data && data.signStatus && data.signStatus.collectStatus
+                  }
+                  error={error}
+                  trackSignCompleted={track}
+                  runAdtraction={() => {
+                    adtraction(
+                      parseFloat(
+                        currentOffer.insurance.cost.monthlyGross.amount,
+                      ),
+                      currentOffer.member.id,
+                      signEmail,
+                      currentOffer.redeemedCampaigns !== null &&
+                        currentOffer.redeemedCampaigns.length !== 0
+                        ? currentOffer.redeemedCampaigns[0].code
+                        : null,
+                      currentOffer.insurance.type,
+                    )
+                  }}
+                />
+              )}
+            </OfferContainer>
           )}
         </TrackAction>
       </Mount>

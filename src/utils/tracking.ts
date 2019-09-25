@@ -46,21 +46,6 @@ export const { Track, TrackAction, Identify, IdentifyAction } = setupTrackers<
   { debug: process.env.NODE_ENV === 'development' },
 )
 
-interface Adt {
-  Tag: AdtTag
-}
-
-interface AdtTag {
-  t: number
-  c: string
-  tp: number
-  am: number
-  ti: string
-  xd: string
-  cpn?: string
-  doEvent: () => void
-}
-
 const adtractionProductMap: { [type in InsuranceType]: number } = {
   BRF: 1417356498,
   STUDENT_BRF: 1423041022,
@@ -75,8 +60,7 @@ export const adtraction = (
   couponCode: string | null,
   insuranceType: InsuranceType,
 ) => {
-  // @ts-ignore
-  const adt: Adt = ADT
+  const adt = ADT
   adt.Tag = adt.Tag || {}
   adt.Tag.t = 3
   adt.Tag.c = 'SEK'
