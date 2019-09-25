@@ -14,6 +14,7 @@ export const OFFER_QUERY = gql`
       postalNumber
       personsInHousehold
       currentInsurerName
+      status
       cost {
         monthlyDiscount {
           amount
@@ -39,14 +40,17 @@ export const OFFER_QUERY = gql`
           }
         }
       }
+      code
       owner {
         displayName
       }
     }
 
     member {
+      id
       firstName
       lastName
+      email
     }
   }
 `
@@ -67,13 +71,16 @@ export interface OfferData {
   }
   redeemedCampaigns: Array<{
     incentive: Incentive
+    code: string
     owner: {
       displayName: string
     }
   }>
   member: {
+    id: string
     firstName: string
     lastName: string
+    email: string
   }
 }
 

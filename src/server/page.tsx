@@ -60,6 +60,7 @@ const template = (
     Sentry.init(${JSON.stringify(sentryConfig())})
   </script>
   <script key="segment-snippet" nonce="${cspNonce}">${segmentSnippet}</script>
+  <script defer src="https://adtr.io/jsTag?ap=1412531808"></script>
 </head>
 <body>
   <div id="react-root">${body}</div>
