@@ -4,6 +4,8 @@ import gql from 'graphql-tag'
 import * as React from 'react'
 import { Mutation } from 'react-apollo'
 import styled from 'react-emotion'
+import TrustlyModal from '../components/TrustlyModal'
+import { ActionMap, Container } from 'constate'
 
 const SITEWRAPPER = 1300
 const BP = 800
@@ -94,42 +96,74 @@ const ConnectPaymentImage = styled('img')({
   },
 })
 
+interface State {
+  trustlyModalIsOpen: boolean
+}
+
+interface Actions {
+  setTrustlyModalIsOpen: (trustlyModalIsOpen: boolean) => void
+}
+
 export const ConnectPaymentPage: React.SFC<{}> = () => (
-  <>
-    <Background />
-    <InnerWrapper>
-      <TextColumn>
-        <Header>
-          <HeaderPart color={colors.DARK_GREEN}>
-            Om du vill ha cash fort,
-          </HeaderPart>
-          <HeaderPart color={colors.BLACK}>koppla ditt bankkonto</HeaderPart>
-        </Header>
-        <ConnectText>
-          För att din försäkring ska gälla framöver behöver du koppla autogiro
-          från din bank så att du kan betala och få utbetalt. Vi sköter det med
-          Trustly.
-        </ConnectText>
-        <Mutation mutation={START_DIRECT_DEBIT_REGISTRATION_MUTATION}>
-          {(mutate: any) => (
-            <Button
-              background={colors.PURPLE}
-              foreground={colors.WHITE}
-              onClick={async () => {
-                const res = await mutate()
-                console.log(res)
-              }}
-            >
-              Koppla autogiro
-            </Button>
-          )}
-        </Mutation>
-      </TextColumn>
-      <ImageColumn>
-        <ConnectPaymentImage
-          src={'/new-member-assets/connect-payment/connect-dd-illustration.svg'}
+  <Container<State, ActionMap<State, Actions>>
+    initialState={{
+      trustlyModalIsOpen: false,
+    }}
+    actions={{
+      setTrustlyModalIsOpen: (trustlyModalIsOpen: boolean) => ({
+        trustlyModalIsOpen,
+      }),
+    }}
+  >
+    {({ trustlyModalIsOpen, setTrustlyModalIsOpen }) => (
+      <>
+        <Background />
+        <InnerWrapper>
+          <TextColumn>
+            <Header>
+              <HeaderPart color={colors.DARK_GREEN}>
+                Om du vill ha cash fort,
+              </HeaderPart>
+              <HeaderPart color={colors.BLACK}>
+                koppla ditt bankkonto
+              </HeaderPart>
+            </Header>
+            <ConnectText>
+              För att din försäkring ska gälla framöver behöver du koppla
+              autogiro från din bank så att du kan betala och få utbetalt. Vi
+              sköter det med Trustly.
+            </ConnectText>
+            <Mutation mutation={START_DIRECT_DEBIT_REGISTRATION_MUTATION}>
+              {(mutate: any) => (
+                <Button
+                  background={colors.PURPLE}
+                  foreground={colors.WHITE}
+                  onClick={async () => {
+                    const res = await mutate()
+                    console.log(res)
+                    setTrustlyModalIsOpen(true)
+                  }}
+                >
+                  Koppla autogiro
+                </Button>
+              )}
+            </Mutation>
+          </TextColumn>
+          <ImageColumn>
+            <ConnectPaymentImage
+              src={
+                '/new-member-assets/connect-payment/connect-dd-illustration.svg'
+              }
+            />
+          </ImageColumn>
+        </InnerWrapper>
+        <TrustlyModal
+          isOpen={trustlyModalIsOpen}
+          setIsOpen={(isOpen: boolean) => {
+            setTrustlyModalIsOpen(isOpen)
+          }}
         />
-      </ImageColumn>
-    </InnerWrapper>
-  </>
+      </>
+    )}
+  </Container>
 )
