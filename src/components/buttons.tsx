@@ -1,4 +1,4 @@
-import { colors } from '@hedviginsurance/brand'
+import { colors, fonts } from '@hedviginsurance/brand'
 import styled from 'react-emotion'
 import { Link } from 'react-router-dom'
 
@@ -32,6 +32,7 @@ export const Button = styled('button')(
     border?: string
     size?: 'sm' | 'lg'
   }) => ({
+    fontFamily: fonts.CIRCULAR,
     appearance: 'none',
     padding: size === 'sm' ? '10px 16px' : '16px 20px',
     border,
