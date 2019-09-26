@@ -98,24 +98,35 @@ const ConnectPaymentImage = styled('img')({
 
 interface State {
   trustlyModalIsOpen: boolean
+  trustlyUrl: string | null
 }
 
 interface Actions {
   setTrustlyModalIsOpen: (trustlyModalIsOpen: boolean) => void
+  setTrustlyUrl: (trustlyUrl: string) => void
 }
 
 export const ConnectPaymentPage: React.SFC<{}> = () => (
   <Container<State, ActionMap<State, Actions>>
     initialState={{
       trustlyModalIsOpen: false,
+      trustlyUrl: null,
     }}
     actions={{
       setTrustlyModalIsOpen: (trustlyModalIsOpen: boolean) => ({
         trustlyModalIsOpen,
       }),
+      setTrustlyUrl: (trustlyUrl: string) => ({
+        trustlyUrl,
+      }),
     }}
   >
-    {({ trustlyModalIsOpen, setTrustlyModalIsOpen }) => (
+    {({
+      trustlyModalIsOpen,
+      setTrustlyModalIsOpen,
+      trustlyUrl,
+      setTrustlyUrl,
+    }) => (
       <>
         <Background />
         <InnerWrapper>
@@ -141,6 +152,7 @@ export const ConnectPaymentPage: React.SFC<{}> = () => (
                   onClick={async () => {
                     const res = await mutate()
                     console.log(res)
+                    setTrustlyUrl(res.data.startDirectDebitRegistration)
                     setTrustlyModalIsOpen(true)
                   }}
                 >
@@ -162,6 +174,7 @@ export const ConnectPaymentPage: React.SFC<{}> = () => (
           setIsOpen={(isOpen: boolean) => {
             setTrustlyModalIsOpen(isOpen)
           }}
+          trustlyUrl={trustlyUrl}
         />
       </>
     )}

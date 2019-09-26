@@ -15,18 +15,26 @@ const Header = styled('div')({
   boxShadow: '0 0 11px rgba(0, 0, 0, 0.05)',
 })
 
+const TrustlyIframe = styled('iframe')({
+  width: '100%',
+  height: 'calc(100% - 40px)',
+  border: 'none',
+})
+
 interface Props {
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
+  trustlyUrl: string | null
 }
 
-const TrustlyModal: React.FC<Props> = ({ isOpen, setIsOpen }) => (
+const TrustlyModal: React.FC<Props> = ({ isOpen, setIsOpen, trustlyUrl }) => (
   <Modal
     isOpen={isOpen}
     setIsOpen={setIsOpen}
     style={{ content: { padding: 0 } }}
   >
     <Header>Sätt upp betalning</Header>
+    {trustlyUrl !== null && <TrustlyIframe src={trustlyUrl} />}
   </Modal>
 )
 
