@@ -44,7 +44,7 @@ const InnerWrapper = styled('div')({
 })
 
 const TextColumn = styled('div')({
-  width: '55%',
+  width: '60%',
   paddingRight: 20,
   paddingLeft: 20,
   paddingBottom: 40,

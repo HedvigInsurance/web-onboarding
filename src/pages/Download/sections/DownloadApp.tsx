@@ -3,7 +3,7 @@ import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import styled from 'react-emotion'
 
-const SITEWRAPPER = 1200
+const SITEWRAPPER = 1300
 const BP = 800
 
 const Background = styled('div')({
@@ -33,8 +33,20 @@ const InnerWrapper = styled('div')({
   },
 })
 
-const Column = styled('div')({
-  width: '50%',
+const TextColumn = styled('div')({
+  width: '60%',
+  paddingRight: 20,
+  paddingLeft: 20,
+  paddingBottom: 40,
+
+  [`@media (max-width: ${BP}px)`]: {
+    width: '100%',
+    textAlign: 'center',
+  },
+})
+
+const ImageColumn = styled('div')({
+  width: '40%',
   paddingRight: 20,
   paddingLeft: 20,
   paddingBottom: 40,
@@ -46,11 +58,11 @@ const Column = styled('div')({
 })
 
 const DownloadButton = styled('a')({
-  backgroundColor: colors.GREEN,
+  backgroundColor: colors.PURPLE,
   color: colors.WHITE,
   textDecoration: 'none',
   borderRadius: '50px',
-  padding: '15px 30px',
+  padding: '10px 16px',
   cursor: 'pointer',
   border: 'none',
   outlineStyle: 'none',
@@ -71,12 +83,19 @@ const DownloadImage = styled('img')({
 
 const Header = styled('h1')({
   marginTop: '0px',
-  marginBottom: '0px',
-  fontSize: '55px',
+  marginBottom: '30px',
+  fontSize: '56px',
+  lineHeight: '60px',
 })
 
-const InsuredText = styled('div')({
+const HeaderPart = styled('span')(({ color }: { color: string }) => ({
+  color,
+}))
+
+const DownloadText = styled('div')({
+  width: '65%',
   marginBottom: '45px',
+  color: colors.OFF_BLACK,
 })
 
 interface DownloadAppProps {
@@ -89,28 +108,18 @@ export const DownloadApp: React.SFC<DownloadAppProps> = ({
   <>
     <Background />
     <InnerWrapper>
-      <Column>
+      <TextColumn>
         <Header>
-          <TranslationsConsumer textKey="DOWNLOAD_HEADER_ONE">
-            {(header) => header}
-          </TranslationsConsumer>
+          <HeaderPart color={colors.DARK_YELLOW}>Välkommen! </HeaderPart>
+          <HeaderPart color={colors.BLACK}>
+            Ladda ner appen för att komma igång
+          </HeaderPart>
         </Header>
-        <Header>
-          <TranslationsConsumer textKey="DOWNLOAD_HEADER_TWO">
-            {(header) => header}
-          </TranslationsConsumer>
-        </Header>
-        <InsuredText>
-          <TranslationsConsumer
-            textKey={
-              hasCurrentInsurer
-                ? 'DOWNLOAD_INFO_INSURED'
-                : 'DOWNLOAD_INFO_NOT_INSURED'
-            }
-          >
-            {(insuredText) => insuredText}
-          </TranslationsConsumer>
-        </InsuredText>
+        <DownloadText>
+          Du hittar den på App Store och Google Play. Om du är tidigare
+          försäkrad kommer vi hålla dig informerad om bytet från ditt gamla
+          försäkringsbolag.
+        </DownloadText>
         <TranslationsConsumer textKey="DOWNLOAD_LINK">
           {(downloadLink) => (
             <DownloadButton href={downloadLink}>
@@ -120,10 +129,12 @@ export const DownloadApp: React.SFC<DownloadAppProps> = ({
             </DownloadButton>
           )}
         </TranslationsConsumer>
-      </Column>
-      <Column>
-        <DownloadImage src={'/new-member-assets/download/success_image.svg'} />
-      </Column>
+      </TextColumn>
+      <ImageColumn>
+        <DownloadImage
+          src={'/new-member-assets/download/balloons-welcome-illustrations.svg'}
+        />
+      </ImageColumn>
     </InnerWrapper>
   </>
 )
