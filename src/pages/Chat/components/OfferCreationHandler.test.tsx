@@ -56,8 +56,10 @@ it('does nothing when no correct state is set', async () => {
           },
           redeemedCampaigns: [],
           member: {
+            id: '1337',
             firstName: 'Test',
             lastName: 'Testerson',
+            email: 'test@testerson.se',
             __typename: 'Member',
           },
         },

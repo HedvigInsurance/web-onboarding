@@ -55,8 +55,10 @@ export const mockOffer: OfferData = {
   },
   redeemedCampaigns: [],
   member: {
+    id: '1337',
     firstName: 'Test',
     lastName: 'Testerson',
+    email: 'test@testerson.se',
   },
 }
 

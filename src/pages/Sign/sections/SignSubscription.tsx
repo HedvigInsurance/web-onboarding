@@ -10,6 +10,8 @@ import { Mount } from 'react-lifecycle-components/dist'
 import { Redirect } from 'react-router-dom'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
 import { CurrentLanguage } from '../../../components/utils/CurrentLanguage'
+import { OfferContainer } from '../../../containers/OfferContainer'
+import { adtraction } from '../../../utils/tracking'
 
 const spin = keyframes({
   from: { transform: 'rotate(0deg)' },
@@ -151,6 +153,7 @@ interface StateComponentProps {
   collectStatus?: CollectStatus
   error?: ApolloError
   trackSignCompleted: () => void
+  runAdtraction: () => void
 }
 
 const StateComponent: React.SFC<StateComponentProps> = ({
@@ -158,6 +161,7 @@ const StateComponent: React.SFC<StateComponentProps> = ({
   collectStatus,
   error,
   trackSignCompleted,
+  runAdtraction,
 }) => {
   if (!signState || !collectStatus) {
     return null
@@ -188,6 +192,11 @@ const StateComponent: React.SFC<StateComponentProps> = ({
     case SIGNSTATE.COMPLETED:
       if (collectStatus.status === BANKIDSTATUS.COMPLETE) {
         trackSignCompleted()
+
+        if (process.env.NODE_ENV !== 'test') {
+          runAdtraction()
+        }
+
         return (
           <CurrentLanguage>
             {({ currentLanguage }) => (
@@ -210,6 +219,7 @@ const StateComponent: React.SFC<StateComponentProps> = ({
 
 interface SubscriptionComponentProps {
   isSignLoading: boolean
+  signEmail: string
 }
 
 const getIsSignPending = (data: SignStatusData | undefined) =>
@@ -219,6 +229,7 @@ const getIsSignPending = (data: SignStatusData | undefined) =>
 
 export const SubscriptionComponent: React.SFC<SubscriptionComponentProps> = ({
   isSignLoading,
+  signEmail,
 }) => (
   <Query<SignStatusData> query={SIGN_QUERY} fetchPolicy="network-only">
     {({ data, error, subscribeToMore }) => (
@@ -265,14 +276,34 @@ export const SubscriptionComponent: React.SFC<SubscriptionComponentProps> = ({
           }}
         >
           {({ track }) => (
-            <StateComponent
-              signState={data && data.signStatus && data.signStatus.signState}
-              collectStatus={
-                data && data.signStatus && data.signStatus.collectStatus
-              }
-              error={error}
-              trackSignCompleted={track}
-            />
+            <OfferContainer>
+              {(currentOffer) => (
+                <StateComponent
+                  signState={
+                    data && data.signStatus && data.signStatus.signState
+                  }
+                  collectStatus={
+                    data && data.signStatus && data.signStatus.collectStatus
+                  }
+                  error={error}
+                  trackSignCompleted={track}
+                  runAdtraction={() => {
+                    adtraction(
+                      parseFloat(
+                        currentOffer.insurance.cost.monthlyGross.amount,
+                      ),
+                      currentOffer.member.id,
+                      signEmail,
+                      currentOffer.redeemedCampaigns !== null &&
+                        currentOffer.redeemedCampaigns.length !== 0
+                        ? currentOffer.redeemedCampaigns[0].code
+                        : null,
+                      currentOffer.insurance.type,
+                    )
+                  }}
+                />
+              )}
+            </OfferContainer>
           )}
         </TrackAction>
       </Mount>

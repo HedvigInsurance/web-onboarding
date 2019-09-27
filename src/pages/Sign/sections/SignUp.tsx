@@ -8,6 +8,7 @@ import {
   FORMWIDTHSMALL,
   InputField,
 } from 'components/userInput/InputField'
+import { ActionMap, Container } from 'constate'
 import { OfferData } from 'containers/OfferContainer'
 import { Form, Formik } from 'formik'
 import gql from 'graphql-tag'
@@ -151,6 +152,13 @@ export const SIGN_MUTATION = gql`
     signOffer(details: { personalNumber: $personalNumber, email: $email })
   }
 `
+interface State {
+  email: string
+}
+
+interface Actions {
+  setEmail: (email: string) => void
+}
 
 interface SignOfferMutationVariables {
   personalNumber: string
@@ -162,122 +170,143 @@ interface SignUpProps {
 }
 
 export const SignUp: React.SFC<SignUpProps> = ({ offer }) => (
-  <CardWrapper>
-    <Card>
-      <DiscountBubble offer={offer} />
-      <HeaderBackground>
-        <HeaderWrapper>
-          <Header>
-            <TranslationsPlaceholderConsumer
-              textKey="SIGN_HEADER_TITLE"
-              replacements={{
-                address: <span data-hj-supress>{offer.insurance.address}</span>,
-              }}
+  <Container<State, ActionMap<State, Actions>>
+    initialState={{
+      email: '',
+    }}
+    actions={{
+      setEmail: (email: string) => ({
+        email,
+      }),
+    }}
+  >
+    {({ email, setEmail }) => (
+      <CardWrapper>
+        <Card>
+          <DiscountBubble offer={offer} />
+          <HeaderBackground>
+            <HeaderWrapper>
+              <Header>
+                <TranslationsPlaceholderConsumer
+                  textKey="SIGN_HEADER_TITLE"
+                  replacements={{
+                    address: (
+                      <span data-hj-supress>{offer.insurance.address}</span>
+                    ),
+                  }}
+                >
+                  {(title) => title}
+                </TranslationsPlaceholderConsumer>
+              </Header>
+            </HeaderWrapper>
+            <PersonalInfo data-hj-supress>
+              {`${offer.member.firstName} ${offer.member.lastName}`}
+              {' · '}
+              {offer.insurance.address}
+              {' · '}
+              {formatPostalNumber(offer.insurance.postalNumber)}
+            </PersonalInfo>
+          </HeaderBackground>
+          <PriceAndInclusions offer={offer} />
+          <>
+            <Mutation<boolean, SignOfferMutationVariables>
+              mutation={SIGN_MUTATION}
             >
-              {(title) => title}
-            </TranslationsPlaceholderConsumer>
-          </Header>
-        </HeaderWrapper>
-        <PersonalInfo data-hj-supress>
-          {`${offer.member.firstName} ${offer.member.lastName}`}
-          {' · '}
-          {offer.insurance.address}
-          {' · '}
-          {formatPostalNumber(offer.insurance.postalNumber)}
-        </PersonalInfo>
-      </HeaderBackground>
-      <PriceAndInclusions offer={offer} />
-      <>
-        <Mutation<boolean, SignOfferMutationVariables> mutation={SIGN_MUTATION}>
-          {(signOffer, { loading }) => (
-            <Formik
-              initialValues={{
-                email: '',
-                personalNumber: '',
-              }}
-              validationSchema={userSchema}
-              onSubmit={(values) =>
-                signOffer({
-                  variables: {
-                    personalNumber: values.personalNumber,
-                    email: values.email,
-                  },
-                })
-              }
-            >
-              {({ errors, touched }) => (
-                <CustomForm>
-                  <InputTitle>
-                    <TranslationsConsumer textKey="SIGN_INPUT_ONE_TITLE">
-                      {(title) => title}
-                    </TranslationsConsumer>
-                  </InputTitle>
-                  <TranslationsConsumer textKey="SIGN_INPUT_EMAIL_PLACEHOLDER">
-                    {(placeholder) => (
-                      <InputRow>
-                        <InputField
-                          name="email"
-                          id="email"
-                          touched={touched.email}
-                          errors={errors.email}
-                          placeholder={placeholder}
-                        />
-                        {touched.email ? (
-                          errors.email ? (
-                            <VerificationIcon src="/new-member-assets/offering/not_insured.svg" />
-                          ) : (
-                            <VerificationIcon src="/new-member-assets/offering/checkmark.svg" />
-                          )
-                        ) : null}
-                      </InputRow>
-                    )}
-                  </TranslationsConsumer>
-                  {errors.email && touched.email ? (
-                    <ErrorMessage>
-                      <TranslationsConsumer textKey={errors.email}>
-                        {(errorMessage) => errorMessage}
+              {(signOffer, { loading }) => (
+                <Formik
+                  initialValues={{
+                    email: '',
+                    personalNumber: '',
+                  }}
+                  validationSchema={userSchema}
+                  onSubmit={(values) => {
+                    setEmail(values.email)
+                    signOffer({
+                      variables: {
+                        personalNumber: values.personalNumber,
+                        email: values.email,
+                      },
+                    })
+                  }}
+                >
+                  {({ errors, touched }) => (
+                    <CustomForm>
+                      <InputTitle>
+                        <TranslationsConsumer textKey="SIGN_INPUT_ONE_TITLE">
+                          {(title) => title}
+                        </TranslationsConsumer>
+                      </InputTitle>
+                      <TranslationsConsumer textKey="SIGN_INPUT_EMAIL_PLACEHOLDER">
+                        {(placeholder) => (
+                          <InputRow>
+                            <InputField
+                              name="email"
+                              id="email"
+                              touched={touched.email}
+                              errors={errors.email}
+                              placeholder={placeholder}
+                            />
+                            {touched.email ? (
+                              errors.email ? (
+                                <VerificationIcon src="/new-member-assets/offering/not_insured.svg" />
+                              ) : (
+                                <VerificationIcon src="/new-member-assets/offering/checkmark.svg" />
+                              )
+                            ) : null}
+                          </InputRow>
+                        )}
                       </TranslationsConsumer>
-                    </ErrorMessage>
-                  ) : null}
-                  <InputTitle>
-                    <TranslationsConsumer textKey="SIGN_INPUT_TWO_TITLE">
-                      {(title) => title}
-                    </TranslationsConsumer>
-                  </InputTitle>
-                  <TranslationsConsumer textKey="SIGN_INPUT_PERSONAL_NUMBER_PLACEHOLDER">
-                    {(placeholder) => (
-                      <InputRow>
-                        <InputField
-                          name="personalNumber"
-                          id="personalNumber"
-                          touched={touched.personalNumber}
-                          errors={errors.personalNumber}
-                          placeholder={placeholder}
-                        />
-                        {touched.personalNumber ? (
-                          errors.personalNumber ? (
-                            <VerificationIcon src="/new-member-assets/offering/not_insured.svg" />
-                          ) : (
-                            <VerificationIcon src="/new-member-assets/offering/checkmark.svg" />
-                          )
-                        ) : null}
-                      </InputRow>
-                    )}
-                  </TranslationsConsumer>
-                  {errors.personalNumber && touched.personalNumber ? (
-                    <ErrorMessage>
-                      <TranslationsConsumer textKey={errors.personalNumber}>
-                        {(errorMessage) => errorMessage}
+                      {errors.email && touched.email ? (
+                        <ErrorMessage>
+                          <TranslationsConsumer textKey={errors.email}>
+                            {(errorMessage) => errorMessage}
+                          </TranslationsConsumer>
+                        </ErrorMessage>
+                      ) : null}
+                      <InputTitle>
+                        <TranslationsConsumer textKey="SIGN_INPUT_TWO_TITLE">
+                          {(title) => title}
+                        </TranslationsConsumer>
+                      </InputTitle>
+                      <TranslationsConsumer textKey="SIGN_INPUT_PERSONAL_NUMBER_PLACEHOLDER">
+                        {(placeholder) => (
+                          <InputRow>
+                            <InputField
+                              name="personalNumber"
+                              id="personalNumber"
+                              touched={touched.personalNumber}
+                              errors={errors.personalNumber}
+                              placeholder={placeholder}
+                            />
+                            {touched.personalNumber ? (
+                              errors.personalNumber ? (
+                                <VerificationIcon src="/new-member-assets/offering/not_insured.svg" />
+                              ) : (
+                                <VerificationIcon src="/new-member-assets/offering/checkmark.svg" />
+                              )
+                            ) : null}
+                          </InputRow>
+                        )}
                       </TranslationsConsumer>
-                    </ErrorMessage>
-                  ) : null}
-                  <SubscriptionComponent isSignLoading={loading} />
-                </CustomForm>
+                      {errors.personalNumber && touched.personalNumber ? (
+                        <ErrorMessage>
+                          <TranslationsConsumer textKey={errors.personalNumber}>
+                            {(errorMessage) => errorMessage}
+                          </TranslationsConsumer>
+                        </ErrorMessage>
+                      ) : null}
+                      <SubscriptionComponent
+                        isSignLoading={loading}
+                        signEmail={email}
+                      />
+                    </CustomForm>
+                  )}
+                </Formik>
               )}
-            </Formik>
-          )}
-        </Mutation>
-      </>
-    </Card>
-  </CardWrapper>
+            </Mutation>
+          </>
+        </Card>
+      </CardWrapper>
+    )}
+  </Container>
 )

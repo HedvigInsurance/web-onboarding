@@ -65,8 +65,10 @@ it('queries when it has a session', async () => {
           },
           redeemedCampaigns: [],
           member: {
+            id: '1337',
             firstName: 'Test',
             lastName: 'Testerson',
+            email: 'test@testerson.se',
             __typename: 'Member',
           },
         },
@@ -154,8 +156,10 @@ it('signs without 💥', async () => {
           },
           redeemedCampaigns: [],
           member: {
+            id: '1337',
             firstName: 'Test',
             lastName: 'Testerson',
+            email: 'test@testerson.se',
             __typename: 'Member',
           },
         },
@@ -289,8 +293,10 @@ it('shows an error when bankid errors', async () => {
           },
           redeemedCampaigns: [],
           member: {
+            id: '1337',
             firstName: 'Test',
             lastName: 'Testerson',
+            email: 'test@testerson.se',
             __typename: 'Member',
           },
         },
@@ -426,8 +432,10 @@ it('renders correct status when sign status query has a status', async () => {
           },
           redeemedCampaigns: [],
           member: {
+            id: '1337',
             firstName: 'Test',
             lastName: 'Testerson',
+            email: 'test@testerson.se',
             __typename: 'Member',
           },
         },

@@ -56,8 +56,10 @@ it('queries when it has a session', async () => {
           },
           redeemedCampaigns: [],
           member: {
+            id: '1337',
             firstName: 'Test',
             lastName: 'Testerson',
+            email: 'test@testerson.se',
             __typename: 'Member',
           },
         },
@@ -145,8 +147,10 @@ it('shows information about switching if you have an insurance', async () => {
           },
           redeemedCampaigns: [],
           member: {
+            id: '1337',
             firstName: 'Test',
             lastName: 'Testerson',
+            email: 'test@testerson.se',
             __typename: 'Member',
           },
         },
