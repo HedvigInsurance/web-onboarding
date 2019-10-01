@@ -150,10 +150,10 @@ export const ConnectPaymentPage: React.SFC<{}> = () => (
                   background={colors.PURPLE}
                   foreground={colors.WHITE}
                   onClick={async () => {
+                    setTrustlyModalIsOpen(true)
                     const res = await mutate()
                     console.log(res)
                     setTrustlyUrl(res.data.startDirectDebitRegistration)
-                    setTrustlyModalIsOpen(true)
                   }}
                 >
                   Koppla autogiro

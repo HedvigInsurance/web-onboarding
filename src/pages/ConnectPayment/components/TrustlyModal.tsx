@@ -1,7 +1,10 @@
 import { colors } from '@hedviginsurance/brand'
 import Modal from 'components/Modal'
+import { ActionMap, Container } from 'constate'
 import * as React from 'react'
-import styled from 'react-emotion'
+import styled, { keyframes } from 'react-emotion'
+import { Redirect } from 'react-router'
+import { CurrentLanguage } from '../../../components/utils/CurrentLanguage'
 
 const Header = styled('div')({
   width: '100%',
@@ -21,21 +24,95 @@ const TrustlyIframe = styled('iframe')({
   border: 'none',
 })
 
+const spin = keyframes({
+  from: { transform: 'rotate(0deg)' },
+  to: { transform: 'rotate(360deg)' },
+})
+
+const Spinner = styled('span')({
+  display: 'inline-block',
+  width: '1em',
+  height: '1em',
+  marginLeft: '1em',
+  border: `2px solid ${colors.BLACK}`,
+  borderTopColor: 'transparent',
+  borderRadius: '1em',
+  animation: `${spin} 500ms linear infinite`,
+})
+
+interface State {
+  isSuccess: boolean
+}
+
+interface Actions {
+  setIsSuccess: (isSuccess: boolean) => void
+}
+
 interface Props {
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
   trustlyUrl: string | null
 }
 
-const TrustlyModal: React.FC<Props> = ({ isOpen, setIsOpen, trustlyUrl }) => (
-  <Modal
-    isOpen={isOpen}
-    setIsOpen={setIsOpen}
-    style={{ content: { padding: 0 } }}
-  >
-    <Header>Sätt upp betalning</Header>
-    {trustlyUrl !== null && <TrustlyIframe src={trustlyUrl} />}
-  </Modal>
-)
+const TrustlyModal: React.FC<Props> = ({ isOpen, setIsOpen, trustlyUrl }) => {
+  const iframeRef = React.createRef<HTMLIFrameElement>()
+  return (
+    <Container<State, ActionMap<State, Actions>>
+      initialState={{
+        isSuccess: false,
+      }}
+      actions={{
+        setIsSuccess: (isSuccess: boolean) => ({
+          isSuccess,
+        }),
+      }}
+    >
+      {({ isSuccess, setIsSuccess }) => (
+        <Modal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          style={{ content: { padding: 0 } }}
+        >
+          <Header>Sätt upp betalning</Header>
+          {trustlyUrl !== null ? (
+            <TrustlyIframe
+              src={trustlyUrl}
+              innerRef={iframeRef}
+              onLoad={() => {
+                const iframe = iframeRef.current
+
+                if (iframe !== null) {
+                  const href =
+                    iframe.contentWindow !== null
+                      ? iframe.contentWindow.location.href
+                      : ''
+
+                  if (href.endsWith('success')) {
+                    setIsOpen(false)
+                    setIsSuccess(true)
+                  } else {
+                    // TODO
+                  }
+                }
+              }}
+            />
+          ) : (
+            <Spinner />
+          )}
+          {isSuccess && (
+            <CurrentLanguage>
+              {({ currentLanguage }) => (
+                <Redirect
+                  to={`/${currentLanguage &&
+                    currentLanguage + '/'}new-member/download`}
+                />
+              )}
+            </CurrentLanguage>
+          )}
+        </Modal>
+      )}
+    </Container>
+  )
+}
 
 export default TrustlyModal
