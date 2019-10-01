@@ -1,7 +1,10 @@
 import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
+import { Form, Formik } from 'formik'
 import * as React from 'react'
 import styled from 'react-emotion'
+import { InputField } from '../../../components/userInput/InputField'
+import { Button } from '../../../components/buttons'
 
 const SITEWRAPPER = 1300
 const BP = 800
@@ -45,6 +48,10 @@ const TextColumn = styled('div')({
   },
 })
 
+const TextSubColumn = styled('div')({
+  width: '65%',
+})
+
 const ImageColumn = styled('div')({
   width: '40%',
   paddingRight: 20,
@@ -57,17 +64,29 @@ const ImageColumn = styled('div')({
   },
 })
 
-const DownloadButton = styled('a')({
-  backgroundColor: colors.PURPLE,
-  color: colors.WHITE,
-  textDecoration: 'none',
-  borderRadius: '50px',
-  padding: '10px 16px',
-  cursor: 'pointer',
-  border: 'none',
-  outlineStyle: 'none',
-  marginTop: '10px',
-  marginBottom: '30px',
+const PhoneInput = styled(InputField)({
+  width: '100%',
+  background: colors.WHITE,
+  marginBottom: 30,
+})
+
+const ButtonWrapper = styled('div')({
+  display: 'flex',
+  flexFlow: 'row',
+  alignItems: 'center',
+})
+
+const DownloadButton = styled(Button)({
+  marginRight: 24,
+})
+
+const AppleLogo = styled('img')({
+  width: 24,
+  marginRight: 16,
+})
+
+const GooglePlayLogo = styled('img')({
+  width: 24,
 })
 
 const DownloadImage = styled('img')({
@@ -93,7 +112,6 @@ const HeaderPart = styled('span')(({ color }: { color: string }) => ({
 }))
 
 const DownloadText = styled('div')({
-  width: '65%',
   marginBottom: '45px',
   color: colors.OFF_BLACK,
 })
@@ -115,20 +133,47 @@ export const DownloadApp: React.SFC<DownloadAppProps> = ({
             Ladda ner appen för att komma igång
           </HeaderPart>
         </Header>
-        <DownloadText>
-          Du hittar den på App Store och Google Play. Om du är tidigare
-          försäkrad kommer vi hålla dig informerad om bytet från ditt gamla
-          försäkringsbolag.
-        </DownloadText>
-        <TranslationsConsumer textKey="DOWNLOAD_LINK">
-          {(downloadLink) => (
-            <DownloadButton href={downloadLink}>
-              <TranslationsConsumer textKey="DOWNLOAD_BUTTON_TEXT">
-                {(buttonText) => buttonText}
-              </TranslationsConsumer>
-            </DownloadButton>
-          )}
-        </TranslationsConsumer>
+        <TextSubColumn>
+          <DownloadText>
+            Du hittar den på App Store och Google Play. Om du är tidigare
+            försäkrad kommer vi hålla dig informerad om bytet från ditt gamla
+            försäkringsbolag.
+          </DownloadText>
+          <Formik
+            validateOnBlur
+            initialValues={{ phone: '' }}
+            onSubmit={(form, actions) => {
+              alert('send sms')
+            }}
+          >
+            {({ touched, errors }) => (
+              <Form>
+                <PhoneInput
+                  placeholder="Telefonnummer"
+                  name="phone"
+                  touched={touched.phone}
+                  errors={errors.phone}
+                />
+                <ButtonWrapper>
+                  <DownloadButton
+                    background={colors.PURPLE}
+                    foreground={colors.WHITE}
+                    type="submit"
+                  >
+                    Få nedladdningslänk
+                  </DownloadButton>
+
+                  <AppleLogo
+                    src={'/new-member-assets/download/apple-logo.svg'}
+                  />
+                  <GooglePlayLogo
+                    src={'/new-member-assets/download/google-play-logo.svg'}
+                  />
+                </ButtonWrapper>
+              </Form>
+            )}
+          </Formik>
+        </TextSubColumn>
       </TextColumn>
       <ImageColumn>
         <DownloadImage
