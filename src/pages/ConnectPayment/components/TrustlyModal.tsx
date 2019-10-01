@@ -2,7 +2,7 @@ import { colors } from '@hedviginsurance/brand'
 import Modal from 'components/Modal'
 import { ActionMap, Container } from 'constate'
 import * as React from 'react'
-import styled, { keyframes } from 'react-emotion'
+import styled from 'react-emotion'
 import { Redirect } from 'react-router'
 import { CurrentLanguage } from '../../../components/utils/CurrentLanguage'
 
@@ -22,22 +22,6 @@ const TrustlyIframe = styled('iframe')({
   width: '100%',
   height: 'calc(100% - 40px)',
   border: 'none',
-})
-
-const spin = keyframes({
-  from: { transform: 'rotate(0deg)' },
-  to: { transform: 'rotate(360deg)' },
-})
-
-const Spinner = styled('span')({
-  display: 'inline-block',
-  width: '1em',
-  height: '1em',
-  marginLeft: '1em',
-  border: `2px solid ${colors.BLACK}`,
-  borderTopColor: 'transparent',
-  borderRadius: '1em',
-  animation: `${spin} 500ms linear infinite`,
 })
 
 interface State {
@@ -74,31 +58,34 @@ const TrustlyModal: React.FC<Props> = ({ isOpen, setIsOpen, trustlyUrl }) => {
           style={{ content: { padding: 0 } }}
         >
           <Header>Sätt upp betalning</Header>
-          {trustlyUrl !== null ? (
+
+          {trustlyUrl !== null && (
             <TrustlyIframe
               src={trustlyUrl}
               innerRef={iframeRef}
               onLoad={() => {
                 const iframe = iframeRef.current
 
-                if (iframe !== null) {
-                  const href =
-                    iframe.contentWindow !== null
-                      ? iframe.contentWindow.location.href
-                      : ''
+                if (!iframe) {
+                  return
+                }
 
-                  if (href.endsWith('success')) {
-                    setIsOpen(false)
-                    setIsSuccess(true)
-                  } else {
-                    // TODO
-                  }
+                const contentWindow = iframe.contentWindow
+                if (!contentWindow) {
+                  return
+                }
+
+                const href = contentWindow.location.href
+                if (href.endsWith('success')) {
+                  setIsOpen(false)
+                  setIsSuccess(true)
+                } else if (href.endsWith('retry')) {
+                  contentWindow.location.href = trustlyUrl
                 }
               }}
             />
-          ) : (
-            <Spinner />
           )}
+
           {isSuccess && (
             <CurrentLanguage>
               {({ currentLanguage }) => (

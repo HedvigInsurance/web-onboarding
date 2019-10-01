@@ -1,4 +1,8 @@
 import { Chat } from './pages/Chat'
+import { ConnectPayment } from './pages/ConnectPayment'
+import { TrustlyFailPage } from './pages/ConnectPayment/components/TrustlyFailPage'
+import { TrustlyRetryPage } from './pages/ConnectPayment/components/TrustlyRetryPage'
+import { TrustlySuccessPage } from './pages/ConnectPayment/components/TrustlySuccessPage'
 import { LazyDontPanic } from './pages/DontPanic'
 import { Download } from './pages/Download'
 import { FourOhFour } from './pages/FourOhFour'
@@ -6,7 +10,6 @@ import { NewMemberLanding } from './pages/NewMemberLanding'
 import { Offering } from './pages/Offer'
 import { Referral } from './pages/Referral'
 import { Sign } from './pages/Sign'
-import { ConnectPayment } from './pages/ConnectPayment'
 
 export const LANGUAGE_PATH_PATTERN = '/:language(en)?'
 export const serverSideRedirects = [
@@ -41,6 +44,21 @@ export const reactPageRoutes = [
   {
     path: LANGUAGE_PATH_PATTERN + '/new-member/connect-payment',
     Component: ConnectPayment,
+    exact: true,
+  },
+  {
+    path: LANGUAGE_PATH_PATTERN + '/new-member/connect-payment/success',
+    Component: TrustlySuccessPage,
+    exact: true,
+  },
+  {
+    path: LANGUAGE_PATH_PATTERN + '/new-member/connect-payment/fail',
+    Component: TrustlyFailPage,
+    exact: true,
+  },
+  {
+    path: LANGUAGE_PATH_PATTERN + '/new-member/connect-payment/retry',
+    Component: TrustlyRetryPage,
     exact: true,
   },
   { path: '/dont-panic/hedvig', Component: LazyDontPanic, exact: true },
