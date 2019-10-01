@@ -1,11 +1,11 @@
 import { colors } from '@hedviginsurance/brand'
 import { Button } from 'components/buttons'
+import { ActionMap, Container } from 'constate'
 import gql from 'graphql-tag'
 import * as React from 'react'
 import { Mutation } from 'react-apollo'
 import styled from 'react-emotion'
 import TrustlyModal from '../components/TrustlyModal'
-import { ActionMap, Container } from 'constate'
 
 const SITEWRAPPER = 1300
 const BP = 800
@@ -148,7 +148,6 @@ export const ConnectPaymentPage: React.SFC<{}> = () => (
                   onClick={async () => {
                     setTrustlyModalIsOpen(true)
                     const res = await mutate()
-                    console.log(res)
                     setTrustlyUrl(res.data.startDirectDebitRegistration)
                   }}
                 >
