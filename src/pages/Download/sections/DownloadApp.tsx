@@ -14,6 +14,7 @@ import {
 
 const SITEWRAPPER = 1300
 const BP = 800
+const MOBILE = 450
 
 const Background = styled('div')({
   position: 'fixed',
@@ -35,10 +36,10 @@ const InnerWrapper = styled('div')({
   paddingLeft: '10px',
   paddingRight: '10px',
   paddingTop: '20vh',
-  [`@media (max-width: ${BP}px)`]: {
+  [`@media (maxWidth: ${BP}px)`]: {
     maxWidth: '100%',
     flexDirection: 'column',
-    paddingTop: 20 + 70,
+    paddingTop: 30 + 70,
   },
 })
 
@@ -56,6 +57,9 @@ const TextColumn = styled('div')({
 
 const TextSubColumn = styled('div')({
   width: '65%',
+  [`@media (max-width: ${BP}px)`]: {
+    width: '100%',
+  },
 })
 
 const ImageColumn = styled('div')({
@@ -72,7 +76,12 @@ const ImageColumn = styled('div')({
 
 const PhoneInput = styled(InputField)({
   width: '100%',
+  maxWidth: '400px',
   background: colors.WHITE,
+  [`@media (max-width: ${MOBILE}px)`]: {
+    minWidth: '100%',
+    maxWidth: '100%',
+  },
 })
 
 const ErrorText = styled('p')({
@@ -85,12 +94,22 @@ const ButtonWrapper = styled('div')({
   flexFlow: 'row',
   alignItems: 'center',
   marginTop: 30,
+  [`@media (max-width: ${BP}px)`]: {
+    justifyContent: 'center',
+  },
+  [`@media (max-width: ${MOBILE}px)`]: {
+    flexFlow: 'column',
+  },
 })
 
 const DownloadButton = styled(Button)({
   marginRight: 24,
   display: 'flex',
   alignItems: 'center',
+  [`@media (max-width: ${MOBILE}px)`]: {
+    marginRight: 0,
+    marginBottom: 20,
+  },
 })
 
 const spin = keyframes({
@@ -109,6 +128,10 @@ const Spinner = styled('span')({
   animation: `${spin} 500ms linear infinite`,
 })
 
+const LogoWrapper = styled('div')({
+  display: 'flex',
+})
+
 const AppleLogo = styled('img')({
   width: 24,
   marginRight: 16,
@@ -123,7 +146,7 @@ const DownloadImage = styled('img')({
   marginTop: '30px',
   marginLeft: 'auto',
   width: '100%',
-  '@media (max-width: 800px)': {
+  [`@media (max-width: ${BP}px)`]: {
     marginRight: 'auto',
     width: '80%',
   },
@@ -134,6 +157,10 @@ const Header = styled('h1')({
   marginBottom: '30px',
   fontSize: '56px',
   lineHeight: '60px',
+  [`@media (max-width: ${MOBILE}px)`]: {
+    fontSize: '44px',
+    lineHeight: '56px',
+  },
 })
 
 const HeaderPart = styled('span')(({ color }: { color: string }) => ({
@@ -283,15 +310,16 @@ export const DownloadApp: React.FC<DownloadAppProps> = ({
                             Få nedladdningslänk
                             {isSending && <Spinner />}
                           </DownloadButton>
-
-                          <AppleLogo
-                            src={'/new-member-assets/download/apple-logo.svg'}
-                          />
-                          <GooglePlayLogo
-                            src={
-                              '/new-member-assets/download/google-play-logo.svg'
-                            }
-                          />
+                          <LogoWrapper>
+                            <AppleLogo
+                              src={'/new-member-assets/download/apple-logo.svg'}
+                            />
+                            <GooglePlayLogo
+                              src={
+                                '/new-member-assets/download/google-play-logo.svg'
+                              }
+                            />
+                          </LogoWrapper>
                         </ButtonWrapper>
                       </>
                     ) : (

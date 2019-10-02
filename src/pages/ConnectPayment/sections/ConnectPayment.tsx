@@ -10,6 +10,7 @@ import TrustlyModal from '../components/TrustlyModal'
 
 const SITEWRAPPER = 1300
 const BP = 800
+const MOBILE = 450
 
 const START_DIRECT_DEBIT_REGISTRATION_MUTATION = gql`
   mutation StartDirectDebigRegistration {
@@ -40,7 +41,7 @@ const InnerWrapper = styled('div')({
   [`@media (max-width: ${BP}px)`]: {
     maxWidth: '100%',
     flexDirection: 'column',
-    paddingTop: 20 + 70,
+    paddingTop: 30 + 70,
   },
 })
 
@@ -73,6 +74,10 @@ const Header = styled('h1')({
   marginBottom: '30px',
   fontSize: '56px',
   lineHeight: '60px',
+  [`@media (max-width: ${MOBILE}px)`]: {
+    fontSize: '44px',
+    lineHeight: '56px',
+  },
 })
 
 const HeaderPart = styled('span')(({ color }: { color: string }) => ({
@@ -84,6 +89,9 @@ const ConnectText = styled('div')({
   width: '65%',
   marginBottom: '45px',
   color: colors.OFF_BLACK,
+  [`@media (max-width: ${BP}px)`]: {
+    width: '100%',
+  },
 })
 
 const ConnectPaymentImage = styled('img')({
@@ -91,9 +99,12 @@ const ConnectPaymentImage = styled('img')({
   marginTop: '30px',
   marginLeft: 'auto',
   width: '100%',
-  '@media (max-width: 800px)': {
+  [`@media (max-width: ${BP}px)`]: {
     marginRight: 'auto',
     width: '80%',
+  },
+  [`@media (max-width: ${MOBILE}px)`]: {
+    width: '100%',
   },
 })
 
