@@ -67,6 +67,7 @@ const template = (
   </script>
   <script key="segment-snippet" nonce="${cspNonce}">${segmentSnippet}</script>
   <script nonce="${cspNonce}">${branchSnippet}</script>
+  <script defer src="https://adtr.io/jsTag?ap=1412531808"></script>
 </head>
 <body>
   <div id="react-root">${body}</div>
