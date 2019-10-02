@@ -3,8 +3,6 @@ import { injectGlobal } from 'emotion'
 import * as React from 'react'
 import * as ReactModal from 'react-modal'
 
-const MOBILE = 450
-
 const cssTransitions = `
 .ReactModal__Overlay {
   opacity: 0;

@@ -37,9 +37,15 @@ interface Props {
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
   trustlyUrl: string | null
+  generateTrustlyUrl: () => Promise<string | null>
 }
 
-const TrustlyModal: React.FC<Props> = ({ isOpen, setIsOpen, trustlyUrl }) => {
+const TrustlyModal: React.FC<Props> = ({
+  isOpen,
+  setIsOpen,
+  trustlyUrl,
+  generateTrustlyUrl,
+}) => {
   const iframeRef = React.createRef<HTMLIFrameElement>()
   return (
     <Container<State, ActionMap<State, Actions>>
@@ -68,7 +74,7 @@ const TrustlyModal: React.FC<Props> = ({ isOpen, setIsOpen, trustlyUrl }) => {
             <TrustlyIframe
               src={trustlyUrl}
               innerRef={iframeRef}
-              onLoad={() => {
+              onLoad={async () => {
                 const iframe = iframeRef.current
 
                 if (!iframe) {
@@ -76,16 +82,22 @@ const TrustlyModal: React.FC<Props> = ({ isOpen, setIsOpen, trustlyUrl }) => {
                 }
 
                 const contentWindow = iframe.contentWindow
+
                 if (!contentWindow) {
                   return
                 }
 
                 const href = contentWindow.location.href
+
                 if (href.endsWith('success')) {
                   setIsOpen(false)
                   setIsSuccess(true)
                 } else if (href.endsWith('retry')) {
-                  contentWindow.location.href = trustlyUrl
+                  const newTrustlyUrl = await generateTrustlyUrl()
+
+                  if (newTrustlyUrl !== null) {
+                    contentWindow.location.href = newTrustlyUrl
+                  }
                 }
               }}
             />

@@ -28,15 +28,15 @@ const Background = styled('div')({
 
 const InnerWrapper = styled('div')({
   display: 'flex',
-  flexDirection: 'row',
+  flexFlow: 'row wrap',
   alignItems: 'center',
   justifyContent: 'center',
   maxWidth: SITEWRAPPER,
   margin: 'auto',
   paddingLeft: '10px',
   paddingRight: '10px',
-  paddingTop: '20vh',
-  [`@media (maxWidth: ${BP}px)`]: {
+  paddingTop: '25vh',
+  [`@media (max-width: ${BP}px)`]: {
     maxWidth: '100%',
     flexDirection: 'column',
     paddingTop: 30 + 70,
@@ -159,7 +159,7 @@ const Header = styled('h1')({
   lineHeight: '60px',
   [`@media (max-width: ${MOBILE}px)`]: {
     fontSize: '44px',
-    lineHeight: '56px',
+    lineHeight: '52px',
   },
 })
 
@@ -168,8 +168,11 @@ const HeaderPart = styled('span')(({ color }: { color: string }) => ({
 }))
 
 const DownloadText = styled('div')({
-  marginBottom: '45px',
+  marginBottom: 45,
   color: colors.OFF_BLACK,
+  [`@media (max-width: ${MOBILE}px)`]: {
+    marginBottom: 25,
+  },
 })
 
 const validationSchema = Yup.object().shape({
@@ -190,9 +193,7 @@ interface DownloadAppProps {
   hasCurrentInsurer?: boolean
 }
 
-export const DownloadApp: React.FC<DownloadAppProps> = ({
-  hasCurrentInsurer,
-}) => (
+export const DownloadApp: React.FC<DownloadAppProps> = () => (
   <Container<State, ActionMap<State, Actions>>
     initialState={{
       isSending: false,
@@ -234,7 +235,7 @@ export const DownloadApp: React.FC<DownloadAppProps> = ({
                 validateOnBlur
                 validationSchema={validationSchema}
                 initialValues={{ phoneNumber: '' }}
-                onSubmit={(form, actions) => {
+                onSubmit={(form) => {
                   let phoneNumber = form.phoneNumber.trim()
 
                   if (!phoneNumber) {

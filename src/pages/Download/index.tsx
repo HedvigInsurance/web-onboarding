@@ -13,7 +13,7 @@ export const Download: React.SFC<{}> = () => (
       <OfferContainer>
         {(offer) => (
           <>
-            <TranslationsConsumer textKey="DOWNLOAD_PAGE_TITLE">
+            <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_PAGE_TITLE">
               {(t) => (
                 <Helmet>
                   <title>{t}</title>
