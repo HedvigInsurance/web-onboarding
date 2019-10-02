@@ -165,18 +165,18 @@ export const ConnectPaymentPage: React.SFC<{}> = () => (
                       <Header>
                         <HeaderPart color={colors.DARK_GREEN}>
                           <TranslationsConsumer textKey="ONBOARDING_CONNECT_DD_PRE_HEADLINE">
-                            {(header) => header}
+                            {(t) => t}
                           </TranslationsConsumer>
                         </HeaderPart>
                         <HeaderPart color={colors.BLACK}>
                           <TranslationsConsumer textKey="ONBOARDING_CONNECT_DD_HEADLINE">
-                            {(header) => header}
+                            {(t) => t}
                           </TranslationsConsumer>
                         </HeaderPart>
                       </Header>
                       <ConnectText>
                         <TranslationsConsumer textKey="ONBOARDING_CONNECT_DD_BODY">
-                          {(header) => header}
+                          {(t) => t}
                         </TranslationsConsumer>
                       </ConnectText>
                       <Button
@@ -193,7 +193,7 @@ export const ConnectPaymentPage: React.SFC<{}> = () => (
                         }}
                       >
                         <TranslationsConsumer textKey="ONBOARDING_CONNECT_DD_CTA">
-                          {(header) => header}
+                          {(t) => t}
                         </TranslationsConsumer>
                       </Button>
                     </TextColumn>

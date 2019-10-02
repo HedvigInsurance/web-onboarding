@@ -175,8 +175,12 @@ const DownloadText = styled('div')({
   },
 })
 
+const phoneNumberRegex = /^([0-9+-])+$/
+
 const validationSchema = Yup.object().shape({
-  phoneNumber: Yup.string().required('ONBOARDING_DOWNLOAD_INPUT_ERROR'),
+  phoneNumber: Yup.string()
+    .required('ONBOARDING_DOWNLOAD_INPUT_ERROR')
+    .matches(phoneNumberRegex, 'ONBOARDING_DOWNLOAD_INPUT_ERROR'),
 })
 
 interface State {
@@ -216,121 +220,131 @@ export const DownloadApp: React.FC<DownloadAppProps> = () => (
             <Header>
               <HeaderPart color={colors.DARK_YELLOW}>
                 <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_PRE_HEADLINE">
-                  {(header) => header}
+                  {(t) => t}
                 </TranslationsConsumer>
               </HeaderPart>
               <HeaderPart color={colors.BLACK}>
                 <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_HEADLINE">
-                  {(header) => header}
+                  {(t) => t}
                 </TranslationsConsumer>
               </HeaderPart>
             </Header>
             <TextSubColumn>
               <DownloadText>
                 <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_BODY">
-                  {(header) => header}
+                  {(t) => t}
                 </TranslationsConsumer>
               </DownloadText>
-              <Formik
-                validateOnBlur
-                validationSchema={validationSchema}
-                initialValues={{ phoneNumber: '' }}
-                onSubmit={(form) => {
-                  let phoneNumber = form.phoneNumber.trim()
+              <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_SMS_TEXT">
+                {(smsText) => (
+                  <Formik
+                    validateOnBlur
+                    validationSchema={validationSchema}
+                    initialValues={{ phoneNumber: '' }}
+                    onSubmit={(form) => {
+                      let phoneNumber = form.phoneNumber.trim()
 
-                  if (!phoneNumber) {
-                    return
-                  }
-
-                  setIsSending(true)
-
-                  if (!phoneNumber.match(/^\+/)) {
-                    phoneNumber = `+46${phoneNumber}`
-                  }
-
-                  const utmParams = getUtmParamsFromCookie() || {}
-                  const defaultBranchLinkOptions = {
-                    channel: 'hedvig',
-                    feature: 'send-sms',
-                  }
-
-                  const linkOptions = utmParamsToBranchLinkOptions(
-                    utmParams as any,
-                    defaultBranchLinkOptions,
-                  )
-                  ;(window as any).branch.sendSMS(
-                    phoneNumber,
-                    {
-                      ...linkOptions,
-                      data: {
-                        ...(linkOptions || {}),
-                        $custom_sms_text: 'Ladda ner Hedvig-appen: {{ link }}',
-                      },
-                    },
-                    { make_new_link: false },
-                    (err: Error) => {
-                      setIsSending(false)
-
-                      if (err) {
-                        console.log('Branch.sendSMS error', err) // tslint:disable-line no-console
+                      if (!phoneNumber) {
                         return
                       }
 
-                      setIsSuccess(true)
-                    },
-                  )
-                }}
-              >
-                {({ touched, errors }) => (
-                  <Form>
-                    {isSuccess === false ? (
-                      <>
-                        <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_INPUT_PLACEHOLDER">
-                          {(header) => (
-                            <PhoneInput
-                              placeholder={header}
-                              name="phoneNumber"
-                              touched={touched.phoneNumber ? 'true' : 'false'}
-                              errors={errors.phoneNumber}
-                            />
-                          )}
-                        </TranslationsConsumer>
+                      setIsSending(true)
 
-                        {errors.phoneNumber && (
-                          <TranslationsConsumer textKey={errors.phoneNumber}>
-                            {(header) => <ErrorText>{header}</ErrorText>}
+                      if (!phoneNumber.match(/^\+/)) {
+                        phoneNumber = `+46${phoneNumber}`
+                      }
+
+                      const utmParams = getUtmParamsFromCookie() || {}
+                      const defaultBranchLinkOptions = {
+                        channel: 'hedvig',
+                        feature: 'send-sms',
+                      }
+
+                      const linkOptions = utmParamsToBranchLinkOptions(
+                        utmParams as any,
+                        defaultBranchLinkOptions,
+                      )
+                      ;(window as any).branch.sendSMS(
+                        phoneNumber,
+                        {
+                          ...linkOptions,
+                          data: {
+                            ...(linkOptions || {}),
+                            $custom_sms_text: `${smsText} {{ link }}`,
+                          },
+                        },
+                        { make_new_link: false },
+                        (err: Error) => {
+                          setIsSending(false)
+
+                          if (err) {
+                            console.log('Branch.sendSMS error', err) // tslint:disable-line no-console
+                            return
+                          }
+
+                          setIsSuccess(true)
+                        },
+                      )
+                    }}
+                  >
+                    {({ touched, errors }) => (
+                      <Form>
+                        {isSuccess === false ? (
+                          <>
+                            <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_INPUT_PLACEHOLDER">
+                              {(t) => (
+                                <PhoneInput
+                                  placeholder={t}
+                                  name="phoneNumber"
+                                  touched={touched.phoneNumber}
+                                  errors={errors.phoneNumber}
+                                />
+                              )}
+                            </TranslationsConsumer>
+
+                            {errors.phoneNumber && (
+                              <TranslationsConsumer
+                                textKey={errors.phoneNumber}
+                              >
+                                {(t) => <ErrorText>{t}</ErrorText>}
+                              </TranslationsConsumer>
+                            )}
+                            <ButtonWrapper>
+                              <DownloadButton
+                                background={colors.PURPLE}
+                                foreground={colors.WHITE}
+                                disabled={isSending}
+                                type="submit"
+                              >
+                                <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_CTA">
+                                  {(t) => t}
+                                </TranslationsConsumer>
+                                {isSending && <Spinner />}
+                              </DownloadButton>
+                              <LogoWrapper>
+                                <AppleLogo
+                                  src={
+                                    '/new-member-assets/download/apple-logo.svg'
+                                  }
+                                />
+                                <GooglePlayLogo
+                                  src={
+                                    '/new-member-assets/download/google-play-logo.svg'
+                                  }
+                                />
+                              </LogoWrapper>
+                            </ButtonWrapper>
+                          </>
+                        ) : (
+                          <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_SUCCESS_TEXT">
+                            {(t) => <p>{t}</p>}
                           </TranslationsConsumer>
                         )}
-                        <ButtonWrapper>
-                          <DownloadButton
-                            background={colors.PURPLE}
-                            foreground={colors.WHITE}
-                            disabled={isSending}
-                            type="submit"
-                          >
-                            Få nedladdningslänk
-                            {isSending && <Spinner />}
-                          </DownloadButton>
-                          <LogoWrapper>
-                            <AppleLogo
-                              src={'/new-member-assets/download/apple-logo.svg'}
-                            />
-                            <GooglePlayLogo
-                              src={
-                                '/new-member-assets/download/google-play-logo.svg'
-                              }
-                            />
-                          </LogoWrapper>
-                        </ButtonWrapper>
-                      </>
-                    ) : (
-                      <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_SUCCESS_TEXT">
-                        {(header) => <p>{header}</p>}
-                      </TranslationsConsumer>
+                      </Form>
                     )}
-                  </Form>
+                  </Formik>
                 )}
-              </Formik>
+              </TranslationsConsumer>
             </TextSubColumn>
           </TextColumn>
           <ImageColumn>
