@@ -146,7 +146,7 @@ const DownloadText = styled('div')({
 })
 
 const validationSchema = Yup.object().shape({
-  phoneNumber: Yup.string().required('Ej giligt telefonnummer'),
+  phoneNumber: Yup.string().required('ONBOARDING_DOWNLOAD_INPUT_ERROR'),
 })
 
 interface State {
@@ -159,7 +159,13 @@ interface Actions {
   setIsSuccess: (isSuccess: boolean) => void
 }
 
-export const DownloadApp: React.FC = () => (
+interface DownloadAppProps {
+  hasCurrentInsurer?: boolean
+}
+
+export const DownloadApp: React.FC<DownloadAppProps> = ({
+  hasCurrentInsurer,
+}) => (
   <Container<State, ActionMap<State, Actions>>
     initialState={{
       isSending: false,
@@ -180,16 +186,22 @@ export const DownloadApp: React.FC = () => (
         <InnerWrapper>
           <TextColumn>
             <Header>
-              <HeaderPart color={colors.DARK_YELLOW}>Välkommen! </HeaderPart>
+              <HeaderPart color={colors.DARK_YELLOW}>
+                <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_PRE_HEADLINE">
+                  {(header) => header}
+                </TranslationsConsumer>
+              </HeaderPart>
               <HeaderPart color={colors.BLACK}>
-                Ladda ner appen för att komma igång
+                <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_HEADLINE">
+                  {(header) => header}
+                </TranslationsConsumer>
               </HeaderPart>
             </Header>
             <TextSubColumn>
               <DownloadText>
-                Du hittar den på App Store och Google Play. Om du är tidigare
-                försäkrad kommer vi hålla dig informerad om bytet från ditt
-                gamla försäkringsbolag.
+                <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_BODY">
+                  {(header) => header}
+                </TranslationsConsumer>
               </DownloadText>
               <Formik
                 validateOnBlur
@@ -245,14 +257,21 @@ export const DownloadApp: React.FC = () => (
                   <Form>
                     {isSuccess === false ? (
                       <>
-                        <PhoneInput
-                          placeholder="Telefonnummer"
-                          name="phoneNumber"
-                          touched={touched.phoneNumber ? 'true' : 'false'}
-                          errors={errors.phoneNumber}
-                        />
+                        <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_INPUT_PLACEHOLDER">
+                          {(header) => (
+                            <PhoneInput
+                              placeholder={header}
+                              name="phoneNumber"
+                              touched={touched.phoneNumber ? 'true' : 'false'}
+                              errors={errors.phoneNumber}
+                            />
+                          )}
+                        </TranslationsConsumer>
+
                         {errors.phoneNumber && (
-                          <ErrorText>{errors.phoneNumber}</ErrorText>
+                          <TranslationsConsumer textKey={errors.phoneNumber}>
+                            {(header) => <ErrorText>{header}</ErrorText>}
+                          </TranslationsConsumer>
                         )}
                         <ButtonWrapper>
                           <DownloadButton
@@ -276,7 +295,9 @@ export const DownloadApp: React.FC = () => (
                         </ButtonWrapper>
                       </>
                     ) : (
-                      <p>Vi har skickat ett sms med en nedladdningslänk!</p>
+                      <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_SUCCESS_TEXT">
+                        {(header) => <p>{header}</p>}
+                      </TranslationsConsumer>
                     )}
                   </Form>
                 )}

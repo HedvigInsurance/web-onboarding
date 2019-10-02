@@ -1,4 +1,5 @@
 import { colors } from '@hedviginsurance/brand'
+import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { Button } from 'components/buttons'
 import { ActionMap, Container } from 'constate'
 import gql from 'graphql-tag'
@@ -132,13 +133,21 @@ export const ConnectPaymentPage: React.SFC<{}> = () => (
         <InnerWrapper>
           <TextColumn>
             <Header>
-              <HeaderPart color={colors.DARK_GREEN}>Nästan klara!</HeaderPart>
-              <HeaderPart color={colors.BLACK}>Koppla ditt autogiro</HeaderPart>
+              <HeaderPart color={colors.DARK_GREEN}>
+                <TranslationsConsumer textKey="ONBOARDING_CONNECT_DD_PRE_HEADLINE">
+                  {(header) => header}
+                </TranslationsConsumer>
+              </HeaderPart>
+              <HeaderPart color={colors.BLACK}>
+                <TranslationsConsumer textKey="ONBOARDING_CONNECT_DD_HEADLINE">
+                  {(header) => header}
+                </TranslationsConsumer>
+              </HeaderPart>
             </Header>
             <ConnectText>
-              För att försäkringen ska gälla så behöver du koppla ditt autogiro.
-              Betalningen dras automatiskt från ditt bankkonto den 27:e varje
-              månad.
+              <TranslationsConsumer textKey="ONBOARDING_CONNECT_DD_BODY">
+                {(header) => header}
+              </TranslationsConsumer>
             </ConnectText>
             <Mutation mutation={START_DIRECT_DEBIT_REGISTRATION_MUTATION}>
               {(mutate: any) => (
@@ -151,7 +160,9 @@ export const ConnectPaymentPage: React.SFC<{}> = () => (
                     setTrustlyUrl(res.data.startDirectDebitRegistration)
                   }}
                 >
-                  Koppla autogiro
+                  <TranslationsConsumer textKey="ONBOARDING_CONNECT_DD_CTA">
+                    {(header) => header}
+                  </TranslationsConsumer>
                 </Button>
               )}
             </Mutation>

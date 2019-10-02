@@ -1,4 +1,5 @@
 import { colors } from '@hedviginsurance/brand'
+import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import Modal from 'components/Modal'
 import { ActionMap, Container } from 'constate'
 import * as React from 'react'
@@ -57,7 +58,11 @@ const TrustlyModal: React.FC<Props> = ({ isOpen, setIsOpen, trustlyUrl }) => {
           setIsOpen={setIsOpen}
           style={{ content: { padding: 0 } }}
         >
-          <Header>Sätt upp betalning</Header>
+          <Header>
+            <TranslationsConsumer textKey="ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_TITLE">
+              {(header) => header}
+            </TranslationsConsumer>
+          </Header>
 
           {trustlyUrl !== null && (
             <TrustlyIframe
