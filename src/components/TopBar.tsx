@@ -233,9 +233,23 @@ export const TopBar: React.SFC<Props> = ({ progress, button, partner }) => (
 )
 
 const EmptyBar = styled(Bar)({
-  justifyContent: 'flex-start',
+  justifyContent: 'space-between',
 })
-export const EmptyTopBar: React.FunctionComponent = () => (
+
+const ProceedComponentWrapper = styled('div')({
+  marginRight: 26,
+  '@media (max-width: 350px)': {
+    marginRight: 10,
+  },
+})
+
+interface EmptyTopBarProps {
+  proceedComponent?: React.ReactNode
+}
+
+export const EmptyTopBar: React.FC<EmptyTopBarProps> = ({
+  proceedComponent = <div />,
+}) => (
   <Wrapper>
     <EmptyBar>
       <LogoWrapper>
@@ -244,6 +258,7 @@ export const EmptyTopBar: React.FunctionComponent = () => (
         </EscapeLink>
       </LogoWrapper>
       <div />
+      <ProceedComponentWrapper>{proceedComponent}</ProceedComponentWrapper>
     </EmptyBar>
   </Wrapper>
 )
