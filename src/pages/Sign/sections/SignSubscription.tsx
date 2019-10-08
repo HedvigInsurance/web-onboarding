@@ -202,7 +202,7 @@ const StateComponent: React.SFC<StateComponentProps> = ({
             {({ currentLanguage }) => (
               <Redirect
                 to={`/${currentLanguage &&
-                  currentLanguage + '/'}new-member/download`}
+                  currentLanguage + '/'}new-member/connect-payment`}
               />
             )}
           </CurrentLanguage>

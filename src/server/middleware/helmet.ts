@@ -32,6 +32,7 @@ const defaultSrc = [
   'analytics.twitter.com',
   'online.adservicemedia.dk',
   '*.doubleclick.net',
+  '*.branch.io',
   'https://adtr.io',
   'https://track.adtraction.com',
   GIRAFFE_ENDPOINT,

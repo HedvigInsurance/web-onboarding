@@ -253,7 +253,7 @@ it('signs without 💥', async () => {
   })
   await mockNetworkWait()
   wrapper.update()
-  expect(wrapper.find(Redirect).prop('to')).toBe('/new-member/download')
+  expect(wrapper.find(Redirect).prop('to')).toBe('/new-member/connect-payment')
 })
 
 it('shows an error when bankid errors', async () => {

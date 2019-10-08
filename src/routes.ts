@@ -1,4 +1,7 @@
 import { Chat } from './pages/Chat'
+import { ConnectPayment } from './pages/ConnectPayment'
+import { TrustlyFailPage } from './pages/ConnectPayment/components/TrustlyFailPage'
+import { TrustlySpinnerPage } from './pages/ConnectPayment/components/TrustlySpinnerPage'
 import { LazyDontPanic } from './pages/DontPanic'
 import { Download } from './pages/Download'
 import { FourOhFour } from './pages/FourOhFour'
@@ -35,6 +38,26 @@ export const reactPageRoutes = [
   {
     path: LANGUAGE_PATH_PATTERN + '/new-member/sign',
     Component: Sign,
+    exact: true,
+  },
+  {
+    path: LANGUAGE_PATH_PATTERN + '/new-member/connect-payment',
+    Component: ConnectPayment,
+    exact: true,
+  },
+  {
+    path: LANGUAGE_PATH_PATTERN + '/new-member/connect-payment/success',
+    Component: TrustlySpinnerPage,
+    exact: true,
+  },
+  {
+    path: LANGUAGE_PATH_PATTERN + '/new-member/connect-payment/fail',
+    Component: TrustlyFailPage,
+    exact: true,
+  },
+  {
+    path: LANGUAGE_PATH_PATTERN + '/new-member/connect-payment/retry',
+    Component: TrustlySpinnerPage,
     exact: true,
   },
   { path: '/dont-panic/hedvig', Component: LazyDontPanic, exact: true },
