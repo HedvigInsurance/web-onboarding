@@ -8,6 +8,7 @@ const REGISTER_DIRECT_DEBIT_MUTATION = gql`
   ) {
     registerDirectDebit(clientContext: $clientContext) {
       url
+      orderId
     }
   }
 `
