@@ -251,7 +251,7 @@ export const DownloadApp: React.FC<DownloadAppProps> = () => (
                       setIsSending(true)
 
                       if (!phoneNumber.match(/^\+/)) {
-                        phoneNumber = `+46${phoneNumber}`
+                        phoneNumber = `+46${phoneNumber.replace(/^0/, '')}`
                       }
 
                       const utmParams = getUtmParamsFromCookie() || {}

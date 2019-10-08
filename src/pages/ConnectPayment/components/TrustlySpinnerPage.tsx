@@ -25,7 +25,7 @@ const Spinner = styled('span')({
   animation: `${spin} 500ms linear infinite`,
 })
 
-export const TrustlyRetryPage: React.FC = () => (
+export const TrustlySpinnerPage: React.FC = () => (
   <Wrapper>
     <Spinner />
   </Wrapper>

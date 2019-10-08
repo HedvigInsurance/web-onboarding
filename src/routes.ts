@@ -1,8 +1,7 @@
 import { Chat } from './pages/Chat'
 import { ConnectPayment } from './pages/ConnectPayment'
 import { TrustlyFailPage } from './pages/ConnectPayment/components/TrustlyFailPage'
-import { TrustlyRetryPage } from './pages/ConnectPayment/components/TrustlyRetryPage'
-import { TrustlySuccessPage } from './pages/ConnectPayment/components/TrustlySuccessPage'
+import { TrustlySpinnerPage } from './pages/ConnectPayment/components/TrustlySpinnerPage'
 import { LazyDontPanic } from './pages/DontPanic'
 import { Download } from './pages/Download'
 import { FourOhFour } from './pages/FourOhFour'
@@ -48,7 +47,7 @@ export const reactPageRoutes = [
   },
   {
     path: LANGUAGE_PATH_PATTERN + '/new-member/connect-payment/success',
-    Component: TrustlySuccessPage,
+    Component: TrustlySpinnerPage,
     exact: true,
   },
   {
@@ -58,7 +57,7 @@ export const reactPageRoutes = [
   },
   {
     path: LANGUAGE_PATH_PATTERN + '/new-member/connect-payment/retry',
-    Component: TrustlyRetryPage,
+    Component: TrustlySpinnerPage,
     exact: true,
   },
   { path: '/dont-panic/hedvig', Component: LazyDontPanic, exact: true },

@@ -4,7 +4,7 @@ import { Mutation, MutationFn } from 'react-apollo'
 
 const REGISTER_DIRECT_DEBIT_MUTATION = gql`
   mutation RegisterDirectDebit(
-    $clientContext: RegisterDirectDebitClientContext
+    $clientContext: RegisterDirectDebitClientContext!
   ) {
     registerDirectDebit(clientContext: $clientContext) {
       url

@@ -75,19 +75,13 @@ const TrustlyModal: React.FC<Props> = ({
               src={trustlyUrl}
               innerRef={iframeRef}
               onLoad={async () => {
-                const iframe = iframeRef.current
+                const contentWindow =
+                  iframeRef.current && iframeRef.current.contentWindow
+                const href = contentWindow && contentWindow.location.href
 
-                if (!iframe) {
+                if (!contentWindow || !href) {
                   return
                 }
-
-                const contentWindow = iframe.contentWindow
-
-                if (!contentWindow) {
-                  return
-                }
-
-                const href = contentWindow.location.href
 
                 if (href.endsWith('success')) {
                   setIsOpen(false)
