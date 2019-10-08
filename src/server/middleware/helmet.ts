@@ -35,6 +35,9 @@ const defaultSrc = [
   '*.branch.io',
   'https://adtr.io',
   'https://track.adtraction.com',
+  'app.link',
+  'trustly.com',
+  '*.trustly.com',
   GIRAFFE_ENDPOINT,
   GIRAFFE_WS_ENDPOINT,
 ]
