@@ -36,6 +36,8 @@ const defaultSrc = [
   'https://adtr.io',
   'https://track.adtraction.com',
   'app.link',
+  'hedvig.app.link',
+  'hedvig.test-app.link',
   'trustly.com',
   '*.trustly.com',
   GIRAFFE_ENDPOINT,
