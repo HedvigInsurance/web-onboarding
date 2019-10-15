@@ -18,7 +18,7 @@ const Bar = styled('div')({
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
-  justifyContent: 'flex-start',
+  justifyContent: 'space-between',
   top: 0,
   left: 0,
   right: 0,
@@ -48,7 +48,9 @@ const LogoWrapper = styled('div')({
     width: '33%',
   },
   '@media (max-width: 600px)': {
-    width: '60%',
+    width: '55%',
+  },
+  '@media (max-width: 350px)': {
     paddingLeft: 10,
   },
 })
@@ -116,9 +118,16 @@ const ButtonWrapper = styled('div')({
   },
   '@media (max-width: 600px)': {
     width: '45%',
+    paddingRight: 26,
     '& > *:last-of-type': {
       marginRight: 10,
     },
+    '& > *:last-child': {
+      marginRight: 0,
+    },
+  },
+  '@media (max-width: 350px)': {
+    paddingRight: 10,
   },
 })
 

@@ -49,23 +49,28 @@ export const Download: React.SFC<{}> = () => (
               )}
             </TranslationsConsumer>
             <StorageContainer>
-              {({ session }) => (
-                <EmptyTopBar
-                  proceedComponent={
-                    <ProceedLink href="/">
-                      <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_PROCEED_TEXT">
-                        {(text) => text}
-                      </TranslationsConsumer>
-                      <RightArrow />
-                    </ProceedLink>
-                  }
-                  partner={
-                    session &&
-                    session.getSession() &&
-                    session.getSession()!.partner
-                  }
-                />
-              )}
+              {({ session }) => {
+                const partner =
+                  session &&
+                  session.getSession() &&
+                  session.getSession()!.partner
+
+                return (
+                  <EmptyTopBar
+                    proceedComponent={
+                      !partner && (
+                        <ProceedLink href="/">
+                          <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_PROCEED_TEXT">
+                            {(text) => text}
+                          </TranslationsConsumer>
+                          <RightArrow />
+                        </ProceedLink>
+                      )
+                    }
+                    partner={partner}
+                  />
+                )
+              }}
             </StorageContainer>
 
             <DownloadApp
