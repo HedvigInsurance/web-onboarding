@@ -12,6 +12,10 @@ const Button = styled('button')({
 const Icon = styled('img')({
   width: '1.75rem',
   height: '1.75rem',
+  '@media (max-width: 600px)': {
+    width: '1.5rem',
+    height: '1.5rem',
+  },
 })
 
 export const ResetButton = () => (

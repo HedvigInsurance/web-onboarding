@@ -34,6 +34,10 @@ const ToggleButton = styled('button')({
 const LocalizationIcon = styled(LocalizationIconSvg)({
   width: '1.75rem',
   height: '1.75rem',
+  '@media (max-width: 600px)': {
+    width: '1.5rem',
+    height: '1.5rem',
+  },
 })
 const LanguageSwitcherDropdown = styled('ul')({
   position: 'absolute',

@@ -40,24 +40,23 @@ const ProgressLine = styled('div')({
 const LogoWrapper = styled('div')({
   height: '100%',
   width: '20%',
+  display: 'flex',
+  alignItems: 'center',
+  paddingTop: 4,
+  paddingLeft: 24,
   '@media (max-width: 850px)': {
     width: '33%',
   },
   '@media (max-width: 600px)': {
-    width: '50%',
+    width: '65%',
   },
 })
 
-const EscapeLink = styled('a')({})
-
-const Logo = styled('img')({
-  marginLeft: '26px',
-  marginTop: '24px',
-  '@media (max-width: 350px)': {
-    marginLeft: '10px',
-  },
-  maxWidth: 'calc(100% - 26px)',
+const EscapeLink = styled('a')({
+  display: 'flex',
 })
+
+const Logo = styled('img')({})
 
 const CheckmarkIcon = styled('img')({
   width: ICON_WIDTH,
@@ -106,15 +105,19 @@ const ButtonWrapper = styled('div')({
   justifyContent: 'flex-end',
   textAlign: 'right',
   width: '20%',
+  paddingTop: 4,
+  paddingLeft: 10,
+  '& > *:last-of-type': {
+    marginRight: 26,
+  },
   '@media (max-width: 850px)': {
     width: '33%',
   },
   '@media (max-width: 600px)': {
-    width: '50%',
-  },
-
-  '& > *:last-of-type': {
-    marginRight: 26,
+    width: '35%',
+    '& > *:last-of-type': {
+      marginRight: 10,
+    },
   },
 })
 
