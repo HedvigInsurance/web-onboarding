@@ -59,9 +59,6 @@ const BarButtonWrapper = styled('div')(
 const GetInsuredButton = styled('div')({
   display: 'flex',
   justifyContent: 'inherit',
-  '@media (max-width: 350px)': {
-    marginRight: '10px',
-  },
 })
 
 const LinkTag = styled(Link)({
@@ -71,6 +68,10 @@ const LinkTag = styled(Link)({
   borderRadius: '50px',
   padding: '10px 24px',
   textAlign: 'center',
+  '@media (max-width: 450px)': {
+    fontSize: '14px',
+    padding: '10px 18px',
+  },
   '@media (max-width: 300px)': {
     padding: '10px 12px',
   },

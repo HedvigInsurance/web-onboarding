@@ -43,21 +43,24 @@ const LogoWrapper = styled('div')({
   display: 'flex',
   alignItems: 'center',
   paddingTop: 4,
-  paddingLeft: 24,
+  paddingLeft: 20,
   '@media (max-width: 850px)': {
     width: '33%',
   },
   '@media (max-width: 600px)': {
-    width: '60%',
+    width: '55%',
   },
   '@media (max-width: 350px)': {
     paddingLeft: 10,
   },
 })
 
-const EscapeLink = styled('a')({
-  display: 'flex',
-})
+const EscapeLink = styled('a')(
+  ({ disable = false }: { disable?: boolean }) => ({
+    display: 'flex',
+    cursor: disable ? 'default' : 'cursor',
+  }),
+)
 
 const Logo = styled('img')({})
 
@@ -117,8 +120,8 @@ const ButtonWrapper = styled('div')({
     width: '33%',
   },
   '@media (max-width: 600px)': {
-    width: '40%',
-    paddingRight: 26,
+    width: '45%',
+    paddingRight: 20,
     '& > *:last-of-type': {
       marginRight: 10,
     },
@@ -174,7 +177,13 @@ export const TopBar: React.SFC<Props> = ({ progress, button, partner }) => (
       <LogoWrapper>
         <CurrentLanguage>
           {({ currentLanguage }) => (
-            <EscapeLink href={'/' + currentLanguage}>
+            <EscapeLink
+              href={'/' + currentLanguage}
+              onClick={(event) =>
+                partner === 'dreams' && event.preventDefault()
+              }
+              disable={partner === 'dreams'}
+            >
               <Logo
                 src={`/new-member-assets/topbar/hedvig-wordmark-${partner ||
                   'solid'}.svg`}
@@ -250,7 +259,7 @@ const EmptyBar = styled(Bar)({
 })
 
 const ProceedComponentWrapper = styled('div')({
-  marginRight: 26,
+  marginRight: 20,
   '@media (max-width: 350px)': {
     marginRight: 10,
   },
@@ -268,7 +277,11 @@ export const EmptyTopBar: React.FC<EmptyTopBarProps> = ({
   <Wrapper>
     <EmptyBar>
       <LogoWrapper>
-        <EscapeLink href="/">
+        <EscapeLink
+          href="/"
+          onClick={(event) => partner === 'dreams' && event.preventDefault()}
+          disable={partner === 'dreams'}
+        >
           <Logo
             src={`/new-member-assets/topbar/hedvig-wordmark-${partner ||
               'solid'}.svg`}
