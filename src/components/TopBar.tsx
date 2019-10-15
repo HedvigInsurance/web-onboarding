@@ -48,7 +48,8 @@ const LogoWrapper = styled('div')({
     width: '33%',
   },
   '@media (max-width: 600px)': {
-    width: '65%',
+    width: '60%',
+    paddingLeft: 10,
   },
 })
 
@@ -72,7 +73,7 @@ const ProgressStages = styled('div')({
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'space-around',
-  width: '60%',
+  width: '55%',
   '@media (max-width: 850px)': {
     display: 'none',
   },
@@ -114,7 +115,7 @@ const ButtonWrapper = styled('div')({
     width: '33%',
   },
   '@media (max-width: 600px)': {
-    width: '35%',
+    width: '45%',
     '& > *:last-of-type': {
       marginRight: 10,
     },
@@ -248,16 +249,21 @@ const ProceedComponentWrapper = styled('div')({
 
 interface EmptyTopBarProps {
   proceedComponent?: React.ReactNode
+  partner?: string
 }
 
 export const EmptyTopBar: React.FC<EmptyTopBarProps> = ({
   proceedComponent = <div />,
+  partner,
 }) => (
   <Wrapper>
     <EmptyBar>
       <LogoWrapper>
         <EscapeLink href="/">
-          <Logo src="/new-member-assets/topbar/hedvig-wordmark-solid.svg" />
+          <Logo
+            src={`/new-member-assets/topbar/hedvig-wordmark-${partner ||
+              'solid'}.svg`}
+          />
         </EscapeLink>
       </LogoWrapper>
       <div />

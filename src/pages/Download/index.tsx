@@ -7,6 +7,7 @@ import styled from 'react-emotion'
 import Helmet from 'react-helmet-async'
 import { OfferContainer } from '../../containers/OfferContainer'
 import { SessionTokenGuard } from '../../containers/SessionTokenGuard'
+import { StorageContainer } from '../../utils/StorageContainer'
 import { DownloadApp } from './sections/DownloadApp'
 
 const ProceedLink = styled('a')({
@@ -14,6 +15,7 @@ const ProceedLink = styled('a')({
   alignItems: 'center',
   color: colors.PURPLE,
   textDecoration: 'none',
+  whiteSpace: 'nowrap',
 })
 
 const RightArrowSvg: React.FC<{ className?: string }> = ({ className }) => (
@@ -46,16 +48,25 @@ export const Download: React.SFC<{}> = () => (
                 </Helmet>
               )}
             </TranslationsConsumer>
-            <EmptyTopBar
-              proceedComponent={
-                <ProceedLink href="/">
-                  <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_PROCEED_TEXT">
-                    {(text) => text}
-                  </TranslationsConsumer>
-                  <RightArrow />
-                </ProceedLink>
-              }
-            />
+            <StorageContainer>
+              {({ session }) => (
+                <EmptyTopBar
+                  proceedComponent={
+                    <ProceedLink href="/">
+                      <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_PROCEED_TEXT">
+                        {(text) => text}
+                      </TranslationsConsumer>
+                      <RightArrow />
+                    </ProceedLink>
+                  }
+                  partner={
+                    session &&
+                    session.getSession() &&
+                    session.getSession()!.partner
+                  }
+                />
+              )}
+            </StorageContainer>
 
             <DownloadApp
               hasCurrentInsurer={offer.insurance.insuredAtOtherCompany}

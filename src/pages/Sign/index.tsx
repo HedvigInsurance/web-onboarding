@@ -7,6 +7,7 @@ import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import * as React from 'react'
 import styled from 'react-emotion'
 import Helmet from 'react-helmet-async'
+import { StorageContainer } from '../../utils/StorageContainer'
 import { Legal } from './sections/LegalText'
 import { SignUp } from './sections/SignUp'
 
@@ -41,7 +42,18 @@ export const Sign: React.SFC = () => (
                   </Helmet>
                 )}
               </TranslationsConsumer>
-              <TopBar progress={2} />
+              <StorageContainer>
+                {({ session }) => (
+                  <TopBar
+                    progress={2}
+                    partner={
+                      session &&
+                      session.getSession() &&
+                      session.getSession()!.partner
+                    }
+                  />
+                )}
+              </StorageContainer>
               <InnerWrapper>
                 <SignUp offer={offer} />
               </InnerWrapper>

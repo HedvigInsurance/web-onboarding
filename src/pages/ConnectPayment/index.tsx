@@ -4,6 +4,7 @@ import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import * as React from 'react'
 import Helmet from 'react-helmet-async'
+import { StorageContainer } from '../../utils/StorageContainer'
 import { ConnectPaymentPage } from './sections/ConnectPayment'
 
 export const ConnectPayment: React.SFC = () => (
@@ -16,7 +17,16 @@ export const ConnectPayment: React.SFC = () => (
           </Helmet>
         )}
       </TranslationsConsumer>
-      <TopBar progress={3} />
+      <StorageContainer>
+        {({ session }) => (
+          <TopBar
+            progress={3}
+            partner={
+              session && session.getSession() && session.getSession()!.partner
+            }
+          />
+        )}
+      </StorageContainer>
       <ConnectPaymentPage />
     </SessionTokenGuard>
   </Page>
