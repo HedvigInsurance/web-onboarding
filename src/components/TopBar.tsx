@@ -48,7 +48,7 @@ const LogoWrapper = styled('div')({
     width: '33%',
   },
   '@media (max-width: 600px)': {
-    width: '55%',
+    width: '60%',
   },
   '@media (max-width: 350px)': {
     paddingLeft: 10,
@@ -117,7 +117,7 @@ const ButtonWrapper = styled('div')({
     width: '33%',
   },
   '@media (max-width: 600px)': {
-    width: '45%',
+    width: '40%',
     paddingRight: 26,
     '& > *:last-of-type': {
       marginRight: 10,
