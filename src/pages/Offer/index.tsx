@@ -12,6 +12,7 @@ import Helmet from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 import { getUtmParamsFromCookie, Track, TrackAction } from 'utils/tracking'
 import { CurrentLanguage } from '../../components/utils/CurrentLanguage'
+import { StorageContainer } from '../../utils/StorageContainer'
 import { CardWrapper } from './components/CardWrapper'
 import { InnerWrapper } from './components/InnerWrapper'
 import { Wrapper } from './components/Wrapper'
@@ -58,9 +59,6 @@ const BarButtonWrapper = styled('div')(
 const GetInsuredButton = styled('div')({
   display: 'flex',
   justifyContent: 'inherit',
-  '@media (max-width: 350px)': {
-    marginRight: '10px',
-  },
 })
 
 const LinkTag = styled(Link)({
@@ -70,6 +68,10 @@ const LinkTag = styled(Link)({
   borderRadius: '50px',
   padding: '10px 24px',
   textAlign: 'center',
+  '@media (max-width: 450px)': {
+    fontSize: '14px',
+    padding: '10px 18px',
+  },
   '@media (max-width: 300px)': {
     padding: '10px 12px',
   },
@@ -130,47 +132,62 @@ export const Offering: React.SFC<{}> = () => (
               >
                 {(state) => (
                   <>
-                    <TopBar
-                      progress={1}
-                      button={
-                        <BarButtonWrapper
-                          upperSignButtonVisible={!state.upperSignButtonVisible}
-                          lowerSignButtonVisible={!state.lowerSignButtonVisible}
-                        >
-                          <GetInsuredButton>
-                            <TrackAction
-                              event={{
-                                name: SemanticEvents.Ecommerce.CheckoutStarted,
-                                properties: {
-                                  category: 'offer',
-                                  value: Number(
-                                    offer.insurance.cost.monthlyNet.amount,
-                                  ),
-                                  label: 'TopBar',
-                                  ...getUtmParamsFromCookie(),
-                                },
-                              }}
+                    <StorageContainer>
+                      {({ session }) => (
+                        <TopBar
+                          progress={1}
+                          button={
+                            <BarButtonWrapper
+                              upperSignButtonVisible={
+                                !state.upperSignButtonVisible
+                              }
+                              lowerSignButtonVisible={
+                                !state.lowerSignButtonVisible
+                              }
                             >
-                              {({ track }) => (
-                                <CurrentLanguage>
-                                  {({ currentLanguage }) => (
-                                    <LinkTag
-                                      to={`/${currentLanguage &&
-                                        currentLanguage + '/'}new-member/sign`}
-                                      onClick={() => track()}
-                                    >
-                                      <TranslationsConsumer textKey="TOP_BAR_SIGN_BUTTON">
-                                        {(text) => text}
-                                      </TranslationsConsumer>
-                                    </LinkTag>
+                              <GetInsuredButton>
+                                <TrackAction
+                                  event={{
+                                    name:
+                                      SemanticEvents.Ecommerce.CheckoutStarted,
+                                    properties: {
+                                      category: 'offer',
+                                      value: Number(
+                                        offer.insurance.cost.monthlyNet.amount,
+                                      ),
+                                      label: 'TopBar',
+                                      ...getUtmParamsFromCookie(),
+                                    },
+                                  }}
+                                >
+                                  {({ track }) => (
+                                    <CurrentLanguage>
+                                      {({ currentLanguage }) => (
+                                        <LinkTag
+                                          to={`/${currentLanguage &&
+                                            currentLanguage +
+                                              '/'}new-member/sign`}
+                                          onClick={() => track()}
+                                        >
+                                          <TranslationsConsumer textKey="TOP_BAR_SIGN_BUTTON">
+                                            {(text) => text}
+                                          </TranslationsConsumer>
+                                        </LinkTag>
+                                      )}
+                                    </CurrentLanguage>
                                   )}
-                                </CurrentLanguage>
-                              )}
-                            </TrackAction>
-                          </GetInsuredButton>
-                        </BarButtonWrapper>
-                      }
-                    />
+                                </TrackAction>
+                              </GetInsuredButton>
+                            </BarButtonWrapper>
+                          }
+                          partner={
+                            session &&
+                            session.getSession() &&
+                            session.getSession()!.partner
+                          }
+                        />
+                      )}
+                    </StorageContainer>
                     <Offer
                       refetch={refetch}
                       offer={offer}

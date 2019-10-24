@@ -30,7 +30,7 @@ const InnerWrapper = styled('div')({
   [`@media (max-width: ${BP}px)`]: {
     maxWidth: '100%',
     flexDirection: 'column',
-    paddingTop: 30 + 70,
+    paddingTop: 40 + 70,
   },
 })
 

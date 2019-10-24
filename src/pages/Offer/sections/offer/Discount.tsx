@@ -6,6 +6,7 @@ import {
 import { Button } from 'components/buttons'
 import { InputField } from 'components/userInput/InputField'
 import { ActionMap, Container } from 'constate'
+import { isNoDiscount } from 'containers/types'
 import { Form, Formik } from 'formik'
 import gql from 'graphql-tag'
 import * as React from 'react'
@@ -189,7 +190,7 @@ export const Discount: React.FunctionComponent<Props> = ({ offer, refetch }) =>
         </Container>
       )}
     </RedeemCodeMutation>
-  ) : (
+  ) : !isNoDiscount(offer.redeemedCampaigns[0].incentive) ? (
     <Mutation<{ __typename: string }> mutation={REMOVE_CODE_MUTATION}>
       {(mutate) => (
         <DiscountButtonLink
@@ -205,4 +206,4 @@ export const Discount: React.FunctionComponent<Props> = ({ offer, refetch }) =>
         </DiscountButtonLink>
       )}
     </Mutation>
-  )
+  ) : null

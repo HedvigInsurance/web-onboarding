@@ -1,6 +1,10 @@
 import { colors } from '@hedviginsurance/brand'
 import { OfferData } from 'containers/OfferContainer'
-import { isFreeMonths, isMonthlyCostDeduction } from 'containers/types'
+import {
+  isFreeMonths,
+  isMonthlyCostDeduction,
+  isNoDiscount,
+} from 'containers/types'
 import * as React from 'react'
 import styled, { keyframes } from 'react-emotion'
 
@@ -75,7 +79,8 @@ interface DiscountBubbleProps {
 export const DiscountBubble: React.FunctionComponent<DiscountBubbleProps> = ({
   offer,
 }) =>
-  offer.redeemedCampaigns.length > 0 ? (
+  offer.redeemedCampaigns.length > 0 &&
+  !isNoDiscount(offer.redeemedCampaigns[0].incentive) ? (
     <DiscountBubbleWrapper>
       {isFreeMonths(offer.redeemedCampaigns[0].incentive) && (
         <DiscountBubbleTitle>Rabatt!</DiscountBubbleTitle>

@@ -18,7 +18,7 @@ const Bar = styled('div')({
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
-  justifyContent: 'flex-start',
+  justifyContent: 'space-between',
   top: 0,
   left: 0,
   right: 0,
@@ -40,24 +40,29 @@ const ProgressLine = styled('div')({
 const LogoWrapper = styled('div')({
   height: '100%',
   width: '20%',
+  display: 'flex',
+  alignItems: 'center',
+  paddingTop: 4,
+  paddingLeft: 20,
   '@media (max-width: 850px)': {
     width: '33%',
   },
   '@media (max-width: 600px)': {
-    width: '50%',
+    width: '55%',
   },
-})
-
-const EscapeLink = styled('a')({})
-
-const Logo = styled('img')({
-  marginLeft: '26px',
-  marginTop: '24px',
   '@media (max-width: 350px)': {
-    marginLeft: '10px',
+    paddingLeft: 10,
   },
-  maxWidth: 'calc(100% - 26px)',
 })
+
+const EscapeLink = styled('a')(
+  ({ disable = false }: { disable?: boolean }) => ({
+    display: 'flex',
+    cursor: disable ? 'default' : 'cursor',
+  }),
+)
+
+const Logo = styled('img')({})
 
 const CheckmarkIcon = styled('img')({
   width: ICON_WIDTH,
@@ -73,7 +78,7 @@ const ProgressStages = styled('div')({
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'space-around',
-  width: '60%',
+  width: '55%',
   '@media (max-width: 850px)': {
     display: 'none',
   },
@@ -106,15 +111,26 @@ const ButtonWrapper = styled('div')({
   justifyContent: 'flex-end',
   textAlign: 'right',
   width: '20%',
+  paddingTop: 4,
+  paddingLeft: 10,
+  '& > *:last-of-type': {
+    marginRight: 26,
+  },
   '@media (max-width: 850px)': {
     width: '33%',
   },
   '@media (max-width: 600px)': {
-    width: '50%',
+    width: '45%',
+    paddingRight: 20,
+    '& > *:last-of-type': {
+      marginRight: 10,
+    },
+    '& > *:last-child': {
+      marginRight: 0,
+    },
   },
-
-  '& > *:last-of-type': {
-    marginRight: 26,
+  '@media (max-width: 350px)': {
+    paddingRight: 10,
   },
 })
 
@@ -161,7 +177,13 @@ export const TopBar: React.SFC<Props> = ({ progress, button, partner }) => (
       <LogoWrapper>
         <CurrentLanguage>
           {({ currentLanguage }) => (
-            <EscapeLink href={'/' + currentLanguage}>
+            <EscapeLink
+              href={'/' + currentLanguage}
+              onClick={(event) =>
+                partner === 'dreams' && event.preventDefault()
+              }
+              disable={partner === 'dreams'}
+            >
               <Logo
                 src={`/new-member-assets/topbar/hedvig-wordmark-${partner ||
                   'solid'}.svg`}
@@ -237,7 +259,7 @@ const EmptyBar = styled(Bar)({
 })
 
 const ProceedComponentWrapper = styled('div')({
-  marginRight: 26,
+  marginRight: 20,
   '@media (max-width: 350px)': {
     marginRight: 10,
   },
@@ -245,16 +267,25 @@ const ProceedComponentWrapper = styled('div')({
 
 interface EmptyTopBarProps {
   proceedComponent?: React.ReactNode
+  partner?: string
 }
 
 export const EmptyTopBar: React.FC<EmptyTopBarProps> = ({
   proceedComponent = <div />,
+  partner,
 }) => (
   <Wrapper>
     <EmptyBar>
       <LogoWrapper>
-        <EscapeLink href="/">
-          <Logo src="/new-member-assets/topbar/hedvig-wordmark-solid.svg" />
+        <EscapeLink
+          href="/"
+          onClick={(event) => partner === 'dreams' && event.preventDefault()}
+          disable={partner === 'dreams'}
+        >
+          <Logo
+            src={`/new-member-assets/topbar/hedvig-wordmark-${partner ||
+              'solid'}.svg`}
+          />
         </EscapeLink>
       </LogoWrapper>
       <div />

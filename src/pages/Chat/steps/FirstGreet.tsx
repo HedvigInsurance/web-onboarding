@@ -4,6 +4,7 @@ import { StorageContainer } from 'utils/StorageContainer'
 
 const partners: Record<string, string> = {
   seb: 'CHAT_HEDVIG_FIRST_GREET_PARTNER_SEB',
+  dreams: 'CHAT_HEDVIG_FIRST_GREET_PARTNER_DREAMS',
 }
 const getTextKey = (partner?: string): string =>
   partners[partner as any] || 'CHAT_HEDVIG_FIRST_GREET'
