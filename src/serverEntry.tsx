@@ -9,9 +9,9 @@ import { appLogger } from './server/logging'
 import {
   inCaseOfEmergency,
   logRequestMiddleware,
+  savePartnershipCookie,
   setLoggerMiddleware,
   setRequestUuidMiddleware,
-  savePartnershipCookie,
 } from './server/middleware/enhancers'
 import { helmet } from './server/middleware/helmet'
 import { forceHost, permanentRedirect } from './server/middleware/redirects'
