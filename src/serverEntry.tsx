@@ -9,7 +9,6 @@ import { appLogger } from './server/logging'
 import {
   inCaseOfEmergency,
   logRequestMiddleware,
-  savePartnershipCookie,
   setLoggerMiddleware,
   setRequestUuidMiddleware,
 } from './server/middleware/enhancers'
@@ -41,8 +40,6 @@ const server = createKoaServer({
   publicPath: '/new-member-assets',
   assetLocation: __dirname + '/assets',
 })
-
-server.router.use('/*', savePartnershipCookie)
 
 if (process.env.FORCE_HOST) {
   appLogger.info(`Forcing host to be ${process.env.FORCE_HOST}`)

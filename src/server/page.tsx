@@ -106,6 +106,9 @@ export const getPage: Koa.Middleware = async (ctx) => {
       partner: serverCookieStorage.getItem('_hvpartner'),
     })
   }
+  if (ctx.query.partner) {
+    serverCookieStorage.setItem('_hvcode', ctx.query.code.toLowerCase())
+  }
   if (
     serverCookieStorage.getItem('_hvcode') &&
     serverCookieStorage.getItem('_hvcode') !== 'undefined'
