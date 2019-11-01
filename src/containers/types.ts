@@ -22,3 +22,6 @@ export const isMonthlyCostDeduction = (
   incentive: Incentive,
 ): incentive is MonthlyCostDeduction =>
   incentive.__typename === 'MonthlyCostDeduction'
+
+export const isNoDiscount = (incentive: Incentive) =>
+  incentive.__typename === 'NoDiscount'
