@@ -11,6 +11,7 @@ import {
   logRequestMiddleware,
   setLoggerMiddleware,
   setRequestUuidMiddleware,
+  savePartnershipCookie,
 } from './server/middleware/enhancers'
 import { helmet } from './server/middleware/helmet'
 import { forceHost, permanentRedirect } from './server/middleware/redirects'
@@ -40,6 +41,8 @@ const server = createKoaServer({
   publicPath: '/new-member-assets',
   assetLocation: __dirname + '/assets',
 })
+
+server.router.use('/*', savePartnershipCookie)
 
 if (process.env.FORCE_HOST) {
   appLogger.info(`Forcing host to be ${process.env.FORCE_HOST}`)
