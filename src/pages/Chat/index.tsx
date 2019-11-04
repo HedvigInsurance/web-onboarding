@@ -13,9 +13,15 @@ import { OfferCreationHandler } from './components/OfferCreationHandler'
 import { ResetButton } from './ResetButton'
 import { initialState, Insurer } from './state'
 
+const getSanitizedQueryString = (o: queryString.ParsedUrlQuery) =>
+  Object.keys(o)
+    .filter((key) => !['firstName', 'lastName', 'initialInsurer'].includes(key))
+    .reduce((acc: string[], key) => [...acc, `${key}=${o[key]}`], [])
+    .join('&')
+
 export const Chat: React.ComponentType = withRouter(({ location }) => {
   const query = queryString.parse(location.search.replace(/^\?/, ''))
-  if (query.firstName || query.lastName || query.code || query.initialInsurer) {
+  if (query.firstName || query.lastName || query.initialInsurer) {
     return (
       <StorageContainer>
         {({ session }) => {
@@ -25,7 +31,6 @@ export const Chat: React.ComponentType = withRouter(({ location }) => {
               initialLastName: query.lastName as string,
               initialInsurer: (query.initialInsurer as string) as Insurer,
             }),
-            code: query.code as string,
           })
 
           return (
@@ -33,7 +38,8 @@ export const Chat: React.ComponentType = withRouter(({ location }) => {
               {({ currentLanguage }) => (
                 <Redirect
                   to={`/${currentLanguage &&
-                    currentLanguage + '/'}new-member/hedvig`}
+                    currentLanguage +
+                      '/'}new-member/hedvig?${getSanitizedQueryString(query)}`}
                 />
               )}
             </CurrentLanguage>
