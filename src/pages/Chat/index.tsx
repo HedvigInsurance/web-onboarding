@@ -13,10 +13,10 @@ import { OfferCreationHandler } from './components/OfferCreationHandler'
 import { ResetButton } from './ResetButton'
 import { initialState, Insurer } from './state'
 
-const getSanitizedQueryString = (o: Record<string, string>) =>
+const getSanitizedQueryString = (o: queryString.ParsedUrlQuery) =>
   Object.keys(o)
     .filter((key) => !['firstName', 'lastName', 'initialInsurer'].includes(key))
-    .reduce((acc, key) => [...acc, `${key}=${o[key]}`], [])
+    .reduce((acc: string[], key) => [...acc, `${key}=${o[key]}`], [])
     .join('&')
 
 export const Chat: React.ComponentType = withRouter(({ location }) => {
