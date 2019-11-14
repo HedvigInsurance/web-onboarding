@@ -31,7 +31,11 @@ export const reactPageRoutes = [
     Component: Offering,
     exact: true,
   },
-  { path: '/new-member/offer-new', Components: OfferNew, exact: true },
+  {
+    path: LANGUAGE_PATH_PATTERN + '/new-member/offer-new',
+    Component: OfferNew,
+    exact: true,
+  },
   {
     path: LANGUAGE_PATH_PATTERN + '/new-member/download',
     Component: Download,

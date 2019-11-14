@@ -8,7 +8,7 @@ interface PerilItemProps {
   onClick: () => void
 }
 
-const Button = styled.button`
+const Button = styled('button')`
   width: 116px;
   height: 92px;
   margin: 4px;
@@ -42,7 +42,7 @@ const Button = styled.button`
   }
 `
 
-const Title = styled.div`
+const Title = styled('div')`
   font-size: 16px;
   letter-spacing: -0.23px;
   color: ${colorsV2.violet500};

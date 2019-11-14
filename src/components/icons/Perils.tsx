@@ -8,7 +8,7 @@ export interface SvgProps {
   height?: number | string
 }
 
-export const Svg = styled.svg`
+export const Svg = styled('svg')`
   fill: ${({ fill = colorsV2.black }: SvgProps) => fill};
   width: ${({ width = 32 }: SvgProps) => width}px;
   height: ${({ height = 32 }: SvgProps) => height}px;

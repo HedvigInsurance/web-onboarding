@@ -15,7 +15,7 @@ interface PerilModalProps {
   setCurrentPeril: (perilIndex: number) => void
 }
 
-const Header = styled.div`
+const Header = styled('div')`
   width: 100%;
   height: 140px;
   background-color: ${colorsV2.white};
@@ -28,7 +28,7 @@ const Header = styled.div`
   margin-bottom: 2px;
 `
 
-const Picker = styled.div`
+const Picker = styled('div')`
   width: 100%;
   height: 88px;
   display: flex;
@@ -39,7 +39,7 @@ const Picker = styled.div`
   box-sizing: border-box;
 `
 
-const PickerItem = styled.button`
+const PickerItem = styled('button')`
   width: 100px;
   flex-shrink: 0;
   padding: 8px 8px 10px 8px;
@@ -62,7 +62,7 @@ const PickerItem = styled.button`
   }
 `
 
-const PickerItemLabel = styled.div`
+const PickerItemLabel = styled('div')`
   font-size: 15px;
   letter-spacing: -0.23px;
   text-align: center;
@@ -75,7 +75,7 @@ interface PerilItemsContainerProps {
   transition: boolean
 }
 
-const PerilItemsContainer = styled.div<PerilItemsContainerProps>`
+const PerilItemsContainer = styled('div')<PerilItemsContainerProps>`
   position: relative;
   height: 88px;
   display: flex;
@@ -92,7 +92,7 @@ const PerilItemsContainer = styled.div<PerilItemsContainerProps>`
     });`}
 `
 
-const Indicator = styled.div`
+const Indicator = styled('div')`
   position: absolute;
   width: 100px;
   height: 2px;
@@ -105,7 +105,7 @@ const Indicator = styled.div`
   left: 116px;
 `
 
-const Gradient = styled.div`
+const Gradient = styled('div')`
   height: 80px;
   width: 100px;
   position: absolute;
@@ -133,7 +133,7 @@ const RightGradient = styled(Gradient)`
   );
 `
 
-const DirectionButton = styled.button`
+const DirectionButton = styled('button')`
   width: 100%;
   height: 100%;
   display: flex;
@@ -168,7 +168,7 @@ const ForwardButton = styled(DirectionButton)`
   justify-content: flex-end;
 `
 
-const Content = styled.div`
+const Content = styled('div')`
   padding: 24px;
 `
 
@@ -177,7 +177,7 @@ const createPerilItems = (
   setCurrentPeril: (index: number) => void,
   actionsAllowed: boolean,
 ) => {
-  let items = []
+  const items = []
   for (let i = 0; i < perils.length * 3; i++) {
     const index = i % perils.length
     items.push(
@@ -237,18 +237,18 @@ export const PerilModal = (
 
         <LeftGradient>
           <BackButton
-            onClick={() => {
+            onClick={() =>
               actionsAllowed && props.setCurrentPeril(props.currentPeril - 1)
-            }}
+            }
           >
             <BackArrow />
           </BackButton>
         </LeftGradient>
         <RightGradient>
           <ForwardButton
-            onClick={() => {
+            onClick={() =>
               actionsAllowed && props.setCurrentPeril(props.currentPeril + 1)
-            }}
+            }
           >
             <ForwardArrow />
           </ForwardButton>

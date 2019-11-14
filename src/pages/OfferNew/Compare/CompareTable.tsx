@@ -16,7 +16,7 @@ interface Props {
   currentCompany?: CompanyProperties
 }
 
-const Container = styled.div`
+const Container = styled('div')`
   width: 100%;
   border-radius: 4px;
   display: flex;
@@ -25,20 +25,21 @@ const Container = styled.div`
   border: 1px solid ${colorsV2.lightgray};
 `
 
-const InsurancePropertiesSection = styled.div`
+const InsurancePropertiesSection = styled('div')`
   width: 100%;
   height: 100%;
-  padding: 28px;
+  padding: 25px 28px;
   box-sizing: border-box;
 `
 
-const ColumnHead = styled.div`
+const ColumnHead = styled('div')`
   display: flex;
   align-items: center;
   margin-bottom: 58px;
+  height: 25px;
 `
 
-const ColumnRow = styled.div`
+const ColumnRow = styled('div')`
   display: flex;
   height: 20px;
   margin-bottom: 26px;
@@ -48,12 +49,12 @@ const ColumnRow = styled.div`
   }
 `
 
-const ColumnRowPrimaryContent = styled.span`
+const ColumnRowPrimaryContent = styled('span')`
   color: ${colorsV2.black};
   margin-right: 4px;
 `
 
-const InsurancePropertyNames = styled.div``
+const InsurancePropertyNames = styled('div')``
 
 const InsuranceProperty = styled(ColumnRow)`
   font-size: 16px;
@@ -62,10 +63,11 @@ const InsuranceProperty = styled(ColumnRow)`
   align-items: center;
 `
 
-const InsurancePropertyHelpButton = styled.button`
+const InsurancePropertyHelpButton = styled('button')`
   width: 16px;
   height: 16px;
   box-sizing: border-box;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -84,7 +86,7 @@ const InsurancePropertyHelpButton = styled.button`
   }
 `
 
-const PrimaryCompanySection = styled.div`
+const PrimaryCompanySection = styled('div')`
   width: 100%;
   max-width: 178px;
   height: 100%;
@@ -127,7 +129,7 @@ const CompanyColumnRow = styled(ColumnRow)`
   letter-spacing: -0.2px;
 `
 
-const OtherCompaniesSection = styled.div`
+const OtherCompaniesSection = styled('div')`
   width: 100%;
   max-width: 178px;
   height: 100%;
@@ -141,7 +143,7 @@ interface OtherCompanyHeadProps {
   dropdownIsVisible: boolean
 }
 
-const OtherCompanyHead = styled.button<OtherCompanyHeadProps>`
+const OtherCompanyHead = styled('button')<OtherCompanyHeadProps>`
   width: 100%;
   display: flex;
   height: 25px;
@@ -179,7 +181,7 @@ const OtherCompanyHead = styled.button<OtherCompanyHeadProps>`
   }
 `
 
-const Dropdown = styled.div<{ visible: boolean }>`
+const Dropdown = styled('div')<{ visible: boolean }>`
   background: ${colorsV2.white};
   width: 100%;
   position: absolute;
@@ -194,7 +196,7 @@ const Dropdown = styled.div<{ visible: boolean }>`
   border-top: 1px solid ${colorsV2.lightgray};
 `
 
-const DropdownRow = styled.button`
+const DropdownRow = styled('button')`
   width: 100%;
   background: none;
   border: none;

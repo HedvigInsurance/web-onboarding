@@ -58,12 +58,13 @@ const Container = styled(motion.div)`
   }
 `
 
-const CloseButton = styled.button`
+const CloseButton = styled('button')`
   width: 24px;
   height: 24px;
   position: absolute;
   top: 16px;
   right: 16px;
+  padding: 0;
   display: flex;
   align-items: center;
   text-align: center;

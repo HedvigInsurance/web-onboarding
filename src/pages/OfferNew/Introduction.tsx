@@ -9,7 +9,7 @@ import {
   PreHeading,
 } from './components'
 
-const Wrapper = styled.div`
+const Wrapper = styled('div')`
   width: 100%;
   height: 845px;
   padding: 200px 0 80px 0;
@@ -18,7 +18,7 @@ const Wrapper = styled.div`
   box-sizing: border-box;
 `
 
-const SummaryBox = styled.div`
+const SummaryBox = styled('div')`
   width: 420px;
   height: 500px;
   background-color: ${colorsV2.white};

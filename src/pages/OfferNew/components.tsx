@@ -1,7 +1,7 @@
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import styled from 'react-emotion'
 
-export const Heading = styled.h1`
+export const Heading = styled('h1')`
   font-family: ${fonts.GEOMANIST};
   font-size: 64px;
   line-height: 64px;
@@ -17,7 +17,7 @@ export const HeadingBlack = styled(Heading)`
   color: ${colorsV2.black};
 `
 
-export const SubHeading = styled.h2`
+export const SubHeading = styled('h2')`
   font-family: ${fonts.GEOMANIST};
   font-size: 24px;
   line-height: 24px;
@@ -33,7 +33,7 @@ export const SubHeadingBlack = styled(SubHeading)`
   color: ${colorsV2.black};
 `
 
-export const SubSubHeading = styled.h2`
+export const SubSubHeading = styled('h2')`
   font-family: ${fonts.GEOMANIST};
   font-size: 20px;
   line-height: 20px;
@@ -48,7 +48,7 @@ export const SubSubHeadingBlack = styled(SubSubHeading)`
   color: ${colorsV2.black};
 `
 
-export const PreHeading = styled.div`
+export const PreHeading = styled('div')`
   font-size: 16px;
   line-height: 24px;
   font-weight: 600;
@@ -58,12 +58,12 @@ export const PreHeading = styled.div`
   margin-bottom: 25px;
 `
 
-export const HeadingWrapper = styled.div`
+export const HeadingWrapper = styled('div')`
   padding-right: 100px;
   margin-bottom: 46px;
 `
 
-export const Container = styled.div`
+export const Container = styled('div')`
   width: 100%;
   height: 100%;
   padding: 0 32px;
@@ -74,7 +74,7 @@ export const Container = styled.div`
   justify-content: space-between;
 `
 
-export const Column = styled.div`
+export const Column = styled('div')`
   display: flex;
   flex-flow: column;
   max-width: 760px;
