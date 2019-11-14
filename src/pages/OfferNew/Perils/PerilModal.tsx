@@ -1,5 +1,5 @@
 import { colorsV2 } from '@hedviginsurance/brand'
-const hexToRgba = require('hex-to-rgba')
+import hexToRgba from 'hex-to-rgba'
 import * as React from 'react'
 import styled from 'react-emotion'
 import { BackArrow } from '../../../components/icons/BackArrow'

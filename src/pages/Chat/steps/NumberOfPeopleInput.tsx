@@ -54,8 +54,9 @@ export const isNumberOfPeopleDone = (
   }
 }
 
-export const NumberOfPeopleInput: React.SFC<NumberOfPeopleInputProps &
-  Focusable> = ({
+export const NumberOfPeopleInput: React.SFC<
+  NumberOfPeopleInputProps & Focusable
+> = ({
   appear,
   onSubmit = () => {
     /* noop */

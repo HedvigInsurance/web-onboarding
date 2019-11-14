@@ -121,12 +121,9 @@ export interface Effects {
   unpeek: () => void
 }
 
-export const ChatContainer: React.SFC<ContainerProps<
-  State,
-  {},
-  {},
-  Effects
->> = (props) => (
+export const ChatContainer: React.SFC<
+  ContainerProps<State, {}, {}, Effects>
+> = (props) => (
   <StorageContainer>
     {(storageState) => (
       <Container<State, {}, {}, Effects>

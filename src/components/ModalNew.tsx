@@ -1,8 +1,8 @@
 import { colorsV2 } from '@hedviginsurance/brand'
+import { motion } from 'framer-motion'
+import hexToRgba from 'hex-to-rgba'
 import * as React from 'react'
 import styled from 'react-emotion'
-const hexToRgba = require('hex-to-rgba')
-import { motion } from 'framer-motion'
 import { Cross } from './icons/Cross'
 
 export interface ModalProps {
@@ -93,7 +93,7 @@ export const Modal = (props: React.PropsWithChildren<ModalProps>) => {
 
   const handleClick = (e: MouseEvent) => {
     // @ts-ignore
-    !containerRef.current.contains(e.target) && props.onClose()
+    return !containerRef.current.contains(e.target) && props.onClose()
   }
 
   React.useEffect(() => {

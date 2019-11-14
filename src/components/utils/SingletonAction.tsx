@@ -8,12 +8,9 @@ interface Effects {
   doAction: () => void
 }
 
-export const SingletonAction: React.SFC<ContainerProps<
-  State,
-  {},
-  {},
-  EffectMap<State, Effects>
->> = (props) => (
+export const SingletonAction: React.SFC<
+  ContainerProps<State, {}, {}, EffectMap<State, Effects>>
+> = (props) => (
   <Container<State, {}, {}, EffectMap<State, Effects>>
     initialState={{ isActionDone: false }}
     effects={

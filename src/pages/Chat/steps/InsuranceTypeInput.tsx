@@ -120,8 +120,9 @@ const formatSquareMeters = (value?: string): string =>
 const displaySquareMeters = (value: string | number): string | number =>
   value === 0 ? '' : value
 
-export const InsuranceTypeInput: React.SFC<InsuranceTypeInputProps &
-  Focusable> = ({
+export const InsuranceTypeInput: React.SFC<
+  InsuranceTypeInputProps & Focusable
+> = ({
   appear,
   onSubmit = () => {
     /* noop */

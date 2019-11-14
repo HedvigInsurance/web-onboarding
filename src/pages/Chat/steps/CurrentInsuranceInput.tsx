@@ -134,8 +134,9 @@ export const isCurrentInsuranceDone = (
   values: Partial<CurrentInsuranceState> = {},
 ) => validationSchema.isValidSync(values)
 
-export const CurrentInsuranceInput: React.SFC<CurrentInsuranceInputProps &
-  Focusable> = ({
+export const CurrentInsuranceInput: React.SFC<
+  CurrentInsuranceInputProps & Focusable
+> = ({
   appear,
   onSubmit = () => {
     /* noop */
