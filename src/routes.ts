@@ -7,6 +7,7 @@ import { Download } from './pages/Download'
 import { FourOhFour } from './pages/FourOhFour'
 import { NewMemberLanding } from './pages/NewMemberLanding'
 import { Offering } from './pages/Offer'
+import { OfferNew } from './pages/OfferNew'
 import { Referral } from './pages/Referral'
 import { Sign } from './pages/Sign'
 
@@ -30,6 +31,7 @@ export const reactPageRoutes = [
     Component: Offering,
     exact: true,
   },
+  { path: '/new-member/offer-new', Components: OfferNew, exact: true },
   {
     path: LANGUAGE_PATH_PATTERN + '/new-member/download',
     Component: Download,
