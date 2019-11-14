@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react'
 
 export const BackArrow = () => (
   <svg
@@ -22,4 +22,4 @@ export const BackArrow = () => (
       </g>
     </g>
   </svg>
-);
+)

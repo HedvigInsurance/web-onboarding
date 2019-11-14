@@ -31,9 +31,9 @@ interface OfferCreationSubscriptionProps {
   children: (offer: OfferCreationSubscriptionData | null) => React.ReactNode
 }
 
-export const OfferCreationSubscription: React.SFC<
-  OfferCreationSubscriptionProps
-> = ({ children }) => (
+export const OfferCreationSubscription: React.SFC<OfferCreationSubscriptionProps> = ({
+  children,
+}) => (
   <Subscription<OfferCreationSubscriptionData>
     subscription={OFFER_CREATION_SUBSCRIPTION}
   >

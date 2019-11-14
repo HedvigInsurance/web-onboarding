@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react'
 
 export const ForwardArrow = () => (
   <svg
@@ -22,4 +22,4 @@ export const ForwardArrow = () => (
       </g>
     </g>
   </svg>
-);
+)

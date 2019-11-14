@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react'
 
 export const HedvigSymbol = () => (
   <svg
@@ -17,4 +17,4 @@ export const HedvigSymbol = () => (
       <path fill="#FF8A80" d="M0 24.998h3.725v-8.735H0z" />
     </g>
   </svg>
-);
+)

@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react'
 
 export const Checkmark = () => (
   <svg
@@ -21,4 +21,4 @@ export const Checkmark = () => (
       fill="white"
     />
   </svg>
-);
+)

@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react'
 
 export const Questionmark = () => (
   <svg width="8px" height="12px" viewBox="0 0 8 12" version="1.1">
@@ -21,4 +21,4 @@ export const Questionmark = () => (
       </g>
     </g>
   </svg>
-);
+)

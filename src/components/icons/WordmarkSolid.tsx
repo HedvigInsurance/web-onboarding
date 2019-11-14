@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react'
 
 export const WordmarkSolid = () => (
   <svg width="93.4" height="29" viewBox="0 0 96 30" version="1.1">
@@ -45,4 +45,4 @@ export const WordmarkSolid = () => (
       fill="#212121"
     />
   </svg>
-);
+)

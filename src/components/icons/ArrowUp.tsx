@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react'
 
 export const ArrowUp = () => (
   <svg width="16px" height="9px" viewBox="0 0 16 9" version="1.1">
@@ -29,4 +29,4 @@ export const ArrowUp = () => (
       </g>
     </g>
   </svg>
-);
+)
