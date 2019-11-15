@@ -253,8 +253,8 @@ export const CompareTable = (props: Props) => {
         <InsurancePropertyNames>
           {Object.entries(props.insuranceProperties)
             .filter(([key]) => key !== 'name')
-            .map(([_, property]) => (
-              <InsuranceProperty>
+            .map(([key, property]) => (
+              <InsuranceProperty key={key}>
                 {property.name}
                 <InsurancePropertyHelpButton>
                   <Questionmark />
@@ -272,7 +272,9 @@ export const CompareTable = (props: Props) => {
         {Object.entries(props.primaryCompany)
           .filter(([key]) => key !== 'name')
           .map(([key, property]) => (
-            <CompanyColumnRow>{getProperty(key, property)}</CompanyColumnRow>
+            <CompanyColumnRow key={key}>
+              {getProperty(key, property)}
+            </CompanyColumnRow>
           ))}
       </PrimaryCompanySection>
 
@@ -306,7 +308,9 @@ export const CompareTable = (props: Props) => {
           Object.entries(currentCompany)
             .filter(([key]) => key !== 'name')
             .map(([key, property]) => (
-              <CompanyColumnRow>{getProperty(key, property)}</CompanyColumnRow>
+              <CompanyColumnRow key={key}>
+                {getProperty(key, property)}
+              </CompanyColumnRow>
             ))}
       </OtherCompaniesSection>
     </Container>

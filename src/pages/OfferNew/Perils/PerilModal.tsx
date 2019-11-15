@@ -85,10 +85,9 @@ const PerilItemsContainer = styled('div')<PerilItemsContainerProps>`
   ${(props) =>
     `transform: translateX(${
       props.currentPeril !== 0
-        ? `calc(-33.3333333333333% - ${(props.currentPeril - 12 - 1) *
-            (100 + 16) +
+        ? `calc((-100%/3) - ${(props.currentPeril - 12 - 1) * (100 + 16) +
             8}px)`
-        : `calc(-33.3333333333333% + 108px)`
+        : `calc((-100%/3) + 108px)`
     });`}
 `
 
@@ -141,19 +140,15 @@ const DirectionButton = styled('button')`
   background: none;
   border: none;
   svg {
-    * {
-      transition: all 0.15s ease-in-out;
-      fill: ${colorsV2.gray};
-    }
+    transition: all 0.15s ease-in-out;
+    fill: ${colorsV2.gray};
   }
   :focus {
     outline: none;
   }
   &:hover {
     svg {
-      * {
-        fill: ${colorsV2.violet500};
-      }
+      fill: ${colorsV2.violet500};
     }
   }
 `
@@ -171,24 +166,6 @@ const ForwardButton = styled(DirectionButton)`
 const Content = styled('div')`
   padding: 24px;
 `
-
-const createPerilItems = (
-  perils: Peril[],
-  setCurrentPeril: (index: number) => void,
-  actionsAllowed: boolean,
-) => {
-  const items = []
-  for (let i = 0; i < perils.length * 3; i++) {
-    const index = i % perils.length
-    items.push(
-      <PickerItem onClick={() => actionsAllowed && setCurrentPeril(i)}>
-        {perils[index].icon}
-        <PickerItemLabel>{perils[index].title}</PickerItemLabel>
-      </PickerItem>,
-    )
-  }
-  return items
-}
 
 export const PerilModal = (
   props: React.PropsWithChildren<PerilModalProps & ModalProps>,
@@ -218,6 +195,8 @@ export const PerilModal = (
     }, TRANSITION_MS * 2)
   }, [props.currentPeril])
 
+  const trippledPerils = props.perils.concat(props.perils).concat(props.perils)
+
   return (
     <Modal isVisible={props.isVisible} onClose={props.onClose}>
       <Header>
@@ -226,11 +205,18 @@ export const PerilModal = (
             currentPeril={props.currentPeril}
             transition={transitionEnabled}
           >
-            {createPerilItems(
-              props.perils,
-              props.setCurrentPeril,
-              actionsAllowed,
-            )}
+            {trippledPerils.map((peril, index) => (
+              <PickerItem
+                key={index}
+                onClick={() =>
+                  actionsAllowed &&
+                  props.setCurrentPeril(index % trippledPerils.length)
+                }
+              >
+                {peril.icon}
+                <PickerItemLabel>{peril.title}</PickerItemLabel>
+              </PickerItem>
+            ))}
           </PerilItemsContainer>
           <Indicator />
         </Picker>

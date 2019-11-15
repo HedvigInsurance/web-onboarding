@@ -32,7 +32,7 @@ const Background = styled(motion.div)`
   background-color: ${hexToRgba(colorsV2.white, 0.75)};
 `
 
-const Container = styled(motion.div)`
+const ModalContainer = styled(motion.div)`
   position: relative;
   width: 100%;
   max-width: 900px;
@@ -50,12 +50,17 @@ const Container = styled(motion.div)`
   overflow-x: scroll;
 
   @media (max-height: 900px) {
-    max-height: calc(100vh - 32px);
+    max-height: calc(100vh - 2rem);
   }
 
   @media (max-width: 900px) {
-    max-width: calc(100% - 32px);
+    max-width: calc(100% - 2rem);
   }
+`
+
+const ModalInnerContainer = styled('div')`
+  width: 100%;
+  height: 100%;
 `
 
 const CloseButton = styled('button')`
@@ -88,12 +93,15 @@ const CloseButton = styled('button')`
   }
 `
 
-export const Modal = (props: React.PropsWithChildren<ModalProps>) => {
-  const containerRef = React.useRef(null)
-
+export const Modal: React.FC<ModalProps> = (props) => {
+  const containerRef = React.useRef<HTMLDivElement>(null)
   const handleClick = (e: MouseEvent) => {
-    // @ts-ignore
-    return !containerRef.current.contains(e.target) && props.onClose()
+    if (
+      containerRef.current &&
+      !containerRef.current.contains(e.target as Node)
+    ) {
+      props.onClose()
+    }
   }
 
   React.useEffect(() => {
@@ -129,8 +137,7 @@ export const Modal = (props: React.PropsWithChildren<ModalProps>) => {
           },
         }}
       >
-        <Container
-          ref={containerRef}
+        <ModalContainer
           initial={'hidden'}
           animate={props.isVisible ? 'visible' : 'hidden'}
           transition={{
@@ -155,11 +162,13 @@ export const Modal = (props: React.PropsWithChildren<ModalProps>) => {
             },
           }}
         >
-          {props.children}
-          <CloseButton onClick={() => props.onClose()}>
+          <ModalInnerContainer innerRef={containerRef}>
+            {props.children}
+          </ModalInnerContainer>
+          <CloseButton onClick={props.onClose}>
             <Cross />
           </CloseButton>
-        </Container>
+        </ModalContainer>
       </Background>
     </Wrapper>
   )

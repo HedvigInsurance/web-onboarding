@@ -126,6 +126,7 @@ export const Perils = () => {
           <PerilItemCollection>
             {perils.map((peril, perilIndex) => (
               <PerilItem
+                key={peril.title}
                 title={peril.title}
                 icon={peril.icon}
                 onClick={() => {
