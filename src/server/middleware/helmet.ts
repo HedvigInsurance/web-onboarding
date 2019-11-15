@@ -27,6 +27,7 @@ const defaultSrc = [
   '*.facebook.net',
   '*.facebook.com',
   'www.studentkortet.se',
+  'https://studentkortet.go2cloud.org',
   'tr.snapchat.com',
   'sc-static.net',
   'analytics.twitter.com',
