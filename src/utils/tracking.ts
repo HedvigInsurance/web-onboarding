@@ -128,3 +128,13 @@ export const adtraction = (
   adt.Tag.tp = adtractionProductMap[insuranceType]
   adt.Tag.doEvent()
 }
+
+export const trackStudentkortet = (memberId: string, amount: string) => {
+  const iframe = document.createElement('iframe')
+  iframe.src = `https://studentkortet.go2cloud.org/aff_l?offer_id=68&adv_sub=${memberId}&amount=${amount}`
+  iframe.scrolling = 'no'
+  iframe.frameBorder = '0'
+  iframe.width = '1'
+  iframe.height = '1'
+  document.body.appendChild(iframe)
+}

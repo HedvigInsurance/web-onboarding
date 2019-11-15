@@ -8,7 +8,11 @@ import { Query } from 'react-apollo'
 import styled, { keyframes } from 'react-emotion'
 import { Mount } from 'react-lifecycle-components/dist'
 import { Redirect } from 'react-router-dom'
-import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
+import {
+  getUtmParamsFromCookie,
+  TrackAction,
+  trackStudentkortet,
+} from 'utils/tracking'
 import { CurrentLanguage } from '../../../components/utils/CurrentLanguage'
 import { OfferContainer } from '../../../containers/OfferContainer'
 import { adtraction } from '../../../utils/tracking'
@@ -154,6 +158,7 @@ interface StateComponentProps {
   error?: ApolloError
   trackSignCompleted: () => void
   runAdtraction: () => void
+  runStudentkortet: () => void
 }
 
 const StateComponent: React.SFC<StateComponentProps> = ({
@@ -162,6 +167,7 @@ const StateComponent: React.SFC<StateComponentProps> = ({
   error,
   trackSignCompleted,
   runAdtraction,
+  runStudentkortet,
 }) => {
   if (!signState || !collectStatus) {
     return null
@@ -195,6 +201,7 @@ const StateComponent: React.SFC<StateComponentProps> = ({
 
         if (process.env.NODE_ENV !== 'test') {
           runAdtraction()
+          runStudentkortet()
         }
 
         return (
@@ -301,6 +308,12 @@ export const SubscriptionComponent: React.SFC<SubscriptionComponentProps> = ({
                       currentOffer.insurance.type,
                     )
                   }}
+                  runStudentkortet={() =>
+                    trackStudentkortet(
+                      currentOffer.member.id,
+                      currentOffer.insurance.cost.monthlyGross.amount,
+                    )
+                  }
                 />
               )}
             </OfferContainer>
