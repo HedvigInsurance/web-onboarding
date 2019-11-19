@@ -8,9 +8,14 @@ import { Query } from 'react-apollo'
 import styled, { keyframes } from 'react-emotion'
 import { Mount } from 'react-lifecycle-components/dist'
 import { Redirect } from 'react-router-dom'
-import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
+import {
+  getUtmParamsFromCookie,
+  TrackAction,
+  trackStudentkortet,
+} from 'utils/tracking'
 import { CurrentLanguage } from '../../../components/utils/CurrentLanguage'
 import { OfferContainer } from '../../../containers/OfferContainer'
+import { StorageContainer } from '../../../utils/StorageContainer'
 import { adtraction } from '../../../utils/tracking'
 
 const spin = keyframes({
@@ -154,6 +159,7 @@ interface StateComponentProps {
   error?: ApolloError
   trackSignCompleted: () => void
   runAdtraction: () => void
+  runStudentkortet: () => void
 }
 
 const StateComponent: React.SFC<StateComponentProps> = ({
@@ -162,6 +168,7 @@ const StateComponent: React.SFC<StateComponentProps> = ({
   error,
   trackSignCompleted,
   runAdtraction,
+  runStudentkortet,
 }) => {
   if (!signState || !collectStatus) {
     return null
@@ -195,6 +202,7 @@ const StateComponent: React.SFC<StateComponentProps> = ({
 
         if (process.env.NODE_ENV !== 'test') {
           runAdtraction()
+          runStudentkortet()
         }
 
         return (
@@ -276,34 +284,50 @@ export const SubscriptionComponent: React.SFC<SubscriptionComponentProps> = ({
           }}
         >
           {({ track }) => (
-            <OfferContainer>
-              {(currentOffer) => (
-                <StateComponent
-                  signState={
-                    data && data.signStatus && data.signStatus.signState
-                  }
-                  collectStatus={
-                    data && data.signStatus && data.signStatus.collectStatus
-                  }
-                  error={error}
-                  trackSignCompleted={track}
-                  runAdtraction={() => {
-                    adtraction(
-                      parseFloat(
-                        currentOffer.insurance.cost.monthlyGross.amount,
-                      ),
-                      currentOffer.member.id,
-                      signEmail,
-                      currentOffer.redeemedCampaigns !== null &&
-                        currentOffer.redeemedCampaigns.length !== 0
-                        ? currentOffer.redeemedCampaigns[0].code
-                        : null,
-                      currentOffer.insurance.type,
-                    )
-                  }}
-                />
+            <StorageContainer>
+              {({ session }) => (
+                <OfferContainer>
+                  {(currentOffer) => (
+                    <StateComponent
+                      signState={
+                        data && data.signStatus && data.signStatus.signState
+                      }
+                      collectStatus={
+                        data && data.signStatus && data.signStatus.collectStatus
+                      }
+                      error={error}
+                      trackSignCompleted={track}
+                      runAdtraction={() => {
+                        adtraction(
+                          parseFloat(
+                            currentOffer.insurance.cost.monthlyGross.amount,
+                          ),
+                          currentOffer.member.id,
+                          signEmail,
+                          currentOffer.redeemedCampaigns !== null &&
+                            currentOffer.redeemedCampaigns.length !== 0
+                            ? currentOffer.redeemedCampaigns[0].code
+                            : null,
+                          currentOffer.insurance.type,
+                        )
+                      }}
+                      runStudentkortet={() => {
+                        if (
+                          session &&
+                          session.getSession() &&
+                          session.getSession()!.code === 'studentkortet'
+                        ) {
+                          trackStudentkortet(
+                            currentOffer.member.id,
+                            currentOffer.insurance.cost.monthlyGross.amount,
+                          )
+                        }
+                      }}
+                    />
+                  )}
+                </OfferContainer>
               )}
-            </OfferContainer>
+            </StorageContainer>
           )}
         </TrackAction>
       </Mount>
