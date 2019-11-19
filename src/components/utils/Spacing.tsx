@@ -24,7 +24,7 @@ type spacingAttribute =
 
 type Props = Partial<Record<spacingAttribute, Size>>
 
-export const Spacing = styled('div')((props: Props) =>
+export const Spacing = styled('div')<Props>((props) =>
   Object.keys(props).reduce(
     (acc, key) => ({
       ...acc,

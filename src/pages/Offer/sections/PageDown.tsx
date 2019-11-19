@@ -1,8 +1,8 @@
 import styled from '@emotion/styled'
-import { InnerWrapper } from '../components/InnerWrapper'
-import { Wrapper } from '../components/Wrapper'
 import * as React from 'react'
 import { CurrentLanguage } from '../../../components/utils/CurrentLanguage'
+import { InnerWrapper } from '../components/InnerWrapper'
+import { Wrapper } from '../components/Wrapper'
 
 const PageDownIcon = styled('img')({
   marginTop: '40px',

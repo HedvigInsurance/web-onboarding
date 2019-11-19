@@ -1,3 +1,4 @@
+import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand'
 import {
   TranslationsConsumer,
@@ -11,7 +12,6 @@ import { Form, Formik } from 'formik'
 import gql from 'graphql-tag'
 import * as React from 'react'
 import { Mutation } from 'react-apollo'
-import styled from '@emotion/styled'
 import { OfferData } from 'src/containers/OfferContainer'
 import * as Yup from 'yup'
 import { RedeemCodeMutation } from '../../containers/RedeemCodeMutation'

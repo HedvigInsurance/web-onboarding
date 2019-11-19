@@ -1,3 +1,4 @@
+import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { FadeIn } from 'components/animations/appearings'
@@ -9,7 +10,6 @@ import {
 import { Size, Spacing } from 'components/utils/Spacing'
 import { SessionContainer } from 'containers/SessionContainer'
 import * as React from 'react'
-import styled from '@emotion/styled'
 import { Update } from 'react-lifecycle-components'
 import { qualifiesForStudentInsurance } from 'utils/insuranceDomainUtils'
 import {

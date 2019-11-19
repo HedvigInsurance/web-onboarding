@@ -1,6 +1,6 @@
-import { colors } from '@hedviginsurance/brand'
 import { keyframes } from '@emotion/core'
 import styled from '@emotion/styled'
+import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { LazyLottie } from 'components/animations/LazyLottie'
 import * as React from 'react'

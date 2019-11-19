@@ -1,3 +1,4 @@
+import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand'
 import {
   TranslationsConsumer,
@@ -6,7 +7,6 @@ import {
 import { Button } from 'components/buttons'
 import { Page } from 'components/utils/Page'
 import * as React from 'react'
-import styled from '@emotion/styled'
 import Helmet from 'react-helmet-async'
 import { RouteComponentProps } from 'react-router'
 import { MobileContext } from 'utils/mobileContext'
