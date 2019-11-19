@@ -9,6 +9,7 @@ export const GlobalCss: React.SFC = ({ children }) => {
 
 * {
   box-sizing: border-box;
+  font-family: ${fonts.CIRCULAR}, sans-serif;
 }
 
 body {

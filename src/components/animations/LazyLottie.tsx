@@ -5,7 +5,7 @@ import ReactLottieComponent, { ReactLottieProps } from 'react-lottie'
 
 interface State {
   animationData: any | null
-  ReactLottie: (typeof ReactLottieComponent) | null
+  ReactLottie: typeof ReactLottieComponent | null
 }
 
 interface Actions {
