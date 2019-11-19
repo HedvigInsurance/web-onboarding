@@ -1,3 +1,4 @@
+import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { TopBar } from 'components/TopBar'
@@ -7,7 +8,6 @@ import { OfferContainer } from 'containers/OfferContainer'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
-import styled from 'react-emotion'
 import Helmet from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 import { getUtmParamsFromCookie, Track, TrackAction } from 'utils/tracking'
@@ -36,25 +36,20 @@ interface Actions {
   updateLowerButtonVisibility: (visible: boolean) => void
 }
 
-const BarButtonWrapper = styled('div')(
-  ({
-    upperSignButtonVisible,
-    lowerSignButtonVisible,
-  }: {
-    upperSignButtonVisible: boolean
-    lowerSignButtonVisible: boolean
-  }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    transition: 'transform 250ms 100ms',
-    transform:
-      upperSignButtonVisible === true && lowerSignButtonVisible === true
-        ? `translateX(0)`
-        : `translateX(calc(100% + 26px))`,
-    willChange: 'transform',
-    justifyContent: 'flex-end',
-  }),
-)
+const BarButtonWrapper = styled('div')<{
+  upperSignButtonVisible: boolean
+  lowerSignButtonVisible: boolean
+}>(({ upperSignButtonVisible, lowerSignButtonVisible }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  transition: 'transform 250ms 100ms',
+  transform:
+    upperSignButtonVisible === true && lowerSignButtonVisible === true
+      ? `translateX(0)`
+      : `translateX(calc(100% + 26px))`,
+  willChange: 'transform',
+  justifyContent: 'flex-end',
+}))
 
 const GetInsuredButton = styled('div')({
   display: 'flex',

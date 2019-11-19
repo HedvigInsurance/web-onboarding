@@ -1,7 +1,7 @@
+import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import hexToRgba from 'hex-to-rgba'
 import * as React from 'react'
-import styled from 'react-emotion'
 import { BackArrow } from '../../../components/icons/BackArrow'
 import { ForwardArrow } from '../../../components/icons/ForwardArrow'
 import { Modal, ModalProps } from '../../../components/ModalNew'

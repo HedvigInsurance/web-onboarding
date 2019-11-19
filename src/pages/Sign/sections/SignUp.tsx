@@ -1,3 +1,4 @@
+import styled from '@emotion/styled'
 import { colors, fonts } from '@hedviginsurance/brand'
 import {
   TranslationsConsumer,
@@ -16,7 +17,6 @@ import { PriceAndInclusions } from 'pages/Offer/components/PriceAndInclusions'
 import { DiscountBubble } from 'pages/Offer/sections/offer/DiscountBubble'
 import * as React from 'react'
 import { Mutation } from 'react-apollo'
-import styled from 'react-emotion'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import * as Yup from 'yup'
 import { SubscriptionComponent } from './SignSubscription'

@@ -1,9 +1,9 @@
+import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import Modal from 'components/Modal'
 import { ActionMap, Container } from 'constate'
 import * as React from 'react'
-import styled from 'react-emotion'
 import { Redirect } from 'react-router'
 import { CurrentLanguage } from '../../../components/utils/CurrentLanguage'
 
@@ -73,7 +73,7 @@ const TrustlyModal: React.FC<Props> = ({
           {trustlyUrl !== null && (
             <TrustlyIframe
               src={trustlyUrl}
-              innerRef={iframeRef}
+              ref={iframeRef}
               onLoad={async () => {
                 const contentWindow =
                   iframeRef.current && iframeRef.current.contentWindow

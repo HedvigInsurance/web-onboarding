@@ -1,6 +1,6 @@
+import styled from '@emotion/styled'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
-import styled from 'react-emotion'
 import Helmet from 'react-helmet-async'
 import { RouteComponentProps } from 'react-router'
 import { LazyLottie } from '../components/animations/LazyLottie'

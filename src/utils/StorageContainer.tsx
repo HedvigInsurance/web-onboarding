@@ -15,9 +15,12 @@ export interface StorageEffects {
   setToken: (token?: string) => void
 }
 
-export const StorageContainer: React.SFC<
-  ContainerProps<StorageState, {}, {}, EffectMap<StorageState, StorageEffects>>
-> = (props) => (
+export const StorageContainer: React.SFC<ContainerProps<
+  StorageState,
+  {},
+  {},
+  EffectMap<StorageState, StorageEffects>
+>> = (props) => (
   <Container<StorageState, {}, {}, EffectMap<StorageState, StorageEffects>>
     context="storage"
     {...props}

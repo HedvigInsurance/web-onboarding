@@ -1,5 +1,5 @@
+import styled from '@emotion/styled'
 import * as React from 'react'
-import styled from 'react-emotion'
 import Transition, { ENTERED } from 'react-transition-group/Transition'
 import { MessageProps } from './Message'
 

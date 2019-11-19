@@ -1,16 +1,18 @@
-import styled from 'react-emotion'
+import styled from '@emotion/styled'
 
-export const Mufflable = styled('div')(
+interface MufflableProps {
+  muffled: boolean
+  unMuffled?: boolean
+  unMufflable?: boolean
+  direction?: string
+}
+
+export const Mufflable = styled('div')<MufflableProps>(
   ({
     muffled,
     unMuffled = false,
     unMufflable = false,
     direction = 'left',
-  }: {
-    muffled: boolean
-    unMuffled?: boolean
-    unMufflable?: boolean
-    direction?: string
   }) => ({
     opacity: muffled && !unMuffled ? 0.5 : 1,
     fontSize: muffled ? 16 : 20,

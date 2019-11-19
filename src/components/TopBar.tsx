@@ -1,7 +1,7 @@
+import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
-import styled from 'react-emotion'
 import { CurrentLanguage } from './utils/CurrentLanguage'
 
 export const TOP_BAR_HEIGHT = 70
@@ -55,8 +55,8 @@ const LogoWrapper = styled('div')({
   },
 })
 
-const EscapeLink = styled('a')(
-  ({ disable = false }: { disable?: boolean }) => ({
+const EscapeLink = styled('a')<{ disable?: boolean }>(
+  ({ disable = false }) => ({
     display: 'flex',
     cursor: disable ? 'default' : 'cursor',
   }),

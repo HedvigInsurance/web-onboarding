@@ -1,12 +1,12 @@
+import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand'
 import { Field } from 'formik'
-import styled from 'react-emotion'
 
 export const FORMWIDTH = 300
 export const FORMWIDTHSMALL = 100
 
-export const InputField = styled(Field)(
-  ({ touched, errors }: { touched?: boolean; errors?: string }) => ({
+export const InputField = styled(Field)<{ touched?: boolean; errors?: string }>(
+  ({ touched, errors }) => ({
     marginTop: '10px',
     fontSize: '16px',
     marginBottom: '10px',

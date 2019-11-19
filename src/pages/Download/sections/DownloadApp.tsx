@@ -1,7 +1,7 @@
+import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
-import styled from 'react-emotion'
 
 const SITEWRAPPER = 1300
 const BP = 800
@@ -103,7 +103,7 @@ const Header = styled('h1')({
   },
 })
 
-const HeaderPart = styled('span')(({ color }: { color: string }) => ({
+const HeaderPart = styled('span')<{ color: string }>(({ color }) => ({
   color,
 }))
 
