@@ -97,7 +97,7 @@ export const AddressInput: React.SFC<AddressInputProps & Focusable> = ({
                           placeholder={placeholder}
                           value={chatState.livingSituation.streetAddress}
                           onChange={handleChange('streetAddress', chatState)}
-                          innerRef={(ref) => {
+                          ref={(ref) => {
                             if (
                               !ref ||
                               focusState.isActionDone ||

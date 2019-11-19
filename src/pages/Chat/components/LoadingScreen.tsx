@@ -1,8 +1,9 @@
+import { keyframes } from '@emotion/core'
+import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { LazyLottie } from 'components/animations/LazyLottie'
 import * as React from 'react'
-import styled, { keyframes } from 'react-emotion'
 
 const MEDIA_QUERY_MAX_WIDTH = '@media (max-width: 700px)'
 
@@ -21,7 +22,7 @@ interface WithAppear {
   appear?: boolean
 }
 
-const Wrapper = styled('div')(({ appear }: WithAppear) => ({
+const Wrapper = styled('div')<WithAppear>(({ appear }) => ({
   position: 'fixed',
   top: 0,
   right: 0,

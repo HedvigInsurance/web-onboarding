@@ -1,5 +1,5 @@
+import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
-import styled from 'react-emotion'
 
 export const Heading = styled('h1')`
   font-family: ${fonts.GEOMANIST};

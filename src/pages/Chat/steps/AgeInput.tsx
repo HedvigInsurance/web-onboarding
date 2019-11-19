@@ -94,7 +94,7 @@ export const AgeInput: React.SFC<Props & Focusable> = ({
                             onChange={handleChange('age', chatState)}
                             maxWidth={2}
                             pattern="[0-9]*"
-                            innerRef={(ref) => {
+                            ref={(ref) => {
                               if (
                                 !ref ||
                                 focusState.isActionDone ||

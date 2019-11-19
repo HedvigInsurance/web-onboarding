@@ -1,8 +1,8 @@
+import styled from '@emotion/styled'
 import { colors, fonts } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { ActionMap, Container } from 'constate'
 import * as React from 'react'
-import styled from 'react-emotion'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 
 const PERILSIDE = 72

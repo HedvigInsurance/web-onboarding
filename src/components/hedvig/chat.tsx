@@ -1,8 +1,9 @@
+import { keyframes } from '@emotion/core'
+import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand'
 import { Container } from 'constate'
 import * as React from 'react'
 import AnimateHeight from 'react-animate-height'
-import styled, { keyframes } from 'react-emotion'
 import { Mount } from 'react-lifecycle-components'
 import { Transition } from 'react-transition-group'
 import {
@@ -24,8 +25,8 @@ const fadeOut = keyframes({
   },
 })
 
-export const ChatWrapper = styled('div')(
-  ({ isHedvig }: { isHedvig: boolean }) => ({
+export const ChatWrapper = styled('div')<{ isHedvig: boolean }>(
+  ({ isHedvig }) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: isHedvig ? 'flex-start' : 'flex-end',
@@ -54,8 +55,8 @@ const ChatMessageWrapper = styled('div')({
   paddingTop: 20,
 })
 
-const TypingWrapper = styled('div')(
-  ({ status }: { status: TransitionStatus }) => ({
+const TypingWrapper = styled('div')<{ status: TransitionStatus }>(
+  ({ status }) => ({
     width: 60,
     opacity: 0,
     animation:
@@ -83,7 +84,7 @@ const bounce = keyframes({
   '100%': { transform: 'translateY(0)' },
 })
 
-const TypingBall = styled('div')(({ delay }: { delay: number }) => ({
+const TypingBall = styled('div')<{ delay: number }>(({ delay }) => ({
   display: 'inline-block',
   marginLeft: 10,
   '&:first-of-type': {
@@ -108,32 +109,26 @@ export const Typing: React.SFC<{ status: TransitionStatus }> = ({ status }) => (
   </TypingWrapper>
 )
 
-export const ChatMessageTextWrapper = styled('div')(
-  ({
-    isVisible,
-    appear,
-    isHedvig,
-  }: {
-    isVisible: boolean
-    appear: boolean
-    isHedvig: boolean
-  }) => ({
-    display: 'inline-block',
-    maxWidth: '100%',
-    padding: '15px 18px',
-    backgroundColor: isHedvig ? colors.OFF_WHITE : colors.PURPLE,
-    color: isHedvig ? colors.BLACK_PURPLE : colors.WHITE,
-    fontSize: '0.95em',
-    fontWeight: 300,
-    borderRadius: 8,
-    opacity: appear ? 1 : 0,
-    animation:
-      isVisible && !appear
-        ? `${fadeUp} 200ms forwards, ${fadeIn} 300ms forwards`
-        : 'none',
-    wordBreak: 'break-word',
-  }),
-)
+export const ChatMessageTextWrapper = styled('div')<{
+  isVisible: boolean
+  appear: boolean
+  isHedvig: boolean
+}>(({ isVisible, appear, isHedvig }) => ({
+  display: 'inline-block',
+  maxWidth: '100%',
+  padding: '15px 18px',
+  backgroundColor: isHedvig ? colors.OFF_WHITE : colors.PURPLE,
+  color: isHedvig ? colors.BLACK_PURPLE : colors.WHITE,
+  fontSize: '0.95em',
+  fontWeight: 300,
+  borderRadius: 8,
+  opacity: appear ? 1 : 0,
+  animation:
+    isVisible && !appear
+      ? `${fadeUp} 200ms forwards, ${fadeIn} 300ms forwards`
+      : 'none',
+  wordBreak: 'break-word',
+}))
 
 export interface ChatMessageProps {
   appear?: boolean

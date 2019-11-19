@@ -90,7 +90,7 @@ export const NameInput: React.SFC<Props & Focusable> = ({
                               chatState.nameAge.firstName.length || 0,
                               15,
                             )}
-                            innerRef={(ref) => {
+                            ref={(ref) => {
                               if (
                                 !ref ||
                                 focusState.isActionDone ||

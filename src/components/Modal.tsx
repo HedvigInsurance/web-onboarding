@@ -1,5 +1,5 @@
+import { css, Global } from '@emotion/core'
 import { colors } from '@hedviginsurance/brand'
-import { injectGlobal } from 'emotion'
 import * as React from 'react'
 import * as ReactModal from 'react-modal'
 
@@ -57,10 +57,13 @@ interface Props {
   style?: ReactModal.Styles
 }
 
-const Modal: React.FC<Props> = ({ isOpen, setIsOpen, style, children }) => {
-  // tslint:disable-next-line no-unused-expression
-  injectGlobal`${cssTransitions}`
-  return (
+const Modal: React.FC<Props> = ({ isOpen, setIsOpen, style, children }) => (
+  <>
+    <Global
+      styles={css`
+        ${cssTransitions}
+      `}
+    />
     <ReactModal
       isOpen={isOpen}
       style={{
@@ -82,7 +85,7 @@ const Modal: React.FC<Props> = ({ isOpen, setIsOpen, style, children }) => {
     >
       {children}
     </ReactModal>
-  )
-}
+  </>
+)
 
 export default Modal

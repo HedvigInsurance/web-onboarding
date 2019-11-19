@@ -1,3 +1,4 @@
+import styled from '@emotion/styled'
 import { colors, fonts } from '@hedviginsurance/brand'
 import {
   TranslationsConsumer,
@@ -6,7 +7,6 @@ import {
 import { OfferData } from 'containers/OfferContainer'
 import { isFreeMonths, isMonthlyCostDeduction } from 'containers/types'
 import * as React from 'react'
-import styled from 'react-emotion'
 import {
   isApartmentOwner,
   isStudentInsurance,
@@ -31,7 +31,7 @@ export const Price = styled('h1')({
   fontFamily: fonts.CIRCULAR,
 })
 
-const InsuranceInfo = styled('div')(({ wide }: { wide?: boolean }) => ({
+const InsuranceInfo = styled('div')<{ wide?: boolean }>(({ wide }) => ({
   textAlign: 'center',
   justifyContent: 'center',
   display: 'flex',

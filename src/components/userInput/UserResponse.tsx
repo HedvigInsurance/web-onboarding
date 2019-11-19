@@ -1,9 +1,9 @@
+import styled from '@emotion/styled'
 import { colors, fonts } from '@hedviginsurance/brand'
 import animateScrollTo from 'animated-scroll-to'
 import { Container } from 'constate'
 import * as React from 'react'
 import AnimateHeight from 'react-animate-height'
-import styled from 'react-emotion'
 import { Mount } from 'react-lifecycle-components'
 import { FadeIn, FadeUp } from '../animations/appearings'
 import { HEIGHT_AND_SCROLL_ANIMATION_TIME } from '../hedvig/conversation'
@@ -16,8 +16,8 @@ interface WithMaxWidth {
   maxWidth?: number
 }
 
-export const UserTextInput = styled('input')(
-  ({ hasError, maxWidth }: WithMaxWidth & InputProps) => ({
+export const UserTextInput = styled('input')<WithMaxWidth & InputProps>(
+  ({ hasError, maxWidth }) => ({
     fontFamily: fonts.CIRCULAR,
     color: hasError ? colors.PINK : colors.OFF_BLACK,
     border: 0,
@@ -48,7 +48,7 @@ export const UserTextInput = styled('input')(
   }),
 )
 
-const ActualSelectInput = styled('select')(({ hasError }: InputProps) => ({
+const ActualSelectInput = styled('select')<InputProps>(({ hasError }) => ({
   appearance: 'none',
   background: 'transparent',
   fontSize: 'inherit',
@@ -59,8 +59,8 @@ const ActualSelectInput = styled('select')(({ hasError }: InputProps) => ({
   color: hasError ? colors.PINK : undefined,
 }))
 
-const UserSelectInputWrapper = styled(UserTextInput)(
-  ({ hasError }: WithMaxWidth & InputProps) => ({
+const UserSelectInputWrapper = styled(UserTextInput)<WithMaxWidth & InputProps>(
+  ({ hasError }) => ({
     appearance: 'none',
     cursor: 'pointer',
     position: 'relative',
@@ -88,14 +88,15 @@ export const UserSelectInput = (
   </UserSelectInputWrapper>
 )
 
-const CheckboxWrapper = styled('label')(
-  ({ disabled }: { disabled?: boolean }) => ({
+const CheckboxWrapper = styled('label')<{ disabled?: boolean }>(
+  ({ disabled }) => ({
     opacity: disabled ? 0.3 : 1,
     display: 'inline-flex',
     flexDirection: 'row',
     alignItems: 'center',
   }),
 )
+
 const CheckboxInputContainer = styled('span')({
   display: 'inline-flex',
   alignItems: 'center',
@@ -103,6 +104,7 @@ const CheckboxInputContainer = styled('span')({
   cursor: 'pointer',
   position: 'relative',
 })
+
 const Tick = styled('svg')({
   opacity: 0,
   transition: 'opacity 150ms',
@@ -117,6 +119,7 @@ const Tick = styled('svg')({
     opacity: 1,
   },
 })
+
 const CheckboxInput = styled('input')({
   appearance: 'none',
   fontSize: 'inherit',
@@ -137,10 +140,12 @@ const CheckboxInput = styled('input')({
     borderColor: colors.GREEN,
   },
 })
+
 const CheckboxLabel = styled('span')({
   paddingLeft: '0.5em',
   cursor: 'pointer',
 })
+
 export const UserCheckbox = (
   props: React.InputHTMLAttributes<HTMLInputElement>,
 ) => (

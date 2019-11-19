@@ -1,12 +1,12 @@
+import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { FadeIn } from 'components/animations/appearings'
 import { Button } from 'components/buttons'
 import { Size, Spacing } from 'components/utils/Spacing'
 import * as React from 'react'
-import styled from 'react-emotion'
 
-const Wrapper = styled('div')(({ hidden }: { hidden: boolean }) => ({
+const Wrapper = styled('div')<{ hidden: boolean }>(({ hidden }) => ({
   position: 'relative',
   // Hide but don't disable button
   ...(hidden

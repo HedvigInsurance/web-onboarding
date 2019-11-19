@@ -1,9 +1,10 @@
+import { css } from '@emotion/core'
+import styled from '@emotion/styled'
 import { colors, fonts } from '@hedviginsurance/brand'
 import { Container } from 'constate'
 import gql from 'graphql-tag'
 import * as React from 'react'
 import { Mutation, Query } from 'react-apollo'
-import styled, { css } from 'react-emotion'
 import ReactFacebookLogin from 'react-facebook-login'
 import { Link } from 'react-router-dom'
 import { Button } from '../../components/buttons'
@@ -433,17 +434,14 @@ export class DontPanic extends React.Component {
                                         })
                                         track()
                                       }}
-                                      cssClass={facebookButtonClass}
+                                      css={facebookButtonClass}
                                     />
                                   )}
                                 </TrackAction>
                               </div>
                             ) : (
                               email && (
-                                <button
-                                  className={facebookButtonClass}
-                                  disabled
-                                >
+                                <button css={facebookButtonClass} disabled>
                                   Fortsätt med Facebook
                                 </button>
                               )

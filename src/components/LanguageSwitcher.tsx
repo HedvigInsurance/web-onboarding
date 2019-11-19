@@ -1,6 +1,6 @@
+import styled from '@emotion/styled'
 import { Container } from 'constate'
 import * as React from 'react'
-import styled from 'react-emotion'
 import { withRouter } from 'react-router'
 
 const LocalizationIconSvg: React.FunctionComponent<{ className?: string }> = ({
@@ -15,8 +15,8 @@ const LocalizationIconSvg: React.FunctionComponent<{ className?: string }> = ({
   </svg>
 )
 
-const LanguageSwitcherWrapper = styled('div')(
-  ({ isOpen }: { isOpen: boolean }) => ({
+const LanguageSwitcherWrapper = styled('div')<{ isOpen: boolean }>(
+  ({ isOpen }) => ({
     position: 'relative',
     display: 'flex',
     alignItems: 'center',
@@ -25,12 +25,14 @@ const LanguageSwitcherWrapper = styled('div')(
     marginRight: '.5rem',
   }),
 )
+
 const ToggleButton = styled('button')({
   appearance: 'none',
   background: 'transparent',
   border: 0,
   cursor: 'pointer',
 })
+
 const LocalizationIcon = styled(LocalizationIconSvg)({
   width: '1.75rem',
   height: '1.75rem',
@@ -39,6 +41,7 @@ const LocalizationIcon = styled(LocalizationIconSvg)({
     height: '1.5rem',
   },
 })
+
 const LanguageSwitcherDropdown = styled('ul')({
   position: 'absolute',
   top: '100%',
@@ -50,11 +53,13 @@ const LanguageSwitcherDropdown = styled('ul')({
   backgroundColor: '#fff',
   boxShadow: '2px 3px 5px rgba(0, 0, 0, .1)',
 })
+
 const Language = styled('li')({
   padding: 0,
   margin: 0,
   display: 'block',
 })
+
 const LanguageLink = styled('a')({
   display: 'block',
   padding: '12px 24px',

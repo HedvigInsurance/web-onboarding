@@ -1,3 +1,4 @@
+import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand'
 import {
   TranslationsConsumer,
@@ -8,7 +9,6 @@ import { CurrentLanguage } from 'components/utils/CurrentLanguage'
 import { OfferData } from 'containers/OfferContainer'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
-import styled from 'react-emotion'
 import VisibilitySensor from 'react-visibility-sensor'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'

@@ -1,6 +1,7 @@
+import { keyframes } from '@emotion/core'
+import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand/dist'
 import * as React from 'react'
-import styled, { keyframes } from 'react-emotion'
 
 const Wrapper = styled('div')({
   display: 'flex',
@@ -34,7 +35,7 @@ const snore = keyframes({
     opacity: 0,
   },
 })
-const Snore = styled('div')(({ delay = 0 }: { delay?: number }) => ({
+const Snore = styled('div')<{ delay?: number }>(({ delay = 0 }) => ({
   position: 'absolute',
   top: '10%',
   left: '40%',
