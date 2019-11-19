@@ -11,16 +11,16 @@ import {
 
 const Wrapper = styled('div')`
   width: 100%;
-  height: 845px;
-  padding: 200px 0 80px 0;
+  height: 53rem;
+  padding: 12.5rem 0 5rem 0;
   background-color: ${colorsV2.black};
   position: relative;
   box-sizing: border-box;
 `
 
 const SummaryBox = styled('div')`
-  width: 420px;
-  height: 500px;
+  width: 26rem;
+  height: 31rem;
   background-color: ${colorsV2.white};
   border-radius: 8px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);

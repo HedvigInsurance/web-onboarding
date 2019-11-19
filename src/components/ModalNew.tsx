@@ -35,10 +35,10 @@ const Background = styled(motion.div)`
 const ModalContainer = styled(motion.div)`
   position: relative;
   width: 100%;
-  max-width: 900px;
+  max-width: 56rem;
   height: 100%;
-  min-height: 400px;
-  max-height: 900px;
+  min-height: 25rem;
+  max-height: 56rem;
   background: ${colorsV2.white};
   border-radius: 9px;
   position: absolute;
@@ -64,11 +64,11 @@ const ModalInnerContainer = styled('div')`
 `
 
 const CloseButton = styled('button')`
-  width: 24px;
-  height: 24px;
+  width: 1.5rem;
+  height: 1.5rem;
   position: absolute;
-  top: 16px;
-  right: 16px;
+  top: 1rem;
+  right: 1rem;
   padding: 0;
   display: flex;
   align-items: center;

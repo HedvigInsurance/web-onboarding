@@ -9,11 +9,11 @@ interface PerilItemProps {
 }
 
 const Button = styled('button')`
-  width: 116px;
-  height: 92px;
-  margin: 4px;
-  padding: 8px;
-  border-radius: 4px;
+  width: 7.25rem;
+  height: 5.75rem;
+  margin: 0.25rem;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
   background-color: ${colorsV2.white};
   border: 1px solid ${colorsV2.lightgray};
   cursor: pointer;
@@ -24,8 +24,8 @@ const Button = styled('button')`
   align-items: center;
 
   svg {
-    width: 48px;
-    height: 48px;
+    width: 3rem;
+    height: 3rem;
   }
 
   :focus {
@@ -43,7 +43,7 @@ const Button = styled('button')`
 `
 
 const Title = styled('div')`
-  font-size: 16px;
+  font-size: 1rem;
   letter-spacing: -0.23px;
   color: ${colorsV2.violet500};
   font-family: ${fonts.CIRCULAR};

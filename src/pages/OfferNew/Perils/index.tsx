@@ -27,27 +27,27 @@ import { PerilItem } from './PerilItem'
 import { PerilModal } from './PerilModal'
 
 const Wrapper = styled('div')`
-  padding: 80px 0;
+  padding: 5rem 0;
   background-color: ${colorsV2.offwhite};
   display: flex;
 `
 
 const Body = styled('div')`
-  font-size: 20px;
-  line-height: 26px;
+  font-size: 1.25rem;
+  line-height: 1.626rem;
   color: ${colorsV2.darkgray};
-  margin-top: 32px;
+  margin-top: 2rem;
 `
 
 const PerilItemCollection = styled('div')`
   width: 100%;
   display: flex;
   flex-flow: row wrap;
-  margin: 0 -4px;
+  margin: 0 -0.25rem;
 `
 
 const ImportantNumbers = styled('div')`
-  margin-top: 32px;
+  margin-top: 2rem;
 `
 
 export interface Peril {

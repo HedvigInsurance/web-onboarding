@@ -12,7 +12,7 @@ import { CompareTable } from './CompareTable'
 import { hedvigCompany, insuranceProperties, otherCompanies } from './mock'
 
 const Wrapper = styled('div')`
-  padding: 80px 0;
+  padding: 5rem 0;
   background-color: ${colorsV2.offwhite};
 `
 

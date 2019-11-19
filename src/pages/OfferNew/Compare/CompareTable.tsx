@@ -28,24 +28,24 @@ const Container = styled('div')`
 const InsurancePropertiesSection = styled('div')`
   width: 100%;
   height: 100%;
-  padding: 25px 28px;
+  padding: 1.5rem 1.75rem;
   box-sizing: border-box;
 `
 
 const ColumnHead = styled('div')`
   display: flex;
   align-items: center;
-  margin-bottom: 58px;
-  height: 25px;
+  margin-bottom: 3.625rem;
+  height: 1.5rem;
 `
 
 const ColumnRow = styled('div')`
   display: flex;
-  height: 20px;
-  margin-bottom: 26px;
+  height: 1.25rem;
+  margin-bottom: 1.5rem;
   color: ${colorsV2.gray};
   :last-child {
-    margin-bottom: 14px;
+    margin-bottom: 0.875rem;
   }
 `
 
@@ -57,15 +57,15 @@ const ColumnRowPrimaryContent = styled('span')`
 const InsurancePropertyNames = styled('div')``
 
 const InsuranceProperty = styled(ColumnRow)`
-  font-size: 16px;
+  font-size: 1rem;
   letter-spacing -0.23px;
   flex-flow: row;
   align-items: center;
 `
 
 const InsurancePropertyHelpButton = styled('button')`
-  width: 16px;
-  height: 16px;
+  width: 1rem;
+  height: 1rem;
   box-sizing: border-box;
   padding: 0;
   display: flex;
@@ -75,7 +75,7 @@ const InsurancePropertyHelpButton = styled('button')`
   border-radius: 50%;
   cursor: pointer;
   border: none;
-  margin-left: 12px;
+  margin-left: 0.75rem;
 
   :focus {
     outline: none;
@@ -90,7 +90,7 @@ const PrimaryCompanySection = styled('div')`
   width: 100%;
   max-width: 178px;
   height: 100%;
-  padding: 25px;
+  padding: 1.5rem;
   box-sizing: border-box;
   background-color: ${colorsV2.lightgray};
   position: relative;
@@ -133,7 +133,7 @@ const OtherCompaniesSection = styled('div')`
   width: 100%;
   max-width: 178px;
   height: 100%;
-  padding: 25px 16px;
+  padding: 2rem 1rem;
   box-sizing: border-box;
   position: relative;
 `
@@ -146,12 +146,12 @@ interface OtherCompanyHeadProps {
 const OtherCompanyHead = styled('button')<OtherCompanyHeadProps>`
   width: 100%;
   display: flex;
-  height: 25px;
+  height: 1.5rem;
   align-items: center;
   justify-content: space-between;
   border: none;
-  margin-bottom: 58px;
-  font-size: 16px;
+  margin-bottom: 3.625rem;
+  font-size: 1rem;
   font-weight: 500;
   color: ${(props) =>
     hexToRgba(
@@ -187,11 +187,11 @@ const Dropdown = styled('div')<{ visible: boolean }>`
   position: absolute;
   height: calc(100% - 61px);
   left: 0;
-  top: 60px;
+  top: 3.75rem;
   transition: all 0.2s;
   opacity: ${(props) => (props.visible ? 0.9 : 0)};
   visibility: ${(props) => (props.visible ? 'visible' : 'hidden')};
-  padding: 16px;
+  padding: 1rem;
   box-sizing: border-box;
   border-top: 1px solid ${colorsV2.lightgray};
 `
@@ -200,11 +200,11 @@ const DropdownRow = styled('button')`
   width: 100%;
   background: none;
   border: none;
-  font-size: 16px;
-  line-height: 24px;
+  font-size: 1rem;
+  line-height: 1.5rem;
   text-align: left;
   color: ${colorsV2.darkgray};
-  margin-bottom: 14px;
+  margin-bottom: 0.875rem;
   cursor: pointer;
 
   :focus {

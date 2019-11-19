@@ -17,7 +17,7 @@ interface PerilModalProps {
 
 const Header = styled('div')`
   width: 100%;
-  height: 140px;
+  height: 8.75rem;
   background-color: ${colorsV2.white};
   display: flex;
   flex-flow: column;
@@ -25,15 +25,15 @@ const Header = styled('div')`
   justify-content: flex-end;
   position: relative;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  margin-bottom: 2px;
+  margin-bottom: 0.125rem;
 `
 
 const Picker = styled('div')`
   width: 100%;
-  height: 88px;
+  height: 5.5rem;
   display: flex;
   flex-flow: row;
-  margin: 0 -12px;
+  margin: 0 -0.75rem;
   overflow: hidden;
   position: relative;
   box-sizing: border-box;
@@ -42,8 +42,8 @@ const Picker = styled('div')`
 const PickerItem = styled('button')`
   width: 100px;
   flex-shrink: 0;
-  padding: 8px 8px 10px 8px;
-  margin: 0 8px;
+  padding: 0.5rem 0.5rem 0.625rem 0.5rem;
+  margin: 0 0.5rem;
   background: none;
   border: none;
   display: flex;
@@ -53,8 +53,8 @@ const PickerItem = styled('button')`
   cursor: pointer;
 
   svg {
-    width: 44px;
-    height: 44px;
+    width: 2.75rem;
+    height: 2.75rem;
   }
 
   :focus {
@@ -63,7 +63,7 @@ const PickerItem = styled('button')`
 `
 
 const PickerItemLabel = styled('div')`
-  font-size: 15px;
+  font-size: 0.9375rem;
   letter-spacing: -0.23px;
   text-align: center;
   white-space: nowrap;
@@ -77,7 +77,7 @@ interface PerilItemsContainerProps {
 
 const PerilItemsContainer = styled('div')<PerilItemsContainerProps>`
   position: relative;
-  height: 88px;
+  height: 5.5rem;
   display: flex;
   ${(props) =>
     props.transition && `transition: all ${TRANSITION_MS}ms ease-in-out;`}
@@ -87,30 +87,30 @@ const PerilItemsContainer = styled('div')<PerilItemsContainerProps>`
       props.currentPeril !== 0
         ? `calc((-100%/3) - ${(props.currentPeril - 12 - 1) * (100 + 16) +
             8}px)`
-        : `calc((-100%/3) + 108px)`
+        : `calc((-100%/3) + 6.75rem)`
     });`}
 `
 
 const Indicator = styled('div')`
   position: absolute;
-  width: 100px;
-  height: 2px;
+  width: 6.25rem;
+  height: 0.125rem;
   bottom: 0;
   left: 0;
   background-color: ${colorsV2.black};
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
   transition: transform 0.15s ease-in-out;
-  left: 116px;
+  left: 7.25rem;
 `
 
 const Gradient = styled('div')`
-  height: 80px;
-  width: 100px;
+  height: 5rem;
+  width: 6.25rem;
   position: absolute;
   display: flex;
   align-items: center;
-  bottom: 8px;
+  bottom: 0.5rem;
 `
 
 const LeftGradient = styled(Gradient)`
@@ -154,17 +154,17 @@ const DirectionButton = styled('button')`
 `
 
 const BackButton = styled(DirectionButton)`
-  margin-left: 10px;
+  margin-left: 0.625rem;
   justify-content: flex-start;
 `
 
 const ForwardButton = styled(DirectionButton)`
-  margin-right: 10px;
+  margin-right: 0.625rem;
   justify-content: flex-end;
 `
 
 const Content = styled('div')`
-  padding: 24px;
+  padding: 1.5rem;
 `
 
 export const PerilModal = (
