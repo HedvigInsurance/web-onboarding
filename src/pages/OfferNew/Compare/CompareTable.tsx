@@ -34,6 +34,10 @@ const InsurancePropertiesSection = styled('div')`
   @media (max-width: 600px) {
     padding: 1.25rem 0.875rem;
   }
+
+  @media (max-width: 350px) {
+    padding: 1.25rem 0.625rem;
+  }
 `
 
 const ColumnHead = styled('div')`
@@ -131,6 +135,10 @@ const PrimaryCompanySection = styled('div')`
   @media (max-width: 600px) {
     padding: 1.25rem 0.875rem;
   }
+
+  @media (max-width: 350px) {
+    padding: 1.25rem 0.625rem;
+  }
 `
 
 const PrimaryCompanyHead = styled(ColumnHead)`
@@ -155,6 +163,10 @@ const OtherCompaniesSection = styled('div')`
 
   @media (max-width: 600px) {
     padding: 1.25rem 0.875rem;
+  }
+
+  @media (max-width: 350px) {
+    padding: 1.25rem 0.625rem;
   }
 `
 
