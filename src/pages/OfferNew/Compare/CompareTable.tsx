@@ -30,6 +30,10 @@ const InsurancePropertiesSection = styled('div')`
   height: 100%;
   padding: 1.5rem 1.75rem;
   box-sizing: border-box;
+
+  @media (max-width: 600px) {
+    padding: 1.25rem 0.875rem;
+  }
 `
 
 const ColumnHead = styled('div')`
@@ -37,6 +41,10 @@ const ColumnHead = styled('div')`
   align-items: center;
   margin-bottom: 3.625rem;
   height: 1.5rem;
+
+  @media (max-width: 600px) {
+    margin-bottom: 3.25rem;
+  }
 `
 
 const ColumnRow = styled('div')`
@@ -84,13 +92,17 @@ const InsurancePropertyHelpButton = styled('button')`
   svg {
     width: 6px;
   }
+
+  @media (max-width: 600px) {
+    display: none;
+  }
 `
 
 const PrimaryCompanySection = styled('div')`
   width: 100%;
   max-width: 178px;
   height: 100%;
-  padding: 1.5rem;
+  padding: 2rem 1rem;
   box-sizing: border-box;
   background-color: ${colorsV2.lightgray};
   position: relative;
@@ -115,6 +127,10 @@ const PrimaryCompanySection = styled('div')`
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
   }
+
+  @media (max-width: 600px) {
+    padding: 1.25rem 0.875rem;
+  }
 `
 
 const PrimaryCompanyHead = styled(ColumnHead)`
@@ -136,6 +152,10 @@ const OtherCompaniesSection = styled('div')`
   padding: 2rem 1rem;
   box-sizing: border-box;
   position: relative;
+
+  @media (max-width: 600px) {
+    padding: 1.25rem 0.875rem;
+  }
 `
 
 interface OtherCompanyHeadProps {
@@ -160,6 +180,10 @@ const OtherCompanyHead = styled('button')<OtherCompanyHeadProps>`
     )};
   transition: all 0.1s ease;
   cursor: pointer;
+  background: none;
+  padding: 0 0.375rem;
+  position: relative;
+  word-break: break-word;
 
   :focus {
     outline: none;
@@ -179,21 +203,44 @@ const OtherCompanyHead = styled('button')<OtherCompanyHeadProps>`
       fill: ${colorsV2.violet500};
     }
   }
+
+  @media (max-width: 600px) {
+    margin-bottom: 3.25rem;
+    font-size: 0.75rem;
+    padding: 0;
+    justify-content: center;
+
+    > svg {
+      position: absolute;
+      left: 50%;
+      bottom: -1.75rem;
+      fill: ${colorsV2.violet500};
+      ${(props) =>
+        props.dropdownIsVisible
+          ? `transform: translateX(-50%) rotate(180deg);`
+          : `transform: translateX(-50%)`}
+    }
+  }
 `
 
 const Dropdown = styled('div')<{ visible: boolean }>`
   background: ${colorsV2.white};
   width: 100%;
   position: absolute;
-  height: calc(100% - 61px);
   left: 0;
-  top: 3.75rem;
+  top: 4.25rem;
+  height: calc(100% - 4.25rem);
   transition: all 0.2s;
   opacity: ${(props) => (props.visible ? 0.9 : 0)};
   visibility: ${(props) => (props.visible ? 'visible' : 'hidden')};
   padding: 1rem;
   box-sizing: border-box;
   border-top: 1px solid ${colorsV2.lightgray};
+
+  @media (max-width: 600px) {
+    top: 5.5rem;
+    height: calc(100% - 5.5rem);
+  }
 `
 
 const DropdownRow = styled('button')`
@@ -206,6 +253,8 @@ const DropdownRow = styled('button')`
   color: ${colorsV2.darkgray};
   margin-bottom: 0.875rem;
   cursor: pointer;
+  padding: 0 0.375rem;
+  word-break: break-word;
 
   :focus {
     outline: none;
@@ -213,6 +262,12 @@ const DropdownRow = styled('button')`
 
   :hover {
     color: ${colorsV2.violet500};
+  }
+
+  @media (max-width: 600px) {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    padding: 0;
   }
 `
 
@@ -288,7 +343,7 @@ export const CompareTable = (props: Props) => {
         >
           {currentCompany !== null && !dropdownIsVisible
             ? currentCompany.name
-            : 'Välj försäkring'}
+            : 'Välj bolag'}
           <DownArrow />
         </OtherCompanyHead>
         <Dropdown visible={dropdownIsVisible}>
