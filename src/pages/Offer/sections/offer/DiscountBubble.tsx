@@ -1,3 +1,5 @@
+import { keyframes } from '@emotion/core'
+import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand'
 import { OfferData } from 'containers/OfferContainer'
 import {
@@ -6,7 +8,6 @@ import {
   isNoDiscount,
 } from 'containers/types'
 import * as React from 'react'
-import styled, { keyframes } from 'react-emotion'
 
 const bubbleKeyframe = keyframes`
   from {

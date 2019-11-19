@@ -1,8 +1,8 @@
+import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { motion } from 'framer-motion'
 import hexToRgba from 'hex-to-rgba'
 import * as React from 'react'
-import styled from 'react-emotion'
 import { Cross } from './icons/Cross'
 
 export interface ModalProps {
@@ -162,7 +162,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
             },
           }}
         >
-          <ModalInnerContainer innerRef={containerRef}>
+          <ModalInnerContainer ref={containerRef}>
             {props.children}
           </ModalInnerContainer>
           <CloseButton onClick={props.onClose}>

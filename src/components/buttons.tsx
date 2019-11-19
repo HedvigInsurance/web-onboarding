@@ -1,15 +1,16 @@
+import styled from '@emotion/styled'
 import { colors, fonts } from '@hedviginsurance/brand'
-import styled from 'react-emotion'
 import { Link } from 'react-router-dom'
 
-export const GetInsuredButton = styled('div')(
-  ({ margin, centered }: { margin?: string; centered?: boolean }) => ({
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: centered ? 'center' : undefined,
-    marginTop: margin || 0,
-  }),
-)
+export const GetInsuredButton = styled('div')<{
+  margin?: string
+  centered?: boolean
+}>(({ margin, centered }) => ({
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: centered ? 'center' : undefined,
+  marginTop: margin || 0,
+}))
 
 export const LinkTag = styled(Link)({
   backgroundColor: colors.GREEN,
@@ -20,17 +21,17 @@ export const LinkTag = styled(Link)({
   padding: '15px 30px',
 })
 
-export const Button = styled('button')(
+export const Button = styled('button')<{
+  background: string
+  foreground: string
+  border?: string
+  size?: 'sm' | 'lg'
+}>(
   ({
     background,
     foreground,
     border = '1px solid transparent',
     size = 'sm',
-  }: {
-    background: string
-    foreground: string
-    border?: string
-    size?: 'sm' | 'lg'
   }) => ({
     fontFamily: fonts.CIRCULAR,
     appearance: 'none',

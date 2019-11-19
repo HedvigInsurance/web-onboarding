@@ -1,7 +1,7 @@
+import styled from '@emotion/styled'
 import { colors, fonts } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
-import styled from 'react-emotion'
 import {
   getInsurancePDFTextKey,
   getPrebuyPDFTextKey,

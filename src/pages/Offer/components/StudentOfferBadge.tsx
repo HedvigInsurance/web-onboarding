@@ -1,10 +1,10 @@
+import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
-import styled from 'react-emotion'
 
-const StudentBadgeWrapper = styled('div')(
-  ({ placement }: { placement: 'left' | 'right' }) => ({
+const StudentBadgeWrapper = styled('div')<{ placement: 'left' | 'right' }>(
+  ({ placement }) => ({
     position: 'absolute',
     [placement === 'left' ? 'right' : 'left']: '70%',
     display: 'flex',

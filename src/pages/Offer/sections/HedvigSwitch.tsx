@@ -1,7 +1,7 @@
+import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
-import styled from 'react-emotion'
 import { CurrentInsuranceState, SwitchableInsurers } from '../../Chat/state'
 import { CardWrapper } from '../components/CardWrapper'
 import { HeaderWrapper } from '../components/HeaderWrapper'

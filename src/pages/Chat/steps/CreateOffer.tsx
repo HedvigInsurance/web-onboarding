@@ -9,7 +9,7 @@ import {
 import { Size, Spacing } from 'components/utils/Spacing'
 import { SessionContainer } from 'containers/SessionContainer'
 import * as React from 'react'
-import styled from 'react-emotion'
+import styled from '@emotion/styled'
 import { Update } from 'react-lifecycle-components'
 import { qualifiesForStudentInsurance } from 'utils/insuranceDomainUtils'
 import {

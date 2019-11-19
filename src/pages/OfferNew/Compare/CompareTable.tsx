@@ -1,7 +1,7 @@
+import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import hexToRgba from 'hex-to-rgba'
 import * as React from 'react'
-import styled from 'react-emotion'
 import { Checkmark } from '../../../components/icons/Checkmark'
 import { DownArrow } from '../../../components/icons/DownArrow'
 import { HedvigSymbol } from '../../../components/icons/HedvigSymbol'

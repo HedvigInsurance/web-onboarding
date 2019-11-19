@@ -1,3 +1,5 @@
+import { keyframes } from '@emotion/core'
+import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { ApolloError } from 'apollo-client'
@@ -5,7 +7,6 @@ import gql from 'graphql-tag'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
 import { Query } from 'react-apollo'
-import styled, { keyframes } from 'react-emotion'
 import { Mount } from 'react-lifecycle-components/dist'
 import { Redirect } from 'react-router-dom'
 import {

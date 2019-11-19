@@ -1,9 +1,9 @@
+import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { Button } from 'components/buttons'
 import { ActionMap, Container } from 'constate'
 import * as React from 'react'
-import styled from 'react-emotion'
 import { CurrentLanguage } from '../../../components/utils/CurrentLanguage'
 import TrustlyModal from '../components/TrustlyModal'
 import { RegisterDirectDebitMutation } from '../containers/RegisterDirectDebitMutation'
@@ -74,7 +74,7 @@ const Header = styled('h1')({
   },
 })
 
-const HeaderPart = styled('span')(({ color }: { color: string }) => ({
+const HeaderPart = styled('span')<{ color: string }>(({ color }) => ({
   color,
   display: 'block',
 }))
