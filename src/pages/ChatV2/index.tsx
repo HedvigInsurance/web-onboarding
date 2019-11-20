@@ -1,12 +1,12 @@
-import * as React from 'react'
-import {
-  Passage,
-  Header,
-  KeyValueStore,
-  goToHook,
-} from '@hedviginsurance/embark'
 import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand'
+import {
+  goToHook,
+  Header,
+  KeyValueStore,
+  Passage,
+} from '@hedviginsurance/embark'
+import * as React from 'react'
 
 interface State {
   history: string[]
@@ -102,7 +102,7 @@ const Chat = () => {
   }
 
   const currentPassage = state.data.passages.filter(
-    (passage: any) => passage.id == state.passageId,
+    (passage: any) => passage.id === state.passageId,
   )[0]
 
   return (
