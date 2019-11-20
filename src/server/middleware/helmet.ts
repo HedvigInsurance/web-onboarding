@@ -42,6 +42,7 @@ const defaultSrc = [
   'hedvig.test-app.link',
   'trustly.com',
   '*.trustly.com',
+  'https://hedvig-embark.herokuapp.com',
   GIRAFFE_ENDPOINT,
   GIRAFFE_WS_ENDPOINT,
 ]
