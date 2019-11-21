@@ -126,7 +126,17 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
   }
 
   return (
-    <EmbarkProvider data={data}>
+    <EmbarkProvider
+      data={data}
+      resolvers={{
+        personalInformationApi: () => {
+          throw Error('TODO')
+        },
+        createQuote: () => {
+          throw Error('TODO')
+        },
+      }}
+    >
       <Embark data={data} />
     </EmbarkProvider>
   )
