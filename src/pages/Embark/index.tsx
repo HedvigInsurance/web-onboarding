@@ -1,10 +1,10 @@
 import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand'
 import {
+  useGoTo,
   Header,
   KeyValueStore,
   Passage,
-  useGoTo,
 } from '@hedviginsurance/embark'
 import * as React from 'react'
 
@@ -43,13 +43,7 @@ const reducer: (state: State, action: Action) => State = (state, action) => {
   }
 }
 
-export const ChatRoot = () => (
-  <KeyValueStore>
-    <Chat />
-  </KeyValueStore>
-)
-
-const ChatStyling = styled.div`
+const EmbarkStyling = styled.div`
   background-color: ${colors.PINK};
 
   * {
@@ -65,7 +59,11 @@ const ChatStyling = styled.div`
   }
 `
 
-const Chat = () => {
+interface EmbarkProps {
+  name: string
+}
+
+const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
   const [state, dispatch] = React.useReducer(reducer, {
     history: [],
     passageId: null,
@@ -82,7 +80,9 @@ const Chat = () => {
   React.useEffect(() => {
     // TODO load this via GraphQL
     fetch(
-      'https://hedvig-embark.herokuapp.com/angel-data/angel-data?name=Web%20Onboarding%20-%20Swedish',
+      `https://hedvig-embark.herokuapp.com/angel-data/angel-data?name=${encodeURIComponent(
+        props.name,
+      )}`,
     )
       .then((res) => res.json())
       .then((angelData) => {
@@ -106,7 +106,7 @@ const Chat = () => {
   )[0]
 
   return (
-    <ChatStyling>
+    <EmbarkStyling>
       <Header passage={currentPassage} storyData={state.data} />
       <Passage
         canGoBack={state.history.length > 1}
@@ -121,6 +121,12 @@ const Chat = () => {
         }}
         changePassage={goTo}
       />
-    </ChatStyling>
+    </EmbarkStyling>
   )
 }
+
+export const EmbarkRoot: React.FunctionComponent<EmbarkProps> = (props) => (
+  <KeyValueStore>
+    <Embark name={props.name} />
+  </KeyValueStore>
+)
