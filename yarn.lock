@@ -2,33 +2,6 @@
 # yarn lockfile v1
 
 
-"@apollo/react-common@^3.1.3":
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/@apollo/react-common/-/react-common-3.1.3.tgz#ddc34f6403f55d47c0da147fd4756dfd7c73dac5"
-  integrity sha512-Q7ZjDOeqjJf/AOGxUMdGxKF+JVClRXrYBGVq+SuVFqANRpd68MxtVV2OjCWavsFAN0eqYnRqRUrl7vtUCiJqeg==
-  dependencies:
-    ts-invariant "^0.4.4"
-    tslib "^1.10.0"
-
-"@apollo/react-hooks@^3.1.3":
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/@apollo/react-hooks/-/react-hooks-3.1.3.tgz#ad42c7af78e81fee0f30e53242640410d5bd0293"
-  integrity sha512-reIRO9xKdfi+B4gT/o/hnXuopUnm7WED/ru8VQydPw+C/KG/05Ssg1ZdxFKHa3oxwiTUIDnevtccIH35POanbA==
-  dependencies:
-    "@apollo/react-common" "^3.1.3"
-    "@wry/equality" "^0.1.9"
-    ts-invariant "^0.4.4"
-    tslib "^1.10.0"
-
-"@apollo/react-testing@^3.1.3":
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/@apollo/react-testing/-/react-testing-3.1.3.tgz#d8dd318f58fb6a404976bfa3f8a79e976a5c6562"
-  integrity sha512-58R7gROl4TZMHm5kS76Nof9FfZhD703AU3SmJTA2f7naiMqC9Qd8pZ4oNCBafcab0SYN//UtWvLcluK5O7V/9g==
-  dependencies:
-    "@apollo/react-common" "^3.1.3"
-    fast-json-stable-stringify "^2.0.0"
-    tslib "^1.10.0"
-
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.0.0-beta.35", "@babel/code-frame@^7.5.5":
   version "7.5.5"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.5.5.tgz#bc0782f6d69f7b7d49531219699b988f669a8f9d"
@@ -937,13 +910,11 @@
     webpack "4.19.1"
     webpack-dev-server "3.1.14"
 
-"@hedviginsurance/embark@^1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-1.0.5.tgz#c021636c687dece6cba023f0d7e987878e268947"
-  integrity sha512-WebWUh//HxfdTPztV103/CumcVa04u4PJdmneTHF/ehsT7TY3KmgpDKt3AtTuv3ubTVVpgKCV32pRiBr08wVmQ==
+"@hedviginsurance/embark@^1.0.8":
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-1.0.8.tgz#6043d4a81d308fd6455730b985db16ae1d26757c"
+  integrity sha512-0Zw5uYL8LBmjtjZ0aZwf4NBglakKd4P+Q4LTsqiZ2ujTwx//YjZxmC9/D54PoKUpx7xj840LKwJPOofQmiR9yg==
   dependencies:
-    "@apollo/react-hooks" "^3.1.3"
-    "@apollo/react-testing" "^3.1.3"
     "@emotion/core" "^10.0.21"
     "@emotion/styled" "^10.0.17"
     "@hedviginsurance/brand" "^2.0.0"
@@ -953,10 +924,6 @@
     "@types/react-dom" "^16.9.2"
     "@types/react-input-mask" "^2.0.4"
     "@types/uuid" "^3.4.6"
-    apollo-cache-inmemory "^1.6.3"
-    apollo-client "^2.6.4"
-    apollo-link "^1.2.13"
-    apollo-utilities "^1.3.2"
     emotion "^10.0.17"
     framer-motion "^1.6.14"
     hex-to-rgba "^2.0.1"
@@ -1846,7 +1813,7 @@
     "@types/node" ">=6"
     tslib "^1.9.3"
 
-"@wry/equality@^0.1.2", "@wry/equality@^0.1.9":
+"@wry/equality@^0.1.2":
   version "0.1.9"
   resolved "https://registry.yarnpkg.com/@wry/equality/-/equality-0.1.9.tgz#b13e18b7a8053c6858aa6c85b54911fb31e3a909"
   integrity sha512-mB6ceGjpMGz1ZTza8HYnrPGos2mC6So4NhS1PtZ8s4Qt0K7fBiIGhpSxUbQmhwcSWE3no+bYxmI2OL6KuXYmoQ==
@@ -2048,7 +2015,7 @@ anymatch@^2.0.0:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
 
-apollo-cache-inmemory@^1.2.10, apollo-cache-inmemory@^1.6.3:
+apollo-cache-inmemory@^1.2.10:
   version "1.6.3"
   resolved "https://registry.yarnpkg.com/apollo-cache-inmemory/-/apollo-cache-inmemory-1.6.3.tgz#826861d20baca4abc45f7ca7a874105905b8525d"
   integrity sha512-S4B/zQNSuYc0M/1Wq8dJDTIO9yRgU0ZwDGnmlqxGGmFombOZb9mLjylewSfQKmjNpciZ7iUIBbJ0mHlPJTzdXg==
@@ -2067,7 +2034,7 @@ apollo-cache@1.3.2, apollo-cache@^1.3.2:
     apollo-utilities "^1.3.2"
     tslib "^1.9.3"
 
-apollo-client@^2.4.2, apollo-client@^2.6.4:
+apollo-client@^2.4.2:
   version "2.6.4"
   resolved "https://registry.yarnpkg.com/apollo-client/-/apollo-client-2.6.4.tgz#872c32927263a0d34655c5ef8a8949fbb20b6140"
   integrity sha512-oWOwEOxQ9neHHVZrQhHDbI6bIibp9SHgxaLRVPoGvOFy7OH5XUykZE7hBQAVxq99tQjBzgytaZffQkeWo1B4VQ==
@@ -11815,7 +11782,7 @@ tryer@^1.0.1:
   resolved "https://registry.yarnpkg.com/tryer/-/tryer-1.0.1.tgz#f2c85406800b9b0f74c9f7465b81eaad241252f8"
   integrity sha512-c3zayb8/kWWpycWYg87P71E1S1ZL6b6IJxfb5fvsUgsf0S2MVGaDhDXXjDMpdCpfWXqptc+4mXwmiy1ypXqRAA==
 
-ts-invariant@^0.4.0, ts-invariant@^0.4.2, ts-invariant@^0.4.4:
+ts-invariant@^0.4.0, ts-invariant@^0.4.2:
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/ts-invariant/-/ts-invariant-0.4.4.tgz#97a523518688f93aafad01b0e80eb803eb2abd86"
   integrity sha512-uEtWkFM/sdZvRNNDL3Ehu4WVpwaulhwQszV8mrtcdeE8nN00BV9mAmQ88RkrBhFgl9gMgvjJLAQcZbnPXI9mlA==

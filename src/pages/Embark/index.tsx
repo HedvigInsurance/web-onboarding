@@ -1,10 +1,10 @@
 import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand'
 import {
-  goToHook,
+  EmbarkProvider,
   Header,
-  KeyValueStore,
   Passage,
+  useGoTo,
 } from '@hedviginsurance/embark'
 import * as React from 'react'
 
@@ -43,13 +43,7 @@ const reducer: (state: State, action: Action) => State = (state, action) => {
   }
 }
 
-export const ChatRoot = () => (
-  <KeyValueStore>
-    <Chat />
-  </KeyValueStore>
-)
-
-const ChatStyling = styled.div`
+const EmbarkStyling = styled.div`
   background-color: ${colors.PINK};
 
   * {
@@ -65,48 +59,30 @@ const ChatStyling = styled.div`
   }
 `
 
-const Chat = () => {
-  const [state, dispatch] = React.useReducer(reducer, {
-    history: [],
-    passageId: null,
-    data: null,
-  })
+interface EmbarkProps {
+  data: any
+}
 
-  const goTo = goToHook(state.data, (targetPassageId) => {
+const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
+  const [state, dispatch] = React.useReducer(reducer, null, () => ({
+    history: [props.data.startPassage],
+    passageId: props.data.startPassage,
+    data: props.data,
+  }))
+
+  const goTo = useGoTo(state.data, (targetPassageId) => {
     dispatch({
       type: 'GO_TO',
       passageId: targetPassageId,
     })
   })
 
-  React.useEffect(() => {
-    // TODO load this via GraphQL
-    fetch(
-      'https://hedvig-embark.herokuapp.com/angel-data/angel-data?name=Web%20Onboarding%20-%20Swedish',
-    )
-      .then((res) => res.json())
-      .then((angelData) => {
-        dispatch({
-          type: 'SET_STATE',
-          state: {
-            history: [angelData.startPassage],
-            passageId: angelData.startPassage,
-            data: angelData,
-          },
-        })
-      })
-  }, [])
-
-  if (!state.data) {
-    return null
-  }
-
   const currentPassage = state.data.passages.filter(
     (passage: any) => passage.id === state.passageId,
   )[0]
 
   return (
-    <ChatStyling>
+    <EmbarkStyling>
       <Header passage={currentPassage} storyData={state.data} />
       <Passage
         canGoBack={state.history.length > 1}
@@ -121,6 +97,47 @@ const Chat = () => {
         }}
         changePassage={goTo}
       />
-    </ChatStyling>
+    </EmbarkStyling>
+  )
+}
+
+interface EmbarkRootProps {
+  name: string
+}
+
+export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
+  const [data, setData] = React.useState<null | any>(null)
+
+  React.useEffect(() => {
+    // TODO load this via GraphQL
+    fetch(
+      `https://hedvig-embark.herokuapp.com/angel-data?name=${encodeURIComponent(
+        props.name,
+      )}`,
+    )
+      .then((res) => res.json())
+      .then((angelData) => {
+        setData(angelData)
+      })
+  }, [])
+
+  if (!data) {
+    return null
+  }
+
+  return (
+    <EmbarkProvider
+      data={data}
+      resolvers={{
+        personalInformationApi: () => {
+          throw Error('TODO')
+        },
+        createQuote: () => {
+          throw Error('TODO')
+        },
+      }}
+    >
+      <Embark data={data} />
+    </EmbarkProvider>
   )
 }
