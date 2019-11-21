@@ -80,7 +80,7 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
   React.useEffect(() => {
     // TODO load this via GraphQL
     fetch(
-      `https://hedvig-embark.herokuapp.com/angel-data/angel-data?name=${encodeURIComponent(
+      `https://hedvig-embark.herokuapp.com/angel-data?name=${encodeURIComponent(
         props.name,
       )}`,
     )
