@@ -1,10 +1,10 @@
 import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand'
 import {
-  goToHook,
   Header,
   KeyValueStore,
   Passage,
+  useGoTo,
 } from '@hedviginsurance/embark'
 import * as React from 'react'
 
@@ -72,7 +72,7 @@ const Chat = () => {
     data: null,
   })
 
-  const goTo = goToHook(state.data, (targetPassageId) => {
+  const goTo = useGoTo(state.data, (targetPassageId) => {
     dispatch({
       type: 'GO_TO',
       passageId: targetPassageId,
