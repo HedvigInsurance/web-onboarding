@@ -313,7 +313,8 @@ export const SubscriptionComponent: React.SFC<SubscriptionComponentProps> = ({
                     if (
                       currentOffer.redeemedCampaigns !== null &&
                       currentOffer.redeemedCampaigns.length !== 0 &&
-                      currentOffer.redeemedCampaigns[0].code === 'studentkortet'
+                      currentOffer.redeemedCampaigns[0].code.toLowerCase() ===
+                        'studentkortet'
                     ) {
                       trackStudentkortet(
                         currentOffer.member.id,
