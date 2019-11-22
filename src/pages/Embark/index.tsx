@@ -8,6 +8,8 @@ import {
 } from '@hedviginsurance/embark'
 import * as React from 'react'
 
+import { resolvePersonalInformation } from './personalInformation'
+
 interface State {
   history: string[]
   passageId: null | string
@@ -129,9 +131,8 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
     <EmbarkProvider
       data={data}
       resolvers={{
-        personalInformationApi: () => {
-          throw Error('TODO')
-        },
+        // @ts-ignore
+        personalInformation: resolvePersonalInformation,
         createQuote: () => {
           throw Error('TODO')
         },
