@@ -4,11 +4,15 @@ import * as React from 'react'
 import SwipeableView from 'react-swipeable-views'
 import { Peril } from '.'
 
+const PERILS_PER_SLIDE = 4
+
 interface Props {
   perils: Peril[]
   setCurrentPeril: (index: number) => void
   setIsShowingPeril: (isShowingPeril: boolean) => void
 }
+
+const Wrapper = styled.div``
 
 const PerilItemCollectionSwiper = styled(SwipeableView)`
   padding: 2rem 0;
@@ -47,34 +51,40 @@ export const PerilSwiper: React.FC<Props> = ({
   setIsShowingPeril,
 }) => {
   const [currentPage, setCurrentPage] = React.useState(0)
+
   return (
-    <PerilItemCollectionSwiper
-      resistance
-      enableMouseEvents
-      slideStyle={{
-        display: 'flex',
-        width: '100%',
-        paddingTop: 20,
-        paddingBottom: 20,
-      }}
-    >
-      {Array.from(
-        { length: Math.ceil(perils.length / 4) },
-        (_, i) => i * 4,
-      ).map((i) => (
-        <PerilSlide>
-          {Array.from(
-            { length: Math.min(4, perils.length - i) },
-            (_, b) => b + i,
-          ).map((index) => (
-            <PerilItem
-              title={perils[index].title}
-              icon={perils[index].icon}
-              onClick={() => {}}
-            />
-          ))}
-        </PerilSlide>
-      ))}
-    </PerilItemCollectionSwiper>
+    <Wrapper>
+      <PerilItemCollectionSwiper
+        resistance
+        enableMouseEvents
+        slideStyle={{
+          display: 'flex',
+          width: '100%',
+          paddingTop: 20,
+          paddingBottom: 20,
+        }}
+      >
+        {Array.from(
+          { length: Math.ceil(perils.length / PERILS_PER_SLIDE) },
+          (_, i) => i * PERILS_PER_SLIDE,
+        ).map((i) => (
+          <PerilSlide>
+            {Array.from(
+              { length: Math.min(PERILS_PER_SLIDE, perils.length - i) },
+              (_, b) => b + i,
+            ).map((index) => (
+              <PerilItem
+                title={perils[index].title}
+                icon={perils[index].icon}
+                onClick={() => {
+                  setCurrentPeril(index)
+                  setIsShowingPeril(true)
+                }}
+              />
+            ))}
+          </PerilSlide>
+        ))}
+      </PerilItemCollectionSwiper>
+    </Wrapper>
   )
 }
