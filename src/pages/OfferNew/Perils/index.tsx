@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import * as React from 'react'
+import { useMediaQuery } from 'react-responsive'
 import {
   Alarm,
   BaseballBat,
@@ -25,6 +26,7 @@ import {
 } from '../components'
 import { PerilItem } from './PerilItem'
 import { PerilModal } from './PerilModal'
+import { PerilSwiper } from './PerilSwiper'
 
 const Wrapper = styled('div')`
   padding: 5rem 0;
@@ -109,6 +111,7 @@ const perils: Peril[] = [
 export const Perils = () => {
   const [isShowingPeril, setIsShowingPeril] = React.useState(false)
   const [currentPeril, setCurrentPeril] = React.useState(0)
+  const isMobile = useMediaQuery({ query: '(max-width: 600px)' })
 
   return (
     <Wrapper>
@@ -123,19 +126,28 @@ export const Perils = () => {
               Omfattande skydd för dig och din familj, ditt hus och dina prylar.
             </Body>
           </HeadingWrapper>
-          <PerilItemCollection>
-            {perils.map((peril, perilIndex) => (
-              <PerilItem
-                key={peril.title}
-                title={peril.title}
-                icon={peril.icon}
-                onClick={() => {
-                  setCurrentPeril(perilIndex)
-                  setIsShowingPeril(true)
-                }}
-              />
-            ))}
-          </PerilItemCollection>
+
+          {!isMobile ? (
+            <PerilItemCollection>
+              {perils.map((peril, perilIndex) => (
+                <PerilItem
+                  key={peril.title}
+                  title={peril.title}
+                  icon={peril.icon}
+                  onClick={() => {
+                    setCurrentPeril(perilIndex)
+                    setIsShowingPeril(true)
+                  }}
+                />
+              ))}
+            </PerilItemCollection>
+          ) : (
+            <PerilSwiper
+              perils={perils}
+              setCurrentPeril={setCurrentPeril}
+              setIsShowingPeril={setIsShowingPeril}
+            />
+          )}
 
           <ImportantNumbers>
             <SubSubHeadingBlack>Viktiga siffror</SubSubHeadingBlack>
