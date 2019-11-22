@@ -1,9 +1,11 @@
+import * as React from 'react'
 import { Chat } from './pages/Chat'
 import { ConnectPayment } from './pages/ConnectPayment'
 import { TrustlyFailPage } from './pages/ConnectPayment/components/TrustlyFailPage'
 import { TrustlySpinnerPage } from './pages/ConnectPayment/components/TrustlySpinnerPage'
 import { LazyDontPanic } from './pages/DontPanic'
 import { Download } from './pages/Download'
+import { EmbarkRoot } from './pages/Embark'
 import { FourOhFour } from './pages/FourOhFour'
 import { NewMemberLanding } from './pages/NewMemberLanding'
 import { Offering } from './pages/Offer'
@@ -24,6 +26,20 @@ export const reactPageRoutes = [
   {
     path: LANGUAGE_PATH_PATTERN + '/new-member/hedvig',
     Component: Chat,
+    exact: true,
+  },
+  {
+    path: '/new',
+    Component: () => {
+      return <EmbarkRoot name="Web Onboarding - Swedish Needer" />
+    },
+    exact: true,
+  },
+  {
+    path: '/switch',
+    Component: () => {
+      return <EmbarkRoot name="Web Onboarding - Swedish Switcher" />
+    },
     exact: true,
   },
   {
