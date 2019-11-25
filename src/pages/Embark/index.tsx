@@ -8,6 +8,11 @@ import {
 } from '@hedviginsurance/embark'
 import * as React from 'react'
 
+import { StorageContainer } from '../../utils/StorageContainer'
+import { createQuote } from './createQuote'
+import { resolveHouseInformation } from './houseInformation'
+import { resolvePersonalInformation } from './personalInformation'
+
 interface State {
   history: string[]
   passageId: null | string
@@ -126,18 +131,19 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
   }
 
   return (
-    <EmbarkProvider
-      data={data}
-      resolvers={{
-        personalInformationApi: () => {
-          throw Error('TODO')
-        },
-        createQuote: () => {
-          throw Error('TODO')
-        },
-      }}
-    >
-      <Embark data={data} />
-    </EmbarkProvider>
+    <StorageContainer>
+      {(storageState) => (
+        <EmbarkProvider
+          data={data}
+          resolvers={{
+            personalInformationApi: resolvePersonalInformation,
+            houseInformation: resolveHouseInformation,
+            createQuote: createQuote(storageState),
+          }}
+        >
+          <Embark data={data} />
+        </EmbarkProvider>
+      )}
+    </StorageContainer>
   )
 }
