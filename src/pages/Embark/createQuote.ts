@@ -1,3 +1,4 @@
+import { CreateQuoteData, CreateQuoteVariables } from '@hedviginsurance/embark'
 import gql from 'graphql-tag'
 import { apolloClient } from '../../client/apolloClient'
 import { CREATE_SESSION_TOKEN_MUTATION } from '../../containers/SessionContainer'
@@ -44,7 +45,9 @@ const afterTick = (f: () => void) => {
   })
 }
 
-export const createQuote = (storage: any) => async (input: any) => {
+export const createQuote = (storage: any) => async (
+  variables: CreateQuoteVariables,
+): Promise<CreateQuoteData | Error> => {
   if (!apolloClient) {
     return Error('Missing apollo client')
   }
@@ -59,12 +62,13 @@ export const createQuote = (storage: any) => async (input: any) => {
     })
   }
 
-  const result = await apolloClient.client.mutate({
+  const result = await apolloClient.client.mutate<
+    CreateQuoteData,
+    CreateQuoteVariables
+  >({
     mutation: MUTATION,
-    variables: {
-      input,
-    },
+    variables,
   })
 
-  return result.data
+  return result.data!
 }

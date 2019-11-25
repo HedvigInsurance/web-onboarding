@@ -1,3 +1,7 @@
+import {
+  HouseInformationData,
+  HouseInformationVariables,
+} from '@hedviginsurance/embark'
 import gql from 'graphql-tag'
 import { apolloClient } from '../../client/apolloClient'
 
@@ -11,14 +15,19 @@ const QUERY = gql`
   }
 `
 
-export const resolveHouseInformation = async (input: any) => {
+export const resolveHouseInformation = async (
+  variables: HouseInformationVariables,
+) => {
   if (!apolloClient) {
     return Error('Missing apollo client')
   }
 
-  const result = await apolloClient.client.query({
+  const result = await apolloClient.client.query<
+    HouseInformationData,
+    HouseInformationVariables
+  >({
     query: QUERY,
-    variables: { input },
+    variables,
   })
 
   return result.data

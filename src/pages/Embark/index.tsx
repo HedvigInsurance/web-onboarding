@@ -136,8 +136,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
         <EmbarkProvider
           data={data}
           resolvers={{
-            // @ts-ignore
-            personalInformation: resolvePersonalInformation,
+            personalInformationApi: resolvePersonalInformation,
             houseInformation: resolveHouseInformation,
             createQuote: createQuote(storageState),
           }}

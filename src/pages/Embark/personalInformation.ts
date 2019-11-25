@@ -1,3 +1,4 @@
+import { PersonalInformationData } from '@hedviginsurance/embark'
 import gql from 'graphql-tag'
 import { apolloClient } from '../../client/apolloClient'
 
@@ -13,7 +14,9 @@ const QUERY = gql`
   }
 `
 
-export const resolvePersonalInformation = async (personalNumber: string) => {
+export const resolvePersonalInformation = async (
+  personalNumber: string,
+): Promise<PersonalInformationData | Error> => {
   if (!apolloClient) {
     return Error('Missing apollo client')
   }
