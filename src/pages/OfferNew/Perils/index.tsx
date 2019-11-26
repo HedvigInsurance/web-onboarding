@@ -45,7 +45,6 @@ const PerilItemCollection = styled('div')`
   width: 100%;
   display: flex;
   flex-flow: row wrap;
-  margin: 0 -0.25rem;
 `
 
 const ImportantNumbers = styled('div')`

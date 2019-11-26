@@ -8,11 +8,11 @@ const Container = styled('button')`
   border-radius: 8px;
   background: ${colorsV2.white};
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
-  margin: 0.25rem;
-  padding: 0.5rem;
+  margin: 0.5rem;
+  padding: 0.75rem;
   border-radius: 0.5rem;
   background-color: ${colorsV2.white};
-  border: 1px solid ${colorsV2.lightgray};
+  border: none;
   cursor: pointer;
   transition: all 0.15s ease-in-out;
   display: flex;
@@ -21,8 +21,8 @@ const Container = styled('button')`
   align-items: center;
 
   svg {
-    width: 3rem;
-    height: 3rem;
+    width: 4rem;
+    height: 4rem;
   }
 
   :focus {

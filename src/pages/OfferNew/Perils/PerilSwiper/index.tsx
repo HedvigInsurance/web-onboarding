@@ -17,7 +17,7 @@ interface Props {
 const Wrapper = styled.div``
 
 const PerilItemCollectionSwiper = styled(SwipeableView)`
-  padding: 2rem 0;
+  padding: 1.5rem 0;
 `
 
 const PerilSlide = styled.div`
@@ -25,15 +25,42 @@ const PerilSlide = styled.div`
   height: 100;
   display: flex;
   flex-flow: row wrap;
-  background: yellow;
 `
 
 const PerilSlideRow = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-bottom: 1rem;
 `
+
+const SwiperDots = styled.div`
+  width: 100%;
+  height: 10px;
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  align-items: center;
+`
+
+interface DotProps {
+  active: boolean
+}
+
+const Dot = styled.div<DotProps>`
+  width: 0.25rem;
+  height: 0.25rem;
+  transform: scale(${(props) => (props.active ? 1.5 : 1)});
+  background: ${(props) =>
+    props.active ? colorsV2.violet700 : colorsV2.semilightgray};
+  border-radius: 50%;
+  margin-right: 0.375rem;
+  transition: all 0.2s ease-in-out;
+
+  :last-child {
+    marign-right: 0;
+  }
+`
+
 const chunkArray = (array: any[], size: number) =>
   array.reduce(
     (chunks, _, idx, arr) =>
@@ -46,7 +73,7 @@ export const PerilSwiper: React.FC<Props> = ({
   setCurrentPeril,
   setIsShowingPeril,
 }) => {
-  const [currentPage, setCurrentPage] = React.useState(0)
+  const [currentPageIndex, setCurrentPageIndex] = React.useState(0)
 
   return (
     <Wrapper>
@@ -59,6 +86,7 @@ export const PerilSwiper: React.FC<Props> = ({
           paddingTop: 20,
           paddingBottom: 20,
         }}
+        onChangeIndex={(index) => setCurrentPageIndex(index)}
       >
         {chunkArray(perils, PERILS_PER_SLIDE).map(
           (perilsSlideChunk, slideIndex) => (
@@ -86,6 +114,14 @@ export const PerilSwiper: React.FC<Props> = ({
           ),
         )}
       </PerilItemCollectionSwiper>
+      <SwiperDots>
+        {Array.from(
+          { length: Math.ceil(perils.length / PERILS_PER_SLIDE) },
+          (_, i) => i,
+        ).map((i) => (
+          <Dot active={i === currentPageIndex} />
+        ))}
+      </SwiperDots>
     </Wrapper>
   )
 }
