@@ -2,18 +2,15 @@ import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import * as React from 'react'
 
-interface PerilItemProps {
-  title: string
-  icon: JSX.Element
-  onClick: () => void
-}
-
 const Container = styled('button')`
-  width: 7.25rem;
-  height: 5.75rem;
+  width: 138px;
+  height: 120px;
+  border-radius: 8px;
+  background: ${colorsV2.white};
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
   margin: 0.25rem;
   padding: 0.5rem;
-  border-radius: 0.25rem;
+  border-radius: 0.5rem;
   background-color: ${colorsV2.white};
   border: 1px solid ${colorsV2.lightgray};
   cursor: pointer;
@@ -48,6 +45,12 @@ const Title = styled('div')`
   color: ${colorsV2.violet500};
   font-family: ${fonts.CIRCULAR};
 `
+
+interface PerilItemProps {
+  title: string
+  icon: JSX.Element
+  onClick: () => void
+}
 
 export const PerilItem: React.FC<PerilItemProps> = ({
   title,

@@ -2,7 +2,8 @@ import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import * as React from 'react'
 import SwipeableView from 'react-swipeable-views'
-import { Peril } from '.'
+import { Peril } from '../index'
+import { PerilItem } from './PerilItem'
 
 const PERILS_PER_SLIDE = 4
 const PERILS_PER_ROW = 2
@@ -19,14 +20,6 @@ const PerilItemCollectionSwiper = styled(SwipeableView)`
   padding: 2rem 0;
 `
 
-const PerilItemContainer = styled.button`
-  width: 138px;
-  height: 120px;
-  border-radius: 8px;
-  background: ${colorsV2.white};
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
-`
-
 const PerilSlide = styled.div`
   width: 100%;
   height: 100;
@@ -41,23 +34,12 @@ const PerilSlideRow = styled.div`
   justify-content: center;
   margin-bottom: 1rem;
 `
-
-interface PerilItemProps {
-  title: string
-  icon: JSX.Element
-  onClick: () => void
-}
-
 const chunkArray = (array: any[], size: number) =>
   array.reduce(
     (chunks, _, idx, arr) =>
       idx % size === 0 ? [...chunks, arr.slice(idx, idx + size)] : chunks,
     [],
   ) as Peril[][]
-
-const PerilItem: React.FC<PerilItemProps> = ({ title, icon, onClick }) => (
-  <PerilItemContainer onClick={onClick}>{title}</PerilItemContainer>
-)
 
 export const PerilSwiper: React.FC<Props> = ({
   perils,
