@@ -8,7 +8,7 @@ import { Crossmark } from '../../../components/icons/Crossmark'
 import { ForwardArrow } from '../../../components/icons/ForwardArrow'
 import { InfoIcon } from '../../../components/icons/Info'
 import { Modal, ModalProps } from '../../../components/ModalNew'
-import { Peril } from './index'
+import { Peril } from './types'
 
 const TRANSITION_MS = 250
 

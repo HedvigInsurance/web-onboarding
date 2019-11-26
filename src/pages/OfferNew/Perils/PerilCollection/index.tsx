@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import * as React from 'react'
-import { Peril } from '../index'
+import { Peril } from '../types'
 import { PerilItem } from './PerilItem'
 
 interface Props {

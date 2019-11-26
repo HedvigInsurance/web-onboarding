@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import * as React from 'react'
 import SwipeableView from 'react-swipeable-views'
-import { Peril } from '../index'
+import { Peril } from '../types'
 import { PerilItem } from './PerilItem'
 
 const PERILS_PER_SLIDE = 4
