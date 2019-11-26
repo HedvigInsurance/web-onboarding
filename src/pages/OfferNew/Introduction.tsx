@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import * as React from 'react'
+import Sticky from 'react-sticky-el'
 import {
   Column,
   Container,
@@ -18,13 +19,12 @@ const Wrapper = styled('div')`
   box-sizing: border-box;
 `
 
-const SummaryBox = styled('div')`
+const SummaryBoxContainer = styled('div')`
   width: 26rem;
   height: 31rem;
   background-color: ${colorsV2.white};
   border-radius: 8px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
-  right: 0;
   flex-shrink: 0;
 `
 
@@ -39,7 +39,8 @@ export const Introduction = () => (
           </HeadingWhite>
         </HeadingWrapper>
       </Column>
-      <SummaryBox />
+
+      <SummaryBoxContainer />
     </Container>
   </Wrapper>
 )
