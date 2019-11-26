@@ -301,7 +301,7 @@ export const Perils = () => {
       </Container>
       <PerilModal
         perils={perils}
-        currentPeril={currentPeril}
+        currentPerilIndex={currentPeril}
         setCurrentPeril={setCurrentPeril}
         isVisible={isShowingPeril}
         onClose={() => setIsShowingPeril(false)}

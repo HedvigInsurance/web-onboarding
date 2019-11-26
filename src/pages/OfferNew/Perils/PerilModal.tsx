@@ -14,7 +14,7 @@ const TRANSITION_MS = 250
 
 interface PerilModalProps {
   perils: Peril[]
-  currentPeril: number
+  currentPerilIndex: number
   setCurrentPeril: (perilIndex: number) => void
 }
 
@@ -74,7 +74,7 @@ const PickerItemLabel = styled('div')`
 `
 
 interface PerilItemsContainerProps {
-  currentPeril: number
+  currentPerilIndex: number
   transition: boolean
 }
 
@@ -87,8 +87,8 @@ const PerilItemsContainer = styled('div')<PerilItemsContainerProps>`
 
   ${(props) =>
     `transform: translateX(${
-      props.currentPeril !== 0
-        ? `calc((-100%/3) - ${(props.currentPeril - 12 - 1) * (100 + 16) +
+      props.currentPerilIndex !== 0
+        ? `calc((-100%/3) - ${(props.currentPerilIndex - 12 - 1) * (100 + 16) +
             8}px)`
         : `calc((-100%/3) + 6.75rem)`
     });`}
@@ -308,14 +308,15 @@ export const PerilModal = (
   const [actionsAllowed, setActionsAllowed] = React.useState(true)
 
   React.useEffect(() => {
-    const isBelowBoundary = props.currentPeril < props.perils.length
-    const isAboveBoundary = props.currentPeril > props.perils.length * 2
+    const isBelowBoundary = props.currentPerilIndex < props.perils.length
+    const isAboveBoundary = props.currentPerilIndex > props.perils.length * 2
 
     if (isBelowBoundary || isAboveBoundary) {
       setTimeout(() => {
         setTransitionEnabled(false)
         props.setCurrentPeril(
-          props.currentPeril + (isBelowBoundary ? 1 : -1) * props.perils.length,
+          props.currentPerilIndex +
+            (isBelowBoundary ? 1 : -1) * props.perils.length,
         )
 
         setTimeout(() => setTransitionEnabled(true), TRANSITION_MS)
@@ -327,18 +328,19 @@ export const PerilModal = (
     setTimeout(() => {
       setActionsAllowed(true)
     }, TRANSITION_MS * 2)
-  }, [props.currentPeril])
+  }, [props.currentPerilIndex])
 
   const trippledPerils = props.perils.concat(props.perils).concat(props.perils)
 
-  const peril = props.perils[props.currentPeril % props.perils.length]
+  const currrentPeril =
+    props.perils[props.currentPerilIndex % props.perils.length]
 
   return (
     <Modal isVisible={props.isVisible} onClose={props.onClose}>
       <Header>
         <Picker>
           <PerilItemsContainer
-            currentPeril={props.currentPeril}
+            currentPerilIndex={props.currentPerilIndex}
             transition={transitionEnabled}
           >
             {trippledPerils.map((peril, index) => (
@@ -360,7 +362,8 @@ export const PerilModal = (
         <LeftGradient>
           <BackButton
             onClick={() =>
-              actionsAllowed && props.setCurrentPeril(props.currentPeril - 1)
+              actionsAllowed &&
+              props.setCurrentPeril(props.currentPerilIndex - 1)
             }
           >
             <BackArrow />
@@ -369,7 +372,8 @@ export const PerilModal = (
         <RightGradient>
           <ForwardButton
             onClick={() =>
-              actionsAllowed && props.setCurrentPeril(props.currentPeril + 1)
+              actionsAllowed &&
+              props.setCurrentPeril(props.currentPerilIndex + 1)
             }
           >
             <ForwardArrow />
@@ -377,13 +381,13 @@ export const PerilModal = (
         </RightGradient>
       </Header>
       <Content>
-        <Title>{peril.title}</Title>
-        <Description>{peril.description}</Description>
+        <Title>{currrentPeril.title}</Title>
+        <Description>{currrentPeril.description}</Description>
 
         <CoverageWrapper>
           <CoverageList>
             <CoverageListTitle>Det här täcks</CoverageListTitle>
-            {peril.covered.map((text) => (
+            {currrentPeril.covered.map((text) => (
               <CoverageListItem>
                 <Checkmark />
                 {text}
@@ -393,7 +397,7 @@ export const PerilModal = (
 
           <CoverageList>
             <CoverageListTitle>Undantag</CoverageListTitle>
-            {peril.exceptions.map((text) => (
+            {currrentPeril.exceptions.map((text) => (
               <CoverageListItem>
                 <Crossmark />
 
@@ -403,12 +407,12 @@ export const PerilModal = (
           </CoverageList>
         </CoverageWrapper>
 
-        {peril.info && (
+        {currrentPeril.info && (
           <InfoBoxWrapper>
             <InfoBox>
               <InfoIcon />
               <InfoBoxTitle>Att tänka på</InfoBoxTitle>
-              <InfoBoxBody>{peril.info}</InfoBoxBody>
+              <InfoBoxBody>{currrentPeril.info}</InfoBoxBody>
             </InfoBox>
           </InfoBoxWrapper>
         )}
