@@ -3,6 +3,7 @@ import { colorsV2 } from '@hedviginsurance/brand'
 import * as React from 'react'
 import {
   Column,
+  ColumnSpacing,
   Container,
   HeadingBlack,
   HeadingWrapper,
@@ -32,6 +33,7 @@ export const Compare = () => {
             otherCompanies={otherCompanies}
           />
         </Column>
+        <ColumnSpacing />
       </Container>
     </Wrapper>
   )

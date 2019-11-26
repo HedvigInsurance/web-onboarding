@@ -17,6 +17,7 @@ import {
 } from '../../../components/icons/Perils'
 import {
   Column,
+  ColumnSpacing,
   Container,
   HeadingBlack,
   HeadingWrapper,
@@ -141,6 +142,7 @@ export const Perils = () => {
             <SubSubHeadingBlack>Viktiga siffror</SubSubHeadingBlack>
           </ImportantNumbers>
         </Column>
+        <ColumnSpacing />
       </Container>
       <PerilModal
         perils={perils}

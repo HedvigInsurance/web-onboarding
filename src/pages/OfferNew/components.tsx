@@ -83,3 +83,9 @@ export const Column = styled('div')`
   flex-grow: 0;
   box-sizing: border-box;
 `
+
+export const ColumnSpacing = styled('div')`
+  width: 26rem;
+  height: 31rem;
+  flex-shrink: 0;
+`

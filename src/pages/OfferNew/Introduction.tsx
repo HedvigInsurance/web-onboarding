@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import * as React from 'react'
-import Sticky from 'react-sticky-el'
+import { useDocumentScroll } from '../../utils/hooks/useDocumentScroll'
 import {
   Column,
   Container,
@@ -9,7 +9,6 @@ import {
   HeadingWrapper,
   PreHeading,
 } from './components'
-import { useDocumentScroll } from '../../utils/hooks/useDocumentScroll'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -20,17 +19,43 @@ const Wrapper = styled.div`
   box-sizing: border-box;
 `
 
-const SummaryBoxWrapper = styled.div<{ sticky: boolean }>`
-  position: absolute;
-  right: 0;
+const SidebarWrapper = styled.div`
+  width: 26rem;
+  flex-shrink: 0;
+  position: relative;
 `
 
-const SummaryBoxContainer = styled.div<{ sticky: boolean }>`
+const Sidebar = styled.div<{ sticky: boolean }>`
   width: 26rem;
   height: 31rem;
   background-color: ${colorsV2.white};
   border-radius: 8px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  flex-shrink: 0;
+  position: ${(props) => (props.sticky ? `fixed` : `relative`)};
+  ${(props) => props.sticky && `top: 6rem;`}
+`
+
+const SidebarHeader = styled.div`
+  width: 100%;
+  display: flex;
+  flex-flow: row;
+  padding: 2rem 1.5rem 2rem 2rem;
+`
+
+const SidebarHeaderSummary = styled.div`
+  width: 100%;
+`
+
+const SidebarHeaderSummaryPreTitle = styled.div`
+  font-size: 0.75rem;
+  letter-spacing: 0.075rem;
+  color: ${colorsV2.gray};
+  text-transform: uppercase;
+`
+
+const SidebarHeaderPrice = styled.div`
+  width: 6.5rem;
   flex-shrink: 0;
 `
 
@@ -38,9 +63,13 @@ export const Introduction = () => {
   const [sidebarIsSticky, setSidebarIsSticky] = React.useState(false)
   const ref = React.useRef<HTMLDivElement>(null)
 
-  useDocumentScroll(({ currentScrollTop }) => {
-    console.log(ref.current && ref.current.offsetTop - 32, currentScrollTop)
-    if (ref.current && ref.current.offsetTop - 32 <= currentScrollTop) {
+  useDocumentScroll(() => {
+    const distanceToTop =
+      ref.current !== null
+        ? ref.current.getBoundingClientRect().top
+        : Math.pow(10, 4)
+
+    if (distanceToTop <= 96) {
       setSidebarIsSticky(true)
     } else {
       setSidebarIsSticky(false)
@@ -59,9 +88,18 @@ export const Introduction = () => {
           </HeadingWrapper>
         </Column>
 
-        <SummaryBoxWrapper ref={ref} sticky={sidebarIsSticky}>
-          <SummaryBoxContainer sticky={sidebarIsSticky} />
-        </SummaryBoxWrapper>
+        <SidebarWrapper ref={ref}>
+          <Sidebar sticky={sidebarIsSticky}>
+            <SidebarHeader>
+              <SidebarHeaderSummary>
+                <SidebarHeaderSummaryPreTitle>
+                  Hemförsäkring
+                </SidebarHeaderSummaryPreTitle>
+              </SidebarHeaderSummary>
+              <SidebarHeaderPrice>2</SidebarHeaderPrice>
+            </SidebarHeader>
+          </Sidebar>
+        </SidebarWrapper>
       </Container>
     </Wrapper>
   )
