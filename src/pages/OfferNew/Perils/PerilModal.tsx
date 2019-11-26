@@ -388,7 +388,7 @@ export const PerilModal = (
           <CoverageList>
             <CoverageListTitle>Det här täcks</CoverageListTitle>
             {currrentPeril.covered.map((text) => (
-              <CoverageListItem>
+              <CoverageListItem key={text}>
                 <Checkmark />
                 {text}
               </CoverageListItem>
@@ -398,9 +398,8 @@ export const PerilModal = (
           <CoverageList>
             <CoverageListTitle>Undantag</CoverageListTitle>
             {currrentPeril.exceptions.map((text) => (
-              <CoverageListItem>
+              <CoverageListItem key={text}>
                 <Crossmark />
-
                 {text}
               </CoverageListItem>
             ))}

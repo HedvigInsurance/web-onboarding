@@ -119,7 +119,7 @@ export const PerilSwiper: React.FC<Props> = ({
           { length: Math.ceil(perils.length / PERILS_PER_SLIDE) },
           (_, i) => i,
         ).map((i) => (
-          <Dot active={i === currentPageIndex} />
+          <Dot key={i} active={i === currentPageIndex} />
         ))}
       </SwiperDots>
     </Wrapper>
