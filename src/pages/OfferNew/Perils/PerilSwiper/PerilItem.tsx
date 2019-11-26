@@ -3,9 +3,9 @@ import { colorsV2, fonts } from '@hedviginsurance/brand'
 import * as React from 'react'
 
 const Container = styled('button')`
-  width: 138px;
-  height: 120px;
-  border-radius: 8px;
+  width: 8.625rem;
+  height: 7.5rem;
+  border-radius: 0.5rem;
   background: ${colorsV2.white};
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
   margin: 0.5rem;

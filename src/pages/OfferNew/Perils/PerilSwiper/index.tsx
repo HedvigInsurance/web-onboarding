@@ -6,7 +6,7 @@ import { Peril } from '../index'
 import { PerilItem } from './PerilItem'
 
 const PERILS_PER_SLIDE = 4
-const PERILS_PER_ROW = 2
+const PERILS_PER_ROW = PERILS_PER_SLIDE / 2
 
 interface Props {
   perils: Peril[]

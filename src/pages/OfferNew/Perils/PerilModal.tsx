@@ -1,9 +1,12 @@
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV2, fonts } from '@hedviginsurance/brand'
 import hexToRgba from 'hex-to-rgba'
 import * as React from 'react'
 import { BackArrow } from '../../../components/icons/BackArrow'
+import { Checkmark } from '../../../components/icons/Checkmark'
+import { Crossmark } from '../../../components/icons/Crossmark'
 import { ForwardArrow } from '../../../components/icons/ForwardArrow'
+import { InfoIcon } from '../../../components/icons/Info'
 import { Modal, ModalProps } from '../../../components/ModalNew'
 import { Peril } from './index'
 
@@ -164,7 +167,103 @@ const ForwardButton = styled(DirectionButton)`
 `
 
 const Content = styled('div')`
-  padding: 1.5rem;
+  padding: 3.5rem;
+`
+
+const Title = styled.div`
+  font-family: ${fonts.GEOMANIST};
+  font-size: 2.5rem;
+  line-height 3.5rem;
+  color: ${colorsV2.black};
+  margin-bottom: 1rem;
+  letter-spacing: -0.57px;
+`
+
+const Description = styled.div` 
+  font-size: 1.125rem;
+  line-height 1.625rem;
+  color: ${colorsV2.black};
+  letter-spacing: -0.26px;
+`
+
+const CoverageWrapper = styled.div`
+  margin-top: 4rem;
+  display: flex;
+  flex-flow: row;
+  width: 100%;
+`
+
+const CoverageList = styled.div`
+  width: 50%;
+
+  :first-child {
+    margin-right: 1rem;
+  }
+
+  :last-child {
+    margin-left: 1rem;
+  }
+`
+
+const CoverageListTitle = styled.div`
+  font-size: 1rem;
+  line-height 1.5rem;
+  color: ${colorsV2.black};
+  letter-spacing: -0.26px;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+`
+
+const CoverageListItem = styled.div`
+  font-size: 1rem;
+  line-height 1.5rem;
+  color: ${colorsV2.black};
+  letter-spacing: -0.26px;
+  padding-left: 2rem;
+  position: relative;
+  margin-bottom: 1rem;
+
+  svg {
+    position: absolute;
+    left: 0;
+    top: 0.25rem;
+  }
+`
+const InfoBoxWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`
+
+const InfoBox = styled.div`
+  max-width: 41.25rem;
+  width: 100%;
+  border-radius: 8px;
+  background: ${colorsV2.offwhite};
+  padding: 1.5rem 2.5rem 1.5rem 3.5rem;
+  margin-top: 4rem;
+  position: relative;
+
+  > svg {
+    position: absolute;
+    left: 1.5rem;
+  }
+`
+
+const InfoBoxTitle = styled.div`
+  font-size: 1rem;
+  line-height 1rem;
+  color: ${colorsV2.black};
+  letter-spacing: -0.26px;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+`
+
+const InfoBoxBody = styled.div`
+  font-size: 0.875rem;
+  line-height 1.25rem;
+  color: ${colorsV2.black};
+  letter-spacing: -0.26px;
 `
 
 export const PerilModal = (
@@ -196,6 +295,8 @@ export const PerilModal = (
   }, [props.currentPeril])
 
   const trippledPerils = props.perils.concat(props.perils).concat(props.perils)
+
+  const peril = props.perils[props.currentPeril % props.perils.length]
 
   return (
     <Modal isVisible={props.isVisible} onClose={props.onClose}>
@@ -241,7 +342,41 @@ export const PerilModal = (
         </RightGradient>
       </Header>
       <Content>
-        {props.perils[props.currentPeril % props.perils.length].title}
+        <Title>{peril.title}</Title>
+        <Description>{peril.description}</Description>
+
+        <CoverageWrapper>
+          <CoverageList>
+            <CoverageListTitle>Det här täcks</CoverageListTitle>
+            {peril.covered.map((text) => (
+              <CoverageListItem>
+                <Checkmark />
+                {text}
+              </CoverageListItem>
+            ))}
+          </CoverageList>
+
+          <CoverageList>
+            <CoverageListTitle>Undantag</CoverageListTitle>
+            {peril.exceptions.map((text) => (
+              <CoverageListItem>
+                <Crossmark />
+
+                {text}
+              </CoverageListItem>
+            ))}
+          </CoverageList>
+        </CoverageWrapper>
+
+        {peril.info && (
+          <InfoBoxWrapper>
+            <InfoBox>
+              <InfoIcon />
+              <InfoBoxTitle>Att tänka på</InfoBoxTitle>
+              <InfoBoxBody>{peril.info}</InfoBoxBody>
+            </InfoBox>
+          </InfoBoxWrapper>
+        )}
       </Content>
     </Modal>
   )
