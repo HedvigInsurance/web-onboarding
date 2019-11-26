@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV2, fonts } from '@hedviginsurance/brand'
 import * as React from 'react'
 import { useDocumentScroll } from '../../utils/hooks/useDocumentScroll'
 import {
@@ -48,15 +48,61 @@ const SidebarHeaderSummary = styled.div`
 `
 
 const SidebarHeaderSummaryPreTitle = styled.div`
+  font-family: ${fonts.GEOMANIST};
   font-size: 0.75rem;
+  line-height: 0.875rem;
   letter-spacing: 0.075rem;
   color: ${colorsV2.gray};
   text-transform: uppercase;
 `
 
+const SidebarHeaderSummaryTitle = styled.div`
+  font-family: ${fonts.GEOMANIST};
+  font-size: 2rem;
+  font-weight: 500;
+  color: ${colorsV2.black};
+  margin-top: 0.25rem;
+`
+
 const SidebarHeaderPrice = styled.div`
-  width: 6.5rem;
+  width: 8rem;
   flex-shrink: 0;
+  padding-top: 1rem;
+  display: flex;
+  flex-flow: row;
+`
+
+const SidebarHeaderPriceValue = styled.div`
+  font-size: 3.5rem;
+  line-height: 3.5rem;
+  color: ${colorsV2.black};
+  font-family: ${fonts.GEOMANIST};
+  font-weight: 700;
+`
+
+const SidebarHeaderPriceSuffix = styled.div`
+  display: flex;
+  flex-flow: column;
+  justify-content: flex-end;
+  padding-bottom: 0.5rem;
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+`
+
+const SidebarHeaderPriceUnit = styled.div`
+  font-size: 1rem;
+  line-height: 1rem;
+  letter-spacing: -0.23px;
+  font-weight: 700;
+  color: ${colorsV2.darkgray};
+`
+
+const SidebarHeaderPriceInterval = styled.div`
+  font-size: 1rem;
+  line-height: 1rem;
+  letter-spacing: -0.23px;
+  color: ${colorsV2.darkgray};
+  white-space: nowrap;
 `
 
 export const Introduction = () => {
@@ -95,8 +141,19 @@ export const Introduction = () => {
                 <SidebarHeaderSummaryPreTitle>
                   Hemförsäkring
                 </SidebarHeaderSummaryPreTitle>
+
+                <SidebarHeaderSummaryTitle>
+                  Bostadsrätt
+                </SidebarHeaderSummaryTitle>
               </SidebarHeaderSummary>
-              <SidebarHeaderPrice>2</SidebarHeaderPrice>
+
+              <SidebarHeaderPrice>
+                <SidebarHeaderPriceValue>119</SidebarHeaderPriceValue>
+                <SidebarHeaderPriceSuffix>
+                  <SidebarHeaderPriceUnit>kr</SidebarHeaderPriceUnit>
+                  <SidebarHeaderPriceInterval>/ mån</SidebarHeaderPriceInterval>
+                </SidebarHeaderPriceSuffix>
+              </SidebarHeaderPrice>
             </SidebarHeader>
           </Sidebar>
         </SidebarWrapper>
