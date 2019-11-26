@@ -14,8 +14,6 @@ interface Props {
   setIsShowingPeril: (isShowingPeril: boolean) => void
 }
 
-const Wrapper = styled.div``
-
 const PerilItemCollectionSwiper = styled(SwipeableView)`
   padding: 1.5rem 0;
 `
@@ -76,7 +74,7 @@ export const PerilSwiper: React.FC<Props> = ({
   const [currentPageIndex, setCurrentPageIndex] = React.useState(0)
 
   return (
-    <Wrapper>
+    <>
       <PerilItemCollectionSwiper
         resistance
         enableMouseEvents
@@ -122,6 +120,6 @@ export const PerilSwiper: React.FC<Props> = ({
           <Dot key={i} active={i === currentPageIndex} />
         ))}
       </SwiperDots>
-    </Wrapper>
+    </>
   )
 }
