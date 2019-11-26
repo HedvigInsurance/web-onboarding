@@ -56,6 +56,12 @@ const ModalContainer = styled(motion.div)`
   @media (max-width: 900px) {
     max-width: calc(100% - 2rem);
   }
+
+  @media (max-width: 600px) {
+    max-width: 100%;
+    max-height: 100%;
+    min-height: 15rem;
+  }
 `
 
 const ModalInnerContainer = styled('div')`

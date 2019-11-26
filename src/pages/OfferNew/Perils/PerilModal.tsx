@@ -43,7 +43,7 @@ const Picker = styled('div')`
 `
 
 const PickerItem = styled('button')`
-  width: 100px;
+  width: 6.25rem;
   flex-shrink: 0;
   padding: 0.5rem 0.5rem 0.625rem 0.5rem;
   margin: 0 0.5rem;
@@ -168,6 +168,10 @@ const ForwardButton = styled(DirectionButton)`
 
 const Content = styled('div')`
   padding: 3.5rem;
+
+  @media (max-width: 450px) {
+    padding: 2rem;
+  }
 `
 
 const Title = styled.div`
@@ -177,20 +181,30 @@ const Title = styled.div`
   color: ${colorsV2.black};
   margin-bottom: 1rem;
   letter-spacing: -0.57px;
+
+  @media (max-width: 600px) {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    margin-bottom: 0.5rem;
+  }
 `
 
 const Description = styled.div` 
   font-size: 1.125rem;
   line-height 1.625rem;
-  color: ${colorsV2.black};
+  color: ${colorsV2.darkgray};
   letter-spacing: -0.26px;
 `
 
 const CoverageWrapper = styled.div`
-  margin-top: 4rem;
+  margin-top: 2.5rem;
   display: flex;
   flex-flow: row;
   width: 100%;
+
+  @media (max-width: 600px) {
+    flex-flow: column;
+  }
 `
 
 const CoverageList = styled.div`
@@ -202,6 +216,18 @@ const CoverageList = styled.div`
 
   :last-child {
     margin-left: 1rem;
+  }
+
+  @media (max-width: 600px) {
+    width: 100%;
+
+    :first-child {
+      margin: 0 0 2.5rem 0;
+    }
+
+    :last-child {
+      margin: 0;
+    }
   }
 `
 
@@ -248,6 +274,15 @@ const InfoBox = styled.div`
     position: absolute;
     left: 1.5rem;
   }
+
+  @media (max-width: 600px) {
+    margin-top: 2.5rem;
+    background: none;
+    padding: 0;
+    > svg {
+      display: none;
+    }
+  }
 `
 
 const InfoBoxTitle = styled.div`
@@ -262,7 +297,7 @@ const InfoBoxTitle = styled.div`
 const InfoBoxBody = styled.div`
   font-size: 0.875rem;
   line-height 1.25rem;
-  color: ${colorsV2.black};
+  color: ${colorsV2.darkgray};
   letter-spacing: -0.26px;
 `
 
