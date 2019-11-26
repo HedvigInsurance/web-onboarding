@@ -72,6 +72,7 @@ export const Container = styled('div')`
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
+  position: relative;
 `
 
 export const Column = styled('div')`

@@ -9,8 +9,9 @@ import {
   HeadingWrapper,
   PreHeading,
 } from './components'
+import { useDocumentScroll } from '../../utils/hooks/useDocumentScroll'
 
-const Wrapper = styled('div')`
+const Wrapper = styled.div`
   width: 100%;
   height: 53rem;
   padding: 12.5rem 0 5rem 0;
@@ -19,7 +20,12 @@ const Wrapper = styled('div')`
   box-sizing: border-box;
 `
 
-const SummaryBoxContainer = styled('div')`
+const SummaryBoxWrapper = styled.div<{ sticky: boolean }>`
+  position: absolute;
+  right: 0;
+`
+
+const SummaryBoxContainer = styled.div<{ sticky: boolean }>`
   width: 26rem;
   height: 31rem;
   background-color: ${colorsV2.white};
@@ -28,19 +34,35 @@ const SummaryBoxContainer = styled('div')`
   flex-shrink: 0;
 `
 
-export const Introduction = () => (
-  <Wrapper>
-    <Container>
-      <Column>
-        <HeadingWrapper>
-          <PreHeading>Försäkringsförslag</PreHeading>
-          <HeadingWhite>
-            Tyckte du det där var enkelt? Då skulle du uppleva vår försäkring
-          </HeadingWhite>
-        </HeadingWrapper>
-      </Column>
+export const Introduction = () => {
+  const [sidebarIsSticky, setSidebarIsSticky] = React.useState(false)
+  const ref = React.useRef<HTMLDivElement>(null)
 
-      <SummaryBoxContainer />
-    </Container>
-  </Wrapper>
-)
+  useDocumentScroll(({ currentScrollTop }) => {
+    console.log(ref.current && ref.current.offsetTop - 32, currentScrollTop)
+    if (ref.current && ref.current.offsetTop - 32 <= currentScrollTop) {
+      setSidebarIsSticky(true)
+    } else {
+      setSidebarIsSticky(false)
+    }
+  })
+
+  return (
+    <Wrapper>
+      <Container>
+        <Column>
+          <HeadingWrapper>
+            <PreHeading>Försäkringsförslag</PreHeading>
+            <HeadingWhite>
+              Tyckte du det där var enkelt? Då skulle du uppleva vår försäkring
+            </HeadingWhite>
+          </HeadingWrapper>
+        </Column>
+
+        <SummaryBoxWrapper ref={ref} sticky={sidebarIsSticky}>
+          <SummaryBoxContainer sticky={sidebarIsSticky} />
+        </SummaryBoxWrapper>
+      </Container>
+    </Wrapper>
+  )
+}
