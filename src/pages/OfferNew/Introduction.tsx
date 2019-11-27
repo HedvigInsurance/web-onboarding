@@ -65,11 +65,9 @@ const SidebarHeaderSummaryTitle = styled.div`
 `
 
 const SidebarHeaderPrice = styled.div`
-  width: 8rem;
-  flex-shrink: 0;
-  padding-top: 1rem;
   display: flex;
   flex-flow: row;
+  padding-top: 1rem;
 `
 
 const SidebarHeaderPriceValue = styled.div`
@@ -95,6 +93,7 @@ const SidebarHeaderPriceUnit = styled.div`
   letter-spacing: -0.23px;
   font-weight: 700;
   color: ${colorsV2.darkgray};
+  margin-bottom: 0.25rem;
 `
 
 const SidebarHeaderPriceInterval = styled.div`
