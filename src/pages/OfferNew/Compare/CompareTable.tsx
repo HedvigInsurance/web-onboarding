@@ -23,6 +23,7 @@ const Container = styled('div')`
   flex-flow: row;
   background-color: ${colorsV2.white};
   border: 1px solid ${colorsV2.lightgray};
+  margin: 0 -1rem;
 `
 
 const InsurancePropertiesSection = styled('div')`

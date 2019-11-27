@@ -17,7 +17,7 @@ import { PerilModal } from './PerilModal'
 import { PerilSwiper } from './PerilSwiper'
 
 const Wrapper = styled('div')`
-  padding: 5rem 0;
+  padding: 8.5rem 0 5rem 0;
   background-color: ${colorsV2.offwhite};
   display: flex;
 `

@@ -10,6 +10,7 @@ interface Props {
 const Svg = styled.svg<Props>`
   ${(props) => props.direction === 'down' && `transform: rotate(180deg);`}
   fill: ${(props) => props.color};
+  position: absolute;
 `
 
 export const Blob: React.FC<Props> = ({

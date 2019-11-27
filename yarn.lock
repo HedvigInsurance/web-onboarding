@@ -1467,10 +1467,10 @@
     "@types/history" "*"
     "@types/react" "*"
 
-"@types/react-sticky-el@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@types/react-sticky-el/-/react-sticky-el-1.0.2.tgz#dd544d164566829b5857783de19ae1892e99835a"
-  integrity sha512-LjtfYEAKylFdTXMdoOnt2qVLf6BgrudNPeMxYu6rIqSEjN2eRE3yQkWvaodiYjMH474DQi04kwjt4SD3bdv5Bw==
+"@types/react-scroll@^1.5.4":
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/@types/react-scroll/-/react-scroll-1.5.4.tgz#c151b8e5320ba90dbb0adfbdfaa0823d57571746"
+  integrity sha512-EYJt9wDvyrcDZpZqI19eb2UlAzCoXBeoFu3yMkrBDC8zkwFXOhb8lv3tD9V9UAqptora096M7qWYktsWq1guEg==
   dependencies:
     "@types/react" "*"
 
@@ -7721,6 +7721,11 @@ lodash.sortby@^4.7.0:
   resolved "https://registry.yarnpkg.com/lodash.sortby/-/lodash.sortby-4.7.0.tgz#edd14c824e2cc9c1e0b0a1b42bb5210516a42438"
   integrity sha1-7dFMgk4sycHgsKG0K7UhBRakJDg=
 
+lodash.throttle@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
+  integrity sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
+
 lodash.uniq@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
@@ -9715,7 +9720,7 @@ prop-types-exact@^1.2.0:
     object.assign "^4.1.0"
     reflect.ownkeys "^0.2.0"
 
-prop-types@>=15.5.10, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -10143,19 +10148,20 @@ react-router@^4.3.1:
     prop-types "^15.6.1"
     warning "^4.0.1"
 
+react-scroll@^1.7.14:
+  version "1.7.14"
+  resolved "https://registry.yarnpkg.com/react-scroll/-/react-scroll-1.7.14.tgz#cb7a19cc0f88e8608f6c3511bb5e03e76a2fbbe9"
+  integrity sha512-zQ2/8+TaEBctA9RSQspP5GWMffA6g7u+AB9gMWB42btZZTBcGEyomvxnm52UVVELjqXOpD9U1/tHhVTNXyntbQ==
+  dependencies:
+    lodash.throttle "^4.1.1"
+    prop-types "^15.5.8"
+
 react-side-effect@^1.1.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/react-side-effect/-/react-side-effect-1.2.0.tgz#0e940c78faba0c73b9b0eba9cd3dda8dfb7e7dae"
   integrity sha512-v1ht1aHg5k/thv56DRcjw+WtojuuDHFUgGfc+bFHOWsF4ZK6C2V57DO0Or0GPsg6+LSTE0M6Ry/gfzhzSwbc5w==
   dependencies:
     shallowequal "^1.0.1"
-
-react-sticky-el@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/react-sticky-el/-/react-sticky-el-1.1.0.tgz#641658f1fc038902862e3ee8c262e2dcdb902032"
-  integrity sha512-aDlz85yfyPtiE+Jlok+N109dnJ6VBhP4h3wkOFxT2tzauWoE8cMdTDB7pvQam4TIOXJtWKgilZA8q03G/PANmQ==
-  dependencies:
-    prop-types ">=15.5.10"
 
 react-swipeable-views-core@^0.13.1:
   version "0.13.1"
