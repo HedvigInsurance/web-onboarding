@@ -1,6 +1,6 @@
 import { keyframes } from '@emotion/core'
 import styled from '@emotion/styled'
-import { colorsV2, fonts } from '@hedviginsurance/brand'
+import { colorsV2 } from '@hedviginsurance/brand'
 import * as React from 'react'
 import { animateScroll } from 'react-scroll'
 import { DownArrow } from '../../../components/icons/DownArrow'
@@ -13,8 +13,8 @@ import {
   PreHeading,
   Section,
 } from '../components'
-import { Usps } from './Usps'
 import { Sidebar } from './Sidebar'
+import { Usps } from './Usps'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -24,8 +24,6 @@ const Wrapper = styled.div`
   position: relative;
   box-sizing: border-box;
 `
-
-const SidebarWrapper = styled.div``
 
 const scrollButtonKeyframes = keyframes`
   0% {
@@ -53,9 +51,14 @@ const ScrollButton = styled.button`
   left: 0;
   bottom: -8.875rem;
   animation: ${scrollButtonKeyframes} 6s ease-in-out infinite;
+  transition: background 0.1s ease;
 
   :focus {
     outline: none;
+  }
+
+  :hover {
+    background: ${colorsV2.semilightgray};
   }
 
   svg {
@@ -72,7 +75,7 @@ export const Introduction = () => {
     const distanceToTop =
       ref.current !== null
         ? ref.current.getBoundingClientRect().top
-        : Math.pow(10, 4)
+        : Math.pow(10, 10)
 
     if (distanceToTop <= 96) {
       setSidebarIsSticky(true)

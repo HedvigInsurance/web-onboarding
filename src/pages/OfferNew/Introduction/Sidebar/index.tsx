@@ -1,6 +1,8 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import * as React from 'react'
+import { otherCompanies } from '../../mock'
+import { PreviousInsurancePicker } from './PreviousInsurancePicker'
 
 interface Props {
   sticky: boolean
@@ -61,11 +63,7 @@ const SummaryContent = styled.div`
 const SummaryText = styled.div`
   font-size: 0.875rem;
   line-height: 1.5rem;
-  colo: ${colorsV2.darkgray};
-`
-
-const SummaryInsured = styled(SummaryText)`
-  font-weight: 600;
+  color: ${colorsV2.darkgray};
 `
 
 const Price = styled.div`
@@ -125,6 +123,11 @@ const TextButton = styled.button`
   border: none;
   cursor: pointer;
   display: flex;
+  transition: color 0.1s ease;
+
+  :hover {
+    color: ${colorsV2.violet700};
+  }
 
   :focus {
     outline: none;
@@ -154,6 +157,12 @@ const FooterProceedButton = styled.button`
   border-radius: 2rem;
   cursor: pointer;
   padding: 1.5rem 4rem;
+  transition: background 0.1s ease;
+  border: none;
+
+  :hover {
+    background: ${colorsV2.violet700};
+  }
 
   :focus {
     outline: none;
@@ -177,42 +186,47 @@ const FooterExtraActions = styled.div`
 `
 
 export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
-  ({ sticky }, ref) => (
-    <Wrapper ref={ref}>
-      <Container sticky={sticky}>
-        <Header>
-          <Summary>
-            <PreTitle>Hemförsäkring</PreTitle>
-            <Title>Bostadsrätt</Title>
-            <SummaryContent>
-              <SummaryInsured>Du + 3 pers.</SummaryInsured>
-              <SummaryText>Vagnvägen 9, 137 39</SummaryText>
-              <TextButton>Visa detaljer</TextButton>
-            </SummaryContent>
-          </Summary>
+  ({ sticky }, ref) => {
+    console.log(otherCompanies)
+    return (
+      <Wrapper ref={ref}>
+        <Container sticky={sticky}>
+          <Header>
+            <Summary>
+              <PreTitle>Hemförsäkring</PreTitle>
+              <Title>Bostadsrätt</Title>
+              <SummaryContent>
+                <SummaryText>
+                  <b>John Doe</b> + 3 pers.
+                </SummaryText>
+                <SummaryText>Vagnvägen 9, 137 39</SummaryText>
+                <TextButton>Visa detaljer</TextButton>
+              </SummaryContent>
+            </Summary>
 
-          <Price>
-            <PriceNumbers>
-              <PriceValue>119</PriceValue>
-              <PriceSuffix>
-                <PriceUnit>kr</PriceUnit>
-                <PriceInterval>/mån</PriceInterval>
-              </PriceSuffix>
-            </PriceNumbers>
-            <TextButton>Se prisuträkning</TextButton>
-          </Price>
-        </Header>
+            <Price>
+              <PriceNumbers>
+                <PriceValue>119</PriceValue>
+                <PriceSuffix>
+                  <PriceUnit>kr</PriceUnit>
+                  <PriceInterval>/mån</PriceInterval>
+                </PriceSuffix>
+              </PriceNumbers>
+            </Price>
+          </Header>
 
-        <Body>Body</Body>
+          <Body>
+            <PreviousInsurancePicker insurances={otherCompanies} />
+          </Body>
 
-        <Footer>
-          <FooterProceedButton>Skaffa Hedvig nu</FooterProceedButton>
-          <FooterExtraActions>
-            <TextButton>Spara ditt förslag</TextButton>
-            <TextButton>Lägg till rabattkod</TextButton>
-          </FooterExtraActions>
-        </Footer>
-      </Container>
-    </Wrapper>
-  ),
+          <Footer>
+            <FooterProceedButton>Skaffa Hedvig nu</FooterProceedButton>
+            <FooterExtraActions>
+              <TextButton>Lägg till rabattkod</TextButton>
+            </FooterExtraActions>
+          </Footer>
+        </Container>
+      </Wrapper>
+    )
+  },
 )
