@@ -73,6 +73,10 @@ export const Container = styled('div')`
   display: flex;
   justify-content: space-between;
   position: relative;
+
+  @media (max-width: 500px) {
+    padding: 0 1rem;
+  }
 `
 
 export const Column = styled('div')`
