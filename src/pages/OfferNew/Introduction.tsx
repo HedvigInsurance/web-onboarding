@@ -9,6 +9,7 @@ import {
   HeadingWrapper,
   PreHeading,
 } from './components'
+import { Usps } from './Usps'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -126,11 +127,12 @@ export const Introduction = () => {
       <Container>
         <Column>
           <HeadingWrapper>
-            <PreHeading>Försäkringsförslag</PreHeading>
+            <PreHeading>Förslag</PreHeading>
             <HeadingWhite>
-              Tyckte du det där var enkelt? Då skulle du uppleva vår försäkring
+              Hej Magnus, här är ditt personliga erbjudande
             </HeadingWhite>
           </HeadingWrapper>
+          <Usps />
         </Column>
 
         <SidebarWrapper ref={ref}>
