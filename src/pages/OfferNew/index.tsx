@@ -17,7 +17,7 @@ export const OfferNew: React.SFC = () => (
 
           return (
             <>
-              <Introduction />
+              <Introduction offer={offer} />
               <Perils />
               <Compare />
             </>

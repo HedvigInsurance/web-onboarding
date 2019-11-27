@@ -1,11 +1,18 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
+import {
+  TranslationsConsumer,
+  TranslationsPlaceholderConsumer,
+} from '@hedviginsurance/textkeyfy'
+import { OfferData } from 'containers/OfferContainer'
+import { isFreeMonths, isMonthlyCostDeduction } from 'containers/types'
 import * as React from 'react'
-import { otherCompanies } from '../../mock'
+import { otherInsuranceCompanies } from './mock'
 import { PreviousInsurancePicker } from './PreviousInsurancePicker'
 
 interface Props {
   sticky: boolean
+  offer: OfferData
 }
 
 const Wrapper = styled.div`
@@ -21,6 +28,7 @@ const Container = styled.div<{ sticky: boolean }>`
   border-radius: 8px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
   flex-shrink: 0;
+  overflow: hidden;
   position: ${(props) => (props.sticky ? `fixed` : `relative`)};
   ${(props) => props.sticky && `top: 6rem;`}
 `
@@ -31,6 +39,19 @@ const Header = styled.div`
   flex-flow: row;
   padding: 2rem 1.5rem 2rem 2rem;
   align-items: flex-start;
+  position: relative;
+`
+
+const DiscountInfo = styled.div`
+  width: 100%;
+  min-height: 2rem;
+  padding: 0.375rem 1rem;
+  background: ${colorsV2.grass500};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.875rem;
+  color: ${colorsV2.white};
 `
 
 const Summary = styled.div`
@@ -70,7 +91,18 @@ const Price = styled.div`
   display: flex;
   flex-flow: column;
   padding-top: 1rem;
-  align-items: flex-end;
+  align-items: flex-start;
+  position: relative;
+`
+
+const PriceNet = styled.div`
+  font-size: 1rem;
+  line-height: 1rem;
+  color: ${colorsV2.gray};
+  text-decoration: line-through;
+  margin-bottom: 0.5rem;
+  position: absolute;
+  top: 0;
 `
 
 const PriceNumbers = styled.div`
@@ -79,10 +111,10 @@ const PriceNumbers = styled.div`
   margin-bottom: 0.5rem;
 `
 
-const PriceValue = styled.div`
+const PriceGross = styled.div<{ freeMonths: boolean }>`
   font-size: 3.5rem;
   line-height: 3.5rem;
-  color: ${colorsV2.black};
+  color: ${(props) => (props.freeMonths ? colorsV2.grass500 : colorsV2.black)};
   font-family: ${fonts.GEOMANIST};
   font-weight: 600;
 `
@@ -186,27 +218,43 @@ const FooterExtraActions = styled.div`
 `
 
 export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
-  ({ sticky }, ref) => {
-    console.log(otherCompanies)
+  ({ sticky, offer }, ref) => {
+    const freeMonths =
+      offer.redeemedCampaigns.length > 0 &&
+      isFreeMonths(offer.redeemedCampaigns[0].incentive)
+
     return (
       <Wrapper ref={ref}>
         <Container sticky={sticky}>
+          {offer.redeemedCampaigns.length > 0 && (
+            <DiscountInfo>Rabatt</DiscountInfo>
+          )}
           <Header>
             <Summary>
               <PreTitle>Hemförsäkring</PreTitle>
               <Title>Bostadsrätt</Title>
               <SummaryContent>
                 <SummaryText>
-                  <b>John Doe</b> + 3 pers.
+                  <b>{`${offer.member.firstName} ${offer.member.lastName}`}</b>
+                  {` `}+ 3 pers.
                 </SummaryText>
-                <SummaryText>Vagnvägen 9, 137 39</SummaryText>
+                <SummaryText>{`${offer.insurance.address}, ${offer.insurance.postalNumber}`}</SummaryText>
                 <TextButton>Visa detaljer</TextButton>
               </SummaryContent>
             </Summary>
 
             <Price>
+              {freeMonths && (
+                <PriceNet>
+                  {Number(offer.insurance.cost.monthlyNet.amount)}kr/mån
+                </PriceNet>
+              )}
+
               <PriceNumbers>
-                <PriceValue>119</PriceValue>
+                <PriceGross freeMonths={freeMonths}>
+                  {Number(offer.insurance.cost.monthlyNet.amount)}
+                </PriceGross>
+
                 <PriceSuffix>
                   <PriceUnit>kr</PriceUnit>
                   <PriceInterval>/mån</PriceInterval>
@@ -216,7 +264,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
           </Header>
 
           <Body>
-            <PreviousInsurancePicker insurances={otherCompanies} />
+            <PreviousInsurancePicker insurances={otherInsuranceCompanies} />
           </Body>
 
           <Footer>

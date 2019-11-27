@@ -1,6 +1,7 @@
 import { keyframes } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
+import { OfferData } from 'containers/OfferContainer'
 import * as React from 'react'
 import { animateScroll } from 'react-scroll'
 import { DownArrow } from '../../../components/icons/DownArrow'
@@ -15,6 +16,10 @@ import {
 } from '../components'
 import { Sidebar } from './Sidebar'
 import { Usps } from './Usps'
+
+interface Props {
+  offer: OfferData
+}
 
 const Wrapper = styled.div`
   width: 100%;
@@ -67,7 +72,7 @@ const ScrollButton = styled.button`
   }
 `
 
-export const Introduction = () => {
+export const Introduction: React.FC<Props> = ({ offer }) => {
   const [sidebarIsSticky, setSidebarIsSticky] = React.useState(false)
   const ref = React.useRef<HTMLDivElement>(null)
 
@@ -92,14 +97,14 @@ export const Introduction = () => {
             <HeadingWrapper>
               <PreHeading>Förslag</PreHeading>
               <HeadingWhite>
-                Hej Magnus,
+                Hej {offer.member.firstName},
                 <br /> här är ditt personliga erbjudande
               </HeadingWhite>
             </HeadingWrapper>
             <Usps />
           </Column>
 
-          <Sidebar ref={ref} sticky={sidebarIsSticky} />
+          <Sidebar ref={ref} sticky={sidebarIsSticky} offer={offer} />
 
           <ScrollButton
             onClick={() => {
