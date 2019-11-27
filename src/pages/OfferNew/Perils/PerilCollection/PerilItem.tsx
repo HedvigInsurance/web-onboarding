@@ -8,7 +8,7 @@ interface PerilItemProps {
   onClick: () => void
 }
 
-const Button = styled('button')`
+const Container = styled('button')`
   width: 7.25rem;
   height: 5.75rem;
   margin: 0.25rem;
@@ -49,9 +49,13 @@ const Title = styled('div')`
   font-family: ${fonts.CIRCULAR};
 `
 
-export const PerilItem = (props: PerilItemProps) => (
-  <Button onClick={props.onClick}>
-    {props.icon}
-    <Title>{props.title}</Title>
-  </Button>
+export const PerilItem: React.FC<PerilItemProps> = ({
+  title,
+  icon,
+  onClick,
+}) => (
+  <Container onClick={onClick}>
+    {icon}
+    <Title>{title}</Title>
+  </Container>
 )

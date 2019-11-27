@@ -72,6 +72,10 @@ export const Container = styled('div')`
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
+
+  @media (max-width: 500px) {
+    padding: 0 1rem;
+  }
 `
 
 export const Column = styled('div')`

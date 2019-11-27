@@ -1,20 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import * as React from 'react'
-import {
-  Alarm,
-  BaseballBat,
-  Fire,
-  LegalDispute,
-  Lock,
-  Plane,
-  Plus,
-  Storm,
-  Theft,
-  WaterLeak,
-  WetPhone,
-  WhiteGoods,
-} from '../../../components/icons/Perils'
+import { useMediaQuery } from 'react-responsive'
 import {
   Column,
   Container,
@@ -23,8 +10,10 @@ import {
   PreHeading,
   SubSubHeadingBlack,
 } from '../components'
-import { PerilItem } from './PerilItem'
+import { perils } from './mock'
+import { PerilCollection } from './PerilCollection'
 import { PerilModal } from './PerilModal'
+import { PerilSwiper } from './PerilSwiper'
 
 const Wrapper = styled('div')`
   padding: 5rem 0;
@@ -39,76 +28,14 @@ const Body = styled('div')`
   margin-top: 2rem;
 `
 
-const PerilItemCollection = styled('div')`
-  width: 100%;
-  display: flex;
-  flex-flow: row wrap;
-  margin: 0 -0.25rem;
-`
-
 const ImportantNumbers = styled('div')`
   margin-top: 2rem;
 `
 
-export interface Peril {
-  title: string
-  icon: JSX.Element
-}
-
-const perils: Peril[] = [
-  {
-    title: 'Eldsvåda',
-    icon: <Fire />,
-  },
-  {
-    title: 'Vattenläcka',
-    icon: <WaterLeak />,
-  },
-  {
-    title: 'Oväder',
-    icon: <Storm />,
-  },
-  {
-    title: 'Inbrott',
-    icon: <Lock />,
-  },
-  {
-    title: 'Stöld',
-    icon: <Theft />,
-  },
-  {
-    title: 'Skadegörelse',
-    icon: <BaseballBat />,
-  },
-  {
-    title: 'Juridisk tvist',
-    icon: <LegalDispute />,
-  },
-  {
-    title: 'Resetrubbel',
-    icon: <Plane />,
-  },
-  {
-    title: 'Överfall',
-    icon: <Alarm />,
-  },
-  {
-    title: 'Sjuk på resa',
-    icon: <Plus />,
-  },
-  {
-    title: 'Vitvaror',
-    icon: <WhiteGoods />,
-  },
-  {
-    title: 'Drulle',
-    icon: <WetPhone />,
-  },
-]
-
 export const Perils = () => {
   const [isShowingPeril, setIsShowingPeril] = React.useState(false)
   const [currentPeril, setCurrentPeril] = React.useState(0)
+  const isMobile = useMediaQuery({ query: '(max-width: 600px)' })
 
   return (
     <Wrapper>
@@ -123,19 +50,20 @@ export const Perils = () => {
               Omfattande skydd för dig och din familj, ditt hus och dina prylar.
             </Body>
           </HeadingWrapper>
-          <PerilItemCollection>
-            {perils.map((peril, perilIndex) => (
-              <PerilItem
-                key={peril.title}
-                title={peril.title}
-                icon={peril.icon}
-                onClick={() => {
-                  setCurrentPeril(perilIndex)
-                  setIsShowingPeril(true)
-                }}
-              />
-            ))}
-          </PerilItemCollection>
+
+          {!isMobile ? (
+            <PerilCollection
+              perils={perils}
+              setCurrentPeril={setCurrentPeril}
+              setIsShowingPeril={setIsShowingPeril}
+            />
+          ) : (
+            <PerilSwiper
+              perils={perils}
+              setCurrentPeril={setCurrentPeril}
+              setIsShowingPeril={setIsShowingPeril}
+            />
+          )}
 
           <ImportantNumbers>
             <SubSubHeadingBlack>Viktiga siffror</SubSubHeadingBlack>
@@ -144,7 +72,7 @@ export const Perils = () => {
       </Container>
       <PerilModal
         perils={perils}
-        currentPeril={currentPeril}
+        currentPerilIndex={currentPeril}
         setCurrentPeril={setCurrentPeril}
         isVisible={isShowingPeril}
         onClose={() => setIsShowingPeril(false)}

@@ -1,17 +1,20 @@
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV2, fonts } from '@hedviginsurance/brand'
 import hexToRgba from 'hex-to-rgba'
 import * as React from 'react'
 import { BackArrow } from '../../../components/icons/BackArrow'
+import { Checkmark } from '../../../components/icons/Checkmark'
+import { Crossmark } from '../../../components/icons/Crossmark'
 import { ForwardArrow } from '../../../components/icons/ForwardArrow'
+import { InfoIcon } from '../../../components/icons/Info'
 import { Modal, ModalProps } from '../../../components/ModalNew'
-import { Peril } from './index'
+import { Peril } from './types'
 
 const TRANSITION_MS = 250
 
 interface PerilModalProps {
   perils: Peril[]
-  currentPeril: number
+  currentPerilIndex: number
   setCurrentPeril: (perilIndex: number) => void
 }
 
@@ -40,7 +43,7 @@ const Picker = styled('div')`
 `
 
 const PickerItem = styled('button')`
-  width: 100px;
+  width: 6.25rem;
   flex-shrink: 0;
   padding: 0.5rem 0.5rem 0.625rem 0.5rem;
   margin: 0 0.5rem;
@@ -71,7 +74,7 @@ const PickerItemLabel = styled('div')`
 `
 
 interface PerilItemsContainerProps {
-  currentPeril: number
+  currentPerilIndex: number
   transition: boolean
 }
 
@@ -84,8 +87,8 @@ const PerilItemsContainer = styled('div')<PerilItemsContainerProps>`
 
   ${(props) =>
     `transform: translateX(${
-      props.currentPeril !== 0
-        ? `calc((-100%/3) - ${(props.currentPeril - 12 - 1) * (100 + 16) +
+      props.currentPerilIndex !== 0
+        ? `calc((-100%/3) - ${(props.currentPerilIndex - 12 - 1) * (100 + 16) +
             8}px)`
         : `calc((-100%/3) + 6.75rem)`
     });`}
@@ -164,7 +167,138 @@ const ForwardButton = styled(DirectionButton)`
 `
 
 const Content = styled('div')`
-  padding: 1.5rem;
+  padding: 3.5rem;
+
+  @media (max-width: 450px) {
+    padding: 2rem;
+  }
+`
+
+const Title = styled.div`
+  font-family: ${fonts.GEOMANIST};
+  font-size: 2.5rem;
+  line-height 3.5rem;
+  color: ${colorsV2.black};
+  margin-bottom: 1rem;
+  letter-spacing: -0.57px;
+
+  @media (max-width: 600px) {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    margin-bottom: 0.5rem;
+  }
+`
+
+const Description = styled.div` 
+  font-size: 1.125rem;
+  line-height 1.625rem;
+  color: ${colorsV2.darkgray};
+  letter-spacing: -0.26px;
+`
+
+const CoverageWrapper = styled.div`
+  margin-top: 2.5rem;
+  display: flex;
+  flex-flow: row;
+  width: 100%;
+
+  @media (max-width: 600px) {
+    flex-flow: column;
+  }
+`
+
+const CoverageList = styled.div`
+  width: 50%;
+
+  :first-child {
+    margin-right: 1rem;
+  }
+
+  :last-child {
+    margin-left: 1rem;
+  }
+
+  @media (max-width: 600px) {
+    width: 100%;
+
+    :first-child {
+      margin: 0 0 2.5rem 0;
+    }
+
+    :last-child {
+      margin: 0;
+    }
+  }
+`
+
+const CoverageListTitle = styled.div`
+  font-size: 1rem;
+  line-height 1.5rem;
+  color: ${colorsV2.black};
+  letter-spacing: -0.26px;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+`
+
+const CoverageListItem = styled.div`
+  font-size: 1rem;
+  line-height 1.5rem;
+  color: ${colorsV2.black};
+  letter-spacing: -0.26px;
+  padding-left: 2rem;
+  position: relative;
+  margin-bottom: 1rem;
+
+  svg {
+    position: absolute;
+    left: 0;
+    top: 0.25rem;
+  }
+`
+const InfoBoxWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`
+
+const InfoBox = styled.div`
+  max-width: 41.25rem;
+  width: 100%;
+  border-radius: 8px;
+  background: ${colorsV2.offwhite};
+  padding: 1.5rem 2.5rem 1.5rem 3.5rem;
+  margin-top: 4rem;
+  position: relative;
+
+  > svg {
+    position: absolute;
+    left: 1.5rem;
+  }
+
+  @media (max-width: 600px) {
+    margin-top: 2.5rem;
+    background: none;
+    padding: 0;
+    > svg {
+      display: none;
+    }
+  }
+`
+
+const InfoBoxTitle = styled.div`
+  font-size: 1rem;
+  line-height 1rem;
+  color: ${colorsV2.black};
+  letter-spacing: -0.26px;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+`
+
+const InfoBoxBody = styled.div`
+  font-size: 0.875rem;
+  line-height 1.25rem;
+  color: ${colorsV2.darkgray};
+  letter-spacing: -0.26px;
 `
 
 export const PerilModal = (
@@ -174,14 +308,15 @@ export const PerilModal = (
   const [actionsAllowed, setActionsAllowed] = React.useState(true)
 
   React.useEffect(() => {
-    const isBelowBoundary = props.currentPeril < props.perils.length
-    const isAboveBoundary = props.currentPeril > props.perils.length * 2
+    const isBelowBoundary = props.currentPerilIndex < props.perils.length
+    const isAboveBoundary = props.currentPerilIndex > props.perils.length * 2
 
     if (isBelowBoundary || isAboveBoundary) {
       setTimeout(() => {
         setTransitionEnabled(false)
         props.setCurrentPeril(
-          props.currentPeril + (isBelowBoundary ? 1 : -1) * props.perils.length,
+          props.currentPerilIndex +
+            (isBelowBoundary ? 1 : -1) * props.perils.length,
         )
 
         setTimeout(() => setTransitionEnabled(true), TRANSITION_MS)
@@ -193,16 +328,19 @@ export const PerilModal = (
     setTimeout(() => {
       setActionsAllowed(true)
     }, TRANSITION_MS * 2)
-  }, [props.currentPeril])
+  }, [props.currentPerilIndex])
 
   const trippledPerils = props.perils.concat(props.perils).concat(props.perils)
+
+  const currrentPeril =
+    props.perils[props.currentPerilIndex % props.perils.length]
 
   return (
     <Modal isVisible={props.isVisible} onClose={props.onClose}>
       <Header>
         <Picker>
           <PerilItemsContainer
-            currentPeril={props.currentPeril}
+            currentPerilIndex={props.currentPerilIndex}
             transition={transitionEnabled}
           >
             {trippledPerils.map((peril, index) => (
@@ -224,7 +362,8 @@ export const PerilModal = (
         <LeftGradient>
           <BackButton
             onClick={() =>
-              actionsAllowed && props.setCurrentPeril(props.currentPeril - 1)
+              actionsAllowed &&
+              props.setCurrentPeril(props.currentPerilIndex - 1)
             }
           >
             <BackArrow />
@@ -233,7 +372,8 @@ export const PerilModal = (
         <RightGradient>
           <ForwardButton
             onClick={() =>
-              actionsAllowed && props.setCurrentPeril(props.currentPeril + 1)
+              actionsAllowed &&
+              props.setCurrentPeril(props.currentPerilIndex + 1)
             }
           >
             <ForwardArrow />
@@ -241,7 +381,40 @@ export const PerilModal = (
         </RightGradient>
       </Header>
       <Content>
-        {props.perils[props.currentPeril % props.perils.length].title}
+        <Title>{currrentPeril.title}</Title>
+        <Description>{currrentPeril.description}</Description>
+
+        <CoverageWrapper>
+          <CoverageList>
+            <CoverageListTitle>Det här täcks</CoverageListTitle>
+            {currrentPeril.covered.map((text) => (
+              <CoverageListItem key={text}>
+                <Checkmark />
+                {text}
+              </CoverageListItem>
+            ))}
+          </CoverageList>
+
+          <CoverageList>
+            <CoverageListTitle>Undantag</CoverageListTitle>
+            {currrentPeril.exceptions.map((text) => (
+              <CoverageListItem key={text}>
+                <Crossmark />
+                {text}
+              </CoverageListItem>
+            ))}
+          </CoverageList>
+        </CoverageWrapper>
+
+        {currrentPeril.info && (
+          <InfoBoxWrapper>
+            <InfoBox>
+              <InfoIcon />
+              <InfoBoxTitle>Att tänka på</InfoBoxTitle>
+              <InfoBoxBody>{currrentPeril.info}</InfoBoxBody>
+            </InfoBox>
+          </InfoBoxWrapper>
+        )}
       </Content>
     </Modal>
   )
