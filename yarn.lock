@@ -1467,17 +1467,17 @@
     "@types/history" "*"
     "@types/react" "*"
 
-<<<<<<< HEAD
 "@types/react-sticky-el@^1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@types/react-sticky-el/-/react-sticky-el-1.0.2.tgz#dd544d164566829b5857783de19ae1892e99835a"
   integrity sha512-LjtfYEAKylFdTXMdoOnt2qVLf6BgrudNPeMxYu6rIqSEjN2eRE3yQkWvaodiYjMH474DQi04kwjt4SD3bdv5Bw==
-=======
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-swipeable-views@^0.13.0":
   version "0.13.0"
   resolved "https://registry.yarnpkg.com/@types/react-swipeable-views/-/react-swipeable-views-0.13.0.tgz#9e5f2efa51380886f3f73014ac8b15546d337210"
   integrity sha512-orrreCcXev6IUXDuHf07RDDCAoIZRMSr95eyWmYNRfjic7w/O+68iPu0NCysVls+UygRNvoqZMuXI72N/58E1w==
->>>>>>> master
   dependencies:
     "@types/react" "*"
 
@@ -9715,7 +9715,7 @@ prop-types-exact@^1.2.0:
     object.assign "^4.1.0"
     reflect.ownkeys "^0.2.0"
 
-prop-types@>=15.5.10, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@>=15.5.10, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -10150,14 +10150,13 @@ react-side-effect@^1.1.0:
   dependencies:
     shallowequal "^1.0.1"
 
-<<<<<<< HEAD
 react-sticky-el@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/react-sticky-el/-/react-sticky-el-1.1.0.tgz#641658f1fc038902862e3ee8c262e2dcdb902032"
   integrity sha512-aDlz85yfyPtiE+Jlok+N109dnJ6VBhP4h3wkOFxT2tzauWoE8cMdTDB7pvQam4TIOXJtWKgilZA8q03G/PANmQ==
   dependencies:
     prop-types ">=15.5.10"
-=======
+
 react-swipeable-views-core@^0.13.1:
   version "0.13.1"
   resolved "https://registry.yarnpkg.com/react-swipeable-views-core/-/react-swipeable-views-core-0.13.1.tgz#8829a922462a8bdd701709cd1b385393d38f1527"
@@ -10189,7 +10188,6 @@ react-swipeable-views@^0.13.3:
     react-swipeable-views-core "^0.13.1"
     react-swipeable-views-utils "^0.13.3"
     warning "^4.0.1"
->>>>>>> master
 
 react-test-renderer@^16.0.0-0:
   version "16.12.0"

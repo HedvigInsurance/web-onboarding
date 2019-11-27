@@ -1,14 +1,14 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import * as React from 'react'
-import { useDocumentScroll } from '../../utils/hooks/useDocumentScroll'
+import { useDocumentScroll } from '../../../utils/hooks/useDocumentScroll'
 import {
   Column,
   Container,
   HeadingWhite,
   HeadingWrapper,
   PreHeading,
-} from './components'
+} from '../components'
 import { Usps } from './Usps'
 
 const Wrapper = styled.div`
@@ -129,7 +129,8 @@ export const Introduction = () => {
           <HeadingWrapper>
             <PreHeading>Förslag</PreHeading>
             <HeadingWhite>
-              Hej Magnus, här är ditt personliga erbjudande
+              Hej Magnus,
+              <br /> här är ditt personliga erbjudande
             </HeadingWhite>
           </HeadingWrapper>
           <Usps />

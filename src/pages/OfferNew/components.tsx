@@ -5,8 +5,9 @@ export const Heading = styled('h1')`
   font-family: ${fonts.GEOMANIST};
   font-size: 4rem;
   line-height: 4rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.91px;
+  margin: 0;
 `
 
 export const HeadingWhite = styled(Heading)`
@@ -59,8 +60,8 @@ export const PreHeading = styled('div')`
 `
 
 export const HeadingWrapper = styled('div')`
-  padding-right: 100px;
-  margin-bottom: 2.875rem;
+  padding-right: 6.25rem;
+  margin-bottom: 3.875rem;
 `
 
 export const Container = styled('div')`
@@ -68,7 +69,7 @@ export const Container = styled('div')`
   height: 100%;
   padding: 0 2rem;
   margin: 0 auto;
-  max-width: 79rem;
+  max-width: 80rem;
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
@@ -86,6 +87,7 @@ export const Column = styled('div')`
   width: 100%;
   flex-grow: 0;
   box-sizing: border-box;
+  padding-right: 1rem;
 `
 
 export const ColumnSpacing = styled('div')`
