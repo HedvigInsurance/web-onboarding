@@ -28,7 +28,7 @@ type Action =
 const reducer: (state: State, action: Action) => State = (state, action) => {
   switch (action.type) {
     case 'GO_TO':
-      if (state.passageId == action.passageId) {
+      if (state.passageId === action.passageId) {
         return state
       }
 
@@ -81,7 +81,7 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
   const [state, dispatch] = React.useReducer(reducer, null, () => {
     if (
       history.location.state &&
-      props.name == history.location.state.embarkPassageName
+      props.name === history.location.state.embarkPassageName
     ) {
       return {
         history: history.location.state.embarkPassageHistory || [
@@ -129,7 +129,7 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
         canGoBack={state.history.length > 1}
         historyGoBackListener={(goBack) =>
           history.listen((_: any, action: string) => {
-            if (action == 'POP' && state.history.length > 1) {
+            if (action === 'POP' && state.history.length > 1) {
               goBack()
             }
           })
