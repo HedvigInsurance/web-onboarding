@@ -45,10 +45,11 @@ export const Perils = () => {
           <HeadingWrapper>
             <PreHeading>Skyddet</PreHeading>
             <HeadingBlack>
-              {'Säkerhet genom livets alla $%*!;€&-stunder'}
+              Förstklassigt skydd med service i världsklass
             </HeadingBlack>
             <Body>
               Omfattande skydd för dig och din familj, ditt hus och dina prylar.
+              Drulle ingår alltid.
             </Body>
           </HeadingWrapper>
 

@@ -1,4 +1,5 @@
 import styled from '@emotion/styled'
+import { keyframes } from '@emotion/core'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import * as React from 'react'
 import { useDocumentScroll } from '../../../utils/hooks/useDocumentScroll'
@@ -8,8 +9,10 @@ import {
   HeadingWhite,
   HeadingWrapper,
   PreHeading,
+  Section,
 } from '../components'
 import { Usps } from './Usps'
+import { DownArrow } from '../../../components/icons/DownArrow'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -24,6 +27,7 @@ const SidebarWrapper = styled.div`
   width: 26rem;
   flex-shrink: 0;
   position: relative;
+  z-index: 1000;
 `
 
 const Sidebar = styled.div<{ sticky: boolean }>`
@@ -76,7 +80,7 @@ const SidebarHeaderPriceValue = styled.div`
   line-height: 3.5rem;
   color: ${colorsV2.black};
   font-family: ${fonts.GEOMANIST};
-  font-weight: 700;
+  font-weight: 600;
 `
 
 const SidebarHeaderPriceSuffix = styled.div`
@@ -105,6 +109,43 @@ const SidebarHeaderPriceInterval = styled.div`
   white-space: nowrap;
 `
 
+const scrollButtonKeyframes = keyframes`
+  0% {
+    transform: translateY(0rem);
+  }
+  50% {
+    transform: translateY(-0.75rem);
+  }
+  100% {
+    transform: translateY(0rem);
+  }
+`
+
+const ScrollButton = styled.button`
+  font-size: 1rem;
+  letter-spacing: -0.23px;
+  color: ${colorsV2.black};
+  cursor: pointer;
+  border-radius: 28px;
+  background: ${colorsV2.lightgray};
+  padding: 1rem 1rem 1rem 1.5rem;
+  position: absolute;
+  border: none;
+  z-index: 100;
+  left: 0;
+  bottom: -8.875rem;
+  animation: ${scrollButtonKeyframes} 6s ease-in-out infinite;
+
+  :focus {
+    outline: none;
+  }
+
+  svg {
+    margin-left: 0.75rem;
+    fill: ${colorsV2.black};
+  }
+`
+
 export const Introduction = () => {
   const [sidebarIsSticky, setSidebarIsSticky] = React.useState(false)
   const ref = React.useRef<HTMLDivElement>(null)
@@ -123,43 +164,51 @@ export const Introduction = () => {
   })
 
   return (
-    <Wrapper>
-      <Container>
-        <Column>
-          <HeadingWrapper>
-            <PreHeading>Förslag</PreHeading>
-            <HeadingWhite>
-              Hej Magnus,
-              <br /> här är ditt personliga erbjudande
-            </HeadingWhite>
-          </HeadingWrapper>
-          <Usps />
-        </Column>
+    <Section bottomBlobColor={colorsV2.black}>
+      <Wrapper>
+        <Container>
+          <Column>
+            <HeadingWrapper>
+              <PreHeading>Förslag</PreHeading>
+              <HeadingWhite>
+                Hej Magnus,
+                <br /> här är ditt personliga erbjudande
+              </HeadingWhite>
+            </HeadingWrapper>
+            <Usps />
+          </Column>
 
-        <SidebarWrapper ref={ref}>
-          <Sidebar sticky={sidebarIsSticky}>
-            <SidebarHeader>
-              <SidebarHeaderSummary>
-                <SidebarHeaderSummaryPreTitle>
-                  Hemförsäkring
-                </SidebarHeaderSummaryPreTitle>
+          <SidebarWrapper ref={ref}>
+            <Sidebar sticky={sidebarIsSticky}>
+              <SidebarHeader>
+                <SidebarHeaderSummary>
+                  <SidebarHeaderSummaryPreTitle>
+                    Hemförsäkring
+                  </SidebarHeaderSummaryPreTitle>
 
-                <SidebarHeaderSummaryTitle>
-                  Bostadsrätt
-                </SidebarHeaderSummaryTitle>
-              </SidebarHeaderSummary>
+                  <SidebarHeaderSummaryTitle>
+                    Bostadsrätt
+                  </SidebarHeaderSummaryTitle>
+                </SidebarHeaderSummary>
 
-              <SidebarHeaderPrice>
-                <SidebarHeaderPriceValue>119</SidebarHeaderPriceValue>
-                <SidebarHeaderPriceSuffix>
-                  <SidebarHeaderPriceUnit>kr</SidebarHeaderPriceUnit>
-                  <SidebarHeaderPriceInterval>/ mån</SidebarHeaderPriceInterval>
-                </SidebarHeaderPriceSuffix>
-              </SidebarHeaderPrice>
-            </SidebarHeader>
-          </Sidebar>
-        </SidebarWrapper>
-      </Container>
-    </Wrapper>
+                <SidebarHeaderPrice>
+                  <SidebarHeaderPriceValue>119</SidebarHeaderPriceValue>
+                  <SidebarHeaderPriceSuffix>
+                    <SidebarHeaderPriceUnit>kr</SidebarHeaderPriceUnit>
+                    <SidebarHeaderPriceInterval>
+                      /mån
+                    </SidebarHeaderPriceInterval>
+                  </SidebarHeaderPriceSuffix>
+                </SidebarHeaderPrice>
+              </SidebarHeader>
+            </Sidebar>
+          </SidebarWrapper>
+          <ScrollButton onClick={() => {}}>
+            Scrolla för mer
+            <DownArrow />
+          </ScrollButton>
+        </Container>
+      </Wrapper>
+    </Section>
   )
 }

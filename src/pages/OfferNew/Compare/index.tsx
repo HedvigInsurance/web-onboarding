@@ -24,7 +24,9 @@ export const Compare = () => {
         <Column>
           <HeadingWrapper>
             <PreHeading>Villkor</PreHeading>
-            <HeadingBlack>Jämför gärna!</HeadingBlack>
+            <HeadingBlack>
+              Allt du förväntar dig av en hemförsäkring, plus drulle
+            </HeadingBlack>
           </HeadingWrapper>
 
           <CompareTable

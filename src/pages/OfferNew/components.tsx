@@ -1,5 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
+import * as React from 'react'
+import { Blob } from '../../components/Blob'
 
 export const Heading = styled('h1')`
   font-family: ${fonts.GEOMANIST};
@@ -51,16 +53,15 @@ export const SubSubHeadingBlack = styled(SubSubHeading)`
 
 export const PreHeading = styled('div')`
   font-size: 1rem;
-  line-height: 1.5rem;
+  line-height: 1.5625rem;
   font-weight: 600;
   letter-spacing: 2.67px;
   color: ${colorsV2.gray};
   text-transform: uppercase;
-  margin-bottom: 1.625rem;
+  margin-bottom: 1.5625rem;
 `
 
 export const HeadingWrapper = styled('div')`
-  padding-right: 6.25rem;
   margin-bottom: 3.875rem;
 `
 
@@ -95,3 +96,30 @@ export const ColumnSpacing = styled('div')`
   height: 31rem;
   flex-shrink: 0;
 `
+
+const SectionWrapper = styled.section`
+  width: 100%;
+  position: relative;
+`
+
+const StyledBlob = styled(Blob)`
+  position: absolute;
+  ${(props) => (props.direction === 'up' ? `top: -44px;` : `bottom: -44px;`)}
+`
+
+interface SectionProps {
+  topBlobColor?: string
+  bottomBlobColor?: string
+}
+
+export const Section: React.FC<SectionProps> = ({
+  topBlobColor,
+  bottomBlobColor,
+  children,
+}) => (
+  <SectionWrapper>
+    {topBlobColor && <StyledBlob direction="up" color={topBlobColor} />}
+    {children}
+    {bottomBlobColor && <StyledBlob direction="down" color={bottomBlobColor} />}
+  </SectionWrapper>
+)
