@@ -15,7 +15,6 @@ const Wrapper = styled.div`
 
 const Container = styled.div<{ sticky: boolean }>`
   width: 26rem;
-  height: 31rem;
   background-color: ${colorsV2.white};
   border-radius: 8px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
@@ -132,6 +131,51 @@ const TextButton = styled.button`
   }
 `
 
+const Body = styled.div`
+  padding: 2rem 1rem;
+  height: 12rem;
+`
+
+const Footer = styled.div`
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+`
+
+const FooterProceedButton = styled.button`
+  font-size: 1rem;
+  line-height: 1rem;
+  font-weight: 600;
+  text-align: center;
+  background: ${colorsV2.violet500};
+  color: ${colorsV2.white};
+  border-radius: 2rem;
+  cursor: pointer;
+  padding: 1.5rem 4rem;
+
+  :focus {
+    outline: none;
+  }
+`
+
+const FooterExtraActions = styled.div`
+  width: 100%;
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1.5rem;
+
+  > * {
+    margin-right: 1.375rem;
+    :last-child {
+      margin-right: 0;
+    }
+  }
+`
+
 export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
   ({ sticky }, ref) => (
     <Wrapper ref={ref}>
@@ -158,6 +202,16 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
             <TextButton>Se prisuträkning</TextButton>
           </Price>
         </Header>
+
+        <Body>Body</Body>
+
+        <Footer>
+          <FooterProceedButton>Skaffa Hedvig nu</FooterProceedButton>
+          <FooterExtraActions>
+            <TextButton>Spara ditt förslag</TextButton>
+            <TextButton>Lägg till rabattkod</TextButton>
+          </FooterExtraActions>
+        </Footer>
       </Container>
     </Wrapper>
   ),
