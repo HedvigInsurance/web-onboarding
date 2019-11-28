@@ -188,7 +188,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
     }
   }, [])
 
-  if (!data) {
+  if (!data || !initialStore) {
     return null
   }
 
