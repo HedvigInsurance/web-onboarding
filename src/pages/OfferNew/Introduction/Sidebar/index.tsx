@@ -1,16 +1,13 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
-import {
-  TranslationsConsumer,
-  TranslationsPlaceholderConsumer,
-} from '@hedviginsurance/textkeyfy'
 import { OfferData } from 'containers/OfferContainer'
 import { isFreeMonths, isMonthlyCostDeduction } from 'containers/types'
+import { Button, TextButton } from 'new-components/buttons'
 import * as React from 'react'
 import { otherInsuranceCompanies } from './mock'
+import { DiscountCodeModal } from './DiscountCodeModal'
 import { PreviousInsurancePicker } from './PreviousInsurancePicker'
 import { StartDate } from './StartDate'
-import { DiscountCodeModal } from './DiscountCodeModal'
 
 interface Props {
   sticky: boolean
@@ -147,27 +144,6 @@ const PriceInterval = styled.div`
   white-space: nowrap;
 `
 
-const TextButton = styled.button`
-  background: none;
-  padding: 0;
-  margin: 0;
-  color: ${colorsV2.violet500};
-  font-size: 0.875rem;
-  line-height: 1.5rem;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  transition: color 0.1s ease;
-
-  :hover {
-    color: ${colorsV2.violet700};
-  }
-
-  :focus {
-    outline: none;
-  }
-`
-
 const Body = styled.div`
   padding: 2rem 1rem;
   height: 12rem;
@@ -179,28 +155,6 @@ const Footer = styled.div`
   display: flex;
   flex-flow: column;
   align-items: center;
-`
-
-const FooterProceedButton = styled.button`
-  font-size: 1rem;
-  line-height: 1rem;
-  font-weight: 600;
-  text-align: center;
-  background: ${colorsV2.violet500};
-  color: ${colorsV2.white};
-  border-radius: 2rem;
-  cursor: pointer;
-  padding: 1.5rem 4rem;
-  transition: background 0.1s ease;
-  border: none;
-
-  :hover {
-    background: ${colorsV2.violet700};
-  }
-
-  :focus {
-    outline: none;
-  }
 `
 
 const FooterExtraActions = styled.div`
@@ -277,7 +231,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
           </Body>
 
           <Footer>
-            <FooterProceedButton>Skaffa Hedvig nu</FooterProceedButton>
+            <Button size="lg">Skaffa Hedvig nu</Button>
             <FooterExtraActions>
               <TextButton
                 onClick={() => {

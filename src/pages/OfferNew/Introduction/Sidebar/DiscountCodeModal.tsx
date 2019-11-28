@@ -12,8 +12,9 @@ import {
   TranslationsConsumer,
   TranslationsPlaceholderConsumer,
 } from '@hedviginsurance/textkeyfy'
-import { InputField } from 'components/userInput/InputField'
 import { Button } from 'new-components/buttons'
+import { TextInput } from 'new-components/inputs'
+import { motion } from 'framer-motion'
 
 interface Props {
   isOpen: boolean
@@ -35,7 +36,7 @@ const Wrapper = styled.div<{ isOpen: boolean }>`
   align-items: center;
 `
 
-const Container = styled.div`
+const Container = styled(motion.div)`
   width: 100%;
   display: flex;
   flex-flow: column;
@@ -90,30 +91,68 @@ const Paragraph = styled.div`
   margin-top: 0.5rem;
   margin-bottom: 1rem;
 `
-const DiscountInput = styled(InputField)({
-  maxWidth: 220,
-  minWidth: 220,
-  marginRight: 34,
-})
 
-const ErrorText = styled.div`
-  font-size: 0.75rem;
-  line-height: 1.375rem;
-  text-align: center;
-  color: ${colorsV2.coral700};
+const DiscountInputWrapper = styled.div`
+  margin: 0 -0.5rem;
 `
 
-const SubmitButton = styled(Button)``
+const Footer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+`
+
+const Terms = styled.div`
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-align: center;
+  color: ${colorsV2.darkgray};
+  margin-top: 1rem;
+`
+
+const TermsLink = styled.a`
+  color: ${colorsV2.violet500};
+  text-decoration: none;
+
+  :hover {
+    color: ${colorsV2.violet700};
+  }
+`
 
 const discountSchema = Yup.object({
-  code: Yup.string().required(
-    'Den där rabattkoden finns inte... Kolla att du skrivit rätt',
-  ),
+  code: Yup.string().required('Skriv in en rabattkod'),
 })
 
 export const DiscountCodeModal: React.FC<Props> = ({ isOpen, close }) => (
   <Wrapper isOpen={isOpen}>
-    <Container>
+    <Container
+      initial={'hidden'}
+      animate={isOpen ? 'visible' : 'hidden'}
+      transition={{
+        type: 'spring',
+        stiffness: 400,
+        damping: 100,
+      }}
+      variants={{
+        visible: {
+          opacity: 1,
+          transform: 'translateY(0%) scale(1)',
+          transition: {
+            type: 'spring',
+            stiffness: 400,
+            damping: 100,
+            delay: 0.15,
+          },
+        },
+        hidden: {
+          opacity: 0,
+          transform: 'translateY(50%) scale(0.9)',
+        },
+      }}
+    >
       <Title>Lägg till rabattkod</Title>
       <Paragraph>Har du en rabattkod? Lyckost! Skriv in den nedan.</Paragraph>
       <CloseButton onClick={close}>
@@ -130,6 +169,7 @@ export const DiscountCodeModal: React.FC<Props> = ({ isOpen, close }) => (
               mutate({ variables: { code: form.code } })
                 .then((result) => {
                   if (!result) {
+                    close()
                     return
                   }
                   if (result.errors && result.errors.length > 0) {
@@ -147,16 +187,28 @@ export const DiscountCodeModal: React.FC<Props> = ({ isOpen, close }) => (
                 })
             }
           >
-            {({ touched, errors }) => (
+            {({ touched, errors, values }) => (
               <Form>
-                <DiscountInput
-                  placeholder="XXXXX"
-                  name="code"
-                  touched={touched.code}
-                  errors={errors.code}
-                />
-                {errors.code && <ErrorText>{errors.code}</ErrorText>}
-                <SubmitButton type="submit">Lägg till rabattkod</SubmitButton>
+                <DiscountInputWrapper>
+                  <TextInput
+                    label="Rabattkod"
+                    placeholder="XXXXX"
+                    name="code"
+                    autoComplete="off"
+                    touched={touched.code ? touched.code.toString() : undefined}
+                    errors={errors.code}
+                  />
+                </DiscountInputWrapper>
+                <Footer>
+                  {touched.code}
+                  <Button type="submit" disabled={!values.code}>
+                    Lägg till rabattkod
+                  </Button>
+                  <Terms>
+                    Genom att klicka på "Lägg till rabattkod" så accepterar du{' '}
+                    <TermsLink href="">villkoren</TermsLink>
+                  </Terms>
+                </Footer>
               </Form>
             )}
           </Formik>
