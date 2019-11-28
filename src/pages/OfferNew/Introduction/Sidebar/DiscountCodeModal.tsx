@@ -1,20 +1,14 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { Cross } from 'components/icons/Cross'
-import { RedeemCodeMutation } from '../../../../pages/Offer/containers/RedeemCodeMutation'
 import { Form, Formik } from 'formik'
-import gql from 'graphql-tag'
+import { motion } from 'framer-motion'
 import hexToRgba from 'hex-to-rgba'
-import * as React from 'react'
-import { Mutation } from 'react-apollo'
-import * as Yup from 'yup'
-import {
-  TranslationsConsumer,
-  TranslationsPlaceholderConsumer,
-} from '@hedviginsurance/textkeyfy'
 import { Button } from 'new-components/buttons'
 import { TextInput } from 'new-components/inputs'
-import { motion } from 'framer-motion'
+import { RedeemCodeMutation } from 'pages/Offer/containers/RedeemCodeMutation'
+import * as React from 'react'
+import * as Yup from 'yup'
 
 interface Props {
   isOpen: boolean

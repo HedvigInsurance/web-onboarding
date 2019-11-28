@@ -1,11 +1,11 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import { OfferData } from 'containers/OfferContainer'
-import { isFreeMonths, isMonthlyCostDeduction } from 'containers/types'
+import { isMonthlyCostDeduction } from 'containers/types'
 import { Button, TextButton } from 'new-components/buttons'
 import * as React from 'react'
-import { otherInsuranceCompanies } from './mock'
 import { DiscountCodeModal } from './DiscountCodeModal'
+import { insuranceTypeMapping, otherInsuranceCompanies } from './mock'
 import { PreviousInsurancePicker } from './PreviousInsurancePicker'
 import { StartDate } from './StartDate'
 
@@ -110,10 +110,11 @@ const PriceNumbers = styled.div`
   margin-bottom: 0.5rem;
 `
 
-const PriceGross = styled.div<{ freeMonths: boolean }>`
+const PriceGross = styled.div<{ monthlyConstDeduction: boolean }>`
   font-size: 3.5rem;
   line-height: 3.5rem;
-  color: ${(props) => (props.freeMonths ? colorsV2.grass500 : colorsV2.black)};
+  color: ${(props) =>
+    props.monthlyConstDeduction ? colorsV2.grass500 : colorsV2.black};
   font-family: ${fonts.GEOMANIST};
   font-weight: 600;
 `
@@ -179,9 +180,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
       discountCodeModalIsOpen,
       setDiscountCodeModalIsOpen,
     ] = React.useState(false)
-    const freeMonths =
+    const monthlyConstDeduction =
       offer.redeemedCampaigns.length > 0 &&
-      isFreeMonths(offer.redeemedCampaigns[0].incentive)
+      isMonthlyCostDeduction(offer.redeemedCampaigns[0].incentive)
 
     return (
       <Wrapper ref={ref}>
@@ -192,11 +193,12 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
           <Header>
             <Summary>
               <PreTitle>Hemförsäkring</PreTitle>
-              <Title>Bostadsrätt</Title>
+              <Title>{insuranceTypeMapping[offer.insurance.type]}</Title>
               <SummaryContent>
                 <SummaryText>
                   <b>{`${offer.member.firstName} ${offer.member.lastName}`}</b>
-                  {` `}+ 3 pers.
+                  {offer.insurance.personsInHousehold - 1 > 0 &&
+                    ` + ${offer.insurance.personsInHousehold - 1} pers`}
                 </SummaryText>
                 <SummaryText>{`${offer.insurance.address}, ${offer.insurance.postalNumber}`}</SummaryText>
                 <TextButton>Visa detaljer</TextButton>
@@ -204,14 +206,14 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
             </Summary>
 
             <Price>
-              {freeMonths && (
+              {monthlyConstDeduction && (
                 <PriceNet>
                   {Number(offer.insurance.cost.monthlyNet.amount)}kr/mån
                 </PriceNet>
               )}
 
               <PriceNumbers>
-                <PriceGross freeMonths={freeMonths}>
+                <PriceGross monthlyConstDeduction={monthlyConstDeduction}>
                   {Number(offer.insurance.cost.monthlyNet.amount)}
                 </PriceGross>
 
@@ -224,7 +226,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
           </Header>
 
           <Body>
-            <PreviousInsurancePicker insurances={otherInsuranceCompanies} />
+            {offer.insurance.insuredAtOtherCompany && (
+              <PreviousInsurancePicker insurances={otherInsuranceCompanies} />
+            )}
             <StartDate
               insuredAtOtherCompany={offer.insurance.insuredAtOtherCompany}
             />

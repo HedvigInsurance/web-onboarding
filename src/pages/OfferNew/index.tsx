@@ -10,7 +10,7 @@ export const OfferNew: React.SFC = () => (
   <Page>
     <SessionTokenGuard>
       <OfferContainer>
-        {(offer, { refetch }) => {
+        {(offer) => {
           if (!offer || !offer.insurance.type) {
             return null
           }
