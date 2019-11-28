@@ -31,14 +31,42 @@ export const reactPageRoutes = [
   {
     path: '/new',
     Component: () => {
-      return <EmbarkRoot name="Web Onboarding - Swedish Needer" />
+      return (
+        <EmbarkRoot baseUrl="/new" name="Web Onboarding - Swedish Needer" />
+      )
+    },
+    exact: true,
+  },
+  {
+    path: '/new/*',
+    Component: () => {
+      return (
+        <EmbarkRoot baseUrl="/new" name="Web Onboarding - Swedish Needer" />
+      )
+    },
+    exact: true,
+  },
+  {
+    path: '/switch/*',
+    Component: () => {
+      return (
+        <EmbarkRoot
+          baseUrl="/switch"
+          name="Web Onboarding - Swedish Switcher"
+        />
+      )
     },
     exact: true,
   },
   {
     path: '/switch',
     Component: () => {
-      return <EmbarkRoot name="Web Onboarding - Swedish Switcher" />
+      return (
+        <EmbarkRoot
+          baseUrl="/switch"
+          name="Web Onboarding - Swedish Switcher"
+        />
+      )
     },
     exact: true,
   },

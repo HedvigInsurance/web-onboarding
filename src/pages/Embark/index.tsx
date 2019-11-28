@@ -7,6 +7,7 @@ import {
   useGoTo,
 } from '@hedviginsurance/embark'
 import * as React from 'react'
+import { useHistory } from 'react-router'
 
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
@@ -27,6 +28,10 @@ type Action =
 const reducer: (state: State, action: Action) => State = (state, action) => {
   switch (action.type) {
     case 'GO_TO':
+      if (state.passageId === action.passageId) {
+        return state
+      }
+
       return {
         ...state,
         history: [...state.history, action.passageId],
@@ -50,6 +55,7 @@ const reducer: (state: State, action: Action) => State = (state, action) => {
 
 const EmbarkStyling = styled.div`
   background-color: ${colors.PINK};
+  height: 100vh;
 
   * {
     margin: 0;
@@ -66,14 +72,33 @@ const EmbarkStyling = styled.div`
 
 interface EmbarkProps {
   data: any
+  name: string
+  baseUrl: string
 }
 
 const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
-  const [state, dispatch] = React.useReducer(reducer, null, () => ({
-    history: [props.data.startPassage],
-    passageId: props.data.startPassage,
-    data: props.data,
-  }))
+  const history = useHistory()
+  const [state, dispatch] = React.useReducer(reducer, null, () => {
+    if (
+      history.location.state &&
+      props.name === history.location.state.embarkPassageName
+    ) {
+      return {
+        history: history.location.state.embarkPassageHistory || [
+          props.data.startPassage,
+        ],
+        passageId:
+          history.location.state.embarkPassageId || props.data.startPassage,
+        data: props.data,
+      }
+    }
+
+    return {
+      history: [props.data.startPassage],
+      passageId: props.data.startPassage,
+      data: props.data,
+    }
+  })
 
   const goTo = useGoTo(state.data, (targetPassageId) => {
     dispatch({
@@ -82,18 +107,33 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
     })
   })
 
-  const currentPassage = state.data.passages.filter(
+  const currentPassage = state.data.passages.find(
     (passage: any) => passage.id === state.passageId,
-  )[0]
+  )
+
+  React.useEffect(() => {
+    history.push(
+      `${props.baseUrl}${currentPassage.url || `/${currentPassage.id}`}`,
+      {
+        embarkPassageId: currentPassage.id,
+        embarkPassageHistory: state.history,
+        embarkPassageName: props.name,
+      },
+    )
+  }, [currentPassage])
 
   return (
     <EmbarkStyling>
       <Header passage={currentPassage} storyData={state.data} />
       <Passage
         canGoBack={state.history.length > 1}
-        historyGoBackListener={(_) => () => {
-          // TODO
-        }}
+        historyGoBackListener={(goBack) =>
+          history.listen((_: any, action: string) => {
+            if (action === 'POP' && state.history.length > 1) {
+              goBack()
+            }
+          })
+        }
         passage={currentPassage}
         goBack={() => {
           dispatch({
@@ -108,10 +148,14 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
 
 interface EmbarkRootProps {
   name: string
+  baseUrl: string
 }
 
 export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
   const [data, setData] = React.useState<null | any>(null)
+  const [initialStore, setInitialStore] = React.useState<null | {
+    [key: string]: any
+  }>()
 
   React.useEffect(() => {
     // TODO load this via GraphQL
@@ -126,7 +170,25 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
       })
   }, [])
 
-  if (!data) {
+  React.useEffect(() => {
+    const prevStore = window.localStorage.getItem(
+      `embark-store-${encodeURIComponent(props.name)}`,
+    )
+
+    if (!prevStore) {
+      setInitialStore({})
+      return
+    }
+
+    try {
+      const parsedPrevStore = JSON.parse(prevStore)
+      setInitialStore(parsedPrevStore as { [key: string]: any })
+    } catch (err) {
+      setInitialStore({})
+    }
+  }, [])
+
+  if (!data || !initialStore) {
     return null
   }
 
@@ -140,8 +202,15 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
             houseInformation: resolveHouseInformation,
             createQuote: createQuote(storageState),
           }}
+          initialStore={initialStore}
+          onStoreChange={(store) => {
+            window.localStorage.setItem(
+              `embark-store-${encodeURIComponent(props.name)}`,
+              JSON.stringify(store),
+            )
+          }}
         >
-          <Embark data={data} />
+          <Embark baseUrl={props.baseUrl} data={data} name={props.name} />
         </EmbarkProvider>
       )}
     </StorageContainer>

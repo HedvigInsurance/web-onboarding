@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { matchPath, RouteComponentProps, withRouter } from 'react-router'
+import { matchPath, useLocation } from 'react-router'
 import { LANGUAGE_PATH_PATTERN } from '../../routes'
 
 export const getLanguageIsoCode = (language: string) => {
@@ -28,8 +28,9 @@ type RenderProp = (props: { currentLanguage: string }) => React.ReactNode
 
 export const CurrentLanguage: React.ComponentType<{
   children: RenderProp
-}> = withRouter<RouteComponentProps<WithLanguage> & { children: RenderProp }>(
-  ({ children, location }) => (
+}> = ({ children }) => {
+  const location = useLocation()
+  return (
     <>{children({ currentLanguage: getLanguageFromPath(location.pathname) })}</>
-  ),
-)
+  )
+}
