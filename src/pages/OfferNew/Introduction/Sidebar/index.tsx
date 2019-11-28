@@ -4,6 +4,7 @@ import { OfferData } from 'containers/OfferContainer'
 import { isMonthlyCostDeduction } from 'containers/types'
 import { Button, TextButton } from 'new-components/buttons'
 import * as React from 'react'
+import { formatPostalNumber } from 'utils/postalNumbers'
 import { DiscountCodeModal } from './DiscountCodeModal'
 import { insuranceTypeMapping, otherInsuranceCompanies } from './mock'
 import { PreviousInsurancePicker } from './PreviousInsurancePicker'
@@ -200,7 +201,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                   {offer.insurance.personsInHousehold - 1 > 0 &&
                     ` + ${offer.insurance.personsInHousehold - 1} pers`}
                 </SummaryText>
-                <SummaryText>{`${offer.insurance.address}, ${offer.insurance.postalNumber}`}</SummaryText>
+                <SummaryText>{`${offer.insurance.address}, ${formatPostalNumber(
+                  offer.insurance.postalNumber,
+                )}`}</SummaryText>
                 <TextButton>Visa detaljer</TextButton>
               </SummaryContent>
             </Summary>

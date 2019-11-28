@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
+import { Tooltip } from 'new-components/Tooltip'
 import * as React from 'react'
-import { Questionmark } from '../../../../components/icons/Questionmark'
 
 interface Props {
   insuredAtOtherCompany: boolean
@@ -45,26 +45,8 @@ const Value = styled.div`
   align-items: center;
 `
 
-const HelpButton = styled.button`
-  width: 1.5rem;
-  height: 1.5rem;
-  border: none;
-  background: ${colorsV2.lightgray};
+const TooltipWrapper = styled.div`
   margin-left: 0.5rem;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  :focus {
-    outline: none;
-  }
-
-  svg {
-    width: 0.625rem;
-    height: 0.625rem;
-  }
 `
 
 export const StartDate: React.FC<Props> = ({ insuredAtOtherCompany }) => (
@@ -76,10 +58,9 @@ export const StartDate: React.FC<Props> = ({ insuredAtOtherCompany }) => (
 
     <Value>
       {insuredAtOtherCompany ? 'När din gamla löper ut' : 'Idag'}
-
-      <HelpButton>
-        <Questionmark />
-      </HelpButton>
+      <TooltipWrapper>
+        <Tooltip size="lg" body="Info" />
+      </TooltipWrapper>
     </Value>
   </Wrapper>
 )
