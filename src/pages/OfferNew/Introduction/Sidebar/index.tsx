@@ -9,6 +9,7 @@ import { isFreeMonths, isMonthlyCostDeduction } from 'containers/types'
 import * as React from 'react'
 import { otherInsuranceCompanies } from './mock'
 import { PreviousInsurancePicker } from './PreviousInsurancePicker'
+import { StartDate } from './StartDate'
 
 interface Props {
   sticky: boolean
@@ -265,6 +266,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
           <Body>
             <PreviousInsurancePicker insurances={otherInsuranceCompanies} />
+            <StartDate
+              insuredAtOtherCompany={offer.insurance.insuredAtOtherCompany}
+            />
           </Body>
 
           <Footer>

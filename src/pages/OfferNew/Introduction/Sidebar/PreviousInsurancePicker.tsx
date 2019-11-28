@@ -28,6 +28,12 @@ const Button = styled.button<{ dropdownIsVisible: boolean }>`
   align-items: center;
   padding: 1rem;
 
+  :hover {
+    border: 1px solid
+      ${(props) =>
+        props.dropdownIsVisible ? colorsV2.violet500 : colorsV2.semilightgray};
+  }
+
   :focus {
     outline: none;
   }
