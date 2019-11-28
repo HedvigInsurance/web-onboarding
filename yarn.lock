@@ -756,6 +756,13 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
+"@babel/runtime@^7.4.0":
+  version "7.7.4"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.7.4.tgz#b23a856751e4bf099262f867767889c0e3fe175b"
+  integrity sha512-r24eVUUr0QqNZa+qrImUk8fn5SPhHq+IfYvIoIMg0do3GdK9sMdiLKP3GYVVaxpPKORgm8KRKaNTEhAjgIpLMw==
+  dependencies:
+    regenerator-runtime "^0.13.2"
+
 "@babel/template@^7.4.4", "@babel/template@^7.7.0":
   version "7.7.0"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.7.0.tgz#4fadc1b8e734d97f56de39c77de76f2562e597d0"
@@ -910,10 +917,10 @@
     webpack "4.19.1"
     webpack-dev-server "3.1.14"
 
-"@hedviginsurance/embark@^1.0.11":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-1.0.11.tgz#284548babfd7fe6066f538ebda0a68903320b89b"
-  integrity sha512-qx39ZuJYaQoqkaBGTYDMRNbVDSvQhWLrMPNvq0O0Be5R9Nya1hQ3PRWYIGVi3r0VgXctzeQWMRXZjW/yyMIBgQ==
+"@hedviginsurance/embark@^1.0.17":
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-1.0.17.tgz#d2be8ff2bf772f8466b5f70eb22e5359a502a075"
+  integrity sha512-eTRwp4FhjGQL0F+9aovS+Pd5Lr+baN2yia9XpHByw7wzz6C9AdL+R95W3Wpw4NR+85+n5Ihcgn57PZk8KKYzSw==
   dependencies:
     "@emotion/core" "^10.0.21"
     "@emotion/styled" "^10.0.17"
@@ -939,7 +946,6 @@
     react "^16.11.0"
     react-dom "^16.10.2"
     react-emotion "^10.0.0"
-    react-flip-toolkit "^7.0.6"
     react-input-mask "^2.0.4"
     requestidlecallback "^0.3.0"
     rollup "^1.27.2"
@@ -1442,27 +1448,19 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-router-dom@^4.3.1":
-  version "4.3.5"
-  resolved "https://registry.yarnpkg.com/@types/react-router-dom/-/react-router-dom-4.3.5.tgz#72f229967690c890d00f96e6b85e9ee5780db31f"
-  integrity sha512-eFajSUASYbPHg2BDM1G8Btx+YqGgvROPIg6sBhl3O4kbDdYXdFdfrgQFf/pcBuQVObjfT9AL/dd15jilR5DIEA==
+"@types/react-router-dom@^5.1.3":
+  version "5.1.3"
+  resolved "https://registry.yarnpkg.com/@types/react-router-dom/-/react-router-dom-5.1.3.tgz#b5d28e7850bd274d944c0fbbe5d57e6b30d71196"
+  integrity sha512-pCq7AkOvjE65jkGS5fQwQhvUp4+4PVD9g39gXLZViP2UqFiFzsEpB3PKf0O6mdbKsewSK8N14/eegisa/0CwnA==
   dependencies:
     "@types/history" "*"
     "@types/react" "*"
     "@types/react-router" "*"
 
-"@types/react-router@*":
+"@types/react-router@*", "@types/react-router@^5.1.3":
   version "5.1.3"
   resolved "https://registry.yarnpkg.com/@types/react-router/-/react-router-5.1.3.tgz#7c7ca717399af64d8733d8cb338dd43641b96f2d"
   integrity sha512-0gGhmerBqN8CzlnDmSgGNun3tuZFXerUclWkqEhozdLaJtfcJRUTGkKaEKk+/MpHd1KDS1+o2zb/3PkBUiv2qQ==
-  dependencies:
-    "@types/history" "*"
-    "@types/react" "*"
-
-"@types/react-router@^4.0.31":
-  version "4.4.5"
-  resolved "https://registry.yarnpkg.com/@types/react-router/-/react-router-4.4.5.tgz#1166997dc7eef2917b5ebce890ebecb32ee5c1b3"
-  integrity sha512-12+VOu1+xiC8RPc9yrgHCyLI79VswjtuqeS2gPrMcywH6tkc8rGIUhs4LaL3AJPqo5d+RPnfRpNKiJ7MK2Qhcg==
   dependencies:
     "@types/history" "*"
     "@types/react" "*"
@@ -5758,7 +5756,7 @@ hide-powered-by@1.1.0:
   resolved "https://registry.yarnpkg.com/hide-powered-by/-/hide-powered-by-1.1.0.tgz#be3ea9cab4bdb16f8744be873755ca663383fa7a"
   integrity sha512-Io1zA2yOA1YJslkr+AJlWSf2yWFkKjvkcL9Ni1XSUqnGLr/qRQe2UI3Cn/J9MsJht7yEVCe0SscY1HgVMujbgg==
 
-history@^4.10.1, history@^4.7.2:
+history@^4.10.1, history@^4.9.0:
   version "4.10.1"
   resolved "https://registry.yarnpkg.com/history/-/history-4.10.1.tgz#33371a65e3a83b267434e2b3f3b1b4c58aad4cf3"
   integrity sha512-36nwAD620w12kuzPAsyINPWJqlNbij+hpK1k9XRloDtym8mxzGYl2c17LnV6IAGB2Dmg4tEa7G7DlawS0+qjew==
@@ -5779,12 +5777,7 @@ hmac-drbg@^1.0.0:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.1"
 
-hoist-non-react-statics@^2.5.0:
-  version "2.5.5"
-  resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-2.5.5.tgz#c5903cf409c0dfd908f388e619d86b9c1174cb47"
-  integrity sha512-rqcy4pJo55FTTLWt+bU8ukscqHeE/e9KWvsOW2b/a3afxQZhwkQdT1rPPCJ0rYXdj4vNcasY8zHTH+jF/qStxw==
-
-hoist-non-react-statics@^3.3.0:
+hoist-non-react-statics@^3.1.0, hoist-non-react-statics@^3.3.0:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.3.1.tgz#101685d3aff3b23ea213163f6e8e12f4f111e19f"
   integrity sha512-wbg3bpgA/ZqWrZuMOeJi8+SKMhr7X9TesL/rXMjTzh0p0JUBo3II8DHboYbuIXWRlttrUFxwcu/5kygrCw8fJw==
@@ -8060,6 +8053,15 @@ min-document@^2.19.0:
   dependencies:
     dom-walk "^0.1.0"
 
+mini-create-react-context@^0.3.0:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/mini-create-react-context/-/mini-create-react-context-0.3.2.tgz#79fc598f283dd623da8e088b05db8cddab250189"
+  integrity sha512-2v+OeetEyliMt5VHMXsBhABoJ0/M4RCe7fatd/fBy6SMiKazUSEt3gxxypfnk2SHMkdBYvorHRoQxuGoiwbzAw==
+  dependencies:
+    "@babel/runtime" "^7.4.0"
+    gud "^1.0.0"
+    tiny-warning "^1.0.2"
+
 minimalistic-assert@^1.0.0, minimalistic-assert@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/minimalistic-assert/-/minimalistic-assert-1.0.1.tgz#2e194de044626d4a10e7f7fbc00ce73e83e4d5c7"
@@ -10005,13 +10007,6 @@ react-fast-compare@^2.0.1, react-fast-compare@^2.0.2:
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-2.0.4.tgz#e84b4d455b0fec113e0402c329352715196f81f9"
   integrity sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==
 
-react-flip-toolkit@^7.0.6:
-  version "7.0.7"
-  resolved "https://registry.yarnpkg.com/react-flip-toolkit/-/react-flip-toolkit-7.0.7.tgz#a50d455ff4f9f9961042a7a0eb23bd5a2154c963"
-  integrity sha512-1aORVOoaseauhoBg86P1qy4RgG0spzT50s2Ewiju20KtQjcNdkyqObyzOrl7ETd5fCkLV6uzgkJe8AEzuxYJBQ==
-  dependencies:
-    rematrix "0.2.2"
-
 react-helmet-async@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/react-helmet-async/-/react-helmet-async-0.2.0.tgz#d20d8725c1dcdcc95d54e281a1040af47c3abffa"
@@ -10054,7 +10049,7 @@ react-input-mask@^2.0.4:
     invariant "^2.2.4"
     warning "^4.0.2"
 
-react-is@^16.10.2, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.6, react-is@^16.9.0:
+react-is@^16.10.2, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.6, react-is@^16.9.0:
   version "16.12.0"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.12.0.tgz#2cc0fe0fba742d97fd527c42a13bec4eeb06241c"
   integrity sha512-rPCkf/mWBtKc97aLL9/txD8DZdemK0vkA3JMLShjlJB3Pj3s+lpf1KaBzMfQrAmhMQB0n1cU/SUGgKKBCe837Q==
@@ -10111,30 +10106,34 @@ react-responsive@^8.0.1:
     prop-types "^15.6.1"
     shallow-equal "^1.1.0"
 
-react-router-dom@^4.3.1:
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-4.3.1.tgz#4c2619fc24c4fa87c9fd18f4fb4a43fe63fbd5c6"
-  integrity sha512-c/MlywfxDdCp7EnB7YfPMOfMD3tOtIjrQlj/CKfNMBxdmpJP8xcz5P/UAFn3JbnQCNUxsHyVVqllF9LhgVyFCA==
+react-router-dom@^5.1.2:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-5.1.2.tgz#06701b834352f44d37fbb6311f870f84c76b9c18"
+  integrity sha512-7BPHAaIwWpZS074UKaw1FjVdZBSVWEk8IuDXdB+OkLb8vd/WRQIpA4ag9WQk61aEfQs47wHyjWUoUGGZxpQXew==
   dependencies:
-    history "^4.7.2"
-    invariant "^2.2.4"
+    "@babel/runtime" "^7.1.2"
+    history "^4.9.0"
     loose-envify "^1.3.1"
-    prop-types "^15.6.1"
-    react-router "^4.3.1"
-    warning "^4.0.1"
+    prop-types "^15.6.2"
+    react-router "5.1.2"
+    tiny-invariant "^1.0.2"
+    tiny-warning "^1.0.0"
 
-react-router@^4.3.1:
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/react-router/-/react-router-4.3.1.tgz#aada4aef14c809cb2e686b05cee4742234506c4e"
-  integrity sha512-yrvL8AogDh2X42Dt9iknk4wF4V8bWREPirFfS9gLU1huk6qK41sg7Z/1S81jjTrGHxa3B8R3J6xIkDAA6CVarg==
+react-router@5.1.2, react-router@^5.1.2:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/react-router/-/react-router-5.1.2.tgz#6ea51d789cb36a6be1ba5f7c0d48dd9e817d3418"
+  integrity sha512-yjEuMFy1ONK246B+rsa0cUam5OeAQ8pyclRDgpxuSCrAlJ1qN9uZ5IgyKC7gQg0w8OM50NXHEegPh/ks9YuR2A==
   dependencies:
-    history "^4.7.2"
-    hoist-non-react-statics "^2.5.0"
-    invariant "^2.2.4"
+    "@babel/runtime" "^7.1.2"
+    history "^4.9.0"
+    hoist-non-react-statics "^3.1.0"
     loose-envify "^1.3.1"
+    mini-create-react-context "^0.3.0"
     path-to-regexp "^1.7.0"
-    prop-types "^15.6.1"
-    warning "^4.0.1"
+    prop-types "^15.6.2"
+    react-is "^16.6.0"
+    tiny-invariant "^1.0.2"
+    tiny-warning "^1.0.0"
 
 react-side-effect@^1.1.0:
   version "1.2.0"
@@ -10433,11 +10432,6 @@ remark-parse@^5.0.0:
     unist-util-remove-position "^1.0.0"
     vfile-location "^2.0.0"
     xtend "^4.0.1"
-
-rematrix@0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/rematrix/-/rematrix-0.2.2.tgz#c96a050260782db9908904885991256e23beda5d"
-  integrity sha512-agFFS3RzrLXJl5LY5xg/xYyXvUuVAnkhgKO7RaO9J1Ssth6yvbO+PIiV67V59MB5NCdAK2flvGvNT4mdKVniFA==
 
 remove-trailing-separator@^1.0.1:
   version "1.1.0"
