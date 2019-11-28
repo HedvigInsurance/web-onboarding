@@ -41,7 +41,7 @@ const TooltipIcon = styled(motion.div)<{ size: 'sm' | 'lg' }>`
   }
 `
 
-const TooltipContainer = styled(motion.div)`
+const TooltipContainer = styled.div<{ visible: boolean }>`
   background-color: ${colorsV2.violet500};
   max-width: 9.75rem;
   min-width: 2rem;
@@ -53,6 +53,14 @@ const TooltipContainer = styled(motion.div)`
   top: 0px;
   left: 50%;
   border-radius: 10px;
+  transition: all 0.25s ease;
+  opacity: ${(props) => (props.visible ? 1 : 0)};
+  transform: translateX(-50%)
+    ${(props) =>
+      props.visible
+        ? `translateY(calc(-100% - 0.75rem))`
+        : `translateY(-100%)`};
+  visibility: ${(props) => (props.visible ? `visible` : `hidden`)};
 
   :after {
     top: 100%;
@@ -77,42 +85,22 @@ const TooltipText = styled.div`
 `
 
 export const Tooltip: React.FC<Props> = ({ body, size = 'sm' }) => {
-  const [tooltipIsVisible, setTooltipIsVisible] = React.useState(false)
+  const [visible, setVisible] = React.useState(false)
 
   return (
-    <>
-      <Wrapper>
-        <TooltipContainer
-          initial="hidden"
-          animate={tooltipIsVisible ? 'visible' : 'hidden'}
-          transition={{
-            type: 'spring',
-            stiffness: 260,
-            damping: 125,
-          }}
-          variants={{
-            visible: {
-              opacity: 1,
-              transform: 'translateX(-50%) translateY(calc(-100% - 0.75rem))',
-            },
-            hidden: {
-              opacity: 0,
-              transform: 'translateX(-50%) translateY(calc(-100% - 0rem))',
-            },
-          }}
-        >
-          <TooltipText>{body}</TooltipText>
-        </TooltipContainer>
-        <TooltipIcon
-          size={size}
-          onHoverStart={() => {
-            setTooltipIsVisible(true)
-          }}
-          onHoverEnd={() => setTooltipIsVisible(false)}
-        >
-          <Questionmark />
-        </TooltipIcon>
-      </Wrapper>
-    </>
+    <Wrapper>
+      <TooltipContainer visible={visible}>
+        <TooltipText>{body}</TooltipText>
+      </TooltipContainer>
+      <TooltipIcon
+        size={size}
+        onHoverStart={() => {
+          setVisible(true)
+        }}
+        onHoverEnd={() => setVisible(false)}
+      >
+        <Questionmark />
+      </TooltipIcon>
+    </Wrapper>
   )
 }
