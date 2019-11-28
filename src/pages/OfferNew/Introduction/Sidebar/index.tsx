@@ -10,6 +10,7 @@ import * as React from 'react'
 import { otherInsuranceCompanies } from './mock'
 import { PreviousInsurancePicker } from './PreviousInsurancePicker'
 import { StartDate } from './StartDate'
+import { DiscountCodeModal } from './DiscountCodeModal'
 
 interface Props {
   sticky: boolean
@@ -220,6 +221,10 @@ const FooterExtraActions = styled.div`
 
 export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
   ({ sticky, offer }, ref) => {
+    const [
+      discountCodeModalIsOpen,
+      setDiscountCodeModalIsOpen,
+    ] = React.useState(false)
     const freeMonths =
       offer.redeemedCampaigns.length > 0 &&
       isFreeMonths(offer.redeemedCampaigns[0].incentive)
@@ -274,9 +279,20 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
           <Footer>
             <FooterProceedButton>Skaffa Hedvig nu</FooterProceedButton>
             <FooterExtraActions>
-              <TextButton>Lägg till rabattkod</TextButton>
+              <TextButton
+                onClick={() => {
+                  setDiscountCodeModalIsOpen(true)
+                }}
+              >
+                Lägg till rabattkod
+              </TextButton>
             </FooterExtraActions>
           </Footer>
+
+          <DiscountCodeModal
+            isOpen={discountCodeModalIsOpen}
+            close={() => setDiscountCodeModalIsOpen(false)}
+          />
         </Container>
       </Wrapper>
     )
