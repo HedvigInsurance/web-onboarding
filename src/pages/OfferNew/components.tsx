@@ -48,7 +48,7 @@ export const SubHeadingBlack = styled(SubHeading)`
 
 export const SubSubHeading = styled('h2')`
   font-family: ${fonts.GEOMANIST};
-  font-size: 1.25re;
+  font-size: 1.25rem;
   line-height: 1.25rem;
   font-weight: 500;
 `
@@ -102,10 +102,6 @@ export const Container = styled('div')`
   display: flex;
   justify-content: space-between;
   position: relative;
-
-  @media (max-width: 500px) {
-    padding: 0 1rem;
-  }
 
   @media (max-width: 1020px) {
     flex-flow: column-reverse;

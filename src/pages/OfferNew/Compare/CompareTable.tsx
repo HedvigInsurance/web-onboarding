@@ -25,8 +25,11 @@ const Container = styled('div')`
   border: 1px solid ${colorsV2.lightgray};
   margin: 0 -1rem;
 
+  @media (max-width: 1020px) {
+    width: calc(100% + 2rem);
+  }
+
   @media (max-width: 600px) {
-    margin: 0;
   }
 `
 
@@ -84,6 +87,14 @@ const TooltipWrapper = styled.div`
   margin-left: 0.75rem;
   @media (max-width: 600px) {
     display: none;
+  }
+`
+const MobileTooltipWrapper = styled.div`
+  display: none;
+  margin-left: 1rem;
+
+  @media (max-width: 600px) {
+    display: block;
   }
 `
 
@@ -300,6 +311,9 @@ export const CompareTable = (props: Props) => {
       <InsurancePropertiesSection>
         <ColumnHead>
           <SubHeadingBlack>Skydd</SubHeadingBlack>
+          <MobileTooltipWrapper>
+            <Tooltip size="lg" body="Info" />
+          </MobileTooltipWrapper>
         </ColumnHead>
 
         <InsurancePropertyNames>

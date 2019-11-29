@@ -20,7 +20,7 @@ export const OfferNew: React.SFC = () => (
             <>
               <TopBar />
               <Introduction offer={offer} refetch={refetch} />
-              <Perils />
+              <Perils offer={offer} />
               <Compare />
             </>
           )
