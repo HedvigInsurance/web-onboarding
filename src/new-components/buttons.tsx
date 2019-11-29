@@ -1,11 +1,12 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import color from 'color'
+import { Size } from './types'
 
 export const Button = styled.button<{
   background?: string
   foreground?: string
-  size?: 'sm' | 'lg'
+  size?: Size
   disabled?: boolean
 }>`
   font-size: ${(props) => (props.size === 'lg' ? `1rem` : `0.875rem`)};

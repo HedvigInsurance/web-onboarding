@@ -3,17 +3,18 @@ import { colorsV2 } from '@hedviginsurance/brand'
 import { Questionmark } from 'components/icons/Questionmark'
 import { motion } from 'framer-motion'
 import * as React from 'react'
+import { Size } from './types'
 
 interface Props {
   body: string
-  size?: 'sm' | 'lg'
+  size?: Size
 }
 
 const Wrapper = styled.div`
   position: relative;
 `
 
-const TooltipIcon = styled(motion.div)<{ size: 'sm' | 'lg' }>`
+const TooltipIcon = styled(motion.div)<{ size: Size }>`
   background-color: ${colorsV2.lightgray};
   width: ${(props) => (props.size === 'sm' ? `1rem` : `1.5rem`)};
   height: ${(props) => (props.size === 'sm' ? `1rem` : `1.5rem`)};
