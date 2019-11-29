@@ -11,13 +11,12 @@ import {
   HeadingBlack,
   HeadingWrapper,
   PreHeading,
-  SubSubHeadingBlack,
 } from '../components'
+import { InsuranceValues } from './InsuranceValues'
 import { perils } from './mock'
 import { PerilCollection } from './PerilCollection'
 import { PerilModal } from './PerilModal'
 import { PerilSwiper } from './PerilSwiper'
-import { InsuranceValues } from './InsuranceValues'
 
 interface Props {
   offer: OfferData
@@ -27,10 +26,6 @@ const Wrapper = styled('div')`
   padding: 8.5rem 0 5rem 0;
   background-color: ${colorsV2.offwhite};
   display: flex;
-`
-
-const ImportantNumbers = styled('div')`
-  margin-top: 2rem;
 `
 
 export const Perils: React.FC<Props> = ({ offer }) => {

@@ -11,10 +11,11 @@ interface Props {
 const Wrapper = styled.div`
   display: flex;
   flex-flow: row;
-  margin-top: 1.5rem;
+  margin-top: 0.5rem;
 
   @media (max-width: 600px) {
     flex-flow: row wrap;
+    justify-content: space-between;
   }
 `
 
@@ -33,7 +34,8 @@ const Container = styled.div`
   }
 
   @media (max-width: 600px) {
-    width: 8.75rem;
+    width: 50%;
+    margin-right: 0;
     margin-bottom: 2.5rem;
   }
 `
@@ -61,6 +63,10 @@ const Value = styled.div`
 
 const TooltipWrapper = styled.div`
   margin-left: 0.5rem;
+
+  @media (max-width: 600px) {
+    display: none;
+  }
 `
 
 export const Values: React.FC<Props> = ({ insuranceValues }) => (
