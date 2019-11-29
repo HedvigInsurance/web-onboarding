@@ -7,8 +7,12 @@ import { Stopwatch } from './icons/Stopwatch'
 
 const UspsContainer = styled.div`
   display: flex;
-  justify-content: space-around;
   margin: 0 -0.75rem;
+
+  @media (max-width: 600px) {
+    flex-flow: column;
+    align-items: center;
+  }
 `
 
 const UspContainer = styled.div`

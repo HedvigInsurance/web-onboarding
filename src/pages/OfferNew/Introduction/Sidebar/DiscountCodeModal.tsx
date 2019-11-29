@@ -13,6 +13,7 @@ import * as Yup from 'yup'
 interface Props {
   isOpen: boolean
   close: () => void
+  refetch: () => void
 }
 
 const Wrapper = styled.div<{ isOpen: boolean }>`
@@ -120,7 +121,11 @@ const discountSchema = Yup.object({
   code: Yup.string().required('Skriv in en rabattkod'),
 })
 
-export const DiscountCodeModal: React.FC<Props> = ({ isOpen, close }) => (
+export const DiscountCodeModal: React.FC<Props> = ({
+  isOpen,
+  close,
+  refetch,
+}) => (
   <Wrapper isOpen={isOpen}>
     <Container
       initial={'hidden'}
@@ -163,6 +168,7 @@ export const DiscountCodeModal: React.FC<Props> = ({ isOpen, close }) => (
               mutate({ variables: { code: form.code } })
                 .then((result) => {
                   if (!result) {
+                    refetch()
                     close()
                     return
                   }

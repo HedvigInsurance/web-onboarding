@@ -1,3 +1,4 @@
+import { TopBar } from 'components/TopBar'
 import { Page } from 'components/utils/Page'
 import { OfferContainer } from 'containers/OfferContainer'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
@@ -10,14 +11,15 @@ export const OfferNew: React.SFC = () => (
   <Page>
     <SessionTokenGuard>
       <OfferContainer>
-        {(offer) => {
+        {(offer, { refetch }) => {
           if (!offer || !offer.insurance.type) {
             return null
           }
 
           return (
             <>
-              <Introduction offer={offer} />
+              <TopBar />
+              <Introduction offer={offer} refetch={refetch} />
               <Perils />
               <Compare />
             </>

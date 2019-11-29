@@ -67,6 +67,11 @@ const ValueText = styled.div`
   line-height: 1rem;
   text-align: right;
   color: ${colorsV2.semilightgray};
+
+  @media (max-width: 600px) {
+    font-size: 0.875rem;
+    line-height: 0.875rem;
+  }
 `
 
 const Dropdown = styled.div<{ visible: boolean }>`
@@ -82,6 +87,7 @@ const Dropdown = styled.div<{ visible: boolean }>`
     props.visible ? `translateY(0)` : `translateY(-0.25rem)`};
   opacity: ${(props) => (props.visible ? 1 : 0)};
   visibility: ${(props) => (props.visible ? 'visible' : 'hidden')};
+  z-index: 1;
 `
 
 const DropdownChoice = styled.button`

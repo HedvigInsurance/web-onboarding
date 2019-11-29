@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import * as React from 'react'
 import {
+  Body,
   Column,
   ColumnSpacing,
   Container,
@@ -27,6 +28,10 @@ export const Compare = () => {
             <HeadingBlack>
               Allt du förväntar dig av en hemförsäkring, plus drulle
             </HeadingBlack>
+            <Body>
+              Det är viktigt för oss att du känner sig säker på att du får bästa
+              möjliga villkor.
+            </Body>
           </HeadingWrapper>
 
           <CompareTable

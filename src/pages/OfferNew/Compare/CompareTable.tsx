@@ -24,6 +24,10 @@ const Container = styled('div')`
   background-color: ${colorsV2.white};
   border: 1px solid ${colorsV2.lightgray};
   margin: 0 -1rem;
+
+  @media (max-width: 600px) {
+    margin: 0;
+  }
 `
 
 const InsurancePropertiesSection = styled('div')`

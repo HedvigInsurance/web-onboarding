@@ -13,13 +13,20 @@ import { StartDate } from './StartDate'
 interface Props {
   sticky: boolean
   offer: OfferData
+  refetch: () => void
 }
 
 const Wrapper = styled.div`
   width: 26rem;
   flex-shrink: 0;
   position: relative;
-  z-index: 1000;
+  z-index: 1;
+  height: 0;
+
+  @media (max-width: 1020px) {
+    width: 100%;
+    height: auto;
+  }
 `
 
 const Container = styled.div<{ sticky: boolean }>`
@@ -31,6 +38,13 @@ const Container = styled.div<{ sticky: boolean }>`
   overflow: hidden;
   position: ${(props) => (props.sticky ? `fixed` : `relative`)};
   ${(props) => props.sticky && `top: 6rem;`}
+
+  @media (max-width: 1020px) {
+    width: 100%;
+    position: relative;
+    top: 0;
+    margin-bottom: 4rem;
+  }
 `
 
 const Header = styled.div`
@@ -40,6 +54,10 @@ const Header = styled.div`
   padding: 2rem 1.5rem 2rem 2rem;
   align-items: flex-start;
   position: relative;
+
+  @media (max-width: 600px) {
+    padding: 1.5rem;
+  }
 `
 
 const DiscountInfo = styled.div`
@@ -73,6 +91,10 @@ const Title = styled.div`
   font-weight: 500;
   color: ${colorsV2.black};
   margin-top: 0.25rem;
+
+  @media (max-width: 600px) {
+    font-size: 1.5rem;
+  }
 `
 
 const SummaryContent = styled.div`
@@ -148,7 +170,10 @@ const PriceInterval = styled.div`
 
 const Body = styled.div`
   padding: 2rem 1rem;
-  height: 12rem;
+
+  @media (max-width: 600px) {
+    padding: 1rem;
+  }
 `
 
 const Footer = styled.div`
@@ -157,6 +182,10 @@ const Footer = styled.div`
   display: flex;
   flex-flow: column;
   align-items: center;
+
+  @media (max-width: 600px) {
+    padding: 2rem 1rem;
+  }
 `
 
 const FooterExtraActions = styled.div`
@@ -176,7 +205,7 @@ const FooterExtraActions = styled.div`
 `
 
 export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
-  ({ sticky, offer }, ref) => {
+  ({ sticky, offer, refetch }, ref) => {
     const [
       discountCodeModalIsOpen,
       setDiscountCodeModalIsOpen,
@@ -253,6 +282,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
           <DiscountCodeModal
             isOpen={discountCodeModalIsOpen}
             close={() => setDiscountCodeModalIsOpen(false)}
+            refetch={refetch}
           />
         </Container>
       </Wrapper>

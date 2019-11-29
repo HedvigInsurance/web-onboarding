@@ -43,6 +43,10 @@ const Value = styled.div`
   flex-flow: row;
   justify-content: right;
   align-items: center;
+
+  @media (max-width: 600px) {
+    font-size: 0.875rem;
+  }
 `
 
 const TooltipWrapper = styled.div`

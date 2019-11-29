@@ -3,6 +3,7 @@ import { colorsV2 } from '@hedviginsurance/brand'
 import * as React from 'react'
 import { useMediaQuery } from 'react-responsive'
 import {
+  Body,
   Column,
   ColumnSpacing,
   Container,
@@ -20,13 +21,6 @@ const Wrapper = styled('div')`
   padding: 8.5rem 0 5rem 0;
   background-color: ${colorsV2.offwhite};
   display: flex;
-`
-
-const Body = styled('div')`
-  font-size: 1.25rem;
-  line-height: 1.626rem;
-  color: ${colorsV2.darkgray};
-  margin-top: 2rem;
 `
 
 const ImportantNumbers = styled('div')`

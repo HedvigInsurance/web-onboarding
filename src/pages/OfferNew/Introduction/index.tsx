@@ -19,15 +19,23 @@ import { Usps } from './Usps'
 
 interface Props {
   offer: OfferData
+  refetch: () => void
 }
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 53rem;
-  padding: 12.5rem 0 5rem 0;
+  padding: 12.5rem 0 7rem 0;
   background-color: ${colorsV2.black};
   position: relative;
   box-sizing: border-box;
+
+  @media (max-width: 1020px) {
+    padding: 7rem 0 7rem 0;
+  }
+
+  @media (max-width: 600px) {
+    padding: 7rem 0 5rem 0;
+  }
 `
 
 const scrollButtonKeyframes = keyframes`
@@ -52,9 +60,9 @@ const ScrollButton = styled.button`
   padding: 1rem 1rem 1rem 1.5rem;
   position: absolute;
   border: none;
-  z-index: 100;
-  left: 0;
-  bottom: -8.875rem;
+  z-index: 1;
+  left: 1rem;
+  bottom: -10.875rem;
   animation: ${scrollButtonKeyframes} 6s ease-in-out infinite;
   transition: background 0.1s ease;
 
@@ -70,9 +78,13 @@ const ScrollButton = styled.button`
     margin-left: 0.75rem;
     fill: ${colorsV2.black};
   }
+
+  @media (max-width: 600px) {
+    bottom: -8.875rem;
+  }
 `
 
-export const Introduction: React.FC<Props> = ({ offer }) => {
+export const Introduction: React.FC<Props> = ({ offer, refetch }) => {
   const [sidebarIsSticky, setSidebarIsSticky] = React.useState(false)
   const ref = React.useRef<HTMLDivElement>(null)
 
@@ -104,7 +116,12 @@ export const Introduction: React.FC<Props> = ({ offer }) => {
             <Usps />
           </Column>
 
-          <Sidebar ref={ref} sticky={sidebarIsSticky} offer={offer} />
+          <Sidebar
+            ref={ref}
+            sticky={sidebarIsSticky}
+            offer={offer}
+            refetch={refetch}
+          />
 
           <ScrollButton
             onClick={() => {

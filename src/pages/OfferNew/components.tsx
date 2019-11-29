@@ -10,6 +10,12 @@ export const Heading = styled('h1')`
   font-weight: 600;
   letter-spacing: -0.91px;
   margin: 0;
+
+  @media (max-width: 600px) {
+    font-size: 2rem;
+    line-height: 2rem;
+    text-align: center;
+  }
 `
 
 export const HeadingWhite = styled(Heading)`
@@ -26,6 +32,10 @@ export const SubHeading = styled('h2')`
   line-height: 1.5rem;
   font-weight: 500;
   letter-spacing -0.34px;
+
+  @media (max-width: 600px) {
+    font-size: 1.25rem;
+  }
 `
 
 export const SubHeadingWhite = styled(SubHeading)`
@@ -59,10 +69,27 @@ export const PreHeading = styled('div')`
   color: ${colorsV2.gray};
   text-transform: uppercase;
   margin-bottom: 1.5625rem;
+
+  @media (max-width: 600px) {
+    text-align: center;
+  }
 `
 
 export const HeadingWrapper = styled('div')`
   margin-bottom: 3.875rem;
+`
+
+export const Body = styled('div')`
+  font-size: 1.25rem;
+  line-height: 1.626rem;
+  color: ${colorsV2.darkgray};
+  margin-top: 2rem;
+  padding-right: 7.5rem;
+
+  @media (max-width: 600px) {
+    padding-right: 0;
+    text-align: center;
+  }
 `
 
 export const Container = styled('div')`
@@ -79,6 +106,10 @@ export const Container = styled('div')`
   @media (max-width: 500px) {
     padding: 0 1rem;
   }
+
+  @media (max-width: 1020px) {
+    flex-flow: column-reverse;
+  }
 `
 
 export const Column = styled('div')`
@@ -89,11 +120,14 @@ export const Column = styled('div')`
   flex-grow: 0;
   box-sizing: border-box;
   padding-right: 1rem;
+
+  @media (max-width: 1020px) {
+    padding-right: 0;
+  }
 `
 
 export const ColumnSpacing = styled('div')`
   width: 26rem;
-  height: 31rem;
   flex-shrink: 0;
 `
 
