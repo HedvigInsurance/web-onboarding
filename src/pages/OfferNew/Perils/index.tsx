@@ -1,38 +1,34 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
+import { OfferData } from 'containers/OfferContainer'
 import * as React from 'react'
 import { useMediaQuery } from 'react-responsive'
 import {
+  Body,
   Column,
+  ColumnSpacing,
   Container,
   HeadingBlack,
   HeadingWrapper,
   PreHeading,
-  SubSubHeadingBlack,
 } from '../components'
+import { InsuranceValues } from './InsuranceValues'
 import { perils } from './mock'
 import { PerilCollection } from './PerilCollection'
 import { PerilModal } from './PerilModal'
 import { PerilSwiper } from './PerilSwiper'
 
+interface Props {
+  offer: OfferData
+}
+
 const Wrapper = styled('div')`
-  padding: 5rem 0;
+  padding: 8.5rem 0 5rem 0;
   background-color: ${colorsV2.offwhite};
   display: flex;
 `
 
-const Body = styled('div')`
-  font-size: 1.25rem;
-  line-height: 1.626rem;
-  color: ${colorsV2.darkgray};
-  margin-top: 2rem;
-`
-
-const ImportantNumbers = styled('div')`
-  margin-top: 2rem;
-`
-
-export const Perils = () => {
+export const Perils: React.FC<Props> = ({ offer }) => {
   const [isShowingPeril, setIsShowingPeril] = React.useState(false)
   const [currentPeril, setCurrentPeril] = React.useState(0)
   const isMobile = useMediaQuery({ query: '(max-width: 600px)' })
@@ -44,10 +40,11 @@ export const Perils = () => {
           <HeadingWrapper>
             <PreHeading>Skyddet</PreHeading>
             <HeadingBlack>
-              {'Säkerhet genom livets alla $%*!;€&-stunder'}
+              Förstklassigt skydd med service i världsklass
             </HeadingBlack>
             <Body>
               Omfattande skydd för dig och din familj, ditt hus och dina prylar.
+              Drulle ingår alltid.
             </Body>
           </HeadingWrapper>
 
@@ -65,10 +62,9 @@ export const Perils = () => {
             />
           )}
 
-          <ImportantNumbers>
-            <SubSubHeadingBlack>Viktiga siffror</SubSubHeadingBlack>
-          </ImportantNumbers>
+          <InsuranceValues insuranceType={offer.insurance.type} />
         </Column>
+        <ColumnSpacing />
       </Container>
       <PerilModal
         perils={perils}

@@ -1,11 +1,11 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import hexToRgba from 'hex-to-rgba'
+import { Tooltip } from 'new-components/Tooltip'
 import * as React from 'react'
 import { Checkmark } from '../../../components/icons/Checkmark'
 import { DownArrow } from '../../../components/icons/DownArrow'
 import { HedvigSymbol } from '../../../components/icons/HedvigSymbol'
-import { Questionmark } from '../../../components/icons/Questionmark'
 import { SubHeadingBlack } from '../components'
 import { CompanyProperties, InsuranceProperties } from './types'
 
@@ -23,6 +23,14 @@ const Container = styled('div')`
   flex-flow: row;
   background-color: ${colorsV2.white};
   border: 1px solid ${colorsV2.lightgray};
+  margin: 0 -1rem;
+
+  @media (max-width: 1020px) {
+    width: calc(100% + 2rem);
+  }
+
+  @media (max-width: 600px) {
+  }
 `
 
 const InsurancePropertiesSection = styled('div')`
@@ -75,30 +83,18 @@ const InsuranceProperty = styled(ColumnRow)`
   align-items: center;
 `
 
-const InsurancePropertyHelpButton = styled('button')`
-  width: 1rem;
-  height: 1rem;
-  box-sizing: border-box;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: ${colorsV2.lightgray};
-  border-radius: 50%;
-  cursor: pointer;
-  border: none;
+const TooltipWrapper = styled.div`
   margin-left: 0.75rem;
-
-  :focus {
-    outline: none;
-  }
-
-  svg {
-    width: 6px;
-  }
-
   @media (max-width: 600px) {
     display: none;
+  }
+`
+const MobileTooltipWrapper = styled.div`
+  display: none;
+  margin-left: 1rem;
+
+  @media (max-width: 600px) {
+    display: block;
   }
 `
 
@@ -315,6 +311,9 @@ export const CompareTable = (props: Props) => {
       <InsurancePropertiesSection>
         <ColumnHead>
           <SubHeadingBlack>Skydd</SubHeadingBlack>
+          <MobileTooltipWrapper>
+            <Tooltip size="lg" body="Info" />
+          </MobileTooltipWrapper>
         </ColumnHead>
 
         <InsurancePropertyNames>
@@ -323,9 +322,9 @@ export const CompareTable = (props: Props) => {
             .map(([key, property]) => (
               <InsuranceProperty key={key}>
                 {property.name}
-                <InsurancePropertyHelpButton>
-                  <Questionmark />
-                </InsurancePropertyHelpButton>
+                <TooltipWrapper>
+                  <Tooltip body="Info" />
+                </TooltipWrapper>
               </InsuranceProperty>
             ))}
         </InsurancePropertyNames>
