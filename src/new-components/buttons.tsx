@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
-import * as color from 'color'
+import color from 'color'
 
 export const Button = styled.button<{
   background?: string

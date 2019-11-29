@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
-import * as color from 'color'
+import color from 'color'
 import { DocumentIcon } from 'components/icons/Document'
 import { Tooltip } from 'new-components/Tooltip'
 import * as React from 'react'
