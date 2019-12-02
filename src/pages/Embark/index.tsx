@@ -152,6 +152,7 @@ interface EmbarkRootProps {
 }
 
 export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
+  const history = useHistory()
   const [data, setData] = React.useState<null | any>(null)
   const [initialStore, setInitialStore] = React.useState<null | {
     [key: string]: any
@@ -196,6 +197,11 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
     <StorageContainer>
       {(storageState) => (
         <EmbarkProvider
+          externalRedirects={{
+            Offer: () => {
+              history.push('/new-member/offer')
+            },
+          }}
           data={data}
           resolvers={{
             personalInformationApi: resolvePersonalInformation,

@@ -902,10 +902,10 @@
     webpack "4.19.1"
     webpack-dev-server "3.1.14"
 
-"@hedviginsurance/embark@^1.0.18":
-  version "1.0.18"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-1.0.18.tgz#1bb0af8961b9ddaaa5f7d8c271c3f8abeff13340"
-  integrity sha512-8TENi0VkHC6wim4D+KS4noaxCvEETH7ifJ78SceHSNLLmdCuvL4hdkKYg7fNaKlf3kN+zxVv7l8teg5sWV5WjQ==
+"@hedviginsurance/embark@^1.0.19":
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-1.0.19.tgz#632f2c28729fa1e31bf9b418afdff4b0df7a009d"
+  integrity sha512-5T2fjSzxgFkBwdhZr/Xlca8v+2zol1FjoKuOCKp87GmYJRLWGJPu4eh1M3gB3PUENGizS+1j4wCsXzTwqli3og==
   dependencies:
     "@emotion/core" "^10.0.21"
     "@emotion/styled" "^10.0.17"
