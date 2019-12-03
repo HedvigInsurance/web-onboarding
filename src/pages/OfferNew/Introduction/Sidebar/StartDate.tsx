@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
+import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { Tooltip } from 'new-components/Tooltip'
 import * as React from 'react'
 
@@ -56,8 +57,16 @@ const TooltipWrapper = styled.div`
 export const StartDate: React.FC<Props> = ({ insuredAtOtherCompany }) => (
   <Wrapper>
     <Label>
-      <Title>Startdatum</Title>
-      <SubTitle>hos Hedvig</SubTitle>
+      <Title>
+        <TranslationsConsumer textKey="SIDEBAR_STARTDATE_CELL_LABEL">
+          {(t) => t}
+        </TranslationsConsumer>
+      </Title>
+      <SubTitle>
+        <TranslationsConsumer textKey="SIDEBAR_STARTDATE_CELL_SUBLABEL">
+          {(t) => t}
+        </TranslationsConsumer>
+      </SubTitle>
     </Label>
 
     <Value>

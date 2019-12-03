@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
+import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { OfferData } from 'containers/OfferContainer'
 import { isMonthlyCostDeduction } from 'containers/types'
 import { Button, TextButton } from 'new-components/buttons'
@@ -223,8 +224,14 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
           )}
           <Header>
             <Summary>
-              <PreTitle>Hemförsäkring</PreTitle>
+              <PreTitle>
+                <TranslationsConsumer textKey="SIDEBAR_LABEL">
+                  {(t) => t}
+                </TranslationsConsumer>
+              </PreTitle>
+
               <Title>{insuranceTypeMapping[offer.insurance.type]}</Title>
+
               <SummaryContent>
                 <SummaryText>
                   <b>{`${offer.member.firstName} ${offer.member.lastName}`}</b>
@@ -234,7 +241,12 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 <SummaryText>{`${offer.insurance.address}, ${formatPostalNumber(
                   offer.insurance.postalNumber,
                 )}`}</SummaryText>
-                <TextButton>Visa detaljer</TextButton>
+
+                <TextButton>
+                  <TranslationsConsumer textKey="SIDEBAR_SHOW_DETAILS_BUTTON">
+                    {(t) => t}
+                  </TranslationsConsumer>
+                </TextButton>
               </SummaryContent>
             </Summary>
 
@@ -268,14 +280,20 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
           </Body>
 
           <Footer>
-            <Button size="lg">Skaffa Hedvig nu</Button>
+            <Button size="lg">
+              <TranslationsConsumer textKey="SIDEBAR_GETHEDVIG_BUTTON">
+                {(t) => t}
+              </TranslationsConsumer>
+            </Button>
             <FooterExtraActions>
               <TextButton
                 onClick={() => {
                   setDiscountCodeModalIsOpen(true)
                 }}
               >
-                Lägg till rabattkod
+                <TranslationsConsumer textKey="SIDEBAR_ADD_DISCOUNT_BUTTON">
+                  {(t) => t}
+                </TranslationsConsumer>
               </TextButton>
             </FooterExtraActions>
           </Footer>
