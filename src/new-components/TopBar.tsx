@@ -8,7 +8,7 @@ interface Props {
   transparent?: boolean
 }
 
-const Wrapper = styled.div<{ transparent?: boolean }>`
+const Wrapper = styled.div<Props>`
   width: 100%;
   height: 5rem;
   background: ${(props) =>
