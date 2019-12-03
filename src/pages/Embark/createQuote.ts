@@ -6,28 +6,32 @@ import { CREATE_SESSION_TOKEN_MUTATION } from '../../containers/SessionContainer
 const MUTATION = gql`
   mutation CreateQuote($input: CreateQuoteInput!) {
     createQuote(input: $input) {
-      ... on Quote {
+      ... on CompleteQuote {
         id
         price {
           amount
           currency
         }
         details {
-          ... on QuoteDetailsCore {
+          ... on CompleteApartmentQuoteDetails {
+            type
             street
             zipCode
             householdSize
             livingSpace
           }
-          ... on ApartmentQuoteDetails {
-            type
-          }
-          ... on HouseQuoteDetails {
+          ... on CompleteHouseQuoteDetails {
             ancillarySpace
+            street
+            zipCode
+            householdSize
+            livingSpace
             extraBuildings {
-              type
-              ancillarySpace
-              hasWaterConnected
+              ... on ExtraBuildingCore {
+                displayName
+                area
+                hasWaterConnected
+              }
             }
           }
         }
