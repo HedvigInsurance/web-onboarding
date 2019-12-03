@@ -1,6 +1,10 @@
 import { keyframes } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
+import {
+  TranslationsConsumer,
+  TranslationsPlaceholderConsumer,
+} from '@hedviginsurance/textkeyfy'
 import { OfferData } from 'containers/OfferContainer'
 import * as React from 'react'
 import { animateScroll } from 'react-scroll'
@@ -107,10 +111,18 @@ export const Introduction: React.FC<Props> = ({ offer, refetch }) => {
         <Container>
           <Column>
             <HeadingWrapper>
-              <PreHeading>Förslag</PreHeading>
+              <PreHeading>
+                <TranslationsConsumer textKey="HERO_LABEL">
+                  {(t) => t}
+                </TranslationsConsumer>
+              </PreHeading>
               <HeadingWhite>
-                Hej {offer.member.firstName},
-                <br /> här är ditt personliga erbjudande
+                <TranslationsPlaceholderConsumer
+                  textKey="HERO_HEADLINE"
+                  replacements={{ FIRST_NAME: offer.member.firstName }}
+                >
+                  {(t) => t}
+                </TranslationsPlaceholderConsumer>
               </HeadingWhite>
             </HeadingWrapper>
             <Usps />
@@ -128,7 +140,9 @@ export const Introduction: React.FC<Props> = ({ offer, refetch }) => {
               animateScroll.scrollTo(800)
             }}
           >
-            Scrolla för mer
+            <TranslationsConsumer textKey="HERO_SCROLL_BUTTON">
+              {(t) => t}
+            </TranslationsConsumer>
             <DownArrow />
           </ScrollButton>
         </Container>
