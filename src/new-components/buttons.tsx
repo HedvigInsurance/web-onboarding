@@ -2,17 +2,20 @@ import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import color from 'color'
 import { Size } from './types'
+import { Link } from 'react-router-dom'
 
-export const Button = styled.button<{
+interface ButtonProps {
   background?: string
   foreground?: string
   size?: Size
   disabled?: boolean
-}>`
+}
+
+export const Button = styled.button<ButtonProps>`
   font-size: ${(props) => (props.size === 'lg' ? `1rem` : `0.875rem`)};
   line-height: ${(props) => (props.size === 'lg' ? `1rem` : `1.25rem`)};
   padding: ${(props) =>
-    props.size === 'lg' ? `1.5rem 4rem` : `0.875rem 1.5rem`};
+    props.size === 'lg' ? `1.5rem 2.5rem` : `0.875rem 1.5rem`};
   background: ${(props) =>
     props.disabled
       ? color(props.background)
@@ -25,6 +28,7 @@ export const Button = styled.button<{
   border: none;
   cursor: ${(props) => (props.disabled ? `default` : `pointer`)};
   transition: all 0.15s ease-in-out;
+  text-decoration: none;
 
   :focus {
     outline: none;
@@ -41,12 +45,20 @@ export const Button = styled.button<{
   `}
 `
 
-Button.defaultProps = {
+const defaultButtonProps: ButtonProps = {
   background: colorsV2.violet500,
   foreground: colorsV2.white,
   size: 'sm',
   disabled: false,
 }
+
+Button.defaultProps = defaultButtonProps
+
+export const LinkButton = Button.withComponent(Link)
+LinkButton.defaultProps = defaultButtonProps
+
+export const PureLinkButton = Button.withComponent('a')
+PureLinkButton.defaultProps = defaultButtonProps
 
 export const TextButton = styled.button`
   background: none;

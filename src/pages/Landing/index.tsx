@@ -5,7 +5,7 @@ import { Page } from 'components/utils/Page'
 import { TopBar } from 'new-components/TopBar'
 import * as React from 'react'
 import Helmet from 'react-helmet-async'
-import { Button } from 'new-components/buttons'
+import { LinkButton } from 'new-components/buttons'
 
 const Background = styled.div`
   width: 100%;
@@ -68,7 +68,7 @@ const Paragraph = styled.p`
   color: ${colorsV2.black};
 `
 
-const ProceedButton = styled(Button)`
+const ProceedButton = styled(LinkButton)`
   margin-top: 5rem;
 `
 
@@ -84,7 +84,9 @@ export const Landing: React.FC = () => (
           <Paragraph>
             Beräkna priset på ett ny hemförsäkring hos Hedvig
           </Paragraph>
-          <ProceedButton size="lg">Beräkna ditt pris</ProceedButton>
+          <ProceedButton size="lg" to="/new">
+            Beräkna ditt pris
+          </ProceedButton>
         </Card>
         <Card>
           <Headline>Har du redan hemförsäkring?</Headline>
@@ -92,7 +94,9 @@ export const Landing: React.FC = () => (
             Beräkna priset på att flytta över din nuvarande försäkring till
             Hedvig
           </Paragraph>
-          <ProceedButton size="lg">Jämför med Hedvig</ProceedButton>
+          <ProceedButton size="lg" to="/switch">
+            Jämför med Hedvig
+          </ProceedButton>
         </Card>
       </Container>
     </Wrapper>
