@@ -6,6 +6,7 @@ import { TopBar } from 'new-components/TopBar'
 import * as React from 'react'
 import Helmet from 'react-helmet-async'
 import { LinkButton } from 'new-components/buttons'
+import hexToRgba from 'hex-to-rgba'
 
 const Background = styled.div`
   width: 100%;
@@ -18,6 +19,20 @@ const Background = styled.div`
   background-position: center center;
   background-size: cover;
   background-image: url(/new-member-assets/landing/background.jpg);
+
+  ::before {
+    position: absolute;
+    content: '';
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 5rem;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.2),
+      rgba(0, 0, 0, 0)
+    );
+  }
 `
 
 const Wrapper = styled.div`
@@ -29,6 +44,14 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   padding-top: 25vh;
+
+  @media (max-width: 850px) {
+    padding-top: 10vh;
+  }
+
+  @media (max-width: 600px) {
+    padding-top: 1rem;
+  }
 `
 
 const Container = styled.div`
@@ -38,6 +61,15 @@ const Container = styled.div`
   justify-content: space-between;
   position: relative;
   margin: 0 -2.5rem;
+
+  @media (max-width: 1020px) {
+    width: calc(100% + 2.5rem);
+    margin: 0 -1.125rem;
+  }
+
+  @media (max-width: 850px) {
+    flex-flow: column;
+  }
 `
 
 const Card = styled.div`
@@ -50,6 +82,28 @@ const Card = styled.div`
   flex-flow: column;
   align-items: flex-start;
   justify-content: flex-end;
+  transition: all 0.35s;
+  box-shadow: 0 0 13px rgba(0, 0, 0, 0.06);
+
+  :hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 18px rgba(0, 0, 0, 0.18);
+  }
+
+  @media (max-width: 1020px) {
+    padding: 2.5rem 2rem 2rem 2rem;
+    margin: 0 1.125rem;
+  }
+
+  @media (max-width: 850px) {
+    margin: 0 0 1rem 0;
+  }
+
+  @media (max-width: 600px) {
+    padding: 2rem 1.5rem 1.5rem 1.5rem;
+    align-items: center;
+    box-shadow: 0 8px 13px rgba(0, 0, 0, 0.18);
+  }
 `
 
 const Headline = styled.h1`
@@ -59,17 +113,33 @@ const Headline = styled.h1`
   color: ${colorsV2.black};
   letter-spacing: -1px;
   margin: 0 0 1rem 0;
+
+  @media (max-width: 600px) {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+    text-align: center;
+  }
 `
 
 const Paragraph = styled.p`
   font-size: 1.25rem;
   line-height: 1.875rem;
   margin: 0;
-  color: ${colorsV2.black};
+  color: ${colorsV2.darkgray};
+
+  @media (max-width: 600px) {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    text-align: center;
+  }
 `
 
 const ProceedButton = styled(LinkButton)`
   margin-top: 5rem;
+
+  @media (max-width: 600px) {
+    margin-top: 2.5rem;
+  }
 `
 
 export const Landing: React.FC = () => (
