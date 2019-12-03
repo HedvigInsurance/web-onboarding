@@ -4,7 +4,7 @@ import {
   EmbarkProvider,
   Header,
   Passage,
-  useGoTo,
+  useEmbark,
 } from '@hedviginsurance/embark'
 import * as React from 'react'
 import { useHistory } from 'react-router'
@@ -13,45 +13,6 @@ import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
 import { resolveHouseInformation } from './houseInformation'
 import { resolvePersonalInformation } from './personalInformation'
-
-interface State {
-  history: string[]
-  passageId: null | string
-  data: null | any
-}
-
-type Action =
-  | { type: 'GO_TO'; passageId: string }
-  | { type: 'SET_STATE'; state: State }
-  | { type: 'GO_BACK' }
-
-const reducer: (state: State, action: Action) => State = (state, action) => {
-  switch (action.type) {
-    case 'GO_TO':
-      if (state.passageId === action.passageId) {
-        return state
-      }
-
-      return {
-        ...state,
-        history: [...state.history, action.passageId],
-        passageId: action.passageId,
-      }
-    case 'GO_BACK':
-      const historyLength = state.history.length
-      return {
-        ...state,
-        history: state.history.slice(0, -1),
-        passageId: state.history[historyLength - 2],
-      }
-    case 'SET_STATE':
-      return {
-        ...action.state,
-      }
-    default:
-      return state
-  }
-}
 
 const EmbarkStyling = styled.div`
   background-color: ${colors.PINK};
@@ -78,7 +39,10 @@ interface EmbarkProps {
 
 const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
   const history = useHistory()
-  const [state, dispatch] = React.useReducer(reducer, null, () => {
+  const {
+    reducer: [state, dispatch],
+    goTo,
+  } = useEmbark(() => {
     if (
       history.location.state &&
       props.name === history.location.state.embarkPassageName
@@ -98,13 +62,6 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
       passageId: props.data.startPassage,
       data: props.data,
     }
-  })
-
-  const goTo = useGoTo(state.data, (targetPassageId) => {
-    dispatch({
-      type: 'GO_TO',
-      passageId: targetPassageId,
-    })
   })
 
   const currentPassage = state.data.passages.find(
@@ -152,6 +109,7 @@ interface EmbarkRootProps {
 }
 
 export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
+  const history = useHistory()
   const [data, setData] = React.useState<null | any>(null)
   const [initialStore, setInitialStore] = React.useState<null | {
     [key: string]: any
@@ -196,6 +154,11 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
     <StorageContainer>
       {(storageState) => (
         <EmbarkProvider
+          externalRedirects={{
+            Offer: () => {
+              history.push('/new-member/offer')
+            },
+          }}
           data={data}
           resolvers={{
             personalInformationApi: resolvePersonalInformation,
