@@ -119,6 +119,12 @@ const Headline = styled.h1`
     line-height: 2.5rem;
     text-align: center;
   }
+
+  @media (max-width: 400px) {
+    font-size: 1.75rem;
+    line-height: 2rem;
+    text-align: center;
+  }
 `
 
 const Paragraph = styled.p`
@@ -133,6 +139,12 @@ const Paragraph = styled.p`
     line-height: 1.75rem;
     text-align: center;
   }
+
+  @media (max-width: 500px) {
+    font-size: 1.125rem;
+    line-height: 1.5rem;
+    text-align: center;
+  }
 `
 
 const ProceedButton = styled(LinkButton)`
@@ -140,6 +152,10 @@ const ProceedButton = styled(LinkButton)`
 
   @media (max-width: 600px) {
     margin-top: 2.5rem;
+  }
+
+  @media (max-width: 500px) {
+    margin-top: 1.75rem;
   }
 `
 
