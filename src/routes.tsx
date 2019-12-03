@@ -7,6 +7,7 @@ import { LazyDontPanic } from './pages/DontPanic'
 import { Download } from './pages/Download'
 import { EmbarkRoot } from './pages/Embark'
 import { FourOhFour } from './pages/FourOhFour'
+import { Landing } from './pages/Landing'
 import { NewMemberLanding } from './pages/NewMemberLanding'
 import { Offering } from './pages/Offer'
 import { OfferNew } from './pages/OfferNew'
@@ -26,6 +27,11 @@ export const reactPageRoutes = [
   {
     path: LANGUAGE_PATH_PATTERN + '/new-member/hedvig',
     Component: Chat,
+    exact: true,
+  },
+  {
+    path: LANGUAGE_PATH_PATTERN + '/new-member/landing',
+    Component: Landing,
     exact: true,
   },
   {
