@@ -1,6 +1,9 @@
 export interface InsuranceProperty {
   name: string
-  description: string
+  tooltip?: {
+    title: string
+    body: string
+  }
 }
 
 export interface CompanyProperties {
@@ -16,5 +19,5 @@ export interface CompanyProperties {
 }
 
 export type InsuranceProperties = {
-  [key in keyof CompanyProperties]: InsuranceProperty
+  [key in Exclude<keyof CompanyProperties, 'name'>]: InsuranceProperty
 }

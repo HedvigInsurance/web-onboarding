@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
+import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import color from 'color'
 import { DocumentIcon } from 'components/icons/Document'
 import { Tooltip } from 'new-components/Tooltip'
@@ -82,7 +83,11 @@ const Link = styled.a`
 export const InsuranceValues: React.FC<Props> = () => (
   <Wrapper>
     <Header>
-      <SubSubHeadingBlack>Mer information</SubSubHeadingBlack>
+      <SubSubHeadingBlack>
+        <TranslationsConsumer textKey="COVERAGE_INFO_HEADLINE">
+          {(t) => t}
+        </TranslationsConsumer>
+      </SubSubHeadingBlack>
       <TooltipWrapper>
         <Tooltip size="lg" body="Information" />
       </TooltipWrapper>
@@ -93,10 +98,15 @@ export const InsuranceValues: React.FC<Props> = () => (
     <Links>
       <Link href="">
         <DocumentIcon />
-        Fullständiga villkor
+        <TranslationsConsumer textKey="COVERAGE_TERMSANDCONDITIONS_BUTTON">
+          {(t) => t}
+        </TranslationsConsumer>
       </Link>
       <Link href="">
-        <DocumentIcon /> Förköpsinformation
+        <DocumentIcon />
+        <TranslationsConsumer textKey="COVERAGE_PRESALEINFORMATION_BUTTON">
+          {(t) => t}
+        </TranslationsConsumer>
       </Link>
     </Links>
   </Wrapper>
