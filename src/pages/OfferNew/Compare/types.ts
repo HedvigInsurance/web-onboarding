@@ -14,7 +14,6 @@ export interface CompanyProperties {
   liabilityProtection: boolean | string
   legalProtection: boolean | string
   drulle: boolean | string
-  deductible: number
   trustpilotScore: number
 }
 

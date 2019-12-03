@@ -63,11 +63,8 @@ const insuranceProperties: InsuranceProperties = {
       body: 'COMPARE_TABLE_DRULLE_TOOLTIP_BODY',
     },
   },
-  deductible: {
-    name: 'Grundsjälvrisk',
-  },
   trustpilotScore: {
-    name: 'Trustpilot Score',
+    name: 'COMPARE_TABLE_TRUSTPILOT_TITLE',
   },
 }
 

@@ -8,7 +8,6 @@ export const hedvigCompany: CompanyProperties = {
   liabilityProtection: true,
   legalProtection: true,
   drulle: true,
-  deductible: 1500,
   trustpilotScore: 4.5,
 }
 
@@ -21,7 +20,6 @@ export const otherCompanies: CompanyProperties[] = [
     liabilityProtection: true,
     legalProtection: true,
     drulle: 'Tillval',
-    deductible: 1500,
     trustpilotScore: 1.7,
   },
   {
@@ -32,7 +30,6 @@ export const otherCompanies: CompanyProperties[] = [
     liabilityProtection: true,
     legalProtection: true,
     drulle: 'Tillval',
-    deductible: 1500,
     trustpilotScore: 1.7,
   },
   {
@@ -43,7 +40,6 @@ export const otherCompanies: CompanyProperties[] = [
     liabilityProtection: true,
     legalProtection: true,
     drulle: 'Tillval',
-    deductible: 1500,
     trustpilotScore: 1.7,
   },
   {
@@ -54,7 +50,6 @@ export const otherCompanies: CompanyProperties[] = [
     liabilityProtection: true,
     legalProtection: true,
     drulle: 'Tillval',
-    deductible: 1500,
     trustpilotScore: 1.7,
   },
   {
@@ -65,7 +60,6 @@ export const otherCompanies: CompanyProperties[] = [
     liabilityProtection: true,
     legalProtection: true,
     drulle: 'Tillval',
-    deductible: 1500,
     trustpilotScore: 1.7,
   },
 ]
