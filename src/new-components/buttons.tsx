@@ -1,8 +1,8 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import color from 'color'
-import { Size } from './types'
 import { Link } from 'react-router-dom'
+import { Size } from './types'
 
 interface ButtonProps {
   background?: string

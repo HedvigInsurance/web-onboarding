@@ -2,11 +2,10 @@ import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { Page } from 'components/utils/Page'
+import { LinkButton } from 'new-components/buttons'
 import { TopBar } from 'new-components/TopBar'
 import * as React from 'react'
 import Helmet from 'react-helmet-async'
-import { LinkButton } from 'new-components/buttons'
-import hexToRgba from 'hex-to-rgba'
 
 const Background = styled.div`
   width: 100%;
@@ -44,6 +43,7 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   padding-top: 25vh;
+  padding-bottom: 4rem;
 
   @media (max-width: 850px) {
     padding-top: 10vh;
@@ -55,12 +55,12 @@ const Wrapper = styled.div`
 `
 
 const Container = styled.div`
-  width: calc(100% + 5rem);
+  width: calc(100% + 7rem);
   height: 100%;
   display: flex;
   justify-content: space-between;
   position: relative;
-  margin: 0 -2.5rem;
+  margin: 0 -3.5rem;
 
   @media (max-width: 1020px) {
     width: calc(100% + 2.5rem);
@@ -107,8 +107,8 @@ const Card = styled.div`
 `
 
 const Headline = styled.h1`
-  font-size: 3rem;
-  line-height: 3rem;
+  font-size: 2.875rem;
+  line-height: 2.875rem;
   font-weight: 500;
   color: ${colorsV2.black};
   letter-spacing: -1px;
@@ -126,6 +126,7 @@ const Paragraph = styled.p`
   line-height: 1.875rem;
   margin: 0;
   color: ${colorsV2.darkgray};
+  min-height: 3.75rem;
 
   @media (max-width: 600px) {
     font-size: 1.25rem;
@@ -147,25 +148,48 @@ export const Landing: React.FC = () => (
     <Background />
     <TopBar transparent />
 
+    <TranslationsConsumer textKey="STARTPAGE_PAGE_TITLE">
+      {(t) => (
+        <Helmet>
+          <title>{t}</title>
+        </Helmet>
+      )}
+    </TranslationsConsumer>
+
     <Wrapper>
       <Container>
         <Card>
-          <Headline>Är du oförsäkrad?</Headline>
+          <Headline>
+            <TranslationsConsumer textKey="STARTPAGE_UNINSURED_HEADLINE">
+              {(t) => t}
+            </TranslationsConsumer>
+          </Headline>
           <Paragraph>
-            Beräkna priset på ett ny hemförsäkring hos Hedvig
+            <TranslationsConsumer textKey="STARTPAGE_UNINSURED_BODY">
+              {(t) => t}
+            </TranslationsConsumer>
           </Paragraph>
           <ProceedButton size="lg" to="/new">
-            Beräkna ditt pris
+            <TranslationsConsumer textKey="STARTPAGE_UNINSURED_BUTTON">
+              {(t) => t}
+            </TranslationsConsumer>
           </ProceedButton>
         </Card>
         <Card>
-          <Headline>Har du redan hemförsäkring?</Headline>
+          <Headline>
+            <TranslationsConsumer textKey="STARTPAGE_INSURED_HEADLINE">
+              {(t) => t}
+            </TranslationsConsumer>
+          </Headline>
           <Paragraph>
-            Beräkna priset på att flytta över din nuvarande försäkring till
-            Hedvig
+            <TranslationsConsumer textKey="STARTPAGE_INSURED_BODY">
+              {(t) => t}
+            </TranslationsConsumer>
           </Paragraph>
           <ProceedButton size="lg" to="/switch">
-            Jämför med Hedvig
+            <TranslationsConsumer textKey="STARTPAGE_INSURED_BUTTON">
+              {(t) => t}
+            </TranslationsConsumer>
           </ProceedButton>
         </Card>
       </Container>
