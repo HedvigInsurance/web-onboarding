@@ -1,8 +1,8 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
-import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
 import * as React from 'react'
+import { CurrentLanguage } from '../components/utils/CurrentLanguage'
 
 interface Props {
   transparent?: boolean
@@ -26,16 +26,26 @@ const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   margin: 0 auto;
+
+  @media (max-width: 600px) {
+    justify-content: center;
+  }
 `
 
-const LogoWrapper = styled.div``
+const LogoLink = styled.a`
+  display: flex;
+`
 
 export const TopBar: React.FC<Props> = ({ transparent }) => (
   <Wrapper transparent={transparent}>
     <Container>
-      <LogoWrapper>
-        <HedvigLogo fill={transparent ? colorsV2.white : colorsV2.black} />
-      </LogoWrapper>
+      <CurrentLanguage>
+        {({ currentLanguage }) => (
+          <LogoLink href={'/' + currentLanguage}>
+            <HedvigLogo fill={transparent ? colorsV2.white : colorsV2.black} />
+          </LogoLink>
+        )}
+      </CurrentLanguage>
     </Container>
   </Wrapper>
 )

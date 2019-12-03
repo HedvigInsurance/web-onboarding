@@ -20,7 +20,7 @@ export const Button = styled.button<{
           .toString()
       : props.background};
   color: ${(props) => props.foreground};
-  font-weight: ${(props) => (props.size === 'lg' ? 600 : 500)};
+  font-weight: 500;
   border-radius: ${(props) => (props.size === 'lg' ? `2rem` : `1.5rem`)};
   border: none;
   cursor: ${(props) => (props.disabled ? `default` : `pointer`)};
