@@ -13,19 +13,23 @@ const MUTATION = gql`
           currency
         }
         details {
-          street
-          zipCode
-          householdSize
-          livingSpace
-          ... on CompleteQuoteDetails {
-            ... on CompleteApartmentQuoteDetails {
-              type
-            }
-            ... on CompleteHouseQuoteDetails {
-              ancillarySpace
-              extraBuildings {
-                type
-                ancillarySpace
+          ... on CompleteApartmentQuoteDetails {
+            type
+            street
+            zipCode
+            householdSize
+            livingSpace
+          }
+          ... on CompleteHouseQuoteDetails {
+            ancillarySpace
+            street
+            zipCode
+            householdSize
+            livingSpace
+            extraBuildings {
+              ... on ExtraBuildingCore {
+                displayName
+                area
                 hasWaterConnected
               }
             }
