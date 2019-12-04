@@ -15,7 +15,13 @@ import { resolveHouseInformation } from './houseInformation'
 import { resolvePersonalInformation } from './personalInformation'
 
 const EmbarkStyling = styled.div`
-  background-color: ${colors.PINK};
+  background: url('/new-member-assets/embark/orange-juice-mobile.png') no-repeat
+    center center fixed;
+  background-size: cover;
+
+  @media (min-width: 768px) {
+    background-image: url('/new-member-assets/embark/orange-juice.png');
+  }
   height: 100vh;
 
   * {
