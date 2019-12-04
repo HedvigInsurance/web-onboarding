@@ -6,8 +6,10 @@ import {
 } from '@hedviginsurance/textkeyfy'
 import { OfferData } from 'containers/OfferContainer'
 import { isMonthlyCostDeduction } from 'containers/types'
+import gql from 'graphql-tag'
 import { Button, TextButton } from 'new-components/buttons'
 import * as React from 'react'
+import { Mutation } from 'react-apollo'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { DiscountCodeModal } from './DiscountCodeModal'
 import { insuranceTypeMapping, otherInsuranceCompanies } from './mock'
@@ -19,6 +21,14 @@ interface Props {
   offer: OfferData
   refetch: () => void
 }
+
+const REMOVE_CODE_MUTATION = gql`
+  mutation RemoveDiscountCode {
+    removeDiscountCode {
+      __typename
+    }
+  }
+`
 
 const Wrapper = styled.div`
   width: 26rem;
@@ -242,8 +252,14 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
               <SummaryContent>
                 <SummaryText>
                   <b>{`${offer.member.firstName} ${offer.member.lastName}`}</b>
-                  {offer.insurance.personsInHousehold - 1 > 0 &&
-                    ` + ${offer.insurance.personsInHousehold - 1} pers`}
+
+                  {offer.insurance.personsInHousehold - 1 > 0 && (
+                    <TranslationsConsumer textKey="SIDEBAR_INSURED_PERSONS_SUFFIX">
+                      {(t) =>
+                        ` + ${offer.insurance.personsInHousehold - 1} ${t}`
+                      }
+                    </TranslationsConsumer>
+                  )}
                 </SummaryText>
                 <SummaryText>{`${offer.insurance.address}, ${formatPostalNumber(
                   offer.insurance.postalNumber,
@@ -307,16 +323,38 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 {(t) => t}
               </TranslationsConsumer>
             </Button>
+
             <FooterExtraActions>
-              <TextButton
-                onClick={() => {
-                  setDiscountCodeModalIsOpen(true)
-                }}
-              >
-                <TranslationsConsumer textKey="SIDEBAR_ADD_DISCOUNT_BUTTON">
-                  {(t) => t}
-                </TranslationsConsumer>
-              </TextButton>
+              {offer.redeemedCampaigns.length === 0 ? (
+                <TextButton
+                  onClick={() => {
+                    setDiscountCodeModalIsOpen(true)
+                  }}
+                >
+                  <TranslationsConsumer textKey="SIDEBAR_ADD_DISCOUNT_BUTTON">
+                    {(t) => t}
+                  </TranslationsConsumer>
+                </TextButton>
+              ) : (
+                <Mutation<{ __typename: string }>
+                  mutation={REMOVE_CODE_MUTATION}
+                >
+                  {(mutate) => (
+                    <TextButton
+                      color={colorsV2.coral700}
+                      onClick={() => {
+                        mutate().then(() => {
+                          refetch()
+                        })
+                      }}
+                    >
+                      <TranslationsConsumer textKey="SIDEBAR_REMOVE_DISCOUNT_BUTTON">
+                        {(t) => t}
+                      </TranslationsConsumer>
+                    </TextButton>
+                  )}
+                </Mutation>
+              )}
             </FooterExtraActions>
           </Footer>
 
@@ -330,3 +368,6 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
     )
   },
 )
+/*
+
+*/
