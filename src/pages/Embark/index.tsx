@@ -1,5 +1,4 @@
 import styled from '@emotion/styled'
-import { colors } from '@hedviginsurance/brand'
 import {
   EmbarkProvider,
   Header,
