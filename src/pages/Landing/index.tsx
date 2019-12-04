@@ -20,7 +20,18 @@ const Background = styled.div`
   background-size: cover;
 
   @media (min-width: 768px) {
-    background-image: url('/new-member-assets/embark/orange-juice.png');
+    background: url('/new-member-assets/embark/orange-juice.png') no-repeat
+      center center fixed;
+  }
+
+  @media (min-width: 1280px) {
+    background: url('/new-member-assets/embark/orange-juice@2x.png') no-repeat
+      center center fixed;
+  }
+
+  @media (min-width: 1920px) {
+    background: url('/new-member-assets/embark/orange-juice@3x.png') no-repeat
+      center center fixed;
   }
 
   ::before {
