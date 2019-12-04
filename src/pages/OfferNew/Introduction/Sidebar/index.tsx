@@ -1,6 +1,9 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
-import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
+import {
+  TranslationsConsumer,
+  TranslationsPlaceholderConsumer,
+} from '@hedviginsurance/textkeyfy'
 import { OfferData } from 'containers/OfferContainer'
 import { isMonthlyCostDeduction } from 'containers/types'
 import { Button, TextButton } from 'new-components/buttons'
@@ -135,11 +138,11 @@ const PriceNumbers = styled.div`
   margin-bottom: 0.5rem;
 `
 
-const PriceGross = styled.div<{ monthlyConstDeduction: boolean }>`
+const PriceGross = styled.div<{ monthlyCostDeduction: boolean }>`
   font-size: 3.5rem;
   line-height: 3.5rem;
   color: ${(props) =>
-    props.monthlyConstDeduction ? colorsV2.grass500 : colorsV2.black};
+    props.monthlyCostDeduction ? colorsV2.grass500 : colorsV2.black};
   font-family: ${fonts.GEOMANIST};
   font-weight: 600;
 `
@@ -212,15 +215,19 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
       discountCodeModalIsOpen,
       setDiscountCodeModalIsOpen,
     ] = React.useState(false)
-    const monthlyConstDeduction =
+    const monthlyCostDeduction =
       offer.redeemedCampaigns.length > 0 &&
       isMonthlyCostDeduction(offer.redeemedCampaigns[0].incentive)
 
     return (
       <Wrapper ref={ref}>
         <Container sticky={sticky}>
-          {offer.redeemedCampaigns.length > 0 && (
-            <DiscountInfo>Rabatt</DiscountInfo>
+          {monthlyCostDeduction && (
+            <DiscountInfo>
+              <TranslationsConsumer textKey="SIDEBAR_ACTIVE_REFERRAL">
+                {(t) => t}
+              </TranslationsConsumer>
+            </DiscountInfo>
           )}
           <Header>
             <Summary>
@@ -251,20 +258,35 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
             </Summary>
 
             <Price>
-              {monthlyConstDeduction && (
+              {monthlyCostDeduction && (
                 <PriceNet>
-                  {Number(offer.insurance.cost.monthlyNet.amount)}kr/mån
+                  <TranslationsPlaceholderConsumer
+                    textKey="SIDEBAR_OLD_PRICE"
+                    replacements={{
+                      PRICE: Number(offer.insurance.cost.monthlyNet.amount),
+                    }}
+                  >
+                    {(t) => t}
+                  </TranslationsPlaceholderConsumer>
                 </PriceNet>
               )}
 
               <PriceNumbers>
-                <PriceGross monthlyConstDeduction={monthlyConstDeduction}>
+                <PriceGross monthlyCostDeduction={monthlyCostDeduction}>
                   {Number(offer.insurance.cost.monthlyNet.amount)}
                 </PriceGross>
 
                 <PriceSuffix>
-                  <PriceUnit>kr</PriceUnit>
-                  <PriceInterval>/mån</PriceInterval>
+                  <PriceUnit>
+                    <TranslationsConsumer textKey="SIDEBAR_PRICE_SUFFIX_UNIT">
+                      {(t) => t}
+                    </TranslationsConsumer>
+                  </PriceUnit>
+                  <PriceInterval>
+                    <TranslationsConsumer textKey="SIDEBAR_PRICE_SUFFIX_INTERVAL">
+                      {(t) => t}
+                    </TranslationsConsumer>
+                  </PriceInterval>
                 </PriceSuffix>
               </PriceNumbers>
             </Price>

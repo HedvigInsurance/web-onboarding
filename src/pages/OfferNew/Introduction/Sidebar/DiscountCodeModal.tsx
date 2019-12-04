@@ -220,8 +220,14 @@ export const DiscountCodeModal: React.FC<Props> = ({
                     </TranslationsConsumer>
                   </Button>
                   <Terms>
-                    Genom att klicka på "Lägg till rabattkod" så accepterar du{' '}
-                    <TermsLink href="">villkoren</TermsLink>
+                    <TranslationsConsumer textKey="SIDEBAR_ADD_DISCOUNT_FINEPRINT">
+                      {(t) => t}
+                    </TranslationsConsumer>{' '}
+                    <TermsLink href="">
+                      <TranslationsConsumer textKey="SIDEBAR_ADD_DISCOUNT_FINEPRINT_LINK_TEXT">
+                        {(t) => t}
+                      </TranslationsConsumer>
+                    </TermsLink>
                   </Terms>
                 </Footer>
               </Form>
