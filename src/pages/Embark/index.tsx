@@ -11,6 +11,8 @@ import * as React from 'react'
 import { useHistory } from 'react-router'
 
 import { colorsV2 } from '@hedviginsurance/brand'
+import gql from 'graphql-tag'
+import { apolloClient } from '../../client/apolloClient'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
 import { EmbarkBackground } from './EmbarkBackground'
@@ -139,14 +141,32 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
 }
 
 interface EmbarkRootProps {
-  name?: string
+  name: string
   baseUrl?: string
   showLanding?: boolean
 }
 
+const ANGEL_DATA_QUERY = gql`
+  query AngelStory($name: String!) {
+    angelStory(name: $name) {
+      content
+    }
+  }
+`
+
+interface AngelData {
+  angelStory: {
+    content: string
+  }
+}
+
+interface AngelVariables {
+  name: string
+}
+
 export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
   const history = useHistory()
-  const [data, setData] = React.useState<null | any>(null)
+  const [data, setData] = React.useState<string | null>(null)
   const [initialStore, setInitialStore] = React.useState<null | {
     [key: string]: any
   }>()
@@ -154,21 +174,20 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
   const isShowingLanding = props.showLanding || false
 
   React.useEffect(() => {
-    if (!props.name) {
-      return
-    }
+    ;(async () => {
+      if (!apolloClient) {
+        throw Error('Missing apollo client')
+      }
 
-    // TODO load this via GraphQL
-    fetch(
-      `https://hedvig-embark.herokuapp.com/angel-data?name=${encodeURIComponent(
-        props.name,
-      )}`,
-    )
-      .then((res) => res.json())
-      .then((angelData) => {
-        setData(angelData)
-      })
-  }, [props.name])
+      const result = await apolloClient.client.query<AngelData, AngelVariables>(
+        { query: ANGEL_DATA_QUERY, variables: { name: props.name } },
+      )
+
+      if (result.data && result.data.angelStory) {
+        setData(JSON.parse(result.data.angelStory.content))
+      }
+    })()
+  }, [])
 
   React.useEffect(() => {
     if (!props.name) {

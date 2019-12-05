@@ -114,23 +114,27 @@ export const adtraction = (
   couponCode: string | null,
   insuranceType: InsuranceType,
 ) => {
-  if (insuranceType === InsuranceType.HOUSE) {
-    return
-  }
-  const adt = ADT
-  adt.Tag = adt.Tag || {}
-  adt.Tag.t = 3
-  adt.Tag.c = 'SEK'
-  adt.Tag.am = orderValue
-  adt.Tag.ti = orderId
-  adt.Tag.xd = md5(emailAddress)
+  try {
+    if (insuranceType === InsuranceType.HOUSE) {
+      return
+    }
+    const adt = ADT
+    adt.Tag = adt.Tag || {}
+    adt.Tag.t = 3
+    adt.Tag.c = 'SEK'
+    adt.Tag.am = orderValue
+    adt.Tag.ti = orderId
+    adt.Tag.xd = md5(emailAddress)
 
-  if (couponCode !== null) {
-    adt.Tag.cpn = couponCode
-  }
+    if (couponCode !== null) {
+      adt.Tag.cpn = couponCode
+    }
 
-  adt.Tag.tp = adtractionProductMap[insuranceType]
-  adt.Tag.doEvent()
+    adt.Tag.tp = adtractionProductMap[insuranceType]
+    adt.Tag.doEvent()
+  } catch (e) {
+    ;(window as any).Sentry.captureMessage(e)
+  }
 }
 
 export const trackStudentkortet = (memberId: string, amount: string) => {
