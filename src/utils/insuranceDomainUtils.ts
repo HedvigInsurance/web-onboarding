@@ -3,6 +3,7 @@ export enum InsuranceType {
   BRF = 'BRF',
   STUDENT_RENT = 'STUDENT_RENT',
   STUDENT_BRF = 'STUDENT_BRF',
+  HOUSE = 'HOUSE',
 }
 
 export const isApartmentOwner = (insuranceType: InsuranceType): boolean =>
@@ -41,6 +42,7 @@ export const getPrebuyPDFTextKey = (insuranceType: InsuranceType): string => {
     [InsuranceType.BRF]: 'TERMS_PDF_PREBUY_BRF_URL',
     [InsuranceType.STUDENT_RENT]: 'TERMS_PDF_PREBUY_STUDENT_RENT_URL',
     [InsuranceType.STUDENT_BRF]: 'TERMS_PDF_PREBUY_STUDENT_BRF_URL',
+    [InsuranceType.HOUSE]: 'TERMS_PDF_PREBUY_HOUSE_URL',
   }
 
   if (!map[insuranceType]) {
@@ -57,6 +59,7 @@ export const getInsurancePDFTextKey = (
     [InsuranceType.BRF]: 'TERMS_PDF_INSURANCE_BRF_URL',
     [InsuranceType.STUDENT_RENT]: 'TERMS_PDF_INSURANCE_STUDENT_RENT_URL',
     [InsuranceType.STUDENT_BRF]: 'TERMS_PDF_INSURANCE_STUDENT_BRF_URL',
+    [InsuranceType.HOUSE]: 'TERMS_PDF_INSURANCE_HOUSE_URL',
   }
 
   if (!map[insuranceType]) {
