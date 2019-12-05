@@ -64,18 +64,18 @@ export const reactPageRoutes = [
     exact: true,
   },
   {
-    path: '/new-member/:name?/:id?',
+    path: '/beta/new-member/:name?/:id?',
     render: ({ match }: RouteComponentProps<any>) => {
       const getProps = () => {
         switch (match.params.name) {
           case 'new':
             return {
-              baseUrl: '/new-member/new',
+              baseUrl: '/beta/new-member/new',
               name: 'Web Onboarding - Swedish Needer',
             }
           case 'switch':
             return {
-              baseUrl: '/new-member/switch',
+              baseUrl: '/beta/new-member/switch',
               name: 'Web Onboarding - Swedish Switcher',
             }
         }
