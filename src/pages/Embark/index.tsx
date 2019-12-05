@@ -6,17 +6,17 @@ import {
   Passage,
   useEmbark,
 } from '@hedviginsurance/embark'
+import { AnimatePresence, motion } from 'framer-motion'
 import * as React from 'react'
 import { useHistory } from 'react-router'
-import { motion, AnimatePresence } from 'framer-motion'
 
 import { colorsV2 } from '@hedviginsurance/brand'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
-import { resolveHouseInformation } from './houseInformation'
-import { resolvePersonalInformation } from './personalInformation'
 import { EmbarkBackground } from './EmbarkBackground'
+import { resolveHouseInformation } from './houseInformation'
 import { Landing } from './landing'
+import { resolvePersonalInformation } from './personalInformation'
 
 const EmbarkStyling = styled.div`
   height: 100vh;

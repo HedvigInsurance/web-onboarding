@@ -4,8 +4,8 @@ import * as bodyParser from 'koa-bodyparser'
 import 'source-map-support/register'
 import { Logger } from 'typescript-logging'
 import {
-  reactPageRoutes,
   manualReactPageRoutes,
+  reactPageRoutes,
   serverSideRedirects,
 } from './routes'
 import { GIRAFFE_ENDPOINT, GIRAFFE_WS_ENDPOINT } from './server/config'

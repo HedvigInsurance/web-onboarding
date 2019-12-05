@@ -1,5 +1,6 @@
 import { Project, TranslationsProvider } from '@hedviginsurance/textkeyfy'
 import { Provider } from 'constate'
+import { EmbarkRoot } from 'pages/Embark'
 import * as React from 'react'
 import { hot } from 'react-hot-loader'
 import { Route, Switch } from 'react-router-dom'
@@ -10,7 +11,6 @@ import {
 import { reactPageRoutes } from './routes'
 import { GlobalCss } from './utils/globalStyles'
 import { StorageState, WithStorageProps } from './utils/StorageContainer'
-import { EmbarkRoot } from 'pages/Embark'
 
 export const App: React.ComponentType<StorageState> = ({
   session,
@@ -50,8 +50,6 @@ export const App: React.ComponentType<StorageState> = ({
                   }
 
                   const props = getProps()
-
-                  console.log(props)
 
                   return (
                     <EmbarkRoot
