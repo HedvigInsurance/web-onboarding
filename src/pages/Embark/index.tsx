@@ -1,3 +1,4 @@
+import { css, Global } from '@emotion/core'
 import styled from '@emotion/styled'
 import {
   EmbarkProvider,
@@ -7,7 +8,6 @@ import {
 } from '@hedviginsurance/embark'
 import * as React from 'react'
 import { useHistory } from 'react-router'
-import { Global, css } from '@emotion/core'
 
 import { colorsV2 } from '@hedviginsurance/brand'
 import { StorageContainer } from '../../utils/StorageContainer'
