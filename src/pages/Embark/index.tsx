@@ -15,7 +15,7 @@ import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
 import { EmbarkBackground } from './EmbarkBackground'
 import { resolveHouseInformation } from './houseInformation'
-import { Landing } from './landing'
+import { Landing } from './Landing'
 import { resolvePersonalInformation } from './personalInformation'
 
 const EmbarkStyling = styled.div`
