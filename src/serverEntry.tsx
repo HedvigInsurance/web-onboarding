@@ -3,11 +3,7 @@ import * as Sentry from '@sentry/node' // tslint:disable-line ordered-imports
 import * as bodyParser from 'koa-bodyparser'
 import 'source-map-support/register'
 import { Logger } from 'typescript-logging'
-import {
-  manualReactPageRoutes,
-  reactPageRoutes,
-  serverSideRedirects,
-} from './routes'
+import { reactPageRoutes, serverSideRedirects } from './routes'
 import { GIRAFFE_ENDPOINT, GIRAFFE_WS_ENDPOINT } from './server/config'
 import { appLogger } from './server/logging'
 import {
@@ -106,10 +102,6 @@ server.router.post('/new-member/_report-csp-violation', (ctx) => {
 })
 
 reactPageRoutes.forEach((route) => {
-  server.router.get(route.path, getPage)
-})
-
-manualReactPageRoutes.forEach((route) => {
   server.router.get(route.path, getPage)
 })
 
