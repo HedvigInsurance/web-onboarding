@@ -34,41 +34,6 @@ export const reactPageRoutes = [
     exact: true,
   },
   {
-    path: '/new-member/:name?/:id?',
-    render: ({ match }: RouteComponentProps<any>) => {
-      const getProps = () => {
-        switch (match.params.name) {
-          case 'new':
-            return {
-              baseUrl: '/new-member/new',
-              name: 'Web Onboarding - Swedish Needer',
-            }
-          case 'switch':
-            return {
-              baseUrl: '/new-member/switch',
-              name: 'Web Onboarding - Swedish Switcher',
-            }
-        }
-
-        return null
-      }
-
-      const props = getProps()
-
-      if (!(props && props.name)) {
-        return null
-      }
-      return (
-        <EmbarkRoot
-          name={props && props.name}
-          baseUrl={(props && props.baseUrl) || undefined}
-          showLanding={!props}
-        />
-      )
-    },
-    exact: false,
-  },
-  {
     path: LANGUAGE_PATH_PATTERN + '/new-member/download',
     Component: Download,
     exact: true,
@@ -97,6 +62,41 @@ export const reactPageRoutes = [
     path: LANGUAGE_PATH_PATTERN + '/new-member/connect-payment/retry',
     Component: TrustlySpinnerPage,
     exact: true,
+  },
+  {
+    path: '/beta/new-member/:name?/:id?',
+    render: ({ match }: RouteComponentProps<any>) => {
+      const getProps = () => {
+        switch (match.params.name) {
+          case 'new':
+            return {
+              baseUrl: '/beta/new-member/new',
+              name: 'Web Onboarding - Swedish Needer',
+            }
+          case 'switch':
+            return {
+              baseUrl: '/beta/new-member/switch',
+              name: 'Web Onboarding - Swedish Switcher',
+            }
+        }
+
+        return null
+      }
+
+      const props = getProps()
+      if (!(props && props.name)) {
+        return null
+      }
+
+      return (
+        <EmbarkRoot
+          name={props.name}
+          baseUrl={(props && props.baseUrl) || undefined}
+          showLanding={!props}
+        />
+      )
+    },
+    exact: false,
   },
   { path: '/dont-panic/hedvig', Component: LazyDontPanic, exact: true },
   {
