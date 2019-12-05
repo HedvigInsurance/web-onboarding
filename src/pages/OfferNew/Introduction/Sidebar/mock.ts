@@ -21,4 +21,5 @@ export const insuranceTypeMapping: {
   RENT: 'Hyresrätt',
   STUDENT_BRF: 'Bostadsrätt',
   STUDENT_RENT: 'Hyresträtt',
+  HOUSE: 'Hus',
 }
