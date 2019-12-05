@@ -34,6 +34,36 @@ export const reactPageRoutes = [
     exact: true,
   },
   {
+    path: LANGUAGE_PATH_PATTERN + '/new-member/download',
+    Component: Download,
+    exact: true,
+  },
+  {
+    path: LANGUAGE_PATH_PATTERN + '/new-member/sign',
+    Component: Sign,
+    exact: true,
+  },
+  {
+    path: LANGUAGE_PATH_PATTERN + '/new-member/connect-payment',
+    Component: ConnectPayment,
+    exact: true,
+  },
+  {
+    path: LANGUAGE_PATH_PATTERN + '/new-member/connect-payment/success',
+    Component: TrustlySpinnerPage,
+    exact: true,
+  },
+  {
+    path: LANGUAGE_PATH_PATTERN + '/new-member/connect-payment/fail',
+    Component: TrustlyFailPage,
+    exact: true,
+  },
+  {
+    path: LANGUAGE_PATH_PATTERN + '/new-member/connect-payment/retry',
+    Component: TrustlySpinnerPage,
+    exact: true,
+  },
+  {
     path: '/new-member/:name?/:id?',
     render: ({ match }: RouteComponentProps<any>) => {
       const getProps = () => {
@@ -64,36 +94,6 @@ export const reactPageRoutes = [
       )
     },
     exact: false,
-  },
-  {
-    path: LANGUAGE_PATH_PATTERN + '/new-member/download',
-    Component: Download,
-    exact: true,
-  },
-  {
-    path: LANGUAGE_PATH_PATTERN + '/new-member/sign',
-    Component: Sign,
-    exact: true,
-  },
-  {
-    path: LANGUAGE_PATH_PATTERN + '/new-member/connect-payment',
-    Component: ConnectPayment,
-    exact: true,
-  },
-  {
-    path: LANGUAGE_PATH_PATTERN + '/new-member/connect-payment/success',
-    Component: TrustlySpinnerPage,
-    exact: true,
-  },
-  {
-    path: LANGUAGE_PATH_PATTERN + '/new-member/connect-payment/fail',
-    Component: TrustlyFailPage,
-    exact: true,
-  },
-  {
-    path: LANGUAGE_PATH_PATTERN + '/new-member/connect-payment/retry',
-    Component: TrustlySpinnerPage,
-    exact: true,
   },
   { path: '/dont-panic/hedvig', Component: LazyDontPanic, exact: true },
   {
