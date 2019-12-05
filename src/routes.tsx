@@ -6,12 +6,12 @@ import { TrustlyFailPage } from './pages/ConnectPayment/components/TrustlyFailPa
 import { TrustlySpinnerPage } from './pages/ConnectPayment/components/TrustlySpinnerPage'
 import { LazyDontPanic } from './pages/DontPanic'
 import { Download } from './pages/Download'
+import { EmbarkRoot } from './pages/Embark'
 import { FourOhFour } from './pages/FourOhFour'
 import { Offering } from './pages/Offer'
 import { OfferNew } from './pages/OfferNew'
 import { Referral } from './pages/Referral'
 import { Sign } from './pages/Sign'
-import { EmbarkRoot } from './pages/Embark'
 
 export const LANGUAGE_PATH_PATTERN = '/:language(en)?'
 export const serverSideRedirects = [
