@@ -10,6 +10,7 @@ import {
 import { reactPageRoutes } from './routes'
 import { GlobalCss } from './utils/globalStyles'
 import { StorageState, WithStorageProps } from './utils/StorageContainer'
+import { EmbarkRoot } from 'pages/Embark'
 
 export const App: React.ComponentType<StorageState> = ({
   session,
@@ -28,6 +29,39 @@ export const App: React.ComponentType<StorageState> = ({
             devtools={process.env.NODE_ENV !== 'production'}
           >
             <Switch>
+              <Route
+                path="/new-member/:name?/:id?"
+                render={({ match }) => {
+                  const getProps = () => {
+                    switch (match.params.name) {
+                      case 'new':
+                        return {
+                          baseUrl: '/new-member/new',
+                          name: 'Web Onboarding - Swedish Needer',
+                        }
+                      case 'switch':
+                        return {
+                          baseUrl: '/new-member/switch',
+                          name: 'Web Onboarding - Swedish Switcher',
+                        }
+                    }
+
+                    return null
+                  }
+
+                  const props = getProps()
+
+                  console.log(props)
+
+                  return (
+                    <EmbarkRoot
+                      name={(props && props.name) || undefined}
+                      baseUrl={(props && props.baseUrl) || undefined}
+                      showLanding={!props}
+                    />
+                  )
+                }}
+              />
               {reactPageRoutes.map(({ path, exact, Component }) => (
                 <Route
                   key={path}

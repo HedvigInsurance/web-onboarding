@@ -3,61 +3,11 @@ import { colorsV2 } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { Page } from 'components/utils/Page'
 import { LinkButton } from 'new-components/buttons'
-import { TopBar } from 'new-components/TopBar'
 import * as React from 'react'
 import Helmet from 'react-helmet-async'
 
-const Background = styled.div`
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-
-  background-color: ${colorsV2.lightgray};
-  background: url('/new-member-assets/embark/orange-juice-mobile.png') no-repeat
-    center center fixed;
-  background-size: cover;
-
-  @media (min-width: 768px) {
-    background: url('/new-member-assets/embark/orange-juice.png') no-repeat
-      center center fixed;
-
-    background-size: cover;
-  }
-
-  @media (min-width: 1280px) {
-    background: url('/new-member-assets/embark/orange-juice@2x.png') no-repeat
-      center center fixed;
-    background-size: cover;
-  }
-
-  @media (min-width: 1920px) {
-    background: url('/new-member-assets/embark/orange-juice@3x.png') no-repeat
-      center center fixed;
-    background-size: cover;
-  }
-
-  ::before {
-    position: absolute;
-    content: '';
-    top: 0;
-    right: 0;
-    left: 0;
-    height: 5rem;
-    background: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.2),
-      rgba(0, 0, 0, 0)
-    );
-  }
-`
-
 const Wrapper = styled.div`
   width: 100%;
-  height: 100%;
   max-width: 80rem;
   margin: 0 auto;
   padding: 0 2rem;
@@ -180,56 +130,61 @@ const ProceedButton = styled(LinkButton)`
   }
 `
 
+const LandingPageContainer = styled.div`
+  position: relative;
+  height: 100vh;
+  backdrop-filter: blur(20px);
+`
+
 export const Landing: React.FC = () => (
   <Page>
-    <Background />
-    <TopBar transparent />
+    <LandingPageContainer>
+      <TranslationsConsumer textKey="STARTPAGE_PAGE_TITLE">
+        {(t) => (
+          <Helmet>
+            <title>{t}</title>
+          </Helmet>
+        )}
+      </TranslationsConsumer>
 
-    <TranslationsConsumer textKey="STARTPAGE_PAGE_TITLE">
-      {(t) => (
-        <Helmet>
-          <title>{t}</title>
-        </Helmet>
-      )}
-    </TranslationsConsumer>
-
-    <Wrapper>
-      <Container>
-        <Card>
-          <Headline>
-            <TranslationsConsumer textKey="STARTPAGE_UNINSURED_HEADLINE">
-              {(t) => t}
-            </TranslationsConsumer>
-          </Headline>
-          <Paragraph>
-            <TranslationsConsumer textKey="STARTPAGE_UNINSURED_BODY">
-              {(t) => t}
-            </TranslationsConsumer>
-          </Paragraph>
-          <ProceedButton size="lg" to="/new">
-            <TranslationsConsumer textKey="STARTPAGE_UNINSURED_BUTTON">
-              {(t) => t}
-            </TranslationsConsumer>
-          </ProceedButton>
-        </Card>
-        <Card>
-          <Headline>
-            <TranslationsConsumer textKey="STARTPAGE_INSURED_HEADLINE">
-              {(t) => t}
-            </TranslationsConsumer>
-          </Headline>
-          <Paragraph>
-            <TranslationsConsumer textKey="STARTPAGE_INSURED_BODY">
-              {(t) => t}
-            </TranslationsConsumer>
-          </Paragraph>
-          <ProceedButton size="lg" to="/switch">
-            <TranslationsConsumer textKey="STARTPAGE_INSURED_BUTTON">
-              {(t) => t}
-            </TranslationsConsumer>
-          </ProceedButton>
-        </Card>
-      </Container>
-    </Wrapper>
+      <Wrapper>
+        <Container>
+          <Card>
+            <Headline>
+              <TranslationsConsumer textKey="STARTPAGE_UNINSURED_HEADLINE">
+                {(t) => t}
+              </TranslationsConsumer>
+            </Headline>
+            <Paragraph>
+              <TranslationsConsumer textKey="STARTPAGE_UNINSURED_BODY">
+                {(t) => t}
+              </TranslationsConsumer>
+            </Paragraph>
+            <ProceedButton size="lg" to="/new-member/new">
+              <TranslationsConsumer textKey="STARTPAGE_UNINSURED_BUTTON">
+                {(t) => t}
+              </TranslationsConsumer>
+            </ProceedButton>
+          </Card>
+          <Card>
+            <Headline>
+              <TranslationsConsumer textKey="STARTPAGE_INSURED_HEADLINE">
+                {(t) => t}
+              </TranslationsConsumer>
+            </Headline>
+            <Paragraph>
+              <TranslationsConsumer textKey="STARTPAGE_INSURED_BODY">
+                {(t) => t}
+              </TranslationsConsumer>
+            </Paragraph>
+            <ProceedButton size="lg" to="/new-member/switch">
+              <TranslationsConsumer textKey="STARTPAGE_INSURED_BUTTON">
+                {(t) => t}
+              </TranslationsConsumer>
+            </ProceedButton>
+          </Card>
+        </Container>
+      </Wrapper>
+    </LandingPageContainer>
   </Page>
 )

@@ -7,7 +7,6 @@ import { LazyDontPanic } from './pages/DontPanic'
 import { Download } from './pages/Download'
 import { EmbarkRoot } from './pages/Embark'
 import { FourOhFour } from './pages/FourOhFour'
-import { Landing } from './pages/Landing'
 import { NewMemberLanding } from './pages/NewMemberLanding'
 import { Offering } from './pages/Offer'
 import { OfferNew } from './pages/OfferNew'
@@ -18,62 +17,27 @@ export const LANGUAGE_PATH_PATTERN = '/:language(en)?'
 export const serverSideRedirects = [
   { from: '/referrals/terms', to: '/invite/terms' },
 ]
-export const reactPageRoutes = [
+export const manualReactPageRoutes = [
   {
-    path: LANGUAGE_PATH_PATTERN + '/new-member',
-    Component: NewMemberLanding,
-    exact: true,
+    path: '/new-member',
   },
+  {
+    path: '/new-member/new',
+  },
+  {
+    path: '/new-member/new/*',
+  },
+  {
+    path: '/new-member/switch',
+  },
+  {
+    path: '/new-member/switch/*',
+  },
+]
+export const reactPageRoutes = [
   {
     path: LANGUAGE_PATH_PATTERN + '/new-member/hedvig',
     Component: Chat,
-    exact: true,
-  },
-  {
-    path: LANGUAGE_PATH_PATTERN + '/new-member/landing',
-    Component: Landing,
-    exact: true,
-  },
-  {
-    path: '/new',
-    Component: () => {
-      return (
-        <EmbarkRoot baseUrl="/new" name="Web Onboarding - Swedish Needer" />
-      )
-    },
-    exact: true,
-  },
-  {
-    path: '/new/*',
-    Component: () => {
-      return (
-        <EmbarkRoot baseUrl="/new" name="Web Onboarding - Swedish Needer" />
-      )
-    },
-    exact: true,
-  },
-  {
-    path: '/switch/*',
-    Component: () => {
-      return (
-        <EmbarkRoot
-          baseUrl="/switch"
-          name="Web Onboarding - Swedish Switcher"
-        />
-      )
-    },
-    exact: true,
-  },
-  {
-    path: '/switch',
-    Component: () => {
-      return (
-        <EmbarkRoot
-          baseUrl="/switch"
-          name="Web Onboarding - Swedish Switcher"
-        />
-      )
-    },
     exact: true,
   },
   {
