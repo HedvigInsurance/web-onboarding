@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
+import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { Cross } from 'components/icons/Cross'
 import { Form, Formik } from 'formik'
 import { motion } from 'framer-motion'
@@ -118,7 +119,7 @@ const TermsLink = styled.a`
 `
 
 const discountSchema = Yup.object({
-  code: Yup.string().required('Skriv in en rabattkod'),
+  code: Yup.string().required('SIDEBAR_ADD_DISCOUNT_ERROR'),
 })
 
 export const DiscountCodeModal: React.FC<Props> = ({
@@ -152,8 +153,16 @@ export const DiscountCodeModal: React.FC<Props> = ({
         },
       }}
     >
-      <Title>Lägg till rabattkod</Title>
-      <Paragraph>Har du en rabattkod? Lyckost! Skriv in den nedan.</Paragraph>
+      <Title>
+        <TranslationsConsumer textKey="SIDEBAR_ADD_DISCOUNT_HEADLINE">
+          {(t) => t}
+        </TranslationsConsumer>
+      </Title>
+      <Paragraph>
+        <TranslationsConsumer textKey="SIDEBAR_ADD_DISCOUNT_BODY">
+          {(t) => t}
+        </TranslationsConsumer>
+      </Paragraph>
       <CloseButton onClick={close}>
         <Cross />
       </CloseButton>
@@ -173,40 +182,52 @@ export const DiscountCodeModal: React.FC<Props> = ({
                     return
                   }
                   if (result.errors && result.errors.length > 0) {
-                    actions.setFieldError(
-                      'code',
-                      'Den där rabattkoden finns inte... Kolla att du skrivit rätt',
-                    )
+                    actions.setFieldError('code', 'SIDEBAR_ADD_DISCOUNT_ERROR')
                   }
                 })
                 .catch(() => {
-                  actions.setFieldError(
-                    'code',
-                    'Den där rabattkoden finns inte... Kolla att du skrivit rätt',
-                  )
+                  actions.setFieldError('code', 'SIDEBAR_ADD_DISCOUNT_ERROR')
                 })
             }
           >
             {({ touched, errors, values }) => (
               <Form>
                 <DiscountInputWrapper>
-                  <TextInput
-                    label="Rabattkod"
-                    placeholder="XXXXX"
-                    name="code"
-                    autoComplete="off"
-                    touched={touched.code ? touched.code.toString() : undefined}
-                    errors={errors.code}
-                  />
+                  <TranslationsConsumer textKey="SIDEBAR_ADD_DISCOUNT_CELL_LABEL">
+                    {(label) => (
+                      <TranslationsConsumer textKey={errors.code || ''}>
+                        {(errorText) => (
+                          <TextInput
+                            label={label}
+                            placeholder="XXXXX"
+                            name="code"
+                            autoComplete="off"
+                            touched={
+                              touched.code ? touched.code.toString() : undefined
+                            }
+                            errors={errorText}
+                          />
+                        )}
+                      </TranslationsConsumer>
+                    )}
+                  </TranslationsConsumer>
                 </DiscountInputWrapper>
+
                 <Footer>
-                  {touched.code}
                   <Button type="submit" disabled={!values.code}>
-                    Lägg till rabattkod
+                    <TranslationsConsumer textKey="SIDEBAR_ADD_DISCOUNT_BUTTON">
+                      {(t) => t}
+                    </TranslationsConsumer>
                   </Button>
                   <Terms>
-                    Genom att klicka på "Lägg till rabattkod" så accepterar du{' '}
-                    <TermsLink href="">villkoren</TermsLink>
+                    <TranslationsConsumer textKey="SIDEBAR_ADD_DISCOUNT_FINEPRINT">
+                      {(t) => t}
+                    </TranslationsConsumer>{' '}
+                    <TermsLink href="">
+                      <TranslationsConsumer textKey="SIDEBAR_ADD_DISCOUNT_FINEPRINT_LINK_TEXT">
+                        {(t) => t}
+                      </TranslationsConsumer>
+                    </TermsLink>
                   </Terms>
                 </Footer>
               </Form>

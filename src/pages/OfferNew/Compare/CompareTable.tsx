@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
+import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import hexToRgba from 'hex-to-rgba'
 import { Tooltip } from 'new-components/Tooltip'
 import * as React from 'react'
@@ -310,7 +311,12 @@ export const CompareTable = (props: Props) => {
     <Container>
       <InsurancePropertiesSection>
         <ColumnHead>
-          <SubHeadingBlack>Skydd</SubHeadingBlack>
+          <SubHeadingBlack>
+            <TranslationsConsumer textKey="COMPARE_TABLE_TITLE">
+              {(t) => t}
+            </TranslationsConsumer>
+          </SubHeadingBlack>
+
           <MobileTooltipWrapper>
             <Tooltip size="lg" body="Info" />
           </MobileTooltipWrapper>
@@ -321,10 +327,17 @@ export const CompareTable = (props: Props) => {
             .filter(([key]) => key !== 'name')
             .map(([key, property]) => (
               <InsuranceProperty key={key}>
-                {property.name}
-                <TooltipWrapper>
-                  <Tooltip body="Info" />
-                </TooltipWrapper>
+                <TranslationsConsumer textKey={property.name}>
+                  {(name) => name}
+                </TranslationsConsumer>
+
+                {property.tooltip && (
+                  <TooltipWrapper>
+                    <TranslationsConsumer textKey={property.tooltip.body}>
+                      {(tooltip) => <Tooltip body={tooltip} />}
+                    </TranslationsConsumer>
+                  </TooltipWrapper>
+                )}
               </InsuranceProperty>
             ))}
         </InsurancePropertyNames>

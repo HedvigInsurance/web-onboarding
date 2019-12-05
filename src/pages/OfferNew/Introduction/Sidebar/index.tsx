@@ -1,9 +1,15 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
+import {
+  TranslationsConsumer,
+  TranslationsPlaceholderConsumer,
+} from '@hedviginsurance/textkeyfy'
 import { OfferData } from 'containers/OfferContainer'
 import { isMonthlyCostDeduction } from 'containers/types'
+import gql from 'graphql-tag'
 import { Button, TextButton } from 'new-components/buttons'
 import * as React from 'react'
+import { Mutation } from 'react-apollo'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { DiscountCodeModal } from './DiscountCodeModal'
 import { insuranceTypeMapping, otherInsuranceCompanies } from './mock'
@@ -15,6 +21,14 @@ interface Props {
   offer: OfferData
   refetch: () => void
 }
+
+const REMOVE_CODE_MUTATION = gql`
+  mutation RemoveDiscountCode {
+    removeDiscountCode {
+      __typename
+    }
+  }
+`
 
 const Wrapper = styled.div`
   width: 26rem;
@@ -134,11 +148,11 @@ const PriceNumbers = styled.div`
   margin-bottom: 0.5rem;
 `
 
-const PriceGross = styled.div<{ monthlyConstDeduction: boolean }>`
+const PriceGross = styled.div<{ monthlyCostDeduction: boolean }>`
   font-size: 3.5rem;
   line-height: 3.5rem;
   color: ${(props) =>
-    props.monthlyConstDeduction ? colorsV2.grass500 : colorsV2.black};
+    props.monthlyCostDeduction ? colorsV2.grass500 : colorsV2.black};
   font-family: ${fonts.GEOMANIST};
   font-weight: 600;
 `
@@ -211,48 +225,84 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
       discountCodeModalIsOpen,
       setDiscountCodeModalIsOpen,
     ] = React.useState(false)
-    const monthlyConstDeduction =
+    const monthlyCostDeduction =
       offer.redeemedCampaigns.length > 0 &&
       isMonthlyCostDeduction(offer.redeemedCampaigns[0].incentive)
 
     return (
       <Wrapper ref={ref}>
         <Container sticky={sticky}>
-          {offer.redeemedCampaigns.length > 0 && (
-            <DiscountInfo>Rabatt</DiscountInfo>
+          {monthlyCostDeduction && (
+            <DiscountInfo>
+              <TranslationsConsumer textKey="SIDEBAR_ACTIVE_REFERRAL">
+                {(t) => t}
+              </TranslationsConsumer>
+            </DiscountInfo>
           )}
           <Header>
             <Summary>
-              <PreTitle>Hemförsäkring</PreTitle>
+              <PreTitle>
+                <TranslationsConsumer textKey="SIDEBAR_LABEL">
+                  {(t) => t}
+                </TranslationsConsumer>
+              </PreTitle>
+
               <Title>{insuranceTypeMapping[offer.insurance.type]}</Title>
+
               <SummaryContent>
                 <SummaryText>
                   <b>{`${offer.member.firstName} ${offer.member.lastName}`}</b>
-                  {offer.insurance.personsInHousehold - 1 > 0 &&
-                    ` + ${offer.insurance.personsInHousehold - 1} pers`}
+
+                  {offer.insurance.personsInHousehold - 1 > 0 && (
+                    <TranslationsConsumer textKey="SIDEBAR_INSURED_PERSONS_SUFFIX">
+                      {(t) =>
+                        ` + ${offer.insurance.personsInHousehold - 1} ${t}`
+                      }
+                    </TranslationsConsumer>
+                  )}
                 </SummaryText>
                 <SummaryText>{`${offer.insurance.address}, ${formatPostalNumber(
                   offer.insurance.postalNumber,
                 )}`}</SummaryText>
-                <TextButton>Visa detaljer</TextButton>
+
+                <TextButton>
+                  <TranslationsConsumer textKey="SIDEBAR_SHOW_DETAILS_BUTTON">
+                    {(t) => t}
+                  </TranslationsConsumer>
+                </TextButton>
               </SummaryContent>
             </Summary>
 
             <Price>
-              {monthlyConstDeduction && (
+              {monthlyCostDeduction && (
                 <PriceNet>
-                  {Number(offer.insurance.cost.monthlyNet.amount)}kr/mån
+                  <TranslationsPlaceholderConsumer
+                    textKey="SIDEBAR_OLD_PRICE"
+                    replacements={{
+                      PRICE: Number(offer.insurance.cost.monthlyNet.amount),
+                    }}
+                  >
+                    {(t) => t}
+                  </TranslationsPlaceholderConsumer>
                 </PriceNet>
               )}
 
               <PriceNumbers>
-                <PriceGross monthlyConstDeduction={monthlyConstDeduction}>
+                <PriceGross monthlyCostDeduction={monthlyCostDeduction}>
                   {Number(offer.insurance.cost.monthlyNet.amount)}
                 </PriceGross>
 
                 <PriceSuffix>
-                  <PriceUnit>kr</PriceUnit>
-                  <PriceInterval>/mån</PriceInterval>
+                  <PriceUnit>
+                    <TranslationsConsumer textKey="SIDEBAR_PRICE_SUFFIX_UNIT">
+                      {(t) => t}
+                    </TranslationsConsumer>
+                  </PriceUnit>
+                  <PriceInterval>
+                    <TranslationsConsumer textKey="SIDEBAR_PRICE_SUFFIX_INTERVAL">
+                      {(t) => t}
+                    </TranslationsConsumer>
+                  </PriceInterval>
                 </PriceSuffix>
               </PriceNumbers>
             </Price>
@@ -268,15 +318,43 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
           </Body>
 
           <Footer>
-            <Button size="lg">Skaffa Hedvig nu</Button>
+            <Button size="lg">
+              <TranslationsConsumer textKey="SIDEBAR_GETHEDVIG_BUTTON">
+                {(t) => t}
+              </TranslationsConsumer>
+            </Button>
+
             <FooterExtraActions>
-              <TextButton
-                onClick={() => {
-                  setDiscountCodeModalIsOpen(true)
-                }}
-              >
-                Lägg till rabattkod
-              </TextButton>
+              {offer.redeemedCampaigns.length === 0 ? (
+                <TextButton
+                  onClick={() => {
+                    setDiscountCodeModalIsOpen(true)
+                  }}
+                >
+                  <TranslationsConsumer textKey="SIDEBAR_ADD_DISCOUNT_BUTTON">
+                    {(t) => t}
+                  </TranslationsConsumer>
+                </TextButton>
+              ) : (
+                <Mutation<{ __typename: string }>
+                  mutation={REMOVE_CODE_MUTATION}
+                >
+                  {(mutate) => (
+                    <TextButton
+                      color={colorsV2.coral700}
+                      onClick={() => {
+                        mutate().then(() => {
+                          refetch()
+                        })
+                      }}
+                    >
+                      <TranslationsConsumer textKey="SIDEBAR_REMOVE_DISCOUNT_BUTTON">
+                        {(t) => t}
+                      </TranslationsConsumer>
+                    </TextButton>
+                  )}
+                </Mutation>
+              )}
             </FooterExtraActions>
           </Footer>
 
@@ -290,3 +368,6 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
     )
   },
 )
+/*
+
+*/

@@ -10,11 +10,14 @@ interface Props {
 
 const Wrapper = styled.div<Props>`
   width: 100%;
+  top: 0;
   height: 5rem;
   background: ${(props) =>
     props.transparent ? `transparent` : colorsV2.white};
-
-  position: relative;
+  position: fixed;
+  z-index: 1000;
+  ${(props) =>
+    !props.transparent && `box-shadow: 0 2px 14px rgba(0, 0, 0, 0.08);`}
 `
 
 const Container = styled.div`

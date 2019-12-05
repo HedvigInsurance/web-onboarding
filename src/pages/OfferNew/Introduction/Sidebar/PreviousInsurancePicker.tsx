@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
+import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import { DownArrow } from '../../../../components/icons/DownArrow'
 import { InsuranceCompany } from './mock'
@@ -124,7 +125,11 @@ export const PreviousInsurancePicker: React.FC<Props> = ({ insurances }) => {
         dropdownIsVisible={dropdownIsVisible}
         onClick={() => setDropdownIsVisible(!dropdownIsVisible)}
       >
-        <Label>Ditt gamla bolag</Label>
+        <Label>
+          <TranslationsConsumer textKey="SIDEBAR_OLDINSURANCE_CELL_LABEL">
+            {(t) => t}
+          </TranslationsConsumer>
+        </Label>
         <Value dropdownIsVisible={dropdownIsVisible}>
           <ValueText>Välj bolag</ValueText>
           <DownArrow />

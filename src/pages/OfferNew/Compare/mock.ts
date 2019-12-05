@@ -1,37 +1,4 @@
-import { CompanyProperties, InsuranceProperties } from './types'
-
-export const insuranceProperties: InsuranceProperties = {
-  name: { name: 'Namn', description: 'Namm (beskrivning)' },
-  propertyProtection: {
-    name: 'Egendomsskydd',
-    description: 'Egendomsskydd (beskrivning)',
-  },
-  travelProtection: {
-    name: 'Reseskydd',
-    description: 'Reseskydd (beskrivning)',
-  },
-  assaultProtection: {
-    name: 'Överfallsskydd',
-    description: 'Överfallsskydd (beskrivning)',
-  },
-  liabilityProtection: {
-    name: 'Ansvarskydd',
-    description: 'Ansvarskydd (beskrivning)',
-  },
-  legalProtection: {
-    name: 'Rättsskydd',
-    description: 'Rättsskydd (beskrivning)',
-  },
-  drulle: { name: 'Drulle', description: 'Drulle (beskrivning)' },
-  deductible: {
-    name: 'Grundsjälvrisk',
-    description: 'Grundsjälvrisk (beskrivning)',
-  },
-  trustpilotScore: {
-    name: 'Trustpilot Score',
-    description: 'Trustpilot Score (beskrivning)',
-  },
-}
+import { CompanyProperties } from './types'
 
 export const hedvigCompany: CompanyProperties = {
   name: 'Hedvig',
@@ -41,7 +8,6 @@ export const hedvigCompany: CompanyProperties = {
   liabilityProtection: true,
   legalProtection: true,
   drulle: true,
-  deductible: 1500,
   trustpilotScore: 4.5,
 }
 
@@ -54,7 +20,6 @@ export const otherCompanies: CompanyProperties[] = [
     liabilityProtection: true,
     legalProtection: true,
     drulle: 'Tillval',
-    deductible: 1500,
     trustpilotScore: 1.7,
   },
   {
@@ -65,7 +30,6 @@ export const otherCompanies: CompanyProperties[] = [
     liabilityProtection: true,
     legalProtection: true,
     drulle: 'Tillval',
-    deductible: 1500,
     trustpilotScore: 1.7,
   },
   {
@@ -76,7 +40,6 @@ export const otherCompanies: CompanyProperties[] = [
     liabilityProtection: true,
     legalProtection: true,
     drulle: 'Tillval',
-    deductible: 1500,
     trustpilotScore: 1.7,
   },
   {
@@ -87,7 +50,6 @@ export const otherCompanies: CompanyProperties[] = [
     liabilityProtection: true,
     legalProtection: true,
     drulle: 'Tillval',
-    deductible: 1500,
     trustpilotScore: 1.7,
   },
   {
@@ -98,7 +60,6 @@ export const otherCompanies: CompanyProperties[] = [
     liabilityProtection: true,
     legalProtection: true,
     drulle: 'Tillval',
-    deductible: 1500,
     trustpilotScore: 1.7,
   },
 ]

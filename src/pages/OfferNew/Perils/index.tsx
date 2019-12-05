@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
+import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { OfferData } from 'containers/OfferContainer'
 import * as React from 'react'
 import { useMediaQuery } from 'react-responsive'
@@ -22,7 +23,7 @@ interface Props {
   offer: OfferData
 }
 
-const Wrapper = styled('div')`
+const Wrapper = styled.div`
   padding: 8.5rem 0 5rem 0;
   background-color: ${colorsV2.offwhite};
   display: flex;
@@ -38,13 +39,20 @@ export const Perils: React.FC<Props> = ({ offer }) => {
       <Container>
         <Column>
           <HeadingWrapper>
-            <PreHeading>Skyddet</PreHeading>
+            <PreHeading>
+              <TranslationsConsumer textKey="COVERAGE_LABEL">
+                {(t) => t}
+              </TranslationsConsumer>
+            </PreHeading>
             <HeadingBlack>
-              Förstklassigt skydd med service i världsklass
+              <TranslationsConsumer textKey="COVARAGE_HEADLINE">
+                {(t) => t}
+              </TranslationsConsumer>
             </HeadingBlack>
             <Body>
-              Omfattande skydd för dig och din familj, ditt hus och dina prylar.
-              Drulle ingår alltid.
+              <TranslationsConsumer textKey="COVERAGE_BODY">
+                {(t) => t}
+              </TranslationsConsumer>
             </Body>
           </HeadingWrapper>
 

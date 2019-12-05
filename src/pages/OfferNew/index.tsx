@@ -1,7 +1,7 @@
-import { TopBar } from 'components/TopBar'
 import { Page } from 'components/utils/Page'
 import { OfferContainer } from 'containers/OfferContainer'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
+import { TopBar } from 'new-components/TopBar'
 import * as React from 'react'
 import { Compare } from './Compare/index'
 import { Introduction } from './Introduction/index'

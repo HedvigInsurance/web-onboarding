@@ -60,11 +60,15 @@ LinkButton.defaultProps = defaultButtonProps
 export const PureLinkButton = Button.withComponent('a')
 PureLinkButton.defaultProps = defaultButtonProps
 
-export const TextButton = styled.button`
+interface TextButtonProps {
+  color?: string
+}
+
+export const TextButton = styled.button<TextButtonProps>`
   background: none;
   padding: 0;
   margin: 0;
-  color: ${colorsV2.violet500};
+  color: ${(props) => props.color || colorsV2.violet500};
   font-size: 0.875rem;
   line-height: 1.5rem;
   border: none;
@@ -73,10 +77,17 @@ export const TextButton = styled.button`
   transition: color 0.1s ease;
 
   :hover {
-    color: ${colorsV2.violet700};
+    color: ${(props) =>
+      color(props.color || colorsV2.violet500)
+        .darken(0.1)
+        .toString()};
   }
 
   :focus {
     outline: none;
   }
 `
+
+TextButton.defaultProps = {
+  color: colorsV2.violet500,
+}

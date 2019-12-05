@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
+import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import { Bell } from './icons/Bell'
 import { Heart } from './icons/Heart'
@@ -58,26 +59,32 @@ const Usp: React.FC<UspProps> = ({ image, title, paragraph }) => (
 
 export const Usps: React.FunctionComponent = () => (
   <UspsContainer>
-    <Usp
-      image={<Stopwatch />}
-      title="Spara tid med Hedvig"
-      paragraph={
-        'Slipp vänta på hjälp eller pengar. Med Hedvig går allt blixtsnabbt.'
-      }
-    />
-    <Usp
-      image={<Bell />}
-      title="Service i världsklass"
-      paragraph={
-        'Få personlig service 07-21 året runt. Vi hjälper dig med allt.'
-      }
-    />
-    <Usp
-      image={<Heart />}
-      title="Överskottet till välgörenhet"
-      paragraph={
-        'Tillsammans gör vi det enkelt att hjälpa andra och göra världen bättre'
-      }
-    />
+    <TranslationsConsumer textKey="HERO_USP1_HEADLINE">
+      {(headline) => (
+        <TranslationsConsumer textKey="HERO_USP1_BODY">
+          {(body) => (
+            <Usp image={<Stopwatch />} title={headline} paragraph={body} />
+          )}
+        </TranslationsConsumer>
+      )}
+    </TranslationsConsumer>
+
+    <TranslationsConsumer textKey="HERO_USP2_HEADLINE">
+      {(headline) => (
+        <TranslationsConsumer textKey="HERO_USP2_BODY">
+          {(body) => <Usp image={<Bell />} title={headline} paragraph={body} />}
+        </TranslationsConsumer>
+      )}
+    </TranslationsConsumer>
+
+    <TranslationsConsumer textKey="HERO_USP3_HEADLINE">
+      {(headline) => (
+        <TranslationsConsumer textKey="HERO_USP3_BODY">
+          {(body) => (
+            <Usp image={<Heart />} title={headline} paragraph={body} />
+          )}
+        </TranslationsConsumer>
+      )}
+    </TranslationsConsumer>
   </UspsContainer>
 )
