@@ -63,7 +63,7 @@ export const helmet = koaHelmet({
           return `'nonce-${(response as any).cspNonce}'`
         },
       ],
-      imgSrc: ["'self", 'data:'],
+      imgSrc: ["'self'", 'data:'],
       connectSrc: [
         ...defaultSrc,
         'https://api.segment.io',
