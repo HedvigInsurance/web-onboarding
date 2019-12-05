@@ -6,13 +6,16 @@ import {
   Passage,
   useEmbark,
 } from '@hedviginsurance/embark'
+import { AnimatePresence, motion } from 'framer-motion'
 import * as React from 'react'
 import { useHistory } from 'react-router'
 
 import { colorsV2 } from '@hedviginsurance/brand'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
+import { EmbarkBackground } from './EmbarkBackground'
 import { resolveHouseInformation } from './houseInformation'
+import { Landing } from './Landing'
 import { resolvePersonalInformation } from './personalInformation'
 
 const EmbarkStyling = styled.div`
@@ -30,28 +33,6 @@ const EmbarkStyling = styled.div`
   li {
     list-style-type: none;
   }
-`
-
-const EmbarkBackgroundContainer = styled.picture<{
-  backgroundHasLoaded: boolean
-}>`
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
-  transition: opacity 1s;
-  transition-delay: 150ms;
-  ${(props) => `opacity: ${props.backgroundHasLoaded ? 1 : 0}`};
-`
-
-const EmbarkBackground = styled.img`
-  postion: fixed;
-  min-width: 100%;
-  min-height: 100%;
-  height: auto;
-  width: auto;
-  object-fit: cover;
 `
 
 const PassageContainer = styled.div`
@@ -100,45 +81,27 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
   )
 
   React.useEffect(() => {
-    history.push(
-      `${props.baseUrl}${currentPassage.url || `/${currentPassage.id}`}`,
-      {
+    const method =
+      history.location.pathname === props.baseUrl ? 'replace' : 'push'
+    const newPathName = `${props.baseUrl}${currentPassage.url ||
+      `/${currentPassage.id}`}`
+
+    if (history.location.pathname !== newPathName) {
+      history[method](newPathName, {
         embarkPassageId: currentPassage.id,
         embarkPassageHistory: state.history,
         embarkPassageName: props.name,
-      },
-    )
-  }, [currentPassage])
-
-  const [backgroundHasLoaded, setBackgroundHasLoaded] = React.useState(false)
+      })
+    }
+  }, [currentPassage.id])
 
   return (
-    <EmbarkStyling>
-      <Global
-        styles={css`
-          body {
-            overflow: hidden;
-          }
-        `}
-      />
-      <EmbarkBackgroundContainer backgroundHasLoaded={backgroundHasLoaded}>
-        <EmbarkBackground
-          onLoad={() => setBackgroundHasLoaded(true)}
-          sizes="(max-width: 1400px) 100vw, 1400px"
-          srcSet="
-/new-member-assets/embark/orange-juice-copy_3x_xybd1d_c_scale,w_200.jpg 200w,
-/new-member-assets/embark/orange-juice-copy_3x_xybd1d_c_scale,w_481.jpg 481w,
-/new-member-assets/embark/orange-juice-copy_3x_xybd1d_c_scale,w_677.jpg 677w,
-/new-member-assets/embark/orange-juice-copy_3x_xybd1d_c_scale,w_858.jpg 858w,
-/new-member-assets/embark/orange-juice-copy_3x_xybd1d_c_scale,w_1013.jpg 1013w,
-/new-member-assets/embark/orange-juice-copy_3x_xybd1d_c_scale,w_1161.jpg 1161w,
-/new-member-assets/embark/orange-juice-copy_3x_xybd1d_c_scale,w_1296.jpg 1296w,
-/new-member-assets/embark/orange-juice-copy_3x_xybd1d_c_scale,w_1393.jpg 1393w,
-/new-member-assets/embark/orange-juice-copy_3x_xybd1d_c_scale,w_1400.jpg 1400w"
-          src="/new-member-assets/embark/orange-juice-copy_3x_xybd1d_c_scale,w_1400.jpg"
-        />
-      </EmbarkBackgroundContainer>
-      <PassageContainer>
+    <PassageContainer>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ ease: 'easeOut', duration: 1 }}
+      >
         <StorageContainer>
           {({ session }) => (
             <Header
@@ -153,31 +116,32 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
             />
           )}
         </StorageContainer>
-        <Passage
-          canGoBack={state.history.length > 1}
-          historyGoBackListener={(goBack) =>
-            history.listen((_: any, action: string) => {
-              if (action === 'POP' && state.history.length > 1) {
-                goBack()
-              }
-            })
-          }
-          passage={currentPassage}
-          goBack={() => {
-            dispatch({
-              type: 'GO_BACK',
-            })
-          }}
-          changePassage={goTo}
-        />
-      </PassageContainer>
-    </EmbarkStyling>
+      </motion.div>
+      <Passage
+        canGoBack={state.history.length > 1}
+        historyGoBackListener={(goBack) =>
+          history.listen((_: any, action: string) => {
+            if (action === 'POP' && state.history.length > 1) {
+              goBack()
+            }
+          })
+        }
+        passage={currentPassage}
+        goBack={() => {
+          dispatch({
+            type: 'GO_BACK',
+          })
+        }}
+        changePassage={goTo}
+      />
+    </PassageContainer>
   )
 }
 
 interface EmbarkRootProps {
-  name: string
-  baseUrl: string
+  name?: string
+  baseUrl?: string
+  showLanding?: boolean
 }
 
 export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
@@ -187,7 +151,13 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
     [key: string]: any
   }>()
 
+  const isShowingLanding = props.showLanding || false
+
   React.useEffect(() => {
+    if (!props.name) {
+      return
+    }
+
     // TODO load this via GraphQL
     fetch(
       `https://hedvig-embark.herokuapp.com/angel-data?name=${encodeURIComponent(
@@ -198,9 +168,13 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
       .then((angelData) => {
         setData(angelData)
       })
-  }, [])
+  }, [props.name])
 
   React.useEffect(() => {
+    if (!props.name) {
+      return
+    }
+
     const prevStore = window.localStorage.getItem(
       `embark-store-${encodeURIComponent(props.name)}`,
     )
@@ -216,38 +190,81 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
     } catch (err) {
       setInitialStore({})
     }
-  }, [])
-
-  if (!data || !initialStore) {
-    return null
-  }
+  }, [props.name])
 
   return (
-    <StorageContainer>
-      {(storageState) => (
-        <EmbarkProvider
-          externalRedirects={{
-            Offer: () => {
-              history.push('/new-member/offer')
-            },
-          }}
-          data={data}
-          resolvers={{
-            personalInformationApi: resolvePersonalInformation,
-            houseInformation: resolveHouseInformation,
-            createQuote: createQuote(storageState),
-          }}
-          initialStore={initialStore}
-          onStoreChange={(store) => {
-            window.localStorage.setItem(
-              `embark-store-${encodeURIComponent(props.name)}`,
-              JSON.stringify(store),
-            )
-          }}
-        >
-          <Embark baseUrl={props.baseUrl} data={data} name={props.name} />
-        </EmbarkProvider>
-      )}
-    </StorageContainer>
+    <EmbarkStyling>
+      <Global
+        styles={css`
+          body {
+            overflow: hidden;
+          }
+        `}
+      />
+      <EmbarkBackground />
+      <AnimatePresence>
+        {!isShowingLanding && (
+          <motion.div
+            key="embark"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{
+              ease: 'easeOut',
+              duration: 0.5,
+              delay: 0.25,
+            }}
+          >
+            {data && initialStore && (
+              <StorageContainer>
+                {(storageState) => (
+                  <EmbarkProvider
+                    externalRedirects={{
+                      Offer: () => {
+                        history.push('/new-member/offer')
+                      },
+                    }}
+                    data={data}
+                    resolvers={{
+                      personalInformationApi: resolvePersonalInformation,
+                      houseInformation: resolveHouseInformation,
+                      createQuote: createQuote(storageState),
+                    }}
+                    initialStore={initialStore}
+                    onStoreChange={(store) => {
+                      window.localStorage.setItem(
+                        `embark-store-${encodeURIComponent(props.name!)}`,
+                        JSON.stringify(store),
+                      )
+                    }}
+                  >
+                    <Embark
+                      baseUrl={props.baseUrl!}
+                      data={data}
+                      name={props.name!}
+                    />
+                  </EmbarkProvider>
+                )}
+              </StorageContainer>
+            )}
+          </motion.div>
+        )}
+        {isShowingLanding && (
+          <motion.div
+            key="landing"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{
+              ease: 'easeOut',
+              duration: 0.5,
+              delay: 0.25,
+            }}
+          >
+            <Landing />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </EmbarkStyling>
   )
 }

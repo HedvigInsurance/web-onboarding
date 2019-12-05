@@ -1,5 +1,6 @@
 import { Project, TranslationsProvider } from '@hedviginsurance/textkeyfy'
 import { Provider } from 'constate'
+import { EmbarkRoot } from 'pages/Embark'
 import * as React from 'react'
 import { hot } from 'react-hot-loader'
 import { Route, Switch } from 'react-router-dom'
@@ -28,6 +29,37 @@ export const App: React.ComponentType<StorageState> = ({
             devtools={process.env.NODE_ENV !== 'production'}
           >
             <Switch>
+              <Route
+                path="/new-member/:name?/:id?"
+                render={({ match }) => {
+                  const getProps = () => {
+                    switch (match.params.name) {
+                      case 'new':
+                        return {
+                          baseUrl: '/new-member/new',
+                          name: 'Web Onboarding - Swedish Needer',
+                        }
+                      case 'switch':
+                        return {
+                          baseUrl: '/new-member/switch',
+                          name: 'Web Onboarding - Swedish Switcher',
+                        }
+                    }
+
+                    return null
+                  }
+
+                  const props = getProps()
+
+                  return (
+                    <EmbarkRoot
+                      name={(props && props.name) || undefined}
+                      baseUrl={(props && props.baseUrl) || undefined}
+                      showLanding={!props}
+                    />
+                  )
+                }}
+              />
               {reactPageRoutes.map(({ path, exact, Component }) => (
                 <Route
                   key={path}
