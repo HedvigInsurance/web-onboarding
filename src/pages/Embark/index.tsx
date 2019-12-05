@@ -103,11 +103,20 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
 
   return (
     <EmbarkStyling>
-      <Header
-        passage={currentPassage}
-        storyData={state.data}
-        partnerName={null}
-      />
+      <StorageContainer>
+        {({ session }) => (
+          <Header
+            partnerName={
+              (session &&
+                session.getSession() &&
+                session.getSession()!.partner) ||
+              null
+            }
+            passage={currentPassage}
+            storyData={state.data}
+          />
+        )}
+      </StorageContainer>
       <Passage
         canGoBack={state.history.length > 1}
         historyGoBackListener={(goBack) =>
