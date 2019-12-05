@@ -60,7 +60,11 @@ LinkButton.defaultProps = defaultButtonProps
 export const PureLinkButton = Button.withComponent('a')
 PureLinkButton.defaultProps = defaultButtonProps
 
-export const TextButton = styled.button<{ color?: string }>`
+interface TextButtonProps {
+  color?: string
+}
+
+export const TextButton = styled.button<TextButtonProps>`
   background: none;
   padding: 0;
   margin: 0;
