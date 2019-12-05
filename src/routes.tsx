@@ -84,13 +84,10 @@ export const reactPageRoutes = [
       }
 
       const props = getProps()
-      if (!(props && props.name)) {
-        return null
-      }
 
       return (
         <EmbarkRoot
-          name={props.name}
+          name={(props && props.name) || undefined}
           baseUrl={(props && props.baseUrl) || undefined}
           showLanding={!props}
         />

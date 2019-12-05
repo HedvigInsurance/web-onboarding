@@ -141,7 +141,7 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
 }
 
 interface EmbarkRootProps {
-  name: string
+  name?: string
   baseUrl?: string
   showLanding?: boolean
 }
@@ -175,6 +175,9 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
 
   React.useEffect(() => {
     ;(async () => {
+      if (!props.name) {
+        return
+      }
       if (!apolloClient) {
         throw Error('Missing apollo client')
       }
@@ -187,7 +190,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
         setData(JSON.parse(result.data.angelStory.content))
       }
     })()
-  }, [])
+  }, [props.name])
 
   React.useEffect(() => {
     if (!props.name) {
