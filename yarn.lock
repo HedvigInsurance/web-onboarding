@@ -902,10 +902,10 @@
     webpack "4.19.1"
     webpack-dev-server "3.1.14"
 
-"@hedviginsurance/embark@^1.0.25":
-  version "1.0.25"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-1.0.25.tgz#866b0833caa2a9add16ae53d97f0649e5c7a4f3b"
-  integrity sha512-OQF/wtVfoT13KKWEiKdK3yL0dvvURq7kgUFlaLarurukOzUJQnSSo7b1uVIWHHxHtwJiPd3yBK+ku0vofUtjEQ==
+"@hedviginsurance/embark@^1.0.26":
+  version "1.0.26"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-1.0.26.tgz#3deb6c14d6db642db5225031dbbb61e38edb5b80"
+  integrity sha512-ylRot7QYIASUk+b+yK5loj8xTRF3sxGd1jSkRSUTNwApslLsIwFyCLhee0A1SjTn8puIKcgbeVVsf1PAtL2s1A==
   dependencies:
     "@emotion/core" "^10.0.21"
     "@emotion/styled" "^10.0.17"
@@ -920,7 +920,7 @@
     koa "^2.10.0"
     koa-mount "^4.0.0"
     koa-static "^5.0.0"
-    prettier "^1.18.2"
+    prettier "^1.19.1"
     pretty-quick "^2.0.0"
     react "^16.11.0"
     react-dom "^16.10.2"
@@ -8555,7 +8555,7 @@ preserve@^0.2.0:
   resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
   integrity sha1-gV7R9uvGWSb4ZbMQwHE7yzMVzks=
 
-prettier@^1.14.3, prettier@^1.18.2:
+prettier@^1.14.3, prettier@^1.19.1:
   version "1.19.1"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.19.1.tgz#f7d7f5ff8a9cd872a7be4ca142095956a60797cb"
   integrity sha512-s7PoyDv/II1ObgQunCbB9PdLmUcBZcnWOcxDh7O0N/UwDEsHyqkW+Qh28jW+mVuCdx7gLB0BotYI1Y6uI9iyew==
