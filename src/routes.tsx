@@ -11,6 +11,7 @@ import { FourOhFour } from './pages/FourOhFour'
 import { Offering } from './pages/Offer'
 import { OfferNew } from './pages/OfferNew'
 import { Referral } from './pages/Referral'
+import { NewMemberLanding } from './pages/NewMemberLanding'
 import { Sign } from './pages/Sign'
 
 export const LANGUAGE_PATH_PATTERN = '/:language(en)?'
@@ -18,6 +19,11 @@ export const serverSideRedirects = [
   { from: '/referrals/terms', to: '/invite/terms' },
 ]
 export const reactPageRoutes = [
+  {
+    path: LANGUAGE_PATH_PATTERN + '/new-member',
+    Component: NewMemberLanding,
+    exact: true,
+  },
   {
     path: LANGUAGE_PATH_PATTERN + '/new-member/hedvig',
     Component: Chat,
