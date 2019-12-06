@@ -257,6 +257,12 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                     }}
                     initialStore={initialStore}
                     onStoreChange={(store) => {
+                      try {
+                        Intercom('update', store)
+                      } catch (e) {
+                        // noop
+                      }
+
                       window.localStorage.setItem(
                         `embark-store-${encodeURIComponent(props.name!)}`,
                         JSON.stringify(store),
