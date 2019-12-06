@@ -902,10 +902,10 @@
     webpack "4.19.1"
     webpack-dev-server "3.1.14"
 
-"@hedviginsurance/embark@^1.0.29":
-  version "1.0.29"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-1.0.29.tgz#3fe3747348e33ab7ccfe2b448e35e7e0ea195bec"
-  integrity sha512-qbNlGA7oMZpQuvU/j+EhIJPKQ/5eG0HcgClefuTlPmSkKUCMbJUsACVOfBPr2Pw0rCwp2v2ADksb3En3tRUxcg==
+"@hedviginsurance/embark@^1.0.30":
+  version "1.0.30"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-1.0.30.tgz#4f4b2aa44489db0a83d4eae0fa4956a6d1b32782"
+  integrity sha512-QTSSXZvOnpjSF+suWmhuSLAeE/0tFZJnXlv+bvl6pIN6GKA43nvSjMRTDQt1i0XhZqS7Bepi3X0jvUKasIwN8A==
   dependencies:
     "@emotion/core" "^10.0.21"
     "@emotion/styled" "^10.0.17"
@@ -917,6 +917,7 @@
     hex-to-rgba "^2.0.1"
     history "^4.10.1"
     husky "^3.0.9"
+    ismobilejs "^1.0.3"
     jsdom "^15.2.0"
     koa "^2.10.0"
     koa-mount "^4.0.0"
@@ -927,6 +928,7 @@
     react-emotion "^10.0.0"
     react-input-mask "^2.0.4"
     requestidlecallback "^0.3.0"
+    smoothscroll "^0.4.0"
     ts-node "^8.4.1"
     typescript "^3.7.2"
     uglify-js "^3.6.3"
@@ -6194,6 +6196,11 @@ isexe@^2.0.0:
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=
 
+ismobilejs@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/ismobilejs/-/ismobilejs-1.0.3.tgz#69ec3faccd17dfeeadd471e70955d1e192a46eb6"
+  integrity sha512-6rTcdWK7PHIWPYlCPdTbU9eE9yzdnIQSpiH+8Ln5OqugpEszQK5KHlsjZrDae26fEhki9rPvQmsjI1q4CLuKIA==
+
 isobject@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/isobject/-/isobject-2.1.0.tgz#f065561096a3f1da2ef46272f815c840d87e0c89"
@@ -9832,6 +9839,11 @@ slice-ansi@0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/slice-ansi/-/slice-ansi-0.0.4.tgz#edbf8903f66f7ce2f8eafd6ceed65e264c831b35"
   integrity sha1-7b+JA/ZvfOL46v1s7tZeJkyDGzU=
+
+smoothscroll@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/smoothscroll/-/smoothscroll-0.4.0.tgz#40e507b46461408ba1b787d0081e1e883c4124a5"
+  integrity sha512-sggQ3U2Un38b3+q/j1P4Y4fCboCtoUIaBYoge+Lb6Xg1H8RTIif/hugVr+ErMtIDpvBbhQfTjtiTeYAfbw1ZGQ==
 
 snapdragon-node@^2.0.1:
   version "2.1.1"

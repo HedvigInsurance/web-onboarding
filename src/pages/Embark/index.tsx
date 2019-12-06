@@ -21,7 +21,7 @@ import { Landing } from './Landing'
 import { resolvePersonalInformation } from './personalInformation'
 
 const EmbarkStyling = styled.div`
-  height: 100vh;
+  height: 100%;
   background-color: ${colorsV2.gray};
 
   * {
@@ -41,8 +41,8 @@ const PassageContainer = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
 `
 
 interface EmbarkProps {
