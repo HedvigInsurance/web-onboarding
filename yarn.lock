@@ -902,14 +902,15 @@
     webpack "4.19.1"
     webpack-dev-server "3.1.14"
 
-"@hedviginsurance/embark@1.0.28":
-  version "1.0.28"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-1.0.28.tgz#5ca5d2d731b9a3ddfec3562b5f85546a4c5d677a"
-  integrity sha512-iWW/wojhnhOqYOmfOFz5vi7yzfljJQHHU9HVq9ZRvhAByRg9J4zGQLZCcJKFTSrDv8+q+FKsrS1kTcPgijoymA==
+"@hedviginsurance/embark@^1.0.29":
+  version "1.0.29"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-1.0.29.tgz#3fe3747348e33ab7ccfe2b448e35e7e0ea195bec"
+  integrity sha512-qbNlGA7oMZpQuvU/j+EhIJPKQ/5eG0HcgClefuTlPmSkKUCMbJUsACVOfBPr2Pw0rCwp2v2ADksb3En3tRUxcg==
   dependencies:
     "@emotion/core" "^10.0.21"
     "@emotion/styled" "^10.0.17"
     "@hedviginsurance/brand" "^2.0.0"
+    animated-scroll-to "^2.0.5"
     date-fns "^2.8.1"
     emotion "^10.0.17"
     framer-motion "^1.6.14"
@@ -920,7 +921,6 @@
     koa "^2.10.0"
     koa-mount "^4.0.0"
     koa-static "^5.0.0"
-    prettier "^1.19.1"
     pretty-quick "^2.0.0"
     react "^16.11.0"
     react-dom "^16.10.2"
@@ -1873,6 +1873,11 @@ animated-scroll-to@^1.2.2:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/animated-scroll-to/-/animated-scroll-to-1.3.1.tgz#8d585dc3479fcd08ec5b8f73cd23b4ffd2443942"
   integrity sha512-LihfT808uwY1TmVw9CMemPKC2vMznSrR7O38hxjlZR/OvdI0Upc987AXIBexY9wT/cSDg7MFlME7hrsnI//DTQ==
+
+animated-scroll-to@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/animated-scroll-to/-/animated-scroll-to-2.0.5.tgz#475fcf742ee38de0a969920182a6aaba319771b4"
+  integrity sha512-xDZY/geNZSJj99xftr8uAAJpp6k6yI8mdBNp8HM1LTwmeebaw4EjkHL8y0PtsuZg9/UG9tUNn2JqaZxEfzJxLw==
 
 ansi-align@^2.0.0:
   version "2.0.0"
@@ -8555,7 +8560,7 @@ preserve@^0.2.0:
   resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
   integrity sha1-gV7R9uvGWSb4ZbMQwHE7yzMVzks=
 
-prettier@^1.14.3, prettier@^1.19.1:
+prettier@^1.14.3:
   version "1.19.1"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.19.1.tgz#f7d7f5ff8a9cd872a7be4ca142095956a60797cb"
   integrity sha512-s7PoyDv/II1ObgQunCbB9PdLmUcBZcnWOcxDh7O0N/UwDEsHyqkW+Qh28jW+mVuCdx7gLB0BotYI1Y6uI9iyew==
