@@ -245,7 +245,9 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                       Offer: () => {
                         history.push('/new-member/offer')
                       },
-                      MailingList: () => {},
+                      MailingList: () => {
+                        // todo
+                      },
                     }}
                     data={data}
                     resolvers={{
