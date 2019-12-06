@@ -29,6 +29,7 @@ const EmbarkStyling = styled.div`
     padding: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    box-sizing: content-box;
   }
 
   ul,
