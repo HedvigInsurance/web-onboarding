@@ -5,7 +5,6 @@ import {
   TranslationsConsumer,
   TranslationsPlaceholderConsumer,
 } from '@hedviginsurance/textkeyfy'
-import { OfferData } from 'containers/OfferContainer'
 import * as React from 'react'
 import { animateScroll } from 'react-scroll'
 import { DownArrow } from '../../../components/icons/DownArrow'
@@ -18,6 +17,7 @@ import {
   PreHeading,
   Section,
 } from '../components'
+import { OfferData } from '../types'
 import { Sidebar } from './Sidebar'
 import { Usps } from './Usps'
 

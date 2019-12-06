@@ -6,6 +6,7 @@ import * as React from 'react'
 import { Compare } from './Compare/index'
 import { Introduction } from './Introduction/index'
 import { Perils } from './Perils/index'
+import { mockedOffer } from './mock'
 
 export const OfferNew: React.SFC = () => (
   <Page>

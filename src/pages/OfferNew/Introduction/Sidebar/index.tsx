@@ -4,13 +4,13 @@ import {
   TranslationsConsumer,
   TranslationsPlaceholderConsumer,
 } from '@hedviginsurance/textkeyfy'
-import { OfferData } from 'containers/OfferContainer'
 import { isMonthlyCostDeduction } from 'containers/types'
 import gql from 'graphql-tag'
 import { Button, TextButton } from 'new-components/buttons'
 import * as React from 'react'
 import { Mutation } from 'react-apollo'
 import { formatPostalNumber } from 'utils/postalNumbers'
+import { OfferData } from '../../types'
 import { DiscountCodeModal } from './DiscountCodeModal'
 import { insuranceTypeMapping, otherInsuranceCompanies } from './mock'
 import { PreviousInsurancePicker } from './PreviousInsurancePicker'
@@ -261,8 +261,12 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                     </TranslationsConsumer>
                   )}
                 </SummaryText>
-                <SummaryText>{`${offer.insurance.address}, ${formatPostalNumber(
-                  offer.insurance.postalNumber,
+                <SummaryText>{`${
+                  offer.quote.details.street
+                }, ${formatPostalNumber(
+                  (offer.quote.__typename === 'CompleteQuote' &&
+                    offer.quote.details.zipCode!) ||
+                    '',
                 )}`}</SummaryText>
 
                 <TextButton>
