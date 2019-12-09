@@ -88,6 +88,10 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
     const newPathName = `${props.baseUrl}${currentPassage.url ||
       `/${currentPassage.id}`}`
 
+    if (currentPassage.api || currentPassage.externalRedirect) {
+      return
+    }
+
     if (history.location.pathname !== newPathName) {
       history[method](newPathName, {
         embarkPassageId: currentPassage.id,
