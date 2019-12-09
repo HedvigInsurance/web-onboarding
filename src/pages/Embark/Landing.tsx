@@ -39,7 +39,7 @@ const Container = styled.div`
   }
 
   @media (max-width: 850px) {
-    flex-flow: column;
+    flex-direction: column;
   }
 `
 
@@ -50,7 +50,7 @@ const Card = styled.div`
   margin: 0 2.5rem;
   padding: 3.5rem 2.5rem 2.5rem 2.5rem;
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   align-items: flex-start;
   justify-content: flex-end;
   transition: all 0.35s;

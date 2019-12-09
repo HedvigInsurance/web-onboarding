@@ -15,7 +15,7 @@ const Container = styled('button')`
   cursor: pointer;
   transition: all 0.15s ease-in-out;
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
 

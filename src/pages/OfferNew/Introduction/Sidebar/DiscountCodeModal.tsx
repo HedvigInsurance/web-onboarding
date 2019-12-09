@@ -35,7 +35,7 @@ const Wrapper = styled.div<{ isOpen: boolean }>`
 const Container = styled(motion.div)`
   width: 100%;
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   border-radius: 0.5rem;
   padding: 1.5rem;
   background: ${colorsV2.white};
@@ -95,7 +95,7 @@ const DiscountInputWrapper = styled.div`
 const Footer = styled.div`
   width: 100%;
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-top: 1rem;

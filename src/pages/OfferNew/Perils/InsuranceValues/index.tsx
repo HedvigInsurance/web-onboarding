@@ -28,7 +28,7 @@ const Wrapper = styled.div`
 
 const Header = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   align-items: center;
 `
 
@@ -43,12 +43,12 @@ const TooltipWrapper = styled.div`
 
 const Links = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   margin-top: 4rem;
   align-items: center;
 
   @media (max-width: 600px) {
-    flex-flow: column;
+    flex-direction: column;
   }
 `
 
