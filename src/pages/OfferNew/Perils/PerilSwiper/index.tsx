@@ -5,22 +5,14 @@ import SwipeableView from 'react-swipeable-views'
 import { Peril } from '../types'
 import { PerilItem } from './PerilItem'
 
-const PERILS_PER_SLIDE = 4
-const PERILS_PER_ROW = PERILS_PER_SLIDE / 2
-
 interface Props {
   perils: Peril[]
   setCurrentPeril: (index: number) => void
   setIsShowingPeril: (isShowingPeril: boolean) => void
 }
 
-const PerilItemCollectionSwiper = styled(SwipeableView)`
-  padding: 1.5rem 0;
-`
-
 const PerilSlide = styled.div`
   width: 100%;
-  height: 100;
   display: flex;
   flex-flow: row wrap;
 `
@@ -35,7 +27,7 @@ const SwiperDots = styled.div`
   width: 100%;
   height: 10px;
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
 `
@@ -59,12 +51,23 @@ const Dot = styled.div<DotProps>`
   }
 `
 
-const chunkArray = (array: any[], size: number) =>
+const chunkArray = <T extends {}>(
+  array: T[],
+  size: number,
+): Array<typeof array> =>
   array.reduce(
     (chunks, _, idx, arr) =>
       idx % size === 0 ? [...chunks, arr.slice(idx, idx + size)] : chunks,
-    [],
-  ) as Peril[][]
+    [] as Array<typeof array>,
+  )
+
+const PAGE_GUTTER = 32 * 2
+const PERIL_SIZE = 138
+const PERIL_MARGIN = 16
+const PERIL_ROWS = 2
+const getNumberOfPerilsPerSlide = (windowWidth: number) =>
+  Math.ceil((windowWidth - PAGE_GUTTER) / (PERIL_SIZE + PERIL_MARGIN * 2)) *
+  PERIL_ROWS
 
 export const PerilSwiper: React.FC<Props> = ({
   perils,
@@ -75,7 +78,7 @@ export const PerilSwiper: React.FC<Props> = ({
 
   return (
     <>
-      <PerilItemCollectionSwiper
+      <SwipeableView
         resistance
         enableMouseEvents
         slideStyle={{
@@ -84,37 +87,50 @@ export const PerilSwiper: React.FC<Props> = ({
           paddingTop: 20,
           paddingBottom: 20,
         }}
-        onChangeIndex={(index) => setCurrentPageIndex(index)}
+        style={{
+          width: 'calc(100% + 4rem)',
+          marginLeft: '-2rem',
+        }}
+        containerStyle={{
+          width: 'calc(100% - 4rem)',
+          marginLeft: '2rem',
+        }}
+        onChangeIndex={setCurrentPageIndex}
       >
-        {chunkArray(perils, PERILS_PER_SLIDE).map(
+        {chunkArray(perils, getNumberOfPerilsPerSlide(window.innerWidth)).map(
           (perilsSlideChunk, slideIndex) => (
             <PerilSlide key={slideIndex}>
-              {chunkArray(perilsSlideChunk, PERILS_PER_ROW).map(
-                (perilsSlideRowChunk, slideRowIndex) => (
-                  <PerilSlideRow key={slideRowIndex}>
-                    {perilsSlideRowChunk.map((peril, perilIndex) => (
-                      <PerilItem
-                        key={peril.title}
-                        title={peril.title}
-                        icon={peril.icon}
-                        onClick={() => {
-                          setCurrentPeril(
-                            slideIndex * 4 + slideRowIndex * 2 + perilIndex,
-                          )
-                          setIsShowingPeril(true)
-                        }}
-                      />
-                    ))}
-                  </PerilSlideRow>
-                ),
-              )}
+              {chunkArray(
+                perilsSlideChunk,
+                getNumberOfPerilsPerSlide(window.innerWidth) / 2,
+              ).map((perilsSlideRowChunk, slideRowIndex) => (
+                <PerilSlideRow key={slideRowIndex}>
+                  {perilsSlideRowChunk.map((peril, perilIndex) => (
+                    <PerilItem
+                      key={peril.title}
+                      title={peril.title}
+                      icon={peril.icon}
+                      onClick={() => {
+                        setCurrentPeril(
+                          slideIndex * 4 + slideRowIndex * 2 + perilIndex,
+                        )
+                        setIsShowingPeril(true)
+                      }}
+                    />
+                  ))}
+                </PerilSlideRow>
+              ))}
             </PerilSlide>
           ),
         )}
-      </PerilItemCollectionSwiper>
+      </SwipeableView>
       <SwiperDots>
         {Array.from(
-          { length: Math.ceil(perils.length / PERILS_PER_SLIDE) },
+          {
+            length: Math.ceil(
+              perils.length / getNumberOfPerilsPerSlide(window.innerWidth),
+            ),
+          },
           (_, i) => i,
         ).map((i) => (
           <Dot key={i} active={i === currentPageIndex} />
