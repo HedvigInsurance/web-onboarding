@@ -8963,7 +8963,7 @@ react-is@^16.10.2, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-i
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.12.0.tgz#2cc0fe0fba742d97fd527c42a13bec4eeb06241c"
   integrity sha512-rPCkf/mWBtKc97aLL9/txD8DZdemK0vkA3JMLShjlJB3Pj3s+lpf1KaBzMfQrAmhMQB0n1cU/SUGgKKBCe837Q==
 
-react-lifecycle-components@^1.1.1, react-lifecycle-components@^1.1.2:
+react-lifecycle-components@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/react-lifecycle-components/-/react-lifecycle-components-1.1.2.tgz#96b258d6f2a2ad8629118ddfed846f93432982a9"
   integrity sha512-elxCneyzYvx6BEPvyhXFChm6Q+pbTV5Gq6cyl+Sw8wD53DmpfXbwi6pTrMzD0PseGZjh+c+H8IARTAbYPOhSfg==

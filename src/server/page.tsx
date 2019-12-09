@@ -41,12 +41,7 @@ const segmentSnippet = createMinifiedSegmentSnippet({
   load: true,
 })
 
-const template = (
-  body: string,
-  helmetContext: FilledContext['helmet'],
-  initialState: any,
-  cspNonce: string,
-) => `
+const template = (helmetContext: FilledContext['helmet'], cspNonce: string) => `
 <!doctype html>
 <html lang="en">
 <head>
@@ -64,12 +59,11 @@ const template = (
   <script defer src="https://adtr.io/jsTag?ap=1412531808"></script>
 </head>
 <body>
-  <div id="react-root">${body}</div>
+  <div id="react-root"></div>
 
   <script nonce="${cspNonce}">
     window.GIRAFFE_WS_ENDPOINT= ${JSON.stringify(GIRAFFE_WS_ENDPOINT)}
     window.GIRAFFE_ENDPOINT= ${JSON.stringify(GIRAFFE_ENDPOINT)}
-    window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
     window.FIREBASE_LINK_DOMAIN=${JSON.stringify(FIREBASE_LINK_DOMAIN)}
     window.ANDROID_PACKAGE_NAME=${JSON.stringify(ANDROID_PACKAGE_NAME)}
     window.ANDROID_MINIMUM_VERSION=${JSON.stringify(ANDROID_MINIMUM_VERSION)}
@@ -142,7 +136,6 @@ export const getPage: Koa.Middleware = async (ctx) => {
     </StaticRouter>
   )
   await getDataFromTree(serverApp)
-  const reactBody = renderStylesToString(renderToString(serverApp))
 
   if (routerContext.statusCode) {
     ctx.status = routerContext.statusCode
@@ -153,9 +146,7 @@ export const getPage: Koa.Middleware = async (ctx) => {
   }
 
   ctx.body = template(
-    reactBody,
     (helmetContext as FilledContext).helmet,
-    apolloClient.extract(),
     (ctx.res as any).cspNonce,
   )
 

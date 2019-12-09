@@ -32,9 +32,7 @@ export const apolloClient = (() => {
     },
   )
   const client = new ApolloClient({
-    cache: new InMemoryCache({ fragmentMatcher }).restore(
-      (window as any).__INITIAL_STATE__,
-    ),
+    cache: new InMemoryCache({ fragmentMatcher }),
     link: new WebSocketLink(subscriptionClient),
   })
 
