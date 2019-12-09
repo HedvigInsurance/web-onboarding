@@ -1,7 +1,7 @@
 {
   "engines": {
     "node": "10.14.1",
-    "yarn": "1.16.0"
+    "yarn": "1.19.2"
   },
   "scripts": {
     "start": "NODE_ENV=production node build/index.js",
@@ -67,7 +67,7 @@
     "@emotion/styled": "^10.0.23",
     "@hedviginsurance/brand": "^2.0.0",
     "@hedviginsurance/cli": "^2.3.2",
-    "@hedviginsurance/embark": "^1.0.33",
+    "@hedviginsurance/embark": "^1.0.34",
     "@hedviginsurance/textkeyfy": "^1.2.2",
     "@hedviginsurance/web-survival-kit": "^1.8.2",
     "@segment/snippet": "^4.4.0",
