@@ -17,9 +17,9 @@ const Container = styled('button')`
   background-color: ${colorsV2.white};
   border: 1px solid ${colorsV2.lightgray};
   cursor: pointer;
-  transition: all 0.15s ease-in-out;
+  transition: all 150ms ease-in-out;
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
 
@@ -34,6 +34,7 @@ const Container = styled('button')`
 
   :hover {
     box-shadow: 0 0 16px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2%);
   }
 
   :active {

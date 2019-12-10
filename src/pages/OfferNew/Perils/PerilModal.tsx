@@ -23,7 +23,7 @@ const Header = styled('div')`
   height: 8.75rem;
   background-color: ${colorsV2.white};
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   align-items: center;
   justify-content: flex-end;
   position: relative;
@@ -35,7 +35,7 @@ const Picker = styled('div')`
   width: 100%;
   height: 5.5rem;
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   margin: 0 -0.75rem;
   overflow: hidden;
   position: relative;
@@ -50,7 +50,7 @@ const PickerItem = styled('button')`
   background: none;
   border: none;
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
@@ -199,11 +199,11 @@ const Description = styled.div` 
 const CoverageWrapper = styled.div`
   margin-top: 2.5rem;
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   width: 100%;
 
   @media (max-width: 600px) {
-    flex-flow: column;
+    flex-direction: column;
   }
 `
 

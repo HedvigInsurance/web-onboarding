@@ -10,7 +10,7 @@ interface Props {
 
 const Wrapper = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   margin-top: 0.5rem;
 
   @media (max-width: 600px) {
@@ -21,7 +21,7 @@ const Wrapper = styled.div`
 
 const Container = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   margin-right: 4rem;
   align-items: flex-end;
 
@@ -42,8 +42,9 @@ const Container = styled.div`
 
 const TextContainer = styled.div`
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   max-width: 7rem;
+  width: 100%;
 `
 
 const Label = styled.div`

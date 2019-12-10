@@ -9,9 +9,10 @@ import { Stopwatch } from './icons/Stopwatch'
 const UspsContainer = styled.div`
   display: flex;
   margin: 0 -0.75rem;
+  width: 100%;
 
   @media (max-width: 600px) {
-    flex-flow: column;
+    flex-direction: column;
     align-items: center;
   }
 `
@@ -22,6 +23,7 @@ const UspContainer = styled.div`
   align-items: center;
   max-width: 13.75rem;
   margin: 0 0.75rem;
+  width: 100%;
 `
 
 const UspTitle = styled.h3`
@@ -32,6 +34,7 @@ const UspTitle = styled.h3`
   color: ${colorsV2.white};
   margin-top: 1rem;
   margin-bottom: 0;
+  width: 100%;
 `
 
 const UspParagraph = styled.p`
@@ -41,6 +44,8 @@ const UspParagraph = styled.p`
   color: ${colorsV2.gray};
   text-align: center;
   margin-top: 8px;
+  flex: 1 1 auto;
+  width: 100%;
 `
 
 interface UspProps {

@@ -49,7 +49,7 @@ const Label = styled.div`
 
 const Value = styled.div<{ dropdownIsVisible: boolean }>`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   align-items: center;
 
   svg {

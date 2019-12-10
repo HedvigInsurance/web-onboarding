@@ -3,7 +3,9 @@ import { colorsV2 } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import hexToRgba from 'hex-to-rgba'
 import { Tooltip } from 'new-components/Tooltip'
+import { otherCompanies } from 'pages/OfferNew/Compare/mock'
 import * as React from 'react'
+import { useMediaQuery } from 'react-responsive'
 import { Checkmark } from '../../../components/icons/Checkmark'
 import { DownArrow } from '../../../components/icons/DownArrow'
 import { HedvigSymbol } from '../../../components/icons/HedvigSymbol'
@@ -21,7 +23,7 @@ const Container = styled('div')`
   width: 100%;
   border-radius: 4px;
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   background-color: ${colorsV2.white};
   border: 1px solid ${colorsV2.lightgray};
   margin: 0 -1rem;
@@ -79,8 +81,8 @@ const InsurancePropertyNames = styled('div')``
 
 const InsuranceProperty = styled(ColumnRow)`
   font-size: 1rem;
-  letter-spacing -0.23px;
-  flex-flow: row;
+  letter-spacing: -0.23px;
+  flex-direction: row;
   align-items: center;
 `
 
@@ -193,6 +195,7 @@ const OtherCompanyHead = styled('button')<OtherCompanyHeadProps>`
   padding: 0 0.375rem;
   position: relative;
   word-break: break-word;
+  overflow: visible;
 
   :focus {
     outline: none;
@@ -280,6 +283,31 @@ const DropdownRow = styled('button')`
   }
 `
 
+const MobileDropdown = styled('select')`
+  appearance: none;
+  height: 1.5rem;
+  margin-bottom: 3.25rem;
+  border: 0;
+  background: transparent;
+  font-size: 0.875rem;
+  font-family: inherit;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 85px;
+  padding: 0;
+
+  :active {
+    font-size: 1rem;
+    transform: scale(0.875);
+    transform-origin: left center;
+    -moz-transform: none; // firefox closes dropdown if you transform it on activation
+  }
+  :focus {
+    outline: none;
+    box-shadow: none;
+  }
+`
+
 const getProperty = (key: string, value: any): any => {
   if (key === 'deductible') {
     return <ColumnRowPrimaryContent>{value} kr</ColumnRowPrimaryContent>
@@ -306,6 +334,7 @@ export const CompareTable = (props: Props) => {
     setCurrentCompany,
   ] = React.useState<CompanyProperties | null>(props.currentCompany || null)
   const [dropdownIsVisible, setDropdownIsVisible] = React.useState(false)
+  const isMobile = useMediaQuery({ maxWidth: 600 })
 
   return (
     <Container>
@@ -358,31 +387,61 @@ export const CompareTable = (props: Props) => {
       </PrimaryCompanySection>
 
       <OtherCompaniesSection>
-        <OtherCompanyHead
-          currentCompany={currentCompany}
-          dropdownIsVisible={dropdownIsVisible}
-          onClick={() => {
-            setDropdownIsVisible(!dropdownIsVisible)
-          }}
-        >
-          {currentCompany !== null && !dropdownIsVisible
-            ? currentCompany.name
-            : 'Välj bolag'}
-          <DownArrow />
-        </OtherCompanyHead>
-        <Dropdown visible={dropdownIsVisible}>
-          {props.otherCompanies.map((company) => (
-            <DropdownRow
-              key={company.name}
+        {!isMobile && (
+          <>
+            <OtherCompanyHead
+              currentCompany={currentCompany}
+              dropdownIsVisible={dropdownIsVisible}
               onClick={() => {
-                setCurrentCompany(company)
-                setDropdownIsVisible(false)
+                setDropdownIsVisible(!dropdownIsVisible)
               }}
             >
-              {company.name}
-            </DropdownRow>
-          ))}
-        </Dropdown>
+              {currentCompany !== null && !dropdownIsVisible ? (
+                currentCompany.name
+              ) : (
+                <TranslationsConsumer textKey="COMPARE_TABLE_DROPDOWN_LABEL">
+                  {(t) => t}
+                </TranslationsConsumer>
+              )}
+              <DownArrow />
+            </OtherCompanyHead>
+            <Dropdown visible={dropdownIsVisible}>
+              {props.otherCompanies.map((company) => (
+                <DropdownRow
+                  key={company.name}
+                  onClick={() => {
+                    setCurrentCompany(company)
+                    setDropdownIsVisible(false)
+                  }}
+                >
+                  {company.name}
+                </DropdownRow>
+              ))}
+            </Dropdown>
+          </>
+        )}
+        {isMobile && (
+          <TranslationsConsumer textKey="COMPARE_TABLE_DROPDOWN_LABEL">
+            {(selectCompanyText) => (
+              <MobileDropdown
+                onChange={(e) =>
+                  setCurrentCompany(
+                    otherCompanies.find(
+                      ({ name }) => e.target.value === name,
+                    ) || null,
+                  )
+                }
+                value={currentCompany?.name}
+                defaultValue={selectCompanyText}
+              >
+                <option disabled>{selectCompanyText}</option>
+                {props.otherCompanies.map((company) => (
+                  <option key={company.name}>{company.name}</option>
+                ))}
+              </MobileDropdown>
+            )}
+          </TranslationsConsumer>
+        )}
         {currentCompany &&
           Object.entries(currentCompany)
             .filter(([key]) => key !== 'name')

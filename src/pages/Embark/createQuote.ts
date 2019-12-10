@@ -74,5 +74,8 @@ export const createQuote = (storage: any) => async (
     variables,
   })
 
+  // Nuke the cache in case we have something tasty in there
+  await apolloClient.client.cache.reset()
+
   return result.data!
 }

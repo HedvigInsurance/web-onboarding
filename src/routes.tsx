@@ -29,11 +29,6 @@ export const reactPageRoutes = [
     exact: true,
   },
   {
-    path: LANGUAGE_PATH_PATTERN + '/new-member/offer-new',
-    Component: OfferNew,
-    exact: true,
-  },
-  {
     path: LANGUAGE_PATH_PATTERN + '/new-member/download',
     Component: Download,
     exact: true,
@@ -64,18 +59,23 @@ export const reactPageRoutes = [
     exact: true,
   },
   {
-    path: '/beta/new-member/:name?/:id?',
+    path: LANGUAGE_PATH_PATTERN + '/beta/new-member/offer',
+    Component: OfferNew,
+    exact: true,
+  },
+  {
+    path: '/new-member/:name?/:id?',
     render: ({ match }: RouteComponentProps<any>) => {
       const getProps = () => {
         switch (match.params.name) {
           case 'new':
             return {
-              baseUrl: '/beta/new-member/new',
+              baseUrl: '/new-member/new',
               name: 'Web Onboarding - Swedish Needer',
             }
           case 'switch':
             return {
-              baseUrl: '/beta/new-member/switch',
+              baseUrl: '/new-member/switch',
               name: 'Web Onboarding - Swedish Switcher',
             }
         }

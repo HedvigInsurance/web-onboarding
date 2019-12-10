@@ -3,6 +3,7 @@ import { colorsV2 } from '@hedviginsurance/brand'
 import { Questionmark } from 'components/icons/Questionmark'
 import { motion } from 'framer-motion'
 import * as React from 'react'
+import { useMediaQuery } from 'react-responsive'
 import { Size } from './types'
 
 interface Props {
@@ -29,10 +30,12 @@ const TooltipIcon = styled(motion.div)<{ size: Size }>`
     transition: all 250ms;
   }
 
-  :hover {
-    background-color: ${colorsV2.gray};
-    .fillColor {
-      fill: ${colorsV2.white};
+  @media (hover: hover) {
+    :hover {
+      background-color: ${colorsV2.gray};
+      .fillColor {
+        fill: ${colorsV2.white};
+      }
     }
   }
 
@@ -86,7 +89,22 @@ const TooltipText = styled.div`
 `
 
 export const Tooltip: React.FC<Props> = ({ body, size = 'sm' }) => {
+  const tooltipIconRef = React.useRef<HTMLDivElement>()
   const [visible, setVisible] = React.useState(false)
+  React.useEffect(() => {
+    const listener = (e: TouchEvent) => {
+      if (
+        tooltipIconRef.current &&
+        !(e.target as Node)?.contains(tooltipIconRef.current)
+      ) {
+        setVisible(false)
+      }
+    }
+
+    window.addEventListener('touchstart', listener)
+    return () => window.removeEventListener('touchstart', listener)
+  })
+  const isHover = useMediaQuery({ query: '(hover: hover)' })
 
   return (
     <Wrapper>
@@ -95,10 +113,16 @@ export const Tooltip: React.FC<Props> = ({ body, size = 'sm' }) => {
       </TooltipContainer>
       <TooltipIcon
         size={size}
-        onHoverStart={() => {
-          setVisible(true)
-        }}
-        onHoverEnd={() => setVisible(false)}
+        onHoverStart={
+          !isHover
+            ? undefined
+            : () => {
+                setVisible(true)
+              }
+        }
+        onHoverEnd={!isHover ? undefined : () => setVisible(false)}
+        onTouchStart={() => setVisible(true)}
+        ref={tooltipIconRef as React.MutableRefObject<HTMLDivElement>}
       >
         <Questionmark />
       </TooltipIcon>
