@@ -396,10 +396,13 @@ export const CompareTable = (props: Props) => {
                 setDropdownIsVisible(!dropdownIsVisible)
               }}
             >
-              {currentCompany !== null && !dropdownIsVisible
-                ? currentCompany.name
-                : 'Välj bolag'}
-              {/* TODO: text key? ☝️ */}
+              {currentCompany !== null && !dropdownIsVisible ? (
+                currentCompany.name
+              ) : (
+                <TranslationsConsumer textKey="COMPARE_TABLE_DROPDOWN_LABEL">
+                  {(t) => t}
+                </TranslationsConsumer>
+              )}
               <DownArrow />
             </OtherCompanyHead>
             <Dropdown visible={dropdownIsVisible}>
@@ -418,21 +421,26 @@ export const CompareTable = (props: Props) => {
           </>
         )}
         {isMobile && (
-          <MobileDropdown
-            onChange={(e) =>
-              setCurrentCompany(
-                otherCompanies.find(({ name }) => e.target.value === name) ||
-                  null,
-              )
-            }
-            value={currentCompany?.name}
-            defaultValue="Välj bolag" // TODO text key?
-          >
-            <option disabled>Välj bolag</option>
-            {props.otherCompanies.map((company) => (
-              <option key={company.name}>{company.name}</option>
-            ))}
-          </MobileDropdown>
+          <TranslationsConsumer textKey="COMPARE_TABLE_DROPDOWN_LABEL">
+            {(selectCompanyText) => (
+              <MobileDropdown
+                onChange={(e) =>
+                  setCurrentCompany(
+                    otherCompanies.find(
+                      ({ name }) => e.target.value === name,
+                    ) || null,
+                  )
+                }
+                value={currentCompany?.name}
+                defaultValue={selectCompanyText}
+              >
+                <option disabled>{selectCompanyText}</option>
+                {props.otherCompanies.map((company) => (
+                  <option key={company.name}>{company.name}</option>
+                ))}
+              </MobileDropdown>
+            )}
+          </TranslationsConsumer>
         )}
         {currentCompany &&
           Object.entries(currentCompany)
