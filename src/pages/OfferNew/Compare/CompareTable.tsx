@@ -414,7 +414,6 @@ export const CompareTable = (props: Props) => {
                   {company.name}
                 </DropdownRow>
               ))}
-              }
             </Dropdown>
           </>
         )}
