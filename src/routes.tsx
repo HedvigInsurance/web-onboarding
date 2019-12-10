@@ -70,12 +70,12 @@ export const reactPageRoutes = [
         switch (match.params.name) {
           case 'new':
             return {
-              baseUrl: '/beta/new-member/new',
+              baseUrl: '/new-member/new',
               name: 'Web Onboarding - Swedish Needer',
             }
           case 'switch':
             return {
-              baseUrl: '/beta/new-member/switch',
+              baseUrl: '/new-member/switch',
               name: 'Web Onboarding - Swedish Switcher',
             }
         }
