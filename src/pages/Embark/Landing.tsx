@@ -10,11 +10,9 @@ const Wrapper = styled.div`
   width: 100%;
   max-width: 80rem;
   margin: 0 auto;
-  padding: 0 2rem;
   display: flex;
   align-items: center;
-  padding-top: 25vh;
-  padding-bottom: 4rem;
+  padding: 25vh 2rem 4rem;
 
   @media (max-width: 850px) {
     padding-top: 10vh;
@@ -84,6 +82,7 @@ const Headline = styled.h1`
   color: ${colorsV2.black};
   letter-spacing: -1px;
   margin: 0 0 1rem 0;
+  width: 100%;
 
   @media (max-width: 600px) {
     font-size: 2.25rem;
@@ -104,6 +103,7 @@ const Paragraph = styled.p`
   margin: 0;
   color: ${colorsV2.darkgray};
   min-height: 3.75rem;
+  width: 100%;
 
   @media (max-width: 600px) {
     font-size: 1.25rem;
