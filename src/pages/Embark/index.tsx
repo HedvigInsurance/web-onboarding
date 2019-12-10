@@ -250,7 +250,8 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                         history.push('/new-member/offer')
                       },
                       MailingList: () => {
-                        // todo
+                        location.href =
+                          'https://hedvigapp.typeform.com/to/xiTKWi'
                       },
                     }}
                     data={data[1]}
