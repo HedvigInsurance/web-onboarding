@@ -17,7 +17,7 @@ const Wrapper = styled.div`
 
 const Label = styled.div`
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   align-items: left;
   justify-content: center;
 `
@@ -41,7 +41,7 @@ const Value = styled.div`
   line-height: 1.5rem;
   color: ${colorsV2.darkgray};
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   justify-content: right;
   align-items: center;
 

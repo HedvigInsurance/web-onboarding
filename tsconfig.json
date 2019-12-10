@@ -23,7 +23,8 @@
     "types": ["jest"],
 
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true
   },
   "include": ["./src"],
   "exclude": ["node_modules", "./src/generated/graphql.tsx"]

@@ -56,14 +56,14 @@ export const Perils: React.FC<Props> = ({ offer }) => {
             </Body>
           </HeadingWrapper>
 
-          {!isMobile ? (
-            <PerilCollection
+          {isMobile ? (
+            <PerilSwiper
               perils={perils}
               setCurrentPeril={setCurrentPeril}
               setIsShowingPeril={setIsShowingPeril}
             />
           ) : (
-            <PerilSwiper
+            <PerilCollection
               perils={perils}
               setCurrentPeril={setCurrentPeril}
               setIsShowingPeril={setIsShowingPeril}

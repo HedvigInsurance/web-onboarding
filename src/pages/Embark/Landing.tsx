@@ -10,11 +10,9 @@ const Wrapper = styled.div`
   width: 100%;
   max-width: 80rem;
   margin: 0 auto;
-  padding: 0 2rem;
   display: flex;
   align-items: center;
-  padding-top: 25vh;
-  padding-bottom: 4rem;
+  padding: 25vh 2rem 4rem;
 
   @media (max-width: 850px) {
     padding-top: 10vh;
@@ -39,7 +37,7 @@ const Container = styled.div`
   }
 
   @media (max-width: 850px) {
-    flex-flow: column;
+    flex-direction: column;
   }
 `
 
@@ -50,7 +48,7 @@ const Card = styled.div`
   margin: 0 2.5rem;
   padding: 3.5rem 2.5rem 2.5rem 2.5rem;
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   align-items: flex-start;
   justify-content: flex-end;
   transition: all 0.35s;
@@ -84,6 +82,7 @@ const Headline = styled.h1`
   color: ${colorsV2.black};
   letter-spacing: -1px;
   margin: 0 0 1rem 0;
+  width: 100%;
 
   @media (max-width: 600px) {
     font-size: 2.25rem;
@@ -104,6 +103,7 @@ const Paragraph = styled.p`
   margin: 0;
   color: ${colorsV2.darkgray};
   min-height: 3.75rem;
+  width: 100%;
 
   @media (max-width: 600px) {
     font-size: 1.25rem;
@@ -160,7 +160,7 @@ export const Landing: React.FC = () => (
                 {(t) => t}
               </TranslationsConsumer>
             </Paragraph>
-            <ProceedButton size="lg" to="/beta/new-member/new">
+            <ProceedButton size="lg" to="/new-member/new">
               <TranslationsConsumer textKey="STARTPAGE_UNINSURED_BUTTON">
                 {(t) => t}
               </TranslationsConsumer>
@@ -177,7 +177,7 @@ export const Landing: React.FC = () => (
                 {(t) => t}
               </TranslationsConsumer>
             </Paragraph>
-            <ProceedButton size="lg" to="/beta/new-member/switch">
+            <ProceedButton size="lg" to="/new-member/switch">
               <TranslationsConsumer textKey="STARTPAGE_INSURED_BUTTON">
                 {(t) => t}
               </TranslationsConsumer>

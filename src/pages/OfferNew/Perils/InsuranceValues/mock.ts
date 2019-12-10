@@ -4,9 +4,7 @@ export interface InsuranceValue {
   tooltip: string
 }
 
-export interface InsuranceValues {
-  [key: string]: InsuranceValue
-}
+export type InsuranceValues = Record<string, InsuranceValue>
 
 export const insuranceValues: InsuranceValues = {
   HOME: {

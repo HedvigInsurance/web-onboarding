@@ -65,7 +65,8 @@ const Container = styled.div<{ sticky: boolean }>`
 const Header = styled.div`
   width: 100%;
   display: flex;
-  flex-flow: row;
+  flex-direction: column;
+  flex-wrap: wrap;
   padding: 2rem 1.5rem 2rem 2rem;
   align-items: flex-start;
   position: relative;
@@ -88,6 +89,9 @@ const DiscountInfo = styled.div`
 `
 
 const Summary = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   width: 100%;
 `
 
@@ -105,7 +109,8 @@ const Title = styled.div`
   font-size: 2rem;
   font-weight: 500;
   color: ${colorsV2.black};
-  margin-top: 0.25rem;
+  max-width: 50%;
+  flex-shrink: 1;
 
   @media (max-width: 600px) {
     font-size: 1.5rem;
@@ -114,8 +119,7 @@ const Title = styled.div`
 
 const SummaryContent = styled.div`
   display: flex;
-  flex-flow: column;
-  margin-top: 1.5rem;
+  flex-direction: column;
 `
 
 const SummaryText = styled.div`
@@ -126,8 +130,7 @@ const SummaryText = styled.div`
 
 const Price = styled.div`
   display: flex;
-  flex-flow: column;
-  padding-top: 1rem;
+  flex-direction: column;
   align-items: flex-start;
   position: relative;
 `
@@ -144,7 +147,7 @@ const PriceNet = styled.div`
 
 const PriceNumbers = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   margin-bottom: 0.5rem;
 `
 
@@ -155,11 +158,15 @@ const PriceGross = styled.div<{ monthlyCostDeduction: boolean }>`
     props.monthlyCostDeduction ? colorsV2.grass500 : colorsV2.black};
   font-family: ${fonts.GEOMANIST};
   font-weight: 600;
+
+  @media (max-width: 330px) {
+    font-size: 2.75rem;
+  }
 `
 
 const PriceSuffix = styled.div`
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   justify-content: flex-end;
   padding-bottom: 0.5rem;
   flex-shrink: 0;
@@ -195,7 +202,7 @@ const Footer = styled.div`
   width: 100%;
   padding: 2rem;
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   align-items: center;
 
   @media (max-width: 600px) {
@@ -206,7 +213,7 @@ const Footer = styled.div`
 const FooterExtraActions = styled.div`
   width: 100%;
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   margin-top: 1.5rem;
@@ -244,42 +251,40 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
             </DiscountInfo>
           )}
           <Header>
-            <Summary>
-              <PreTitle>
-                <TranslationsConsumer textKey="SIDEBAR_LABEL">
+            <PreTitle>
+              <TranslationsConsumer textKey="SIDEBAR_LABEL">
+                {(t) => t}
+              </TranslationsConsumer>
+            </PreTitle>
+
+            <Title>{getInsuranceType(offer.quote)}</Title>
+
+            <SummaryContent>
+              <SummaryText>
+                <b>{`${offer.member.firstName} ${offer.member.lastName}`}</b>
+
+                {offer.quote.details.householdSize - 1 > 0 && (
+                  <TranslationsConsumer textKey="SIDEBAR_INSURED_PERSONS_SUFFIX">
+                    {(t) =>
+                      ` + ${offer.quote!.details!.householdSize! - 1} ${t}`
+                    }
+                  </TranslationsConsumer>
+                )}
+              </SummaryText>
+              <SummaryText>{`${offer.quote &&
+                offer.quote.details &&
+                offer.quote.details.street}, ${formatPostalNumber(
+                (offer.quote.__typename === 'CompleteQuote' &&
+                  offer.quote.details.zipCode!) ||
+                  '',
+              )}`}</SummaryText>
+
+              <TextButton>
+                <TranslationsConsumer textKey="SIDEBAR_SHOW_DETAILS_BUTTON">
                   {(t) => t}
                 </TranslationsConsumer>
-              </PreTitle>
-
-              <Title>{getInsuranceType(offer.quote)}</Title>
-
-              <SummaryContent>
-                <SummaryText>
-                  <b>{`${offer.member.firstName} ${offer.member.lastName}`}</b>
-
-                  {offer.quote.details.householdSize - 1 > 0 && (
-                    <TranslationsConsumer textKey="SIDEBAR_INSURED_PERSONS_SUFFIX">
-                      {(t) =>
-                        ` + ${offer.quote!.details!.householdSize! - 1} ${t}`
-                      }
-                    </TranslationsConsumer>
-                  )}
-                </SummaryText>
-                <SummaryText>{`${offer.quote &&
-                  offer.quote.details &&
-                  offer.quote.details.street}, ${formatPostalNumber(
-                  (offer.quote.__typename === 'CompleteQuote' &&
-                    offer.quote.details.zipCode!) ||
-                    '',
-                )}`}</SummaryText>
-
-                <TextButton>
-                  <TranslationsConsumer textKey="SIDEBAR_SHOW_DETAILS_BUTTON">
-                    {(t) => t}
-                  </TranslationsConsumer>
-                </TextButton>
-              </SummaryContent>
-            </Summary>
+              </TextButton>
+            </SummaryContent>
 
             <Price>
               {monthlyCostDeduction && (

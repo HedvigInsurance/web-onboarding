@@ -25,7 +25,7 @@ const Wrapper = styled.div<{ errors?: string }>`
 const TextWrapper = styled.div`
   width: 100%;
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
 `
 
 const Label = styled.div`

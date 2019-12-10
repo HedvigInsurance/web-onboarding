@@ -8,7 +8,6 @@ import { LazyDontPanic } from './pages/DontPanic'
 import { Download } from './pages/Download'
 import { EmbarkRoot } from './pages/Embark'
 import { FourOhFour } from './pages/FourOhFour'
-import { NewMemberLanding } from './pages/NewMemberLanding'
 import { Offering } from './pages/Offer'
 import { OfferNew } from './pages/OfferNew'
 import { Referral } from './pages/Referral'
@@ -20,11 +19,6 @@ export const serverSideRedirects = [
 ]
 export const reactPageRoutes = [
   {
-    path: LANGUAGE_PATH_PATTERN + '/new-member',
-    Component: NewMemberLanding,
-    exact: true,
-  },
-  {
     path: LANGUAGE_PATH_PATTERN + '/new-member/hedvig',
     Component: Chat,
     exact: true,
@@ -32,11 +26,6 @@ export const reactPageRoutes = [
   {
     path: LANGUAGE_PATH_PATTERN + '/new-member/offer',
     Component: Offering,
-    exact: true,
-  },
-  {
-    path: LANGUAGE_PATH_PATTERN + '/new-member/offer-new',
-    Component: OfferNew,
     exact: true,
   },
   {
@@ -70,18 +59,23 @@ export const reactPageRoutes = [
     exact: true,
   },
   {
-    path: '/beta/new-member/:name?/:id?',
+    path: LANGUAGE_PATH_PATTERN + '/beta/new-member/offer',
+    Component: OfferNew,
+    exact: true,
+  },
+  {
+    path: '/new-member/:name?/:id?',
     render: ({ match }: RouteComponentProps<any>) => {
       const getProps = () => {
         switch (match.params.name) {
           case 'new':
             return {
-              baseUrl: '/beta/new-member/new',
+              baseUrl: '/new-member/new',
               name: 'Web Onboarding - Swedish Needer',
             }
           case 'switch':
             return {
-              baseUrl: '/beta/new-member/switch',
+              baseUrl: '/new-member/switch',
               name: 'Web Onboarding - Swedish Switcher',
             }
         }

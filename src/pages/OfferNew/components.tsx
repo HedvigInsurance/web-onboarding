@@ -104,13 +104,13 @@ export const Container = styled('div')`
   position: relative;
 
   @media (max-width: 1020px) {
-    flex-flow: column-reverse;
+    flex-direction: column-reverse;
   }
 `
 
 export const Column = styled('div')`
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   max-width: 47.5rem;
   width: 100%;
   flex-grow: 0;
