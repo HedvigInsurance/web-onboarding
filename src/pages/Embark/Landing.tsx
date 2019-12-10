@@ -160,7 +160,7 @@ export const Landing: React.FC = () => (
                 {(t) => t}
               </TranslationsConsumer>
             </Paragraph>
-            <ProceedButton size="lg" to="/beta/new-member/new">
+            <ProceedButton size="lg" to="/new-member/new">
               <TranslationsConsumer textKey="STARTPAGE_UNINSURED_BUTTON">
                 {(t) => t}
               </TranslationsConsumer>
@@ -177,7 +177,7 @@ export const Landing: React.FC = () => (
                 {(t) => t}
               </TranslationsConsumer>
             </Paragraph>
-            <ProceedButton size="lg" to="/beta/new-member/switch">
+            <ProceedButton size="lg" to="/new-member/switch">
               <TranslationsConsumer textKey="STARTPAGE_INSURED_BUTTON">
                 {(t) => t}
               </TranslationsConsumer>
