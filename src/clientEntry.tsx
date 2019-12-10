@@ -25,7 +25,7 @@ const dontPanicSession = createSession<any>(
 
 window.setInterval(() => session.keepAlive(), 5 * 1000)
 
-ReactDOM.hydrate(
+ReactDOM.render(
   <BrowserRouter>
     <PageTracker>
       <HelmetProvider>

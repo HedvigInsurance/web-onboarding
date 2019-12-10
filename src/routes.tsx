@@ -35,11 +35,6 @@ export const reactPageRoutes = [
     exact: true,
   },
   {
-    path: LANGUAGE_PATH_PATTERN + '/new-member/offer-new',
-    Component: OfferNew,
-    exact: true,
-  },
-  {
     path: LANGUAGE_PATH_PATTERN + '/new-member/download',
     Component: Download,
     exact: true,
@@ -67,6 +62,11 @@ export const reactPageRoutes = [
   {
     path: LANGUAGE_PATH_PATTERN + '/new-member/connect-payment/retry',
     Component: TrustlySpinnerPage,
+    exact: true,
+  },
+  {
+    path: LANGUAGE_PATH_PATTERN + '/beta/new-member/offer',
+    Component: OfferNew,
     exact: true,
   },
   {

@@ -5,7 +5,11 @@ import color from 'color'
 import { DocumentIcon } from 'components/icons/Document'
 import { Tooltip } from 'new-components/Tooltip'
 import * as React from 'react'
-import { InsuranceType } from 'utils/insuranceDomainUtils'
+import {
+  getInsurancePDFTextKey,
+  getPrebuyPDFTextKey,
+  InsuranceType,
+} from 'utils/insuranceDomainUtils'
 import { SubSubHeadingBlack } from '../../components'
 import { insuranceValues } from './mock'
 import { Values } from './Values'
@@ -24,7 +28,7 @@ const Wrapper = styled.div`
 
 const Header = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   align-items: center;
 `
 
@@ -39,12 +43,12 @@ const TooltipWrapper = styled.div`
 
 const Links = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   margin-top: 4rem;
   align-items: center;
 
   @media (max-width: 600px) {
-    flex-flow: column;
+    flex-direction: column;
   }
 `
 
@@ -80,7 +84,7 @@ const Link = styled.a`
   }
 `
 
-export const InsuranceValues: React.FC<Props> = () => (
+export const InsuranceValues: React.FC<Props> = ({ insuranceType }) => (
   <Wrapper>
     <Header>
       <SubSubHeadingBlack>
@@ -96,18 +100,26 @@ export const InsuranceValues: React.FC<Props> = () => (
     <Values insuranceValues={insuranceValues} />
 
     <Links>
-      <Link href="">
-        <DocumentIcon />
-        <TranslationsConsumer textKey="COVERAGE_TERMSANDCONDITIONS_BUTTON">
-          {(t) => t}
-        </TranslationsConsumer>
-      </Link>
-      <Link href="">
-        <DocumentIcon />
-        <TranslationsConsumer textKey="COVERAGE_PRESALEINFORMATION_BUTTON">
-          {(t) => t}
-        </TranslationsConsumer>
-      </Link>
+      <TranslationsConsumer textKey={getPrebuyPDFTextKey(insuranceType)}>
+        {(prebuyLink) => (
+          <Link href={prebuyLink} target="_blank">
+            <DocumentIcon />
+            <TranslationsConsumer textKey="COVERAGE_TERMSANDCONDITIONS_BUTTON">
+              {(t) => t}
+            </TranslationsConsumer>
+          </Link>
+        )}
+      </TranslationsConsumer>
+      <TranslationsConsumer textKey={getInsurancePDFTextKey(insuranceType)}>
+        {(pdfLink) => (
+          <Link href={pdfLink} target="_blank">
+            <DocumentIcon />
+            <TranslationsConsumer textKey="COVERAGE_PRESALEINFORMATION_BUTTON">
+              {(t) => t}
+            </TranslationsConsumer>
+          </Link>
+        )}
+      </TranslationsConsumer>
     </Links>
   </Wrapper>
 )
