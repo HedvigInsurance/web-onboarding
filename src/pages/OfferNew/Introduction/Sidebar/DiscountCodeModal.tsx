@@ -223,7 +223,11 @@ export const DiscountCodeModal: React.FC<Props> = ({
                     <TranslationsConsumer textKey="SIDEBAR_ADD_DISCOUNT_FINEPRINT">
                       {(t) => t}
                     </TranslationsConsumer>{' '}
-                    <TermsLink href="" target="_blank">
+                    <TermsLink
+                      href=""
+                      target="_blank"
+                      rel="noreferrer noopener"
+                    >
                       <TranslationsConsumer textKey="SIDEBAR_ADD_DISCOUNT_FINEPRINT_LINK_TEXT">
                         {(t) => t}
                       </TranslationsConsumer>
