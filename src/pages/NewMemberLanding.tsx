@@ -6,7 +6,7 @@ export const NewMemberLanding: React.SFC = () => (
   <CurrentLanguage>
     {({ currentLanguage }) => (
       <Redirect
-        to={`/${currentLanguage && currentLanguage + '/'}new-member/hedvig`}
+        to={`/${currentLanguage && currentLanguage + '/'}new-member/new`}
       />
     )}
   </CurrentLanguage>
