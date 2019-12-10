@@ -8,6 +8,7 @@ import { LazyDontPanic } from './pages/DontPanic'
 import { Download } from './pages/Download'
 import { EmbarkRoot } from './pages/Embark'
 import { FourOhFour } from './pages/FourOhFour'
+import { NewMemberLanding } from './pages/NewMemberLanding'
 import { Offering } from './pages/Offer'
 import { OfferNew } from './pages/OfferNew'
 import { Referral } from './pages/Referral'
@@ -18,6 +19,11 @@ export const serverSideRedirects = [
   { from: '/referrals/terms', to: '/invite/terms' },
 ]
 export const reactPageRoutes = [
+  {
+    path: LANGUAGE_PATH_PATTERN + '/new-member',
+    Component: NewMemberLanding,
+    exact: true,
+  },
   {
     path: LANGUAGE_PATH_PATTERN + '/new-member/hedvig',
     Component: Chat,

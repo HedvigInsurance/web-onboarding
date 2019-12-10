@@ -21,7 +21,7 @@ import { Landing } from './Landing'
 import { resolvePersonalInformation } from './personalInformation'
 
 const EmbarkStyling = styled.div`
-  height: 100vh;
+  height: 100%;
   background-color: ${colorsV2.gray};
 
   * {
@@ -41,8 +41,8 @@ const PassageContainer = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
 `
 
 interface EmbarkProps {
@@ -87,6 +87,10 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
       history.location.pathname === props.baseUrl ? 'replace' : 'push'
     const newPathName = `${props.baseUrl}${currentPassage.url ||
       `/${currentPassage.id}`}`
+
+    if (currentPassage.api || currentPassage.externalRedirect) {
+      return
+    }
 
     if (history.location.pathname !== newPathName) {
       history[method](newPathName, {
@@ -166,7 +170,7 @@ interface AngelVariables {
 
 export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
   const history = useHistory()
-  const [data, setData] = React.useState<string | null>(null)
+  const [data, setData] = React.useState<[string, any] | null>(null)
   const [initialStore, setInitialStore] = React.useState<null | {
     [key: string]: any
   }>()
@@ -187,7 +191,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
       )
 
       if (result.data && result.data.angelStory) {
-        setData(JSON.parse(result.data.angelStory.content))
+        setData([props.name, JSON.parse(result.data.angelStory.content)])
       }
     })()
   }, [props.name])
@@ -237,7 +241,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
               delay: 0.25,
             }}
           >
-            {data && initialStore && (
+            {data && initialStore && data[0] === props.name && (
               <StorageContainer>
                 {(storageState) => (
                   <EmbarkProvider
@@ -245,8 +249,11 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                       Offer: () => {
                         history.push('/new-member/offer')
                       },
+                      MailingList: () => {
+                        // todo
+                      },
                     }}
-                    data={data}
+                    data={data[1]}
                     resolvers={{
                       personalInformationApi: resolvePersonalInformation,
                       houseInformation: resolveHouseInformation,
@@ -254,6 +261,12 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                     }}
                     initialStore={initialStore}
                     onStoreChange={(store) => {
+                      try {
+                        Intercom('update', store)
+                      } catch (e) {
+                        // noop
+                      }
+
                       window.localStorage.setItem(
                         `embark-store-${encodeURIComponent(props.name!)}`,
                         JSON.stringify(store),
@@ -262,7 +275,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                   >
                     <Embark
                       baseUrl={props.baseUrl!}
-                      data={data}
+                      data={data[1]}
                       name={props.name!}
                     />
                   </EmbarkProvider>

@@ -902,31 +902,33 @@
     webpack "4.19.1"
     webpack-dev-server "3.1.14"
 
-"@hedviginsurance/embark@1.0.28":
-  version "1.0.28"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-1.0.28.tgz#5ca5d2d731b9a3ddfec3562b5f85546a4c5d677a"
-  integrity sha512-iWW/wojhnhOqYOmfOFz5vi7yzfljJQHHU9HVq9ZRvhAByRg9J4zGQLZCcJKFTSrDv8+q+FKsrS1kTcPgijoymA==
+"@hedviginsurance/embark@^1.0.36":
+  version "1.0.36"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-1.0.36.tgz#f1e330f79b96ae984d520546c0b57d586607571f"
+  integrity sha512-T42O4v4TYjXFy4lilTtntP8hbnei1VFzG+uPgfR0UySAxnSx07AxuazRUhWKhmfatTutiKPeumTQh0hca4IZYg==
   dependencies:
     "@emotion/core" "^10.0.21"
     "@emotion/styled" "^10.0.17"
     "@hedviginsurance/brand" "^2.0.0"
+    animated-scroll-to "^2.0.5"
     date-fns "^2.8.1"
     emotion "^10.0.17"
     framer-motion "^1.6.14"
     hex-to-rgba "^2.0.1"
     history "^4.10.1"
     husky "^3.0.9"
+    ismobilejs "^1.0.3"
     jsdom "^15.2.0"
     koa "^2.10.0"
     koa-mount "^4.0.0"
     koa-static "^5.0.0"
-    prettier "^1.19.1"
     pretty-quick "^2.0.0"
     react "^16.11.0"
     react-dom "^16.10.2"
     react-emotion "^10.0.0"
     react-input-mask "^2.0.4"
     requestidlecallback "^0.3.0"
+    smoothscroll "^0.4.0"
     ts-node "^8.4.1"
     typescript "^3.7.2"
     uglify-js "^3.6.3"
@@ -1873,6 +1875,11 @@ animated-scroll-to@^1.2.2:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/animated-scroll-to/-/animated-scroll-to-1.3.1.tgz#8d585dc3479fcd08ec5b8f73cd23b4ffd2443942"
   integrity sha512-LihfT808uwY1TmVw9CMemPKC2vMznSrR7O38hxjlZR/OvdI0Upc987AXIBexY9wT/cSDg7MFlME7hrsnI//DTQ==
+
+animated-scroll-to@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/animated-scroll-to/-/animated-scroll-to-2.0.5.tgz#475fcf742ee38de0a969920182a6aaba319771b4"
+  integrity sha512-xDZY/geNZSJj99xftr8uAAJpp6k6yI8mdBNp8HM1LTwmeebaw4EjkHL8y0PtsuZg9/UG9tUNn2JqaZxEfzJxLw==
 
 ansi-align@^2.0.0:
   version "2.0.0"
@@ -6189,6 +6196,11 @@ isexe@^2.0.0:
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=
 
+ismobilejs@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/ismobilejs/-/ismobilejs-1.0.3.tgz#69ec3faccd17dfeeadd471e70955d1e192a46eb6"
+  integrity sha512-6rTcdWK7PHIWPYlCPdTbU9eE9yzdnIQSpiH+8Ln5OqugpEszQK5KHlsjZrDae26fEhki9rPvQmsjI1q4CLuKIA==
+
 isobject@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/isobject/-/isobject-2.1.0.tgz#f065561096a3f1da2ef46272f815c840d87e0c89"
@@ -8555,7 +8567,7 @@ preserve@^0.2.0:
   resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
   integrity sha1-gV7R9uvGWSb4ZbMQwHE7yzMVzks=
 
-prettier@^1.14.3, prettier@^1.19.1:
+prettier@^1.14.3:
   version "1.19.1"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.19.1.tgz#f7d7f5ff8a9cd872a7be4ca142095956a60797cb"
   integrity sha512-s7PoyDv/II1ObgQunCbB9PdLmUcBZcnWOcxDh7O0N/UwDEsHyqkW+Qh28jW+mVuCdx7gLB0BotYI1Y6uI9iyew==
@@ -9827,6 +9839,11 @@ slice-ansi@0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/slice-ansi/-/slice-ansi-0.0.4.tgz#edbf8903f66f7ce2f8eafd6ceed65e264c831b35"
   integrity sha1-7b+JA/ZvfOL46v1s7tZeJkyDGzU=
+
+smoothscroll@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/smoothscroll/-/smoothscroll-0.4.0.tgz#40e507b46461408ba1b787d0081e1e883c4124a5"
+  integrity sha512-sggQ3U2Un38b3+q/j1P4Y4fCboCtoUIaBYoge+Lb6Xg1H8RTIif/hugVr+ErMtIDpvBbhQfTjtiTeYAfbw1ZGQ==
 
 snapdragon-node@^2.0.1:
   version "2.1.1"
