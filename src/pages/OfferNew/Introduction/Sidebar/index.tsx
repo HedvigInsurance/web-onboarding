@@ -65,8 +65,7 @@ const Container = styled.div<{ sticky: boolean }>`
 const Header = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
+  flex-direction: row;
   padding: 2rem 1.5rem 2rem 2rem;
   align-items: flex-start;
   position: relative;
@@ -91,6 +90,7 @@ const DiscountInfo = styled.div`
 const Summary = styled.div`
   display: flex;
   justify-content: space-between;
+  flex-direction: column;
   align-items: flex-start;
   width: 100%;
 `
@@ -133,6 +133,7 @@ const Price = styled.div`
   flex-direction: column;
   align-items: flex-start;
   position: relative;
+  padding-top: 1rem;
 `
 
 const PriceNet = styled.div`
@@ -251,41 +252,42 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
             </DiscountInfo>
           )}
           <Header>
-            <PreTitle>
-              <TranslationsConsumer textKey="SIDEBAR_LABEL">
-                {(t) => t}
-              </TranslationsConsumer>
-            </PreTitle>
-
-            <Title>{getInsuranceType(offer.quote)}</Title>
-
-            <SummaryContent>
-              <SummaryText>
-                <b>{`${offer.member.firstName} ${offer.member.lastName}`}</b>
-
-                {offer.quote.details.householdSize - 1 > 0 && (
-                  <TranslationsConsumer textKey="SIDEBAR_INSURED_PERSONS_SUFFIX">
-                    {(t) =>
-                      ` + ${offer.quote!.details!.householdSize! - 1} ${t}`
-                    }
-                  </TranslationsConsumer>
-                )}
-              </SummaryText>
-              <SummaryText>{`${offer.quote &&
-                offer.quote.details &&
-                offer.quote.details.street}, ${formatPostalNumber(
-                (offer.quote.__typename === 'CompleteQuote' &&
-                  offer.quote.details.zipCode!) ||
-                  '',
-              )}`}</SummaryText>
-
-              <TextButton>
-                <TranslationsConsumer textKey="SIDEBAR_SHOW_DETAILS_BUTTON">
+            <Summary>
+              <PreTitle>
+                <TranslationsConsumer textKey="SIDEBAR_LABEL">
                   {(t) => t}
                 </TranslationsConsumer>
-              </TextButton>
-            </SummaryContent>
+              </PreTitle>
 
+              <Title>{getInsuranceType(offer.quote)}</Title>
+
+              <SummaryContent>
+                <SummaryText>
+                  <b>{`${offer.member.firstName} ${offer.member.lastName}`}</b>
+
+                  {offer.quote.details.householdSize - 1 > 0 && (
+                    <TranslationsConsumer textKey="SIDEBAR_INSURED_PERSONS_SUFFIX">
+                      {(t) =>
+                        ` + ${offer.quote!.details!.householdSize! - 1} ${t}`
+                      }
+                    </TranslationsConsumer>
+                  )}
+                </SummaryText>
+                <SummaryText>{`${offer.quote &&
+                  offer.quote.details &&
+                  offer.quote.details.street}, ${formatPostalNumber(
+                  (offer.quote.__typename === 'CompleteQuote' &&
+                    offer.quote.details.zipCode!) ||
+                    '',
+                )}`}</SummaryText>
+
+                <TextButton>
+                  <TranslationsConsumer textKey="SIDEBAR_SHOW_DETAILS_BUTTON">
+                    {(t) => t}
+                  </TranslationsConsumer>
+                </TextButton>
+              </SummaryContent>
+            </Summary>
             <Price>
               {monthlyCostDeduction && (
                 <PriceNet>

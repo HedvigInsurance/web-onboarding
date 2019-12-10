@@ -1,3 +1,4 @@
+import { useEmbark } from '@hedviginsurance/embark'
 import { Page } from 'components/utils/Page'
 import { OfferContainer } from 'containers/OfferContainer'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
@@ -7,26 +8,26 @@ import { Compare } from './Compare/index'
 import { Introduction } from './Introduction/index'
 import { Perils } from './Perils/index'
 import { mockedOffer } from './mock'
+import { useOfferQuery } from 'generated/graphql'
+import { EmbarkProvider } from '@hedviginsurance/embark'
+import { StorageContainer } from 'utils/StorageContainer'
 
-export const OfferNew: React.SFC = () => (
-  <Page>
-    <SessionTokenGuard>
-      <OfferContainer>
-        {(offer, { refetch }) => {
-          if (!offer || !offer.insurance.type) {
-            return null
-          }
+export const OfferNew: React.FC = () => {
+  const { data, loading, error, refetch } = useOfferQuery()
+  console.log(data)
 
-          return (
-            <>
-              <TopBar />
-              <Introduction offer={mockedOffer} refetch={refetch} />
-              <Perils offer={offer} />
-              <Compare />
-            </>
-          )
-        }}
-      </OfferContainer>
-    </SessionTokenGuard>
-  </Page>
-)
+  return (
+    <StorageContainer>
+      {({ session }) => (
+        <Page>
+          <SessionTokenGuard>
+            <TopBar />
+            <Introduction offer={mockedOffer} refetch={refetch} />
+            {/*<Perils offer={offer} />*/}
+            <Compare />
+          </SessionTokenGuard>
+        </Page>
+      )}
+    </StorageContainer>
+  )
+}

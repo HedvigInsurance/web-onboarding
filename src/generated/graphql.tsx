@@ -1,10 +1,7 @@
 import gql from 'graphql-tag'
-import * as React from 'react'
 import * as ApolloReactCommon from '@apollo/react-common'
-import * as ApolloReactComponents from '@apollo/react-components'
-import * as ApolloReactHoc from '@apollo/react-hoc'
+import * as ApolloReactHooks from '@apollo/react-hooks'
 export type Maybe<T> = T | null
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string
@@ -3648,39 +3645,47 @@ export const OfferDocument = gql`
     }
   }
 `
-export type OfferComponentProps = Omit<
-  ApolloReactComponents.QueryComponentOptions<OfferQuery, OfferQueryVariables>,
-  'query'
->
 
-export const OfferComponent = (props: OfferComponentProps) => (
-  <ApolloReactComponents.Query<OfferQuery, OfferQueryVariables>
-    query={OfferDocument}
-    {...props}
-  />
-)
-
-export type OfferProps<TChildProps = {}> =
-  | ApolloReactHoc.DataProps<OfferQuery, OfferQueryVariables>
-  | TChildProps
-export function withOffer<TProps, TChildProps = {}>(
-  operationOptions?: ApolloReactHoc.OperationOption<
-    TProps,
+/**
+ * __useOfferQuery__
+ *
+ * To run a query within a React component, call `useOfferQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOfferQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOfferQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useOfferQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
     OfferQuery,
-    OfferQueryVariables,
-    OfferProps<TChildProps>
+    OfferQueryVariables
   >,
 ) {
-  return ApolloReactHoc.withQuery<
-    TProps,
-    OfferQuery,
-    OfferQueryVariables,
-    OfferProps<TChildProps>
-  >(OfferDocument, {
-    alias: 'offer',
-    ...operationOptions,
-  })
+  return ApolloReactHooks.useQuery<OfferQuery, OfferQueryVariables>(
+    OfferDocument,
+    baseOptions,
+  )
 }
+export function useOfferLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    OfferQuery,
+    OfferQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useLazyQuery<OfferQuery, OfferQueryVariables>(
+    OfferDocument,
+    baseOptions,
+  )
+}
+export type OfferQueryHookResult = ReturnType<typeof useOfferQuery>
+export type OfferLazyQueryHookResult = ReturnType<typeof useOfferLazyQuery>
 export type OfferQueryResult = ApolloReactCommon.QueryResult<
   OfferQuery,
   OfferQueryVariables

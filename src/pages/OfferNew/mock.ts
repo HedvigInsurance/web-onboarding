@@ -19,7 +19,18 @@ export const mockedOffer: OfferData = {
     },
     __typename: 'CompleteQuote',
   },
-  redeemedCampaigns: [],
+  redeemedCampaigns: [
+    {
+      code: 'CODE',
+      incentive: {
+        amount: {
+          amount: '10.0',
+          currency: 'SEK',
+        },
+        __typename: 'MonthlyCostDeduction',
+      },
+    },
+  ],
   member: {
     id: '1337',
     firstName: 'Test',
