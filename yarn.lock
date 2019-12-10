@@ -925,10 +925,10 @@
     webpack "4.19.1"
     webpack-dev-server "3.1.14"
 
-"@hedviginsurance/embark@^1.0.36":
-  version "1.0.36"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-1.0.36.tgz#f1e330f79b96ae984d520546c0b57d586607571f"
-  integrity sha512-T42O4v4TYjXFy4lilTtntP8hbnei1VFzG+uPgfR0UySAxnSx07AxuazRUhWKhmfatTutiKPeumTQh0hca4IZYg==
+"@hedviginsurance/embark@^1.0.37":
+  version "1.0.37"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-1.0.37.tgz#6252754c35157d297929f38121f76456b3be4799"
+  integrity sha512-d24FOKMSaIx2O042goM7wUZezF4kyZKNdHGKd9PAMbZdtpd8T/1dUhMbMrXupcwH67LXGtGvZDwDM2siQp77Bg==
   dependencies:
     "@emotion/core" "^10.0.21"
     "@emotion/styled" "^10.0.17"
@@ -951,6 +951,7 @@
     react-emotion "^10.0.0"
     react-input-mask "^2.0.4"
     requestidlecallback "^0.3.0"
+    resize-observer-polyfill "^1.5.1"
     smoothscroll "^0.4.0"
     ts-node "^8.4.1"
     typescript "^3.7.2"
@@ -9445,6 +9446,11 @@ requires-port@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
   integrity sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8=
+
+resize-observer-polyfill@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz#0e9020dd3d21024458d4ebd27e23e40269810464"
+  integrity sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==
 
 resolve-cwd@^2.0.0:
   version "2.0.0"
