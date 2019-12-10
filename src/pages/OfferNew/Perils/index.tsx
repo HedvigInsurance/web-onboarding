@@ -45,7 +45,7 @@ export const Perils: React.FC<Props> = ({ offer }) => {
               </TranslationsConsumer>
             </PreHeading>
             <HeadingBlack>
-              <TranslationsConsumer textKey="COVARAGE_HEADLINE">
+              <TranslationsConsumer textKey="COVERAGE_HEADLINE">
                 {(t) => t}
               </TranslationsConsumer>
             </HeadingBlack>

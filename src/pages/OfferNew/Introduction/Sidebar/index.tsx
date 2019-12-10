@@ -4,15 +4,15 @@ import {
   TranslationsConsumer,
   TranslationsPlaceholderConsumer,
 } from '@hedviginsurance/textkeyfy'
-import { isMonthlyCostDeduction } from 'containers/types'
 import gql from 'graphql-tag'
 import { Button, TextButton } from 'new-components/buttons'
 import * as React from 'react'
 import { Mutation } from 'react-apollo'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { OfferData } from '../../types'
+import { isMonthlyCostDeduction } from '../../utils'
 import { DiscountCodeModal } from './DiscountCodeModal'
-import { insuranceTypeMapping, otherInsuranceCompanies } from './mock'
+import { getInsuranceType, otherInsuranceCompanies } from './mock'
 import { PreviousInsurancePicker } from './PreviousInsurancePicker'
 import { StartDate } from './StartDate'
 
@@ -225,11 +225,15 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
       discountCodeModalIsOpen,
       setDiscountCodeModalIsOpen,
     ] = React.useState(false)
-    const monthlyCostDeduction =
-      offer.redeemedCampaigns.length > 0 &&
-      isMonthlyCostDeduction(offer.redeemedCampaigns[0].incentive)
 
-    return (
+    const monthlyCostDeduction =
+      offer.redeemedCampaigns.length > 0 && offer.redeemedCampaigns[0].incentive
+        ? isMonthlyCostDeduction(offer.redeemedCampaigns[0].incentive)
+        : false
+
+    return offer.quote &&
+      offer.quote.__typename === 'CompleteQuote' &&
+      offer.quote.details ? (
       <Wrapper ref={ref}>
         <Container sticky={sticky}>
           {monthlyCostDeduction && (
@@ -247,23 +251,23 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 </TranslationsConsumer>
               </PreTitle>
 
-              <Title>{insuranceTypeMapping[offer.insurance.type]}</Title>
+              <Title>{getInsuranceType(offer.quote)}</Title>
 
               <SummaryContent>
                 <SummaryText>
                   <b>{`${offer.member.firstName} ${offer.member.lastName}`}</b>
 
-                  {offer.insurance.personsInHousehold - 1 > 0 && (
+                  {offer.quote.details.householdSize - 1 > 0 && (
                     <TranslationsConsumer textKey="SIDEBAR_INSURED_PERSONS_SUFFIX">
                       {(t) =>
-                        ` + ${offer.insurance.personsInHousehold - 1} ${t}`
+                        ` + ${offer.quote!.details!.householdSize! - 1} ${t}`
                       }
                     </TranslationsConsumer>
                   )}
                 </SummaryText>
-                <SummaryText>{`${
-                  offer.quote.details.street
-                }, ${formatPostalNumber(
+                <SummaryText>{`${offer.quote &&
+                  offer.quote.details &&
+                  offer.quote.details.street}, ${formatPostalNumber(
                   (offer.quote.__typename === 'CompleteQuote' &&
                     offer.quote.details.zipCode!) ||
                     '',
@@ -283,7 +287,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                   <TranslationsPlaceholderConsumer
                     textKey="SIDEBAR_OLD_PRICE"
                     replacements={{
-                      PRICE: Number(offer.insurance.cost.monthlyNet.amount),
+                      PRICE: Number(offer.quote.price.amount),
                     }}
                   >
                     {(t) => t}
@@ -293,7 +297,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
               <PriceNumbers>
                 <PriceGross monthlyCostDeduction={monthlyCostDeduction}>
-                  {Number(offer.insurance.cost.monthlyNet.amount)}
+                  {Number(offer.quote.price.amount)}
                 </PriceGross>
 
                 <PriceSuffix>
@@ -313,12 +317,10 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
           </Header>
 
           <Body>
-            {offer.insurance.insuredAtOtherCompany && (
+            {!!offer.quote.currentInsurer && (
               <PreviousInsurancePicker insurances={otherInsuranceCompanies} />
             )}
-            <StartDate
-              insuredAtOtherCompany={offer.insurance.insuredAtOtherCompany}
-            />
+            <StartDate insuredAtOtherCompany={!!offer.quote.currentInsurer} />
           </Body>
 
           <Footer>
@@ -369,9 +371,6 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
           />
         </Container>
       </Wrapper>
-    )
+    ) : null
   },
 )
-/*
-
-*/

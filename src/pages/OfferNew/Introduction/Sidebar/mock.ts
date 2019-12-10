@@ -1,3 +1,4 @@
+import { Quote, ApartmentType } from 'generated/graphql'
 import { InsuranceType } from 'utils/insuranceDomainUtils'
 
 export interface InsuranceCompany {
@@ -14,12 +15,34 @@ export const otherInsuranceCompanies: InsuranceCompany[] = [
   { name: 'Moderna försäkringar', switchable: true },
 ]
 
-export const insuranceTypeMapping: {
-  [key in keyof typeof InsuranceType]: string
+export const getInsuranceType = (quote: Quote): string => {
+  if (quote.details === null || quote.details === undefined) {
+    return ''
+  }
+
+  if (
+    quote.details.__typename === 'CompleteHouseQuoteDetails' ||
+    quote.details.__typename === 'IncompleteHouseQuoteDetails'
+  ) {
+    return 'Hus'
+  }
+
+  if (
+    (quote.details.__typename === 'CompleteApartmentQuoteDetails' ||
+      quote.details.__typename === 'IncompleteApartmentQuoteDetails') &&
+    !!quote.details.type
+  ) {
+    return apartmentTypeMapping[quote.details.type]
+  }
+
+  return ''
+}
+
+export const apartmentTypeMapping: {
+  [key in ApartmentType]: string
 } = {
-  BRF: 'Bostadsrätt',
+  STUDENT_RENT: 'Hyresrätt',
   RENT: 'Hyresrätt',
   STUDENT_BRF: 'Bostadsrätt',
-  STUDENT_RENT: 'Hyresträtt',
-  HOUSE: 'Hus',
+  BRF: 'Bostadsrätt',
 }

@@ -1,4 +1,5 @@
-import { ApartmentType, OfferData } from './types'
+import { ApartmentType } from 'generated/graphql'
+import { OfferData } from './types'
 
 export const mockedOffer: OfferData = {
   quote: {
@@ -11,9 +12,9 @@ export const mockedOffer: OfferData = {
     details: {
       street: 'Strandvägen 1',
       zipCode: '123 45',
-      householdSize: 49,
+      householdSize: 2,
       livingSpace: 49,
-      type: ApartmentType.STUDENT_BRF,
+      type: ApartmentType.StudentBrf,
       __typename: 'CompleteApartmentQuoteDetails',
     },
     __typename: 'CompleteQuote',
