@@ -1,6 +1,7 @@
 import { CreateQuoteData, CreateQuoteVariables } from '@hedviginsurance/embark'
 import gql from 'graphql-tag'
 import { apolloClient } from '../../client/apolloClient'
+import { OFFER_QUERY } from '../../containers/OfferContainer'
 import { CREATE_SESSION_TOKEN_MUTATION } from '../../containers/SessionContainer'
 
 const MUTATION = gql`
@@ -73,6 +74,9 @@ export const createQuote = (storage: any) => async (
     mutation: MUTATION,
     variables,
   })
+
+  // Nuke the cache in case we have something tasty in there
+  await apolloClient.client.cache.reset()
 
   return result.data!
 }
