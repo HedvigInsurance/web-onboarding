@@ -3,6 +3,7 @@ import { colorsV2 } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import hexToRgba from 'hex-to-rgba'
 import { Tooltip } from 'new-components/Tooltip'
+import { otherCompanies } from 'pages/OfferNew/Compare/mock'
 import * as React from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { Checkmark } from '../../../components/icons/Checkmark'
@@ -10,7 +11,6 @@ import { DownArrow } from '../../../components/icons/DownArrow'
 import { HedvigSymbol } from '../../../components/icons/HedvigSymbol'
 import { SubHeadingBlack } from '../components'
 import { CompanyProperties, InsuranceProperties } from './types'
-import { otherCompanies } from 'pages/OfferNew/Compare/mock'
 
 interface Props {
   insuranceProperties: InsuranceProperties
