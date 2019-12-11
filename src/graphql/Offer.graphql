@@ -7,7 +7,7 @@ query Offer($id: ID) {
         amount
         currency
       }
-      completeDetails: details {
+      details {
         ... on CompleteApartmentQuoteDetails {
           street
           zipCode
@@ -34,30 +34,6 @@ query Offer($id: ID) {
 
     ... on IncompleteQuote {
       id
-      currentInsurer
-      incompleteDetails: details {
-        ... on IncompleteApartmentQuoteDetails {
-          street
-          zipCode
-          householdSize
-          livingSpace
-          type
-        }
-        ... on IncompleteHouseQuoteDetails {
-          street
-          zipCode
-          householdSize
-          livingSpace
-          ancillarySpace
-          extraBuildings {
-            ... on ExtraBuildingCore {
-              area
-              displayName
-              hasWaterConnected
-            }
-          }
-        }
-      }
     }
   }
 

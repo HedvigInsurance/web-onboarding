@@ -3380,7 +3380,7 @@ export type OfferQuery = { __typename?: 'Query' } & {
             MonetaryAmountV2,
             'amount' | 'currency'
           >
-          completeDetails:
+          details:
             | ({ __typename?: 'CompleteApartmentQuoteDetails' } & Pick<
                 CompleteApartmentQuoteDetails,
                 'street' | 'zipCode' | 'householdSize' | 'livingSpace' | 'type'
@@ -3453,86 +3453,7 @@ export type OfferQuery = { __typename?: 'Query' } & {
                   >
                 })
         })
-    | ({ __typename?: 'IncompleteQuote' } & Pick<
-        IncompleteQuote,
-        'id' | 'currentInsurer'
-      > & {
-          incompleteDetails: Maybe<
-            | ({ __typename?: 'IncompleteApartmentQuoteDetails' } & Pick<
-                IncompleteApartmentQuoteDetails,
-                'street' | 'zipCode' | 'householdSize' | 'livingSpace' | 'type'
-              >)
-            | ({ __typename?: 'IncompleteHouseQuoteDetails' } & Pick<
-                IncompleteHouseQuoteDetails,
-                | 'street'
-                | 'zipCode'
-                | 'householdSize'
-                | 'livingSpace'
-                | 'ancillarySpace'
-              > & {
-                  extraBuildings: Maybe<
-                    Array<
-                      | ({ __typename?: 'ExtraBuildingGarage' } & Pick<
-                          ExtraBuildingGarage,
-                          'area' | 'displayName' | 'hasWaterConnected'
-                        >)
-                      | ({ __typename?: 'ExtraBuildingCarport' } & Pick<
-                          ExtraBuildingCarport,
-                          'area' | 'displayName' | 'hasWaterConnected'
-                        >)
-                      | ({ __typename?: 'ExtraBuildingShed' } & Pick<
-                          ExtraBuildingShed,
-                          'area' | 'displayName' | 'hasWaterConnected'
-                        >)
-                      | ({ __typename?: 'ExtraBuildingStorehouse' } & Pick<
-                          ExtraBuildingStorehouse,
-                          'area' | 'displayName' | 'hasWaterConnected'
-                        >)
-                      | ({ __typename?: 'ExtraBuildingFriggebod' } & Pick<
-                          ExtraBuildingFriggebod,
-                          'area' | 'displayName' | 'hasWaterConnected'
-                        >)
-                      | ({ __typename?: 'ExtraBuildingAttefall' } & Pick<
-                          ExtraBuildingAttefall,
-                          'area' | 'displayName' | 'hasWaterConnected'
-                        >)
-                      | ({ __typename?: 'ExtraBuildingOuthouse' } & Pick<
-                          ExtraBuildingOuthouse,
-                          'area' | 'displayName' | 'hasWaterConnected'
-                        >)
-                      | ({ __typename?: 'ExtraBuildingGuesthouse' } & Pick<
-                          ExtraBuildingGuesthouse,
-                          'area' | 'displayName' | 'hasWaterConnected'
-                        >)
-                      | ({ __typename?: 'ExtraBuildingGazebo' } & Pick<
-                          ExtraBuildingGazebo,
-                          'area' | 'displayName' | 'hasWaterConnected'
-                        >)
-                      | ({ __typename?: 'ExtraBuildingGreenhouse' } & Pick<
-                          ExtraBuildingGreenhouse,
-                          'area' | 'displayName' | 'hasWaterConnected'
-                        >)
-                      | ({ __typename?: 'ExtraBuildingSauna' } & Pick<
-                          ExtraBuildingSauna,
-                          'area' | 'displayName' | 'hasWaterConnected'
-                        >)
-                      | ({ __typename?: 'ExtraBuildingBarn' } & Pick<
-                          ExtraBuildingBarn,
-                          'area' | 'displayName' | 'hasWaterConnected'
-                        >)
-                      | ({ __typename?: 'ExtraBuildingBoathouse' } & Pick<
-                          ExtraBuildingBoathouse,
-                          'area' | 'displayName' | 'hasWaterConnected'
-                        >)
-                      | ({ __typename?: 'ExtraBuildingOther' } & Pick<
-                          ExtraBuildingOther,
-                          'area' | 'displayName' | 'hasWaterConnected'
-                        >)
-                    >
-                  >
-                })
-          >
-        })
+    | ({ __typename?: 'IncompleteQuote' } & Pick<IncompleteQuote, 'id'>)
   redeemedCampaigns: Array<
     { __typename?: 'Campaign' } & Pick<Campaign, 'code'> & {
         incentive: Maybe<
@@ -3568,7 +3489,7 @@ export const OfferDocument = gql`
           amount
           currency
         }
-        completeDetails: details {
+        details {
           ... on CompleteApartmentQuoteDetails {
             street
             zipCode
@@ -3594,30 +3515,6 @@ export const OfferDocument = gql`
       }
       ... on IncompleteQuote {
         id
-        currentInsurer
-        incompleteDetails: details {
-          ... on IncompleteApartmentQuoteDetails {
-            street
-            zipCode
-            householdSize
-            livingSpace
-            type
-          }
-          ... on IncompleteHouseQuoteDetails {
-            street
-            zipCode
-            householdSize
-            livingSpace
-            ancillarySpace
-            extraBuildings {
-              ... on ExtraBuildingCore {
-                area
-                displayName
-                hasWaterConnected
-              }
-            }
-          }
-        }
       }
     }
     redeemedCampaigns {

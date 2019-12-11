@@ -74,5 +74,12 @@ export const createQuote = (storage: any) => async (
     variables,
   })
 
+  if (result.data!.createQuote.__typename === 'CompleteQuote') {
+    storage.session.setSession({
+      ...storage.session.getSession(),
+      quoteId: result.data!.createQuote!.id,
+    })
+  }
+
   return result.data!
 }

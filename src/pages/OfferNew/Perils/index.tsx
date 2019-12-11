@@ -1,7 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
-import { OfferData } from 'containers/OfferContainer'
 import * as React from 'react'
 import { useMediaQuery } from 'react-responsive'
 import {
@@ -13,11 +12,13 @@ import {
   HeadingWrapper,
   PreHeading,
 } from '../components'
+import { OfferData } from '../types'
 import { InsuranceValues } from './InsuranceValues'
 import { perils } from './mock'
 import { PerilCollection } from './PerilCollection'
 import { PerilModal } from './PerilModal'
 import { PerilSwiper } from './PerilSwiper'
+import { InsuranceType } from 'utils/insuranceDomainUtils'
 
 interface Props {
   offer: OfferData
@@ -70,7 +71,7 @@ export const Perils: React.FC<Props> = ({ offer }) => {
             />
           )}
 
-          <InsuranceValues insuranceType={offer.insurance.type} />
+          <InsuranceValues insuranceType={InsuranceType.BRF} />
         </Column>
         <ColumnSpacing />
       </Container>

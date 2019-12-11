@@ -1,33 +1,32 @@
-import { useEmbark } from '@hedviginsurance/embark'
 import { Page } from 'components/utils/Page'
-import { OfferContainer } from 'containers/OfferContainer'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
+import { useOfferQuery } from 'generated/graphql'
 import { TopBar } from 'new-components/TopBar'
 import * as React from 'react'
+import { RouteComponentProps } from 'react-router'
 import { Compare } from './Compare/index'
 import { Introduction } from './Introduction/index'
 import { Perils } from './Perils/index'
-import { mockedOffer } from './mock'
-import { useOfferQuery } from 'generated/graphql'
-import { EmbarkProvider } from '@hedviginsurance/embark'
-import { StorageContainer } from 'utils/StorageContainer'
 
-export const OfferNew: React.FC = () => {
-  const { data, loading, error, refetch } = useOfferQuery()
+export const OfferNew: React.FC<RouteComponentProps<{ offerId: string }>> = ({
+  match: {
+    params: { offerId },
+  },
+}) => {
+  const { data, loading, error, refetch } = useOfferQuery({
+    variables: { id: offerId },
+  })
+
   console.log(data)
 
-  return (
-    <StorageContainer>
-      {({ session }) => (
-        <Page>
-          <SessionTokenGuard>
-            <TopBar />
-            <Introduction offer={mockedOffer} refetch={refetch} />
-            {/*<Perils offer={offer} />*/}
-            <Compare />
-          </SessionTokenGuard>
-        </Page>
-      )}
-    </StorageContainer>
-  )
+  return !loading && !error && data ? (
+    <Page>
+      <SessionTokenGuard>
+        <TopBar />
+        <Introduction offer={data} refetch={refetch} />
+        <Perils offer={data} />
+        <Compare />
+      </SessionTokenGuard>
+    </Page>
+  ) : null
 }
