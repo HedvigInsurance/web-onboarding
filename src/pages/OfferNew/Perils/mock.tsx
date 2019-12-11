@@ -36,18 +36,23 @@ export const perils: Peril[] = [
   {
     title: 'Vattenläcka',
     description:
-      'Din diskmaskin går sönder och du kommer hem till en swimmingpool i köket och blöta grannar våningen under. Råkar du ut för en vattenläcka får du ersättning för skadorna.',
+      'Skyddet kan ge ersättning vid olika typer av vattenskador t.ex. om en tvättmaskin läckt okontrollerat eller ett badrum svämmat över. Du kan få ersättning både för att åtgärda skadorna på huset samt för andra merkostnader under reparationen.',
     covered: [
-      'När du råkar ut för en plötslig oföretsägbar händelse, t.ex. tappat något',
-      'Saker värda mindre än 50 000 kr',
-      'Om du orsakar en skada på någon annans egendom',
+      'Oberäknat vatten/ånga från vattenledningssytem',
+      'Oberäknat vatten/ånga från badrum, kök eller tvätstuga',
+      'Oberäknat vatten/ånga från värmepanna',
+      'Läckage från kyl/frys',
+      'Läckage från brandsläckare',
+      'Läckage från tvättställ',
+      'Läckage från akvarie',
     ],
     exceptions: [
-      'Saker värda över 50 000 kr',
-      'Om du glömmer kvar något på en restaurang',
+      'Yt-och tätskikt installerats utan behörig installatör',
+      'Skada på det föremål som har läckt',
+      'Skada orsakat av takränna eller utvändigt stuprör',
     ],
     info:
-      'Du måste se till att kranar är täta och inte läcker. Under kyl, fry och diskmaskin måste du se till att det finns vattenuppsamlande underlägg. Se till att innertemperaturen i huset hålls så hög att rör inte fryser.',
+      'Se till att kranar är täta och stängda när de inte används. Lägg underlägg under kyl/frys/ diskmaskin som samlar upp vatten. Se till att ledningssystem och anslutna anordningar inte fryser sönder. Och lämnar du huset i mer än 7 dagar så måste vattnet stängas av helt.',
     icon: <WaterLeak />,
   },
   {
