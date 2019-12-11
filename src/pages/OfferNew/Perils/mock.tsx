@@ -119,7 +119,7 @@ export const perils: Peril[] = [
     icon: <BaseballBat />,
   },
   {
-    title: 'Juridisk tvist',
+    title: 'Juridisk tvist - Ansvarsskydd',
     description:
       'Vårt ansvarsskydd gäller när någon kräver dig på skadestånd för att ha skadat honom eller henne eller dennes ägodelar. Vi hjälper dig med utredning och förhandling och vi betalar både rättegångskostnader och skadestånd om du vållat skadan.',
     covered: [
@@ -138,54 +138,83 @@ export const perils: Peril[] = [
     icon: <LegalDispute />,
   },
   {
-    title: 'Resetrubbel',
+    title: 'Juridisk tvist - Rättsskydd',
     description:
-      'Din diskmaskin går sönder och du kommer hem till en swimmingpool i köket och blöta grannar våningen under. Råkar du ut för en vattenläcka får du ersättning för skadorna.',
+      'Vårt rättsskydd kan ge dig ersättning för att t.ex. anlita advokat/ombud om du hamnar i en rättslig tvist. Skyddet gäller i tvister som prövas i tingsrätt, hovrätt eller Högsta domstolen.',
     covered: [
-      'När du råkar ut för en plötslig oföretsägbar händelse, t.ex. tappat något',
-      'Saker värda mindre än 50 000 kr',
-      'Om du orsakar en skada på någon annans egendom',
+      'Vårdnadstvist',
+      'Arvstvist',
+      'Fastighetstvist',
+      'Advokat och representation i domstol',
+      'Krav enligt skadeståndslagen',
+      'Mellan 1 500 - 250 000 kr i ersättning, självrisk 20% av totalbeloppet',
     ],
     exceptions: [
-      'Saker värda över 50 000 kr',
-      'Om du glömmer kvar något på en restaurang',
+      'Småmål enligt rättegångsbalken',
+      'Uppsåtligt brott, t.e.x om du skadat någon/något med flit',
+      'Uppsåtligt brott, t.ex. om du skadar någon/något med flit',
     ],
     info:
-      'Du måste se till att kranar är täta och inte läcker. Under kyl, fry och diskmaskin måste du se till att det finns vattenuppsamlande underlägg. Se till att innertemperaturen i huset hålls så hög att rör inte fryser.',
+      'Du måste välja vem som ska representera dig och personen måste vara medlem i Svenska advokatsamfundet. Sen måste ombudet skicka in en ansökan till oss innan du kan få besked om rättsskyddet täcker tvisten.',
+    icon: <LegalDispute />,
+  },
+  {
+    title: 'Resetrubbel',
+    description:
+      'Du kan få ersättning om ditt bagage blir försenat på utresa. Och är du i ett land där det utbryter krig eller det sker en naturkatastrof, ja då flyger vi hem dig till Sverige och ersätter dig för de nödvändiga och skäliga kostnaderna.',
+    covered: [
+      'Reseskydd i 45 dagar, kan förlängas till max 90 dagar',
+      'Evakuering vid krig',
+      'Evakuering vid epidemi',
+      'Evakuering vid naturkatastrof, jordskalv, vulkanutbrott',
+      'Bagageförsening vid utresa',
+      'Max 5000 kr i ersättning vid försenat bagage',
+    ],
+    exceptions: [
+      'Hemresa från land som UD avråder folk från att resa till',
+      'Förlorat bagage',
+    ],
+    info:
+      'Anmäl försenat bagage direkt till flygbolaget och se alltid till att få en så kallad PIR-rapport, som kvitto på att ditt bagage är försenat/försvunnet.',
     icon: <Plane />,
   },
   {
     title: 'Överfall',
     description:
-      'Din diskmaskin går sönder och du kommer hem till en swimmingpool i köket och blöta grannar våningen under. Råkar du ut för en vattenläcka får du ersättning för skadorna.',
+      'Vårt överfallsskydd kan ge dig ersättning om du blir utsatt för brott, t.ex. misshandel, rån, ofredande eller våldtäkt. Skyddet kan också ge dig ersättning om du skulle bli utsatt för försök till brott.',
     covered: [
-      'När du råkar ut för en plötslig oföretsägbar händelse, t.ex. tappat något',
-      'Saker värda mindre än 50 000 kr',
-      'Om du orsakar en skada på någon annans egendom',
+      'Misshandel (som inte är ringa) eller rån',
+      'Grov misshandel med livshotande skada',
+      'Grovt rån',
+      'Ofredande om du är under 18 år',
+      'Våldtäkt',
+      'Mellan 8000 kr - 200 000 kr i ersättning, ingen självrisk',
     ],
     exceptions: [
-      'Saker värda över 50 000 kr',
-      'Om du glömmer kvar något på en restaurang',
+      'Brott i samband med arbete eller när du medvetet blandar dig i bråk',
+      'Överfallsskada i samband med upplopp / huliganism / våld i hemmet',
     ],
     info:
-      'Du måste se till att kranar är täta och inte läcker. Under kyl, fry och diskmaskin måste du se till att det finns vattenuppsamlande underlägg. Se till att innertemperaturen i huset hålls så hög att rör inte fryser.',
+      'Hur du själv agerar i olika situationer kan påverka hur stor din ersättning blir. Om du är påverkad av alkohol eller droger, är provocerande eller aggressiv eller medvetet går in i konflikter kan din ersättning minskas eller helt utebli.',
     icon: <Alarm />,
   },
   {
-    title: 'Sjuk på resa',
+    title: 'Sjukdom och olycksfall på resa',
     description:
-      'Din diskmaskin går sönder och du kommer hem till en swimmingpool i köket och blöta grannar våningen under. Råkar du ut för en vattenläcka får du ersättning för skadorna.',
+      'Vårt reseskydd gäller de första 45 dagarna på din resa och ersätter kostnader om du blir akut sjuk, skadar dig eller får akuta tandskador. Vi flyger även hem dig till Sverige för vidare vård om det bedöms nödvändigt.',
     covered: [
-      'När du råkar ut för en plötslig oföretsägbar händelse, t.ex. tappat något',
-      'Saker värda mindre än 50 000 kr',
-      'Om du orsakar en skada på någon annans egendom',
+      'Olycksfall, akut sjukdom, akuta tandbesvär',
+      'Avbruten resa p.g.a att närstående person avlidit/allvarligt sjuk/skadad',
+      'Läkarvård och logi',
+      'Ingen självrisk',
+      'Inget maxtak för ersättning',
     ],
     exceptions: [
-      'Saker värda över 50 000 kr',
-      'Om du glömmer kvar något på en restaurang',
+      'Sjukdomstillstånd som var kända innan avresan',
+      'Kampsport med kroppskontakt / Fallskärmshoppning / Skärmflygning',
     ],
     info:
-      'Du måste se till att kranar är täta och inte läcker. Under kyl, fry och diskmaskin måste du se till att det finns vattenuppsamlande underlägg. Se till att innertemperaturen i huset hålls så hög att rör inte fryser.',
+      'Kontakta alltid oss direkt via appen eller ring Hedvig Global Assistance på +45 38 48 94 61 som har öppet dygnet runt.',
     icon: <Plus />,
   },
   {
