@@ -3,14 +3,11 @@ import { colorsV2 } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import color from 'color'
 import { DocumentIcon } from 'components/icons/Document'
+import { InsuranceType } from 'generated/graphql'
 import { Tooltip } from 'new-components/Tooltip'
 import * as React from 'react'
-import {
-  getInsurancePDFTextKey,
-  getPrebuyPDFTextKey,
-  InsuranceType,
-} from 'utils/insuranceDomainUtils'
 import { SubSubHeadingBlack } from '../../components'
+import { getInsurancePDFTextKey, getPrebuyPDFTextKey } from '../../utils'
 import { insuranceValues } from './mock'
 import { Values } from './Values'
 

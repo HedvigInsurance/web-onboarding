@@ -13,12 +13,12 @@ import {
   PreHeading,
 } from '../components'
 import { CompleteOfferData } from '../types'
+import { getInsuranceType } from '../utils'
 import { InsuranceValues } from './InsuranceValues'
 import { perils } from './mock'
 import { PerilCollection } from './PerilCollection'
 import { PerilModal } from './PerilModal'
 import { PerilSwiper } from './PerilSwiper'
-import { InsuranceType } from 'utils/insuranceDomainUtils'
 
 interface Props {
   offer: CompleteOfferData
@@ -71,7 +71,7 @@ export const Perils: React.FC<Props> = ({ offer }) => {
             />
           )}
 
-          <InsuranceValues insuranceType={InsuranceType.BRF} />
+          <InsuranceValues insuranceType={getInsuranceType(offer.quote)} />
         </Column>
         <ColumnSpacing />
       </Container>

@@ -4,13 +4,12 @@ import {
   TranslationsConsumer,
   TranslationsPlaceholderConsumer,
 } from '@hedviginsurance/textkeyfy'
-import gql from 'graphql-tag'
+import { useRemoveDiscountCodeMutation } from 'generated/graphql'
 import { Button, TextButton } from 'new-components/buttons'
 import * as React from 'react'
-import { Mutation } from 'react-apollo'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { CompleteOfferData } from '../../types'
-import { getInsuranceType, isMonthlyCostDeduction, isQuote } from '../../utils'
+import { getInsuranceType, isMonthlyCostDeduction } from '../../utils'
 import { DiscountCodeModal } from './DiscountCodeModal'
 import { insuranceTypeMapping, otherInsuranceCompanies } from './mock'
 import { PreviousInsurancePicker } from './PreviousInsurancePicker'
@@ -21,14 +20,6 @@ interface Props {
   offer: CompleteOfferData
   refetch: () => void
 }
-
-const REMOVE_CODE_MUTATION = gql`
-  mutation RemoveDiscountCode {
-    removeDiscountCode {
-      __typename
-    }
-  }
-`
 
 const Wrapper = styled.div`
   width: 26rem;
@@ -235,8 +226,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
     ] = React.useState(false)
 
     const monthlyCostDeduction = isMonthlyCostDeduction(offer.redeemedCampaigns)
+    const [removeDiscountCode] = useRemoveDiscountCodeMutation()
 
-    return isQuote(offer.quote) ? (
+    return (
       <Wrapper ref={ref}>
         <Container sticky={sticky}>
           {monthlyCostDeduction && (
@@ -346,24 +338,18 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                   </TranslationsConsumer>
                 </TextButton>
               ) : (
-                <Mutation<{ __typename: string }>
-                  mutation={REMOVE_CODE_MUTATION}
+                <TextButton
+                  color={colorsV2.coral700}
+                  onClick={() => {
+                    removeDiscountCode().then(() => {
+                      refetch()
+                    })
+                  }}
                 >
-                  {(mutate) => (
-                    <TextButton
-                      color={colorsV2.coral700}
-                      onClick={() => {
-                        mutate().then(() => {
-                          refetch()
-                        })
-                      }}
-                    >
-                      <TranslationsConsumer textKey="SIDEBAR_REMOVE_DISCOUNT_BUTTON">
-                        {(t) => t}
-                      </TranslationsConsumer>
-                    </TextButton>
-                  )}
-                </Mutation>
+                  <TranslationsConsumer textKey="SIDEBAR_REMOVE_DISCOUNT_BUTTON">
+                    {(t) => t}
+                  </TranslationsConsumer>
+                </TextButton>
               )}
             </FooterExtraActions>
           </Footer>
@@ -375,6 +361,6 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
           />
         </Container>
       </Wrapper>
-    ) : null
+    )
   },
 )

@@ -3479,6 +3479,47 @@ export type OfferQuery = { __typename?: 'Query' } & {
   >
 }
 
+export type RedeemCodeMutationVariables = {
+  code: Scalars['String']
+}
+
+export type RedeemCodeMutation = { __typename?: 'Mutation' } & {
+  redeemCode: { __typename?: 'RedemedCodeResult' } & {
+    campaigns: Array<
+      { __typename?: 'Campaign' } & {
+        incentive: Maybe<
+          | ({ __typename?: 'MonthlyCostDeduction' } & {
+              amount: Maybe<
+                { __typename?: 'MonetaryAmountV2' } & Pick<
+                  MonetaryAmountV2,
+                  'amount' | 'currency'
+                >
+              >
+            })
+          | ({ __typename?: 'FreeMonths' } & Pick<FreeMonths, 'quantity'>)
+          | { __typename?: 'NoDiscount' }
+        >
+      }
+    >
+    cost: { __typename?: 'InsuranceCost' } & {
+      monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
+        MonetaryAmountV2,
+        'amount' | 'currency'
+      >
+      monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
+        MonetaryAmountV2,
+        'amount' | 'currency'
+      >
+    }
+  }
+}
+
+export type RemoveDiscountCodeMutationVariables = {}
+
+export type RemoveDiscountCodeMutation = { __typename?: 'Mutation' } & {
+  removeDiscountCode: { __typename: 'RedemedCodeResult' }
+}
+
 export const OfferDocument = gql`
   query Offer($id: ID) {
     quote(id: $id) {
@@ -3586,4 +3627,125 @@ export type OfferLazyQueryHookResult = ReturnType<typeof useOfferLazyQuery>
 export type OfferQueryResult = ApolloReactCommon.QueryResult<
   OfferQuery,
   OfferQueryVariables
+>
+export const RedeemCodeDocument = gql`
+  mutation RedeemCode($code: String!) {
+    redeemCode(code: $code) {
+      campaigns {
+        incentive {
+          ... on MonthlyCostDeduction {
+            amount {
+              amount
+              currency
+            }
+          }
+          ... on FreeMonths {
+            quantity
+          }
+        }
+      }
+      cost {
+        monthlyGross {
+          amount
+          currency
+        }
+        monthlyNet {
+          amount
+          currency
+        }
+      }
+    }
+  }
+`
+export type RedeemCodeMutationFn = ApolloReactCommon.MutationFunction<
+  RedeemCodeMutation,
+  RedeemCodeMutationVariables
+>
+
+/**
+ * __useRedeemCodeMutation__
+ *
+ * To run a mutation, you first call `useRedeemCodeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRedeemCodeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [redeemCodeMutation, { data, loading, error }] = useRedeemCodeMutation({
+ *   variables: {
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useRedeemCodeMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    RedeemCodeMutation,
+    RedeemCodeMutationVariables
+  >,
+) {
+  return ApolloReactHooks.useMutation<
+    RedeemCodeMutation,
+    RedeemCodeMutationVariables
+  >(RedeemCodeDocument, baseOptions)
+}
+export type RedeemCodeMutationHookResult = ReturnType<
+  typeof useRedeemCodeMutation
+>
+export type RedeemCodeMutationResult = ApolloReactCommon.MutationResult<
+  RedeemCodeMutation
+>
+export type RedeemCodeMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  RedeemCodeMutation,
+  RedeemCodeMutationVariables
+>
+export const RemoveDiscountCodeDocument = gql`
+  mutation RemoveDiscountCode {
+    removeDiscountCode {
+      __typename
+    }
+  }
+`
+export type RemoveDiscountCodeMutationFn = ApolloReactCommon.MutationFunction<
+  RemoveDiscountCodeMutation,
+  RemoveDiscountCodeMutationVariables
+>
+
+/**
+ * __useRemoveDiscountCodeMutation__
+ *
+ * To run a mutation, you first call `useRemoveDiscountCodeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveDiscountCodeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeDiscountCodeMutation, { data, loading, error }] = useRemoveDiscountCodeMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useRemoveDiscountCodeMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    RemoveDiscountCodeMutation,
+    RemoveDiscountCodeMutationVariables
+  >,
+) {
+  return ApolloReactHooks.useMutation<
+    RemoveDiscountCodeMutation,
+    RemoveDiscountCodeMutationVariables
+  >(RemoveDiscountCodeDocument, baseOptions)
+}
+export type RemoveDiscountCodeMutationHookResult = ReturnType<
+  typeof useRemoveDiscountCodeMutation
+>
+export type RemoveDiscountCodeMutationResult = ApolloReactCommon.MutationResult<
+  RemoveDiscountCodeMutation
+>
+export type RemoveDiscountCodeMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  RemoveDiscountCodeMutation,
+  RemoveDiscountCodeMutationVariables
 >
