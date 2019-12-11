@@ -75,11 +75,13 @@ export const createQuote = (storage: any) => async (
     variables,
   })
 
-  // Update the cache
-  await apolloClient.client.query({
-    query: OFFER_QUERY,
-    fetchPolicy: 'network-only',
-  })
+  if (result.data && result.data.createQuote.__typename === 'CompleteQuote') {
+    // Update the cache
+    await apolloClient.client.query({
+      query: OFFER_QUERY,
+      fetchPolicy: 'network-only',
+    })
+  }
 
   return result.data!
 }
