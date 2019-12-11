@@ -1,7 +1,8 @@
 import * as React from 'react'
 
-export const DownArrow = () => (
+export const DownArrow: React.FC<{ className?: string }> = ({ className }) => (
   <svg
+    className={className}
     width="18px"
     height="11px"
     viewBox="0 0 18 11"

@@ -98,7 +98,6 @@ export const Container = styled('div')`
   padding: 0 2rem;
   margin: 0 auto;
   max-width: 80rem;
-  box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   position: relative;
