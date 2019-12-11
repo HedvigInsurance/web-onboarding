@@ -2,7 +2,11 @@ import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
-import { InsuranceType, isStudentInsurance } from 'utils/insuranceDomainUtils'
+import {
+  getAccidentalCoverageLimitTextKey,
+  getInsuranceAmountTextKey,
+  InsuranceType,
+} from 'utils/insuranceDomainUtils'
 import { HeaderWrapper } from '../components/HeaderWrapper'
 
 const Card = styled('div')({
@@ -59,32 +63,30 @@ const InfoText = styled('div')({
 })
 
 const rows = (
-  isStudent: boolean,
+  insuranceType: InsuranceType,
 ): ReadonlyArray<{
   titleKey: string
   amountKey: string
-}> => [
-  {
-    titleKey: 'OFFER_INSURED_AMOUNT_COL_ONE_TITLE',
-    amountKey: 'OFFER_INSURED_AMOUNT_COL_ONE_AMOUNT',
-  },
-  {
-    titleKey: 'OFFER_INSURED_AMOUNT_COL_TWO_TITLE',
-    amountKey: isStudent
-      ? 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT_STUDENT'
-      : 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT',
-  },
-  {
-    titleKey: 'OFFER_INSURED_AMOUNT_COL_THREE_TITLE',
-    amountKey: isStudent
-      ? 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT_STUDENT'
-      : 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT',
-  },
-  {
-    titleKey: 'OFFER_INSURED_AMOUNT_COL_FOUR_TITLE',
-    amountKey: 'OFFER_INSURED_AMOUNT_COL_FOUR_AMOUNT',
-  },
-]
+}> => {
+  return [
+    {
+      titleKey: 'OFFER_INSURED_AMOUNT_COL_ONE_TITLE',
+      amountKey: 'OFFER_INSURED_AMOUNT_COL_ONE_AMOUNT',
+    },
+    {
+      titleKey: 'OFFER_INSURED_AMOUNT_COL_TWO_TITLE',
+      amountKey: getInsuranceAmountTextKey(insuranceType),
+    },
+    {
+      titleKey: 'OFFER_INSURED_AMOUNT_COL_THREE_TITLE',
+      amountKey: getAccidentalCoverageLimitTextKey(insuranceType),
+    },
+    {
+      titleKey: 'OFFER_INSURED_AMOUNT_COL_FOUR_TITLE',
+      amountKey: 'OFFER_INSURED_AMOUNT_COL_FOUR_AMOUNT',
+    },
+  ]
+}
 
 export const InsuredAmount: React.SFC<{ insuranceType: InsuranceType }> = ({
   insuranceType,
@@ -96,7 +98,7 @@ export const InsuredAmount: React.SFC<{ insuranceType: InsuranceType }> = ({
       </TranslationsConsumer>
     </HeaderWrapper>
     <Table>
-      {rows(isStudentInsurance(insuranceType)).map((row, index) => (
+      {rows(insuranceType).map((row, index) => (
         <Row
           key={row.titleKey + row.amountKey}
           style={{

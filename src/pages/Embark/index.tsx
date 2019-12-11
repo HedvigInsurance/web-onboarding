@@ -254,7 +254,8 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                         )
                       },
                       MailingList: () => {
-                        // todo
+                        location.href =
+                          'https://hedvigapp.typeform.com/to/xiTKWi'
                       },
                     }}
                     data={data[1]}
