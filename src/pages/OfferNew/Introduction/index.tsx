@@ -17,12 +17,12 @@ import {
   PreHeading,
   Section,
 } from '../components'
-import { OfferData } from '../types'
+import { CompleteOfferData } from '../types'
 import { Sidebar } from './Sidebar'
 import { Usps } from './Usps'
 
 interface Props {
-  offer: OfferData
+  offer: CompleteOfferData
   refetch: () => void
 }
 

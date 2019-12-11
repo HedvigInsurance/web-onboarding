@@ -7,19 +7,16 @@ import { RouteComponentProps } from 'react-router'
 import { Compare } from './Compare/index'
 import { Introduction } from './Introduction/index'
 import { Perils } from './Perils/index'
+import { isOffer } from './utils'
 
 export const OfferNew: React.FC<RouteComponentProps<{ offerId: string }>> = ({
-  match: {
-    params: { offerId },
-  },
+  match,
 }) => {
   const { data, loading, error, refetch } = useOfferQuery({
-    variables: { id: offerId },
+    variables: { id: match.params.offerId },
   })
 
-  console.log(data)
-
-  return !loading && !error && data ? (
+  return !loading && !error && data && isOffer(data) ? (
     <Page>
       <SessionTokenGuard>
         <TopBar />

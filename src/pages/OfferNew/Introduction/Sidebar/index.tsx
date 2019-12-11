@@ -9,16 +9,16 @@ import { Button, TextButton } from 'new-components/buttons'
 import * as React from 'react'
 import { Mutation } from 'react-apollo'
 import { formatPostalNumber } from 'utils/postalNumbers'
-import { OfferData } from '../../types'
-import { isMonthlyCostDeduction } from '../../utils'
+import { CompleteOfferData } from '../../types'
+import { getInsuranceType, isMonthlyCostDeduction, isQuote } from '../../utils'
 import { DiscountCodeModal } from './DiscountCodeModal'
-import { getInsuranceType, otherInsuranceCompanies } from './mock'
+import { insuranceTypeMapping, otherInsuranceCompanies } from './mock'
 import { PreviousInsurancePicker } from './PreviousInsurancePicker'
 import { StartDate } from './StartDate'
 
 interface Props {
   sticky: boolean
-  offer: OfferData
+  offer: CompleteOfferData
   refetch: () => void
 }
 
@@ -234,14 +234,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
       setDiscountCodeModalIsOpen,
     ] = React.useState(false)
 
-    const monthlyCostDeduction =
-      offer.redeemedCampaigns.length > 0 && offer.redeemedCampaigns[0].incentive
-        ? isMonthlyCostDeduction(offer.redeemedCampaigns[0].incentive)
-        : false
+    const monthlyCostDeduction = isMonthlyCostDeduction(offer.redeemedCampaigns)
 
-    return offer.quote &&
-      offer.quote.__typename === 'CompleteQuote' &&
-      offer.quote.details ? (
+    return isQuote(offer.quote) ? (
       <Wrapper ref={ref}>
         <Container sticky={sticky}>
           {monthlyCostDeduction && (
@@ -259,27 +254,29 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 </TranslationsConsumer>
               </PreTitle>
 
-              <Title>{getInsuranceType(offer.quote)}</Title>
+              <Title>
+                {insuranceTypeMapping[getInsuranceType(offer.quote)]}
+              </Title>
 
               <SummaryContent>
                 <SummaryText>
-                  <b>{`${offer.member.firstName} ${offer.member.lastName}`}</b>
-
+                  <b>{`${offer.member.firstName} ${offer.member.lastName}`}</b>{' '}
                   {offer.quote.details.householdSize - 1 > 0 && (
-                    <TranslationsConsumer textKey="SIDEBAR_INSURED_PERSONS_SUFFIX">
-                      {(t) =>
-                        ` + ${offer.quote!.details!.householdSize! - 1} ${t}`
-                      }
-                    </TranslationsConsumer>
+                    <TranslationsPlaceholderConsumer
+                      textKey="SIDEBAR_INSURED_PERSONS_SUFFIX"
+                      replacements={{
+                        AMOUNT: offer.quote.details.householdSize - 1,
+                      }}
+                    >
+                      {(t) => t}
+                    </TranslationsPlaceholderConsumer>
                   )}
                 </SummaryText>
-                <SummaryText>{`${offer.quote &&
-                  offer.quote.details &&
-                  offer.quote.details.street}, ${formatPostalNumber(
-                  (offer.quote.__typename === 'CompleteQuote' &&
-                    offer.quote.details.zipCode!) ||
-                    '',
-                )}`}</SummaryText>
+                <SummaryText>
+                  {`${offer.quote.details.street}, ${formatPostalNumber(
+                    offer.quote.details.zipCode,
+                  )}`}
+                </SummaryText>
 
                 <TextButton>
                   <TranslationsConsumer textKey="SIDEBAR_SHOW_DETAILS_BUTTON">
@@ -324,7 +321,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
           </Header>
 
           <Body>
-            {!!offer.quote.currentInsurer && (
+            {offer.quote.currentInsurer && (
               <PreviousInsurancePicker insurances={otherInsuranceCompanies} />
             )}
             <StartDate insuredAtOtherCompany={!!offer.quote.currentInsurer} />

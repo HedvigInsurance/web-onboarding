@@ -12,7 +12,7 @@ import {
   HeadingWrapper,
   PreHeading,
 } from '../components'
-import { OfferData } from '../types'
+import { CompleteOfferData } from '../types'
 import { InsuranceValues } from './InsuranceValues'
 import { perils } from './mock'
 import { PerilCollection } from './PerilCollection'
@@ -21,7 +21,7 @@ import { PerilSwiper } from './PerilSwiper'
 import { InsuranceType } from 'utils/insuranceDomainUtils'
 
 interface Props {
-  offer: OfferData
+  offer: CompleteOfferData
 }
 
 const Wrapper = styled.div`
