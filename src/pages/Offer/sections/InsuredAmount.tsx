@@ -3,7 +3,7 @@ import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import {
-  getDeductibleTextKey,
+  getAccidentalCoverageLimitTextKey,
   getInsuranceAmountTextKey,
   InsuranceType,
 } from 'utils/insuranceDomainUtils'
@@ -79,7 +79,7 @@ const rows = (
     },
     {
       titleKey: 'OFFER_INSURED_AMOUNT_COL_THREE_TITLE',
-      amountKey: getDeductibleTextKey(insuranceType),
+      amountKey: getAccidentalCoverageLimitTextKey(insuranceType),
     },
     {
       titleKey: 'OFFER_INSURED_AMOUNT_COL_FOUR_TITLE',
