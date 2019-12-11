@@ -1,8 +1,8 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
-import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { Tooltip } from 'new-components/Tooltip'
 import * as React from 'react'
+import { useTextKeys } from 'utils/hooks/useTextKey'
 
 interface Props {
   insuredAtOtherCompany: boolean
@@ -54,26 +54,21 @@ const TooltipWrapper = styled.div`
   margin-left: 0.5rem;
 `
 
-export const StartDate: React.FC<Props> = ({ insuredAtOtherCompany }) => (
-  <Wrapper>
-    <Label>
-      <Title>
-        <TranslationsConsumer textKey="SIDEBAR_STARTDATE_CELL_LABEL">
-          {(t) => t}
-        </TranslationsConsumer>
-      </Title>
-      <SubTitle>
-        <TranslationsConsumer textKey="SIDEBAR_STARTDATE_CELL_SUBLABEL">
-          {(t) => t}
-        </TranslationsConsumer>
-      </SubTitle>
-    </Label>
+export const StartDate: React.FC<Props> = ({ insuredAtOtherCompany }) => {
+  const textKeys = useTextKeys()
+  return (
+    <Wrapper>
+      <Label>
+        <Title>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL}</Title>
+        <SubTitle>{textKeys.SIDEBAR_STARTDATE_CELL_SUBLABEL}</SubTitle>
+      </Label>
 
-    <Value>
-      {insuredAtOtherCompany ? 'När din gamla löper ut' : 'Idag'}
-      <TooltipWrapper>
-        <Tooltip size="lg" body="Info" />
-      </TooltipWrapper>
-    </Value>
-  </Wrapper>
-)
+      <Value>
+        {insuredAtOtherCompany ? 'När din gamla löper ut' : 'Idag'}
+        <TooltipWrapper>
+          <Tooltip size="lg" body="Info" />
+        </TooltipWrapper>
+      </Value>
+    </Wrapper>
+  )
+}

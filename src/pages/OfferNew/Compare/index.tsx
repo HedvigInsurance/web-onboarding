@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
-import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
+import { useTextKeys } from 'utils/hooks/useTextKey'
 import {
   Body,
   Column,
@@ -69,26 +69,15 @@ const insuranceProperties: InsuranceProperties = {
 }
 
 export const Compare = () => {
+  const textKeys = useTextKeys()
   return (
     <Wrapper>
       <Container>
         <Column>
           <HeadingWrapper>
-            <PreHeading>
-              <TranslationsConsumer textKey="COMPARE_LABEL">
-                {(t) => t}
-              </TranslationsConsumer>
-            </PreHeading>
-            <HeadingBlack>
-              <TranslationsConsumer textKey="COMPARE_HEADLINE">
-                {(t) => t}
-              </TranslationsConsumer>
-            </HeadingBlack>
-            <Body>
-              <TranslationsConsumer textKey="COMPARE_BODY">
-                {(t) => t}
-              </TranslationsConsumer>
-            </Body>
+            <PreHeading>{textKeys.COMPARE_LABEL}</PreHeading>
+            <HeadingBlack>{textKeys.COMPARE_HEADLINE}</HeadingBlack>
+            <Body>{textKeys.COMPARE_BODY}</Body>
           </HeadingWrapper>
 
           <CompareTable

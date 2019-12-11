@@ -1,11 +1,11 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
-import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import color from 'color'
 import { DocumentIcon } from 'components/icons/Document'
 import { InsuranceType } from 'generated/graphql'
 import { Tooltip } from 'new-components/Tooltip'
 import * as React from 'react'
+import { useTextKeys } from 'utils/hooks/useTextKey'
 import { SubSubHeadingBlack } from '../../components'
 import { getInsurancePDFTextKey, getPrebuyPDFTextKey } from '../../utils'
 import { insuranceValues } from './mock'
@@ -81,42 +81,39 @@ const Link = styled.a`
   }
 `
 
-export const InsuranceValues: React.FC<Props> = ({ insuranceType }) => (
-  <Wrapper>
-    <Header>
-      <SubSubHeadingBlack>
-        <TranslationsConsumer textKey="COVERAGE_INFO_HEADLINE">
-          {(t) => t}
-        </TranslationsConsumer>
-      </SubSubHeadingBlack>
-      <TooltipWrapper>
-        <Tooltip size="lg" body="Information" />
-      </TooltipWrapper>
-    </Header>
+export const InsuranceValues: React.FC<Props> = ({ insuranceType }) => {
+  const textKeys = useTextKeys()
 
-    <Values insuranceValues={insuranceValues} />
+  return (
+    <Wrapper>
+      <Header>
+        <SubSubHeadingBlack>
+          {textKeys.COVERAGE_INFO_HEADLINE}
+        </SubSubHeadingBlack>
+        <TooltipWrapper>
+          <Tooltip size="lg" body="Information" />
+        </TooltipWrapper>
+      </Header>
 
-    <Links>
-      <TranslationsConsumer textKey={getPrebuyPDFTextKey(insuranceType)}>
-        {(prebuyLink) => (
-          <Link href={prebuyLink} target="_blank">
-            <DocumentIcon />
-            <TranslationsConsumer textKey="COVERAGE_TERMSANDCONDITIONS_BUTTON">
-              {(t) => t}
-            </TranslationsConsumer>
-          </Link>
-        )}
-      </TranslationsConsumer>
-      <TranslationsConsumer textKey={getInsurancePDFTextKey(insuranceType)}>
-        {(pdfLink) => (
-          <Link href={pdfLink} target="_blank">
-            <DocumentIcon />
-            <TranslationsConsumer textKey="COVERAGE_PRESALEINFORMATION_BUTTON">
-              {(t) => t}
-            </TranslationsConsumer>
-          </Link>
-        )}
-      </TranslationsConsumer>
-    </Links>
-  </Wrapper>
-)
+      <Values insuranceValues={insuranceValues} />
+
+      <Links>
+        <Link
+          href={textKeys[getPrebuyPDFTextKey(insuranceType)]}
+          target="_blank"
+        >
+          <DocumentIcon />
+          {textKeys.COVERAGE_TERMSANDCONDITIONS_BUTTON}
+        </Link>
+
+        <Link
+          href={textKeys[getInsurancePDFTextKey(insuranceType)]}
+          target="_blank"
+        >
+          <DocumentIcon />
+          {textKeys.COVERAGE_PRESALEINFORMATION_BUTTON}
+        </Link>
+      </Links>
+    </Wrapper>
+  )
+}

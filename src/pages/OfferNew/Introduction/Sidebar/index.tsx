@@ -1,12 +1,10 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
-import {
-  TranslationsConsumer,
-  TranslationsPlaceholderConsumer,
-} from '@hedviginsurance/textkeyfy'
+import { TranslationsPlaceholderConsumer } from '@hedviginsurance/textkeyfy'
 import { InsuranceType, useRemoveDiscountCodeMutation } from 'generated/graphql'
 import { Button, TextButton } from 'new-components/buttons'
 import * as React from 'react'
+import { useTextKeys } from 'utils/hooks/useTextKey'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { CompleteOfferData } from '../../types'
 import { getInsuranceType, isMonthlyCostDeduction } from '../../utils'
@@ -228,6 +226,7 @@ export const insuranceTypeTextKeys: { [key in InsuranceType]: string } = {
 
 export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
   ({ sticky, offer, refetch }, ref) => {
+    const textKeys = useTextKeys()
     const [
       discountCodeModalIsOpen,
       setDiscountCodeModalIsOpen,
@@ -240,26 +239,14 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
       <Wrapper ref={ref}>
         <Container sticky={sticky}>
           {monthlyCostDeduction && (
-            <DiscountInfo>
-              <TranslationsConsumer textKey="SIDEBAR_ACTIVE_REFERRAL">
-                {(t) => t}
-              </TranslationsConsumer>
-            </DiscountInfo>
+            <DiscountInfo>{textKeys.SIDEBAR_ACTIVE_REFERRAL}</DiscountInfo>
           )}
           <Header>
             <Summary>
-              <PreTitle>
-                <TranslationsConsumer textKey="SIDEBAR_LABEL">
-                  {(t) => t}
-                </TranslationsConsumer>
-              </PreTitle>
+              <PreTitle>{textKeys.SIDEBAR_LABEL}</PreTitle>
 
               <Title>
-                <TranslationsConsumer
-                  textKey={insuranceTypeTextKeys[getInsuranceType(offer.quote)]}
-                >
-                  {(t) => t}
-                </TranslationsConsumer>
+                {textKeys[insuranceTypeTextKeys[getInsuranceType(offer.quote)]]}
               </Title>
 
               <SummaryContent>
@@ -282,11 +269,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                   )}`}
                 </SummaryText>
 
-                <TextButton>
-                  <TranslationsConsumer textKey="SIDEBAR_SHOW_DETAILS_BUTTON">
-                    {(t) => t}
-                  </TranslationsConsumer>
-                </TextButton>
+                <TextButton>{textKeys.SIDEBAR_SHOW_DETAILS_BUTTON}</TextButton>
               </SummaryContent>
             </Summary>
             <Price>
@@ -309,15 +292,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 </PriceGross>
 
                 <PriceSuffix>
-                  <PriceUnit>
-                    <TranslationsConsumer textKey="SIDEBAR_PRICE_SUFFIX_UNIT">
-                      {(t) => t}
-                    </TranslationsConsumer>
-                  </PriceUnit>
+                  <PriceUnit>{textKeys.SIDEBAR_PRICE_SUFFIX_UNIT}</PriceUnit>
                   <PriceInterval>
-                    <TranslationsConsumer textKey="SIDEBAR_PRICE_SUFFIX_INTERVAL">
-                      {(t) => t}
-                    </TranslationsConsumer>
+                    {textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL}
                   </PriceInterval>
                 </PriceSuffix>
               </PriceNumbers>
@@ -332,11 +309,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
           </Body>
 
           <Footer>
-            <Button size="lg">
-              <TranslationsConsumer textKey="SIDEBAR_GETHEDVIG_BUTTON">
-                {(t) => t}
-              </TranslationsConsumer>
-            </Button>
+            <Button size="lg">{textKeys.SIDEBAR_GETHEDVIG_BUTTON}</Button>
 
             <FooterExtraActions>
               {offer.redeemedCampaigns.length === 0 ? (
@@ -345,9 +318,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                     setDiscountCodeModalIsOpen(true)
                   }}
                 >
-                  <TranslationsConsumer textKey="SIDEBAR_ADD_DISCOUNT_BUTTON">
-                    {(t) => t}
-                  </TranslationsConsumer>
+                  {textKeys.SIDEBAR_ADD_DISCOUNT_BUTTON}
                 </TextButton>
               ) : (
                 <TextButton
@@ -358,9 +329,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                     })
                   }}
                 >
-                  <TranslationsConsumer textKey="SIDEBAR_REMOVE_DISCOUNT_BUTTON">
-                    {(t) => t}
-                  </TranslationsConsumer>
+                  {textKeys.SIDEBAR_REMOVE_DISCOUNT_BUTTON}
                 </TextButton>
               )}
             </FooterExtraActions>

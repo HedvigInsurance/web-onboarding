@@ -1,8 +1,8 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
-import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import { useMediaQuery } from 'react-responsive'
+import { useTextKeys } from 'utils/hooks/useTextKey'
 import {
   Body,
   Column,
@@ -31,6 +31,7 @@ const Wrapper = styled.div`
 `
 
 export const Perils: React.FC<Props> = ({ offer }) => {
+  const textKeys = useTextKeys()
   const [isShowingPeril, setIsShowingPeril] = React.useState(false)
   const [currentPeril, setCurrentPeril] = React.useState(0)
   const isMobile = useMediaQuery({ query: '(max-width: 600px)' })
@@ -40,21 +41,9 @@ export const Perils: React.FC<Props> = ({ offer }) => {
       <Container>
         <Column>
           <HeadingWrapper>
-            <PreHeading>
-              <TranslationsConsumer textKey="COVERAGE_LABEL">
-                {(t) => t}
-              </TranslationsConsumer>
-            </PreHeading>
-            <HeadingBlack>
-              <TranslationsConsumer textKey="COVERAGE_HEADLINE">
-                {(t) => t}
-              </TranslationsConsumer>
-            </HeadingBlack>
-            <Body>
-              <TranslationsConsumer textKey="COVERAGE_BODY">
-                {(t) => t}
-              </TranslationsConsumer>
-            </Body>
+            <PreHeading>{textKeys.COVERAGE_LABEL}</PreHeading>
+            <HeadingBlack>{textKeys.COVERAGE_HEADLINE}</HeadingBlack>
+            <Body>{textKeys.COVERAGE_BODY}</Body>
           </HeadingWrapper>
 
           {isMobile ? (

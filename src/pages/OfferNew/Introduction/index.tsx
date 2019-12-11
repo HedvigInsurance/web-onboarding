@@ -1,12 +1,10 @@
 import { keyframes } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
-import {
-  TranslationsConsumer,
-  TranslationsPlaceholderConsumer,
-} from '@hedviginsurance/textkeyfy'
+import { TranslationsPlaceholderConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import { animateScroll } from 'react-scroll'
+import { useTextKeys } from 'utils/hooks/useTextKey'
 import { DownArrow } from '../../../components/icons/DownArrow'
 import { useDocumentScroll } from '../../../utils/hooks/useDocumentScroll'
 import {
@@ -91,6 +89,7 @@ const ScrollButton = styled.button`
 export const Introduction: React.FC<Props> = ({ offer, refetch }) => {
   const [sidebarIsSticky, setSidebarIsSticky] = React.useState(false)
   const ref = React.useRef<HTMLDivElement>(null)
+  const textKeys = useTextKeys()
 
   useDocumentScroll(() => {
     const distanceToTop =
@@ -111,11 +110,7 @@ export const Introduction: React.FC<Props> = ({ offer, refetch }) => {
         <Container>
           <Column>
             <HeadingWrapper>
-              <PreHeading>
-                <TranslationsConsumer textKey="HERO_LABEL">
-                  {(t) => t}
-                </TranslationsConsumer>
-              </PreHeading>
+              <PreHeading>{textKeys.HERO_LABEL}</PreHeading>
               <HeadingWhite>
                 <TranslationsPlaceholderConsumer
                   textKey="HERO_HEADLINE"
@@ -140,9 +135,7 @@ export const Introduction: React.FC<Props> = ({ offer, refetch }) => {
               animateScroll.scrollTo(800)
             }}
           >
-            <TranslationsConsumer textKey="HERO_SCROLL_BUTTON">
-              {(t) => t}
-            </TranslationsConsumer>
+            {textKeys.HERO_SCROLL_BUTTON}
             <DownArrow />
           </ScrollButton>
         </Container>

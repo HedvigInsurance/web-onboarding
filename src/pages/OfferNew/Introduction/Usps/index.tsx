@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
-import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
+import { useTextKeys } from 'utils/hooks/useTextKey'
 import { Bell } from './icons/Bell'
 import { Heart } from './icons/Heart'
 import { Stopwatch } from './icons/Stopwatch'
@@ -62,34 +62,27 @@ const Usp: React.FC<UspProps> = ({ image, title, paragraph }) => (
   </UspContainer>
 )
 
-export const Usps: React.FunctionComponent = () => (
-  <UspsContainer>
-    <TranslationsConsumer textKey="HERO_USP1_HEADLINE">
-      {(headline) => (
-        <TranslationsConsumer textKey="HERO_USP1_BODY">
-          {(body) => (
-            <Usp image={<Stopwatch />} title={headline} paragraph={body} />
-          )}
-        </TranslationsConsumer>
-      )}
-    </TranslationsConsumer>
+export const Usps: React.FunctionComponent = () => {
+  const textKeys = useTextKeys()
+  return (
+    <UspsContainer>
+      <Usp
+        image={<Stopwatch />}
+        title={textKeys.HERO_USP1_HEADLINE}
+        paragraph={textKeys.HERO_USP1_BODY}
+      />
 
-    <TranslationsConsumer textKey="HERO_USP2_HEADLINE">
-      {(headline) => (
-        <TranslationsConsumer textKey="HERO_USP2_BODY">
-          {(body) => <Usp image={<Bell />} title={headline} paragraph={body} />}
-        </TranslationsConsumer>
-      )}
-    </TranslationsConsumer>
+      <Usp
+        image={<Bell />}
+        title={textKeys.HERO_USP2_HEADLINE}
+        paragraph={textKeys.HERO_USP2_BODY}
+      />
 
-    <TranslationsConsumer textKey="HERO_USP3_HEADLINE">
-      {(headline) => (
-        <TranslationsConsumer textKey="HERO_USP3_BODY">
-          {(body) => (
-            <Usp image={<Heart />} title={headline} paragraph={body} />
-          )}
-        </TranslationsConsumer>
-      )}
-    </TranslationsConsumer>
-  </UspsContainer>
-)
+      <Usp
+        image={<Heart />}
+        title={textKeys.HERO_USP3_HEADLINE}
+        paragraph={textKeys.HERO_USP3_BODY}
+      />
+    </UspsContainer>
+  )
+}
