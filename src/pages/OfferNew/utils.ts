@@ -48,18 +48,26 @@ export const getInsuranceType = (quote: CompleteQuote): InsuranceType => {
     return InsuranceType.House
   }
 
-  switch (quote.details.type) {
-    case 'RENT':
-      return InsuranceType.Rent
-    case 'BRF':
-      return InsuranceType.Brf
-    case 'STUDENT_RENT':
-      return InsuranceType.StudentRent
-    case 'STUDENT_BRF':
-      return InsuranceType.StudentBrf
-    default:
-      return InsuranceType.Rent
+  const map = {
+    RENT: InsuranceType.Rent,
+    BRF: InsuranceType.Brf,
+    STUDENT_RENT: InsuranceType.StudentRent,
+    STUDENT_BRF: InsuranceType.StudentBrf,
   }
+
+  if (!map[quote.details.type]) {
+    throw new Error(`Invalid insurance type ${quote.details.type}`)
+  }
+
+  return map[quote.details.type]
+}
+
+export const insuranceTypeTextKeys: { [key in InsuranceType]: string } = {
+  [InsuranceType.Rent]: 'Hyresrätt',
+  [InsuranceType.Brf]: 'Bostadsrätt',
+  [InsuranceType.StudentRent]: 'Hyresrätt',
+  [InsuranceType.StudentBrf]: 'Bostadsrätt',
+  [InsuranceType.House]: 'Hus',
 }
 
 export const getPrebuyPDFTextKey = (insuranceType: InsuranceType): string => {

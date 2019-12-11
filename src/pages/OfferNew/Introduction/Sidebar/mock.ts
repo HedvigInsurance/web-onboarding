@@ -1,5 +1,3 @@
-import { InsuranceType } from 'generated/graphql'
-
 export interface InsuranceCompany {
   name: string
   switchable: boolean
@@ -13,13 +11,3 @@ export const otherInsuranceCompanies: InsuranceCompany[] = [
   { name: 'Länsförsäkringar', switchable: false },
   { name: 'Moderna försäkringar', switchable: true },
 ]
-
-export const insuranceTypeMapping: {
-  [key in InsuranceType]: string
-} = {
-  RENT: 'Hyresrätt',
-  BRF: 'Bostadsrätt',
-  STUDENT_RENT: 'Hyresrätt',
-  STUDENT_BRF: 'Bostadsrätt',
-  HOUSE: 'Hus',
-}

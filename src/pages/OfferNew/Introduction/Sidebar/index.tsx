@@ -9,9 +9,13 @@ import { Button, TextButton } from 'new-components/buttons'
 import * as React from 'react'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { CompleteOfferData } from '../../types'
-import { getInsuranceType, isMonthlyCostDeduction } from '../../utils'
+import {
+  getInsuranceType,
+  insuranceTypeTextKeys,
+  isMonthlyCostDeduction,
+} from '../../utils'
 import { DiscountCodeModal } from './DiscountCodeModal'
-import { insuranceTypeMapping, otherInsuranceCompanies } from './mock'
+import { otherInsuranceCompanies } from './mock'
 import { PreviousInsurancePicker } from './PreviousInsurancePicker'
 import { StartDate } from './StartDate'
 
@@ -111,6 +115,7 @@ const Title = styled.div`
 const SummaryContent = styled.div`
   display: flex;
   flex-direction: column;
+  margin-top: 1.5rem;
 `
 
 const SummaryText = styled.div`
@@ -247,7 +252,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
               </PreTitle>
 
               <Title>
-                {insuranceTypeMapping[getInsuranceType(offer.quote)]}
+                {insuranceTypeTextKeys[getInsuranceType(offer.quote)]}
               </Title>
 
               <SummaryContent>
