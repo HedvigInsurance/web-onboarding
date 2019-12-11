@@ -131,7 +131,11 @@ export const PreviousInsurancePicker: React.FC<Props> = ({ insurances }) => {
           </TranslationsConsumer>
         </Label>
         <Value dropdownIsVisible={dropdownIsVisible}>
-          <ValueText>Välj bolag</ValueText>
+          <ValueText>
+            <TranslationsConsumer textKey="SIDEBAR_OLDINSURANCE_CHOOSE_LABEL">
+              {(t) => t}
+            </TranslationsConsumer>
+          </ValueText>
           <DownArrow />
         </Value>
       </Button>

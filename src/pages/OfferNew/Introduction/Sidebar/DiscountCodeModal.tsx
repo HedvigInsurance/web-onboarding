@@ -197,18 +197,24 @@ export const DiscountCodeModal: React.FC<Props> = ({
               <DiscountInputWrapper>
                 <TranslationsConsumer textKey="SIDEBAR_ADD_DISCOUNT_CELL_LABEL">
                   {(label) => (
-                    <TranslationsConsumer textKey={errors.code || ''}>
-                      {(errorText) => (
-                        <TextInput
-                          label={label}
-                          placeholder="XXXXX"
-                          name="code"
-                          autoComplete="off"
-                          touched={
-                            touched.code ? touched.code.toString() : undefined
-                          }
-                          errors={errorText}
-                        />
+                    <TranslationsConsumer textKey="SIDEBAR_ADD_DISCOUNT_CELL_PLACEHOLDER">
+                      {(placeholder) => (
+                        <TranslationsConsumer textKey={errors.code || ''}>
+                          {(errorText) => (
+                            <TextInput
+                              label={label}
+                              placeholder={placeholder}
+                              name="code"
+                              autoComplete="off"
+                              touched={
+                                touched.code
+                                  ? touched.code.toString()
+                                  : undefined
+                              }
+                              errors={errorText}
+                            />
+                          )}
+                        </TranslationsConsumer>
                       )}
                     </TranslationsConsumer>
                   )}

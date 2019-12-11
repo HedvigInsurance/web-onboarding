@@ -4,16 +4,12 @@ import {
   TranslationsConsumer,
   TranslationsPlaceholderConsumer,
 } from '@hedviginsurance/textkeyfy'
-import { useRemoveDiscountCodeMutation } from 'generated/graphql'
+import { InsuranceType, useRemoveDiscountCodeMutation } from 'generated/graphql'
 import { Button, TextButton } from 'new-components/buttons'
 import * as React from 'react'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { CompleteOfferData } from '../../types'
-import {
-  getInsuranceType,
-  insuranceTypeTextKeys,
-  isMonthlyCostDeduction,
-} from '../../utils'
+import { getInsuranceType, isMonthlyCostDeduction } from '../../utils'
 import { DiscountCodeModal } from './DiscountCodeModal'
 import { otherInsuranceCompanies } from './mock'
 import { PreviousInsurancePicker } from './PreviousInsurancePicker'
@@ -222,6 +218,13 @@ const FooterExtraActions = styled.div`
     }
   }
 `
+export const insuranceTypeTextKeys: { [key in InsuranceType]: string } = {
+  [InsuranceType.Rent]: 'SIDEBAR_INSURANCE_TYPE_RENT',
+  [InsuranceType.Brf]: 'SIDEBAR_INSURANCE_TYPE_BRF',
+  [InsuranceType.StudentRent]: 'SIDEBAR_INSURANCE_TYPE_RENT',
+  [InsuranceType.StudentBrf]: 'SIDEBAR_INSURANCE_TYPE_BRF',
+  [InsuranceType.House]: 'SIDEBAR_INSURANCE_TYPE_HOUSE',
+}
 
 export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
   ({ sticky, offer, refetch }, ref) => {
@@ -252,7 +255,11 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
               </PreTitle>
 
               <Title>
-                {insuranceTypeTextKeys[getInsuranceType(offer.quote)]}
+                <TranslationsConsumer
+                  textKey={insuranceTypeTextKeys[getInsuranceType(offer.quote)]}
+                >
+                  {(t) => t}
+                </TranslationsConsumer>
               </Title>
 
               <SummaryContent>

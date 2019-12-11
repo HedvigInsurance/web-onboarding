@@ -62,14 +62,6 @@ export const getInsuranceType = (quote: CompleteQuote): InsuranceType => {
   return map[quote.details.type]
 }
 
-export const insuranceTypeTextKeys: { [key in InsuranceType]: string } = {
-  [InsuranceType.Rent]: 'Hyresrätt',
-  [InsuranceType.Brf]: 'Bostadsrätt',
-  [InsuranceType.StudentRent]: 'Hyresrätt',
-  [InsuranceType.StudentBrf]: 'Bostadsrätt',
-  [InsuranceType.House]: 'Hus',
-}
-
 export const getPrebuyPDFTextKey = (insuranceType: InsuranceType): string => {
   const map = {
     [InsuranceType.Rent]: 'TERMS_PDF_PREBUY_RENT_URL',
