@@ -198,7 +198,9 @@ export const Offering: React.SFC<{}> = () => (
                               {({ currentLanguage }) =>
                                 (currentLanguage === '' ||
                                   currentLanguage === 'sv') && (
-                                  <InsuranceCoverage />
+                                  <InsuranceCoverage
+                                    insuranceType={offer.insurance.type}
+                                  />
                                 )
                               }
                             </CurrentLanguage>

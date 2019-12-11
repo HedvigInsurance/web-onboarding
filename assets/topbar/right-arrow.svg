@@ -1,3 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 408 408" xml:space="preserve">
-	<polygon points="204,0 168.3,35.7 311.1,178.5 0,178.5 0,229.5 311.1,229.5 168.3,372.3 204,408 408,204"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 408 408"><path d="M204 0l-35.7 35.7 142.8 142.8H0v51h311.1L168.3 372.3 204 408l204-204z"/></svg>
