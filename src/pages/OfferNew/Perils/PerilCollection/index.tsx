@@ -12,7 +12,8 @@ interface Props {
 const Wrapper = styled('div')`
   width: 100%;
   display: flex;
-  flex-flow: row wrap;
+  flex-direction: row;
+  flex-wrap: wrap;
   margin: 0 -1rem;
 `
 

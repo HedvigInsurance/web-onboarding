@@ -12,6 +12,7 @@ interface Props {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   margin-top: 0.5rem;
 
   @media (max-width: 600px) {
@@ -23,7 +24,8 @@ const Wrapper = styled.div`
 const Container = styled.div`
   display: flex;
   flex-direction: row;
-  margin-right: 4rem;
+  margin-right: 2rem;
+  margin-bottom: 2rem;
   align-items: flex-end;
 
   @media (max-width: 800px) {

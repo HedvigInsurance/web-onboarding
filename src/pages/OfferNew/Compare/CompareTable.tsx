@@ -283,17 +283,26 @@ const DropdownRow = styled('button')`
   }
 `
 
+const MobileDropdownWrapper = styled('div')`
+  display: flex;
+  align-items: center;
+  max-width: 85px;
+  margin-bottom: 3.25rem;
+`
+const TinyDownArrow = styled(DownArrow)`
+  width: 7px;
+  height: 7px;
+`
 const MobileDropdown = styled('select')`
   appearance: none;
   height: 1.5rem;
-  margin-bottom: 3.25rem;
+  width: calc(100% - 8px);
   border: 0;
   background: transparent;
   font-size: 0.875rem;
   font-family: inherit;
   text-overflow: ellipsis;
   overflow: hidden;
-  max-width: 85px;
   padding: 0;
 
   :active {
@@ -412,21 +421,26 @@ export const CompareTable = (props: Props) => {
           </>
         )}
         {isMobile && (
-          <MobileDropdown
-            onChange={(e) =>
-              setCurrentCompany(
-                otherCompanies.find(({ name }) => e.target.value === name) ||
-                  null,
-              )
-            }
-            value={currentCompany?.name}
-            defaultValue={textKeys.COMPARE_TABLE_DROPDOWN_LABEL()}
-          >
-            <option disabled>{textKeys.COMPARE_TABLE_DROPDOWN_LABEL()}</option>
-            {props.otherCompanies.map((company) => (
-              <option key={company.name}>{company.name}</option>
-            ))}
-          </MobileDropdown>
+          <MobileDropdownWrapper>
+            <MobileDropdown
+              onChange={(e) =>
+                setCurrentCompany(
+                  otherCompanies.find(({ name }) => e.target.value === name) ||
+                    null,
+                )
+              }
+              value={currentCompany?.name}
+              defaultValue={textKeys.COMPARE_TABLE_DROPDOWN_LABEL()}
+            >
+              <option disabled>
+                {textKeys.COMPARE_TABLE_DROPDOWN_LABEL()}
+              </option>
+              {props.otherCompanies.map((company) => (
+                <option key={company.name}>{company.name}</option>
+              ))}
+            </MobileDropdown>
+            <TinyDownArrow />
+          </MobileDropdownWrapper>
         )}
         {currentCompany &&
           Object.entries(currentCompany)

@@ -296,14 +296,12 @@ const InfoBoxTitle = styled.div`
 
 const InfoBoxBody = styled.div`
   font-size: 0.875rem;
-  line-height 1.25rem;
+  line-height: 1.25rem;
   color: ${colorsV2.darkgray};
   letter-spacing: -0.26px;
 `
 
-export const PerilModal = (
-  props: React.PropsWithChildren<PerilModalProps & ModalProps>,
-) => {
+export const PerilModal: React.FC<PerilModalProps & ModalProps> = (props) => {
   const [transitionEnabled, setTransitionEnabled] = React.useState(true)
   const [actionsAllowed, setActionsAllowed] = React.useState(true)
 
@@ -330,9 +328,9 @@ export const PerilModal = (
     }, TRANSITION_MS * 2)
   }, [props.currentPerilIndex])
 
-  const trippledPerils = props.perils.concat(props.perils).concat(props.perils)
+  const tripledPerils = props.perils.concat(props.perils).concat(props.perils)
 
-  const currrentPeril =
+  const currentPeril =
     props.perils[props.currentPerilIndex % props.perils.length]
 
   return (
@@ -343,12 +341,12 @@ export const PerilModal = (
             currentPerilIndex={props.currentPerilIndex}
             transition={transitionEnabled}
           >
-            {trippledPerils.map((peril, index) => (
+            {tripledPerils.map((peril, index) => (
               <PickerItem
                 key={index}
                 onClick={() =>
                   actionsAllowed &&
-                  props.setCurrentPeril(index % trippledPerils.length)
+                  props.setCurrentPeril(index % tripledPerils.length)
                 }
               >
                 {peril.icon}
@@ -381,13 +379,13 @@ export const PerilModal = (
         </RightGradient>
       </Header>
       <Content>
-        <Title>{currrentPeril.title}</Title>
-        <Description>{currrentPeril.description}</Description>
+        <Title>{currentPeril.title}</Title>
+        <Description>{currentPeril.description}</Description>
 
         <CoverageWrapper>
           <CoverageList>
             <CoverageListTitle>Det här täcks</CoverageListTitle>
-            {currrentPeril.covered.map((text) => (
+            {currentPeril.covered.map((text) => (
               <CoverageListItem key={text}>
                 <Checkmark />
                 {text}
@@ -397,7 +395,7 @@ export const PerilModal = (
 
           <CoverageList>
             <CoverageListTitle>Undantag</CoverageListTitle>
-            {currrentPeril.exceptions.map((text) => (
+            {currentPeril.exceptions.map((text) => (
               <CoverageListItem key={text}>
                 <Crossmark />
                 {text}
@@ -406,12 +404,12 @@ export const PerilModal = (
           </CoverageList>
         </CoverageWrapper>
 
-        {currrentPeril.info && (
+        {currentPeril.info && (
           <InfoBoxWrapper>
             <InfoBox>
               <InfoIcon />
               <InfoBoxTitle>Att tänka på</InfoBoxTitle>
-              <InfoBoxBody>{currrentPeril.info}</InfoBoxBody>
+              <InfoBoxBody>{currentPeril.info}</InfoBoxBody>
             </InfoBox>
           </InfoBoxWrapper>
         )}
