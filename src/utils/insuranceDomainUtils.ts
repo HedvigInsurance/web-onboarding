@@ -67,3 +67,41 @@ export const getInsurancePDFTextKey = (
   }
   return map[insuranceType]
 }
+
+export const getInsuranceAmountTextKey = (
+  insuranceType: InsuranceType,
+): string => {
+  const map = {
+    [InsuranceType.RENT]: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT',
+    [InsuranceType.BRF]: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT',
+    [InsuranceType.STUDENT_BRF]: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT_STUDENT',
+    [InsuranceType.STUDENT_RENT]: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT_STUDENT',
+    [InsuranceType.HOUSE]: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT_HOUSE',
+  }
+
+  if (!map[insuranceType]) {
+    throw new Error(`Invalid insurance type ${insuranceType}`)
+  }
+
+  return map[insuranceType]
+}
+
+export const getAccidentalCoverageLimitTextKey = (
+  insuranceType: InsuranceType,
+) => {
+  const map = {
+    [InsuranceType.RENT]: 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT',
+    [InsuranceType.BRF]: 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT',
+    [InsuranceType.STUDENT_BRF]:
+      'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT_STUDENT',
+    [InsuranceType.STUDENT_RENT]:
+      'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT_STUDENT',
+    [InsuranceType.HOUSE]: 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT',
+  }
+
+  if (!map[insuranceType]) {
+    throw new Error(`Invalid insurance type ${insuranceType}`)
+  }
+
+  return map[insuranceType]
+}
