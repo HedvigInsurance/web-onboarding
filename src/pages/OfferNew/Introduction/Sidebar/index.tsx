@@ -252,7 +252,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 <SummaryText>
                   <b>{`${offer.member.firstName} ${offer.member.lastName}`}</b>{' '}
                   {offer.quote.details.householdSize - 1 > 0 &&
-                    textKeys.SIDEBAR_INSURED_PERSONS_SUFFIX.fill({
+                    textKeys.SIDEBAR_INSURED_PERSONS_SUFFIX.withReplacements({
                       AMOUNT: offer.quote.details.householdSize - 1,
                     })}
                 </SummaryText>
@@ -268,7 +268,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
             <Price>
               {monthlyCostDeduction && (
                 <PriceNet>
-                  {textKeys.SIDEBAR_OLD_PRICE.fill({
+                  {textKeys.SIDEBAR_OLD_PRICE.withReplacements({
                     PRICE: Number(offer.quote.price.amount),
                   })}
                 </PriceNet>

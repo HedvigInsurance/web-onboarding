@@ -111,7 +111,7 @@ export const Introduction: React.FC<Props> = ({ offer, refetch }) => {
             <HeadingWrapper>
               <PreHeading>{textKeys.HERO_LABEL}</PreHeading>
               <HeadingWhite>
-                {textKeys.HERO_HEADLINE.fill({
+                {textKeys.HERO_HEADLINE.withReplacements({
                   FIRST_NAME: offer.member.firstName,
                 })}
               </HeadingWhite>

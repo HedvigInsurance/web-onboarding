@@ -6,7 +6,7 @@ declare module '*.json' {
 declare type GlobalFetch = any
 
 interface String {
-  fill: (replacements: {
+  withReplacements: (replacements: {
     [key: string]: string | number | null | undefined
   }) => string[]
 }
