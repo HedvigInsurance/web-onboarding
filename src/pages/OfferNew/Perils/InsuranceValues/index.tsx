@@ -88,7 +88,7 @@ export const InsuranceValues: React.FC<Props> = ({ insuranceType }) => {
     <Wrapper>
       <Header>
         <SubSubHeadingBlack>
-          {textKeys.COVERAGE_INFO_HEADLINE}
+          {textKeys.COVERAGE_INFO_HEADLINE()}
         </SubSubHeadingBlack>
         <TooltipWrapper>
           <Tooltip size="lg" body="Information" />
@@ -99,19 +99,19 @@ export const InsuranceValues: React.FC<Props> = ({ insuranceType }) => {
 
       <Links>
         <Link
-          href={textKeys[getPrebuyPDFTextKey(insuranceType)]}
+          href={textKeys[getPrebuyPDFTextKey(insuranceType)]()}
           target="_blank"
         >
           <DocumentIcon />
-          {textKeys.COVERAGE_TERMSANDCONDITIONS_BUTTON}
+          {textKeys.COVERAGE_TERMSANDCONDITIONS_BUTTON()}
         </Link>
 
         <Link
-          href={textKeys[getInsurancePDFTextKey(insuranceType)]}
+          href={textKeys[getInsurancePDFTextKey(insuranceType)]()}
           target="_blank"
         >
           <DocumentIcon />
-          {textKeys.COVERAGE_PRESALEINFORMATION_BUTTON}
+          {textKeys.COVERAGE_PRESALEINFORMATION_BUTTON()}
         </Link>
       </Links>
     </Wrapper>

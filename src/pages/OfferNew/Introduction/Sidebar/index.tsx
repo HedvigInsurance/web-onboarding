@@ -238,11 +238,11 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
       <Wrapper ref={ref}>
         <Container sticky={sticky}>
           {monthlyCostDeduction && (
-            <DiscountInfo>{textKeys.SIDEBAR_ACTIVE_REFERRAL}</DiscountInfo>
+            <DiscountInfo>{textKeys.SIDEBAR_ACTIVE_REFERRAL()}</DiscountInfo>
           )}
           <Header>
             <Summary>
-              <PreTitle>{textKeys.SIDEBAR_LABEL}</PreTitle>
+              <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
 
               <Title>
                 {textKeys[insuranceTypeTextKeys[getInsuranceType(offer.quote)]]}
@@ -252,7 +252,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 <SummaryText>
                   <b>{`${offer.member.firstName} ${offer.member.lastName}`}</b>{' '}
                   {offer.quote.details.householdSize - 1 > 0 &&
-                    textKeys.SIDEBAR_INSURED_PERSONS_SUFFIX.withReplacements({
+                    textKeys.SIDEBAR_INSURED_PERSONS_SUFFIX({
                       AMOUNT: offer.quote.details.householdSize - 1,
                     })}
                 </SummaryText>
@@ -262,13 +262,15 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                   )}`}
                 </SummaryText>
 
-                <TextButton>{textKeys.SIDEBAR_SHOW_DETAILS_BUTTON}</TextButton>
+                <TextButton>
+                  {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
+                </TextButton>
               </SummaryContent>
             </Summary>
             <Price>
               {monthlyCostDeduction && (
                 <PriceNet>
-                  {textKeys.SIDEBAR_OLD_PRICE.withReplacements({
+                  {textKeys.SIDEBAR_OLD_PRICE({
                     PRICE: Number(offer.quote.price.amount),
                   })}
                 </PriceNet>
@@ -280,9 +282,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 </PriceGross>
 
                 <PriceSuffix>
-                  <PriceUnit>{textKeys.SIDEBAR_PRICE_SUFFIX_UNIT}</PriceUnit>
+                  <PriceUnit>{textKeys.SIDEBAR_PRICE_SUFFIX_UNIT()}</PriceUnit>
                   <PriceInterval>
-                    {textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL}
+                    {textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL()}
                   </PriceInterval>
                 </PriceSuffix>
               </PriceNumbers>
@@ -297,7 +299,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
           </Body>
 
           <Footer>
-            <Button size="lg">{textKeys.SIDEBAR_GETHEDVIG_BUTTON}</Button>
+            <Button size="lg">{textKeys.SIDEBAR_GETHEDVIG_BUTTON()}</Button>
 
             <FooterExtraActions>
               {offer.redeemedCampaigns.length === 0 ? (
@@ -306,7 +308,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                     setDiscountCodeModalIsOpen(true)
                   }}
                 >
-                  {textKeys.SIDEBAR_ADD_DISCOUNT_BUTTON}
+                  {textKeys.SIDEBAR_ADD_DISCOUNT_BUTTON()}
                 </TextButton>
               ) : (
                 <TextButton
@@ -317,7 +319,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                     })
                   }}
                 >
-                  {textKeys.SIDEBAR_REMOVE_DISCOUNT_BUTTON}
+                  {textKeys.SIDEBAR_REMOVE_DISCOUNT_BUTTON()}
                 </TextButton>
               )}
             </FooterExtraActions>

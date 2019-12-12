@@ -75,9 +75,9 @@ export const Compare = () => {
       <Container>
         <Column>
           <HeadingWrapper>
-            <PreHeading>{textKeys.COMPARE_LABEL}</PreHeading>
-            <HeadingBlack>{textKeys.COMPARE_HEADLINE}</HeadingBlack>
-            <Body>{textKeys.COMPARE_BODY}</Body>
+            <PreHeading>{textKeys.COMPARE_LABEL()}</PreHeading>
+            <HeadingBlack>{textKeys.COMPARE_HEADLINE()}</HeadingBlack>
+            <Body>{textKeys.COMPARE_BODY()}</Body>
           </HeadingWrapper>
 
           <CompareTable

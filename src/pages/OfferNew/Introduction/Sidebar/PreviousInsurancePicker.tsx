@@ -126,9 +126,9 @@ export const PreviousInsurancePicker: React.FC<Props> = ({ insurances }) => {
         dropdownIsVisible={dropdownIsVisible}
         onClick={() => setDropdownIsVisible(!dropdownIsVisible)}
       >
-        <Label>{textKeys.SIDEBAR_OLDINSURANCE_CELL_LABEL}</Label>
+        <Label>{textKeys.SIDEBAR_OLDINSURANCE_CELL_LABEL()}</Label>
         <Value dropdownIsVisible={dropdownIsVisible}>
-          <ValueText>{textKeys.SIDEBAR_OLDINSURANCE_CHOOSE_LABEL}</ValueText>
+          <ValueText>{textKeys.SIDEBAR_OLDINSURANCE_CHOOSE_LABEL()}</ValueText>
           <DownArrow />
         </Value>
       </Button>

@@ -341,7 +341,7 @@ export const CompareTable = (props: Props) => {
     <Container>
       <InsurancePropertiesSection>
         <ColumnHead>
-          <SubHeadingBlack>{textKeys.COMPARE_TABLE_TITLE}</SubHeadingBlack>
+          <SubHeadingBlack>{textKeys.COMPARE_TABLE_TITLE()}</SubHeadingBlack>
 
           <MobileTooltipWrapper>
             <Tooltip size="lg" body="Info" />
@@ -357,7 +357,7 @@ export const CompareTable = (props: Props) => {
 
                 {property.tooltip && (
                   <TooltipWrapper>
-                    <Tooltip body={textKeys[property.tooltip.body]} />
+                    <Tooltip body={textKeys[property.tooltip.body]()} />
                   </TooltipWrapper>
                 )}
               </InsuranceProperty>
@@ -392,7 +392,7 @@ export const CompareTable = (props: Props) => {
               {currentCompany !== null && !dropdownIsVisible ? (
                 currentCompany.name
               ) : (
-                <>{textKeys.COMPARE_TABLE_DROPDOWN_LABEL}</>
+                <>{textKeys.COMPARE_TABLE_DROPDOWN_LABEL()}</>
               )}
               <DownArrow />
             </OtherCompanyHead>
@@ -420,9 +420,9 @@ export const CompareTable = (props: Props) => {
               )
             }
             value={currentCompany?.name}
-            defaultValue={textKeys.COMPARE_TABLE_DROPDOWN_LABEL}
+            defaultValue={textKeys.COMPARE_TABLE_DROPDOWN_LABEL()}
           >
-            <option disabled>{textKeys.COMPARE_TABLE_DROPDOWN_LABEL}</option>
+            <option disabled>{textKeys.COMPARE_TABLE_DROPDOWN_LABEL()}</option>
             {props.otherCompanies.map((company) => (
               <option key={company.name}>{company.name}</option>
             ))}

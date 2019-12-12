@@ -157,8 +157,8 @@ export const DiscountCodeModal: React.FC<Props> = ({
           },
         }}
       >
-        <Title>{textKeys.SIDEBAR_ADD_DISCOUNT_HEADLINE}</Title>
-        <Paragraph>{textKeys.SIDEBAR_ADD_DISCOUNT_BODY}</Paragraph>
+        <Title>{textKeys.SIDEBAR_ADD_DISCOUNT_HEADLINE()}</Title>
+        <Paragraph>{textKeys.SIDEBAR_ADD_DISCOUNT_BODY()}</Paragraph>
         <CloseButton onClick={close}>
           <Cross />
         </CloseButton>
@@ -189,23 +189,23 @@ export const DiscountCodeModal: React.FC<Props> = ({
             <Form>
               <DiscountInputWrapper>
                 <TextInput
-                  label={textKeys.SIDEBAR_ADD_DISCOUNT_CELL_LABEL}
-                  placeholder={textKeys.SIDEBAR_ADD_DISCOUNT_CELL_PLACEHOLDER}
+                  label={textKeys.SIDEBAR_ADD_DISCOUNT_CELL_LABEL()}
+                  placeholder={textKeys.SIDEBAR_ADD_DISCOUNT_CELL_PLACEHOLDER()}
                   name="code"
                   autoComplete="off"
                   touched={touched.code ? touched.code.toString() : undefined}
-                  errors={textKeys[errors.code || '']}
+                  errors={textKeys[errors.code || '']()}
                 />
               </DiscountInputWrapper>
 
               <Footer>
                 <Button type="submit" disabled={!values.code}>
-                  {textKeys.SIDEBAR_ADD_DISCOUNT_BUTTON}
+                  {textKeys.SIDEBAR_ADD_DISCOUNT_BUTTON()}
                 </Button>
                 <Terms>
-                  {`${textKeys.SIDEBAR_ADD_DISCOUNT_FINEPRINT} `}
+                  {`${textKeys.SIDEBAR_ADD_DISCOUNT_FINEPRINT()} `}
                   <TermsLink href="" target="_blank" rel="noreferrer noopener">
-                    {textKeys.SIDEBAR_ADD_DISCOUNT_FINEPRINT_LINK_TEXT}
+                    {textKeys.SIDEBAR_ADD_DISCOUNT_FINEPRINT_LINK_TEXT()}
                   </TermsLink>
                 </Terms>
               </Footer>

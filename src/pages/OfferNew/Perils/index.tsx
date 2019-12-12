@@ -41,9 +41,9 @@ export const Perils: React.FC<Props> = ({ offer }) => {
       <Container>
         <Column>
           <HeadingWrapper>
-            <PreHeading>{textKeys.COVERAGE_LABEL}</PreHeading>
-            <HeadingBlack>{textKeys.COVERAGE_HEADLINE}</HeadingBlack>
-            <Body>{textKeys.COVERAGE_BODY}</Body>
+            <PreHeading>{textKeys.COVERAGE_LABEL()}</PreHeading>
+            <HeadingBlack>{textKeys.COVERAGE_HEADLINE()}</HeadingBlack>
+            <Body>{textKeys.COVERAGE_BODY()}</Body>
           </HeadingWrapper>
 
           {isMobile ? (

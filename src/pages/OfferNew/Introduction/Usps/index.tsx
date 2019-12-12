@@ -68,20 +68,20 @@ export const Usps: React.FunctionComponent = () => {
     <UspsContainer>
       <Usp
         image={<Stopwatch />}
-        title={textKeys.HERO_USP1_HEADLINE}
-        paragraph={textKeys.HERO_USP1_BODY}
+        title={textKeys.HERO_USP1_HEADLINE()}
+        paragraph={textKeys.HERO_USP1_BODY()}
       />
 
       <Usp
         image={<Bell />}
-        title={textKeys.HERO_USP2_HEADLINE}
-        paragraph={textKeys.HERO_USP2_BODY}
+        title={textKeys.HERO_USP2_HEADLINE()}
+        paragraph={textKeys.HERO_USP2_BODY()}
       />
 
       <Usp
         image={<Heart />}
-        title={textKeys.HERO_USP3_HEADLINE}
-        paragraph={textKeys.HERO_USP3_BODY}
+        title={textKeys.HERO_USP3_HEADLINE()}
+        paragraph={textKeys.HERO_USP3_BODY()}
       />
     </UspsContainer>
   )

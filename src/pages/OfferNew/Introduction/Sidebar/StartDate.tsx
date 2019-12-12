@@ -59,14 +59,14 @@ export const StartDate: React.FC<Props> = ({ insuredAtOtherCompany }) => {
   return (
     <Wrapper>
       <Label>
-        <Title>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL}</Title>
-        <SubTitle>{textKeys.SIDEBAR_STARTDATE_CELL_SUBLABEL}</SubTitle>
+        <Title>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}</Title>
+        <SubTitle>{textKeys.SIDEBAR_STARTDATE_CELL_SUBLABEL()}</SubTitle>
       </Label>
 
       <Value>
         {insuredAtOtherCompany
-          ? textKeys.SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER
-          : textKeys.SIDEBAR_STARTDATE_CELL_VALUE_NEW}
+          ? textKeys.SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER()
+          : textKeys.SIDEBAR_STARTDATE_CELL_VALUE_NEW()}
         <TooltipWrapper>
           <Tooltip size="lg" body="Info" />
         </TooltipWrapper>

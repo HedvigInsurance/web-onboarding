@@ -109,10 +109,10 @@ export const Introduction: React.FC<Props> = ({ offer, refetch }) => {
         <Container>
           <Column>
             <HeadingWrapper>
-              <PreHeading>{textKeys.HERO_LABEL}</PreHeading>
+              <PreHeading>{textKeys.HERO_LABEL()}</PreHeading>
               <HeadingWhite>
-                {textKeys.HERO_HEADLINE.withReplacements({
-                  FIRST_NAME: offer.member.firstName,
+                {textKeys.HERO_HEADLINE({
+                  FIRST_NAME: offer.member.firstName || '',
                 })}
               </HeadingWhite>
             </HeadingWrapper>
@@ -131,7 +131,7 @@ export const Introduction: React.FC<Props> = ({ offer, refetch }) => {
               animateScroll.scrollTo(800)
             }}
           >
-            {textKeys.HERO_SCROLL_BUTTON}
+            {textKeys.HERO_SCROLL_BUTTON()}
             <DownArrow />
           </ScrollButton>
         </Container>
