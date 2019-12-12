@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { Tooltip } from 'new-components/Tooltip'
 import * as React from 'react'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { InsuranceValues } from './mock'
 
 interface Props {
@@ -70,21 +71,24 @@ const TooltipWrapper = styled.div`
   }
 `
 
-export const Values: React.FC<Props> = ({ insuranceValues }) => (
-  <Wrapper>
-    {Object.entries(insuranceValues).map(([key, insuranceValue]) => {
-      return (
-        <Container key={key}>
-          <TextContainer>
-            <Label>{insuranceValue.title}</Label>
-            <Value>{insuranceValue.value}</Value>
-          </TextContainer>
+export const Values: React.FC<Props> = ({ insuranceValues }) => {
+  const textKeys = useTextKeys()
+  return (
+    <Wrapper>
+      {Object.entries(insuranceValues).map(([key, insuranceValue]) => {
+        return (
+          <Container key={key}>
+            <TextContainer>
+              <Label>{textKeys[insuranceValue.title]}</Label>
+              <Value>{textKeys[insuranceValue.value]}</Value>
+            </TextContainer>
 
-          <TooltipWrapper>
-            <Tooltip size="lg" body={insuranceValue.tooltip} />
-          </TooltipWrapper>
-        </Container>
-      )
-    })}
-  </Wrapper>
-)
+            <TooltipWrapper>
+              <Tooltip size="lg" body={textKeys[insuranceValue.tooltipBody]} />
+            </TooltipWrapper>
+          </Container>
+        )
+      })}
+    </Wrapper>
+  )
+}

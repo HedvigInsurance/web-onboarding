@@ -14,6 +14,9 @@ export const isStudentInsurance = (insuranceType: InsuranceType): boolean =>
   insuranceType === InsuranceType.STUDENT_RENT ||
   insuranceType === InsuranceType.STUDENT_BRF
 
+export const isHouseInsurance = (insuranceType: InsuranceType): boolean =>
+  insuranceType === InsuranceType.HOUSE
+
 export const qualifiesForStudentInsurance = (details: {
   age: number
   squareMeters: number

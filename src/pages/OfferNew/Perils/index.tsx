@@ -1,9 +1,9 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
-import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { OfferData } from 'containers/OfferContainer'
 import * as React from 'react'
 import { useMediaQuery } from 'react-responsive'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 import {
   Body,
   Column,
@@ -34,26 +34,16 @@ export const Perils: React.FC<Props> = ({ offer }) => {
   const [currentPeril, setCurrentPeril] = React.useState(0)
   const isMobile = useMediaQuery({ query: '(max-width: 600px)' })
 
+  const textKeys = useTextKeys()
+
   return (
     <Wrapper>
       <Container>
         <Column>
           <HeadingWrapper>
-            <PreHeading>
-              <TranslationsConsumer textKey="COVERAGE_LABEL">
-                {(t) => t}
-              </TranslationsConsumer>
-            </PreHeading>
-            <HeadingBlack>
-              <TranslationsConsumer textKey="COVARAGE_HEADLINE">
-                {(t) => t}
-              </TranslationsConsumer>
-            </HeadingBlack>
-            <Body>
-              <TranslationsConsumer textKey="COVERAGE_BODY">
-                {(t) => t}
-              </TranslationsConsumer>
-            </Body>
+            <PreHeading>{textKeys.COVERAGE_LABEL}</PreHeading>
+            <HeadingBlack>{textKeys.COVERAGE_HEADLINE}</HeadingBlack>
+            <Body>{textKeys.COVERAGE_BODY}</Body>
           </HeadingWrapper>
 
           {isMobile ? (
