@@ -4,10 +4,17 @@ import { useOfferQuery } from 'generated/graphql'
 import { History } from 'history'
 import { TopBar } from 'new-components/TopBar'
 import * as React from 'react'
+<<<<<<< HEAD
 import { RouteComponentProps, useHistory, useRouteMatch } from 'react-router'
 import { Checkout } from './Checkout'
 import { Compare } from './Compare'
 import { Introduction } from './Introduction'
+=======
+import { RouteComponentProps } from 'react-router'
+import { Checkout } from './Checkout'
+import { Compare } from './Compare/index'
+import { Introduction } from './Introduction/index'
+>>>>>>> Add ui for new checkout
 import { Perils } from './Perils/index'
 import { isOffer } from './utils'
 
