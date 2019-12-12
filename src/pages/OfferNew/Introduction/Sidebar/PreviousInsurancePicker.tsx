@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import * as React from 'react'
-import { useTextKeys } from 'utils/hooks/useTextKey'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { DownArrow } from '../../../../components/icons/DownArrow'
 import { InsuranceCompany } from './mock'
 

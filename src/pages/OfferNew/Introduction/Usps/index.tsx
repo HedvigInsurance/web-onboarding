@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import * as React from 'react'
-import { useTextKeys } from 'utils/hooks/useTextKey'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { Bell } from './icons/Bell'
 import { Heart } from './icons/Heart'
 import { Stopwatch } from './icons/Stopwatch'

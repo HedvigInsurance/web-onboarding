@@ -8,7 +8,7 @@ import hexToRgba from 'hex-to-rgba'
 import { Button } from 'new-components/buttons'
 import { TextInput } from 'new-components/inputs'
 import * as React from 'react'
-import { useTextKeys } from 'utils/hooks/useTextKey'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 import * as Yup from 'yup'
 
 interface Props {
