@@ -201,7 +201,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
       return
     }
 
-    const prevStore = window.localStorage.getItem(
+    const prevStore = window.sessionStorage.getItem(
       `embark-store-${encodeURIComponent(props.name)}`,
     )
 
@@ -274,7 +274,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                         // noop
                       }
 
-                      window.localStorage.setItem(
+                      window.sessionStorage.setItem(
                         `embark-store-${encodeURIComponent(props.name!)}`,
                         JSON.stringify(store),
                       )
