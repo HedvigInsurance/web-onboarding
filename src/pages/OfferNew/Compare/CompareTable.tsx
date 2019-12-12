@@ -353,7 +353,7 @@ export const CompareTable = (props: Props) => {
             .filter(([key]) => key !== 'name')
             .map(([key, property]) => (
               <InsuranceProperty key={key}>
-                {textKeys[property.name]}
+                {textKeys[property.name]()}
 
                 {property.tooltip && (
                   <TooltipWrapper>
