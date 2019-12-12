@@ -89,7 +89,9 @@ export const InsuranceValues: React.FC<Props> = ({ insuranceType }) => {
   return (
     <Wrapper>
       <Header>
-        <SubSubHeadingBlack>{textKeys.COVERAGE_HEADLINE}</SubSubHeadingBlack>
+        <SubSubHeadingBlack>
+          {textKeys.COVERAGE_INFO_HEADLINE}
+        </SubSubHeadingBlack>
         {/*<TooltipWrapper>
           <Tooltip size="lg" body="Information" />
         </TooltipWrapper>*/}
