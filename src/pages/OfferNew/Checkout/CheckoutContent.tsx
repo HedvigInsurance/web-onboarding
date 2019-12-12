@@ -19,6 +19,11 @@ const Title = styled('h1')`
   line-height: 1;
   color: ${colorsV2.black};
   margin: 0;
+
+  @media (max-width: 40rem) {
+    font-size: 2rem;
+    text-align: center;
+  }
 `
 
 const Excerpt = styled('div')`
@@ -26,6 +31,10 @@ const Excerpt = styled('div')`
   justify-content: space-between;
   align-items: center;
   padding: 4rem 0;
+
+  @media (max-width: 40rem) {
+    padding: 2rem 0;
+  }
 `
 
 const InsuranceTypeLabel = styled('div')`
@@ -38,6 +47,10 @@ const InsuranceType = styled('div')`
   font-family: ${fonts.GEOMANIST};
   font-weight: 500;
   line-height: 1;
+
+  @media (max-width: 40rem) {
+    font-size: 1.5rem;
+  }
 `
 
 interface Props {

@@ -1,7 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { motion } from 'framer-motion'
-import hexToRgba from 'hex-to-rgba'
 import * as React from 'react'
 import { Cross } from './icons/Cross'
 
@@ -29,7 +28,7 @@ const Background = styled(motion.div)`
   top: 0;
   bottom: 0;
   right: 0;
-  background-color: ${hexToRgba(colorsV2.white, 0.75)};
+  background-color: rgba(25, 25, 25, 0.4);
 `
 
 const ModalContainer = styled(motion.div)`

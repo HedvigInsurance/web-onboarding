@@ -19,6 +19,7 @@ export const UserDetailsForm: React.FC = () => (
           placeholder="din.epost@här.nu"
           name="email"
           value={values.email}
+          type="email"
         />
       </Form>
     )}
