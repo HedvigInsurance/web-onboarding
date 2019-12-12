@@ -6,7 +6,7 @@ export interface InsuranceValue {
 
 export type InsuranceValues = Record<string, InsuranceValue>
 
-export const insuranceValues: InsuranceValues = {
+export const insuranceValues = (): InsuranceValues => ({
   HOME: {
     title: 'Ditt hem är försäkrat till',
     value: 'Fullvärde',
@@ -27,4 +27,4 @@ export const insuranceValues: InsuranceValues = {
     value: '45 dagar',
     tooltip: 'Information',
   },
-}
+})
