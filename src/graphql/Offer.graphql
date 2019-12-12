@@ -48,9 +48,6 @@ query Offer($id: ID) {
           currency
         }
       }
-      ... on NoDiscount {
-        _
-      }
     }
     code
     owner {
