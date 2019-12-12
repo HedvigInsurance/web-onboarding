@@ -3466,7 +3466,7 @@ export type OfferQuery = { __typename?: 'Query' } & {
               >
             })
           | ({ __typename?: 'FreeMonths' } & Pick<FreeMonths, 'quantity'>)
-          | { __typename?: 'NoDiscount' }
+          | ({ __typename?: 'NoDiscount' } & Pick<NoDiscount, '_'>)
         >
         owner: Maybe<
           { __typename?: 'CampaignOwner' } & Pick<CampaignOwner, 'displayName'>
@@ -3568,6 +3568,9 @@ export const OfferDocument = gql`
             amount
             currency
           }
+        }
+        ... on NoDiscount {
+          _
         }
       }
       code

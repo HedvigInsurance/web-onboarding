@@ -6,7 +6,12 @@ import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { CompleteOfferData } from '../../types'
-import { getInsuranceType, isMonthlyCostDeduction } from '../../utils'
+import {
+  getInsuranceType,
+  isFreeMonths,
+  isMonthlyCostDeduction,
+  isNoDiscount,
+} from '../../utils'
 import { DiscountCodeModal } from './DiscountCodeModal'
 import { otherInsuranceCompanies } from './mock'
 import { PreviousInsurancePicker } from './PreviousInsurancePicker'
@@ -73,6 +78,7 @@ const DiscountInfo = styled.div`
   align-items: center;
   font-size: 0.875rem;
   color: ${colorsV2.white};
+  text-align: center;
 `
 
 const Summary = styled.div`
@@ -232,20 +238,30 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
     ] = React.useState(false)
 
     const monthlyCostDeduction = isMonthlyCostDeduction(offer.redeemedCampaigns)
+    const freeMonths = isFreeMonths(offer.redeemedCampaigns)
+    const noDiscount = isNoDiscount(offer.redeemedCampaigns)
+
     const [removeDiscountCode] = useRemoveDiscountCodeMutation()
 
     return (
       <Wrapper ref={ref}>
         <Container sticky={sticky}>
-          {monthlyCostDeduction && (
-            <DiscountInfo>{textKeys.SIDEBAR_ACTIVE_REFERRAL()}</DiscountInfo>
+          {(monthlyCostDeduction || freeMonths) && (
+            <DiscountInfo>
+              {monthlyCostDeduction
+                ? textKeys.SIDEBAR_ACTIVE_REFERRAL()
+                : offer.redeemedCampaigns.length > 0 &&
+                  offer.redeemedCampaigns[0].owner?.displayName}
+            </DiscountInfo>
           )}
           <Header>
             <Summary>
               <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
 
               <Title>
-                {textKeys[insuranceTypeTextKeys[getInsuranceType(offer.quote)]]}
+                {textKeys[
+                  insuranceTypeTextKeys[getInsuranceType(offer.quote)]
+                ]()}
               </Title>
 
               <SummaryContent>
@@ -310,7 +326,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 >
                   {textKeys.SIDEBAR_ADD_DISCOUNT_BUTTON()}
                 </TextButton>
-              ) : (
+              ) : noDiscount ? null : (
                 <TextButton
                   color={colorsV2.coral700}
                   onClick={() => {

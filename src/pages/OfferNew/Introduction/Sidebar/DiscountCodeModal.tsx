@@ -169,16 +169,17 @@ export const DiscountCodeModal: React.FC<Props> = ({
           initialValues={{ code: '' }}
           onSubmit={(form, actions) =>
             redeemCode({ variables: { code: form.code } })
-              .then((result) => {
+              .then(async (result) => {
                 if (!result) {
-                  refetch()
-                  close()
                   return
                 }
 
                 if (result.errors && result.errors.length > 0) {
                   actions.setFieldError('code', 'SIDEBAR_ADD_DISCOUNT_ERROR')
                 }
+
+                await refetch()
+                close()
               })
               .catch(() => {
                 actions.setFieldError('code', 'SIDEBAR_ADD_DISCOUNT_ERROR')
