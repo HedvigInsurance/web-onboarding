@@ -1,6 +1,5 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
-import { TranslationsPlaceholderConsumer } from '@hedviginsurance/textkeyfy'
 import { InsuranceType, useRemoveDiscountCodeMutation } from 'generated/graphql'
 import { Button, TextButton } from 'new-components/buttons'
 import * as React from 'react'
@@ -252,16 +251,10 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
               <SummaryContent>
                 <SummaryText>
                   <b>{`${offer.member.firstName} ${offer.member.lastName}`}</b>{' '}
-                  {offer.quote.details.householdSize - 1 > 0 && (
-                    <TranslationsPlaceholderConsumer
-                      textKey="SIDEBAR_INSURED_PERSONS_SUFFIX"
-                      replacements={{
-                        AMOUNT: offer.quote.details.householdSize - 1,
-                      }}
-                    >
-                      {(t) => t}
-                    </TranslationsPlaceholderConsumer>
-                  )}
+                  {offer.quote.details.householdSize - 1 > 0 &&
+                    textKeys.SIDEBAR_INSURED_PERSONS_SUFFIX.fill({
+                      AMOUNT: offer.quote.details.householdSize - 1,
+                    })}
                 </SummaryText>
                 <SummaryText>
                   {`${offer.quote.details.street}, ${formatPostalNumber(
@@ -275,14 +268,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
             <Price>
               {monthlyCostDeduction && (
                 <PriceNet>
-                  <TranslationsPlaceholderConsumer
-                    textKey="SIDEBAR_OLD_PRICE"
-                    replacements={{
-                      PRICE: Number(offer.quote.price.amount),
-                    }}
-                  >
-                    {(t) => t}
-                  </TranslationsPlaceholderConsumer>
+                  {textKeys.SIDEBAR_OLD_PRICE.fill({
+                    PRICE: Number(offer.quote.price.amount),
+                  })}
                 </PriceNet>
               )}
 

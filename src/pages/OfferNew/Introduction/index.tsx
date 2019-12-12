@@ -1,7 +1,6 @@
 import { keyframes } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
-import { TranslationsPlaceholderConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import { animateScroll } from 'react-scroll'
 import { useTextKeys } from 'utils/hooks/useTextKey'
@@ -112,12 +111,9 @@ export const Introduction: React.FC<Props> = ({ offer, refetch }) => {
             <HeadingWrapper>
               <PreHeading>{textKeys.HERO_LABEL}</PreHeading>
               <HeadingWhite>
-                <TranslationsPlaceholderConsumer
-                  textKey="HERO_HEADLINE"
-                  replacements={{ FIRST_NAME: offer.member.firstName }}
-                >
-                  {(t) => t}
-                </TranslationsPlaceholderConsumer>
+                {textKeys.HERO_HEADLINE.fill({
+                  FIRST_NAME: offer.member.firstName,
+                })}
               </HeadingWhite>
             </HeadingWrapper>
             <Usps />
