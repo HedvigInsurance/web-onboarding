@@ -8,19 +8,19 @@ import {
 
 describe('isApartmentOwner()', () => {
   it('returns correctly for all insurance types', () => {
-    expect(isApartmentOwner(InsuranceType.RENT)).toBe(false)
-    expect(isApartmentOwner(InsuranceType.STUDENT_RENT)).toBe(false)
-    expect(isApartmentOwner(InsuranceType.BRF)).toBe(true)
-    expect(isApartmentOwner(InsuranceType.STUDENT_BRF)).toBe(true)
+    expect(isApartmentOwner(InsuranceType.Rent)).toBe(false)
+    expect(isApartmentOwner(InsuranceType.StudentRent)).toBe(false)
+    expect(isApartmentOwner(InsuranceType.Brf)).toBe(true)
+    expect(isApartmentOwner(InsuranceType.StudentBrf)).toBe(true)
   })
 })
 
 describe('isStudentInsurance()', () => {
   it('return correctly for all insurance types', () => {
-    expect(isStudentInsurance(InsuranceType.RENT)).toBe(false)
-    expect(isStudentInsurance(InsuranceType.BRF)).toBe(false)
-    expect(isStudentInsurance(InsuranceType.STUDENT_RENT)).toBe(true)
-    expect(isStudentInsurance(InsuranceType.STUDENT_BRF)).toBe(true)
+    expect(isStudentInsurance(InsuranceType.Rent)).toBe(false)
+    expect(isStudentInsurance(InsuranceType.Brf)).toBe(false)
+    expect(isStudentInsurance(InsuranceType.StudentRent)).toBe(true)
+    expect(isStudentInsurance(InsuranceType.StudentBrf)).toBe(true)
   })
 })
 
@@ -124,19 +124,19 @@ describe('qualifiesForStudentInsurance()', () => {
 
 describe('mapToStudentVariant()', () => {
   it('maps regular rent to student rent', () => {
-    expect(mapToStudentVariant(InsuranceType.RENT)).toBe(
-      InsuranceType.STUDENT_RENT,
+    expect(mapToStudentVariant(InsuranceType.Rent)).toBe(
+      InsuranceType.StudentRent,
     )
   })
 
   it('maps regular brf to student brf', () => {
-    expect(mapToStudentVariant(InsuranceType.BRF)).toBe(
-      InsuranceType.STUDENT_BRF,
+    expect(mapToStudentVariant(InsuranceType.Brf)).toBe(
+      InsuranceType.StudentBrf,
     )
   })
 
   it('Does not accept other variants', () => {
-    expect(() => mapToStudentVariant(InsuranceType.STUDENT_RENT)).toThrow()
-    expect(() => mapToStudentVariant(InsuranceType.STUDENT_BRF)).toThrow()
+    expect(() => mapToStudentVariant(InsuranceType.StudentRent)).toThrow()
+    expect(() => mapToStudentVariant(InsuranceType.StudentBrf)).toThrow()
   })
 })

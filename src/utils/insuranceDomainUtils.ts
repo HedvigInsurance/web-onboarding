@@ -1,18 +1,21 @@
 export enum InsuranceType {
-  RENT = 'RENT',
-  BRF = 'BRF',
-  STUDENT_RENT = 'STUDENT_RENT',
-  STUDENT_BRF = 'STUDENT_BRF',
-  HOUSE = 'HOUSE',
+  Rent = 'RENT',
+  Brf = 'BRF',
+  StudentRent = 'STUDENT_RENT',
+  StudentBrf = 'STUDENT_BRF',
+  House = 'HOUSE',
 }
 
 export const isApartmentOwner = (insuranceType: InsuranceType): boolean =>
-  insuranceType === InsuranceType.BRF ||
-  insuranceType === InsuranceType.STUDENT_BRF
+  insuranceType === InsuranceType.Brf ||
+  insuranceType === InsuranceType.StudentBrf
 
 export const isStudentInsurance = (insuranceType: InsuranceType): boolean =>
-  insuranceType === InsuranceType.STUDENT_RENT ||
-  insuranceType === InsuranceType.STUDENT_BRF
+  insuranceType === InsuranceType.StudentRent ||
+  insuranceType === InsuranceType.StudentBrf
+
+export const isHouseInsurance = (insuranceType: InsuranceType): boolean =>
+  insuranceType === InsuranceType.House
 
 export const qualifiesForStudentInsurance = (details: {
   age: number
@@ -24,11 +27,11 @@ export const qualifiesForStudentInsurance = (details: {
 }
 
 export const mapToStudentVariant = (insuranceType: InsuranceType) => {
-  if (insuranceType === InsuranceType.RENT) {
-    return InsuranceType.STUDENT_RENT
+  if (insuranceType === InsuranceType.Rent) {
+    return InsuranceType.StudentRent
   }
-  if (insuranceType === InsuranceType.BRF) {
-    return InsuranceType.STUDENT_BRF
+  if (insuranceType === InsuranceType.Brf) {
+    return InsuranceType.StudentBrf
   }
 
   throw new Error(
@@ -38,11 +41,11 @@ export const mapToStudentVariant = (insuranceType: InsuranceType) => {
 
 export const getPrebuyPDFTextKey = (insuranceType: InsuranceType): string => {
   const map = {
-    [InsuranceType.RENT]: 'TERMS_PDF_PREBUY_RENT_URL',
-    [InsuranceType.BRF]: 'TERMS_PDF_PREBUY_BRF_URL',
-    [InsuranceType.STUDENT_RENT]: 'TERMS_PDF_PREBUY_STUDENT_RENT_URL',
-    [InsuranceType.STUDENT_BRF]: 'TERMS_PDF_PREBUY_STUDENT_BRF_URL',
-    [InsuranceType.HOUSE]: 'TERMS_PDF_PREBUY_HOUSE_URL',
+    [InsuranceType.Rent]: 'TERMS_PDF_PREBUY_RENT_URL',
+    [InsuranceType.Brf]: 'TERMS_PDF_PREBUY_BRF_URL',
+    [InsuranceType.StudentRent]: 'TERMS_PDF_PREBUY_STUDENT_RENT_URL',
+    [InsuranceType.StudentBrf]: 'TERMS_PDF_PREBUY_STUDENT_BRF_URL',
+    [InsuranceType.House]: 'TERMS_PDF_PREBUY_HOUSE_URL',
   }
 
   if (!map[insuranceType]) {
@@ -55,11 +58,11 @@ export const getInsurancePDFTextKey = (
   insuranceType: InsuranceType,
 ): string => {
   const map = {
-    [InsuranceType.RENT]: 'TERMS_PDF_INSURANCE_RENT_URL',
-    [InsuranceType.BRF]: 'TERMS_PDF_INSURANCE_BRF_URL',
-    [InsuranceType.STUDENT_RENT]: 'TERMS_PDF_INSURANCE_STUDENT_RENT_URL',
-    [InsuranceType.STUDENT_BRF]: 'TERMS_PDF_INSURANCE_STUDENT_BRF_URL',
-    [InsuranceType.HOUSE]: 'TERMS_PDF_INSURANCE_HOUSE_URL',
+    [InsuranceType.Rent]: 'TERMS_PDF_INSURANCE_RENT_URL',
+    [InsuranceType.Brf]: 'TERMS_PDF_INSURANCE_BRF_URL',
+    [InsuranceType.StudentRent]: 'TERMS_PDF_INSURANCE_STUDENT_RENT_URL',
+    [InsuranceType.StudentBrf]: 'TERMS_PDF_INSURANCE_STUDENT_BRF_URL',
+    [InsuranceType.House]: 'TERMS_PDF_INSURANCE_HOUSE_URL',
   }
 
   if (!map[insuranceType]) {
@@ -72,11 +75,11 @@ export const getInsuranceAmountTextKey = (
   insuranceType: InsuranceType,
 ): string => {
   const map = {
-    [InsuranceType.RENT]: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT',
-    [InsuranceType.BRF]: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT',
-    [InsuranceType.STUDENT_BRF]: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT_STUDENT',
-    [InsuranceType.STUDENT_RENT]: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT_STUDENT',
-    [InsuranceType.HOUSE]: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT_HOUSE',
+    [InsuranceType.Rent]: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT',
+    [InsuranceType.Brf]: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT',
+    [InsuranceType.StudentBrf]: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT_STUDENT',
+    [InsuranceType.StudentRent]: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT_STUDENT',
+    [InsuranceType.House]: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT_HOUSE',
   }
 
   if (!map[insuranceType]) {
@@ -90,13 +93,12 @@ export const getAccidentalCoverageLimitTextKey = (
   insuranceType: InsuranceType,
 ) => {
   const map = {
-    [InsuranceType.RENT]: 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT',
-    [InsuranceType.BRF]: 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT',
-    [InsuranceType.STUDENT_BRF]:
+    [InsuranceType.Rent]: 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT',
+    [InsuranceType.Brf]: 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT',
+    [InsuranceType.StudentBrf]: 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT_STUDENT',
+    [InsuranceType.StudentRent]:
       'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT_STUDENT',
-    [InsuranceType.STUDENT_RENT]:
-      'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT_STUDENT',
-    [InsuranceType.HOUSE]: 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT',
+    [InsuranceType.House]: 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT',
   }
 
   if (!map[insuranceType]) {

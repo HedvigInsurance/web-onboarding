@@ -3,7 +3,6 @@ import { colorsV2 } from '@hedviginsurance/brand'
 import color from 'color'
 import { DocumentIcon } from 'components/icons/Document'
 import { InsuranceType } from 'generated/graphql'
-import { Tooltip } from 'new-components/Tooltip'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { SubSubHeadingBlack } from '../../components'
@@ -29,14 +28,14 @@ const Header = styled.div`
   align-items: center;
 `
 
-const TooltipWrapper = styled.div`
-  margin-left: 1rem;
-  display: none;
-
-  @media (max-width: 600px) {
-    display: block;
-  }
-`
+// const TooltipWrapper = styled.div`
+//   margin-left: 1rem;
+//   display: none;
+//
+//   @media (max-width: 600px) {
+//     display: block;
+//   }
+// `
 
 const Links = styled.div`
   display: flex;
@@ -90,12 +89,12 @@ export const InsuranceValues: React.FC<Props> = ({ insuranceType }) => {
         <SubSubHeadingBlack>
           {textKeys.COVERAGE_INFO_HEADLINE()}
         </SubSubHeadingBlack>
-        <TooltipWrapper>
+        {/*<TooltipWrapper>
           <Tooltip size="lg" body="Information" />
-        </TooltipWrapper>
+        </TooltipWrapper>*/}
       </Header>
 
-      <Values insuranceValues={insuranceValues} />
+      <Values insuranceValues={insuranceValues(insuranceType)} />
 
       <Links>
         <Link

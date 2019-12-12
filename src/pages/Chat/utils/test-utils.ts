@@ -16,7 +16,7 @@ export const mockState = (): ChatState => ({
   livingSituation: {
     postalNumber: '123 45',
     streetAddress: 'Storgatan 1',
-    insuranceType: InsuranceType.RENT,
+    insuranceType: InsuranceType.Rent,
     size: 37,
     numberOfPeople: 1,
   },
@@ -48,7 +48,7 @@ export const mockOffer: OfferData = {
       },
     },
     insuredAtOtherCompany: false,
-    type: InsuranceType.RENT,
+    type: InsuranceType.Rent,
     postalNumber: '12345',
     personsInHousehold: 1,
     currentInsurerName: Insurer.FOLKSAM,
@@ -77,8 +77,8 @@ export const createCreateOfferMutationMock = (
         postalNumber: '12345',
         squareMeters: mockState().livingSituation.size,
         insuranceType: isStudent
-          ? InsuranceType.STUDENT_RENT
-          : InsuranceType.RENT,
+          ? InsuranceType.StudentRent
+          : InsuranceType.Rent,
         personsInHousehold: mockState().livingSituation.numberOfPeople,
         previousInsurer: mockState().currentInsurance.currentInsurer,
       } as CreateOfferMutationVariables,
