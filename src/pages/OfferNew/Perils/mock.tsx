@@ -19,18 +19,19 @@ export const perils: Peril[] = [
   {
     title: 'Eldsvåda',
     description:
-      'Din diskmaskin går sönder och du kommer hem till en swimmingpool i köket och blöta grannar våningen under. Råkar du ut för en vattenläcka får du ersättning för skadorna.',
+      'Vi hjälper dig med reparation, ersättningsboende och sanering om det skulle börja brinna i din villa eller någon annan försäkrad byggnad. Och om ditt hus blir totalskadat ersätter vi dig med en likadan eller motsvarande villa.',
     covered: [
-      'När du råkar ut för en plötslig oföretsägbar händelse, t.ex. tappat något',
-      'Saker värda mindre än 50 000 kr',
-      'Om du orsakar en skada på någon annans egendom',
+      'Totalskadat hus efter brand',
+      'Explosion',
+      'Blixt',
+      'Frätande gas som bildats vid oavsiktlig upphettning av plast',
+      'Sanering av sot orsakad av öppen låga',
     ],
     exceptions: [
-      'Saker värda över 50 000 kr',
-      'Om du glömmer kvar något på en restaurang',
+      'Sprängningsarbete, sot eller levande ljus',
     ],
     info:
-      'Du måste se till att kranar är täta och inte läcker. Under kyl, fry och diskmaskin måste du se till att det finns vattenuppsamlande underlägg. Se till att innertemperaturen i huset hålls så hög att rör inte fryser.',
+      'Var försiktig med levande ljus eller eld.',
     icon: <Fire />,
   },
   {
@@ -58,69 +59,73 @@ export const perils: Peril[] = [
   {
     title: 'Oväder',
     description:
-      'Din diskmaskin går sönder och du kommer hem till en swimmingpool i köket och blöta grannar våningen under. Råkar du ut för en vattenläcka får du ersättning för skadorna.',
+      'Skulle ditt hus, din tomt eller dina saker bli skadat p.g.a översvämning, snötryck, storm, hagel, regn, kyla eller jordskalv kan du få ersättning från oss. Det finns också viss möjlighet att få ersättning om du missar en resa på grund av oväder.',
     covered: [
-      'När du råkar ut för en plötslig oföretsägbar händelse, t.ex. tappat något',
-      'Saker värda mindre än 50 000 kr',
-      'Om du orsakar en skada på någon annans egendom',
+      'Översvämning p.g.a. skyfall (1mm/minut eller 50mm/dygn) snösmältning, stigande sjö eller vattendrag genom rör, avloppet eller där vatten strömmar från markytan in i huset.',
+      'Storm (minst 21 m/s), t.e.x. något blåser omkull på huset',
+      'Hagel, kyla eller regn',
+      'Jordskalv (minst 4 på richterskalan), jordras, bergras, lavin',
     ],
     exceptions: [
-      'Saker värda över 50 000 kr',
-      'Om du glömmer kvar något på en restaurang',
+      'Översvämning p.g.a husets dränering och grund',
+      'Översvämning p.g.a yttertaket läcker in regnvatten',
+      'Skador på båthus, sjöbod, växthus och tomtmark',
     ],
     info:
-      'Du måste se till att kranar är täta och inte läcker. Under kyl, fry och diskmaskin måste du se till att det finns vattenuppsamlande underlägg. Se till att innertemperaturen i huset hålls så hög att rör inte fryser.',
+      'Se till att inspektera taket och lägg om takplattor om de ser dåliga ut. Hantverkare brukar rekommendera att du byter tak var trettionde år.',
     icon: <Storm />,
   },
   {
     title: 'Inbrott',
     description:
-      'Din diskmaskin går sönder och du kommer hem till en swimmingpool i köket och blöta grannar våningen under. Råkar du ut för en vattenläcka får du ersättning för skadorna.',
+      'Skyddet gäller när någon utan lov gjort inbrott eller förstört ditt hus. Skyddet gäller självklart också för vinden och källaren, samt om tjuven gjort inbrott i ditt garage.',
     covered: [
-      'När du råkar ut för en plötslig oföretsägbar händelse, t.ex. tappat något',
-      'Saker värda mindre än 50 000 kr',
-      'Om du orsakar en skada på någon annans egendom',
+      'Allt du äger i din villa till ett värde upp till 1.5 miljoner',
+      'Inbrott och skadegörelse i din villa/biutrymmen, t.ex. vind/källare',
+      'Inbrott i garage',
+      'Kostnad för byte av lås',
     ],
     exceptions: [
-      'Saker värda över 50 000 kr',
-      'Om du glömmer kvar något på en restaurang',
+      'Stöld av pengar, värdehandlingar och stöldbegärlig egendom (smycken, mobiltelefoner, datorer och allt annat dyrt) ifrån biyta',
     ],
     info:
-      'Du måste se till att kranar är täta och inte läcker. Under kyl, fry och diskmaskin måste du se till att det finns vattenuppsamlande underlägg. Se till att innertemperaturen i huset hålls så hög att rör inte fryser.',
+      'Lås ytterdörrar och regla fönster när ingen är hemma. Och märk inte dina nycklar så att folk förstår vart du bor eller vart de går.',
     icon: <Lock />,
   },
   {
     title: 'Stöld',
     description:
-      'Din diskmaskin går sönder och du kommer hem till en swimmingpool i köket och blöta grannar våningen under. Råkar du ut för en vattenläcka får du ersättning för skadorna.',
+      'Vid stöld och skadegörelse av dina saker så täcks dem och ersätts av oss. Oavsett om du är hemma eller på flygande fot kan du alltid känna dig trygg med oss.',
     covered: [
-      'När du råkar ut för en plötslig oföretsägbar händelse, t.ex. tappat något',
-      'Saker värda mindre än 50 000 kr',
-      'Om du orsakar en skada på någon annans egendom',
+      'Stöld och skadegörelse i ditt hem',
+      'Stöld ur gemensamhetsutrymme, t.ex. cykel- eller barnvagnsförråd',
+      'Stöld och skadegörelse av saker du tar med dig till ditt arbete eller hotellrum',
+      'Stöld och skadegörelse vid förvaring hos t.ex. Shurguard',
+      'Stöld utanför bostaden',
+      'Stöld ur bil när du är på resa',
     ],
     exceptions: [
-      'Saker värda över 50 000 kr',
-      'Om du glömmer kvar något på en restaurang',
+      'För vissa typer av saker, t.ex. pengar, hemelektronik, mobiltelefoner, datorer, kameror, sprit och smycken gäller speciella regler beroende på var stölden inträffat.',
     ],
     info:
-      'Du måste se till att kranar är täta och inte läcker. Under kyl, fry och diskmaskin måste du se till att det finns vattenuppsamlande underlägg. Se till att innertemperaturen i huset hålls så hög att rör inte fryser.',
+      'Ha alltid uppsikt över dina saker. Lämna inte värdesaker på t.ex. ett bord på ett café. Lås alltid bilen om du förvarar saker där och stöldbegärlig egendom (smycke, dator) ska alltid döljas. Och lås alltid din cykel.',
     icon: <Theft />,
   },
   {
     title: 'Skadegörelse',
     description:
-      'Din diskmaskin går sönder och du kommer hem till en swimmingpool i köket och blöta grannar våningen under. Råkar du ut för en vattenläcka får du ersättning för skadorna.',
+      'Skyddet gäller när någon utan lov gjort inbrott eller förstört ditt hus. Skyddet gäller självklart också för vinden och källaren, samt om tjuven gjort inbrott i ditt garage.',
     covered: [
-      'När du råkar ut för en plötslig oföretsägbar händelse, t.ex. tappat något',
-      'Saker värda mindre än 50 000 kr',
-      'Om du orsakar en skada på någon annans egendom',
+      'Allt du äger i din villa till ett värde upp till 1.5 miljoner',
+      'Inbrott och skadegörelse i din villa/biutrymmen, t.ex. vind/källare',
+      'Inbrott i garage',
+      'Kostnad för byte av lås',
     ],
     exceptions: [
-      'Saker värda över 50 000 kr',
-      'Om du glömmer kvar något på en restaurang',
+      'Stöld av pengar, värdehandlingar och stöldbegärlig egendom (smycken, mobiltelefoner, datorer och allt annat dyrt) ifrån biyta',
     ],
     info:
-      'Du måste se till att kranar är täta och inte läcker. Under kyl, fry och diskmaskin måste du se till att det finns vattenuppsamlande underlägg. Se till att innertemperaturen i huset hålls så hög att rör inte fryser.',
+      'Lås ytterdörrar och regla fönster när ingen är hemma. Och märk inte dina nycklar så att folk förstår vart du bor eller vart de går.',
     icon: <BaseballBat />,
   },
   {
@@ -140,6 +145,8 @@ export const perils: Peril[] = [
       'Skada orsakat av när du kört bil/fordon',
       'Uppsåtligt brott, t.ex. om du skadar någon/något med flit',
     ],
+    info:
+      'Kontakta Hedvig direkt när någon kräver dig på skadestånd. Medge aldrig någon skyldighet utan ta ett djupt andetag och låt oss hjälpa dig istället.',
     icon: <LegalDispute />,
   },
   {
@@ -216,7 +223,7 @@ export const perils: Peril[] = [
     ],
     exceptions: [
       'Sjukdomstillstånd som var kända innan avresan',
-      'Kampsport med kroppskontakt / Fallskärmshoppning / Skärmflygning',
+      'Kampsport med kroppskontakt/Fallskärmshoppning/Skärmflygning',
     ],
     info:
       'Kontakta alltid oss direkt via appen eller ring Hedvig Global Assistance på +45 38 48 94 61 som har öppet dygnet runt.',
@@ -225,35 +232,43 @@ export const perils: Peril[] = [
   {
     title: 'Vitvaror',
     description:
-      'Din diskmaskin går sönder och du kommer hem till en swimmingpool i köket och blöta grannar våningen under. Råkar du ut för en vattenläcka får du ersättning för skadorna.',
+      'Du kan få ersättning om tvättmaskinen säckar ihop eller om annan elektrisk maskin eller apparat går sönder p.g.a. kortslutning, överslag eller överspänning. Och går frysen sönder kan du få ersättning för eventuellt skadat innehåll.',
     covered: [
-      'När du råkar ut för en plötslig oföretsägbar händelse, t.ex. tappat något',
-      'Saker värda mindre än 50 000 kr',
-      'Om du orsakar en skada på någon annans egendom',
+      'Vitvaror/hushållsmaskiner p.g.a kortslutning, överslag eller överspänning',
+      'Installation för värme, vatten, avlopp, ventilation, gas, el',
+      'Glasrutor i fönster/dörrar i byggnaden',
+      'Tvätt i tvättmaskin/torktumlare vid fel på maskinen',
+      'Sanitetsgods',
+      'Livsmedel i frys vid strömavbrott',
+      'Egeninstallerad hiss (max 20.000 kr)',
     ],
     exceptions: [
-      'Saker värda över 50 000 kr',
-      'Om du glömmer kvar något på en restaurang',
+      'Ytliga skador och skönhetsfel ersätts inte',
+      'Värmeslingor i golv i badrum eller annat våtutrymme',
     ],
     info:
-      'Du måste se till att kranar är täta och inte läcker. Under kyl, fry och diskmaskin måste du se till att det finns vattenuppsamlande underlägg. Se till att innertemperaturen i huset hålls så hög att rör inte fryser.',
+      'Det finns inget speciellt att tänka på.',
     icon: <WhiteGoods />,
   },
   {
     title: 'Drulle',
     description:
-      'Din diskmaskin går sönder och du kommer hem till en swimmingpool i köket och blöta grannar våningen under. Råkar du ut för en vattenläcka får du ersättning för skadorna.',
+      'Vår drulleförsäkring gäller när du har sönder saker som du äger genom en plötslig och oförutsedd händelse. Vi hjälper dig t.e.x när du spiller kaffe på datorn, tappar mobilen i marken eller sätter dig på glasögonen. Drulle ingår alltid utan extra kostnad.',
     covered: [
-      'När du råkar ut för en plötslig oföretsägbar händelse, t.ex. tappat något',
-      'Saker värda mindre än 50 000 kr',
-      'Om du orsakar en skada på någon annans egendom',
+      'Plötslig och oförutsedd skada',
+      'Plötslig och oförutsedd händelse',
+      'T.ex. om du skulle spilla kaffe på din dator',
+      'T.ex. om du tappar din mobiltelefon i marken',
+      'T.ex. om du sätter dig på dina glasögon',
+      'Max 50 000 kr i ersättning per förlorad eller skadad sak',
     ],
     exceptions: [
-      'Saker värda över 50 000 kr',
-      'Om du glömmer kvar något på en restaurang',
+      'Lånad egendom t.ex. lånedator från jobbet/skolan',
+      'Stöld av stöldbegärlig egendom (ex: kamera, smycke) i bil/lokal/biyta',
+      'Stöld av pengar eller värdehandlingar',
     ],
     info:
-      'Du måste se till att kranar är täta och inte läcker. Under kyl, fry och diskmaskin måste du se till att det finns vattenuppsamlande underlägg. Se till att innertemperaturen i huset hålls så hög att rör inte fryser.',
+      'Ta med mobilen (stöldbegärlig egendom) när du lämnar bilen. Lämna inte värdefulla ägodelar i källaren (biyta) och checka inte in smycken eller klockor när du reser.',
     icon: <WetPhone />,
   },
 ]
