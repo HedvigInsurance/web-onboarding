@@ -94,7 +94,7 @@ export const InsuranceValues: React.FC<Props> = ({ insuranceType }) => {
         </TooltipWrapper>*/}
       </Header>
 
-      <Values insuranceValues={insuranceValues} />
+      <Values insuranceValues={insuranceValues(insuranceType)} />
 
       <Links>
         <Link

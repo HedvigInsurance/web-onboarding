@@ -168,10 +168,10 @@ export const InsuranceTypeInput: React.SFC<InsuranceTypeInputProps &
                           <option value="select" disabled>
                             {' '}
                           </option>
-                          <option value={InsuranceType.RENT}>
+                          <option value={InsuranceType.Rent}>
                             {rentLabel}
                           </option>
-                          <option value={InsuranceType.BRF}>{brfLabel}</option>
+                          <option value={InsuranceType.Brf}>{brfLabel}</option>
                         </UserSelectInput>
                       )}
                     </TranslationsConsumer>

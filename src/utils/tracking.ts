@@ -115,7 +115,7 @@ export const adtraction = (
   insuranceType: InsuranceType,
 ) => {
   try {
-    if (insuranceType === InsuranceType.HOUSE) {
+    if (insuranceType === InsuranceType.House) {
       return
     }
     const adt = ADT

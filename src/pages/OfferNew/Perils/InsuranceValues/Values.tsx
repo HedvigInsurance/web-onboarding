@@ -79,12 +79,15 @@ export const Values: React.FC<Props> = ({ insuranceValues }) => {
         return (
           <Container key={key}>
             <TextContainer>
-              <Label>{textKeys[insuranceValue.title]}</Label>
-              <Value>{textKeys[insuranceValue.value]}</Value>
+              <Label>{textKeys[insuranceValue.title]()}</Label>
+              <Value>{textKeys[insuranceValue.value]()}</Value>
             </TextContainer>
 
             <TooltipWrapper>
-              <Tooltip size="lg" body={textKeys[insuranceValue.tooltipBody]} />
+              <Tooltip
+                size="lg"
+                body={textKeys[insuranceValue.tooltipBody]()}
+              />
             </TooltipWrapper>
           </Container>
         )
