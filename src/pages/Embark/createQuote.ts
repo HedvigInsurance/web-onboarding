@@ -81,6 +81,11 @@ export const createQuote = (storage: any) => async (
       query: OFFER_QUERY,
       fetchPolicy: 'network-only',
     })
+
+    storage.session.setSession({
+      ...storage.session.getSession(),
+      quoteId: result.data!.createQuote!.id,
+    })
   }
 
   return result.data!

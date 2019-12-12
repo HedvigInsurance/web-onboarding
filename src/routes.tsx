@@ -59,7 +59,7 @@ export const reactPageRoutes = [
     exact: true,
   },
   {
-    path: LANGUAGE_PATH_PATTERN + '/beta/new-member/offer',
+    path: LANGUAGE_PATH_PATTERN + '/beta/new-member/offer/:offerId',
     Component: OfferNew,
     exact: true,
   },

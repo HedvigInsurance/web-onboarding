@@ -1,34 +1,22 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
-import {
-  TranslationsConsumer,
-  TranslationsPlaceholderConsumer,
-} from '@hedviginsurance/textkeyfy'
-import { OfferData } from 'containers/OfferContainer'
-import { isMonthlyCostDeduction } from 'containers/types'
-import gql from 'graphql-tag'
+import { InsuranceType, useRemoveDiscountCodeMutation } from 'generated/graphql'
 import { Button, TextButton } from 'new-components/buttons'
 import * as React from 'react'
-import { Mutation } from 'react-apollo'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { formatPostalNumber } from 'utils/postalNumbers'
+import { CompleteOfferData } from '../../types'
+import { getInsuranceType, isMonthlyCostDeduction } from '../../utils'
 import { DiscountCodeModal } from './DiscountCodeModal'
-import { insuranceTypeMapping, otherInsuranceCompanies } from './mock'
+import { otherInsuranceCompanies } from './mock'
 import { PreviousInsurancePicker } from './PreviousInsurancePicker'
 import { StartDate } from './StartDate'
 
 interface Props {
   sticky: boolean
-  offer: OfferData
+  offer: CompleteOfferData
   refetch: () => void
 }
-
-const REMOVE_CODE_MUTATION = gql`
-  mutation RemoveDiscountCode {
-    removeDiscountCode {
-      __typename
-    }
-  }
-`
 
 const Wrapper = styled.div`
   width: 26rem;
@@ -65,8 +53,7 @@ const Container = styled.div<{ sticky: boolean }>`
 const Header = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
+  flex-direction: row;
   padding: 2rem 1.5rem 2rem 2rem;
   align-items: flex-start;
   position: relative;
@@ -91,6 +78,7 @@ const DiscountInfo = styled.div`
 const Summary = styled.div`
   display: flex;
   justify-content: space-between;
+  flex-direction: column;
   align-items: flex-start;
   width: 100%;
 `
@@ -120,6 +108,7 @@ const Title = styled.div`
 const SummaryContent = styled.div`
   display: flex;
   flex-direction: column;
+  margin-top: 1.5rem;
 `
 
 const SummaryText = styled.div`
@@ -133,6 +122,7 @@ const Price = styled.div`
   flex-direction: column;
   align-items: flex-start;
   position: relative;
+  padding-top: 1rem;
 `
 
 const PriceNet = styled.div`
@@ -225,110 +215,91 @@ const FooterExtraActions = styled.div`
     }
   }
 `
+export const insuranceTypeTextKeys: { [key in InsuranceType]: string } = {
+  [InsuranceType.Rent]: 'SIDEBAR_INSURANCE_TYPE_RENT',
+  [InsuranceType.Brf]: 'SIDEBAR_INSURANCE_TYPE_BRF',
+  [InsuranceType.StudentRent]: 'SIDEBAR_INSURANCE_TYPE_RENT',
+  [InsuranceType.StudentBrf]: 'SIDEBAR_INSURANCE_TYPE_BRF',
+  [InsuranceType.House]: 'SIDEBAR_INSURANCE_TYPE_HOUSE',
+}
 
 export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
   ({ sticky, offer, refetch }, ref) => {
+    const textKeys = useTextKeys()
     const [
       discountCodeModalIsOpen,
       setDiscountCodeModalIsOpen,
     ] = React.useState(false)
-    const monthlyCostDeduction =
-      offer.redeemedCampaigns.length > 0 &&
-      isMonthlyCostDeduction(offer.redeemedCampaigns[0].incentive)
+
+    const monthlyCostDeduction = isMonthlyCostDeduction(offer.redeemedCampaigns)
+    const [removeDiscountCode] = useRemoveDiscountCodeMutation()
 
     return (
       <Wrapper ref={ref}>
         <Container sticky={sticky}>
           {monthlyCostDeduction && (
-            <DiscountInfo>
-              <TranslationsConsumer textKey="SIDEBAR_ACTIVE_REFERRAL">
-                {(t) => t}
-              </TranslationsConsumer>
-            </DiscountInfo>
+            <DiscountInfo>{textKeys.SIDEBAR_ACTIVE_REFERRAL()}</DiscountInfo>
           )}
           <Header>
-            <PreTitle>
-              <TranslationsConsumer textKey="SIDEBAR_LABEL">
-                {(t) => t}
-              </TranslationsConsumer>
-            </PreTitle>
-
             <Summary>
-              <Title>{insuranceTypeMapping[offer.insurance.type]}</Title>
+              <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
 
-              <Price>
-                {monthlyCostDeduction && (
-                  <PriceNet>
-                    <TranslationsPlaceholderConsumer
-                      textKey="SIDEBAR_OLD_PRICE"
-                      replacements={{
-                        PRICE: Number(offer.insurance.cost.monthlyNet.amount),
-                      }}
-                    >
-                      {(t) => t}
-                    </TranslationsPlaceholderConsumer>
-                  </PriceNet>
-                )}
+              <Title>
+                {textKeys[insuranceTypeTextKeys[getInsuranceType(offer.quote)]]}
+              </Title>
 
-                <PriceNumbers>
-                  <PriceGross monthlyCostDeduction={monthlyCostDeduction}>
-                    {Number(offer.insurance.cost.monthlyNet.amount)}
-                  </PriceGross>
+              <SummaryContent>
+                <SummaryText>
+                  <b>{`${offer.member.firstName} ${offer.member.lastName}`}</b>{' '}
+                  {offer.quote.details.householdSize - 1 > 0 &&
+                    textKeys.SIDEBAR_INSURED_PERSONS_SUFFIX({
+                      AMOUNT: offer.quote.details.householdSize - 1,
+                    })}
+                </SummaryText>
+                <SummaryText>
+                  {`${offer.quote.details.street}, ${formatPostalNumber(
+                    offer.quote.details.zipCode,
+                  )}`}
+                </SummaryText>
 
-                  <PriceSuffix>
-                    <PriceUnit>
-                      <TranslationsConsumer textKey="SIDEBAR_PRICE_SUFFIX_UNIT">
-                        {(t) => t}
-                      </TranslationsConsumer>
-                    </PriceUnit>
-                    <PriceInterval>
-                      <TranslationsConsumer textKey="SIDEBAR_PRICE_SUFFIX_INTERVAL">
-                        {(t) => t}
-                      </TranslationsConsumer>
-                    </PriceInterval>
-                  </PriceSuffix>
-                </PriceNumbers>
-              </Price>
+                <TextButton>
+                  {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
+                </TextButton>
+              </SummaryContent>
             </Summary>
+            <Price>
+              {monthlyCostDeduction && (
+                <PriceNet>
+                  {textKeys.SIDEBAR_OLD_PRICE({
+                    PRICE: Number(offer.quote.price.amount),
+                  })}
+                </PriceNet>
+              )}
 
-            <SummaryContent>
-              <SummaryText>
-                <strong>{`${offer.member.firstName} ${offer.member.lastName}`}</strong>
+              <PriceNumbers>
+                <PriceGross monthlyCostDeduction={monthlyCostDeduction}>
+                  {Number(offer.quote.price.amount)}
+                </PriceGross>
 
-                {offer.insurance.personsInHousehold - 1 > 0 && (
-                  <TranslationsConsumer textKey="SIDEBAR_INSURED_PERSONS_SUFFIX">
-                    {(t) => ` + ${offer.insurance.personsInHousehold - 1} ${t}`}
-                  </TranslationsConsumer>
-                )}
-              </SummaryText>
-              <SummaryText>{`${offer.insurance.address}, ${formatPostalNumber(
-                offer.insurance.postalNumber,
-              )}`}</SummaryText>
-
-              {/* TODO: Add edit offer functionality :))) */}
-              {/*<TextButton>*/}
-              {/*  <TranslationsConsumer textKey="SIDEBAR_SHOW_DETAILS_BUTTON">*/}
-              {/*    {(t) => t}*/}
-              {/*  </TranslationsConsumer>*/}
-              {/*</TextButton>*/}
-            </SummaryContent>
+                <PriceSuffix>
+                  <PriceUnit>{textKeys.SIDEBAR_PRICE_SUFFIX_UNIT()}</PriceUnit>
+                  <PriceInterval>
+                    {textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL()}
+                  </PriceInterval>
+                </PriceSuffix>
+              </PriceNumbers>
+            </Price>
           </Header>
 
           <Body>
-            {offer.insurance.insuredAtOtherCompany && (
+            {offer.quote.currentInsurer && (
               <PreviousInsurancePicker insurances={otherInsuranceCompanies} />
             )}
-            <StartDate
-              insuredAtOtherCompany={offer.insurance.insuredAtOtherCompany}
-            />
+            <StartDate insuredAtOtherCompany={!!offer.quote.currentInsurer} />
           </Body>
 
           <Footer>
-            <Button size="lg">
-              <TranslationsConsumer textKey="SIDEBAR_GETHEDVIG_BUTTON">
-                {(t) => t}
-              </TranslationsConsumer>
-            </Button>
+            <Button size="lg">{textKeys.SIDEBAR_GETHEDVIG_BUTTON()}</Button>
 
             <FooterExtraActions>
               {offer.redeemedCampaigns.length === 0 ? (
@@ -337,29 +308,19 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                     setDiscountCodeModalIsOpen(true)
                   }}
                 >
-                  <TranslationsConsumer textKey="SIDEBAR_ADD_DISCOUNT_BUTTON">
-                    {(t) => t}
-                  </TranslationsConsumer>
+                  {textKeys.SIDEBAR_ADD_DISCOUNT_BUTTON()}
                 </TextButton>
               ) : (
-                <Mutation<{ __typename: string }>
-                  mutation={REMOVE_CODE_MUTATION}
+                <TextButton
+                  color={colorsV2.coral700}
+                  onClick={() => {
+                    removeDiscountCode().then(() => {
+                      refetch()
+                    })
+                  }}
                 >
-                  {(mutate) => (
-                    <TextButton
-                      color={colorsV2.coral700}
-                      onClick={() => {
-                        mutate().then(() => {
-                          refetch()
-                        })
-                      }}
-                    >
-                      <TranslationsConsumer textKey="SIDEBAR_REMOVE_DISCOUNT_BUTTON">
-                        {(t) => t}
-                      </TranslationsConsumer>
-                    </TextButton>
-                  )}
-                </Mutation>
+                  {textKeys.SIDEBAR_REMOVE_DISCOUNT_BUTTON()}
+                </TextButton>
               )}
             </FooterExtraActions>
           </Footer>

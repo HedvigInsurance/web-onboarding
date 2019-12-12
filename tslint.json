@@ -7,5 +7,8 @@
     "interface-name": false,
     "no-submodule-imports": false,
     "no-implicit-dependencies": false
+  },
+  "linterOptions": {
+    "exclude": ["src/generated/graphql.tsx"]
   }
 }
