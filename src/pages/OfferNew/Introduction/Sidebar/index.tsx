@@ -16,6 +16,8 @@ import { DiscountCodeModal } from './DiscountCodeModal'
 import { otherInsuranceCompanies } from './mock'
 import { PreviousInsurancePicker } from './PreviousInsurancePicker'
 import { StartDate } from './StartDate'
+import { Modal } from 'components/ModalNew'
+import { DetailsModal } from './DetailsModal'
 
 interface Props {
   sticky: boolean
@@ -237,6 +239,8 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
       setDiscountCodeModalIsOpen,
     ] = React.useState(false)
 
+    const [detailsModalIsOpen, setDetailsModalIsOpen] = React.useState(false)
+
     const monthlyCostDeduction = isMonthlyCostDeduction(offer.redeemedCampaigns)
     const freeMonths = isFreeMonths(offer.redeemedCampaigns)
     const noDiscount = isNoDiscount(offer.redeemedCampaigns)
@@ -278,7 +282,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                   )}`}
                 </SummaryText>
 
-                <TextButton>
+                <TextButton onClick={() => setDetailsModalIsOpen(true)}>
                   {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
                 </TextButton>
               </SummaryContent>
@@ -347,6 +351,11 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
             refetch={refetch}
           />
         </Container>
+        <DetailsModal
+          quote={offer.quote}
+          isVisible={detailsModalIsOpen}
+          onClose={() => setDetailsModalIsOpen(false)}
+        />
       </Wrapper>
     )
   },
