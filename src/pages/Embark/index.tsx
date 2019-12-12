@@ -259,6 +259,12 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                       personalInformationApi: resolvePersonalInformation,
                       houseInformation: resolveHouseInformation,
                       createQuote: createQuote(storageState),
+                      track: (eventName, payload) => {
+                        const castedWindow = window as any
+                        if (castedWindow && castedWindow.analytics) {
+                          castedWindow.analytics.track(eventName, payload)
+                        }
+                      },
                     }}
                     initialStore={initialStore}
                     onStoreChange={(store) => {
