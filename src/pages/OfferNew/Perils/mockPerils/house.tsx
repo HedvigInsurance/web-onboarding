@@ -89,6 +89,42 @@ export const housePerils: Peril[] = [
       'Lås ytterdörrar och regla fönster när ingen är hemma. Och märk inte dina nycklar så att folk förstår vart du bor eller vart de går.',
     icon: <Lock />,
   },
+{
+    title: 'Skadedjur',
+    description:
+      'Drabbas ditt hus av skadedjur kan du få ersättning för sanering och reparation upp till 4 000 000 kr. Skyddet gäller sanering av husbock, hästmyra, myror, getingar, råttor, möss och andra bostadsinsekter, samt när vilda djur tar sig in och orsakar skada i ditt hem.',
+    covered: [
+      'Fackmannamässig sanering',
+      'T.ex. rådgivning, fällor, mekanisk eller kemisk sanering',
+      'Reparation av bärande byggdelar som skadats',
+      'Skador från vilda djur (älg, ren, bäver) som tagit sig in i din villa',
+      'Ersättning: upp till 4 00 000 kr',
+    ],
+    exceptions: [
+      'Livsmedel, kläder, saneringsstädning, angrepp på rötskadat virke',
+    ],
+    info:
+      'Det finns inget speciellt att tänka på.',
+    icon: <Bug />,
+  },
+{
+    title: 'Ombyggnation',
+    description:
+      'Under alla delar av ombyggnationen av huset skyddar vi dig. Med hjälp av den här delen av skyddet kan du t.e.x få ersättning vid stöld av material och verktyg ur verktygsbodar som du köpt för att genomföra renoveringen.',
+    covered: [
+      'Ditt hus under till-, om- eller uppbyggnad',
+      'Byggbod',
+      'Material',
+      'Verktyg',
+    ],
+    exceptions: [
+      'Vattenskada p.g.a installation av ej testat/felfritt rörsystem',
+      'Stormskador på verktyg eller material',
+    ],
+    info:
+      'Förvara verktyg och material i låst utrymme.',
+    icon: <Drill />,
+  },
   {
     title: 'Stöld',
     description:
