@@ -176,6 +176,7 @@ export const DiscountCodeModal: React.FC<Props> = ({
 
                 if (result.errors && result.errors.length > 0) {
                   actions.setFieldError('code', 'SIDEBAR_ADD_DISCOUNT_ERROR')
+                  return
                 }
 
                 await refetch()
