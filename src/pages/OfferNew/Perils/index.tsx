@@ -14,7 +14,7 @@ import {
   PreHeading,
 } from '../components'
 import { InsuranceValues } from './InsuranceValues'
-import { perils } from './mock'
+import { getMockPerils } from './mockPerils'
 import { PerilCollection } from './PerilCollection'
 import { PerilModal } from './PerilModal'
 import { PerilSwiper } from './PerilSwiper'
@@ -58,13 +58,13 @@ export const Perils: React.FC<Props> = ({ offer }) => {
 
           {isMobile ? (
             <PerilSwiper
-              perils={perils}
+              perils={getMockPerils(offer.insurance.type)}
               setCurrentPeril={setCurrentPeril}
               setIsShowingPeril={setIsShowingPeril}
             />
           ) : (
             <PerilCollection
-              perils={perils}
+              perils={getMockPerils(offer.insurance.type)}
               setCurrentPeril={setCurrentPeril}
               setIsShowingPeril={setIsShowingPeril}
             />
@@ -75,7 +75,7 @@ export const Perils: React.FC<Props> = ({ offer }) => {
         <ColumnSpacing />
       </Container>
       <PerilModal
-        perils={perils}
+        perils={getMockPerils(offer.insurance.type)}
         currentPerilIndex={currentPeril}
         setCurrentPeril={setCurrentPeril}
         isVisible={isShowingPeril}

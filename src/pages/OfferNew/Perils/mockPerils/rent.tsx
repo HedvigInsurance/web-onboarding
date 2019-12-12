@@ -12,10 +12,10 @@ import {
   WaterLeak,
   WetPhone,
   WhiteGoods,
-} from '../../../components/icons/Perils'
-import { Peril } from './types'
+} from '../../../../components/icons/Perils'
+import { Peril } from '../types'
 
-export const perils: Peril[] = [
+export const rentPerils: Peril[] = [
   {
     title: 'Eldsvåda',
     description:
@@ -27,11 +27,8 @@ export const perils: Peril[] = [
       'Frätande gas som bildats vid oavsiktlig upphettning av plast',
       'Sanering av sot orsakad av öppen låga',
     ],
-    exceptions: [
-      'Sprängningsarbete, sot eller levande ljus',
-    ],
-    info:
-      'Var försiktig med levande ljus eller eld.',
+    exceptions: ['Sprängningsarbete, sot eller levande ljus'],
+    info: 'Var försiktig med levande ljus eller eld.',
     icon: <Fire />,
   },
   {
@@ -246,8 +243,7 @@ export const perils: Peril[] = [
       'Ytliga skador och skönhetsfel ersätts inte',
       'Värmeslingor i golv i badrum eller annat våtutrymme',
     ],
-    info:
-      'Det finns inget speciellt att tänka på.',
+    info: 'Det finns inget speciellt att tänka på.',
     icon: <WhiteGoods />,
   },
   {
