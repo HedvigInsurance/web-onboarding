@@ -91,7 +91,7 @@ const getDetails = (
     {
       key: 'bostadstyp',
       label: 'Bostadstyp',
-      value: textKeys[insuranceTypeTextKeys[getInsuranceType(offer.quote)]],
+      value: textKeys[insuranceTypeTextKeys[getInsuranceType(offer.quote)]](),
     },
   ],
   [

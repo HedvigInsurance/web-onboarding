@@ -1,6 +1,7 @@
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
+import { BackArrow } from 'components/icons/BackArrow'
 import { Sign } from 'pages/OfferNew/Checkout/Sign'
 import { CompleteOfferData } from 'pages/OfferNew/types'
 import * as React from 'react'
@@ -84,7 +85,24 @@ const InnerWrapper = styled('div')`
   min-height: 100%;
   background: ${colorsV2.offwhite};
   padding: 5rem 8rem 2.5rem 4.5rem;
+
+  @media (max-width: 40rem) {
+    padding: 1rem;
+  }
 `
+
+const BackButtonWrapper = styled('div')`
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+`
+const BackButton = styled('button')`
+  appearance: none;
+  background: transparent;
+  border: none;
+  width: 2rem;
+  height: 2rem;
+`
+
 const Backdrop = styled('div')<Openable>`
   position: fixed;
   background: rgba(25, 25, 25, 0.4);
@@ -158,15 +176,17 @@ export const Checkout: React.FC<Props> = ({ offer, isOpen, onClose }) => {
     }
 
     window.addEventListener('wheel', listener, { passive: false })
+    window.addEventListener('touchmove', listener, { passive: false })
 
     return () => {
       window.removeEventListener('wheel', listener)
+      window.removeEventListener('touchmove', listener)
     }
   })
 
   React.useEffect(() => {
     if (isOpen) {
-      setTimeout(() => setVisibilityState(VisibilityState.OPEN), 10)
+      setTimeout(() => setVisibilityState(VisibilityState.OPEN), 50)
       setVisibilityState(VisibilityState.OPENING)
     } else {
       setTimeout(() => {
@@ -184,9 +204,16 @@ export const Checkout: React.FC<Props> = ({ offer, isOpen, onClose }) => {
           visibilityState={visibilityState}
         >
           <InnerWrapper>
+            <BackButtonWrapper>
+              <BackButton onClick={onClose}>
+                <BackArrow />
+              </BackButton>
+            </BackButtonWrapper>
+
             <CheckoutContent offer={offer} />
           </InnerWrapper>
         </OuterScrollWrapper>
+
         <SlidingSign visibilityState={visibilityState} />
       </OuterWrapper>
       <Backdrop visibilityState={visibilityState} onClick={onClose} />

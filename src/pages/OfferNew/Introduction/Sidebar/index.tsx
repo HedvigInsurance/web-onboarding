@@ -177,7 +177,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
               <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
 
               <Title>
-                {textKeys[insuranceTypeTextKeys[getInsuranceType(offer.quote)]]}
+                {textKeys[
+                  insuranceTypeTextKeys[getInsuranceType(offer.quote)]
+                ]()}
               </Title>
 
               <SummaryContent>
