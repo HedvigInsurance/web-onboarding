@@ -1,37 +1,52 @@
 import { Replacements, TranslationsContext } from '@hedviginsurance/textkeyfy'
+import { TextKeys } from '@hedviginsurance/textkeyfy/dist/translations/types'
 import * as React from 'react'
 
 const placeholderRegex = new RegExp('({[a-zA-Z0-9_]+})', 'g')
 const placeholderKeyRegex = new RegExp('([a-zA-Z0-9_]+)', 'g')
 
-// @ts-ignore
-String.prototype.fill = function(replacements: Replacements) {
-  const matches = this.split(placeholderRegex).filter((value) => value)
-
-  return matches.map((placeholder, _) => {
-    if (!placeholderKeyRegex.test(placeholder)) {
-      return placeholder
-    }
-    const key = placeholder.match(placeholderKeyRegex)![0]
-
-    const value = replacements[key]
-
-    if (value) {
-      return value.toString()
-    }
-
-    return placeholder
-  })
+interface TextKeyResolver {
+  (replacements: Replacements): string[]
+  (): string
 }
+
+export const makeTextKeyResolver = (textKeys: TextKeys) =>
+  new Proxy<{
+    [key: string]: TextKeyResolver
+  }>(
+    {},
+    {
+      get: (_, key: string) => (replacements?: Replacements) => {
+        const resolvedKey = textKeys[key] || key
+        if (!replacements) {
+          return resolvedKey
+        }
+        const matches = resolvedKey
+          .split(placeholderRegex)
+          .filter((value) => value)
+
+        return matches.map((placeholder) => {
+          if (!placeholderKeyRegex.test(placeholder)) {
+            return placeholder
+          }
+          const k = placeholder.match(placeholderKeyRegex)![0]
+
+          const value = replacements[k]
+
+          if (value) {
+            return value.toString()
+          }
+
+          return placeholder
+        })
+      },
+    },
+  )
 
 export const useTextKeys = () => {
   const context = React.useContext(TranslationsContext)
 
-  return React.useMemo(() => {
-    return new Proxy(context.textKeys, {
-      get: (textKeys, key: string) => {
-        return textKeys[key] || key
-      },
-    })
-  }, [context.textKeys])
+  return React.useMemo(() => makeTextKeyResolver(context.textKeys), [
+    context.textKeys,
+  ])
 }

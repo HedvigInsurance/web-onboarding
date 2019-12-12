@@ -1,0 +1,64 @@
+query Offer($id: ID) {
+  quote(id: $id) {
+    ... on CompleteQuote {
+      id
+      currentInsurer
+      price {
+        amount
+        currency
+      }
+      details {
+        ... on CompleteApartmentQuoteDetails {
+          street
+          zipCode
+          householdSize
+          livingSpace
+          type
+        }
+        ... on CompleteHouseQuoteDetails {
+          street
+          zipCode
+          householdSize
+          livingSpace
+          ancillarySpace
+          extraBuildings {
+            ... on ExtraBuildingCore {
+              area
+              displayName
+              hasWaterConnected
+            }
+          }
+        }
+      }
+    }
+
+    ... on IncompleteQuote {
+      id
+    }
+  }
+
+  redeemedCampaigns {
+    incentive {
+      ... on FreeMonths {
+        quantity
+      }
+      ... on MonthlyCostDeduction {
+        amount {
+          amount
+          currency
+        }
+      }
+    }
+    code
+    owner {
+      displayName
+    }
+  }
+
+  member {
+    id
+    firstName
+    lastName
+    email
+  }
+}

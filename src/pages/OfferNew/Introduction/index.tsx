@@ -1,13 +1,9 @@
 import { keyframes } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
-import {
-  TranslationsConsumer,
-  TranslationsPlaceholderConsumer,
-} from '@hedviginsurance/textkeyfy'
-import { OfferData } from 'containers/OfferContainer'
 import * as React from 'react'
 import { animateScroll } from 'react-scroll'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { DownArrow } from '../../../components/icons/DownArrow'
 import { useDocumentScroll } from '../../../utils/hooks/useDocumentScroll'
 import {
@@ -18,11 +14,12 @@ import {
   PreHeading,
   Section,
 } from '../components'
+import { CompleteOfferData } from '../types'
 import { Sidebar } from './Sidebar'
 import { Usps } from './Usps'
 
 interface Props {
-  offer: OfferData
+  offer: CompleteOfferData
   refetch: () => void
 }
 
@@ -91,6 +88,7 @@ const ScrollButton = styled.button`
 export const Introduction: React.FC<Props> = ({ offer, refetch }) => {
   const [sidebarIsSticky, setSidebarIsSticky] = React.useState(false)
   const ref = React.useRef<HTMLDivElement>(null)
+  const textKeys = useTextKeys()
 
   useDocumentScroll(() => {
     const distanceToTop =
@@ -111,18 +109,11 @@ export const Introduction: React.FC<Props> = ({ offer, refetch }) => {
         <Container>
           <Column>
             <HeadingWrapper>
-              <PreHeading>
-                <TranslationsConsumer textKey="HERO_LABEL">
-                  {(t) => t}
-                </TranslationsConsumer>
-              </PreHeading>
+              <PreHeading>{textKeys.HERO_LABEL()}</PreHeading>
               <HeadingWhite>
-                <TranslationsPlaceholderConsumer
-                  textKey="HERO_HEADLINE"
-                  replacements={{ FIRST_NAME: offer.member.firstName }}
-                >
-                  {(t) => t}
-                </TranslationsPlaceholderConsumer>
+                {textKeys.HERO_HEADLINE({
+                  FIRST_NAME: offer.member.firstName || '',
+                })}
               </HeadingWhite>
             </HeadingWrapper>
             <Usps />
@@ -140,9 +131,7 @@ export const Introduction: React.FC<Props> = ({ offer, refetch }) => {
               animateScroll.scrollTo(800)
             }}
           >
-            <TranslationsConsumer textKey="HERO_SCROLL_BUTTON">
-              {(t) => t}
-            </TranslationsConsumer>
+            {textKeys.HERO_SCROLL_BUTTON()}
             <DownArrow />
           </ScrollButton>
         </Container>

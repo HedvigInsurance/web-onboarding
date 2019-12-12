@@ -1,6 +1,5 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
-import { OfferData } from 'containers/OfferContainer'
 import * as React from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
@@ -13,6 +12,8 @@ import {
   HeadingWrapper,
   PreHeading,
 } from '../components'
+import { CompleteOfferData } from '../types'
+import { getInsuranceType } from '../utils'
 import { InsuranceValues } from './InsuranceValues'
 import { perils } from './mock'
 import { PerilCollection } from './PerilCollection'
@@ -20,7 +21,7 @@ import { PerilModal } from './PerilModal'
 import { PerilSwiper } from './PerilSwiper'
 
 interface Props {
-  offer: OfferData
+  offer: CompleteOfferData
 }
 
 const Wrapper = styled.div`
@@ -30,20 +31,19 @@ const Wrapper = styled.div`
 `
 
 export const Perils: React.FC<Props> = ({ offer }) => {
+  const textKeys = useTextKeys()
   const [isShowingPeril, setIsShowingPeril] = React.useState(false)
   const [currentPeril, setCurrentPeril] = React.useState(0)
   const isMobile = useMediaQuery({ query: '(max-width: 600px)' })
-
-  const textKeys = useTextKeys()
 
   return (
     <Wrapper>
       <Container>
         <Column>
           <HeadingWrapper>
-            <PreHeading>{textKeys.COVERAGE_LABEL}</PreHeading>
-            <HeadingBlack>{textKeys.COVERAGE_HEADLINE}</HeadingBlack>
-            <Body>{textKeys.COVERAGE_BODY}</Body>
+            <PreHeading>{textKeys.COVERAGE_LABEL()}</PreHeading>
+            <HeadingBlack>{textKeys.COVERAGE_HEADLINE()}</HeadingBlack>
+            <Body>{textKeys.COVERAGE_BODY()}</Body>
           </HeadingWrapper>
 
           {isMobile ? (
@@ -60,7 +60,7 @@ export const Perils: React.FC<Props> = ({ offer }) => {
             />
           )}
 
-          <InsuranceValues insuranceType={offer.insurance.type} />
+          <InsuranceValues insuranceType={getInsuranceType(offer.quote)} />
         </Column>
         <ColumnSpacing />
       </Container>

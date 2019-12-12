@@ -2,14 +2,11 @@ import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import color from 'color'
 import { DocumentIcon } from 'components/icons/Document'
+import { InsuranceType } from 'generated/graphql'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-import {
-  getInsurancePDFTextKey,
-  getPrebuyPDFTextKey,
-  InsuranceType,
-} from 'utils/insuranceDomainUtils'
 import { SubSubHeadingBlack } from '../../components'
+import { getInsurancePDFTextKey, getPrebuyPDFTextKey } from '../../utils'
 import { insuranceValues } from './mock'
 import { Values } from './Values'
 
@@ -90,29 +87,30 @@ export const InsuranceValues: React.FC<Props> = ({ insuranceType }) => {
     <Wrapper>
       <Header>
         <SubSubHeadingBlack>
-          {textKeys.COVERAGE_INFO_HEADLINE}
+          {textKeys.COVERAGE_INFO_HEADLINE()}
         </SubSubHeadingBlack>
         {/*<TooltipWrapper>
           <Tooltip size="lg" body="Information" />
         </TooltipWrapper>*/}
       </Header>
 
-      <Values insuranceValues={insuranceValues(insuranceType)} />
+      <Values insuranceValues={insuranceValues} />
 
       <Links>
         <Link
-          href={textKeys[getPrebuyPDFTextKey(insuranceType)]}
+          href={textKeys[getPrebuyPDFTextKey(insuranceType)]()}
           target="_blank"
         >
           <DocumentIcon />
-          {textKeys.COVERAGE_TERMSANDCONDITIONS_BUTTON}
+          {textKeys.COVERAGE_TERMSANDCONDITIONS_BUTTON()}
         </Link>
+
         <Link
-          href={textKeys[getInsurancePDFTextKey(insuranceType)]}
+          href={textKeys[getInsurancePDFTextKey(insuranceType)]()}
           target="_blank"
         >
           <DocumentIcon />
-          {textKeys.COVERAGE_PRESALEINFORMATION_BUTTON}
+          {textKeys.COVERAGE_PRESALEINFORMATION_BUTTON()}
         </Link>
       </Links>
     </Wrapper>
