@@ -70,6 +70,6 @@ export const otherCompanies: CompanyProperties[] = [
     liabilityProtection: true,
     legalProtection: true,
     drulle: false,
-    trustpilotScore: 4.2,
+    trustpilotScore: 1.9,
   },
 ]
