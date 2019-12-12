@@ -6,7 +6,7 @@ const placeholderRegex = new RegExp('({[a-zA-Z0-9_]+})', 'g')
 const placeholderKeyRegex = new RegExp('([a-zA-Z0-9_]+)', 'g')
 
 interface TextKeyResolver {
-  (replacements: Replacements): Array<string | number>
+  (replacements: Replacements): string[]
   (): string
 }
 
