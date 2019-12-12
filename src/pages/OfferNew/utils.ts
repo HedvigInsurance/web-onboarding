@@ -6,7 +6,6 @@ import {
   CompleteQuoteDetails,
   InsuranceType,
   Quote,
-  Incentive,
 } from '../../generated/graphql'
 import { CompleteOfferData, OfferData } from './types'
 
