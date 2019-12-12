@@ -201,7 +201,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
       return
     }
 
-    const prevStore = window.localStorage.getItem(
+    const prevStore = window.sessionStorage.getItem(
       `embark-store-${encodeURIComponent(props.name)}`,
     )
 
@@ -259,6 +259,12 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                       personalInformationApi: resolvePersonalInformation,
                       houseInformation: resolveHouseInformation,
                       createQuote: createQuote(storageState),
+                      track: (eventName, payload) => {
+                        const castedWindow = window as any
+                        if (castedWindow && castedWindow.analytics) {
+                          castedWindow.analytics.track(eventName, payload)
+                        }
+                      },
                     }}
                     initialStore={initialStore}
                     onStoreChange={(store) => {
@@ -268,7 +274,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                         // noop
                       }
 
-                      window.localStorage.setItem(
+                      window.sessionStorage.setItem(
                         `embark-store-${encodeURIComponent(props.name!)}`,
                         JSON.stringify(store),
                       )
