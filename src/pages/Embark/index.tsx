@@ -12,7 +12,7 @@ import { useHistory } from 'react-router'
 
 import { colorsV2 } from '@hedviginsurance/brand'
 import gql from 'graphql-tag'
-import Helmet from 'react-helmet'
+import Helmet from 'react-helmet-async'
 import { apolloClient } from '../../client/apolloClient'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
