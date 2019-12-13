@@ -1,23 +1,23 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import { Modal, ModalProps } from 'components/ModalNew'
-import { Form, Formik } from 'formik'
+import { Form, Formik, GenericFieldHTMLAttributes } from 'formik'
 import {
   CompleteQuote,
   EditQuoteInput,
   useEditQuoteMutation,
-  EditApartmentInput,
+  ApartmentType,
 } from 'generated/graphql'
 import { Button } from 'new-components/buttons'
-import { InputGroup, Mask, TextInput } from 'new-components/inputs/index'
+import {
+  CoreInputFieldProps,
+  InputGroup,
+  masks,
+  TextInput,
+} from 'new-components/inputs/index'
 import * as React from 'react'
 import * as Yup from 'yup'
 import { isApartment } from '../../utils'
-
-interface Props {
-  quote: CompleteQuote
-  refetch: () => void
-}
 
 const Container = styled.div`
   width: 100%;
@@ -54,22 +54,24 @@ const Footer = styled.div`
   justify-content: center;
 `
 
-interface FieldType {
-  label: string
-  placeholder: string
-  mask?: Mask
+interface FieldType extends CoreInputFieldProps {
   validation: Yup.Schema<string | number>
 }
 
-interface FieldSchema {
-  apartment?: {
+interface ApartmentFieldSchema {
+  apartment: {
     street?: FieldType
+    zipCode?: FieldType
     householdSize?: FieldType
     livingSpace?: FieldType
     type?: FieldType
   }
-  house?: {
+}
+
+interface HouseFieldSchema {
+  house: {
     street?: FieldType
+    zipCode?: FieldType
     householdSize?: FieldType
     livingSpace?: FieldType
     ancillarySpace?: FieldType
@@ -77,6 +79,18 @@ interface FieldSchema {
     numberOfBathrooms?: FieldType
     isSubleted?: FieldType
   }
+}
+
+type FieldSchema = ApartmentFieldSchema | HouseFieldSchema
+
+const isApartmentFieldSchema = (
+  fieldSchema: FieldSchema,
+  quote: CompleteQuote,
+): fieldSchema is ApartmentFieldSchema => {
+  return (
+    (fieldSchema as ApartmentFieldSchema).apartment &&
+    isApartment(quote.details)
+  )
 }
 
 const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
@@ -89,7 +103,17 @@ const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
     zipCode: {
       label: 'Postnummer',
       placeholder: 'Postnummer',
-      mask: 'ZipCode',
+      mask: masks.zipCode,
+      validation: Yup.string().matches(/^[0-9]{3}[0-9]{2}$/),
+    },
+    livingSpace: {
+      label: 'Storlek',
+      placeholder: 'Storlek',
+      validation: Yup.number().required(),
+    },
+    householdSize: {
+      label: 'Antal försäkrade',
+      placeholder: 'Antal försäkrade',
       validation: Yup.number().required(),
     },
   }
@@ -98,6 +122,17 @@ const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
     ? {
         apartment: {
           ...base,
+          type: {
+            label: 'Typ av boende',
+            placeholder: 'Typ av boende',
+            options: [
+              { label: 'Bostadsrätt', value: ApartmentType.Brf },
+              { label: 'Hyresrätt', value: ApartmentType.Rent },
+              { label: 'Bostadsrätt', value: ApartmentType.StudentBrf },
+              { label: 'Hyresrätt', value: ApartmentType.StudentRent },
+            ],
+            validation: Yup.string().required(),
+          },
         },
       }
     : {
@@ -107,17 +142,22 @@ const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
       }
 }
 
-const getValidationSchema = (fieldSchema: FieldSchema): any =>
-  Object.entries(fieldSchema).reduce((acc, [key, value]) => {
-    if (value.hasOwnProperty('validation')) {
-      return { ...acc, [key]: value.validation }
-    }
-
-    return {
-      ...acc,
-      [key]: getValidationSchema(value),
-    }
-  }, {})
+// TODO: fix any type
+const getValidationSchema = (
+  fieldSchema: FieldSchema,
+): Yup.ObjectSchema<unknown> =>
+  Yup.object({
+    ...Object.entries(fieldSchema).reduce(
+      (acc, [key, value]) =>
+        value.hasOwnProperty('validation')
+          ? { ...acc, [key]: value.validation }
+          : {
+              ...acc,
+              [key]: getValidationSchema(value),
+            },
+      {},
+    ),
+  })
 
 const getSchema = (quote: CompleteQuote): EditQuoteInput => {
   const base = {
@@ -140,34 +180,52 @@ const getSchema = (quote: CompleteQuote): EditQuoteInput => {
       }
 }
 
-/*
-const validationSchema = Yup.object({
-  street: Yup.string().required(),
-  zipCode: Yup.string().required(),
-  livingSpace: Yup.string().required(),
-  householdSize: Yup.string().required(),
-})
-*/
-export const DetailsModal: React.FC<ModalProps & Props> = ({
+interface DetailInputProps {
+  field?: FieldType
+  name: string
+}
+
+const DetailInput: React.FC<DetailInputProps & GenericFieldHTMLAttributes> = ({
+  field,
+  name,
+}) =>
+  field ? (
+    <TextInput
+      label={field.label}
+      placeholder={field.placeholder}
+      name={name}
+      mask={field.mask}
+      type={field.type}
+      options={field.options}
+      showErrorMessage={false}
+      autoComplete="off"
+    />
+  ) : null
+
+interface DetailsModalProps {
+  quote: CompleteQuote
+  refetch: () => void
+}
+
+export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   quote,
   refetch,
   isVisible,
   onClose,
 }) => {
+  const [editQuote, editQuoteResponse] = useEditQuoteMutation()
   const fieldSchema = getFieldSchema(quote)
   const validationSchema = getValidationSchema(fieldSchema)
 
-  console.log('validation schema', validationSchema)
-
-  const [editQuote, editQuoteResponse] = useEditQuoteMutation()
+  console.log(validationSchema)
 
   return (
     <Modal isVisible={isVisible} onClose={onClose}>
       <Container>
-        <Formik
-          validateOnBlur
-          validationSchema={validationSchema}
+        <Formik<EditQuoteInput>
           initialValues={getSchema(quote)}
+          validationSchema={validationSchema}
+          validateOnBlur
           onSubmit={(form) => {
             editQuote({ variables: { input: form } })
               .then(async (result) => {
@@ -202,38 +260,33 @@ export const DetailsModal: React.FC<ModalProps & Props> = ({
               <b>Mutation</b> {JSON.stringify(editQuoteResponse.data)}
               <br></br>
               <br></br>
-              {isApartment(quote.details) && (
+              {isApartmentFieldSchema(fieldSchema, quote) && (
                 <Content>
                   <ContentColumn>
                     <InputGroup>
-                      <TextInput
-                        label={fieldSchema.apartment?.street?.label || ''}
-                        showErrorMessage={false}
-                        placeholder={'Adress'}
+                      <DetailInput
+                        field={fieldSchema.apartment.street}
                         name="apartment.street"
-                        autoComplete="off"
                       />
-                      <TextInput
-                        label={'Postnummer'}
-                        mask="ZipCode"
-                        showErrorMessage={false}
-                        placeholder={'Postnummer'}
+
+                      <DetailInput
+                        field={fieldSchema.apartment.zipCode}
                         name="apartment.zipCode"
-                        autoComplete="off"
                       />
-                      <TextInput
-                        label={'Storlek'}
-                        showErrorMessage={false}
-                        placeholder={'Storlek'}
+
+                      <DetailInput
+                        field={fieldSchema.apartment.type}
+                        name="apartment.type"
+                      />
+
+                      <DetailInput
+                        field={fieldSchema.apartment.livingSpace}
                         name="apartment.livingSpace"
-                        autoComplete="off"
                       />
-                      <TextInput
-                        label={'Antal försäkrade'}
-                        showErrorMessage={false}
-                        placeholder={'Antal försäkrade'}
-                        name="apartmeent.householdSize"
-                        autoComplete="off"
+
+                      <DetailInput
+                        field={fieldSchema.apartment.householdSize}
+                        name="apartment.householdSize"
                       />
                     </InputGroup>
                   </ContentColumn>

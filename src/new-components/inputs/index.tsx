@@ -3,11 +3,13 @@ import { colorsV2 } from '@hedviginsurance/brand'
 import { WarningIcon } from 'components/icons/Warning'
 import { Field, GenericFieldHTMLAttributes } from 'formik'
 import * as React from 'react'
-import InputMask, { ReactInputMask } from 'react-input-mask'
-
-const POSTAL_CODE_REGEX = /^[0-9]{3}[0-9]{2}$/
+import InputMask from 'react-input-mask'
 
 export type Mask = 'ZipCode'
+
+export const masks: { [key: string]: Mask } = {
+  zipCode: 'ZipCode',
+}
 
 export const unmaskValue = (value: string, mask?: Mask): string => {
   if (mask === 'ZipCode') {
@@ -87,9 +89,20 @@ const ErrorText = styled.div`
   margin-top: 0.25rem;
 `
 
-interface TextInputProps {
+interface CoreInputFieldOptions {
   label: string
+  value: string
+}
+
+export interface CoreInputFieldProps {
+  label: string
+  placeholder: string
+  type?: 'text' | 'number'
+  options?: CoreInputFieldOptions[]
   mask?: Mask
+}
+
+export interface TextInputProps extends CoreInputFieldProps {
   showErrorMessage?: boolean
   touched?: string
   errors?: string
@@ -100,6 +113,8 @@ export const TextInput: React.FC<TextInputProps &
   label,
   mask,
   showErrorMessage = true,
+  type = 'text',
+  options,
   touched,
   errors,
   ...props
@@ -110,19 +125,29 @@ export const TextInput: React.FC<TextInputProps &
         <Label>{label}</Label>
         {mask ? (
           <StyledField {...props}>
-            {({ field }: any) => {
-              return (
-                <StyledInput
-                  placeholder={props.placeholder}
-                  maskChar={null}
-                  mask={resolveMask(mask)}
-                  {...field}
-                />
-              )
-            }}
+            {({ field }: any) => (
+              <StyledInput
+                placeholder={props.placeholder}
+                maskChar={null}
+                mask={resolveMask(mask)}
+                {...field}
+              />
+            )}
           </StyledField>
         ) : (
-          <StyledField {...props} />
+          <>
+            {options && options.length > 0 ? (
+              <StyledField {...props} component="select">
+                {options.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </StyledField>
+            ) : (
+              <StyledField type={type} {...props} />
+            )}
+          </>
         )}
       </TextWrapper>
       <SymbolWrapper>{errors && <WarningIcon />}</SymbolWrapper>
