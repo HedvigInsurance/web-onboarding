@@ -48,13 +48,13 @@ export const Perils: React.FC<Props> = ({ offer }) => {
 
           {isMobile ? (
             <PerilSwiper
-              perils={getMockPerils(offer.insurance.type)}
+              perils={getMockPerils(offer.insurance.type, 'sv-SE')}
               setCurrentPeril={setCurrentPeril}
               setIsShowingPeril={setIsShowingPeril}
             />
           ) : (
             <PerilCollection
-              perils={getMockPerils(offer.insurance.type)}
+              perils={getMockPerils(offer.insurance.type, 'sv-SE')}
               setCurrentPeril={setCurrentPeril}
               setIsShowingPeril={setIsShowingPeril}
             />
@@ -65,7 +65,7 @@ export const Perils: React.FC<Props> = ({ offer }) => {
         <ColumnSpacing />
       </Container>
       <PerilModal
-        perils={getMockPerils(offer.insurance.type)}
+        perils={getMockPerils(offer.insurance.type, 'sv-SE')}
         currentPerilIndex={currentPeril}
         setCurrentPeril={setCurrentPeril}
         isVisible={isShowingPeril}
