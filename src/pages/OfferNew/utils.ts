@@ -1,4 +1,5 @@
 import {
+  ApartmentType,
   Campaign,
   CompleteApartmentQuoteDetails,
   CompleteHouseQuoteDetails,
@@ -62,12 +63,18 @@ export const getInsuranceType = (quote: CompleteQuote): InsuranceType => {
   return map[quote.details.type]
 }
 
-export const insuranceTypeTextKeys: { [key in InsuranceType]: string } = {
+export const insuranceTypeTextKeys: Record<InsuranceType, string> = {
   [InsuranceType.Rent]: 'SIDEBAR_INSURANCE_TYPE_RENT',
   [InsuranceType.Brf]: 'SIDEBAR_INSURANCE_TYPE_BRF',
   [InsuranceType.StudentRent]: 'SIDEBAR_INSURANCE_TYPE_RENT',
   [InsuranceType.StudentBrf]: 'SIDEBAR_INSURANCE_TYPE_BRF',
   [InsuranceType.House]: 'SIDEBAR_INSURANCE_TYPE_HOUSE',
+}
+export const apartmentTypeTextKeys: Record<ApartmentType, string> = {
+  [ApartmentType.Brf]: 'CHECKOUT_INSURANCE_APARTMENT_TYPE_BRF',
+  [ApartmentType.Rent]: 'CHECKOUT_INSURANCE_APARTMENT_TYPE_RENT',
+  [ApartmentType.StudentBrf]: 'CHECKOUT_INSURANCE_APARTMENT_TYPE_BRF',
+  [ApartmentType.StudentRent]: 'CHECKOUT_INSURANCE_APARTMENT_TYPE_RENT',
 }
 
 export const getPrebuyPDFTextKey = (insuranceType: InsuranceType): string => {
