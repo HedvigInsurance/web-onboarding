@@ -13,7 +13,7 @@ import { useHistory } from 'react-router'
 import { colorsV2 } from '@hedviginsurance/brand'
 import gql from 'graphql-tag'
 import Helmet from 'react-helmet-async'
-import { useTextKeys } from 'src/utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { apolloClient } from '../../client/apolloClient'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
@@ -230,7 +230,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
           property="og:image"
           content="https://www.hedvig.com/f/62762/1200x630/2b9c894ea5/metaimage-hedviginsurance.jpg"
         />
-        <meta property="og:title" content="Hedvig hemförsäkring" />
+        <meta property="og:title" content={textKeys.EMBARK_META_OG_TITLE()} />
       </Helmet>
       <Global
         styles={css`
