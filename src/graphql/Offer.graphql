@@ -23,7 +23,7 @@ query Offer($id: ID) {
           ancillarySpace
           extraBuildings {
             ... on ExtraBuildingCore {
-              area–
+              area
               displayName
               hasWaterConnected
             }

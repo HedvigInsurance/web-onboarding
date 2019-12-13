@@ -149,7 +149,7 @@ const getDetails = (offer: CompleteOfferData, textKeys: TextKeyMap) => [
           key: 'buildingSize',
           label: textKeys.CHECKOUT_DETAILS_EXTRA_BUILDINGS_SIZE(),
           value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
-            VALUE: extraBuilding.area ?? 0,
+            VALUE: extraBuilding.area ?? 'blah',
           }),
         },
         {
