@@ -33,7 +33,7 @@ export const makeTextKeyResolver = (textKeys: TextKeys) =>
 
           const value = replacements[k]
 
-          if (value) {
+          if (value !== undefined && value !== null) {
             return value.toString()
           }
 
