@@ -10,10 +10,10 @@ interface TextKeyResolver {
   (): string
 }
 
+export type TextKeyMap = Record<string, TextKeyResolver>
+
 export const makeTextKeyResolver = (textKeys: TextKeys) =>
-  new Proxy<{
-    [key: string]: TextKeyResolver
-  }>(
+  new Proxy<TextKeyMap>(
     {},
     {
       get: (_, key: string) => (replacements?: Replacements) => {

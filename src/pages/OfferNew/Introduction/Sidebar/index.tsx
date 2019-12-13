@@ -1,19 +1,21 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
-import { InsuranceType, useRemoveDiscountCodeMutation } from 'generated/graphql'
+import { useRemoveDiscountCodeMutation } from 'generated/graphql'
 import { Button, TextButton } from 'new-components/buttons'
+import { otherInsuranceCompanies } from 'pages/OfferNew/mock'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { formatPostalNumber } from 'utils/postalNumbers'
+import { Price } from '../../components'
 import { CompleteOfferData } from '../../types'
 import {
   getInsuranceType,
+  insuranceTypeTextKeys,
   isFreeMonths,
   isMonthlyCostDeduction,
   isNoDiscount,
 } from '../../utils'
 import { DiscountCodeModal } from './DiscountCodeModal'
-import { otherInsuranceCompanies } from './mock'
 import { PreviousInsurancePicker } from './PreviousInsurancePicker'
 import { StartDate } from './StartDate'
 
@@ -21,6 +23,7 @@ interface Props {
   sticky: boolean
   offer: CompleteOfferData
   refetch: () => void
+  onCheckoutOpen: () => void
 }
 
 const Wrapper = styled.div`
@@ -44,7 +47,7 @@ const Container = styled.div<{ sticky: boolean }>`
   flex-shrink: 0;
   overflow: hidden;
   position: ${(props) => (props.sticky ? `fixed` : `relative`)};
-  ${(props) => props.sticky && `top: 6rem;`}
+  ${(props) => props.sticky && `top: 6rem`};
 
   @media (max-width: 1020px) {
     width: calc(100% + 2rem);
@@ -59,6 +62,7 @@ const Header = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
+  flex-wrap: nowrap;
   padding: 2rem 1.5rem 2rem 2rem;
   align-items: flex-start;
   position: relative;
@@ -123,69 +127,6 @@ const SummaryText = styled.div`
   color: ${colorsV2.darkgray};
 `
 
-const Price = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  position: relative;
-  padding-top: 1rem;
-`
-
-const PriceNet = styled.div`
-  font-size: 1rem;
-  line-height: 1rem;
-  color: ${colorsV2.gray};
-  text-decoration: line-through;
-  margin-bottom: 0.5rem;
-  position: absolute;
-  top: 0;
-`
-
-const PriceNumbers = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 0.5rem;
-`
-
-const PriceGross = styled.div<{ monthlyCostDeduction: boolean }>`
-  font-size: 3.5rem;
-  line-height: 3.5rem;
-  color: ${(props) =>
-    props.monthlyCostDeduction ? colorsV2.grass500 : colorsV2.black};
-  font-family: ${fonts.GEOMANIST};
-  font-weight: 600;
-
-  @media (max-width: 330px) {
-    font-size: 2.75rem;
-  }
-`
-
-const PriceSuffix = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding-bottom: 0.5rem;
-  flex-shrink: 0;
-  margin-left: 0.5rem;
-`
-
-const PriceUnit = styled.div`
-  font-size: 1rem;
-  line-height: 1rem;
-  letter-spacing: -0.23px;
-  font-weight: 700;
-  color: ${colorsV2.darkgray};
-  margin-bottom: 0.25rem;
-`
-
-const PriceInterval = styled.div`
-  font-size: 1rem;
-  line-height: 1rem;
-  letter-spacing: -0.23px;
-  color: ${colorsV2.darkgray};
-  white-space: nowrap;
-`
-
 const Body = styled.div`
   padding: 2rem 1rem;
 
@@ -221,16 +162,9 @@ const FooterExtraActions = styled.div`
     }
   }
 `
-export const insuranceTypeTextKeys: { [key in InsuranceType]: string } = {
-  [InsuranceType.Rent]: 'SIDEBAR_INSURANCE_TYPE_RENT',
-  [InsuranceType.Brf]: 'SIDEBAR_INSURANCE_TYPE_BRF',
-  [InsuranceType.StudentRent]: 'SIDEBAR_INSURANCE_TYPE_RENT',
-  [InsuranceType.StudentBrf]: 'SIDEBAR_INSURANCE_TYPE_BRF',
-  [InsuranceType.House]: 'SIDEBAR_INSURANCE_TYPE_HOUSE',
-}
 
 export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
-  ({ sticky, offer, refetch }, ref) => {
+  ({ sticky, offer, refetch, onCheckoutOpen }, ref) => {
     const textKeys = useTextKeys()
     const [
       discountCodeModalIsOpen,
@@ -283,28 +217,12 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 </TextButton>
               </SummaryContent>
             </Summary>
-            <Price>
-              {monthlyCostDeduction && (
-                <PriceNet>
-                  {textKeys.SIDEBAR_OLD_PRICE({
-                    PRICE: Number(offer.quote.price.amount),
-                  })}
-                </PriceNet>
-              )}
 
-              <PriceNumbers>
-                <PriceGross monthlyCostDeduction={monthlyCostDeduction}>
-                  {Number(offer.quote.price.amount)}
-                </PriceGross>
-
-                <PriceSuffix>
-                  <PriceUnit>{textKeys.SIDEBAR_PRICE_SUFFIX_UNIT()}</PriceUnit>
-                  <PriceInterval>
-                    {textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL()}
-                  </PriceInterval>
-                </PriceSuffix>
-              </PriceNumbers>
-            </Price>
+            <Price
+              monthlyCostDeduction={monthlyCostDeduction}
+              monthlyNet={offer.quote.price}
+              monthlyGross={offer.quote.price} // TODO what should either of these be?
+            />
           </Header>
 
           <Body>
@@ -315,7 +233,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
           </Body>
 
           <Footer>
-            <Button size="lg">{textKeys.SIDEBAR_GETHEDVIG_BUTTON()}</Button>
+            <Button size="lg" onClick={() => onCheckoutOpen()}>
+              {textKeys.SIDEBAR_GETHEDVIG_BUTTON()}
+            </Button>
 
             <FooterExtraActions>
               {offer.redeemedCampaigns.length === 0 ? (
