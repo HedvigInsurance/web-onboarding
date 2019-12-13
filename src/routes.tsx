@@ -61,7 +61,7 @@ export const reactPageRoutes = [
   {
     path: LANGUAGE_PATH_PATTERN + '/beta/new-member/offer/:offerId',
     Component: OfferNew,
-    exact: true,
+    exact: false,
   },
   {
     path: '/new-member/:name?/:id?',
