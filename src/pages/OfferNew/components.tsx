@@ -3,6 +3,8 @@ import { colorsV2, fonts } from '@hedviginsurance/brand'
 import * as React from 'react'
 import { Blob } from '../../components/Blob'
 
+export * from './common/price'
+
 export const Heading = styled('h1')`
   font-family: ${fonts.GEOMANIST};
   font-size: 4rem;
@@ -98,7 +100,6 @@ export const Container = styled('div')`
   padding: 0 2rem;
   margin: 0 auto;
   max-width: 80rem;
-  box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   position: relative;

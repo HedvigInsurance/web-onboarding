@@ -21,6 +21,7 @@ import { Usps } from './Usps'
 interface Props {
   offer: CompleteOfferData
   refetch: () => void
+  onCheckoutOpen: () => void
 }
 
 const Wrapper = styled.div`
@@ -85,7 +86,11 @@ const ScrollButton = styled.button`
   }
 `
 
-export const Introduction: React.FC<Props> = ({ offer, refetch }) => {
+export const Introduction: React.FC<Props> = ({
+  offer,
+  refetch,
+  onCheckoutOpen,
+}) => {
   const [sidebarIsSticky, setSidebarIsSticky] = React.useState(false)
   const ref = React.useRef<HTMLDivElement>(null)
   const textKeys = useTextKeys()
@@ -124,6 +129,7 @@ export const Introduction: React.FC<Props> = ({ offer, refetch }) => {
             sticky={sidebarIsSticky}
             offer={offer}
             refetch={refetch}
+            onCheckoutOpen={onCheckoutOpen}
           />
 
           <ScrollButton
