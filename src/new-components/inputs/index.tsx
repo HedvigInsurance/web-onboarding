@@ -37,6 +37,11 @@ const Wrapper = styled.div<{ errors?: string }>`
   justify-content: space-between;
   align-items: center;
   transition: all 0.2s;
+
+  select {
+    cursor: pointer;
+    appearance: none;
+  }
 `
 
 const TextWrapper = styled.div`
