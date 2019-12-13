@@ -19,6 +19,7 @@ import { EmbarkBackground } from './EmbarkBackground'
 import { resolveHouseInformation } from './houseInformation'
 import { Landing } from './Landing'
 import { resolvePersonalInformation } from './personalInformation'
+import { DateInput } from 'new-components/DateInput'
 
 const EmbarkStyling = styled.div`
   height: 100%;
@@ -220,6 +221,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
 
   return (
     <EmbarkStyling>
+      <DateInput open={true} setOpen={() => {}} />
       <Global
         styles={css`
           body {

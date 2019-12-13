@@ -3,12 +3,14 @@ import { colorsV2 } from '@hedviginsurance/brand'
 import { Tooltip } from 'new-components/Tooltip'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { DateInput } from 'new-components/DateInput'
+import { CalendarIcon } from './CalendarIcon'
 
 interface Props {
   insuredAtOtherCompany: boolean
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.button`
   width: 100%;
   padding: 0.5rem 1rem;
   display: flex;
@@ -55,22 +57,28 @@ const TooltipWrapper = styled.div`
 `
 
 export const StartDate: React.FC<Props> = ({ insuredAtOtherCompany }) => {
+  const [datePickerOpen, setDatePickerOpen] = React.useState(false)
   const textKeys = useTextKeys()
-  return (
-    <Wrapper>
-      <Label>
-        <Title>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}</Title>
-        <SubTitle>{textKeys.SIDEBAR_STARTDATE_CELL_SUBLABEL()}</SubTitle>
-      </Label>
 
-      <Value>
-        {insuredAtOtherCompany
-          ? textKeys.SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER()
-          : textKeys.SIDEBAR_STARTDATE_CELL_VALUE_NEW()}
-        <TooltipWrapper>
-          <Tooltip size="lg" body="Info" />
-        </TooltipWrapper>
-      </Value>
-    </Wrapper>
+  return (
+    <>
+      <Wrapper onClick={() => setDatePickerOpen(!datePickerOpen)}>
+        <Label>
+          <Title>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}</Title>
+          <SubTitle>{textKeys.SIDEBAR_STARTDATE_CELL_SUBLABEL()}</SubTitle>
+        </Label>
+
+        <Value>
+          {insuredAtOtherCompany
+            ? textKeys.SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER()
+            : textKeys.SIDEBAR_STARTDATE_CELL_VALUE_NEW()}
+          <TooltipWrapper>
+            <Tooltip size="lg" body="Info" />
+          </TooltipWrapper>
+        </Value>
+        <CalendarIcon />
+      </Wrapper>
+      <DateInput open={datePickerOpen} setOpen={setDatePickerOpen} />
+    </>
   )
 }
