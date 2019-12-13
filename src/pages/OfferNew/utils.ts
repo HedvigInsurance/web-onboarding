@@ -15,6 +15,10 @@ export const isOffer = (offer?: OfferData): offer is CompleteOfferData =>
 export const isQuote = (quote: Quote): quote is CompleteQuote =>
   quote.__typename === 'CompleteQuote' || false
 
+export const isStudent = (details: CompleteQuoteDetails) =>
+  isApartment(details) &&
+  (details.type === 'STUDENT_BRF' || details.type === 'STUDENT_RENT')
+
 export const isApartment = (
   details: CompleteQuoteDetails,
 ): details is CompleteApartmentQuoteDetails =>

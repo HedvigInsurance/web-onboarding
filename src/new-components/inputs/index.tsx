@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
+import { DownArrow } from 'components/icons/DownArrow'
 import { WarningIcon } from 'components/icons/Warning'
 import { Field, GenericFieldHTMLAttributes } from 'formik'
 import * as React from 'react'
@@ -11,7 +12,7 @@ export const masks: { [key: string]: Mask } = {
   zipCode: 'ZipCode',
 }
 
-export const unmaskValue = (value: string, mask?: Mask): string => {
+export const sanitizeValue = (value: string, mask?: Mask): string => {
   if (mask === 'ZipCode') {
     return value.replace(/\s+/, '')
   }
@@ -19,7 +20,7 @@ export const unmaskValue = (value: string, mask?: Mask): string => {
   return value
 }
 
-const resolveMask = (mask: Mask): string => {
+const resolveMask = (mask: Mask): any => {
   if (mask === 'ZipCode') {
     return '999 99'
   }
@@ -83,6 +84,14 @@ const SymbolWrapper = styled.div`
   height: 1.5rem;
   flex-shrink: 0;
   margin-left: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  svg {
+    width 1rem;
+    height: 1rem;
+  }
 `
 
 const ErrorText = styled.div`
@@ -99,10 +108,17 @@ interface CoreInputFieldOptions {
   value: string
 }
 
+type CoreInputFieldType = 'text' | 'number' | 'email'
+
+export const inputTypes: { [key: string]: CoreInputFieldType } = {
+  text: 'text',
+  number: 'number',
+}
+
 export interface CoreInputFieldProps {
   label: string
   placeholder: string
-  type?: 'text' | 'number'
+  type?: CoreInputFieldType
   options?: CoreInputFieldOptions[]
   mask?: Mask
 }
@@ -155,7 +171,13 @@ export const TextInput: React.FC<TextInputProps &
           </>
         )}
       </TextWrapper>
-      <SymbolWrapper>{errors && <WarningIcon />}</SymbolWrapper>
+      <SymbolWrapper>
+        {options && options.length > 0 ? (
+          <DownArrow />
+        ) : (
+          errors && <WarningIcon />
+        )}
+      </SymbolWrapper>
     </Wrapper>
     {showErrorMessage && <ErrorText>{errors}</ErrorText>}
   </>

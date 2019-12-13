@@ -1,5 +1,5 @@
 import { Form, Formik } from 'formik'
-import { TextInput } from 'new-components/inputs'
+import { TextInput } from 'new-components/inputs/index'
 import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 

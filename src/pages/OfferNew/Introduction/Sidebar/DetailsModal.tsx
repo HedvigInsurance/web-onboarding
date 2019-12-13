@@ -3,21 +3,22 @@ import { colorsV2, fonts } from '@hedviginsurance/brand'
 import { Modal, ModalProps } from 'components/ModalNew'
 import { Form, Formik, GenericFieldHTMLAttributes } from 'formik'
 import {
+  ApartmentType,
   CompleteQuote,
   EditQuoteInput,
   useEditQuoteMutation,
-  ApartmentType,
 } from 'generated/graphql'
 import { Button } from 'new-components/buttons'
 import {
   CoreInputFieldProps,
   InputGroup,
+  inputTypes,
   masks,
   TextInput,
 } from 'new-components/inputs/index'
 import * as React from 'react'
 import * as Yup from 'yup'
-import { isApartment } from '../../utils'
+import { isApartment, isStudent } from '../../utils'
 
 const Container = styled.div`
   width: 100%;
@@ -104,16 +105,19 @@ const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
       label: 'Postnummer',
       placeholder: 'Postnummer',
       mask: masks.zipCode,
+      type: inputTypes.number,
       validation: Yup.string().matches(/^[0-9]{3}[0-9]{2}$/),
     },
     livingSpace: {
       label: 'Storlek',
       placeholder: 'Storlek',
+      type: inputTypes.number,
       validation: Yup.number().required(),
     },
     householdSize: {
       label: 'Antal försäkrade',
       placeholder: 'Antal försäkrade',
+      type: inputTypes.number,
       validation: Yup.number().required(),
     },
   }
@@ -126,10 +130,15 @@ const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
             label: 'Typ av boende',
             placeholder: 'Typ av boende',
             options: [
-              { label: 'Bostadsrätt', value: ApartmentType.Brf },
-              { label: 'Hyresrätt', value: ApartmentType.Rent },
-              { label: 'Bostadsrätt', value: ApartmentType.StudentBrf },
-              { label: 'Hyresrätt', value: ApartmentType.StudentRent },
+              ...(isStudent(quote.details)
+                ? [
+                    { label: 'Bostadsrätt', value: ApartmentType.StudentBrf },
+                    { label: 'Hyresrätt', value: ApartmentType.StudentRent },
+                  ]
+                : [
+                    { label: 'Bostadsrätt', value: ApartmentType.Brf },
+                    { label: 'Hyresrätt', value: ApartmentType.Rent },
+                  ]),
             ],
             validation: Yup.string().required(),
           },
@@ -217,8 +226,6 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   const fieldSchema = getFieldSchema(quote)
   const validationSchema = getValidationSchema(fieldSchema)
 
-  console.log(validationSchema)
-
   return (
     <Modal isVisible={isVisible} onClose={onClose}>
       <Container>
@@ -240,8 +247,8 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                 await refetch()
                 onClose()
               })
-              .catch(() => {
-                console.log('error')
+              .catch((err) => {
+                console.error(err)
               })
           }}
         >
