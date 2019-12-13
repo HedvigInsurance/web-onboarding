@@ -45,7 +45,6 @@ const Container = styled.div<{ sticky: boolean }>`
   border-radius: 8px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
   flex-shrink: 0;
-  overflow: hidden;
   position: ${(props) => (props.sticky ? `fixed` : `relative`)};
   ${(props) => props.sticky && `top: 6rem`};
 
