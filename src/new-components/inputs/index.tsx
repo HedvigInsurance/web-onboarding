@@ -6,7 +6,13 @@ import { Field, GenericFieldHTMLAttributes } from 'formik'
 import * as React from 'react'
 import InputMask from 'react-input-mask'
 
-export const masks: { [key: string]: MaskType } = {
+interface Mask {
+  name: string
+  mask: string
+  sanitize: (value: string) => string
+}
+
+export const masks: { [key: string]: Mask } = {
   zipCode: {
     name: 'ZipCode',
     mask: '999 99',
@@ -17,12 +23,6 @@ export const masks: { [key: string]: MaskType } = {
     mask: '99999 m2',
     sanitize: (value) => value.replace(/[\s\u200b]+m2/, ''),
   },
-}
-
-interface Mask {
-  name: string
-  mask: string
-  sanitize: (value: string) => string
 }
 
 const Wrapper = styled.div<{ errors?: string }>`
