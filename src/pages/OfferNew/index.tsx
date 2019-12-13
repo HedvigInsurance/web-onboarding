@@ -1,23 +1,23 @@
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import { useOfferQuery } from 'generated/graphql'
+import { History } from 'history'
 import { TopBar } from 'new-components/TopBar'
 import * as React from 'react'
-import { RouteComponentProps } from 'react-router'
+import { RouteComponentProps, useHistory, useRouteMatch } from 'react-router'
 import { Checkout } from './Checkout'
 import { Compare } from './Compare'
 import { Introduction } from './Introduction'
 import { Perils } from './Perils/index'
 import { isOffer } from './utils'
 
-const createToggleCheckout = (setCheckoutIsOpen: (isOpen: boolean) => void) => (
+const createToggleCheckout = (history: History<any>, offerId?: string) => (
   isOpen: boolean,
 ) => {
-  setCheckoutIsOpen(isOpen)
   if (isOpen) {
-    history.pushState({ isOpen }, undefined as any, '/beta/new-member/offer') // TODO
+    history.push(`/beta/new-member/offer/${offerId ?? ''}/checkout`) // TODO
   } else {
-    history.back()
+    history.goBack()
   }
 }
 
@@ -27,16 +27,11 @@ export const OfferNew: React.FC<RouteComponentProps<{ offerId: string }>> = ({
   const { data, loading, error, refetch } = useOfferQuery({
     variables: { id: match.params.offerId },
   })
-  const [checkoutIsOpen, setCheckoutIsOpen] = React.useState(false)
-  const toggleCheckout = createToggleCheckout(setCheckoutIsOpen)
-
-  React.useEffect(() => {
-    const listener = (e: PopStateEvent) => {
-      setCheckoutIsOpen(Boolean(e.state?.isOpen))
-    }
-    window.addEventListener('popstate', listener)
-    return () => window.removeEventListener('popstate', listener)
-  })
+  const history = useHistory()
+  const checkoutMatch = useRouteMatch(
+    '/beta/new-member/offer/:offerId/checkout',
+  )
+  const toggleCheckout = createToggleCheckout(history, data?.quote?.id)
 
   return !loading && !error && data && isOffer(data) ? (
     <Page>
@@ -51,9 +46,10 @@ export const OfferNew: React.FC<RouteComponentProps<{ offerId: string }>> = ({
         <Compare />
         <Checkout
           offer={data}
-          isOpen={checkoutIsOpen}
+          isOpen={checkoutMatch !== null}
           onClose={() => toggleCheckout(false)}
         />
+        )}
       </SessionTokenGuard>
     </Page>
   ) : null
