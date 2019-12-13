@@ -13,6 +13,7 @@ import { useHistory } from 'react-router'
 import { colorsV2 } from '@hedviginsurance/brand'
 import gql from 'graphql-tag'
 import Helmet from 'react-helmet-async'
+import { useTextKeys } from 'src/utils/hooks/useTextKeys'
 import { apolloClient } from '../../client/apolloClient'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
@@ -176,6 +177,8 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
     [key: string]: any
   }>()
 
+  const textKeys = useTextKeys()
+
   const isShowingLanding = props.showLanding || false
 
   React.useEffect(() => {
@@ -222,6 +225,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
   return (
     <EmbarkStyling>
       <Helmet>
+        <title>{textKeys.STARTPAGE_PAGE_TITLE()}</title>
         <meta
           property="og:image"
           content="https://www.hedvig.com/f/62762/1200x630/2b9c894ea5/metaimage-hedviginsurance.jpg"
