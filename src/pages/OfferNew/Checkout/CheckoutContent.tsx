@@ -67,10 +67,10 @@ export const CheckoutContent: React.FC<Props> = ({ offer }) => {
   return (
     <>
       <Section>
-        <Title>Grattis! Snart är du försäkrad med Hedvig</Title>
+        <Title>{textKeys.CHECKOUT_TITLE()}</Title>
         <Excerpt>
           <div>
-            <InsuranceTypeLabel>Hemförsäkring</InsuranceTypeLabel>
+            <InsuranceTypeLabel>{textKeys.SIDEBAR_LABEL()}</InsuranceTypeLabel>
             <InsuranceType>
               {textKeys[insuranceTypeTextKeys[getInsuranceType(offer.quote)]]()}
             </InsuranceType>

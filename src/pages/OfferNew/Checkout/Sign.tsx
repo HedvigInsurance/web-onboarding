@@ -3,6 +3,7 @@ import { colorsV2 } from '@hedviginsurance/brand/dist'
 import { Button } from 'new-components/buttons'
 import * as React from 'react'
 import { useMediaQuery } from 'react-responsive'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 
 export const SignSpacer = styled('div')`
   height: 250px;
@@ -49,16 +50,16 @@ interface Props {
 
 export const Sign: React.FC<Props> = ({ className }) => {
   const isMobile = useMediaQuery({ maxWidth: 600 })
+  const textKeys = useTextKeys()
+
   return (
     <Wrapper className={className}>
       <ButtonWrapper>
-        <Button size={isMobile ? 'sm' : 'lg'}>Signera med BankID</Button>
+        <Button size={isMobile ? 'sm' : 'lg'}>
+          {textKeys.CHECKOUT_SIGN_BUTTON_TEXT()}
+        </Button>
       </ButtonWrapper>
-      <Disclaimer>
-        Genom att trycka på ”Gå vidare till signering” godkänner jag att jag har
-        tagit del av förköpsinformation, villkor och att mina personuppgifter
-        behandlas enligt GDPR.
-      </Disclaimer>
+      <Disclaimer>{textKeys.CHECKOUT_SIGN_DISCLAIMER()}</Disclaimer>
     </Wrapper>
   )
 }

@@ -9,7 +9,7 @@ import { formatPostalNumber } from 'utils/postalNumbers'
 const Wrapper = styled('div')`
   padding: 0 0.5rem;
 `
-const Headline = styled('h3')`
+const Title = styled('h3')`
   font-size: 1rem;
   letter-spacing: -0.23px;
   font-family: ${fonts.CIRCULAR};
@@ -56,7 +56,7 @@ export const InsuranceSummary: React.FC<Props> = ({ offer }) => {
 
   return (
     <Wrapper>
-      <Headline>Dina detaljer</Headline>
+      <Title>{textKeys.CHECKOUT_SUMMARY_TITLE()}</Title>
       <Table>
         {getDetails(offer, textKeys).map((group, index) => (
           <Group key={index}>
