@@ -6,6 +6,7 @@ import {
 } from '@hedviginsurance/textkeyfy'
 import { MonetaryAmount } from 'containers/types'
 import * as React from 'react'
+
 const PriceWrapper = styled.div`
   display: flex;
   flex-direction: column;

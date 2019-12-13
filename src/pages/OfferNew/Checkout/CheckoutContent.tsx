@@ -1,11 +1,14 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand/dist'
-import { getHasMonthlyCostDeduction } from 'pages/OfferNew/common/utils'
 import { CompleteOfferData } from 'pages/OfferNew/types'
-import { getInsuranceType, insuranceTypeTextKeys } from 'pages/OfferNew/utils'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-import { Price } from '../common/components'
+import { Price } from '../components'
+import {
+  getInsuranceType,
+  insuranceTypeTextKeys,
+  isMonthlyCostDeduction,
+} from '../utils'
 import { InsuranceSummary } from './InsuranceSummary'
 import { SignSpacer } from './Sign'
 import { UserDetailsForm } from './UserDetailsForm'
@@ -59,7 +62,7 @@ interface Props {
 
 export const CheckoutContent: React.FC<Props> = ({ offer }) => {
   const textKeys = useTextKeys()
-  const monthlyCostDeduction = getHasMonthlyCostDeduction(offer)
+  const monthlyCostDeduction = isMonthlyCostDeduction(offer.redeemedCampaigns)
 
   return (
     <>

@@ -6,7 +6,7 @@ import { otherInsuranceCompanies } from 'pages/OfferNew/mock'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { formatPostalNumber } from 'utils/postalNumbers'
-import { Price } from '../../common/components'
+import { Price } from '../../components'
 import { CompleteOfferData } from '../../types'
 import {
   getInsuranceType,
