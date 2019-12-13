@@ -3372,12 +3372,12 @@ export type EditQuoteMutationVariables = {
 
 export type EditQuoteMutation = { __typename?: 'Mutation' } & {
   editQuote:
-    | ({ __typename?: 'CompleteQuote' } & {
-        price: { __typename?: 'MonetaryAmountV2' } & Pick<
-          MonetaryAmountV2,
-          'amount' | 'currency'
-        >
-      })
+    | ({ __typename?: 'CompleteQuote' } & Pick<CompleteQuote, 'id'> & {
+          price: { __typename?: 'MonetaryAmountV2' } & Pick<
+            MonetaryAmountV2,
+            'amount' | 'currency'
+          >
+        })
     | ({ __typename?: 'UnderwritingLimitsHit' } & {
         limits: Array<
           { __typename?: 'UnderwritingLimit' } & Pick<
@@ -3546,6 +3546,7 @@ export const EditQuoteDocument = gql`
   mutation EditQuote($input: EditQuoteInput!) {
     editQuote(input: $input) {
       ... on CompleteQuote {
+        id
         price {
           amount
           currency

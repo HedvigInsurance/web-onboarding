@@ -136,16 +136,16 @@ export const InputGroup = styled.div`
     border-radius: 0;
     border-color: ${colorsV2.lightgray};
 
-    :not(:first-child) {
+    :not(:first-of-type) {
       border-top: none;
     }
 
-    :first-child {
+    :first-of-type {
       border-top-left-radius: 8px;
       border-top-right-radius 8px;
     }
 
-    :last-child {
+    :last-of-type {
       border-bottom-left-radius: 8px;
       border-bottom-right-radius 8px;
     }

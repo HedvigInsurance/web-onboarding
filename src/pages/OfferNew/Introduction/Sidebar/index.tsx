@@ -353,6 +353,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
         </Container>
         <DetailsModal
           quote={offer.quote}
+          refetch={refetch}
           isVisible={detailsModalIsOpen}
           onClose={() => setDetailsModalIsOpen(false)}
         />

@@ -6,6 +6,7 @@ import {
   CompleteQuote,
   EditQuoteInput,
   useEditQuoteMutation,
+  EditApartmentInput,
 } from 'generated/graphql'
 import { Button } from 'new-components/buttons'
 import { InputGroup, Mask, TextInput } from 'new-components/inputs/index'
@@ -15,6 +16,7 @@ import { isApartment } from '../../utils'
 
 interface Props {
   quote: CompleteQuote
+  refetch: () => void
 }
 
 const Container = styled.div`
@@ -52,135 +54,192 @@ const Footer = styled.div`
   justify-content: center;
 `
 
-interface Schema {
-  [key: string]: {
-    label: string
-    placeholder: string
-    mask?: Mask
+interface FieldType {
+  label: string
+  placeholder: string
+  mask?: Mask
+  validation: Yup.Schema<string | number>
+}
+
+interface FieldSchema {
+  apartment?: {
+    street?: FieldType
+    householdSize?: FieldType
+    livingSpace?: FieldType
+    type?: FieldType
+  }
+  house?: {
+    street?: FieldType
+    householdSize?: FieldType
+    livingSpace?: FieldType
+    ancillarySpace?: FieldType
+    yearOfConstruction?: FieldType
+    numberOfBathrooms?: FieldType
+    isSubleted?: FieldType
   }
 }
 
-const generateSchema = (quote: CompleteQuote): Schema => ({
-  street: {
-    label: 'Adress',
-    placeholder: 'Adress',
-  },
-  zipCode: {
-    label: 'Postnummer',
-    placeholder: 'Postnummer',
-    mask: 'ZipCode',
-  },
-  ...(isApartment(quote.details)
+const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
+  const base = {
+    street: {
+      label: 'Adress',
+      placeholder: 'Adress',
+      validation: Yup.string().required(),
+    },
+    zipCode: {
+      label: 'Postnummer',
+      placeholder: 'Postnummer',
+      mask: 'ZipCode',
+      validation: Yup.number().required(),
+    },
+  }
+
+  return isApartment(quote.details)
     ? {
         apartment: {
-          label: 'Apartment',
-          placeholder: 'Apartment',
+          ...base,
         },
       }
     : {
         house: {
-          label: 'House',
-          placeholder: 'House',
+          ...base,
         },
-      }),
-})
+      }
+}
 
+const getValidationSchema = (fieldSchema: FieldSchema): any =>
+  Object.entries(fieldSchema).reduce((acc, [key, value]) => {
+    if (value.hasOwnProperty('validation')) {
+      return { ...acc, [key]: value.validation }
+    }
+
+    return {
+      ...acc,
+      [key]: getValidationSchema(value),
+    }
+  }, {})
+
+const getSchema = (quote: CompleteQuote): EditQuoteInput => {
+  const base = {
+    street: quote.details.street,
+    zipCode: quote.details.zipCode,
+    householdSize: quote.details.householdSize,
+    livingSpace: quote.details.livingSpace,
+  }
+
+  return isApartment(quote.details)
+    ? {
+        id: quote.id,
+        apartment: {
+          ...base,
+          type: quote.details.type,
+        },
+      }
+    : {
+        id: quote.id,
+      }
+}
+
+/*
 const validationSchema = Yup.object({
   street: Yup.string().required(),
   zipCode: Yup.string().required(),
   livingSpace: Yup.string().required(),
   householdSize: Yup.string().required(),
 })
-
+*/
 export const DetailsModal: React.FC<ModalProps & Props> = ({
   quote,
+  refetch,
   isVisible,
   onClose,
 }) => {
-  const editQuote = useEditQuoteMutation({
-    variables: { input: { id: quote.id } },
-  })
+  const fieldSchema = getFieldSchema(quote)
+  const validationSchema = getValidationSchema(fieldSchema)
+
+  console.log('validation schema', validationSchema)
+
+  const [editQuote, editQuoteResponse] = useEditQuoteMutation()
+
   return (
     <Modal isVisible={isVisible} onClose={onClose}>
       <Container>
         <Formik
           validateOnBlur
           validationSchema={validationSchema}
-          initialValues={{
-            street: quote.details.street,
-            zipCode: quote.details.zipCode,
-            livingSpace: quote.details.livingSpace,
-            householdSize: quote.details.householdSize,
-          }}
-          onSubmit={(form, actions) => {
-            const schema = generateSchema(quote)
-            console.log(schema)
-            console.log(form)
+          initialValues={getSchema(quote)}
+          onSubmit={(form) => {
+            editQuote({ variables: { input: form } })
+              .then(async (result) => {
+                if (!result) {
+                  return
+                }
+
+                if (result.errors && result.errors.length > 0) {
+                  return
+                }
+
+                await refetch()
+                onClose()
+              })
+              .catch(() => {
+                console.log('error')
+              })
           }}
         >
           {({ touched, errors, values }) => (
             <Form>
               <Headline>Dina detaljer</Headline>
-              <Content>
-                <ContentColumn>
-                  {JSON.stringify(errors)}
-                  <InputGroup>
-                    <TextInput
-                      label={'Adress'}
-                      showErrorMessage={false}
-                      placeholder={'Adress'}
-                      name="street"
-                      autoComplete="off"
-                      touched={
-                        touched.street ? touched.street.toString() : undefined
-                      }
-                      errors={errors.street}
-                    />
-
-                    <TextInput
-                      label={'Postnummer'}
-                      mask="ZipCode"
-                      showErrorMessage={false}
-                      placeholder={'Postnummer'}
-                      name="zipCode"
-                      autoComplete="off"
-                      touched={
-                        touched.zipCode ? touched.zipCode.toString() : undefined
-                      }
-                      errors={errors.zipCode}
-                    />
-
-                    <TextInput
-                      label={'Storlek'}
-                      showErrorMessage={false}
-                      placeholder={'Storlek'}
-                      name="livingSpace"
-                      autoComplete="off"
-                      touched={
-                        touched.livingSpace
-                          ? touched.livingSpace.toString()
-                          : undefined
-                      }
-                      errors={errors.livingSpace}
-                    />
-
-                    <TextInput
-                      label={'Antal försäkrade'}
-                      showErrorMessage={false}
-                      placeholder={'Antal försäkrade'}
-                      name="householdSize"
-                      autoComplete="off"
-                      touched={
-                        touched.householdSize
-                          ? touched.householdSize.toString()
-                          : undefined
-                      }
-                      errors={errors.householdSize}
-                    />
-                  </InputGroup>
-                </ContentColumn>
-                <ContentColumn>2</ContentColumn>
-              </Content>
+              <b>Errors</b> {JSON.stringify(errors)}
+              <br></br>
+              <br></br>
+              <b>Values</b> {JSON.stringify(values)}
+              <br></br>
+              <br></br>
+              <b>Touched</b> {JSON.stringify(touched)}
+              <br></br>
+              <br></br>
+              <b>Mutation</b> {JSON.stringify(editQuoteResponse.data)}
+              <br></br>
+              <br></br>
+              {isApartment(quote.details) && (
+                <Content>
+                  <ContentColumn>
+                    <InputGroup>
+                      <TextInput
+                        label={fieldSchema.apartment?.street?.label || ''}
+                        showErrorMessage={false}
+                        placeholder={'Adress'}
+                        name="apartment.street"
+                        autoComplete="off"
+                      />
+                      <TextInput
+                        label={'Postnummer'}
+                        mask="ZipCode"
+                        showErrorMessage={false}
+                        placeholder={'Postnummer'}
+                        name="apartment.zipCode"
+                        autoComplete="off"
+                      />
+                      <TextInput
+                        label={'Storlek'}
+                        showErrorMessage={false}
+                        placeholder={'Storlek'}
+                        name="apartment.livingSpace"
+                        autoComplete="off"
+                      />
+                      <TextInput
+                        label={'Antal försäkrade'}
+                        showErrorMessage={false}
+                        placeholder={'Antal försäkrade'}
+                        name="apartmeent.householdSize"
+                        autoComplete="off"
+                      />
+                    </InputGroup>
+                  </ContentColumn>
+                  <ContentColumn>2</ContentColumn>
+                </Content>
+              )}
               <Footer>
                 <Button type="submit">Uppdatera detaljer</Button>
               </Footer>
