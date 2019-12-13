@@ -11,8 +11,8 @@ import {
   WaterLeak,
   WetPhone,
   WhiteGoods,
-} from '../../../../components/icons/Perils'
-import { Peril } from '../types'
+} from '../../../../../components/icons/Perils'
+import { Peril } from '../../types'
 
 export const brfPerils: Peril[] = [
   {

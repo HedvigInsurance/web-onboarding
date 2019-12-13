@@ -410,3 +410,58 @@ export const WetPhone = (props: SvgProps) => (
     ></path>
   </Svg>
 )
+
+export const Bugs: React.FC<SvgProps> = (props) => (
+  <Svg {...props} viewBox="0 0 48 48">
+    <g transform="translate(9 10)" fill="#141033" fillRule="evenodd">
+      <path
+        d="M15 3.5a8.5 8.5 0 018.5 8.5v6a8.5 8.5 0 11-17 0v-6A8.5 8.5 0 0115 3.5zm0 1A7.5 7.5 0 007.5 12v6a7.5 7.5 0 0015 0v-6A7.5 7.5 0 0015 4.5z"
+        fill-rule="nonzero"
+      />
+      <circle cx="15" cy="9" r="1" />
+      <circle cx="15" cy="15" r="1" />
+      <circle cx="15" cy="21" r="1" />
+      <path d="M22.5 9h5.2v1h-5.2zM22.5 21h5.2v1h-5.2zM22.5 15h7v1h-7zM7.2 9H2v1h5.2zM21.085.308l-3.677 3.677.707.707 3.677-3.677zM9.115.308l3.677 3.677-.707.707-3.677-3.677zM8 21H2v1h6zM7 15H0v1h7z" />
+    </g>
+  </Svg>
+)
+
+export const Tools: React.FC<SvgProps> = (props) => (
+  <Svg {...props} viewBox="0 0 48 48">
+    <g transform="translate(10 13)" fill="#141033" fillRule="evenodd">
+      <path fillRule="nonzero" d="M19 5.5h5v-1h-5zM27 5.5h2v-1h-2z" />
+      <rect x="25" width="1" height="10" rx=".5" />
+      <path
+        fillRule="nonzero"
+        d="M10 13.5h3v-1h-3zM16.5 8.5a3.5 3.5 0 000-7v1a2.5 2.5 0 110 5v1z"
+      />
+      <rect x="22" y="12" width="2" height="2" rx="1" />
+      <rect x="21" y="15" width="2" height="2" rx="1" />
+      <rect x="22" y="18" width="2" height="2" rx="1" />
+      <rect
+        transform="rotate(90 6 6.5)"
+        x="5.5"
+        y="4.5"
+        width="1"
+        height="4"
+        rx=".5"
+      />
+      <rect
+        transform="rotate(90 6 3.5)"
+        x="5.5"
+        y="1.5"
+        width="1"
+        height="4"
+        rx=".5"
+      />
+      <path
+        d="M9.129 18H3.34l2.531-9h5.789l-2.531 9zm-2.5-8L4.66 17h3.711l1.969-7H6.629z"
+        fillRule="nonzero"
+      />
+      <path
+        d="M17.135 0l-.06 10H2.733c-.887 0-1.6-.73-1.6-1.625v-6.75C1.132.73 1.845 0 2.732 0h14.402zM16.13 1H2.733c-.33 0-.6.277-.6.625v6.75c0 .348.27.625.6.625H16.08l.048-8zM11 17a1.5 1.5 0 011.5 1.5v2A1.5 1.5 0 0111 22H2a1.5 1.5 0 01-1.5-1.5v-2A1.5 1.5 0 012 17h9zm0 1H2a.5.5 0 00-.5.5v2a.5.5 0 00.5.5h9a.5.5 0 00.5-.5v-2a.5.5 0 00-.5-.5z"
+        fillRule="nonzero"
+      />
+    </g>
+  </Svg>
+)
