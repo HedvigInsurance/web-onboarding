@@ -7,7 +7,6 @@ import {
   Lock,
   Plane,
   Plus,
-  Storm,
   Theft,
   WaterLeak,
   WetPhone,
@@ -28,9 +27,7 @@ export const brfPerils: Peril[] = [
       'Frätande gas som bildats vid oavsiktlig upphettning av plast',
       'Sanering av sot orsakad av öppen låga',
     ],
-    exceptions: [
-      'Sprängningsarbete, sot eller levande ljus',
-    ],
+    exceptions: ['Sprängningsarbete, sot eller levande ljus'],
     info: 'Var försiktig med levande ljus eller eld.',
     icon: <Fire />,
   },
@@ -40,7 +37,7 @@ export const brfPerils: Peril[] = [
       'Skyddet kan ge ersättning vid olika typer av vattenskador t.ex. om en tvättmaskin läckt okontrollerat eller ett badrum svämmat över. Du kan få ersättning både för att åtgärda skadorna på lägenheten samt för andra merkostnader under reparationen.',
     covered: [
       'Oberäknat vatten/ånga från vattenledningssytem',
-      'Oberäknat vatten/ånga från badrum, kök eller tvättstuga', 
+      'Oberäknat vatten/ånga från badrum, kök eller tvättstuga',
       'Oberäknat vatten/ånga från värmepanna',
       'Läckage från kyl/frys',
       'Läckage från brandsläckare',
@@ -255,11 +252,8 @@ export const brfPerils: Peril[] = [
       'skador på fast inredning (typ ditt nya kök)',
       'skador på ytskikt (typ dina nyfixade golv, tak eller väggar)',
     ],
-    exceptions: [
-      'Inget särskilt!',
-    ],
-    info:
-      'Inget särskilt.',
+    exceptions: ['Inget särskilt!'],
+    info: 'Inget särskilt.',
     icon: <WetPhone />,
   },
 ]
