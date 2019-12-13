@@ -1,14 +1,14 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
-import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { Cross } from 'components/icons/Cross'
 import { Form, Formik } from 'formik'
 import { motion } from 'framer-motion'
+import { useRedeemCodeMutation } from 'generated/graphql'
 import hexToRgba from 'hex-to-rgba'
 import { Button } from 'new-components/buttons'
 import { TextInput } from 'new-components/inputs'
-import { RedeemCodeMutation } from 'pages/Offer/containers/RedeemCodeMutation'
 import * as React from 'react'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 import * as Yup from 'yup'
 
 interface Props {
@@ -126,119 +126,95 @@ export const DiscountCodeModal: React.FC<Props> = ({
   isOpen,
   close,
   refetch,
-}) => (
-  <Wrapper isOpen={isOpen}>
-    <Container
-      initial={'hidden'}
-      animate={isOpen ? 'visible' : 'hidden'}
-      transition={{
-        type: 'spring',
-        stiffness: 400,
-        damping: 100,
-      }}
-      variants={{
-        visible: {
-          opacity: 1,
-          transform: 'translateY(0%) scale(1)',
-          transition: {
-            type: 'spring',
-            stiffness: 400,
-            damping: 100,
-            delay: 0.15,
+}) => {
+  const textKeys = useTextKeys()
+  const [redeemCode] = useRedeemCodeMutation()
+
+  return (
+    <Wrapper isOpen={isOpen}>
+      <Container
+        initial={'hidden'}
+        animate={isOpen ? 'visible' : 'hidden'}
+        transition={{
+          type: 'spring',
+          stiffness: 400,
+          damping: 100,
+        }}
+        variants={{
+          visible: {
+            opacity: 1,
+            transform: 'translateY(0%) scale(1)',
+            transition: {
+              type: 'spring',
+              stiffness: 400,
+              damping: 100,
+              delay: 0.15,
+            },
           },
-        },
-        hidden: {
-          opacity: 0,
-          transform: 'translateY(50%) scale(0.9)',
-        },
-      }}
-    >
-      <Title>
-        <TranslationsConsumer textKey="SIDEBAR_ADD_DISCOUNT_HEADLINE">
-          {(t) => t}
-        </TranslationsConsumer>
-      </Title>
-      <Paragraph>
-        <TranslationsConsumer textKey="SIDEBAR_ADD_DISCOUNT_BODY">
-          {(t) => t}
-        </TranslationsConsumer>
-      </Paragraph>
-      <CloseButton onClick={close}>
-        <Cross />
-      </CloseButton>
+          hidden: {
+            opacity: 0,
+            transform: 'translateY(50%) scale(0.9)',
+          },
+        }}
+      >
+        <Title>{textKeys.SIDEBAR_ADD_DISCOUNT_HEADLINE()}</Title>
+        <Paragraph>{textKeys.SIDEBAR_ADD_DISCOUNT_BODY()}</Paragraph>
+        <CloseButton onClick={close}>
+          <Cross />
+        </CloseButton>
 
-      <RedeemCodeMutation>
-        {(mutate) => (
-          <Formik
-            validateOnBlur
-            validationSchema={discountSchema}
-            initialValues={{ code: '' }}
-            onSubmit={(form, actions) =>
-              mutate({ variables: { code: form.code } })
-                .then((result) => {
-                  if (!result) {
-                    refetch()
-                    close()
-                    return
-                  }
-                  if (result.errors && result.errors.length > 0) {
-                    actions.setFieldError('code', 'SIDEBAR_ADD_DISCOUNT_ERROR')
-                  }
-                })
-                .catch(() => {
+        <Formik
+          validateOnBlur
+          validationSchema={discountSchema}
+          initialValues={{ code: '' }}
+          onSubmit={(form, actions) =>
+            redeemCode({ variables: { code: form.code } })
+              .then(async (result) => {
+                if (!result) {
+                  return
+                }
+
+                if (result.errors && result.errors.length > 0) {
                   actions.setFieldError('code', 'SIDEBAR_ADD_DISCOUNT_ERROR')
-                })
-            }
-          >
-            {({ touched, errors, values }) => (
-              <Form>
-                <DiscountInputWrapper>
-                  <TranslationsConsumer textKey="SIDEBAR_ADD_DISCOUNT_CELL_LABEL">
-                    {(label) => (
-                      <TranslationsConsumer textKey={errors.code || ''}>
-                        {(errorText) => (
-                          <TextInput
-                            label={label}
-                            placeholder="XXXXX"
-                            name="code"
-                            autoComplete="off"
-                            touched={
-                              touched.code ? touched.code.toString() : undefined
-                            }
-                            errors={errorText}
-                          />
-                        )}
-                      </TranslationsConsumer>
-                    )}
-                  </TranslationsConsumer>
-                </DiscountInputWrapper>
+                  return
+                }
 
-                <Footer>
-                  <Button type="submit" disabled={!values.code}>
-                    <TranslationsConsumer textKey="SIDEBAR_ADD_DISCOUNT_BUTTON">
-                      {(t) => t}
-                    </TranslationsConsumer>
-                  </Button>
-                  <Terms>
-                    <TranslationsConsumer textKey="SIDEBAR_ADD_DISCOUNT_FINEPRINT">
-                      {(t) => t}
-                    </TranslationsConsumer>{' '}
-                    <TermsLink
-                      href=""
-                      target="_blank"
-                      rel="noreferrer noopener"
-                    >
-                      <TranslationsConsumer textKey="SIDEBAR_ADD_DISCOUNT_FINEPRINT_LINK_TEXT">
-                        {(t) => t}
-                      </TranslationsConsumer>
-                    </TermsLink>
-                  </Terms>
-                </Footer>
-              </Form>
-            )}
-          </Formik>
-        )}
-      </RedeemCodeMutation>
-    </Container>
-  </Wrapper>
-)
+                await refetch()
+                close()
+              })
+              .catch(() => {
+                actions.setFieldError('code', 'SIDEBAR_ADD_DISCOUNT_ERROR')
+              })
+          }
+        >
+          {({ touched, errors, values }) => (
+            <Form>
+              <DiscountInputWrapper>
+                <TextInput
+                  label={textKeys.SIDEBAR_ADD_DISCOUNT_CELL_LABEL()}
+                  placeholder={textKeys.SIDEBAR_ADD_DISCOUNT_CELL_PLACEHOLDER()}
+                  name="code"
+                  autoComplete="off"
+                  touched={touched.code ? touched.code.toString() : undefined}
+                  errors={textKeys[errors.code || '']()}
+                />
+              </DiscountInputWrapper>
+
+              <Footer>
+                <Button type="submit" disabled={!values.code}>
+                  {textKeys.SIDEBAR_ADD_DISCOUNT_BUTTON()}
+                </Button>
+                <Terms>
+                  {`${textKeys.SIDEBAR_ADD_DISCOUNT_FINEPRINT()} `}
+                  <TermsLink href="" target="_blank" rel="noreferrer noopener">
+                    {textKeys.SIDEBAR_ADD_DISCOUNT_FINEPRINT_LINK_TEXT()}
+                  </TermsLink>
+                </Terms>
+              </Footer>
+            </Form>
+          )}
+        </Formik>
+      </Container>
+    </Wrapper>
+  )
+}

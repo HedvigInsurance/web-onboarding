@@ -36,9 +36,9 @@ it('handles form changes', () => {
 
   wrapper
     .find('select#insuranceType')
-    .simulate('change', { target: { value: InsuranceType.RENT } })
+    .simulate('change', { target: { value: InsuranceType.Rent } })
   expect(wrapper.find('select#insuranceType').prop('value')).toBe(
-    InsuranceType.RENT,
+    InsuranceType.Rent,
   )
   wrapper.find('input#size').simulate('change', { target: { value: '42' } })
   expect(wrapper.find('input#size').prop('value')).toBe('42')

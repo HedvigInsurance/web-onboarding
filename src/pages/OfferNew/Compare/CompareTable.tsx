@@ -1,11 +1,11 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
-import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import hexToRgba from 'hex-to-rgba'
 import { Tooltip } from 'new-components/Tooltip'
 import { otherCompanies } from 'pages/OfferNew/Compare/mock'
 import * as React from 'react'
 import { useMediaQuery } from 'react-responsive'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { Checkmark } from '../../../components/icons/Checkmark'
 import { DownArrow } from '../../../components/icons/DownArrow'
 import { HedvigSymbol } from '../../../components/icons/HedvigSymbol'
@@ -329,6 +329,7 @@ const getProperty = (key: string, value: any): any => {
 }
 
 export const CompareTable = (props: Props) => {
+  const textKeys = useTextKeys()
   const [
     currentCompany,
     setCurrentCompany,
@@ -340,11 +341,7 @@ export const CompareTable = (props: Props) => {
     <Container>
       <InsurancePropertiesSection>
         <ColumnHead>
-          <SubHeadingBlack>
-            <TranslationsConsumer textKey="COMPARE_TABLE_TITLE">
-              {(t) => t}
-            </TranslationsConsumer>
-          </SubHeadingBlack>
+          <SubHeadingBlack>{textKeys.COMPARE_TABLE_TITLE()}</SubHeadingBlack>
 
           <MobileTooltipWrapper>
             <Tooltip size="lg" body="Info" />
@@ -356,15 +353,11 @@ export const CompareTable = (props: Props) => {
             .filter(([key]) => key !== 'name')
             .map(([key, property]) => (
               <InsuranceProperty key={key}>
-                <TranslationsConsumer textKey={property.name}>
-                  {(name) => name}
-                </TranslationsConsumer>
+                {textKeys[property.name]()}
 
                 {property.tooltip && (
                   <TooltipWrapper>
-                    <TranslationsConsumer textKey={property.tooltip.body}>
-                      {(tooltip) => <Tooltip body={tooltip} />}
-                    </TranslationsConsumer>
+                    <Tooltip body={textKeys[property.tooltip.body]()} />
                   </TooltipWrapper>
                 )}
               </InsuranceProperty>
@@ -399,9 +392,7 @@ export const CompareTable = (props: Props) => {
               {currentCompany !== null && !dropdownIsVisible ? (
                 currentCompany.name
               ) : (
-                <TranslationsConsumer textKey="COMPARE_TABLE_DROPDOWN_LABEL">
-                  {(t) => t}
-                </TranslationsConsumer>
+                <>{textKeys.COMPARE_TABLE_DROPDOWN_LABEL()}</>
               )}
               <DownArrow />
             </OtherCompanyHead>
@@ -421,26 +412,21 @@ export const CompareTable = (props: Props) => {
           </>
         )}
         {isMobile && (
-          <TranslationsConsumer textKey="COMPARE_TABLE_DROPDOWN_LABEL">
-            {(selectCompanyText) => (
-              <MobileDropdown
-                onChange={(e) =>
-                  setCurrentCompany(
-                    otherCompanies.find(
-                      ({ name }) => e.target.value === name,
-                    ) || null,
-                  )
-                }
-                value={currentCompany?.name}
-                defaultValue={selectCompanyText}
-              >
-                <option disabled>{selectCompanyText}</option>
-                {props.otherCompanies.map((company) => (
-                  <option key={company.name}>{company.name}</option>
-                ))}
-              </MobileDropdown>
-            )}
-          </TranslationsConsumer>
+          <MobileDropdown
+            onChange={(e) =>
+              setCurrentCompany(
+                otherCompanies.find(({ name }) => e.target.value === name) ||
+                  null,
+              )
+            }
+            value={currentCompany?.name}
+            defaultValue={textKeys.COMPARE_TABLE_DROPDOWN_LABEL()}
+          >
+            <option disabled>{textKeys.COMPARE_TABLE_DROPDOWN_LABEL()}</option>
+            {props.otherCompanies.map((company) => (
+              <option key={company.name}>{company.name}</option>
+            ))}
+          </MobileDropdown>
         )}
         {currentCompany &&
           Object.entries(currentCompany)

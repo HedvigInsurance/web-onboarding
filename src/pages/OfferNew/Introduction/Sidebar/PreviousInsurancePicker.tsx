@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
-import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { DownArrow } from '../../../../components/icons/DownArrow'
 import { InsuranceCompany } from './mock'
 
@@ -117,6 +117,7 @@ const DropdownChoice = styled.button`
 `
 
 export const PreviousInsurancePicker: React.FC<Props> = ({ insurances }) => {
+  const textKeys = useTextKeys()
   const [dropdownIsVisible, setDropdownIsVisible] = React.useState(false)
 
   return (
@@ -125,13 +126,9 @@ export const PreviousInsurancePicker: React.FC<Props> = ({ insurances }) => {
         dropdownIsVisible={dropdownIsVisible}
         onClick={() => setDropdownIsVisible(!dropdownIsVisible)}
       >
-        <Label>
-          <TranslationsConsumer textKey="SIDEBAR_OLDINSURANCE_CELL_LABEL">
-            {(t) => t}
-          </TranslationsConsumer>
-        </Label>
+        <Label>{textKeys.SIDEBAR_OLDINSURANCE_CELL_LABEL()}</Label>
         <Value dropdownIsVisible={dropdownIsVisible}>
-          <ValueText>Välj bolag</ValueText>
+          <ValueText>{textKeys.SIDEBAR_OLDINSURANCE_CHOOSE_LABEL()}</ValueText>
           <DownArrow />
         </Value>
       </Button>

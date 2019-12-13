@@ -75,11 +75,18 @@ export const createQuote = (storage: any) => async (
     variables,
   })
 
-  // Update the cache
-  await apolloClient.client.query({
-    query: OFFER_QUERY,
-    fetchPolicy: 'network-only',
-  })
+  if (result.data && result.data.createQuote.__typename === 'CompleteQuote') {
+    // Update the cache
+    await apolloClient.client.query({
+      query: OFFER_QUERY,
+      fetchPolicy: 'network-only',
+    })
+
+    storage.session.setSession({
+      ...storage.session.getSession(),
+      quoteId: result.data!.createQuote!.id,
+    })
+  }
 
   return result.data!
 }

@@ -1,10 +1,14 @@
+import { ApolloProvider } from '@apollo/react-common'
 import { getScriptLocation } from '@hedviginsurance/web-survival-kit'
 import { min as createMinifiedSegmentSnippet } from '@segment/snippet'
 import { isMobile } from 'is-mobile'
 import * as Koa from 'koa'
 import * as path from 'path'
 import * as React from 'react'
-import { ApolloProvider, getDataFromTree } from 'react-apollo'
+import {
+  ApolloProvider as LegacyApolloProvider,
+  getDataFromTree,
+} from 'react-apollo'
 import { FilledContext, HelmetProvider } from 'react-helmet-async'
 import { StaticRouter, StaticRouterContext } from 'react-router'
 import { MobileContext } from 'utils/mobileContext'
@@ -121,14 +125,16 @@ export const getPage: Koa.Middleware = async (ctx) => {
     <StaticRouter location={ctx.request.originalUrl} context={routerContext}>
       <HelmetProvider context={helmetContext}>
         <ApolloProvider client={apolloClient}>
-          <MobileContext.Provider
-            value={isMobile({
-              ua: ctx.req.headers['user-agent'],
-              tablet: true,
-            })}
-          >
-            <App session={session} dontPanicSession={dontPanicSession} />
-          </MobileContext.Provider>
+          <LegacyApolloProvider client={apolloClient}>
+            <MobileContext.Provider
+              value={isMobile({
+                ua: ctx.req.headers['user-agent'],
+                tablet: true,
+              })}
+            >
+              <App session={session} dontPanicSession={dontPanicSession} />
+            </MobileContext.Provider>
+          </LegacyApolloProvider>
         </ApolloProvider>
       </HelmetProvider>
     </StaticRouter>

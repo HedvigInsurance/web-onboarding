@@ -116,7 +116,7 @@ const PerilInfo = styled('div')({
 const getPerils = (
   insuranceType: InsuranceType,
 ): typeof APARTMENT_PERILS | typeof HOUSE_PERILS => {
-  if (insuranceType !== InsuranceType.HOUSE) {
+  if (insuranceType !== InsuranceType.House) {
     return APARTMENT_PERILS
   }
 

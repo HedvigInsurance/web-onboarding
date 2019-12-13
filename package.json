@@ -10,7 +10,8 @@
     "watch": "NODE_ENV=development hedvig project:watch ./hedvig.config.js",
     "test": "NODE_ENV=test jest",
     "typecheck": "tsc --noEmit",
-    "lint": "tslint \"src/**/*.{ts,tsx}\""
+    "lint": "tslint \"src/**/*.{ts,tsx}\"",
+    "gen": "graphql-codegen --config codegen.yml"
   },
   "devDependencies": {
     "@babel/core": "^7.1.0",
@@ -20,6 +21,10 @@
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.1.0",
+    "@graphql-codegen/cli": "^1.9.1",
+    "@graphql-codegen/typescript": "^1.9.1",
+    "@graphql-codegen/typescript-operations": "^1.9.1",
+    "@graphql-codegen/typescript-react-apollo": "^1.9.1",
     "@types/color": "^3.0.0",
     "@types/enzyme": "^3.1.14",
     "@types/graphql": "^14.0.1",
@@ -64,12 +69,17 @@
     "webpack-dev-server": "^3.1.8"
   },
   "dependencies": {
+    "@apollo/react-common": "^3.1.3",
+    "@apollo/react-components": "^3.1.3",
+    "@apollo/react-hoc": "^3.1.3",
+    "@apollo/react-hooks": "^3.1.3",
+    "@apollo/react-testing": "^3.1.3",
     "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@emotion/core": "^10.0.22",
     "@emotion/styled": "^10.0.23",
     "@hedviginsurance/brand": "^2.0.0",
     "@hedviginsurance/cli": "^2.3.2",
-    "@hedviginsurance/embark": "^1.0.39",
+    "@hedviginsurance/embark": "^1.0.42",
     "@hedviginsurance/textkeyfy": "^1.2.2",
     "@hedviginsurance/web-survival-kit": "^1.8.2",
     "@segment/snippet": "^4.4.0",
