@@ -37,7 +37,7 @@ export const housePerils: Peril[] = [
       'Skyddet kan ge ersättning vid olika typer av vattenskador t.ex. om en tvättmaskin läckt okontrollerat eller ett badrum svämmat över. Du kan få ersättning både för att åtgärda skadorna på huset samt för andra merkostnader under reparationen.',
     covered: [
       'Oberäknat vatten/ånga från vattenledningssytem',
-      'Oberäknat vatten/ånga från badrum, kök eller tvätstuga',
+      'Oberäknat vatten/ånga från badrum, kök eller tvättstuga',
       'Oberäknat vatten/ånga från värmepanna',
       'Läckage från kyl/frys',
       'Läckage från brandsläckare',
