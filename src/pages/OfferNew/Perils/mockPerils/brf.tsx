@@ -19,25 +19,28 @@ export const brfPerils: Peril[] = [
   {
     title: 'Eldsvåda',
     description:
-      'Vi hjälper dig med reparation, ersättningsboende och sanering om det skulle börja brinna i din villa eller någon annan försäkrad byggnad. Och om ditt hus blir totalskadat ersätter vi dig med en likadan eller motsvarande villa.',
+      'En överhettad mobilladdare eller ett misslyckat försök att fritera pommes frites, bränder uppstår på de mest vardagliga vis. Om det börjar brinna i din lägenhet får du ersättning för brand- och rökskador.',
     covered: [
-      'Totalskadat hus efter brand',
+      'Eld som har brunnit med öppen låga (inte enbart glöd- eller svedskada)',
       'Explosion',
+      'Plötslig skada av sot',
       'Blixt',
       'Frätande gas som bildats vid oavsiktlig upphettning av plast',
       'Sanering av sot orsakad av öppen låga',
     ],
-    exceptions: ['Sprängningsarbete, sot eller levande ljus'],
+    exceptions: [
+      'Sprängningsarbete, sot eller levande ljus',
+    ],
     info: 'Var försiktig med levande ljus eller eld.',
     icon: <Fire />,
   },
   {
     title: 'Vattenläcka',
     description:
-      'Skyddet kan ge ersättning vid olika typer av vattenskador t.ex. om en tvättmaskin läckt okontrollerat eller ett badrum svämmat över. Du kan få ersättning både för att åtgärda skadorna på huset samt för andra merkostnader under reparationen.',
+      'Skyddet kan ge ersättning vid olika typer av vattenskador t.ex. om en tvättmaskin läckt okontrollerat eller ett badrum svämmat över. Du kan få ersättning både för att åtgärda skadorna på lägenheten samt för andra merkostnader under reparationen.',
     covered: [
       'Oberäknat vatten/ånga från vattenledningssytem',
-      'Oberäknat vatten/ånga från badrum, kök eller tvätstuga',
+      'Oberäknat vatten/ånga från badrum, kök eller tvättstuga', 
       'Oberäknat vatten/ånga från värmepanna',
       'Läckage från kyl/frys',
       'Läckage från brandsläckare',
@@ -50,40 +53,19 @@ export const brfPerils: Peril[] = [
       'Skada orsakat av takränna eller utvändigt stuprör',
     ],
     info:
-      'Se till att kranar är täta och stängda när de inte används. Lägg underlägg under kyl/frys/ diskmaskin som samlar upp vatten. Se till att ledningssystem och anslutna anordningar inte fryser sönder. Och lämnar du huset i mer än 7 dagar så måste vattnet stängas av helt.',
+      'Se till att kranar är täta och stängda när de inte används. Lägg underlägg under kyl/frys/ diskmaskin som samlar upp vatten. Se till att ledningssystem och anslutna anordningar inte fryser sönder. Och lämnar du lägenheten i mer än 7 dagar så måste vattnet stängas av helt.',
     icon: <WaterLeak />,
-  },
-  {
-    title: 'Oväder',
-    description:
-      'Skulle ditt hus, din tomt eller dina saker bli skadat p.g.a översvämning, snötryck, storm, hagel, regn, kyla eller jordskalv kan du få ersättning från oss. Det finns också viss möjlighet att få ersättning om du missar en resa på grund av oväder.',
-    covered: [
-      'Översvämning p.g.a. skyfall (1mm/minut eller 50mm/dygn) snösmältning, stigande sjö eller vattendrag genom rör, avloppet eller där vatten strömmar från markytan in i huset.',
-      'Storm (minst 21 m/s), t.e.x. något blåser omkull på huset',
-      'Hagel, kyla eller regn',
-      'Jordskalv (minst 4 på richterskalan), jordras, bergras, lavin',
-    ],
-    exceptions: [
-      'Översvämning p.g.a husets dränering och grund',
-      'Översvämning p.g.a yttertaket läcker in regnvatten',
-      'Skador på båthus, sjöbod, växthus och tomtmark',
-    ],
-    info:
-      'Se till att inspektera taket och lägg om takplattor om de ser dåliga ut. Hantverkare brukar rekommendera att du byter tak var trettionde år.',
-    icon: <Storm />,
   },
   {
     title: 'Inbrott',
     description:
-      'Skyddet gäller när någon utan lov gjort inbrott eller förstört ditt hus. Skyddet gäller självklart också för vinden och källaren, samt om tjuven gjort inbrott i ditt garage.',
+      'Skyddet gäller när någon utan lov gjort inbrott eller förstört din bostadsrätt. Skyddet gäller självklart också för vinden och källaren.',
     covered: [
-      'Allt du äger i din villa till ett värde upp till 1.5 miljoner',
-      'Inbrott och skadegörelse i din villa/biutrymmen, t.ex. vind/källare',
-      'Inbrott i garage',
-      'Kostnad för byte av lås',
+      'Allt du äger i din villa till ett värde upp till 1 miljon kronor',
+      'Inbrott och skadegörelse i din bostadsrätt inklusive. vind/källare',
     ],
     exceptions: [
-      'Stöld av pengar, värdehandlingar och stöldbegärlig egendom (smycken, mobiltelefoner, datorer och allt annat dyrt) ifrån biyta',
+      'Stöld av pengar, värdehandlingar och stöldbegärlig egendom (smycken, mobiltelefoner, datorer och allt annat dyrt) ifrån vind eller källarförråd eller ur bil',
     ],
     info:
       'Lås ytterdörrar och regla fönster när ingen är hemma. Och märk inte dina nycklar så att folk förstår vart du bor eller vart de går.',
@@ -111,12 +93,10 @@ export const brfPerils: Peril[] = [
   {
     title: 'Skadegörelse',
     description:
-      'Skyddet gäller när någon utan lov gjort inbrott eller förstört ditt hus. Skyddet gäller självklart också för vinden och källaren, samt om tjuven gjort inbrott i ditt garage.',
+      'Skyddet gäller när någon utan lov gjort inbrott eller förstört din bostadsrätt. Skyddet gäller självklart också för vinden och källaren.',
     covered: [
-      'Allt du äger i din villa till ett värde upp till 1.5 miljoner',
-      'Inbrott och skadegörelse i din villa/biutrymmen, t.ex. vind/källare',
-      'Inbrott i garage',
-      'Kostnad för byte av lås',
+      'Sakerna i din lägenhet till ett värde upp till 1 miljon kronor',
+      'Inbrott och skadegörelse i t.ex. vind/källare',
     ],
     exceptions: [
       'Stöld av pengar, värdehandlingar och stöldbegärlig egendom (smycken, mobiltelefoner, datorer och allt annat dyrt) ifrån biyta',
@@ -265,6 +245,21 @@ export const brfPerils: Peril[] = [
     ],
     info:
       'Ta med mobilen (stöldbegärlig egendom) när du lämnar bilen. Lämna inte värdefulla ägodelar i källaren (biyta) och checka inte in smycken eller klockor när du reser.',
+    icon: <WetPhone />,
+  },
+  {
+    title: 'Bostadsrättstillägg',
+    description:
+      'Om man äger sin lägenhet är det skönt att ha en försäkring som täcker själva lägenheten också, inte bara prylarna som finns däri. På försäkringsspråk kallas det för bostadsrättstillägg. Hedvig ersätter kostnaden för att reparera skador på din lägenhet utan beloppsbegränsning - oavsett om du bor i studentlya eller paradvåning. Skönt!',
+    covered: [
+      'skador på fast inredning (typ ditt nya kök)',
+      'skador på ytskikt (typ dina nyfixade golv, tak eller väggar)',
+    ],
+    exceptions: [
+      'Inget särskilt!',
+    ],
+    info:
+      'Inget särskilt.',
     icon: <WetPhone />,
   },
 ]
