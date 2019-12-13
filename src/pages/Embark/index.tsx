@@ -12,6 +12,7 @@ import { useHistory } from 'react-router'
 
 import { colorsV2 } from '@hedviginsurance/brand'
 import gql from 'graphql-tag'
+import Helmet from 'react-helmet'
 import { apolloClient } from '../../client/apolloClient'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
@@ -220,6 +221,13 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
 
   return (
     <EmbarkStyling>
+      <Helmet>
+        <meta
+          property="og:image"
+          content="https://www.hedvig.com/f/62762/1200x630/2b9c894ea5/metaimage-hedviginsurance.jpg"
+        />
+        <meta property="og:title" content="Hedvig hemförsäkring" />
+      </Helmet>
       <Global
         styles={css`
           body {
