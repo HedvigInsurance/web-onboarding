@@ -111,6 +111,7 @@ const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
     livingSpace: {
       label: 'Storlek',
       placeholder: 'Storlek',
+      mask: masks.area,
       type: inputTypes.number,
       validation: Yup.number().required(),
     },
@@ -192,11 +193,13 @@ const getSchema = (quote: CompleteQuote): EditQuoteInput => {
 interface DetailInputProps {
   field?: FieldType
   name: string
+  setFieldValue: (name: string, value: any) => void
 }
 
 const DetailInput: React.FC<DetailInputProps & GenericFieldHTMLAttributes> = ({
   field,
   name,
+  setFieldValue,
 }) =>
   field ? (
     <TextInput
@@ -207,6 +210,13 @@ const DetailInput: React.FC<DetailInputProps & GenericFieldHTMLAttributes> = ({
       type={field.type}
       options={field.options}
       showErrorMessage={false}
+      onChange={(e: any) => {
+        if (!field.mask) {
+          return
+        }
+
+        setFieldValue(name, field.mask.sanitize(e.target.value || ''))
+      }}
       autoComplete="off"
     />
   ) : null
@@ -252,19 +262,19 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
               })
           }}
         >
-          {({ touched, errors, values }) => (
+          {({ touched, errors, values, setFieldValue }) => (
             <Form>
               <Headline>Dina detaljer</Headline>
-              <b>Errors</b> {JSON.stringify(errors)}
+              <b>Errors</b> {JSON.stringify(errors, null, 2)}
               <br></br>
               <br></br>
-              <b>Values</b> {JSON.stringify(values)}
+              <b>Values</b> {JSON.stringify(values, null, 2)}
               <br></br>
               <br></br>
-              <b>Touched</b> {JSON.stringify(touched)}
+              <b>Touched</b> {JSON.stringify(touched, null, 2)}
               <br></br>
               <br></br>
-              <b>Mutation</b> {JSON.stringify(editQuoteResponse.data)}
+              <b>Mutation</b> {JSON.stringify(editQuoteResponse.data, null, 2)}
               <br></br>
               <br></br>
               {isApartmentFieldSchema(fieldSchema, quote) && (
@@ -274,26 +284,31 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                       <DetailInput
                         field={fieldSchema.apartment.street}
                         name="apartment.street"
+                        setFieldValue={setFieldValue}
                       />
 
                       <DetailInput
                         field={fieldSchema.apartment.zipCode}
                         name="apartment.zipCode"
+                        setFieldValue={setFieldValue}
                       />
 
                       <DetailInput
                         field={fieldSchema.apartment.type}
                         name="apartment.type"
+                        setFieldValue={setFieldValue}
                       />
 
                       <DetailInput
                         field={fieldSchema.apartment.livingSpace}
                         name="apartment.livingSpace"
+                        setFieldValue={setFieldValue}
                       />
 
                       <DetailInput
                         field={fieldSchema.apartment.householdSize}
                         name="apartment.householdSize"
+                        setFieldValue={setFieldValue}
                       />
                     </InputGroup>
                   </ContentColumn>

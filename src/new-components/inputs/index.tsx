@@ -6,26 +6,23 @@ import { Field, GenericFieldHTMLAttributes } from 'formik'
 import * as React from 'react'
 import InputMask from 'react-input-mask'
 
-export type Mask = 'ZipCode'
-
-export const masks: { [key: string]: Mask } = {
-  zipCode: 'ZipCode',
+export const masks: { [key: string]: MaskType } = {
+  zipCode: {
+    name: 'ZipCode',
+    mask: '999 99',
+    sanitize: (value) => value.replace(/\s+/, ''),
+  },
+  area: {
+    name: 'Area',
+    mask: '99999 m2',
+    sanitize: (value) => value.replace(/[\s\u200b]+m2/, ''),
+  },
 }
 
-export const sanitizeValue = (value: string, mask?: Mask): string => {
-  if (mask === 'ZipCode') {
-    return value.replace(/\s+/, '')
-  }
-
-  return value
-}
-
-const resolveMask = (mask: Mask): any => {
-  if (mask === 'ZipCode') {
-    return '999 99'
-  }
-
-  return ''
+interface Mask {
+  name: string
+  mask: string
+  sanitize: (value: string) => string
 }
 
 const Wrapper = styled.div<{ errors?: string }>`
@@ -149,9 +146,11 @@ export const TextInput: React.FC<TextInputProps &
             {({ field }: any) => (
               <StyledInput
                 placeholder={props.placeholder}
-                maskChar={null}
-                mask={resolveMask(mask)}
+                mask={mask.mask}
+                alwaysShowMask={true}
+                maskChar={`\u200b`}
                 {...field}
+                {...props}
               />
             )}
           </StyledField>
