@@ -6,6 +6,7 @@ import { otherInsuranceCompanies } from 'pages/OfferNew/mock'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { formatPostalNumber } from 'utils/postalNumbers'
+import { Price } from '../../common/components'
 import { CompleteOfferData } from '../../types'
 import {
   getInsuranceType,
@@ -60,8 +61,8 @@ const Container = styled.div<{ sticky: boolean }>`
 const Header = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
+  flex-direction: row;
+  flex-wrap: nowrap;
   padding: 2rem 1.5rem 2rem 2rem;
   align-items: flex-start;
   position: relative;
@@ -216,6 +217,12 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 </TextButton>
               </SummaryContent>
             </Summary>
+
+            <Price
+              monthlyCostDeduction={monthlyCostDeduction}
+              monthlyNet={offer.quote.price}
+              monthlyGross={offer.quote.price} // TODO what should either of these be?
+            />
           </Header>
 
           <Body>
