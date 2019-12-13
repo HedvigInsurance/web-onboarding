@@ -3520,6 +3520,50 @@ export type RemoveDiscountCodeMutation = { __typename?: 'Mutation' } & {
   removeDiscountCode: { __typename: 'RedemedCodeResult' }
 }
 
+export type SignOfferMutationVariables = {
+  personalNumber: Scalars['String']
+  email: Scalars['String']
+}
+
+export type SignOfferMutation = { __typename?: 'Mutation' } & Pick<
+  Mutation,
+  'signOffer'
+>
+
+export type SignStatusQueryVariables = {}
+
+export type SignStatusQuery = { __typename?: 'Query' } & {
+  signStatus: Maybe<
+    { __typename?: 'SignStatus' } & Pick<SignStatus, 'signState'> & {
+        collectStatus: Maybe<
+          { __typename?: 'CollectStatus' } & Pick<
+            CollectStatus,
+            'status' | 'code'
+          >
+        >
+      }
+  >
+}
+
+export type SignStatusListenerSubscriptionVariables = {}
+
+export type SignStatusListenerSubscription = { __typename?: 'Subscription' } & {
+  signStatus: Maybe<
+    { __typename?: 'SignEvent' } & {
+      status: Maybe<
+        { __typename?: 'SignStatus' } & Pick<SignStatus, 'signState'> & {
+            collectStatus: Maybe<
+              { __typename?: 'CollectStatus' } & Pick<
+                CollectStatus,
+                'status' | 'code'
+              >
+            >
+          }
+      >
+    }
+  >
+}
+
 export const OfferDocument = gql`
   query Offer($id: ID) {
     quote(id: $id) {
@@ -3748,4 +3792,156 @@ export type RemoveDiscountCodeMutationResult = ApolloReactCommon.MutationResult<
 export type RemoveDiscountCodeMutationOptions = ApolloReactCommon.BaseMutationOptions<
   RemoveDiscountCodeMutation,
   RemoveDiscountCodeMutationVariables
+>
+export const SignOfferDocument = gql`
+  mutation SignOffer($personalNumber: String!, $email: String!) {
+    signOffer(details: { personalNumber: $personalNumber, email: $email })
+  }
+`
+export type SignOfferMutationFn = ApolloReactCommon.MutationFunction<
+  SignOfferMutation,
+  SignOfferMutationVariables
+>
+
+/**
+ * __useSignOfferMutation__
+ *
+ * To run a mutation, you first call `useSignOfferMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSignOfferMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [signOfferMutation, { data, loading, error }] = useSignOfferMutation({
+ *   variables: {
+ *      personalNumber: // value for 'personalNumber'
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useSignOfferMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    SignOfferMutation,
+    SignOfferMutationVariables
+  >,
+) {
+  return ApolloReactHooks.useMutation<
+    SignOfferMutation,
+    SignOfferMutationVariables
+  >(SignOfferDocument, baseOptions)
+}
+export type SignOfferMutationHookResult = ReturnType<
+  typeof useSignOfferMutation
+>
+export type SignOfferMutationResult = ApolloReactCommon.MutationResult<
+  SignOfferMutation
+>
+export type SignOfferMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  SignOfferMutation,
+  SignOfferMutationVariables
+>
+export const SignStatusDocument = gql`
+  query SignStatus {
+    signStatus {
+      collectStatus {
+        status
+        code
+      }
+      signState
+    }
+  }
+`
+
+/**
+ * __useSignStatusQuery__
+ *
+ * To run a query within a React component, call `useSignStatusQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSignStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSignStatusQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSignStatusQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    SignStatusQuery,
+    SignStatusQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useQuery<SignStatusQuery, SignStatusQueryVariables>(
+    SignStatusDocument,
+    baseOptions,
+  )
+}
+export function useSignStatusLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    SignStatusQuery,
+    SignStatusQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useLazyQuery<
+    SignStatusQuery,
+    SignStatusQueryVariables
+  >(SignStatusDocument, baseOptions)
+}
+export type SignStatusQueryHookResult = ReturnType<typeof useSignStatusQuery>
+export type SignStatusLazyQueryHookResult = ReturnType<
+  typeof useSignStatusLazyQuery
+>
+export type SignStatusQueryResult = ApolloReactCommon.QueryResult<
+  SignStatusQuery,
+  SignStatusQueryVariables
+>
+export const SignStatusListenerDocument = gql`
+  subscription SignStatusListener {
+    signStatus {
+      status {
+        signState
+        collectStatus {
+          status
+          code
+        }
+      }
+    }
+  }
+`
+
+/**
+ * __useSignStatusListenerSubscription__
+ *
+ * To run a query within a React component, call `useSignStatusListenerSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useSignStatusListenerSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSignStatusListenerSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSignStatusListenerSubscription(
+  baseOptions?: ApolloReactHooks.SubscriptionHookOptions<
+    SignStatusListenerSubscription,
+    SignStatusListenerSubscriptionVariables
+  >,
+) {
+  return ApolloReactHooks.useSubscription<
+    SignStatusListenerSubscription,
+    SignStatusListenerSubscriptionVariables
+  >(SignStatusListenerDocument, baseOptions)
+}
+export type SignStatusListenerSubscriptionHookResult = ReturnType<
+  typeof useSignStatusListenerSubscription
+>
+export type SignStatusListenerSubscriptionResult = ApolloReactCommon.SubscriptionResult<
+  SignStatusListenerSubscription
 >

@@ -14,3 +14,8 @@ export interface IncompleteOfferData extends OfferCore {
 }
 
 export type OfferData = CompleteOfferData | IncompleteOfferData
+
+export interface WithEmailForm {
+  email: string
+  onEmailChange: (email: string) => void
+}

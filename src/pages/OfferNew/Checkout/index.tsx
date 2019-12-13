@@ -144,6 +144,7 @@ interface Props {
 }
 
 export const Checkout: React.FC<Props> = ({ offer, isOpen, onClose }) => {
+  const [email, setEmail] = React.useState('')
   const [visibilityState, setVisibilityState] = React.useState(
     VisibilityState.CLOSED,
   )
@@ -210,11 +211,19 @@ export const Checkout: React.FC<Props> = ({ offer, isOpen, onClose }) => {
               </BackButton>
             </BackButtonWrapper>
 
-            <CheckoutContent offer={offer} />
+            <CheckoutContent
+              offer={offer}
+              email={email}
+              onEmailChange={setEmail}
+            />
           </InnerWrapper>
         </OuterScrollWrapper>
 
-        <SlidingSign visibilityState={visibilityState} />
+        <SlidingSign
+          visibilityState={visibilityState}
+          personalNumber="20121212-1212"
+          email={email}
+        />
       </OuterWrapper>
       <Backdrop visibilityState={visibilityState} onClick={onClose} />
     </>

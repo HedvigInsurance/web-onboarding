@@ -1,9 +1,9 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand/dist'
-import { CompleteOfferData } from 'pages/OfferNew/types'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { Price } from '../components'
+import { CompleteOfferData, WithEmailForm } from '../types'
 import {
   getInsuranceType,
   insuranceTypeTextKeys,
@@ -56,11 +56,15 @@ const InsuranceType = styled('div')`
   }
 `
 
-interface Props {
+interface Props extends WithEmailForm {
   offer: CompleteOfferData
 }
 
-export const CheckoutContent: React.FC<Props> = ({ offer }) => {
+export const CheckoutContent: React.FC<Props> = ({
+  offer,
+  email,
+  onEmailChange,
+}) => {
   const textKeys = useTextKeys()
   const monthlyCostDeduction = isMonthlyCostDeduction(offer.redeemedCampaigns)
 
@@ -85,7 +89,7 @@ export const CheckoutContent: React.FC<Props> = ({ offer }) => {
           </div>
         </Excerpt>
 
-        <UserDetailsForm />
+        <UserDetailsForm email={email} onEmailChange={onEmailChange} />
 
         <InsuranceSummary offer={offer} />
 
