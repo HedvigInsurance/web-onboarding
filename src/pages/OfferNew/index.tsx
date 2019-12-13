@@ -49,7 +49,6 @@ export const OfferNew: React.FC<RouteComponentProps<{ offerId: string }>> = ({
           isOpen={checkoutMatch !== null}
           onClose={() => toggleCheckout(false)}
         />
-        )}
       </SessionTokenGuard>
     </Page>
   ) : null
