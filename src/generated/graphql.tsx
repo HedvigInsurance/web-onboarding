@@ -3366,6 +3366,28 @@ export type Welcome = {
   title: Scalars['String']
 }
 
+export type EditQuoteMutationVariables = {
+  input: EditQuoteInput
+}
+
+export type EditQuoteMutation = { __typename?: 'Mutation' } & {
+  editQuote:
+    | ({ __typename?: 'CompleteQuote' } & {
+        price: { __typename?: 'MonetaryAmountV2' } & Pick<
+          MonetaryAmountV2,
+          'amount' | 'currency'
+        >
+      })
+    | ({ __typename?: 'UnderwritingLimitsHit' } & {
+        limits: Array<
+          { __typename?: 'UnderwritingLimit' } & Pick<
+            UnderwritingLimit,
+            'description'
+          >
+        >
+      })
+}
+
 export type OfferQueryVariables = {
   id?: Maybe<Scalars['ID']>
 }
@@ -3520,6 +3542,66 @@ export type RemoveDiscountCodeMutation = { __typename?: 'Mutation' } & {
   removeDiscountCode: { __typename: 'RedemedCodeResult' }
 }
 
+export const EditQuoteDocument = gql`
+  mutation EditQuote($input: EditQuoteInput!) {
+    editQuote(input: $input) {
+      ... on CompleteQuote {
+        price {
+          amount
+          currency
+        }
+      }
+      ... on UnderwritingLimitsHit {
+        limits {
+          description
+        }
+      }
+    }
+  }
+`
+export type EditQuoteMutationFn = ApolloReactCommon.MutationFunction<
+  EditQuoteMutation,
+  EditQuoteMutationVariables
+>
+
+/**
+ * __useEditQuoteMutation__
+ *
+ * To run a mutation, you first call `useEditQuoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditQuoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editQuoteMutation, { data, loading, error }] = useEditQuoteMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useEditQuoteMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    EditQuoteMutation,
+    EditQuoteMutationVariables
+  >,
+) {
+  return ApolloReactHooks.useMutation<
+    EditQuoteMutation,
+    EditQuoteMutationVariables
+  >(EditQuoteDocument, baseOptions)
+}
+export type EditQuoteMutationHookResult = ReturnType<
+  typeof useEditQuoteMutation
+>
+export type EditQuoteMutationResult = ApolloReactCommon.MutationResult<
+  EditQuoteMutation
+>
+export type EditQuoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  EditQuoteMutation,
+  EditQuoteMutationVariables
+>
 export const OfferDocument = gql`
   query Offer($id: ID) {
     quote(id: $id) {

@@ -1,0 +1,15 @@
+mutation EditQuote($input: EditQuoteInput!) {
+  editQuote(input: $input) {
+    ... on CompleteQuote {
+      price {
+        amount
+        currency
+      }
+    }
+    ... on UnderwritingLimitsHit {
+      limits {
+        description
+      }
+    }
+  }
+}

@@ -12,12 +12,11 @@ import {
   isMonthlyCostDeduction,
   isNoDiscount,
 } from '../../utils'
+import { DetailsModal } from './DetailsModal'
 import { DiscountCodeModal } from './DiscountCodeModal'
 import { otherInsuranceCompanies } from './mock'
 import { PreviousInsurancePicker } from './PreviousInsurancePicker'
 import { StartDate } from './StartDate'
-import { Modal } from 'components/ModalNew'
-import { DetailsModal } from './DetailsModal'
 
 interface Props {
   sticky: boolean
@@ -31,6 +30,7 @@ const Wrapper = styled.div`
   position: relative;
   z-index: 1;
   height: 0;
+  z-index: 1000;
 
   @media (max-width: 1020px) {
     width: 100%;

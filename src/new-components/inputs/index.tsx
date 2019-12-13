@@ -3,11 +3,26 @@ import { colorsV2 } from '@hedviginsurance/brand'
 import { WarningIcon } from 'components/icons/Warning'
 import { Field, GenericFieldHTMLAttributes } from 'formik'
 import * as React from 'react'
+import InputMask, { ReactInputMask } from 'react-input-mask'
 
-interface TextInputProps {
-  label: string
-  touched?: string
-  errors?: string
+const POSTAL_CODE_REGEX = /^[0-9]{3}[0-9]{2}$/
+
+export type Mask = 'ZipCode'
+
+export const unmaskValue = (value: string, mask?: Mask): string => {
+  if (mask === 'ZipCode') {
+    return value.replace(/\s+/, '')
+  }
+
+  return value
+}
+
+const resolveMask = (mask: Mask): string => {
+  if (mask === 'ZipCode') {
+    return '999 99'
+  }
+
+  return ''
 }
 
 const Wrapper = styled.div<{ errors?: string }>`
@@ -54,6 +69,8 @@ const StyledField = styled(Field)`
   }
 `
 
+const StyledInput = StyledField.withComponent(InputMask)
+
 const SymbolWrapper = styled.div`
   width: 1.5rem;
   height: 1.5rem;
@@ -70,16 +87,67 @@ const ErrorText = styled.div`
   margin-top: 0.25rem;
 `
 
+interface TextInputProps {
+  label: string
+  mask?: Mask
+  showErrorMessage?: boolean
+  touched?: string
+  errors?: string
+}
+
 export const TextInput: React.FC<TextInputProps &
-  GenericFieldHTMLAttributes> = ({ label, touched, errors, ...props }) => (
+  GenericFieldHTMLAttributes> = ({
+  label,
+  mask,
+  showErrorMessage = true,
+  touched,
+  errors,
+  ...props
+}) => (
   <>
     <Wrapper errors={errors}>
       <TextWrapper>
         <Label>{label}</Label>
-        <StyledField {...props} />
+        {mask ? (
+          <StyledField {...props}>
+            {({ field }: any) => {
+              return (
+                <StyledInput
+                  placeholder={props.placeholder}
+                  maskChar={null}
+                  mask={resolveMask(mask)}
+                  {...field}
+                />
+              )
+            }}
+          </StyledField>
+        ) : (
+          <StyledField {...props} />
+        )}
       </TextWrapper>
       <SymbolWrapper>{errors && <WarningIcon />}</SymbolWrapper>
     </Wrapper>
-    <ErrorText>{errors}</ErrorText>
+    {showErrorMessage && <ErrorText>{errors}</ErrorText>}
   </>
 )
+
+export const InputGroup = styled.div`
+  ${Wrapper} {
+    border-radius: 0;
+    border-color: ${colorsV2.lightgray};
+
+    :not(:first-child) {
+      border-top: none;
+    }
+
+    :first-child {
+      border-top-left-radius: 8px;
+      border-top-right-radius 8px;
+    }
+
+    :last-child {
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius 8px;
+    }
+  }
+`
