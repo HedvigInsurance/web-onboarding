@@ -15,7 +15,7 @@ import {
   isMonthlyCostDeduction,
   isNoDiscount,
 } from '../../utils'
-import { DetailsModal } from './DetailsModal'
+import { DetailsModal } from './DetailsModal/index'
 import { DiscountCodeModal } from './DiscountCodeModal'
 import { PreviousInsurancePicker } from './PreviousInsurancePicker'
 import { StartDate } from './StartDate'

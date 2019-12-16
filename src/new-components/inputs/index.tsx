@@ -72,6 +72,16 @@ const StyledField = styled(Field)`
   ::placeholder {
     color: ${colorsV2.semilightgray};
   }
+
+  ::-webkit-outer-spin-button,
+  ::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+
+  &input[type='number'] {
+    appearance: textfield;
+  }
 `
 
 const StyledInput = StyledField.withComponent(InputMask)
@@ -105,9 +115,7 @@ interface CoreInputFieldOptions {
   value: string
 }
 
-type CoreInputFieldType = 'text' | 'number' | 'email'
-
-export const inputTypes: { [key: string]: CoreInputFieldType } = {
+export const inputTypes: { [key: string]: string } = {
   text: 'text',
   number: 'number',
 }
@@ -115,7 +123,7 @@ export const inputTypes: { [key: string]: CoreInputFieldType } = {
 export interface CoreInputFieldProps {
   label: string
   placeholder: string
-  type?: CoreInputFieldType
+  type?: string
   options?: CoreInputFieldOptions[]
   mask?: Mask
 }

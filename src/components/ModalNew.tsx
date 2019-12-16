@@ -3,9 +3,11 @@ import { colorsV2 } from '@hedviginsurance/brand'
 import { motion } from 'framer-motion'
 import * as React from 'react'
 import { Cross } from './icons/Cross'
+import { bool } from 'yup'
 
 export interface ModalProps {
   isVisible: boolean
+  dynamicHeight?: boolean
   onClose: () => void
 }
 
@@ -31,12 +33,20 @@ const Background = styled(motion.div)`
   background-color: rgba(25, 25, 25, 0.4);
 `
 
-const ModalContainer = styled(motion.div)`
+interface ModalContainerProps {
+  dynamicHeight?: boolean
+}
+
+const ModalContainer = styled(motion.div)<ModalContainerProps>`
   position: relative;
   width: 100%;
   max-width: 56rem;
+  ${(props) =>
+    !props.dynamicHeight &&
+    `
   height: 100%;
-  min-height: 25rem;
+  min-height: 25rem;`}
+
   max-height: 56rem;
   background: ${colorsV2.white};
   border-radius: 9px;
@@ -143,6 +153,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
         }}
       >
         <ModalContainer
+          dynamicHeight={props.dynamicHeight}
           initial={'hidden'}
           animate={props.isVisible ? 'visible' : 'hidden'}
           transition={{
