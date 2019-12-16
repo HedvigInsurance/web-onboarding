@@ -13,8 +13,7 @@ export const SessionTokenGuard: React.SFC = ({ children }) => (
         <CurrentLanguage>
           {({ currentLanguage }) => (
             <Redirect
-              to={`/${currentLanguage &&
-                currentLanguage + '/'}new-member/hedvig`}
+              to={`/${currentLanguage && currentLanguage + '/'}new-member`}
             />
           )}
         </CurrentLanguage>
