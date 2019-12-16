@@ -2,13 +2,19 @@ import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import { useRemoveDiscountCodeMutation } from 'generated/graphql'
 import { Button, TextButton } from 'new-components/buttons'
-import { getHasMonthlyCostDeduction } from 'pages/OfferNew/common/utils'
+import { otherInsuranceCompanies } from 'pages/OfferNew/mock'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { formatPostalNumber } from 'utils/postalNumbers'
-import { otherInsuranceCompanies } from '../../mock'
+import { Price } from '../../components'
 import { CompleteOfferData } from '../../types'
-import { getInsuranceType, insuranceTypeTextKeys } from '../../utils'
+import {
+  getInsuranceType,
+  insuranceTypeTextKeys,
+  isFreeMonths,
+  isMonthlyCostDeduction,
+  isNoDiscount,
+} from '../../utils'
 import { DiscountCodeModal } from './DiscountCodeModal'
 import { PreviousInsurancePicker } from './PreviousInsurancePicker'
 import { StartDate } from './StartDate'
@@ -54,8 +60,8 @@ const Container = styled.div<{ sticky: boolean }>`
 const Header = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
+  flex-direction: row;
+  flex-wrap: nowrap;
   padding: 2rem 1.5rem 2rem 2rem;
   align-items: flex-start;
   position: relative;
@@ -75,6 +81,7 @@ const DiscountInfo = styled.div`
   align-items: center;
   font-size: 0.875rem;
   color: ${colorsV2.white};
+  text-align: center;
 `
 
 const Summary = styled.div`
@@ -163,14 +170,23 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
       discountCodeModalIsOpen,
       setDiscountCodeModalIsOpen,
     ] = React.useState(false)
-    const monthlyCostDeduction = getHasMonthlyCostDeduction(offer)
+
+    const monthlyCostDeduction = isMonthlyCostDeduction(offer.redeemedCampaigns)
+    const freeMonths = isFreeMonths(offer.redeemedCampaigns)
+    const noDiscount = isNoDiscount(offer.redeemedCampaigns)
+
     const [removeDiscountCode] = useRemoveDiscountCodeMutation()
 
     return (
       <Wrapper ref={ref}>
         <Container sticky={sticky}>
-          {monthlyCostDeduction && (
-            <DiscountInfo>{textKeys.SIDEBAR_ACTIVE_REFERRAL()}</DiscountInfo>
+          {(monthlyCostDeduction || freeMonths) && (
+            <DiscountInfo>
+              {monthlyCostDeduction
+                ? textKeys.SIDEBAR_ACTIVE_REFERRAL()
+                : offer.redeemedCampaigns.length > 0 &&
+                  offer.redeemedCampaigns[0].owner?.displayName}
+            </DiscountInfo>
           )}
           <Header>
             <Summary>
@@ -201,6 +217,12 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 </TextButton>
               </SummaryContent>
             </Summary>
+
+            <Price
+              monthlyCostDeduction={monthlyCostDeduction}
+              monthlyNet={offer.quote.price}
+              monthlyGross={offer.quote.price} // TODO what should either of these be?
+            />
           </Header>
 
           <Body>
@@ -224,7 +246,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 >
                   {textKeys.SIDEBAR_ADD_DISCOUNT_BUTTON()}
                 </TextButton>
-              ) : (
+              ) : noDiscount ? null : (
                 <TextButton
                   color={colorsV2.coral700}
                   onClick={() => {

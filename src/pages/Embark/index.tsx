@@ -12,6 +12,8 @@ import { useHistory } from 'react-router'
 
 import { colorsV2 } from '@hedviginsurance/brand'
 import gql from 'graphql-tag'
+import Helmet from 'react-helmet-async'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { apolloClient } from '../../client/apolloClient'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
@@ -19,7 +21,6 @@ import { EmbarkBackground } from './EmbarkBackground'
 import { resolveHouseInformation } from './houseInformation'
 import { Landing } from './Landing'
 import { resolvePersonalInformation } from './personalInformation'
-import { DateInput } from 'new-components/DateInput'
 
 const EmbarkStyling = styled.div`
   height: 100%;
@@ -176,6 +177,8 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
     [key: string]: any
   }>()
 
+  const textKeys = useTextKeys()
+
   const isShowingLanding = props.showLanding || false
 
   React.useEffect(() => {
@@ -221,7 +224,14 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
 
   return (
     <EmbarkStyling>
-      <DateInput open={true} setOpen={() => {}} />
+      <Helmet>
+        <title>{textKeys.STARTPAGE_PAGE_TITLE()}</title>
+        <meta
+          property="og:image"
+          content="https://www.hedvig.com/f/62762/1200x630/2b9c894ea5/metaimage-hedviginsurance.jpg"
+        />
+        <meta property="og:title" content={textKeys.EMBARK_META_OG_TITLE()} />
+      </Helmet>
       <Global
         styles={css`
           body {
@@ -270,12 +280,6 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                     }}
                     initialStore={initialStore}
                     onStoreChange={(store) => {
-                      try {
-                        Intercom('update', store)
-                      } catch (e) {
-                        // noop
-                      }
-
                       window.sessionStorage.setItem(
                         `embark-store-${encodeURIComponent(props.name!)}`,
                         JSON.stringify(store),

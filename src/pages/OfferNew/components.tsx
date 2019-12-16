@@ -3,6 +3,8 @@ import { colorsV2, fonts } from '@hedviginsurance/brand'
 import * as React from 'react'
 import { Blob } from '../../components/Blob'
 
+export * from './common/price'
+
 export const Heading = styled('h1')`
   font-family: ${fonts.GEOMANIST};
   font-size: 4rem;
