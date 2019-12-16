@@ -130,6 +130,7 @@ const Body = styled.div`
 const Footer = styled.div`
   width: 100%;
   padding: 2rem;
+  padding-top: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
