@@ -269,6 +269,7 @@ const Calendar: React.FC<DayzedCalendarProps> = ({
         <div>
           <ArrowButton
             position="left"
+            disabled
             {...backProps}
             onClick={(e) => {
               setAnimationDirection(AnimationDirection.BACKWARDS)
@@ -279,6 +280,7 @@ const Calendar: React.FC<DayzedCalendarProps> = ({
           </ArrowButton>
           <ArrowButton
             position="right"
+            disabled
             {...forwardProps}
             onClick={(e) => {
               setAnimationDirection(AnimationDirection.FORWARDS)
@@ -308,7 +310,7 @@ export const DateInput: React.FC<DateInputProps> = ({ open, setOpen }) => {
                 opacity: 1,
                 pointerEvents: 'all',
               }
-            : { y: '100%', opacity: 0, pointerEvents: 'none' }
+            : { y: 50, opacity: 0, pointerEvents: 'none' }
         }
         transition={{
           type: 'spring',
