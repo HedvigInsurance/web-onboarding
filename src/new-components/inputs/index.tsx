@@ -191,6 +191,8 @@ export const TextInput: React.FC<TextInputProps &
 )
 
 export const InputGroup = styled.div`
+  margin-bottom: 1.5rem;
+
   ${Wrapper} {
     border-radius: 0;
     border-color: ${colorsV2.lightgray};

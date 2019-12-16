@@ -152,11 +152,11 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                         setFieldValue={setFieldValue}
                         min={1}
                       />
-
-                      <SupportSection />
                     </InputGroup>
                   </ContentColumn>
-                  <ContentColumn>2</ContentColumn>
+                  <ContentColumn>
+                    <SupportSection />
+                  </ContentColumn>
                 </Content>
               )}
               <Footer>
