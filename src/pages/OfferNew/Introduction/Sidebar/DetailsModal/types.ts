@@ -25,6 +25,11 @@ export interface HouseFieldSchema {
     yearOfConstruction?: FieldType
     numberOfBathrooms?: FieldType
     isSubleted?: FieldType
+    extraBuildings: {
+      type: FieldType
+      area: FieldType
+      hasWaterConnected: FieldType
+    }
   }
 }
 

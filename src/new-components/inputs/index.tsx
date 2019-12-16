@@ -193,6 +193,16 @@ export const TextInput: React.FC<TextInputProps &
 export const InputGroup = styled.div`
   margin-bottom: 1.5rem;
 
+  > ${Wrapper}:first-of-type {
+    border-top-left-radius: 8px;
+    border-top-right-radius 8px;
+  }
+
+  > ${Wrapper}:last-of-type {
+    border-bottom-left-radius: 8px;
+      border-bottom-right-radius 8px;
+  }
+
   ${Wrapper} {
     border-radius: 0;
     border-color: ${colorsV2.lightgray};
@@ -200,15 +210,20 @@ export const InputGroup = styled.div`
     :not(:first-of-type) {
       border-top: none;
     }
+  }
+`
+
+export const InputGroupRow = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+
+  ${Wrapper} {
+    width: 50%;
+    border-top: 0;
 
     :first-of-type {
-      border-top-left-radius: 8px;
-      border-top-right-radius 8px;
-    }
-
-    :last-of-type {
-      border-bottom-left-radius: 8px;
-      border-bottom-right-radius 8px;
+      border-right: 0;
     }
   }
 `

@@ -195,7 +195,7 @@ export const DiscountCodeModal: React.FC<Props> = ({
                   placeholder={textKeys.SIDEBAR_ADD_DISCOUNT_CELL_PLACEHOLDER()}
                   name="code"
                   autoComplete="off"
-                  touched={touched.code ? touched.code.toString() : undefined}
+                  touched={touched.code}
                   errors={textKeys[errors.code || '']()}
                 />
               </DiscountInputWrapper>
