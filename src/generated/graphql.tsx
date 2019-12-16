@@ -3411,7 +3411,10 @@ export type OfferQueryVariables = {
 
 export type OfferQuery = { __typename?: 'Query' } & {
   quote:
-    | ({ __typename?: 'CompleteQuote' } & Pick<CompleteQuote, 'id'> & {
+    | ({ __typename?: 'CompleteQuote' } & Pick<
+        CompleteQuote,
+        'id' | 'firstName' | 'lastName' | 'ssn'
+      > & {
           currentInsurer: Maybe<
             { __typename?: 'CurrentInsurer' } & Pick<
               CurrentInsurer,
@@ -3447,6 +3450,9 @@ export type OfferQuery = { __typename?: 'Query' } & {
                 | 'householdSize'
                 | 'livingSpace'
                 | 'ancillarySpace'
+                | 'numberOfBathrooms'
+                | 'yearOfConstruction'
+                | 'isSubleted'
               > & {
                   extraBuildings: Array<
                     | ({ __typename?: 'ExtraBuildingGarage' } & Pick<
@@ -3657,6 +3663,9 @@ export const OfferDocument = gql`
           }
           freeUntil
         }
+        firstName
+        lastName
+        ssn
         details {
           ... on CompleteApartmentQuoteDetails {
             street
@@ -3672,12 +3681,80 @@ export const OfferDocument = gql`
             livingSpace
             ancillarySpace
             extraBuildings {
-              ... on ExtraBuildingCore {
+              ... on ExtraBuildingGarage {
+                area
+                displayName
+                hasWaterConnected
+              }
+              ... on ExtraBuildingCarport {
+                area
+                displayName
+                hasWaterConnected
+              }
+              ... on ExtraBuildingShed {
+                area
+                displayName
+                hasWaterConnected
+              }
+              ... on ExtraBuildingStorehouse {
+                area
+                displayName
+                hasWaterConnected
+              }
+              ... on ExtraBuildingFriggebod {
+                area
+                displayName
+                hasWaterConnected
+              }
+              ... on ExtraBuildingAttefall {
+                area
+                displayName
+                hasWaterConnected
+              }
+              ... on ExtraBuildingOuthouse {
+                area
+                displayName
+                hasWaterConnected
+              }
+              ... on ExtraBuildingGuesthouse {
+                area
+                displayName
+                hasWaterConnected
+              }
+              ... on ExtraBuildingGazebo {
+                area
+                displayName
+                hasWaterConnected
+              }
+              ... on ExtraBuildingGreenhouse {
+                area
+                displayName
+                hasWaterConnected
+              }
+              ... on ExtraBuildingSauna {
+                area
+                displayName
+                hasWaterConnected
+              }
+              ... on ExtraBuildingBarn {
+                area
+                displayName
+                hasWaterConnected
+              }
+              ... on ExtraBuildingBoathouse {
+                area
+                displayName
+                hasWaterConnected
+              }
+              ... on ExtraBuildingOther {
                 area
                 displayName
                 hasWaterConnected
               }
             }
+            numberOfBathrooms
+            yearOfConstruction
+            isSubleted
           }
         }
       }

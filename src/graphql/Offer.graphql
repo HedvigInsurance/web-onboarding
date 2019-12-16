@@ -22,6 +22,9 @@ query Offer($id: ID) {
         }
         freeUntil
       }
+      firstName
+      lastName
+      ssn
       details {
         ... on CompleteApartmentQuoteDetails {
           street
@@ -37,12 +40,80 @@ query Offer($id: ID) {
           livingSpace
           ancillarySpace
           extraBuildings {
-            ... on ExtraBuildingCore {
+            ... on ExtraBuildingGarage {
+              area
+              displayName
+              hasWaterConnected
+            }
+            ... on ExtraBuildingCarport {
+              area
+              displayName
+              hasWaterConnected
+            }
+            ... on ExtraBuildingShed {
+              area
+              displayName
+              hasWaterConnected
+            }
+            ... on ExtraBuildingStorehouse {
+              area
+              displayName
+              hasWaterConnected
+            }
+            ... on ExtraBuildingFriggebod {
+              area
+              displayName
+              hasWaterConnected
+            }
+            ... on ExtraBuildingAttefall {
+              area
+              displayName
+              hasWaterConnected
+            }
+            ... on ExtraBuildingOuthouse {
+              area
+              displayName
+              hasWaterConnected
+            }
+            ... on ExtraBuildingGuesthouse {
+              area
+              displayName
+              hasWaterConnected
+            }
+            ... on ExtraBuildingGazebo {
+              area
+              displayName
+              hasWaterConnected
+            }
+            ... on ExtraBuildingGreenhouse {
+              area
+              displayName
+              hasWaterConnected
+            }
+            ... on ExtraBuildingSauna {
+              area
+              displayName
+              hasWaterConnected
+            }
+            ... on ExtraBuildingBarn {
+              area
+              displayName
+              hasWaterConnected
+            }
+            ... on ExtraBuildingBoathouse {
+              area
+              displayName
+              hasWaterConnected
+            }
+            ... on ExtraBuildingOther {
               area
               displayName
               hasWaterConnected
             }
           }
+          numberOfBathrooms
+          yearOfConstruction
+          isSubleted
         }
       }
     }

@@ -34,15 +34,22 @@ export const DetailInput: React.FC<DetailInputProps &
       showErrorMessage={false}
       errors={errors}
       touched={touched}
-      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-        if (!field.mask) {
-          setFieldValue(name, e.target.value || '')
-        } else {
-          setFieldValue(name, field.mask.sanitize(e.target.value || ''))
-        }
-      }}
       autoComplete="off"
       min={min}
       max={max}
+      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = field.mask
+          ? field.mask.sanitize(e.target.value)
+          : e.target.value
+
+        if (field.type === 'number') {
+          setFieldValue(name, parseInt(value, 10))
+        } else {
+          setFieldValue(
+            name,
+            /^(true|false)$/.test(value) ? JSON.parse(value) : value,
+          )
+        }
+      }}
     />
   ) : null

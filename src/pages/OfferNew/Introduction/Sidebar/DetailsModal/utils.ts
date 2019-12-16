@@ -59,7 +59,9 @@ export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
             placeholder: 'Storlek',
             mask: masks.area,
             type: inputTypes.number,
-            validation: Yup.number().required(),
+            validation: Yup.number()
+              .min(1)
+              .required(),
           },
           type: {
             label: 'Typ av boende',
@@ -87,20 +89,26 @@ export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
             placeholder: 'Boyta',
             mask: masks.area,
             type: inputTypes.number,
-            validation: Yup.number().required(),
+            validation: Yup.number()
+              .min(1)
+              .required(),
           },
           ancillarySpace: {
             label: 'Biyta',
             placeholder: 'Biyta',
             mask: masks.area,
             type: inputTypes.number,
-            validation: Yup.number().required(),
+            validation: Yup.number()
+              .min(1)
+              .required(),
           },
           numberOfBathrooms: {
             label: 'Antal badrum',
             placeholder: 'Antal badrum',
             type: inputTypes.number,
-            validation: Yup.number().required(),
+            validation: Yup.number()
+              .min(0)
+              .required(),
           },
           yearOfConstruction: {
             label: 'Byggnadsår',
@@ -112,12 +120,13 @@ export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
             label: 'Har hyresgäst',
             placeholder: 'Har hyresgäst',
             options: [
-              { label: 'Ja', value: 'ja' },
-              { label: 'Nej', value: 'nej' },
+              { label: 'Ja', value: 'true' },
+              { label: 'Nej', value: 'false' },
             ],
-            validation: Yup.string().required(),
+            validation: Yup.boolean().required(),
           },
           extraBuildings: {
+            validation: Yup.array(),
             type: {
               label: 'Byggnadstyp',
               placeholder: 'Byggnadstyp',
@@ -132,16 +141,18 @@ export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
               placeholder: 'Storlek',
               mask: masks.area,
               type: inputTypes.number,
-              validation: Yup.number().required(),
+              validation: Yup.number()
+                .min(1)
+                .required(),
             },
             hasWaterConnected: {
               label: 'Indraget vatten',
               placeholder: 'Indraget vatten',
               options: [
-                { label: 'Ja', value: 'ja' },
-                { label: 'Nej', value: 'nej' },
+                { label: 'Ja', value: 'true' },
+                { label: 'Nej', value: 'false' },
               ],
-              validation: Yup.string().required(),
+              validation: Yup.boolean().required(),
             },
           },
         },
@@ -232,6 +243,9 @@ export const getSchema = (quote: CompleteQuote): EditQuoteInput => {
         house: {
           ...base,
           ancillarySpace: quote.details.ancillarySpace,
+          numberOfBathrooms: quote.details.numberOfBathrooms,
+          yearOfConstruction: quote.details.yearOfConstruction,
+          isSubleted: quote.details.isSubleted,
           extraBuildings: quote.details.extraBuildings
             .filter((b) => !!b.__typename)
             .map((b) => ({

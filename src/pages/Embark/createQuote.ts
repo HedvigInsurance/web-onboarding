@@ -86,8 +86,6 @@ export const createQuote = (storage: any) => async (
     variables,
   })
 
-  console.log(result)
-
   if (result.data && result.data.createQuote.__typename === 'CompleteQuote') {
     // Update the cache
     await apolloClient.client.query({
