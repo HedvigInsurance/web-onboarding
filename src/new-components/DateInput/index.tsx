@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { motion } from 'framer-motion'
 import Dayzed, { RenderProps as DayzedCalendarProps } from 'dayzed'
-import { addYears } from 'date-fns'
+import { addYears, subDays } from 'date-fns'
 import * as React from 'react'
 import { Animator, AnimationDirection } from './animator'
 import { useMeasure } from './useMeasure'
@@ -16,7 +16,7 @@ const Wrapper = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  padding: 20px;
+  padding: 0.625rem 1.25rem;
 `
 
 const Container = styled(motion.div)`
@@ -47,14 +47,14 @@ const Content = styled.div`
 const CalendarMonth = styled.div`
   display: inline-block;
   width: 100%;
-  padding: 0 10px 30px;
+  padding: 0 0.625rem 1.875rem;
   boxsizing: border-box;
   user-select: none;
 `
 
 const CalendarMonthHeader = styled.span`
   display: block;
-  padding: 20px;
+  padding: 1.25rem;
   font-size: 1rem;
   font-weight: 600;
 `
@@ -75,8 +75,8 @@ const CalendarDay = styled.button<{ selected: boolean; selectable: boolean }>`
   outline: 0;
   cursor: pointer;
   font-size: 0.875rem;
-  padding-top: 2.5px;
-  padding-bottom: 2.5px;
+  padding-top: 0.15625rem;
+  padding-bottom: 0.15625rem;
   border-radius: 12px;
   transition: background-color 250ms, color 250ms;
   margin: 2.1%;
@@ -154,6 +154,8 @@ const CalendarContainer = styled.div`
 interface DateInputProps {
   open: boolean
   setOpen: (open: boolean) => void
+  date: Date
+  setDate: (date: Date) => void
 }
 
 const Calendar: React.FC<DayzedCalendarProps> = ({
@@ -182,20 +184,11 @@ const Calendar: React.FC<DayzedCalendarProps> = ({
     getLocaleImport().then((module) => {
       const locale = module.default
 
-      setMonthNamesShort([
-        locale.localize.month(0, { width: 'abbreviated' }),
-        locale.localize.month(1, { width: 'abbreviated' }),
-        locale.localize.month(2, { width: 'abbreviated' }),
-        locale.localize.month(3, { width: 'abbreviated' }),
-        locale.localize.month(4, { width: 'abbreviated' }),
-        locale.localize.month(5, { width: 'abbreviated' }),
-        locale.localize.month(6, { width: 'abbreviated' }),
-        locale.localize.month(7, { width: 'abbreviated' }),
-        locale.localize.month(8, { width: 'abbreviated' }),
-        locale.localize.month(9, { width: 'abbreviated' }),
-        locale.localize.month(10, { width: 'abbreviated' }),
-        locale.localize.month(11, { width: 'abbreviated' }),
-      ])
+      setMonthNamesShort(
+        Array.from({ length: 12 }).map((_, i) =>
+          locale.localize.month(i, { width: 'abbreviated' }),
+        ),
+      )
 
       setWeekdayNamesShort([
         locale.localize.day(1, { width: 'abbreviated' }),
@@ -296,9 +289,12 @@ const Calendar: React.FC<DayzedCalendarProps> = ({
   return null
 }
 
-export const DateInput: React.FC<DateInputProps> = ({ open, setOpen }) => {
-  const [dateValue, setDateValue] = React.useState<Date>(new Date())
-
+export const DateInput: React.FC<DateInputProps> = ({
+  open,
+  setOpen,
+  date,
+  setDate,
+}) => {
   return (
     <Wrapper aria-hidden={!open}>
       <Container
@@ -321,11 +317,11 @@ export const DateInput: React.FC<DateInputProps> = ({ open, setOpen }) => {
         <Dayzed
           date={new Date()}
           firstDayOfWeek={1}
-          selected={dateValue}
-          minDate={new Date()}
+          selected={date}
+          minDate={subDays(new Date(), 1)}
           maxDate={addYears(new Date(), 1)}
           onDateSelected={(dateObj) => {
-            setDateValue(dateObj.date)
+            setDate(dateObj.date)
             setOpen(false)
           }}
           render={(dayzedData) => <Calendar {...dayzedData} />}
