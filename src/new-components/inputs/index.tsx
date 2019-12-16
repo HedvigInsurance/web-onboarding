@@ -122,7 +122,7 @@ export interface CoreInputFieldProps {
 
 export interface TextInputProps extends CoreInputFieldProps {
   showErrorMessage?: boolean
-  touched?: string
+  touched?: boolean
   errors?: string
 }
 

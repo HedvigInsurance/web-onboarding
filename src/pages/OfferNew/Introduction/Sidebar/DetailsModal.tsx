@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import { Modal, ModalProps } from 'components/ModalNew'
-import { Form, Formik, GenericFieldHTMLAttributes } from 'formik'
+import { Form, Formik, GenericFieldHTMLAttributes, getIn } from 'formik'
 import {
   ApartmentType,
   CompleteQuote,
@@ -193,12 +193,16 @@ const getSchema = (quote: CompleteQuote): EditQuoteInput => {
 interface DetailInputProps {
   field?: FieldType
   name: string
+  errors?: string
+  touched?: boolean
   setFieldValue: (name: string, value: any) => void
 }
 
 const DetailInput: React.FC<DetailInputProps & GenericFieldHTMLAttributes> = ({
   field,
   name,
+  errors,
+  touched,
   setFieldValue,
 }) =>
   field ? (
@@ -210,12 +214,14 @@ const DetailInput: React.FC<DetailInputProps & GenericFieldHTMLAttributes> = ({
       type={field.type}
       options={field.options}
       showErrorMessage={false}
-      onChange={(e: any) => {
+      errors={errors}
+      touched={touched}
+      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
         if (!field.mask) {
-          return
+          setFieldValue(name, e.target.value || '')
+        } else {
+          setFieldValue(name, field.mask.sanitize(e.target.value || ''))
         }
-
-        setFieldValue(name, field.mask.sanitize(e.target.value || ''))
       }}
       autoComplete="off"
     />
@@ -235,6 +241,8 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   const [editQuote, editQuoteResponse] = useEditQuoteMutation()
   const fieldSchema = getFieldSchema(quote)
   const validationSchema = getValidationSchema(fieldSchema)
+
+  console.log(validationSchema)
 
   return (
     <Modal isVisible={isVisible} onClose={onClose}>
@@ -284,30 +292,40 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                       <DetailInput
                         field={fieldSchema.apartment.street}
                         name="apartment.street"
+                        errors={getIn(errors.apartment, 'street')}
+                        touched={getIn(touched.apartment, 'street')}
                         setFieldValue={setFieldValue}
                       />
 
                       <DetailInput
                         field={fieldSchema.apartment.zipCode}
                         name="apartment.zipCode"
+                        errors={getIn(errors.apartment, 'zipCode')}
+                        touched={getIn(touched.apartment, 'zipCode')}
                         setFieldValue={setFieldValue}
                       />
 
                       <DetailInput
                         field={fieldSchema.apartment.type}
                         name="apartment.type"
+                        errors={getIn(errors.apartment, 'type')}
+                        touched={getIn(touched.apartment, 'type')}
                         setFieldValue={setFieldValue}
                       />
 
                       <DetailInput
                         field={fieldSchema.apartment.livingSpace}
                         name="apartment.livingSpace"
+                        errors={getIn(errors.apartment, 'livingSpace')}
+                        touched={getIn(touched.apartment, 'livingSpace')}
                         setFieldValue={setFieldValue}
                       />
 
                       <DetailInput
                         field={fieldSchema.apartment.householdSize}
                         name="apartment.householdSize"
+                        errors={getIn(errors.apartment, 'householdSize')}
+                        touched={getIn(touched.apartment, 'householdSize')}
                         setFieldValue={setFieldValue}
                       />
                     </InputGroup>
