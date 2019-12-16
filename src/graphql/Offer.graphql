@@ -2,10 +2,25 @@ query Offer($id: ID) {
   quote(id: $id) {
     ... on CompleteQuote {
       id
-      currentInsurer
-      price {
-        amount
-        currency
+      currentInsurer {
+        id
+        displayName
+        switchable
+      }
+      insuranceCost {
+        monthlyGross {
+          amount
+          currency
+        }
+        monthlyDiscount {
+          amount
+          currency
+        }
+        monthlyNet {
+          amount
+          currency
+        }
+        freeUntil
       }
       details {
         ... on CompleteApartmentQuoteDetails {

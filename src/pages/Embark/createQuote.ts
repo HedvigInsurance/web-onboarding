@@ -9,9 +9,20 @@ const MUTATION = gql`
     createQuote(input: $input) {
       ... on CompleteQuote {
         id
-        price {
-          amount
-          currency
+        insuranceCost {
+          monthlyGross {
+            amount
+            currency
+          }
+          monthlyDiscount {
+            amount
+            currency
+          }
+          monthlyNet {
+            amount
+            currency
+          }
+          freeUntil
         }
         details {
           ... on CompleteApartmentQuoteDetails {
@@ -74,6 +85,8 @@ export const createQuote = (storage: any) => async (
     mutation: MUTATION,
     variables,
   })
+
+  console.log(result)
 
   if (result.data && result.data.createQuote.__typename === 'CompleteQuote') {
     // Update the cache

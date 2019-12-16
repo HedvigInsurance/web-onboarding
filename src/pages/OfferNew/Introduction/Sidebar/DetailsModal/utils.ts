@@ -169,7 +169,7 @@ export const getExtraBuilding = (
   extraBuildingType: ExtraBuildingType,
 ): string => {
   const map = {
-    [ExtraBuildingType.Attefall]: 'Attefallshus',
+    [ExtraBuildingType.Attefall]: 'Attefall',
     [ExtraBuildingType.Barn]: 'Lada',
     [ExtraBuildingType.Boathouse]: 'Båthus',
     [ExtraBuildingType.Carport]: 'Carport',

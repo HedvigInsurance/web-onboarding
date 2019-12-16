@@ -708,14 +708,22 @@ export type CompleteHouseQuoteDetails = {
   livingSpace: Scalars['Int']
   ancillarySpace: Scalars['Int']
   extraBuildings: Array<ExtraBuilding>
+  numberOfBathrooms: Scalars['Int']
+  yearOfConstruction: Scalars['Int']
+  isSubleted: Scalars['Boolean']
 }
 
 export type CompleteQuote = {
   __typename?: 'CompleteQuote'
   id: Scalars['ID']
-  currentInsurer?: Maybe<Scalars['String']>
-  price: MonetaryAmountV2
+  currentInsurer?: Maybe<CurrentInsurer>
+  insuranceCost: InsuranceCost
+  firstName: Scalars['String']
+  lastName: Scalars['String']
+  ssn: Scalars['String']
   details: CompleteQuoteDetails
+  startDate: Scalars['LocalDate']
+  expiresAt: Scalars['LocalDate']
 }
 
 export type CompleteQuoteDetails =
@@ -748,11 +756,19 @@ export type CreateQuoteInput = {
   lastName: Scalars['String']
   currentInsurer?: Maybe<Scalars['String']>
   ssn: Scalars['String']
+  startDate?: Maybe<Scalars['LocalDate']>
   apartment?: Maybe<CreateApartmentInput>
   house?: Maybe<CreateHouseInput>
 }
 
 export type CreateQuoteResult = CompleteQuote | UnderwritingLimitsHit
+
+export type CurrentInsurer = {
+  __typename?: 'CurrentInsurer'
+  id?: Maybe<Scalars['String']>
+  displayName?: Maybe<Scalars['String']>
+  switchable?: Maybe<Scalars['Boolean']>
+}
 
 export type DirectDebitResponse = {
   __typename?: 'DirectDebitResponse'
@@ -867,6 +883,7 @@ export type EditQuoteInput = {
   lastName?: Maybe<Scalars['String']>
   currentInsurer?: Maybe<Scalars['String']>
   ssn?: Maybe<Scalars['String']>
+  startDate?: Maybe<Scalars['LocalDate']>
   apartment?: Maybe<EditApartmentInput>
   house?: Maybe<EditHouseInput>
 }
@@ -1154,12 +1171,16 @@ export type IncompleteHouseQuoteDetails = {
   livingSpace?: Maybe<Scalars['Int']>
   ancillarySpace?: Maybe<Scalars['Int']>
   extraBuildings?: Maybe<Array<ExtraBuilding>>
+  numberOfBathrooms?: Maybe<Scalars['Int']>
+  yearOfConstruction?: Maybe<Scalars['Int']>
+  isSubleted?: Maybe<Scalars['Boolean']>
 }
 
 export type IncompleteQuote = {
   __typename?: 'IncompleteQuote'
   id: Scalars['ID']
-  currentInsurer?: Maybe<Scalars['String']>
+  currentInsurer?: Maybe<CurrentInsurer>
+  startDate?: Maybe<Scalars['LocalDate']>
   details?: Maybe<IncompleteQuoteDetails>
 }
 
@@ -2697,6 +2718,7 @@ export type Query = {
   personalInformation?: Maybe<PersonalInformation>
   houseInformation?: Maybe<HouseInformation>
   quote: Quote
+  lastQuoteOfMember: Quote
   commonClaims: Array<CommonClaim>
   news: Array<News>
   welcome: Array<Welcome>
@@ -3372,12 +3394,7 @@ export type EditQuoteMutationVariables = {
 
 export type EditQuoteMutation = { __typename?: 'Mutation' } & {
   editQuote:
-    | ({ __typename?: 'CompleteQuote' } & Pick<CompleteQuote, 'id'> & {
-          price: { __typename?: 'MonetaryAmountV2' } & Pick<
-            MonetaryAmountV2,
-            'amount' | 'currency'
-          >
-        })
+    | ({ __typename?: 'CompleteQuote' } & Pick<CompleteQuote, 'id'>)
     | ({ __typename?: 'UnderwritingLimitsHit' } & {
         limits: Array<
           { __typename?: 'UnderwritingLimit' } & Pick<
@@ -3394,14 +3411,30 @@ export type OfferQueryVariables = {
 
 export type OfferQuery = { __typename?: 'Query' } & {
   quote:
-    | ({ __typename?: 'CompleteQuote' } & Pick<
-        CompleteQuote,
-        'id' | 'currentInsurer'
-      > & {
-          price: { __typename?: 'MonetaryAmountV2' } & Pick<
-            MonetaryAmountV2,
-            'amount' | 'currency'
+    | ({ __typename?: 'CompleteQuote' } & Pick<CompleteQuote, 'id'> & {
+          currentInsurer: Maybe<
+            { __typename?: 'CurrentInsurer' } & Pick<
+              CurrentInsurer,
+              'id' | 'displayName' | 'switchable'
+            >
           >
+          insuranceCost: { __typename?: 'InsuranceCost' } & Pick<
+            InsuranceCost,
+            'freeUntil'
+          > & {
+              monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount' | 'currency'
+              >
+              monthlyDiscount: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount' | 'currency'
+              >
+              monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount' | 'currency'
+              >
+            }
           details:
             | ({ __typename?: 'CompleteApartmentQuoteDetails' } & Pick<
                 CompleteApartmentQuoteDetails,
@@ -3547,10 +3580,6 @@ export const EditQuoteDocument = gql`
     editQuote(input: $input) {
       ... on CompleteQuote {
         id
-        price {
-          amount
-          currency
-        }
       }
       ... on UnderwritingLimitsHit {
         limits {
@@ -3608,10 +3637,25 @@ export const OfferDocument = gql`
     quote(id: $id) {
       ... on CompleteQuote {
         id
-        currentInsurer
-        price {
-          amount
-          currency
+        currentInsurer {
+          id
+          displayName
+          switchable
+        }
+        insuranceCost {
+          monthlyGross {
+            amount
+            currency
+          }
+          monthlyDiscount {
+            amount
+            currency
+          }
+          monthlyNet {
+            amount
+            currency
+          }
+          freeUntil
         }
         details {
           ... on CompleteApartmentQuoteDetails {

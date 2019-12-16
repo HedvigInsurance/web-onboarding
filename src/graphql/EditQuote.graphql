@@ -2,10 +2,6 @@ mutation EditQuote($input: EditQuoteInput!) {
   editQuote(input: $input) {
     ... on CompleteQuote {
       id
-      price {
-        amount
-        currency
-      }
     }
     ... on UnderwritingLimitsHit {
       limits {
