@@ -151,14 +151,14 @@ export const Landing: React.FC = () => {
               <Headline>{textKeys.STARTPAGE_UNINSURED_HEADLINE()}</Headline>
               <Paragraph>{textKeys.STARTPAGE_UNINSURED_BODY()}</Paragraph>
               <ProceedButton size="lg" to="/new-member/new">
-                {textKeys.STARTPAGE_UNINSURED_BODY()}
+                {textKeys.STARTPAGE_UNINSURED_BUTTON()}
               </ProceedButton>
             </Card>
             <Card>
-              <Headline>{textKeys.STARTPAGE_UNINSURED_BODY()}</Headline>
-              <Paragraph>{textKeys.STARTPAGE_UNINSURED_BODY()}</Paragraph>
+              <Headline>{textKeys.STARTPAGE_INSURED_HEADLINE()}</Headline>
+              <Paragraph>{textKeys.STARTPAGE_INSURED_BODY()}</Paragraph>
               <ProceedButton size="lg" to="/new-member/switch">
-                {textKeys.STARTPAGE_UNINSURED_BODY()}
+                {textKeys.STARTPAGE_INSURED_BUTTON()}
               </ProceedButton>
             </Card>
           </Container>
