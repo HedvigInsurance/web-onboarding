@@ -195,20 +195,45 @@ export const TextInput: React.FC<TextInputProps &
   </>
 )
 
+export const InputGroupDeleteButton = styled.button`
+  background: ${colorsV2.white};
+  color: ${colorsV2.coral500};
+  display: flex;
+  width: 100%;
+  height: 3.125rem;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 350ms;
+  border: 1px solid ${colorsV2.lightgray};
+  border-top: 0;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+
+  :focus {
+    outline: none;
+  }
+
+  :hover {
+    background: ${colorsV2.coral100};
+  }
+`
+
 export const InputGroup = styled.div`
   margin-bottom: 1.5rem;
 
-  > ${Wrapper}:first-of-type {
+  > ${Wrapper}:first-child {
     border-top-left-radius: 8px;
     border-top-right-radius 8px;
   }
 
-  > ${Wrapper}:last-of-type {
+  > ${Wrapper}:last-child, ${InputGroupDeleteButton}:last-child {
     border-bottom-left-radius: 8px;
-      border-bottom-right-radius 8px;
+    border-bottom-right-radius 8px;
   }
 
-  ${Wrapper} {
+  ${Wrapper}, ${InputGroupDeleteButton} {
     border-radius: 0;
     border-color: ${colorsV2.lightgray};
 
@@ -227,7 +252,7 @@ export const InputGroupRow = styled.div`
     width: 50%;
     border-top: 0;
 
-    :first-of-type {
+    :first-child {
       border-right: 0;
     }
   }

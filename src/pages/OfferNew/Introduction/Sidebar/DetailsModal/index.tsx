@@ -6,9 +6,14 @@ import {
   CompleteQuote,
   EditQuoteInput,
   useEditQuoteMutation,
+  ExtraBuildingType,
 } from 'generated/graphql'
 import { Button } from 'new-components/buttons'
-import { InputGroup, InputGroupRow } from 'new-components/inputs/index'
+import {
+  InputGroup,
+  InputGroupRow,
+  InputGroupDeleteButton,
+} from 'new-components/inputs/index'
 import * as React from 'react'
 import { DetailInput } from './DetailInput'
 import { SupportSection } from './SupportSection'
@@ -18,7 +23,6 @@ import {
   getValidationSchema,
   isApartmentFieldSchema,
   isHouseFieldSchema,
-  testValidationSchema,
 } from './utils'
 
 const Container = styled.div`
@@ -54,6 +58,30 @@ const ContentColumnTitle = styled.div`
   color: ${colorsV2.gray};
   margin-bottom: 1rem;
   padding-left: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 2rem;
+`
+
+const ContentColumnTitleButton = styled.button`
+  padding: 0.375rem 1rem;
+  font-size: 0.875rem;
+  color: ${colorsV2.gray};
+  border-radius: 24px;
+  border: 1px solid ${colorsV2.gray};
+  cursor: pointer;
+  transition: all 250ms;
+
+  :focus {
+    outline: none;
+  }
+
+  :hover {
+    color: ${colorsV2.darkgray};
+    border-color: ${colorsV2.darkgray};
+  }
 `
 
 const Footer = styled.div`
@@ -88,9 +116,6 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   const validationSchema = getValidationSchema(fieldSchema, quote)
   const schema = getSchema(quote)
 
-  console.log('validation schema', validationSchema)
-  const test = testValidationSchema(fieldSchema, quote)
-
   return (
     <Modal isVisible={isVisible} onClose={onClose} dynamicHeight>
       <Container>
@@ -118,17 +143,9 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
           }}
         >
           {({ touched, errors, values, setFieldValue }) => {
-            console.log(values)
             return (
               <Form>
                 <Headline>Dina detaljer</Headline>
-                {JSON.stringify(values, null, 2)}
-                <br />
-                <br />
-                {JSON.stringify(errors, null, 2)}
-                <br />
-                <br />
-                {JSON.stringify(touched, null, 2)}
 
                 {isApartmentFieldSchema(fieldSchema, quote) && (
                   <Content>
@@ -254,65 +271,82 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                       <SupportSection />
                     </ContentColumn>
                     <ContentColumn>
-                      <ContentColumnTitle>Övriga byggnader</ContentColumnTitle>
                       <FieldArray
                         name="house.extraBuildings"
                         render={(arrayHelpers) => (
                           <>
-                            {values.house?.extraBuildings?.map(
-                              (extraBuilding, index) => (
-                                <InputGroup>
-                                  <DetailInput
-                                    field={
-                                      fieldSchema.house.extraBuildings.type
-                                    }
-                                    name={`house.extraBuildings.${index}.type`}
-                                    errors={getIn(
-                                      errors.house,
-                                      `extraBuildings.${index}.type`,
-                                    )}
-                                    touched={getIn(
-                                      touched.apartment,
-                                      `extraBuildings.${index}.type`,
-                                    )}
-                                    setFieldValue={setFieldValue}
-                                  />
+                            <ContentColumnTitle>
+                              Övriga byggnader
+                              <ContentColumnTitleButton
+                                type="button"
+                                onClick={() => {
+                                  arrayHelpers.insert(
+                                    values.house?.extraBuildings?.length || 0,
+                                    {
+                                      type: ExtraBuildingType.Garage,
+                                      area: 10,
+                                      hasWaterConnected: false,
+                                    },
+                                  )
+                                }}
+                              >
+                                Lägg till byggnad
+                              </ContentColumnTitleButton>
+                            </ContentColumnTitle>
+                            {values.house?.extraBuildings?.map((_, index) => (
+                              <InputGroup key={index}>
+                                <DetailInput
+                                  field={fieldSchema.house.extraBuildings.type}
+                                  name={`house.extraBuildings.${index}.type`}
+                                  errors={getIn(
+                                    errors.house,
+                                    `extraBuildings.${index}.type`,
+                                  )}
+                                  touched={getIn(
+                                    touched.apartment,
+                                    `extraBuildings.${index}.type`,
+                                  )}
+                                  setFieldValue={setFieldValue}
+                                />
 
-                                  <DetailInput
-                                    field={
-                                      fieldSchema.house.extraBuildings.area
-                                    }
-                                    name={`house.extraBuildings.${index}.area`}
-                                    errors={getIn(
-                                      errors.house,
-                                      `extraBuildings.${index}.area`,
-                                    )}
-                                    touched={getIn(
-                                      touched.apartment,
-                                      `extraBuildings.${index}.area`,
-                                    )}
-                                    setFieldValue={setFieldValue}
-                                  />
+                                <DetailInput
+                                  field={fieldSchema.house.extraBuildings.area}
+                                  name={`house.extraBuildings.${index}.area`}
+                                  errors={getIn(
+                                    errors.house,
+                                    `extraBuildings.${index}.area`,
+                                  )}
+                                  touched={getIn(
+                                    touched.apartment,
+                                    `extraBuildings.${index}.area`,
+                                  )}
+                                  setFieldValue={setFieldValue}
+                                />
 
-                                  <DetailInput
-                                    field={
-                                      fieldSchema.house.extraBuildings
-                                        .hasWaterConnected
-                                    }
-                                    name={`house.extraBuildings.${index}.hasWaterConnected`}
-                                    errors={getIn(
-                                      errors.house,
-                                      `extraBuildings.${index}.hasWaterConnected`,
-                                    )}
-                                    touched={getIn(
-                                      touched.apartment,
-                                      `extraBuildings.${index}.hasWaterConnected`,
-                                    )}
-                                    setFieldValue={setFieldValue}
-                                  />
-                                </InputGroup>
-                              ),
-                            )}
+                                <DetailInput
+                                  field={
+                                    fieldSchema.house.extraBuildings
+                                      .hasWaterConnected
+                                  }
+                                  name={`house.extraBuildings.${index}.hasWaterConnected`}
+                                  errors={getIn(
+                                    errors.house,
+                                    `extraBuildings.${index}.hasWaterConnected`,
+                                  )}
+                                  touched={getIn(
+                                    touched.apartment,
+                                    `extraBuildings.${index}.hasWaterConnected`,
+                                  )}
+                                  setFieldValue={setFieldValue}
+                                />
+                                <InputGroupDeleteButton
+                                  type="button"
+                                  onClick={() => arrayHelpers.remove(index)}
+                                >
+                                  Ta bort byggnad
+                                </InputGroupDeleteButton>
+                              </InputGroup>
+                            ))}
                           </>
                         )}
                       />

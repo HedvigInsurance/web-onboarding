@@ -11,9 +11,9 @@ import { isApartment, isHouse, isStudent } from '../../../utils'
 import {
   ApartmentFieldSchema,
   FieldSchema,
-  HouseFieldSchema,
-  FieldType,
   Field,
+  FieldType,
+  HouseFieldSchema,
   ArrayFieldType,
 } from './types'
 
@@ -210,55 +210,6 @@ export const isArrayFieldType = <T>(
   field: Field<T>,
 ): field is ArrayFieldType<T> => {
   return field.hasOwnProperty('arrayValidation')
-}
-
-export const testValidationSchema = (
-  fieldSchema: FieldSchema,
-  quote: CompleteQuote,
-): any => {
-  const fields = isApartmentFieldSchema(fieldSchema, quote)
-    ? fieldSchema.apartment
-    : fieldSchema.house
-
-  const res = Object.entries(fields).reduce((acc, [key, value]) => {
-    if (isNormalFieldType(value)) {
-      return { ...acc, [key]: value.validation }
-    }
-
-    if (isArrayFieldType(value)) {
-      return {
-        ...acc,
-        [key]: value.arrayValidation.of(
-          Yup.array().of(
-            Yup.object().shape({
-              name: Yup.string()
-                .min(4, 'too short')
-                .required('Required'), // these constraints take precedence
-              salary: Yup.string()
-                .min(3, 'cmon')
-                .required('Required'), // these constraints take precedence
-            }),
-          ),
-        ),
-      }
-    }
-    return { ...acc }
-  }, {})
-
-  return { house: res }
-
-  /*
-  return Object.entries(fieldSchema).reduce((acc, [key, value]) => {
-    console.log(typeof value)
-
-    const v2 = value as any
-    const t = Object.entries(v2)
-      .filter(([k, v]) => k !== 'objectValidation')
-      .map(([k, v]: any) => ({ [k]: v.validation }))
-    console.log(t)
-
-    return {...acc, {}}
-  }, {})*/
 }
 
 export const getExtraBuilding = (
