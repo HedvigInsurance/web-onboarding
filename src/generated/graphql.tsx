@@ -3395,7 +3395,10 @@ export type OfferQueryVariables = {
 
 export type OfferQuery = { __typename?: 'Query' } & {
   quote:
-    | ({ __typename?: 'CompleteQuote' } & Pick<CompleteQuote, 'id'> & {
+    | ({ __typename?: 'CompleteQuote' } & Pick<
+        CompleteQuote,
+        'id' | 'startDate'
+      > & {
           currentInsurer: Maybe<
             { __typename?: 'CurrentInsurer' } & Pick<
               CurrentInsurer,
@@ -3573,6 +3576,7 @@ export const OfferDocument = gql`
           displayName
           id
         }
+        startDate
         insuranceCost {
           monthlyNet {
             amount

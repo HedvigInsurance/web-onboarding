@@ -1,7 +1,7 @@
-import * as React from 'react'
-import { motion } from 'framer-motion'
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
+import { motion } from 'framer-motion'
+import * as React from 'react'
 
 const SwitchContainer = styled(motion.span)`
   display: inline-block;

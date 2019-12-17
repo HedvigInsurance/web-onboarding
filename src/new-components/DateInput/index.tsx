@@ -1,15 +1,15 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
-import { motion } from 'framer-motion'
-import Dayzed, { RenderProps as DayzedCalendarProps } from 'dayzed'
-import { addYears, subDays } from 'date-fns'
-import * as React from 'react'
-import { Animator, AnimationDirection } from './Animator'
-import { useMeasure } from './useMeasure'
 import { BackArrow } from 'components/icons/BackArrow'
-import { ForwardArrow } from 'components/icons/ForwardArrow'
 import { Cross } from 'components/icons/Cross'
+import { ForwardArrow } from 'components/icons/ForwardArrow'
 import { useCurrentLanguage } from 'components/utils/CurrentLanguage'
+import { addYears, subDays } from 'date-fns'
+import Dayzed, { RenderProps as DayzedCalendarProps } from 'dayzed'
+import { motion } from 'framer-motion'
+import * as React from 'react'
+import { AnimationDirection, Animator } from './Animator'
+import { useMeasure } from './useMeasure'
 
 const Wrapper = styled(motion.div)`
   position: absolute;
@@ -132,7 +132,7 @@ const ArrowButton = styled.button<{
   position: absolute;
   transition: opacity 250ms, transform 250ms;
   background: transparent;
-  ${(props) => (props.position == 'left' ? `left: 10px;` : `right: 10px;`)};
+  ${(props) => (props.position === 'left' ? `left: 10px;` : `right: 10px;`)};
   ${(props) => props.disabled && `opacity: 0.5;`};
   top: 22px;
   cursor: pointer;
@@ -222,12 +222,12 @@ const Calendar: React.FC<DayzedCalendarProps> = ({
       ))}
       {calendar.weeks.map((week, weekIndex) =>
         week.map((dateObj, index) => {
-          let key = `${calendar.month}${calendar.year}${weekIndex}${index}`
+          const key = `${calendar.month}${calendar.year}${weekIndex}${index}`
           if (!dateObj) {
             return <EmptyDay key={key} />
           }
 
-          let { date, selected, selectable } = dateObj
+          const { date, selected, selectable } = dateObj
 
           return (
             <CalendarDay

@@ -23,7 +23,9 @@ export const useMeasure = <T extends Element>(): [
     () => new ResizeObserver(([entry]) => set(entry.contentRect)),
   )
   React.useEffect(() => {
-    if (ref.current) ro.observe(ref.current)
+    if (ref.current) {
+      ro.observe(ref.current)
+    }
     return () => ro.disconnect()
   }, [])
   return [{ ref }, bounds]

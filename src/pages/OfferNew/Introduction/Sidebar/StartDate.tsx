@@ -1,12 +1,12 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
-import * as React from 'react'
-import { format, parse, isToday } from 'date-fns'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { format, isToday, parse } from 'date-fns'
+import { CurrentInsurer, useStartDateMutation } from 'generated/graphql'
 import { DateInput } from 'new-components/DateInput'
-import { CalendarIcon } from './CalendarIcon'
 import { Switch } from 'new-components/Switch'
-import { useStartDateMutation, CurrentInsurer } from 'generated/graphql'
+import * as React from 'react'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { CalendarIcon } from './CalendarIcon'
 
 interface Props {
   currentInsurer: CurrentInsurer | null
@@ -94,26 +94,21 @@ export const StartDate: React.FC<Props> = ({
   currentInsurer,
 }) => {
   const getDefaultDateValue = () => {
+    if (startDate) {
+      return parse(startDate, 'yyyy-MM-dd', new Date())
+    }
+
     if (currentInsurer) {
       return null
     }
 
-    return startDate ? parse(startDate, 'yyyy-MM-dd', new Date()) : new Date()
+    return new Date()
   }
 
   const [datePickerOpen, setDatePickerOpen] = React.useState(false)
   const [dateValue, setDateValue] = React.useState(getDefaultDateValue)
   const textKeys = useTextKeys()
   const [setStartDate] = useStartDateMutation()
-
-  React.useEffect(() => {
-    setStartDate({
-      variables: {
-        quoteId: offerId,
-        date: (dateValue && format(dateValue, 'yyyy-MM-dd')) || null,
-      },
-    })
-  }, [dateValue])
 
   const getDateLabel = () => {
     if (dateValue) {
@@ -148,7 +143,15 @@ export const StartDate: React.FC<Props> = ({
         open={datePickerOpen}
         setOpen={setDatePickerOpen}
         date={dateValue || new Date()}
-        setDate={setDateValue}
+        setDate={(newDateValue) => {
+          setDateValue(newDateValue)
+          setStartDate({
+            variables: {
+              quoteId: offerId,
+              date: format(newDateValue, 'yyyy-MM-dd'),
+            },
+          })
+        }}
       />
       {currentInsurer?.switchable && (
         <HandleSwitchingWrapper>
@@ -158,6 +161,12 @@ export const StartDate: React.FC<Props> = ({
           <Switch
             value={dateValue == null}
             onChange={(newValue) => {
+              setStartDate({
+                variables: {
+                  quoteId: offerId,
+                  date: null,
+                },
+              })
               setDateValue(newValue ? null : new Date())
             }}
           />

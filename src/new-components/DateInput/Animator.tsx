@@ -1,6 +1,6 @@
-import * as React from 'react'
 import styled from '@emotion/styled'
 import { motion } from 'framer-motion'
+import * as React from 'react'
 import { useMeasure } from './useMeasure'
 
 const ContentItem = styled(motion.div)`
@@ -66,7 +66,7 @@ export const Animator: React.FC<AnimatorProps> = ({
           animate={{
             opacity: 0,
             x:
-              animationDirection == AnimationDirection.FORWARDS
+              animationDirection === AnimationDirection.FORWARDS
                 ? '-100%'
                 : '100%',
           }}
@@ -84,7 +84,7 @@ export const Animator: React.FC<AnimatorProps> = ({
         initial={{
           opacity: 0,
           x:
-            animationDirection == AnimationDirection.FORWARDS
+            animationDirection === AnimationDirection.FORWARDS
               ? '100%'
               : '-100%',
         }}
