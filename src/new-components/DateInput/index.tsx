@@ -149,6 +149,9 @@ const EmptyDay = styled.div`
 
 const CalendarContainer = styled.div`
   position: relative;
+  maxwidth: 800;
+  margin: 0 auto;
+  textalign: center;
 `
 
 interface DateInputProps {
@@ -246,9 +249,7 @@ const Calendar: React.FC<DayzedCalendarProps> = ({
     const forwardProps = getForwardProps({ calendars })
 
     return (
-      <CalendarContainer
-        style={{ maxWidth: 800, margin: '0 auto', textAlign: 'center' }}
-      >
+      <CalendarContainer>
         <HeightCalculation {...bind}>{content}</HeightCalculation>
         <HeightAnimation
           animate={{ height: measured.height, width: measured.width }}

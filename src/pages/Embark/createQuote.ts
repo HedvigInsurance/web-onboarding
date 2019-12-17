@@ -88,7 +88,5 @@ export const createQuote = (storage: any) => async (
     })
   }
 
-  console.log(result.data!.createQuote!.id)
-
   return result.data!
 }

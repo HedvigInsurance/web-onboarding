@@ -230,6 +230,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
               <PreviousInsurancePicker insurances={otherInsuranceCompanies} />
             )}
             <StartDate
+              startDate={offer.quote.startDate}
               offerId={offer.quote.id}
               insuredAtOtherCompany={!!offer.quote.currentInsurer}
             />

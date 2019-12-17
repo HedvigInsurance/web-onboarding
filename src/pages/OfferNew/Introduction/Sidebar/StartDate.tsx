@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import * as React from 'react'
-import { format, isToday } from 'date-fns'
+import { format, parse, isToday } from 'date-fns'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { DateInput } from 'new-components/DateInput'
 import { CalendarIcon } from './CalendarIcon'
@@ -10,6 +10,7 @@ import { useStartDateMutation } from 'generated/graphql'
 
 interface Props {
   insuredAtOtherCompany: boolean
+  startDate: string | null
   offerId: string
 }
 
@@ -76,7 +77,7 @@ const HandleSwitchingWrapper = styled.div`
   margin-top: 10px;
   display: flex;
   justify-content: space-between;
-  padding: 0 20px;
+  padding: 0 1.25rem;
 `
 
 const HandleSwitchingLabel = styled.span`
@@ -89,12 +90,19 @@ const HandleSwitchingLabel = styled.span`
 
 export const StartDate: React.FC<Props> = ({
   offerId,
+  startDate,
   insuredAtOtherCompany,
 }) => {
+  const getDefaultDateValue = () => {
+    if (insuredAtOtherCompany) {
+      return null
+    }
+
+    return startDate ? parse(startDate, 'yyyy-MM-dd', new Date()) : new Date()
+  }
+
   const [datePickerOpen, setDatePickerOpen] = React.useState(false)
-  const [dateValue, setDateValue] = React.useState(
-    insuredAtOtherCompany ? null : new Date(),
-  )
+  const [dateValue, setDateValue] = React.useState(getDefaultDateValue)
   const textKeys = useTextKeys()
   const [setStartDate] = useStartDateMutation()
 
@@ -107,6 +115,18 @@ export const StartDate: React.FC<Props> = ({
     })
   }, [dateValue])
 
+  const getDateLabel = () => {
+    if (dateValue) {
+      if (isToday(dateValue)) {
+        return textKeys.SIDEBAR_STARTDATE_CELL_VALUE_NEW()
+      }
+
+      return format(dateValue, 'dd MMM yyyy')
+    }
+
+    return textKeys.SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER()
+  }
+
   return (
     <>
       <RowButton
@@ -118,13 +138,7 @@ export const StartDate: React.FC<Props> = ({
           <SubTitle>{textKeys.SIDEBAR_STARTDATE_CELL_SUBLABEL()}</SubTitle>
         </Label>
         <Value>
-          <DateLabel>
-            {dateValue
-              ? isToday(dateValue)
-                ? textKeys.SIDEBAR_STARTDATE_CELL_VALUE_NEW()
-                : format(dateValue, 'dd MMM yyyy')
-              : textKeys.SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER()}
-          </DateLabel>
+          <DateLabel>{getDateLabel()}</DateLabel>
           <CalendarIcon
             color={dateValue ? colorsV2.violet500 : colorsV2.gray}
           />
