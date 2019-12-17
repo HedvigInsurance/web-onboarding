@@ -1,10 +1,10 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand/dist'
+import { motion } from 'framer-motion'
 import { CompleteQuote, useSignOfferMutation } from 'generated/graphql'
 import { Button } from 'new-components/buttons'
 import { CompleteOfferDataForMember } from 'pages/OfferNew/types'
 import * as React from 'react'
-import AnimateHeight from 'react-animate-height'
 import { useMediaQuery } from 'react-responsive'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { InsuranceType } from 'utils/insuranceDomainUtils'
@@ -40,10 +40,6 @@ const ButtonWrapper = styled('div')`
   justify-content: center;
 `
 
-const SignStateWrapper = styled('div')<{ isVisible: boolean }>`
-  transition: opacity 100ms;
-  ${({ isVisible }) => (isVisible ? 'opacity: 1' : 'opacity: 0')};
-`
 const Disclaimer = styled('p')`
   font-size: 0.75rem;
   margin: 1rem 0 0;
@@ -113,19 +109,23 @@ export const Sign: React.FC<Props> = ({
         </Button>
       </ButtonWrapper>
 
-      <AnimateHeight height={signState === SignState.NOT_STARTED ? 0 : 'auto'}>
-        {
-          <SignStateWrapper isVisible={signState !== SignState.NOT_STARTED}>
-            <SignStatus
-              isSigning={signState !== SignState.NOT_STARTED}
-              onFailure={() => setSignState(SignState.FAILED)}
-              onSuccess={() => {
-                track(email!, offer)
-              }}
-            />
-          </SignStateWrapper>
+      <motion.div
+        initial={{ height: 'auto', opacity: 1 }}
+        animate={
+          signState === SignState.NOT_STARTED
+            ? { opacity: 0, height: 0 }
+            : { opacity: 1, height: 'auto' }
         }
-      </AnimateHeight>
+        transition={{ type: 'spring', stiffness: 400, damping: 100 }}
+      >
+        <SignStatus
+          isSigning={signState !== SignState.NOT_STARTED}
+          onFailure={() => setSignState(SignState.FAILED)}
+          onSuccess={() => {
+            track(email!, offer)
+          }}
+        />
+      </motion.div>
 
       <Disclaimer>{textKeys.CHECKOUT_SIGN_DISCLAIMER()}</Disclaimer>
     </Wrapper>
