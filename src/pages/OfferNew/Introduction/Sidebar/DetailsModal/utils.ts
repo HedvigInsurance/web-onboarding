@@ -291,7 +291,7 @@ export const extraBuildingTypes: {
   ExtraBuildingStorehouse: ExtraBuildingType.Storehouse,
 }
 
-export const getSchema = (quote: CompleteQuote): EditQuoteInput => {
+export const getInitialValues = (quote: CompleteQuote): EditQuoteInput => {
   const base = {
     street: quote.details.street,
     zipCode: quote.details.zipCode,

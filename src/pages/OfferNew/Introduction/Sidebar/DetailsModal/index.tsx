@@ -20,7 +20,7 @@ import { DetailInput } from './DetailInput'
 import { SupportSection } from './SupportSection'
 import {
   getFieldSchema,
-  getSchema,
+  getInitialValues,
   getValidationSchema,
   isApartmentFieldSchema,
   isHouseFieldSchema,
@@ -116,13 +116,13 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   const [editQuote] = useEditQuoteMutation()
   const fieldSchema = getFieldSchema(quote)
   const validationSchema = getValidationSchema(fieldSchema, quote)
-  const schema = getSchema(quote)
+  const initialValues = getInitialValues(quote)
 
   return (
     <Modal isVisible={isVisible} onClose={onClose} dynamicHeight>
       <Container>
         <Formik<EditQuoteInput>
-          initialValues={schema}
+          initialValues={initialValues}
           validationSchema={validationSchema}
           validateOnBlur
           onSubmit={(form) => {
@@ -265,15 +265,11 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                               <ContentColumnTitleButton
                                 type="button"
                                 onClick={() => {
-                                  arrayHelpers.insert(
-                                    formikProps.values.house?.extraBuildings
-                                      ?.length || 0,
-                                    {
-                                      type: ExtraBuildingType.Garage,
-                                      area: 10,
-                                      hasWaterConnected: false,
-                                    },
-                                  )
+                                  arrayHelpers.insert(0, {
+                                    type: ExtraBuildingType.Garage,
+                                    area: 10,
+                                    hasWaterConnected: false,
+                                  })
                                 }}
                               >
                                 {textKeys.DETAILS_MODULE_EXTRABUILDINGS_TABLE_BUTTON()}
@@ -312,7 +308,23 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
 
                                   <InputGroupDeleteButton
                                     type="button"
-                                    onClick={() => arrayHelpers.remove(index)}
+                                    onClick={() => {
+                                      const isLastItem =
+                                        formikProps.values.house?.extraBuildings
+                                          ?.length === 1
+
+                                      arrayHelpers.remove(index)
+
+                                      if (isLastItem) {
+                                        formikProps.setValues({
+                                          ...formikProps.values,
+                                          house: {
+                                            ...formikProps.values.house,
+                                            extraBuildings: [],
+                                          },
+                                        })
+                                      }
+                                    }}
                                   >
                                     {textKeys.DETAILS_MODULE_EXTRABUILDINGS_TABLE_REMOVE_BUILDING_BUTTON()}
                                   </InputGroupDeleteButton>
