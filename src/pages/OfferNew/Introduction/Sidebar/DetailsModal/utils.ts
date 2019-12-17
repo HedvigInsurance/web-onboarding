@@ -123,7 +123,7 @@ export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
           },
           numberOfBathrooms: {
             label: 'DETAILS_MODULE_TABLE_BATHROOMS_CELL_LABEL_HOUSE',
-            placeholder: 'DETAILS_MODULE_TABEL_BATHROOMS_CELL_LABEL_HOUSE',
+            placeholder: 'DETAILS_MODULE_TABLE_BATHROOMS_CELL_LABEL_HOUSE',
             type: inputTypes.number,
             validation: Yup.number()
               .min(0)
@@ -162,7 +162,7 @@ export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
               label:
                 'DETAILS_MODULE_EXTRABUILDINGS_TABLE_SIZE_CELL_LABEL_HOUSE',
               placeholder:
-                'DETAILS_MODULE_EXTRABUILDINGS_SIZE_BUILDINGTYPE_CELL_LABEL_HOUSE',
+                'DETAILS_MODULE_EXTRABUILDINGS_TABLE_SIZE_CELL_LABEL_HOUSE',
               mask: masks.area,
               type: inputTypes.number,
               validation: Yup.number()
