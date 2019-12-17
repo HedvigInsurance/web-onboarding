@@ -8,7 +8,7 @@ type RequiredFields<T> = {
   [P in keyof T]-?: NonNullable<T[P]>
 }
 
-export interface FieldType extends CoreInputFieldProps {
+export interface RegularFieldType extends CoreInputFieldProps {
   validation: Yup.Schema<string | number | boolean>
 }
 
@@ -16,7 +16,7 @@ export type ArrayFieldType<T> = {
   arrayValidation: Yup.ArraySchema<any[]>
 } & FieldSchemaBuilder<Unarray<T>>
 
-export type Field<T> = FieldType | ArrayFieldType<T>
+export type FieldType<T> = RegularFieldType | ArrayFieldType<T>
 
 export interface ApartmentFieldSchema {
   apartment: FieldSchemaBuilder<RequiredFields<EditApartmentInput>>
@@ -29,7 +29,7 @@ export interface HouseFieldSchema {
 export type FieldSchemaBuilder<T> = RequiredFields<
   {
     [P in keyof T]: T[P] extends string | number | boolean
-      ? FieldType
+      ? RegularFieldType
       : T[P] extends any[]
       ? ArrayFieldType<T[P]>
       : FieldSchemaBuilder<T[P]>

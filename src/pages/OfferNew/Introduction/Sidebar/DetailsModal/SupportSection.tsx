@@ -1,7 +1,8 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
-import * as React from 'react'
 import { InfoIcon } from 'components/icons/Info'
+import * as React from 'react'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 
 const Wrapper = styled.div`
   background: ${colorsV2.offwhite};
@@ -62,18 +63,21 @@ const Button = styled.button`
   }
 `
 
-export const SupportSection: React.FC<{}> = () => (
-  <Wrapper>
-    <IconWrapper>
-      <InfoIcon />
-    </IconWrapper>
-    <Content>
-      <Headline>Frågor?</Headline>
-      <Body>
-        Har några funderingar kring din information så kan du alltid skriva till
-        oss!
-      </Body>
-      <Button>Ställ en fråga</Button>
-    </Content>
-  </Wrapper>
-)
+export const SupportSection: React.FC = () => {
+  const textKeys = useTextKeys()
+
+  return (
+    <Wrapper>
+      <IconWrapper>
+        <InfoIcon />
+      </IconWrapper>
+      <Content>
+        <Headline>{textKeys.DETAILS_MODULE_INFOBOX_TITLE()}</Headline>
+        <Body>{textKeys.DETAILS_MODULE_INFOBOX_BODY()}</Body>
+        <Button type="button">
+          {textKeys.DETAILS_MODULE_INFOBOX_BUTTON()}
+        </Button>
+      </Content>
+    </Wrapper>
+  )
+}

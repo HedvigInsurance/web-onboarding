@@ -1,5 +1,5 @@
 import { Form, Formik } from 'formik'
-import { TextInput } from 'new-components/inputs/index'
+import { InputField } from 'new-components/inputs/index'
 import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 
@@ -18,7 +18,7 @@ export const UserDetailsForm: React.FC = () => {
     >
       {({ values }) => (
         <Form>
-          <TextInput
+          <InputField
             label={textKeys.CHECKOUT_EMAIL_LABEL()}
             placeholder={textKeys.CHECKOUT_EMAIL_PLACEHOLDER()}
             name="email"

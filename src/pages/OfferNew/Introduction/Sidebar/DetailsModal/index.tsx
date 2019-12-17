@@ -15,6 +15,7 @@ import {
   InputGroupRow,
 } from 'new-components/inputs/index'
 import * as React from 'react'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { DetailInput } from './DetailInput'
 import { SupportSection } from './SupportSection'
 import {
@@ -92,7 +93,7 @@ const Footer = styled.div`
   justify-content: center;
 `
 
-const Disclaimer = styled.div`
+const Warning = styled.div`
   font-size: 0.75rem;
   line-height: 1rem;
   margin-top: 1rem;
@@ -111,6 +112,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   isVisible,
   onClose,
 }) => {
+  const textKeys = useTextKeys()
   const [editQuote] = useEditQuoteMutation()
   const fieldSchema = getFieldSchema(quote)
   const validationSchema = getValidationSchema(fieldSchema, quote)
@@ -124,28 +126,24 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
           validationSchema={validationSchema}
           validateOnBlur
           onSubmit={(form) => {
-            editQuote({ variables: { input: form } })
-              .then(async (result) => {
-                if (!result) {
-                  return
-                }
+            editQuote({ variables: { input: form } }).then(async (result) => {
+              if (!result) {
+                return
+              }
 
-                if (result.errors && result.errors.length > 0) {
-                  return
-                }
+              if (result.errors && result.errors.length > 0) {
+                return
+              }
 
-                await refetch()
-                onClose()
-              })
-              .catch((err) => {
-                console.error(err)
-              })
+              await refetch()
+              onClose()
+            })
           }}
         >
           {(formikProps) => {
             return (
               <Form>
-                <Headline>Dina detaljer</Headline>
+                <Headline>{textKeys.DETAILS_MODULE_HEADLINE()}</Headline>
 
                 {isApartmentFieldSchema(fieldSchema, quote) && (
                   <Content>
@@ -196,7 +194,9 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                 {isHouseFieldSchema(fieldSchema, quote) && (
                   <Content>
                     <ContentColumn>
-                      <ContentColumnTitle>Din bostad</ContentColumnTitle>
+                      <ContentColumnTitle>
+                        {textKeys.DETAILS_MODULE_TABLE_TITLE()}
+                      </ContentColumnTitle>
                       <InputGroup>
                         <DetailInput
                           field={fieldSchema.house.street}
@@ -204,14 +204,12 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                           nameRoot="house"
                           name="street"
                         />
-
                         <DetailInput
                           field={fieldSchema.house.zipCode}
                           formikProps={formikProps}
                           nameRoot="house"
                           name="zipCode"
                         />
-
                         <InputGroupRow>
                           <DetailInput
                             field={fieldSchema.house.livingSpace}
@@ -219,7 +217,6 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                             nameRoot="house"
                             name="livingSpace"
                           />
-
                           <DetailInput
                             field={fieldSchema.house.ancillarySpace}
                             formikProps={formikProps}
@@ -235,7 +232,6 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                             nameRoot="house"
                             name="numberOfBathrooms"
                           />
-
                           <DetailInput
                             field={fieldSchema.house.yearOfConstruction}
                             formikProps={formikProps}
@@ -250,7 +246,6 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                           nameRoot="house"
                           name="householdSize"
                         />
-
                         <DetailInput
                           field={fieldSchema.house.isSubleted}
                           formikProps={formikProps}
@@ -266,7 +261,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                         render={(arrayHelpers) => (
                           <>
                             <ContentColumnTitle>
-                              Övriga byggnader
+                              {textKeys.DETAILS_MODULE_EXTRABUILDINGS_TABLE_TITLE()}
                               <ContentColumnTitleButton
                                 type="button"
                                 onClick={() => {
@@ -281,7 +276,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                                   )
                                 }}
                               >
-                                Lägg till byggnad
+                                {textKeys.DETAILS_MODULE_EXTRABUILDINGS_TABLE_BUTTON()}
                               </ContentColumnTitleButton>
                             </ContentColumnTitle>
                             {formikProps.values.house?.extraBuildings?.map(
@@ -319,7 +314,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                                     type="button"
                                     onClick={() => arrayHelpers.remove(index)}
                                   >
-                                    Ta bort byggnad
+                                    {textKeys.DETAILS_MODULE_EXTRABUILDINGS_TABLE_REMOVE_BUILDING_BUTTON()}
                                   </InputGroupDeleteButton>
                                 </InputGroup>
                               ),
@@ -331,8 +326,10 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                   </Content>
                 )}
                 <Footer>
-                  <Button type="submit">Uppdatera detaljer</Button>
-                  <Disclaimer>Ditt pris kan komma att uppdateras</Disclaimer>
+                  <Button type="submit">
+                    {textKeys.DETAILS_MODULE_BUTTON()}
+                  </Button>
+                  <Warning>{textKeys.DETAILS_MODULE_BUTTON_WARNING()}</Warning>
                 </Footer>
               </Form>
             )

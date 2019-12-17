@@ -6,7 +6,7 @@ import { motion } from 'framer-motion'
 import { useRedeemCodeMutation } from 'generated/graphql'
 import hexToRgba from 'hex-to-rgba'
 import { Button } from 'new-components/buttons'
-import { TextInput } from 'new-components/inputs/index'
+import { InputField } from 'new-components/inputs/index'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import * as Yup from 'yup'
@@ -190,10 +190,11 @@ export const DiscountCodeModal: React.FC<Props> = ({
           {({ touched, errors, values }) => (
             <Form>
               <DiscountInputWrapper>
-                <TextInput
+                <InputField
                   label={textKeys.SIDEBAR_ADD_DISCOUNT_CELL_LABEL()}
                   placeholder={textKeys.SIDEBAR_ADD_DISCOUNT_CELL_PLACEHOLDER()}
                   name="code"
+                  type="text"
                   autoComplete="off"
                   touched={touched.code}
                   errors={textKeys[errors.code || '']()}

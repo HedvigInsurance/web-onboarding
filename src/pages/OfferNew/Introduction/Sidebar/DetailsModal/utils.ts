@@ -10,11 +10,11 @@ import * as Yup from 'yup'
 import { isApartment, isHouse, isStudent } from '../../../utils'
 import {
   ApartmentFieldSchema,
+  ArrayFieldType,
   FieldSchema,
-  Field,
   FieldType,
   HouseFieldSchema,
-  ArrayFieldType,
+  RegularFieldType,
 } from './types'
 
 export const isApartmentFieldSchema = (
@@ -37,20 +37,20 @@ export const isHouseFieldSchema = (
 export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
   const base = {
     street: {
-      label: 'Adress',
-      placeholder: 'Adress',
+      label: 'DETAILS_MODULE_TABLE_ADDRESS_CELL_LABEL',
+      placeholder: 'DETAILS_MODULE_TABLE_ADDRESS_CELL_LABEL',
       validation: Yup.string().required(),
     },
     zipCode: {
-      label: 'Postnummer',
-      placeholder: 'Postnummer',
+      label: 'DETAILS_MODULE_TABLE_POSTALCODE_CELL_LABEL',
+      placeholder: 'DETAILS_MODULE_TABLE_POSTALCODE_CELL_LABEL',
       mask: masks.zipCode,
       type: inputTypes.text,
       validation: Yup.string().matches(/^[0-9]{3}[0-9]{2}$/),
     },
     householdSize: {
-      label: 'Antal försäkrade',
-      placeholder: 'Antal försäkrade',
+      label: 'DETAILS_MODULE_TABLE_INSUREDPEOPLE_CELL_LABEL',
+      placeholder: 'DETAILS_MODULE_TABLE_INSUREDPEOPLE_CELL_LABEL',
       type: inputTypes.number,
       validation: Yup.number().required(),
     },
@@ -61,8 +61,8 @@ export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
         apartment: {
           ...base,
           livingSpace: {
-            label: 'Storlek',
-            placeholder: 'Storlek',
+            label: 'DETAILS_MODULE_TABLE_SIZE_CELL_LABEL_APARTMENT',
+            placeholder: 'DETAILS_MODULE_TABLE_SIZE_CELL_LABEL_APARTMENT',
             mask: masks.area,
             type: inputTypes.number,
             validation: Yup.number()
@@ -70,17 +70,30 @@ export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
               .required(),
           },
           type: {
-            label: 'Typ av boende',
-            placeholder: 'Typ av boende',
+            label: 'DETAILS_MODULE_TABLE_RECIDENCY_TYPE_CELL_LABEL_APARTMENT',
+            placeholder:
+              'DETAILS_MODULE_TABLE_RECIDENCY_TYPE_CELL_LABEL_APARTMENT',
             options: [
               ...(isStudent(quote.details)
                 ? [
-                    { label: 'Bostadsrätt', value: ApartmentType.StudentBrf },
-                    { label: 'Hyresrätt', value: ApartmentType.StudentRent },
+                    {
+                      label: 'SIDEBAR_INSURANCE_TYPE_BRF',
+                      value: ApartmentType.StudentBrf,
+                    },
+                    {
+                      label: 'SIDEBAR_INSURANCE_TYPE_RENT',
+                      value: ApartmentType.StudentRent,
+                    },
                   ]
                 : [
-                    { label: 'Bostadsrätt', value: ApartmentType.Brf },
-                    { label: 'Hyresrätt', value: ApartmentType.Rent },
+                    {
+                      label: 'SIDEBAR_INSURANCE_TYPE_BRF',
+                      value: ApartmentType.Brf,
+                    },
+                    {
+                      label: 'SIDEBAR_INSURANCE_TYPE_RENT',
+                      value: ApartmentType.Rent,
+                    },
                   ]),
             ],
             validation: Yup.string().required(),
@@ -91,8 +104,8 @@ export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
         house: {
           ...base,
           livingSpace: {
-            label: 'Boyta',
-            placeholder: 'Boyta',
+            label: 'DETAILS_MODULE_TABLE_LIVINGSPACE_CELL_LABEL_HOUSE',
+            placeholder: 'DETAILS_MODULE_TABLE_LIVINGSPACE_CELL_LABEL_HOUSE',
             mask: masks.area,
             type: inputTypes.number,
             validation: Yup.number()
@@ -100,8 +113,8 @@ export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
               .required(),
           },
           ancillarySpace: {
-            label: 'Biyta',
-            placeholder: 'Biyta',
+            label: 'DETAILS_MODULE_TABLE_ANCILLARYAREA_CELL_LABEL_HOUSE',
+            placeholder: 'DETAILS_MODULE_TABLE_ANCILLARYAREA_CELL_LABEL_HOUSE',
             mask: masks.area,
             type: inputTypes.number,
             validation: Yup.number()
@@ -109,23 +122,23 @@ export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
               .required(),
           },
           numberOfBathrooms: {
-            label: 'Antal badrum',
-            placeholder: 'Antal badrum',
+            label: 'DETAILS_MODULE_TABLE_BATHROOMS_CELL_LABEL_HOUSE',
+            placeholder: 'DETAILS_MODULE_TABEL_BATHROOMS_CELL_LABEL_HOUSE',
             type: inputTypes.number,
             validation: Yup.number()
               .min(0)
               .required(),
           },
           yearOfConstruction: {
-            label: 'Byggnadsår',
-            placeholder: 'Byggnadsår',
+            label: 'DETAILS_MODULE_TABLE_YEARBUILT_CELL_LABEL_HOUSE',
+            placeholder: 'DETAILS_MODULE_TABLE_YEARBUILT_CELL_LABEL_HOUSE',
             mask: masks.year,
             type: inputTypes.number,
             validation: Yup.number().required(),
           },
           isSubleted: {
-            label: 'Har hyresgäst',
-            placeholder: 'Har hyresgäst',
+            label: 'DETAILS_MODULE_TABLE_SUBLETTING_CELL_LABEL_HOUSE',
+            placeholder: 'DETAILS_MODULE_TABLE_SUBLETTING_CELL_LABEL_HOUSE',
             options: [
               { label: 'Ja', value: 'true' },
               { label: 'Nej', value: 'false' },
@@ -135,8 +148,10 @@ export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
           extraBuildings: {
             arrayValidation: Yup.array(),
             type: {
-              label: 'Byggnadstyp',
-              placeholder: 'Byggnadstyp',
+              label:
+                'DETAILS_MODULE_EXTRABUILDINGS_TABLE_BUILDINGTYPE_CELL_LABEL_HOUSE',
+              placeholder:
+                'DETAILS_MODULE_EXTRABUILDINGS_TABLE_BUILDINGTYPE_CELL_LABEL_HOUSE',
               options: Object.values(ExtraBuildingType).map((value) => ({
                 label: getExtraBuilding(value),
                 value,
@@ -144,8 +159,10 @@ export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
               validation: Yup.string().required(),
             },
             area: {
-              label: 'Storlek',
-              placeholder: 'Storlek',
+              label:
+                'DETAILS_MODULE_EXTRABUILDINGS_TABLE_SIZE_CELL_LABEL_HOUSE',
+              placeholder:
+                'DETAILS_MODULE_EXTRABUILDINGS_SIZE_BUILDINGTYPE_CELL_LABEL_HOUSE',
               mask: masks.area,
               type: inputTypes.number,
               validation: Yup.number()
@@ -153,8 +170,10 @@ export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
                 .required(),
             },
             hasWaterConnected: {
-              label: 'Indraget vatten',
-              placeholder: 'Indraget vatten',
+              label:
+                'DETAILS_MODULE_EXTRABUILDINGS_TABLE_WATER_CELL_LABEL_HOUSE',
+              placeholder:
+                'DETAILS_MODULE_EXTRABUILDINGS_TABLE_WATER_CELL_LABEL_HOUSE',
               options: [
                 { label: 'Ja', value: 'true' },
                 { label: 'Nej', value: 'false' },
@@ -174,40 +193,54 @@ export const getValidationSchema = (
     ? fieldSchema.apartment
     : fieldSchema.house
 
-  const validation = Object.entries(fields).reduce((acc, [key, value]) => {
-    if (isNormalFieldType(value)) {
-      return { ...acc, [key]: value.validation }
-    }
-
-    if (isArrayFieldType(value)) {
-      return {
-        ...acc,
-        [key]: value.arrayValidation.of(
-          Yup.object().shape(
-            Object.assign(
-              {},
-              ...Object.entries(value)
-                .filter(([k]) => k !== 'arrayValidation')
-                .map(([k, v]: any) => ({ [k]: v.validation })),
-            ),
-          ),
-        ),
-      }
-    }
-    return { ...acc }
-  }, {})
-
   return Yup.object({
-    house: Yup.object({ ...validation }),
+    [isApartmentFieldSchema(fieldSchema, quote)
+      ? 'apartment'
+      : 'house']: Yup.object({
+      ...Object.entries(fields).reduce(
+        (acc, t) => ({
+          ...acc,
+          ...getValidationSchemaHelper(t),
+        }),
+        {},
+      ),
+    }),
   })
 }
 
-export const isNormalFieldType = <T>(field: Field<T>): field is FieldType => {
+type FieldTuple<T> = [string, FieldType<T>]
+
+const getValidationSchemaHelper = <T>([key, value]: FieldTuple<T>): any => {
+  if (isRegularFieldType(value)) {
+    return { [key]: value.validation }
+  }
+
+  if (isArrayFieldType(value)) {
+    return {
+      [key]: value.arrayValidation.of(
+        Yup.object().shape(
+          Object.assign(
+            {},
+            ...Object.entries(value)
+              .filter(([k]) => k !== 'arrayValidation')
+              .map((v) => getValidationSchemaHelper(v as FieldTuple<T>)),
+          ),
+        ),
+      ),
+    }
+  }
+
+  return { [key]: Yup.object().shape({ ...getValidationSchemaHelper(value) }) }
+}
+
+export const isRegularFieldType = <T>(
+  field: FieldType<T>,
+): field is RegularFieldType => {
   return field.hasOwnProperty('validation')
 }
 
 export const isArrayFieldType = <T>(
-  field: Field<T>,
+  field: FieldType<T>,
 ): field is ArrayFieldType<T> => {
   return field.hasOwnProperty('arrayValidation')
 }
@@ -216,20 +249,20 @@ export const getExtraBuilding = (
   extraBuildingType: ExtraBuildingType,
 ): string => {
   const map = {
-    [ExtraBuildingType.Attefall]: 'Attefall',
-    [ExtraBuildingType.Barn]: 'Lada',
-    [ExtraBuildingType.Boathouse]: 'Båthus',
-    [ExtraBuildingType.Carport]: 'Carport',
-    [ExtraBuildingType.Friggebod]: 'Friggebod',
-    [ExtraBuildingType.Garage]: 'Garage',
-    [ExtraBuildingType.Gazebo]: 'Lusthus',
-    [ExtraBuildingType.Greenhouse]: 'Växthus',
-    [ExtraBuildingType.Guesthouse]: 'Gästhus',
-    [ExtraBuildingType.Other]: 'Annat',
-    [ExtraBuildingType.Outhouse]: 'Uthus',
-    [ExtraBuildingType.Sauna]: 'Bastu',
-    [ExtraBuildingType.Shed]: 'Skjul',
-    [ExtraBuildingType.Storehouse]: 'Förråd',
+    [ExtraBuildingType.Attefall]: 'DETAILS_MODULE_EXTRABUILDINGS_ATTEFALL',
+    [ExtraBuildingType.Barn]: 'DETAILS_MODULE_EXTRABUILDINGS_BARN',
+    [ExtraBuildingType.Boathouse]: 'DETAILS_MODULE_EXTRABUILDINGS_BOATHOUSE',
+    [ExtraBuildingType.Carport]: 'DETAILS_MODULE_EXTRABUILDINGS_CARPORT',
+    [ExtraBuildingType.Friggebod]: 'DETAILS_MODULE_EXTRABUILDINGS_FRIGGEBOD',
+    [ExtraBuildingType.Garage]: 'DETAILS_MODULE_EXTRABUILDINGS_GARAGE',
+    [ExtraBuildingType.Gazebo]: 'DETAILS_MODULE_EXTRABUILDINGS_GAZEBO',
+    [ExtraBuildingType.Greenhouse]: 'DETAILS_MODULE_EXTRABUILDINGS_GREENHOUSE',
+    [ExtraBuildingType.Guesthouse]: 'DETAILS_MODULE_EXTRABUILDINGS_GUESTHOUSE',
+    [ExtraBuildingType.Other]: 'DETAILS_MODULE_EXTRABUILDINGS_OTHER',
+    [ExtraBuildingType.Outhouse]: 'DETAILS_MODULE_EXTRABUILDINGS_OUTHOUSE',
+    [ExtraBuildingType.Sauna]: 'DETAILS_MODULE_EXTRABUILDINGS_SAUNA',
+    [ExtraBuildingType.Shed]: 'DETAILS_MODULE_EXTRABUILDINGS_SHED',
+    [ExtraBuildingType.Storehouse]: 'DETAILS_MODULE_EXTRABUILDINGS_STOREHOUSE',
   }
 
   if (!map[extraBuildingType]) {

@@ -139,7 +139,7 @@ export interface TextInputProps extends CoreInputFieldProps {
   errors?: string
 }
 
-export const TextInput: React.FC<TextInputProps &
+export const InputField: React.FC<TextInputProps &
   GenericFieldHTMLAttributes> = ({
   label,
   mask,

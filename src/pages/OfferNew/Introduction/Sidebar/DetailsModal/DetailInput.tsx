@@ -1,11 +1,12 @@
 import { FormikProps, GenericFieldHTMLAttributes, getIn } from 'formik'
 import { EditQuoteInput } from 'generated/graphql'
-import { TextInput } from 'new-components/inputs'
+import { InputField } from 'new-components/inputs'
 import * as React from 'react'
-import { FieldType } from './types'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { RegularFieldType } from './types'
 
 interface DetailInputProps {
-  field?: FieldType
+  field?: RegularFieldType
   formikProps: FormikProps<EditQuoteInput>
   nameRoot: 'apartment' | 'house'
   name: string
@@ -13,16 +14,20 @@ interface DetailInputProps {
 
 export const DetailInput: React.FC<DetailInputProps &
   GenericFieldHTMLAttributes> = ({ field, formikProps, nameRoot, name }) => {
+  const textKeys = useTextKeys()
   const formikName = `${nameRoot}.${name}`
 
   return field ? (
-    <TextInput
-      label={field.label}
-      placeholder={field.placeholder}
+    <InputField
+      label={textKeys[field.label]()}
+      placeholder={textKeys[field.placeholder]()}
       name={formikName}
       mask={field.mask}
       type={field.type}
-      options={field.options}
+      options={field.options?.map((o) => ({
+        label: textKeys[o.label](),
+        value: o.value,
+      }))}
       showErrorMessage={false}
       errors={getIn(formikProps.errors[nameRoot], name)}
       touched={getIn(formikProps.touched[nameRoot], name)}
