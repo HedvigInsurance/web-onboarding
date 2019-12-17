@@ -1,18 +1,18 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import { Modal, ModalProps } from 'components/ModalNew'
-import { Form, Formik, getIn, FieldArray } from 'formik'
+import { FieldArray, Form, Formik } from 'formik'
 import {
   CompleteQuote,
   EditQuoteInput,
-  useEditQuoteMutation,
   ExtraBuildingType,
+  useEditQuoteMutation,
 } from 'generated/graphql'
 import { Button } from 'new-components/buttons'
 import {
   InputGroup,
-  InputGroupRow,
   InputGroupDeleteButton,
+  InputGroupRow,
 } from 'new-components/inputs/index'
 import * as React from 'react'
 import { DetailInput } from './DetailInput'
@@ -142,7 +142,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
               })
           }}
         >
-          {({ touched, errors, values, setFieldValue }) => {
+          {(formikProps) => {
             return (
               <Form>
                 <Headline>Dina detaljer</Headline>
@@ -153,43 +153,37 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                       <InputGroup>
                         <DetailInput
                           field={fieldSchema.apartment.street}
-                          name="apartment.street"
-                          errors={getIn(errors.apartment, 'street')}
-                          touched={getIn(touched.apartment, 'street')}
-                          setFieldValue={setFieldValue}
+                          formikProps={formikProps}
+                          nameRoot="apartment"
+                          name="street"
                         />
 
                         <DetailInput
                           field={fieldSchema.apartment.zipCode}
-                          name="apartment.zipCode"
-                          errors={getIn(errors.apartment, 'zipCode')}
-                          touched={getIn(touched.apartment, 'zipCode')}
-                          setFieldValue={setFieldValue}
+                          formikProps={formikProps}
+                          nameRoot="apartment"
+                          name="zipCode"
                         />
 
                         <DetailInput
                           field={fieldSchema.apartment.type}
-                          name="apartment.type"
-                          errors={getIn(errors.apartment, 'type')}
-                          touched={getIn(touched.apartment, 'type')}
-                          setFieldValue={setFieldValue}
+                          formikProps={formikProps}
+                          nameRoot="apartment"
+                          name="type"
                         />
 
                         <DetailInput
                           field={fieldSchema.apartment.livingSpace}
-                          name="apartment.livingSpace"
-                          errors={getIn(errors.apartment, 'livingSpace')}
-                          touched={getIn(touched.apartment, 'livingSpace')}
-                          setFieldValue={setFieldValue}
+                          formikProps={formikProps}
+                          nameRoot="apartment"
+                          name="livingSpace"
                         />
 
                         <DetailInput
                           field={fieldSchema.apartment.householdSize}
-                          name="apartment.householdSize"
-                          errors={getIn(errors.apartment, 'householdSize')}
-                          touched={getIn(touched.apartment, 'householdSize')}
-                          setFieldValue={setFieldValue}
-                          min={1}
+                          formikProps={formikProps}
+                          nameRoot="apartment"
+                          name="householdSize"
                         />
                       </InputGroup>
                     </ContentColumn>
@@ -206,66 +200,62 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                       <InputGroup>
                         <DetailInput
                           field={fieldSchema.house.street}
-                          name="house.street"
-                          errors={getIn(errors.house, 'street')}
-                          touched={getIn(touched.house, 'street')}
-                          setFieldValue={setFieldValue}
+                          formikProps={formikProps}
+                          nameRoot="house"
+                          name="street"
                         />
+
                         <DetailInput
                           field={fieldSchema.house.zipCode}
-                          name="house.zipCode"
-                          errors={getIn(errors.house, 'zipCode')}
-                          touched={getIn(touched.house, 'zipCode')}
-                          setFieldValue={setFieldValue}
+                          formikProps={formikProps}
+                          nameRoot="house"
+                          name="zipCode"
                         />
+
                         <InputGroupRow>
                           <DetailInput
                             field={fieldSchema.house.livingSpace}
-                            name="house.livingSpace"
-                            errors={getIn(errors.house, 'livingSpace')}
-                            touched={getIn(touched.house, 'livingSpace')}
-                            setFieldValue={setFieldValue}
+                            formikProps={formikProps}
+                            nameRoot="house"
+                            name="livingSpace"
                           />
+
                           <DetailInput
                             field={fieldSchema.house.ancillarySpace}
-                            name="house.ancillarySpace"
-                            errors={getIn(errors.house, 'ancillarySpace')}
-                            touched={getIn(touched.house, 'ancillarySpace')}
-                            setFieldValue={setFieldValue}
+                            formikProps={formikProps}
+                            nameRoot="house"
+                            name="ancillarySpace"
                           />
                         </InputGroupRow>
 
                         <InputGroupRow>
                           <DetailInput
                             field={fieldSchema.house.numberOfBathrooms}
-                            name="house.numberOfBathrooms"
-                            errors={getIn(errors.house, 'numberOfBathrooms')}
-                            touched={getIn(touched.house, 'numberOfBathrooms')}
-                            setFieldValue={setFieldValue}
+                            formikProps={formikProps}
+                            nameRoot="house"
+                            name="numberOfBathrooms"
                           />
+
                           <DetailInput
                             field={fieldSchema.house.yearOfConstruction}
-                            name="house.yearOfConstruction"
-                            errors={getIn(errors.house, 'yearOfConstruction')}
-                            touched={getIn(touched.house, 'yearOfConstruction')}
-                            setFieldValue={setFieldValue}
+                            formikProps={formikProps}
+                            nameRoot="house"
+                            name="yearOfConstruction"
                           />
                         </InputGroupRow>
 
                         <DetailInput
                           field={fieldSchema.house.householdSize}
-                          name="house.householdSize"
-                          errors={getIn(errors.house, 'householdSize')}
-                          touched={getIn(touched.house, 'householdSize')}
-                          setFieldValue={setFieldValue}
+                          formikProps={formikProps}
+                          nameRoot="house"
+                          name="householdSize"
                         />
 
                         <DetailInput
                           field={fieldSchema.house.isSubleted}
-                          name="house.isSubleted"
-                          errors={getIn(errors.house, 'isSubleted')}
-                          touched={getIn(touched.house, 'isSubleted')}
-                          setFieldValue={setFieldValue}
+                          formikProps={formikProps}
+                          nameRoot="house"
+                          name="isSubleted"
                         />
                       </InputGroup>
                       <SupportSection />
@@ -281,7 +271,8 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                                 type="button"
                                 onClick={() => {
                                   arrayHelpers.insert(
-                                    values.house?.extraBuildings?.length || 0,
+                                    formikProps.values.house?.extraBuildings
+                                      ?.length || 0,
                                     {
                                       type: ExtraBuildingType.Garage,
                                       area: 10,
@@ -293,60 +284,46 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                                 Lägg till byggnad
                               </ContentColumnTitleButton>
                             </ContentColumnTitle>
-                            {values.house?.extraBuildings?.map((_, index) => (
-                              <InputGroup key={index}>
-                                <DetailInput
-                                  field={fieldSchema.house.extraBuildings.type}
-                                  name={`house.extraBuildings.${index}.type`}
-                                  errors={getIn(
-                                    errors.house,
-                                    `extraBuildings.${index}.type`,
-                                  )}
-                                  touched={getIn(
-                                    touched.apartment,
-                                    `extraBuildings.${index}.type`,
-                                  )}
-                                  setFieldValue={setFieldValue}
-                                />
+                            {formikProps.values.house?.extraBuildings?.map(
+                              (_, index) => (
+                                <InputGroup key={index}>
+                                  <DetailInput
+                                    field={
+                                      fieldSchema.house.extraBuildings.type
+                                    }
+                                    formikProps={formikProps}
+                                    nameRoot="house"
+                                    name={`extraBuildings.${index}.type`}
+                                  />
 
-                                <DetailInput
-                                  field={fieldSchema.house.extraBuildings.area}
-                                  name={`house.extraBuildings.${index}.area`}
-                                  errors={getIn(
-                                    errors.house,
-                                    `extraBuildings.${index}.area`,
-                                  )}
-                                  touched={getIn(
-                                    touched.apartment,
-                                    `extraBuildings.${index}.area`,
-                                  )}
-                                  setFieldValue={setFieldValue}
-                                />
+                                  <DetailInput
+                                    field={
+                                      fieldSchema.house.extraBuildings.area
+                                    }
+                                    formikProps={formikProps}
+                                    nameRoot="house"
+                                    name={`extraBuildings.${index}.area`}
+                                  />
 
-                                <DetailInput
-                                  field={
-                                    fieldSchema.house.extraBuildings
-                                      .hasWaterConnected
-                                  }
-                                  name={`house.extraBuildings.${index}.hasWaterConnected`}
-                                  errors={getIn(
-                                    errors.house,
-                                    `extraBuildings.${index}.hasWaterConnected`,
-                                  )}
-                                  touched={getIn(
-                                    touched.apartment,
-                                    `extraBuildings.${index}.hasWaterConnected`,
-                                  )}
-                                  setFieldValue={setFieldValue}
-                                />
-                                <InputGroupDeleteButton
-                                  type="button"
-                                  onClick={() => arrayHelpers.remove(index)}
-                                >
-                                  Ta bort byggnad
-                                </InputGroupDeleteButton>
-                              </InputGroup>
-                            ))}
+                                  <DetailInput
+                                    field={
+                                      fieldSchema.house.extraBuildings
+                                        .hasWaterConnected
+                                    }
+                                    formikProps={formikProps}
+                                    nameRoot="house"
+                                    name={`extraBuildings.${index}.hasWaterConnected`}
+                                  />
+
+                                  <InputGroupDeleteButton
+                                    type="button"
+                                    onClick={() => arrayHelpers.remove(index)}
+                                  >
+                                    Ta bort byggnad
+                                  </InputGroupDeleteButton>
+                                </InputGroup>
+                              ),
+                            )}
                           </>
                         )}
                       />
