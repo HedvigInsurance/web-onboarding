@@ -221,7 +221,7 @@ export const Checkout: React.FC<Props> = ({ offer, isOpen, onClose }) => {
 
         <SlidingSign
           visibilityState={visibilityState}
-          personalNumber="20121212-1212"
+          personalNumber={offer.lastQuoteOfMember.ssn}
           email={email}
         />
       </OuterWrapper>

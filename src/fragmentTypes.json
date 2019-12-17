@@ -1,1 +1,164 @@
-{"__schema":{"types":[{"kind":"INTERFACE","name":"Node","possibleTypes":[{"name":"Language"},{"name":"Translation"},{"name":"Key"},{"name":"MarketingStory"},{"name":"Asset"}]},{"kind":"UNION","name":"ExtraBuilding","possibleTypes":[{"name":"ExtraBuildingGarage"},{"name":"ExtraBuildingCarport"},{"name":"ExtraBuildingShed"},{"name":"ExtraBuildingStorehouse"},{"name":"ExtraBuildingFriggebod"},{"name":"ExtraBuildingAttefall"},{"name":"ExtraBuildingOuthouse"},{"name":"ExtraBuildingGuesthouse"},{"name":"ExtraBuildingGazebo"},{"name":"ExtraBuildingGreenhouse"},{"name":"ExtraBuildingSauna"},{"name":"ExtraBuildingBarn"},{"name":"ExtraBuildingBoathouse"},{"name":"ExtraBuildingOther"}]},{"kind":"INTERFACE","name":"ExtraBuildingCore","possibleTypes":[{"name":"ExtraBuildingGarage"},{"name":"ExtraBuildingCarport"},{"name":"ExtraBuildingShed"},{"name":"ExtraBuildingStorehouse"},{"name":"ExtraBuildingFriggebod"},{"name":"ExtraBuildingAttefall"},{"name":"ExtraBuildingOuthouse"},{"name":"ExtraBuildingGuesthouse"},{"name":"ExtraBuildingGazebo"},{"name":"ExtraBuildingGreenhouse"},{"name":"ExtraBuildingSauna"},{"name":"ExtraBuildingBarn"},{"name":"ExtraBuildingBoathouse"},{"name":"ExtraBuildingOther"}]},{"kind":"UNION","name":"MessageBody","possibleTypes":[{"name":"MessageBodySingleSelect"},{"name":"MessageBodyMultipleSelect"},{"name":"MessageBodyText"},{"name":"MessageBodyNumber"},{"name":"MessageBodyAudio"},{"name":"MessageBodyBankIdCollect"},{"name":"MessageBodyFile"},{"name":"MessageBodyParagraph"},{"name":"MessageBodyUndefined"}]},{"kind":"INTERFACE","name":"MessageBodyCore","possibleTypes":[{"name":"MessageBodySingleSelect"},{"name":"MessageBodyMultipleSelect"},{"name":"MessageBodyText"},{"name":"MessageBodyNumber"},{"name":"MessageBodyAudio"},{"name":"MessageBodyBankIdCollect"},{"name":"MessageBodyFile"},{"name":"MessageBodyParagraph"},{"name":"MessageBodyUndefined"}]},{"kind":"UNION","name":"MessageBodyChoices","possibleTypes":[{"name":"MessageBodyChoicesUndefined"},{"name":"MessageBodyChoicesSelection"},{"name":"MessageBodyChoicesLink"}]},{"kind":"INTERFACE","name":"MessageBodyChoicesCore","possibleTypes":[{"name":"MessageBodyChoicesUndefined"},{"name":"MessageBodyChoicesSelection"},{"name":"MessageBodyChoicesLink"}]},{"kind":"UNION","name":"Incentive","possibleTypes":[{"name":"MonthlyCostDeduction"},{"name":"FreeMonths"},{"name":"NoDiscount"}]},{"kind":"UNION","name":"Referral","possibleTypes":[{"name":"ActiveReferral"},{"name":"InProgressReferral"},{"name":"AcceptedReferral"},{"name":"TerminatedReferral"}]},{"kind":"UNION","name":"Quote","possibleTypes":[{"name":"CompleteQuote"},{"name":"IncompleteQuote"}]},{"kind":"UNION","name":"CompleteQuoteDetails","possibleTypes":[{"name":"CompleteApartmentQuoteDetails"},{"name":"CompleteHouseQuoteDetails"}]},{"kind":"UNION","name":"IncompleteQuoteDetails","possibleTypes":[{"name":"IncompleteApartmentQuoteDetails"},{"name":"IncompleteHouseQuoteDetails"}]},{"kind":"UNION","name":"CommonClaimLayouts","possibleTypes":[{"name":"TitleAndBulletPoints"},{"name":"Emergency"}]},{"kind":"UNION","name":"CreateQuoteResult","possibleTypes":[{"name":"CompleteQuote"},{"name":"UnderwritingLimitsHit"}]}]}}
+{
+  "__schema": {
+    "types": [
+      {
+        "kind": "INTERFACE",
+        "name": "Node",
+        "possibleTypes": [
+          { "name": "Language" },
+          { "name": "Translation" },
+          { "name": "Key" },
+          { "name": "MarketingStory" },
+          { "name": "Asset" }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "ExtraBuilding",
+        "possibleTypes": [
+          { "name": "ExtraBuildingGarage" },
+          { "name": "ExtraBuildingCarport" },
+          { "name": "ExtraBuildingShed" },
+          { "name": "ExtraBuildingStorehouse" },
+          { "name": "ExtraBuildingFriggebod" },
+          { "name": "ExtraBuildingAttefall" },
+          { "name": "ExtraBuildingOuthouse" },
+          { "name": "ExtraBuildingGuesthouse" },
+          { "name": "ExtraBuildingGazebo" },
+          { "name": "ExtraBuildingGreenhouse" },
+          { "name": "ExtraBuildingSauna" },
+          { "name": "ExtraBuildingBarn" },
+          { "name": "ExtraBuildingBoathouse" },
+          { "name": "ExtraBuildingOther" }
+        ]
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "ExtraBuildingCore",
+        "possibleTypes": [
+          { "name": "ExtraBuildingGarage" },
+          { "name": "ExtraBuildingCarport" },
+          { "name": "ExtraBuildingShed" },
+          { "name": "ExtraBuildingStorehouse" },
+          { "name": "ExtraBuildingFriggebod" },
+          { "name": "ExtraBuildingAttefall" },
+          { "name": "ExtraBuildingOuthouse" },
+          { "name": "ExtraBuildingGuesthouse" },
+          { "name": "ExtraBuildingGazebo" },
+          { "name": "ExtraBuildingGreenhouse" },
+          { "name": "ExtraBuildingSauna" },
+          { "name": "ExtraBuildingBarn" },
+          { "name": "ExtraBuildingBoathouse" },
+          { "name": "ExtraBuildingOther" }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "MessageBody",
+        "possibleTypes": [
+          { "name": "MessageBodySingleSelect" },
+          { "name": "MessageBodyMultipleSelect" },
+          { "name": "MessageBodyText" },
+          { "name": "MessageBodyNumber" },
+          { "name": "MessageBodyAudio" },
+          { "name": "MessageBodyBankIdCollect" },
+          { "name": "MessageBodyFile" },
+          { "name": "MessageBodyParagraph" },
+          { "name": "MessageBodyUndefined" }
+        ]
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "MessageBodyCore",
+        "possibleTypes": [
+          { "name": "MessageBodySingleSelect" },
+          { "name": "MessageBodyMultipleSelect" },
+          { "name": "MessageBodyText" },
+          { "name": "MessageBodyNumber" },
+          { "name": "MessageBodyAudio" },
+          { "name": "MessageBodyBankIdCollect" },
+          { "name": "MessageBodyFile" },
+          { "name": "MessageBodyParagraph" },
+          { "name": "MessageBodyUndefined" }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "MessageBodyChoices",
+        "possibleTypes": [
+          { "name": "MessageBodyChoicesUndefined" },
+          { "name": "MessageBodyChoicesSelection" },
+          { "name": "MessageBodyChoicesLink" }
+        ]
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "MessageBodyChoicesCore",
+        "possibleTypes": [
+          { "name": "MessageBodyChoicesUndefined" },
+          { "name": "MessageBodyChoicesSelection" },
+          { "name": "MessageBodyChoicesLink" }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "Incentive",
+        "possibleTypes": [
+          { "name": "MonthlyCostDeduction" },
+          { "name": "FreeMonths" },
+          { "name": "NoDiscount" }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "Referral",
+        "possibleTypes": [
+          { "name": "ActiveReferral" },
+          { "name": "InProgressReferral" },
+          { "name": "AcceptedReferral" },
+          { "name": "TerminatedReferral" }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "Quote",
+        "possibleTypes": [
+          { "name": "CompleteQuote" },
+          { "name": "IncompleteQuote" }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "CompleteQuoteDetails",
+        "possibleTypes": [
+          { "name": "CompleteApartmentQuoteDetails" },
+          { "name": "CompleteHouseQuoteDetails" }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "IncompleteQuoteDetails",
+        "possibleTypes": [
+          { "name": "IncompleteApartmentQuoteDetails" },
+          { "name": "IncompleteHouseQuoteDetails" }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "CommonClaimLayouts",
+        "possibleTypes": [
+          { "name": "TitleAndBulletPoints" },
+          { "name": "Emergency" }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "CreateQuoteResult",
+        "possibleTypes": [
+          { "name": "CompleteQuote" },
+          { "name": "UnderwritingLimitsHit" }
+        ]
+      }
+    ]
+  }
+}

@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { SignState, useSignStatusLazyQuery } from 'generated/graphql'
 import * as React from 'react'
+import { Redirect } from 'react-router-dom'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 
 const Wrapper = styled('div')`
@@ -21,10 +22,15 @@ const BANK_ID_STATUS_TEXT_KEYS: Record<string, string> = {
 
 interface Props {
   isSigning: boolean
+  onFailure: () => void
   error?: boolean
 }
 
-export const SignStatus: React.FC<Props> = ({ isSigning, error }) => {
+export const SignStatus: React.FC<Props> = ({
+  isSigning,
+  onFailure,
+  error,
+}) => {
   const textKeys = useTextKeys()
   const [executeSignStatusQuery, signStatusQuery] = useSignStatusLazyQuery({
     pollInterval: 1000, // TODO replace with subscription? or not really?
@@ -42,7 +48,10 @@ export const SignStatus: React.FC<Props> = ({ isSigning, error }) => {
     if (signStatusQuery?.data?.signStatus?.signState === SignState.Completed) {
       // TODO tracking
     }
-  }, [signStatusQuery?.data?.signStatus?.signState === SignState.Completed])
+    if (signStatusQuery?.data?.signStatus?.signState === SignState.Failed) {
+      onFailure()
+    }
+  }, [signStatusQuery?.data?.signStatus?.signState])
 
   if (error) {
     return <Wrapper>{textKeys.SIGN_BANKID_CODE_START_FAILED()}</Wrapper>
@@ -50,6 +59,10 @@ export const SignStatus: React.FC<Props> = ({ isSigning, error }) => {
 
   if (!isSigning) {
     return null
+  }
+
+  if (signStatusQuery?.data?.signStatus?.signState === SignState.Completed) {
+    return <Redirect to="/new-member/connect-payment" />
   }
 
   return (
@@ -66,16 +79,18 @@ export const SignStatus: React.FC<Props> = ({ isSigning, error }) => {
         }
 
         if (
-          signStatusQuery.data?.signStatus?.signState === SignState.InProgress
+          signStatusQuery.data?.signStatus?.signState ===
+            SignState.InProgress ||
+          signStatusQuery.data?.signStatus?.signState === SignState.Failed
         ) {
-          const collectStatus =
-            signStatusQuery.data?.signStatus?.collectStatus?.status
+          const collectCode =
+            signStatusQuery.data?.signStatus?.collectStatus?.code
 
-          return textKeys[BANK_ID_STATUS_TEXT_KEYS[collectStatus!]]()
-        }
+          if (!collectCode) {
+            return textKeys.SIGN_BANKID_CODE_START_FAILED()
+          }
 
-        if (signStatusQuery.data?.signStatus?.signState === SignState.Failed) {
-          return textKeys.SIGN_BANKID_CODE_START_FAILED()
+          return textKeys[BANK_ID_STATUS_TEXT_KEYS[collectCode!]]()
         }
 
         return null

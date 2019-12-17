@@ -16,7 +16,11 @@ export const UserDetailsForm: React.FC<Props> = ({ email, onEmailChange }) => {
   const [emailError, setEmailError] = React.useState<boolean>(false)
 
   return (
-    <form onSubmit={(e) => e.preventDefault()}>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+      }}
+    >
       <TextInput
         label={textKeys.CHECKOUT_EMAIL_LABEL()}
         placeholder={textKeys.CHECKOUT_EMAIL_PLACEHOLDER()}

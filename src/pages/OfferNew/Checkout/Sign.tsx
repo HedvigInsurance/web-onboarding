@@ -53,6 +53,12 @@ const Disclaimer = styled('p')`
   }
 `
 
+enum SignState {
+  NOT_STARTED,
+  STARTED,
+  FAILED,
+}
+
 interface Props {
   className?: string
   email?: string
@@ -68,7 +74,7 @@ export const Sign: React.FC<Props> = ({ className, email, personalNumber }) => {
       personalNumber,
     },
   })
-  const [isSigning, setIsSigning] = React.useState(false)
+  const [signState, setSignState] = React.useState(SignState.NOT_STARTED)
 
   return (
     <Wrapper className={className}>
@@ -77,7 +83,7 @@ export const Sign: React.FC<Props> = ({ className, email, personalNumber }) => {
           size={isMobile ? 'sm' : 'lg'}
           disabled={
             !email ||
-            (isSigning && !signOfferMutation.error) ||
+            signState === SignState.STARTED ||
             signOfferMutation.loading ||
             !emailValidation.isValidSync(email ?? '')
           }
@@ -90,21 +96,21 @@ export const Sign: React.FC<Props> = ({ className, email, personalNumber }) => {
               return
             }
 
-            setIsSigning(true)
+            setSignState(SignState.STARTED)
             await signOffer()
-            // TODO success state
           }}
         >
           {textKeys.CHECKOUT_SIGN_BUTTON_TEXT()}
         </Button>
       </ButtonWrapper>
 
-      <AnimateHeight height={isSigning ? 'auto' : 0}>
+      <AnimateHeight height={signState === SignState.NOT_STARTED ? 0 : 'auto'}>
         {
-          <SignStateWrapper isVisible={isSigning}>
+          <SignStateWrapper isVisible={signState !== SignState.NOT_STARTED}>
             <SignStatus
-              isSigning={isSigning}
+              isSigning={signState !== SignState.NOT_STARTED}
               error={Boolean(signOfferMutation.error)}
+              onFailure={() => setSignState(SignState.FAILED)}
             />
           </SignStateWrapper>
         }
