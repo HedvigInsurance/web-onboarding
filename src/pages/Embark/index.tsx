@@ -259,10 +259,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                   <EmbarkProvider
                     externalRedirects={{
                       Offer: () => {
-                        history.push(
-                          '/beta/new-member/offer/' + // FIXME update me when you deploy plz
-                            storageState.session.getSession()?.quoteId,
-                        )
+                        history.push('/new-member/offer')
                       },
                       MailingList: () => {
                         location.href =

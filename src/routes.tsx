@@ -8,7 +8,6 @@ import { LazyDontPanic } from './pages/DontPanic'
 import { Download } from './pages/Download'
 import { EmbarkRoot } from './pages/Embark'
 import { FourOhFour } from './pages/FourOhFour'
-import { Offering } from './pages/Offer'
 import { OfferNew } from './pages/OfferNew'
 import { Referral } from './pages/Referral'
 import { Sign } from './pages/Sign'
@@ -21,11 +20,6 @@ export const reactPageRoutes = [
   {
     path: LANGUAGE_PATH_PATTERN + '/new-member/hedvig',
     Component: Chat,
-    exact: true,
-  },
-  {
-    path: LANGUAGE_PATH_PATTERN + '/new-member/offer',
-    Component: Offering,
     exact: true,
   },
   {
@@ -59,7 +53,7 @@ export const reactPageRoutes = [
     exact: true,
   },
   {
-    path: LANGUAGE_PATH_PATTERN + '/beta/new-member/offer',
+    path: LANGUAGE_PATH_PATTERN + '/new-member/offer',
     Component: OfferNew,
     exact: false,
   },

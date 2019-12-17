@@ -13,7 +13,7 @@ import { isOffer } from './utils'
 
 const createToggleCheckout = (history: History<any>) => (isOpen: boolean) => {
   if (isOpen) {
-    history.push(`/beta/new-member/offer/checkout`)
+    history.push(`/new-member/offer/checkout`)
   } else {
     history.goBack()
   }
@@ -22,7 +22,7 @@ const createToggleCheckout = (history: History<any>) => (isOpen: boolean) => {
 export const OfferNew: React.FC = () => {
   const { data, loading, error, refetch } = useMemberOfferQuery()
   const history = useHistory()
-  const checkoutMatch = useRouteMatch('/beta/new-member/offer/checkout')
+  const checkoutMatch = useRouteMatch('/new-member/offer/checkout')
   const toggleCheckout = createToggleCheckout(history)
 
   return !loading && !error && data && isOffer(data) ? (
