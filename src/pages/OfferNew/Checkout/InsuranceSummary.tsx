@@ -1,6 +1,5 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
-import { CompleteApartmentQuoteDetails } from 'generated/graphql'
 import { CompleteOfferDataForMember } from 'pages/OfferNew/types'
 import {
   apartmentTypeTextKeys,
@@ -82,6 +81,95 @@ type DetailsGroup = ReadonlyArray<{
   label: React.ReactNode
   value: React.ReactNode
 }>
+
+function getHouseSummaryDetailsMaybe(
+  textKeys: TextKeyMap,
+  offer: CompleteOfferDataForMember,
+): DetailsGroup {
+  if (
+    offer.lastQuoteOfMember.details.__typename !== 'CompleteHouseQuoteDetails'
+  ) {
+    return []
+  }
+
+  return [
+    {
+      key: 'ancillaryarea',
+      label: textKeys.CHECKOUT_DETAILS_ANCILLARY_SPACE(),
+      value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
+        VALUE: offer.lastQuoteOfMember.details.ancillarySpace,
+      }),
+    },
+    {
+      key: 'bathrooms',
+      label: textKeys.CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS(),
+      value: textKeys.CHECKOUT_DETAILS_COUNT_VALUE({
+        VALUE: offer.lastQuoteOfMember.details.numberOfBathrooms,
+      }),
+    },
+    {
+      key: 'yearOfConstruction',
+      label: textKeys.CHECKOUT_DETAILS_YEAR_OF_CONSTRUCTION(),
+      value: offer.lastQuoteOfMember.details.yearOfConstruction,
+    },
+  ]
+}
+
+const getHouseExtraBuildingsMaybe = (
+  textKeys: TextKeyMap,
+  offer: CompleteOfferDataForMember,
+): ReadonlyArray<DetailsGroup> => {
+  if (
+    offer.lastQuoteOfMember.details.__typename !== 'CompleteHouseQuoteDetails'
+  ) {
+    return []
+  }
+
+  return offer.lastQuoteOfMember.details.extraBuildings.map<DetailsGroup>(
+    (extraBuilding) => [
+      {
+        key: 'buildingType',
+        label: textKeys.CHECKOUT_DETAILS_EXTRA_BUILDINGS_BUILDING_TYPE(),
+        value: extraBuilding.displayName,
+      },
+      {
+        key: 'buildingSize',
+        label: textKeys.CHECKOUT_DETAILS_EXTRA_BUILDINGS_SIZE(),
+        value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
+          VALUE: extraBuilding.area ?? 'blah',
+        }),
+      },
+      {
+        key: 'hasWater',
+        label: textKeys.CHECKOUT_DETAILS_EXTRA_BUILDINGS_HAS_WATER_CONNECTED(),
+        value: extraBuilding.hasWaterConnected ? textKeys.YES() : textKeys.NO(),
+      },
+    ],
+  )
+}
+
+function getApartmentSummaryDetailsMaybe(
+  textKeys: TextKeyMap,
+  offer: CompleteOfferDataForMember,
+): DetailsGroup {
+  if (
+    offer.lastQuoteOfMember.details.__typename !==
+    'CompleteApartmentQuoteDetails'
+  ) {
+    return []
+  }
+
+  return [
+    {
+      key: 'subtype',
+      label: textKeys.CHECKOUT_DETAILS_APARTMENT_TYPE(),
+      value: textKeys[
+        apartmentTypeTextKeys[offer.lastQuoteOfMember.details.type]
+      ](),
+    },
+  ]
+}
+
 const getDetails = (
   offer: CompleteOfferDataForMember,
   textKeys: TextKeyMap,
@@ -106,17 +194,7 @@ const getDetails = (
           ? textKeys.CHECKOUT_APARTMENT()
           : textKeys.CHECKOUT_HOUSE(),
     },
-    offer.lastQuoteOfMember.details.__typename ===
-      'CompleteApartmentQuoteDetails' && {
-      key: 'subtype',
-      label: textKeys.CHECKOUT_DETAILS_APARTMENT_TYPE(),
-      value: textKeys[
-        apartmentTypeTextKeys[
-          (offer.lastQuoteOfMember.details as CompleteApartmentQuoteDetails)
-            .type
-        ]
-      ](),
-    },
+    ...getApartmentSummaryDetailsMaybe(textKeys, offer),
     {
       key: 'livingspace',
       label: textKeys.CHECKOUT_DETAILS_LIVING_SPACE(),
@@ -124,57 +202,10 @@ const getDetails = (
         VALUE: offer.lastQuoteOfMember.details.livingSpace,
       }),
     },
-    ...(offer.lastQuoteOfMember.details.__typename ===
-    'CompleteHouseQuoteDetails'
-      ? ([
-          {
-            key: 'ancillaryarea',
-            label: textKeys.CHECKOUT_DETAILS_ANCILLARY_SPACE(),
-            value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
-              VALUE: offer.lastQuoteOfMember.details.ancillarySpace,
-            }),
-          },
-          {
-            key: 'bathrooms',
-            label: textKeys.CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS(),
-            value: textKeys.CHECKOUT_DETAILS_COUNT_VALUE({
-              VALUE: offer.lastQuoteOfMember.details.numberOfBathrooms,
-            }),
-          },
-          {
-            key: 'yearOfConstruction',
-            label: textKeys.CHECKOUT_DETAILS_YEAR_OF_CONSTRUCTION(),
-            value: offer.lastQuoteOfMember.details.yearOfConstruction,
-          },
-        ] as DetailsGroup)
-      : []),
-  ].filter(Boolean) as DetailsGroup,
+    ...getHouseSummaryDetailsMaybe(textKeys, offer),
+  ],
 
-  ...(offer.lastQuoteOfMember.details.__typename === 'CompleteHouseQuoteDetails'
-    ? offer.lastQuoteOfMember.details.extraBuildings.map<DetailsGroup>(
-        (extraBuilding) => [
-          {
-            key: 'buildingType',
-            label: textKeys.CHECKOUT_DETAILS_EXTRA_BUILDINGS_BUILDING_TYPE(),
-            value: extraBuilding.displayName,
-          },
-          {
-            key: 'buildingSize',
-            label: textKeys.CHECKOUT_DETAILS_EXTRA_BUILDINGS_SIZE(),
-            value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
-              VALUE: extraBuilding.area ?? 'blah',
-            }),
-          },
-          {
-            key: 'hasWater',
-            label: textKeys.CHECKOUT_DETAILS_EXTRA_BUILDINGS_HAS_WATER_CONNECTED(),
-            value: extraBuilding.hasWaterConnected
-              ? textKeys.YES()
-              : textKeys.NO(),
-          },
-        ],
-      )
-    : []),
+  ...getHouseExtraBuildingsMaybe(textKeys, offer),
 
   [
     {

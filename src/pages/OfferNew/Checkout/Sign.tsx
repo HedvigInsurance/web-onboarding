@@ -81,23 +81,17 @@ export const Sign: React.FC<Props> = ({
   })
   const [signState, setSignState] = React.useState(SignState.NOT_STARTED)
 
+  const canInitiateSign =
+    signState !== SignState.STARTED && emailValidation.isValidSync(email ?? '')
+
   return (
     <Wrapper className={className}>
       <ButtonWrapper>
         <Button
           size={isMobile ? 'sm' : 'lg'}
-          disabled={
-            !email ||
-            signState === SignState.STARTED ||
-            signOfferMutation.loading ||
-            !emailValidation.isValidSync(email ?? '')
-          }
+          disabled={!canInitiateSign}
           onClick={async () => {
-            if (!emailValidation.isValidSync(email ?? '')) {
-              return
-            }
-
-            if (signOfferMutation.loading) {
+            if (!canInitiateSign || signOfferMutation.loading) {
               return
             }
 

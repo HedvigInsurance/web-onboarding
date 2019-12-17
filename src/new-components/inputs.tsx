@@ -35,7 +35,7 @@ const Label = styled.div`
   margin-bottom: 0.125rem;
 `
 
-const StyledInput = styled('input')`
+const StyledInput = styled.div`
   background: none;
   border: none;
   font-size: 1.125rem;
