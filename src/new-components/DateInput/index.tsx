@@ -151,7 +151,7 @@ const CalendarContainer = styled.div`
   position: relative;
   maxwidth: 800;
   margin: 0 auto;
-  textalign: center;
+  text-align: center;
 `
 
 interface DateInputProps {

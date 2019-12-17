@@ -232,7 +232,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
             <StartDate
               startDate={offer.quote.startDate}
               offerId={offer.quote.id}
-              insuredAtOtherCompany={!!offer.quote.currentInsurer}
+              currentInsurer={offer.quote.currentInsurer || null}
             />
           </Body>
 

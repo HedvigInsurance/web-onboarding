@@ -6,10 +6,10 @@ import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { DateInput } from 'new-components/DateInput'
 import { CalendarIcon } from './CalendarIcon'
 import { Switch } from 'new-components/Switch'
-import { useStartDateMutation } from 'generated/graphql'
+import { useStartDateMutation, CurrentInsurer } from 'generated/graphql'
 
 interface Props {
-  insuredAtOtherCompany: boolean
+  currentInsurer: CurrentInsurer | null
   startDate: string | null
   offerId: string
 }
@@ -91,10 +91,10 @@ const HandleSwitchingLabel = styled.span`
 export const StartDate: React.FC<Props> = ({
   offerId,
   startDate,
-  insuredAtOtherCompany,
+  currentInsurer,
 }) => {
   const getDefaultDateValue = () => {
-    if (insuredAtOtherCompany) {
+    if (currentInsurer) {
       return null
     }
 
@@ -150,7 +150,7 @@ export const StartDate: React.FC<Props> = ({
         date={dateValue || new Date()}
         setDate={setDateValue}
       />
-      {insuredAtOtherCompany && (
+      {currentInsurer?.switchable && (
         <HandleSwitchingWrapper>
           <HandleSwitchingLabel>
             {textKeys.SIDEBAR_REQUEST_CANCELLATION()}
