@@ -77,8 +77,8 @@ export const CheckoutContent: React.FC<Props> = ({ offer }) => {
           </div>
           <div>
             <Price
-              monthlyGross={offer.quote.price}
-              monthlyNet={offer.quote.price} // TODO with discounts
+              monthlyGross={offer.quote.insuranceCost.monthlyGross}
+              monthlyNet={offer.quote.insuranceCost.monthlyNet}
               monthlyCostDeduction={monthlyCostDeduction}
               highlightAmount
             />

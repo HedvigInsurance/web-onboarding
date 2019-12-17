@@ -708,14 +708,23 @@ export type CompleteHouseQuoteDetails = {
   livingSpace: Scalars['Int']
   ancillarySpace: Scalars['Int']
   extraBuildings: Array<ExtraBuilding>
+  numberOfBathrooms: Scalars['Int']
+  yearOfConstruction: Scalars['Int']
+  isSubleted: Scalars['Boolean']
 }
 
 export type CompleteQuote = {
   __typename?: 'CompleteQuote'
   id: Scalars['ID']
-  currentInsurer?: Maybe<Scalars['String']>
+  currentInsurer?: Maybe<CurrentInsurer>
   price: MonetaryAmountV2
+  insuranceCost: InsuranceCost
+  firstName: Scalars['String']
+  lastName: Scalars['String']
+  ssn: Scalars['String']
   details: CompleteQuoteDetails
+  startDate?: Maybe<Scalars['LocalDate']>
+  expiresAt: Scalars['LocalDate']
 }
 
 export type CompleteQuoteDetails =
@@ -748,11 +757,19 @@ export type CreateQuoteInput = {
   lastName: Scalars['String']
   currentInsurer?: Maybe<Scalars['String']>
   ssn: Scalars['String']
+  startDate?: Maybe<Scalars['LocalDate']>
   apartment?: Maybe<CreateApartmentInput>
   house?: Maybe<CreateHouseInput>
 }
 
 export type CreateQuoteResult = CompleteQuote | UnderwritingLimitsHit
+
+export type CurrentInsurer = {
+  __typename?: 'CurrentInsurer'
+  id?: Maybe<Scalars['String']>
+  displayName?: Maybe<Scalars['String']>
+  switchable?: Maybe<Scalars['Boolean']>
+}
 
 export type DirectDebitResponse = {
   __typename?: 'DirectDebitResponse'
@@ -867,6 +884,7 @@ export type EditQuoteInput = {
   lastName?: Maybe<Scalars['String']>
   currentInsurer?: Maybe<Scalars['String']>
   ssn?: Maybe<Scalars['String']>
+  startDate?: Maybe<Scalars['LocalDate']>
   apartment?: Maybe<EditApartmentInput>
   house?: Maybe<EditHouseInput>
 }
@@ -1154,12 +1172,16 @@ export type IncompleteHouseQuoteDetails = {
   livingSpace?: Maybe<Scalars['Int']>
   ancillarySpace?: Maybe<Scalars['Int']>
   extraBuildings?: Maybe<Array<ExtraBuilding>>
+  numberOfBathrooms?: Maybe<Scalars['Int']>
+  yearOfConstruction?: Maybe<Scalars['Int']>
+  isSubleted?: Maybe<Scalars['Boolean']>
 }
 
 export type IncompleteQuote = {
   __typename?: 'IncompleteQuote'
   id: Scalars['ID']
-  currentInsurer?: Maybe<Scalars['String']>
+  currentInsurer?: Maybe<CurrentInsurer>
+  startDate?: Maybe<Scalars['LocalDate']>
   details?: Maybe<IncompleteQuoteDetails>
 }
 
@@ -2697,6 +2719,7 @@ export type Query = {
   personalInformation?: Maybe<PersonalInformation>
   houseInformation?: Maybe<HouseInformation>
   quote: Quote
+  lastQuoteOfMember: Quote
   commonClaims: Array<CommonClaim>
   news: Array<News>
   welcome: Array<Welcome>
@@ -3372,14 +3395,23 @@ export type OfferQueryVariables = {
 
 export type OfferQuery = { __typename?: 'Query' } & {
   quote:
-    | ({ __typename?: 'CompleteQuote' } & Pick<
-        CompleteQuote,
-        'id' | 'currentInsurer'
-      > & {
-          price: { __typename?: 'MonetaryAmountV2' } & Pick<
-            MonetaryAmountV2,
-            'amount' | 'currency'
+    | ({ __typename?: 'CompleteQuote' } & Pick<CompleteQuote, 'id'> & {
+          currentInsurer: Maybe<
+            { __typename?: 'CurrentInsurer' } & Pick<
+              CurrentInsurer,
+              'switchable' | 'displayName' | 'id'
+            >
           >
+          insuranceCost: { __typename?: 'InsuranceCost' } & {
+            monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
+              MonetaryAmountV2,
+              'amount' | 'currency'
+            >
+            monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
+              MonetaryAmountV2,
+              'amount' | 'currency'
+            >
+          }
           details:
             | ({ __typename?: 'CompleteApartmentQuoteDetails' } & Pick<
                 CompleteApartmentQuoteDetails,
@@ -3520,15 +3552,36 @@ export type RemoveDiscountCodeMutation = { __typename?: 'Mutation' } & {
   removeDiscountCode: { __typename: 'RedemedCodeResult' }
 }
 
+export type StartDateMutationVariables = {
+  quoteId: Scalars['ID']
+  date?: Maybe<Scalars['LocalDate']>
+}
+
+export type StartDateMutation = { __typename?: 'Mutation' } & {
+  editQuote:
+    | ({ __typename?: 'CompleteQuote' } & Pick<CompleteQuote, 'startDate'>)
+    | { __typename?: 'UnderwritingLimitsHit' }
+}
+
 export const OfferDocument = gql`
   query Offer($id: ID) {
     quote(id: $id) {
       ... on CompleteQuote {
         id
-        currentInsurer
-        price {
-          amount
-          currency
+        currentInsurer {
+          switchable
+          displayName
+          id
+        }
+        insuranceCost {
+          monthlyNet {
+            amount
+            currency
+          }
+          monthlyGross {
+            amount
+            currency
+          }
         }
         details {
           ... on CompleteApartmentQuoteDetails {
@@ -3748,4 +3801,57 @@ export type RemoveDiscountCodeMutationResult = ApolloReactCommon.MutationResult<
 export type RemoveDiscountCodeMutationOptions = ApolloReactCommon.BaseMutationOptions<
   RemoveDiscountCodeMutation,
   RemoveDiscountCodeMutationVariables
+>
+export const StartDateDocument = gql`
+  mutation StartDate($quoteId: ID!, $date: LocalDate) {
+    editQuote(input: { id: $quoteId, startDate: $date }) {
+      ... on CompleteQuote {
+        startDate
+      }
+    }
+  }
+`
+export type StartDateMutationFn = ApolloReactCommon.MutationFunction<
+  StartDateMutation,
+  StartDateMutationVariables
+>
+
+/**
+ * __useStartDateMutation__
+ *
+ * To run a mutation, you first call `useStartDateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStartDateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [startDateMutation, { data, loading, error }] = useStartDateMutation({
+ *   variables: {
+ *      quoteId: // value for 'quoteId'
+ *      date: // value for 'date'
+ *   },
+ * });
+ */
+export function useStartDateMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    StartDateMutation,
+    StartDateMutationVariables
+  >,
+) {
+  return ApolloReactHooks.useMutation<
+    StartDateMutation,
+    StartDateMutationVariables
+  >(StartDateDocument, baseOptions)
+}
+export type StartDateMutationHookResult = ReturnType<
+  typeof useStartDateMutation
+>
+export type StartDateMutationResult = ApolloReactCommon.MutationResult<
+  StartDateMutation
+>
+export type StartDateMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  StartDateMutation,
+  StartDateMutationVariables
 >

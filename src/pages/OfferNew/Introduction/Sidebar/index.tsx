@@ -220,8 +220,8 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
             <Price
               monthlyCostDeduction={monthlyCostDeduction}
-              monthlyNet={offer.quote.price}
-              monthlyGross={offer.quote.price} // TODO what should either of these be?
+              monthlyNet={offer.quote.insuranceCost.monthlyNet}
+              monthlyGross={offer.quote.insuranceCost.monthlyGross}
             />
           </Header>
 
@@ -229,7 +229,10 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
             {offer.quote.currentInsurer && (
               <PreviousInsurancePicker insurances={otherInsuranceCompanies} />
             )}
-            <StartDate insuredAtOtherCompany={!!offer.quote.currentInsurer} />
+            <StartDate
+              offerId={offer.quote.id}
+              insuredAtOtherCompany={!!offer.quote.currentInsurer}
+            />
           </Body>
 
           <Footer>

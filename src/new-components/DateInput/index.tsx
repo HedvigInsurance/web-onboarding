@@ -11,7 +11,7 @@ import { ForwardArrow } from 'components/icons/ForwardArrow'
 import { Cross } from 'components/icons/Cross'
 import { useCurrentLanguage } from 'components/utils/CurrentLanguage'
 
-const Wrapper = styled.div`
+const Wrapper = styled(motion.div)`
   position: absolute;
   left: 0;
   width: 100%;
@@ -296,12 +296,24 @@ export const DateInput: React.FC<DateInputProps> = ({
   setDate,
 }) => {
   return (
-    <Wrapper aria-hidden={!open}>
+    <Wrapper
+      aria-hidden={!open}
+      initial={{ visibility: 'hidden' }}
+      animate={
+        open
+          ? {
+              visibility: 'visible',
+            }
+          : { visibility: 'hidden' }
+      }
+      transition={{ ease: 'linear', delay: open ? 0 : 0.5, duration: 0 }}
+    >
       <Container
         initial={{ y: 0, opacity: 0, pointerEvents: 'none' }}
         animate={
           open
             ? {
+                display: 'inline-block',
                 y: 0,
                 opacity: 1,
                 pointerEvents: 'all',

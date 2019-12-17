@@ -6,9 +6,11 @@ import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { DateInput } from 'new-components/DateInput'
 import { CalendarIcon } from './CalendarIcon'
 import { Switch } from 'new-components/Switch'
+import { useStartDateMutation } from 'generated/graphql'
 
 interface Props {
   insuredAtOtherCompany: boolean
+  offerId: string
 }
 
 const RowButton = styled.button<{ datePickerOpen: boolean }>`
@@ -85,25 +87,25 @@ const HandleSwitchingLabel = styled.span`
   width: 50%;
 `
 
-export const StartDate: React.FC<Props> = ({ insuredAtOtherCompany }) => {
+export const StartDate: React.FC<Props> = ({
+  offerId,
+  insuredAtOtherCompany,
+}) => {
   const [datePickerOpen, setDatePickerOpen] = React.useState(false)
-  const [handleSwitching, setHandleSwitching] = React.useState(true)
   const [dateValue, setDateValue] = React.useState(
     insuredAtOtherCompany ? null : new Date(),
   )
   const textKeys = useTextKeys()
+  const [setStartDate] = useStartDateMutation()
 
   React.useEffect(() => {
-    if (dateValue) {
-      setHandleSwitching(false)
-    }
+    setStartDate({
+      variables: {
+        quoteId: offerId,
+        date: (dateValue && format(dateValue, 'yyyy-MM-dd')) || null,
+      },
+    })
   }, [dateValue])
-
-  React.useEffect(() => {
-    if (handleSwitching) {
-      setDateValue(null)
-    }
-  }, [handleSwitching])
 
   return (
     <>
@@ -139,7 +141,12 @@ export const StartDate: React.FC<Props> = ({ insuredAtOtherCompany }) => {
           <HandleSwitchingLabel>
             {textKeys.SIDEBAR_REQUEST_CANCELLATION()}
           </HandleSwitchingLabel>
-          <Switch value={handleSwitching} onChange={setHandleSwitching} />
+          <Switch
+            value={dateValue == null}
+            onChange={(newValue) => {
+              setDateValue(newValue ? null : new Date())
+            }}
+          />
         </HandleSwitchingWrapper>
       )}
     </>
