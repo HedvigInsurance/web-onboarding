@@ -67,7 +67,7 @@ it('does nothing when no correct state is set', async () => {
     },
   ]
   const wrapper = mount(
-    <StaticRouter context={{}} location="/new-member/hedvig">
+    <StaticRouter context={{}} location="/new-member">
       <MockedProvider mocks={mocks}>
         <Provider
           initialState={{
