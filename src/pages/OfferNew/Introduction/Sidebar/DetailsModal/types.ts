@@ -1,37 +1,39 @@
+import { EditApartmentInput, EditHouseInput } from 'generated/graphql'
 import { CoreInputFieldProps } from 'new-components/inputs/index'
 import * as Yup from 'yup'
+
+type Unarray<T> = T extends Array<infer U> ? U : T
+
+type RequiredFields<T> = {
+  [P in keyof T]-?: NonNullable<T[P]>
+}
 
 export interface FieldType extends CoreInputFieldProps {
   validation: Yup.Schema<string | number | boolean>
 }
 
+export type ArrayFieldType<T> = {
+  arrayValidation: Yup.ArraySchema<any[]>
+} & FieldSchemaBuilder<Unarray<T>>
+
+export type Field<T> = FieldType | ArrayFieldType<T>
+
 export interface ApartmentFieldSchema {
-  apartment: {
-    street?: FieldType
-    zipCode?: FieldType
-    householdSize?: FieldType
-    livingSpace?: FieldType
-    type?: FieldType
-  }
+  apartment: FieldSchemaBuilder<RequiredFields<EditApartmentInput>>
 }
 
 export interface HouseFieldSchema {
-  house: {
-    street?: FieldType
-    zipCode?: FieldType
-    householdSize?: FieldType
-    livingSpace?: FieldType
-    ancillarySpace?: FieldType
-    yearOfConstruction?: FieldType
-    numberOfBathrooms?: FieldType
-    isSubleted?: FieldType
-    extraBuildings: {
-      validation: Yup.Schema<any[]>
-      type: FieldType
-      area: FieldType
-      hasWaterConnected: FieldType
-    }
-  }
+  house: FieldSchemaBuilder<RequiredFields<EditHouseInput>>
 }
+
+export type FieldSchemaBuilder<T> = RequiredFields<
+  {
+    [P in keyof T]: T[P] extends string | number | boolean
+      ? FieldType
+      : T[P] extends any[]
+      ? ArrayFieldType<T[P]>
+      : FieldSchemaBuilder<T[P]>
+  }
+>
 
 export type FieldSchema = ApartmentFieldSchema | HouseFieldSchema

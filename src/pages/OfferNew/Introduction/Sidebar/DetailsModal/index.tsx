@@ -18,6 +18,7 @@ import {
   getValidationSchema,
   isApartmentFieldSchema,
   isHouseFieldSchema,
+  testValidationSchema,
 } from './utils'
 
 const Container = styled.div`
@@ -84,8 +85,11 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
 }) => {
   const [editQuote] = useEditQuoteMutation()
   const fieldSchema = getFieldSchema(quote)
-  const validationSchema = getValidationSchema(fieldSchema)
+  const validationSchema = getValidationSchema(fieldSchema, quote)
   const schema = getSchema(quote)
+
+  console.log('validation schema', validationSchema)
+  const test = testValidationSchema(fieldSchema, quote)
 
   return (
     <Modal isVisible={isVisible} onClose={onClose} dynamicHeight>
@@ -122,6 +126,9 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                 <br />
                 <br />
                 {JSON.stringify(errors, null, 2)}
+                <br />
+                <br />
+                {JSON.stringify(touched, null, 2)}
 
                 {isApartmentFieldSchema(fieldSchema, quote) && (
                   <Content>

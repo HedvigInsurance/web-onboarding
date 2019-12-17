@@ -8,7 +8,14 @@ import {
 import { inputTypes, masks } from 'new-components/inputs/index'
 import * as Yup from 'yup'
 import { isApartment, isHouse, isStudent } from '../../../utils'
-import { ApartmentFieldSchema, FieldSchema, HouseFieldSchema } from './types'
+import {
+  ApartmentFieldSchema,
+  FieldSchema,
+  HouseFieldSchema,
+  FieldType,
+  Field,
+  ArrayFieldType,
+} from './types'
 
 export const isApartmentFieldSchema = (
   fieldSchema: FieldSchema,
@@ -28,7 +35,6 @@ export const isHouseFieldSchema = (
 }
 
 export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
-  console.log(quote)
   const base = {
     street: {
       label: 'Adress',
@@ -113,6 +119,7 @@ export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
           yearOfConstruction: {
             label: 'Byggnadsår',
             placeholder: 'Byggnadsår',
+            mask: masks.year,
             type: inputTypes.number,
             validation: Yup.number().required(),
           },
@@ -126,7 +133,7 @@ export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
             validation: Yup.boolean().required(),
           },
           extraBuildings: {
-            validation: Yup.array(),
+            arrayValidation: Yup.array(),
             type: {
               label: 'Byggnadstyp',
               placeholder: 'Byggnadstyp',
@@ -159,22 +166,100 @@ export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
       }
 }
 
-// TODO: fix any type
 export const getValidationSchema = (
   fieldSchema: FieldSchema,
-): Yup.ObjectSchema<unknown> =>
-  Yup.object({
-    ...Object.entries(fieldSchema).reduce(
-      (acc, [key, value]) =>
-        value.hasOwnProperty('validation')
-          ? { ...acc, [key]: value.validation }
-          : {
-              ...acc,
-              [key]: getValidationSchema(value),
-            },
-      {},
-    ),
+  quote: CompleteQuote,
+): Yup.ObjectSchema<unknown> => {
+  const fields = isApartmentFieldSchema(fieldSchema, quote)
+    ? fieldSchema.apartment
+    : fieldSchema.house
+
+  const validation = Object.entries(fields).reduce((acc, [key, value]) => {
+    if (isNormalFieldType(value)) {
+      return { ...acc, [key]: value.validation }
+    }
+
+    if (isArrayFieldType(value)) {
+      return {
+        ...acc,
+        [key]: value.arrayValidation.of(
+          Yup.object().shape(
+            Object.assign(
+              {},
+              ...Object.entries(value)
+                .filter(([k]) => k !== 'arrayValidation')
+                .map(([k, v]: any) => ({ [k]: v.validation })),
+            ),
+          ),
+        ),
+      }
+    }
+    return { ...acc }
+  }, {})
+
+  return Yup.object({
+    house: Yup.object({ ...validation }),
   })
+}
+
+export const isNormalFieldType = <T>(field: Field<T>): field is FieldType => {
+  return field.hasOwnProperty('validation')
+}
+
+export const isArrayFieldType = <T>(
+  field: Field<T>,
+): field is ArrayFieldType<T> => {
+  return field.hasOwnProperty('arrayValidation')
+}
+
+export const testValidationSchema = (
+  fieldSchema: FieldSchema,
+  quote: CompleteQuote,
+): any => {
+  const fields = isApartmentFieldSchema(fieldSchema, quote)
+    ? fieldSchema.apartment
+    : fieldSchema.house
+
+  const res = Object.entries(fields).reduce((acc, [key, value]) => {
+    if (isNormalFieldType(value)) {
+      return { ...acc, [key]: value.validation }
+    }
+
+    if (isArrayFieldType(value)) {
+      return {
+        ...acc,
+        [key]: value.arrayValidation.of(
+          Yup.array().of(
+            Yup.object().shape({
+              name: Yup.string()
+                .min(4, 'too short')
+                .required('Required'), // these constraints take precedence
+              salary: Yup.string()
+                .min(3, 'cmon')
+                .required('Required'), // these constraints take precedence
+            }),
+          ),
+        ),
+      }
+    }
+    return { ...acc }
+  }, {})
+
+  return { house: res }
+
+  /*
+  return Object.entries(fieldSchema).reduce((acc, [key, value]) => {
+    console.log(typeof value)
+
+    const v2 = value as any
+    const t = Object.entries(v2)
+      .filter(([k, v]) => k !== 'objectValidation')
+      .map(([k, v]: any) => ({ [k]: v.validation }))
+    console.log(t)
+
+    return {...acc, {}}
+  }, {})*/
+}
 
 export const getExtraBuilding = (
   extraBuildingType: ExtraBuildingType,

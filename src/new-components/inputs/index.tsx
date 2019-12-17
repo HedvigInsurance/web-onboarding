@@ -23,6 +23,11 @@ export const masks: { [key: string]: Mask } = {
     mask: '99999 m2',
     sanitize: (value) => value.replace(/[\s\u200b]+m2/, ''),
   },
+  year: {
+    name: 'Year',
+    mask: '9999',
+    sanitize: (value) => value,
+  },
 }
 
 const Wrapper = styled.div<{ errors?: string }>`
