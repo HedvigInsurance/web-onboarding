@@ -27,7 +27,7 @@ interface Props {
 export const SignStatus: React.FC<Props> = ({ isSigning, error }) => {
   const textKeys = useTextKeys()
   const [executeSignStatusQuery, signStatusQuery] = useSignStatusLazyQuery({
-    pollInterval: 1000, // TODO replace with subscription?
+    pollInterval: 1000, // TODO replace with subscription? or not really?
   })
 
   React.useEffect(() => {

@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { BackArrow } from 'components/icons/BackArrow'
 import { Sign } from 'pages/OfferNew/Checkout/Sign'
-import { CompleteOfferData } from 'pages/OfferNew/types'
+import { CompleteOfferDataForMember } from 'pages/OfferNew/types'
 import * as React from 'react'
 import { CheckoutContent } from './CheckoutContent'
 
@@ -138,7 +138,7 @@ const Backdrop = styled('div')<Openable>`
 `
 
 interface Props {
-  offer: CompleteOfferData
+  offer: CompleteOfferDataForMember
   isOpen?: boolean
   onClose?: () => void
 }

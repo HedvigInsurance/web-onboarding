@@ -12,7 +12,7 @@ import {
   HeadingWrapper,
   PreHeading,
 } from '../components'
-import { CompleteOfferData } from '../types'
+import { CompleteOfferDataForMember } from '../types'
 import { getInsuranceType } from '../utils'
 import { InsuranceValues } from './InsuranceValues'
 import { perils } from './mock'
@@ -21,7 +21,7 @@ import { PerilModal } from './PerilModal'
 import { PerilSwiper } from './PerilSwiper'
 
 interface Props {
-  offer: CompleteOfferData
+  offer: CompleteOfferDataForMember
 }
 
 const Wrapper = styled.div`
@@ -60,7 +60,9 @@ export const Perils: React.FC<Props> = ({ offer }) => {
             />
           )}
 
-          <InsuranceValues insuranceType={getInsuranceType(offer.quote)} />
+          <InsuranceValues
+            insuranceType={getInsuranceType(offer.lastQuoteOfMember)}
+          />
         </Column>
         <ColumnSpacing />
       </Container>

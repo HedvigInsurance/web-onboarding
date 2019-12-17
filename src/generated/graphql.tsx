@@ -708,14 +708,22 @@ export type CompleteHouseQuoteDetails = {
   livingSpace: Scalars['Int']
   ancillarySpace: Scalars['Int']
   extraBuildings: Array<ExtraBuilding>
+  numberOfBathrooms: Scalars['Int']
+  yearOfConstruction: Scalars['Int']
+  isSubleted: Scalars['Boolean']
 }
 
 export type CompleteQuote = {
   __typename?: 'CompleteQuote'
   id: Scalars['ID']
-  currentInsurer?: Maybe<Scalars['String']>
-  price: MonetaryAmountV2
+  currentInsurer?: Maybe<CurrentInsurer>
+  insuranceCost: InsuranceCost
+  firstName: Scalars['String']
+  lastName: Scalars['String']
+  ssn: Scalars['String']
   details: CompleteQuoteDetails
+  startDate: Scalars['LocalDate']
+  expiresAt: Scalars['LocalDate']
 }
 
 export type CompleteQuoteDetails =
@@ -748,11 +756,19 @@ export type CreateQuoteInput = {
   lastName: Scalars['String']
   currentInsurer?: Maybe<Scalars['String']>
   ssn: Scalars['String']
+  startDate?: Maybe<Scalars['LocalDate']>
   apartment?: Maybe<CreateApartmentInput>
   house?: Maybe<CreateHouseInput>
 }
 
 export type CreateQuoteResult = CompleteQuote | UnderwritingLimitsHit
+
+export type CurrentInsurer = {
+  __typename?: 'CurrentInsurer'
+  id?: Maybe<Scalars['String']>
+  displayName?: Maybe<Scalars['String']>
+  switchable?: Maybe<Scalars['Boolean']>
+}
 
 export type DirectDebitResponse = {
   __typename?: 'DirectDebitResponse'
@@ -867,6 +883,7 @@ export type EditQuoteInput = {
   lastName?: Maybe<Scalars['String']>
   currentInsurer?: Maybe<Scalars['String']>
   ssn?: Maybe<Scalars['String']>
+  startDate?: Maybe<Scalars['LocalDate']>
   apartment?: Maybe<EditApartmentInput>
   house?: Maybe<EditHouseInput>
 }
@@ -1154,12 +1171,16 @@ export type IncompleteHouseQuoteDetails = {
   livingSpace?: Maybe<Scalars['Int']>
   ancillarySpace?: Maybe<Scalars['Int']>
   extraBuildings?: Maybe<Array<ExtraBuilding>>
+  numberOfBathrooms?: Maybe<Scalars['Int']>
+  yearOfConstruction?: Maybe<Scalars['Int']>
+  isSubleted?: Maybe<Scalars['Boolean']>
 }
 
 export type IncompleteQuote = {
   __typename?: 'IncompleteQuote'
   id: Scalars['ID']
-  currentInsurer?: Maybe<Scalars['String']>
+  currentInsurer?: Maybe<CurrentInsurer>
+  startDate?: Maybe<Scalars['LocalDate']>
   details?: Maybe<IncompleteQuoteDetails>
 }
 
@@ -2697,6 +2718,7 @@ export type Query = {
   personalInformation?: Maybe<PersonalInformation>
   houseInformation?: Maybe<HouseInformation>
   quote: Quote
+  lastQuoteOfMember: Quote
   commonClaims: Array<CommonClaim>
   news: Array<News>
   welcome: Array<Welcome>
@@ -3366,20 +3388,37 @@ export type Welcome = {
   title: Scalars['String']
 }
 
-export type OfferQueryVariables = {
-  id?: Maybe<Scalars['ID']>
-}
+export type MemberOfferQueryVariables = {}
 
-export type OfferQuery = { __typename?: 'Query' } & {
-  quote:
+export type MemberOfferQuery = { __typename?: 'Query' } & {
+  lastQuoteOfMember:
     | ({ __typename?: 'CompleteQuote' } & Pick<
         CompleteQuote,
-        'id' | 'currentInsurer'
+        'id' | 'ssn' | 'firstName' | 'lastName'
       > & {
-          price: { __typename?: 'MonetaryAmountV2' } & Pick<
-            MonetaryAmountV2,
-            'amount' | 'currency'
+          currentInsurer: Maybe<
+            { __typename?: 'CurrentInsurer' } & Pick<
+              CurrentInsurer,
+              'id' | 'displayName' | 'switchable'
+            >
           >
+          insuranceCost: { __typename?: 'InsuranceCost' } & Pick<
+            InsuranceCost,
+            'freeUntil'
+          > & {
+              monthlyDiscount: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount' | 'currency'
+              >
+              monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount' | 'currency'
+              >
+              monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount' | 'currency'
+              >
+            }
           details:
             | ({ __typename?: 'CompleteApartmentQuoteDetails' } & Pick<
                 CompleteApartmentQuoteDetails,
@@ -3473,10 +3512,7 @@ export type OfferQuery = { __typename?: 'Query' } & {
         >
       }
   >
-  member: { __typename?: 'Member' } & Pick<
-    Member,
-    'id' | 'firstName' | 'lastName' | 'email'
-  >
+  member: { __typename?: 'Member' } & Pick<Member, 'id' | 'email'>
 }
 
 export type RedeemCodeMutationVariables = {
@@ -3564,15 +3600,33 @@ export type SignStatusListenerSubscription = { __typename?: 'Subscription' } & {
   >
 }
 
-export const OfferDocument = gql`
-  query Offer($id: ID) {
-    quote(id: $id) {
+export const MemberOfferDocument = gql`
+  query MemberOffer {
+    lastQuoteOfMember {
       ... on CompleteQuote {
         id
-        currentInsurer
-        price {
-          amount
-          currency
+        ssn
+        firstName
+        lastName
+        currentInsurer {
+          id
+          displayName
+          switchable
+        }
+        insuranceCost {
+          freeUntil
+          monthlyDiscount {
+            amount
+            currency
+          }
+          monthlyGross {
+            amount
+            currency
+          }
+          monthlyNet {
+            amount
+            currency
+          }
         }
         details {
           ... on CompleteApartmentQuoteDetails {
@@ -3621,56 +3675,55 @@ export const OfferDocument = gql`
     }
     member {
       id
-      firstName
-      lastName
       email
     }
   }
 `
 
 /**
- * __useOfferQuery__
+ * __useMemberOfferQuery__
  *
- * To run a query within a React component, call `useOfferQuery` and pass it any options that fit your needs.
- * When your component renders, `useOfferQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useMemberOfferQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMemberOfferQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useOfferQuery({
+ * const { data, loading, error } = useMemberOfferQuery({
  *   variables: {
- *      id: // value for 'id'
  *   },
  * });
  */
-export function useOfferQuery(
+export function useMemberOfferQuery(
   baseOptions?: ApolloReactHooks.QueryHookOptions<
-    OfferQuery,
-    OfferQueryVariables
+    MemberOfferQuery,
+    MemberOfferQueryVariables
   >,
 ) {
-  return ApolloReactHooks.useQuery<OfferQuery, OfferQueryVariables>(
-    OfferDocument,
+  return ApolloReactHooks.useQuery<MemberOfferQuery, MemberOfferQueryVariables>(
+    MemberOfferDocument,
     baseOptions,
   )
 }
-export function useOfferLazyQuery(
+export function useMemberOfferLazyQuery(
   baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
-    OfferQuery,
-    OfferQueryVariables
+    MemberOfferQuery,
+    MemberOfferQueryVariables
   >,
 ) {
-  return ApolloReactHooks.useLazyQuery<OfferQuery, OfferQueryVariables>(
-    OfferDocument,
-    baseOptions,
-  )
+  return ApolloReactHooks.useLazyQuery<
+    MemberOfferQuery,
+    MemberOfferQueryVariables
+  >(MemberOfferDocument, baseOptions)
 }
-export type OfferQueryHookResult = ReturnType<typeof useOfferQuery>
-export type OfferLazyQueryHookResult = ReturnType<typeof useOfferLazyQuery>
-export type OfferQueryResult = ApolloReactCommon.QueryResult<
-  OfferQuery,
-  OfferQueryVariables
+export type MemberOfferQueryHookResult = ReturnType<typeof useMemberOfferQuery>
+export type MemberOfferLazyQueryHookResult = ReturnType<
+  typeof useMemberOfferLazyQuery
+>
+export type MemberOfferQueryResult = ApolloReactCommon.QueryResult<
+  MemberOfferQuery,
+  MemberOfferQueryVariables
 >
 export const RedeemCodeDocument = gql`
   mutation RedeemCode($code: String!) {

@@ -14,12 +14,12 @@ import {
   PreHeading,
   Section,
 } from '../components'
-import { CompleteOfferData } from '../types'
+import { CompleteOfferDataForMember } from '../types'
 import { Sidebar } from './Sidebar'
 import { Usps } from './Usps'
 
 interface Props {
-  offer: CompleteOfferData
+  offer: CompleteOfferDataForMember
   refetch: () => void
   onCheckoutOpen: () => void
 }
@@ -117,7 +117,7 @@ export const Introduction: React.FC<Props> = ({
               <PreHeading>{textKeys.HERO_LABEL()}</PreHeading>
               <HeadingWhite>
                 {textKeys.HERO_HEADLINE({
-                  FIRST_NAME: offer.member.firstName || '',
+                  FIRST_NAME: offer.lastQuoteOfMember.firstName || '',
                 })}
               </HeadingWhite>
             </HeadingWrapper>

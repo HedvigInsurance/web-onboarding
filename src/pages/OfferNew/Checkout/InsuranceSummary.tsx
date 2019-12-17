@@ -1,8 +1,11 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import { CompleteApartmentQuoteDetails } from 'generated/graphql'
-import { CompleteOfferData } from 'pages/OfferNew/types'
-import { apartmentTypeTextKeys } from 'pages/OfferNew/utils'
+import { CompleteOfferDataForMember } from 'pages/OfferNew/types'
+import {
+  apartmentTypeTextKeys,
+  maskAndFormatRawSsn,
+} from 'pages/OfferNew/utils'
 import * as React from 'react'
 import { TextKeyMap, useTextKeys } from 'utils/hooks/useTextKeys'
 import { formatPostalNumber } from 'utils/postalNumbers'
@@ -49,7 +52,7 @@ const Value = styled('div')`
 `
 
 interface Props {
-  offer: CompleteOfferData
+  offer: CompleteOfferDataForMember
 }
 
 export const InsuranceSummary: React.FC<Props> = ({ offer }) => {
@@ -79,32 +82,38 @@ type DetailsGroup = ReadonlyArray<{
   label: React.ReactNode
   value: React.ReactNode
 }>
-const getDetails = (offer: CompleteOfferData, textKeys: TextKeyMap) => [
+const getDetails = (
+  offer: CompleteOfferDataForMember,
+  textKeys: TextKeyMap,
+) => [
   [
     {
       key: 'address',
       label: textKeys.CHECKOUT_DETAILS_ADDRESS(),
-      value: offer.quote.details.street,
+      value: offer.lastQuoteOfMember.details.street,
     },
     {
       key: 'zipcode',
       label: textKeys.CHECKOUT_DETAILS_ZIPCODE(),
-      value: formatPostalNumber(offer.quote.details.zipCode),
+      value: formatPostalNumber(offer.lastQuoteOfMember.details.zipCode),
     },
     {
       key: 'bostadstyp',
       label: textKeys.CHECKOUT_DETAILS_QUOTE_TYPE(),
       value:
-        offer.quote.details.__typename === 'CompleteApartmentQuoteDetails'
+        offer.lastQuoteOfMember.details.__typename ===
+        'CompleteApartmentQuoteDetails'
           ? textKeys.CHECKOUT_APARTMENT()
           : textKeys.CHECKOUT_HOUSE(),
     },
-    offer.quote.details.__typename === 'CompleteApartmentQuoteDetails' && {
+    offer.lastQuoteOfMember.details.__typename ===
+      'CompleteApartmentQuoteDetails' && {
       key: 'subtype',
       label: textKeys.CHECKOUT_DETAILS_APARTMENT_TYPE(),
       value: textKeys[
         apartmentTypeTextKeys[
-          (offer.quote.details as CompleteApartmentQuoteDetails).type
+          (offer.lastQuoteOfMember.details as CompleteApartmentQuoteDetails)
+            .type
         ]
       ](),
     },
@@ -112,70 +121,75 @@ const getDetails = (offer: CompleteOfferData, textKeys: TextKeyMap) => [
       key: 'livingspace',
       label: textKeys.CHECKOUT_DETAILS_LIVING_SPACE(),
       value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
-        VALUE: offer.quote.details.livingSpace,
+        VALUE: offer.lastQuoteOfMember.details.livingSpace,
       }),
     },
-    ...(offer.quote.details.__typename === 'CompleteHouseQuoteDetails'
+    ...(offer.lastQuoteOfMember.details.__typename ===
+    'CompleteHouseQuoteDetails'
       ? ([
           {
             key: 'ancillaryarea',
             label: textKeys.CHECKOUT_DETAILS_ANCILLARY_SPACE(),
             value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
-              VALUE: offer.quote.details.ancillarySpace,
+              VALUE: offer.lastQuoteOfMember.details.ancillarySpace,
             }),
           },
           {
             key: 'bathrooms',
             label: textKeys.CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS(),
-            value: textKeys.CHECKOUT_DETAILS_COUNT_VALUE({ VALUE: 2 }), // TODO real data
+            value: textKeys.CHECKOUT_DETAILS_COUNT_VALUE({
+              VALUE: offer.lastQuoteOfMember.details.numberOfBathrooms,
+            }),
           },
           {
             key: 'yearOfConstruction',
             label: textKeys.CHECKOUT_DETAILS_YEAR_OF_CONSTRUCTION(),
-            value: 1937, // TODO real data
+            value: offer.lastQuoteOfMember.details.yearOfConstruction,
           },
         ] as DetailsGroup)
       : []),
   ].filter(Boolean) as DetailsGroup,
 
-  ...(offer.quote.details.__typename === 'CompleteHouseQuoteDetails'
-    ? offer.quote.details.extraBuildings.map<DetailsGroup>((extraBuilding) => [
-        {
-          key: 'buildingType',
-          label: textKeys.CHECKOUT_DETAILS_EXTRA_BUILDINGS_BUILDING_TYPE(),
-          value: extraBuilding.displayName,
-        },
-        {
-          key: 'buildingSize',
-          label: textKeys.CHECKOUT_DETAILS_EXTRA_BUILDINGS_SIZE(),
-          value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
-            VALUE: extraBuilding.area ?? 'blah',
-          }),
-        },
-        {
-          key: 'hasWater',
-          label: textKeys.CHECKOUT_DETAILS_EXTRA_BUILDINGS_HAS_WATER_CONNECTED(),
-          value: extraBuilding.hasWaterConnected
-            ? textKeys.YES()
-            : textKeys.NO(),
-        },
-      ])
+  ...(offer.lastQuoteOfMember.details.__typename === 'CompleteHouseQuoteDetails'
+    ? offer.lastQuoteOfMember.details.extraBuildings.map<DetailsGroup>(
+        (extraBuilding) => [
+          {
+            key: 'buildingType',
+            label: textKeys.CHECKOUT_DETAILS_EXTRA_BUILDINGS_BUILDING_TYPE(),
+            value: extraBuilding.displayName,
+          },
+          {
+            key: 'buildingSize',
+            label: textKeys.CHECKOUT_DETAILS_EXTRA_BUILDINGS_SIZE(),
+            value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
+              VALUE: extraBuilding.area ?? 'blah',
+            }),
+          },
+          {
+            key: 'hasWater',
+            label: textKeys.CHECKOUT_DETAILS_EXTRA_BUILDINGS_HAS_WATER_CONNECTED(),
+            value: extraBuilding.hasWaterConnected
+              ? textKeys.YES()
+              : textKeys.NO(),
+          },
+        ],
+      )
     : []),
 
   [
     {
       key: 'ssn',
       label: textKeys.CHECKOUT_DETAILS_SSN(),
-      value: 'TODO-****', // TODO
+      value: maskAndFormatRawSsn(offer.lastQuoteOfMember.ssn),
     },
     {
       key: 'antal-personer',
       label: textKeys.CHECKOUT_DETAILS_HOUSEHOLD_SIZE(),
       value:
-        offer.quote.details.householdSize === 1
+        offer.lastQuoteOfMember.details.householdSize === 1
           ? textKeys.CHECKOUT_DETAILS_SINGLE_PERSON()
           : textKeys.CHECKOUT_DETAILS_PERSONS_VALUE({
-              VALUE: offer.quote.details.householdSize,
+              VALUE: offer.lastQuoteOfMember.details.householdSize,
             }),
     },
   ],

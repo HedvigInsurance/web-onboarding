@@ -7,7 +7,7 @@ import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { Price } from '../../components'
-import { CompleteOfferData } from '../../types'
+import { CompleteOfferDataForMember } from '../../types'
 import {
   getInsuranceType,
   insuranceTypeTextKeys,
@@ -21,7 +21,7 @@ import { StartDate } from './StartDate'
 
 interface Props {
   sticky: boolean
-  offer: CompleteOfferData
+  offer: CompleteOfferDataForMember
   refetch: () => void
   onCheckoutOpen: () => void
 }
@@ -194,21 +194,25 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
               <Title>
                 {textKeys[
-                  insuranceTypeTextKeys[getInsuranceType(offer.quote)]
+                  insuranceTypeTextKeys[
+                    getInsuranceType(offer.lastQuoteOfMember)
+                  ]
                 ]()}
               </Title>
 
               <SummaryContent>
                 <SummaryText>
-                  <b>{`${offer.member.firstName} ${offer.member.lastName}`}</b>{' '}
-                  {offer.quote.details.householdSize - 1 > 0 &&
+                  <b>{`${offer.lastQuoteOfMember.firstName} ${offer.lastQuoteOfMember.lastName}`}</b>{' '}
+                  {offer.lastQuoteOfMember.details.householdSize - 1 > 0 &&
                     textKeys.SIDEBAR_INSURED_PERSONS_SUFFIX({
-                      AMOUNT: offer.quote.details.householdSize - 1,
+                      AMOUNT: offer.lastQuoteOfMember.details.householdSize - 1,
                     })}
                 </SummaryText>
                 <SummaryText>
-                  {`${offer.quote.details.street}, ${formatPostalNumber(
-                    offer.quote.details.zipCode,
+                  {`${
+                    offer.lastQuoteOfMember.details.street
+                  }, ${formatPostalNumber(
+                    offer.lastQuoteOfMember.details.zipCode,
                   )}`}
                 </SummaryText>
 
@@ -220,16 +224,18 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
             <Price
               monthlyCostDeduction={monthlyCostDeduction}
-              monthlyNet={offer.quote.price}
-              monthlyGross={offer.quote.price} // TODO what should either of these be?
+              monthlyGross={offer.lastQuoteOfMember.insuranceCost.monthlyGross}
+              monthlyNet={offer.lastQuoteOfMember.insuranceCost.monthlyNet}
             />
           </Header>
 
           <Body>
-            {offer.quote.currentInsurer && (
+            {offer.lastQuoteOfMember.currentInsurer && (
               <PreviousInsurancePicker insurances={otherInsuranceCompanies} />
             )}
-            <StartDate insuredAtOtherCompany={!!offer.quote.currentInsurer} />
+            <StartDate
+              insuredAtOtherCompany={!!offer.lastQuoteOfMember.currentInsurer}
+            />
           </Body>
 
           <Footer>

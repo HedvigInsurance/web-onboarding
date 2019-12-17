@@ -5,15 +5,17 @@ interface OfferCore {
   member: Query['member']
 }
 
-export interface CompleteOfferData extends OfferCore {
-  quote: CompleteQuote
+export interface CompleteOfferDataForMember extends OfferCore {
+  lastQuoteOfMember: CompleteQuote
 }
 
-export interface IncompleteOfferData extends OfferCore {
-  quote: IncompleteQuote
+export interface IncompleteOfferDataForMember extends OfferCore {
+  lastQuoteOfMember: IncompleteQuote
 }
 
-export type OfferData = CompleteOfferData | IncompleteOfferData
+export type OfferData =
+  | CompleteOfferDataForMember
+  | IncompleteOfferDataForMember
 
 export interface WithEmailForm {
   email: string

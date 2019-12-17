@@ -8,10 +8,12 @@ import {
   InsuranceType,
   Quote,
 } from '../../generated/graphql'
-import { CompleteOfferData, OfferData } from './types'
+import { CompleteOfferDataForMember, OfferData } from './types'
 
-export const isOffer = (offer?: OfferData): offer is CompleteOfferData =>
-  (offer && isQuote(offer.quote)) || false
+export const isOffer = (
+  offer?: OfferData,
+): offer is CompleteOfferDataForMember =>
+  (offer && isQuote(offer.lastQuoteOfMember)) || false
 
 export const isQuote = (quote: Quote): quote is CompleteQuote =>
   quote.__typename === 'CompleteQuote' || false
@@ -107,4 +109,14 @@ export const getInsurancePDFTextKey = (
     throw new Error(`Invalid insurance type ${insuranceType}`)
   }
   return map[insuranceType]
+}
+
+export const maskAndFormatRawSsn = (ssn: string) => {
+  if (ssn.length !== 12) {
+    return ssn
+  }
+
+  const CENTURY_LENGTH = 2
+  const DATE_LENGTH = 6
+  return ssn.substr(CENTURY_LENGTH, DATE_LENGTH) + '-****'
 }

@@ -3,7 +3,7 @@ import { colorsV2, fonts } from '@hedviginsurance/brand/dist'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { Price } from '../components'
-import { CompleteOfferData, WithEmailForm } from '../types'
+import { CompleteOfferDataForMember, WithEmailForm } from '../types'
 import {
   getInsuranceType,
   insuranceTypeTextKeys,
@@ -57,7 +57,7 @@ const InsuranceType = styled('div')`
 `
 
 interface Props extends WithEmailForm {
-  offer: CompleteOfferData
+  offer: CompleteOfferDataForMember
 }
 
 export const CheckoutContent: React.FC<Props> = ({
@@ -76,13 +76,15 @@ export const CheckoutContent: React.FC<Props> = ({
           <div>
             <InsuranceTypeLabel>{textKeys.SIDEBAR_LABEL()}</InsuranceTypeLabel>
             <InsuranceType>
-              {textKeys[insuranceTypeTextKeys[getInsuranceType(offer.quote)]]()}
+              {textKeys[
+                insuranceTypeTextKeys[getInsuranceType(offer.lastQuoteOfMember)]
+              ]()}
             </InsuranceType>
           </div>
           <div>
             <Price
-              monthlyGross={offer.quote.price}
-              monthlyNet={offer.quote.price} // TODO with discounts
+              monthlyGross={offer.lastQuoteOfMember.insuranceCost.monthlyGross}
+              monthlyNet={offer.lastQuoteOfMember.insuranceCost.monthlyNet}
               monthlyCostDeduction={monthlyCostDeduction}
               highlightAmount
             />
