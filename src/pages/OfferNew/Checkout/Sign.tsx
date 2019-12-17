@@ -1,13 +1,16 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand/dist'
-import { useSignOfferMutation } from 'generated/graphql'
+import { CompleteQuote, useSignOfferMutation } from 'generated/graphql'
 import { Button } from 'new-components/buttons'
 import * as React from 'react'
 import AnimateHeight from 'react-animate-height'
 import { useMediaQuery } from 'react-responsive'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { InsuranceType } from 'utils/insuranceDomainUtils'
+import { adtraction, trackStudentkortet } from 'utils/tracking'
 import { SignStatus } from './SignStatus'
 import { emailValidation } from './UserDetailsForm'
+import { CompleteOfferDataForMember } from 'pages/OfferNew/types'
 
 export const SignSpacer = styled('div')`
   height: 250px;
@@ -63,9 +66,15 @@ interface Props {
   className?: string
   email?: string
   personalNumber: string
+  offer: CompleteOfferDataForMember
 }
 
-export const Sign: React.FC<Props> = ({ className, email, personalNumber }) => {
+export const Sign: React.FC<Props> = ({
+  className,
+  email,
+  personalNumber,
+  offer,
+}) => {
   const isMobile = useMediaQuery({ maxWidth: 600 })
   const textKeys = useTextKeys()
   const [signOffer, signOfferMutation] = useSignOfferMutation({
@@ -109,8 +118,10 @@ export const Sign: React.FC<Props> = ({ className, email, personalNumber }) => {
           <SignStateWrapper isVisible={signState !== SignState.NOT_STARTED}>
             <SignStatus
               isSigning={signState !== SignState.NOT_STARTED}
-              error={Boolean(signOfferMutation.error)}
               onFailure={() => setSignState(SignState.FAILED)}
+              onSuccess={() => {
+                track(email!, offer)
+              }}
             />
           </SignStateWrapper>
         }
@@ -119,4 +130,37 @@ export const Sign: React.FC<Props> = ({ className, email, personalNumber }) => {
       <Disclaimer>{textKeys.CHECKOUT_SIGN_DISCLAIMER()}</Disclaimer>
     </Wrapper>
   )
+}
+
+const track = (email: string, offer: CompleteOfferDataForMember) => {
+  if (process.env.NODE_ENV === 'test') {
+    return
+  }
+
+  const lastQuote: CompleteQuote = offer.lastQuoteOfMember as CompleteQuote
+  const legacyInsuranceType: InsuranceType =
+    lastQuote.details.__typename === 'CompleteApartmentQuoteDetails'
+      ? (lastQuote.details.type as any)
+      : 'HOUSE'
+
+  adtraction(
+    parseFloat(lastQuote.insuranceCost.monthlyGross.amount),
+    offer.member.id!,
+    email,
+    offer.redeemedCampaigns !== null && offer.redeemedCampaigns.length !== 0
+      ? offer.redeemedCampaigns[0].code
+      : null,
+    legacyInsuranceType,
+  )
+
+  if (
+    offer.redeemedCampaigns !== null &&
+    offer.redeemedCampaigns.length !== 0 &&
+    offer.redeemedCampaigns[0].code.toLowerCase() === 'studentkortet'
+  ) {
+    trackStudentkortet(
+      offer.member.id!,
+      lastQuote.insuranceCost.monthlyGross.amount,
+    )
+  }
 }

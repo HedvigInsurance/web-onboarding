@@ -223,6 +223,7 @@ export const Checkout: React.FC<Props> = ({ offer, isOpen, onClose }) => {
           visibilityState={visibilityState}
           personalNumber={offer.lastQuoteOfMember.ssn}
           email={email}
+          offer={offer}
         />
       </OuterWrapper>
       <Backdrop visibilityState={visibilityState} onClick={onClose} />

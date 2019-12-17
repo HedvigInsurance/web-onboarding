@@ -23,13 +23,13 @@ const BANK_ID_STATUS_TEXT_KEYS: Record<string, string> = {
 interface Props {
   isSigning: boolean
   onFailure: () => void
-  error?: boolean
+  onSuccess: () => void
 }
 
 export const SignStatus: React.FC<Props> = ({
   isSigning,
   onFailure,
-  error,
+  onSuccess,
 }) => {
   const textKeys = useTextKeys()
   const [executeSignStatusQuery, signStatusQuery] = useSignStatusLazyQuery({
@@ -46,16 +46,12 @@ export const SignStatus: React.FC<Props> = ({
 
   React.useEffect(() => {
     if (signStatusQuery?.data?.signStatus?.signState === SignState.Completed) {
-      // TODO tracking
+      onSuccess()
     }
     if (signStatusQuery?.data?.signStatus?.signState === SignState.Failed) {
       onFailure()
     }
   }, [signStatusQuery?.data?.signStatus?.signState])
-
-  if (error) {
-    return <Wrapper>{textKeys.SIGN_BANKID_CODE_START_FAILED()}</Wrapper>
-  }
 
   if (!isSigning) {
     return null
@@ -79,15 +75,15 @@ export const SignStatus: React.FC<Props> = ({
         }
 
         if (
-          signStatusQuery.data?.signStatus?.signState ===
-            SignState.InProgress ||
-          signStatusQuery.data?.signStatus?.signState === SignState.Failed
+          [SignState.InProgress, SignState.Failed].includes(
+            signStatusQuery.data?.signStatus?.signState,
+          )
         ) {
           const collectCode =
             signStatusQuery.data?.signStatus?.collectStatus?.code
 
           if (!collectCode) {
-            return textKeys.SIGN_BANKID_CODE_START_FAILED()
+            return null
           }
 
           return textKeys[BANK_ID_STATUS_TEXT_KEYS[collectCode!]]()
