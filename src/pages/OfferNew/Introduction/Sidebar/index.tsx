@@ -2,7 +2,6 @@ import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import { useRemoveDiscountCodeMutation } from 'generated/graphql'
 import { Button, TextButton } from 'new-components/buttons'
-import { otherInsuranceCompanies } from 'pages/OfferNew/mock'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { formatPostalNumber } from 'utils/postalNumbers'
@@ -16,7 +15,6 @@ import {
   isNoDiscount,
 } from '../../utils'
 import { DiscountCodeModal } from './DiscountCodeModal'
-import { PreviousInsurancePicker } from './PreviousInsurancePicker'
 import { StartDate } from './StartDate'
 
 interface Props {
@@ -226,9 +224,6 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
           </Header>
 
           <Body>
-            {offer.quote.currentInsurer && (
-              <PreviousInsurancePicker insurances={otherInsuranceCompanies} />
-            )}
             <StartDate
               startDate={offer.quote.startDate}
               offerId={offer.quote.id}
