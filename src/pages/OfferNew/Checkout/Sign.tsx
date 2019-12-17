@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand/dist'
 import { CompleteQuote, useSignOfferMutation } from 'generated/graphql'
 import { Button } from 'new-components/buttons'
+import { CompleteOfferDataForMember } from 'pages/OfferNew/types'
 import * as React from 'react'
 import AnimateHeight from 'react-animate-height'
 import { useMediaQuery } from 'react-responsive'
@@ -10,7 +11,6 @@ import { InsuranceType } from 'utils/insuranceDomainUtils'
 import { adtraction, trackStudentkortet } from 'utils/tracking'
 import { SignStatus } from './SignStatus'
 import { emailValidation } from './UserDetailsForm'
-import { CompleteOfferDataForMember } from 'pages/OfferNew/types'
 
 export const SignSpacer = styled('div')`
   height: 250px;
