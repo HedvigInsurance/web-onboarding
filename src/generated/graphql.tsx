@@ -1153,7 +1153,11 @@ export type ImageTransformationInput = {
   resize?: Maybe<ImageResizeInput>
 }
 
-export type Incentive = MonthlyCostDeduction | FreeMonths | NoDiscount
+export type Incentive =
+  | MonthlyCostDeduction
+  | FreeMonths
+  | NoDiscount
+  | PercentageDiscountMonths
 
 export type IncompleteApartmentQuoteDetails = {
   __typename?: 'IncompleteApartmentQuoteDetails'
@@ -2451,6 +2455,7 @@ export type Mutation = {
   createQuote: CreateQuoteResult
   editQuote: CreateQuoteResult
   removeCurrentInsurer: CreateQuoteResult
+  removeStartDate: CreateQuoteResult
 }
 
 export type MutationCreateSessionArgs = {
@@ -2562,6 +2567,10 @@ export type MutationRemoveCurrentInsurerArgs = {
   input: RemoveCurrentInsurerInput
 }
 
+export type MutationRemoveStartDateArgs = {
+  input: RemoveStartDateInput
+}
+
 export enum MutationType {
   Created = 'CREATED',
   Updated = 'UPDATED',
@@ -2625,6 +2634,12 @@ export type PageInfo = {
   startCursor?: Maybe<Scalars['String']>
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']>
+}
+
+export type PercentageDiscountMonths = {
+  __typename?: 'PercentageDiscountMonths'
+  percentageDiscount: Scalars['Float']
+  quantity: Scalars['Int']
 }
 
 export type Peril = {
@@ -2829,6 +2844,10 @@ export type RegisterDirectDebitClientContext = {
 }
 
 export type RemoveCurrentInsurerInput = {
+  id: Scalars['ID']
+}
+
+export type RemoveStartDateInput = {
   id: Scalars['ID']
 }
 
@@ -3502,6 +3521,7 @@ export type OfferQuery = { __typename?: 'Query' } & {
             })
           | ({ __typename?: 'FreeMonths' } & Pick<FreeMonths, 'quantity'>)
           | { __typename?: 'NoDiscount' }
+          | { __typename?: 'PercentageDiscountMonths' }
         >
         owner: Maybe<
           { __typename?: 'CampaignOwner' } & Pick<CampaignOwner, 'displayName'>
@@ -3533,6 +3553,7 @@ export type RedeemCodeMutation = { __typename?: 'Mutation' } & {
             })
           | ({ __typename?: 'FreeMonths' } & Pick<FreeMonths, 'quantity'>)
           | { __typename?: 'NoDiscount' }
+          | { __typename?: 'PercentageDiscountMonths' }
         >
       }
     >
@@ -3553,6 +3574,16 @@ export type RemoveDiscountCodeMutationVariables = {}
 
 export type RemoveDiscountCodeMutation = { __typename?: 'Mutation' } & {
   removeDiscountCode: { __typename: 'RedemedCodeResult' }
+}
+
+export type RemoveStartDateMutationVariables = {
+  quoteId: Scalars['ID']
+}
+
+export type RemoveStartDateMutation = { __typename?: 'Mutation' } & {
+  removeStartDate:
+    | ({ __typename?: 'CompleteQuote' } & Pick<CompleteQuote, 'startDate'>)
+    | { __typename?: 'UnderwritingLimitsHit' }
 }
 
 export type StartDateMutationVariables = {
@@ -3805,6 +3836,58 @@ export type RemoveDiscountCodeMutationResult = ApolloReactCommon.MutationResult<
 export type RemoveDiscountCodeMutationOptions = ApolloReactCommon.BaseMutationOptions<
   RemoveDiscountCodeMutation,
   RemoveDiscountCodeMutationVariables
+>
+export const RemoveStartDateDocument = gql`
+  mutation RemoveStartDate($quoteId: ID!) {
+    removeStartDate(input: { id: $quoteId }) {
+      ... on CompleteQuote {
+        startDate
+      }
+    }
+  }
+`
+export type RemoveStartDateMutationFn = ApolloReactCommon.MutationFunction<
+  RemoveStartDateMutation,
+  RemoveStartDateMutationVariables
+>
+
+/**
+ * __useRemoveStartDateMutation__
+ *
+ * To run a mutation, you first call `useRemoveStartDateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveStartDateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeStartDateMutation, { data, loading, error }] = useRemoveStartDateMutation({
+ *   variables: {
+ *      quoteId: // value for 'quoteId'
+ *   },
+ * });
+ */
+export function useRemoveStartDateMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    RemoveStartDateMutation,
+    RemoveStartDateMutationVariables
+  >,
+) {
+  return ApolloReactHooks.useMutation<
+    RemoveStartDateMutation,
+    RemoveStartDateMutationVariables
+  >(RemoveStartDateDocument, baseOptions)
+}
+export type RemoveStartDateMutationHookResult = ReturnType<
+  typeof useRemoveStartDateMutation
+>
+export type RemoveStartDateMutationResult = ApolloReactCommon.MutationResult<
+  RemoveStartDateMutation
+>
+export type RemoveStartDateMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  RemoveStartDateMutation,
+  RemoveStartDateMutationVariables
 >
 export const StartDateDocument = gql`
   mutation StartDate($quoteId: ID!, $date: LocalDate) {

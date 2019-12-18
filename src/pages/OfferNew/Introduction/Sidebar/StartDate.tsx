@@ -1,7 +1,11 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { format, isToday, parse } from 'date-fns'
-import { CurrentInsurer, useStartDateMutation } from 'generated/graphql'
+import {
+  CurrentInsurer,
+  useStartDateMutation,
+  useRemoveStartDateMutation,
+} from 'generated/graphql'
 import { DateInput } from 'new-components/DateInput'
 import { Switch } from 'new-components/Switch'
 import * as React from 'react'
@@ -109,6 +113,7 @@ export const StartDate: React.FC<Props> = ({
   const [dateValue, setDateValue] = React.useState(getDefaultDateValue)
   const textKeys = useTextKeys()
   const [setStartDate] = useStartDateMutation()
+  const [removeStartDate] = useRemoveStartDateMutation()
 
   const getDateLabel = () => {
     if (dateValue) {
@@ -121,6 +126,8 @@ export const StartDate: React.FC<Props> = ({
 
     return textKeys.SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER()
   }
+
+  const gqlDateFormat = 'yyyy-MM-dd'
 
   return (
     <>
@@ -148,7 +155,7 @@ export const StartDate: React.FC<Props> = ({
           setStartDate({
             variables: {
               quoteId: offerId,
-              date: format(newDateValue, 'yyyy-MM-dd'),
+              date: format(newDateValue, gqlDateFormat),
             },
           })
         }}
@@ -161,12 +168,21 @@ export const StartDate: React.FC<Props> = ({
           <Switch
             value={dateValue == null}
             onChange={(newValue) => {
-              setStartDate({
-                variables: {
-                  quoteId: offerId,
-                  date: null,
-                },
-              })
+              if (newValue) {
+                removeStartDate({
+                  variables: {
+                    quoteId: offerId,
+                  },
+                })
+              } else {
+                setStartDate({
+                  variables: {
+                    quoteId: offerId,
+                    date: format(new Date(), gqlDateFormat),
+                  },
+                })
+              }
+
               setDateValue(newValue ? null : new Date())
             }}
           />
