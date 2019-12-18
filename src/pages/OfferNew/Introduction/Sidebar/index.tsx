@@ -216,9 +216,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                   )}`}
                 </SummaryText>
 
-                <TextButton>
-                  {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
-                </TextButton>
+                {/*<TextButton>*/}
+                {/*  {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}*/}
+                {/*</TextButton>*/}
               </SummaryContent>
             </Summary>
 
