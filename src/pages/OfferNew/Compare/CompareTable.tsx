@@ -353,7 +353,7 @@ export const CompareTable = (props: Props) => {
           <SubHeadingBlack>{textKeys.COMPARE_TABLE_TITLE()}</SubHeadingBlack>
 
           <MobileTooltipWrapper>
-            <Tooltip size="lg" body="Info" />
+            <Tooltip size="lg" body={textKeys.COMPARE_TABLE_MOBILE_TOOLTIP()} />
           </MobileTooltipWrapper>
         </ColumnHead>
 
