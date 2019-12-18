@@ -717,12 +717,13 @@ export type CompleteQuote = {
   __typename?: 'CompleteQuote'
   id: Scalars['ID']
   currentInsurer?: Maybe<CurrentInsurer>
+  price: MonetaryAmountV2
   insuranceCost: InsuranceCost
   firstName: Scalars['String']
   lastName: Scalars['String']
   ssn: Scalars['String']
   details: CompleteQuoteDetails
-  startDate: Scalars['LocalDate']
+  startDate?: Maybe<Scalars['LocalDate']>
   expiresAt: Scalars['LocalDate']
 }
 
@@ -893,6 +894,11 @@ export type Emergency = {
   __typename?: 'Emergency'
   color: HedvigColor
   title: Scalars['String']
+}
+
+export enum Environment {
+  Production = 'Production',
+  Staging = 'Staging',
 }
 
 export type ExtraBuilding =
@@ -1152,7 +1158,11 @@ export type ImageTransformationInput = {
   resize?: Maybe<ImageResizeInput>
 }
 
-export type Incentive = MonthlyCostDeduction | FreeMonths | NoDiscount
+export type Incentive =
+  | MonthlyCostDeduction
+  | FreeMonths
+  | NoDiscount
+  | PercentageDiscountMonths
 
 export type IncompleteApartmentQuoteDetails = {
   __typename?: 'IncompleteApartmentQuoteDetails'
@@ -1541,6 +1551,7 @@ export type Language = Node & {
   translations?: Maybe<Array<Translation>>
   code: Scalars['String']
   name: Scalars['String']
+  marketingStory?: Maybe<MarketingStory>
 }
 
 export type LanguageTranslationsArgs = {
@@ -1568,6 +1579,12 @@ export type LanguageCreateInput = {
   code: Scalars['String']
   name: Scalars['String']
   translations?: Maybe<TranslationCreateManyWithoutLanguageInput>
+  marketingStory?: Maybe<MarketingStoryCreateOneWithoutLanguageInput>
+}
+
+export type LanguageCreateOneWithoutMarketingStoryInput = {
+  create?: Maybe<LanguageCreateWithoutMarketingStoryInput>
+  connect?: Maybe<LanguageWhereUniqueInput>
 }
 
 export type LanguageCreateOneWithoutTranslationsInput = {
@@ -1575,10 +1592,18 @@ export type LanguageCreateOneWithoutTranslationsInput = {
   connect?: Maybe<LanguageWhereUniqueInput>
 }
 
+export type LanguageCreateWithoutMarketingStoryInput = {
+  status?: Maybe<Status>
+  code: Scalars['String']
+  name: Scalars['String']
+  translations?: Maybe<TranslationCreateManyWithoutLanguageInput>
+}
+
 export type LanguageCreateWithoutTranslationsInput = {
   status?: Maybe<Status>
   code: Scalars['String']
   name: Scalars['String']
+  marketingStory?: Maybe<MarketingStoryCreateOneWithoutLanguageInput>
 }
 
 /** An edge in a connection. */
@@ -1646,12 +1671,22 @@ export type LanguageUpdateInput = {
   code?: Maybe<Scalars['String']>
   name?: Maybe<Scalars['String']>
   translations?: Maybe<TranslationUpdateManyWithoutLanguageInput>
+  marketingStory?: Maybe<MarketingStoryUpdateOneWithoutLanguageInput>
 }
 
 export type LanguageUpdateManyMutationInput = {
   status?: Maybe<Status>
   code?: Maybe<Scalars['String']>
   name?: Maybe<Scalars['String']>
+}
+
+export type LanguageUpdateOneWithoutMarketingStoryInput = {
+  create?: Maybe<LanguageCreateWithoutMarketingStoryInput>
+  connect?: Maybe<LanguageWhereUniqueInput>
+  disconnect?: Maybe<Scalars['Boolean']>
+  delete?: Maybe<Scalars['Boolean']>
+  update?: Maybe<LanguageUpdateWithoutMarketingStoryDataInput>
+  upsert?: Maybe<LanguageUpsertWithoutMarketingStoryInput>
 }
 
 export type LanguageUpdateOneWithoutTranslationsInput = {
@@ -1663,10 +1698,23 @@ export type LanguageUpdateOneWithoutTranslationsInput = {
   upsert?: Maybe<LanguageUpsertWithoutTranslationsInput>
 }
 
+export type LanguageUpdateWithoutMarketingStoryDataInput = {
+  status?: Maybe<Status>
+  code?: Maybe<Scalars['String']>
+  name?: Maybe<Scalars['String']>
+  translations?: Maybe<TranslationUpdateManyWithoutLanguageInput>
+}
+
 export type LanguageUpdateWithoutTranslationsDataInput = {
   status?: Maybe<Status>
   code?: Maybe<Scalars['String']>
   name?: Maybe<Scalars['String']>
+  marketingStory?: Maybe<MarketingStoryUpdateOneWithoutLanguageInput>
+}
+
+export type LanguageUpsertWithoutMarketingStoryInput = {
+  update: LanguageUpdateWithoutMarketingStoryDataInput
+  create: LanguageCreateWithoutMarketingStoryInput
 }
 
 export type LanguageUpsertWithoutTranslationsInput = {
@@ -1803,6 +1851,7 @@ export type LanguageWhereInput = {
   translations_every?: Maybe<TranslationWhereInput>
   translations_some?: Maybe<TranslationWhereInput>
   translations_none?: Maybe<TranslationWhereInput>
+  marketingStory?: Maybe<MarketingStoryWhereInput>
 }
 
 export type LanguageWhereUniqueInput = {
@@ -1850,6 +1899,8 @@ export type MarketingStory = Node & {
   duration?: Maybe<Scalars['Float']>
   importance?: Maybe<Scalars['Int']>
   backgroundColor: HedvigColor
+  language?: Maybe<Language>
+  environment?: Maybe<Environment>
 }
 
 /** A connection to a list of items. */
@@ -1867,7 +1918,9 @@ export type MarketingStoryCreateInput = {
   duration?: Maybe<Scalars['Float']>
   importance?: Maybe<Scalars['Int']>
   backgroundColor: HedvigColor
+  environment?: Maybe<Environment>
   asset?: Maybe<AssetCreateOneWithoutAssetMarketingStoryInput>
+  language?: Maybe<LanguageCreateOneWithoutMarketingStoryInput>
 }
 
 export type MarketingStoryCreateManyWithoutAssetInput = {
@@ -1875,11 +1928,27 @@ export type MarketingStoryCreateManyWithoutAssetInput = {
   connect?: Maybe<Array<MarketingStoryWhereUniqueInput>>
 }
 
+export type MarketingStoryCreateOneWithoutLanguageInput = {
+  create?: Maybe<MarketingStoryCreateWithoutLanguageInput>
+  connect?: Maybe<MarketingStoryWhereUniqueInput>
+}
+
 export type MarketingStoryCreateWithoutAssetInput = {
   status?: Maybe<Status>
   duration?: Maybe<Scalars['Float']>
   importance?: Maybe<Scalars['Int']>
   backgroundColor: HedvigColor
+  environment?: Maybe<Environment>
+  language?: Maybe<LanguageCreateOneWithoutMarketingStoryInput>
+}
+
+export type MarketingStoryCreateWithoutLanguageInput = {
+  status?: Maybe<Status>
+  duration?: Maybe<Scalars['Float']>
+  importance?: Maybe<Scalars['Int']>
+  backgroundColor: HedvigColor
+  environment?: Maybe<Environment>
+  asset?: Maybe<AssetCreateOneWithoutAssetMarketingStoryInput>
 }
 
 /** An edge in a connection. */
@@ -1906,6 +1975,8 @@ export enum MarketingStoryOrderByInput {
   ImportanceDesc = 'importance_DESC',
   BackgroundColorAsc = 'backgroundColor_ASC',
   BackgroundColorDesc = 'backgroundColor_DESC',
+  EnvironmentAsc = 'environment_ASC',
+  EnvironmentDesc = 'environment_DESC',
 }
 
 export type MarketingStoryPreviousValues = {
@@ -1917,6 +1988,7 @@ export type MarketingStoryPreviousValues = {
   duration?: Maybe<Scalars['Float']>
   importance?: Maybe<Scalars['Int']>
   backgroundColor: HedvigColor
+  environment?: Maybe<Environment>
 }
 
 export type MarketingStoryScalarWhereInput = {
@@ -2028,6 +2100,13 @@ export type MarketingStoryScalarWhereInput = {
   backgroundColor_in?: Maybe<Array<HedvigColor>>
   /** All values that are not contained in given list. */
   backgroundColor_not_in?: Maybe<Array<HedvigColor>>
+  environment?: Maybe<Environment>
+  /** All values that are not equal to given value. */
+  environment_not?: Maybe<Environment>
+  /** All values that are contained in given list. */
+  environment_in?: Maybe<Array<Environment>>
+  /** All values that are not contained in given list. */
+  environment_not_in?: Maybe<Array<Environment>>
 }
 
 export type MarketingStorySubscriptionPayload = {
@@ -2061,7 +2140,9 @@ export type MarketingStoryUpdateInput = {
   duration?: Maybe<Scalars['Float']>
   importance?: Maybe<Scalars['Int']>
   backgroundColor?: Maybe<HedvigColor>
+  environment?: Maybe<Environment>
   asset?: Maybe<AssetUpdateOneWithoutAssetMarketingStoryInput>
+  language?: Maybe<LanguageUpdateOneWithoutMarketingStoryInput>
 }
 
 export type MarketingStoryUpdateManyDataInput = {
@@ -2069,6 +2150,7 @@ export type MarketingStoryUpdateManyDataInput = {
   duration?: Maybe<Scalars['Float']>
   importance?: Maybe<Scalars['Int']>
   backgroundColor?: Maybe<HedvigColor>
+  environment?: Maybe<Environment>
 }
 
 export type MarketingStoryUpdateManyMutationInput = {
@@ -2076,6 +2158,7 @@ export type MarketingStoryUpdateManyMutationInput = {
   duration?: Maybe<Scalars['Float']>
   importance?: Maybe<Scalars['Int']>
   backgroundColor?: Maybe<HedvigColor>
+  environment?: Maybe<Environment>
 }
 
 export type MarketingStoryUpdateManyWithoutAssetInput = {
@@ -2095,16 +2178,41 @@ export type MarketingStoryUpdateManyWithWhereNestedInput = {
   data: MarketingStoryUpdateManyDataInput
 }
 
+export type MarketingStoryUpdateOneWithoutLanguageInput = {
+  create?: Maybe<MarketingStoryCreateWithoutLanguageInput>
+  connect?: Maybe<MarketingStoryWhereUniqueInput>
+  disconnect?: Maybe<Scalars['Boolean']>
+  delete?: Maybe<Scalars['Boolean']>
+  update?: Maybe<MarketingStoryUpdateWithoutLanguageDataInput>
+  upsert?: Maybe<MarketingStoryUpsertWithoutLanguageInput>
+}
+
 export type MarketingStoryUpdateWithoutAssetDataInput = {
   status?: Maybe<Status>
   duration?: Maybe<Scalars['Float']>
   importance?: Maybe<Scalars['Int']>
   backgroundColor?: Maybe<HedvigColor>
+  environment?: Maybe<Environment>
+  language?: Maybe<LanguageUpdateOneWithoutMarketingStoryInput>
+}
+
+export type MarketingStoryUpdateWithoutLanguageDataInput = {
+  status?: Maybe<Status>
+  duration?: Maybe<Scalars['Float']>
+  importance?: Maybe<Scalars['Int']>
+  backgroundColor?: Maybe<HedvigColor>
+  environment?: Maybe<Environment>
+  asset?: Maybe<AssetUpdateOneWithoutAssetMarketingStoryInput>
 }
 
 export type MarketingStoryUpdateWithWhereUniqueWithoutAssetInput = {
   where: MarketingStoryWhereUniqueInput
   data: MarketingStoryUpdateWithoutAssetDataInput
+}
+
+export type MarketingStoryUpsertWithoutLanguageInput = {
+  update: MarketingStoryUpdateWithoutLanguageDataInput
+  create: MarketingStoryCreateWithoutLanguageInput
 }
 
 export type MarketingStoryUpsertWithWhereUniqueWithoutAssetInput = {
@@ -2222,7 +2330,15 @@ export type MarketingStoryWhereInput = {
   backgroundColor_in?: Maybe<Array<HedvigColor>>
   /** All values that are not contained in given list. */
   backgroundColor_not_in?: Maybe<Array<HedvigColor>>
+  environment?: Maybe<Environment>
+  /** All values that are not equal to given value. */
+  environment_not?: Maybe<Environment>
+  /** All values that are contained in given list. */
+  environment_in?: Maybe<Array<Environment>>
+  /** All values that are not contained in given list. */
+  environment_not_in?: Maybe<Array<Environment>>
   asset?: Maybe<AssetWhereInput>
+  language?: Maybe<LanguageWhereInput>
 }
 
 export type MarketingStoryWhereUniqueInput = {
@@ -2450,6 +2566,7 @@ export type Mutation = {
   createQuote: CreateQuoteResult
   editQuote: CreateQuoteResult
   removeCurrentInsurer: CreateQuoteResult
+  removeStartDate: CreateQuoteResult
 }
 
 export type MutationCreateSessionArgs = {
@@ -2561,6 +2678,10 @@ export type MutationRemoveCurrentInsurerArgs = {
   input: RemoveCurrentInsurerInput
 }
 
+export type MutationRemoveStartDateArgs = {
+  input: RemoveStartDateInput
+}
+
 export enum MutationType {
   Created = 'CREATED',
   Updated = 'UPDATED',
@@ -2624,6 +2745,12 @@ export type PageInfo = {
   startCursor?: Maybe<Scalars['String']>
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']>
+}
+
+export type PercentageDiscountMonths = {
+  __typename?: 'PercentageDiscountMonths'
+  percentageDiscount: Scalars['Float']
+  quantity: Scalars['Int']
 }
 
 export type Peril = {
@@ -2828,6 +2955,10 @@ export type RegisterDirectDebitClientContext = {
 }
 
 export type RemoveCurrentInsurerInput = {
+  id: Scalars['ID']
+}
+
+export type RemoveStartDateInput = {
   id: Scalars['ID']
 }
 
@@ -3431,6 +3562,8 @@ export type MemberOfferQuery = { __typename?: 'Query' } & {
                 | 'householdSize'
                 | 'livingSpace'
                 | 'ancillarySpace'
+                | 'numberOfBathrooms'
+                | 'yearOfConstruction'
               > & {
                   extraBuildings: Array<
                     | ({ __typename?: 'ExtraBuildingGarage' } & Pick<
@@ -3506,6 +3639,7 @@ export type MemberOfferQuery = { __typename?: 'Query' } & {
             })
           | ({ __typename?: 'FreeMonths' } & Pick<FreeMonths, 'quantity'>)
           | { __typename?: 'NoDiscount' }
+          | { __typename?: 'PercentageDiscountMonths' }
         >
         owner: Maybe<
           { __typename?: 'CampaignOwner' } & Pick<CampaignOwner, 'displayName'>
@@ -3534,6 +3668,7 @@ export type RedeemCodeMutation = { __typename?: 'Mutation' } & {
             })
           | ({ __typename?: 'FreeMonths' } & Pick<FreeMonths, 'quantity'>)
           | { __typename?: 'NoDiscount' }
+          | { __typename?: 'PercentageDiscountMonths' }
         >
       }
     >
@@ -3642,6 +3777,8 @@ export const MemberOfferDocument = gql`
             householdSize
             livingSpace
             ancillarySpace
+            numberOfBathrooms
+            yearOfConstruction
             extraBuildings {
               ... on ExtraBuildingCore {
                 area

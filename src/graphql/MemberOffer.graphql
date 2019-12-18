@@ -41,6 +41,8 @@ query MemberOffer {
           householdSize
           livingSpace
           ancillarySpace
+          numberOfBathrooms
+          yearOfConstruction
           extraBuildings {
             ... on ExtraBuildingCore {
               area

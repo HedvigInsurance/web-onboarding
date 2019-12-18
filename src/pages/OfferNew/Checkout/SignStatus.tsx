@@ -6,6 +6,7 @@ import { useTextKeys } from 'utils/hooks/useTextKeys'
 
 const Wrapper = styled('div')`
   padding: 1rem 0.5rem 0 0.5rem;
+  text-align: center;
 `
 
 const BANK_ID_STATUS_TEXT_KEYS: Record<string, string> = {
