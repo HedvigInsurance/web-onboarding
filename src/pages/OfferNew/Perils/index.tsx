@@ -4,7 +4,6 @@ import { Peril } from 'pages/OfferNew/Perils/types'
 import * as React from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-import { getInsuranceTypeFromDetails } from 'utils/insuranceDomainUtils'
 import {
   Body,
   Column,
@@ -39,11 +38,10 @@ export const Perils: React.FC<Props> = ({ offer }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 600px)' })
   const [perils, setPerils] = React.useState<ReadonlyArray<Peril>>([])
   React.useEffect(() => {
-    getLocalizedPerils(
-      getInsuranceTypeFromDetails(offer.lastQuoteOfMember.details),
-      'sv-SE',
-    ).then(setPerils)
-  }, [getInsuranceTypeFromDetails(offer.lastQuoteOfMember.details), 'sv-SE'])
+    getLocalizedPerils(getInsuranceType(offer.lastQuoteOfMember), 'sv-SE').then(
+      setPerils,
+    )
+  }, [getInsuranceType(offer.lastQuoteOfMember), 'sv-SE'])
 
   return (
     <Wrapper>

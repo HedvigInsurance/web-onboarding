@@ -1,13 +1,19 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand/dist'
+import { MarkdownTranslation } from '@hedviginsurance/textkeyfy'
 import { motion } from 'framer-motion'
 import { CompleteQuote, useSignOfferMutation } from 'generated/graphql'
 import { Button } from 'new-components/buttons'
 import { CompleteOfferDataForMember } from 'pages/OfferNew/types'
+import { getInsuranceType } from 'pages/OfferNew/utils'
 import * as React from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-import { InsuranceType } from 'utils/insuranceDomainUtils'
+import {
+  getInsurancePDFTextKey,
+  getPrebuyPDFTextKey,
+  InsuranceType,
+} from 'utils/insuranceDomainUtils'
 import { adtraction, trackStudentkortet } from 'utils/tracking'
 import { SignStatus } from './SignStatus'
 import { emailValidation } from './UserDetailsForm'
@@ -121,7 +127,20 @@ export const Sign: React.FC<Props> = ({
         />
       </motion.div>
 
-      <Disclaimer>{textKeys.CHECKOUT_SIGN_DISCLAIMER()}</Disclaimer>
+      <Disclaimer>
+        <MarkdownTranslation
+          textKey="CHECKOUT_SIGN_DISCLAIMER"
+          replacements={{
+            PREBUY_LINK: textKeys[
+              getPrebuyPDFTextKey(getInsuranceType(offer.lastQuoteOfMember))
+            ](),
+            TERMS_LINK: textKeys[
+              getInsurancePDFTextKey(getInsuranceType(offer.lastQuoteOfMember))
+            ](),
+          }}
+          markdownProps={{ linkTarget: '_blank' }}
+        />
+      </Disclaimer>
     </Wrapper>
   )
 }

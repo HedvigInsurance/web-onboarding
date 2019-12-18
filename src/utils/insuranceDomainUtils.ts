@@ -1,21 +1,9 @@
-import { CompleteQuoteDetails } from 'generated/graphql'
-
 export enum InsuranceType {
   Rent = 'RENT',
   Brf = 'BRF',
   StudentRent = 'STUDENT_RENT',
   StudentBrf = 'STUDENT_BRF',
   House = 'HOUSE',
-}
-
-export const getInsuranceTypeFromDetails = (
-  details: CompleteQuoteDetails,
-): InsuranceType => {
-  if (details.__typename === 'CompleteApartmentQuoteDetails') {
-    return (details.type as string) as InsuranceType
-  }
-
-  return InsuranceType.House
 }
 
 export const isApartmentOwner = (insuranceType: InsuranceType): boolean =>

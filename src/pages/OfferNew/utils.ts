@@ -79,38 +79,6 @@ export const apartmentTypeTextKeys: Record<ApartmentType, string> = {
   [ApartmentType.StudentRent]: 'CHECKOUT_INSURANCE_APARTMENT_TYPE_RENT',
 }
 
-export const getPrebuyPDFTextKey = (insuranceType: InsuranceType): string => {
-  const map = {
-    [InsuranceType.Rent]: 'TERMS_PDF_PREBUY_RENT_URL',
-    [InsuranceType.Brf]: 'TERMS_PDF_PREBUY_BRF_URL',
-    [InsuranceType.StudentRent]: 'TERMS_PDF_PREBUY_STUDENT_RENT_URL',
-    [InsuranceType.StudentBrf]: 'TERMS_PDF_PREBUY_STUDENT_BRF_URL',
-    [InsuranceType.House]: 'TERMS_PDF_PREBUY_HOUSE_URL',
-  }
-
-  if (!map[insuranceType]) {
-    throw new Error(`Invalid insurance type ${insuranceType}`)
-  }
-  return map[insuranceType]
-}
-
-export const getInsurancePDFTextKey = (
-  insuranceType: InsuranceType,
-): string => {
-  const map = {
-    [InsuranceType.Rent]: 'TERMS_PDF_INSURANCE_RENT_URL',
-    [InsuranceType.Brf]: 'TERMS_PDF_INSURANCE_BRF_URL',
-    [InsuranceType.StudentRent]: 'TERMS_PDF_INSURANCE_STUDENT_RENT_URL',
-    [InsuranceType.StudentBrf]: 'TERMS_PDF_INSURANCE_STUDENT_BRF_URL',
-    [InsuranceType.House]: 'TERMS_PDF_INSURANCE_HOUSE_URL',
-  }
-
-  if (!map[insuranceType]) {
-    throw new Error(`Invalid insurance type ${insuranceType}`)
-  }
-  return map[insuranceType]
-}
-
 export const maskAndFormatRawSsn = (ssn: string) => {
   if (ssn.length !== 12) {
     return ssn
