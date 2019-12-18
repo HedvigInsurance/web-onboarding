@@ -43,7 +43,7 @@ export const OfferNew: React.FC<RouteComponentProps<{ offerId: string }>> = ({
           onCheckoutOpen={() => toggleCheckout(true)}
         />
         <Perils offer={data} />
-        <Compare />
+        <Compare currentInsurer={data.quote.currentInsurer || undefined} />
         <Checkout
           offer={data}
           isOpen={checkoutMatch !== null}

@@ -8,6 +8,7 @@ export interface InsuranceProperty {
 
 export interface CompanyProperties {
   name: string
+  id: string
   propertyProtection: boolean | string
   travelProtection: boolean | string
   assaultProtection: boolean | string

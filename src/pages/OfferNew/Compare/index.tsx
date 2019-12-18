@@ -14,6 +14,7 @@ import {
 import { CompareTable } from './CompareTable'
 import { hedvigCompany, otherCompanies } from './mock'
 import { InsuranceProperties } from './types'
+import { CurrentInsurer } from 'src/generated/graphql'
 
 const Wrapper = styled.div`
   padding: 5rem 0;
@@ -68,7 +69,11 @@ const insuranceProperties: InsuranceProperties = {
   },
 }
 
-export const Compare = () => {
+interface CompareProps {
+  currentInsurer?: CurrentInsurer
+}
+
+export const Compare: React.FC<CompareProps> = ({ currentInsurer }) => {
   const textKeys = useTextKeys()
   return (
     <Wrapper>
@@ -84,6 +89,9 @@ export const Compare = () => {
             insuranceProperties={insuranceProperties}
             primaryCompany={hedvigCompany}
             otherCompanies={otherCompanies}
+            currentCompany={otherCompanies.find(
+              (company) => company.id === currentInsurer?.id,
+            )}
           />
         </Column>
         <ColumnSpacing />

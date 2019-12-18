@@ -248,6 +248,8 @@ const Dropdown = styled('div')<{ visible: boolean }>`
   padding: 1rem;
   box-sizing: border-box;
   border-top: 1px solid ${colorsV2.lightgray};
+  max-height: 90%;
+  overflow-y: scroll;
 
   @media (max-width: 600px) {
     top: 5.5rem;
