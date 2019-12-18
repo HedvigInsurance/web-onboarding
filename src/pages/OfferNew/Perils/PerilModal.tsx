@@ -88,7 +88,7 @@ const PerilItemsContainer = styled('div')<PerilItemsContainerProps>`
   ${(props) =>
     `transform: translateX(${
       props.currentPerilIndex !== 0
-        ? `calc((-100%/3) - ${(props.currentPerilIndex - 12 - 1) * (100 + 16) +
+        ? `calc((-100%/3) - ${(props.currentPerilIndex - 12 - 2) * (100 + 16) +
             8}px)`
         : `calc((-100%/3) + 6.75rem)`
     });`}

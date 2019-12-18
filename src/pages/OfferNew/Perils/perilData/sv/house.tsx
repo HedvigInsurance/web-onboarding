@@ -160,7 +160,7 @@ export const housePerils: Peril[] = [
     icon: <BaseballBat />,
   },
   {
-    title: 'Juridisk tvist - Ansvarsskydd',
+    title: 'Ansvarsskydd',
     description:
       'Vårt ansvarsskydd gäller när någon kräver dig på skadestånd för att ha skadat honom eller henne eller dennes ägodelar. Vi hjälper dig med utredning och förhandling och vi betalar både rättegångskostnader och skadestånd om du vållat skadan.',
     covered: [
@@ -181,7 +181,7 @@ export const housePerils: Peril[] = [
     icon: <LegalDispute />,
   },
   {
-    title: 'Juridisk tvist - Rättsskydd',
+    title: 'Rättsskydd',
     description:
       'Vårt rättsskydd kan ge dig ersättning för att t.ex. anlita advokat/ombud om du hamnar i en rättslig tvist. Skyddet gäller i tvister som prövas i tingsrätt, hovrätt eller Högsta domstolen.',
     covered: [
@@ -242,7 +242,7 @@ export const housePerils: Peril[] = [
     icon: <Alarm />,
   },
   {
-    title: 'Sjukdom och olycksfall på resa',
+    title: 'Sjuk på resa',
     description:
       'Vårt reseskydd gäller de första 45 dagarna på din resa och ersätter kostnader om du blir akut sjuk, skadar dig eller får akuta tandskador. Vi flyger även hem dig till Sverige för vidare vård om det bedöms nödvändigt.',
     covered: [
