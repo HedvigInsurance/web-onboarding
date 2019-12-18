@@ -68,7 +68,7 @@ export const StartDate: React.FC<Props> = ({ insuredAtOtherCompany }) => {
           ? textKeys.SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER()
           : textKeys.SIDEBAR_STARTDATE_CELL_VALUE_NEW()}
         <TooltipWrapper>
-          <Tooltip size="lg" body="Info" />
+          <Tooltip size="lg" body={textKeys.SIDEBAR_STARTDATE_TOOLTIP()} />
         </TooltipWrapper>
       </Value>
     </Wrapper>

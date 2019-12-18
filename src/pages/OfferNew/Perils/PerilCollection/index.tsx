@@ -4,7 +4,7 @@ import { Peril } from '../types'
 import { PerilItem } from './PerilItem'
 
 interface Props {
-  perils: Peril[]
+  perils: ReadonlyArray<Peril>
   setCurrentPeril: (index: number) => void
   setIsShowingPeril: (isShowingPeril: boolean) => void
 }

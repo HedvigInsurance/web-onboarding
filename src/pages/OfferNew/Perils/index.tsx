@@ -1,8 +1,10 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
+import { Peril } from 'pages/OfferNew/Perils/types'
 import * as React from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { getInsuranceTypeFromDetails } from 'utils/insuranceDomainUtils'
 import {
   Body,
   Column,
@@ -15,8 +17,8 @@ import {
 import { CompleteOfferDataForMember } from '../types'
 import { getInsuranceType } from '../utils'
 import { InsuranceValues } from './InsuranceValues'
-import { perils } from './mock'
 import { PerilCollection } from './PerilCollection'
+import { getLocalizedPerils } from './perilData'
 import { PerilModal } from './PerilModal'
 import { PerilSwiper } from './PerilSwiper'
 
@@ -35,6 +37,13 @@ export const Perils: React.FC<Props> = ({ offer }) => {
   const [isShowingPeril, setIsShowingPeril] = React.useState(false)
   const [currentPeril, setCurrentPeril] = React.useState(0)
   const isMobile = useMediaQuery({ query: '(max-width: 600px)' })
+  const [perils, setPerils] = React.useState<ReadonlyArray<Peril>>([])
+  React.useEffect(() => {
+    getLocalizedPerils(
+      getInsuranceTypeFromDetails(offer.lastQuoteOfMember.details),
+      'sv-SE',
+    ).then(setPerils)
+  }, [getInsuranceTypeFromDetails(offer.lastQuoteOfMember.details), 'sv-SE'])
 
   return (
     <Wrapper>
@@ -66,13 +75,15 @@ export const Perils: React.FC<Props> = ({ offer }) => {
         </Column>
         <ColumnSpacing />
       </Container>
-      <PerilModal
-        perils={perils}
-        currentPerilIndex={currentPeril}
-        setCurrentPeril={setCurrentPeril}
-        isVisible={isShowingPeril}
-        onClose={() => setIsShowingPeril(false)}
-      />
+      {perils.length > 0 && (
+        <PerilModal
+          perils={perils}
+          currentPerilIndex={currentPeril}
+          setCurrentPeril={setCurrentPeril}
+          isVisible={isShowingPeril}
+          onClose={() => setIsShowingPeril(false)}
+        />
+      )}
     </Wrapper>
   )
 }
