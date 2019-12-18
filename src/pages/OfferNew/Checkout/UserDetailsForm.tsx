@@ -25,6 +25,7 @@ export const UserDetailsForm: React.FC<Props> = ({ email, onEmailChange }) => {
         label={textKeys.CHECKOUT_EMAIL_LABEL()}
         placeholder={textKeys.CHECKOUT_EMAIL_PLACEHOLDER()}
         name="email"
+        id="email"
         type="email"
         value={email}
         errors={emailError ? textKeys.SIGN_EMAIL_CHECK() : undefined}

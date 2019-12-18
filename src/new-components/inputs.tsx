@@ -28,7 +28,8 @@ const TextWrapper = styled.div`
   flex-direction: column;
 `
 
-const Label = styled.div`
+const Label = styled.label`
+  display: block;
   font-size: 0.75rem;
   line-height: 0.75rem;
   color: ${colorsV2.gray};
@@ -72,13 +73,13 @@ const ErrorText = styled.div`
   margin-top: 0.25rem;
 `
 
-const createTextInput = <T extends {}>(
+const createTextInput = <T extends React.HTMLProps<HTMLInputElement>>(
   FieldComponent: React.ComponentType<T>,
 ): React.FC<TextInputProps & T> => ({ label, touched, errors, ...props }) => (
   <>
     <Wrapper errors={errors}>
       <TextWrapper>
-        <Label>{label}</Label>
+        <Label htmlFor={(props as T).id}>{label}</Label>
         <FieldComponent {...(props as T)} />
       </TextWrapper>
       <SymbolWrapper>{errors && <WarningIcon />}</SymbolWrapper>
@@ -91,6 +92,6 @@ export const TextInput = createTextInput<
   React.InputHTMLAttributes<HTMLInputElement>
 >(StyledInput)
 
-export const FormikTextInput = createTextInput<GenericFieldHTMLAttributes>(
-  StyledField,
-)
+export const FormikTextInput = createTextInput<
+  GenericFieldHTMLAttributes & React.HTMLProps<HTMLInputElement>
+>(StyledField)
