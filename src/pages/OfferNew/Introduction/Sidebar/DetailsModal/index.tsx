@@ -28,10 +28,22 @@ import {
 
 const Container = styled.div`
   width: 100%;
-  height: 100;
+  height: 100%;
   padding 4rem 5rem 1.5rem 5rem;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 900px) {
+    padding: 3rem 3rem 1.5rem 3rem;
+  }
+
+  @media (max-width: 800px) {
+    padding: 2rem 2rem 1.5rem 2rem;
+  }
+
+  @media (max-width: 500px) {
+    padding: 2rem 1rem 1.5rem 1rem;
+  }
 `
 
 const Headline = styled.div`
@@ -39,6 +51,11 @@ const Headline = styled.div`
   font-size: 2.5rem;
   line-height: 3.5rem;
   color: ${colorsV2.black};
+
+  @media (max-width: 600px) {
+    font-size: 2rem;
+    line-height: 3rem;
+  }
 `
 
 const Content = styled.div`
@@ -47,11 +64,26 @@ const Content = styled.div`
   flex-direction: row;
   margin: 0 -1rem;
   margin-top: 2.5rem;
+
+  @media (max-width: 800px) {
+    width: 100%;
+    margin: 1.5rem 0 0 0;
+    flex-direction: column;
+  }
 `
 
 const ContentColumn = styled.div`
   width: calc(50% - 2rem);
   margin: 0 1rem;
+
+  @media (max-width: 800px) {
+    width: 100%;
+    margin: 0 0 2rem 0;
+
+    :last-child {
+      margin-bottom: 0;
+    }
+  }
 `
 
 const ContentColumnTitle = styled.div`
@@ -64,6 +96,10 @@ const ContentColumnTitle = styled.div`
   justify-content: space-between;
   align-items: center;
   min-height: 2rem;
+
+  @media (max-width: 800px) {
+    padding: 0;
+  }
 `
 
 const ContentColumnTitleButton = styled.button`
@@ -74,6 +110,7 @@ const ContentColumnTitleButton = styled.button`
   border: 1px solid ${colorsV2.gray};
   cursor: pointer;
   transition: all 250ms;
+  background: none;
 
   :focus {
     outline: none;

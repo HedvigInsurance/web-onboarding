@@ -41,13 +41,13 @@ const ModalContainer = styled(motion.div)<ModalContainerProps>`
   position: relative;
   width: 100%;
   max-width: 56rem;
+  max-height: 100vh;
   ${(props) =>
     !props.dynamicHeight &&
     `
   height: 100%;
-  min-height: 25rem;`}
-
-  max-height: 56rem;
+  min-height: 25rem;
+  max-height: 56rem;`}
   background: ${colorsV2.white};
   border-radius: 9px;
   position: absolute;
