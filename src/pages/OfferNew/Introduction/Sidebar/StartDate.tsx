@@ -3,8 +3,8 @@ import { colorsV2 } from '@hedviginsurance/brand'
 import { format, isToday, parse } from 'date-fns'
 import {
   CurrentInsurer,
-  useStartDateMutation,
   useRemoveStartDateMutation,
+  useStartDateMutation,
 } from 'generated/graphql'
 import { DateInput } from 'new-components/DateInput'
 import { Switch } from 'new-components/Switch'
