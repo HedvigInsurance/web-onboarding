@@ -48,7 +48,7 @@ export const otherCompanies: CompanyProperties[] = [
   },
   {
     name: 'Ica',
-    id: 'Ica',
+    id: 'ICA',
     propertyProtection: true,
     travelProtection: true,
     assaultProtection: true,
