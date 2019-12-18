@@ -62,10 +62,10 @@ const Usp: React.FC<UspProps> = ({ image, title, paragraph }) => (
   </UspContainer>
 )
 
-export const Usps: React.FunctionComponent = () => {
+export const Usps: React.FC<{ className?: string }> = ({ className }) => {
   const textKeys = useTextKeys()
   return (
-    <UspsContainer>
+    <UspsContainer className={className}>
       <Usp
         image={<Stopwatch />}
         title={textKeys.HERO_USP1_HEADLINE()}

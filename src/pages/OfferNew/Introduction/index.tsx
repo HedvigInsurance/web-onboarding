@@ -40,6 +40,18 @@ const Wrapper = styled.div`
   }
 `
 
+const UspsMobile = styled(Usps)`
+  @media (min-width: 1021px) {
+    display: none;
+  }
+`
+
+const UspsDesktop = styled(Usps)`
+  @media (max-width: 1020px) {
+    display: none;
+  }
+`
+
 const scrollButtonKeyframes = keyframes`
   0% {
     transform: translateY(0rem);
@@ -121,7 +133,7 @@ export const Introduction: React.FC<Props> = ({
                 })}
               </HeadingWhite>
             </HeadingWrapper>
-            <Usps />
+            <UspsDesktop />
           </Column>
 
           <Sidebar
@@ -131,6 +143,8 @@ export const Introduction: React.FC<Props> = ({
             refetch={refetch}
             onCheckoutOpen={onCheckoutOpen}
           />
+
+          <UspsMobile />
 
           <ScrollButton
             onClick={() => {
