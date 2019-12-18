@@ -5,6 +5,7 @@ import { FieldArray, Form, Formik } from 'formik'
 import {
   CompleteQuote,
   EditQuoteInput,
+  ExtraBuildingInput,
   ExtraBuildingType,
   useEditQuoteMutation,
 } from 'generated/graphql'
@@ -138,6 +139,26 @@ const Warning = styled.div`
   text-align: center;
 `
 
+const Error = styled.div`
+  font-size: 0.75rem;
+  line-height: 1rem;
+  margin-top: 1rem;
+  color: ${colorsV2.coral500};
+  text-align: center;
+`
+
+const LoadingDimmer = styled.div<{ visible: boolean }>`
+  background: rgba(255, 255, 255, 0.5);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: all 350ms;
+  opacity: ${(props) => (props.visible ? 1 : 0)};
+  visibility: ${(props) => (props.visible ? 'visible' : 'hidden')};
+`
+
 interface DetailsModalProps {
   quote: CompleteQuote
   refetch: () => void
@@ -150,31 +171,37 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   onClose,
 }) => {
   const textKeys = useTextKeys()
-  const [editQuote] = useEditQuoteMutation()
+  const [editQuote, editQuoteResult] = useEditQuoteMutation()
   const fieldSchema = getFieldSchema(quote)
   const validationSchema = getValidationSchema(fieldSchema, quote)
   const initialValues = getInitialValues(quote)
+  const [isUpdating, setIsUpdating] = React.useState(false)
 
   return (
     <Modal isVisible={isVisible} onClose={onClose} dynamicHeight>
+      <LoadingDimmer visible={isUpdating} />
       <Container>
         <Formik<EditQuoteInput>
           initialValues={initialValues}
           validationSchema={validationSchema}
           validateOnBlur
           onSubmit={(form) => {
-            editQuote({ variables: { input: form } }).then(async (result) => {
-              if (!result) {
-                return
-              }
+            setIsUpdating(true)
 
-              if (result.errors && result.errors.length > 0) {
-                return
-              }
+            editQuote({ variables: { input: form } })
+              .then(async (result) => {
+                if (!result || (result.errors && result.errors.length > 0)) {
+                  setIsUpdating(false)
+                  return
+                }
 
-              await refetch()
-              onClose()
-            })
+                await refetch()
+                onClose()
+                setIsUpdating(false)
+              })
+              .catch(() => {
+                setIsUpdating(false)
+              })
           }}
         >
           {(formikProps) => {
@@ -223,7 +250,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                       </InputGroup>
                     </ContentColumn>
                     <ContentColumn>
-                      <SupportSection />
+                      <SupportSection onButtonClick={() => Intercom('show')} />
                     </ContentColumn>
                   </Content>
                 )}
@@ -290,7 +317,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                           name="isSubleted"
                         />
                       </InputGroup>
-                      <SupportSection />
+                      <SupportSection onButtonClick={() => Intercom('show')} />
                     </ContentColumn>
                     <ContentColumn>
                       <FieldArray
@@ -302,16 +329,18 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                               <ContentColumnTitleButton
                                 type="button"
                                 onClick={() => {
-                                  arrayHelpers.insert(0, {
+                                  const defaultExtraBuilding: ExtraBuildingInput = {
                                     type: ExtraBuildingType.Garage,
                                     area: 10,
                                     hasWaterConnected: false,
-                                  })
+                                  }
+                                  arrayHelpers.insert(0, defaultExtraBuilding)
                                 }}
                               >
                                 {textKeys.DETAILS_MODULE_EXTRABUILDINGS_TABLE_BUTTON()}
                               </ContentColumnTitleButton>
                             </ContentColumnTitle>
+
                             {formikProps.values.house?.extraBuildings?.map(
                               (_, index) => (
                                 <InputGroup key={index}>
@@ -378,7 +407,13 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                   <Button type="submit">
                     {textKeys.DETAILS_MODULE_BUTTON()}
                   </Button>
-                  <Warning>{textKeys.DETAILS_MODULE_BUTTON_WARNING()}</Warning>
+                  {editQuoteResult.error ? (
+                    <Error>{textKeys.DETAILS_MODULE_BUTTON_ERROR()}</Error>
+                  ) : (
+                    <Warning>
+                      {textKeys.DETAILS_MODULE_BUTTON_WARNING()}
+                    </Warning>
+                  )}
                 </Footer>
               </Form>
             )

@@ -63,7 +63,11 @@ const Button = styled.button`
   }
 `
 
-export const SupportSection: React.FC = () => {
+interface Props {
+  onButtonClick: () => void
+}
+
+export const SupportSection: React.FC<Props> = ({ onButtonClick }) => {
   const textKeys = useTextKeys()
 
   return (
@@ -74,7 +78,7 @@ export const SupportSection: React.FC = () => {
       <Content>
         <Headline>{textKeys.DETAILS_MODULE_INFOBOX_TITLE()}</Headline>
         <Body>{textKeys.DETAILS_MODULE_INFOBOX_BODY()}</Body>
-        <Button type="button">
+        <Button type="button" onClick={onButtonClick}>
           {textKeys.DETAILS_MODULE_INFOBOX_BUTTON()}
         </Button>
       </Content>

@@ -3,7 +3,6 @@ import { colorsV2 } from '@hedviginsurance/brand'
 import { motion } from 'framer-motion'
 import * as React from 'react'
 import { Cross } from './icons/Cross'
-import { bool } from 'yup'
 
 export interface ModalProps {
   isVisible: boolean

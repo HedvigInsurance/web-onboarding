@@ -45,7 +45,7 @@ export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
       label: 'DETAILS_MODULE_TABLE_POSTALCODE_CELL_LABEL',
       placeholder: 'DETAILS_MODULE_TABLE_POSTALCODE_CELL_LABEL',
       mask: masks.zipCode,
-      type: inputTypes.text,
+      type: inputTypes.number,
       validation: Yup.string().matches(/^[0-9]{3}[0-9]{2}$/),
     },
     householdSize: {
