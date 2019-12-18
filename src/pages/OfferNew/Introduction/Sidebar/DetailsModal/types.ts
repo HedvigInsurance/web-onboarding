@@ -26,14 +26,12 @@ export interface HouseFieldSchema {
   house: FieldSchemaBuilder<RequiredFields<EditHouseInput>>
 }
 
-export type FieldSchemaBuilder<T> = RequiredFields<
-  {
-    [P in keyof T]: T[P] extends string | number | boolean
-      ? RegularFieldType
-      : T[P] extends any[]
-      ? ArrayFieldType<T[P]>
-      : FieldSchemaBuilder<T[P]>
-  }
->
+export type FieldSchemaBuilder<T> = {
+  [P in keyof T]: T[P] extends string | number | boolean
+    ? RegularFieldType
+    : T[P] extends any[]
+    ? ArrayFieldType<T[P]>
+    : FieldSchemaBuilder<T[P]>
+}
 
 export type FieldSchema = ApartmentFieldSchema | HouseFieldSchema
