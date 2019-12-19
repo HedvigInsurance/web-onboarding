@@ -27,11 +27,6 @@ export const reactPageRoutes = [
     exact: true,
   },
   {
-    path: LANGUAGE_PATH_PATTERN + '/new-member/sign',
-    Component: OfferNew,
-    exact: true,
-  },
-  {
     path: LANGUAGE_PATH_PATTERN + '/new-member/connect-payment',
     Component: ConnectPayment,
     exact: true,
@@ -52,7 +47,7 @@ export const reactPageRoutes = [
     exact: true,
   },
   {
-    path: LANGUAGE_PATH_PATTERN + '/new-member/offer',
+    path: LANGUAGE_PATH_PATTERN + '/new-member/(offer|sign)',
     Component: OfferNew,
     exact: true,
   },
