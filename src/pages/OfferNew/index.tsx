@@ -55,7 +55,9 @@ export const OfferNew: React.FC = () => {
           )}
         </TrackAction>
         <Perils offer={data} />
-        <Compare currentInsurer={data.quote.currentInsurer || undefined} />
+        <Compare
+          currentInsurer={data.lastQuoteOfMember.currentInsurer || undefined}
+        />
         <Checkout
           offer={data}
           isOpen={checkoutMatch !== null}
