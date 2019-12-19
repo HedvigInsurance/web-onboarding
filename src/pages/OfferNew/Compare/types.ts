@@ -19,5 +19,5 @@ export interface CompanyProperties {
 }
 
 export type InsuranceProperties = {
-  [key in Exclude<keyof CompanyProperties, 'name'>]: InsuranceProperty
+  [key in keyof Omit<CompanyProperties, 'name' | 'id'>]: InsuranceProperty
 }
