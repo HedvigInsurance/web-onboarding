@@ -1,19 +1,28 @@
-query Offer($id: ID) {
-  quote(id: $id) {
+query MemberOffer {
+  lastQuoteOfMember {
     ... on CompleteQuote {
       id
+
+      ssn
+      firstName
+      lastName
+
       currentInsurer {
-        switchable
-        displayName
         id
+        displayName
+        switchable
       }
-      startDate
       insuranceCost {
-        monthlyNet {
+        freeUntil
+        monthlyDiscount {
           amount
           currency
         }
         monthlyGross {
+          amount
+          currency
+        }
+        monthlyNet {
           amount
           currency
         }
@@ -32,6 +41,8 @@ query Offer($id: ID) {
           householdSize
           livingSpace
           ancillarySpace
+          numberOfBathrooms
+          yearOfConstruction
           extraBuildings {
             ... on ExtraBuildingCore {
               area
@@ -68,8 +79,6 @@ query Offer($id: ID) {
 
   member {
     id
-    firstName
-    lastName
     email
   }
 }

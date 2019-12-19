@@ -1,0 +1,11 @@
+subscription SignStatusListener {
+  signStatus {
+    status {
+      signState
+      collectStatus {
+        status
+        code
+      }
+    }
+  }
+}

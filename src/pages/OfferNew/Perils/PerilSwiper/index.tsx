@@ -6,7 +6,7 @@ import { Peril } from '../types'
 import { PerilItem } from './PerilItem'
 
 interface Props {
-  perils: Peril[]
+  perils: ReadonlyArray<Peril>
   setCurrentPeril: (index: number) => void
   setIsShowingPeril: (isShowingPeril: boolean) => void
 }
@@ -52,7 +52,7 @@ const Dot = styled.div<DotProps>`
 `
 
 const chunkArray = <T extends {}>(
-  array: T[],
+  array: ReadonlyArray<T>,
   size: number,
 ): Array<typeof array> =>
   array.reduce(

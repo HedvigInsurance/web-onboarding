@@ -896,6 +896,11 @@ export type Emergency = {
   title: Scalars['String']
 }
 
+export enum Environment {
+  Production = 'Production',
+  Staging = 'Staging',
+}
+
 export type ExtraBuilding =
   | ExtraBuildingGarage
   | ExtraBuildingCarport
@@ -1546,6 +1551,7 @@ export type Language = Node & {
   translations?: Maybe<Array<Translation>>
   code: Scalars['String']
   name: Scalars['String']
+  marketingStory?: Maybe<MarketingStory>
 }
 
 export type LanguageTranslationsArgs = {
@@ -1573,6 +1579,12 @@ export type LanguageCreateInput = {
   code: Scalars['String']
   name: Scalars['String']
   translations?: Maybe<TranslationCreateManyWithoutLanguageInput>
+  marketingStory?: Maybe<MarketingStoryCreateOneWithoutLanguageInput>
+}
+
+export type LanguageCreateOneWithoutMarketingStoryInput = {
+  create?: Maybe<LanguageCreateWithoutMarketingStoryInput>
+  connect?: Maybe<LanguageWhereUniqueInput>
 }
 
 export type LanguageCreateOneWithoutTranslationsInput = {
@@ -1580,10 +1592,18 @@ export type LanguageCreateOneWithoutTranslationsInput = {
   connect?: Maybe<LanguageWhereUniqueInput>
 }
 
+export type LanguageCreateWithoutMarketingStoryInput = {
+  status?: Maybe<Status>
+  code: Scalars['String']
+  name: Scalars['String']
+  translations?: Maybe<TranslationCreateManyWithoutLanguageInput>
+}
+
 export type LanguageCreateWithoutTranslationsInput = {
   status?: Maybe<Status>
   code: Scalars['String']
   name: Scalars['String']
+  marketingStory?: Maybe<MarketingStoryCreateOneWithoutLanguageInput>
 }
 
 /** An edge in a connection. */
@@ -1651,12 +1671,22 @@ export type LanguageUpdateInput = {
   code?: Maybe<Scalars['String']>
   name?: Maybe<Scalars['String']>
   translations?: Maybe<TranslationUpdateManyWithoutLanguageInput>
+  marketingStory?: Maybe<MarketingStoryUpdateOneWithoutLanguageInput>
 }
 
 export type LanguageUpdateManyMutationInput = {
   status?: Maybe<Status>
   code?: Maybe<Scalars['String']>
   name?: Maybe<Scalars['String']>
+}
+
+export type LanguageUpdateOneWithoutMarketingStoryInput = {
+  create?: Maybe<LanguageCreateWithoutMarketingStoryInput>
+  connect?: Maybe<LanguageWhereUniqueInput>
+  disconnect?: Maybe<Scalars['Boolean']>
+  delete?: Maybe<Scalars['Boolean']>
+  update?: Maybe<LanguageUpdateWithoutMarketingStoryDataInput>
+  upsert?: Maybe<LanguageUpsertWithoutMarketingStoryInput>
 }
 
 export type LanguageUpdateOneWithoutTranslationsInput = {
@@ -1668,10 +1698,23 @@ export type LanguageUpdateOneWithoutTranslationsInput = {
   upsert?: Maybe<LanguageUpsertWithoutTranslationsInput>
 }
 
+export type LanguageUpdateWithoutMarketingStoryDataInput = {
+  status?: Maybe<Status>
+  code?: Maybe<Scalars['String']>
+  name?: Maybe<Scalars['String']>
+  translations?: Maybe<TranslationUpdateManyWithoutLanguageInput>
+}
+
 export type LanguageUpdateWithoutTranslationsDataInput = {
   status?: Maybe<Status>
   code?: Maybe<Scalars['String']>
   name?: Maybe<Scalars['String']>
+  marketingStory?: Maybe<MarketingStoryUpdateOneWithoutLanguageInput>
+}
+
+export type LanguageUpsertWithoutMarketingStoryInput = {
+  update: LanguageUpdateWithoutMarketingStoryDataInput
+  create: LanguageCreateWithoutMarketingStoryInput
 }
 
 export type LanguageUpsertWithoutTranslationsInput = {
@@ -1808,6 +1851,7 @@ export type LanguageWhereInput = {
   translations_every?: Maybe<TranslationWhereInput>
   translations_some?: Maybe<TranslationWhereInput>
   translations_none?: Maybe<TranslationWhereInput>
+  marketingStory?: Maybe<MarketingStoryWhereInput>
 }
 
 export type LanguageWhereUniqueInput = {
@@ -1855,6 +1899,8 @@ export type MarketingStory = Node & {
   duration?: Maybe<Scalars['Float']>
   importance?: Maybe<Scalars['Int']>
   backgroundColor: HedvigColor
+  language?: Maybe<Language>
+  environment?: Maybe<Environment>
 }
 
 /** A connection to a list of items. */
@@ -1872,7 +1918,9 @@ export type MarketingStoryCreateInput = {
   duration?: Maybe<Scalars['Float']>
   importance?: Maybe<Scalars['Int']>
   backgroundColor: HedvigColor
+  environment?: Maybe<Environment>
   asset?: Maybe<AssetCreateOneWithoutAssetMarketingStoryInput>
+  language?: Maybe<LanguageCreateOneWithoutMarketingStoryInput>
 }
 
 export type MarketingStoryCreateManyWithoutAssetInput = {
@@ -1880,11 +1928,27 @@ export type MarketingStoryCreateManyWithoutAssetInput = {
   connect?: Maybe<Array<MarketingStoryWhereUniqueInput>>
 }
 
+export type MarketingStoryCreateOneWithoutLanguageInput = {
+  create?: Maybe<MarketingStoryCreateWithoutLanguageInput>
+  connect?: Maybe<MarketingStoryWhereUniqueInput>
+}
+
 export type MarketingStoryCreateWithoutAssetInput = {
   status?: Maybe<Status>
   duration?: Maybe<Scalars['Float']>
   importance?: Maybe<Scalars['Int']>
   backgroundColor: HedvigColor
+  environment?: Maybe<Environment>
+  language?: Maybe<LanguageCreateOneWithoutMarketingStoryInput>
+}
+
+export type MarketingStoryCreateWithoutLanguageInput = {
+  status?: Maybe<Status>
+  duration?: Maybe<Scalars['Float']>
+  importance?: Maybe<Scalars['Int']>
+  backgroundColor: HedvigColor
+  environment?: Maybe<Environment>
+  asset?: Maybe<AssetCreateOneWithoutAssetMarketingStoryInput>
 }
 
 /** An edge in a connection. */
@@ -1911,6 +1975,8 @@ export enum MarketingStoryOrderByInput {
   ImportanceDesc = 'importance_DESC',
   BackgroundColorAsc = 'backgroundColor_ASC',
   BackgroundColorDesc = 'backgroundColor_DESC',
+  EnvironmentAsc = 'environment_ASC',
+  EnvironmentDesc = 'environment_DESC',
 }
 
 export type MarketingStoryPreviousValues = {
@@ -1922,6 +1988,7 @@ export type MarketingStoryPreviousValues = {
   duration?: Maybe<Scalars['Float']>
   importance?: Maybe<Scalars['Int']>
   backgroundColor: HedvigColor
+  environment?: Maybe<Environment>
 }
 
 export type MarketingStoryScalarWhereInput = {
@@ -2033,6 +2100,13 @@ export type MarketingStoryScalarWhereInput = {
   backgroundColor_in?: Maybe<Array<HedvigColor>>
   /** All values that are not contained in given list. */
   backgroundColor_not_in?: Maybe<Array<HedvigColor>>
+  environment?: Maybe<Environment>
+  /** All values that are not equal to given value. */
+  environment_not?: Maybe<Environment>
+  /** All values that are contained in given list. */
+  environment_in?: Maybe<Array<Environment>>
+  /** All values that are not contained in given list. */
+  environment_not_in?: Maybe<Array<Environment>>
 }
 
 export type MarketingStorySubscriptionPayload = {
@@ -2066,7 +2140,9 @@ export type MarketingStoryUpdateInput = {
   duration?: Maybe<Scalars['Float']>
   importance?: Maybe<Scalars['Int']>
   backgroundColor?: Maybe<HedvigColor>
+  environment?: Maybe<Environment>
   asset?: Maybe<AssetUpdateOneWithoutAssetMarketingStoryInput>
+  language?: Maybe<LanguageUpdateOneWithoutMarketingStoryInput>
 }
 
 export type MarketingStoryUpdateManyDataInput = {
@@ -2074,6 +2150,7 @@ export type MarketingStoryUpdateManyDataInput = {
   duration?: Maybe<Scalars['Float']>
   importance?: Maybe<Scalars['Int']>
   backgroundColor?: Maybe<HedvigColor>
+  environment?: Maybe<Environment>
 }
 
 export type MarketingStoryUpdateManyMutationInput = {
@@ -2081,6 +2158,7 @@ export type MarketingStoryUpdateManyMutationInput = {
   duration?: Maybe<Scalars['Float']>
   importance?: Maybe<Scalars['Int']>
   backgroundColor?: Maybe<HedvigColor>
+  environment?: Maybe<Environment>
 }
 
 export type MarketingStoryUpdateManyWithoutAssetInput = {
@@ -2100,16 +2178,41 @@ export type MarketingStoryUpdateManyWithWhereNestedInput = {
   data: MarketingStoryUpdateManyDataInput
 }
 
+export type MarketingStoryUpdateOneWithoutLanguageInput = {
+  create?: Maybe<MarketingStoryCreateWithoutLanguageInput>
+  connect?: Maybe<MarketingStoryWhereUniqueInput>
+  disconnect?: Maybe<Scalars['Boolean']>
+  delete?: Maybe<Scalars['Boolean']>
+  update?: Maybe<MarketingStoryUpdateWithoutLanguageDataInput>
+  upsert?: Maybe<MarketingStoryUpsertWithoutLanguageInput>
+}
+
 export type MarketingStoryUpdateWithoutAssetDataInput = {
   status?: Maybe<Status>
   duration?: Maybe<Scalars['Float']>
   importance?: Maybe<Scalars['Int']>
   backgroundColor?: Maybe<HedvigColor>
+  environment?: Maybe<Environment>
+  language?: Maybe<LanguageUpdateOneWithoutMarketingStoryInput>
+}
+
+export type MarketingStoryUpdateWithoutLanguageDataInput = {
+  status?: Maybe<Status>
+  duration?: Maybe<Scalars['Float']>
+  importance?: Maybe<Scalars['Int']>
+  backgroundColor?: Maybe<HedvigColor>
+  environment?: Maybe<Environment>
+  asset?: Maybe<AssetUpdateOneWithoutAssetMarketingStoryInput>
 }
 
 export type MarketingStoryUpdateWithWhereUniqueWithoutAssetInput = {
   where: MarketingStoryWhereUniqueInput
   data: MarketingStoryUpdateWithoutAssetDataInput
+}
+
+export type MarketingStoryUpsertWithoutLanguageInput = {
+  update: MarketingStoryUpdateWithoutLanguageDataInput
+  create: MarketingStoryCreateWithoutLanguageInput
 }
 
 export type MarketingStoryUpsertWithWhereUniqueWithoutAssetInput = {
@@ -2227,7 +2330,15 @@ export type MarketingStoryWhereInput = {
   backgroundColor_in?: Maybe<Array<HedvigColor>>
   /** All values that are not contained in given list. */
   backgroundColor_not_in?: Maybe<Array<HedvigColor>>
+  environment?: Maybe<Environment>
+  /** All values that are not equal to given value. */
+  environment_not?: Maybe<Environment>
+  /** All values that are contained in given list. */
+  environment_in?: Maybe<Array<Environment>>
+  /** All values that are not contained in given list. */
+  environment_not_in?: Maybe<Array<Environment>>
   asset?: Maybe<AssetWhereInput>
+  language?: Maybe<LanguageWhereInput>
 }
 
 export type MarketingStoryWhereUniqueInput = {
@@ -3408,32 +3519,37 @@ export type Welcome = {
   title: Scalars['String']
 }
 
-export type OfferQueryVariables = {
-  id?: Maybe<Scalars['ID']>
-}
+export type MemberOfferQueryVariables = {}
 
-export type OfferQuery = { __typename?: 'Query' } & {
-  quote:
+export type MemberOfferQuery = { __typename?: 'Query' } & {
+  lastQuoteOfMember:
     | ({ __typename?: 'CompleteQuote' } & Pick<
         CompleteQuote,
-        'id' | 'startDate'
+        'id' | 'ssn' | 'firstName' | 'lastName'
       > & {
           currentInsurer: Maybe<
             { __typename?: 'CurrentInsurer' } & Pick<
               CurrentInsurer,
-              'switchable' | 'displayName' | 'id'
+              'id' | 'displayName' | 'switchable'
             >
           >
-          insuranceCost: { __typename?: 'InsuranceCost' } & {
-            monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
-              MonetaryAmountV2,
-              'amount' | 'currency'
-            >
-            monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
-              MonetaryAmountV2,
-              'amount' | 'currency'
-            >
-          }
+          insuranceCost: { __typename?: 'InsuranceCost' } & Pick<
+            InsuranceCost,
+            'freeUntil'
+          > & {
+              monthlyDiscount: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount' | 'currency'
+              >
+              monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount' | 'currency'
+              >
+              monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount' | 'currency'
+              >
+            }
           details:
             | ({ __typename?: 'CompleteApartmentQuoteDetails' } & Pick<
                 CompleteApartmentQuoteDetails,
@@ -3446,6 +3562,8 @@ export type OfferQuery = { __typename?: 'Query' } & {
                 | 'householdSize'
                 | 'livingSpace'
                 | 'ancillarySpace'
+                | 'numberOfBathrooms'
+                | 'yearOfConstruction'
               > & {
                   extraBuildings: Array<
                     | ({ __typename?: 'ExtraBuildingGarage' } & Pick<
@@ -3528,10 +3646,7 @@ export type OfferQuery = { __typename?: 'Query' } & {
         >
       }
   >
-  member: { __typename?: 'Member' } & Pick<
-    Member,
-    'id' | 'firstName' | 'lastName' | 'email'
-  >
+  member: { __typename?: 'Member' } & Pick<Member, 'id' | 'email'>
 }
 
 export type RedeemCodeMutationVariables = {
@@ -3576,44 +3691,74 @@ export type RemoveDiscountCodeMutation = { __typename?: 'Mutation' } & {
   removeDiscountCode: { __typename: 'RedemedCodeResult' }
 }
 
-export type RemoveStartDateMutationVariables = {
-  quoteId: Scalars['ID']
+export type SignOfferMutationVariables = {
+  personalNumber: Scalars['String']
+  email: Scalars['String']
 }
 
-export type RemoveStartDateMutation = { __typename?: 'Mutation' } & {
-  removeStartDate:
-    | ({ __typename?: 'CompleteQuote' } & Pick<CompleteQuote, 'startDate'>)
-    | { __typename?: 'UnderwritingLimitsHit' }
+export type SignOfferMutation = { __typename?: 'Mutation' } & Pick<
+  Mutation,
+  'signOffer'
+>
+
+export type SignStatusQueryVariables = {}
+
+export type SignStatusQuery = { __typename?: 'Query' } & {
+  signStatus: Maybe<
+    { __typename?: 'SignStatus' } & Pick<SignStatus, 'signState'> & {
+        collectStatus: Maybe<
+          { __typename?: 'CollectStatus' } & Pick<
+            CollectStatus,
+            'status' | 'code'
+          >
+        >
+      }
+  >
 }
 
-export type StartDateMutationVariables = {
-  quoteId: Scalars['ID']
-  date?: Maybe<Scalars['LocalDate']>
+export type SignStatusListenerSubscriptionVariables = {}
+
+export type SignStatusListenerSubscription = { __typename?: 'Subscription' } & {
+  signStatus: Maybe<
+    { __typename?: 'SignEvent' } & {
+      status: Maybe<
+        { __typename?: 'SignStatus' } & Pick<SignStatus, 'signState'> & {
+            collectStatus: Maybe<
+              { __typename?: 'CollectStatus' } & Pick<
+                CollectStatus,
+                'status' | 'code'
+              >
+            >
+          }
+      >
+    }
+  >
 }
 
-export type StartDateMutation = { __typename?: 'Mutation' } & {
-  editQuote:
-    | ({ __typename?: 'CompleteQuote' } & Pick<CompleteQuote, 'startDate'>)
-    | { __typename?: 'UnderwritingLimitsHit' }
-}
-
-export const OfferDocument = gql`
-  query Offer($id: ID) {
-    quote(id: $id) {
+export const MemberOfferDocument = gql`
+  query MemberOffer {
+    lastQuoteOfMember {
       ... on CompleteQuote {
         id
+        ssn
+        firstName
+        lastName
         currentInsurer {
-          switchable
-          displayName
           id
+          displayName
+          switchable
         }
-        startDate
         insuranceCost {
-          monthlyNet {
+          freeUntil
+          monthlyDiscount {
             amount
             currency
           }
           monthlyGross {
+            amount
+            currency
+          }
+          monthlyNet {
             amount
             currency
           }
@@ -3632,6 +3777,8 @@ export const OfferDocument = gql`
             householdSize
             livingSpace
             ancillarySpace
+            numberOfBathrooms
+            yearOfConstruction
             extraBuildings {
               ... on ExtraBuildingCore {
                 area
@@ -3665,56 +3812,55 @@ export const OfferDocument = gql`
     }
     member {
       id
-      firstName
-      lastName
       email
     }
   }
 `
 
 /**
- * __useOfferQuery__
+ * __useMemberOfferQuery__
  *
- * To run a query within a React component, call `useOfferQuery` and pass it any options that fit your needs.
- * When your component renders, `useOfferQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useMemberOfferQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMemberOfferQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useOfferQuery({
+ * const { data, loading, error } = useMemberOfferQuery({
  *   variables: {
- *      id: // value for 'id'
  *   },
  * });
  */
-export function useOfferQuery(
+export function useMemberOfferQuery(
   baseOptions?: ApolloReactHooks.QueryHookOptions<
-    OfferQuery,
-    OfferQueryVariables
+    MemberOfferQuery,
+    MemberOfferQueryVariables
   >,
 ) {
-  return ApolloReactHooks.useQuery<OfferQuery, OfferQueryVariables>(
-    OfferDocument,
+  return ApolloReactHooks.useQuery<MemberOfferQuery, MemberOfferQueryVariables>(
+    MemberOfferDocument,
     baseOptions,
   )
 }
-export function useOfferLazyQuery(
+export function useMemberOfferLazyQuery(
   baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
-    OfferQuery,
-    OfferQueryVariables
+    MemberOfferQuery,
+    MemberOfferQueryVariables
   >,
 ) {
-  return ApolloReactHooks.useLazyQuery<OfferQuery, OfferQueryVariables>(
-    OfferDocument,
-    baseOptions,
-  )
+  return ApolloReactHooks.useLazyQuery<
+    MemberOfferQuery,
+    MemberOfferQueryVariables
+  >(MemberOfferDocument, baseOptions)
 }
-export type OfferQueryHookResult = ReturnType<typeof useOfferQuery>
-export type OfferLazyQueryHookResult = ReturnType<typeof useOfferLazyQuery>
-export type OfferQueryResult = ApolloReactCommon.QueryResult<
-  OfferQuery,
-  OfferQueryVariables
+export type MemberOfferQueryHookResult = ReturnType<typeof useMemberOfferQuery>
+export type MemberOfferLazyQueryHookResult = ReturnType<
+  typeof useMemberOfferLazyQuery
+>
+export type MemberOfferQueryResult = ApolloReactCommon.QueryResult<
+  MemberOfferQuery,
+  MemberOfferQueryVariables
 >
 export const RedeemCodeDocument = gql`
   mutation RedeemCode($code: String!) {
@@ -3837,108 +3983,155 @@ export type RemoveDiscountCodeMutationOptions = ApolloReactCommon.BaseMutationOp
   RemoveDiscountCodeMutation,
   RemoveDiscountCodeMutationVariables
 >
-export const RemoveStartDateDocument = gql`
-  mutation RemoveStartDate($quoteId: ID!) {
-    removeStartDate(input: { id: $quoteId }) {
-      ... on CompleteQuote {
-        startDate
-      }
-    }
+export const SignOfferDocument = gql`
+  mutation SignOffer($personalNumber: String!, $email: String!) {
+    signOffer(details: { personalNumber: $personalNumber, email: $email })
   }
 `
-export type RemoveStartDateMutationFn = ApolloReactCommon.MutationFunction<
-  RemoveStartDateMutation,
-  RemoveStartDateMutationVariables
+export type SignOfferMutationFn = ApolloReactCommon.MutationFunction<
+  SignOfferMutation,
+  SignOfferMutationVariables
 >
 
 /**
- * __useRemoveStartDateMutation__
+ * __useSignOfferMutation__
  *
- * To run a mutation, you first call `useRemoveStartDateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRemoveStartDateMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useSignOfferMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSignOfferMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [removeStartDateMutation, { data, loading, error }] = useRemoveStartDateMutation({
+ * const [signOfferMutation, { data, loading, error }] = useSignOfferMutation({
  *   variables: {
- *      quoteId: // value for 'quoteId'
+ *      personalNumber: // value for 'personalNumber'
+ *      email: // value for 'email'
  *   },
  * });
  */
-export function useRemoveStartDateMutation(
+export function useSignOfferMutation(
   baseOptions?: ApolloReactHooks.MutationHookOptions<
-    RemoveStartDateMutation,
-    RemoveStartDateMutationVariables
+    SignOfferMutation,
+    SignOfferMutationVariables
   >,
 ) {
   return ApolloReactHooks.useMutation<
-    RemoveStartDateMutation,
-    RemoveStartDateMutationVariables
-  >(RemoveStartDateDocument, baseOptions)
+    SignOfferMutation,
+    SignOfferMutationVariables
+  >(SignOfferDocument, baseOptions)
 }
-export type RemoveStartDateMutationHookResult = ReturnType<
-  typeof useRemoveStartDateMutation
+export type SignOfferMutationHookResult = ReturnType<
+  typeof useSignOfferMutation
 >
-export type RemoveStartDateMutationResult = ApolloReactCommon.MutationResult<
-  RemoveStartDateMutation
+export type SignOfferMutationResult = ApolloReactCommon.MutationResult<
+  SignOfferMutation
 >
-export type RemoveStartDateMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  RemoveStartDateMutation,
-  RemoveStartDateMutationVariables
+export type SignOfferMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  SignOfferMutation,
+  SignOfferMutationVariables
 >
-export const StartDateDocument = gql`
-  mutation StartDate($quoteId: ID!, $date: LocalDate) {
-    editQuote(input: { id: $quoteId, startDate: $date }) {
-      ... on CompleteQuote {
-        startDate
+export const SignStatusDocument = gql`
+  query SignStatus {
+    signStatus {
+      collectStatus {
+        status
+        code
+      }
+      signState
+    }
+  }
+`
+
+/**
+ * __useSignStatusQuery__
+ *
+ * To run a query within a React component, call `useSignStatusQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSignStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSignStatusQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSignStatusQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    SignStatusQuery,
+    SignStatusQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useQuery<SignStatusQuery, SignStatusQueryVariables>(
+    SignStatusDocument,
+    baseOptions,
+  )
+}
+export function useSignStatusLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    SignStatusQuery,
+    SignStatusQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useLazyQuery<
+    SignStatusQuery,
+    SignStatusQueryVariables
+  >(SignStatusDocument, baseOptions)
+}
+export type SignStatusQueryHookResult = ReturnType<typeof useSignStatusQuery>
+export type SignStatusLazyQueryHookResult = ReturnType<
+  typeof useSignStatusLazyQuery
+>
+export type SignStatusQueryResult = ApolloReactCommon.QueryResult<
+  SignStatusQuery,
+  SignStatusQueryVariables
+>
+export const SignStatusListenerDocument = gql`
+  subscription SignStatusListener {
+    signStatus {
+      status {
+        signState
+        collectStatus {
+          status
+          code
+        }
       }
     }
   }
 `
-export type StartDateMutationFn = ApolloReactCommon.MutationFunction<
-  StartDateMutation,
-  StartDateMutationVariables
->
 
 /**
- * __useStartDateMutation__
+ * __useSignStatusListenerSubscription__
  *
- * To run a mutation, you first call `useStartDateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useStartDateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
+ * To run a query within a React component, call `useSignStatusListenerSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useSignStatusListenerSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const [startDateMutation, { data, loading, error }] = useStartDateMutation({
+ * const { data, loading, error } = useSignStatusListenerSubscription({
  *   variables: {
- *      quoteId: // value for 'quoteId'
- *      date: // value for 'date'
  *   },
  * });
  */
-export function useStartDateMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<
-    StartDateMutation,
-    StartDateMutationVariables
+export function useSignStatusListenerSubscription(
+  baseOptions?: ApolloReactHooks.SubscriptionHookOptions<
+    SignStatusListenerSubscription,
+    SignStatusListenerSubscriptionVariables
   >,
 ) {
-  return ApolloReactHooks.useMutation<
-    StartDateMutation,
-    StartDateMutationVariables
-  >(StartDateDocument, baseOptions)
+  return ApolloReactHooks.useSubscription<
+    SignStatusListenerSubscription,
+    SignStatusListenerSubscriptionVariables
+  >(SignStatusListenerDocument, baseOptions)
 }
-export type StartDateMutationHookResult = ReturnType<
-  typeof useStartDateMutation
+export type SignStatusListenerSubscriptionHookResult = ReturnType<
+  typeof useSignStatusListenerSubscription
 >
-export type StartDateMutationResult = ApolloReactCommon.MutationResult<
-  StartDateMutation
->
-export type StartDateMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  StartDateMutation,
-  StartDateMutationVariables
+export type SignStatusListenerSubscriptionResult = ApolloReactCommon.SubscriptionResult<
+  SignStatusListenerSubscription
 >

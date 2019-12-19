@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
+import { Peril } from 'pages/OfferNew/Perils/types'
 import * as React from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
@@ -12,16 +13,16 @@ import {
   HeadingWrapper,
   PreHeading,
 } from '../components'
-import { CompleteOfferData } from '../types'
+import { CompleteOfferDataForMember } from '../types'
 import { getInsuranceType } from '../utils'
 import { InsuranceValues } from './InsuranceValues'
-import { perils } from './mock'
 import { PerilCollection } from './PerilCollection'
+import { getLocalizedPerils } from './perilData'
 import { PerilModal } from './PerilModal'
 import { PerilSwiper } from './PerilSwiper'
 
 interface Props {
-  offer: CompleteOfferData
+  offer: CompleteOfferDataForMember
 }
 
 const Wrapper = styled.div`
@@ -35,6 +36,12 @@ export const Perils: React.FC<Props> = ({ offer }) => {
   const [isShowingPeril, setIsShowingPeril] = React.useState(false)
   const [currentPeril, setCurrentPeril] = React.useState(0)
   const isMobile = useMediaQuery({ query: '(max-width: 600px)' })
+  const [perils, setPerils] = React.useState<ReadonlyArray<Peril>>([])
+  React.useEffect(() => {
+    getLocalizedPerils(getInsuranceType(offer.lastQuoteOfMember), 'sv-SE').then(
+      setPerils,
+    )
+  }, [getInsuranceType(offer.lastQuoteOfMember), 'sv-SE'])
 
   return (
     <Wrapper>
@@ -60,17 +67,21 @@ export const Perils: React.FC<Props> = ({ offer }) => {
             />
           )}
 
-          <InsuranceValues insuranceType={getInsuranceType(offer.quote)} />
+          <InsuranceValues
+            insuranceType={getInsuranceType(offer.lastQuoteOfMember)}
+          />
         </Column>
         <ColumnSpacing />
       </Container>
-      <PerilModal
-        perils={perils}
-        currentPerilIndex={currentPeril}
-        setCurrentPeril={setCurrentPeril}
-        isVisible={isShowingPeril}
-        onClose={() => setIsShowingPeril(false)}
-      />
+      {perils.length > 0 && (
+        <PerilModal
+          perils={perils}
+          currentPerilIndex={currentPeril}
+          setCurrentPeril={setCurrentPeril}
+          isVisible={isShowingPeril}
+          onClose={() => setIsShowingPeril(false)}
+        />
+      )}
     </Wrapper>
   )
 }

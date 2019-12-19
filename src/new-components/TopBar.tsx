@@ -17,7 +17,11 @@ const Wrapper = styled.div<Props>`
   position: fixed;
   z-index: 1000;
   ${(props) =>
-    !props.transparent && `box-shadow: 0 2px 14px rgba(0, 0, 0, 0.08);`}
+    !props.transparent && `box-shadow: 0 2px 14px rgba(0, 0, 0, 0.08);`};
+
+  @media (max-width: 375px) {
+    height: 4rem;
+  }
 `
 
 const Container = styled.div`

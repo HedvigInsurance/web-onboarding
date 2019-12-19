@@ -14,4 +14,10 @@ it('should work', () => {
       REPLACEMENT: 'bar',
     }),
   ).toEqual(['bar', ' baz'])
+  expect(resolver.NON_EXISTING_KEY()).toEqual('NON_EXISTING_KEY')
+  expect(
+    resolver.SOME_KEY_WITH_REPLACEMENTS({
+      /* noop */
+    }),
+  ).toEqual(['{REPLACEMENT}', ' baz'])
 })
