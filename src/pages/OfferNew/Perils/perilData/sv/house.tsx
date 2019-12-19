@@ -1,18 +1,20 @@
-import * as React from 'react'
 import {
   Alarm,
   BaseballBat,
   Fire,
   LegalDispute,
   Lock,
+  Pests,
   Plane,
   Plus,
+  Reconstruction,
   Storm,
   Theft,
   WaterLeak,
   WetPhone,
   WhiteGoods,
-} from '../../../../../components/icons/Perils'
+} from 'components/icons/Perils'
+import * as React from 'react'
 import { Peril } from '../../types'
 
 export const housePerils: Peril[] = [
@@ -104,7 +106,7 @@ export const housePerils: Peril[] = [
       'Livsmedel, kläder, saneringsstädning, angrepp på rötskadat virke',
     ],
     info: 'Det finns inget speciellt att tänka på.',
-    icon: <Lock />,
+    icon: <Pests />,
   },
   {
     title: 'Ombyggnation',
@@ -121,7 +123,7 @@ export const housePerils: Peril[] = [
       'Stormskador på verktyg eller material',
     ],
     info: 'Förvara verktyg och material i låst utrymme.',
-    icon: <Lock />,
+    icon: <Reconstruction />,
   },
   {
     title: 'Stöld',

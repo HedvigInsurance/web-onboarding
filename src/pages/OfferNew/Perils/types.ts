@@ -1,5 +1,7 @@
+import React from 'react'
+
 export interface Peril {
-  title: string
+  title: React.ReactNode
   description: string
   covered: string[]
   exceptions: string[]

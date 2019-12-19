@@ -25,7 +25,7 @@ export const PerilCollection: React.FC<Props> = ({
   <Wrapper>
     {perils.map((peril, perilIndex) => (
       <PerilItem
-        key={peril.title}
+        key={peril.title?.toString()}
         title={peril.title}
         icon={peril.icon}
         onClick={() => {
