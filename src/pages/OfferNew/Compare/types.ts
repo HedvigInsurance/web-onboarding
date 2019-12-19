@@ -8,6 +8,7 @@ export interface InsuranceProperty {
 
 export interface CompanyProperties {
   name: string
+  id: string
   propertyProtection: boolean | string
   travelProtection: boolean | string
   assaultProtection: boolean | string
@@ -18,5 +19,5 @@ export interface CompanyProperties {
 }
 
 export type InsuranceProperties = {
-  [key in Exclude<keyof CompanyProperties, 'name'>]: InsuranceProperty
+  [key in keyof Omit<CompanyProperties, 'name' | 'id'>]: InsuranceProperty
 }

@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import * as React from 'react'
+import { CurrentInsurer } from 'src/generated/graphql'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import {
   Body,
@@ -68,7 +69,11 @@ const insuranceProperties: InsuranceProperties = {
   },
 }
 
-export const Compare = () => {
+interface CompareProps {
+  currentInsurer?: CurrentInsurer
+}
+
+export const Compare: React.FC<CompareProps> = ({ currentInsurer }) => {
   const textKeys = useTextKeys()
   return (
     <Wrapper>
@@ -84,6 +89,9 @@ export const Compare = () => {
             insuranceProperties={insuranceProperties}
             primaryCompany={hedvigCompany}
             otherCompanies={otherCompanies}
+            currentCompany={otherCompanies.find(
+              (company) => company.id === currentInsurer?.id,
+            )}
           />
         </Column>
         <ColumnSpacing />

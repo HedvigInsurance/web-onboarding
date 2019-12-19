@@ -2,6 +2,7 @@ import { CompanyProperties } from './types'
 
 export const hedvigCompany: CompanyProperties = {
   name: 'Hedvig',
+  id: 'hedvig',
   propertyProtection: true,
   travelProtection: true,
   assaultProtection: true,
@@ -14,6 +15,7 @@ export const hedvigCompany: CompanyProperties = {
 export const otherCompanies: CompanyProperties[] = [
   {
     name: 'Folksam Bas',
+    id: 'Folksam',
     propertyProtection: true,
     travelProtection: true,
     assaultProtection: true,
@@ -24,6 +26,7 @@ export const otherCompanies: CompanyProperties[] = [
   },
   {
     name: 'Trygg Hansa',
+    id: 'Trygg-Hansa',
     propertyProtection: true,
     travelProtection: true,
     assaultProtection: true,
@@ -34,6 +37,7 @@ export const otherCompanies: CompanyProperties[] = [
   },
   {
     name: 'If Hem',
+    id: 'If',
     propertyProtection: true,
     travelProtection: true,
     assaultProtection: true,
@@ -44,6 +48,7 @@ export const otherCompanies: CompanyProperties[] = [
   },
   {
     name: 'Ica',
+    id: 'ICA',
     propertyProtection: true,
     travelProtection: true,
     assaultProtection: true,
@@ -54,6 +59,7 @@ export const otherCompanies: CompanyProperties[] = [
   },
   {
     name: 'Länsförsäkringar',
+    id: 'Länsförsäkringar',
     propertyProtection: true,
     travelProtection: true,
     assaultProtection: true,
@@ -64,6 +70,7 @@ export const otherCompanies: CompanyProperties[] = [
   },
   {
     name: 'Moderna Försäkringar Grundskydd',
+    id: 'Moderna Försäkringar',
     propertyProtection: true,
     travelProtection: true,
     assaultProtection: true,
@@ -71,5 +78,38 @@ export const otherCompanies: CompanyProperties[] = [
     legalProtection: true,
     drulle: false,
     trustpilotScore: 1.9,
+  },
+  {
+    name: 'Vardia Hemförsäkring',
+    id: 'Vardia',
+    propertyProtection: true,
+    travelProtection: true,
+    assaultProtection: true,
+    liabilityProtection: true,
+    legalProtection: true,
+    drulle: false,
+    trustpilotScore: 1.4,
+  },
+  {
+    name: 'Dina Försäkringar',
+    id: 'Dina Försäkringar',
+    propertyProtection: true,
+    travelProtection: true,
+    assaultProtection: true,
+    liabilityProtection: true,
+    legalProtection: true,
+    drulle: false,
+    trustpilotScore: 2.1,
+  },
+  {
+    name: 'Gjensidige Bas',
+    id: 'Gjensidige',
+    propertyProtection: true,
+    travelProtection: true,
+    assaultProtection: true,
+    liabilityProtection: true,
+    legalProtection: true,
+    drulle: false,
+    trustpilotScore: 2.1,
   },
 ]
