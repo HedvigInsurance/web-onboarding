@@ -1,10 +1,11 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { format, isToday, parse } from 'date-fns'
+import { motion } from 'framer-motion'
 import {
   CurrentInsurer,
-  useStartDateMutation,
   useRemoveStartDateMutation,
+  useStartDateMutation,
 } from 'generated/graphql'
 import { DateInput } from 'new-components/DateInput'
 import { Switch } from 'new-components/Switch'
@@ -92,6 +93,14 @@ const HandleSwitchingLabel = styled.span`
   width: 50%;
 `
 
+const ErrorMessage = styled(motion.div)`
+  background-color: ${colorsV2.flamingo500};
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 10px;
+  color: ${colorsV2.black};
+`
+
 export const StartDate: React.FC<Props> = ({
   offerId,
   startDate,
@@ -110,10 +119,15 @@ export const StartDate: React.FC<Props> = ({
   }
 
   const [datePickerOpen, setDatePickerOpen] = React.useState(false)
+  const [showError, setShowError] = React.useState(false)
   const [dateValue, setDateValue] = React.useState(getDefaultDateValue)
   const textKeys = useTextKeys()
   const [setStartDate] = useStartDateMutation()
   const [removeStartDate] = useRemoveStartDateMutation()
+
+  const handleFail = () => {
+    setShowError(true)
+  }
 
   const getDateLabel = () => {
     if (dateValue) {
@@ -131,6 +145,20 @@ export const StartDate: React.FC<Props> = ({
 
   return (
     <>
+      <ErrorMessage
+        aria-hidden={!showError}
+        initial={{ height: 0, opacity: 0 }}
+        animate={
+          showError ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }
+        }
+        transition={{
+          type: 'spring',
+          stiffness: 400,
+          damping: 100,
+        }}
+      >
+        {textKeys.SIDEBAR_UPDATE_START_DATE_FAILED()}
+      </ErrorMessage>
       <RowButton
         datePickerOpen={datePickerOpen}
         onClick={() => setDatePickerOpen(!datePickerOpen)}
@@ -152,12 +180,13 @@ export const StartDate: React.FC<Props> = ({
         date={dateValue || new Date()}
         setDate={(newDateValue) => {
           setDateValue(newDateValue)
+          setShowError(false)
           setStartDate({
             variables: {
               quoteId: offerId,
               date: format(newDateValue, gqlDateFormat),
             },
-          })
+          }).catch(handleFail)
         }}
       />
       {currentInsurer?.switchable && (
@@ -168,19 +197,21 @@ export const StartDate: React.FC<Props> = ({
           <Switch
             value={dateValue == null}
             onChange={(newValue) => {
+              setShowError(false)
+
               if (newValue) {
                 removeStartDate({
                   variables: {
                     quoteId: offerId,
                   },
-                })
+                }).catch(handleFail)
               } else {
                 setStartDate({
                   variables: {
                     quoteId: offerId,
                     date: format(new Date(), gqlDateFormat),
                   },
-                })
+                }).catch(handleFail)
               }
 
               setDateValue(newValue ? null : new Date())

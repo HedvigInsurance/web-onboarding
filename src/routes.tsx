@@ -8,10 +8,8 @@ import { LazyDontPanic } from './pages/DontPanic'
 import { Download } from './pages/Download'
 import { EmbarkRoot } from './pages/Embark'
 import { FourOhFour } from './pages/FourOhFour'
-import { Offering } from './pages/Offer'
 import { OfferNew } from './pages/OfferNew'
 import { Referral } from './pages/Referral'
-import { Sign } from './pages/Sign'
 
 export const LANGUAGE_PATH_PATTERN = '/:language(en)?'
 export const serverSideRedirects = [
@@ -24,18 +22,8 @@ export const reactPageRoutes = [
     exact: true,
   },
   {
-    path: LANGUAGE_PATH_PATTERN + '/new-member/offer',
-    Component: Offering,
-    exact: true,
-  },
-  {
     path: LANGUAGE_PATH_PATTERN + '/new-member/download',
     Component: Download,
-    exact: true,
-  },
-  {
-    path: LANGUAGE_PATH_PATTERN + '/new-member/sign',
-    Component: Sign,
     exact: true,
   },
   {
@@ -59,9 +47,9 @@ export const reactPageRoutes = [
     exact: true,
   },
   {
-    path: LANGUAGE_PATH_PATTERN + '/beta/new-member/offer/:offerId',
+    path: LANGUAGE_PATH_PATTERN + '/new-member/(offer|sign)',
     Component: OfferNew,
-    exact: false,
+    exact: true,
   },
   {
     path: '/new-member/:name?/:id?',

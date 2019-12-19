@@ -9,10 +9,6 @@ const MUTATION = gql`
     createQuote(input: $input) {
       ... on CompleteQuote {
         id
-        price {
-          amount
-          currency
-        }
         details {
           ... on CompleteApartmentQuoteDetails {
             type

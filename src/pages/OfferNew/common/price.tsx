@@ -1,11 +1,8 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
-import {
-  TranslationsConsumer,
-  TranslationsPlaceholderConsumer,
-} from '@hedviginsurance/textkeyfy'
 import { MonetaryAmount } from 'containers/types'
 import * as React from 'react'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 
 const PriceWrapper = styled.div`
   display: flex;
@@ -14,14 +11,15 @@ const PriceWrapper = styled.div`
   position: relative;
 `
 
-const PriceNet = styled.div`
+const PriceGross = styled.div<{ visible: boolean }>`
   font-size: 1rem;
   line-height: 1rem;
   color: ${colorsV2.gray};
   text-decoration: line-through;
   margin-bottom: 0.5rem;
-  position: absolute;
-  top: 0;
+  height: 0.875rem;
+
+  ${({ visible }) => !visible && 'visibility: hidden;'};
 `
 
 const PriceNumbers = styled.div`
@@ -30,7 +28,7 @@ const PriceNumbers = styled.div`
   margin-bottom: 0.5rem;
 `
 
-const PriceGross = styled.div<{
+const PriceNet = styled.div<{
   monthlyCostDeduction: boolean
   highlightAmount?: boolean
 }>`
@@ -86,41 +84,34 @@ export const Price: React.FC<{
   monthlyNet: MonetaryAmount
   monthlyGross: MonetaryAmount
   highlightAmount?: boolean
-}> = ({ monthlyCostDeduction, monthlyNet, monthlyGross, highlightAmount }) => (
-  <PriceWrapper>
-    {monthlyCostDeduction && (
-      <PriceNet>
-        <TranslationsPlaceholderConsumer
-          textKey="SIDEBAR_OLD_PRICE"
-          replacements={{
-            PRICE: Number(monthlyNet.amount),
-          }}
-        >
-          {(t) => t}
-        </TranslationsPlaceholderConsumer>
-      </PriceNet>
-    )}
-
-    <PriceNumbers>
+}> = ({ monthlyCostDeduction, monthlyNet, monthlyGross, highlightAmount }) => {
+  const textKeys = useTextKeys()
+  return (
+    <PriceWrapper>
       <PriceGross
-        monthlyCostDeduction={!!monthlyCostDeduction}
-        highlightAmount={highlightAmount}
+        visible={monthlyCostDeduction!}
+        aria-hidden={!monthlyCostDeduction}
       >
-        {Number(monthlyGross.amount)}
+        {textKeys.SIDEBAR_OLD_PRICE({
+          PRICE: Number(monthlyGross.amount),
+        })}
       </PriceGross>
 
-      <PriceSuffix>
-        <PriceUnit>
-          <TranslationsConsumer textKey="SIDEBAR_PRICE_SUFFIX_UNIT">
-            {(t) => t}
-          </TranslationsConsumer>
-        </PriceUnit>
-        <PriceInterval>
-          <TranslationsConsumer textKey="SIDEBAR_PRICE_SUFFIX_INTERVAL">
-            {(t) => t}
-          </TranslationsConsumer>
-        </PriceInterval>
-      </PriceSuffix>
-    </PriceNumbers>
-  </PriceWrapper>
-)
+      <PriceNumbers>
+        <PriceNet
+          monthlyCostDeduction={!!monthlyCostDeduction}
+          highlightAmount={highlightAmount}
+        >
+          {Number(monthlyNet.amount)}
+        </PriceNet>
+
+        <PriceSuffix>
+          <PriceUnit>{textKeys.SIDEBAR_PRICE_SUFFIX_UNIT()}</PriceUnit>
+          <PriceInterval>
+            {textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL()}
+          </PriceInterval>
+        </PriceSuffix>
+      </PriceNumbers>
+    </PriceWrapper>
+  )
+}
