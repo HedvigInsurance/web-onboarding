@@ -1,4 +1,5 @@
 import {
+  ApartmentType,
   Campaign,
   CompleteApartmentQuoteDetails,
   CompleteHouseQuoteDetails,
@@ -7,10 +8,12 @@ import {
   InsuranceType,
   Quote,
 } from '../../generated/graphql'
-import { CompleteOfferData, OfferData } from './types'
+import { CompleteOfferDataForMember, OfferData } from './types'
 
-export const isOffer = (offer?: OfferData): offer is CompleteOfferData =>
-  (offer && isQuote(offer.quote)) || false
+export const isOffer = (
+  offer?: OfferData,
+): offer is CompleteOfferDataForMember =>
+  (offer && isQuote(offer.lastQuoteOfMember)) || false
 
 export const isQuote = (quote: Quote): quote is CompleteQuote =>
   quote.__typename === 'CompleteQuote' || false
@@ -62,42 +65,26 @@ export const getInsuranceType = (quote: CompleteQuote): InsuranceType => {
   return map[quote.details.type]
 }
 
-export const insuranceTypeTextKeys: { [key in InsuranceType]: string } = {
+export const insuranceTypeTextKeys: Record<InsuranceType, string> = {
   [InsuranceType.Rent]: 'SIDEBAR_INSURANCE_TYPE_RENT',
   [InsuranceType.Brf]: 'SIDEBAR_INSURANCE_TYPE_BRF',
   [InsuranceType.StudentRent]: 'SIDEBAR_INSURANCE_TYPE_RENT',
   [InsuranceType.StudentBrf]: 'SIDEBAR_INSURANCE_TYPE_BRF',
   [InsuranceType.House]: 'SIDEBAR_INSURANCE_TYPE_HOUSE',
 }
-
-export const getPrebuyPDFTextKey = (insuranceType: InsuranceType): string => {
-  const map = {
-    [InsuranceType.Rent]: 'TERMS_PDF_PREBUY_RENT_URL',
-    [InsuranceType.Brf]: 'TERMS_PDF_PREBUY_BRF_URL',
-    [InsuranceType.StudentRent]: 'TERMS_PDF_PREBUY_STUDENT_RENT_URL',
-    [InsuranceType.StudentBrf]: 'TERMS_PDF_PREBUY_STUDENT_BRF_URL',
-    [InsuranceType.House]: 'TERMS_PDF_PREBUY_HOUSE_URL',
-  }
-
-  if (!map[insuranceType]) {
-    throw new Error(`Invalid insurance type ${insuranceType}`)
-  }
-  return map[insuranceType]
+export const apartmentTypeTextKeys: Record<ApartmentType, string> = {
+  [ApartmentType.Brf]: 'CHECKOUT_INSURANCE_APARTMENT_TYPE_BRF',
+  [ApartmentType.Rent]: 'CHECKOUT_INSURANCE_APARTMENT_TYPE_RENT',
+  [ApartmentType.StudentBrf]: 'CHECKOUT_INSURANCE_APARTMENT_TYPE_BRF',
+  [ApartmentType.StudentRent]: 'CHECKOUT_INSURANCE_APARTMENT_TYPE_RENT',
 }
 
-export const getInsurancePDFTextKey = (
-  insuranceType: InsuranceType,
-): string => {
-  const map = {
-    [InsuranceType.Rent]: 'TERMS_PDF_INSURANCE_RENT_URL',
-    [InsuranceType.Brf]: 'TERMS_PDF_INSURANCE_BRF_URL',
-    [InsuranceType.StudentRent]: 'TERMS_PDF_INSURANCE_STUDENT_RENT_URL',
-    [InsuranceType.StudentBrf]: 'TERMS_PDF_INSURANCE_STUDENT_BRF_URL',
-    [InsuranceType.House]: 'TERMS_PDF_INSURANCE_HOUSE_URL',
+export const maskAndFormatRawSsn = (ssn: string) => {
+  if (ssn.length !== 12) {
+    return ssn
   }
 
-  if (!map[insuranceType]) {
-    throw new Error(`Invalid insurance type ${insuranceType}`)
-  }
-  return map[insuranceType]
+  const CENTURY_LENGTH = 2
+  const DATE_LENGTH = 6
+  return ssn.substr(CENTURY_LENGTH, DATE_LENGTH) + '-****'
 }

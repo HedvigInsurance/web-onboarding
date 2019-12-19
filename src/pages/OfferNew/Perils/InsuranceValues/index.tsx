@@ -5,8 +5,11 @@ import { DocumentIcon } from 'components/icons/Document'
 import { InsuranceType } from 'generated/graphql'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
+import {
+  getInsurancePDFTextKey,
+  getPrebuyPDFTextKey,
+} from 'utils/insuranceDomainUtils'
 import { SubSubHeadingBlack } from '../../components'
-import { getInsurancePDFTextKey, getPrebuyPDFTextKey } from '../../utils'
 import { insuranceValues } from './mock'
 import { Values } from './Values'
 
