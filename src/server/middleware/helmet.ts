@@ -45,6 +45,7 @@ const defaultSrc = [
   'trustly.com',
   '*.trustly.com',
   'https://hedvig-embark.herokuapp.com',
+  'https://heapanalytics.com',
   GIRAFFE_ENDPOINT,
   GIRAFFE_WS_ENDPOINT,
 ]
@@ -59,6 +60,7 @@ export const helmet = koaHelmet({
         'browser.sentry-cdn.com',
         'cdn.segment.com',
         'www.googletagmanager.com',
+        'https://cdn.heapanalytics.com',
         // tslint:disable-next-line variable-name
         (_request, response) => {
           ;(response as any).cspNonce = uuidV4()
