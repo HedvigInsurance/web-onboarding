@@ -10,7 +10,6 @@ import { EmbarkRoot } from './pages/Embark'
 import { FourOhFour } from './pages/FourOhFour'
 import { OfferNew } from './pages/OfferNew'
 import { Referral } from './pages/Referral'
-import { Sign } from './pages/Sign'
 
 export const LANGUAGE_PATH_PATTERN = '/:language(en)?'
 export const serverSideRedirects = [
@@ -29,7 +28,7 @@ export const reactPageRoutes = [
   },
   {
     path: LANGUAGE_PATH_PATTERN + '/new-member/sign',
-    Component: Sign,
+    Component: OfferNew,
     exact: true,
   },
   {
@@ -55,7 +54,7 @@ export const reactPageRoutes = [
   {
     path: LANGUAGE_PATH_PATTERN + '/new-member/offer',
     Component: OfferNew,
-    exact: false,
+    exact: true,
   },
   {
     path: '/new-member/:name?/:id?',
