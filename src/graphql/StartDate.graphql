@@ -1,0 +1,10 @@
+mutation StartDate($quoteId: ID!, $date: LocalDate) {
+    editQuote(input: {
+        id: $quoteId
+        startDate: $date
+    }) {
+        ... on CompleteQuote {
+            startDate
+        }
+    }
+}

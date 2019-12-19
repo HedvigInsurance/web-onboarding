@@ -34,3 +34,8 @@ export const CurrentLanguage: React.ComponentType<{
     <>{children({ currentLanguage: getLanguageFromPath(location.pathname) })}</>
   )
 }
+
+export const useCurrentLanguage = () => {
+  const location = useLocation()
+  return getLanguageFromPath(location.pathname)
+}

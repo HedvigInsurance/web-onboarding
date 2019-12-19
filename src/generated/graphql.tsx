@@ -3691,6 +3691,16 @@ export type RemoveDiscountCodeMutation = { __typename?: 'Mutation' } & {
   removeDiscountCode: { __typename: 'RedemedCodeResult' }
 }
 
+export type RemoveStartDateMutationVariables = {
+  quoteId: Scalars['ID']
+}
+
+export type RemoveStartDateMutation = { __typename?: 'Mutation' } & {
+  removeStartDate:
+    | ({ __typename?: 'CompleteQuote' } & Pick<CompleteQuote, 'startDate'>)
+    | { __typename?: 'UnderwritingLimitsHit' }
+}
+
 export type SignOfferMutationVariables = {
   personalNumber: Scalars['String']
   email: Scalars['String']
@@ -3733,6 +3743,17 @@ export type SignStatusListenerSubscription = { __typename?: 'Subscription' } & {
       >
     }
   >
+}
+
+export type StartDateMutationVariables = {
+  quoteId: Scalars['ID']
+  date?: Maybe<Scalars['LocalDate']>
+}
+
+export type StartDateMutation = { __typename?: 'Mutation' } & {
+  editQuote:
+    | ({ __typename?: 'CompleteQuote' } & Pick<CompleteQuote, 'startDate'>)
+    | { __typename?: 'UnderwritingLimitsHit' }
 }
 
 export const MemberOfferDocument = gql`
@@ -3983,6 +4004,58 @@ export type RemoveDiscountCodeMutationOptions = ApolloReactCommon.BaseMutationOp
   RemoveDiscountCodeMutation,
   RemoveDiscountCodeMutationVariables
 >
+export const RemoveStartDateDocument = gql`
+  mutation RemoveStartDate($quoteId: ID!) {
+    removeStartDate(input: { id: $quoteId }) {
+      ... on CompleteQuote {
+        startDate
+      }
+    }
+  }
+`
+export type RemoveStartDateMutationFn = ApolloReactCommon.MutationFunction<
+  RemoveStartDateMutation,
+  RemoveStartDateMutationVariables
+>
+
+/**
+ * __useRemoveStartDateMutation__
+ *
+ * To run a mutation, you first call `useRemoveStartDateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveStartDateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeStartDateMutation, { data, loading, error }] = useRemoveStartDateMutation({
+ *   variables: {
+ *      quoteId: // value for 'quoteId'
+ *   },
+ * });
+ */
+export function useRemoveStartDateMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    RemoveStartDateMutation,
+    RemoveStartDateMutationVariables
+  >,
+) {
+  return ApolloReactHooks.useMutation<
+    RemoveStartDateMutation,
+    RemoveStartDateMutationVariables
+  >(RemoveStartDateDocument, baseOptions)
+}
+export type RemoveStartDateMutationHookResult = ReturnType<
+  typeof useRemoveStartDateMutation
+>
+export type RemoveStartDateMutationResult = ApolloReactCommon.MutationResult<
+  RemoveStartDateMutation
+>
+export type RemoveStartDateMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  RemoveStartDateMutation,
+  RemoveStartDateMutationVariables
+>
 export const SignOfferDocument = gql`
   mutation SignOffer($personalNumber: String!, $email: String!) {
     signOffer(details: { personalNumber: $personalNumber, email: $email })
@@ -4134,4 +4207,57 @@ export type SignStatusListenerSubscriptionHookResult = ReturnType<
 >
 export type SignStatusListenerSubscriptionResult = ApolloReactCommon.SubscriptionResult<
   SignStatusListenerSubscription
+>
+export const StartDateDocument = gql`
+  mutation StartDate($quoteId: ID!, $date: LocalDate) {
+    editQuote(input: { id: $quoteId, startDate: $date }) {
+      ... on CompleteQuote {
+        startDate
+      }
+    }
+  }
+`
+export type StartDateMutationFn = ApolloReactCommon.MutationFunction<
+  StartDateMutation,
+  StartDateMutationVariables
+>
+
+/**
+ * __useStartDateMutation__
+ *
+ * To run a mutation, you first call `useStartDateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStartDateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [startDateMutation, { data, loading, error }] = useStartDateMutation({
+ *   variables: {
+ *      quoteId: // value for 'quoteId'
+ *      date: // value for 'date'
+ *   },
+ * });
+ */
+export function useStartDateMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    StartDateMutation,
+    StartDateMutationVariables
+  >,
+) {
+  return ApolloReactHooks.useMutation<
+    StartDateMutation,
+    StartDateMutationVariables
+  >(StartDateDocument, baseOptions)
+}
+export type StartDateMutationHookResult = ReturnType<
+  typeof useStartDateMutation
+>
+export type StartDateMutationResult = ApolloReactCommon.MutationResult<
+  StartDateMutation
+>
+export type StartDateMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  StartDateMutation,
+  StartDateMutationVariables
 >

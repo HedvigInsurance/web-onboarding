@@ -104,7 +104,7 @@ export const Tooltip: React.FC<Props> = ({ body, size = 'sm' }) => {
 
     window.addEventListener('touchstart', listener)
     return () => window.removeEventListener('touchstart', listener)
-  })
+  }, [])
   const isHover = useMediaQuery({ query: '(hover: hover)' })
 
   return (
