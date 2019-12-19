@@ -183,7 +183,7 @@ export const Checkout: React.FC<Props> = ({ offer, isOpen, onClose }) => {
       window.removeEventListener('wheel', listener)
       window.removeEventListener('touchmove', listener)
     }
-  })
+  }, [])
 
   React.useEffect(() => {
     if (isOpen) {

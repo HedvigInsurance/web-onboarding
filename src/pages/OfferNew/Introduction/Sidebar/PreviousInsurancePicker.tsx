@@ -12,6 +12,7 @@ interface Props {
 
 const Wrapper = styled.div`
   position: relative;
+  margin-bottom: 10px;
 `
 
 const Button = styled.button<{ dropdownIsVisible: boolean }>`
@@ -85,7 +86,7 @@ const Dropdown = styled.div<{ visible: boolean }>`
   margin-top: 0.25rem;
   transition: all 0.2s;
   transform: ${(props) =>
-    props.visible ? `translateY(0)` : `translateY(-0.25rem)`};
+    props.visible ? `translateY(0)` : `translateY(3.125rem)`};
   opacity: ${(props) => (props.visible ? 1 : 0)};
   visibility: ${(props) => (props.visible ? 'visible' : 'hidden')};
   z-index: 1;

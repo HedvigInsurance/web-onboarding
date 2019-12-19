@@ -2,7 +2,6 @@ import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import { useRemoveDiscountCodeMutation } from 'generated/graphql'
 import { Button, TextButton } from 'new-components/buttons'
-import { otherInsuranceCompanies } from 'pages/OfferNew/mock'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { formatPostalNumber } from 'utils/postalNumbers'
@@ -16,7 +15,6 @@ import {
   isNoDiscount,
 } from '../../utils'
 import { DiscountCodeModal } from './DiscountCodeModal'
-import { PreviousInsurancePicker } from './PreviousInsurancePicker'
 import { StartDate } from './StartDate'
 
 interface Props {
@@ -45,7 +43,6 @@ const Container = styled.div<{ sticky: boolean }>`
   border-radius: 8px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
   flex-shrink: 0;
-  overflow: hidden;
   position: ${(props) => (props.sticky ? `fixed` : `relative`)};
   ${(props) => props.sticky && `top: 6rem`};
 
@@ -138,6 +135,7 @@ const Body = styled.div`
 const Footer = styled.div`
   width: 100%;
   padding: 2rem;
+  padding-top: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -230,11 +228,10 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
           </Header>
 
           <Body>
-            {offer.lastQuoteOfMember.currentInsurer && (
-              <PreviousInsurancePicker insurances={otherInsuranceCompanies} />
-            )}
             <StartDate
-              insuredAtOtherCompany={!!offer.lastQuoteOfMember.currentInsurer}
+              startDate={offer.lastQuoteOfMember.startDate}
+              offerId={offer.lastQuoteOfMember.id}
+              currentInsurer={offer.lastQuoteOfMember.currentInsurer || null}
             />
           </Body>
 
