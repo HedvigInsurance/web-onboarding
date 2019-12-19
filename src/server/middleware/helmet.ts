@@ -10,6 +10,8 @@ const defaultSrc = [
   'www.googletagmanager.com',
   'https://*.hotjar.com',
   'wss://*.hotjar.com',
+  'https://*.hotjar.io',
+  'wss://*.hotjar.io',
   'https://*.intercom.io',
   'https://*.intercomcdn.com',
   'https://*.intercomassets.com',
