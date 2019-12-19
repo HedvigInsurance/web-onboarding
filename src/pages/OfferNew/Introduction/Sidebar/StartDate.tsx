@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
-import { motion } from 'framer-motion'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { format, isToday, parse } from 'date-fns'
+import { motion } from 'framer-motion'
 import {
   CurrentInsurer,
   useRemoveStartDateMutation,
