@@ -2,6 +2,7 @@ import * as React from 'react'
 import {
   Alarm,
   BaseballBat,
+  Condominium,
   Fire,
   LegalDispute,
   Lock,
@@ -11,7 +12,7 @@ import {
   WaterLeak,
   WetPhone,
   WhiteGoods,
-} from '../../../../../components/icons/Perils'
+} from 'components/icons/Perils'
 import { Peril } from '../../types'
 
 export const brfPerils: Peril[] = [
@@ -245,7 +246,7 @@ export const brfPerils: Peril[] = [
     icon: <WetPhone />,
   },
   {
-    title: 'Bostadsrättstillägg',
+    title: <>Bostadsrätts&shy;tillägg</>,
     description:
       'Om man äger sin lägenhet är det skönt att ha en försäkring som täcker själva lägenheten också, inte bara prylarna som finns däri. På försäkringsspråk kallas det för bostadsrättstillägg. Hedvig ersätter kostnaden för att reparera skador på din lägenhet utan beloppsbegränsning - oavsett om du bor i studentlya eller paradvåning. Skönt!',
     covered: [
@@ -254,6 +255,6 @@ export const brfPerils: Peril[] = [
     ],
     exceptions: ['Inget särskilt!'],
     info: 'Inget särskilt.',
-    icon: <WetPhone />,
+    icon: <Condominium />,
   },
 ]

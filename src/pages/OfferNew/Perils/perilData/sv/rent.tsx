@@ -12,7 +12,7 @@ import {
   WaterLeak,
   WetPhone,
   WhiteGoods,
-} from '../../../../../components/icons/Perils'
+} from 'components/icons/Perils'
 import { Peril } from '../../types'
 
 export const rentPerils: Peril[] = [
