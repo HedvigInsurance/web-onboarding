@@ -3,8 +3,10 @@ import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import { useMemberOfferQuery } from 'generated/graphql'
 import { History } from 'history'
 import { TopBar } from 'new-components/TopBar'
+import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
 import { useHistory, useRouteMatch } from 'react-router'
+import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
 import { Checkout } from './Checkout'
 import { Compare } from './Compare'
 import { Introduction } from './Introduction'
@@ -29,11 +31,29 @@ export const OfferNew: React.FC = () => {
     <Page>
       <SessionTokenGuard>
         <TopBar />
-        <Introduction
-          offer={data}
-          refetch={refetch}
-          onCheckoutOpen={() => toggleCheckout(true)}
-        />
+        <TrackAction
+          event={{
+            name: SemanticEvents.Ecommerce.CheckoutStarted,
+            properties: {
+              value: Number(
+                data.lastQuoteOfMember.insuranceCost.monthlyNet.amount,
+              ),
+              label: 'Offer',
+              ...getUtmParamsFromCookie(),
+            },
+          }}
+        >
+          {({ track }) => (
+            <Introduction
+              offer={data}
+              refetch={refetch}
+              onCheckoutOpen={() => {
+                toggleCheckout(true)
+                track()
+              }}
+            />
+          )}
+        </TrackAction>
         <Perils offer={data} />
         <Compare />
         <Checkout

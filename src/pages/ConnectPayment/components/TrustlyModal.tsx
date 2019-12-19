@@ -3,8 +3,11 @@ import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import Modal from 'components/Modal'
 import { ActionMap, Container } from 'constate'
+import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
+import { Mount } from 'react-lifecycle-components/dist'
 import { Redirect } from 'react-router'
+import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
 import { CurrentLanguage } from '../../../components/utils/CurrentLanguage'
 
 const Header = styled('div')({
@@ -98,14 +101,29 @@ const TrustlyModal: React.FC<Props> = ({
           )}
 
           {isSuccess && (
-            <CurrentLanguage>
-              {({ currentLanguage }) => (
-                <Redirect
-                  to={`/${currentLanguage &&
-                    currentLanguage + '/'}new-member/download`}
-                />
+            <TrackAction
+              event={{
+                name: SemanticEvents.Ecommerce.PaymentInfoEntered,
+                properties: {
+                  category: 'web-onboarding-steps',
+                  label: 'Payment',
+                  ...getUtmParamsFromCookie(),
+                },
+              }}
+            >
+              {({ track }) => (
+                <CurrentLanguage>
+                  {({ currentLanguage }) => (
+                    <Mount on={track}>
+                      <Redirect
+                        to={`/${currentLanguage &&
+                          currentLanguage + '/'}new-member/download`}
+                      />
+                    </Mount>
+                  )}
+                </CurrentLanguage>
               )}
-            </CurrentLanguage>
+            </TrackAction>
           )}
         </Modal>
       )}

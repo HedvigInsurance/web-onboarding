@@ -124,6 +124,7 @@ export const Offer: React.SFC<Props> = ({
                       event={{
                         name: SemanticEvents.Ecommerce.CheckoutStarted,
                         properties: {
+                          category: 'web-onboarding-steps',
                           value: Number(offer.insurance.cost.monthlyNet.amount),
                           label: 'Offer',
                           ...getUtmParamsFromCookie(),

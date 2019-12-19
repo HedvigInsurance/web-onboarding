@@ -1,8 +1,12 @@
 import styled from '@emotion/styled'
+import { CurrentLanguage } from 'components/utils/CurrentLanguage'
 import { SignState, useSignStatusLazyQuery } from 'generated/graphql'
+import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
+import { Mount } from 'react-lifecycle-components/dist'
 import { Redirect } from 'react-router-dom'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
 
 const Wrapper = styled('div')`
   padding: 1rem 0.5rem 0 0.5rem;
@@ -59,7 +63,31 @@ export const SignStatus: React.FC<Props> = ({
   }
 
   if (signStatusQuery?.data?.signStatus?.signState === SignState.Completed) {
-    return <Redirect to="/new-member/connect-payment" />
+    return (
+      <TrackAction
+        event={{
+          name: SemanticEvents.Ecommerce.OrderCompleted,
+          properties: {
+            category: 'web-onboarding-steps',
+            ...getUtmParamsFromCookie(),
+          },
+        }}
+      >
+        {({ track }) => (
+          <Mount on={track}>
+            <CurrentLanguage>
+              {({ currentLanguage }) => (
+                <Redirect
+                  to={`/${currentLanguage &&
+                    currentLanguage + '/'}new-member/connect-payment`}
+                />
+              )}
+            </CurrentLanguage>
+            )
+          </Mount>
+        )}
+      </TrackAction>
+    )
   }
 
   return (
