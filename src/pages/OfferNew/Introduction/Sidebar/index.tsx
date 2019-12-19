@@ -1,6 +1,10 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
-import { useRemoveDiscountCodeMutation } from 'generated/graphql'
+import { CookieStorage } from 'cookie-storage'
+import {
+  useRedeemCodeMutation,
+  useRemoveDiscountCodeMutation,
+} from 'generated/graphql'
 import { Button, TextButton } from 'new-components/buttons'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
@@ -174,6 +178,19 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
     const noDiscount = isNoDiscount(offer.redeemedCampaigns)
 
     const [removeDiscountCode] = useRemoveDiscountCodeMutation()
+    const [redeemCode] = useRedeemCodeMutation()
+
+    React.useEffect(() => {
+      const campaignCodes =
+        offer.redeemedCampaigns.map((campaign) => campaign!.code) ?? []
+      const cookieStorage = new CookieStorage()
+      const preRedeemedCode = cookieStorage.getItem('_hvcode')
+      if (preRedeemedCode && !campaignCodes.includes(preRedeemedCode)) {
+        redeemCode({ variables: { code: preRedeemedCode } })
+          .then(() => refetch())
+          .then(() => cookieStorage.setItem('_hvcode', '', { path: '/' }))
+      }
+    }, [])
 
     return (
       <Wrapper ref={ref}>
