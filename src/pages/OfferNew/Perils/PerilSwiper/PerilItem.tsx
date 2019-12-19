@@ -46,7 +46,7 @@ const Title = styled('div')`
 `
 
 interface PerilItemProps {
-  title: string
+  title: React.ReactNode
   icon: JSX.Element
   onClick: () => void
 }

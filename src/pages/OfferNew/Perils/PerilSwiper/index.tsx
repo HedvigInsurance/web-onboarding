@@ -107,7 +107,7 @@ export const PerilSwiper: React.FC<Props> = ({
                 <PerilSlideRow key={slideRowIndex}>
                   {perilsSlideRowChunk.map((peril, perilIndex) => (
                     <PerilItem
-                      key={peril.title}
+                      key={peril.title?.toString()}
                       title={peril.title}
                       icon={peril.icon}
                       onClick={() => {
