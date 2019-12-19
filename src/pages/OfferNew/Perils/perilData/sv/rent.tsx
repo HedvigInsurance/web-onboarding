@@ -1,4 +1,3 @@
-import * as React from 'react'
 import {
   Alarm,
   BaseballBat,
@@ -13,6 +12,7 @@ import {
   WetPhone,
   WhiteGoods,
 } from 'components/icons/Perils'
+import * as React from 'react'
 import { Peril } from '../../types'
 
 export const rentPerils: Peril[] = [
