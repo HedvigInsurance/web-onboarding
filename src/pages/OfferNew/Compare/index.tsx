@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import * as React from 'react'
+import { CurrentInsurer } from 'src/generated/graphql'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import {
   Body,
@@ -14,7 +15,6 @@ import {
 import { CompareTable } from './CompareTable'
 import { hedvigCompany, otherCompanies } from './mock'
 import { InsuranceProperties } from './types'
-import { CurrentInsurer } from 'src/generated/graphql'
 
 const Wrapper = styled.div`
   padding: 5rem 0;
