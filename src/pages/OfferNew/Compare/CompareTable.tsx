@@ -339,6 +339,9 @@ const getProperty = (key: string, value: any): any => {
   )
 }
 
+const filterVisibleProperties = ([key]: [string, any]) =>
+  !['name', 'id'].includes(key)
+
 export const CompareTable = (props: Props) => {
   const textKeys = useTextKeys()
   const [
@@ -361,7 +364,7 @@ export const CompareTable = (props: Props) => {
 
         <InsurancePropertyNames>
           {Object.entries(props.insuranceProperties)
-            .filter(([key]) => key !== 'name')
+            .filter(filterVisibleProperties)
             .map(([key, property]) => (
               <InsuranceProperty key={key}>
                 {textKeys[property.name]()}
@@ -382,7 +385,7 @@ export const CompareTable = (props: Props) => {
         </PrimaryCompanyHead>
 
         {Object.entries(props.primaryCompany)
-          .filter(([key]) => key !== 'name')
+          .filter(filterVisibleProperties)
           .map(([key, property]) => (
             <CompanyColumnRow key={key}>
               {getProperty(key, property)}
@@ -446,7 +449,7 @@ export const CompareTable = (props: Props) => {
         )}
         {currentCompany &&
           Object.entries(currentCompany)
-            .filter(([key]) => key !== 'name')
+            .filter(filterVisibleProperties)
             .map(([key, property]) => (
               <CompanyColumnRow key={key}>
                 {getProperty(key, property)}
