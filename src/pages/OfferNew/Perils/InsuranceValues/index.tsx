@@ -101,7 +101,7 @@ export const InsuranceValues: React.FC<Props> = ({ insuranceType }) => {
 
       <Links>
         <Link
-          href={textKeys[getPrebuyPDFTextKey(insuranceType)]()}
+          href={textKeys[getInsurancePDFTextKey(insuranceType)]()}
           target="_blank"
         >
           <DocumentIcon />
@@ -109,7 +109,7 @@ export const InsuranceValues: React.FC<Props> = ({ insuranceType }) => {
         </Link>
 
         <Link
-          href={textKeys[getInsurancePDFTextKey(insuranceType)]()}
+          href={textKeys[getPrebuyPDFTextKey(insuranceType)]()}
           target="_blank"
         >
           <DocumentIcon />
