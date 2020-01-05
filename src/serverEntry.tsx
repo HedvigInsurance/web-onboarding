@@ -46,6 +46,11 @@ if (process.env.FORCE_HOST) {
   server.router.use(forceHost({ host: process.env.FORCE_HOST! }))
 }
 
+// 302 because english web onboarding is broken at the time of this comment
+server.router.get('/en/new-member/hedvig', (ctx) => {
+  ctx.redirect('/en/download')
+})
+
 serverSideRedirects.forEach(({ from, to }) => {
   server.router.use(from, permanentRedirect(to))
 })
