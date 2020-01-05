@@ -7,6 +7,7 @@ import * as React from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { Checkmark } from '../../../components/icons/Checkmark'
+import { XMark } from '../../../components/icons/XMark'
 import { DownArrow } from '../../../components/icons/DownArrow'
 import { HedvigSymbol } from '../../../components/icons/HedvigSymbol'
 import { SubHeadingBlack } from '../components'
@@ -155,7 +156,6 @@ const CompanyColumnRow = styled(ColumnRow)`
 const OtherCompaniesSection = styled('div')`
   width: 100%;
   max-width: 178px;
-  height: 100%;
   padding: 2rem 1rem;
   box-sizing: border-box;
   position: relative;
@@ -332,11 +332,15 @@ const getProperty = (key: string, value: any): any => {
     )
   }
 
-  return typeof value === 'string' ? (
-    <ColumnRowPrimaryContent>{value}</ColumnRowPrimaryContent>
-  ) : (
-    <Checkmark />
-  )
+  if (typeof value === 'string') {
+    return <ColumnRowPrimaryContent>{value}</ColumnRowPrimaryContent>
+  }
+
+  if (value) {
+    return <Checkmark />
+  }
+
+  return <XMark />
 }
 
 const filterVisibleProperties = ([key]: [string, any]) =>
