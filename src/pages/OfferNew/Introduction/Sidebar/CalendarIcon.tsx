@@ -7,7 +7,7 @@ interface CalendarIconProps {
 export const CalendarIcon: React.FC<CalendarIconProps> = ({ color }) => (
   <svg width="24" height="24" viewBox="0 0 24 24">
     <g fill="none" fill-rule="evenodd">
-      <path fill="#FFF" filllOpacity=".01" d="M0 0h24v24H0z" />
+      <path fill="#FFF" fillOpacity=".01" d="M0 0h24v24H0z" />
       <path
         fill={color}
         fillRule="nonzero"
