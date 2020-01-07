@@ -50,10 +50,7 @@ export const Download: React.SFC<{}> = () => (
             </TranslationsConsumer>
             <StorageContainer>
               {({ session }) => {
-                const partner =
-                  session &&
-                  session.getSession() &&
-                  session.getSession()!.partner
+                const partner = session?.getSession()?.partner
 
                 return (
                   <EmptyTopBar

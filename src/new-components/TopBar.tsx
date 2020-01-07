@@ -6,6 +6,7 @@ import { CurrentLanguage } from '../components/utils/CurrentLanguage'
 
 interface Props {
   transparent?: boolean
+  partner?: string
 }
 
 const Wrapper = styled.div<Props>`
@@ -43,7 +44,7 @@ const LogoLink = styled.a`
   display: flex;
 `
 
-export const TopBar: React.FC<Props> = ({ transparent }) => (
+export const TopBar: React.FC<Props> = ({ transparent, partner }) => (
   <Wrapper transparent={transparent}>
     <Container>
       <CurrentLanguage>
