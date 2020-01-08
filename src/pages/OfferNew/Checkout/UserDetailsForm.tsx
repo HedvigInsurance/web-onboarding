@@ -1,4 +1,4 @@
-import { TextInput } from 'new-components/inputs'
+import { RawInputField } from 'new-components/inputs'
 import { WithEmailForm } from 'pages/OfferNew/types'
 import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
@@ -21,7 +21,7 @@ export const UserDetailsForm: React.FC<Props> = ({ email, onEmailChange }) => {
         e.preventDefault()
       }}
     >
-      <TextInput
+      <RawInputField
         label={textKeys.CHECKOUT_EMAIL_LABEL()}
         placeholder={textKeys.CHECKOUT_EMAIL_PLACEHOLDER()}
         name="email"
@@ -29,15 +29,15 @@ export const UserDetailsForm: React.FC<Props> = ({ email, onEmailChange }) => {
         type="email"
         value={email}
         errors={emailError ? textKeys.SIGN_EMAIL_CHECK() : undefined}
-        onChange={(e) => {
+        onChange={(e: React.ChangeEvent<any>) => {
           onEmailChange(e.target.value)
           setEmailError(false)
         }}
-        onBlur={() =>
+        onBlur={() => {
           emailValidation.validate(email).catch(() => {
             setEmailError(true)
           })
-        }
+        }}
       />
     </form>
   )

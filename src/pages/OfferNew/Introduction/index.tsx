@@ -20,7 +20,7 @@ import { Usps } from './Usps'
 
 interface Props {
   offer: CompleteOfferDataForMember
-  refetch: () => void
+  refetch: () => Promise<void>
   onCheckoutOpen: () => void
 }
 
