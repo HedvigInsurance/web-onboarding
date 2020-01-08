@@ -1,4 +1,4 @@
-import { InputField } from 'new-components/inputs'
+import { RawInputField } from 'new-components/inputs'
 import { WithEmailForm } from 'pages/OfferNew/types'
 import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
@@ -21,7 +21,7 @@ export const UserDetailsForm: React.FC<Props> = ({ email, onEmailChange }) => {
         e.preventDefault()
       }}
     >
-      <InputField
+      <RawInputField
         label={textKeys.CHECKOUT_EMAIL_LABEL()}
         placeholder={textKeys.CHECKOUT_EMAIL_PLACEHOLDER()}
         name="email"

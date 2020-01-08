@@ -3,9 +3,9 @@ import { colorsV2 } from '@hedviginsurance/brand'
 import { DownArrow } from 'components/icons/DownArrow'
 import { WarningIcon } from 'components/icons/Warning'
 import { Field, GenericFieldHTMLAttributes } from 'formik'
+import { FieldInputProps } from 'formik/dist/types'
 import * as React from 'react'
 import InputMask from 'react-input-mask'
-import { FieldInputProps } from 'formik/dist/types'
 
 interface Mask {
   name: string
@@ -54,7 +54,7 @@ const TextWrapper = styled.div`
   flex-direction: column;
 `
 
-const Label = styled.div`
+const Label = styled.label`
   font-size: 0.75rem;
   line-height: 0.75rem;
   color: ${colorsV2.gray};
@@ -90,7 +90,7 @@ const StyledField = styled(Field)`
   }
 `
 
-const StyledInput = StyledField.withComponent(InputMask)
+const StyledInputMask = StyledField.withComponent(InputMask)
 
 const SymbolWrapper = styled.div`
   width: 1.5rem;
@@ -142,6 +142,41 @@ export interface TextInputProps extends CoreInputFieldProps {
   errors?: string
 }
 
+const StyledRawInput = styled.input`
+  background: none;
+  border: none;
+  font-size: 1.125rem;
+  line-height: 1.625rem;
+  font-weight: 600;
+  color: ${colorsV2.black};
+  padding: 0;
+  margin: 0;
+  :focus {
+    outline: none;
+  }
+  ::placeholder {
+    color: ${colorsV2.semilightgray};
+  }
+`
+
+export const RawInputField: React.FC<React.InputHTMLAttributes<
+  HTMLInputElement
+> & {
+  label: string
+  errors?: string
+}> = ({ errors, label, ...props }) => (
+  <>
+    <Wrapper errors={errors}>
+      <TextWrapper>
+        <Label htmlFor={props.id}>{label}</Label>
+        <StyledRawInput {...props} />
+      </TextWrapper>
+      <SymbolWrapper>{errors && <WarningIcon />}</SymbolWrapper>
+    </Wrapper>
+    <ErrorText>{errors}</ErrorText>
+  </>
+)
+
 export const InputField: React.FC<TextInputProps &
   GenericFieldHTMLAttributes> = ({
   label,
@@ -160,7 +195,7 @@ export const InputField: React.FC<TextInputProps &
         {mask ? (
           <StyledField {...props}>
             {({ field }: any) => (
-              <StyledInput
+              <StyledInputMask
                 placeholder={props.placeholder}
                 mask={mask.mask}
                 alwaysShowMask={true}
