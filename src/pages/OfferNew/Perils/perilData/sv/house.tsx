@@ -100,7 +100,7 @@ export const housePerils: Peril[] = [
       'T.ex. rådgivning, fällor, mekanisk eller kemisk sanering',
       'Reparation av bärande byggdelar som skadats',
       'Skador från vilda djur (älg, ren, bäver) som tagit sig in i din villa',
-      'Ersättning: upp till 400 000 kr',
+      'Ersättning: upp till 4 000 000 kr',
     ],
     exceptions: [
       'Livsmedel, kläder, saneringsstädning, angrepp på rötskadat virke',
@@ -264,7 +264,7 @@ export const housePerils: Peril[] = [
   {
     title: 'Vitvaror',
     description:
-      'Vi finns här för dig när du får problem med frysen, kylskåpet, tvättmaskinen, torktumlaren, diskmaskinen eller ugnen. Blir det strömavbrott eller blir något fel på kyle ller frys kan du få ersättning för mat som förstörs.',
+      'Vi finns här för dig när du får problem med frysen, kylskåpet, tvättmaskinen, torktumlaren, diskmaskinen eller ugnen. Blir det strömavbrott eller blir något fel på frysen kan du få ersättning för mat som förstörs.',
     covered: [
       'Vitvaror/hushållsmaskiner p.g.a kortslutning, överslag eller överspänning',
       'Installation för värme, vatten, avlopp, ventilation, gas, el',
