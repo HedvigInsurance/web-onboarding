@@ -57,6 +57,7 @@ export const helmet = koaHelmet({
       scriptSrc: [
         ...defaultSrc,
         "'unsafe-eval'",
+        "'unsafe-inline'",
         'browser.sentry-cdn.com',
         'cdn.segment.com',
         'www.googletagmanager.com',
