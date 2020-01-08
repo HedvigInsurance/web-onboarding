@@ -79,7 +79,9 @@ export const LoadingScreen: React.SFC<WithAppear> = ({ appear }) => (
       </TranslationsConsumer>
       <LazyLottie
         options={{
-          animationData: import('components/animations/lottie/loading.json'),
+          animationData: import(
+            /* webpackChunkName: 'animation-loading' */ 'components/animations/lottie/loading.json'
+          ),
         }}
         width={300}
         height={100}
