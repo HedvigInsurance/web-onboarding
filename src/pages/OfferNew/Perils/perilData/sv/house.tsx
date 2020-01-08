@@ -61,7 +61,7 @@ export const housePerils: Peril[] = [
       'Skulle ditt hus, din tomt eller dina saker bli skadat p.g.a översvämning, snötryck, storm, hagel, regn, kyla eller jordskalv kan du få ersättning från oss. Det finns också viss möjlighet att få ersättning om du missar en resa på grund av oväder.',
     covered: [
       'Översvämning p.g.a. skyfall (1mm/minut eller 50mm/dygn) snösmältning, stigande sjö eller vattendrag genom rör, avloppet eller där vatten strömmar från markytan in i huset.',
-      'Storm (minst 21 m/s), t.e.x. något blåser omkull på huset',
+      'Storm (minst 21 m/s), t.e.x. träd blåser ner och skadar ditt hus',
       'Hagel, kyla eller regn',
       'Jordskalv (minst 4 på richterskalan), jordras, bergras, lavin',
     ],
@@ -100,7 +100,7 @@ export const housePerils: Peril[] = [
       'T.ex. rådgivning, fällor, mekanisk eller kemisk sanering',
       'Reparation av bärande byggdelar som skadats',
       'Skador från vilda djur (älg, ren, bäver) som tagit sig in i din villa',
-      'Ersättning: upp till 4 00 000 kr',
+      'Ersättning: upp till 400 000 kr',
     ],
     exceptions: [
       'Livsmedel, kläder, saneringsstädning, angrepp på rötskadat virke',
@@ -130,10 +130,10 @@ export const housePerils: Peril[] = [
     description:
       'Vid stöld och skadegörelse av dina saker så täcks dem och ersätts av oss. Oavsett om du är hemma eller på flygande fot kan du alltid känna dig trygg med oss.',
     covered: [
-      'Stöld och skadegörelse i ditt hem',
+      'Stöld eller skadegörelse i ditt hem',
       'Stöld ur gemensamhetsutrymme, t.ex. cykel- eller barnvagnsförråd',
-      'Stöld och skadegörelse av saker du tar med dig till ditt arbete eller hotellrum',
-      'Stöld och skadegörelse vid förvaring hos t.ex. Shurguard',
+      'Stöld eller skadegörelse av saker du tar med dig till ditt arbete eller hotellrum',
+      'Stöld eller skadegörelse vid förvaring hos t.ex. Shurguard',
       'Stöld utanför bostaden',
       'Stöld ur bil när du är på resa',
     ],
@@ -167,8 +167,8 @@ export const housePerils: Peril[] = [
       'Vårt ansvarsskydd gäller när någon kräver dig på skadestånd för att ha skadat honom eller henne eller dennes ägodelar. Vi hjälper dig med utredning och förhandling och vi betalar både rättegångskostnader och skadestånd om du vållat skadan.',
     covered: [
       'T.ex. om ditt handfat gått sönder i en lägenhet',
-      'T.ex. vattenskada från ditt hus som drabbar grannarna',
-      'T.ex. Hunden orsakar bitskador',
+      'T.ex. vattenläcka från ditt hus in i grannhuset',
+      'T.ex. hunden biter någon',
       'Utredning och förhandling',
       'Representation i domstol',
       'Max 5 000 000 kr i ersättning per försäkringsår och person/sakskada',
@@ -197,7 +197,6 @@ export const housePerils: Peril[] = [
     exceptions: [
       'Småmål enligt rättegångsbalken',
       'Uppsåtligt brott, t.e.x om du skadat någon/något med flit',
-      'Uppsåtligt brott, t.ex. om du skadar någon/något med flit',
     ],
     info:
       'Du måste välja vem som ska representera dig och personen måste vara medlem i Svenska advokatsamfundet. Sen måste ombudet skicka in en ansökan till oss innan du kan få besked om rättsskyddet täcker tvisten.',
@@ -265,7 +264,7 @@ export const housePerils: Peril[] = [
   {
     title: 'Vitvaror',
     description:
-      'Du kan få ersättning om tvättmaskinen säckar ihop eller om annan elektrisk maskin eller apparat går sönder p.g.a. kortslutning, överslag eller överspänning. Och går frysen sönder kan du få ersättning för eventuellt skadat innehåll.',
+      'Vi finns här för dig när du får problem med frysen, kylskåpet, tvättmaskinen, torktumlaren, diskmaskinen eller ugnen. Blir det strömavbrott eller blir något fel på kyle ller frys kan du få ersättning för mat som förstörs.',
     covered: [
       'Vitvaror/hushållsmaskiner p.g.a kortslutning, överslag eller överspänning',
       'Installation för värme, vatten, avlopp, ventilation, gas, el',
