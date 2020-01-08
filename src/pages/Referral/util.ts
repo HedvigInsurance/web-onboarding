@@ -96,7 +96,7 @@ export const getAppStoreId = () => {
   }
 
   throw Error(
-    'Unable to find apple bundle id - specify with envvar `APPLE_BUNDLE_ID`',
+    'Unable to find app store id - specify with envvar `APP_STORE_ID`',
   )
 }
 
