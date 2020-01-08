@@ -126,10 +126,10 @@ export const Lock = (props: SvgProps) => (
 
 export const Pests = (props: SvgProps) => (
   <Svg {...props} viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-    <g transform="translate(9 10)" fill="#141033" fill-rule="evenodd">
+    <g transform="translate(9 10)" fill="#141033" fillRule="evenodd">
       <path
         d="M15 3.5a8.5 8.5 0 018.5 8.5v6a8.5 8.5 0 11-17 0v-6A8.5 8.5 0 0115 3.5zm0 1A7.5 7.5 0 007.5 12v6a7.5 7.5 0 0015 0v-6A7.5 7.5 0 0015 4.5z"
-        fill-rule="nonzero"
+        fillRule="nonzero"
       />
       <circle cx="15" cy="9" r="1" />
       <circle cx="15" cy="15" r="1" />
@@ -141,11 +141,11 @@ export const Pests = (props: SvgProps) => (
 
 export const Reconstruction = (props: SvgProps) => (
   <Svg {...props} viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-    <g transform="translate(10 13)" fill="#141033" fill-rule="evenodd">
-      <path fill-rule="nonzero" d="M19 5.5h5v-1h-5zM27 5.5h2v-1h-2z" />
+    <g transform="translate(10 13)" fill="#141033" fillRule="evenodd">
+      <path fillRule="nonzero" d="M19 5.5h5v-1h-5zM27 5.5h2v-1h-2z" />
       <rect x="25" width="1" height="10" rx=".5" />
       <path
-        fill-rule="nonzero"
+        fillRule="nonzero"
         d="M10 13.5h3v-1h-3zM16.5 8.5a3.5 3.5 0 000-7v1a2.5 2.5 0 110 5v1z"
       />
       <rect x="22" y="12" width="2" height="2" rx="1" />
@@ -169,11 +169,11 @@ export const Reconstruction = (props: SvgProps) => (
       />
       <path
         d="M9.129 18H3.34l2.531-9h5.789l-2.531 9zm-2.5-8L4.66 17h3.711l1.969-7H6.629z"
-        fill-rule="nonzero"
+        fillRule="nonzero"
       />
       <path
         d="M17.135 0l-.06 10H2.733c-.887 0-1.6-.73-1.6-1.625v-6.75C1.132.73 1.845 0 2.732 0h14.402zM16.13 1H2.733c-.33 0-.6.277-.6.625v6.75c0 .348.27.625.6.625H16.08l.048-8zM11 17a1.5 1.5 0 011.5 1.5v2A1.5 1.5 0 0111 22H2a1.5 1.5 0 01-1.5-1.5v-2A1.5 1.5 0 012 17h9zm0 1H2a.5.5 0 00-.5.5v2a.5.5 0 00.5.5h9a.5.5 0 00.5-.5v-2a.5.5 0 00-.5-.5z"
-        fill-rule="nonzero"
+        fillRule="nonzero"
       />
     </g>
   </Svg>
@@ -471,7 +471,7 @@ export const Condominium = (props: SvgProps) => (
     <defs>
       <path id="a" d="M0 0h48v48H0z" />
     </defs>
-    <g fill="none" fill-rule="evenodd">
+    <g fill="none" fillRule="evenodd">
       <mask id="b" fill="#fff">
         <use xlinkHref="#a" />
       </mask>

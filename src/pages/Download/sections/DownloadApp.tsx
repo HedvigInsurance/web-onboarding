@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colors } from '@hedviginsurance/brand'
+import { colors, fonts } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 
@@ -105,6 +105,8 @@ const Header = styled('h1')({
 
 const HeaderPart = styled('span')<{ color: string }>(({ color }) => ({
   color,
+  fontFamily: fonts.GEOMANIST,
+  fontWeight: 400,
 }))
 
 const DownloadText = styled('div')({

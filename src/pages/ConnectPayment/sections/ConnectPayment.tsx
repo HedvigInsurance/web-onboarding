@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colors } from '@hedviginsurance/brand'
+import { colors, fonts } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { Button } from 'components/buttons'
 import { ActionMap, Container } from 'constate'
@@ -74,10 +74,11 @@ const Header = styled('h1')({
   },
 })
 
-const HeaderPart = styled('span')<{ color: string }>(({ color }) => ({
-  color,
+const HeaderPart = styled('span')({
   display: 'block',
-}))
+  fontFamily: fonts.GEOMANIST,
+  fontWeight: 400,
+})
 
 const ConnectText = styled('div')({
   width: '65%',
@@ -163,12 +164,12 @@ export const ConnectPaymentPage: React.SFC<{}> = () => (
                   <InnerWrapper>
                     <TextColumn>
                       <Header>
-                        <HeaderPart color={colors.DARK_GREEN}>
+                        <HeaderPart>
                           <TranslationsConsumer textKey="ONBOARDING_CONNECT_DD_PRE_HEADLINE">
                             {(t) => t}
                           </TranslationsConsumer>
                         </HeaderPart>
-                        <HeaderPart color={colors.BLACK}>
+                        <HeaderPart>
                           <TranslationsConsumer textKey="ONBOARDING_CONNECT_DD_HEADLINE">
                             {(t) => t}
                           </TranslationsConsumer>

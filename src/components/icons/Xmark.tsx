@@ -7,7 +7,7 @@ export const XMark = () => (
     height="16"
     viewBox="0 0 16 16"
   >
-    <g fill="none" fill-rule="evenodd">
+    <g fill="none" fillRule="evenodd">
       <circle cx="8" cy="8" r="8" fill="#FF8A80" opacity=".3" />
       <path
         fill="#FFF"
