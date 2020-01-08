@@ -43,6 +43,7 @@ query MemberOffer {
           ancillarySpace
           numberOfBathrooms
           yearOfConstruction
+          isSubleted
           extraBuildings {
             ... on ExtraBuildingCore {
               area

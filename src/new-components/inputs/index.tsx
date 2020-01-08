@@ -13,6 +13,8 @@ interface Mask {
   sanitize: (value: string) => string
 }
 
+const INVISIBLE_MASK_CHAR = '\u200b'
+
 export const masks: { [key: string]: Mask } = {
   zipCode: {
     name: 'ZipCode',
@@ -22,7 +24,8 @@ export const masks: { [key: string]: Mask } = {
   area: {
     name: 'Area',
     mask: '99999 m2',
-    sanitize: (value) => value.replace(/[\s\u200b]+m2/, ''),
+    sanitize: (value) =>
+      value.replace(RegExp(`/[\\s${INVISIBLE_MASK_CHAR}]+m2/`), ''),
   },
   year: {
     name: 'Year',
@@ -121,7 +124,7 @@ interface CoreInputFieldOptions {
   value: string
 }
 
-export const inputTypes: { [key: string]: string } = {
+export const inputTypes: Record<string, string> = {
   text: 'text',
   number: 'number',
 }
@@ -199,7 +202,7 @@ export const InputField: React.FC<TextInputProps &
                 placeholder={props.placeholder}
                 mask={mask.mask}
                 alwaysShowMask={true}
-                maskChar={`\u200b`}
+                maskChar={INVISIBLE_MASK_CHAR}
                 {...field}
                 {...props}
               />

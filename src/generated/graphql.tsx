@@ -1077,18 +1077,6 @@ export enum HedvigColor {
   Black = 'Black',
 }
 
-export type HouseInformation = {
-  __typename?: 'HouseInformation'
-  livingSpace: Scalars['Int']
-  ancillaryArea: Scalars['Int']
-  yearOfConstruction: Scalars['Int']
-}
-
-export type HouseInformationInput = {
-  streetAddress: Scalars['String']
-  postalNumber: Scalars['String']
-}
-
 /** A vectorized image to show to the user */
 export type Icon = {
   __typename?: 'Icon'
@@ -1158,11 +1146,7 @@ export type ImageTransformationInput = {
   resize?: Maybe<ImageResizeInput>
 }
 
-export type Incentive =
-  | MonthlyCostDeduction
-  | FreeMonths
-  | NoDiscount
-  | PercentageDiscountMonths
+export type Incentive = MonthlyCostDeduction | FreeMonths | NoDiscount
 
 export type IncompleteApartmentQuoteDetails = {
   __typename?: 'IncompleteApartmentQuoteDetails'
@@ -2747,12 +2731,6 @@ export type PageInfo = {
   endCursor?: Maybe<Scalars['String']>
 }
 
-export type PercentageDiscountMonths = {
-  __typename?: 'PercentageDiscountMonths'
-  percentageDiscount: Scalars['Float']
-  quantity: Scalars['Int']
-}
-
 export type Peril = {
   __typename?: 'Peril'
   id?: Maybe<Scalars['ID']>
@@ -2767,19 +2745,6 @@ export type PerilCategory = {
   description?: Maybe<Scalars['String']>
   iconUrl?: Maybe<Scalars['String']>
   perils?: Maybe<Array<Maybe<Peril>>>
-}
-
-export type PersonalInformation = {
-  __typename?: 'PersonalInformation'
-  firstName: Scalars['String']
-  lastName: Scalars['String']
-  streetAddress: Scalars['String']
-  postalNumber: Scalars['String']
-  city: Scalars['String']
-}
-
-export type PersonalInformationInput = {
-  personalNumber: Scalars['String']
 }
 
 export enum Platform {
@@ -2842,8 +2807,6 @@ export type Query = {
   balance: Balance
   chargeEstimation: ChargeEstimation
   chargeHistory: Array<Charge>
-  personalInformation?: Maybe<PersonalInformation>
-  houseInformation?: Maybe<HouseInformation>
   quote: Quote
   lastQuoteOfMember: Quote
   commonClaims: Array<CommonClaim>
@@ -2889,14 +2852,6 @@ export type QueryDontPanicSessionArgs = {
 
 export type QueryCampaignArgs = {
   code: Scalars['String']
-}
-
-export type QueryPersonalInformationArgs = {
-  input: PersonalInformationInput
-}
-
-export type QueryHouseInformationArgs = {
-  input: HouseInformationInput
 }
 
 export type QueryQuoteArgs = {
@@ -3581,6 +3536,7 @@ export type MemberOfferQuery = { __typename?: 'Query' } & {
                 | 'ancillarySpace'
                 | 'numberOfBathrooms'
                 | 'yearOfConstruction'
+                | 'isSubleted'
               > & {
                   extraBuildings: Array<
                     | ({ __typename?: 'ExtraBuildingGarage' } & Pick<
@@ -3656,7 +3612,6 @@ export type MemberOfferQuery = { __typename?: 'Query' } & {
             })
           | ({ __typename?: 'FreeMonths' } & Pick<FreeMonths, 'quantity'>)
           | { __typename?: 'NoDiscount' }
-          | { __typename?: 'PercentageDiscountMonths' }
         >
         owner: Maybe<
           { __typename?: 'CampaignOwner' } & Pick<CampaignOwner, 'displayName'>
@@ -3688,7 +3643,6 @@ export type RedeemCodeMutation = { __typename?: 'Mutation' } & {
             })
           | ({ __typename?: 'FreeMonths' } & Pick<FreeMonths, 'quantity'>)
           | { __typename?: 'NoDiscount' }
-          | { __typename?: 'PercentageDiscountMonths' }
         >
       }
     >
@@ -3877,6 +3831,7 @@ export const MemberOfferDocument = gql`
             ancillarySpace
             numberOfBathrooms
             yearOfConstruction
+            isSubleted
             extraBuildings {
               ... on ExtraBuildingCore {
                 area

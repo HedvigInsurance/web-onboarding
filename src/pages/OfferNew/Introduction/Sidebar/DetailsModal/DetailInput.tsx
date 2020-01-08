@@ -38,11 +38,11 @@ export const DetailInput: React.FC<DetailInputProps &
           : e.target.value
 
         if (field.type === 'number') {
-          formikProps.setFieldValue(formikName, parseInt(value, 10))
+          formikProps.setFieldValue(formikName, value && parseInt(value, 10))
         } else {
           formikProps.setFieldValue(
             formikName,
-            /^(true|false)$/.test(value) ? JSON.parse(value) : value,
+            /\A(true|false)\z/.test(value) ? JSON.parse(value) : value,
           )
         }
       }}
