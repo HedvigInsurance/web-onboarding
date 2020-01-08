@@ -1,7 +1,10 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
-import { CompleteOfferData } from 'pages/OfferNew/types'
-import { getInsuranceType, insuranceTypeTextKeys } from 'pages/OfferNew/utils'
+import { CompleteOfferDataForMember } from 'pages/OfferNew/types'
+import {
+  apartmentTypeTextKeys,
+  maskAndFormatRawSsn,
+} from 'pages/OfferNew/utils'
 import * as React from 'react'
 import { TextKeyMap, useTextKeys } from 'utils/hooks/useTextKeys'
 import { formatPostalNumber } from 'utils/postalNumbers'
@@ -48,7 +51,7 @@ const Value = styled('div')`
 `
 
 interface Props {
-  offer: CompleteOfferData
+  offer: CompleteOfferDataForMember
 }
 
 export const InsuranceSummary: React.FC<Props> = ({ offer }) => {
@@ -73,33 +76,152 @@ export const InsuranceSummary: React.FC<Props> = ({ offer }) => {
   )
 }
 
-const getDetails = (
-  offer: CompleteOfferData,
-  textKeys: TextKeyMap,
-): ReadonlyArray<ReadonlyArray<{
+type DetailsGroup = ReadonlyArray<{
   key: string
   label: React.ReactNode
   value: React.ReactNode
-}>> => [
-  [
-    { key: 'adress', label: 'Adress', value: offer.quote.details.street },
+}>
+
+function getHouseSummaryDetailsMaybe(
+  textKeys: TextKeyMap,
+  offer: CompleteOfferDataForMember,
+): DetailsGroup {
+  if (
+    offer.lastQuoteOfMember.details.__typename !== 'CompleteHouseQuoteDetails'
+  ) {
+    return []
+  }
+
+  return [
     {
-      key: 'postnummer',
-      label: 'Postnummer',
-      value: formatPostalNumber(offer.quote.details.zipCode),
+      key: 'ancillaryarea',
+      label: textKeys.CHECKOUT_DETAILS_ANCILLARY_SPACE(),
+      value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
+        VALUE: offer.lastQuoteOfMember.details.ancillarySpace,
+      }),
+    },
+    {
+      key: 'bathrooms',
+      label: textKeys.CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS(),
+      value: textKeys.CHECKOUT_DETAILS_COUNT_VALUE({
+        VALUE: offer.lastQuoteOfMember.details.numberOfBathrooms,
+      }),
+    },
+    {
+      key: 'yearOfConstruction',
+      label: textKeys.CHECKOUT_DETAILS_YEAR_OF_CONSTRUCTION(),
+      value: offer.lastQuoteOfMember.details.yearOfConstruction,
+    },
+  ]
+}
+
+const getHouseExtraBuildingsMaybe = (
+  textKeys: TextKeyMap,
+  offer: CompleteOfferDataForMember,
+): ReadonlyArray<DetailsGroup> => {
+  if (
+    offer.lastQuoteOfMember.details.__typename !== 'CompleteHouseQuoteDetails'
+  ) {
+    return []
+  }
+
+  return offer.lastQuoteOfMember.details.extraBuildings.map<DetailsGroup>(
+    (extraBuilding) => [
+      {
+        key: 'buildingType',
+        label: textKeys.CHECKOUT_DETAILS_EXTRA_BUILDINGS_BUILDING_TYPE(),
+        value: extraBuilding.displayName,
+      },
+      {
+        key: 'buildingSize',
+        label: textKeys.CHECKOUT_DETAILS_EXTRA_BUILDINGS_SIZE(),
+        value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
+          VALUE: extraBuilding.area ?? 'blah',
+        }),
+      },
+      {
+        key: 'hasWater',
+        label: textKeys.CHECKOUT_DETAILS_EXTRA_BUILDINGS_HAS_WATER_CONNECTED(),
+        value: extraBuilding.hasWaterConnected ? textKeys.YES() : textKeys.NO(),
+      },
+    ],
+  )
+}
+
+function getApartmentSummaryDetailsMaybe(
+  textKeys: TextKeyMap,
+  offer: CompleteOfferDataForMember,
+): DetailsGroup {
+  if (
+    offer.lastQuoteOfMember.details.__typename !==
+    'CompleteApartmentQuoteDetails'
+  ) {
+    return []
+  }
+
+  return [
+    {
+      key: 'subtype',
+      label: textKeys.CHECKOUT_DETAILS_APARTMENT_TYPE(),
+      value: textKeys[
+        apartmentTypeTextKeys[offer.lastQuoteOfMember.details.type]
+      ](),
+    },
+  ]
+}
+
+const getDetails = (
+  offer: CompleteOfferDataForMember,
+  textKeys: TextKeyMap,
+) => [
+  [
+    {
+      key: 'address',
+      label: textKeys.CHECKOUT_DETAILS_ADDRESS(),
+      value: offer.lastQuoteOfMember.details.street,
+    },
+    {
+      key: 'zipcode',
+      label: textKeys.CHECKOUT_DETAILS_ZIPCODE(),
+      value: formatPostalNumber(offer.lastQuoteOfMember.details.zipCode),
     },
     {
       key: 'bostadstyp',
-      label: 'Bostadstyp',
-      value: textKeys[insuranceTypeTextKeys[getInsuranceType(offer.quote)]](),
+      label: textKeys.CHECKOUT_DETAILS_QUOTE_TYPE(),
+      value:
+        offer.lastQuoteOfMember.details.__typename ===
+        'CompleteApartmentQuoteDetails'
+          ? textKeys.CHECKOUT_APARTMENT()
+          : textKeys.CHECKOUT_HOUSE(),
     },
+    ...getApartmentSummaryDetailsMaybe(textKeys, offer),
+    {
+      key: 'livingspace',
+      label: textKeys.CHECKOUT_DETAILS_LIVING_SPACE(),
+      value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
+        VALUE: offer.lastQuoteOfMember.details.livingSpace,
+      }),
+    },
+    ...getHouseSummaryDetailsMaybe(textKeys, offer),
   ],
+
+  ...getHouseExtraBuildingsMaybe(textKeys, offer),
+
   [
-    { key: 'personnummer', label: 'Personnummer', value: 'TODO-****' }, // TODO
+    {
+      key: 'ssn',
+      label: textKeys.CHECKOUT_DETAILS_SSN(),
+      value: maskAndFormatRawSsn(offer.lastQuoteOfMember.ssn),
+    },
     {
       key: 'antal-personer',
-      label: 'Antal personer',
-      value: `${offer.quote.details.householdSize} personer`, // TODO
+      label: textKeys.CHECKOUT_DETAILS_HOUSEHOLD_SIZE(),
+      value:
+        offer.lastQuoteOfMember.details.householdSize === 1
+          ? textKeys.CHECKOUT_DETAILS_SINGLE_PERSON()
+          : textKeys.CHECKOUT_DETAILS_PERSONS_VALUE({
+              VALUE: offer.lastQuoteOfMember.details.householdSize,
+            }),
     },
   ],
 ]

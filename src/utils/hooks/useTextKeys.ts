@@ -33,11 +33,7 @@ export const makeTextKeyResolver = (textKeys: TextKeys) =>
 
           const value = replacements[k]
 
-          if (value) {
-            return value.toString()
-          }
-
-          return placeholder
+          return value?.toString() ?? placeholder
         })
       },
     },

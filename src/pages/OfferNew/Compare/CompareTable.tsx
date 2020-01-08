@@ -9,6 +9,7 @@ import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { Checkmark } from '../../../components/icons/Checkmark'
 import { DownArrow } from '../../../components/icons/DownArrow'
 import { HedvigSymbol } from '../../../components/icons/HedvigSymbol'
+import { XMark } from '../../../components/icons/Xmark'
 import { SubHeadingBlack } from '../components'
 import { CompanyProperties, InsuranceProperties } from './types'
 
@@ -155,7 +156,6 @@ const CompanyColumnRow = styled(ColumnRow)`
 const OtherCompaniesSection = styled('div')`
   width: 100%;
   max-width: 178px;
-  height: 100%;
   padding: 2rem 1rem;
   box-sizing: border-box;
   position: relative;
@@ -248,6 +248,8 @@ const Dropdown = styled('div')<{ visible: boolean }>`
   padding: 1rem;
   box-sizing: border-box;
   border-top: 1px solid ${colorsV2.lightgray};
+  max-height: 90%;
+  overflow-y: scroll;
 
   @media (max-width: 600px) {
     top: 5.5rem;
@@ -330,12 +332,19 @@ const getProperty = (key: string, value: any): any => {
     )
   }
 
-  return typeof value === 'string' ? (
-    <ColumnRowPrimaryContent>{value}</ColumnRowPrimaryContent>
-  ) : (
-    <Checkmark />
-  )
+  if (typeof value === 'string') {
+    return <ColumnRowPrimaryContent>{value}</ColumnRowPrimaryContent>
+  }
+
+  if (value) {
+    return <Checkmark />
+  }
+
+  return <XMark />
 }
+
+const filterVisibleProperties = ([key]: [string, any]) =>
+  !['name', 'id'].includes(key)
 
 export const CompareTable = (props: Props) => {
   const textKeys = useTextKeys()
@@ -353,13 +362,13 @@ export const CompareTable = (props: Props) => {
           <SubHeadingBlack>{textKeys.COMPARE_TABLE_TITLE()}</SubHeadingBlack>
 
           <MobileTooltipWrapper>
-            <Tooltip size="lg" body="Info" />
+            <Tooltip size="lg" body={textKeys.COMPARE_TABLE_MOBILE_TOOLTIP()} />
           </MobileTooltipWrapper>
         </ColumnHead>
 
         <InsurancePropertyNames>
           {Object.entries(props.insuranceProperties)
-            .filter(([key]) => key !== 'name')
+            .filter(filterVisibleProperties)
             .map(([key, property]) => (
               <InsuranceProperty key={key}>
                 {textKeys[property.name]()}
@@ -380,7 +389,7 @@ export const CompareTable = (props: Props) => {
         </PrimaryCompanyHead>
 
         {Object.entries(props.primaryCompany)
-          .filter(([key]) => key !== 'name')
+          .filter(filterVisibleProperties)
           .map(([key, property]) => (
             <CompanyColumnRow key={key}>
               {getProperty(key, property)}
@@ -444,7 +453,7 @@ export const CompareTable = (props: Props) => {
         )}
         {currentCompany &&
           Object.entries(currentCompany)
-            .filter(([key]) => key !== 'name')
+            .filter(filterVisibleProperties)
             .map(([key, property]) => (
               <CompanyColumnRow key={key}>
                 {getProperty(key, property)}

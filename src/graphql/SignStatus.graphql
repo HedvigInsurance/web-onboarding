@@ -1,0 +1,9 @@
+query SignStatus {
+  signStatus {
+    collectStatus {
+      status
+      code
+    }
+    signState
+  }
+}

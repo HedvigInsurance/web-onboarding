@@ -3,7 +3,7 @@ import { colorsV2, fonts } from '@hedviginsurance/brand'
 import * as React from 'react'
 
 interface PerilItemProps {
-  title: string
+  title: React.ReactNode
   icon: JSX.Element
   onClick: () => void
 }

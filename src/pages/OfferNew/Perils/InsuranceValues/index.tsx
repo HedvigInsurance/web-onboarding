@@ -5,8 +5,11 @@ import { DocumentIcon } from 'components/icons/Document'
 import { InsuranceType } from 'generated/graphql'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
+import {
+  getInsurancePDFTextKey,
+  getPrebuyPDFTextKey,
+} from 'utils/insuranceDomainUtils'
 import { SubSubHeadingBlack } from '../../components'
-import { getInsurancePDFTextKey, getPrebuyPDFTextKey } from '../../utils'
 import { insuranceValues } from './mock'
 import { Values } from './Values'
 
@@ -98,7 +101,7 @@ export const InsuranceValues: React.FC<Props> = ({ insuranceType }) => {
 
       <Links>
         <Link
-          href={textKeys[getPrebuyPDFTextKey(insuranceType)]()}
+          href={textKeys[getInsurancePDFTextKey(insuranceType)]()}
           target="_blank"
         >
           <DocumentIcon />
@@ -106,7 +109,7 @@ export const InsuranceValues: React.FC<Props> = ({ insuranceType }) => {
         </Link>
 
         <Link
-          href={textKeys[getInsurancePDFTextKey(insuranceType)]()}
+          href={textKeys[getPrebuyPDFTextKey(insuranceType)]()}
           target="_blank"
         >
           <DocumentIcon />

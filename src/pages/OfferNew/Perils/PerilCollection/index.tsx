@@ -4,7 +4,7 @@ import { Peril } from '../types'
 import { PerilItem } from './PerilItem'
 
 interface Props {
-  perils: Peril[]
+  perils: ReadonlyArray<Peril>
   setCurrentPeril: (index: number) => void
   setIsShowingPeril: (isShowingPeril: boolean) => void
 }
@@ -25,7 +25,7 @@ export const PerilCollection: React.FC<Props> = ({
   <Wrapper>
     {perils.map((peril, perilIndex) => (
       <PerilItem
-        key={peril.title}
+        key={peril.title?.toString()}
         title={peril.title}
         icon={peril.icon}
         onClick={() => {

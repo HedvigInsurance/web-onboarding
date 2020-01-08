@@ -5,6 +5,7 @@ import { WarningIcon } from 'components/icons/Warning'
 import { Field, GenericFieldHTMLAttributes } from 'formik'
 import * as React from 'react'
 import InputMask from 'react-input-mask'
+import { FieldInputProps } from 'formik/dist/types'
 
 interface Mask {
   name: string
@@ -131,6 +132,8 @@ export interface CoreInputFieldProps {
   type?: string
   options?: CoreInputFieldOptions[]
   mask?: Mask
+  onChange?: FieldInputProps<string>['onChange']
+  onBlur?: FieldInputProps<string>['onBlur']
 }
 
 export interface TextInputProps extends CoreInputFieldProps {
@@ -171,7 +174,7 @@ export const InputField: React.FC<TextInputProps &
           <>
             {options && options.length > 0 ? (
               <StyledField {...props} component="select">
-                {options.map((option) => (
+                {options!.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
@@ -230,7 +233,7 @@ export const InputGroup = styled.div`
 
   > ${Wrapper}:last-child, ${InputGroupDeleteButton}:last-child {
     border-bottom-left-radius: 8px;
-    border-bottom-right-radius 8px;
+    border-bottom-right-radius: 8px;
   }
 
   ${Wrapper}, ${InputGroupDeleteButton} {

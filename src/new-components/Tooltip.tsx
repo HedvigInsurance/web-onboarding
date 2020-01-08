@@ -13,6 +13,7 @@ interface Props {
 
 const Wrapper = styled.div`
   position: relative;
+  z-index: 100;
 `
 
 const TooltipIcon = styled(motion.div)<{ size: Size }>`
@@ -48,7 +49,7 @@ const TooltipIcon = styled(motion.div)<{ size: Size }>`
 const TooltipContainer = styled.div<{ visible: boolean }>`
   background-color: ${colorsV2.violet500};
   max-width: 9.75rem;
-  min-width: 2rem;
+  min-width: 6rem;
   padding: 10px;
   position: absolute;
   display: flex;
@@ -103,7 +104,7 @@ export const Tooltip: React.FC<Props> = ({ body, size = 'sm' }) => {
 
     window.addEventListener('touchstart', listener)
     return () => window.removeEventListener('touchstart', listener)
-  })
+  }, [])
   const isHover = useMediaQuery({ query: '(hover: hover)' })
 
   return (

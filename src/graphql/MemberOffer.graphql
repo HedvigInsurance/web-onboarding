@@ -1,0 +1,86 @@
+query MemberOffer {
+  lastQuoteOfMember {
+    ... on CompleteQuote {
+      id
+
+      ssn
+      firstName
+      lastName
+
+      currentInsurer {
+        id
+        displayName
+        switchable
+      }
+      insuranceCost {
+        freeUntil
+        monthlyDiscount {
+          amount
+          currency
+        }
+        monthlyGross {
+          amount
+          currency
+        }
+        monthlyNet {
+          amount
+          currency
+        }
+      }
+      details {
+        ... on CompleteApartmentQuoteDetails {
+          street
+          zipCode
+          householdSize
+          livingSpace
+          type
+        }
+        ... on CompleteHouseQuoteDetails {
+          street
+          zipCode
+          householdSize
+          livingSpace
+          ancillarySpace
+          numberOfBathrooms
+          yearOfConstruction
+          extraBuildings {
+            ... on ExtraBuildingCore {
+              area
+              displayName
+              hasWaterConnected
+            }
+          }
+        }
+      }
+    }
+
+    ... on IncompleteQuote {
+      id
+    }
+  }
+
+  redeemedCampaigns {
+    incentive {
+      ... on FreeMonths {
+        quantity
+      }
+      ... on MonthlyCostDeduction {
+        amount {
+          amount
+          currency
+        }
+      }
+    }
+    code
+    owner {
+      displayName
+    }
+  }
+
+  member {
+    id
+    firstName
+    lastName
+    email
+  }
+}

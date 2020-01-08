@@ -13,7 +13,7 @@ import { Peril } from './types'
 const TRANSITION_MS = 250
 
 interface PerilModalProps {
-  perils: Peril[]
+  perils: ReadonlyArray<Peril>
   currentPerilIndex: number
   setCurrentPeril: (perilIndex: number) => void
 }
@@ -88,7 +88,7 @@ const PerilItemsContainer = styled('div')<PerilItemsContainerProps>`
   ${(props) =>
     `transform: translateX(${
       props.currentPerilIndex !== 0
-        ? `calc((-100%/3) - ${(props.currentPerilIndex - 12 - 1) * (100 + 16) +
+        ? `calc((-100%/3) - ${(props.currentPerilIndex - 12 - 2) * (100 + 16) +
             8}px)`
         : `calc((-100%/3) + 6.75rem)`
     });`}
@@ -177,7 +177,7 @@ const Content = styled('div')`
 const Title = styled.div`
   font-family: ${fonts.GEOMANIST};
   font-size: 2.5rem;
-  line-height 3.5rem;
+  line-height: 3.5rem;
   color: ${colorsV2.black};
   margin-bottom: 1rem;
   letter-spacing: -0.57px;
@@ -189,9 +189,9 @@ const Title = styled.div`
   }
 `
 
-const Description = styled.div` 
+const Description = styled.div`
   font-size: 1.125rem;
-  line-height 1.625rem;
+  line-height: 1.625rem;
   color: ${colorsV2.darkgray};
   letter-spacing: -0.26px;
 `
@@ -233,7 +233,7 @@ const CoverageList = styled.div`
 
 const CoverageListTitle = styled.div`
   font-size: 1rem;
-  line-height 1.5rem;
+  line-height: 1.5rem;
   color: ${colorsV2.black};
   letter-spacing: -0.26px;
   font-weight: 600;
@@ -242,7 +242,7 @@ const CoverageListTitle = styled.div`
 
 const CoverageListItem = styled.div`
   font-size: 1rem;
-  line-height 1.5rem;
+  line-height: 1.5rem;
   color: ${colorsV2.black};
   letter-spacing: -0.26px;
   padding-left: 2rem;
@@ -287,7 +287,7 @@ const InfoBox = styled.div`
 
 const InfoBoxTitle = styled.div`
   font-size: 1rem;
-  line-height 1rem;
+  line-height: 1rem;
   color: ${colorsV2.black};
   letter-spacing: -0.26px;
   font-weight: 600;

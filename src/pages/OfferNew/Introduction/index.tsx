@@ -14,13 +14,13 @@ import {
   PreHeading,
   Section,
 } from '../components'
-import { CompleteOfferData } from '../types'
+import { CompleteOfferDataForMember } from '../types'
 import { Sidebar } from './Sidebar'
 import { Usps } from './Usps'
 
 interface Props {
-  offer: CompleteOfferData
-  refetch: () => void
+  offer: CompleteOfferDataForMember
+  refetch: () => Promise<void>
   onCheckoutOpen: () => void
 }
 
@@ -37,6 +37,18 @@ const Wrapper = styled.div`
 
   @media (max-width: 600px) {
     padding: 7rem 0 5rem 0;
+  }
+`
+
+const UspsMobile = styled(Usps)`
+  @media (min-width: 1021px) {
+    display: none;
+  }
+`
+
+const UspsDesktop = styled(Usps)`
+  @media (max-width: 1020px) {
+    display: none;
   }
 `
 
@@ -117,11 +129,11 @@ export const Introduction: React.FC<Props> = ({
               <PreHeading>{textKeys.HERO_LABEL()}</PreHeading>
               <HeadingWhite>
                 {textKeys.HERO_HEADLINE({
-                  FIRST_NAME: offer.member.firstName || '',
+                  FIRST_NAME: offer.lastQuoteOfMember.firstName || '',
                 })}
               </HeadingWhite>
             </HeadingWrapper>
-            <Usps />
+            <UspsDesktop />
           </Column>
 
           <Sidebar
@@ -131,6 +143,8 @@ export const Introduction: React.FC<Props> = ({
             refetch={refetch}
             onCheckoutOpen={onCheckoutOpen}
           />
+
+          <UspsMobile />
 
           <ScrollButton
             onClick={() => {

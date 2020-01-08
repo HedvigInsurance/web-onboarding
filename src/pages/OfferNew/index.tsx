@@ -1,55 +1,68 @@
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
-import { useOfferQuery } from 'generated/graphql'
+import { useMemberOfferQuery } from 'generated/graphql'
 import { History } from 'history'
 import { TopBar } from 'new-components/TopBar'
+import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
-import { RouteComponentProps, useHistory, useRouteMatch } from 'react-router'
+import { useHistory, useRouteMatch } from 'react-router'
+import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
 import { Checkout } from './Checkout'
 import { Compare } from './Compare'
 import { Introduction } from './Introduction'
 import { Perils } from './Perils/index'
 import { isOffer } from './utils'
 
-const createToggleCheckout = (history: History<any>, offerId?: string) => (
-  isOpen: boolean,
-) => {
+const createToggleCheckout = (history: History<any>) => (isOpen: boolean) => {
   if (isOpen) {
-    history.push(`/beta/new-member/offer/${offerId ?? ''}/checkout`) // TODO
+    history.push(`/new-member/sign`)
   } else {
     history.goBack()
   }
 }
 
-export const OfferNew: React.FC<RouteComponentProps<{ offerId: string }>> = ({
-  match,
-}) => {
-  const { data, loading, error, refetch } = useOfferQuery({
-    variables: { id: match.params.offerId },
-  })
+export const OfferNew: React.FC = () => {
+  const { data, loading, error, refetch } = useMemberOfferQuery()
   const history = useHistory()
-  const checkoutMatch = useRouteMatch(
-    '/beta/new-member/offer/:offerId/checkout',
-  )
-  const toggleCheckout = createToggleCheckout(history, data?.quote?.id)
+  const checkoutMatch = useRouteMatch('/new-member/sign')
+  const toggleCheckout = createToggleCheckout(history)
 
   return !loading && !error && data && isOffer(data) ? (
     <Page>
       <SessionTokenGuard>
         <TopBar />
-        <Introduction
-          offer={data}
-          refetch={refetch}
-          onCheckoutOpen={() => toggleCheckout(true)}
-        />
+        <TrackAction
+          event={{
+            name: SemanticEvents.Ecommerce.CheckoutStarted,
+            properties: {
+              value: Number(
+                data.lastQuoteOfMember.insuranceCost.monthlyNet.amount,
+              ),
+              label: 'Offer',
+              ...getUtmParamsFromCookie(),
+            },
+          }}
+        >
+          {({ track }) => (
+            <Introduction
+              offer={data}
+              refetch={refetch as () => Promise<any>}
+              onCheckoutOpen={() => {
+                toggleCheckout(true)
+                track()
+              }}
+            />
+          )}
+        </TrackAction>
         <Perils offer={data} />
-        <Compare />
+        <Compare
+          currentInsurer={data.lastQuoteOfMember.currentInsurer || undefined}
+        />
         <Checkout
           offer={data}
           isOpen={checkoutMatch !== null}
           onClose={() => toggleCheckout(false)}
         />
-        )}
       </SessionTokenGuard>
     </Page>
   ) : null

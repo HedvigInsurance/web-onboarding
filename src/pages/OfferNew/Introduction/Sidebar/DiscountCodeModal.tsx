@@ -6,7 +6,7 @@ import { motion } from 'framer-motion'
 import { useRedeemCodeMutation } from 'generated/graphql'
 import hexToRgba from 'hex-to-rgba'
 import { Button } from 'new-components/buttons'
-import { InputField } from 'new-components/inputs/index'
+import { InputField } from 'new-components/inputs'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import * as Yup from 'yup'
@@ -14,7 +14,7 @@ import * as Yup from 'yup'
 interface Props {
   isOpen: boolean
   close: () => void
-  refetch: () => void
+  refetch: () => Promise<void>
 }
 
 const Wrapper = styled.div<{ isOpen: boolean }>`

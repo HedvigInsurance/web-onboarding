@@ -1,13 +1,16 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
-import { useRemoveDiscountCodeMutation } from 'generated/graphql'
+import { CookieStorage } from 'cookie-storage'
+import {
+  useRedeemCodeMutation,
+  useRemoveDiscountCodeMutation,
+} from 'generated/graphql'
 import { Button, TextButton } from 'new-components/buttons'
-import { otherInsuranceCompanies } from 'pages/OfferNew/mock'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { Price } from '../../components'
-import { CompleteOfferData } from '../../types'
+import { CompleteOfferDataForMember } from '../../types'
 import {
   getInsuranceType,
   insuranceTypeTextKeys,
@@ -17,13 +20,12 @@ import {
 } from '../../utils'
 import { DetailsModal } from './DetailsModal/index'
 import { DiscountCodeModal } from './DiscountCodeModal'
-import { PreviousInsurancePicker } from './PreviousInsurancePicker'
 import { StartDate } from './StartDate'
 
 interface Props {
   sticky: boolean
-  offer: CompleteOfferData
-  refetch: () => void
+  offer: CompleteOfferDataForMember
+  refetch: () => Promise<void>
   onCheckoutOpen: () => void
 }
 
@@ -47,7 +49,6 @@ const Container = styled.div<{ sticky: boolean }>`
   border-radius: 8px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
   flex-shrink: 0;
-  overflow: hidden;
   position: ${(props) => (props.sticky ? `fixed` : `relative`)};
   ${(props) => props.sticky && `top: 6rem`};
 
@@ -140,6 +141,7 @@ const Body = styled.div`
 const Footer = styled.div`
   width: 100%;
   padding: 2rem;
+  padding-top: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -180,6 +182,19 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
     const noDiscount = isNoDiscount(offer.redeemedCampaigns)
 
     const [removeDiscountCode] = useRemoveDiscountCodeMutation()
+    const [redeemCode] = useRedeemCodeMutation()
+
+    React.useEffect(() => {
+      const campaignCodes =
+        offer.redeemedCampaigns.map((campaign) => campaign!.code) ?? []
+      const cookieStorage = new CookieStorage()
+      const preRedeemedCode = cookieStorage.getItem('_hvcode')
+      if (preRedeemedCode && !campaignCodes.includes(preRedeemedCode)) {
+        redeemCode({ variables: { code: preRedeemedCode } })
+          .then(() => refetch())
+          .then(() => cookieStorage.setItem('_hvcode', '', { path: '/' }))
+      }
+    }, [])
 
     return (
       <Wrapper ref={ref}>
@@ -198,21 +213,25 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
               <Title>
                 {textKeys[
-                  insuranceTypeTextKeys[getInsuranceType(offer.quote)]
+                  insuranceTypeTextKeys[
+                    getInsuranceType(offer.lastQuoteOfMember)
+                  ]
                 ]()}
               </Title>
 
               <SummaryContent>
                 <SummaryText>
-                  <b>{`${offer.member.firstName} ${offer.member.lastName}`}</b>{' '}
-                  {offer.quote.details.householdSize - 1 > 0 &&
+                  <b>{`${offer.lastQuoteOfMember.firstName} ${offer.lastQuoteOfMember.lastName}`}</b>{' '}
+                  {offer.lastQuoteOfMember.details.householdSize - 1 > 0 &&
                     textKeys.SIDEBAR_INSURED_PERSONS_SUFFIX({
-                      AMOUNT: offer.quote.details.householdSize - 1,
+                      AMOUNT: offer.lastQuoteOfMember.details.householdSize - 1,
                     })}
                 </SummaryText>
                 <SummaryText>
-                  {`${offer.quote.details.street}, ${formatPostalNumber(
-                    offer.quote.details.zipCode,
+                  {`${
+                    offer.lastQuoteOfMember.details.street
+                  }, ${formatPostalNumber(
+                    offer.lastQuoteOfMember.details.zipCode,
                   )}`}
                 </SummaryText>
 
@@ -224,16 +243,17 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
             <Price
               monthlyCostDeduction={monthlyCostDeduction}
-              monthlyNet={offer.quote.insuranceCost.monthlyNet}
-              monthlyGross={offer.quote.insuranceCost.monthlyGross}
+              monthlyGross={offer.lastQuoteOfMember.insuranceCost.monthlyGross}
+              monthlyNet={offer.lastQuoteOfMember.insuranceCost.monthlyNet}
             />
           </Header>
 
           <Body>
-            {offer.quote.currentInsurer && (
-              <PreviousInsurancePicker insurances={otherInsuranceCompanies} />
-            )}
-            <StartDate insuredAtOtherCompany={!!offer.quote.currentInsurer} />
+            <StartDate
+              startDate={offer.lastQuoteOfMember.startDate}
+              offerId={offer.lastQuoteOfMember.id}
+              currentInsurer={offer.lastQuoteOfMember.currentInsurer || null}
+            />
           </Body>
 
           <Footer>
@@ -272,7 +292,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
           />
         </Container>
         <DetailsModal
-          quote={offer.quote}
+          quote={offer.lastQuoteOfMember}
           refetch={refetch}
           isVisible={detailsModalIsOpen}
           onClose={() => setDetailsModalIsOpen(false)}

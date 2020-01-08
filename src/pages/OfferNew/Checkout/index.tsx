@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { BackArrow } from 'components/icons/BackArrow'
 import { Sign } from 'pages/OfferNew/Checkout/Sign'
-import { CompleteOfferData } from 'pages/OfferNew/types'
+import { CompleteOfferDataForMember } from 'pages/OfferNew/types'
 import * as React from 'react'
 import { CheckoutContent } from './CheckoutContent'
 
@@ -138,12 +138,13 @@ const Backdrop = styled('div')<Openable>`
 `
 
 interface Props {
-  offer: CompleteOfferData
+  offer: CompleteOfferDataForMember
   isOpen?: boolean
   onClose?: () => void
 }
 
 export const Checkout: React.FC<Props> = ({ offer, isOpen, onClose }) => {
+  const [email, setEmail] = React.useState('')
   const [visibilityState, setVisibilityState] = React.useState(
     VisibilityState.CLOSED,
   )
@@ -182,7 +183,7 @@ export const Checkout: React.FC<Props> = ({ offer, isOpen, onClose }) => {
       window.removeEventListener('wheel', listener)
       window.removeEventListener('touchmove', listener)
     }
-  })
+  }, [])
 
   React.useEffect(() => {
     if (isOpen) {
@@ -210,11 +211,20 @@ export const Checkout: React.FC<Props> = ({ offer, isOpen, onClose }) => {
               </BackButton>
             </BackButtonWrapper>
 
-            <CheckoutContent offer={offer} />
+            <CheckoutContent
+              offer={offer}
+              email={email}
+              onEmailChange={setEmail}
+            />
           </InnerWrapper>
         </OuterScrollWrapper>
 
-        <SlidingSign visibilityState={visibilityState} />
+        <SlidingSign
+          visibilityState={visibilityState}
+          personalNumber={offer.lastQuoteOfMember.ssn}
+          email={email}
+          offer={offer}
+        />
       </OuterWrapper>
       <Backdrop visibilityState={visibilityState} onClick={onClose} />
     </>
