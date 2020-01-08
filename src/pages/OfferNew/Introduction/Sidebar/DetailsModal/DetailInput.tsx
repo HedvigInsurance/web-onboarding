@@ -42,7 +42,7 @@ export const DetailInput: React.FC<DetailInputProps &
         } else {
           formikProps.setFieldValue(
             formikName,
-            /\A(true|false)\z/.test(value) ? JSON.parse(value) : value,
+            /^(true|false)/.test(value) ? JSON.parse(value) : value,
           )
         }
       }}
