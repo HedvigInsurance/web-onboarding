@@ -59,7 +59,7 @@ export const brfPerils: Peril[] = [
     description:
       'Skyddet gäller när någon utan lov gjort inbrott eller förstört din bostadsrätt. Skyddet gäller självklart också för vinden och källaren.',
     covered: [
-      'Allt du äger i din villa till ett värde upp till 1 miljon kronor',
+      'Allt du äger i din lägenhet till ett värde upp till 1 miljon kronor',
       'Inbrott och skadegörelse i din bostadsrätt inklusive. vind/källare',
     ],
     exceptions: [
@@ -109,7 +109,7 @@ export const brfPerils: Peril[] = [
       'Vårt ansvarsskydd gäller när någon kräver dig på skadestånd för att ha skadat honom eller henne eller dennes ägodelar. Vi hjälper dig med utredning och förhandling och vi betalar både rättegångskostnader och skadestånd om du vållat skadan.',
     covered: [
       'T.ex. om ditt handfat gått sönder i en lägenhet',
-      'T.ex. vattenskada från ditt hus som drabbar grannarna',
+      'T.ex. vattenskada från din lägenhet som drabbar grannarna',
       'T.ex. Hunden orsakar bitskador',
       'Utredning och förhandling',
       'Representation i domstol',
