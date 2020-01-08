@@ -176,6 +176,10 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   const validationSchema = getValidationSchema(fieldSchema, quote)
   const initialValues = getInitialValues(quote)
   const [isUpdating, setIsUpdating] = React.useState(false)
+  const [
+    isUnderwritingGuidelineHit,
+    setIsUnderwritingGuidelineHit,
+  ] = React.useState(false)
 
   return (
     <Modal isVisible={isVisible} onClose={onClose} dynamicHeight>
@@ -187,9 +191,18 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
           validateOnBlur
           onSubmit={async (form) => {
             setIsUpdating(true)
+            setIsUnderwritingGuidelineHit(false)
             try {
               const result = await editQuote({ variables: { input: form } })
               if (!result || (result.errors && result.errors.length > 0)) {
+                setIsUpdating(false)
+                return
+              }
+
+              if (
+                result.data?.editQuote.__typename === 'UnderwritingLimitsHit'
+              ) {
+                setIsUnderwritingGuidelineHit(true)
                 setIsUpdating(false)
                 return
               }
@@ -405,9 +418,15 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                 <Button type="submit">
                   {textKeys.DETAILS_MODULE_BUTTON()}
                 </Button>
-                {editQuoteResult.error ? (
+                {editQuoteResult.error && (
                   <Error>{textKeys.DETAILS_MODULE_BUTTON_ERROR()}</Error>
-                ) : (
+                )}
+                {isUnderwritingGuidelineHit && (
+                  <Error>
+                    {textKeys.DETAILS_MODULE_BUTTON_UNDERWRITING_GUIDELINE_HIT()}
+                  </Error>
+                )}
+                {!editQuoteResult.error && !isUnderwritingGuidelineHit && (
                   <Warning>{textKeys.DETAILS_MODULE_BUTTON_WARNING()}</Warning>
                 )}
               </Footer>
