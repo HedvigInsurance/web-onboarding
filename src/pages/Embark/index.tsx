@@ -18,6 +18,10 @@ import { apolloClient } from '../../client/apolloClient'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
 import { EmbarkBackground } from './EmbarkBackground'
+import {
+  resolveExternalInsuranceProviderProviderStatus,
+  resolveExternalInsuranceProviderStartSession,
+} from './externalInsuranceProvider'
 import { resolveHouseInformation } from './houseInformation'
 import { Landing } from './Landing'
 import { resolvePersonalInformation } from './personalInformation'
@@ -275,6 +279,8 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                       personalInformationApi: resolvePersonalInformation,
                       houseInformation: resolveHouseInformation,
                       createQuote: createQuote(storageState),
+                      externalInsuranceProviderProviderStatus: resolveExternalInsuranceProviderProviderStatus,
+                      externalInsuranceProviderStartSession: resolveExternalInsuranceProviderStartSession,
                       track: (eventName, payload) => {
                         const castedWindow = window as any
                         if (castedWindow && castedWindow.analytics) {
