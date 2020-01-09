@@ -66,6 +66,11 @@ export const reactPageRoutes = [
               baseUrl: '/new-member/switch',
               name: 'Web Onboarding - Swedish Switcher',
             }
+          case 'switch-beta':
+            return {
+              baseUrl: '/new-member/switch-beta',
+              name: 'Switcher Onboarding Playground',
+            }
         }
 
         return null

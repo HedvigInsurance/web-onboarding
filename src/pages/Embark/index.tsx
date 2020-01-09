@@ -21,6 +21,10 @@ import { EmbarkBackground } from './EmbarkBackground'
 import { resolveHouseInformation } from './houseInformation'
 import { Landing } from './Landing'
 import { resolvePersonalInformation } from './personalInformation'
+import {
+  resolveExternalInsuranceProviderStartSession,
+  resolveExternalInsuranceProviderProviderStatus,
+} from './externalInsuranceProvider'
 
 const EmbarkStyling = styled.div`
   height: 100%;
@@ -271,6 +275,8 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                       personalInformationApi: resolvePersonalInformation,
                       houseInformation: resolveHouseInformation,
                       createQuote: createQuote(storageState),
+                      externalInsuranceProviderProviderStatus: resolveExternalInsuranceProviderProviderStatus,
+                      externalInsuranceProviderStartSession: resolveExternalInsuranceProviderStartSession,
                       track: (eventName, payload) => {
                         const castedWindow = window as any
                         if (castedWindow && castedWindow.analytics) {
