@@ -19,7 +19,7 @@ export const housePerils: Peril[] = [
   {
     title: 'Fire',
     description:
-      'We can help you with home repairs, temporary accomodation and cleaning if there\'s a fire in your house or ancillary buildings. If your house is completely damaged we compensate you with an equivalent house.',
+      "We can help you with home repairs, temporary accomodation and cleaning if there's a fire in your house or ancillary buildings. If your house is completely damaged we compensate you with an equivalent house.",
     covered: [
       'Completely damaged or destoyed house after fire',
       'Explosion',
@@ -98,9 +98,7 @@ export const housePerils: Peril[] = [
       'Wild animals, e.g. elk, reindeer, beaver',
       'Compensation: Maxium SEK 4 million',
     ],
-    exceptions: [
-      'Food, clothes, cleaning, timber rot',
-    ],
+    exceptions: ['Food, clothes, cleaning, timber rot'],
     info: 'There is nothing special for you to think about.',
     icon: <Lock />,
   },
@@ -137,7 +135,7 @@ export const housePerils: Peril[] = [
       'For some items, e.g. money, electronics, mobile phones, computers, cameras, liquor and jewelry, special rules apply depending on where the theft occured.',
     ],
     info:
-      'Always keep an eye on your gadgets, for example don\'t leave your camera alone on a coffee-house table. If you leave theft-prone property inside your car, always lock the car and hide gadgets. One last thing: always lock your bike.',
+      "Always keep an eye on your gadgets, for example don't leave your camera alone on a coffee-house table. If you leave theft-prone property inside your car, always lock the car and hide gadgets. One last thing: always lock your bike.",
     icon: <Theft />,
   },
   {
@@ -162,7 +160,7 @@ export const housePerils: Peril[] = [
     description:
       'When someone claims that you injured them or that you damaged their property, we can help you to investigate what happened. If you caused the damage, we can reimburse you for court costs and pay damages.',
     covered: [
-      'E.g. damages to someone else\'s sink ',
+      "E.g. damages to someone else's sink ",
       'E.g. leak from your house that affects your neighhbour',
       'E.g. your dog bites someone',
       'Legal representation',
@@ -191,7 +189,7 @@ export const housePerils: Peril[] = [
     ],
     exceptions: [
       'Simplified litigation according to Code of Judicial Procedure',
-      'Intentional crimes, e.g. if you\'ve injured someone on purpose',
+      "Intentional crimes, e.g. if you've injured someone on purpose",
     ],
     info:
       'You have to choose your own representation and that person needs to be a member of the Swedish law Society. Make sure your representative contacts us directly to see whether or not the legal protection is valid.',
@@ -273,7 +271,7 @@ export const housePerils: Peril[] = [
       'Superficial damages and beauty defects',
       'in-floor heating in bathrooms or other wet spaces',
     ],
-    info: 'There\'s nothing special for you to think about.',
+    info: "There's nothing special for you to think about.",
     icon: <WhiteGoods />,
   },
   {
@@ -294,7 +292,7 @@ export const housePerils: Peril[] = [
       'Theft of cash or valuable documents',
     ],
     info:
-      'Bring your mobile phone (theft-prone property) with you when leaving your car. Don\'t leave valuable property in your basement (ancillary space). If you check-in jewelry or watches in your bag while travelling, we will not be able to compensate you if they are lost.',
+      "Bring your mobile phone (theft-prone property) with you when leaving your car. Don't leave valuable property in your basement (ancillary space). If you check-in jewelry or watches in your bag while travelling, we will not be able to compensate you if they are lost.",
     icon: <WetPhone />,
   },
 ]

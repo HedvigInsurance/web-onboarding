@@ -103,7 +103,7 @@ export const brfPerils: Peril[] = [
     description:
       'When someone claims that you injured them or that you damaged their property, we can help you to investigate what happened. If you caused the damage, we can reimburse you for court costs and pay damages.',
     covered: [
-      'E.g. damages to someone else\'s sink',
+      "E.g. damages to someone else's sink",
       'E.g. leak from your apartment that affects your neighhbour',
       'E.g. your dog bites someone',
       'Investigation and negotiation',
@@ -133,7 +133,7 @@ export const brfPerils: Peril[] = [
     ],
     exceptions: [
       'Simplified litigation according to Code of Judicial Procedure',
-      'Intentional crimes, e.g. if you\'ve injured someone on purpose',
+      "Intentional crimes, e.g. if you've injured someone on purpose",
     ],
     info:
       'You have to choose your own representation and that person needs to be a member of the Swedish law Society. Make sure your representative contacts us directly to see whether or not the legal protection is valid.',
@@ -162,7 +162,7 @@ export const brfPerils: Peril[] = [
   {
     title: 'Assualt',
     description:
-      'We will compensate you if you\'re the victim of a crime, e.g. assualt, robbery or rape. You can also seek compensation if someone attempts to commit crimes against you.',
+      "We will compensate you if you're the victim of a crime, e.g. assualt, robbery or rape. You can also seek compensation if someone attempts to commit crimes against you.",
     covered: [
       'Assault or robbery',
       'Aggravated assualt with life threating damages',
@@ -215,7 +215,7 @@ export const brfPerils: Peril[] = [
       'Superficial damages and beauty defects',
       'Underfloor heating in bathrooms or other wet spaces',
     ],
-    info: 'There\'s nothing special for you to think about.',
+    info: "There's nothing special for you to think about.",
     icon: <WhiteGoods />,
   },
   {
@@ -236,7 +236,7 @@ export const brfPerils: Peril[] = [
       'Theft of cash or valuable documents',
     ],
     info:
-      'Take your mobile phone (theft-prone property) with you when leaving your car. Don\'t leave valuable property in your basement (ancillary space). If you check-in jewelry or watches in your bag while travelling, we will not be able to compensate you if they are lost.',
+      "Take your mobile phone (theft-prone property) with you when leaving your car. Don't leave valuable property in your basement (ancillary space). If you check-in jewelry or watches in your bag while travelling, we will not be able to compensate you if they are lost.",
     icon: <WetPhone />,
   },
 ]
