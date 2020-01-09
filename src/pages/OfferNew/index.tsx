@@ -1,3 +1,4 @@
+import { useCurrentLanguage } from 'components/utils/CurrentLanguage'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import { useMemberOfferQuery } from 'generated/graphql'
@@ -26,14 +27,9 @@ const createToggleCheckout = (history: History<any>, language?: string) => (
 export const OfferNew: React.FC = () => {
   const { data, loading, error, refetch } = useMemberOfferQuery()
   const history = useHistory()
-  const langMatch = useRouteMatch<{ language?: string }>(
-    '/:language(en)?/new-member',
-  )
+  const currentLanguage = useCurrentLanguage()
   const checkoutMatch = useRouteMatch('/:language(en)?/new-member/sign')
-  const toggleCheckout = createToggleCheckout(
-    history,
-    langMatch?.params?.language,
-  )
+  const toggleCheckout = createToggleCheckout(history, currentLanguage)
 
   return !loading && !error && data && isOffer(data) ? (
     <Page>

@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
+import { useCurrentLanguage } from 'components/utils/CurrentLanguage'
 import { Peril } from 'pages/OfferNew/Perils/types'
 import * as React from 'react'
 import { useMediaQuery } from 'react-responsive'
@@ -37,10 +38,12 @@ export const Perils: React.FC<Props> = ({ offer }) => {
   const [currentPeril, setCurrentPeril] = React.useState(0)
   const isMobile = useMediaQuery({ query: '(max-width: 600px)' })
   const [perils, setPerils] = React.useState<ReadonlyArray<Peril>>([])
+  const currentLanguage = useCurrentLanguage()
   React.useEffect(() => {
-    getLocalizedPerils(getInsuranceType(offer.lastQuoteOfMember), 'sv-SE').then(
-      setPerils,
-    )
+    getLocalizedPerils(
+      getInsuranceType(offer.lastQuoteOfMember),
+      (currentLanguage || 'sv') + '-SE',
+    ).then(setPerils)
   }, [getInsuranceType(offer.lastQuoteOfMember), 'sv-SE'])
 
   return (

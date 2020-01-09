@@ -1,6 +1,7 @@
 import {
   Alarm,
   BaseballBat,
+  Condominium,
   Fire,
   LegalDispute,
   Lock,
@@ -249,6 +250,6 @@ export const brfPerils: Peril[] = [
     ],
     exceptions: ["There's nothing special for you to think about"],
     info: "There's nothing special for you to think about.",
-    icon: <WetPhone />,
+    icon: <Condominium />,
   },
 ]
