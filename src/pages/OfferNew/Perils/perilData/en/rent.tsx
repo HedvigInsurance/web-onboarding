@@ -14,7 +14,7 @@ import {
 import * as React from 'react'
 import { Peril } from '../../types'
 
-export const brfPerils: Peril[] = [
+export const rentPerils: Peril[] = [
   {
     title: 'Fire',
     description:
