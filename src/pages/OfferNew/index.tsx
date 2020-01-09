@@ -13,9 +13,11 @@ import { Introduction } from './Introduction'
 import { Perils } from './Perils/index'
 import { isOffer } from './utils'
 
-const createToggleCheckout = (history: History<any>) => (isOpen: boolean) => {
+const createToggleCheckout = (history: History<any>, language?: string) => (
+  isOpen: boolean,
+) => {
   if (isOpen) {
-    history.push(`/new-member/sign`)
+    history.push((language ? '/' + language : '') + `/new-member/sign`)
   } else {
     history.goBack()
   }
@@ -24,8 +26,14 @@ const createToggleCheckout = (history: History<any>) => (isOpen: boolean) => {
 export const OfferNew: React.FC = () => {
   const { data, loading, error, refetch } = useMemberOfferQuery()
   const history = useHistory()
-  const checkoutMatch = useRouteMatch('/new-member/sign')
-  const toggleCheckout = createToggleCheckout(history)
+  const langMatch = useRouteMatch<{ language?: string }>(
+    '/:language(en)?/new-member',
+  )
+  const checkoutMatch = useRouteMatch('/:language(en)?/new-member/sign')
+  const toggleCheckout = createToggleCheckout(
+    history,
+    langMatch?.params?.language,
+  )
 
   return !loading && !error && data && isOffer(data) ? (
     <Page>

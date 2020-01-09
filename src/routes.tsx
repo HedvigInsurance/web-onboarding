@@ -52,25 +52,40 @@ export const reactPageRoutes = [
     exact: true,
   },
   {
-    path: '/new-member/:name?/:id?',
+    path: LANGUAGE_PATH_PATTERN + '/new-member/:name?/:id?',
     render: ({ match }: RouteComponentProps<any>) => {
       const getProps = () => {
-        switch (match.params.name) {
-          case 'new':
-            return {
-              baseUrl: '/new-member/new',
-              name: 'Web Onboarding - Swedish Needer',
-            }
-          case 'switch':
-            return {
-              baseUrl: '/new-member/switch',
-              name: 'Web Onboarding - Swedish Switcher',
-            }
-          case 'switch-beta':
-            return {
-              baseUrl: '/new-member/switch-beta',
-              name: 'Switcher Onboarding Playground',
-            }
+        if (match.params.language === 'en') {
+          switch (match.params.name) {
+            case 'new':
+              return {
+                baseUrl: '/en/new-member/new',
+                name: 'Web Onboarding - English Needer',
+              }
+            case 'switch':
+              return {
+                baseUrl: '/en/new-member/switch',
+                name: 'Web Onboarding - English Switcher',
+              }
+          }
+        } else {
+          switch (match.params.name) {
+            case 'new':
+              return {
+                baseUrl: '/new-member/new',
+                name: 'Web Onboarding - Swedish Needer',
+              }
+            case 'switch':
+              return {
+                baseUrl: '/new-member/switch',
+                name: 'Web Onboarding - Swedish Switcher',
+              }
+            case 'switch-beta':
+              return {
+                baseUrl: '/new-member/switch-beta',
+                name: 'Switcher Onboarding Playground',
+              }
+          }
         }
 
         return null
@@ -80,6 +95,7 @@ export const reactPageRoutes = [
 
       return (
         <EmbarkRoot
+          language={match.params.language}
           name={(props && props.name) || undefined}
           baseUrl={(props && props.baseUrl) || undefined}
           showLanding={!props}
