@@ -140,8 +140,8 @@ export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
             label: 'DETAILS_MODULE_TABLE_SUBLETTING_CELL_LABEL_HOUSE',
             placeholder: 'DETAILS_MODULE_TABLE_SUBLETTING_CELL_LABEL_HOUSE',
             options: [
-              { label: 'Ja', value: 'true' },
-              { label: 'Nej', value: 'false' },
+              { label: 'YES', value: 'true' },
+              { label: 'NO', value: 'false' },
             ],
             validation: Yup.boolean().required(),
           },
@@ -175,8 +175,8 @@ export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
               placeholder:
                 'DETAILS_MODULE_EXTRABUILDINGS_TABLE_WATER_CELL_LABEL_HOUSE',
               options: [
-                { label: 'Ja', value: 'true' },
-                { label: 'Nej', value: 'false' },
+                { label: 'YES', value: 'true' },
+                { label: 'NO', value: 'false' },
               ],
               validation: Yup.boolean().required(),
             },
