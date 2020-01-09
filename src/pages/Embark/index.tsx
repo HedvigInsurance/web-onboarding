@@ -18,13 +18,13 @@ import { apolloClient } from '../../client/apolloClient'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
 import { EmbarkBackground } from './EmbarkBackground'
+import {
+  resolveExternalInsuranceProviderProviderStatus,
+  resolveExternalInsuranceProviderStartSession,
+} from './externalInsuranceProvider'
 import { resolveHouseInformation } from './houseInformation'
 import { Landing } from './Landing'
 import { resolvePersonalInformation } from './personalInformation'
-import {
-  resolveExternalInsuranceProviderStartSession,
-  resolveExternalInsuranceProviderProviderStatus,
-} from './externalInsuranceProvider'
 
 const EmbarkStyling = styled.div`
   height: 100%;

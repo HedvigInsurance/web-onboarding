@@ -1,6 +1,6 @@
 import {
-  ExternalInsuranceProviderStatus,
   ExternalInsuranceProviderEventEmitter,
+  ExternalInsuranceProviderStatus,
 } from '@hedviginsurance/embark'
 import EventEmitter from 'eventemitter3'
 
@@ -122,7 +122,7 @@ export const resolveExternalInsuranceProviderProviderStatus = async () => {
 
   const response = await apolloClient.client.query<{
     externalInsuranceProvider: {
-      providerStatus: { insuranceProvider: string; functional: boolean }[]
+      providerStatus: Array<{ insuranceProvider: string; functional: boolean }>
     }
   }>({
     query: PROVIDER_STATUS_QUERY,
