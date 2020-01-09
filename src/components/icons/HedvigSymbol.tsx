@@ -1,7 +1,15 @@
 import * as React from 'react'
 
-export const HedvigSymbol = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="25">
+export const HedvigSymbol: React.FC<{ className?: string }> = ({
+  className,
+}) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 19 25"
+    width="19"
+    height="25"
+    className={className}
+  >
     <g fill="none">
       <path fill="#1BE9B6" d="M14.456 24.998h3.725v-8.735h-3.725z" />
       <path

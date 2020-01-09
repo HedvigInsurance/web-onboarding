@@ -13,6 +13,8 @@ import { Compare } from './Compare'
 import { Introduction } from './Introduction'
 import { Perils } from './Perils/index'
 import { isOffer } from './utils'
+import { TestimonialsSection } from 'pages/OfferNew/TestimonialsSection'
+import { SwitchSafetySection } from 'pages/OfferNew/SwitchSafetySection'
 
 const createToggleCheckout = (history: History<any>, language?: string) => (
   isOpen: boolean,
@@ -62,6 +64,9 @@ export const OfferNew: React.FC = () => {
         <Compare
           currentInsurer={data.lastQuoteOfMember.currentInsurer || undefined}
         />
+        <TestimonialsSection />
+        <SwitchSafetySection />
+        <SwitchSafetySection />
         <Checkout
           offer={data}
           isOpen={checkoutMatch !== null}
