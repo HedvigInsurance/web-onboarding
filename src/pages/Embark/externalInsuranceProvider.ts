@@ -32,7 +32,7 @@ export const resolveExternalInsuranceProviderStartSession = (
   personalNumber: string,
 ) => {
   if (!apolloClient) {
-    return Error('Missing apollo client')
+    throw new Error('Missing apollo client')
   }
 
   const eventEmitter = new EventEmitter<ExternalInsuranceProviderEventEmitter>()
@@ -50,7 +50,7 @@ export const resolveExternalInsuranceProviderStartSession = (
     })
     .then(() => {
       if (!apolloClient) {
-        return Error('Missing apollo client')
+        throw new Error('Missing apollo client')
       }
 
       const subscriber = apolloClient.client
@@ -97,8 +97,6 @@ export const resolveExternalInsuranceProviderStartSession = (
               break
           }
         })
-
-      return
     })
 
   return eventEmitter
