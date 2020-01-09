@@ -115,7 +115,7 @@ const PROVIDER_STATUS_QUERY = gql`
 
 export const resolveExternalInsuranceProviderProviderStatus = async () => {
   if (!apolloClient) {
-    return Error('Missing apollo client')
+    throw new Error('Missing apollo client')
   }
 
   const response = await apolloClient.client.query<{
