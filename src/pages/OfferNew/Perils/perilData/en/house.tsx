@@ -12,7 +12,8 @@ import {
   WaterLeak,
   WetPhone,
   WhiteGoods,
-} from '../../../../../components/icons/Perils'
+} from 'components/icons/Perils'
+import * as React from 'react'
 import { Peril } from '../../types'
 
 export const housePerils: Peril[] = [
