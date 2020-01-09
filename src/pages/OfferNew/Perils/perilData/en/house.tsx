@@ -4,8 +4,10 @@ import {
   Fire,
   LegalDispute,
   Lock,
+  Pests,
   Plane,
   Plus,
+  Reconstruction,
   Storm,
   Theft,
   WaterLeak,
@@ -100,7 +102,7 @@ export const housePerils: Peril[] = [
     ],
     exceptions: ['Food, clothes, cleaning, timber rot'],
     info: 'There is nothing special for you to think about.',
-    icon: <Lock />,
+    icon: <Pests />,
   },
   {
     title: 'Rebuilding',
@@ -117,7 +119,7 @@ export const housePerils: Peril[] = [
       'Storm damages to tools or materials',
     ],
     info: 'Always store materials and tools in a locked shed.',
-    icon: <Lock />,
+    icon: <Reconstruction />,
   },
   {
     title: 'Theft and damage',
@@ -236,7 +238,7 @@ export const housePerils: Peril[] = [
     icon: <Alarm />,
   },
   {
-    title: 'Illness and accidents while travelling',
+    title: 'Travel illness',
     description:
       'Our travel protection is eligible during the first 45 days of your trip and will reimburse you for costs due to acute illness, injury and acute dental injury. If considered necessery, we provide you with a flight back home to Sweden for further medical assistance.',
     covered: [

@@ -7,7 +7,7 @@ import { Peril } from '../types'
 
 export const getLocalizedPerils = async (
   insuranceType: InsuranceType,
-  language: 'sv-SE' | 'en-SE',
+  language: string,
 ): Promise<ReadonlyArray<Peril>> => {
   if (language === 'sv-SE') {
     if (isHouseInsurance(insuranceType)) {

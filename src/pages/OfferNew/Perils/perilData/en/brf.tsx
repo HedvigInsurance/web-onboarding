@@ -1,6 +1,7 @@
 import {
   Alarm,
   BaseballBat,
+  Condominium,
   Fire,
   LegalDispute,
   Lock,
@@ -180,7 +181,7 @@ export const brfPerils: Peril[] = [
     icon: <Alarm />,
   },
   {
-    title: 'Illness and accidents while travelling',
+    title: 'Travel illness',
     description:
       'Our travel protection is eligible during the first 45 days of your travel and will reimburse you for costs due to acute illness, injury and acute dental injury. If considered necessery, we can provide you with a flight back home to Sweden for further medical assistance.',
     covered: [
@@ -249,6 +250,6 @@ export const brfPerils: Peril[] = [
     ],
     exceptions: ["There's nothing special for you to think about"],
     info: "There's nothing special for you to think about.",
-    icon: <WetPhone />,
+    icon: <Condominium />,
   },
 ]

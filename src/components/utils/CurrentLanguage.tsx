@@ -15,10 +15,7 @@ const getLanguageFromPath = (path: string) => {
   const match = matchPath<WithLanguage>(path, {
     path: LANGUAGE_PATH_PATTERN + '/*',
   })
-  return (
-    (match && match.params.language && match.params.language.toLowerCase()) ||
-    ''
-  )
+  return match?.params?.language?.toLowerCase() || ''
 }
 
 export interface WithLanguage {
