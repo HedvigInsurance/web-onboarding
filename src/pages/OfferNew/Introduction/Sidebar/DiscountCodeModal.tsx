@@ -6,7 +6,7 @@ import { motion } from 'framer-motion'
 import { useRedeemCodeMutation } from 'generated/graphql'
 import hexToRgba from 'hex-to-rgba'
 import { Button } from 'new-components/buttons'
-import { FormikTextInput } from 'new-components/inputs'
+import { InputField } from 'new-components/inputs'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import * as Yup from 'yup'
@@ -14,7 +14,7 @@ import * as Yup from 'yup'
 interface Props {
   isOpen: boolean
   close: () => void
-  refetch: () => void
+  refetch: () => Promise<void>
 }
 
 const Wrapper = styled.div<{ isOpen: boolean }>`
@@ -190,13 +190,14 @@ export const DiscountCodeModal: React.FC<Props> = ({
           {({ touched, errors, values }) => (
             <Form>
               <DiscountInputWrapper>
-                <FormikTextInput
+                <InputField
                   label={textKeys.SIDEBAR_ADD_DISCOUNT_CELL_LABEL()}
                   placeholder={textKeys.SIDEBAR_ADD_DISCOUNT_CELL_PLACEHOLDER()}
                   name="code"
+                  type="text"
                   autoComplete="off"
-                  touched={touched.code ? touched.code.toString() : undefined}
-                  errors={textKeys[errors.code || '']()}
+                  touched={touched.code}
+                  errors={errors.code ? textKeys[errors.code]() : ''}
                 />
               </DiscountInputWrapper>
 

@@ -6,6 +6,7 @@ import { Cross } from './icons/Cross'
 
 export interface ModalProps {
   isVisible: boolean
+  dynamicHeight?: boolean
   onClose: () => void
 }
 
@@ -17,7 +18,7 @@ const Wrapper = styled(motion.div)`
   top: 0;
   bottom: 0;
   right: 0;
-  z-index: 2000;
+  z-index: 3000;
 `
 
 const Background = styled(motion.div)`
@@ -31,13 +32,21 @@ const Background = styled(motion.div)`
   background-color: rgba(25, 25, 25, 0.4);
 `
 
-const ModalContainer = styled(motion.div)`
+interface ModalContainerProps {
+  dynamicHeight?: boolean
+}
+
+const ModalContainer = styled(motion.div)<ModalContainerProps>`
   position: relative;
   width: 100%;
   max-width: 56rem;
+  max-height: 100vh;
+  ${(props) =>
+    !props.dynamicHeight &&
+    `
   height: 100%;
   min-height: 25rem;
-  max-height: 56rem;
+  max-height: 56rem;`}
   background: ${colorsV2.white};
   border-radius: 9px;
   position: absolute;
@@ -143,6 +152,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
         }}
       >
         <ModalContainer
+          dynamicHeight={props.dynamicHeight}
           initial={'hidden'}
           animate={props.isVisible ? 'visible' : 'hidden'}
           transition={{

@@ -46,7 +46,7 @@ export const OfferNew: React.FC = () => {
           {({ track }) => (
             <Introduction
               offer={data}
-              refetch={refetch}
+              refetch={refetch as () => Promise<any>}
               onCheckoutOpen={() => {
                 toggleCheckout(true)
                 track()

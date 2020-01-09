@@ -43,6 +43,7 @@ query MemberOffer {
           ancillarySpace
           numberOfBathrooms
           yearOfConstruction
+          isSubleted
           extraBuildings {
             ... on ExtraBuildingCore {
               area
@@ -79,6 +80,8 @@ query MemberOffer {
 
   member {
     id
+    firstName
+    lastName
     email
   }
 }

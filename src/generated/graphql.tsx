@@ -1077,18 +1077,6 @@ export enum HedvigColor {
   Black = 'Black',
 }
 
-export type HouseInformation = {
-  __typename?: 'HouseInformation'
-  livingSpace: Scalars['Int']
-  ancillaryArea: Scalars['Int']
-  yearOfConstruction: Scalars['Int']
-}
-
-export type HouseInformationInput = {
-  streetAddress: Scalars['String']
-  postalNumber: Scalars['String']
-}
-
 /** A vectorized image to show to the user */
 export type Icon = {
   __typename?: 'Icon'
@@ -1158,11 +1146,7 @@ export type ImageTransformationInput = {
   resize?: Maybe<ImageResizeInput>
 }
 
-export type Incentive =
-  | MonthlyCostDeduction
-  | FreeMonths
-  | NoDiscount
-  | PercentageDiscountMonths
+export type Incentive = MonthlyCostDeduction | FreeMonths | NoDiscount
 
 export type IncompleteApartmentQuoteDetails = {
   __typename?: 'IncompleteApartmentQuoteDetails'
@@ -2747,12 +2731,6 @@ export type PageInfo = {
   endCursor?: Maybe<Scalars['String']>
 }
 
-export type PercentageDiscountMonths = {
-  __typename?: 'PercentageDiscountMonths'
-  percentageDiscount: Scalars['Float']
-  quantity: Scalars['Int']
-}
-
 export type Peril = {
   __typename?: 'Peril'
   id?: Maybe<Scalars['ID']>
@@ -2767,19 +2745,6 @@ export type PerilCategory = {
   description?: Maybe<Scalars['String']>
   iconUrl?: Maybe<Scalars['String']>
   perils?: Maybe<Array<Maybe<Peril>>>
-}
-
-export type PersonalInformation = {
-  __typename?: 'PersonalInformation'
-  firstName: Scalars['String']
-  lastName: Scalars['String']
-  streetAddress: Scalars['String']
-  postalNumber: Scalars['String']
-  city: Scalars['String']
-}
-
-export type PersonalInformationInput = {
-  personalNumber: Scalars['String']
 }
 
 export enum Platform {
@@ -2842,8 +2807,6 @@ export type Query = {
   balance: Balance
   chargeEstimation: ChargeEstimation
   chargeHistory: Array<Charge>
-  personalInformation?: Maybe<PersonalInformation>
-  houseInformation?: Maybe<HouseInformation>
   quote: Quote
   lastQuoteOfMember: Quote
   commonClaims: Array<CommonClaim>
@@ -2889,14 +2852,6 @@ export type QueryDontPanicSessionArgs = {
 
 export type QueryCampaignArgs = {
   code: Scalars['String']
-}
-
-export type QueryPersonalInformationArgs = {
-  input: PersonalInformationInput
-}
-
-export type QueryHouseInformationArgs = {
-  input: HouseInformationInput
 }
 
 export type QueryQuoteArgs = {
@@ -3519,6 +3474,23 @@ export type Welcome = {
   title: Scalars['String']
 }
 
+export type EditQuoteMutationVariables = {
+  input: EditQuoteInput
+}
+
+export type EditQuoteMutation = { __typename?: 'Mutation' } & {
+  editQuote:
+    | ({ __typename?: 'CompleteQuote' } & Pick<CompleteQuote, 'id'>)
+    | ({ __typename?: 'UnderwritingLimitsHit' } & {
+        limits: Array<
+          { __typename?: 'UnderwritingLimit' } & Pick<
+            UnderwritingLimit,
+            'description'
+          >
+        >
+      })
+}
+
 export type MemberOfferQueryVariables = {}
 
 export type MemberOfferQuery = { __typename?: 'Query' } & {
@@ -3564,6 +3536,7 @@ export type MemberOfferQuery = { __typename?: 'Query' } & {
                 | 'ancillarySpace'
                 | 'numberOfBathrooms'
                 | 'yearOfConstruction'
+                | 'isSubleted'
               > & {
                   extraBuildings: Array<
                     | ({ __typename?: 'ExtraBuildingGarage' } & Pick<
@@ -3639,14 +3612,16 @@ export type MemberOfferQuery = { __typename?: 'Query' } & {
             })
           | ({ __typename?: 'FreeMonths' } & Pick<FreeMonths, 'quantity'>)
           | { __typename?: 'NoDiscount' }
-          | { __typename?: 'PercentageDiscountMonths' }
         >
         owner: Maybe<
           { __typename?: 'CampaignOwner' } & Pick<CampaignOwner, 'displayName'>
         >
       }
   >
-  member: { __typename?: 'Member' } & Pick<Member, 'id' | 'email'>
+  member: { __typename?: 'Member' } & Pick<
+    Member,
+    'id' | 'firstName' | 'lastName' | 'email'
+  >
 }
 
 export type RedeemCodeMutationVariables = {
@@ -3668,7 +3643,6 @@ export type RedeemCodeMutation = { __typename?: 'Mutation' } & {
             })
           | ({ __typename?: 'FreeMonths' } & Pick<FreeMonths, 'quantity'>)
           | { __typename?: 'NoDiscount' }
-          | { __typename?: 'PercentageDiscountMonths' }
         >
       }
     >
@@ -3756,6 +3730,63 @@ export type StartDateMutation = { __typename?: 'Mutation' } & {
     | { __typename?: 'UnderwritingLimitsHit' }
 }
 
+export const EditQuoteDocument = gql`
+  mutation EditQuote($input: EditQuoteInput!) {
+    editQuote(input: $input) {
+      ... on CompleteQuote {
+        id
+      }
+      ... on UnderwritingLimitsHit {
+        limits {
+          description
+        }
+      }
+    }
+  }
+`
+export type EditQuoteMutationFn = ApolloReactCommon.MutationFunction<
+  EditQuoteMutation,
+  EditQuoteMutationVariables
+>
+
+/**
+ * __useEditQuoteMutation__
+ *
+ * To run a mutation, you first call `useEditQuoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditQuoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editQuoteMutation, { data, loading, error }] = useEditQuoteMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useEditQuoteMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    EditQuoteMutation,
+    EditQuoteMutationVariables
+  >,
+) {
+  return ApolloReactHooks.useMutation<
+    EditQuoteMutation,
+    EditQuoteMutationVariables
+  >(EditQuoteDocument, baseOptions)
+}
+export type EditQuoteMutationHookResult = ReturnType<
+  typeof useEditQuoteMutation
+>
+export type EditQuoteMutationResult = ApolloReactCommon.MutationResult<
+  EditQuoteMutation
+>
+export type EditQuoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  EditQuoteMutation,
+  EditQuoteMutationVariables
+>
 export const MemberOfferDocument = gql`
   query MemberOffer {
     lastQuoteOfMember {
@@ -3800,6 +3831,7 @@ export const MemberOfferDocument = gql`
             ancillarySpace
             numberOfBathrooms
             yearOfConstruction
+            isSubleted
             extraBuildings {
               ... on ExtraBuildingCore {
                 area
@@ -3833,6 +3865,8 @@ export const MemberOfferDocument = gql`
     }
     member {
       id
+      firstName
+      lastName
       email
     }
   }

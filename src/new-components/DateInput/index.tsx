@@ -178,10 +178,16 @@ const Calendar: React.FC<DayzedCalendarProps> = ({
   React.useEffect(() => {
     const getLocaleImport = () => {
       if (language === 'en') {
-        return import('date-fns/locale/en-GB')
+        return import(
+          /* webpackChunkName: 'date-fns-en' */
+          'date-fns/locale/en-GB'
+        )
       }
 
-      return import('date-fns/locale/sv')
+      return import(
+        /* webpackChunkName: 'date-fns-sv' */
+        'date-fns/locale/sv'
+      )
     }
 
     getLocaleImport().then((module) => {

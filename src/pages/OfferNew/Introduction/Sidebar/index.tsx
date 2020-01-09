@@ -18,13 +18,14 @@ import {
   isMonthlyCostDeduction,
   isNoDiscount,
 } from '../../utils'
+import { DetailsModal } from './DetailsModal/index'
 import { DiscountCodeModal } from './DiscountCodeModal'
 import { StartDate } from './StartDate'
 
 interface Props {
   sticky: boolean
   offer: CompleteOfferDataForMember
-  refetch: () => void
+  refetch: () => Promise<void>
   onCheckoutOpen: () => void
 }
 
@@ -34,6 +35,7 @@ const Wrapper = styled.div`
   position: relative;
   z-index: 1;
   height: 0;
+  z-index: 1000;
 
   @media (max-width: 1020px) {
     width: 100%;
@@ -173,6 +175,8 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
       setDiscountCodeModalIsOpen,
     ] = React.useState(false)
 
+    const [detailsModalIsOpen, setDetailsModalIsOpen] = React.useState(false)
+
     const monthlyCostDeduction = isMonthlyCostDeduction(offer.redeemedCampaigns)
     const freeMonths = isFreeMonths(offer.redeemedCampaigns)
     const noDiscount = isNoDiscount(offer.redeemedCampaigns)
@@ -231,9 +235,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                   )}`}
                 </SummaryText>
 
-                {/*<TextButton>*/}
-                {/*  {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}*/}
-                {/*</TextButton>*/}
+                <TextButton onClick={() => setDetailsModalIsOpen(true)}>
+                  {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
+                </TextButton>
               </SummaryContent>
             </Summary>
 
@@ -287,6 +291,12 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
             refetch={refetch}
           />
         </Container>
+        <DetailsModal
+          quote={offer.lastQuoteOfMember}
+          refetch={refetch}
+          isVisible={detailsModalIsOpen}
+          onClose={() => setDetailsModalIsOpen(false)}
+        />
       </Wrapper>
     )
   },
