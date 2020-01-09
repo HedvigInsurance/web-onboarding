@@ -197,7 +197,7 @@ export const DiscountCodeModal: React.FC<Props> = ({
                   type="text"
                   autoComplete="off"
                   touched={touched.code}
-                  errors={textKeys[errors.code || '']()}
+                  errors={errors.code ? textKeys[errors.code]() : ''}
                 />
               </DiscountInputWrapper>
 
