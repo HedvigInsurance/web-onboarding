@@ -150,6 +150,7 @@ interface EmbarkRootProps {
   name?: string
   baseUrl?: string
   showLanding?: boolean
+  language?: string
 }
 
 const ANGEL_DATA_QUERY = gql`
@@ -259,7 +260,10 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                   <EmbarkProvider
                     externalRedirects={{
                       Offer: () => {
-                        history.push('/new-member/offer')
+                        history.push(
+                          (props.language ? '/' + props.language : '') +
+                            '/new-member/offer',
+                        )
                       },
                       MailingList: () => {
                         location.href =
@@ -309,7 +313,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
               delay: 0.25,
             }}
           >
-            <Landing />
+            <Landing language={props.language} />
           </motion.div>
         )}
       </AnimatePresence>

@@ -136,7 +136,7 @@ const LandingPageContainer = styled.div`
   backdrop-filter: blur(20px);
 `
 
-export const Landing: React.FC = () => {
+export const Landing: React.FC<{ language?: string }> = ({ language }) => {
   const textKeys = useTextKeys()
   return (
     <Page>
@@ -150,14 +150,20 @@ export const Landing: React.FC = () => {
             <Card>
               <Headline>{textKeys.STARTPAGE_UNINSURED_HEADLINE()}</Headline>
               <Paragraph>{textKeys.STARTPAGE_UNINSURED_BODY()}</Paragraph>
-              <ProceedButton size="lg" to="/new-member/new">
+              <ProceedButton
+                size="lg"
+                to={(language ? '/' + language : '') + '/new-member/new'}
+              >
                 {textKeys.STARTPAGE_UNINSURED_BUTTON()}
               </ProceedButton>
             </Card>
             <Card>
               <Headline>{textKeys.STARTPAGE_INSURED_HEADLINE()}</Headline>
               <Paragraph>{textKeys.STARTPAGE_INSURED_BODY()}</Paragraph>
-              <ProceedButton size="lg" to="/new-member/switch">
+              <ProceedButton
+                size="lg"
+                to={(language ? '/' + language : '') + '/new-member/switch'}
+              >
                 {textKeys.STARTPAGE_INSURED_BUTTON()}
               </ProceedButton>
             </Card>
