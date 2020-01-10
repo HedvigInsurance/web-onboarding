@@ -1,0 +1,5 @@
+subscription ExternalInsuranceDataStatus($reference: ID!) {
+    dataCollectionStatus(reference: $reference) {
+        status
+    }
+}

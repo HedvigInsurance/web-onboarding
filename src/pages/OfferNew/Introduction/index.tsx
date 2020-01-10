@@ -17,6 +17,7 @@ import {
 import { CompleteOfferDataForMember } from '../types'
 import { Sidebar } from './Sidebar'
 import { Usps } from './Usps'
+import { ExternalInsuranceProvider } from './ExternalInsuranceProvider'
 
 interface Props {
   offer: CompleteOfferDataForMember
@@ -120,6 +121,10 @@ export const Introduction: React.FC<Props> = ({
     }
   })
 
+  console.log(offer)
+
+  const hasDataCollection = !!offer.lastQuoteOfMember.dataCollectionId || false
+
   return (
     <Section bottomBlobColor={colorsV2.black}>
       <Wrapper>
@@ -133,7 +138,11 @@ export const Introduction: React.FC<Props> = ({
                 })}
               </HeadingWhite>
             </HeadingWrapper>
-            <UspsDesktop />
+            {hasDataCollection ? (
+              <ExternalInsuranceProvider offer={offer} />
+            ) : (
+              <UspsDesktop />
+            )}
           </Column>
 
           <Sidebar
