@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { externalInsuranceProviders } from '@hedviginsurance/embark'
+import color from 'color'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
@@ -34,12 +35,26 @@ const CompareBox = styled.div<{ isExternalProvider?: boolean }>`
   border-radius: 0.5rem;
   width: 100%;
   ${({ isExternalProvider }) =>
-    isExternalProvider && `background-color: ${colorsV2.gray}`};
+    isExternalProvider &&
+    `
+    background-color: rgba(255,255,255,0.25);
+    color: ${colorsV2.white};
+  `};
 `
 
 const CompareBoxName = styled.div`
   display: flex;
   align-items: center;
+`
+
+const ProviderLogoContainer = styled.div`
+  background-color: ${colorsV2.white};
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+
+  > * {
+    margin-right: 0 !important;
+  }
 `
 
 const CompareBoxTitle = styled.div`
@@ -57,8 +72,14 @@ const TrustpilotScoreWrapper = styled.div`
   justify-content: space-between;
 `
 
-const TrustpilotScoreName = styled.span`
+const TrustpilotScoreName = styled.span<{ isExternalProvider?: boolean }>`
   color: ${colorsV2.darkgray};
+
+  ${({ isExternalProvider }) =>
+    isExternalProvider &&
+    `
+    color: ${colorsV2.white};
+  `};
 `
 
 interface Props {
@@ -104,13 +125,17 @@ export const Compare: React.FC<Props> = ({
         </TrustpilotScoreWrapper>
       </CompareBox>
       <Spacer />
-      <CompareBox>
+      <CompareBox isExternalProvider>
         <CompareBoxTitle>
           <CompareBoxName>
-            {externalInsuranceProvider?.icon({ forceWidth: false }) ||
+            <ProviderLogoContainer>
+              {externalInsuranceProvider?.icon({ forceWidth: false })}
+            </ProviderLogoContainer>
+            {!externalInsuranceProvider?.icon &&
               externalInsuranceProvider?.name}
           </CompareBoxName>
           <Price
+            lightAppearance
             monthlyGross={
               insuranceDataCollection.monthlyPremium || {
                 amount: '0',
@@ -126,7 +151,7 @@ export const Compare: React.FC<Props> = ({
           />
         </CompareBoxTitle>
         <TrustpilotScoreWrapper>
-          <TrustpilotScoreName>
+          <TrustpilotScoreName isExternalProvider>
             {textKeys.EXTERNAL_PROVIDER_TRUSTPILOT_SCORE()}
           </TrustpilotScoreName>
           <span>

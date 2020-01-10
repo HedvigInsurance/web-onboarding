@@ -31,6 +31,7 @@ const PriceNumbers = styled.div`
 const PriceNet = styled.div<{
   monthlyCostDeduction: boolean
   highlightAmount?: boolean
+  lightAppearance?: boolean
 }>`
   font-size: 3.5rem;
   line-height: 3.5rem;
@@ -48,6 +49,8 @@ const PriceNet = styled.div<{
   font-family: ${fonts.GEOMANIST};
   font-weight: 600;
 
+  ${({ lightAppearance }) => lightAppearance && `color: ${colorsV2.white}`};
+
   @media (max-width: 330px) {
     font-size: 2.75rem;
   }
@@ -62,21 +65,23 @@ const PriceSuffix = styled.div`
   margin-left: 0.5rem;
 `
 
-const PriceUnit = styled.div`
+const PriceUnit = styled.div<{ lightAppearance?: boolean }>`
   font-size: 1rem;
   line-height: 1rem;
   letter-spacing: -0.23px;
   font-weight: 700;
   color: ${colorsV2.darkgray};
   margin-bottom: 0.25rem;
+  ${({ lightAppearance }) => lightAppearance && `color: ${colorsV2.white}`};
 `
 
-const PriceInterval = styled.div`
+const PriceInterval = styled.div<{ lightAppearance?: boolean }>`
   font-size: 1rem;
   line-height: 1rem;
   letter-spacing: -0.23px;
   color: ${colorsV2.darkgray};
   white-space: nowrap;
+  ${({ lightAppearance }) => lightAppearance && `color: ${colorsV2.white}`};
 `
 
 export const Price: React.FC<{
@@ -84,7 +89,14 @@ export const Price: React.FC<{
   monthlyNet: MonetaryAmount
   monthlyGross: MonetaryAmount
   highlightAmount?: boolean
-}> = ({ monthlyCostDeduction, monthlyNet, monthlyGross, highlightAmount }) => {
+  lightAppearance?: boolean
+}> = ({
+  monthlyCostDeduction,
+  monthlyNet,
+  monthlyGross,
+  highlightAmount,
+  lightAppearance,
+}) => {
   const textKeys = useTextKeys()
   return (
     <PriceWrapper>
@@ -101,13 +113,16 @@ export const Price: React.FC<{
         <PriceNet
           monthlyCostDeduction={!!monthlyCostDeduction}
           highlightAmount={highlightAmount}
+          lightAppearance={lightAppearance}
         >
           {Number(monthlyNet.amount)}
         </PriceNet>
 
         <PriceSuffix>
-          <PriceUnit>{textKeys.SIDEBAR_PRICE_SUFFIX_UNIT()}</PriceUnit>
-          <PriceInterval>
+          <PriceUnit lightAppearance={lightAppearance}>
+            {textKeys.SIDEBAR_PRICE_SUFFIX_UNIT()}
+          </PriceUnit>
+          <PriceInterval lightAppearance={lightAppearance}>
             {textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL()}
           </PriceInterval>
         </PriceSuffix>
