@@ -58,7 +58,7 @@ export const Compare: React.FC<Props> = ({
 }) => {
   const textKeys = useTextKeys()
   const externalInsuranceProvider = externalInsuranceProviders.find(
-    (provider) =>
+    (provider: { externalCollectionId?: string }) =>
       provider.externalCollectionId ===
       insuranceDataCollection.insuranceProvider,
   )
