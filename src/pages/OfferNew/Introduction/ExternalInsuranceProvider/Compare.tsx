@@ -1,7 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { externalInsuranceProviders } from '@hedviginsurance/embark'
-import color from 'color'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
