@@ -11,16 +11,15 @@ import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { Price } from '../../components'
 import { CompleteOfferDataForMember } from '../../types'
-import {
-  getInsuranceType,
-  insuranceTypeTextKeys,
-  isFreeMonths,
-  isMonthlyCostDeduction,
-  isNoDiscount,
-} from '../../utils'
+import { getInsuranceType, insuranceTypeTextKeys } from '../../utils'
 import { DetailsModal } from './DetailsModal/index'
 import { DiscountCodeModal } from './DiscountCodeModal'
 import { StartDate } from './StartDate'
+import {
+  getDiscountText,
+  isMonthlyCostDeduction,
+  isNoDiscount,
+} from 'pages/OfferNew/Introduction/Sidebar/utils'
 
 interface Props {
   sticky: boolean
@@ -177,10 +176,6 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
     const [detailsModalIsOpen, setDetailsModalIsOpen] = React.useState(false)
 
-    const monthlyCostDeduction = isMonthlyCostDeduction(offer.redeemedCampaigns)
-    const freeMonths = isFreeMonths(offer.redeemedCampaigns)
-    const noDiscount = isNoDiscount(offer.redeemedCampaigns)
-
     const [removeDiscountCode] = useRemoveDiscountCodeMutation()
     const [redeemCode] = useRedeemCodeMutation()
 
@@ -196,17 +191,12 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
       }
     }, [])
 
+    const discountText = getDiscountText(textKeys)(offer.redeemedCampaigns)
+
     return (
       <Wrapper ref={ref}>
         <Container sticky={sticky}>
-          {(monthlyCostDeduction || freeMonths) && (
-            <DiscountInfo>
-              {monthlyCostDeduction
-                ? textKeys.SIDEBAR_ACTIVE_REFERRAL()
-                : offer.redeemedCampaigns.length > 0 &&
-                  offer.redeemedCampaigns[0].owner?.displayName}
-            </DiscountInfo>
-          )}
+          {discountText && <DiscountInfo>{discountText}</DiscountInfo>}
           <Header>
             <Summary>
               <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
@@ -242,7 +232,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
             </Summary>
 
             <Price
-              monthlyCostDeduction={monthlyCostDeduction}
+              monthlyCostDeduction={isMonthlyCostDeduction(
+                offer.redeemedCampaigns[0]?.incentive ?? undefined,
+              )}
               monthlyGross={offer.lastQuoteOfMember.insuranceCost.monthlyGross}
               monthlyNet={offer.lastQuoteOfMember.insuranceCost.monthlyNet}
             />
@@ -263,7 +255,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
             </Button>
 
             <FooterExtraActions>
-              {offer.redeemedCampaigns.length === 0 ? (
+              {offer.redeemedCampaigns.length === 0 && (
                 <TextButton
                   onClick={() => {
                     setDiscountCodeModalIsOpen(true)
@@ -271,18 +263,22 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 >
                   {textKeys.SIDEBAR_ADD_DISCOUNT_BUTTON()}
                 </TextButton>
-              ) : noDiscount ? null : (
-                <TextButton
-                  color={colorsV2.coral700}
-                  onClick={() => {
-                    removeDiscountCode().then(() => {
-                      refetch()
-                    })
-                  }}
-                >
-                  {textKeys.SIDEBAR_REMOVE_DISCOUNT_BUTTON()}
-                </TextButton>
               )}
+              {offer.redeemedCampaigns.length > 0 &&
+                !isNoDiscount(
+                  offer.redeemedCampaigns[0]?.incentive ?? undefined,
+                ) && (
+                  <TextButton
+                    color={colorsV2.coral700}
+                    onClick={() => {
+                      removeDiscountCode().then(() => {
+                        refetch()
+                      })
+                    }}
+                  >
+                    {textKeys.SIDEBAR_REMOVE_DISCOUNT_BUTTON()}
+                  </TextButton>
+                )}
             </FooterExtraActions>
           </Footer>
 
