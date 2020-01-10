@@ -144,7 +144,7 @@ interface Props {
 }
 
 export const Checkout: React.FC<Props> = ({ offer, isOpen, onClose }) => {
-  const [email, setEmail] = React.useState('')
+  const [email, setEmail] = React.useState(offer.lastQuoteOfMember.email ?? '')
   const [visibilityState, setVisibilityState] = React.useState(
     VisibilityState.CLOSED,
   )

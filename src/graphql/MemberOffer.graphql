@@ -5,6 +5,7 @@ query MemberOffer {
       dataCollectionId
 
       ssn
+      email
       firstName
       lastName
 
