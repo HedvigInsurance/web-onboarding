@@ -41,14 +41,14 @@ export const getDiscountText = (textKeys: Record<string, any>) => (
 
   if (isMonthlyCostDeduction(incentive)) {
     return textKeys.WEB_REFERRAL_ADDEDPERK({
-      REFERRAL_VALUE: incentive.amount,
+      REFERRAL_VALUE: `${Number(incentive.amount?.amount)} kr`,
     })
   }
 
   if (isPercentageDiscountMonths(incentive)) {
     return textKeys.WEB_PERCENTAGE_DISCOUNT_MONTHS_ADDEDPERK({
       PERCENTAGE: incentive.percentageDiscount,
-      QUANTITY: incentive.quantity,
+      QUANTITY: ((incentive as unknown) as any).quantityMonths,
     })
   }
 
