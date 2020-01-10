@@ -28,11 +28,13 @@ const Wrapper = styled.div`
   }
 `
 
-const CompareBox = styled.div`
+const CompareBox = styled.div<{ isExternalProvider?: boolean }>`
   background-color: ${colorsV2.white};
   padding: 1.25rem;
   border-radius: 0.5rem;
   width: 100%;
+  ${({ isExternalProvider }) =>
+    isExternalProvider && `background-color: ${colorsV2.gray}`};
 `
 
 const CompareBoxName = styled.div`

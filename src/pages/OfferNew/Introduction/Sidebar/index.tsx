@@ -250,6 +250,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
           <Body>
             <StartDate
+              dataCollectionId={offer.lastQuoteOfMember.dataCollectionId}
               startDate={offer.lastQuoteOfMember.startDate}
               offerId={offer.lastQuoteOfMember.id}
               currentInsurer={offer.lastQuoteOfMember.currentInsurer || null}

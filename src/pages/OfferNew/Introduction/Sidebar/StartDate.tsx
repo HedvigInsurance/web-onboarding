@@ -1,9 +1,11 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
+import { externalInsuranceProviders } from '@hedviginsurance/embark'
 import { format, isToday, parse } from 'date-fns'
 import { motion } from 'framer-motion'
 import {
   CurrentInsurer,
+  useExternalInsuranceDataQuery,
   useRemoveStartDateMutation,
   useStartDateMutation,
 } from 'generated/graphql'
@@ -14,6 +16,7 @@ import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { CalendarIcon } from './CalendarIcon'
 
 interface Props {
+  dataCollectionId?: string | null
   currentInsurer: CurrentInsurer | null
   startDate: string | null
   offerId: string
@@ -101,11 +104,35 @@ const ErrorMessage = styled(motion.div)`
   color: ${colorsV2.black};
 `
 
+const DataCollectedStartDateWrapper = styled.div`
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  text-align: right;
+  margin-right: 0.5rem;
+`
+
+const DataCollectedStartDateDescription = styled.span`
+  font-size: 0.75rem;
+  line-height: 0.75rem;
+  color: ${colorsV2.gray};
+`
+
+const DataCollectedStartDateValue = styled.span`
+  font-size: 1rem;
+`
+
 export const StartDate: React.FC<Props> = ({
   offerId,
   startDate,
   currentInsurer,
+  dataCollectionId,
 }) => {
+  const { data: externalInsuranceData } = useExternalInsuranceDataQuery({
+    variables: {
+      reference: dataCollectionId || '',
+    },
+  })
   const getDefaultDateValue = () => {
     if (startDate) {
       return parse(startDate, 'yyyy-MM-dd', new Date())
@@ -136,6 +163,31 @@ export const StartDate: React.FC<Props> = ({
       }
 
       return format(dateValue, 'dd MMM yyyy')
+    }
+
+    const firstExternalInsurance =
+      externalInsuranceData?.externalInsuranceProvider?.dataCollection[0]
+    const renewalDate = firstExternalInsurance?.renewalDate
+
+    if (renewalDate) {
+      const externalInsuranceProvider = externalInsuranceProviders.find(
+        (provider: { externalCollectionId?: string }) =>
+          provider.externalCollectionId ===
+          firstExternalInsurance?.insuranceProvider?.toUpperCase(),
+      )
+
+      return (
+        <DataCollectedStartDateWrapper>
+          <DataCollectedStartDateValue>
+            {renewalDate}
+          </DataCollectedStartDateValue>
+          <DataCollectedStartDateDescription>
+            {textKeys.START_DATE_EXTERNAL_PROVIDER_SWITCH({
+              insuranceProvider: externalInsuranceProvider.name,
+            })}
+          </DataCollectedStartDateDescription>
+        </DataCollectedStartDateWrapper>
+      )
     }
 
     return textKeys.SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER()
