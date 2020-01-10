@@ -725,6 +725,8 @@ export type CompleteQuote = {
   details: CompleteQuoteDetails
   startDate?: Maybe<Scalars['LocalDate']>
   expiresAt: Scalars['LocalDate']
+  email?: Maybe<Scalars['String']>
+  dataCollectionId?: Maybe<Scalars['ID']>
 }
 
 export type CompleteQuoteDetails =
@@ -760,6 +762,8 @@ export type CreateQuoteInput = {
   startDate?: Maybe<Scalars['LocalDate']>
   apartment?: Maybe<CreateApartmentInput>
   house?: Maybe<CreateHouseInput>
+  email?: Maybe<Scalars['String']>
+  dataCollectionId?: Maybe<Scalars['ID']>
 }
 
 export type CreateQuoteResult = CompleteQuote | UnderwritingLimitsHit
@@ -769,6 +773,23 @@ export type CurrentInsurer = {
   id?: Maybe<Scalars['String']>
   displayName?: Maybe<Scalars['String']>
   switchable?: Maybe<Scalars['Boolean']>
+}
+
+export type DataCollectingStatusResponse = {
+  __typename?: 'DataCollectingStatusResponse'
+  status: DataCollectionStatus
+  imageValue?: Maybe<Scalars['String']>
+  token?: Maybe<Scalars['String']>
+}
+
+export enum DataCollectionStatus {
+  Running = 'RUNNING',
+  Login = 'LOGIN',
+  Collecting = 'COLLECTING',
+  CompletedPartial = 'COMPLETED_PARTIAL',
+  Completed = 'COMPLETED',
+  CompletedEmpty = 'COMPLETED_EMPTY',
+  Failed = 'FAILED',
 }
 
 export type DirectDebitResponse = {
@@ -887,6 +908,7 @@ export type EditQuoteInput = {
   startDate?: Maybe<Scalars['LocalDate']>
   apartment?: Maybe<EditApartmentInput>
   house?: Maybe<EditHouseInput>
+  email?: Maybe<Scalars['String']>
 }
 
 /** The emergency layout shows a few actions for the user to rely on in the case of an emergency */
@@ -899,6 +921,25 @@ export type Emergency = {
 export enum Environment {
   Production = 'Production',
   Staging = 'Staging',
+}
+
+export type ExternalInsuranceProvider = {
+  __typename?: 'ExternalInsuranceProvider'
+  providerStatus: Array<ProviderStatus>
+  dataCollection: Array<InsuranceDataCollection>
+}
+
+export type ExternalInsuranceProviderDataCollectionArgs = {
+  reference: Scalars['ID']
+}
+
+export type ExternalInsuranceProviderMutation = {
+  __typename?: 'ExternalInsuranceProviderMutation'
+  initiateDataCollection: DataCollectionStatus
+}
+
+export type ExternalInsuranceProviderMutationInitiateDataCollectionArgs = {
+  input: InitiateDataCollectionInput
 }
 
 export type ExtraBuilding =
@@ -1077,6 +1118,18 @@ export enum HedvigColor {
   Black = 'Black',
 }
 
+export type HouseInformation = {
+  __typename?: 'HouseInformation'
+  livingSpace: Scalars['Int']
+  ancillaryArea: Scalars['Int']
+  yearOfConstruction: Scalars['Int']
+}
+
+export type HouseInformationInput = {
+  streetAddress: Scalars['String']
+  postalNumber: Scalars['String']
+}
+
 /** A vectorized image to show to the user */
 export type Icon = {
   __typename?: 'Icon'
@@ -1176,11 +1229,19 @@ export type IncompleteQuote = {
   currentInsurer?: Maybe<CurrentInsurer>
   startDate?: Maybe<Scalars['LocalDate']>
   details?: Maybe<IncompleteQuoteDetails>
+  email?: Maybe<Scalars['String']>
+  dataCollectionId?: Maybe<Scalars['ID']>
 }
 
 export type IncompleteQuoteDetails =
   | IncompleteApartmentQuoteDetails
   | IncompleteHouseQuoteDetails
+
+export type InitiateDataCollectionInput = {
+  reference: Scalars['ID']
+  insuranceProvider: Scalars['String']
+  personalNumber: Scalars['String']
+}
 
 export type InProgressReferral = {
   __typename?: 'InProgressReferral'
@@ -1221,6 +1282,18 @@ export type InsuranceCost = {
   monthlyDiscount: MonetaryAmountV2
   monthlyNet: MonetaryAmountV2
   freeUntil?: Maybe<Scalars['LocalDate']>
+}
+
+export type InsuranceDataCollection = {
+  __typename?: 'InsuranceDataCollection'
+  insuranceObjectStreetAddress?: Maybe<Scalars['String']>
+  postalNumber?: Maybe<Scalars['String']>
+  insuranceName?: Maybe<Scalars['String']>
+  insuranceType?: Maybe<Scalars['String']>
+  insuranceProvider?: Maybe<Scalars['String']>
+  renewalDate?: Maybe<Scalars['LocalDate']>
+  monthlyPremium?: Maybe<MonetaryAmountV2>
+  monthlyDiscountedPremium?: Maybe<MonetaryAmountV2>
 }
 
 export enum InsuranceStatus {
@@ -2547,6 +2620,7 @@ export type Mutation = {
   /** Will be called from the client when 1) redeem manually a code, 2) click the link  --Fails if the code is invalid?-- */
   redeemCode: RedemedCodeResult
   removeDiscountCode: RedemedCodeResult
+  externalInsuranceProvider?: Maybe<ExternalInsuranceProviderMutation>
   createQuote: CreateQuoteResult
   editQuote: CreateQuoteResult
   removeCurrentInsurer: CreateQuoteResult
@@ -2747,6 +2821,19 @@ export type PerilCategory = {
   perils?: Maybe<Array<Maybe<Peril>>>
 }
 
+export type PersonalInformation = {
+  __typename?: 'PersonalInformation'
+  firstName: Scalars['String']
+  lastName: Scalars['String']
+  streetAddress: Scalars['String']
+  postalNumber: Scalars['String']
+  city: Scalars['String']
+}
+
+export type PersonalInformationInput = {
+  personalNumber: Scalars['String']
+}
+
 export enum Platform {
   Android = 'Android',
   IOs = 'iOS',
@@ -2771,6 +2858,12 @@ export enum Project {
   ProductPricing = 'ProductPricing',
   NotificationService = 'NotificationService',
   Underwriter = 'Underwriter',
+}
+
+export type ProviderStatus = {
+  __typename?: 'ProviderStatus'
+  functional: Scalars['Boolean']
+  insuranceProvider: Scalars['String']
 }
 
 export type Query = {
@@ -2807,6 +2900,9 @@ export type Query = {
   balance: Balance
   chargeEstimation: ChargeEstimation
   chargeHistory: Array<Charge>
+  personalInformation?: Maybe<PersonalInformation>
+  houseInformation?: Maybe<HouseInformation>
+  externalInsuranceProvider?: Maybe<ExternalInsuranceProvider>
   quote: Quote
   lastQuoteOfMember: Quote
   commonClaims: Array<CommonClaim>
@@ -2852,6 +2948,14 @@ export type QueryDontPanicSessionArgs = {
 
 export type QueryCampaignArgs = {
   code: Scalars['String']
+}
+
+export type QueryPersonalInformationArgs = {
+  input: PersonalInformationInput
+}
+
+export type QueryHouseInformationArgs = {
+  input: HouseInformationInput
 }
 
 export type QueryQuoteArgs = {
@@ -2966,6 +3070,7 @@ export type Subscription = {
   currentChatResponse?: Maybe<ChatResponse>
   chatState: ChatState
   authStatus?: Maybe<AuthEvent>
+  dataCollectionStatus?: Maybe<DataCollectingStatusResponse>
 }
 
 export type SubscriptionCurrentChatResponseArgs = {
@@ -2974,6 +3079,10 @@ export type SubscriptionCurrentChatResponseArgs = {
 
 export type SubscriptionChatStateArgs = {
   mostRecentTimestamp: Scalars['String']
+}
+
+export type SubscriptionDataCollectionStatusArgs = {
+  reference: Scalars['ID']
 }
 
 export type TerminatedReferral = {
@@ -3491,13 +3600,52 @@ export type EditQuoteMutation = { __typename?: 'Mutation' } & {
       })
 }
 
+export type ExternalInsuranceDataQueryVariables = {
+  reference: Scalars['ID']
+}
+
+export type ExternalInsuranceDataQuery = { __typename?: 'Query' } & {
+  externalInsuranceProvider: Maybe<
+    { __typename?: 'ExternalInsuranceProvider' } & {
+      dataCollection: Array<
+        { __typename?: 'InsuranceDataCollection' } & Pick<
+          InsuranceDataCollection,
+          'renewalDate'
+        > & {
+            monthlyPremium: Maybe<
+              { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'currency' | 'amount'
+              >
+            >
+          }
+      >
+    }
+  >
+}
+
+export type ExternalInsuranceDataStatusSubscriptionVariables = {
+  reference: Scalars['ID']
+}
+
+export type ExternalInsuranceDataStatusSubscription = {
+  __typename?: 'Subscription'
+} & {
+  dataCollectionStatus: Maybe<
+    { __typename?: 'DataCollectingStatusResponse' } & Pick<
+      DataCollectingStatusResponse,
+      'status'
+    >
+  >
+}
+
 export type MemberOfferQueryVariables = {}
 
 export type MemberOfferQuery = { __typename?: 'Query' } & {
   lastQuoteOfMember:
     | ({ __typename?: 'CompleteQuote' } & Pick<
         CompleteQuote,
-        'id' | 'ssn' | 'firstName' | 'lastName'
+        'id' | 'dataCollectionId' | 'ssn' | 'firstName' | 'lastName'
       > & {
           currentInsurer: Maybe<
             { __typename?: 'CurrentInsurer' } & Pick<
@@ -3787,11 +3935,115 @@ export type EditQuoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
   EditQuoteMutation,
   EditQuoteMutationVariables
 >
+export const ExternalInsuranceDataDocument = gql`
+  query ExternalInsuranceData($reference: ID!) {
+    externalInsuranceProvider {
+      dataCollection(reference: $reference) {
+        renewalDate
+        monthlyPremium {
+          currency
+          amount
+        }
+      }
+    }
+  }
+`
+
+/**
+ * __useExternalInsuranceDataQuery__
+ *
+ * To run a query within a React component, call `useExternalInsuranceDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useExternalInsuranceDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useExternalInsuranceDataQuery({
+ *   variables: {
+ *      reference: // value for 'reference'
+ *   },
+ * });
+ */
+export function useExternalInsuranceDataQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    ExternalInsuranceDataQuery,
+    ExternalInsuranceDataQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useQuery<
+    ExternalInsuranceDataQuery,
+    ExternalInsuranceDataQueryVariables
+  >(ExternalInsuranceDataDocument, baseOptions)
+}
+export function useExternalInsuranceDataLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    ExternalInsuranceDataQuery,
+    ExternalInsuranceDataQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useLazyQuery<
+    ExternalInsuranceDataQuery,
+    ExternalInsuranceDataQueryVariables
+  >(ExternalInsuranceDataDocument, baseOptions)
+}
+export type ExternalInsuranceDataQueryHookResult = ReturnType<
+  typeof useExternalInsuranceDataQuery
+>
+export type ExternalInsuranceDataLazyQueryHookResult = ReturnType<
+  typeof useExternalInsuranceDataLazyQuery
+>
+export type ExternalInsuranceDataQueryResult = ApolloReactCommon.QueryResult<
+  ExternalInsuranceDataQuery,
+  ExternalInsuranceDataQueryVariables
+>
+export const ExternalInsuranceDataStatusDocument = gql`
+  subscription ExternalInsuranceDataStatus($reference: ID!) {
+    dataCollectionStatus(reference: $reference) {
+      status
+    }
+  }
+`
+
+/**
+ * __useExternalInsuranceDataStatusSubscription__
+ *
+ * To run a query within a React component, call `useExternalInsuranceDataStatusSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useExternalInsuranceDataStatusSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useExternalInsuranceDataStatusSubscription({
+ *   variables: {
+ *      reference: // value for 'reference'
+ *   },
+ * });
+ */
+export function useExternalInsuranceDataStatusSubscription(
+  baseOptions?: ApolloReactHooks.SubscriptionHookOptions<
+    ExternalInsuranceDataStatusSubscription,
+    ExternalInsuranceDataStatusSubscriptionVariables
+  >,
+) {
+  return ApolloReactHooks.useSubscription<
+    ExternalInsuranceDataStatusSubscription,
+    ExternalInsuranceDataStatusSubscriptionVariables
+  >(ExternalInsuranceDataStatusDocument, baseOptions)
+}
+export type ExternalInsuranceDataStatusSubscriptionHookResult = ReturnType<
+  typeof useExternalInsuranceDataStatusSubscription
+>
+export type ExternalInsuranceDataStatusSubscriptionResult = ApolloReactCommon.SubscriptionResult<
+  ExternalInsuranceDataStatusSubscription
+>
 export const MemberOfferDocument = gql`
   query MemberOffer {
     lastQuoteOfMember {
       ... on CompleteQuote {
         id
+        dataCollectionId
         ssn
         firstName
         lastName

@@ -2,6 +2,7 @@ query MemberOffer {
   lastQuoteOfMember {
     ... on CompleteQuote {
       id
+      dataCollectionId
 
       ssn
       firstName

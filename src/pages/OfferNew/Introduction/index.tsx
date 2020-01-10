@@ -15,6 +15,7 @@ import {
   Section,
 } from '../components'
 import { CompleteOfferDataForMember } from '../types'
+import { ExternalInsuranceProvider } from './ExternalInsuranceProvider'
 import { Sidebar } from './Sidebar'
 import { Usps } from './Usps'
 
@@ -120,6 +121,8 @@ export const Introduction: React.FC<Props> = ({
     }
   })
 
+  const hasDataCollection = !!offer.lastQuoteOfMember.dataCollectionId || false
+
   return (
     <Section bottomBlobColor={colorsV2.black}>
       <Wrapper>
@@ -133,7 +136,11 @@ export const Introduction: React.FC<Props> = ({
                 })}
               </HeadingWhite>
             </HeadingWrapper>
-            <UspsDesktop />
+            {hasDataCollection ? (
+              <ExternalInsuranceProvider offer={offer} />
+            ) : (
+              <UspsDesktop />
+            )}
           </Column>
 
           <Sidebar
