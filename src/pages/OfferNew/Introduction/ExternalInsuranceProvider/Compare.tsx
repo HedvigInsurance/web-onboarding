@@ -14,6 +14,18 @@ import { CompleteOfferDataForMember } from '../../types'
 const Wrapper = styled.div`
   display: flex;
   width: 100%;
+
+  @media all and (max-width: 1020px) {
+    margin-bottom: 2.25rem;
+  }
+
+  @media all and (max-width: 600px) {
+    flex-direction: column;
+
+    > *:first-child {
+      margin-bottom: 1.25rem;
+    }
+  }
 `
 
 const CompareBox = styled.div`
