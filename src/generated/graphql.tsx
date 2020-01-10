@@ -3660,7 +3660,7 @@ export type MemberOfferQuery = { __typename?: 'Query' } & {
   lastQuoteOfMember:
     | ({ __typename?: 'CompleteQuote' } & Pick<
         CompleteQuote,
-        'id' | 'dataCollectionId' | 'ssn' | 'firstName' | 'lastName'
+        'id' | 'dataCollectionId' | 'ssn' | 'email' | 'firstName' | 'lastName'
       > & {
           currentInsurer: Maybe<
             { __typename?: 'CurrentInsurer' } & Pick<
@@ -4063,6 +4063,7 @@ export const MemberOfferDocument = gql`
         id
         dataCollectionId
         ssn
+        email
         firstName
         lastName
         currentInsurer {
