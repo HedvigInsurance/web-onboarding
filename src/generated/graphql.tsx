@@ -927,9 +927,14 @@ export type ExternalInsuranceProvider = {
   __typename?: 'ExternalInsuranceProvider'
   providerStatus: Array<ProviderStatus>
   dataCollection: Array<InsuranceDataCollection>
+  dataCollectionStatus: DataCollectingStatusResponse
 }
 
 export type ExternalInsuranceProviderDataCollectionArgs = {
+  reference: Scalars['ID']
+}
+
+export type ExternalInsuranceProviderDataCollectionStatusArgs = {
   reference: Scalars['ID']
 }
 
@@ -1199,7 +1204,11 @@ export type ImageTransformationInput = {
   resize?: Maybe<ImageResizeInput>
 }
 
-export type Incentive = MonthlyCostDeduction | FreeMonths | NoDiscount
+export type Incentive =
+  | MonthlyCostDeduction
+  | FreeMonths
+  | NoDiscount
+  | PercentageDiscountMonths
 
 export type IncompleteApartmentQuoteDetails = {
   __typename?: 'IncompleteApartmentQuoteDetails'
@@ -2805,6 +2814,12 @@ export type PageInfo = {
   endCursor?: Maybe<Scalars['String']>
 }
 
+export type PercentageDiscountMonths = {
+  __typename?: 'PercentageDiscountMonths'
+  percentageDiscount: Scalars['Float']
+  quantity: Scalars['Int']
+}
+
 export type Peril = {
   __typename?: 'Peril'
   id?: Maybe<Scalars['ID']>
@@ -3610,7 +3625,7 @@ export type ExternalInsuranceDataQuery = { __typename?: 'Query' } & {
       dataCollection: Array<
         { __typename?: 'InsuranceDataCollection' } & Pick<
           InsuranceDataCollection,
-          'renewalDate'
+          'renewalDate' | 'insuranceProvider'
         > & {
             monthlyPremium: Maybe<
               { __typename?: 'MonetaryAmountV2' } & Pick<
@@ -3760,6 +3775,7 @@ export type MemberOfferQuery = { __typename?: 'Query' } & {
             })
           | ({ __typename?: 'FreeMonths' } & Pick<FreeMonths, 'quantity'>)
           | { __typename?: 'NoDiscount' }
+          | { __typename?: 'PercentageDiscountMonths' }
         >
         owner: Maybe<
           { __typename?: 'CampaignOwner' } & Pick<CampaignOwner, 'displayName'>
@@ -3791,6 +3807,7 @@ export type RedeemCodeMutation = { __typename?: 'Mutation' } & {
             })
           | ({ __typename?: 'FreeMonths' } & Pick<FreeMonths, 'quantity'>)
           | { __typename?: 'NoDiscount' }
+          | { __typename?: 'PercentageDiscountMonths' }
         >
       }
     >
@@ -3940,6 +3957,7 @@ export const ExternalInsuranceDataDocument = gql`
     externalInsuranceProvider {
       dataCollection(reference: $reference) {
         renewalDate
+        insuranceProvider
         monthlyPremium {
           currency
           amount

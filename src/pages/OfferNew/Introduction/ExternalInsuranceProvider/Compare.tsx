@@ -60,7 +60,7 @@ export const Compare: React.FC<Props> = ({
   const externalInsuranceProvider = externalInsuranceProviders.find(
     (provider: { externalCollectionId?: string }) =>
       provider.externalCollectionId ===
-      insuranceDataCollection.insuranceProvider,
+      insuranceDataCollection.insuranceProvider?.toUpperCase(),
   )
   const externalTrustpilotScore = otherCompanies.find(
     (company) => externalInsuranceProvider.id === company.id,
@@ -93,8 +93,8 @@ export const Compare: React.FC<Props> = ({
       <CompareBox>
         <CompareBoxTitle>
           <CompareBoxName>
-            {externalInsuranceProvider?.icon({ forceWidth: false })}
-            {externalInsuranceProvider?.name}
+            {externalInsuranceProvider?.icon({ forceWidth: false }) ||
+              externalInsuranceProvider?.name}
           </CompareBoxName>
           <Price
             monthlyGross={
@@ -104,7 +104,7 @@ export const Compare: React.FC<Props> = ({
               }
             }
             monthlyNet={
-              insuranceDataCollection.monthlyDiscountedPremium || {
+              insuranceDataCollection.monthlyPremium || {
                 amount: '0',
                 currency: 'SEK',
               }
