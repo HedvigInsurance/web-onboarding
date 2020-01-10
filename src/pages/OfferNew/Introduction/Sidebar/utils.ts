@@ -52,5 +52,5 @@ export const getDiscountText = (textKeys: Record<string, any>) => (
     })
   }
 
-  return null
+  return redeemedCampaigns[0].owner?.displayName ?? null
 }
