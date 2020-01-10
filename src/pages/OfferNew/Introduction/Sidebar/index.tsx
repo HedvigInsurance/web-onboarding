@@ -6,6 +6,11 @@ import {
   useRemoveDiscountCodeMutation,
 } from 'generated/graphql'
 import { Button, TextButton } from 'new-components/buttons'
+import {
+  getDiscountText,
+  isMonthlyCostDeduction,
+  isNoDiscount,
+} from 'pages/OfferNew/Introduction/Sidebar/utils'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { formatPostalNumber } from 'utils/postalNumbers'
@@ -15,11 +20,6 @@ import { getInsuranceType, insuranceTypeTextKeys } from '../../utils'
 import { DetailsModal } from './DetailsModal/index'
 import { DiscountCodeModal } from './DiscountCodeModal'
 import { StartDate } from './StartDate'
-import {
-  getDiscountText,
-  isMonthlyCostDeduction,
-  isNoDiscount,
-} from 'pages/OfferNew/Introduction/Sidebar/utils'
 
 interface Props {
   sticky: boolean
