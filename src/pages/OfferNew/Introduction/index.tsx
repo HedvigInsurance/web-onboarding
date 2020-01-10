@@ -15,9 +15,9 @@ import {
   Section,
 } from '../components'
 import { CompleteOfferDataForMember } from '../types'
+import { ExternalInsuranceProvider } from './ExternalInsuranceProvider'
 import { Sidebar } from './Sidebar'
 import { Usps } from './Usps'
-import { ExternalInsuranceProvider } from './ExternalInsuranceProvider'
 
 interface Props {
   offer: CompleteOfferDataForMember
@@ -120,8 +120,6 @@ export const Introduction: React.FC<Props> = ({
       setSidebarIsSticky(false)
     }
   })
-
-  console.log(offer)
 
   const hasDataCollection = !!offer.lastQuoteOfMember.dataCollectionId || false
 

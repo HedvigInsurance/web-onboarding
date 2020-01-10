@@ -1,13 +1,13 @@
-import * as React from 'react'
 import styled from '@emotion/styled'
+import * as React from 'react'
 import {
   useExternalInsuranceDataQuery,
   useExternalInsuranceDataStatusSubscription,
 } from '../../../../generated/graphql'
 
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { CompleteOfferDataForMember } from '../../types'
 import { Compare } from './Compare'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
 
 interface Props {
   offer: CompleteOfferDataForMember

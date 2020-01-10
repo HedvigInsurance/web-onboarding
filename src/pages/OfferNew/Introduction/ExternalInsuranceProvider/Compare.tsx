@@ -1,15 +1,15 @@
-import * as React from 'react'
 import styled from '@emotion/styled'
-import { HedvigLogo } from 'components/icons/HedvigLogo'
-import { externalInsuranceProviders } from '@hedviginsurance/embark'
 import { colorsV2 } from '@hedviginsurance/brand'
-import { Price } from '../../components'
+import { externalInsuranceProviders } from '@hedviginsurance/embark'
+import { HedvigLogo } from 'components/icons/HedvigLogo'
+import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { Price } from '../../components'
 
 import { hedvigCompany, otherCompanies } from '../../Compare/mock'
 
-import { CompleteOfferDataForMember } from '../../types'
 import { InsuranceDataCollection } from '../../../../generated/graphql'
+import { CompleteOfferDataForMember } from '../../types'
 
 const Wrapper = styled.div`
   display: flex;
@@ -63,7 +63,7 @@ export const Compare: React.FC<Props> = ({
       insuranceDataCollection.insuranceProvider,
   )
   const externalTrustpilotScore = otherCompanies.find(
-    (company) => externalInsuranceProvider.id == company.id,
+    (company) => externalInsuranceProvider.id === company.id,
   )?.trustpilotScore
 
   return (
