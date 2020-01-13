@@ -11,10 +11,7 @@ import { reactPageRoutes } from './routes'
 import { GlobalCss } from './utils/globalStyles'
 import { StorageState, WithStorageProps } from './utils/StorageContainer'
 
-export const App: React.ComponentType<StorageState> = ({
-  session,
-  dontPanicSession,
-}) => (
+export const App: React.ComponentType<StorageState> = ({ session }) => (
   <>
     <GlobalCss />
     <CurrentLanguage>
@@ -24,7 +21,7 @@ export const App: React.ComponentType<StorageState> = ({
           project={Project.WebOnboarding}
         >
           <Provider<WithStorageProps>
-            initialState={{ storage: { session, dontPanicSession } }}
+            initialState={{ storage: { session } }}
             devtools={process.env.NODE_ENV !== 'production'}
           >
             <Switch>
