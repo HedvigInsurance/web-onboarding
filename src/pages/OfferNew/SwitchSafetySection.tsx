@@ -13,8 +13,12 @@ import {
 } from './components'
 
 const OuterWrapper = styled.div`
+  padding: 3rem 0;
   background-color: ${colorsV2.offwhite};
-  padding: 5rem 0;
+
+  @media (min-width: 376px) {
+    padding: 5rem 0;
+  }
 `
 
 const BodyText = styled.p`
@@ -23,8 +27,12 @@ const BodyText = styled.p`
 
 const NotificationArea = styled.div`
   background-color: ${colorsV2.flamingo300};
-  padding: 8rem 4rem;
+  padding: 3rem 1.5rem;
   border-radius: 4px;
+
+  @media (min-width: 376px) {
+    padding: 8rem 4rem;
+  }
 `
 
 interface Showable {
@@ -32,23 +40,38 @@ interface Showable {
 }
 
 const NotificationBody = styled.div`
-  padding-left: 1.5rem;
+  @media (min-width: 376px) {
+    padding-left: 1.5rem;
+  }
 `
 const NotificationHeading = styled.div`
   font-weight: 600;
-  font-size: 1.25rem;
   opacity: 0.5;
+  padding-bottom: 0.5rem;
+
+  @media (min-width: 376px) {
+    font-size: 1.25rem;
+    padding-bottom: 0;
+  }
 `
 const NotificationBodyText = styled.div`
-  font-size: 1.25rem;
   opacity: 0.5;
+
+  @media (min-width: 376px) {
+    font-size: 1.25rem;
+  }
 `
 const NotificationTimestamp = styled.div`
   position: absolute;
   right: 1.5rem;
   top: 0.5rem;
   font-weight: 200;
+  font-size: 0.75rem;
   opacity: 0;
+
+  @media (min-width: 376px) {
+    font-size: 1rem;
+  }
 `
 
 const fadeIn = (opacityStart: number = 0, opacityEnd: number = 1) => keyframes`
@@ -77,8 +100,13 @@ const Notification = styled.div<Showable>`
   position: relative;
   display: flex;
   align-items: center;
-  padding: 1.5rem;
   opacity: 0;
+  padding: 1rem;
+
+  @media (min-width: 376px) {
+    padding: 1.5rem;
+  }
+
   ${({ visible }) =>
     visible
       ? css`
@@ -114,8 +142,11 @@ const zoomIn = keyframes`
     transform: scale(1);
   }
 `
-const NotificationIcon = styled.div<Showable>`
-  display: flex;
+const DesktopNotificationIcon = styled.div<Showable>`
+  display: none;
+  @media (min-width: 376px) {
+    display: flex;
+  }
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
@@ -134,9 +165,26 @@ const NotificationIcon = styled.div<Showable>`
       : ''};
   animation-delay: 1000ms;
 `
+const MobileNotificationIcon = styled(DesktopNotificationIcon)`
+  display: inline-flex;
+  width: 1.75rem;
+  height: 1.75rem;
+  vertical-align: center;
+  border-radius: 5px;
+  margin-right: 0.5rem;
+
+  @media (min-width: 376px) {
+    display: none;
+  }
+`
 const StyledHedvigSymbol = styled(HedvigSymbol)`
-  width: 30px;
-  height: 38px;
+  width: 15px;
+  height: 19px;
+
+  @media (min-width: 376px) {
+    width: 30px;
+    height: 38px;
+  }
 `
 
 export const SwitchSafetySection: React.FC = () => (
@@ -162,12 +210,17 @@ export const SwitchSafetySection: React.FC = () => (
           {({ isVisible }) => (
             <NotificationArea>
               <Notification visible={isVisible}>
-                <NotificationIcon visible={isVisible}>
+                <DesktopNotificationIcon visible={isVisible}>
                   <StyledHedvigSymbol />
-                </NotificationIcon>
+                </DesktopNotificationIcon>
                 <NotificationTimestamp>Just nu</NotificationTimestamp>
                 <NotificationBody>
-                  <NotificationHeading>Hedvig</NotificationHeading>
+                  <NotificationHeading>
+                    <MobileNotificationIcon visible={isVisible}>
+                      <StyledHedvigSymbol />
+                    </MobileNotificationIcon>
+                    Hedvig
+                  </NotificationHeading>
                   <NotificationBodyText>
                     Din hemförsäkring hos Hedvig är nu aktiv. Välkommen!
                   </NotificationBodyText>

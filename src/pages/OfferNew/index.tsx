@@ -4,6 +4,8 @@ import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import { useMemberOfferQuery } from 'generated/graphql'
 import { History } from 'history'
 import { TopBar } from 'new-components/TopBar'
+import { SwitchSafetySection } from 'pages/OfferNew/SwitchSafetySection'
+import { TestimonialsSection } from 'pages/OfferNew/TestimonialsSection'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
 import { useHistory, useRouteMatch } from 'react-router'
@@ -13,8 +15,6 @@ import { Compare } from './Compare'
 import { Introduction } from './Introduction'
 import { Perils } from './Perils/index'
 import { isOffer } from './utils'
-import { TestimonialsSection } from 'pages/OfferNew/TestimonialsSection'
-import { SwitchSafetySection } from 'pages/OfferNew/SwitchSafetySection'
 
 const createToggleCheckout = (history: History<any>, language?: string) => (
   isOpen: boolean,

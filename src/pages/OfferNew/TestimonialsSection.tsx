@@ -10,14 +10,20 @@ import {
 } from './components'
 
 const OuterWrapper = styled.div`
-  padding: 5rem 0;
+  padding: 3rem 0;
   background-color: ${colorsV2.offwhite};
+
+  @media (min-width: 376px) {
+    padding: 5rem 0;
+  }
 `
 
 const HeadingWrapper = styled.div``
 
 const ContentWrapper = styled.div`
-  padding: 4rem 3rem;
+  @media (min-width: 400px) {
+    padding: 4rem 3rem;
+  }
 `
 
 const Quote = styled.blockquote`
@@ -27,6 +33,7 @@ const Quote = styled.blockquote`
   border-radius: 8px;
   text-align: center;
   font-size: 1.125rem;
+  margin: 2rem 0;
 `
 const CiteFooter = styled.footer`
   padding-top: 1rem;
@@ -37,12 +44,47 @@ const Cite = styled.cite`
   font-weight: 800;
 `
 
-const RatingWrapper = styled.div`
+const MobileRatingWrapper = styled.div`
   display: flex;
+  flex-direction: column;
+
+  @media (min-width: 500px) {
+    display: none;
+  }
 `
-const RatingColumn = styled.div`
+
+const DesktopRatingWrapper = styled.div`
+  display: none;
+
+  @media (min-width: 500px) {
+    display: table;
+    max-width: 100%;
+  }
+`
+const RatingRow = styled.div`
+  display: block;
+  max-width: 200px;
+  margin: auto;
+  text-align: center;
+
+  &:not(:last-of-type) {
+    padding-bottom: 1rem;
+  }
+
+  @media (min-width: 500px) {
+    display: table-row;
+    text-align: left;
+    max-width: none;
+    padding-bottom: 0;
+  }
+`
+const RatingGrid = styled.div`
+  display: table-cell;
   width: 50%;
-  padding-right: 1rem;
+
+  &:last-of-type {
+    padding-left: 1rem;
+  }
 `
 const RatingColumnHeadline = styled.h4`
   font-size: 1.5rem;
@@ -96,7 +138,7 @@ const TrustpilotScore20: React.FC<{ className?: string }> = ({ className }) => (
 )
 
 const TrustpilotScore45Styled = styled(TrustpilotScore45)`
-  max-width: 100%;
+  max-width: calc(100% - 1rem);
 `
 const TrustpilotScore20Styled = TrustpilotScore45Styled.withComponent(
   TrustpilotScore20,
@@ -119,20 +161,58 @@ export const TestimonialsSection: React.FC = () => (
             </CiteFooter>
           </Quote>
         </ContentWrapper>
-        <RatingWrapper>
-          <RatingColumn>
+
+        <DesktopRatingWrapper>
+          <RatingRow>
+            <RatingGrid>
+              <RatingColumnHeadline>Hedvig</RatingColumnHeadline>
+            </RatingGrid>
+            <RatingGrid>
+              <RatingColumnHeadline>
+                Sveriges 5 största försäkringsbolag
+              </RatingColumnHeadline>
+            </RatingGrid>
+          </RatingRow>
+
+          <RatingRow>
+            <RatingGrid>
+              <RatingColumnSubHeadline>
+                4,5 på Trustpilot
+              </RatingColumnSubHeadline>
+            </RatingGrid>
+            <RatingGrid>
+              <RatingColumnSubHeadline>
+                2,0 på Trustpilot
+              </RatingColumnSubHeadline>
+            </RatingGrid>
+          </RatingRow>
+
+          <RatingRow>
+            <RatingGrid>
+              <TrustpilotScore45Styled />
+            </RatingGrid>
+
+            <RatingGrid>
+              <TrustpilotScore20Styled />
+            </RatingGrid>
+          </RatingRow>
+        </DesktopRatingWrapper>
+
+        <MobileRatingWrapper>
+          <RatingRow>
             <RatingColumnHeadline>Hedvig</RatingColumnHeadline>
             <RatingColumnSubHeadline>4,5 på Trustpilot</RatingColumnSubHeadline>
             <TrustpilotScore45Styled />
-          </RatingColumn>
-          <RatingColumn>
+          </RatingRow>
+
+          <RatingRow>
             <RatingColumnHeadline>
               Sveriges 5 största försäkringsbolag
             </RatingColumnHeadline>
             <RatingColumnSubHeadline>2,0 på Trustpilot</RatingColumnSubHeadline>
             <TrustpilotScore20Styled />
-          </RatingColumn>
-        </RatingWrapper>
+          </RatingRow>
+        </MobileRatingWrapper>
       </Column>
       <ColumnSpacing />
     </Container>
