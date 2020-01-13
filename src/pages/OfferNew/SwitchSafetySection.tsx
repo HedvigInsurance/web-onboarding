@@ -4,6 +4,7 @@ import { colorsV2 } from '@hedviginsurance/brand'
 import { HedvigSymbol } from 'components/icons/HedvigSymbol'
 import * as React from 'react'
 import ReactVisibilitySensor from 'react-visibility-sensor'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 import {
   Column,
   ColumnSpacing,
@@ -187,50 +188,53 @@ const StyledHedvigSymbol = styled(HedvigSymbol)`
   }
 `
 
-export const SwitchSafetySection: React.FC = () => (
-  <OuterWrapper>
-    <Container>
-      <Column>
-        <PreHeading>Byt till Hedvig</PreHeading>
-        <Heading>Enkelt och tryggt att flytta hit din hemförsäkring</Heading>
+export const SwitchSafetySection: React.FC = () => {
+  const textKeys = useTextKeys()
+  return (
+    <OuterWrapper>
+      <Container>
+        <Column>
+          <PreHeading>
+            {textKeys.OFFER_SWITCHER_SAFETY_PRE_HEADING()}
+          </PreHeading>
+          <Heading>{textKeys.OFFER_SWITCHER_SAFETY_HEADING()}</Heading>
 
-        <BodyText>
-          Det tar bara någon minut med BankID och din nya hemförsäkring hos
-          Hedvig börjar såklart gälla automatiskt samma dag som din gamla löper
-          ut.
-        </BodyText>
+          <BodyText>{textKeys.OFFER_SWITCHER_SAFETY_PARAGRAPH()}</BodyText>
 
-        <ReactVisibilitySensor
-          onChange={() => {
-            /* noop */
-          }}
-          offset={{ bottom: 150 }}
-          partialVisibility
-        >
-          {({ isVisible }) => (
-            <NotificationArea>
-              <Notification visible={isVisible}>
-                <DesktopNotificationIcon visible={isVisible}>
-                  <StyledHedvigSymbol />
-                </DesktopNotificationIcon>
-                <NotificationTimestamp>Just nu</NotificationTimestamp>
-                <NotificationBody>
-                  <NotificationHeading>
-                    <MobileNotificationIcon visible={isVisible}>
-                      <StyledHedvigSymbol />
-                    </MobileNotificationIcon>
-                    Hedvig
-                  </NotificationHeading>
-                  <NotificationBodyText>
-                    Din hemförsäkring hos Hedvig är nu aktiv. Välkommen!
-                  </NotificationBodyText>
-                </NotificationBody>
-              </Notification>
-            </NotificationArea>
-          )}
-        </ReactVisibilitySensor>
-      </Column>
-      <ColumnSpacing />
-    </Container>
-  </OuterWrapper>
-)
+          <ReactVisibilitySensor
+            onChange={() => {
+              /* noop */
+            }}
+            offset={{ bottom: 150 }}
+            partialVisibility
+          >
+            {({ isVisible }) => (
+              <NotificationArea>
+                <Notification visible={isVisible}>
+                  <DesktopNotificationIcon visible={isVisible}>
+                    <StyledHedvigSymbol />
+                  </DesktopNotificationIcon>
+                  <NotificationTimestamp>
+                    {textKeys.OFFER_SWITCHER_SAFETY_NOTIFICATION_TIMESTAMP()}
+                  </NotificationTimestamp>
+                  <NotificationBody>
+                    <NotificationHeading>
+                      <MobileNotificationIcon visible={isVisible}>
+                        <StyledHedvigSymbol />
+                      </MobileNotificationIcon>
+                      Hedvig
+                    </NotificationHeading>
+                    <NotificationBodyText>
+                      {textKeys.OFFER_SWITCHER_SAFETY_NOTIFICATION_BODY()}
+                    </NotificationBodyText>
+                  </NotificationBody>
+                </Notification>
+              </NotificationArea>
+            )}
+          </ReactVisibilitySensor>
+        </Column>
+        <ColumnSpacing />
+      </Container>
+    </OuterWrapper>
+  )
+}

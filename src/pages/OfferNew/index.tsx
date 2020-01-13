@@ -66,7 +66,6 @@ export const OfferNew: React.FC = () => {
         />
         <TestimonialsSection />
         <SwitchSafetySection />
-        <SwitchSafetySection />
         <Checkout
           offer={data}
           isOpen={checkoutMatch !== null}

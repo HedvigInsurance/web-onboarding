@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import * as React from 'react'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 import {
   Column,
   ColumnSpacing,
@@ -144,77 +145,86 @@ const TrustpilotScore20Styled = TrustpilotScore45Styled.withComponent(
   TrustpilotScore20,
 )
 
-export const TestimonialsSection: React.FC = () => (
-  <OuterWrapper>
-    <Container>
-      <Column>
-        <HeadingWrapper>
-          <PreHeading>Nöjdhet</PreHeading>
-          <Heading>Vad våra medlemmar säger om varför de valt Hedvig</Heading>
-        </HeadingWrapper>
-        <ContentWrapper>
-          <Quote>
-            Bästa företaget jag blivit kund hos någonsin, allt är superenkelt
-            samt fantastisk kundservice. Rekommenderar starkt!
-            <CiteFooter>
-              <Cite>Adam S via Trustpilot</Cite>
-            </CiteFooter>
-          </Quote>
-        </ContentWrapper>
+export const TestimonialsSection: React.FC = () => {
+  const textKeys = useTextKeys()
 
-        <DesktopRatingWrapper>
-          <RatingRow>
-            <RatingGrid>
+  return (
+    <OuterWrapper>
+      <Container>
+        <Column>
+          <HeadingWrapper>
+            <PreHeading>{textKeys.OFFER_TESTIMONIAL_PRE_HEADING()}</PreHeading>
+            <Heading>{textKeys.OFFER_TESTIMONIAL_HEADING()}</Heading>
+          </HeadingWrapper>
+          <ContentWrapper>
+            <Quote>
+              {textKeys.OFFER_TESTIMONIALS_TESTIMONIAL_0()}
+              <CiteFooter>
+                <Cite>
+                  {textKeys.OFFER_TESTIMONIALS_TESTIMONIAL_0_AUTHOR()}
+                </Cite>
+              </CiteFooter>
+            </Quote>
+          </ContentWrapper>
+
+          <DesktopRatingWrapper>
+            <RatingRow>
+              <RatingGrid>
+                <RatingColumnHeadline>Hedvig</RatingColumnHeadline>
+              </RatingGrid>
+              <RatingGrid>
+                <RatingColumnHeadline>
+                  {textKeys.OFFER_TESTIMONIALS_OTHER_COMPANIES_REVIEW_HEADLINE()}
+                </RatingColumnHeadline>
+              </RatingGrid>
+            </RatingRow>
+
+            <RatingRow>
+              <RatingGrid>
+                <RatingColumnSubHeadline>
+                  {textKeys.OFFER_TESTIMONIALS_HEDVIG_REVIEW_ON_TRUSTPILOT()}
+                </RatingColumnSubHeadline>
+              </RatingGrid>
+              <RatingGrid>
+                <RatingColumnSubHeadline>
+                  {textKeys.OFFER_TESTIMONIALS_OTHERS_REVIEW_ON_TRUSTPILOT()}
+                </RatingColumnSubHeadline>
+              </RatingGrid>
+            </RatingRow>
+
+            <RatingRow>
+              <RatingGrid>
+                <TrustpilotScore45Styled />
+              </RatingGrid>
+
+              <RatingGrid>
+                <TrustpilotScore20Styled />
+              </RatingGrid>
+            </RatingRow>
+          </DesktopRatingWrapper>
+
+          <MobileRatingWrapper>
+            <RatingRow>
               <RatingColumnHeadline>Hedvig</RatingColumnHeadline>
-            </RatingGrid>
-            <RatingGrid>
-              <RatingColumnHeadline>
-                Sveriges 5 största försäkringsbolag
-              </RatingColumnHeadline>
-            </RatingGrid>
-          </RatingRow>
-
-          <RatingRow>
-            <RatingGrid>
               <RatingColumnSubHeadline>
-                4,5 på Trustpilot
+                {textKeys.OFFER_TESTIMONIALS_HEDVIG_REVIEW_ON_TRUSTPILOT()}
               </RatingColumnSubHeadline>
-            </RatingGrid>
-            <RatingGrid>
-              <RatingColumnSubHeadline>
-                2,0 på Trustpilot
-              </RatingColumnSubHeadline>
-            </RatingGrid>
-          </RatingRow>
-
-          <RatingRow>
-            <RatingGrid>
               <TrustpilotScore45Styled />
-            </RatingGrid>
+            </RatingRow>
 
-            <RatingGrid>
+            <RatingRow>
+              <RatingColumnHeadline>
+                {textKeys.OFFER_TESTIMONIALS_OTHER_COMPANIES_REVIEW_HEADLINE()}
+              </RatingColumnHeadline>
+              <RatingColumnSubHeadline>
+                {textKeys.OFFER_TESTIMONIALS_OTHERS_REVIEW_ON_TRUSTPILOT()}
+              </RatingColumnSubHeadline>
               <TrustpilotScore20Styled />
-            </RatingGrid>
-          </RatingRow>
-        </DesktopRatingWrapper>
-
-        <MobileRatingWrapper>
-          <RatingRow>
-            <RatingColumnHeadline>Hedvig</RatingColumnHeadline>
-            <RatingColumnSubHeadline>4,5 på Trustpilot</RatingColumnSubHeadline>
-            <TrustpilotScore45Styled />
-          </RatingRow>
-
-          <RatingRow>
-            <RatingColumnHeadline>
-              Sveriges 5 största försäkringsbolag
-            </RatingColumnHeadline>
-            <RatingColumnSubHeadline>2,0 på Trustpilot</RatingColumnSubHeadline>
-            <TrustpilotScore20Styled />
-          </RatingRow>
-        </MobileRatingWrapper>
-      </Column>
-      <ColumnSpacing />
-    </Container>
-  </OuterWrapper>
-)
+            </RatingRow>
+          </MobileRatingWrapper>
+        </Column>
+        <ColumnSpacing />
+      </Container>
+    </OuterWrapper>
+  )
+}
