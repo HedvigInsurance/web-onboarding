@@ -1251,10 +1251,10 @@
     webpack "4.19.1"
     webpack-dev-server "3.1.14"
 
-"@hedviginsurance/embark@^1.0.49":
-  version "1.0.49"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-1.0.49.tgz#bb504f7c0e69a3f623c62d8afd31e5ad341902fe"
-  integrity sha512-OGKI5NNR55HFQYqhuqMtdFGju9mGbt8p4Vr8DYrlvCo9w6WwdtvqPCHXyr+3rX1G/+ey3sG1tmIwFAPD7i62eA==
+"@hedviginsurance/embark@^1.0.50":
+  version "1.0.50"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-1.0.50.tgz#b87f522c2f4737e675918fd5c6416e010c1d9504"
+  integrity sha512-XA8GWknMngXIuOS4J4XYCGebSDDCuYvQ0VTJnQUzXd4y4MXQw4Uei0Q+olfmgPcZWE1hMFil0oNscZZs2d2r4A==
   dependencies:
     "@emotion/core" "^10.0.21"
     "@emotion/styled" "^10.0.17"
