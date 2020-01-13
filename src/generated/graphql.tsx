@@ -3830,7 +3830,10 @@ export type MemberOfferQuery = { __typename?: 'Query' } & {
             })
           | ({ __typename?: 'FreeMonths' } & Pick<FreeMonths, 'quantity'>)
           | { __typename?: 'NoDiscount' }
-          | { __typename?: 'PercentageDiscountMonths' }
+          | ({ __typename?: 'PercentageDiscountMonths' } & Pick<
+              PercentageDiscountMonths,
+              'percentageDiscount'
+            > & { quantityMonths: PercentageDiscountMonths['quantity'] })
         >
         owner: Maybe<
           { __typename?: 'CampaignOwner' } & Pick<CampaignOwner, 'displayName'>
@@ -4276,6 +4279,10 @@ export const MemberOfferDocument = gql`
             amount
             currency
           }
+        }
+        ... on PercentageDiscountMonths {
+          percentageDiscount
+          quantityMonths: quantity
         }
       }
       code

@@ -73,6 +73,10 @@ query MemberOffer {
           currency
         }
       }
+      ... on PercentageDiscountMonths {
+        percentageDiscount
+        quantityMonths: quantity
+      }
     }
     code
     owner {
