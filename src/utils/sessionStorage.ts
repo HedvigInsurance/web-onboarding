@@ -1,6 +1,5 @@
 import { CookieStorage } from 'cookie-storage'
 import { CookieOptions } from 'cookie-storage/lib/cookie-options'
-import { State as ChatState } from '../pages/Chat/state'
 import { MinimalStorage } from './storage/MinimalStorage'
 
 export const SESSION_KEY = '_hvsession'
@@ -8,7 +7,6 @@ export const KA_SESSION_KEY = '_hvsessionexpiry'
 const SESSION_EXPIRY_TIMEOUT = 30 * 60 * 1000
 
 export interface Session {
-  chat: ChatState
   token?: string
   code?: string
   partner?: string

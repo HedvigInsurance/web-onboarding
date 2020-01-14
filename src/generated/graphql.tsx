@@ -3654,6 +3654,61 @@ export type ExternalInsuranceDataStatusSubscription = {
   >
 }
 
+export type MemberInsuranceQueryVariables = {}
+
+export type MemberInsuranceQuery = { __typename?: 'Query' } & {
+  insurance: { __typename?: 'Insurance' } & Pick<
+    Insurance,
+    | 'address'
+    | 'insuredAtOtherCompany'
+    | 'type'
+    | 'postalNumber'
+    | 'personsInHousehold'
+    | 'currentInsurerName'
+  > & {
+      cost: Maybe<
+        { __typename?: 'InsuranceCost' } & {
+          monthlyDiscount: { __typename?: 'MonetaryAmountV2' } & Pick<
+            MonetaryAmountV2,
+            'amount'
+          >
+          monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
+            MonetaryAmountV2,
+            'amount'
+          >
+          monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
+            MonetaryAmountV2,
+            'amount'
+          >
+        }
+      >
+    }
+  redeemedCampaigns: Array<
+    { __typename?: 'Campaign' } & Pick<Campaign, 'code'> & {
+        incentive: Maybe<
+          | ({ __typename?: 'MonthlyCostDeduction' } & {
+              amount: Maybe<
+                { __typename?: 'MonetaryAmountV2' } & Pick<
+                  MonetaryAmountV2,
+                  'amount' | 'currency'
+                >
+              >
+            })
+          | ({ __typename?: 'FreeMonths' } & Pick<FreeMonths, 'quantity'>)
+          | { __typename?: 'NoDiscount' }
+          | { __typename?: 'PercentageDiscountMonths' }
+        >
+        owner: Maybe<
+          { __typename?: 'CampaignOwner' } & Pick<CampaignOwner, 'displayName'>
+        >
+      }
+  >
+  member: { __typename?: 'Member' } & Pick<
+    Member,
+    'id' | 'firstName' | 'lastName' | 'email'
+  >
+}
+
 export type MemberOfferQueryVariables = {}
 
 export type MemberOfferQuery = { __typename?: 'Query' } & {
@@ -4058,6 +4113,100 @@ export type ExternalInsuranceDataStatusSubscriptionHookResult = ReturnType<
 >
 export type ExternalInsuranceDataStatusSubscriptionResult = ApolloReactCommon.SubscriptionResult<
   ExternalInsuranceDataStatusSubscription
+>
+export const MemberInsuranceDocument = gql`
+  query MemberInsurance {
+    insurance {
+      address
+      insuredAtOtherCompany
+      type
+      postalNumber
+      personsInHousehold
+      currentInsurerName
+      cost {
+        monthlyDiscount {
+          amount
+        }
+        monthlyNet {
+          amount
+        }
+        monthlyGross {
+          amount
+        }
+      }
+    }
+    redeemedCampaigns {
+      incentive {
+        ... on FreeMonths {
+          quantity
+        }
+        ... on MonthlyCostDeduction {
+          amount {
+            amount
+            currency
+          }
+        }
+      }
+      code
+      owner {
+        displayName
+      }
+    }
+    member {
+      id
+      firstName
+      lastName
+      email
+    }
+  }
+`
+
+/**
+ * __useMemberInsuranceQuery__
+ *
+ * To run a query within a React component, call `useMemberInsuranceQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMemberInsuranceQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMemberInsuranceQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMemberInsuranceQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    MemberInsuranceQuery,
+    MemberInsuranceQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useQuery<
+    MemberInsuranceQuery,
+    MemberInsuranceQueryVariables
+  >(MemberInsuranceDocument, baseOptions)
+}
+export function useMemberInsuranceLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    MemberInsuranceQuery,
+    MemberInsuranceQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useLazyQuery<
+    MemberInsuranceQuery,
+    MemberInsuranceQueryVariables
+  >(MemberInsuranceDocument, baseOptions)
+}
+export type MemberInsuranceQueryHookResult = ReturnType<
+  typeof useMemberInsuranceQuery
+>
+export type MemberInsuranceLazyQueryHookResult = ReturnType<
+  typeof useMemberInsuranceLazyQuery
+>
+export type MemberInsuranceQueryResult = ApolloReactCommon.QueryResult<
+  MemberInsuranceQuery,
+  MemberInsuranceQueryVariables
 >
 export const MemberOfferDocument = gql`
   query MemberOffer {

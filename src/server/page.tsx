@@ -84,10 +84,6 @@ export const getPage: Koa.Middleware = async (ctx) => {
   )
   const session = createSession<Session>(serverCookieStorage)
 
-  const dontPanicSession = createSession<any>(
-    new ServerCookieStorage(ctx),
-    '_hv_dp',
-  )
   const unwrappedSession = session.getSession()
 
   if (ctx.query.partner) {
@@ -132,7 +128,7 @@ export const getPage: Koa.Middleware = async (ctx) => {
                 tablet: true,
               })}
             >
-              <App session={session} dontPanicSession={dontPanicSession} />
+              <App session={session} />
             </MobileContext.Provider>
           </LegacyApolloProvider>
         </ApolloProvider>

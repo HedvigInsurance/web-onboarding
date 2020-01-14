@@ -1,10 +1,8 @@
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
-import { Chat } from './pages/Chat'
 import { ConnectPayment } from './pages/ConnectPayment'
 import { TrustlyFailPage } from './pages/ConnectPayment/components/TrustlyFailPage'
 import { TrustlySpinnerPage } from './pages/ConnectPayment/components/TrustlySpinnerPage'
-import { LazyDontPanic } from './pages/DontPanic'
 import { Download } from './pages/Download'
 import { EmbarkRoot } from './pages/Embark'
 import { FourOhFour } from './pages/FourOhFour'
@@ -14,13 +12,10 @@ import { Referral } from './pages/Referral'
 export const LANGUAGE_PATH_PATTERN = '/:language(en)?'
 export const serverSideRedirects = [
   { from: '/referrals/terms', to: '/invite/terms' },
+  { from: '/new-member/hedvig', to: '/new-member' },
+  { from: '/en/new-member/hedvig', to: '/en/new-member' },
 ]
 export const reactPageRoutes = [
-  {
-    path: LANGUAGE_PATH_PATTERN + '/new-member/hedvig',
-    Component: Chat,
-    exact: true,
-  },
   {
     path: LANGUAGE_PATH_PATTERN + '/new-member/download',
     Component: Download,
@@ -104,7 +99,6 @@ export const reactPageRoutes = [
     },
     exact: false,
   },
-  { path: '/dont-panic/hedvig', Component: LazyDontPanic, exact: true },
   {
     path: LANGUAGE_PATH_PATTERN + '/referrals/:code',
     Component: Referral,
