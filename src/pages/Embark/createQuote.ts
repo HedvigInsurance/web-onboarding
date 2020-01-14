@@ -1,7 +1,7 @@
 import { CreateQuoteData, CreateQuoteVariables } from '@hedviginsurance/embark'
+import { MemberInsuranceDocument } from 'generated/graphql'
 import gql from 'graphql-tag'
 import { apolloClient } from '../../client/apolloClient'
-import { OFFER_QUERY } from '../../containers/OfferContainer'
 import { CREATE_SESSION_TOKEN_MUTATION } from '../../containers/SessionContainer'
 
 const MUTATION = gql`
@@ -89,7 +89,7 @@ export const createQuote = (storage: any) => async (
   if (result.data && result.data.createQuote.__typename === 'CompleteQuote') {
     // Update the cache
     await apolloClient.client.query({
-      query: OFFER_QUERY,
+      query: MemberInsuranceDocument,
       fetchPolicy: 'network-only',
     })
 

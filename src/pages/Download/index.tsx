@@ -5,7 +5,6 @@ import { EmptyTopBar } from 'components/TopBar'
 import { Page } from 'components/utils/Page'
 import * as React from 'react'
 import Helmet from 'react-helmet-async'
-import { OfferContainer } from '../../containers/OfferContainer'
 import { SessionTokenGuard } from '../../containers/SessionTokenGuard'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { DownloadApp } from './sections/DownloadApp'
@@ -35,47 +34,41 @@ const RightArrow = styled(RightArrowSvg)({
   marginLeft: 10,
 })
 
-export const Download: React.SFC<{}> = () => (
+export const Download: React.FC = () => (
   <Page>
     <SessionTokenGuard>
-      <OfferContainer>
-        {(offer) => (
-          <>
-            <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_PAGE_TITLE">
-              {(t) => (
-                <Helmet>
-                  <title>{t}</title>
-                </Helmet>
-              )}
-            </TranslationsConsumer>
-            <StorageContainer>
-              {({ session }) => {
-                const partner = session?.getSession()?.partner
+      <>
+        <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_PAGE_TITLE">
+          {(t) => (
+            <Helmet>
+              <title>{t}</title>
+            </Helmet>
+          )}
+        </TranslationsConsumer>
+        <StorageContainer>
+          {({ session }) => {
+            const partner = session?.getSession()?.partner
 
-                return (
-                  <EmptyTopBar
-                    proceedComponent={
-                      !partner && (
-                        <ProceedLink href="/">
-                          <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_PROCEED_TEXT">
-                            {(text) => text}
-                          </TranslationsConsumer>
-                          <RightArrow />
-                        </ProceedLink>
-                      )
-                    }
-                    partner={partner}
-                  />
-                )
-              }}
-            </StorageContainer>
+            return (
+              <EmptyTopBar
+                proceedComponent={
+                  !partner && (
+                    <ProceedLink href="/">
+                      <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_PROCEED_TEXT">
+                        {(text) => text}
+                      </TranslationsConsumer>
+                      <RightArrow />
+                    </ProceedLink>
+                  )
+                }
+                partner={partner}
+              />
+            )
+          }}
+        </StorageContainer>
 
-            <DownloadApp
-              hasCurrentInsurer={offer.insurance.insuredAtOtherCompany}
-            />
-          </>
-        )}
-      </OfferContainer>
+        <DownloadApp />
+      </>
     </SessionTokenGuard>
   </Page>
 )

@@ -19,10 +19,6 @@ import {
 const session = createSession<Session>(
   new SavingCookieStorage(new CookieStorage({ expires: null, path: '/' })),
 )
-const dontPanicSession = createSession<any>(
-  new SavingCookieStorage(new CookieStorage({ expires: null, path: '/' })),
-  '_hv_dp',
-)
 
 window.setInterval(() => session.keepAlive(), 5 * 1000)
 
@@ -33,7 +29,7 @@ ReactDOM.render(
         <ApolloProvider client={apolloClient!.client!}>
           <LegacyApolloProvider client={apolloClient!.client!}>
             <MobileContext.Provider value={isMobile({ tablet: true })}>
-              <HotApp session={session} dontPanicSession={dontPanicSession} />
+              <HotApp session={session} />
             </MobileContext.Provider>
           </LegacyApolloProvider>
         </ApolloProvider>
