@@ -117,11 +117,7 @@ const DownloadText = styled('div')({
   },
 })
 
-interface DownloadAppProps {
-  hasCurrentInsurer?: boolean
-}
-
-export const DownloadApp: React.FC<DownloadAppProps> = () => (
+export const DownloadApp: React.FC = () => (
   <>
     <Background />
     <InnerWrapper>
