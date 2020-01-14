@@ -117,22 +117,30 @@ const TrustpilotScore45: React.FC<{ className?: string }> = ({ className }) => (
     </g>
   </svg>
 )
-const TrustpilotScore20: React.FC<{ className?: string }> = ({ className }) => (
+const TrustpilotScore15: React.FC<{ className?: string }> = ({ className }) => (
   <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 312 46"
     width="312"
     height="46"
+    viewBox="0 0 312 46"
+    xmlns="http://www.w3.org/2000/svg"
     className={className}
   >
     <g fill="none" fill-rule="evenodd">
       <path
         fill="#FF8A80"
-        d="M24 37.5L9.305 45.225l2.807-16.362L.224 17.275l16.429-2.388L24 0l7.347 14.887 16.43 2.388-11.889 11.588 2.807 16.362zm66 0l-14.695 7.725 2.807-16.362-11.888-11.588 16.429-2.388L90 0l7.347 14.887 16.43 2.388-11.889 11.588 2.807 16.362z"
+        d="M24 37.5L9.305 45.225l2.807-16.362L.224 17.275l16.429-2.388L24 0l7.347 14.887 16.43 2.388-11.889 11.588 2.807 16.362z"
       />
       <path
         fill="#E9ECEF"
-        d="M156 37.5l-14.695 7.725 2.807-16.362-11.888-11.588 16.429-2.388L156 0l7.347 14.887 16.43 2.388-11.889 11.588 2.807 16.362zm66 0l-14.695 7.725 2.807-16.362-11.888-11.588 16.429-2.388L222 0l7.347 14.887 16.43 2.388-11.889 11.588 2.807 16.362zm66 0l-14.695 7.725 2.807-16.362-11.888-11.588 16.429-2.388L288 0l7.347 14.887 16.43 2.388-11.889 11.588 2.807 16.362z"
+        d="M156 37.5l-14.695 7.725 2.807-16.362-11.888-11.588 16.429-2.388L156 0l7.347 14.887 16.43 2.388-11.889 11.588 2.807 16.362zM90 37.5l-14.695 7.725 2.807-16.362-11.888-11.588 16.429-2.388L90 0l7.347 14.887 16.43 2.388-11.889 11.588 2.807 16.362z"
+      />
+      <path
+        d="M90 0v37.5l-14.695 7.725 2.807-16.362-11.888-11.588 16.429-2.388L90 0z"
+        fill="#FF8A80"
+      />
+      <path
+        fill="#E9ECEF"
+        d="M222 37.5l-14.695 7.725 2.807-16.362-11.888-11.588 16.429-2.388L222 0l7.347 14.887 16.43 2.388-11.889 11.588 2.807 16.362zM288 37.5l-14.695 7.725 2.807-16.362-11.888-11.588 16.429-2.388L288 0l7.347 14.887 16.43 2.388-11.889 11.588 2.807 16.362z"
       />
     </g>
   </svg>
@@ -141,8 +149,8 @@ const TrustpilotScore20: React.FC<{ className?: string }> = ({ className }) => (
 const TrustpilotScore45Styled = styled(TrustpilotScore45)`
   max-width: calc(100% - 1rem);
 `
-const TrustpilotScore20Styled = TrustpilotScore45Styled.withComponent(
-  TrustpilotScore20,
+const TrustpilotScore15Styled = TrustpilotScore45Styled.withComponent(
+  TrustpilotScore15,
 )
 
 export const TestimonialsSection: React.FC = () => {
@@ -198,7 +206,7 @@ export const TestimonialsSection: React.FC = () => {
               </RatingGrid>
 
               <RatingGrid>
-                <TrustpilotScore20Styled />
+                <TrustpilotScore15Styled />
               </RatingGrid>
             </RatingRow>
           </DesktopRatingWrapper>
@@ -219,7 +227,7 @@ export const TestimonialsSection: React.FC = () => {
               <RatingColumnSubHeadline>
                 {textKeys.OFFER_TESTIMONIALS_OTHERS_REVIEW_ON_TRUSTPILOT()}
               </RatingColumnSubHeadline>
-              <TrustpilotScore20Styled />
+              <TrustpilotScore15Styled />
             </RatingRow>
           </MobileRatingWrapper>
         </Column>
