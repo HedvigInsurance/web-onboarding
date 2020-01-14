@@ -4,6 +4,8 @@ import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import { useMemberOfferQuery } from 'generated/graphql'
 import { History } from 'history'
 import { TopBar } from 'new-components/TopBar'
+import { SwitchSafetySection } from 'pages/OfferNew/SwitchSafetySection'
+import { TestimonialsSection } from 'pages/OfferNew/TestimonialsSection'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
 import { useHistory, useRouteMatch } from 'react-router'
@@ -62,6 +64,8 @@ export const OfferNew: React.FC = () => {
         <Compare
           currentInsurer={data.lastQuoteOfMember.currentInsurer || undefined}
         />
+        <TestimonialsSection />
+        <SwitchSafetySection />
         <Checkout
           offer={data}
           isOpen={checkoutMatch !== null}
