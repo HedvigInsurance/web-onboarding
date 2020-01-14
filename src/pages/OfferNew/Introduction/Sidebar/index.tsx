@@ -52,8 +52,7 @@ const Container = styled.div<{ sticky: boolean }>`
   ${(props) => props.sticky && `top: 6rem`};
 
   @media (max-width: 1020px) {
-    width: calc(100% + 2rem);
-    margin: 0 -1rem;
+    width: 100%;
     position: relative;
     top: 0;
     margin-bottom: 4rem;

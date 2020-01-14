@@ -18,6 +18,11 @@ const ErrorBox = styled.div`
   padding: 1.25rem;
   background-color: white;
   border-radius: 0.5rem;
+
+  @media (max-width: 800px) {
+    margin-bottom: 1.25rem;
+    width: 100%;
+  }
 `
 
 export const ExternalInsuranceProvider: React.FC<Props> = ({ offer }) => {
