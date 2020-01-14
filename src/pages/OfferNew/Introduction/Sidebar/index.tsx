@@ -6,7 +6,6 @@ import {
   useRemoveDiscountCodeMutation,
 } from 'generated/graphql'
 import { Button, TextButton } from 'new-components/buttons'
-import { StickyBottomSidebar } from 'pages/OfferNew/Introduction/Sidebar/StickyBottomSidebar'
 import {
   getDiscountText,
   isMonthlyCostDeduction,
@@ -22,6 +21,7 @@ import { getInsuranceType, insuranceTypeTextKeys } from '../../utils'
 import { DetailsModal } from './DetailsModal/index'
 import { DiscountCodeModal } from './DiscountCodeModal'
 import { StartDate } from './StartDate'
+import { StickyBottomSidebar } from './StickyBottomSidebar'
 
 interface Props {
   sticky: boolean
