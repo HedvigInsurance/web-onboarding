@@ -20,7 +20,6 @@ const ErrorBox = styled.div`
   border-radius: 0.5rem;
 
   @media (max-width: 800px) {
-    padding: 1.25rem;
     margin-bottom: 1.25rem;
     width: 100%;
   }
