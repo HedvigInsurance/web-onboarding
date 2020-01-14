@@ -14,8 +14,8 @@ const Wrapper = styled.div<Props>`
   height: 5rem;
   background: ${(props) =>
     props.transparent ? `transparent` : colorsV2.white};
-  position: fixed;
-  z-index: 1000;
+  position: absolute;
+  z-index: 1010;
   ${(props) =>
     !props.transparent && `box-shadow: 0 2px 14px rgba(0, 0, 0, 0.08);`};
 

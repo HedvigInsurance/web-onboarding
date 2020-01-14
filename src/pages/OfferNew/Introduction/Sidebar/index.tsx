@@ -6,12 +6,14 @@ import {
   useRemoveDiscountCodeMutation,
 } from 'generated/graphql'
 import { Button, TextButton } from 'new-components/buttons'
+import { StickyBottomSidebar } from 'pages/OfferNew/Introduction/Sidebar/StickyBottomSidebar'
 import {
   getDiscountText,
   isMonthlyCostDeduction,
   isNoDiscount,
 } from 'pages/OfferNew/Introduction/Sidebar/utils'
 import * as React from 'react'
+import ReactVisibilitySensor from 'react-visibility-sensor'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { Price } from '../../components'
@@ -172,6 +174,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
       discountCodeModalIsOpen,
       setDiscountCodeModalIsOpen,
     ] = React.useState(false)
+    const [isSidebarVisible, setIsSidebarVisible] = React.useState(true)
 
     const [detailsModalIsOpen, setDetailsModalIsOpen] = React.useState(false)
 
@@ -193,107 +196,126 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
     const discountText = getDiscountText(textKeys)(offer.redeemedCampaigns)
 
     return (
-      <Wrapper ref={ref}>
-        <Container sticky={sticky}>
-          {discountText && <DiscountInfo>{discountText}</DiscountInfo>}
-          <Header>
-            <Summary>
-              <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
+      <>
+        <ReactVisibilitySensor partialVisibility onChange={setIsSidebarVisible}>
+          {() => (
+            <Wrapper ref={ref}>
+              <Container sticky={sticky}>
+                {discountText && <DiscountInfo>{discountText}</DiscountInfo>}
+                <Header>
+                  <Summary>
+                    <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
 
-              <Title>
-                {textKeys[
-                  insuranceTypeTextKeys[
-                    getInsuranceType(offer.lastQuoteOfMember)
-                  ]
-                ]()}
-              </Title>
+                    <Title>
+                      {textKeys[
+                        insuranceTypeTextKeys[
+                          getInsuranceType(offer.lastQuoteOfMember)
+                        ]
+                      ]()}
+                    </Title>
 
-              <SummaryContent>
-                <SummaryText>
-                  <b>{`${offer.lastQuoteOfMember.firstName} ${offer.lastQuoteOfMember.lastName}`}</b>{' '}
-                  {offer.lastQuoteOfMember.details.householdSize - 1 > 0 &&
-                    textKeys.SIDEBAR_INSURED_PERSONS_SUFFIX({
-                      AMOUNT: offer.lastQuoteOfMember.details.householdSize - 1,
-                    })}
-                </SummaryText>
-                <SummaryText>
-                  {`${
-                    offer.lastQuoteOfMember.details.street
-                  }, ${formatPostalNumber(
-                    offer.lastQuoteOfMember.details.zipCode,
-                  )}`}
-                </SummaryText>
+                    <SummaryContent>
+                      <SummaryText>
+                        <b>{`${offer.lastQuoteOfMember.firstName} ${offer.lastQuoteOfMember.lastName}`}</b>{' '}
+                        {offer.lastQuoteOfMember.details.householdSize - 1 >
+                          0 &&
+                          textKeys.SIDEBAR_INSURED_PERSONS_SUFFIX({
+                            AMOUNT:
+                              offer.lastQuoteOfMember.details.householdSize - 1,
+                          })}
+                      </SummaryText>
+                      <SummaryText>
+                        {`${
+                          offer.lastQuoteOfMember.details.street
+                        }, ${formatPostalNumber(
+                          offer.lastQuoteOfMember.details.zipCode,
+                        )}`}
+                      </SummaryText>
 
-                <TextButton onClick={() => setDetailsModalIsOpen(true)}>
-                  {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
-                </TextButton>
-              </SummaryContent>
-            </Summary>
+                      <TextButton onClick={() => setDetailsModalIsOpen(true)}>
+                        {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
+                      </TextButton>
+                    </SummaryContent>
+                  </Summary>
 
-            <Price
-              monthlyCostDeduction={isMonthlyCostDeduction(
-                offer.redeemedCampaigns[0]?.incentive ?? undefined,
-              )}
-              monthlyGross={offer.lastQuoteOfMember.insuranceCost.monthlyGross}
-              monthlyNet={offer.lastQuoteOfMember.insuranceCost.monthlyNet}
-            />
-          </Header>
+                  <Price
+                    monthlyCostDeduction={isMonthlyCostDeduction(
+                      offer.redeemedCampaigns[0]?.incentive ?? undefined,
+                    )}
+                    monthlyGross={
+                      offer.lastQuoteOfMember.insuranceCost.monthlyGross
+                    }
+                    monthlyNet={
+                      offer.lastQuoteOfMember.insuranceCost.monthlyNet
+                    }
+                  />
+                </Header>
 
-          <Body>
-            <StartDate
-              dataCollectionId={offer.lastQuoteOfMember.dataCollectionId}
-              startDate={offer.lastQuoteOfMember.startDate}
-              offerId={offer.lastQuoteOfMember.id}
-              currentInsurer={offer.lastQuoteOfMember.currentInsurer || null}
-            />
-          </Body>
+                <Body>
+                  <StartDate
+                    dataCollectionId={offer.lastQuoteOfMember.dataCollectionId}
+                    startDate={offer.lastQuoteOfMember.startDate}
+                    offerId={offer.lastQuoteOfMember.id}
+                    currentInsurer={
+                      offer.lastQuoteOfMember.currentInsurer || null
+                    }
+                  />
+                </Body>
 
-          <Footer>
-            <Button size="lg" onClick={() => onCheckoutOpen()}>
-              {textKeys.SIDEBAR_GETHEDVIG_BUTTON()}
-            </Button>
+                <Footer>
+                  <Button size="lg" onClick={() => onCheckoutOpen()}>
+                    {textKeys.SIDEBAR_GETHEDVIG_BUTTON()}
+                  </Button>
 
-            <FooterExtraActions>
-              {offer.redeemedCampaigns.length === 0 && (
-                <TextButton
-                  onClick={() => {
-                    setDiscountCodeModalIsOpen(true)
-                  }}
-                >
-                  {textKeys.SIDEBAR_ADD_DISCOUNT_BUTTON()}
-                </TextButton>
-              )}
-              {offer.redeemedCampaigns.length > 0 &&
-                !isNoDiscount(
-                  offer.redeemedCampaigns[0]?.incentive ?? undefined,
-                ) && (
-                  <TextButton
-                    color={colorsV2.coral700}
-                    onClick={() => {
-                      removeDiscountCode().then(() => {
-                        refetch()
-                      })
-                    }}
-                  >
-                    {textKeys.SIDEBAR_REMOVE_DISCOUNT_BUTTON()}
-                  </TextButton>
-                )}
-            </FooterExtraActions>
-          </Footer>
+                  <FooterExtraActions>
+                    {offer.redeemedCampaigns.length === 0 && (
+                      <TextButton
+                        onClick={() => {
+                          setDiscountCodeModalIsOpen(true)
+                        }}
+                      >
+                        {textKeys.SIDEBAR_ADD_DISCOUNT_BUTTON()}
+                      </TextButton>
+                    )}
+                    {offer.redeemedCampaigns.length > 0 &&
+                      !isNoDiscount(
+                        offer.redeemedCampaigns[0]?.incentive ?? undefined,
+                      ) && (
+                        <TextButton
+                          color={colorsV2.coral700}
+                          onClick={() => {
+                            removeDiscountCode().then(() => {
+                              refetch()
+                            })
+                          }}
+                        >
+                          {textKeys.SIDEBAR_REMOVE_DISCOUNT_BUTTON()}
+                        </TextButton>
+                      )}
+                  </FooterExtraActions>
+                </Footer>
 
-          <DiscountCodeModal
-            isOpen={discountCodeModalIsOpen}
-            close={() => setDiscountCodeModalIsOpen(false)}
-            refetch={refetch}
-          />
-        </Container>
-        <DetailsModal
-          quote={offer.lastQuoteOfMember}
-          refetch={refetch}
-          isVisible={detailsModalIsOpen}
-          onClose={() => setDetailsModalIsOpen(false)}
+                <DiscountCodeModal
+                  isOpen={discountCodeModalIsOpen}
+                  close={() => setDiscountCodeModalIsOpen(false)}
+                  refetch={refetch}
+                />
+              </Container>
+              <DetailsModal
+                quote={offer.lastQuoteOfMember}
+                refetch={refetch}
+                isVisible={detailsModalIsOpen}
+                onClose={() => setDetailsModalIsOpen(false)}
+              />
+            </Wrapper>
+          )}
+        </ReactVisibilitySensor>
+        <StickyBottomSidebar
+          isVisible={!isSidebarVisible}
+          offer={offer}
+          onCheckoutOpen={onCheckoutOpen}
         />
-      </Wrapper>
+      </>
     )
   },
 )
