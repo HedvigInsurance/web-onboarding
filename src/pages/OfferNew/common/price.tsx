@@ -105,7 +105,7 @@ export const Price: React.FC<{
         aria-hidden={!monthlyCostDeduction}
       >
         {textKeys.SIDEBAR_OLD_PRICE({
-          PRICE: Number(monthlyGross.amount),
+          PRICE: Math.round(Number(monthlyGross.amount)),
         })}
       </PriceGross>
 
@@ -115,7 +115,7 @@ export const Price: React.FC<{
           highlightAmount={highlightAmount}
           lightAppearance={lightAppearance}
         >
-          {Number(monthlyNet.amount)}
+          {Math.round(Number(monthlyNet.amount))}
         </PriceNet>
 
         <PriceSuffix>

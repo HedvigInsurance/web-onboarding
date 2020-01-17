@@ -40,8 +40,8 @@ export const isFreeMonths = (campaigns: Campaign[]) =>
 
 export const isMonthlyCostDeduction = (campaigns: Campaign[]) =>
   (campaigns.length > 0 &&
-    campaigns[0].incentive &&
-    campaigns[0].incentive.__typename === 'MonthlyCostDeduction') ||
+    (campaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction' ||
+      campaigns[0]?.incentive?.__typename === 'PercentageDiscountMonths')) ||
   false
 
 export const isNoDiscount = (campaigns: Campaign[]) =>

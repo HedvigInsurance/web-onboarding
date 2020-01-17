@@ -10,6 +10,7 @@ import {
   getDiscountText,
   isMonthlyCostDeduction,
   isNoDiscount,
+  isPercentageDiscountMonths,
 } from 'pages/OfferNew/Introduction/Sidebar/utils'
 import * as React from 'react'
 import ReactVisibilitySensor from 'react-visibility-sensor'
@@ -239,9 +240,14 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                   </Summary>
 
                   <Price
-                    monthlyCostDeduction={isMonthlyCostDeduction(
-                      offer.redeemedCampaigns[0]?.incentive ?? undefined,
-                    )}
+                    monthlyCostDeduction={
+                      isMonthlyCostDeduction(
+                        offer.redeemedCampaigns[0]?.incentive ?? undefined,
+                      ) ||
+                      isPercentageDiscountMonths(
+                        offer.redeemedCampaigns[0]?.incentive ?? undefined,
+                      )
+                    }
                     monthlyGross={
                       offer.lastQuoteOfMember.insuranceCost.monthlyGross
                     }
