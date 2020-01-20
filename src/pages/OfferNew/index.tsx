@@ -1,3 +1,5 @@
+import styled from '@emotion/styled'
+import { colorsV2 } from '@hedviginsurance/brand/dist'
 import { useCurrentLanguage } from 'components/utils/CurrentLanguage'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
@@ -15,6 +17,12 @@ import { Compare } from './Compare'
 import { Introduction } from './Introduction'
 import { Perils } from './Perils/index'
 import { isOffer } from './utils'
+
+const Spacer = styled.div`
+  width: 100%;
+  height: 130px;
+  background-color: ${colorsV2.offwhite};
+`
 
 const createToggleCheckout = (history: History<any>, language?: string) => (
   isOpen: boolean,
@@ -66,6 +74,7 @@ export const OfferNew: React.FC = () => {
         />
         <TestimonialsSection />
         <SwitchSafetySection />
+        <Spacer />
         <Checkout
           offer={data}
           isOpen={checkoutMatch !== null}
