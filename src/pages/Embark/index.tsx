@@ -55,6 +55,7 @@ interface EmbarkProps {
   data: any
   name: string
   baseUrl: string
+  startPageLink?: string
 }
 
 const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
@@ -125,6 +126,7 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
               }
               passage={currentPassage}
               storyData={state.data}
+              startPageLink={props.startPageLink}
             />
           )}
         </StorageContainer>
@@ -300,6 +302,9 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                       baseUrl={props.baseUrl!}
                       data={data[1]}
                       name={props.name!}
+                      startPageLink={
+                        props.language ? '/' + props.language : '/'
+                      }
                     />
                   </EmbarkProvider>
                 )}
