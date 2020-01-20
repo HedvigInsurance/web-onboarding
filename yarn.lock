@@ -1251,10 +1251,10 @@
     webpack "4.19.1"
     webpack-dev-server "3.1.14"
 
-"@hedviginsurance/embark@^1.0.50":
-  version "1.0.50"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-1.0.50.tgz#b87f522c2f4737e675918fd5c6416e010c1d9504"
-  integrity sha512-XA8GWknMngXIuOS4J4XYCGebSDDCuYvQ0VTJnQUzXd4y4MXQw4Uei0Q+olfmgPcZWE1hMFil0oNscZZs2d2r4A==
+"@hedviginsurance/embark@^1.0.53":
+  version "1.0.53"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-1.0.53.tgz#46b2b7c2dd4dd8a259b26ee42b76c2f6307aeda1"
+  integrity sha512-/ElP26i+YxBvEqJnPz5yB9MlDWCnz7/x25MS4VYEYFXoBxQFbspYfZ271XG7PQ6HWDVUOswabu8ei+2rhmpZyg==
   dependencies:
     "@emotion/core" "^10.0.21"
     "@emotion/styled" "^10.0.17"
@@ -1264,12 +1264,14 @@
     emotion "^10.0.17"
     eventemitter3 "^4.0.0"
     framer-motion "^1.6.14"
+    graphql-tools "^4.0.6"
     hex-to-rgba "^2.0.1"
     history "^4.10.1"
     husky "^3.0.9"
     ismobilejs "^1.0.3"
     jsdom "^15.2.0"
     koa "^2.10.0"
+    koa-graphql "^0.8.0"
     koa-mount "^4.0.0"
     koa-static "^5.0.0"
     pretty-quick "^2.0.0"
@@ -5164,6 +5166,16 @@ expect@^23.6.0:
     jest-message-util "^23.4.0"
     jest-regex-util "^23.3.0"
 
+express-graphql@0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/express-graphql/-/express-graphql-0.7.1.tgz#6c7712ee966c3aba1930e064ea4c8181e56fd3ef"
+  integrity sha512-YpheAqTbSKpb5h57rV2yu2dPNUBi4FvZDspZ5iEV3ov34PBRgnM4lEBkv60+vZRJ6SweYL14N8AGYdov7g6ooQ==
+  dependencies:
+    accepts "^1.3.5"
+    content-type "^1.0.4"
+    http-errors "^1.7.1"
+    raw-body "^2.3.3"
+
 express@^4.16.2, express@^4.16.3, express@^4.17.1:
   version "4.17.1"
   resolved "https://registry.yarnpkg.com/express/-/express-4.17.1.tgz#4491fc38605cf51f8629d39c2b5d026f98a4c134"
@@ -5977,7 +5989,7 @@ graphql-tag@2.10.1, graphql-tag@^2.10.0:
   resolved "https://registry.yarnpkg.com/graphql-tag/-/graphql-tag-2.10.1.tgz#10aa41f1cd8fae5373eaf11f1f67260a3cad5e02"
   integrity sha512-jApXqWBzNXQ8jYa/HLkZJaVw9jgwNqZkywa2zfFn16Iv1Zb7ELNHkJaXHR7Quvd5SIGsy6Ny7SUKATgnu05uEg==
 
-graphql-tools@4.0.6:
+graphql-tools@4.0.6, graphql-tools@^4.0.6:
   version "4.0.6"
   resolved "https://registry.yarnpkg.com/graphql-tools/-/graphql-tools-4.0.6.tgz#0e729e73db05ade3df10a2f92511be544972a844"
   integrity sha512-jHLQw8x3xmSNRBCsaZqelXXsFfUSUSktSCUP8KYHiX1Z9qEuwcMpAf+FkdBzk8aTAFqOlPdNZ3OI4DKKqGKUqg==
@@ -6348,7 +6360,7 @@ http-errors@1.7.2:
     statuses ">= 1.5.0 < 2"
     toidentifier "1.0.0"
 
-http-errors@1.7.3, http-errors@^1.3.1, http-errors@^1.6.3, http-errors@~1.7.2:
+http-errors@1.7.3, http-errors@^1.3.1, http-errors@^1.6.3, http-errors@^1.7.1, http-errors@~1.7.2:
   version "1.7.3"
   resolved "https://registry.yarnpkg.com/http-errors/-/http-errors-1.7.3.tgz#6c619e4f9c60308c38519498c14fbb10aacebb06"
   integrity sha512-ZTTX0MWrsQ2ZAhA1cejAwDLycFsd7I7nVtnkT3Ol0aqodaKW+0CTZDQ1uBv5whptCnc8e8HeRRJxRs0kmm/Qfw==
@@ -7842,6 +7854,16 @@ koa-convert@^1.2.0:
   dependencies:
     co "^4.6.0"
     koa-compose "^3.0.0"
+
+koa-graphql@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/koa-graphql/-/koa-graphql-0.8.0.tgz#82afc2521bae38db0ed09cdb6c8a73c60136c1bd"
+  integrity sha512-mzXQjRQxcxKM78Ds/0/JEfy4DCt+ZxLKhCjjWsqpLtXie/b8LeF1MGiLYRIMKaw61ZbODLs3+WMdf1DJn1KhEA==
+  dependencies:
+    babel-runtime "^6.26.0"
+    express-graphql "0.7.1"
+    http-errors "^1.7.1"
+    thenify "^3.3.0"
 
 koa-helmet@^4.0.0:
   version "4.2.1"
@@ -11703,7 +11725,7 @@ thenify-all@^1.0.0:
   dependencies:
     thenify ">= 3.1.0 < 4"
 
-"thenify@>= 3.1.0 < 4":
+"thenify@>= 3.1.0 < 4", thenify@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/thenify/-/thenify-3.3.0.tgz#e69e38a1babe969b0108207978b9f62b88604839"
   integrity sha1-5p44obq+lpsBCCB5eLn2K4hgSDk=
