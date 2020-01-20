@@ -40,10 +40,6 @@ export const SubHeading = styled('h2')`
   }
 `
 
-export const SubHeadingWhite = styled(SubHeading)`
-  color: ${colorsV2.white};
-`
-
 export const SubHeadingBlack = styled(SubHeading)`
   color: ${colorsV2.black};
 `
@@ -53,10 +49,6 @@ export const SubSubHeading = styled('h2')`
   font-size: 1.25rem;
   line-height: 1.25rem;
   font-weight: 500;
-`
-
-export const SubSubHeadingWhite = styled(SubSubHeading)`
-  color: ${colorsV2.white};
 `
 
 export const SubSubHeadingBlack = styled(SubSubHeading)`

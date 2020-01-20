@@ -88,22 +88,3 @@ export const getInsuranceAmountTextKey = (
 
   return map[insuranceType]
 }
-
-export const getAccidentalCoverageLimitTextKey = (
-  insuranceType: InsuranceType,
-) => {
-  const map = {
-    [InsuranceType.Rent]: 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT',
-    [InsuranceType.Brf]: 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT',
-    [InsuranceType.StudentBrf]: 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT_STUDENT',
-    [InsuranceType.StudentRent]:
-      'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT_STUDENT',
-    [InsuranceType.House]: 'OFFER_INSURED_AMOUNT_COL_THREE_AMOUNT',
-  }
-
-  if (!map[insuranceType]) {
-    throw new Error(`Invalid insurance type ${insuranceType}`)
-  }
-
-  return map[insuranceType]
-}

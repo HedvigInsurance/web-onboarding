@@ -1,25 +1,5 @@
 import styled from '@emotion/styled'
 import { colors, fonts } from '@hedviginsurance/brand'
-import { Link } from 'react-router-dom'
-
-export const GetInsuredButton = styled('div')<{
-  margin?: string
-  centered?: boolean
-}>(({ margin, centered }) => ({
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: centered ? 'center' : undefined,
-  marginTop: margin || 0,
-}))
-
-export const LinkTag = styled(Link)({
-  backgroundColor: colors.GREEN,
-  fontSize: '16px',
-  color: colors.WHITE,
-  textDecoration: 'none',
-  borderRadius: '50px',
-  padding: '15px 30px',
-})
 
 export const Button = styled('button')<{
   background: string
