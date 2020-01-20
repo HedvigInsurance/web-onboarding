@@ -293,9 +293,14 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                         <TextButton
                           color={colorsV2.coral700}
                           onClick={() => {
-                            removeDiscountCode().then(() => {
-                              refetch()
-                            })
+                            removeDiscountCode()
+                              .then(() => {
+                                const cookieStorage = new CookieStorage()
+                                cookieStorage.setItem('_hvcode', '', {
+                                  path: '/',
+                                })
+                              })
+                              .then(() => refetch())
                           }}
                         >
                           {textKeys.SIDEBAR_REMOVE_DISCOUNT_BUTTON()}
