@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { Cross } from 'components/icons/Cross'
+import { CookieStorage } from 'cookie-storage'
 import { Form, Formik } from 'formik'
 import { motion } from 'framer-motion'
 import { useRedeemCodeMutation } from 'generated/graphql'
@@ -169,7 +170,7 @@ export const DiscountCodeModal: React.FC<Props> = ({
           initialValues={{ code: '' }}
           onSubmit={(form, actions) =>
             redeemCode({ variables: { code: form.code } })
-              .then(async (result) => {
+              .then((result) => {
                 if (!result) {
                   return
                 }
@@ -178,10 +179,13 @@ export const DiscountCodeModal: React.FC<Props> = ({
                   actions.setFieldError('code', 'SIDEBAR_ADD_DISCOUNT_ERROR')
                   return
                 }
-
-                await refetch()
-                close()
               })
+              .then(() => refetch())
+              .then(() => {
+                const cookieStorage = new CookieStorage()
+                cookieStorage.setItem('_hvcode', form.code, { path: '/' })
+              })
+              .then(() => close())
               .catch(() => {
                 actions.setFieldError('code', 'SIDEBAR_ADD_DISCOUNT_ERROR')
               })

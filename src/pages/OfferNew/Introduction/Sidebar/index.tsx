@@ -184,13 +184,16 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
     React.useEffect(() => {
       const campaignCodes =
-        offer.redeemedCampaigns.map((campaign) => campaign!.code) ?? []
+        offer.redeemedCampaigns?.map((campaign) => campaign!.code) ?? []
       const cookieStorage = new CookieStorage()
       const preRedeemedCode = cookieStorage.getItem('_hvcode')
-      if (preRedeemedCode && !campaignCodes.includes(preRedeemedCode)) {
-        redeemCode({ variables: { code: preRedeemedCode } })
-          .then(() => refetch())
-          .then(() => cookieStorage.setItem('_hvcode', '', { path: '/' }))
+      if (
+        preRedeemedCode &&
+        !campaignCodes.includes(preRedeemedCode.toUpperCase())
+      ) {
+        redeemCode({ variables: { code: preRedeemedCode } }).then(() =>
+          refetch(),
+        )
       }
     }, [])
 
