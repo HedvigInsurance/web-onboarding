@@ -113,6 +113,7 @@ const Title = styled.div`
   color: ${colorsV2.black};
   max-width: 50%;
   flex-shrink: 1;
+  line-height: 1.25;
 
   @media (max-width: 600px) {
     font-size: 1.5rem;
