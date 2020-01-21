@@ -10,6 +10,7 @@ import {
   getDiscountText,
   isMonthlyCostDeduction,
   isNoDiscount,
+  isPercentageDiscountMonths,
 } from 'pages/OfferNew/Introduction/Sidebar/utils'
 import * as React from 'react'
 import ReactVisibilitySensor from 'react-visibility-sensor'
@@ -183,13 +184,16 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
     React.useEffect(() => {
       const campaignCodes =
-        offer.redeemedCampaigns.map((campaign) => campaign!.code) ?? []
+        offer.redeemedCampaigns?.map((campaign) => campaign!.code) ?? []
       const cookieStorage = new CookieStorage()
       const preRedeemedCode = cookieStorage.getItem('_hvcode')
-      if (preRedeemedCode && !campaignCodes.includes(preRedeemedCode)) {
-        redeemCode({ variables: { code: preRedeemedCode } })
-          .then(() => refetch())
-          .then(() => cookieStorage.setItem('_hvcode', '', { path: '/' }))
+      if (
+        preRedeemedCode &&
+        !campaignCodes.includes(preRedeemedCode.toUpperCase())
+      ) {
+        redeemCode({ variables: { code: preRedeemedCode } }).then(() =>
+          refetch(),
+        )
       }
     }, [])
 
@@ -239,9 +243,14 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                   </Summary>
 
                   <Price
-                    monthlyCostDeduction={isMonthlyCostDeduction(
-                      offer.redeemedCampaigns[0]?.incentive ?? undefined,
-                    )}
+                    monthlyCostDeduction={
+                      isMonthlyCostDeduction(
+                        offer.redeemedCampaigns[0]?.incentive ?? undefined,
+                      ) ||
+                      isPercentageDiscountMonths(
+                        offer.redeemedCampaigns[0]?.incentive ?? undefined,
+                      )
+                    }
                     monthlyGross={
                       offer.lastQuoteOfMember.insuranceCost.monthlyGross
                     }
@@ -284,9 +293,14 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                         <TextButton
                           color={colorsV2.coral700}
                           onClick={() => {
-                            removeDiscountCode().then(() => {
-                              refetch()
-                            })
+                            removeDiscountCode()
+                              .then(() => {
+                                const cookieStorage = new CookieStorage()
+                                cookieStorage.setItem('_hvcode', '', {
+                                  path: '/',
+                                })
+                              })
+                              .then(() => refetch())
                           }}
                         >
                           {textKeys.SIDEBAR_REMOVE_DISCOUNT_BUTTON()}
