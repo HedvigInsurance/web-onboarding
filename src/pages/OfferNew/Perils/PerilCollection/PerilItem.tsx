@@ -8,10 +8,20 @@ interface PerilItemProps {
   onClick: () => void
 }
 
-const Container = styled('button')`
+const OuterContainer = styled.button`
+  background-color: transparent;
+  border: 0;
+  margin: 0.25rem;
+  padding: 0;
+
+  &:focus {
+    box-shadow: none;
+    outline: none;
+  }
+`
+const Container = styled.span`
   width: 7.25rem;
   height: 5.75rem;
-  margin: 0.25rem;
   padding: 0.5rem;
   border-radius: 0.25rem;
   background-color: ${colorsV2.white};
@@ -22,6 +32,7 @@ const Container = styled('button')`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  text-align: center;
 
   svg {
     width: 3rem;
@@ -55,8 +66,10 @@ export const PerilItem: React.FC<PerilItemProps> = ({
   icon,
   onClick,
 }) => (
-  <Container onClick={onClick}>
-    {icon}
-    <Title>{title}</Title>
-  </Container>
+  <OuterContainer>
+    <Container onClick={onClick}>
+      {icon}
+      <Title>{title}</Title>
+    </Container>
+  </OuterContainer>
 )

@@ -11,6 +11,22 @@ interface Props {
   setIsShowingPeril: (isShowingPeril: boolean) => void
 }
 
+const Wrapper = styled.div<{ extraSpace: number }>`
+  width: 100%;
+
+  .swipeable-views-slide {
+    transition: transform 300ms;
+    transform: translateX(${({ extraSpace }) => extraSpace / 2}px);
+
+    &[aria-hidden='false'] {
+      transform: translateX(0);
+    }
+    &[aria-hidden='false'] + [aria-hidden='true'] {
+      transform: translateX(-${({ extraSpace }) => extraSpace / 2}px);
+    }
+  }
+`
+
 const PerilSlide = styled.div`
   width: 100%;
   display: flex;
@@ -20,7 +36,9 @@ const PerilSlide = styled.div`
 const PerilSlideRow = styled.div`
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
+  margin: 0 -2rem;
+  padding-left: 4rem;
 `
 
 const SwiperDots = styled.div`
@@ -66,8 +84,15 @@ const PERIL_SIZE = 138
 const PERIL_MARGIN = 16
 const PERIL_ROWS = 2
 const getNumberOfPerilsPerSlide = (windowWidth: number) =>
-  Math.ceil((windowWidth - PAGE_GUTTER) / (PERIL_SIZE + PERIL_MARGIN * 2)) *
+  Math.round((windowWidth - PAGE_GUTTER) / (PERIL_SIZE + PERIL_MARGIN * 2)) *
   PERIL_ROWS
+const getExtraSpace = (windowWidth: number, perilsPerSlide: number) => {
+  return (
+    windowWidth -
+    (PERIL_SIZE + PERIL_MARGIN) * (perilsPerSlide / 2) +
+    PAGE_GUTTER
+  )
+}
 
 export const PerilSwiper: React.FC<Props> = ({
   perils,
@@ -76,8 +101,11 @@ export const PerilSwiper: React.FC<Props> = ({
 }) => {
   const [currentPageIndex, setCurrentPageIndex] = React.useState(0)
 
+  const numberOfPerilsPerSlide = getNumberOfPerilsPerSlide(window.innerWidth)
   return (
-    <>
+    <Wrapper
+      extraSpace={getExtraSpace(window.innerWidth, numberOfPerilsPerSlide)}
+    >
       <SwipeableView
         resistance
         enableMouseEvents
@@ -87,39 +115,38 @@ export const PerilSwiper: React.FC<Props> = ({
           paddingTop: 20,
           paddingBottom: 20,
         }}
+        slideClassName="swipeable-views-slide"
         style={{
           width: 'calc(100% + 4rem)',
           marginLeft: '-2rem',
         }}
         containerStyle={{
-          width: 'calc(100% - 4rem)',
-          marginLeft: '2rem',
+          width: '100%',
         }}
         onChangeIndex={setCurrentPageIndex}
       >
-        {chunkArray(perils, getNumberOfPerilsPerSlide(window.innerWidth)).map(
+        {chunkArray(perils, numberOfPerilsPerSlide).map(
           (perilsSlideChunk, slideIndex) => (
             <PerilSlide key={slideIndex}>
-              {chunkArray(
-                perilsSlideChunk,
-                getNumberOfPerilsPerSlide(window.innerWidth) / 2,
-              ).map((perilsSlideRowChunk, slideRowIndex) => (
-                <PerilSlideRow key={slideRowIndex}>
-                  {perilsSlideRowChunk.map((peril, perilIndex) => (
-                    <PerilItem
-                      key={peril.title?.toString()}
-                      title={peril.title}
-                      icon={peril.icon}
-                      onClick={() => {
-                        setCurrentPeril(
-                          slideIndex * 4 + slideRowIndex * 2 + perilIndex,
-                        )
-                        setIsShowingPeril(true)
-                      }}
-                    />
-                  ))}
-                </PerilSlideRow>
-              ))}
+              {chunkArray(perilsSlideChunk, numberOfPerilsPerSlide / 2).map(
+                (perilsSlideRowChunk, slideRowIndex) => (
+                  <PerilSlideRow key={slideRowIndex}>
+                    {perilsSlideRowChunk.map((peril, perilIndex) => (
+                      <PerilItem
+                        key={peril.title?.toString()}
+                        title={peril.title}
+                        icon={peril.icon}
+                        onClick={() => {
+                          setCurrentPeril(
+                            slideIndex * 4 + slideRowIndex * 2 + perilIndex,
+                          )
+                          setIsShowingPeril(true)
+                        }}
+                      />
+                    ))}
+                  </PerilSlideRow>
+                ),
+              )}
             </PerilSlide>
           ),
         )}
@@ -127,15 +154,13 @@ export const PerilSwiper: React.FC<Props> = ({
       <SwiperDots>
         {Array.from(
           {
-            length: Math.ceil(
-              perils.length / getNumberOfPerilsPerSlide(window.innerWidth),
-            ),
+            length: Math.ceil(perils.length / numberOfPerilsPerSlide),
           },
           (_, i) => i,
         ).map((i) => (
           <Dot key={i} active={i === currentPageIndex} />
         ))}
       </SwiperDots>
-    </>
+    </Wrapper>
   )
 }
