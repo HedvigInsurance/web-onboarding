@@ -72,8 +72,8 @@ export const getInsuranceType = (quote: CompleteQuote): InsuranceType => {
 export const insuranceTypeTextKeys: Record<InsuranceType, string> = {
   [InsuranceType.Rent]: 'SIDEBAR_INSURANCE_TYPE_RENT',
   [InsuranceType.Brf]: 'SIDEBAR_INSURANCE_TYPE_BRF',
-  [InsuranceType.StudentRent]: 'SIDEBAR_INSURANCE_TYPE_RENT',
-  [InsuranceType.StudentBrf]: 'SIDEBAR_INSURANCE_TYPE_BRF',
+  [InsuranceType.StudentRent]: 'SIDEBAR_INSURANCE_TYPE_STUDENT_RENT',
+  [InsuranceType.StudentBrf]: 'SIDEBAR_INSURANCE_TYPE_STUDENT_BRF',
   [InsuranceType.House]: 'SIDEBAR_INSURANCE_TYPE_HOUSE',
 }
 export const apartmentTypeTextKeys: Record<ApartmentType, string> = {
