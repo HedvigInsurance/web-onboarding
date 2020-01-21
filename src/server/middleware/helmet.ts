@@ -30,6 +30,7 @@ const defaultSrc = [
   '*.facebook.com',
   'www.studentkortet.se',
   'https://studentkortet.go2cloud.org',
+  'track.studentkortet.se',
   'tr.snapchat.com',
   'sc-static.net',
   'analytics.twitter.com',
