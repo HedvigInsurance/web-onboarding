@@ -18,6 +18,8 @@ const Container = styled('button')`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  flex-shrink: 0;
+  flex-grow: 0;
 
   svg {
     width: 4rem;
