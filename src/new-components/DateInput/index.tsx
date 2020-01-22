@@ -355,7 +355,7 @@ export const DateInput: React.FC<DateInputProps> = ({
           }}
           render={(dayzedData) => <Calendar {...dayzedData} />}
         />
-        {hasCurrentInsurer ? (
+        {hasCurrentInsurer && (
           <AtStartDateContainer>
             <TextButton
               onClick={() => {
@@ -366,7 +366,7 @@ export const DateInput: React.FC<DateInputProps> = ({
               När min gamla försäkring löper ut
             </TextButton>
           </AtStartDateContainer>
-        ) : null}
+        )}
       </Container>
     </Wrapper>
   )
