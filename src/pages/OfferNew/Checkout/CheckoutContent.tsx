@@ -72,7 +72,6 @@ export const CheckoutContent: React.FC<Props> = ({
   onEmailChange,
   refetch,
 }) => {
-  console.log(offer)
   const textKeys = useTextKeys()
   const monthlyCostDeduction = isMonthlyCostDeduction(offer.redeemedCampaigns)
 

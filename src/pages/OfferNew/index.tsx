@@ -41,8 +41,6 @@ export const OfferNew: React.FC = () => {
   const checkoutMatch = useRouteMatch('/:language(en)?/new-member/sign')
   const toggleCheckout = createToggleCheckout(history, currentLanguage)
 
-  console.log(data)
-
   return !loading && !error && data && isOffer(data) ? (
     <Page>
       <SessionTokenGuard>

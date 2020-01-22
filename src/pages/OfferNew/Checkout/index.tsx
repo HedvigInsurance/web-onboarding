@@ -156,8 +156,6 @@ export const Checkout: React.FC<Props> = ({
   )
   const outerWrapper = React.useRef<HTMLDivElement>()
 
-  console.log('checkout', offer)
-
   React.useEffect(() => {
     const listener = (e: WheelEvent | TouchEvent) => {
       if (visibilityState !== VisibilityState.OPEN) {
