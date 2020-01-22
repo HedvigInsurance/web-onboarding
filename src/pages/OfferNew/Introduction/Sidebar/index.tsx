@@ -269,6 +269,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                     currentInsurer={
                       offer.lastQuoteOfMember.currentInsurer || null
                     }
+                    refetch={refetch}
                   />
                 </Body>
 

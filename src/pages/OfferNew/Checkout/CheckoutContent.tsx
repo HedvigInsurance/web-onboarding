@@ -12,6 +12,7 @@ import {
 import { InsuranceSummary } from './InsuranceSummary'
 import { SignSpacer } from './Sign'
 import { UserDetailsForm } from './UserDetailsForm'
+import { StartDate } from '../Introduction/Sidebar/StartDate'
 
 const Section = styled('div')`
   width: 100%;
@@ -40,6 +41,10 @@ const Excerpt = styled('div')`
   }
 `
 
+const StartDateWrapper = styled.div`
+  position: relative;
+`
+
 const InsuranceTypeLabel = styled('div')`
   font-size: 0.75rem;
   color: ${colorsV2.gray};
@@ -58,13 +63,16 @@ const InsuranceType = styled('div')`
 
 interface Props extends WithEmailForm {
   offer: CompleteOfferDataForMember
+  refetch: () => Promise<void>
 }
 
 export const CheckoutContent: React.FC<Props> = ({
   offer,
   email,
   onEmailChange,
+  refetch,
 }) => {
+  console.log(offer)
   const textKeys = useTextKeys()
   const monthlyCostDeduction = isMonthlyCostDeduction(offer.redeemedCampaigns)
 
@@ -92,6 +100,16 @@ export const CheckoutContent: React.FC<Props> = ({
         </Excerpt>
 
         <UserDetailsForm email={email} onEmailChange={onEmailChange} />
+
+        <StartDateWrapper>
+          <StartDate
+            dataCollectionId={offer.lastQuoteOfMember.dataCollectionId}
+            startDate={offer.lastQuoteOfMember.startDate}
+            offerId={offer.lastQuoteOfMember.id}
+            currentInsurer={offer.lastQuoteOfMember.currentInsurer || null}
+            refetch={refetch}
+          />
+        </StartDateWrapper>
 
         <InsuranceSummary offer={offer} />
 

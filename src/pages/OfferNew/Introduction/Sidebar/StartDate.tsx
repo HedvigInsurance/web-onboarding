@@ -20,6 +20,7 @@ interface Props {
   currentInsurer: CurrentInsurer | null
   startDate: string | null
   offerId: string
+  refetch: () => Promise<void>
 }
 
 const RowButton = styled.button<{ datePickerOpen: boolean }>`
@@ -127,6 +128,7 @@ export const StartDate: React.FC<Props> = ({
   startDate,
   currentInsurer,
   dataCollectionId,
+  refetch,
 }) => {
   const { data: externalInsuranceData } = useExternalInsuranceDataQuery({
     variables: {
@@ -151,6 +153,10 @@ export const StartDate: React.FC<Props> = ({
   const textKeys = useTextKeys()
   const [setStartDate] = useStartDateMutation()
   const [removeStartDate] = useRemoveStartDateMutation()
+
+  React.useEffect(() => {
+    setDateValue(getDefaultDateValue())
+  }, [startDate])
 
   const handleFail = () => {
     setShowError(true)
@@ -201,7 +207,9 @@ export const StartDate: React.FC<Props> = ({
         aria-hidden={!showError}
         initial={{ height: 0, opacity: 0 }}
         animate={
-          showError ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }
+          showError
+            ? { height: 'auto', opacity: 1, display: 'block' }
+            : { height: 0, opacity: 0, display: 'none' }
         }
         transition={{
           type: 'spring',
@@ -238,7 +246,9 @@ export const StartDate: React.FC<Props> = ({
               quoteId: offerId,
               date: format(newDateValue, gqlDateFormat),
             },
-          }).catch(handleFail)
+          })
+            .then(() => refetch())
+            .catch(handleFail)
         }}
       />
       {currentInsurer?.switchable && (
@@ -263,7 +273,9 @@ export const StartDate: React.FC<Props> = ({
                     quoteId: offerId,
                     date: format(new Date(), gqlDateFormat),
                   },
-                }).catch(handleFail)
+                })
+                  .then(() => refetch())
+                  .catch(handleFail)
               }
 
               setDateValue(newValue ? null : new Date())

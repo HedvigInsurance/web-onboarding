@@ -141,14 +141,22 @@ interface Props {
   offer: CompleteOfferDataForMember
   isOpen?: boolean
   onClose?: () => void
+  refetch: () => Promise<void>
 }
 
-export const Checkout: React.FC<Props> = ({ offer, isOpen, onClose }) => {
+export const Checkout: React.FC<Props> = ({
+  offer,
+  isOpen,
+  onClose,
+  refetch,
+}) => {
   const [email, setEmail] = React.useState(offer.lastQuoteOfMember.email ?? '')
   const [visibilityState, setVisibilityState] = React.useState(
     VisibilityState.CLOSED,
   )
   const outerWrapper = React.useRef<HTMLDivElement>()
+
+  console.log('checkout', offer)
 
   React.useEffect(() => {
     const listener = (e: WheelEvent | TouchEvent) => {
@@ -215,6 +223,7 @@ export const Checkout: React.FC<Props> = ({ offer, isOpen, onClose }) => {
               offer={offer}
               email={email}
               onEmailChange={setEmail}
+              refetch={refetch}
             />
           </InnerWrapper>
         </OuterScrollWrapper>

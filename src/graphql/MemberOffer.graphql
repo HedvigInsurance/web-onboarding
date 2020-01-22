@@ -8,6 +8,7 @@ query MemberOffer {
       email
       firstName
       lastName
+      startDate
 
       currentInsurer {
         id
