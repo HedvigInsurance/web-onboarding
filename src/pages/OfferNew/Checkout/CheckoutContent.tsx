@@ -43,6 +43,7 @@ const Excerpt = styled('div')`
 
 const StartDateWrapper = styled.div`
   position: relative;
+  margin-top: 0.375rem;
   margin-bottom: 2rem;
 `
 
