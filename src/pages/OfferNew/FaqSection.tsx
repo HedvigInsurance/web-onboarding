@@ -1,3 +1,4 @@
+import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import {
@@ -47,15 +48,15 @@ const AccordionsWrapper = styled.div`
   margin: 0;
 `
 
-const AccordionWrapper = styled('li')({
-  padding: 0,
-  margin: 0,
-})
+const AccordionWrapper = styled('li')`
+  padding: 0;
+  margin: 0;
+`
 
-const AccordionHeadline = styled('h3')({
-  fontSize: '1.25rem',
-  lineHeight: 1.25,
-})
+const AccordionHeadline = styled('h3')`
+  font-size: 1.25rem;
+  line-height: 1.25;
+`
 
 const ExpandToggler = styled('button')`
   appearance: none;
@@ -83,27 +84,24 @@ const ExpandToggler = styled('button')`
   }
 `
 
-const AccordionHeadlineContent = styled('span')({
-  paddingRight: '1rem',
-})
-
-const AccordionBody = styled('div')({
-  overflowY: 'hidden',
-  fontWeight: 'normal',
-})
+const AccordionHeadlineContent = styled('span')`
+  padding-right: 1rem;
+`
 
 interface Openable {
   isOpen: boolean
 }
 
-const ExpanderIcon = styled.svg<Openable>(({ isOpen }) => ({
-  transform: isOpen ? 'rotate(45deg)' : undefined,
-  transition: 'transform 150ms',
-  flexShrink: 0,
-  width: '0.8rem',
-  height: '0.8rem',
-  fill: '#fff',
-}))
+const ExpanderIcon = styled.svg<Openable>`
+  ${({ isOpen }) => css`
+    transform: ${isOpen ? 'rotate(45deg)' : 'rotate(0deg)'};
+  `};
+  transition: transform 150ms;
+  flex-shrink: 0;
+  width: 0.8rem;
+  height: 0.8rem;
+  fill: #fff;
+`
 
 interface AccordionProps {
   id: string
