@@ -4150,6 +4150,24 @@ export type ExternalInsuranceDataStatusSubscription = {
   >
 }
 
+export type FaqsQueryVariables = {
+  language: Scalars['String']
+}
+
+export type FaqsQuery = { __typename?: 'Query' } & {
+  languages: Array<
+    Maybe<
+      { __typename?: 'Language' } & Pick<Language, 'id'> & {
+          faqs: Maybe<
+            Array<
+              { __typename?: 'Faq' } & Pick<Faq, 'id' | 'headline' | 'body'>
+            >
+          >
+        }
+    >
+  >
+}
+
 export type MemberInsuranceQueryVariables = {}
 
 export type MemberInsuranceQuery = { __typename?: 'Query' } & {
@@ -4615,6 +4633,63 @@ export type ExternalInsuranceDataStatusSubscriptionHookResult = ReturnType<
 >
 export type ExternalInsuranceDataStatusSubscriptionResult = ApolloReactCommon.SubscriptionResult<
   ExternalInsuranceDataStatusSubscription
+>
+export const FaqsDocument = gql`
+  query Faqs($language: String!) {
+    languages(where: { code: $language }) {
+      id
+      faqs {
+        id
+        headline
+        body
+      }
+    }
+  }
+`
+
+/**
+ * __useFaqsQuery__
+ *
+ * To run a query within a React component, call `useFaqsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFaqsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFaqsQuery({
+ *   variables: {
+ *      language: // value for 'language'
+ *   },
+ * });
+ */
+export function useFaqsQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    FaqsQuery,
+    FaqsQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useQuery<FaqsQuery, FaqsQueryVariables>(
+    FaqsDocument,
+    baseOptions,
+  )
+}
+export function useFaqsLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    FaqsQuery,
+    FaqsQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useLazyQuery<FaqsQuery, FaqsQueryVariables>(
+    FaqsDocument,
+    baseOptions,
+  )
+}
+export type FaqsQueryHookResult = ReturnType<typeof useFaqsQuery>
+export type FaqsLazyQueryHookResult = ReturnType<typeof useFaqsLazyQuery>
+export type FaqsQueryResult = ApolloReactCommon.QueryResult<
+  FaqsQuery,
+  FaqsQueryVariables
 >
 export const MemberInsuranceDocument = gql`
   query MemberInsurance {

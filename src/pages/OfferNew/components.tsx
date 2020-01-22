@@ -99,6 +99,10 @@ export const Container = styled('div')`
   @media (max-width: 1020px) {
     flex-direction: column;
   }
+
+  @media (max-width: 420px) {
+    padding: 0 1rem;
+  }
 `
 
 export const Column = styled('div')`
