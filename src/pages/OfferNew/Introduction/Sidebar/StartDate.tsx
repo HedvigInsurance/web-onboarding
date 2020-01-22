@@ -9,6 +9,7 @@ import {
   useRemoveStartDateMutation,
   useStartDateMutation,
 } from 'generated/graphql'
+import hexToRgba from 'hex-to-rgba'
 import { DateInput } from 'new-components/DateInput'
 import { Switch } from 'new-components/Switch'
 import * as React from 'react'
@@ -122,6 +123,27 @@ const DataCollectedStartDateValue = styled.span`
   font-size: 1rem;
 `
 
+const DateInputModalWrapper = styled.div<{ isOpen: boolean }>`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: ${hexToRgba(colorsV2.white, 0.8)};
+  top: 0;
+  left: 0;
+  transition: all 0.2s;
+  visibility: ${(props) => (props.isOpen ? 'visible' : 'hidden')};
+  opacity: ${(props) => (props.isOpen ? 1 : 0)};
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+`
+
+const DateInputModal = styled(DateInput)`
+  top: 50%;
+  transform: translateY(-50%);
+`
+
 export const StartDate: React.FC<Props> = ({
   offerId,
   startDate,
@@ -226,21 +248,25 @@ export const StartDate: React.FC<Props> = ({
           />
         </Value>
       </RowButton>
-      <DateInput
-        open={datePickerOpen}
-        setOpen={setDatePickerOpen}
-        date={dateValue || new Date()}
-        setDate={(newDateValue) => {
-          setDateValue(newDateValue)
-          setShowError(false)
-          setStartDate({
-            variables: {
-              quoteId: offerId,
-              date: format(newDateValue, gqlDateFormat),
-            },
-          }).catch(handleFail)
-        }}
-      />
+
+      <DateInputModalWrapper isOpen={datePickerOpen}>
+        <DateInputModal
+          open={datePickerOpen}
+          setOpen={setDatePickerOpen}
+          date={dateValue || new Date()}
+          setDate={(newDateValue) => {
+            setDateValue(newDateValue)
+            setShowError(false)
+            setStartDate({
+              variables: {
+                quoteId: offerId,
+                date: format(newDateValue, gqlDateFormat),
+              },
+            }).catch(handleFail)
+          }}
+        />
+      </DateInputModalWrapper>
+
       {currentInsurer?.switchable && (
         <HandleSwitchingWrapper>
           <HandleSwitchingLabel>

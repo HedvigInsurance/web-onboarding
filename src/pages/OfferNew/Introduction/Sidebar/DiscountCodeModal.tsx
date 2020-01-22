@@ -31,6 +31,7 @@ const Wrapper = styled.div<{ isOpen: boolean }>`
   padding: 1rem;
   display: flex;
   align-items: center;
+  border-radius: 8px;
 `
 
 const Container = styled(motion.div)`
