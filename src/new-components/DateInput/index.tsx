@@ -16,7 +16,6 @@ const Wrapper = styled(motion.div)`
   position: absolute;
   left: 0;
   width: 100%;
-  height: 100%;
   padding: 0.625rem 1.25rem;
 `
 
@@ -49,7 +48,7 @@ const CalendarMonth = styled.div`
   display: inline-block;
   width: 100%;
   padding: 0 0.625rem 1.875rem;
-  boxsizing: border-box;
+  box-sizing: border-box;
   user-select: none;
 `
 
@@ -150,7 +149,7 @@ const EmptyDay = styled.div`
 
 const CalendarContainer = styled.div`
   position: relative;
-  maxwidth: 800;
+  max-width: 50rem;
   margin: 0 auto;
   text-align: center;
 `
