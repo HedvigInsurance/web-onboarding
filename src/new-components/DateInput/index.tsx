@@ -8,6 +8,8 @@ import { addYears, subDays } from 'date-fns'
 import Dayzed, { RenderProps as DayzedCalendarProps } from 'dayzed'
 import { motion } from 'framer-motion'
 import * as React from 'react'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { TextButton } from '../buttons'
 import { AnimationDirection, Animator } from './Animator'
 import { useMeasure } from './useMeasure'
 
@@ -15,7 +17,6 @@ const Wrapper = styled(motion.div)`
   position: absolute;
   left: 0;
   width: 100%;
-  height: 100%;
   padding: 0.625rem 1.25rem;
 `
 
@@ -48,7 +49,7 @@ const CalendarMonth = styled.div`
   display: inline-block;
   width: 100%;
   padding: 0 0.625rem 1.875rem;
-  boxsizing: border-box;
+  box-sizing: border-box;
   user-select: none;
 `
 
@@ -149,16 +150,24 @@ const EmptyDay = styled.div`
 
 const CalendarContainer = styled.div`
   position: relative;
-  maxwidth: 800;
+  max-width: 50rem;
   margin: 0 auto;
   text-align: center;
+`
+
+const AtStartDateContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 0 0 1.875rem;
 `
 
 interface DateInputProps {
   open: boolean
   setOpen: (open: boolean) => void
   date: Date
-  setDate: (date: Date) => void
+  setDate: (date: Date | null) => void
+  hasCurrentInsurer: boolean
 }
 
 const Calendar: React.FC<DayzedCalendarProps> = ({
@@ -301,7 +310,10 @@ export const DateInput: React.FC<DateInputProps> = ({
   setOpen,
   date,
   setDate,
+  hasCurrentInsurer,
 }) => {
+  const textKeys = useTextKeys()
+
   return (
     <Wrapper
       aria-hidden={!open}
@@ -345,6 +357,18 @@ export const DateInput: React.FC<DateInputProps> = ({
           }}
           render={(dayzedData) => <Calendar {...dayzedData} />}
         />
+        {hasCurrentInsurer && (
+          <AtStartDateContainer>
+            <TextButton
+              onClick={() => {
+                setDate(null)
+                setOpen(false)
+              }}
+            >
+              {textKeys.START_DATE_WHEN_OLD_EXPIRES()}
+            </TextButton>
+          </AtStartDateContainer>
+        )}
       </Container>
     </Wrapper>
   )
