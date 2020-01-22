@@ -99,8 +99,8 @@ const StyledField = styled(Field)`
 const StyledInputMask = StyledField.withComponent(InputMask)
 
 const SymbolWrapper = styled.div`
-position: absolute;
-right: 1.5rem;
+  position: absolute;
+  right: 1.5rem;
   width: 1.5rem;
   height: 1.5rem;
   flex-shrink: 0;
