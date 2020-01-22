@@ -243,7 +243,7 @@ export const StartDate: React.FC<Props> = ({
             setStartDate({
               variables: {
                 quoteId: offerId,
-                date: newDateValue ? format(newDateValue, gqlDateFormat) : null,
+                date: format(newDateValue, gqlDateFormat),
               },
             }).catch(handleFail)
           }
