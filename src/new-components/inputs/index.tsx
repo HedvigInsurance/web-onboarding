@@ -74,7 +74,7 @@ const StyledField = styled(Field)`
   line-height: 1.625rem;
   font-weight: 600;
   color: ${colorsV2.black};
-  padding: 0 2rem 0 0;
+  padding: 0 2.5rem 0 0;
   margin: 0;
 
   :focus {
