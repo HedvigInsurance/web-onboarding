@@ -15,7 +15,7 @@ interface Mask {
 
 const INVISIBLE_MASK_CHAR = '\u200b'
 
-export const masks: { [key: string]: Mask } = {
+export const masks: Record<string, Mask> = {
   zipCode: {
     name: 'ZipCode',
     mask: '999 99',
@@ -55,6 +55,7 @@ const TextWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  position: relative;
 `
 
 const Label = styled.label`
@@ -65,13 +66,15 @@ const Label = styled.label`
 `
 
 const StyledField = styled(Field)`
+  position: relative;
+  z-index: 1;
   background: none;
   border: none;
   font-size: 1.125rem;
   line-height: 1.625rem;
   font-weight: 600;
   color: ${colorsV2.black};
-  padding: 0;
+  padding: 0 2rem 0 0;
   margin: 0;
 
   :focus {
@@ -96,6 +99,8 @@ const StyledField = styled(Field)`
 const StyledInputMask = StyledField.withComponent(InputMask)
 
 const SymbolWrapper = styled.div`
+position: absolute;
+right: 1.5rem;
   width: 1.5rem;
   height: 1.5rem;
   flex-shrink: 0;
@@ -262,6 +267,7 @@ export const InputGroupDeleteButton = styled.button`
 `
 
 export const InputGroup = styled.div`
+  position: relative;
   margin-bottom: 1.5rem;
 
   > ${Wrapper}:first-child {
