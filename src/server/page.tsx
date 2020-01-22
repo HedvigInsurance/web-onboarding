@@ -31,6 +31,7 @@ import {
   GIRAFFE_WS_ENDPOINT,
   IOS_MINIMUM_VERSION,
 } from './config'
+import { favicons } from './favicons'
 
 const scriptLocation = getScriptLocation({
   statsLocation: path.resolve(__dirname, 'assets'),
@@ -50,6 +51,7 @@ const template = (helmetContext: FilledContext['helmet'], cspNonce: string) => `
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1.0, maximum-scale=1.2, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  ${favicons}
   ${helmetContext.title}
   ${helmetContext.link}
   ${helmetContext.meta}
