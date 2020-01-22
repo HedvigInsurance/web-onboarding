@@ -22,6 +22,7 @@ interface Props {
   startDate: string | null
   offerId: string
   refetch: () => Promise<void>
+  modal?: boolean
 }
 
 const RowButton = styled.button<{ datePickerOpen: boolean }>`
@@ -140,9 +141,13 @@ const DateInputModalWrapper = styled.div<{ isOpen: boolean }>`
   border-radius: 8px;
 `
 
-const DateInputModal = styled(DateInput)`
+const StyledDateInput = styled(DateInput)<{ modal: boolean }>`
+  ${(props) =>
+    props.modal &&
+    `
   top: 50%;
   transform: translateY(-50%);
+  `}
 `
 
 export const StartDate: React.FC<Props> = ({
@@ -151,6 +156,7 @@ export const StartDate: React.FC<Props> = ({
   currentInsurer,
   dataCollectionId,
   refetch,
+  modal = false,
 }) => {
   const { data: externalInsuranceData } = useExternalInsuranceDataQuery({
     variables: {
@@ -223,6 +229,35 @@ export const StartDate: React.FC<Props> = ({
 
   const gqlDateFormat = 'yyyy-MM-dd'
 
+  const getDateInput = () => (
+    <StyledDateInput
+      open={datePickerOpen}
+      setOpen={setDatePickerOpen}
+      date={dateValue || new Date()}
+      setDate={(newDateValue) => {
+        setDateValue(newDateValue)
+        setShowError(false)
+        if (newDateValue === null) {
+          removeStartDate({
+            variables: {
+              quoteId: offerId,
+            },
+          }).catch(handleFail)
+        } else {
+          setStartDate({
+            variables: {
+              quoteId: offerId,
+              date: format(newDateValue, gqlDateFormat),
+            },
+          })
+            .then(() => refetch())
+            .catch(handleFail)
+        }
+      }}
+      hasCurrentInsurer={currentInsurer !== null}
+    />
+  )
+
   return (
     <>
       <ErrorMessage
@@ -256,34 +291,14 @@ export const StartDate: React.FC<Props> = ({
           />
         </Value>
       </RowButton>
-      <DateInputModalWrapper isOpen={datePickerOpen}>
-        <DateInputModal
-          open={datePickerOpen}
-          setOpen={setDatePickerOpen}
-          date={dateValue || new Date()}
-          setDate={(newDateValue) => {
-            setDateValue(newDateValue)
-            setShowError(false)
-            if (newDateValue === null) {
-              removeStartDate({
-                variables: {
-                  quoteId: offerId,
-                },
-              }).catch(handleFail)
-            } else {
-              setStartDate({
-                variables: {
-                  quoteId: offerId,
-                  date: format(newDateValue, gqlDateFormat),
-                },
-              })
-                .then(() => refetch())
-                .catch(handleFail)
-            }
-          }}
-          hasCurrentInsurer={currentInsurer !== null}
-        />
-      </DateInputModalWrapper>
+      {modal ? (
+        <DateInputModalWrapper isOpen={datePickerOpen}>
+          {getDateInput()}
+        </DateInputModalWrapper>
+      ) : (
+        getDateInput()
+      )}
+
       {currentInsurer?.switchable && (
         <HandleSwitchingWrapper>
           <HandleSwitchingLabel>

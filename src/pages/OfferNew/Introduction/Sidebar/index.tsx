@@ -270,6 +270,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                       offer.lastQuoteOfMember.currentInsurer || null
                     }
                     refetch={refetch}
+                    modal={true}
                   />
                 </Body>
 
