@@ -233,12 +233,20 @@ export const StartDate: React.FC<Props> = ({
         setDate={(newDateValue) => {
           setDateValue(newDateValue)
           setShowError(false)
-          setStartDate({
-            variables: {
-              quoteId: offerId,
-              date: newDateValue ? format(newDateValue, gqlDateFormat) : null,
-            },
-          }).catch(handleFail)
+          if (newDateValue === null) {
+            removeStartDate({
+              variables: {
+                quoteId: offerId,
+              },
+            }).catch(handleFail)
+          } else {
+            setStartDate({
+              variables: {
+                quoteId: offerId,
+                date: newDateValue ? format(newDateValue, gqlDateFormat) : null,
+              },
+            }).catch(handleFail)
+          }
         }}
         hasCurrentInsurer={currentInsurer !== null}
       />
