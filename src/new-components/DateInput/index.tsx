@@ -8,6 +8,7 @@ import { addYears, subDays } from 'date-fns'
 import Dayzed, { RenderProps as DayzedCalendarProps } from 'dayzed'
 import { motion } from 'framer-motion'
 import * as React from 'react'
+import { TextButton } from '../buttons'
 import { AnimationDirection, Animator } from './Animator'
 import { useMeasure } from './useMeasure'
 
@@ -154,11 +155,19 @@ const CalendarContainer = styled.div`
   text-align: center;
 `
 
+const AtStartDateContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 0 0 1.875rem;
+`
+
 interface DateInputProps {
   open: boolean
   setOpen: (open: boolean) => void
   date: Date
-  setDate: (date: Date) => void
+  setDate: (date: Date | null) => void
+  hasCurrentInsurer: boolean
 }
 
 const Calendar: React.FC<DayzedCalendarProps> = ({
@@ -301,6 +310,7 @@ export const DateInput: React.FC<DateInputProps> = ({
   setOpen,
   date,
   setDate,
+  hasCurrentInsurer,
 }) => {
   return (
     <Wrapper
@@ -345,6 +355,18 @@ export const DateInput: React.FC<DateInputProps> = ({
           }}
           render={(dayzedData) => <Calendar {...dayzedData} />}
         />
+        {hasCurrentInsurer ? (
+          <AtStartDateContainer>
+            <TextButton
+              onClick={() => {
+                setDate(null)
+                setOpen(false)
+              }}
+            >
+              När min gamla försäkring löper ut
+            </TextButton>
+          </AtStartDateContainer>
+        ) : null}
       </Container>
     </Wrapper>
   )

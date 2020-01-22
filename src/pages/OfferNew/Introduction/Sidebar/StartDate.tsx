@@ -236,10 +236,11 @@ export const StartDate: React.FC<Props> = ({
           setStartDate({
             variables: {
               quoteId: offerId,
-              date: format(newDateValue, gqlDateFormat),
+              date: newDateValue ? format(newDateValue, gqlDateFormat) : null,
             },
           }).catch(handleFail)
         }}
+        hasCurrentInsurer={currentInsurer !== null}
       />
       {currentInsurer?.switchable && (
         <HandleSwitchingWrapper>
