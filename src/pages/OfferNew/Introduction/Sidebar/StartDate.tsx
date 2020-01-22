@@ -32,7 +32,7 @@ const RowButton = styled.button<{ datePickerOpen: boolean }>`
   justify-content: space-between;
   border: 1px solid ${colorsV2.lightgray};
   outline: 0;
-  background-color: transparent;
+  background-color: ${colorsV2.white};
   border-radius: 8px;
   align-items: center;
   cursor: pointer;

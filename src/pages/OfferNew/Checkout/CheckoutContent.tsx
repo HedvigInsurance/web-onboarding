@@ -3,6 +3,7 @@ import { colorsV2, fonts } from '@hedviginsurance/brand/dist'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { Price } from '../components'
+import { StartDate } from '../Introduction/Sidebar/StartDate'
 import { CompleteOfferDataForMember, WithEmailForm } from '../types'
 import {
   getInsuranceType,
@@ -12,7 +13,6 @@ import {
 import { InsuranceSummary } from './InsuranceSummary'
 import { SignSpacer } from './Sign'
 import { UserDetailsForm } from './UserDetailsForm'
-import { StartDate } from '../Introduction/Sidebar/StartDate'
 
 const Section = styled('div')`
   width: 100%;
@@ -43,6 +43,7 @@ const Excerpt = styled('div')`
 
 const StartDateWrapper = styled.div`
   position: relative;
+  margin-bottom: 2rem;
 `
 
 const InsuranceTypeLabel = styled('div')`
@@ -50,6 +51,7 @@ const InsuranceTypeLabel = styled('div')`
   color: ${colorsV2.gray};
   text-transform: uppercase;
 `
+
 const InsuranceType = styled('div')`
   font-size: 2rem;
   font-family: ${fonts.GEOMANIST};
