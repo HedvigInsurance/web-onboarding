@@ -8,6 +8,7 @@ import { addYears, subDays } from 'date-fns'
 import Dayzed, { RenderProps as DayzedCalendarProps } from 'dayzed'
 import { motion } from 'framer-motion'
 import * as React from 'react'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { TextButton } from '../buttons'
 import { AnimationDirection, Animator } from './Animator'
 import { useMeasure } from './useMeasure'
@@ -311,6 +312,8 @@ export const DateInput: React.FC<DateInputProps> = ({
   setDate,
   hasCurrentInsurer,
 }) => {
+  const textKeys = useTextKeys()
+
   return (
     <Wrapper
       aria-hidden={!open}
@@ -362,7 +365,7 @@ export const DateInput: React.FC<DateInputProps> = ({
                 setOpen(false)
               }}
             >
-              När min gamla försäkring löper ut
+              {textKeys.START_DATE_WHEN_OLD_EXPIRES()}
             </TextButton>
           </AtStartDateContainer>
         )}
