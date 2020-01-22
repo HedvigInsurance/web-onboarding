@@ -248,7 +248,6 @@ export const StartDate: React.FC<Props> = ({
           />
         </Value>
       </RowButton>
-
       <DateInputModalWrapper isOpen={datePickerOpen}>
         <DateInputModal
           open={datePickerOpen}
@@ -257,16 +256,24 @@ export const StartDate: React.FC<Props> = ({
           setDate={(newDateValue) => {
             setDateValue(newDateValue)
             setShowError(false)
-            setStartDate({
-              variables: {
-                quoteId: offerId,
-                date: format(newDateValue, gqlDateFormat),
-              },
-            }).catch(handleFail)
+            if (newDateValue === null) {
+              removeStartDate({
+                variables: {
+                  quoteId: offerId,
+                },
+              }).catch(handleFail)
+            } else {
+              setStartDate({
+                variables: {
+                  quoteId: offerId,
+                  date: format(newDateValue, gqlDateFormat),
+                },
+              }).catch(handleFail)
+            }
           }}
+          hasCurrentInsurer={currentInsurer !== null}
         />
       </DateInputModalWrapper>
-
       {currentInsurer?.switchable && (
         <HandleSwitchingWrapper>
           <HandleSwitchingLabel>
