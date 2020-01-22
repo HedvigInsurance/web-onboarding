@@ -255,6 +255,7 @@ export const StartDate: React.FC<Props> = ({
         }
       }}
       hasCurrentInsurer={currentInsurer !== null}
+      modal={modal}
     />
   )
 
