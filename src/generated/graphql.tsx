@@ -41,6 +41,11 @@ export type AggregateAsset = {
   count: Scalars['Int']
 }
 
+export type AggregateFaq = {
+  __typename?: 'AggregateFaq'
+  count: Scalars['Int']
+}
+
 export type AggregateKey = {
   __typename?: 'AggregateKey'
   count: Scalars['Int']
@@ -1090,6 +1095,419 @@ export enum ExtraBuildingType {
   Other = 'OTHER',
 }
 
+export type Faq = Node & {
+  __typename?: 'Faq'
+  status: Status
+  updatedAt: Scalars['DateTime']
+  createdAt: Scalars['DateTime']
+  id: Scalars['ID']
+  language?: Maybe<Language>
+  headline?: Maybe<Scalars['String']>
+  body?: Maybe<Scalars['String']>
+}
+
+/** A connection to a list of items. */
+export type FaqConnection = {
+  __typename?: 'FaqConnection'
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo
+  /** A list of edges. */
+  edges: Array<Maybe<FaqEdge>>
+  aggregate: AggregateFaq
+}
+
+export type FaqCreateInput = {
+  status?: Maybe<Status>
+  headline?: Maybe<Scalars['String']>
+  body?: Maybe<Scalars['String']>
+  language?: Maybe<LanguageCreateOneWithoutFaqsInput>
+}
+
+export type FaqCreateManyWithoutLanguageInput = {
+  create?: Maybe<Array<FaqCreateWithoutLanguageInput>>
+  connect?: Maybe<Array<FaqWhereUniqueInput>>
+}
+
+export type FaqCreateWithoutLanguageInput = {
+  status?: Maybe<Status>
+  headline?: Maybe<Scalars['String']>
+  body?: Maybe<Scalars['String']>
+}
+
+/** An edge in a connection. */
+export type FaqEdge = {
+  __typename?: 'FaqEdge'
+  /** The item at the end of the edge. */
+  node: Faq
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']
+}
+
+export enum FaqOrderByInput {
+  StatusAsc = 'status_ASC',
+  StatusDesc = 'status_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC',
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  IdAsc = 'id_ASC',
+  IdDesc = 'id_DESC',
+  HeadlineAsc = 'headline_ASC',
+  HeadlineDesc = 'headline_DESC',
+  BodyAsc = 'body_ASC',
+  BodyDesc = 'body_DESC',
+}
+
+export type FaqPreviousValues = {
+  __typename?: 'FaqPreviousValues'
+  status: Status
+  updatedAt: Scalars['DateTime']
+  createdAt: Scalars['DateTime']
+  id: Scalars['ID']
+  headline?: Maybe<Scalars['String']>
+  body?: Maybe<Scalars['String']>
+}
+
+export type FaqScalarWhereInput = {
+  _search?: Maybe<Scalars['String']>
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<FaqScalarWhereInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<FaqScalarWhereInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<FaqScalarWhereInput>>
+  status?: Maybe<Status>
+  /** All values that are not equal to given value. */
+  status_not?: Maybe<Status>
+  /** All values that are contained in given list. */
+  status_in?: Maybe<Array<Status>>
+  /** All values that are not contained in given list. */
+  status_not_in?: Maybe<Array<Status>>
+  updatedAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  updatedAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  updatedAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  updatedAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  updatedAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  updatedAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  updatedAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  updatedAt_gte?: Maybe<Scalars['DateTime']>
+  createdAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  createdAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  createdAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  createdAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  createdAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  createdAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  createdAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  createdAt_gte?: Maybe<Scalars['DateTime']>
+  id?: Maybe<Scalars['ID']>
+  /** All values that are not equal to given value. */
+  id_not?: Maybe<Scalars['ID']>
+  /** All values that are contained in given list. */
+  id_in?: Maybe<Array<Scalars['ID']>>
+  /** All values that are not contained in given list. */
+  id_not_in?: Maybe<Array<Scalars['ID']>>
+  /** All values less than the given value. */
+  id_lt?: Maybe<Scalars['ID']>
+  /** All values less than or equal the given value. */
+  id_lte?: Maybe<Scalars['ID']>
+  /** All values greater than the given value. */
+  id_gt?: Maybe<Scalars['ID']>
+  /** All values greater than or equal the given value. */
+  id_gte?: Maybe<Scalars['ID']>
+  /** All values containing the given string. */
+  id_contains?: Maybe<Scalars['ID']>
+  /** All values not containing the given string. */
+  id_not_contains?: Maybe<Scalars['ID']>
+  /** All values starting with the given string. */
+  id_starts_with?: Maybe<Scalars['ID']>
+  /** All values not starting with the given string. */
+  id_not_starts_with?: Maybe<Scalars['ID']>
+  /** All values ending with the given string. */
+  id_ends_with?: Maybe<Scalars['ID']>
+  /** All values not ending with the given string. */
+  id_not_ends_with?: Maybe<Scalars['ID']>
+  headline?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  headline_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  headline_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  headline_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values less than the given value. */
+  headline_lt?: Maybe<Scalars['String']>
+  /** All values less than or equal the given value. */
+  headline_lte?: Maybe<Scalars['String']>
+  /** All values greater than the given value. */
+  headline_gt?: Maybe<Scalars['String']>
+  /** All values greater than or equal the given value. */
+  headline_gte?: Maybe<Scalars['String']>
+  /** All values containing the given string. */
+  headline_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  headline_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  headline_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  headline_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  headline_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string. */
+  headline_not_ends_with?: Maybe<Scalars['String']>
+  body?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  body_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  body_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  body_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values less than the given value. */
+  body_lt?: Maybe<Scalars['String']>
+  /** All values less than or equal the given value. */
+  body_lte?: Maybe<Scalars['String']>
+  /** All values greater than the given value. */
+  body_gt?: Maybe<Scalars['String']>
+  /** All values greater than or equal the given value. */
+  body_gte?: Maybe<Scalars['String']>
+  /** All values containing the given string. */
+  body_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  body_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  body_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  body_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  body_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string. */
+  body_not_ends_with?: Maybe<Scalars['String']>
+}
+
+export type FaqSubscriptionPayload = {
+  __typename?: 'FaqSubscriptionPayload'
+  mutation: MutationType
+  node?: Maybe<Faq>
+  updatedFields?: Maybe<Array<Scalars['String']>>
+  previousValues?: Maybe<FaqPreviousValues>
+}
+
+export type FaqSubscriptionWhereInput = {
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<FaqSubscriptionWhereInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<FaqSubscriptionWhereInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<FaqSubscriptionWhereInput>>
+  /** The subscription event gets dispatched when it's listed in mutation_in */
+  mutation_in?: Maybe<Array<MutationType>>
+  /** The subscription event gets only dispatched when one of the updated fields names is included in this list */
+  updatedFields_contains?: Maybe<Scalars['String']>
+  /** The subscription event gets only dispatched when all of the field names included in this list have been updated */
+  updatedFields_contains_every?: Maybe<Array<Scalars['String']>>
+  /** The subscription event gets only dispatched when some of the field names included in this list have been updated */
+  updatedFields_contains_some?: Maybe<Array<Scalars['String']>>
+  node?: Maybe<FaqWhereInput>
+}
+
+export type FaqUpdateInput = {
+  status?: Maybe<Status>
+  headline?: Maybe<Scalars['String']>
+  body?: Maybe<Scalars['String']>
+  language?: Maybe<LanguageUpdateOneWithoutFaqsInput>
+}
+
+export type FaqUpdateManyDataInput = {
+  status?: Maybe<Status>
+  headline?: Maybe<Scalars['String']>
+  body?: Maybe<Scalars['String']>
+}
+
+export type FaqUpdateManyMutationInput = {
+  status?: Maybe<Status>
+  headline?: Maybe<Scalars['String']>
+  body?: Maybe<Scalars['String']>
+}
+
+export type FaqUpdateManyWithoutLanguageInput = {
+  create?: Maybe<Array<FaqCreateWithoutLanguageInput>>
+  connect?: Maybe<Array<FaqWhereUniqueInput>>
+  set?: Maybe<Array<FaqWhereUniqueInput>>
+  disconnect?: Maybe<Array<FaqWhereUniqueInput>>
+  delete?: Maybe<Array<FaqWhereUniqueInput>>
+  update?: Maybe<Array<FaqUpdateWithWhereUniqueWithoutLanguageInput>>
+  updateMany?: Maybe<Array<FaqUpdateManyWithWhereNestedInput>>
+  deleteMany?: Maybe<Array<FaqScalarWhereInput>>
+  upsert?: Maybe<Array<FaqUpsertWithWhereUniqueWithoutLanguageInput>>
+}
+
+export type FaqUpdateManyWithWhereNestedInput = {
+  where: FaqScalarWhereInput
+  data: FaqUpdateManyDataInput
+}
+
+export type FaqUpdateWithoutLanguageDataInput = {
+  status?: Maybe<Status>
+  headline?: Maybe<Scalars['String']>
+  body?: Maybe<Scalars['String']>
+}
+
+export type FaqUpdateWithWhereUniqueWithoutLanguageInput = {
+  where: FaqWhereUniqueInput
+  data: FaqUpdateWithoutLanguageDataInput
+}
+
+export type FaqUpsertWithWhereUniqueWithoutLanguageInput = {
+  where: FaqWhereUniqueInput
+  update: FaqUpdateWithoutLanguageDataInput
+  create: FaqCreateWithoutLanguageInput
+}
+
+export type FaqWhereInput = {
+  _search?: Maybe<Scalars['String']>
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<FaqWhereInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<FaqWhereInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<FaqWhereInput>>
+  status?: Maybe<Status>
+  /** All values that are not equal to given value. */
+  status_not?: Maybe<Status>
+  /** All values that are contained in given list. */
+  status_in?: Maybe<Array<Status>>
+  /** All values that are not contained in given list. */
+  status_not_in?: Maybe<Array<Status>>
+  updatedAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  updatedAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  updatedAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  updatedAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  updatedAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  updatedAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  updatedAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  updatedAt_gte?: Maybe<Scalars['DateTime']>
+  createdAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  createdAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  createdAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  createdAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  createdAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  createdAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  createdAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  createdAt_gte?: Maybe<Scalars['DateTime']>
+  id?: Maybe<Scalars['ID']>
+  /** All values that are not equal to given value. */
+  id_not?: Maybe<Scalars['ID']>
+  /** All values that are contained in given list. */
+  id_in?: Maybe<Array<Scalars['ID']>>
+  /** All values that are not contained in given list. */
+  id_not_in?: Maybe<Array<Scalars['ID']>>
+  /** All values less than the given value. */
+  id_lt?: Maybe<Scalars['ID']>
+  /** All values less than or equal the given value. */
+  id_lte?: Maybe<Scalars['ID']>
+  /** All values greater than the given value. */
+  id_gt?: Maybe<Scalars['ID']>
+  /** All values greater than or equal the given value. */
+  id_gte?: Maybe<Scalars['ID']>
+  /** All values containing the given string. */
+  id_contains?: Maybe<Scalars['ID']>
+  /** All values not containing the given string. */
+  id_not_contains?: Maybe<Scalars['ID']>
+  /** All values starting with the given string. */
+  id_starts_with?: Maybe<Scalars['ID']>
+  /** All values not starting with the given string. */
+  id_not_starts_with?: Maybe<Scalars['ID']>
+  /** All values ending with the given string. */
+  id_ends_with?: Maybe<Scalars['ID']>
+  /** All values not ending with the given string. */
+  id_not_ends_with?: Maybe<Scalars['ID']>
+  headline?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  headline_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  headline_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  headline_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values less than the given value. */
+  headline_lt?: Maybe<Scalars['String']>
+  /** All values less than or equal the given value. */
+  headline_lte?: Maybe<Scalars['String']>
+  /** All values greater than the given value. */
+  headline_gt?: Maybe<Scalars['String']>
+  /** All values greater than or equal the given value. */
+  headline_gte?: Maybe<Scalars['String']>
+  /** All values containing the given string. */
+  headline_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  headline_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  headline_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  headline_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  headline_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string. */
+  headline_not_ends_with?: Maybe<Scalars['String']>
+  body?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  body_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  body_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  body_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values less than the given value. */
+  body_lt?: Maybe<Scalars['String']>
+  /** All values less than or equal the given value. */
+  body_lte?: Maybe<Scalars['String']>
+  /** All values greater than the given value. */
+  body_gt?: Maybe<Scalars['String']>
+  /** All values greater than or equal the given value. */
+  body_gte?: Maybe<Scalars['String']>
+  /** All values containing the given string. */
+  body_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  body_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  body_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  body_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  body_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string. */
+  body_not_ends_with?: Maybe<Scalars['String']>
+  language?: Maybe<LanguageWhereInput>
+}
+
+export type FaqWhereUniqueInput = {
+  id?: Maybe<Scalars['ID']>
+}
+
 export type File = {
   __typename?: 'File'
   /** signedUrl is valid for 30 minutes after upload, don't hang on to this. */
@@ -1302,7 +1720,9 @@ export type InsuranceDataCollection = {
   insuranceProvider?: Maybe<Scalars['String']>
   renewalDate?: Maybe<Scalars['LocalDate']>
   monthlyPremium?: Maybe<MonetaryAmountV2>
-  monthlyDiscountedPremium?: Maybe<MonetaryAmountV2>
+  monthlyNetPremium?: Maybe<MonetaryAmountV2>
+  monthlyGrossPremium?: Maybe<MonetaryAmountV2>
+  monthlyDiscount?: Maybe<MonetaryAmountV2>
 }
 
 export enum InsuranceStatus {
@@ -1617,12 +2037,33 @@ export type Language = Node & {
   translations?: Maybe<Array<Translation>>
   code: Scalars['String']
   name: Scalars['String']
-  marketingStory?: Maybe<MarketingStory>
+  marketingStories?: Maybe<Array<MarketingStory>>
+  faqs?: Maybe<Array<Faq>>
 }
 
 export type LanguageTranslationsArgs = {
   where?: Maybe<TranslationWhereInput>
   orderBy?: Maybe<TranslationOrderByInput>
+  skip?: Maybe<Scalars['Int']>
+  after?: Maybe<Scalars['String']>
+  before?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+}
+
+export type LanguageMarketingStoriesArgs = {
+  where?: Maybe<MarketingStoryWhereInput>
+  orderBy?: Maybe<MarketingStoryOrderByInput>
+  skip?: Maybe<Scalars['Int']>
+  after?: Maybe<Scalars['String']>
+  before?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+}
+
+export type LanguageFaqsArgs = {
+  where?: Maybe<FaqWhereInput>
+  orderBy?: Maybe<FaqOrderByInput>
   skip?: Maybe<Scalars['Int']>
   after?: Maybe<Scalars['String']>
   before?: Maybe<Scalars['String']>
@@ -1645,11 +2086,17 @@ export type LanguageCreateInput = {
   code: Scalars['String']
   name: Scalars['String']
   translations?: Maybe<TranslationCreateManyWithoutLanguageInput>
-  marketingStory?: Maybe<MarketingStoryCreateOneWithoutLanguageInput>
+  marketingStories?: Maybe<MarketingStoryCreateManyWithoutLanguageInput>
+  faqs?: Maybe<FaqCreateManyWithoutLanguageInput>
 }
 
-export type LanguageCreateOneWithoutMarketingStoryInput = {
-  create?: Maybe<LanguageCreateWithoutMarketingStoryInput>
+export type LanguageCreateOneWithoutFaqsInput = {
+  create?: Maybe<LanguageCreateWithoutFaqsInput>
+  connect?: Maybe<LanguageWhereUniqueInput>
+}
+
+export type LanguageCreateOneWithoutMarketingStoriesInput = {
+  create?: Maybe<LanguageCreateWithoutMarketingStoriesInput>
   connect?: Maybe<LanguageWhereUniqueInput>
 }
 
@@ -1658,18 +2105,28 @@ export type LanguageCreateOneWithoutTranslationsInput = {
   connect?: Maybe<LanguageWhereUniqueInput>
 }
 
-export type LanguageCreateWithoutMarketingStoryInput = {
+export type LanguageCreateWithoutFaqsInput = {
   status?: Maybe<Status>
   code: Scalars['String']
   name: Scalars['String']
   translations?: Maybe<TranslationCreateManyWithoutLanguageInput>
+  marketingStories?: Maybe<MarketingStoryCreateManyWithoutLanguageInput>
+}
+
+export type LanguageCreateWithoutMarketingStoriesInput = {
+  status?: Maybe<Status>
+  code: Scalars['String']
+  name: Scalars['String']
+  translations?: Maybe<TranslationCreateManyWithoutLanguageInput>
+  faqs?: Maybe<FaqCreateManyWithoutLanguageInput>
 }
 
 export type LanguageCreateWithoutTranslationsInput = {
   status?: Maybe<Status>
   code: Scalars['String']
   name: Scalars['String']
-  marketingStory?: Maybe<MarketingStoryCreateOneWithoutLanguageInput>
+  marketingStories?: Maybe<MarketingStoryCreateManyWithoutLanguageInput>
+  faqs?: Maybe<FaqCreateManyWithoutLanguageInput>
 }
 
 /** An edge in a connection. */
@@ -1737,7 +2194,8 @@ export type LanguageUpdateInput = {
   code?: Maybe<Scalars['String']>
   name?: Maybe<Scalars['String']>
   translations?: Maybe<TranslationUpdateManyWithoutLanguageInput>
-  marketingStory?: Maybe<MarketingStoryUpdateOneWithoutLanguageInput>
+  marketingStories?: Maybe<MarketingStoryUpdateManyWithoutLanguageInput>
+  faqs?: Maybe<FaqUpdateManyWithoutLanguageInput>
 }
 
 export type LanguageUpdateManyMutationInput = {
@@ -1746,13 +2204,22 @@ export type LanguageUpdateManyMutationInput = {
   name?: Maybe<Scalars['String']>
 }
 
-export type LanguageUpdateOneWithoutMarketingStoryInput = {
-  create?: Maybe<LanguageCreateWithoutMarketingStoryInput>
+export type LanguageUpdateOneWithoutFaqsInput = {
+  create?: Maybe<LanguageCreateWithoutFaqsInput>
   connect?: Maybe<LanguageWhereUniqueInput>
   disconnect?: Maybe<Scalars['Boolean']>
   delete?: Maybe<Scalars['Boolean']>
-  update?: Maybe<LanguageUpdateWithoutMarketingStoryDataInput>
-  upsert?: Maybe<LanguageUpsertWithoutMarketingStoryInput>
+  update?: Maybe<LanguageUpdateWithoutFaqsDataInput>
+  upsert?: Maybe<LanguageUpsertWithoutFaqsInput>
+}
+
+export type LanguageUpdateOneWithoutMarketingStoriesInput = {
+  create?: Maybe<LanguageCreateWithoutMarketingStoriesInput>
+  connect?: Maybe<LanguageWhereUniqueInput>
+  disconnect?: Maybe<Scalars['Boolean']>
+  delete?: Maybe<Scalars['Boolean']>
+  update?: Maybe<LanguageUpdateWithoutMarketingStoriesDataInput>
+  upsert?: Maybe<LanguageUpsertWithoutMarketingStoriesInput>
 }
 
 export type LanguageUpdateOneWithoutTranslationsInput = {
@@ -1764,23 +2231,38 @@ export type LanguageUpdateOneWithoutTranslationsInput = {
   upsert?: Maybe<LanguageUpsertWithoutTranslationsInput>
 }
 
-export type LanguageUpdateWithoutMarketingStoryDataInput = {
+export type LanguageUpdateWithoutFaqsDataInput = {
   status?: Maybe<Status>
   code?: Maybe<Scalars['String']>
   name?: Maybe<Scalars['String']>
   translations?: Maybe<TranslationUpdateManyWithoutLanguageInput>
+  marketingStories?: Maybe<MarketingStoryUpdateManyWithoutLanguageInput>
+}
+
+export type LanguageUpdateWithoutMarketingStoriesDataInput = {
+  status?: Maybe<Status>
+  code?: Maybe<Scalars['String']>
+  name?: Maybe<Scalars['String']>
+  translations?: Maybe<TranslationUpdateManyWithoutLanguageInput>
+  faqs?: Maybe<FaqUpdateManyWithoutLanguageInput>
 }
 
 export type LanguageUpdateWithoutTranslationsDataInput = {
   status?: Maybe<Status>
   code?: Maybe<Scalars['String']>
   name?: Maybe<Scalars['String']>
-  marketingStory?: Maybe<MarketingStoryUpdateOneWithoutLanguageInput>
+  marketingStories?: Maybe<MarketingStoryUpdateManyWithoutLanguageInput>
+  faqs?: Maybe<FaqUpdateManyWithoutLanguageInput>
 }
 
-export type LanguageUpsertWithoutMarketingStoryInput = {
-  update: LanguageUpdateWithoutMarketingStoryDataInput
-  create: LanguageCreateWithoutMarketingStoryInput
+export type LanguageUpsertWithoutFaqsInput = {
+  update: LanguageUpdateWithoutFaqsDataInput
+  create: LanguageCreateWithoutFaqsInput
+}
+
+export type LanguageUpsertWithoutMarketingStoriesInput = {
+  update: LanguageUpdateWithoutMarketingStoriesDataInput
+  create: LanguageCreateWithoutMarketingStoriesInput
 }
 
 export type LanguageUpsertWithoutTranslationsInput = {
@@ -1917,7 +2399,12 @@ export type LanguageWhereInput = {
   translations_every?: Maybe<TranslationWhereInput>
   translations_some?: Maybe<TranslationWhereInput>
   translations_none?: Maybe<TranslationWhereInput>
-  marketingStory?: Maybe<MarketingStoryWhereInput>
+  marketingStories_every?: Maybe<MarketingStoryWhereInput>
+  marketingStories_some?: Maybe<MarketingStoryWhereInput>
+  marketingStories_none?: Maybe<MarketingStoryWhereInput>
+  faqs_every?: Maybe<FaqWhereInput>
+  faqs_some?: Maybe<FaqWhereInput>
+  faqs_none?: Maybe<FaqWhereInput>
 }
 
 export type LanguageWhereUniqueInput = {
@@ -1965,8 +2452,8 @@ export type MarketingStory = Node & {
   duration?: Maybe<Scalars['Float']>
   importance?: Maybe<Scalars['Int']>
   backgroundColor: HedvigColor
-  language?: Maybe<Language>
   environment?: Maybe<Environment>
+  language?: Maybe<Language>
 }
 
 /** A connection to a list of items. */
@@ -1986,7 +2473,7 @@ export type MarketingStoryCreateInput = {
   backgroundColor: HedvigColor
   environment?: Maybe<Environment>
   asset?: Maybe<AssetCreateOneWithoutAssetMarketingStoryInput>
-  language?: Maybe<LanguageCreateOneWithoutMarketingStoryInput>
+  language?: Maybe<LanguageCreateOneWithoutMarketingStoriesInput>
 }
 
 export type MarketingStoryCreateManyWithoutAssetInput = {
@@ -1994,9 +2481,9 @@ export type MarketingStoryCreateManyWithoutAssetInput = {
   connect?: Maybe<Array<MarketingStoryWhereUniqueInput>>
 }
 
-export type MarketingStoryCreateOneWithoutLanguageInput = {
-  create?: Maybe<MarketingStoryCreateWithoutLanguageInput>
-  connect?: Maybe<MarketingStoryWhereUniqueInput>
+export type MarketingStoryCreateManyWithoutLanguageInput = {
+  create?: Maybe<Array<MarketingStoryCreateWithoutLanguageInput>>
+  connect?: Maybe<Array<MarketingStoryWhereUniqueInput>>
 }
 
 export type MarketingStoryCreateWithoutAssetInput = {
@@ -2005,7 +2492,7 @@ export type MarketingStoryCreateWithoutAssetInput = {
   importance?: Maybe<Scalars['Int']>
   backgroundColor: HedvigColor
   environment?: Maybe<Environment>
-  language?: Maybe<LanguageCreateOneWithoutMarketingStoryInput>
+  language?: Maybe<LanguageCreateOneWithoutMarketingStoriesInput>
 }
 
 export type MarketingStoryCreateWithoutLanguageInput = {
@@ -2208,7 +2695,7 @@ export type MarketingStoryUpdateInput = {
   backgroundColor?: Maybe<HedvigColor>
   environment?: Maybe<Environment>
   asset?: Maybe<AssetUpdateOneWithoutAssetMarketingStoryInput>
-  language?: Maybe<LanguageUpdateOneWithoutMarketingStoryInput>
+  language?: Maybe<LanguageUpdateOneWithoutMarketingStoriesInput>
 }
 
 export type MarketingStoryUpdateManyDataInput = {
@@ -2239,18 +2726,21 @@ export type MarketingStoryUpdateManyWithoutAssetInput = {
   upsert?: Maybe<Array<MarketingStoryUpsertWithWhereUniqueWithoutAssetInput>>
 }
 
+export type MarketingStoryUpdateManyWithoutLanguageInput = {
+  create?: Maybe<Array<MarketingStoryCreateWithoutLanguageInput>>
+  connect?: Maybe<Array<MarketingStoryWhereUniqueInput>>
+  set?: Maybe<Array<MarketingStoryWhereUniqueInput>>
+  disconnect?: Maybe<Array<MarketingStoryWhereUniqueInput>>
+  delete?: Maybe<Array<MarketingStoryWhereUniqueInput>>
+  update?: Maybe<Array<MarketingStoryUpdateWithWhereUniqueWithoutLanguageInput>>
+  updateMany?: Maybe<Array<MarketingStoryUpdateManyWithWhereNestedInput>>
+  deleteMany?: Maybe<Array<MarketingStoryScalarWhereInput>>
+  upsert?: Maybe<Array<MarketingStoryUpsertWithWhereUniqueWithoutLanguageInput>>
+}
+
 export type MarketingStoryUpdateManyWithWhereNestedInput = {
   where: MarketingStoryScalarWhereInput
   data: MarketingStoryUpdateManyDataInput
-}
-
-export type MarketingStoryUpdateOneWithoutLanguageInput = {
-  create?: Maybe<MarketingStoryCreateWithoutLanguageInput>
-  connect?: Maybe<MarketingStoryWhereUniqueInput>
-  disconnect?: Maybe<Scalars['Boolean']>
-  delete?: Maybe<Scalars['Boolean']>
-  update?: Maybe<MarketingStoryUpdateWithoutLanguageDataInput>
-  upsert?: Maybe<MarketingStoryUpsertWithoutLanguageInput>
 }
 
 export type MarketingStoryUpdateWithoutAssetDataInput = {
@@ -2259,7 +2749,7 @@ export type MarketingStoryUpdateWithoutAssetDataInput = {
   importance?: Maybe<Scalars['Int']>
   backgroundColor?: Maybe<HedvigColor>
   environment?: Maybe<Environment>
-  language?: Maybe<LanguageUpdateOneWithoutMarketingStoryInput>
+  language?: Maybe<LanguageUpdateOneWithoutMarketingStoriesInput>
 }
 
 export type MarketingStoryUpdateWithoutLanguageDataInput = {
@@ -2276,15 +2766,21 @@ export type MarketingStoryUpdateWithWhereUniqueWithoutAssetInput = {
   data: MarketingStoryUpdateWithoutAssetDataInput
 }
 
-export type MarketingStoryUpsertWithoutLanguageInput = {
-  update: MarketingStoryUpdateWithoutLanguageDataInput
-  create: MarketingStoryCreateWithoutLanguageInput
+export type MarketingStoryUpdateWithWhereUniqueWithoutLanguageInput = {
+  where: MarketingStoryWhereUniqueInput
+  data: MarketingStoryUpdateWithoutLanguageDataInput
 }
 
 export type MarketingStoryUpsertWithWhereUniqueWithoutAssetInput = {
   where: MarketingStoryWhereUniqueInput
   update: MarketingStoryUpdateWithoutAssetDataInput
   create: MarketingStoryCreateWithoutAssetInput
+}
+
+export type MarketingStoryUpsertWithWhereUniqueWithoutLanguageInput = {
+  where: MarketingStoryWhereUniqueInput
+  update: MarketingStoryUpdateWithoutLanguageDataInput
+  create: MarketingStoryCreateWithoutLanguageInput
 }
 
 export type MarketingStoryWhereInput = {
@@ -3715,7 +4211,13 @@ export type MemberOfferQuery = { __typename?: 'Query' } & {
   lastQuoteOfMember:
     | ({ __typename?: 'CompleteQuote' } & Pick<
         CompleteQuote,
-        'id' | 'dataCollectionId' | 'ssn' | 'email' | 'firstName' | 'lastName'
+        | 'id'
+        | 'dataCollectionId'
+        | 'ssn'
+        | 'email'
+        | 'firstName'
+        | 'lastName'
+        | 'startDate'
       > & {
           currentInsurer: Maybe<
             { __typename?: 'CurrentInsurer' } & Pick<
@@ -4218,6 +4720,7 @@ export const MemberOfferDocument = gql`
         email
         firstName
         lastName
+        startDate
         currentInsurer {
           id
           displayName

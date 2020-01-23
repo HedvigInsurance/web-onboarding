@@ -35,6 +35,7 @@ export const masks: Record<string, Mask> = {
 }
 
 const Wrapper = styled.div<{ errors?: string }>`
+  position: relative;
   background: ${colorsV2.white};
   border-radius: 8px;
   border: 1px solid

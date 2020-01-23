@@ -3,6 +3,7 @@ import { colorsV2, fonts } from '@hedviginsurance/brand/dist'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { Price } from '../components'
+import { StartDate } from '../Introduction/Sidebar/StartDate'
 import { CompleteOfferDataForMember, WithEmailForm } from '../types'
 import {
   getInsuranceType,
@@ -40,11 +41,18 @@ const Excerpt = styled('div')`
   }
 `
 
+const StartDateWrapper = styled.div`
+  position: relative;
+  margin-top: 0.375rem;
+  margin-bottom: 2rem;
+`
+
 const InsuranceTypeLabel = styled('div')`
   font-size: 0.75rem;
   color: ${colorsV2.gray};
   text-transform: uppercase;
 `
+
 const InsuranceType = styled('div')`
   font-size: 2rem;
   font-family: ${fonts.GEOMANIST};
@@ -58,12 +66,14 @@ const InsuranceType = styled('div')`
 
 interface Props extends WithEmailForm {
   offer: CompleteOfferDataForMember
+  refetch: () => Promise<void>
 }
 
 export const CheckoutContent: React.FC<Props> = ({
   offer,
   email,
   onEmailChange,
+  refetch,
 }) => {
   const textKeys = useTextKeys()
   const monthlyCostDeduction = isMonthlyCostDeduction(offer.redeemedCampaigns)
@@ -92,6 +102,16 @@ export const CheckoutContent: React.FC<Props> = ({
         </Excerpt>
 
         <UserDetailsForm email={email} onEmailChange={onEmailChange} />
+
+        <StartDateWrapper>
+          <StartDate
+            dataCollectionId={offer.lastQuoteOfMember.dataCollectionId}
+            startDate={offer.lastQuoteOfMember.startDate}
+            offerId={offer.lastQuoteOfMember.id}
+            currentInsurer={offer.lastQuoteOfMember.currentInsurer || null}
+            refetch={refetch}
+          />
+        </StartDateWrapper>
 
         <InsuranceSummary offer={offer} />
 

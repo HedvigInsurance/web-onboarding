@@ -141,9 +141,15 @@ interface Props {
   offer: CompleteOfferDataForMember
   isOpen?: boolean
   onClose?: () => void
+  refetch: () => Promise<void>
 }
 
-export const Checkout: React.FC<Props> = ({ offer, isOpen, onClose }) => {
+export const Checkout: React.FC<Props> = ({
+  offer,
+  isOpen,
+  onClose,
+  refetch,
+}) => {
   const [email, setEmail] = React.useState(offer.lastQuoteOfMember.email ?? '')
   const [visibilityState, setVisibilityState] = React.useState(
     VisibilityState.CLOSED,
@@ -215,6 +221,7 @@ export const Checkout: React.FC<Props> = ({ offer, isOpen, onClose }) => {
               offer={offer}
               email={email}
               onEmailChange={setEmail}
+              refetch={refetch}
             />
           </InnerWrapper>
         </OuterScrollWrapper>

@@ -21,6 +21,8 @@ interface Props {
   currentInsurer: CurrentInsurer | null
   startDate: string | null
   offerId: string
+  refetch: () => Promise<void>
+  modal?: boolean
 }
 
 const RowButton = styled.button<{ datePickerOpen: boolean }>`
@@ -30,7 +32,7 @@ const RowButton = styled.button<{ datePickerOpen: boolean }>`
   justify-content: space-between;
   border: 1px solid ${colorsV2.lightgray};
   outline: 0;
-  background-color: transparent;
+  background-color: ${colorsV2.white};
   border-radius: 8px;
   align-items: center;
   cursor: pointer;
@@ -139,9 +141,13 @@ const DateInputModalWrapper = styled.div<{ isOpen: boolean }>`
   border-radius: 8px;
 `
 
-const DateInputModal = styled(DateInput)`
+const StyledDateInput = styled(DateInput)<{ modal: boolean }>`
+  ${(props) =>
+    props.modal &&
+    `
   top: 50%;
   transform: translateY(-50%);
+  `}
 `
 
 export const StartDate: React.FC<Props> = ({
@@ -149,6 +155,8 @@ export const StartDate: React.FC<Props> = ({
   startDate,
   currentInsurer,
   dataCollectionId,
+  refetch,
+  modal = false,
 }) => {
   const { data: externalInsuranceData } = useExternalInsuranceDataQuery({
     variables: {
@@ -173,6 +181,10 @@ export const StartDate: React.FC<Props> = ({
   const textKeys = useTextKeys()
   const [setStartDate] = useStartDateMutation()
   const [removeStartDate] = useRemoveStartDateMutation()
+
+  React.useEffect(() => {
+    setDateValue(getDefaultDateValue())
+  }, [startDate])
 
   const handleFail = () => {
     setShowError(true)
@@ -217,13 +229,45 @@ export const StartDate: React.FC<Props> = ({
 
   const gqlDateFormat = 'yyyy-MM-dd'
 
+  const getDateInput = () => (
+    <StyledDateInput
+      open={datePickerOpen}
+      setOpen={setDatePickerOpen}
+      date={dateValue || new Date()}
+      setDate={(newDateValue) => {
+        setDateValue(newDateValue)
+        setShowError(false)
+        if (newDateValue === null) {
+          removeStartDate({
+            variables: {
+              quoteId: offerId,
+            },
+          }).catch(handleFail)
+        } else {
+          setStartDate({
+            variables: {
+              quoteId: offerId,
+              date: format(newDateValue, gqlDateFormat),
+            },
+          })
+            .then(() => refetch())
+            .catch(handleFail)
+        }
+      }}
+      hasCurrentInsurer={currentInsurer !== null}
+      modal={modal}
+    />
+  )
+
   return (
     <>
       <ErrorMessage
         aria-hidden={!showError}
         initial={{ height: 0, opacity: 0 }}
         animate={
-          showError ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }
+          showError
+            ? { height: 'auto', opacity: 1, display: 'block' }
+            : { height: 0, opacity: 0, display: 'none' }
         }
         transition={{
           type: 'spring',
@@ -248,32 +292,14 @@ export const StartDate: React.FC<Props> = ({
           />
         </Value>
       </RowButton>
-      <DateInputModalWrapper isOpen={datePickerOpen}>
-        <DateInputModal
-          open={datePickerOpen}
-          setOpen={setDatePickerOpen}
-          date={dateValue || new Date()}
-          setDate={(newDateValue) => {
-            setDateValue(newDateValue)
-            setShowError(false)
-            if (newDateValue === null) {
-              removeStartDate({
-                variables: {
-                  quoteId: offerId,
-                },
-              }).catch(handleFail)
-            } else {
-              setStartDate({
-                variables: {
-                  quoteId: offerId,
-                  date: format(newDateValue, gqlDateFormat),
-                },
-              }).catch(handleFail)
-            }
-          }}
-          hasCurrentInsurer={currentInsurer !== null}
-        />
-      </DateInputModalWrapper>
+      {modal ? (
+        <DateInputModalWrapper isOpen={datePickerOpen}>
+          {getDateInput()}
+        </DateInputModalWrapper>
+      ) : (
+        getDateInput()
+      )}
+
       {currentInsurer?.switchable && (
         <HandleSwitchingWrapper>
           <HandleSwitchingLabel>
@@ -296,7 +322,9 @@ export const StartDate: React.FC<Props> = ({
                     quoteId: offerId,
                     date: format(new Date(), gqlDateFormat),
                   },
-                }).catch(handleFail)
+                })
+                  .then(() => refetch())
+                  .catch(handleFail)
               }
 
               setDateValue(newValue ? null : new Date())

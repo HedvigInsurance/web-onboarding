@@ -79,6 +79,7 @@ export const OfferNew: React.FC = () => {
           offer={data}
           isOpen={checkoutMatch !== null}
           onClose={() => toggleCheckout(false)}
+          refetch={refetch as () => Promise<any>}
         />
       </SessionTokenGuard>
     </Page>
