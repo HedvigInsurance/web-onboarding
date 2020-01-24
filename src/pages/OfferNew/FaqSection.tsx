@@ -29,7 +29,7 @@ const SectionWrapper = styled.div`
   padding: 8rem 2rem 12rem 2rem;
   margin-top: -10px;
   background: ${colorsV2.black};
-  color: #fff;
+  color: ${colorsV2.white};
 
   @media (max-width: 420px) {
     padding-left: 1rem;
@@ -115,7 +115,7 @@ const ExpanderIcon = styled.svg<Openable>`
   flex-shrink: 0;
   width: 0.8rem;
   height: 0.8rem;
-  fill: #fff;
+  fill: ${colorsV2.white};
 `
 
 interface AccordionProps {
@@ -124,10 +124,7 @@ interface AccordionProps {
   body: string
 }
 
-export const Accordion: React.FunctionComponent<AccordionProps> = ({
-  headline,
-  body,
-}) => {
+export const Accordion: React.FC<AccordionProps> = ({ headline, body }) => {
   const [isOpen, setIsOpen] = React.useState(false)
   const toggleIsOpen = () => setIsOpen(!isOpen)
 
