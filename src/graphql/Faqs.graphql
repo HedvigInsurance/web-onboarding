@@ -1,0 +1,9 @@
+query Faqs($language: String!) {
+  languages(where: { code: $language }) {
+    faqs {
+      id
+      headline
+      body
+    }
+  }
+}

@@ -39,6 +39,11 @@ const PerilSlideRow = styled.div`
   justify-content: flex-start;
   margin: 0 -2rem;
   padding-left: 4rem;
+
+  @media (max-width: 420px) {
+    margin: 0 -1rem;
+    padding-left: 2rem;
+  }
 `
 
 const SwiperDots = styled.div`

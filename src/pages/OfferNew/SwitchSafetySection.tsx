@@ -14,11 +14,11 @@ import {
 } from './components'
 
 const OuterWrapper = styled.div`
-  padding: 3rem 0;
+  padding: 3rem 0 5rem 0;
   background-color: ${colorsV2.offwhite};
 
   @media (min-width: 376px) {
-    padding: 5rem 0;
+    padding: 5rem 0 10rem 0;
   }
 `
 
