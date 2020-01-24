@@ -25,6 +25,7 @@ import {
 import { resolveHouseInformation } from './houseInformation'
 import { Landing } from './Landing'
 import { resolvePersonalInformation } from './personalInformation'
+import { LanguagePicker } from './LanguagePicker'
 
 const EmbarkStyling = styled.div`
   height: 100%;
@@ -127,6 +128,7 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
               passage={currentPassage}
               storyData={state.data}
               startPageLink={props.startPageLink}
+              customTrailingContent={<LanguagePicker />}
             />
           )}
         </StorageContainer>
