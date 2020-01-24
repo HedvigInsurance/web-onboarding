@@ -9,6 +9,7 @@ import { useFaqsQuery } from 'generated/graphql'
 import React from 'react'
 import AnimateHeight from 'react-animate-height'
 import ReactMarkdown from 'react-markdown/with-html'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 import {
   Column,
   ColumnSpacing,
@@ -16,7 +17,6 @@ import {
   HeadingWhite,
   PreHeading,
 } from './components'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
 
 const BlobSvg = styled.svg`
   width: 100%;
