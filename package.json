@@ -80,7 +80,7 @@
     "@emotion/styled": "^10.0.23",
     "@hedviginsurance/brand": "^2.0.0",
     "@hedviginsurance/cli": "^2.3.2",
-    "@hedviginsurance/embark": "^1.0.53",
+    "@hedviginsurance/embark": "^1.0.54",
     "@hedviginsurance/textkeyfy": "^1.2.2",
     "@hedviginsurance/web-survival-kit": "^1.8.2",
     "@segment/snippet": "^4.4.0",

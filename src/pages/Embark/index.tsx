@@ -24,6 +24,7 @@ import {
 } from './externalInsuranceProvider'
 import { resolveHouseInformation } from './houseInformation'
 import { Landing } from './Landing'
+import { LanguagePicker } from './LanguagePicker'
 import { resolvePersonalInformation } from './personalInformation'
 
 const EmbarkStyling = styled.div`
@@ -127,6 +128,7 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
               passage={currentPassage}
               storyData={state.data}
               startPageLink={props.startPageLink}
+              customTrailingContent={<LanguagePicker />}
             />
           )}
         </StorageContainer>
