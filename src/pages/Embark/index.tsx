@@ -24,8 +24,8 @@ import {
 } from './externalInsuranceProvider'
 import { resolveHouseInformation } from './houseInformation'
 import { Landing } from './Landing'
-import { resolvePersonalInformation } from './personalInformation'
 import { LanguagePicker } from './LanguagePicker'
+import { resolvePersonalInformation } from './personalInformation'
 
 const EmbarkStyling = styled.div`
   height: 100%;

@@ -1,8 +1,8 @@
-import * as React from 'react'
-import { motion } from 'framer-motion'
-import { colorsV2 } from '@hedviginsurance/brand'
 import styled from '@emotion/styled'
+import { colorsV2 } from '@hedviginsurance/brand'
 import { LanguageIcon } from 'components/icons/LanguageIcon'
+import { motion } from 'framer-motion'
+import * as React from 'react'
 import { Link } from 'react-router-dom'
 
 const Wrapper = styled.div`
