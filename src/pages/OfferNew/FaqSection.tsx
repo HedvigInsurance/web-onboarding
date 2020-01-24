@@ -16,6 +16,7 @@ import {
   HeadingWhite,
   PreHeading,
 } from './components'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 
 const BlobSvg = styled.svg`
   width: 100%;
@@ -56,6 +57,20 @@ const AccordionWrapper = styled('li')`
 const AccordionHeadline = styled('h3')`
   font-size: 1.25rem;
   line-height: 1.25;
+`
+
+const AccordionBody = styled(ReactMarkdown)`
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    &:first-of-type {
+      margin-top: 0;
+    }
+  }
 `
 
 const ExpandToggler = styled('button')`
@@ -127,7 +142,7 @@ export const Accordion: React.FunctionComponent<AccordionProps> = ({
         </ExpandToggler>
       </AccordionHeadline>
       <AnimateHeight height={isOpen ? 'auto' : 0}>
-        <ReactMarkdown source={body} escapeHtml={false} />
+        <AccordionBody source={body} escapeHtml={false} />
       </AnimateHeight>
     </AccordionWrapper>
   )
@@ -138,6 +153,7 @@ export const FaqSection: React.FC = () => {
   const language = getLanguageIsoCode(pathLanguage)
   const faqs = useFaqsQuery({ variables: { language } })
   const languageData = faqs?.data?.languages[0]
+  const textKeys = useTextKeys()
 
   return (
     <>
@@ -147,8 +163,8 @@ export const FaqSection: React.FC = () => {
       <SectionWrapper>
         <Container>
           <Column>
-            <PreHeading>Vanliga frågor</PreHeading>
-            <SmallerHeading>Vanliga frågor vid byte till Hedvig</SmallerHeading>
+            <PreHeading>{textKeys.OFFER_FAQ_PRE_HEADING()}</PreHeading>
+            <SmallerHeading>{textKeys.OFFER_FAQ_HEADING()}</SmallerHeading>
             <AccordionsWrapper>
               {(languageData?.faqs ?? []).map((faq) => (
                 <Accordion

@@ -4157,13 +4157,11 @@ export type FaqsQueryVariables = {
 export type FaqsQuery = { __typename?: 'Query' } & {
   languages: Array<
     Maybe<
-      { __typename?: 'Language' } & Pick<Language, 'id'> & {
-          faqs: Maybe<
-            Array<
-              { __typename?: 'Faq' } & Pick<Faq, 'id' | 'headline' | 'body'>
-            >
-          >
-        }
+      { __typename?: 'Language' } & {
+        faqs: Maybe<
+          Array<{ __typename?: 'Faq' } & Pick<Faq, 'id' | 'headline' | 'body'>>
+        >
+      }
     >
   >
 }
@@ -4637,7 +4635,6 @@ export type ExternalInsuranceDataStatusSubscriptionResult = ApolloReactCommon.Su
 export const FaqsDocument = gql`
   query Faqs($language: String!) {
     languages(where: { code: $language }) {
-      id
       faqs {
         id
         headline
