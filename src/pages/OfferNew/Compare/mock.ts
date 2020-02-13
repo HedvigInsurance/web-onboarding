@@ -70,7 +70,7 @@ export const otherCompanies: CompanyProperties[] = [
   },
   {
     name: 'Moderna Försäkringar Grundskydd',
-    id: 'Moderna Försäkringar',
+    id: 'Moderna',
     propertyProtection: true,
     travelProtection: true,
     assaultProtection: true,
