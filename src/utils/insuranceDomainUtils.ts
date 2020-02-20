@@ -71,6 +71,21 @@ export const getInsurancePDFTextKey = (
   return map[insuranceType]
 }
 
+export const getEUPrebuyPDFTextKey = (insuranceType: InsuranceType): string => {
+  const map = {
+    [InsuranceType.Rent]: 'TERMS_PDF_PREBUY_EU_RENT_URL',
+    [InsuranceType.Brf]: 'TERMS_PDF_PREBUY_EU_BRF_URL',
+    [InsuranceType.StudentRent]: 'TERMS_PDF_PREBUY_EU_STUDENT_RENT_URL',
+    [InsuranceType.StudentBrf]: 'TERMS_PDF_PREBUY_EU_STUDENT_BRF_URL',
+    [InsuranceType.House]: 'TERMS_PDF_PREBUY_EU_HOUSE_URL',
+  }
+
+  if (!map[insuranceType]) {
+    throw new Error(`Invalid insurance type ${insuranceType}`)
+  }
+  return map[insuranceType]
+}
+
 export const getInsuranceAmountTextKey = (
   insuranceType: InsuranceType,
 ): string => {
