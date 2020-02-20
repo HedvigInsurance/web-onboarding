@@ -6,6 +6,7 @@ import { InsuranceType } from 'generated/graphql'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import {
+  getEUPrebuyPDFTextKey,
   getInsurancePDFTextKey,
   getPrebuyPDFTextKey,
 } from 'utils/insuranceDomainUtils'
@@ -43,6 +44,7 @@ const Header = styled.div`
 const Links = styled.div`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   margin-top: 4rem;
   align-items: center;
 
@@ -61,6 +63,7 @@ const Link = styled.a`
   font-size: 1rem;
   text-decoration: none;
   margin-right: 1rem;
+  margin-top: 0.5rem;
   transition: all 0.1s;
 
   :last-child {
@@ -114,6 +117,14 @@ export const InsuranceValues: React.FC<Props> = ({ insuranceType }) => {
         >
           <DocumentIcon />
           {textKeys.COVERAGE_PRESALEINFORMATION_BUTTON()}
+        </Link>
+
+        <Link
+          href={textKeys[getEUPrebuyPDFTextKey(insuranceType)]()}
+          target="_blank"
+        >
+          <DocumentIcon />
+          {textKeys.COVERAGE_PRESALEINFORMATIONEU_BUTTON()}
         </Link>
       </Links>
     </Wrapper>
