@@ -51,7 +51,7 @@ const adtractionProductMap: { [type in InsuranceType]: number } = {
   STUDENT_BRF: 1423041022,
   RENT: 1417356528,
   STUDENT_RENT: 1412601108,
-  HOUSE: 0,
+  HOUSE: 1477448913,
 }
 
 export const adtraction = (
@@ -62,9 +62,6 @@ export const adtraction = (
   insuranceType: InsuranceType,
 ) => {
   try {
-    if (insuranceType === InsuranceType.House) {
-      return
-    }
     const adt = ADT
     adt.Tag = adt.Tag || {}
     adt.Tag.t = 3
