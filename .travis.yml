@@ -1,14 +1,14 @@
 language: node_js
 
 node_js:
-- 'v10.14.1'
+- 'v10.19.0'
 
 cache:
   directories:
   - node_modules
 
 install:
-- npm i -g yarn@1.19.2
+- npm i -g yarn@1.22.0
 - yarn install
 
 script:
