@@ -33,7 +33,7 @@ const Container = styled.span`
   justify-content: flex-start;
   text-align: left;
 
-  padding: 0.5rem;
+  padding: 0.75rem 0.5rem;
   border-radius: 0.25rem;
   background-color: ${colorsV2.white};
   cursor: pointer;
@@ -46,6 +46,7 @@ const Container = styled.span`
     text-align: center;
     width: 7.25rem;
     height: 5.75rem;
+    padding: 0.5rem;
     border: 1px solid ${colorsV2.lightgray};
   }
 
