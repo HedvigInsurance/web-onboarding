@@ -1,23 +1,29 @@
+import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { Button } from 'new-components/buttons'
 import { CompleteOfferDataForMember } from 'pages/OfferNew/types'
-import { getInsuranceType, insuranceTypeTextKeys } from 'pages/OfferNew/utils'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useVariation, Variation } from 'utils/hooks/useVariation'
+import { getInsuranceType, insuranceTypeTextKeys } from '../../utils'
 
 interface Hidable {
   isVisible: boolean
 }
 
-const Wrapper = styled.div<Hidable & { displayNone: boolean }>`
+interface Centerable {
+  centered: boolean
+}
+
+const Wrapper = styled.div<Hidable & Centerable & { displayNone: boolean }>`
   display: ${({ displayNone }) => (displayNone ? 'none' : 'flex')};
   position: fixed;
   right: 0;
   bottom: 0;
   left: 0;
   z-index: 1010;
-  justify-content: space-between;
+  justify-content: ${({ centered }) => (centered ? 'center' : 'space-between')};
   transform: ${({ isVisible }) =>
     isVisible ? 'translateY(0)' : 'translateY(100%)'};
   opacity: ${({ isVisible }) => (isVisible ? 1 : 0.8)};
@@ -62,8 +68,12 @@ const PriceUnit = styled.span`
   line-height: 1.25;
 `
 
-const CtaWrapper = styled.div`
-  padding-right: calc(80px + 1rem);
+const CtaWrapper = styled.div<Centerable>`
+  ${({ centered }) =>
+    !centered &&
+    css`
+      padding-right: calc(80px + 1rem);
+    `};
 `
 const Cta = styled(Button)`
   @media (max-width: 374px) {
@@ -99,29 +109,39 @@ export const StickyBottomSidebar: React.FC<Hidable & {
     [isVisible],
   )
   const textKeys = useTextKeys()
+  const variation = useVariation()
+  const shouldCenterCta = [Variation.ANDROID, Variation.IOS].includes(
+    variation!,
+  )
 
   return (
-    <Wrapper isVisible={reallyIsVisible} displayNone={displayNone}>
-      <TextWrapper>
-        <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
-        <Title>
-          {textKeys[
-            insuranceTypeTextKeys[getInsuranceType(offer.lastQuoteOfMember)]
-          ]()}
-        </Title>
-        <div>
-          <Price>
-            {Number(offer.lastQuoteOfMember.insuranceCost.monthlyNet.amount)}
-            &nbsp;
-          </Price>
-          <PriceUnit>
-            {textKeys.SIDEBAR_PRICE_SUFFIX_UNIT()}
-            {textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL()}
-          </PriceUnit>
-        </div>
-      </TextWrapper>
+    <Wrapper
+      isVisible={reallyIsVisible}
+      displayNone={displayNone}
+      centered={shouldCenterCta}
+    >
+      {!shouldCenterCta && (
+        <TextWrapper>
+          <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
+          <Title>
+            {textKeys[
+              insuranceTypeTextKeys[getInsuranceType(offer.lastQuoteOfMember)]
+            ]()}
+          </Title>
+          <div>
+            <Price>
+              {Number(offer.lastQuoteOfMember.insuranceCost.monthlyNet.amount)}
+              &nbsp;
+            </Price>
+            <PriceUnit>
+              {textKeys.SIDEBAR_PRICE_SUFFIX_UNIT()}
+              {textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL()}
+            </PriceUnit>
+          </div>
+        </TextWrapper>
+      )}
 
-      <CtaWrapper>
+      <CtaWrapper centered={shouldCenterCta}>
         <Cta onClick={() => onCheckoutOpen()}>
           {textKeys.BOTTOMBAR_GETHEDVIG_BUTTON()}
         </Cta>

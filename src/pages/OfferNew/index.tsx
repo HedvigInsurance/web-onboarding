@@ -9,6 +9,7 @@ import { TestimonialsSection } from 'pages/OfferNew/TestimonialsSection'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
 import { useHistory, useRouteMatch } from 'react-router'
+import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
 import { Checkout } from './Checkout'
 import { Compare } from './Compare'
@@ -33,11 +34,12 @@ export const OfferNew: React.FC = () => {
   const currentLanguage = useCurrentLanguage()
   const checkoutMatch = useRouteMatch('/:language(en)?/new-member/sign')
   const toggleCheckout = createToggleCheckout(history, currentLanguage)
+  const variation = useVariation()
 
   return !loading && !error && data && isOffer(data) ? (
     <Page>
       <SessionTokenGuard>
-        <TopBar />
+        {![Variation.IOS, Variation.ANDROID].includes(variation!) && <TopBar />}
         <TrackAction
           event={{
             name: SemanticEvents.Ecommerce.CheckoutStarted,
