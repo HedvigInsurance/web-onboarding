@@ -39,6 +39,7 @@ const defaultSrc = [
   '*.branch.io',
   'https://adtr.io',
   'https://track.adtraction.com',
+  'https://c.adtraction.net',
   'bnc.lt',
   'app.link',
   'hedvig.app.link',
