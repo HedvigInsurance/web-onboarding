@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import hexToRgba from 'hex-to-rgba'
 import * as React from 'react'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { BackArrow } from '../../../components/icons/BackArrow'
 import { Checkmark } from '../../../components/icons/Checkmark'
 import { Crossmark } from '../../../components/icons/Crossmark'
@@ -304,6 +305,7 @@ const InfoBoxBody = styled.div`
 export const PerilModal: React.FC<PerilModalProps & ModalProps> = (props) => {
   const [transitionEnabled, setTransitionEnabled] = React.useState(true)
   const [actionsAllowed, setActionsAllowed] = React.useState(true)
+  const textKeys = useTextKeys()
 
   React.useEffect(() => {
     const isBelowBoundary = props.currentPerilIndex < props.perils.length
@@ -384,7 +386,9 @@ export const PerilModal: React.FC<PerilModalProps & ModalProps> = (props) => {
 
         <CoverageWrapper>
           <CoverageList>
-            <CoverageListTitle>Det här täcks</CoverageListTitle>
+            <CoverageListTitle>
+              {textKeys.PERIL_MODAL_COVERAGE_TITLE()}
+            </CoverageListTitle>
             {currentPeril.covered.map((text) => (
               <CoverageListItem key={text}>
                 <Checkmark />
@@ -393,22 +397,26 @@ export const PerilModal: React.FC<PerilModalProps & ModalProps> = (props) => {
             ))}
           </CoverageList>
 
-          <CoverageList>
-            <CoverageListTitle>Undantag</CoverageListTitle>
-            {currentPeril.exceptions.map((text) => (
-              <CoverageListItem key={text}>
-                <Crossmark />
-                {text}
-              </CoverageListItem>
-            ))}
-          </CoverageList>
+          {currentPeril.exceptions.length > 0 && (
+            <CoverageList>
+              <CoverageListTitle>
+                {textKeys.PERIL_MODAL_EXCEPTIONS_TITLE()}
+              </CoverageListTitle>
+              {currentPeril.exceptions.map((text) => (
+                <CoverageListItem key={text}>
+                  <Crossmark />
+                  {text}
+                </CoverageListItem>
+              ))}
+            </CoverageList>
+          )}
         </CoverageWrapper>
 
         {currentPeril.info && (
           <InfoBoxWrapper>
             <InfoBox>
               <InfoIcon />
-              <InfoBoxTitle>Att tänka på</InfoBoxTitle>
+              <InfoBoxTitle>{textKeys.PERIL_MODAL_INFO_TITLE()}</InfoBoxTitle>
               <InfoBoxBody>{currentPeril.info}</InfoBoxBody>
             </InfoBox>
           </InfoBoxWrapper>

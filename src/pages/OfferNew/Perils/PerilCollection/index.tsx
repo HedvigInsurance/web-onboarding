@@ -14,7 +14,6 @@ const Wrapper = styled('div')`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  margin: 0 -1rem;
 `
 
 export const PerilCollection: React.FC<Props> = ({

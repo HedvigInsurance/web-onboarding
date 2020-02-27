@@ -9,6 +9,8 @@ interface PerilItemProps {
 }
 
 const OuterContainer = styled.button`
+  width: calc(50% - 0.5rem);
+
   background-color: transparent;
   border: 0;
   margin: 0.25rem;
@@ -18,25 +20,46 @@ const OuterContainer = styled.button`
     box-shadow: none;
     outline: none;
   }
+
+  @media (min-width: 400px) {
+    width: auto;
+  }
 `
+
 const Container = styled.span`
-  width: 7.25rem;
-  height: 5.75rem;
-  padding: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+
+  padding: 0.75rem 0.5rem;
   border-radius: 0.25rem;
   background-color: ${colorsV2.white};
-  border: 1px solid ${colorsV2.lightgray};
   cursor: pointer;
   transition: all 150ms ease-in-out;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  text-align: center;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+
+  @media (min-width: 400px) {
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    width: 7.25rem;
+    height: 5.75rem;
+    padding: 0.5rem;
+    border: 1px solid ${colorsV2.lightgray};
+  }
 
   svg {
-    width: 3rem;
-    height: 3rem;
+    width: 2rem;
+    height: 2rem;
+    margin-right: 0.5rem;
+
+    @media (min-width: 400px) {
+      margin-right: 0;
+      width: 3rem;
+      height: 3rem;
+    }
   }
 
   :focus {
