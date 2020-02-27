@@ -66,9 +66,11 @@ const Container = styled.span`
     outline: none;
   }
 
-  :hover {
-    box-shadow: 0 0 16px rgba(0, 0, 0, 0.08);
-    transform: translateY(-2%);
+  @media (min-width: 400px) {
+    :hover {
+      box-shadow: 0 0 16px rgba(0, 0, 0, 0.08);
+      transform: translateY(-2%);
+    }
   }
 
   :active {
