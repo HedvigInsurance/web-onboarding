@@ -59,10 +59,25 @@ const template = (helmetContext: FilledContext['helmet'], cspNonce: string) => `
   <script nonce="${cspNonce}">
     Sentry.init(${JSON.stringify(sentryConfig())})
   </script>
+
+  <!-- Google Tag Manager -->
+  <script nonce="${cspNonce}">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;var n=d.querySelector('[nonce]');
+  n&&j.setAttribute('nonce',n.nonce||n.getAttribute('nonce'));f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-WWMKHK5');</script>
+  <!-- End Google Tag Manager -->
+
   <script key="segment-snippet" nonce="${cspNonce}">${segmentSnippet}</script>
   <script defer src="https://adtr.io/jsTag?ap=1412531808"></script>
 </head>
 <body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WWMKHK5"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
   <div id="react-root"></div>
 
   <script nonce="${cspNonce}">
