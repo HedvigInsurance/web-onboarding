@@ -1,7 +1,7 @@
+import gql from 'graphql-tag'
 import { apolloClient } from '../../client/apolloClient'
 import { CREATE_SESSION_TOKEN_MUTATION } from '../../containers/SessionContainer'
 import { afterTick } from './utils'
-import gql from 'graphql-tag'
 
 export const graphQLQuery = (storage: any) => async (
   query: string,

@@ -22,11 +22,11 @@ import {
   resolveExternalInsuranceProviderProviderStatus,
   resolveExternalInsuranceProviderStartSession,
 } from './externalInsuranceProvider'
+import { graphQLMutation, graphQLQuery } from './graphql'
 import { resolveHouseInformation } from './houseInformation'
 import { Landing } from './Landing'
 import { LanguagePicker } from './LanguagePicker'
 import { resolvePersonalInformation } from './personalInformation'
-import { graphQLQuery, graphQLMutation } from './graphql'
 
 const EmbarkStyling = styled.div`
   height: 100%;
