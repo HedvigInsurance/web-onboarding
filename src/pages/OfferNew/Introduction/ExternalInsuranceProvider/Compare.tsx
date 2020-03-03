@@ -97,7 +97,7 @@ export const Compare: React.FC<Props> = ({
       insuranceDataCollection.insuranceProvider?.toUpperCase(),
   )
   const externalTrustpilotScore = otherCompanies.find(
-    (company) => externalInsuranceProvider.id === company.id,
+    (company) => externalInsuranceProvider?.id === company.id,
   )?.trustpilotScore
 
   return (

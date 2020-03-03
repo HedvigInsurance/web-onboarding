@@ -22,6 +22,7 @@ import {
   resolveExternalInsuranceProviderProviderStatus,
   resolveExternalInsuranceProviderStartSession,
 } from './externalInsuranceProvider'
+import { graphQLMutation, graphQLQuery } from './graphql'
 import { resolveHouseInformation } from './houseInformation'
 import { Landing } from './Landing'
 import { LanguagePicker } from './LanguagePicker'
@@ -280,6 +281,8 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                     }}
                     data={data[1]}
                     resolvers={{
+                      graphqlQuery: graphQLQuery(storageState),
+                      graphqlMutation: graphQLMutation(storageState),
                       personalInformationApi: resolvePersonalInformation,
                       houseInformation: resolveHouseInformation,
                       createQuote: createQuote(storageState),

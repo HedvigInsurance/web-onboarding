@@ -217,7 +217,7 @@ export const StartDate: React.FC<Props> = ({
           </DataCollectedStartDateValue>
           <DataCollectedStartDateDescription>
             {textKeys.START_DATE_EXTERNAL_PROVIDER_SWITCH({
-              insuranceProvider: externalInsuranceProvider.name,
+              insuranceProvider: externalInsuranceProvider?.name,
             })}
           </DataCollectedStartDateDescription>
         </DataCollectedStartDateWrapper>
