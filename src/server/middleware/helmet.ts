@@ -52,7 +52,7 @@ const defaultSrc = [
   'https://hedvig-embark.herokuapp.com',
   'https://heapanalytics.com',
   'cdn.mxpnl.com',
-  'https://api-js.mixpanel.com/',
+  'https://api-js.mixpanel.com',
   GIRAFFE_ENDPOINT,
   GIRAFFE_WS_ENDPOINT,
 ]
