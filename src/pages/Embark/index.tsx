@@ -26,6 +26,7 @@ import { resolveHouseInformation } from './houseInformation'
 import { Landing } from './Landing'
 import { LanguagePicker } from './LanguagePicker'
 import { resolvePersonalInformation } from './personalInformation'
+import { graphQLQuery, graphQLMutation } from './graphql'
 
 const EmbarkStyling = styled.div`
   height: 100%;
@@ -280,6 +281,8 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                     }}
                     data={data[1]}
                     resolvers={{
+                      graphqlQuery: graphQLQuery(storageState),
+                      graphqlMutation: graphQLMutation(storageState),
                       personalInformationApi: resolvePersonalInformation,
                       houseInformation: resolveHouseInformation,
                       createQuote: createQuote(storageState),

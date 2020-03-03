@@ -3,6 +3,7 @@ import { MemberInsuranceDocument } from 'generated/graphql'
 import gql from 'graphql-tag'
 import { apolloClient } from '../../client/apolloClient'
 import { CREATE_SESSION_TOKEN_MUTATION } from '../../containers/SessionContainer'
+import { afterTick } from './utils'
 
 const MUTATION = gql`
   mutation CreateQuote($input: CreateQuoteInput!) {
@@ -51,15 +52,6 @@ const MUTATION = gql`
     }
   }
 `
-
-const afterTick = (f: () => void) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      f()
-      resolve()
-    }, 0)
-  })
-}
 
 export const createQuote = (storage: any) => async (
   variables: CreateQuoteVariables,
