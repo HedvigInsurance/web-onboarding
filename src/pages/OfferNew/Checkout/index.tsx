@@ -151,8 +151,8 @@ export const Checkout: React.FC<Props> = ({
   refetch,
 }) => {
   const [email, setEmail] = React.useState(offer.lastQuoteOfMember.email ?? '')
-  const [visibilityState, setVisibilityState] = React.useState(
-    VisibilityState.CLOSED,
+  const [visibilityState, setVisibilityState] = React.useState(() =>
+    isOpen ? VisibilityState.OPEN : VisibilityState.CLOSED,
   )
   const outerWrapper = React.useRef<HTMLDivElement>()
 
@@ -193,6 +193,10 @@ export const Checkout: React.FC<Props> = ({
 
   React.useEffect(() => {
     if (isOpen) {
+      if (visibilityState === VisibilityState.OPEN) {
+        return
+      }
+
       setTimeout(() => setVisibilityState(VisibilityState.OPEN), 50)
       setVisibilityState(VisibilityState.OPENING)
     } else {

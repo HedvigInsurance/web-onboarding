@@ -1,11 +1,13 @@
 import styled from '@emotion/styled'
-import { CurrentLanguage } from 'components/utils/CurrentLanguage'
+import { useCurrentLanguage } from 'components/utils/CurrentLanguage'
 import { SignState, useSignStatusLazyQuery } from 'generated/graphql'
+import { match } from 'matchly'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
-import { Mount } from 'react-lifecycle-components/dist'
+import { Mount } from 'react-lifecycle-components'
 import { Redirect } from 'react-router-dom'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
 
 const Wrapper = styled('div')`
@@ -37,6 +39,20 @@ export const SignStatus: React.FC<Props> = ({
   onSuccess,
 }) => {
   const textKeys = useTextKeys()
+  const variation = useVariation()
+  const currentLanguage = useCurrentLanguage()
+  const getSuccessStatus = match([
+    [Variation.IOS, textKeys.SIGN_BANKID_CODE_USER_SIGN()],
+    [Variation.ANDROID, textKeys.SIGN_BANKID_CODE_USER_SIGN()],
+    [
+      match.any(),
+      <Redirect
+        to={`/${currentLanguage &&
+          currentLanguage + '/'}new-member/connect-payment`}
+      />,
+    ],
+  ])
+
   const [executeSignStatusQuery, signStatusQuery] = useSignStatusLazyQuery({
     pollInterval: 1000, // TODO replace with subscription? or not really?
   })
@@ -73,19 +89,23 @@ export const SignStatus: React.FC<Props> = ({
           },
         }}
       >
-        {({ track }) => (
-          <Mount on={track}>
-            <CurrentLanguage>
-              {({ currentLanguage }) => (
-                <Redirect
-                  to={`/${currentLanguage &&
-                    currentLanguage + '/'}new-member/connect-payment`}
-                />
-              )}
-            </CurrentLanguage>
-            )
-          </Mount>
-        )}
+        {({ track }) => {
+          return (
+            <Mount
+              on={() => {
+                track()
+                if (variation === Variation.IOS) {
+                  // TODO mediator
+                }
+                if (variation === Variation.ANDROID) {
+                  // TODO other mediator?
+                }
+              }}
+            >
+              <>{getSuccessStatus(variation)}</>
+            </Mount>
+          )
+        }}
       </TrackAction>
     )
   }
