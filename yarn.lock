@@ -10446,10 +10446,10 @@ markdown-escapes@^1.0.0:
   resolved "https://registry.yarnpkg.com/markdown-escapes/-/markdown-escapes-1.0.3.tgz#6155e10416efaafab665d466ce598216375195f5"
   integrity sha512-XUi5HJhhV5R74k8/0H2oCbCiYf/u4cO/rX8tnGkRvrqhsr5BRNU6Mg0yt/8UIx1iIS8220BNJsDb7XnILhLepw==
 
-matchly@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/matchly/-/matchly-1.0.0.tgz#7d7a09804cbe3cb0790a7e38cf94774aaa4fa45a"
-  integrity sha512-269rSWX3M/q7uCEG6G8471/EBz/SLT1ciVSHlc4YmF53S+hDAolo8YgvJVI097gjdRGaVYAk+nwXTEyTUJqqgQ==
+matchly@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/matchly/-/matchly-1.0.1.tgz#c43ff28e22b0efe62753e05cc17e7da9f460b7ac"
+  integrity sha512-9SX0aHTYemCTXJ8QTO2UV+IXbeLIFAggTRe8c3GWVywvaNtoiock8DSVYZMmMLY1m6HUNR147MP1DzWjZHBiCQ==
 
 matchmediaquery@^0.3.0:
   version "0.3.0"

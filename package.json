@@ -107,7 +107,7 @@
     "koa-bodyparser": "^4.2.1",
     "koa-helmet": "^4.0.0",
     "koa-router": "^7.4.0",
-    "matchly": "^1.0.0",
+    "matchly": "^1.0.1",
     "md5": "^2.2.1",
     "node-fetch": "^2.6.0",
     "quepasa": "^0.1.3",
