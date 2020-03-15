@@ -2,9 +2,9 @@ import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import {
-  getLanguageIsoCode,
-  useCurrentLanguage,
-} from 'components/utils/CurrentLanguage'
+  getLocaleIsoCode,
+  useCurrentLocale,
+} from 'components/utils/CurrentLocale'
 import { useFaqsQuery } from 'generated/graphql'
 import React from 'react'
 import AnimateHeight from 'react-animate-height'
@@ -146,8 +146,8 @@ export const Accordion: React.FC<AccordionProps> = ({ headline, body }) => {
 }
 
 export const FaqSection: React.FC = () => {
-  const pathLanguage = useCurrentLanguage()
-  const language = getLanguageIsoCode(pathLanguage)
+  const pathLocale = useCurrentLocale()
+  const language = getLocaleIsoCode(pathLocale)
   const faqs = useFaqsQuery({ variables: { language } })
   const languageData = faqs?.data?.languages[0]
   const textKeys = useTextKeys()

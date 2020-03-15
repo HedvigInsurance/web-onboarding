@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
-import { useCurrentLanguage } from 'components/utils/CurrentLanguage'
+import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { Peril } from 'pages/OfferNew/Perils/types'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
@@ -35,11 +35,11 @@ export const Perils: React.FC<Props> = ({ offer }) => {
   const [isShowingPeril, setIsShowingPeril] = React.useState(false)
   const [currentPeril, setCurrentPeril] = React.useState(0)
   const [perils, setPerils] = React.useState<ReadonlyArray<Peril>>([])
-  const currentLanguage = useCurrentLanguage()
+  const currentLocale = useCurrentLocale()
   React.useEffect(() => {
     getLocalizedPerils(
       getInsuranceType(offer.lastQuoteOfMember),
-      (currentLanguage || 'sv') + '-SE',
+      (currentLocale || 'sv') + '-SE',
     ).then(setPerils)
   }, [getInsuranceType(offer.lastQuoteOfMember), 'sv-SE'])
 

@@ -2,6 +2,10 @@ import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import { CookieStorage } from 'cookie-storage'
 import {
+  CompleteApartmentQuoteDetails,
+  CompleteHouseQuoteDetails,
+  CompleteQuote,
+  Query,
   useRedeemCodeMutation,
   useRemoveDiscountCodeMutation,
 } from 'generated/graphql'
@@ -17,7 +21,7 @@ import ReactVisibilitySensor from 'react-visibility-sensor'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { Price } from '../../components'
-import { CompleteOfferDataForMember } from '../../types'
+import { CompleteQuoteWithoutUnknownDetails } from '../../types'
 import { getInsuranceType, insuranceTypeTextKeys } from '../../utils'
 import { DetailsModal } from './DetailsModal/index'
 import { DiscountCodeModal } from './DiscountCodeModal'
@@ -26,7 +30,11 @@ import { StickyBottomSidebar } from './StickyBottomSidebar'
 
 interface Props {
   sticky: boolean
-  offer: CompleteOfferDataForMember
+  offer: {
+    lastQuoteOfMember: CompleteQuote
+    redeemedCampaigns: Query['redeemedCampaigns']
+    member: Omit<Query['member'], 'features'>
+  }
   refetch: () => Promise<void>
   onCheckoutOpen: () => void
 }
@@ -35,7 +43,6 @@ const Wrapper = styled.div`
   width: 26rem;
   flex-shrink: 0;
   position: relative;
-  z-index: 1;
   height: 0;
   z-index: 1000;
 
@@ -200,6 +207,15 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
     const discountText = getDiscountText(textKeys)(offer.redeemedCampaigns)
 
+    // FIXME When does this happen? It should never happen i hope. How do we handle it properly if it does?
+    if (offer.lastQuoteOfMember.details.__typename === 'UnknownQuoteDetails') {
+      return <>Fatal: lastQuoteOfMember.details is UnknownQuoteDetails</>
+    }
+
+    const details = offer.lastQuoteOfMember.details as
+      | CompleteApartmentQuoteDetails
+      | CompleteHouseQuoteDetails
+
     return (
       <>
         <ReactVisibilitySensor partialVisibility onChange={setIsSidebarVisible}>
@@ -222,18 +238,14 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                     <SummaryContent>
                       <SummaryText>
                         <b>{`${offer.lastQuoteOfMember.firstName} ${offer.lastQuoteOfMember.lastName}`}</b>{' '}
-                        {offer.lastQuoteOfMember.details.householdSize - 1 >
-                          0 &&
+                        {details.householdSize - 1 > 0 &&
                           textKeys.SIDEBAR_INSURED_PERSONS_SUFFIX({
-                            AMOUNT:
-                              offer.lastQuoteOfMember.details.householdSize - 1,
+                            AMOUNT: details.householdSize - 1,
                           })}
                       </SummaryText>
                       <SummaryText>
-                        {`${
-                          offer.lastQuoteOfMember.details.street
-                        }, ${formatPostalNumber(
-                          offer.lastQuoteOfMember.details.zipCode,
+                        {`${details.street}, ${formatPostalNumber(
+                          details.zipCode,
                         )}`}
                       </SummaryText>
 
@@ -319,7 +331,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 />
               </Container>
               <DetailsModal
-                quote={offer.lastQuoteOfMember}
+                quote={
+                  offer.lastQuoteOfMember as CompleteQuoteWithoutUnknownDetails
+                }
                 refetch={refetch}
                 isVisible={detailsModalIsOpen}
                 onClose={() => setDetailsModalIsOpen(false)}
@@ -329,7 +343,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
         </ReactVisibilitySensor>
         <StickyBottomSidebar
           isVisible={!isSidebarVisible}
-          offer={offer}
+          offer={offer as any} // FIXME gah, this needs fixing at some point
           onCheckoutOpen={onCheckoutOpen}
         />
       </>

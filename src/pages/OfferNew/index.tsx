@@ -1,4 +1,4 @@
-import { useCurrentLanguage } from 'components/utils/CurrentLanguage'
+import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import { useMemberOfferQuery } from 'generated/graphql'
@@ -17,11 +17,11 @@ import { Introduction } from './Introduction'
 import { Perils } from './Perils/index'
 import { isOffer } from './utils'
 
-const createToggleCheckout = (history: History<any>, language?: string) => (
+const createToggleCheckout = (history: History<any>, locale?: string) => (
   isOpen: boolean,
 ) => {
   if (isOpen) {
-    history.push((language ? '/' + language : '') + `/new-member/sign`)
+    history.push((locale ? '/' + locale : '') + `/new-member/sign`)
   } else {
     history.goBack()
   }
@@ -30,9 +30,9 @@ const createToggleCheckout = (history: History<any>, language?: string) => (
 export const OfferNew: React.FC = () => {
   const { data, loading, error, refetch } = useMemberOfferQuery()
   const history = useHistory()
-  const currentLanguage = useCurrentLanguage()
-  const checkoutMatch = useRouteMatch('/:language(en)?/new-member/sign')
-  const toggleCheckout = createToggleCheckout(history, currentLanguage)
+  const currentLocale = useCurrentLocale()
+  const checkoutMatch = useRouteMatch('/:locale(en|no|no/en)?/new-member/sign')
+  const toggleCheckout = createToggleCheckout(history, currentLocale)
 
   return !loading && !error && data && isOffer(data) ? (
     <Page>

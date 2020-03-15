@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
 import * as React from 'react'
-import { CurrentLanguage } from '../components/utils/CurrentLanguage'
+import { CurrentLocale } from '../components/utils/CurrentLocale'
 
 interface Props {
   transparent?: boolean
@@ -46,13 +46,13 @@ const LogoLink = styled.a`
 export const TopBar: React.FC<Props> = ({ transparent }) => (
   <Wrapper transparent={transparent}>
     <Container>
-      <CurrentLanguage>
-        {({ currentLanguage }) => (
-          <LogoLink href={'/' + currentLanguage}>
+      <CurrentLocale>
+        {({ currentLocale }) => (
+          <LogoLink href={'/' + currentLocale}>
             <HedvigLogo fill={transparent ? colorsV2.white : colorsV2.black} />
           </LogoLink>
         )}
-      </CurrentLanguage>
+      </CurrentLocale>
     </Container>
   </Wrapper>
 )

@@ -1,12 +1,22 @@
-import { CompleteQuote, IncompleteQuote, Query } from 'generated/graphql'
+import {
+  CompleteApartmentQuoteDetails,
+  CompleteHouseQuoteDetails,
+  CompleteQuote,
+  IncompleteQuote,
+  Query,
+} from 'generated/graphql'
 
 interface OfferCore {
   redeemedCampaigns: Query['redeemedCampaigns']
-  member: Query['member']
+  member: Omit<Query['member'], 'features'>
 }
 
 export interface CompleteOfferDataForMember extends OfferCore {
-  lastQuoteOfMember: CompleteQuote
+  lastQuoteOfMember: CompleteQuoteWithoutUnknownDetails
+}
+
+export type CompleteQuoteWithoutUnknownDetails = CompleteQuote & {
+  details: CompleteHouseQuoteDetails | CompleteApartmentQuoteDetails
 }
 
 export interface IncompleteOfferDataForMember extends OfferCore {

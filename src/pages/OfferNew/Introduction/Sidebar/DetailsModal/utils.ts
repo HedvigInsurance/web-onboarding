@@ -6,6 +6,7 @@ import {
   ExtraBuildingType,
 } from 'generated/graphql'
 import { inputTypes, masks } from 'new-components/inputs/index'
+import { CompleteQuoteWithoutUnknownDetails } from 'pages/OfferNew/types'
 import * as Yup from 'yup'
 import { isApartment, isHouse, isStudent } from '../../../utils'
 import {
@@ -29,7 +30,7 @@ export const isApartmentFieldSchema = (
 
 export const isHouseFieldSchema = (
   fieldSchema: FieldSchema,
-  quote: CompleteQuote,
+  quote: CompleteQuoteWithoutUnknownDetails,
 ): fieldSchema is HouseFieldSchema => {
   return (fieldSchema as HouseFieldSchema).house && isHouse(quote.details)
 }
@@ -291,7 +292,9 @@ export const extraBuildingTypes: {
   ExtraBuildingStorehouse: ExtraBuildingType.Storehouse,
 }
 
-export const getInitialValues = (quote: CompleteQuote): EditQuoteInput => {
+export const getInitialValues = (
+  quote: CompleteQuoteWithoutUnknownDetails,
+): EditQuoteInput => {
   const base = {
     street: quote.details.street,
     zipCode: quote.details.zipCode,

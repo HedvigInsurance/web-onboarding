@@ -1,12 +1,9 @@
 import { Project, TranslationsProvider } from '@hedviginsurance/textkeyfy'
+import { CurrentLocale, getLocaleIsoCode } from 'components/utils/CurrentLocale'
 import { Provider } from 'constate'
 import * as React from 'react'
 import { hot } from 'react-hot-loader'
 import { Route, Switch } from 'react-router-dom'
-import {
-  CurrentLanguage,
-  getLanguageIsoCode,
-} from './components/utils/CurrentLanguage'
 import { reactPageRoutes } from './routes'
 import { GlobalCss } from './utils/globalStyles'
 import { StorageState, WithStorageProps } from './utils/StorageContainer'
@@ -14,10 +11,10 @@ import { StorageState, WithStorageProps } from './utils/StorageContainer'
 export const App: React.ComponentType<StorageState> = ({ session }) => (
   <>
     <GlobalCss />
-    <CurrentLanguage>
-      {({ currentLanguage }) => (
+    <CurrentLocale>
+      {({ currentLocale }) => (
         <TranslationsProvider
-          code={getLanguageIsoCode(currentLanguage)}
+          code={getLocaleIsoCode(currentLocale)}
           project={Project.WebOnboarding}
         >
           <Provider<WithStorageProps>
@@ -38,7 +35,7 @@ export const App: React.ComponentType<StorageState> = ({ session }) => (
           </Provider>
         </TranslationsProvider>
       )}
-    </CurrentLanguage>
+    </CurrentLocale>
   </>
 )
 

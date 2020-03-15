@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { CurrentLanguage } from 'components/utils/CurrentLanguage'
+import { CurrentLocale } from 'components/utils/CurrentLocale'
 import { SignState, useSignStatusLazyQuery } from 'generated/graphql'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
@@ -75,14 +75,14 @@ export const SignStatus: React.FC<Props> = ({
       >
         {({ track }) => (
           <Mount on={track}>
-            <CurrentLanguage>
-              {({ currentLanguage }) => (
+            <CurrentLocale>
+              {({ currentLocale }) => (
                 <Redirect
-                  to={`/${currentLanguage &&
-                    currentLanguage + '/'}new-member/connect-payment`}
+                  to={`/${currentLocale &&
+                    currentLocale + '/'}new-member/connect-payment`}
                 />
               )}
-            </CurrentLanguage>
+            </CurrentLocale>
             )
           </Mount>
         )}

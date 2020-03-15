@@ -3,7 +3,7 @@ import { colorsV2 } from '@hedviginsurance/brand'
 import { BackArrow } from 'components/icons/BackArrow'
 import { Cross } from 'components/icons/Cross'
 import { ForwardArrow } from 'components/icons/ForwardArrow'
-import { useCurrentLanguage } from 'components/utils/CurrentLanguage'
+import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { addYears, subDays } from 'date-fns'
 import Dayzed, { RenderProps as DayzedCalendarProps } from 'dayzed'
 import { motion } from 'framer-motion'
@@ -182,40 +182,47 @@ const Calendar: React.FC<DayzedCalendarProps> = ({
   const [monthNamesShort, setMonthNamesShort] = React.useState<string[]>(
     [] as string[],
   )
-  const language = useCurrentLanguage()
+  const locale = useCurrentLocale()
 
   React.useEffect(() => {
     const getLocaleImport = () => {
-      if (language === 'en') {
-        return import(
-          /* webpackChunkName: 'date-fns-en' */
-          'date-fns/locale/en-GB'
-        )
+      switch (locale) {
+        case 'en':
+        case 'no/en':
+          return import(
+            /* webpackChunkName: 'date-fns-en' */
+            'date-fns/locale/en-GB'
+          )
+        case 'no':
+          return import(
+            /* webpackChunkName: 'date-fn-no' */
+            'date-fns/locale/nb'
+          )
+        default:
+          return import(
+            /* webpackChunkName: 'date-fns-sv' */
+            'date-fns/locale/sv'
+          )
       }
-
-      return import(
-        /* webpackChunkName: 'date-fns-sv' */
-        'date-fns/locale/sv'
-      )
     }
 
     getLocaleImport().then((module) => {
-      const locale = module.default
+      const dateLocale = module.default
 
       setMonthNamesShort(
         Array.from({ length: 12 }).map((_, i) =>
-          locale.localize.month(i, { width: 'abbreviated' }),
+          dateLocale.localize.month(i, { width: 'abbreviated' }),
         ),
       )
 
       setWeekdayNamesShort([
-        locale.localize.day(1, { width: 'abbreviated' }),
-        locale.localize.day(2, { width: 'abbreviated' }),
-        locale.localize.day(3, { width: 'abbreviated' }),
-        locale.localize.day(4, { width: 'abbreviated' }),
-        locale.localize.day(5, { width: 'abbreviated' }),
-        locale.localize.day(6, { width: 'abbreviated' }),
-        locale.localize.day(0, { width: 'abbreviated' }),
+        dateLocale.localize.day(1, { width: 'abbreviated' }),
+        dateLocale.localize.day(2, { width: 'abbreviated' }),
+        dateLocale.localize.day(3, { width: 'abbreviated' }),
+        dateLocale.localize.day(4, { width: 'abbreviated' }),
+        dateLocale.localize.day(5, { width: 'abbreviated' }),
+        dateLocale.localize.day(6, { width: 'abbreviated' }),
+        dateLocale.localize.day(0, { width: 'abbreviated' }),
       ])
     })
   }, [])

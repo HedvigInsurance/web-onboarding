@@ -7,6 +7,7 @@ import {
   CompleteQuoteDetails,
   InsuranceType,
   Quote,
+  UnknownQuoteDetails,
 } from '../../generated/graphql'
 import { CompleteOfferDataForMember, OfferData } from './types'
 
@@ -32,6 +33,11 @@ export const isHouse = (
 ): details is CompleteHouseQuoteDetails =>
   details.__typename === 'CompleteHouseQuoteDetails' || false
 
+export const isUnknownQuoteType = (
+  details: CompleteQuoteDetails,
+): details is UnknownQuoteDetails =>
+  details.__typename === 'UnknownQuoteDetails' || false
+
 export const isFreeMonths = (campaigns: Campaign[]) =>
   (campaigns.length > 0 &&
     campaigns[0].incentive &&
@@ -53,6 +59,10 @@ export const isNoDiscount = (campaigns: Campaign[]) =>
 export const getInsuranceType = (quote: CompleteQuote): InsuranceType => {
   if (isHouse(quote.details)) {
     return InsuranceType.House
+  }
+
+  if (isUnknownQuoteType(quote.details)) {
+    throw new Error(`Unknown insurance type: ${quote.details.unknown}`)
   }
 
   const map = {

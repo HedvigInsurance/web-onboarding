@@ -7,9 +7,9 @@ import { Peril } from '../types'
 
 export const getLocalizedPerils = async (
   insuranceType: InsuranceType,
-  language: string,
+  locale: string,
 ): Promise<ReadonlyArray<Peril>> => {
-  if (language === 'sv-SE') {
+  if (locale === 'sv-SE') {
     if (isHouseInsurance(insuranceType)) {
       const { housePerils } = await import(
         /* webpackChunkName: 'peril-sv-house' */ './sv/house'
