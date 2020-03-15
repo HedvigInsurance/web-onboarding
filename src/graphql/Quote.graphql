@@ -1,0 +1,78 @@
+query Quote($id: ID!) {
+  quote(id: $id) {
+    ... on CompleteQuote {
+      id
+      dataCollectionId
+
+      ssn
+      email
+      firstName
+      lastName
+      startDate
+
+      currentInsurer {
+        id
+        displayName
+        switchable
+      }
+      insuranceCost {
+        freeUntil
+        monthlyDiscount {
+          amount
+          currency
+        }
+        monthlyGross {
+          amount
+          currency
+        }
+        monthlyNet {
+          amount
+          currency
+        }
+      }
+      quoteDetails {
+        ... on SwedishApartmentQuoteDetails {
+          street
+          zipCode
+          householdSize
+          livingSpace
+          type
+        }
+        ... on SwedishHouseQuoteDetails {
+          street
+          zipCode
+          householdSize
+          livingSpace
+          ancillarySpace
+          numberOfBathrooms
+          yearOfConstruction
+          isSubleted
+          extraBuildings {
+            ... on ExtraBuildingCore {
+              area
+              displayName
+              hasWaterConnected
+            }
+          }
+        }
+
+        ... on NorwegianHomeContentsDetails {
+          coInsured
+          isStudent
+          livingSpace
+          street
+          homeType: type
+          zipCode
+        }
+
+        ... on NorwegianTravelDetails {
+          coInsured
+        }
+      }
+    }
+
+    ... on IncompleteQuote {
+      id
+    }
+  }
+}

@@ -3,6 +3,7 @@ import { RouteComponentProps } from 'react-router'
 import { ConnectPayment } from './pages/ConnectPayment'
 import { TrustlyFailPage } from './pages/ConnectPayment/components/TrustlyFailPage'
 import { TrustlySpinnerPage } from './pages/ConnectPayment/components/TrustlySpinnerPage'
+import { Debugger } from './pages/Debugger'
 import { Download } from './pages/Download'
 import { EmbarkRoot } from './pages/Embark'
 import { FourOhFour } from './pages/FourOhFour'
@@ -15,7 +16,15 @@ export const serverSideRedirects = [
   { from: '/new-member/hedvig', to: '/new-member' },
   { from: '/en/new-member/hedvig', to: '/en/new-member' },
 ]
-export const reactPageRoutes = [
+
+interface ReactPageRoute {
+  path: string
+  Component?: React.ComponentType<any>
+  render?: (props: RouteComponentProps<any>) => React.ReactNode
+  exact?: boolean
+}
+
+export const reactPageRoutes: ReactPageRoute[] = [
   {
     path: LANGUAGE_PATH_PATTERN + '/new-member/download',
     Component: Download,
@@ -44,6 +53,11 @@ export const reactPageRoutes = [
   {
     path: LANGUAGE_PATH_PATTERN + '/new-member/(offer|sign)',
     Component: OfferNew,
+    exact: true,
+  },
+  {
+    path: LANGUAGE_PATH_PATTERN + '/debugger',
+    Component: Debugger,
     exact: true,
   },
   {
