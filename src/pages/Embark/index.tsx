@@ -291,7 +291,10 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                       track: (eventName, payload) => {
                         const castedWindow = window as any
                         if (castedWindow && castedWindow.analytics) {
-                          castedWindow.analytics.track(eventName, payload)
+                          castedWindow.analytics.track(eventName, {
+                            ...payload,
+                            originatedFromEmbarkStory: props.name,
+                          })
                         }
                       },
                     }}
