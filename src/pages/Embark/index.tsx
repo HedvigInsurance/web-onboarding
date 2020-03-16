@@ -297,6 +297,14 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                     }}
                     initialStore={initialStore}
                     onStoreChange={(store) => {
+                      const castedWindow = window as any
+                      if (castedWindow && castedWindow.analytics) {
+                        castedWindow.analytics.track(
+                          `Embark Store Changed - ${props.name!}`,
+                          store,
+                        )
+                      }
+
                       window.sessionStorage.setItem(
                         `embark-store-${encodeURIComponent(props.name!)}`,
                         JSON.stringify(store),
