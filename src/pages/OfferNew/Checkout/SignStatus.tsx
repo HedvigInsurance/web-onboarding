@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { CurrentLocale } from 'components/utils/CurrentLocale'
-import { SignState, useSignStatusLazyQuery } from 'generated/graphql'
+import { SignState, useSignStatusLazyQuery } from 'data/graphql'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
 import { Mount } from 'react-lifecycle-components/dist'

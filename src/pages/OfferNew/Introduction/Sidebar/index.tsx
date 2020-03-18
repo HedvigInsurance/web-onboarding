@@ -2,16 +2,18 @@ import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import { CookieStorage } from 'cookie-storage'
 import {
-  CompleteApartmentQuoteDetails,
-  CompleteHouseQuoteDetails,
   CompleteQuote,
-  Query,
+  NorwegianHomeContentsDetails,
+  SwedishApartmentQuoteDetails,
+  SwedishHouseQuoteDetails,
   useRedeemCodeMutation,
+  useRedeemedCampaignsQuery,
   useRemoveDiscountCodeMutation,
-} from 'generated/graphql'
+} from 'data/graphql'
 import { Button, TextButton } from 'new-components/buttons'
 import {
   getDiscountText,
+  getHouseholdSize,
   isMonthlyCostDeduction,
   isNoDiscount,
   isPercentageDiscountMonths,
@@ -30,11 +32,7 @@ import { StickyBottomSidebar } from './StickyBottomSidebar'
 
 interface Props {
   sticky: boolean
-  offer: {
-    lastQuoteOfMember: CompleteQuote
-    redeemedCampaigns: Query['redeemedCampaigns']
-    member: Omit<Query['member'], 'features'>
-  }
+  firstQuote: CompleteQuote
   refetch: () => Promise<void>
   onCheckoutOpen: () => void
 }
@@ -177,7 +175,7 @@ const FooterExtraActions = styled.div`
 `
 
 export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
-  ({ sticky, offer, refetch, onCheckoutOpen }, ref) => {
+  ({ sticky, firstQuote, refetch, onCheckoutOpen }, ref) => {
     const textKeys = useTextKeys()
     const [
       discountCodeModalIsOpen,
@@ -189,10 +187,13 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
     const [removeDiscountCode] = useRemoveDiscountCodeMutation()
     const [redeemCode] = useRedeemCodeMutation()
+    const redeemedCampaignsQuery = useRedeemedCampaignsQuery()
+    const redeemedCampaigns =
+      redeemedCampaignsQuery.data?.redeemedCampaigns ?? []
 
     React.useEffect(() => {
       const campaignCodes =
-        offer.redeemedCampaigns?.map((campaign) => campaign!.code) ?? []
+        redeemedCampaigns.map((campaign) => campaign!.code) ?? []
       const cookieStorage = new CookieStorage()
       const preRedeemedCode = cookieStorage.getItem('_hvcode')
       if (
@@ -205,16 +206,12 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
       }
     }, [])
 
-    const discountText = getDiscountText(textKeys)(offer.redeemedCampaigns)
+    const discountText = getDiscountText(textKeys)(redeemedCampaigns)
 
-    // FIXME When does this happen? It should never happen i hope. How do we handle it properly if it does?
-    if (offer.lastQuoteOfMember.details.__typename === 'UnknownQuoteDetails') {
-      return <>Fatal: lastQuoteOfMember.details is UnknownQuoteDetails</>
-    }
-
-    const details = offer.lastQuoteOfMember.details as
-      | CompleteApartmentQuoteDetails
-      | CompleteHouseQuoteDetails
+    const details = firstQuote.quoteDetails as
+      | SwedishApartmentQuoteDetails
+      | SwedishHouseQuoteDetails
+      | NorwegianHomeContentsDetails
 
     return (
       <>
@@ -229,18 +226,16 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
                     <Title>
                       {textKeys[
-                        insuranceTypeTextKeys[
-                          getInsuranceType(offer.lastQuoteOfMember)
-                        ]
+                        insuranceTypeTextKeys[getInsuranceType(firstQuote)]
                       ]()}
                     </Title>
 
                     <SummaryContent>
                       <SummaryText>
-                        <b>{`${offer.lastQuoteOfMember.firstName} ${offer.lastQuoteOfMember.lastName}`}</b>{' '}
-                        {details.householdSize - 1 > 0 &&
+                        <b>{`${firstQuote.firstName} ${firstQuote.lastName}`}</b>{' '}
+                        {getHouseholdSize(details) - 1 > 0 &&
                           textKeys.SIDEBAR_INSURED_PERSONS_SUFFIX({
-                            AMOUNT: details.householdSize - 1,
+                            AMOUNT: getHouseholdSize(details) - 1,
                           })}
                       </SummaryText>
                       <SummaryText>
@@ -258,29 +253,23 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                   <Price
                     monthlyCostDeduction={
                       isMonthlyCostDeduction(
-                        offer.redeemedCampaigns[0]?.incentive ?? undefined,
+                        redeemedCampaigns![0]?.incentive ?? undefined,
                       ) ||
                       isPercentageDiscountMonths(
-                        offer.redeemedCampaigns[0]?.incentive ?? undefined,
+                        redeemedCampaigns![0]?.incentive ?? undefined,
                       )
                     }
-                    monthlyGross={
-                      offer.lastQuoteOfMember.insuranceCost.monthlyGross
-                    }
-                    monthlyNet={
-                      offer.lastQuoteOfMember.insuranceCost.monthlyNet
-                    }
+                    monthlyGross={firstQuote.insuranceCost.monthlyGross}
+                    monthlyNet={firstQuote.insuranceCost.monthlyNet}
                   />
                 </Header>
 
                 <Body>
                   <StartDate
-                    dataCollectionId={offer.lastQuoteOfMember.dataCollectionId}
-                    startDate={offer.lastQuoteOfMember.startDate}
-                    offerId={offer.lastQuoteOfMember.id}
-                    currentInsurer={
-                      offer.lastQuoteOfMember.currentInsurer || null
-                    }
+                    dataCollectionId={firstQuote.dataCollectionId}
+                    startDate={firstQuote.startDate}
+                    offerId={firstQuote.id}
+                    currentInsurer={firstQuote.currentInsurer || null}
                     refetch={refetch}
                     modal={true}
                   />
@@ -292,7 +281,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                   </Button>
 
                   <FooterExtraActions>
-                    {offer.redeemedCampaigns.length === 0 && (
+                    {redeemedCampaigns.length === 0 && (
                       <TextButton
                         onClick={() => {
                           setDiscountCodeModalIsOpen(true)
@@ -301,9 +290,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                         {textKeys.SIDEBAR_ADD_DISCOUNT_BUTTON()}
                       </TextButton>
                     )}
-                    {offer.redeemedCampaigns.length > 0 &&
+                    {redeemedCampaigns.length > 0 &&
                       !isNoDiscount(
-                        offer.redeemedCampaigns[0]?.incentive ?? undefined,
+                        redeemedCampaigns[0]?.incentive ?? undefined,
                       ) && (
                         <TextButton
                           color={colorsV2.coral700}
@@ -331,9 +320,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 />
               </Container>
               <DetailsModal
-                quote={
-                  offer.lastQuoteOfMember as CompleteQuoteWithoutUnknownDetails
-                }
+                quote={firstQuote as CompleteQuoteWithoutUnknownDetails}
                 refetch={refetch}
                 isVisible={detailsModalIsOpen}
                 onClose={() => setDetailsModalIsOpen(false)}
@@ -343,7 +330,6 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
         </ReactVisibilitySensor>
         <StickyBottomSidebar
           isVisible={!isSidebarVisible}
-          offer={offer as any} // FIXME gah, this needs fixing at some point
           onCheckoutOpen={onCheckoutOpen}
         />
       </>

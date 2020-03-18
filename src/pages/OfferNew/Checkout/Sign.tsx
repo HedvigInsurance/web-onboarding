@@ -1,10 +1,15 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand/dist'
 import { MarkdownTranslation } from '@hedviginsurance/textkeyfy'
+import {
+  CompleteQuote,
+  RedeemedCampaignsQuery,
+  useMemberQuery,
+  useRedeemedCampaignsQuery,
+  useSignOfferMutation,
+} from 'data/graphql'
 import { motion } from 'framer-motion'
-import { CompleteQuote, useSignOfferMutation } from 'generated/graphql'
 import { Button } from 'new-components/buttons'
-import { CompleteOfferDataForMember } from 'pages/OfferNew/types'
 import { getInsuranceType } from 'pages/OfferNew/utils'
 import * as React from 'react'
 import { useMediaQuery } from 'react-responsive'
@@ -68,17 +73,19 @@ interface Props {
   className?: string
   email?: string
   personalNumber: string
-  offer: CompleteOfferDataForMember
+  firstQuote: CompleteQuote
 }
 
 export const Sign: React.FC<Props> = ({
   className,
   email,
   personalNumber,
-  offer,
+  firstQuote,
 }) => {
   const isMobile = useMediaQuery({ maxWidth: 600 })
   const textKeys = useTextKeys()
+  const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
+  const { data: memberData } = useMemberQuery()
   const [signOffer, signOfferMutation] = useSignOfferMutation({
     variables: {
       email: email!,
@@ -122,7 +129,12 @@ export const Sign: React.FC<Props> = ({
           isSigning={signState !== SignState.NOT_STARTED}
           onFailure={() => setSignState(SignState.FAILED)}
           onSuccess={() => {
-            track(email!, offer)
+            track(
+              email!,
+              firstQuote,
+              memberData?.member.id!,
+              redeemedCampaignsData?.redeemedCampaigns!,
+            )
           }}
         />
       </motion.div>
@@ -132,10 +144,10 @@ export const Sign: React.FC<Props> = ({
           textKey="CHECKOUT_SIGN_DISCLAIMER"
           replacements={{
             PREBUY_LINK: textKeys[
-              getPrebuyPDFTextKey(getInsuranceType(offer.lastQuoteOfMember))
+              getPrebuyPDFTextKey(getInsuranceType(firstQuote))
             ](),
             TERMS_LINK: textKeys[
-              getInsurancePDFTextKey(getInsuranceType(offer.lastQuoteOfMember))
+              getInsurancePDFTextKey(getInsuranceType(firstQuote))
             ](),
           }}
           markdownProps={{ linkTarget: '_blank' }}
@@ -145,35 +157,36 @@ export const Sign: React.FC<Props> = ({
   )
 }
 
-const track = (email: string, offer: CompleteOfferDataForMember) => {
+const track = (
+  email: string,
+  firstQuote: CompleteQuote,
+  memberId: string,
+  redeemedCampaigns: RedeemedCampaignsQuery['redeemedCampaigns'],
+) => {
   if (process.env.NODE_ENV === 'test') {
     return
   }
 
-  const lastQuote: CompleteQuote = offer.lastQuoteOfMember as CompleteQuote
   const legacyInsuranceType: InsuranceType =
-    lastQuote.details.__typename === 'CompleteApartmentQuoteDetails'
-      ? (lastQuote.details.type as any)
-      : 'HOUSE'
+    firstQuote.details.__typename === 'CompleteApartmentQuoteDetails'
+      ? (firstQuote.details.type as any)
+      : 'HOUSE' // TODO do we have norway quotes here?
 
   adtraction(
-    parseFloat(lastQuote.insuranceCost.monthlyGross.amount),
-    offer.member.id!,
+    parseFloat(firstQuote.insuranceCost.monthlyGross.amount),
+    memberId,
     email,
-    offer.redeemedCampaigns !== null && offer.redeemedCampaigns.length !== 0
-      ? offer.redeemedCampaigns[0].code
+    redeemedCampaigns !== null && redeemedCampaigns.length !== 0
+      ? redeemedCampaigns[0].code
       : null,
     legacyInsuranceType,
   )
 
   if (
-    offer.redeemedCampaigns !== null &&
-    offer.redeemedCampaigns.length !== 0 &&
-    offer.redeemedCampaigns[0].code.toLowerCase() === 'studentkortet'
+    redeemedCampaigns !== null &&
+    redeemedCampaigns.length !== 0 &&
+    redeemedCampaigns[0].code.toLowerCase() === 'studentkortet'
   ) {
-    trackStudentkortet(
-      offer.member.id!,
-      lastQuote.insuranceCost.monthlyGross.amount,
-    )
+    trackStudentkortet(memberId, firstQuote.insuranceCost.monthlyGross.amount)
   }
 }

@@ -4,11 +4,14 @@ import {
   EditQuoteInput,
   ExtraBuilding,
   ExtraBuildingType,
-} from 'generated/graphql'
+  NorwegianHomeContentsDetails,
+  SwedishApartmentQuoteDetails,
+  SwedishHouseQuoteDetails,
+} from 'data/graphql'
 import { inputTypes, masks } from 'new-components/inputs/index'
 import { CompleteQuoteWithoutUnknownDetails } from 'pages/OfferNew/types'
 import * as Yup from 'yup'
-import { isApartment, isHouse, isStudent } from '../../../utils'
+import { isStudent, isSwedishApartment, isSwedishHouse } from '../../../utils'
 import {
   ApartmentFieldSchema,
   ArrayFieldType,
@@ -17,6 +20,7 @@ import {
   HouseFieldSchema,
   RegularFieldType,
 } from './types'
+import { match } from 'matchly'
 
 export const isApartmentFieldSchema = (
   fieldSchema: FieldSchema,
@@ -24,7 +28,7 @@ export const isApartmentFieldSchema = (
 ): fieldSchema is ApartmentFieldSchema => {
   return (
     (fieldSchema as ApartmentFieldSchema).apartment &&
-    isApartment(quote.details)
+    isSwedishApartment(quote.quoteDetails)
   )
 }
 
@@ -32,7 +36,10 @@ export const isHouseFieldSchema = (
   fieldSchema: FieldSchema,
   quote: CompleteQuoteWithoutUnknownDetails,
 ): fieldSchema is HouseFieldSchema => {
-  return (fieldSchema as HouseFieldSchema).house && isHouse(quote.details)
+  return (
+    (fieldSchema as HouseFieldSchema).house &&
+    isSwedishHouse(quote.quoteDetails)
+  )
 }
 
 export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
@@ -57,7 +64,7 @@ export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
     },
   }
 
-  return isApartment(quote.details)
+  return isSwedishApartment(quote.quoteDetails)
     ? {
         apartment: {
           ...base,
@@ -75,7 +82,7 @@ export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
             placeholder:
               'DETAILS_MODULE_TABLE_RECIDENCY_TYPE_CELL_LABEL_APARTMENT',
             options: [
-              ...(isStudent(quote.details)
+              ...(isStudent(quote.quoteDetails)
                 ? [
                     {
                       label: 'SIDEBAR_INSURANCE_TYPE_BRF',
@@ -292,39 +299,88 @@ export const extraBuildingTypes: {
   ExtraBuildingStorehouse: ExtraBuildingType.Storehouse,
 }
 
-export const getInitialValues = (
-  quote: CompleteQuoteWithoutUnknownDetails,
-): EditQuoteInput => {
-  const base = {
-    street: quote.details.street,
-    zipCode: quote.details.zipCode,
-    householdSize: quote.details.householdSize,
-    livingSpace: quote.details.livingSpace,
-  }
+export const getInitialSwedishApartmentValues = (
+  quoteId: string,
+  details: SwedishApartmentQuoteDetails,
+): EditQuoteInput => ({
+  id: quoteId,
+  apartment: {
+    street: details.street,
+    zipCode: details.zipCode,
+    householdSize: details.householdSize,
+    livingSpace: details.livingSpace,
+    type: details.type,
+  },
+})
 
-  return isApartment(quote.details)
-    ? {
-        id: quote.id,
-        apartment: {
-          ...base,
-          type: quote.details.type,
-        },
-      }
-    : {
-        id: quote.id,
-        house: {
-          ...base,
-          ancillarySpace: quote.details.ancillarySpace,
-          numberOfBathrooms: quote.details.numberOfBathrooms,
-          yearOfConstruction: quote.details.yearOfConstruction,
-          isSubleted: quote.details.isSubleted,
-          extraBuildings: quote.details.extraBuildings
-            .filter((b) => !!b.__typename)
-            .map((b) => ({
-              type: extraBuildingTypes[b.__typename!],
-              area: b.area,
-              hasWaterConnected: b.hasWaterConnected,
-            })),
-        },
-      }
-}
+export const getInitialSwedishHouseValues = (
+  quoteId: string,
+  details: SwedishHouseQuoteDetails,
+): EditQuoteInput => ({
+  id: quoteId,
+  house: {
+    street: details.street,
+    zipCode: details.zipCode,
+    householdSize: details.householdSize,
+    livingSpace: details.livingSpace,
+    ancillarySpace: details.ancillarySpace,
+    numberOfBathrooms: details.numberOfBathrooms,
+    yearOfConstruction: details.yearOfConstruction,
+    isSubleted: details.isSubleted,
+    extraBuildings: details.extraBuildings
+      .filter((b) => !!b.__typename)
+      .map((b) => ({
+        type: extraBuildingTypes[b.__typename!],
+        area: b.area,
+        hasWaterConnected: b.hasWaterConnected,
+      })),
+  },
+})
+
+export const getInitialNorwegianHomeContentValues = (
+  quoteId: string,
+  quoteDetails: NorwegianHomeContentsDetails,
+): EditQuoteInput => ({
+  id: quoteId,
+  norwegianHomeContents: {
+    type: quoteDetails.type,
+    street: quoteDetails.street,
+    zipCode: quoteDetails.zipCode,
+    coInsured: quoteDetails.coInsured,
+    isYouth: quoteDetails.isYouth,
+    livingSpace: quoteDetails.livingSpace,
+  },
+})
+
+export const getInitialInputValues = (quote: CompleteQuote) =>
+  match<string, EditQuoteInput>([
+    [
+      'SwedishHouseQuoteDetails',
+      () =>
+        getInitialSwedishHouseValues(
+          quote.id,
+          quote.quoteDetails as SwedishHouseQuoteDetails,
+        ),
+    ],
+    [
+      'SwedishApartmentQuoteDetails',
+      () =>
+        getInitialSwedishApartmentValues(
+          quote.id,
+          quote.quoteDetails as SwedishApartmentQuoteDetails,
+        ),
+    ],
+    [
+      'NorwegianHomeContentsDetails',
+      () =>
+        getInitialNorwegianHomeContentValues(
+          quote.id,
+          quote.quoteDetails as NorwegianHomeContentsDetails,
+        ),
+    ],
+  ])(quote.quoteDetails.__typename as string) ??
+  (() => {
+    throw new window.Error(
+      `Expected quote details to be a valid type but was "${quote.quoteDetails.__typename}"`,
+    )
+  })()

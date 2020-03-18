@@ -105,7 +105,7 @@ const TrustpilotScore45: React.FC<{ className?: string }> = ({ className }) => (
     height="46"
     className={className}
   >
-    <g fill="none" fill-rule="evenodd">
+    <g fill="none" fillRule="evenodd">
       <path
         fill="#E9ECEF"
         d="M288 37.5l-14.695 7.725 2.807-16.362-11.888-11.588 16.429-2.388L288 0l7.347 14.887 16.43 2.388-11.889 11.588 2.807 16.362z"
@@ -125,7 +125,7 @@ const TrustpilotScore15: React.FC<{ className?: string }> = ({ className }) => (
     xmlns="http://www.w3.org/2000/svg"
     className={className}
   >
-    <g fill="none" fill-rule="evenodd">
+    <g fill="none" fillRule="evenodd">
       <path
         fill="#FF8A80"
         d="M24 37.5L9.305 45.225l2.807-16.362L.224 17.275l16.429-2.388L24 0l7.347 14.887 16.43 2.388-11.889 11.588 2.807 16.362z"

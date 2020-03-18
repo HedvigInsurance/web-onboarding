@@ -1,10 +1,10 @@
+import { useQuoteLazyQuery } from 'data/graphql'
 import { Form, Formik, FormikProps } from 'formik'
-import { useQuoteLazyQuery } from 'generated/graphql'
 import { Button } from 'new-components/buttons'
 import { InputField } from 'new-components/inputs'
 import { createQuote } from 'pages/Embark/createQuote'
 import * as React from 'react'
-import { StorageContainer } from 'utils/StorageContainer'
+import { StorageContainer, useStorage } from 'utils/StorageContainer'
 
 enum QuoteType {
   NorwegianHome = 'norwegian-home',
@@ -15,17 +15,22 @@ enum QuoteType {
 
 export const Offer: React.FC = () => {
   const [getQuote, { data, refetch }] = useQuoteLazyQuery()
-  const [quoteId, setQuoteId] = React.useState<string>('')
+  const [quoteId, setQuoteId] = React.useState<string>('') // TODO handle multiple quotes
   const [quoteType, setQuoteType] = React.useState(QuoteType.NorwegianHome)
+  const storageState = useStorage()
 
   React.useEffect(() => {
-    if (!quoteId && localStorage.getItem('hvg:debugger:quoteId')) {
-      setQuoteId(localStorage.getItem('hvg:debugger:quoteId') ?? '')
+    const quoteIds = storageState.session.getSession()?.quoteIds ?? []
+    if (!quoteId && quoteIds[0]) {
+      setQuoteId(quoteIds[0] ?? '')
       return
     }
 
     if (quoteId) {
-      localStorage.setItem('hvg:debugger:quoteId', quoteId ?? '')
+      storageState.session.setSession({
+        ...storageState.session.getSession(),
+        quoteIds: [quoteId],
+      })
       getQuote({ variables: { id: quoteId } })
     }
   }, [quoteId])
@@ -93,7 +98,6 @@ export const Offer: React.FC = () => {
               {quoteType === QuoteType.NorwegianHome && (
                 <Formik
                   initialValues={{
-                    id: quoteId,
                     firstName: 'Blargh',
                     lastName: 'Blarghson',
                     currentInsurer: '',
@@ -101,9 +105,9 @@ export const Offer: React.FC = () => {
                     ssn: '',
                     startDate: '',
                     email: 'blargis@hedvig.com',
-                    norweiganHomeContents: {
+                    norwegianHomeContents: {
                       coInsured: 0,
-                      isSudent: false,
+                      isYouth: false,
                       livingSpace: 0,
                       street: 'Gulebøjsveien 1',
                       type: 'RENT',
@@ -114,6 +118,7 @@ export const Offer: React.FC = () => {
                     await createQuote(storage)({
                       input: {
                         ...values,
+                        id: quoteId,
                         currentInsurer: values.currentInsurer || undefined,
                         // @ts-ignore
                         startDate: values.startDate || undefined,
@@ -148,11 +153,6 @@ interface WithFormikProps {
 const QuoteForm: React.FC<WithFormikProps> = ({ children, formik }) => {
   return (
     <Form>
-      <InputField
-        label="Quote id"
-        placeholder=""
-        {...formik.getFieldProps('id')}
-      />
       <InputField
         label="First name"
         placeholder="First name"
@@ -203,24 +203,24 @@ export const NorwegianHome: React.FC<WithFormikProps> = ({ formik }) => {
         label="Co-insured"
         placeholder="1"
         type="number"
-        {...formik.getFieldProps('norweiganHomeContents.coInsured')}
+        {...formik.getFieldProps('norwegianHomeContents.coInsured')}
       />
-      <div>isStudent TODO</div>
+      <div>isYouth TODO</div>
       <InputField
         label="Living space"
         placeholder="23"
         type="number"
-        {...formik.getFieldProps('norweiganHomeContents.livingSpace')}
+        {...formik.getFieldProps('norwegianHomeContents.livingSpace')}
       />
       <InputField
         label="Street"
         placeholder="Gulebøjsveien 1"
-        {...formik.getFieldProps('norweiganHomeContents.street')}
+        {...formik.getFieldProps('norwegianHomeContents.street')}
       />
       <InputField
         label="Zip code"
         placeholder="1234"
-        {...formik.getFieldProps('norweiganHomeContents.zipCode')}
+        {...formik.getFieldProps('norwegianHomeContents.zipCode')}
       />
       <InputField
         label="Type"
@@ -229,7 +229,7 @@ export const NorwegianHome: React.FC<WithFormikProps> = ({ formik }) => {
           { label: 'Own', value: 'OWN' },
           { label: 'Rent', value: 'RENT' },
         ]}
-        {...formik.getFieldProps('norweiganHomeContents.type')}
+        {...formik.getFieldProps('norwegianHomeContents.type')}
       />
     </>
   )

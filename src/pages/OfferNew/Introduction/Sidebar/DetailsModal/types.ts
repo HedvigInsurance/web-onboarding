@@ -1,4 +1,4 @@
-import { EditApartmentInput, EditHouseInput } from 'generated/graphql'
+import { EditApartmentInput, EditHouseInput } from 'data/graphql'
 import { CoreInputFieldProps } from 'new-components/inputs/index'
 import * as Yup from 'yup'
 

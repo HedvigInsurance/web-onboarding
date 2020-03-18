@@ -1,8 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
 import { Button } from 'new-components/buttons'
-import { CompleteOfferDataForMember } from 'pages/OfferNew/types'
-import { getInsuranceType, insuranceTypeTextKeys } from 'pages/OfferNew/utils'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 
@@ -17,7 +14,7 @@ const Wrapper = styled.div<Hidable & { displayNone: boolean }>`
   bottom: 0;
   left: 0;
   z-index: 1010;
-  justify-content: space-between;
+  justify-content: center;
   transform: ${({ isVisible }) =>
     isVisible ? 'translateY(0)' : 'translateY(100%)'};
   opacity: ${({ isVisible }) => (isVisible ? 1 : 0.8)};
@@ -35,36 +32,7 @@ const Wrapper = styled.div<Hidable & { displayNone: boolean }>`
   }
 `
 
-const TextWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-`
-
-const PreTitle = styled.div`
-  color: ${colorsV2.gray};
-  font-weight: 200;
-  font-size: 0.75rem;
-`
-const Title = styled.div`
-  font-weight: 500;
-  font-size: 0.875rem;
-  color: ${colorsV2.black};
-`
-const Price = styled.span`
-  font-size: 0.875rem;
-  font-weight: bold;
-  color: ${colorsV2.black};
-  line-height: 1.25;
-`
-const PriceUnit = styled.span`
-  font-size: 0.75rem;
-  color: ${colorsV2.darkgray};
-  line-height: 1.25;
-`
-
-const CtaWrapper = styled.div`
-  padding-right: calc(80px + 1rem);
-`
+const CtaWrapper = styled.div``
 const Cta = styled(Button)`
   @media (max-width: 374px) {
     padding: 0.75rem;
@@ -89,9 +57,8 @@ const avoidDisplayNoneGlitch = (
 }
 
 export const StickyBottomSidebar: React.FC<Hidable & {
-  offer: CompleteOfferDataForMember
   onCheckoutOpen: () => void
-}> = ({ isVisible, offer, onCheckoutOpen }) => {
+}> = ({ isVisible, onCheckoutOpen }) => {
   const [reallyIsVisible, setReallyIsVisible] = React.useState(false)
   const [displayNone, setDisplayNone] = React.useState(false)
   React.useEffect(
@@ -102,25 +69,6 @@ export const StickyBottomSidebar: React.FC<Hidable & {
 
   return (
     <Wrapper isVisible={reallyIsVisible} displayNone={displayNone}>
-      <TextWrapper>
-        <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
-        <Title>
-          {textKeys[
-            insuranceTypeTextKeys[getInsuranceType(offer.lastQuoteOfMember)]
-          ]()}
-        </Title>
-        <div>
-          <Price>
-            {Number(offer.lastQuoteOfMember.insuranceCost.monthlyNet.amount)}
-            &nbsp;
-          </Price>
-          <PriceUnit>
-            {textKeys.SIDEBAR_PRICE_SUFFIX_UNIT()}
-            {textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL()}
-          </PriceUnit>
-        </div>
-      </TextWrapper>
-
       <CtaWrapper>
         <Cta onClick={() => onCheckoutOpen()}>
           {textKeys.BOTTOMBAR_GETHEDVIG_BUTTON()}

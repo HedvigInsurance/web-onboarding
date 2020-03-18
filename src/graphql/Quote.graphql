@@ -58,7 +58,6 @@ query Quote($id: ID!) {
 
         ... on NorwegianHomeContentsDetails {
           coInsured
-          isStudent
           livingSpace
           street
           homeType: type

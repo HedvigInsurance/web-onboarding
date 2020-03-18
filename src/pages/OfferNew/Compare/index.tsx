@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
+import { CurrentInsurer } from 'data/graphql'
 import * as React from 'react'
-import { CurrentInsurer } from 'src/generated/graphql'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import {
   Body,

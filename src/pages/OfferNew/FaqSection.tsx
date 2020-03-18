@@ -5,7 +5,7 @@ import {
   getLocaleIsoCode,
   useCurrentLocale,
 } from 'components/utils/CurrentLocale'
-import { useFaqsQuery } from 'generated/graphql'
+import { useFaqsQuery } from 'data/graphql'
 import React from 'react'
 import AnimateHeight from 'react-animate-height'
 import ReactMarkdown from 'react-markdown/with-html'

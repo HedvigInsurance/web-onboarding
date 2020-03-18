@@ -1,5 +1,5 @@
 import { CreateQuoteData, CreateQuoteVariables } from '@hedviginsurance/embark'
-import { MemberInsuranceDocument } from 'generated/graphql'
+import { MemberInsuranceDocument } from 'data/graphql'
 import gql from 'graphql-tag'
 import { apolloClient } from '../../client/apolloClient'
 import { CREATE_SESSION_TOKEN_MUTATION } from '../../containers/SessionContainer'
@@ -87,7 +87,12 @@ export const createQuote = (storage: any) => async (
 
     storage.session.setSession({
       ...storage.session.getSession(),
-      quoteId: result.data!.createQuote!.id,
+      quoteIds: Array.from(
+        new Set([
+          ...(storage.session.getSession()?.quoteIds ?? []),
+          result.data!.createQuote!.id,
+        ]),
+      ),
     })
   }
 

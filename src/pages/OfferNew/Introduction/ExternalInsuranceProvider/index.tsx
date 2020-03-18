@@ -1,16 +1,17 @@
 import styled from '@emotion/styled'
 import * as React from 'react'
 import {
+  CompleteQuote,
   useExternalInsuranceDataQuery,
   useExternalInsuranceDataStatusSubscription,
-} from '../../../../generated/graphql'
+} from '../../../../data/graphql'
 
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-import { CompleteOfferDataForMember } from '../../types'
 import { Compare } from './Compare'
 
 interface Props {
-  offer: CompleteOfferDataForMember
+  dataCollectionId: string
+  firstQuote: CompleteQuote
 }
 
 const ErrorBox = styled.div`
@@ -25,18 +26,21 @@ const ErrorBox = styled.div`
   }
 `
 
-export const ExternalInsuranceProvider: React.FC<Props> = ({ offer }) => {
+export const ExternalInsuranceProvider: React.FC<Props> = ({
+  dataCollectionId,
+  firstQuote,
+}) => {
   const textKeys = useTextKeys()
   const { loading, error, data, refetch } = useExternalInsuranceDataQuery({
     variables: {
-      reference: offer.lastQuoteOfMember.dataCollectionId || '',
+      reference: dataCollectionId,
     },
   })
 
   const { data: subscriptionData } = useExternalInsuranceDataStatusSubscription(
     {
       variables: {
-        reference: offer.lastQuoteOfMember.dataCollectionId || '',
+        reference: dataCollectionId,
       },
     },
   )
@@ -69,5 +73,10 @@ export const ExternalInsuranceProvider: React.FC<Props> = ({ offer }) => {
     return <ErrorBox>{textKeys.EXTERNAL_INSURANCE_FAILED()}</ErrorBox>
   }
 
-  return <Compare offer={offer} insuranceDataCollection={firstInsurance} />
+  return (
+    <Compare
+      cost={firstQuote.insuranceCost}
+      insuranceDataCollection={firstInsurance}
+    />
+  )
 }

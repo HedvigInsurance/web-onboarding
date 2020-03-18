@@ -4,7 +4,7 @@ import {
   CompleteQuote,
   IncompleteQuote,
   Query,
-} from 'generated/graphql'
+} from 'data/graphql'
 
 interface OfferCore {
   redeemedCampaigns: Query['redeemedCampaigns']

@@ -1,3 +1,4 @@
+import { NorwayOffer } from 'NorwayOffer'
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 import { ConnectPayment } from './pages/ConnectPayment'

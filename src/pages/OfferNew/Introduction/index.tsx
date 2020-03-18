@@ -1,6 +1,7 @@
 import { keyframes } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
+import { CompleteQuote } from 'data/graphql'
 import * as React from 'react'
 import { animateScroll } from 'react-scroll'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
@@ -14,13 +15,12 @@ import {
   PreHeading,
   Section,
 } from '../components'
-import { CompleteOfferDataForMember } from '../types'
 import { ExternalInsuranceProvider } from './ExternalInsuranceProvider'
 import { Sidebar } from './Sidebar'
 import { Usps } from './Usps'
 
 interface Props {
-  offer: CompleteOfferDataForMember
+  firstQuote: CompleteQuote
   refetch: () => Promise<void>
   onCheckoutOpen: () => void
 }
@@ -100,7 +100,7 @@ const ScrollButton = styled.button`
 `
 
 export const Introduction: React.FC<Props> = ({
-  offer,
+  firstQuote,
   refetch,
   onCheckoutOpen,
 }) => {
@@ -121,7 +121,7 @@ export const Introduction: React.FC<Props> = ({
     }
   })
 
-  const hasDataCollection = !!offer.lastQuoteOfMember.dataCollectionId || false
+  const hasDataCollection = !!firstQuote.dataCollectionId || false
 
   return (
     <Section bottomBlobColor={colorsV2.black}>
@@ -132,12 +132,15 @@ export const Introduction: React.FC<Props> = ({
               <PreHeading>{textKeys.HERO_LABEL()}</PreHeading>
               <HeadingWhite>
                 {textKeys.HERO_HEADLINE({
-                  FIRST_NAME: offer.lastQuoteOfMember.firstName || '',
+                  FIRST_NAME: firstQuote.firstName ?? '',
                 })}
               </HeadingWhite>
             </HeadingWrapper>
             {hasDataCollection ? (
-              <ExternalInsuranceProvider offer={offer} />
+              <ExternalInsuranceProvider
+                dataCollectionId={firstQuote.dataCollectionId || ''}
+                firstQuote={firstQuote}
+              />
             ) : (
               <UspsDesktop />
             )}
@@ -146,7 +149,7 @@ export const Introduction: React.FC<Props> = ({
           <Sidebar
             ref={ref}
             sticky={sidebarIsSticky}
-            offer={offer}
+            firstQuote={firstQuote}
             refetch={refetch}
             onCheckoutOpen={onCheckoutOpen}
           />

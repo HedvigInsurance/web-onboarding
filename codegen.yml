@@ -2,7 +2,7 @@ overwrite: true
 schema: 'https://graphql.dev.hedvigit.com/graphql'
 documents: 'src/**/*.graphql'
 generates:
-  src/generated/graphql.tsx:
+  src/data/graphql.tsx:
     plugins:
       - 'typescript'
       - 'typescript-operations'

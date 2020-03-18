@@ -1,21 +1,23 @@
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
-import { useMemberOfferQuery } from 'generated/graphql'
+import { CompleteQuote } from 'data/graphql'
+import { useMultipleQuotes } from 'data/useMultipleQuotes'
 import { History } from 'history'
 import { TopBar } from 'new-components/TopBar'
 import { SwitchSafetySection } from 'pages/OfferNew/SwitchSafetySection'
 import { TestimonialsSection } from 'pages/OfferNew/TestimonialsSection'
+import { getInsuranceType } from 'pages/OfferNew/utils'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
-import { useHistory, useRouteMatch } from 'react-router'
+import { Redirect, useHistory, useRouteMatch } from 'react-router'
+import { useStorage } from 'utils/StorageContainer'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
 import { Checkout } from './Checkout'
 import { Compare } from './Compare'
 import { FaqSection } from './FaqSection'
 import { Introduction } from './Introduction'
 import { Perils } from './Perils/index'
-import { isOffer } from './utils'
 
 const createToggleCheckout = (history: History<any>, locale?: string) => (
   isOpen: boolean,
@@ -28,13 +30,31 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
 }
 
 export const OfferNew: React.FC = () => {
-  const { data, loading, error, refetch } = useMemberOfferQuery()
+  const storage = useStorage()
+  const quoteIds = storage.session.getSession()?.quoteIds ?? []
+  const [quotes, { loading: loadingQuotes, refetch }] = useMultipleQuotes(
+    quoteIds,
+  )
   const history = useHistory()
   const currentLocale = useCurrentLocale()
-  const checkoutMatch = useRouteMatch('/:locale(en|no|no/en)?/new-member/sign')
+  const checkoutMatch = useRouteMatch('/:locale(en|no/en|no)?/new-member/sign')
   const toggleCheckout = createToggleCheckout(history, currentLocale)
 
-  return !loading && !error && data && isOffer(data) ? (
+  if (quoteIds.length === 0) {
+    return (
+      <Redirect to={`${currentLocale && '/' + currentLocale}/new-member`} />
+    )
+  }
+
+  if (!loadingQuotes && quoteIds.length !== quotes.length) {
+    throw new Error(
+      `Mismatching number of quote ids in session (${quoteIds.length}) and actual returned quotes (${quotes.length}).`,
+    )
+  }
+
+  const firstQuote = quotes[0] as CompleteQuote
+
+  return loadingQuotes ? null : (
     <Page>
       <SessionTokenGuard>
         <TopBar />
@@ -42,9 +62,7 @@ export const OfferNew: React.FC = () => {
           event={{
             name: SemanticEvents.Ecommerce.CheckoutStarted,
             properties: {
-              value: Number(
-                data.lastQuoteOfMember.insuranceCost.monthlyNet.amount,
-              ),
+              value: Number(firstQuote.insuranceCost.monthlyNet.amount),
               label: 'Offer',
               ...getUtmParamsFromCookie(),
             },
@@ -52,7 +70,7 @@ export const OfferNew: React.FC = () => {
         >
           {({ track }) => (
             <Introduction
-              offer={data}
+              firstQuote={firstQuote}
               refetch={refetch as () => Promise<any>}
               onCheckoutOpen={() => {
                 toggleCheckout(true)
@@ -61,20 +79,18 @@ export const OfferNew: React.FC = () => {
             />
           )}
         </TrackAction>
-        <Perils offer={data} />
-        <Compare
-          currentInsurer={data.lastQuoteOfMember.currentInsurer || undefined}
-        />
+        <Perils insuranceType={getInsuranceType(firstQuote)} />
+        <Compare currentInsurer={firstQuote.currentInsurer || undefined} />
         <TestimonialsSection />
         <SwitchSafetySection />
         <FaqSection />
         <Checkout
-          offer={data}
+          firstQuote={firstQuote}
           isOpen={checkoutMatch !== null}
           onClose={() => toggleCheckout(false)}
           refetch={refetch as () => Promise<any>}
         />
       </SessionTokenGuard>
     </Page>
-  ) : null
+  )
 }

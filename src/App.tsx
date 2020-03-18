@@ -6,7 +6,11 @@ import { hot } from 'react-hot-loader'
 import { Route, Switch } from 'react-router-dom'
 import { reactPageRoutes } from './routes'
 import { GlobalCss } from './utils/globalStyles'
-import { StorageState, WithStorageProps } from './utils/StorageContainer'
+import {
+  StorageContext,
+  StorageState,
+  WithStorageProps,
+} from './utils/StorageContainer'
 
 export const App: React.ComponentType<StorageState> = ({ session }) => (
   <>
@@ -21,17 +25,19 @@ export const App: React.ComponentType<StorageState> = ({ session }) => (
             initialState={{ storage: { session } }}
             devtools={process.env.NODE_ENV !== 'production'}
           >
-            <Switch>
-              {reactPageRoutes.map(({ path, exact, Component, render }) => (
-                <Route
-                  key={path}
-                  path={path}
-                  exact={exact}
-                  component={Component}
-                  render={render}
-                />
-              ))}
-            </Switch>
+            <StorageContext.Provider value={{ session }}>
+              <Switch>
+                {reactPageRoutes.map(({ path, exact, Component, render }) => (
+                  <Route
+                    key={path}
+                    path={path}
+                    exact={exact}
+                    component={Component}
+                    render={render}
+                  />
+                ))}
+              </Switch>
+            </StorageContext.Provider>
           </Provider>
         </TranslationsProvider>
       )}

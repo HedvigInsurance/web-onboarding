@@ -1,5 +1,5 @@
+import { EditQuoteInput } from 'data/graphql'
 import { FormikProps, GenericFieldHTMLAttributes, getIn } from 'formik'
-import { EditQuoteInput } from 'generated/graphql'
 import { InputField } from 'new-components/inputs'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'

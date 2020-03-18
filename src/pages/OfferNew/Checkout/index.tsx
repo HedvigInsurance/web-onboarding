@@ -2,8 +2,8 @@ import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { BackArrow } from 'components/icons/BackArrow'
+import { CompleteQuote } from 'data/graphql'
 import { Sign } from 'pages/OfferNew/Checkout/Sign'
-import { CompleteOfferDataForMember } from 'pages/OfferNew/types'
 import * as React from 'react'
 import { CheckoutContent } from './CheckoutContent'
 
@@ -138,19 +138,19 @@ const Backdrop = styled('div')<Openable>`
 `
 
 interface Props {
-  offer: CompleteOfferDataForMember
+  firstQuote: CompleteQuote
   isOpen?: boolean
   onClose?: () => void
   refetch: () => Promise<void>
 }
 
 export const Checkout: React.FC<Props> = ({
-  offer,
+  firstQuote,
   isOpen,
   onClose,
   refetch,
 }) => {
-  const [email, setEmail] = React.useState(offer.lastQuoteOfMember.email ?? '')
+  const [email, setEmail] = React.useState(firstQuote.email ?? '')
   const [visibilityState, setVisibilityState] = React.useState(
     VisibilityState.CLOSED,
   )
@@ -218,7 +218,7 @@ export const Checkout: React.FC<Props> = ({
             </BackButtonWrapper>
 
             <CheckoutContent
-              offer={offer}
+              firstQuote={firstQuote}
               email={email}
               onEmailChange={setEmail}
               refetch={refetch}
@@ -227,10 +227,10 @@ export const Checkout: React.FC<Props> = ({
         </OuterScrollWrapper>
 
         <SlidingSign
+          firstQuote={firstQuote}
           visibilityState={visibilityState}
-          personalNumber={offer.lastQuoteOfMember.ssn}
+          personalNumber={firstQuote.ssn}
           email={email}
-          offer={offer}
         />
       </OuterWrapper>
       <Backdrop visibilityState={visibilityState} onClick={onClose} />

@@ -4,6 +4,7 @@ import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { Peril } from 'pages/OfferNew/Perils/types'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { InsuranceType } from 'utils/insuranceDomainUtils'
 import {
   Body,
   Column,
@@ -13,15 +14,13 @@ import {
   HeadingWrapper,
   PreHeading,
 } from '../components'
-import { CompleteOfferDataForMember } from '../types'
-import { getInsuranceType } from '../utils'
 import { InsuranceValues } from './InsuranceValues'
 import { PerilCollection } from './PerilCollection'
 import { getLocalizedPerils } from './perilData'
 import { PerilModal } from './PerilModal'
 
 interface Props {
-  offer: CompleteOfferDataForMember
+  insuranceType: InsuranceType
 }
 
 const Wrapper = styled.div`
@@ -30,18 +29,17 @@ const Wrapper = styled.div`
   display: flex;
 `
 
-export const Perils: React.FC<Props> = ({ offer }) => {
+export const Perils: React.FC<Props> = ({ insuranceType }) => {
   const textKeys = useTextKeys()
   const [isShowingPeril, setIsShowingPeril] = React.useState(false)
   const [currentPeril, setCurrentPeril] = React.useState(0)
   const [perils, setPerils] = React.useState<ReadonlyArray<Peril>>([])
   const currentLocale = useCurrentLocale()
   React.useEffect(() => {
-    getLocalizedPerils(
-      getInsuranceType(offer.lastQuoteOfMember),
-      (currentLocale || 'sv') + '-SE',
-    ).then(setPerils)
-  }, [getInsuranceType(offer.lastQuoteOfMember), 'sv-SE'])
+    getLocalizedPerils(insuranceType, (currentLocale || 'sv') + '-SE').then(
+      setPerils,
+    )
+  }, [insuranceType, 'sv-SE'])
 
   return (
     <Wrapper>
@@ -58,9 +56,7 @@ export const Perils: React.FC<Props> = ({ offer }) => {
             setIsShowingPeril={setIsShowingPeril}
           />
 
-          <InsuranceValues
-            insuranceType={getInsuranceType(offer.lastQuoteOfMember)}
-          />
+          <InsuranceValues insuranceType={insuranceType} />
         </Column>
         <ColumnSpacing />
       </Container>

@@ -1,2 +1,2 @@
 export const mockNetworkWait = (delay: number = 0) =>
-  new Promise((resolve) => setTimeout(() => resolve(), delay))
+  new Promise<void>((resolve) => setTimeout(() => resolve(), delay))

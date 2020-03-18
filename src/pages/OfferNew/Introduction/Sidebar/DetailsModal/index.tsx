@@ -1,13 +1,13 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import { Modal, ModalProps } from 'components/ModalNew'
-import { FieldArray, Form, Formik } from 'formik'
 import {
   EditQuoteInput,
   ExtraBuildingInput,
   ExtraBuildingType,
   useEditQuoteMutation,
-} from 'generated/graphql'
+} from 'data/graphql'
+import { FieldArray, Form, Formik } from 'formik'
 import { Button } from 'new-components/buttons'
 import {
   InputGroup,
@@ -21,7 +21,7 @@ import { DetailInput } from './DetailInput'
 import { SupportSection } from './SupportSection'
 import {
   getFieldSchema,
-  getInitialValues,
+  getInitialInputValues,
   getValidationSchema,
   isApartmentFieldSchema,
   isHouseFieldSchema,
@@ -174,7 +174,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   const [editQuote, editQuoteResult] = useEditQuoteMutation()
   const fieldSchema = getFieldSchema(quote)
   const validationSchema = getValidationSchema(fieldSchema, quote)
-  const initialValues = getInitialValues(quote)
+  const initialValues = getInitialInputValues(quote)
   const [isUpdating, setIsUpdating] = React.useState(false)
   const [
     isUnderwritingGuidelineHit,

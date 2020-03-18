@@ -10,7 +10,7 @@ export interface Session {
   token?: string
   code?: string
   partner?: string
-  quoteId?: string
+  quoteIds?: ReadonlyArray<string>
 }
 
 export interface IsomorphicSessionStorage<T> {
