@@ -1,4 +1,8 @@
-import { useQuoteLazyQuery } from 'data/graphql'
+import {
+  ApartmentType,
+  CreateQuoteInput,
+  useQuoteLazyQuery,
+} from 'data/graphql'
 import { Form, Formik, FormikProps } from 'formik'
 import { Button } from 'new-components/buttons'
 import { InputField } from 'new-components/inputs'
@@ -137,6 +141,48 @@ export const Offer: React.FC = () => {
                   )}
                 </Formik>
               )}
+
+              {quoteType === QuoteType.SwedishApartment && (
+                <Formik<Partial<CreateQuoteInput>>
+                  initialValues={{
+                    firstName: 'Blargh',
+                    lastName: 'Blarghson',
+                    currentInsurer: '',
+                    birthDate: '1995-09-29',
+                    ssn: '',
+                    startDate: '',
+                    email: 'blargis@hedvig.com',
+                    swedishApartment: {
+                      street: 'Storgatan 1',
+                      zipCode: '',
+                      livingSpace: 23,
+                      householdSize: 1,
+                      type: ApartmentType.Rent,
+                    },
+                  }}
+                  onSubmit={async (values) => {
+                    await createQuote(storage)({
+                      input: {
+                        ...values,
+                        id: quoteId,
+                        currentInsurer: values.currentInsurer || undefined,
+                        // @ts-ignore
+                        startDate: values.startDate || undefined,
+                      },
+                    })
+
+                    await refetch()
+                  }}
+                >
+                  {(props) => (
+                    <>
+                      <QuoteForm formik={props}>
+                        <SwedishApartment formik={props} />
+                      </QuoteForm>
+                    </>
+                  )}
+                </Formik>
+              )}
             </>
           )}
           {data?.quote && <pre>{JSON.stringify(data, null, 2)}</pre>}
@@ -230,6 +276,46 @@ export const NorwegianHome: React.FC<WithFormikProps> = ({ formik }) => {
           { label: 'Rent', value: 'RENT' },
         ]}
         {...formik.getFieldProps('norwegianHomeContents.type')}
+      />
+    </>
+  )
+}
+
+export const SwedishApartment: React.FC<WithFormikProps> = ({ formik }) => {
+  return (
+    <>
+      <InputField
+        label="Household size"
+        placeholder="1"
+        type="number"
+        {...formik.getFieldProps('swedishApartment.householdSize')}
+      />
+      <InputField
+        label="Living space"
+        placeholder="23"
+        type="number"
+        {...formik.getFieldProps('swedishApartment.livingSpace')}
+      />
+      <InputField
+        label="Street"
+        placeholder="Gulebøjsveien 1"
+        {...formik.getFieldProps('swedishApartment.street')}
+      />
+      <InputField
+        label="Zip code"
+        placeholder="12345"
+        {...formik.getFieldProps('swedishApartment.zipCode')}
+      />
+      <InputField
+        label="Type"
+        placeholder=""
+        options={[
+          { label: 'Brf', value: ApartmentType.Brf },
+          { label: 'Rent', value: ApartmentType.Rent },
+          { label: 'Brf (student)', value: ApartmentType.StudentBrf },
+          { label: 'Rent (student)', value: ApartmentType.StudentRent },
+        ]}
+        {...formik.getFieldProps('swedishApartment.type')}
       />
     </>
   )

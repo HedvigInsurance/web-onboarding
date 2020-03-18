@@ -168,8 +168,8 @@ const track = (
   }
 
   const legacyInsuranceType: InsuranceType =
-    firstQuote.details.__typename === 'CompleteApartmentQuoteDetails'
-      ? (firstQuote.details.type as any)
+    firstQuote.quoteDetails.__typename === 'SwedishApartmentQuoteDetails'
+      ? (firstQuote.quoteDetails.type as any)
       : 'HOUSE' // TODO do we have norway quotes here?
 
   adtraction(

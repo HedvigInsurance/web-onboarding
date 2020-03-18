@@ -271,9 +271,9 @@ export const InputGroup = styled.div`
   position: relative;
   margin-bottom: 1.5rem;
 
-  > ${Wrapper}:first-child {
+  > ${Wrapper}:first-of-type {
     border-top-left-radius: 8px;
-    border-top-right-radius 8px;
+    border-top-right-radius: 8px;
   }
 
   > ${Wrapper}:last-child, ${InputGroupDeleteButton}:last-child {
@@ -300,7 +300,7 @@ export const InputGroupRow = styled.div`
     width: 50%;
     border-top: 0;
 
-    :first-child {
+    :first-of-type {
       border-right: 0;
     }
     ${TextWrapper} {

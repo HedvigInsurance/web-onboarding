@@ -24,7 +24,7 @@ const Wrapper = styled.div`
   @media all and (max-width: 600px) {
     flex-direction: column;
 
-    > *:first-child {
+    > *:first-of-type {
       margin-bottom: 1.25rem;
     }
   }

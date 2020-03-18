@@ -54,7 +54,7 @@ export const OfferNew: React.FC = () => {
 
   const firstQuote = quotes[0] as CompleteQuote
 
-  return loadingQuotes ? null : (
+  return loadingQuotes && quotes.length === 0 ? null : (
     <Page>
       <SessionTokenGuard>
         <TopBar />

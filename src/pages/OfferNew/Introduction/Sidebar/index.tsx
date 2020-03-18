@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import { CookieStorage } from 'cookie-storage'
 import {
+  Campaign,
   CompleteQuote,
   NorwegianHomeContentsDetails,
   SwedishApartmentQuoteDetails,
@@ -188,8 +189,15 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
     const [removeDiscountCode] = useRemoveDiscountCodeMutation()
     const [redeemCode] = useRedeemCodeMutation()
     const redeemedCampaignsQuery = useRedeemedCampaignsQuery()
-    const redeemedCampaigns =
+    const redeemedCampaigns: Campaign[] =
       redeemedCampaignsQuery.data?.redeemedCampaigns ?? []
+
+    const refetchAll = () =>
+      refetch()
+        .then(() => redeemedCampaignsQuery.refetch())
+        .then(() => {
+          return // void
+        })
 
     React.useEffect(() => {
       const campaignCodes =
@@ -201,7 +209,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
         !campaignCodes.includes(preRedeemedCode.toUpperCase())
       ) {
         redeemCode({ variables: { code: preRedeemedCode } }).then(() =>
-          refetch(),
+          refetchAll(),
         )
       }
     }, [])
@@ -253,10 +261,10 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                   <Price
                     monthlyCostDeduction={
                       isMonthlyCostDeduction(
-                        redeemedCampaigns![0]?.incentive ?? undefined,
+                        redeemedCampaigns[0]?.incentive ?? undefined,
                       ) ||
                       isPercentageDiscountMonths(
-                        redeemedCampaigns![0]?.incentive ?? undefined,
+                        redeemedCampaigns[0]?.incentive ?? undefined,
                       )
                     }
                     monthlyGross={firstQuote.insuranceCost.monthlyGross}
@@ -304,7 +312,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                                   path: '/',
                                 })
                               })
-                              .then(() => refetch())
+                              .then(() => refetchAll())
                           }}
                         >
                           {textKeys.SIDEBAR_REMOVE_DISCOUNT_BUTTON()}
@@ -316,12 +324,12 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 <DiscountCodeModal
                   isOpen={discountCodeModalIsOpen}
                   close={() => setDiscountCodeModalIsOpen(false)}
-                  refetch={refetch}
+                  refetch={() => refetchAll()}
                 />
               </Container>
               <DetailsModal
                 quote={firstQuote as CompleteQuoteWithoutUnknownDetails}
-                refetch={refetch}
+                refetch={refetchAll}
                 isVisible={detailsModalIsOpen}
                 onClose={() => setDetailsModalIsOpen(false)}
               />

@@ -7084,7 +7084,7 @@ export type RedeemedCampaignsQuery = { __typename?: 'Query' } & {
               >
             })
           | ({ __typename?: 'FreeMonths' } & Pick<FreeMonths, 'quantity'>)
-          | { __typename?: 'NoDiscount' }
+          | { __typename: 'NoDiscount' }
           | ({ __typename?: 'PercentageDiscountMonths' } & Pick<
               PercentageDiscountMonths,
               'percentageDiscount'
@@ -7874,6 +7874,9 @@ export const RedeemedCampaignsDocument = gql`
         ... on PercentageDiscountMonths {
           percentageDiscount
           quantityMonths: quantity
+        }
+        ... on NoDiscount {
+          __typename
         }
       }
       code
