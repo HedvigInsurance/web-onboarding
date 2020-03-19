@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { matchPath, useLocation } from 'react-router'
 import { LOCALE_PATH_PATTERN } from '../../routes'
+import { match } from 'matchly'
 
 export const getLocaleIsoCode = (locale: string) => {
   switch (locale) {
@@ -16,10 +17,10 @@ export const getLocaleIsoCode = (locale: string) => {
   }
 }
 const getLocaleFromPath = (path: string) => {
-  const match = matchPath<WithLocale>(path, {
+  const localeMatch = matchPath<WithLocale>(path, {
     path: LOCALE_PATH_PATTERN + '/*',
   })
-  return match?.params?.locale?.toLowerCase() || ''
+  return localeMatch?.params?.locale?.toLowerCase() || ''
 }
 
 export interface WithLocale {
@@ -39,4 +40,20 @@ export const CurrentLocale: React.ComponentType<{
 export const useCurrentLocale = () => {
   const location = useLocation()
   return getLocaleFromPath(location.pathname)
+}
+
+export enum Market {
+  Se = 'SE',
+  No = 'NO',
+}
+export const useMarket = () => {
+  const currentLocale = useCurrentLocale()
+
+  return match([
+    ['sv', Market.Se],
+    ['', Market.Se],
+    ['en', Market.Se],
+    ['no', Market.No],
+    ['en/no', Market.No],
+  ])(currentLocale)
 }
