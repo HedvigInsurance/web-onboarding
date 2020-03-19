@@ -8,6 +8,7 @@ import {
   SwedishApartmentQuoteDetails,
   SwedishHouseQuoteDetails,
 } from 'data/graphql'
+import { match } from 'matchly'
 import { inputTypes, masks } from 'new-components/inputs/index'
 import { CompleteQuoteWithoutUnknownDetails } from 'pages/OfferNew/types'
 import * as Yup from 'yup'
@@ -20,7 +21,6 @@ import {
   HouseFieldSchema,
   RegularFieldType,
 } from './types'
-import { match } from 'matchly'
 
 export const isApartmentFieldSchema = (
   fieldSchema: FieldSchema,

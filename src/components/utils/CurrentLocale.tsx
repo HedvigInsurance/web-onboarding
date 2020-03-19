@@ -1,7 +1,7 @@
+import { match } from 'matchly'
 import * as React from 'react'
 import { matchPath, useLocation } from 'react-router'
 import { LOCALE_PATH_PATTERN } from '../../routes'
-import { match } from 'matchly'
 
 export const getLocaleIsoCode = (locale: string) => {
   switch (locale) {
