@@ -42,7 +42,7 @@ export const OfferNew: React.FC = () => {
   const history = useHistory()
   const currentLocale = useCurrentLocale()
   const market = useMarket()
-  const checkoutMatch = useRouteMatch('/:locale(en|no/en|no)?/new-member/sign')
+  const checkoutMatch = useRouteMatch('/:locale(en|no/en-no)?/new-member/sign')
   const toggleCheckout = createToggleCheckout(history, currentLocale)
 
   if (quoteIds.length === 0) {

@@ -10,7 +10,7 @@ import { FourOhFour } from './pages/FourOhFour'
 import { OfferNew } from './pages/OfferNew'
 import { Referral } from './pages/Referral'
 
-export const LOCALE_PATH_PATTERN = '/:locale(en|no/en|no)?'
+export const LOCALE_PATH_PATTERN = '/:locale(en|no-en|no)?'
 export const serverSideRedirects = [
   { from: '/referrals/terms', to: '/invite/terms' },
   { from: '/new-member/hedvig', to: '/new-member' },

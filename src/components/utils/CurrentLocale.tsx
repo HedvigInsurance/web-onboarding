@@ -9,7 +9,7 @@ export const getLocaleIsoCode = (locale: string) => {
       return 'en_SE'
     case 'no':
       return 'nb_NO'
-    case 'no/en':
+    case 'no-en':
       return 'en_NO'
     case '':
     default:
