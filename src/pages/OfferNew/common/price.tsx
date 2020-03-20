@@ -1,3 +1,4 @@
+import { keyframes } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import { MonetaryAmount } from 'containers/types'
@@ -84,18 +85,39 @@ const PriceInterval = styled.div<{ lightAppearance?: boolean }>`
   ${({ lightAppearance }) => lightAppearance && `color: ${colorsV2.white}`};
 `
 
+const SpinnerWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  height: 3.5rem;
+`
+const spin = keyframes`
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+`
+const Spinner = styled.div`
+  width: 2rem;
+  height: 2rem;
+  flex: 1;
+  border: 2px solid ${colorsV2.darkgray};
+  border-top-color: transparent;
+  border-radius: 4rem;
+  animation: ${spin} 500ms linear infinite;
+`
+
 export const Price: React.FC<{
   monthlyCostDeduction?: boolean
   monthlyNet: MonetaryAmount
   monthlyGross: MonetaryAmount
   highlightAmount?: boolean
   lightAppearance?: boolean
+  loading?: boolean
 }> = ({
   monthlyCostDeduction,
   monthlyNet,
   monthlyGross,
   highlightAmount,
   lightAppearance,
+  loading,
 }) => {
   const textKeys = useTextKeys()
   return (
@@ -110,13 +132,20 @@ export const Price: React.FC<{
       </PriceGross>
 
       <PriceNumbers>
-        <PriceNet
-          monthlyCostDeduction={!!monthlyCostDeduction}
-          highlightAmount={highlightAmount}
-          lightAppearance={lightAppearance}
-        >
-          {Math.round(Number(monthlyNet.amount))}
-        </PriceNet>
+        {!loading && (
+          <PriceNet
+            monthlyCostDeduction={!!monthlyCostDeduction}
+            highlightAmount={highlightAmount}
+            lightAppearance={lightAppearance}
+          >
+            {Math.round(Number(monthlyNet.amount))}
+          </PriceNet>
+        )}
+        {loading && (
+          <SpinnerWrapper>
+            <Spinner />
+          </SpinnerWrapper>
+        )}
 
         <PriceSuffix>
           <PriceUnit lightAppearance={lightAppearance}>

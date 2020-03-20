@@ -1,3 +1,4 @@
+import { Market } from 'components/utils/CurrentLocale'
 import {
   ApartmentType,
   Campaign,
@@ -95,4 +96,16 @@ export const maskAndFormatRawSsn = (ssn: string) => {
   const CENTURY_LENGTH = 2
   const DATE_LENGTH = 6
   return ssn.substr(CENTURY_LENGTH, DATE_LENGTH) + '-****'
+}
+
+export const createSsnValidator = (market: Market) => (
+  ssn: string,
+): boolean => {
+  if (market === Market.No) {
+    return /^[0-9]{2}[0,1][0-9][0-9]{2}[ ]?[0-9]{5}$/.test(ssn)
+  } else if (market === Market.Se) {
+    return /^[0-9]{2}[0-1][0-9][0-9]{2}[-+][0-9]{4}$/.test(ssn)
+  }
+
+  throw new Error(`Expected market to be NO or SE but was ${market}`)
 }

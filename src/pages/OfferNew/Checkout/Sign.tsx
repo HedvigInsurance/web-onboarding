@@ -95,7 +95,9 @@ export const Sign: React.FC<Props> = ({
   const [signState, setSignState] = React.useState(SignState.NOT_STARTED)
 
   const canInitiateSign =
-    signState !== SignState.STARTED && emailValidation.isValidSync(email ?? '')
+    signState !== SignState.STARTED &&
+    emailValidation.isValidSync(email ?? '') &&
+    firstQuote.ssn
 
   return (
     <Wrapper className={className}>
