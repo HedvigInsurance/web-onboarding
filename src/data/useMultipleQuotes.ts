@@ -1,8 +1,8 @@
 import { useApolloClient } from '@apollo/react-hooks'
+import { FetchPolicy } from 'apollo-client'
 import { QuoteDocument, QuoteQuery } from 'data/graphql'
 import * as React from 'react'
 import { Quote } from './graphql'
-import { FetchPolicy } from 'apollo-client'
 
 export interface UseMultipleQuotesState {
   loading: boolean
