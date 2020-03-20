@@ -54,6 +54,6 @@ export const useMarket = () => {
     ['', Market.Se],
     ['en', Market.Se],
     ['no', Market.No],
-    ['en/no', Market.No],
+    ['no-en', Market.No],
   ])(currentLocale)
 }

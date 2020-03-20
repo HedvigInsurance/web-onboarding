@@ -10,6 +10,3 @@ export const formatPostalNumber = (postalNumber: string) => {
 
   return postalNumber
 }
-
-export const sanitizePostalNumber = (postalNumber: string) =>
-  String(postalNumber).replace(/[^\d]/g, '')

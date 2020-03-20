@@ -1,12 +1,10 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
+import { CompleteQuote, QuoteDetails } from 'data/graphql'
 import {
-  CompleteQuote,
-  NorwegianHomeContentsDetails,
-  SwedishApartmentQuoteDetails,
-  SwedishHouseQuoteDetails,
-} from 'data/graphql'
-import { getHouseholdSize } from 'pages/OfferNew/Introduction/Sidebar/utils'
+  getHouseholdSize,
+  quoteDetailsHasAddress,
+} from 'pages/OfferNew/Introduction/Sidebar/utils'
 import {
   apartmentTypeTextKeys,
   maskAndFormatRawSsn,
@@ -67,23 +65,18 @@ export const InsuranceSummary: React.FC<Props> = ({ firstQuote }) => {
     <Wrapper>
       <Title>{textKeys.CHECKOUT_SUMMARY_TITLE()}</Title>
       <Table>
-        {(firstQuote.quoteDetails.__typename ===
-          'SwedishApartmentQuoteDetails' ||
-          firstQuote.quoteDetails.__typename === 'SwedishHouseQuoteDetails' ||
-          firstQuote.quoteDetails.__typename ===
-            'NorwegianHomeContentsDetails') &&
-          getDetails(firstQuote.quoteDetails, textKeys, firstQuote.ssn).map(
-            (group, index) => (
-              <Group key={index}>
-                {group.map(({ key, value, label }) => (
-                  <Row key={key}>
-                    <Label>{label}</Label>
-                    <Value>{value}</Value>
-                  </Row>
-                ))}
-              </Group>
-            ),
-          )}
+        {getDetails(firstQuote.quoteDetails, textKeys, firstQuote.ssn).map(
+          (group, index) => (
+            <Group key={index}>
+              {group.map(({ key, value, label }) => (
+                <Row key={key}>
+                  <Label>{label}</Label>
+                  <Value>{value}</Value>
+                </Row>
+              ))}
+            </Group>
+          ),
+        )}
       </Table>
     </Wrapper>
   )
@@ -97,16 +90,11 @@ type DetailsGroup = ReadonlyArray<{
 
 function getHouseSummaryDetailsMaybe(
   textKeys: TextKeyMap,
-  quoteDetails:
-    | SwedishApartmentQuoteDetails
-    | SwedishHouseQuoteDetails
-    | NorwegianHomeContentsDetails,
+  quoteDetails: QuoteDetails,
 ): DetailsGroup {
   if (quoteDetails.__typename !== 'SwedishHouseQuoteDetails') {
     return []
   }
-
-  // TODO norway?
 
   return [
     {
@@ -133,16 +121,11 @@ function getHouseSummaryDetailsMaybe(
 
 const getHouseExtraBuildingsMaybe = (
   textKeys: TextKeyMap,
-  quoteDetails:
-    | SwedishApartmentQuoteDetails
-    | SwedishHouseQuoteDetails
-    | NorwegianHomeContentsDetails,
+  quoteDetails: QuoteDetails,
 ): ReadonlyArray<DetailsGroup> => {
   if (quoteDetails.__typename !== 'SwedishHouseQuoteDetails') {
     return []
   }
-
-  // TODO norway?
 
   return quoteDetails.extraBuildings.map<DetailsGroup>((extraBuilding) => [
     {
@@ -167,16 +150,11 @@ const getHouseExtraBuildingsMaybe = (
 
 function getApartmentSummaryDetailsMaybe(
   textKeys: TextKeyMap,
-  quoteDetails:
-    | SwedishApartmentQuoteDetails
-    | SwedishHouseQuoteDetails
-    | NorwegianHomeContentsDetails,
+  quoteDetails: QuoteDetails,
 ): DetailsGroup {
   if (quoteDetails.__typename !== 'SwedishApartmentQuoteDetails') {
     return []
   }
-
-  // TODO norway
 
   return [
     {
@@ -188,52 +166,60 @@ function getApartmentSummaryDetailsMaybe(
 }
 
 const getDetails = (
-  quoteDetails:
-    | SwedishApartmentQuoteDetails
-    | SwedishHouseQuoteDetails
-    | NorwegianHomeContentsDetails,
+  quoteDetails: QuoteDetails,
   textKeys: TextKeyMap,
   ssn?: string,
-): ReadonlyArray<DetailsGroup> => [
-  [
-    {
-      key: 'address',
-      label: textKeys.CHECKOUT_DETAILS_ADDRESS(),
-      value: quoteDetails.street,
-    },
-    {
-      key: 'zipcode',
-      label: textKeys.CHECKOUT_DETAILS_ZIPCODE(),
-      value: formatPostalNumber(quoteDetails.zipCode),
-    },
-    {
-      key: 'bostadstyp',
-      label: textKeys.CHECKOUT_DETAILS_QUOTE_TYPE(),
-      value:
-        quoteDetails.__typename === 'SwedishApartmentQuoteDetails' ||
-        quoteDetails.__typename === 'NorwegianHomeContentsDetails'
-          ? textKeys.CHECKOUT_APARTMENT()
-          : textKeys.CHECKOUT_HOUSE(),
-    },
-    ...getApartmentSummaryDetailsMaybe(textKeys, quoteDetails),
-    {
-      key: 'livingspace',
-      label: textKeys.CHECKOUT_DETAILS_LIVING_SPACE(),
-      value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
-        VALUE: quoteDetails.livingSpace,
-      }),
-    },
-    ...getHouseSummaryDetailsMaybe(textKeys, quoteDetails),
-  ],
+): ReadonlyArray<DetailsGroup> => {
+  const detailsGroups: DetailsGroup[] = []
 
-  ...getHouseExtraBuildingsMaybe(textKeys, quoteDetails),
+  if (quoteDetailsHasAddress(quoteDetails)) {
+    detailsGroups.push(
+      [
+        {
+          key: 'address',
+          label: textKeys.CHECKOUT_DETAILS_ADDRESS(),
+          value: quoteDetails.street,
+        },
+        {
+          key: 'zipcode',
+          label: textKeys.CHECKOUT_DETAILS_ZIPCODE(),
+          value: formatPostalNumber(quoteDetails.zipCode),
+        },
+        {
+          key: 'bostadstyp',
+          label: textKeys.CHECKOUT_DETAILS_QUOTE_TYPE(),
+          value:
+            quoteDetails.__typename === 'SwedishApartmentQuoteDetails' ||
+            quoteDetails.__typename === 'NorwegianHomeContentsDetails'
+              ? textKeys.CHECKOUT_APARTMENT()
+              : textKeys.CHECKOUT_HOUSE(),
+        },
+        ...getApartmentSummaryDetailsMaybe(textKeys, quoteDetails),
+        {
+          key: 'livingspace',
+          label: textKeys.CHECKOUT_DETAILS_LIVING_SPACE(),
+          value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
+            VALUE: quoteDetails.livingSpace,
+          }),
+        },
+        ...getHouseSummaryDetailsMaybe(textKeys, quoteDetails),
+      ],
 
-  [
-    ssn && {
-      key: 'ssn',
-      label: textKeys.CHECKOUT_DETAILS_SSN(),
-      value: maskAndFormatRawSsn(ssn),
-    },
+      ...getHouseExtraBuildingsMaybe(textKeys, quoteDetails),
+    )
+  }
+
+  if (ssn) {
+    detailsGroups.push([
+      {
+        key: 'ssn',
+        label: textKeys.CHECKOUT_DETAILS_SSN(),
+        value: maskAndFormatRawSsn(ssn),
+      },
+    ])
+  }
+
+  detailsGroups.push([
     {
       key: 'antal-personer',
       label: textKeys.CHECKOUT_DETAILS_HOUSEHOLD_SIZE(),
@@ -244,5 +230,7 @@ const getDetails = (
               VALUE: getHouseholdSize(quoteDetails),
             }),
     },
-  ].filter(Boolean) as DetailsGroup,
-]
+  ])
+
+  return detailsGroups
+}
