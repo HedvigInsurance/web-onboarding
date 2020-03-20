@@ -12,8 +12,6 @@ import introspectionQueryResultData from '../fragmentTypes.json'
 import { QuoteDocument } from './graphql'
 import { useMultipleQuotes } from './useMultipleQuotes'
 
-// jest.mock('../client/apolloClient.ts', () => ({}))
-
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData,
 })

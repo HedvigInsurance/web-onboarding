@@ -2,6 +2,7 @@ import { useApolloClient } from '@apollo/react-hooks'
 import { QuoteDocument, QuoteQuery } from 'data/graphql'
 import * as React from 'react'
 import { Quote } from './graphql'
+import { FetchPolicy } from 'apollo-client'
 
 export interface UseMultipleQuotesState {
   loading: boolean
@@ -20,13 +21,14 @@ export const useMultipleQuotes = (
   const [loading, setLoading] = React.useState(true)
   const apolloClient = useApolloClient()
 
-  const fetch = () => {
+  const fetch = (fetchPolicy?: FetchPolicy) => {
     setLoading(true)
     return Promise.all(
       quoteIds.map((quoteId) =>
         apolloClient.query<QuoteQuery>({
           query: QuoteDocument,
           variables: { id: quoteId },
+          fetchPolicy,
         }),
       ),
     )
@@ -46,5 +48,5 @@ export const useMultipleQuotes = (
     fetch()
   }, [...quoteIds])
 
-  return [quotes, { loading, refetch: fetch }]
+  return [quotes, { loading, refetch: () => fetch('network-only') }]
 }

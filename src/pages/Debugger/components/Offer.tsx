@@ -142,6 +142,45 @@ export const Offer: React.FC = () => {
                 </Formik>
               )}
 
+              {quoteType === QuoteType.NorwegianTravel && (
+                <Formik
+                  initialValues={{
+                    firstName: 'Blargh',
+                    lastName: 'Blarghson',
+                    currentInsurer: '',
+                    birthDate: '1995-09-29',
+                    ssn: '',
+                    startDate: '',
+                    email: 'blargis@hedvig.com',
+                    norwegianTravel: {
+                      coInsured: 0,
+                      isYouth: false,
+                    },
+                  }}
+                  onSubmit={async (values) => {
+                    await createQuote(storage)({
+                      input: {
+                        ...values,
+                        id: quoteId,
+                        currentInsurer: values.currentInsurer || undefined,
+                        // @ts-ignore
+                        startDate: values.startDate || undefined,
+                      },
+                    })
+
+                    await refetch()
+                  }}
+                >
+                  {(props) => (
+                    <>
+                      <QuoteForm formik={props}>
+                        <NorwegianTravel formik={props} />
+                      </QuoteForm>
+                    </>
+                  )}
+                </Formik>
+              )}
+
               {quoteType === QuoteType.SwedishApartment && (
                 <Formik<Partial<CreateQuoteInput>>
                   initialValues={{
@@ -277,6 +316,20 @@ export const NorwegianHome: React.FC<WithFormikProps> = ({ formik }) => {
         ]}
         {...formik.getFieldProps('norwegianHomeContents.type')}
       />
+    </>
+  )
+}
+
+export const NorwegianTravel: React.FC<WithFormikProps> = ({ formik }) => {
+  return (
+    <>
+      <InputField
+        label="Co-insured"
+        placeholder="1"
+        type="number"
+        {...formik.getFieldProps('norwegianTravel.coInsured')}
+      />
+      <div>isYouth TODO</div>
     </>
   )
 }

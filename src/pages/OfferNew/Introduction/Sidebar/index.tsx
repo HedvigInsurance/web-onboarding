@@ -4,9 +4,6 @@ import { CookieStorage } from 'cookie-storage'
 import {
   Campaign,
   CompleteQuote,
-  NorwegianHomeContentsDetails,
-  SwedishApartmentQuoteDetails,
-  SwedishHouseQuoteDetails,
   useRedeemCodeMutation,
   useRedeemedCampaignsQuery,
   useRemoveDiscountCodeMutation,
@@ -18,14 +15,19 @@ import {
   isMonthlyCostDeduction,
   isNoDiscount,
   isPercentageDiscountMonths,
+  quoteDetailsHasAddress,
 } from 'pages/OfferNew/Introduction/Sidebar/utils'
 import * as React from 'react'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { Price } from '../../components'
-import { CompleteQuoteWithoutUnknownDetails } from '../../types'
-import { getInsuranceType, insuranceTypeTextKeys } from '../../utils'
+import {
+  getInsuranceType,
+  insuranceTypeTextKeys,
+  isSwedishApartment,
+  isSwedishHouse,
+} from '../../utils'
 import { DetailsModal } from './DetailsModal/index'
 import { DiscountCodeModal } from './DiscountCodeModal'
 import { StartDate } from './StartDate'
@@ -216,10 +218,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
     const discountText = getDiscountText(textKeys)(redeemedCampaigns)
 
-    const details = firstQuote.quoteDetails as
-      | SwedishApartmentQuoteDetails
-      | SwedishHouseQuoteDetails
-      | NorwegianHomeContentsDetails
+    const details = firstQuote.quoteDetails
 
     return (
       <>
@@ -246,15 +245,20 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                             AMOUNT: getHouseholdSize(details) - 1,
                           })}
                       </SummaryText>
-                      <SummaryText>
-                        {`${details.street}, ${formatPostalNumber(
-                          details.zipCode,
-                        )}`}
-                      </SummaryText>
+                      {quoteDetailsHasAddress(details) && (
+                        <SummaryText>
+                          {`${details.street}, ${formatPostalNumber(
+                            details.zipCode,
+                          )}`}
+                        </SummaryText>
+                      )}
 
-                      <TextButton onClick={() => setDetailsModalIsOpen(true)}>
-                        {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
-                      </TextButton>
+                      {(isSwedishHouse(details) ||
+                        isSwedishApartment(details)) && (
+                        <TextButton onClick={() => setDetailsModalIsOpen(true)}>
+                          {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
+                        </TextButton>
+                      )}
                     </SummaryContent>
                   </Summary>
 
@@ -328,7 +332,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 />
               </Container>
               <DetailsModal
-                quote={firstQuote as CompleteQuoteWithoutUnknownDetails}
+                quote={firstQuote}
                 refetch={refetchAll}
                 isVisible={detailsModalIsOpen}
                 onClose={() => setDetailsModalIsOpen(false)}

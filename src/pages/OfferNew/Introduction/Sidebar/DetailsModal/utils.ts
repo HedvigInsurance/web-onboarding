@@ -5,12 +5,12 @@ import {
   ExtraBuilding,
   ExtraBuildingType,
   NorwegianHomeContentsDetails,
+  NorwegianTravelDetails,
   SwedishApartmentQuoteDetails,
   SwedishHouseQuoteDetails,
 } from 'data/graphql'
 import { match } from 'matchly'
 import { inputTypes, masks } from 'new-components/inputs/index'
-import { CompleteQuoteWithoutUnknownDetails } from 'pages/OfferNew/types'
 import * as Yup from 'yup'
 import { isStudent, isSwedishApartment, isSwedishHouse } from '../../../utils'
 import {
@@ -34,7 +34,7 @@ export const isApartmentFieldSchema = (
 
 export const isHouseFieldSchema = (
   fieldSchema: FieldSchema,
-  quote: CompleteQuoteWithoutUnknownDetails,
+  quote: CompleteQuote,
 ): fieldSchema is HouseFieldSchema => {
   return (
     (fieldSchema as HouseFieldSchema).house &&
@@ -352,6 +352,17 @@ export const getInitialNorwegianHomeContentValues = (
   },
 })
 
+const getInitialNorwegianTravelValues = (
+  quoteId: string,
+  quoteDetails: NorwegianTravelDetails,
+): EditQuoteInput => ({
+  id: quoteId,
+  norwegianTravel: {
+    coInsured: quoteDetails.coInsured,
+    isYouth: quoteDetails.isYouth,
+  },
+})
+
 export const getInitialInputValues = (quote: CompleteQuote) =>
   match<string, EditQuoteInput>([
     [
@@ -376,6 +387,14 @@ export const getInitialInputValues = (quote: CompleteQuote) =>
         getInitialNorwegianHomeContentValues(
           quote.id,
           quote.quoteDetails as NorwegianHomeContentsDetails,
+        ),
+    ],
+    [
+      'NorwegianTravelDetails',
+      () =>
+        getInitialNorwegianTravelValues(
+          quote.id,
+          quote.quoteDetails as NorwegianTravelDetails,
         ),
     ],
   ])(quote.quoteDetails.__typename as string) ??

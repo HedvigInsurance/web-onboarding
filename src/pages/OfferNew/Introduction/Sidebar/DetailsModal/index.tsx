@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import { Modal, ModalProps } from 'components/ModalNew'
 import {
+  CompleteQuote,
   EditQuoteInput,
   ExtraBuildingInput,
   ExtraBuildingType,
@@ -14,7 +15,6 @@ import {
   InputGroupDeleteButton,
   InputGroupRow,
 } from 'new-components/inputs/index'
-import { CompleteQuoteWithoutUnknownDetails } from 'pages/OfferNew/types'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { DetailInput } from './DetailInput'
@@ -160,7 +160,7 @@ const LoadingDimmer = styled.div<{ visible: boolean }>`
 `
 
 interface DetailsModalProps {
-  quote: CompleteQuoteWithoutUnknownDetails
+  quote: CompleteQuote
   refetch: () => Promise<void>
 }
 
