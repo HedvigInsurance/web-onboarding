@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { BackArrow } from 'components/icons/BackArrow'
 import { CompleteQuote } from 'data/graphql'
+import { TOP_BAR_Z_INDEX } from 'new-components/TopBar'
 import { Sign } from 'pages/OfferNew/Checkout/Sign'
 import * as React from 'react'
 import { CheckoutContent } from './CheckoutContent'
@@ -27,7 +28,7 @@ const OuterWrapper = styled('div')<Openable>`
   max-width: 40rem;
   width: 100%;
   overflow: hidden;
-  z-index: 1010;
+  z-index: ${TOP_BAR_Z_INDEX + 1};
 
   ${({ visibilityState }) =>
     visibilityState === VisibilityState.CLOSED ? 'display: none;' : ''};

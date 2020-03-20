@@ -4,6 +4,8 @@ import { HedvigLogo } from 'components/icons/HedvigLogo'
 import * as React from 'react'
 import { CurrentLocale } from '../components/utils/CurrentLocale'
 
+export const TOP_BAR_Z_INDEX = 1009
+
 interface Props {
   transparent?: boolean
 }
@@ -15,7 +17,7 @@ const Wrapper = styled.div<Props>`
   background: ${(props) =>
     props.transparent ? `transparent` : colorsV2.white};
   position: absolute;
-  z-index: 1009;
+  z-index: ${TOP_BAR_Z_INDEX};
   ${(props) =>
     !props.transparent && `box-shadow: 0 2px 14px rgba(0, 0, 0, 0.08);`};
 

@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { Button } from 'new-components/buttons'
+import { TOP_BAR_Z_INDEX } from 'new-components/TopBar'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 
@@ -13,7 +14,7 @@ const Wrapper = styled.div<Hidable & { displayNone: boolean }>`
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 1010;
+  z-index: ${TOP_BAR_Z_INDEX};
   justify-content: center;
   transform: ${({ isVisible }) =>
     isVisible ? 'translateY(0)' : 'translateY(100%)'};
