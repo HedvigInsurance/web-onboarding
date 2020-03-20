@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { useMarket } from 'components/utils/CurrentLocale'
+import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { RawInputField } from 'new-components/inputs'
 import { WithEmailForm, WithSsnForm } from 'pages/OfferNew/types'
 import { createSsnValidator } from 'pages/OfferNew/utils'
@@ -74,25 +74,27 @@ export const UserDetailsForm: React.FC<Props> = ({
         }}
       />
 
-      <BottomSpacedRawInputField
-        label={textKeys.CHECKOUT_SSN_LABEL()}
-        placeholder={textKeys.CHECKOUT_SSN_PLACEHOLDER()}
-        name="ssn"
-        id="ssn"
-        type="number"
-        value={ssn}
-        // errors={ssnError ? textKeys.SIGN_SSN_CHECK() : undefined} TODO error handling?
-        onChange={(e: React.ChangeEvent<any>) => {
-          setSsn(e.target.value)
-        }}
-        onBlur={() => {
-          if (!isValidSsn(ssn) || ssn === initialSsn) {
-            return
-          }
+      {market === Market.No && (
+        <BottomSpacedRawInputField
+          label={textKeys.CHECKOUT_SSN_LABEL()}
+          placeholder={textKeys.CHECKOUT_SSN_PLACEHOLDER()}
+          name="ssn"
+          id="ssn"
+          type="number"
+          value={ssn}
+          // errors={ssnError ? textKeys.SIGN_SSN_CHECK() : undefined} TODO error handling?
+          onChange={(e: React.ChangeEvent<any>) => {
+            setSsn(e.target.value)
+          }}
+          onBlur={() => {
+            if (!isValidSsn(ssn) || ssn === initialSsn) {
+              return
+            }
 
-          onSsnChange(ssn)
-        }}
-      />
+            onSsnChange(ssn)
+          }}
+        />
+      )}
     </form>
   )
 }
