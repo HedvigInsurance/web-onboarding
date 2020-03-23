@@ -689,11 +689,27 @@ export type BatchPayload = {
   count: Scalars['Long']
 }
 
-export type BulletPoint = {
-  __typename?: 'BulletPoint'
-  description: Scalars['String']
+export type BulletPoints = {
+  __typename?: 'BulletPoints'
   icon: Icon
   title: Scalars['String']
+  description: Scalars['String']
+}
+
+export type BundledQuote = {
+  __typename?: 'BundledQuote'
+  id: Scalars['ID']
+  currentInsurer?: Maybe<CurrentInsurer>
+  price: MonetaryAmountV2
+  firstName: Scalars['String']
+  lastName: Scalars['String']
+  ssn: Scalars['String']
+  birthDate: Scalars['LocalDate']
+  quoteDetails: QuoteDetails
+  startDate?: Maybe<Scalars['LocalDate']>
+  expiresAt: Scalars['LocalDate']
+  email?: Maybe<Scalars['String']>
+  dataCollectionId?: Maybe<Scalars['ID']>
 }
 
 export enum CacheControlScope {
@@ -818,15 +834,11 @@ export type CollectStatus = {
   code?: Maybe<Scalars['String']>
 }
 
-/** A list of claim types that are common to show for the user */
 export type CommonClaim = {
   __typename?: 'CommonClaim'
-  /** An icon to show on the card of the common claim */
   icon: Icon
-  /** The layout to use for the subpage regarding the common claim */
-  layout: CommonClaimLayouts
-  /** A title to show on the card of the common claim */
   title: Scalars['String']
+  layout: CommonClaimLayouts
 }
 
 export type CommonClaimLayouts = TitleAndBulletPoints | Emergency
@@ -869,6 +881,12 @@ export type CompleteQuote = {
   expiresAt: Scalars['LocalDate']
   email?: Maybe<Scalars['String']>
   dataCollectionId?: Maybe<Scalars['ID']>
+  typeOfContract: TypeOfContract
+  perils: Array<PerilV2>
+}
+
+export type CompleteQuotePerilsArgs = {
+  locale: Locale
 }
 
 export type CompleteQuoteDetails =
@@ -879,6 +897,7 @@ export type CompleteQuoteDetails =
 export type Contract = {
   __typename?: 'Contract'
   id: Scalars['ID']
+  typeOfContract: TypeOfContract
   holderMember: Scalars['ID']
   status: ContractStatus
   displayName: Scalars['String']
@@ -894,6 +913,11 @@ export type Contract = {
   /** An upcoming renewal, present if the member has been notified and the renewal is within 31 days */
   upcomingRenewal?: Maybe<UpcomingRenewal>
   createdAt: Scalars['Instant']
+  perils: Array<PerilV2>
+}
+
+export type ContractPerilsArgs = {
+  locale: Locale
 }
 
 export enum ContractStatus {
@@ -1913,7 +1937,6 @@ export type EmbarkTrack = {
   customData: Scalars['JSONString']
 }
 
-/** The emergency layout shows a few actions for the user to rely on in the case of an emergency */
 export type Emergency = {
   __typename?: 'Emergency'
   color: HedvigColor
@@ -2512,6 +2535,7 @@ export type FaqWhereUniqueInput = {
 
 export enum Feature {
   KeyGear = 'KeyGear',
+  Referrals = 'Referrals',
 }
 
 export type File = {
@@ -2540,18 +2564,18 @@ export type Gif = {
 }
 
 export enum HedvigColor {
-  OffWhite = 'OffWhite',
+  Pink = 'Pink',
+  Turquoise = 'Turquoise',
   Purple = 'Purple',
+  DarkPurple = 'DarkPurple',
   BlackPurple = 'BlackPurple',
   DarkGray = 'DarkGray',
   LightGray = 'LightGray',
   White = 'White',
-  Turquoise = 'Turquoise',
-  Pink = 'Pink',
-  DarkPurple = 'DarkPurple',
   Black = 'Black',
-  Yellow = 'Yellow',
   OffBlack = 'OffBlack',
+  OffWhite = 'OffWhite',
+  Yellow = 'Yellow',
 }
 
 export type HouseInformation = {
@@ -2573,10 +2597,10 @@ export type Icon = {
   pdfUrl: Scalars['String']
   /** For Web use */
   svgUrl: Scalars['String']
-  /** Icons with variants for light and dark mode */
-  variants: IconVariants
   /** For Android use */
   vectorDrawableUrl: Scalars['String']
+  /** Icons with variants for light and dark mode */
+  variants: IconVariants
 }
 
 /** A vectorized image to show to the user */
@@ -3233,6 +3257,8 @@ export type InProgressReferral = {
   name?: Maybe<Scalars['String']>
 }
 
+export type InsurableLimit = SwedishInsurableLimit | NorwegianInsurableLimit
+
 export type Insurance = {
   __typename?: 'Insurance'
   address?: Maybe<Scalars['String']>
@@ -3259,6 +3285,19 @@ export type Insurance = {
   numberOfBathrooms?: Maybe<Scalars['Int']>
   extraBuildings?: Maybe<Array<ExtraBuilding>>
   isSubleted?: Maybe<Scalars['Boolean']>
+}
+
+export type InsuranceCompany = {
+  __typename?: 'InsuranceCompany'
+  name: Scalars['String']
+  switchable: Scalars['Boolean']
+  logo: Icon
+}
+
+export type InsuranceCompanyType = {
+  __typename?: 'InsuranceCompanyType'
+  major: Array<InsuranceCompany>
+  minor: Array<InsuranceCompany>
 }
 
 export type InsuranceCost = {
@@ -3289,6 +3328,12 @@ export enum InsuranceStatus {
   Inactive = 'INACTIVE',
   InactiveWithStartDate = 'INACTIVE_WITH_START_DATE',
   Terminated = 'TERMINATED',
+}
+
+export type InsuranceTerm = {
+  __typename?: 'InsuranceTerm'
+  displayName: Scalars['String']
+  url: Scalars['String']
 }
 
 export enum InsuranceType {
@@ -4435,8 +4480,10 @@ export type LanguageWhereUniqueInput = {
 }
 
 export enum Locale {
-  EnSe = 'en_SE',
   SvSe = 'sv_SE',
+  EnSe = 'en_SE',
+  NbNo = 'nb_NO',
+  EnNo = 'en_NO',
 }
 
 export type LoggingInput = {
@@ -5148,6 +5195,7 @@ export type Mutation = {
   norwegianBankIdAuth: NorwegianBankIdAuthResponse
   registerBranchCampaign?: Maybe<Scalars['Boolean']>
   updateLanguage: Scalars['Boolean']
+  updatePickedLocale: Member
   createDontPanicSession: DontPanicSession
   addDontPanicChatMessage: DontPanicChatMessage
   registerDirectDebit: DirectDebitResponse
@@ -5160,7 +5208,7 @@ export type Mutation = {
   editQuote: CreateQuoteResult
   removeCurrentInsurer: CreateQuoteResult
   removeStartDate: CreateQuoteResult
-  signQuotes?: Maybe<StartSignResponse>
+  signQuotes: StartSignResponse
   createKeyGearItem: KeyGearItem
   addPhotoToKeyGearItem: KeyGearItem
   deletePhotoFromKeyGearItem: KeyGearItem
@@ -5256,6 +5304,10 @@ export type MutationRegisterBranchCampaignArgs = {
 
 export type MutationUpdateLanguageArgs = {
   input: Scalars['String']
+}
+
+export type MutationUpdatePickedLocaleArgs = {
+  pickedLocale: PickedLocale
 }
 
 export type MutationCreateDontPanicSessionArgs = {
@@ -5359,10 +5411,10 @@ export type News = {
   __typename?: 'News'
   /** Illustration shown for the page */
   illustration: Icon
-  /** Text key for the paragraph shown below the title */
-  paragraph: Scalars['String']
   /** Text key for the title of the page */
   title: Scalars['String']
+  /** Text key for the paragraph shown below the title */
+  paragraph: Scalars['String']
 }
 
 /** An object with an ID */
@@ -5420,6 +5472,13 @@ export type NorwegianHomeContentsDetails = {
 export enum NorwegianHomeContentsType {
   Rent = 'RENT',
   Own = 'OWN',
+}
+
+export type NorwegianInsurableLimit = {
+  __typename?: 'NorwegianInsurableLimit'
+  maxInsurableAmountContents: MonetaryAmountV2
+  deductible: MonetaryAmountV2
+  personalAccidentLimit: MonetaryAmountV2
 }
 
 export type NorwegianTravelAgreement = AgreementCore & {
@@ -5504,6 +5563,16 @@ export type PerilCategory = {
   perils?: Maybe<Array<Maybe<Peril>>>
 }
 
+export type PerilV2 = {
+  __typename?: 'PerilV2'
+  title: Scalars['String']
+  description: Scalars['String']
+  covered: Array<Scalars['String']>
+  exceptions: Array<Scalars['String']>
+  info: Scalars['String']
+  icon: Icon
+}
+
 export type PersonalInformation = {
   __typename?: 'PersonalInformation'
   firstName: Scalars['String']
@@ -5515,6 +5584,11 @@ export type PersonalInformation = {
 
 export type PersonalInformationInput = {
   personalNumber: Scalars['String']
+}
+
+export enum PickedLocale {
+  Se = 'SE',
+  No = 'NO',
 }
 
 export enum Platform {
@@ -5600,9 +5674,14 @@ export type Query = {
   externalInsuranceProvider?: Maybe<ExternalInsuranceProvider>
   quote: Quote
   lastQuoteOfMember: Quote
+  quoteBundle: QuoteBundle
   commonClaims: Array<CommonClaim>
   news: Array<News>
   welcome: Array<Welcome>
+  perils: Array<PerilV2>
+  insuranceTerms: Array<InsuranceTerm>
+  insuranceCompanies: InsuranceCompanyType
+  insurableLimits: InsurableLimit
   embarkStory?: Maybe<EmbarkStory>
   /** Used */
   keyGearItems: Array<KeyGearItem>
@@ -5691,19 +5770,42 @@ export type QueryQuoteArgs = {
   id?: Maybe<Scalars['ID']>
 }
 
+export type QueryQuoteBundleArgs = {
+  input: QuoteBundleInput
+}
+
 export type QueryCommonClaimsArgs = {
   locale: Locale
 }
 
 export type QueryNewsArgs = {
-  sinceVersion: Scalars['String']
   platform: Platform
+  sinceVersion: Scalars['String']
   locale: Locale
 }
 
 export type QueryWelcomeArgs = {
-  locale: Locale
   platform: Platform
+  locale: Locale
+}
+
+export type QueryPerilsArgs = {
+  contractType: TypeOfContract
+  locale: Locale
+}
+
+export type QueryInsuranceTermsArgs = {
+  contractType: TypeOfContract
+  locale: Locale
+}
+
+export type QueryInsuranceCompaniesArgs = {
+  contractType: TypeOfContract
+}
+
+export type QueryInsurableLimitsArgs = {
+  contractType: TypeOfContract
+  locale: Locale
 }
 
 export type QueryEmbarkStoryArgs = {
@@ -5719,6 +5821,16 @@ export type QueryKeyGearItemArgs = {
 }
 
 export type Quote = CompleteQuote | IncompleteQuote
+
+export type QuoteBundle = {
+  __typename?: 'QuoteBundle'
+  quotes: Array<BundledQuote>
+  bundleCost: InsuranceCost
+}
+
+export type QuoteBundleInput = {
+  ids: Array<Scalars['ID']>
+}
 
 export type QuoteDetails =
   | SwedishApartmentQuoteDetails
@@ -5917,6 +6029,14 @@ export type SwedishHouseQuoteDetails = {
   isSubleted: Scalars['Boolean']
 }
 
+export type SwedishInsurableLimit = {
+  __typename?: 'SwedishInsurableLimit'
+  maxInsurableAmountBuilding: Scalars['String']
+  maxInsurableAmountContents: MonetaryAmountV2
+  deductible: MonetaryAmountV2
+  maxTravelDurationDays: Scalars['String']
+}
+
 export type TerminatedReferral = {
   __typename?: 'TerminatedReferral'
   name?: Maybe<Scalars['String']>
@@ -5951,16 +6071,14 @@ export enum TextContentType {
   Password = 'PASSWORD',
 }
 
-/** A layout with a title and some bullet points */
 export type TitleAndBulletPoints = {
   __typename?: 'TitleAndBulletPoints'
-  bulletPoints: Array<BulletPoint>
-  buttonTitle: Scalars['String']
-  claimFirstMessage: Scalars['String']
-  /** The color to show as the background */
   color: HedvigColor
   icon: Icon
   title: Scalars['String']
+  buttonTitle: Scalars['String']
+  claimFirstMessage: Scalars['String']
+  bulletPoints: Array<BulletPoints>
 }
 
 export type Translation = Node & {
@@ -6388,6 +6506,20 @@ export type TriggerClaimChatInput = {
   claimTypeId?: Maybe<Scalars['ID']>
 }
 
+export enum TypeOfContract {
+  SeHouse = 'SE_HOUSE',
+  SeApartmentBrf = 'SE_APARTMENT_BRF',
+  SeApartmentRent = 'SE_APARTMENT_RENT',
+  SeApartmentStudentBrf = 'SE_APARTMENT_STUDENT_BRF',
+  SeApartmentStudentRent = 'SE_APARTMENT_STUDENT_RENT',
+  NoHomeContentOwn = 'NO_HOME_CONTENT_OWN',
+  NoHomeContentRent = 'NO_HOME_CONTENT_RENT',
+  NoHomeContentYouthOwn = 'NO_HOME_CONTENT_YOUTH_OWN',
+  NoHomeContentYouthRent = 'NO_HOME_CONTENT_YOUTH_RENT',
+  NoTravel = 'NO_TRAVEL',
+  NoTravelYouth = 'NO_TRAVEL_YOUTH',
+}
+
 export type UnderwritingLimit = {
   __typename?: 'UnderwritingLimit'
   description: Scalars['String']
@@ -6624,10 +6756,10 @@ export type Welcome = {
   __typename?: 'Welcome'
   /** Illustration shown for the page */
   illustration: Icon
-  /** Text key for the paragraph shown below the title */
-  paragraph: Scalars['String']
   /** Text key for the title of the page */
   title: Scalars['String']
+  /** Text key for the paragraph shown below the title */
+  paragraph: Scalars['String']
 }
 
 export type EditQuoteMutationVariables = {
@@ -7122,6 +7254,26 @@ export type SignOfferMutation = { __typename?: 'Mutation' } & Pick<
   Mutation,
   'signOffer'
 >
+
+export type SignQuotesMutationVariables = {
+  quoteIds: Array<Scalars['ID']>
+}
+
+export type SignQuotesMutation = { __typename?: 'Mutation' } & {
+  signQuotes:
+    | ({ __typename: 'SwedishBankIdSession' } & Pick<
+        SwedishBankIdSession,
+        'autoStartToken'
+      >)
+    | ({ __typename: 'NorwegianBankIdSession' } & Pick<
+        NorwegianBankIdSession,
+        'redirectUrl'
+      >)
+    | ({ __typename: 'FailedToStartSign' } & Pick<
+        FailedToStartSign,
+        'errorMessage'
+      >)
+}
 
 export type SignStatusQueryVariables = {}
 
@@ -8083,6 +8235,65 @@ export type SignOfferMutationResult = ApolloReactCommon.MutationResult<
 export type SignOfferMutationOptions = ApolloReactCommon.BaseMutationOptions<
   SignOfferMutation,
   SignOfferMutationVariables
+>
+export const SignQuotesDocument = gql`
+  mutation SignQuotes($quoteIds: [ID!]!) {
+    signQuotes(input: { quoteIds: $quoteIds }) {
+      __typename
+      ... on FailedToStartSign {
+        errorMessage
+      }
+      ... on SwedishBankIdSession {
+        autoStartToken
+      }
+      ... on NorwegianBankIdSession {
+        redirectUrl
+      }
+    }
+  }
+`
+export type SignQuotesMutationFn = ApolloReactCommon.MutationFunction<
+  SignQuotesMutation,
+  SignQuotesMutationVariables
+>
+
+/**
+ * __useSignQuotesMutation__
+ *
+ * To run a mutation, you first call `useSignQuotesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSignQuotesMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [signQuotesMutation, { data, loading, error }] = useSignQuotesMutation({
+ *   variables: {
+ *      quoteIds: // value for 'quoteIds'
+ *   },
+ * });
+ */
+export function useSignQuotesMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    SignQuotesMutation,
+    SignQuotesMutationVariables
+  >,
+) {
+  return ApolloReactHooks.useMutation<
+    SignQuotesMutation,
+    SignQuotesMutationVariables
+  >(SignQuotesDocument, baseOptions)
+}
+export type SignQuotesMutationHookResult = ReturnType<
+  typeof useSignQuotesMutation
+>
+export type SignQuotesMutationResult = ApolloReactCommon.MutationResult<
+  SignQuotesMutation
+>
+export type SignQuotesMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  SignQuotesMutation,
+  SignQuotesMutationVariables
 >
 export const SignStatusDocument = gql`
   query SignStatus {

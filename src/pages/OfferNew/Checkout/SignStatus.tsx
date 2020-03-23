@@ -13,6 +13,11 @@ const Wrapper = styled('div')`
   text-align: center;
 `
 
+const SignIframe = styled('iframe')`
+  border: 0;
+  min-height: 50vh;
+`
+
 const BANK_ID_STATUS_TEXT_KEYS: Record<string, string> = {
   started: 'SIGN_BANKID_CODE_STARTED',
   userSign: 'SIGN_BANKID_CODE_USER_SIGN',
@@ -26,19 +31,21 @@ const BANK_ID_STATUS_TEXT_KEYS: Record<string, string> = {
 }
 
 interface Props {
+  bankIdUrl: string | null
   isSigning: boolean
   onFailure: () => void
   onSuccess: () => void
 }
 
 export const SignStatus: React.FC<Props> = ({
+  bankIdUrl,
   isSigning,
   onFailure,
   onSuccess,
 }) => {
   const textKeys = useTextKeys()
   const [executeSignStatusQuery, signStatusQuery] = useSignStatusLazyQuery({
-    pollInterval: 1000, // TODO replace with subscription? or not really?
+    pollInterval: 2000, // TODO replace with subscription? or not really?
   })
 
   React.useEffect(() => {
@@ -88,6 +95,10 @@ export const SignStatus: React.FC<Props> = ({
         )}
       </TrackAction>
     )
+  }
+
+  if (bankIdUrl) {
+    return <SignIframe width="100%" frameBorder={0} src={bankIdUrl} />
   }
 
   return (

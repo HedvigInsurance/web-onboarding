@@ -3,7 +3,7 @@ import {
   InMemoryCache,
   IntrospectionFragmentMatcher,
 } from 'apollo-cache-inmemory'
-import { ApartmentType, CompleteQuote } from 'data/graphql'
+import { ApartmentType, CompleteQuote, TypeOfContract } from 'data/graphql'
 import { mount } from 'enzyme'
 import * as React from 'react'
 import { act } from 'react-dom/test-utils'
@@ -89,6 +89,8 @@ const quoteMock: CompleteQuote = {
     zipCode: '1234',
     __typename: 'CompleteApartmentQuoteDetails',
   },
+  typeOfContract: TypeOfContract.NoHomeContentOwn,
+  perils: [],
   __typename: 'CompleteQuote',
 }
 

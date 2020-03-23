@@ -6,7 +6,7 @@ import {
   RedeemedCampaignsQuery,
   useMemberQuery,
   useRedeemedCampaignsQuery,
-  useSignOfferMutation,
+  useSignQuotesMutation,
 } from 'data/graphql'
 import { motion } from 'framer-motion'
 import { Button } from 'new-components/buttons'
@@ -76,23 +76,16 @@ interface Props {
   firstQuote: CompleteQuote
 }
 
-export const Sign: React.FC<Props> = ({
-  className,
-  email,
-  personalNumber,
-  firstQuote,
-}) => {
+export const Sign: React.FC<Props> = ({ className, email, firstQuote }) => {
   const isMobile = useMediaQuery({ maxWidth: 600 })
   const textKeys = useTextKeys()
   const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
   const { data: memberData } = useMemberQuery()
-  const [signOffer, signOfferMutation] = useSignOfferMutation({
-    variables: {
-      email: email!,
-      personalNumber,
-    },
+  const [signQuotes, signQuotesMutation] = useSignQuotesMutation({
+    variables: { quoteIds: [firstQuote.id] },
   })
   const [signState, setSignState] = React.useState(SignState.NOT_STARTED)
+  const [bankIdUrl, setBankIdUrl] = React.useState<string | null>(null)
 
   const canInitiateSign =
     signState !== SignState.STARTED &&
@@ -101,22 +94,33 @@ export const Sign: React.FC<Props> = ({
 
   return (
     <Wrapper className={className}>
-      <ButtonWrapper>
-        <Button
-          size={isMobile ? 'sm' : 'lg'}
-          disabled={!canInitiateSign}
-          onClick={async () => {
-            if (!canInitiateSign || signOfferMutation.loading) {
-              return
-            }
+      {!bankIdUrl && (
+        <ButtonWrapper>
+          <Button
+            size={isMobile ? 'sm' : 'lg'}
+            disabled={!canInitiateSign}
+            onClick={async () => {
+              if (!canInitiateSign || signQuotesMutation.loading) {
+                return
+              }
 
-            setSignState(SignState.STARTED)
-            await signOffer()
-          }}
-        >
-          {textKeys.CHECKOUT_SIGN_BUTTON_TEXT()}
-        </Button>
-      </ButtonWrapper>
+              setSignState(SignState.STARTED)
+              const result = await signQuotes()
+              if (result.data?.signQuotes?.__typename === 'FailedToStartSign') {
+                setSignState(SignState.FAILED)
+                return
+              }
+              if (
+                result.data?.signQuotes?.__typename === 'NorwegianBankIdSession'
+              ) {
+                setBankIdUrl(result.data.signQuotes.redirectUrl!)
+              }
+            }}
+          >
+            {textKeys.CHECKOUT_SIGN_BUTTON_TEXT()}
+          </Button>
+        </ButtonWrapper>
+      )}
 
       <motion.div
         initial={{ height: 'auto', opacity: 1 }}
@@ -128,6 +132,7 @@ export const Sign: React.FC<Props> = ({
         transition={{ type: 'spring', stiffness: 400, damping: 100 }}
       >
         <SignStatus
+          bankIdUrl={bankIdUrl}
           isSigning={signState !== SignState.NOT_STARTED}
           onFailure={() => setSignState(SignState.FAILED)}
           onSuccess={() => {
@@ -135,7 +140,7 @@ export const Sign: React.FC<Props> = ({
               email!,
               firstQuote,
               memberData?.member.id!,
-              redeemedCampaignsData?.redeemedCampaigns!,
+              redeemedCampaignsData?.redeemedCampaigns ?? [],
             )
           }}
         />
