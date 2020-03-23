@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
+import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { LinkButton } from 'new-components/buttons'
 import * as React from 'react'
@@ -138,6 +139,7 @@ const LandingPageContainer = styled.div`
 
 export const Landing: React.FC<{ language?: string }> = ({ language }) => {
   const textKeys = useTextKeys()
+  const market = useMarket()
   return (
     <Page>
       <LandingPageContainer>
@@ -147,26 +149,61 @@ export const Landing: React.FC<{ language?: string }> = ({ language }) => {
 
         <Wrapper>
           <Container>
-            <Card>
-              <Headline>{textKeys.STARTPAGE_UNINSURED_HEADLINE()}</Headline>
-              <Paragraph>{textKeys.STARTPAGE_UNINSURED_BODY()}</Paragraph>
-              <ProceedButton
-                size="lg"
-                to={(language ? '/' + language : '') + '/new-member/new'}
-              >
-                {textKeys.STARTPAGE_UNINSURED_BUTTON()}
-              </ProceedButton>
-            </Card>
-            <Card>
-              <Headline>{textKeys.STARTPAGE_INSURED_HEADLINE()}</Headline>
-              <Paragraph>{textKeys.STARTPAGE_INSURED_BODY()}</Paragraph>
-              <ProceedButton
-                size="lg"
-                to={(language ? '/' + language : '') + '/new-member/switch'}
-              >
-                {textKeys.STARTPAGE_INSURED_BUTTON()}
-              </ProceedButton>
-            </Card>
+            {market === Market.Se && (
+              <>
+                <Card>
+                  <Headline>{textKeys.STARTPAGE_UNINSURED_HEADLINE()}</Headline>
+                  <Paragraph>{textKeys.STARTPAGE_UNINSURED_BODY()}</Paragraph>
+                  <ProceedButton
+                    size="lg"
+                    to={(language ? '/' + language : '') + '/new-member/new'}
+                  >
+                    {textKeys.STARTPAGE_UNINSURED_BUTTON()}
+                  </ProceedButton>
+                </Card>
+                <Card>
+                  <Headline>{textKeys.STARTPAGE_INSURED_HEADLINE()}</Headline>
+                  <Paragraph>{textKeys.STARTPAGE_INSURED_BODY()}</Paragraph>
+                  <ProceedButton
+                    size="lg"
+                    to={(language ? '/' + language : '') + '/new-member/switch'}
+                  >
+                    {textKeys.STARTPAGE_INSURED_BUTTON()}
+                  </ProceedButton>
+                </Card>
+              </>
+            )}
+            {market === Market.No && (
+              <>
+                <Card>
+                  <Headline>
+                    {textKeys.STARTPAGE_HOME_CONTENT_HEADLINE()}
+                  </Headline>
+                  <Paragraph>
+                    {textKeys.STARTPAGE_HOME_CONTENT_BODY()}
+                  </Paragraph>
+                  <ProceedButton
+                    size="lg"
+                    to={
+                      (language ? '/' + language : '') +
+                      '/new-member/home-content'
+                    }
+                  >
+                    {textKeys.STARTPAGE_HOME_CONTENT_BUTTON()}
+                  </ProceedButton>
+                </Card>
+                <Card>
+                  <Headline>{textKeys.STARTPAGE_TRAVEL_HEADLINE()}</Headline>
+                  <Paragraph>{textKeys.STARTPAGE_TRAVEL_BODY()}</Paragraph>
+                  <ProceedButton
+                    size="lg"
+                    to={(language ? '/' + language : '') + '/new-member/travel'}
+                  >
+                    {textKeys.STARTPAGE_TRAVEL_BUTTON()}
+                  </ProceedButton>
+                </Card>
+              </>
+            )}
           </Container>
         </Wrapper>
       </LandingPageContainer>
