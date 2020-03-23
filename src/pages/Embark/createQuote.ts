@@ -87,12 +87,7 @@ export const createQuote = (storage: any) => async (
 
     storage.session.setSession({
       ...storage.session.getSession(),
-      quoteIds: Array.from(
-        new Set([
-          ...(storage.session.getSession()?.quoteIds ?? []),
-          result.data!.createQuote!.id,
-        ]),
-      ),
+      quoteIds: [result.data!.createQuote!.id],
     })
   }
 
