@@ -13,6 +13,9 @@ export type Scalars = {
   LocalDate: any
   Object: any
   URL: any
+  /** An ISO-8601 String representation of a `java.time.Instant`, e.g. 2019-07-03T19:07:38.494081Z */
+  Instant: any
+  JSONString: any
   UUID: any
   /** The `Upload` scalar type represents a file upload. */
   Upload: any
@@ -36,8 +39,30 @@ export type ActiveReferral = {
   discount: MonetaryAmountV2
 }
 
+export type AddPhotoToKeyGearItemInput = {
+  itemId: Scalars['ID']
+  file: S3FileInput
+}
+
+export type AddReceiptToKeyGearItemInput = {
+  itemId: Scalars['ID']
+  file: S3FileInput
+}
+
+export type Address = {
+  __typename?: 'Address'
+  street: Scalars['String']
+  postalCode: Scalars['String']
+  city?: Maybe<Scalars['String']>
+}
+
 export type AggregateAsset = {
   __typename?: 'AggregateAsset'
+  count: Scalars['Int']
+}
+
+export type AggregateCoreMlModel = {
+  __typename?: 'AggregateCoreMLModel'
   count: Scalars['Int']
 }
 
@@ -46,8 +71,18 @@ export type AggregateFaq = {
   count: Scalars['Int']
 }
 
+export type AggregateImportantMessage = {
+  __typename?: 'AggregateImportantMessage'
+  count: Scalars['Int']
+}
+
 export type AggregateKey = {
   __typename?: 'AggregateKey'
+  count: Scalars['Int']
+}
+
+export type AggregateKeyGearItemCoverage = {
+  __typename?: 'AggregateKeyGearItemCoverage'
   count: Scalars['Int']
 }
 
@@ -64,6 +99,37 @@ export type AggregateMarketingStory = {
 export type AggregateTranslation = {
   __typename?: 'AggregateTranslation'
   count: Scalars['Int']
+}
+
+export type AggregateUserFeature = {
+  __typename?: 'AggregateUserFeature'
+  count: Scalars['Int']
+}
+
+export type Agreement =
+  | SwedishApartmentAgreement
+  | SwedishHouseAgreement
+  | NorwegianHomeContentAgreement
+  | NorwegianTravelAgreement
+
+export type AgreementCore = {
+  id: Scalars['ID']
+  status: AgreementStatus
+  activeFrom?: Maybe<Scalars['LocalDate']>
+  activeTo?: Maybe<Scalars['LocalDate']>
+  premium: MonetaryAmountV2
+  certificateUrl?: Maybe<Scalars['String']>
+}
+
+export enum AgreementStatus {
+  /** An agreement with no activation date, waiting to be activated */
+  Pending = 'PENDING',
+  /** An agreement that will be active on a future date */
+  ActiveInFuture = 'ACTIVE_IN_FUTURE',
+  /** An agreement that is active today */
+  Active = 'ACTIVE',
+  /** An agreement that either was never active that is now terminated or was active in the past of a now terminated contract */
+  Terminated = 'TERMINATED',
 }
 
 export type AngelStory = {
@@ -98,6 +164,7 @@ export type Asset = Node & {
   size?: Maybe<Scalars['Float']>
   mimeType?: Maybe<Scalars['String']>
   assetMarketingStory?: Maybe<Array<MarketingStory>>
+  fileCoreMLModel?: Maybe<Array<CoreMlModel>>
   /** Get the url for the asset with provided transformations applied. */
   url: Scalars['String']
 }
@@ -105,6 +172,16 @@ export type Asset = Node & {
 export type AssetAssetMarketingStoryArgs = {
   where?: Maybe<MarketingStoryWhereInput>
   orderBy?: Maybe<MarketingStoryOrderByInput>
+  skip?: Maybe<Scalars['Int']>
+  after?: Maybe<Scalars['String']>
+  before?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+}
+
+export type AssetFileCoreMlModelArgs = {
+  where?: Maybe<CoreMlModelWhereInput>
+  orderBy?: Maybe<CoreMlModelOrderByInput>
   skip?: Maybe<Scalars['Int']>
   after?: Maybe<Scalars['String']>
   before?: Maybe<Scalars['String']>
@@ -135,11 +212,18 @@ export type AssetCreateInput = {
   size?: Maybe<Scalars['Float']>
   mimeType?: Maybe<Scalars['String']>
   assetMarketingStory?: Maybe<MarketingStoryCreateManyWithoutAssetInput>
+  fileCoreMLModel?: Maybe<CoreMlModelCreateManyWithoutFileInput>
 }
 
 export type AssetCreateOneWithoutAssetMarketingStoryInput = {
   upload?: Maybe<AssetUploadWithoutAssetMarketingStoryInput>
   create?: Maybe<AssetCreateWithoutAssetMarketingStoryInput>
+  connect?: Maybe<AssetWhereUniqueInput>
+}
+
+export type AssetCreateOneWithoutFileCoreMlModelInput = {
+  upload?: Maybe<AssetUploadWithoutFileCoreMlModelInput>
+  create?: Maybe<AssetCreateWithoutFileCoreMlModelInput>
   connect?: Maybe<AssetWhereUniqueInput>
 }
 
@@ -151,6 +235,18 @@ export type AssetCreateWithoutAssetMarketingStoryInput = {
   width?: Maybe<Scalars['Float']>
   size?: Maybe<Scalars['Float']>
   mimeType?: Maybe<Scalars['String']>
+  fileCoreMLModel?: Maybe<CoreMlModelCreateManyWithoutFileInput>
+}
+
+export type AssetCreateWithoutFileCoreMlModelInput = {
+  status?: Maybe<Status>
+  handle: Scalars['String']
+  fileName: Scalars['String']
+  height?: Maybe<Scalars['Float']>
+  width?: Maybe<Scalars['Float']>
+  size?: Maybe<Scalars['Float']>
+  mimeType?: Maybe<Scalars['String']>
+  assetMarketingStory?: Maybe<MarketingStoryCreateManyWithoutAssetInput>
 }
 
 /** An edge in a connection. */
@@ -242,6 +338,7 @@ export type AssetUpdateInput = {
   size?: Maybe<Scalars['Float']>
   mimeType?: Maybe<Scalars['String']>
   assetMarketingStory?: Maybe<MarketingStoryUpdateManyWithoutAssetInput>
+  fileCoreMLModel?: Maybe<CoreMlModelUpdateManyWithoutFileInput>
 }
 
 export type AssetUpdateManyMutationInput = {
@@ -263,6 +360,15 @@ export type AssetUpdateOneWithoutAssetMarketingStoryInput = {
   upsert?: Maybe<AssetUpsertWithoutAssetMarketingStoryInput>
 }
 
+export type AssetUpdateOneWithoutFileCoreMlModelInput = {
+  create?: Maybe<AssetCreateWithoutFileCoreMlModelInput>
+  connect?: Maybe<AssetWhereUniqueInput>
+  disconnect?: Maybe<Scalars['Boolean']>
+  delete?: Maybe<Scalars['Boolean']>
+  update?: Maybe<AssetUpdateWithoutFileCoreMlModelDataInput>
+  upsert?: Maybe<AssetUpsertWithoutFileCoreMlModelInput>
+}
+
 export type AssetUpdateWithoutAssetMarketingStoryDataInput = {
   status?: Maybe<Status>
   handle?: Maybe<Scalars['String']>
@@ -271,22 +377,47 @@ export type AssetUpdateWithoutAssetMarketingStoryDataInput = {
   width?: Maybe<Scalars['Float']>
   size?: Maybe<Scalars['Float']>
   mimeType?: Maybe<Scalars['String']>
+  fileCoreMLModel?: Maybe<CoreMlModelUpdateManyWithoutFileInput>
+}
+
+export type AssetUpdateWithoutFileCoreMlModelDataInput = {
+  status?: Maybe<Status>
+  handle?: Maybe<Scalars['String']>
+  fileName?: Maybe<Scalars['String']>
+  height?: Maybe<Scalars['Float']>
+  width?: Maybe<Scalars['Float']>
+  size?: Maybe<Scalars['Float']>
+  mimeType?: Maybe<Scalars['String']>
+  assetMarketingStory?: Maybe<MarketingStoryUpdateManyWithoutAssetInput>
 }
 
 export type AssetUploadInput = {
   url: Scalars['String']
   status?: Maybe<Status>
   assetMarketingStory?: Maybe<MarketingStoryCreateManyWithoutAssetInput>
+  fileCoreMLModel?: Maybe<CoreMlModelCreateManyWithoutFileInput>
 }
 
 export type AssetUploadWithoutAssetMarketingStoryInput = {
   url: Scalars['String']
   status?: Maybe<Status>
+  fileCoreMLModel?: Maybe<CoreMlModelCreateManyWithoutFileInput>
+}
+
+export type AssetUploadWithoutFileCoreMlModelInput = {
+  url: Scalars['String']
+  status?: Maybe<Status>
+  assetMarketingStory?: Maybe<MarketingStoryCreateManyWithoutAssetInput>
 }
 
 export type AssetUpsertWithoutAssetMarketingStoryInput = {
   update: AssetUpdateWithoutAssetMarketingStoryDataInput
   create: AssetCreateWithoutAssetMarketingStoryInput
+}
+
+export type AssetUpsertWithoutFileCoreMlModelInput = {
+  update: AssetUpdateWithoutFileCoreMlModelDataInput
+  create: AssetCreateWithoutFileCoreMlModelInput
 }
 
 export type AssetWhereInput = {
@@ -490,6 +621,9 @@ export type AssetWhereInput = {
   assetMarketingStory_every?: Maybe<MarketingStoryWhereInput>
   assetMarketingStory_some?: Maybe<MarketingStoryWhereInput>
   assetMarketingStory_none?: Maybe<MarketingStoryWhereInput>
+  fileCoreMLModel_every?: Maybe<CoreMlModelWhereInput>
+  fileCoreMLModel_some?: Maybe<CoreMlModelWhereInput>
+  fileCoreMLModel_none?: Maybe<CoreMlModelWhereInput>
 }
 
 export type AssetWhereUniqueInput = {
@@ -539,7 +673,8 @@ export type BankIdAuthResponse = {
 
 export type BankIdSignResponse = {
   __typename?: 'BankIdSignResponse'
-  autoStartToken: Scalars['String']
+  autoStartToken?: Maybe<Scalars['String']>
+  redirectUrl?: Maybe<Scalars['String']>
 }
 
 export enum BankIdStatus {
@@ -727,7 +862,9 @@ export type CompleteQuote = {
   firstName: Scalars['String']
   lastName: Scalars['String']
   ssn: Scalars['String']
+  birthDate: Scalars['LocalDate']
   details: CompleteQuoteDetails
+  quoteDetails: QuoteDetails
   startDate?: Maybe<Scalars['LocalDate']>
   expiresAt: Scalars['LocalDate']
   email?: Maybe<Scalars['String']>
@@ -737,6 +874,355 @@ export type CompleteQuote = {
 export type CompleteQuoteDetails =
   | CompleteApartmentQuoteDetails
   | CompleteHouseQuoteDetails
+  | UnknownQuoteDetails
+
+export type Contract = {
+  __typename?: 'Contract'
+  id: Scalars['ID']
+  holderMember: Scalars['ID']
+  status: ContractStatus
+  displayName: Scalars['String']
+  /**
+   * "The 'best guess' of the agreement that depicts the member's insurance, either
+   * the pending, future, current or, if terminated, past agreement
+   */
+  currentAgreement: Agreement
+  /** The date the contract agreement timeline begin, if it has been activated */
+  inception?: Maybe<Scalars['LocalDate']>
+  /** The date the contract agreement timelinen end, on if it has been terminated */
+  termination?: Maybe<Scalars['LocalDate']>
+  /** An upcoming renewal, present if the member has been notified and the renewal is within 31 days */
+  upcomingRenewal?: Maybe<UpcomingRenewal>
+  createdAt: Scalars['Instant']
+}
+
+export enum ContractStatus {
+  /**
+   * A contract that has been signed but do not have any active agreement and is
+   * not terminated, i.e. will be active or terminated
+   */
+  Pending = 'PENDING',
+  /**
+   * A contract timeline that has at least one active agreement at some point and
+   * is not terminated, i.e. active today or in the future without a termination date set
+   */
+  Active = 'ACTIVE',
+  /** A contract that has a termination date set (either in the past, today or the future), OBS: have an active agreement today */
+  Terminated = 'TERMINATED',
+}
+
+export type CoreMlModel = Node & {
+  __typename?: 'CoreMLModel'
+  status: Status
+  updatedAt: Scalars['DateTime']
+  createdAt: Scalars['DateTime']
+  id: Scalars['ID']
+  type?: Maybe<CoreMlModelType>
+  file?: Maybe<Asset>
+}
+
+/** A connection to a list of items. */
+export type CoreMlModelConnection = {
+  __typename?: 'CoreMLModelConnection'
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo
+  /** A list of edges. */
+  edges: Array<Maybe<CoreMlModelEdge>>
+  aggregate: AggregateCoreMlModel
+}
+
+export type CoreMlModelCreateInput = {
+  status?: Maybe<Status>
+  type?: Maybe<CoreMlModelType>
+  file?: Maybe<AssetCreateOneWithoutFileCoreMlModelInput>
+}
+
+export type CoreMlModelCreateManyWithoutFileInput = {
+  create?: Maybe<Array<CoreMlModelCreateWithoutFileInput>>
+  connect?: Maybe<Array<CoreMlModelWhereUniqueInput>>
+}
+
+export type CoreMlModelCreateWithoutFileInput = {
+  status?: Maybe<Status>
+  type?: Maybe<CoreMlModelType>
+}
+
+/** An edge in a connection. */
+export type CoreMlModelEdge = {
+  __typename?: 'CoreMLModelEdge'
+  /** The item at the end of the edge. */
+  node: CoreMlModel
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']
+}
+
+export enum CoreMlModelOrderByInput {
+  StatusAsc = 'status_ASC',
+  StatusDesc = 'status_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC',
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  IdAsc = 'id_ASC',
+  IdDesc = 'id_DESC',
+  TypeAsc = 'type_ASC',
+  TypeDesc = 'type_DESC',
+}
+
+export type CoreMlModelPreviousValues = {
+  __typename?: 'CoreMLModelPreviousValues'
+  status: Status
+  updatedAt: Scalars['DateTime']
+  createdAt: Scalars['DateTime']
+  id: Scalars['ID']
+  type?: Maybe<CoreMlModelType>
+}
+
+export type CoreMlModelScalarWhereInput = {
+  _search?: Maybe<Scalars['String']>
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<CoreMlModelScalarWhereInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<CoreMlModelScalarWhereInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<CoreMlModelScalarWhereInput>>
+  status?: Maybe<Status>
+  /** All values that are not equal to given value. */
+  status_not?: Maybe<Status>
+  /** All values that are contained in given list. */
+  status_in?: Maybe<Array<Status>>
+  /** All values that are not contained in given list. */
+  status_not_in?: Maybe<Array<Status>>
+  updatedAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  updatedAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  updatedAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  updatedAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  updatedAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  updatedAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  updatedAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  updatedAt_gte?: Maybe<Scalars['DateTime']>
+  createdAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  createdAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  createdAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  createdAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  createdAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  createdAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  createdAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  createdAt_gte?: Maybe<Scalars['DateTime']>
+  id?: Maybe<Scalars['ID']>
+  /** All values that are not equal to given value. */
+  id_not?: Maybe<Scalars['ID']>
+  /** All values that are contained in given list. */
+  id_in?: Maybe<Array<Scalars['ID']>>
+  /** All values that are not contained in given list. */
+  id_not_in?: Maybe<Array<Scalars['ID']>>
+  /** All values less than the given value. */
+  id_lt?: Maybe<Scalars['ID']>
+  /** All values less than or equal the given value. */
+  id_lte?: Maybe<Scalars['ID']>
+  /** All values greater than the given value. */
+  id_gt?: Maybe<Scalars['ID']>
+  /** All values greater than or equal the given value. */
+  id_gte?: Maybe<Scalars['ID']>
+  /** All values containing the given string. */
+  id_contains?: Maybe<Scalars['ID']>
+  /** All values not containing the given string. */
+  id_not_contains?: Maybe<Scalars['ID']>
+  /** All values starting with the given string. */
+  id_starts_with?: Maybe<Scalars['ID']>
+  /** All values not starting with the given string. */
+  id_not_starts_with?: Maybe<Scalars['ID']>
+  /** All values ending with the given string. */
+  id_ends_with?: Maybe<Scalars['ID']>
+  /** All values not ending with the given string. */
+  id_not_ends_with?: Maybe<Scalars['ID']>
+  type?: Maybe<CoreMlModelType>
+  /** All values that are not equal to given value. */
+  type_not?: Maybe<CoreMlModelType>
+  /** All values that are contained in given list. */
+  type_in?: Maybe<Array<CoreMlModelType>>
+  /** All values that are not contained in given list. */
+  type_not_in?: Maybe<Array<CoreMlModelType>>
+}
+
+export type CoreMlModelSubscriptionPayload = {
+  __typename?: 'CoreMLModelSubscriptionPayload'
+  mutation: MutationType
+  node?: Maybe<CoreMlModel>
+  updatedFields?: Maybe<Array<Scalars['String']>>
+  previousValues?: Maybe<CoreMlModelPreviousValues>
+}
+
+export type CoreMlModelSubscriptionWhereInput = {
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<CoreMlModelSubscriptionWhereInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<CoreMlModelSubscriptionWhereInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<CoreMlModelSubscriptionWhereInput>>
+  /** The subscription event gets dispatched when it's listed in mutation_in */
+  mutation_in?: Maybe<Array<MutationType>>
+  /** The subscription event gets only dispatched when one of the updated fields names is included in this list */
+  updatedFields_contains?: Maybe<Scalars['String']>
+  /** The subscription event gets only dispatched when all of the field names included in this list have been updated */
+  updatedFields_contains_every?: Maybe<Array<Scalars['String']>>
+  /** The subscription event gets only dispatched when some of the field names included in this list have been updated */
+  updatedFields_contains_some?: Maybe<Array<Scalars['String']>>
+  node?: Maybe<CoreMlModelWhereInput>
+}
+
+export enum CoreMlModelType {
+  KeyGearClassifier = 'KeyGearClassifier',
+}
+
+export type CoreMlModelUpdateInput = {
+  status?: Maybe<Status>
+  type?: Maybe<CoreMlModelType>
+  file?: Maybe<AssetUpdateOneWithoutFileCoreMlModelInput>
+}
+
+export type CoreMlModelUpdateManyDataInput = {
+  status?: Maybe<Status>
+  type?: Maybe<CoreMlModelType>
+}
+
+export type CoreMlModelUpdateManyMutationInput = {
+  status?: Maybe<Status>
+  type?: Maybe<CoreMlModelType>
+}
+
+export type CoreMlModelUpdateManyWithoutFileInput = {
+  create?: Maybe<Array<CoreMlModelCreateWithoutFileInput>>
+  connect?: Maybe<Array<CoreMlModelWhereUniqueInput>>
+  set?: Maybe<Array<CoreMlModelWhereUniqueInput>>
+  disconnect?: Maybe<Array<CoreMlModelWhereUniqueInput>>
+  delete?: Maybe<Array<CoreMlModelWhereUniqueInput>>
+  update?: Maybe<Array<CoreMlModelUpdateWithWhereUniqueWithoutFileInput>>
+  updateMany?: Maybe<Array<CoreMlModelUpdateManyWithWhereNestedInput>>
+  deleteMany?: Maybe<Array<CoreMlModelScalarWhereInput>>
+  upsert?: Maybe<Array<CoreMlModelUpsertWithWhereUniqueWithoutFileInput>>
+}
+
+export type CoreMlModelUpdateManyWithWhereNestedInput = {
+  where: CoreMlModelScalarWhereInput
+  data: CoreMlModelUpdateManyDataInput
+}
+
+export type CoreMlModelUpdateWithoutFileDataInput = {
+  status?: Maybe<Status>
+  type?: Maybe<CoreMlModelType>
+}
+
+export type CoreMlModelUpdateWithWhereUniqueWithoutFileInput = {
+  where: CoreMlModelWhereUniqueInput
+  data: CoreMlModelUpdateWithoutFileDataInput
+}
+
+export type CoreMlModelUpsertWithWhereUniqueWithoutFileInput = {
+  where: CoreMlModelWhereUniqueInput
+  update: CoreMlModelUpdateWithoutFileDataInput
+  create: CoreMlModelCreateWithoutFileInput
+}
+
+export type CoreMlModelWhereInput = {
+  _search?: Maybe<Scalars['String']>
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<CoreMlModelWhereInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<CoreMlModelWhereInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<CoreMlModelWhereInput>>
+  status?: Maybe<Status>
+  /** All values that are not equal to given value. */
+  status_not?: Maybe<Status>
+  /** All values that are contained in given list. */
+  status_in?: Maybe<Array<Status>>
+  /** All values that are not contained in given list. */
+  status_not_in?: Maybe<Array<Status>>
+  updatedAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  updatedAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  updatedAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  updatedAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  updatedAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  updatedAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  updatedAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  updatedAt_gte?: Maybe<Scalars['DateTime']>
+  createdAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  createdAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  createdAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  createdAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  createdAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  createdAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  createdAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  createdAt_gte?: Maybe<Scalars['DateTime']>
+  id?: Maybe<Scalars['ID']>
+  /** All values that are not equal to given value. */
+  id_not?: Maybe<Scalars['ID']>
+  /** All values that are contained in given list. */
+  id_in?: Maybe<Array<Scalars['ID']>>
+  /** All values that are not contained in given list. */
+  id_not_in?: Maybe<Array<Scalars['ID']>>
+  /** All values less than the given value. */
+  id_lt?: Maybe<Scalars['ID']>
+  /** All values less than or equal the given value. */
+  id_lte?: Maybe<Scalars['ID']>
+  /** All values greater than the given value. */
+  id_gt?: Maybe<Scalars['ID']>
+  /** All values greater than or equal the given value. */
+  id_gte?: Maybe<Scalars['ID']>
+  /** All values containing the given string. */
+  id_contains?: Maybe<Scalars['ID']>
+  /** All values not containing the given string. */
+  id_not_contains?: Maybe<Scalars['ID']>
+  /** All values starting with the given string. */
+  id_starts_with?: Maybe<Scalars['ID']>
+  /** All values not starting with the given string. */
+  id_not_starts_with?: Maybe<Scalars['ID']>
+  /** All values ending with the given string. */
+  id_ends_with?: Maybe<Scalars['ID']>
+  /** All values not ending with the given string. */
+  id_not_ends_with?: Maybe<Scalars['ID']>
+  type?: Maybe<CoreMlModelType>
+  /** All values that are not equal to given value. */
+  type_not?: Maybe<CoreMlModelType>
+  /** All values that are contained in given list. */
+  type_in?: Maybe<Array<CoreMlModelType>>
+  /** All values that are not contained in given list. */
+  type_not_in?: Maybe<Array<CoreMlModelType>>
+  file?: Maybe<AssetWhereInput>
+}
+
+export type CoreMlModelWhereUniqueInput = {
+  id?: Maybe<Scalars['ID']>
+}
 
 export type CreateApartmentInput = {
   street: Scalars['String']
@@ -758,20 +1244,67 @@ export type CreateHouseInput = {
   extraBuildings: Array<ExtraBuildingInput>
 }
 
+export type CreateKeyGearItemInput = {
+  photos: Array<S3FileInput>
+  category: KeyGearItemCategory
+  purchasePrice?: Maybe<MonetaryAmountV2Input>
+  physicalReferenceHash?: Maybe<Scalars['String']>
+  name?: Maybe<Scalars['String']>
+}
+
+export type CreateNorwegianHomeContentsInput = {
+  street: Scalars['String']
+  zipCode: Scalars['String']
+  coInsured: Scalars['Int']
+  livingSpace: Scalars['Int']
+  isYouth: Scalars['Boolean']
+  type: NorwegianHomeContentsType
+}
+
+export type CreateNorwegianTravelInput = {
+  coInsured: Scalars['Int']
+  isYouth: Scalars['Boolean']
+}
+
 export type CreateQuoteInput = {
   id: Scalars['ID']
   firstName: Scalars['String']
   lastName: Scalars['String']
   currentInsurer?: Maybe<Scalars['String']>
-  ssn: Scalars['String']
+  ssn?: Maybe<Scalars['String']>
+  birthDate?: Maybe<Scalars['LocalDate']>
   startDate?: Maybe<Scalars['LocalDate']>
   apartment?: Maybe<CreateApartmentInput>
   house?: Maybe<CreateHouseInput>
+  swedishApartment?: Maybe<CreateSwedishApartmentInput>
+  swedishHouse?: Maybe<CreateSwedishHouseInput>
+  norwegianHomeContents?: Maybe<CreateNorwegianHomeContentsInput>
+  norwegianTravel?: Maybe<CreateNorwegianTravelInput>
   email?: Maybe<Scalars['String']>
   dataCollectionId?: Maybe<Scalars['ID']>
 }
 
 export type CreateQuoteResult = CompleteQuote | UnderwritingLimitsHit
+
+export type CreateSwedishApartmentInput = {
+  street: Scalars['String']
+  zipCode: Scalars['String']
+  householdSize: Scalars['Int']
+  livingSpace: Scalars['Int']
+  type: ApartmentType
+}
+
+export type CreateSwedishHouseInput = {
+  street: Scalars['String']
+  zipCode: Scalars['String']
+  householdSize: Scalars['Int']
+  livingSpace: Scalars['Int']
+  ancillarySpace: Scalars['Int']
+  yearOfConstruction: Scalars['Int']
+  numberOfBathrooms: Scalars['Int']
+  isSubleted: Scalars['Boolean']
+  extraBuildings: Array<ExtraBuildingInput>
+}
 
 export type CurrentInsurer = {
   __typename?: 'CurrentInsurer'
@@ -904,16 +1437,480 @@ export type EditHouseInput = {
   extraBuildings?: Maybe<Array<ExtraBuildingInput>>
 }
 
+export type EditNorwegianHomeContentsInput = {
+  street?: Maybe<Scalars['String']>
+  zipCode?: Maybe<Scalars['String']>
+  coInsured?: Maybe<Scalars['Int']>
+  livingSpace?: Maybe<Scalars['Int']>
+  isYouth?: Maybe<Scalars['Boolean']>
+  type?: Maybe<NorwegianHomeContentsType>
+}
+
+export type EditNorwegianTravelInput = {
+  coInsured?: Maybe<Scalars['Int']>
+  isYouth?: Maybe<Scalars['Boolean']>
+}
+
 export type EditQuoteInput = {
   id: Scalars['ID']
   firstName?: Maybe<Scalars['String']>
   lastName?: Maybe<Scalars['String']>
   currentInsurer?: Maybe<Scalars['String']>
   ssn?: Maybe<Scalars['String']>
+  birthDate?: Maybe<Scalars['LocalDate']>
   startDate?: Maybe<Scalars['LocalDate']>
   apartment?: Maybe<EditApartmentInput>
+  swedishApartment?: Maybe<EditSwedishApartmentInput>
   house?: Maybe<EditHouseInput>
+  swedishHouse?: Maybe<EditSwedishHouseInput>
+  norwegianHomeContents?: Maybe<EditNorwegianHomeContentsInput>
+  norwegianTravel?: Maybe<EditNorwegianTravelInput>
   email?: Maybe<Scalars['String']>
+}
+
+export type EditSwedishApartmentInput = {
+  street?: Maybe<Scalars['String']>
+  zipCode?: Maybe<Scalars['String']>
+  householdSize?: Maybe<Scalars['Int']>
+  livingSpace?: Maybe<Scalars['Int']>
+  type?: Maybe<ApartmentType>
+}
+
+export type EditSwedishHouseInput = {
+  street?: Maybe<Scalars['String']>
+  zipCode?: Maybe<Scalars['String']>
+  householdSize?: Maybe<Scalars['Int']>
+  livingSpace?: Maybe<Scalars['Int']>
+  ancillarySpace?: Maybe<Scalars['Int']>
+  yearOfConstruction?: Maybe<Scalars['Int']>
+  numberOfBathrooms?: Maybe<Scalars['Int']>
+  isSubleted?: Maybe<Scalars['Boolean']>
+  extraBuildings?: Maybe<Array<ExtraBuildingInput>>
+}
+
+export type EmbarkAction =
+  | EmbarkNumberActionSet
+  | EmbarkTextActionSet
+  | EmbarkTextAction
+  | EmbarkSelectAction
+  | EmbarkNumberAction
+  | EmbarkMultiAction
+
+export type EmbarkActionCore = {
+  component: Scalars['String']
+}
+
+export type EmbarkApi =
+  | EmbarkApiPersonalInformation
+  | EmbarkApiHouseInformation
+  | EmbarkApiCreateQuote
+  | EmbarkApiGraphQlQuery
+  | EmbarkApiGraphQlMutation
+
+export type EmbarkApiCore = {
+  component: Scalars['String']
+}
+
+export type EmbarkApiCreateQuote = EmbarkApiCore & {
+  __typename?: 'EmbarkApiCreateQuote'
+  component: Scalars['String']
+  data: EmbarkApiCreateQuoteData
+}
+
+export type EmbarkApiCreateQuoteData = {
+  __typename?: 'EmbarkApiCreateQuoteData'
+  uwlimits: EmbarkLink
+  success: EmbarkLink
+  error: EmbarkLink
+}
+
+export type EmbarkApiGraphQlError = {
+  __typename?: 'EmbarkAPIGraphQLError'
+  contains?: Maybe<Scalars['String']>
+  next: EmbarkLink
+}
+
+export type EmbarkApiGraphQlGeneratedVariable = {
+  __typename?: 'EmbarkAPIGraphQLGeneratedVariable'
+  key: Scalars['String']
+  storeAs: Scalars['String']
+  type: EmbarkApiGraphQlVariableGeneratedType
+}
+
+export type EmbarkApiGraphQlMultiActionVariable = {
+  __typename?: 'EmbarkAPIGraphQLMultiActionVariable'
+  key: Scalars['String']
+  variables: Array<EmbarkApiGraphQlVariable>
+}
+
+export type EmbarkApiGraphQlMutation = {
+  __typename?: 'EmbarkApiGraphQLMutation'
+  next: EmbarkLink
+  mutation: Scalars['String']
+  variables: Array<EmbarkApiGraphQlVariable>
+  errors: Array<EmbarkApiGraphQlError>
+  results: Array<Maybe<EmbarkApiGraphQlResult>>
+}
+
+export type EmbarkApiGraphQlQuery = {
+  __typename?: 'EmbarkApiGraphQLQuery'
+  next: EmbarkLink
+  query: Scalars['String']
+  variables: Array<EmbarkApiGraphQlVariable>
+  errors: Array<EmbarkApiGraphQlError>
+  results: Array<EmbarkApiGraphQlResult>
+}
+
+export type EmbarkApiGraphQlResult = {
+  __typename?: 'EmbarkAPIGraphQLResult'
+  key: Scalars['String']
+  as: Scalars['String']
+}
+
+export type EmbarkApiGraphQlSingleVariable = {
+  __typename?: 'EmbarkAPIGraphQLSingleVariable'
+  key: Scalars['String']
+  from: Scalars['String']
+  as: EmbarkApiGraphQlSingleVariableCasting
+}
+
+export enum EmbarkApiGraphQlSingleVariableCasting {
+  String = 'string',
+  Int = 'int',
+  Boolean = 'boolean',
+}
+
+export type EmbarkApiGraphQlVariable =
+  | EmbarkApiGraphQlSingleVariable
+  | EmbarkApiGraphQlGeneratedVariable
+  | EmbarkApiGraphQlMultiActionVariable
+
+export enum EmbarkApiGraphQlVariableGeneratedType {
+  Uuid = 'uuid',
+}
+
+export type EmbarkApiHouseInformation = EmbarkApiCore & {
+  __typename?: 'EmbarkApiHouseInformation'
+  component: Scalars['String']
+  data: EmbarkApiHouseInformation
+}
+
+export type EmbarkApiHouseInformationData = {
+  __typename?: 'EmbarkApiHouseInformationData'
+  match: EmbarkLink
+  noMatch: EmbarkLink
+  error: EmbarkLink
+}
+
+export type EmbarkApiPersonalInformation = EmbarkApiCore & {
+  __typename?: 'EmbarkApiPersonalInformation'
+  component: Scalars['String']
+  data: EmbarkApiPersonalInformationData
+}
+
+export type EmbarkApiPersonalInformationData = {
+  __typename?: 'EmbarkApiPersonalInformationData'
+  match: EmbarkLink
+  noMatch: EmbarkLink
+  error: EmbarkLink
+}
+
+export type EmbarkDropdownAction = EmbarkActionCore & {
+  __typename?: 'EmbarkDropdownAction'
+  component: Scalars['String']
+  data: EmbarkDropdownActionData
+}
+
+export type EmbarkDropdownActionData = {
+  __typename?: 'EmbarkDropdownActionData'
+  label: Scalars['String']
+  key: Scalars['String']
+  options: Array<EmbarkDropdownOption>
+}
+
+export type EmbarkDropdownOption = {
+  __typename?: 'EmbarkDropdownOption'
+  value: Scalars['String']
+  text: Scalars['String']
+}
+
+export type EmbarkExpression =
+  | EmbarkExpressionUnary
+  | EmbarkExpressionBinary
+  | EmbarkExpressionMultiple
+
+export type EmbarkExpressionBinary = {
+  __typename?: 'EmbarkExpressionBinary'
+  type: EmbarkExpressionTypeBinary
+  key: Scalars['String']
+  value: Scalars['String']
+  text?: Maybe<Scalars['String']>
+}
+
+export type EmbarkExpressionMultiple = {
+  __typename?: 'EmbarkExpressionMultiple'
+  type: EmbarkExpressionTypeMultiple
+  text?: Maybe<Scalars['String']>
+  subExpressions: Array<EmbarkExpression>
+}
+
+export enum EmbarkExpressionTypeBinary {
+  Equals = 'EQUALS',
+  NotEquals = 'NOT_EQUALS',
+  MoreThan = 'MORE_THAN',
+  LessThan = 'LESS_THAN',
+  MoreThanOrEquals = 'MORE_THAN_OR_EQUALS',
+  LessThanOrEquals = 'LESS_THAN_OR_EQUALS',
+}
+
+export enum EmbarkExpressionTypeMultiple {
+  And = 'AND',
+  Or = 'OR',
+}
+
+export enum EmbarkExpressionTypeUnary {
+  Always = 'ALWAYS',
+  Never = 'NEVER',
+}
+
+export type EmbarkExpressionUnary = {
+  __typename?: 'EmbarkExpressionUnary'
+  type: EmbarkExpressionTypeUnary
+  text?: Maybe<Scalars['String']>
+}
+
+export enum EmbarkExternalRedirect {
+  Email = 'email',
+}
+
+export type EmbarkGroupedResponse = {
+  __typename?: 'EmbarkGroupedResponse'
+  component: Scalars['String']
+  title: Scalars['String']
+  items: Array<EmbarkMessage>
+  each: Array<EmbarkGroupedResponseEach>
+}
+
+export type EmbarkGroupedResponseEach = {
+  __typename?: 'EmbarkGroupedResponseEach'
+  key: Scalars['String']
+  content: EmbarkMessage
+}
+
+export type EmbarkKeywords = {
+  __typename?: 'EmbarkKeywords'
+  selectActionSelectLabel?: Maybe<Scalars['String']>
+  tooltipModalInformationLabel?: Maybe<Scalars['String']>
+  backButton?: Maybe<Scalars['String']>
+  externalInsuranceProviderConfirmTitle?: Maybe<Scalars['String']>
+  externalInsuranceProviderConfirmPrivacyPolicy?: Maybe<Scalars['String']>
+  externalInsuranceProviderConfirmMessage?: Maybe<Scalars['String']>
+  externalInsuranceProviderConfirmButton?: Maybe<Scalars['String']>
+  externalInsuranceProviderConfirmRejectButton?: Maybe<Scalars['String']>
+  externalInsuranceProviderFailureTitle?: Maybe<Scalars['String']>
+  externalInsuranceProviderFailureMessage?: Maybe<Scalars['String']>
+  externalInsuranceProviderFailureButton?: Maybe<Scalars['String']>
+  externalInsuranceProviderSelectTitle?: Maybe<Scalars['String']>
+  externalInsuranceProviderPersonalNumberTitle?: Maybe<Scalars['String']>
+  externalInsuranceProviderPersonalNumberSubtitle?: Maybe<Scalars['String']>
+  externalInsuranceProviderOtherProviderButton?: Maybe<Scalars['String']>
+  externalInsuranceProviderGoBackButton?: Maybe<Scalars['String']>
+  externalInsuranceProviderContinueButton?: Maybe<Scalars['String']>
+  externalInsuranceProviderSetupTitle?: Maybe<Scalars['String']>
+  externalInsuranceProviderAuthScanBankID?: Maybe<Scalars['String']>
+  externalInsuranceProviderAuthOpenBankId?: Maybe<Scalars['String']>
+  externalInsuranceProviderBackgroundFetchTitle?: Maybe<Scalars['String']>
+  externalInsuranceProviderBackgroundFetchBody?: Maybe<Scalars['String']>
+  externalInsuranceProviderBETATag?: Maybe<Scalars['String']>
+  previousInsuranceProviderOtherProviderModal?: Maybe<Scalars['String']>
+  previousInsuranceProviderOtherProviderModalButton?: Maybe<Scalars['String']>
+}
+
+export type EmbarkLink = {
+  __typename?: 'EmbarkLink'
+  name: Scalars['String']
+  label: Scalars['String']
+}
+
+export type EmbarkMessage = {
+  __typename?: 'EmbarkMessage'
+  expressions: Array<EmbarkExpression>
+  text: Scalars['String']
+}
+
+export type EmbarkMultiAction = EmbarkActionCore & {
+  __typename?: 'EmbarkMultiAction'
+  component: Scalars['String']
+  data: EmbarkMultiActionData
+}
+
+export type EmbarkMultiActionComponent =
+  | EmbarkNumberAction
+  | EmbarkDropdownAction
+  | EmbarkSwitchAction
+
+export type EmbarkMultiActionData = {
+  __typename?: 'EmbarkMultiActionData'
+  components: Array<EmbarkMultiActionComponent>
+}
+
+export type EmbarkNumberAction = EmbarkActionCore & {
+  __typename?: 'EmbarkNumberAction'
+  component: Scalars['String']
+}
+
+export type EmbarkNumberActionSet = EmbarkActionCore & {
+  __typename?: 'EmbarkNumberActionSet'
+  component: Scalars['String']
+  data?: Maybe<EmbarkNumberActionSetData>
+}
+
+export type EmbarkNumberActionSetData = {
+  __typename?: 'EmbarkNumberActionSetData'
+  link: EmbarkLink
+}
+
+export type EmbarkPartnerConfig = {
+  __typename?: 'EmbarkPartnerConfig'
+  alignment: EmbarkPartnerConfigAlignment
+  image: Scalars['String']
+  isDefault: Scalars['Boolean']
+  name: Scalars['String']
+}
+
+export enum EmbarkPartnerConfigAlignment {
+  Center = 'center',
+  Left = 'left',
+}
+
+export type EmbarkPassage = {
+  __typename?: 'EmbarkPassage'
+  id: Scalars['String']
+  text: Scalars['String']
+  name: Scalars['String']
+  url?: Maybe<Scalars['String']>
+  allLinks: Array<EmbarkLink>
+  api: Array<EmbarkApi>
+  messages: Array<EmbarkMessage>
+  externalRedirect?: Maybe<EmbarkExternalRedirect>
+  action?: Maybe<EmbarkAction>
+  response: Array<EmbarkResponse>
+  tooltips: Array<EmbarkTooltip>
+  tracks: Array<EmbarkTrack>
+  redirects: Array<EmbarkRedirect>
+}
+
+export type EmbarkRedirect =
+  | EmbarkRedirectUnaryExpression
+  | EmbarkRedirectBinaryExpression
+  | EmbarkRedirectMultipleExpressions
+
+export type EmbarkRedirectBinaryExpression = {
+  __typename?: 'EmbarkRedirectBinaryExpression'
+  type: EmbarkExpressionTypeBinary
+  key: Scalars['String']
+  value: Scalars['String']
+  to: Scalars['String']
+}
+
+export type EmbarkRedirectMultipleExpressions = {
+  __typename?: 'EmbarkRedirectMultipleExpressions'
+  to: Scalars['String']
+  type: EmbarkExpressionTypeMultiple
+  subExpressions: Array<EmbarkExpression>
+}
+
+export type EmbarkRedirectUnaryExpression = {
+  __typename?: 'EmbarkRedirectUnaryExpression'
+  type: EmbarkExpressionTypeUnary
+  to: Scalars['String']
+}
+
+export type EmbarkResponse = EmbarkGroupedResponse | EmbarkMessage
+
+export type EmbarkSelectAction = EmbarkActionCore & {
+  __typename?: 'EmbarkSelectAction'
+  component: Scalars['String']
+  data: EmbarkSelectActionData
+}
+
+export type EmbarkSelectActionData = {
+  __typename?: 'EmbarkSelectActionData'
+  options: Array<EmbarkSelectActionOption>
+}
+
+export type EmbarkSelectActionOption = {
+  __typename?: 'EmbarkSelectActionOption'
+  key?: Maybe<Scalars['String']>
+  value?: Maybe<Scalars['String']>
+  link: EmbarkLink
+  tooltip?: Maybe<EmbarkTooltip>
+  api?: Maybe<EmbarkApi>
+}
+
+export type EmbarkStory = {
+  __typename?: 'EmbarkStory'
+  id: Scalars['String']
+  startPassage: Scalars['String']
+  name: Scalars['String']
+  keywords: EmbarkKeywords
+  partnerConfigs: Array<EmbarkPartnerConfig>
+  passages: Array<EmbarkPassage>
+}
+
+export type EmbarkSwitchAction = EmbarkActionCore & {
+  __typename?: 'EmbarkSwitchAction'
+  component: Scalars['String']
+  data: EmbarkSwitchActionData
+}
+
+export type EmbarkSwitchActionData = {
+  __typename?: 'EmbarkSwitchActionData'
+  label: Scalars['String']
+  key: Scalars['String']
+  defaultValue: Scalars['Boolean']
+}
+
+export type EmbarkTextAction = EmbarkActionCore & {
+  __typename?: 'EmbarkTextAction'
+  component: Scalars['String']
+  data: EmbarkTextActionData
+}
+
+export type EmbarkTextActionData = {
+  __typename?: 'EmbarkTextActionData'
+  placeholder: Scalars['String']
+  key: Scalars['String']
+  api?: Maybe<EmbarkApi>
+  link: EmbarkLink
+  large?: Maybe<Scalars['Boolean']>
+  mask?: Maybe<Scalars['String']>
+  tooltip?: Maybe<EmbarkTooltip>
+}
+
+export type EmbarkTextActionSet = EmbarkActionCore & {
+  __typename?: 'EmbarkTextActionSet'
+  component: Scalars['String']
+  data?: Maybe<EmbarkTextActionSetData>
+}
+
+export type EmbarkTextActionSetData = {
+  __typename?: 'EmbarkTextActionSetData'
+  link: EmbarkLink
+}
+
+export type EmbarkTooltip = {
+  __typename?: 'EmbarkTooltip'
+  title: Scalars['String']
+  description: Scalars['String']
+}
+
+export type EmbarkTrack = {
+  __typename?: 'EmbarkTrack'
+  eventName: Scalars['String']
+  eventKeys: Array<Maybe<Scalars['String']>>
+  includeAllKeys: Scalars['Boolean']
+  customData: Scalars['JSONString']
 }
 
 /** The emergency layout shows a few actions for the user to rely on in the case of an emergency */
@@ -1093,6 +2090,11 @@ export enum ExtraBuildingType {
   Barn = 'BARN',
   Boathouse = 'BOATHOUSE',
   Other = 'OTHER',
+}
+
+export type FailedToStartSign = {
+  __typename?: 'FailedToStartSign'
+  errorMessage?: Maybe<Scalars['String']>
 }
 
 export type Faq = Node & {
@@ -1508,17 +2510,28 @@ export type FaqWhereUniqueInput = {
   id?: Maybe<Scalars['ID']>
 }
 
+export enum Feature {
+  KeyGear = 'KeyGear',
+}
+
 export type File = {
   __typename?: 'File'
   /** signedUrl is valid for 30 minutes after upload, don't hang on to this. */
   signedUrl: Scalars['String']
   /** S3 key that can be used to retreive new signed urls in the future. */
   key: Scalars['String']
+  /** S3 bucket that the file was uploaded to. */
+  bucket: Scalars['String']
 }
 
 export type FreeMonths = {
   __typename?: 'FreeMonths'
   quantity?: Maybe<Scalars['Int']>
+}
+
+export type Geo = {
+  __typename?: 'Geo'
+  countryISOCode: Scalars['String']
 }
 
 export type Gif = {
@@ -1528,17 +2541,17 @@ export type Gif = {
 
 export enum HedvigColor {
   OffWhite = 'OffWhite',
-  OffBlack = 'OffBlack',
-  Yellow = 'Yellow',
-  BlackPurple = 'BlackPurple',
   Purple = 'Purple',
-  Turquoise = 'Turquoise',
-  Pink = 'Pink',
-  DarkPurple = 'DarkPurple',
+  BlackPurple = 'BlackPurple',
   DarkGray = 'DarkGray',
   LightGray = 'LightGray',
   White = 'White',
+  Turquoise = 'Turquoise',
+  Pink = 'Pink',
+  DarkPurple = 'DarkPurple',
   Black = 'Black',
+  Yellow = 'Yellow',
+  OffBlack = 'OffBlack',
 }
 
 export type HouseInformation = {
@@ -1620,6 +2633,551 @@ export type ImageResizeInput = {
 export type ImageTransformationInput = {
   /** Resizes the image */
   resize?: Maybe<ImageResizeInput>
+}
+
+export type ImportantMessage = Node & {
+  __typename?: 'ImportantMessage'
+  status: Status
+  updatedAt: Scalars['DateTime']
+  createdAt: Scalars['DateTime']
+  id: Scalars['ID']
+  title?: Maybe<Scalars['String']>
+  message?: Maybe<Scalars['String']>
+  language?: Maybe<Language>
+  button?: Maybe<Scalars['String']>
+  link?: Maybe<Scalars['String']>
+}
+
+/** A connection to a list of items. */
+export type ImportantMessageConnection = {
+  __typename?: 'ImportantMessageConnection'
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo
+  /** A list of edges. */
+  edges: Array<Maybe<ImportantMessageEdge>>
+  aggregate: AggregateImportantMessage
+}
+
+export type ImportantMessageCreateInput = {
+  status?: Maybe<Status>
+  title?: Maybe<Scalars['String']>
+  message?: Maybe<Scalars['String']>
+  button?: Maybe<Scalars['String']>
+  link?: Maybe<Scalars['String']>
+  language?: Maybe<LanguageCreateOneWithoutImportantMessagesesInput>
+}
+
+export type ImportantMessageCreateManyWithoutLanguageInput = {
+  create?: Maybe<Array<ImportantMessageCreateWithoutLanguageInput>>
+  connect?: Maybe<Array<ImportantMessageWhereUniqueInput>>
+}
+
+export type ImportantMessageCreateWithoutLanguageInput = {
+  status?: Maybe<Status>
+  title?: Maybe<Scalars['String']>
+  message?: Maybe<Scalars['String']>
+  button?: Maybe<Scalars['String']>
+  link?: Maybe<Scalars['String']>
+}
+
+/** An edge in a connection. */
+export type ImportantMessageEdge = {
+  __typename?: 'ImportantMessageEdge'
+  /** The item at the end of the edge. */
+  node: ImportantMessage
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']
+}
+
+export enum ImportantMessageOrderByInput {
+  StatusAsc = 'status_ASC',
+  StatusDesc = 'status_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC',
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  IdAsc = 'id_ASC',
+  IdDesc = 'id_DESC',
+  TitleAsc = 'title_ASC',
+  TitleDesc = 'title_DESC',
+  MessageAsc = 'message_ASC',
+  MessageDesc = 'message_DESC',
+  ButtonAsc = 'button_ASC',
+  ButtonDesc = 'button_DESC',
+  LinkAsc = 'link_ASC',
+  LinkDesc = 'link_DESC',
+}
+
+export type ImportantMessagePreviousValues = {
+  __typename?: 'ImportantMessagePreviousValues'
+  status: Status
+  updatedAt: Scalars['DateTime']
+  createdAt: Scalars['DateTime']
+  id: Scalars['ID']
+  title?: Maybe<Scalars['String']>
+  message?: Maybe<Scalars['String']>
+  button?: Maybe<Scalars['String']>
+  link?: Maybe<Scalars['String']>
+}
+
+export type ImportantMessageScalarWhereInput = {
+  _search?: Maybe<Scalars['String']>
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<ImportantMessageScalarWhereInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<ImportantMessageScalarWhereInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<ImportantMessageScalarWhereInput>>
+  status?: Maybe<Status>
+  /** All values that are not equal to given value. */
+  status_not?: Maybe<Status>
+  /** All values that are contained in given list. */
+  status_in?: Maybe<Array<Status>>
+  /** All values that are not contained in given list. */
+  status_not_in?: Maybe<Array<Status>>
+  updatedAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  updatedAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  updatedAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  updatedAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  updatedAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  updatedAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  updatedAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  updatedAt_gte?: Maybe<Scalars['DateTime']>
+  createdAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  createdAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  createdAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  createdAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  createdAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  createdAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  createdAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  createdAt_gte?: Maybe<Scalars['DateTime']>
+  id?: Maybe<Scalars['ID']>
+  /** All values that are not equal to given value. */
+  id_not?: Maybe<Scalars['ID']>
+  /** All values that are contained in given list. */
+  id_in?: Maybe<Array<Scalars['ID']>>
+  /** All values that are not contained in given list. */
+  id_not_in?: Maybe<Array<Scalars['ID']>>
+  /** All values less than the given value. */
+  id_lt?: Maybe<Scalars['ID']>
+  /** All values less than or equal the given value. */
+  id_lte?: Maybe<Scalars['ID']>
+  /** All values greater than the given value. */
+  id_gt?: Maybe<Scalars['ID']>
+  /** All values greater than or equal the given value. */
+  id_gte?: Maybe<Scalars['ID']>
+  /** All values containing the given string. */
+  id_contains?: Maybe<Scalars['ID']>
+  /** All values not containing the given string. */
+  id_not_contains?: Maybe<Scalars['ID']>
+  /** All values starting with the given string. */
+  id_starts_with?: Maybe<Scalars['ID']>
+  /** All values not starting with the given string. */
+  id_not_starts_with?: Maybe<Scalars['ID']>
+  /** All values ending with the given string. */
+  id_ends_with?: Maybe<Scalars['ID']>
+  /** All values not ending with the given string. */
+  id_not_ends_with?: Maybe<Scalars['ID']>
+  title?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  title_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  title_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  title_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values less than the given value. */
+  title_lt?: Maybe<Scalars['String']>
+  /** All values less than or equal the given value. */
+  title_lte?: Maybe<Scalars['String']>
+  /** All values greater than the given value. */
+  title_gt?: Maybe<Scalars['String']>
+  /** All values greater than or equal the given value. */
+  title_gte?: Maybe<Scalars['String']>
+  /** All values containing the given string. */
+  title_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  title_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  title_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  title_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  title_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string. */
+  title_not_ends_with?: Maybe<Scalars['String']>
+  message?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  message_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  message_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  message_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values less than the given value. */
+  message_lt?: Maybe<Scalars['String']>
+  /** All values less than or equal the given value. */
+  message_lte?: Maybe<Scalars['String']>
+  /** All values greater than the given value. */
+  message_gt?: Maybe<Scalars['String']>
+  /** All values greater than or equal the given value. */
+  message_gte?: Maybe<Scalars['String']>
+  /** All values containing the given string. */
+  message_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  message_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  message_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  message_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  message_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string. */
+  message_not_ends_with?: Maybe<Scalars['String']>
+  button?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  button_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  button_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  button_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values less than the given value. */
+  button_lt?: Maybe<Scalars['String']>
+  /** All values less than or equal the given value. */
+  button_lte?: Maybe<Scalars['String']>
+  /** All values greater than the given value. */
+  button_gt?: Maybe<Scalars['String']>
+  /** All values greater than or equal the given value. */
+  button_gte?: Maybe<Scalars['String']>
+  /** All values containing the given string. */
+  button_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  button_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  button_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  button_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  button_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string. */
+  button_not_ends_with?: Maybe<Scalars['String']>
+  link?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  link_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  link_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  link_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values less than the given value. */
+  link_lt?: Maybe<Scalars['String']>
+  /** All values less than or equal the given value. */
+  link_lte?: Maybe<Scalars['String']>
+  /** All values greater than the given value. */
+  link_gt?: Maybe<Scalars['String']>
+  /** All values greater than or equal the given value. */
+  link_gte?: Maybe<Scalars['String']>
+  /** All values containing the given string. */
+  link_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  link_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  link_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  link_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  link_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string. */
+  link_not_ends_with?: Maybe<Scalars['String']>
+}
+
+export type ImportantMessageSubscriptionPayload = {
+  __typename?: 'ImportantMessageSubscriptionPayload'
+  mutation: MutationType
+  node?: Maybe<ImportantMessage>
+  updatedFields?: Maybe<Array<Scalars['String']>>
+  previousValues?: Maybe<ImportantMessagePreviousValues>
+}
+
+export type ImportantMessageSubscriptionWhereInput = {
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<ImportantMessageSubscriptionWhereInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<ImportantMessageSubscriptionWhereInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<ImportantMessageSubscriptionWhereInput>>
+  /** The subscription event gets dispatched when it's listed in mutation_in */
+  mutation_in?: Maybe<Array<MutationType>>
+  /** The subscription event gets only dispatched when one of the updated fields names is included in this list */
+  updatedFields_contains?: Maybe<Scalars['String']>
+  /** The subscription event gets only dispatched when all of the field names included in this list have been updated */
+  updatedFields_contains_every?: Maybe<Array<Scalars['String']>>
+  /** The subscription event gets only dispatched when some of the field names included in this list have been updated */
+  updatedFields_contains_some?: Maybe<Array<Scalars['String']>>
+  node?: Maybe<ImportantMessageWhereInput>
+}
+
+export type ImportantMessageUpdateInput = {
+  status?: Maybe<Status>
+  title?: Maybe<Scalars['String']>
+  message?: Maybe<Scalars['String']>
+  button?: Maybe<Scalars['String']>
+  link?: Maybe<Scalars['String']>
+  language?: Maybe<LanguageUpdateOneWithoutImportantMessagesesInput>
+}
+
+export type ImportantMessageUpdateManyDataInput = {
+  status?: Maybe<Status>
+  title?: Maybe<Scalars['String']>
+  message?: Maybe<Scalars['String']>
+  button?: Maybe<Scalars['String']>
+  link?: Maybe<Scalars['String']>
+}
+
+export type ImportantMessageUpdateManyMutationInput = {
+  status?: Maybe<Status>
+  title?: Maybe<Scalars['String']>
+  message?: Maybe<Scalars['String']>
+  button?: Maybe<Scalars['String']>
+  link?: Maybe<Scalars['String']>
+}
+
+export type ImportantMessageUpdateManyWithoutLanguageInput = {
+  create?: Maybe<Array<ImportantMessageCreateWithoutLanguageInput>>
+  connect?: Maybe<Array<ImportantMessageWhereUniqueInput>>
+  set?: Maybe<Array<ImportantMessageWhereUniqueInput>>
+  disconnect?: Maybe<Array<ImportantMessageWhereUniqueInput>>
+  delete?: Maybe<Array<ImportantMessageWhereUniqueInput>>
+  update?: Maybe<
+    Array<ImportantMessageUpdateWithWhereUniqueWithoutLanguageInput>
+  >
+  updateMany?: Maybe<Array<ImportantMessageUpdateManyWithWhereNestedInput>>
+  deleteMany?: Maybe<Array<ImportantMessageScalarWhereInput>>
+  upsert?: Maybe<
+    Array<ImportantMessageUpsertWithWhereUniqueWithoutLanguageInput>
+  >
+}
+
+export type ImportantMessageUpdateManyWithWhereNestedInput = {
+  where: ImportantMessageScalarWhereInput
+  data: ImportantMessageUpdateManyDataInput
+}
+
+export type ImportantMessageUpdateWithoutLanguageDataInput = {
+  status?: Maybe<Status>
+  title?: Maybe<Scalars['String']>
+  message?: Maybe<Scalars['String']>
+  button?: Maybe<Scalars['String']>
+  link?: Maybe<Scalars['String']>
+}
+
+export type ImportantMessageUpdateWithWhereUniqueWithoutLanguageInput = {
+  where: ImportantMessageWhereUniqueInput
+  data: ImportantMessageUpdateWithoutLanguageDataInput
+}
+
+export type ImportantMessageUpsertWithWhereUniqueWithoutLanguageInput = {
+  where: ImportantMessageWhereUniqueInput
+  update: ImportantMessageUpdateWithoutLanguageDataInput
+  create: ImportantMessageCreateWithoutLanguageInput
+}
+
+export type ImportantMessageWhereInput = {
+  _search?: Maybe<Scalars['String']>
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<ImportantMessageWhereInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<ImportantMessageWhereInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<ImportantMessageWhereInput>>
+  status?: Maybe<Status>
+  /** All values that are not equal to given value. */
+  status_not?: Maybe<Status>
+  /** All values that are contained in given list. */
+  status_in?: Maybe<Array<Status>>
+  /** All values that are not contained in given list. */
+  status_not_in?: Maybe<Array<Status>>
+  updatedAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  updatedAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  updatedAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  updatedAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  updatedAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  updatedAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  updatedAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  updatedAt_gte?: Maybe<Scalars['DateTime']>
+  createdAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  createdAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  createdAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  createdAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  createdAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  createdAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  createdAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  createdAt_gte?: Maybe<Scalars['DateTime']>
+  id?: Maybe<Scalars['ID']>
+  /** All values that are not equal to given value. */
+  id_not?: Maybe<Scalars['ID']>
+  /** All values that are contained in given list. */
+  id_in?: Maybe<Array<Scalars['ID']>>
+  /** All values that are not contained in given list. */
+  id_not_in?: Maybe<Array<Scalars['ID']>>
+  /** All values less than the given value. */
+  id_lt?: Maybe<Scalars['ID']>
+  /** All values less than or equal the given value. */
+  id_lte?: Maybe<Scalars['ID']>
+  /** All values greater than the given value. */
+  id_gt?: Maybe<Scalars['ID']>
+  /** All values greater than or equal the given value. */
+  id_gte?: Maybe<Scalars['ID']>
+  /** All values containing the given string. */
+  id_contains?: Maybe<Scalars['ID']>
+  /** All values not containing the given string. */
+  id_not_contains?: Maybe<Scalars['ID']>
+  /** All values starting with the given string. */
+  id_starts_with?: Maybe<Scalars['ID']>
+  /** All values not starting with the given string. */
+  id_not_starts_with?: Maybe<Scalars['ID']>
+  /** All values ending with the given string. */
+  id_ends_with?: Maybe<Scalars['ID']>
+  /** All values not ending with the given string. */
+  id_not_ends_with?: Maybe<Scalars['ID']>
+  title?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  title_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  title_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  title_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values less than the given value. */
+  title_lt?: Maybe<Scalars['String']>
+  /** All values less than or equal the given value. */
+  title_lte?: Maybe<Scalars['String']>
+  /** All values greater than the given value. */
+  title_gt?: Maybe<Scalars['String']>
+  /** All values greater than or equal the given value. */
+  title_gte?: Maybe<Scalars['String']>
+  /** All values containing the given string. */
+  title_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  title_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  title_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  title_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  title_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string. */
+  title_not_ends_with?: Maybe<Scalars['String']>
+  message?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  message_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  message_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  message_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values less than the given value. */
+  message_lt?: Maybe<Scalars['String']>
+  /** All values less than or equal the given value. */
+  message_lte?: Maybe<Scalars['String']>
+  /** All values greater than the given value. */
+  message_gt?: Maybe<Scalars['String']>
+  /** All values greater than or equal the given value. */
+  message_gte?: Maybe<Scalars['String']>
+  /** All values containing the given string. */
+  message_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  message_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  message_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  message_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  message_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string. */
+  message_not_ends_with?: Maybe<Scalars['String']>
+  button?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  button_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  button_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  button_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values less than the given value. */
+  button_lt?: Maybe<Scalars['String']>
+  /** All values less than or equal the given value. */
+  button_lte?: Maybe<Scalars['String']>
+  /** All values greater than the given value. */
+  button_gt?: Maybe<Scalars['String']>
+  /** All values greater than or equal the given value. */
+  button_gte?: Maybe<Scalars['String']>
+  /** All values containing the given string. */
+  button_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  button_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  button_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  button_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  button_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string. */
+  button_not_ends_with?: Maybe<Scalars['String']>
+  link?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  link_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  link_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  link_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values less than the given value. */
+  link_lt?: Maybe<Scalars['String']>
+  /** All values less than or equal the given value. */
+  link_lte?: Maybe<Scalars['String']>
+  /** All values greater than the given value. */
+  link_gt?: Maybe<Scalars['String']>
+  /** All values greater than or equal the given value. */
+  link_gte?: Maybe<Scalars['String']>
+  /** All values containing the given string. */
+  link_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  link_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  link_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  link_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  link_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string. */
+  link_not_ends_with?: Maybe<Scalars['String']>
+  language?: Maybe<LanguageWhereInput>
+}
+
+export type ImportantMessageWhereUniqueInput = {
+  id?: Maybe<Scalars['ID']>
 }
 
 export type Incentive =
@@ -1750,6 +3308,8 @@ export type Key = Node & {
   value: Scalars['String']
   translations?: Maybe<Array<Translation>>
   description?: Maybe<Scalars['String']>
+  keyGearItemCoverageTitle?: Maybe<KeyGearItemCoverage>
+  keyGearItemCoverageDescription?: Maybe<KeyGearItemCoverage>
 }
 
 export type KeyTranslationsArgs = {
@@ -1786,6 +3346,22 @@ export type KeyCreateInput = {
   value: Scalars['String']
   description?: Maybe<Scalars['String']>
   translations?: Maybe<TranslationCreateManyWithoutKeyInput>
+  keyGearItemCoverageTitle?: Maybe<
+    KeyGearItemCoverageCreateOneWithoutTitleInput
+  >
+  keyGearItemCoverageDescription?: Maybe<
+    KeyGearItemCoverageCreateOneWithoutDescriptionInput
+  >
+}
+
+export type KeyCreateOneWithoutKeyGearItemCoverageDescriptionInput = {
+  create?: Maybe<KeyCreateWithoutKeyGearItemCoverageDescriptionInput>
+  connect?: Maybe<KeyWhereUniqueInput>
+}
+
+export type KeyCreateOneWithoutKeyGearItemCoverageTitleInput = {
+  create?: Maybe<KeyCreateWithoutKeyGearItemCoverageTitleInput>
+  connect?: Maybe<KeyWhereUniqueInput>
 }
 
 export type KeyCreateOneWithoutTranslationsInput = {
@@ -1793,10 +3369,36 @@ export type KeyCreateOneWithoutTranslationsInput = {
   connect?: Maybe<KeyWhereUniqueInput>
 }
 
+export type KeyCreateWithoutKeyGearItemCoverageDescriptionInput = {
+  status?: Maybe<Status>
+  value: Scalars['String']
+  description?: Maybe<Scalars['String']>
+  translations?: Maybe<TranslationCreateManyWithoutKeyInput>
+  keyGearItemCoverageTitle?: Maybe<
+    KeyGearItemCoverageCreateOneWithoutTitleInput
+  >
+}
+
+export type KeyCreateWithoutKeyGearItemCoverageTitleInput = {
+  status?: Maybe<Status>
+  value: Scalars['String']
+  description?: Maybe<Scalars['String']>
+  translations?: Maybe<TranslationCreateManyWithoutKeyInput>
+  keyGearItemCoverageDescription?: Maybe<
+    KeyGearItemCoverageCreateOneWithoutDescriptionInput
+  >
+}
+
 export type KeyCreateWithoutTranslationsInput = {
   status?: Maybe<Status>
   value: Scalars['String']
   description?: Maybe<Scalars['String']>
+  keyGearItemCoverageTitle?: Maybe<
+    KeyGearItemCoverageCreateOneWithoutTitleInput
+  >
+  keyGearItemCoverageDescription?: Maybe<
+    KeyGearItemCoverageCreateOneWithoutDescriptionInput
+  >
 }
 
 /** An edge in a connection. */
@@ -1806,6 +3408,304 @@ export type KeyEdge = {
   node: Key
   /** A cursor for use in pagination. */
   cursor: Scalars['String']
+}
+
+export type KeyGearItem = {
+  __typename?: 'KeyGearItem'
+  id: Scalars['ID']
+  deleted: Scalars['Boolean']
+  /**
+   * If this item was added automatically - what was the Hash of the identifiable information?
+   * Use this to avoid automatically adding an Item which the user has already automatically added or
+   * does not wish to have automatically added
+   */
+  name?: Maybe<Scalars['String']>
+  physicalReferenceHash?: Maybe<Scalars['String']>
+  photos: Array<KeyGearItemPhoto>
+  category: KeyGearItemCategory
+  receipts: Array<KeyGearItemReceipt>
+  purchasePrice?: Maybe<MonetaryAmountV2>
+  timeOfPurchase?: Maybe<Scalars['LocalDate']>
+  valuation?: Maybe<KeyGearItemValuation>
+  maxInsurableAmount?: Maybe<MonetaryAmountV2>
+  deductible: MonetaryAmountV2
+  covered: Array<KeyGearItemCoverage>
+  exceptions: Array<KeyGearItemCoverage>
+}
+
+export enum KeyGearItemCategory {
+  Phone = 'PHONE',
+  Computer = 'COMPUTER',
+  Tv = 'TV',
+  Bike = 'BIKE',
+  Jewelry = 'JEWELRY',
+  Watch = 'WATCH',
+  SmartWatch = 'SMART_WATCH',
+  Tablet = 'TABLET',
+}
+
+export type KeyGearItemCoverage = Node & {
+  __typename?: 'KeyGearItemCoverage'
+  status: Status
+  updatedAt: Scalars['DateTime']
+  createdAt: Scalars['DateTime']
+  id: Scalars['ID']
+  title?: Maybe<Key>
+  description?: Maybe<Key>
+}
+
+/** A connection to a list of items. */
+export type KeyGearItemCoverageConnection = {
+  __typename?: 'KeyGearItemCoverageConnection'
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo
+  /** A list of edges. */
+  edges: Array<Maybe<KeyGearItemCoverageEdge>>
+  aggregate: AggregateKeyGearItemCoverage
+}
+
+export type KeyGearItemCoverageCreateInput = {
+  status?: Maybe<Status>
+  title?: Maybe<KeyCreateOneWithoutKeyGearItemCoverageTitleInput>
+  description?: Maybe<KeyCreateOneWithoutKeyGearItemCoverageDescriptionInput>
+}
+
+export type KeyGearItemCoverageCreateOneWithoutDescriptionInput = {
+  create?: Maybe<KeyGearItemCoverageCreateWithoutDescriptionInput>
+  connect?: Maybe<KeyGearItemCoverageWhereUniqueInput>
+}
+
+export type KeyGearItemCoverageCreateOneWithoutTitleInput = {
+  create?: Maybe<KeyGearItemCoverageCreateWithoutTitleInput>
+  connect?: Maybe<KeyGearItemCoverageWhereUniqueInput>
+}
+
+export type KeyGearItemCoverageCreateWithoutDescriptionInput = {
+  status?: Maybe<Status>
+  title?: Maybe<KeyCreateOneWithoutKeyGearItemCoverageTitleInput>
+}
+
+export type KeyGearItemCoverageCreateWithoutTitleInput = {
+  status?: Maybe<Status>
+  description?: Maybe<KeyCreateOneWithoutKeyGearItemCoverageDescriptionInput>
+}
+
+/** An edge in a connection. */
+export type KeyGearItemCoverageEdge = {
+  __typename?: 'KeyGearItemCoverageEdge'
+  /** The item at the end of the edge. */
+  node: KeyGearItemCoverage
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']
+}
+
+export enum KeyGearItemCoverageOrderByInput {
+  StatusAsc = 'status_ASC',
+  StatusDesc = 'status_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC',
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  IdAsc = 'id_ASC',
+  IdDesc = 'id_DESC',
+}
+
+export type KeyGearItemCoveragePreviousValues = {
+  __typename?: 'KeyGearItemCoveragePreviousValues'
+  status: Status
+  updatedAt: Scalars['DateTime']
+  createdAt: Scalars['DateTime']
+  id: Scalars['ID']
+}
+
+export type KeyGearItemCoverageSubscriptionPayload = {
+  __typename?: 'KeyGearItemCoverageSubscriptionPayload'
+  mutation: MutationType
+  node?: Maybe<KeyGearItemCoverage>
+  updatedFields?: Maybe<Array<Scalars['String']>>
+  previousValues?: Maybe<KeyGearItemCoveragePreviousValues>
+}
+
+export type KeyGearItemCoverageSubscriptionWhereInput = {
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<KeyGearItemCoverageSubscriptionWhereInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<KeyGearItemCoverageSubscriptionWhereInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<KeyGearItemCoverageSubscriptionWhereInput>>
+  /** The subscription event gets dispatched when it's listed in mutation_in */
+  mutation_in?: Maybe<Array<MutationType>>
+  /** The subscription event gets only dispatched when one of the updated fields names is included in this list */
+  updatedFields_contains?: Maybe<Scalars['String']>
+  /** The subscription event gets only dispatched when all of the field names included in this list have been updated */
+  updatedFields_contains_every?: Maybe<Array<Scalars['String']>>
+  /** The subscription event gets only dispatched when some of the field names included in this list have been updated */
+  updatedFields_contains_some?: Maybe<Array<Scalars['String']>>
+  node?: Maybe<KeyGearItemCoverageWhereInput>
+}
+
+export type KeyGearItemCoverageUpdateInput = {
+  status?: Maybe<Status>
+  title?: Maybe<KeyUpdateOneWithoutKeyGearItemCoverageTitleInput>
+  description?: Maybe<KeyUpdateOneWithoutKeyGearItemCoverageDescriptionInput>
+}
+
+export type KeyGearItemCoverageUpdateManyMutationInput = {
+  status?: Maybe<Status>
+}
+
+export type KeyGearItemCoverageUpdateOneWithoutDescriptionInput = {
+  create?: Maybe<KeyGearItemCoverageCreateWithoutDescriptionInput>
+  connect?: Maybe<KeyGearItemCoverageWhereUniqueInput>
+  disconnect?: Maybe<Scalars['Boolean']>
+  delete?: Maybe<Scalars['Boolean']>
+  update?: Maybe<KeyGearItemCoverageUpdateWithoutDescriptionDataInput>
+  upsert?: Maybe<KeyGearItemCoverageUpsertWithoutDescriptionInput>
+}
+
+export type KeyGearItemCoverageUpdateOneWithoutTitleInput = {
+  create?: Maybe<KeyGearItemCoverageCreateWithoutTitleInput>
+  connect?: Maybe<KeyGearItemCoverageWhereUniqueInput>
+  disconnect?: Maybe<Scalars['Boolean']>
+  delete?: Maybe<Scalars['Boolean']>
+  update?: Maybe<KeyGearItemCoverageUpdateWithoutTitleDataInput>
+  upsert?: Maybe<KeyGearItemCoverageUpsertWithoutTitleInput>
+}
+
+export type KeyGearItemCoverageUpdateWithoutDescriptionDataInput = {
+  status?: Maybe<Status>
+  title?: Maybe<KeyUpdateOneWithoutKeyGearItemCoverageTitleInput>
+}
+
+export type KeyGearItemCoverageUpdateWithoutTitleDataInput = {
+  status?: Maybe<Status>
+  description?: Maybe<KeyUpdateOneWithoutKeyGearItemCoverageDescriptionInput>
+}
+
+export type KeyGearItemCoverageUpsertWithoutDescriptionInput = {
+  update: KeyGearItemCoverageUpdateWithoutDescriptionDataInput
+  create: KeyGearItemCoverageCreateWithoutDescriptionInput
+}
+
+export type KeyGearItemCoverageUpsertWithoutTitleInput = {
+  update: KeyGearItemCoverageUpdateWithoutTitleDataInput
+  create: KeyGearItemCoverageCreateWithoutTitleInput
+}
+
+export type KeyGearItemCoverageWhereInput = {
+  _search?: Maybe<Scalars['String']>
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<KeyGearItemCoverageWhereInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<KeyGearItemCoverageWhereInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<KeyGearItemCoverageWhereInput>>
+  status?: Maybe<Status>
+  /** All values that are not equal to given value. */
+  status_not?: Maybe<Status>
+  /** All values that are contained in given list. */
+  status_in?: Maybe<Array<Status>>
+  /** All values that are not contained in given list. */
+  status_not_in?: Maybe<Array<Status>>
+  updatedAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  updatedAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  updatedAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  updatedAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  updatedAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  updatedAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  updatedAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  updatedAt_gte?: Maybe<Scalars['DateTime']>
+  createdAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  createdAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  createdAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  createdAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  createdAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  createdAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  createdAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  createdAt_gte?: Maybe<Scalars['DateTime']>
+  id?: Maybe<Scalars['ID']>
+  /** All values that are not equal to given value. */
+  id_not?: Maybe<Scalars['ID']>
+  /** All values that are contained in given list. */
+  id_in?: Maybe<Array<Scalars['ID']>>
+  /** All values that are not contained in given list. */
+  id_not_in?: Maybe<Array<Scalars['ID']>>
+  /** All values less than the given value. */
+  id_lt?: Maybe<Scalars['ID']>
+  /** All values less than or equal the given value. */
+  id_lte?: Maybe<Scalars['ID']>
+  /** All values greater than the given value. */
+  id_gt?: Maybe<Scalars['ID']>
+  /** All values greater than or equal the given value. */
+  id_gte?: Maybe<Scalars['ID']>
+  /** All values containing the given string. */
+  id_contains?: Maybe<Scalars['ID']>
+  /** All values not containing the given string. */
+  id_not_contains?: Maybe<Scalars['ID']>
+  /** All values starting with the given string. */
+  id_starts_with?: Maybe<Scalars['ID']>
+  /** All values not starting with the given string. */
+  id_not_starts_with?: Maybe<Scalars['ID']>
+  /** All values ending with the given string. */
+  id_ends_with?: Maybe<Scalars['ID']>
+  /** All values not ending with the given string. */
+  id_not_ends_with?: Maybe<Scalars['ID']>
+  title?: Maybe<KeyWhereInput>
+  description?: Maybe<KeyWhereInput>
+}
+
+export type KeyGearItemCoverageWhereUniqueInput = {
+  id?: Maybe<Scalars['ID']>
+}
+
+export type KeyGearItemPhoto = {
+  __typename?: 'KeyGearItemPhoto'
+  id: Scalars['ID']
+  file: S3File
+  markedAsDeleted: Scalars['Boolean']
+}
+
+export type KeyGearItemReceipt = {
+  __typename?: 'KeyGearItemReceipt'
+  id: Scalars['ID']
+  file: S3File
+  markedAsDeleted: Scalars['Boolean']
+}
+
+export type KeyGearItemsFilter = {
+  /** default: false */
+  deleted?: Maybe<Scalars['Boolean']>
+}
+
+export type KeyGearItemValuation =
+  | KeyGearItemValuationFixed
+  | KeyGearItemValuationMarketValue
+
+export type KeyGearItemValuationFixed = {
+  __typename?: 'KeyGearItemValuationFixed'
+  /** Value between 100 and 0 which corresponds to the percentage of the item's value relative to purchase price */
+  ratio: Scalars['Int']
+  valuation: MonetaryAmountV2
+}
+
+export type KeyGearItemValuationMarketValue = {
+  __typename?: 'KeyGearItemValuationMarketValue'
+  /** Value between 100 and 0 which corresponds to the percentage of the item's value relative to current market value */
+  ratio: Scalars['Int']
 }
 
 export enum KeyOrderByInput {
@@ -1864,12 +3764,36 @@ export type KeyUpdateInput = {
   value?: Maybe<Scalars['String']>
   description?: Maybe<Scalars['String']>
   translations?: Maybe<TranslationUpdateManyWithoutKeyInput>
+  keyGearItemCoverageTitle?: Maybe<
+    KeyGearItemCoverageUpdateOneWithoutTitleInput
+  >
+  keyGearItemCoverageDescription?: Maybe<
+    KeyGearItemCoverageUpdateOneWithoutDescriptionInput
+  >
 }
 
 export type KeyUpdateManyMutationInput = {
   status?: Maybe<Status>
   value?: Maybe<Scalars['String']>
   description?: Maybe<Scalars['String']>
+}
+
+export type KeyUpdateOneWithoutKeyGearItemCoverageDescriptionInput = {
+  create?: Maybe<KeyCreateWithoutKeyGearItemCoverageDescriptionInput>
+  connect?: Maybe<KeyWhereUniqueInput>
+  disconnect?: Maybe<Scalars['Boolean']>
+  delete?: Maybe<Scalars['Boolean']>
+  update?: Maybe<KeyUpdateWithoutKeyGearItemCoverageDescriptionDataInput>
+  upsert?: Maybe<KeyUpsertWithoutKeyGearItemCoverageDescriptionInput>
+}
+
+export type KeyUpdateOneWithoutKeyGearItemCoverageTitleInput = {
+  create?: Maybe<KeyCreateWithoutKeyGearItemCoverageTitleInput>
+  connect?: Maybe<KeyWhereUniqueInput>
+  disconnect?: Maybe<Scalars['Boolean']>
+  delete?: Maybe<Scalars['Boolean']>
+  update?: Maybe<KeyUpdateWithoutKeyGearItemCoverageTitleDataInput>
+  upsert?: Maybe<KeyUpsertWithoutKeyGearItemCoverageTitleInput>
 }
 
 export type KeyUpdateOneWithoutTranslationsInput = {
@@ -1881,10 +3805,46 @@ export type KeyUpdateOneWithoutTranslationsInput = {
   upsert?: Maybe<KeyUpsertWithoutTranslationsInput>
 }
 
+export type KeyUpdateWithoutKeyGearItemCoverageDescriptionDataInput = {
+  status?: Maybe<Status>
+  value?: Maybe<Scalars['String']>
+  description?: Maybe<Scalars['String']>
+  translations?: Maybe<TranslationUpdateManyWithoutKeyInput>
+  keyGearItemCoverageTitle?: Maybe<
+    KeyGearItemCoverageUpdateOneWithoutTitleInput
+  >
+}
+
+export type KeyUpdateWithoutKeyGearItemCoverageTitleDataInput = {
+  status?: Maybe<Status>
+  value?: Maybe<Scalars['String']>
+  description?: Maybe<Scalars['String']>
+  translations?: Maybe<TranslationUpdateManyWithoutKeyInput>
+  keyGearItemCoverageDescription?: Maybe<
+    KeyGearItemCoverageUpdateOneWithoutDescriptionInput
+  >
+}
+
 export type KeyUpdateWithoutTranslationsDataInput = {
   status?: Maybe<Status>
   value?: Maybe<Scalars['String']>
   description?: Maybe<Scalars['String']>
+  keyGearItemCoverageTitle?: Maybe<
+    KeyGearItemCoverageUpdateOneWithoutTitleInput
+  >
+  keyGearItemCoverageDescription?: Maybe<
+    KeyGearItemCoverageUpdateOneWithoutDescriptionInput
+  >
+}
+
+export type KeyUpsertWithoutKeyGearItemCoverageDescriptionInput = {
+  update: KeyUpdateWithoutKeyGearItemCoverageDescriptionDataInput
+  create: KeyCreateWithoutKeyGearItemCoverageDescriptionInput
+}
+
+export type KeyUpsertWithoutKeyGearItemCoverageTitleInput = {
+  update: KeyUpdateWithoutKeyGearItemCoverageTitleDataInput
+  create: KeyCreateWithoutKeyGearItemCoverageTitleInput
 }
 
 export type KeyUpsertWithoutTranslationsInput = {
@@ -2021,6 +3981,8 @@ export type KeyWhereInput = {
   translations_every?: Maybe<TranslationWhereInput>
   translations_some?: Maybe<TranslationWhereInput>
   translations_none?: Maybe<TranslationWhereInput>
+  keyGearItemCoverageTitle?: Maybe<KeyGearItemCoverageWhereInput>
+  keyGearItemCoverageDescription?: Maybe<KeyGearItemCoverageWhereInput>
 }
 
 export type KeyWhereUniqueInput = {
@@ -2039,6 +4001,7 @@ export type Language = Node & {
   name: Scalars['String']
   marketingStories?: Maybe<Array<MarketingStory>>
   faqs?: Maybe<Array<Faq>>
+  importantMessageses?: Maybe<Array<ImportantMessage>>
 }
 
 export type LanguageTranslationsArgs = {
@@ -2071,6 +4034,16 @@ export type LanguageFaqsArgs = {
   last?: Maybe<Scalars['Int']>
 }
 
+export type LanguageImportantMessagesesArgs = {
+  where?: Maybe<ImportantMessageWhereInput>
+  orderBy?: Maybe<ImportantMessageOrderByInput>
+  skip?: Maybe<Scalars['Int']>
+  after?: Maybe<Scalars['String']>
+  before?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+}
+
 /** A connection to a list of items. */
 export type LanguageConnection = {
   __typename?: 'LanguageConnection'
@@ -2088,10 +4061,16 @@ export type LanguageCreateInput = {
   translations?: Maybe<TranslationCreateManyWithoutLanguageInput>
   marketingStories?: Maybe<MarketingStoryCreateManyWithoutLanguageInput>
   faqs?: Maybe<FaqCreateManyWithoutLanguageInput>
+  importantMessageses?: Maybe<ImportantMessageCreateManyWithoutLanguageInput>
 }
 
 export type LanguageCreateOneWithoutFaqsInput = {
   create?: Maybe<LanguageCreateWithoutFaqsInput>
+  connect?: Maybe<LanguageWhereUniqueInput>
+}
+
+export type LanguageCreateOneWithoutImportantMessagesesInput = {
+  create?: Maybe<LanguageCreateWithoutImportantMessagesesInput>
   connect?: Maybe<LanguageWhereUniqueInput>
 }
 
@@ -2111,6 +4090,16 @@ export type LanguageCreateWithoutFaqsInput = {
   name: Scalars['String']
   translations?: Maybe<TranslationCreateManyWithoutLanguageInput>
   marketingStories?: Maybe<MarketingStoryCreateManyWithoutLanguageInput>
+  importantMessageses?: Maybe<ImportantMessageCreateManyWithoutLanguageInput>
+}
+
+export type LanguageCreateWithoutImportantMessagesesInput = {
+  status?: Maybe<Status>
+  code: Scalars['String']
+  name: Scalars['String']
+  translations?: Maybe<TranslationCreateManyWithoutLanguageInput>
+  marketingStories?: Maybe<MarketingStoryCreateManyWithoutLanguageInput>
+  faqs?: Maybe<FaqCreateManyWithoutLanguageInput>
 }
 
 export type LanguageCreateWithoutMarketingStoriesInput = {
@@ -2119,6 +4108,7 @@ export type LanguageCreateWithoutMarketingStoriesInput = {
   name: Scalars['String']
   translations?: Maybe<TranslationCreateManyWithoutLanguageInput>
   faqs?: Maybe<FaqCreateManyWithoutLanguageInput>
+  importantMessageses?: Maybe<ImportantMessageCreateManyWithoutLanguageInput>
 }
 
 export type LanguageCreateWithoutTranslationsInput = {
@@ -2127,6 +4117,7 @@ export type LanguageCreateWithoutTranslationsInput = {
   name: Scalars['String']
   marketingStories?: Maybe<MarketingStoryCreateManyWithoutLanguageInput>
   faqs?: Maybe<FaqCreateManyWithoutLanguageInput>
+  importantMessageses?: Maybe<ImportantMessageCreateManyWithoutLanguageInput>
 }
 
 /** An edge in a connection. */
@@ -2196,6 +4187,7 @@ export type LanguageUpdateInput = {
   translations?: Maybe<TranslationUpdateManyWithoutLanguageInput>
   marketingStories?: Maybe<MarketingStoryUpdateManyWithoutLanguageInput>
   faqs?: Maybe<FaqUpdateManyWithoutLanguageInput>
+  importantMessageses?: Maybe<ImportantMessageUpdateManyWithoutLanguageInput>
 }
 
 export type LanguageUpdateManyMutationInput = {
@@ -2211,6 +4203,15 @@ export type LanguageUpdateOneWithoutFaqsInput = {
   delete?: Maybe<Scalars['Boolean']>
   update?: Maybe<LanguageUpdateWithoutFaqsDataInput>
   upsert?: Maybe<LanguageUpsertWithoutFaqsInput>
+}
+
+export type LanguageUpdateOneWithoutImportantMessagesesInput = {
+  create?: Maybe<LanguageCreateWithoutImportantMessagesesInput>
+  connect?: Maybe<LanguageWhereUniqueInput>
+  disconnect?: Maybe<Scalars['Boolean']>
+  delete?: Maybe<Scalars['Boolean']>
+  update?: Maybe<LanguageUpdateWithoutImportantMessagesesDataInput>
+  upsert?: Maybe<LanguageUpsertWithoutImportantMessagesesInput>
 }
 
 export type LanguageUpdateOneWithoutMarketingStoriesInput = {
@@ -2237,6 +4238,16 @@ export type LanguageUpdateWithoutFaqsDataInput = {
   name?: Maybe<Scalars['String']>
   translations?: Maybe<TranslationUpdateManyWithoutLanguageInput>
   marketingStories?: Maybe<MarketingStoryUpdateManyWithoutLanguageInput>
+  importantMessageses?: Maybe<ImportantMessageUpdateManyWithoutLanguageInput>
+}
+
+export type LanguageUpdateWithoutImportantMessagesesDataInput = {
+  status?: Maybe<Status>
+  code?: Maybe<Scalars['String']>
+  name?: Maybe<Scalars['String']>
+  translations?: Maybe<TranslationUpdateManyWithoutLanguageInput>
+  marketingStories?: Maybe<MarketingStoryUpdateManyWithoutLanguageInput>
+  faqs?: Maybe<FaqUpdateManyWithoutLanguageInput>
 }
 
 export type LanguageUpdateWithoutMarketingStoriesDataInput = {
@@ -2245,6 +4256,7 @@ export type LanguageUpdateWithoutMarketingStoriesDataInput = {
   name?: Maybe<Scalars['String']>
   translations?: Maybe<TranslationUpdateManyWithoutLanguageInput>
   faqs?: Maybe<FaqUpdateManyWithoutLanguageInput>
+  importantMessageses?: Maybe<ImportantMessageUpdateManyWithoutLanguageInput>
 }
 
 export type LanguageUpdateWithoutTranslationsDataInput = {
@@ -2253,11 +4265,17 @@ export type LanguageUpdateWithoutTranslationsDataInput = {
   name?: Maybe<Scalars['String']>
   marketingStories?: Maybe<MarketingStoryUpdateManyWithoutLanguageInput>
   faqs?: Maybe<FaqUpdateManyWithoutLanguageInput>
+  importantMessageses?: Maybe<ImportantMessageUpdateManyWithoutLanguageInput>
 }
 
 export type LanguageUpsertWithoutFaqsInput = {
   update: LanguageUpdateWithoutFaqsDataInput
   create: LanguageCreateWithoutFaqsInput
+}
+
+export type LanguageUpsertWithoutImportantMessagesesInput = {
+  update: LanguageUpdateWithoutImportantMessagesesDataInput
+  create: LanguageCreateWithoutImportantMessagesesInput
 }
 
 export type LanguageUpsertWithoutMarketingStoriesInput = {
@@ -2405,6 +4423,9 @@ export type LanguageWhereInput = {
   faqs_every?: Maybe<FaqWhereInput>
   faqs_some?: Maybe<FaqWhereInput>
   faqs_none?: Maybe<FaqWhereInput>
+  importantMessageses_every?: Maybe<ImportantMessageWhereInput>
+  importantMessageses_some?: Maybe<ImportantMessageWhereInput>
+  importantMessageses_none?: Maybe<ImportantMessageWhereInput>
 }
 
 export type LanguageWhereUniqueInput = {
@@ -2915,6 +4936,7 @@ export type Member = {
   email?: Maybe<Scalars['String']>
   phoneNumber?: Maybe<Scalars['String']>
   acceptLanguage?: Maybe<Scalars['String']>
+  features: Array<Feature>
 }
 
 export type Message = {
@@ -3083,6 +5105,11 @@ export type MonetaryAmountV2 = {
   currency: Scalars['String']
 }
 
+export type MonetaryAmountV2Input = {
+  amount: Scalars['String']
+  currency: Scalars['String']
+}
+
 export type MonthlyCostDeduction = {
   __typename?: 'MonthlyCostDeduction'
   amount?: Maybe<MonetaryAmountV2>
@@ -3097,6 +5124,7 @@ export type Mutation = {
   signOffer?: Maybe<Scalars['Boolean']>
   signOfferV2: BankIdSignResponse
   uploadFile: File
+  uploadFiles?: Maybe<Array<File>>
   selectCashbackOption: Cashback
   offerClosed: Scalars['Boolean']
   startDirectDebitRegistration: Scalars['URL']
@@ -3116,6 +5144,8 @@ export type Mutation = {
   markMessageAsRead: Message
   log?: Maybe<Scalars['Boolean']>
   bankIdAuth: BankIdAuthResponse
+  swedishBankIdAuth: BankIdAuthResponse
+  norwegianBankIdAuth: NorwegianBankIdAuthResponse
   registerBranchCampaign?: Maybe<Scalars['Boolean']>
   updateLanguage: Scalars['Boolean']
   createDontPanicSession: DontPanicSession
@@ -3130,6 +5160,25 @@ export type Mutation = {
   editQuote: CreateQuoteResult
   removeCurrentInsurer: CreateQuoteResult
   removeStartDate: CreateQuoteResult
+  signQuotes?: Maybe<StartSignResponse>
+  createKeyGearItem: KeyGearItem
+  addPhotoToKeyGearItem: KeyGearItem
+  deletePhotoFromKeyGearItem: KeyGearItem
+  addReceiptToKeyGearItem: KeyGearItem
+  deleteReceiptFromKeyGearItem: KeyGearItem
+  updateCategoryForKeyGearItem: KeyGearItem
+  /** # send null to remove */
+  updatePurchasePriceForKeyGearItem: KeyGearItem
+  /** # send null to remove */
+  updateTimeOfPurchaseForKeyGearItem: KeyGearItem
+  updateKeyGearItemName: KeyGearItem
+  /**
+   * """
+   * When we've deleted an item, we mark it as deleted and should probably redact all information
+   * except for the physicalReferenceHash.
+   * """
+   */
+  deleteKeyGearItem: KeyGearItem
 }
 
 export type MutationCreateSessionArgs = {
@@ -3151,6 +5200,10 @@ export type MutationSignOfferV2Args = {
 
 export type MutationUploadFileArgs = {
   file: Scalars['Upload']
+}
+
+export type MutationUploadFilesArgs = {
+  files: Array<Scalars['Upload']>
 }
 
 export type MutationSelectCashbackOptionArgs = {
@@ -3245,6 +5298,56 @@ export type MutationRemoveStartDateArgs = {
   input: RemoveStartDateInput
 }
 
+export type MutationSignQuotesArgs = {
+  input: SignQuotesInput
+}
+
+export type MutationCreateKeyGearItemArgs = {
+  input: CreateKeyGearItemInput
+}
+
+export type MutationAddPhotoToKeyGearItemArgs = {
+  input: AddPhotoToKeyGearItemInput
+}
+
+export type MutationDeletePhotoFromKeyGearItemArgs = {
+  itemId: Scalars['ID']
+  id: Scalars['ID']
+}
+
+export type MutationAddReceiptToKeyGearItemArgs = {
+  input: AddReceiptToKeyGearItemInput
+}
+
+export type MutationDeleteReceiptFromKeyGearItemArgs = {
+  itemId: Scalars['ID']
+  id: Scalars['ID']
+}
+
+export type MutationUpdateCategoryForKeyGearItemArgs = {
+  itemId: Scalars['ID']
+  category: KeyGearItemCategory
+}
+
+export type MutationUpdatePurchasePriceForKeyGearItemArgs = {
+  itemId: Scalars['ID']
+  newPrice?: Maybe<MonetaryAmountV2Input>
+}
+
+export type MutationUpdateTimeOfPurchaseForKeyGearItemArgs = {
+  id: Scalars['ID']
+  newTimeOfPurchase?: Maybe<Scalars['LocalDate']>
+}
+
+export type MutationUpdateKeyGearItemNameArgs = {
+  itemId: Scalars['ID']
+  updatedName?: Maybe<Scalars['String']>
+}
+
+export type MutationDeleteKeyGearItemArgs = {
+  id: Scalars['ID']
+}
+
 export enum MutationType {
   Created = 'CREATED',
   Updated = 'UPDATED',
@@ -3271,6 +5374,75 @@ export type Node = {
 export type NoDiscount = {
   __typename?: 'NoDiscount'
   _?: Maybe<Scalars['Boolean']>
+}
+
+export type NorwegianBankIdAuthResponse = {
+  __typename?: 'NorwegianBankIdAuthResponse'
+  redirectUrl: Scalars['String']
+}
+
+export type NorwegianBankIdSession = {
+  __typename?: 'NorwegianBankIdSession'
+  redirectUrl?: Maybe<Scalars['String']>
+}
+
+export type NorwegianHomeContentAgreement = AgreementCore & {
+  __typename?: 'NorwegianHomeContentAgreement'
+  id: Scalars['ID']
+  activeFrom?: Maybe<Scalars['LocalDate']>
+  activeTo?: Maybe<Scalars['LocalDate']>
+  premium: MonetaryAmountV2
+  certificateUrl?: Maybe<Scalars['String']>
+  status: AgreementStatus
+  address: Address
+  numberCoInsured: Scalars['Int']
+  squareMeters: Scalars['Int']
+  type?: Maybe<NorwegianHomeContentLineOfBusiness>
+}
+
+export enum NorwegianHomeContentLineOfBusiness {
+  YouthRent = 'YOUTH_RENT',
+  Rent = 'RENT',
+  YouthOwn = 'YOUTH_OWN',
+  Own = 'OWN',
+}
+
+export type NorwegianHomeContentsDetails = {
+  __typename?: 'NorwegianHomeContentsDetails'
+  street: Scalars['String']
+  zipCode: Scalars['String']
+  coInsured: Scalars['Int']
+  livingSpace: Scalars['Int']
+  isYouth: Scalars['Boolean']
+  type: NorwegianHomeContentsType
+}
+
+export enum NorwegianHomeContentsType {
+  Rent = 'RENT',
+  Own = 'OWN',
+}
+
+export type NorwegianTravelAgreement = AgreementCore & {
+  __typename?: 'NorwegianTravelAgreement'
+  id: Scalars['ID']
+  activeFrom?: Maybe<Scalars['LocalDate']>
+  activeTo?: Maybe<Scalars['LocalDate']>
+  premium: MonetaryAmountV2
+  certificateUrl?: Maybe<Scalars['String']>
+  status: AgreementStatus
+  numberCoInsured: Scalars['Int']
+  type?: Maybe<NorwegianTravelLineOfBusiness>
+}
+
+export type NorwegianTravelDetails = {
+  __typename?: 'NorwegianTravelDetails'
+  coInsured: Scalars['Int']
+  isYouth: Scalars['Boolean']
+}
+
+export enum NorwegianTravelLineOfBusiness {
+  Regular = 'REGULAR',
+  Youth = 'YOUTH',
 }
 
 export type OfferEvent = {
@@ -3369,6 +5541,7 @@ export enum Project {
   ProductPricing = 'ProductPricing',
   NotificationService = 'NotificationService',
   Underwriter = 'Underwriter',
+  MemberService = 'MemberService',
 }
 
 export type ProviderStatus = {
@@ -3381,6 +5554,9 @@ export type Query = {
   __typename?: 'Query'
   languages: Array<Maybe<Language>>
   marketingStories: Array<Maybe<MarketingStory>>
+  coreMLModels: Array<Maybe<CoreMlModel>>
+  keyGearItemCoverages: Array<Maybe<KeyGearItemCoverage>>
+  importantMessages: Array<Maybe<ImportantMessage>>
   insurance: Insurance
   cashback?: Maybe<Cashback>
   cashbackOptions: Array<Maybe<Cashback>>
@@ -3393,7 +5569,7 @@ export type Query = {
   chatState: ChatState
   avatars?: Maybe<Array<Maybe<Avatar>>>
   chatActions?: Maybe<Array<Maybe<ChatAction>>>
-  travel: Travel
+  geo: Geo
   angelStory?: Maybe<AngelStory>
   dontPanicPing: Scalars['String']
   dontPanicSession?: Maybe<DontPanicSession>
@@ -3408,6 +5584,14 @@ export type Query = {
   referralInformation: Referrals
   /** Returns redeemed campaigns belonging to authedUser */
   redeemedCampaigns: Array<Campaign>
+  /** Returns all contracts the member currently holds, regardless of activation/termination status */
+  contracts: Array<Contract>
+  /** Returns the aggregated insurance cost of a member's PENDING, ACTIVE or ACTIVE_IN_FUTURE current agreements */
+  insuranceCost?: Maybe<InsuranceCost>
+  /** Returns whether a member has at least one contract */
+  hasContract: Scalars['Boolean']
+  /** Returns whether a member is eligible to create a claim, i.e. if a member has an active contract */
+  isEligibleToCreateClaim: Scalars['Boolean']
   balance: Balance
   chargeEstimation: ChargeEstimation
   chargeHistory: Array<Charge>
@@ -3419,6 +5603,10 @@ export type Query = {
   commonClaims: Array<CommonClaim>
   news: Array<News>
   welcome: Array<Welcome>
+  embarkStory?: Maybe<EmbarkStory>
+  /** Used */
+  keyGearItems: Array<KeyGearItem>
+  keyGearItem?: Maybe<KeyGearItem>
 }
 
 export type QueryLanguagesArgs = {
@@ -3434,6 +5622,36 @@ export type QueryLanguagesArgs = {
 export type QueryMarketingStoriesArgs = {
   where?: Maybe<MarketingStoryWhereInput>
   orderBy?: Maybe<MarketingStoryOrderByInput>
+  skip?: Maybe<Scalars['Int']>
+  after?: Maybe<Scalars['String']>
+  before?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+}
+
+export type QueryCoreMlModelsArgs = {
+  where?: Maybe<CoreMlModelWhereInput>
+  orderBy?: Maybe<CoreMlModelOrderByInput>
+  skip?: Maybe<Scalars['Int']>
+  after?: Maybe<Scalars['String']>
+  before?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+}
+
+export type QueryKeyGearItemCoveragesArgs = {
+  where?: Maybe<KeyGearItemCoverageWhereInput>
+  orderBy?: Maybe<KeyGearItemCoverageOrderByInput>
+  skip?: Maybe<Scalars['Int']>
+  after?: Maybe<Scalars['String']>
+  before?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+}
+
+export type QueryImportantMessagesArgs = {
+  where?: Maybe<ImportantMessageWhereInput>
+  orderBy?: Maybe<ImportantMessageOrderByInput>
   skip?: Maybe<Scalars['Int']>
   after?: Maybe<Scalars['String']>
   before?: Maybe<Scalars['String']>
@@ -3478,8 +5696,8 @@ export type QueryCommonClaimsArgs = {
 }
 
 export type QueryNewsArgs = {
-  platform: Platform
   sinceVersion: Scalars['String']
+  platform: Platform
   locale: Locale
 }
 
@@ -3488,7 +5706,25 @@ export type QueryWelcomeArgs = {
   platform: Platform
 }
 
+export type QueryEmbarkStoryArgs = {
+  name: Scalars['String']
+}
+
+export type QueryKeyGearItemsArgs = {
+  where?: Maybe<KeyGearItemsFilter>
+}
+
+export type QueryKeyGearItemArgs = {
+  id: Scalars['ID']
+}
+
 export type Quote = CompleteQuote | IncompleteQuote
+
+export type QuoteDetails =
+  | SwedishApartmentQuoteDetails
+  | SwedishHouseQuoteDetails
+  | NorwegianHomeContentsDetails
+  | NorwegianTravelDetails
 
 export type RedemedCodeResult = {
   __typename?: 'RedemedCodeResult'
@@ -3538,6 +5774,16 @@ export type Renewal = {
   date: Scalars['LocalDate']
 }
 
+export type S3File = {
+  __typename?: 'S3File'
+  preSignedUrl: Scalars['String']
+}
+
+export type S3FileInput = {
+  bucket: Scalars['String']
+  key: Scalars['String']
+}
+
 export type SessionInformation = {
   __typename?: 'SessionInformation'
   token: Scalars['String']
@@ -3554,6 +5800,10 @@ export type SignInput = {
   email: Scalars['String']
 }
 
+export type SignQuotesInput = {
+  quoteIds: Array<Scalars['ID']>
+}
+
 export enum SignState {
   Initiated = 'INITIATED',
   InProgress = 'IN_PROGRESS',
@@ -3566,6 +5816,11 @@ export type SignStatus = {
   collectStatus?: Maybe<CollectStatus>
   signState?: Maybe<SignState>
 }
+
+export type StartSignResponse =
+  | SwedishBankIdSession
+  | NorwegianBankIdSession
+  | FailedToStartSign
 
 export enum Status {
   Draft = 'DRAFT',
@@ -3594,6 +5849,72 @@ export type SubscriptionChatStateArgs = {
 
 export type SubscriptionDataCollectionStatusArgs = {
   reference: Scalars['ID']
+}
+
+export type SwedishApartmentAgreement = AgreementCore & {
+  __typename?: 'SwedishApartmentAgreement'
+  id: Scalars['ID']
+  activeFrom?: Maybe<Scalars['LocalDate']>
+  activeTo?: Maybe<Scalars['LocalDate']>
+  premium: MonetaryAmountV2
+  certificateUrl?: Maybe<Scalars['String']>
+  status: AgreementStatus
+  address: Address
+  numberCoInsured: Scalars['Int']
+  squareMeters: Scalars['Int']
+  type: SwedishApartmentLineOfBusiness
+}
+
+export enum SwedishApartmentLineOfBusiness {
+  Rent = 'RENT',
+  Brf = 'BRF',
+  StudentRent = 'STUDENT_RENT',
+  StudentBrf = 'STUDENT_BRF',
+}
+
+export type SwedishApartmentQuoteDetails = {
+  __typename?: 'SwedishApartmentQuoteDetails'
+  street: Scalars['String']
+  zipCode: Scalars['String']
+  householdSize: Scalars['Int']
+  livingSpace: Scalars['Int']
+  type: ApartmentType
+}
+
+export type SwedishBankIdSession = {
+  __typename?: 'SwedishBankIdSession'
+  autoStartToken?: Maybe<Scalars['String']>
+}
+
+export type SwedishHouseAgreement = AgreementCore & {
+  __typename?: 'SwedishHouseAgreement'
+  id: Scalars['ID']
+  activeFrom?: Maybe<Scalars['LocalDate']>
+  activeTo?: Maybe<Scalars['LocalDate']>
+  premium: MonetaryAmountV2
+  certificateUrl?: Maybe<Scalars['String']>
+  status: AgreementStatus
+  address: Address
+  numberCoInsured: Scalars['Int']
+  squareMeters: Scalars['Int']
+  ancillaryArea: Scalars['Int']
+  yearOfConstruction: Scalars['Int']
+  numberOfBathrooms: Scalars['Int']
+  extraBuildings: Array<Maybe<ExtraBuilding>>
+  isSubleted: Scalars['Boolean']
+}
+
+export type SwedishHouseQuoteDetails = {
+  __typename?: 'SwedishHouseQuoteDetails'
+  street: Scalars['String']
+  zipCode: Scalars['String']
+  householdSize: Scalars['Int']
+  livingSpace: Scalars['Int']
+  ancillarySpace: Scalars['Int']
+  extraBuildings: Array<ExtraBuilding>
+  numberOfBathrooms: Scalars['Int']
+  yearOfConstruction: Scalars['Int']
+  isSubleted: Scalars['Boolean']
 }
 
 export type TerminatedReferral = {
@@ -4063,12 +6384,6 @@ export type TranslationWhereUniqueInput = {
   id?: Maybe<Scalars['ID']>
 }
 
-export type Travel = {
-  __typename?: 'Travel'
-  possiblyTravelling: Scalars['Boolean']
-  countryISOCode: Scalars['String']
-}
-
 export type TriggerClaimChatInput = {
   claimTypeId?: Maybe<Scalars['ID']>
 }
@@ -4081,6 +6396,227 @@ export type UnderwritingLimit = {
 export type UnderwritingLimitsHit = {
   __typename?: 'UnderwritingLimitsHit'
   limits: Array<UnderwritingLimit>
+}
+
+export type UnknownQuoteDetails = {
+  __typename?: 'UnknownQuoteDetails'
+  unknown?: Maybe<Scalars['String']>
+}
+
+export type UpcomingRenewal = {
+  __typename?: 'UpcomingRenewal'
+  renewalDate: Scalars['LocalDate']
+  draftCertificateUrl: Scalars['String']
+}
+
+export type UserFeature = Node & {
+  __typename?: 'UserFeature'
+  status: Status
+  updatedAt: Scalars['DateTime']
+  createdAt: Scalars['DateTime']
+  id: Scalars['ID']
+  feature?: Maybe<Feature>
+  memberId?: Maybe<Scalars['String']>
+}
+
+/** A connection to a list of items. */
+export type UserFeatureConnection = {
+  __typename?: 'UserFeatureConnection'
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo
+  /** A list of edges. */
+  edges: Array<Maybe<UserFeatureEdge>>
+  aggregate: AggregateUserFeature
+}
+
+export type UserFeatureCreateInput = {
+  status?: Maybe<Status>
+  feature?: Maybe<Feature>
+  memberId?: Maybe<Scalars['String']>
+}
+
+/** An edge in a connection. */
+export type UserFeatureEdge = {
+  __typename?: 'UserFeatureEdge'
+  /** The item at the end of the edge. */
+  node: UserFeature
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']
+}
+
+export enum UserFeatureOrderByInput {
+  StatusAsc = 'status_ASC',
+  StatusDesc = 'status_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC',
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  IdAsc = 'id_ASC',
+  IdDesc = 'id_DESC',
+  FeatureAsc = 'feature_ASC',
+  FeatureDesc = 'feature_DESC',
+  MemberIdAsc = 'memberId_ASC',
+  MemberIdDesc = 'memberId_DESC',
+}
+
+export type UserFeaturePreviousValues = {
+  __typename?: 'UserFeaturePreviousValues'
+  status: Status
+  updatedAt: Scalars['DateTime']
+  createdAt: Scalars['DateTime']
+  id: Scalars['ID']
+  feature?: Maybe<Feature>
+  memberId?: Maybe<Scalars['String']>
+}
+
+export type UserFeatureSubscriptionPayload = {
+  __typename?: 'UserFeatureSubscriptionPayload'
+  mutation: MutationType
+  node?: Maybe<UserFeature>
+  updatedFields?: Maybe<Array<Scalars['String']>>
+  previousValues?: Maybe<UserFeaturePreviousValues>
+}
+
+export type UserFeatureSubscriptionWhereInput = {
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<UserFeatureSubscriptionWhereInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<UserFeatureSubscriptionWhereInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<UserFeatureSubscriptionWhereInput>>
+  /** The subscription event gets dispatched when it's listed in mutation_in */
+  mutation_in?: Maybe<Array<MutationType>>
+  /** The subscription event gets only dispatched when one of the updated fields names is included in this list */
+  updatedFields_contains?: Maybe<Scalars['String']>
+  /** The subscription event gets only dispatched when all of the field names included in this list have been updated */
+  updatedFields_contains_every?: Maybe<Array<Scalars['String']>>
+  /** The subscription event gets only dispatched when some of the field names included in this list have been updated */
+  updatedFields_contains_some?: Maybe<Array<Scalars['String']>>
+  node?: Maybe<UserFeatureWhereInput>
+}
+
+export type UserFeatureUpdateInput = {
+  status?: Maybe<Status>
+  feature?: Maybe<Feature>
+  memberId?: Maybe<Scalars['String']>
+}
+
+export type UserFeatureUpdateManyMutationInput = {
+  status?: Maybe<Status>
+  feature?: Maybe<Feature>
+  memberId?: Maybe<Scalars['String']>
+}
+
+export type UserFeatureWhereInput = {
+  _search?: Maybe<Scalars['String']>
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<UserFeatureWhereInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<UserFeatureWhereInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<UserFeatureWhereInput>>
+  status?: Maybe<Status>
+  /** All values that are not equal to given value. */
+  status_not?: Maybe<Status>
+  /** All values that are contained in given list. */
+  status_in?: Maybe<Array<Status>>
+  /** All values that are not contained in given list. */
+  status_not_in?: Maybe<Array<Status>>
+  updatedAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  updatedAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  updatedAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  updatedAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  updatedAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  updatedAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  updatedAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  updatedAt_gte?: Maybe<Scalars['DateTime']>
+  createdAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  createdAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  createdAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  createdAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  createdAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  createdAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  createdAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  createdAt_gte?: Maybe<Scalars['DateTime']>
+  id?: Maybe<Scalars['ID']>
+  /** All values that are not equal to given value. */
+  id_not?: Maybe<Scalars['ID']>
+  /** All values that are contained in given list. */
+  id_in?: Maybe<Array<Scalars['ID']>>
+  /** All values that are not contained in given list. */
+  id_not_in?: Maybe<Array<Scalars['ID']>>
+  /** All values less than the given value. */
+  id_lt?: Maybe<Scalars['ID']>
+  /** All values less than or equal the given value. */
+  id_lte?: Maybe<Scalars['ID']>
+  /** All values greater than the given value. */
+  id_gt?: Maybe<Scalars['ID']>
+  /** All values greater than or equal the given value. */
+  id_gte?: Maybe<Scalars['ID']>
+  /** All values containing the given string. */
+  id_contains?: Maybe<Scalars['ID']>
+  /** All values not containing the given string. */
+  id_not_contains?: Maybe<Scalars['ID']>
+  /** All values starting with the given string. */
+  id_starts_with?: Maybe<Scalars['ID']>
+  /** All values not starting with the given string. */
+  id_not_starts_with?: Maybe<Scalars['ID']>
+  /** All values ending with the given string. */
+  id_ends_with?: Maybe<Scalars['ID']>
+  /** All values not ending with the given string. */
+  id_not_ends_with?: Maybe<Scalars['ID']>
+  feature?: Maybe<Feature>
+  /** All values that are not equal to given value. */
+  feature_not?: Maybe<Feature>
+  /** All values that are contained in given list. */
+  feature_in?: Maybe<Array<Feature>>
+  /** All values that are not contained in given list. */
+  feature_not_in?: Maybe<Array<Feature>>
+  memberId?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  memberId_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  memberId_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  memberId_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values less than the given value. */
+  memberId_lt?: Maybe<Scalars['String']>
+  /** All values less than or equal the given value. */
+  memberId_lte?: Maybe<Scalars['String']>
+  /** All values greater than the given value. */
+  memberId_gt?: Maybe<Scalars['String']>
+  /** All values greater than or equal the given value. */
+  memberId_gte?: Maybe<Scalars['String']>
+  /** All values containing the given string. */
+  memberId_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  memberId_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  memberId_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  memberId_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  memberId_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string. */
+  memberId_not_ends_with?: Maybe<Scalars['String']>
+}
+
+export type UserFeatureWhereUniqueInput = {
+  id?: Maybe<Scalars['ID']>
 }
 
 /** A page in the `Welcome`-screen in the app */
@@ -4164,6 +6700,12 @@ export type FaqsQuery = { __typename?: 'Query' } & {
       }
     >
   >
+}
+
+export type MemberQueryVariables = {}
+
+export type MemberQuery = { __typename?: 'Query' } & {
+  member: { __typename?: 'Member' } & Pick<Member, 'id'>
 }
 
 export type MemberInsuranceQueryVariables = {}
@@ -4333,6 +6875,7 @@ export type MemberOfferQuery = { __typename?: 'Query' } & {
                       >)
                   >
                 })
+            | { __typename?: 'UnknownQuoteDetails' }
         })
     | ({ __typename?: 'IncompleteQuote' } & Pick<IncompleteQuote, 'id'>)
   redeemedCampaigns: Array<
@@ -4362,6 +6905,132 @@ export type MemberOfferQuery = { __typename?: 'Query' } & {
     Member,
     'id' | 'firstName' | 'lastName' | 'email'
   >
+}
+
+export type QuoteQueryVariables = {
+  id: Scalars['ID']
+}
+
+export type QuoteQuery = { __typename?: 'Query' } & {
+  quote:
+    | ({ __typename?: 'CompleteQuote' } & Pick<
+        CompleteQuote,
+        | 'id'
+        | 'dataCollectionId'
+        | 'ssn'
+        | 'email'
+        | 'firstName'
+        | 'lastName'
+        | 'startDate'
+      > & {
+          currentInsurer: Maybe<
+            { __typename?: 'CurrentInsurer' } & Pick<
+              CurrentInsurer,
+              'id' | 'displayName' | 'switchable'
+            >
+          >
+          insuranceCost: { __typename?: 'InsuranceCost' } & Pick<
+            InsuranceCost,
+            'freeUntil'
+          > & {
+              monthlyDiscount: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount' | 'currency'
+              >
+              monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount' | 'currency'
+              >
+              monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount' | 'currency'
+              >
+            }
+          quoteDetails:
+            | ({ __typename?: 'SwedishApartmentQuoteDetails' } & Pick<
+                SwedishApartmentQuoteDetails,
+                'street' | 'zipCode' | 'householdSize' | 'livingSpace' | 'type'
+              >)
+            | ({ __typename?: 'SwedishHouseQuoteDetails' } & Pick<
+                SwedishHouseQuoteDetails,
+                | 'street'
+                | 'zipCode'
+                | 'householdSize'
+                | 'livingSpace'
+                | 'ancillarySpace'
+                | 'numberOfBathrooms'
+                | 'yearOfConstruction'
+                | 'isSubleted'
+              > & {
+                  extraBuildings: Array<
+                    | ({ __typename?: 'ExtraBuildingGarage' } & Pick<
+                        ExtraBuildingGarage,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingCarport' } & Pick<
+                        ExtraBuildingCarport,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingShed' } & Pick<
+                        ExtraBuildingShed,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingStorehouse' } & Pick<
+                        ExtraBuildingStorehouse,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingFriggebod' } & Pick<
+                        ExtraBuildingFriggebod,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingAttefall' } & Pick<
+                        ExtraBuildingAttefall,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingOuthouse' } & Pick<
+                        ExtraBuildingOuthouse,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingGuesthouse' } & Pick<
+                        ExtraBuildingGuesthouse,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingGazebo' } & Pick<
+                        ExtraBuildingGazebo,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingGreenhouse' } & Pick<
+                        ExtraBuildingGreenhouse,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingSauna' } & Pick<
+                        ExtraBuildingSauna,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingBarn' } & Pick<
+                        ExtraBuildingBarn,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingBoathouse' } & Pick<
+                        ExtraBuildingBoathouse,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingOther' } & Pick<
+                        ExtraBuildingOther,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                  >
+                })
+            | ({ __typename?: 'NorwegianHomeContentsDetails' } & Pick<
+                NorwegianHomeContentsDetails,
+                'coInsured' | 'livingSpace' | 'street' | 'zipCode'
+              > & { homeType: NorwegianHomeContentsDetails['type'] })
+            | ({ __typename?: 'NorwegianTravelDetails' } & Pick<
+                NorwegianTravelDetails,
+                'coInsured'
+              >)
+        })
+    | ({ __typename?: 'IncompleteQuote' } & Pick<IncompleteQuote, 'id'>)
 }
 
 export type RedeemCodeMutationVariables = {
@@ -4398,6 +7067,34 @@ export type RedeemCodeMutation = { __typename?: 'Mutation' } & {
       >
     }
   }
+}
+
+export type RedeemedCampaignsQueryVariables = {}
+
+export type RedeemedCampaignsQuery = { __typename?: 'Query' } & {
+  redeemedCampaigns: Array<
+    { __typename?: 'Campaign' } & Pick<Campaign, 'code'> & {
+        incentive: Maybe<
+          | ({ __typename?: 'MonthlyCostDeduction' } & {
+              amount: Maybe<
+                { __typename?: 'MonetaryAmountV2' } & Pick<
+                  MonetaryAmountV2,
+                  'amount' | 'currency'
+                >
+              >
+            })
+          | ({ __typename?: 'FreeMonths' } & Pick<FreeMonths, 'quantity'>)
+          | { __typename: 'NoDiscount' }
+          | ({ __typename?: 'PercentageDiscountMonths' } & Pick<
+              PercentageDiscountMonths,
+              'percentageDiscount'
+            > & { quantityMonths: PercentageDiscountMonths['quantity'] })
+        >
+        owner: Maybe<
+          { __typename?: 'CampaignOwner' } & Pick<CampaignOwner, 'displayName'>
+        >
+      }
+  >
 }
 
 export type RemoveDiscountCodeMutationVariables = {}
@@ -4688,6 +7385,57 @@ export type FaqsQueryResult = ApolloReactCommon.QueryResult<
   FaqsQuery,
   FaqsQueryVariables
 >
+export const MemberDocument = gql`
+  query Member {
+    member {
+      id
+    }
+  }
+`
+
+/**
+ * __useMemberQuery__
+ *
+ * To run a query within a React component, call `useMemberQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMemberQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMemberQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMemberQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    MemberQuery,
+    MemberQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useQuery<MemberQuery, MemberQueryVariables>(
+    MemberDocument,
+    baseOptions,
+  )
+}
+export function useMemberLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    MemberQuery,
+    MemberQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useLazyQuery<MemberQuery, MemberQueryVariables>(
+    MemberDocument,
+    baseOptions,
+  )
+}
+export type MemberQueryHookResult = ReturnType<typeof useMemberQuery>
+export type MemberLazyQueryHookResult = ReturnType<typeof useMemberLazyQuery>
+export type MemberQueryResult = ApolloReactCommon.QueryResult<
+  MemberQuery,
+  MemberQueryVariables
+>
 export const MemberInsuranceDocument = gql`
   query MemberInsurance {
     insurance {
@@ -4919,6 +7667,125 @@ export type MemberOfferQueryResult = ApolloReactCommon.QueryResult<
   MemberOfferQuery,
   MemberOfferQueryVariables
 >
+export const QuoteDocument = gql`
+  query Quote($id: ID!) {
+    quote(id: $id) {
+      ... on CompleteQuote {
+        id
+        dataCollectionId
+        ssn
+        email
+        firstName
+        lastName
+        startDate
+        currentInsurer {
+          id
+          displayName
+          switchable
+        }
+        insuranceCost {
+          freeUntil
+          monthlyDiscount {
+            amount
+            currency
+          }
+          monthlyGross {
+            amount
+            currency
+          }
+          monthlyNet {
+            amount
+            currency
+          }
+        }
+        quoteDetails {
+          ... on SwedishApartmentQuoteDetails {
+            street
+            zipCode
+            householdSize
+            livingSpace
+            type
+          }
+          ... on SwedishHouseQuoteDetails {
+            street
+            zipCode
+            householdSize
+            livingSpace
+            ancillarySpace
+            numberOfBathrooms
+            yearOfConstruction
+            isSubleted
+            extraBuildings {
+              ... on ExtraBuildingCore {
+                area
+                displayName
+                hasWaterConnected
+              }
+            }
+          }
+          ... on NorwegianHomeContentsDetails {
+            coInsured
+            livingSpace
+            street
+            homeType: type
+            zipCode
+          }
+          ... on NorwegianTravelDetails {
+            coInsured
+          }
+        }
+      }
+      ... on IncompleteQuote {
+        id
+      }
+    }
+  }
+`
+
+/**
+ * __useQuoteQuery__
+ *
+ * To run a query within a React component, call `useQuoteQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQuoteQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQuoteQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useQuoteQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    QuoteQuery,
+    QuoteQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useQuery<QuoteQuery, QuoteQueryVariables>(
+    QuoteDocument,
+    baseOptions,
+  )
+}
+export function useQuoteLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    QuoteQuery,
+    QuoteQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useLazyQuery<QuoteQuery, QuoteQueryVariables>(
+    QuoteDocument,
+    baseOptions,
+  )
+}
+export type QuoteQueryHookResult = ReturnType<typeof useQuoteQuery>
+export type QuoteLazyQueryHookResult = ReturnType<typeof useQuoteLazyQuery>
+export type QuoteQueryResult = ApolloReactCommon.QueryResult<
+  QuoteQuery,
+  QuoteQueryVariables
+>
 export const RedeemCodeDocument = gql`
   mutation RedeemCode($code: String!) {
     redeemCode(code: $code) {
@@ -4990,6 +7857,82 @@ export type RedeemCodeMutationResult = ApolloReactCommon.MutationResult<
 export type RedeemCodeMutationOptions = ApolloReactCommon.BaseMutationOptions<
   RedeemCodeMutation,
   RedeemCodeMutationVariables
+>
+export const RedeemedCampaignsDocument = gql`
+  query RedeemedCampaigns {
+    redeemedCampaigns {
+      incentive {
+        ... on FreeMonths {
+          quantity
+        }
+        ... on MonthlyCostDeduction {
+          amount {
+            amount
+            currency
+          }
+        }
+        ... on PercentageDiscountMonths {
+          percentageDiscount
+          quantityMonths: quantity
+        }
+        ... on NoDiscount {
+          __typename
+        }
+      }
+      code
+      owner {
+        displayName
+      }
+    }
+  }
+`
+
+/**
+ * __useRedeemedCampaignsQuery__
+ *
+ * To run a query within a React component, call `useRedeemedCampaignsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRedeemedCampaignsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRedeemedCampaignsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useRedeemedCampaignsQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    RedeemedCampaignsQuery,
+    RedeemedCampaignsQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useQuery<
+    RedeemedCampaignsQuery,
+    RedeemedCampaignsQueryVariables
+  >(RedeemedCampaignsDocument, baseOptions)
+}
+export function useRedeemedCampaignsLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    RedeemedCampaignsQuery,
+    RedeemedCampaignsQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useLazyQuery<
+    RedeemedCampaignsQuery,
+    RedeemedCampaignsQueryVariables
+  >(RedeemedCampaignsDocument, baseOptions)
+}
+export type RedeemedCampaignsQueryHookResult = ReturnType<
+  typeof useRedeemedCampaignsQuery
+>
+export type RedeemedCampaignsLazyQueryHookResult = ReturnType<
+  typeof useRedeemedCampaignsLazyQuery
+>
+export type RedeemedCampaignsQueryResult = ApolloReactCommon.QueryResult<
+  RedeemedCampaignsQuery,
+  RedeemedCampaignsQueryVariables
 >
 export const RemoveDiscountCodeDocument = gql`
   mutation RemoveDiscountCode {

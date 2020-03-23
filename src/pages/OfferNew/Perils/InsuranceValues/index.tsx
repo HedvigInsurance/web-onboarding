@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import color from 'color'
 import { DocumentIcon } from 'components/icons/Document'
-import { InsuranceType } from 'generated/graphql'
+import { InsuranceType } from 'data/graphql'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import {

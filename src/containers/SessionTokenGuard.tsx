@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Redirect } from 'react-router-dom'
-import { CurrentLanguage } from '../components/utils/CurrentLanguage'
+import { CurrentLocale } from '../components/utils/CurrentLocale'
 import { StorageContainer } from '../utils/StorageContainer'
 
 export const SessionTokenGuard: React.SFC = ({ children }) => (
@@ -10,13 +10,13 @@ export const SessionTokenGuard: React.SFC = ({ children }) => (
       storageState.session.getSession()!.token ? (
         <>{children}</>
       ) : (
-        <CurrentLanguage>
-          {({ currentLanguage }) => (
+        <CurrentLocale>
+          {({ currentLocale }) => (
             <Redirect
-              to={`/${currentLanguage && currentLanguage + '/'}new-member`}
+              to={`/${currentLocale && currentLocale + '/'}new-member`}
             />
           )}
-        </CurrentLanguage>
+        </CurrentLocale>
       )
     }
   </StorageContainer>

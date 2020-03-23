@@ -2,9 +2,9 @@ import styled from '@emotion/styled'
 import { colors, fonts } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { Button } from 'components/buttons'
+import { CurrentLocale } from 'components/utils/CurrentLocale'
 import { ActionMap, Container } from 'constate'
 import * as React from 'react'
-import { CurrentLanguage } from '../../../components/utils/CurrentLanguage'
 import TrustlyModal from '../components/TrustlyModal'
 import { RegisterDirectDebitMutation } from '../containers/RegisterDirectDebitMutation'
 
@@ -136,11 +136,11 @@ export const ConnectPaymentPage: React.SFC<{}> = () => (
     }) => (
       <RegisterDirectDebitMutation>
         {(mutate) => (
-          <CurrentLanguage>
-            {({ currentLanguage }) => {
+          <CurrentLocale>
+            {({ currentLocale }) => {
               const generateTrustlyUrl = async () => {
-                const baseUrl = `${window.location.origin}/${currentLanguage &&
-                  currentLanguage + '/'}new-member/connect-payment`
+                const baseUrl = `${window.location.origin}/${currentLocale &&
+                  currentLocale + '/'}new-member/connect-payment`
 
                 const res = await mutate({
                   variables: {
@@ -217,7 +217,7 @@ export const ConnectPaymentPage: React.SFC<{}> = () => (
                 </>
               )
             }}
-          </CurrentLanguage>
+          </CurrentLocale>
         )}
       </RegisterDirectDebitMutation>
     )}

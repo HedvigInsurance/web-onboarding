@@ -2,7 +2,9 @@ import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
 import * as React from 'react'
-import { CurrentLanguage } from '../components/utils/CurrentLanguage'
+import { CurrentLocale } from '../components/utils/CurrentLocale'
+
+export const TOP_BAR_Z_INDEX = 1009
 
 interface Props {
   transparent?: boolean
@@ -15,7 +17,7 @@ const Wrapper = styled.div<Props>`
   background: ${(props) =>
     props.transparent ? `transparent` : colorsV2.white};
   position: absolute;
-  z-index: 1010;
+  z-index: ${TOP_BAR_Z_INDEX};
   ${(props) =>
     !props.transparent && `box-shadow: 0 2px 14px rgba(0, 0, 0, 0.08);`};
 
@@ -46,13 +48,13 @@ const LogoLink = styled.a`
 export const TopBar: React.FC<Props> = ({ transparent }) => (
   <Wrapper transparent={transparent}>
     <Container>
-      <CurrentLanguage>
-        {({ currentLanguage }) => (
-          <LogoLink href={'/' + currentLanguage}>
+      <CurrentLocale>
+        {({ currentLocale }) => (
+          <LogoLink href={'/' + currentLocale}>
             <HedvigLogo fill={transparent ? colorsV2.white : colorsV2.black} />
           </LogoLink>
         )}
-      </CurrentLanguage>
+      </CurrentLocale>
     </Container>
   </Wrapper>
 )

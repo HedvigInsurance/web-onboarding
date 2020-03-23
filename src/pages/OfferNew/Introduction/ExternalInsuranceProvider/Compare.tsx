@@ -8,8 +8,10 @@ import { Price } from '../../components'
 
 import { hedvigCompany, otherCompanies } from '../../Compare/mock'
 
-import { InsuranceDataCollection } from '../../../../generated/graphql'
-import { CompleteOfferDataForMember } from '../../types'
+import {
+  InsuranceCost,
+  InsuranceDataCollection,
+} from '../../../../data/graphql'
 
 const Wrapper = styled.div`
   display: flex;
@@ -22,7 +24,7 @@ const Wrapper = styled.div`
   @media all and (max-width: 600px) {
     flex-direction: column;
 
-    > *:first-child {
+    > *:first-of-type {
       margin-bottom: 1.25rem;
     }
   }
@@ -83,13 +85,10 @@ const TrustpilotScoreName = styled.span<{ isExternalProvider?: boolean }>`
 
 interface Props {
   insuranceDataCollection: InsuranceDataCollection
-  offer: CompleteOfferDataForMember
+  cost: InsuranceCost
 }
 
-export const Compare: React.FC<Props> = ({
-  insuranceDataCollection,
-  offer,
-}) => {
+export const Compare: React.FC<Props> = ({ insuranceDataCollection, cost }) => {
   const textKeys = useTextKeys()
   const externalInsuranceProvider = externalInsuranceProviders.find(
     (provider: { externalCollectionId?: string }) =>
@@ -108,8 +107,8 @@ export const Compare: React.FC<Props> = ({
             <HedvigLogo />
           </CompareBoxName>
           <Price
-            monthlyGross={offer.lastQuoteOfMember.insuranceCost.monthlyGross}
-            monthlyNet={offer.lastQuoteOfMember.insuranceCost.monthlyNet}
+            monthlyGross={cost.monthlyGross}
+            monthlyNet={cost.monthlyNet}
           />
         </CompareBoxTitle>
         <TrustpilotScoreWrapper>

@@ -3,7 +3,7 @@ import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import * as React from 'react'
 import { Button } from '../../../components/buttons'
-import { CurrentLanguage } from '../../../components/utils/CurrentLanguage'
+import { CurrentLocale } from '../../../components/utils/CurrentLocale'
 
 const Wrapper = styled('div')({
   width: '100%',
@@ -25,14 +25,14 @@ export const TrustlyFailPage: React.FC = () => (
         {(header) => header}
       </TranslationsConsumer>
     </Text>
-    <CurrentLanguage>
-      {({ currentLanguage }) => (
+    <CurrentLocale>
+      {({ currentLocale }) => (
         <Button
           background={colors.PURPLE}
           foreground={colors.WHITE}
           onClick={() => {
-            const baseUrl = `${window.location.origin}/${currentLanguage &&
-              currentLanguage + '/'}new-member/connect-payment`
+            const baseUrl = `${window.location.origin}/${currentLocale &&
+              currentLocale + '/'}new-member/connect-payment`
 
             window.location.href = `${baseUrl}/retry`
           }}
@@ -42,6 +42,6 @@ export const TrustlyFailPage: React.FC = () => (
           </TranslationsConsumer>
         </Button>
       )}
-    </CurrentLanguage>
+    </CurrentLocale>
   </Wrapper>
 )

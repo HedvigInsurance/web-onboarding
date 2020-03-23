@@ -1,6 +1,10 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
-import { CompleteOfferDataForMember } from 'pages/OfferNew/types'
+import { CompleteQuote, QuoteDetails } from 'data/graphql'
+import {
+  getHouseholdSize,
+  quoteDetailsHasAddress,
+} from 'pages/OfferNew/Introduction/Sidebar/utils'
 import {
   apartmentTypeTextKeys,
   maskAndFormatRawSsn,
@@ -51,26 +55,28 @@ const Value = styled('div')`
 `
 
 interface Props {
-  offer: CompleteOfferDataForMember
+  firstQuote: CompleteQuote
 }
 
-export const InsuranceSummary: React.FC<Props> = ({ offer }) => {
+export const InsuranceSummary: React.FC<Props> = ({ firstQuote }) => {
   const textKeys = useTextKeys()
 
   return (
     <Wrapper>
       <Title>{textKeys.CHECKOUT_SUMMARY_TITLE()}</Title>
       <Table>
-        {getDetails(offer, textKeys).map((group, index) => (
-          <Group key={index}>
-            {group.map(({ key, value, label }) => (
-              <Row key={key}>
-                <Label>{label}</Label>
-                <Value>{value}</Value>
-              </Row>
-            ))}
-          </Group>
-        ))}
+        {getDetails(firstQuote.quoteDetails, textKeys, firstQuote.ssn).map(
+          (group, index) => (
+            <Group key={index}>
+              {group.map(({ key, value, label }) => (
+                <Row key={key}>
+                  <Label>{label}</Label>
+                  <Value>{value}</Value>
+                </Row>
+              ))}
+            </Group>
+          ),
+        )}
       </Table>
     </Wrapper>
   )
@@ -84,11 +90,9 @@ type DetailsGroup = ReadonlyArray<{
 
 function getHouseSummaryDetailsMaybe(
   textKeys: TextKeyMap,
-  offer: CompleteOfferDataForMember,
+  quoteDetails: QuoteDetails,
 ): DetailsGroup {
-  if (
-    offer.lastQuoteOfMember.details.__typename !== 'CompleteHouseQuoteDetails'
-  ) {
+  if (quoteDetails.__typename !== 'SwedishHouseQuoteDetails') {
     return []
   }
 
@@ -97,65 +101,58 @@ function getHouseSummaryDetailsMaybe(
       key: 'ancillaryarea',
       label: textKeys.CHECKOUT_DETAILS_ANCILLARY_SPACE(),
       value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
-        VALUE: offer.lastQuoteOfMember.details.ancillarySpace,
+        VALUE: quoteDetails.ancillarySpace,
       }),
     },
     {
       key: 'bathrooms',
       label: textKeys.CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS(),
       value: textKeys.CHECKOUT_DETAILS_COUNT_VALUE({
-        VALUE: offer.lastQuoteOfMember.details.numberOfBathrooms,
+        VALUE: quoteDetails.numberOfBathrooms,
       }),
     },
     {
       key: 'yearOfConstruction',
       label: textKeys.CHECKOUT_DETAILS_YEAR_OF_CONSTRUCTION(),
-      value: offer.lastQuoteOfMember.details.yearOfConstruction,
+      value: quoteDetails.yearOfConstruction,
     },
   ]
 }
 
 const getHouseExtraBuildingsMaybe = (
   textKeys: TextKeyMap,
-  offer: CompleteOfferDataForMember,
+  quoteDetails: QuoteDetails,
 ): ReadonlyArray<DetailsGroup> => {
-  if (
-    offer.lastQuoteOfMember.details.__typename !== 'CompleteHouseQuoteDetails'
-  ) {
+  if (quoteDetails.__typename !== 'SwedishHouseQuoteDetails') {
     return []
   }
 
-  return offer.lastQuoteOfMember.details.extraBuildings.map<DetailsGroup>(
-    (extraBuilding) => [
-      {
-        key: 'buildingType',
-        label: textKeys.CHECKOUT_DETAILS_EXTRA_BUILDINGS_BUILDING_TYPE(),
-        value: extraBuilding.displayName,
-      },
-      {
-        key: 'buildingSize',
-        label: textKeys.CHECKOUT_DETAILS_EXTRA_BUILDINGS_SIZE(),
-        value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
-          VALUE: extraBuilding.area ?? 'blah',
-        }),
-      },
-      {
-        key: 'hasWater',
-        label: textKeys.CHECKOUT_DETAILS_EXTRA_BUILDINGS_HAS_WATER_CONNECTED(),
-        value: extraBuilding.hasWaterConnected ? textKeys.YES() : textKeys.NO(),
-      },
-    ],
-  )
+  return quoteDetails.extraBuildings.map<DetailsGroup>((extraBuilding) => [
+    {
+      key: 'buildingType',
+      label: textKeys.CHECKOUT_DETAILS_EXTRA_BUILDINGS_BUILDING_TYPE(),
+      value: extraBuilding.displayName,
+    },
+    {
+      key: 'buildingSize',
+      label: textKeys.CHECKOUT_DETAILS_EXTRA_BUILDINGS_SIZE(),
+      value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
+        VALUE: extraBuilding.area ?? 'blah',
+      }),
+    },
+    {
+      key: 'hasWater',
+      label: textKeys.CHECKOUT_DETAILS_EXTRA_BUILDINGS_HAS_WATER_CONNECTED(),
+      value: extraBuilding.hasWaterConnected ? textKeys.YES() : textKeys.NO(),
+    },
+  ])
 }
 
 function getApartmentSummaryDetailsMaybe(
   textKeys: TextKeyMap,
-  offer: CompleteOfferDataForMember,
+  quoteDetails: QuoteDetails,
 ): DetailsGroup {
-  if (
-    offer.lastQuoteOfMember.details.__typename !==
-    'CompleteApartmentQuoteDetails'
-  ) {
+  if (quoteDetails.__typename !== 'SwedishApartmentQuoteDetails') {
     return []
   }
 
@@ -163,65 +160,77 @@ function getApartmentSummaryDetailsMaybe(
     {
       key: 'subtype',
       label: textKeys.CHECKOUT_DETAILS_APARTMENT_TYPE(),
-      value: textKeys[
-        apartmentTypeTextKeys[offer.lastQuoteOfMember.details.type]
-      ](),
+      value: textKeys[apartmentTypeTextKeys[quoteDetails.type]](),
     },
   ]
 }
 
 const getDetails = (
-  offer: CompleteOfferDataForMember,
+  quoteDetails: QuoteDetails,
   textKeys: TextKeyMap,
-) => [
-  [
-    {
-      key: 'address',
-      label: textKeys.CHECKOUT_DETAILS_ADDRESS(),
-      value: offer.lastQuoteOfMember.details.street,
-    },
-    {
-      key: 'zipcode',
-      label: textKeys.CHECKOUT_DETAILS_ZIPCODE(),
-      value: formatPostalNumber(offer.lastQuoteOfMember.details.zipCode),
-    },
-    {
-      key: 'bostadstyp',
-      label: textKeys.CHECKOUT_DETAILS_QUOTE_TYPE(),
-      value:
-        offer.lastQuoteOfMember.details.__typename ===
-        'CompleteApartmentQuoteDetails'
-          ? textKeys.CHECKOUT_APARTMENT()
-          : textKeys.CHECKOUT_HOUSE(),
-    },
-    ...getApartmentSummaryDetailsMaybe(textKeys, offer),
-    {
-      key: 'livingspace',
-      label: textKeys.CHECKOUT_DETAILS_LIVING_SPACE(),
-      value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
-        VALUE: offer.lastQuoteOfMember.details.livingSpace,
-      }),
-    },
-    ...getHouseSummaryDetailsMaybe(textKeys, offer),
-  ],
+  ssn?: string,
+): ReadonlyArray<DetailsGroup> => {
+  const detailsGroups: DetailsGroup[] = []
 
-  ...getHouseExtraBuildingsMaybe(textKeys, offer),
+  if (quoteDetailsHasAddress(quoteDetails)) {
+    detailsGroups.push(
+      [
+        {
+          key: 'address',
+          label: textKeys.CHECKOUT_DETAILS_ADDRESS(),
+          value: quoteDetails.street,
+        },
+        {
+          key: 'zipcode',
+          label: textKeys.CHECKOUT_DETAILS_ZIPCODE(),
+          value: formatPostalNumber(quoteDetails.zipCode),
+        },
+        {
+          key: 'bostadstyp',
+          label: textKeys.CHECKOUT_DETAILS_QUOTE_TYPE(),
+          value:
+            quoteDetails.__typename === 'SwedishApartmentQuoteDetails' ||
+            quoteDetails.__typename === 'NorwegianHomeContentsDetails'
+              ? textKeys.CHECKOUT_APARTMENT()
+              : textKeys.CHECKOUT_HOUSE(),
+        },
+        ...getApartmentSummaryDetailsMaybe(textKeys, quoteDetails),
+        {
+          key: 'livingspace',
+          label: textKeys.CHECKOUT_DETAILS_LIVING_SPACE(),
+          value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
+            VALUE: quoteDetails.livingSpace,
+          }),
+        },
+        ...getHouseSummaryDetailsMaybe(textKeys, quoteDetails),
+      ],
 
-  [
-    {
-      key: 'ssn',
-      label: textKeys.CHECKOUT_DETAILS_SSN(),
-      value: maskAndFormatRawSsn(offer.lastQuoteOfMember.ssn),
-    },
+      ...getHouseExtraBuildingsMaybe(textKeys, quoteDetails),
+    )
+  }
+
+  if (ssn) {
+    detailsGroups.push([
+      {
+        key: 'ssn',
+        label: textKeys.CHECKOUT_DETAILS_SSN(),
+        value: maskAndFormatRawSsn(ssn),
+      },
+    ])
+  }
+
+  detailsGroups.push([
     {
       key: 'antal-personer',
       label: textKeys.CHECKOUT_DETAILS_HOUSEHOLD_SIZE(),
       value:
-        offer.lastQuoteOfMember.details.householdSize === 1
+        getHouseholdSize(quoteDetails) === 1
           ? textKeys.CHECKOUT_DETAILS_SINGLE_PERSON()
           : textKeys.CHECKOUT_DETAILS_PERSONS_VALUE({
-              VALUE: offer.lastQuoteOfMember.details.householdSize,
+              VALUE: getHouseholdSize(quoteDetails),
             }),
     },
-  ],
-]
+  ])
+
+  return detailsGroups
+}

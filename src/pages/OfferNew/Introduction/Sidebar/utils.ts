@@ -3,8 +3,12 @@ import {
   Incentive,
   MonthlyCostDeduction,
   NoDiscount,
+  NorwegianHomeContentsDetails,
   PercentageDiscountMonths,
-} from 'generated/graphql'
+  QuoteDetails,
+  SwedishApartmentQuoteDetails,
+  SwedishHouseQuoteDetails,
+} from 'data/graphql'
 import * as React from 'react'
 import { CompleteOfferDataForMember } from '../../types'
 
@@ -54,3 +58,24 @@ export const getDiscountText = (textKeys: Record<string, any>) => (
 
   return redeemedCampaigns[0].owner?.displayName ?? null
 }
+
+export const getHouseholdSize = (quoteDetails: QuoteDetails) =>
+  quoteDetails.__typename === 'SwedishApartmentQuoteDetails' ||
+  quoteDetails.__typename === 'SwedishHouseQuoteDetails'
+    ? quoteDetails.householdSize
+    : quoteDetails.__typename === 'NorwegianHomeContentsDetails' ||
+      quoteDetails.__typename === 'NorwegianTravelDetails'
+    ? quoteDetails.coInsured + 1
+    : 0
+
+export const quoteDetailsHasAddress = (
+  quoteDetails: QuoteDetails,
+): quoteDetails is
+  | SwedishApartmentQuoteDetails
+  | SwedishHouseQuoteDetails
+  | NorwegianHomeContentsDetails =>
+  [
+    'SwedishApartmentQuoteDetails',
+    'SwedishHouseQuoteDetails',
+    'NorwegianHomeContentsDetails',
+  ].includes(quoteDetails.__typename as string)

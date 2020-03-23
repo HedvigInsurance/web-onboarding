@@ -2,23 +2,32 @@ import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import { CookieStorage } from 'cookie-storage'
 import {
+  Campaign,
+  CompleteQuote,
   useRedeemCodeMutation,
+  useRedeemedCampaignsQuery,
   useRemoveDiscountCodeMutation,
-} from 'generated/graphql'
+} from 'data/graphql'
 import { Button, TextButton } from 'new-components/buttons'
 import {
   getDiscountText,
+  getHouseholdSize,
   isMonthlyCostDeduction,
   isNoDiscount,
   isPercentageDiscountMonths,
+  quoteDetailsHasAddress,
 } from 'pages/OfferNew/Introduction/Sidebar/utils'
 import * as React from 'react'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { Price } from '../../components'
-import { CompleteOfferDataForMember } from '../../types'
-import { getInsuranceType, insuranceTypeTextKeys } from '../../utils'
+import {
+  getInsuranceType,
+  insuranceTypeTextKeys,
+  isSwedishApartment,
+  isSwedishHouse,
+} from '../../utils'
 import { DetailsModal } from './DetailsModal/index'
 import { DiscountCodeModal } from './DiscountCodeModal'
 import { StartDate } from './StartDate'
@@ -26,7 +35,7 @@ import { StickyBottomSidebar } from './StickyBottomSidebar'
 
 interface Props {
   sticky: boolean
-  offer: CompleteOfferDataForMember
+  firstQuote: CompleteQuote
   refetch: () => Promise<void>
   onCheckoutOpen: () => void
 }
@@ -35,7 +44,6 @@ const Wrapper = styled.div`
   width: 26rem;
   flex-shrink: 0;
   position: relative;
-  z-index: 1;
   height: 0;
   z-index: 1000;
 
@@ -170,7 +178,7 @@ const FooterExtraActions = styled.div`
 `
 
 export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
-  ({ sticky, offer, refetch, onCheckoutOpen }, ref) => {
+  ({ sticky, firstQuote, refetch, onCheckoutOpen }, ref) => {
     const textKeys = useTextKeys()
     const [
       discountCodeModalIsOpen,
@@ -182,10 +190,20 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
     const [removeDiscountCode] = useRemoveDiscountCodeMutation()
     const [redeemCode] = useRedeemCodeMutation()
+    const redeemedCampaignsQuery = useRedeemedCampaignsQuery()
+    const redeemedCampaigns: Campaign[] =
+      redeemedCampaignsQuery.data?.redeemedCampaigns ?? []
+
+    const refetchAll = () =>
+      refetch()
+        .then(() => redeemedCampaignsQuery.refetch())
+        .then(() => {
+          return // void
+        })
 
     React.useEffect(() => {
       const campaignCodes =
-        offer.redeemedCampaigns?.map((campaign) => campaign!.code) ?? []
+        redeemedCampaigns.map((campaign) => campaign!.code) ?? []
       const cookieStorage = new CookieStorage()
       const preRedeemedCode = cookieStorage.getItem('_hvcode')
       if (
@@ -193,12 +211,14 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
         !campaignCodes.includes(preRedeemedCode.toUpperCase())
       ) {
         redeemCode({ variables: { code: preRedeemedCode } }).then(() =>
-          refetch(),
+          refetchAll(),
         )
       }
     }, [])
 
-    const discountText = getDiscountText(textKeys)(offer.redeemedCampaigns)
+    const discountText = getDiscountText(textKeys)(redeemedCampaigns)
+
+    const details = firstQuote.quoteDetails
 
     return (
       <>
@@ -213,62 +233,55 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
                     <Title>
                       {textKeys[
-                        insuranceTypeTextKeys[
-                          getInsuranceType(offer.lastQuoteOfMember)
-                        ]
+                        insuranceTypeTextKeys[getInsuranceType(firstQuote)]
                       ]()}
                     </Title>
 
                     <SummaryContent>
                       <SummaryText>
-                        <b>{`${offer.lastQuoteOfMember.firstName} ${offer.lastQuoteOfMember.lastName}`}</b>{' '}
-                        {offer.lastQuoteOfMember.details.householdSize - 1 >
-                          0 &&
+                        <b>{`${firstQuote.firstName} ${firstQuote.lastName}`}</b>{' '}
+                        {getHouseholdSize(details) - 1 > 0 &&
                           textKeys.SIDEBAR_INSURED_PERSONS_SUFFIX({
-                            AMOUNT:
-                              offer.lastQuoteOfMember.details.householdSize - 1,
+                            AMOUNT: getHouseholdSize(details) - 1,
                           })}
                       </SummaryText>
-                      <SummaryText>
-                        {`${
-                          offer.lastQuoteOfMember.details.street
-                        }, ${formatPostalNumber(
-                          offer.lastQuoteOfMember.details.zipCode,
-                        )}`}
-                      </SummaryText>
+                      {quoteDetailsHasAddress(details) && (
+                        <SummaryText>
+                          {`${details.street}, ${formatPostalNumber(
+                            details.zipCode,
+                          )}`}
+                        </SummaryText>
+                      )}
 
-                      <TextButton onClick={() => setDetailsModalIsOpen(true)}>
-                        {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
-                      </TextButton>
+                      {(isSwedishHouse(details) ||
+                        isSwedishApartment(details)) && (
+                        <TextButton onClick={() => setDetailsModalIsOpen(true)}>
+                          {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
+                        </TextButton>
+                      )}
                     </SummaryContent>
                   </Summary>
 
                   <Price
                     monthlyCostDeduction={
                       isMonthlyCostDeduction(
-                        offer.redeemedCampaigns[0]?.incentive ?? undefined,
+                        redeemedCampaigns[0]?.incentive ?? undefined,
                       ) ||
                       isPercentageDiscountMonths(
-                        offer.redeemedCampaigns[0]?.incentive ?? undefined,
+                        redeemedCampaigns[0]?.incentive ?? undefined,
                       )
                     }
-                    monthlyGross={
-                      offer.lastQuoteOfMember.insuranceCost.monthlyGross
-                    }
-                    monthlyNet={
-                      offer.lastQuoteOfMember.insuranceCost.monthlyNet
-                    }
+                    monthlyGross={firstQuote.insuranceCost.monthlyGross}
+                    monthlyNet={firstQuote.insuranceCost.monthlyNet}
                   />
                 </Header>
 
                 <Body>
                   <StartDate
-                    dataCollectionId={offer.lastQuoteOfMember.dataCollectionId}
-                    startDate={offer.lastQuoteOfMember.startDate}
-                    offerId={offer.lastQuoteOfMember.id}
-                    currentInsurer={
-                      offer.lastQuoteOfMember.currentInsurer || null
-                    }
+                    dataCollectionId={firstQuote.dataCollectionId}
+                    startDate={firstQuote.startDate}
+                    offerId={firstQuote.id}
+                    currentInsurer={firstQuote.currentInsurer || null}
                     refetch={refetch}
                     modal={true}
                   />
@@ -280,7 +293,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                   </Button>
 
                   <FooterExtraActions>
-                    {offer.redeemedCampaigns.length === 0 && (
+                    {redeemedCampaigns.length === 0 && (
                       <TextButton
                         onClick={() => {
                           setDiscountCodeModalIsOpen(true)
@@ -289,9 +302,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                         {textKeys.SIDEBAR_ADD_DISCOUNT_BUTTON()}
                       </TextButton>
                     )}
-                    {offer.redeemedCampaigns.length > 0 &&
+                    {redeemedCampaigns.length > 0 &&
                       !isNoDiscount(
-                        offer.redeemedCampaigns[0]?.incentive ?? undefined,
+                        redeemedCampaigns[0]?.incentive ?? undefined,
                       ) && (
                         <TextButton
                           color={colorsV2.coral700}
@@ -303,7 +316,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                                   path: '/',
                                 })
                               })
-                              .then(() => refetch())
+                              .then(() => refetchAll())
                           }}
                         >
                           {textKeys.SIDEBAR_REMOVE_DISCOUNT_BUTTON()}
@@ -315,12 +328,12 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 <DiscountCodeModal
                   isOpen={discountCodeModalIsOpen}
                   close={() => setDiscountCodeModalIsOpen(false)}
-                  refetch={refetch}
+                  refetch={() => refetchAll()}
                 />
               </Container>
               <DetailsModal
-                quote={offer.lastQuoteOfMember}
-                refetch={refetch}
+                quote={firstQuote}
+                refetch={refetchAll}
                 isVisible={detailsModalIsOpen}
                 onClose={() => setDetailsModalIsOpen(false)}
               />
@@ -329,7 +342,6 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
         </ReactVisibilitySensor>
         <StickyBottomSidebar
           isVisible={!isSidebarVisible}
-          offer={offer}
           onCheckoutOpen={onCheckoutOpen}
         />
       </>

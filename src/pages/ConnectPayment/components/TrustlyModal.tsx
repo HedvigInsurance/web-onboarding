@@ -8,7 +8,7 @@ import * as React from 'react'
 import { Mount } from 'react-lifecycle-components/dist'
 import { Redirect } from 'react-router'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
-import { CurrentLanguage } from '../../../components/utils/CurrentLanguage'
+import { CurrentLocale } from '../../../components/utils/CurrentLocale'
 
 const Header = styled('div')({
   width: '100%',
@@ -112,16 +112,16 @@ const TrustlyModal: React.FC<Props> = ({
               }}
             >
               {({ track }) => (
-                <CurrentLanguage>
-                  {({ currentLanguage }) => (
+                <CurrentLocale>
+                  {({ currentLocale }) => (
                     <Mount on={track}>
                       <Redirect
-                        to={`/${currentLanguage &&
-                          currentLanguage + '/'}new-member/download`}
+                        to={`/${currentLocale &&
+                          currentLocale + '/'}new-member/download`}
                       />
                     </Mount>
                   )}
-                </CurrentLanguage>
+                </CurrentLocale>
               )}
             </TrackAction>
           )}

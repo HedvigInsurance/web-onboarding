@@ -211,7 +211,7 @@ const CoverageWrapper = styled.div`
 const CoverageList = styled.div`
   width: 50%;
 
-  :first-child {
+  :first-of-type {
     margin-right: 1rem;
   }
 
@@ -222,7 +222,7 @@ const CoverageList = styled.div`
   @media (max-width: 600px) {
     width: 100%;
 
-    :first-child {
+    :first-of-type {
       margin: 0 0 2.5rem 0;
     }
 

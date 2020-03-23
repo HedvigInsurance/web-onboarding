@@ -1,10 +1,11 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand/dist'
+import { CompleteQuote, useRedeemedCampaignsQuery } from 'data/graphql'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { Price } from '../components'
 import { StartDate } from '../Introduction/Sidebar/StartDate'
-import { CompleteOfferDataForMember, WithEmailForm } from '../types'
+import { WithEmailForm } from '../types'
 import {
   getInsuranceType,
   insuranceTypeTextKeys,
@@ -65,18 +66,21 @@ const InsuranceType = styled('div')`
 `
 
 interface Props extends WithEmailForm {
-  offer: CompleteOfferDataForMember
+  firstQuote: CompleteQuote
   refetch: () => Promise<void>
 }
 
 export const CheckoutContent: React.FC<Props> = ({
-  offer,
+  firstQuote,
   email,
   onEmailChange,
   refetch,
 }) => {
   const textKeys = useTextKeys()
-  const monthlyCostDeduction = isMonthlyCostDeduction(offer.redeemedCampaigns)
+  const redeemedCampaignsQuery = useRedeemedCampaignsQuery()
+  const monthlyCostDeduction = isMonthlyCostDeduction(
+    redeemedCampaignsQuery.data?.redeemedCampaigns ?? [],
+  )
 
   return (
     <>
@@ -86,15 +90,13 @@ export const CheckoutContent: React.FC<Props> = ({
           <div>
             <InsuranceTypeLabel>{textKeys.SIDEBAR_LABEL()}</InsuranceTypeLabel>
             <InsuranceType>
-              {textKeys[
-                insuranceTypeTextKeys[getInsuranceType(offer.lastQuoteOfMember)]
-              ]()}
+              {textKeys[insuranceTypeTextKeys[getInsuranceType(firstQuote)]]()}
             </InsuranceType>
           </div>
           <div>
             <Price
-              monthlyGross={offer.lastQuoteOfMember.insuranceCost.monthlyGross}
-              monthlyNet={offer.lastQuoteOfMember.insuranceCost.monthlyNet}
+              monthlyGross={firstQuote.insuranceCost.monthlyGross}
+              monthlyNet={firstQuote.insuranceCost.monthlyNet}
               monthlyCostDeduction={monthlyCostDeduction}
               highlightAmount
             />
@@ -105,15 +107,15 @@ export const CheckoutContent: React.FC<Props> = ({
 
         <StartDateWrapper>
           <StartDate
-            dataCollectionId={offer.lastQuoteOfMember.dataCollectionId}
-            startDate={offer.lastQuoteOfMember.startDate}
-            offerId={offer.lastQuoteOfMember.id}
-            currentInsurer={offer.lastQuoteOfMember.currentInsurer || null}
+            dataCollectionId={firstQuote.dataCollectionId}
+            startDate={firstQuote.startDate}
+            offerId={firstQuote.id}
+            currentInsurer={firstQuote.currentInsurer || null}
             refetch={refetch}
           />
         </StartDateWrapper>
 
-        <InsuranceSummary offer={offer} />
+        <InsuranceSummary firstQuote={firstQuote} />
 
         <SignSpacer />
       </Section>

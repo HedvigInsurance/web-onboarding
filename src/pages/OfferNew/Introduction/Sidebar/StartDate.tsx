@@ -1,14 +1,14 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { externalInsuranceProviders } from '@hedviginsurance/embark'
-import { format, isToday, parse } from 'date-fns'
-import { motion } from 'framer-motion'
 import {
   CurrentInsurer,
   useExternalInsuranceDataQuery,
   useRemoveStartDateMutation,
   useStartDateMutation,
-} from 'generated/graphql'
+} from 'data/graphql'
+import { format, isToday, parse } from 'date-fns'
+import { motion } from 'framer-motion'
 import hexToRgba from 'hex-to-rgba'
 import { DateInput } from 'new-components/DateInput'
 import { Switch } from 'new-components/Switch'

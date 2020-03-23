@@ -3,54 +3,68 @@ import { RouteComponentProps } from 'react-router'
 import { ConnectPayment } from './pages/ConnectPayment'
 import { TrustlyFailPage } from './pages/ConnectPayment/components/TrustlyFailPage'
 import { TrustlySpinnerPage } from './pages/ConnectPayment/components/TrustlySpinnerPage'
+import { Debugger } from './pages/Debugger'
 import { Download } from './pages/Download'
 import { EmbarkRoot } from './pages/Embark'
 import { FourOhFour } from './pages/FourOhFour'
 import { OfferNew } from './pages/OfferNew'
 import { Referral } from './pages/Referral'
 
-export const LANGUAGE_PATH_PATTERN = '/:language(en)?'
+export const LOCALE_PATH_PATTERN = '/:locale(en|no-en|no)?'
 export const serverSideRedirects = [
   { from: '/referrals/terms', to: '/invite/terms' },
   { from: '/new-member/hedvig', to: '/new-member' },
   { from: '/en/new-member/hedvig', to: '/en/new-member' },
 ]
-export const reactPageRoutes = [
+
+interface ReactPageRoute {
+  path: string
+  Component?: React.ComponentType<any>
+  render?: (props: RouteComponentProps<any>) => React.ReactNode
+  exact?: boolean
+}
+
+export const reactPageRoutes: ReactPageRoute[] = [
   {
-    path: LANGUAGE_PATH_PATTERN + '/new-member/download',
+    path: LOCALE_PATH_PATTERN + '/new-member/download',
     Component: Download,
     exact: true,
   },
   {
-    path: LANGUAGE_PATH_PATTERN + '/new-member/connect-payment',
+    path: LOCALE_PATH_PATTERN + '/new-member/connect-payment',
     Component: ConnectPayment,
     exact: true,
   },
   {
-    path: LANGUAGE_PATH_PATTERN + '/new-member/connect-payment/success',
+    path: LOCALE_PATH_PATTERN + '/new-member/connect-payment/success',
     Component: TrustlySpinnerPage,
     exact: true,
   },
   {
-    path: LANGUAGE_PATH_PATTERN + '/new-member/connect-payment/fail',
+    path: LOCALE_PATH_PATTERN + '/new-member/connect-payment/fail',
     Component: TrustlyFailPage,
     exact: true,
   },
   {
-    path: LANGUAGE_PATH_PATTERN + '/new-member/connect-payment/retry',
+    path: LOCALE_PATH_PATTERN + '/new-member/connect-payment/retry',
     Component: TrustlySpinnerPage,
     exact: true,
   },
   {
-    path: LANGUAGE_PATH_PATTERN + '/new-member/(offer|sign)',
+    path: LOCALE_PATH_PATTERN + '/new-member/(offer|sign)',
     Component: OfferNew,
     exact: true,
   },
   {
-    path: LANGUAGE_PATH_PATTERN + '/new-member/:name?/:id?',
+    path: LOCALE_PATH_PATTERN + '/debugger',
+    Component: Debugger,
+    exact: true,
+  },
+  {
+    path: LOCALE_PATH_PATTERN + '/new-member/:name?/:id?',
     render: ({ match }: RouteComponentProps<any>) => {
       const getProps = () => {
-        if (match.params.language === 'en') {
+        if (match.params.locale === 'en') {
           switch (match.params.name) {
             case 'new':
               return {
@@ -90,7 +104,7 @@ export const reactPageRoutes = [
 
       return (
         <EmbarkRoot
-          language={match.params.language}
+          language={match.params.locale}
           name={(props && props.name) || undefined}
           baseUrl={(props && props.baseUrl) || undefined}
           showLanding={!props}
@@ -100,7 +114,7 @@ export const reactPageRoutes = [
     exact: false,
   },
   {
-    path: LANGUAGE_PATH_PATTERN + '/referrals/:code',
+    path: LOCALE_PATH_PATTERN + '/referrals/:code',
     Component: Referral,
     exact: true,
   },

@@ -39,3 +39,7 @@ export const StorageContainer: React.SFC<ContainerProps<
     }
   />
 )
+
+export const StorageContext = React.createContext<StorageState>(null as any)
+
+export const useStorage = () => React.useContext(StorageContext)

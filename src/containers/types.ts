@@ -1,4 +1,4 @@
-import { Incentive as GraphqlIncentive } from 'generated/graphql'
+import { Incentive as GraphqlIncentive } from 'data/graphql'
 
 export interface MonetaryAmount {
   amount: string

@@ -9,6 +9,6 @@
     "no-implicit-dependencies": false
   },
   "linterOptions": {
-    "exclude": ["src/generated/graphql.tsx"]
+    "exclude": ["src/data/graphql.tsx"]
   }
 }

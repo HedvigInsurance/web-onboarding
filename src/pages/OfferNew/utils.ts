@@ -1,13 +1,13 @@
 import {
   ApartmentType,
   Campaign,
-  CompleteApartmentQuoteDetails,
-  CompleteHouseQuoteDetails,
   CompleteQuote,
-  CompleteQuoteDetails,
   InsuranceType,
   Quote,
-} from '../../generated/graphql'
+  QuoteDetails,
+  SwedishApartmentQuoteDetails,
+  SwedishHouseQuoteDetails,
+} from '../../data/graphql'
 import { CompleteOfferDataForMember, OfferData } from './types'
 
 export const isOffer = (
@@ -18,19 +18,19 @@ export const isOffer = (
 export const isQuote = (quote: Quote): quote is CompleteQuote =>
   quote.__typename === 'CompleteQuote' || false
 
-export const isStudent = (details: CompleteQuoteDetails) =>
-  isApartment(details) &&
+export const isStudent = (details: QuoteDetails) =>
+  isSwedishApartment(details) &&
   (details.type === 'STUDENT_BRF' || details.type === 'STUDENT_RENT')
 
-export const isApartment = (
-  details: CompleteQuoteDetails,
-): details is CompleteApartmentQuoteDetails =>
-  details.__typename === 'CompleteApartmentQuoteDetails' || false
+export const isSwedishApartment = (
+  details: QuoteDetails,
+): details is SwedishApartmentQuoteDetails =>
+  details.__typename === 'SwedishApartmentQuoteDetails'
 
-export const isHouse = (
-  details: CompleteQuoteDetails,
-): details is CompleteHouseQuoteDetails =>
-  details.__typename === 'CompleteHouseQuoteDetails' || false
+export const isSwedishHouse = (
+  details: QuoteDetails,
+): details is SwedishHouseQuoteDetails =>
+  details.__typename === 'SwedishHouseQuoteDetails'
 
 export const isFreeMonths = (campaigns: Campaign[]) =>
   (campaigns.length > 0 &&
@@ -51,22 +51,26 @@ export const isNoDiscount = (campaigns: Campaign[]) =>
   false
 
 export const getInsuranceType = (quote: CompleteQuote): InsuranceType => {
-  if (isHouse(quote.details)) {
+  if (isSwedishHouse(quote.quoteDetails)) {
     return InsuranceType.House
   }
 
-  const map = {
-    RENT: InsuranceType.Rent,
-    BRF: InsuranceType.Brf,
-    STUDENT_RENT: InsuranceType.StudentRent,
-    STUDENT_BRF: InsuranceType.StudentBrf,
+  if (isSwedishApartment(quote.quoteDetails)) {
+    const map = {
+      RENT: InsuranceType.Rent,
+      BRF: InsuranceType.Brf,
+      STUDENT_RENT: InsuranceType.StudentRent,
+      STUDENT_BRF: InsuranceType.StudentBrf,
+    }
+
+    if (!map[quote.quoteDetails.type]) {
+      throw new Error(`Invalid insurance type ${quote.quoteDetails.type}`)
+    }
+
+    return map[quote.quoteDetails.type]
   }
 
-  if (!map[quote.details.type]) {
-    throw new Error(`Invalid insurance type ${quote.details.type}`)
-  }
-
-  return map[quote.details.type]
+  return InsuranceType.Rent // FIXME Norway... 🇳🇴
 }
 
 export const insuranceTypeTextKeys: Record<InsuranceType, string> = {

@@ -1,0 +1,26 @@
+query RedeemedCampaigns {
+  redeemedCampaigns {
+    incentive {
+      ... on FreeMonths {
+        quantity
+      }
+      ... on MonthlyCostDeduction {
+        amount {
+          amount
+          currency
+        }
+      }
+      ... on PercentageDiscountMonths {
+        percentageDiscount
+        quantityMonths: quantity
+      }
+      ... on NoDiscount {
+        __typename
+      }
+    }
+    code
+    owner {
+      displayName
+    }
+  }
+}
