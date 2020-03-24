@@ -5,7 +5,7 @@ import { Page } from 'components/utils/Page'
 import { LinkButton } from 'new-components/buttons'
 import * as React from 'react'
 import Helmet from 'react-helmet-async'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { TextKeyMap, useTextKeys } from 'utils/hooks/useTextKeys'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -163,7 +163,7 @@ export const Landing: React.FC<{ language?: string }> = ({ language }) => {
 }
 
 const LandingPageCardsSe: React.FC<{
-  textKeys: Record<string, any>
+  textKeys: TextKeyMap
   language: string | undefined
 }> = ({ textKeys, language }) => {
   return (
@@ -193,7 +193,7 @@ const LandingPageCardsSe: React.FC<{
 }
 
 const LandingPageCardsNo: React.FC<{
-  textKeys: Record<string, any>
+  textKeys: TextKeyMap
   language: string | undefined
 }> = ({ textKeys, language }) => {
   return (
