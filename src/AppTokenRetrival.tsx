@@ -15,7 +15,7 @@ export const AppTokenRetrival: React.FC = ({ children }) => {
         <Mount
           on={() => {
             if (location.hash.includes('token')) {
-              const params: { [string]: string } = location.hash
+              const params: { [key: string]: string } = location.hash
                 .substring(1)
                 .split('&')
                 .reduce((acc, curr) => {
