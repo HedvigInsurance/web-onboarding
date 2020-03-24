@@ -64,37 +64,67 @@ export const reactPageRoutes: ReactPageRoute[] = [
     path: LOCALE_PATH_PATTERN + '/new-member/:name?/:id?',
     render: ({ match }: RouteComponentProps<any>) => {
       const getProps = () => {
-        if (match.params.locale === 'en') {
-          switch (match.params.name) {
-            case 'new':
-              return {
-                baseUrl: '/en/new-member/new',
-                name: 'Web Onboarding - English Needer',
-              }
-            case 'switch':
-              return {
-                baseUrl: '/en/new-member/switch',
-                name: 'Web Onboarding - English Switcher',
-              }
-          }
-        } else {
-          switch (match.params.name) {
-            case 'new':
-              return {
-                baseUrl: '/new-member/new',
-                name: 'Web Onboarding - Swedish Needer',
-              }
-            case 'switch':
-              return {
-                baseUrl: '/new-member/switch',
-                name: 'Web Onboarding - Swedish Switcher',
-              }
-            case 'switch-beta':
-              return {
-                baseUrl: '/new-member/switch-beta',
-                name: 'Switcher Onboarding Playground',
-              }
-          }
+        switch (match.params.locale) {
+          case 'no':
+            switch (match.params.name) {
+              case 'contents':
+                return {
+                  baseUrl: '/no/new-member/contents',
+                  name: 'Web Onboarding NO - Contents',
+                }
+              case 'travel':
+                return {
+                  baseUrl: '/no/new-member/travel',
+                  name: 'Web Onboarding NO - Travel',
+                }
+            }
+            break
+          case 'no-en':
+            switch (match.params.name) {
+              case 'contents':
+                return {
+                  baseUrl: '/no-en/new-member/contents',
+                  name: 'Web Onboarding NO - English Contents',
+                }
+              case 'travel':
+                return {
+                  baseUrl: '/no-en/new-member/travel',
+                  name: 'Web Onboarding NO - English Travel',
+                }
+            }
+            break
+          case 'en':
+            switch (match.params.name) {
+              case 'new':
+                return {
+                  baseUrl: '/en/new-member/new',
+                  name: 'Web Onboarding - English Needer',
+                }
+              case 'switch':
+                return {
+                  baseUrl: '/en/new-member/switch',
+                  name: 'Web Onboarding - English Switcher',
+                }
+            }
+            break
+          default:
+            switch (match.params.name) {
+              case 'new':
+                return {
+                  baseUrl: '/new-member/new',
+                  name: 'Web Onboarding - Swedish Needer',
+                }
+              case 'switch':
+                return {
+                  baseUrl: '/new-member/switch',
+                  name: 'Web Onboarding - Swedish Switcher',
+                }
+              case 'switch-beta':
+                return {
+                  baseUrl: '/new-member/switch-beta',
+                  name: 'Switcher Onboarding Playground',
+                }
+            }
         }
 
         return null
