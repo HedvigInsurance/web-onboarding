@@ -72,12 +72,14 @@ const InsuranceType = styled('div')`
 interface Props extends WithEmailForm {
   firstQuote: CompleteQuote
   refetch: () => Promise<void>
+  onSsnUpdate: (onCompletion: Promise<void>) => void
 }
 
 export const CheckoutContent: React.FC<Props> = ({
   firstQuote,
   email,
   onEmailChange,
+  onSsnUpdate,
   refetch,
 }) => {
   const textKeys = useTextKeys()
@@ -116,17 +118,22 @@ export const CheckoutContent: React.FC<Props> = ({
           onEmailChange={onEmailChange}
           ssn={firstQuote.ssn ?? ''}
           onSsnChange={(ssn) => {
-            setFakeLoading(true)
-            setReallyLoading(true)
-            window.setTimeout(() => setFakeLoading(false), 1000)
-            // TODO we somehow need to compare the birth date to the ssn to check so they match. In case they don't, we should warn (as they might get a different price)
-            editQuote({ variables: { input: { id: firstQuote.id, ssn } } })
-              .then(() => refetch())
-              .then(() => setReallyLoading(false))
-              .catch((e) => {
-                setReallyLoading(false)
-                throw e
-              })
+            const onCompletion = new Promise<void>((resolve, reject) => {
+              setFakeLoading(true)
+              setReallyLoading(true)
+              window.setTimeout(() => setFakeLoading(false), 1000)
+              // TODO we somehow need to compare the birth date to the ssn to check so they match. In case they don't, we should warn (as they might get a different price)
+              editQuote({ variables: { input: { id: firstQuote.id, ssn } } })
+                .then(() => refetch())
+                .then(() => setReallyLoading(false))
+                .then(() => resolve())
+                .catch((e) => {
+                  setReallyLoading(false)
+                  reject(e)
+                  throw e
+                })
+            })
+            onSsnUpdate(onCompletion)
           }}
         />
 

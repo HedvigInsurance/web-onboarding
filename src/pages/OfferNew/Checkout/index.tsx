@@ -2,10 +2,31 @@ import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { BackArrow } from 'components/icons/BackArrow'
-import { CompleteQuote } from 'data/graphql'
+import { useCurrentLocale } from 'components/utils/CurrentLocale'
+import {
+  CompleteQuote,
+  RedeemedCampaignsQuery,
+  SignState,
+  useMemberQuery,
+  useRedeemedCampaignsQuery,
+  useSignQuotesMutation,
+} from 'data/graphql'
 import { TOP_BAR_Z_INDEX } from 'new-components/TopBar'
-import { Sign } from 'pages/OfferNew/Checkout/Sign'
+import { Sign, SignUiState } from 'pages/OfferNew/Checkout/Sign'
+import { useSignState } from 'pages/OfferNew/Checkout/SignStatus'
+import { emailValidation } from 'pages/OfferNew/Checkout/UserDetailsForm'
+import { getInsuranceType } from 'pages/OfferNew/utils'
+import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
+import { Mount } from 'react-lifecycle-components/dist'
+import { Redirect } from 'react-router-dom'
+import { InsuranceType } from 'utils/insuranceDomainUtils'
+import {
+  adtraction,
+  getUtmParamsFromCookie,
+  TrackAction,
+  trackStudentkortet,
+} from 'utils/tracking'
 import { CheckoutContent } from './CheckoutContent'
 
 enum VisibilityState {
@@ -78,10 +99,17 @@ const SlidingSign = styled(Sign)<Openable>`
   ${slideInStyles};
 `
 
-const InnerWrapper = styled('div')`
+const InnerWrapper = styled('div')<{ hasIframe: boolean }>`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  ${({ hasIframe }) =>
+    hasIframe
+      ? css`
+          padding-top: 20vh;
+        `
+      : css`
+          justify-content: space-between;
+        `};
   width: 100%;
   min-height: 100%;
   background: ${colorsV2.offwhite};
@@ -138,6 +166,11 @@ const Backdrop = styled('div')<Openable>`
   }};
 `
 
+const SignIframe = styled('iframe')`
+  border: 0;
+  min-height: 50vh;
+`
+
 interface Props {
   firstQuote: CompleteQuote
   isOpen?: boolean
@@ -155,7 +188,40 @@ export const Checkout: React.FC<Props> = ({
   const [visibilityState, setVisibilityState] = React.useState(
     VisibilityState.CLOSED,
   )
+  const [signUiState, setSignUiState] = React.useState(SignUiState.NOT_STARTED)
+  const [bankIdUrl, setBankIdUrl] = React.useState<string | null>(null)
+  const [ssnUpdateLoading, setSsnUpdateLoading] = React.useState(false)
+  const [startPollingSignState, signStatus] = useSignState()
+  const [signQuotes, signQuotesMutation] = useSignQuotesMutation({
+    variables: { quoteIds: [firstQuote.id] },
+  })
+  const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
+  const { data: memberData } = useMemberQuery()
+  const locale = useCurrentLocale()
+
   const outerWrapper = React.useRef<HTMLDivElement>()
+
+  React.useEffect(() => {
+    if (
+      ![SignUiState.STARTED, SignUiState.STARTED_WITH_IFRAME].includes(
+        signUiState,
+      )
+    ) {
+      return
+    }
+
+    startPollingSignState()
+  }, [signUiState])
+  React.useEffect(() => {
+    if (signStatus?.signState === SignState.Completed) {
+      track(
+        email!,
+        firstQuote,
+        memberData?.member.id!,
+        redeemedCampaignsData?.redeemedCampaigns ?? [],
+      )
+    }
+  }, [signStatus?.signState])
 
   React.useEffect(() => {
     const listener = (e: WheelEvent | TouchEvent) => {
@@ -204,6 +270,36 @@ export const Checkout: React.FC<Props> = ({
     }
   }, [isOpen])
 
+  const canInitiateSign = Boolean(
+    signUiState !== SignUiState.STARTED &&
+      !signQuotesMutation.loading &&
+      emailValidation.isValidSync(email ?? '') &&
+      firstQuote.ssn,
+  )
+
+  if (signStatus?.signState === SignState.Completed) {
+    return (
+      <TrackAction
+        event={{
+          name: SemanticEvents.Ecommerce.OrderCompleted,
+          properties: {
+            category: 'web-onboarding-steps',
+            ...getUtmParamsFromCookie(),
+          },
+        }}
+      >
+        {({ track: trackAction }) => (
+          <Mount on={trackAction}>
+            <Redirect
+              to={`/${locale && locale + '/'}new-member/connect-payment`}
+            />
+            )
+          </Mount>
+        )}
+      </TrackAction>
+    )
+  }
+
   return (
     <>
       <OuterWrapper visibilityState={visibilityState}>
@@ -211,30 +307,101 @@ export const Checkout: React.FC<Props> = ({
           ref={outerWrapper as React.MutableRefObject<HTMLDivElement | null>}
           visibilityState={visibilityState}
         >
-          <InnerWrapper>
-            <BackButtonWrapper>
-              <BackButton onClick={onClose}>
-                <BackArrow />
-              </BackButton>
-            </BackButtonWrapper>
+          <InnerWrapper
+            hasIframe={signUiState === SignUiState.STARTED_WITH_IFRAME}
+          >
+            {signUiState === SignUiState.STARTED_WITH_IFRAME ? (
+              <SignIframe src={bankIdUrl!} />
+            ) : (
+              <>
+                <BackButtonWrapper>
+                  <BackButton onClick={onClose}>
+                    <BackArrow />
+                  </BackButton>
+                </BackButtonWrapper>
 
-            <CheckoutContent
-              firstQuote={firstQuote}
-              email={email}
-              onEmailChange={setEmail}
-              refetch={refetch}
-            />
+                <CheckoutContent
+                  firstQuote={firstQuote}
+                  email={email}
+                  onEmailChange={setEmail}
+                  onSsnUpdate={(onCompletion) => {
+                    setSsnUpdateLoading(true)
+                    onCompletion.finally(() => setSsnUpdateLoading(false))
+                  }}
+                  refetch={refetch}
+                />
+              </>
+            )}
+
+            <div />
           </InnerWrapper>
         </OuterScrollWrapper>
 
         <SlidingSign
-          firstQuote={firstQuote}
+          insuranceType={getInsuranceType(firstQuote)}
           visibilityState={visibilityState}
-          personalNumber={firstQuote.ssn}
-          email={email}
+          canInitiateSign={canInitiateSign && !ssnUpdateLoading}
+          signUiState={signUiState}
+          signStatus={signStatus}
+          loading={
+            signQuotesMutation.loading || signUiState === SignUiState.STARTED
+          }
+          onSignStart={async () => {
+            if (!canInitiateSign) {
+              return
+            }
+
+            const result = await signQuotes()
+            if (result.data?.signQuotes?.__typename === 'FailedToStartSign') {
+              setSignUiState(SignUiState.FAILED)
+              return
+            }
+            if (
+              result.data?.signQuotes?.__typename === 'NorwegianBankIdSession'
+            ) {
+              setBankIdUrl(result.data.signQuotes.redirectUrl!)
+              setSignUiState(SignUiState.STARTED_WITH_IFRAME)
+              return
+            }
+            setSignUiState(SignUiState.STARTED)
+          }}
         />
       </OuterWrapper>
       <Backdrop visibilityState={visibilityState} onClick={onClose} />
     </>
   )
+}
+
+const track = (
+  email: string,
+  firstQuote: CompleteQuote,
+  memberId: string,
+  redeemedCampaigns: RedeemedCampaignsQuery['redeemedCampaigns'],
+) => {
+  if (process.env.NODE_ENV === 'test') {
+    return
+  }
+
+  const legacyInsuranceType: InsuranceType =
+    firstQuote.quoteDetails.__typename === 'SwedishApartmentQuoteDetails'
+      ? (firstQuote.quoteDetails.type as any)
+      : 'HOUSE' // TODO do we have norway quotes here?
+
+  adtraction(
+    parseFloat(firstQuote.insuranceCost.monthlyGross.amount),
+    memberId,
+    email,
+    redeemedCampaigns !== null && redeemedCampaigns.length !== 0
+      ? redeemedCampaigns[0].code
+      : null,
+    legacyInsuranceType,
+  )
+
+  if (
+    redeemedCampaigns !== null &&
+    redeemedCampaigns.length !== 0 &&
+    redeemedCampaigns[0].code.toLowerCase() === 'studentkortet'
+  ) {
+    trackStudentkortet(memberId, firstQuote.insuranceCost.monthlyGross.amount)
+  }
 }
