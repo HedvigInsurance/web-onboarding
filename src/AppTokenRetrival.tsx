@@ -6,7 +6,7 @@ import { useLocation } from 'react-router'
 import { apolloClient } from './client/apolloClient'
 import { StorageContainer } from './utils/StorageContainer'
 
-export const AppTokenRetrival = ({ children }) => {
+export const AppTokenRetrival: React.FC = ({ children }) => {
   const location = useLocation()
 
   return (
@@ -15,7 +15,7 @@ export const AppTokenRetrival = ({ children }) => {
         <Mount
           on={() => {
             if (location.hash.includes('token')) {
-              const params = location.hash
+              const params: { [string]: string } = location.hash
                 .substring(1)
                 .split('&')
                 .reduce((acc, curr) => {
