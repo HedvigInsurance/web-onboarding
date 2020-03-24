@@ -20,7 +20,7 @@ export const AppTokenRetrival: React.FC = ({ children }) => {
                 .split('&')
                 .reduce((acc, curr) => {
                   const param = curr.split('=')
-                  return { ...acc, [param[0]]: param[1] }
+                  return { ...acc, [param[0]]: decodeURIComponent(param[1]) }
                 }, {})
 
               storageState.setToken(params.token)
