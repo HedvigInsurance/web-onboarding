@@ -4,6 +4,7 @@ import { Provider } from 'constate'
 import * as React from 'react'
 import { hot } from 'react-hot-loader'
 import { Route, Switch } from 'react-router-dom'
+import { AppTokenRetrival } from './AppTokenRetrival'
 import { reactPageRoutes } from './routes'
 import { GlobalCss } from './utils/globalStyles'
 import {
@@ -11,7 +12,6 @@ import {
   StorageState,
   WithStorageProps,
 } from './utils/StorageContainer'
-import { AppTokenRetrival } from './AppTokenRetrival'
 
 export const App: React.ComponentType<StorageState> = ({ session }) => (
   <>

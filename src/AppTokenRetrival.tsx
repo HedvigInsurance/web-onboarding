@@ -19,7 +19,7 @@ export const AppTokenRetrival = ({ children }) => {
                 .substring(1)
                 .split('&')
                 .reduce((acc, curr) => {
-                  let param = curr.split('=')
+                  const param = curr.split('=')
                   return { ...acc, [param[0]]: param[1] }
                 }, {})
 
