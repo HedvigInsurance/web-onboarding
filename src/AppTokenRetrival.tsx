@@ -25,8 +25,8 @@ export const AppTokenRetrival = ({ children }) => {
                   params[param[0]] = param[1]
                 })
 
-              apolloClient!.subscriptionClient.close(true, true)
               storageState.setToken(params.token)
+              apolloClient!.subscriptionClient.close(true, true)
             }
           }}
         >
