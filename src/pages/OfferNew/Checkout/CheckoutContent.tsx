@@ -1,6 +1,10 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand/dist'
-import { CompleteQuote, useRedeemedCampaignsQuery } from 'data/graphql'
+import {
+  CompleteQuote,
+  useEditQuoteMutation,
+  useRedeemedCampaignsQuery,
+} from 'data/graphql'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { Price } from '../components'
@@ -81,6 +85,9 @@ export const CheckoutContent: React.FC<Props> = ({
   const monthlyCostDeduction = isMonthlyCostDeduction(
     redeemedCampaignsQuery.data?.redeemedCampaigns ?? [],
   )
+  const [fakeLoading, setFakeLoading] = React.useState(false) // TODO should these loading states be propagated up to sign button or no?
+  const [reallyLoading, setReallyLoading] = React.useState(false)
+  const [editQuote] = useEditQuoteMutation()
 
   return (
     <>
@@ -95,6 +102,7 @@ export const CheckoutContent: React.FC<Props> = ({
           </div>
           <div>
             <Price
+              loading={fakeLoading || reallyLoading}
               monthlyGross={firstQuote.insuranceCost.monthlyGross}
               monthlyNet={firstQuote.insuranceCost.monthlyNet}
               monthlyCostDeduction={monthlyCostDeduction}
@@ -103,7 +111,24 @@ export const CheckoutContent: React.FC<Props> = ({
           </div>
         </Excerpt>
 
-        <UserDetailsForm email={email} onEmailChange={onEmailChange} />
+        <UserDetailsForm
+          email={email}
+          onEmailChange={onEmailChange}
+          ssn={firstQuote.ssn ?? ''}
+          onSsnChange={(ssn) => {
+            setFakeLoading(true)
+            setReallyLoading(true)
+            window.setTimeout(() => setFakeLoading(false), 1000)
+            // TODO we somehow need to compare the birth date to the ssn to check so they match. In case they don't, we should warn (as they might get a different price)
+            editQuote({ variables: { input: { id: firstQuote.id, ssn } } })
+              .then(() => refetch())
+              .then(() => setReallyLoading(false))
+              .catch((e) => {
+                setReallyLoading(false)
+                throw e
+              })
+          }}
+        />
 
         <StartDateWrapper>
           <StartDate

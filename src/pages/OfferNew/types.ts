@@ -31,3 +31,8 @@ export interface WithEmailForm {
   email: string
   onEmailChange: (email: string) => void
 }
+
+export interface WithSsnForm {
+  ssn: string
+  onSsnChange: (ssn: string) => void
+}
