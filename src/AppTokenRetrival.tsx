@@ -15,15 +15,13 @@ export const AppTokenRetrival = ({ children }) => {
         <Mount
           on={() => {
             if (location.hash.includes('token')) {
-              var params = {}
-
-              location.hash
+              const params = location.hash
                 .substring(1)
                 .split('&')
-                .map((hk) => {
-                  let param = hk.split('=')
-                  params[param[0]] = param[1]
-                })
+                .reduce((acc, curr) => {
+                  let param = curr.split('=')
+                  return { ...acc, [param[0]]: param[1] }
+                }, {})
 
               storageState.setToken(params.token)
               apolloClient!.subscriptionClient.close(true, true)
