@@ -1980,6 +1980,11 @@
   resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-2.0.0.tgz#5549b8aa1a756925f3d05e0e350462be3c36cb02"
   integrity sha512-6pA7JCIhVPCqTx8RESwvj+tmbiStbCwICbaUmXMCxgUNj+pLxFpJQb4SBtXXGB+A2ge96Fti0VrE+0Wdc0aHSQ==
 
+"@hedviginsurance/brand@^3.0.3":
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-3.0.3.tgz#1792eb48f2e0f723b0088f4a0852342c2ef8c818"
+  integrity sha512-efAV2Tuuy+948dkPAt4md0sd9rtWtXkWjydQ8cG0V0jCNZbJrEtrUXAOSHBm8qKm7omhb5dBQ1QfRa8BOeb5eg==
+
 "@hedviginsurance/cli@^2.3.2":
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/@hedviginsurance/cli/-/cli-2.3.3.tgz#cff8a76ae7765c153c48f74cd2a3833f0e1a7414"
