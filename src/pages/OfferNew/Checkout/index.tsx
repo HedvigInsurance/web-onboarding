@@ -3,14 +3,7 @@ import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { BackArrow } from 'components/icons/BackArrow'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
-import {
-  CompleteQuote,
-  RedeemedCampaignsQuery,
-  SignState,
-  useMemberQuery,
-  useRedeemedCampaignsQuery,
-  useSignQuotesMutation,
-} from 'data/graphql'
+import { CompleteQuote, SignState, useSignQuotesMutation } from 'data/graphql'
 import { TOP_BAR_Z_INDEX } from 'new-components/TopBar'
 import { Sign, SignUiState } from 'pages/OfferNew/Checkout/Sign'
 import { useSignState } from 'pages/OfferNew/Checkout/SignStatus'
@@ -21,21 +14,9 @@ import * as React from 'react'
 import { Mount } from 'react-lifecycle-components/dist'
 import { Redirect } from 'react-router-dom'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-import { InsuranceType } from 'utils/insuranceDomainUtils'
-import {
-  adtraction,
-  getUtmParamsFromCookie,
-  TrackAction,
-  trackStudentkortet,
-} from 'utils/tracking'
+import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
 import { CheckoutContent, Title } from './CheckoutContent'
-
-enum VisibilityState {
-  CLOSED,
-  CLOSING,
-  OPENING,
-  OPEN,
-}
+import { useScrollLock, useTrack, VisibilityState } from './hooks'
 
 interface Openable {
   visibilityState: VisibilityState
@@ -188,19 +169,29 @@ export const Checkout: React.FC<Props> = ({
   refetch,
 }) => {
   const textKeys = useTextKeys()
-  const [email, setEmail] = React.useState(firstQuote.email ?? '')
   const [visibilityState, setVisibilityState] = React.useState(
     VisibilityState.CLOSED,
   )
+  React.useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => setVisibilityState(VisibilityState.OPEN), 50)
+      setVisibilityState(VisibilityState.OPENING)
+    } else {
+      setTimeout(() => {
+        setVisibilityState(VisibilityState.CLOSED)
+      }, 300)
+      setVisibilityState(VisibilityState.CLOSING)
+    }
+  }, [isOpen])
+
   const [signUiState, setSignUiState] = React.useState(SignUiState.NOT_STARTED)
   const [bankIdUrl, setBankIdUrl] = React.useState<string | null>(null)
+  const [email, setEmail] = React.useState(firstQuote.email ?? '')
   const [ssnUpdateLoading, setSsnUpdateLoading] = React.useState(false)
   const [startPollingSignState, signStatus] = useSignState()
   const [signQuotes, signQuotesMutation] = useSignQuotesMutation({
     variables: { quoteIds: [firstQuote.id] },
   })
-  const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
-  const { data: memberData } = useMemberQuery()
   const locale = useCurrentLocale()
 
   const outerWrapper = React.useRef<HTMLDivElement>()
@@ -216,63 +207,13 @@ export const Checkout: React.FC<Props> = ({
 
     startPollingSignState()
   }, [signUiState])
-  React.useEffect(() => {
-    if (signStatus?.signState === SignState.Completed) {
-      track(
-        email!,
-        firstQuote,
-        memberData?.member.id!,
-        redeemedCampaignsData?.redeemedCampaigns ?? [],
-      )
-    }
-  }, [signStatus?.signState])
 
-  React.useEffect(() => {
-    const listener = (e: WheelEvent | TouchEvent) => {
-      if (visibilityState !== VisibilityState.OPEN) {
-        return
-      }
-
-      const { current } = outerWrapper
-      if (!current) {
-        return
-      }
-
-      const tryingToScrollUpButCant =
-        e instanceof WheelEvent && current.scrollTop === 0 && e.deltaY < 0
-      const tryingToScrollDownButCant =
-        e instanceof WheelEvent &&
-        current.offsetHeight + current.scrollTop >= current.scrollHeight &&
-        e.deltaY > 0
-      if (
-        !outerWrapper.current?.contains(e.target as Node) ||
-        tryingToScrollUpButCant ||
-        tryingToScrollDownButCant
-      ) {
-        e.preventDefault()
-      }
-    }
-
-    window.addEventListener('wheel', listener, { passive: false })
-    window.addEventListener('touchmove', listener, { passive: false })
-
-    return () => {
-      window.removeEventListener('wheel', listener)
-      window.removeEventListener('touchmove', listener)
-    }
-  }, [])
-
-  React.useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => setVisibilityState(VisibilityState.OPEN), 50)
-      setVisibilityState(VisibilityState.OPENING)
-    } else {
-      setTimeout(() => {
-        setVisibilityState(VisibilityState.CLOSED)
-      }, 300)
-      setVisibilityState(VisibilityState.CLOSING)
-    }
-  }, [isOpen])
+  useTrack({
+    signState: signStatus?.signState,
+    email,
+    firstQuote,
+  })
+  useScrollLock(visibilityState, outerWrapper)
 
   const canInitiateSign = Boolean(
     signUiState !== SignUiState.STARTED &&
@@ -378,38 +319,4 @@ export const Checkout: React.FC<Props> = ({
       <Backdrop visibilityState={visibilityState} onClick={onClose} />
     </>
   )
-}
-
-const track = (
-  email: string,
-  firstQuote: CompleteQuote,
-  memberId: string,
-  redeemedCampaigns: RedeemedCampaignsQuery['redeemedCampaigns'],
-) => {
-  if (process.env.NODE_ENV === 'test') {
-    return
-  }
-
-  const legacyInsuranceType: InsuranceType =
-    firstQuote.quoteDetails.__typename === 'SwedishApartmentQuoteDetails'
-      ? (firstQuote.quoteDetails.type as any)
-      : 'HOUSE' // TODO do we have norway quotes here?
-
-  adtraction(
-    parseFloat(firstQuote.insuranceCost.monthlyGross.amount),
-    memberId,
-    email,
-    redeemedCampaigns !== null && redeemedCampaigns.length !== 0
-      ? redeemedCampaigns[0].code
-      : null,
-    legacyInsuranceType,
-  )
-
-  if (
-    redeemedCampaigns !== null &&
-    redeemedCampaigns.length !== 0 &&
-    redeemedCampaigns[0].code.toLowerCase() === 'studentkortet'
-  ) {
-    trackStudentkortet(memberId, firstQuote.insuranceCost.monthlyGross.amount)
-  }
 }
