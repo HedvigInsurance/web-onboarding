@@ -1,24 +1,38 @@
 import * as React from 'react'
 
 import { Mount } from 'react-lifecycle-components'
+import { useLocation } from 'react-router'
+
 import { apolloClient } from './client/apolloClient'
 import { StorageContainer } from './utils/StorageContainer'
 
-export const AppTokenRetrival = ({ children }) => (
-  <StorageContainer>
-    {(storageState) => (
-      <Mount
-        on={() => {
-          if (location.hash.includes('token=')) {
-            const token = location.hash.replace('#token=', '')
-            console.log('setting token to', token)
-            apolloClient!.subscriptionClient.close(true, true)
-            storageState.setToken(token)
-          }
-        }}
-      >
-        {children}
-      </Mount>
-    )}
-  </StorageContainer>
-)
+export const AppTokenRetrival = ({ children }) => {
+  const location = useLocation()
+
+  return (
+    <StorageContainer>
+      {(storageState) => (
+        <Mount
+          on={() => {
+            if (location.hash.includes('token')) {
+              var params = {}
+
+              location.hash
+                .substring(1)
+                .split('&')
+                .map((hk) => {
+                  let param = hk.split('=')
+                  params[param[0]] = param[1]
+                })
+
+              apolloClient!.subscriptionClient.close(true, true)
+              storageState.setToken(params.token)
+            }
+          }}
+        >
+          {children}
+        </Mount>
+      )}
+    </StorageContainer>
+  )
+}
