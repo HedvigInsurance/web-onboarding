@@ -67,29 +67,29 @@ export const reactPageRoutes: ReactPageRoute[] = [
         switch (match.params.locale) {
           case 'no':
             switch (match.params.name) {
-              case 'home-content':
+              case 'contents':
                 return {
-                  baseUrl: '/no/new-member/home-content',
-                  name: 'Web Onboarding - Norwegian Home Content',
+                  baseUrl: '/no/new-member/contents',
+                  name: 'Web Onboarding NO - Contents',
                 }
               case 'travel':
                 return {
                   baseUrl: '/no/new-member/travel',
-                  name: 'Web Onboarding - Norwegian Travel',
+                  name: 'Web Onboarding NO - Travel',
                 }
             }
             break
           case 'no-en':
             switch (match.params.name) {
-              case 'home-content':
+              case 'contents':
                 return {
-                  baseUrl: '/no-en/new-member/home-content',
-                  name: 'Web Onboarding - English Home Content',
+                  baseUrl: '/no-en/new-member/contents',
+                  name: 'Web Onboarding NO - English Contents',
                 }
               case 'travel':
                 return {
                   baseUrl: '/no-en/new-member/travel',
-                  name: 'Web Onboarding - English Travel',
+                  name: 'Web Onboarding NO - English Travel',
                 }
             }
             break
