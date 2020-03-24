@@ -23,7 +23,7 @@ const Section = styled('div')`
   width: 100%;
 `
 
-const Title = styled('h1')`
+export const Title = styled('h1')`
   font-size: 3.5rem;
   line-height: 1;
   color: ${colorsV2.black};

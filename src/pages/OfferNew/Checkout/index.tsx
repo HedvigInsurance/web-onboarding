@@ -20,6 +20,7 @@ import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
 import { Mount } from 'react-lifecycle-components/dist'
 import { Redirect } from 'react-router-dom'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { InsuranceType } from 'utils/insuranceDomainUtils'
 import {
   adtraction,
@@ -27,7 +28,7 @@ import {
   TrackAction,
   trackStudentkortet,
 } from 'utils/tracking'
-import { CheckoutContent } from './CheckoutContent'
+import { CheckoutContent, Title } from './CheckoutContent'
 
 enum VisibilityState {
   CLOSED,
@@ -168,7 +169,9 @@ const Backdrop = styled('div')<Openable>`
 
 const SignIframe = styled('iframe')`
   border: 0;
-  min-height: 50vh;
+  margin-top: 5vh;
+  min-height: 40vh;
+  max-width: 100%;
 `
 
 interface Props {
@@ -184,6 +187,7 @@ export const Checkout: React.FC<Props> = ({
   onClose,
   refetch,
 }) => {
+  const textKeys = useTextKeys()
   const [email, setEmail] = React.useState(firstQuote.email ?? '')
   const [visibilityState, setVisibilityState] = React.useState(
     VisibilityState.CLOSED,
@@ -311,7 +315,11 @@ export const Checkout: React.FC<Props> = ({
             hasIframe={signUiState === SignUiState.STARTED_WITH_IFRAME}
           >
             {signUiState === SignUiState.STARTED_WITH_IFRAME ? (
-              <SignIframe src={bankIdUrl!} />
+              <>
+                <Title>{textKeys.CHECKOUT_TITLE()}</Title>
+
+                <SignIframe src={bankIdUrl!} />
+              </>
             ) : (
               <>
                 <BackButtonWrapper>
