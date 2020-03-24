@@ -1,10 +1,11 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
+import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { LinkButton } from 'new-components/buttons'
 import * as React from 'react'
 import Helmet from 'react-helmet-async'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { TextKeyMap, useTextKeys } from 'utils/hooks/useTextKeys'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -138,6 +139,7 @@ const LandingPageContainer = styled.div`
 
 export const Landing: React.FC<{ language?: string }> = ({ language }) => {
   const textKeys = useTextKeys()
+  const market = useMarket()
   return (
     <Page>
       <LandingPageContainer>
@@ -147,29 +149,75 @@ export const Landing: React.FC<{ language?: string }> = ({ language }) => {
 
         <Wrapper>
           <Container>
-            <Card>
-              <Headline>{textKeys.STARTPAGE_UNINSURED_HEADLINE()}</Headline>
-              <Paragraph>{textKeys.STARTPAGE_UNINSURED_BODY()}</Paragraph>
-              <ProceedButton
-                size="lg"
-                to={(language ? '/' + language : '') + '/new-member/new'}
-              >
-                {textKeys.STARTPAGE_UNINSURED_BUTTON()}
-              </ProceedButton>
-            </Card>
-            <Card>
-              <Headline>{textKeys.STARTPAGE_INSURED_HEADLINE()}</Headline>
-              <Paragraph>{textKeys.STARTPAGE_INSURED_BODY()}</Paragraph>
-              <ProceedButton
-                size="lg"
-                to={(language ? '/' + language : '') + '/new-member/switch'}
-              >
-                {textKeys.STARTPAGE_INSURED_BUTTON()}
-              </ProceedButton>
-            </Card>
+            {market === Market.Se && (
+              <LandingPageCardsSe textKeys={textKeys} language={language} />
+            )}
+            {market === Market.No && (
+              <LandingPageCardsNo textKeys={textKeys} language={language} />
+            )}
           </Container>
         </Wrapper>
       </LandingPageContainer>
     </Page>
+  )
+}
+
+const LandingPageCardsSe: React.FC<{
+  textKeys: TextKeyMap
+  language: string | undefined
+}> = ({ textKeys, language }) => {
+  return (
+    <>
+      <Card>
+        <Headline>{textKeys.STARTPAGE_UNINSURED_HEADLINE()}</Headline>
+        <Paragraph>{textKeys.STARTPAGE_UNINSURED_BODY()}</Paragraph>
+        <ProceedButton
+          size="lg"
+          to={(language ? '/' + language : '') + '/new-member/new'}
+        >
+          {textKeys.STARTPAGE_UNINSURED_BUTTON()}
+        </ProceedButton>
+      </Card>
+      <Card>
+        <Headline>{textKeys.STARTPAGE_INSURED_HEADLINE()}</Headline>
+        <Paragraph>{textKeys.STARTPAGE_INSURED_BODY()}</Paragraph>
+        <ProceedButton
+          size="lg"
+          to={(language ? '/' + language : '') + '/new-member/switch'}
+        >
+          {textKeys.STARTPAGE_INSURED_BUTTON()}
+        </ProceedButton>
+      </Card>
+    </>
+  )
+}
+
+const LandingPageCardsNo: React.FC<{
+  textKeys: TextKeyMap
+  language: string | undefined
+}> = ({ textKeys, language }) => {
+  return (
+    <>
+      <Card>
+        <Headline>{textKeys.STARTPAGE_CONTENTS_HEADLINE()}</Headline>
+        <Paragraph>{textKeys.STARTPAGE_CONTENTS_BODY()}</Paragraph>
+        <ProceedButton
+          size="lg"
+          to={(language ? '/' + language : '') + '/new-member/contents'}
+        >
+          {textKeys.STARTPAGE_CONTENTS_BUTTON()}
+        </ProceedButton>
+      </Card>
+      <Card>
+        <Headline>{textKeys.STARTPAGE_TRAVEL_HEADLINE()}</Headline>
+        <Paragraph>{textKeys.STARTPAGE_TRAVEL_BODY()}</Paragraph>
+        <ProceedButton
+          size="lg"
+          to={(language ? '/' + language : '') + '/new-member/travel'}
+        >
+          {textKeys.STARTPAGE_TRAVEL_BUTTON()}
+        </ProceedButton>
+      </Card>
+    </>
   )
 }
