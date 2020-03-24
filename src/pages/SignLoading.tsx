@@ -20,7 +20,6 @@ export const SignLoading: React.FC = () => {
       <div>
         <Spinner />
       </div>
-      {/* TODO have some kind of "move forward" button? */}
     </SpinnerWrapper>
   )
 }

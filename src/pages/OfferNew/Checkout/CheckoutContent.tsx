@@ -87,7 +87,7 @@ export const CheckoutContent: React.FC<Props> = ({
   const monthlyCostDeduction = isMonthlyCostDeduction(
     redeemedCampaignsQuery.data?.redeemedCampaigns ?? [],
   )
-  const [fakeLoading, setFakeLoading] = React.useState(false) // TODO should these loading states be propagated up to sign button or no?
+  const [fakeLoading, setFakeLoading] = React.useState(false)
   const [reallyLoading, setReallyLoading] = React.useState(false)
   const [editQuote] = useEditQuoteMutation()
 

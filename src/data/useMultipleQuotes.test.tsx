@@ -54,6 +54,7 @@ const quoteMock: CompleteQuote = {
   price: { __typename: 'MonetaryAmountV2', amount: '9650.42', currency: 'SEK' },
   birthDate: '2012-12-12',
   expiresAt: '1942-12-21',
+  insurableLimits: [],
   insuranceCost: {
     freeUntil: null,
     monthlyDiscount: {

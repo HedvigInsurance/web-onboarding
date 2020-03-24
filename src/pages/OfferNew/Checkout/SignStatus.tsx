@@ -26,7 +26,7 @@ const BANK_ID_STATUS_TEXT_KEYS: Record<string, string> = {
 
 export const useSignState = (): [() => void, GraphQLSignStatus | null] => {
   const [executeSignStatusQuery, signStatusQuery] = useSignStatusLazyQuery({
-    pollInterval: 1000, // TODO replace with subscription? or not really?
+    pollInterval: 1000,
   })
 
   return [executeSignStatusQuery, signStatusQuery?.data?.signStatus ?? null]

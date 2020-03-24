@@ -13,6 +13,8 @@ export type Scalars = {
   LocalDate: any
   Object: any
   URL: any
+  /** A String-representation of Adyen's PaymentMethodsResponse */
+  PaymentMethodsResponse: any
   /** An ISO-8601 String representation of a `java.time.Instant`, e.g. 2019-07-03T19:07:38.494081Z */
   Instant: any
   JSONString: any
@@ -21,6 +23,10 @@ export type Scalars = {
   Upload: any
   TimeStamp: any
   JSONObject: any
+  /** A String-representation of Adyen's payments request */
+  PaymentsRequest: any
+  /** A String-representation of Adyen's payments respone */
+  PaymentsResponse: any
   /**
    * The `Long` scalar type represents non-fractional signed whole numeric values.
    * Long can represent values between -(2^63) and 2^63 - 1.
@@ -33,10 +39,24 @@ export type AcceptedReferral = {
   quantity?: Maybe<Scalars['Int']>
 }
 
+export type ActivePaymentMethodsResponse = {
+  __typename?: 'ActivePaymentMethodsResponse'
+  paymentMethodsResponse: Scalars['PaymentMethodsResponse']
+}
+
 export type ActiveReferral = {
   __typename?: 'ActiveReferral'
   name?: Maybe<Scalars['String']>
   discount: MonetaryAmountV2
+}
+
+export type AdditionalPaymentsDetailsRequest = {
+  paymentsRequest: Scalars['PaymentsRequest']
+}
+
+export type AdditionalPaymentsDetailsResponse = {
+  __typename?: 'AdditionalPaymentsDetailsResponse'
+  paymentsResponse?: Maybe<Scalars['PaymentsResponse']>
 }
 
 export type AddPhotoToKeyGearItemInput = {
@@ -643,6 +663,11 @@ export enum AuthState {
   Success = 'SUCCESS',
 }
 
+export type AvailablePaymentMethodsResponse = {
+  __typename?: 'AvailablePaymentMethodsResponse'
+  paymentMethodsResponse: Scalars['PaymentMethodsResponse']
+}
+
 export type Avatar = {
   __typename?: 'Avatar'
   name: Scalars['String']
@@ -883,9 +908,14 @@ export type CompleteQuote = {
   dataCollectionId?: Maybe<Scalars['ID']>
   typeOfContract: TypeOfContract
   perils: Array<PerilV2>
+  insurableLimits: Array<InsurableLimit>
 }
 
 export type CompleteQuotePerilsArgs = {
+  locale: Locale
+}
+
+export type CompleteQuoteInsurableLimitsArgs = {
   locale: Locale
 }
 
@@ -914,9 +944,14 @@ export type Contract = {
   upcomingRenewal?: Maybe<UpcomingRenewal>
   createdAt: Scalars['Instant']
   perils: Array<PerilV2>
+  insurableLimits: Array<InsurableLimit>
 }
 
 export type ContractPerilsArgs = {
+  locale: Locale
+}
+
+export type ContractInsurableLimitsArgs = {
   locale: Locale
 }
 
@@ -3257,7 +3292,12 @@ export type InProgressReferral = {
   name?: Maybe<Scalars['String']>
 }
 
-export type InsurableLimit = SwedishInsurableLimit | NorwegianInsurableLimit
+export type InsurableLimit = {
+  __typename?: 'InsurableLimit'
+  label: Scalars['String']
+  limit: Scalars['String']
+  description: Scalars['String']
+}
 
 export type Insurance = {
   __typename?: 'Insurance'
@@ -5200,6 +5240,10 @@ export type Mutation = {
   addDontPanicChatMessage: DontPanicChatMessage
   registerDirectDebit: DirectDebitResponse
   cancelDirectDebitRequest: CancelDirectDebitStatus
+  /** Tokenize payment details per member in order to be used in future and returns the status */
+  tokenizePaymentDetails?: Maybe<TokenizationResponse>
+  /** Submite additional payment details */
+  submitAdditionalPaymentDetails: AdditionalPaymentsDetailsResponse
   /** Will be called from the client when 1) redeem manually a code, 2) click the link  --Fails if the code is invalid?-- */
   redeemCode: RedemedCodeResult
   removeDiscountCode: RedemedCodeResult
@@ -5328,6 +5372,14 @@ export type MutationAddDontPanicChatMessageArgs = {
 
 export type MutationRegisterDirectDebitArgs = {
   clientContext?: Maybe<RegisterDirectDebitClientContext>
+}
+
+export type MutationTokenizePaymentDetailsArgs = {
+  req?: Maybe<TokenizationRequest>
+}
+
+export type MutationSubmitAdditionalPaymentDetailsArgs = {
+  req?: Maybe<AdditionalPaymentsDetailsRequest>
 }
 
 export type MutationRedeemCodeArgs = {
@@ -5472,13 +5524,6 @@ export type NorwegianHomeContentsDetails = {
 export enum NorwegianHomeContentsType {
   Rent = 'RENT',
   Own = 'OWN',
-}
-
-export type NorwegianInsurableLimit = {
-  __typename?: 'NorwegianInsurableLimit'
-  maxInsurableAmountContents: MonetaryAmountV2
-  deductible: MonetaryAmountV2
-  personalAccidentLimit: MonetaryAmountV2
 }
 
 export type NorwegianTravelAgreement = AgreementCore & {
@@ -5652,6 +5697,10 @@ export type Query = {
   nextChargeDate?: Maybe<Scalars['LocalDate']>
   registerAccountProcessingStatus: RegisterAccountProcessingStatus
   directDebitStatus: DirectDebitStatus
+  /** Returns all the available payments methods before the client requests a tokenization */
+  availablePaymentMethods: AvailablePaymentMethodsResponse
+  /** Returns the active payment method which the member chose to tokenize */
+  activePaymentMethods: ActivePaymentMethodsResponse
   /** Returns campaign associated with code */
   campaign: Campaign
   /** Returns information about the authed member's referralCampaign and referrals */
@@ -5681,7 +5730,7 @@ export type Query = {
   perils: Array<PerilV2>
   insuranceTerms: Array<InsuranceTerm>
   insuranceCompanies: InsuranceCompanyType
-  insurableLimits: InsurableLimit
+  insurableLimits: Array<InsurableLimit>
   embarkStory?: Maybe<EmbarkStory>
   /** Used */
   keyGearItems: Array<KeyGearItem>
@@ -6029,14 +6078,6 @@ export type SwedishHouseQuoteDetails = {
   isSubleted: Scalars['Boolean']
 }
 
-export type SwedishInsurableLimit = {
-  __typename?: 'SwedishInsurableLimit'
-  maxInsurableAmountBuilding: Scalars['String']
-  maxInsurableAmountContents: MonetaryAmountV2
-  deductible: MonetaryAmountV2
-  maxTravelDurationDays: Scalars['String']
-}
-
 export type TerminatedReferral = {
   __typename?: 'TerminatedReferral'
   name?: Maybe<Scalars['String']>
@@ -6079,6 +6120,15 @@ export type TitleAndBulletPoints = {
   buttonTitle: Scalars['String']
   claimFirstMessage: Scalars['String']
   bulletPoints: Array<BulletPoints>
+}
+
+export type TokenizationRequest = {
+  paymentsRequest: Scalars['PaymentsRequest']
+}
+
+export type TokenizationResponse = {
+  __typename?: 'TokenizationResponse'
+  paymentsResponse?: Maybe<Scalars['PaymentsResponse']>
 }
 
 export type Translation = Node & {
