@@ -90,8 +90,7 @@ export const useTrack = ({ firstQuote, email, signState }: TrackProps) => {
     )
 
     if (
-      redeemedCampaigns !== null &&
-      redeemedCampaigns.length !== 0 &&
+      redeemedCampaigns?.length > 0 &&
       redeemedCampaigns[0].code.toLowerCase() === 'studentkortet'
     ) {
       trackStudentkortet(memberId, firstQuote.insuranceCost.monthlyGross.amount)
