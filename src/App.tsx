@@ -4,6 +4,7 @@ import { Provider } from 'constate'
 import * as React from 'react'
 import { hot } from 'react-hot-loader'
 import { Route, Switch } from 'react-router-dom'
+import { AppTokenRetrival } from './AppTokenRetrival'
 import { reactPageRoutes } from './routes'
 import { GlobalCss } from './utils/globalStyles'
 import {
@@ -26,17 +27,19 @@ export const App: React.ComponentType<StorageState> = ({ session }) => (
             devtools={process.env.NODE_ENV !== 'production'}
           >
             <StorageContext.Provider value={{ session }}>
-              <Switch>
-                {reactPageRoutes.map(({ path, exact, Component, render }) => (
-                  <Route
-                    key={path}
-                    path={path}
-                    exact={exact}
-                    component={Component}
-                    render={render}
-                  />
-                ))}
-              </Switch>
+              <AppTokenRetrival>
+                <Switch>
+                  {reactPageRoutes.map(({ path, exact, Component, render }) => (
+                    <Route
+                      key={path}
+                      path={path}
+                      exact={exact}
+                      component={Component}
+                      render={render}
+                    />
+                  ))}
+                </Switch>
+              </AppTokenRetrival>
             </StorageContext.Provider>
           </Provider>
         </TranslationsProvider>
