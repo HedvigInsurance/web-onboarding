@@ -30,6 +30,20 @@ query Quote($id: ID!) {
           currency
         }
       }
+      perils(locale: sv_SE) {
+        title
+        description
+        covered
+        exceptions
+        info
+        icon {
+          variants {
+            light {
+              svgUrl
+            }
+          }
+        }
+      }
       quoteDetails {
         ... on SwedishApartmentQuoteDetails {
           street

@@ -25,6 +25,10 @@ export type Scalars = {
   JSONObject: any
   /** A String-representation of Adyen's payments request */
   PaymentsRequest: any
+  /** A String-representation of Adyen's checkout payments action */
+  CheckoutPaymentsAction: any
+  /** A String-representation of Adyen's payments details request */
+  PaymentsDetailsRequest: any
   /** A String-representation of Adyen's payments respone */
   PaymentsResponse: any
   /**
@@ -39,9 +43,22 @@ export type AcceptedReferral = {
   quantity?: Maybe<Scalars['Int']>
 }
 
+/** The contract has an inception date in the future and a termination date in the future */
+export type ActiveInFutureAndTerminatedInFutureStatus = {
+  __typename?: 'ActiveInFutureAndTerminatedInFutureStatus'
+  futureInception?: Maybe<Scalars['LocalDate']>
+  futureTermination?: Maybe<Scalars['LocalDate']>
+}
+
+/** The contract has an inception date set in the future */
+export type ActiveInFutureStatus = {
+  __typename?: 'ActiveInFutureStatus'
+  futureInception?: Maybe<Scalars['LocalDate']>
+}
+
 export type ActivePaymentMethodsResponse = {
   __typename?: 'ActivePaymentMethodsResponse'
-  paymentMethodsResponse: Scalars['PaymentMethodsResponse']
+  storedPaymentMethodsDetails: StoredPaymentMethodsDetails
 }
 
 export type ActiveReferral = {
@@ -50,8 +67,14 @@ export type ActiveReferral = {
   discount: MonetaryAmountV2
 }
 
+/** The contract has an inception date set today or in the past without a termination date set */
+export type ActiveStatus = {
+  __typename?: 'ActiveStatus'
+  pastInception?: Maybe<Scalars['LocalDate']>
+}
+
 export type AdditionalPaymentsDetailsRequest = {
-  paymentsRequest: Scalars['PaymentsRequest']
+  paymentsDetailsRequest: Scalars['PaymentsDetailsRequest']
 }
 
 export type AdditionalPaymentsDetailsResponse = {
@@ -728,7 +751,7 @@ export type BundledQuote = {
   price: MonetaryAmountV2
   firstName: Scalars['String']
   lastName: Scalars['String']
-  ssn: Scalars['String']
+  ssn?: Maybe<Scalars['String']>
   birthDate: Scalars['LocalDate']
   quoteDetails: QuoteDetails
   startDate?: Maybe<Scalars['LocalDate']>
@@ -898,7 +921,7 @@ export type CompleteQuote = {
   insuranceCost: InsuranceCost
   firstName: Scalars['String']
   lastName: Scalars['String']
-  ssn: Scalars['String']
+  ssn?: Maybe<Scalars['String']>
   birthDate: Scalars['LocalDate']
   details: CompleteQuoteDetails
   quoteDetails: QuoteDetails
@@ -909,6 +932,7 @@ export type CompleteQuote = {
   typeOfContract: TypeOfContract
   perils: Array<PerilV2>
   insurableLimits: Array<InsurableLimit>
+  termsAndConditions: InsuranceTerm
 }
 
 export type CompleteQuotePerilsArgs = {
@@ -916,6 +940,10 @@ export type CompleteQuotePerilsArgs = {
 }
 
 export type CompleteQuoteInsurableLimitsArgs = {
+  locale: Locale
+}
+
+export type CompleteQuoteTermsAndConditionsArgs = {
   locale: Locale
 }
 
@@ -945,6 +973,7 @@ export type Contract = {
   createdAt: Scalars['Instant']
   perils: Array<PerilV2>
   insurableLimits: Array<InsurableLimit>
+  termsAndConditions: InsuranceTerm
 }
 
 export type ContractPerilsArgs = {
@@ -955,20 +984,18 @@ export type ContractInsurableLimitsArgs = {
   locale: Locale
 }
 
-export enum ContractStatus {
-  /**
-   * A contract that has been signed but do not have any active agreement and is
-   * not terminated, i.e. will be active or terminated
-   */
-  Pending = 'PENDING',
-  /**
-   * A contract timeline that has at least one active agreement at some point and
-   * is not terminated, i.e. active today or in the future without a termination date set
-   */
-  Active = 'ACTIVE',
-  /** A contract that has a termination date set (either in the past, today or the future), OBS: have an active agreement today */
-  Terminated = 'TERMINATED',
+export type ContractTermsAndConditionsArgs = {
+  locale: Locale
 }
+
+export type ContractStatus =
+  | PendingStatus
+  | ActiveInFutureStatus
+  | ActiveStatus
+  | ActiveInFutureAndTerminatedInFutureStatus
+  | TerminatedInFutureStatus
+  | TerminatedTodayStatus
+  | TerminatedStatus
 
 export type CoreMlModel = Node & {
   __typename?: 'CoreMLModel'
@@ -1867,22 +1894,28 @@ export type EmbarkRedirect =
 export type EmbarkRedirectBinaryExpression = {
   __typename?: 'EmbarkRedirectBinaryExpression'
   type: EmbarkExpressionTypeBinary
+  to: Scalars['String']
   key: Scalars['String']
   value: Scalars['String']
-  to: Scalars['String']
+  passedExpressionKey?: Maybe<Scalars['String']>
+  passedExpressionValue?: Maybe<Scalars['String']>
 }
 
 export type EmbarkRedirectMultipleExpressions = {
   __typename?: 'EmbarkRedirectMultipleExpressions'
-  to: Scalars['String']
   type: EmbarkExpressionTypeMultiple
+  to: Scalars['String']
   subExpressions: Array<EmbarkExpression>
+  passedExpressionKey?: Maybe<Scalars['String']>
+  passedExpressionValue?: Maybe<Scalars['String']>
 }
 
 export type EmbarkRedirectUnaryExpression = {
   __typename?: 'EmbarkRedirectUnaryExpression'
   type: EmbarkExpressionTypeUnary
   to: Scalars['String']
+  passedExpressionKey?: Maybe<Scalars['String']>
+  passedExpressionValue?: Maybe<Scalars['String']>
 }
 
 export type EmbarkResponse = EmbarkGroupedResponse | EmbarkMessage
@@ -5586,6 +5619,12 @@ export type PageInfo = {
   endCursor?: Maybe<Scalars['String']>
 }
 
+/** The contract is neither active or terminated, waiting to have an inception date set */
+export type PendingStatus = {
+  __typename?: 'PendingStatus'
+  pendingSince?: Maybe<Scalars['LocalDate']>
+}
+
 export type PercentageDiscountMonths = {
   __typename?: 'PercentageDiscountMonths'
   percentageDiscount: Scalars['Float']
@@ -5700,7 +5739,7 @@ export type Query = {
   /** Returns all the available payments methods before the client requests a tokenization */
   availablePaymentMethods: AvailablePaymentMethodsResponse
   /** Returns the active payment method which the member chose to tokenize */
-  activePaymentMethods: ActivePaymentMethodsResponse
+  activePaymentMethods?: Maybe<ActivePaymentMethodsResponse>
   /** Returns campaign associated with code */
   campaign: Campaign
   /** Returns information about the authed member's referralCampaign and referrals */
@@ -5729,6 +5768,7 @@ export type Query = {
   welcome: Array<Welcome>
   perils: Array<PerilV2>
   insuranceTerms: Array<InsuranceTerm>
+  termsAndConditions: InsuranceTerm
   insuranceCompanies: InsuranceCompanyType
   insurableLimits: Array<InsurableLimit>
   embarkStory?: Maybe<EmbarkStory>
@@ -5844,6 +5884,11 @@ export type QueryPerilsArgs = {
 }
 
 export type QueryInsuranceTermsArgs = {
+  contractType: TypeOfContract
+  locale: Locale
+}
+
+export type QueryTermsAndConditionsArgs = {
   contractType: TypeOfContract
   locale: Locale
 }
@@ -5989,6 +6034,17 @@ export enum Status {
   Archived = 'ARCHIVED',
 }
 
+export type StoredPaymentMethodsDetails = {
+  __typename?: 'StoredPaymentMethodsDetails'
+  id: Scalars['String']
+  cardName?: Maybe<Scalars['String']>
+  brand?: Maybe<Scalars['String']>
+  lastFourDigits: Scalars['String']
+  expiryMonth: Scalars['String']
+  expiryYear: Scalars['String']
+  holderName?: Maybe<Scalars['String']>
+}
+
 export type Subscription = {
   __typename?: 'Subscription'
   offer?: Maybe<OfferEvent>
@@ -6078,9 +6134,30 @@ export type SwedishHouseQuoteDetails = {
   isSubleted: Scalars['Boolean']
 }
 
+/** The contract is active today but will be terminated in the future, i.e. is active today but will not be in the future */
+export type TerminatedInFutureStatus = {
+  __typename?: 'TerminatedInFutureStatus'
+  futureTermination?: Maybe<Scalars['LocalDate']>
+}
+
 export type TerminatedReferral = {
   __typename?: 'TerminatedReferral'
   name?: Maybe<Scalars['String']>
+}
+
+/**
+ * The contract has been terminated in the past, terminated on the same date as its
+ * start date or has never been activated and has a termination date set
+ */
+export type TerminatedStatus = {
+  __typename?: 'TerminatedStatus'
+  termination?: Maybe<Scalars['LocalDate']>
+}
+
+/** The contract has been active and has its termination date set to today, i.e. today is the last day the contract is active */
+export type TerminatedTodayStatus = {
+  __typename?: 'TerminatedTodayStatus'
+  today?: Maybe<Scalars['LocalDate']>
 }
 
 export enum TextContentType {
@@ -6126,9 +6203,18 @@ export type TokenizationRequest = {
   paymentsRequest: Scalars['PaymentsRequest']
 }
 
-export type TokenizationResponse = {
-  __typename?: 'TokenizationResponse'
-  paymentsResponse?: Maybe<Scalars['PaymentsResponse']>
+export type TokenizationResponse =
+  | TokenizationResponseFinished
+  | TokenizationResponseAction
+
+export type TokenizationResponseAction = {
+  __typename?: 'TokenizationResponseAction'
+  action: Scalars['CheckoutPaymentsAction']
+}
+
+export type TokenizationResponseFinished = {
+  __typename?: 'TokenizationResponseFinished'
+  resultCode: Scalars['String']
 }
 
 export type Translation = Node & {
@@ -7128,6 +7214,21 @@ export type QuoteQuery = { __typename?: 'Query' } & {
                 'amount' | 'currency'
               >
             }
+          perils: Array<
+            { __typename?: 'PerilV2' } & Pick<
+              PerilV2,
+              'title' | 'description' | 'covered' | 'exceptions' | 'info'
+            > & {
+                icon: { __typename?: 'Icon' } & {
+                  variants: { __typename?: 'IconVariants' } & {
+                    light: { __typename?: 'IconVariant' } & Pick<
+                      IconVariant,
+                      'svgUrl'
+                    >
+                  }
+                }
+              }
+          >
           quoteDetails:
             | ({ __typename?: 'SwedishApartmentQuoteDetails' } & Pick<
                 SwedishApartmentQuoteDetails,
@@ -7898,6 +7999,20 @@ export const QuoteDocument = gql`
           monthlyNet {
             amount
             currency
+          }
+        }
+        perils(locale: sv_SE) {
+          title
+          description
+          covered
+          exceptions
+          info
+          icon {
+            variants {
+              light {
+                svgUrl
+              }
+            }
           }
         }
         quoteDetails {
