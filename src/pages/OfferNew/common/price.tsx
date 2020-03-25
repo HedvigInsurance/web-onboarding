@@ -1,7 +1,7 @@
-import { keyframes } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import { MonetaryAmount } from 'containers/types'
+import { Spinner } from 'new-components/utils'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 
@@ -89,19 +89,8 @@ const SpinnerWrapper = styled.div`
   display: flex;
   align-items: center;
   height: 3.5rem;
-`
-const spin = keyframes`
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-`
-const Spinner = styled.div`
-  width: 2rem;
-  height: 2rem;
-  flex: 1;
-  border: 2px solid ${colorsV2.darkgray};
-  border-top-color: transparent;
-  border-radius: 4rem;
-  animation: ${spin} 500ms linear infinite;
+  font-size: 2rem;
+  color: ${colorsV2.darkgray};
 `
 
 export const Price: React.FC<{
