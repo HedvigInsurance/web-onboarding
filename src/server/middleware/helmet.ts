@@ -54,6 +54,7 @@ const defaultSrc = [
   'cdn.mxpnl.com',
   'https://api-js.mixpanel.com',
   'oidc-ui-current.bankidnorge.no',
+  'oidc-current.bankidapis.no',
   'bankidnorge.no',
   '*.zignsec.com',
   GIRAFFE_ENDPOINT,
