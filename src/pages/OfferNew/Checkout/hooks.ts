@@ -9,10 +9,10 @@ import { InsuranceType } from 'utils/insuranceDomainUtils'
 import { adtraction, trackStudentkortet } from 'utils/tracking'
 
 export enum VisibilityState {
-  CLOSED,
-  CLOSING,
-  OPENING,
-  OPEN,
+  CLOSED = 'CLOSED',
+  CLOSING = 'CLOSING',
+  OPENING = 'OPENING',
+  OPEN = 'OPEN',
 }
 
 export const useScrollLock = (
@@ -52,7 +52,7 @@ export const useScrollLock = (
       window.removeEventListener('wheel', listener)
       window.removeEventListener('touchmove', listener)
     }
-  }, [])
+  }, [visibilityState])
 
 interface TrackProps {
   email: string
