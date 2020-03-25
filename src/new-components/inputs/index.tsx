@@ -152,6 +152,8 @@ export interface TextInputProps extends CoreInputFieldProps {
 }
 
 const StyledRawInput = styled.input`
+  appearance: none;
+  -moz-appearance: textfield;
   background: none;
   border: none;
   font-size: 1.125rem;
@@ -173,16 +175,16 @@ export const RawInputField: React.FC<React.InputHTMLAttributes<
 > & {
   label: string
   errors?: string
-}> = ({ errors, label, ...props }) => (
+}> = ({ errors, label, className, ...props }) => (
   <>
-    <Wrapper errors={errors}>
+    <Wrapper errors={errors} className={className}>
       <TextWrapper>
         <Label htmlFor={props.id}>{label}</Label>
         <StyledRawInput {...props} />
       </TextWrapper>
       <SymbolWrapper>{errors && <WarningIcon />}</SymbolWrapper>
     </Wrapper>
-    <ErrorText>{errors}</ErrorText>
+    {errors && <ErrorText>{errors}</ErrorText>}
   </>
 )
 

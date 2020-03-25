@@ -27,7 +27,7 @@ interface Props {
 
 const RowButton = styled.button<{ datePickerOpen: boolean }>`
   width: 100%;
-  padding: 0.8rem 1.2rem;
+  padding: 0.8rem 1.5rem;
   display: flex;
   justify-content: space-between;
   border: 1px solid ${colorsV2.lightgray};

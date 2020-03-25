@@ -1,0 +1,14 @@
+mutation SignQuotes($quoteIds: [ID!]!) {
+  signQuotes(input: { quoteIds: $quoteIds }) {
+    __typename
+    ... on FailedToStartSign {
+      errorMessage
+    }
+    ... on SwedishBankIdSession {
+      autoStartToken
+    }
+    ... on NorwegianBankIdSession {
+      redirectUrl
+    }
+  }
+}

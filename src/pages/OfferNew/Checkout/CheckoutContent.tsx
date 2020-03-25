@@ -1,6 +1,10 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand/dist'
-import { CompleteQuote, useRedeemedCampaignsQuery } from 'data/graphql'
+import {
+  CompleteQuote,
+  useEditQuoteMutation,
+  useRedeemedCampaignsQuery,
+} from 'data/graphql'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { Price } from '../components'
@@ -19,7 +23,7 @@ const Section = styled('div')`
   width: 100%;
 `
 
-const Title = styled('h1')`
+export const Title = styled('h1')`
   font-size: 3.5rem;
   line-height: 1;
   color: ${colorsV2.black};
@@ -68,12 +72,14 @@ const InsuranceType = styled('div')`
 interface Props extends WithEmailForm {
   firstQuote: CompleteQuote
   refetch: () => Promise<void>
+  onSsnUpdate: (onCompletion: Promise<void>) => void
 }
 
 export const CheckoutContent: React.FC<Props> = ({
   firstQuote,
   email,
   onEmailChange,
+  onSsnUpdate,
   refetch,
 }) => {
   const textKeys = useTextKeys()
@@ -81,6 +87,9 @@ export const CheckoutContent: React.FC<Props> = ({
   const monthlyCostDeduction = isMonthlyCostDeduction(
     redeemedCampaignsQuery.data?.redeemedCampaigns ?? [],
   )
+  const [fakeLoading, setFakeLoading] = React.useState(false)
+  const [reallyLoading, setReallyLoading] = React.useState(false)
+  const [editQuote] = useEditQuoteMutation()
 
   return (
     <>
@@ -95,6 +104,7 @@ export const CheckoutContent: React.FC<Props> = ({
           </div>
           <div>
             <Price
+              loading={fakeLoading || reallyLoading}
               monthlyGross={firstQuote.insuranceCost.monthlyGross}
               monthlyNet={firstQuote.insuranceCost.monthlyNet}
               monthlyCostDeduction={monthlyCostDeduction}
@@ -103,7 +113,29 @@ export const CheckoutContent: React.FC<Props> = ({
           </div>
         </Excerpt>
 
-        <UserDetailsForm email={email} onEmailChange={onEmailChange} />
+        <UserDetailsForm
+          email={email}
+          onEmailChange={onEmailChange}
+          ssn={firstQuote.ssn ?? ''}
+          onSsnChange={(ssn) => {
+            const onCompletion = new Promise<void>((resolve, reject) => {
+              setFakeLoading(true)
+              setReallyLoading(true)
+              window.setTimeout(() => setFakeLoading(false), 1000)
+              // TODO we somehow need to compare the birth date to the ssn to check so they match. In case they don't, we should warn (as they might get a different price)
+              editQuote({ variables: { input: { id: firstQuote.id, ssn } } })
+                .then(() => refetch())
+                .then(() => setReallyLoading(false))
+                .then(() => resolve())
+                .catch((e) => {
+                  setReallyLoading(false)
+                  reject(e)
+                  throw e
+                })
+            })
+            onSsnUpdate(onCompletion)
+          }}
+        />
 
         <StartDateWrapper>
           <StartDate

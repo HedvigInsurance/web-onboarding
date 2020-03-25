@@ -3,7 +3,7 @@ import {
   InMemoryCache,
   IntrospectionFragmentMatcher,
 } from 'apollo-cache-inmemory'
-import { ApartmentType, CompleteQuote } from 'data/graphql'
+import { ApartmentType, CompleteQuote, TypeOfContract } from 'data/graphql'
 import { mount } from 'enzyme'
 import * as React from 'react'
 import { act } from 'react-dom/test-utils'
@@ -54,6 +54,7 @@ const quoteMock: CompleteQuote = {
   price: { __typename: 'MonetaryAmountV2', amount: '9650.42', currency: 'SEK' },
   birthDate: '2012-12-12',
   expiresAt: '1942-12-21',
+  insurableLimits: [],
   insuranceCost: {
     freeUntil: null,
     monthlyDiscount: {
@@ -89,6 +90,8 @@ const quoteMock: CompleteQuote = {
     zipCode: '1234',
     __typename: 'CompleteApartmentQuoteDetails',
   },
+  typeOfContract: TypeOfContract.NoHomeContentOwn,
+  perils: [],
   __typename: 'CompleteQuote',
 }
 

@@ -1,3 +1,4 @@
+import { SignLoading } from 'pages/SignLoading'
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 import { ConnectPayment } from './pages/ConnectPayment'
@@ -53,6 +54,16 @@ export const reactPageRoutes: ReactPageRoute[] = [
   {
     path: LOCALE_PATH_PATTERN + '/new-member/(offer|sign)',
     Component: OfferNew,
+    exact: true,
+  },
+  {
+    path: LOCALE_PATH_PATTERN + '/new-member/sign/success',
+    Component: SignLoading,
+    exact: true,
+  },
+  {
+    path: LOCALE_PATH_PATTERN + '/new-member/sign/fail',
+    Component: SignLoading,
     exact: true,
   },
   {
