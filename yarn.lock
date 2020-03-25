@@ -1999,10 +1999,10 @@
     webpack "4.19.1"
     webpack-dev-server "3.1.14"
 
-"@hedviginsurance/embark@1.0.62":
-  version "1.0.62"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-1.0.62.tgz#05a7eee6388c365e75c0ab76ef11b0d93a75abb7"
-  integrity sha512-nfcQsm3KWrT+bRpv3QjRSsiphboQ8FyglRiRFwhj4G+vUpE8mxoiiSVarbq2ykPbzAJYYk/3gmEu/RnK1xV8TQ==
+"@hedviginsurance/embark@^1.0.63":
+  version "1.0.63"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-1.0.63.tgz#f9ae5d1c785485acfe385bbac2abc198b09a0dda"
+  integrity sha512-GbyTsWH0Sw/GEgMMdFu5hN437GAz5g/g4dVMeEVmDFJyTqWZagkcUOMNnxnLLfSbZiuJl8cwPx+ufC+g4Ij/ZQ==
   dependencies:
     "@babel/plugin-proposal-optional-chaining" "^7.8.3"
     "@emotion/core" "^10.0.21"
