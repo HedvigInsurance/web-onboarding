@@ -300,10 +300,25 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                     }}
                     initialStore={initialStore}
                     onStoreChange={(store) => {
+                      const storeKey = `embark-store-${encodeURIComponent(
+                        props.name!,
+                      )}`
                       window.sessionStorage.setItem(
-                        `embark-store-${encodeURIComponent(props.name!)}`,
+                        storeKey,
                         JSON.stringify(store),
                       )
+                      if (store.quoteId) {
+                        const uniqueQuoteIds = new Set([
+                          ...(storageState.session.getSession()?.quoteIds ??
+                            []),
+                          store.quoteId,
+                        ])
+
+                        storageState.session.setSession({
+                          ...storageState.session.getSession(),
+                          quoteIds: Array.from(uniqueQuoteIds),
+                        })
+                      }
                     }}
                   >
                     <Embark
