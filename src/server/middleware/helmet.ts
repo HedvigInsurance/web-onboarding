@@ -53,6 +53,9 @@ const defaultSrc = [
   'https://heapanalytics.com',
   'cdn.mxpnl.com',
   'https://api-js.mixpanel.com',
+  'oidc-ui-current.bankidnorge.no',
+  'bankidnorge.no',
+  '*.zignsec.com',
   GIRAFFE_ENDPOINT,
   GIRAFFE_WS_ENDPOINT,
 ]
