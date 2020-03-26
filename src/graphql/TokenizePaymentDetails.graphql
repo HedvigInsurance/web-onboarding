@@ -1,5 +1,5 @@
-mutation TokenizePaymentDetails($paymentsRequest: TokenizationRequest!) {
-  tokenizePaymentDetails(req: $paymentsRequest) {
+mutation TokenizePaymentDetails($paymentsRequest: PaymentsRequest!) {
+  tokenizePaymentDetails(req: { paymentsRequest: $paymentsRequest }) {
     ... on TokenizationResponseAction {
       action
     }

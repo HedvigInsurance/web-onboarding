@@ -14,7 +14,6 @@ import {
   useTokenizePaymentDetailsMutation,
 } from 'data/graphql'
 import { match } from 'matchly'
-import { Spinner } from 'new-components/utils'
 import * as React from 'react'
 import { useHistory } from 'react-router'
 import { SpinnerWrapper } from './Spinner'
