@@ -1,4 +1,4 @@
-query Quote($id: ID!) {
+query Quote($id: ID!, $perilsLocale: Locale!) {
   quote(id: $id) {
     ... on CompleteQuote {
       id
@@ -30,7 +30,7 @@ query Quote($id: ID!) {
           currency
         }
       }
-      perils(locale: sv_SE) {
+      perils(locale: $perilsLocale) {
         title
         description
         covered

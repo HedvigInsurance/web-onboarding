@@ -1,4 +1,5 @@
 import {
+  getLocaleIsoCode,
   Market,
   useCurrentLocale,
   useMarket,
@@ -36,11 +37,13 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
 export const OfferNew: React.FC = () => {
   const storage = useStorage()
   const quoteIds = storage.session.getSession()?.quoteIds ?? []
+  const currentLocale = useCurrentLocale()
+  const localeIsoCode = getLocaleIsoCode(currentLocale)
   const [quotes, { loading: loadingQuotes, refetch }] = useMultipleQuotes(
     quoteIds,
+    localeIsoCode,
   )
   const history = useHistory()
-  const currentLocale = useCurrentLocale()
   const market = useMarket()
   const checkoutMatch = useRouteMatch('/:locale(en|no-en|no)?/new-member/sign')
   const toggleCheckout = createToggleCheckout(history, currentLocale)

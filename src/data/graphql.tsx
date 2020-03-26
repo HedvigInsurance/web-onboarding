@@ -29,8 +29,6 @@ export type Scalars = {
   CheckoutPaymentsAction: any
   /** A String-representation of Adyen's payments details request */
   PaymentsDetailsRequest: any
-  /** A String-representation of Adyen's payments respone */
-  PaymentsResponse: any
   /**
    * The `Long` scalar type represents non-fractional signed whole numeric values.
    * Long can represent values between -(2^63) and 2^63 - 1.
@@ -77,9 +75,18 @@ export type AdditionalPaymentsDetailsRequest = {
   paymentsDetailsRequest: Scalars['PaymentsDetailsRequest']
 }
 
-export type AdditionalPaymentsDetailsResponse = {
-  __typename?: 'AdditionalPaymentsDetailsResponse'
-  paymentsResponse?: Maybe<Scalars['PaymentsResponse']>
+export type AdditionalPaymentsDetailsResponse =
+  | AdditionalPaymentsDetailsResponseFinished
+  | AdditionalPaymentsDetailsResponseAction
+
+export type AdditionalPaymentsDetailsResponseAction = {
+  __typename?: 'AdditionalPaymentsDetailsResponseAction'
+  action: Scalars['CheckoutPaymentsAction']
+}
+
+export type AdditionalPaymentsDetailsResponseFinished = {
+  __typename?: 'AdditionalPaymentsDetailsResponseFinished'
+  resultCode: Scalars['String']
 }
 
 export type AddPhotoToKeyGearItemInput = {
@@ -7177,6 +7184,7 @@ export type MemberOfferQuery = { __typename?: 'Query' } & {
 
 export type QuoteQueryVariables = {
   id: Scalars['ID']
+  perilsLocale: Locale
 }
 
 export type QuoteQuery = { __typename?: 'Query' } & {
@@ -7971,7 +7979,7 @@ export type MemberOfferQueryResult = ApolloReactCommon.QueryResult<
   MemberOfferQueryVariables
 >
 export const QuoteDocument = gql`
-  query Quote($id: ID!) {
+  query Quote($id: ID!, $perilsLocale: Locale!) {
     quote(id: $id) {
       ... on CompleteQuote {
         id
@@ -8001,7 +8009,7 @@ export const QuoteDocument = gql`
             currency
           }
         }
-        perils(locale: sv_SE) {
+        perils(locale: $perilsLocale) {
           title
           description
           covered
@@ -8072,6 +8080,7 @@ export const QuoteDocument = gql`
  * const { data, loading, error } = useQuoteQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      perilsLocale: // value for 'perilsLocale'
  *   },
  * });
  */
