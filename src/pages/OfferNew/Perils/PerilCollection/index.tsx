@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import * as React from 'react'
-import { PerilV2 } from '../types'
+import { PerilV2 } from 'src/data/graphql'
 import { PerilItem } from './PerilItem'
 
 interface Props {

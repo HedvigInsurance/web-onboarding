@@ -2,15 +2,15 @@ import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import hexToRgba from 'hex-to-rgba'
 import * as React from 'react'
+import { PerilV2 } from 'src/data/graphql'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { getIconUrl } from '.'
 import { BackArrow } from '../../../components/icons/BackArrow'
 import { Checkmark } from '../../../components/icons/Checkmark'
 import { Crossmark } from '../../../components/icons/Crossmark'
 import { ForwardArrow } from '../../../components/icons/ForwardArrow'
 import { InfoIcon } from '../../../components/icons/Info'
 import { Modal, ModalProps } from '../../../components/ModalNew'
-import { PerilV2 } from './types'
-import { getIconUrl } from '.'
 
 const TRANSITION_MS = 250
 
