@@ -61,6 +61,8 @@ const defaultSrc = [
   'oidc-current.bankidapis.no',
   'bankidnorge.no',
   '*.zignsec.com',
+  'checkoutshopper-live.adyen.com',
+  'checkoutshopper-test.adyen.com',
   GIRAFFE_ENDPOINT,
   GIRAFFE_WS_ENDPOINT,
   CONTENT_SERVICE_ENDPOINT,
