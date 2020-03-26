@@ -2,10 +2,11 @@ import styled from '@emotion/styled'
 import { colorsV2, fonts, colorsV3 } from '@hedviginsurance/brand'
 import * as React from 'react'
 import { getIconUrl } from '..'
+import { PerilIcon } from '../types'
 
 interface PerilItemProps {
   title: React.ReactNode
-  icon?: any
+  icon: PerilIcon
   onClick: () => void
 }
 
