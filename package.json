@@ -95,6 +95,7 @@
     "cookie-storage": "^3.2.0",
     "core-js": "2",
     "dayzed": "^3.1.0",
+    "dotenv": "^8.2.0",
     "formik": "^2.0.8",
     "framer-motion": "^1.6.15",
     "graphql": "^14.0.2",
