@@ -22,6 +22,7 @@ import {
 import { ServerCookieStorage } from '../utils/storage/ServerCookieStorage'
 import { createServerApolloClient } from './apolloClient'
 import {
+  ADYEN_ORIGIN_KEY,
   ANDROID_MINIMUM_VERSION,
   ANDROID_PACKAGE_NAME,
   APP_STORE_ID,
@@ -91,6 +92,7 @@ const template = (helmetContext: FilledContext['helmet'], cspNonce: string) => `
     window.APPLE_BUNDLE_ID=${JSON.stringify(APPLE_BUNDLE_ID)}
     window.APP_STORE_ID=${JSON.stringify(APP_STORE_ID)}
     window.IOS_MINIMUM_VERSION=${JSON.stringify(IOS_MINIMUM_VERSION)}
+    window.ADYEN_ORIGIN_KEY=${JSON.stringify(ADYEN_ORIGIN_KEY)}
   </script>
   <script src="${scriptLocation}"></script>
 </body>
