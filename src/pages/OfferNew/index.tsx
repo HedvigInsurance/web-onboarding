@@ -84,7 +84,10 @@ export const OfferNew: React.FC = () => {
             />
           )}
         </TrackAction>
-        <Perils insuranceType={getInsuranceType(firstQuote)} />
+        <Perils
+          insuranceType={getInsuranceType(firstQuote)}
+          perils={firstQuote.perils}
+        />
         {market === Market.Se && (
           <Compare currentInsurer={firstQuote.currentInsurer || undefined} />
         )}

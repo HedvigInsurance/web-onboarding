@@ -9,12 +9,13 @@ import { Crossmark } from '../../../components/icons/Crossmark'
 import { ForwardArrow } from '../../../components/icons/ForwardArrow'
 import { InfoIcon } from '../../../components/icons/Info'
 import { Modal, ModalProps } from '../../../components/ModalNew'
-import { Peril } from './types'
+import { PerilV2 } from './types'
+import { getIconUrl } from '.'
 
 const TRANSITION_MS = 250
 
 interface PerilModalProps {
-  perils: ReadonlyArray<Peril>
+  perils: ReadonlyArray<PerilV2>
   currentPerilIndex: number
   setCurrentPeril: (perilIndex: number) => void
 }
@@ -351,7 +352,7 @@ export const PerilModal: React.FC<PerilModalProps & ModalProps> = (props) => {
                   props.setCurrentPeril(index % tripledPerils.length)
                 }
               >
-                {peril.icon}
+                <img src={getIconUrl(peril.icon.variants.light.svgUrl)} />
                 <PickerItemLabel>{peril.title}</PickerItemLabel>
               </PickerItem>
             ))}
