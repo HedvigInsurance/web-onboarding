@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import * as React from 'react'
 import { PerilV2 } from 'src/data/graphql'
+import { getGiraffeEndpoint } from 'utils/apolloClient'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { InsuranceType } from 'utils/insuranceDomainUtils'
 import {
@@ -27,8 +28,15 @@ const Wrapper = styled.div`
   background-color: ${colorsV2.offwhite};
   display: flex;
 `
-export const getIconUrl = (iconPath: string) =>
-  `https://graphql.dev.hedvigit.com${iconPath}` // TODO where should we get the base url from?
+export const getIconUrl = (iconPath: string) => {
+  const giraffeEndpoint = getGiraffeEndpoint(
+    'GIRAFFE_ENDPOINT',
+    'https://graphql.dev.hedvigit.com/graphql',
+  )
+  const match = /\/([a-z0-9_-]*[\/]?)$/
+  const baseUrl = giraffeEndpoint.replace(match, '')
+  return `${baseUrl}${iconPath}`
+}
 
 export const Perils: React.FC<Props> = ({ insuranceType, perils }) => {
   const textKeys = useTextKeys()
