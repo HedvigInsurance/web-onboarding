@@ -1,8 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
-import * as React from 'react'
 import { PerilV2 } from 'data/graphql'
-import { getGiraffeEndpoint } from 'utils/apolloClient'
+import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { InsuranceType } from 'utils/insuranceDomainUtils'
 import {
@@ -29,13 +28,7 @@ const Wrapper = styled.div`
   display: flex;
 `
 export const getIconUrl = (iconPath: string) => {
-  const giraffeEndpoint = getGiraffeEndpoint(
-    'GIRAFFE_ENDPOINT',
-    'https://graphql.dev.hedvigit.com/graphql',
-  )
-  const match = /\/([a-z0-9_-]*[\/]?)$/
-  const baseUrl = giraffeEndpoint.replace(match, '')
-  return `${baseUrl}${iconPath}`
+  return `${(window as any).CONTENT_SERVICE_ENDPOINT}${iconPath}`
 }
 
 export const Perils: React.FC<Props> = ({ insuranceType, perils }) => {

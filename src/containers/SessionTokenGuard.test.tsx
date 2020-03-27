@@ -7,7 +7,7 @@ import { createSession, SESSION_KEY } from 'utils/sessionStorage'
 import { MockStorage } from 'utils/storage/MockStorage'
 import { SessionTokenGuard } from './SessionTokenGuard'
 
-jest.mock('client/apolloClient', () => ({
+jest.mock('../client/apolloClient', () => ({
   apolloClient: {
     subscriptionClient: { close: jest.fn() },
   },
