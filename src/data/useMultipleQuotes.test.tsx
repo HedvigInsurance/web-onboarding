@@ -112,7 +112,10 @@ it('fetches quote on one quote', async () => {
       cache={new InMemoryCache({ fragmentMatcher })}
       mocks={[
         {
-          request: { query: QuoteDocument, variables: { id: quoteMock.id } },
+          request: {
+            query: QuoteDocument,
+            variables: { id: quoteMock.id, perilsLocale: Locale.SvSe },
+          },
           result: {
             data: {
               quote: quoteMock,
