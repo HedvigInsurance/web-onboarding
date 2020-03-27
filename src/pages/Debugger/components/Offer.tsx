@@ -1,4 +1,8 @@
 import {
+  getLocaleIsoCode,
+  useCurrentLocale,
+} from 'components/utils/CurrentLocale'
+import {
   ApartmentType,
   CreateQuoteInput,
   useQuoteLazyQuery,
@@ -8,10 +12,6 @@ import { Button } from 'new-components/buttons'
 import { InputField } from 'new-components/inputs'
 import { createQuote } from 'pages/Embark/createQuote'
 import * as React from 'react'
-import {
-  getLocaleIsoCode,
-  useCurrentLocale,
-} from 'src/components/utils/CurrentLocale'
 import { StorageContainer, useStorage } from 'utils/StorageContainer'
 
 enum QuoteType {

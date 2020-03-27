@@ -38,7 +38,7 @@ const QuotesDisplayer: React.FC<{
 it('does nothing on no quote ids', async () => {
   const wrapper = mount(
     <MockedProvider mocks={[]}>
-      <QuotesDisplayer quoteIds={[]} localeIsoCode="sv_SE" />
+      <QuotesDisplayer quoteIds={[]} localeIsoCode={Locale.SvSe} />
     </MockedProvider>,
   )
 
@@ -121,7 +121,7 @@ it('fetches quote on one quote', async () => {
         },
       ]}
     >
-      <QuotesDisplayer quoteIds={[quoteMock.id]} localeIsoCode="sv_SE" />
+      <QuotesDisplayer quoteIds={[quoteMock.id]} localeIsoCode={Locale.SvSe} />
     </MockedProvider>,
   )
 
