@@ -1,3 +1,5 @@
+import styled from '@emotion/styled'
+import { colorsV2 } from '@hedviginsurance/brand'
 import {
   getLocaleIsoCode,
   useCurrentLocale,
@@ -9,8 +11,31 @@ import {
   useTokenizePaymentDetailsMutation,
 } from 'data/graphql'
 import { match } from 'matchly'
+import { Spinner } from 'new-components/utils'
 import * as React from 'react'
 import { useHistory } from 'react-router'
+import { SpinnerWrapper } from './Spinner'
+
+const Wrapper = styled('div')`
+  position: relative;
+
+  @media (min-width: 801px) {
+    padding-right: 5rem;
+  }
+
+  .adyen-checkout__payment-method {
+    &,
+    &:first-child,
+    &:last-child {
+      border-radius: 3px;
+      border-top-left-radius: 3px;
+      border-top-right-radius: 3px;
+    }
+  }
+  .adyen-checkout__payment-method--selected {
+    background: ${colorsV2.offwhite};
+  }
+`
 
 export const AdyenCheckout = () => {
   const availablePaymentMethods = useAvailablePaymentMethodsQuery()
@@ -41,7 +66,16 @@ export const AdyenCheckout = () => {
   React.useEffect(mountAdyenCss, [])
 
   return (
-    <div ref={adyenCheckoutRef as React.MutableRefObject<HTMLDivElement>}></div>
+    <Wrapper>
+      {!adyenLoaded && (
+        <SpinnerWrapper>
+          <Spinner />
+        </SpinnerWrapper>
+      )}
+      <div
+        ref={adyenCheckoutRef as React.MutableRefObject<HTMLDivElement>}
+      ></div>
+    </Wrapper>
   )
 }
 
@@ -65,6 +99,10 @@ const createAdyenCheckout = ({
     ['en_NO', 'en-US'],
   ])(getLocaleIsoCode(currentLocale))
 
+  // const returnUrl = `${window.location.origin}${
+  //   currentLocale ? '/' + currentLocale : ''
+  // }/new-member/connect-payment` // FIXME maybe this should be /download?
+
   const configuration = {
     locale,
     environment: 'test',
@@ -77,10 +115,12 @@ const createAdyenCheckout = ({
       },
     },
     enableStoreDetails: true,
+    // onChange: console.log,
     onAdditionalDetails: (_state: any, _dropinComponent: any) => {
       // TODO call to additional details mutation?
     },
     onSubmit: async (state: any, dropinComponent: any) => {
+      dropinComponent.setStatus('loading')
       const result = await tokenizePaymentMutation({
         variables: { paymentsRequest: JSON.stringify(state.data) },
       })

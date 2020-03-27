@@ -6,6 +6,7 @@ import { AdyenCheckout } from 'pages/ConnectPayment/components/AdyenCheckout'
 import { TrustlyCheckout } from 'pages/ConnectPayment/components/TrustlyCheckout'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { SpinnerWrapper } from '../components/Spinner'
 
 const SITEWRAPPER = 1300
 const BP = 800
@@ -87,10 +88,6 @@ const ConnectText = styled('div')({
     width: '100%',
   },
 })
-
-const SpinnerWrapper = styled('div')`
-  font-size: 2rem;
-`
 
 const ConnectPaymentImage = styled('img')({
   marginBottom: '30px',
