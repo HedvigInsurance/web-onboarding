@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2, colorsV3, fonts } from '@hedviginsurance/brand'
-import * as React from 'react'
 import { Icon } from 'data/graphql'
+import * as React from 'react'
 import { getIconUrl } from '..'
 
 interface PerilItemProps {
