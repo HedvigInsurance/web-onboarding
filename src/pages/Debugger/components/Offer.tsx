@@ -8,6 +8,10 @@ import { Button } from 'new-components/buttons'
 import { InputField } from 'new-components/inputs'
 import { createQuote } from 'pages/Embark/createQuote'
 import * as React from 'react'
+import {
+  getLocaleIsoCode,
+  useCurrentLocale,
+} from 'src/components/utils/CurrentLocale'
 import { StorageContainer, useStorage } from 'utils/StorageContainer'
 
 enum QuoteType {
@@ -22,6 +26,8 @@ export const Offer: React.FC = () => {
   const [quoteId, setQuoteId] = React.useState<string>('') // TODO handle multiple quotes
   const [quoteType, setQuoteType] = React.useState(QuoteType.NorwegianHome)
   const storageState = useStorage()
+  const currentLocale = useCurrentLocale()
+  const localeIsoCode = getLocaleIsoCode(currentLocale)
 
   React.useEffect(() => {
     const quoteIds = storageState.session.getSession()?.quoteIds ?? []
@@ -35,7 +41,7 @@ export const Offer: React.FC = () => {
         ...storageState.session.getSession(),
         quoteIds: [quoteId],
       })
-      getQuote({ variables: { id: quoteId } })
+      getQuote({ variables: { id: quoteId, perilsLocale: localeIsoCode } })
     }
   }, [quoteId])
 
