@@ -121,7 +121,7 @@ const NORWEGIAN_CONTRACT_TYPES = [
 
 export const ConnectTrustlyPage: React.FC = () => {
   const textKeys = useTextKeys()
-  const contracts = useContractsQuery()
+  const contracts = useContractsQuery({ pollInterval: 1500 })
 
   const hasSwedishContract =
     contracts.data?.contracts
@@ -139,13 +139,7 @@ export const ConnectTrustlyPage: React.FC = () => {
     !hasSwedishContract && !hasNorwegianContract && !contracts.loading
 
   React.useEffect(() => {
-    if (contracts.data === null) {
-      return
-    }
-
-    if (waitingForBackendToUpdate) {
-      contracts.startPolling(1000)
-    } else {
+    if (hasSwedishContract || hasNorwegianContract) {
       contracts.stopPolling()
     }
   }, [hasSwedishContract, hasNorwegianContract])
