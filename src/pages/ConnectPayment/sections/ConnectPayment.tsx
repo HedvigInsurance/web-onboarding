@@ -135,8 +135,7 @@ export const ConnectTrustlyPage: React.FC = () => {
         NORWEGIAN_CONTRACT_TYPES.includes(contract.typeOfContract),
       )
       .includes(true) ?? false
-  const waitingForBackendToUpdate =
-    !hasSwedishContract && !hasNorwegianContract && !contracts.loading
+  const waitingForBackendToUpdate = !hasSwedishContract && !hasNorwegianContract
 
   React.useEffect(() => {
     if (hasSwedishContract || hasNorwegianContract) {
