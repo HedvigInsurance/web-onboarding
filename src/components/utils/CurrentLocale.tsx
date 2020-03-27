@@ -1,7 +1,7 @@
 import { match } from 'matchly'
 import * as React from 'react'
 import { matchPath, useLocation } from 'react-router'
-import { Locale } from 'src/data/graphql'
+import { Locale } from 'data/graphql'
 import { LOCALE_PATH_PATTERN } from '../../routes'
 
 export const getLocaleIsoCode = (locale: string): Locale => {

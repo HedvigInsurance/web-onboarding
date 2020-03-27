@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import * as React from 'react'
-import { PerilV2 } from 'src/data/graphql'
+import { PerilV2 } from 'data/graphql'
 import { getGiraffeEndpoint } from 'utils/apolloClient'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { InsuranceType } from 'utils/insuranceDomainUtils'
