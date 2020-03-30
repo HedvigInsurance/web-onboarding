@@ -122,7 +122,7 @@ const createAdyenCheckout = ({
     onSubmit: async (state: any, dropinComponent: any) => {
       dropinComponent.setStatus('loading')
       const result = await tokenizePaymentMutation({
-        variables: { paymentsRequest: JSON.stringify(state.data) },
+        variables: { paymentsRequest: JSON.stringify(state.data) }, // FIXME Graphql: will be updated
       })
       if (
         result.data?.tokenizePaymentDetails?.__typename ===
