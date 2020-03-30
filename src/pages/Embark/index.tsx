@@ -11,6 +11,10 @@ import * as React from 'react'
 import { useHistory } from 'react-router'
 
 import { colorsV2 } from '@hedviginsurance/brand'
+import {
+  getPickedLocaleFromCurrentLocale,
+  useCurrentLocale,
+} from 'components/utils/CurrentLocale'
 import gql from 'graphql-tag'
 import Helmet from 'react-helmet-async'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
@@ -186,6 +190,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
   const [initialStore, setInitialStore] = React.useState<null | {
     [key: string]: any
   }>()
+  const currentLocale = useCurrentLocale()
 
   const textKeys = useTextKeys()
 
@@ -281,8 +286,14 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                     }}
                     data={data[1]}
                     resolvers={{
-                      graphqlQuery: graphQLQuery(storageState),
-                      graphqlMutation: graphQLMutation(storageState),
+                      graphqlQuery: graphQLQuery(
+                        storageState,
+                        getPickedLocaleFromCurrentLocale(currentLocale),
+                      ),
+                      graphqlMutation: graphQLMutation(
+                        storageState,
+                        getPickedLocaleFromCurrentLocale(currentLocale),
+                      ),
                       personalInformationApi: resolvePersonalInformation,
                       houseInformation: resolveHouseInformation,
                       createQuote: createQuote(storageState),

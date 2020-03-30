@@ -1,27 +1,16 @@
+import { setupSession } from 'containers/SessionContainer'
+import { Locale } from 'data/graphql'
 import gql from 'graphql-tag'
+import { Storage } from 'utils/StorageContainer'
 import { apolloClient } from '../../client/apolloClient'
-import { CREATE_SESSION_TOKEN_MUTATION } from '../../containers/SessionContainer'
-import { afterTick } from './utils'
 
-export const graphQLQuery = (storage: any) => async (
+export const graphQLQuery = (storage: Storage, pickedLocale: Locale) => async (
   query: string,
   variables: { [key: string]: any },
 ) => {
-  if (!apolloClient) {
-    throw new Error('Missing apollo client')
-  }
+  await setupSession(apolloClient!, storage, pickedLocale)
 
-  if (!storage.session.getSession().token) {
-    const sessionResult = await apolloClient.client.mutate({
-      mutation: CREATE_SESSION_TOKEN_MUTATION,
-    })
-    await afterTick(() => {
-      apolloClient!.subscriptionClient.close(true, true)
-      storage.setToken(sessionResult.data.createSessionV2.token)
-    })
-  }
-
-  const result = await apolloClient.client.query({
+  const result = await apolloClient!.client.query({
     query: gql(query),
     variables,
     errorPolicy: 'all',
@@ -30,25 +19,13 @@ export const graphQLQuery = (storage: any) => async (
   return result
 }
 
-export const graphQLMutation = (storage: any) => async (
-  mutation: string,
-  variables: { [key: string]: any },
-) => {
-  if (!apolloClient) {
-    throw new Error('Missing apollo client')
-  }
+export const graphQLMutation = (
+  storage: Storage,
+  pickedLocale: Locale,
+) => async (mutation: string, variables: { [key: string]: any }) => {
+  await setupSession(apolloClient!, storage, pickedLocale)
 
-  if (!storage.session.getSession().token) {
-    const sessionResult = await apolloClient.client.mutate({
-      mutation: CREATE_SESSION_TOKEN_MUTATION,
-    })
-    await afterTick(() => {
-      apolloClient!.subscriptionClient.close(true, true)
-      storage.setToken(sessionResult.data.createSessionV2.token)
-    })
-  }
-
-  const result = await apolloClient.client.mutate({
+  const result = await apolloClient!.client.mutate({
     mutation: gql(mutation),
     variables,
     errorPolicy: 'all',

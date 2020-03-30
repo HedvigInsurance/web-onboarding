@@ -14,6 +14,8 @@ export interface StorageEffects {
   setToken: (token?: string) => void
 }
 
+export type Storage = StorageState & StorageEffects
+
 export const StorageContainer: React.SFC<ContainerProps<
   StorageState,
   {},

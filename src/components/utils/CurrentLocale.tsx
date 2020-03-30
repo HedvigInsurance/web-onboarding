@@ -1,3 +1,4 @@
+import { Locale } from 'data/graphql'
 import { match } from 'matchly'
 import * as React from 'react'
 import { matchPath, useLocation } from 'react-router'
@@ -46,7 +47,7 @@ export enum Market {
   Se = 'SE',
   No = 'NO',
 }
-export const useMarket = () => {
+export const useMarket = (): Market => {
   const currentLocale = useCurrentLocale()
 
   return match([
@@ -55,5 +56,15 @@ export const useMarket = () => {
     ['en', Market.Se],
     ['no', Market.No],
     ['no-en', Market.No],
-  ])(currentLocale)
+  ])(currentLocale)!
 }
+
+export const getPickedLocaleFromCurrentLocale = (
+  currentLocale: string,
+): Locale =>
+  match<string, Locale>([
+    ['sv_SE', Locale.SvSe],
+    ['en_SE', Locale.EnSe],
+    ['nb_NO', Locale.NbNo],
+    ['en_NO', Locale.EnNo],
+  ])(getLocaleIsoCode(currentLocale))!
