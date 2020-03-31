@@ -13,7 +13,7 @@ import { SwitchSafetySection } from 'pages/OfferNew/SwitchSafetySection'
 import { TestimonialsSection } from 'pages/OfferNew/TestimonialsSection'
 import { OfferQuote } from 'pages/OfferNew/types'
 import {
-  getInsuranceType,
+  getContractType,
   getOfferData,
   getOfferInsuranceCost,
 } from 'pages/OfferNew/utils'
@@ -119,7 +119,7 @@ export const OfferNew: React.FC = () => {
             />
           )}
         </TrackAction>
-        <Perils insuranceType={getInsuranceType(offerData)} />
+        <Perils insuranceType={getContractType(offerData)} />
         {market === Market.Se && (
           <Compare currentInsurer={offerData.currentInsurer || undefined} />
         )}

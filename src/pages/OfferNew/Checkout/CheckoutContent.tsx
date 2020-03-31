@@ -7,12 +7,13 @@ import { Price } from '../components'
 import { StartDate } from '../Introduction/Sidebar/StartDate'
 import { OfferData, OfferQuote, WithEmailForm } from '../types'
 import {
-  getInsuranceType,
+  getContractType,
   getOfferInsuranceCost,
   getOfferPerson,
   getOfferQuoteIds,
   insuranceTypeTextKeys,
   isMonthlyCostDeduction,
+  isOfferFromQuoteBundle,
 } from '../utils'
 import { InsuranceSummary } from './InsuranceSummary'
 import { SignSpacer } from './Sign'
@@ -103,7 +104,10 @@ export const CheckoutContent: React.FC<Props> = ({
           <div>
             <InsuranceTypeLabel>{textKeys.SIDEBAR_LABEL()}</InsuranceTypeLabel>
             <InsuranceType>
-              {textKeys[insuranceTypeTextKeys[getInsuranceType(offerData)]]()}
+              {!isOfferFromQuoteBundle(offerQuote) &&
+                textKeys[insuranceTypeTextKeys[getContractType(offerData)]]()}
+              {isOfferFromQuoteBundle(offerQuote) &&
+                textKeys.SIDEBAR_INSURANCE_TYPE_BUNDLE()}
             </InsuranceType>
           </div>
           <div>

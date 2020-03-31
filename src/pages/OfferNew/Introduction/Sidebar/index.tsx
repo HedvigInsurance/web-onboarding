@@ -23,9 +23,10 @@ import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { Price } from '../../components'
 import {
-  getInsuranceType,
+  getContractType,
   getOfferInsuranceCost,
   insuranceTypeTextKeys,
+  isOfferFromQuoteBundle,
   isSwedishApartment,
   isSwedishHouse,
 } from '../../utils'
@@ -88,6 +89,7 @@ const Header = styled.div`
 
 const DiscountInfo = styled.div`
   width: 100%;
+  border-radius: 8px 8px 0 0;
   min-height: 2rem;
   padding: 0.375rem 1rem;
   background: ${colorsV2.grass500};
@@ -236,9 +238,12 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                     <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
 
                     <Title>
-                      {textKeys[
-                        insuranceTypeTextKeys[getInsuranceType(offerData)]
-                      ]()}
+                      {!isOfferFromQuoteBundle(offerQuote) &&
+                        textKeys[
+                          insuranceTypeTextKeys[getContractType(offerData)]
+                        ]()}
+                      {isOfferFromQuoteBundle(offerQuote) &&
+                        textKeys.SIDEBAR_INSURANCE_TYPE_BUNDLE()}
                     </Title>
 
                     <SummaryContent>

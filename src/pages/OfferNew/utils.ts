@@ -4,14 +4,17 @@ import {
   Campaign,
   CompleteQuote,
   InsuranceCost,
-  InsuranceType,
+  NorwegianHomeContentsDetails,
+  NorwegianHomeContentsType,
+  NorwegianTravelDetails,
   Quote,
   QuoteBundle,
   QuoteDetails,
   SwedishApartmentQuoteDetails,
   SwedishHouseQuoteDetails,
+  TypeOfContract,
 } from 'data/graphql'
-import { OfferQuote, OfferPerson } from 'pages/OfferNew/types'
+import { OfferPerson, OfferQuote } from 'pages/OfferNew/types'
 import { OfferData } from './types'
 
 export const getOfferInsuranceCost = (
@@ -70,12 +73,12 @@ export const getOfferPerson = (offerQuote: OfferQuote): OfferPerson => {
   throw new Error(`Invalid OfferQuote type ${offerQuote}`)
 }
 
-const isOfferFromCompleteQuote = (
+export const isOfferFromCompleteQuote = (
   offerQuote: OfferQuote,
 ): offerQuote is CompleteQuote =>
   offerQuote.__typename === 'CompleteQuote' || false
 
-const isOfferFromQuoteBundle = (
+export const isOfferFromQuoteBundle = (
   offerQuote: OfferQuote,
 ): offerQuote is QuoteBundle => offerQuote.__typename === 'QuoteBundle' || false
 
@@ -96,6 +99,16 @@ export const isSwedishHouse = (
 ): details is SwedishHouseQuoteDetails =>
   details.__typename === 'SwedishHouseQuoteDetails'
 
+export const isNorwegianHomeContents = (
+  details: QuoteDetails,
+): details is NorwegianHomeContentsDetails =>
+  details.__typename === 'NorwegianHomeContentsDetails'
+
+export const isNorwegianTravel = (
+  details: QuoteDetails,
+): details is NorwegianTravelDetails =>
+  details.__typename === 'NorwegianTravelDetails'
+
 export const isFreeMonths = (campaigns: Campaign[]) =>
   (campaigns.length > 0 &&
     campaigns[0].incentive &&
@@ -114,17 +127,17 @@ export const isNoDiscount = (campaigns: Campaign[]) =>
     campaigns[0].incentive.__typename === 'NoDiscount') ||
   false
 
-export const getInsuranceType = (quote: OfferData): InsuranceType => {
+export const getContractType = (quote: OfferData): TypeOfContract => {
   if (isSwedishHouse(quote.quoteDetails)) {
-    return InsuranceType.House
+    return TypeOfContract.SeHouse
   }
 
   if (isSwedishApartment(quote.quoteDetails)) {
     const map = {
-      RENT: InsuranceType.Rent,
-      BRF: InsuranceType.Brf,
-      STUDENT_RENT: InsuranceType.StudentRent,
-      STUDENT_BRF: InsuranceType.StudentBrf,
+      RENT: TypeOfContract.SeApartmentRent,
+      BRF: TypeOfContract.SeApartmentBrf,
+      STUDENT_RENT: TypeOfContract.SeApartmentStudentRent,
+      STUDENT_BRF: TypeOfContract.SeApartmentStudentBrf,
     }
 
     if (!map[quote.quoteDetails.type]) {
@@ -134,21 +147,68 @@ export const getInsuranceType = (quote: OfferData): InsuranceType => {
     return map[quote.quoteDetails.type]
   }
 
-  return InsuranceType.Rent // FIXME Norway... 🇳🇴
+  if (isNorwegianHomeContents(quote.quoteDetails)) {
+    const map = {
+      RENT: NorwegianHomeContentsType.Rent,
+      OWN: NorwegianHomeContentsType.Own,
+    }
+
+    if (!map[quote.quoteDetails.type]) {
+      throw new Error(`Invalid insurance type ${quote.quoteDetails.type}`)
+    }
+
+    const type = map[quote.quoteDetails.type]
+
+    switch (type) {
+      case NorwegianHomeContentsType.Own:
+        if (quote.quoteDetails.isYouth) {
+          return TypeOfContract.NoHomeContentYouthOwn
+        }
+        return TypeOfContract.NoHomeContentOwn
+      case NorwegianHomeContentsType.Rent:
+        if (quote.quoteDetails.isYouth) {
+          return TypeOfContract.NoHomeContentYouthRent
+        }
+        return TypeOfContract.NoHomeContentRent
+    }
+  }
+
+  if (isNorwegianTravel(quote.quoteDetails)) {
+    if (quote.quoteDetails.isYouth) {
+      return TypeOfContract.NoTravelYouth
+    }
+    return TypeOfContract.NoTravel
+  }
+
+  throw new Error(
+    `Unsupported quoteDetails type (quoteDetails=${JSON.stringify(
+      quote.quoteDetails,
+    )})`,
+  )
 }
 
-export const insuranceTypeTextKeys: Record<InsuranceType, string> = {
-  [InsuranceType.Rent]: 'SIDEBAR_INSURANCE_TYPE_RENT',
-  [InsuranceType.Brf]: 'SIDEBAR_INSURANCE_TYPE_BRF',
-  [InsuranceType.StudentRent]: 'SIDEBAR_INSURANCE_TYPE_STUDENT_RENT',
-  [InsuranceType.StudentBrf]: 'SIDEBAR_INSURANCE_TYPE_STUDENT_BRF',
-  [InsuranceType.House]: 'SIDEBAR_INSURANCE_TYPE_HOUSE',
+export const insuranceTypeTextKeys: Record<TypeOfContract, string> = {
+  [TypeOfContract.SeApartmentRent]: 'SIDEBAR_INSURANCE_TYPE_RENT',
+  [TypeOfContract.SeApartmentBrf]: 'SIDEBAR_INSURANCE_TYPE_BRF',
+  [TypeOfContract.SeApartmentStudentRent]:
+    'SIDEBAR_INSURANCE_TYPE_STUDENT_RENT',
+  [TypeOfContract.SeApartmentStudentBrf]: 'SIDEBAR_INSURANCE_TYPE_STUDENT_BRF',
+  [TypeOfContract.SeHouse]: 'SIDEBAR_INSURANCE_TYPE_HOUSE',
+  [TypeOfContract.NoHomeContentRent]: 'SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_RENT',
+  [TypeOfContract.NoHomeContentOwn]: 'SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_OWN',
+  [TypeOfContract.NoHomeContentYouthRent]:
+    'SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_RENT',
+  [TypeOfContract.NoHomeContentYouthOwn]:
+    'SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_OWN',
+  [TypeOfContract.NoTravel]: 'SIDEBAR_INSURANCE_TYPE_NO_TRAVEL',
+  [TypeOfContract.NoTravelYouth]: 'SIDEBAR_INSURANCE_TYPE_NO_TRAVEL_YOUTH',
 }
+
 export const apartmentTypeTextKeys: Record<ApartmentType, string> = {
-  [ApartmentType.Brf]: 'CHECKOUT_INSURANCE_APARTMENT_TYPE_BRF',
   [ApartmentType.Rent]: 'CHECKOUT_INSURANCE_APARTMENT_TYPE_RENT',
-  [ApartmentType.StudentBrf]: 'CHECKOUT_INSURANCE_APARTMENT_TYPE_BRF',
+  [ApartmentType.Brf]: 'CHECKOUT_INSURANCE_APARTMENT_TYPE_BRF',
   [ApartmentType.StudentRent]: 'CHECKOUT_INSURANCE_APARTMENT_TYPE_RENT',
+  [ApartmentType.StudentBrf]: 'CHECKOUT_INSURANCE_APARTMENT_TYPE_BRF',
 }
 
 export const maskAndFormatRawSsn = (ssn: string) => {

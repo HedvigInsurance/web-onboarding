@@ -1,3 +1,5 @@
+import { TypeOfContract } from 'data/graphql'
+
 export enum InsuranceType {
   Rent = 'RENT',
   Brf = 'BRF',
@@ -39,55 +41,112 @@ export const mapToStudentVariant = (insuranceType: InsuranceType) => {
   )
 }
 
-export const getPrebuyPDFTextKey = (insuranceType: InsuranceType): string => {
+// TODO: Remove all usages of this one when deprecated
+export const getInsuranceType = (
+  contractType: TypeOfContract,
+): InsuranceType => {
   const map = {
-    [InsuranceType.Rent]: 'TERMS_PDF_PREBUY_RENT_URL',
-    [InsuranceType.Brf]: 'TERMS_PDF_PREBUY_BRF_URL',
-    [InsuranceType.StudentRent]: 'TERMS_PDF_PREBUY_STUDENT_RENT_URL',
-    [InsuranceType.StudentBrf]: 'TERMS_PDF_PREBUY_STUDENT_BRF_URL',
-    [InsuranceType.House]: 'TERMS_PDF_PREBUY_HOUSE_URL',
+    [TypeOfContract.SeApartmentRent]: InsuranceType.Rent,
+    [TypeOfContract.SeApartmentBrf]: InsuranceType.Brf,
+    [TypeOfContract.SeApartmentStudentRent]: InsuranceType.StudentRent,
+    [TypeOfContract.SeApartmentStudentBrf]: InsuranceType.StudentBrf,
+    [TypeOfContract.SeHouse]: InsuranceType.House,
+    [TypeOfContract.NoHomeContentRent]: InsuranceType.Rent,
+    [TypeOfContract.NoHomeContentOwn]: InsuranceType.Rent,
+    [TypeOfContract.NoHomeContentYouthRent]: InsuranceType.Rent,
+    [TypeOfContract.NoHomeContentYouthOwn]: InsuranceType.Rent,
+    [TypeOfContract.NoTravel]: InsuranceType.Rent,
+    [TypeOfContract.NoTravelYouth]: InsuranceType.Rent,
   }
 
-  if (!map[insuranceType]) {
-    throw new Error(`Invalid insurance type ${insuranceType}`)
+  if (!map[contractType]) {
+    throw new Error(`Invalid insurance type ${contractType}`)
   }
-  return map[insuranceType]
+  return map[contractType]
+}
+
+export const getPrebuyPDFTextKey = (contractType: TypeOfContract): string => {
+  const map = {
+    [TypeOfContract.SeApartmentRent]: 'TERMS_PDF_PREBUY_RENT_URL',
+    [TypeOfContract.SeApartmentBrf]: 'TERMS_PDF_PREBUY_BRF_URL',
+    [TypeOfContract.SeApartmentStudentRent]:
+      'TERMS_PDF_PREBUY_STUDENT_RENT_URL',
+    [TypeOfContract.SeApartmentStudentBrf]: 'TERMS_PDF_PREBUY_STUDENT_BRF_URL',
+    [TypeOfContract.SeHouse]: 'TERMS_PDF_PREBUY_HOUSE_URL',
+    [TypeOfContract.NoHomeContentRent]: 'TERMS_PDF_PREBUY_NO_CONTENTS_RENT_URL',
+    [TypeOfContract.NoHomeContentOwn]: 'TERMS_PDF_PREBUY_NO_CONTENTS_OWN_URL',
+    [TypeOfContract.NoHomeContentYouthRent]:
+      'TERMS_PDF_PREBUY_NO_CONTENTS_YOUTH_RENT_URL',
+    [TypeOfContract.NoHomeContentYouthOwn]:
+      'TERMS_PDF_PREBUY_NO_CONTENTS_YOUTH_OWN_URL',
+    [TypeOfContract.NoTravel]: 'TERMS_PDF_PREBUY_NO_TRAVEL_URL',
+    [TypeOfContract.NoTravelYouth]: 'TERMS_PDF_PREBUY_NO_TRAVEL_YOUTH_URL',
+  }
+
+  if (!map[contractType]) {
+    throw new Error(`Invalid insurance type ${contractType}`)
+  }
+  return map[contractType]
 }
 
 export const getInsurancePDFTextKey = (
-  insuranceType: InsuranceType,
+  contractType: TypeOfContract,
 ): string => {
   const map = {
-    [InsuranceType.Rent]: 'TERMS_PDF_INSURANCE_RENT_URL',
-    [InsuranceType.Brf]: 'TERMS_PDF_INSURANCE_BRF_URL',
-    [InsuranceType.StudentRent]: 'TERMS_PDF_INSURANCE_STUDENT_RENT_URL',
-    [InsuranceType.StudentBrf]: 'TERMS_PDF_INSURANCE_STUDENT_BRF_URL',
-    [InsuranceType.House]: 'TERMS_PDF_INSURANCE_HOUSE_URL',
+    [TypeOfContract.SeApartmentRent]: 'TERMS_PDF_INSURANCE_RENT_URL',
+    [TypeOfContract.SeApartmentBrf]: 'TERMS_PDF_INSURANCE_BRF_URL',
+    [TypeOfContract.SeApartmentStudentRent]:
+      'TERMS_PDF_INSURANCE_STUDENT_RENT_URL',
+    [TypeOfContract.SeApartmentStudentBrf]:
+      'TERMS_PDF_INSURANCE_STUDENT_BRF_URL',
+    [TypeOfContract.SeHouse]: 'TERMS_PDF_INSURANCE_HOUSE_URL',
+    [TypeOfContract.NoHomeContentRent]:
+      'TERMS_PDF_INSURANCE_NO_CONTENTS_RENT_URL',
+    [TypeOfContract.NoHomeContentOwn]:
+      'TERMS_PDF_INSURANCE_NO_CONTENTS_OWN_URL',
+    [TypeOfContract.NoHomeContentYouthRent]:
+      'TERMS_PDF_INSURANCE_NO_CONTENTS_YOUTH_RENT_URL',
+    [TypeOfContract.NoHomeContentYouthOwn]:
+      'TERMS_PDF_INSURANCE_NO_CONTENTS_YOUTH_OWN_URL',
+    [TypeOfContract.NoTravel]: 'TERMS_PDF_INSURANCE_NO_TRAVEL_URL',
+    [TypeOfContract.NoTravelYouth]: 'TERMS_PDF_INSURANCE_NO_TRAVEL_YOUTH_URL',
   }
 
-  if (!map[insuranceType]) {
-    throw new Error(`Invalid insurance type ${insuranceType}`)
+  if (!map[contractType]) {
+    throw new Error(`Invalid insurance type ${contractType}`)
   }
-  return map[insuranceType]
+  return map[contractType]
 }
 
-export const getEUPrebuyPDFTextKey = (insuranceType: InsuranceType): string => {
+export const getEUPrebuyPDFTextKey = (contractType: TypeOfContract): string => {
   const map = {
-    [InsuranceType.Rent]: 'TERMS_PDF_PREBUY_EU_RENT_URL',
-    [InsuranceType.Brf]: 'TERMS_PDF_PREBUY_EU_BRF_URL',
-    [InsuranceType.StudentRent]: 'TERMS_PDF_PREBUY_EU_STUDENT_RENT_URL',
-    [InsuranceType.StudentBrf]: 'TERMS_PDF_PREBUY_EU_STUDENT_BRF_URL',
-    [InsuranceType.House]: 'TERMS_PDF_PREBUY_EU_HOUSE_URL',
+    [TypeOfContract.SeApartmentRent]: 'TERMS_PDF_PREBUY_EU_RENT_URL',
+    [TypeOfContract.SeApartmentBrf]: 'TERMS_PDF_PREBUY_EU_BRF_URL',
+    [TypeOfContract.SeApartmentStudentRent]:
+      'TERMS_PDF_PREBUY_EU_STUDENT_RENT_URL',
+    [TypeOfContract.SeApartmentStudentBrf]:
+      'TERMS_PDF_PREBUY_EU_STUDENT_BRF_URL',
+    [TypeOfContract.SeHouse]: 'TERMS_PDF_PREBUY_EU_HOUSE_URL',
+    [TypeOfContract.NoHomeContentRent]:
+      'TERMS_PDF_PREBUY_EU_NO_CONTENTS_RENT_URL',
+    [TypeOfContract.NoHomeContentOwn]:
+      'TERMS_PDF_PREBUY_EU_NO_CONTENTS_OWN_URL',
+    [TypeOfContract.NoHomeContentYouthRent]:
+      'TERMS_PDF_PREBUY_EU_NO_CONTENTS_YOUTH_RENT_URL',
+    [TypeOfContract.NoHomeContentYouthOwn]:
+      'TERMS_PDF_PREBUY_EU_NO_CONTENTS_YOUTH_OWN_URL',
+    [TypeOfContract.NoTravel]: 'TERMS_PDF_PREBUY_EU_NO_TRAVEL_URL',
+    [TypeOfContract.NoTravelYouth]: 'TERMS_PDF_PREBUY_EU_NO_TRAVEL_YOUTH_URL',
   }
 
-  if (!map[insuranceType]) {
-    throw new Error(`Invalid insurance type ${insuranceType}`)
+  if (!map[contractType]) {
+    throw new Error(`Invalid insurance type ${contractType}`)
   }
-  return map[insuranceType]
+  return map[contractType]
 }
 
 export const getInsuranceAmountTextKey = (
-  insuranceType: InsuranceType,
+  typeOfContract: InsuranceType,
 ): string => {
   const map = {
     [InsuranceType.Rent]: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT',
@@ -97,9 +156,9 @@ export const getInsuranceAmountTextKey = (
     [InsuranceType.House]: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT_HOUSE',
   }
 
-  if (!map[insuranceType]) {
-    throw new Error(`Invalid insurance type ${insuranceType}`)
+  if (!map[typeOfContract]) {
+    throw new Error(`Invalid insurance type ${typeOfContract}`)
   }
 
-  return map[insuranceType]
+  return map[typeOfContract]
 }

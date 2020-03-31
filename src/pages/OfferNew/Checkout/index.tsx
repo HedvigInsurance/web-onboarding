@@ -7,7 +7,7 @@ import { SignState, useSignQuotesMutation } from 'data/graphql'
 import { TOP_BAR_Z_INDEX } from 'new-components/TopBar'
 import { OfferData, OfferQuote } from 'pages/OfferNew/types'
 import {
-  getInsuranceType,
+  getContractType,
   getOfferPerson,
   getOfferQuoteIds,
 } from 'pages/OfferNew/utils'
@@ -297,7 +297,7 @@ export const Checkout: React.FC<Props> = ({
         </OuterScrollWrapper>
 
         <SlidingSign
-          insuranceType={getInsuranceType(offerData)}
+          insuranceType={getContractType(offerData)}
           visibilityState={visibilityState}
           canInitiateSign={canInitiateSign && !ssnUpdateLoading}
           signUiState={signUiState}

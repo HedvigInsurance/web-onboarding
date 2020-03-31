@@ -56,7 +56,7 @@ export const Perils: React.FC<Props> = ({ insuranceType }) => {
             setIsShowingPeril={setIsShowingPeril}
           />
 
-          <InsuranceValues insuranceType={insuranceType} />
+          <InsuranceValues contractType={insuranceType} />
         </Column>
         <ColumnSpacing />
       </Container>
