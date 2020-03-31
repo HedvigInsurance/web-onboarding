@@ -6,7 +6,7 @@ import {
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import { CompleteQuote } from 'data/graphql'
-import { useMultipleQuotes } from 'data/useMultipleQuotes'
+import { useQuote } from 'data/useQuote'
 import { History } from 'history'
 import { TopBar } from 'new-components/TopBar'
 import { SwitchSafetySection } from 'pages/OfferNew/SwitchSafetySection'
@@ -36,11 +36,9 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
 export const OfferNew: React.FC = () => {
   const storage = useStorage()
   const quoteIds = storage.session.getSession()?.quoteIds ?? []
-  const [quotes, { loading: loadingQuotes, refetch }] = useMultipleQuotes(
-    quoteIds,
-  )
-  const history = useHistory()
+
   const currentLocale = useCurrentLocale()
+  const history = useHistory()
   const market = useMarket()
   const checkoutMatch = useRouteMatch('/:locale(en|no-en|no)?/new-member/sign')
   const toggleCheckout = createToggleCheckout(history, currentLocale)
@@ -50,16 +48,16 @@ export const OfferNew: React.FC = () => {
       <Redirect to={`${currentLocale && '/' + currentLocale}/new-member`} />
     )
   }
+  const quoteId = quoteIds[0]
+  const [quote, { loading: loadingQuotes, refetch }] = useQuote(quoteId)
 
-  if (!loadingQuotes && quoteIds.length !== quotes.length) {
-    throw new Error(
-      `Mismatching number of quote ids in session (${quoteIds.length}) and actual returned quotes (${quotes.length}).`,
-    )
+  if (!loadingQuotes && quote === undefined) {
+    throw new Error(`No quote returned (quoteId=${quoteId}).`)
   }
 
-  const firstQuote = quotes[0] as CompleteQuote
+  const completeQuote = quote as CompleteQuote
 
-  return loadingQuotes && quotes.length === 0 ? null : (
+  return loadingQuotes && quote === undefined ? null : (
     <Page>
       <SessionTokenGuard>
         <TopBar />
@@ -67,7 +65,7 @@ export const OfferNew: React.FC = () => {
           event={{
             name: SemanticEvents.Ecommerce.CheckoutStarted,
             properties: {
-              value: Number(firstQuote.insuranceCost.monthlyNet.amount),
+              value: Number(completeQuote.insuranceCost.monthlyNet.amount),
               label: 'Offer',
               ...getUtmParamsFromCookie(),
             },
@@ -75,7 +73,7 @@ export const OfferNew: React.FC = () => {
         >
           {({ track }) => (
             <Introduction
-              firstQuote={firstQuote}
+              firstQuote={completeQuote}
               refetch={refetch as () => Promise<any>}
               onCheckoutOpen={() => {
                 toggleCheckout(true)
@@ -84,15 +82,15 @@ export const OfferNew: React.FC = () => {
             />
           )}
         </TrackAction>
-        <Perils insuranceType={getInsuranceType(firstQuote)} />
+        <Perils insuranceType={getInsuranceType(completeQuote)} />
         {market === Market.Se && (
-          <Compare currentInsurer={firstQuote.currentInsurer || undefined} />
+          <Compare currentInsurer={completeQuote.currentInsurer || undefined} />
         )}
         {market === Market.Se && <TestimonialsSection />}
         <SwitchSafetySection />
         <FaqSection />
         <Checkout
-          firstQuote={firstQuote}
+          firstQuote={completeQuote}
           isOpen={checkoutMatch !== null}
           onClose={() => toggleCheckout(false)}
           refetch={refetch as () => Promise<any>}

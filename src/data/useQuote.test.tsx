@@ -4,43 +4,26 @@ import {
   IntrospectionFragmentMatcher,
 } from 'apollo-cache-inmemory'
 import { ApartmentType, CompleteQuote, TypeOfContract } from 'data/graphql'
+import { useQuote } from 'data/useQuote'
 import { mount } from 'enzyme'
 import * as React from 'react'
 import { act } from 'react-dom/test-utils'
 import { mockNetworkWait } from 'utils/test-utils'
 import introspectionQueryResultData from '../fragmentTypes.json'
 import { QuoteDocument } from './graphql'
-import { useMultipleQuotes } from './useMultipleQuotes'
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData,
 })
 
-const QuotesDisplayer: React.FC<{ quoteIds: ReadonlyArray<string> }> = ({
-  quoteIds,
-}) => {
-  const [quotes] = useMultipleQuotes(quoteIds)
+const QuotesDisplayer: React.FC<{ quoteId: string }> = ({ quoteId }) => {
+  const [quote] = useQuote(quoteId)
   return (
     <ul>
-      {quotes.map((quote) => (
-        <li key={quote.id}>{quote.id}</li>
-      ))}
+      <li key={quote!!.id}>{quote!!.id}</li>
     </ul>
   )
 }
-
-it('does nothing on no quote ids', async () => {
-  const wrapper = mount(
-    <MockedProvider mocks={[]}>
-      <QuotesDisplayer quoteIds={[]} />
-    </MockedProvider>,
-  )
-
-  await act(() => mockNetworkWait())
-  wrapper.update()
-
-  expect(wrapper.find('li').length).toBe(0)
-})
 
 const quoteMock: CompleteQuote = {
   id: 'b2571926-fbae-4ade-8a55-ebc7f6375ad1',
@@ -110,7 +93,7 @@ it('fetches quote on one quote', async () => {
         },
       ]}
     >
-      <QuotesDisplayer quoteIds={[quoteMock.id]} />
+      <QuotesDisplayer quoteId={quoteMock.id} />
     </MockedProvider>,
   )
 
