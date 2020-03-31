@@ -311,6 +311,20 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                         storageState.session.setSession({
                           ...storageState.session.getSession(),
                           quoteIds: [store.quoteId],
+                          bundledQuoteIds: [],
+                        })
+                      }
+                      if (
+                        store.norwegianHomeContentsQuoteId &&
+                        store.norwegianTravelQuoteId
+                      ) {
+                        storageState.session.setSession({
+                          ...storageState.session.getSession(),
+                          quoteIds: [],
+                          bundledQuoteIds: [
+                            store.norwegianHomeContentsQuoteId,
+                            store.norwegianTravelQuoteId,
+                          ],
                         })
                       }
                     }}
