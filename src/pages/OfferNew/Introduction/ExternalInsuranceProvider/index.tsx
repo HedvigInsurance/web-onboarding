@@ -4,7 +4,7 @@ import {
   CompleteQuote,
   useExternalInsuranceDataQuery,
   useExternalInsuranceDataStatusSubscription,
-} from '../../../../data/graphql'
+} from 'data/graphql'
 
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { Compare } from './Compare'

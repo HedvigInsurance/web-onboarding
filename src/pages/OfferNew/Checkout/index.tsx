@@ -3,9 +3,14 @@ import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { BackArrow } from 'components/icons/BackArrow'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
-import { CompleteQuote, SignState, useSignQuotesMutation } from 'data/graphql'
+import { SignState, useSignQuotesMutation } from 'data/graphql'
 import { TOP_BAR_Z_INDEX } from 'new-components/TopBar'
-import { getInsuranceType } from 'pages/OfferNew/utils'
+import { OfferData, OfferQuote } from 'pages/OfferNew/types'
+import {
+  getInsuranceType,
+  getOfferPerson,
+  getOfferQuoteIds,
+} from 'pages/OfferNew/utils'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
 import { Mount } from 'react-lifecycle-components'
@@ -156,14 +161,16 @@ const SignIframe = styled('iframe')`
 `
 
 interface Props {
-  firstQuote: CompleteQuote
+  offerQuote: OfferQuote
+  offerData: OfferData
   isOpen?: boolean
   onClose?: () => void
   refetch: () => Promise<void>
 }
 
 export const Checkout: React.FC<Props> = ({
-  firstQuote,
+  offerQuote,
+  offerData,
   isOpen,
   onClose,
   refetch,
@@ -184,13 +191,14 @@ export const Checkout: React.FC<Props> = ({
     }
   }, [isOpen])
 
+  const offerPerson = getOfferPerson(offerQuote)
+  const [email, setEmail] = React.useState(offerPerson.email ?? '')
   const [signUiState, setSignUiState] = React.useState(SignUiState.NOT_STARTED)
   const [bankIdUrl, setBankIdUrl] = React.useState<string | null>(null)
-  const [email, setEmail] = React.useState(firstQuote.email ?? '')
   const [ssnUpdateLoading, setSsnUpdateLoading] = React.useState(false)
   const [startPollingSignState, signStatus] = useSignState()
   const [signQuotes, signQuotesMutation] = useSignQuotesMutation({
-    variables: { quoteIds: [firstQuote.id] },
+    variables: { quoteIds: getOfferQuoteIds(offerQuote) },
   })
   const locale = useCurrentLocale()
 
@@ -209,9 +217,10 @@ export const Checkout: React.FC<Props> = ({
   }, [signUiState])
 
   useTrack({
+    offerData,
+    offerQuote,
     signState: signStatus?.signState,
     email,
-    firstQuote,
   })
   useScrollLock(visibilityState, outerWrapper)
 
@@ -219,7 +228,7 @@ export const Checkout: React.FC<Props> = ({
     signUiState !== SignUiState.STARTED &&
       !signQuotesMutation.loading &&
       emailValidation.isValidSync(email ?? '') &&
-      firstQuote.ssn,
+      offerPerson.ssn,
   )
 
   if (signStatus?.signState === SignState.Completed) {
@@ -270,7 +279,8 @@ export const Checkout: React.FC<Props> = ({
                 </BackButtonWrapper>
 
                 <CheckoutContent
-                  firstQuote={firstQuote}
+                  offerQuote={offerQuote}
+                  offerData={offerData}
                   email={email}
                   onEmailChange={setEmail}
                   onSsnUpdate={(onCompletion) => {
@@ -287,7 +297,7 @@ export const Checkout: React.FC<Props> = ({
         </OuterScrollWrapper>
 
         <SlidingSign
-          insuranceType={getInsuranceType(firstQuote)}
+          insuranceType={getInsuranceType(offerData)}
           visibilityState={visibilityState}
           canInitiateSign={canInitiateSign && !ssnUpdateLoading}
           signUiState={signUiState}

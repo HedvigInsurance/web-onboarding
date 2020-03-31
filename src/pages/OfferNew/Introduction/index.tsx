@@ -1,12 +1,13 @@
 import { keyframes } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
+import { DownArrow } from 'components/icons/DownArrow'
 import { CompleteQuote } from 'data/graphql'
+import { OfferData, OfferQuote } from 'pages/OfferNew/types'
 import * as React from 'react'
 import { animateScroll } from 'react-scroll'
+import { useDocumentScroll } from 'utils/hooks/useDocumentScroll'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-import { DownArrow } from '../../../components/icons/DownArrow'
-import { useDocumentScroll } from '../../../utils/hooks/useDocumentScroll'
 import {
   Column,
   Container,
@@ -20,7 +21,8 @@ import { Sidebar } from './Sidebar'
 import { Usps } from './Usps'
 
 interface Props {
-  firstQuote: CompleteQuote
+  offerQuote: OfferQuote
+  offerData: OfferData
   refetch: () => Promise<void>
   onCheckoutOpen: () => void
 }
@@ -100,7 +102,8 @@ const ScrollButton = styled.button`
 `
 
 export const Introduction: React.FC<Props> = ({
-  firstQuote,
+  offerQuote,
+  offerData,
   refetch,
   onCheckoutOpen,
 }) => {
@@ -121,7 +124,7 @@ export const Introduction: React.FC<Props> = ({
     }
   })
 
-  const hasDataCollection = !!firstQuote.dataCollectionId || false
+  const hasDataCollection = !!offerData.dataCollectionId || false
 
   return (
     <Section bottomBlobColor={colorsV2.black}>
@@ -132,14 +135,14 @@ export const Introduction: React.FC<Props> = ({
               <PreHeading>{textKeys.HERO_LABEL()}</PreHeading>
               <HeadingWhite>
                 {textKeys.HERO_HEADLINE({
-                  FIRST_NAME: firstQuote.firstName ?? '',
+                  FIRST_NAME: offerData.firstName ?? '',
                 })}
               </HeadingWhite>
             </HeadingWrapper>
             {hasDataCollection ? (
               <ExternalInsuranceProvider
-                dataCollectionId={firstQuote.dataCollectionId || ''}
-                firstQuote={firstQuote}
+                dataCollectionId={offerData.dataCollectionId || ''}
+                firstQuote={offerData as CompleteQuote}
               />
             ) : (
               <UspsDesktop />
@@ -149,7 +152,8 @@ export const Introduction: React.FC<Props> = ({
           <Sidebar
             ref={ref}
             sticky={sidebarIsSticky}
-            firstQuote={firstQuote}
+            offerQuote={offerQuote}
+            offerData={offerData}
             refetch={refetch}
             onCheckoutOpen={onCheckoutOpen}
           />

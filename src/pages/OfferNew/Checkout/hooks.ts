@@ -1,9 +1,10 @@
 import {
-  CompleteQuote,
   SignState,
   useMemberQuery,
   useRedeemedCampaignsQuery,
 } from 'data/graphql'
+import { OfferData, OfferQuote } from 'pages/OfferNew/types'
+import { getOfferInsuranceCost } from 'pages/OfferNew/utils'
 import * as React from 'react'
 import { InsuranceType } from 'utils/insuranceDomainUtils'
 import { adtraction, trackStudentkortet } from 'utils/tracking'
@@ -56,10 +57,16 @@ export const useScrollLock = (
 
 interface TrackProps {
   email: string
-  firstQuote: CompleteQuote
+  offerQuote: OfferQuote
+  offerData: OfferData
   signState?: SignState | null
 }
-export const useTrack = ({ firstQuote, email, signState }: TrackProps) => {
+export const useTrack = ({
+  offerData,
+  offerQuote,
+  email,
+  signState,
+}: TrackProps) => {
   const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
   const redeemedCampaigns = redeemedCampaignsData?.redeemedCampaigns ?? []
   const { data: memberData } = useMemberQuery()
@@ -75,12 +82,12 @@ export const useTrack = ({ firstQuote, email, signState }: TrackProps) => {
     }
 
     const legacyInsuranceType: InsuranceType =
-      firstQuote.quoteDetails.__typename === 'SwedishApartmentQuoteDetails'
-        ? (firstQuote.quoteDetails.type as any)
+      offerData.quoteDetails.__typename === 'SwedishApartmentQuoteDetails'
+        ? (offerData.quoteDetails.type as any)
         : 'HOUSE' // TODO do we have norway quotes here?
 
     adtraction(
-      parseFloat(firstQuote.insuranceCost.monthlyGross.amount),
+      parseFloat(getOfferInsuranceCost(offerQuote).monthlyGross.amount),
       memberId,
       email,
       redeemedCampaigns !== null && redeemedCampaigns.length !== 0
@@ -93,7 +100,10 @@ export const useTrack = ({ firstQuote, email, signState }: TrackProps) => {
       redeemedCampaigns?.length > 0 &&
       redeemedCampaigns[0].code.toLowerCase() === 'studentkortet'
     ) {
-      trackStudentkortet(memberId, firstQuote.insuranceCost.monthlyGross.amount)
+      trackStudentkortet(
+        memberId,
+        getOfferInsuranceCost(offerQuote).monthlyGross.amount,
+      )
     }
   }, [signState])
 }

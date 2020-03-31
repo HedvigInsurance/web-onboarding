@@ -1,9 +1,10 @@
 import {
+  BundledQuote,
   CompleteApartmentQuoteDetails,
   CompleteHouseQuoteDetails,
   CompleteQuote,
-  IncompleteQuote,
   Query,
+  QuoteBundle,
 } from 'data/graphql'
 
 interface OfferCore {
@@ -19,13 +20,16 @@ export type CompleteQuoteWithoutUnknownDetails = CompleteQuote & {
   details: CompleteHouseQuoteDetails | CompleteApartmentQuoteDetails
 }
 
-export interface IncompleteOfferDataForMember extends OfferCore {
-  lastQuoteOfMember: IncompleteQuote
-}
+export type OfferQuote = CompleteQuote | QuoteBundle
 
-export type OfferData =
-  | CompleteOfferDataForMember
-  | IncompleteOfferDataForMember
+export type OfferData = CompleteQuote | BundledQuote
+
+export interface OfferPerson {
+  firstName: string
+  lastName: string
+  ssn?: string
+  email?: string
+}
 
 export interface WithEmailForm {
   email: string

@@ -2,7 +2,6 @@ import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import { Modal, ModalProps } from 'components/ModalNew'
 import {
-  CompleteQuote,
   EditQuoteInput,
   ExtraBuildingInput,
   ExtraBuildingType,
@@ -15,6 +14,7 @@ import {
   InputGroupDeleteButton,
   InputGroupRow,
 } from 'new-components/inputs/index'
+import { OfferData } from 'pages/OfferNew/types'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { DetailInput } from './DetailInput'
@@ -160,21 +160,21 @@ const LoadingDimmer = styled.div<{ visible: boolean }>`
 `
 
 interface DetailsModalProps {
-  quote: CompleteQuote
+  offerData: OfferData
   refetch: () => Promise<void>
 }
 
 export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
-  quote,
+  offerData,
   refetch,
   isVisible,
   onClose,
 }) => {
   const textKeys = useTextKeys()
   const [editQuote, editQuoteResult] = useEditQuoteMutation()
-  const fieldSchema = getFieldSchema(quote)
-  const validationSchema = getValidationSchema(fieldSchema, quote)
-  const initialValues = getInitialInputValues(quote)
+  const fieldSchema = getFieldSchema(offerData)
+  const validationSchema = getValidationSchema(fieldSchema, offerData)
+  const initialValues = getInitialInputValues(offerData)
   const [isUpdating, setIsUpdating] = React.useState(false)
   const [
     isUnderwritingGuidelineHit,
@@ -224,7 +224,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
             <Form>
               <Headline>{textKeys.DETAILS_MODULE_HEADLINE()}</Headline>
 
-              {isApartmentFieldSchema(fieldSchema, quote) && (
+              {isApartmentFieldSchema(fieldSchema, offerData) && (
                 <Content>
                   <ContentColumn>
                     <InputGroup>
@@ -270,7 +270,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                 </Content>
               )}
 
-              {isHouseFieldSchema(fieldSchema, quote) && (
+              {isHouseFieldSchema(fieldSchema, offerData) && (
                 <Content>
                   <ContentColumn>
                     <ContentColumnTitle>

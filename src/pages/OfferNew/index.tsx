@@ -5,13 +5,18 @@ import {
 } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
-import { CompleteQuote } from 'data/graphql'
 import { useQuote } from 'data/useQuote'
+import { useQuoteBundle } from 'data/useQuoteBundle'
 import { History } from 'history'
 import { TopBar } from 'new-components/TopBar'
 import { SwitchSafetySection } from 'pages/OfferNew/SwitchSafetySection'
 import { TestimonialsSection } from 'pages/OfferNew/TestimonialsSection'
-import { getInsuranceType } from 'pages/OfferNew/utils'
+import { OfferQuote } from 'pages/OfferNew/types'
+import {
+  getInsuranceType,
+  getOfferData,
+  getOfferInsuranceCost,
+} from 'pages/OfferNew/utils'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
 import { Redirect, useHistory, useRouteMatch } from 'react-router'
@@ -33,31 +38,60 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
   }
 }
 
+type UseOfferQuoteReturnTuple = [
+  OfferQuote | undefined,
+  {
+    loading: boolean
+    refetch: () => Promise<any>
+  },
+]
+
+const useOfferQuote = (
+  quoteIds: ReadonlyArray<string>,
+  bundledQuoteIds: ReadonlyArray<string>,
+): UseOfferQuoteReturnTuple => {
+  if (quoteIds.length === 0) {
+    return useQuoteBundle(bundledQuoteIds)
+  }
+  return useQuote(quoteIds[0])
+}
+
 export const OfferNew: React.FC = () => {
   const storage = useStorage()
   const quoteIds = storage.session.getSession()?.quoteIds ?? []
-
+  const bundledQuoteIds = storage.session.getSession()?.bundledQuoteIds ?? []
   const currentLocale = useCurrentLocale()
+
+  if (quoteIds.length === 0 && bundledQuoteIds.length === 0) {
+    return (
+      <Redirect to={`${currentLocale && '/' + currentLocale}/new-member`} />
+    )
+  }
+  const [
+    offerQuoteBeingFetched,
+    { loading: loadingOfferQuote, refetch },
+  ] = useOfferQuote(quoteIds, bundledQuoteIds)
+
   const history = useHistory()
   const market = useMarket()
   const checkoutMatch = useRouteMatch('/:locale(en|no-en|no)?/new-member/sign')
   const toggleCheckout = createToggleCheckout(history, currentLocale)
 
-  if (quoteIds.length === 0) {
-    return (
-      <Redirect to={`${currentLocale && '/' + currentLocale}/new-member`} />
+  if (!loadingOfferQuote && offerQuoteBeingFetched === undefined) {
+    throw new Error(
+      `No quote returned to show offer with (quoteIds=${quoteIds}, bundledQuoteIds=${bundledQuoteIds}).`,
     )
   }
-  const quoteId = quoteIds[0]
-  const [quote, { loading: loadingQuotes, refetch }] = useQuote(quoteId)
 
-  if (!loadingQuotes && quote === undefined) {
-    throw new Error(`No quote returned (quoteId=${quoteId}).`)
+  if (loadingOfferQuote && offerQuoteBeingFetched === undefined) {
+    return null
   }
 
-  const completeQuote = quote as CompleteQuote
+  const offerQuote = offerQuoteBeingFetched as OfferQuote
 
-  return loadingQuotes && quote === undefined ? null : (
+  const offerData = getOfferData(offerQuote)[0]
+
+  return (
     <Page>
       <SessionTokenGuard>
         <TopBar />
@@ -65,7 +99,9 @@ export const OfferNew: React.FC = () => {
           event={{
             name: SemanticEvents.Ecommerce.CheckoutStarted,
             properties: {
-              value: Number(completeQuote.insuranceCost.monthlyNet.amount),
+              value: Number(
+                getOfferInsuranceCost(offerQuote).monthlyNet.amount,
+              ),
               label: 'Offer',
               ...getUtmParamsFromCookie(),
             },
@@ -73,7 +109,8 @@ export const OfferNew: React.FC = () => {
         >
           {({ track }) => (
             <Introduction
-              firstQuote={completeQuote}
+              offerQuote={offerQuote}
+              offerData={offerData}
               refetch={refetch as () => Promise<any>}
               onCheckoutOpen={() => {
                 toggleCheckout(true)
@@ -82,15 +119,16 @@ export const OfferNew: React.FC = () => {
             />
           )}
         </TrackAction>
-        <Perils insuranceType={getInsuranceType(completeQuote)} />
+        <Perils insuranceType={getInsuranceType(offerData)} />
         {market === Market.Se && (
-          <Compare currentInsurer={completeQuote.currentInsurer || undefined} />
+          <Compare currentInsurer={offerData.currentInsurer || undefined} />
         )}
         {market === Market.Se && <TestimonialsSection />}
         <SwitchSafetySection />
         <FaqSection />
         <Checkout
-          firstQuote={completeQuote}
+          offerQuote={offerQuote}
+          offerData={offerData}
           isOpen={checkoutMatch !== null}
           onClose={() => toggleCheckout(false)}
           refetch={refetch as () => Promise<any>}

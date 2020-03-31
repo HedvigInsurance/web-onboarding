@@ -1,6 +1,6 @@
 import { useApolloClient } from '@apollo/react-hooks'
 import { FetchPolicy } from 'apollo-client'
-import { QuoteDocument, QuoteQuery } from 'data/graphql'
+import { CompleteQuote, QuoteDocument, QuoteQuery } from 'data/graphql'
 import * as React from 'react'
 import { Quote } from './graphql'
 
@@ -9,10 +9,10 @@ export interface UseQuoteState {
   refetch: () => Promise<Quote>
 }
 
-export type UseQuoteReturnTuple = [Quote | undefined, UseQuoteState]
+export type UseQuoteReturnTuple = [CompleteQuote | undefined, UseQuoteState]
 
 export const useQuote = (quoteId: string): UseQuoteReturnTuple => {
-  const [quote, setQuote] = React.useState<Quote | undefined>(undefined)
+  const [quote, setQuote] = React.useState<CompleteQuote | undefined>(undefined)
   const [loading, setLoading] = React.useState(true)
   const apolloClient = useApolloClient()
 
@@ -25,7 +25,7 @@ export const useQuote = (quoteId: string): UseQuoteReturnTuple => {
         fetchPolicy,
       })
       .then((result) => {
-        setQuote(result.data.quote)
+        setQuote(result.data.quote as CompleteQuote)
         setLoading(false)
         return result.data.quote
       })

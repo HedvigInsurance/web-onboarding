@@ -3,7 +3,6 @@ import { colorsV2, fonts } from '@hedviginsurance/brand'
 import { CookieStorage } from 'cookie-storage'
 import {
   Campaign,
-  CompleteQuote,
   useRedeemCodeMutation,
   useRedeemedCampaignsQuery,
   useRemoveDiscountCodeMutation,
@@ -17,6 +16,7 @@ import {
   isPercentageDiscountMonths,
   quoteDetailsHasAddress,
 } from 'pages/OfferNew/Introduction/Sidebar/utils'
+import { OfferData, OfferQuote } from 'pages/OfferNew/types'
 import * as React from 'react'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
@@ -24,6 +24,7 @@ import { formatPostalNumber } from 'utils/postalNumbers'
 import { Price } from '../../components'
 import {
   getInsuranceType,
+  getOfferInsuranceCost,
   insuranceTypeTextKeys,
   isSwedishApartment,
   isSwedishHouse,
@@ -35,7 +36,8 @@ import { StickyBottomSidebar } from './StickyBottomSidebar'
 
 interface Props {
   sticky: boolean
-  firstQuote: CompleteQuote
+  offerQuote: OfferQuote
+  offerData: OfferData
   refetch: () => Promise<void>
   onCheckoutOpen: () => void
 }
@@ -178,7 +180,7 @@ const FooterExtraActions = styled.div`
 `
 
 export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
-  ({ sticky, firstQuote, refetch, onCheckoutOpen }, ref) => {
+  ({ sticky, offerQuote, offerData, refetch, onCheckoutOpen }, ref) => {
     const textKeys = useTextKeys()
     const [
       discountCodeModalIsOpen,
@@ -218,7 +220,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
     const discountText = getDiscountText(textKeys)(redeemedCampaigns)
 
-    const details = firstQuote.quoteDetails
+    const details = offerData.quoteDetails
+
+    const insuranceCost = getOfferInsuranceCost(offerQuote)
 
     return (
       <>
@@ -233,13 +237,13 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
                     <Title>
                       {textKeys[
-                        insuranceTypeTextKeys[getInsuranceType(firstQuote)]
+                        insuranceTypeTextKeys[getInsuranceType(offerData)]
                       ]()}
                     </Title>
 
                     <SummaryContent>
                       <SummaryText>
-                        <b>{`${firstQuote.firstName} ${firstQuote.lastName}`}</b>{' '}
+                        <b>{`${offerData.firstName} ${offerData.lastName}`}</b>{' '}
                         {getHouseholdSize(details) - 1 > 0 &&
                           textKeys.SIDEBAR_INSURED_PERSONS_SUFFIX({
                             AMOUNT: getHouseholdSize(details) - 1,
@@ -271,17 +275,17 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                         redeemedCampaigns[0]?.incentive ?? undefined,
                       )
                     }
-                    monthlyGross={firstQuote.insuranceCost.monthlyGross}
-                    monthlyNet={firstQuote.insuranceCost.monthlyNet}
+                    monthlyGross={insuranceCost.monthlyGross}
+                    monthlyNet={insuranceCost.monthlyNet}
                   />
                 </Header>
 
                 <Body>
                   <StartDate
-                    dataCollectionId={firstQuote.dataCollectionId}
-                    startDate={firstQuote.startDate}
-                    offerId={firstQuote.id}
-                    currentInsurer={firstQuote.currentInsurer || null}
+                    dataCollectionId={offerData.dataCollectionId}
+                    startDate={offerData.startDate}
+                    offerId={offerData.id}
+                    currentInsurer={offerData.currentInsurer || null}
                     refetch={refetch}
                     modal={true}
                   />
@@ -332,7 +336,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 />
               </Container>
               <DetailsModal
-                quote={firstQuote}
+                offerData={offerData}
                 refetch={refetchAll}
                 isVisible={detailsModalIsOpen}
                 onClose={() => setDetailsModalIsOpen(false)}

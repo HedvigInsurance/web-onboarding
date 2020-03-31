@@ -3,20 +3,83 @@ import {
   ApartmentType,
   Campaign,
   CompleteQuote,
+  InsuranceCost,
   InsuranceType,
   Quote,
+  QuoteBundle,
   QuoteDetails,
   SwedishApartmentQuoteDetails,
   SwedishHouseQuoteDetails,
-} from '../../data/graphql'
-import { CompleteOfferDataForMember, OfferData } from './types'
+} from 'data/graphql'
+import { OfferQuote, OfferPerson } from 'pages/OfferNew/types'
+import { OfferData } from './types'
 
-export const isOffer = (
-  offer?: OfferData,
-): offer is CompleteOfferDataForMember =>
-  (offer && isQuote(offer.lastQuoteOfMember)) || false
+export const getOfferInsuranceCost = (
+  offerQuote: OfferQuote,
+): InsuranceCost => {
+  if (isOfferFromCompleteQuote(offerQuote)) {
+    return offerQuote.insuranceCost
+  }
+  if (isOfferFromQuoteBundle(offerQuote)) {
+    return offerQuote.bundleCost
+  }
+  throw new Error(`Invalid OfferQuote type ${offerQuote}`)
+}
 
-export const isQuote = (quote: Quote): quote is CompleteQuote =>
+export const getOfferData = (
+  offerQuote: OfferQuote,
+): ReadonlyArray<OfferData> => {
+  if (isOfferFromCompleteQuote(offerQuote)) {
+    return [offerQuote]
+  }
+  if (isOfferFromQuoteBundle(offerQuote)) {
+    return offerQuote.quotes
+  }
+  throw new Error(`Invalid OfferQuote type ${offerQuote}`)
+}
+
+export const getOfferQuoteIds = (offerQuote: OfferQuote): string[] => {
+  if (isOfferFromCompleteQuote(offerQuote)) {
+    return [offerQuote.id]
+  }
+  if (isOfferFromQuoteBundle(offerQuote)) {
+    return offerQuote.quotes.map((quote) => quote.id)
+  }
+  throw new Error(`Invalid OfferQuote type ${offerQuote}`)
+}
+
+export const getOfferPerson = (offerQuote: OfferQuote): OfferPerson => {
+  if (isOfferFromCompleteQuote(offerQuote)) {
+    return {
+      firstName: offerQuote.firstName,
+      lastName: offerQuote.lastName,
+      ssn: offerQuote.ssn ?? undefined,
+      email: offerQuote.email ?? undefined,
+    }
+  }
+  if (isOfferFromQuoteBundle(offerQuote)) {
+    console.log(offerQuote)
+    const firstQuote = offerQuote.quotes[0]
+    return {
+      firstName: firstQuote.firstName,
+      lastName: firstQuote.lastName,
+      ssn: firstQuote.ssn ?? undefined,
+      email: firstQuote.email ?? undefined,
+    }
+  }
+  throw new Error(`Invalid OfferQuote type ${offerQuote}`)
+}
+
+const isOfferFromCompleteQuote = (
+  offerQuote: OfferQuote,
+): offerQuote is CompleteQuote =>
+  offerQuote.__typename === 'CompleteQuote' || false
+
+const isOfferFromQuoteBundle = (
+  offerQuote: OfferQuote,
+): offerQuote is QuoteBundle => offerQuote.__typename === 'QuoteBundle' || false
+
+export const isCompleteQuote = (quote: Quote): quote is CompleteQuote =>
   quote.__typename === 'CompleteQuote' || false
 
 export const isStudent = (details: QuoteDetails) =>
@@ -51,7 +114,7 @@ export const isNoDiscount = (campaigns: Campaign[]) =>
     campaigns[0].incentive.__typename === 'NoDiscount') ||
   false
 
-export const getInsuranceType = (quote: CompleteQuote): InsuranceType => {
+export const getInsuranceType = (quote: OfferData): InsuranceType => {
   if (isSwedishHouse(quote.quoteDetails)) {
     return InsuranceType.House
   }

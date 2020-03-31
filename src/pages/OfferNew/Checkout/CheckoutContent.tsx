@@ -1,17 +1,16 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand/dist'
-import {
-  CompleteQuote,
-  useEditQuoteMutation,
-  useRedeemedCampaignsQuery,
-} from 'data/graphql'
+import { useEditQuoteMutation, useRedeemedCampaignsQuery } from 'data/graphql'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { Price } from '../components'
 import { StartDate } from '../Introduction/Sidebar/StartDate'
-import { WithEmailForm } from '../types'
+import { OfferData, OfferQuote, WithEmailForm } from '../types'
 import {
   getInsuranceType,
+  getOfferInsuranceCost,
+  getOfferPerson,
+  getOfferQuoteIds,
   insuranceTypeTextKeys,
   isMonthlyCostDeduction,
 } from '../utils'
@@ -70,13 +69,15 @@ const InsuranceType = styled('div')`
 `
 
 interface Props extends WithEmailForm {
-  firstQuote: CompleteQuote
+  offerQuote: OfferQuote
+  offerData: OfferData
   refetch: () => Promise<void>
   onSsnUpdate: (onCompletion: Promise<void>) => void
 }
 
 export const CheckoutContent: React.FC<Props> = ({
-  firstQuote,
+  offerQuote,
+  offerData,
   email,
   onEmailChange,
   onSsnUpdate,
@@ -90,6 +91,9 @@ export const CheckoutContent: React.FC<Props> = ({
   const [fakeLoading, setFakeLoading] = React.useState(false)
   const [reallyLoading, setReallyLoading] = React.useState(false)
   const [editQuote] = useEditQuoteMutation()
+  const insuranceCost = getOfferInsuranceCost(offerQuote)
+  const offerPerson = getOfferPerson(offerQuote)
+  const quoteIds = getOfferQuoteIds(offerQuote)
 
   return (
     <>
@@ -99,14 +103,14 @@ export const CheckoutContent: React.FC<Props> = ({
           <div>
             <InsuranceTypeLabel>{textKeys.SIDEBAR_LABEL()}</InsuranceTypeLabel>
             <InsuranceType>
-              {textKeys[insuranceTypeTextKeys[getInsuranceType(firstQuote)]]()}
+              {textKeys[insuranceTypeTextKeys[getInsuranceType(offerData)]]()}
             </InsuranceType>
           </div>
           <div>
             <Price
               loading={fakeLoading || reallyLoading}
-              monthlyGross={firstQuote.insuranceCost.monthlyGross}
-              monthlyNet={firstQuote.insuranceCost.monthlyNet}
+              monthlyGross={insuranceCost.monthlyGross}
+              monthlyNet={insuranceCost.monthlyNet}
               monthlyCostDeduction={monthlyCostDeduction}
               highlightAmount
             />
@@ -116,14 +120,17 @@ export const CheckoutContent: React.FC<Props> = ({
         <UserDetailsForm
           email={email}
           onEmailChange={onEmailChange}
-          ssn={firstQuote.ssn ?? ''}
+          ssn={offerPerson.ssn ?? ''}
           onSsnChange={(ssn) => {
             const onCompletion = new Promise<void>((resolve, reject) => {
               setFakeLoading(true)
               setReallyLoading(true)
               window.setTimeout(() => setFakeLoading(false), 1000)
-              // TODO we somehow need to compare the birth date to the ssn to check so they match. In case they don't, we should warn (as they might get a different price)
-              editQuote({ variables: { input: { id: firstQuote.id, ssn } } })
+              Promise.all(
+                quoteIds.map((quoteId) => {
+                  editQuote({ variables: { input: { id: quoteId, ssn } } })
+                }),
+              )
                 .then(() => refetch())
                 .then(() => setReallyLoading(false))
                 .then(() => resolve())
@@ -139,15 +146,15 @@ export const CheckoutContent: React.FC<Props> = ({
 
         <StartDateWrapper>
           <StartDate
-            dataCollectionId={firstQuote.dataCollectionId}
-            startDate={firstQuote.startDate}
-            offerId={firstQuote.id}
-            currentInsurer={firstQuote.currentInsurer || null}
+            dataCollectionId={offerData.dataCollectionId}
+            startDate={offerData.startDate}
+            offerId={offerData.id}
+            currentInsurer={offerData.currentInsurer || null}
             refetch={refetch}
           />
         </StartDateWrapper>
 
-        <InsuranceSummary firstQuote={firstQuote} />
+        <InsuranceSummary offerData={offerData} ssn={offerPerson.ssn} />
 
         <SignSpacer />
       </Section>
