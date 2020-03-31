@@ -7279,8 +7279,8 @@ export type RemoveStartDateMutation = (
 
 export type SignQuotesMutationVariables = {
   quoteIds: Array<Scalars['ID']>,
-  successUrl: Scalars['String'],
-  failUrl: Scalars['String']
+  successUrl?: Maybe<Scalars['String']>,
+  failUrl?: Maybe<Scalars['String']>
 };
 
 
@@ -7912,7 +7912,7 @@ export type RemoveStartDateMutationHookResult = ReturnType<typeof useRemoveStart
 export type RemoveStartDateMutationResult = ApolloReactCommon.MutationResult<RemoveStartDateMutation>;
 export type RemoveStartDateMutationOptions = ApolloReactCommon.BaseMutationOptions<RemoveStartDateMutation, RemoveStartDateMutationVariables>;
 export const SignQuotesDocument = gql`
-    mutation SignQuotes($quoteIds: [ID!]!, $successUrl: String!, $failUrl: String!) {
+    mutation SignQuotes($quoteIds: [ID!]!, $successUrl: String, $failUrl: String) {
   signQuotes(input: {quoteIds: $quoteIds, successUrl: $successUrl, failUrl: $failUrl}) {
     __typename
     ... on FailedToStartSign {

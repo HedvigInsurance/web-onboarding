@@ -1,7 +1,7 @@
 mutation SignQuotes(
   $quoteIds: [ID!]!
-  $successUrl: String!
-  $failUrl: String!
+  $successUrl: String
+  $failUrl: String
 ) {
   signQuotes(
     input: {
