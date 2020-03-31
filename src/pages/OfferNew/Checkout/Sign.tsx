@@ -1,13 +1,17 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand/dist'
 import { MarkdownTranslation } from '@hedviginsurance/textkeyfy'
-import { SignStatus as GraphQLSignStatus } from 'data/graphql'
+import { InsuranceType, SignStatus as GraphQLSignStatus } from 'data/graphql'
 import { motion } from 'framer-motion'
 import { Button } from 'new-components/buttons'
 import { Spinner } from 'new-components/utils'
 import * as React from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
+import {
+  getInsurancePDFTextKey,
+  getPrebuyPDFTextKey,
+} from 'utils/insuranceDomainUtils'
 import { SignStatus } from './SignStatus'
 
 export const SignSpacer = styled('div')`
@@ -72,6 +76,7 @@ interface Props {
   loading: boolean
   canInitiateSign: boolean
   onSignStart: () => void
+  insuranceType: InsuranceType
 }
 
 export const Sign: React.FC<Props> = ({
@@ -81,6 +86,7 @@ export const Sign: React.FC<Props> = ({
   loading,
   canInitiateSign,
   onSignStart,
+  insuranceType,
 }) => {
   const isMobile = useMediaQuery({ maxWidth: 600 })
   const textKeys = useTextKeys()
@@ -125,8 +131,8 @@ export const Sign: React.FC<Props> = ({
         <MarkdownTranslation
           textKey="CHECKOUT_SIGN_DISCLAIMER"
           replacements={{
-            PREBUY_LINK: 'TODO',
-            TERMS_LINK: 'TODO',
+            PREBUY_LINK: textKeys[getPrebuyPDFTextKey(insuranceType)](),
+            TERMS_LINK: textKeys[getInsurancePDFTextKey(insuranceType)](),
           }}
           markdownProps={{ linkTarget: '_blank' }}
         />

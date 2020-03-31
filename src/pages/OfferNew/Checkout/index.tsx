@@ -5,6 +5,7 @@ import { BackArrow } from 'components/icons/BackArrow'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { CompleteQuote, SignState, useSignQuotesMutation } from 'data/graphql'
 import { TOP_BAR_Z_INDEX } from 'new-components/TopBar'
+import { getInsuranceType } from 'pages/OfferNew/utils'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
 import { Mount } from 'react-lifecycle-components'
@@ -296,6 +297,7 @@ export const Checkout: React.FC<Props> = ({
             }
             setSignUiState(SignUiState.STARTED)
           }}
+          insuranceType={getInsuranceType(firstQuote)}
         />
       </OuterWrapper>
       <Backdrop visibilityState={visibilityState} onClick={onClose} />
