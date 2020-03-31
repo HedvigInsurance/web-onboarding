@@ -23,10 +23,10 @@ import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { Price } from '../../components'
 import {
-  getQuoteTextKeyType,
+  getInsuranceType,
+  insuranceTypeTextKeys,
   isSwedishApartment,
   isSwedishHouse,
-  quoteTypeTextKeys,
 } from '../../utils'
 import { DetailsModal } from './DetailsModal/index'
 import { DiscountCodeModal } from './DiscountCodeModal'
@@ -233,7 +233,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
                     <Title>
                       {textKeys[
-                        quoteTypeTextKeys[getQuoteTextKeyType(firstQuote)]
+                        insuranceTypeTextKeys[getInsuranceType(firstQuote)]
                       ]()}
                     </Title>
 

@@ -2,6 +2,7 @@ import {
   InsuranceType,
   isApartmentOwner,
   isStudentInsurance,
+  mapToStudentVariant,
   qualifiesForStudentInsurance,
 } from './insuranceDomainUtils'
 
@@ -118,5 +119,24 @@ describe('qualifiesForStudentInsurance()', () => {
         numberOfPeople: 2,
       }),
     ).toBe(true)
+  })
+})
+
+describe('mapToStudentVariant()', () => {
+  it('maps regular rent to student rent', () => {
+    expect(mapToStudentVariant(InsuranceType.Rent)).toBe(
+      InsuranceType.StudentRent,
+    )
+  })
+
+  it('maps regular brf to student brf', () => {
+    expect(mapToStudentVariant(InsuranceType.Brf)).toBe(
+      InsuranceType.StudentBrf,
+    )
+  })
+
+  it('Does not accept other variants', () => {
+    expect(() => mapToStudentVariant(InsuranceType.StudentRent)).toThrow()
+    expect(() => mapToStudentVariant(InsuranceType.StudentBrf)).toThrow()
   })
 })

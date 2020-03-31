@@ -11,6 +11,7 @@ import { History } from 'history'
 import { TopBar } from 'new-components/TopBar'
 import { SwitchSafetySection } from 'pages/OfferNew/SwitchSafetySection'
 import { TestimonialsSection } from 'pages/OfferNew/TestimonialsSection'
+import { getInsuranceType } from 'pages/OfferNew/utils'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
 import { Redirect, useHistory, useRouteMatch } from 'react-router'
@@ -83,7 +84,7 @@ export const OfferNew: React.FC = () => {
             />
           )}
         </TrackAction>
-        <Perils />
+        <Perils insuranceType={getInsuranceType(firstQuote)} />
         {market === Market.Se && (
           <Compare currentInsurer={firstQuote.currentInsurer || undefined} />
         )}
