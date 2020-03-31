@@ -65,18 +65,20 @@ export const InsuranceSummary: React.FC<Props> = ({ firstQuote }) => {
     <Wrapper>
       <Title>{textKeys.CHECKOUT_SUMMARY_TITLE()}</Title>
       <Table>
-        {getDetails(firstQuote.quoteDetails, textKeys, firstQuote.ssn).map(
-          (group, index) => (
-            <Group key={index}>
-              {group.map(({ key, value, label }) => (
-                <Row key={key}>
-                  <Label>{label}</Label>
-                  <Value>{value}</Value>
-                </Row>
-              ))}
-            </Group>
-          ),
-        )}
+        {getDetails(
+          firstQuote.quoteDetails,
+          textKeys,
+          firstQuote.ssn ?? undefined,
+        ).map((group, index) => (
+          <Group key={index}>
+            {group.map(({ key, value, label }) => (
+              <Row key={key}>
+                <Label>{label}</Label>
+                <Value>{value}</Value>
+              </Row>
+            ))}
+          </Group>
+        ))}
       </Table>
     </Wrapper>
   )

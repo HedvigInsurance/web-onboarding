@@ -13,6 +13,11 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData,
 })
 
+export interface ApolloClientAndSubscriptionClient {
+  subscriptionClient: SubscriptionClient
+  client: ApolloClient<object>
+}
+
 export const apolloClient = (() => {
   if (typeof window === 'undefined') {
     return undefined
