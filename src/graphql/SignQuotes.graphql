@@ -1,13 +1,13 @@
 mutation SignQuotes(
   $quoteIds: [ID!]!
-  $targetUrl: String!
-  $failedTargetUrl: String!
+  $successUrl: String!
+  $failUrl: String!
 ) {
   signQuotes(
     input: {
       quoteIds: $quoteIds
-      targetUrl: $targetUrl
-      failedTargetUrl: $failedTargetUrl
+      successUrl: $successUrl
+      failUrl: $failUrl
     }
   ) {
     __typename

@@ -171,9 +171,7 @@ export const Checkout: React.FC<Props> = ({
   const [email, setEmail] = React.useState(firstQuote.email ?? '')
   const [ssnUpdateLoading, setSsnUpdateLoading] = React.useState(false)
   const [startPollingSignState, signStatus] = useSignState()
-  const [signQuotes, signQuotesMutation] = useSignQuotesMutation({
-    variables: { quoteIds: [firstQuote.id] },
-  })
+  const [signQuotes, signQuotesMutation] = useSignQuotesMutation()
   const locale = useCurrentLocale()
 
   const outerWrapper = React.useRef<HTMLDivElement>()
@@ -268,7 +266,16 @@ export const Checkout: React.FC<Props> = ({
               return
             }
 
-            const result = await signQuotes()
+            const baseUrl = `${window.location.origin}${
+              locale ? '/' + locale : ''
+            }/new-member`
+            const result = await signQuotes({
+              variables: {
+                quoteIds: [firstQuote.id],
+                successUrl: baseUrl + '/connect-payment',
+                failUrl: baseUrl + '/sign/fatal',
+              },
+            })
             if (result.data?.signQuotes?.__typename === 'FailedToStartSign') {
               setSignUiState(SignUiState.FAILED)
               return
