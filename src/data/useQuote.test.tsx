@@ -20,7 +20,7 @@ const QuotesDisplayer: React.FC<{ quoteId: string }> = ({ quoteId }) => {
   const [quote] = useQuote(quoteId)
   return (
     <ul>
-      <li key={quote!!.id}>{quote!!.id}</li>
+      <li key={quote?.id}>{quote?.id}</li>
     </ul>
   )
 }
