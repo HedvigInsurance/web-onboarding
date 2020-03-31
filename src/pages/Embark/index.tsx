@@ -296,7 +296,10 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                       ),
                       personalInformationApi: resolvePersonalInformation,
                       houseInformation: resolveHouseInformation,
-                      createQuote: createQuote(storageState),
+                      createQuote: createQuote(
+                        storageState,
+                        getPickedLocaleFromCurrentLocale(currentLocale),
+                      ),
                       externalInsuranceProviderProviderStatus: resolveExternalInsuranceProviderProviderStatus,
                       externalInsuranceProviderStartSession: resolveExternalInsuranceProviderStartSession,
                       track: (eventName, payload) => {

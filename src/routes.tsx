@@ -4,7 +4,6 @@ import { RouteComponentProps } from 'react-router'
 import { ConnectPayment } from './pages/ConnectPayment'
 import { TrustlyFailPage } from './pages/ConnectPayment/components/TrustlyFailPage'
 import { TrustlySpinnerPage } from './pages/ConnectPayment/components/TrustlySpinnerPage'
-import { Debugger } from './pages/Debugger'
 import { Download } from './pages/Download'
 import { EmbarkRoot } from './pages/Embark'
 import { FourOhFour } from './pages/FourOhFour'
@@ -64,11 +63,6 @@ export const reactPageRoutes: ReactPageRoute[] = [
   {
     path: LOCALE_PATH_PATTERN + '/new-member/sign/fail',
     Component: SignLoading,
-    exact: true,
-  },
-  {
-    path: LOCALE_PATH_PATTERN + '/debugger',
-    Component: Debugger,
     exact: true,
   },
   {

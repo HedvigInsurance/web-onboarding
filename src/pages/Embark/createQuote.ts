@@ -1,9 +1,8 @@
 import { CreateQuoteData, CreateQuoteVariables } from '@hedviginsurance/embark'
-import { MemberInsuranceDocument } from 'data/graphql'
+import { Locale } from 'data/graphql'
 import gql from 'graphql-tag'
 import { apolloClient } from '../../client/apolloClient'
-import { CREATE_SESSION_TOKEN_MUTATION } from '../../containers/SessionContainer'
-import { afterTick } from './utils'
+import { setupSession } from '../../containers/SessionContainer'
 
 const MUTATION = gql`
   mutation CreateQuote($input: CreateQuoteInput!) {
@@ -53,24 +52,12 @@ const MUTATION = gql`
   }
 `
 
-export const createQuote = (storage: any) => async (
+export const createQuote = (storage: any, locale: Locale) => async (
   variables: CreateQuoteVariables,
 ): Promise<CreateQuoteData | Error> => {
-  if (!apolloClient) {
-    return Error('Missing apollo client')
-  }
+  await setupSession(apolloClient!, storage, locale)
 
-  if (!storage.session.getSession().token) {
-    const sessionResult = await apolloClient.client.mutate({
-      mutation: CREATE_SESSION_TOKEN_MUTATION,
-    })
-    await afterTick(() => {
-      apolloClient!.subscriptionClient.close(true, true)
-      storage.setToken(sessionResult.data.createSessionV2.token)
-    })
-  }
-
-  const result = await apolloClient.client.mutate<
+  const result = await apolloClient!.client.mutate<
     CreateQuoteData,
     CreateQuoteVariables
   >({
@@ -79,12 +66,6 @@ export const createQuote = (storage: any) => async (
   })
 
   if (result.data && result.data.createQuote.__typename === 'CompleteQuote') {
-    // Update the cache
-    await apolloClient.client.query({
-      query: MemberInsuranceDocument,
-      fetchPolicy: 'network-only',
-    })
-
     storage.session.setSession({
       ...storage.session.getSession(),
       quoteIds: [result.data!.createQuote!.id],
