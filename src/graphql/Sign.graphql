@@ -1,3 +1,0 @@
-mutation SignOffer($personalNumber: String!, $email: String!) {
-  signOffer(details: { personalNumber: $personalNumber, email: $email })
-}

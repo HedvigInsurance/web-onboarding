@@ -3,12 +3,12 @@ import {
   ApartmentType,
   Campaign,
   CompleteQuote,
-  InsuranceType,
   Quote,
   QuoteDetails,
   SwedishApartmentQuoteDetails,
   SwedishHouseQuoteDetails,
-} from '../../data/graphql'
+} from 'data/graphql'
+import { match } from 'matchly'
 import { CompleteOfferDataForMember, OfferData } from './types'
 
 export const isOffer = (
@@ -51,36 +51,55 @@ export const isNoDiscount = (campaigns: Campaign[]) =>
     campaigns[0].incentive.__typename === 'NoDiscount') ||
   false
 
-export const getInsuranceType = (quote: CompleteQuote): InsuranceType => {
+export type QuoteTextKeyType =
+  | 'SE_RENT'
+  | 'SE_BRF'
+  | 'SE_STUDENT_RENT'
+  | 'SE_STUDENT_BRF'
+  | 'SE_HOUSE'
+  | 'NO_HOME'
+  | 'NO_TRAVEL'
+
+export const quoteTypeTextKeys: Record<QuoteTextKeyType, string> = {
+  SE_RENT: 'SIDEBAR_INSURANCE_TYPE_RENT',
+  SE_BRF: 'SIDEBAR_INSURANCE_TYPE_BRF',
+  SE_STUDENT_RENT: 'SIDEBAR_INSURANCE_TYPE_STUDENT_RENT',
+  SE_STUDENT_BRF: 'SIDEBAR_INSURANCE_TYPE_STUDENT_BRF',
+  SE_HOUSE: 'SIDEBAR_INSURANCE_TYPE_HOUSE',
+  NO_HOME: 'SIDEBAR_INSURANCE_TYPE_NORWAY_HOME',
+  NO_TRAVEL: 'SIDEBAR_INSURANCE_TYPE_NORWAY_TRAVEL',
+}
+
+export const getQuoteTextKeyType = (quote: CompleteQuote): QuoteTextKeyType => {
   if (isSwedishHouse(quote.quoteDetails)) {
-    return InsuranceType.House
+    return 'SE_HOUSE'
   }
 
   if (isSwedishApartment(quote.quoteDetails)) {
-    const map = {
-      RENT: InsuranceType.Rent,
-      BRF: InsuranceType.Brf,
-      STUDENT_RENT: InsuranceType.StudentRent,
-      STUDENT_BRF: InsuranceType.StudentBrf,
+    const result = match<ApartmentType, QuoteTextKeyType>([
+      [ApartmentType.Rent, 'SE_RENT'],
+      [ApartmentType.Brf, 'SE_BRF'],
+      [ApartmentType.StudentRent, 'SE_STUDENT_RENT'],
+      [ApartmentType.StudentBrf, 'SE_STUDENT_BRF'],
+    ])(quote.quoteDetails.type)
+
+    if (!result) {
+      throw new Error(`Unknown apartment quote type ${quote.quoteDetails.type}`)
     }
 
-    if (!map[quote.quoteDetails.type]) {
-      throw new Error(`Invalid insurance type ${quote.quoteDetails.type}`)
-    }
-
-    return map[quote.quoteDetails.type]
+    return result
   }
 
-  return InsuranceType.Rent // FIXME Norway... 🇳🇴
+  if (quote.quoteDetails.__typename === 'NorwegianHomeContentsDetails') {
+    return 'NO_HOME'
+  }
+  if (quote.quoteDetails.__typename === 'NorwegianTravelDetails') {
+    return 'NO_TRAVEL'
+  }
+
+  throw new Error(`Unknown quote type ${quote.quoteDetails.__typename}`)
 }
 
-export const insuranceTypeTextKeys: Record<InsuranceType, string> = {
-  [InsuranceType.Rent]: 'SIDEBAR_INSURANCE_TYPE_RENT',
-  [InsuranceType.Brf]: 'SIDEBAR_INSURANCE_TYPE_BRF',
-  [InsuranceType.StudentRent]: 'SIDEBAR_INSURANCE_TYPE_STUDENT_RENT',
-  [InsuranceType.StudentBrf]: 'SIDEBAR_INSURANCE_TYPE_STUDENT_BRF',
-  [InsuranceType.House]: 'SIDEBAR_INSURANCE_TYPE_HOUSE',
-}
 export const apartmentTypeTextKeys: Record<ApartmentType, string> = {
   [ApartmentType.Brf]: 'CHECKOUT_INSURANCE_APARTMENT_TYPE_BRF',
   [ApartmentType.Rent]: 'CHECKOUT_INSURANCE_APARTMENT_TYPE_RENT',

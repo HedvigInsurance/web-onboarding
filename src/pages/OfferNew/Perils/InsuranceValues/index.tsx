@@ -2,20 +2,15 @@ import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import color from 'color'
 import { DocumentIcon } from 'components/icons/Document'
-import { InsuranceType } from 'data/graphql'
+import { QuoteTextKeyType } from 'pages/OfferNew/utils'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-import {
-  getEUPrebuyPDFTextKey,
-  getInsurancePDFTextKey,
-  getPrebuyPDFTextKey,
-} from 'utils/insuranceDomainUtils'
 import { SubSubHeadingBlack } from '../../components'
 import { insuranceValues } from './mock'
 import { Values } from './Values'
 
 interface Props {
-  insuranceType: InsuranceType
+  quoteTextKeyType: QuoteTextKeyType
 }
 
 const Wrapper = styled.div`
@@ -31,15 +26,6 @@ const Header = styled.div`
   flex-direction: row;
   align-items: center;
 `
-
-// const TooltipWrapper = styled.div`
-//   margin-left: 1rem;
-//   display: none;
-//
-//   @media (max-width: 600px) {
-//     display: block;
-//   }
-// `
 
 const Links = styled.div`
   display: flex;
@@ -86,7 +72,7 @@ const Link = styled.a`
   }
 `
 
-export const InsuranceValues: React.FC<Props> = ({ insuranceType }) => {
+export const InsuranceValues: React.FC<Props> = ({ quoteTextKeyType }) => {
   const textKeys = useTextKeys()
 
   return (
@@ -95,36 +81,24 @@ export const InsuranceValues: React.FC<Props> = ({ insuranceType }) => {
         <SubSubHeadingBlack>
           {textKeys.COVERAGE_INFO_HEADLINE()}
         </SubSubHeadingBlack>
-        {/*<TooltipWrapper>
-          <Tooltip size="lg" body="Information" />
-        </TooltipWrapper>*/}
       </Header>
 
-      <Values insuranceValues={insuranceValues(insuranceType)} />
+      <Values insuranceValues={insuranceValues(quoteTextKeyType)} />
 
       <Links>
-        <Link
-          href={textKeys[getInsurancePDFTextKey(insuranceType)]()}
-          target="_blank"
-        >
+        <Link href="TODO" target="_blank">
           <DocumentIcon />
-          {textKeys.COVERAGE_TERMSANDCONDITIONS_BUTTON()}
+          TODO
         </Link>
 
-        <Link
-          href={textKeys[getPrebuyPDFTextKey(insuranceType)]()}
-          target="_blank"
-        >
+        <Link href="TODO" target="_blank">
           <DocumentIcon />
-          {textKeys.COVERAGE_PRESALEINFORMATION_BUTTON()}
+          TODO
         </Link>
 
-        <Link
-          href={textKeys[getEUPrebuyPDFTextKey(insuranceType)]()}
-          target="_blank"
-        >
+        <Link href="TODO" target="_blank">
           <DocumentIcon />
-          {textKeys.COVERAGE_PRESALEINFORMATIONEU_BUTTON()}
+          TODO
         </Link>
       </Links>
     </Wrapper>

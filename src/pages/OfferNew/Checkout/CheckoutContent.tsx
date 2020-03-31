@@ -11,9 +11,9 @@ import { Price } from '../components'
 import { StartDate } from '../Introduction/Sidebar/StartDate'
 import { WithEmailForm } from '../types'
 import {
-  getInsuranceType,
-  insuranceTypeTextKeys,
+  getQuoteTextKeyType,
   isMonthlyCostDeduction,
+  quoteTypeTextKeys,
 } from '../utils'
 import { InsuranceSummary } from './InsuranceSummary'
 import { SignSpacer } from './Sign'
@@ -99,7 +99,7 @@ export const CheckoutContent: React.FC<Props> = ({
           <div>
             <InsuranceTypeLabel>{textKeys.SIDEBAR_LABEL()}</InsuranceTypeLabel>
             <InsuranceType>
-              {textKeys[insuranceTypeTextKeys[getInsuranceType(firstQuote)]]()}
+              {textKeys[quoteTypeTextKeys[getQuoteTextKeyType(firstQuote)]]()}
             </InsuranceType>
           </div>
           <div>

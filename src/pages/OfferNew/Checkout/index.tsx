@@ -5,14 +5,12 @@ import { BackArrow } from 'components/icons/BackArrow'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { CompleteQuote, SignState, useSignQuotesMutation } from 'data/graphql'
 import { TOP_BAR_Z_INDEX } from 'new-components/TopBar'
-import { getInsuranceType } from 'pages/OfferNew/utils'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
 import { Mount } from 'react-lifecycle-components'
 import { Redirect } from 'react-router-dom'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
-import { CheckoutContent, Title } from './CheckoutContent'
+import { CheckoutContent } from './CheckoutContent'
 import { useScrollLock, useTrack, VisibilityState } from './hooks'
 import { Sign, SignUiState } from './Sign'
 import { useSignState } from './SignStatus'
@@ -81,17 +79,10 @@ const SlidingSign = styled(Sign)<Openable>`
   ${slideInStyles};
 `
 
-const InnerWrapper = styled('div')<{ hasIframe: boolean }>`
+const InnerWrapper = styled('div')`
   display: flex;
   flex-direction: column;
-  ${({ hasIframe }) =>
-    hasIframe
-      ? css`
-          padding-top: 20vh;
-        `
-      : css`
-          justify-content: space-between;
-        `};
+  justify-content: space-between;
   width: 100%;
   min-height: 100%;
   background: ${colorsV2.offwhite};
@@ -148,13 +139,6 @@ const Backdrop = styled('div')<Openable>`
   }};
 `
 
-const SignIframe = styled('iframe')`
-  border: 0;
-  margin-top: 5vh;
-  min-height: 40vh;
-  max-width: 100%;
-`
-
 interface Props {
   firstQuote: CompleteQuote
   isOpen?: boolean
@@ -168,7 +152,6 @@ export const Checkout: React.FC<Props> = ({
   onClose,
   refetch,
 }) => {
-  const textKeys = useTextKeys()
   const [visibilityState, setVisibilityState] = React.useState(
     VisibilityState.CLOSED,
   )
@@ -185,7 +168,6 @@ export const Checkout: React.FC<Props> = ({
   }, [isOpen])
 
   const [signUiState, setSignUiState] = React.useState(SignUiState.NOT_STARTED)
-  const [bankIdUrl, setBankIdUrl] = React.useState<string | null>(null)
   const [email, setEmail] = React.useState(firstQuote.email ?? '')
   const [ssnUpdateLoading, setSsnUpdateLoading] = React.useState(false)
   const [startPollingSignState, signStatus] = useSignState()
@@ -198,7 +180,7 @@ export const Checkout: React.FC<Props> = ({
 
   React.useEffect(() => {
     if (
-      ![SignUiState.STARTED, SignUiState.STARTED_WITH_IFRAME].includes(
+      ![SignUiState.STARTED, SignUiState.STARTED_WITH_REDIRECT].includes(
         signUiState,
       )
     ) {
@@ -252,42 +234,28 @@ export const Checkout: React.FC<Props> = ({
           ref={outerWrapper as React.MutableRefObject<HTMLDivElement | null>}
           visibilityState={visibilityState}
         >
-          <InnerWrapper
-            hasIframe={signUiState === SignUiState.STARTED_WITH_IFRAME}
-          >
-            {signUiState === SignUiState.STARTED_WITH_IFRAME ? (
-              <>
-                <Title>{textKeys.CHECKOUT_TITLE()}</Title>
+          <InnerWrapper>
+            <BackButtonWrapper>
+              <BackButton onClick={onClose}>
+                <BackArrow />
+              </BackButton>
+            </BackButtonWrapper>
 
-                <SignIframe src={bankIdUrl!} />
-              </>
-            ) : (
-              <>
-                <BackButtonWrapper>
-                  <BackButton onClick={onClose}>
-                    <BackArrow />
-                  </BackButton>
-                </BackButtonWrapper>
-
-                <CheckoutContent
-                  firstQuote={firstQuote}
-                  email={email}
-                  onEmailChange={setEmail}
-                  onSsnUpdate={(onCompletion) => {
-                    setSsnUpdateLoading(true)
-                    onCompletion.finally(() => setSsnUpdateLoading(false))
-                  }}
-                  refetch={refetch}
-                />
-              </>
-            )}
-
+            <CheckoutContent
+              firstQuote={firstQuote}
+              email={email}
+              onEmailChange={setEmail}
+              onSsnUpdate={(onCompletion) => {
+                setSsnUpdateLoading(true)
+                onCompletion.finally(() => setSsnUpdateLoading(false))
+              }}
+              refetch={refetch}
+            />
             <div />
           </InnerWrapper>
         </OuterScrollWrapper>
 
         <SlidingSign
-          insuranceType={getInsuranceType(firstQuote)}
           visibilityState={visibilityState}
           canInitiateSign={canInitiateSign && !ssnUpdateLoading}
           signUiState={signUiState}
@@ -308,8 +276,8 @@ export const Checkout: React.FC<Props> = ({
             if (
               result.data?.signQuotes?.__typename === 'NorwegianBankIdSession'
             ) {
-              setBankIdUrl(result.data.signQuotes.redirectUrl!)
-              setSignUiState(SignUiState.STARTED_WITH_IFRAME)
+              setSignUiState(SignUiState.STARTED_WITH_REDIRECT)
+              window.location.href = result.data.signQuotes.redirectUrl!
               return
             }
             setSignUiState(SignUiState.STARTED)

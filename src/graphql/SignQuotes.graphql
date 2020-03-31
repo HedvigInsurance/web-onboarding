@@ -1,5 +1,15 @@
-mutation SignQuotes($quoteIds: [ID!]!) {
-  signQuotes(input: { quoteIds: $quoteIds }) {
+mutation SignQuotes(
+  $quoteIds: [ID!]!
+  $targetUrl: String!
+  $failedTargetUrl: String!
+) {
+  signQuotes(
+    input: {
+      quoteIds: $quoteIds
+      targetUrl: $targetUrl
+      failedTargetUrl: $failedTargetUrl
+    }
+  ) {
     __typename
     ... on FailedToStartSign {
       errorMessage

@@ -8,11 +8,6 @@ import { Spinner } from 'new-components/utils'
 import * as React from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-import {
-  getInsurancePDFTextKey,
-  getPrebuyPDFTextKey,
-  InsuranceType,
-} from 'utils/insuranceDomainUtils'
 import { SignStatus } from './SignStatus'
 
 export const SignSpacer = styled('div')`
@@ -65,14 +60,13 @@ const Disclaimer = styled('p')`
 
 export enum SignUiState {
   NOT_STARTED,
-  STARTED_WITH_IFRAME,
+  STARTED_WITH_REDIRECT,
   STARTED,
   FAILED,
 }
 
 interface Props {
   className?: string
-  insuranceType: InsuranceType
   signUiState: SignUiState
   signStatus: GraphQLSignStatus | null
   loading: boolean
@@ -82,7 +76,6 @@ interface Props {
 
 export const Sign: React.FC<Props> = ({
   className,
-  insuranceType,
   signUiState,
   signStatus,
   loading,
@@ -94,7 +87,7 @@ export const Sign: React.FC<Props> = ({
 
   return (
     <Wrapper className={className}>
-      {signUiState !== SignUiState.STARTED_WITH_IFRAME && (
+      {signUiState !== SignUiState.STARTED_WITH_REDIRECT && (
         <>
           <ButtonWrapper>
             <Button
@@ -138,8 +131,8 @@ export const Sign: React.FC<Props> = ({
         <MarkdownTranslation
           textKey="CHECKOUT_SIGN_DISCLAIMER"
           replacements={{
-            PREBUY_LINK: textKeys[getPrebuyPDFTextKey(insuranceType)](),
-            TERMS_LINK: textKeys[getInsurancePDFTextKey(insuranceType)](),
+            PREBUY_LINK: 'TODO',
+            TERMS_LINK: 'TODO',
           }}
           markdownProps={{ linkTarget: '_blank' }}
         />
