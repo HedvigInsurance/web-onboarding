@@ -273,6 +273,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
                   <Price
                     monthlyCostDeduction={
+                      isOfferFromQuoteBundle(offerQuote) || // TODO: Maybe remove this if we don't want it, it looks nice I think though
                       isMonthlyCostDeduction(
                         redeemedCampaigns[0]?.incentive ?? undefined,
                       ) ||

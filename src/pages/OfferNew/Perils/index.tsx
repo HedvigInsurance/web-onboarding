@@ -4,7 +4,7 @@ import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { Peril } from 'pages/OfferNew/Perils/types'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-import { InsuranceType } from 'utils/insuranceDomainUtils'
+import { getInsuranceType, TypeOfContract } from 'utils/insuranceDomainUtils'
 import {
   Body,
   Column,
@@ -20,7 +20,7 @@ import { getLocalizedPerils } from './perilData'
 import { PerilModal } from './PerilModal'
 
 interface Props {
-  insuranceType: InsuranceType
+  contractType: TypeOfContract
 }
 
 const Wrapper = styled.div`
@@ -29,7 +29,8 @@ const Wrapper = styled.div`
   display: flex;
 `
 
-export const Perils: React.FC<Props> = ({ insuranceType }) => {
+export const Perils: React.FC<Props> = ({ contractType }) => {
+  const insuranceType = getInsuranceType(contractType)
   const textKeys = useTextKeys()
   const [isShowingPeril, setIsShowingPeril] = React.useState(false)
   const [currentPeril, setCurrentPeril] = React.useState(0)
@@ -56,7 +57,7 @@ export const Perils: React.FC<Props> = ({ insuranceType }) => {
             setIsShowingPeril={setIsShowingPeril}
           />
 
-          <InsuranceValues contractType={insuranceType} />
+          <InsuranceValues contractType={contractType} />
         </Column>
         <ColumnSpacing />
       </Container>

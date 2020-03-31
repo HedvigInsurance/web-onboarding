@@ -12,9 +12,9 @@ import {
   QuoteDetails,
   SwedishApartmentQuoteDetails,
   SwedishHouseQuoteDetails,
-  TypeOfContract,
 } from 'data/graphql'
 import { OfferPerson, OfferQuote } from 'pages/OfferNew/types'
+import { TypeOfContract } from 'utils/insuranceDomainUtils'
 import { OfferData } from './types'
 
 export const getOfferInsuranceCost = (
@@ -61,7 +61,6 @@ export const getOfferPerson = (offerQuote: OfferQuote): OfferPerson => {
     }
   }
   if (isOfferFromQuoteBundle(offerQuote)) {
-    console.log(offerQuote)
     const firstQuote = offerQuote.quotes[0]
     return {
       firstName: firstQuote.firstName,
@@ -127,12 +126,12 @@ export const isNoDiscount = (campaigns: Campaign[]) =>
     campaigns[0].incentive.__typename === 'NoDiscount') ||
   false
 
-export const getContractType = (quote: OfferData): TypeOfContract => {
-  if (isSwedishHouse(quote.quoteDetails)) {
+export const getContractType = (offerData: OfferData): TypeOfContract => {
+  if (isSwedishHouse(offerData.quoteDetails)) {
     return TypeOfContract.SeHouse
   }
 
-  if (isSwedishApartment(quote.quoteDetails)) {
+  if (isSwedishApartment(offerData.quoteDetails)) {
     const map = {
       RENT: TypeOfContract.SeApartmentRent,
       BRF: TypeOfContract.SeApartmentBrf,
@@ -140,41 +139,48 @@ export const getContractType = (quote: OfferData): TypeOfContract => {
       STUDENT_BRF: TypeOfContract.SeApartmentStudentBrf,
     }
 
-    if (!map[quote.quoteDetails.type]) {
-      throw new Error(`Invalid insurance type ${quote.quoteDetails.type}`)
+    if (!map[offerData.quoteDetails.type]) {
+      throw new Error(
+        `Get Contract Type: Invalid insurance type ${offerData.quoteDetails.type}`,
+      )
     }
 
-    return map[quote.quoteDetails.type]
+    return map[offerData.quoteDetails.type]
   }
 
-  if (isNorwegianHomeContents(quote.quoteDetails)) {
+  if (isNorwegianHomeContents(offerData.quoteDetails)) {
     const map = {
       RENT: NorwegianHomeContentsType.Rent,
       OWN: NorwegianHomeContentsType.Own,
     }
 
-    if (!map[quote.quoteDetails.type]) {
-      throw new Error(`Invalid insurance type ${quote.quoteDetails.type}`)
+    // @ts-ignore
+    if (!map[offerData.quoteDetails.homeType]) {
+      // FIXME: We're using homeType as alias for type
+      throw new Error(
+        `Get Contract Type: Invalid insurance type ${offerData.quoteDetails.type}`,
+      )
     }
 
-    const type = map[quote.quoteDetails.type]
+    // @ts-ignore
+    const type = map[offerData.quoteDetails.homeType]
 
     switch (type) {
       case NorwegianHomeContentsType.Own:
-        if (quote.quoteDetails.isYouth) {
+        if (offerData.quoteDetails.isYouth) {
           return TypeOfContract.NoHomeContentYouthOwn
         }
         return TypeOfContract.NoHomeContentOwn
       case NorwegianHomeContentsType.Rent:
-        if (quote.quoteDetails.isYouth) {
+        if (offerData.quoteDetails.isYouth) {
           return TypeOfContract.NoHomeContentYouthRent
         }
         return TypeOfContract.NoHomeContentRent
     }
   }
 
-  if (isNorwegianTravel(quote.quoteDetails)) {
-    if (quote.quoteDetails.isYouth) {
+  if (isNorwegianTravel(offerData.quoteDetails)) {
+    if (offerData.quoteDetails.isYouth) {
       return TypeOfContract.NoTravelYouth
     }
     return TypeOfContract.NoTravel
@@ -182,7 +188,7 @@ export const getContractType = (quote: OfferData): TypeOfContract => {
 
   throw new Error(
     `Unsupported quoteDetails type (quoteDetails=${JSON.stringify(
-      quote.quoteDetails,
+      offerData.quoteDetails,
     )})`,
   )
 }

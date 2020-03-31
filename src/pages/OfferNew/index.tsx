@@ -89,7 +89,8 @@ export const OfferNew: React.FC = () => {
 
   const offerQuote = offerQuoteBeingFetched as OfferQuote
 
-  const offerData = getOfferData(offerQuote)[0]
+  const offerData = getOfferData(offerQuote)
+  const firstOfferData = offerData[0]
 
   return (
     <Page>
@@ -110,7 +111,7 @@ export const OfferNew: React.FC = () => {
           {({ track }) => (
             <Introduction
               offerQuote={offerQuote}
-              offerData={offerData}
+              offerData={firstOfferData}
               refetch={refetch as () => Promise<any>}
               onCheckoutOpen={() => {
                 toggleCheckout(true)
@@ -119,16 +120,18 @@ export const OfferNew: React.FC = () => {
             />
           )}
         </TrackAction>
-        <Perils insuranceType={getContractType(offerData)} />
+        <Perils contractType={getContractType(firstOfferData)} />
         {market === Market.Se && (
-          <Compare currentInsurer={offerData.currentInsurer || undefined} />
+          <Compare
+            currentInsurer={firstOfferData.currentInsurer || undefined}
+          />
         )}
         {market === Market.Se && <TestimonialsSection />}
         <SwitchSafetySection />
         <FaqSection />
         <Checkout
           offerQuote={offerQuote}
-          offerData={offerData}
+          offerData={firstOfferData}
           isOpen={checkoutMatch !== null}
           onClose={() => toggleCheckout(false)}
           refetch={refetch as () => Promise<any>}

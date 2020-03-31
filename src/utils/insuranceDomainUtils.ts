@@ -1,11 +1,23 @@
-import { TypeOfContract } from 'data/graphql'
-
 export enum InsuranceType {
   Rent = 'RENT',
   Brf = 'BRF',
   StudentRent = 'STUDENT_RENT',
   StudentBrf = 'STUDENT_BRF',
   House = 'HOUSE',
+}
+
+export enum TypeOfContract {
+  SeHouse = 'SE_HOUSE',
+  SeApartmentBrf = 'SE_APARTMENT_BRF',
+  SeApartmentRent = 'SE_APARTMENT_RENT',
+  SeApartmentStudentBrf = 'SE_APARTMENT_STUDENT_BRF',
+  SeApartmentStudentRent = 'SE_APARTMENT_STUDENT_RENT',
+  NoHomeContentOwn = 'NO_HOME_CONTENT_OWN',
+  NoHomeContentRent = 'NO_HOME_CONTENT_RENT',
+  NoHomeContentYouthOwn = 'NO_HOME_CONTENT_YOUTH_OWN',
+  NoHomeContentYouthRent = 'NO_HOME_CONTENT_YOUTH_RENT',
+  NoTravel = 'NO_TRAVEL',
+  NoTravelYouth = 'NO_TRAVEL_YOUTH',
 }
 
 export const isApartmentOwner = (insuranceType: InsuranceType): boolean =>
@@ -60,7 +72,9 @@ export const getInsuranceType = (
   }
 
   if (!map[contractType]) {
-    throw new Error(`Invalid insurance type ${contractType}`)
+    throw new Error(
+      `Get Insurance Type: Invalid insurance type ${contractType}`,
+    )
   }
   return map[contractType]
 }
@@ -84,7 +98,9 @@ export const getPrebuyPDFTextKey = (contractType: TypeOfContract): string => {
   }
 
   if (!map[contractType]) {
-    throw new Error(`Invalid insurance type ${contractType}`)
+    throw new Error(
+      `Prebuy PDF Text Key: Invalid insurance type ${contractType}`,
+    )
   }
   return map[contractType]
 }
@@ -113,7 +129,9 @@ export const getInsurancePDFTextKey = (
   }
 
   if (!map[contractType]) {
-    throw new Error(`Invalid insurance type ${contractType}`)
+    throw new Error(
+      `Insurance PDF Text Key: Invalid insurance type ${contractType}`,
+    )
   }
   return map[contractType]
 }
@@ -140,13 +158,15 @@ export const getEUPrebuyPDFTextKey = (contractType: TypeOfContract): string => {
   }
 
   if (!map[contractType]) {
-    throw new Error(`Invalid insurance type ${contractType}`)
+    throw new Error(
+      `EU Prebuy PDF Text Key: Invalid insurance type ${contractType}`,
+    )
   }
   return map[contractType]
 }
 
 export const getInsuranceAmountTextKey = (
-  typeOfContract: InsuranceType,
+  insuranceType: InsuranceType,
 ): string => {
   const map = {
     [InsuranceType.Rent]: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT',
@@ -156,9 +176,11 @@ export const getInsuranceAmountTextKey = (
     [InsuranceType.House]: 'OFFER_INSURED_AMOUNT_COL_TWO_AMOUNT_HOUSE',
   }
 
-  if (!map[typeOfContract]) {
-    throw new Error(`Invalid insurance type ${typeOfContract}`)
+  if (!map[insuranceType]) {
+    throw new Error(
+      `Insurance Amount Text Key: Invalid insurance type ${insuranceType}`,
+    )
   }
 
-  return map[typeOfContract]
+  return map[insuranceType]
 }

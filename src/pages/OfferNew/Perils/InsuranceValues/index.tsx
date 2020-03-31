@@ -2,7 +2,6 @@ import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import color from 'color'
 import { DocumentIcon } from 'components/icons/Document'
-import { TypeOfContract } from 'data/graphql'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import {
@@ -10,6 +9,7 @@ import {
   getInsurancePDFTextKey,
   getInsuranceType,
   getPrebuyPDFTextKey,
+  TypeOfContract,
 } from 'utils/insuranceDomainUtils'
 import { SubSubHeadingBlack } from '../../components'
 import { insuranceValues } from './mock'

@@ -6033,6 +6033,8 @@ export type SignInput = {
 
 export type SignQuotesInput = {
   quoteIds: Array<Scalars['ID']>
+  successUrl?: Maybe<Scalars['String']>
+  failUrl?: Maybe<Scalars['String']>
 }
 
 export enum SignState {
