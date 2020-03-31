@@ -18,6 +18,7 @@ query QuoteBundle($input: QuoteBundleInput!) {
       ssn
       birthDate
       startDate
+      expiresAt
       email
       quoteDetails {
         ... on SwedishApartmentQuoteDetails {
@@ -51,10 +52,12 @@ query QuoteBundle($input: QuoteBundleInput!) {
           street
           homeType: type
           zipCode
+          isYouth
         }
 
         ... on NorwegianTravelDetails {
           coInsured
+          isYouth
         }
       }
     }

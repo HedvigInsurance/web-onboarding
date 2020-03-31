@@ -7351,6 +7351,7 @@ export type QuoteBundleQuery = { __typename?: 'Query' } & {
         | 'ssn'
         | 'birthDate'
         | 'startDate'
+        | 'expiresAt'
         | 'email'
       > & {
           currentInsurer: Maybe<
@@ -7440,11 +7441,11 @@ export type QuoteBundleQuery = { __typename?: 'Query' } & {
                 })
             | ({ __typename?: 'NorwegianHomeContentsDetails' } & Pick<
                 NorwegianHomeContentsDetails,
-                'coInsured' | 'livingSpace' | 'street' | 'zipCode'
+                'coInsured' | 'livingSpace' | 'street' | 'zipCode' | 'isYouth'
               > & { homeType: NorwegianHomeContentsDetails['type'] })
             | ({ __typename?: 'NorwegianTravelDetails' } & Pick<
                 NorwegianTravelDetails,
-                'coInsured'
+                'coInsured' | 'isYouth'
               >)
         }
     >
@@ -8261,6 +8262,7 @@ export const QuoteBundleDocument = gql`
         ssn
         birthDate
         startDate
+        expiresAt
         email
         quoteDetails {
           ... on SwedishApartmentQuoteDetails {
@@ -8293,9 +8295,11 @@ export const QuoteBundleDocument = gql`
             street
             homeType: type
             zipCode
+            isYouth
           }
           ... on NorwegianTravelDetails {
             coInsured
+            isYouth
           }
         }
       }
