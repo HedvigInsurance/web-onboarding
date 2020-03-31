@@ -9,7 +9,6 @@ import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { Price } from '../components'
 import { StartDate } from '../Introduction/Sidebar/StartDate'
-import { WithEmailForm } from '../types'
 import {
   getInsuranceType,
   insuranceTypeTextKeys,
@@ -69,16 +68,16 @@ const InsuranceType = styled('div')`
   }
 `
 
-interface Props extends WithEmailForm {
+interface Props {
   firstQuote: CompleteQuote
   refetch: () => Promise<void>
+  onEmailUpdate: (onCompletion: Promise<void>) => void
   onSsnUpdate: (onCompletion: Promise<void>) => void
 }
 
 export const CheckoutContent: React.FC<Props> = ({
   firstQuote,
-  email,
-  onEmailChange,
+  onEmailUpdate,
   onSsnUpdate,
   refetch,
 }) => {
@@ -114,8 +113,19 @@ export const CheckoutContent: React.FC<Props> = ({
         </Excerpt>
 
         <UserDetailsForm
-          email={email}
-          onEmailChange={onEmailChange}
+          email={firstQuote.email ?? ''}
+          onEmailChange={(email) => {
+            const onCompletion = new Promise<void>((resolve, reject) => {
+              editQuote({ variables: { input: { id: firstQuote.id, email } } })
+                .then(() => refetch())
+                .then(() => resolve())
+                .catch((e) => {
+                  reject(e)
+                  throw e
+                })
+            })
+            onEmailUpdate(onCompletion)
+          }}
           ssn={firstQuote.ssn ?? ''}
           onSsnChange={(ssn) => {
             const onCompletion = new Promise<void>((resolve, reject) => {

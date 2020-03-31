@@ -87,46 +87,40 @@ export const Sign: React.FC<Props> = ({
 
   return (
     <Wrapper className={className}>
-      {signUiState !== SignUiState.STARTED_WITH_REDIRECT && (
-        <>
-          <ButtonWrapper>
-            <Button
-              size={isMobile ? 'sm' : 'lg'}
-              disabled={!canInitiateSign}
-              onClick={async () => {
-                if (!canInitiateSign) {
-                  return
-                }
-
-                onSignStart()
-              }}
-            >
-              {textKeys.CHECKOUT_SIGN_BUTTON_TEXT()}
-              <SpinnerWrapper
-                initial={{ width: 0, opacity: 0 }}
-                animate={
-                  loading
-                    ? { opacity: 1, width: 'auto' }
-                    : { opacity: 0, width: 0 }
-                }
-              >
-                <Spinner />
-              </SpinnerWrapper>
-            </Button>
-          </ButtonWrapper>
-          <motion.div
-            initial={{ height: 'auto', opacity: 1 }}
-            animate={
-              signUiState === SignUiState.NOT_STARTED
-                ? { opacity: 0, height: 0 }
-                : { opacity: 1, height: 'auto' }
+      <ButtonWrapper>
+        <Button
+          size={isMobile ? 'sm' : 'lg'}
+          disabled={!canInitiateSign}
+          onClick={async () => {
+            if (!canInitiateSign) {
+              return
             }
-            transition={{ type: 'spring', stiffness: 400, damping: 100 }}
+
+            onSignStart()
+          }}
+        >
+          {textKeys.CHECKOUT_SIGN_BUTTON_TEXT()}
+          <SpinnerWrapper
+            initial={{ width: 0, opacity: 0 }}
+            animate={
+              loading ? { opacity: 1, width: 'auto' } : { opacity: 0, width: 0 }
+            }
           >
-            <SignStatus signStatus={signStatus} />
-          </motion.div>
-        </>
-      )}
+            <Spinner />
+          </SpinnerWrapper>
+        </Button>
+      </ButtonWrapper>
+      <motion.div
+        initial={{ height: 'auto', opacity: 1 }}
+        animate={
+          [SignUiState.STARTED, SignUiState.FAILED].includes(signUiState)
+            ? { opacity: 0, height: 0 }
+            : { opacity: 1, height: 'auto' }
+        }
+        transition={{ type: 'spring', stiffness: 400, damping: 100 }}
+      >
+        <SignStatus signStatus={signStatus} />
+      </motion.div>
       <Disclaimer>
         <MarkdownTranslation
           textKey="CHECKOUT_SIGN_DISCLAIMER"

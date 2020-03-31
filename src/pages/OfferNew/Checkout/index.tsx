@@ -14,7 +14,6 @@ import { CheckoutContent } from './CheckoutContent'
 import { useScrollLock, useTrack, VisibilityState } from './hooks'
 import { Sign, SignUiState } from './Sign'
 import { useSignState } from './SignStatus'
-import { emailValidation } from './UserDetailsForm'
 
 interface Openable {
   visibilityState: VisibilityState
@@ -168,7 +167,7 @@ export const Checkout: React.FC<Props> = ({
   }, [isOpen])
 
   const [signUiState, setSignUiState] = React.useState(SignUiState.NOT_STARTED)
-  const [email, setEmail] = React.useState(firstQuote.email ?? '')
+  const [emailUpdateLoading, setEmailUpdateLoading] = React.useState(false)
   const [ssnUpdateLoading, setSsnUpdateLoading] = React.useState(false)
   const [startPollingSignState, signStatus] = useSignState()
   const [signQuotes, signQuotesMutation] = useSignQuotesMutation()
@@ -190,15 +189,16 @@ export const Checkout: React.FC<Props> = ({
 
   useTrack({
     signState: signStatus?.signState,
-    email,
+    email: firstQuote.email ?? '',
     firstQuote,
   })
   useScrollLock(visibilityState, outerWrapper)
 
   const canInitiateSign = Boolean(
     signUiState !== SignUiState.STARTED &&
+      signUiState !== SignUiState.STARTED_WITH_REDIRECT &&
       !signQuotesMutation.loading &&
-      emailValidation.isValidSync(email ?? '') &&
+      firstQuote.email &&
       firstQuote.ssn,
   )
 
@@ -241,8 +241,10 @@ export const Checkout: React.FC<Props> = ({
 
             <CheckoutContent
               firstQuote={firstQuote}
-              email={email}
-              onEmailChange={setEmail}
+              onEmailUpdate={(onCompletion) => {
+                setEmailUpdateLoading(true)
+                onCompletion.finally(() => setEmailUpdateLoading(false))
+              }}
               onSsnUpdate={(onCompletion) => {
                 setSsnUpdateLoading(true)
                 onCompletion.finally(() => setSsnUpdateLoading(false))
@@ -255,11 +257,16 @@ export const Checkout: React.FC<Props> = ({
 
         <SlidingSign
           visibilityState={visibilityState}
-          canInitiateSign={canInitiateSign && !ssnUpdateLoading}
+          canInitiateSign={
+            canInitiateSign && !ssnUpdateLoading && !emailUpdateLoading
+          }
           signUiState={signUiState}
           signStatus={signStatus}
           loading={
-            signQuotesMutation.loading || signUiState === SignUiState.STARTED
+            signQuotesMutation.loading ||
+            signUiState === SignUiState.STARTED ||
+            signUiState === SignUiState.STARTED_WITH_REDIRECT ||
+            emailUpdateLoading
           }
           onSignStart={async () => {
             if (!canInitiateSign) {
