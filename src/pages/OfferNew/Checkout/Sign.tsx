@@ -119,7 +119,7 @@ export const Sign: React.FC<Props> = ({
       <motion.div
         initial={{ height: 'auto', opacity: 1 }}
         animate={
-          [SignUiState.STARTED, SignUiState.FAILED].includes(signUiState)
+          ![SignUiState.STARTED, SignUiState.FAILED].includes(signUiState)
             ? { opacity: 0, height: 0 }
             : { opacity: 1, height: 'auto' }
         }
