@@ -1,12 +1,10 @@
 import styled from '@emotion/styled'
 import { colors, fonts } from '@hedviginsurance/brand'
-import { TypeOfContract, useContractsQuery } from 'data/graphql'
-import { Spinner } from 'new-components/utils'
+import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { AdyenCheckout } from 'pages/ConnectPayment/components/AdyenCheckout'
 import { TrustlyCheckout } from 'pages/ConnectPayment/components/TrustlyCheckout'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-import { SpinnerWrapper } from '../components/Spinner'
 
 const SITEWRAPPER = 1300
 const BP = 800
@@ -103,45 +101,9 @@ const ConnectPaymentImage = styled('img')({
   },
 })
 
-const SWEDISH_CONTRACT_TYPES = [
-  TypeOfContract.SeApartmentBrf,
-  TypeOfContract.SeApartmentRent,
-  TypeOfContract.SeApartmentStudentBrf,
-  TypeOfContract.SeApartmentStudentRent,
-  TypeOfContract.SeHouse,
-]
-const NORWEGIAN_CONTRACT_TYPES = [
-  TypeOfContract.NoHomeContentOwn,
-  TypeOfContract.NoHomeContentRent,
-  TypeOfContract.NoHomeContentYouthOwn,
-  TypeOfContract.NoHomeContentYouthRent,
-  TypeOfContract.NoTravel,
-  TypeOfContract.NoTravelYouth,
-]
-
 export const ConnectTrustlyPage: React.FC = () => {
   const textKeys = useTextKeys()
-  const contracts = useContractsQuery({ pollInterval: 1500 })
-
-  const hasSwedishContract =
-    contracts.data?.contracts
-      ?.map((contract) =>
-        SWEDISH_CONTRACT_TYPES.includes(contract.typeOfContract),
-      )
-      .includes(true) ?? false
-  const hasNorwegianContract =
-    contracts.data?.contracts
-      ?.map((contract) =>
-        NORWEGIAN_CONTRACT_TYPES.includes(contract.typeOfContract),
-      )
-      .includes(true) ?? false
-  const waitingForBackendToUpdate = !hasSwedishContract && !hasNorwegianContract
-
-  React.useEffect(() => {
-    if (hasSwedishContract || hasNorwegianContract) {
-      contracts.stopPolling()
-    }
-  }, [hasSwedishContract, hasNorwegianContract])
+  const market = useMarket()
 
   return (
     <>
@@ -155,13 +117,8 @@ export const ConnectTrustlyPage: React.FC = () => {
             <HeaderPart>{textKeys.ONBOARDING_CONNECT_DD_HEADLINE()}</HeaderPart>
           </Header>
           <ConnectText>{textKeys.ONBOARDING_CONNECT_DD_BODY()}</ConnectText>
-          {hasSwedishContract && <TrustlyCheckout />}
-          {hasNorwegianContract && <AdyenCheckout />}
-          {waitingForBackendToUpdate && (
-            <SpinnerWrapper>
-              <Spinner />
-            </SpinnerWrapper>
-          )}
+          {market === Market.Se && <TrustlyCheckout />}
+          {market === Market.No && <AdyenCheckout />}
         </TextColumn>
         <ImageColumn>
           <ConnectPaymentImage

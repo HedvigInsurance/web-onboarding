@@ -6956,6 +6956,22 @@ export type Welcome = {
   paragraph: Scalars['String']
 }
 
+export type AvailablePaymentMethodsQueryVariables = {}
+
+export type AvailablePaymentMethodsQuery = { __typename?: 'Query' } & {
+  availablePaymentMethods: {
+    __typename?: 'AvailablePaymentMethodsResponse'
+  } & Pick<AvailablePaymentMethodsResponse, 'paymentMethodsResponse'>
+}
+
+export type ContractsQueryVariables = {}
+
+export type ContractsQuery = { __typename?: 'Query' } & {
+  contracts: Array<
+    { __typename?: 'Contract' } & Pick<Contract, 'id' | 'typeOfContract'>
+  >
+}
+
 export type EditQuoteMutationVariables = {
   input: EditQuoteInput
 }
@@ -7639,6 +7655,132 @@ export type StartDateMutation = { __typename?: 'Mutation' } & {
     | { __typename?: 'UnderwritingLimitsHit' }
 }
 
+export type TokenizePaymentDetailsMutationVariables = {
+  paymentsRequest: TokenizationRequest
+}
+
+export type TokenizePaymentDetailsMutation = { __typename?: 'Mutation' } & {
+  tokenizePaymentDetails: Maybe<
+    | ({ __typename?: 'TokenizationResponseFinished' } & Pick<
+        TokenizationResponseFinished,
+        'resultCode'
+      >)
+    | ({ __typename?: 'TokenizationResponseAction' } & Pick<
+        TokenizationResponseAction,
+        'action'
+      >)
+  >
+}
+
+export const AvailablePaymentMethodsDocument = gql`
+  query AvailablePaymentMethods {
+    availablePaymentMethods {
+      paymentMethodsResponse
+    }
+  }
+`
+
+/**
+ * __useAvailablePaymentMethodsQuery__
+ *
+ * To run a query within a React component, call `useAvailablePaymentMethodsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAvailablePaymentMethodsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAvailablePaymentMethodsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAvailablePaymentMethodsQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    AvailablePaymentMethodsQuery,
+    AvailablePaymentMethodsQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useQuery<
+    AvailablePaymentMethodsQuery,
+    AvailablePaymentMethodsQueryVariables
+  >(AvailablePaymentMethodsDocument, baseOptions)
+}
+export function useAvailablePaymentMethodsLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    AvailablePaymentMethodsQuery,
+    AvailablePaymentMethodsQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useLazyQuery<
+    AvailablePaymentMethodsQuery,
+    AvailablePaymentMethodsQueryVariables
+  >(AvailablePaymentMethodsDocument, baseOptions)
+}
+export type AvailablePaymentMethodsQueryHookResult = ReturnType<
+  typeof useAvailablePaymentMethodsQuery
+>
+export type AvailablePaymentMethodsLazyQueryHookResult = ReturnType<
+  typeof useAvailablePaymentMethodsLazyQuery
+>
+export type AvailablePaymentMethodsQueryResult = ApolloReactCommon.QueryResult<
+  AvailablePaymentMethodsQuery,
+  AvailablePaymentMethodsQueryVariables
+>
+export const ContractsDocument = gql`
+  query Contracts {
+    contracts {
+      id
+      typeOfContract
+    }
+  }
+`
+
+/**
+ * __useContractsQuery__
+ *
+ * To run a query within a React component, call `useContractsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useContractsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useContractsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useContractsQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    ContractsQuery,
+    ContractsQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useQuery<ContractsQuery, ContractsQueryVariables>(
+    ContractsDocument,
+    baseOptions,
+  )
+}
+export function useContractsLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    ContractsQuery,
+    ContractsQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useLazyQuery<ContractsQuery, ContractsQueryVariables>(
+    ContractsDocument,
+    baseOptions,
+  )
+}
+export type ContractsQueryHookResult = ReturnType<typeof useContractsQuery>
+export type ContractsLazyQueryHookResult = ReturnType<
+  typeof useContractsLazyQuery
+>
+export type ContractsQueryResult = ApolloReactCommon.QueryResult<
+  ContractsQuery,
+  ContractsQueryVariables
+>
 export const EditQuoteDocument = gql`
   mutation EditQuote($input: EditQuoteInput!) {
     editQuote(input: $input) {
@@ -8805,4 +8947,59 @@ export type StartDateMutationResult = ApolloReactCommon.MutationResult<
 export type StartDateMutationOptions = ApolloReactCommon.BaseMutationOptions<
   StartDateMutation,
   StartDateMutationVariables
+>
+export const TokenizePaymentDetailsDocument = gql`
+  mutation TokenizePaymentDetails($paymentsRequest: TokenizationRequest!) {
+    tokenizePaymentDetails(req: $paymentsRequest) {
+      ... on TokenizationResponseAction {
+        action
+      }
+      ... on TokenizationResponseFinished {
+        resultCode
+      }
+    }
+  }
+`
+export type TokenizePaymentDetailsMutationFn = ApolloReactCommon.MutationFunction<
+  TokenizePaymentDetailsMutation,
+  TokenizePaymentDetailsMutationVariables
+>
+
+/**
+ * __useTokenizePaymentDetailsMutation__
+ *
+ * To run a mutation, you first call `useTokenizePaymentDetailsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTokenizePaymentDetailsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [tokenizePaymentDetailsMutation, { data, loading, error }] = useTokenizePaymentDetailsMutation({
+ *   variables: {
+ *      paymentsRequest: // value for 'paymentsRequest'
+ *   },
+ * });
+ */
+export function useTokenizePaymentDetailsMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    TokenizePaymentDetailsMutation,
+    TokenizePaymentDetailsMutationVariables
+  >,
+) {
+  return ApolloReactHooks.useMutation<
+    TokenizePaymentDetailsMutation,
+    TokenizePaymentDetailsMutationVariables
+  >(TokenizePaymentDetailsDocument, baseOptions)
+}
+export type TokenizePaymentDetailsMutationHookResult = ReturnType<
+  typeof useTokenizePaymentDetailsMutation
+>
+export type TokenizePaymentDetailsMutationResult = ApolloReactCommon.MutationResult<
+  TokenizePaymentDetailsMutation
+>
+export type TokenizePaymentDetailsMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  TokenizePaymentDetailsMutation,
+  TokenizePaymentDetailsMutationVariables
 >

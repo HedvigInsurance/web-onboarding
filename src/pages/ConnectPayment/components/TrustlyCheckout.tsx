@@ -11,15 +11,20 @@ export const TrustlyCheckout: React.FC = () => {
   const [trustlyModalIsOpen, setTrustlyModalIsOpen] = React.useState(false)
   const [trustlyUrl, setTrustlyUrl] = React.useState<string | null>(null)
   const currentLocale = useCurrentLocale()
-  const baseUrl = `${window.location.origin}/${currentLocale &&
-    currentLocale + '/'}new-member/connect-payment`
-  const [createTrustlyUrlMutation] = useRegisterDirectDebitMutation({
-    successUrl: `${baseUrl}/success`,
-    failureUrl: `${baseUrl}/fail`,
-  })
+  const [createTrustlyUrlMutation] = useRegisterDirectDebitMutation()
 
   const generateTrustlyUrl = async () => {
-    const res = await createTrustlyUrlMutation()
+    const baseUrl = `${window.location.origin}/${currentLocale &&
+      currentLocale + '/'}new-member/connect-payment`
+
+    const res = await createTrustlyUrlMutation({
+      variables: {
+        clientContext: {
+          successUrl: `${baseUrl}/success`,
+          failureUrl: `${baseUrl}/fail`,
+        },
+      },
+    })
 
     if (!res?.data?.registerDirectDebit) {
       return null

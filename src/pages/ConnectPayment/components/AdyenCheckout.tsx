@@ -6,6 +6,7 @@ import {
 } from 'components/utils/CurrentLocale'
 import {
   Scalars,
+  TokenizationChannel,
   TokenizePaymentDetailsMutationFn,
   useAvailablePaymentMethodsQuery,
   useTokenizePaymentDetailsMutation,
@@ -99,9 +100,9 @@ const createAdyenCheckout = ({
     ['en_NO', 'en-US'],
   ])(getLocaleIsoCode(currentLocale))
 
-  // const returnUrl = `${window.location.origin}${
-  //   currentLocale ? '/' + currentLocale : ''
-  // }/new-member/connect-payment` // FIXME maybe this should be /download?
+  const returnUrl = `${window.location.origin}${
+    currentLocale ? '/' + currentLocale : ''
+  }/new-member/connect-payment` // FIXME maybe this should be /download?
 
   const configuration = {
     locale,
@@ -115,15 +116,25 @@ const createAdyenCheckout = ({
       },
     },
     enableStoreDetails: true,
+    returnUrl,
     // onChange: console.log,
-    onAdditionalDetails: (_state: any, _dropinComponent: any) => {
+    onAdditionalDetails: (state: any, _dropinComponent: any) => {
       // TODO call to additional details mutation?
+      console.log(state)
     },
     onSubmit: async (state: any, dropinComponent: any) => {
       dropinComponent.setStatus('loading')
       const result = await tokenizePaymentMutation({
-        variables: { paymentsRequest: JSON.stringify(state.data) }, // FIXME Graphql: will be updated
+        variables: {
+          paymentsRequest: {
+            browserInfo: state.data.browserInfo,
+            paymentMethodDetails: JSON.stringify(state.data.paymentMethod),
+            channel: TokenizationChannel.Web,
+            returnUrl,
+          },
+        },
       })
+      console.log(result)
       if (
         result.data?.tokenizePaymentDetails?.__typename ===
         'TokenizationResponseAction'

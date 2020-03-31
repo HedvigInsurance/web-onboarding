@@ -90,6 +90,7 @@
     "apollo-link": "^1.2.3",
     "apollo-link-batch-http": "^1.2.3",
     "apollo-link-ws": "^1.0.9",
+    "axios": "^0.19.2",
     "color": "^3.1.2",
     "constate": "^0.8.2",
     "cookie-storage": "^3.2.0",

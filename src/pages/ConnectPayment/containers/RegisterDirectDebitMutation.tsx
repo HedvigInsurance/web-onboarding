@@ -26,10 +26,7 @@ interface RegisterDirectDebitVariables {
   }
 }
 
-export const useRegisterDirectDebitMutation = (
-  clientContext: RegisterDirectDebitVariables['clientContext'],
-) =>
+export const useRegisterDirectDebitMutation = () =>
   useMutation<RegisterDirectDebitData, RegisterDirectDebitVariables>(
     REGISTER_DIRECT_DEBIT_MUTATION,
-    { variables: { clientContext } },
   )
