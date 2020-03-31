@@ -7362,18 +7362,10 @@ export type RemoveStartDateMutation = { __typename?: 'Mutation' } & {
     | { __typename?: 'UnderwritingLimitsHit' }
 }
 
-export type SignOfferMutationVariables = {
-  personalNumber: Scalars['String']
-  email: Scalars['String']
-}
-
-export type SignOfferMutation = { __typename?: 'Mutation' } & Pick<
-  Mutation,
-  'signOffer'
->
-
 export type SignQuotesMutationVariables = {
   quoteIds: Array<Scalars['ID']>
+  successUrl?: Maybe<Scalars['String']>
+  failUrl?: Maybe<Scalars['String']>
 }
 
 export type SignQuotesMutation = { __typename?: 'Mutation' } & {
@@ -8210,58 +8202,15 @@ export type RemoveStartDateMutationOptions = ApolloReactCommon.BaseMutationOptio
   RemoveStartDateMutation,
   RemoveStartDateMutationVariables
 >
-export const SignOfferDocument = gql`
-  mutation SignOffer($personalNumber: String!, $email: String!) {
-    signOffer(details: { personalNumber: $personalNumber, email: $email })
-  }
-`
-export type SignOfferMutationFn = ApolloReactCommon.MutationFunction<
-  SignOfferMutation,
-  SignOfferMutationVariables
->
-
-/**
- * __useSignOfferMutation__
- *
- * To run a mutation, you first call `useSignOfferMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSignOfferMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [signOfferMutation, { data, loading, error }] = useSignOfferMutation({
- *   variables: {
- *      personalNumber: // value for 'personalNumber'
- *      email: // value for 'email'
- *   },
- * });
- */
-export function useSignOfferMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<
-    SignOfferMutation,
-    SignOfferMutationVariables
-  >,
-) {
-  return ApolloReactHooks.useMutation<
-    SignOfferMutation,
-    SignOfferMutationVariables
-  >(SignOfferDocument, baseOptions)
-}
-export type SignOfferMutationHookResult = ReturnType<
-  typeof useSignOfferMutation
->
-export type SignOfferMutationResult = ApolloReactCommon.MutationResult<
-  SignOfferMutation
->
-export type SignOfferMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  SignOfferMutation,
-  SignOfferMutationVariables
->
 export const SignQuotesDocument = gql`
-  mutation SignQuotes($quoteIds: [ID!]!) {
-    signQuotes(input: { quoteIds: $quoteIds }) {
+  mutation SignQuotes(
+    $quoteIds: [ID!]!
+    $successUrl: String
+    $failUrl: String
+  ) {
+    signQuotes(
+      input: { quoteIds: $quoteIds, successUrl: $successUrl, failUrl: $failUrl }
+    ) {
       __typename
       ... on FailedToStartSign {
         errorMessage
@@ -8294,6 +8243,8 @@ export type SignQuotesMutationFn = ApolloReactCommon.MutationFunction<
  * const [signQuotesMutation, { data, loading, error }] = useSignQuotesMutation({
  *   variables: {
  *      quoteIds: // value for 'quoteIds'
+ *      successUrl: // value for 'successUrl'
+ *      failUrl: // value for 'failUrl'
  *   },
  * });
  */
