@@ -78,7 +78,7 @@
     "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@emotion/core": "^10.0.22",
     "@emotion/styled": "^10.0.23",
-    "@hedviginsurance/brand": "^3.0.3",
+    "@hedviginsurance/brand": "^3.0.5",
     "@hedviginsurance/cli": "^2.3.2",
     "@hedviginsurance/embark": "^1.0.66",
     "@hedviginsurance/textkeyfy": "^1.2.2",
