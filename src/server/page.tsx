@@ -22,6 +22,7 @@ import {
 import { ServerCookieStorage } from '../utils/storage/ServerCookieStorage'
 import { createServerApolloClient } from './apolloClient'
 import {
+  ADYEN_ENVIRONMENT,
   ADYEN_ORIGIN_KEY,
   ANDROID_MINIMUM_VERSION,
   ANDROID_PACKAGE_NAME,
@@ -83,16 +84,19 @@ const template = (helmetContext: FilledContext['helmet'], cspNonce: string) => `
   <div id="react-root"></div>
 
   <script nonce="${cspNonce}">
-    window.GIRAFFE_WS_ENDPOINT= ${JSON.stringify(GIRAFFE_WS_ENDPOINT)}
-    window.GIRAFFE_ENDPOINT= ${JSON.stringify(GIRAFFE_ENDPOINT)}
-    window.CONTENT_SERVICE_ENDPOINT= ${JSON.stringify(CONTENT_SERVICE_ENDPOINT)}
-    window.FIREBASE_LINK_DOMAIN=${JSON.stringify(FIREBASE_LINK_DOMAIN)}
-    window.ANDROID_PACKAGE_NAME=${JSON.stringify(ANDROID_PACKAGE_NAME)}
-    window.ANDROID_MINIMUM_VERSION=${JSON.stringify(ANDROID_MINIMUM_VERSION)}
-    window.APPLE_BUNDLE_ID=${JSON.stringify(APPLE_BUNDLE_ID)}
-    window.APP_STORE_ID=${JSON.stringify(APP_STORE_ID)}
-    window.IOS_MINIMUM_VERSION=${JSON.stringify(IOS_MINIMUM_VERSION)}
-    window.ADYEN_ORIGIN_KEY=${JSON.stringify(ADYEN_ORIGIN_KEY)}
+    window.GIRAFFE_WS_ENDPOINT= ${JSON.stringify(GIRAFFE_WS_ENDPOINT)};
+    window.GIRAFFE_ENDPOINT= ${JSON.stringify(GIRAFFE_ENDPOINT)};
+    window.CONTENT_SERVICE_ENDPOINT= ${JSON.stringify(
+      CONTENT_SERVICE_ENDPOINT,
+    )};
+    window.FIREBASE_LINK_DOMAIN=${JSON.stringify(FIREBASE_LINK_DOMAIN)};
+    window.ANDROID_PACKAGE_NAME=${JSON.stringify(ANDROID_PACKAGE_NAME)};
+    window.ANDROID_MINIMUM_VERSION=${JSON.stringify(ANDROID_MINIMUM_VERSION)};
+    window.APPLE_BUNDLE_ID=${JSON.stringify(APPLE_BUNDLE_ID)};
+    window.APP_STORE_ID=${JSON.stringify(APP_STORE_ID)};
+    window.IOS_MINIMUM_VERSION=${JSON.stringify(IOS_MINIMUM_VERSION)};
+    window.ADYEN_ORIGIN_KEY=${JSON.stringify(ADYEN_ORIGIN_KEY)};
+    window.ADYEN_ENVIRONMENT=${JSON.stringify(ADYEN_ENVIRONMENT)};
   </script>
   <script src="${scriptLocation}"></script>
 </body>
