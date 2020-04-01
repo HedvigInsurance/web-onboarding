@@ -96,15 +96,11 @@ const quoteMock: CompleteQuote = {
     zipCode: '1234',
     __typename: 'CompleteApartmentQuoteDetails',
   },
-  termsAndConditions: {
-    displayName: '',
-    url: '',
-    __typename: 'InsuranceTerm',
-  },
   typeOfContract: TypeOfContract.NoHomeContentOwn,
   termsAndConditions: {
     url: 'https://important',
     displayName: 'Important ToC',
+    __typename: 'InsuranceTerm',
   },
   insuranceTerms: [],
   perils: [],
