@@ -1,10 +1,12 @@
 import styled from '@emotion/styled'
-import { colorsV2, fonts } from '@hedviginsurance/brand'
+import { colorsV2, colorsV3, fonts } from '@hedviginsurance/brand'
+import { Icon } from 'data/graphql'
 import * as React from 'react'
+import { getIconUrl } from '..'
 
 interface PerilItemProps {
   title: React.ReactNode
-  icon: JSX.Element
+  icon: Icon
   onClick: () => void
 }
 
@@ -82,19 +84,23 @@ const Container = styled.span`
 const Title = styled('div')`
   font-size: 1rem;
   letter-spacing: -0.23px;
-  color: ${colorsV2.violet500};
-  font-family: ${fonts.CIRCULAR};
+  color: ${colorsV3.gray900};
+  font-family: ${fonts.FAVORIT};
 `
 
 export const PerilItem: React.FC<PerilItemProps> = ({
   title,
   icon,
   onClick,
-}) => (
-  <OuterContainer>
-    <Container onClick={onClick}>
-      {icon}
-      <Title>{title}</Title>
-    </Container>
-  </OuterContainer>
-)
+}) => {
+  const iconUrl = getIconUrl(icon.variants.light.svgUrl)
+
+  return (
+    <OuterContainer>
+      <Container onClick={onClick}>
+        {iconUrl && <img src={iconUrl} />}
+        <Title>{title}</Title>
+      </Container>
+    </OuterContainer>
+  )
+}

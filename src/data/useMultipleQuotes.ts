@@ -1,6 +1,6 @@
 import { useApolloClient } from '@apollo/react-hooks'
 import { FetchPolicy } from 'apollo-client'
-import { QuoteDocument, QuoteQuery } from 'data/graphql'
+import { Locale, QuoteDocument, QuoteQuery } from 'data/graphql'
 import * as React from 'react'
 import { Quote } from './graphql'
 
@@ -16,6 +16,7 @@ export type UseMultipleQuotesReturnTuple = [
 
 export const useMultipleQuotes = (
   quoteIds: ReadonlyArray<string>,
+  localeIsoCode: Locale,
 ): UseMultipleQuotesReturnTuple => {
   const [quotes, setQuotes] = React.useState<ReadonlyArray<Quote>>([])
   const [loading, setLoading] = React.useState(true)
@@ -27,7 +28,7 @@ export const useMultipleQuotes = (
       quoteIds.map((quoteId) =>
         apolloClient.query<QuoteQuery>({
           query: QuoteDocument,
-          variables: { id: quoteId },
+          variables: { id: quoteId, perilsLocale: localeIsoCode },
           fetchPolicy,
         }),
       ),

@@ -26,6 +26,7 @@ import {
   ANDROID_PACKAGE_NAME,
   APP_STORE_ID,
   APPLE_BUNDLE_ID,
+  CONTENT_SERVICE_ENDPOINT,
   FIREBASE_LINK_DOMAIN,
   GIRAFFE_ENDPOINT,
   GIRAFFE_WS_ENDPOINT,
@@ -83,6 +84,7 @@ const template = (helmetContext: FilledContext['helmet'], cspNonce: string) => `
   <script nonce="${cspNonce}">
     window.GIRAFFE_WS_ENDPOINT= ${JSON.stringify(GIRAFFE_WS_ENDPOINT)}
     window.GIRAFFE_ENDPOINT= ${JSON.stringify(GIRAFFE_ENDPOINT)}
+    window.CONTENT_SERVICE_ENDPOINT= ${JSON.stringify(CONTENT_SERVICE_ENDPOINT)}
     window.FIREBASE_LINK_DOMAIN=${JSON.stringify(FIREBASE_LINK_DOMAIN)}
     window.ANDROID_PACKAGE_NAME=${JSON.stringify(ANDROID_PACKAGE_NAME)}
     window.ANDROID_MINIMUM_VERSION=${JSON.stringify(ANDROID_MINIMUM_VERSION)}

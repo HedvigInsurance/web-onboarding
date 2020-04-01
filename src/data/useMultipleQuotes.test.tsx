@@ -3,7 +3,12 @@ import {
   InMemoryCache,
   IntrospectionFragmentMatcher,
 } from 'apollo-cache-inmemory'
-import { ApartmentType, CompleteQuote, TypeOfContract } from 'data/graphql'
+import {
+  ApartmentType,
+  CompleteQuote,
+  Locale,
+  TypeOfContract,
+} from 'data/graphql'
 import { mount } from 'enzyme'
 import * as React from 'react'
 import { act } from 'react-dom/test-utils'
@@ -16,10 +21,11 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData,
 })
 
-const QuotesDisplayer: React.FC<{ quoteIds: ReadonlyArray<string> }> = ({
-  quoteIds,
-}) => {
-  const [quotes] = useMultipleQuotes(quoteIds)
+const QuotesDisplayer: React.FC<{
+  quoteIds: ReadonlyArray<string>
+  localeIsoCode: Locale
+}> = ({ quoteIds, localeIsoCode }) => {
+  const [quotes] = useMultipleQuotes(quoteIds, localeIsoCode)
   return (
     <ul>
       {quotes.map((quote) => (
@@ -32,7 +38,7 @@ const QuotesDisplayer: React.FC<{ quoteIds: ReadonlyArray<string> }> = ({
 it('does nothing on no quote ids', async () => {
   const wrapper = mount(
     <MockedProvider mocks={[]}>
-      <QuotesDisplayer quoteIds={[]} />
+      <QuotesDisplayer quoteIds={[]} localeIsoCode={Locale.SvSe} />
     </MockedProvider>,
   )
 
@@ -94,6 +100,7 @@ const quoteMock: CompleteQuote = {
   termsAndConditions: {
     url: 'https://important',
     displayName: 'Important ToC',
+    __typename: 'InsuranceTerm',
   },
   insuranceTerms: [],
   perils: [],
@@ -106,7 +113,10 @@ it('fetches quote on one quote', async () => {
       cache={new InMemoryCache({ fragmentMatcher })}
       mocks={[
         {
-          request: { query: QuoteDocument, variables: { id: quoteMock.id } },
+          request: {
+            query: QuoteDocument,
+            variables: { id: quoteMock.id, perilsLocale: Locale.SvSe },
+          },
           result: {
             data: {
               quote: quoteMock,
@@ -115,7 +125,7 @@ it('fetches quote on one quote', async () => {
         },
       ]}
     >
-      <QuotesDisplayer quoteIds={[quoteMock.id]} />
+      <QuotesDisplayer quoteIds={[quoteMock.id]} localeIsoCode={Locale.SvSe} />
     </MockedProvider>,
   )
 

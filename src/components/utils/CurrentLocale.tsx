@@ -4,17 +4,17 @@ import * as React from 'react'
 import { matchPath, useLocation } from 'react-router'
 import { LOCALE_PATH_PATTERN } from '../../routes'
 
-export const getLocaleIsoCode = (locale: string) => {
+export const getLocaleIsoCode = (locale: string): Locale => {
   switch (locale) {
     case 'en':
-      return 'en_SE'
+      return Locale.EnSe
     case 'no':
-      return 'nb_NO'
+      return Locale.NbNo
     case 'no-en':
-      return 'en_NO'
+      return Locale.EnNo
     case '':
     default:
-      return 'sv_SE'
+      return Locale.SvSe
   }
 }
 const getLocaleFromPath = (path: string) => {

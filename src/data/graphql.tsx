@@ -5765,6 +5765,7 @@ export type Query = {
   availablePaymentMethods: AvailablePaymentMethodsResponse
   /** Returns the active payment method which the member chose to tokenize */
   activePaymentMethods?: Maybe<ActivePaymentMethodsResponse>
+  adyenPublicKey: Scalars['String']
   /** Returns campaign associated with code */
   campaign: Campaign
   /** Returns information about the authed member's referralCampaign and referrals */
@@ -7158,6 +7159,7 @@ export type MemberOfferQuery = { __typename?: 'Query' } & {
 
 export type QuoteQueryVariables = {
   id: Scalars['ID']
+  perilsLocale: Locale
 }
 
 export type QuoteQuery = { __typename?: 'Query' } & {
@@ -7195,6 +7197,21 @@ export type QuoteQuery = { __typename?: 'Query' } & {
                 'amount' | 'currency'
               >
             }
+          perils: Array<
+            { __typename?: 'PerilV2' } & Pick<
+              PerilV2,
+              'title' | 'description' | 'covered' | 'exceptions' | 'info'
+            > & {
+                icon: { __typename?: 'Icon' } & {
+                  variants: { __typename?: 'IconVariants' } & {
+                    light: { __typename?: 'IconVariant' } & Pick<
+                      IconVariant,
+                      'svgUrl'
+                    >
+                  }
+                }
+              }
+          >
           quoteDetails:
             | ({ __typename?: 'SwedishApartmentQuoteDetails' } & Pick<
                 SwedishApartmentQuoteDetails,
@@ -7835,7 +7852,7 @@ export type MemberOfferQueryResult = ApolloReactCommon.QueryResult<
   MemberOfferQueryVariables
 >
 export const QuoteDocument = gql`
-  query Quote($id: ID!) {
+  query Quote($id: ID!, $perilsLocale: Locale!) {
     quote(id: $id) {
       ... on CompleteQuote {
         id
@@ -7863,6 +7880,20 @@ export const QuoteDocument = gql`
           monthlyNet {
             amount
             currency
+          }
+        }
+        perils(locale: $perilsLocale) {
+          title
+          description
+          covered
+          exceptions
+          info
+          icon {
+            variants {
+              light {
+                svgUrl
+              }
+            }
           }
         }
         quoteDetails {
@@ -7922,6 +7953,7 @@ export const QuoteDocument = gql`
  * const { data, loading, error } = useQuoteQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      perilsLocale: // value for 'perilsLocale'
  *   },
  * });
  */
