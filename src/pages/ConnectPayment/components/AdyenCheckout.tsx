@@ -120,6 +120,7 @@ const createAdyenCheckout = ({
     // onChange: console.log,
     onAdditionalDetails: (state: any, _dropinComponent: any) => {
       // TODO call to additional details mutation?
+      // tslint:disable-next-line no-console
       console.log(state)
     },
     onSubmit: async (state: any, dropinComponent: any) => {
@@ -134,7 +135,6 @@ const createAdyenCheckout = ({
           },
         },
       })
-      console.log(result)
       if (
         result.data?.tokenizePaymentDetails?.__typename ===
         'TokenizationResponseAction'
