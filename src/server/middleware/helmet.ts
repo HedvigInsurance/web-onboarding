@@ -59,6 +59,7 @@ const defaultSrc = [
   '*.zignsec.com',
   GIRAFFE_ENDPOINT,
   GIRAFFE_WS_ENDPOINT,
+  CONTENT_SERVICE_ENDPOINT,
 ]
 
 export const helmet = koaHelmet({
