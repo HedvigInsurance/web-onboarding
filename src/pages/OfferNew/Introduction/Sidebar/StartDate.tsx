@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { externalInsuranceProviders } from '@hedviginsurance/embark'
 import { DateInput } from 'components/DateInput'
 import { Switch } from 'components/Switch'
@@ -28,20 +28,20 @@ const RowButton = styled.button<{ datePickerOpen: boolean }>`
   padding: 0.8rem 1.5rem;
   display: flex;
   justify-content: space-between;
-  border: 1px solid ${colorsV2.lightgray};
+  border: 1px solid ${colorsV3.gray300};
   outline: 0;
-  background-color: ${colorsV2.white};
+  background-color: ${colorsV3.white};
   border-radius: 8px;
   align-items: center;
   cursor: pointer;
   transition: background-color 250ms, border 250ms;
 
   :active {
-    background-color: ${colorsV2.lightgray};
+    background-color: ${colorsV3.gray300};
   }
 
   ${(props) =>
-    props.datePickerOpen && `border: 1px solid ${colorsV2.violet500};`};
+    props.datePickerOpen && `border: 1px solid ${colorsV3.gray900};`};
 `
 
 const Label = styled.div`
@@ -57,21 +57,20 @@ const DateLabel = styled.span`
 const Title = styled.div`
   font-size: 1rem;
   line-height: 1.5rem;
-  font-weight: 600;
-  color: ${colorsV2.darkgray};
+  color: ${colorsV3.gray900};
 `
 
 const SubTitle = styled.div`
   font-size: 0.75rem;
   line-height: 0.75rem;
-  font-weight: 500;
-  color: ${colorsV2.gray};
+  font-weight: 200;
+  color: ${colorsV3.gray700};
 `
 
 const Value = styled.div`
   font-size: 1rem;
   line-height: 1.5rem;
-  color: ${colorsV2.darkgray};
+  color: ${colorsV3.gray700};
   display: flex;
   flex-direction: row;
   justify-content: right;
@@ -92,17 +91,16 @@ const HandleSwitchingWrapper = styled.div`
 const HandleSwitchingLabel = styled.span`
   font-size: 0.8rem;
   line-height: 0.9rem;
-  font-weight: 500;
-  color: ${colorsV2.gray};
+  color: ${colorsV3.gray700};
   width: 50%;
 `
 
 const ErrorMessage = styled(motion.div)`
-  background-color: ${colorsV2.flamingo500};
+  background-color: ${colorsV3.purple500};
   border-radius: 8px;
   padding: 1.25rem;
   margin-bottom: 10px;
-  color: ${colorsV2.black};
+  color: ${colorsV3.gray900};
 `
 
 const DataCollectedStartDateWrapper = styled.div`
@@ -116,7 +114,7 @@ const DataCollectedStartDateWrapper = styled.div`
 const DataCollectedStartDateDescription = styled.span`
   font-size: 0.75rem;
   line-height: 0.75rem;
-  color: ${colorsV2.gray};
+  color: ${colorsV3.gray700};
 `
 
 const DataCollectedStartDateValue = styled.span`
@@ -127,7 +125,7 @@ const DateInputModalWrapper = styled.div<{ isOpen: boolean }>`
   width: 100%;
   height: 100%;
   position: absolute;
-  background: ${hexToRgba(colorsV2.white, 0.8)};
+  background: ${hexToRgba(colorsV3.white, 0.8)};
   top: 0;
   left: 0;
   transition: all 0.2s;
@@ -305,7 +303,7 @@ export const StartDate: React.FC<Props> = ({
         <Value>
           <DateLabel>{getDateLabel()}</DateLabel>
           <CalendarIcon
-            color={dateValue ? colorsV2.violet500 : colorsV2.gray}
+            color={dateValue ? colorsV3.gray700 : colorsV3.gray500}
           />
         </Value>
       </RowButton>

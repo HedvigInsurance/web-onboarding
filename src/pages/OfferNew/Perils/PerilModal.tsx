@@ -177,7 +177,7 @@ const Content = styled('div')`
 `
 
 const Title = styled.div`
-  font-family: ${fonts.GEOMANIST};
+  font-family: ${fonts.FAVORIT};
   font-size: 2.5rem;
   line-height: 3.5rem;
   color: ${colorsV2.black};

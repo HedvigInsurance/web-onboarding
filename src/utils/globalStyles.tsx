@@ -1,5 +1,5 @@
 import { css, Global } from '@emotion/core'
-import { fonts, getCdnFontFaces } from '@hedviginsurance/brand'
+import { colorsV3, fonts, getCdnFontFaces } from '@hedviginsurance/brand'
 import * as React from 'react'
 
 export const GlobalCss: React.SFC = ({ children }) => (
@@ -43,6 +43,14 @@ export const GlobalCss: React.SFC = ({ children }) => (
 
         img {
           max-width: 100%;
+        }
+
+        a {
+          color: ${colorsV3.purple500};
+          &:hover,
+          &:focus {
+            color: ${colorsV3.purple500};
+          }
         }
       `}
     />

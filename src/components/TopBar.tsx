@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
 import * as React from 'react'
 import { CurrentLocale } from './utils/CurrentLocale'
@@ -15,11 +15,12 @@ const Wrapper = styled.div<Props>`
   top: 0;
   height: 5rem;
   background: ${(props) =>
-    props.transparent ? `transparent` : colorsV2.white};
+    props.transparent ? `transparent` : colorsV3.gray900};
   position: absolute;
   z-index: ${TOP_BAR_Z_INDEX};
   ${(props) =>
     !props.transparent && `box-shadow: 0 2px 14px rgba(0, 0, 0, 0.08);`};
+  color: ${colorsV3.white};
 
   @media (max-width: 375px) {
     height: 4rem;

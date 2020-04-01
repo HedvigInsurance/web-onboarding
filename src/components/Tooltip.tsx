@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { Questionmark } from 'components/icons/Questionmark'
 import { motion } from 'framer-motion'
 import * as React from 'react'
@@ -17,7 +17,7 @@ const Wrapper = styled.div`
 `
 
 const TooltipIcon = styled(motion.div)<{ size: Size }>`
-  background-color: ${colorsV2.lightgray};
+  background-color: ${colorsV3.gray300};
   width: ${(props) => (props.size === 'sm' ? `1rem` : `1.5rem`)};
   height: ${(props) => (props.size === 'sm' ? `1rem` : `1.5rem`)};
   border-radius: 50%;
@@ -33,9 +33,9 @@ const TooltipIcon = styled(motion.div)<{ size: Size }>`
 
   @media (hover: hover) {
     :hover {
-      background-color: ${colorsV2.gray};
+      background-color: ${colorsV3.gray500};
       .fillColor {
-        fill: ${colorsV2.white};
+        fill: ${colorsV3.white};
       }
     }
   }
@@ -47,7 +47,7 @@ const TooltipIcon = styled(motion.div)<{ size: Size }>`
 `
 
 const TooltipContainer = styled.div<{ visible: boolean }>`
-  background-color: ${colorsV2.violet500};
+  background-color: ${colorsV3.purple500};
   max-width: 9.75rem;
   min-width: 6rem;
   padding: 10px;
@@ -76,7 +76,7 @@ const TooltipContainer = styled.div<{ visible: boolean }>`
     width: 0;
     position: absolute;
     pointer-events: none;
-    border-top-color: ${colorsV2.violet500};
+    border-top-color: ${colorsV3.purple500};
     border-width: 7px;
     margin-left: -7px;
   }
@@ -85,7 +85,7 @@ const TooltipContainer = styled.div<{ visible: boolean }>`
 const TooltipText = styled.div`
   font-size: 0.875rem;
   line-height: 1rem;
-  color: ${colorsV2.white};
+  color: ${colorsV3.white};
   text-align: center;
 `
 

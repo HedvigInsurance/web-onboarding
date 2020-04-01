@@ -25,7 +25,6 @@ export const Button = styled.button<ButtonProps>`
           .toString()
       : props.background ?? colorsV3.gray900};
   color: ${(props) => props.foreground ?? colorsV3.white};
-  font-weight: 500;
   border-radius: 8px;
   border: none;
   cursor: ${(props) => (props.disabled ? `default` : `pointer`)};
@@ -58,7 +57,7 @@ export const TextButton = styled.button<TextButtonProps>`
   background: none;
   padding: 0;
   margin: 0;
-  color: ${(props) => props.color || colorsV3.gray900};
+  color: ${(props) => props.color || colorsV3.purple500};
   font-size: 0.875rem;
   line-height: 1.5rem;
   border: none;
@@ -68,7 +67,7 @@ export const TextButton = styled.button<TextButtonProps>`
 
   :hover {
     color: ${(props) =>
-      color(props.color ?? colorsV3.gray900)
+      color(props.color ?? colorsV3.purple500)
         .darken(0.1)
         .toString()};
   }

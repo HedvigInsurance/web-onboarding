@@ -105,7 +105,7 @@ const Header = styled('h1')({
 
 const HeaderPart = styled('span')<{ color: string }>(({ color }) => ({
   color,
-  fontFamily: fonts.GEOMANIST,
+  fontFamily: fonts.FAVORIT,
   fontWeight: 400,
 }))
 

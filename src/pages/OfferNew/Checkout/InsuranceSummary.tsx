@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2, fonts } from '@hedviginsurance/brand'
+import { colorsV3, fonts } from '@hedviginsurance/brand'
 import { QuoteDetails } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import {
@@ -18,7 +18,7 @@ const Wrapper = styled('div')`
 const Title = styled('h3')`
   font-size: 1rem;
   letter-spacing: -0.23px;
-  font-family: ${fonts.CIRCULAR};
+  font-family: ${fonts.FAVORIT};
 `
 
 const Table = styled('div')`
@@ -32,7 +32,7 @@ const Table = styled('div')`
 const Group = styled('div')`
   :not(:last-of-type) {
     margin-bottom: 1rem;
-    border-bottom: 1px solid ${colorsV2.lightgray};
+    border-bottom: 1px solid ${colorsV3.gray300};
   }
 `
 
@@ -45,11 +45,11 @@ const Row = styled('div')`
 `
 const Label = styled('div')`
   width: 50%;
-  color: ${colorsV2.gray};
+  color: ${colorsV3.gray700};
 `
 const Value = styled('div')`
   width: 50%;
-  color: ${colorsV2.darkgray};
+  color: ${colorsV3.gray700};
   text-align: right;
 `
 

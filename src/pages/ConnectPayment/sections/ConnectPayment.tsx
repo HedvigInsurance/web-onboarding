@@ -74,7 +74,7 @@ const Header = styled('h1')({
 
 const HeaderPart = styled('span')({
   display: 'block',
-  fontFamily: fonts.GEOMANIST,
+  fontFamily: fonts.FAVORIT,
   fontWeight: 400,
 })
 
