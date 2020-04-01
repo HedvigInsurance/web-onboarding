@@ -39,10 +39,11 @@ export const Button = styled.button<ButtonProps>`
   ${(props) =>
     !props.disabled &&
     `
-    :hover {
-      background: ${color(props.background)
+    &:hover {
+      background: ${color(props.background ?? colorsV3.gray900)
         .darken(0.1)
         .toString()};
+      color: ${props.foreground ?? colorsV3.white};
     }
   `}
 `
