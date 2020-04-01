@@ -19,33 +19,55 @@ export const emailValidation = yup
   .required()
 
 export const UserDetailsForm: React.FC<Props> = ({
-  email,
+  email: initialEmail,
   onEmailChange,
   ssn: initialSsn,
   onSsnChange,
 }) => {
   const textKeys = useTextKeys()
+  const [email, reallySetEmail] = React.useState(() => initialEmail)
   const [emailError, setEmailError] = React.useState<boolean>(false)
   const [ssn, reallySetSsn] = React.useState(() => initialSsn)
-  const [changeTimout, setChangeTimout] = React.useState<number | null>(null)
+  const [emailChangeTimout, setEmailChangeTimout] = React.useState<
+    number | null
+  >(null)
+  const [ssnChangeTimout, setSsnChangeTimout] = React.useState<number | null>(
+    null,
+  )
 
   // FIXME should we pick which ssn validation to use in a different way? or not really?
   const market = useMarket()
   const isValidSsn = createSsnValidator(market!)
 
   const setSsn = (newSsn: string) => {
-    if (changeTimout) {
-      window.clearTimeout(changeTimout)
-      setChangeTimout(null)
+    if (ssnChangeTimout) {
+      window.clearTimeout(ssnChangeTimout)
+      setSsnChangeTimout(null)
     }
 
     reallySetSsn(newSsn)
-    setChangeTimout(
+    setSsnChangeTimout(
       window.setTimeout(() => {
         if (isValidSsn(newSsn)) {
           onSsnChange(newSsn)
         }
       }, 500),
+    )
+  }
+
+  const setEmailDebounced = (newEmail: string) => {
+    if (emailChangeTimout) {
+      window.clearTimeout(emailChangeTimout)
+      setEmailChangeTimout(null)
+    }
+
+    reallySetEmail(newEmail)
+    setEmailChangeTimout(
+      window.setTimeout(() => {
+        if (emailValidation.isValidSync(newEmail)) {
+          onEmailChange(newEmail)
+        }
+      }, 300),
     )
   }
 
@@ -64,13 +86,8 @@ export const UserDetailsForm: React.FC<Props> = ({
         value={email}
         errors={emailError ? textKeys.SIGN_EMAIL_CHECK() : undefined}
         onChange={(e: React.ChangeEvent<any>) => {
-          onEmailChange(e.target.value)
+          setEmailDebounced(e.target.value)
           setEmailError(false)
-        }}
-        onBlur={() => {
-          emailValidation.validate(email).catch(() => {
-            setEmailError(true)
-          })
         }}
       />
 

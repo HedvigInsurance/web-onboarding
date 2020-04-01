@@ -102,6 +102,11 @@ const quoteMock: CompleteQuote = {
     __typename: 'InsuranceTerm',
   },
   typeOfContract: TypeOfContract.NoHomeContentOwn,
+  termsAndConditions: {
+    url: 'https://important',
+    displayName: 'Important ToC',
+  },
+  insuranceTerms: [],
   perils: [],
   __typename: 'CompleteQuote',
 }

@@ -6,7 +6,16 @@
     "object-literal-sort-keys": false,
     "interface-name": false,
     "no-submodule-imports": false,
-    "no-implicit-dependencies": false
+    "no-implicit-dependencies": false,
+    "variable-name": {
+      "options": [
+        "ban-keywords",
+        "allow-pascal-case",
+        "allow-leading-underscore",
+        "allow-leading-underscore",
+        "check-format"
+      ]
+    }
   },
   "linterOptions": {
     "exclude": ["src/data/graphql.tsx"]
