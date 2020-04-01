@@ -10,7 +10,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import * as React from 'react'
 import { useHistory } from 'react-router'
 
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import {
   getPickedLocaleFromCurrentLocale,
   useCurrentLocale,
@@ -21,7 +21,6 @@ import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { apolloClient } from '../../client/apolloClient'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
-import { EmbarkBackground } from './EmbarkBackground'
 import {
   resolveExternalInsuranceProviderProviderStatus,
   resolveExternalInsuranceProviderStartSession,
@@ -34,7 +33,8 @@ import { resolvePersonalInformation } from './personalInformation'
 
 const EmbarkStyling = styled.div`
   height: 100%;
-  background-color: ${colorsV2.gray};
+  background-color: ${colorsV3.gray900};
+  color: ${colorsV3.white};
 
   * {
     margin: 0;
@@ -55,6 +55,7 @@ const PassageContainer = styled.div`
   left: 0;
   height: 100%;
   width: 100%;
+  background-color: ${colorsV3.gray900};
 `
 
 interface EmbarkProps {
@@ -254,7 +255,6 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
           }
         `}
       />
-      <EmbarkBackground />
       <AnimatePresence>
         {!isShowingLanding && (
           <motion.div

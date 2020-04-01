@@ -26,6 +26,10 @@ const Wrapper = styled.div<Props>`
   }
 `
 
+export const TopBarFiller = styled.div`
+  height: 5rem;
+`
+
 const Container = styled.div`
   width: 100%;
   height: 100%;

@@ -10,11 +10,11 @@ export const GlobalCss: React.SFC = ({ children }) => (
 
         * {
           box-sizing: border-box;
-          font-family: ${fonts.CIRCULAR}, sans-serif;
+          font-family: ${fonts.FAVORIT}, sans-serif;
         }
 
         body {
-          font-family: ${fonts.CIRCULAR}, sans-serif;
+          font-family: ${fonts.FAVORIT}, sans-serif;
           font-size: 16px;
           line-height: 1.5;
           margin: 0;
@@ -27,7 +27,7 @@ export const GlobalCss: React.SFC = ({ children }) => (
         h4,
         h5,
         h6 {
-          font-family: ${fonts.GEOMANIST}, sans-serif;
+          font-family: ${fonts.FAVORIT}, sans-serif;
           font-kerning: none;
         }
 

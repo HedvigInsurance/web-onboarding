@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import color from 'color'
 import { Link } from 'react-router-dom'
 import { Size } from './types'
@@ -8,27 +8,30 @@ interface ButtonProps {
   background?: string
   foreground?: string
   size?: Size
+  fullWidth?: boolean
   disabled?: boolean
 }
 
 export const Button = styled.button<ButtonProps>`
   font-size: ${(props) => (props.size === 'lg' ? `1rem` : `0.875rem`)};
   line-height: ${(props) => (props.size === 'lg' ? `1rem` : `1.25rem`)};
+  width: ${(props) => (props.fullWidth ? '100%' : 'auto')};
   padding: ${(props) =>
     props.size === 'lg' ? `1.5rem 2.5rem` : `0.875rem 1.5rem`};
   background: ${(props) =>
     props.disabled
-      ? color(props.background)
+      ? color(props.background ?? colorsV3.gray900)
           .lighten(0.5)
           .toString()
-      : props.background};
-  color: ${(props) => props.foreground};
+      : props.background ?? colorsV3.gray900};
+  color: ${(props) => props.foreground ?? colorsV3.white};
   font-weight: 500;
-  border-radius: ${(props) => (props.size === 'lg' ? `2rem` : `1.5rem`)};
+  border-radius: 8px;
   border: none;
   cursor: ${(props) => (props.disabled ? `default` : `pointer`)};
   transition: all 0.15s ease-in-out;
   text-decoration: none;
+  text-align: center;
 
   :focus {
     outline: none;
@@ -45,20 +48,7 @@ export const Button = styled.button<ButtonProps>`
   `}
 `
 
-const defaultButtonProps: ButtonProps = {
-  background: colorsV2.violet500,
-  foreground: colorsV2.white,
-  size: 'sm',
-  disabled: false,
-}
-
-Button.defaultProps = defaultButtonProps
-
 export const LinkButton = Button.withComponent(Link)
-LinkButton.defaultProps = defaultButtonProps
-
-export const PureLinkButton = Button.withComponent('a')
-PureLinkButton.defaultProps = defaultButtonProps
 
 interface TextButtonProps {
   color?: string
@@ -68,7 +58,7 @@ export const TextButton = styled.button<TextButtonProps>`
   background: none;
   padding: 0;
   margin: 0;
-  color: ${(props) => props.color || colorsV2.violet500};
+  color: ${(props) => props.color || colorsV3.gray900};
   font-size: 0.875rem;
   line-height: 1.5rem;
   border: none;
@@ -78,7 +68,7 @@ export const TextButton = styled.button<TextButtonProps>`
 
   :hover {
     color: ${(props) =>
-      color(props.color || colorsV2.violet500)
+      color(props.color ?? colorsV3.gray900)
         .darken(0.1)
         .toString()};
   }
@@ -87,7 +77,3 @@ export const TextButton = styled.button<TextButtonProps>`
     outline: none;
   }
 `
-
-TextButton.defaultProps = {
-  color: colorsV2.violet500,
-}

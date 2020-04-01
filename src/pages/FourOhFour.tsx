@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
+import { TopBar } from 'components/TopBar'
 import * as React from 'react'
 import Helmet from 'react-helmet-async'
 import { RouteComponentProps } from 'react-router'
@@ -8,6 +9,7 @@ import { LazyLottie } from '../components/animations/LazyLottie'
 const FourOhFourWrapper = styled('div')({
   textAlign: 'center',
   padding: 20,
+  paddingTop: '5rem',
 })
 
 const LinksWrapper = styled('div')({
@@ -38,6 +40,7 @@ export const FourOhFour: React.SFC<RouteComponentProps<{}>> = ({
         )}
       </TranslationsConsumer>
 
+      <TopBar />
       <FourOhFourWrapper>
         <h1>
           <TranslationsConsumer textKey="FOUR_OH_FOUR_HEADLINE">
@@ -48,7 +51,7 @@ export const FourOhFour: React.SFC<RouteComponentProps<{}>> = ({
           <LazyLottie
             options={{
               animationData: import(
-                /* webpackChunkName: 'animation-sad' */ '../components/animations/sad.json'
+                /* webpackChunkName: 'animation-sad' */ 'components/animations/sad-hedvig.json'
               ),
               autoplay: true,
               loop: false,
