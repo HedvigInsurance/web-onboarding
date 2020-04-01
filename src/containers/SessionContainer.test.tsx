@@ -1,7 +1,22 @@
+import { MockedProvider, MockedResponse } from '@apollo/react-testing'
+
+jest.mock('../client/apolloClient', () => ({
+  apolloClient: {
+    client: {
+      mutate: jest.fn(),
+    },
+    subscriptionClient: {
+      close: jest.fn(),
+    },
+  },
+}))
+
 import { Provider } from 'constate'
 import { mount } from 'enzyme'
 import * as React from 'react'
-import { MockedProvider, MockedResponse } from 'react-apollo/test-utils'
+
+import { Locale } from 'data/graphql'
+import { StaticRouter } from 'react-router-dom'
 import { apolloClient } from '../client/apolloClient'
 import {
   createSession,
@@ -14,36 +29,32 @@ import { mockNetworkWait } from '../utils/test-utils'
 import {
   CREATE_SESSION_TOKEN_MUTATION,
   SessionContainer,
+  UPDATE_PICKED_LOCALE_MUTATION,
 } from './SessionContainer'
 
-jest.mock('../client/apolloClient', () => ({
-  apolloClient: {
-    subscriptionClient: {
-      close: jest.fn(),
-    },
-  },
-}))
 it('picks up any stored session token in session without actually creating a new session', () => {
   const wrapper = mount(
-    <MockedProvider>
-      <Provider<{
-        storage: { session: IsomorphicSessionStorage<Session> }
-      }>
-        initialState={{
-          storage: {
-            session: createSession(
-              new MockStorage({
-                [SESSION_KEY]: JSON.stringify({ token: 'abc123' }),
-              }),
-            ),
-          },
-        }}
-      >
-        <SessionContainer>
-          {(sessionToken) => <div>{sessionToken}</div>}
-        </SessionContainer>
-      </Provider>
-    </MockedProvider>,
+    <StaticRouter location="/new-member" context={{}}>
+      <MockedProvider>
+        <Provider<{
+          storage: { session: IsomorphicSessionStorage<Session> }
+        }>
+          initialState={{
+            storage: {
+              session: createSession(
+                new MockStorage({
+                  [SESSION_KEY]: JSON.stringify({ token: 'abc123' }),
+                }),
+              ),
+            },
+          }}
+        >
+          <SessionContainer>
+            {(sessionToken) => <div>{sessionToken}</div>}
+          </SessionContainer>
+        </Provider>
+      </MockedProvider>
+    </StaticRouter>,
   )
 
   expect(wrapper.find('div').contains('abc123')).toBe(true)
@@ -65,27 +76,42 @@ it('creates a new session', async () => {
         },
       },
     },
+    {
+      request: {
+        query: UPDATE_PICKED_LOCALE_MUTATION,
+        variables: { pickedLocale: Locale.SvSe },
+      },
+      result: {
+        data: {
+          updatePickedLocale: {
+            memberId: 'abc123',
+          },
+        },
+      },
+    },
   ]
   const wrapper = mount(
-    <MockedProvider mocks={mocks}>
-      <Provider<{
-        storage: { session: IsomorphicSessionStorage<Session> }
-      }>
-        initialState={{
-          storage: {
-            session: createSession(
-              new MockStorage({
-                [SESSION_KEY]: JSON.stringify({}),
-              }),
-            ),
-          },
-        }}
-      >
-        <SessionContainer>
-          {(sessionToken) => <div>{sessionToken}</div>}
-        </SessionContainer>
-      </Provider>
-    </MockedProvider>,
+    <StaticRouter location="/new-member" context={{}}>
+      <MockedProvider mocks={mocks}>
+        <Provider<{
+          storage: { session: IsomorphicSessionStorage<Session> }
+        }>
+          initialState={{
+            storage: {
+              session: createSession(
+                new MockStorage({
+                  [SESSION_KEY]: JSON.stringify({}),
+                }),
+              ),
+            },
+          }}
+        >
+          <SessionContainer>
+            {(sessionToken) => <div>{sessionToken}</div>}
+          </SessionContainer>
+        </Provider>
+      </MockedProvider>
+    </StaticRouter>,
   )
 
   expect(wrapper.find('div').contains('abc123')).toBe(false)

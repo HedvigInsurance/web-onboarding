@@ -5765,6 +5765,7 @@ export type Query = {
   availablePaymentMethods: AvailablePaymentMethodsResponse
   /** Returns the active payment method which the member chose to tokenize */
   activePaymentMethods?: Maybe<ActivePaymentMethodsResponse>
+  adyenPublicKey: Scalars['String']
   /** Returns campaign associated with code */
   campaign: Campaign
   /** Returns information about the authed member's referralCampaign and referrals */
@@ -7012,61 +7013,6 @@ export type MemberQuery = { __typename?: 'Query' } & {
   member: { __typename?: 'Member' } & Pick<Member, 'id'>
 }
 
-export type MemberInsuranceQueryVariables = {}
-
-export type MemberInsuranceQuery = { __typename?: 'Query' } & {
-  insurance: { __typename?: 'Insurance' } & Pick<
-    Insurance,
-    | 'address'
-    | 'insuredAtOtherCompany'
-    | 'type'
-    | 'postalNumber'
-    | 'personsInHousehold'
-    | 'currentInsurerName'
-  > & {
-      cost: Maybe<
-        { __typename?: 'InsuranceCost' } & {
-          monthlyDiscount: { __typename?: 'MonetaryAmountV2' } & Pick<
-            MonetaryAmountV2,
-            'amount'
-          >
-          monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
-            MonetaryAmountV2,
-            'amount'
-          >
-          monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
-            MonetaryAmountV2,
-            'amount'
-          >
-        }
-      >
-    }
-  redeemedCampaigns: Array<
-    { __typename?: 'Campaign' } & Pick<Campaign, 'code'> & {
-        incentive: Maybe<
-          | ({ __typename?: 'MonthlyCostDeduction' } & {
-              amount: Maybe<
-                { __typename?: 'MonetaryAmountV2' } & Pick<
-                  MonetaryAmountV2,
-                  'amount' | 'currency'
-                >
-              >
-            })
-          | ({ __typename?: 'FreeMonths' } & Pick<FreeMonths, 'quantity'>)
-          | { __typename?: 'NoDiscount' }
-          | { __typename?: 'PercentageDiscountMonths' }
-        >
-        owner: Maybe<
-          { __typename?: 'CampaignOwner' } & Pick<CampaignOwner, 'displayName'>
-        >
-      }
-  >
-  member: { __typename?: 'Member' } & Pick<
-    Member,
-    'id' | 'firstName' | 'lastName' | 'email'
-  >
-}
-
 export type MemberOfferQueryVariables = {}
 
 export type MemberOfferQuery = { __typename?: 'Query' } & {
@@ -7551,18 +7497,10 @@ export type RemoveStartDateMutation = { __typename?: 'Mutation' } & {
     | { __typename?: 'UnderwritingLimitsHit' }
 }
 
-export type SignOfferMutationVariables = {
-  personalNumber: Scalars['String']
-  email: Scalars['String']
-}
-
-export type SignOfferMutation = { __typename?: 'Mutation' } & Pick<
-  Mutation,
-  'signOffer'
->
-
 export type SignQuotesMutationVariables = {
   quoteIds: Array<Scalars['ID']>
+  successUrl?: Maybe<Scalars['String']>
+  failUrl?: Maybe<Scalars['String']>
 }
 
 export type SignQuotesMutation = { __typename?: 'Mutation' } & {
@@ -7893,100 +7831,6 @@ export type MemberLazyQueryHookResult = ReturnType<typeof useMemberLazyQuery>
 export type MemberQueryResult = ApolloReactCommon.QueryResult<
   MemberQuery,
   MemberQueryVariables
->
-export const MemberInsuranceDocument = gql`
-  query MemberInsurance {
-    insurance {
-      address
-      insuredAtOtherCompany
-      type
-      postalNumber
-      personsInHousehold
-      currentInsurerName
-      cost {
-        monthlyDiscount {
-          amount
-        }
-        monthlyNet {
-          amount
-        }
-        monthlyGross {
-          amount
-        }
-      }
-    }
-    redeemedCampaigns {
-      incentive {
-        ... on FreeMonths {
-          quantity
-        }
-        ... on MonthlyCostDeduction {
-          amount {
-            amount
-            currency
-          }
-        }
-      }
-      code
-      owner {
-        displayName
-      }
-    }
-    member {
-      id
-      firstName
-      lastName
-      email
-    }
-  }
-`
-
-/**
- * __useMemberInsuranceQuery__
- *
- * To run a query within a React component, call `useMemberInsuranceQuery` and pass it any options that fit your needs.
- * When your component renders, `useMemberInsuranceQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useMemberInsuranceQuery({
- *   variables: {
- *   },
- * });
- */
-export function useMemberInsuranceQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<
-    MemberInsuranceQuery,
-    MemberInsuranceQueryVariables
-  >,
-) {
-  return ApolloReactHooks.useQuery<
-    MemberInsuranceQuery,
-    MemberInsuranceQueryVariables
-  >(MemberInsuranceDocument, baseOptions)
-}
-export function useMemberInsuranceLazyQuery(
-  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
-    MemberInsuranceQuery,
-    MemberInsuranceQueryVariables
-  >,
-) {
-  return ApolloReactHooks.useLazyQuery<
-    MemberInsuranceQuery,
-    MemberInsuranceQueryVariables
-  >(MemberInsuranceDocument, baseOptions)
-}
-export type MemberInsuranceQueryHookResult = ReturnType<
-  typeof useMemberInsuranceQuery
->
-export type MemberInsuranceLazyQueryHookResult = ReturnType<
-  typeof useMemberInsuranceLazyQuery
->
-export type MemberInsuranceQueryResult = ApolloReactCommon.QueryResult<
-  MemberInsuranceQuery,
-  MemberInsuranceQueryVariables
 >
 export const MemberOfferDocument = gql`
   query MemberOffer {
@@ -8619,58 +8463,15 @@ export type RemoveStartDateMutationOptions = ApolloReactCommon.BaseMutationOptio
   RemoveStartDateMutation,
   RemoveStartDateMutationVariables
 >
-export const SignOfferDocument = gql`
-  mutation SignOffer($personalNumber: String!, $email: String!) {
-    signOffer(details: { personalNumber: $personalNumber, email: $email })
-  }
-`
-export type SignOfferMutationFn = ApolloReactCommon.MutationFunction<
-  SignOfferMutation,
-  SignOfferMutationVariables
->
-
-/**
- * __useSignOfferMutation__
- *
- * To run a mutation, you first call `useSignOfferMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSignOfferMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [signOfferMutation, { data, loading, error }] = useSignOfferMutation({
- *   variables: {
- *      personalNumber: // value for 'personalNumber'
- *      email: // value for 'email'
- *   },
- * });
- */
-export function useSignOfferMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<
-    SignOfferMutation,
-    SignOfferMutationVariables
-  >,
-) {
-  return ApolloReactHooks.useMutation<
-    SignOfferMutation,
-    SignOfferMutationVariables
-  >(SignOfferDocument, baseOptions)
-}
-export type SignOfferMutationHookResult = ReturnType<
-  typeof useSignOfferMutation
->
-export type SignOfferMutationResult = ApolloReactCommon.MutationResult<
-  SignOfferMutation
->
-export type SignOfferMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  SignOfferMutation,
-  SignOfferMutationVariables
->
 export const SignQuotesDocument = gql`
-  mutation SignQuotes($quoteIds: [ID!]!) {
-    signQuotes(input: { quoteIds: $quoteIds }) {
+  mutation SignQuotes(
+    $quoteIds: [ID!]!
+    $successUrl: String
+    $failUrl: String
+  ) {
+    signQuotes(
+      input: { quoteIds: $quoteIds, successUrl: $successUrl, failUrl: $failUrl }
+    ) {
       __typename
       ... on FailedToStartSign {
         errorMessage
@@ -8703,6 +8504,8 @@ export type SignQuotesMutationFn = ApolloReactCommon.MutationFunction<
  * const [signQuotesMutation, { data, loading, error }] = useSignQuotesMutation({
  *   variables: {
  *      quoteIds: // value for 'quoteIds'
+ *      successUrl: // value for 'successUrl'
+ *      failUrl: // value for 'failUrl'
  *   },
  * });
  */

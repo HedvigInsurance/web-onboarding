@@ -5,7 +5,7 @@ import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { Price } from '../components'
 import { StartDate } from '../Introduction/Sidebar/StartDate'
-import { OfferData, OfferQuote, WithEmailForm } from '../types'
+import { OfferData, OfferQuote } from '../types'
 import {
   getContractType,
   getOfferInsuranceCost,
@@ -69,18 +69,18 @@ const InsuranceType = styled('div')`
   }
 `
 
-interface Props extends WithEmailForm {
+interface Props {
   offerQuote: OfferQuote
   offerData: OfferData
   refetch: () => Promise<void>
+  onEmailUpdate: (onCompletion: Promise<void>) => void
   onSsnUpdate: (onCompletion: Promise<void>) => void
 }
 
 export const CheckoutContent: React.FC<Props> = ({
   offerQuote,
   offerData,
-  email,
-  onEmailChange,
+  onEmailUpdate,
   onSsnUpdate,
   refetch,
 }) => {
@@ -122,8 +122,23 @@ export const CheckoutContent: React.FC<Props> = ({
         </Excerpt>
 
         <UserDetailsForm
-          email={email}
-          onEmailChange={onEmailChange}
+          email={offerPerson.email ?? ''}
+          onEmailChange={(email) => {
+            const onCompletion = new Promise<void>((resolve, reject) => {
+              Promise.all(
+                quoteIds.map((quoteId) => {
+                  editQuote({ variables: { input: { id: quoteId, email } } })
+                }),
+              )
+                .then(() => refetch())
+                .then(() => resolve())
+                .catch((e) => {
+                  reject(e)
+                  throw e
+                })
+            })
+            onEmailUpdate(onCompletion)
+          }}
           ssn={offerPerson.ssn ?? ''}
           onSsnChange={(ssn) => {
             const onCompletion = new Promise<void>((resolve, reject) => {
