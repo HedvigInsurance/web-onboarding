@@ -1975,15 +1975,15 @@
     tslib "1.10.0"
     valid-url "1.0.9"
 
+"@hedviginsurance/brand@3.0.5":
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-3.0.5.tgz#04ad29b5d01b04c456691e010a2336dce454ce6c"
+  integrity sha512-jjOn/0/6KJhZGRSwiYq8+L9zL/CGD7m3e42HC/tQ/m7RXV4hZvdv0nzkV8EhdbmdTj1f0gj32l0JgXPiD1GNUw==
+
 "@hedviginsurance/brand@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-2.0.0.tgz#5549b8aa1a756925f3d05e0e350462be3c36cb02"
   integrity sha512-6pA7JCIhVPCqTx8RESwvj+tmbiStbCwICbaUmXMCxgUNj+pLxFpJQb4SBtXXGB+A2ge96Fti0VrE+0Wdc0aHSQ==
-
-"@hedviginsurance/brand@^3.0.5":
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-3.0.5.tgz#04ad29b5d01b04c456691e010a2336dce454ce6c"
-  integrity sha512-jjOn/0/6KJhZGRSwiYq8+L9zL/CGD7m3e42HC/tQ/m7RXV4hZvdv0nzkV8EhdbmdTj1f0gj32l0JgXPiD1GNUw==
 
 "@hedviginsurance/cli@^2.3.2":
   version "2.3.3"

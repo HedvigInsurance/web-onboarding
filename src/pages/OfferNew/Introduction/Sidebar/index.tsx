@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
+import { Button, TextButton } from 'components/buttons'
 import { CookieStorage } from 'cookie-storage'
 import {
   Campaign,
@@ -7,7 +8,6 @@ import {
   useRedeemedCampaignsQuery,
   useRemoveDiscountCodeMutation,
 } from 'data/graphql'
-import { Button, TextButton } from 'new-components/buttons'
 import {
   getDiscountText,
   isMonthlyCostDeduction,

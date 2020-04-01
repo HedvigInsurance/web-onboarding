@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
+import { Spinner } from 'components/utils'
 import { MonetaryAmount } from 'containers/types'
-import { Spinner } from 'new-components/utils'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 

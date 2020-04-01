@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
-import { Tooltip } from 'new-components/Tooltip'
+import { Tooltip } from 'components/Tooltip'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { InsuranceValues } from './mock'

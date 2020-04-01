@@ -1,3 +1,4 @@
+import { TopBar } from 'components/TopBar'
 import {
   getLocaleIsoCode,
   Market,
@@ -8,7 +9,6 @@ import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import { QuoteBundle, useQuoteBundleQuery } from 'data/graphql'
 import { History } from 'history'
-import { TopBar } from 'new-components/TopBar'
 import { SwitchSafetySection } from 'pages/OfferNew/SwitchSafetySection'
 import { TestimonialsSection } from 'pages/OfferNew/TestimonialsSection'
 import { getOfferData } from 'pages/OfferNew/utils'

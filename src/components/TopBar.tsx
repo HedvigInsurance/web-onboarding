@@ -1,92 +1,61 @@
 import styled from '@emotion/styled'
-import { colors } from '@hedviginsurance/brand'
+import { colorsV2 } from '@hedviginsurance/brand'
+import { HedvigLogo } from 'components/icons/HedvigLogo'
 import * as React from 'react'
+import { CurrentLocale } from './utils/CurrentLocale'
 
-export const TOP_BAR_HEIGHT = 70
+export const TOP_BAR_Z_INDEX = 1009
 
-const Wrapper = styled('div')({
-  width: '100%',
-  backgroundColor: colors.OFF_WHITE,
-})
-
-const Bar = styled('div')({
-  height: TOP_BAR_HEIGHT,
-  position: 'fixed',
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  top: 0,
-  left: 0,
-  right: 0,
-  backgroundColor: colors.WHITE,
-  zIndex: 5,
-  boxShadow: '0 1px 11px 1px rgba(0,0,0,.15)',
-})
-
-const LogoWrapper = styled('div')({
-  height: '100%',
-  width: '20%',
-  display: 'flex',
-  alignItems: 'center',
-  paddingTop: 4,
-  paddingLeft: 20,
-  '@media (max-width: 850px)': {
-    width: '33%',
-  },
-  '@media (max-width: 600px)': {
-    width: '55%',
-  },
-  '@media (max-width: 350px)': {
-    paddingLeft: 10,
-  },
-})
-
-const EscapeLink = styled('a')<{ disable?: boolean }>(
-  ({ disable = false }) => ({
-    display: 'flex',
-    cursor: disable ? 'default' : 'cursor',
-  }),
-)
-
-const Logo = styled('img')({})
-
-const EmptyBar = styled(Bar)({
-  justifyContent: 'space-between',
-})
-
-const ProceedComponentWrapper = styled('div')({
-  marginRight: 20,
-  '@media (max-width: 350px)': {
-    marginRight: 10,
-  },
-})
-
-interface EmptyTopBarProps {
-  proceedComponent?: React.ReactNode
-  partner?: string
+interface Props {
+  transparent?: boolean
 }
 
-export const EmptyTopBar: React.FC<EmptyTopBarProps> = ({
-  proceedComponent = <div />,
-  partner,
-}) => (
-  <Wrapper>
-    <EmptyBar>
-      <LogoWrapper>
-        <EscapeLink
-          href="/"
-          onClick={(event) => partner === 'dreams' && event.preventDefault()}
-          disable={partner === 'dreams'}
-        >
-          <Logo
-            src={`/new-member-assets/topbar/hedvig-wordmark-${partner ||
-              'solid'}.svg`}
-          />
-        </EscapeLink>
-      </LogoWrapper>
-      <div />
-      <ProceedComponentWrapper>{proceedComponent}</ProceedComponentWrapper>
-    </EmptyBar>
+const Wrapper = styled.div<Props>`
+  width: 100%;
+  top: 0;
+  height: 5rem;
+  background: ${(props) =>
+    props.transparent ? `transparent` : colorsV2.white};
+  position: absolute;
+  z-index: ${TOP_BAR_Z_INDEX};
+  ${(props) =>
+    !props.transparent && `box-shadow: 0 2px 14px rgba(0, 0, 0, 0.08);`};
+
+  @media (max-width: 375px) {
+    height: 4rem;
+  }
+`
+
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
+  max-width: 80rem;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
+
+  @media (max-width: 600px) {
+    justify-content: center;
+  }
+`
+
+const LogoLink = styled.a`
+  color: inherit;
+  display: flex;
+`
+
+export const TopBar: React.FC<Props> = ({ transparent }) => (
+  <Wrapper transparent={transparent}>
+    <Container>
+      <CurrentLocale>
+        {({ currentLocale }) => (
+          <LogoLink href={'/' + currentLocale}>
+            <HedvigLogo width={94} />
+          </LogoLink>
+        )}
+      </CurrentLocale>
+    </Container>
   </Wrapper>
 )

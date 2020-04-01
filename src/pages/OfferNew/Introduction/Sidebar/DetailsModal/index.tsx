@@ -1,5 +1,11 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
+import { Button } from 'components/buttons'
+import {
+  InputGroup,
+  InputGroupDeleteButton,
+  InputGroupRow,
+} from 'components/inputs/index'
 import { Modal, ModalProps } from 'components/ModalNew'
 import {
   EditQuoteInput,
@@ -8,12 +14,6 @@ import {
   useEditQuoteMutation,
 } from 'data/graphql'
 import { FieldArray, Form, Formik } from 'formik'
-import { Button } from 'new-components/buttons'
-import {
-  InputGroup,
-  InputGroupDeleteButton,
-  InputGroupRow,
-} from 'new-components/inputs/index'
 import { OfferQuote } from 'pages/OfferNew/types'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'

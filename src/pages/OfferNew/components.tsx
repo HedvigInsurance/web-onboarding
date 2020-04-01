@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import * as React from 'react'
-import { Blob } from '../../components/Blob'
+import { Blob } from './common/Blob'
 
 export * from './common/price'
 

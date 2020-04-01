@@ -1,6 +1,8 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { externalInsuranceProviders } from '@hedviginsurance/embark'
+import { DateInput } from 'components/DateInput'
+import { Switch } from 'components/Switch'
 import {
   useExternalInsuranceDataQuery,
   useRemoveStartDateMutation,
@@ -9,8 +11,6 @@ import {
 import { format, isToday } from 'date-fns'
 import { motion } from 'framer-motion'
 import hexToRgba from 'hex-to-rgba'
-import { DateInput } from 'new-components/DateInput'
-import { Switch } from 'new-components/Switch'
 import { OfferData } from 'pages/OfferNew/types'
 import { getQuoteIds, hasCurrentInsurer, isBundle } from 'pages/OfferNew/utils'
 import * as React from 'react'

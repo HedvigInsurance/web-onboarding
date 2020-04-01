@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
+import { Spinner } from 'components/utils'
 import {
   getLocaleIsoCode,
   useCurrentLocale,

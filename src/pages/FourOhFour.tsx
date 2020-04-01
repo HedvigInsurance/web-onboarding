@@ -48,7 +48,7 @@ export const FourOhFour: React.SFC<RouteComponentProps<{}>> = ({
           <LazyLottie
             options={{
               animationData: import(
-                /* webpackChunkName: 'animation-sad' */ '../components/hedvig/sad.json'
+                /* webpackChunkName: 'animation-sad' */ '../components/animations/sad.json'
               ),
               autoplay: true,
               loop: false,

@@ -1,6 +1,6 @@
+import { TopBar } from 'components/TopBar'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
-import { TopBar } from 'new-components/TopBar'
 import * as React from 'react'
 import Helmet from 'react-helmet-async'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
