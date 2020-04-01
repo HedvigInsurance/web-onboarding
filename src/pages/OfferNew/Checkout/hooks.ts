@@ -3,8 +3,7 @@ import {
   useMemberQuery,
   useRedeemedCampaignsQuery,
 } from 'data/graphql'
-import { OfferData, OfferQuote } from 'pages/OfferNew/types'
-import { getOfferInsuranceCost } from 'pages/OfferNew/utils'
+import { OfferData } from 'pages/OfferNew/types'
 import * as React from 'react'
 import { InsuranceType } from 'utils/insuranceDomainUtils'
 import { adtraction, trackStudentkortet } from 'utils/tracking'
@@ -57,16 +56,10 @@ export const useScrollLock = (
 
 interface TrackProps {
   email: string
-  offerQuote: OfferQuote
   offerData: OfferData
   signState?: SignState | null
 }
-export const useTrack = ({
-  offerData,
-  offerQuote,
-  email,
-  signState,
-}: TrackProps) => {
+export const useTrack = ({ offerData, email, signState }: TrackProps) => {
   const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
   const redeemedCampaigns = redeemedCampaignsData?.redeemedCampaigns ?? []
   const { data: memberData } = useMemberQuery()
@@ -81,13 +74,15 @@ export const useTrack = ({
       return
     }
 
+    // TODO: Map to ContractType after talking to Carl about productIds
     const legacyInsuranceType: InsuranceType =
-      offerData.quoteDetails.__typename === 'SwedishApartmentQuoteDetails'
-        ? (offerData.quoteDetails.type as any)
+      offerData.quotes[0].quoteDetails.__typename ===
+      'SwedishApartmentQuoteDetails'
+        ? (offerData.quotes[0].quoteDetails.type as any)
         : 'HOUSE' // TODO do we have norway quotes here?
 
     adtraction(
-      parseFloat(getOfferInsuranceCost(offerQuote).monthlyGross.amount),
+      parseFloat(offerData.cost.monthlyGross.amount),
       memberId,
       email,
       redeemedCampaigns !== null && redeemedCampaigns.length !== 0
@@ -100,10 +95,7 @@ export const useTrack = ({
       redeemedCampaigns?.length > 0 &&
       redeemedCampaigns[0].code.toLowerCase() === 'studentkortet'
     ) {
-      trackStudentkortet(
-        memberId,
-        getOfferInsuranceCost(offerQuote).monthlyGross.amount,
-      )
+      trackStudentkortet(memberId, offerData.cost.monthlyGross.amount)
     }
   }, [signState])
 }

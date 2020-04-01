@@ -10,23 +10,20 @@ import {
 import { Button, TextButton } from 'new-components/buttons'
 import {
   getDiscountText,
-  getHouseholdSize,
   isMonthlyCostDeduction,
   isNoDiscount,
   isPercentageDiscountMonths,
-  quoteDetailsHasAddress,
 } from 'pages/OfferNew/Introduction/Sidebar/utils'
-import { OfferData, OfferQuote } from 'pages/OfferNew/types'
+import { OfferData } from 'pages/OfferNew/types'
 import * as React from 'react'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { Price } from '../../components'
 import {
-  getContractType,
-  getOfferInsuranceCost,
+  hasAddress,
   insuranceTypeTextKeys,
-  isOfferFromQuoteBundle,
+  isBundle,
   isSwedishApartment,
   isSwedishHouse,
 } from '../../utils'
@@ -37,7 +34,6 @@ import { StickyBottomSidebar } from './StickyBottomSidebar'
 
 interface Props {
   sticky: boolean
-  offerQuote: OfferQuote
   offerData: OfferData
   refetch: () => Promise<void>
   onCheckoutOpen: () => void
@@ -182,7 +178,7 @@ const FooterExtraActions = styled.div`
 `
 
 export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
-  ({ sticky, offerQuote, offerData, refetch, onCheckoutOpen }, ref) => {
+  ({ sticky, offerData, refetch, onCheckoutOpen }, ref) => {
     const textKeys = useTextKeys()
     const [
       discountCodeModalIsOpen,
@@ -222,10 +218,6 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
     const discountText = getDiscountText(textKeys)(redeemedCampaigns)
 
-    const details = offerData.quoteDetails
-
-    const insuranceCost = getOfferInsuranceCost(offerQuote)
-
     return (
       <>
         <ReactVisibilitySensor partialVisibility onChange={setIsSidebarVisible}>
@@ -238,36 +230,45 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                     <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
 
                     <Title>
-                      {!isOfferFromQuoteBundle(offerQuote) &&
+                      {!isBundle(offerData) &&
                         textKeys[
-                          insuranceTypeTextKeys[getContractType(offerData)]
+                          insuranceTypeTextKeys[
+                            offerData.quotes[0].contractType
+                          ]
                         ]()}
-                      {isOfferFromQuoteBundle(offerQuote) &&
+                      {isBundle(offerData) &&
                         textKeys.SIDEBAR_INSURANCE_TYPE_BUNDLE()}
                     </Title>
 
                     <SummaryContent>
                       <SummaryText>
-                        <b>{`${offerData.firstName} ${offerData.lastName}`}</b>{' '}
-                        {getHouseholdSize(details) - 1 > 0 &&
+                        <b>{`${offerData.person.firstName} ${offerData.person.lastName}`}</b>{' '}
+                        {offerData.person.householdSize - 1 > 0 &&
                           textKeys.SIDEBAR_INSURED_PERSONS_SUFFIX({
-                            AMOUNT: getHouseholdSize(details) - 1,
+                            AMOUNT: offerData.person.householdSize - 1,
                           })}
                       </SummaryText>
-                      {quoteDetailsHasAddress(details) && (
+                      {hasAddress(offerData) && (
                         <SummaryText>
-                          {`${details.street}, ${formatPostalNumber(
-                            details.zipCode,
+                          {`${
+                            offerData.person.address!.street
+                          }, ${formatPostalNumber(
+                            offerData.person.address!.zipCode,
                           )}`}
                         </SummaryText>
                       )}
 
-                      {(isSwedishHouse(details) ||
-                        isSwedishApartment(details)) && (
-                        <TextButton onClick={() => setDetailsModalIsOpen(true)}>
-                          {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
-                        </TextButton>
-                      )}
+                      {!isBundle(offerData) &&
+                        (isSwedishHouse(offerData.quotes[0].quoteDetails) ||
+                          isSwedishApartment(
+                            offerData.quotes[0].quoteDetails,
+                          )) && (
+                          <TextButton
+                            onClick={() => setDetailsModalIsOpen(true)}
+                          >
+                            {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
+                          </TextButton>
+                        )}
                     </SummaryContent>
                   </Summary>
 
@@ -280,17 +281,14 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                         redeemedCampaigns[0]?.incentive ?? undefined,
                       )
                     }
-                    monthlyGross={insuranceCost.monthlyGross}
-                    monthlyNet={insuranceCost.monthlyNet}
+                    monthlyGross={offerData.cost.monthlyGross}
+                    monthlyNet={offerData.cost.monthlyNet}
                   />
                 </Header>
 
                 <Body>
                   <StartDate
-                    dataCollectionId={offerData.dataCollectionId}
-                    startDate={offerData.startDate}
-                    offerId={offerData.id}
-                    currentInsurer={offerData.currentInsurer || null}
+                    offerData={offerData}
                     refetch={refetch}
                     modal={true}
                   />
@@ -341,7 +339,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 />
               </Container>
               <DetailsModal
-                offerData={offerData}
+                offerQuote={offerData.quotes[0]}
                 refetch={refetchAll}
                 isVisible={detailsModalIsOpen}
                 onClose={() => setDetailsModalIsOpen(false)}

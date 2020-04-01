@@ -5,15 +5,12 @@ import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { Price } from '../components'
 import { StartDate } from '../Introduction/Sidebar/StartDate'
-import { OfferData, OfferQuote } from '../types'
+import { OfferData } from '../types'
 import {
-  getContractType,
-  getOfferInsuranceCost,
-  getOfferPerson,
-  getOfferQuoteIds,
+  getQuoteIds,
   insuranceTypeTextKeys,
+  isBundle,
   isMonthlyCostDeduction,
-  isOfferFromQuoteBundle,
 } from '../utils'
 import { InsuranceSummary } from './InsuranceSummary'
 import { SignSpacer } from './Sign'
@@ -70,7 +67,6 @@ const InsuranceType = styled('div')`
 `
 
 interface Props {
-  offerQuote: OfferQuote
   offerData: OfferData
   refetch: () => Promise<void>
   onEmailUpdate: (onCompletion: Promise<void>) => void
@@ -78,7 +74,6 @@ interface Props {
 }
 
 export const CheckoutContent: React.FC<Props> = ({
-  offerQuote,
   offerData,
   onEmailUpdate,
   onSsnUpdate,
@@ -92,9 +87,7 @@ export const CheckoutContent: React.FC<Props> = ({
   const [fakeLoading, setFakeLoading] = React.useState(false)
   const [reallyLoading, setReallyLoading] = React.useState(false)
   const [editQuote] = useEditQuoteMutation()
-  const insuranceCost = getOfferInsuranceCost(offerQuote)
-  const offerPerson = getOfferPerson(offerQuote)
-  const quoteIds = getOfferQuoteIds(offerQuote)
+  const quoteIds = getQuoteIds(offerData)
 
   return (
     <>
@@ -102,19 +95,19 @@ export const CheckoutContent: React.FC<Props> = ({
         <Title>{textKeys.CHECKOUT_TITLE()}</Title>
         <Excerpt>
           <div>
-            <InsuranceTypeLabel>{textKeys.SIDEBAR_LABEL()}</InsuranceTypeLabel>
             <InsuranceType>
-              {!isOfferFromQuoteBundle(offerQuote) &&
-                textKeys[insuranceTypeTextKeys[getContractType(offerData)]]()}
-              {isOfferFromQuoteBundle(offerQuote) &&
-                textKeys.SIDEBAR_INSURANCE_TYPE_BUNDLE()}
+              {!isBundle(offerData) &&
+                textKeys[
+                  insuranceTypeTextKeys[offerData.quotes[0].contractType]
+                ]()}
+              {isBundle(offerData) && textKeys.SIDEBAR_INSURANCE_TYPE_BUNDLE()}
             </InsuranceType>
           </div>
           <div>
             <Price
               loading={fakeLoading || reallyLoading}
-              monthlyGross={insuranceCost.monthlyGross}
-              monthlyNet={insuranceCost.monthlyNet}
+              monthlyGross={offerData.cost.monthlyGross}
+              monthlyNet={offerData.cost.monthlyNet}
               monthlyCostDeduction={monthlyCostDeduction}
               highlightAmount
             />
@@ -122,7 +115,7 @@ export const CheckoutContent: React.FC<Props> = ({
         </Excerpt>
 
         <UserDetailsForm
-          email={offerPerson.email ?? ''}
+          email={offerData.person.email ?? ''}
           onEmailChange={(email) => {
             const onCompletion = new Promise<void>((resolve, reject) => {
               Promise.all(
@@ -139,7 +132,7 @@ export const CheckoutContent: React.FC<Props> = ({
             })
             onEmailUpdate(onCompletion)
           }}
-          ssn={offerPerson.ssn ?? ''}
+          ssn={offerData.person.ssn ?? ''}
           onSsnChange={(ssn) => {
             const onCompletion = new Promise<void>((resolve, reject) => {
               setFakeLoading(true)
@@ -164,16 +157,13 @@ export const CheckoutContent: React.FC<Props> = ({
         />
 
         <StartDateWrapper>
-          <StartDate
-            dataCollectionId={offerData.dataCollectionId}
-            startDate={offerData.startDate}
-            offerId={offerData.id}
-            currentInsurer={offerData.currentInsurer || null}
-            refetch={refetch}
-          />
+          <StartDate offerData={offerData} refetch={refetch} />
         </StartDateWrapper>
 
-        <InsuranceSummary offerData={offerData} ssn={offerPerson.ssn} />
+        <InsuranceSummary
+          offerData={offerData}
+          ssn={offerData.person.ssn || undefined}
+        />
 
         <SignSpacer />
       </Section>

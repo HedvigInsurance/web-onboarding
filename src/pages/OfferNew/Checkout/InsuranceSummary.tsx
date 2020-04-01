@@ -1,14 +1,12 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import { QuoteDetails } from 'data/graphql'
-import {
-  getHouseholdSize,
-  quoteDetailsHasAddress,
-} from 'pages/OfferNew/Introduction/Sidebar/utils'
 import { OfferData } from 'pages/OfferNew/types'
 import {
   apartmentTypeTextKeys,
+  getHouseholdSize,
   maskAndFormatRawSsn,
+  quoteDetailsHasAddress,
 } from 'pages/OfferNew/utils'
 import * as React from 'react'
 import { TextKeyMap, useTextKeys } from 'utils/hooks/useTextKeys'
@@ -66,20 +64,24 @@ export const InsuranceSummary: React.FC<Props> = ({ offerData, ssn }) => {
   return (
     <Wrapper>
       <Title>{textKeys.CHECKOUT_SUMMARY_TITLE()}</Title>
-      <Table>
-        {getDetails(offerData.quoteDetails, textKeys, ssn).map(
-          (group, index) => (
-            <Group key={index}>
-              {group.map(({ key, value, label }) => (
-                <Row key={key}>
-                  <Label>{label}</Label>
-                  <Value>{value}</Value>
-                </Row>
-              ))}
-            </Group>
-          ),
-        )}
-      </Table>
+      {offerData.quotes.map((quote) => {
+        return (
+          <Table>
+            {getDetails(quote.quoteDetails, textKeys, ssn).map(
+              (group, index) => (
+                <Group key={index}>
+                  {group.map(({ key, value, label }) => (
+                    <Row key={key}>
+                      <Label>{label}</Label>
+                      <Value>{value}</Value>
+                    </Row>
+                  ))}
+                </Group>
+              ),
+            )}
+          </Table>
+        )
+      })}
     </Wrapper>
   )
 }

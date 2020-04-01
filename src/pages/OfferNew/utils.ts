@@ -1,9 +1,9 @@
 import { Market } from 'components/utils/CurrentLocale'
 import {
   ApartmentType,
+  BundledQuote,
   Campaign,
   CompleteQuote,
-  InsuranceCost,
   NorwegianHomeContentsDetails,
   NorwegianHomeContentsType,
   NorwegianTravelDetails,
@@ -13,72 +13,128 @@ import {
   SwedishApartmentQuoteDetails,
   SwedishHouseQuoteDetails,
 } from 'data/graphql'
-import { OfferPerson, OfferQuote } from 'pages/OfferNew/types'
+import { parse } from 'date-fns'
+import { Address, OfferData } from 'pages/OfferNew/types'
 import { TypeOfContract } from 'utils/insuranceDomainUtils'
-import { OfferData } from './types'
 
-export const getOfferInsuranceCost = (
-  offerQuote: OfferQuote,
-): InsuranceCost => {
-  if (isOfferFromCompleteQuote(offerQuote)) {
-    return offerQuote.insuranceCost
-  }
-  if (isOfferFromQuoteBundle(offerQuote)) {
-    return offerQuote.bundleCost
-  }
-  throw new Error(`Invalid OfferQuote type ${offerQuote}`)
-}
-
-export const getOfferData = (
-  offerQuote: OfferQuote,
-): ReadonlyArray<OfferData> => {
-  if (isOfferFromCompleteQuote(offerQuote)) {
-    return [offerQuote]
-  }
-  if (isOfferFromQuoteBundle(offerQuote)) {
-    return offerQuote.quotes
-  }
-  throw new Error(`Invalid OfferQuote type ${offerQuote}`)
-}
-
-export const getOfferQuoteIds = (offerQuote: OfferQuote): string[] => {
-  if (isOfferFromCompleteQuote(offerQuote)) {
-    return [offerQuote.id]
-  }
-  if (isOfferFromQuoteBundle(offerQuote)) {
-    return offerQuote.quotes.map((quote) => quote.id)
-  }
-  throw new Error(`Invalid OfferQuote type ${offerQuote}`)
-}
-
-export const getOfferPerson = (offerQuote: OfferQuote): OfferPerson => {
-  if (isOfferFromCompleteQuote(offerQuote)) {
+export const getOfferData = (quote: Quote | QuoteBundle): OfferData => {
+  if (isOfferFromCompleteQuote(quote)) {
     return {
-      firstName: offerQuote.firstName,
-      lastName: offerQuote.lastName,
-      ssn: offerQuote.ssn ?? undefined,
-      email: offerQuote.email ?? undefined,
+      person: {
+        ...quote,
+        householdSize: getHouseholdSize(quote.quoteDetails),
+        address: quoteDetailsHasAddress(quote.quoteDetails)
+          ? {
+              street: quote.quoteDetails.street,
+              zipCode: quote.quoteDetails.zipCode,
+            }
+          : undefined,
+      },
+      quotes: [
+        {
+          ...quote,
+          contractType: getContractType(quote.quoteDetails),
+        },
+      ],
+      cost: quote.insuranceCost,
+      startDate: quote.startDate
+        ? parse(quote.startDate, 'yyyy-MM-dd', new Date())
+        : undefined,
     }
   }
-  if (isOfferFromQuoteBundle(offerQuote)) {
-    const firstQuote = offerQuote.quotes[0]
+  if (isOfferFromQuoteBundle(quote)) {
+    const firstQuote = quote.quotes[0]
     return {
-      firstName: firstQuote.firstName,
-      lastName: firstQuote.lastName,
-      ssn: firstQuote.ssn ?? undefined,
-      email: firstQuote.email ?? undefined,
+      person: {
+        ...firstQuote,
+        householdSize: getHouseholdSize(firstQuote.quoteDetails),
+        address: getAddressFromBundledQuotes(quote.quotes),
+      },
+      quotes: quote.quotes.map((bundleQuote) => {
+        return {
+          ...bundleQuote,
+          contractType: getContractType(bundleQuote.quoteDetails),
+        }
+      }),
+      cost: quote.bundleCost,
+      startDate: getStartDateFromBundledQuotes(quote.quotes),
     }
   }
-  throw new Error(`Invalid OfferQuote type ${offerQuote}`)
+  throw new Error(`Invalid OfferQuote type ${quote}`)
 }
+
+export const getHouseholdSize = (quoteDetails: QuoteDetails) =>
+  quoteDetails.__typename === 'SwedishApartmentQuoteDetails' ||
+  quoteDetails.__typename === 'SwedishHouseQuoteDetails'
+    ? quoteDetails.householdSize
+    : quoteDetails.__typename === 'NorwegianHomeContentsDetails' ||
+      quoteDetails.__typename === 'NorwegianTravelDetails'
+    ? quoteDetails.coInsured + 1
+    : 0
+
+const getAddressFromBundledQuotes = (
+  quotes: ReadonlyArray<BundledQuote>,
+): Address | undefined => {
+  const quotesWithAddress = quotes.filter((quote) =>
+    quoteDetailsHasAddress(quote.quoteDetails),
+  )
+  if (
+    quotesWithAddress.length > 0 &&
+    quoteDetailsHasAddress(quotesWithAddress[0].quoteDetails)
+  ) {
+    return {
+      street: quotesWithAddress[0].quoteDetails.street,
+      zipCode: quotesWithAddress[0].quoteDetails.zipCode,
+    }
+  }
+  return undefined
+}
+
+// FIXME: I think this may result in some weird behaviour on refetch
+const getStartDateFromBundledQuotes = (
+  quotes: ReadonlyArray<BundledQuote>,
+): Date | undefined => {
+  const distinctStartDates = Array.from(
+    new Set(quotes.map((quote) => quote.startDate)),
+  )
+  if (distinctStartDates.length === 1 && distinctStartDates[0]) {
+    return parse(distinctStartDates[0], 'yyyy-MM-dd', new Date())
+  }
+  return undefined
+}
+
+export const quoteDetailsHasAddress = (
+  quoteDetails: QuoteDetails,
+): quoteDetails is
+  | SwedishApartmentQuoteDetails
+  | SwedishHouseQuoteDetails
+  | NorwegianHomeContentsDetails =>
+  [
+    'SwedishApartmentQuoteDetails',
+    'SwedishHouseQuoteDetails',
+    'NorwegianHomeContentsDetails',
+  ].includes(quoteDetails.__typename as string)
+
+export const getQuoteIds = (offerData: OfferData): string[] =>
+  offerData.quotes.map((quote) => quote.id)
+
+export const isBundle = (offerData: OfferData): boolean =>
+  offerData.quotes.length > 1
+
+// FIXME: Remove this
+export const hasAddress = (offerData: OfferData): boolean =>
+  offerData.person.address !== undefined
+
+export const hasCurrentInsurer = (offerData: OfferData): boolean =>
+  offerData.quotes.filter((quote) => quote.currentInsurer).length > 0
 
 export const isOfferFromCompleteQuote = (
-  offerQuote: OfferQuote,
+  offerQuote: Quote | QuoteBundle,
 ): offerQuote is CompleteQuote =>
   offerQuote.__typename === 'CompleteQuote' || false
 
 export const isOfferFromQuoteBundle = (
-  offerQuote: OfferQuote,
+  offerQuote: Quote | QuoteBundle,
 ): offerQuote is QuoteBundle => offerQuote.__typename === 'QuoteBundle' || false
 
 export const isCompleteQuote = (quote: Quote): quote is CompleteQuote =>
@@ -126,12 +182,12 @@ export const isNoDiscount = (campaigns: Campaign[]) =>
     campaigns[0].incentive.__typename === 'NoDiscount') ||
   false
 
-export const getContractType = (offerData: OfferData): TypeOfContract => {
-  if (isSwedishHouse(offerData.quoteDetails)) {
+export const getContractType = (quoteDetails: QuoteDetails): TypeOfContract => {
+  if (isSwedishHouse(quoteDetails)) {
     return TypeOfContract.SeHouse
   }
 
-  if (isSwedishApartment(offerData.quoteDetails)) {
+  if (isSwedishApartment(quoteDetails)) {
     const map = {
       RENT: TypeOfContract.SeApartmentRent,
       BRF: TypeOfContract.SeApartmentBrf,
@@ -139,48 +195,48 @@ export const getContractType = (offerData: OfferData): TypeOfContract => {
       STUDENT_BRF: TypeOfContract.SeApartmentStudentBrf,
     }
 
-    if (!map[offerData.quoteDetails.type]) {
+    if (!map[quoteDetails.type]) {
       throw new Error(
-        `Get Contract Type: Invalid insurance type ${offerData.quoteDetails.type}`,
+        `Get Contract Type: Invalid insurance type ${quoteDetails.type}`,
       )
     }
 
-    return map[offerData.quoteDetails.type]
+    return map[quoteDetails.type]
   }
 
-  if (isNorwegianHomeContents(offerData.quoteDetails)) {
+  if (isNorwegianHomeContents(quoteDetails)) {
     const map = {
       RENT: NorwegianHomeContentsType.Rent,
       OWN: NorwegianHomeContentsType.Own,
     }
 
     // @ts-ignore
-    if (!map[offerData.quoteDetails.homeType]) {
+    if (!map[quoteDetails.homeType]) {
       // FIXME: We're using homeType as alias for type
       throw new Error(
-        `Get Contract Type: Invalid insurance type ${offerData.quoteDetails.type}`,
+        `Get Contract Type: Invalid insurance type ${quoteDetails.type}`,
       )
     }
 
     // @ts-ignore
-    const type = map[offerData.quoteDetails.homeType]
+    const type = map[quoteDetails.homeType]
 
     switch (type) {
       case NorwegianHomeContentsType.Own:
-        if (offerData.quoteDetails.isYouth) {
+        if (quoteDetails.isYouth) {
           return TypeOfContract.NoHomeContentYouthOwn
         }
         return TypeOfContract.NoHomeContentOwn
       case NorwegianHomeContentsType.Rent:
-        if (offerData.quoteDetails.isYouth) {
+        if (quoteDetails.isYouth) {
           return TypeOfContract.NoHomeContentYouthRent
         }
         return TypeOfContract.NoHomeContentRent
     }
   }
 
-  if (isNorwegianTravel(offerData.quoteDetails)) {
-    if (offerData.quoteDetails.isYouth) {
+  if (isNorwegianTravel(quoteDetails)) {
+    if (quoteDetails.isYouth) {
       return TypeOfContract.NoTravelYouth
     }
     return TypeOfContract.NoTravel
@@ -188,7 +244,7 @@ export const getContractType = (offerData: OfferData): TypeOfContract => {
 
   throw new Error(
     `Unsupported quoteDetails type (quoteDetails=${JSON.stringify(
-      offerData.quoteDetails,
+      quoteDetails,
     )})`,
   )
 }

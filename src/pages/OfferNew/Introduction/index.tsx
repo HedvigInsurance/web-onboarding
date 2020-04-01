@@ -2,8 +2,8 @@ import { keyframes } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { DownArrow } from 'components/icons/DownArrow'
-import { CompleteQuote } from 'data/graphql'
-import { OfferData, OfferQuote } from 'pages/OfferNew/types'
+import { OfferData } from 'pages/OfferNew/types'
+import { isBundle } from 'pages/OfferNew/utils'
 import * as React from 'react'
 import { animateScroll } from 'react-scroll'
 import { useDocumentScroll } from 'utils/hooks/useDocumentScroll'
@@ -21,7 +21,6 @@ import { Sidebar } from './Sidebar'
 import { Usps } from './Usps'
 
 interface Props {
-  offerQuote: OfferQuote
   offerData: OfferData
   refetch: () => Promise<void>
   onCheckoutOpen: () => void
@@ -102,7 +101,6 @@ const ScrollButton = styled.button`
 `
 
 export const Introduction: React.FC<Props> = ({
-  offerQuote,
   offerData,
   refetch,
   onCheckoutOpen,
@@ -124,7 +122,8 @@ export const Introduction: React.FC<Props> = ({
     }
   })
 
-  const hasDataCollection = !!offerData.dataCollectionId || false
+  const hasDataCollection =
+    !isBundle(offerData) && !!offerData.quotes[0].dataCollectionId
 
   return (
     <Section bottomBlobColor={colorsV2.black}>
@@ -135,14 +134,14 @@ export const Introduction: React.FC<Props> = ({
               <PreHeading>{textKeys.HERO_LABEL()}</PreHeading>
               <HeadingWhite>
                 {textKeys.HERO_HEADLINE({
-                  FIRST_NAME: offerData.firstName ?? '',
+                  FIRST_NAME: offerData.person.firstName ?? '',
                 })}
               </HeadingWhite>
             </HeadingWrapper>
-            {hasDataCollection ? (
+            {hasDataCollection && !isBundle(offerData) ? (
               <ExternalInsuranceProvider
-                dataCollectionId={offerData.dataCollectionId || ''}
-                firstQuote={offerData as CompleteQuote}
+                dataCollectionId={offerData.quotes[0].dataCollectionId || ''}
+                offerData={offerData}
               />
             ) : (
               <UspsDesktop />
@@ -152,7 +151,6 @@ export const Introduction: React.FC<Props> = ({
           <Sidebar
             ref={ref}
             sticky={sidebarIsSticky}
-            offerQuote={offerQuote}
             offerData={offerData}
             refetch={refetch}
             onCheckoutOpen={onCheckoutOpen}

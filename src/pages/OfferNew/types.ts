@@ -3,9 +3,10 @@ import {
   CompleteApartmentQuoteDetails,
   CompleteHouseQuoteDetails,
   CompleteQuote,
+  InsuranceCost,
   Query,
-  QuoteBundle,
 } from 'data/graphql'
+import { TypeOfContract } from 'utils/insuranceDomainUtils'
 
 interface OfferCore {
   redeemedCampaigns: Query['redeemedCampaigns']
@@ -20,15 +21,31 @@ export type CompleteQuoteWithoutUnknownDetails = CompleteQuote & {
   details: CompleteHouseQuoteDetails | CompleteApartmentQuoteDetails
 }
 
-export type OfferQuote = CompleteQuote | QuoteBundle
+export interface Address {
+  street: string
+  zipCode: string
+}
 
-export type OfferData = CompleteQuote | BundledQuote
+export type OfferPersonInfo = Pick<
+  CompleteQuote | BundledQuote,
+  'firstName' | 'lastName' | 'email' | 'ssn' | 'birthDate'
+> & {
+  householdSize: number
+  address?: Address
+}
 
-export interface OfferPerson {
-  firstName: string
-  lastName: string
-  ssn?: string
-  email?: string
+export type OfferQuote = Pick<
+  CompleteQuote | BundledQuote,
+  'id' | 'startDate' | 'quoteDetails' | 'dataCollectionId' | 'currentInsurer'
+> & {
+  contractType: TypeOfContract
+}
+
+export interface OfferData {
+  person: OfferPersonInfo
+  quotes: ReadonlyArray<OfferQuote>
+  cost: InsuranceCost
+  startDate?: Date
 }
 
 export interface WithEmailForm {

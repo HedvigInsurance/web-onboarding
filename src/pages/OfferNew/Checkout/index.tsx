@@ -5,12 +5,8 @@ import { BackArrow } from 'components/icons/BackArrow'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { SignState, useSignQuotesMutation } from 'data/graphql'
 import { TOP_BAR_Z_INDEX } from 'new-components/TopBar'
-import { OfferData, OfferQuote } from 'pages/OfferNew/types'
-import {
-  getContractType,
-  getOfferPerson,
-  getOfferQuoteIds,
-} from 'pages/OfferNew/utils'
+import { OfferData } from 'pages/OfferNew/types'
+import { getQuoteIds } from 'pages/OfferNew/utils'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
 import { Mount } from 'react-lifecycle-components'
@@ -145,7 +141,6 @@ const Backdrop = styled('div')<Openable>`
 `
 
 interface Props {
-  offerQuote: OfferQuote
   offerData: OfferData
   isOpen?: boolean
   onClose?: () => void
@@ -153,7 +148,6 @@ interface Props {
 }
 
 export const Checkout: React.FC<Props> = ({
-  offerQuote,
   offerData,
   isOpen,
   onClose,
@@ -180,7 +174,6 @@ export const Checkout: React.FC<Props> = ({
   const [startPollingSignState, signStatus] = useSignState()
   const [signQuotes, signQuotesMutation] = useSignQuotesMutation()
   const locale = useCurrentLocale()
-  const offerPerson = getOfferPerson(offerQuote)
 
   const outerWrapper = React.useRef<HTMLDivElement>()
 
@@ -198,9 +191,8 @@ export const Checkout: React.FC<Props> = ({
 
   useTrack({
     offerData,
-    offerQuote,
     signState: signStatus?.signState,
-    email: offerPerson.email ?? '',
+    email: offerData.person.email ?? '',
   })
   useScrollLock(visibilityState, outerWrapper)
 
@@ -208,8 +200,8 @@ export const Checkout: React.FC<Props> = ({
     signUiState !== SignUiState.STARTED &&
       signUiState !== SignUiState.STARTED_WITH_REDIRECT &&
       !signQuotesMutation.loading &&
-      offerPerson.email &&
-      offerPerson.ssn,
+      offerData.person.email &&
+      offerData.person.ssn,
   )
 
   if (signStatus?.signState === SignState.Completed) {
@@ -250,7 +242,6 @@ export const Checkout: React.FC<Props> = ({
             </BackButtonWrapper>
 
             <CheckoutContent
-              offerQuote={offerQuote}
               offerData={offerData}
               onEmailUpdate={(onCompletion) => {
                 setEmailUpdateLoading(true)
@@ -267,7 +258,7 @@ export const Checkout: React.FC<Props> = ({
         </OuterScrollWrapper>
 
         <SlidingSign
-          contractType={getContractType(offerData)}
+          offerData={offerData}
           visibilityState={visibilityState}
           canInitiateSign={
             canInitiateSign && !ssnUpdateLoading && !emailUpdateLoading
@@ -290,7 +281,7 @@ export const Checkout: React.FC<Props> = ({
             }/new-member`
             const result = await signQuotes({
               variables: {
-                quoteIds: getOfferQuoteIds(offerQuote),
+                quoteIds: getQuoteIds(offerData),
                 successUrl: baseUrl + '/connect-payment',
                 failUrl: baseUrl + '/sign/fatal',
               },

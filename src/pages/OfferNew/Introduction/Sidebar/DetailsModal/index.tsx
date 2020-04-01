@@ -14,7 +14,7 @@ import {
   InputGroupDeleteButton,
   InputGroupRow,
 } from 'new-components/inputs/index'
-import { OfferData } from 'pages/OfferNew/types'
+import { OfferQuote } from 'pages/OfferNew/types'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { DetailInput } from './DetailInput'
@@ -160,21 +160,21 @@ const LoadingDimmer = styled.div<{ visible: boolean }>`
 `
 
 interface DetailsModalProps {
-  offerData: OfferData
+  offerQuote: OfferQuote
   refetch: () => Promise<void>
 }
 
 export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
-  offerData,
+  offerQuote,
   refetch,
   isVisible,
   onClose,
 }) => {
   const textKeys = useTextKeys()
   const [editQuote, editQuoteResult] = useEditQuoteMutation()
-  const fieldSchema = getFieldSchema(offerData)
-  const validationSchema = getValidationSchema(fieldSchema, offerData)
-  const initialValues = getInitialInputValues(offerData)
+  const fieldSchema = getFieldSchema(offerQuote)
+  const validationSchema = getValidationSchema(fieldSchema, offerQuote)
+  const initialValues = getInitialInputValues(offerQuote)
   const [isUpdating, setIsUpdating] = React.useState(false)
   const [
     isUnderwritingGuidelineHit,
@@ -224,7 +224,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
             <Form>
               <Headline>{textKeys.DETAILS_MODULE_HEADLINE()}</Headline>
 
-              {isApartmentFieldSchema(fieldSchema, offerData) && (
+              {isApartmentFieldSchema(fieldSchema, offerQuote) && (
                 <Content>
                   <ContentColumn>
                     <InputGroup>
@@ -270,7 +270,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                 </Content>
               )}
 
-              {isHouseFieldSchema(fieldSchema, offerData) && (
+              {isHouseFieldSchema(fieldSchema, offerQuote) && (
                 <Content>
                   <ContentColumn>
                     <ContentColumnTitle>

@@ -1,17 +1,17 @@
 import styled from '@emotion/styled'
-import * as React from 'react'
 import {
-  CompleteQuote,
   useExternalInsuranceDataQuery,
   useExternalInsuranceDataStatusSubscription,
 } from 'data/graphql'
+import { OfferData } from 'pages/OfferNew/types'
+import * as React from 'react'
 
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { Compare } from './Compare'
 
 interface Props {
   dataCollectionId: string
-  firstQuote: CompleteQuote
+  offerData: OfferData
 }
 
 const ErrorBox = styled.div`
@@ -28,7 +28,7 @@ const ErrorBox = styled.div`
 
 export const ExternalInsuranceProvider: React.FC<Props> = ({
   dataCollectionId,
-  firstQuote,
+  offerData,
 }) => {
   const textKeys = useTextKeys()
   const { loading, error, data, refetch } = useExternalInsuranceDataQuery({
@@ -74,9 +74,6 @@ export const ExternalInsuranceProvider: React.FC<Props> = ({
   }
 
   return (
-    <Compare
-      cost={firstQuote.insuranceCost}
-      insuranceDataCollection={firstInsurance}
-    />
+    <Compare cost={offerData.cost} insuranceDataCollection={firstInsurance} />
   )
 }

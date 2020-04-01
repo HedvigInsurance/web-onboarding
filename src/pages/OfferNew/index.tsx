@@ -5,18 +5,14 @@ import {
 } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
+import { Quote, QuoteBundle } from 'data/graphql'
 import { useQuote } from 'data/useQuote'
 import { useQuoteBundle } from 'data/useQuoteBundle'
 import { History } from 'history'
 import { TopBar } from 'new-components/TopBar'
 import { SwitchSafetySection } from 'pages/OfferNew/SwitchSafetySection'
 import { TestimonialsSection } from 'pages/OfferNew/TestimonialsSection'
-import { OfferQuote } from 'pages/OfferNew/types'
-import {
-  getContractType,
-  getOfferData,
-  getOfferInsuranceCost,
-} from 'pages/OfferNew/utils'
+import { getOfferData } from 'pages/OfferNew/utils'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
 import { Redirect, useHistory, useRouteMatch } from 'react-router'
@@ -39,7 +35,7 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
 }
 
 type UseOfferQuoteReturnTuple = [
-  OfferQuote | undefined,
+  Quote | QuoteBundle | undefined,
   {
     loading: boolean
     refetch: () => Promise<any>
@@ -87,10 +83,7 @@ export const OfferNew: React.FC = () => {
     return null
   }
 
-  const offerQuote = offerQuoteBeingFetched as OfferQuote
-
-  const offerData = getOfferData(offerQuote)
-  const firstOfferData = offerData[0]
+  const offerData = getOfferData(offerQuoteBeingFetched!)
 
   return (
     <Page>
@@ -100,9 +93,7 @@ export const OfferNew: React.FC = () => {
           event={{
             name: SemanticEvents.Ecommerce.CheckoutStarted,
             properties: {
-              value: Number(
-                getOfferInsuranceCost(offerQuote).monthlyNet.amount,
-              ),
+              value: Number(offerData.cost.monthlyNet.amount),
               label: 'Offer',
               ...getUtmParamsFromCookie(),
             },
@@ -110,8 +101,7 @@ export const OfferNew: React.FC = () => {
         >
           {({ track }) => (
             <Introduction
-              offerQuote={offerQuote}
-              offerData={firstOfferData}
+              offerData={offerData}
               refetch={refetch as () => Promise<any>}
               onCheckoutOpen={() => {
                 toggleCheckout(true)
@@ -120,18 +110,21 @@ export const OfferNew: React.FC = () => {
             />
           )}
         </TrackAction>
-        <Perils contractType={getContractType(firstOfferData)} />
-        {market === Market.Se && (
-          <Compare
-            currentInsurer={firstOfferData.currentInsurer || undefined}
-          />
-        )}
+        {offerData.quotes.map((quote) => {
+          return (
+            <>
+              <Perils contractType={quote.contractType} />
+              {market === Market.Se && (
+                <Compare currentInsurer={quote.currentInsurer || undefined} />
+              )}
+            </>
+          )
+        })}
         {market === Market.Se && <TestimonialsSection />}
         <SwitchSafetySection />
         <FaqSection />
         <Checkout
-          offerQuote={offerQuote}
-          offerData={firstOfferData}
+          offerData={offerData}
           isOpen={checkoutMatch !== null}
           onClose={() => toggleCheckout(false)}
           refetch={refetch as () => Promise<any>}

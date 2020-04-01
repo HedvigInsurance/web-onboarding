@@ -5,13 +5,13 @@ import { SignStatus as GraphQLSignStatus } from 'data/graphql'
 import { motion } from 'framer-motion'
 import { Button } from 'new-components/buttons'
 import { Spinner } from 'new-components/utils'
+import { OfferData } from 'pages/OfferNew/types'
 import * as React from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import {
   getInsurancePDFTextKey,
   getPrebuyPDFTextKey,
-  TypeOfContract,
 } from 'utils/insuranceDomainUtils'
 import { SignStatus } from './SignStatus'
 
@@ -71,23 +71,23 @@ export enum SignUiState {
 }
 
 interface Props {
+  offerData: OfferData
   className?: string
   signUiState: SignUiState
   signStatus: GraphQLSignStatus | null
   loading: boolean
   canInitiateSign: boolean
   onSignStart: () => void
-  contractType: TypeOfContract
 }
 
 export const Sign: React.FC<Props> = ({
+  offerData,
   className,
   signUiState,
   signStatus,
   loading,
   canInitiateSign,
   onSignStart,
-  contractType,
 }) => {
   const isMobile = useMediaQuery({ maxWidth: 600 })
   const textKeys = useTextKeys()
@@ -128,16 +128,24 @@ export const Sign: React.FC<Props> = ({
       >
         <SignStatus signStatus={signStatus} />
       </motion.div>
-      <Disclaimer>
-        <MarkdownTranslation
-          textKey="CHECKOUT_SIGN_DISCLAIMER"
-          replacements={{
-            PREBUY_LINK: textKeys[getPrebuyPDFTextKey(contractType)](),
-            TERMS_LINK: textKeys[getInsurancePDFTextKey(contractType)](),
-          }}
-          markdownProps={{ linkTarget: '_blank' }}
-        />
-      </Disclaimer>
+      {offerData.quotes.map((quote) => {
+        return (
+          <Disclaimer>
+            <MarkdownTranslation
+              textKey="CHECKOUT_SIGN_DISCLAIMER"
+              replacements={{
+                PREBUY_LINK: textKeys[
+                  getPrebuyPDFTextKey(quote.contractType)
+                ](),
+                TERMS_LINK: textKeys[
+                  getInsurancePDFTextKey(quote.contractType)
+                ](),
+              }}
+              markdownProps={{ linkTarget: '_blank' }}
+            />
+          </Disclaimer>
+        )
+      })}
     </Wrapper>
   )
 }

@@ -199,6 +199,16 @@ const LandingPageCardsNo: React.FC<{
   return (
     <>
       <Card>
+        <Headline>{textKeys.STARTPAGE_COMBO_HEADLINE()}</Headline>
+        <Paragraph>{textKeys.STARTPAGE_COMBO_BODY()}</Paragraph>
+        <ProceedButton
+          size="lg"
+          to={(language ? '/' + language : '') + '/new-member/combo'}
+        >
+          {textKeys.STARTPAGE_COMBO_BUTTON()}
+        </ProceedButton>
+      </Card>
+      <Card>
         <Headline>{textKeys.STARTPAGE_CONTENTS_HEADLINE()}</Headline>
         <Paragraph>{textKeys.STARTPAGE_CONTENTS_BODY()}</Paragraph>
         <ProceedButton
