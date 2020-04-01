@@ -31,4 +31,4 @@ export const ANDROID_MINIMUM_VERSION = getAndroidMinimumVersion()
 export const APPLE_BUNDLE_ID = getAppleBundleId()
 export const APP_STORE_ID = getAppStoreId()
 export const IOS_MINIMUM_VERSION = getIosMinimumVersion()
-export const ADYEN_ORIGIN_KEY = process.env.ADYEN_ORIGIN_KEY! // FIXME: handle null?
+export const ADYEN_ORIGIN_KEY = process.env.ADYEN_ORIGIN_KEY!
