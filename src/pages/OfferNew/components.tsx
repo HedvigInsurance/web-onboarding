@@ -6,8 +6,8 @@ export * from './common/price'
 
 export const Heading = styled('h1')`
   font-family: ${fonts.FAVORIT};
-  font-size: 4rem;
-  line-height: 4rem;
+  font-size: 3rem;
+  line-height: 3.5rem;
   letter-spacing: -0.91px;
   margin: 0;
 

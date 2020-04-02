@@ -33,7 +33,7 @@ const TooltipIcon = styled(motion.div)<{ size: Size }>`
 
   @media (hover: hover) {
     :hover {
-      background-color: ${colorsV3.gray500};
+      background-color: ${colorsV3.purple500};
       .fillColor {
         fill: ${colorsV3.white};
       }

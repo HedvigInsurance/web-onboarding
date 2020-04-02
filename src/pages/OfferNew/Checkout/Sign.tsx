@@ -61,7 +61,7 @@ const Disclaimer = styled('p')`
   line-height: 1.5;
   padding: 0 0.5rem;
 
-  @media (max-width: 40rem) {
+  @media (max-width: 600rem) {
     text-align: center;
   }
 `

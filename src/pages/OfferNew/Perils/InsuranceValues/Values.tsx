@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { Tooltip } from 'components/Tooltip'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
@@ -53,15 +53,14 @@ const TextContainer = styled.div`
 const Label = styled.div`
   font-size: 1rem;
   letter-spacing: -0.23px;
-  color: ${colorsV2.gray};
+  color: ${colorsV3.gray500};
   margin-bottom: 0.25rem;
 `
 
 const Value = styled.div`
   font-size: 1.125rem;
   letter-spacing: -0.26px;
-  color: ${colorsV2.midnight500};
-  font-weight: 600;
+  color: ${colorsV3.gray900};
   white-space: nowrap;
 `
 

@@ -20,7 +20,7 @@ export const Button = styled.button<ButtonProps>`
     props.size === 'lg' ? `1.5rem 2.5rem` : `0.875rem 1.5rem`};
   background: ${(props) =>
     props.disabled
-      ? color(props.background ?? colorsV3.gray900)
+      ? color(props.background ?? colorsV3.gray700)
           .lighten(0.5)
           .toString()
       : props.background ?? colorsV3.gray900};
@@ -40,9 +40,8 @@ export const Button = styled.button<ButtonProps>`
     !props.disabled &&
     `
     &:hover {
-      background: ${color(props.background ?? colorsV3.gray900)
-        .darken(0.1)
-        .toString()};
+      transform: translateY(-2px);
+      box-shadow: 0 3px 5px rgba(55, 55, 55, 0.15);
       color: ${props.foreground ?? colorsV3.white};
     }
   `}
