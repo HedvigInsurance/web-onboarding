@@ -1,11 +1,12 @@
 import {
+  getLocaleIsoCode,
   Market,
   useCurrentLocale,
   useMarket,
 } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
-import { useQuoteBundleQuery } from 'data/graphql'
+import { QuoteBundle, useQuoteBundleQuery } from 'data/graphql'
 import { History } from 'history'
 import { TopBar } from 'new-components/TopBar'
 import { SwitchSafetySection } from 'pages/OfferNew/SwitchSafetySection'
@@ -36,6 +37,7 @@ export const OfferNew: React.FC = () => {
   const storage = useStorage()
   const quoteIds = storage.session.getSession()?.quoteIds ?? []
   const currentLocale = useCurrentLocale()
+  const localeIsoCode = getLocaleIsoCode(currentLocale)
 
   if (quoteIds.length === 0) {
     return (
@@ -48,6 +50,7 @@ export const OfferNew: React.FC = () => {
       input: {
         ids: [...quoteIds],
       },
+      locale: localeIsoCode,
     },
   })
 
@@ -66,7 +69,7 @@ export const OfferNew: React.FC = () => {
     return null
   }
 
-  const offerData = getOfferData(data?.quoteBundle!)
+  const offerData = getOfferData(data?.quoteBundle! as QuoteBundle)
 
   return (
     <Page>
@@ -96,7 +99,7 @@ export const OfferNew: React.FC = () => {
         {offerData.quotes.map((quote) => {
           return (
             <>
-              <Perils contractType={quote.contractType} />
+              <Perils contractType={quote.contractType} perils={quote.perils} />
               {market === Market.Se && (
                 <Compare currentInsurer={quote.currentInsurer || undefined} />
               )}

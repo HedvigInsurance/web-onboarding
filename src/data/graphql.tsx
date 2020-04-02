@@ -776,6 +776,27 @@ export type BundledQuote = {
   expiresAt: Scalars['LocalDate']
   email?: Maybe<Scalars['String']>
   dataCollectionId?: Maybe<Scalars['ID']>
+  typeOfContract: TypeOfContract
+  perils: Array<PerilV2>
+  insurableLimits: Array<InsurableLimit>
+  termsAndConditions: InsuranceTerm
+  insuranceTerms: Array<InsuranceTerm>
+}
+
+export type BundledQuotePerilsArgs = {
+  locale: Locale
+}
+
+export type BundledQuoteInsurableLimitsArgs = {
+  locale: Locale
+}
+
+export type BundledQuoteTermsAndConditionsArgs = {
+  locale: Locale
+}
+
+export type BundledQuoteInsuranceTermsArgs = {
+  locale: Locale
 }
 
 export enum CacheControlScope {
@@ -7159,6 +7180,7 @@ export type MemberOfferQuery = { __typename?: 'Query' } & {
 
 export type QuoteQueryVariables = {
   id: Scalars['ID']
+  perilsLocale: Locale
 }
 
 export type QuoteQuery = { __typename?: 'Query' } & {
@@ -7196,6 +7218,21 @@ export type QuoteQuery = { __typename?: 'Query' } & {
                 'amount' | 'currency'
               >
             }
+          perils: Array<
+            { __typename?: 'PerilV2' } & Pick<
+              PerilV2,
+              'title' | 'description' | 'covered' | 'exceptions' | 'info'
+            > & {
+                icon: { __typename?: 'Icon' } & {
+                  variants: { __typename?: 'IconVariants' } & {
+                    light: { __typename?: 'IconVariant' } & Pick<
+                      IconVariant,
+                      'svgUrl'
+                    >
+                  }
+                }
+              }
+          >
           quoteDetails:
             | ({ __typename?: 'SwedishApartmentQuoteDetails' } & Pick<
                 SwedishApartmentQuoteDetails,
@@ -7285,6 +7322,7 @@ export type QuoteQuery = { __typename?: 'Query' } & {
 
 export type QuoteBundleQueryVariables = {
   input: QuoteBundleInput
+  locale: Locale
 }
 
 export type QuoteBundleQuery = { __typename?: 'Query' } & {
@@ -7301,6 +7339,7 @@ export type QuoteBundleQuery = { __typename?: 'Query' } & {
         | 'startDate'
         | 'expiresAt'
         | 'email'
+        | 'typeOfContract'
       > & {
           currentInsurer: Maybe<
             { __typename?: 'CurrentInsurer' } & Pick<
@@ -7311,6 +7350,42 @@ export type QuoteBundleQuery = { __typename?: 'Query' } & {
           price: { __typename?: 'MonetaryAmountV2' } & Pick<
             MonetaryAmountV2,
             'amount' | 'currency'
+          >
+          perils: Array<
+            { __typename?: 'PerilV2' } & Pick<
+              PerilV2,
+              | 'title'
+              | 'description'
+              | 'covered'
+              | 'exceptions'
+              | 'info'
+              | 'iconName'
+            > & {
+                icon: { __typename?: 'Icon' } & {
+                  variants: { __typename?: 'IconVariants' } & {
+                    light: { __typename?: 'IconVariant' } & Pick<
+                      IconVariant,
+                      'svgUrl'
+                    >
+                  }
+                }
+              }
+          >
+          insurableLimits: Array<
+            { __typename?: 'InsurableLimit' } & Pick<
+              InsurableLimit,
+              'label' | 'limit' | 'description'
+            >
+          >
+          termsAndConditions: { __typename?: 'InsuranceTerm' } & Pick<
+            InsuranceTerm,
+            'displayName' | 'url'
+          >
+          insuranceTerms: Array<
+            { __typename?: 'InsuranceTerm' } & Pick<
+              InsuranceTerm,
+              'displayName' | 'url'
+            >
           >
           quoteDetails:
             | ({ __typename?: 'SwedishApartmentQuoteDetails' } & Pick<
@@ -7970,7 +8045,7 @@ export type MemberOfferQueryResult = ApolloReactCommon.QueryResult<
   MemberOfferQueryVariables
 >
 export const QuoteDocument = gql`
-  query Quote($id: ID!) {
+  query Quote($id: ID!, $perilsLocale: Locale!) {
     quote(id: $id) {
       ... on CompleteQuote {
         id
@@ -7998,6 +8073,20 @@ export const QuoteDocument = gql`
           monthlyNet {
             amount
             currency
+          }
+        }
+        perils(locale: $perilsLocale) {
+          title
+          description
+          covered
+          exceptions
+          info
+          icon {
+            variants {
+              light {
+                svgUrl
+              }
+            }
           }
         }
         quoteDetails {
@@ -8057,6 +8146,7 @@ export const QuoteDocument = gql`
  * const { data, loading, error } = useQuoteQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      perilsLocale: // value for 'perilsLocale'
  *   },
  * });
  */
@@ -8089,7 +8179,7 @@ export type QuoteQueryResult = ApolloReactCommon.QueryResult<
   QuoteQueryVariables
 >
 export const QuoteBundleDocument = gql`
-  query QuoteBundle($input: QuoteBundleInput!) {
+  query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
     quoteBundle(input: $input) {
       quotes {
         id
@@ -8110,6 +8200,35 @@ export const QuoteBundleDocument = gql`
         startDate
         expiresAt
         email
+        typeOfContract
+        perils(locale: $locale) {
+          title
+          description
+          covered
+          exceptions
+          info
+          icon {
+            variants {
+              light {
+                svgUrl
+              }
+            }
+          }
+          iconName
+        }
+        insurableLimits(locale: $locale) {
+          label
+          limit
+          description
+        }
+        termsAndConditions(locale: $locale) {
+          displayName
+          url
+        }
+        insuranceTerms(locale: $locale) {
+          displayName
+          url
+        }
         quoteDetails {
           ... on SwedishApartmentQuoteDetails {
             street
@@ -8181,6 +8300,7 @@ export const QuoteBundleDocument = gql`
  * const { data, loading, error } = useQuoteBundleQuery({
  *   variables: {
  *      input: // value for 'input'
+ *      locale: // value for 'locale'
  *   },
  * });
  */

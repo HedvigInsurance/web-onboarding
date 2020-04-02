@@ -1,4 +1,4 @@
-query Quote($id: ID!) {
+query Quote($id: ID!, $perilsLocale: Locale!) {
   quote(id: $id) {
     ... on CompleteQuote {
       id
@@ -28,6 +28,20 @@ query Quote($id: ID!) {
         monthlyNet {
           amount
           currency
+        }
+      }
+      perils(locale: $perilsLocale) {
+        title
+        description
+        covered
+        exceptions
+        info
+        icon {
+          variants {
+            light {
+              svgUrl
+            }
+          }
         }
       }
       quoteDetails {

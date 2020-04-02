@@ -1,6 +1,10 @@
 import * as koaHelmet from 'koa-helmet'
 import * as uuidV4 from 'uuid/v4'
-import { GIRAFFE_ENDPOINT, GIRAFFE_WS_ENDPOINT } from '../config'
+import {
+  CONTENT_SERVICE_ENDPOINT,
+  GIRAFFE_ENDPOINT,
+  GIRAFFE_WS_ENDPOINT,
+} from '../config'
 
 const defaultSrc = [
   "'self'",
@@ -59,6 +63,7 @@ const defaultSrc = [
   '*.zignsec.com',
   GIRAFFE_ENDPOINT,
   GIRAFFE_WS_ENDPOINT,
+  CONTENT_SERVICE_ENDPOINT,
 ]
 
 export const helmet = koaHelmet({

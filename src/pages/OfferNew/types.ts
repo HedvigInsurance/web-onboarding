@@ -36,7 +36,12 @@ export type OfferPersonInfo = Pick<
 
 export type OfferQuote = Pick<
   BundledQuote,
-  'id' | 'startDate' | 'quoteDetails' | 'dataCollectionId' | 'currentInsurer'
+  | 'id'
+  | 'startDate'
+  | 'quoteDetails'
+  | 'dataCollectionId'
+  | 'currentInsurer'
+  | 'perils'
 > & {
   contractType: TypeOfContract
 }

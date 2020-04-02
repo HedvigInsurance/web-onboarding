@@ -1,5 +1,8 @@
 export const getGiraffeEndpoint = (
-  constant: 'GIRAFFE_ENDPOINT' | 'GIRAFFE_WS_ENDPOINT',
+  constant:
+    | 'GIRAFFE_ENDPOINT'
+    | 'GIRAFFE_WS_ENDPOINT'
+    | 'CONTENT_SERVICE_ENDPOINT',
   defaultEndpoint: string,
 ) => {
   if (

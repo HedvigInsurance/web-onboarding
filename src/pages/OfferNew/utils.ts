@@ -37,6 +37,7 @@ export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
         dataCollectionId: bundleQuote.dataCollectionId,
         currentInsurer: bundleQuote.currentInsurer,
         contractType: getContractType(bundleQuote.quoteDetails),
+        perils: bundleQuote.perils,
       }
     }),
     cost: quoteBundle.bundleCost,

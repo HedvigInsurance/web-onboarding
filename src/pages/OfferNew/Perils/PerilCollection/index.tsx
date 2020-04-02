@@ -1,10 +1,10 @@
 import styled from '@emotion/styled'
+import { PerilV2 } from 'data/graphql'
 import * as React from 'react'
-import { Peril } from '../types'
 import { PerilItem } from './PerilItem'
 
 interface Props {
-  perils: ReadonlyArray<Peril>
+  perils: ReadonlyArray<PerilV2>
   setCurrentPeril: (index: number) => void
   setIsShowingPeril: (isShowingPeril: boolean) => void
 }

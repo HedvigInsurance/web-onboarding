@@ -1,4 +1,4 @@
-query QuoteBundle($input: QuoteBundleInput!) {
+query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
   quoteBundle(input: $input) {
     quotes {
       id
@@ -20,6 +20,34 @@ query QuoteBundle($input: QuoteBundleInput!) {
       startDate
       expiresAt
       email
+      typeOfContract
+      perils(locale: $locale) {
+        title
+        description
+        covered
+        exceptions
+        info
+        icon {
+          variants {
+            light {
+              svgUrl
+            }
+          }
+        }
+      }
+      insurableLimits(locale: $locale) {
+        label
+        limit
+        description
+      }
+      termsAndConditions(locale: $locale) {
+        displayName
+        url
+      }
+      insuranceTerms(locale: $locale) {
+        displayName
+        url
+      }
       quoteDetails {
         ... on SwedishApartmentQuoteDetails {
           street

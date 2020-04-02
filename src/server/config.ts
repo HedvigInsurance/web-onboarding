@@ -18,6 +18,11 @@ export const GIRAFFE_WS_ENDPOINT = getGiraffeEndpoint(
   'wss://graphql.dev.hedvigit.com/subscriptions',
 )
 
+export const CONTENT_SERVICE_ENDPOINT = getGiraffeEndpoint(
+  'CONTENT_SERVICE_ENDPOINT',
+  'https://graphql.dev.hedvigit.com',
+)
+
 export const FIREBASE_LINK_DOMAIN = getFirebaseLinkDomain()
 export const ANDROID_PACKAGE_NAME = getAndroidPackageName()
 export const ANDROID_MINIMUM_VERSION = getAndroidMinimumVersion()
