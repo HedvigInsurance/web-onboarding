@@ -133,6 +133,7 @@ export const CheckoutContent: React.FC<Props> = ({
             onEmailUpdate(onCompletion)
           }}
           ssn={offerData.person.ssn ?? ''}
+          // TODO we somehow need to compare the birth date to the ssn to check so they match. In case they don't, we should warn (as they might get a different price)
           onSsnChange={(ssn) => {
             const onCompletion = new Promise<void>((resolve, reject) => {
               setFakeLoading(true)
@@ -160,10 +161,7 @@ export const CheckoutContent: React.FC<Props> = ({
           <StartDate offerData={offerData} refetch={refetch} />
         </StartDateWrapper>
 
-        <InsuranceSummary
-          offerData={offerData}
-          ssn={offerData.person.ssn || undefined}
-        />
+        <InsuranceSummary offerData={offerData} />
 
         <SignSpacer />
       </Section>

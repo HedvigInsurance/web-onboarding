@@ -325,7 +325,6 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                         storageState.session.setSession({
                           ...storageState.session.getSession(),
                           quoteIds: [store.quoteId],
-                          bundledQuoteIds: [],
                         })
                       }
                       if (
@@ -334,8 +333,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                       ) {
                         storageState.session.setSession({
                           ...storageState.session.getSession(),
-                          quoteIds: [],
-                          bundledQuoteIds: [
+                          quoteIds: [
                             store.norwegianHomeContentsQuoteId,
                             store.norwegianTravelQuoteId,
                           ],

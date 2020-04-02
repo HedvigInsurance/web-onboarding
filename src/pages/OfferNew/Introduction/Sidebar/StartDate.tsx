@@ -252,7 +252,9 @@ export const StartDate: React.FC<Props> = ({
                 },
               }),
             ),
-          ).catch(handleFail)
+          )
+            .then(() => refetch())
+            .catch(handleFail)
         } else {
           Promise.all(
             quoteIds.map((quoteId) =>
@@ -264,7 +266,6 @@ export const StartDate: React.FC<Props> = ({
               }),
             ),
           )
-            .catch(handleFail)
             .then(() => refetch())
             .catch(handleFail)
         }
@@ -314,39 +315,43 @@ export const StartDate: React.FC<Props> = ({
       ) : (
         getDateInput()
       )}
-      {!isBundle(offerData) &&
-      offerData.quotes[0].currentInsurer?.switchable && ( // TODO: Is this correct?
-          <HandleSwitchingWrapper>
-            <HandleSwitchingLabel>
-              {textKeys.SIDEBAR_REQUEST_CANCELLATION()}
-            </HandleSwitchingLabel>
-            <Switch
-              value={dateValue == null}
-              onChange={(newValue) => {
-                setShowError(false)
+      {offerData.quotes.map((quote) => {
+        return (
+          quote.currentInsurer?.switchable && (
+            <HandleSwitchingWrapper>
+              <HandleSwitchingLabel>
+                {textKeys.SIDEBAR_REQUEST_CANCELLATION()}
+              </HandleSwitchingLabel>
+              <Switch
+                value={dateValue == null}
+                onChange={(newValue) => {
+                  setShowError(false)
+                  if (newValue === null) {
+                    removeStartDate({
+                      variables: {
+                        quoteId: quote.id,
+                      },
+                    })
+                      .then(() => refetch())
+                      .catch(handleFail)
+                  } else {
+                    setStartDate({
+                      variables: {
+                        quoteId: quote.id,
+                        date: format(new Date(), gqlDateFormat),
+                      },
+                    })
+                      .then(() => refetch())
+                      .catch(handleFail)
+                  }
 
-                if (newValue === null) {
-                  removeStartDate({
-                    variables: {
-                      quoteId: offerData.quotes[0].id,
-                    },
-                  }).catch(handleFail)
-                } else {
-                  setStartDate({
-                    variables: {
-                      quoteId: offerData.quotes[0].id,
-                      date: format(new Date(), gqlDateFormat),
-                    },
-                  })
-                    .then(() => refetch())
-                    .catch(handleFail)
-                }
-
-                setDateValue(newValue ? null : new Date())
-              }}
-            />
-          </HandleSwitchingWrapper>
-        )}
+                  setDateValue(newValue ? null : new Date())
+                }}
+              />
+            </HandleSwitchingWrapper>
+          )
+        )
+      })}
     </>
   )
 }

@@ -11,7 +11,6 @@ export interface Session {
   code?: string
   partner?: string
   quoteIds?: ReadonlyArray<string>
-  bundledQuoteIds?: ReadonlyArray<string>
 }
 
 export interface IsomorphicSessionStorage<T> {

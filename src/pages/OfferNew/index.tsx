@@ -5,9 +5,7 @@ import {
 } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
-import { Quote, QuoteBundle } from 'data/graphql'
-import { useQuote } from 'data/useQuote'
-import { useQuoteBundle } from 'data/useQuoteBundle'
+import { useQuoteBundleQuery } from 'data/graphql'
 import { History } from 'history'
 import { TopBar } from 'new-components/TopBar'
 import { SwitchSafetySection } from 'pages/OfferNew/SwitchSafetySection'
@@ -34,56 +32,41 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
   }
 }
 
-type UseOfferQuoteReturnTuple = [
-  Quote | QuoteBundle | undefined,
-  {
-    loading: boolean
-    refetch: () => Promise<any>
-  },
-]
-
-const useOfferQuote = (
-  quoteIds: ReadonlyArray<string>,
-  bundledQuoteIds: ReadonlyArray<string>,
-): UseOfferQuoteReturnTuple => {
-  if (quoteIds.length === 0) {
-    return useQuoteBundle(bundledQuoteIds)
-  }
-  return useQuote(quoteIds[0])
-}
-
 export const OfferNew: React.FC = () => {
   const storage = useStorage()
   const quoteIds = storage.session.getSession()?.quoteIds ?? []
-  const bundledQuoteIds = storage.session.getSession()?.bundledQuoteIds ?? []
   const currentLocale = useCurrentLocale()
 
-  if (quoteIds.length === 0 && bundledQuoteIds.length === 0) {
+  if (quoteIds.length === 0) {
     return (
       <Redirect to={`${currentLocale && '/' + currentLocale}/new-member`} />
     )
   }
-  const [
-    offerQuoteBeingFetched,
-    { loading: loadingOfferQuote, refetch },
-  ] = useOfferQuote(quoteIds, bundledQuoteIds)
+
+  const { data, loading: loadingQuoteBundle, refetch } = useQuoteBundleQuery({
+    variables: {
+      input: {
+        ids: [...quoteIds],
+      },
+    },
+  })
 
   const history = useHistory()
   const market = useMarket()
   const checkoutMatch = useRouteMatch('/:locale(en|no-en|no)?/new-member/sign')
   const toggleCheckout = createToggleCheckout(history, currentLocale)
 
-  if (!loadingOfferQuote && offerQuoteBeingFetched === undefined) {
+  if (!loadingQuoteBundle && data?.quoteBundle === undefined) {
     throw new Error(
-      `No quote returned to show offer with (quoteIds=${quoteIds}, bundledQuoteIds=${bundledQuoteIds}).`,
+      `No quote returned to show offer with (quoteIds=${quoteIds}).`,
     )
   }
 
-  if (loadingOfferQuote && offerQuoteBeingFetched === undefined) {
+  if (loadingQuoteBundle && data?.quoteBundle === undefined) {
     return null
   }
 
-  const offerData = getOfferData(offerQuoteBeingFetched!)
+  const offerData = getOfferData(data?.quoteBundle!)
 
   return (
     <Page>

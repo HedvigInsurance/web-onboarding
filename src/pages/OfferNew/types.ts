@@ -27,7 +27,7 @@ export interface Address {
 }
 
 export type OfferPersonInfo = Pick<
-  CompleteQuote | BundledQuote,
+  BundledQuote,
   'firstName' | 'lastName' | 'email' | 'ssn' | 'birthDate'
 > & {
   householdSize: number
@@ -35,7 +35,7 @@ export type OfferPersonInfo = Pick<
 }
 
 export type OfferQuote = Pick<
-  CompleteQuote | BundledQuote,
+  BundledQuote,
   'id' | 'startDate' | 'quoteDetails' | 'dataCollectionId' | 'currentInsurer'
 > & {
   contractType: TypeOfContract

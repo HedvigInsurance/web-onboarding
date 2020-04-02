@@ -17,50 +17,31 @@ import { parse } from 'date-fns'
 import { Address, OfferData } from 'pages/OfferNew/types'
 import { TypeOfContract } from 'utils/insuranceDomainUtils'
 
-export const getOfferData = (quote: Quote | QuoteBundle): OfferData => {
-  if (isOfferFromCompleteQuote(quote)) {
-    return {
-      person: {
-        ...quote,
-        householdSize: getHouseholdSize(quote.quoteDetails),
-        address: quoteDetailsHasAddress(quote.quoteDetails)
-          ? {
-              street: quote.quoteDetails.street,
-              zipCode: quote.quoteDetails.zipCode,
-            }
-          : undefined,
-      },
-      quotes: [
-        {
-          ...quote,
-          contractType: getContractType(quote.quoteDetails),
-        },
-      ],
-      cost: quote.insuranceCost,
-      startDate: quote.startDate
-        ? parse(quote.startDate, 'yyyy-MM-dd', new Date())
-        : undefined,
-    }
+export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
+  const firstQuote = quoteBundle.quotes[0]
+  return {
+    person: {
+      firstName: firstQuote.firstName,
+      lastName: firstQuote.lastName,
+      email: firstQuote.email,
+      ssn: firstQuote.ssn,
+      birthDate: firstQuote.birthDate,
+      householdSize: getHouseholdSize(firstQuote.quoteDetails),
+      address: getAddressFromBundledQuotes(quoteBundle.quotes),
+    },
+    quotes: quoteBundle.quotes.map((bundleQuote) => {
+      return {
+        id: bundleQuote.id,
+        startDate: bundleQuote.startDate,
+        quoteDetails: bundleQuote.quoteDetails,
+        dataCollectionId: bundleQuote.dataCollectionId,
+        currentInsurer: bundleQuote.currentInsurer,
+        contractType: getContractType(bundleQuote.quoteDetails),
+      }
+    }),
+    cost: quoteBundle.bundleCost,
+    startDate: getStartDateFromBundledQuotes(quoteBundle.quotes),
   }
-  if (isOfferFromQuoteBundle(quote)) {
-    const firstQuote = quote.quotes[0]
-    return {
-      person: {
-        ...firstQuote,
-        householdSize: getHouseholdSize(firstQuote.quoteDetails),
-        address: getAddressFromBundledQuotes(quote.quotes),
-      },
-      quotes: quote.quotes.map((bundleQuote) => {
-        return {
-          ...bundleQuote,
-          contractType: getContractType(bundleQuote.quoteDetails),
-        }
-      }),
-      cost: quote.bundleCost,
-      startDate: getStartDateFromBundledQuotes(quote.quotes),
-    }
-  }
-  throw new Error(`Invalid OfferQuote type ${quote}`)
 }
 
 export const getHouseholdSize = (quoteDetails: QuoteDetails) =>
@@ -122,6 +103,7 @@ export const isBundle = (offerData: OfferData): boolean =>
   offerData.quotes.length > 1
 
 // FIXME: Remove this
+
 export const hasAddress = (offerData: OfferData): boolean =>
   offerData.person.address !== undefined
 
@@ -210,11 +192,12 @@ export const getContractType = (quoteDetails: QuoteDetails): TypeOfContract => {
       OWN: NorwegianHomeContentsType.Own,
     }
 
-    // @ts-ignore
+    // @ts-ignores
     if (!map[quoteDetails.homeType]) {
       // FIXME: We're using homeType as alias for type
       throw new Error(
-        `Get Contract Type: Invalid insurance type ${quoteDetails.type}`,
+        // @ts-ignore
+        `Get Contract Type: Invalid insurance type ${quoteDetails.homeType}`,
       )
     }
 

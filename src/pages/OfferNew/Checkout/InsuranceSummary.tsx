@@ -55,10 +55,9 @@ const Value = styled('div')`
 
 interface Props {
   offerData: OfferData
-  ssn?: string
 }
 
-export const InsuranceSummary: React.FC<Props> = ({ offerData, ssn }) => {
+export const InsuranceSummary: React.FC<Props> = ({ offerData }) => {
   const textKeys = useTextKeys()
 
   return (
@@ -67,18 +66,20 @@ export const InsuranceSummary: React.FC<Props> = ({ offerData, ssn }) => {
       {offerData.quotes.map((quote) => {
         return (
           <Table>
-            {getDetails(quote.quoteDetails, textKeys, ssn).map(
-              (group, index) => (
-                <Group key={index}>
-                  {group.map(({ key, value, label }) => (
-                    <Row key={key}>
-                      <Label>{label}</Label>
-                      <Value>{value}</Value>
-                    </Row>
-                  ))}
-                </Group>
-              ),
-            )}
+            {getDetails(
+              quote.quoteDetails,
+              textKeys,
+              offerData.person.ssn || undefined,
+            ).map((group, index) => (
+              <Group key={index}>
+                {group.map(({ key, value, label }) => (
+                  <Row key={key}>
+                    <Label>{label}</Label>
+                    <Value>{value}</Value>
+                  </Row>
+                ))}
+              </Group>
+            ))}
           </Table>
         )
       })}
