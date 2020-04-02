@@ -39,10 +39,14 @@ export const Button = styled.button<ButtonProps>`
   ${(props) =>
     !props.disabled &&
     `
-    &:hover {
+    &:hover, &:focus {
       transform: translateY(-2px);
       box-shadow: 0 3px 5px rgba(55, 55, 55, 0.15);
       color: ${props.foreground ?? colorsV3.white};
+
+      @media (hover: none) {
+        transform: none;
+      }
     }
   `}
 `

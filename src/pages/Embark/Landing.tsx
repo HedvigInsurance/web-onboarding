@@ -7,6 +7,7 @@ import { Page } from 'components/utils/Page'
 import * as React from 'react'
 import Helmet from 'react-helmet-async'
 import { TextKeyMap, useTextKeys } from 'utils/hooks/useTextKeys'
+import { css, Global } from '@emotion/core'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -26,8 +27,8 @@ const Wrapper = styled.div`
 `
 
 const Container = styled.div`
-  width: calc(100%);
-  height: 100%;
+  width: 100%;
+  min-height: 100%;
   display: flex;
   justify-content: space-between;
   position: relative;
@@ -57,6 +58,10 @@ const Card = styled.div`
 
   :hover {
     transform: translateY(-6px);
+
+    @media (hover: none) {
+      transform: none;
+    }
   }
 
   @media (max-width: 1020px) {
@@ -141,6 +146,13 @@ export const Landing: React.FC<{ language?: string }> = ({ language }) => {
   const market = useMarket()
   return (
     <Page>
+      <Global
+        styles={css`
+          body {
+            overflow: visible !important;
+          }
+        `}
+      />
       <LandingPageContainer>
         <Helmet>
           <title>{textKeys.STARTPAGE_PAGE_TITLE()}</title>
