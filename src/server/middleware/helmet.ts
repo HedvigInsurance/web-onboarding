@@ -56,11 +56,8 @@ const defaultSrc = [
   'https://hedvig-embark.herokuapp.com',
   'https://heapanalytics.com',
   'cdn.mxpnl.com',
+  'https://cdn.heapanalytics.com',
   'https://api-js.mixpanel.com',
-  'oidc-ui-current.bankidnorge.no',
-  'oidc-current.bankidapis.no',
-  'bankidnorge.no',
-  '*.zignsec.com',
   'checkoutshopper-live.adyen.com',
   'checkoutshopper-test.adyen.com',
   GIRAFFE_ENDPOINT,
@@ -73,25 +70,15 @@ export const helmet = koaHelmet({
     directives: {
       defaultSrc,
       scriptSrc: [
-        ...defaultSrc,
         "'unsafe-eval'",
         "'unsafe-inline'",
-        'browser.sentry-cdn.com',
-        'cdn.segment.com',
-        'https://cdn.heapanalytics.com',
+        ...defaultSrc,
         // tslint:disable-next-line variable-name
         (_request, response) => {
           ;(response as any).cspNonce = uuidV4()
           return `'nonce-${(response as any).cspNonce}'`
         },
       ],
-      imgSrc: [...defaultSrc, 'data:'],
-      connectSrc: [
-        ...defaultSrc,
-        'https://api.segment.io',
-        'https://sentry.io',
-      ],
-      styleSrc: [...defaultSrc, "'unsafe-inline'"],
       upgradeInsecureRequests: true,
       objectSrc: ["'none'"],
       reportUri:
