@@ -1,9 +1,9 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
-import { PerilV2 } from 'data/graphql'
+import { PerilRow } from 'pages/OfferNew/Perils/PerilRow'
+import { OfferData } from 'pages/OfferNew/types'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-import { TypeOfContract } from 'utils/insuranceDomainUtils'
 import {
   Body,
   Column,
@@ -13,13 +13,9 @@ import {
   HeadingWrapper,
   PreHeading,
 } from '../components'
-import { InsuranceValues } from './InsuranceValues'
-import { PerilCollection } from './PerilCollection'
-import { PerilModal } from './PerilModal'
 
 interface Props {
-  contractType: TypeOfContract
-  perils: ReadonlyArray<PerilV2>
+  offerData: OfferData
 }
 
 const Wrapper = styled.div`
@@ -31,10 +27,8 @@ export const getIconUrl = (iconPath: string) => {
   return `${(window as any).CONTENT_SERVICE_ENDPOINT}${iconPath}`
 }
 
-export const Perils: React.FC<Props> = ({ contractType, perils }) => {
+export const Perils: React.FC<Props> = ({ offerData }) => {
   const textKeys = useTextKeys()
-  const [isShowingPeril, setIsShowingPeril] = React.useState(false)
-  const [currentPeril, setCurrentPeril] = React.useState(0)
 
   return (
     <Wrapper>
@@ -45,25 +39,12 @@ export const Perils: React.FC<Props> = ({ contractType, perils }) => {
             <HeadingBlack>{textKeys.COVERAGE_HEADLINE()}</HeadingBlack>
             <Body>{textKeys.COVERAGE_BODY()}</Body>
           </HeadingWrapper>
-          <PerilCollection
-            perils={perils}
-            setCurrentPeril={setCurrentPeril}
-            setIsShowingPeril={setIsShowingPeril}
-          />
-
-          <InsuranceValues contractType={contractType} />
+          {offerData.quotes.map((quote) => (
+            <PerilRow key={quote.id} offerQuote={quote} />
+          ))}
         </Column>
         <ColumnSpacing />
       </Container>
-      {perils.length > 0 && (
-        <PerilModal
-          perils={perils}
-          currentPerilIndex={currentPeril}
-          setCurrentPeril={setCurrentPeril}
-          isVisible={isShowingPeril}
-          onClose={() => setIsShowingPeril(false)}
-        />
-      )}
     </Wrapper>
   )
 }

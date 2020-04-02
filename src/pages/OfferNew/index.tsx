@@ -96,17 +96,13 @@ export const OfferNew: React.FC = () => {
             />
           )}
         </TrackAction>
-        {offerData.quotes.map((quote) => {
-          return (
-            <>
-              <Perils contractType={quote.contractType} perils={quote.perils} />
-              {market === Market.Se && (
-                <Compare currentInsurer={quote.currentInsurer || undefined} />
-              )}
-            </>
-          )
-        })}
-        {market === Market.Se && <TestimonialsSection />}
+        <Perils offerData={offerData} />
+        {market === Market.Se && (
+          <Compare
+            currentInsurer={offerData.quotes[0].currentInsurer || undefined}
+          />
+        )}
+        ){market === Market.Se && <TestimonialsSection />}
         <SwitchSafetySection />
         <FaqSection />
         <Checkout
