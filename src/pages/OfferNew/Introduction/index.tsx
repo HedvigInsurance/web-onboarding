@@ -122,6 +122,7 @@ export const Introduction: React.FC<Props> = ({
     }
   })
 
+  // TODO: Data Collection + bundle?
   const hasDataCollection =
     !isBundle(offerData) && !!offerData.quotes[0].dataCollectionId
 

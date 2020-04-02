@@ -3,11 +3,7 @@ import {
   ApartmentType,
   BundledQuote,
   Campaign,
-  CompleteQuote,
   NorwegianHomeContentsDetails,
-  NorwegianHomeContentsType,
-  NorwegianTravelDetails,
-  Quote,
   QuoteBundle,
   QuoteDetails,
   SwedishApartmentQuoteDetails,
@@ -36,7 +32,7 @@ export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
         quoteDetails: bundleQuote.quoteDetails,
         dataCollectionId: bundleQuote.dataCollectionId,
         currentInsurer: bundleQuote.currentInsurer,
-        contractType: getContractType(bundleQuote.quoteDetails),
+        contractType: bundleQuote.typeOfContract,
         perils: bundleQuote.perils,
       }
     }),
@@ -72,7 +68,6 @@ const getAddressFromBundledQuotes = (
   return undefined
 }
 
-// FIXME: I think this may result in some weird behaviour on refetch
 const getStartDateFromBundledQuotes = (
   quotes: ReadonlyArray<BundledQuote>,
 ): Date | undefined => {
@@ -103,25 +98,11 @@ export const getQuoteIds = (offerData: OfferData): string[] =>
 export const isBundle = (offerData: OfferData): boolean =>
   offerData.quotes.length > 1
 
-// FIXME: Remove this
-
 export const hasAddress = (offerData: OfferData): boolean =>
   offerData.person.address !== undefined
 
 export const hasCurrentInsurer = (offerData: OfferData): boolean =>
   offerData.quotes.filter((quote) => quote.currentInsurer).length > 0
-
-export const isOfferFromCompleteQuote = (
-  offerQuote: Quote | QuoteBundle,
-): offerQuote is CompleteQuote =>
-  offerQuote.__typename === 'CompleteQuote' || false
-
-export const isOfferFromQuoteBundle = (
-  offerQuote: Quote | QuoteBundle,
-): offerQuote is QuoteBundle => offerQuote.__typename === 'QuoteBundle' || false
-
-export const isCompleteQuote = (quote: Quote): quote is CompleteQuote =>
-  quote.__typename === 'CompleteQuote' || false
 
 export const isStudent = (details: QuoteDetails) =>
   isSwedishApartment(details) &&
@@ -136,16 +117,6 @@ export const isSwedishHouse = (
   details: QuoteDetails,
 ): details is SwedishHouseQuoteDetails =>
   details.__typename === 'SwedishHouseQuoteDetails'
-
-export const isNorwegianHomeContents = (
-  details: QuoteDetails,
-): details is NorwegianHomeContentsDetails =>
-  details.__typename === 'NorwegianHomeContentsDetails'
-
-export const isNorwegianTravel = (
-  details: QuoteDetails,
-): details is NorwegianTravelDetails =>
-  details.__typename === 'NorwegianTravelDetails'
 
 export const isFreeMonths = (campaigns: Campaign[]) =>
   (campaigns.length > 0 &&
@@ -164,74 +135,6 @@ export const isNoDiscount = (campaigns: Campaign[]) =>
     campaigns[0].incentive &&
     campaigns[0].incentive.__typename === 'NoDiscount') ||
   false
-
-export const getContractType = (quoteDetails: QuoteDetails): TypeOfContract => {
-  if (isSwedishHouse(quoteDetails)) {
-    return TypeOfContract.SeHouse
-  }
-
-  if (isSwedishApartment(quoteDetails)) {
-    const map = {
-      RENT: TypeOfContract.SeApartmentRent,
-      BRF: TypeOfContract.SeApartmentBrf,
-      STUDENT_RENT: TypeOfContract.SeApartmentStudentRent,
-      STUDENT_BRF: TypeOfContract.SeApartmentStudentBrf,
-    }
-
-    if (!map[quoteDetails.type]) {
-      throw new Error(
-        `Get Contract Type: Invalid insurance type ${quoteDetails.type}`,
-      )
-    }
-
-    return map[quoteDetails.type]
-  }
-
-  if (isNorwegianHomeContents(quoteDetails)) {
-    const map = {
-      RENT: NorwegianHomeContentsType.Rent,
-      OWN: NorwegianHomeContentsType.Own,
-    }
-
-    // @ts-ignores
-    if (!map[quoteDetails.homeType]) {
-      // FIXME: We're using homeType as alias for type
-      throw new Error(
-        // @ts-ignore
-        `Get Contract Type: Invalid insurance type ${quoteDetails.homeType}`,
-      )
-    }
-
-    // @ts-ignore
-    const type = map[quoteDetails.homeType]
-
-    switch (type) {
-      case NorwegianHomeContentsType.Own:
-        if (quoteDetails.isYouth) {
-          return TypeOfContract.NoHomeContentYouthOwn
-        }
-        return TypeOfContract.NoHomeContentOwn
-      case NorwegianHomeContentsType.Rent:
-        if (quoteDetails.isYouth) {
-          return TypeOfContract.NoHomeContentYouthRent
-        }
-        return TypeOfContract.NoHomeContentRent
-    }
-  }
-
-  if (isNorwegianTravel(quoteDetails)) {
-    if (quoteDetails.isYouth) {
-      return TypeOfContract.NoTravelYouth
-    }
-    return TypeOfContract.NoTravel
-  }
-
-  throw new Error(
-    `Unsupported quoteDetails type (quoteDetails=${JSON.stringify(
-      quoteDetails,
-    )})`,
-  )
-}
 
 export const insuranceTypeTextKeys: Record<TypeOfContract, string> = {
   [TypeOfContract.SeApartmentRent]: 'SIDEBAR_INSURANCE_TYPE_RENT',

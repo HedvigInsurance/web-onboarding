@@ -130,7 +130,7 @@ export const Sign: React.FC<Props> = ({
       </motion.div>
       {offerData.quotes.map((quote) => {
         return (
-          <Disclaimer>
+          <Disclaimer key={quote.id}>
             <MarkdownTranslation
               textKey="CHECKOUT_SIGN_DISCLAIMER"
               replacements={{

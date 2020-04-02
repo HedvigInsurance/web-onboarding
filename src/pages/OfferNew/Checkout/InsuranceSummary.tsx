@@ -65,7 +65,7 @@ export const InsuranceSummary: React.FC<Props> = ({ offerData }) => {
       <Title>{textKeys.CHECKOUT_SUMMARY_TITLE()}</Title>
       {offerData.quotes.map((quote) => {
         return (
-          <Table>
+          <Table key={quote.id}>
             {getDetails(
               quote.quoteDetails,
               textKeys,

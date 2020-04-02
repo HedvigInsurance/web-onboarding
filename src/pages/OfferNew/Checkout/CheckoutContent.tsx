@@ -95,6 +95,7 @@ export const CheckoutContent: React.FC<Props> = ({
         <Title>{textKeys.CHECKOUT_TITLE()}</Title>
         <Excerpt>
           <div>
+            <InsuranceTypeLabel>{textKeys.SIDEBAR_LABEL()}</InsuranceTypeLabel>
             <InsuranceType>
               {!isBundle(offerData) &&
                 textKeys[

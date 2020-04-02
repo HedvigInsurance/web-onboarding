@@ -149,6 +149,7 @@ const StyledDateInput = styled(DateInput)<{ modal: boolean }>`
 `
 
 const getExternalInsuranceData = (offerData: OfferData) => {
+  // TODO: At some point we should handle external insurance data for bundles
   if (isBundle(offerData)) {
     return undefined
   }
@@ -318,7 +319,7 @@ export const StartDate: React.FC<Props> = ({
       {offerData.quotes.map((quote) => {
         return (
           quote.currentInsurer?.switchable && (
-            <HandleSwitchingWrapper>
+            <HandleSwitchingWrapper key={quote.id}>
               <HandleSwitchingLabel>
                 {textKeys.SIDEBAR_REQUEST_CANCELLATION()}
               </HandleSwitchingLabel>

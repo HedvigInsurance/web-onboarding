@@ -258,17 +258,19 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                         </SummaryText>
                       )}
 
-                      {!isBundle(offerData) &&
-                        (isSwedishHouse(offerData.quotes[0].quoteDetails) ||
-                          isSwedishApartment(
-                            offerData.quotes[0].quoteDetails,
-                          )) && (
-                          <TextButton
-                            onClick={() => setDetailsModalIsOpen(true)}
-                          >
-                            {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
-                          </TextButton>
-                        )}
+                      {offerData.quotes.map((quote) => {
+                        return (
+                          (isSwedishHouse(quote.quoteDetails) ||
+                            isSwedishApartment(quote.quoteDetails)) && (
+                            <TextButton
+                              key={quote.id}
+                              onClick={() => setDetailsModalIsOpen(true)}
+                            >
+                              {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
+                            </TextButton>
+                          )
+                        )
+                      })}
                     </SummaryContent>
                   </Summary>
 
