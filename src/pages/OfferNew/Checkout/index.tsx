@@ -192,7 +192,6 @@ export const Checkout: React.FC<Props> = ({
   useTrack({
     offerData,
     signState: signStatus?.signState,
-    email: offerData.person.email ?? '',
   })
   useScrollLock(visibilityState, outerWrapper)
 

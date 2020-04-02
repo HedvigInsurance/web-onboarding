@@ -5,7 +5,6 @@ import {
 } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import * as React from 'react'
-import { InsuranceType } from 'utils/insuranceDomainUtils'
 import { adtraction, trackStudentkortet } from 'utils/tracking'
 
 export enum VisibilityState {
@@ -55,11 +54,10 @@ export const useScrollLock = (
   }, [visibilityState])
 
 interface TrackProps {
-  email: string
   offerData: OfferData
   signState?: SignState | null
 }
-export const useTrack = ({ offerData, email, signState }: TrackProps) => {
+export const useTrack = ({ offerData, signState }: TrackProps) => {
   const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
   const redeemedCampaigns = redeemedCampaignsData?.redeemedCampaigns ?? []
   const { data: memberData } = useMemberQuery()
@@ -74,21 +72,14 @@ export const useTrack = ({ offerData, email, signState }: TrackProps) => {
       return
     }
 
-    // TODO: Map to ContractType after talking to Carl about productIds
-    const legacyInsuranceType: InsuranceType =
-      offerData.quotes[0].quoteDetails.__typename ===
-      'SwedishApartmentQuoteDetails'
-        ? (offerData.quotes[0].quoteDetails.type as any)
-        : 'HOUSE' // TODO do we have norway quotes here?
-
     adtraction(
       parseFloat(offerData.cost.monthlyGross.amount),
       memberId,
-      email,
+      offerData.person.email || '',
       redeemedCampaigns !== null && redeemedCampaigns.length !== 0
         ? redeemedCampaigns[0].code
         : null,
-      legacyInsuranceType,
+      offerData,
     )
 
     if (

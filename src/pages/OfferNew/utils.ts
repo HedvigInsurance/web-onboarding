@@ -4,6 +4,7 @@ import {
   BundledQuote,
   Campaign,
   NorwegianHomeContentsDetails,
+  NorwegianTravelDetails,
   QuoteBundle,
   QuoteDetails,
   SwedishApartmentQuoteDetails,
@@ -98,6 +99,14 @@ export const getQuoteIds = (offerData: OfferData): string[] =>
 export const isBundle = (offerData: OfferData): boolean =>
   offerData.quotes.length > 1
 
+export const isYouth = (offerData: OfferData): boolean =>
+  offerData.quotes.every(
+    (quote) =>
+      isNorwegianHomeContents(quote.quoteDetails) &&
+      isNorwegianTravel(quote.quoteDetails) &&
+      quote.quoteDetails.isYouth,
+  )
+
 export const hasAddress = (offerData: OfferData): boolean =>
   offerData.person.address !== undefined
 
@@ -117,6 +126,16 @@ export const isSwedishHouse = (
   details: QuoteDetails,
 ): details is SwedishHouseQuoteDetails =>
   details.__typename === 'SwedishHouseQuoteDetails'
+
+export const isNorwegianHomeContents = (
+  details: QuoteDetails,
+): details is NorwegianHomeContentsDetails =>
+  details.__typename === 'NorwegianHomeContentsDetails'
+
+export const isNorwegianTravel = (
+  details: QuoteDetails,
+): details is NorwegianTravelDetails =>
+  details.__typename === 'NorwegianTravelDetails'
 
 export const isFreeMonths = (campaigns: Campaign[]) =>
   (campaigns.length > 0 &&
