@@ -29,16 +29,7 @@ export const GlobalCss: React.SFC = ({ children }) => (
         h6 {
           font-family: ${fonts.FAVORIT}, sans-serif;
           font-kerning: none;
-        }
-
-        h1,
-        h2,
-        h3 {
-          font-weight: 600;
-        }
-
-        h4 {
-          font-weight: 500;
+          font-weight: 400;
         }
 
         img {
