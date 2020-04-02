@@ -1,3 +1,4 @@
+import { css, Global } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { LinkButton } from 'components/buttons'
@@ -7,7 +8,6 @@ import { Page } from 'components/utils/Page'
 import * as React from 'react'
 import Helmet from 'react-helmet-async'
 import { TextKeyMap, useTextKeys } from 'utils/hooks/useTextKeys'
-import { css, Global } from '@emotion/core'
 
 const Wrapper = styled.div`
   width: 100%;
