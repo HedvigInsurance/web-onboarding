@@ -72,6 +72,7 @@ export const helmet = koaHelmet({
       scriptSrc: [
         "'unsafe-eval'",
         "'unsafe-inline'",
+        'https://browser.sentry-cdn.com',
         ...defaultSrc,
         // tslint:disable-next-line variable-name
         (_request, response) => {

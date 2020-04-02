@@ -8,7 +8,6 @@ export const Heading = styled('h1')`
   font-family: ${fonts.FAVORIT};
   font-size: 4rem;
   line-height: 4rem;
-  font-weight: 600;
   letter-spacing: -0.91px;
   margin: 0;
 
@@ -31,7 +30,6 @@ export const SubHeading = styled('h2')`
   font-family: ${fonts.FAVORIT};
   font-size: 1.5rem;
   line-height: 1.5rem;
-  font-weight: 500;
   letter-spacing: -0.34px;
 
   @media (max-width: 600px) {
@@ -47,7 +45,6 @@ export const SubSubHeading = styled('h2')`
   font-family: ${fonts.FAVORIT};
   font-size: 1.25rem;
   line-height: 1.25rem;
-  font-weight: 500;
 `
 
 export const SubSubHeadingBlack = styled(SubSubHeading)`
@@ -57,7 +54,6 @@ export const SubSubHeadingBlack = styled(SubSubHeading)`
 export const PreHeading = styled('div')`
   font-size: 1rem;
   line-height: 1.5625rem;
-  font-weight: 600;
   letter-spacing: 2.67px;
   color: ${colorsV2.gray};
   text-transform: uppercase;

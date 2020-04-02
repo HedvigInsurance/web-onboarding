@@ -8,7 +8,7 @@ export const InfoIcon = () => (
     viewBox="0 0 16 16"
   >
     <g fill="none" fillRule="evenodd">
-      <circle cx="8" cy="8" r="7.5" stroke="#651EFF" />
+      <circle cx="8" cy="8" r="7.5" stroke="#8f7cf9" />
       <path
         fill="#651EFF"
         d="M8.558 12V6.228H7.442V12h1.116zM7.19 4.044c0 .444.36.804.804.804a.81.81 0 1 0-.804-.804z"

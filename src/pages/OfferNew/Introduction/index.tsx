@@ -1,7 +1,9 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { Tick } from 'components/icons/Tick'
 import { OfferData } from 'pages/OfferNew/types'
 import * as React from 'react'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { useDocumentScroll } from '../../../utils/hooks/useDocumentScroll'
 import { Column, Container, Section } from '../components'
 import { Sidebar } from './Sidebar'
@@ -33,15 +35,34 @@ const UspsColumn = styled(Column)`
   min-height: 50vh;
 `
 
-const Usps = styled('ul')`
+const Usps = styled.ul`
   font-size: 1.5rem;
   line-height: 2rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
   color: ${colorsV3.white};
   font-weight: 300;
+
+  @media (max-width: 600px) {
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+  }
 `
 
-const Usp = styled('li')`
+const Usp = styled.li`
+  display: flex;
+  align-items: center;
   padding: 1rem 0;
+  margin: 0;
+  line-height: 1;
+`
+
+const TickWrapper = styled.div`
+  width: 2em;
+  height: 2em;
+  margin-right: 1em;
+  flex-shrink: 0;
 `
 
 export const Introduction: React.FC<Props> = ({
@@ -51,7 +72,7 @@ export const Introduction: React.FC<Props> = ({
 }) => {
   const [sidebarIsSticky, setSidebarIsSticky] = React.useState(false)
   const ref = React.useRef<HTMLDivElement>(null)
-  // const textKeys = useTextKeys()
+  const textKeys = useTextKeys()
 
   useDocumentScroll(() => {
     const distanceToTop =
@@ -72,9 +93,24 @@ export const Introduction: React.FC<Props> = ({
         <Container>
           <UspsColumn>
             <Usps>
-              <Usp>Drulle ingar</Usp>
-              <Usp>Ingen bindningstid, avsluta när som helst</Usp>
-              <Usp>Automatisk betalning varje månad</Usp>
+              <Usp>
+                <TickWrapper>
+                  <Tick />
+                </TickWrapper>
+                {textKeys.OFFER_USPS_USP_0()}
+              </Usp>
+              <Usp>
+                <TickWrapper>
+                  <Tick />
+                </TickWrapper>
+                {textKeys.OFFER_USPS_USP_1()}
+              </Usp>
+              <Usp>
+                <TickWrapper>
+                  <Tick />
+                </TickWrapper>
+                {textKeys.OFFER_USPS_USP_2()}
+              </Usp>
             </Usps>
           </UspsColumn>
 

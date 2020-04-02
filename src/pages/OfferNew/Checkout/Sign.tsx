@@ -40,7 +40,10 @@ const Wrapper = styled('div')`
 const ButtonWrapper = styled('div')`
   display: flex;
   width: 100%;
-  justify-content: center;
+
+  @media (max-width: 600px) {
+    justify-content: center;
+  }
 `
 
 const SpinnerWrapper = styled(motion.div)`

@@ -1,6 +1,6 @@
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { BackArrow } from 'components/icons/BackArrow'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
@@ -86,7 +86,7 @@ const InnerWrapper = styled('div')`
   justify-content: space-between;
   width: 100%;
   min-height: 100%;
-  background: ${colorsV2.offwhite};
+  background: ${colorsV3.white};
   padding: 5rem 8rem 2.5rem 4.5rem;
 
   @media (max-width: 40rem) {
