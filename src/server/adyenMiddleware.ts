@@ -29,14 +29,14 @@ export const handleAdyen3dsPostRedirect: Koa.Middleware<object> = async (
     const result = await httpClient.post(
       GIRAFFE_ENDPOINT,
       {
-        operationName: 'PostPaymentsDetails',
+        operationName: 'SubmitAdyenRedirectionResult',
         query: `
-      mutation PostPaymentDetails($MD: String!, PaRes: String!) {
-        postPaymentDetails(MD: $MD, PaRes: $PaRes) {
-          # anything?
-        }
-      }
-    `,
+          mutation SubmitAdyenRedirectionResult($MD: String!, $PaRes: String!) {
+            submitAdyenRedirectionResult(MD: $MD, PaRes: $PaRes) {
+              resultCode
+            }
+          }
+        `,
         variables: {
           MD,
           PaRes,
@@ -46,7 +46,11 @@ export const handleAdyen3dsPostRedirect: Koa.Middleware<object> = async (
         headers: { Authorization },
       },
     )
-    ctx.body = JSON.stringify({ status: result.status, data: result.data })
+    ctx.body = JSON.stringify(
+      { status: result.status, data: result.data },
+      null,
+      2,
+    )
   } catch (e) {
     // TODO how to handle?
     throw e

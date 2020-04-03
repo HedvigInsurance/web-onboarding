@@ -6,9 +6,11 @@ import {
 } from 'components/utils/CurrentLocale'
 import {
   Scalars,
+  SubmitAdditionalPaymentDetialsMutationFn,
   TokenizationChannel,
   TokenizePaymentDetailsMutationFn,
   useAvailablePaymentMethodsQuery,
+  useSubmitAdditionalPaymentDetialsMutation,
   useTokenizePaymentDetailsMutation,
 } from 'data/graphql'
 import { match } from 'matchly'
@@ -43,6 +45,9 @@ export const AdyenCheckout = () => {
   const adyenCheckoutRef = React.useRef<HTMLDivElement>()
   const [adyenLoaded, setAdyenLoaded] = React.useState(false)
   const [tokenizePaymentMutation] = useTokenizePaymentDetailsMutation()
+  const [
+    submitAdditionalPaymentDetails,
+  ] = useSubmitAdditionalPaymentDetialsMutation()
   const history = useHistory()
   const currentLocale = useCurrentLocale()
 
@@ -58,6 +63,7 @@ export const AdyenCheckout = () => {
       currentLocale,
       paymentMethodsResponse,
       tokenizePaymentMutation,
+      submitAdditionalPaymentDetails,
       history,
     }).mount(adyenCheckoutRef.current)
   }, [paymentMethodsResponse, adyenLoaded])
@@ -84,6 +90,7 @@ interface AdyenCheckoutProps {
   currentLocale: string
   paymentMethodsResponse: Scalars['PaymentMethodsResponse']
   tokenizePaymentMutation: TokenizePaymentDetailsMutationFn
+  submitAdditionalPaymentDetails: SubmitAdditionalPaymentDetialsMutationFn
   history: ReturnType<typeof useHistory>
 }
 
@@ -91,6 +98,7 @@ const createAdyenCheckout = ({
   currentLocale,
   paymentMethodsResponse,
   tokenizePaymentMutation,
+  submitAdditionalPaymentDetails,
   history,
 }: AdyenCheckoutProps) => {
   const locale = match([
@@ -102,7 +110,25 @@ const createAdyenCheckout = ({
 
   const returnUrl = `${window.location.origin}${
     currentLocale ? '/' + currentLocale : ''
-  }/new-member/connect-payment` // FIXME maybe this should be /download?
+  }/new-member/connect-payment/adyen-callback` // FIXME is this always true?
+
+  const handleError = (dropinComponent: any, resultCode: string) => {
+    if (['Authorised', 'Pending'].includes(resultCode)) {
+      history.push(
+        currentLocale
+          ? '/' + currentLocale + '/new-member/download'
+          : '/new-member/download',
+      )
+    } else {
+      // tslint:disable-next-line no-console
+      console.error(
+        `Received unknown or faulty status type "${resultCode}" as request finished from Adyen`,
+      )
+
+      dropinComponent.setStatus('error')
+      window.setTimeout(() => dropinComponent.setStatus('ready'), 500)
+    }
+  }
 
   const configuration = {
     locale,
@@ -118,10 +144,34 @@ const createAdyenCheckout = ({
     enableStoreDetails: true,
     returnUrl,
     // onChange: console.log,
-    onAdditionalDetails: (state: any, _dropinComponent: any) => {
-      // TODO call to additional details mutation?
-      // tslint:disable-next-line no-console
-      console.log(state)
+    onAdditionalDetails: async (state: any, dropinComponent: any) => {
+      const result = await submitAdditionalPaymentDetails({
+        variables: {
+          request: {
+            paymentsDetailsRequest: JSON.stringify(state.data),
+          },
+        },
+      })
+
+      if (
+        result.data?.submitAdditionalPaymentDetails.__typename ===
+        'AdditionalPaymentsDetailsResponseAction'
+      ) {
+        dropinComponent.handleAction(
+          JSON.parse(result.data?.submitAdditionalPaymentDetails.action),
+        )
+        return
+      }
+
+      if (
+        result.data?.submitAdditionalPaymentDetails.__typename ===
+        'AdditionalPaymentsDetailsResponseFinished'
+      ) {
+        handleError(
+          dropinComponent,
+          result.data?.submitAdditionalPaymentDetails.resultCode,
+        )
+      }
     },
     onSubmit: async (state: any, dropinComponent: any) => {
       dropinComponent.setStatus('loading')
@@ -149,23 +199,10 @@ const createAdyenCheckout = ({
         result.data?.tokenizePaymentDetails?.__typename ===
         'TokenizationResponseFinished'
       ) {
-        if (
-          ['Authorised', 'Pending'].includes(
-            result.data.tokenizePaymentDetails.resultCode,
-          )
-        ) {
-          history.push(
-            currentLocale
-              ? '/' + currentLocale + '/new-member/download'
-              : '/new-member/download',
-          )
-        } else {
-          // tslint:disable-next-line no-console
-          console.error(
-            `Received unknown or faulty status type "${result.data.tokenizePaymentDetails.resultCode}" as TokenizationResponseFinished from Adyen`,
-          )
-          dropinComponent.setStatus('error') // FIXME Can we handle this in a better way? Rentry logic maybe?
-        }
+        handleError(
+          dropinComponent,
+          result.data?.tokenizePaymentDetails.resultCode,
+        )
       }
     },
   }

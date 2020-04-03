@@ -3,7 +3,11 @@ import * as Sentry from '@sentry/node' // tslint:disable-line ordered-imports
 import * as bodyParser from 'koa-bodyparser'
 import 'source-map-support/register'
 import { Logger } from 'typescript-logging'
-import { reactPageRoutes, serverSideRedirects } from './routes'
+import {
+  LOCALE_PATH_PATTERN,
+  reactPageRoutes,
+  serverSideRedirects,
+} from './routes'
 import { GIRAFFE_ENDPOINT, GIRAFFE_WS_ENDPOINT } from './server/config'
 import { appLogger } from './server/logging'
 import {
@@ -17,6 +21,7 @@ import { forceHost, permanentRedirect } from './server/middleware/redirects'
 import { getPage } from './server/page'
 import { notNullable } from './utils/nullables'
 import { sentryConfig } from './utils/sentry'
+import { handleAdyen3dsPostRedirect } from 'server/adyenMiddleware'
 
 Sentry.init({
   ...sentryConfig(),
@@ -105,6 +110,11 @@ server.router.post('/new-member/_report-csp-violation', (ctx) => {
   )
   ctx.status = 204
 })
+
+server.router.post(
+  LOCALE_PATH_PATTERN + '/new-member/connect-payment/adyen-callback',
+  handleAdyen3dsPostRedirect,
+)
 
 reactPageRoutes.forEach((route) => {
   server.router.get(route.path, getPage)

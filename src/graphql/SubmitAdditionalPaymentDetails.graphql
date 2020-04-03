@@ -1,0 +1,12 @@
+mutation SubmitAdditionalPaymentDetials(
+  $request: AdditionalPaymentsDetailsRequest!
+) {
+  submitAdditionalPaymentDetails(req: $request) {
+    ... on AdditionalPaymentsDetailsResponseAction {
+      action
+    }
+    ... on AdditionalPaymentsDetailsResponseFinished {
+      resultCode
+    }
+  }
+}

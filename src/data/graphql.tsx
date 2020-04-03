@@ -7655,6 +7655,24 @@ export type StartDateMutation = { __typename?: 'Mutation' } & {
     | { __typename?: 'UnderwritingLimitsHit' }
 }
 
+export type SubmitAdditionalPaymentDetialsMutationVariables = {
+  request: AdditionalPaymentsDetailsRequest
+}
+
+export type SubmitAdditionalPaymentDetialsMutation = {
+  __typename?: 'Mutation'
+} & {
+  submitAdditionalPaymentDetails:
+    | ({ __typename?: 'AdditionalPaymentsDetailsResponseFinished' } & Pick<
+        AdditionalPaymentsDetailsResponseFinished,
+        'resultCode'
+      >)
+    | ({ __typename?: 'AdditionalPaymentsDetailsResponseAction' } & Pick<
+        AdditionalPaymentsDetailsResponseAction,
+        'action'
+      >)
+}
+
 export type TokenizePaymentDetailsMutationVariables = {
   paymentsRequest: TokenizationRequest
 }
@@ -8947,6 +8965,63 @@ export type StartDateMutationResult = ApolloReactCommon.MutationResult<
 export type StartDateMutationOptions = ApolloReactCommon.BaseMutationOptions<
   StartDateMutation,
   StartDateMutationVariables
+>
+export const SubmitAdditionalPaymentDetialsDocument = gql`
+  mutation SubmitAdditionalPaymentDetials(
+    $request: AdditionalPaymentsDetailsRequest!
+  ) {
+    submitAdditionalPaymentDetails(req: $request) {
+      ... on AdditionalPaymentsDetailsResponseAction {
+        action
+      }
+      ... on AdditionalPaymentsDetailsResponseFinished {
+        resultCode
+      }
+    }
+  }
+`
+export type SubmitAdditionalPaymentDetialsMutationFn = ApolloReactCommon.MutationFunction<
+  SubmitAdditionalPaymentDetialsMutation,
+  SubmitAdditionalPaymentDetialsMutationVariables
+>
+
+/**
+ * __useSubmitAdditionalPaymentDetialsMutation__
+ *
+ * To run a mutation, you first call `useSubmitAdditionalPaymentDetialsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSubmitAdditionalPaymentDetialsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [submitAdditionalPaymentDetialsMutation, { data, loading, error }] = useSubmitAdditionalPaymentDetialsMutation({
+ *   variables: {
+ *      request: // value for 'request'
+ *   },
+ * });
+ */
+export function useSubmitAdditionalPaymentDetialsMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    SubmitAdditionalPaymentDetialsMutation,
+    SubmitAdditionalPaymentDetialsMutationVariables
+  >,
+) {
+  return ApolloReactHooks.useMutation<
+    SubmitAdditionalPaymentDetialsMutation,
+    SubmitAdditionalPaymentDetialsMutationVariables
+  >(SubmitAdditionalPaymentDetialsDocument, baseOptions)
+}
+export type SubmitAdditionalPaymentDetialsMutationHookResult = ReturnType<
+  typeof useSubmitAdditionalPaymentDetialsMutation
+>
+export type SubmitAdditionalPaymentDetialsMutationResult = ApolloReactCommon.MutationResult<
+  SubmitAdditionalPaymentDetialsMutation
+>
+export type SubmitAdditionalPaymentDetialsMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  SubmitAdditionalPaymentDetialsMutation,
+  SubmitAdditionalPaymentDetialsMutationVariables
 >
 export const TokenizePaymentDetailsDocument = gql`
   mutation TokenizePaymentDetails($paymentsRequest: TokenizationRequest!) {
