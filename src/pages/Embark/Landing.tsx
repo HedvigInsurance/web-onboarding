@@ -196,9 +196,18 @@ const LandingPageCardsNo: React.FC<{
   textKeys: TextKeyMap
   language: string | undefined
 }> = ({ textKeys, language }) => {
-  // TODO: Add bundle card
   return (
     <>
+      <Card>
+        <Headline>{textKeys.STARTPAGE_COMBO_HEADLINE()}</Headline>
+        <Paragraph>{textKeys.STARTPAGE_COMBO_BODY()}</Paragraph>
+        <ProceedButton
+          size="lg"
+          to={(language ? '/' + language : '') + '/new-member/combo'}
+        >
+          {textKeys.STARTPAGE_COMBO_BUTTON()}
+        </ProceedButton>
+      </Card>
       <Card>
         <Headline>{textKeys.STARTPAGE_CONTENTS_HEADLINE()}</Headline>
         <Paragraph>{textKeys.STARTPAGE_CONTENTS_BODY()}</Paragraph>

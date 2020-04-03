@@ -75,14 +75,14 @@ const getAddressFromBundledQuotes = (
 
 const getStartDateFromBundledQuotes = (
   quotes: ReadonlyArray<BundledQuote>,
-): Date | undefined => {
+): Date | null => {
   const distinctStartDates = Array.from(
     new Set(quotes.map((quote) => quote.startDate)),
   )
   if (distinctStartDates.length === 1 && distinctStartDates[0]) {
     return parse(distinctStartDates[0], 'yyyy-MM-dd', new Date())
   }
-  return undefined
+  return null
 }
 
 export const quoteDetailsHasAddress = (
@@ -112,7 +112,7 @@ export const isYouth = (offerData: OfferData): boolean =>
   )
 
 export const hasAddress = (offerData: OfferData): boolean =>
-  offerData.person.address !== undefined
+  !!offerData.person.address
 
 export const hasCurrentInsurer = (offerData: OfferData): boolean =>
   offerData.quotes.filter((quote) => quote.currentInsurer).length > 0
