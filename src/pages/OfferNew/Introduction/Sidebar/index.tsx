@@ -237,7 +237,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                           ]
                         ]()}
                       {isBundle(offerData) &&
-                        textKeys.SIDEBAR_INSURANCE_TYPE_BUNDLE()}
+                        textKeys.SIDEBAR_INSURANCE_TYPE_NO_COMBO()}
                     </Title>
 
                     <SummaryContent>
