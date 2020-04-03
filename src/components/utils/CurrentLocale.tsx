@@ -17,6 +17,7 @@ export const getLocaleIsoCode = (locale: string): Locale => {
       return Locale.SvSe
   }
 }
+
 const getLocaleFromPath = (path: string) => {
   const localeMatch = matchPath<WithLocale>(path, {
     path: LOCALE_PATH_PATTERN + '/*',

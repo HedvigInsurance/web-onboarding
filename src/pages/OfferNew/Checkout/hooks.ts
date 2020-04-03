@@ -1,11 +1,10 @@
 import {
-  CompleteQuote,
   SignState,
   useMemberQuery,
   useRedeemedCampaignsQuery,
 } from 'data/graphql'
+import { OfferData } from 'pages/OfferNew/types'
 import * as React from 'react'
-import { InsuranceType } from 'utils/insuranceDomainUtils'
 import { adtraction, trackStudentkortet } from 'utils/tracking'
 
 export enum VisibilityState {
@@ -55,11 +54,10 @@ export const useScrollLock = (
   }, [visibilityState])
 
 interface TrackProps {
-  email: string
-  firstQuote: CompleteQuote
+  offerData: OfferData
   signState?: SignState | null
 }
-export const useTrack = ({ firstQuote, email, signState }: TrackProps) => {
+export const useTrack = ({ offerData, signState }: TrackProps) => {
   const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
   const redeemedCampaigns = redeemedCampaignsData?.redeemedCampaigns ?? []
   const { data: memberData } = useMemberQuery()
@@ -74,26 +72,21 @@ export const useTrack = ({ firstQuote, email, signState }: TrackProps) => {
       return
     }
 
-    const legacyInsuranceType: InsuranceType =
-      firstQuote.quoteDetails.__typename === 'SwedishApartmentQuoteDetails'
-        ? (firstQuote.quoteDetails.type as any)
-        : 'HOUSE' // TODO do we have norway quotes here?
-
     adtraction(
-      parseFloat(firstQuote.insuranceCost.monthlyGross.amount),
+      parseFloat(offerData.cost.monthlyGross.amount),
       memberId,
-      email,
+      offerData.person.email || '',
       redeemedCampaigns !== null && redeemedCampaigns.length !== 0
         ? redeemedCampaigns[0].code
         : null,
-      legacyInsuranceType,
+      offerData,
     )
 
     if (
       redeemedCampaigns?.length > 0 &&
       redeemedCampaigns[0].code.toLowerCase() === 'studentkortet'
     ) {
-      trackStudentkortet(memberId, firstQuote.insuranceCost.monthlyGross.amount)
+      trackStudentkortet(memberId, offerData.cost.monthlyGross.amount)
     }
   }, [signState])
 }

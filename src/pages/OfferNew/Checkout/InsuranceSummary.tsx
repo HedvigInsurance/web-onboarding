@@ -1,13 +1,12 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
-import { CompleteQuote, QuoteDetails } from 'data/graphql'
-import {
-  getHouseholdSize,
-  quoteDetailsHasAddress,
-} from 'pages/OfferNew/Introduction/Sidebar/utils'
+import { QuoteDetails } from 'data/graphql'
+import { OfferData } from 'pages/OfferNew/types'
 import {
   apartmentTypeTextKeys,
+  getHouseholdSize,
   maskAndFormatRawSsn,
+  quoteDetailsHasAddress,
 } from 'pages/OfferNew/utils'
 import * as React from 'react'
 import { TextKeyMap, useTextKeys } from 'utils/hooks/useTextKeys'
@@ -55,31 +54,35 @@ const Value = styled('div')`
 `
 
 interface Props {
-  firstQuote: CompleteQuote
+  offerData: OfferData
 }
 
-export const InsuranceSummary: React.FC<Props> = ({ firstQuote }) => {
+export const InsuranceSummary: React.FC<Props> = ({ offerData }) => {
   const textKeys = useTextKeys()
 
   return (
     <Wrapper>
       <Title>{textKeys.CHECKOUT_SUMMARY_TITLE()}</Title>
-      <Table>
-        {getDetails(
-          firstQuote.quoteDetails,
-          textKeys,
-          firstQuote.ssn ?? undefined,
-        ).map((group, index) => (
-          <Group key={index}>
-            {group.map(({ key, value, label }) => (
-              <Row key={key}>
-                <Label>{label}</Label>
-                <Value>{value}</Value>
-              </Row>
+      {offerData.quotes.map((quote) => {
+        return (
+          <Table key={quote.id}>
+            {getDetails(
+              quote.quoteDetails,
+              textKeys,
+              offerData.person.ssn || undefined,
+            ).map((group, index) => (
+              <Group key={index}>
+                {group.map(({ key, value, label }) => (
+                  <Row key={key}>
+                    <Label>{label}</Label>
+                    <Value>{value}</Value>
+                  </Row>
+                ))}
+              </Group>
             ))}
-          </Group>
-        ))}
-      </Table>
+          </Table>
+        )
+      })}
     </Wrapper>
   )
 }

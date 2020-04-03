@@ -776,6 +776,27 @@ export type BundledQuote = {
   expiresAt: Scalars['LocalDate']
   email?: Maybe<Scalars['String']>
   dataCollectionId?: Maybe<Scalars['ID']>
+  typeOfContract: TypeOfContract
+  perils: Array<PerilV2>
+  insurableLimits: Array<InsurableLimit>
+  termsAndConditions: InsuranceTerm
+  insuranceTerms: Array<InsuranceTerm>
+}
+
+export type BundledQuotePerilsArgs = {
+  locale: Locale
+}
+
+export type BundledQuoteInsurableLimitsArgs = {
+  locale: Locale
+}
+
+export type BundledQuoteTermsAndConditionsArgs = {
+  locale: Locale
+}
+
+export type BundledQuoteInsuranceTermsArgs = {
+  locale: Locale
 }
 
 export enum CacheControlScope {
@@ -7299,6 +7320,178 @@ export type QuoteQuery = { __typename?: 'Query' } & {
     | ({ __typename?: 'IncompleteQuote' } & Pick<IncompleteQuote, 'id'>)
 }
 
+export type QuoteBundleQueryVariables = {
+  input: QuoteBundleInput
+  locale: Locale
+}
+
+export type QuoteBundleQuery = { __typename?: 'Query' } & {
+  quoteBundle: { __typename?: 'QuoteBundle' } & {
+    quotes: Array<
+      { __typename?: 'BundledQuote' } & Pick<
+        BundledQuote,
+        | 'id'
+        | 'dataCollectionId'
+        | 'firstName'
+        | 'lastName'
+        | 'ssn'
+        | 'birthDate'
+        | 'startDate'
+        | 'expiresAt'
+        | 'email'
+        | 'typeOfContract'
+      > & {
+          currentInsurer: Maybe<
+            { __typename?: 'CurrentInsurer' } & Pick<
+              CurrentInsurer,
+              'id' | 'displayName' | 'switchable'
+            >
+          >
+          price: { __typename?: 'MonetaryAmountV2' } & Pick<
+            MonetaryAmountV2,
+            'amount' | 'currency'
+          >
+          perils: Array<
+            { __typename?: 'PerilV2' } & Pick<
+              PerilV2,
+              | 'title'
+              | 'description'
+              | 'covered'
+              | 'exceptions'
+              | 'info'
+              | 'iconName'
+            > & {
+                icon: { __typename?: 'Icon' } & {
+                  variants: { __typename?: 'IconVariants' } & {
+                    light: { __typename?: 'IconVariant' } & Pick<
+                      IconVariant,
+                      'svgUrl'
+                    >
+                  }
+                }
+              }
+          >
+          insurableLimits: Array<
+            { __typename?: 'InsurableLimit' } & Pick<
+              InsurableLimit,
+              'label' | 'limit' | 'description'
+            >
+          >
+          termsAndConditions: { __typename?: 'InsuranceTerm' } & Pick<
+            InsuranceTerm,
+            'displayName' | 'url'
+          >
+          insuranceTerms: Array<
+            { __typename?: 'InsuranceTerm' } & Pick<
+              InsuranceTerm,
+              'displayName' | 'url'
+            >
+          >
+          quoteDetails:
+            | ({ __typename?: 'SwedishApartmentQuoteDetails' } & Pick<
+                SwedishApartmentQuoteDetails,
+                'street' | 'zipCode' | 'householdSize' | 'livingSpace' | 'type'
+              >)
+            | ({ __typename?: 'SwedishHouseQuoteDetails' } & Pick<
+                SwedishHouseQuoteDetails,
+                | 'street'
+                | 'zipCode'
+                | 'householdSize'
+                | 'livingSpace'
+                | 'ancillarySpace'
+                | 'numberOfBathrooms'
+                | 'yearOfConstruction'
+                | 'isSubleted'
+              > & {
+                  extraBuildings: Array<
+                    | ({ __typename?: 'ExtraBuildingGarage' } & Pick<
+                        ExtraBuildingGarage,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingCarport' } & Pick<
+                        ExtraBuildingCarport,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingShed' } & Pick<
+                        ExtraBuildingShed,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingStorehouse' } & Pick<
+                        ExtraBuildingStorehouse,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingFriggebod' } & Pick<
+                        ExtraBuildingFriggebod,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingAttefall' } & Pick<
+                        ExtraBuildingAttefall,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingOuthouse' } & Pick<
+                        ExtraBuildingOuthouse,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingGuesthouse' } & Pick<
+                        ExtraBuildingGuesthouse,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingGazebo' } & Pick<
+                        ExtraBuildingGazebo,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingGreenhouse' } & Pick<
+                        ExtraBuildingGreenhouse,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingSauna' } & Pick<
+                        ExtraBuildingSauna,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingBarn' } & Pick<
+                        ExtraBuildingBarn,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingBoathouse' } & Pick<
+                        ExtraBuildingBoathouse,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingOther' } & Pick<
+                        ExtraBuildingOther,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                  >
+                })
+            | ({ __typename?: 'NorwegianHomeContentsDetails' } & Pick<
+                NorwegianHomeContentsDetails,
+                'coInsured' | 'livingSpace' | 'street' | 'zipCode' | 'isYouth'
+              > & { homeType: NorwegianHomeContentsDetails['type'] })
+            | ({ __typename?: 'NorwegianTravelDetails' } & Pick<
+                NorwegianTravelDetails,
+                'coInsured' | 'isYouth'
+              >)
+        }
+    >
+    bundleCost: { __typename?: 'InsuranceCost' } & Pick<
+      InsuranceCost,
+      'freeUntil'
+    > & {
+        monthlyDiscount: { __typename?: 'MonetaryAmountV2' } & Pick<
+          MonetaryAmountV2,
+          'amount' | 'currency'
+        >
+        monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
+          MonetaryAmountV2,
+          'amount' | 'currency'
+        >
+        monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
+          MonetaryAmountV2,
+          'amount' | 'currency'
+        >
+      }
+  }
+}
+
 export type RedeemCodeMutationVariables = {
   code: Scalars['String']
 }
@@ -7984,6 +8177,162 @@ export type QuoteLazyQueryHookResult = ReturnType<typeof useQuoteLazyQuery>
 export type QuoteQueryResult = ApolloReactCommon.QueryResult<
   QuoteQuery,
   QuoteQueryVariables
+>
+export const QuoteBundleDocument = gql`
+  query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
+    quoteBundle(input: $input) {
+      quotes {
+        id
+        dataCollectionId
+        currentInsurer {
+          id
+          displayName
+          switchable
+        }
+        price {
+          amount
+          currency
+        }
+        firstName
+        lastName
+        ssn
+        birthDate
+        startDate
+        expiresAt
+        email
+        typeOfContract
+        perils(locale: $locale) {
+          title
+          description
+          covered
+          exceptions
+          info
+          icon {
+            variants {
+              light {
+                svgUrl
+              }
+            }
+          }
+          iconName
+        }
+        insurableLimits(locale: $locale) {
+          label
+          limit
+          description
+        }
+        termsAndConditions(locale: $locale) {
+          displayName
+          url
+        }
+        insuranceTerms(locale: $locale) {
+          displayName
+          url
+        }
+        quoteDetails {
+          ... on SwedishApartmentQuoteDetails {
+            street
+            zipCode
+            householdSize
+            livingSpace
+            type
+          }
+          ... on SwedishHouseQuoteDetails {
+            street
+            zipCode
+            householdSize
+            livingSpace
+            ancillarySpace
+            numberOfBathrooms
+            yearOfConstruction
+            isSubleted
+            extraBuildings {
+              ... on ExtraBuildingCore {
+                area
+                displayName
+                hasWaterConnected
+              }
+            }
+          }
+          ... on NorwegianHomeContentsDetails {
+            coInsured
+            livingSpace
+            street
+            homeType: type
+            zipCode
+            isYouth
+          }
+          ... on NorwegianTravelDetails {
+            coInsured
+            isYouth
+          }
+        }
+      }
+      bundleCost {
+        freeUntil
+        monthlyDiscount {
+          amount
+          currency
+        }
+        monthlyGross {
+          amount
+          currency
+        }
+        monthlyNet {
+          amount
+          currency
+        }
+      }
+    }
+  }
+`
+
+/**
+ * __useQuoteBundleQuery__
+ *
+ * To run a query within a React component, call `useQuoteBundleQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQuoteBundleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQuoteBundleQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *      locale: // value for 'locale'
+ *   },
+ * });
+ */
+export function useQuoteBundleQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    QuoteBundleQuery,
+    QuoteBundleQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useQuery<QuoteBundleQuery, QuoteBundleQueryVariables>(
+    QuoteBundleDocument,
+    baseOptions,
+  )
+}
+export function useQuoteBundleLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    QuoteBundleQuery,
+    QuoteBundleQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useLazyQuery<
+    QuoteBundleQuery,
+    QuoteBundleQueryVariables
+  >(QuoteBundleDocument, baseOptions)
+}
+export type QuoteBundleQueryHookResult = ReturnType<typeof useQuoteBundleQuery>
+export type QuoteBundleLazyQueryHookResult = ReturnType<
+  typeof useQuoteBundleLazyQuery
+>
+export type QuoteBundleQueryResult = ApolloReactCommon.QueryResult<
+  QuoteBundleQuery,
+  QuoteBundleQueryVariables
 >
 export const RedeemCodeDocument = gql`
   mutation RedeemCode($code: String!) {

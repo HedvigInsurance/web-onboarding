@@ -1,6 +1,5 @@
 import {
   ApartmentType,
-  CompleteQuote,
   EditQuoteInput,
   ExtraBuilding,
   ExtraBuildingType,
@@ -11,6 +10,7 @@ import {
 } from 'data/graphql'
 import { match } from 'matchly'
 import { inputTypes, masks } from 'new-components/inputs/index'
+import { OfferQuote } from 'pages/OfferNew/types'
 import * as Yup from 'yup'
 import { isStudent, isSwedishApartment, isSwedishHouse } from '../../../utils'
 import {
@@ -24,7 +24,7 @@ import {
 
 export const isApartmentFieldSchema = (
   fieldSchema: FieldSchema,
-  quote: CompleteQuote,
+  quote: OfferQuote,
 ): fieldSchema is ApartmentFieldSchema => {
   return (
     (fieldSchema as ApartmentFieldSchema).apartment &&
@@ -34,7 +34,7 @@ export const isApartmentFieldSchema = (
 
 export const isHouseFieldSchema = (
   fieldSchema: FieldSchema,
-  quote: CompleteQuote,
+  quote: OfferQuote,
 ): fieldSchema is HouseFieldSchema => {
   return (
     (fieldSchema as HouseFieldSchema).house &&
@@ -42,7 +42,7 @@ export const isHouseFieldSchema = (
   )
 }
 
-export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
+export const getFieldSchema = (offerQuote: OfferQuote): FieldSchema => {
   const base = {
     street: {
       label: 'DETAILS_MODULE_TABLE_ADDRESS_CELL_LABEL',
@@ -64,7 +64,7 @@ export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
     },
   }
 
-  return isSwedishApartment(quote.quoteDetails)
+  return isSwedishApartment(offerQuote.quoteDetails)
     ? {
         apartment: {
           ...base,
@@ -82,7 +82,7 @@ export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
             placeholder:
               'DETAILS_MODULE_TABLE_RECIDENCY_TYPE_CELL_LABEL_APARTMENT',
             options: [
-              ...(isStudent(quote.quoteDetails)
+              ...(isStudent(offerQuote.quoteDetails)
                 ? [
                     {
                       label: 'SIDEBAR_INSURANCE_TYPE_BRF',
@@ -195,14 +195,14 @@ export const getFieldSchema = (quote: CompleteQuote): FieldSchema => {
 
 export const getValidationSchema = (
   fieldSchema: FieldSchema,
-  quote: CompleteQuote,
+  offerQuote: OfferQuote,
 ): Yup.ObjectSchema<unknown> => {
-  const fields = isApartmentFieldSchema(fieldSchema, quote)
+  const fields = isApartmentFieldSchema(fieldSchema, offerQuote)
     ? fieldSchema.apartment
     : fieldSchema.house
 
   return Yup.object({
-    [isApartmentFieldSchema(fieldSchema, quote)
+    [isApartmentFieldSchema(fieldSchema, offerQuote)
       ? 'apartment'
       : 'house']: Yup.object({
       ...Object.entries(fields).reduce(
@@ -363,43 +363,43 @@ const getInitialNorwegianTravelValues = (
   },
 })
 
-export const getInitialInputValues = (quote: CompleteQuote) =>
+export const getInitialInputValues = (offerQuote: OfferQuote) =>
   match<string, EditQuoteInput>([
     [
       'SwedishHouseQuoteDetails',
       () =>
         getInitialSwedishHouseValues(
-          quote.id,
-          quote.quoteDetails as SwedishHouseQuoteDetails,
+          offerQuote.id,
+          offerQuote.quoteDetails as SwedishHouseQuoteDetails,
         ),
     ],
     [
       'SwedishApartmentQuoteDetails',
       () =>
         getInitialSwedishApartmentValues(
-          quote.id,
-          quote.quoteDetails as SwedishApartmentQuoteDetails,
+          offerQuote.id,
+          offerQuote.quoteDetails as SwedishApartmentQuoteDetails,
         ),
     ],
     [
       'NorwegianHomeContentsDetails',
       () =>
         getInitialNorwegianHomeContentValues(
-          quote.id,
-          quote.quoteDetails as NorwegianHomeContentsDetails,
+          offerQuote.id,
+          offerQuote.quoteDetails as NorwegianHomeContentsDetails,
         ),
     ],
     [
       'NorwegianTravelDetails',
       () =>
         getInitialNorwegianTravelValues(
-          quote.id,
-          quote.quoteDetails as NorwegianTravelDetails,
+          offerQuote.id,
+          offerQuote.quoteDetails as NorwegianTravelDetails,
         ),
     ],
-  ])(quote.quoteDetails.__typename as string) ??
+  ])(offerQuote.quoteDetails.__typename as string) ??
   (() => {
     throw new window.Error(
-      `Expected quote details to be a valid type but was "${quote.quoteDetails.__typename}"`,
+      `Expected quote details to be a valid type but was "${offerQuote.quoteDetails.__typename}"`,
     )
   })()

@@ -3,9 +3,10 @@ import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { BackArrow } from 'components/icons/BackArrow'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
-import { CompleteQuote, SignState, useSignQuotesMutation } from 'data/graphql'
+import { SignState, useSignQuotesMutation } from 'data/graphql'
 import { TOP_BAR_Z_INDEX } from 'new-components/TopBar'
-import { getInsuranceType } from 'pages/OfferNew/utils'
+import { OfferData } from 'pages/OfferNew/types'
+import { getQuoteIds } from 'pages/OfferNew/utils'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
 import { Mount } from 'react-lifecycle-components'
@@ -140,14 +141,14 @@ const Backdrop = styled('div')<Openable>`
 `
 
 interface Props {
-  firstQuote: CompleteQuote
+  offerData: OfferData
   isOpen?: boolean
   onClose?: () => void
   refetch: () => Promise<void>
 }
 
 export const Checkout: React.FC<Props> = ({
-  firstQuote,
+  offerData,
   isOpen,
   onClose,
   refetch,
@@ -189,9 +190,8 @@ export const Checkout: React.FC<Props> = ({
   }, [signUiState])
 
   useTrack({
+    offerData,
     signState: signStatus?.signState,
-    email: firstQuote.email ?? '',
-    firstQuote,
   })
   useScrollLock(visibilityState, outerWrapper)
 
@@ -199,8 +199,8 @@ export const Checkout: React.FC<Props> = ({
     signUiState !== SignUiState.STARTED &&
       signUiState !== SignUiState.STARTED_WITH_REDIRECT &&
       !signQuotesMutation.loading &&
-      firstQuote.email &&
-      firstQuote.ssn,
+      offerData.person.email &&
+      offerData.person.ssn,
   )
 
   if (signStatus?.signState === SignState.Completed) {
@@ -241,7 +241,7 @@ export const Checkout: React.FC<Props> = ({
             </BackButtonWrapper>
 
             <CheckoutContent
-              firstQuote={firstQuote}
+              offerData={offerData}
               onEmailUpdate={(onCompletion) => {
                 setEmailUpdateLoading(true)
                 onCompletion.finally(() => setEmailUpdateLoading(false))
@@ -257,6 +257,7 @@ export const Checkout: React.FC<Props> = ({
         </OuterScrollWrapper>
 
         <SlidingSign
+          offerData={offerData}
           visibilityState={visibilityState}
           canInitiateSign={
             canInitiateSign && !ssnUpdateLoading && !emailUpdateLoading
@@ -279,7 +280,7 @@ export const Checkout: React.FC<Props> = ({
             }/new-member`
             const result = await signQuotes({
               variables: {
-                quoteIds: [firstQuote.id],
+                quoteIds: getQuoteIds(offerData),
                 successUrl: baseUrl + '/connect-payment',
                 failUrl: baseUrl + '/sign/fatal',
               },
@@ -297,7 +298,6 @@ export const Checkout: React.FC<Props> = ({
             }
             setSignUiState(SignUiState.STARTED)
           }}
-          insuranceType={getInsuranceType(firstQuote)}
         />
       </OuterWrapper>
       <Backdrop visibilityState={visibilityState} onClick={onClose} />

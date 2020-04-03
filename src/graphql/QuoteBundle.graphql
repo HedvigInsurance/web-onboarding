@@ -1,0 +1,108 @@
+query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
+  quoteBundle(input: $input) {
+    quotes {
+      id
+      dataCollectionId
+
+      currentInsurer {
+        id
+        displayName
+        switchable
+      }
+      price {
+        amount
+        currency
+      }
+      firstName
+      lastName
+      ssn
+      birthDate
+      startDate
+      expiresAt
+      email
+      typeOfContract
+      perils(locale: $locale) {
+        title
+        description
+        covered
+        exceptions
+        info
+        icon {
+          variants {
+            light {
+              svgUrl
+            }
+          }
+        }
+      }
+      insurableLimits(locale: $locale) {
+        label
+        limit
+        description
+      }
+      termsAndConditions(locale: $locale) {
+        displayName
+        url
+      }
+      insuranceTerms(locale: $locale) {
+        displayName
+        url
+      }
+      quoteDetails {
+        ... on SwedishApartmentQuoteDetails {
+          street
+          zipCode
+          householdSize
+          livingSpace
+          type
+        }
+        ... on SwedishHouseQuoteDetails {
+          street
+          zipCode
+          householdSize
+          livingSpace
+          ancillarySpace
+          numberOfBathrooms
+          yearOfConstruction
+          isSubleted
+          extraBuildings {
+            ... on ExtraBuildingCore {
+              area
+              displayName
+              hasWaterConnected
+            }
+          }
+        }
+
+        ... on NorwegianHomeContentsDetails {
+          coInsured
+          livingSpace
+          street
+          homeType: type
+          zipCode
+          isYouth
+        }
+
+        ... on NorwegianTravelDetails {
+          coInsured
+          isYouth
+        }
+      }
+    }
+    bundleCost {
+      freeUntil
+      monthlyDiscount {
+        amount
+        currency
+      }
+      monthlyGross {
+        amount
+        currency
+      }
+      monthlyNet {
+        amount
+        currency
+      }
+    }
+  }
+}

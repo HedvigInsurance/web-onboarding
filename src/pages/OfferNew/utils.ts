@@ -1,23 +1,121 @@
 import { Market } from 'components/utils/CurrentLocale'
 import {
   ApartmentType,
+  BundledQuote,
   Campaign,
-  CompleteQuote,
-  InsuranceType,
-  Quote,
+  NorwegianHomeContentsDetails,
+  NorwegianTravelDetails,
+  QuoteBundle,
   QuoteDetails,
   SwedishApartmentQuoteDetails,
   SwedishHouseQuoteDetails,
-} from '../../data/graphql'
-import { CompleteOfferDataForMember, OfferData } from './types'
+} from 'data/graphql'
+import { parse } from 'date-fns'
+import { Address, OfferData } from 'pages/OfferNew/types'
+import { TypeOfContract } from 'utils/insuranceDomainUtils'
 
-export const isOffer = (
-  offer?: OfferData,
-): offer is CompleteOfferDataForMember =>
-  (offer && isQuote(offer.lastQuoteOfMember)) || false
+export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
+  const firstQuote = quoteBundle.quotes[0]
+  return {
+    person: {
+      firstName: firstQuote.firstName,
+      lastName: firstQuote.lastName,
+      email: firstQuote.email,
+      ssn: firstQuote.ssn,
+      birthDate: firstQuote.birthDate,
+      householdSize: getHouseholdSize(firstQuote.quoteDetails),
+      address: getAddressFromBundledQuotes(quoteBundle.quotes),
+    },
+    quotes: quoteBundle.quotes.map((bundleQuote) => {
+      return {
+        id: bundleQuote.id,
+        startDate: bundleQuote.startDate,
+        quoteDetails: bundleQuote.quoteDetails,
+        dataCollectionId: bundleQuote.dataCollectionId,
+        currentInsurer: bundleQuote.currentInsurer,
+        contractType: bundleQuote.typeOfContract,
+        perils: bundleQuote.perils,
+      }
+    }),
+    cost: quoteBundle.bundleCost,
+    startDate: getStartDateFromBundledQuotes(quoteBundle.quotes),
+  }
+}
 
-export const isQuote = (quote: Quote): quote is CompleteQuote =>
-  quote.__typename === 'CompleteQuote' || false
+export const getHouseholdSize = (quoteDetails: QuoteDetails) => {
+  if (isSwedishHouse(quoteDetails) || isSwedishApartment(quoteDetails)) {
+    return quoteDetails.householdSize
+  }
+  if (
+    isNorwegianHomeContents(quoteDetails) ||
+    isNorwegianTravel(quoteDetails)
+  ) {
+    return quoteDetails.coInsured + 1
+  }
+  return 0
+}
+
+const getAddressFromBundledQuotes = (
+  quotes: ReadonlyArray<BundledQuote>,
+): Address | null => {
+  const quotesWithAddress = quotes.filter((quote) =>
+    quoteDetailsHasAddress(quote.quoteDetails),
+  )
+  if (
+    quotesWithAddress.length > 0 &&
+    quoteDetailsHasAddress(quotesWithAddress[0].quoteDetails)
+  ) {
+    return {
+      street: quotesWithAddress[0].quoteDetails.street,
+      zipCode: quotesWithAddress[0].quoteDetails.zipCode,
+    }
+  }
+  return null
+}
+
+const getStartDateFromBundledQuotes = (
+  quotes: ReadonlyArray<BundledQuote>,
+): Date | null => {
+  const distinctStartDates = Array.from(
+    new Set(quotes.map((quote) => quote.startDate)),
+  )
+  if (distinctStartDates.length === 1 && distinctStartDates[0]) {
+    return parse(distinctStartDates[0], 'yyyy-MM-dd', new Date())
+  }
+  return null
+}
+
+export const quoteDetailsHasAddress = (
+  quoteDetails: QuoteDetails,
+): quoteDetails is
+  | SwedishApartmentQuoteDetails
+  | SwedishHouseQuoteDetails
+  | NorwegianHomeContentsDetails =>
+  [
+    'SwedishApartmentQuoteDetails',
+    'SwedishHouseQuoteDetails',
+    'NorwegianHomeContentsDetails',
+  ].includes(quoteDetails.__typename as string)
+
+export const getQuoteIds = (offerData: OfferData): string[] =>
+  offerData.quotes.map((quote) => quote.id)
+
+export const isBundle = (offerData: OfferData): boolean =>
+  offerData.quotes.length > 1
+
+export const isYouth = (offerData: OfferData): boolean =>
+  offerData.quotes.every(
+    (quote) =>
+      isNorwegianHomeContents(quote.quoteDetails) &&
+      isNorwegianTravel(quote.quoteDetails) &&
+      quote.quoteDetails.isYouth,
+  )
+
+export const hasAddress = (offerData: OfferData): boolean =>
+  !!offerData.person.address
+
+export const hasCurrentInsurer = (offerData: OfferData): boolean =>
+  offerData.quotes.filter((quote) => quote.currentInsurer).length > 0
 
 export const isStudent = (details: QuoteDetails) =>
   isSwedishApartment(details) &&
@@ -32,6 +130,16 @@ export const isSwedishHouse = (
   details: QuoteDetails,
 ): details is SwedishHouseQuoteDetails =>
   details.__typename === 'SwedishHouseQuoteDetails'
+
+export const isNorwegianHomeContents = (
+  details: QuoteDetails,
+): details is NorwegianHomeContentsDetails =>
+  details.__typename === 'NorwegianHomeContentsDetails'
+
+export const isNorwegianTravel = (
+  details: QuoteDetails,
+): details is NorwegianTravelDetails =>
+  details.__typename === 'NorwegianTravelDetails'
 
 export const isFreeMonths = (campaigns: Campaign[]) =>
   (campaigns.length > 0 &&
@@ -51,41 +159,28 @@ export const isNoDiscount = (campaigns: Campaign[]) =>
     campaigns[0].incentive.__typename === 'NoDiscount') ||
   false
 
-export const getInsuranceType = (quote: CompleteQuote): InsuranceType => {
-  if (isSwedishHouse(quote.quoteDetails)) {
-    return InsuranceType.House
-  }
-
-  if (isSwedishApartment(quote.quoteDetails)) {
-    const map = {
-      RENT: InsuranceType.Rent,
-      BRF: InsuranceType.Brf,
-      STUDENT_RENT: InsuranceType.StudentRent,
-      STUDENT_BRF: InsuranceType.StudentBrf,
-    }
-
-    if (!map[quote.quoteDetails.type]) {
-      throw new Error(`Invalid insurance type ${quote.quoteDetails.type}`)
-    }
-
-    return map[quote.quoteDetails.type]
-  }
-
-  return InsuranceType.Rent // FIXME Norway... 🇳🇴
+export const insuranceTypeTextKeys: Record<TypeOfContract, string> = {
+  [TypeOfContract.SeApartmentRent]: 'SIDEBAR_INSURANCE_TYPE_RENT',
+  [TypeOfContract.SeApartmentBrf]: 'SIDEBAR_INSURANCE_TYPE_BRF',
+  [TypeOfContract.SeApartmentStudentRent]:
+    'SIDEBAR_INSURANCE_TYPE_STUDENT_RENT',
+  [TypeOfContract.SeApartmentStudentBrf]: 'SIDEBAR_INSURANCE_TYPE_STUDENT_BRF',
+  [TypeOfContract.SeHouse]: 'SIDEBAR_INSURANCE_TYPE_HOUSE',
+  [TypeOfContract.NoHomeContentRent]: 'SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_RENT',
+  [TypeOfContract.NoHomeContentOwn]: 'SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_OWN',
+  [TypeOfContract.NoHomeContentYouthRent]:
+    'SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_RENT',
+  [TypeOfContract.NoHomeContentYouthOwn]:
+    'SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_OWN',
+  [TypeOfContract.NoTravel]: 'SIDEBAR_INSURANCE_TYPE_NO_TRAVEL',
+  [TypeOfContract.NoTravelYouth]: 'SIDEBAR_INSURANCE_TYPE_NO_TRAVEL_YOUTH',
 }
 
-export const insuranceTypeTextKeys: Record<InsuranceType, string> = {
-  [InsuranceType.Rent]: 'SIDEBAR_INSURANCE_TYPE_RENT',
-  [InsuranceType.Brf]: 'SIDEBAR_INSURANCE_TYPE_BRF',
-  [InsuranceType.StudentRent]: 'SIDEBAR_INSURANCE_TYPE_STUDENT_RENT',
-  [InsuranceType.StudentBrf]: 'SIDEBAR_INSURANCE_TYPE_STUDENT_BRF',
-  [InsuranceType.House]: 'SIDEBAR_INSURANCE_TYPE_HOUSE',
-}
 export const apartmentTypeTextKeys: Record<ApartmentType, string> = {
-  [ApartmentType.Brf]: 'CHECKOUT_INSURANCE_APARTMENT_TYPE_BRF',
   [ApartmentType.Rent]: 'CHECKOUT_INSURANCE_APARTMENT_TYPE_RENT',
-  [ApartmentType.StudentBrf]: 'CHECKOUT_INSURANCE_APARTMENT_TYPE_BRF',
+  [ApartmentType.Brf]: 'CHECKOUT_INSURANCE_APARTMENT_TYPE_BRF',
   [ApartmentType.StudentRent]: 'CHECKOUT_INSURANCE_APARTMENT_TYPE_RENT',
+  [ApartmentType.StudentBrf]: 'CHECKOUT_INSURANCE_APARTMENT_TYPE_BRF',
 }
 
 export const maskAndFormatRawSsn = (ssn: string) => {

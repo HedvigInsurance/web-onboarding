@@ -6,13 +6,12 @@ import {
 } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
-import { CompleteQuote } from 'data/graphql'
-import { useMultipleQuotes } from 'data/useMultipleQuotes'
+import { QuoteBundle, useQuoteBundleQuery } from 'data/graphql'
 import { History } from 'history'
 import { TopBar } from 'new-components/TopBar'
 import { SwitchSafetySection } from 'pages/OfferNew/SwitchSafetySection'
 import { TestimonialsSection } from 'pages/OfferNew/TestimonialsSection'
-import { getInsuranceType } from 'pages/OfferNew/utils'
+import { getOfferData } from 'pages/OfferNew/utils'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
 import { Redirect, useHistory, useRouteMatch } from 'react-router'
@@ -39,14 +38,6 @@ export const OfferNew: React.FC = () => {
   const quoteIds = storage.session.getSession()?.quoteIds ?? []
   const currentLocale = useCurrentLocale()
   const localeIsoCode = getLocaleIsoCode(currentLocale)
-  const [quotes, { loading: loadingQuotes, refetch }] = useMultipleQuotes(
-    quoteIds,
-    localeIsoCode,
-  )
-  const history = useHistory()
-  const market = useMarket()
-  const checkoutMatch = useRouteMatch('/:locale(en|no-en|no)?/new-member/sign')
-  const toggleCheckout = createToggleCheckout(history, currentLocale)
 
   if (quoteIds.length === 0) {
     return (
@@ -54,15 +45,33 @@ export const OfferNew: React.FC = () => {
     )
   }
 
-  if (!loadingQuotes && quoteIds.length !== quotes.length) {
+  const { data, loading: loadingQuoteBundle, refetch } = useQuoteBundleQuery({
+    variables: {
+      input: {
+        ids: [...quoteIds],
+      },
+      locale: localeIsoCode,
+    },
+  })
+
+  const history = useHistory()
+  const market = useMarket()
+  const checkoutMatch = useRouteMatch('/:locale(en|no-en|no)?/new-member/sign')
+  const toggleCheckout = createToggleCheckout(history, currentLocale)
+
+  if (!loadingQuoteBundle && !data?.quoteBundle) {
     throw new Error(
-      `Mismatching number of quote ids in session (${quoteIds.length}) and actual returned quotes (${quotes.length}).`,
+      `No quote returned to show offer with (quoteIds=${quoteIds}).`,
     )
   }
 
-  const firstQuote = quotes[0] as CompleteQuote
+  if (loadingQuoteBundle && !data?.quoteBundle) {
+    return null
+  }
 
-  return loadingQuotes && quotes.length === 0 ? null : (
+  const offerData = getOfferData(data?.quoteBundle! as QuoteBundle)
+
+  return (
     <Page>
       <SessionTokenGuard>
         <TopBar />
@@ -70,7 +79,7 @@ export const OfferNew: React.FC = () => {
           event={{
             name: SemanticEvents.Ecommerce.CheckoutStarted,
             properties: {
-              value: Number(firstQuote.insuranceCost.monthlyNet.amount),
+              value: Number(offerData.cost.monthlyNet.amount),
               label: 'Offer',
               ...getUtmParamsFromCookie(),
             },
@@ -78,7 +87,7 @@ export const OfferNew: React.FC = () => {
         >
           {({ track }) => (
             <Introduction
-              firstQuote={firstQuote}
+              offerData={offerData}
               refetch={refetch as () => Promise<any>}
               onCheckoutOpen={() => {
                 toggleCheckout(true)
@@ -87,18 +96,17 @@ export const OfferNew: React.FC = () => {
             />
           )}
         </TrackAction>
-        <Perils
-          insuranceType={getInsuranceType(firstQuote)}
-          perils={firstQuote.perils}
-        />
+        <Perils offerData={offerData} />
         {market === Market.Se && (
-          <Compare currentInsurer={firstQuote.currentInsurer || undefined} />
+          <Compare
+            currentInsurer={offerData.quotes[0].currentInsurer || undefined}
+          />
         )}
-        {market === Market.Se && <TestimonialsSection />}
+        ){market === Market.Se && <TestimonialsSection />}
         <SwitchSafetySection />
         <FaqSection />
         <Checkout
-          firstQuote={firstQuote}
+          offerData={offerData}
           isOpen={checkoutMatch !== null}
           onClose={() => toggleCheckout(false)}
           refetch={refetch as () => Promise<any>}

@@ -1,17 +1,15 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand/dist'
-import {
-  CompleteQuote,
-  useEditQuoteMutation,
-  useRedeemedCampaignsQuery,
-} from 'data/graphql'
+import { useEditQuoteMutation, useRedeemedCampaignsQuery } from 'data/graphql'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { Price } from '../components'
 import { StartDate } from '../Introduction/Sidebar/StartDate'
+import { OfferData } from '../types'
 import {
-  getInsuranceType,
+  getQuoteIds,
   insuranceTypeTextKeys,
+  isBundle,
   isMonthlyCostDeduction,
 } from '../utils'
 import { InsuranceSummary } from './InsuranceSummary'
@@ -69,14 +67,14 @@ const InsuranceType = styled('div')`
 `
 
 interface Props {
-  firstQuote: CompleteQuote
+  offerData: OfferData
   refetch: () => Promise<void>
   onEmailUpdate: (onCompletion: Promise<void>) => void
   onSsnUpdate: (onCompletion: Promise<void>) => void
 }
 
 export const CheckoutContent: React.FC<Props> = ({
-  firstQuote,
+  offerData,
   onEmailUpdate,
   onSsnUpdate,
   refetch,
@@ -89,6 +87,7 @@ export const CheckoutContent: React.FC<Props> = ({
   const [fakeLoading, setFakeLoading] = React.useState(false)
   const [reallyLoading, setReallyLoading] = React.useState(false)
   const [editQuote] = useEditQuoteMutation()
+  const quoteIds = getQuoteIds(offerData)
 
   return (
     <>
@@ -98,14 +97,18 @@ export const CheckoutContent: React.FC<Props> = ({
           <div>
             <InsuranceTypeLabel>{textKeys.SIDEBAR_LABEL()}</InsuranceTypeLabel>
             <InsuranceType>
-              {textKeys[insuranceTypeTextKeys[getInsuranceType(firstQuote)]]()}
+              {!isBundle(offerData) &&
+                textKeys[
+                  insuranceTypeTextKeys[offerData.quotes[0].contractType]
+                ]()}
+              {isBundle(offerData) && textKeys.SIDEBAR_INSURANCE_TYPE_BUNDLE()}
             </InsuranceType>
           </div>
           <div>
             <Price
               loading={fakeLoading || reallyLoading}
-              monthlyGross={firstQuote.insuranceCost.monthlyGross}
-              monthlyNet={firstQuote.insuranceCost.monthlyNet}
+              monthlyGross={offerData.cost.monthlyGross}
+              monthlyNet={offerData.cost.monthlyNet}
               monthlyCostDeduction={monthlyCostDeduction}
               highlightAmount
             />
@@ -113,10 +116,14 @@ export const CheckoutContent: React.FC<Props> = ({
         </Excerpt>
 
         <UserDetailsForm
-          email={firstQuote.email ?? ''}
+          email={offerData.person.email ?? ''}
           onEmailChange={(email) => {
             const onCompletion = new Promise<void>((resolve, reject) => {
-              editQuote({ variables: { input: { id: firstQuote.id, email } } })
+              Promise.all(
+                quoteIds.map((quoteId) => {
+                  editQuote({ variables: { input: { id: quoteId, email } } })
+                }),
+              )
                 .then(() => refetch())
                 .then(() => resolve())
                 .catch((e) => {
@@ -126,14 +133,18 @@ export const CheckoutContent: React.FC<Props> = ({
             })
             onEmailUpdate(onCompletion)
           }}
-          ssn={firstQuote.ssn ?? ''}
+          ssn={offerData.person.ssn ?? ''}
+          // TODO we somehow need to compare the birth date to the ssn to check so they match. In case they don't, we should warn (as they might get a different price)
           onSsnChange={(ssn) => {
             const onCompletion = new Promise<void>((resolve, reject) => {
               setFakeLoading(true)
               setReallyLoading(true)
               window.setTimeout(() => setFakeLoading(false), 1000)
-              // TODO we somehow need to compare the birth date to the ssn to check so they match. In case they don't, we should warn (as they might get a different price)
-              editQuote({ variables: { input: { id: firstQuote.id, ssn } } })
+              Promise.all(
+                quoteIds.map((quoteId) => {
+                  editQuote({ variables: { input: { id: quoteId, ssn } } })
+                }),
+              )
                 .then(() => refetch())
                 .then(() => setReallyLoading(false))
                 .then(() => resolve())
@@ -148,16 +159,10 @@ export const CheckoutContent: React.FC<Props> = ({
         />
 
         <StartDateWrapper>
-          <StartDate
-            dataCollectionId={firstQuote.dataCollectionId}
-            startDate={firstQuote.startDate}
-            offerId={firstQuote.id}
-            currentInsurer={firstQuote.currentInsurer || null}
-            refetch={refetch}
-          />
+          <StartDate offerData={offerData} refetch={refetch} />
         </StartDateWrapper>
 
-        <InsuranceSummary firstQuote={firstQuote} />
+        <InsuranceSummary offerData={offerData} />
 
         <SignSpacer />
       </Section>

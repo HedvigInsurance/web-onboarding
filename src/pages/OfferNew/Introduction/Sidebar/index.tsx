@@ -3,7 +3,6 @@ import { colorsV2, fonts } from '@hedviginsurance/brand'
 import { CookieStorage } from 'cookie-storage'
 import {
   Campaign,
-  CompleteQuote,
   useRedeemCodeMutation,
   useRedeemedCampaignsQuery,
   useRemoveDiscountCodeMutation,
@@ -11,20 +10,20 @@ import {
 import { Button, TextButton } from 'new-components/buttons'
 import {
   getDiscountText,
-  getHouseholdSize,
   isMonthlyCostDeduction,
   isNoDiscount,
   isPercentageDiscountMonths,
-  quoteDetailsHasAddress,
 } from 'pages/OfferNew/Introduction/Sidebar/utils'
+import { OfferData } from 'pages/OfferNew/types'
 import * as React from 'react'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { Price } from '../../components'
 import {
-  getInsuranceType,
+  hasAddress,
   insuranceTypeTextKeys,
+  isBundle,
   isSwedishApartment,
   isSwedishHouse,
 } from '../../utils'
@@ -35,7 +34,7 @@ import { StickyBottomSidebar } from './StickyBottomSidebar'
 
 interface Props {
   sticky: boolean
-  firstQuote: CompleteQuote
+  offerData: OfferData
   refetch: () => Promise<void>
   onCheckoutOpen: () => void
 }
@@ -86,6 +85,7 @@ const Header = styled.div`
 
 const DiscountInfo = styled.div`
   width: 100%;
+  border-radius: 8px 8px 0 0;
   min-height: 2rem;
   padding: 0.375rem 1rem;
   background: ${colorsV2.grass500};
@@ -178,7 +178,7 @@ const FooterExtraActions = styled.div`
 `
 
 export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
-  ({ sticky, firstQuote, refetch, onCheckoutOpen }, ref) => {
+  ({ sticky, offerData, refetch, onCheckoutOpen }, ref) => {
     const textKeys = useTextKeys()
     const [
       discountCodeModalIsOpen,
@@ -218,8 +218,6 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
     const discountText = getDiscountText(textKeys)(redeemedCampaigns)
 
-    const details = firstQuote.quoteDetails
-
     return (
       <>
         <ReactVisibilitySensor partialVisibility onChange={setIsSidebarVisible}>
@@ -232,33 +230,47 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                     <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
 
                     <Title>
-                      {textKeys[
-                        insuranceTypeTextKeys[getInsuranceType(firstQuote)]
-                      ]()}
+                      {!isBundle(offerData) &&
+                        textKeys[
+                          insuranceTypeTextKeys[
+                            offerData.quotes[0].contractType
+                          ]
+                        ]()}
+                      {isBundle(offerData) &&
+                        textKeys.SIDEBAR_INSURANCE_TYPE_BUNDLE()}
                     </Title>
 
                     <SummaryContent>
                       <SummaryText>
-                        <b>{`${firstQuote.firstName} ${firstQuote.lastName}`}</b>{' '}
-                        {getHouseholdSize(details) - 1 > 0 &&
+                        <b>{`${offerData.person.firstName} ${offerData.person.lastName}`}</b>{' '}
+                        {offerData.person.householdSize - 1 > 0 &&
                           textKeys.SIDEBAR_INSURED_PERSONS_SUFFIX({
-                            AMOUNT: getHouseholdSize(details) - 1,
+                            AMOUNT: offerData.person.householdSize - 1,
                           })}
                       </SummaryText>
-                      {quoteDetailsHasAddress(details) && (
+                      {hasAddress(offerData) && (
                         <SummaryText>
-                          {`${details.street}, ${formatPostalNumber(
-                            details.zipCode,
+                          {`${
+                            offerData.person.address!.street
+                          }, ${formatPostalNumber(
+                            offerData.person.address!.zipCode,
                           )}`}
                         </SummaryText>
                       )}
 
-                      {(isSwedishHouse(details) ||
-                        isSwedishApartment(details)) && (
-                        <TextButton onClick={() => setDetailsModalIsOpen(true)}>
-                          {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
-                        </TextButton>
-                      )}
+                      {offerData.quotes.map((quote) => {
+                        return (
+                          (isSwedishHouse(quote.quoteDetails) ||
+                            isSwedishApartment(quote.quoteDetails)) && (
+                            <TextButton
+                              key={quote.id}
+                              onClick={() => setDetailsModalIsOpen(true)}
+                            >
+                              {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
+                            </TextButton>
+                          )
+                        )
+                      })}
                     </SummaryContent>
                   </Summary>
 
@@ -271,17 +283,14 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                         redeemedCampaigns[0]?.incentive ?? undefined,
                       )
                     }
-                    monthlyGross={firstQuote.insuranceCost.monthlyGross}
-                    monthlyNet={firstQuote.insuranceCost.monthlyNet}
+                    monthlyGross={offerData.cost.monthlyGross}
+                    monthlyNet={offerData.cost.monthlyNet}
                   />
                 </Header>
 
                 <Body>
                   <StartDate
-                    dataCollectionId={firstQuote.dataCollectionId}
-                    startDate={firstQuote.startDate}
-                    offerId={firstQuote.id}
-                    currentInsurer={firstQuote.currentInsurer || null}
+                    offerData={offerData}
                     refetch={refetch}
                     modal={true}
                   />
@@ -332,7 +341,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 />
               </Container>
               <DetailsModal
-                quote={firstQuote}
+                offerQuote={offerData.quotes[0]}
                 refetch={refetchAll}
                 isVisible={detailsModalIsOpen}
                 onClose={() => setDetailsModalIsOpen(false)}

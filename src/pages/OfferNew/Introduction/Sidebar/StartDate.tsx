@@ -2,25 +2,23 @@ import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { externalInsuranceProviders } from '@hedviginsurance/embark'
 import {
-  CurrentInsurer,
   useExternalInsuranceDataQuery,
   useRemoveStartDateMutation,
   useStartDateMutation,
 } from 'data/graphql'
-import { format, isToday, parse } from 'date-fns'
+import { format, isToday } from 'date-fns'
 import { motion } from 'framer-motion'
 import hexToRgba from 'hex-to-rgba'
 import { DateInput } from 'new-components/DateInput'
 import { Switch } from 'new-components/Switch'
+import { OfferData } from 'pages/OfferNew/types'
+import { getQuoteIds, hasCurrentInsurer, isBundle } from 'pages/OfferNew/utils'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { CalendarIcon } from './CalendarIcon'
 
 interface Props {
-  dataCollectionId?: string | null
-  currentInsurer: CurrentInsurer | null
-  startDate: string | null
-  offerId: string
+  offerData: OfferData
   refetch: () => Promise<void>
   modal?: boolean
 }
@@ -150,25 +148,32 @@ const StyledDateInput = styled(DateInput)<{ modal: boolean }>`
   `}
 `
 
+const getExternalInsuranceData = (offerData: OfferData) => {
+  // TODO: At some point we should handle external insurance data for bundles
+  if (isBundle(offerData)) {
+    return undefined
+  }
+  const { data: externalInsuranceData } = useExternalInsuranceDataQuery({
+    variables: {
+      reference: offerData.quotes[0].dataCollectionId || '',
+    },
+  })
+  return externalInsuranceData
+}
+
 export const StartDate: React.FC<Props> = ({
-  offerId,
-  startDate,
-  currentInsurer,
-  dataCollectionId,
+  offerData,
   refetch,
   modal = false,
 }) => {
-  const { data: externalInsuranceData } = useExternalInsuranceDataQuery({
-    variables: {
-      reference: dataCollectionId || '',
-    },
-  })
+  const externalInsuranceData = getExternalInsuranceData(offerData)
+
   const getDefaultDateValue = () => {
-    if (startDate) {
-      return parse(startDate, 'yyyy-MM-dd', new Date())
+    if (offerData.startDate) {
+      return offerData.startDate
     }
 
-    if (currentInsurer) {
+    if (hasCurrentInsurer(offerData)) {
       return null
     }
 
@@ -184,7 +189,7 @@ export const StartDate: React.FC<Props> = ({
 
   React.useEffect(() => {
     setDateValue(getDefaultDateValue())
-  }, [startDate])
+  }, [offerData.startDate])
 
   const handleFail = () => {
     setShowError(true)
@@ -229,6 +234,8 @@ export const StartDate: React.FC<Props> = ({
 
   const gqlDateFormat = 'yyyy-MM-dd'
 
+  const quoteIds = getQuoteIds(offerData)
+
   const getDateInput = () => (
     <StyledDateInput
       open={datePickerOpen}
@@ -238,23 +245,33 @@ export const StartDate: React.FC<Props> = ({
         setDateValue(newDateValue)
         setShowError(false)
         if (newDateValue === null) {
-          removeStartDate({
-            variables: {
-              quoteId: offerId,
-            },
-          }).catch(handleFail)
+          Promise.all(
+            quoteIds.map((quoteId) =>
+              removeStartDate({
+                variables: {
+                  quoteId,
+                },
+              }),
+            ),
+          )
+            .then(() => refetch())
+            .catch(handleFail)
         } else {
-          setStartDate({
-            variables: {
-              quoteId: offerId,
-              date: format(newDateValue, gqlDateFormat),
-            },
-          })
+          Promise.all(
+            quoteIds.map((quoteId) =>
+              setStartDate({
+                variables: {
+                  quoteId,
+                  date: format(newDateValue, gqlDateFormat),
+                },
+              }),
+            ),
+          )
             .then(() => refetch())
             .catch(handleFail)
         }
       }}
-      hasCurrentInsurer={currentInsurer !== null}
+      hasCurrentInsurer={hasCurrentInsurer(offerData)}
       modal={modal}
     />
   )
@@ -299,39 +316,43 @@ export const StartDate: React.FC<Props> = ({
       ) : (
         getDateInput()
       )}
+      {offerData.quotes.map((quote) => {
+        return (
+          quote.currentInsurer?.switchable && (
+            <HandleSwitchingWrapper key={quote.id}>
+              <HandleSwitchingLabel>
+                {textKeys.SIDEBAR_REQUEST_CANCELLATION()}
+              </HandleSwitchingLabel>
+              <Switch
+                value={dateValue == null}
+                onChange={(newValue) => {
+                  setShowError(false)
+                  if (newValue === null) {
+                    removeStartDate({
+                      variables: {
+                        quoteId: quote.id,
+                      },
+                    })
+                      .then(() => refetch())
+                      .catch(handleFail)
+                  } else {
+                    setStartDate({
+                      variables: {
+                        quoteId: quote.id,
+                        date: format(new Date(), gqlDateFormat),
+                      },
+                    })
+                      .then(() => refetch())
+                      .catch(handleFail)
+                  }
 
-      {currentInsurer?.switchable && (
-        <HandleSwitchingWrapper>
-          <HandleSwitchingLabel>
-            {textKeys.SIDEBAR_REQUEST_CANCELLATION()}
-          </HandleSwitchingLabel>
-          <Switch
-            value={dateValue == null}
-            onChange={(newValue) => {
-              setShowError(false)
-
-              if (newValue) {
-                removeStartDate({
-                  variables: {
-                    quoteId: offerId,
-                  },
-                }).catch(handleFail)
-              } else {
-                setStartDate({
-                  variables: {
-                    quoteId: offerId,
-                    date: format(new Date(), gqlDateFormat),
-                  },
-                })
-                  .then(() => refetch())
-                  .catch(handleFail)
-              }
-
-              setDateValue(newValue ? null : new Date())
-            }}
-          />
-        </HandleSwitchingWrapper>
-      )}
+                  setDateValue(newValue ? null : new Date())
+                }}
+              />
+            </HandleSwitchingWrapper>
+          )
+        )
+      })}
     </>
   )
 }

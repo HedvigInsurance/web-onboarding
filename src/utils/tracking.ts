@@ -1,7 +1,9 @@
 import { CookieStorage } from 'cookie-storage'
 import * as md5 from 'md5'
+import { OfferData } from 'pages/OfferNew/types'
+import { isBundle, isYouth } from 'pages/OfferNew/utils'
 import { SegmentAnalyticsJs, setupTrackers } from 'quepasa'
-import { InsuranceType } from './insuranceDomainUtils'
+import { TypeOfContract } from './insuranceDomainUtils'
 
 const cookie = new CookieStorage()
 
@@ -46,20 +48,29 @@ export const { TrackAction, IdentifyAction } = setupTrackers<
   { debug: process.env.NODE_ENV === 'development' },
 )
 
-const adtractionProductMap: { [type in InsuranceType]: number } = {
-  BRF: 1417356498,
-  STUDENT_BRF: 1423041022,
-  RENT: 1417356528,
-  STUDENT_RENT: 1412601108,
-  HOUSE: 1477448913,
+const adtractionProductMap: { [type in TypeOfContract]: number } = {
+  SE_HOUSE: 1477448913,
+  SE_APARTMENT_BRF: 1417356498,
+  SE_APARTMENT_STUDENT_BRF: 1423041022,
+  SE_APARTMENT_RENT: 1417356528,
+  SE_APARTMENT_STUDENT_RENT: 1412601108,
+  NO_HOME_CONTENT_OWN: 1492623645,
+  NO_HOME_CONTENT_RENT: 1492623645,
+  NO_HOME_CONTENT_YOUTH_OWN: 1492623719,
+  NO_HOME_CONTENT_YOUTH_RENT: 1492623719,
+  NO_TRAVEL: 1492623742,
+  NO_TRAVEL_YOUTH: 1492623785,
 }
+
+const getComboAdractionProductValue = (isYouthBundle: boolean) =>
+  isYouthBundle ? 1492623841 : 1492623821
 
 export const adtraction = (
   orderValue: number,
   orderId: string,
   emailAddress: string,
   couponCode: string | null,
-  insuranceType: InsuranceType,
+  offerData: OfferData,
 ) => {
   try {
     const adt = ADT
@@ -74,7 +85,9 @@ export const adtraction = (
       adt.Tag.cpn = couponCode
     }
 
-    adt.Tag.tp = adtractionProductMap[insuranceType]
+    adt.Tag.tp = isBundle(offerData)
+      ? getComboAdractionProductValue(isYouth(offerData))
+      : adtractionProductMap[offerData.quotes[0].contractType]
     adt.Tag.doEvent()
   } catch (e) {
     ;(window as any).Sentry.captureMessage(e)

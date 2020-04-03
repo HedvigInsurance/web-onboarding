@@ -88,6 +88,11 @@ export const reactPageRoutes: ReactPageRoute[] = [
                   baseUrl: '/no/new-member/travel',
                   name: 'Web Onboarding NO - Travel',
                 }
+              case 'combo':
+                return {
+                  baseUrl: '/no/new-member/combo',
+                  name: 'Web Onboarding NO - Combo',
+                }
             }
             break
           case 'no-en':
@@ -101,6 +106,11 @@ export const reactPageRoutes: ReactPageRoute[] = [
                 return {
                   baseUrl: '/no-en/new-member/travel',
                   name: 'Web Onboarding NO - English Travel',
+                }
+              case 'combo':
+                return {
+                  baseUrl: '/no-en/new-member/combo',
+                  name: 'Web Onboarding NO - English Combo',
                 }
             }
             break

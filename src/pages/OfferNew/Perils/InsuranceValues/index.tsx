@@ -2,20 +2,21 @@ import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import color from 'color'
 import { DocumentIcon } from 'components/icons/Document'
-import { InsuranceType } from 'data/graphql'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import {
   getEUPrebuyPDFTextKey,
   getInsurancePDFTextKey,
+  getInsuranceType,
   getPrebuyPDFTextKey,
+  TypeOfContract,
 } from 'utils/insuranceDomainUtils'
 import { SubSubHeadingBlack } from '../../components'
 import { insuranceValues } from './mock'
 import { Values } from './Values'
 
 interface Props {
-  insuranceType: InsuranceType
+  contractType: TypeOfContract
 }
 
 const Wrapper = styled.div`
@@ -86,7 +87,7 @@ const Link = styled.a`
   }
 `
 
-export const InsuranceValues: React.FC<Props> = ({ insuranceType }) => {
+export const InsuranceValues: React.FC<Props> = ({ contractType }) => {
   const textKeys = useTextKeys()
 
   return (
@@ -100,11 +101,13 @@ export const InsuranceValues: React.FC<Props> = ({ insuranceType }) => {
         </TooltipWrapper>*/}
       </Header>
 
-      <Values insuranceValues={insuranceValues(insuranceType)} />
+      <Values
+        insuranceValues={insuranceValues(getInsuranceType(contractType))}
+      />
 
       <Links>
         <Link
-          href={textKeys[getInsurancePDFTextKey(insuranceType)]()}
+          href={textKeys[getInsurancePDFTextKey(contractType)]()}
           target="_blank"
         >
           <DocumentIcon />
@@ -112,7 +115,7 @@ export const InsuranceValues: React.FC<Props> = ({ insuranceType }) => {
         </Link>
 
         <Link
-          href={textKeys[getPrebuyPDFTextKey(insuranceType)]()}
+          href={textKeys[getPrebuyPDFTextKey(contractType)]()}
           target="_blank"
         >
           <DocumentIcon />
@@ -120,7 +123,7 @@ export const InsuranceValues: React.FC<Props> = ({ insuranceType }) => {
         </Link>
 
         <Link
-          href={textKeys[getEUPrebuyPDFTextKey(insuranceType)]()}
+          href={textKeys[getEUPrebuyPDFTextKey(contractType)]()}
           target="_blank"
         >
           <DocumentIcon />

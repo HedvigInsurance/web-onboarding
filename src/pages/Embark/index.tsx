@@ -327,6 +327,18 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                           quoteIds: [store.quoteId],
                         })
                       }
+                      if (
+                        store.norwegianHomeContentsQuoteId &&
+                        store.norwegianTravelQuoteId
+                      ) {
+                        storageState.session.setSession({
+                          ...storageState.session.getSession(),
+                          quoteIds: [
+                            store.norwegianHomeContentsQuoteId,
+                            store.norwegianTravelQuoteId,
+                          ],
+                        })
+                      }
                     }}
                   >
                     <Embark
