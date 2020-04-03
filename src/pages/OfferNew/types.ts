@@ -42,6 +42,9 @@ export type OfferQuote = Pick<
   | 'dataCollectionId'
   | 'currentInsurer'
   | 'perils'
+  | 'insurableLimits'
+  | 'termsAndConditions'
+  | 'insuranceTerms'
 > & {
   contractType: TypeOfContract
 }

@@ -129,6 +129,7 @@ export const Sign: React.FC<Props> = ({
         <SignStatus signStatus={signStatus} />
       </motion.div>
       {offerData.quotes.map((quote) => {
+        // TODO: Use quote.insuranceTerms instead (may have to refactor that one since we only want 2 out of 3, we'll see.
         return (
           <Disclaimer key={quote.id}>
             <MarkdownTranslation

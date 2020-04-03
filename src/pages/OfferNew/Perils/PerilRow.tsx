@@ -20,7 +20,7 @@ export const PerilRow: React.FC<Props> = ({ offerQuote }) => {
         setIsShowingPeril={setIsShowingPeril}
       />
 
-      <InsuranceValues contractType={offerQuote.contractType} />
+      <InsuranceValues offerQuote={offerQuote} />
       {offerQuote.perils.length > 0 && (
         <PerilModal
           perils={offerQuote.perils}
