@@ -33,7 +33,7 @@ export const otherCompanies: CompanyProperties[] = [
     liabilityProtection: true,
     legalProtection: true,
     drulle: false,
-    trustpilotScore: 2.1,
+    trustpilotScore: 2.2,
   },
   {
     name: 'If Hem',
@@ -110,6 +110,6 @@ export const otherCompanies: CompanyProperties[] = [
     liabilityProtection: true,
     legalProtection: true,
     drulle: false,
-    trustpilotScore: 1.6,
+    trustpilotScore: 2.1,
   },
 ]
