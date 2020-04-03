@@ -1,6 +1,7 @@
 import { createKoaServer } from '@hedviginsurance/web-survival-kit' // tslint:disable-line ordered-imports
 import * as Sentry from '@sentry/node' // tslint:disable-line ordered-imports
 import * as bodyParser from 'koa-bodyparser'
+import { handleAdyen3dsPostRedirect } from 'server/adyenMiddleware'
 import 'source-map-support/register'
 import { Logger } from 'typescript-logging'
 import {
@@ -21,7 +22,6 @@ import { forceHost, permanentRedirect } from './server/middleware/redirects'
 import { getPage } from './server/page'
 import { notNullable } from './utils/nullables'
 import { sentryConfig } from './utils/sentry'
-import { handleAdyen3dsPostRedirect } from 'server/adyenMiddleware'
 
 Sentry.init({
   ...sentryConfig(),
