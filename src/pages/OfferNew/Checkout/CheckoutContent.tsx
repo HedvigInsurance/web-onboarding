@@ -102,7 +102,7 @@ export const CheckoutContent: React.FC<Props> = ({
                   insuranceTypeTextKeys[offerData.quotes[0].contractType]
                 ]()}
               {isBundle(offerData) &&
-                textKeys.SIDEBAR_INSURANCE_TYPE_NO_COMBO()}
+                textKeys.SIDEBAR_INSURANCE_TYPE_NO_BUNDLE()}
             </InsuranceType>
           </div>
           <div>
