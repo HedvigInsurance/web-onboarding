@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { LanguageIcon } from 'components/icons/LanguageIcon'
+import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { motion } from 'framer-motion'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
@@ -46,10 +47,12 @@ const Dropdown = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  z-index: 999;
 `
 
 export const LanguagePicker = () => {
   const [isOpen, setIsOpen] = React.useState(false)
+  const market = useMarket()
 
   return (
     <Wrapper>
@@ -66,9 +69,20 @@ export const LanguagePicker = () => {
         transition={{ type: 'spring', stiffness: 400, damping: 100 }}
       >
         <Dropdown>
-          <StyledLink to="/new-member">Svenska</StyledLink>
-          <Divider />
-          <StyledLink to="/en/new-member">English</StyledLink>
+          {market === Market.Se && (
+            <>
+              <StyledLink to="/new-member">Svenska</StyledLink>
+              <Divider />
+              <StyledLink to="/en/new-member">English</StyledLink>
+            </>
+          )}
+          {market === Market.No && (
+            <>
+              <StyledLink to="/no/new-member">Norsk</StyledLink>
+              <Divider />
+              <StyledLink to="/no-en/new-member">English</StyledLink>
+            </>
+          )}
         </Dropdown>
       </motion.div>
     </Wrapper>
