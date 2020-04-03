@@ -42,18 +42,22 @@ export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
   }
 }
 
-export const getHouseholdSize = (quoteDetails: QuoteDetails) =>
-  quoteDetails.__typename === 'SwedishApartmentQuoteDetails' ||
-  quoteDetails.__typename === 'SwedishHouseQuoteDetails'
-    ? quoteDetails.householdSize
-    : quoteDetails.__typename === 'NorwegianHomeContentsDetails' ||
-      quoteDetails.__typename === 'NorwegianTravelDetails'
-    ? quoteDetails.coInsured + 1
-    : 0
+export const getHouseholdSize = (quoteDetails: QuoteDetails) => {
+  if (isSwedishHouse(quoteDetails) || isSwedishApartment(quoteDetails)) {
+    return quoteDetails.householdSize
+  }
+  if (
+    isNorwegianHomeContents(quoteDetails) ||
+    isNorwegianTravel(quoteDetails)
+  ) {
+    return quoteDetails.coInsured + 1
+  }
+  return 0
+}
 
 const getAddressFromBundledQuotes = (
   quotes: ReadonlyArray<BundledQuote>,
-): Address | undefined => {
+): Address | null => {
   const quotesWithAddress = quotes.filter((quote) =>
     quoteDetailsHasAddress(quote.quoteDetails),
   )
@@ -66,7 +70,7 @@ const getAddressFromBundledQuotes = (
       zipCode: quotesWithAddress[0].quoteDetails.zipCode,
     }
   }
-  return undefined
+  return null
 }
 
 const getStartDateFromBundledQuotes = (

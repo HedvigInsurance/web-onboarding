@@ -31,7 +31,7 @@ export type OfferPersonInfo = Pick<
   'firstName' | 'lastName' | 'email' | 'ssn' | 'birthDate'
 > & {
   householdSize: number
-  address?: Address
+  address: Address | null
 }
 
 export type OfferQuote = Pick<
