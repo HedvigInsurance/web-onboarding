@@ -31,7 +31,7 @@ export type OfferPersonInfo = Pick<
   'firstName' | 'lastName' | 'email' | 'ssn' | 'birthDate'
 > & {
   householdSize: number
-  address?: Address
+  address: Address | null
 }
 
 export type OfferQuote = Pick<
@@ -50,7 +50,7 @@ export interface OfferData {
   person: OfferPersonInfo
   quotes: ReadonlyArray<OfferQuote>
   cost: InsuranceCost
-  startDate?: Date
+  startDate: Date | null
 }
 
 export interface WithEmailForm {

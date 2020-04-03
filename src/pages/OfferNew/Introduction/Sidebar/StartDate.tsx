@@ -189,7 +189,7 @@ export const StartDate: React.FC<Props> = ({
 
   React.useEffect(() => {
     setDateValue(getDefaultDateValue())
-  }, [offerData.startDate]) // FIXME: This results in some weird behaviour where the date flips
+  }, [offerData.startDate])
 
   const handleFail = () => {
     setShowError(true)

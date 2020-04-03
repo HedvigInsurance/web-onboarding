@@ -59,13 +59,13 @@ export const OfferNew: React.FC = () => {
   const checkoutMatch = useRouteMatch('/:locale(en|no-en|no)?/new-member/sign')
   const toggleCheckout = createToggleCheckout(history, currentLocale)
 
-  if (!loadingQuoteBundle && data?.quoteBundle === undefined) {
+  if (!loadingQuoteBundle && !data?.quoteBundle) {
     throw new Error(
       `No quote returned to show offer with (quoteIds=${quoteIds}).`,
     )
   }
 
-  if (loadingQuoteBundle && data?.quoteBundle === undefined) {
+  if (loadingQuoteBundle && !data?.quoteBundle) {
     return null
   }
 

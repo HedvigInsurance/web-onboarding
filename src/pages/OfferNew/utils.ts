@@ -4,6 +4,7 @@ import {
   BundledQuote,
   Campaign,
   NorwegianHomeContentsDetails,
+  NorwegianTravelDetails,
   QuoteBundle,
   QuoteDetails,
   SwedishApartmentQuoteDetails,
@@ -41,18 +42,22 @@ export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
   }
 }
 
-export const getHouseholdSize = (quoteDetails: QuoteDetails) =>
-  quoteDetails.__typename === 'SwedishApartmentQuoteDetails' ||
-  quoteDetails.__typename === 'SwedishHouseQuoteDetails'
-    ? quoteDetails.householdSize
-    : quoteDetails.__typename === 'NorwegianHomeContentsDetails' ||
-      quoteDetails.__typename === 'NorwegianTravelDetails'
-    ? quoteDetails.coInsured + 1
-    : 0
+export const getHouseholdSize = (quoteDetails: QuoteDetails) => {
+  if (isSwedishHouse(quoteDetails) || isSwedishApartment(quoteDetails)) {
+    return quoteDetails.householdSize
+  }
+  if (
+    isNorwegianHomeContents(quoteDetails) ||
+    isNorwegianTravel(quoteDetails)
+  ) {
+    return quoteDetails.coInsured + 1
+  }
+  return 0
+}
 
 const getAddressFromBundledQuotes = (
   quotes: ReadonlyArray<BundledQuote>,
-): Address | undefined => {
+): Address | null => {
   const quotesWithAddress = quotes.filter((quote) =>
     quoteDetailsHasAddress(quote.quoteDetails),
   )
@@ -65,19 +70,19 @@ const getAddressFromBundledQuotes = (
       zipCode: quotesWithAddress[0].quoteDetails.zipCode,
     }
   }
-  return undefined
+  return null
 }
 
 const getStartDateFromBundledQuotes = (
   quotes: ReadonlyArray<BundledQuote>,
-): Date | undefined => {
+): Date | null => {
   const distinctStartDates = Array.from(
     new Set(quotes.map((quote) => quote.startDate)),
   )
   if (distinctStartDates.length === 1 && distinctStartDates[0]) {
     return parse(distinctStartDates[0], 'yyyy-MM-dd', new Date())
   }
-  return undefined
+  return null
 }
 
 export const quoteDetailsHasAddress = (
@@ -98,8 +103,16 @@ export const getQuoteIds = (offerData: OfferData): string[] =>
 export const isBundle = (offerData: OfferData): boolean =>
   offerData.quotes.length > 1
 
+export const isYouth = (offerData: OfferData): boolean =>
+  offerData.quotes.every(
+    (quote) =>
+      isNorwegianHomeContents(quote.quoteDetails) &&
+      isNorwegianTravel(quote.quoteDetails) &&
+      quote.quoteDetails.isYouth,
+  )
+
 export const hasAddress = (offerData: OfferData): boolean =>
-  offerData.person.address !== undefined
+  !!offerData.person.address
 
 export const hasCurrentInsurer = (offerData: OfferData): boolean =>
   offerData.quotes.filter((quote) => quote.currentInsurer).length > 0
@@ -117,6 +130,16 @@ export const isSwedishHouse = (
   details: QuoteDetails,
 ): details is SwedishHouseQuoteDetails =>
   details.__typename === 'SwedishHouseQuoteDetails'
+
+export const isNorwegianHomeContents = (
+  details: QuoteDetails,
+): details is NorwegianHomeContentsDetails =>
+  details.__typename === 'NorwegianHomeContentsDetails'
+
+export const isNorwegianTravel = (
+  details: QuoteDetails,
+): details is NorwegianTravelDetails =>
+  details.__typename === 'NorwegianTravelDetails'
 
 export const isFreeMonths = (campaigns: Campaign[]) =>
   (campaigns.length > 0 &&
