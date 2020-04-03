@@ -16,6 +16,7 @@ import { mount } from 'enzyme'
 import * as React from 'react'
 
 import { Locale } from 'data/graphql'
+import { act } from 'react-dom/test-utils'
 import { StaticRouter } from 'react-router-dom'
 import { apolloClient } from '../client/apolloClient'
 import {
@@ -115,8 +116,8 @@ it('creates a new session', async () => {
   )
 
   expect(wrapper.find('div').contains('abc123')).toBe(false)
-  await mockNetworkWait()
-  await mockNetworkWait(2)
+  await act(() => mockNetworkWait())
+  await act(() => mockNetworkWait(2))
   wrapper.update()
   expect(wrapper.find('div').contains('abc123')).toBe(true)
   expect(apolloClient!.subscriptionClient.close).toHaveBeenCalledWith(
