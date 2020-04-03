@@ -18,7 +18,7 @@ import {
 import gql from 'graphql-tag'
 import Helmet from 'react-helmet-async'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-import { Variation, useVariation } from 'utils/hooks/useVariation'
+import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { apolloClient } from '../../client/apolloClient'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
