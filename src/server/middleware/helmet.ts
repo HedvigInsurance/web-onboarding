@@ -80,7 +80,7 @@ export const helmet = koaHelmet({
           return `'nonce-${(response as any).cspNonce}'`
         },
       ],
-      styleSrc: ["'unsafe-inline'", "'self'"],
+      styleSrc: ["'unsafe-inline'", "'self'", 'checkoutshopper-live.adyen.com'],
       upgradeInsecureRequests: true,
       objectSrc: ["'none'"],
       reportUri:
