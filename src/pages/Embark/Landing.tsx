@@ -8,6 +8,7 @@ import { Page } from 'components/utils/Page'
 import * as React from 'react'
 import Helmet from 'react-helmet-async'
 import { TextKeyMap, useTextKeys } from 'utils/hooks/useTextKeys'
+import { useVariation, Variation } from 'utils/hooks/useVariation'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -144,6 +145,7 @@ const LandingPageContainer = styled.div`
 export const Landing: React.FC<{ language?: string }> = ({ language }) => {
   const textKeys = useTextKeys()
   const market = useMarket()
+  const variation = useVariation()
   return (
     <Page>
       <Global
@@ -158,8 +160,12 @@ export const Landing: React.FC<{ language?: string }> = ({ language }) => {
           <title>{textKeys.STARTPAGE_PAGE_TITLE()}</title>
         </Helmet>
 
-        <TopBar transparent />
-        <TopBarFiller />
+        {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
+          <>
+            <TopBar transparent />
+            <TopBarFiller />
+          </>
+        )}
 
         <Wrapper>
           <Container>
