@@ -12,10 +12,6 @@ import { OfferData } from 'pages/OfferNew/types'
 import * as React from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-import {
-  getInsurancePDFTextKey,
-  getPrebuyPDFTextKey,
-} from 'utils/insuranceDomainUtils'
 import { SignStatus } from './SignStatus'
 
 export const SignSpacer = styled('div')`

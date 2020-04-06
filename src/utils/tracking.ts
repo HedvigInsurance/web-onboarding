@@ -1,9 +1,9 @@
 import { CookieStorage } from 'cookie-storage'
+import { TypeOfContract } from 'data/graphql'
 import * as md5 from 'md5'
 import { OfferData } from 'pages/OfferNew/types'
 import { isBundle, isYouth } from 'pages/OfferNew/utils'
 import { SegmentAnalyticsJs, setupTrackers } from 'quepasa'
-import { TypeOfContract } from './insuranceDomainUtils'
 
 const cookie = new CookieStorage()
 

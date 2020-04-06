@@ -3,14 +3,14 @@ import {
   CompleteApartmentQuoteDetails,
   CompleteHouseQuoteDetails,
   CompleteQuote,
-  InsuranceCost,
-  Query,
   InsurableLimit,
+  InsurableLimitType,
+  InsuranceCost,
   InsuranceTerm,
   InsuranceTermType,
-  InsurableLimitType,
+  Query,
+  TypeOfContract,
 } from 'data/graphql'
-import { TypeOfContract } from 'utils/insuranceDomainUtils'
 
 interface OfferCore {
   redeemedCampaigns: Query['redeemedCampaigns']

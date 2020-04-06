@@ -13,10 +13,10 @@ import {
   QuoteDetails,
   SwedishApartmentQuoteDetails,
   SwedishHouseQuoteDetails,
+  TypeOfContract,
 } from 'data/graphql'
 import { parse } from 'date-fns'
 import { Address, OfferData } from 'pages/OfferNew/types'
-import { TypeOfContract } from 'utils/insuranceDomainUtils'
 
 export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
   const firstQuote = quoteBundle.quotes[0]
