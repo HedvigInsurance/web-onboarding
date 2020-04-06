@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
+import { Button } from 'components/buttons'
 import { Modal } from 'components/ModalNew'
-import { Button } from 'new-components/buttons'
 import React from 'react'
 import { useHistory } from 'react-router'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
