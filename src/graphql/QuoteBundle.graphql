@@ -39,6 +39,7 @@ query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
         label
         limit
         description
+        type
       }
       termsAndConditions(locale: $locale) {
         displayName

@@ -5,6 +5,8 @@ import {
   CompleteQuote,
   InsuranceCost,
   Query,
+  InsurableLimit,
+  InsuranceTerm,
 } from 'data/graphql'
 import { TypeOfContract } from 'utils/insuranceDomainUtils'
 
@@ -44,6 +46,8 @@ export type OfferQuote = Pick<
   | 'perils'
 > & {
   contractType: TypeOfContract
+  insurableLimits: Map<InsurableLimitType, InsurableLimit>
+  insuranceTerms: Map<InsuranceTermType, InsuranceTerm>
 }
 
 export interface OfferData {

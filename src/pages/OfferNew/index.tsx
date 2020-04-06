@@ -71,6 +71,7 @@ export const OfferNew: React.FC = () => {
     return null
   }
 
+  console.log(data?.quoteBundle)
   const offerData = getOfferData(data?.quoteBundle! as QuoteBundle)
 
   return (
