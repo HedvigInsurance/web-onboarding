@@ -31,5 +31,7 @@ module.exports = {
     'APP_STORE_ID',
     'IOS_MINIMUM_VERSION',
     'BRANCH_API_KEY',
+    'ADYEN_ORIGIN_KEY',
+    'ADYEN_ENVIRONMENT',
   ],
 }

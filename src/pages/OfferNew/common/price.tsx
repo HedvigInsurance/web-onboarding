@@ -138,7 +138,7 @@ export const Price: React.FC<{
 
         <PriceSuffix>
           <PriceUnit lightAppearance={lightAppearance}>
-            {textKeys.SIDEBAR_PRICE_SUFFIX_UNIT()}
+            {monthlyGross.currency}
           </PriceUnit>
           <PriceInterval lightAppearance={lightAppearance}>
             {textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL()}

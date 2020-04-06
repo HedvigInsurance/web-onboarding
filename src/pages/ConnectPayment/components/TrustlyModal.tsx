@@ -24,7 +24,8 @@ const Header = styled('div')({
 
 const TrustlyIframe = styled('iframe')({
   width: '100%',
-  height: 'calc(100% - 40px)',
+  height: 'calc(50vh - 45px)',
+  minHeight: '500px',
   border: 'none',
 })
 

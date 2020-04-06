@@ -1,12 +1,11 @@
 import styled from '@emotion/styled'
 import { colors, fonts } from '@hedviginsurance/brand'
-import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
-import { Button } from 'components/buttons'
-import { CurrentLocale } from 'components/utils/CurrentLocale'
-import { ActionMap, Container } from 'constate'
+import { Market, useMarket } from 'components/utils/CurrentLocale'
+import { AdyenCheckout } from 'pages/ConnectPayment/components/AdyenCheckout'
+import { TrustlyCheckout } from 'pages/ConnectPayment/components/TrustlyCheckout'
 import * as React from 'react'
-import TrustlyModal from '../components/TrustlyModal'
-import { RegisterDirectDebitMutation } from '../containers/RegisterDirectDebitMutation'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { ErrorModal } from '../components/ErrorModal'
 
 const SITEWRAPPER = 1300
 const BP = 800
@@ -103,123 +102,34 @@ const ConnectPaymentImage = styled('img')({
   },
 })
 
-interface State {
-  trustlyModalIsOpen: boolean
-  trustlyUrl: string | null
+export const ConnectTrustlyPage: React.FC = () => {
+  const textKeys = useTextKeys()
+  const market = useMarket()
+
+  return (
+    <>
+      <Background />
+      <InnerWrapper>
+        <TextColumn>
+          <Header>
+            <HeaderPart>
+              {textKeys.ONBOARDING_CONNECT_DD_PRE_HEADLINE()}
+            </HeaderPart>
+            <HeaderPart>{textKeys.ONBOARDING_CONNECT_DD_HEADLINE()}</HeaderPart>
+          </Header>
+          <ConnectText>{textKeys.ONBOARDING_CONNECT_DD_BODY()}</ConnectText>
+          {market === Market.Se && <TrustlyCheckout />}
+          {market === Market.No && <AdyenCheckout />}
+          <ErrorModal />
+        </TextColumn>
+        <ImageColumn>
+          <ConnectPaymentImage
+            src={
+              '/new-member-assets/connect-payment/connect-dd-illustration.svg'
+            }
+          />
+        </ImageColumn>
+      </InnerWrapper>
+    </>
+  )
 }
-
-interface Actions {
-  setTrustlyModalIsOpen: (trustlyModalIsOpen: boolean) => void
-  setTrustlyUrl: (trustlyUrl: string) => void
-}
-
-export const ConnectPaymentPage: React.SFC<{}> = () => (
-  <Container<State, ActionMap<State, Actions>>
-    initialState={{
-      trustlyModalIsOpen: false,
-      trustlyUrl: null,
-    }}
-    actions={{
-      setTrustlyModalIsOpen: (trustlyModalIsOpen: boolean) => ({
-        trustlyModalIsOpen,
-      }),
-      setTrustlyUrl: (trustlyUrl: string) => ({
-        trustlyUrl,
-      }),
-    }}
-  >
-    {({
-      trustlyModalIsOpen,
-      setTrustlyModalIsOpen,
-      trustlyUrl,
-      setTrustlyUrl,
-    }) => (
-      <RegisterDirectDebitMutation>
-        {(mutate) => (
-          <CurrentLocale>
-            {({ currentLocale }) => {
-              const generateTrustlyUrl = async () => {
-                const baseUrl = `${window.location.origin}/${currentLocale &&
-                  currentLocale + '/'}new-member/connect-payment`
-
-                const res = await mutate({
-                  variables: {
-                    clientContext: {
-                      successUrl: `${baseUrl}/success`,
-                      failureUrl: `${baseUrl}/fail`,
-                    },
-                  },
-                })
-
-                if (!res || !res.data) {
-                  return null
-                }
-
-                return res.data.registerDirectDebit.url
-              }
-
-              return (
-                <>
-                  <Background />
-                  <InnerWrapper>
-                    <TextColumn>
-                      <Header>
-                        <HeaderPart>
-                          <TranslationsConsumer textKey="ONBOARDING_CONNECT_DD_PRE_HEADLINE">
-                            {(t) => t}
-                          </TranslationsConsumer>
-                        </HeaderPart>
-                        <HeaderPart>
-                          <TranslationsConsumer textKey="ONBOARDING_CONNECT_DD_HEADLINE">
-                            {(t) => t}
-                          </TranslationsConsumer>
-                        </HeaderPart>
-                      </Header>
-                      <ConnectText>
-                        <TranslationsConsumer textKey="ONBOARDING_CONNECT_DD_BODY">
-                          {(t) => t}
-                        </TranslationsConsumer>
-                      </ConnectText>
-                      <Button
-                        background={colors.PURPLE}
-                        foreground={colors.WHITE}
-                        onClick={async () => {
-                          setTrustlyModalIsOpen(true)
-
-                          const url = await generateTrustlyUrl()
-
-                          if (url !== null) {
-                            setTrustlyUrl(url)
-                          }
-                        }}
-                      >
-                        <TranslationsConsumer textKey="ONBOARDING_CONNECT_DD_CTA">
-                          {(t) => t}
-                        </TranslationsConsumer>
-                      </Button>
-                    </TextColumn>
-                    <ImageColumn>
-                      <ConnectPaymentImage
-                        src={
-                          '/new-member-assets/connect-payment/connect-dd-illustration.svg'
-                        }
-                      />
-                    </ImageColumn>
-                  </InnerWrapper>
-                  <TrustlyModal
-                    isOpen={trustlyModalIsOpen}
-                    setIsOpen={(isOpen) => {
-                      setTrustlyModalIsOpen(isOpen)
-                    }}
-                    trustlyUrl={trustlyUrl}
-                    generateTrustlyUrl={generateTrustlyUrl}
-                  />
-                </>
-              )
-            }}
-          </CurrentLocale>
-        )}
-      </RegisterDirectDebitMutation>
-    )}
-  </Container>
-)
