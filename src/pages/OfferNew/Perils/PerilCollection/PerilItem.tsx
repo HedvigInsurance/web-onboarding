@@ -84,7 +84,7 @@ const Container = styled.span`
 const Title = styled('div')`
   font-size: 1rem;
   letter-spacing: -0.23px;
-  color: ${colorsV3.gray900};
+  color: ${colorsV3.black};
   font-family: ${fonts.FAVORIT};
 `
 

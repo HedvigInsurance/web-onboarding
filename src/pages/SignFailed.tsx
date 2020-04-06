@@ -1,8 +1,8 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { Button } from 'components/buttons'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { useMemberQuery } from 'data/graphql'
-import { Button } from 'new-components/buttons'
 import * as React from 'react'
 
 const ButtonLink = Button.withComponent('a')

@@ -1,6 +1,6 @@
 import { css, keyframes } from '@emotion/core'
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV2, colorsV3 } from '@hedviginsurance/brand'
 import { HedvigSymbol } from 'components/icons/HedvigSymbol'
 import * as React from 'react'
 import ReactVisibilitySensor from 'react-visibility-sensor'
@@ -15,7 +15,7 @@ import {
 
 const OuterWrapper = styled.div`
   padding: 3rem 0 5rem 0;
-  background-color: ${colorsV2.offwhite};
+  background-color: ${colorsV3.gray100};
 
   @media (min-width: 376px) {
     padding: 5rem 0 10rem 0;
@@ -24,6 +24,7 @@ const OuterWrapper = styled.div`
 
 const BodyText = styled.p`
   margin: 2rem 0;
+  color: ${colorsV3.gray700};
 `
 
 const NotificationArea = styled.div`

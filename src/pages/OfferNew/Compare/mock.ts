@@ -9,7 +9,7 @@ export const hedvigCompany: CompanyProperties = {
   liabilityProtection: true,
   legalProtection: true,
   drulle: true,
-  trustpilotScore: 4.5,
+  trustpilotScore: 4.6,
 }
 
 export const otherCompanies: CompanyProperties[] = [
@@ -33,7 +33,7 @@ export const otherCompanies: CompanyProperties[] = [
     liabilityProtection: true,
     legalProtection: true,
     drulle: false,
-    trustpilotScore: 1.2,
+    trustpilotScore: 2.2,
   },
   {
     name: 'If Hem',
@@ -44,7 +44,7 @@ export const otherCompanies: CompanyProperties[] = [
     liabilityProtection: true,
     legalProtection: true,
     drulle: false,
-    trustpilotScore: 1.6,
+    trustpilotScore: 4.3,
   },
   {
     name: 'Ica',
@@ -55,7 +55,7 @@ export const otherCompanies: CompanyProperties[] = [
     liabilityProtection: true,
     legalProtection: true,
     drulle: true,
-    trustpilotScore: 3.6,
+    trustpilotScore: 3.3,
   },
   {
     name: 'Länsförsäkringar',
@@ -66,7 +66,7 @@ export const otherCompanies: CompanyProperties[] = [
     liabilityProtection: true,
     legalProtection: true,
     drulle: false,
-    trustpilotScore: 1.6,
+    trustpilotScore: 1.5,
   },
   {
     name: 'Moderna Försäkringar Grundskydd',
@@ -77,7 +77,7 @@ export const otherCompanies: CompanyProperties[] = [
     liabilityProtection: true,
     legalProtection: true,
     drulle: false,
-    trustpilotScore: 1.9,
+    trustpilotScore: 3.5,
   },
   {
     name: 'Vardia Hemförsäkring',

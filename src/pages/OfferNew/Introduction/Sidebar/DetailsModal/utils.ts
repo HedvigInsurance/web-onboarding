@@ -1,3 +1,4 @@
+import { inputTypes, masks } from 'components/inputs'
 import {
   ApartmentType,
   EditQuoteInput,
@@ -9,7 +10,6 @@ import {
   SwedishHouseQuoteDetails,
 } from 'data/graphql'
 import { match } from 'matchly'
-import { inputTypes, masks } from 'new-components/inputs/index'
 import { OfferQuote } from 'pages/OfferNew/types'
 import * as Yup from 'yup'
 import { isStudent, isSwedishApartment, isSwedishHouse } from '../../../utils'

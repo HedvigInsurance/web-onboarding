@@ -42,7 +42,8 @@ const defaultStyle: ReactModal.Styles = {
   content: {
     width: 500,
     maxWidth: 'calc(100% - 30px)',
-    height: 400,
+    height: '50vh',
+    minHeight: '550px',
     top: '50%',
     left: '50%',
     borderRadius: 10,

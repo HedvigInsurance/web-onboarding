@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
-import { colors, fonts } from '@hedviginsurance/brand'
-import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
+import { colorsV3 } from '@hedviginsurance/brand'
 import * as React from 'react'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 
 const SITEWRAPPER = 1300
 const BP = 800
@@ -13,7 +13,7 @@ const Background = styled('div')({
   right: 0,
   bottom: 0,
   left: 0,
-  backgroundColor: colors.OFF_WHITE,
+  backgroundColor: colorsV3.gray900,
   zIndex: -1,
 })
 
@@ -67,6 +67,7 @@ const ImageColumn = styled('div')({
 
 const LogoWrapper = styled('div')({
   display: 'flex',
+  alignItems: 'center',
   [`@media (max-width: ${BP}px)`]: {
     justifyContent: 'center',
   },
@@ -95,65 +96,52 @@ const DownloadImage = styled('img')({
 const Header = styled('h1')({
   marginTop: '0px',
   marginBottom: '30px',
-  fontSize: '56px',
-  lineHeight: '60px',
+  fontSize: '3rem',
+  lineHeight: 1.2,
+  color: colorsV3.white,
   [`@media (max-width: ${MOBILE}px)`]: {
     fontSize: '44px',
     lineHeight: '52px',
   },
 })
 
-const HeaderPart = styled('span')<{ color: string }>(({ color }) => ({
-  color,
-  fontFamily: fonts.GEOMANIST,
-  fontWeight: 400,
-}))
-
 const DownloadText = styled('div')({
   marginBottom: 45,
-  color: colors.OFF_BLACK,
+  color: colorsV3.gray500,
   [`@media (max-width: ${MOBILE}px)`]: {
     marginBottom: 25,
   },
 })
 
-export const DownloadApp: React.FC = () => (
-  <>
-    <Background />
-    <InnerWrapper>
-      <TextColumn>
-        <Header>
-          <HeaderPart color={colors.DARK_YELLOW}>
-            <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_PRE_HEADLINE">
-              {(t) => t}
-            </TranslationsConsumer>
-          </HeaderPart>
-          <HeaderPart color={colors.BLACK}>
-            <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_HEADLINE">
-              {(t) => t}
-            </TranslationsConsumer>
-          </HeaderPart>
-        </Header>
-        <TextSubColumn>
-          <DownloadText>
-            <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_BODY">
-              {(t) => t}
-            </TranslationsConsumer>
-          </DownloadText>
+export const DownloadApp: React.FC = () => {
+  const textKeys = useTextKeys()
+  return (
+    <>
+      <Background />
+      <InnerWrapper>
+        <TextColumn>
+          <Header>
+            {textKeys.ONBOARDING_DOWNLOAD_PRE_HEADLINE() +
+              ' ' +
+              textKeys.ONBOARDING_DOWNLOAD_HEADLINE()}
+          </Header>
+          <TextSubColumn>
+            <DownloadText>{textKeys.ONBOARDING_DOWNLOAD_BODY()}</DownloadText>
 
-          <LogoWrapper>
-            <AppleLogo src={'/new-member-assets/download/apple-logo.svg'} />
-            <GooglePlayLogo
-              src={'/new-member-assets/download/google-play-logo.svg'}
-            />
-          </LogoWrapper>
-        </TextSubColumn>
-      </TextColumn>
-      <ImageColumn>
-        <DownloadImage
-          src={'/new-member-assets/download/balloons-welcome-illustrations.svg'}
-        />
-      </ImageColumn>
-    </InnerWrapper>
-  </>
-)
+            <LogoWrapper>
+              <AppleLogo src={'/new-member-assets/download/apple-logo.svg'} />
+              <GooglePlayLogo
+                src={'/new-member-assets/download/google-play-logo.svg'}
+              />
+            </LogoWrapper>
+          </TextSubColumn>
+        </TextColumn>
+        <ImageColumn>
+          <DownloadImage
+            src={'/new-member-assets/download/welcome-illustration.svg'}
+          />
+        </ImageColumn>
+      </InnerWrapper>
+    </>
+  )
+}

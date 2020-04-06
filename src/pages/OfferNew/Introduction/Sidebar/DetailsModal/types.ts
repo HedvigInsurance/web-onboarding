@@ -1,5 +1,5 @@
+import { CoreInputFieldProps } from 'components/inputs/index'
 import { EditApartmentInput, EditHouseInput } from 'data/graphql'
-import { CoreInputFieldProps } from 'new-components/inputs/index'
 import * as Yup from 'yup'
 
 type Unarray<T> = T extends Array<infer U> ? U : T

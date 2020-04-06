@@ -1,7 +1,6 @@
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import color from 'color'
-import { DocumentIcon } from 'components/icons/Document'
 import { Limits } from 'pages/OfferNew/Perils/InsuranceValues/Limits'
 import { OfferQuote } from 'pages/OfferNew/types'
 import * as React from 'react'
@@ -42,9 +41,9 @@ const Link = styled.a`
   display: flex;
   align-items: center;
   padding: 0.75rem 1.5rem 0.75rem 1rem;
-  background: ${colorsV2.lightgray};
-  border-radius: 1.75rem;
-  color: ${colorsV2.black};
+  background: ${colorsV3.gray300};
+  border-radius: 8px;
+  color: ${colorsV3.black};
   font-size: 1rem;
   text-decoration: none;
   margin-right: 1rem;
@@ -59,10 +58,12 @@ const Link = styled.a`
     margin-right: 0.5rem;
   }
 
-  :hover {
-    background: ${color(colorsV2.lightgray)
+  :hover,
+  :focus {
+    background: ${color(colorsV3.gray300)
       .darken(0.03)
       .toString()};
+    color: ${colorsV3.black};
   }
 
   @media (max-width: 600px) {
@@ -88,7 +89,6 @@ export const InsuranceValues: React.FC<Props> = ({ offerQuote }) => {
         {offerQuote.insuranceTerms.map((insuranceTerm, index) => {
           return (
             <Link key={index} href={insuranceTerm.url} target="_blank">
-              <DocumentIcon />
               {insuranceTerm.displayName}
             </Link>
           )

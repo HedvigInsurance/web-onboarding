@@ -1,38 +1,16 @@
 import styled from '@emotion/styled'
-import { colors } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand/dist'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
-import { EmptyTopBar } from 'components/TopBar'
+import { TopBar } from 'components/TopBar'
 import { Page } from 'components/utils/Page'
 import * as React from 'react'
 import Helmet from 'react-helmet-async'
 import { SessionTokenGuard } from '../../containers/SessionTokenGuard'
-import { StorageContainer } from '../../utils/StorageContainer'
 import { DownloadApp } from './sections/DownloadApp'
 
-const ProceedLink = styled('a')({
-  display: 'flex',
-  alignItems: 'center',
-  color: colors.PURPLE,
-  textDecoration: 'none',
-  whiteSpace: 'nowrap',
-})
-
-const RightArrowSvg: React.FC<{ className?: string }> = ({ className }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-    viewBox="0 0 408 408"
-  >
-    <polygon points="204,0 168.3,35.7 311.1,178.5 0,178.5 0,229.5 311.1,229.5 168.3,372.3 204,408 408,204" />
-  </svg>
-)
-
-const RightArrow = styled(RightArrowSvg)({
-  width: 14,
-  height: 14,
-  fill: colors.PURPLE,
-  marginLeft: 10,
-})
+const TopBarWrapper = styled('div')`
+  color: ${colorsV3.black};
+`
 
 export const Download: React.FC = () => (
   <Page>
@@ -45,27 +23,9 @@ export const Download: React.FC = () => (
             </Helmet>
           )}
         </TranslationsConsumer>
-        <StorageContainer>
-          {({ session }) => {
-            const partner = session?.getSession()?.partner
-
-            return (
-              <EmptyTopBar
-                proceedComponent={
-                  !partner && (
-                    <ProceedLink href="/">
-                      <TranslationsConsumer textKey="ONBOARDING_DOWNLOAD_PROCEED_TEXT">
-                        {(text) => text}
-                      </TranslationsConsumer>
-                      <RightArrow />
-                    </ProceedLink>
-                  )
-                }
-                partner={partner}
-              />
-            )
-          }}
-        </StorageContainer>
+        <TopBarWrapper>
+          <TopBar />
+        </TopBarWrapper>
 
         <DownloadApp />
       </>

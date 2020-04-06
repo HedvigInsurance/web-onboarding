@@ -1,5 +1,5 @@
 import { css, Global } from '@emotion/core'
-import { fonts, getCdnFontFaces } from '@hedviginsurance/brand'
+import { colorsV3, fonts, getCdnFontFaces } from '@hedviginsurance/brand'
 import * as React from 'react'
 
 export const GlobalCss: React.SFC = ({ children }) => (
@@ -10,11 +10,11 @@ export const GlobalCss: React.SFC = ({ children }) => (
 
         * {
           box-sizing: border-box;
-          font-family: ${fonts.CIRCULAR}, sans-serif;
+          font-family: ${fonts.FAVORIT}, sans-serif;
         }
 
         body {
-          font-family: ${fonts.CIRCULAR}, sans-serif;
+          font-family: ${fonts.FAVORIT}, sans-serif;
           font-size: 16px;
           line-height: 1.5;
           margin: 0;
@@ -27,22 +27,21 @@ export const GlobalCss: React.SFC = ({ children }) => (
         h4,
         h5,
         h6 {
-          font-family: ${fonts.GEOMANIST}, sans-serif;
+          font-family: ${fonts.FAVORIT}, sans-serif;
           font-kerning: none;
-        }
-
-        h1,
-        h2,
-        h3 {
-          font-weight: 600;
-        }
-
-        h4 {
-          font-weight: 500;
+          font-weight: 400;
         }
 
         img {
           max-width: 100%;
+        }
+
+        a {
+          color: ${colorsV3.purple500};
+          &:hover,
+          &:focus {
+            color: ${colorsV3.purple500};
+          }
         }
       `}
     />

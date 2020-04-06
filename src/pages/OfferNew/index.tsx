@@ -1,3 +1,7 @@
+import styled from '@emotion/styled'
+import { colorsV3 } from '@hedviginsurance/brand/dist'
+import { TopBar } from 'components/TopBar'
+import { Spinner } from 'components/utils'
 import {
   getLocaleIsoCode,
   Market,
@@ -8,13 +12,13 @@ import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import { QuoteBundle, useQuoteBundleQuery } from 'data/graphql'
 import { History } from 'history'
-import { TopBar } from 'new-components/TopBar'
 import { SwitchSafetySection } from 'pages/OfferNew/SwitchSafetySection'
 import { TestimonialsSection } from 'pages/OfferNew/TestimonialsSection'
 import { getOfferData } from 'pages/OfferNew/utils'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
 import { Redirect, useHistory, useRouteMatch } from 'react-router'
+import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useStorage } from 'utils/StorageContainer'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
 import { Checkout } from './Checkout'
@@ -22,6 +26,21 @@ import { Compare } from './Compare'
 import { FaqSection } from './FaqSection'
 import { Introduction } from './Introduction'
 import { Perils } from './Perils/index'
+
+const OuterSpinnerWrapper = styled('div')`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  background-color: ${colorsV3.gray900};
+`
+
+const InnerSpinnerWrapper = styled('div')`
+  font-size: 3rem;
+  color: ${colorsV3.gray500};
+`
 
 const createToggleCheckout = (history: History<any>, locale?: string) => (
   isOpen: boolean,
@@ -38,6 +57,7 @@ export const OfferNew: React.FC = () => {
   const quoteIds = storage.session.getSession()?.quoteIds ?? []
   const currentLocale = useCurrentLocale()
   const localeIsoCode = getLocaleIsoCode(currentLocale)
+  const variation = useVariation()
 
   if (quoteIds.length === 0) {
     return (
@@ -66,7 +86,16 @@ export const OfferNew: React.FC = () => {
   }
 
   if (loadingQuoteBundle && !data?.quoteBundle) {
-    return null
+    return (
+      <>
+        <TopBar />
+        <OuterSpinnerWrapper>
+          <InnerSpinnerWrapper>
+            <Spinner />
+          </InnerSpinnerWrapper>
+        </OuterSpinnerWrapper>
+      </>
+    )
   }
 
   const offerData = getOfferData(data?.quoteBundle! as QuoteBundle)
@@ -74,7 +103,7 @@ export const OfferNew: React.FC = () => {
   return (
     <Page>
       <SessionTokenGuard>
-        <TopBar />
+        {![Variation.IOS, Variation.ANDROID].includes(variation!) && <TopBar />}
         <TrackAction
           event={{
             name: SemanticEvents.Ecommerce.CheckoutStarted,
