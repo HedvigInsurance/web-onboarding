@@ -1,6 +1,9 @@
+import * as Sentry from '@sentry/node'
 import Axios from 'axios'
 import * as Koa from 'koa'
+import * as Router from 'koa-router'
 import { GIRAFFE_ENDPOINT } from 'server/config'
+import { WithLoggerState } from 'server/middleware/enhancers'
 import { createSession, Session } from 'utils/sessionStorage'
 import { ServerCookieStorage } from 'utils/storage/ServerCookieStorage'
 
@@ -16,12 +19,11 @@ const httpClient = Axios.create({
   },
 })
 
-// FIXME use this
-export const handleAdyen3dsPostRedirect: Koa.Middleware<object> = async (
-  ctx,
-  _next,
-) => {
-  const { MD, PaRes } = ctx.request.body as Adyen3dsDetails
+export const handleAdyen3dsPostRedirect: Koa.Middleware<
+  WithLoggerState,
+  Router.IRouterParamContext
+> = async (ctx, _next) => {
+  const { MD: md, PaRes: pares } = ctx.request.body as Adyen3dsDetails
   const session = createSession<Session>(new ServerCookieStorage(ctx))
   const Authorization = session.getSession()?.token
 
@@ -29,30 +31,56 @@ export const handleAdyen3dsPostRedirect: Koa.Middleware<object> = async (
     const result = await httpClient.post(
       GIRAFFE_ENDPOINT,
       {
-        operationName: 'SubmitAdyenRedirectionResult',
+        operationName: 'SubmitAdyenRedirection',
         query: `
-          mutation SubmitAdyenRedirectionResult($MD: String!, $PaRes: String!) {
-            submitAdyenRedirectionResult(MD: $MD, PaRes: $PaRes) {
+          mutation SubmitAdyenRedirection($md: String!, $pares: String!) {
+            submitAdyenRedirection(req: { md: $md, pares: $pares }) {
               resultCode
             }
           }
         `,
         variables: {
-          MD,
-          PaRes,
+          md,
+          pares,
         },
       },
       {
         headers: { Authorization },
       },
     )
-    ctx.body = JSON.stringify(
-      { status: result.status, data: result.data },
-      null,
-      2,
+
+    if (result.status !== 200) {
+      throw new Error(
+        `Expected status code from Graphql endpoint to be 200 when submitting adyen redirection, but was really ${result.status}`,
+      )
+    }
+
+    if (
+      ['Authorised', 'Pending'].includes(
+        result.data?.data?.submitAdyenRedirection?.resultCode,
+      )
+    ) {
+      ctx.redirect(
+        ctx.params.locale
+          ? `/${ctx.params.locale}/new-member/download`
+          : '/new-member/connect-download',
+      )
+      ctx.body = 'Loading'
+      return
+    }
+
+    const message = `Received error adyen resultCode "${result.data?.data?.submitAdyenRedirection?.resultCode}" when submitting adyen redirection`
+    Sentry.captureException(new Error(message))
+    ctx.state.getLogger('ayden').error(message)
+    ctx.redirect(
+      ctx.params.locale
+        ? `/${ctx.params.locale}/new-member/connect-payment?error=yes` // todo handle client side
+        : '/new-member/connect-payment?error=yes',
     )
+    ctx.body = 'Loading'
   } catch (e) {
-    // TODO how to handle?
+    Sentry.captureException(e)
+    ctx.state.getLogger('ayden').error(e.message)
     throw e
   }
 }

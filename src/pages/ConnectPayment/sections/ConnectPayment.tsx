@@ -5,6 +5,7 @@ import { AdyenCheckout } from 'pages/ConnectPayment/components/AdyenCheckout'
 import { TrustlyCheckout } from 'pages/ConnectPayment/components/TrustlyCheckout'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { ErrorModal } from '../components/ErrorModal'
 
 const SITEWRAPPER = 1300
 const BP = 800
@@ -119,6 +120,7 @@ export const ConnectTrustlyPage: React.FC = () => {
           <ConnectText>{textKeys.ONBOARDING_CONNECT_DD_BODY()}</ConnectText>
           {market === Market.Se && <TrustlyCheckout />}
           {market === Market.No && <AdyenCheckout />}
+          <ErrorModal />
         </TextColumn>
         <ImageColumn>
           <ConnectPaymentImage
