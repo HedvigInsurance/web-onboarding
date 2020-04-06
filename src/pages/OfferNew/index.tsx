@@ -15,6 +15,7 @@ import { getOfferData } from 'pages/OfferNew/utils'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
 import { Redirect, useHistory, useRouteMatch } from 'react-router'
+import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useStorage } from 'utils/StorageContainer'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
 import { Checkout } from './Checkout'
@@ -38,6 +39,7 @@ export const OfferNew: React.FC = () => {
   const quoteIds = storage.session.getSession()?.quoteIds ?? []
   const currentLocale = useCurrentLocale()
   const localeIsoCode = getLocaleIsoCode(currentLocale)
+  const variation = useVariation()
 
   if (quoteIds.length === 0) {
     return (
@@ -74,7 +76,7 @@ export const OfferNew: React.FC = () => {
   return (
     <Page>
       <SessionTokenGuard>
-        <TopBar />
+        {![Variation.IOS, Variation.ANDROID].includes(variation!) && <TopBar />}
         <TrackAction
           event={{
             name: SemanticEvents.Ecommerce.CheckoutStarted,

@@ -18,6 +18,7 @@ import {
 import gql from 'graphql-tag'
 import Helmet from 'react-helmet-async'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { apolloClient } from '../../client/apolloClient'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
@@ -115,6 +116,8 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
     }
   }, [currentPassage.id])
 
+  const variation = useVariation()
+
   return (
     <PassageContainer>
       <motion.div
@@ -122,22 +125,24 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
         animate={{ opacity: 1 }}
         transition={{ ease: 'easeOut', duration: 1 }}
       >
-        <StorageContainer>
-          {({ session }) => (
-            <Header
-              partnerName={
-                (session &&
-                  session.getSession() &&
-                  session.getSession()!.partner) ||
-                null
-              }
-              passage={currentPassage}
-              storyData={state.data}
-              startPageLink={props.startPageLink}
-              customTrailingContent={<LanguagePicker />}
-            />
-          )}
-        </StorageContainer>
+        {variation !== Variation.ANDROID && variation !== Variation.IOS && (
+          <StorageContainer>
+            {({ session }) => (
+              <Header
+                partnerName={
+                  (session &&
+                    session.getSession() &&
+                    session.getSession()!.partner) ||
+                  null
+                }
+                passage={currentPassage}
+                storyData={state.data}
+                startPageLink={props.startPageLink}
+                customTrailingContent={<LanguagePicker />}
+              />
+            )}
+          </StorageContainer>
+        )}
       </motion.div>
       <Passage
         canGoBack={state.history.length > 1}
