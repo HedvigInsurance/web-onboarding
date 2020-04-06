@@ -7979,7 +7979,7 @@ export type QuoteBundleQuery = { __typename?: 'Query' } & {
           insurableLimits: Array<
             { __typename?: 'InsurableLimit' } & Pick<
               InsurableLimit,
-              'label' | 'limit' | 'description'
+              'label' | 'limit' | 'description' | 'type'
             >
           >
           termsAndConditions: { __typename?: 'InsuranceTerm' } & Pick<
@@ -7989,7 +7989,7 @@ export type QuoteBundleQuery = { __typename?: 'Query' } & {
           insuranceTerms: Array<
             { __typename?: 'InsuranceTerm' } & Pick<
               InsuranceTerm,
-              'displayName' | 'url'
+              'displayName' | 'url' | 'type'
             >
           >
           quoteDetails:
@@ -8968,6 +8968,7 @@ export const QuoteBundleDocument = gql`
           label
           limit
           description
+          type
         }
         termsAndConditions(locale: $locale) {
           displayName
@@ -8976,6 +8977,7 @@ export const QuoteBundleDocument = gql`
         insuranceTerms(locale: $locale) {
           displayName
           url
+          type
         }
         quoteDetails {
           ... on SwedishApartmentQuoteDetails {

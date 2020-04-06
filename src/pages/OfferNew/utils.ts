@@ -3,6 +3,10 @@ import {
   ApartmentType,
   BundledQuote,
   Campaign,
+  InsurableLimit,
+  InsurableLimitType,
+  InsuranceTerm,
+  InsuranceTermType,
   NorwegianHomeContentsDetails,
   NorwegianTravelDetails,
   QuoteBundle,
@@ -40,13 +44,13 @@ export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
             insurableLimit.type,
             insurableLimit,
           ]),
-        ),
+        ) as ReadonlyMap<InsurableLimitType, InsurableLimit>,
         insuranceTerms: new Map(
           bundleQuote.insuranceTerms.map((insuranceTerm) => [
             insuranceTerm.type,
             insuranceTerm,
           ]),
-        ),
+        ) as ReadonlyMap<InsuranceTermType, InsuranceTerm>,
       }
     }),
     cost: quoteBundle.bundleCost,

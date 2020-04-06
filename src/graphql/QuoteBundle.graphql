@@ -48,6 +48,7 @@ query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
       insuranceTerms(locale: $locale) {
         displayName
         url
+        type
       }
       quoteDetails {
         ... on SwedishApartmentQuoteDetails {

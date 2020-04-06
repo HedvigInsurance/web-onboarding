@@ -1,12 +1,11 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { Tooltip } from 'components/Tooltip'
-import { InsurableLimit } from 'data/graphql'
+import { InsurableLimit, InsurableLimitType } from 'data/graphql'
 import * as React from 'react'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
 
 interface Props {
-  insurableLimits: ReadonlyArray<InsurableLimit>
+  insurableLimits: ReadonlyMap<InsurableLimitType, InsurableLimit>
 }
 
 const Wrapper = styled.div`
@@ -73,26 +72,24 @@ const TooltipWrapper = styled.div`
 `
 
 export const Limits: React.FC<Props> = ({ insurableLimits }) => {
-  const textKeys = useTextKeys()
   return (
     <Wrapper>
-      {Object.entries(insurableLimits).map(([key, insuranceValue]) => {
-        return (
-          <Container key={key}>
-            <TextContainer>
-              <Label>{textKeys[insuranceValue.label]()}</Label>
-              <Value>{textKeys[insuranceValue.limit]()}</Value>
-            </TextContainer>
+      {[...insurableLimits.entries()].map(
+        ([insuranceLimitType, insurableLimit]) => {
+          return (
+            <Container key={insuranceLimitType}>
+              <TextContainer>
+                <Label>{insurableLimit.label}</Label>
+                <Value>{insurableLimit.limit}</Value>
+              </TextContainer>
 
-            <TooltipWrapper>
-              <Tooltip
-                size="lg"
-                body={textKeys[insuranceValue.description]()}
-              />
-            </TooltipWrapper>
-          </Container>
-        )
-      })}
+              <TooltipWrapper>
+                <Tooltip size="lg" body={insurableLimit.description} />
+              </TooltipWrapper>
+            </Container>
+          )
+        },
+      )}
     </Wrapper>
   )
 }
