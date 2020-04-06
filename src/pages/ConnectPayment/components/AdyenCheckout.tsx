@@ -135,12 +135,6 @@ const createAdyenCheckout = ({
     environment: (window as any).ADYEN_ENVIRONMENT,
     originKey: (window as any).ADYEN_ORIGIN_KEY,
     paymentMethodsResponse: JSON.parse(paymentMethodsResponse),
-    paymentMethodsConfiguration: {
-      card: {
-        hasHolderName: true,
-        holderNameRequired: true,
-      },
-    },
     enableStoreDetails: true,
     returnUrl,
     // onChange: console.log,

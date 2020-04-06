@@ -11,6 +11,10 @@ export const setRequestUuidMiddleware: Middleware = async (ctx, next) => {
   await next()
 }
 
+export interface WithLoggerState {
+  getLogger: (name: string) => Logger
+}
+
 export const setLoggerMiddleware: Middleware = async (ctx, next) => {
   ctx.state.getLogger = (name: string) =>
     loggerFactory.getLogger(
