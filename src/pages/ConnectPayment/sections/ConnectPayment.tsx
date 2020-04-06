@@ -1,10 +1,11 @@
 import styled from '@emotion/styled'
-import { colors, fonts } from '@hedviginsurance/brand'
+import { colorsV3, fonts } from '@hedviginsurance/brand'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { AdyenCheckout } from 'pages/ConnectPayment/components/AdyenCheckout'
 import { TrustlyCheckout } from 'pages/ConnectPayment/components/TrustlyCheckout'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { ErrorModal } from '../components/ErrorModal'
 
 const SITEWRAPPER = 1300
 const BP = 800
@@ -16,7 +17,7 @@ const Background = styled('div')({
   right: 0,
   bottom: 0,
   left: 0,
-  backgroundColor: colors.OFF_WHITE,
+  backgroundColor: colorsV3.gray900,
   zIndex: -1,
 })
 
@@ -30,6 +31,7 @@ const InnerWrapper = styled('div')({
   paddingLeft: '10px',
   paddingRight: '10px',
   paddingTop: '25vh',
+  color: colorsV3.gray500,
   [`@media (max-width: ${BP}px)`]: {
     maxWidth: '100%',
     flexDirection: 'column',
@@ -66,6 +68,7 @@ const Header = styled('h1')({
   marginBottom: '30px',
   fontSize: '56px',
   lineHeight: '60px',
+  color: colorsV3.white,
   [`@media (max-width: ${MOBILE}px)`]: {
     fontSize: '44px',
     lineHeight: '52px',
@@ -81,7 +84,6 @@ const HeaderPart = styled('span')({
 const ConnectText = styled('div')({
   width: '65%',
   marginBottom: '45px',
-  color: colors.OFF_BLACK,
   [`@media (max-width: ${BP}px)`]: {
     width: '100%',
   },
@@ -119,11 +121,12 @@ export const ConnectTrustlyPage: React.FC = () => {
           <ConnectText>{textKeys.ONBOARDING_CONNECT_DD_BODY()}</ConnectText>
           {market === Market.Se && <TrustlyCheckout />}
           {market === Market.No && <AdyenCheckout />}
+          <ErrorModal />
         </TextColumn>
         <ImageColumn>
           <ConnectPaymentImage
             src={
-              '/new-member-assets/connect-payment/connect-dd-illustration.svg'
+              '/new-member-assets/connect-payment/connect-payments-illustration.svg'
             }
           />
         </ImageColumn>
