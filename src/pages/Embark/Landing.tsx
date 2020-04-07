@@ -218,9 +218,10 @@ const LandingPageCardsNo: React.FC<{
   textKeys: TextKeyMap
   language: string | undefined
 }> = ({ textKeys, language }) => {
+  // TODO: Uncomment combo card when it's supported design-wise on the offer page
   return (
     <>
-      <Card>
+      {/*<Card>
         <Headline>{textKeys.STARTPAGE_COMBO_HEADLINE()}</Headline>
         <Paragraph>{textKeys.STARTPAGE_COMBO_BODY()}</Paragraph>
         <ProceedButton
@@ -229,7 +230,7 @@ const LandingPageCardsNo: React.FC<{
         >
           {textKeys.STARTPAGE_COMBO_BUTTON()}
         </ProceedButton>
-      </Card>
+      </Card>*/}
       <Card>
         <Headline>{textKeys.STARTPAGE_CONTENTS_HEADLINE()}</Headline>
         <Paragraph>{textKeys.STARTPAGE_CONTENTS_BODY()}</Paragraph>
