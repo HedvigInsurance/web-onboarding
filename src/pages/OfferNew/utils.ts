@@ -127,6 +127,20 @@ export const isYouth = (offerData: OfferData): boolean =>
       quote.quoteDetails.isYouth,
   )
 
+export const isSwedish = (offerData: OfferData): boolean =>
+  offerData.quotes.every(
+    (quote) =>
+      isSwedishApartment(quote.quoteDetails) ||
+      isSwedishHouse(quote.quoteDetails),
+  )
+
+export const isNorwegian = (offerData: OfferData): boolean =>
+  offerData.quotes.every(
+    (quote) =>
+      isNorwegianHomeContents(quote.quoteDetails) ||
+      isNorwegianTravel(quote.quoteDetails),
+  )
+
 export const hasAddress = (offerData: OfferData): boolean =>
   !!offerData.person.address
 
