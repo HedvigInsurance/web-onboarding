@@ -1,7 +1,5 @@
-import styled from '@emotion/styled'
-import { colorsV3 } from '@hedviginsurance/brand/dist'
+import { LoadingPage } from 'components/LoadingPage'
 import { TopBar } from 'components/TopBar'
-import { Spinner } from 'components/utils'
 import {
   getLocaleIsoCode,
   Market,
@@ -26,21 +24,6 @@ import { Compare } from './Compare'
 import { FaqSection } from './FaqSection'
 import { Introduction } from './Introduction'
 import { Perils } from './Perils/index'
-
-const OuterSpinnerWrapper = styled('div')`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100%;
-  background-color: ${colorsV3.gray900};
-`
-
-const InnerSpinnerWrapper = styled('div')`
-  font-size: 3rem;
-  color: ${colorsV3.gray500};
-`
 
 const createToggleCheckout = (history: History<any>, locale?: string) => (
   isOpen: boolean,
@@ -86,16 +69,7 @@ export const OfferNew: React.FC = () => {
   }
 
   if (loadingQuoteBundle && !data?.quoteBundle) {
-    return (
-      <>
-        <TopBar />
-        <OuterSpinnerWrapper>
-          <InnerSpinnerWrapper>
-            <Spinner />
-          </InnerSpinnerWrapper>
-        </OuterSpinnerWrapper>
-      </>
-    )
+    return <LoadingPage />
   }
 
   const offerData = getOfferData(data?.quoteBundle! as QuoteBundle)

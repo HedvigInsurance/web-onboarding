@@ -1,4 +1,3 @@
-import { SignFailed } from 'pages/SignFailed'
 import { SignLoading } from 'pages/SignLoading'
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
@@ -64,11 +63,6 @@ export const reactPageRoutes: ReactPageRoute[] = [
   {
     path: LOCALE_PATH_PATTERN + '/new-member/sign/fail',
     Component: SignLoading,
-    exact: true,
-  },
-  {
-    path: LOCALE_PATH_PATTERN + '/new-member/sign/fatal',
-    Component: SignFailed,
     exact: true,
   },
   {

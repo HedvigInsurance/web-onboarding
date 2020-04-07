@@ -119,9 +119,9 @@ export const CheckoutContent: React.FC<Props> = ({
           onEmailChange={(email) => {
             const onCompletion = new Promise<void>((resolve, reject) => {
               Promise.all(
-                quoteIds.map((quoteId) => {
-                  editQuote({ variables: { input: { id: quoteId, email } } })
-                }),
+                quoteIds.map((quoteId) =>
+                  editQuote({ variables: { input: { id: quoteId, email } } }),
+                ),
               )
                 .then(() => refetch())
                 .then(() => resolve())
@@ -140,9 +140,9 @@ export const CheckoutContent: React.FC<Props> = ({
               setReallyLoading(true)
               window.setTimeout(() => setFakeLoading(false), 1000)
               Promise.all(
-                quoteIds.map((quoteId) => {
-                  editQuote({ variables: { input: { id: quoteId, ssn } } })
-                }),
+                quoteIds.map((quoteId) =>
+                  editQuote({ variables: { input: { id: quoteId, ssn } } }),
+                ),
               )
                 .then(() => refetch())
                 .then(() => setReallyLoading(false))
