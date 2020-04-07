@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
+import { Tooltip } from 'components/Tooltip'
 import hexToRgba from 'hex-to-rgba'
-import { Tooltip } from 'new-components/Tooltip'
 import { otherCompanies } from 'pages/OfferNew/Compare/mock'
 import * as React from 'react'
 import { useMediaQuery } from 'react-responsive'

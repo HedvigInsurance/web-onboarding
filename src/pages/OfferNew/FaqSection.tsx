@@ -1,6 +1,6 @@
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import {
   getLocaleIsoCode,
   useCurrentLocale,
@@ -18,18 +18,11 @@ import {
   PreHeading,
 } from './components'
 
-const BlobSvg = styled.svg`
-  width: 100%;
-  height: 2rem;
-  fill: ${colorsV2.black};
-  transform: rotateY(180deg);
-`
-
 const SectionWrapper = styled.div`
   padding: 8rem 2rem 12rem 2rem;
   margin-top: -10px;
-  background: ${colorsV2.black};
-  color: ${colorsV2.white};
+  background: ${colorsV3.gray900};
+  color: ${colorsV3.white};
 
   @media (max-width: 420px) {
     padding-left: 1rem;
@@ -115,7 +108,7 @@ const ExpanderIcon = styled.svg<Openable>`
   flex-shrink: 0;
   width: 0.8rem;
   height: 0.8rem;
-  fill: ${colorsV2.white};
+  fill: ${colorsV3.white};
 `
 
 interface AccordionProps {
@@ -154,9 +147,6 @@ export const FaqSection: React.FC = () => {
 
   return (
     <>
-      <BlobSvg viewBox="0 0 375 44" preserveAspectRatio="none">
-        <path d="M.032 44A9.744 9.744 0 0 1 0 43.207c0-24.246 54 2.987 151-30.379s224 6.133 224 30.38c0 .263-.01.527-.031.792H.032z" />
-      </BlobSvg>
       <SectionWrapper>
         <Container>
           <Column>

@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
+import { RawInputField } from 'components/inputs'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
-import { RawInputField } from 'new-components/inputs'
 import { WithEmailForm, WithSsnForm } from 'pages/OfferNew/types'
 import { createSsnValidator } from 'pages/OfferNew/utils'
 import React from 'react'

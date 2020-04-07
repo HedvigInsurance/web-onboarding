@@ -1,4 +1,5 @@
 import { ApolloProvider } from '@apollo/react-common'
+import { PageTracker } from 'containers/PageTracker'
 import { CookieStorage } from 'cookie-storage'
 import { isMobile } from 'is-mobile'
 import * as React from 'react'
@@ -8,7 +9,6 @@ import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter } from 'react-router-dom'
 import { HotApp } from './App'
 import { apolloClient } from './client/apolloClient'
-import { PageTracker } from './components/PageTracker'
 import { MobileContext } from './utils/mobileContext'
 import {
   createSession,

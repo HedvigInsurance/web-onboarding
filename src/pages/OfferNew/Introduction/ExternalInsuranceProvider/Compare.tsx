@@ -104,7 +104,7 @@ export const Compare: React.FC<Props> = ({ insuranceDataCollection, cost }) => {
       <CompareBox>
         <CompareBoxTitle>
           <CompareBoxName>
-            <HedvigLogo />
+            <HedvigLogo width={94} />
           </CompareBoxName>
           <Price
             monthlyGross={cost.monthlyGross}

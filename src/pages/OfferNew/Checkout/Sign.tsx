@@ -1,10 +1,10 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand/dist'
 import { MarkdownTranslation } from '@hedviginsurance/textkeyfy'
+import { Button } from 'components/buttons'
+import { Spinner } from 'components/utils'
 import { SignStatus as GraphQLSignStatus } from 'data/graphql'
 import { motion } from 'framer-motion'
-import { Button } from 'new-components/buttons'
-import { Spinner } from 'new-components/utils'
 import { OfferData } from 'pages/OfferNew/types'
 import * as React from 'react'
 import { useMediaQuery } from 'react-responsive'
@@ -40,7 +40,10 @@ const Wrapper = styled('div')`
 const ButtonWrapper = styled('div')`
   display: flex;
   width: 100%;
-  justify-content: center;
+
+  @media (max-width: 600px) {
+    justify-content: center;
+  }
 `
 
 const SpinnerWrapper = styled(motion.div)`
@@ -58,7 +61,7 @@ const Disclaimer = styled('p')`
   line-height: 1.5;
   padding: 0 0.5rem;
 
-  @media (max-width: 40rem) {
+  @media (max-width: 600rem) {
     text-align: center;
   }
 `

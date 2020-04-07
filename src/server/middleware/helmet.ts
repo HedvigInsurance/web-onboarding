@@ -49,6 +49,7 @@ const defaultSrc = [
   'trustly.com',
   '*.trustly.com',
   'cdn.mxpnl.com',
+  'https://cdn.heapanalytics.com',
   'https://api-js.mixpanel.com',
   'checkoutshopper-live.adyen.com',
   'checkoutshopper-test.adyen.com',
@@ -61,25 +62,17 @@ export const helmet = koaHelmet({
     directives: {
       defaultSrc,
       scriptSrc: [
-        ...defaultSrc,
         "'unsafe-eval'",
         "'unsafe-inline'",
-        'browser.sentry-cdn.com',
-        'cdn.segment.com',
-        'https://cdn.heapanalytics.com',
+        'https://browser.sentry-cdn.com',
+        ...defaultSrc,
         // tslint:disable-next-line variable-name
         (_request, response) => {
           ;(response as any).cspNonce = uuidV4()
           return `'nonce-${(response as any).cspNonce}'`
         },
       ],
-      imgSrc: [...defaultSrc, 'data:'],
-      connectSrc: [
-        ...defaultSrc,
-        'https://api.segment.io',
-        'https://sentry.io',
-      ],
-      styleSrc: [...defaultSrc, "'unsafe-inline'"],
+      styleSrc: ["'unsafe-inline'", "'self'", 'checkoutshopper-live.adyen.com'],
       upgradeInsecureRequests: true,
       objectSrc: ["'none'"],
       reportUri:

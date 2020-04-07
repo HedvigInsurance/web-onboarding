@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand/dist'
-import { Spinner } from 'new-components/utils'
+import { Spinner } from 'components/utils'
 import React from 'react'
 
 const SpinnerWrapper = styled('div')`
