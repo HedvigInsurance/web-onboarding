@@ -6,9 +6,9 @@ import 'source-map-support/register'
 import { Logger } from 'typescript-logging'
 import { reactPageRoutes, serverSideRedirects } from './routes'
 import {
+  ASSET_FALLBACK_PROXY,
   GIRAFFE_ENDPOINT,
   GIRAFFE_WS_ENDPOINT,
-  ASSET_FALLBACK_PROXY,
 } from './server/config'
 import { appLogger } from './server/logging'
 import {
@@ -46,7 +46,6 @@ const server = createKoaServer({
   assetLocation: __dirname + '/assets',
 })
 
-console.log(ASSET_FALLBACK_PROXY)
 if (ASSET_FALLBACK_PROXY) {
   server.app.use(
     proxy('/new-member-assets', {
@@ -118,7 +117,7 @@ server.router.post('/new-member/_report-csp-violation', (ctx) => {
 })
 
 reactPageRoutes.forEach((route) => {
-  server.router.get(route.path, getPage)
+  server.router.get(route.serverPath ?? route.path, getPage)
 })
 
 server.app.listen(getPort(), () => {
