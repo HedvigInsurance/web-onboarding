@@ -3954,6 +3954,8 @@ export enum InsuranceTermType {
   TermsAndConditions = 'TERMS_AND_CONDITIONS',
   PreSaleInfo = 'PRE_SALE_INFO',
   PreSaleInfoEuStandard = 'PRE_SALE_INFO_EU_STANDARD',
+  InsuranceLetter = 'INSURANCE_LETTER',
+  GeneralTerms = 'GENERAL_TERMS',
 }
 
 export enum InsuranceType {
@@ -8097,6 +8099,168 @@ export type QuoteBundleQuery = { __typename?: 'Query' } & {
   }
 }
 
+export type QuoteBundleQuery = { __typename?: 'Query' } & {
+  quoteBundle: { __typename?: 'QuoteBundle' } & {
+    quotes: Array<
+      { __typename?: 'BundledQuote' } & Pick<
+        BundledQuote,
+        | 'id'
+        | 'dataCollectionId'
+        | 'firstName'
+        | 'lastName'
+        | 'ssn'
+        | 'birthDate'
+        | 'startDate'
+        | 'expiresAt'
+        | 'email'
+        | 'typeOfContract'
+      > & {
+          currentInsurer: Maybe<
+            { __typename?: 'CurrentInsurer' } & Pick<
+              CurrentInsurer,
+              'id' | 'displayName' | 'switchable'
+            >
+          >
+          price: { __typename?: 'MonetaryAmountV2' } & Pick<
+            MonetaryAmountV2,
+            'amount' | 'currency'
+          >
+          perils: Array<
+            { __typename?: 'PerilV2' } & Pick<
+              PerilV2,
+              'title' | 'description' | 'covered' | 'exceptions' | 'info'
+            > & {
+                icon: { __typename?: 'Icon' } & {
+                  variants: { __typename?: 'IconVariants' } & {
+                    light: { __typename?: 'IconVariant' } & Pick<
+                      IconVariant,
+                      'svgUrl'
+                    >
+                  }
+                }
+              }
+          >
+          insurableLimits: Array<
+            { __typename?: 'InsurableLimit' } & Pick<
+              InsurableLimit,
+              'label' | 'limit' | 'description'
+            >
+          >
+          termsAndConditions: { __typename?: 'InsuranceTerm' } & Pick<
+            InsuranceTerm,
+            'displayName' | 'url'
+          >
+          insuranceTerms: Array<
+            { __typename?: 'InsuranceTerm' } & Pick<
+              InsuranceTerm,
+              'displayName' | 'url'
+            >
+          >
+          quoteDetails:
+            | ({ __typename?: 'SwedishApartmentQuoteDetails' } & Pick<
+                SwedishApartmentQuoteDetails,
+                'street' | 'zipCode' | 'householdSize' | 'livingSpace' | 'type'
+              >)
+            | ({ __typename?: 'SwedishHouseQuoteDetails' } & Pick<
+                SwedishHouseQuoteDetails,
+                | 'street'
+                | 'zipCode'
+                | 'householdSize'
+                | 'livingSpace'
+                | 'ancillarySpace'
+                | 'numberOfBathrooms'
+                | 'yearOfConstruction'
+                | 'isSubleted'
+              > & {
+                  extraBuildings: Array<
+                    | ({ __typename?: 'ExtraBuildingGarage' } & Pick<
+                        ExtraBuildingGarage,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingCarport' } & Pick<
+                        ExtraBuildingCarport,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingShed' } & Pick<
+                        ExtraBuildingShed,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingStorehouse' } & Pick<
+                        ExtraBuildingStorehouse,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingFriggebod' } & Pick<
+                        ExtraBuildingFriggebod,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingAttefall' } & Pick<
+                        ExtraBuildingAttefall,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingOuthouse' } & Pick<
+                        ExtraBuildingOuthouse,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingGuesthouse' } & Pick<
+                        ExtraBuildingGuesthouse,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingGazebo' } & Pick<
+                        ExtraBuildingGazebo,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingGreenhouse' } & Pick<
+                        ExtraBuildingGreenhouse,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingSauna' } & Pick<
+                        ExtraBuildingSauna,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingBarn' } & Pick<
+                        ExtraBuildingBarn,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingBoathouse' } & Pick<
+                        ExtraBuildingBoathouse,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                    | ({ __typename?: 'ExtraBuildingOther' } & Pick<
+                        ExtraBuildingOther,
+                        'area' | 'displayName' | 'hasWaterConnected'
+                      >)
+                  >
+                })
+            | ({ __typename?: 'NorwegianHomeContentsDetails' } & Pick<
+                NorwegianHomeContentsDetails,
+                'coInsured' | 'livingSpace' | 'street' | 'zipCode' | 'isYouth'
+              > & { homeType: NorwegianHomeContentsDetails['type'] })
+            | ({ __typename?: 'NorwegianTravelDetails' } & Pick<
+                NorwegianTravelDetails,
+                'coInsured' | 'isYouth'
+              >)
+        }
+    >
+    bundleCost: { __typename?: 'InsuranceCost' } & Pick<
+      InsuranceCost,
+      'freeUntil'
+    > & {
+        monthlyDiscount: { __typename?: 'MonetaryAmountV2' } & Pick<
+          MonetaryAmountV2,
+          'amount' | 'currency'
+        >
+        monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
+          MonetaryAmountV2,
+          'amount' | 'currency'
+        >
+        monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
+          MonetaryAmountV2,
+          'amount' | 'currency'
+        >
+      }
+  }
+}
+
 export type RedeemCodeMutationVariables = {
   code: Scalars['String']
 }
@@ -8928,39 +9092,38 @@ export type QuoteQueryResult = ApolloReactCommon.QueryResult<
   QuoteQueryVariables
 >
 export const QuoteBundleDocument = gql`
-  query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
-    quoteBundle(input: $input) {
-      quotes {
+    query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
+  quoteBundle(input: $input) {
+    quotes {
+      id
+      dataCollectionId
+      currentInsurer {
         id
-        dataCollectionId
-        currentInsurer {
-          id
-          displayName
-          switchable
-        }
-        price {
-          amount
-          currency
-        }
-        firstName
-        lastName
-        ssn
-        birthDate
-        startDate
-        expiresAt
-        email
-        typeOfContract
-        perils(locale: $locale) {
-          title
-          description
-          covered
-          exceptions
-          info
-          icon {
-            variants {
-              light {
-                svgUrl
-              }
+        displayName
+        switchable
+      }
+      price {
+        amount
+        currency
+      }
+      firstName
+      lastName
+      ssn
+      birthDate
+      startDate
+      expiresAt
+      email
+      typeOfContract
+      perils(locale: $locale) {
+        title
+        description
+        covered
+        exceptions
+        info
+        icon {
+          variants {
+            light {
+              svgUrl
             }
           }
         }
@@ -8977,65 +9140,77 @@ export const QuoteBundleDocument = gql`
         insuranceTerms(locale: $locale) {
           displayName
           url
+      }
+      insurableLimits(locale: $locale) {
+        label
+        limit
+        description
+      }
+      termsAndConditions(locale: $locale) {
+        displayName
+        url
+      }
+      insuranceTerms(locale: $locale) {
+        displayName
+        url
+      }
+      quoteDetails {
+        ... on SwedishApartmentQuoteDetails {
+          street
+          zipCode
+          householdSize
+          livingSpace
           type
         }
-        quoteDetails {
-          ... on SwedishApartmentQuoteDetails {
-            street
-            zipCode
-            householdSize
-            livingSpace
-            type
-          }
-          ... on SwedishHouseQuoteDetails {
-            street
-            zipCode
-            householdSize
-            livingSpace
-            ancillarySpace
-            numberOfBathrooms
-            yearOfConstruction
-            isSubleted
-            extraBuildings {
-              ... on ExtraBuildingCore {
-                area
-                displayName
-                hasWaterConnected
-              }
+        ... on SwedishHouseQuoteDetails {
+          street
+          zipCode
+          householdSize
+          livingSpace
+          ancillarySpace
+          numberOfBathrooms
+          yearOfConstruction
+          isSubleted
+          extraBuildings {
+            ... on ExtraBuildingCore {
+              area
+              displayName
+              hasWaterConnected
             }
           }
-          ... on NorwegianHomeContentsDetails {
-            coInsured
-            livingSpace
-            street
-            homeType: type
-            zipCode
-            isYouth
-          }
-          ... on NorwegianTravelDetails {
-            coInsured
-            isYouth
-          }
         }
-      }
-      bundleCost {
-        freeUntil
-        monthlyDiscount {
-          amount
-          currency
+        ... on NorwegianHomeContentsDetails {
+          coInsured
+          livingSpace
+          street
+          homeType: type
+          zipCode
+          isYouth
         }
-        monthlyGross {
-          amount
-          currency
-        }
-        monthlyNet {
-          amount
-          currency
+        ... on NorwegianTravelDetails {
+          coInsured
+          isYouth
         }
       }
     }
+    bundleCost {
+      freeUntil
+      monthlyDiscount {
+        amount
+        currency
+      }
+      monthlyGross {
+        amount
+        currency
+      }
+      monthlyNet {
+        amount
+        currency
+      }
+    }
   }
-`
+}
+    `
 
 /**
  * __useQuoteBundleQuery__
