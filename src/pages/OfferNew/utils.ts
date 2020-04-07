@@ -3,16 +3,20 @@ import {
   ApartmentType,
   BundledQuote,
   Campaign,
+  InsurableLimit,
+  InsurableLimitType,
+  InsuranceTerm,
+  InsuranceTermType,
   NorwegianHomeContentsDetails,
   NorwegianTravelDetails,
   QuoteBundle,
   QuoteDetails,
   SwedishApartmentQuoteDetails,
   SwedishHouseQuoteDetails,
+  TypeOfContract,
 } from 'data/graphql'
 import { parse } from 'date-fns'
 import { Address, OfferData } from 'pages/OfferNew/types'
-import { TypeOfContract } from 'utils/insuranceDomainUtils'
 
 export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
   const firstQuote = quoteBundle.quotes[0]
@@ -35,6 +39,18 @@ export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
         currentInsurer: bundleQuote.currentInsurer,
         contractType: bundleQuote.typeOfContract,
         perils: bundleQuote.perils,
+        insurableLimits: new Map(
+          bundleQuote.insurableLimits.map((insurableLimit) => [
+            insurableLimit.type,
+            insurableLimit,
+          ]),
+        ) as ReadonlyMap<InsurableLimitType, InsurableLimit>,
+        insuranceTerms: new Map(
+          bundleQuote.insuranceTerms.map((insuranceTerm) => [
+            insuranceTerm.type,
+            insuranceTerm,
+          ]),
+        ) as ReadonlyMap<InsuranceTermType, InsuranceTerm>,
       }
     }),
     cost: quoteBundle.bundleCost,
@@ -109,6 +125,20 @@ export const isYouth = (offerData: OfferData): boolean =>
       isNorwegianHomeContents(quote.quoteDetails) &&
       isNorwegianTravel(quote.quoteDetails) &&
       quote.quoteDetails.isYouth,
+  )
+
+export const isSwedish = (offerData: OfferData): boolean =>
+  offerData.quotes.every(
+    (quote) =>
+      isSwedishApartment(quote.quoteDetails) ||
+      isSwedishHouse(quote.quoteDetails),
+  )
+
+export const isNorwegian = (offerData: OfferData): boolean =>
+  offerData.quotes.every(
+    (quote) =>
+      isNorwegianHomeContents(quote.quoteDetails) ||
+      isNorwegianTravel(quote.quoteDetails),
   )
 
 export const hasAddress = (offerData: OfferData): boolean =>
