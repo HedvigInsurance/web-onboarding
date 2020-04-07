@@ -145,6 +145,7 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
         )}
       </motion.div>
       <Passage
+        hasHeader={![Variation.IOS, Variation.ANDROID].includes(variation!)}
         canGoBack={state.history.length > 1}
         historyGoBackListener={(goBack) =>
           history.listen((_: any, action: string) => {
