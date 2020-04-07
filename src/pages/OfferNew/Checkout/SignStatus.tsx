@@ -1,9 +1,5 @@
 import styled from '@emotion/styled'
-import {
-  SignState,
-  SignStatus as GraphQLSignStatus,
-  useSignStatusLazyQuery,
-} from 'data/graphql'
+import { SignState, SignStatus as GraphQLSignStatus } from 'data/graphql'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 
@@ -25,14 +21,6 @@ const BANK_ID_STATUS_TEXT_KEYS: Record<string, string> = {
   userCancel: 'SIGN_BANKID_CODE_USER_CANCEL',
   cancelled: 'SIGN_BANKID_CODE_CANCELLED',
   startFailed: 'SIGN_BANKID_CODE_START_FAILED',
-}
-
-export const useSignState = (): [() => void, GraphQLSignStatus | null] => {
-  const [executeSignStatusQuery, signStatusQuery] = useSignStatusLazyQuery({
-    pollInterval: 1000,
-  })
-
-  return [executeSignStatusQuery, signStatusQuery?.data?.signStatus ?? null]
 }
 
 interface Props {
