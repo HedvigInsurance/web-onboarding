@@ -3954,6 +3954,8 @@ export enum InsuranceTermType {
   TermsAndConditions = 'TERMS_AND_CONDITIONS',
   PreSaleInfo = 'PRE_SALE_INFO',
   PreSaleInfoEuStandard = 'PRE_SALE_INFO_EU_STANDARD',
+  InsuranceLetter = 'INSURANCE_LETTER',
+  GeneralTerms = 'GENERAL_TERMS',
 }
 
 export enum InsuranceType {
@@ -8201,18 +8203,21 @@ export type SignQuotesMutation = { __typename?: 'Mutation' } & {
 
 export type SignStatusQueryVariables = {}
 
-export type SignStatusQuery = { __typename?: 'Query' } & {
-  signStatus: Maybe<
-    { __typename?: 'SignStatus' } & Pick<SignStatus, 'signState'> & {
-        collectStatus: Maybe<
-          { __typename?: 'CollectStatus' } & Pick<
-            CollectStatus,
-            'status' | 'code'
+export type SignStatusQuery = { __typename?: 'Query' } & Pick<
+  Query,
+  'hasContract'
+> & {
+    signStatus: Maybe<
+      { __typename?: 'SignStatus' } & Pick<SignStatus, 'signState'> & {
+          collectStatus: Maybe<
+            { __typename?: 'CollectStatus' } & Pick<
+              CollectStatus,
+              'status' | 'code'
+            >
           >
-        >
-      }
-  >
-}
+        }
+    >
+  }
 
 export type SignStatusListenerSubscriptionVariables = {}
 
@@ -9407,6 +9412,7 @@ export const SignStatusDocument = gql`
       }
       signState
     }
+    hasContract
   }
 `
 

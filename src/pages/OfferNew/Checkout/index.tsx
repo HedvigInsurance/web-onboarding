@@ -178,6 +178,7 @@ export const Checkout: React.FC<Props> = ({
     pollInterval: 1000,
   })
   const signStatus = signStatusQueryProps.data?.signStatus ?? null
+  const hasContract = signStatusQueryProps.data?.hasContract ?? false
   const [signQuotes, signQuotesMutation] = useSignQuotesMutation()
   const locale = useCurrentLocale()
 
@@ -209,7 +210,7 @@ export const Checkout: React.FC<Props> = ({
       offerData.person.ssn,
   )
 
-  if (signStatus?.signState === SignState.Completed) {
+  if (hasContract) {
     return (
       <TrackAction
         event={{

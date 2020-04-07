@@ -6,4 +6,5 @@ query SignStatus {
     }
     signState
   }
+  hasContract
 }
