@@ -1,10 +1,6 @@
 import * as koaHelmet from 'koa-helmet'
 import * as uuidV4 from 'uuid/v4'
-import {
-  CONTENT_SERVICE_ENDPOINT,
-  GIRAFFE_ENDPOINT,
-  GIRAFFE_WS_ENDPOINT,
-} from '../config'
+import { CONTENT_SERVICE_ENDPOINT, GIRAFFE_WS_ENDPOINT } from '../config'
 
 const defaultSrc = [
   "'self'",
@@ -43,7 +39,6 @@ const defaultSrc = [
   'analytics.twitter.com',
   'online.adservicemedia.dk',
   '*.doubleclick.net',
-  '*.branch.io',
   'https://adtr.io',
   'https://track.adtraction.com',
   'https://c.adtraction.net',
@@ -53,17 +48,10 @@ const defaultSrc = [
   'hedvig.test-app.link',
   'trustly.com',
   '*.trustly.com',
-  'https://hedvig-embark.herokuapp.com',
-  'https://heapanalytics.com',
   'cdn.mxpnl.com',
   'https://api-js.mixpanel.com',
-  'oidc-ui-current.bankidnorge.no',
-  'oidc-current.bankidapis.no',
-  'bankidnorge.no',
-  '*.zignsec.com',
   'checkoutshopper-live.adyen.com',
   'checkoutshopper-test.adyen.com',
-  GIRAFFE_ENDPOINT,
   GIRAFFE_WS_ENDPOINT,
   CONTENT_SERVICE_ENDPOINT,
 ]
