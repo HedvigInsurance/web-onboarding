@@ -169,5 +169,5 @@ export const reactPageRoutes: ReactPageRoute[] = [
     Component: Referral,
     exact: true,
   },
-  { path: '/*', Component: FourOhFour },
+  // { path: '/*', Component: FourOhFour },
 ]

@@ -1,10 +1,15 @@
 import { createKoaServer } from '@hedviginsurance/web-survival-kit' // tslint:disable-line ordered-imports
 import * as Sentry from '@sentry/node' // tslint:disable-line ordered-imports
 import * as bodyParser from 'koa-bodyparser'
+import * as proxy from 'koa-proxies'
 import 'source-map-support/register'
 import { Logger } from 'typescript-logging'
 import { reactPageRoutes, serverSideRedirects } from './routes'
-import { GIRAFFE_ENDPOINT, GIRAFFE_WS_ENDPOINT } from './server/config'
+import {
+  GIRAFFE_ENDPOINT,
+  GIRAFFE_WS_ENDPOINT,
+  ASSET_FALLBACK_PROXY,
+} from './server/config'
 import { appLogger } from './server/logging'
 import {
   inCaseOfEmergency,
@@ -41,15 +46,21 @@ const server = createKoaServer({
   assetLocation: __dirname + '/assets',
 })
 
+console.log(ASSET_FALLBACK_PROXY)
+if (ASSET_FALLBACK_PROXY) {
+  server.app.use(
+    proxy('/new-member-assets', {
+      target: ASSET_FALLBACK_PROXY,
+      logs: true,
+      changeOrigin: true,
+    }),
+  )
+}
+
 if (process.env.FORCE_HOST) {
   appLogger.info(`Forcing host to be ${process.env.FORCE_HOST}`)
   server.router.use(forceHost({ host: process.env.FORCE_HOST! }))
 }
-
-// 302 because english web onboarding is broken at the time of this comment
-server.router.get('/en/new-member/hedvig', (ctx) => {
-  ctx.redirect('/en/download')
-})
 
 serverSideRedirects.forEach(({ from, to }) => {
   server.router.use(from, permanentRedirect(to))
