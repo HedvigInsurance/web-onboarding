@@ -3,16 +3,16 @@ import { colorsV2 } from '@hedviginsurance/brand/dist'
 import { MarkdownTranslation } from '@hedviginsurance/textkeyfy'
 import { Button } from 'components/buttons'
 import { Spinner } from 'components/utils'
-import { SignStatus as GraphQLSignStatus } from 'data/graphql'
+import {
+  InsuranceTermType,
+  SignStatus as GraphQLSignStatus,
+} from 'data/graphql'
 import { motion } from 'framer-motion'
 import { OfferData } from 'pages/OfferNew/types'
+import { isNorwegian, isSwedish } from 'pages/OfferNew/utils'
 import * as React from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-import {
-  getInsurancePDFTextKey,
-  getPrebuyPDFTextKey,
-} from 'utils/insuranceDomainUtils'
 import { SignStatus } from './SignStatus'
 
 export const SignSpacer = styled('div')`
@@ -134,18 +134,22 @@ export const Sign: React.FC<Props> = ({
       {offerData.quotes.map((quote) => {
         return (
           <Disclaimer key={quote.id}>
-            <MarkdownTranslation
-              textKey="CHECKOUT_SIGN_DISCLAIMER"
-              replacements={{
-                PREBUY_LINK: textKeys[
-                  getPrebuyPDFTextKey(quote.contractType)
-                ](),
-                TERMS_LINK: textKeys[
-                  getInsurancePDFTextKey(quote.contractType)
-                ](),
-              }}
-              markdownProps={{ linkTarget: '_blank' }}
-            />
+            {isSwedish(offerData) && (
+              <MarkdownTranslation
+                textKey="CHECKOUT_SIGN_DISCLAIMER"
+                replacements={{
+                  PREBUY_LINK: quote.insuranceTerms.get(
+                    InsuranceTermType.PreSaleInfo,
+                  )!!.url,
+                  TERMS_LINK: quote.insuranceTerms.get(
+                    InsuranceTermType.TermsAndConditions,
+                  )!!.url,
+                }}
+                markdownProps={{ linkTarget: '_blank' }}
+              />
+            )}
+            {isNorwegian(offerData) &&
+              null /* TODO: Add CHECKOUT_SIGN_DISCLAIMER_NO with the correct replacements once available */}
           </Disclaimer>
         )
       })}

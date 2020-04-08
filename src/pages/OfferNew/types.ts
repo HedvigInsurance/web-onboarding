@@ -3,10 +3,14 @@ import {
   CompleteApartmentQuoteDetails,
   CompleteHouseQuoteDetails,
   CompleteQuote,
+  InsurableLimit,
+  InsurableLimitType,
   InsuranceCost,
+  InsuranceTerm,
+  InsuranceTermType,
   Query,
+  TypeOfContract,
 } from 'data/graphql'
-import { TypeOfContract } from 'utils/insuranceDomainUtils'
 
 interface OfferCore {
   redeemedCampaigns: Query['redeemedCampaigns']
@@ -44,6 +48,8 @@ export type OfferQuote = Pick<
   | 'perils'
 > & {
   contractType: TypeOfContract
+  insurableLimits: ReadonlyMap<InsurableLimitType, InsurableLimit>
+  insuranceTerms: ReadonlyMap<InsuranceTermType, InsuranceTerm>
 }
 
 export interface OfferData {

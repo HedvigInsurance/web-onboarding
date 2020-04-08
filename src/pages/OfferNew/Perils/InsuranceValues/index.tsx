@@ -1,21 +1,14 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import color from 'color'
+import { Limits } from 'pages/OfferNew/Perils/InsuranceValues/Limits'
+import { OfferQuote } from 'pages/OfferNew/types'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-import {
-  getEUPrebuyPDFTextKey,
-  getInsurancePDFTextKey,
-  getInsuranceType,
-  getPrebuyPDFTextKey,
-  TypeOfContract,
-} from 'utils/insuranceDomainUtils'
 import { SubSubHeadingBlack } from '../../components'
-import { insuranceValues } from './mock'
-import { Values } from './Values'
 
 interface Props {
-  contractType: TypeOfContract
+  offerQuote: OfferQuote
 }
 
 const Wrapper = styled.div`
@@ -79,7 +72,7 @@ const Link = styled.a`
   }
 `
 
-export const InsuranceValues: React.FC<Props> = ({ contractType }) => {
+export const InsuranceValues: React.FC<Props> = ({ offerQuote }) => {
   const textKeys = useTextKeys()
 
   return (
@@ -90,34 +83,23 @@ export const InsuranceValues: React.FC<Props> = ({ contractType }) => {
         </SubSubHeadingBlack>
       </Header>
 
-      <Values
-        insuranceValues={insuranceValues(getInsuranceType(contractType))}
-      />
+      <Limits insurableLimits={offerQuote.insurableLimits} />
 
       <Links>
-        <Link
-          href={textKeys[getInsurancePDFTextKey(contractType)]()}
-          target="_blank"
-        >
-          {textKeys.COVERAGE_TERMSANDCONDITIONS_BUTTON()}
-          {' ↗'}
-        </Link>
-
-        <Link
-          href={textKeys[getPrebuyPDFTextKey(contractType)]()}
-          target="_blank"
-        >
-          {textKeys.COVERAGE_PRESALEINFORMATION_BUTTON()}
-          {' ↗'}
-        </Link>
-
-        <Link
-          href={textKeys[getEUPrebuyPDFTextKey(contractType)]()}
-          target="_blank"
-        >
-          {textKeys.COVERAGE_PRESALEINFORMATIONEU_BUTTON()}
-          {' ↗'}
-        </Link>
+        {[...offerQuote.insuranceTerms.entries()].map(
+          ([insuranceTermType, insuranceTerm]) => {
+            return (
+              <Link
+                key={insuranceTermType}
+                href={insuranceTerm.url}
+                target="_blank"
+              >
+                {insuranceTerm.displayName}
+                {' ↗'}
+              </Link>
+            )
+          },
+        )}
       </Links>
     </Wrapper>
   )
