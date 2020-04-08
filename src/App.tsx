@@ -7,6 +7,7 @@ import { Route, Switch } from 'react-router-dom'
 import { AppTokenRetrival } from './AppTokenRetrival'
 import { reactPageRoutes } from './routes'
 import { GlobalCss } from './utils/globalStyles'
+import { Intercom } from './utils/Intercom'
 import {
   StorageContext,
   StorageState,
@@ -45,6 +46,7 @@ export const App: React.ComponentType<StorageState> = ({ session }) => (
         </TranslationsProvider>
       )}
     </CurrentLocale>
+    <Intercom />
   </>
 )
 
