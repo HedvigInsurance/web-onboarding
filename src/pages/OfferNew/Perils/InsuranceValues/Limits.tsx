@@ -60,7 +60,6 @@ const Value = styled.div`
   font-size: 1.125rem;
   letter-spacing: -0.26px;
   color: ${colorsV3.gray900};
-  white-space: nowrap;
 `
 
 const TooltipWrapper = styled.div`
