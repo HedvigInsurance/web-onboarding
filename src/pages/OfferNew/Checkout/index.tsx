@@ -275,8 +275,8 @@ export const Checkout: React.FC<Props> = ({
             signQuotesMutation.loading ||
             signUiState === SignUiState.STARTED ||
             signUiState === SignUiState.STARTED_WITH_REDIRECT ||
-            !hasContract ||
-            emailUpdateLoading
+            emailUpdateLoading ||
+            (signStatus?.signState === SignState.Completed && !hasContract)
           }
           onSignStart={async () => {
             if (!canInitiateSign) {
