@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import { Button, TextButton } from 'components/buttons'
+import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { CookieStorage } from 'cookie-storage'
 import {
   Campaign,
@@ -180,6 +181,7 @@ const FooterExtraActions = styled.div`
 export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
   ({ sticky, offerData, refetch, onCheckoutOpen }, ref) => {
     const textKeys = useTextKeys()
+    const market = useMarket()
     const [
       discountCodeModalIsOpen,
       setDiscountCodeModalIsOpen,
@@ -227,7 +229,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 {discountText && <DiscountInfo>{discountText}</DiscountInfo>}
                 <Header>
                   <Summary>
-                    <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
+                    {market !== Market.No && (
+                      <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
+                    )}
 
                     <Title>
                       {!isBundle(offerData) &&

@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV3, fonts } from '@hedviginsurance/brand'
+import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { useEditQuoteMutation, useRedeemedCampaignsQuery } from 'data/graphql'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
@@ -79,6 +80,7 @@ export const CheckoutContent: React.FC<Props> = ({
   refetch,
 }) => {
   const textKeys = useTextKeys()
+  const market = useMarket()
   const redeemedCampaignsQuery = useRedeemedCampaignsQuery()
   const monthlyCostDeduction = isMonthlyCostDeduction(
     redeemedCampaignsQuery.data?.redeemedCampaigns ?? [],
@@ -94,7 +96,11 @@ export const CheckoutContent: React.FC<Props> = ({
         <Title>{textKeys.CHECKOUT_TITLE()}</Title>
         <Excerpt>
           <div>
-            <InsuranceTypeLabel>{textKeys.SIDEBAR_LABEL()}</InsuranceTypeLabel>
+            {market !== Market.No && (
+              <InsuranceTypeLabel>
+                {textKeys.SIDEBAR_LABEL()}
+              </InsuranceTypeLabel>
+            )}
             <InsuranceType>
               {!isBundle(offerData) &&
                 textKeys[
