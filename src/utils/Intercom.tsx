@@ -28,7 +28,10 @@ export const Intercom: React.FC = () => {
       )?.nonce
       scriptTag.innerHTML = script
       window.document.body.append(scriptTag)
-    } else if (isIntercomMatch) {
+    } else if (
+      isIntercomMatch &&
+      typeof (window as any).Intercom !== 'undefined'
+    ) {
       ;(window as any).Intercom('boot')
     } else if (
       !isIntercomMatch &&
