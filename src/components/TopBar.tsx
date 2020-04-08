@@ -49,6 +49,11 @@ const Container = styled.div`
 const LogoLink = styled.a`
   color: inherit;
   display: flex;
+
+  &:hover,
+  &:focus {
+    color: ${colorsV3.white};
+  }
 `
 
 export const TopBar: React.FC<Props> = ({ transparent }) => (

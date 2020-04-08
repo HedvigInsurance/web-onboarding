@@ -148,8 +148,18 @@ export const Sign: React.FC<Props> = ({
                 markdownProps={{ linkTarget: '_blank' }}
               />
             )}
-            {isNorwegian(offerData) &&
-              null /* TODO: Add CHECKOUT_SIGN_DISCLAIMER_NO with the correct replacements once available */}
+            {isNorwegian(offerData) && (
+              <MarkdownTranslation
+                textKey="CHECKOUT_SIGN_DISCLAIMER_NO"
+                replacements={{
+                  TERMS_LINK:
+                    quote.insuranceTerms.get(
+                      InsuranceTermType.TermsAndConditions,
+                    )?.url ?? '',
+                }}
+                markdownProps={{ linkTarget: '_blank' }}
+              />
+            )}
           </Disclaimer>
         )
       })}
