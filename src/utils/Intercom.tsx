@@ -1,6 +1,5 @@
 import React from 'react'
 import { useRouteMatch } from 'react-router'
-import { useVariation, Variation } from 'utils/hooks/useVariation'
 
 const createIntercom = () => {
   const script = `
