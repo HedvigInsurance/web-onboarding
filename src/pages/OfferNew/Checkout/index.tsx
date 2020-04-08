@@ -4,7 +4,11 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { BackArrow } from 'components/icons/BackArrow'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
-import { useSignQuotesMutation, useSignStatusLazyQuery } from 'data/graphql'
+import {
+  SignState,
+  useSignQuotesMutation,
+  useSignStatusLazyQuery,
+} from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import { getQuoteIds } from 'pages/OfferNew/utils'
 import { SemanticEvents } from 'quepasa'
@@ -206,7 +210,7 @@ export const Checkout: React.FC<Props> = ({
       offerData.person.ssn,
   )
 
-  if (hasContract) {
+  if (signStatus?.signState === SignState.Completed && hasContract) {
     return (
       <TrackAction
         event={{
@@ -271,6 +275,7 @@ export const Checkout: React.FC<Props> = ({
             signQuotesMutation.loading ||
             signUiState === SignUiState.STARTED ||
             signUiState === SignUiState.STARTED_WITH_REDIRECT ||
+            !hasContract ||
             emailUpdateLoading
           }
           onSignStart={async () => {
