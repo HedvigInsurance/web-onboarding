@@ -1,11 +1,19 @@
 import React from 'react'
 import { useRouteMatch } from 'react-router'
+import { useVariation, Variation } from 'utils/hooks/useVariation'
 
 export const Intercom: React.FC = () => {
-  const match = useRouteMatch('/:locale(no-en|no)/new-member/connect-payment')
+  const variation = useVariation()
+  const isIntercomMatch = useRouteMatch(
+    '/:locale(no-en|no)/new-member/:place(offer|sign|download)',
+  )
   React.useEffect(() => {
+    if ([Variation.IOS, Variation.ANDROID].includes(variation!)) {
+      return
+    }
+
     const elementById = window.document.getElementById('intercom-script')
-    if (!match && !elementById) {
+    if (isIntercomMatch && !elementById) {
       const script = `
       window.intercomSettings = {
         app_id: "ziqa7goa"
@@ -20,12 +28,15 @@ export const Intercom: React.FC = () => {
       )?.nonce
       scriptTag.innerHTML = script
       window.document.body.append(scriptTag)
-    } else if (!match) {
+    } else if (isIntercomMatch) {
       ;(window as any).Intercom('boot')
-    } else if (match && typeof (window as any).Intercom !== 'undefined') {
+    } else if (
+      !isIntercomMatch &&
+      typeof (window as any).Intercom !== 'undefined'
+    ) {
       ;(window as any).Intercom('shutdown')
     }
-  }, [match?.path])
+  }, [isIntercomMatch?.path])
 
   return null
 }
