@@ -9,7 +9,7 @@ import * as React from 'react'
 import Helmet from 'react-helmet-async'
 import { TextKeyMap, useTextKeys } from 'utils/hooks/useTextKeys'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
-import { LanguagePicker } from 'pages/Embark/LanguagePicker'
+import { LanguagePicker } from './LanguagePicker'
 
 const Wrapper = styled.div`
   width: 100%;
