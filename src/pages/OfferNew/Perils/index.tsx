@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { PerilRow } from 'pages/OfferNew/Perils/PerilRow'
 import { OfferData } from 'pages/OfferNew/types'
 import * as React from 'react'
@@ -20,7 +20,7 @@ interface Props {
 
 const Wrapper = styled.div`
   padding: 8.5rem 0 5rem 0;
-  background-color: ${colorsV2.offwhite};
+  background-color: ${colorsV3.gray100};
   display: flex;
 `
 export const getIconUrl = (iconPath: string) => {
