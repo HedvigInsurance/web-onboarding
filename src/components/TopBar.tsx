@@ -40,10 +40,6 @@ const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   margin: 0 auto;
-
-  @media (max-width: 600px) {
-    justify-content: center;
-  }
 `
 
 const LogoLink = styled.a`
@@ -56,7 +52,7 @@ const LogoLink = styled.a`
   }
 `
 
-export const TopBar: React.FC<Props> = ({ transparent }) => (
+export const TopBar: React.FC<Props> = ({ transparent, children }) => (
   <Wrapper transparent={transparent}>
     <Container>
       <CurrentLocale>
@@ -66,6 +62,8 @@ export const TopBar: React.FC<Props> = ({ transparent }) => (
           </LogoLink>
         )}
       </CurrentLocale>
+
+      {children}
     </Container>
   </Wrapper>
 )

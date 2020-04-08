@@ -42,12 +42,14 @@ const Divider = styled.span`
 const Dropdown = styled.div`
   background-color: white;
   border-radius: 5px;
-  position: fixed;
-  transform: translateX(-40%) translateY(10px);
+  position: absolute;
+  right: 0;
+  transform: translateY(10px);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  z-index: 999;
+  z-index: 9999;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
 `
 
 export const LanguagePicker = () => {
