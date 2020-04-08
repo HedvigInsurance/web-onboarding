@@ -27,7 +27,7 @@ export const SignLoading: React.FC = () => {
   const textKeys = useTextKeys()
 
   React.useEffect(() => {
-    setTimer(window.setTimeout(() => setHasTakenLong(true), 5000))
+    setTimer(window.setTimeout(() => setHasTakenLong(true), 10000))
     return () => {
       window.clearTimeout(timer!)
     }
