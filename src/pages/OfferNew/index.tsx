@@ -105,7 +105,7 @@ export const OfferNew: React.FC = () => {
             currentInsurer={offerData.quotes[0].currentInsurer || undefined}
           />
         )}
-        ){market === Market.Se && <TestimonialsSection />}
+        {market === Market.Se && <TestimonialsSection />}
         <SwitchSafetySection />
         <FaqSection />
         <Checkout
