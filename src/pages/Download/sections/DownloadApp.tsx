@@ -131,7 +131,7 @@ export const DownloadApp: React.FC = () => {
             <LogoWrapper>
               <AppleLogo src={'/new-member-assets/download/apple-logo.svg'} />
               <GooglePlayLogo
-                src={'/new-member-assets/download/google-play-logo.svg'}
+                src={'/new-member-assets/download/google-play-logo-mono.svg'}
               />
             </LogoWrapper>
           </TextSubColumn>
