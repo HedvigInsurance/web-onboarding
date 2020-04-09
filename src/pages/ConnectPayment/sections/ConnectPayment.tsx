@@ -126,7 +126,7 @@ export const ConnectTrustlyPage: React.FC = () => {
         <ImageColumn>
           <ConnectPaymentImage
             src={
-              '/new-member-assets/connect-payment/connect-payments-illustration.svg'
+              '/new-member-assets/connect-payment/connect-payments-illustration-mono.svg'
             }
           />
         </ImageColumn>
