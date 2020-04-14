@@ -129,9 +129,11 @@ export const DownloadApp: React.FC = () => {
             <DownloadText>{textKeys.ONBOARDING_DOWNLOAD_BODY()}</DownloadText>
 
             <LogoWrapper>
-              <AppleLogo src={'/new-member-assets/download/apple-logo.svg'} />
+              <AppleLogo
+                src={'/new-member-assets/download/apple-logo-mono.svg'}
+              />
               <GooglePlayLogo
-                src={'/new-member-assets/download/google-play-logo.svg'}
+                src={'/new-member-assets/download/google-play-logo-mono.svg'}
               />
             </LogoWrapper>
           </TextSubColumn>
