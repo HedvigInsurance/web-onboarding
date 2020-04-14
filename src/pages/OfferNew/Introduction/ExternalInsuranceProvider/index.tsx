@@ -19,6 +19,7 @@ const ErrorBox = styled.div`
   padding: 1.25rem;
   background-color: white;
   border-radius: 0.5rem;
+  font-weight: 300;
 
   @media (max-width: 800px) {
     margin-bottom: 1.25rem;

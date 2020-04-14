@@ -1,12 +1,14 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { Tick } from 'components/icons/Tick'
 import { OfferData } from 'pages/OfferNew/types'
 import * as React from 'react'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { useDocumentScroll } from '../../../utils/hooks/useDocumentScroll'
-import { Column, Container, Section } from '../components'
+import { Container, Section } from '../components'
+import { isBundle } from 'pages/OfferNew/utils'
 import { Sidebar } from './Sidebar'
+import { ExternalInsuranceProvider } from './ExternalInsuranceProvider'
+
+import { Usps } from './usps'
 
 interface Props {
   offerData: OfferData
@@ -30,39 +32,24 @@ const Wrapper = styled.div`
   }
 `
 
-const UspsColumn = styled(Column)`
-  justify-content: center;
+const DesktopLeadingContainer = styled.div`
+  margin-right: 1.875rem;
+  display: none;
+  width: 100%;
   min-height: 50vh;
-`
 
-const Usps = styled.ul`
-  font-size: 1.5rem;
-  line-height: 2rem;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  color: ${colorsV3.white};
-  font-weight: 300;
-
-  @media (max-width: 600px) {
-    font-size: 1.25rem;
-    line-height: 1.5rem;
+  @media (min-width: 1000px) {
+    display: block;
   }
 `
 
-const Usp = styled.li`
-  display: flex;
-  align-items: center;
-  padding: 1rem 0;
-  margin: 0;
-  line-height: 1;
-`
+const MobileLeadingContainer = styled.div`
+  display: none;
+  width: 100%;
 
-const TickWrapper = styled.div`
-  width: 2em;
-  height: 2em;
-  margin-right: 1em;
-  flex-shrink: 0;
+  @media (max-width: 1000px) {
+    display: block;
+  }
 `
 
 export const Introduction: React.FC<Props> = ({
@@ -72,7 +59,6 @@ export const Introduction: React.FC<Props> = ({
 }) => {
   const [sidebarIsSticky, setSidebarIsSticky] = React.useState(false)
   const ref = React.useRef<HTMLDivElement>(null)
-  const textKeys = useTextKeys()
 
   useDocumentScroll(() => {
     const distanceToTop =
@@ -87,33 +73,31 @@ export const Introduction: React.FC<Props> = ({
     }
   })
 
+  const hasDataCollection =
+    !isBundle(offerData) && !!offerData.quotes[0].dataCollectionId
+
   return (
     <Section>
       <Wrapper>
         <Container>
-          <UspsColumn>
-            <Usps>
-              <Usp>
-                <TickWrapper>
-                  <Tick />
-                </TickWrapper>
-                {textKeys.OFFER_USPS_USP_0()}
-              </Usp>
-              <Usp>
-                <TickWrapper>
-                  <Tick />
-                </TickWrapper>
-                {textKeys.OFFER_USPS_USP_1()}
-              </Usp>
-              <Usp>
-                <TickWrapper>
-                  <Tick />
-                </TickWrapper>
-                {textKeys.OFFER_USPS_USP_2()}
-              </Usp>
-            </Usps>
-          </UspsColumn>
-
+          <DesktopLeadingContainer>
+            <Usps />
+            {hasDataCollection && (
+              <ExternalInsuranceProvider
+                dataCollectionId={offerData.quotes[0].dataCollectionId || ''}
+                offerData={offerData}
+              />
+            )}
+          </DesktopLeadingContainer>
+          <MobileLeadingContainer>
+            {hasDataCollection && (
+              <ExternalInsuranceProvider
+                dataCollectionId={offerData.quotes[0].dataCollectionId || ''}
+                offerData={offerData}
+              />
+            )}
+            <Usps />
+          </MobileLeadingContainer>
           <Sidebar
             ref={ref}
             sticky={sidebarIsSticky}
