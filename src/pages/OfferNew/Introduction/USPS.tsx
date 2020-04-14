@@ -1,10 +1,10 @@
-import * as React from 'react'
-import { colorsV3 } from '@hedviginsurance/brand'
 import styled from '@emotion/styled'
+import { colorsV3 } from '@hedviginsurance/brand'
+import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 
-import { Column } from '../components'
 import { Tick } from 'components/icons/Tick'
+import { Column } from '../components'
 
 const UspsColumn = styled(Column)`
   justify-content: center;

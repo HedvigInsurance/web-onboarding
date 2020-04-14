@@ -1,12 +1,12 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { OfferData } from 'pages/OfferNew/types'
+import { isBundle } from 'pages/OfferNew/utils'
 import * as React from 'react'
 import { useDocumentScroll } from '../../../utils/hooks/useDocumentScroll'
 import { Container, Section } from '../components'
-import { isBundle } from 'pages/OfferNew/utils'
-import { Sidebar } from './Sidebar'
 import { ExternalInsuranceProvider } from './ExternalInsuranceProvider'
+import { Sidebar } from './Sidebar'
 
 import { Usps } from './usps'
 
