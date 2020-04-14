@@ -8,7 +8,7 @@ import { Container, Section } from '../components'
 import { ExternalInsuranceProvider } from './ExternalInsuranceProvider'
 import { Sidebar } from './Sidebar'
 
-import { Usps } from './usps'
+import { Usps } from './USPS'
 
 interface Props {
   offerData: OfferData
