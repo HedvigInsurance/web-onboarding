@@ -274,6 +274,14 @@ export const StartDate: React.FC<Props> = ({
     />
   )
 
+  if (isBundle(offerData)) {
+    return (
+      <>
+        {textKeys.OFFER_START_DATE_LABEL()} {textKeys.OFFER_START_NOW()}
+      </>
+    )
+  }
+
   return (
     <>
       <ErrorMessage
