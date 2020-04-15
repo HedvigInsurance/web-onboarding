@@ -4,7 +4,7 @@ import { PerilModal } from 'pages/OfferNew/Perils/PerilModal'
 import { OfferQuote } from 'pages/OfferNew/types'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-import { insuranceTypeTextKeys } from 'pages/OfferNew/utils'
+import { insuranceTypeTextKeys } from '../utils'
 
 interface Props {
   offerQuote: OfferQuote
