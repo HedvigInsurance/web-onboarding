@@ -1,7 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { BackArrow } from 'components/icons/BackArrow'
-import { Cross } from 'components/icons/Cross'
 import { ForwardArrow } from 'components/icons/ForwardArrow'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { addYears, subDays } from 'date-fns'
@@ -74,11 +73,12 @@ const CalendarDay = styled.button<{ selected: boolean; selectable: boolean }>`
   outline: 0;
   cursor: pointer;
   font-size: 0.875rem;
-  padding-top: 0.15625rem;
-  padding-bottom: 0.15625rem;
-  border-radius: 12px;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-radius: 2px;
   transition: background-color 250ms, color 250ms;
-  margin: 2.1%;
+  margin: 1%;
+  background: ${colorsV3.white};
 
   svg {
     width: 13px;
@@ -94,14 +94,9 @@ const CalendarDay = styled.button<{ selected: boolean; selectable: boolean }>`
     !props.selected &&
     props.selectable &&
     `
-    :hover {
-      background-color: ${colorsV3.gray700};
-      color: ${colorsV3.white};
-    }
-
-    :active {
-      background-color: ${colorsV3.gray700};
-      color: ${colorsV3.white};
+    :hover, :active {
+      background-color: ${colorsV3.gray300};
+      color: ${colorsV3.gray900};
     }
   `};
 
@@ -115,8 +110,8 @@ const CalendarDay = styled.button<{ selected: boolean; selectable: boolean }>`
   ${(props) =>
     !props.selectable &&
     `
-    background-color: ${colorsV3.gray300};
-    color: ${colorsV3.gray900};
+    background-color: ${colorsV3.white};
+    color: ${colorsV3.gray300};
     cursor: default;
   `};
 `
@@ -156,8 +151,9 @@ const CalendarContainer = styled.div`
 const AtStartDateContainer = styled.div`
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   padding: 0 0 1.875rem;
+  color: ${colorsV3.gray500};
 `
 
 interface DateInputProps {
@@ -257,7 +253,7 @@ const Calendar: React.FC<DayzedCalendarProps> = ({
               key={key}
               {...getDateProps({ dateObj })}
             >
-              {selectable ? date.getDate() : <Cross />}
+              {date.getDate()}
             </CalendarDay>
           )
         }),

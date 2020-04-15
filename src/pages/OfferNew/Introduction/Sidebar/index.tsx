@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2, fonts } from '@hedviginsurance/brand'
+import { colorsV2, colorsV3, fonts } from '@hedviginsurance/brand'
 import { Button, TextButton } from 'components/buttons'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { CookieStorage } from 'cookie-storage'
@@ -19,15 +19,8 @@ import { OfferData } from 'pages/OfferNew/types'
 import * as React from 'react'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-import { formatPostalNumber } from 'utils/postalNumbers'
 import { Price } from '../../components'
-import {
-  hasAddress,
-  insuranceTypeTextKeys,
-  isBundle,
-  isSwedishApartment,
-  isSwedishHouse,
-} from '../../utils'
+import { insuranceTypeTextKeys, isBundle } from '../../utils'
 import { DetailsModal } from './DetailsModal/index'
 import { DiscountCodeModal } from './DiscountCodeModal'
 import { StartDate } from './StartDate'
@@ -53,14 +46,16 @@ const Wrapper = styled.div`
   }
 `
 
-const Container = styled.div<{ sticky: boolean }>`
-  width: 26rem;
-  background-color: ${colorsV2.white};
-  border-radius: 8px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
-  flex-shrink: 0;
+const Container = styled.div<{ sticky: boolean; hasDiscount: boolean }>`
   position: ${(props) => (props.sticky ? `fixed` : `relative`)};
   ${(props) => props.sticky && `top: 6rem`};
+  width: 26rem;
+  padding: 2rem 0 1.5rem 0;
+  flex-shrink: 0;
+  background-color: ${colorsV3.white};
+  border-radius: 8px;
+  ${(props) => props.hasDiscount && 'padding-top: 0;'};
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
 
   @media (max-width: 1020px) {
     width: 100%;
@@ -70,40 +65,32 @@ const Container = styled.div<{ sticky: boolean }>`
   }
 `
 
-const Header = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  padding: 2rem 1.5rem 2rem 2rem;
-  align-items: flex-start;
-  position: relative;
-
-  @media (max-width: 600px) {
-    padding: 1.5rem;
-  }
-`
-
 const DiscountInfo = styled.div`
   width: 100%;
   border-radius: 8px 8px 0 0;
   min-height: 2rem;
   padding: 0.375rem 1rem;
+  margin-bottom: 2rem;
   background: ${colorsV2.grass500};
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 0.875rem;
-  color: ${colorsV2.white};
+  color: ${colorsV3.white};
   text-align: center;
 `
 
-const Summary = styled.div`
+const Header = styled.div`
   display: flex;
-  justify-content: space-between;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  position: relative;
   width: 100%;
+  padding: 0 1rem;
+
+  @media (max-width: 600px) {
+    padding: 1.5rem;
+  }
 `
 
 const PreTitle = styled.div`
@@ -111,34 +98,20 @@ const PreTitle = styled.div`
   font-size: 0.75rem;
   line-height: 0.875rem;
   letter-spacing: 0.075rem;
-  color: ${colorsV2.gray};
+  color: ${colorsV3.gray500};
   text-transform: uppercase;
 `
 
 const Title = styled.div`
+  text-align: center;
+  width: 100%;
   font-family: ${fonts.FAVORIT};
-  font-size: 2rem;
-  font-weight: 500;
-  color: ${colorsV2.black};
-  max-width: 50%;
-  flex-shrink: 1;
-  line-height: 1.25;
+  font-size: 1.5rem;
+  color: ${colorsV3.gray900};
 
   @media (max-width: 600px) {
     font-size: 1.5rem;
   }
-`
-
-const SummaryContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 1.5rem;
-`
-
-const SummaryText = styled.div`
-  font-size: 0.875rem;
-  line-height: 1.5rem;
-  color: ${colorsV2.darkgray};
 `
 
 const Body = styled.div`
@@ -146,17 +119,16 @@ const Body = styled.div`
   padding-top: 0;
 
   @media (max-width: 600px) {
-    padding: 1rem;
+    padding: 1rem 0;
   }
 `
 
 const Footer = styled.div`
-  width: 100%;
-  padding: 2rem;
-  padding-top: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  padding: 0 1rem;
 
   @media (max-width: 600px) {
     padding: 2rem 1rem;
@@ -226,58 +198,24 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
         <ReactVisibilitySensor partialVisibility onChange={setIsSidebarVisible}>
           {() => (
             <Wrapper ref={ref}>
-              <Container sticky={sticky}>
+              <Container
+                sticky={sticky}
+                hasDiscount={redeemedCampaigns.length > 0}
+              >
                 {discountText && <DiscountInfo>{discountText}</DiscountInfo>}
                 <Header>
-                  <Summary>
-                    {market !== Market.No && (
-                      <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
-                    )}
+                  {market !== Market.No && (
+                    <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
+                  )}
 
-                    <Title>
-                      {!isBundle(offerData) &&
-                        textKeys[
-                          insuranceTypeTextKeys[
-                            offerData.quotes[0].contractType
-                          ]
-                        ]()}
-                      {isBundle(offerData) &&
-                        textKeys.SIDEBAR_INSURANCE_TYPE_NO_BUNDLE()}
-                    </Title>
-
-                    <SummaryContent>
-                      <SummaryText>
-                        <b>{`${offerData.person.firstName} ${offerData.person.lastName}`}</b>{' '}
-                        {offerData.person.householdSize - 1 > 0 &&
-                          textKeys.SIDEBAR_INSURED_PERSONS_SUFFIX({
-                            AMOUNT: offerData.person.householdSize - 1,
-                          })}
-                      </SummaryText>
-                      {hasAddress(offerData) && (
-                        <SummaryText>
-                          {`${
-                            offerData.person.address!.street
-                          }, ${formatPostalNumber(
-                            offerData.person.address!.zipCode,
-                          )}`}
-                        </SummaryText>
-                      )}
-
-                      {offerData.quotes.map((quote) => {
-                        return (
-                          (isSwedishHouse(quote.quoteDetails) ||
-                            isSwedishApartment(quote.quoteDetails)) && (
-                            <TextButton
-                              key={quote.id}
-                              onClick={() => setDetailsModalIsOpen(true)}
-                            >
-                              {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
-                            </TextButton>
-                          )
-                        )
-                      })}
-                    </SummaryContent>
-                  </Summary>
+                  <Title>
+                    {!isBundle(offerData) &&
+                      textKeys[
+                        insuranceTypeTextKeys[offerData.quotes[0].contractType]
+                      ]()}
+                    {isBundle(offerData) &&
+                      textKeys.SIDEBAR_INSURANCE_TYPE_NO_BUNDLE()}
+                  </Title>
 
                   <Price
                     monthlyCostDeduction={
@@ -294,6 +232,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 </Header>
 
                 <Body>
+                  {textKeys.SIDEBAR_STARTDATE_CELL_LABEL() +
+                    ' ' +
+                    textKeys.SIDEBAR_STARTDATE_CELL_SUBLABEL()}
                   <StartDate
                     offerData={offerData}
                     refetch={refetch}
@@ -302,7 +243,13 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 </Body>
 
                 <Footer>
-                  <Button size="lg" onClick={() => onCheckoutOpen()}>
+                  <Button
+                    size="lg"
+                    fullWidth
+                    onClick={() => onCheckoutOpen()}
+                    foreground={colorsV3.gray900}
+                    background="#c9abf5"
+                  >
                     {textKeys.SIDEBAR_GETHEDVIG_BUTTON()}
                   </Button>
 

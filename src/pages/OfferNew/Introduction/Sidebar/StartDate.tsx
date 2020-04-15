@@ -2,7 +2,9 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { externalInsuranceProviders } from '@hedviginsurance/embark'
 import { DateInput } from 'components/DateInput'
+import { DownArrow } from 'components/icons/DownArrow'
 import { Switch } from 'components/Switch'
+import { Market, useMarket } from 'components/utils/CurrentLocale'
 import {
   useExternalInsuranceDataQuery,
   useRemoveStartDateMutation,
@@ -11,11 +13,11 @@ import {
 import { format, isToday } from 'date-fns'
 import { motion } from 'framer-motion'
 import hexToRgba from 'hex-to-rgba'
+import { match } from 'matchly'
 import { OfferData } from 'pages/OfferNew/types'
 import { getQuoteIds, hasCurrentInsurer, isBundle } from 'pages/OfferNew/utils'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-import { CalendarIcon } from './CalendarIcon'
 
 interface Props {
   offerData: OfferData
@@ -44,37 +46,19 @@ const RowButton = styled.button<{ datePickerOpen: boolean }>`
     props.datePickerOpen && `border: 1px solid ${colorsV3.gray900};`};
 `
 
-const Label = styled.div`
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-`
-
 const DateLabel = styled.span`
   margin-right: 5px;
 `
 
-const Title = styled.div`
-  font-size: 1rem;
-  line-height: 1.5rem;
-  color: ${colorsV3.gray900};
-`
-
-const SubTitle = styled.div`
-  font-size: 0.75rem;
-  line-height: 0.75rem;
-  font-weight: 200;
-  color: ${colorsV3.gray700};
-`
-
 const Value = styled.div`
-  font-size: 1rem;
-  line-height: 1.5rem;
-  color: ${colorsV3.gray700};
   display: flex;
   flex-direction: row;
-  justify-content: right;
+  justify-content: space-between;
   align-items: center;
+  width: 100%;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  color: ${colorsV3.gray700};
 
   @media (max-width: 600px) {
     font-size: 0.875rem;
@@ -85,18 +69,17 @@ const HandleSwitchingWrapper = styled.div`
   margin-top: 10px;
   display: flex;
   justify-content: space-between;
-  padding: 0 1.25rem;
 `
 
 const HandleSwitchingLabel = styled.span`
-  font-size: 0.8rem;
-  line-height: 0.9rem;
+  font-size: 0.875rem;
+  line-height: 1.2;
   color: ${colorsV3.gray700};
-  width: 50%;
+  width: 75%;
 `
 
 const ErrorMessage = styled(motion.div)`
-  background-color: ${colorsV3.purple500};
+  background-color: #c9abf5;
   border-radius: 8px;
   padding: 1.25rem;
   margin-bottom: 10px;
@@ -147,7 +130,6 @@ const StyledDateInput = styled(DateInput)<{ modal: boolean }>`
 `
 
 const getExternalInsuranceData = (offerData: OfferData) => {
-  // TODO: At some point we should handle external insurance data for bundles
   if (isBundle(offerData)) {
     return undefined
   }
@@ -182,8 +164,13 @@ export const StartDate: React.FC<Props> = ({
   const [showError, setShowError] = React.useState(false)
   const [dateValue, setDateValue] = React.useState(getDefaultDateValue)
   const textKeys = useTextKeys()
+  const market = useMarket()
   const [setStartDate] = useStartDateMutation()
   const [removeStartDate] = useRemoveStartDateMutation()
+  const getDateFormat = match([
+    [Market.Se, 'dd MMM yyyy'],
+    [Market.No, 'dd/MM/yyyy'],
+  ])
 
   React.useEffect(() => {
     setDateValue(getDefaultDateValue())
@@ -199,7 +186,7 @@ export const StartDate: React.FC<Props> = ({
         return textKeys.SIDEBAR_STARTDATE_CELL_VALUE_NEW()
       }
 
-      return format(dateValue, 'dd MMM yyyy')
+      return format(dateValue, getDateFormat(market)!)
     }
 
     const firstExternalInsurance =
@@ -304,15 +291,9 @@ export const StartDate: React.FC<Props> = ({
         datePickerOpen={datePickerOpen}
         onClick={() => setDatePickerOpen(!datePickerOpen)}
       >
-        <Label>
-          <Title>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}</Title>
-          <SubTitle>{textKeys.SIDEBAR_STARTDATE_CELL_SUBLABEL()}</SubTitle>
-        </Label>
         <Value>
           <DateLabel>{getDateLabel()}</DateLabel>
-          <CalendarIcon
-            color={dateValue ? colorsV3.gray700 : colorsV3.gray500}
-          />
+          <DownArrow />
         </Value>
       </RowButton>
       {modal ? (
