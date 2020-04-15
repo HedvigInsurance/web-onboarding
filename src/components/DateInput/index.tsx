@@ -151,7 +151,7 @@ const CalendarContainer = styled.div`
 const AtStartDateContainer = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   padding: 0 0 1.875rem;
   color: ${colorsV3.gray500};
 `

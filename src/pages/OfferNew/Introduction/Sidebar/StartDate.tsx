@@ -3,14 +3,13 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { externalInsuranceProviders } from '@hedviginsurance/embark'
 import { DateInput } from 'components/DateInput'
 import { DownArrow } from 'components/icons/DownArrow'
-import { Switch } from 'components/Switch'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
 import {
   useExternalInsuranceDataQuery,
   useRemoveStartDateMutation,
   useStartDateMutation,
 } from 'data/graphql'
-import { format, isToday } from 'date-fns'
+import { format, isToday, parse } from 'date-fns'
 import { motion } from 'framer-motion'
 import hexToRgba from 'hex-to-rgba'
 import { match } from 'matchly'
@@ -18,6 +17,8 @@ import { OfferData } from 'pages/OfferNew/types'
 import { getQuoteIds, hasCurrentInsurer, isBundle } from 'pages/OfferNew/utils'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { CancellationOptions } from './CancellationOptions'
+import { gqlDateFormat } from './utils'
 
 interface Props {
   offerData: OfferData
@@ -63,19 +64,6 @@ const Value = styled.div`
   @media (max-width: 600px) {
     font-size: 0.875rem;
   }
-`
-
-const HandleSwitchingWrapper = styled.div`
-  margin-top: 10px;
-  display: flex;
-  justify-content: space-between;
-`
-
-const HandleSwitchingLabel = styled.span`
-  font-size: 0.875rem;
-  line-height: 1.2;
-  color: ${colorsV3.gray700};
-  width: 75%;
 `
 
 const ErrorMessage = styled(motion.div)`
@@ -149,11 +137,11 @@ export const StartDate: React.FC<Props> = ({
   const externalInsuranceData = getExternalInsuranceData(offerData)
 
   const getDefaultDateValue = () => {
-    if (offerData.startDate) {
-      return offerData.startDate
+    if (offerData.quotes[0].startDate) {
+      return parse(offerData.quotes[0].startDate, 'yyyy-MM-dd', new Date())
     }
 
-    if (hasCurrentInsurer(offerData)) {
+    if (hasCurrentInsurer(offerData.quotes[0])) {
       return null
     }
 
@@ -174,7 +162,7 @@ export const StartDate: React.FC<Props> = ({
 
   React.useEffect(() => {
     setDateValue(getDefaultDateValue())
-  }, [offerData.startDate])
+  }, [offerData.quotes[0].startDate])
 
   const handleFail = () => {
     setShowError(true)
@@ -217,8 +205,6 @@ export const StartDate: React.FC<Props> = ({
     return textKeys.SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER()
   }
 
-  const gqlDateFormat = 'yyyy-MM-dd'
-
   const quoteIds = getQuoteIds(offerData)
 
   const getDateInput = () => (
@@ -229,6 +215,7 @@ export const StartDate: React.FC<Props> = ({
       setDate={(newDateValue) => {
         setDateValue(newDateValue)
         setShowError(false)
+        // FIXME one per quote
         if (newDateValue === null) {
           Promise.all(
             quoteIds.map((quoteId) =>
@@ -256,7 +243,7 @@ export const StartDate: React.FC<Props> = ({
             .catch(handleFail)
         }
       }}
-      hasCurrentInsurer={hasCurrentInsurer(offerData)}
+      hasCurrentInsurer={hasCurrentInsurer(offerData.quotes[0])}
       modal={modal}
     />
   )
@@ -303,43 +290,15 @@ export const StartDate: React.FC<Props> = ({
       ) : (
         getDateInput()
       )}
-      {offerData.quotes.map((quote) => {
-        return (
-          quote.currentInsurer?.switchable && (
-            <HandleSwitchingWrapper key={quote.id}>
-              <HandleSwitchingLabel>
-                {textKeys.SIDEBAR_REQUEST_CANCELLATION()}
-              </HandleSwitchingLabel>
-              <Switch
-                value={dateValue == null}
-                onChange={(newValue) => {
-                  setShowError(false)
-                  if (newValue === null) {
-                    removeStartDate({
-                      variables: {
-                        quoteId: quote.id,
-                      },
-                    })
-                      .then(() => refetch())
-                      .catch(handleFail)
-                  } else {
-                    setStartDate({
-                      variables: {
-                        quoteId: quote.id,
-                        date: format(new Date(), gqlDateFormat),
-                      },
-                    })
-                      .then(() => refetch())
-                      .catch(handleFail)
-                  }
 
-                  setDateValue(newValue ? null : new Date())
-                }}
-              />
-            </HandleSwitchingWrapper>
-          )
-        )
-      })}
+      <CancellationOptions
+        quotes={offerData.quotes}
+        dateValue={dateValue}
+        setDateValue={setDateValue}
+        setShowError={setShowError}
+        handleFail={handleFail}
+        refetch={refetch}
+      />
     </>
   )
 }

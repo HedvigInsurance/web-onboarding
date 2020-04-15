@@ -6,6 +6,7 @@ import { ApolloClient } from 'apollo-client'
 import { WebSocketLink } from 'apollo-link-ws'
 import { CookieStorage } from 'cookie-storage'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
+import { dataIdFromObject } from 'utils/apolloClient'
 import introspectionQueryResultData from '../fragmentTypes.json'
 import { createSession, Session } from '../utils/sessionStorage'
 
@@ -37,7 +38,7 @@ export const apolloClient = (() => {
     },
   )
   const client = new ApolloClient({
-    cache: new InMemoryCache({ fragmentMatcher }),
+    cache: new InMemoryCache({ fragmentMatcher, dataIdFromObject }),
     link: new WebSocketLink(subscriptionClient),
   })
 

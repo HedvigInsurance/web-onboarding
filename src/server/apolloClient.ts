@@ -5,6 +5,7 @@ import {
 import { ApolloClient } from 'apollo-client'
 import { ApolloLink, concat } from 'apollo-link'
 import { BatchHttpLink } from 'apollo-link-batch-http'
+import { dataIdFromObject } from 'utils/apolloClient'
 import * as uuidV4 from 'uuid/v4'
 import introspectionData from '../fragmentTypes.json'
 import { notNullable } from '../utils/nullables'
@@ -23,7 +24,7 @@ const requestIdMiddleware = (requestId?: string) =>
 export const createServerApolloClient = (requestId?: string, token?: string) =>
   new ApolloClient({
     ssrMode: true,
-    cache: new InMemoryCache({ fragmentMatcher }),
+    cache: new InMemoryCache({ fragmentMatcher, dataIdFromObject }),
     link: concat(
       requestIdMiddleware(requestId),
       new BatchHttpLink({
