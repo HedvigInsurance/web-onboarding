@@ -55,7 +55,8 @@ if (process.env.FORCE_HOST) {
   server.router.use(forceHost({ host: process.env.FORCE_HOST! }))
 }
 
-server.router.use('/new-member', redirectEmptyLanguageToSweden)
+server.router.use('/new-member*', redirectEmptyLanguageToSweden)
+server.router.use('/en/new-member*', redirectEmptyLanguageToSweden)
 
 serverSideRedirects.forEach(({ from, to }) => {
   server.router.use(from, permanentRedirect(to))
