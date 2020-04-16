@@ -1,6 +1,6 @@
 import { css, keyframes } from '@emotion/core'
 import styled from '@emotion/styled'
-import { colorsV2, colorsV3 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { HedvigSymbol } from 'components/icons/HedvigSymbol'
 import * as React from 'react'
 import ReactVisibilitySensor from 'react-visibility-sensor'
@@ -13,11 +13,13 @@ import {
   PreHeading,
 } from './components'
 
+const MEDIA_MIN_WIDTH = '@media (min-width: 550px)'
+
 const OuterWrapper = styled.div`
   padding: 3rem 0 5rem 0;
   background-color: ${colorsV3.gray100};
 
-  @media (min-width: 376px) {
+  ${MEDIA_MIN_WIDTH} {
     padding: 5rem 0 10rem 0;
   }
 `
@@ -28,11 +30,11 @@ const BodyText = styled.p`
 `
 
 const NotificationArea = styled.div`
-  background-color: ${colorsV2.flamingo300};
+  background-color: #c9abf5;
   padding: 3rem 1.5rem;
-  border-radius: 4px;
+  border-radius: 8px;
 
-  @media (min-width: 376px) {
+  ${MEDIA_MIN_WIDTH} {
     padding: 8rem 4rem;
   }
 `
@@ -42,7 +44,7 @@ interface Showable {
 }
 
 const NotificationBody = styled.div`
-  @media (min-width: 376px) {
+  ${MEDIA_MIN_WIDTH} {
     padding-left: 1.5rem;
   }
 `
@@ -51,7 +53,7 @@ const NotificationHeading = styled.div`
   opacity: 0.5;
   padding-bottom: 0.5rem;
 
-  @media (min-width: 376px) {
+  ${MEDIA_MIN_WIDTH} {
     font-size: 1.25rem;
     padding-bottom: 0;
   }
@@ -59,7 +61,7 @@ const NotificationHeading = styled.div`
 const NotificationBodyText = styled.div`
   opacity: 0.5;
 
-  @media (min-width: 376px) {
+  ${MEDIA_MIN_WIDTH} {
     font-size: 1.25rem;
   }
 `
@@ -71,7 +73,7 @@ const NotificationTimestamp = styled.div`
   font-size: 0.75rem;
   opacity: 0;
 
-  @media (min-width: 376px) {
+  ${MEDIA_MIN_WIDTH} {
     font-size: 1rem;
   }
 `
@@ -105,7 +107,7 @@ const Notification = styled.div<Showable>`
   opacity: 0;
   padding: 1rem;
 
-  @media (min-width: 376px) {
+  ${MEDIA_MIN_WIDTH} {
     padding: 1.5rem;
   }
 
@@ -132,7 +134,7 @@ const Notification = styled.div<Showable>`
       : ''};
   animation-delay: 500ms;
   background: rgba(255, 255, 255, 0.5);
-  border-radius: 1.5rem;
+  border-radius: 8px;
 `
 const zoomIn = keyframes`
   from {
@@ -146,7 +148,7 @@ const zoomIn = keyframes`
 `
 const DesktopNotificationIcon = styled.div<Showable>`
   display: none;
-  @media (min-width: 376px) {
+  ${MEDIA_MIN_WIDTH} {
     display: flex;
   }
   justify-content: center;
@@ -154,8 +156,9 @@ const DesktopNotificationIcon = styled.div<Showable>`
   flex-shrink: 0;
   width: 4.5rem;
   height: 4.5rem;
-  background: #fff;
-  border-radius: 18px;
+  background: ${colorsV3.gray900};
+  color: ${colorsV3.white};
+  border-radius: 8px;
 
   opacity: 0.5;
   transform: scale(0.9);
@@ -172,10 +175,12 @@ const MobileNotificationIcon = styled(DesktopNotificationIcon)`
   width: 1.75rem;
   height: 1.75rem;
   vertical-align: center;
-  border-radius: 5px;
+  border-radius: 3px;
   margin-right: 0.5rem;
+  background: ${colorsV3.gray900};
+  color: ${colorsV3.white};
 
-  @media (min-width: 376px) {
+  ${MEDIA_MIN_WIDTH} {
     display: none;
   }
 `
@@ -183,7 +188,7 @@ const StyledHedvigSymbol = styled(HedvigSymbol)`
   width: 15px;
   height: 19px;
 
-  @media (min-width: 376px) {
+  ${MEDIA_MIN_WIDTH} {
     width: 30px;
     height: 38px;
   }
@@ -213,7 +218,7 @@ export const SwitchSafetySection: React.FC = () => {
               <NotificationArea>
                 <Notification visible={isVisible}>
                   <DesktopNotificationIcon visible={isVisible}>
-                    <StyledHedvigSymbol />
+                    <StyledHedvigSymbol size="60%" />
                   </DesktopNotificationIcon>
                   <NotificationTimestamp>
                     {textKeys.OFFER_SWITCHER_SAFETY_NOTIFICATION_TIMESTAMP()}
@@ -221,7 +226,7 @@ export const SwitchSafetySection: React.FC = () => {
                   <NotificationBody>
                     <NotificationHeading>
                       <MobileNotificationIcon visible={isVisible}>
-                        <StyledHedvigSymbol />
+                        <StyledHedvigSymbol size="60%" />
                       </MobileNotificationIcon>
                       Hedvig
                     </NotificationHeading>
