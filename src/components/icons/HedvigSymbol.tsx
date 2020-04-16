@@ -1,23 +1,17 @@
+import styled from '@emotion/styled'
 import * as React from 'react'
 
-export const HedvigSymbol: React.FC<{ className?: string }> = ({
-  className,
-}) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 19 25"
-    width="19"
-    height="25"
-    className={className}
-  >
-    <g fill="none">
-      <path fill="#1BE9B6" d="M14.456 24.998h3.725v-8.735h-3.725z" />
-      <path
-        fill="#651EFF"
-        d="M18.18 16.263h-3.724a5.372 5.372 0 00-5.365-5.366 5.372 5.372 0 00-5.366 5.366H0c0-5.012 4.078-9.09 9.09-9.09 5.013 0 9.09 4.078 9.09 9.09"
-      />
-      <path fill="#0F007A" d="M0 16.263h3.725V0H0z" />
-      <path fill="#FF8A80" d="M0 24.998h3.725v-8.735H0z" />
+const Svg = styled('svg')({
+  fill: 'currentColor',
+})
+
+export const HedvigSymbol: React.FunctionComponent<{
+  size: number | string
+}> = ({ size }) => (
+  <Svg width={String(size)} height={String(size)} viewBox="0 0 300 300">
+    <g fillRule="nonzero">
+      <path d="M150 0C67.157 0 0 67.157 0 150s67.157 150 150 150 150-67.157 150-150A150 150 0 00150 0zm0 279.59c-71.44 0-129.56-58.07-129.56-129.57C20.523 78.5 78.48 20.543 150 20.46c71.45 0 129.57 58.12 129.57 129.56-.077 71.528-58.042 129.493-129.57 129.57z" />
+      <path d="M194.33 139.8h-88.65V68.19H85.22v163.67h20.46v-71.61h88.65v71.61h20.46V68.19h-20.46z" />
     </g>
-  </svg>
+  </Svg>
 )
