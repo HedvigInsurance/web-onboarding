@@ -109,7 +109,7 @@ export const reactPageRoutes: ReactPageRoute[] = [
                 }
             }
             break
-          case 'en':
+          case 'se-en':
             switch (match.params.name) {
               case 'new':
                 return {
