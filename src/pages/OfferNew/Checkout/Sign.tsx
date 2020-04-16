@@ -138,12 +138,13 @@ export const Sign: React.FC<Props> = ({
               <MarkdownTranslation
                 textKey="CHECKOUT_SIGN_DISCLAIMER"
                 replacements={{
-                  PREBUY_LINK: quote.insuranceTerms.get(
-                    InsuranceTermType.PreSaleInfo,
-                  )!!.url,
-                  TERMS_LINK: quote.insuranceTerms.get(
-                    InsuranceTermType.TermsAndConditions,
-                  )!!.url,
+                  PREBUY_LINK:
+                    quote.insuranceTerms.get(InsuranceTermType.PreSaleInfo)
+                      ?.url ?? '',
+                  TERMS_LINK:
+                    quote.insuranceTerms.get(
+                      InsuranceTermType.TermsAndConditions,
+                    )?.url ?? '',
                 }}
                 markdownProps={{ linkTarget: '_blank' }}
               />

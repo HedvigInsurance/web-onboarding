@@ -382,7 +382,7 @@ export const CompareTable = (props: Props) => {
 
       <PrimaryCompanySection>
         <PrimaryCompanyHead>
-          <HedvigSymbol />
+          <HedvigSymbol size="100%" />
         </PrimaryCompanyHead>
 
         {Object.entries(props.primaryCompany)

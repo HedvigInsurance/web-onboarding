@@ -142,7 +142,7 @@ const LandingPageContainer = styled.div`
   backdrop-filter: blur(20px);
 `
 
-export const Landing: React.FC<{ language?: string }> = ({ language }) => {
+export const Landing: React.FC<{ language: string }> = ({ language }) => {
   const textKeys = useTextKeys()
   const market = useMarket()
   const variation = useVariation()
@@ -191,11 +191,7 @@ const LandingPageCardsSe: React.FC<{
       <Card>
         <Headline>{textKeys.STARTPAGE_UNINSURED_HEADLINE()}</Headline>
         <Paragraph>{textKeys.STARTPAGE_UNINSURED_BODY()}</Paragraph>
-        <ProceedButton
-          size="lg"
-          fullWidth
-          to={(language ? '/' + language : '') + '/new-member/new'}
-        >
+        <ProceedButton size="lg" fullWidth to={`/${language}/new-member/new`}>
           {textKeys.STARTPAGE_UNINSURED_BUTTON()}
         </ProceedButton>
       </Card>
@@ -205,7 +201,7 @@ const LandingPageCardsSe: React.FC<{
         <ProceedButton
           size="lg"
           fullWidth
-          to={(language ? '/' + language : '') + '/new-member/switch'}
+          to={`/${language}/new-member/switch`}
         >
           {textKeys.STARTPAGE_INSURED_BUTTON()}
         </ProceedButton>
@@ -223,11 +219,7 @@ const LandingPageCardsNo: React.FC<{
       <Card>
         <Headline>{textKeys.STARTPAGE_COMBO_HEADLINE()}</Headline>
         <Paragraph>{textKeys.STARTPAGE_COMBO_BODY()}</Paragraph>
-        <ProceedButton
-          size="lg"
-          fullWidth
-          to={(language ? '/' + language : '') + '/new-member/combo'}
-        >
+        <ProceedButton size="lg" fullWidth to={`/${language}/new-member/combo`}>
           {textKeys.STARTPAGE_COMBO_BUTTON()}
         </ProceedButton>
       </Card>
@@ -237,7 +229,7 @@ const LandingPageCardsNo: React.FC<{
         <ProceedButton
           size="lg"
           fullWidth
-          to={(language ? '/' + language : '') + '/new-member/contents'}
+          to={`/${language}/new-member/contents`}
         >
           {textKeys.STARTPAGE_CONTENTS_BUTTON()}
         </ProceedButton>
@@ -248,7 +240,7 @@ const LandingPageCardsNo: React.FC<{
         <ProceedButton
           size="lg"
           fullWidth
-          to={(language ? '/' + language : '') + '/new-member/travel'}
+          to={`/${language}/new-member/travel`}
         >
           {textKeys.STARTPAGE_TRAVEL_BUTTON()}
         </ProceedButton>

@@ -170,7 +170,7 @@ interface EmbarkRootProps {
   name?: string
   baseUrl?: string
   showLanding?: boolean
-  language?: string
+  language: string
 }
 
 const ANGEL_DATA_QUERY = gql`
