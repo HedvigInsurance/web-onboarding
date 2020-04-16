@@ -180,17 +180,11 @@ const createAdyenCheckout = ({
     ['en_NO', 'en-US'],
   ])(getLocaleIsoCode(currentLocale))
 
-  const returnUrl = `${window.location.origin}${
-    currentLocale ? '/' + currentLocale : ''
-  }/new-member/connect-payment/adyen-callback` // FIXME is this always true?
+  const returnUrl = `${window.location.origin}/${currentLocale}/new-member/connect-payment/adyen-callback`
 
   const handleResult = (dropinComponent: any, resultCode: string) => {
     if (['Authorised', 'Pending'].includes(resultCode)) {
-      history.push(
-        currentLocale
-          ? '/' + currentLocale + '/new-member/download'
-          : '/new-member/download',
-      )
+      history.push(`/${currentLocale}/new-member/download`)
     } else {
       // tslint:disable-next-line no-console
       console.error(

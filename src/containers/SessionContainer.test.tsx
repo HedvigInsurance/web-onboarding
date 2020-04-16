@@ -35,7 +35,7 @@ import {
 
 it('picks up any stored session token in session without actually creating a new session', () => {
   const wrapper = mount(
-    <StaticRouter location="/new-member" context={{}}>
+    <StaticRouter location="/se/new-member" context={{}}>
       <MockedProvider>
         <Provider<{
           storage: { session: IsomorphicSessionStorage<Session> }
@@ -92,7 +92,7 @@ it('creates a new session', async () => {
     },
   ]
   const wrapper = mount(
-    <StaticRouter location="/new-member" context={{}}>
+    <StaticRouter location="/se/new-member" context={{}}>
       <MockedProvider mocks={mocks}>
         <Provider<{
           storage: { session: IsomorphicSessionStorage<Session> }

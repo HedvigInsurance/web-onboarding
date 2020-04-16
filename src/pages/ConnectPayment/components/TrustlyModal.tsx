@@ -116,10 +116,7 @@ const TrustlyModal: React.FC<Props> = ({
                 <CurrentLocale>
                   {({ currentLocale }) => (
                     <Mount on={track}>
-                      <Redirect
-                        to={`/${currentLocale &&
-                          currentLocale + '/'}new-member/download`}
-                      />
+                      <Redirect to={`/${currentLocale}/new-member/download`} />
                     </Mount>
                   )}
                 </CurrentLocale>
