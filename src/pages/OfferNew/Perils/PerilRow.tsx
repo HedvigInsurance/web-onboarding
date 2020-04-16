@@ -3,6 +3,8 @@ import { PerilCollection } from 'pages/OfferNew/Perils/PerilCollection'
 import { PerilModal } from 'pages/OfferNew/Perils/PerilModal'
 import { OfferQuote } from 'pages/OfferNew/types'
 import * as React from 'react'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { insuranceTypeTextKeys } from '../utils'
 
 interface Props {
   offerQuote: OfferQuote
@@ -11,9 +13,11 @@ interface Props {
 export const PerilRow: React.FC<Props> = ({ offerQuote }) => {
   const [isShowingPeril, setIsShowingPeril] = React.useState(false)
   const [currentPeril, setCurrentPeril] = React.useState(0)
+  const textKeys = useTextKeys()
 
   return (
     <>
+      <h3>{textKeys[insuranceTypeTextKeys[offerQuote.contractType]]()}</h3>
       <PerilCollection
         perils={offerQuote.perils}
         setCurrentPeril={setCurrentPeril}

@@ -142,7 +142,8 @@ const SummaryText = styled.div`
 `
 
 const Body = styled.div`
-  padding: 2rem 1rem;
+  padding: 2rem;
+  padding-top: 0;
 
   @media (max-width: 600px) {
     padding: 1rem;
