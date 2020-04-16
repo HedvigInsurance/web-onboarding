@@ -22,7 +22,7 @@ const createIntercom = () => {
 export const Intercom: React.FC = () => {
   const variation = useVariation()
   const isIntercomMatch = useRouteMatch(
-    '/:locale(no-en|no)/new-member/:place(offer|sign|download)',
+    '/:locale(se-en|se|no-en|no)/new-member/:place(offer|sign|download)',
   )
   React.useEffect(() => {
     if ([Variation.IOS, Variation.ANDROID].includes(variation!)) {
