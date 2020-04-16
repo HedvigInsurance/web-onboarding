@@ -48,7 +48,6 @@ const StartDateWrapper = styled.div`
   position: relative;
   margin-top: 0.375rem;
   margin-bottom: 2rem;
-  padding: 0 0.5rem;
 `
 
 const InsuranceTypeLabel = styled('div')`

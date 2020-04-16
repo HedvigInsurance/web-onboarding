@@ -250,7 +250,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
         <title>{textKeys.STARTPAGE_PAGE_TITLE()}</title>
         <meta
           property="og:image"
-          content="https://www.hedvig.com/new-member-assets/social/hedvig-hemforsakring.jpg"
+          content="https://www.hedvig.com/new-member-assets/social/hedvig-hemforsakring-2.jpg"
         />
         <meta property="og:title" content={textKeys.EMBARK_META_OG_TITLE()} />
       </Helmet>

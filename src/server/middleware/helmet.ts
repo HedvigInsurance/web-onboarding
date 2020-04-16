@@ -49,6 +49,7 @@ const defaultSrc = [
   'trustly.com',
   '*.trustly.com',
   'cdn.mxpnl.com',
+  'cdn.segment.com',
   'https://cdn.heapanalytics.com',
   'https://api-js.mixpanel.com',
   'checkoutshopper-live.adyen.com',
