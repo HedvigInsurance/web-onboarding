@@ -19,6 +19,7 @@ export const serverSideRedirects = [
 
 interface ReactPageRoute {
   path: string
+  serverPath?: string | RegExp
   Component?: React.ComponentType<any>
   render?: (props: RouteComponentProps<any>) => React.ReactNode
   exact?: boolean
@@ -163,5 +164,9 @@ export const reactPageRoutes: ReactPageRoute[] = [
     Component: Referral,
     exact: true,
   },
-  { path: '/*', Component: FourOhFour },
+  {
+    path: '/*',
+    serverPath: /^(?!\/?new-member-assets).*$/,
+    Component: FourOhFour,
+  },
 ]

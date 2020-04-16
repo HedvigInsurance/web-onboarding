@@ -31,5 +31,6 @@ export const ANDROID_MINIMUM_VERSION = getAndroidMinimumVersion()
 export const APPLE_BUNDLE_ID = getAppleBundleId()
 export const APP_STORE_ID = getAppStoreId()
 export const IOS_MINIMUM_VERSION = getIosMinimumVersion()
+export const ASSET_FALLBACK_PROXY = process.env.ASSET_FALLBACK_PROXY
 export const ADYEN_ORIGIN_KEY = process.env.ADYEN_ORIGIN_KEY!
 export const ADYEN_ENVIRONMENT = process.env.ADYEN_ENVIRONMENT!

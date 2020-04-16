@@ -1,6 +1,7 @@
 import { createKoaServer } from '@hedviginsurance/web-survival-kit' // tslint:disable-line ordered-imports
 import * as Sentry from '@sentry/node' // tslint:disable-line ordered-imports
 import * as bodyParser from 'koa-bodyparser'
+import * as proxy from 'koa-proxies'
 import { handleAdyen3dsPostRedirect } from 'server/adyenMiddleware'
 import 'source-map-support/register'
 import { Logger } from 'typescript-logging'
@@ -9,7 +10,11 @@ import {
   reactPageRoutes,
   serverSideRedirects,
 } from './routes'
-import { GIRAFFE_ENDPOINT, GIRAFFE_WS_ENDPOINT } from './server/config'
+import {
+  ASSET_FALLBACK_PROXY,
+  GIRAFFE_ENDPOINT,
+  GIRAFFE_WS_ENDPOINT,
+} from './server/config'
 import { appLogger } from './server/logging'
 import {
   inCaseOfEmergency,
@@ -50,6 +55,16 @@ const server = createKoaServer({
   publicPath: '/new-member-assets',
   assetLocation: __dirname + '/assets',
 })
+
+if (ASSET_FALLBACK_PROXY) {
+  server.app.use(
+    proxy('/new-member-assets', {
+      target: ASSET_FALLBACK_PROXY,
+      logs: true,
+      changeOrigin: true,
+    }),
+  )
+}
 
 if (process.env.FORCE_HOST) {
   appLogger.info(`Forcing host to be ${process.env.FORCE_HOST}`)
@@ -120,7 +135,7 @@ server.router.post(
 )
 
 reactPageRoutes.forEach((route) => {
-  server.router.get(route.path, getPage)
+  server.router.get(route.serverPath ?? route.path, getPage)
 })
 
 server.app.listen(getPort(), () => {
