@@ -185,7 +185,7 @@ const Calendar: React.FC<DayzedCalendarProps> = ({
   React.useEffect(() => {
     const getLocaleImport = () => {
       switch (locale) {
-        case 'en':
+        case 'se-en':
         case 'no-en':
           return import(
             /* webpackChunkName: 'date-fns-en' */
@@ -196,6 +196,7 @@ const Calendar: React.FC<DayzedCalendarProps> = ({
             /* webpackChunkName: 'date-fn-no' */
             'date-fns/locale/nb'
           )
+        case 'se':
         default:
           return import(
             /* webpackChunkName: 'date-fns-sv' */

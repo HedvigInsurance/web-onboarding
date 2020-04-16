@@ -24,3 +24,19 @@ export const forceHost = ({ host }: { host: string }): Middleware => async (
 
   await next()
 }
+
+export const redirectEmptyLanguageToSweden: Middleware = (ctx, next) => {
+  if (ctx.path.startsWith('/new-member')) {
+    ctx.set('location', '/se' + ctx.path)
+    ctx.status = 302
+    return
+  }
+
+  if (ctx.path.startsWith('/en/new-member')) {
+    ctx.set('location', '/se-enn' + ctx.path)
+    ctx.status = 302
+    return
+  }
+
+  return next()
+}

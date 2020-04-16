@@ -18,7 +18,11 @@ import {
   setRequestUuidMiddleware,
 } from './server/middleware/enhancers'
 import { helmet } from './server/middleware/helmet'
-import { forceHost, permanentRedirect } from './server/middleware/redirects'
+import {
+  forceHost,
+  permanentRedirect,
+  redirectEmptyLanguageToSweden,
+} from './server/middleware/redirects'
 import { getPage } from './server/page'
 import { notNullable } from './utils/nullables'
 import { sentryConfig } from './utils/sentry'
@@ -51,10 +55,7 @@ if (process.env.FORCE_HOST) {
   server.router.use(forceHost({ host: process.env.FORCE_HOST! }))
 }
 
-// 302 because english web onboarding is broken at the time of this comment
-server.router.get('/en/new-member/hedvig', (ctx) => {
-  ctx.redirect('/en/download')
-})
+server.router.use('/new-member', redirectEmptyLanguageToSweden)
 
 serverSideRedirects.forEach(({ from, to }) => {
   server.router.use(from, permanentRedirect(to))

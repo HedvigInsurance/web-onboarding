@@ -14,8 +14,7 @@ export const TrustlyCheckout: React.FC = () => {
   const [createTrustlyUrlMutation] = useRegisterDirectDebitMutation()
 
   const generateTrustlyUrl = async () => {
-    const baseUrl = `${window.location.origin}/${currentLocale &&
-      currentLocale + '/'}new-member/connect-payment`
+    const baseUrl = `${window.location.origin}/${currentLocale}/new-member/connect-payment`
 
     const res = await createTrustlyUrlMutation({
       variables: {

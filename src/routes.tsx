@@ -10,7 +10,7 @@ import { FourOhFour } from './pages/FourOhFour'
 import { OfferNew } from './pages/OfferNew'
 import { Referral } from './pages/Referral'
 
-export const LOCALE_PATH_PATTERN = '/:locale(en|no-en|no)?'
+export const LOCALE_PATH_PATTERN = '/:locale(se-en|se|no-en|no)'
 export const serverSideRedirects = [
   { from: '/referrals/terms', to: '/invite/terms' },
   { from: '/new-member/hedvig', to: '/new-member' },
@@ -112,12 +112,12 @@ export const reactPageRoutes: ReactPageRoute[] = [
             switch (match.params.name) {
               case 'new':
                 return {
-                  baseUrl: '/en/new-member/new',
+                  baseUrl: '/se-en/new-member/new',
                   name: 'Web Onboarding - English Needer',
                 }
               case 'switch':
                 return {
-                  baseUrl: '/en/new-member/switch',
+                  baseUrl: '/se-en/new-member/switch',
                   name: 'Web Onboarding - English Switcher',
                 }
             }
@@ -126,17 +126,17 @@ export const reactPageRoutes: ReactPageRoute[] = [
             switch (match.params.name) {
               case 'new':
                 return {
-                  baseUrl: '/new-member/new',
+                  baseUrl: '/se/new-member/new',
                   name: 'Web Onboarding - Swedish Needer',
                 }
               case 'switch':
                 return {
-                  baseUrl: '/new-member/switch',
+                  baseUrl: '/se/new-member/switch',
                   name: 'Web Onboarding - Swedish Switcher',
                 }
               case 'switch-beta':
                 return {
-                  baseUrl: '/new-member/switch-beta',
+                  baseUrl: '/se/new-member/switch-beta',
                   name: 'Switcher Onboarding Playground',
                 }
             }

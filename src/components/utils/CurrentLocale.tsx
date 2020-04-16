@@ -6,15 +6,16 @@ import { LOCALE_PATH_PATTERN } from '../../routes'
 
 export const getLocaleIsoCode = (locale: string): Locale => {
   switch (locale) {
-    case 'en':
+    case 'se-en':
       return Locale.EnSe
     case 'no':
       return Locale.NbNo
     case 'no-en':
       return Locale.EnNo
-    case '':
-    default:
+    case 'se':
       return Locale.SvSe
+    default:
+      throw new Error(`Illegal locale "${locale}"`)
   }
 }
 
@@ -52,9 +53,8 @@ export const useMarket = (): Market => {
   const currentLocale = useCurrentLocale()
 
   return match([
-    ['sv', Market.Se],
-    ['', Market.Se],
-    ['en', Market.Se],
+    ['se', Market.Se],
+    ['se-en', Market.Se],
     ['no', Market.No],
     ['no-en', Market.No],
   ])(currentLocale)!

@@ -34,7 +34,7 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
   isOpen: boolean,
 ) => {
   if (isOpen) {
-    history.push((locale ? '/' + locale : '') + `/new-member/sign`)
+    history.push(`/${locale}/new-member/sign`)
   } else {
     history.goBack()
   }
@@ -48,9 +48,7 @@ export const OfferNew: React.FC = () => {
   const variation = useVariation()
 
   if (quoteIds.length === 0) {
-    return (
-      <Redirect to={`${currentLocale && '/' + currentLocale}/new-member`} />
-    )
+    return <Redirect to={`/${currentLocale}/new-member`} />
   }
 
   const { data, loading: loadingQuoteBundle, refetch } = useQuoteBundleQuery({
@@ -64,7 +62,9 @@ export const OfferNew: React.FC = () => {
 
   const history = useHistory()
   const market = useMarket()
-  const checkoutMatch = useRouteMatch('/:locale(en|no-en|no)?/new-member/sign')
+  const checkoutMatch = useRouteMatch(
+    '/:locale(se-en|se|no-en|no)/new-member/sign',
+  )
   const toggleCheckout = createToggleCheckout(history, currentLocale)
   const [setStartDate] = useStartDateMutation()
 
