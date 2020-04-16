@@ -32,6 +32,10 @@ export const redirectEmptyLanguageToSweden: Middleware = (ctx, next) => {
     return
   }
 
+  return next()
+}
+
+export const redirectEnLanguageToSweden: Middleware = (ctx, next) => {
   if (ctx.path.startsWith('/en/new-member')) {
     ctx.set('location', '/se-en' + ctx.path.replace(/^\/en/, ''))
     ctx.status = 301

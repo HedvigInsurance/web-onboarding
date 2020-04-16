@@ -22,6 +22,7 @@ import {
   forceHost,
   permanentRedirect,
   redirectEmptyLanguageToSweden,
+  redirectEnLanguageToSweden,
 } from './server/middleware/redirects'
 import { getPage } from './server/page'
 import { notNullable } from './utils/nullables'
@@ -56,7 +57,7 @@ if (process.env.FORCE_HOST) {
 }
 
 server.router.use('/new-member*', redirectEmptyLanguageToSweden)
-server.router.use('/en/new-member*', redirectEmptyLanguageToSweden)
+server.router.use('/en/new-member*', redirectEnLanguageToSweden)
 
 serverSideRedirects.forEach(({ from, to }) => {
   server.router.use(from, permanentRedirect(to))
