@@ -75,10 +75,17 @@ export const helmet = koaHelmet({
         },
       ],
       styleSrc: ["'unsafe-inline'", "'self'", 'checkoutshopper-live.adyen.com'],
-      upgradeInsecureRequests: true,
       objectSrc: ["'none'"],
+      imgSrc: [
+        "'self'",
+        'data:',
+        'hedvig.com',
+        '*.hedvig.com',
+        CONTENT_SERVICE_ENDPOINT,
+      ],
       reportUri:
         process.env.CSP_REPORT_ENDPOINT || '/new-member/_report-csp-violation',
+      upgradeInsecureRequests: true,
     },
   },
 })
