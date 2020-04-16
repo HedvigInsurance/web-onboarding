@@ -52,15 +52,17 @@ const Container = styled.span`
     border: 1px solid ${colorsV2.lightgray};
   }
 
-  svg {
+  img {
     width: 2rem;
     height: 2rem;
     margin-right: 0.5rem;
 
     @media (min-width: 400px) {
       margin-right: 0;
-      width: 3rem;
+      width: 100%;
       height: 3rem;
+      min-width: 0;
+      min-height: 0;
     }
   }
 
@@ -84,7 +86,7 @@ const Container = styled.span`
 const Title = styled('div')`
   font-size: 1rem;
   letter-spacing: -0.23px;
-  color: ${colorsV3.gray900};
+  color: ${colorsV3.black};
   font-family: ${fonts.FAVORIT};
 `
 

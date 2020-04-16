@@ -2,9 +2,14 @@ import { createKoaServer } from '@hedviginsurance/web-survival-kit' // tslint:di
 import * as Sentry from '@sentry/node' // tslint:disable-line ordered-imports
 import * as bodyParser from 'koa-bodyparser'
 import * as proxy from 'koa-proxies'
+import { handleAdyen3dsPostRedirect } from 'server/adyenMiddleware'
 import 'source-map-support/register'
 import { Logger } from 'typescript-logging'
-import { reactPageRoutes, serverSideRedirects } from './routes'
+import {
+  LOCALE_PATH_PATTERN,
+  reactPageRoutes,
+  serverSideRedirects,
+} from './routes'
 import {
   ASSET_FALLBACK_PROXY,
   GIRAFFE_ENDPOINT,
@@ -18,7 +23,12 @@ import {
   setRequestUuidMiddleware,
 } from './server/middleware/enhancers'
 import { helmet } from './server/middleware/helmet'
-import { forceHost, permanentRedirect } from './server/middleware/redirects'
+import {
+  forceHost,
+  permanentRedirect,
+  redirectEmptyLanguageToSweden,
+  redirectEnLanguageToSweden,
+} from './server/middleware/redirects'
 import { getPage } from './server/page'
 import { notNullable } from './utils/nullables'
 import { sentryConfig } from './utils/sentry'
@@ -60,6 +70,9 @@ if (process.env.FORCE_HOST) {
   appLogger.info(`Forcing host to be ${process.env.FORCE_HOST}`)
   server.router.use(forceHost({ host: process.env.FORCE_HOST! }))
 }
+
+server.router.use('/new-member*', redirectEmptyLanguageToSweden)
+server.router.use('/en/new-member*', redirectEnLanguageToSweden)
 
 serverSideRedirects.forEach(({ from, to }) => {
   server.router.use(from, permanentRedirect(to))
@@ -115,6 +128,11 @@ server.router.post('/new-member/_report-csp-violation', (ctx) => {
   )
   ctx.status = 204
 })
+
+server.router.post(
+  LOCALE_PATH_PATTERN + '/new-member/connect-payment/adyen-callback',
+  handleAdyen3dsPostRedirect,
+)
 
 reactPageRoutes.forEach((route) => {
   server.router.get(route.serverPath ?? route.path, getPage)

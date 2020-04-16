@@ -1,22 +1,14 @@
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import color from 'color'
-import { DocumentIcon } from 'components/icons/Document'
+import { Limits } from 'pages/OfferNew/Perils/InsuranceValues/Limits'
+import { OfferQuote } from 'pages/OfferNew/types'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-import {
-  getEUPrebuyPDFTextKey,
-  getInsurancePDFTextKey,
-  getInsuranceType,
-  getPrebuyPDFTextKey,
-  TypeOfContract,
-} from 'utils/insuranceDomainUtils'
 import { SubSubHeadingBlack } from '../../components'
-import { insuranceValues } from './mock'
-import { Values } from './Values'
 
 interface Props {
-  contractType: TypeOfContract
+  offerQuote: OfferQuote
 }
 
 const Wrapper = styled.div`
@@ -32,15 +24,6 @@ const Header = styled.div`
   flex-direction: row;
   align-items: center;
 `
-
-// const TooltipWrapper = styled.div`
-//   margin-left: 1rem;
-//   display: none;
-//
-//   @media (max-width: 600px) {
-//     display: block;
-//   }
-// `
 
 const Links = styled.div`
   display: flex;
@@ -58,9 +41,9 @@ const Link = styled.a`
   display: flex;
   align-items: center;
   padding: 0.75rem 1.5rem 0.75rem 1rem;
-  background: ${colorsV2.lightgray};
-  border-radius: 1.75rem;
-  color: ${colorsV2.black};
+  background: ${colorsV3.gray300};
+  border-radius: 8px;
+  color: ${colorsV3.black};
   font-size: 1rem;
   text-decoration: none;
   margin-right: 1rem;
@@ -75,10 +58,12 @@ const Link = styled.a`
     margin-right: 0.5rem;
   }
 
-  :hover {
-    background: ${color(colorsV2.lightgray)
+  :hover,
+  :focus {
+    background: ${color(colorsV3.gray300)
       .darken(0.03)
       .toString()};
+    color: ${colorsV3.black};
   }
 
   @media (max-width: 600px) {
@@ -87,7 +72,7 @@ const Link = styled.a`
   }
 `
 
-export const InsuranceValues: React.FC<Props> = ({ contractType }) => {
+export const InsuranceValues: React.FC<Props> = ({ offerQuote }) => {
   const textKeys = useTextKeys()
 
   return (
@@ -96,39 +81,25 @@ export const InsuranceValues: React.FC<Props> = ({ contractType }) => {
         <SubSubHeadingBlack>
           {textKeys.COVERAGE_INFO_HEADLINE()}
         </SubSubHeadingBlack>
-        {/*<TooltipWrapper>
-          <Tooltip size="lg" body="Information" />
-        </TooltipWrapper>*/}
       </Header>
 
-      <Values
-        insuranceValues={insuranceValues(getInsuranceType(contractType))}
-      />
+      <Limits insurableLimits={offerQuote.insurableLimits} />
 
       <Links>
-        <Link
-          href={textKeys[getInsurancePDFTextKey(contractType)]()}
-          target="_blank"
-        >
-          <DocumentIcon />
-          {textKeys.COVERAGE_TERMSANDCONDITIONS_BUTTON()}
-        </Link>
-
-        <Link
-          href={textKeys[getPrebuyPDFTextKey(contractType)]()}
-          target="_blank"
-        >
-          <DocumentIcon />
-          {textKeys.COVERAGE_PRESALEINFORMATION_BUTTON()}
-        </Link>
-
-        <Link
-          href={textKeys[getEUPrebuyPDFTextKey(contractType)]()}
-          target="_blank"
-        >
-          <DocumentIcon />
-          {textKeys.COVERAGE_PRESALEINFORMATIONEU_BUTTON()}
-        </Link>
+        {[...offerQuote.insuranceTerms.entries()].map(
+          ([insuranceTermType, insuranceTerm]) => {
+            return (
+              <Link
+                key={insuranceTermType}
+                href={insuranceTerm.url}
+                target="_blank"
+              >
+                {insuranceTerm.displayName}
+                {' ↗'}
+              </Link>
+            )
+          },
+        )}
       </Links>
     </Wrapper>
   )

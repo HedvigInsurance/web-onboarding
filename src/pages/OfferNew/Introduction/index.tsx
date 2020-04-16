@@ -1,24 +1,14 @@
-import { keyframes } from '@emotion/core'
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
-import { DownArrow } from 'components/icons/DownArrow'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { OfferData } from 'pages/OfferNew/types'
 import { isBundle } from 'pages/OfferNew/utils'
 import * as React from 'react'
-import { animateScroll } from 'react-scroll'
-import { useDocumentScroll } from 'utils/hooks/useDocumentScroll'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
-import {
-  Column,
-  Container,
-  HeadingWhite,
-  HeadingWrapper,
-  PreHeading,
-  Section,
-} from '../components'
+import { useDocumentScroll } from '../../../utils/hooks/useDocumentScroll'
+import { Container, Section } from '../components'
 import { ExternalInsuranceProvider } from './ExternalInsuranceProvider'
 import { Sidebar } from './Sidebar'
-import { Usps } from './Usps'
+
+import { Usps } from './USPS'
 
 interface Props {
   offerData: OfferData
@@ -29,7 +19,7 @@ interface Props {
 const Wrapper = styled.div`
   width: 100%;
   padding: 12.5rem 0 7rem 0;
-  background-color: ${colorsV2.black};
+  background-color: ${colorsV3.gray900};
   position: relative;
   box-sizing: border-box;
 
@@ -42,61 +32,23 @@ const Wrapper = styled.div`
   }
 `
 
-const UspsMobile = styled(Usps)`
-  @media (min-width: 1021px) {
-    display: none;
+const DesktopLeadingContainer = styled.div`
+  margin-right: 1.875rem;
+  display: none;
+  width: 100%;
+  min-height: 50vh;
+
+  @media (min-width: 1000px) {
+    display: block;
   }
 `
 
-const UspsDesktop = styled(Usps)`
-  @media (max-width: 1020px) {
-    display: none;
-  }
-`
+const MobileLeadingContainer = styled.div`
+  display: none;
+  width: 100%;
 
-const scrollButtonKeyframes = keyframes`
-  0% {
-    transform: translateY(0rem);
-  }
-  50% {
-    transform: translateY(-0.75rem);
-  }
-  100% {
-    transform: translateY(0rem);
-  }
-`
-
-const ScrollButton = styled.button`
-  font-size: 1rem;
-  letter-spacing: -0.23px;
-  color: ${colorsV2.black};
-  cursor: pointer;
-  border-radius: 28px;
-  background: ${colorsV2.lightgray};
-  padding: 1rem 1rem 1rem 1.5rem;
-  position: absolute;
-  border: none;
-  z-index: 1;
-  left: 1rem;
-  bottom: -10.875rem;
-  animation: ${scrollButtonKeyframes} 6s ease-in-out infinite;
-  transition: background 0.1s ease;
-
-  :focus {
-    outline: none;
-  }
-
-  :hover {
-    background: ${colorsV2.semilightgray};
-  }
-
-  svg {
-    margin-left: 0.75rem;
-    fill: ${colorsV2.black};
-  }
-
-  @media (max-width: 600px) {
-    bottom: -8.875rem;
+  @media (max-width: 1000px) {
+    display: block;
   }
 `
 
@@ -107,7 +59,6 @@ export const Introduction: React.FC<Props> = ({
 }) => {
   const [sidebarIsSticky, setSidebarIsSticky] = React.useState(false)
   const ref = React.useRef<HTMLDivElement>(null)
-  const textKeys = useTextKeys()
 
   useDocumentScroll(() => {
     const distanceToTop =
@@ -122,33 +73,31 @@ export const Introduction: React.FC<Props> = ({
     }
   })
 
-  // TODO: Data Collection + bundle?
   const hasDataCollection =
     !isBundle(offerData) && !!offerData.quotes[0].dataCollectionId
 
   return (
-    <Section bottomBlobColor={colorsV2.black}>
+    <Section>
       <Wrapper>
         <Container>
-          <Column>
-            <HeadingWrapper>
-              <PreHeading>{textKeys.HERO_LABEL()}</PreHeading>
-              <HeadingWhite>
-                {textKeys.HERO_HEADLINE({
-                  FIRST_NAME: offerData.person.firstName ?? '',
-                })}
-              </HeadingWhite>
-            </HeadingWrapper>
-            {hasDataCollection && !isBundle(offerData) ? (
+          <DesktopLeadingContainer>
+            <Usps />
+            {hasDataCollection && (
               <ExternalInsuranceProvider
                 dataCollectionId={offerData.quotes[0].dataCollectionId || ''}
                 offerData={offerData}
               />
-            ) : (
-              <UspsDesktop />
             )}
-          </Column>
-
+          </DesktopLeadingContainer>
+          <MobileLeadingContainer>
+            {hasDataCollection && (
+              <ExternalInsuranceProvider
+                dataCollectionId={offerData.quotes[0].dataCollectionId || ''}
+                offerData={offerData}
+              />
+            )}
+            <Usps />
+          </MobileLeadingContainer>
           <Sidebar
             ref={ref}
             sticky={sidebarIsSticky}
@@ -156,17 +105,6 @@ export const Introduction: React.FC<Props> = ({
             refetch={refetch}
             onCheckoutOpen={onCheckoutOpen}
           />
-
-          <UspsMobile />
-
-          <ScrollButton
-            onClick={() => {
-              animateScroll.scrollTo(800)
-            }}
-          >
-            {textKeys.HERO_SCROLL_BUTTON()}
-            <DownArrow />
-          </ScrollButton>
         </Container>
       </Wrapper>
     </Section>

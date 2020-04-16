@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
-import { Button } from 'new-components/buttons'
-import { TOP_BAR_Z_INDEX } from 'new-components/TopBar'
+import { Button } from 'components/buttons'
+import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 
@@ -25,15 +25,16 @@ const Wrapper = styled.div<Hidable & { displayNone: boolean }>`
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   background: #fff;
-  padding: 1rem;
-  padding-bottom: 54px;
+  padding: 1rem 1rem 54px 1rem; // 54px = spacing needed before ios safari opens bottom toolbar
 
   @media (min-width: 601px) {
     display: none;
   }
 `
 
-const CtaWrapper = styled.div``
+const CtaWrapper = styled.div`
+  width: 100%;
+`
 const Cta = styled(Button)`
   @media (max-width: 374px) {
     padding: 0.75rem;
@@ -71,7 +72,7 @@ export const StickyBottomSidebar: React.FC<Hidable & {
   return (
     <Wrapper isVisible={reallyIsVisible} displayNone={displayNone}>
       <CtaWrapper>
-        <Cta onClick={() => onCheckoutOpen()}>
+        <Cta fullWidth onClick={() => onCheckoutOpen()}>
           {textKeys.BOTTOMBAR_GETHEDVIG_BUTTON()}
         </Cta>
       </CtaWrapper>

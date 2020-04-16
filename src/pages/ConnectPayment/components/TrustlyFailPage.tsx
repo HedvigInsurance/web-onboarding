@@ -1,8 +1,8 @@
 import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
+import { Button } from 'components/buttons'
 import * as React from 'react'
-import { Button } from '../../../components/buttons'
 import { CurrentLocale } from '../../../components/utils/CurrentLocale'
 
 const Wrapper = styled('div')({
@@ -31,8 +31,7 @@ export const TrustlyFailPage: React.FC = () => (
           background={colors.PURPLE}
           foreground={colors.WHITE}
           onClick={() => {
-            const baseUrl = `${window.location.origin}/${currentLocale &&
-              currentLocale + '/'}new-member/connect-payment`
+            const baseUrl = `${window.location.origin}/${currentLocale}/new-member/connect-payment`
 
             window.location.href = `${baseUrl}/retry`
           }}

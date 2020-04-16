@@ -1,3 +1,5 @@
+import { LoadingPage } from 'components/LoadingPage'
+import { TopBar } from 'components/TopBar'
 import {
   getLocaleIsoCode,
   Market,
@@ -6,15 +8,20 @@ import {
 } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
-import { QuoteBundle, useQuoteBundleQuery } from 'data/graphql'
+import {
+  QuoteBundle,
+  useQuoteBundleQuery,
+  useStartDateMutation,
+} from 'data/graphql'
+import { format } from 'date-fns'
 import { History } from 'history'
-import { TopBar } from 'new-components/TopBar'
 import { SwitchSafetySection } from 'pages/OfferNew/SwitchSafetySection'
 import { TestimonialsSection } from 'pages/OfferNew/TestimonialsSection'
-import { getOfferData } from 'pages/OfferNew/utils'
+import { getOfferData, isBundle } from 'pages/OfferNew/utils'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
 import { Redirect, useHistory, useRouteMatch } from 'react-router'
+import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useStorage } from 'utils/StorageContainer'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
 import { Checkout } from './Checkout'
@@ -27,7 +34,7 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
   isOpen: boolean,
 ) => {
   if (isOpen) {
-    history.push((locale ? '/' + locale : '') + `/new-member/sign`)
+    history.push(`/${locale}/new-member/sign`)
   } else {
     history.goBack()
   }
@@ -38,11 +45,10 @@ export const OfferNew: React.FC = () => {
   const quoteIds = storage.session.getSession()?.quoteIds ?? []
   const currentLocale = useCurrentLocale()
   const localeIsoCode = getLocaleIsoCode(currentLocale)
+  const variation = useVariation()
 
   if (quoteIds.length === 0) {
-    return (
-      <Redirect to={`${currentLocale && '/' + currentLocale}/new-member`} />
-    )
+    return <Redirect to={`/${currentLocale}/new-member`} />
   }
 
   const { data, loading: loadingQuoteBundle, refetch } = useQuoteBundleQuery({
@@ -56,8 +62,34 @@ export const OfferNew: React.FC = () => {
 
   const history = useHistory()
   const market = useMarket()
-  const checkoutMatch = useRouteMatch('/:locale(en|no-en|no)?/new-member/sign')
+  const checkoutMatch = useRouteMatch(
+    '/:locale(se-en|se|no-en|no)/new-member/sign',
+  )
   const toggleCheckout = createToggleCheckout(history, currentLocale)
+  const [setStartDate] = useStartDateMutation()
+
+  // FIXME remove this once we have bundle quotes fixed
+  // hack for fixing start dates into combo quotes
+  const gqlDateFormat = 'yyyy-MM-dd'
+  React.useEffect(() => {
+    if (!data?.quoteBundle) {
+      return
+    }
+    if (!isBundle(getOfferData(data?.quoteBundle as QuoteBundle))) {
+      return
+    }
+
+    offerData.quotes.map(({ id, startDate }) => {
+      if (!startDate) {
+        setStartDate({
+          variables: {
+            quoteId: id,
+            date: format(new Date(), gqlDateFormat),
+          },
+        })
+      }
+    })
+  }, [data?.quoteBundle.quotes[0]?.startDate])
 
   if (!loadingQuoteBundle && !data?.quoteBundle) {
     throw new Error(
@@ -66,7 +98,7 @@ export const OfferNew: React.FC = () => {
   }
 
   if (loadingQuoteBundle && !data?.quoteBundle) {
-    return null
+    return <LoadingPage />
   }
 
   const offerData = getOfferData(data?.quoteBundle! as QuoteBundle)
@@ -74,7 +106,7 @@ export const OfferNew: React.FC = () => {
   return (
     <Page>
       <SessionTokenGuard>
-        <TopBar />
+        {![Variation.IOS, Variation.ANDROID].includes(variation!) && <TopBar />}
         <TrackAction
           event={{
             name: SemanticEvents.Ecommerce.CheckoutStarted,
@@ -102,7 +134,7 @@ export const OfferNew: React.FC = () => {
             currentInsurer={offerData.quotes[0].currentInsurer || undefined}
           />
         )}
-        ){market === Market.Se && <TestimonialsSection />}
+        {market === Market.Se && <TestimonialsSection />}
         <SwitchSafetySection />
         <FaqSection />
         <Checkout

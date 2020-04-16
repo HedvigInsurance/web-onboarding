@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2, fonts } from '@hedviginsurance/brand'
+import { colorsV3, fonts } from '@hedviginsurance/brand'
 import { PerilV2 } from 'data/graphql'
 import hexToRgba from 'hex-to-rgba'
 import * as React from 'react'
@@ -23,7 +23,7 @@ interface PerilModalProps {
 const Header = styled('div')`
   width: 100%;
   height: 8.75rem;
-  background-color: ${colorsV2.white};
+  background-color: ${colorsV3.white};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -72,11 +72,12 @@ const PickerItemLabel = styled('div')`
   letter-spacing: -0.23px;
   text-align: center;
   white-space: nowrap;
-  color: ${colorsV2.darkgray};
+  color: ${colorsV3.gray700};
 `
 
 interface PerilItemsContainerProps {
   currentPerilIndex: number
+  totalNumberOfPerils: number
   transition: boolean
 }
 
@@ -90,7 +91,10 @@ const PerilItemsContainer = styled('div')<PerilItemsContainerProps>`
   ${(props) =>
     `transform: translateX(${
       props.currentPerilIndex !== 0
-        ? `calc((-100%/3) - ${(props.currentPerilIndex - 12 - 2) * (100 + 16) +
+        ? `calc((-100%/3) - ${(props.currentPerilIndex -
+            props.totalNumberOfPerils -
+            1) *
+            (100 + 16) +
             8}px)`
         : `calc((-100%/3) + 6.75rem)`
     });`}
@@ -102,7 +106,7 @@ const Indicator = styled('div')`
   height: 0.125rem;
   bottom: 0;
   left: 0;
-  background-color: ${colorsV2.black};
+  background-color: ${colorsV3.gray900};
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
   transition: transform 0.15s ease-in-out;
@@ -122,8 +126,8 @@ const LeftGradient = styled(Gradient)`
   left: 0;
   background: linear-gradient(
     to right,
-    ${colorsV2.white} 30%,
-    ${hexToRgba(colorsV2.white, 0)} 100%
+    ${colorsV3.white} 30%,
+    ${hexToRgba(colorsV3.white, 0)} 100%
   );
 `
 
@@ -132,8 +136,8 @@ const RightGradient = styled(Gradient)`
   justify-content: flex-end;
   background: linear-gradient(
     to left,
-    ${colorsV2.white} 30%,
-    ${hexToRgba(colorsV2.white, 0)} 100%
+    ${colorsV3.white} 30%,
+    ${hexToRgba(colorsV3.white, 0)} 100%
   );
 `
 
@@ -146,14 +150,14 @@ const DirectionButton = styled('button')`
   border: none;
   svg {
     transition: all 0.15s ease-in-out;
-    fill: ${colorsV2.gray};
+    fill: ${colorsV3.gray500};
   }
   :focus {
     outline: none;
   }
   &:hover {
     svg {
-      fill: ${colorsV2.violet500};
+      fill: ${colorsV3.gray900};
     }
   }
 `
@@ -177,10 +181,10 @@ const Content = styled('div')`
 `
 
 const Title = styled.div`
-  font-family: ${fonts.GEOMANIST};
+  font-family: ${fonts.FAVORIT};
   font-size: 2.5rem;
   line-height: 3.5rem;
-  color: ${colorsV2.black};
+  color: ${colorsV3.gray900};
   margin-bottom: 1rem;
   letter-spacing: -0.57px;
 
@@ -194,7 +198,7 @@ const Title = styled.div`
 const Description = styled.div`
   font-size: 1.125rem;
   line-height: 1.625rem;
-  color: ${colorsV2.darkgray};
+  color: ${colorsV3.gray900};
   letter-spacing: -0.26px;
 `
 
@@ -236,7 +240,7 @@ const CoverageList = styled.div`
 const CoverageListTitle = styled.div`
   font-size: 1rem;
   line-height: 1.5rem;
-  color: ${colorsV2.black};
+  color: ${colorsV3.gray900};
   letter-spacing: -0.26px;
   font-weight: 600;
   margin-bottom: 0.75rem;
@@ -245,7 +249,7 @@ const CoverageListTitle = styled.div`
 const CoverageListItem = styled.div`
   font-size: 1rem;
   line-height: 1.5rem;
-  color: ${colorsV2.black};
+  color: ${colorsV3.gray700};
   letter-spacing: -0.26px;
   padding-left: 2rem;
   position: relative;
@@ -267,7 +271,7 @@ const InfoBox = styled.div`
   max-width: 41.25rem;
   width: 100%;
   border-radius: 8px;
-  background: ${colorsV2.offwhite};
+  background: ${colorsV3.gray200};
   padding: 1.5rem 2.5rem 1.5rem 3.5rem;
   margin-top: 4rem;
   position: relative;
@@ -290,7 +294,7 @@ const InfoBox = styled.div`
 const InfoBoxTitle = styled.div`
   font-size: 1rem;
   line-height: 1rem;
-  color: ${colorsV2.black};
+  color: ${colorsV3.gray900};
   letter-spacing: -0.26px;
   font-weight: 600;
   margin-bottom: 0.75rem;
@@ -299,7 +303,7 @@ const InfoBoxTitle = styled.div`
 const InfoBoxBody = styled.div`
   font-size: 0.875rem;
   line-height: 1.25rem;
-  color: ${colorsV2.darkgray};
+  color: ${colorsV3.gray700};
   letter-spacing: -0.26px;
 `
 
@@ -342,6 +346,7 @@ export const PerilModal: React.FC<PerilModalProps & ModalProps> = (props) => {
         <Picker>
           <PerilItemsContainer
             currentPerilIndex={props.currentPerilIndex}
+            totalNumberOfPerils={props.perils.length}
             transition={transitionEnabled}
           >
             {tripledPerils.map((peril, index) => (

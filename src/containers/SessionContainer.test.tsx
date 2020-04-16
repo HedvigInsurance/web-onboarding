@@ -16,6 +16,7 @@ import { mount } from 'enzyme'
 import * as React from 'react'
 
 import { Locale } from 'data/graphql'
+import { act } from 'react-dom/test-utils'
 import { StaticRouter } from 'react-router-dom'
 import { apolloClient } from '../client/apolloClient'
 import {
@@ -34,7 +35,7 @@ import {
 
 it('picks up any stored session token in session without actually creating a new session', () => {
   const wrapper = mount(
-    <StaticRouter location="/new-member" context={{}}>
+    <StaticRouter location="/se/new-member" context={{}}>
       <MockedProvider>
         <Provider<{
           storage: { session: IsomorphicSessionStorage<Session> }
@@ -91,7 +92,7 @@ it('creates a new session', async () => {
     },
   ]
   const wrapper = mount(
-    <StaticRouter location="/new-member" context={{}}>
+    <StaticRouter location="/se/new-member" context={{}}>
       <MockedProvider mocks={mocks}>
         <Provider<{
           storage: { session: IsomorphicSessionStorage<Session> }
@@ -115,8 +116,8 @@ it('creates a new session', async () => {
   )
 
   expect(wrapper.find('div').contains('abc123')).toBe(false)
-  await mockNetworkWait()
-  await mockNetworkWait(2)
+  await act(() => mockNetworkWait())
+  await act(() => mockNetworkWait(2))
   wrapper.update()
   expect(wrapper.find('div').contains('abc123')).toBe(true)
   expect(apolloClient!.subscriptionClient.close).toHaveBeenCalledWith(

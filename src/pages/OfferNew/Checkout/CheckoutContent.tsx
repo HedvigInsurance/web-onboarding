@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
-import { colorsV2, fonts } from '@hedviginsurance/brand/dist'
+import { colorsV3, fonts } from '@hedviginsurance/brand'
+import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { useEditQuoteMutation, useRedeemedCampaignsQuery } from 'data/graphql'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
@@ -23,7 +24,7 @@ const Section = styled('div')`
 export const Title = styled('h1')`
   font-size: 3.5rem;
   line-height: 1;
-  color: ${colorsV2.black};
+  color: ${colorsV3.gray900};
   margin: 0;
 
   @media (max-width: 40rem) {
@@ -51,14 +52,13 @@ const StartDateWrapper = styled.div`
 
 const InsuranceTypeLabel = styled('div')`
   font-size: 0.75rem;
-  color: ${colorsV2.gray};
+  color: ${colorsV3.gray500};
   text-transform: uppercase;
 `
 
 const InsuranceType = styled('div')`
   font-size: 2rem;
-  font-family: ${fonts.GEOMANIST};
-  font-weight: 500;
+  font-family: ${fonts.FAVORIT};
   line-height: 1;
 
   @media (max-width: 40rem) {
@@ -80,6 +80,7 @@ export const CheckoutContent: React.FC<Props> = ({
   refetch,
 }) => {
   const textKeys = useTextKeys()
+  const market = useMarket()
   const redeemedCampaignsQuery = useRedeemedCampaignsQuery()
   const monthlyCostDeduction = isMonthlyCostDeduction(
     redeemedCampaignsQuery.data?.redeemedCampaigns ?? [],
@@ -95,7 +96,11 @@ export const CheckoutContent: React.FC<Props> = ({
         <Title>{textKeys.CHECKOUT_TITLE()}</Title>
         <Excerpt>
           <div>
-            <InsuranceTypeLabel>{textKeys.SIDEBAR_LABEL()}</InsuranceTypeLabel>
+            {market !== Market.No && (
+              <InsuranceTypeLabel>
+                {textKeys.SIDEBAR_LABEL()}
+              </InsuranceTypeLabel>
+            )}
             <InsuranceType>
               {!isBundle(offerData) &&
                 textKeys[
@@ -111,7 +116,6 @@ export const CheckoutContent: React.FC<Props> = ({
               monthlyGross={offerData.cost.monthlyGross}
               monthlyNet={offerData.cost.monthlyNet}
               monthlyCostDeduction={monthlyCostDeduction}
-              highlightAmount
             />
           </div>
         </Excerpt>
@@ -121,9 +125,9 @@ export const CheckoutContent: React.FC<Props> = ({
           onEmailChange={(email) => {
             const onCompletion = new Promise<void>((resolve, reject) => {
               Promise.all(
-                quoteIds.map((quoteId) => {
-                  editQuote({ variables: { input: { id: quoteId, email } } })
-                }),
+                quoteIds.map((quoteId) =>
+                  editQuote({ variables: { input: { id: quoteId, email } } }),
+                ),
               )
                 .then(() => refetch())
                 .then(() => resolve())
@@ -142,9 +146,9 @@ export const CheckoutContent: React.FC<Props> = ({
               setReallyLoading(true)
               window.setTimeout(() => setFakeLoading(false), 1000)
               Promise.all(
-                quoteIds.map((quoteId) => {
-                  editQuote({ variables: { input: { id: quoteId, ssn } } })
-                }),
+                quoteIds.map((quoteId) =>
+                  editQuote({ variables: { input: { id: quoteId, ssn } } }),
+                ),
               )
                 .then(() => refetch())
                 .then(() => setReallyLoading(false))

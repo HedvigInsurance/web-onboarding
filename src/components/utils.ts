@@ -6,6 +6,7 @@ const spin = keyframes`
   to { transform: rotate(360deg); }
 `
 export const Spinner = styled.div`
+  display: inline-block;
   width: 1em;
   height: 1em;
   flex: 1;

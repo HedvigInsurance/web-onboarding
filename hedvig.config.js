@@ -32,5 +32,7 @@ module.exports = {
     'IOS_MINIMUM_VERSION',
     'BRANCH_API_KEY',
     'ASSET_FALLBACK_PROXY',
+    'ADYEN_ORIGIN_KEY',
+    'ADYEN_ENVIRONMENT',
   ],
 }

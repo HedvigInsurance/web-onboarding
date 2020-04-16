@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { BackArrow } from 'components/icons/BackArrow'
 import { Cross } from 'components/icons/Cross'
 import { ForwardArrow } from 'components/icons/ForwardArrow'
@@ -26,7 +26,7 @@ const Container = styled(motion.div)`
   width: 100%;
   border-radius: 8px;
   box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
-  background-color: ${colorsV2.white};
+  background-color: ${colorsV3.white};
 `
 
 const HeightCalculation = styled.div`
@@ -57,12 +57,10 @@ const CalendarMonthHeader = styled.span`
   display: block;
   padding: 1.25rem;
   font-size: 1rem;
-  font-weight: 600;
 `
 
 const CalendarWeekday = styled.span`
   font-size: 0.875rem;
-  font-weight: 300;
   display: inline-block;
   width: calc(100% / 7);
 `
@@ -88,7 +86,7 @@ const CalendarDay = styled.button<{ selected: boolean; selectable: boolean }>`
     transform: translateY(1px);
 
     path {
-      fill: ${colorsV2.darkgray};
+      fill: ${colorsV3.gray700};
     }
   }
 
@@ -97,28 +95,28 @@ const CalendarDay = styled.button<{ selected: boolean; selectable: boolean }>`
     props.selectable &&
     `
     :hover {
-      background-color: ${colorsV2.violet200};
-      color: ${colorsV2.white};
+      background-color: ${colorsV3.gray700};
+      color: ${colorsV3.white};
     }
 
     :active {
-      background-color: ${colorsV2.violet500};
-      color: ${colorsV2.white};
+      background-color: ${colorsV3.gray700};
+      color: ${colorsV3.white};
     }
   `};
 
   ${(props) =>
     props.selected &&
     `
-    background-color: ${colorsV2.violet500};
-    color: ${colorsV2.white};
+    background-color: ${colorsV3.gray900};
+    color: ${colorsV3.white};
   `};
 
   ${(props) =>
     !props.selectable &&
     `
-    background-color: ${colorsV2.lightgray};
-    color: ${colorsV2.darkgray};
+    background-color: ${colorsV3.gray300};
+    color: ${colorsV3.gray900};
     cursor: default;
   `};
 `
@@ -187,7 +185,7 @@ const Calendar: React.FC<DayzedCalendarProps> = ({
   React.useEffect(() => {
     const getLocaleImport = () => {
       switch (locale) {
-        case 'en':
+        case 'se-en':
         case 'no-en':
           return import(
             /* webpackChunkName: 'date-fns-en' */
@@ -198,6 +196,7 @@ const Calendar: React.FC<DayzedCalendarProps> = ({
             /* webpackChunkName: 'date-fn-no' */
             'date-fns/locale/nb'
           )
+        case 'se':
         default:
           return import(
             /* webpackChunkName: 'date-fns-sv' */

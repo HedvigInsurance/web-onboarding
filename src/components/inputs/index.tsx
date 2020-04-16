@@ -73,7 +73,6 @@ const StyledField = styled(Field)`
   border: none;
   font-size: 1.125rem;
   line-height: 1.625rem;
-  font-weight: 600;
   color: ${colorsV2.black};
   padding: 0 2.5rem 0 0;
   margin: 0;
@@ -158,7 +157,6 @@ const StyledRawInput = styled.input`
   border: none;
   font-size: 1.125rem;
   line-height: 1.625rem;
-  font-weight: 600;
   color: ${colorsV2.black};
   padding: 0;
   margin: 0;

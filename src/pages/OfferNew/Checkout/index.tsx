@@ -1,10 +1,14 @@
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { BackArrow } from 'components/icons/BackArrow'
+import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
-import { SignState, useSignQuotesMutation } from 'data/graphql'
-import { TOP_BAR_Z_INDEX } from 'new-components/TopBar'
+import {
+  SignState,
+  useSignQuotesMutation,
+  useSignStatusLazyQuery,
+} from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import { getQuoteIds } from 'pages/OfferNew/utils'
 import { SemanticEvents } from 'quepasa'
@@ -15,7 +19,6 @@ import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
 import { CheckoutContent } from './CheckoutContent'
 import { useScrollLock, useTrack, VisibilityState } from './hooks'
 import { Sign, SignUiState } from './Sign'
-import { useSignState } from './SignStatus'
 
 interface Openable {
   visibilityState: VisibilityState
@@ -86,7 +89,7 @@ const InnerWrapper = styled('div')`
   justify-content: space-between;
   width: 100%;
   min-height: 100%;
-  background: ${colorsV2.offwhite};
+  background: ${colorsV3.white};
   padding: 5rem 8rem 2.5rem 4.5rem;
 
   @media (max-width: 40rem) {
@@ -171,7 +174,10 @@ export const Checkout: React.FC<Props> = ({
   const [signUiState, setSignUiState] = React.useState(SignUiState.NOT_STARTED)
   const [emailUpdateLoading, setEmailUpdateLoading] = React.useState(false)
   const [ssnUpdateLoading, setSsnUpdateLoading] = React.useState(false)
-  const [startPollingSignState, signStatus] = useSignState()
+  const [startPollingSignState, signStatusQueryProps] = useSignStatusLazyQuery({
+    pollInterval: 1000,
+  })
+  const signStatus = signStatusQueryProps.data?.signStatus ?? null
   const [signQuotes, signQuotesMutation] = useSignQuotesMutation()
   const locale = useCurrentLocale()
 
@@ -216,10 +222,7 @@ export const Checkout: React.FC<Props> = ({
       >
         {({ track: trackAction }) => (
           <Mount on={trackAction}>
-            <Redirect
-              to={`/${locale && locale + '/'}new-member/connect-payment`}
-            />
-            )
+            <Redirect to={`/${locale}/new-member/connect-payment`} />)
           </Mount>
         )}
       </TrackAction>
@@ -275,14 +278,12 @@ export const Checkout: React.FC<Props> = ({
               return
             }
 
-            const baseUrl = `${window.location.origin}${
-              locale ? '/' + locale : ''
-            }/new-member`
+            const baseUrl = `${window.location.origin}/${locale}/new-member`
             const result = await signQuotes({
               variables: {
                 quoteIds: getQuoteIds(offerData),
-                successUrl: baseUrl + '/connect-payment',
-                failUrl: baseUrl + '/sign/fatal',
+                successUrl: baseUrl + '/sign/success',
+                failUrl: baseUrl + '/sign/fail',
               },
             })
             if (result.data?.signQuotes?.__typename === 'FailedToStartSign') {

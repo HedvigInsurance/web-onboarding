@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
-import { colorsV2, fonts } from '@hedviginsurance/brand'
+import { colorsV3, fonts } from '@hedviginsurance/brand'
+import { Spinner } from 'components/utils'
 import { MonetaryAmount } from 'containers/types'
-import { Spinner } from 'new-components/utils'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 
@@ -15,7 +15,7 @@ const PriceWrapper = styled.div`
 const PriceGross = styled.div<{ visible: boolean }>`
   font-size: 1rem;
   line-height: 1rem;
-  color: ${colorsV2.gray};
+  color: ${colorsV3.gray500};
   text-decoration: line-through;
   margin-bottom: 0.5rem;
   height: 0.875rem;
@@ -31,26 +31,20 @@ const PriceNumbers = styled.div`
 
 const PriceNet = styled.div<{
   monthlyCostDeduction: boolean
-  highlightAmount?: boolean
   lightAppearance?: boolean
 }>`
   font-size: 3.5rem;
   line-height: 3.5rem;
   color: ${(props) => {
     if (props.monthlyCostDeduction) {
-      return colorsV2.grass500
+      return colorsV3.purple500
     }
 
-    if (props.highlightAmount) {
-      return colorsV2.violet500
-    }
-
-    return colorsV2.black
+    return colorsV3.gray900
   }};
-  font-family: ${fonts.GEOMANIST};
-  font-weight: 600;
+  font-family: ${fonts.FAVORIT};
 
-  ${({ lightAppearance }) => lightAppearance && `color: ${colorsV2.white}`};
+  ${({ lightAppearance }) => lightAppearance && `color: ${colorsV3.white}`};
 
   @media (max-width: 330px) {
     font-size: 2.75rem;
@@ -70,19 +64,18 @@ const PriceUnit = styled.div<{ lightAppearance?: boolean }>`
   font-size: 1rem;
   line-height: 1rem;
   letter-spacing: -0.23px;
-  font-weight: 700;
-  color: ${colorsV2.darkgray};
+  color: ${colorsV3.gray700};
   margin-bottom: 0.25rem;
-  ${({ lightAppearance }) => lightAppearance && `color: ${colorsV2.white}`};
+  ${({ lightAppearance }) => lightAppearance && `color: ${colorsV3.white}`};
 `
 
 const PriceInterval = styled.div<{ lightAppearance?: boolean }>`
   font-size: 1rem;
   line-height: 1rem;
   letter-spacing: -0.23px;
-  color: ${colorsV2.darkgray};
+  color: ${colorsV3.gray700};
   white-space: nowrap;
-  ${({ lightAppearance }) => lightAppearance && `color: ${colorsV2.white}`};
+  ${({ lightAppearance }) => lightAppearance && `color: ${colorsV3.white}`};
 `
 
 const SpinnerWrapper = styled.div`
@@ -90,21 +83,19 @@ const SpinnerWrapper = styled.div`
   align-items: center;
   height: 3.5rem;
   font-size: 2rem;
-  color: ${colorsV2.darkgray};
+  color: ${colorsV3.gray900};
 `
 
 export const Price: React.FC<{
   monthlyCostDeduction?: boolean
   monthlyNet: MonetaryAmount
   monthlyGross: MonetaryAmount
-  highlightAmount?: boolean
   lightAppearance?: boolean
   loading?: boolean
 }> = ({
   monthlyCostDeduction,
   monthlyNet,
   monthlyGross,
-  highlightAmount,
   lightAppearance,
   loading,
 }) => {
@@ -124,7 +115,6 @@ export const Price: React.FC<{
         {!loading && (
           <PriceNet
             monthlyCostDeduction={!!monthlyCostDeduction}
-            highlightAmount={highlightAmount}
             lightAppearance={lightAppearance}
           >
             {Math.round(Number(monthlyNet.amount))}
@@ -138,7 +128,7 @@ export const Price: React.FC<{
 
         <PriceSuffix>
           <PriceUnit lightAppearance={lightAppearance}>
-            {textKeys.SIDEBAR_PRICE_SUFFIX_UNIT()}
+            {monthlyGross.currency}
           </PriceUnit>
           <PriceInterval lightAppearance={lightAppearance}>
             {textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL()}

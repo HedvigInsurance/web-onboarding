@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { externalInsuranceProviders } from '@hedviginsurance/embark'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
 import * as React from 'react'
@@ -31,7 +31,7 @@ const Wrapper = styled.div`
 `
 
 const CompareBox = styled.div<{ isExternalProvider?: boolean }>`
-  background-color: ${colorsV2.white};
+  background-color: ${colorsV3.white};
   padding: 1.25rem;
   border-radius: 0.5rem;
   width: 100%;
@@ -39,23 +39,14 @@ const CompareBox = styled.div<{ isExternalProvider?: boolean }>`
     isExternalProvider &&
     `
     background-color: rgba(255,255,255,0.25);
-    color: ${colorsV2.white};
+    color: ${colorsV3.white};
   `};
 `
 
 const CompareBoxName = styled.div`
   display: flex;
   align-items: center;
-`
-
-const ProviderLogoContainer = styled.div`
-  background-color: ${colorsV2.white};
-  padding: 0.5rem;
-  border-radius: 0.25rem;
-
-  > * {
-    margin-right: 0 !important;
-  }
+  font-weight: 300;
 `
 
 const CompareBoxTitle = styled.div`
@@ -73,14 +64,8 @@ const TrustpilotScoreWrapper = styled.div`
   justify-content: space-between;
 `
 
-const TrustpilotScoreName = styled.span<{ isExternalProvider?: boolean }>`
-  color: ${colorsV2.darkgray};
-
-  ${({ isExternalProvider }) =>
-    isExternalProvider &&
-    `
-    color: ${colorsV2.white};
-  `};
+const TrustpilotScoreName = styled.span`
+  color: ${colorsV3.gray500};
 `
 
 interface Props {
@@ -104,7 +89,7 @@ export const Compare: React.FC<Props> = ({ insuranceDataCollection, cost }) => {
       <CompareBox>
         <CompareBoxTitle>
           <CompareBoxName>
-            <HedvigLogo />
+            <HedvigLogo width={94} />
           </CompareBoxName>
           <Price
             monthlyGross={cost.monthlyGross}
@@ -125,13 +110,7 @@ export const Compare: React.FC<Props> = ({ insuranceDataCollection, cost }) => {
       <Spacer />
       <CompareBox isExternalProvider>
         <CompareBoxTitle>
-          <CompareBoxName>
-            <ProviderLogoContainer>
-              {externalInsuranceProvider?.icon({ forceWidth: false })}
-            </ProviderLogoContainer>
-            {!externalInsuranceProvider?.icon &&
-              externalInsuranceProvider?.name}
-          </CompareBoxName>
+          <CompareBoxName>{externalInsuranceProvider?.name}</CompareBoxName>
           <Price
             lightAppearance
             monthlyGross={
@@ -149,7 +128,7 @@ export const Compare: React.FC<Props> = ({ insuranceDataCollection, cost }) => {
           />
         </CompareBoxTitle>
         <TrustpilotScoreWrapper>
-          <TrustpilotScoreName isExternalProvider>
+          <TrustpilotScoreName>
             {textKeys.EXTERNAL_PROVIDER_TRUSTPILOT_SCORE()}
           </TrustpilotScoreName>
           <span>

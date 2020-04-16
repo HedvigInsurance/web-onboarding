@@ -1,5 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
+import { Button, TextButton } from 'components/buttons'
+import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { CookieStorage } from 'cookie-storage'
 import {
   Campaign,
@@ -7,7 +9,6 @@ import {
   useRedeemedCampaignsQuery,
   useRemoveDiscountCodeMutation,
 } from 'data/graphql'
-import { Button, TextButton } from 'new-components/buttons'
 import {
   getDiscountText,
   isMonthlyCostDeduction,
@@ -106,7 +107,7 @@ const Summary = styled.div`
 `
 
 const PreTitle = styled.div`
-  font-family: ${fonts.GEOMANIST};
+  font-family: ${fonts.FAVORIT};
   font-size: 0.75rem;
   line-height: 0.875rem;
   letter-spacing: 0.075rem;
@@ -115,7 +116,7 @@ const PreTitle = styled.div`
 `
 
 const Title = styled.div`
-  font-family: ${fonts.GEOMANIST};
+  font-family: ${fonts.FAVORIT};
   font-size: 2rem;
   font-weight: 500;
   color: ${colorsV2.black};
@@ -141,7 +142,8 @@ const SummaryText = styled.div`
 `
 
 const Body = styled.div`
-  padding: 2rem 1rem;
+  padding: 2rem;
+  padding-top: 0;
 
   @media (max-width: 600px) {
     padding: 1rem;
@@ -180,6 +182,7 @@ const FooterExtraActions = styled.div`
 export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
   ({ sticky, offerData, refetch, onCheckoutOpen }, ref) => {
     const textKeys = useTextKeys()
+    const market = useMarket()
     const [
       discountCodeModalIsOpen,
       setDiscountCodeModalIsOpen,
@@ -227,7 +230,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 {discountText && <DiscountInfo>{discountText}</DiscountInfo>}
                 <Header>
                   <Summary>
-                    <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
+                    {market !== Market.No && (
+                      <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
+                    )}
 
                     <Title>
                       {!isBundle(offerData) &&

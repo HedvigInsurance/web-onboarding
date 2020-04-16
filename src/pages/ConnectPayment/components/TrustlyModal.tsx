@@ -24,7 +24,8 @@ const Header = styled('div')({
 
 const TrustlyIframe = styled('iframe')({
   width: '100%',
-  height: 'calc(100% - 40px)',
+  height: 'calc(50vh - 45px)',
+  minHeight: '500px',
   border: 'none',
 })
 
@@ -115,10 +116,7 @@ const TrustlyModal: React.FC<Props> = ({
                 <CurrentLocale>
                   {({ currentLocale }) => (
                     <Mount on={track}>
-                      <Redirect
-                        to={`/${currentLocale &&
-                          currentLocale + '/'}new-member/download`}
-                      />
+                      <Redirect to={`/${currentLocale}/new-member/download`} />
                     </Mount>
                   )}
                 </CurrentLocale>

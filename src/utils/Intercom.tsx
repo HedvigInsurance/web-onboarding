@@ -1,5 +1,6 @@
 import React from 'react'
 import { useRouteMatch } from 'react-router'
+import { useVariation, Variation } from 'utils/hooks/useVariation'
 
 const createIntercom = () => {
   const script = `
@@ -19,10 +20,15 @@ const createIntercom = () => {
 }
 
 export const Intercom: React.FC = () => {
+  const variation = useVariation()
   const isIntercomMatch = useRouteMatch(
-    '/:locale(en)?/new-member/:place(offer|sign|download)',
+    '/:locale(se-en|se|no-en|no)/new-member/:place(offer|sign|download)',
   )
   React.useEffect(() => {
+    if ([Variation.IOS, Variation.ANDROID].includes(variation!)) {
+      return
+    }
+
     const hasIntercomScript = window.document.getElementById('intercom-script')
     const hasIntercomInstalled = typeof (window as any).Intercom !== 'undefined'
     if (isIntercomMatch && !hasIntercomScript) {

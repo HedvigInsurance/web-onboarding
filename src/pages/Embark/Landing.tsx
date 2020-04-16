@@ -1,11 +1,14 @@
+import { css, Global } from '@emotion/core'
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
+import { LinkButton } from 'components/buttons'
+import { TopBar, TopBarFiller } from 'components/TopBar'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
-import { LinkButton } from 'new-components/buttons'
 import * as React from 'react'
 import Helmet from 'react-helmet-async'
 import { TextKeyMap, useTextKeys } from 'utils/hooks/useTextKeys'
+import { useVariation, Variation } from 'utils/hooks/useVariation'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -25,12 +28,12 @@ const Wrapper = styled.div`
 `
 
 const Container = styled.div`
-  width: calc(100% + 7rem);
-  height: 100%;
+  width: 100%;
+  min-height: 100%;
   display: flex;
   justify-content: space-between;
   position: relative;
-  margin: 0 -3.5rem;
+  margin: 0;
 
   @media (max-width: 1020px) {
     width: calc(100% + 2.5rem);
@@ -44,20 +47,22 @@ const Container = styled.div`
 
 const Card = styled.div`
   width: 100%;
-  background: ${colorsV2.white};
+  background: ${colorsV3.white};
   border-radius: 8px;
-  margin: 0 2.5rem;
+  margin: 0 1rem;
   padding: 3.5rem 2.5rem 2.5rem 2.5rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-end;
   transition: all 0.35s;
-  box-shadow: 0 0 13px rgba(0, 0, 0, 0.06);
 
   :hover {
     transform: translateY(-6px);
-    box-shadow: 0 14px 18px rgba(0, 0, 0, 0.18);
+
+    @media (hover: none) {
+      transform: none;
+    }
   }
 
   @media (max-width: 1020px) {
@@ -80,7 +85,7 @@ const Headline = styled.h1`
   font-size: 2.875rem;
   line-height: 2.875rem;
   font-weight: 500;
-  color: ${colorsV2.black};
+  color: ${colorsV3.gray900};
   letter-spacing: -1px;
   margin: 0 0 1rem 0;
   width: 100%;
@@ -102,7 +107,7 @@ const Paragraph = styled.p`
   font-size: 1.25rem;
   line-height: 1.875rem;
   margin: 0;
-  color: ${colorsV2.darkgray};
+  color: ${colorsV3.gray700};
   min-height: 3.75rem;
   width: 100%;
 
@@ -133,19 +138,34 @@ const ProceedButton = styled(LinkButton)`
 
 const LandingPageContainer = styled.div`
   position: relative;
-  height: 100vh;
+  min-height: 100vh;
   backdrop-filter: blur(20px);
 `
 
 export const Landing: React.FC<{ language?: string }> = ({ language }) => {
   const textKeys = useTextKeys()
   const market = useMarket()
+  const variation = useVariation()
   return (
     <Page>
+      <Global
+        styles={css`
+          body {
+            overflow: visible !important;
+          }
+        `}
+      />
       <LandingPageContainer>
         <Helmet>
           <title>{textKeys.STARTPAGE_PAGE_TITLE()}</title>
         </Helmet>
+
+        {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
+          <>
+            <TopBar transparent />
+            <TopBarFiller />
+          </>
+        )}
 
         <Wrapper>
           <Container>
@@ -173,6 +193,7 @@ const LandingPageCardsSe: React.FC<{
         <Paragraph>{textKeys.STARTPAGE_UNINSURED_BODY()}</Paragraph>
         <ProceedButton
           size="lg"
+          fullWidth
           to={(language ? '/' + language : '') + '/new-member/new'}
         >
           {textKeys.STARTPAGE_UNINSURED_BUTTON()}
@@ -183,6 +204,7 @@ const LandingPageCardsSe: React.FC<{
         <Paragraph>{textKeys.STARTPAGE_INSURED_BODY()}</Paragraph>
         <ProceedButton
           size="lg"
+          fullWidth
           to={(language ? '/' + language : '') + '/new-member/switch'}
         >
           {textKeys.STARTPAGE_INSURED_BUTTON()}
@@ -203,6 +225,7 @@ const LandingPageCardsNo: React.FC<{
         <Paragraph>{textKeys.STARTPAGE_COMBO_BODY()}</Paragraph>
         <ProceedButton
           size="lg"
+          fullWidth
           to={(language ? '/' + language : '') + '/new-member/combo'}
         >
           {textKeys.STARTPAGE_COMBO_BUTTON()}
@@ -213,6 +236,7 @@ const LandingPageCardsNo: React.FC<{
         <Paragraph>{textKeys.STARTPAGE_CONTENTS_BODY()}</Paragraph>
         <ProceedButton
           size="lg"
+          fullWidth
           to={(language ? '/' + language : '') + '/new-member/contents'}
         >
           {textKeys.STARTPAGE_CONTENTS_BUTTON()}
@@ -223,6 +247,7 @@ const LandingPageCardsNo: React.FC<{
         <Paragraph>{textKeys.STARTPAGE_TRAVEL_BODY()}</Paragraph>
         <ProceedButton
           size="lg"
+          fullWidth
           to={(language ? '/' + language : '') + '/new-member/travel'}
         >
           {textKeys.STARTPAGE_TRAVEL_BUTTON()}

@@ -1,4 +1,3 @@
-import { SignFailed } from 'pages/SignFailed'
 import { SignLoading } from 'pages/SignLoading'
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
@@ -11,7 +10,7 @@ import { FourOhFour } from './pages/FourOhFour'
 import { OfferNew } from './pages/OfferNew'
 import { Referral } from './pages/Referral'
 
-export const LOCALE_PATH_PATTERN = '/:locale(en|no-en|no)?'
+export const LOCALE_PATH_PATTERN = '/:locale(se-en|se|no-en|no)'
 export const serverSideRedirects = [
   { from: '/referrals/terms', to: '/invite/terms' },
   { from: '/new-member/hedvig', to: '/new-member' },
@@ -68,11 +67,6 @@ export const reactPageRoutes: ReactPageRoute[] = [
     exact: true,
   },
   {
-    path: LOCALE_PATH_PATTERN + '/new-member/sign/fatal',
-    Component: SignFailed,
-    exact: true,
-  },
-  {
     path: LOCALE_PATH_PATTERN + '/new-member/:name?/:id?',
     render: ({ match }: RouteComponentProps<any>) => {
       const getProps = () => {
@@ -82,17 +76,17 @@ export const reactPageRoutes: ReactPageRoute[] = [
               case 'contents':
                 return {
                   baseUrl: '/no/new-member/contents',
-                  name: 'Web Onboarding NO - Contents',
+                  name: 'Web Onboarding NO - Norwegian Contents',
                 }
               case 'travel':
                 return {
                   baseUrl: '/no/new-member/travel',
-                  name: 'Web Onboarding NO - Travel',
+                  name: 'Web Onboarding NO - Norwegian Travel',
                 }
               case 'combo':
                 return {
                   baseUrl: '/no/new-member/combo',
-                  name: 'Web Onboarding NO - Combo',
+                  name: 'Web Onboarding NO - Norwegian Combo',
                 }
             }
             break
@@ -119,12 +113,12 @@ export const reactPageRoutes: ReactPageRoute[] = [
             switch (match.params.name) {
               case 'new':
                 return {
-                  baseUrl: '/en/new-member/new',
+                  baseUrl: '/se-en/new-member/new',
                   name: 'Web Onboarding - English Needer',
                 }
               case 'switch':
                 return {
-                  baseUrl: '/en/new-member/switch',
+                  baseUrl: '/se-en/new-member/switch',
                   name: 'Web Onboarding - English Switcher',
                 }
             }
@@ -133,17 +127,17 @@ export const reactPageRoutes: ReactPageRoute[] = [
             switch (match.params.name) {
               case 'new':
                 return {
-                  baseUrl: '/new-member/new',
+                  baseUrl: '/se/new-member/new',
                   name: 'Web Onboarding - Swedish Needer',
                 }
               case 'switch':
                 return {
-                  baseUrl: '/new-member/switch',
+                  baseUrl: '/se/new-member/switch',
                   name: 'Web Onboarding - Swedish Switcher',
                 }
               case 'switch-beta':
                 return {
-                  baseUrl: '/new-member/switch-beta',
+                  baseUrl: '/se/new-member/switch-beta',
                   name: 'Switcher Onboarding Playground',
                 }
             }

@@ -1,10 +1,6 @@
 import * as koaHelmet from 'koa-helmet'
 import * as uuidV4 from 'uuid/v4'
-import {
-  CONTENT_SERVICE_ENDPOINT,
-  GIRAFFE_ENDPOINT,
-  GIRAFFE_WS_ENDPOINT,
-} from '../config'
+import { CONTENT_SERVICE_ENDPOINT, GIRAFFE_WS_ENDPOINT } from '../config'
 
 const defaultSrc = [
   "'self'",
@@ -43,7 +39,6 @@ const defaultSrc = [
   'analytics.twitter.com',
   'online.adservicemedia.dk',
   '*.doubleclick.net',
-  '*.branch.io',
   'https://adtr.io',
   'https://track.adtraction.com',
   'https://c.adtraction.net',
@@ -53,15 +48,12 @@ const defaultSrc = [
   'hedvig.test-app.link',
   'trustly.com',
   '*.trustly.com',
-  'https://hedvig-embark.herokuapp.com',
-  'https://heapanalytics.com',
   'cdn.mxpnl.com',
+  'cdn.segment.com',
+  'https://cdn.heapanalytics.com',
   'https://api-js.mixpanel.com',
-  'oidc-ui-current.bankidnorge.no',
-  'oidc-current.bankidapis.no',
-  'bankidnorge.no',
-  '*.zignsec.com',
-  GIRAFFE_ENDPOINT,
+  'checkoutshopper-live.adyen.com',
+  'checkoutshopper-test.adyen.com',
   GIRAFFE_WS_ENDPOINT,
   CONTENT_SERVICE_ENDPOINT,
 ]
@@ -71,25 +63,17 @@ export const helmet = koaHelmet({
     directives: {
       defaultSrc,
       scriptSrc: [
-        ...defaultSrc,
         "'unsafe-eval'",
         "'unsafe-inline'",
-        'browser.sentry-cdn.com',
-        'cdn.segment.com',
-        'https://cdn.heapanalytics.com',
+        'https://browser.sentry-cdn.com',
+        ...defaultSrc,
         // tslint:disable-next-line variable-name
         (_request, response) => {
           ;(response as any).cspNonce = uuidV4()
           return `'nonce-${(response as any).cspNonce}'`
         },
       ],
-      imgSrc: [...defaultSrc, 'data:'],
-      connectSrc: [
-        ...defaultSrc,
-        'https://api.segment.io',
-        'https://sentry.io',
-      ],
-      styleSrc: [...defaultSrc, "'unsafe-inline'"],
+      styleSrc: ["'unsafe-inline'", "'self'", 'checkoutshopper-live.adyen.com'],
       upgradeInsecureRequests: true,
       objectSrc: ["'none'"],
       reportUri:

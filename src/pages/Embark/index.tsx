@@ -10,7 +10,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import * as React from 'react'
 import { useHistory } from 'react-router'
 
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import {
   getPickedLocaleFromCurrentLocale,
   useCurrentLocale,
@@ -18,10 +18,10 @@ import {
 import gql from 'graphql-tag'
 import Helmet from 'react-helmet-async'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { apolloClient } from '../../client/apolloClient'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
-import { EmbarkBackground } from './EmbarkBackground'
 import {
   resolveExternalInsuranceProviderProviderStatus,
   resolveExternalInsuranceProviderStartSession,
@@ -34,7 +34,8 @@ import { resolvePersonalInformation } from './personalInformation'
 
 const EmbarkStyling = styled.div`
   height: 100%;
-  background-color: ${colorsV2.gray};
+  background-color: ${colorsV3.gray900};
+  color: ${colorsV3.white};
 
   * {
     margin: 0;
@@ -55,6 +56,7 @@ const PassageContainer = styled.div`
   left: 0;
   height: 100%;
   width: 100%;
+  background-color: ${colorsV3.gray900};
 `
 
 interface EmbarkProps {
@@ -114,6 +116,8 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
     }
   }, [currentPassage.id])
 
+  const variation = useVariation()
+
   return (
     <PassageContainer>
       <motion.div
@@ -121,24 +125,27 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
         animate={{ opacity: 1 }}
         transition={{ ease: 'easeOut', duration: 1 }}
       >
-        <StorageContainer>
-          {({ session }) => (
-            <Header
-              partnerName={
-                (session &&
-                  session.getSession() &&
-                  session.getSession()!.partner) ||
-                null
-              }
-              passage={currentPassage}
-              storyData={state.data}
-              startPageLink={props.startPageLink}
-              customTrailingContent={<LanguagePicker />}
-            />
-          )}
-        </StorageContainer>
+        {variation !== Variation.ANDROID && variation !== Variation.IOS && (
+          <StorageContainer>
+            {({ session }) => (
+              <Header
+                partnerName={
+                  (session &&
+                    session.getSession() &&
+                    session.getSession()!.partner) ||
+                  null
+                }
+                passage={currentPassage}
+                storyData={state.data}
+                startPageLink={props.startPageLink}
+                customTrailingContent={<LanguagePicker />}
+              />
+            )}
+          </StorageContainer>
+        )}
       </motion.div>
       <Passage
+        hasHeader={![Variation.IOS, Variation.ANDROID].includes(variation!)}
         canGoBack={state.history.length > 1}
         historyGoBackListener={(goBack) =>
           history.listen((_: any, action: string) => {
@@ -243,7 +250,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
         <title>{textKeys.STARTPAGE_PAGE_TITLE()}</title>
         <meta
           property="og:image"
-          content="https://www.hedvig.com/new-member-assets/social/hedvig-hemforsakring.jpg"
+          content="https://www.hedvig.com/new-member-assets/social/hedvig-hemforsakring-2.jpg"
         />
         <meta property="og:title" content={textKeys.EMBARK_META_OG_TITLE()} />
       </Helmet>
@@ -254,7 +261,6 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
           }
         `}
       />
-      <EmbarkBackground />
       <AnimatePresence>
         {!isShowingLanding && (
           <motion.div
