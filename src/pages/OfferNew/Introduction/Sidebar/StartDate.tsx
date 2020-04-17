@@ -4,6 +4,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { externalInsuranceProviders } from '@hedviginsurance/embark'
 import { DateInput as DateInputForm } from 'components/DateInput'
 import { DownArrow } from 'components/icons/DownArrow'
+import { Lock } from 'components/icons/Lock'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
 import {
   useExternalInsuranceDataQuery,
@@ -14,6 +15,7 @@ import { format, isToday, parse } from 'date-fns'
 import { motion } from 'framer-motion'
 import hexToRgba from 'hex-to-rgba'
 import { match } from 'matchly'
+import { CancellationOptions } from 'pages/OfferNew/Introduction/Sidebar/CancellationOptions'
 import { OfferData, OfferQuote } from 'pages/OfferNew/types'
 import {
   hasCurrentInsurer,
@@ -23,8 +25,6 @@ import {
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { gqlDateFormat } from './utils'
-import { CancellationOptions } from 'pages/OfferNew/Introduction/Sidebar/CancellationOptions'
-import { Lock } from 'components/icons/Lock'
 
 interface Props {
   offerData: OfferData
