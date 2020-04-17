@@ -415,7 +415,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                 </Content>
               )}
               <Footer>
-                <Button type="submit">
+                <Button type="submit" disabled={isUpdating}>
                   {textKeys.DETAILS_MODULE_BUTTON()}
                 </Button>
                 {editQuoteResult.error && (
