@@ -73,9 +73,9 @@ export const LanguagePicker = () => {
         <Dropdown>
           {market === Market.Se && (
             <>
-              <StyledLink to="/new-member">Svenska</StyledLink>
+              <StyledLink to="/se/new-member">Svenska</StyledLink>
               <Divider />
-              <StyledLink to="/en/new-member">English</StyledLink>
+              <StyledLink to="/se-en/new-member">English</StyledLink>
             </>
           )}
           {market === Market.No && (

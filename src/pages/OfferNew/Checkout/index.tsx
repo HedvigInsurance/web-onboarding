@@ -222,10 +222,7 @@ export const Checkout: React.FC<Props> = ({
       >
         {({ track: trackAction }) => (
           <Mount on={trackAction}>
-            <Redirect
-              to={`/${locale && locale + '/'}new-member/connect-payment`}
-            />
-            )
+            <Redirect to={`/${locale}/new-member/connect-payment`} />)
           </Mount>
         )}
       </TrackAction>
@@ -281,9 +278,7 @@ export const Checkout: React.FC<Props> = ({
               return
             }
 
-            const baseUrl = `${window.location.origin}${
-              locale ? '/' + locale : ''
-            }/new-member`
+            const baseUrl = `${window.location.origin}/${locale}/new-member`
             const result = await signQuotes({
               variables: {
                 quoteIds: getQuoteIds(offerData),

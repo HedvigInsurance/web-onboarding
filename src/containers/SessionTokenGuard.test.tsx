@@ -15,7 +15,7 @@ jest.mock('../client/apolloClient', () => ({
 
 it('redirects when there is no session', () => {
   const wrapper = mount(
-    <StaticRouter context={{}}>
+    <StaticRouter location={'/se/new-member/blah'} context={{}}>
       <MockedProvider>
         <Provider
           initialState={{
@@ -30,7 +30,7 @@ it('redirects when there is no session', () => {
     </StaticRouter>,
   )
 
-  expect(wrapper.find(Redirect).prop('to')).toBe('/new-member')
+  expect(wrapper.find(Redirect).prop('to')).toBe('/se/new-member')
 })
 
 it('does not redirect when there is a session token', () => {

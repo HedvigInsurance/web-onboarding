@@ -5,6 +5,7 @@ import { OfferData } from 'pages/OfferNew/types'
 import {
   apartmentTypeTextKeys,
   getHouseholdSize,
+  insuranceTypeTextKeys,
   maskAndFormatRawSsn,
   quoteDetailsHasAddress,
 } from 'pages/OfferNew/utils'
@@ -66,6 +67,7 @@ export const InsuranceSummary: React.FC<Props> = ({ offerData }) => {
       {offerData.quotes.map((quote) => {
         return (
           <Table key={quote.id}>
+            <h4>{textKeys[insuranceTypeTextKeys[quote.contractType]]()}</h4>
             {getDetails(
               quote.quoteDetails,
               textKeys,

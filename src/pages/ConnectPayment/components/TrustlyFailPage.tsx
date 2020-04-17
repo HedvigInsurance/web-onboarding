@@ -31,8 +31,7 @@ export const TrustlyFailPage: React.FC = () => (
           background={colors.PURPLE}
           foreground={colors.WHITE}
           onClick={() => {
-            const baseUrl = `${window.location.origin}/${currentLocale &&
-              currentLocale + '/'}new-member/connect-payment`
+            const baseUrl = `${window.location.origin}/${currentLocale}/new-member/connect-payment`
 
             window.location.href = `${baseUrl}/retry`
           }}
