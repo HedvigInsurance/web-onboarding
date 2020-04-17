@@ -37,8 +37,8 @@ const HandleSwitchingLabel = styled.button`
 `
 
 const SpinnerWrapper = styled.div`
-  font-size: 20px;
-  height: 20px;
+  font-size: 1.25rem;
+  height: 1.25rem;
 `
 
 interface CancellationOptionsProps {

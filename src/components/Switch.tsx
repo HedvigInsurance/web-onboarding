@@ -7,8 +7,8 @@ const SwitchContainer = styled(motion.span)`
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  height: 20px;
-  width: 20px;
+  height: 1.25rem;
+  width: 1.25rem;
   border: 1px solid;
   border-radius: 2px;
   cursor: pointer;
