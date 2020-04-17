@@ -12,7 +12,6 @@ import {
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { gqlDateFormat } from './utils'
-import { sleep } from 'utils/misc'
 
 const HandleSwitchingWrapper = styled.div`
   margin-top: 10px;
@@ -21,17 +20,29 @@ const HandleSwitchingWrapper = styled.div`
   padding: 0 0.25rem;
 `
 
-const HandleSwitchingLabel = styled.span`
+const HandleSwitchingLabel = styled.button`
   font-size: 0.875rem;
   line-height: 1.2;
+  padding: 0;
+  border: 0;
   color: ${colorsV3.gray700};
   width: 75%;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+
+  :focus {
+    outline: 0;
+  }
+`
+
+const SpinnerWrapper = styled.div`
+  font-size: 20px;
+  height: 20px;
 `
 
 interface CancellationOptionsProps {
   quotes: OfferData['quotes']
-  dateValue?: Date | null
-  setDateValue: (dateValue: Date | null) => void
   setShowError: (showError: boolean) => void
   refetch: () => Promise<void>
   handleFail: (e: Error) => void
@@ -47,6 +58,7 @@ export const CancellationOptions: React.FC<CancellationOptionsProps> = ({
         return (
           quote.currentInsurer?.switchable && (
             <QuoteCancellationOption
+              key={quote.id}
               {...rest}
               isGenericQuote={quotes.length === 1}
               quote={quote as OfferQuote}
@@ -61,8 +73,6 @@ export const CancellationOptions: React.FC<CancellationOptionsProps> = ({
 interface QuoteCancellationOptionProps {
   isGenericQuote: boolean
   quote: OfferQuote
-  dateValue?: Date | null
-  setDateValue: (dateValue: Date | null) => void
   setShowError: (showError: boolean) => void
   refetch: () => Promise<void>
   handleFail: (e: Error) => void
@@ -71,19 +81,44 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
   isGenericQuote,
   quote,
   setShowError,
-  dateValue,
   handleFail,
   refetch,
-  setDateValue,
 }) => {
   const textKeys = useTextKeys()
   const [isLoading, setIsLoading] = React.useState(false)
   const [setStartDate] = useStartDateMutation()
   const [removeStartDate] = useRemoveStartDateMutation()
 
+  const checked = !quote.startDate
+
+  const toggle = () => {
+    setShowError(false)
+    setIsLoading(true)
+    if (!checked) {
+      removeStartDate({
+        variables: {
+          quoteId: quote.id,
+        },
+      })
+        .then(() => refetch())
+        .catch(handleFail)
+        .finally(() => setIsLoading(false))
+    } else {
+      setStartDate({
+        variables: {
+          quoteId: quote.id,
+          date: format(new Date(), gqlDateFormat),
+        },
+      })
+        .then(() => refetch())
+        .catch(handleFail)
+        .finally(() => setIsLoading(false))
+    }
+  }
+
   return (
-    <HandleSwitchingWrapper key={quote.id}>
-      <HandleSwitchingLabel>
+    <HandleSwitchingWrapper>
+      <HandleSwitchingLabel onClick={toggle}>
         {(() => {
           if (isGenericQuote) {
             return textKeys.SIDEBAR_REQUEST_CANCELLATION_GENERIC_INSURANCE()
@@ -100,40 +135,11 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
       </HandleSwitchingLabel>
 
       {isLoading ? (
-        <div>
+        <SpinnerWrapper>
           <Spinner />
-        </div>
+        </SpinnerWrapper>
       ) : (
-        <Switch
-          value={!dateValue}
-          onChange={(newValue) => {
-            setShowError(false)
-            setIsLoading(true)
-            if (newValue) {
-              setStartDate({
-                variables: {
-                  quoteId: quote.id,
-                  date: format(new Date(), gqlDateFormat),
-                },
-              })
-                .then(() => sleep(1000))
-                .then(() => refetch())
-                .catch(handleFail)
-                .finally(() => setIsLoading(false))
-            } else {
-              removeStartDate({
-                variables: {
-                  quoteId: quote.id,
-                },
-              })
-                .then(() => sleep(1000))
-                .then(() => refetch())
-                .catch(handleFail)
-                .finally(() => setIsLoading(false))
-            }
-            setDateValue(newValue ? null : new Date())
-          }}
-        />
+        <Switch value={checked} onChange={toggle} />
       )}
     </HandleSwitchingWrapper>
   )

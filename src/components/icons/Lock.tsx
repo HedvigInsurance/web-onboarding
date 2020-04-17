@@ -5,8 +5,8 @@ export const Lock: React.FC = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 10 13"
-    width={18}
-    height={18}
+    width={14}
+    height={14}
   >
     <g fill="none" fillRule="evenodd">
       <path d="M-5-3h20v20H-5z" />

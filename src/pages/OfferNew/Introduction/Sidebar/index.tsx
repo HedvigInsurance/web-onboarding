@@ -86,7 +86,7 @@ const Header = styled.div`
   align-items: center;
   position: relative;
   width: 100%;
-  padding: 0 1rem;
+  padding: 0 1rem 2rem 1rem;
 
   @media (max-width: 600px) {
     padding: 1.5rem;
@@ -117,10 +117,15 @@ const Title = styled.div`
 const Body = styled.div`
   padding: 2rem;
   padding-top: 0;
+  font-size: 0.875rem;
 
   @media (max-width: 600px) {
-    padding: 1rem 0;
+    padding: 1rem;
   }
+`
+const BodyTitle = styled.div`
+  color: ${colorsV3.gray700};
+  padding-bottom: 0.5rem;
 `
 
 const Footer = styled.div`
@@ -232,9 +237,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 </Header>
 
                 <Body>
-                  {textKeys.SIDEBAR_STARTDATE_CELL_LABEL() +
-                    ' ' +
-                    textKeys.SIDEBAR_STARTDATE_CELL_SUBLABEL()}
+                  <BodyTitle>
+                    {textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}
+                  </BodyTitle>
                   <StartDate
                     offerData={offerData}
                     refetch={refetch}

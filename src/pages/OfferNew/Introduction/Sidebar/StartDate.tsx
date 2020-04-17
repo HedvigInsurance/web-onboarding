@@ -1,7 +1,8 @@
+import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { externalInsuranceProviders } from '@hedviginsurance/embark'
-import { DateInput } from 'components/DateInput'
+import { DateInput as DateInputForm } from 'components/DateInput'
 import { DownArrow } from 'components/icons/DownArrow'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
 import {
@@ -13,12 +14,17 @@ import { format, isToday, parse } from 'date-fns'
 import { motion } from 'framer-motion'
 import hexToRgba from 'hex-to-rgba'
 import { match } from 'matchly'
-import { OfferData } from 'pages/OfferNew/types'
-import { getQuoteIds, hasCurrentInsurer, isBundle } from 'pages/OfferNew/utils'
+import { OfferData, OfferQuote } from 'pages/OfferNew/types'
+import {
+  hasCurrentInsurer,
+  insuranceTypeTextKeys,
+  isBundle,
+} from 'pages/OfferNew/utils'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-import { CancellationOptions } from './CancellationOptions'
 import { gqlDateFormat } from './utils'
+import { CancellationOptions } from 'pages/OfferNew/Introduction/Sidebar/CancellationOptions'
+import { Lock } from 'components/icons/Lock'
 
 interface Props {
   offerData: OfferData
@@ -26,11 +32,22 @@ interface Props {
   modal?: boolean
 }
 
-const RowButton = styled.button<{ datePickerOpen: boolean }>`
+const DateFormsWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+`
+
+const RowButtonWrapper = styled.div`
   width: 100%;
-  padding: 0.8rem 1.5rem;
+  flex: 1;
+`
+
+const RowButton = styled.button<{ datePickerOpen: boolean; isSplit: boolean }>`
   display: flex;
   justify-content: space-between;
+  height: 3rem;
+  width: 100%;
+  padding: 0.75rem 0.75rem;
   border: 1px solid ${colorsV3.gray300};
   outline: 0;
   background-color: ${colorsV3.white};
@@ -45,10 +62,41 @@ const RowButton = styled.button<{ datePickerOpen: boolean }>`
 
   ${(props) =>
     props.datePickerOpen && `border: 1px solid ${colorsV3.gray900};`};
+
+  ${({ isSplit }) =>
+    isSplit &&
+    css`
+      border-radius: 0;
+      border-right-width: 0;
+
+      ${RowButtonWrapper}:first-of-type & {
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+      }
+      ${RowButtonWrapper}:last-of-type & {
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+        border-right-width: 1px;
+      }
+    `}
 `
 
-const DateLabel = styled.span`
+const StartDateRowLabel = styled.div`
+  color: ${colorsV3.gray500};
+  font-size: 0.75rem;
+  padding-bottom: 0.5rem;
+`
+
+const DateLabel = styled.span<{ hasStartDate: boolean }>`
   margin-right: 5px;
+  text-align: left;
+  ${({ hasStartDate }) =>
+    !hasStartDate &&
+    css`
+      font-size: 0.75rem;
+      line-height: 0.75rem;
+      color: ${colorsV3.gray500};
+    `};
 `
 
 const Value = styled.div`
@@ -108,7 +156,7 @@ const DateInputModalWrapper = styled.div<{ isOpen: boolean }>`
   border-radius: 8px;
 `
 
-const StyledDateInput = styled(DateInput)<{ modal: boolean }>`
+const StyledDateInput = styled(DateInputForm)<{ modal: boolean }>`
   ${(props) =>
     props.modal &&
     `
@@ -117,52 +165,48 @@ const StyledDateInput = styled(DateInput)<{ modal: boolean }>`
   `}
 `
 
-const getExternalInsuranceData = (offerData: OfferData) => {
-  if (isBundle(offerData)) {
-    return undefined
+const getDefaultDateValue = (quote: OfferQuote) => {
+  if (quote.startDate) {
+    return parse(quote.startDate, 'yyyy-MM-dd', new Date())
   }
-  const { data: externalInsuranceData } = useExternalInsuranceDataQuery({
-    variables: {
-      reference: offerData.quotes[0].dataCollectionId || '',
-    },
-  })
-  return externalInsuranceData
+
+  if (hasCurrentInsurer(quote)) {
+    return null
+  }
+
+  return new Date()
 }
 
-export const StartDate: React.FC<Props> = ({
-  offerData,
-  refetch,
-  modal = false,
-}) => {
-  const externalInsuranceData = getExternalInsuranceData(offerData)
-
-  const getDefaultDateValue = () => {
-    if (offerData.quotes[0].startDate) {
-      return parse(offerData.quotes[0].startDate, 'yyyy-MM-dd', new Date())
-    }
-
-    if (hasCurrentInsurer(offerData.quotes[0])) {
-      return null
-    }
-
-    return new Date()
-  }
-
+const DateForm: React.FC<{
+  quote: OfferQuote
+  isSplit: boolean
+  setShowError: (showError: boolean) => void
+  modal?: boolean
+  refetch: () => Promise<void>
+}> = ({ quote, isSplit, setShowError, modal, refetch }) => {
   const [datePickerOpen, setDatePickerOpen] = React.useState(false)
-  const [showError, setShowError] = React.useState(false)
-  const [dateValue, setDateValue] = React.useState(getDefaultDateValue)
+  const [dateValue, setDateValue] = React.useState(() =>
+    getDefaultDateValue(quote),
+  )
+
   const textKeys = useTextKeys()
-  const market = useMarket()
   const [setStartDate] = useStartDateMutation()
   const [removeStartDate] = useRemoveStartDateMutation()
+  const { data: externalInsuranceData } = useExternalInsuranceDataQuery({
+    variables: {
+      reference: quote.dataCollectionId || '',
+    },
+  })
+
+  const market = useMarket()
   const getDateFormat = match([
     [Market.Se, 'dd MMM yyyy'],
     [Market.No, 'dd/MM/yyyy'],
   ])
 
   React.useEffect(() => {
-    setDateValue(getDefaultDateValue())
-  }, [offerData.quotes[0].startDate])
+    setDateValue(getDefaultDateValue(quote))
+  }, [quote.startDate])
 
   const handleFail = () => {
     setShowError(true)
@@ -205,8 +249,6 @@ export const StartDate: React.FC<Props> = ({
     return textKeys.SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER()
   }
 
-  const quoteIds = getQuoteIds(offerData)
-
   const getDateInput = () => (
     <StyledDateInput
       open={datePickerOpen}
@@ -215,46 +257,68 @@ export const StartDate: React.FC<Props> = ({
       setDate={(newDateValue) => {
         setDateValue(newDateValue)
         setShowError(false)
-        // FIXME one per quote
         if (newDateValue === null) {
-          Promise.all(
-            quoteIds.map((quoteId) =>
-              removeStartDate({
-                variables: {
-                  quoteId,
-                },
-              }),
-            ),
-          )
+          removeStartDate({
+            variables: {
+              quoteId: quote.id,
+            },
+          })
             .then(() => refetch())
             .catch(handleFail)
         } else {
-          Promise.all(
-            quoteIds.map((quoteId) =>
-              setStartDate({
-                variables: {
-                  quoteId,
-                  date: format(newDateValue, gqlDateFormat),
-                },
-              }),
-            ),
-          )
+          setStartDate({
+            variables: {
+              quoteId: quote.id,
+              date: format(newDateValue, gqlDateFormat),
+            },
+          })
             .then(() => refetch())
             .catch(handleFail)
         }
       }}
-      hasCurrentInsurer={hasCurrentInsurer(offerData.quotes[0])}
-      modal={modal}
+      hasCurrentInsurer={hasCurrentInsurer(quote)}
+      modal={Boolean(modal)}
     />
   )
 
-  if (isBundle(offerData)) {
-    return (
-      <>
-        {textKeys.OFFER_START_DATE_LABEL()} {textKeys.OFFER_START_NOW()}
-      </>
-    )
-  }
+  const hasStartDate = Boolean(getDefaultDateValue(quote))
+  return (
+    <RowButtonWrapper>
+      {isSplit && (
+        <StartDateRowLabel>
+          {textKeys[insuranceTypeTextKeys[quote.contractType]]()}
+        </StartDateRowLabel>
+      )}
+      <RowButton
+        datePickerOpen={datePickerOpen}
+        onClick={() => setDatePickerOpen(!datePickerOpen)}
+        isSplit={isSplit}
+      >
+        <Value>
+          <DateLabel hasStartDate={Boolean(dateValue)}>
+            {getDateLabel()}
+          </DateLabel>
+          {hasStartDate ? <DownArrow /> : <Lock />}
+        </Value>
+      </RowButton>
+      {modal ? (
+        <DateInputModalWrapper isOpen={datePickerOpen}>
+          {getDateInput()}
+        </DateInputModalWrapper>
+      ) : (
+        getDateInput()
+      )}
+    </RowButtonWrapper>
+  )
+}
+
+export const StartDate: React.FC<Props> = ({
+  offerData,
+  refetch,
+  modal = false,
+}) => {
+  const textKeys = useTextKeys()
+  const [showError, setShowError] = React.useState(false)
 
   return (
     <>
@@ -274,29 +338,23 @@ export const StartDate: React.FC<Props> = ({
       >
         {textKeys.SIDEBAR_UPDATE_START_DATE_FAILED()}
       </ErrorMessage>
-      <RowButton
-        datePickerOpen={datePickerOpen}
-        onClick={() => setDatePickerOpen(!datePickerOpen)}
-      >
-        <Value>
-          <DateLabel>{getDateLabel()}</DateLabel>
-          <DownArrow />
-        </Value>
-      </RowButton>
-      {modal ? (
-        <DateInputModalWrapper isOpen={datePickerOpen}>
-          {getDateInput()}
-        </DateInputModalWrapper>
-      ) : (
-        getDateInput()
-      )}
+      <DateFormsWrapper>
+        {offerData.quotes.map((quote) => (
+          <DateForm
+            key={quote.id}
+            quote={quote}
+            setShowError={setShowError}
+            modal={modal}
+            refetch={refetch}
+            isSplit={isBundle(offerData)}
+          />
+        ))}
+      </DateFormsWrapper>
 
       <CancellationOptions
         quotes={offerData.quotes}
-        dateValue={dateValue}
-        setDateValue={setDateValue}
         setShowError={setShowError}
-        handleFail={handleFail}
+        handleFail={() => setShowError(true)}
         refetch={refetch}
       />
     </>

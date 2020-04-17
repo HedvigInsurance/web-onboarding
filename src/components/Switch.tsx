@@ -45,8 +45,7 @@ export const Switch: React.FC<SwitchProps> = ({ value, onChange }) => (
     }}
     transition={{ duration: 0.1 }}
     role="checkbox"
-    // @ts-ignore
-    ariaChecked={value}
+    aria-checked={value}
   >
     <SwitchNobble />
   </SwitchContainer>
