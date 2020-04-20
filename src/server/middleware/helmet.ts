@@ -33,6 +33,7 @@ const defaultSrc = [
   'tr.snapchat.com',
   'sc-static.net',
   's.pinimg.com',
+  'ct.pinterest.com',
   't.co',
   'analytics.twitter.com',
   'static.ads-twitter.com',
