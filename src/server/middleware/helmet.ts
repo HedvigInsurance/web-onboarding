@@ -84,6 +84,7 @@ export const helmet = koaHelmet({
         'checkoutshopper-live.adyen.com',
         'checkoutshopper-test.adyen.com',
         't.co',
+        'ct.pinterest.com',
         'googleads.g.doubleclick.net',
         'stats.g.doubleclick.net',
         'www.googletagmanager.com',
