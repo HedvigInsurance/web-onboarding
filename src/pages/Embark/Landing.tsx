@@ -9,6 +9,7 @@ import * as React from 'react'
 import Helmet from 'react-helmet-async'
 import { TextKeyMap, useTextKeys } from 'utils/hooks/useTextKeys'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
+import { LanguagePicker } from './LanguagePicker'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -162,7 +163,9 @@ export const Landing: React.FC<{ language?: string }> = ({ language }) => {
 
         {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
           <>
-            <TopBar transparent />
+            <TopBar transparent>
+              <LanguagePicker />
+            </TopBar>
             <TopBarFiller />
           </>
         )}
