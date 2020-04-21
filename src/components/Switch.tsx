@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { Tick } from 'components/icons/Tick'
 import { motion } from 'framer-motion'
 import * as React from 'react'
 
@@ -14,7 +15,7 @@ const SwitchContainer = styled(motion.span)`
   cursor: pointer;
 `
 
-const SwitchNobble = styled.span`
+const SwitchNobble = styled(Tick)`
   display: inline-block;
   height: 6px;
   width: 6px;

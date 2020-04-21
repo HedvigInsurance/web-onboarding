@@ -1,9 +1,8 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { CircleTick } from 'components/icons/CircleTick'
 import * as React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-
-import { Tick } from 'components/icons/Tick'
 import { Column } from '../components'
 
 const UspsColumn = styled(Column)`
@@ -49,19 +48,19 @@ export const Usps = () => {
       <UspsContainer>
         <Usp>
           <TickWrapper>
-            <Tick />
+            <CircleTick />
           </TickWrapper>
           {textKeys.OFFER_USPS_USP_0()}
         </Usp>
         <Usp>
           <TickWrapper>
-            <Tick />
+            <CircleTick />
           </TickWrapper>
           {textKeys.OFFER_USPS_USP_1()}
         </Usp>
         <Usp>
           <TickWrapper>
-            <Tick />
+            <CircleTick />
           </TickWrapper>
           {textKeys.OFFER_USPS_USP_2()}
         </Usp>
