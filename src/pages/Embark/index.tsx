@@ -129,12 +129,7 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
           <StorageContainer>
             {({ session }) => (
               <Header
-                partnerName={
-                  (session &&
-                    session.getSession() &&
-                    session.getSession()!.partner) ||
-                  null
-                }
+                partnerName={session?.getSession()?.partner || null}
                 passage={currentPassage}
                 storyData={state.data}
                 startPageLink={props.startPageLink}
