@@ -1,6 +1,5 @@
 import { ApolloProvider } from '@apollo/react-common'
 import { getScriptLocation } from '@hedviginsurance/web-survival-kit'
-import { min as createMinifiedSegmentSnippet } from '@segment/snippet'
 import { isMobile } from 'is-mobile'
 import * as Koa from 'koa'
 import * as path from 'path'
@@ -39,12 +38,6 @@ import { favicons } from './favicons'
 const scriptLocation = getScriptLocation({
   statsLocation: path.resolve(__dirname, 'assets'),
   webpackPublicPath: process.env.WEBPACK_PUBLIC_PATH || '',
-})
-
-const segmentSnippet = createMinifiedSegmentSnippet({
-  apiKey: process.env.SEGMENT_API_KEY || '',
-  page: true,
-  load: true,
 })
 
 const template = (helmetContext: FilledContext['helmet'], cspNonce: string) => `
