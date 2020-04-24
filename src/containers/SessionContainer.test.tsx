@@ -19,6 +19,7 @@ import { Locale } from 'data/graphql'
 import { act } from 'react-dom/test-utils'
 import { StaticRouter } from 'react-router-dom'
 import { apolloClient } from '../client/apolloClient'
+import { sleep } from '../utils/misc'
 import {
   createSession,
   IsomorphicSessionStorage,
@@ -26,7 +27,6 @@ import {
   SESSION_KEY,
 } from '../utils/sessionStorage'
 import { MockStorage } from '../utils/storage/MockStorage'
-import { mockNetworkWait } from '../utils/test-utils'
 import {
   CREATE_SESSION_TOKEN_MUTATION,
   SessionContainer,
@@ -116,8 +116,8 @@ it('creates a new session', async () => {
   )
 
   expect(wrapper.find('div').contains('abc123')).toBe(false)
-  await act(() => mockNetworkWait())
-  await act(() => mockNetworkWait(2))
+  await act(() => sleep())
+  await act(() => sleep(2))
   wrapper.update()
   expect(wrapper.find('div').contains('abc123')).toBe(true)
   expect(apolloClient!.subscriptionClient.close).toHaveBeenCalledWith(

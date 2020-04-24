@@ -15,8 +15,7 @@ import {
   SwedishHouseQuoteDetails,
   TypeOfContract,
 } from 'data/graphql'
-import { parse } from 'date-fns'
-import { Address, OfferData } from 'pages/OfferNew/types'
+import { Address, OfferData, OfferQuote } from 'pages/OfferNew/types'
 
 export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
   const firstQuote = quoteBundle.quotes[0]
@@ -54,7 +53,6 @@ export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
       }
     }),
     cost: quoteBundle.bundleCost,
-    startDate: getStartDateFromBundledQuotes(quoteBundle.quotes),
   }
 }
 
@@ -85,18 +83,6 @@ const getAddressFromBundledQuotes = (
       street: quotesWithAddress[0].quoteDetails.street,
       zipCode: quotesWithAddress[0].quoteDetails.zipCode,
     }
-  }
-  return null
-}
-
-const getStartDateFromBundledQuotes = (
-  quotes: ReadonlyArray<BundledQuote>,
-): Date | null => {
-  const distinctStartDates = Array.from(
-    new Set(quotes.map((quote) => quote.startDate)),
-  )
-  if (distinctStartDates.length === 1 && distinctStartDates[0]) {
-    return parse(distinctStartDates[0], 'yyyy-MM-dd', new Date())
   }
   return null
 }
@@ -144,8 +130,8 @@ export const isNorwegian = (offerData: OfferData): boolean =>
 export const hasAddress = (offerData: OfferData): boolean =>
   !!offerData.person.address
 
-export const hasCurrentInsurer = (offerData: OfferData): boolean =>
-  offerData.quotes.filter((quote) => quote.currentInsurer).length > 0
+export const hasCurrentInsurer = (quote: OfferQuote): boolean =>
+  Boolean(quote.currentInsurer)
 
 export const isStudent = (details: QuoteDetails) =>
   isSwedishApartment(details) &&

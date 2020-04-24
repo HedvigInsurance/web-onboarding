@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { Button } from 'components/buttons'
 import { Cross } from 'components/icons/Cross'
 import { InputField } from 'components/inputs'
@@ -22,7 +22,7 @@ const Wrapper = styled.div<{ isOpen: boolean }>`
   width: 100%;
   height: 100%;
   position: absolute;
-  background: ${hexToRgba(colorsV2.white, 0.8)};
+  background: ${hexToRgba(colorsV3.white, 0.8)};
   top: 0;
   left: 0;
   transition: all 0.2s;
@@ -40,8 +40,8 @@ const Container = styled(motion.div)`
   flex-direction: column;
   border-radius: 0.5rem;
   padding: 1.5rem;
-  background: ${colorsV2.white};
-  border: 1px solid ${colorsV2.lightgray};
+  background: ${colorsV3.white};
+  border: 1px solid ${colorsV3.gray300};
   position: relative;
 `
 
@@ -55,7 +55,7 @@ const CloseButton = styled.button`
   display: flex;
   align-items: center;
   text-align: center;
-  background-color: ${colorsV2.gray};
+  background-color: ${colorsV3.gray500};
   border-radius: 50%;
   border: none;
   cursor: pointer;
@@ -65,27 +65,27 @@ const CloseButton = styled.button`
   }
 
   :hover {
-    background-color: ${colorsV2.darkgray};
+    background-color: ${colorsV3.gray700};
   }
 
   svg {
     width: 100%;
     height: 100%;
-    fill: ${colorsV2.white};
+    fill: ${colorsV3.white};
   }
 `
 
 const Title = styled.div`
   font-size: 1.25rem;
   line-height: 1.25rem;
-  color: ${colorsV2.darkgray};
+  color: ${colorsV3.gray700};
   font-weight: 600;
 `
 
 const Paragraph = styled.div`
   font-size: 0.875rem;
   line-height: 1.25rem;
-  color: ${colorsV2.darkgray};
+  color: ${colorsV3.gray700};
   margin-top: 0.5rem;
   margin-bottom: 1rem;
 `
@@ -107,16 +107,16 @@ const Terms = styled.div`
   font-size: 0.75rem;
   line-height: 1rem;
   text-align: center;
-  color: ${colorsV2.darkgray};
+  color: ${colorsV3.gray700};
   margin-top: 1rem;
 `
 
 const TermsLink = styled.a`
-  color: ${colorsV2.violet500};
+  color: ${colorsV3.purple500};
   text-decoration: none;
 
   :hover {
-    color: ${colorsV2.violet700};
+    color: ${colorsV3.purple500};
   }
 `
 
@@ -207,7 +207,7 @@ export const DiscountCodeModal: React.FC<Props> = ({
               </DiscountInputWrapper>
 
               <Footer>
-                <Button type="submit" disabled={!values.code}>
+                <Button type="submit" fullWidth disabled={!values.code}>
                   {textKeys.SIDEBAR_ADD_DISCOUNT_BUTTON()}
                 </Button>
                 <Terms>

@@ -8,16 +8,11 @@ import {
 } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
-import {
-  QuoteBundle,
-  useQuoteBundleQuery,
-  useStartDateMutation,
-} from 'data/graphql'
-import { format } from 'date-fns'
+import { QuoteBundle, useQuoteBundleQuery } from 'data/graphql'
 import { History } from 'history'
 import { SwitchSafetySection } from 'pages/OfferNew/SwitchSafetySection'
 import { TestimonialsSection } from 'pages/OfferNew/TestimonialsSection'
-import { getOfferData, isBundle } from 'pages/OfferNew/utils'
+import { getOfferData } from 'pages/OfferNew/utils'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
 import { Redirect, useHistory, useRouteMatch } from 'react-router'
@@ -66,30 +61,6 @@ export const OfferNew: React.FC = () => {
     '/:locale(se-en|se|no-en|no)/new-member/sign',
   )
   const toggleCheckout = createToggleCheckout(history, currentLocale)
-  const [setStartDate] = useStartDateMutation()
-
-  // FIXME remove this once we have bundle quotes fixed
-  // hack for fixing start dates into combo quotes
-  const gqlDateFormat = 'yyyy-MM-dd'
-  React.useEffect(() => {
-    if (!data?.quoteBundle) {
-      return
-    }
-    if (!isBundle(getOfferData(data?.quoteBundle as QuoteBundle))) {
-      return
-    }
-
-    offerData.quotes.map(({ id, startDate }) => {
-      if (!startDate) {
-        setStartDate({
-          variables: {
-            quoteId: id,
-            date: format(new Date(), gqlDateFormat),
-          },
-        })
-      }
-    })
-  }, [data?.quoteBundle.quotes[0]?.startDate])
 
   if (!loadingQuoteBundle && !data?.quoteBundle) {
     throw new Error(

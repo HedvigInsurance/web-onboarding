@@ -54,3 +54,5 @@ export const getDiscountText = (textKeys: Record<string, any>) => (
 
   return redeemedCampaigns[0].owner?.displayName ?? null
 }
+
+export const gqlDateFormat = 'yyyy-MM-dd'
