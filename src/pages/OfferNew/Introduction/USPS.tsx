@@ -34,8 +34,8 @@ const Usp = styled.li`
 `
 
 const TickWrapper = styled.div`
-  width: 2em;
-  height: 2em;
+  width: 2rem;
+  height: 2rem;
   margin-right: 1em;
   flex-shrink: 0;
 `

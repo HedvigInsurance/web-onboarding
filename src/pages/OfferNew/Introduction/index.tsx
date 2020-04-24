@@ -18,7 +18,7 @@ interface Props {
 
 const Wrapper = styled.div`
   width: 100%;
-  padding: 12.5rem 0 7rem 0;
+  padding: 7rem 0;
   background-color: ${colorsV3.gray900};
   position: relative;
   box-sizing: border-box;
@@ -39,7 +39,9 @@ const DesktopLeadingContainer = styled.div`
   min-height: 50vh;
 
   @media (min-width: 1000px) {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 `
 

@@ -4,7 +4,6 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { externalInsuranceProviders } from '@hedviginsurance/embark'
 import { DateInput as DateInputForm } from 'components/DateInput'
 import { DownArrow } from 'components/icons/DownArrow'
-import { Lock } from 'components/icons/Lock'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
 import {
   useExternalInsuranceDataQuery,
@@ -45,9 +44,9 @@ const RowButtonWrapper = styled.div`
 const RowButton = styled.button<{ datePickerOpen: boolean; isSplit: boolean }>`
   display: flex;
   justify-content: space-between;
-  height: 3rem;
+  height: 3.25rem;
   width: 100%;
-  padding: 0.75rem 0.75rem;
+  padding: 0 0.75rem;
   border: 1px solid ${colorsV3.gray300};
   outline: 0;
   background-color: ${colorsV3.white};
@@ -298,7 +297,7 @@ const DateForm: React.FC<{
           <DateLabel hasStartDate={Boolean(dateValue)}>
             {getDateLabel()}
           </DateLabel>
-          {hasStartDate ? <DownArrow /> : <Lock />}
+          {hasStartDate && <DownArrow />}
         </Value>
       </RowButton>
       {modal ? (
