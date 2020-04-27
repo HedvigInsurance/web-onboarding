@@ -23,6 +23,15 @@ const Wrapper = styled.div`
   background-color: ${colorsV3.gray100};
   display: flex;
 `
+
+const PerilRowWrapper = styled.div`
+  padding-bottom: 8rem;
+
+  :last-child {
+    padding-bottom: 0;
+  }
+`
+
 export const getIconUrl = (iconPath: string) => {
   return `${(window as any).CONTENT_SERVICE_ENDPOINT}${iconPath}`
 }
@@ -40,7 +49,9 @@ export const Perils: React.FC<Props> = ({ offerData }) => {
             <Body>{textKeys.COVERAGE_BODY()}</Body>
           </HeadingWrapper>
           {offerData.quotes.map((quote) => (
-            <PerilRow key={quote.id} offerQuote={quote} />
+            <PerilRowWrapper key={quote.id}>
+              <PerilRow offerQuote={quote} />
+            </PerilRowWrapper>
           ))}
         </Column>
         <ColumnSpacing />
