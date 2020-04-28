@@ -44,3 +44,29 @@ export const redirectEnLanguageToSweden: Middleware = (ctx, next) => {
 
   return next()
 }
+
+export const referralsRedirectEmptyLanguageToSwedenSwedish: Middleware = (
+  ctx,
+  next,
+) => {
+  if (ctx.path.startsWith('/referrals')) {
+    ctx.set('location', '/se' + ctx.originalUrl)
+    ctx.status = 301
+    return
+  }
+
+  return next()
+}
+
+export const referralsRedirectEnLanguageToSwedenEnglish: Middleware = (
+  ctx,
+  next,
+) => {
+  if (ctx.path.startsWith('/en/referrals')) {
+    ctx.set('location', '/se-en' + ctx.originalUrl.replace(/^\/en/, ''))
+    ctx.status = 301
+    return
+  }
+
+  return next()
+}
