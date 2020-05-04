@@ -37,15 +37,10 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
 
 export const OfferNew: React.FC = () => {
   const storage = useStorage()
-  const quoteIds = storage.session.getSession()?.quoteIds ?? []
   const currentLocale = useCurrentLocale()
   const localeIsoCode = getLocaleIsoCode(currentLocale)
   const variation = useVariation()
-
-  if (quoteIds.length === 0) {
-    return <Redirect to={`/${currentLocale}/new-member`} />
-  }
-
+  const quoteIds = storage.session.getSession()?.quoteIds ?? []
   const { data, loading: loadingQuoteBundle, refetch } = useQuoteBundleQuery({
     variables: {
       input: {
@@ -61,6 +56,10 @@ export const OfferNew: React.FC = () => {
     '/:locale(se-en|se|no-en|no)/new-member/sign',
   )
   const toggleCheckout = createToggleCheckout(history, currentLocale)
+
+  if (quoteIds.length === 0) {
+    return <Redirect to={`/${currentLocale}/new-member`} />
+  }
 
   if (!loadingQuoteBundle && !data?.quoteBundle) {
     throw new Error(

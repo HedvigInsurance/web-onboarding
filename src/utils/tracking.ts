@@ -1,9 +1,15 @@
 import { CookieStorage } from 'cookie-storage'
-import { TypeOfContract } from 'data/graphql'
+import {
+  SignState,
+  TypeOfContract,
+  useMemberQuery,
+  useRedeemedCampaignsQuery,
+} from 'data/graphql'
 import * as md5 from 'md5'
 import { OfferData } from 'pages/OfferNew/types'
 import { isBundle, isYouth } from 'pages/OfferNew/utils'
 import { SegmentAnalyticsJs, setupTrackers } from 'quepasa'
+import React from 'react'
 
 const cookie = new CookieStorage()
 
@@ -102,4 +108,46 @@ export const trackStudentkortet = (memberId: string, amount: string) => {
   iframe.width = '1'
   iframe.height = '1'
   document.body.appendChild(iframe)
+}
+
+interface TrackProps {
+  offerData?: OfferData | null
+  signState?: SignState | null
+}
+export const useTrack = ({ offerData, signState }: TrackProps) => {
+  const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
+  const redeemedCampaigns = redeemedCampaignsData?.redeemedCampaigns ?? []
+  const { data: memberData } = useMemberQuery()
+  const memberId = memberData?.member.id!
+
+  React.useEffect(() => {
+    if (process.env.NODE_ENV === 'test') {
+      return
+    }
+
+    if (signState !== SignState.Completed) {
+      return
+    }
+
+    if (!offerData) {
+      return
+    }
+
+    adtraction(
+      parseFloat(offerData.cost.monthlyGross.amount),
+      memberId,
+      offerData.person.email || '',
+      redeemedCampaigns !== null && redeemedCampaigns.length !== 0
+        ? redeemedCampaigns[0].code
+        : null,
+      offerData,
+    )
+
+    if (
+      redeemedCampaigns?.length > 0 &&
+      redeemedCampaigns[0].code.toLowerCase() === 'studentkortet'
+    ) {
+      trackStudentkortet(memberId, offerData.cost.monthlyGross.amount)
+    }
+  }, [signState])
 }
