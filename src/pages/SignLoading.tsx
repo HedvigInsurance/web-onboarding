@@ -2,12 +2,23 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand/dist'
 import { LinkButton } from 'components/buttons'
 import { LoadingPage } from 'components/LoadingPage'
-import { useCurrentLocale } from 'components/utils/CurrentLocale'
-import { SignState, useSignStatusQuery } from 'data/graphql'
+import {
+  getLocaleIsoCode,
+  useCurrentLocale,
+} from 'components/utils/CurrentLocale'
+import {
+  QuoteBundle,
+  SignState,
+  useQuoteBundleQuery,
+  useSignStatusQuery,
+} from 'data/graphql'
 import { motion } from 'framer-motion'
+import { getOfferData } from 'pages/OfferNew/utils'
 import * as React from 'react'
 import { Redirect } from 'react-router'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useStorage } from 'utils/StorageContainer'
+import { useTrack } from 'utils/tracking'
 
 const InnerWrapper = styled(motion.div)`
   text-align: center;
@@ -23,8 +34,26 @@ export const SignLoading: React.FC = () => {
   const signStatusQuery = useSignStatusQuery({
     pollInterval: 1000,
   })
-  const currentLocale = useCurrentLocale()
   const textKeys = useTextKeys()
+  const currentLocale = useCurrentLocale()
+  const localeIsoCode = getLocaleIsoCode(currentLocale)
+  const storage = useStorage()
+  const quoteIds = storage.session.getSession()?.quoteIds ?? []
+  const { data: quoteBundleData } = useQuoteBundleQuery({
+    variables: {
+      input: {
+        ids: [...quoteIds],
+      },
+      locale: localeIsoCode,
+    },
+  })
+
+  useTrack({
+    offerData:
+      quoteBundleData &&
+      getOfferData(quoteBundleData.quoteBundle as QuoteBundle),
+    signState: signStatusQuery.data?.signStatus?.signState,
+  })
 
   React.useEffect(() => {
     setTimer(window.setTimeout(() => setHasTakenLong(true), 10000))
