@@ -103,7 +103,7 @@ const ConnectPaymentImage = styled('img')({
   },
 })
 
-export const ConnectTrustlyPage: React.FC = () => {
+export const ConnectPaymentPage: React.FC = () => {
   const textKeys = useTextKeys()
   const market = useMarket()
 

@@ -1,10 +1,13 @@
 import { TopBar } from 'components/TopBar'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
+import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
 import Helmet from 'react-helmet-async'
+import { Mount } from 'react-lifecycle-components/dist'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-import { ConnectTrustlyPage } from './sections/ConnectPayment'
+import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
+import { ConnectPaymentPage } from './sections/ConnectPayment'
 
 export const ConnectPayment: React.FC = () => {
   const textKeys = useTextKeys()
@@ -16,7 +19,21 @@ export const ConnectPayment: React.FC = () => {
           <title>{textKeys.ONBOARDING_CONNECT_DD_PAGE_TITLE()}</title>
         </Helmet>
         <TopBar />
-        <ConnectTrustlyPage />
+        <ConnectPaymentPage />
+
+        <TrackAction
+          event={{
+            name: SemanticEvents.Ecommerce.CheckoutStepCompleted,
+            properties: {
+              category: 'web-onboarding-steps',
+              action: 'Signed',
+              label: 'Completed',
+              ...getUtmParamsFromCookie(),
+            },
+          }}
+        >
+          {({ track }) => <Mount on={track}>{null}</Mount>}
+        </TrackAction>
       </SessionTokenGuard>
     </Page>
   )
