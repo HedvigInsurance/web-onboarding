@@ -5,6 +5,10 @@ import { Logger } from 'typescript-logging'
 import * as uuidV4 from 'uuid/v4'
 import { loggerFactory } from '../logging'
 
+export interface WithRequestUuid {
+  requestUuid: string
+}
+
 export const setRequestUuidMiddleware: Middleware = async (ctx, next) => {
   ctx.state.requestUuid = ctx.get('x-request-id') || uuidV4()
 
