@@ -2,7 +2,7 @@ import { ApolloProvider } from '@apollo/react-common'
 import { getScriptLocation } from '@hedviginsurance/web-survival-kit'
 import { min as createMinifiedSegmentSnippet } from '@segment/snippet'
 import { isMobile } from 'is-mobile'
-import * as Koa from 'koa'
+import * as Router from 'koa-router'
 import * as path from 'path'
 import * as React from 'react'
 import {
@@ -35,6 +35,7 @@ import {
   IOS_MINIMUM_VERSION,
 } from './config'
 import { favicons } from './favicons'
+import { WithRequestUuid } from './middleware/enhancers'
 
 const scriptLocation = getScriptLocation({
   statsLocation: path.resolve(__dirname, 'assets'),
@@ -47,7 +48,11 @@ const segmentSnippet = createMinifiedSegmentSnippet({
   load: true,
 })
 
-const template = (helmetContext: FilledContext['helmet'], cspNonce: string) => `
+const template = (
+  helmetContext: FilledContext['helmet'],
+  cspNonce: string,
+  adtractionTag: string,
+) => `
 <!doctype html>
 <html lang="en">
 <head>
@@ -73,7 +78,7 @@ const template = (helmetContext: FilledContext['helmet'], cspNonce: string) => `
   <!-- End Google Tag Manager -->
 
   <script key="segment-snippet" nonce="${cspNonce}">${segmentSnippet}</script>
-  <script defer src="https://adtr.io/jsTag?ap=1412531808"></script>
+  <script defer src="${adtractionTag}"></script>
 </head>
 <body>
   <!-- Google Tag Manager (noscript) -->
@@ -103,7 +108,9 @@ const template = (helmetContext: FilledContext['helmet'], cspNonce: string) => `
 </html>
 `
 
-export const getPage: Koa.Middleware = async (ctx) => {
+export const getPage: Router.IMiddleware<WithRequestUuid, object> = async (
+  ctx,
+) => {
   const serverCookieStorage = new SavingCookieStorage(
     new ServerCookieStorage(ctx),
   )
@@ -170,9 +177,14 @@ export const getPage: Koa.Middleware = async (ctx) => {
     return
   }
 
+  const ADRTRACTION_NO = 'https://cdn.adt387.com/jsTag?ap=1492109567'
+  const ADTRACTION_SE = 'https://adtr.io/jsTag?ap=1412531808'
   ctx.body = template(
     (helmetContext as FilledContext).helmet,
     (ctx.res as any).cspNonce,
+    ['no', 'no-en'].includes(ctx.params.locale)
+      ? ADRTRACTION_NO
+      : ADTRACTION_SE,
   )
 
   ctx.response.set('Access-Control-Allow-Origin', '*')
