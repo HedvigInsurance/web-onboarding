@@ -66,7 +66,7 @@ const CalendarWeekday = styled.span`
 
 const CalendarDay = styled.button<{ selected: boolean; selectable: boolean }>`
   display: inline-block;
-  width: calc(100% / 10);
+  width: calc(100% / 7);
   border: none;
   appearance: none;
   border: 0;
@@ -77,7 +77,6 @@ const CalendarDay = styled.button<{ selected: boolean; selectable: boolean }>`
   padding-bottom: 0.5rem;
   border-radius: 2px;
   transition: background-color 250ms, color 250ms;
-  margin: 1%;
   background: ${colorsV3.white};
 
   svg {
@@ -179,29 +178,7 @@ const Calendar: React.FC<DayzedCalendarProps> = ({
   const locale = useCurrentLocale()
 
   React.useEffect(() => {
-    const getLocaleImport = () => {
-      switch (locale) {
-        case 'se-en':
-        case 'no-en':
-          return import(
-            /* webpackChunkName: 'date-fns-en' */
-            'date-fns/locale/en-GB'
-          )
-        case 'no':
-          return import(
-            /* webpackChunkName: 'date-fn-no' */
-            'date-fns/locale/nb'
-          )
-        case 'se':
-        default:
-          return import(
-            /* webpackChunkName: 'date-fns-sv' */
-            'date-fns/locale/sv'
-          )
-      }
-    }
-
-    getLocaleImport().then((module) => {
+    getLocaleImport(locale).then((module) => {
       const dateLocale = module.default
 
       setMonthNamesShort(
@@ -374,4 +351,26 @@ export const DateInput: React.FC<DateInputProps> = ({
       </Container>
     </Wrapper>
   )
+}
+
+export const getLocaleImport = (locale: string) => {
+  switch (locale) {
+    case 'se-en':
+    case 'no-en':
+      return import(
+        /* webpackChunkName: 'date-fns-en' */
+        'date-fns/locale/en-GB'
+      )
+    case 'no':
+      return import(
+        /* webpackChunkName: 'date-fn-no' */
+        'date-fns/locale/nb'
+      )
+    case 'se':
+    default:
+      return import(
+        /* webpackChunkName: 'date-fns-sv' */
+        'date-fns/locale/sv'
+      )
+  }
 }
