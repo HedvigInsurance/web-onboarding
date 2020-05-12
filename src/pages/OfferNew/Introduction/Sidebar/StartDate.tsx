@@ -2,15 +2,22 @@ import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { externalInsuranceProviders } from '@hedviginsurance/embark'
-import { DateInput as DateInputForm } from 'components/DateInput'
+import {
+  DateInput as DateInputForm,
+  getLocaleImport,
+} from 'components/DateInput'
 import { DownArrow } from 'components/icons/DownArrow'
-import { Market, useMarket } from 'components/utils/CurrentLocale'
+import {
+  Market,
+  useCurrentLocale,
+  useMarket,
+} from 'components/utils/CurrentLocale'
 import {
   useExternalInsuranceDataQuery,
   useRemoveStartDateMutation,
   useStartDateMutation,
 } from 'data/graphql'
-import { format, isToday, parse } from 'date-fns'
+import { format, isToday, Locale, parse } from 'date-fns'
 import { motion } from 'framer-motion'
 import hexToRgba from 'hex-to-rgba'
 import { match } from 'matchly'
@@ -187,6 +194,7 @@ const DateForm: React.FC<{
   const [dateValue, setDateValue] = React.useState(() =>
     getDefaultDateValue(quote),
   )
+  const [dateLocale, setDateLocale] = React.useState<Locale | null>(null)
 
   const textKeys = useTextKeys()
   const [setStartDate] = useStartDateMutation()
@@ -197,6 +205,7 @@ const DateForm: React.FC<{
     },
   })
 
+  const locale = useCurrentLocale()
   const market = useMarket()
   const getDateFormat = match([
     [Market.Se, 'dd MMM yyyy'],
@@ -206,6 +215,9 @@ const DateForm: React.FC<{
   React.useEffect(() => {
     setDateValue(getDefaultDateValue(quote))
   }, [quote.startDate])
+  React.useEffect(() => {
+    getLocaleImport(locale).then((m) => setDateLocale(m.default))
+  })
 
   const handleFail = () => {
     setShowError(true)
@@ -217,7 +229,7 @@ const DateForm: React.FC<{
         return textKeys.SIDEBAR_STARTDATE_CELL_VALUE_NEW()
       }
 
-      return format(dateValue, getDateFormat(market)!)
+      return format(dateValue, getDateFormat(market)!, { locale: dateLocale! })
     }
 
     const firstExternalInsurance =
