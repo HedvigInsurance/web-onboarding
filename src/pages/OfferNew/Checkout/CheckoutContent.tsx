@@ -21,23 +21,11 @@ const Section = styled('div')`
   width: 100%;
 `
 
-export const Title = styled('h1')`
-  font-size: 3.5rem;
-  line-height: 1;
-  color: ${colorsV3.gray900};
-  margin: 0;
-
-  @media (max-width: 40rem) {
-    font-size: 2rem;
-    text-align: center;
-  }
-`
-
 const Excerpt = styled('div')`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 4rem 0;
+  padding: 0 0 4rem 0;
 
   @media (max-width: 40rem) {
     padding: 2rem 0;
@@ -93,7 +81,6 @@ export const CheckoutContent: React.FC<Props> = ({
   return (
     <>
       <Section>
-        <Title>{textKeys.CHECKOUT_TITLE()}</Title>
         <Excerpt>
           <div>
             {market !== Market.No && (
