@@ -25,7 +25,7 @@ const Excerpt = styled('div')`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 0 4rem 0;
+  padding-bottom: 4rem;
 
   @media (max-width: 40rem) {
     padding: 2rem 0;
