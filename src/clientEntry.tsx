@@ -20,8 +20,6 @@ const session = createSession<Session>(
   new SavingCookieStorage(new CookieStorage({ expires: null, path: '/' })),
 )
 
-window.setInterval(() => session.keepAlive(), 5 * 1000)
-
 ReactDOM.render(
   <BrowserRouter>
     <PageTracker>
