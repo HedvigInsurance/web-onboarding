@@ -1,4 +1,4 @@
-import { createSession, KA_SESSION_KEY, SESSION_KEY } from './sessionStorage'
+import { createSession, SESSION_KEY } from './sessionStorage'
 import { MockStorage } from './storage/MockStorage'
 
 it('gets and sets sessions', () => {

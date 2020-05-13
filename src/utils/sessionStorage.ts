@@ -3,7 +3,6 @@ import { CookieOptions } from 'cookie-storage/lib/cookie-options'
 import { MinimalStorage } from './storage/MinimalStorage'
 
 export const SESSION_KEY = '_hvsession'
-export const KA_SESSION_KEY = '_hvsessionexpiry'
 
 export interface Session {
   token?: string
