@@ -33,7 +33,7 @@ import {
 } from './server/middleware/redirects'
 import { getPage } from './server/page'
 import { notNullable } from './utils/nullables'
-import { sentryConfig } from './utils/sentry'
+import { sentryConfig } from './utils/sentry-server'
 
 Sentry.init({
   ...sentryConfig(),
