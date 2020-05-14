@@ -13,7 +13,7 @@ import { FilledContext, HelmetProvider } from 'react-helmet-async'
 import { StaticRouter, StaticRouterContext } from 'react-router'
 import { MobileContext } from 'utils/mobileContext'
 import { App } from '../App'
-import { sentryConfig } from '../utils/sentry'
+import { sentryConfig } from '../utils/sentry-server'
 import {
   createSession,
   SavingCookieStorage,

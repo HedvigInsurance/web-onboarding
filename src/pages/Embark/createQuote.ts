@@ -1,6 +1,7 @@
 import { CreateQuoteData, CreateQuoteVariables } from '@hedviginsurance/embark'
 import { Locale } from 'data/graphql'
 import gql from 'graphql-tag'
+import { captureSentryError } from 'utils/sentry-client'
 import { apolloClient } from '../../client/apolloClient'
 import { setupSession } from '../../containers/SessionContainer'
 
@@ -55,15 +56,22 @@ const MUTATION = gql`
 export const createQuote = (storage: any, locale: Locale) => async (
   variables: CreateQuoteVariables,
 ): Promise<CreateQuoteData | Error> => {
-  await setupSession(apolloClient!, storage, locale)
+  try {
+    await setupSession(apolloClient!, storage, locale)
+  } catch (e) {
+    captureSentryError(e)
+    throw e
+  }
 
-  const result = await apolloClient!.client.mutate<
-    CreateQuoteData,
-    CreateQuoteVariables
-  >({
-    mutation: MUTATION,
-    variables,
-  })
+  const result = await apolloClient!.client
+    .mutate<CreateQuoteData, CreateQuoteVariables>({
+      mutation: MUTATION,
+      variables,
+    })
+    .catch((e) => {
+      captureSentryError(e, { email: variables.input.email })
+      throw e
+    })
 
   if (result.data && result.data.createQuote.__typename === 'CompleteQuote') {
     storage.session.setSession({
