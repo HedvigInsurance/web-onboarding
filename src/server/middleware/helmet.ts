@@ -13,6 +13,7 @@ const defaultSrc = [
   '*.intercomcdn.com',
   '*.intercomassets.com',
   '*.intercomusercontent.com',
+  'nexus-websocket-a.intercom.io',
   'app.getsentry.com',
   'sentry.io',
   'cnv.adt686.net',
@@ -101,6 +102,8 @@ export const helmet = koaHelmet({
         'static.intercomassets.com',
         'hedvig.intercom-attachments-5.com',
         'gifs.intercomcdn.com',
+        'cnv.adt686.net',
+        'cnv.adt387.com',
       ],
       reportUri:
         process.env.CSP_REPORT_ENDPOINT || '/new-member/_report-csp-violation',
