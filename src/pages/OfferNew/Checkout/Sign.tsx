@@ -139,8 +139,9 @@ export const Sign: React.FC<Props> = ({
                 textKey="CHECKOUT_SIGN_DISCLAIMER"
                 replacements={{
                   PREBUY_LINK:
-                    quote.insuranceTerms.get(InsuranceTermType.PreSaleInfo)
-                      ?.url ?? '',
+                    quote.insuranceTerms.get(
+                      InsuranceTermType.PreSaleInfoEuStandard,
+                    )?.url ?? '',
                   TERMS_LINK:
                     quote.insuranceTerms.get(
                       InsuranceTermType.TermsAndConditions,
