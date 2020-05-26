@@ -2034,10 +2034,15 @@
     tslib "1.10.0"
     valid-url "1.0.9"
 
-"@hedviginsurance/brand@3.0.5", "@hedviginsurance/brand@^3.0.5":
+"@hedviginsurance/brand@3.0.5":
   version "3.0.5"
   resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-3.0.5.tgz#04ad29b5d01b04c456691e010a2336dce454ce6c"
   integrity sha512-jjOn/0/6KJhZGRSwiYq8+L9zL/CGD7m3e42HC/tQ/m7RXV4hZvdv0nzkV8EhdbmdTj1f0gj32l0JgXPiD1GNUw==
+
+"@hedviginsurance/brand@^3.0.5":
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-3.0.6.tgz#3d2e963207686d78863702e7d7c2f670dcf66971"
+  integrity sha512-GAgkWY5vdRqVuKt5BZjiFCTEg1gNemAahuW6Zi04RYbqS9Ii4QfBNTqJoCBhS5fP1ATyFNHE6RMB2/Cx4TKHVA==
 
 "@hedviginsurance/cli@^2.3.2":
   version "2.3.3"
@@ -2053,10 +2058,10 @@
     webpack "4.19.1"
     webpack-dev-server "3.1.14"
 
-"@hedviginsurance/embark@^2.0.0-alpha.9":
-  version "2.0.0-alpha.9"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-2.0.0-alpha.9.tgz#fe99df75a2122e1c1776dc9aa0c3a4a6d7d7e17c"
-  integrity sha512-U7ZBYaChvHexmLefe4FCrMCCNie4AaeFN3uBgISUTT41P+M1zMl1ZaEBo1NFREKw8344+kCNF2fohK7ZznTTsw==
+"@hedviginsurance/embark@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-2.0.0.tgz#ac2604cda2675495ccd5382c10f22798459b7b40"
+  integrity sha512-7GjQj276w914pQZy8RH2ieWC+HUz39POwrVZxhZXlb6pmSIC64GXbsZLDi1wGey5X+wn/y4JWPOUjciVNsEkGg==
   dependencies:
     "@babel/plugin-proposal-optional-chaining" "^7.8.3"
     "@emotion/babel-plugin" "^11.0.0-next.12"
