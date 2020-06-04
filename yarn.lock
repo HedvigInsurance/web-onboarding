@@ -2034,15 +2034,15 @@
     tslib "1.10.0"
     valid-url "1.0.9"
 
-"@hedviginsurance/brand@3.0.5":
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-3.0.5.tgz#04ad29b5d01b04c456691e010a2336dce454ce6c"
-  integrity sha512-jjOn/0/6KJhZGRSwiYq8+L9zL/CGD7m3e42HC/tQ/m7RXV4hZvdv0nzkV8EhdbmdTj1f0gj32l0JgXPiD1GNUw==
-
 "@hedviginsurance/brand@^3.0.5":
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-3.0.6.tgz#3d2e963207686d78863702e7d7c2f670dcf66971"
   integrity sha512-GAgkWY5vdRqVuKt5BZjiFCTEg1gNemAahuW6Zi04RYbqS9Ii4QfBNTqJoCBhS5fP1ATyFNHE6RMB2/Cx4TKHVA==
+
+"@hedviginsurance/brand@^3.0.7":
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-3.0.7.tgz#5d27831b41a7edfe678190f57e7e9b790842fd50"
+  integrity sha512-RJAzXXqYGpsz6DK9St9Zb7Y4DdhBXF9rBx4ZINtxiAJrFGiBry7Hfnq0RbiBnR/USJR0P5GQYKe4VgLa98uAYg==
 
 "@hedviginsurance/cli@^2.3.2":
   version "2.3.3"
@@ -5587,10 +5587,10 @@ constants-browserify@^1.0.0:
   resolved "https://registry.yarnpkg.com/constants-browserify/-/constants-browserify-1.0.0.tgz#c20b96d8c617748aaf1c16021760cd27fcb8cb75"
   integrity sha1-wguW2MYXdIqvHBYCF2DNJ/y4y3U=
 
-constate@^0.8.2:
-  version "0.8.2"
-  resolved "https://registry.yarnpkg.com/constate/-/constate-0.8.2.tgz#36974aa47d5243f0f07a92da46eb8c3df40179d8"
-  integrity sha512-V7Z5gDWirhSrswd/lEZAMu+QkVI0odNfknbQIDJRqCNobQelsH3jq7gZ+3lQasQY3SLotx++P8q5NykTq6hALw==
+constate@0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/constate/-/constate-0.9.0.tgz#877197ef8fbcacee95672a7e98f7b21dec818891"
+  integrity sha512-Cgkqefi4GrepnA7gwqbrsU+Kf/xl0sPv3O1UNE/vUZtTgpWlkd+/rSZjjd7npICtExn6yuICro7Vb2zoFCnS/A==
 
 content-disposition@0.5.3, content-disposition@~0.5.2:
   version "0.5.3"

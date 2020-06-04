@@ -1,4 +1,4 @@
-import { colors } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { Button } from 'components/buttons'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import * as React from 'react'
@@ -35,8 +35,8 @@ export const TrustlyCheckout: React.FC = () => {
   return (
     <>
       <Button
-        background={colors.PURPLE}
-        foreground={colors.WHITE}
+        background={colorsV3.purple500}
+        foreground={colorsV3.gray900}
         onClick={async () => {
           setTrustlyModalIsOpen(true)
 

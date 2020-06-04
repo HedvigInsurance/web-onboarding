@@ -4,8 +4,8 @@ import { Provider } from 'constate'
 import * as React from 'react'
 import { hot } from 'react-hot-loader'
 import { Route, Switch } from 'react-router-dom'
-import { AppTokenRetrival } from './AppTokenRetrival'
 import { reactPageRoutes } from './routes'
+import { AppTokenRetrieval } from './utils/AppTokenRetrieval'
 import { GlobalCss } from './utils/globalStyles'
 import { Intercom } from './utils/Intercom'
 import {
@@ -28,7 +28,7 @@ export const App: React.ComponentType<StorageState> = ({ session }) => (
             devtools={process.env.NODE_ENV !== 'production'}
           >
             <StorageContext.Provider value={{ session }}>
-              <AppTokenRetrival>
+              <AppTokenRetrieval>
                 <Switch>
                   {reactPageRoutes.map(({ path, exact, Component, render }) => (
                     <Route
@@ -40,7 +40,7 @@ export const App: React.ComponentType<StorageState> = ({ session }) => (
                     />
                   ))}
                 </Switch>
-              </AppTokenRetrival>
+              </AppTokenRetrieval>
             </StorageContext.Provider>
           </Provider>
         </TranslationsProvider>

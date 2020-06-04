@@ -4,6 +4,7 @@ import { RouteComponentProps } from 'react-router'
 import { ConnectPayment } from './pages/ConnectPayment'
 import { TrustlyFailPage } from './pages/ConnectPayment/components/TrustlyFailPage'
 import { TrustlySpinnerPage } from './pages/ConnectPayment/components/TrustlySpinnerPage'
+import { ConnectPaymentsDirectEntry } from './pages/ConnectPayment/ConnectPaymentsDirectEntry'
 import { Download } from './pages/Download'
 import { EmbarkRoot } from './pages/Embark'
 import { FourOhFour } from './pages/FourOhFour'
@@ -34,6 +35,11 @@ export const reactPageRoutes: ReactPageRoute[] = [
   {
     path: LOCALE_PATH_PATTERN + '/new-member/connect-payment',
     Component: ConnectPayment,
+    exact: true,
+  },
+  {
+    path: LOCALE_PATH_PATTERN + '/new-member/connect-payment/direct',
+    Component: ConnectPaymentsDirectEntry,
     exact: true,
   },
   {

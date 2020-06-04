@@ -52,9 +52,20 @@ const Dropdown = styled.div`
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
 `
 
-export const LanguagePicker = () => {
+export const LanguagePicker: React.FC<{ path?: string }> = ({
+  path = '/new-member',
+}) => {
   const [isOpen, setIsOpen] = React.useState(false)
   const market = useMarket()
+
+  React.useEffect(() => {
+    const clickListener = () => {
+      setIsOpen(false)
+    }
+    document.body.addEventListener('click', clickListener)
+
+    return () => document.body.removeEventListener('click', clickListener)
+  }, [])
 
   return (
     <Wrapper>
@@ -73,16 +84,16 @@ export const LanguagePicker = () => {
         <Dropdown>
           {market === Market.Se && (
             <>
-              <StyledLink to="/se/new-member">Svenska</StyledLink>
+              <StyledLink to={`/se${path}`}>Svenska</StyledLink>
               <Divider />
-              <StyledLink to="/se-en/new-member">English</StyledLink>
+              <StyledLink to={`/se-en${path}`}>English</StyledLink>
             </>
           )}
           {market === Market.No && (
             <>
-              <StyledLink to="/no/new-member">Norsk</StyledLink>
+              <StyledLink to={`/no${path}`}>Norsk</StyledLink>
               <Divider />
-              <StyledLink to="/no-en/new-member">English</StyledLink>
+              <StyledLink to={`/no-en${path}`}>English</StyledLink>
             </>
           )}
         </Dropdown>

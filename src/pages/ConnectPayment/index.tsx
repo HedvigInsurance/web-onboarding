@@ -1,6 +1,7 @@
 import { TopBar } from 'components/TopBar'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
+import { LanguagePicker } from 'pages/Embark/LanguagePicker'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
 import Helmet from 'react-helmet-async'
@@ -18,7 +19,9 @@ export const ConnectPayment: React.FC = () => {
         <Helmet>
           <title>{textKeys.ONBOARDING_CONNECT_DD_PAGE_TITLE()}</title>
         </Helmet>
-        <TopBar />
+        <TopBar>
+          <LanguagePicker path="/new-member/connect-payment" />
+        </TopBar>
         <ConnectPaymentPage />
 
         <TrackAction
