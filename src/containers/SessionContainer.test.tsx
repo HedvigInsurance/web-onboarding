@@ -85,7 +85,8 @@ it('creates a new session', async () => {
       result: {
         data: {
           updatePickedLocale: {
-            memberId: 'abc123',
+            id: 'abc123',
+            __typename: 'Member',
           },
         },
       },

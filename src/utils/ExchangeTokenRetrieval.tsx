@@ -1,23 +1,20 @@
-import { apolloClient } from 'client/apolloClient'
+import { apolloClient as realApolloClient } from 'client/apolloClient'
 import { ExchangeTokenDocument } from 'data/graphql'
 import * as React from 'react'
 import { Mount } from 'react-lifecycle-components'
+import { useHistory } from 'react-router'
 import {
   StorageContainer,
   StorageEffects,
   StorageState,
 } from 'utils/StorageContainer'
 
-export enum LoadingState {
-  Loading = 'Loading',
-  Success = 'Success',
-  Error = 'Error',
-}
-
 export enum ExchangeTokenRetrievalState {
   Loading = 'Loading',
   Success = 'Success',
   Error = 'Error',
+  InvalidToken = 'InvalidToken',
+  ExpiredToken = 'ExpiredToken',
   TakingTooLong = 'TakingTooLong',
 }
 
@@ -26,29 +23,25 @@ export const ExchangeTokenRetrieval: React.FC<{
     exchangeTokenState: ExchangeTokenRetrievalState
     retry: () => void
   }) => React.ReactElement
-}> = ({ children }) => {
+  apolloClient?: typeof realApolloClient
+}> = ({ children, apolloClient = realApolloClient }) => {
   const [hasFinishedFakeLoading, setHasFinishedFakeLoading] = React.useState(
     false,
   )
   const [actualLoadingState, setActualLoadingState] = React.useState(
-    LoadingState.Loading,
+    ExchangeTokenRetrievalState.Loading,
   )
   const [tokenExchangeState, setTokenExchangeState] = React.useState(
     ExchangeTokenRetrievalState.Loading,
   )
+  const { location } = useHistory()
 
   React.useEffect(() => {
     if (!hasFinishedFakeLoading) {
       return
     }
 
-    if (actualLoadingState === LoadingState.Error) {
-      setTokenExchangeState(ExchangeTokenRetrievalState.Error)
-    }
-
-    if (actualLoadingState === LoadingState.Success) {
-      setTokenExchangeState(ExchangeTokenRetrievalState.Success)
-    }
+    setTokenExchangeState(actualLoadingState)
   }, [actualLoadingState, hasFinishedFakeLoading])
 
   React.useEffect(() => {
@@ -64,7 +57,7 @@ export const ExchangeTokenRetrieval: React.FC<{
   React.useEffect(() => {
     const timeout = window.setTimeout(() => {
       if (tokenExchangeState === ExchangeTokenRetrievalState.Loading) {
-        setTokenExchangeState(ExchangeTokenRetrievalState.Error)
+        setTokenExchangeState(ExchangeTokenRetrievalState.TakingTooLong)
       }
     }, 15 * 1000)
 
@@ -75,33 +68,41 @@ export const ExchangeTokenRetrieval: React.FC<{
     storageState: StorageState & StorageEffects,
   ) => {
     setHasFinishedFakeLoading(false)
-    setActualLoadingState(LoadingState.Loading)
+    setActualLoadingState(ExchangeTokenRetrievalState.Loading)
     setTokenExchangeState(ExchangeTokenRetrievalState.Loading)
 
     storageState.setToken('mock token')
 
-    if (!location.hash.includes('#exchange-token=')) {
-      return
-    }
     const exchangeToken = decodeURIComponent(
       location.hash.replace(/^#exchange-token=/, ''),
     )
+    if (!location.hash.includes('#exchange-token=') || !exchangeToken) {
+      return
+    }
     apolloClient!.client
       .mutate({
         mutation: ExchangeTokenDocument,
         variables: { exchangeToken },
       })
       .then(({ data }) => {
-        if (data?.exchangeToken?.token) {
-          storageState.setToken(data.exchangeToken.token)
-          apolloClient!.subscriptionClient.close(true, true)
-          setActualLoadingState(LoadingState.Success)
-        } else {
-          setActualLoadingState(LoadingState.Error)
+        switch (data?.exchangeToken?.__typename) {
+          case 'ExchangeTokenSuccessResponse':
+            storageState.setToken(data.exchangeToken.token)
+            apolloClient!.subscriptionClient.close(true, true)
+            setActualLoadingState(ExchangeTokenRetrievalState.Success)
+            break
+          case 'ExchangeTokenInvalidResponse':
+            setActualLoadingState(ExchangeTokenRetrievalState.InvalidToken)
+            break
+          case 'ExchangeTokenExpiredResponse':
+            setActualLoadingState(ExchangeTokenRetrievalState.ExpiredToken)
+            break
+          default:
+            setActualLoadingState(ExchangeTokenRetrievalState.Error)
         }
       })
       .catch((e) => {
-        setActualLoadingState(LoadingState.Error)
+        setActualLoadingState(ExchangeTokenRetrievalState.Error)
         throw e
       })
   }
