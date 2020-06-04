@@ -71,7 +71,10 @@ export const ExchangeTokenRetrieval: React.FC<{
     setActualLoadingState(ExchangeTokenRetrievalState.Loading)
     setTokenExchangeState(ExchangeTokenRetrievalState.Loading)
 
-    storageState.setToken('mock token')
+    if (!storageState.session.getSession()?.token) {
+      storageState.setToken('mock token to bypass initial auth layer')
+      apolloClient!.subscriptionClient.close(true, true)
+    }
 
     const exchangeToken = decodeURIComponent(
       location.hash.replace(/^#exchange-token=/, ''),
