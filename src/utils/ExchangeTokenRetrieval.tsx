@@ -3,6 +3,7 @@ import { ExchangeTokenDocument } from 'data/graphql'
 import * as React from 'react'
 import { Mount } from 'react-lifecycle-components'
 import { useHistory } from 'react-router'
+import { captureSentryError } from 'utils/sentry-client'
 import {
   StorageContainer,
   StorageEffects,
@@ -76,9 +77,16 @@ export const ExchangeTokenRetrieval: React.FC<{
       apolloClient!.subscriptionClient.close(true, true)
     }
 
-    const exchangeToken = decodeURIComponent(
-      location.hash.replace(/^#exchange-token=/, ''),
-    )
+    let exchangeToken: string | null
+    try {
+      exchangeToken = decodeURIComponent(
+        location.hash.replace(/^#exchange-token=/, ''),
+      )
+    } catch (e) {
+      captureSentryError(e)
+      exchangeToken = null
+    }
+
     if (!location.hash.includes('#exchange-token=') || !exchangeToken) {
       return
     }

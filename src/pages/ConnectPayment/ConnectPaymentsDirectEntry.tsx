@@ -31,7 +31,11 @@ export const ConnectPaymentsDirectEntry: React.FC<RouteComponentProps<
             <Redirect to={`/${locale}/new-member/connect-payment`} />
           )}
           <FadeInUp
-            visible={exchangeTokenState === ExchangeTokenRetrievalState.Error}
+            visible={[
+              ExchangeTokenRetrievalState.InvalidToken,
+              ExchangeTokenRetrievalState.ExpiredToken,
+              ExchangeTokenRetrievalState.Error,
+            ].includes(exchangeTokenState)}
           >
             Something went wrong. Try again. Please change this message.
             <ButtonWrapper>

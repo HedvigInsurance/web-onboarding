@@ -3,7 +3,7 @@ import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import Modal from 'components/Modal'
 import { CurrentLocale } from 'components/utils/CurrentLocale'
-import { ActionMap, Container } from 'constate'
+import { Container } from 'constate'
 import * as React from 'react'
 import { Redirect } from 'react-router'
 
@@ -49,12 +49,12 @@ const TrustlyModal: React.FC<Props> = ({
 }) => {
   const iframeRef = React.createRef<HTMLIFrameElement>()
   return (
-    <Container<State, ActionMap<State, Actions>>
+    <Container<State, Actions>
       initialState={{
         isSuccess: false,
       }}
       actions={{
-        setIsSuccess: (isSuccess: boolean) => ({
+        setIsSuccess: (isSuccess: boolean) => (_state) => ({
           isSuccess,
         }),
       }}
