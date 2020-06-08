@@ -13,11 +13,17 @@ This is the web based onboarding that you can find at [https://www.hedvig.com/se
 2. `nvm install` (installs the node version specified in `.nvmrc`)
 3. `nvm use` (use version from `.nvmrc`)
 
-### Install Yarn
+### Install Yarn package manager
+
+Use one of the following `yarn` or `yvm`
+
+#### Install Yarn
 
 1. Install `yarn` [https://classic.yarnpkg.com/en/docs/install/#mac-stable](https://classic.yarnpkg.com/en/docs/install/#mac-stable)
 
-#### Install Yarn with yvm
+#### Install yvm
+
+`yvm` is a neat yarn version manager just like `nvm` is for node.
 
 1. Install `yvm` [https://yvm.js.org/docs/overview#installation](https://yvm.js.org/docs/overview#installation)
 2. Run any yarn command and watch it automagically use the correct version of yarn. (Version specified in `package.json` or `.yvmrc`)
