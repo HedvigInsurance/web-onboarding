@@ -11,6 +11,7 @@ import {
   ExchangeTokenRetrieval,
   ExchangeTokenRetrievalState,
 } from 'utils/ExchangeTokenRetrieval'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 
 const ButtonWrapper = styled.div`
   padding-top: 1rem;
@@ -20,6 +21,7 @@ export const ConnectPaymentsDirectEntry: React.FC<RouteComponentProps<
   object
 >> = () => {
   const locale = useCurrentLocale()
+  const textKeys = useTextKeys()
 
   return (
     <ExchangeTokenRetrieval>
@@ -37,7 +39,13 @@ export const ConnectPaymentsDirectEntry: React.FC<RouteComponentProps<
               ExchangeTokenRetrievalState.Error,
             ].includes(exchangeTokenState)}
           >
-            Something went wrong. Try again. Please change this message.
+            {exchangeTokenState === ExchangeTokenRetrievalState.InvalidToken &&
+              textKeys.CONNECT_PAYMENT_DIRECT_ERROR_INVALID_TOKEN()}
+            {exchangeTokenState === ExchangeTokenRetrievalState.ExpiredToken &&
+              textKeys.CONNECT_PAYMENT_DIRECT_ERROR_EXPIRED_TOKEN()}
+            {exchangeTokenState === ExchangeTokenRetrievalState.Error &&
+              textKeys.CONNECT_PAYMENT_DIRECT_ERROR_UNKNOWN()}
+
             <ButtonWrapper>
               <Button
                 foreground={colorsV3.gray900}
@@ -46,7 +54,7 @@ export const ConnectPaymentsDirectEntry: React.FC<RouteComponentProps<
                   retry()
                 }}
               >
-                Retry
+                {textKeys.RETRY()}
               </Button>
             </ButtonWrapper>
           </FadeInUp>
@@ -55,9 +63,7 @@ export const ConnectPaymentsDirectEntry: React.FC<RouteComponentProps<
               exchangeTokenState === ExchangeTokenRetrievalState.TakingTooLong
             }
           >
-            <div>
-              Something is taking too long. Try again. Also change this message.
-            </div>
+            <div>{textKeys.CONNECT_PAYMENT_DIRECT_ERROR_TAKING_TOO_LONG()}</div>
             <ButtonWrapper>
               <Button
                 foreground={colorsV3.gray900}
@@ -66,7 +72,7 @@ export const ConnectPaymentsDirectEntry: React.FC<RouteComponentProps<
                   location.reload()
                 }}
               >
-                Try again
+                {textKeys.RETRY()}
               </Button>
             </ButtonWrapper>
           </FadeInUp>
