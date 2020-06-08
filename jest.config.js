@@ -9,4 +9,5 @@ module.exports = {
     '<rootDir>/test-setup-enzyme.js',
     '<rootDir>/setup-mock-analytics.js',
   ],
+  setupFilesAfterEnv: ['./setup-enzyme-json-serializer.js']
 }

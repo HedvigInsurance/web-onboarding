@@ -74,11 +74,18 @@ export const LanguagePicker: React.FC<{ path?: string }> = ({
       </LanguageDropdownButton>
       <motion.div
         initial={{ opacity: 0, y: -20 }}
-        animate={
-          isOpen
-            ? { opacity: 1, y: 0, pointerEvents: 'auto', userSelect: 'auto' }
-            : { opacity: 0, y: -20, pointerEvents: 'none', userSelect: 'none' }
-        }
+        variants={{
+          open: { opacity: 1, y: 0 },
+          closed: {
+            opacity: 0,
+            y: -20,
+          },
+        }}
+        animate={isOpen ? 'open' : 'closed'}
+        style={{
+          pointerEvents: isOpen ? 'auto' : 'none',
+          userSelect: isOpen ? 'auto' : 'none',
+        }}
         transition={{ type: 'spring', stiffness: 400, damping: 100 }}
       >
         <Dropdown>
