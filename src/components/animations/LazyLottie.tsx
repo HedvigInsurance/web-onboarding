@@ -1,4 +1,4 @@
-import { Action, Container, StateUpdater } from 'constate'
+import { Container } from 'constate'
 import * as React from 'react'
 import { Mount } from 'react-lifecycle-components'
 import ReactLottieComponent, { ReactLottieProps } from 'react-lottie'
@@ -9,10 +9,8 @@ interface State {
 }
 
 interface Actions {
-  setLoadedAnimationData: Action<State, any>
-  setLoadedLottie: (
-    ReactLottie: typeof ReactLottieComponent,
-  ) => StateUpdater<State>
+  setLoadedAnimationData: (animationData: any) => void
+  setLoadedLottie: (ReactLottie: typeof ReactLottieComponent) => void
 }
 
 export const LazyLottie: React.SFC<ReactLottieProps> = (props) =>
@@ -20,8 +18,10 @@ export const LazyLottie: React.SFC<ReactLottieProps> = (props) =>
     <Container<State, Actions>
       initialState={{ animationData: null, ReactLottie: null }}
       actions={{
-        setLoadedAnimationData: (animationData: any) => ({ animationData }),
-        setLoadedLottie: (ReactLottie: typeof ReactLottieComponent) => ({
+        setLoadedAnimationData: (animationData) => (_state) => ({
+          animationData,
+        }),
+        setLoadedLottie: (ReactLottie) => (_state) => ({
           ReactLottie,
         }),
       }}

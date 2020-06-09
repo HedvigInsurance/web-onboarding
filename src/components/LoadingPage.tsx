@@ -26,13 +26,16 @@ const ContentWrapper = styled('div')`
   color: ${colorsV3.white};
 `
 
-export const LoadingPage: React.FC = ({ children }) => {
+export const LoadingPage: React.FC<{ loading?: boolean }> = ({
+  children,
+  loading,
+}) => {
   return (
     <>
       <TopBar />
       <OuterSpinnerWrapper>
         <InnerSpinnerWrapper>
-          <Spinner />
+          {loading && <Spinner />}
           {children && <ContentWrapper>{children}</ContentWrapper>}
         </InnerSpinnerWrapper>
       </OuterSpinnerWrapper>

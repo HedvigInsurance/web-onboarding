@@ -1,5 +1,6 @@
 import React from 'react'
 import { useRouteMatch } from 'react-router'
+import { LOCALE_PATH_PATTERN } from 'routes'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 
 const createIntercom = () => {
@@ -22,7 +23,10 @@ const createIntercom = () => {
 export const Intercom: React.FC = () => {
   const variation = useVariation()
   const isIntercomMatch = useRouteMatch(
-    '/:locale(se-en|se|no-en|no)/new-member/:place(offer|sign|download)',
+    LOCALE_PATH_PATTERN + '/new-member/:place(offer|sign|download)',
+  )
+  const isDirectConnectPaymentIntercomMatch = useRouteMatch(
+    LOCALE_PATH_PATTERN + '/new-member/connect-payment/direct',
   )
   React.useEffect(() => {
     if ([Variation.IOS, Variation.ANDROID].includes(variation!)) {
@@ -31,14 +35,16 @@ export const Intercom: React.FC = () => {
 
     const hasIntercomScript = window.document.getElementById('intercom-script')
     const hasIntercomInstalled = typeof (window as any).Intercom !== 'undefined'
-    if (isIntercomMatch && !hasIntercomScript) {
+    const isDefinitelyIntercomMatch =
+      isIntercomMatch || isDirectConnectPaymentIntercomMatch
+    if (isDefinitelyIntercomMatch && !hasIntercomScript) {
       createIntercom()
-    } else if (isIntercomMatch && hasIntercomInstalled) {
+    } else if (isDefinitelyIntercomMatch && hasIntercomInstalled) {
       ;(window as any).Intercom('boot')
-    } else if (!isIntercomMatch && hasIntercomInstalled) {
+    } else if (!isDefinitelyIntercomMatch && hasIntercomInstalled) {
       ;(window as any).Intercom('shutdown')
     }
-  }, [isIntercomMatch?.path])
+  }, [isIntercomMatch?.path, isDirectConnectPaymentIntercomMatch?.path])
 
   return null
 }

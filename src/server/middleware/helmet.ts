@@ -43,6 +43,7 @@ const defaultSrc = [
   'track.adtraction.com',
   'c.adtraction.net',
   'cnv.adt670.com',
+  'cnv.adt686.net',
   'cdn.adt387.com',
   'bnc.lt',
   'app.link',

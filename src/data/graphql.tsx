@@ -1277,11 +1277,6 @@ export type BundledQuoteInsuranceTermsArgs = {
   locale: Locale
 }
 
-export enum CacheControlScope {
-  Public = 'PUBLIC',
-  Private = 'PRIVATE',
-}
-
 export type Campaign = {
   __typename?: 'Campaign'
   incentive?: Maybe<Incentive>
@@ -2011,26 +2006,6 @@ export type DocumentTransformationInput = {
   output?: Maybe<DocumentOutputInput>
 }
 
-export type DontPanicChatMessage = {
-  __typename?: 'DontPanicChatMessage'
-  id: Scalars['ID']
-  who: Scalars['String']
-  text: Scalars['String']
-  session: DontPanicSession
-  isHedvig: Scalars['Boolean']
-  type: Scalars['String']
-}
-
-export type DontPanicSession = {
-  __typename?: 'DontPanicSession'
-  id: Scalars['ID']
-  name: Scalars['String']
-  lastName?: Maybe<Scalars['String']>
-  email?: Maybe<Scalars['String']>
-  currentInsurer?: Maybe<Scalars['String']>
-  chatMessages: Array<DontPanicChatMessage>
-}
-
 export type EditApartmentInput = {
   street?: Maybe<Scalars['String']>
   zipCode?: Maybe<Scalars['String']>
@@ -2103,6 +2078,8 @@ export type EditSwedishHouseInput = {
 }
 
 export type EmbarkAction =
+  | EmbarkExternalInsuranceProviderAction
+  | EmbarkPreviousInsuranceProviderAction
   | EmbarkNumberActionSet
   | EmbarkTextActionSet
   | EmbarkTextAction
@@ -2159,7 +2136,13 @@ export type EmbarkApiGraphQlMultiActionVariable = {
 
 export type EmbarkApiGraphQlMutation = {
   __typename?: 'EmbarkApiGraphQLMutation'
-  next: EmbarkLink
+  component: Scalars['String']
+  data: EmbarkApiGraphQlMutationData
+}
+
+export type EmbarkApiGraphQlMutationData = {
+  __typename?: 'EmbarkApiGraphQLMutationData'
+  next?: Maybe<EmbarkLink>
   mutation: Scalars['String']
   variables: Array<EmbarkApiGraphQlVariable>
   errors: Array<EmbarkApiGraphQlError>
@@ -2168,7 +2151,13 @@ export type EmbarkApiGraphQlMutation = {
 
 export type EmbarkApiGraphQlQuery = {
   __typename?: 'EmbarkApiGraphQLQuery'
-  next: EmbarkLink
+  component: Scalars['String']
+  data: EmbarkApiGraphQlQueryData
+}
+
+export type EmbarkApiGraphQlQueryData = {
+  __typename?: 'EmbarkApiGraphQLQueryData'
+  next?: Maybe<EmbarkLink>
   query: Scalars['String']
   variables: Array<EmbarkApiGraphQlVariable>
   errors: Array<EmbarkApiGraphQlError>
@@ -2293,6 +2282,18 @@ export type EmbarkExpressionUnary = {
   text?: Maybe<Scalars['String']>
 }
 
+export type EmbarkExternalInsuranceProviderAction = EmbarkActionCore & {
+  __typename?: 'EmbarkExternalInsuranceProviderAction'
+  component: Scalars['String']
+  data: EmbarkExternalInsuranceProviderActionData
+}
+
+export type EmbarkExternalInsuranceProviderActionData = {
+  __typename?: 'EmbarkExternalInsuranceProviderActionData'
+  next: EmbarkLink
+  skip: EmbarkLink
+}
+
 export enum EmbarkExternalRedirect {
   Email = 'email',
 }
@@ -2300,7 +2301,7 @@ export enum EmbarkExternalRedirect {
 export type EmbarkGroupedResponse = {
   __typename?: 'EmbarkGroupedResponse'
   component: Scalars['String']
-  title: Scalars['String']
+  title: EmbarkResponseExpression
   items: Array<EmbarkMessage>
   each: Array<EmbarkGroupedResponseEach>
 }
@@ -2371,6 +2372,17 @@ export type EmbarkMultiActionData = {
 export type EmbarkNumberAction = EmbarkActionCore & {
   __typename?: 'EmbarkNumberAction'
   component: Scalars['String']
+  data: EmbarkNumberActionData
+}
+
+export type EmbarkNumberActionData = {
+  __typename?: 'EmbarkNumberActionData'
+  key: Scalars['String']
+  placeholder: Scalars['String']
+  unit?: Maybe<Scalars['String']>
+  maxValue?: Maybe<Scalars['Int']>
+  minValue?: Maybe<Scalars['Int']>
+  link: EmbarkLink
 }
 
 export type EmbarkNumberActionSet = EmbarkActionCore & {
@@ -2404,14 +2416,34 @@ export type EmbarkPassage = {
   name: Scalars['String']
   url?: Maybe<Scalars['String']>
   allLinks: Array<EmbarkLink>
-  api: Array<EmbarkApi>
+  api?: Maybe<EmbarkApi>
   messages: Array<EmbarkMessage>
   externalRedirect?: Maybe<EmbarkExternalRedirect>
   action?: Maybe<EmbarkAction>
-  response: Array<EmbarkResponse>
+  response: EmbarkResponse
   tooltips: Array<EmbarkTooltip>
   tracks: Array<EmbarkTrack>
   redirects: Array<EmbarkRedirect>
+}
+
+export type EmbarkPreviousInsuranceProviderAction = EmbarkActionCore & {
+  __typename?: 'EmbarkPreviousInsuranceProviderAction'
+  component: Scalars['String']
+  data: EmbarkPreviousInsuranceProviderActionData
+}
+
+export type EmbarkPreviousInsuranceProviderActionData = {
+  __typename?: 'EmbarkPreviousInsuranceProviderActionData'
+  next: EmbarkLink
+  skip: EmbarkLink
+  providers?: Maybe<EmbarkPreviousInsuranceProviderActionDataProviders>
+  storeKey: Scalars['String']
+  tooltip?: Maybe<EmbarkTooltip>
+}
+
+export enum EmbarkPreviousInsuranceProviderActionDataProviders {
+  Norwegian = 'NORWEGIAN',
+  Swedish = 'SWEDISH',
 }
 
 export type EmbarkRedirect =
@@ -2446,7 +2478,16 @@ export type EmbarkRedirectUnaryExpression = {
   passedExpressionValue?: Maybe<Scalars['String']>
 }
 
-export type EmbarkResponse = EmbarkGroupedResponse | EmbarkMessage
+export type EmbarkResponse =
+  | EmbarkGroupedResponse
+  | EmbarkResponseExpression
+  | EmbarkMessage
+
+export type EmbarkResponseExpression = {
+  __typename?: 'EmbarkResponseExpression'
+  text: Scalars['String']
+  expressions: Array<EmbarkExpression>
+}
 
 export type EmbarkSelectAction = EmbarkActionCore & {
   __typename?: 'EmbarkSelectAction'
@@ -2461,8 +2502,8 @@ export type EmbarkSelectActionData = {
 
 export type EmbarkSelectActionOption = {
   __typename?: 'EmbarkSelectActionOption'
-  key?: Maybe<Scalars['String']>
-  value?: Maybe<Scalars['String']>
+  keys: Array<Scalars['String']>
+  values: Array<Scalars['String']>
   link: EmbarkLink
   tooltip?: Maybe<EmbarkTooltip>
   api?: Maybe<EmbarkApi>
@@ -2517,6 +2558,24 @@ export type EmbarkTextActionSet = EmbarkActionCore & {
 export type EmbarkTextActionSetData = {
   __typename?: 'EmbarkTextActionSetData'
   link: EmbarkLink
+  api?: Maybe<EmbarkApi>
+  textActions: Array<EmbarkTextActionSetTextAction>
+}
+
+export type EmbarkTextActionSetTextAction = {
+  __typename?: 'EmbarkTextActionSetTextAction'
+  data?: Maybe<EmbarkTextActionSetTextActionData>
+}
+
+export type EmbarkTextActionSetTextActionData = {
+  __typename?: 'EmbarkTextActionSetTextActionData'
+  placeholder: Scalars['String']
+  key: Scalars['String']
+  api?: Maybe<EmbarkApi>
+  large?: Maybe<Scalars['Boolean']>
+  mask?: Maybe<Scalars['String']>
+  tooltip?: Maybe<EmbarkTooltip>
+  title: Scalars['String']
 }
 
 export type EmbarkTooltip = {
@@ -2542,6 +2601,30 @@ export type Emergency = {
 export enum Environment {
   Production = 'Production',
   Staging = 'Staging',
+}
+
+export type ExchangeTokenExpiredResponse = {
+  __typename?: 'ExchangeTokenExpiredResponse'
+  _?: Maybe<Scalars['Boolean']>
+}
+
+export type ExchangeTokenInput = {
+  exchangeToken: Scalars['String']
+}
+
+export type ExchangeTokenInvalidResponse = {
+  __typename?: 'ExchangeTokenInvalidResponse'
+  _?: Maybe<Scalars['Boolean']>
+}
+
+export type ExchangeTokenResponse =
+  | ExchangeTokenSuccessResponse
+  | ExchangeTokenExpiredResponse
+  | ExchangeTokenInvalidResponse
+
+export type ExchangeTokenSuccessResponse = {
+  __typename?: 'ExchangeTokenSuccessResponse'
+  token: Scalars['String']
 }
 
 export type ExternalInsuranceProvider = {
@@ -3805,6 +3888,7 @@ export type Incentive =
   | FreeMonths
   | NoDiscount
   | PercentageDiscountMonths
+  | IndefinitePercentageDiscount
 
 export type IncompleteApartmentQuoteDetails = {
   __typename?: 'IncompleteApartmentQuoteDetails'
@@ -3841,6 +3925,11 @@ export type IncompleteQuote = {
 export type IncompleteQuoteDetails =
   | IncompleteApartmentQuoteDetails
   | IncompleteHouseQuoteDetails
+
+export type IndefinitePercentageDiscount = {
+  __typename?: 'IndefinitePercentageDiscount'
+  percentageDiscount: Scalars['Float']
+}
 
 export type InitiateDataCollectionInput = {
   reference: Scalars['ID']
@@ -3952,9 +4041,7 @@ export type InsuranceTerm = {
 
 export enum InsuranceTermType {
   TermsAndConditions = 'TERMS_AND_CONDITIONS',
-  PreSaleInfo = 'PRE_SALE_INFO',
   PreSaleInfoEuStandard = 'PRE_SALE_INFO_EU_STANDARD',
-  InsuranceLetter = 'INSURANCE_LETTER',
   GeneralTerms = 'GENERAL_TERMS',
 }
 
@@ -5831,6 +5918,11 @@ export type MessageHeader = {
   statusMessage?: Maybe<Scalars['String']>
 }
 
+export type MonetaryAmountInput = {
+  amount: Scalars['String']
+  currency: Scalars['String']
+}
+
 export type MonetaryAmountV2 = {
   __typename?: 'MonetaryAmountV2'
   amount: Scalars['String']
@@ -5881,8 +5973,7 @@ export type Mutation = {
   registerBranchCampaign?: Maybe<Scalars['Boolean']>
   updateLanguage: Scalars['Boolean']
   updatePickedLocale: Member
-  createDontPanicSession: DontPanicSession
-  addDontPanicChatMessage: DontPanicChatMessage
+  exchangeToken: ExchangeTokenResponse
   registerDirectDebit: DirectDebitResponse
   cancelDirectDebitRequest: CancelDirectDebitStatus
   /** Tokenize payment details per member in order to be used in future and returns the status */
@@ -5892,7 +5983,9 @@ export type Mutation = {
   submitAdyenRedirection: SubmitAdyenRedirectionResponse
   /** Will be called from the client when 1) redeem manually a code, 2) click the link  --Fails if the code is invalid?-- */
   redeemCode: RedemedCodeResult
+  redeemCodeV2: RedemedCodeResult
   removeDiscountCode: RedemedCodeResult
+  removeDiscountCodeV2: RedemedCodeResult
   externalInsuranceProvider?: Maybe<ExternalInsuranceProviderMutation>
   createQuote: CreateQuoteResult
   editQuote: CreateQuoteResult
@@ -6000,20 +6093,8 @@ export type MutationUpdatePickedLocaleArgs = {
   pickedLocale: Locale
 }
 
-export type MutationCreateDontPanicSessionArgs = {
-  name: Scalars['String']
-  lastName?: Maybe<Scalars['String']>
-  email?: Maybe<Scalars['String']>
-  currentInsurer?: Maybe<Scalars['String']>
-}
-
-export type MutationAddDontPanicChatMessageArgs = {
-  sessionId: Scalars['ID']
-  who: Scalars['String']
-  text: Scalars['String']
-  isHedvig: Scalars['Boolean']
-  hedvigsSecret?: Maybe<Scalars['String']>
-  type?: Maybe<Scalars['String']>
+export type MutationExchangeTokenArgs = {
+  input: ExchangeTokenInput
 }
 
 export type MutationRegisterDirectDebitArgs = {
@@ -6034,6 +6115,15 @@ export type MutationSubmitAdyenRedirectionArgs = {
 
 export type MutationRedeemCodeArgs = {
   code: Scalars['String']
+}
+
+export type MutationRedeemCodeV2Args = {
+  code: Scalars['String']
+  grossPrice: MonetaryAmountInput
+}
+
+export type MutationRemoveDiscountCodeV2Args = {
+  grossPrice: MonetaryAmountInput
 }
 
 export type MutationCreateQuoteArgs = {
@@ -6273,6 +6363,7 @@ export type PerilCategory = {
 export type PerilV2 = {
   __typename?: 'PerilV2'
   title: Scalars['String']
+  shortDescription: Scalars['String']
   description: Scalars['String']
   covered: Array<Scalars['String']>
   exceptions: Array<Scalars['String']>
@@ -6349,8 +6440,6 @@ export type Query = {
   chatActions?: Maybe<Array<Maybe<ChatAction>>>
   geo: Geo
   angelStory?: Maybe<AngelStory>
-  dontPanicPing: Scalars['String']
-  dontPanicSession?: Maybe<DontPanicSession>
   bankAccount?: Maybe<BankAccount>
   chargeDate: Scalars['LocalDate']
   nextChargeDate?: Maybe<Scalars['LocalDate']>
@@ -6470,10 +6559,6 @@ export type QueryFileArgs = {
 
 export type QueryAngelStoryArgs = {
   name: Scalars['String']
-}
-
-export type QueryDontPanicSessionArgs = {
-  id: Scalars['ID']
 }
 
 export type QueryCampaignArgs = {
@@ -7585,6 +7670,26 @@ export type EditQuoteMutation = { __typename?: 'Mutation' } & {
       })
 }
 
+export type ExchangeTokenMutationVariables = {
+  exchangeToken: Scalars['String']
+}
+
+export type ExchangeTokenMutation = { __typename?: 'Mutation' } & {
+  exchangeToken:
+    | ({ __typename?: 'ExchangeTokenSuccessResponse' } & Pick<
+        ExchangeTokenSuccessResponse,
+        'token'
+      >)
+    | ({ __typename?: 'ExchangeTokenExpiredResponse' } & Pick<
+        ExchangeTokenExpiredResponse,
+        '_'
+      >)
+    | ({ __typename?: 'ExchangeTokenInvalidResponse' } & Pick<
+        ExchangeTokenInvalidResponse,
+        '_'
+      >)
+}
+
 export type ExternalInsuranceDataQueryVariables = {
   reference: Scalars['ID']
 }
@@ -7778,6 +7883,7 @@ export type MemberOfferQuery = { __typename?: 'Query' } & {
               PercentageDiscountMonths,
               'percentageDiscount'
             > & { quantityMonths: PercentageDiscountMonths['quantity'] })
+          | { __typename?: 'IndefinitePercentageDiscount' }
         >
         owner: Maybe<
           { __typename?: 'CampaignOwner' } & Pick<CampaignOwner, 'displayName'>
@@ -8119,6 +8225,7 @@ export type RedeemCodeMutation = { __typename?: 'Mutation' } & {
           | ({ __typename?: 'FreeMonths' } & Pick<FreeMonths, 'quantity'>)
           | { __typename?: 'NoDiscount' }
           | { __typename?: 'PercentageDiscountMonths' }
+          | { __typename?: 'IndefinitePercentageDiscount' }
         >
       }
     >
@@ -8155,6 +8262,7 @@ export type RedeemedCampaignsQuery = { __typename?: 'Query' } & {
               PercentageDiscountMonths,
               'percentageDiscount'
             > & { quantityMonths: PercentageDiscountMonths['quantity'] })
+          | { __typename?: 'IndefinitePercentageDiscount' }
         >
         owner: Maybe<
           { __typename?: 'CampaignOwner' } & Pick<CampaignOwner, 'displayName'>
@@ -8446,6 +8554,64 @@ export type EditQuoteMutationResult = ApolloReactCommon.MutationResult<
 export type EditQuoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
   EditQuoteMutation,
   EditQuoteMutationVariables
+>
+export const ExchangeTokenDocument = gql`
+  mutation ExchangeToken($exchangeToken: String!) {
+    exchangeToken(input: { exchangeToken: $exchangeToken }) {
+      ... on ExchangeTokenExpiredResponse {
+        _
+      }
+      ... on ExchangeTokenInvalidResponse {
+        _
+      }
+      ... on ExchangeTokenSuccessResponse {
+        token
+      }
+    }
+  }
+`
+export type ExchangeTokenMutationFn = ApolloReactCommon.MutationFunction<
+  ExchangeTokenMutation,
+  ExchangeTokenMutationVariables
+>
+
+/**
+ * __useExchangeTokenMutation__
+ *
+ * To run a mutation, you first call `useExchangeTokenMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useExchangeTokenMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [exchangeTokenMutation, { data, loading, error }] = useExchangeTokenMutation({
+ *   variables: {
+ *      exchangeToken: // value for 'exchangeToken'
+ *   },
+ * });
+ */
+export function useExchangeTokenMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    ExchangeTokenMutation,
+    ExchangeTokenMutationVariables
+  >,
+) {
+  return ApolloReactHooks.useMutation<
+    ExchangeTokenMutation,
+    ExchangeTokenMutationVariables
+  >(ExchangeTokenDocument, baseOptions)
+}
+export type ExchangeTokenMutationHookResult = ReturnType<
+  typeof useExchangeTokenMutation
+>
+export type ExchangeTokenMutationResult = ApolloReactCommon.MutationResult<
+  ExchangeTokenMutation
+>
+export type ExchangeTokenMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  ExchangeTokenMutation,
+  ExchangeTokenMutationVariables
 >
 export const ExternalInsuranceDataDocument = gql`
   query ExternalInsuranceData($reference: ID!) {
