@@ -171,13 +171,13 @@ const StyledRawInput = styled.input`
 export const RawInputField: React.FC<React.InputHTMLAttributes<
   HTMLInputElement
 > & {
-  label: string
+  label?: string
   errors?: string
 }> = ({ errors, label, className, ...props }) => (
   <>
     <Wrapper errors={errors} className={className}>
       <TextWrapper>
-        <Label htmlFor={props.id}>{label}</Label>
+        {label && <Label htmlFor={props.id}>{label}</Label>}
         <StyledRawInput {...props} />
       </TextWrapper>
       <SymbolWrapper>{errors && <WarningIcon />}</SymbolWrapper>

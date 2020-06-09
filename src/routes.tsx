@@ -7,6 +7,7 @@ import { TrustlySpinnerPage } from './pages/ConnectPayment/components/TrustlySpi
 import { ConnectPaymentsDirectEntry } from './pages/ConnectPayment/ConnectPaymentsDirectEntry'
 import { Download } from './pages/Download'
 import { EmbarkRoot } from './pages/Embark'
+import { Forever } from './pages/Forever'
 import { FourOhFour } from './pages/FourOhFour'
 import { OfferNew } from './pages/OfferNew'
 import { Referral } from './pages/Referral'
@@ -168,6 +169,11 @@ export const reactPageRoutes: ReactPageRoute[] = [
   {
     path: LOCALE_PATH_PATTERN + '/referrals/:code',
     Component: Referral,
+    exact: true,
+  },
+  {
+    path: LOCALE_PATH_PATTERN + '/forever/:code',
+    Component: Forever,
     exact: true,
   },
   {
