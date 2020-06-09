@@ -3,8 +3,10 @@ import { colorsV3 } from '@hedviginsurance/brand/dist'
 import { Button } from 'components/buttons'
 import { LoadingPage } from 'components/LoadingPage'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
+import { Page } from 'components/utils/Page'
 import { motion } from 'framer-motion'
 import * as React from 'react'
+import Helmet from 'react-helmet-async'
 import { RouteComponentProps } from 'react-router'
 import { Redirect } from 'react-router-dom'
 import {
@@ -24,61 +26,79 @@ export const ConnectPaymentsDirectEntry: React.FC<RouteComponentProps<
   const textKeys = useTextKeys()
 
   return (
-    <ExchangeTokenRetrieval>
-      {({ exchangeTokenState, retry }) => (
-        <LoadingPage
-          loading={exchangeTokenState === ExchangeTokenRetrievalState.Loading}
-        >
-          {exchangeTokenState === ExchangeTokenRetrievalState.Success && (
-            <Redirect to={`/${locale}/new-member/connect-payment`} />
-          )}
-          <FadeInUp
-            visible={[
-              ExchangeTokenRetrievalState.InvalidToken,
-              ExchangeTokenRetrievalState.ExpiredToken,
-              ExchangeTokenRetrievalState.Error,
-            ].includes(exchangeTokenState)}
-          >
-            {exchangeTokenState === ExchangeTokenRetrievalState.InvalidToken &&
-              textKeys.CONNECT_PAYMENT_DIRECT_ERROR_INVALID_TOKEN()}
-            {exchangeTokenState === ExchangeTokenRetrievalState.ExpiredToken &&
-              textKeys.CONNECT_PAYMENT_DIRECT_ERROR_EXPIRED_TOKEN()}
-            {exchangeTokenState === ExchangeTokenRetrievalState.Error &&
-              textKeys.CONNECT_PAYMENT_DIRECT_ERROR_UNKNOWN()}
+    <Page>
+      <Helmet>
+        <title>{textKeys.ONBOARDING_CONNECT_DD_PAGE_TITLE()}</title>
+        <meta
+          property="og:image"
+          content="https://www.hedvig.com/new-member-assets/social/hedvig-hemforsakring-2.jpg"
+        />
+        <meta
+          property="og:title"
+          content={textKeys.ONBOARDING_CONNECT_DD_PAGE_TITLE()}
+        />
+      </Helmet>
 
-            <ButtonWrapper>
-              <Button
-                foreground={colorsV3.gray900}
-                background={colorsV3.purple300}
-                onClick={() => {
-                  retry()
-                }}
-              >
-                {textKeys.RETRY()}
-              </Button>
-            </ButtonWrapper>
-          </FadeInUp>
-          <FadeInUp
-            visible={
-              exchangeTokenState === ExchangeTokenRetrievalState.TakingTooLong
-            }
+      <ExchangeTokenRetrieval>
+        {({ exchangeTokenState, retry }) => (
+          <LoadingPage
+            loading={exchangeTokenState === ExchangeTokenRetrievalState.Loading}
           >
-            <div>{textKeys.CONNECT_PAYMENT_DIRECT_ERROR_TAKING_TOO_LONG()}</div>
-            <ButtonWrapper>
-              <Button
-                foreground={colorsV3.gray900}
-                background={colorsV3.purple300}
-                onClick={() => {
-                  location.reload()
-                }}
-              >
-                {textKeys.RETRY()}
-              </Button>
-            </ButtonWrapper>
-          </FadeInUp>
-        </LoadingPage>
-      )}
-    </ExchangeTokenRetrieval>
+            {exchangeTokenState === ExchangeTokenRetrievalState.Success && (
+              <Redirect to={`/${locale}/new-member/connect-payment`} />
+            )}
+            <FadeInUp
+              visible={[
+                ExchangeTokenRetrievalState.InvalidToken,
+                ExchangeTokenRetrievalState.ExpiredToken,
+                ExchangeTokenRetrievalState.Error,
+              ].includes(exchangeTokenState)}
+            >
+              {exchangeTokenState ===
+                ExchangeTokenRetrievalState.InvalidToken &&
+                textKeys.CONNECT_PAYMENT_DIRECT_ERROR_INVALID_TOKEN()}
+              {exchangeTokenState ===
+                ExchangeTokenRetrievalState.ExpiredToken &&
+                textKeys.CONNECT_PAYMENT_DIRECT_ERROR_EXPIRED_TOKEN()}
+              {exchangeTokenState === ExchangeTokenRetrievalState.Error &&
+                textKeys.CONNECT_PAYMENT_DIRECT_ERROR_UNKNOWN()}
+
+              <ButtonWrapper>
+                <Button
+                  foreground={colorsV3.gray900}
+                  background={colorsV3.purple300}
+                  onClick={() => {
+                    retry()
+                  }}
+                >
+                  {textKeys.RETRY()}
+                </Button>
+              </ButtonWrapper>
+            </FadeInUp>
+            <FadeInUp
+              visible={
+                exchangeTokenState === ExchangeTokenRetrievalState.TakingTooLong
+              }
+            >
+              <div>
+                {textKeys.CONNECT_PAYMENT_DIRECT_ERROR_TAKING_TOO_LONG()}
+              </div>
+              <ButtonWrapper>
+                <Button
+                  foreground={colorsV3.gray900}
+                  background={colorsV3.purple300}
+                  onClick={() => {
+                    location.reload()
+                  }}
+                >
+                  {textKeys.RETRY()}
+                </Button>
+              </ButtonWrapper>
+            </FadeInUp>
+          </LoadingPage>
+        )}
+      </ExchangeTokenRetrieval>
+    </Page>
   )
 }
 
