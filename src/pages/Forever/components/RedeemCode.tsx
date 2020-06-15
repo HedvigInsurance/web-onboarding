@@ -39,14 +39,9 @@ const CodeField = styled.div`
     max-width: 325px;
   }
 
-  div {
-    background: transparent;
-    border-color: ${colorsV3.gray500};
-  }
-
   input {
+    padding-right: 0;
     text-align: center;
-    color: ${colorsV3.gray100};
   }
 `
 
@@ -110,6 +105,7 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
                   placeholder=""
                   touched={false}
                   errors=""
+                  variant="dark"
                 />
               </CodeField>
             </Form>
