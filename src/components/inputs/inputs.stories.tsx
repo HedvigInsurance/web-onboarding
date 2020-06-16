@@ -46,17 +46,14 @@ export const Dark = () => (
   </div>
 )
 
-const lightBackground = {
+Light.story = {
   parameters: {
     backgrounds: [{ name: 'gray100', value: colorsV3.gray100, default: true }],
   },
 }
 
-const darkBackground = {
+Dark.story = {
   parameters: {
     backgrounds: [{ name: 'gray900', value: colorsV3.gray900, default: true }],
   },
 }
-
-Light.story = lightBackground
-Dark.story = darkBackground
