@@ -1,6 +1,9 @@
-import * as React from 'react'
+import { colorsV3 } from '@hedviginsurance/brand'
+import React from 'react'
 
-export const WarningIcon = () => (
+export const WarningIcon: React.FC<{ color?: string }> = ({
+  color = colorsV3.red700,
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="24"
@@ -8,7 +11,7 @@ export const WarningIcon = () => (
     viewBox="0 0 24 24"
   >
     <g fill="none" fillRule="evenodd">
-      <circle cx="12" cy="12" r="12" fill="#FF8A80" />
+      <circle cx="12" cy="12" r="12" fill={color} />
       <path
         fill="#FFF"
         d="M13.053 5.238h-2.124l.468 9.108h1.206l.45-9.108zM10.821 16.92c0 .648.522 1.17 1.17 1.17.648 0 1.188-.522 1.188-1.17 0-.648-.54-1.188-1.188-1.188-.648 0-1.17.54-1.17 1.188z"

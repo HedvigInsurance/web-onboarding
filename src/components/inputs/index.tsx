@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV2, colorsV3 } from '@hedviginsurance/brand'
 import { DownArrow } from 'components/icons/DownArrow'
 import { WarningIcon } from 'components/icons/Warning'
 import { Field, GenericFieldHTMLAttributes } from 'formik'
@@ -34,17 +34,45 @@ export const masks: Record<string, Mask> = {
   },
 }
 
-const Wrapper = styled.div<{ errors?: string }>`
+type variantType = 'light' | 'dark'
+
+interface InputVariant {
+  color: string
+  background: string
+  border: string
+  error: string
+}
+
+export const inputVariants: Record<string, InputVariant> = {
+  light: {
+    color: colorsV3.gray900,
+    background: colorsV3.white,
+    border: colorsV2.lightgray,
+    error: colorsV3.red700,
+  },
+  dark: {
+    color: colorsV3.gray100,
+    background: colorsV3.gray900,
+    border: colorsV3.gray500,
+    error: colorsV3.red500,
+  },
+}
+
+const Wrapper = styled.div<{ errors?: string; variant: variantType }>`
   position: relative;
-  background: ${colorsV2.white};
+  background-color: ${(props) => inputVariants[props.variant].background};
   border-radius: 8px;
   border: 1px solid
-    ${(props) => (props.errors ? colorsV2.coral500 : colorsV2.lightgray)};
+    ${(props) =>
+      props.errors
+        ? inputVariants[props.variant].error
+        : inputVariants[props.variant].border};
   padding: 0.875rem 1.5rem 0.75rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   transition: all 0.2s;
+  color: ${(props) => inputVariants[props.variant].color};
 
   select {
     cursor: pointer;
@@ -73,7 +101,7 @@ const StyledField = styled(Field)`
   border: none;
   font-size: 1.125rem;
   line-height: 1.625rem;
-  color: ${colorsV2.black};
+  color: inherit;
   padding: 0 2.5rem 0 0;
   margin: 0;
 
@@ -115,12 +143,12 @@ const SymbolWrapper = styled.div`
   }
 `
 
-const ErrorText = styled.div`
+const ErrorText = styled.div<{ variant: variantType }>`
   min-height: 1.375rem;
   font-size: 0.75rem;
   line-height: 1.375rem;
   text-align: center;
-  color: ${colorsV2.coral700};
+  color: ${(props) => inputVariants[props.variant].error};
   margin-top: 0.25rem;
 `
 
@@ -148,6 +176,7 @@ export interface TextInputProps extends CoreInputFieldProps {
   showErrorMessage?: boolean
   touched?: boolean
   errors?: string
+  variant?: variantType
 }
 
 const StyledRawInput = styled.input`
@@ -171,18 +200,21 @@ const StyledRawInput = styled.input`
 export const RawInputField: React.FC<React.InputHTMLAttributes<
   HTMLInputElement
 > & {
-  label: string
+  label?: string
   errors?: string
-}> = ({ errors, label, className, ...props }) => (
+  variant?: variantType
+}> = ({ errors, label, className, variant = 'light', ...props }) => (
   <>
-    <Wrapper errors={errors} className={className}>
+    <Wrapper errors={errors} className={className} variant={variant}>
       <TextWrapper>
-        <Label htmlFor={props.id}>{label}</Label>
+        {label && <Label htmlFor={props.id}>{label}</Label>}
         <StyledRawInput {...props} />
       </TextWrapper>
-      <SymbolWrapper>{errors && <WarningIcon />}</SymbolWrapper>
+      <SymbolWrapper>
+        {errors && <WarningIcon color={inputVariants[variant].error} />}
+      </SymbolWrapper>
     </Wrapper>
-    {errors && <ErrorText>{errors}</ErrorText>}
+    {errors && <ErrorText variant={variant}>{errors}</ErrorText>}
   </>
 )
 
@@ -195,10 +227,11 @@ export const InputField: React.FC<TextInputProps &
   options,
   touched,
   errors,
+  variant = 'light',
   ...props
 }) => (
   <>
-    <Wrapper errors={errors}>
+    <Wrapper errors={errors} variant={variant}>
       <TextWrapper>
         <Label>{label}</Label>
         {mask ? (
@@ -234,11 +267,11 @@ export const InputField: React.FC<TextInputProps &
         {options && options.length > 0 ? (
           <DownArrow />
         ) : (
-          errors && <WarningIcon />
+          errors && <WarningIcon color={inputVariants[variant].error} />
         )}
       </SymbolWrapper>
     </Wrapper>
-    {showErrorMessage && <ErrorText>{errors}</ErrorText>}
+    {showErrorMessage && <ErrorText variant={variant}>{errors}</ErrorText>}
   </>
 )
 
