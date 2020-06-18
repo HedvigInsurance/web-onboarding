@@ -46,16 +46,20 @@ const Container = styled.div`
   }
 `
 
-const Card = styled.div`
+const Card = styled.div<{ banner?: boolean }>`
+  position: relative;
   width: 100%;
   background: ${colorsV3.white};
   border-radius: 8px;
-  margin: 0 1rem;
+  margin-top: ${(props) => (props.banner ? '-2rem' : 0)};
+  margin-right: 1rem;
+  margin-left: 1rem;
   padding: 3.5rem 2.5rem 2.5rem 2.5rem;
+  padding-top: ${(props) => (props.banner ? '5.5rem' : '3.5rem')};
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: flex-end;
+  justify-content: space-between;
   transition: all 0.35s;
 
   :hover {
@@ -67,8 +71,11 @@ const Card = styled.div`
   }
 
   @media (max-width: 1020px) {
+    justify-content: flex-end;
     padding: 2.5rem 2rem 2rem 2rem;
-    margin: 0 1.125rem;
+    padding-top: ${(props) => (props.banner ? '4.5rem' : '2.5rem')};
+    margin-right: 1.125rem;
+    margin-left: 1.125rem;
   }
 
   @media (max-width: 850px) {
@@ -77,9 +84,23 @@ const Card = styled.div`
 
   @media (max-width: 600px) {
     padding: 2rem 1.5rem 1.5rem 1.5rem;
+    padding-top: ${(props) => (props.banner ? '4rem' : '2rem')};
     align-items: center;
     box-shadow: 0 8px 13px rgba(0, 0, 0, 0.18);
   }
+`
+
+const CardBanner = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  line-height: 2rem;
+  width: 100%;
+  text-align: center;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  color: ${colorsV3.gray900};
+  background-color: ${colorsV3.purple300};
 `
 
 const Headline = styled.h1`
@@ -219,7 +240,8 @@ const LandingPageCardsNo: React.FC<{
 }> = ({ textKeys, language }) => {
   return (
     <>
-      <Card>
+      <Card banner={true}>
+        <CardBanner>{textKeys.STARTPAGE_COMBO_DISCOUNT_TEXT()}</CardBanner>
         <Headline>{textKeys.STARTPAGE_COMBO_HEADLINE()}</Headline>
         <Paragraph>{textKeys.STARTPAGE_COMBO_BODY()}</Paragraph>
         <ProceedButton size="lg" fullWidth to={`/${language}/new-member/combo`}>
