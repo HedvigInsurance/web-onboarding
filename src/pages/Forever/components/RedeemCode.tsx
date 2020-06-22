@@ -6,13 +6,18 @@ import { InputField } from 'components/inputs'
 import { Form, Formik } from 'formik'
 import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-
-const INPUT_MAX_WIDTH = '21rem'
+import * as Yup from 'yup'
 
 interface RedeemCodeProps {
   code?: string
   currentLocale: string
 }
+
+const codeSchema = Yup.object({
+  code: Yup.string().required('FOREVER_CODE_ERROR'),
+})
+
+const INPUT_MAX_WIDTH = '21rem'
 
 const PageWrapper = styled.div`
   display: flex;
@@ -144,11 +149,12 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
 
       <Formik
         initialValues={{ code }}
+        validationSchema={codeSchema}
         onSubmit={() => {
           // Submit
         }}
       >
-        {({ touched, values }) => (
+        {({ touched, errors, values }) => (
           <RedeemForm>
             <Main>
               <Paragraph>{textKeys.FOREVER_LANDINGPAGE_INPUT_TEXT()}</Paragraph>
@@ -162,7 +168,7 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
                   autoComplete="off"
                   placeholder=""
                   touched={touched.code}
-                  errors=""
+                  errors={errors.code ? textKeys[errors.code]() : ''}
                   variant="dark"
                 />
               </CodeField>
