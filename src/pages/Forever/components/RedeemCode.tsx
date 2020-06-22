@@ -17,12 +17,16 @@ interface RedeemCodeProps {
 const PageWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   height: 100vh;
   padding-left: 1.625rem;
   padding-right: 1.625rem;
   color: ${colorsV3.gray500};
   background-color: ${colorsV3.gray900};
+
+  @media (min-width: 800px) {
+    padding-left: 3.75rem;
+    padding-right: 3.75rem;
+  }
 `
 
 const Header = styled.header`
@@ -30,18 +34,43 @@ const Header = styled.header`
   justify-content: center;
   padding-top: 1.25rem;
   padding-bottom: 1.15rem;
+
+  @media (min-width: 800px) {
+    justify-content: space-between;
+    padding-top: 2.5rem;
+  }
 `
 
-const Main = styled.div``
+const RedeemForm = styled(Form)`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  @media (min-width: 800px) {
+    justify-content: center;
+  }
+`
+
+const Main = styled.div`
+  width: 100%;
+  margin-top: auto;
+  margin-bottom: auto;
+
+  @media (min-width: 800px) {
+    margin: 0;
+  }
+`
 
 const CodeField = styled.div`
   margin: 0 auto;
 
   @media (min-width: 480px) {
     max-width: ${INPUT_MAX_WIDTH};
+    margin-bottom: 1.125rem;
   }
 
   input {
+    width: 100%;
     padding-right: 0;
     text-align: center;
     text-transform: uppercase;
@@ -64,17 +93,20 @@ const Paragraph = styled.p`
   text-align: center;
   color: ${colorsV3.gray500};
   font-size: 1rem;
+
+  @media (min-width: 800px) {
+    margin-bottom: 1.25rem;
+  }
 `
 
-const SubmitButton = styled(Button)`
+const SubmitButton = styled(Button)<{ disabled?: boolean }>`
   width: 100%;
-  min-width: 12rem;
   height: 3.5rem;
-  margin-bottom: 1rem;
+  margin: 0 auto 1rem;
   font-size: 1rem;
 
   @media (min-width: 480px) {
-    width: auto;
+    max-width: ${INPUT_MAX_WIDTH};
   }
 `
 
@@ -85,6 +117,12 @@ const Info = styled.p`
   color: ${colorsV3.gray500};
   text-align: center;
   line-height: 1.2;
+
+  @media (min-width: 800px) {
+    max-width: 37.5rem;
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
 
   a {
     color: ${colorsV3.gray100};
@@ -104,16 +142,17 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
         </LogoLink>
       </Header>
 
-      <Main>
-        <Paragraph>{textKeys.FOREVER_LANDINGPAGE_INPUT_TEXT()}</Paragraph>
-        <Formik
-          initialValues={{ code }}
-          onSubmit={() => {
-            // Submit
-          }}
-        >
-          {({ values }) => (
-            <Form>
+      <Formik
+        initialValues={{ code }}
+        onSubmit={() => {
+          // Submit
+        }}
+      >
+        {({ touched, values }) => (
+          <RedeemForm>
+            <Main>
+              <Paragraph>{textKeys.FOREVER_LANDINGPAGE_INPUT_TEXT()}</Paragraph>
+
               <CodeField>
                 <InputField
                   label=""
@@ -122,23 +161,23 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
                   type="text"
                   autoComplete="off"
                   placeholder=""
-                  touched={false}
+                  touched={touched.code}
                   errors=""
                   variant="dark"
                 />
               </CodeField>
-            </Form>
-          )}
-        </Formik>
-      </Main>
+            </Main>
+            <SubmitButton
+              background={colorsV3.purple500}
+              foreground={colorsV3.gray900}
+            >
+              {textKeys.FOREVER_LANDINGPAGE_BTN_LABEL()}
+            </SubmitButton>
+          </RedeemForm>
+        )}
+      </Formik>
 
       <Footer>
-        <SubmitButton
-          background={colorsV3.purple500}
-          foreground={colorsV3.gray900}
-        >
-          {textKeys.FOREVER_LANDINGPAGE_BTN_LABEL()}
-        </SubmitButton>
         <Info
           dangerouslySetInnerHTML={{
             __html: textKeys.FOREVER_LANDINGPAGE_INFO_TEXT(),
