@@ -109,6 +109,9 @@ const SubmitButton = styled(Button)<{ disabled?: boolean }>`
   height: 3.5rem;
   margin: 0 auto 1rem;
   font-size: 1rem;
+  color: ${(props) => (props.disabled ? colorsV3.gray500 : colorsV3.gray900)};
+  background-color: ${(props) =>
+    props.disabled ? colorsV3.gray800 : colorsV3.purple500};
 
   @media (min-width: 480px) {
     max-width: ${INPUT_MAX_WIDTH};
@@ -176,6 +179,7 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
             <SubmitButton
               background={colorsV3.purple500}
               foreground={colorsV3.gray900}
+              disabled={!values.code}
             >
               {textKeys.FOREVER_LANDINGPAGE_BTN_LABEL()}
             </SubmitButton>
