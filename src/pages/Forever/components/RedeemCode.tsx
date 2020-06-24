@@ -3,6 +3,8 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { MarkdownTranslation } from '@hedviginsurance/textkeyfy'
 import { Button } from 'components/buttons'
 import { InputField } from 'components/inputs'
+import { CookieStorage } from 'cookie-storage'
+import { useRedeemCodeMutation } from 'data/graphql'
 import { Form, Formik } from 'formik'
 import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
@@ -117,14 +119,31 @@ const Info = styled.div`
 
 export const RedeemCode: React.FC<RedeemCodeProps> = ({ code }) => {
   const textKeys = useTextKeys()
+  const [redeemCode] = useRedeemCodeMutation()
   return (
     <Wrapper>
       <Formik
         initialValues={{ code }}
         validationSchema={codeSchema}
-        onSubmit={() => {
-          // TODO Submit
-        }}
+        onSubmit={(form, actions) =>
+          redeemCode({ variables: { code: form.code } })
+            .then((result) => {
+              if (!result) {
+                return
+              }
+              if (result.errors && result.errors.length > 0) {
+                actions.setFieldError('code', 'FOREVER_ADD_CODE_ERROR')
+                return
+              }
+            })
+            .then(() => {
+              const cookieStorage = new CookieStorage()
+              cookieStorage.setItem('_hvcode', form.code, { path: '/' })
+            })
+            .catch((error) => {
+              actions.setFieldError('code', 'FOREVER_ADD_CODE_ERROR')
+            })
+        }
       >
         {({ touched, errors, values }) => (
           <RedeemForm>
@@ -149,6 +168,7 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({ code }) => {
               background={colorsV3.purple500}
               foreground={colorsV3.gray900}
               disabled={!values.code}
+              type="submit"
             >
               {textKeys.FOREVER_LANDINGPAGE_BTN_LABEL()}
             </SubmitButton>
