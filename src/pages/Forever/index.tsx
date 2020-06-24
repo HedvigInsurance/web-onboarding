@@ -1,5 +1,7 @@
 import { css, Global } from '@emotion/core'
+import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { HedvigLogo } from 'components/icons/HedvigLogo'
 import { CurrentLocale } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import React from 'react'
@@ -11,6 +13,37 @@ import { RedeemCode } from './components/RedeemCode'
 type ForeverProps = RouteComponentProps<{
   code: string
 }>
+
+const PageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding-left: 1.625rem;
+  padding-right: 1.625rem;
+  color: ${colorsV3.gray500};
+  background-color: ${colorsV3.gray900};
+
+  @media (min-width: 800px) {
+    padding-left: 3.75rem;
+    padding-right: 3.75rem;
+  }
+`
+
+const Header = styled.header`
+  display: flex;
+  justify-content: center;
+  padding-top: 1.25rem;
+  padding-bottom: 1.15rem;
+
+  @media (min-width: 800px) {
+    justify-content: space-between;
+    padding-top: 2.5rem;
+  }
+`
+
+const LogoLink = styled.a`
+  color: ${colorsV3.gray100};
+`
 
 export const Forever: React.FC<ForeverProps> = ({
   match: {
@@ -45,7 +78,14 @@ export const Forever: React.FC<ForeverProps> = ({
         />
         <CurrentLocale>
           {({ currentLocale }) => (
-            <RedeemCode code={code} currentLocale={currentLocale} />
+            <PageWrapper>
+              <Header>
+                <LogoLink href={'/' + currentLocale}>
+                  <HedvigLogo width={94} />
+                </LogoLink>
+              </Header>
+              <RedeemCode code={code} />
+            </PageWrapper>
           )}
         </CurrentLocale>
       </Page>

@@ -1,7 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { Button } from 'components/buttons'
-import { HedvigLogo } from 'components/icons/HedvigLogo'
 import { InputField } from 'components/inputs'
 import { Form, Formik } from 'formik'
 import React from 'react'
@@ -10,7 +9,6 @@ import * as Yup from 'yup'
 
 interface RedeemCodeProps {
   code?: string
-  currentLocale: string
 }
 
 const codeSchema = Yup.object({
@@ -19,31 +17,10 @@ const codeSchema = Yup.object({
 
 const INPUT_MAX_WIDTH = '21rem'
 
-const PageWrapper = styled.div`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  padding-left: 1.625rem;
-  padding-right: 1.625rem;
-  color: ${colorsV3.gray500};
-  background-color: ${colorsV3.gray900};
-
-  @media (min-width: 800px) {
-    padding-left: 3.75rem;
-    padding-right: 3.75rem;
-  }
-`
-
-const Header = styled.header`
-  display: flex;
-  justify-content: center;
-  padding-top: 1.25rem;
-  padding-bottom: 1.15rem;
-
-  @media (min-width: 800px) {
-    justify-content: space-between;
-    padding-top: 2.5rem;
-  }
+  flex-grow: 1;
 `
 
 const RedeemForm = styled(Form)`
@@ -90,10 +67,6 @@ const Footer = styled.div`
   padding: 1rem 0 2.5rem;
 `
 
-const LogoLink = styled.a`
-  color: ${colorsV3.gray100};
-`
-
 const Paragraph = styled.p`
   text-align: center;
   color: ${colorsV3.gray500};
@@ -137,19 +110,10 @@ const Info = styled.p`
   }
 `
 
-export const RedeemCode: React.FC<RedeemCodeProps> = ({
-  code,
-  currentLocale,
-}) => {
+export const RedeemCode: React.FC<RedeemCodeProps> = ({ code }) => {
   const textKeys = useTextKeys()
   return (
-    <PageWrapper>
-      <Header>
-        <LogoLink href={'/' + currentLocale}>
-          <HedvigLogo width={94} />
-        </LogoLink>
-      </Header>
-
+    <Wrapper>
       <Formik
         initialValues={{ code }}
         validationSchema={codeSchema}
@@ -194,6 +158,6 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
           }}
         />
       </Footer>
-    </PageWrapper>
+    </Wrapper>
   )
 }
