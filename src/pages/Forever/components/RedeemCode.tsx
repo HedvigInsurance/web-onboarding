@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { MarkdownTranslation } from '@hedviginsurance/textkeyfy'
 import { Button } from 'components/buttons'
 import { InputField } from 'components/inputs'
 import { Form, Formik } from 'formik'
@@ -156,11 +157,9 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({ code }) => {
       </Formik>
 
       <Footer>
-        <Info
-          dangerouslySetInnerHTML={{
-            __html: textKeys.FOREVER_LANDINGPAGE_INFO_TEXT(),
-          }}
-        />
+        <Info>
+          <MarkdownTranslation textKey="FOREVER_LANDINGPAGE_INFO_TEXT" />
+        </Info>
       </Footer>
     </Wrapper>
   )
