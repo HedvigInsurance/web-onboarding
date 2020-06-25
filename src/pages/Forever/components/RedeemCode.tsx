@@ -1,100 +1,136 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { MarkdownTranslation } from '@hedviginsurance/textkeyfy'
 import { Button } from 'components/buttons'
-import { HedvigLogo } from 'components/icons/HedvigLogo'
 import { InputField } from 'components/inputs'
 import { Form, Formik } from 'formik'
 import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
+import * as Yup from 'yup'
 
 interface RedeemCodeProps {
   code?: string
-  currentLocale: string
 }
 
-const PageWrapper = styled.div`
+const codeSchema = Yup.object({
+  code: Yup.string().required('FOREVER_CODE_ERROR'),
+})
+
+const INPUT_MAX_WIDTH = '21rem'
+
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  height: 100vh;
-  color: ${colorsV3.gray500};
-  background-color: ${colorsV3.gray900};
+  flex-grow: 1;
 `
 
-const Header = styled.header`
+const RedeemForm = styled(Form)`
   display: flex;
-  justify-content: center;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  flex-direction: column;
+  flex-grow: 1;
+
+  @media (min-width: 800px) {
+    justify-content: center;
+  }
 `
 
 const Main = styled.div`
-  padding: 0 1.625rem;
+  width: 100%;
+  margin-top: auto;
+  margin-bottom: auto;
+
+  @media (min-width: 800px) {
+    margin: 0;
+  }
 `
 
 const CodeField = styled.div`
   margin: 0 auto;
 
   @media (min-width: 480px) {
-    max-width: 325px;
+    max-width: ${INPUT_MAX_WIDTH};
+    margin-bottom: 1.125rem;
   }
 
   input {
+    width: 100%;
     padding-right: 0;
     text-align: center;
+    text-transform: uppercase;
   }
 `
 
 const Footer = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  padding: 1rem 1.625rem 2.5rem;
-`
-
-const LogoLink = styled.a`
-  color: ${colorsV3.gray100};
+  align-items: center;
+  padding: 1rem 0 2.5rem;
 `
 
 const Paragraph = styled.p`
   text-align: center;
   color: ${colorsV3.gray500};
   font-size: 1rem;
-  margin-left: 1rem;
-  margin-right: 1rem;
-`
-const SubmitButton = styled(Button)`
-  width: 100%;
-  min-width: 12rem;
-  height: 3.5rem;
 
-  @media (min-width: 480px) {
-    width: auto;
+  @media (min-width: 800px) {
+    margin-bottom: 1.25rem;
   }
 `
 
-export const RedeemCode: React.FC<RedeemCodeProps> = ({
-  code,
-  currentLocale,
-}) => {
+const SubmitButton = styled(Button)<{ disabled?: boolean }>`
+  width: 100%;
+  height: 3.5rem;
+  margin: 0 auto 1rem;
+  font-size: 1rem;
+  color: ${(props) => (props.disabled ? colorsV3.gray500 : colorsV3.gray900)};
+  background-color: ${(props) =>
+    props.disabled ? colorsV3.gray800 : colorsV3.purple500};
+
+  @media (min-width: 480px) {
+    max-width: ${INPUT_MAX_WIDTH};
+  }
+`
+
+const Info = styled.div`
+  max-width: calc(${INPUT_MAX_WIDTH} + 2 * 2rem);
+  margin-top: 0;
+  font-size: 0.6875rem;
+  color: ${colorsV3.gray500};
+  text-align: center;
+  line-height: 1.2;
+
+  @media (min-width: 800px) {
+    max-width: 37.5rem;
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+
+  a {
+    color: ${colorsV3.gray100};
+
+    &:hover {
+      color: ${colorsV3.gray500};
+    }
+  }
+`
+
+export const RedeemCode: React.FC<RedeemCodeProps> = ({ code }) => {
   const textKeys = useTextKeys()
   return (
-    <PageWrapper>
-      <Header>
-        <LogoLink href={'/' + currentLocale}>
-          <HedvigLogo width={94} />
-        </LogoLink>
-      </Header>
+    <Wrapper>
+      <Formik
+        initialValues={{ code }}
+        validationSchema={codeSchema}
+        onSubmit={() => {
+          // TODO Submit
+        }}
+      >
+        {({ touched, errors, values }) => (
+          <RedeemForm>
+            <Main>
+              <Paragraph>{textKeys.FOREVER_LANDINGPAGE_INPUT_TEXT()}</Paragraph>
 
-      <Main>
-        <Paragraph>{textKeys.FOREVER_LANDINGPAGE_INPUT_TEXT()}</Paragraph>
-        <Formik
-          initialValues={{ code }}
-          onSubmit={() => {
-            // Submit
-          }}
-        >
-          {({ values }) => (
-            <Form>
               <CodeField>
                 <InputField
                   label=""
@@ -103,24 +139,28 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
                   type="text"
                   autoComplete="off"
                   placeholder=""
-                  touched={false}
-                  errors=""
+                  touched={touched.code}
+                  errors={errors.code ? textKeys[errors.code]() : ''}
                   variant="dark"
                 />
               </CodeField>
-            </Form>
-          )}
-        </Formik>
-      </Main>
+            </Main>
+            <SubmitButton
+              background={colorsV3.purple500}
+              foreground={colorsV3.gray900}
+              disabled={!values.code}
+            >
+              {textKeys.FOREVER_LANDINGPAGE_BTN_LABEL()}
+            </SubmitButton>
+          </RedeemForm>
+        )}
+      </Formik>
 
       <Footer>
-        <SubmitButton
-          background={colorsV3.purple500}
-          foreground={colorsV3.gray900}
-        >
-          {textKeys.FOREVER_LANDINGPAGE_BTN_LABEL()}
-        </SubmitButton>
+        <Info>
+          <MarkdownTranslation textKey="FOREVER_LANDINGPAGE_INFO_TEXT" />
+        </Info>
       </Footer>
-    </PageWrapper>
+    </Wrapper>
   )
 }
