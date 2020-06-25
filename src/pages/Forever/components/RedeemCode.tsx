@@ -92,8 +92,8 @@ const SubmitButton = styled(Button)<{ disabled?: boolean }>`
   }
 `
 
-const Info = styled.p`
-  max-width: 25rem;
+const Info = styled.div`
+  max-width: calc(${INPUT_MAX_WIDTH} + 2 * 2rem);
   margin-top: 0;
   font-size: 0.6875rem;
   color: ${colorsV3.gray500};
@@ -123,7 +123,7 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({ code }) => {
         initialValues={{ code }}
         validationSchema={codeSchema}
         onSubmit={() => {
-          // Submit
+          // TODO Submit
         }}
       >
         {({ touched, errors, values }) => (
