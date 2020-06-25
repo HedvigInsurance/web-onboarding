@@ -107,6 +107,10 @@ const Info = styled.p`
 
   a {
     color: ${colorsV3.gray100};
+
+    &:hover {
+      color: ${colorsV3.gray500};
+    }
   }
 `
 
