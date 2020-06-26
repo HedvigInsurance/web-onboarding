@@ -2,16 +2,13 @@ import { LoadingPage } from 'components/LoadingPage'
 import { TopBar } from 'components/TopBar'
 import {
   getLocaleIsoCode,
-  Market,
   useCurrentLocale,
-  useMarket,
 } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import { QuoteBundle, useQuoteBundleQuery } from 'data/graphql'
 import { History } from 'history'
 import { SwitchSafetySection } from 'pages/OfferNew/SwitchSafetySection'
-import { TestimonialsSection } from 'pages/OfferNew/TestimonialsSection'
 import { getOfferData } from 'pages/OfferNew/utils'
 import { SemanticEvents } from 'quepasa'
 import * as React from 'react'
@@ -20,7 +17,6 @@ import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useStorage } from 'utils/StorageContainer'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
 import { Checkout } from './Checkout'
-import { Compare } from './Compare'
 import { FaqSection } from './FaqSection'
 import { Introduction } from './Introduction'
 import { Perils } from './Perils/index'
@@ -51,7 +47,6 @@ export const OfferNew: React.FC = () => {
   })
 
   const history = useHistory()
-  const market = useMarket()
   const checkoutMatch = useRouteMatch(
     '/:locale(se-en|se|no-en|no)/new-member/sign',
   )
@@ -99,12 +94,6 @@ export const OfferNew: React.FC = () => {
           )}
         </TrackAction>
         <Perils offerData={offerData} />
-        {market === Market.Se && (
-          <Compare
-            currentInsurer={offerData.quotes[0].currentInsurer || undefined}
-          />
-        )}
-        {market === Market.Se && <TestimonialsSection />}
         <SwitchSafetySection />
         <FaqSection />
         <Checkout
