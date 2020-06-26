@@ -1285,12 +1285,32 @@ export type Campaign = {
   owner?: Maybe<CampaignOwner>
 }
 
+export type CampaignCannotBeCombinedWithExisting = {
+  __typename?: 'CampaignCannotBeCombinedWithExisting'
+  existingCampaigns: Array<Campaign>
+}
+
+export type CampaignDoesNotExist = {
+  __typename?: 'CampaignDoesNotExist'
+  code: Scalars['String']
+}
+
+export type CampaignHasExpired = {
+  __typename?: 'CampaignHasExpired'
+  code: Scalars['String']
+}
+
 export type CampaignInput = {
   source?: Maybe<Scalars['String']>
   medium?: Maybe<Scalars['String']>
   term?: Maybe<Scalars['String']>
   content?: Maybe<Scalars['String']>
   name?: Maybe<Scalars['String']>
+}
+
+export enum CampaignMarket {
+  Se = 'SE',
+  No = 'NO',
 }
 
 export type CampaignOwner = {
@@ -1303,6 +1323,27 @@ export enum CancelDirectDebitStatus {
   Accepted = 'ACCEPTED',
   DeclinedMissingToken = 'DECLINED_MISSING_TOKEN',
   DeclinedMissingRequest = 'DECLINED_MISSING_REQUEST',
+}
+
+export type CannotRedeemCampaignFromDifferentMarket = {
+  __typename?: 'CannotRedeemCampaignFromDifferentMarket'
+  code: Scalars['String']
+  campaignMarket: CampaignMarket
+}
+
+export type CannotRedeemEmptyCode = {
+  __typename?: 'CannotRedeemEmptyCode'
+  code: Scalars['String']
+}
+
+export type CannotRedeemOwnCampaign = {
+  __typename?: 'CannotRedeemOwnCampaign'
+  code: Scalars['String']
+}
+
+export type CannotRemoveActiveCampaignCode = {
+  __typename?: 'CannotRemoveActiveCampaignCode'
+  activeCampaignCodes: Array<Scalars['String']>
 }
 
 export type Cashback = {
@@ -5758,6 +5799,11 @@ export type Member = {
   features: Array<Feature>
 }
 
+export type MemberIsNotEligibleForCampaign = {
+  __typename?: 'MemberIsNotEligibleForCampaign'
+  code: Scalars['String']
+}
+
 export type Message = {
   __typename?: 'Message'
   globalId: Scalars['ID']
@@ -5983,9 +6029,9 @@ export type Mutation = {
   submitAdyenRedirection: SubmitAdyenRedirectionResponse
   /** Will be called from the client when 1) redeem manually a code, 2) click the link  --Fails if the code is invalid?-- */
   redeemCode: RedemedCodeResult
-  redeemCodeV2: RedemedCodeResult
+  redeemCodeV2: RedeemedCodeV2Result
   removeDiscountCode: RedemedCodeResult
-  removeDiscountCodeV2: RedemedCodeResult
+  removeAllDiscountCodes: RemoveCampaignCodeResult
   externalInsuranceProvider?: Maybe<ExternalInsuranceProviderMutation>
   createQuote: CreateQuoteResult
   editQuote: CreateQuoteResult
@@ -6119,11 +6165,11 @@ export type MutationRedeemCodeArgs = {
 
 export type MutationRedeemCodeV2Args = {
   code: Scalars['String']
-  grossPrice: MonetaryAmountInput
+  grossPrice?: Maybe<MonetaryAmountInput>
 }
 
-export type MutationRemoveDiscountCodeV2Args = {
-  grossPrice: MonetaryAmountInput
+export type MutationRemoveAllDiscountCodesArgs = {
+  grossPrice?: Maybe<MonetaryAmountInput>
 }
 
 export type MutationCreateQuoteArgs = {
@@ -6440,6 +6486,7 @@ export type Query = {
   chatActions?: Maybe<Array<Maybe<ChatAction>>>
   geo: Geo
   angelStory?: Maybe<AngelStory>
+  gateway__?: Maybe<Scalars['Boolean']>
   bankAccount?: Maybe<BankAccount>
   chargeDate: Scalars['LocalDate']
   nextChargeDate?: Maybe<Scalars['LocalDate']>
@@ -6483,6 +6530,7 @@ export type Query = {
   termsAndConditions: InsuranceTerm
   insuranceCompanies: InsuranceCompanyType
   insurableLimits: Array<InsurableLimit>
+  referralTerms: ReferralTerm
   embarkStory?: Maybe<EmbarkStory>
   /** Used */
   keyGearItems: Array<KeyGearItem>
@@ -6620,6 +6668,10 @@ export type QueryInsurableLimitsArgs = {
   locale: Locale
 }
 
+export type QueryReferralTermsArgs = {
+  locale: Locale
+}
+
 export type QueryEmbarkStoryArgs = {
   name: Scalars['String']
 }
@@ -6650,6 +6702,16 @@ export type QuoteDetails =
   | NorwegianHomeContentsDetails
   | NorwegianTravelDetails
 
+export type RedeemedCodeV2Result =
+  | SuccessfulRedeemResult
+  | CannotRedeemOwnCampaign
+  | CampaignCannotBeCombinedWithExisting
+  | CannotRedeemEmptyCode
+  | CampaignHasExpired
+  | MemberIsNotEligibleForCampaign
+  | CampaignDoesNotExist
+  | CannotRedeemCampaignFromDifferentMarket
+
 export type RedemedCodeResult = {
   __typename?: 'RedemedCodeResult'
   /** The currently redeemed incentive, this can be null */
@@ -6668,6 +6730,12 @@ export type Referrals = {
   campaign: Campaign
   referredBy?: Maybe<Referral>
   invitations: Array<Referral>
+  costReducedIndefiniteDiscount?: Maybe<InsuranceCost>
+}
+
+export type ReferralTerm = {
+  __typename?: 'ReferralTerm'
+  url: Scalars['URL']
 }
 
 export enum RegisterAccountProcessingStatus {
@@ -6683,6 +6751,10 @@ export type RegisterDirectDebitClientContext = {
   successUrl: Scalars['String']
   failureUrl: Scalars['String']
 }
+
+export type RemoveCampaignCodeResult =
+  | SuccessfullyRemovedCampaignsResult
+  | CannotRemoveActiveCampaignCode
 
 export type RemoveCurrentInsurerInput = {
   id: Scalars['ID']
@@ -6796,6 +6868,18 @@ export type SubscriptionChatStateArgs = {
 
 export type SubscriptionDataCollectionStatusArgs = {
   reference: Scalars['ID']
+}
+
+export type SuccessfullyRemovedCampaignsResult = {
+  __typename?: 'SuccessfullyRemovedCampaignsResult'
+  campaignCodes: Array<Scalars['String']>
+  insuranceCost?: Maybe<InsuranceCost>
+}
+
+export type SuccessfulRedeemResult = {
+  __typename?: 'SuccessfulRedeemResult'
+  campaigns: Array<Campaign>
+  cost?: Maybe<InsuranceCost>
 }
 
 export type SwedishApartmentAgreement = AgreementCore & {
@@ -7676,15 +7760,15 @@ export type ExchangeTokenMutationVariables = {
 
 export type ExchangeTokenMutation = { __typename?: 'Mutation' } & {
   exchangeToken:
-    | ({ __typename?: 'ExchangeTokenSuccessResponse' } & Pick<
+    | ({ __typename: 'ExchangeTokenSuccessResponse' } & Pick<
         ExchangeTokenSuccessResponse,
         'token'
       >)
-    | ({ __typename?: 'ExchangeTokenExpiredResponse' } & Pick<
+    | ({ __typename: 'ExchangeTokenExpiredResponse' } & Pick<
         ExchangeTokenExpiredResponse,
         '_'
       >)
-    | ({ __typename?: 'ExchangeTokenInvalidResponse' } & Pick<
+    | ({ __typename: 'ExchangeTokenInvalidResponse' } & Pick<
         ExchangeTokenInvalidResponse,
         '_'
       >)
@@ -8227,6 +8311,12 @@ export type RedeemCodeMutation = { __typename?: 'Mutation' } & {
           | { __typename?: 'PercentageDiscountMonths' }
           | { __typename?: 'IndefinitePercentageDiscount' }
         >
+        owner: Maybe<
+          { __typename?: 'CampaignOwner' } & Pick<
+            CampaignOwner,
+            'id' | 'displayName'
+          >
+        >
       }
     >
     cost: { __typename?: 'InsuranceCost' } & {
@@ -8240,6 +8330,47 @@ export type RedeemCodeMutation = { __typename?: 'Mutation' } & {
       >
     }
   }
+}
+
+export type RedeemCodeV2MutationVariables = {
+  code: Scalars['String']
+}
+
+export type RedeemCodeV2Mutation = { __typename?: 'Mutation' } & {
+  redeemCodeV2:
+    | ({ __typename?: 'SuccessfulRedeemResult' } & {
+        campaigns: Array<
+          { __typename?: 'Campaign' } & {
+            incentive: Maybe<
+              | ({ __typename?: 'MonthlyCostDeduction' } & {
+                  amount: Maybe<
+                    { __typename?: 'MonetaryAmountV2' } & Pick<
+                      MonetaryAmountV2,
+                      'amount' | 'currency'
+                    >
+                  >
+                })
+              | { __typename?: 'FreeMonths' }
+              | { __typename?: 'NoDiscount' }
+              | { __typename?: 'PercentageDiscountMonths' }
+              | { __typename?: 'IndefinitePercentageDiscount' }
+            >
+            owner: Maybe<
+              { __typename?: 'CampaignOwner' } & Pick<
+                CampaignOwner,
+                'id' | 'displayName'
+              >
+            >
+          }
+        >
+      })
+    | { __typename?: 'CannotRedeemOwnCampaign' }
+    | { __typename?: 'CampaignCannotBeCombinedWithExisting' }
+    | { __typename?: 'CannotRedeemEmptyCode' }
+    | { __typename?: 'CampaignHasExpired' }
+    | { __typename?: 'MemberIsNotEligibleForCampaign' }
+    | { __typename?: 'CampaignDoesNotExist' }
+    | { __typename?: 'CannotRedeemCampaignFromDifferentMarket' }
 }
 
 export type RedeemedCampaignsQueryVariables = {}
@@ -8558,6 +8689,7 @@ export type EditQuoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
 export const ExchangeTokenDocument = gql`
   mutation ExchangeToken($exchangeToken: String!) {
     exchangeToken(input: { exchangeToken: $exchangeToken }) {
+      __typename
       ... on ExchangeTokenExpiredResponse {
         _
       }
@@ -9267,6 +9399,10 @@ export const RedeemCodeDocument = gql`
             quantity
           }
         }
+        owner {
+          id
+          displayName
+        }
       }
       cost {
         monthlyGross {
@@ -9323,6 +9459,71 @@ export type RedeemCodeMutationResult = ApolloReactCommon.MutationResult<
 export type RedeemCodeMutationOptions = ApolloReactCommon.BaseMutationOptions<
   RedeemCodeMutation,
   RedeemCodeMutationVariables
+>
+export const RedeemCodeV2Document = gql`
+  mutation RedeemCodeV2($code: String!) {
+    redeemCodeV2(code: $code) {
+      ... on SuccessfulRedeemResult {
+        campaigns {
+          incentive {
+            ... on MonthlyCostDeduction {
+              amount {
+                amount
+                currency
+              }
+            }
+          }
+          owner {
+            id
+            displayName
+          }
+        }
+      }
+    }
+  }
+`
+export type RedeemCodeV2MutationFn = ApolloReactCommon.MutationFunction<
+  RedeemCodeV2Mutation,
+  RedeemCodeV2MutationVariables
+>
+
+/**
+ * __useRedeemCodeV2Mutation__
+ *
+ * To run a mutation, you first call `useRedeemCodeV2Mutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRedeemCodeV2Mutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [redeemCodeV2Mutation, { data, loading, error }] = useRedeemCodeV2Mutation({
+ *   variables: {
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useRedeemCodeV2Mutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    RedeemCodeV2Mutation,
+    RedeemCodeV2MutationVariables
+  >,
+) {
+  return ApolloReactHooks.useMutation<
+    RedeemCodeV2Mutation,
+    RedeemCodeV2MutationVariables
+  >(RedeemCodeV2Document, baseOptions)
+}
+export type RedeemCodeV2MutationHookResult = ReturnType<
+  typeof useRedeemCodeV2Mutation
+>
+export type RedeemCodeV2MutationResult = ApolloReactCommon.MutationResult<
+  RedeemCodeV2Mutation
+>
+export type RedeemCodeV2MutationOptions = ApolloReactCommon.BaseMutationOptions<
+  RedeemCodeV2Mutation,
+  RedeemCodeV2MutationVariables
 >
 export const RedeemedCampaignsDocument = gql`
   query RedeemedCampaigns {

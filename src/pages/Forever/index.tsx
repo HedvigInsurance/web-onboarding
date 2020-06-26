@@ -74,7 +74,7 @@ export const Forever: React.FC<ForeverProps> = ({
         actions.setFieldError('code', 'FOREVER_ADD_CODE_ERROR')
         return
       }
-
+      // TODO redirect to success screens
       history.push(`/${currentLocale}/new-member`)
     } catch (e) {
       // tslint:disable-next-line no-console
