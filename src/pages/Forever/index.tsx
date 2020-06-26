@@ -7,7 +7,10 @@ import { Page } from 'components/utils/Page'
 import React from 'react'
 import Helmet from 'react-helmet-async'
 import { RouteComponentProps } from 'react-router'
+import { Route, Switch } from 'react-router-dom'
+import { LOCALE_PATH_PATTERN } from 'routes'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { Intro } from './components/Intro'
 import { RedeemCode } from './components/RedeemCode'
 
 type ForeverProps = RouteComponentProps<{
@@ -84,7 +87,17 @@ export const Forever: React.FC<ForeverProps> = ({
                   <HedvigLogo width={94} />
                 </LogoLink>
               </Header>
-              <RedeemCode code={code} />
+              <Switch>
+                <Route
+                  exact
+                  path={LOCALE_PATH_PATTERN + '/forever/:code'}
+                  render={() => <RedeemCode code={code} />}
+                />
+                <Route
+                  path={LOCALE_PATH_PATTERN + '/forever/:code/intro'}
+                  component={Intro}
+                />
+              </Switch>
             </PageWrapper>
           )}
         </CurrentLocale>

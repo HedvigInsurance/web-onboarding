@@ -13,6 +13,7 @@ interface ButtonProps {
 }
 
 export const Button = styled.button<ButtonProps>`
+  display: inline-block;
   font-size: ${(props) => (props.size === 'lg' ? `1rem` : `0.875rem`)};
   line-height: ${(props) => (props.size === 'lg' ? `1rem` : `1.25rem`)};
   width: ${(props) => (props.fullWidth ? '100%' : 'auto')};
