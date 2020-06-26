@@ -3,15 +3,20 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { MarkdownTranslation } from '@hedviginsurance/textkeyfy'
 import { Button } from 'components/buttons'
 import { InputField } from 'components/inputs'
-import { CookieStorage } from 'cookie-storage'
-import { useRedeemCodeMutation } from 'data/graphql'
-import { Form, Formik } from 'formik'
+import { Form, Formik, FormikHelpers } from 'formik'
 import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import * as Yup from 'yup'
 
+export interface RedeemCodeFormValue {
+  code: string
+}
 interface RedeemCodeProps {
-  code?: string
+  referralCode?: string
+  onSubmit: (
+    values: RedeemCodeFormValue,
+    actions: FormikHelpers<RedeemCodeFormValue>,
+  ) => void
 }
 
 const codeSchema = Yup.object({
@@ -117,33 +122,17 @@ const Info = styled.div`
   }
 `
 
-export const RedeemCode: React.FC<RedeemCodeProps> = ({ code }) => {
+export const RedeemCode: React.FC<RedeemCodeProps> = ({
+  referralCode = '',
+  onSubmit,
+}) => {
   const textKeys = useTextKeys()
-  const [redeemCode] = useRedeemCodeMutation()
   return (
     <Wrapper>
       <Formik
-        initialValues={{ code }}
+        initialValues={{ code: referralCode }}
         validationSchema={codeSchema}
-        onSubmit={(form, actions) =>
-          redeemCode({ variables: { code: form.code } })
-            .then((result) => {
-              if (!result) {
-                return
-              }
-              if (result.errors && result.errors.length > 0) {
-                actions.setFieldError('code', 'FOREVER_ADD_CODE_ERROR')
-                return
-              }
-            })
-            .then(() => {
-              const cookieStorage = new CookieStorage()
-              cookieStorage.setItem('_hvcode', form.code, { path: '/' })
-            })
-            .catch((error) => {
-              actions.setFieldError('code', 'FOREVER_ADD_CODE_ERROR')
-            })
-        }
+        onSubmit={onSubmit}
       >
         {({ touched, errors, values }) => (
           <RedeemForm>
