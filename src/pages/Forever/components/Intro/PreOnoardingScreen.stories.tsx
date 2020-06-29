@@ -1,6 +1,7 @@
 import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
-import { BrowserRouter } from 'react-router-dom'
+import { MemoryRouter } from 'react-router-dom'
+import { MockTextKeyProvider } from 'utils/MockTextKeyProvider'
 import { PreOnboardingScreen } from './PreOnboardingScreen'
 
 export default {
@@ -12,9 +13,16 @@ export default {
 }
 
 export const Default = () => (
-  <BrowserRouter>
-    <div style={{ height: '100vh', color: '#fff' }}>
-      <PreOnboardingScreen />
-    </div>
-  </BrowserRouter>
+  <MemoryRouter initialEntries={['http://localhost/se/forever/intro']}>
+    <MockTextKeyProvider
+      textKeys={{
+        FOREVER_INTRO_READY_QUESTION: 'Redo?',
+        FOREVER_INTRO_READY_CTA: 'Ja, ge mig ett prisförslag',
+      }}
+    >
+      <div style={{ height: '100vh', color: '#fff' }}>
+        <PreOnboardingScreen />
+      </div>
+    </MockTextKeyProvider>
+  </MemoryRouter>
 )

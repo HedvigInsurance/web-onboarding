@@ -2,8 +2,9 @@ import { keyframes } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand/dist/colors'
 import { LinkButton } from 'components/buttons'
+import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import React from 'react'
-import { RouteComponentProps, withRouter } from 'react-router'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { fadeIn, TextContent } from './components'
 
 const Wrapper = styled.div`
@@ -52,26 +53,26 @@ const ButtonWrapper = styled.div`
     margin: 1rem auto 0;
   }
 `
-export const PreOnboardingScreenComponent: React.FC<RouteComponentProps<{
-  locale: string
-}>> = ({ match }) => {
+export const PreOnboardingScreen: React.FC = () => {
+  const textKeys = useTextKeys()
+  // const locale = useCurrentLocale()
   return (
     <Wrapper>
       <div />
-      <AnimatingTextContent>Redo?</AnimatingTextContent>
+      <AnimatingTextContent>
+        {textKeys.FOREVER_INTRO_READY_QUESTION()}
+      </AnimatingTextContent>
       <ButtonWrapper>
         <LinkButton
-          to={`/${match.params.locale}/new-member`}
+          to={`/${'se'}/new-member`}
           foreground={colorsV3.gray900}
           background={colorsV3.purple500}
           size="lg"
           fullWidth
         >
-          Ja, ge mig ett prisförslag
+          {textKeys.FOREVER_INTRO_READY_CTA()}
         </LinkButton>
       </ButtonWrapper>
     </Wrapper>
   )
 }
-
-export const PreOnboardingScreen = withRouter(PreOnboardingScreenComponent)

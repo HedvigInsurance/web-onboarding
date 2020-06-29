@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import React, { useEffect, useState } from 'react'
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom'
+import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { TextContent } from './components'
 
 const Page = styled.div<{ visible: boolean }>`
@@ -119,6 +120,7 @@ export const IntroStoriesComponent: React.FC<IntroProps> = ({
   onFinished,
   history,
 }) => {
+  const textKeys = useTextKeys()
   const [page, setPage] = useState(0)
   const [autoPaginationTimeout, setAutoPaginationTimeout] = useState<
     number | null
@@ -126,20 +128,20 @@ export const IntroStoriesComponent: React.FC<IntroProps> = ({
 
   const pages = [
     <Page key={0} visible={page === 0}>
-      <TextContent>Rebeccas vänner är våra vänner.</TextContent>
+      <TextContent>
+        {textKeys.FOREVER_INTRO_PAGE_1({
+          REFERRER: stripTrailingS('Rebecca'),
+        })}
+      </TextContent>
     </Page>,
     <Page key={1} visible={page === 1}>
-      <TextContent>Det här är en inbjudan till Hedvig Forever.</TextContent>
+      <TextContent>{textKeys.FOREVER_INTRO_PAGE_2()}</TextContent>
     </Page>,
     <Page key={2} visible={page === 2}>
-      <TextContent>
-        För varje vän du bjuder in, sänks din månadskostnad.
-      </TextContent>
+      <TextContent>{textKeys.FOREVER_INTRO_PAGE_3()}</TextContent>
     </Page>,
     <Page key={3} visible={page === 3}>
-      <TextContent>
-        Tills du når noll och behåller gratis hemförsäkring livet ut.
-      </TextContent>
+      <TextContent>{textKeys.FOREVER_INTRO_PAGE_4()}</TextContent>
     </Page>,
   ]
 
@@ -211,10 +213,14 @@ export const IntroStoriesComponent: React.FC<IntroProps> = ({
         }}
       />
       <SkipButton to={history.location.pathname + '/ready'}>
-        Hoppa över
+        {textKeys.SKIP()}
       </SkipButton>
     </>
   )
 }
 
 export const IntroStories = withRouter(IntroStoriesComponent)
+
+export const stripTrailingS = (str: string) => {
+  return str.replace(/s+$/i, '')
+}

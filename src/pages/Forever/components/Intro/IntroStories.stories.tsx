@@ -3,6 +3,7 @@ import { action, withActions } from '@storybook/addon-actions'
 import React from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import { IntroStories } from './IntroStories'
+import { MockTextKeyProvider } from 'utils/MockTextKeyProvider'
 
 export default {
   title: 'Forever/Intro/Stories',
@@ -15,8 +16,20 @@ export default {
 
 export const Default = () => (
   <BrowserRouter>
-    <div style={{ height: '100vh', color: '#fff' }}>
-      <IntroStories onFinished={action('On finished')} />
-    </div>
+    <MockTextKeyProvider
+      textKeys={{
+        FOREVER_INTRO_PAGE_1: '{REFERRER}s vänner är våra vänner.',
+        FOREVER_INTRO_PAGE_2: 'Det här är en inbjudan till Hedvig Forever.',
+        FOREVER_INTRO_PAGE_3:
+          'För varje vän du bjuder in, sänks din månadskostnad.',
+        FOREVER_INTRO_PAGE_4:
+          'Tills du når noll och behåller gratis hemförsäkring livet ut.',
+        SKIP: 'Hoppa över',
+      }}
+    >
+      <div style={{ height: '100vh', color: '#fff' }}>
+        <IntroStories onFinished={action('On finished')} />
+      </div>
+    </MockTextKeyProvider>
   </BrowserRouter>
 )
