@@ -7,12 +7,11 @@ import { Page } from 'components/utils/Page'
 import { SessionContainer } from 'containers/SessionContainer'
 import { useRedeemCodeV2Mutation } from 'data/graphql'
 import { FormikHelpers } from 'formik'
-import React, { useState } from 'react'
+import React from 'react'
 import Helmet from 'react-helmet-async'
 import { RouteComponentProps, useHistory } from 'react-router'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { captureSentryError } from 'utils/sentry-client'
-import { Loading } from './components/Loading'
 import { RedeemCode, RedeemCodeFormValue } from './components/RedeemCode'
 
 type ForeverProps = RouteComponentProps<{
@@ -58,12 +57,10 @@ export const Forever: React.FC<ForeverProps> = ({
   const history = useHistory()
   const currentLocale = useCurrentLocale()
   const [redeemCode] = useRedeemCodeV2Mutation()
-  const [isLoading, setIsLoading] = useState(false)
   const handleSubmit = async (
     form: RedeemCodeFormValue,
     actions: FormikHelpers<RedeemCodeFormValue>,
   ) => {
-    setIsLoading(true)
     try {
       const result = await redeemCode({ variables: { code: form.code } })
       if (!result) {
@@ -75,13 +72,12 @@ export const Forever: React.FC<ForeverProps> = ({
         actions.setFieldError('code', 'FOREVER_ADD_CODE_ERROR')
         return
       }
+
       // TODO redirect to success screens
       history.push(`/${currentLocale}/new-member`)
     } catch (e) {
       // tslint:disable-next-line no-console
       captureSentryError(e)
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -119,10 +115,7 @@ export const Forever: React.FC<ForeverProps> = ({
                   <HedvigLogo width={94} />
                 </LogoLink>
               </Header>
-              {isLoading && <Loading />}
-              {!isLoading && (
-                <RedeemCode referralCode={code} onSubmit={handleSubmit} />
-              )}
+              <RedeemCode referralCode={code} onSubmit={handleSubmit} />
             </PageWrapper>
           </Page>
         )}

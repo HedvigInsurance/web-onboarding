@@ -3,6 +3,10 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand/dist'
 import React from 'react'
 
+interface DotsProps {
+  color?: string
+}
+
 const spin = keyframes`
   0% {
     opacity: 0.25;
@@ -16,10 +20,11 @@ const spin = keyframes`
   }
 `
 
-const Dots = styled.div`
+const Dots = styled.div<DotsProps>`
   display: flex;
   justify-content: center;
   align-items: center;
+  color: ${(props) => props.color};
 `
 
 const Dot = styled.span`
@@ -27,7 +32,7 @@ const Dot = styled.span`
   height: 0.375rem;
   margin: 0.25rem;
   border-radius: 100%;
-  background-color: ${colorsV3.gray100};
+  background-color: currentColor;
   opacity: 0.25;
   opacity: 0.25;
   animation: ${spin} 1000ms both infinite;
@@ -41,9 +46,11 @@ const Dot = styled.span`
   }
 `
 
-export const LoadingDots: React.FC<{ loading?: boolean }> = () => {
+export const LoadingDots: React.FC<DotsProps> = ({
+  color = colorsV3.gray100,
+}) => {
   return (
-    <Dots>
+    <Dots color={color}>
       <Dot />
       <Dot />
       <Dot />

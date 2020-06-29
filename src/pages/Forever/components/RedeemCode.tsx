@@ -3,6 +3,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { MarkdownTranslation } from '@hedviginsurance/textkeyfy'
 import { Button } from 'components/buttons'
 import { InputField } from 'components/inputs'
+import { LoadingDots } from 'components/LoadingDots/LoadingDots'
 import { Form, Formik, FormikHelpers } from 'formik'
 import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
@@ -134,7 +135,7 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
         validationSchema={codeSchema}
         onSubmit={onSubmit}
       >
-        {({ touched, errors, values }) => (
+        {({ touched, errors, values, isSubmitting }) => (
           <RedeemForm>
             <Main>
               <Paragraph>{textKeys.FOREVER_LANDINGPAGE_INPUT_TEXT()}</Paragraph>
@@ -159,7 +160,11 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
               disabled={!values.code}
               type="submit"
             >
-              {textKeys.FOREVER_LANDINGPAGE_BTN_LABEL()}
+              {isSubmitting ? (
+                <LoadingDots color={colorsV3.gray800} />
+              ) : (
+                textKeys.FOREVER_LANDINGPAGE_BTN_LABEL()
+              )}
             </SubmitButton>
           </RedeemForm>
         )}
