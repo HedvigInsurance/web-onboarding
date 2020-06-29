@@ -1,14 +1,10 @@
 import { LOCALE_PATH_PATTERN } from 'components/utils/CurrentLocale'
 import React from 'react'
-import { RouteComponentProps, withRouter } from 'react-router'
 import { Route, Switch } from 'react-router-dom'
 import { IntroStories } from './IntroStories'
 import { PreOnboardingScreen } from './PreOnboardingScreen'
 
-export const IntroComponent: React.FC<RouteComponentProps<{
-  locale: string
-  code: string
-}>> = ({ history }) => {
+export const Intro: React.FC = () => {
   return (
     <>
       <Switch>
@@ -33,5 +29,3 @@ export const IntroComponent: React.FC<RouteComponentProps<{
     </>
   )
 }
-
-export const Intro = withRouter(IntroComponent)
