@@ -67,16 +67,59 @@ export const Forever: React.FC<ForeverProps> = ({
         return
       }
 
-      if (result.errors && result.errors.length > 0) {
-        // TODO handle errors
-        actions.setFieldError('code', 'FOREVER_ADD_CODE_ERROR')
+      if (result.data?.redeemCodeV2.__typename === 'SuccessfulRedeemResult') {
+        // TODO redirect to correct success screens
+        history.push(`/${currentLocale}/new-member`)
+        return
+      }
+      if (result.data?.redeemCodeV2.__typename === 'CannotRedeemOwnCampaign') {
+        actions.setErrors({ code: 'FOREVER_ERROR_CANNOT_REDEEM_OWN_CAMPAIGN' })
+        return
+      }
+      if (
+        result.data?.redeemCodeV2.__typename ===
+        'CampaignCannotBeCombinedWithExisting'
+      ) {
+        actions.setErrors({
+          code: 'FOREVER_ERROR_CAMPAIGN_CANNOT_BE_COMBINED_WITH_EXISTING',
+        })
+        return
+      }
+      if (result.data?.redeemCodeV2.__typename === 'CampaignHasExpired') {
+        actions.setErrors({ code: 'FOREVER_ERROR_CAMPAIGN_HAS_EXPIRED' })
+        return
+      }
+      if (
+        result.data?.redeemCodeV2.__typename ===
+        'MemberIsNotEligibleForCampaign'
+      ) {
+        actions.setErrors({
+          code: 'FOREVER_ERROR_CAMPAIGN_CANNOT_BE_COMBINED_WITH_EXISTING',
+        })
         return
       }
 
-      // TODO redirect to success screens
-      history.push(`/${currentLocale}/new-member`)
+      if (result.data?.redeemCodeV2.__typename === 'CampaignDoesNotExist') {
+        actions.setErrors({ code: 'FOREVER_ERROR_CAMPAIGN_DOES_NOT_EXIST' })
+        return
+      }
+
+      if (
+        result.data?.redeemCodeV2.__typename ===
+        'CannotRedeemCampaignFromDifferentMarket'
+      ) {
+        actions.setErrors({
+          code: 'FOREVER_ERROR_CANNOT_REDEEM_CAMPAIGN_FROM_DIFFERENT_MARKET',
+        })
+        return
+      }
+
+      if (result.errors && result.errors.length > 0) {
+        // TODO handle errors
+        actions.setErrors({ code: 'FOREVER_ERROR_GENERIC' })
+        return
+      }
     } catch (e) {
-      // tslint:disable-next-line no-console
       captureSentryError(e)
     }
   }
