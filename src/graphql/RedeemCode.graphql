@@ -12,6 +12,10 @@ mutation RedeemCode($code: String!) {
           quantity
         }
       }
+      owner {
+        id
+        displayName
+      }
     }
     cost {
       monthlyGross {

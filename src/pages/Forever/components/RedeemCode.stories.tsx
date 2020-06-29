@@ -1,4 +1,5 @@
 import { colorsV3 } from '@hedviginsurance/brand'
+import { action } from '@storybook/addon-actions'
 import React from 'react'
 import { MockTextKeyProvider } from 'utils/MockTextKeyProvider'
 import { RedeemCode } from './RedeemCode'
@@ -22,7 +23,7 @@ const text = {
 export const Default = () => (
   <MockTextKeyProvider textKeys={text}>
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <RedeemCode />
+      <RedeemCode onSubmit={action('Submit')} />
     </div>
   </MockTextKeyProvider>
 )

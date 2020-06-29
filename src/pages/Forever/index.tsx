@@ -2,16 +2,18 @@ import { css, Global } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
-import { CurrentLocale } from 'components/utils/CurrentLocale'
+import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
-import React from 'react'
+import { SessionContainer } from 'containers/SessionContainer'
+import { useRedeemCodeV2Mutation } from 'data/graphql'
+import { FormikHelpers } from 'formik'
+import React, { useState } from 'react'
 import Helmet from 'react-helmet-async'
-import { RouteComponentProps } from 'react-router'
-import { Route, Switch } from 'react-router-dom'
-import { LOCALE_PATH_PATTERN } from 'routes'
+import { RouteComponentProps, useHistory } from 'react-router'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-import { Intro } from './components/Intro'
-import { RedeemCode } from './components/RedeemCode'
+import { captureSentryError } from 'utils/sentry-client'
+import { Loading } from './components/Loading'
+import { RedeemCode, RedeemCodeFormValue } from './components/RedeemCode'
 
 type ForeverProps = RouteComponentProps<{
   code: string
@@ -53,6 +55,36 @@ export const Forever: React.FC<ForeverProps> = ({
     params: { code },
   },
 }) => {
+  const history = useHistory()
+  const currentLocale = useCurrentLocale()
+  const [redeemCode] = useRedeemCodeV2Mutation()
+  const [isLoading, setIsLoading] = useState(false)
+  const handleSubmit = async (
+    form: RedeemCodeFormValue,
+    actions: FormikHelpers<RedeemCodeFormValue>,
+  ) => {
+    setIsLoading(true)
+    try {
+      const result = await redeemCode({ variables: { code: form.code } })
+      if (!result) {
+        return
+      }
+
+      if (result.errors && result.errors.length > 0) {
+        // TODO handle errors
+        actions.setFieldError('code', 'FOREVER_ADD_CODE_ERROR')
+        return
+      }
+      // TODO redirect to success screens
+      history.push(`/${currentLocale}/new-member`)
+    } catch (e) {
+      // tslint:disable-next-line no-console
+      captureSentryError(e)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const textKeys = useTextKeys()
   return (
     <>
@@ -71,37 +103,30 @@ export const Forever: React.FC<ForeverProps> = ({
           content="https://www.hedvig.com/new-member-assets/social/hedvig-hemforsakring-2.jpg"
         />
       </Helmet>
-      <Page>
-        <Global
-          styles={css`
-            body {
-              background-color: ${colorsV3.gray900};
-            }
-          `}
-        />
-        <CurrentLocale>
-          {({ currentLocale }) => (
+      <SessionContainer>
+        {() => (
+          <Page>
+            <Global
+              styles={css`
+                body {
+                  background-color: ${colorsV3.gray900};
+                }
+              `}
+            />
             <PageWrapper>
               <Header>
                 <LogoLink href={'/' + currentLocale}>
                   <HedvigLogo width={94} />
                 </LogoLink>
               </Header>
-              <Switch>
-                <Route
-                  exact
-                  path={LOCALE_PATH_PATTERN + '/forever/:code'}
-                  render={() => <RedeemCode code={code} />}
-                />
-                <Route
-                  path={LOCALE_PATH_PATTERN + '/forever/:code/intro'}
-                  component={Intro}
-                />
-              </Switch>
+              {isLoading && <Loading />}
+              {!isLoading && (
+                <RedeemCode referralCode={code} onSubmit={handleSubmit} />
+              )}
             </PageWrapper>
-          )}
-        </CurrentLocale>
-      </Page>
+          </Page>
+        )}
+      </SessionContainer>
     </>
   )
 }

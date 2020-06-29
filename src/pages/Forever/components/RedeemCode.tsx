@@ -3,13 +3,20 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { MarkdownTranslation } from '@hedviginsurance/textkeyfy'
 import { Button } from 'components/buttons'
 import { InputField } from 'components/inputs'
-import { Form, Formik } from 'formik'
+import { Form, Formik, FormikHelpers } from 'formik'
 import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import * as Yup from 'yup'
 
+export interface RedeemCodeFormValue {
+  code: string
+}
 interface RedeemCodeProps {
-  code?: string
+  referralCode?: string
+  onSubmit: (
+    values: RedeemCodeFormValue,
+    actions: FormikHelpers<RedeemCodeFormValue>,
+  ) => void
 }
 
 const codeSchema = Yup.object({
@@ -115,16 +122,17 @@ const Info = styled.div`
   }
 `
 
-export const RedeemCode: React.FC<RedeemCodeProps> = ({ code }) => {
+export const RedeemCode: React.FC<RedeemCodeProps> = ({
+  referralCode = '',
+  onSubmit,
+}) => {
   const textKeys = useTextKeys()
   return (
     <Wrapper>
       <Formik
-        initialValues={{ code }}
+        initialValues={{ code: referralCode }}
         validationSchema={codeSchema}
-        onSubmit={() => {
-          // TODO Submit
-        }}
+        onSubmit={onSubmit}
       >
         {({ touched, errors, values }) => (
           <RedeemForm>
@@ -149,6 +157,7 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({ code }) => {
               background={colorsV3.purple500}
               foreground={colorsV3.gray900}
               disabled={!values.code}
+              type="submit"
             >
               {textKeys.FOREVER_LANDINGPAGE_BTN_LABEL()}
             </SubmitButton>

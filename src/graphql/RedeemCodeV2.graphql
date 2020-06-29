@@ -1,0 +1,20 @@
+mutation RedeemCodeV2($code: String!) {
+  redeemCodeV2(code: $code) {
+    ... on SuccessfulRedeemResult {
+      campaigns {
+        incentive {
+          ... on MonthlyCostDeduction {
+            amount {
+              amount
+              currency
+            }
+          }
+        }
+        owner {
+          id
+          displayName
+        }
+      }
+    }
+  }
+}
