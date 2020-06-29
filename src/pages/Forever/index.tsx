@@ -5,12 +5,13 @@ import { HedvigLogo } from 'components/icons/HedvigLogo'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionContainer } from 'containers/SessionContainer'
-import { useRedeemCodeMutation } from 'data/graphql'
+import { useRedeemCodeV2Mutation } from 'data/graphql'
 import { FormikHelpers } from 'formik'
 import React, { useState } from 'react'
 import Helmet from 'react-helmet-async'
 import { RouteComponentProps, useHistory } from 'react-router'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { captureSentryError } from 'utils/sentry-client'
 import { Loading } from './components/Loading'
 import { RedeemCode, RedeemCodeFormValue } from './components/RedeemCode'
 
@@ -56,7 +57,7 @@ export const Forever: React.FC<ForeverProps> = ({
 }) => {
   const history = useHistory()
   const currentLocale = useCurrentLocale()
-  const [redeemCode] = useRedeemCodeMutation()
+  const [redeemCode] = useRedeemCodeV2Mutation()
   const [isLoading, setIsLoading] = useState(false)
   const handleSubmit = async (
     form: RedeemCodeFormValue,
@@ -78,7 +79,7 @@ export const Forever: React.FC<ForeverProps> = ({
       history.push(`/${currentLocale}/new-member`)
     } catch (e) {
       // tslint:disable-next-line no-console
-      console.error(e)
+      captureSentryError(e)
     } finally {
       setIsLoading(false)
     }
