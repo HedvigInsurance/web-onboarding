@@ -2,10 +2,10 @@ import { keyframes } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand/dist/colors'
 import { LinkButton } from 'components/buttons'
-import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { fadeIn, TextContent } from './components'
+import { useCurrentLocale } from 'components/utils/CurrentLocale'
 
 const Wrapper = styled.div`
   position: absolute;
@@ -55,7 +55,7 @@ const ButtonWrapper = styled.div`
 `
 export const PreOnboardingScreen: React.FC = () => {
   const textKeys = useTextKeys()
-  // const locale = useCurrentLocale()
+  const locale = useCurrentLocale()
   return (
     <Wrapper>
       <div />
@@ -64,7 +64,7 @@ export const PreOnboardingScreen: React.FC = () => {
       </AnimatingTextContent>
       <ButtonWrapper>
         <LinkButton
-          to={`/${'se'}/new-member`}
+          to={`/${locale}/new-member`}
           foreground={colorsV3.gray900}
           background={colorsV3.purple500}
           size="lg"

@@ -2,8 +2,8 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { action, withActions } from '@storybook/addon-actions'
 import React from 'react'
 import { BrowserRouter } from 'react-router-dom'
-import { IntroStories } from './IntroStories'
 import { MockTextKeyProvider } from 'utils/MockTextKeyProvider'
+import { IntroStories } from './IntroStories'
 
 export default {
   title: 'Forever/Intro/Stories',

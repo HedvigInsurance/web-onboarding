@@ -1,3 +1,4 @@
+import { LOCALE_PATH_PATTERN } from 'components/utils/CurrentLocale'
 import { SignLoading } from 'pages/SignLoading'
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
@@ -11,7 +12,6 @@ import { FourOhFour } from './pages/FourOhFour'
 import { OfferNew } from './pages/OfferNew'
 import { Referral } from './pages/Referral'
 
-export const LOCALE_PATH_PATTERN = '/:locale(se-en|se|no-en|no)'
 export const serverSideRedirects = [
   { from: '/referrals/terms', to: '/invite/terms' },
   { from: '/new-member/hedvig', to: '/new-member' },

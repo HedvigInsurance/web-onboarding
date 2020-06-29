@@ -1,7 +1,7 @@
+import { LOCALE_PATH_PATTERN } from 'components/utils/CurrentLocale'
 import React from 'react'
 import { RouteComponentProps, withRouter } from 'react-router'
 import { Route, Switch } from 'react-router-dom'
-import { LOCALE_PATH_PATTERN } from 'routes'
 import { IntroStories } from './IntroStories'
 import { PreOnboardingScreen } from './PreOnboardingScreen'
 
