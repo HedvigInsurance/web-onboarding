@@ -2,10 +2,10 @@ import { keyframes } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand/dist/colors'
 import { LinkButton } from 'components/buttons'
+import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { fadeIn, TextContent } from './components'
-import { useCurrentLocale } from 'components/utils/CurrentLocale'
 
 const Wrapper = styled.div`
   position: absolute;
