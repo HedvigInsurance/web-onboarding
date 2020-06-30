@@ -32,6 +32,12 @@ const NavigationOverlay = styled.button<{ width: string; offset: string }>`
   @media (min-width: 800px) {
     display: none;
   }
+
+  :hover,
+  :focus {
+    box-shadow: none;
+    outline: none;
+  }
 `
 
 const stretch = keyframes`
