@@ -5,15 +5,12 @@ import { HedvigLogo } from 'components/icons/HedvigLogo'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionContainer } from 'containers/SessionContainer'
-import { useRedeemCodeV2Mutation } from 'data/graphql'
-import { FormikHelpers } from 'formik'
-import React, { useState } from 'react'
+import React from 'react'
 import Helmet from 'react-helmet-async'
-import { RouteComponentProps, useHistory } from 'react-router'
+import { RouteComponentProps } from 'react-router'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-import { captureSentryError } from 'utils/sentry-client'
-import { Loading } from './components/Loading'
-import { RedeemCode, RedeemCodeFormValue } from './components/RedeemCode'
+import { RedeemCode } from './components/RedeemCode'
+import { useRedeemCode } from './useRedeemCode'
 
 type ForeverProps = RouteComponentProps<{
   code: string
@@ -55,37 +52,9 @@ export const Forever: React.FC<ForeverProps> = ({
     params: { code },
   },
 }) => {
-  const history = useHistory()
   const currentLocale = useCurrentLocale()
-  const [redeemCode] = useRedeemCodeV2Mutation()
-  const [isLoading, setIsLoading] = useState(false)
-  const handleSubmit = async (
-    form: RedeemCodeFormValue,
-    actions: FormikHelpers<RedeemCodeFormValue>,
-  ) => {
-    setIsLoading(true)
-    try {
-      const result = await redeemCode({ variables: { code: form.code } })
-      if (!result) {
-        return
-      }
-
-      if (result.errors && result.errors.length > 0) {
-        // TODO handle errors
-        actions.setFieldError('code', 'FOREVER_ADD_CODE_ERROR')
-        return
-      }
-      // TODO redirect to success screens
-      history.push(`/${currentLocale}/new-member`)
-    } catch (e) {
-      // tslint:disable-next-line no-console
-      captureSentryError(e)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
   const textKeys = useTextKeys()
+  const { handleSubmit } = useRedeemCode()
   return (
     <>
       <Helmet>
@@ -119,10 +88,7 @@ export const Forever: React.FC<ForeverProps> = ({
                   <HedvigLogo width={94} />
                 </LogoLink>
               </Header>
-              {isLoading && <Loading />}
-              {!isLoading && (
-                <RedeemCode referralCode={code} onSubmit={handleSubmit} />
-              )}
+              <RedeemCode referralCode={code} onSubmit={handleSubmit} />
             </PageWrapper>
           </Page>
         )}
