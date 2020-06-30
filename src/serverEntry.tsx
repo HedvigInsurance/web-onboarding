@@ -1,15 +1,12 @@
 import { createKoaServer } from '@hedviginsurance/web-survival-kit' // tslint:disable-line ordered-imports
 import * as Sentry from '@sentry/node' // tslint:disable-line ordered-imports
+import { LOCALE_PATH_PATTERN } from 'components/utils/CurrentLocale'
 import * as bodyParser from 'koa-bodyparser'
 import * as proxy from 'koa-proxies'
 import { handleAdyen3dsPostRedirect } from 'server/adyenMiddleware'
 import 'source-map-support/register'
 import { Logger } from 'typescript-logging'
-import {
-  LOCALE_PATH_PATTERN,
-  reactPageRoutes,
-  serverSideRedirects,
-} from './routes'
+import { reactPageRoutes, serverSideRedirects } from './routes'
 import {
   ASSET_FALLBACK_PROXY,
   GIRAFFE_ENDPOINT,

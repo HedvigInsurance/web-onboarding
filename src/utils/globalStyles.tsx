@@ -16,7 +16,7 @@ export const GlobalCss: React.SFC = ({ children }) => (
         body {
           font-family: ${fonts.FAVORIT}, sans-serif;
           font-size: 16px;
-          line-height: 1.5;
+          line-height: 1.25;
           margin: 0;
           padding: 0;
         }

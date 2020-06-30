@@ -1,6 +1,6 @@
+import { LOCALE_PATH_PATTERN } from 'components/utils/CurrentLocale'
 import React from 'react'
 import { useRouteMatch } from 'react-router'
-import { LOCALE_PATH_PATTERN } from 'routes'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 
 const createIntercom = () => {
