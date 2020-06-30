@@ -1,13 +1,16 @@
+import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { useRedeemCodeV2Mutation } from 'data/graphql'
 import { FormikHelpers } from 'formik'
 import { useHistory, useLocation } from 'react-router'
+import { stripTrailingCharacter } from 'utils/misc'
 import { captureSentryError } from 'utils/sentry-client'
 import { RedeemCodeFormValue } from './components/RedeemCode'
 
 export const useRedeemCode = () => {
   const [redeemCode] = useRedeemCodeV2Mutation()
-  const location = useLocation()
+  const locale = useCurrentLocale()
   const history = useHistory()
+  const location = useLocation()
 
   const handleSubmit = async (
     form: RedeemCodeFormValue,
@@ -21,7 +24,16 @@ export const useRedeemCode = () => {
 
       switch (result.data?.redeemCodeV2.__typename) {
         case 'SuccessfulRedeemResult':
-          history.push(`${location.pathname}/intro`)
+          if (
+            result.data.redeemCodeV2.campaigns[0]?.incentive?.__typename ===
+            'MonthlyCostDeduction'
+          ) {
+            history.push(
+              `${stripTrailingCharacter('/', location.pathname)}/intro`,
+            )
+          } else {
+            history.push(`/${locale}/new-member`)
+          }
           return
         case 'CannotRedeemOwnCampaign':
           actions.setErrors({

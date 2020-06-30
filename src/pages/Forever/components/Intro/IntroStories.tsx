@@ -4,6 +4,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import React, { useEffect, useState } from 'react'
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { stripTrailingCharacter } from 'utils/misc'
 import { TextContent } from './components'
 
 const Page = styled.div<{ visible: boolean }>`
@@ -136,7 +137,7 @@ export const IntroStoriesComponent: React.FC<IntroProps> = ({
     <Page key={0} visible={page === 0}>
       <TextContent>
         {textKeys.FOREVER_INTRO_PAGE_1({
-          REFERRER: stripTrailingS('Rebecca'),
+          REFERRER: stripTrailingCharacter('s', 'Rebecca'),
         })}
       </TextContent>
     </Page>,
@@ -226,7 +227,3 @@ export const IntroStoriesComponent: React.FC<IntroProps> = ({
 }
 
 export const IntroStories = withRouter(IntroStoriesComponent)
-
-export const stripTrailingS = (str: string) => {
-  return str.replace(/s+$/i, '')
-}
