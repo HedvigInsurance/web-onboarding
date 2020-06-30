@@ -33,7 +33,7 @@ const NavigationOverlay = styled.button<{ width: string; offset: string }>`
     display: none;
   }
 
-  :hover,
+  :active,
   :focus {
     box-shadow: none;
     outline: none;
