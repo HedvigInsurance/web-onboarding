@@ -5,7 +5,7 @@ import { Button } from 'components/buttons'
 import { InputField } from 'components/inputs'
 import { LoadingDots } from 'components/LoadingDots/LoadingDots'
 import { Form, Formik, FormikHelpers } from 'formik'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import * as Yup from 'yup'
 
@@ -128,14 +128,52 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
   onSubmit,
 }) => {
   const textKeys = useTextKeys()
+  const [writtenCode, setWrittenCode] = useState('')
+  const [charIndex, setCharIndex] = useState(0)
+  const [printCodeTimeout, setPrintCodeTimeout] = useState<number | null>(null)
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    setFieldValue: any,
+  ) => {
+    setWrittenCode(e.target.value)
+    setFieldValue('code', e.target.value)
+  }
+
+  const printCode = () => {
+    if (charIndex === referralCode.length && printCodeTimeout) {
+      window.clearTimeout(printCodeTimeout)
+    } else {
+      setWrittenCode(writtenCode + referralCode[charIndex])
+      setCharIndex(charIndex + 1)
+    }
+  }
+
+  useEffect(() => {
+    if (printCodeTimeout) {
+      window.clearTimeout(printCodeTimeout)
+    }
+
+    const timeout = window.setTimeout(() => {
+      printCode()
+    }, 80)
+    setPrintCodeTimeout(timeout)
+
+    return () => {
+      if (printCodeTimeout) {
+        window.clearTimeout(printCodeTimeout)
+      }
+    }
+  }, [charIndex])
+
   return (
     <Wrapper>
       <Formik
-        initialValues={{ code: referralCode }}
+        initialValues={{ code: '' }}
         validationSchema={codeSchema}
         onSubmit={onSubmit}
       >
-        {({ touched, errors, values, isSubmitting }) => (
+        {({ touched, errors, values, isSubmitting, setFieldValue }) => (
           <RedeemForm>
             <Main>
               <Paragraph>{textKeys.FOREVER_LANDINGPAGE_INPUT_TEXT()}</Paragraph>
@@ -143,7 +181,10 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
               <CodeField>
                 <InputField
                   label=""
-                  value={values.code}
+                  value={writtenCode}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    handleInputChange(e, setFieldValue)
+                  }
                   name="code"
                   type="text"
                   autoComplete="off"
