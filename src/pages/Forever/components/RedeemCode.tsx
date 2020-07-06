@@ -74,7 +74,7 @@ const Footer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 1rem 0 2.5rem;
+  padding: 1rem 0 6rem;
 `
 
 const Paragraph = styled.p`
