@@ -28,7 +28,10 @@ export const Default = () => (
       }}
     >
       <div style={{ height: '100vh', color: '#fff' }}>
-        <IntroStories onFinished={action('On finished')} />
+        <IntroStories
+          onFinished={action('On finished')}
+          referrerName="Rebecca"
+        />
       </div>
     </MockTextKeyProvider>
   </BrowserRouter>
