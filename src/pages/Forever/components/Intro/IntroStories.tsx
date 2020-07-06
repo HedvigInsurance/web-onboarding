@@ -121,11 +121,13 @@ const SkipButton = styled(Link)`
 
 interface IntroProps extends RouteComponentProps {
   onFinished?: () => void
+  referrerName: string
 }
 
 export const IntroStoriesComponent: React.FC<IntroProps> = ({
   onFinished,
   history,
+  referrerName,
 }) => {
   const textKeys = useTextKeys()
   const [page, setPage] = useState(0)
@@ -137,7 +139,7 @@ export const IntroStoriesComponent: React.FC<IntroProps> = ({
     <Page key={0} visible={page === 0}>
       <TextContent>
         {textKeys.FOREVER_INTRO_PAGE_1({
-          REFERRER: stripTrailingCharacter('s', 'Rebecca'),
+          REFERRER: stripTrailingCharacter('s', referrerName),
         })}
       </TextContent>
     </Page>,
