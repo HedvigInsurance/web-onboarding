@@ -8,6 +8,7 @@ import { Form, Formik, FormikHelpers } from 'formik'
 import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import * as Yup from 'yup'
+import { LanguagePicker } from './LanguagePicker'
 
 export interface RedeemCodeFormValue {
   code: string
@@ -107,6 +108,7 @@ const Info = styled.div`
   color: ${colorsV3.gray500};
   text-align: center;
   line-height: 1.2;
+  padding-bottom: 1.5rem;
 
   @media (min-width: 800px) {
     max-width: 37.5rem;
@@ -174,6 +176,7 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
         <Info>
           <MarkdownTranslation textKey="FOREVER_LANDINGPAGE_INFO_TEXT" />
         </Info>
+        <LanguagePicker />
       </Footer>
     </Wrapper>
   )
