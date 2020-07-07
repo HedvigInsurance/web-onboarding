@@ -81,7 +81,7 @@ export const SignLoading: React.FC = () => {
   }
 
   return (
-    <LoadingPage>
+    <LoadingPage loading={!hasTakenLong}>
       <InnerWrapper
         initial="hidden"
         animate={hasTakenLong ? 'visible' : 'hidden'}

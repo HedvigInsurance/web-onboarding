@@ -8,23 +8,27 @@ export const TOP_BAR_Z_INDEX = 1009
 
 interface Props {
   transparent?: boolean
+  centered?: boolean
 }
 
-const Wrapper = styled.div<Props>`
+const Wrapper = styled.div`
   width: 100%;
   top: 0;
   height: 5rem;
-  background: ${(props) =>
-    props.transparent ? `transparent` : colorsV3.gray900};
+  background: ${colorsV3.gray900};
   position: absolute;
   z-index: ${TOP_BAR_Z_INDEX};
-  ${(props) =>
-    !props.transparent && `box-shadow: 0 2px 14px rgba(0, 0, 0, 0.08);`};
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.08);
   color: ${colorsV3.white};
 
   @media (max-width: 375px) {
     height: 4rem;
   }
+`
+
+const TransparentWrapper = styled(Wrapper)`
+  background: transparent;
+  box-shadow: none;
 `
 
 export const TopBarFiller = styled.div`
@@ -42,6 +46,10 @@ const Container = styled.div`
   margin: 0 auto;
 `
 
+const CenteredContainer = styled(Container)`
+  justify-content: center;
+`
+
 const LogoLink = styled.a`
   color: inherit;
   display: flex;
@@ -52,18 +60,26 @@ const LogoLink = styled.a`
   }
 `
 
-export const TopBar: React.FC<Props> = ({ transparent, children }) => (
-  <Wrapper transparent={transparent}>
-    <Container>
-      <CurrentLocale>
-        {({ currentLocale }) => (
-          <LogoLink href={'/' + currentLocale}>
-            <HedvigLogo width={94} />
-          </LogoLink>
-        )}
-      </CurrentLocale>
+export const TopBar: React.FC<Props> = ({
+  transparent,
+  centered,
+  children,
+}) => {
+  const ActualWrapper = transparent ? TransparentWrapper : Wrapper
+  const ActualContainer = centered ? CenteredContainer : Container
+  return (
+    <ActualWrapper>
+      <ActualContainer>
+        <CurrentLocale>
+          {({ currentLocale }) => (
+            <LogoLink href={'/' + currentLocale}>
+              <HedvigLogo width={94} />
+            </LogoLink>
+          )}
+        </CurrentLocale>
 
-      {children}
-    </Container>
-  </Wrapper>
-)
+        {children}
+      </ActualContainer>
+    </ActualWrapper>
+  )
+}
