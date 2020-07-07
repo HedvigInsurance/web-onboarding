@@ -1,0 +1,16 @@
+query ReferrerName {
+  referralInformation {
+    referredBy {
+      ... on ActiveReferral {
+        name
+        discount {
+          amount
+          currency
+        }
+      }
+      ... on InProgressReferral {
+        name
+      }
+    }
+  }
+}

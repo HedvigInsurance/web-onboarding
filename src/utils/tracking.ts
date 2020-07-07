@@ -145,7 +145,9 @@ export const useTrack = ({ offerData, signState }: TrackProps) => {
 
     if (
       redeemedCampaigns?.length > 0 &&
-      redeemedCampaigns[0].code.toLowerCase() === 'studentkortet'
+      ['studentkortet', 'stuk2'].includes(
+        redeemedCampaigns[0].code.toLowerCase(),
+      )
     ) {
       trackStudentkortet(memberId, offerData.cost.monthlyGross.amount)
     }

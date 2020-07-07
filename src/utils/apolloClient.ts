@@ -1,6 +1,6 @@
 import { defaultDataIdFromObject } from 'apollo-cache-inmemory'
 import { IdGetter, IdGetterObj } from 'apollo-cache-inmemory/lib/types'
-import { QuoteBundle } from 'data/graphql'
+import { ActiveReferral, InProgressReferral, QuoteBundle } from 'data/graphql'
 
 export const getGiraffeEndpoint = (
   constant:
@@ -29,6 +29,13 @@ const isQuoteBundle = (obj: IdGetterObj): obj is QuoteBundle =>
 export const dataIdFromObject: IdGetter = (obj) => {
   if (isQuoteBundle(obj)) {
     return `QuoteBundle:${obj.quotes.map((q) => q.id).join(',')}`
+  }
+
+  if (obj.__typename === 'ActiveReferral') {
+    return `ActiveReferral:${(obj as ActiveReferral).name}`
+  }
+  if (obj.__typename === 'InProgressReferral') {
+    return `InProgressReferral:${(obj as InProgressReferral).name}`
   }
 
   return defaultDataIdFromObject(obj)

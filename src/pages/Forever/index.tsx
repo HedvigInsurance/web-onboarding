@@ -2,12 +2,17 @@ import { css, Global } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
-import { useCurrentLocale } from 'components/utils/CurrentLocale'
+import {
+  LOCALE_PATH_PATTERN,
+  useCurrentLocale,
+} from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionContainer } from 'containers/SessionContainer'
+import { Intro } from 'pages/Forever/components/Intro'
 import React from 'react'
 import Helmet from 'react-helmet-async'
 import { RouteComponentProps } from 'react-router'
+import { Route, Switch } from 'react-router-dom'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { RedeemCode } from './components/RedeemCode'
 import { useRedeemCode } from './useRedeemCode'
@@ -88,7 +93,20 @@ export const Forever: React.FC<ForeverProps> = ({
                   <HedvigLogo width={94} />
                 </LogoLink>
               </Header>
-              <RedeemCode referralCode={code} onSubmit={handleSubmit} />
+
+              <Switch>
+                <Route
+                  path={LOCALE_PATH_PATTERN + '/forever/:code?'}
+                  exact
+                  render={() => (
+                    <RedeemCode referralCode={code} onSubmit={handleSubmit} />
+                  )}
+                />
+                <Route
+                  path={LOCALE_PATH_PATTERN + '/forever/:code/intro'}
+                  component={Intro}
+                />
+              </Switch>
             </PageWrapper>
           </Page>
         )}
