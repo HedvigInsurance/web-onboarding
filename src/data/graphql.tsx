@@ -7832,7 +7832,10 @@ export type FaqsQuery = { __typename?: 'Query' } & {
 export type MemberQueryVariables = {}
 
 export type MemberQuery = { __typename?: 'Query' } & {
-  member: { __typename?: 'Member' } & Pick<Member, 'id'>
+  member: { __typename?: 'Member' } & Pick<
+    Member,
+    'id' | 'firstName' | 'lastName'
+  >
 }
 
 export type MemberOfferQueryVariables = {}
@@ -8930,6 +8933,8 @@ export const MemberDocument = gql`
   query Member {
     member {
       id
+      firstName
+      lastName
     }
   }
 `

@@ -9,7 +9,7 @@ import * as React from 'react'
 import Helmet from 'react-helmet-async'
 import { Mount } from 'react-lifecycle-components/dist'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
-import { DownloadApp } from './sections/DownloadApp'
+import { DownloadAppHedvigForeverMember } from './sections/DownloadApp'
 
 const TopBarWrapper = styled('div')`
   color: ${colorsV3.black};
@@ -27,10 +27,10 @@ export const Download: React.FC = () => (
           )}
         </TranslationsConsumer>
         <TopBarWrapper>
-          <TopBar />
+          <TopBar centered />
         </TopBarWrapper>
 
-        <DownloadApp />
+        <DownloadAppHedvigForeverMember />
 
         <TrackAction
           event={{
