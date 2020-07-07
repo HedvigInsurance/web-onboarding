@@ -171,7 +171,9 @@ export const DownloadAppRegular: React.FC = () => {
 }
 
 export const DownloadAppHedvigForeverMember: React.FC = () => {
+  const textKeys = useTextKeys()
   const member = useMemberQuery()
+
   let isAppleDevice = false
   if (typeof window !== 'undefined') {
     const { userAgent } = window.navigator
@@ -185,11 +187,12 @@ export const DownloadAppHedvigForeverMember: React.FC = () => {
   const isMobileOrTablet = isMobile({ tablet: true })
   return (
     <DownloadApp>
-      <Heading>Välkommen {member.data?.member?.firstName}!</Heading>
-      <Paragraph>
-        Du är nu medlem i Hedvig. Ladda ner appen för att komma igång, och glöm
-        inte att bjuda in dina vänner!
-      </Paragraph>
+      <Heading>
+        {textKeys.FOREVER_DOWNLOAD_HEADING({
+          FIRST_NAME: member.data?.member?.firstName,
+        })}
+      </Heading>
+      <Paragraph>{textKeys.FOREVER_DOWNLOAD_PARAGRAPH()}</Paragraph>
       <ButtonWrapper>
         {isMobileOrTablet && isAppleDevice && (
           <RealLinkButton
@@ -199,7 +202,7 @@ export const DownloadAppHedvigForeverMember: React.FC = () => {
             fullWidth
           >
             <InlineAppleLogo />
-            Ladda ner appen
+            {textKeys.FOREVER_DOWNLOAD_DOWNLOAD_APP_CTA()}
           </RealLinkButton>
         )}
         {isMobileOrTablet && !isAppleDevice && (
@@ -210,7 +213,7 @@ export const DownloadAppHedvigForeverMember: React.FC = () => {
             fullWidth
           >
             <InlinePlayLogo />
-            Ladda ner appen
+            {textKeys.FOREVER_DOWNLOAD_DOWNLOAD_APP_CTA()}
           </RealLinkButton>
         )}
         {!isMobileOrTablet && (
