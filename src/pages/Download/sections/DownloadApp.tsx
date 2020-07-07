@@ -174,12 +174,6 @@ export const DownloadAppHedvigForeverMember: React.FC = () => {
   const textKeys = useTextKeys()
   const member = useMemberQuery()
 
-  let isAppleDevice = false
-  if (typeof window !== 'undefined') {
-    const { userAgent } = window.navigator
-    isAppleDevice = userAgent.includes('iPhone') || userAgent.includes('iPad')
-  }
-
   if (!member.data?.member?.firstName) {
     return <LoadingPage loading />
   }
@@ -194,7 +188,7 @@ export const DownloadAppHedvigForeverMember: React.FC = () => {
       </Heading>
       <Paragraph>{textKeys.FOREVER_DOWNLOAD_PARAGRAPH()}</Paragraph>
       <ButtonWrapper>
-        {isMobileOrTablet && isAppleDevice && (
+        {isMobileOrTablet && getIsAppleDevice() && (
           <RealLinkButton
             href={APPLE_APP_STORE_LINK}
             foreground={colorsV3.gray900}
@@ -205,7 +199,7 @@ export const DownloadAppHedvigForeverMember: React.FC = () => {
             {textKeys.FOREVER_DOWNLOAD_DOWNLOAD_APP_CTA()}
           </RealLinkButton>
         )}
-        {isMobileOrTablet && !isAppleDevice && (
+        {isMobileOrTablet && !getIsAppleDevice() && (
           <RealLinkButton
             href={GOOGLE_PLAY_LINK}
             foreground={colorsV3.gray900}
@@ -229,4 +223,14 @@ export const DownloadAppHedvigForeverMember: React.FC = () => {
       </ButtonWrapper>
     </DownloadApp>
   )
+}
+
+const getIsAppleDevice = () => {
+  let isAppleDevice = false
+  if (typeof window !== 'undefined') {
+    const { userAgent } = window.navigator
+    isAppleDevice = userAgent.includes('iPhone') || userAgent.includes('iPad')
+  }
+
+  return isAppleDevice
 }
