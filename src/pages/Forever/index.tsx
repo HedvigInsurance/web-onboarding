@@ -74,7 +74,7 @@ export const Forever: React.FC<ForeverProps> = ({
         />
         <meta
           property="og:image"
-          content="https://www.hedvig.com/new-member-assets/social/hedvig-hemforsakring-2.jpg"
+          content="https://www.hedvig.com/new-member-assets/social/hedvig-forever.png"
         />
       </Helmet>
       <SessionContainer>
