@@ -1,0 +1,5 @@
+mutation UpdatePickedLocale($pickedLocale: Locale!) {
+  updatePickedLocale(pickedLocale: $pickedLocale) {
+    id
+  }
+}

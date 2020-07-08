@@ -8544,6 +8544,14 @@ export type TokenizePaymentDetailsMutation = { __typename?: 'Mutation' } & {
   >
 }
 
+export type UpdatePickedLocaleMutationVariables = {
+  pickedLocale: Locale
+}
+
+export type UpdatePickedLocaleMutation = { __typename?: 'Mutation' } & {
+  updatePickedLocale: { __typename?: 'Member' } & Pick<Member, 'id'>
+}
+
 export const AvailablePaymentMethodsDocument = gql`
   query AvailablePaymentMethods {
     availablePaymentMethods {
@@ -10128,4 +10136,54 @@ export type TokenizePaymentDetailsMutationResult = ApolloReactCommon.MutationRes
 export type TokenizePaymentDetailsMutationOptions = ApolloReactCommon.BaseMutationOptions<
   TokenizePaymentDetailsMutation,
   TokenizePaymentDetailsMutationVariables
+>
+export const UpdatePickedLocaleDocument = gql`
+  mutation UpdatePickedLocale($pickedLocale: Locale!) {
+    updatePickedLocale(pickedLocale: $pickedLocale) {
+      id
+    }
+  }
+`
+export type UpdatePickedLocaleMutationFn = ApolloReactCommon.MutationFunction<
+  UpdatePickedLocaleMutation,
+  UpdatePickedLocaleMutationVariables
+>
+
+/**
+ * __useUpdatePickedLocaleMutation__
+ *
+ * To run a mutation, you first call `useUpdatePickedLocaleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdatePickedLocaleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updatePickedLocaleMutation, { data, loading, error }] = useUpdatePickedLocaleMutation({
+ *   variables: {
+ *      pickedLocale: // value for 'pickedLocale'
+ *   },
+ * });
+ */
+export function useUpdatePickedLocaleMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    UpdatePickedLocaleMutation,
+    UpdatePickedLocaleMutationVariables
+  >,
+) {
+  return ApolloReactHooks.useMutation<
+    UpdatePickedLocaleMutation,
+    UpdatePickedLocaleMutationVariables
+  >(UpdatePickedLocaleDocument, baseOptions)
+}
+export type UpdatePickedLocaleMutationHookResult = ReturnType<
+  typeof useUpdatePickedLocaleMutation
+>
+export type UpdatePickedLocaleMutationResult = ApolloReactCommon.MutationResult<
+  UpdatePickedLocaleMutation
+>
+export type UpdatePickedLocaleMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  UpdatePickedLocaleMutation,
+  UpdatePickedLocaleMutationVariables
 >
