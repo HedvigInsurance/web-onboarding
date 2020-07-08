@@ -43,7 +43,7 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 0 auto;
+  margin: 0 auto !important;
 `
 
 const CenteredContainer = styled(Container)`
