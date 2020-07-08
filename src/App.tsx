@@ -1,4 +1,5 @@
 import { Project, TranslationsProvider } from '@hedviginsurance/textkeyfy'
+import { LoadingPage } from 'components/LoadingPage'
 import { CurrentLocale, getLocaleIsoCode } from 'components/utils/CurrentLocale'
 import { Provider } from 'constate'
 import * as React from 'react'
@@ -22,6 +23,7 @@ export const App: React.ComponentType<StorageState> = ({ session }) => (
         <TranslationsProvider
           code={getLocaleIsoCode(currentLocale)}
           project={Project.WebOnboarding}
+          loader={() => <LoadingPage loading />}
         >
           <Provider<WithStorageProps>
             initialState={{ storage: { session } }}

@@ -1,6 +1,7 @@
 import { colorsV3 } from '@hedviginsurance/brand'
 import { action } from '@storybook/addon-actions'
 import React from 'react'
+import { MemoryRouter } from 'react-router'
 import { MockTextKeyProvider } from 'utils/MockTextKeyProvider'
 import { RedeemCode } from './RedeemCode'
 
@@ -21,9 +22,13 @@ const text = {
 }
 
 export const Default = () => (
-  <MockTextKeyProvider textKeys={text}>
-    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <RedeemCode onSubmit={action('Submit')} />
-    </div>
-  </MockTextKeyProvider>
+  <MemoryRouter initialEntries={['/se/forever/abc123']}>
+    <MockTextKeyProvider textKeys={text}>
+      <div
+        style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}
+      >
+        <RedeemCode onSubmit={action('Submit')} referralCode="abc123" />
+      </div>
+    </MockTextKeyProvider>
+  </MemoryRouter>
 )

@@ -3,3 +3,7 @@ export const sleep = (delay: number = 0) =>
 
 export const nextTickAsync = () =>
   new Promise<void>((resolve) => process.nextTick(resolve))
+
+export const stripTrailingCharacter = (character: string, str: string) => {
+  return str.replace(RegExp(`${character}+$`, 'i'), '')
+}

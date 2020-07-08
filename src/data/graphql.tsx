@@ -7832,7 +7832,10 @@ export type FaqsQuery = { __typename?: 'Query' } & {
 export type MemberQueryVariables = {}
 
 export type MemberQuery = { __typename?: 'Query' } & {
-  member: { __typename?: 'Member' } & Pick<Member, 'id'>
+  member: { __typename?: 'Member' } & Pick<
+    Member,
+    'id' | 'firstName' | 'lastName'
+  >
 }
 
 export type MemberOfferQueryVariables = {}
@@ -8402,6 +8405,27 @@ export type RedeemedCampaignsQuery = { __typename?: 'Query' } & {
   >
 }
 
+export type ReferrerNameQueryVariables = {}
+
+export type ReferrerNameQuery = { __typename?: 'Query' } & {
+  referralInformation: { __typename?: 'Referrals' } & {
+    referredBy: Maybe<
+      | ({ __typename?: 'ActiveReferral' } & Pick<ActiveReferral, 'name'> & {
+            discount: { __typename?: 'MonetaryAmountV2' } & Pick<
+              MonetaryAmountV2,
+              'amount' | 'currency'
+            >
+          })
+      | ({ __typename?: 'InProgressReferral' } & Pick<
+          InProgressReferral,
+          'name'
+        >)
+      | { __typename?: 'AcceptedReferral' }
+      | { __typename?: 'TerminatedReferral' }
+    >
+  }
+}
+
 export type RemoveDiscountCodeMutationVariables = {}
 
 export type RemoveDiscountCodeMutation = { __typename?: 'Mutation' } & {
@@ -8909,6 +8933,8 @@ export const MemberDocument = gql`
   query Member {
     member {
       id
+      firstName
+      lastName
     }
   }
 `
@@ -9600,6 +9626,72 @@ export type RedeemedCampaignsLazyQueryHookResult = ReturnType<
 export type RedeemedCampaignsQueryResult = ApolloReactCommon.QueryResult<
   RedeemedCampaignsQuery,
   RedeemedCampaignsQueryVariables
+>
+export const ReferrerNameDocument = gql`
+  query ReferrerName {
+    referralInformation {
+      referredBy {
+        ... on ActiveReferral {
+          name
+          discount {
+            amount
+            currency
+          }
+        }
+        ... on InProgressReferral {
+          name
+        }
+      }
+    }
+  }
+`
+
+/**
+ * __useReferrerNameQuery__
+ *
+ * To run a query within a React component, call `useReferrerNameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useReferrerNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useReferrerNameQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useReferrerNameQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    ReferrerNameQuery,
+    ReferrerNameQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useQuery<
+    ReferrerNameQuery,
+    ReferrerNameQueryVariables
+  >(ReferrerNameDocument, baseOptions)
+}
+export function useReferrerNameLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    ReferrerNameQuery,
+    ReferrerNameQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useLazyQuery<
+    ReferrerNameQuery,
+    ReferrerNameQueryVariables
+  >(ReferrerNameDocument, baseOptions)
+}
+export type ReferrerNameQueryHookResult = ReturnType<
+  typeof useReferrerNameQuery
+>
+export type ReferrerNameLazyQueryHookResult = ReturnType<
+  typeof useReferrerNameLazyQuery
+>
+export type ReferrerNameQueryResult = ApolloReactCommon.QueryResult<
+  ReferrerNameQuery,
+  ReferrerNameQueryVariables
 >
 export const RemoveDiscountCodeDocument = gql`
   mutation RemoveDiscountCode {
