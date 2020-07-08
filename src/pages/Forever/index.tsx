@@ -60,6 +60,9 @@ export const Forever: React.FC<ForeverProps> = ({
   const currentLocale = useCurrentLocale()
   const textKeys = useTextKeys()
   const { handleSubmit } = useRedeemCode()
+  const ogDescription = textKeys.FOREVER_LANDINGPAGE_DESCRIPTION({
+    CODE: (code ?? '').toUpperCase(),
+  })
   return (
     <>
       <Helmet>
@@ -70,11 +73,15 @@ export const Forever: React.FC<ForeverProps> = ({
         />
         <meta
           property="og:description"
-          content={textKeys.FOREVER_LANDINGPAGE_DESCRIPTION()}
+          content={
+            Array.isArray(ogDescription)
+              ? ogDescription.join('')
+              : ogDescription
+          }
         />
         <meta
           property="og:image"
-          content="https://www.hedvig.com/new-member-assets/social/hedvig-hemforsakring-2.jpg"
+          content="https://www.hedvig.com/new-member-assets/social/hedvig-forever.png"
         />
       </Helmet>
       <SessionContainer>

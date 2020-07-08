@@ -1,5 +1,7 @@
 query Member {
   member {
     id
+    firstName
+    lastName
   }
 }
