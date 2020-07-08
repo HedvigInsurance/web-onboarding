@@ -13,7 +13,8 @@ export const useRedeemCode = () => {
         query: ReferrerNameDocument,
       },
     ],
-    awaitRefetchQueries: true,
+    // TODO put 👇 back when apollo has a solution to infinite spinner on errors in refetch queries
+    // awaitRefetchQueries: true,
   })
   const locale = useCurrentLocale()
   const history = useHistory()
