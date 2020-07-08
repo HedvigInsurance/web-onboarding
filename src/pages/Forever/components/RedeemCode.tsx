@@ -156,9 +156,8 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
       window.clearTimeout(printCodeTimeout)
     }
 
-    const timeout = window.setTimeout(() => {
-      printCode()
-    }, 80)
+    const isInitialTimeout = charIndex === 0
+    const timeout = window.setTimeout(printCode, isInitialTimeout ? 250 : 120)
     setPrintCodeTimeout(timeout)
 
     return () => {
@@ -171,7 +170,7 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
   return (
     <Wrapper>
       <Formik
-        initialValues={{ code: '' }}
+        initialValues={{ code: referralCode }}
         validationSchema={codeSchema}
         onSubmit={onSubmit}
       >
