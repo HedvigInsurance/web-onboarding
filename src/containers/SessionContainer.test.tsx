@@ -15,7 +15,7 @@ import { Provider } from 'constate'
 import { mount } from 'enzyme'
 import * as React from 'react'
 
-import { Locale } from 'data/graphql'
+import { Locale, UpdatePickedLocaleDocument } from 'data/graphql'
 import { act } from 'react-dom/test-utils'
 import { StaticRouter } from 'react-router-dom'
 import { apolloClient } from '../client/apolloClient'
@@ -30,7 +30,6 @@ import { MockStorage } from '../utils/storage/MockStorage'
 import {
   CREATE_SESSION_TOKEN_MUTATION,
   SessionContainer,
-  UPDATE_PICKED_LOCALE_MUTATION,
 } from './SessionContainer'
 
 it('picks up any stored session token in session without actually creating a new session', () => {
@@ -79,7 +78,7 @@ it('creates a new session', async () => {
     },
     {
       request: {
-        query: UPDATE_PICKED_LOCALE_MUTATION,
+        query: UpdatePickedLocaleDocument,
         variables: { pickedLocale: Locale.SvSe },
       },
       result: {
