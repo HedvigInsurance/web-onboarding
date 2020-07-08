@@ -143,9 +143,11 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
   }
 
   const printCode = () => {
-    if (charIndex === referralCode.length && printCodeTimeout) {
+    if (printCodeTimeout) {
       window.clearTimeout(printCodeTimeout)
-    } else {
+    }
+
+    if (charIndex < referralCode.length) {
       setWrittenCode(writtenCode + referralCode[charIndex])
       setCharIndex(charIndex + 1)
     }

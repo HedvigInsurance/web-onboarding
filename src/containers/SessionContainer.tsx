@@ -3,7 +3,7 @@ import {
   getPickedLocaleFromCurrentLocale,
   useCurrentLocale,
 } from 'components/utils/CurrentLocale'
-import { Locale } from 'data/graphql'
+import { Locale, UpdatePickedLocaleDocument } from 'data/graphql'
 import { DocumentNode } from 'graphql'
 import gql from 'graphql-tag'
 import { afterTick } from 'pages/Embark/utils'
@@ -21,14 +21,6 @@ export const CREATE_SESSION_TOKEN_MUTATION: DocumentNode = gql`
     createSessionV2 {
       token
       memberId
-    }
-  }
-`
-
-export const UPDATE_PICKED_LOCALE_MUTATION: DocumentNode = gql`
-  mutation UpdatePickedLocale($pickedLocale: Locale!) {
-    updatePickedLocale(pickedLocale: $pickedLocale) {
-      id
     }
   }
 `
@@ -64,7 +56,7 @@ export const setupSession = async (
     storage.setToken(sessionResult.data.createSessionV2.token)
   })
   await apolloClient.client.mutate<object, { pickedLocale: Locale }>({
-    mutation: UPDATE_PICKED_LOCALE_MUTATION,
+    mutation: UpdatePickedLocaleDocument,
     variables: { pickedLocale },
   })
 
