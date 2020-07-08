@@ -27,7 +27,7 @@ export const Default = () => (
       <div
         style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}
       >
-        <RedeemCode onSubmit={action('Submit')} />
+        <RedeemCode onSubmit={action('Submit')} referralCode="abc123" />
       </div>
     </MockTextKeyProvider>
   </MemoryRouter>
