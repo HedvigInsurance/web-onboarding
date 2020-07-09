@@ -37,7 +37,7 @@ export const getDiscountText = (textKeys: Record<string, any>) => (
   }
 
   if (isVisibleNoDiscount(incentive)) {
-    return textKeys.WEB_VISIBLE_NO_DISCOUNT_ADDED_PERK({
+    return textKeys.WEB_VISIBLE_NO_DISCOUNT_ADDEDPERK({
       CAMPAIGN_NAME: redeemedCampaigns[0]?.owner?.displayName,
     })
   }
