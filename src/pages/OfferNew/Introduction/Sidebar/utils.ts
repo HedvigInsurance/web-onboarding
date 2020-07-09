@@ -11,6 +11,10 @@ import { CompleteOfferDataForMember } from '../../types'
 export const isFreeMonths = (incentive?: Incentive): incentive is FreeMonths =>
   incentive?.__typename === 'FreeMonths'
 
+export const isVisibleNoDiscount = (
+  incentive?: Incentive,
+): incentive is NoDiscount => incentive?.__typename === 'VisibleNoDiscount'
+
 export const isMonthlyCostDeduction = (
   incentive?: Incentive,
 ): incentive is MonthlyCostDeduction =>
@@ -30,6 +34,12 @@ export const getDiscountText = (textKeys: Record<string, any>) => (
   const incentive = redeemedCampaigns[0]?.incentive
   if (!incentive || isNoDiscount(incentive)) {
     return null
+  }
+
+  if (isVisibleNoDiscount(incentive)) {
+    return textKeys.WEB_GENERIC_CAMPAIGN_ADDEDPERK({
+      CAMPAIGN_NAME: redeemedCampaigns[0]?.owner?.displayName,
+    })
   }
 
   if (isFreeMonths(incentive)) {

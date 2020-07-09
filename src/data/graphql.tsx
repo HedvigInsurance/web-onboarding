@@ -2,6 +2,7 @@ import gql from 'graphql-tag'
 import * as ApolloReactCommon from '@apollo/react-common'
 import * as ApolloReactHooks from '@apollo/react-hooks'
 export type Maybe<T> = T | null
+export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] }
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string
@@ -1470,12 +1471,14 @@ export type CompleteQuote = {
   __typename?: 'CompleteQuote'
   id: Scalars['ID']
   currentInsurer?: Maybe<CurrentInsurer>
+  /** @deprecated Use insuranceCost */
   price: MonetaryAmountV2
   insuranceCost: InsuranceCost
   firstName: Scalars['String']
   lastName: Scalars['String']
   ssn?: Maybe<Scalars['String']>
   birthDate: Scalars['LocalDate']
+  /** @deprecated Use quoteDetails */
   details: CompleteQuoteDetails
   quoteDetails: QuoteDetails
   startDate?: Maybe<Scalars['LocalDate']>
@@ -3313,11 +3316,20 @@ export type HouseInformationInput = {
 /** A vectorized image to show to the user */
 export type Icon = {
   __typename?: 'Icon'
-  /** For iOS use */
+  /**
+   * For iOS use
+   * @deprecated use an icon from a variant instead
+   */
   pdfUrl: Scalars['String']
-  /** For Web use */
+  /**
+   * For Web use
+   * @deprecated use an icon from a variant instead
+   */
   svgUrl: Scalars['String']
-  /** For Android use */
+  /**
+   * For Android use
+   * @deprecated use an icon from a variant instead
+   */
   vectorDrawableUrl: Scalars['String']
   /** Icons with variants for light and dark mode */
   variants: IconVariants
@@ -3928,6 +3940,7 @@ export type Incentive =
   | MonthlyCostDeduction
   | FreeMonths
   | NoDiscount
+  | VisibleNoDiscount
   | PercentageDiscountMonths
   | IndefinitePercentageDiscount
 
@@ -4012,13 +4025,18 @@ export type Insurance = {
   status: InsuranceStatus
   type?: Maybe<InsuranceType>
   activeFrom?: Maybe<Scalars['LocalDate']>
+  /** @deprecated Use previousInsurer instead */
   insuredAtOtherCompany?: Maybe<Scalars['Boolean']>
   presaleInformationUrl?: Maybe<Scalars['String']>
   policyUrl?: Maybe<Scalars['String']>
+  /** @deprecated Use previousInsurer instead */
   currentInsurerName?: Maybe<Scalars['String']>
   livingSpace?: Maybe<Scalars['Int']>
+  /** @deprecated Use arrangedPerilCategories instead */
   perilCategories?: Maybe<Array<Maybe<PerilCategory>>>
+  /** @deprecated Use cost instead */
   monthlyCost?: Maybe<Scalars['Int']>
+  /** @deprecated Field no longer supported */
   safetyIncreasers?: Maybe<Array<Scalars['String']>>
   arrangedPerilCategories: ArrangedPerilCategories
   renewal?: Maybe<Renewal>
@@ -5991,6 +6009,7 @@ export type Mutation = {
   createSession: Scalars['String']
   createSessionV2?: Maybe<SessionInformation>
   createOffer?: Maybe<Scalars['Boolean']>
+  /** @deprecated Use `signOfferV2`. */
   signOffer?: Maybe<Scalars['Boolean']>
   signOfferV2: BankIdSignResponse
   uploadFile: File
@@ -6013,6 +6032,7 @@ export type Mutation = {
   emailSign?: Maybe<Scalars['Boolean']>
   markMessageAsRead: Message
   log?: Maybe<Scalars['Boolean']>
+  /** @deprecated Use `swedishBankIdAuth`. */
   bankIdAuth: BankIdAuthResponse
   swedishBankIdAuth: BankIdAuthResponse
   norwegianBankIdAuth: NorwegianBankIdAuthResponse
@@ -6027,9 +6047,13 @@ export type Mutation = {
   /** Submite additional payment details */
   submitAdditionalPaymentDetails: AdditionalPaymentsDetailsResponse
   submitAdyenRedirection: SubmitAdyenRedirectionResponse
-  /** Will be called from the client when 1) redeem manually a code, 2) click the link  --Fails if the code is invalid?-- */
+  /**
+   * Will be called from the client when 1) redeem manually a code, 2) click the link  --Fails if the code is invalid?--
+   * @deprecated Use redeemCodeOnV2
+   */
   redeemCode: RedemedCodeResult
   redeemCodeV2: RedeemedCodeV2Result
+  /** @deprecated Use removeDiscountCodeV2 */
   removeDiscountCode: RedemedCodeResult
   removeAllDiscountCodes: RemoveCampaignCodeResult
   externalInsuranceProvider?: Maybe<ExternalInsuranceProviderMutation>
@@ -6488,9 +6512,12 @@ export type Query = {
   angelStory?: Maybe<AngelStory>
   gateway__?: Maybe<Scalars['Boolean']>
   bankAccount?: Maybe<BankAccount>
+  /** @deprecated Use `nextChargeDate` */
   chargeDate: Scalars['LocalDate']
   nextChargeDate?: Maybe<Scalars['LocalDate']>
+  /** @deprecated Use `directDebitStatus` */
   registerAccountProcessingStatus: RegisterAccountProcessingStatus
+  /** @deprecated Use `payinMethodStatus` */
   directDebitStatus: DirectDebitStatus
   /** Returns the status for the payin method (Trustly's direct debit for Sweden) (Adyen for Norway) */
   payinMethodStatus: PayinMethodStatus
@@ -7009,6 +7036,7 @@ export type TitleAndBulletPoints = {
   icon: Icon
   title: Scalars['String']
   buttonTitle: Scalars['String']
+  /** @deprecated not used */
   claimFirstMessage: Scalars['String']
   bulletPoints: Array<BulletPoints>
 }
@@ -7710,6 +7738,11 @@ export type UserFeatureWhereUniqueInput = {
   id?: Maybe<Scalars['ID']>
 }
 
+export type VisibleNoDiscount = {
+  __typename?: 'VisibleNoDiscount'
+  _?: Maybe<Scalars['Boolean']>
+}
+
 /** A page in the `Welcome`-screen in the app */
 export type Welcome = {
   __typename?: 'Welcome'
@@ -7721,7 +7754,9 @@ export type Welcome = {
   paragraph: Scalars['String']
 }
 
-export type AvailablePaymentMethodsQueryVariables = {}
+export type AvailablePaymentMethodsQueryVariables = Exact<{
+  [key: string]: never
+}>
 
 export type AvailablePaymentMethodsQuery = { __typename?: 'Query' } & {
   availablePaymentMethods: {
@@ -7729,7 +7764,7 @@ export type AvailablePaymentMethodsQuery = { __typename?: 'Query' } & {
   } & Pick<AvailablePaymentMethodsResponse, 'paymentMethodsResponse'>
 }
 
-export type ContractsQueryVariables = {}
+export type ContractsQueryVariables = Exact<{ [key: string]: never }>
 
 export type ContractsQuery = { __typename?: 'Query' } & {
   contracts: Array<
@@ -7737,9 +7772,9 @@ export type ContractsQuery = { __typename?: 'Query' } & {
   >
 }
 
-export type EditQuoteMutationVariables = {
+export type EditQuoteMutationVariables = Exact<{
   input: EditQuoteInput
-}
+}>
 
 export type EditQuoteMutation = { __typename?: 'Mutation' } & {
   editQuote:
@@ -7754,9 +7789,9 @@ export type EditQuoteMutation = { __typename?: 'Mutation' } & {
       })
 }
 
-export type ExchangeTokenMutationVariables = {
+export type ExchangeTokenMutationVariables = Exact<{
   exchangeToken: Scalars['String']
-}
+}>
 
 export type ExchangeTokenMutation = { __typename?: 'Mutation' } & {
   exchangeToken:
@@ -7774,19 +7809,19 @@ export type ExchangeTokenMutation = { __typename?: 'Mutation' } & {
       >)
 }
 
-export type ExternalInsuranceDataQueryVariables = {
+export type ExternalInsuranceDataQueryVariables = Exact<{
   reference: Scalars['ID']
-}
+}>
 
 export type ExternalInsuranceDataQuery = { __typename?: 'Query' } & {
-  externalInsuranceProvider: Maybe<
+  externalInsuranceProvider?: Maybe<
     { __typename?: 'ExternalInsuranceProvider' } & {
       dataCollection: Array<
         { __typename?: 'InsuranceDataCollection' } & Pick<
           InsuranceDataCollection,
           'renewalDate' | 'insuranceProvider'
         > & {
-            monthlyPremium: Maybe<
+            monthlyPremium?: Maybe<
               { __typename?: 'MonetaryAmountV2' } & Pick<
                 MonetaryAmountV2,
                 'currency' | 'amount'
@@ -7798,14 +7833,14 @@ export type ExternalInsuranceDataQuery = { __typename?: 'Query' } & {
   >
 }
 
-export type ExternalInsuranceDataStatusSubscriptionVariables = {
+export type ExternalInsuranceDataStatusSubscriptionVariables = Exact<{
   reference: Scalars['ID']
-}
+}>
 
 export type ExternalInsuranceDataStatusSubscription = {
   __typename?: 'Subscription'
 } & {
-  dataCollectionStatus: Maybe<
+  dataCollectionStatus?: Maybe<
     { __typename?: 'DataCollectingStatusResponse' } & Pick<
       DataCollectingStatusResponse,
       'status'
@@ -7813,15 +7848,15 @@ export type ExternalInsuranceDataStatusSubscription = {
   >
 }
 
-export type FaqsQueryVariables = {
+export type FaqsQueryVariables = Exact<{
   language: Scalars['String']
-}
+}>
 
 export type FaqsQuery = { __typename?: 'Query' } & {
   languages: Array<
     Maybe<
       { __typename?: 'Language' } & {
-        faqs: Maybe<
+        faqs?: Maybe<
           Array<{ __typename?: 'Faq' } & Pick<Faq, 'id' | 'headline' | 'body'>>
         >
       }
@@ -7829,7 +7864,7 @@ export type FaqsQuery = { __typename?: 'Query' } & {
   >
 }
 
-export type MemberQueryVariables = {}
+export type MemberQueryVariables = Exact<{ [key: string]: never }>
 
 export type MemberQuery = { __typename?: 'Query' } & {
   member: { __typename?: 'Member' } & Pick<
@@ -7838,7 +7873,7 @@ export type MemberQuery = { __typename?: 'Query' } & {
   >
 }
 
-export type MemberOfferQueryVariables = {}
+export type MemberOfferQueryVariables = Exact<{ [key: string]: never }>
 
 export type MemberOfferQuery = { __typename?: 'Query' } & {
   lastQuoteOfMember:
@@ -7852,7 +7887,7 @@ export type MemberOfferQuery = { __typename?: 'Query' } & {
         | 'lastName'
         | 'startDate'
       > & {
-          currentInsurer: Maybe<
+          currentInsurer?: Maybe<
             { __typename?: 'CurrentInsurer' } & Pick<
               CurrentInsurer,
               'id' | 'displayName' | 'switchable'
@@ -7955,9 +7990,9 @@ export type MemberOfferQuery = { __typename?: 'Query' } & {
     | ({ __typename?: 'IncompleteQuote' } & Pick<IncompleteQuote, 'id'>)
   redeemedCampaigns: Array<
     { __typename?: 'Campaign' } & Pick<Campaign, 'code'> & {
-        incentive: Maybe<
+        incentive?: Maybe<
           | ({ __typename?: 'MonthlyCostDeduction' } & {
-              amount: Maybe<
+              amount?: Maybe<
                 { __typename?: 'MonetaryAmountV2' } & Pick<
                   MonetaryAmountV2,
                   'amount' | 'currency'
@@ -7966,13 +8001,14 @@ export type MemberOfferQuery = { __typename?: 'Query' } & {
             })
           | ({ __typename?: 'FreeMonths' } & Pick<FreeMonths, 'quantity'>)
           | { __typename?: 'NoDiscount' }
+          | { __typename?: 'VisibleNoDiscount' }
           | ({ __typename?: 'PercentageDiscountMonths' } & Pick<
               PercentageDiscountMonths,
               'percentageDiscount'
             > & { quantityMonths: PercentageDiscountMonths['quantity'] })
           | { __typename?: 'IndefinitePercentageDiscount' }
         >
-        owner: Maybe<
+        owner?: Maybe<
           { __typename?: 'CampaignOwner' } & Pick<CampaignOwner, 'displayName'>
         >
       }
@@ -7983,10 +8019,10 @@ export type MemberOfferQuery = { __typename?: 'Query' } & {
   >
 }
 
-export type QuoteQueryVariables = {
+export type QuoteQueryVariables = Exact<{
   id: Scalars['ID']
   perilsLocale: Locale
-}
+}>
 
 export type QuoteQuery = { __typename?: 'Query' } & {
   quote:
@@ -8000,7 +8036,7 @@ export type QuoteQuery = { __typename?: 'Query' } & {
         | 'lastName'
         | 'startDate'
       > & {
-          currentInsurer: Maybe<
+          currentInsurer?: Maybe<
             { __typename?: 'CurrentInsurer' } & Pick<
               CurrentInsurer,
               'id' | 'displayName' | 'switchable'
@@ -8125,10 +8161,10 @@ export type QuoteQuery = { __typename?: 'Query' } & {
     | ({ __typename?: 'IncompleteQuote' } & Pick<IncompleteQuote, 'id'>)
 }
 
-export type QuoteBundleQueryVariables = {
+export type QuoteBundleQueryVariables = Exact<{
   input: QuoteBundleInput
   locale: Locale
-}
+}>
 
 export type QuoteBundleQuery = { __typename?: 'Query' } & {
   quoteBundle: { __typename?: 'QuoteBundle' } & {
@@ -8146,7 +8182,7 @@ export type QuoteBundleQuery = { __typename?: 'Query' } & {
         | 'email'
         | 'typeOfContract'
       > & {
-          currentInsurer: Maybe<
+          currentInsurer?: Maybe<
             { __typename?: 'CurrentInsurer' } & Pick<
               CurrentInsurer,
               'id' | 'displayName' | 'switchable'
@@ -8292,17 +8328,17 @@ export type QuoteBundleQuery = { __typename?: 'Query' } & {
   }
 }
 
-export type RedeemCodeMutationVariables = {
+export type RedeemCodeMutationVariables = Exact<{
   code: Scalars['String']
-}
+}>
 
 export type RedeemCodeMutation = { __typename?: 'Mutation' } & {
   redeemCode: { __typename?: 'RedemedCodeResult' } & {
     campaigns: Array<
       { __typename?: 'Campaign' } & {
-        incentive: Maybe<
+        incentive?: Maybe<
           | ({ __typename?: 'MonthlyCostDeduction' } & {
-              amount: Maybe<
+              amount?: Maybe<
                 { __typename?: 'MonetaryAmountV2' } & Pick<
                   MonetaryAmountV2,
                   'amount' | 'currency'
@@ -8311,10 +8347,11 @@ export type RedeemCodeMutation = { __typename?: 'Mutation' } & {
             })
           | ({ __typename?: 'FreeMonths' } & Pick<FreeMonths, 'quantity'>)
           | { __typename?: 'NoDiscount' }
+          | { __typename?: 'VisibleNoDiscount' }
           | { __typename?: 'PercentageDiscountMonths' }
           | { __typename?: 'IndefinitePercentageDiscount' }
         >
-        owner: Maybe<
+        owner?: Maybe<
           { __typename?: 'CampaignOwner' } & Pick<
             CampaignOwner,
             'id' | 'displayName'
@@ -8335,18 +8372,18 @@ export type RedeemCodeMutation = { __typename?: 'Mutation' } & {
   }
 }
 
-export type RedeemCodeV2MutationVariables = {
+export type RedeemCodeV2MutationVariables = Exact<{
   code: Scalars['String']
-}
+}>
 
 export type RedeemCodeV2Mutation = { __typename?: 'Mutation' } & {
   redeemCodeV2:
     | ({ __typename?: 'SuccessfulRedeemResult' } & {
         campaigns: Array<
           { __typename?: 'Campaign' } & {
-            incentive: Maybe<
+            incentive?: Maybe<
               | ({ __typename?: 'MonthlyCostDeduction' } & {
-                  amount: Maybe<
+                  amount?: Maybe<
                     { __typename?: 'MonetaryAmountV2' } & Pick<
                       MonetaryAmountV2,
                       'amount' | 'currency'
@@ -8355,10 +8392,11 @@ export type RedeemCodeV2Mutation = { __typename?: 'Mutation' } & {
                 })
               | { __typename?: 'FreeMonths' }
               | { __typename?: 'NoDiscount' }
+              | { __typename?: 'VisibleNoDiscount' }
               | { __typename?: 'PercentageDiscountMonths' }
               | { __typename?: 'IndefinitePercentageDiscount' }
             >
-            owner: Maybe<
+            owner?: Maybe<
               { __typename?: 'CampaignOwner' } & Pick<
                 CampaignOwner,
                 'id' | 'displayName'
@@ -8376,14 +8414,14 @@ export type RedeemCodeV2Mutation = { __typename?: 'Mutation' } & {
     | { __typename?: 'CannotRedeemCampaignFromDifferentMarket' }
 }
 
-export type RedeemedCampaignsQueryVariables = {}
+export type RedeemedCampaignsQueryVariables = Exact<{ [key: string]: never }>
 
 export type RedeemedCampaignsQuery = { __typename?: 'Query' } & {
   redeemedCampaigns: Array<
     { __typename?: 'Campaign' } & Pick<Campaign, 'code'> & {
-        incentive: Maybe<
+        incentive?: Maybe<
           | ({ __typename?: 'MonthlyCostDeduction' } & {
-              amount: Maybe<
+              amount?: Maybe<
                 { __typename?: 'MonetaryAmountV2' } & Pick<
                   MonetaryAmountV2,
                   'amount' | 'currency'
@@ -8392,24 +8430,25 @@ export type RedeemedCampaignsQuery = { __typename?: 'Query' } & {
             })
           | ({ __typename?: 'FreeMonths' } & Pick<FreeMonths, 'quantity'>)
           | { __typename: 'NoDiscount' }
+          | { __typename?: 'VisibleNoDiscount' }
           | ({ __typename?: 'PercentageDiscountMonths' } & Pick<
               PercentageDiscountMonths,
               'percentageDiscount'
             > & { quantityMonths: PercentageDiscountMonths['quantity'] })
           | { __typename?: 'IndefinitePercentageDiscount' }
         >
-        owner: Maybe<
+        owner?: Maybe<
           { __typename?: 'CampaignOwner' } & Pick<CampaignOwner, 'displayName'>
         >
       }
   >
 }
 
-export type ReferrerNameQueryVariables = {}
+export type ReferrerNameQueryVariables = Exact<{ [key: string]: never }>
 
 export type ReferrerNameQuery = { __typename?: 'Query' } & {
   referralInformation: { __typename?: 'Referrals' } & {
-    referredBy: Maybe<
+    referredBy?: Maybe<
       | ({ __typename?: 'ActiveReferral' } & Pick<ActiveReferral, 'name'> & {
             discount: { __typename?: 'MonetaryAmountV2' } & Pick<
               MonetaryAmountV2,
@@ -8426,15 +8465,17 @@ export type ReferrerNameQuery = { __typename?: 'Query' } & {
   }
 }
 
-export type RemoveDiscountCodeMutationVariables = {}
+export type RemoveDiscountCodeMutationVariables = Exact<{
+  [key: string]: never
+}>
 
 export type RemoveDiscountCodeMutation = { __typename?: 'Mutation' } & {
   removeDiscountCode: { __typename: 'RedemedCodeResult' }
 }
 
-export type RemoveStartDateMutationVariables = {
+export type RemoveStartDateMutationVariables = Exact<{
   quoteId: Scalars['ID']
-}
+}>
 
 export type RemoveStartDateMutation = { __typename?: 'Mutation' } & {
   removeStartDate:
@@ -8442,11 +8483,11 @@ export type RemoveStartDateMutation = { __typename?: 'Mutation' } & {
     | { __typename?: 'UnderwritingLimitsHit' }
 }
 
-export type SignQuotesMutationVariables = {
+export type SignQuotesMutationVariables = Exact<{
   quoteIds: Array<Scalars['ID']>
   successUrl?: Maybe<Scalars['String']>
   failUrl?: Maybe<Scalars['String']>
-}
+}>
 
 export type SignQuotesMutation = { __typename?: 'Mutation' } & {
   signQuotes:
@@ -8464,12 +8505,12 @@ export type SignQuotesMutation = { __typename?: 'Mutation' } & {
       >)
 }
 
-export type SignStatusQueryVariables = {}
+export type SignStatusQueryVariables = Exact<{ [key: string]: never }>
 
 export type SignStatusQuery = { __typename?: 'Query' } & {
-  signStatus: Maybe<
+  signStatus?: Maybe<
     { __typename?: 'SignStatus' } & Pick<SignStatus, 'signState'> & {
-        collectStatus: Maybe<
+        collectStatus?: Maybe<
           { __typename?: 'CollectStatus' } & Pick<
             CollectStatus,
             'status' | 'code'
@@ -8479,14 +8520,16 @@ export type SignStatusQuery = { __typename?: 'Query' } & {
   >
 }
 
-export type SignStatusListenerSubscriptionVariables = {}
+export type SignStatusListenerSubscriptionVariables = Exact<{
+  [key: string]: never
+}>
 
 export type SignStatusListenerSubscription = { __typename?: 'Subscription' } & {
-  signStatus: Maybe<
+  signStatus?: Maybe<
     { __typename?: 'SignEvent' } & {
-      status: Maybe<
+      status?: Maybe<
         { __typename?: 'SignStatus' } & Pick<SignStatus, 'signState'> & {
-            collectStatus: Maybe<
+            collectStatus?: Maybe<
               { __typename?: 'CollectStatus' } & Pick<
                 CollectStatus,
                 'status' | 'code'
@@ -8498,10 +8541,10 @@ export type SignStatusListenerSubscription = { __typename?: 'Subscription' } & {
   >
 }
 
-export type StartDateMutationVariables = {
+export type StartDateMutationVariables = Exact<{
   quoteId: Scalars['ID']
   date?: Maybe<Scalars['LocalDate']>
-}
+}>
 
 export type StartDateMutation = { __typename?: 'Mutation' } & {
   editQuote:
@@ -8509,9 +8552,9 @@ export type StartDateMutation = { __typename?: 'Mutation' } & {
     | { __typename?: 'UnderwritingLimitsHit' }
 }
 
-export type SubmitAdditionalPaymentDetialsMutationVariables = {
+export type SubmitAdditionalPaymentDetialsMutationVariables = Exact<{
   request: AdditionalPaymentsDetailsRequest
-}
+}>
 
 export type SubmitAdditionalPaymentDetialsMutation = {
   __typename?: 'Mutation'
@@ -8527,12 +8570,12 @@ export type SubmitAdditionalPaymentDetialsMutation = {
       >)
 }
 
-export type TokenizePaymentDetailsMutationVariables = {
+export type TokenizePaymentDetailsMutationVariables = Exact<{
   paymentsRequest: TokenizationRequest
-}
+}>
 
 export type TokenizePaymentDetailsMutation = { __typename?: 'Mutation' } & {
-  tokenizePaymentDetails: Maybe<
+  tokenizePaymentDetails?: Maybe<
     | ({ __typename?: 'TokenizationResponseFinished' } & Pick<
         TokenizationResponseFinished,
         'resultCode'
@@ -8544,9 +8587,9 @@ export type TokenizePaymentDetailsMutation = { __typename?: 'Mutation' } & {
   >
 }
 
-export type UpdatePickedLocaleMutationVariables = {
+export type UpdatePickedLocaleMutationVariables = Exact<{
   pickedLocale: Locale
-}
+}>
 
 export type UpdatePickedLocaleMutation = { __typename?: 'Mutation' } & {
   updatePickedLocale: { __typename?: 'Member' } & Pick<Member, 'id'>
