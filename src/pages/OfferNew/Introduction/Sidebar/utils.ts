@@ -19,6 +19,10 @@ export const isMonthlyCostDeduction = (
 export const isNoDiscount = (incentive?: Incentive): incentive is NoDiscount =>
   incentive?.__typename === 'NoDiscount'
 
+export const isVisibleNoDiscount = (
+  incentive?: Incentive,
+): incentive is NoDiscount => incentive?.__typename === 'VisibleNoDiscount'
+
 export const isPercentageDiscountMonths = (
   incentive?: Incentive,
 ): incentive is PercentageDiscountMonths =>
@@ -30,6 +34,12 @@ export const getDiscountText = (textKeys: Record<string, any>) => (
   const incentive = redeemedCampaigns[0]?.incentive
   if (!incentive || isNoDiscount(incentive)) {
     return null
+  }
+
+  if (isVisibleNoDiscount(incentive)) {
+    return textKeys.WEB_VISIBLE_NO_DISCOUNT_ADDED_PERK({
+      CAMPAIGN_NAME: redeemedCampaigns[0]?.owner?.displayName,
+    })
   }
 
   if (isFreeMonths(incentive)) {

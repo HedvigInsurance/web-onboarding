@@ -3928,6 +3928,7 @@ export type Incentive =
   | MonthlyCostDeduction
   | FreeMonths
   | NoDiscount
+  | VisibleNoDiscount
   | PercentageDiscountMonths
   | IndefinitePercentageDiscount
 
@@ -7710,6 +7711,11 @@ export type UserFeatureWhereUniqueInput = {
   id?: Maybe<Scalars['ID']>
 }
 
+export type VisibleNoDiscount = {
+  __typename?: 'VisibleNoDiscount'
+  _?: Maybe<Scalars['Boolean']>
+}
+
 /** A page in the `Welcome`-screen in the app */
 export type Welcome = {
   __typename?: 'Welcome'
@@ -7966,6 +7972,7 @@ export type MemberOfferQuery = { __typename?: 'Query' } & {
             })
           | ({ __typename?: 'FreeMonths' } & Pick<FreeMonths, 'quantity'>)
           | { __typename?: 'NoDiscount' }
+          | { __typename?: 'VisibleNoDiscount' }
           | ({ __typename?: 'PercentageDiscountMonths' } & Pick<
               PercentageDiscountMonths,
               'percentageDiscount'
@@ -8311,6 +8318,7 @@ export type RedeemCodeMutation = { __typename?: 'Mutation' } & {
             })
           | ({ __typename?: 'FreeMonths' } & Pick<FreeMonths, 'quantity'>)
           | { __typename?: 'NoDiscount' }
+          | { __typename?: 'VisibleNoDiscount' }
           | { __typename?: 'PercentageDiscountMonths' }
           | { __typename?: 'IndefinitePercentageDiscount' }
         >
@@ -8355,6 +8363,7 @@ export type RedeemCodeV2Mutation = { __typename?: 'Mutation' } & {
                 })
               | { __typename?: 'FreeMonths' }
               | { __typename?: 'NoDiscount' }
+              | { __typename?: 'VisibleNoDiscount' }
               | { __typename?: 'PercentageDiscountMonths' }
               | { __typename?: 'IndefinitePercentageDiscount' }
             >
@@ -8392,6 +8401,7 @@ export type RedeemedCampaignsQuery = { __typename?: 'Query' } & {
             })
           | ({ __typename?: 'FreeMonths' } & Pick<FreeMonths, 'quantity'>)
           | { __typename: 'NoDiscount' }
+          | { __typename?: 'VisibleNoDiscount' }
           | ({ __typename?: 'PercentageDiscountMonths' } & Pick<
               PercentageDiscountMonths,
               'percentageDiscount'
