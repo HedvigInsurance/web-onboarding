@@ -133,7 +133,7 @@ const Card: React.FC<{ to: string; banner?: boolean }> = ({
     </CardLink>
   ) : (
     <CardComponent banner={banner}>
-      {children}{' '}
+      {children}
       <ChevronWrapper>
         <ForwardArrow />
       </ChevronWrapper>
