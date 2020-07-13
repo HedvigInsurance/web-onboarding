@@ -2256,10 +2256,10 @@
     webpack "4.19.1"
     webpack-dev-server "3.1.14"
 
-"@hedviginsurance/embark@^2.0.3":
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-2.0.3.tgz#3d5caee94923e92998faa13a7418a62af95a18c2"
-  integrity sha512-h7oEDnM08Con+WCNGDyt1QXd9xu21xX3o+F9nJQgOIe2dF6FXEqUwvQzuD2jRSWgafw6FG1AhVc5ao3Ikyvy6g==
+"@hedviginsurance/embark@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-2.0.4.tgz#275149b5e2e900965f29599044e6e091d093294d"
+  integrity sha512-4c8RWipkcZIZo9Ypxs4xOJituTHTbqrbRTaw/UmHM8XJUZ9HkuyikHkSrKJ9GTz6YmYSu95QjPegqu6v1xUvpA==
   dependencies:
     "@emotion/babel-plugin" "^11.0.0-next.12"
     "@emotion/core" "^10.0.21"
