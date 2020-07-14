@@ -2,11 +2,14 @@ import { css, Global } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { LinkButton } from 'components/buttons'
+import { ForwardArrow } from 'components/icons/ForwardArrow'
 import { TopBar, TopBarFiller } from 'components/TopBar'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import * as React from 'react'
 import Helmet from 'react-helmet-async'
+import { useMediaQuery } from 'react-responsive'
+import { Link } from 'react-router-dom'
 import { TextKeyMap, useTextKeys } from 'utils/hooks/useTextKeys'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { LanguagePicker } from './LanguagePicker'
@@ -46,7 +49,7 @@ const Container = styled.div`
   }
 `
 
-const Card = styled.div<{ banner?: boolean }>`
+const CardComponent = styled.div<{ banner?: boolean }>`
   position: relative;
   width: 100%;
   background: ${colorsV3.white};
@@ -61,6 +64,7 @@ const Card = styled.div<{ banner?: boolean }>`
   align-items: flex-start;
   justify-content: space-between;
   transition: all 0.35s;
+  text-decoration: none;
 
   :hover {
     transform: translateY(-6px);
@@ -80,15 +84,62 @@ const Card = styled.div<{ banner?: boolean }>`
 
   @media (max-width: 850px) {
     margin: 0 0 1rem 0;
+    padding-right: 4rem;
   }
 
   @media (max-width: 600px) {
-    padding: 2rem 1.5rem 1.5rem 1.5rem;
+    padding: 2rem 4rem 1.5rem 1.5rem;
     padding-top: ${(props) => (props.banner ? '4rem' : '2rem')};
     align-items: center;
     box-shadow: 0 8px 13px rgba(0, 0, 0, 0.18);
   }
 `
+
+const CardLink = CardComponent.withComponent(Link)
+
+const ChevronWrapper = styled.span<{ pushDown?: boolean }>`
+  display: none;
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  height: 1rem;
+  ${({ pushDown }) =>
+    pushDown
+      ? css`
+          transform: translateY(calc(-50% + 1rem));
+        `
+      : css`
+          transform: translateY(-50%);
+        `};
+
+  @media (max-width: 850px) {
+    display: block;
+  }
+`
+
+const Card: React.FC<{ to: string; banner?: boolean }> = ({
+  banner,
+  to,
+  children,
+}) => {
+  const isMobile = useMediaQuery({ query: '(max-width: 850px)' })
+
+  return isMobile ? (
+    <CardLink to={to} banner={banner}>
+      {children}
+      <ChevronWrapper pushDown={banner}>
+        <ForwardArrow />
+      </ChevronWrapper>
+    </CardLink>
+  ) : (
+    <CardComponent banner={banner}>
+      {children}
+      <ChevronWrapper>
+        <ForwardArrow />
+      </ChevronWrapper>
+    </CardComponent>
+  )
+}
 
 const CardBanner = styled.div`
   position: absolute;
@@ -115,13 +166,11 @@ const Headline = styled.h1`
   @media (max-width: 600px) {
     font-size: 2.25rem;
     line-height: 2.5rem;
-    text-align: center;
   }
 
   @media (max-width: 400px) {
     font-size: 1.75rem;
     line-height: 2rem;
-    text-align: center;
   }
 `
 
@@ -133,28 +182,26 @@ const Paragraph = styled.p`
   min-height: 3.75rem;
   width: 100%;
 
+  @media (max-width: 850px) {
+    min-height: 0;
+  }
+
   @media (max-width: 600px) {
     font-size: 1.25rem;
     line-height: 1.75rem;
-    text-align: center;
   }
 
   @media (max-width: 500px) {
     font-size: 1.125rem;
     line-height: 1.5rem;
-    text-align: center;
   }
 `
 
-const ProceedButton = styled(LinkButton)`
+const DesktopProceedButton = styled(LinkButton)`
   margin-top: 5rem;
 
-  @media (max-width: 600px) {
-    margin-top: 2.5rem;
-  }
-
-  @media (max-width: 500px) {
-    margin-top: 1.75rem;
+  @media (max-width: 850px) {
+    display: none;
   }
 `
 
@@ -212,23 +259,27 @@ const LandingPageCardsSe: React.FC<{
 }> = ({ textKeys, language }) => {
   return (
     <>
-      <Card>
+      <Card to={`/${language}/new-member/new`}>
         <Headline>{textKeys.STARTPAGE_UNINSURED_HEADLINE()}</Headline>
         <Paragraph>{textKeys.STARTPAGE_UNINSURED_BODY()}</Paragraph>
-        <ProceedButton size="lg" fullWidth to={`/${language}/new-member/new`}>
+        <DesktopProceedButton
+          size="lg"
+          fullWidth
+          to={`/${language}/new-member/new`}
+        >
           {textKeys.STARTPAGE_UNINSURED_BUTTON()}
-        </ProceedButton>
+        </DesktopProceedButton>
       </Card>
-      <Card>
+      <Card to={`/${language}/new-member/switch`}>
         <Headline>{textKeys.STARTPAGE_INSURED_HEADLINE()}</Headline>
         <Paragraph>{textKeys.STARTPAGE_INSURED_BODY()}</Paragraph>
-        <ProceedButton
+        <DesktopProceedButton
           size="lg"
           fullWidth
           to={`/${language}/new-member/switch`}
         >
           {textKeys.STARTPAGE_INSURED_BUTTON()}
-        </ProceedButton>
+        </DesktopProceedButton>
       </Card>
     </>
   )
@@ -240,35 +291,39 @@ const LandingPageCardsNo: React.FC<{
 }> = ({ textKeys, language }) => {
   return (
     <>
-      <Card banner={true}>
+      <Card banner to={`/${language}/new-member/combo`}>
         <CardBanner>{textKeys.STARTPAGE_COMBO_DISCOUNT_TEXT()}</CardBanner>
         <Headline>{textKeys.STARTPAGE_COMBO_HEADLINE()}</Headline>
         <Paragraph>{textKeys.STARTPAGE_COMBO_BODY()}</Paragraph>
-        <ProceedButton size="lg" fullWidth to={`/${language}/new-member/combo`}>
+        <DesktopProceedButton
+          size="lg"
+          fullWidth
+          to={`/${language}/new-member/combo`}
+        >
           {textKeys.STARTPAGE_COMBO_BUTTON()}
-        </ProceedButton>
+        </DesktopProceedButton>
       </Card>
-      <Card>
+      <Card to={`/${language}/new-member/contents`}>
         <Headline>{textKeys.STARTPAGE_CONTENTS_HEADLINE()}</Headline>
         <Paragraph>{textKeys.STARTPAGE_CONTENTS_BODY()}</Paragraph>
-        <ProceedButton
+        <DesktopProceedButton
           size="lg"
           fullWidth
           to={`/${language}/new-member/contents`}
         >
           {textKeys.STARTPAGE_CONTENTS_BUTTON()}
-        </ProceedButton>
+        </DesktopProceedButton>
       </Card>
-      <Card>
+      <Card to={`/${language}/new-member/travel`}>
         <Headline>{textKeys.STARTPAGE_TRAVEL_HEADLINE()}</Headline>
         <Paragraph>{textKeys.STARTPAGE_TRAVEL_BODY()}</Paragraph>
-        <ProceedButton
+        <DesktopProceedButton
           size="lg"
           fullWidth
           to={`/${language}/new-member/travel`}
         >
           {textKeys.STARTPAGE_TRAVEL_BUTTON()}
-        </ProceedButton>
+        </DesktopProceedButton>
       </Card>
     </>
   )
