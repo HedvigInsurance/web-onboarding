@@ -3,7 +3,7 @@ import { colorsV3, fonts } from '@hedviginsurance/brand'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { AdyenCheckout } from 'pages/ConnectPayment/components/AdyenCheckout'
 import { TrustlyCheckout } from 'pages/ConnectPayment/components/TrustlyCheckout'
-import * as React from 'react'
+import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { ErrorModal } from '../components/ErrorModal'
 

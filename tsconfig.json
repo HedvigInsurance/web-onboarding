@@ -8,11 +8,10 @@
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
-
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
-    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
 
     "moduleResolution": "node",
     "baseUrl": ".",

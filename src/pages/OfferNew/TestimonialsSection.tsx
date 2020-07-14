@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
-import * as React from 'react'
+import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import {
   Column,

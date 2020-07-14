@@ -9,7 +9,7 @@ import {
   isNorwegianHomeContents,
   isNorwegianTravel,
 } from 'pages/OfferNew/utils'
-import * as React from 'react'
+import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { gqlDateFormat } from './utils'
 

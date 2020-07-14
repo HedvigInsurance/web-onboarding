@@ -1,5 +1,5 @@
 import { mount } from 'enzyme'
-import * as React from 'react'
+import React from 'react'
 import { StaticRouter } from 'react-router'
 import { useVariation } from 'utils/hooks/useVariation'
 

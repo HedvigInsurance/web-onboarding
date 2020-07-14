@@ -3,7 +3,7 @@ import { colorsV2 } from '@hedviginsurance/brand'
 import { LanguageIcon } from 'components/icons/LanguageIcon'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { motion } from 'framer-motion'
-import * as React from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 
 const Wrapper = styled.div`

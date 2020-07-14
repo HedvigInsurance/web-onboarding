@@ -1,7 +1,7 @@
 import { css, Global } from '@emotion/core'
 import { colors } from '@hedviginsurance/brand'
-import * as React from 'react'
-import * as ReactModal from 'react-modal'
+import React from 'react'
+import ReactModal from 'react-modal'
 
 const cssTransitions = `
 .ReactModal__Overlay {

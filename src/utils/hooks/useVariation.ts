@@ -1,6 +1,6 @@
 import { match } from 'matchly'
-import * as queryString from 'querystring'
-import * as React from 'react'
+import queryString from 'querystring'
+import React from 'react'
 import { useHistory } from 'react-router'
 
 export enum Variation {

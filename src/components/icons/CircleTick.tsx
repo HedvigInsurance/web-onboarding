@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 
 export const CircleTick: React.FC<{ color?: string }> = ({
   color = '#fff',

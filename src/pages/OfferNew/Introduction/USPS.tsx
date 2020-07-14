@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { CircleTick } from 'components/icons/CircleTick'
-import * as React from 'react'
+import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { Column } from '../components'
 

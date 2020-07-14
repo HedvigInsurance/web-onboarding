@@ -163,11 +163,17 @@ export const isFreeMonths = (campaigns: Campaign[]) =>
     campaigns[0].incentive.__typename === 'FreeMonths') ||
   false
 
-export const isMonthlyCostDeduction = (campaigns: Campaign[]) =>
-  (campaigns.length > 0 &&
-    (campaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction' ||
-      campaigns[0]?.incentive?.__typename === 'PercentageDiscountMonths')) ||
-  false
+export const isMonthlyCostDeduction = (
+  campaigns: ReadonlyArray<Campaign | unknown>,
+) => {
+  const firstCampaign = campaigns[0] as Campaign
+  return (
+    (campaigns.length > 0 &&
+      (firstCampaign?.incentive?.__typename === 'MonthlyCostDeduction' ||
+        firstCampaign?.incentive?.__typename === 'PercentageDiscountMonths')) ||
+    false
+  )
+}
 
 export const isNoDiscount = (campaigns: Campaign[]) =>
   (campaigns.length > 0 &&

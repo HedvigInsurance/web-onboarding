@@ -8,7 +8,7 @@ import { useRedeemCodeMutation } from 'data/graphql'
 import { Form, Formik } from 'formik'
 import { motion } from 'framer-motion'
 import hexToRgba from 'hex-to-rgba'
-import * as React from 'react'
+import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import * as Yup from 'yup'
 

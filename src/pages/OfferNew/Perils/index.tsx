@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { PerilRow } from 'pages/OfferNew/Perils/PerilRow'
 import { OfferData } from 'pages/OfferNew/types'
-import * as React from 'react'
+import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import {
   Body,

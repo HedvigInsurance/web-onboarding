@@ -9,7 +9,7 @@ import {
   maskAndFormatRawSsn,
   quoteDetailsHasAddress,
 } from 'pages/OfferNew/utils'
-import * as React from 'react'
+import React from 'react'
 import { TextKeyMap, useTextKeys } from 'utils/hooks/useTextKeys'
 import { formatPostalNumber } from 'utils/postalNumbers'
 

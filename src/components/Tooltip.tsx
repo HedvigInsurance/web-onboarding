@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { Questionmark } from 'components/icons/Questionmark'
 import { motion } from 'framer-motion'
-import * as React from 'react'
+import React from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { Size } from './types'
 

@@ -4,35 +4,41 @@ import {
   MonthlyCostDeduction,
   NoDiscount,
   PercentageDiscountMonths,
+  RedeemedCampaignsQuery,
 } from 'data/graphql'
-import * as React from 'react'
-import { CompleteOfferDataForMember } from '../../types'
+import React from 'react'
 
-export const isFreeMonths = (incentive?: Incentive): incentive is FreeMonths =>
-  incentive?.__typename === 'FreeMonths'
+type QueriedIncentive =
+  | RedeemedCampaignsQuery['redeemedCampaigns'][0]['incentive']
+  | Incentive
+
+export const isFreeMonths = (
+  incentive?: QueriedIncentive,
+): incentive is FreeMonths => incentive?.__typename === 'FreeMonths'
 
 export const isVisibleNoDiscount = (
-  incentive?: Incentive,
+  incentive?: QueriedIncentive,
 ): incentive is NoDiscount => incentive?.__typename === 'VisibleNoDiscount'
 
 export const isMonthlyCostDeduction = (
-  incentive?: Incentive,
+  incentive?: QueriedIncentive,
 ): incentive is MonthlyCostDeduction =>
   incentive?.__typename === 'MonthlyCostDeduction'
 
-export const isNoDiscount = (incentive?: Incentive): incentive is NoDiscount =>
-  incentive?.__typename === 'NoDiscount'
+export const isNoDiscount = (
+  incentive?: QueriedIncentive,
+): incentive is NoDiscount => incentive?.__typename === 'NoDiscount'
 
 export const isPercentageDiscountMonths = (
-  incentive?: Incentive,
+  incentive?: QueriedIncentive,
 ): incentive is PercentageDiscountMonths =>
   incentive?.__typename === 'PercentageDiscountMonths'
 
 export const getDiscountText = (textKeys: Record<string, any>) => (
-  redeemedCampaigns: CompleteOfferDataForMember['redeemedCampaigns'],
+  redeemedCampaigns: RedeemedCampaignsQuery['redeemedCampaigns'],
 ): React.ReactNode => {
   const incentive = redeemedCampaigns[0]?.incentive
-  if (!incentive || isNoDiscount(incentive)) {
+  if (!incentive || isNoDiscount(incentive as any)) {
     return null
   }
 

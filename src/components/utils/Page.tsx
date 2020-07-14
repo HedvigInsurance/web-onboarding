@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Mount } from 'react-lifecycle-components'
 
 export const Page: React.SFC = ({ children }) => {

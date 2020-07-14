@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { SignState, SignStatus as GraphQLSignStatus } from 'data/graphql'
-import * as React from 'react'
+import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 
 const Wrapper = styled('div')`

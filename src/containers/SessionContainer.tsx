@@ -7,7 +7,7 @@ import { Locale, UpdatePickedLocaleDocument } from 'data/graphql'
 import { DocumentNode } from 'graphql'
 import gql from 'graphql-tag'
 import { afterTick } from 'pages/Embark/utils'
-import * as React from 'react'
+import React from 'react'
 import { Mount } from 'react-lifecycle-components'
 import {
   apolloClient as realApolloClient,

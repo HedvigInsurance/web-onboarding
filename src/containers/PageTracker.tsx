@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Mount } from 'react-lifecycle-components'
 import { withRouter } from 'react-router-dom'
 

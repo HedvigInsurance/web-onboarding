@@ -1,6 +1,6 @@
 import { css, Global } from '@emotion/core'
 import { colorsV3, fonts, getCdnFontFaces } from '@hedviginsurance/brand'
-import * as React from 'react'
+import React from 'react'
 
 export const GlobalCss: React.SFC = ({ children }) => (
   <>

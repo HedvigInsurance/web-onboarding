@@ -65,6 +65,72 @@ exports[`renders NO without 💥 1`] = `
           }
         }
       >
+        <div
+          style={
+            Object {
+              "opacity": 0,
+              "pointerEvents": "none",
+              "transform": "translateY(-20px) translateZ(0)",
+              "userSelect": "none",
+            }
+          }
+        >
+          <Dropdown>
+            <div
+              className="css-j710o6-Dropdown en7uhk74"
+            >
+              <StyledLink
+                to="/no/new-member"
+              >
+                <Link
+                  className="css-1c79say-StyledLink en7uhk72"
+                  to="/no/new-member"
+                >
+                  <LinkAnchor
+                    className="css-1c79say-StyledLink en7uhk72"
+                    href="/no/new-member"
+                    navigate={[Function]}
+                  >
+                    <a
+                      className="css-1c79say-StyledLink en7uhk72"
+                      href="/no/new-member"
+                      onClick={[Function]}
+                    >
+                      Norsk
+                    </a>
+                  </LinkAnchor>
+                </Link>
+              </StyledLink>
+              <Divider>
+                <span
+                  className="css-17zukb2-Divider en7uhk73"
+                />
+              </Divider>
+              <StyledLink
+                to="/no-en/new-member"
+              >
+                <Link
+                  className="css-1c79say-StyledLink en7uhk72"
+                  to="/no-en/new-member"
+                >
+                  <LinkAnchor
+                    className="css-1c79say-StyledLink en7uhk72"
+                    href="/no-en/new-member"
+                    navigate={[Function]}
+                  >
+                    <a
+                      className="css-1c79say-StyledLink en7uhk72"
+                      href="/no-en/new-member"
+                      onClick={[Function]}
+                    >
+                      English
+                    </a>
+                  </LinkAnchor>
+                </Link>
+              </StyledLink>
+            </div>
+          </Dropdown>
+        </div>
         <Memo(MountComponent)
           innerRef={
             Object {
@@ -362,72 +428,6 @@ exports[`renders NO without 💥 1`] = `
             }
           }
         />
-        <div
-          style={
-            Object {
-              "opacity": 0,
-              "pointerEvents": "none",
-              "transform": "translateY(-20px) translateZ(0)",
-              "userSelect": "none",
-            }
-          }
-        >
-          <Dropdown>
-            <div
-              className="css-j710o6-Dropdown en7uhk74"
-            >
-              <StyledLink
-                to="/no/new-member"
-              >
-                <Link
-                  className="css-1c79say-StyledLink en7uhk72"
-                  to="/no/new-member"
-                >
-                  <LinkAnchor
-                    className="css-1c79say-StyledLink en7uhk72"
-                    href="/no/new-member"
-                    navigate={[Function]}
-                  >
-                    <a
-                      className="css-1c79say-StyledLink en7uhk72"
-                      href="/no/new-member"
-                      onClick={[Function]}
-                    >
-                      Norsk
-                    </a>
-                  </LinkAnchor>
-                </Link>
-              </StyledLink>
-              <Divider>
-                <span
-                  className="css-17zukb2-Divider en7uhk73"
-                />
-              </Divider>
-              <StyledLink
-                to="/no-en/new-member"
-              >
-                <Link
-                  className="css-1c79say-StyledLink en7uhk72"
-                  to="/no-en/new-member"
-                >
-                  <LinkAnchor
-                    className="css-1c79say-StyledLink en7uhk72"
-                    href="/no-en/new-member"
-                    navigate={[Function]}
-                  >
-                    <a
-                      className="css-1c79say-StyledLink en7uhk72"
-                      href="/no-en/new-member"
-                      onClick={[Function]}
-                    >
-                      English
-                    </a>
-                  </LinkAnchor>
-                </Link>
-              </StyledLink>
-            </div>
-          </Dropdown>
-        </div>
       </ForwardRef(MotionComponent)>
     </div>
   </Wrapper>
@@ -499,6 +499,72 @@ exports[`renders SE without 💥 1`] = `
           }
         }
       >
+        <div
+          style={
+            Object {
+              "opacity": 0,
+              "pointerEvents": "none",
+              "transform": "translateY(-20px) translateZ(0)",
+              "userSelect": "none",
+            }
+          }
+        >
+          <Dropdown>
+            <div
+              className="css-j710o6-Dropdown en7uhk74"
+            >
+              <StyledLink
+                to="/se/new-member"
+              >
+                <Link
+                  className="css-1c79say-StyledLink en7uhk72"
+                  to="/se/new-member"
+                >
+                  <LinkAnchor
+                    className="css-1c79say-StyledLink en7uhk72"
+                    href="/se/new-member"
+                    navigate={[Function]}
+                  >
+                    <a
+                      className="css-1c79say-StyledLink en7uhk72"
+                      href="/se/new-member"
+                      onClick={[Function]}
+                    >
+                      Svenska
+                    </a>
+                  </LinkAnchor>
+                </Link>
+              </StyledLink>
+              <Divider>
+                <span
+                  className="css-17zukb2-Divider en7uhk73"
+                />
+              </Divider>
+              <StyledLink
+                to="/se-en/new-member"
+              >
+                <Link
+                  className="css-1c79say-StyledLink en7uhk72"
+                  to="/se-en/new-member"
+                >
+                  <LinkAnchor
+                    className="css-1c79say-StyledLink en7uhk72"
+                    href="/se-en/new-member"
+                    navigate={[Function]}
+                  >
+                    <a
+                      className="css-1c79say-StyledLink en7uhk72"
+                      href="/se-en/new-member"
+                      onClick={[Function]}
+                    >
+                      English
+                    </a>
+                  </LinkAnchor>
+                </Link>
+              </StyledLink>
+            </div>
+          </Dropdown>
+        </div>
         <Memo(MountComponent)
           innerRef={
             Object {
@@ -796,72 +862,6 @@ exports[`renders SE without 💥 1`] = `
             }
           }
         />
-        <div
-          style={
-            Object {
-              "opacity": 0,
-              "pointerEvents": "none",
-              "transform": "translateY(-20px) translateZ(0)",
-              "userSelect": "none",
-            }
-          }
-        >
-          <Dropdown>
-            <div
-              className="css-j710o6-Dropdown en7uhk74"
-            >
-              <StyledLink
-                to="/se/new-member"
-              >
-                <Link
-                  className="css-1c79say-StyledLink en7uhk72"
-                  to="/se/new-member"
-                >
-                  <LinkAnchor
-                    className="css-1c79say-StyledLink en7uhk72"
-                    href="/se/new-member"
-                    navigate={[Function]}
-                  >
-                    <a
-                      className="css-1c79say-StyledLink en7uhk72"
-                      href="/se/new-member"
-                      onClick={[Function]}
-                    >
-                      Svenska
-                    </a>
-                  </LinkAnchor>
-                </Link>
-              </StyledLink>
-              <Divider>
-                <span
-                  className="css-17zukb2-Divider en7uhk73"
-                />
-              </Divider>
-              <StyledLink
-                to="/se-en/new-member"
-              >
-                <Link
-                  className="css-1c79say-StyledLink en7uhk72"
-                  to="/se-en/new-member"
-                >
-                  <LinkAnchor
-                    className="css-1c79say-StyledLink en7uhk72"
-                    href="/se-en/new-member"
-                    navigate={[Function]}
-                  >
-                    <a
-                      className="css-1c79say-StyledLink en7uhk72"
-                      href="/se-en/new-member"
-                      onClick={[Function]}
-                    >
-                      English
-                    </a>
-                  </LinkAnchor>
-                </Link>
-              </StyledLink>
-            </div>
-          </Dropdown>
-        </div>
       </ForwardRef(MotionComponent)>
     </div>
   </Wrapper>

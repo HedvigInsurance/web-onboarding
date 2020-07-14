@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { TopBar } from 'components/TopBar'
-import * as React from 'react'
+import React from 'react'
 import Helmet from 'react-helmet-async'
 import { RouteComponentProps } from 'react-router'
 import { LazyLottie } from '../components/animations/LazyLottie'

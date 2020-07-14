@@ -15,7 +15,7 @@ import {
   useTokenizePaymentDetailsMutation,
 } from 'data/graphql'
 import { match } from 'matchly'
-import * as React from 'react'
+import React from 'react'
 import { useHistory } from 'react-router'
 import { SpinnerWrapper } from './Spinner'
 
@@ -230,6 +230,10 @@ const createAdyenCheckout = ({
           },
         })
 
+        if (!result) {
+          return
+        }
+
         if (
           result.data?.submitAdditionalPaymentDetails.__typename ===
           'AdditionalPaymentsDetailsResponseAction'
@@ -266,6 +270,11 @@ const createAdyenCheckout = ({
             },
           },
         })
+
+        if (!result) {
+          return
+        }
+
         if (
           result.data?.tokenizePaymentDetails?.__typename ===
           'TokenizationResponseAction'

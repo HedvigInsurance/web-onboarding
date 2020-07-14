@@ -5,7 +5,7 @@ import {
   useMemberQuery,
   useRedeemedCampaignsQuery,
 } from 'data/graphql'
-import * as md5 from 'md5'
+import md5 from 'md5'
 import { OfferData } from 'pages/OfferNew/types'
 import { isBundle, isYouth } from 'pages/OfferNew/utils'
 import { SegmentAnalyticsJs, setupTrackers } from 'quepasa'

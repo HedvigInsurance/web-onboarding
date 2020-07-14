@@ -1430,6 +1430,21 @@ export type ChatState = {
   onboardingDone: Scalars['Boolean']
 }
 
+export type CodeAlreadyTaken = {
+  __typename?: 'CodeAlreadyTaken'
+  code: Scalars['String']
+}
+
+export type CodeTooLong = {
+  __typename?: 'CodeTooLong'
+  maxCharacters: Scalars['Int']
+}
+
+export type CodeTooShort = {
+  __typename?: 'CodeTooShort'
+  minCharacters: Scalars['Int']
+}
+
 export type CollectStatus = {
   __typename?: 'CollectStatus'
   status?: Maybe<BankIdStatus>
@@ -2645,6 +2660,12 @@ export type Emergency = {
 export enum Environment {
   Production = 'Production',
   Staging = 'Staging',
+}
+
+export type ExceededMaximumUpdates = {
+  __typename?: 'ExceededMaximumUpdates'
+  maximumNumberOfUpdates: Scalars['Int']
+  updatesByMember: Scalars['Int']
 }
 
 export type ExchangeTokenExpiredResponse = {
@@ -6056,6 +6077,7 @@ export type Mutation = {
   /** @deprecated Use removeDiscountCodeV2 */
   removeDiscountCode: RedemedCodeResult
   removeAllDiscountCodes: RemoveCampaignCodeResult
+  updateReferralCampaignCode: UpdateReferralCampaignCodeResult
   externalInsuranceProvider?: Maybe<ExternalInsuranceProviderMutation>
   createQuote: CreateQuoteResult
   editQuote: CreateQuoteResult
@@ -6194,6 +6216,10 @@ export type MutationRedeemCodeV2Args = {
 
 export type MutationRemoveAllDiscountCodesArgs = {
   grossPrice?: Maybe<MonetaryAmountInput>
+}
+
+export type MutationUpdateReferralCampaignCodeArgs = {
+  code: Scalars['String']
 }
 
 export type MutationCreateQuoteArgs = {
@@ -6903,6 +6929,11 @@ export type SuccessfullyRemovedCampaignsResult = {
   insuranceCost?: Maybe<InsuranceCost>
 }
 
+export type SuccessfullyUpdatedCode = {
+  __typename?: 'SuccessfullyUpdatedCode'
+  code: Scalars['String']
+}
+
 export type SuccessfulRedeemResult = {
   __typename?: 'SuccessfulRedeemResult'
   campaigns: Array<Campaign>
@@ -7527,6 +7558,13 @@ export type UpcomingRenewal = {
   renewalDate: Scalars['LocalDate']
   draftCertificateUrl: Scalars['String']
 }
+
+export type UpdateReferralCampaignCodeResult =
+  | SuccessfullyUpdatedCode
+  | CodeAlreadyTaken
+  | CodeTooLong
+  | CodeTooShort
+  | ExceededMaximumUpdates
 
 export type UserFeature = Node & {
   __typename?: 'UserFeature'
@@ -8435,7 +8473,9 @@ export type RedeemedCampaignsQuery = { __typename?: 'Query' } & {
               PercentageDiscountMonths,
               'percentageDiscount'
             > & { quantityMonths: PercentageDiscountMonths['quantity'] })
-          | { __typename?: 'IndefinitePercentageDiscount' }
+          | ({ __typename: 'IndefinitePercentageDiscount' } & {
+              indefinitiePercentageDiscount: IndefinitePercentageDiscount['percentageDiscount']
+            })
         >
         owner?: Maybe<
           { __typename?: 'CampaignOwner' } & Pick<CampaignOwner, 'displayName'>
@@ -9618,6 +9658,10 @@ export const RedeemedCampaignsDocument = gql`
         ... on PercentageDiscountMonths {
           percentageDiscount
           quantityMonths: quantity
+        }
+        ... on IndefinitePercentageDiscount {
+          __typename
+          indefinitiePercentageDiscount: percentageDiscount
         }
         ... on NoDiscount {
           __typename

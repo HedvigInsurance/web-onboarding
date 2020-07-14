@@ -1,14 +1,11 @@
-import { ApolloProvider } from '@apollo/react-common'
-import { getScriptLocation } from '@hedviginsurance/web-survival-kit'
+import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks'
 import { min as createMinifiedSegmentSnippet } from '@segment/snippet'
+import fs from 'fs'
 import { isMobile } from 'is-mobile'
-import * as Router from 'koa-router'
-import * as path from 'path'
-import * as React from 'react'
-import {
-  ApolloProvider as LegacyApolloProvider,
-  getDataFromTree,
-} from 'react-apollo'
+import Router from 'koa-router'
+import path from 'path'
+import React from 'react'
+import { ApolloProvider, getDataFromTree } from 'react-apollo'
 import { FilledContext, HelmetProvider } from 'react-helmet-async'
 import { StaticRouter, StaticRouterContext } from 'react-router'
 import { MobileContext } from 'utils/mobileContext'
@@ -24,23 +21,23 @@ import { createServerApolloClient } from './apolloClient'
 import {
   ADYEN_ENVIRONMENT,
   ADYEN_ORIGIN_KEY,
-  ANDROID_MINIMUM_VERSION,
-  ANDROID_PACKAGE_NAME,
-  APP_STORE_ID,
-  APPLE_BUNDLE_ID,
   CONTENT_SERVICE_ENDPOINT,
-  FIREBASE_LINK_DOMAIN,
   GIRAFFE_ENDPOINT,
   GIRAFFE_WS_ENDPOINT,
-  IOS_MINIMUM_VERSION,
 } from './config'
 import { favicons } from './favicons'
 import { WithRequestUuid } from './middleware/enhancers'
 
-const scriptLocation = getScriptLocation({
-  statsLocation: path.resolve(__dirname, 'assets'),
-  webpackPublicPath: process.env.WEBPACK_PUBLIC_PATH || '',
-})
+const scriptLocation =
+  process.env.NODE_ENV === 'production'
+    ? '/new-member-assets/' +
+      JSON.parse(
+        fs.readFileSync(
+          path.resolve(__dirname, '../../build/new-member-assets/stats.json'),
+          'utf-8',
+        ),
+      ).assetsByChunkName.app[0]
+    : '/new-member-assets/app.js'
 
 const segmentSnippet = createMinifiedSegmentSnippet({
   apiKey: process.env.SEGMENT_API_KEY || '',
@@ -89,26 +86,20 @@ const template = (
   <div id="react-root"></div>
 
   <script nonce="${cspNonce}">
-    window.GIRAFFE_WS_ENDPOINT= ${JSON.stringify(GIRAFFE_WS_ENDPOINT)};
-    window.GIRAFFE_ENDPOINT= ${JSON.stringify(GIRAFFE_ENDPOINT)};
-    window.CONTENT_SERVICE_ENDPOINT= ${JSON.stringify(
+    window.GIRAFFE_WS_ENDPOINT = ${JSON.stringify(GIRAFFE_WS_ENDPOINT)};
+    window.GIRAFFE_ENDPOINT = ${JSON.stringify(GIRAFFE_ENDPOINT)};
+    window.CONTENT_SERVICE_ENDPOINT = ${JSON.stringify(
       CONTENT_SERVICE_ENDPOINT,
     )};
-    window.FIREBASE_LINK_DOMAIN=${JSON.stringify(FIREBASE_LINK_DOMAIN)};
-    window.ANDROID_PACKAGE_NAME=${JSON.stringify(ANDROID_PACKAGE_NAME)};
-    window.ANDROID_MINIMUM_VERSION=${JSON.stringify(ANDROID_MINIMUM_VERSION)};
-    window.APPLE_BUNDLE_ID=${JSON.stringify(APPLE_BUNDLE_ID)};
-    window.APP_STORE_ID=${JSON.stringify(APP_STORE_ID)};
-    window.IOS_MINIMUM_VERSION=${JSON.stringify(IOS_MINIMUM_VERSION)};
-    window.ADYEN_ORIGIN_KEY=${JSON.stringify(ADYEN_ORIGIN_KEY)};
-    window.ADYEN_ENVIRONMENT=${JSON.stringify(ADYEN_ENVIRONMENT)};
+    window.ADYEN_ORIGIN_KEY = ${JSON.stringify(ADYEN_ORIGIN_KEY)};
+    window.ADYEN_ENVIRONMENT = ${JSON.stringify(ADYEN_ENVIRONMENT)};
   </script>
   <script src="${scriptLocation}"></script>
 </body>
 </html>
 `
 
-export const getPage: Router.IMiddleware<WithRequestUuid, object> = async (
+export const getPage: Router.IMiddleware<WithRequestUuid, any> = async (
   ctx,
 ) => {
   const serverCookieStorage = new SavingCookieStorage(
@@ -150,10 +141,13 @@ export const getPage: Router.IMiddleware<WithRequestUuid, object> = async (
   const routerContext: StaticRouterContext & { statusCode?: number } = {}
   const helmetContext = {}
   const serverApp = (
-    <StaticRouter location={ctx.request.originalUrl} context={routerContext}>
-      <HelmetProvider context={helmetContext}>
-        <ApolloProvider client={apolloClient}>
-          <LegacyApolloProvider client={apolloClient}>
+    <ApolloProvider client={apolloClient}>
+      <ApolloHooksProvider client={apolloClient}>
+        <StaticRouter
+          location={ctx.request.originalUrl}
+          context={routerContext}
+        >
+          <HelmetProvider context={helmetContext}>
             <MobileContext.Provider
               value={isMobile({
                 ua: ctx.req.headers['user-agent'],
@@ -162,10 +156,10 @@ export const getPage: Router.IMiddleware<WithRequestUuid, object> = async (
             >
               <App session={session} />
             </MobileContext.Provider>
-          </LegacyApolloProvider>
-        </ApolloProvider>
-      </HelmetProvider>
-    </StaticRouter>
+          </HelmetProvider>
+        </StaticRouter>
+      </ApolloHooksProvider>
+    </ApolloProvider>
   )
   await getDataFromTree(serverApp)
 

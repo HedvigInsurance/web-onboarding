@@ -3,7 +3,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import color from 'color'
 import { Limits } from 'pages/OfferNew/Perils/InsuranceValues/Limits'
 import { OfferQuote } from 'pages/OfferNew/types'
-import * as React from 'react'
+import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { SubSubHeadingBlack } from '../../components'
 

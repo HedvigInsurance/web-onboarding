@@ -1,6 +1,6 @@
 import { mount } from 'enzyme'
 import toJson from 'enzyme-to-json'
-import * as React from 'react'
+import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { MemoryRouter } from 'react-router-dom'
 import { LanguagePicker } from './LanguagePicker'

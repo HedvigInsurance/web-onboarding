@@ -4,7 +4,7 @@ import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import Modal from 'components/Modal'
 import { CurrentLocale } from 'components/utils/CurrentLocale'
 import { Container } from 'constate'
-import * as React from 'react'
+import React from 'react'
 import { Redirect } from 'react-router'
 
 const Header = styled('div')({

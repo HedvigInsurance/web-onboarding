@@ -1,5 +1,5 @@
 import { TranslationsContext } from '@hedviginsurance/textkeyfy'
-import * as React from 'react'
+import React from 'react'
 
 export interface MockTextKeyProviderProps {
   textKeys: { [key: string]: string }

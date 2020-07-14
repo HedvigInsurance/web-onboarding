@@ -1,6 +1,6 @@
 import { LOCALE_PATH_PATTERN } from 'components/utils/CurrentLocale'
 import { SignLoading } from 'pages/SignLoading'
-import * as React from 'react'
+import React from 'react'
 import { RouteComponentProps } from 'react-router'
 import { ConnectPayment } from './pages/ConnectPayment'
 import { TrustlyFailPage } from './pages/ConnectPayment/components/TrustlyFailPage'
@@ -11,7 +11,6 @@ import { EmbarkRoot } from './pages/Embark'
 import { Forever } from './pages/Forever'
 import { FourOhFour } from './pages/FourOhFour'
 import { OfferNew } from './pages/OfferNew'
-import { Referral } from './pages/Referral'
 
 export const serverSideRedirects = [
   { from: '/referrals/terms', to: '/invite/terms' },
@@ -170,11 +169,6 @@ export const reactPageRoutes: ReactPageRoute[] = [
       )
     },
     exact: false,
-  },
-  {
-    path: LOCALE_PATH_PATTERN + '/referrals/:code',
-    Component: Referral,
-    exact: true,
   },
   {
     path: '/*',

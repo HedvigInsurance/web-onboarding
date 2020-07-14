@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand/dist'
 import { TopBar } from 'components/TopBar'
 import { Spinner } from 'components/utils'
-import * as React from 'react'
+import React from 'react'
 
 const OuterSpinnerWrapper = styled('div')`
   display: flex;

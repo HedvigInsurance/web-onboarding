@@ -8,7 +8,7 @@ import {
   AppleAppStoreIcon,
   GooglePlayStoreIcon,
 } from 'pages/Download/sections/appStoreIcons'
-import * as React from 'react'
+import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 
 const SITE_WRAPPER = 1300
