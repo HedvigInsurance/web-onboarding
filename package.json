@@ -99,9 +99,10 @@
     "ws": "^7.3.1"
   },
   "dependencies": {
-    "@apollo/react-common": "3.0.0",
-    "@apollo/react-components": "3.0.0",
-    "@apollo/react-testing": "3.0.0",
+    "@apollo/react-common": "^3.1.4",
+    "@apollo/react-components": "^3.1.5",
+    "@apollo/react-hooks": "^3.1.5",
+    "@apollo/react-testing": "^3.1.4",
     "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@babel/polyfill": "^7.10.4",
     "@emotion/core": "^10.0.22",
@@ -153,7 +154,7 @@
     "querystring": "^0.2.0",
     "react": "^16.13.0",
     "react-animate-height": "^2.0.6",
-    "react-apollo": "3.0.0",
+    "react-apollo": "^3.1.5",
     "react-dom": "^16.13.0",
     "react-helmet": "5.2.0",
     "react-helmet-async": "0.2.0",
@@ -189,6 +190,6 @@
   "sideEffects": false,
   "resolutions": {
     "koa-router/path-to-regexp": "6.1.0",
-    "@hedviginsurance/textkeyfy/react-apollo": "3.0.0"
+    "@hedviginsurance/textkeyfy/react-apollo": "3.1.5"
   }
 }
