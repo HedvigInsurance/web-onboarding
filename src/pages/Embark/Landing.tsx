@@ -227,6 +227,26 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
       <LandingPageContainer>
         <Helmet>
           <title>{textKeys.STARTPAGE_PAGE_TITLE()}</title>
+          <link
+            rel="alternate"
+            hrefLang="sv-se"
+            href="https://www.hedvig.com/se/new-member"
+          />
+          <link
+            rel="alternate"
+            hrefLang="en-se"
+            href="https://www.hedvig.com/se-en/new-member"
+          />
+          <link
+            rel="alternate"
+            hrefLang="nb-no"
+            href="https://www.hedvig.com/no/new-member"
+          />
+          <link
+            rel="alternate"
+            hrefLang="en-no"
+            href="https://www.hedvig.com/no-en/new-member"
+          />
         </Helmet>
 
         {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
