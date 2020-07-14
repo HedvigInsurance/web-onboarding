@@ -16,7 +16,7 @@ module.exports = webpackConfig({
   target: 'web',
   mode: 'development',
   optimization: {
-    useNamedModules: true,
+    namedModules: true,
   },
   devServer: {
     compress: true,
@@ -32,7 +32,7 @@ module.exports = webpackConfig({
   },
   output: {
     filename: '[name].js',
-    publicPath: '/static/',
+    publicPath: '/new-member-assets/',
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
