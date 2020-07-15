@@ -14,7 +14,7 @@ import {
   ApolloClientAndSubscriptionClient,
 } from '../client/apolloClient'
 import { Storage, StorageContainer } from '../utils/StorageContainer'
-import { IdentifyAction } from '../utils/tracking'
+import { SegmentAnalyticsJs } from 'quepasa'
 
 export const CREATE_SESSION_TOKEN_MUTATION: DocumentNode = gql`
   mutation CreateSessionToken {
@@ -60,6 +60,12 @@ export const setupSession = async (
     variables: { pickedLocale },
   })
 
+  try {
+    const castedWindow = window as any
+    const segment = castedWindow.analytics as SegmentAnalyticsJs
+    segment.identify(sessionResult.data.createSessionV2.memberId)
+  } catch (err) {}
+
   return sessionResult.data
 }
 
@@ -73,15 +79,13 @@ export const SessionContainer: React.SFC<SessionContainerProps> = ({
   return (
     <StorageContainer>
       {(storageState) => (
-        <IdentifyAction identity={{}}>
-          {({ identify }) => (
-            <Mount
+        <Mount
               on={async () => {
                 if (
                   !storageState.session.getSession()?.token &&
                   !createSessionCalled
                 ) {
-                  const result = await setupSession(
+                  await setupSession(
                     {
                       client,
                       subscriptionClient: realApolloClient!.subscriptionClient,
@@ -89,17 +93,12 @@ export const SessionContainer: React.SFC<SessionContainerProps> = ({
                     storageState,
                     pickedLocale,
                   )
-                  identify({
-                    userId: result?.id,
-                  })
                   setCreateSessionCalled(true)
                 }
               }}
             >
               {children(storageState.session.getSession()?.token ?? null)}
             </Mount>
-          )}
-        </IdentifyAction>
       )}
     </StorageContainer>
   )
