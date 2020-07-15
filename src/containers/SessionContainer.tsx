@@ -7,14 +7,15 @@ import { Locale, UpdatePickedLocaleDocument } from 'data/graphql'
 import { DocumentNode } from 'graphql'
 import gql from 'graphql-tag'
 import { afterTick } from 'pages/Embark/utils'
+import { SegmentAnalyticsJs } from 'quepasa'
 import * as React from 'react'
 import { Mount } from 'react-lifecycle-components'
+import { captureSentryError } from 'utils/sentry-client'
+import { Storage, StorageContainer } from 'utils/StorageContainer'
 import {
   apolloClient as realApolloClient,
   ApolloClientAndSubscriptionClient,
 } from '../client/apolloClient'
-import { Storage, StorageContainer } from '../utils/StorageContainer'
-import { SegmentAnalyticsJs } from 'quepasa'
 
 export const CREATE_SESSION_TOKEN_MUTATION: DocumentNode = gql`
   mutation CreateSessionToken {
@@ -64,7 +65,9 @@ export const setupSession = async (
     const castedWindow = window as any
     const segment = castedWindow.analytics as SegmentAnalyticsJs
     segment.identify(sessionResult.data.createSessionV2.memberId)
-  } catch (err) {}
+  } catch (e) {
+    captureSentryError(e)
+  }
 
   return sessionResult.data
 }
@@ -80,25 +83,25 @@ export const SessionContainer: React.SFC<SessionContainerProps> = ({
     <StorageContainer>
       {(storageState) => (
         <Mount
-              on={async () => {
-                if (
-                  !storageState.session.getSession()?.token &&
-                  !createSessionCalled
-                ) {
-                  await setupSession(
-                    {
-                      client,
-                      subscriptionClient: realApolloClient!.subscriptionClient,
-                    },
-                    storageState,
-                    pickedLocale,
-                  )
-                  setCreateSessionCalled(true)
-                }
-              }}
-            >
-              {children(storageState.session.getSession()?.token ?? null)}
-            </Mount>
+          on={async () => {
+            if (
+              !storageState.session.getSession()?.token &&
+              !createSessionCalled
+            ) {
+              await setupSession(
+                {
+                  client,
+                  subscriptionClient: realApolloClient!.subscriptionClient,
+                },
+                storageState,
+                pickedLocale,
+              )
+              setCreateSessionCalled(true)
+            }
+          }}
+        >
+          {children(storageState.session.getSession()?.token ?? null)}
+        </Mount>
       )}
     </StorageContainer>
   )
