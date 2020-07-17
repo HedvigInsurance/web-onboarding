@@ -44,6 +44,7 @@ module.exports = ({
     children: false,
   },
   output,
+  plugins,
   bail: true,
   ...rest,
 })
