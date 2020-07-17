@@ -1,6 +1,6 @@
 import { Replacements, TranslationsContext } from '@hedviginsurance/textkeyfy'
 import { TextKeys } from '@hedviginsurance/textkeyfy/dist/translations/types'
-import * as React from 'react'
+import React from 'react'
 
 const placeholderRegex = new RegExp('({[a-zA-Z0-9_]+})', 'g')
 const placeholderKeyRegex = new RegExp('([a-zA-Z0-9_]+)', 'g')

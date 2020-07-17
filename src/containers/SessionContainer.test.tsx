@@ -13,7 +13,7 @@ jest.mock('../client/apolloClient', () => ({
 
 import { Provider } from 'constate'
 import { mount } from 'enzyme'
-import * as React from 'react'
+import React from 'react'
 
 import { Locale, UpdatePickedLocaleDocument } from 'data/graphql'
 import { act } from 'react-dom/test-utils'

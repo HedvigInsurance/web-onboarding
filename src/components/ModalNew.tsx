@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { motion } from 'framer-motion'
-import * as React from 'react'
+import React from 'react'
 import { Cross } from './icons/Cross'
 
 export interface ModalProps {

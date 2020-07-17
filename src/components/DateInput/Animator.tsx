@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { motion } from 'framer-motion'
-import * as React from 'react'
+import React from 'react'
 
 const ContentItem = styled(motion.div)`
   position: absolute;

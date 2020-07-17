@@ -7,7 +7,7 @@ import {
   useEmbark,
 } from '@hedviginsurance/embark'
 import { AnimatePresence, motion } from 'framer-motion'
-import * as React from 'react'
+import React from 'react'
 import { useHistory } from 'react-router'
 
 import { colorsV3 } from '@hedviginsurance/brand'
@@ -67,7 +67,11 @@ interface EmbarkProps {
 }
 
 const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
-  const history = useHistory()
+  const history = useHistory<{
+    embarkPassageName: string
+    embarkPassageId: string
+    embarkPassageHistory: any
+  }>()
   const {
     reducer: [state, dispatch],
     goTo,
@@ -98,6 +102,9 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
   )
 
   React.useEffect(() => {
+    if (!currentPassage?.id) {
+      return
+    }
     const method =
       history.location.pathname === props.baseUrl ? 'replace' : 'push'
     const newPathName = `${props.baseUrl}${currentPassage.url ||

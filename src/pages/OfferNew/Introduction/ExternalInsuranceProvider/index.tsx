@@ -4,7 +4,7 @@ import {
   useExternalInsuranceDataStatusSubscription,
 } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
-import * as React from 'react'
+import React from 'react'
 
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { Compare } from './Compare'

@@ -1,7 +1,10 @@
-import { Middleware } from 'koa'
+import Router from 'koa-router'
 import { Logger } from 'typescript-logging'
+import { WithLoggerState } from './enhancers'
 
-export const permanentRedirect = (to: string): Middleware => async (ctx) => {
+export const permanentRedirect = (
+  to: string,
+): Router.IMiddleware<WithLoggerState, object> => async (ctx) => {
   ;(ctx.state.getLogger('request') as Logger).info(
     `Permanently redirecting to ${to}`,
   )
@@ -9,10 +12,11 @@ export const permanentRedirect = (to: string): Middleware => async (ctx) => {
   ctx.status = 301
 }
 
-export const forceHost = ({ host }: { host: string }): Middleware => async (
-  ctx,
-  next,
-) => {
+export const forceHost = ({
+  host,
+}: {
+  host: string
+}): Router.IMiddleware<WithLoggerState, object> => async (ctx, next) => {
   if (ctx.get('host') !== host) {
     ;(ctx.state.getLogger('request') as Logger).info(
       `Redirecting to "${host}" because of host mismatch (got "${ctx.host}")`,
@@ -25,7 +29,10 @@ export const forceHost = ({ host }: { host: string }): Middleware => async (
   await next()
 }
 
-export const redirectEmptyLanguageToSweden: Middleware = (ctx, next) => {
+export const redirectEmptyLanguageToSweden: Router.IMiddleware<
+  object,
+  object
+> = (ctx, next) => {
   if (ctx.path.startsWith('/new-member')) {
     ctx.set('location', '/se' + ctx.originalUrl)
     ctx.status = 301
@@ -35,34 +42,11 @@ export const redirectEmptyLanguageToSweden: Middleware = (ctx, next) => {
   return next()
 }
 
-export const redirectEnLanguageToSweden: Middleware = (ctx, next) => {
+export const redirectEnLanguageToSweden: Router.IMiddleware<object, object> = (
+  ctx,
+  next,
+) => {
   if (ctx.path.startsWith('/en/new-member')) {
-    ctx.set('location', '/se-en' + ctx.originalUrl.replace(/^\/en/, ''))
-    ctx.status = 301
-    return
-  }
-
-  return next()
-}
-
-export const referralsRedirectEmptyLanguageToSwedenSwedish: Middleware = (
-  ctx,
-  next,
-) => {
-  if (ctx.path.startsWith('/referrals')) {
-    ctx.set('location', '/se' + ctx.originalUrl)
-    ctx.status = 301
-    return
-  }
-
-  return next()
-}
-
-export const referralsRedirectEnLanguageToSwedenEnglish: Middleware = (
-  ctx,
-  next,
-) => {
-  if (ctx.path.startsWith('/en/referrals')) {
     ctx.set('location', '/se-en' + ctx.originalUrl.replace(/^\/en/, ''))
     ctx.status = 301
     return

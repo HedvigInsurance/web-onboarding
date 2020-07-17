@@ -10,7 +10,7 @@ import {
 import { motion } from 'framer-motion'
 import { OfferData } from 'pages/OfferNew/types'
 import { isNorwegian, isSwedish } from 'pages/OfferNew/utils'
-import * as React from 'react'
+import React from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { SignStatus } from './SignStatus'

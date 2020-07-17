@@ -1,9 +1,10 @@
-import * as koaHelmet from 'koa-helmet'
-import * as uuidV4 from 'uuid/v4'
+import koaHelmet from 'koa-helmet'
+import { v4 as uuidV4 } from 'uuid'
 import { CONTENT_SERVICE_ENDPOINT, GIRAFFE_WS_ENDPOINT } from '../config'
 
 const defaultSrc = [
   "'self'",
+  'localhost:8040',
   'hedvig.com',
   'www.hedvig.com',
   'cdn.hedvig.com',
@@ -57,8 +58,8 @@ const defaultSrc = [
   'https://api-js.mixpanel.com',
   'checkoutshopper-live.adyen.com',
   'checkoutshopper-test.adyen.com',
-  GIRAFFE_WS_ENDPOINT,
-  CONTENT_SERVICE_ENDPOINT,
+  GIRAFFE_WS_ENDPOINT!,
+  CONTENT_SERVICE_ENDPOINT!,
 ]
 
 export const helmet = koaHelmet({
@@ -83,7 +84,7 @@ export const helmet = koaHelmet({
         'data:',
         'hedvig.com',
         '*.hedvig.com',
-        CONTENT_SERVICE_ENDPOINT,
+        CONTENT_SERVICE_ENDPOINT!,
         'checkoutshopper-live.adyen.com',
         'checkoutshopper-test.adyen.com',
         't.co',

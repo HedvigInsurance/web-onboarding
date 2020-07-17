@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
-import * as React from 'react'
+import React from 'react'
 
 export * from './common/price'
 

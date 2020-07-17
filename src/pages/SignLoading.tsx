@@ -14,7 +14,7 @@ import {
 } from 'data/graphql'
 import { motion } from 'framer-motion'
 import { getOfferData } from 'pages/OfferNew/utils'
-import * as React from 'react'
+import React from 'react'
 import { Redirect } from 'react-router'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { useStorage } from 'utils/StorageContainer'

@@ -15,7 +15,7 @@ import {
 } from 'data/graphql'
 import { FieldArray, Form, Formik } from 'formik'
 import { OfferQuote } from 'pages/OfferNew/types'
-import * as React from 'react'
+import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { DetailInput } from './DetailInput'
 import { SupportSection } from './SupportSection'

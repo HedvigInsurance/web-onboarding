@@ -12,7 +12,7 @@ import {
 import { OfferData } from 'pages/OfferNew/types'
 import { getQuoteIds } from 'pages/OfferNew/utils'
 import { SemanticEvents } from 'quepasa'
-import * as React from 'react'
+import React from 'react'
 import { Mount } from 'react-lifecycle-components'
 import { Redirect } from 'react-router-dom'
 import { getUtmParamsFromCookie, TrackAction, useTrack } from 'utils/tracking'

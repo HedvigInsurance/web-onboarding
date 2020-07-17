@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { colorsV3, fonts } from '@hedviginsurance/brand'
 import { Spinner } from 'components/utils'
 import { MonetaryAmount } from 'containers/types'
-import * as React from 'react'
+import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 
 const PriceWrapper = styled.div`

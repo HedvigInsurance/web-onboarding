@@ -14,6 +14,10 @@ query RedeemedCampaigns {
         percentageDiscount
         quantityMonths: quantity
       }
+      ... on IndefinitePercentageDiscount {
+        __typename
+        indefinitiePercentageDiscount: percentageDiscount
+      }
       ... on NoDiscount {
         __typename
       }

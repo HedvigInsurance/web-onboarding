@@ -231,7 +231,11 @@ const getValidationSchemaHelper = <T>([key, value]: FieldTuple<T>): any => {
             {},
             ...Object.entries(value)
               .filter(([k]) => k !== 'arrayValidation')
-              .map((v) => getValidationSchemaHelper(v as FieldTuple<T>)),
+              .map((v) =>
+                getValidationSchemaHelper(
+                  (v as any) as [string, RegularFieldType],
+                ),
+              ),
           ),
         ),
       ),

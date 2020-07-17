@@ -4,7 +4,7 @@ import { DownArrow } from 'components/icons/DownArrow'
 import { WarningIcon } from 'components/icons/Warning'
 import { Field, GenericFieldHTMLAttributes } from 'formik'
 import { FieldInputProps } from 'formik/dist/types'
-import * as React from 'react'
+import React from 'react'
 import InputMask from 'react-input-mask'
 
 interface Mask {
@@ -120,7 +120,7 @@ const StyledField = styled(Field)`
   }
 
   &input[type='number'] {
-    appearance: textfield;
+    appearence: textfield;
   }
 `
 
@@ -138,7 +138,7 @@ const SymbolWrapper = styled.div`
   justify-content: flex-end;
 
   svg {
-    width 1rem;
+    width: 1rem;
     height: 1rem;
   }
 `
@@ -238,7 +238,6 @@ export const InputField: React.FC<TextInputProps &
           <StyledField {...props}>
             {({ field }: any) => (
               <StyledInputMask
-                placeholder={props.placeholder}
                 mask={mask.mask}
                 alwaysShowMask={true}
                 maskChar={INVISIBLE_MASK_CHAR}
@@ -304,17 +303,17 @@ export const InputGroup = styled.div`
   position: relative;
   margin-bottom: 1.5rem;
 
-  > ${Wrapper}:first-of-type {
+  > ${Wrapper as any}:first-of-type {
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
   }
 
-  > ${Wrapper}:last-child, ${InputGroupDeleteButton}:last-child {
+  > ${Wrapper as any}:last-child, ${InputGroupDeleteButton}:last-child {
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
   }
 
-  ${Wrapper}, ${InputGroupDeleteButton} {
+  ${Wrapper as any}, ${InputGroupDeleteButton} {
     border-radius: 0;
     border-color: ${colorsV2.lightgray};
 
@@ -329,18 +328,18 @@ export const InputGroupRow = styled.div`
   display: flex;
   flex-direction: row;
 
-  ${Wrapper} {
+  ${Wrapper as any} {
     width: 50%;
     border-top: 0;
 
     :first-of-type {
       border-right: 0;
     }
-    ${TextWrapper} {
+    ${TextWrapper as any} {
       width: calc(100% - 1.5rem);
     }
 
-    ${SymbolWrapper} {
+    ${SymbolWrapper as any} {
       margin: 0 1rem 0 0;
     }
   }

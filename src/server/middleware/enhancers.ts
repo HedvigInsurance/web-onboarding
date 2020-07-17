@@ -1,8 +1,8 @@
 import * as Sentry from '@sentry/node'
-import * as https from 'https'
+import https from 'https'
 import { Context, Middleware } from 'koa'
 import { Logger } from 'typescript-logging'
-import * as uuidV4 from 'uuid/v4'
+import { v4 as uuidV4 } from 'uuid'
 import { loggerFactory } from '../logging'
 
 export interface WithRequestUuid {

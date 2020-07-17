@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 
 export const ForwardArrow = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="11" height="18" fill="#9B9BAA">

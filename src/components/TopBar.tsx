@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
-import * as React from 'react'
+import React from 'react'
 import { CurrentLocale } from './utils/CurrentLocale'
 
 export const TOP_BAR_Z_INDEX = 1009

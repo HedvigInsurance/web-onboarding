@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { Tooltip } from 'components/Tooltip'
 import { InsurableLimit, InsurableLimitType } from 'data/graphql'
-import * as React from 'react'
+import React from 'react'
 
 interface Props {
   insurableLimits: ReadonlyMap<InsurableLimitType, InsurableLimit>

@@ -1,6 +1,6 @@
 import { Locale } from 'data/graphql'
 import { match } from 'matchly'
-import * as React from 'react'
+import React from 'react'
 import { matchPath, useLocation } from 'react-router'
 
 export const LOCALE_PATH_PATTERN = '/:locale(se-en|se|no-en|no)'

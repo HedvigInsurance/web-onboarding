@@ -1,10 +1,10 @@
-import { ApolloProvider } from '@apollo/react-common'
+import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks'
 import { PageTracker } from 'containers/PageTracker'
 import { CookieStorage } from 'cookie-storage'
 import { isMobile } from 'is-mobile'
-import * as React from 'react'
-import { ApolloProvider as LegacyApolloProvider } from 'react-apollo'
-import * as ReactDOM from 'react-dom'
+import React from 'react'
+import { ApolloProvider } from 'react-apollo'
+import ReactDOM from 'react-dom'
 import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter } from 'react-router-dom'
 import { HotApp } from './App'
@@ -26,13 +26,13 @@ ReactDOM.render(
   <BrowserRouter>
     <PageTracker>
       <HelmetProvider>
-        <ApolloProvider client={apolloClient!.client!}>
-          <LegacyApolloProvider client={apolloClient!.client!}>
+        <ApolloHooksProvider client={apolloClient!.client}>
+          <ApolloProvider client={apolloClient!.client!}>
             <MobileContext.Provider value={isMobile({ tablet: true })}>
               <HotApp session={session} />
             </MobileContext.Provider>
-          </LegacyApolloProvider>
-        </ApolloProvider>
+          </ApolloProvider>
+        </ApolloHooksProvider>
       </HelmetProvider>
     </PageTracker>
   </BrowserRouter>,

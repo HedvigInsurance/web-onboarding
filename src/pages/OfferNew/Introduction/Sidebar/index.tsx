@@ -4,7 +4,6 @@ import { Button, TextButton } from 'components/buttons'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { CookieStorage } from 'cookie-storage'
 import {
-  Campaign,
   useRedeemCodeMutation,
   useRedeemedCampaignsQuery,
   useRemoveDiscountCodeMutation,
@@ -16,7 +15,7 @@ import {
   isPercentageDiscountMonths,
 } from 'pages/OfferNew/Introduction/Sidebar/utils'
 import { OfferData } from 'pages/OfferNew/types'
-import * as React from 'react'
+import React from 'react'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { Price } from '../../components'
@@ -171,7 +170,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
     const [removeDiscountCode] = useRemoveDiscountCodeMutation()
     const [redeemCode] = useRedeemCodeMutation()
     const redeemedCampaignsQuery = useRedeemedCampaignsQuery()
-    const redeemedCampaigns: Campaign[] =
+    const redeemedCampaigns =
       redeemedCampaignsQuery.data?.redeemedCampaigns ?? []
 
     const refetchAll = () =>

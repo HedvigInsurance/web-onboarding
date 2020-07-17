@@ -6,7 +6,7 @@ import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { addYears, subDays } from 'date-fns'
 import Dayzed, { RenderProps as DayzedCalendarProps } from 'dayzed'
 import { motion } from 'framer-motion'
-import * as React from 'react'
+import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { TextButton } from '../buttons'
 import { AnimationDirection, Animator } from './Animator'
@@ -183,18 +183,18 @@ const Calendar: React.FC<DayzedCalendarProps> = ({
 
       setMonthNamesShort(
         Array.from({ length: 12 }).map((_, i) =>
-          dateLocale.localize.month(i, { width: 'abbreviated' }),
+          dateLocale.localize?.month(i, { width: 'abbreviated' }),
         ),
       )
 
       setWeekdayNamesShort([
-        dateLocale.localize.day(1, { width: 'abbreviated' }),
-        dateLocale.localize.day(2, { width: 'abbreviated' }),
-        dateLocale.localize.day(3, { width: 'abbreviated' }),
-        dateLocale.localize.day(4, { width: 'abbreviated' }),
-        dateLocale.localize.day(5, { width: 'abbreviated' }),
-        dateLocale.localize.day(6, { width: 'abbreviated' }),
-        dateLocale.localize.day(0, { width: 'abbreviated' }),
+        dateLocale.localize?.day(1, { width: 'abbreviated' }),
+        dateLocale.localize?.day(2, { width: 'abbreviated' }),
+        dateLocale.localize?.day(3, { width: 'abbreviated' }),
+        dateLocale.localize?.day(4, { width: 'abbreviated' }),
+        dateLocale.localize?.day(5, { width: 'abbreviated' }),
+        dateLocale.localize?.day(6, { width: 'abbreviated' }),
+        dateLocale.localize?.day(0, { width: 'abbreviated' }),
       ])
     })
   }, [])

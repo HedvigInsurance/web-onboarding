@@ -1,7 +1,6 @@
-import * as Sentry from '@sentry/node'
+import Sentry from '@sentry/node'
 import Axios from 'axios'
-import * as Koa from 'koa'
-import * as Router from 'koa-router'
+import Router from 'koa-router'
 import { GIRAFFE_ENDPOINT } from 'server/config'
 import { WithLoggerState } from 'server/middleware/enhancers'
 import { createSession, Session } from 'utils/sessionStorage'
@@ -19,11 +18,11 @@ const httpClient = Axios.create({
   },
 })
 
-export const handleAdyen3dsPostRedirect: Koa.Middleware<
+export const handleAdyen3dsPostRedirect: Router.IMiddleware<
   WithLoggerState,
-  Router.IRouterParamContext
+  any
 > = async (ctx, _next) => {
-  const { MD: md, PaRes: pares } = ctx.request.body as Adyen3dsDetails
+  const { MD: md, PaRes: pares } = (ctx.request as any).body as Adyen3dsDetails
   const session = createSession<Session>(new ServerCookieStorage(ctx))
   const Authorization = session.getSession()?.token
 

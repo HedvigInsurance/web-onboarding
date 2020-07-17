@@ -2,7 +2,7 @@ import { css, keyframes } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { HedvigSymbol } from 'components/icons/HedvigSymbol'
-import * as React from 'react'
+import React from 'react'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import {

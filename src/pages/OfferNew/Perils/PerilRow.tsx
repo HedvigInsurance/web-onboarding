@@ -2,7 +2,7 @@ import { InsuranceValues } from 'pages/OfferNew/Perils/InsuranceValues'
 import { PerilCollection } from 'pages/OfferNew/Perils/PerilCollection'
 import { PerilModal } from 'pages/OfferNew/Perils/PerilModal'
 import { OfferQuote } from 'pages/OfferNew/types'
-import * as React from 'react'
+import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { insuranceTypeTextKeys } from '../utils'
 
