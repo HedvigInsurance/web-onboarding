@@ -1,10 +1,10 @@
 import Sentry from '@sentry/node'
 import Axios from 'axios'
 import Router from 'koa-router'
-import { GIRAFFE_ENDPOINT } from 'server/config'
-import { WithLoggerState } from 'server/middleware/enhancers'
-import { createSession, Session } from 'utils/sessionStorage'
 import { ServerCookieStorage } from 'utils/storage/ServerCookieStorage'
+import { createSession, Session } from '../shared/sessionStorage'
+import { GIRAFFE_ENDPOINT } from './config'
+import { WithLoggerState } from './middleware/enhancers'
 
 interface Adyen3dsDetails {
   MD: string

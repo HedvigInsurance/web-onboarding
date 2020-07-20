@@ -10,7 +10,7 @@ module.exports = webpackConfig({
       '@babel/polyfill',
       'webpack-dev-server/client?http://0.0.0.0:8040/',
       'webpack/hot/dev-server',
-      path.resolve(root, 'src/clientEntry.tsx'),
+      path.resolve(root, 'src/client/clientEntry.tsx'),
     ],
   },
   target: 'web',

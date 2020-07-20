@@ -1,16 +1,17 @@
-import { LOCALE_PATH_PATTERN } from 'components/utils/CurrentLocale'
-import { SignLoading } from 'pages/SignLoading'
 import React from 'react'
 import { RouteComponentProps } from 'react-router'
-import { ConnectPayment } from './pages/ConnectPayment'
-import { TrustlyFailPage } from './pages/ConnectPayment/components/TrustlyFailPage'
-import { TrustlySpinnerPage } from './pages/ConnectPayment/components/TrustlySpinnerPage'
-import { ConnectPaymentsDirectEntry } from './pages/ConnectPayment/ConnectPaymentsDirectEntry'
-import { Download } from './pages/Download'
-import { EmbarkRoot } from './pages/Embark'
-import { Forever } from './pages/Forever'
-import { FourOhFour } from './pages/FourOhFour'
-import { OfferNew } from './pages/OfferNew'
+
+import { LOCALE_PATH_PATTERN } from 'shared/locale'
+import { ConnectPayment } from './client/pages/ConnectPayment'
+import { TrustlyFailPage } from './client/pages/ConnectPayment/components/TrustlyFailPage'
+import { TrustlySpinnerPage } from './client/pages/ConnectPayment/components/TrustlySpinnerPage'
+import { ConnectPaymentsDirectEntry } from './client/pages/ConnectPayment/ConnectPaymentsDirectEntry'
+import { Download } from './client/pages/Download'
+import { EmbarkRoot } from './client/pages/Embark'
+import { Forever } from './client/pages/Forever'
+import { FourOhFour } from './client/pages/FourOhFour'
+import { OfferNew } from './client/pages/OfferNew'
+import { SignLoading } from './client/pages/SignLoading'
 
 export interface ServerSideRoute {
   path: string | RegExp

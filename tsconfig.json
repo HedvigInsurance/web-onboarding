@@ -16,7 +16,8 @@
     "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
-      "*": ["*", "node_modules/*", "src/*"]
+      "*": ["*", "node_modules/*", "src/client/*"],
+      "shared/*": ["src/shared/*"]
     },
     "typeRoots": ["./src/types", "./node_modules/@types"],
     "types": ["jest"],
@@ -27,5 +28,5 @@
     "noEmit": true
   },
   "include": ["./src"],
-  "exclude": ["node_modules", "./src/data/graphql.tsx"]
+  "exclude": ["node_modules", "./src/client/data/graphql.tsx"]
 }

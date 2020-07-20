@@ -5,14 +5,14 @@ import escapeHTML from 'escape-html'
 import fs from 'fs'
 import Router from 'koa-router'
 import path from 'path'
-import { ServerSideRoute } from 'routes'
-import { sentryConfig } from '../utils/sentry-server'
+import { sentryConfig } from '../client/utils/sentry-server'
+import { ServerCookieStorage } from '../client/utils/storage/ServerCookieStorage'
+import { ServerSideRoute } from '../routes'
 import {
   createSession,
   SavingCookieStorage,
   Session,
-} from '../utils/sessionStorage'
-import { ServerCookieStorage } from '../utils/storage/ServerCookieStorage'
+} from '../shared/sessionStorage'
 import {
   ADYEN_ENVIRONMENT,
   ADYEN_ORIGIN_KEY,

@@ -34,7 +34,7 @@ const whiteListedEnvVars = [
 
 module.exports = webpackConfig({
   entry: {
-    server: [path.resolve(root, 'src/serverEntry.tsx')],
+    server: [path.resolve(root, 'src/server/serverEntry.tsx')],
   },
   target: 'node',
   node: {

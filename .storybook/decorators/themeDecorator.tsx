@@ -1,5 +1,5 @@
 import React from 'react'
-import { GlobalCss } from '../../src/utils/globalStyles'
+import { GlobalCss } from '../../src/client/utils/globalStyles'
 
 export const themeDecorator = (story) => (
   <>
