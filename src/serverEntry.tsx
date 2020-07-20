@@ -8,7 +8,7 @@ import bodyParser from 'koa-bodyparser'
 import Router from 'koa-router'
 import { handleAdyen3dsPostRedirect } from 'server/adyenMiddleware'
 import { Logger } from 'typescript-logging'
-import { reactPageRoutes, serverSideRedirects } from './routes'
+import { reactPageRoutes, serverSideRoutes } from './routes'
 import { GIRAFFE_ENDPOINT, GIRAFFE_WS_ENDPOINT } from './server/config'
 import { appLogger } from './server/logging'
 import { configureAssets } from './server/middleware/assets'
@@ -21,7 +21,6 @@ import {
 import { helmet } from './server/middleware/helmet'
 import {
   forceHost,
-  permanentRedirect,
   redirectEmptyLanguageToSweden,
   redirectEnLanguageToSweden,
 } from './server/middleware/redirects'
@@ -59,10 +58,6 @@ if (process.env.FORCE_HOST) {
 
 router.use('/new-member(.*)', redirectEmptyLanguageToSweden)
 router.use('/en/new-member(.*)', redirectEnLanguageToSweden)
-
-serverSideRedirects.forEach(({ from, to }) => {
-  router.use(from, permanentRedirect(to))
-})
 
 app.use(
   bodyParser({
@@ -114,8 +109,8 @@ router.post(
   handleAdyen3dsPostRedirect,
 )
 
-reactPageRoutes.forEach((route) => {
-  router.get(route.serverPath ?? route.path, getPage)
+serverSideRoutes.forEach((route) => {
+  router.get(route.path, getPage(route))
 })
 
 app.use(router.middleware())

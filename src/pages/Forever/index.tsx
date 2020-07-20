@@ -72,30 +72,11 @@ export const Forever: React.FC<ForeverProps> = ({
     updatePickedLocale()
   }, [currentLocale])
 
-  const ogDescription = textKeys.FOREVER_LANDINGPAGE_DESCRIPTION({
-    CODE: (code ?? '').toUpperCase(),
-  })
-
   return (
     <>
       <Helmet>
         <title>{textKeys.FOREVER_LANDINGPAGE_TITLE()}</title>
-        <meta
-          property="og:title"
-          content={textKeys.FOREVER_LANDINGPAGE_TITLE()}
-        />
-        <meta
-          property="og:description"
-          content={
-            Array.isArray(ogDescription)
-              ? ogDescription.join('')
-              : ogDescription
-          }
-        />
-        <meta
-          property="og:image"
-          content="https://www.hedvig.com/new-member-assets/social/hedvig-forever.png"
-        />
+        <meta property="og:image" content="" />
       </Helmet>
       <SessionContainer>
         {() => (

@@ -33,6 +33,10 @@ const PerilRowWrapper = styled.div`
 `
 
 export const getIconUrl = (iconPath: string) => {
+  if (typeof window === 'undefined') {
+    return ''
+  }
+
   return `${(window as any).CONTENT_SERVICE_ENDPOINT}${iconPath}`
 }
 

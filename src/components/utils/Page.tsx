@@ -1,5 +1,6 @@
 import React from 'react'
 import { Mount } from 'react-lifecycle-components'
+import { GlobalCss } from 'utils/globalStyles'
 
 export const Page: React.SFC = ({ children }) => {
   return (
@@ -11,6 +12,7 @@ export const Page: React.SFC = ({ children }) => {
         }
       }}
     >
+      <GlobalCss />
       {children}
     </Mount>
   )
