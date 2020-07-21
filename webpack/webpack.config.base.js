@@ -17,7 +17,10 @@ module.exports = ({
   mode,
   resolve: {
     extensions: ['.ts', '.tsx', '.mjs', '.js', '.json'],
-    modules: ['node_modules', path.resolve(context, 'src')],
+    modules: ['node_modules', path.resolve(context, 'src/client')],
+    alias: {
+      shared: path.resolve(context, 'src/shared'),
+    },
   },
   entry,
   module: {

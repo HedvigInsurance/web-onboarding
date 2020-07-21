@@ -1,26 +1,83 @@
-import { LOCALE_PATH_PATTERN } from 'components/utils/CurrentLocale'
-import { SignLoading } from 'pages/SignLoading'
 import React from 'react'
 import { RouteComponentProps } from 'react-router'
-import { ConnectPayment } from './pages/ConnectPayment'
-import { TrustlyFailPage } from './pages/ConnectPayment/components/TrustlyFailPage'
-import { TrustlySpinnerPage } from './pages/ConnectPayment/components/TrustlySpinnerPage'
-import { ConnectPaymentsDirectEntry } from './pages/ConnectPayment/ConnectPaymentsDirectEntry'
-import { Download } from './pages/Download'
-import { EmbarkRoot } from './pages/Embark'
-import { Forever } from './pages/Forever'
-import { FourOhFour } from './pages/FourOhFour'
-import { OfferNew } from './pages/OfferNew'
 
-export const serverSideRedirects = [
-  { from: '/referrals/terms', to: '/invite/terms' },
-  { from: '/new-member/hedvig', to: '/new-member' },
-  { from: '/en/new-member/hedvig', to: '/en/new-member' },
+import { LOCALE_PATH_PATTERN } from 'shared/locale'
+import { ConnectPayment } from './client/pages/ConnectPayment'
+import { TrustlyFailPage } from './client/pages/ConnectPayment/components/TrustlyFailPage'
+import { TrustlySpinnerPage } from './client/pages/ConnectPayment/components/TrustlySpinnerPage'
+import { ConnectPaymentsDirectEntry } from './client/pages/ConnectPayment/ConnectPaymentsDirectEntry'
+import { Download } from './client/pages/Download'
+import { EmbarkRoot } from './client/pages/Embark'
+import { Forever } from './client/pages/Forever'
+import { FourOhFour } from './client/pages/FourOhFour'
+import { OfferNew } from './client/pages/OfferNew'
+import { SignLoading } from './client/pages/SignLoading'
+
+export interface ServerSideRoute {
+  path: string | RegExp
+  titleTextKey: string
+  metaDescriptionTextKey?: string
+  ogImage?: string
+  status?: number
+}
+
+export const serverSideRoutes: ServerSideRoute[] = [
+  {
+    path: LOCALE_PATH_PATTERN + '/forever/:code?',
+    titleTextKey: 'FOREVER_LANDINGPAGE_TITLE',
+    metaDescriptionTextKey: 'FOREVER_LANDINGPAGE_DESCRIPTION',
+    ogImage:
+      'https://www.hedvig.com/new-member-assets/social/hedvig-forever.png',
+  },
+  {
+    path: LOCALE_PATH_PATTERN + '/new-member/download',
+    titleTextKey: 'DOWNLOAD_PAGE_TITLE',
+  },
+  {
+    path: LOCALE_PATH_PATTERN + '/new-member/connect-payment',
+    titleTextKey: 'ONBOARDING_CONNECT_DD_PAGE_TITLE',
+  },
+  {
+    path: LOCALE_PATH_PATTERN + '/new-member/connect-payment/direct',
+    titleTextKey: 'ONBOARDING_CONNECT_DD_PAGE_TITLE',
+  },
+  {
+    path: LOCALE_PATH_PATTERN + '/new-member/connect-payment/success',
+    titleTextKey: 'ONBOARDING_CONNECT_DD_PAGE_TITLE',
+  },
+  {
+    path: LOCALE_PATH_PATTERN + '/new-member/connect-payment/fail',
+    titleTextKey: 'ONBOARDING_CONNECT_DD_PAGE_TITLE',
+  },
+  {
+    path: LOCALE_PATH_PATTERN + '/new-member/connect-payment/retry',
+    titleTextKey: 'ONBOARDING_CONNECT_DD_PAGE_TITLE',
+  },
+  {
+    path: LOCALE_PATH_PATTERN + '/new-member/(offer|sign)',
+    titleTextKey: 'OFFER_PAGE_TITLE',
+  },
+  {
+    path: LOCALE_PATH_PATTERN + '/new-member/sign/success',
+    titleTextKey: '',
+  },
+  {
+    path: LOCALE_PATH_PATTERN + '/new-member/sign/fail',
+    titleTextKey: '',
+  },
+  {
+    path: LOCALE_PATH_PATTERN + '/new-member/:name?/:id?',
+    titleTextKey: 'START_PAGE_TITLE',
+  },
+  {
+    path: /^(?!\/?new-member-assets).*$/,
+    titleTextKey: 'FOUR_OH_FOUR_PAGE_TITLE',
+    status: 404,
+  },
 ]
 
 interface ReactPageRoute {
   path: string
-  serverPath?: string | RegExp
   Component?: React.ComponentType<any>
   render?: (props: RouteComponentProps<any>) => React.ReactNode
   exact?: boolean
@@ -172,7 +229,6 @@ export const reactPageRoutes: ReactPageRoute[] = [
   },
   {
     path: '/*',
-    serverPath: /^(?!\/?new-member-assets).*$/,
     Component: FourOhFour,
   },
 ]

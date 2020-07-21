@@ -8,7 +8,7 @@ import { CookieStorage } from 'cookie-storage'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { dataIdFromObject } from 'utils/apolloClient'
 import introspectionQueryResultData from '../fragmentTypes.json'
-import { createSession, Session } from '../utils/sessionStorage'
+import { createSession, Session } from '../shared/sessionStorage'
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData,

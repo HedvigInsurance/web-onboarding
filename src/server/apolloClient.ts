@@ -8,8 +8,8 @@ import { BatchHttpLink } from 'apollo-link-batch-http'
 import fetch from 'node-fetch'
 import { dataIdFromObject } from 'utils/apolloClient'
 import { v4 as uuidV4 } from 'uuid'
+import { notNullable } from '../client/utils/nullables'
 import introspectionData from '../fragmentTypes.json'
-import { notNullable } from '../utils/nullables'
 import { GIRAFFE_ENDPOINT } from './config'
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
