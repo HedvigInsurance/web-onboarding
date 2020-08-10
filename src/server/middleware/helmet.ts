@@ -77,7 +77,13 @@ export const helmet = koaHelmet({
           return `'nonce-${(response as any).cspNonce}'`
         },
       ],
-      styleSrc: ["'unsafe-inline'", "'self'", 'checkoutshopper-live.adyen.com'],
+      styleSrc: [
+        "'unsafe-inline'",
+        "'self'",
+        'checkoutshopper-live.adyen.com',
+        'https://tagmanager.google.com',
+        'https://fonts.googleapis.com',
+      ],
       objectSrc: ["'none'"],
       imgSrc: [
         "'self'",
