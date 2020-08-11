@@ -108,7 +108,7 @@
     "@emotion/core": "^10.0.22",
     "@emotion/styled": "^10.0.23",
     "@hedviginsurance/brand": "^3.0.8",
-    "@hedviginsurance/embark": "^2.0.4",
+    "@hedviginsurance/embark": "^2.0.6",
     "@hedviginsurance/textkeyfy": "^1.2.4",
     "@segment/snippet": "^4.4.0",
     "@sentry/node": "^4.2.2",
