@@ -100,6 +100,7 @@ export const helmet = koaHelmet({
         'www.googletagmanager.com',
         'www.google-analytics.com',
         'www.gstatic.com',
+        'https://ssl.gstatic.com',
         'www.google.com',
         'www.google.se',
         'www.google.no',
