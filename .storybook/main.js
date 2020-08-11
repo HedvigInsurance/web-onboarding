@@ -10,7 +10,11 @@ module.exports = {
     'storybook-addon-paddings',
   ],
   webpackFinal: async (config) => {
-    config.resolve.modules.push(path.resolve(__dirname, '../src'))
+    config.resolve.modules.push(path.resolve(__dirname, '../src/client'))
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      shared: path.resolve(__dirname, '../src/shared'),
+    }
     config.module.rules.push({
       test: /\.tsx?$/,
       use: [
