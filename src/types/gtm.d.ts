@@ -6,7 +6,7 @@ declare global {
 
 interface OfferData {
   insurance_type: TypeOfContract
-  campaign_code: 'yes' | 'no'
+  referral_code: 'yes' | 'no'
   number_of_people: number
   insurance_price: number
 }
