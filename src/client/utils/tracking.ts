@@ -153,9 +153,12 @@ export const useTrack = ({ offerData, signState }: TrackProps) => {
       event: 'signed_customer',
       offerData: {
         insurance_type: offerData.quotes[0].contractType,
-        campaign_code: redeemedCampaigns?.length > 0 ? 'yes' : 'no',
+        referral_code:
+          redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction'
+            ? 'yes'
+            : 'no',
         number_of_people: offerData.person.householdSize,
-        insurance_price: parseFloat(offerData.cost.monthlyNet.amount) * 12,
+        insurance_price: parseFloat(offerData.cost.monthlyNet.amount),
       },
     })
 
