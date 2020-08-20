@@ -33,7 +33,7 @@ export const trackOfferGTM = (
   referralCodeUsed: boolean,
 ) => {
   try {
-    const contractType = () => {
+    const getContractType = () => {
       if (isBundle(offerData)) {
         return isYouth(offerData)
           ? NoComboTypes.NoComboYouth
@@ -45,7 +45,7 @@ export const trackOfferGTM = (
     pushToGTMDataLayer({
       event: 'signed_customer',
       offerData: {
-        insurance_type: contractType(),
+        insurance_type: getContractType(),
         referral_code: referralCodeUsed ? 'yes' : 'no',
         number_of_people: offerData.person.householdSize,
         insurance_price: parseFloat(offerData.cost.monthlyNet.amount),
