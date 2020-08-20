@@ -1,6 +1,7 @@
 import { TypeOfContract } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import { isBundle, isYouth } from 'pages/OfferNew/utils'
+import { captureSentryError } from 'utils/sentry-client'
 
 enum NoComboTypes {
   NoCombo = 'NO_COMBO',
@@ -51,6 +52,6 @@ export const trackOfferGTM = (
       },
     })
   } catch (e) {
-    ;(window as any).Sentry.captureMessage(e)
+    captureSentryError(e)
   }
 }
