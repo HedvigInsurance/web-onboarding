@@ -22,8 +22,9 @@ export interface DataLayerObject {
 }
 
 const pushToGTMDataLayer = (obj: DataLayerObject) => {
-  window.dataLayer = window.dataLayer || []
-  window.dataLayer.push(obj)
+  const castedWindow = window as any
+  castedWindow.dataLayer = castedWindow.dataLayer || []
+  castedWindow.dataLayer.push(obj)
 }
 
 export const trackOfferGTM = (
