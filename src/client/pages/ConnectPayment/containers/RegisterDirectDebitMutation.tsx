@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 
-const REGISTER_DIRECT_DEBIT_MUTATION = gql`
+export const REGISTER_DIRECT_DEBIT_MUTATION = gql`
   mutation RegisterDirectDebit(
     $clientContext: RegisterDirectDebitClientContext!
   ) {

@@ -29,7 +29,11 @@ export const TrustlyCheckout: React.FC = () => {
       return null
     }
 
-    return res.data.registerDirectDebit.url
+    const finalUrl = res.data.registerDirectDebit.url.includes('?')
+      ? `${res.data.registerDirectDebit.url}&NotifyParent=1`
+      : `${res.data.registerDirectDebit.url}?NotifyParent=1`
+
+    return finalUrl
   }
 
   return (
