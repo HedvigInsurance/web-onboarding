@@ -27,7 +27,7 @@ export const serverSideRoutes: ServerSideRoute[] = [
     titleTextKey: 'FOREVER_LANDINGPAGE_TITLE',
     metaDescriptionTextKey: 'FOREVER_LANDINGPAGE_DESCRIPTION',
     ogImage:
-      'https://www.hedvig.com/new-member-assets/social/hedvig-forever.png',
+      'https://www.hedvig.com/new-member-assets/social/forever-notifications.jpg',
   },
   {
     path: LOCALE_PATH_PATTERN + '/new-member/download',
