@@ -7,7 +7,7 @@ import {
   PerilV2,
   TypeOfContract,
 } from 'data/graphql'
-import { OfferData } from './types'
+import { OfferData } from '../../pages/OfferNew/types'
 
 const insurableLimitMock = new Map([
   [

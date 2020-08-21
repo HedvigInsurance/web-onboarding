@@ -1,4 +1,4 @@
-import { noCombo, noComboYouth } from './offerDataMock'
+import { noCombo, noComboYouth } from 'utils/testData/offerDataMock'
 import { isBundle, isNorwegian, isSwedish, isYouth } from './utils'
 
 describe('quote validation', () => {
