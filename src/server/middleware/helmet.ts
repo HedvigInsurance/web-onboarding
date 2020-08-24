@@ -14,7 +14,7 @@ const defaultSrc = [
   '*.intercomcdn.com',
   '*.intercomassets.com',
   '*.intercomusercontent.com',
-  'nexus-websocket-a.intercom.io',
+  'wss://nexus-websocket-a.intercom.io',
   'app.getsentry.com',
   'sentry.io',
   'www.google-analytics.com',
