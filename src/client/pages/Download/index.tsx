@@ -10,7 +10,7 @@ import { SemanticEvents } from 'quepasa'
 import React from 'react'
 import Helmet from 'react-helmet-async'
 import { Mount } from 'react-lifecycle-components/dist'
-import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
+import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import {
   DownloadAppHedvigForeverMember,
   DownloadAppRegular,

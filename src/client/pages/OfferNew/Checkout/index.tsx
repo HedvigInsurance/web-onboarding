@@ -15,7 +15,11 @@ import { SemanticEvents } from 'quepasa'
 import React from 'react'
 import { Mount } from 'react-lifecycle-components'
 import { Redirect } from 'react-router-dom'
-import { getUtmParamsFromCookie, TrackAction, useTrack } from 'utils/tracking'
+import {
+  getUtmParamsFromCookie,
+  TrackAction,
+  useTrack,
+} from 'utils/tracking/tracking'
 import { CheckoutContent } from './CheckoutContent'
 import { useScrollLock, VisibilityState } from './hooks'
 import { Sign, SignUiState } from './Sign'
