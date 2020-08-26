@@ -18,6 +18,7 @@ module.exports = webpackConfig({
     publicPath: '/new-member-assets/',
     path: path.resolve(root, 'build/new-member-assets'),
   },
+  devtool: 'source-map',
   plugins: [
     new webpack.LoaderOptionsPlugin({
       minimize: true,

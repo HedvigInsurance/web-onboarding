@@ -37,7 +37,6 @@ module.exports = ({
       },
     ],
   },
-  devtool: 'cheap-source-map',
   target,
   context,
   stats: {
