@@ -3,7 +3,18 @@ module.exports = (api) => {
 
   return {
     presets: [
-      ['@babel/preset-env', { modules: false }],
+      [
+        '@babel/preset-env',
+        {
+          modules: false,
+          useBuiltIns: 'usage',
+          corejs: 2,
+          targets: {
+            browsers: ['last 3 versions', 'ie >= 11'],
+          },
+          include: ['es6.promise', 'es6.array.iterator'],
+        },
+      ],
       '@babel/preset-react',
       ['@babel/preset-typescript', { isTSX: true, allExtensions: true }],
     ],

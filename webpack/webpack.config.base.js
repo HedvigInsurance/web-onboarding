@@ -31,7 +31,6 @@ module.exports = ({
           'thread-loader',
           {
             loader: 'babel-loader',
-            options: { ...babelrc, cacheDirectory: true },
           },
         ],
       },
