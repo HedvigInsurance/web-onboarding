@@ -46,6 +46,7 @@ module.exports = webpackConfig({
     filename: '[name].js',
     path: path.resolve(root, 'build'),
   },
+  devtool: 'inline-source-map',
   plugins: [
     new webpack.DefinePlugin({
       ...whiteListedEnvVars.reduce(

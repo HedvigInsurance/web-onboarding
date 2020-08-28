@@ -7,7 +7,6 @@ const root = path.resolve(__dirname, '..')
 module.exports = webpackConfig({
   entry: {
     app: [
-      '@babel/polyfill',
       'webpack-dev-server/client?http://0.0.0.0:8040/',
       'webpack/hot/dev-server',
       path.resolve(root, 'src/client/clientEntry.tsx'),
@@ -30,6 +29,7 @@ module.exports = webpackConfig({
     },
     transportMode: 'ws',
   },
+  devtool: 'eval-source-map',
   output: {
     filename: '[name].js',
     publicPath: '/new-member-assets/',

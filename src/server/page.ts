@@ -102,6 +102,7 @@ const template = (
         content="${route.ogImage ||
           'https://www.hedvig.com/f/62762/1920x1080/a8d806bbbf/background.png'}"
      />
+     <meta name="google-site-verification" content="AZ5rW7lm8fgkGEsSI8BbV4i45ylXAnGEicXf6HPQE-Q" />
 
     <script src="https://browser.sentry-cdn.com/4.2.3/bundle.min.js" crossorigin="anonymous"></script>
     <script nonce="${cspNonce}">

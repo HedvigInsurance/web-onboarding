@@ -8,7 +8,7 @@ const root = path.resolve(__dirname, '..')
 
 module.exports = webpackConfig({
   entry: {
-    app: ['@babel/polyfill', path.resolve(root, 'src/client/clientEntry.tsx')],
+    app: [path.resolve(root, 'src/client/clientEntry.tsx')],
   },
   target: 'web',
   mode: 'production',
@@ -18,6 +18,7 @@ module.exports = webpackConfig({
     publicPath: '/new-member-assets/',
     path: path.resolve(root, 'build/new-member-assets'),
   },
+  devtool: 'source-map',
   plugins: [
     new webpack.LoaderOptionsPlugin({
       minimize: true,

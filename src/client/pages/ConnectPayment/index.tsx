@@ -7,7 +7,7 @@ import React from 'react'
 import Helmet from 'react-helmet-async'
 import { Mount } from 'react-lifecycle-components/dist'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
-import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking'
+import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { ConnectPaymentPage } from './sections/ConnectPayment'
 
 export const ConnectPayment: React.FC = () => {

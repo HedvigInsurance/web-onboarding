@@ -18,7 +18,7 @@ import React from 'react'
 import { Redirect } from 'react-router'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { useStorage } from 'utils/StorageContainer'
-import { useTrack } from 'utils/tracking'
+import { useTrack } from 'utils/tracking/tracking'
 
 const InnerWrapper = styled(motion.div)`
   text-align: center;

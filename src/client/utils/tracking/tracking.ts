@@ -10,7 +10,7 @@ import { OfferData } from 'pages/OfferNew/types'
 import { isBundle, isYouth } from 'pages/OfferNew/utils'
 import { SegmentAnalyticsJs, setupTrackers } from 'quepasa'
 import React from 'react'
-import { DataLayerObject } from 'src/types/gtm'
+import { trackOfferGTM } from './gtm'
 
 const cookie = new CookieStorage()
 
@@ -121,11 +121,6 @@ export const useTrack = ({ offerData, signState }: TrackProps) => {
   const { data: memberData } = useMemberQuery()
   const memberId = memberData?.member.id!
 
-  const pushToGTMDataLayer = (obj: DataLayerObject) => {
-    window.dataLayer = window.dataLayer || []
-    window.dataLayer.push(obj)
-  }
-
   React.useEffect(() => {
     if (process.env.NODE_ENV === 'test') {
       return
@@ -149,18 +144,10 @@ export const useTrack = ({ offerData, signState }: TrackProps) => {
       offerData,
     )
 
-    pushToGTMDataLayer({
-      event: 'signed_customer',
-      offerData: {
-        insurance_type: offerData.quotes[0].contractType,
-        referral_code:
-          redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction'
-            ? 'yes'
-            : 'no',
-        number_of_people: offerData.person.householdSize,
-        insurance_price: parseFloat(offerData.cost.monthlyNet.amount),
-      },
-    })
+    trackOfferGTM(
+      offerData,
+      redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction',
+    )
 
     if (
       redeemedCampaigns?.length > 0 &&
