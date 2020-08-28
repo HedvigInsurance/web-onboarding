@@ -4,7 +4,11 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { LinkButton } from 'components/buttons'
 import { ForwardArrow } from 'components/icons/ForwardArrow'
 import { TopBar, TopBarFiller } from 'components/TopBar'
-import { Market, useMarket } from 'components/utils/CurrentLocale'
+import {
+  Market,
+  useCurrentLocale,
+  useMarket,
+} from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import React from 'react'
 import Helmet from 'react-helmet-async'
@@ -214,6 +218,7 @@ const LandingPageContainer = styled.div`
 export const Landing: React.FC<{ language: string }> = ({ language }) => {
   const textKeys = useTextKeys()
   const market = useMarket()
+  const currentLocale = useCurrentLocale()
   const variation = useVariation()
   return (
     <Page>
@@ -246,6 +251,10 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
             rel="alternate"
             hrefLang="en-no"
             href="https://www.hedvig.com/no-en/new-member"
+          />
+          <link
+            rel="canonical"
+            href={`https://hedvig.com/${currentLocale}/new-member`}
           />
         </Helmet>
 
