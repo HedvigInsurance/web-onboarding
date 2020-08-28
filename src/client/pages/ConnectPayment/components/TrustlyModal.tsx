@@ -50,6 +50,31 @@ export const TrustlyModal: React.FC<Props> = ({
   handleIframeLoad: handleIframeLoad_ = handleIframeLoad,
 }) => {
   const iframeRef = React.createRef<HTMLIFrameElement>()
+
+  React.useEffect(() => {
+    const handler = (e: MessageEvent) => {
+      if (
+        /*
+          JSDOM  doesn't support mocking the event's origin yet
+          See https://github.com/jsdom/jsdom/issues/2745
+         */
+        process.env.NODE_ENV !== 'test' &&
+        e.origin !== 'https://trustly.com'
+      ) {
+        return
+      }
+
+      const trustlyMessage = JSON.parse(e.data)
+
+      if (trustlyMessage.method === 'OPEN_APP') {
+        window.location.assign(trustlyMessage.appURL)
+      }
+    }
+
+    window.addEventListener('message', handler)
+    return () => window.removeEventListener('message', handler)
+  }, [])
+
   return (
     <Container<State, Actions>
       initialState={{

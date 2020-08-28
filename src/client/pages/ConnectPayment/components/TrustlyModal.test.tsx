@@ -8,7 +8,7 @@ import {
 import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { MemoryRouter, withRouter } from 'react-router-dom'
-import { nextTickAsync } from 'utils/misc'
+import { nextTickAsync, sleep } from 'utils/misc'
 
 describe('HandleIframeLoad', () => {
   it('handles a successful load', async () => {
@@ -119,5 +119,48 @@ describe('TrustlyModal', () => {
     })
 
     expect(wrapper.find(ShowPath).text()).toBe('/se/new-member/download')
+  })
+
+  it('handles trustly notify parent', async () => {
+    const trustlyUrl = 'https://trustly.com/blah'
+
+    Object.defineProperty(window, 'location', {
+      value: { assign: jest.fn() },
+    })
+    const mockTrustlyIframe = window.document.createElement('iframe')
+    mockTrustlyIframe.setAttribute('src', 'https://trustly.com')
+    window.document.body.append(mockTrustlyIframe)
+
+    mount(
+      <MemoryRouter
+        initialEntries={[{ pathname: '/se/new-member/connect-payment' }]}
+        initialIndex={0}
+      >
+        <MockedProvider>
+          <>
+            <TrustlyModal
+              isOpen
+              // tslint:disable-next-line:no-empty
+              setIsOpen={() => {}}
+              trustlyUrl={trustlyUrl}
+              generateTrustlyUrl={async () => trustlyUrl}
+              handleIframeLoad={() => () => Promise.resolve()}
+            />
+          </>
+        </MockedProvider>
+      </MemoryRouter>,
+    )
+
+    const trustlyMessage = {
+      method: 'OPEN_APP',
+      appURL: 'bankid:///?callbackurl=googlechrome%3A%2F%2F',
+    }
+    mockTrustlyIframe.contentWindow?.parent?.postMessage(
+      JSON.stringify(trustlyMessage),
+      '*',
+    )
+    await sleep(10) // wait for postmessage to propagate
+
+    expect(window.location.assign).toHaveBeenCalledWith(trustlyMessage.appURL)
   })
 })
