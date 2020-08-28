@@ -4,7 +4,7 @@ import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { useRegisterDirectDebitMutation } from '../containers/RegisterDirectDebitMutation'
-import TrustlyModal from './TrustlyModal'
+import { TrustlyModal } from './TrustlyModal'
 
 export const TrustlyCheckout: React.FC = () => {
   const textKeys = useTextKeys()

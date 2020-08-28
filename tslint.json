@@ -12,7 +12,7 @@
         "ban-keywords",
         "allow-pascal-case",
         "allow-leading-underscore",
-        "allow-leading-underscore",
+        "allow-trailing-underscore",
         "check-format"
       ]
     }

@@ -5,7 +5,7 @@ import Modal from 'components/Modal'
 import { CurrentLocale } from 'components/utils/CurrentLocale'
 import { Container } from 'constate'
 import React from 'react'
-import { Redirect } from 'react-router'
+import { Redirect } from 'react-router-dom'
 
 const Header = styled('div')({
   width: '100%',
@@ -39,13 +39,15 @@ interface Props {
   setIsOpen: (isOpen: boolean) => void
   trustlyUrl: string | null
   generateTrustlyUrl: () => Promise<string | null>
+  handleIframeLoad?: typeof handleIframeLoad
 }
 
-const TrustlyModal: React.FC<Props> = ({
+export const TrustlyModal: React.FC<Props> = ({
   isOpen,
   setIsOpen,
   trustlyUrl,
   generateTrustlyUrl,
+  handleIframeLoad: handleIframeLoad_ = handleIframeLoad,
 }) => {
   const iframeRef = React.createRef<HTMLIFrameElement>()
   return (
@@ -76,24 +78,12 @@ const TrustlyModal: React.FC<Props> = ({
               src={trustlyUrl}
               ref={iframeRef}
               onLoad={async () => {
-                const contentWindow =
-                  iframeRef.current && iframeRef.current.contentWindow
-                const href = contentWindow && contentWindow.location.href
-
-                if (!contentWindow || !href) {
-                  return
-                }
-
-                if (href.endsWith('success')) {
-                  setIsOpen(false)
-                  setIsSuccess(true)
-                } else if (href.endsWith('retry')) {
-                  const newTrustlyUrl = await generateTrustlyUrl()
-
-                  if (newTrustlyUrl !== null) {
-                    contentWindow.location.href = newTrustlyUrl
-                  }
-                }
+                const contentWindow = iframeRef.current?.contentWindow
+                await handleIframeLoad_(
+                  setIsOpen,
+                  setIsSuccess,
+                  generateTrustlyUrl,
+                )(contentWindow)
               }}
             />
           )}
@@ -111,4 +101,30 @@ const TrustlyModal: React.FC<Props> = ({
   )
 }
 
-export default TrustlyModal
+export type HandleIframeLoad = (
+  setIsOpen: (isOpen: boolean) => void,
+  setIsSuccess: (isSuccess: boolean) => void,
+  generateTrustlyUrl: () => Promise<string | null>,
+) => (contentWindow: Window) => Promise<void>
+
+export const handleIframeLoad = (
+  setIsOpen: (isOpen: boolean) => void,
+  setIsSuccess: (isSuccess: boolean) => void,
+  generateTrustlyUrl: () => Promise<string | null>,
+) => async (contentWindow: any) => {
+  const href = contentWindow?.location.href
+  if (!contentWindow || !href) {
+    return
+  }
+
+  if (href.endsWith('success')) {
+    setIsOpen(false)
+    setIsSuccess(true)
+  } else if (href.endsWith('retry')) {
+    const newTrustlyUrl = await generateTrustlyUrl()
+
+    if (newTrustlyUrl !== null) {
+      contentWindow.location.href = newTrustlyUrl
+    }
+  }
+}

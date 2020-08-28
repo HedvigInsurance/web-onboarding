@@ -7,7 +7,7 @@ import { StaticRouter } from 'react-router'
 import { sleep } from 'utils/misc'
 import { REGISTER_DIRECT_DEBIT_MUTATION } from '../containers/RegisterDirectDebitMutation'
 import { TrustlyCheckout } from './TrustlyCheckout'
-import TrustlyModal from './TrustlyModal'
+import { TrustlyModal } from './TrustlyModal'
 
 it('renders without 💥', () => {
   const wrapper = mount(
