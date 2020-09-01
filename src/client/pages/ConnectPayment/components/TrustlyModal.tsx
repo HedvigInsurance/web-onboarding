@@ -47,7 +47,7 @@ export const TrustlyModal: React.FC<Props> = ({
   setIsOpen,
   trustlyUrl,
   generateTrustlyUrl,
-  handleIframeLoad: handleIframeLoad_ = handleIframeLoad,
+  handleIframeLoad: actualHandleIframeLoad = handleIframeLoad,
 }) => {
   const iframeRef = React.createRef<HTMLIFrameElement>()
 
@@ -104,7 +104,7 @@ export const TrustlyModal: React.FC<Props> = ({
               ref={iframeRef}
               onLoad={async () => {
                 const contentWindow = iframeRef.current?.contentWindow
-                await handleIframeLoad_(
+                await actualHandleIframeLoad(
                   setIsOpen,
                   setIsSuccess,
                   generateTrustlyUrl,
@@ -130,13 +130,13 @@ export type HandleIframeLoad = (
   setIsOpen: (isOpen: boolean) => void,
   setIsSuccess: (isSuccess: boolean) => void,
   generateTrustlyUrl: () => Promise<string | null>,
-) => (contentWindow: Window) => Promise<void>
+) => (contentWindow: Window | undefined | null) => Promise<void>
 
 export const handleIframeLoad: HandleIframeLoad = (
-  setIsOpen: (isOpen: boolean) => void,
-  setIsSuccess: (isSuccess: boolean) => void,
-  generateTrustlyUrl: () => Promise<string | null>,
-) => async (contentWindow: any) => {
+  setIsOpen,
+  setIsSuccess,
+  generateTrustlyUrl,
+) => async (contentWindow) => {
   const href = contentWindow?.location.href
   if (!contentWindow || !href) {
     return

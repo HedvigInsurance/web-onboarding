@@ -86,7 +86,7 @@ describe('TrustlyModal', () => {
       setIsOpen,
       setIsSuccess,
       _generateTrustlyUrl,
-    ) => async (_contentWindow: Window) => {
+    ) => async (_contentWindow) => {
       setIsOpen(false)
       setIsSuccess(true)
     }
