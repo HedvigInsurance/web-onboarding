@@ -39,7 +39,7 @@ interface Props {
   setIsOpen: (isOpen: boolean) => void
   trustlyUrl: string | null
   generateTrustlyUrl: () => Promise<string | null>
-  handleIframeLoad?: typeof handleIframeLoad
+  handleIframeLoad?: HandleIframeLoad
 }
 
 export const TrustlyModal: React.FC<Props> = ({
@@ -132,7 +132,7 @@ export type HandleIframeLoad = (
   generateTrustlyUrl: () => Promise<string | null>,
 ) => (contentWindow: Window) => Promise<void>
 
-export const handleIframeLoad = (
+export const handleIframeLoad: HandleIframeLoad = (
   setIsOpen: (isOpen: boolean) => void,
   setIsSuccess: (isSuccess: boolean) => void,
   generateTrustlyUrl: () => Promise<string | null>,
