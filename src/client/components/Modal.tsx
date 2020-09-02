@@ -70,6 +70,7 @@ const Modal: React.FC<Props> = ({ isOpen, setIsOpen, style, children }) => (
       style={{
         overlay: {
           ...defaultStyle.overlay,
+          zIndex: 9999,
           ...(style ? style.overlay : {}),
         },
         content: {
