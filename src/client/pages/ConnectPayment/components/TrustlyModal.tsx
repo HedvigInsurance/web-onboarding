@@ -59,7 +59,8 @@ export const TrustlyModal: React.FC<Props> = ({
           See https://github.com/jsdom/jsdom/issues/2745
          */
         process.env.NODE_ENV !== 'test' &&
-        e.origin !== 'https://trustly.com'
+        e.origin !== 'https://trustly.com' &&
+        e.origin !== 'https://test.trustly.com'
       ) {
         return
       }
