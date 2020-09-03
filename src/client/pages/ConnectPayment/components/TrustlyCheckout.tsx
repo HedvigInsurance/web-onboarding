@@ -4,7 +4,7 @@ import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import React from 'react'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { useRegisterDirectDebitMutation } from '../containers/RegisterDirectDebitMutation'
-import TrustlyModal from './TrustlyModal'
+import { TrustlyModal } from './TrustlyModal'
 
 export const TrustlyCheckout: React.FC = () => {
   const textKeys = useTextKeys()
@@ -29,7 +29,11 @@ export const TrustlyCheckout: React.FC = () => {
       return null
     }
 
-    return res.data.registerDirectDebit.url
+    const finalUrl = res.data.registerDirectDebit.url.includes('?')
+      ? `${res.data.registerDirectDebit.url}&NotifyParent=1`
+      : `${res.data.registerDirectDebit.url}?NotifyParent=1`
+
+    return finalUrl
   }
 
   return (
