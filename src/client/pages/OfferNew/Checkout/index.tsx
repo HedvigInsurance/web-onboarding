@@ -6,15 +6,17 @@ import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import {
   SignState,
+  useMemberQuery,
   useSignQuotesMutation,
   useSignStatusLazyQuery,
 } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import { getQuoteIds } from 'pages/OfferNew/utils'
 import { SemanticEvents } from 'quepasa'
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Mount } from 'react-lifecycle-components'
 import { Redirect } from 'react-router-dom'
+import { handleSignedEvent } from 'utils/tracking/signing'
 import {
   getUtmParamsFromCookie,
   TrackAction,
@@ -160,10 +162,8 @@ export const Checkout: React.FC<Props> = ({
   onClose,
   refetch,
 }) => {
-  const [visibilityState, setVisibilityState] = React.useState(
-    VisibilityState.CLOSED,
-  )
-  React.useEffect(() => {
+  const [visibilityState, setVisibilityState] = useState(VisibilityState.CLOSED)
+  useEffect(() => {
     if (isOpen) {
       setTimeout(() => setVisibilityState(VisibilityState.OPEN), 50)
       setVisibilityState(VisibilityState.OPENING)
@@ -175,19 +175,20 @@ export const Checkout: React.FC<Props> = ({
     }
   }, [isOpen])
 
-  const [signUiState, setSignUiState] = React.useState(SignUiState.NOT_STARTED)
-  const [emailUpdateLoading, setEmailUpdateLoading] = React.useState(false)
-  const [ssnUpdateLoading, setSsnUpdateLoading] = React.useState(false)
+  const [signUiState, setSignUiState] = useState(SignUiState.NOT_STARTED)
+  const [emailUpdateLoading, setEmailUpdateLoading] = useState(false)
+  const [ssnUpdateLoading, setSsnUpdateLoading] = useState(false)
   const [startPollingSignState, signStatusQueryProps] = useSignStatusLazyQuery({
     pollInterval: 1000,
   })
   const signStatus = signStatusQueryProps.data?.signStatus ?? null
   const [signQuotes, signQuotesMutation] = useSignQuotesMutation()
+  const member = useMemberQuery()
   const locale = useCurrentLocale()
 
-  const outerWrapper = React.useRef<HTMLDivElement>()
+  const outerWrapper = useRef<HTMLDivElement>()
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (
       ![SignUiState.STARTED, SignUiState.STARTED_WITH_REDIRECT].includes(
         signUiState,
@@ -203,6 +204,12 @@ export const Checkout: React.FC<Props> = ({
     offerData,
     signState: signStatus?.signState,
   })
+  useEffect(() => {
+    if (signStatus?.signState !== SignState.Completed) {
+      return
+    }
+    handleSignedEvent(member.data?.member ?? null)
+  }, [signStatus?.signState])
   useScrollLock(visibilityState, outerWrapper)
 
   const canInitiateSign = Boolean(

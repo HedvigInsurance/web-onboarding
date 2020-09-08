@@ -9,15 +9,17 @@ import {
 import {
   QuoteBundle,
   SignState,
+  useMemberQuery,
   useQuoteBundleQuery,
   useSignStatusQuery,
 } from 'data/graphql'
 import { motion } from 'framer-motion'
 import { getOfferData } from 'pages/OfferNew/utils'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Redirect } from 'react-router'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { useStorage } from 'utils/StorageContainer'
+import { handleSignedEvent } from 'utils/tracking/signing'
 import { useTrack } from 'utils/tracking/tracking'
 
 const InnerWrapper = styled(motion.div)`
@@ -29,8 +31,8 @@ const TextWrapper = styled('div')`
 `
 
 export const SignLoading: React.FC = () => {
-  const [timer, setTimer] = React.useState<number | null>(null)
-  const [hasTakenLong, setHasTakenLong] = React.useState(false)
+  const [timer, setTimer] = useState<number | null>(null)
+  const [hasTakenLong, setHasTakenLong] = useState(false)
   const signStatusQuery = useSignStatusQuery({
     pollInterval: 1000,
   })
@@ -47,6 +49,7 @@ export const SignLoading: React.FC = () => {
       locale: localeIsoCode,
     },
   })
+  const member = useMemberQuery()
 
   useTrack({
     offerData:
@@ -55,12 +58,20 @@ export const SignLoading: React.FC = () => {
     signState: signStatusQuery.data?.signStatus?.signState,
   })
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTimer(window.setTimeout(() => setHasTakenLong(true), 10000))
     return () => {
       window.clearTimeout(timer!)
     }
   }, [])
+
+  useEffect(() => {
+    if (signStatusQuery.data?.signStatus?.signState !== SignState.Completed) {
+      return
+    }
+
+    handleSignedEvent(member.data?.member ?? null)
+  }, [signStatusQuery.data?.signStatus?.signState])
 
   const failureReturnUrl = currentLocale
     ? `/${currentLocale}/new-member/offer?sign-error=yes`

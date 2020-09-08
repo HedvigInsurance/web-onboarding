@@ -258,7 +258,9 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
           />
         </Helmet>
 
-        {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
+        {![Variation.IOS, Variation.ANDROID, Variation.AVY].includes(
+          variation!,
+        ) && (
           <>
             <TopBar transparent>
               <LanguagePicker />

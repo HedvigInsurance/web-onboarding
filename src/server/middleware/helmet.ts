@@ -119,4 +119,5 @@ export const helmet = koaHelmet({
       upgradeInsecureRequests: true,
     },
   },
+  frameguard: false,
 })

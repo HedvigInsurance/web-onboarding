@@ -6,11 +6,13 @@ import { useHistory } from 'react-router'
 export enum Variation {
   IOS = 'ios',
   ANDROID = 'android',
+  AVY = 'avy',
 }
 
 const getVariation = match([
   ['ios', Variation.IOS],
   ['android', Variation.ANDROID],
+  ['avy', Variation.AVY],
   [match.any(), null],
 ])
 

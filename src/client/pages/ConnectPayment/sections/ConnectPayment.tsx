@@ -107,6 +107,11 @@ export const ConnectPaymentPage: React.FC = () => {
   const textKeys = useTextKeys()
   const market = useMarket()
 
+  const onSuccess = () => {
+    const message = JSON.stringify({ event: 'PaymentConnected' })
+    window.frames.parent.postMessage(message, '*')
+  }
+
   return (
     <>
       <Background />
@@ -119,8 +124,8 @@ export const ConnectPaymentPage: React.FC = () => {
             <HeaderPart>{textKeys.ONBOARDING_CONNECT_DD_HEADLINE()}</HeaderPart>
           </Header>
           <ConnectText>{textKeys.ONBOARDING_CONNECT_DD_BODY()}</ConnectText>
-          {market === Market.Se && <TrustlyCheckout />}
-          {market === Market.No && <AdyenCheckout />}
+          {market === Market.Se && <TrustlyCheckout onSuccess={onSuccess} />}
+          {market === Market.No && <AdyenCheckout onSuccess={onSuccess} />}
           <ErrorModal />
         </TextColumn>
         <ImageColumn>

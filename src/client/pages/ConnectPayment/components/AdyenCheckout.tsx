@@ -15,7 +15,7 @@ import {
   useTokenizePaymentDetailsMutation,
 } from 'data/graphql'
 import { match } from 'matchly'
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router'
 import { SpinnerWrapper } from './Spinner'
 
@@ -112,10 +112,14 @@ const Wrapper = styled('div')`
   }
 `
 
-export const AdyenCheckout = () => {
+interface Props {
+  onSuccess?: () => void
+}
+
+export const AdyenCheckout: React.FC<Props> = ({ onSuccess }) => {
   const availablePaymentMethods = useAvailablePaymentMethodsQuery()
-  const adyenCheckoutRef = React.useRef<HTMLDivElement>()
-  const [adyenLoaded, setAdyenLoaded] = React.useState(false)
+  const adyenCheckoutRef = useRef<HTMLDivElement>()
+  const [adyenLoaded, setAdyenLoaded] = useState(false)
   const [tokenizePaymentMutation] = useTokenizePaymentDetailsMutation()
   const [
     submitAdditionalPaymentDetails,
@@ -126,7 +130,7 @@ export const AdyenCheckout = () => {
   const paymentMethodsResponse =
     availablePaymentMethods.data?.availablePaymentMethods.paymentMethodsResponse
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!paymentMethodsResponse || !adyenLoaded) {
       return
     }
@@ -137,12 +141,13 @@ export const AdyenCheckout = () => {
       tokenizePaymentMutation,
       submitAdditionalPaymentDetails,
       history,
+      onSuccess,
     }).mount(adyenCheckoutRef.current)
   }, [paymentMethodsResponse, adyenLoaded])
 
-  React.useEffect(mountAdyenJs(setAdyenLoaded), [])
+  useEffect(mountAdyenJs(setAdyenLoaded), [])
 
-  React.useEffect(mountAdyenCss, [])
+  useEffect(mountAdyenCss, [])
 
   return (
     <Wrapper>
@@ -164,6 +169,7 @@ interface AdyenCheckoutProps {
   tokenizePaymentMutation: TokenizePaymentDetailsMutationFn
   submitAdditionalPaymentDetails: SubmitAdditionalPaymentDetialsMutationFn
   history: ReturnType<typeof useHistory>
+  onSuccess?: () => void
 }
 
 const createAdyenCheckout = ({
@@ -172,6 +178,9 @@ const createAdyenCheckout = ({
   tokenizePaymentMutation,
   submitAdditionalPaymentDetails,
   history,
+  onSuccess = () => {
+    /* noop */
+  },
 }: AdyenCheckoutProps) => {
   const locale = match([
     ['sv_SE', 'sv-SE'],
@@ -185,6 +194,7 @@ const createAdyenCheckout = ({
   const handleResult = (dropinComponent: any, resultCode: string) => {
     if (['Authorised', 'Pending'].includes(resultCode)) {
       history.push(`/${currentLocale}/new-member/download`)
+      onSuccess()
     } else {
       // tslint:disable-next-line no-console
       console.error(
