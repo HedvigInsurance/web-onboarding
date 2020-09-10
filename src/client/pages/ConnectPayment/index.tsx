@@ -7,11 +7,13 @@ import React from 'react'
 import Helmet from 'react-helmet-async'
 import { Mount } from 'react-lifecycle-components/dist'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { ConnectPaymentPage } from './sections/ConnectPayment'
 
 export const ConnectPayment: React.FC = () => {
   const textKeys = useTextKeys()
+  const variation = useVariation()
 
   return (
     <Page>
@@ -19,9 +21,11 @@ export const ConnectPayment: React.FC = () => {
         <Helmet>
           <title>{textKeys.ONBOARDING_CONNECT_DD_PAGE_TITLE()}</title>
         </Helmet>
-        <TopBar>
-          <LanguagePicker path="/new-member/connect-payment" />
-        </TopBar>
+        {variation !== Variation.AVY && (
+          <TopBar>
+            <LanguagePicker path="/new-member/connect-payment" />
+          </TopBar>
+        )}
         <ConnectPaymentPage />
 
         <TrackAction
