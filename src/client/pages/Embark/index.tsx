@@ -132,9 +132,7 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
         animate={{ opacity: 1 }}
         transition={{ ease: 'easeOut', duration: 1 }}
       >
-        {![Variation.IOS, Variation.ANDROID, Variation.AVY].includes(
-          variation!,
-        ) && (
+        {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
           <StorageContainer>
             {({ session }) => (
               <Header
@@ -154,11 +152,7 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
         )}
       </motion.div>
       <Passage
-        hasHeader={
-          ![Variation.IOS, Variation.ANDROID, Variation.AVY].includes(
-            variation!,
-          )
-        }
+        hasHeader={![Variation.IOS, Variation.ANDROID].includes(variation!)}
         canGoBack={state.history.length > 1}
         historyGoBackListener={(goBack) =>
           history.listen((_: any, action: string) => {

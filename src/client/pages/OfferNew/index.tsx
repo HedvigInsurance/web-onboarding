@@ -71,9 +71,7 @@ export const OfferNew: React.FC = () => {
   return (
     <Page>
       <SessionTokenGuard>
-        {![Variation.IOS, Variation.ANDROID, Variation.AVY].includes(
-          variation!,
-        ) && <TopBar />}
+        {![Variation.IOS, Variation.ANDROID].includes(variation!) && <TopBar />}
         <TrackAction
           event={{
             name: SemanticEvents.Ecommerce.CheckoutStarted,

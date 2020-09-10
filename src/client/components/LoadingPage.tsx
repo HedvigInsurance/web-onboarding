@@ -3,6 +3,7 @@ import { colorsV3 } from '@hedviginsurance/brand/dist'
 import { TopBar } from 'components/TopBar'
 import { Spinner } from 'components/utils'
 import React from 'react'
+import { useVariation, Variation } from 'utils/hooks/useVariation'
 
 const OuterSpinnerWrapper = styled('div')`
   display: flex;
@@ -30,9 +31,11 @@ export const LoadingPage: React.FC<{ loading?: boolean }> = ({
   children,
   loading,
 }) => {
+  const variation = useVariation()
+
   return (
     <>
-      <TopBar />
+      {![Variation.IOS, Variation.ANDROID].includes(variation!) && <TopBar />}
       <OuterSpinnerWrapper>
         <InnerSpinnerWrapper>
           {loading && <Spinner />}
