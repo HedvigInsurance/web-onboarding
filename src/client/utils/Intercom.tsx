@@ -29,7 +29,9 @@ export const Intercom: React.FC = () => {
     LOCALE_PATH_PATTERN + '/new-member/connect-payment/direct',
   )
   React.useEffect(() => {
-    if ([Variation.IOS, Variation.ANDROID].includes(variation!)) {
+    if (
+      [Variation.IOS, Variation.ANDROID, Variation.AVY].includes(variation!)
+    ) {
       return
     }
 

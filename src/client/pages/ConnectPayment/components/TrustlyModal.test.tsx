@@ -59,15 +59,19 @@ describe('TrustlyModal', () => {
   it('renders open with link without 💥', () => {
     const trustlyUrl = 'http://trustly.com/blah'
     const wrapper = mount(
-      <MockedProvider>
-        <TrustlyModal
-          isOpen
-          // tslint:disable-next-line:no-empty
-          setIsOpen={() => {}}
-          trustlyUrl={trustlyUrl}
-          generateTrustlyUrl={async () => 'blah'}
-        />
-      </MockedProvider>,
+      <MemoryRouter
+        initialEntries={[{ pathname: '/se/new-member/connect-payment' }]}
+      >
+        <MockedProvider>
+          <TrustlyModal
+            isOpen
+            // tslint:disable-next-line:no-empty
+            setIsOpen={() => {}}
+            trustlyUrl={trustlyUrl}
+            generateTrustlyUrl={async () => 'blah'}
+          />
+        </MockedProvider>
+      </MemoryRouter>,
     )
 
     expect(wrapper.find('Header').text()).toBe(
@@ -76,7 +80,7 @@ describe('TrustlyModal', () => {
     expect(wrapper.find('iframe').prop('src')).toBe(trustlyUrl)
   })
 
-  it('redirects to success page when iframe is successful', async () => {
+  it('redirects to success page and triggers onSuccess when iframe is successful', async () => {
     const trustlyUrl = 'http://trustly.com/blah'
     const ShowPath = withRouter(({ history }) => {
       return <>{history.location.pathname}</>
@@ -90,6 +94,7 @@ describe('TrustlyModal', () => {
       setIsOpen(false)
       setIsSuccess(true)
     }
+    const onSuccess = jest.fn()
 
     const wrapper = mount(
       <MemoryRouter
@@ -105,6 +110,7 @@ describe('TrustlyModal', () => {
               trustlyUrl={trustlyUrl}
               generateTrustlyUrl={async () => 'blah'}
               handleIframeLoad={handleIframeLoadFn}
+              onSuccess={onSuccess}
             />
             <ShowPath />
           </>
@@ -119,6 +125,7 @@ describe('TrustlyModal', () => {
     })
 
     expect(wrapper.find(ShowPath).text()).toBe('/se/new-member/download')
+    expect(onSuccess).toHaveBeenCalledTimes(1)
   })
 
   it('handles trustly notify parent', async () => {

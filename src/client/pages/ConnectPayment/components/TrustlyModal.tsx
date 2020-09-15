@@ -2,9 +2,8 @@ import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand'
 import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import Modal from 'components/Modal'
-import { CurrentLocale } from 'components/utils/CurrentLocale'
-import { Container } from 'constate'
-import React from 'react'
+import { useCurrentLocale } from 'components/utils/CurrentLocale'
+import React, { createRef, useEffect, useState } from 'react'
 import { Redirect } from 'react-router-dom'
 
 const Header = styled('div')({
@@ -26,20 +25,13 @@ const TrustlyIframe = styled('iframe')({
   border: 'none',
 })
 
-interface State {
-  isSuccess: boolean
-}
-
-interface Actions {
-  setIsSuccess: (isSuccess: boolean) => void
-}
-
 interface Props {
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
   trustlyUrl: string | null
   generateTrustlyUrl: () => Promise<string | null>
   handleIframeLoad?: HandleIframeLoad
+  onSuccess?: () => void
 }
 
 export const TrustlyModal: React.FC<Props> = ({
@@ -48,10 +40,21 @@ export const TrustlyModal: React.FC<Props> = ({
   trustlyUrl,
   generateTrustlyUrl,
   handleIframeLoad: actualHandleIframeLoad = handleIframeLoad,
+  onSuccess = () => {
+    /* noop */
+  },
 }) => {
-  const iframeRef = React.createRef<HTMLIFrameElement>()
+  const iframeRef = createRef<HTMLIFrameElement>()
+  const currentLocale = useCurrentLocale()
+  const [isSuccess, setIsSuccess] = useState(false)
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (isSuccess) {
+      onSuccess()
+    }
+  }, [isSuccess])
+
+  useEffect(() => {
     const handler = (e: MessageEvent) => {
       if (
         /*
@@ -77,53 +80,34 @@ export const TrustlyModal: React.FC<Props> = ({
   }, [])
 
   return (
-    <Container<State, Actions>
-      initialState={{
-        isSuccess: false,
-      }}
-      actions={{
-        setIsSuccess: (isSuccess: boolean) => (_state) => ({
-          isSuccess,
-        }),
-      }}
+    <Modal
+      isOpen={isOpen}
+      setIsOpen={setIsOpen}
+      style={{ content: { padding: 0 } }}
     >
-      {({ isSuccess, setIsSuccess }) => (
-        <Modal
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          style={{ content: { padding: 0 } }}
-        >
-          <Header>
-            <TranslationsConsumer textKey="ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_TITLE">
-              {(header) => header}
-            </TranslationsConsumer>
-          </Header>
+      <Header>
+        <TranslationsConsumer textKey="ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_TITLE">
+          {(header) => header}
+        </TranslationsConsumer>
+      </Header>
 
-          {trustlyUrl !== null && (
-            <TrustlyIframe
-              src={trustlyUrl}
-              ref={iframeRef}
-              onLoad={async () => {
-                const contentWindow = iframeRef.current?.contentWindow
-                await actualHandleIframeLoad(
-                  setIsOpen,
-                  setIsSuccess,
-                  generateTrustlyUrl,
-                )(contentWindow)
-              }}
-            />
-          )}
-
-          {isSuccess && (
-            <CurrentLocale>
-              {({ currentLocale }) => (
-                <Redirect to={`/${currentLocale}/new-member/download`} />
-              )}
-            </CurrentLocale>
-          )}
-        </Modal>
+      {trustlyUrl !== null && (
+        <TrustlyIframe
+          src={trustlyUrl}
+          ref={iframeRef}
+          onLoad={async () => {
+            const contentWindow = iframeRef.current?.contentWindow
+            await actualHandleIframeLoad(
+              setIsOpen,
+              setIsSuccess,
+              generateTrustlyUrl,
+            )(contentWindow)
+          }}
+        />
       )}
-    </Container>
+
+      {isSuccess && <Redirect to={`/${currentLocale}/new-member/download`} />}
+    </Modal>
   )
 }
 

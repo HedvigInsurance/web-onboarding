@@ -132,7 +132,7 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
         animate={{ opacity: 1 }}
         transition={{ ease: 'easeOut', duration: 1 }}
       >
-        {variation !== Variation.ANDROID && variation !== Variation.IOS && (
+        {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
           <StorageContainer>
             {({ session }) => (
               <Header

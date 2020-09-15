@@ -6,7 +6,11 @@ import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { useRegisterDirectDebitMutation } from '../containers/RegisterDirectDebitMutation'
 import { TrustlyModal } from './TrustlyModal'
 
-export const TrustlyCheckout: React.FC = () => {
+interface Props {
+  onSuccess?: () => void
+}
+
+export const TrustlyCheckout: React.FC<Props> = ({ onSuccess }) => {
   const textKeys = useTextKeys()
   const [trustlyModalIsOpen, setTrustlyModalIsOpen] = React.useState(false)
   const [trustlyUrl, setTrustlyUrl] = React.useState<string | null>(null)
@@ -60,6 +64,7 @@ export const TrustlyCheckout: React.FC = () => {
         }}
         trustlyUrl={trustlyUrl}
         generateTrustlyUrl={generateTrustlyUrl}
+        onSuccess={onSuccess}
       />
     </>
   )
