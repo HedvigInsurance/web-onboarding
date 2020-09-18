@@ -30,6 +30,7 @@ const pushToGTMDataLayer = (obj: DataLayerObject) => {
 }
 
 export const trackOfferGTM = (
+  eventName: 'offer_created' | 'signed_customer',
   offerData: OfferData,
   referralCodeUsed: boolean,
 ) => {
@@ -44,7 +45,7 @@ export const trackOfferGTM = (
     }
 
     pushToGTMDataLayer({
-      event: 'signed_customer',
+      event: eventName,
       offerData: {
         insurance_type: getContractType(),
         referral_code: referralCodeUsed ? 'yes' : 'no',
