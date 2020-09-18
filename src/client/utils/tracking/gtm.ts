@@ -15,6 +15,7 @@ interface GTMOfferData {
   referral_code: 'yes' | 'no'
   number_of_people: number
   insurance_price: number
+  currency: string
 }
 
 export interface DataLayerObject {
@@ -49,6 +50,7 @@ export const trackOfferGTM = (
         referral_code: referralCodeUsed ? 'yes' : 'no',
         number_of_people: offerData.person.householdSize,
         insurance_price: parseFloat(offerData.cost.monthlyNet.amount),
+        currency: offerData.cost.monthlyNet.currency,
       },
     })
   } catch (e) {
