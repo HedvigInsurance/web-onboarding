@@ -19,7 +19,8 @@
     "lint": "tslint \"src/**/*.{ts,tsx}\"",
     "gen": "graphql-codegen --config codegen.yml",
     "storybook": "start-storybook -p 6008",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "download-translations": "./bin/download-translations.sh"
   },
   "devDependencies": {
     "@babel/core": "^7.1.0",
