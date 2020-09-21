@@ -1,11 +1,11 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { MarkdownTranslation } from '@hedviginsurance/textkeyfy'
 import { Button } from 'components/buttons'
 import { InputField } from 'components/inputs'
 import { LoadingDots } from 'components/LoadingDots/LoadingDots'
 import { Form, Formik, FormikHelpers } from 'formik'
 import React, { useEffect, useState } from 'react'
+import ReactMarkdown from 'react-markdown/with-html'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import * as Yup from 'yup'
 import { LanguagePicker } from './LanguagePicker'
@@ -216,7 +216,7 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
 
       <Footer>
         <Info>
-          <MarkdownTranslation textKey="FOREVER_LANDINGPAGE_INFO_TEXT" />
+          <ReactMarkdown source={textKeys.FOREVER_LANDINGPAGE_INFO_TEXT()} />
         </Info>
         <LanguagePicker />
       </Footer>

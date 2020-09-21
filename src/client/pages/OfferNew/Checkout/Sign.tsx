@@ -1,6 +1,5 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand/dist'
-import { MarkdownTranslation } from '@hedviginsurance/textkeyfy'
 import { Button } from 'components/buttons'
 import { Spinner } from 'components/utils'
 import {
@@ -11,6 +10,7 @@ import { motion } from 'framer-motion'
 import { OfferData } from 'pages/OfferNew/types'
 import { isNorwegian, isSwedish } from 'pages/OfferNew/utils'
 import React from 'react'
+import ReactMarkdown from 'react-markdown/with-html'
 import { useMediaQuery } from 'react-responsive'
 import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { SignStatus } from './SignStatus'
@@ -135,9 +135,8 @@ export const Sign: React.FC<Props> = ({
         return (
           <Disclaimer key={quote.id}>
             {isSwedish(offerData) && (
-              <MarkdownTranslation
-                textKey="CHECKOUT_SIGN_DISCLAIMER"
-                replacements={{
+              <ReactMarkdown
+                source={textKeys.CHECKOUT_SIGN_DISCLAIMER({
                   PREBUY_LINK:
                     quote.insuranceTerms.get(
                       InsuranceTermType.PreSaleInfoEuStandard,
@@ -146,20 +145,19 @@ export const Sign: React.FC<Props> = ({
                     quote.insuranceTerms.get(
                       InsuranceTermType.TermsAndConditions,
                     )?.url ?? '',
-                }}
-                markdownProps={{ linkTarget: '_blank' }}
+                })}
+                linkTarget="_blank"
               />
             )}
             {isNorwegian(offerData) && (
-              <MarkdownTranslation
-                textKey="CHECKOUT_SIGN_DISCLAIMER_NO"
-                replacements={{
+              <ReactMarkdown
+                source={textKeys.CHECKOUT_SIGN_DISCLAIMER_NO({
                   TERMS_LINK:
                     quote.insuranceTerms.get(
                       InsuranceTermType.TermsAndConditions,
                     )?.url ?? '',
-                }}
-                markdownProps={{ linkTarget: '_blank' }}
+                })}
+                linkTarget="_blank"
               />
             )}
           </Disclaimer>

@@ -1,7 +1,3 @@
-import {
-  placeholderKeyRegex,
-  placeholderRegex,
-} from '@hedviginsurance/textkeyfy'
 import { Locale } from 'data/graphql'
 
 export const translations: Record<Locale, Record<string, string>> = {
@@ -49,26 +45,4 @@ export const translations: Record<Locale, Record<string, string>> = {
     FOREVER_LANDINGPAGE_DESCRIPTION:
       'Gratulerer! Du har blitt invitert til Hedvig Forever. Bruk min kode {CODE} for å senke din månedspris.',
   },
-}
-
-export const replacePlaceholders = (
-  replacements: Record<string, string>,
-  text: string,
-): string => {
-  const matches = text.split(placeholderRegex).filter((value) => value)
-
-  return matches
-    .map((placeholder) => {
-      if (!placeholderKeyRegex.test(placeholder)) {
-        return placeholder
-      }
-      const key = placeholder.match(placeholderKeyRegex)![0]
-
-      if (replacements[key]) {
-        return replacements[key]
-      }
-
-      return placeholder
-    })
-    .join('')
 }
