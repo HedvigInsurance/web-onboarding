@@ -10,8 +10,8 @@ import {
   quoteDetailsHasAddress,
 } from 'pages/OfferNew/utils'
 import React from 'react'
-import { TextKeyMap, useTextKeys } from 'utils/textKeys'
 import { formatPostalNumber } from 'utils/postalNumbers'
+import { TextKeyMap, useTextKeys } from 'utils/textKeys'
 
 const Wrapper = styled('div')`
   padding: 0 0.5rem;

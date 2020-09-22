@@ -6,10 +6,10 @@ import { Provider } from 'constate'
 import React from 'react'
 import { hot } from 'react-hot-loader'
 import { Route, Switch } from 'react-router-dom'
+import { TextKeyProvider } from 'utils/textKeys'
 import { reactPageRoutes } from '../routes'
 import { AppTokenRetrieval } from './utils/AppTokenRetrieval'
 import { GlobalCss } from './utils/globalStyles'
-import { TextKeyProvider } from 'utils/textKeys'
 import { Intercom } from './utils/Intercom'
 import {
   StorageContext,
