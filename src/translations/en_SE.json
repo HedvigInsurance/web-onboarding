@@ -196,7 +196,7 @@
   "DETAILS_MODULE_EXTRABUILDINGS_SAUNA": "Sauna",
   "DETAILS_MODULE_EXTRABUILDINGS_SHED": "Shed",
   "DETAILS_MODULE_EXTRABUILDINGS_STOREHOUSE": "Storage",
-  "SIGN_BANKID_CODE_STARTED": "Searching for BankID, it could take a while ... \nIf it has been a few seconds and no BankID has been found you probably don't have a current BankID that can be used for login / signature on this computer. If you have a BankID card, insert it into the card reader. If you do not have a BankID, you can download it from your internet bank. If you have a BankID on another device, you can start your BankID app there. \",",
+  "SIGN_BANKID_CODE_STARTED": "Searching for BankID, it could take a while ... \nIf it has been a few seconds and no BankID has been found you probably don't have a current BankID that can be used for login / signature on this computer. If you have a BankID card, insert it into the card reader. If you do not have a BankID, you can download it from your internet bank. If you have a BankID on another device, you can start your BankID app there.",
   "SIGN_BANKID_CODE_USER_SIGN": "Enter your security code in the BankID app and select Identify or Sign.",
   "SIGN_BANKID_CODE_NO_CLIENT": "Start your BankID app",
   "SIGN_BANKID_CODE_OUTSTANDING_TRANSACTION": "Start your BankID app",
