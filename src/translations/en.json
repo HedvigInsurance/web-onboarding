@@ -209,5 +209,11 @@
   "SIGN_BANKID_CODE_CERTIFICATE_ERR": "The BankID you are trying to use is old or blocked. Use a valid BankID or get a new one from your internet bank.",
   "SIGN_BANKID_CODE_USER_CANCEL": "Action cancelled.",
   "SIGN_BANKID_CODE_CANCELLED": "Action cancelled. Try again.",
-  "SIGN_BANKID_CODE_START_FAILED": "BankID does not appear to exist on your computer or phone. Install it from install.bankid.com and get a BankID from your internet bank.\""
+  "SIGN_BANKID_CODE_START_FAILED": "BankID does not appear to exist on your computer or phone. Install it from install.bankid.com and get a BankID from your internet bank.\"",
+  "FOREVER_ERROR_GENERIC": "Something went wrong",
+  "FOREVER_ERROR_CANNOT_REDEEM_OWN_CAMPAIGN": "You can't redeem your own code",
+  "FOREVER_ERROR_CAMPAIGN_CANNOT_BE_COMBINED_WITH_EXISTING": "This code can't be combined with other codes.",
+  "FOREVER_ERROR_CAMPAIGN_HAS_EXPIRED": "The code has expired.",
+  "FOREVER_ERROR_MEMBER_IS_NOT_ELIGIBLE_FOR_CAMPAIGN": "Not eligible for campaign.",
+  "FOREVER_ERROR_CAMPAIGN_DOES_NOT_EXIST": "This code doesn't exist."
 }

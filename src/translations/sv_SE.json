@@ -207,5 +207,12 @@
   "SIGN_BANKID_CODE_CERTIFICATE_ERR": "Det BankID du försöker använda är\nför gammalt eller spärrat. Använd\nett annat BankID eller hämta ett\nnytt hos din internetbank.",
   "SIGN_BANKID_CODE_USER_CANCEL": "Åtgärden avbruten.",
   "SIGN_BANKID_CODE_CANCELLED": "Åtgärden avbruten. Försök igen",
-  "SIGN_BANKID_CODE_START_FAILED": "BankID-appen verkar inte finnas i din dator eller telefon. Installera den och hämta ett BankID hos din internetbank. Installera appen från install.bankid.com."
+  "SIGN_BANKID_CODE_START_FAILED": "BankID-appen verkar inte finnas i din dator eller telefon. Installera den och hämta ett BankID hos din internetbank. Installera appen från install.bankid.com.",
+  "FOREVER_ERROR_CAMPAIGN_DOES_NOT_EXIST": "Felaktig kod.",
+  "FOREVER_ERROR_GENERIC": "Oväntat fel",
+  "FOREVER_ERROR_CANNOT_REDEEM_OWN_CAMPAIGN": "Kan ej applicera egen kod",
+  "FOREVER_ERROR_CAMPAIGN_CANNOT_BE_COMBINED_WITH_EXISTING": "Koden kan inte kombineras med andra rabattkoder.",
+  "FOREVER_ERROR_CAMPAIGN_HAS_EXPIRED": "Koden har gått ut.",
+  "FOREVER_ERROR_MEMBER_IS_NOT_ELIGIBLE_FOR_CAMPAIGN": "Ej tillgänglig för kampanj.",
+  "FOREVER_ERROR_CANNOT_REDEEM_CAMPAIGN_FROM_DIFFERENT_MARKET": "Felaktig kod."
 }

@@ -197,5 +197,11 @@
   "DETAILS_MODULE_TABLE_SUBLETTING_CELL_LABEL_HOUSE": "Sublets",
   "DETAILS_MODULE_TABLE_YEARBUILT_CELL_LABEL_HOUSE": "Building year",
   "SIDEBAR_INSURANCE_TYPE_BRF": "Homeowner",
-  "SIDEBAR_INSURANCE_TYPE_RENT": "Rental"
+  "SIDEBAR_INSURANCE_TYPE_RENT": "Rental",
+  "FOREVER_ERROR_GENERIC": "Something went wrong",
+  "FOREVER_ERROR_CANNOT_REDEEM_OWN_CAMPAIGN": "You can't redeem your own code",
+  "FOREVER_ERROR_CAMPAIGN_CANNOT_BE_COMBINED_WITH_EXISTING": "This code can't be combined with other codes.",
+  "FOREVER_ERROR_CAMPAIGN_HAS_EXPIRED": "The code has expired.",
+  "FOREVER_ERROR_MEMBER_IS_NOT_ELIGIBLE_FOR_CAMPAIGN": "Not eligible for campaign.",
+  "FOREVER_ERROR_CAMPAIGN_DOES_NOT_EXIST": "This code doesn't exist."
 }
