@@ -195,5 +195,14 @@
   "DETAILS_MODULE_EXTRABUILDINGS_OUTHOUSE": "Uthus",
   "DETAILS_MODULE_EXTRABUILDINGS_SAUNA": "Bastu",
   "DETAILS_MODULE_EXTRABUILDINGS_SHED": "Skjul",
-  "DETAILS_MODULE_EXTRABUILDINGS_STOREHOUSE": "Förråd"
+  "DETAILS_MODULE_EXTRABUILDINGS_STOREHOUSE": "Förråd",
+  "SIGN_BANKID_CODE_STARTED": "Söker efter BankID, det kan ta en liten stund…\nOm det har gått några sekunder och inget BankID har hittats har du sannolikt inget BankID som går att använda för den aktuella inloggningen/underskriften i den här datorn. Om du har ett BankIDkort, sätt in det i kortläsaren. Om du inte har något BankID kan du hämta ett hos din internetbank. Om du har ett BankID på en annan enhet kan du starta din BankID-app där.",
+  "SIGN_BANKID_CODE_USER_SIGN": "Skriv in din säkerhetskod i BankID-appen och välj Legitimera eller Skriv under.",
+  "SIGN_BANKID_CODE_NO_CLIENT": "Starta BankID-appen.",
+  "SIGN_BANKID_CODE_OUTSTANDING_TRANSACTION": "Starta BankID-appen.",
+  "SIGN_BANKID_CODE_EXPIRED_TRANSACTION": "BankID-appen svarar inte. Kontrollera att den är startad och att du har internetanslutning. Om du inte har något giltigt BankID kan du hämta ett hos din Bank. Försök sedan igen.",
+  "SIGN_BANKID_CODE_CERTIFICATE_ERR": "Det BankID du försöker använda är\nför gammalt eller spärrat. Använd\nett annat BankID eller hämta ett\nnytt hos din internetbank.",
+  "SIGN_BANKID_CODE_USER_CANCEL": "Åtgärden avbruten.",
+  "SIGN_BANKID_CODE_CANCELLED": "Åtgärden avbruten. Försök igen",
+  "SIGN_BANKID_CODE_START_FAILED": "BankID-appen verkar inte finnas i din dator eller telefon. Installera den och hämta ett BankID hos din internetbank. Installera appen från install.bankid.com."
 }
