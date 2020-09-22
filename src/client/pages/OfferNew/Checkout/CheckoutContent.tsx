@@ -4,7 +4,7 @@ import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { useEditQuoteMutation, useRedeemedCampaignsQuery } from 'data/graphql'
 import { Price } from 'pages/OfferNew/components'
 import React from 'react'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 import { StartDate } from '../Introduction/Sidebar/StartDate'
 import { OfferData } from '../types'
 import {

@@ -6,7 +6,7 @@ import { LoadingDots } from 'components/LoadingDots/LoadingDots'
 import { Form, Formik, FormikHelpers } from 'formik'
 import React, { useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown/with-html'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 import * as Yup from 'yup'
 import { LanguagePicker } from './LanguagePicker'
 

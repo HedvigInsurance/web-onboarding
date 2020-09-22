@@ -8,13 +8,16 @@ import { sleep } from 'utils/misc'
 import { REGISTER_DIRECT_DEBIT_MUTATION } from '../containers/RegisterDirectDebitMutation'
 import { TrustlyCheckout } from './TrustlyCheckout'
 import { TrustlyModal } from './TrustlyModal'
+import { StaticTextKeyProvider } from 'utils/textKeys'
 
 it('renders without 💥', () => {
   const wrapper = mount(
     <StaticRouter location="http://localhost:8040/se/new-member/connect-payment">
-      <MockedProvider>
-        <TrustlyCheckout />
-      </MockedProvider>
+      <StaticTextKeyProvider>
+        <MockedProvider>
+          <TrustlyCheckout />
+        </MockedProvider>
+      </StaticTextKeyProvider>
     </StaticRouter>,
   )
 
@@ -56,7 +59,9 @@ it('opens trustly modal and renders correct iframe url', async () => {
           },
         ]}
       >
-        <TrustlyCheckout />
+        <StaticTextKeyProvider>
+          <TrustlyCheckout />
+        </StaticTextKeyProvider>
       </MockedProvider>
     </StaticRouter>,
   )

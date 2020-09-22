@@ -9,7 +9,7 @@ import { Modal, ModalProps } from 'components/ModalNew'
 import { PerilV2 } from 'data/graphql'
 import hexToRgba from 'hex-to-rgba'
 import React from 'react'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 import { getIconUrl } from './index'
 
 const TRANSITION_MS = 250

@@ -2,7 +2,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { action } from '@storybook/addon-actions'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
-import { TextKeyProvider } from 'utils/hooks/useTextKeys'
+import { TextKeyProvider } from 'utils/textKeys'
 import { RedeemCode } from './RedeemCode'
 
 export default {

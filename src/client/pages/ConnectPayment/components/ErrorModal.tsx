@@ -3,7 +3,7 @@ import { Button } from 'components/buttons'
 import { Modal } from 'components/ModalNew'
 import React from 'react'
 import { useHistory } from 'react-router'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 
 const ErrorMessage = styled('div')`
   padding: 2rem 1rem;

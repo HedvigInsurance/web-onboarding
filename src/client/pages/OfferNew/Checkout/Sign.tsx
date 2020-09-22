@@ -12,7 +12,7 @@ import { isNorwegian, isSwedish } from 'pages/OfferNew/utils'
 import React from 'react'
 import ReactMarkdown from 'react-markdown/with-html'
 import { useMediaQuery } from 'react-responsive'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 import { SignStatus } from './SignStatus'
 
 export const SignSpacer = styled('div')`

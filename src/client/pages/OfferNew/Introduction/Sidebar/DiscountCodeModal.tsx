@@ -9,7 +9,7 @@ import { Form, Formik } from 'formik'
 import { motion } from 'framer-motion'
 import hexToRgba from 'hex-to-rgba'
 import React from 'react'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 import * as Yup from 'yup'
 
 interface Props {

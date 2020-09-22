@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { InfoIcon } from 'components/icons/Info'
 import React from 'react'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 
 const Wrapper = styled.div`
   background: ${colorsV2.offwhite};

@@ -4,7 +4,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { HedvigSymbol } from 'components/icons/HedvigSymbol'
 import React from 'react'
 import ReactVisibilitySensor from 'react-visibility-sensor'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 import {
   Column,
   ColumnSpacing,

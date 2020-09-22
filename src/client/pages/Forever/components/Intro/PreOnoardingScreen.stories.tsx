@@ -1,7 +1,7 @@
 import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
-import { TextKeyProvider } from 'utils/hooks/useTextKeys'
+import { TextKeyProvider } from 'utils/textKeys'
 import { PreOnboardingScreen } from './PreOnboardingScreen'
 
 export default {

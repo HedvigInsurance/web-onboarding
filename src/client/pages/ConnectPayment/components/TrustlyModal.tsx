@@ -4,7 +4,7 @@ import Modal from 'components/Modal'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import React, { createRef, useEffect, useState } from 'react'
 import { Redirect } from 'react-router-dom'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 
 const Header = styled('div')({
   width: '100%',

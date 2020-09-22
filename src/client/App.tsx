@@ -9,7 +9,7 @@ import { Route, Switch } from 'react-router-dom'
 import { reactPageRoutes } from '../routes'
 import { AppTokenRetrieval } from './utils/AppTokenRetrieval'
 import { GlobalCss } from './utils/globalStyles'
-import { TextKeyProvider } from './utils/hooks/useTextKeys'
+import { TextKeyProvider } from 'utils/textKeys'
 import { Intercom } from './utils/Intercom'
 import {
   StorageContext,

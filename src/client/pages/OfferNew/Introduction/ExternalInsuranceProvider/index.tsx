@@ -6,7 +6,7 @@ import {
 import { OfferData } from 'pages/OfferNew/types'
 import React from 'react'
 
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 import { Compare } from './Compare'
 
 interface Props {

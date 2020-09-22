@@ -5,6 +5,7 @@ import escapeHTML from 'escape-html'
 import fs from 'fs'
 import Router from 'koa-router'
 import path from 'path'
+import { replacePlaceholders } from 'utils/textKeys'
 import { sentryConfig } from '../client/utils/sentry-server'
 import { ServerCookieStorage } from '../client/utils/storage/ServerCookieStorage'
 import { ServerSideRoute } from '../routes'
@@ -22,7 +23,7 @@ import {
 } from './config'
 import { favicons } from './favicons'
 import { WithRequestUuid } from './middleware/enhancers'
-import { replacePlaceholders, translations } from './tmp-translations'
+import { translations } from './tmp-translations'
 
 const scriptLocation =
   process.env.NODE_ENV === 'production'
@@ -55,10 +56,11 @@ const getOgDescription = (
   if (code === null) {
     ogDescription = translations[localeIsoCode][route.metaDescriptionTextKey]
   } else {
-    ogDescription = replacePlaceholders(
-      { CODE: code.toUpperCase() },
+    const result = replacePlaceholders(
       translations[localeIsoCode][route.metaDescriptionTextKey],
+      { CODE: code.toUpperCase() },
     )
+    ogDescription = Array.isArray(result) ? result.join('') : result
   }
 
   return ogDescription

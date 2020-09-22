@@ -1,7 +1,7 @@
 import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
 import { InsuranceCost, InsuranceDataCollection } from 'src/client/data/graphql'
-import { TextKeyProvider } from 'utils/hooks/useTextKeys'
+import { TextKeyProvider } from 'utils/textKeys'
 import { Compare } from './Compare'
 
 export default {

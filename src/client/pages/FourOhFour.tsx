@@ -4,7 +4,7 @@ import { TopBar } from 'components/TopBar'
 import React from 'react'
 import Helmet from 'react-helmet-async'
 import { RouteComponentProps } from 'react-router'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 
 const FourOhFourWrapper = styled('div')({
   textAlign: 'center',
