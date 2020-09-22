@@ -6,7 +6,11 @@ import {
 } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
-import { QuoteBundle, useQuoteBundleQuery } from 'data/graphql'
+import {
+  QuoteBundle,
+  useQuoteBundleQuery,
+  useRedeemedCampaignsQuery,
+} from 'data/graphql'
 import { History } from 'history'
 import { SwitchSafetySection } from 'pages/OfferNew/SwitchSafetySection'
 import { getOfferData } from 'pages/OfferNew/utils'
@@ -15,6 +19,7 @@ import React from 'react'
 import { Redirect, useHistory, useRouteMatch } from 'react-router'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useStorage } from 'utils/StorageContainer'
+import { trackOfferGTM } from 'utils/tracking/gtm'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { Checkout } from './Checkout'
 import { FaqSection } from './FaqSection'
@@ -37,6 +42,8 @@ export const OfferNew: React.FC = () => {
   const localeIsoCode = getLocaleIsoCode(currentLocale)
   const variation = useVariation()
   const quoteIds = storage.session.getSession()?.quoteIds ?? []
+  const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
+  const redeemedCampaigns = redeemedCampaignsData?.redeemedCampaigns ?? []
   const { data, loading: loadingQuoteBundle, refetch } = useQuoteBundleQuery({
     variables: {
       input: {
@@ -67,6 +74,12 @@ export const OfferNew: React.FC = () => {
   }
 
   const offerData = getOfferData(data?.quoteBundle! as QuoteBundle)
+
+  trackOfferGTM(
+    'offer_created',
+    offerData,
+    redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction',
+  )
 
   return (
     <Page>

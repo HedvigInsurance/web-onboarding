@@ -15,6 +15,7 @@ interface GTMOfferData {
   referral_code: 'yes' | 'no'
   number_of_people: number
   insurance_price: number
+  currency: string
 }
 
 export interface DataLayerObject {
@@ -29,6 +30,7 @@ const pushToGTMDataLayer = (obj: DataLayerObject) => {
 }
 
 export const trackOfferGTM = (
+  eventName: 'offer_created' | 'signed_customer',
   offerData: OfferData,
   referralCodeUsed: boolean,
 ) => {
@@ -43,12 +45,13 @@ export const trackOfferGTM = (
     }
 
     pushToGTMDataLayer({
-      event: 'signed_customer',
+      event: eventName,
       offerData: {
         insurance_type: getContractType(),
         referral_code: referralCodeUsed ? 'yes' : 'no',
         number_of_people: offerData.person.householdSize,
         insurance_price: parseFloat(offerData.cost.monthlyNet.amount),
+        currency: offerData.cost.monthlyNet.currency,
       },
     })
   } catch (e) {
