@@ -25,5 +25,6 @@ lokalise2 \
   --add-newline-eof \
   --original-filenames=false \
   --bundle-structure 'src/translations/%LANG_ISO%.json' \
+  --placeholder-format icu \
   --include-tags web-onboarding \
   --indentation 2sp
