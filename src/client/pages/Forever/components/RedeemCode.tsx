@@ -216,7 +216,9 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
 
       <Footer>
         <Info>
-          <ReactMarkdown source={textKeys.FOREVER_LANDINGPAGE_INFO_TEXT()} />
+          <ReactMarkdown
+            source={textKeys.FOREVER_LANDINGPAGE_INFO_TEXT().join('')}
+          />
         </Info>
         <LanguagePicker />
       </Footer>

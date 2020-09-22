@@ -158,6 +158,8 @@
   "STARTPAGE_COMBO_BODY": "En kombo av både innbo- og reiseforsikring",
   "STARTPAGE_COMBO_BUTTON": "Få et prisforslag",
   "SIDEBAR_INSURANCE_TYPE_NO_BUNDLE": "Komboforsikring 25% rabatt ",
+  "SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_RENT": "Innboforsikring",
+  "SIDEBAR_INSURANCE_TYPE_NO_TRAVEL": "Reiseforsikring",
   "CHECKOUT_SIGN_DISCLAIMER_NO": "Ved å trykke på ”Signer med BankID” godkjenner jeg at jeg har tatt del av [vilkårene]({TERMS_LINK}) og at personopplysningene mine [behandles i tråd med GDPR](https:\/\/www.hedvig.com\/no\/privacy).",
   "BANKID_NOT_RESPONDING": "Respons fra BankID tar lengre tid enn antatt...",
   "RETRY_QUESTION": "Forsøk igjen?",

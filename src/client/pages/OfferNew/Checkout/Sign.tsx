@@ -136,27 +136,31 @@ export const Sign: React.FC<Props> = ({
           <Disclaimer key={quote.id}>
             {isSwedish(offerData) && (
               <ReactMarkdown
-                source={textKeys.CHECKOUT_SIGN_DISCLAIMER({
-                  PREBUY_LINK:
-                    quote.insuranceTerms.get(
-                      InsuranceTermType.PreSaleInfoEuStandard,
-                    )?.url ?? '',
-                  TERMS_LINK:
-                    quote.insuranceTerms.get(
-                      InsuranceTermType.TermsAndConditions,
-                    )?.url ?? '',
-                })}
+                source={textKeys
+                  .CHECKOUT_SIGN_DISCLAIMER({
+                    PREBUY_LINK:
+                      quote.insuranceTerms.get(
+                        InsuranceTermType.PreSaleInfoEuStandard,
+                      )?.url ?? '',
+                    TERMS_LINK:
+                      quote.insuranceTerms.get(
+                        InsuranceTermType.TermsAndConditions,
+                      )?.url ?? '',
+                  })
+                  .join('')}
                 linkTarget="_blank"
               />
             )}
             {isNorwegian(offerData) && (
               <ReactMarkdown
-                source={textKeys.CHECKOUT_SIGN_DISCLAIMER_NO({
-                  TERMS_LINK:
-                    quote.insuranceTerms.get(
-                      InsuranceTermType.TermsAndConditions,
-                    )?.url ?? '',
-                })}
+                source={textKeys
+                  .CHECKOUT_SIGN_DISCLAIMER_NO({
+                    TERMS_LINK:
+                      quote.insuranceTerms.get(
+                        InsuranceTermType.TermsAndConditions,
+                      )?.url ?? '',
+                  })
+                  .join('')}
                 linkTarget="_blank"
               />
             )}

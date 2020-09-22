@@ -1,11 +1,8 @@
 import { min as createMinifiedSegmentSnippet } from '@segment/snippet'
-import { getLocaleIsoCode } from 'components/utils/CurrentLocale'
-import { Locale } from 'data/graphql'
 import escapeHTML from 'escape-html'
 import fs from 'fs'
 import Router from 'koa-router'
 import path from 'path'
-import { replacePlaceholders } from 'utils/textKeys'
 import { sentryConfig } from '../client/utils/sentry-server'
 import { ServerCookieStorage } from '../client/utils/storage/ServerCookieStorage'
 import { ServerSideRoute } from '../routes'
@@ -22,8 +19,8 @@ import {
   GIRAFFE_WS_ENDPOINT,
 } from './config'
 import { favicons } from './favicons'
+import { getPageMeta } from './meta'
 import { WithRequestUuid } from './middleware/enhancers'
-import { translations } from './tmp-translations'
 
 const scriptLocation =
   process.env.NODE_ENV === 'production'
@@ -42,30 +39,6 @@ const segmentSnippet = createMinifiedSegmentSnippet({
   load: true,
 })
 
-const getOgDescription = (
-  route: ServerSideRoute,
-  code: string | null,
-  localeIsoCode: Locale,
-): string | null => {
-  if (!route.metaDescriptionTextKey) {
-    return null
-  }
-
-  let ogDescription: string
-
-  if (code === null) {
-    ogDescription = translations[localeIsoCode][route.metaDescriptionTextKey]
-  } else {
-    const result = replacePlaceholders(
-      translations[localeIsoCode][route.metaDescriptionTextKey],
-      { CODE: code.toUpperCase() },
-    )
-    ogDescription = Array.isArray(result) ? result.join('') : result
-  }
-
-  return ogDescription
-}
-
 const template = (
   route: ServerSideRoute,
   locale: string,
@@ -73,29 +46,21 @@ const template = (
   adtractionTag: string,
   code: string | null,
 ) => {
-  let localeIsoCode: Locale
-  try {
-    localeIsoCode = getLocaleIsoCode(locale)
-  } catch (_e) {
-    localeIsoCode = Locale.EnSe
-  }
-  const metaTitle = translations[localeIsoCode][route.titleTextKey]
-  const ogDescription = getOgDescription(route, code, localeIsoCode)
+  const pageMeta = getPageMeta(locale, route, code)
 
-  return `
-  <!doctype html>
+  return `<!doctype html>
   <html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1.0, maximum-scale=1.2, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     ${favicons}
-    <title>${escapeHTML(metaTitle)}</title>
-    <meta property="og:title" content="${escapeHTML(metaTitle)}" />
+    <title>${escapeHTML(pageMeta?.metaTitle)}</title>
+    <meta property="og:title" content="${escapeHTML(pageMeta?.metaTitle)}" />
     ${
-      ogDescription
+      pageMeta?.ogDescription
         ? `<meta property="og:description" content="${escapeHTML(
-            ogDescription,
+            pageMeta.ogDescription,
           )}" />`
         : ''
     }
