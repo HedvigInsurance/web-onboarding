@@ -51,7 +51,8 @@ We use Segment, Mixpanel and Google Tag Manager as our analytics tools. You can 
 ## Text keys
 
 Text keys are located under `src/translations`. They live in [Lokalise](https://lokalise.com/) and are downloaded from there with `yarn download-translations`.
-Before you run this command you need to generate an API token in your [Lokalise profile page](https://app.lokalise.com/profile).
+Before you run this command you need to generate an API token in your [Lokalise profile page](https://app.lokalise.com/profile) and install
+the [Lokalise CLI tool](https://github.com/lokalise/lokalise-cli-2-go)
 
 To know which text key is used where you can suffix the url anywhere with `?debug=textkeys` to show text keys instead of translations, and to disable
 the debug mode you can suffix the url with `?debug=none`.
