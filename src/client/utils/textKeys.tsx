@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useHistory } from 'react-router'
 import enTextKeys from '../../translations/en.json'
 
 const placeholderRegex = new RegExp('({[a-zA-Z0-9_]+})', 'g')
@@ -81,10 +80,10 @@ const DEBUG_TEXTKEYS_QUERY = 'debug=textkeys'
 const DEBUG_NONE_QUERY = 'debug=none'
 const DEBUG_LOCAL_STORAGE_KEY = 'hvg:debug:textkeys'
 
-export const TextKeyProvider: React.FC<{ locale: Locale }> = ({
-  locale,
-  children,
-}) => {
+export const TextKeyProvider: React.FC<{
+  locale: Locale
+  locationSearch?: string
+}> = ({ locale, locationSearch, children }) => {
   const [textKeys, setTextKeys] = useState<TextKeys | null>(null)
   const [isDebugMode, setIsDebugmode] = useState(() => {
     try {
@@ -95,7 +94,6 @@ export const TextKeyProvider: React.FC<{ locale: Locale }> = ({
       return false
     }
   })
-  const history = useHistory()
 
   useEffect(() => {
     let textKeyMap: Promise<{ default: TextKeys }>
@@ -135,14 +133,14 @@ export const TextKeyProvider: React.FC<{ locale: Locale }> = ({
   }, [locale])
 
   useEffect(() => {
-    if (history.location.search.includes(DEBUG_TEXTKEYS_QUERY)) {
+    if (locationSearch?.includes(DEBUG_TEXTKEYS_QUERY)) {
       setIsDebugmode(true)
     } else {
-      if (history.location.search.includes(DEBUG_NONE_QUERY)) {
+      if (locationSearch?.includes(DEBUG_NONE_QUERY)) {
         setIsDebugmode(false)
       }
     }
-  }, [history.location.search.includes(DEBUG_TEXTKEYS_QUERY)])
+  }, [locationSearch?.includes(DEBUG_TEXTKEYS_QUERY)])
   useEffect(() => {
     sessionStorage.setItem(DEBUG_LOCAL_STORAGE_KEY, JSON.stringify(isDebugMode))
   }, [isDebugMode])

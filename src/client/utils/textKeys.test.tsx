@@ -49,4 +49,23 @@ describe('TextKeyProvider', () => {
 
     expect(wrapper.text()).toBe('Yes')
   })
+
+  it('enables debug mode', async () => {
+    const Component = () => {
+      const textKeys = useTextKeys()
+
+      return <>{textKeys.YES()}</>
+    }
+
+    const wrapper = mount(
+      <TextKeyProvider locale="en" locationSearch="?debug=textkeys">
+        <Component />
+      </TextKeyProvider>,
+    )
+
+    await act(() => nextTickAsync())
+    wrapper.update()
+
+    expect(wrapper.text()).toBe('YES')
+  })
 })
