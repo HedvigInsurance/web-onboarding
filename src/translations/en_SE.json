@@ -13,6 +13,7 @@
   "SIGN_BANKID_INITIATED": "Waiting",
   "DOWNLOAD_PAGE_TITLE": "Download the Hedvig app | Hedvig",
   "SIGN_PAGE_TITLE": "Sign with BankID | Hedvig",
+  "START_PAGE_TITLE": "Get a price quote | Hedvig",
   "WEB_REFERRAL_ADDEDPERK": "{REFERRAL_VALUE} \/ month discount via Hedvig Zero",
   "WEB_VOUCHER_ADDEDPERK": "{FREE_MONTHS} months free from {CAMPAIGN_NAME}",
   "ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_TITLE": "Set up payment",

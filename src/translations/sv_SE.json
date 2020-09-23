@@ -13,6 +13,7 @@
   "SIGN_BANKID_INITIATED": "Väntar",
   "DOWNLOAD_PAGE_TITLE": "Ladda ned Hedvig-appen | Hedvig",
   "SIGN_PAGE_TITLE": "Signera med BankID | Hedvig",
+  "START_PAGE_TITLE": "Få ett prisförslag | Hedvig",
   "WEB_REFERRAL_ADDEDPERK": "{REFERRAL_VALUE}\/mån rabatt via Hedvig Forever",
   "WEB_VOUCHER_ADDEDPERK": "{FREE_MONTHS} månader gratis från {CAMPAIGN_NAME}",
   "ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_TITLE": "Sätt upp betalning",
