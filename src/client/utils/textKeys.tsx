@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router'
 import enTextKeys from '../../translations/en.json'
 
 const placeholderRegex = new RegExp('({[a-zA-Z0-9_]+})', 'g')
@@ -74,11 +75,27 @@ export const useTextKeys = () => {
   return React.useMemo(() => makeTextKeyResolver(context), [context])
 }
 
+const getStaticTextKeys = (textKeys: TextKeys) =>
+  Object.keys(textKeys).reduce((acc, key) => ({ ...acc, [key]: key }), {})
+const DEBUG_TEXTKEYS_QUERY = 'debug=textkeys'
+const DEBUG_NONE_QUERY = 'debug=none'
+const DEBUG_LOCAL_STORAGE_KEY = 'hvg:debug:textkeys'
+
 export const TextKeyProvider: React.FC<{ locale: Locale }> = ({
   locale,
   children,
 }) => {
   const [textKeys, setTextKeys] = useState<TextKeys | null>(null)
+  const [isDebugMode, setIsDebugmode] = useState(() => {
+    try {
+      return JSON.parse(
+        localStorage.getItem(DEBUG_LOCAL_STORAGE_KEY) || 'false',
+      )
+    } catch {
+      return false
+    }
+  })
+  const history = useHistory()
 
   useEffect(() => {
     let textKeyMap: Promise<{ default: TextKeys }>
@@ -112,21 +129,35 @@ export const TextKeyProvider: React.FC<{ locale: Locale }> = ({
         break
     }
 
-    textKeyMap.then((m) => setTextKeys(m.default))
+    textKeyMap.then((m) => {
+      setTextKeys(m.default)
+    })
   }, [locale])
 
+  useEffect(() => {
+    if (history.location.search.includes(DEBUG_TEXTKEYS_QUERY)) {
+      setIsDebugmode(true)
+    } else {
+      if (history.location.search.includes(DEBUG_NONE_QUERY)) {
+        setIsDebugmode(false)
+      }
+    }
+  }, [history.location.search.includes(DEBUG_TEXTKEYS_QUERY)])
+  useEffect(() => {
+    localStorage.setItem(DEBUG_LOCAL_STORAGE_KEY, JSON.stringify(isDebugMode))
+  }, [isDebugMode])
+
   return (
-    <TextKeyContext.Provider value={textKeys}>
+    <TextKeyContext.Provider
+      value={isDebugMode ? getStaticTextKeys(textKeys || {}) : textKeys}
+    >
       {children}
     </TextKeyContext.Provider>
   )
 }
 
 export const StaticTextKeyProvider: React.FC = ({ children }) => {
-  const staticEnTextKeys: TextKeys = Object.keys(enTextKeys).reduce(
-    (acc, key) => ({ ...acc, [key]: key }),
-    {},
-  )
+  const staticEnTextKeys: TextKeys = getStaticTextKeys(enTextKeys)
 
   return (
     <TextKeyContext.Provider value={staticEnTextKeys}>
