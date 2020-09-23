@@ -47,3 +47,11 @@ The app is running on `http://localhost:8080`. Visit [http://localhost:8080/se/n
 ## Analytics
 
 We use Segment, Mixpanel and Google Tag Manager as our analytics tools. You can read about the setup in [Notion](https://www.notion.so/hedviginsurance/Mixpanel-Setup-iOS-Web-Embark-d1abeb9ba7634adea6155f847d32cd8d)
+
+## Text keys
+
+Text keys are located under `src/translations`. They live in [Lokalise](https://lokalise.com/) and are downloaded from there with `yarn download-translations`.
+Before you run this command you need to generate an API token in your [Lokalise profile page](https://app.lokalise.com/profile).
+
+To know which text key is used where you can suffix the url anywhere with `?debug=textkeys` to show text keys instead of translations, and to disable
+the debug mode you can suffix the url with `?debug=none`.
