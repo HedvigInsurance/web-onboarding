@@ -89,7 +89,7 @@ export const TextKeyProvider: React.FC<{ locale: Locale }> = ({
   const [isDebugMode, setIsDebugmode] = useState(() => {
     try {
       return JSON.parse(
-        localStorage.getItem(DEBUG_LOCAL_STORAGE_KEY) || 'false',
+        sessionStorage.getItem(DEBUG_LOCAL_STORAGE_KEY) || 'false',
       )
     } catch {
       return false
@@ -144,7 +144,7 @@ export const TextKeyProvider: React.FC<{ locale: Locale }> = ({
     }
   }, [history.location.search.includes(DEBUG_TEXTKEYS_QUERY)])
   useEffect(() => {
-    localStorage.setItem(DEBUG_LOCAL_STORAGE_KEY, JSON.stringify(isDebugMode))
+    sessionStorage.setItem(DEBUG_LOCAL_STORAGE_KEY, JSON.stringify(isDebugMode))
   }, [isDebugMode])
 
   return (
