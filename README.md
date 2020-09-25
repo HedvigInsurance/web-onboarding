@@ -50,7 +50,7 @@ We use Segment, Mixpanel and Google Tag Manager as our analytics tools. You can 
 
 ## Text keys
 
-Text keys live in [Lokalise](https://lokalise.com/) and exported from there with the script `yarn download-translations`.
+Text keys live in [Lokalise](https://lokalise.com/) and are exported from there with the script `yarn download-translations`.
 
 This is the process for updating/adding text keys:
 
