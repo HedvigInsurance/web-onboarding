@@ -42,7 +42,6 @@ const segmentSnippet = createMinifiedSegmentSnippet({
 const template = (
   route: ServerSideRoute,
   locale: string,
-  cspNonce: string,
   adtractionTag: string,
   code: string | null,
 ) => {
@@ -72,23 +71,23 @@ const template = (
      <meta name="google-site-verification" content="AZ5rW7lm8fgkGEsSI8BbV4i45ylXAnGEicXf6HPQE-Q" />
 
     <script src="https://browser.sentry-cdn.com/4.2.3/bundle.min.js" crossorigin="anonymous"></script>
-    <script nonce="${cspNonce}">
+    <script>
       Sentry.init(${JSON.stringify(sentryConfig())})
     </script>
 
-    <script nonce="${cspNonce}">
+    <script>
       dataLayer = [];
     </script>
 
     <!-- Google Tag Manager -->
-    <script nonce="${cspNonce}">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;j.setAttribute('nonce','${cspNonce}');f.parentNode.insertBefore(j,f);
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-WWMKHK5');</script>
     <!-- End Google Tag Manager -->
 
-    <script key="segment-snippet" nonce="${cspNonce}">${segmentSnippet}</script>
+    <script key="segment-snippet">${segmentSnippet}</script>
     <script defer src="${adtractionTag}"></script>
   </head>
   <body>
@@ -99,7 +98,7 @@ const template = (
 
     <div id="react-root"></div>
 
-    <script nonce="${cspNonce}">
+    <script>
       window.GIRAFFE_WS_ENDPOINT = ${JSON.stringify(GIRAFFE_WS_ENDPOINT)};
       window.GIRAFFE_ENDPOINT = ${JSON.stringify(GIRAFFE_ENDPOINT)};
       window.CONTENT_SERVICE_ENDPOINT = ${JSON.stringify(
@@ -156,7 +155,6 @@ export const getPage = (
   ctx.body = template(
     route,
     ctx.params.locale,
-    (ctx.res as any).cspNonce,
     ['no', 'no-en'].includes(ctx.params.locale)
       ? ADRTRACTION_NO
       : ADTRACTION_SE,
