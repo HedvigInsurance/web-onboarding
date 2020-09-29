@@ -40,7 +40,7 @@ export enum ApplicationSpecificEvents {
   COMPLETED = 'completed',
 }
 
-const NOOP = () => {} // tslint:disable-line
+const NOOP = () => {}
 
 export const { TrackAction, IdentifyAction } = setupTrackers<
   ApplicationSpecificEvents

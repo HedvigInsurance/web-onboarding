@@ -210,7 +210,6 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
               await refetch()
               onClose()
             } catch (e) {
-              // tslint:disable-next-line no-console
               console.error(e)
               if ('Sentry' in window) {
                 ;(window as any).Sentry.captureException(e)

@@ -71,7 +71,6 @@ export const helmet = koaHelmet({
         "'unsafe-inline'",
         'https://browser.sentry-cdn.com',
         ...defaultSrc,
-        // tslint:disable-next-line variable-name
         (_request, response) => {
           ;(response as any).cspNonce = uuidV4()
           return `'nonce-${(response as any).cspNonce}'`

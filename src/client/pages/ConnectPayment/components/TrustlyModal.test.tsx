@@ -65,7 +65,7 @@ describe('TrustlyModal', () => {
         <MockedProvider>
           <TrustlyModal
             isOpen
-            // tslint:disable-next-line:no-empty
+            // eslint-disable-next-line  @typescript-eslint/no-empty-function
             setIsOpen={() => {}}
             trustlyUrl={trustlyUrl}
             generateTrustlyUrl={async () => 'blah'}
@@ -105,7 +105,7 @@ describe('TrustlyModal', () => {
           <>
             <TrustlyModal
               isOpen
-              // tslint:disable-next-line:no-empty
+              // eslint-disable-next-line  @typescript-eslint/no-empty-function
               setIsOpen={() => {}}
               trustlyUrl={trustlyUrl}
               generateTrustlyUrl={async () => 'blah'}
@@ -147,7 +147,7 @@ describe('TrustlyModal', () => {
           <>
             <TrustlyModal
               isOpen
-              // tslint:disable-next-line:no-empty
+              // eslint-disable-next-line  @typescript-eslint/no-empty-function
               setIsOpen={() => {}}
               trustlyUrl={trustlyUrl}
               generateTrustlyUrl={async () => trustlyUrl}
