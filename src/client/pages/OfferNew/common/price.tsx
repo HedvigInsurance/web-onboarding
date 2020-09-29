@@ -3,7 +3,7 @@ import { colorsV3, fonts } from '@hedviginsurance/brand'
 import { Spinner } from 'components/utils'
 import { MonetaryAmount } from 'containers/types'
 import React from 'react'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 
 const PriceWrapper = styled.div`
   display: flex;

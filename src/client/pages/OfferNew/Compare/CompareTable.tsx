@@ -10,7 +10,7 @@ import { otherCompanies } from 'pages/OfferNew/Compare/mock'
 import { SubHeadingBlack } from 'pages/OfferNew/components'
 import React from 'react'
 import { useMediaQuery } from 'react-responsive'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 import { CompanyProperties, InsuranceProperties } from './types'
 
 interface Props {

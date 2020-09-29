@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { SignState, SignStatus as GraphQLSignStatus } from 'data/graphql'
 import React from 'react'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 
 const Wrapper = styled('div')`
   padding: 1rem 0.5rem 0 0.5rem;

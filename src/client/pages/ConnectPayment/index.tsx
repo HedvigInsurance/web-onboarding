@@ -6,7 +6,7 @@ import { SemanticEvents } from 'quepasa'
 import React from 'react'
 import Helmet from 'react-helmet-async'
 import { Mount } from 'react-lifecycle-components/dist'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { ConnectPaymentPage } from './sections/ConnectPayment'
 

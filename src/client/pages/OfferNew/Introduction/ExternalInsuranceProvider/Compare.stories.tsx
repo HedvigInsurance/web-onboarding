@@ -1,7 +1,7 @@
 import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
 import { InsuranceCost, InsuranceDataCollection } from 'src/client/data/graphql'
-import { MockTextKeyProvider } from 'utils/MockTextKeyProvider'
+import { TextKeyProvider } from 'utils/textKeys'
 import { Compare } from './Compare'
 
 export default {
@@ -39,15 +39,9 @@ const insuranceDataMock: InsuranceDataCollection = {
 }
 
 export const Default = () => (
-  <MockTextKeyProvider
-    textKeys={{
-      EXTERNAL_PROVIDER_TRUSTPILOT_SCORE: 'Trustpilot score',
-      EXTERNAL_PROVIDER_TRUSTPILOT_SCORE_VALUE: '{value} av 5',
-      SIDEBAR_PRICE_SUFFIX_INTERVAL: '/mån',
-    }}
-  >
+  <TextKeyProvider locale="en">
     <div style={{ maxWidth: '770px' }}>
       <Compare insuranceDataCollection={insuranceDataMock} cost={costMock} />
     </div>
-  </MockTextKeyProvider>
+  </TextKeyProvider>
 )

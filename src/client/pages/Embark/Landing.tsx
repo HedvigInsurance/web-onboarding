@@ -14,8 +14,8 @@ import React from 'react'
 import Helmet from 'react-helmet-async'
 import { useMediaQuery } from 'react-responsive'
 import { Link } from 'react-router-dom'
-import { TextKeyMap, useTextKeys } from 'utils/hooks/useTextKeys'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
+import { TextKeyMap, useTextKeys } from 'utils/textKeys'
 import { LanguagePicker } from './LanguagePicker'
 
 const Wrapper = styled.div`

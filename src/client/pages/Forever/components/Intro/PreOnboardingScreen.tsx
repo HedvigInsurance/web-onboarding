@@ -4,7 +4,7 @@ import { colorsV3 } from '@hedviginsurance/brand/dist/colors'
 import { LinkButton } from 'components/buttons'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import React from 'react'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 import { fadeIn, TextContent } from './components'
 
 const Wrapper = styled.div`

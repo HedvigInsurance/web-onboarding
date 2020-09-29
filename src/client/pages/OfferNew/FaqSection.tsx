@@ -9,7 +9,7 @@ import { useFaqsQuery } from 'data/graphql'
 import React from 'react'
 import AnimateHeight from 'react-animate-height'
 import ReactMarkdown from 'react-markdown/with-html'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 import {
   Column,
   ColumnSpacing,

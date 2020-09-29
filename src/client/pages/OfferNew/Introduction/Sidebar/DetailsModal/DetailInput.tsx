@@ -2,7 +2,7 @@ import { InputField } from 'components/inputs'
 import { EditQuoteInput } from 'data/graphql'
 import { FormikProps, GenericFieldHTMLAttributes, getIn } from 'formik'
 import React from 'react'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 import { RegularFieldType } from './types'
 
 interface DetailInputProps {

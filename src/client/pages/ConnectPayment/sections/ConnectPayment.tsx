@@ -4,7 +4,7 @@ import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { AdyenCheckout } from 'pages/ConnectPayment/components/AdyenCheckout'
 import { TrustlyCheckout } from 'pages/ConnectPayment/components/TrustlyCheckout'
 import React from 'react'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 import { ErrorModal } from '../components/ErrorModal'
 
 const SITEWRAPPER = 1300

@@ -16,7 +16,7 @@ import {
 import { FieldArray, Form, Formik } from 'formik'
 import { OfferQuote } from 'pages/OfferNew/types'
 import React from 'react'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 import { DetailInput } from './DetailInput'
 import { SupportSection } from './SupportSection'
 import {

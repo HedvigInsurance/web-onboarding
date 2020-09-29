@@ -17,7 +17,7 @@ import {
 import { OfferData } from 'pages/OfferNew/types'
 import React from 'react'
 import ReactVisibilitySensor from 'react-visibility-sensor'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 import { Price } from '../../components'
 import { insuranceTypeTextKeys, isBundle } from '../../utils'
 import { DetailsModal } from './DetailsModal'

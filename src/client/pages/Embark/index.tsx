@@ -18,8 +18,8 @@ import {
 } from 'components/utils/CurrentLocale'
 import gql from 'graphql-tag'
 import Helmet from 'react-helmet-async'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
+import { useTextKeys } from 'utils/textKeys'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
 import {

@@ -3,7 +3,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { CircleTick } from 'components/icons/CircleTick'
 import { Column } from 'pages/OfferNew/components'
 import React from 'react'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 
 const UspsColumn = styled(Column)`
   justify-content: center;

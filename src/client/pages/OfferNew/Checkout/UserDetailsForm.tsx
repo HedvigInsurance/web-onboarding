@@ -4,7 +4,7 @@ import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { WithEmailForm, WithSsnForm } from 'pages/OfferNew/types'
 import { createSsnValidator } from 'pages/OfferNew/utils'
 import React from 'react'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 import * as yup from 'yup'
 
 const BottomSpacedRawInputField = styled(RawInputField)`

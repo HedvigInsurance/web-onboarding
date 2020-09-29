@@ -1,10 +1,10 @@
 import styled from '@emotion/styled'
-import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import { LazyLottie } from 'components/animations/LazyLottie'
 import { TopBar } from 'components/TopBar'
 import React from 'react'
 import Helmet from 'react-helmet-async'
 import { RouteComponentProps } from 'react-router'
+import { useTextKeys } from 'utils/textKeys'
 
 const FourOhFourWrapper = styled('div')({
   textAlign: 'center',
@@ -29,24 +29,17 @@ export const FourOhFour: React.SFC<RouteComponentProps<{}>> = ({
   if (staticContext) {
     staticContext.statusCode = 404
   }
+  const textKeys = useTextKeys()
 
   return (
     <>
-      <TranslationsConsumer textKey="FOUR_OH_FOUR_PAGE_TITLE">
-        {(title) => (
-          <Helmet>
-            <title>{title}</title>
-          </Helmet>
-        )}
-      </TranslationsConsumer>
+      <Helmet>
+        <title>{textKeys.FOUR_OH_FOUR_PAGE_TITLE()}</title>
+      </Helmet>
 
       <TopBar />
       <FourOhFourWrapper>
-        <h1>
-          <TranslationsConsumer textKey="FOUR_OH_FOUR_HEADLINE">
-            {(t) => t}
-          </TranslationsConsumer>
-        </h1>
+        <h1>{textKeys.FOUR_OH_FOUR_HEADLINE()}</h1>
         <LottieWrapper>
           <LazyLottie
             options={{
@@ -60,9 +53,9 @@ export const FourOhFour: React.SFC<RouteComponentProps<{}>> = ({
           />
         </LottieWrapper>
         <LinksWrapper>
-          <TranslationsConsumer textKey="FOUR_OH_FOUR_LINKS">
-            {(text) => <div dangerouslySetInnerHTML={{ __html: text }} />}
-          </TranslationsConsumer>
+          <div
+            dangerouslySetInnerHTML={{ __html: textKeys.FOUR_OH_FOUR_LINKS() }}
+          />
         </LinksWrapper>
       </FourOhFourWrapper>
     </>

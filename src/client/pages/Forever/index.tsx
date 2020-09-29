@@ -15,7 +15,7 @@ import Helmet from 'react-helmet-async'
 import { RouteComponentProps } from 'react-router'
 import { Route, Switch } from 'react-router-dom'
 import { LOCALE_PATH_PATTERN } from 'shared/locale'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 import { RedeemCode } from './components/RedeemCode'
 import { useRedeemCode } from './useRedeemCode'
 

@@ -3,8 +3,8 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import React, { useEffect, useState } from 'react'
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
 import { stripTrailingCharacter } from 'utils/misc'
+import { useTextKeys } from 'utils/textKeys'
 import { TextContent } from './components'
 
 const Page = styled.div<{ visible: boolean }>`
