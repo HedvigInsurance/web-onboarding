@@ -16,6 +16,7 @@
     "heroku-postbuild": "yarn build",
     "test": "NODE_ENV=test jest",
     "typecheck": "tsc --noEmit",
+    "lint": "eslint 'src/**/*.{ts,tsx}'",
     "gen": "graphql-codegen --config codegen.yml",
     "storybook": "start-storybook -p 6008",
     "build-storybook": "build-storybook"
