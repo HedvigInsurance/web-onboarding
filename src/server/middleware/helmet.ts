@@ -1,5 +1,4 @@
 import koaHelmet from 'koa-helmet'
-import { v4 as uuidV4 } from 'uuid'
 import { CONTENT_SERVICE_ENDPOINT, GIRAFFE_WS_ENDPOINT } from '../config'
 
 const defaultSrc = [
@@ -68,13 +67,9 @@ export const helmet = koaHelmet({
       defaultSrc,
       scriptSrc: [
         "'unsafe-eval'",
+        "'unsafe-inline'",
         'https://browser.sentry-cdn.com',
         ...defaultSrc,
-        // tslint:disable-next-line variable-name
-        (_request, response) => {
-          ;(response as any).cspNonce = uuidV4()
-          return `'nonce-${(response as any).cspNonce}'`
-        },
       ],
       styleSrc: [
         "'unsafe-inline'",
