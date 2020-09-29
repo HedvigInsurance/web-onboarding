@@ -13,4 +13,4 @@ interface AdtTag {
   doEvent: () => void
 }
 
-declare var ADT: Adt
+declare let ADT: Adt

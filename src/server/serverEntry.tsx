@@ -43,7 +43,7 @@ configureAssets(app)
 appLogger.info(`Booting server on ${getPort()} 👢`)
 appLogger.info(
   `Sentry is ${
-    Boolean(sentryConfig().enabled) ? 'enabled' : 'disabled'
+    sentryConfig().enabled ? 'enabled' : 'disabled'
   }, with environment "${sentryConfig().environment}"`,
 )
 appLogger.info(
