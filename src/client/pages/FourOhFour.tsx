@@ -23,9 +23,9 @@ const LottieWrapper = styled('div')({
   minHeight: 250,
 })
 
-export const FourOhFour: React.SFC<RouteComponentProps<{}>> = ({
-  staticContext,
-}) => {
+export const FourOhFour: React.FunctionComponent<RouteComponentProps<
+  Record<string, string>
+>> = ({ staticContext }) => {
   if (staticContext) {
     staticContext.statusCode = 404
   }
