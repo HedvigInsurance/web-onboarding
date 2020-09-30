@@ -151,7 +151,7 @@ export const getPage = (
   }
 
   const ADRTRACTION_NO = 'https://cdn.adt387.com/jsTag?ap=1492109567'
-  const ADTRACTION_SE = 'https://adtr.io/jsTag?ap=1412531808'
+  const ADTRACTION_SE = 'https://cdn.adt387.com/jsTag?ap=1412531808'
   ctx.body = template(
     route,
     ctx.params.locale,
