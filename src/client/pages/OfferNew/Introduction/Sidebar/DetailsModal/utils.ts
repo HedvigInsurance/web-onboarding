@@ -248,13 +248,13 @@ const getValidationSchemaHelper = <T>([key, value]: FieldTuple<T>): any => {
 export const isRegularFieldType = <T>(
   field: FieldType<T>,
 ): field is RegularFieldType => {
-  return field.hasOwnProperty('validation')
+  return {}.hasOwnProperty.call(field, 'validation')
 }
 
 export const isArrayFieldType = <T>(
   field: FieldType<T>,
 ): field is ArrayFieldType<T> => {
-  return field.hasOwnProperty('arrayValidation')
+  return {}.hasOwnProperty.call(field, 'arrayValidation')
 }
 
 export const getExtraBuilding = (
