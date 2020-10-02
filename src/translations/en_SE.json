@@ -216,6 +216,12 @@
   "FOREVER_ERROR_CAMPAIGN_HAS_EXPIRED": "The code has expired.",
   "FOREVER_ERROR_MEMBER_IS_NOT_ELIGIBLE_FOR_CAMPAIGN": "Not eligible for campaign.",
   "FOREVER_ERROR_CAMPAIGN_DOES_NOT_EXIST": "This code doesn't exist.",
-  "FOREVER_ERROR_CANNOT_REDEEM_CAMPAIGN_FROM_DIFFERENT_MARKET": "",
-  "START_PAGE_TITLE": "Get a price quote | Hedvig"
+  "FOREVER_ERROR_CANNOT_REDEEM_CAMPAIGN_FROM_DIFFERENT_MARKET": "This code doesn't exist.",
+  "START_PAGE_TITLE": "Get a price quote | Hedvig",
+  "SIDEBAR_INSURANCE_TYPE_STUDENT_BRF": "Homeowner Student",
+  "SIDEBAR_INSURANCE_TYPE_STUDENT_RENT": "Rental Student",
+  "SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_OWN": "Contents insurance",
+  "SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_RENT": "Contents insurance Youth",
+  "SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_OWN": "Contents insurance Youth",
+  "SIDEBAR_INSURANCE_TYPE_NO_TRAVEL_YOUTH": "Travel insurance Youth"
 }
