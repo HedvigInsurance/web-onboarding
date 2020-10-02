@@ -40,7 +40,9 @@ export enum ApplicationSpecificEvents {
   COMPLETED = 'completed',
 }
 
-const NOOP = () => {}
+const NOOP = () => {
+  return
+}
 
 export const { TrackAction, IdentifyAction } = setupTrackers<
   ApplicationSpecificEvents
