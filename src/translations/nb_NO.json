@@ -217,5 +217,11 @@
   "FOREVER_ERROR_MEMBER_IS_NOT_ELIGIBLE_FOR_CAMPAIGN": "Ikke kvalifisert for kampanjen.",
   "FOREVER_ERROR_CAMPAIGN_DOES_NOT_EXIST": "Feil kode.",
   "FOREVER_ERROR_CANNOT_REDEEM_CAMPAIGN_FROM_DIFFERENT_MARKET": "Feil kode.",
-  "START_PAGE_TITLE": "Få et prisforslag | Hedvig"
+  "START_PAGE_TITLE": "Få et prisforslag | Hedvig",
+  "SIDEBAR_INSURANCE_TYPE_STUDENT_BRF": "Leilighet som du eier - Student",
+  "SIDEBAR_INSURANCE_TYPE_STUDENT_RENT": "Studentbolig som du leier",
+  "SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_OWN": "Innboforsikring",
+  "SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_RENT": "Innboforsikring Ungdom",
+  "SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_OWN": "Innboforsikring Ungdom",
+  "SIDEBAR_INSURANCE_TYPE_NO_TRAVEL_YOUTH": "Reiseforsikring Ungdom"
 }
