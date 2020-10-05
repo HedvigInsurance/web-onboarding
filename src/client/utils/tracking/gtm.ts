@@ -1,12 +1,7 @@
 import { TypeOfContract } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
-import { isBundle, isYouth } from 'pages/OfferNew/utils'
 import { captureSentryError } from 'utils/sentry-client'
-
-enum NoComboTypes {
-  NoCombo = 'NO_COMBO',
-  NoComboYouth = 'NO_COMBO_YOUTH',
-}
+import { getContractType, NoComboTypes } from './tracking'
 
 type GAContractType = NoComboTypes | TypeOfContract
 
@@ -35,19 +30,10 @@ export const trackOfferGTM = (
   referralCodeUsed: boolean,
 ) => {
   try {
-    const getContractType = () => {
-      if (isBundle(offerData)) {
-        return isYouth(offerData)
-          ? NoComboTypes.NoComboYouth
-          : NoComboTypes.NoCombo
-      }
-      return offerData.quotes[0].contractType
-    }
-
     pushToGTMDataLayer({
       event: eventName,
       offerData: {
-        insurance_type: getContractType(),
+        insurance_type: getContractType(offerData),
         referral_code: referralCodeUsed ? 'yes' : 'no',
         number_of_people: offerData.person.householdSize,
         insurance_price: parseFloat(offerData.cost.monthlyNet.amount),

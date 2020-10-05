@@ -18,6 +18,7 @@ import { Mount } from 'react-lifecycle-components'
 import { Redirect } from 'react-router-dom'
 import { handleSignedEvent } from 'utils/tracking/signing'
 import {
+  getContractType,
   getUtmParamsFromCookie,
   TrackAction,
   useTrack,
@@ -227,6 +228,13 @@ export const Checkout: React.FC<Props> = ({
           name: SemanticEvents.Ecommerce.OrderCompleted,
           properties: {
             category: 'web-onboarding-steps',
+            currency: offerData.cost.monthlyNet.currency,
+            total: Number(offerData.cost.monthlyNet.amount),
+            products: [
+              {
+                name: getContractType(offerData),
+              },
+            ],
             ...getUtmParamsFromCookie(),
           },
         }}
