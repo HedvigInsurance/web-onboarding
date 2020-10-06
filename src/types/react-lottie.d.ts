@@ -2,7 +2,7 @@ declare module 'react-lottie' {
   import React from 'react'
 
   export interface ReactLottieProps {
-    eventListeners?: object[] // TODO improve typing
+    eventListeners?: Record<string, unknown>[] // TODO improve typing
     options: {
       loop?: boolean
       autoplay?: boolean
