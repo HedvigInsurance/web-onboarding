@@ -4,7 +4,9 @@ import { WithLoggerState } from './enhancers'
 
 export const permanentRedirect = (
   to: string,
-): Router.IMiddleware<WithLoggerState, object> => async (ctx) => {
+): Router.IMiddleware<WithLoggerState, Record<string, unknown>> => async (
+  ctx,
+) => {
   ;(ctx.state.getLogger('request') as Logger).info(
     `Permanently redirecting to ${to}`,
   )
@@ -16,7 +18,10 @@ export const forceHost = ({
   host,
 }: {
   host: string
-}): Router.IMiddleware<WithLoggerState, object> => async (ctx, next) => {
+}): Router.IMiddleware<WithLoggerState, Record<string, any>> => async (
+  ctx,
+  next,
+) => {
   if (ctx.get('host') !== host) {
     ;(ctx.state.getLogger('request') as Logger).info(
       `Redirecting to "${host}" because of host mismatch (got "${ctx.host}")`,
@@ -30,8 +35,8 @@ export const forceHost = ({
 }
 
 export const redirectEmptyLanguageToSweden: Router.IMiddleware<
-  object,
-  object
+  Record<string, unknown>,
+  Record<string, any>
 > = (ctx, next) => {
   if (ctx.path.startsWith('/new-member')) {
     ctx.set('location', '/se' + ctx.originalUrl)
@@ -42,10 +47,10 @@ export const redirectEmptyLanguageToSweden: Router.IMiddleware<
   return next()
 }
 
-export const redirectEnLanguageToSweden: Router.IMiddleware<object, object> = (
-  ctx,
-  next,
-) => {
+export const redirectEnLanguageToSweden: Router.IMiddleware<
+  Record<string, unknown>,
+  Record<string, any>
+> = (ctx, next) => {
   if (ctx.path.startsWith('/en/new-member')) {
     ctx.set('location', '/se-en' + ctx.originalUrl.replace(/^\/en/, ''))
     ctx.status = 301
