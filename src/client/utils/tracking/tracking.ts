@@ -36,6 +36,18 @@ export const getUtmParamsFromCookie = (): UtmParams | undefined => {
   }
 }
 
+export enum NoComboTypes {
+  NoCombo = 'NO_COMBO',
+  NoComboYouth = 'NO_COMBO_YOUTH',
+}
+
+export const getContractType = (offerData: OfferData) => {
+  if (isBundle(offerData)) {
+    return isYouth(offerData) ? NoComboTypes.NoComboYouth : NoComboTypes.NoCombo
+  }
+  return offerData.quotes[0].contractType
+}
+
 export enum ApplicationSpecificEvents {
   COMPLETED = 'completed',
 }

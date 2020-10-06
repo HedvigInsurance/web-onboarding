@@ -90,6 +90,7 @@ export const OfferNew: React.FC = () => {
             name: SemanticEvents.Ecommerce.CheckoutStarted,
             properties: {
               value: Number(offerData.cost.monthlyNet.amount),
+              currency: offerData.cost.monthlyNet.currency,
               label: 'Offer',
               ...getUtmParamsFromCookie(),
             },
