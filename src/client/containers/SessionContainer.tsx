@@ -56,6 +56,7 @@ export const setupSession = async (
     apolloClient!.subscriptionClient.close(true, true)
     storage.setToken(sessionResult.data.createSessionV2.token)
   })
+  // eslint-disable-next-line  @typescript-eslint/ban-types
   await apolloClient.client.mutate<object, { pickedLocale: Locale }>({
     mutation: UpdatePickedLocaleDocument,
     variables: { pickedLocale },
