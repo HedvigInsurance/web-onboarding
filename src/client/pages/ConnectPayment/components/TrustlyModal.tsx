@@ -93,7 +93,14 @@ export const TrustlyModal: React.FC<Props> = ({
           src={trustlyUrl}
           ref={iframeRef}
           onLoad={async () => {
-            const contentWindow = iframeRef.current?.contentWindow
+            let contentWindow: Window | undefined | null
+            try {
+              contentWindow = iframeRef.current?.contentWindow
+            } catch (_) {
+              // Ignore this error, it should only occur if we're trying to access `contentWindow`
+              // of another site that our own, and in that case we don't care about the contents
+              // of it = leave it undefined.
+            }
             await actualHandleIframeLoad(
               setIsOpen,
               setIsSuccess,
