@@ -1,10 +1,10 @@
 import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand'
-import { TranslationsConsumer } from '@hedviginsurance/textkeyfy'
 import Modal from 'components/Modal'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import React, { createRef, useEffect, useState } from 'react'
 import { Redirect } from 'react-router-dom'
+import { useTextKeys } from 'utils/textKeys'
 
 const Header = styled('div')({
   width: '100%',
@@ -47,6 +47,7 @@ export const TrustlyModal: React.FC<Props> = ({
   const iframeRef = createRef<HTMLIFrameElement>()
   const currentLocale = useCurrentLocale()
   const [isSuccess, setIsSuccess] = useState(false)
+  const textKeys = useTextKeys()
 
   useEffect(() => {
     if (isSuccess) {
@@ -85,11 +86,7 @@ export const TrustlyModal: React.FC<Props> = ({
       setIsOpen={setIsOpen}
       style={{ content: { padding: 0 } }}
     >
-      <Header>
-        <TranslationsConsumer textKey="ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_TITLE">
-          {(header) => header}
-        </TranslationsConsumer>
-      </Header>
+      <Header>{textKeys.ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_TITLE()}</Header>
 
       {trustlyUrl !== null && (
         <TrustlyIframe

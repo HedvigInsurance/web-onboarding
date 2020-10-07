@@ -13,7 +13,7 @@ import {
   ExchangeTokenRetrieval,
   ExchangeTokenRetrievalState,
 } from 'utils/ExchangeTokenRetrieval'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 
 const ButtonWrapper = styled.div`
   padding-top: 1rem;

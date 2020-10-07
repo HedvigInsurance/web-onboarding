@@ -1,5 +1,4 @@
 import koaHelmet from 'koa-helmet'
-import { v4 as uuidV4 } from 'uuid'
 import { CONTENT_SERVICE_ENDPOINT, GIRAFFE_WS_ENDPOINT } from '../config'
 
 const defaultSrc = [
@@ -22,6 +21,8 @@ const defaultSrc = [
   'https://tagmanager.google.com',
   'www.googleadservices.com',
   'www.gstatic.com',
+  'https://fonts.gstatic.com',
+  'https://optimize.google.com',
   'www.google.com',
   'www.google.se',
   'tpc.googlesyndication.com',
@@ -71,10 +72,6 @@ export const helmet = koaHelmet({
         "'unsafe-inline'",
         'https://browser.sentry-cdn.com',
         ...defaultSrc,
-        (_request, response) => {
-          ;(response as any).cspNonce = uuidV4()
-          return `'nonce-${(response as any).cspNonce}'`
-        },
       ],
       styleSrc: [
         "'unsafe-inline'",
@@ -82,6 +79,7 @@ export const helmet = koaHelmet({
         'checkoutshopper-live.adyen.com',
         'https://tagmanager.google.com',
         'https://fonts.googleapis.com',
+        'https://optimize.google.com',
       ],
       objectSrc: ["'none'"],
       imgSrc: [
@@ -99,6 +97,7 @@ export const helmet = koaHelmet({
         'www.googletagmanager.com',
         'www.google-analytics.com',
         'www.gstatic.com',
+        'https://optimize.google.com',
         'https://ssl.gstatic.com',
         'www.google.com',
         'www.google.se',

@@ -19,7 +19,8 @@
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "gen": "graphql-codegen --config codegen.yml",
     "storybook": "start-storybook -p 6008",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "download-translations": "./bin/download-translations.sh"
   },
   "devDependencies": {
     "@babel/core": "^7.1.0",
@@ -111,8 +112,7 @@
     "@emotion/core": "^10.0.22",
     "@emotion/styled": "^10.0.23",
     "@hedviginsurance/brand": "^3.0.8",
-    "@hedviginsurance/embark": "^2.0.7",
-    "@hedviginsurance/textkeyfy": "^1.2.4",
+    "@hedviginsurance/embark": "^2.0.8",
     "@segment/snippet": "^4.4.0",
     "@sentry/node": "^4.2.2",
     "@types/dayzed": "^2.2.1",

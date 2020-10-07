@@ -5,6 +5,7 @@ import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { StaticRouter } from 'react-router'
 import { sleep } from 'utils/misc'
+import { StaticTextKeyProvider } from 'utils/textKeys'
 import { REGISTER_DIRECT_DEBIT_MUTATION } from '../containers/RegisterDirectDebitMutation'
 import { TrustlyCheckout } from './TrustlyCheckout'
 import { TrustlyModal } from './TrustlyModal'
@@ -12,9 +13,11 @@ import { TrustlyModal } from './TrustlyModal'
 it('renders without 💥', () => {
   const wrapper = mount(
     <StaticRouter location="http://localhost:8040/se/new-member/connect-payment">
-      <MockedProvider>
-        <TrustlyCheckout />
-      </MockedProvider>
+      <StaticTextKeyProvider>
+        <MockedProvider>
+          <TrustlyCheckout />
+        </MockedProvider>
+      </StaticTextKeyProvider>
     </StaticRouter>,
   )
 
@@ -56,7 +59,9 @@ it('opens trustly modal and renders correct iframe url', async () => {
           },
         ]}
       >
-        <TrustlyCheckout />
+        <StaticTextKeyProvider>
+          <TrustlyCheckout />
+        </StaticTextKeyProvider>
       </MockedProvider>
     </StaticRouter>,
   )

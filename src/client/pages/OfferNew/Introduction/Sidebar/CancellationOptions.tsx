@@ -10,7 +10,7 @@ import {
   isNorwegianTravel,
 } from 'pages/OfferNew/utils'
 import React from 'react'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 import { gqlDateFormat } from './utils'
 
 const HandleSwitchingWrapper = styled.div`

@@ -11,7 +11,7 @@ import {
   PreHeading,
 } from 'pages/OfferNew/components'
 import React from 'react'
-import { useTextKeys } from 'utils/hooks/useTextKeys'
+import { useTextKeys } from 'utils/textKeys'
 import { CompareTable } from './CompareTable'
 import { hedvigCompany, otherCompanies } from './mock'
 import { InsuranceProperties } from './types'
