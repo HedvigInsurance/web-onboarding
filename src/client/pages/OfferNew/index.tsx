@@ -73,49 +73,59 @@ export const OfferNew: React.FC = () => {
     return <LoadingPage />
   }
 
-  const offerData = getOfferData(data?.quoteBundle! as QuoteBundle)
+  const offerData = data?.quoteBundle
+    ? getOfferData(data?.quoteBundle as QuoteBundle)
+    : null
 
-  trackOfferGTM(
-    'offer_created',
-    offerData,
-    redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction',
-  )
+  if (offerData) {
+    trackOfferGTM(
+      'offer_created',
+      offerData,
+      redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction',
+    )
+  }
+
+  // TODO: Add error component to render if there's no offerData
 
   return (
     <Page>
       <SessionTokenGuard>
         {![Variation.IOS, Variation.ANDROID].includes(variation!) && <TopBar />}
-        <TrackAction
-          event={{
-            name: SemanticEvents.Ecommerce.CheckoutStarted,
-            properties: {
-              value: Number(offerData.cost.monthlyNet.amount),
-              currency: offerData.cost.monthlyNet.currency,
-              label: 'Offer',
-              ...getUtmParamsFromCookie(),
-            },
-          }}
-        >
-          {({ track }) => (
-            <Introduction
-              offerData={offerData}
-              refetch={refetch as () => Promise<any>}
-              onCheckoutOpen={() => {
-                toggleCheckout(true)
-                track()
+        {offerData && (
+          <>
+            <TrackAction
+              event={{
+                name: SemanticEvents.Ecommerce.CheckoutStarted,
+                properties: {
+                  value: Number(offerData.cost.monthlyNet.amount),
+                  currency: offerData.cost.monthlyNet.currency,
+                  label: 'Offer',
+                  ...getUtmParamsFromCookie(),
+                },
               }}
+            >
+              {({ track }) => (
+                <Introduction
+                  offerData={offerData}
+                  refetch={refetch as () => Promise<any>}
+                  onCheckoutOpen={() => {
+                    toggleCheckout(true)
+                    track()
+                  }}
+                />
+              )}
+            </TrackAction>
+            <Perils offerData={offerData} />
+            <SwitchSafetySection />
+            <FaqSection />
+            <Checkout
+              offerData={offerData}
+              isOpen={checkoutMatch !== null}
+              onClose={() => toggleCheckout(false)}
+              refetch={refetch as () => Promise<any>}
             />
-          )}
-        </TrackAction>
-        <Perils offerData={offerData} />
-        <SwitchSafetySection />
-        <FaqSection />
-        <Checkout
-          offerData={offerData}
-          isOpen={checkoutMatch !== null}
-          onClose={() => toggleCheckout(false)}
-          refetch={refetch as () => Promise<any>}
-        />
+          </>
+        )}
       </SessionTokenGuard>
     </Page>
   )

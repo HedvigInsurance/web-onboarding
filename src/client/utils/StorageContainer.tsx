@@ -16,13 +16,20 @@ export interface StorageEffects {
 
 export type Storage = StorageState & StorageEffects
 
-export const StorageContainer: React.SFC<ContainerProps<
+type UnknownObject = Record<string, unknown>
+
+export const StorageContainer: React.FunctionComponent<ContainerProps<
   StorageState,
-  {},
-  {},
+  UnknownObject,
+  UnknownObject,
   EffectMap<StorageState, StorageEffects>
 >> = (props) => (
-  <Container<StorageState, {}, {}, EffectMap<StorageState, StorageEffects>>
+  <Container<
+    StorageState,
+    UnknownObject,
+    UnknownObject,
+    EffectMap<StorageState, StorageEffects>
+  >
     context="storage"
     {...props}
     effects={

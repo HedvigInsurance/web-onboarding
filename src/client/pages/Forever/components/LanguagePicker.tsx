@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
 import React from 'react'
-import { RouteComponentProps, withRouter } from 'react-router'
+import { useParams } from 'react-router'
 import { NavLink } from 'react-router-dom'
 
 const LanguagePickerWrapper = styled.div`
@@ -30,35 +30,25 @@ const Language = styled(NavLink)`
   }
 `
 
-export const LanguagePickerComponent: React.FC<{ code?: string }> = ({
-  code,
-}) => {
+export const LanguagePicker: React.FC = () => {
   const market = useMarket()
+  const urlParams: { locale: string; code?: string } = useParams()
+  const code = urlParams.code ? urlParams.code : ''
 
   if (market === Market.No) {
     return (
       <LanguagePickerWrapper>
-        <Language to={`/no/forever/${code ?? ''}`}>No</Language>
+        <Language to={`/no/forever/${code}`}>No</Language>
         <Divider />
-        <Language to={`/no-en/forever/${code ?? ''}`}>En</Language>
+        <Language to={`/no-en/forever/${code}`}>En</Language>
       </LanguagePickerWrapper>
     )
   }
   return (
     <LanguagePickerWrapper>
-      <Language to={`/se/forever/${code ?? ''}`}>Sv</Language>
+      <Language to={`/se/forever/${code}`}>Sv</Language>
       <Divider />
-      <Language to={`/se-en/forever/${code ?? ''}`}>En</Language>
+      <Language to={`/se-en/forever/${code}`}>En</Language>
     </LanguagePickerWrapper>
   )
 }
-
-const withCodeFromRouteMatch = (
-  Component: React.ComponentType<{ code?: string }>,
-) => (props: RouteComponentProps<{ code?: string }>) => {
-  return <Component code={props.match.params.code} />
-}
-
-export const LanguagePicker = withRouter(
-  withCodeFromRouteMatch(LanguagePickerComponent),
-)

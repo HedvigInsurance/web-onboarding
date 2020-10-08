@@ -16,6 +16,7 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
 
 export interface ApolloClientAndSubscriptionClient {
   subscriptionClient: SubscriptionClient
+  // eslint-disable-next-line  @typescript-eslint/ban-types
   client: ApolloClient<object>
 }
 

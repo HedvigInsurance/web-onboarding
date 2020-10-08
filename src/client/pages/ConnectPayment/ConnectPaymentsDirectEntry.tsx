@@ -20,7 +20,7 @@ const ButtonWrapper = styled.div`
 `
 
 export const ConnectPaymentsDirectEntry: React.FC<RouteComponentProps<
-  object
+  Record<string, string | undefined>
 >> = () => {
   const locale = useCurrentLocale()
   const textKeys = useTextKeys()

@@ -196,7 +196,6 @@ const createAdyenCheckout = ({
       history.push(`/${currentLocale}/new-member/download`)
       onSuccess()
     } else {
-      // tslint:disable-next-line no-console
       console.error(
         `Received unknown or faulty status type "${resultCode}" as request finished from Adyen`,
       )

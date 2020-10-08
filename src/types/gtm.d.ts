@@ -1,5 +1,5 @@
 declare global {
   interface Window {
-    dataLayer?: object[]
+    dataLayer?: Record<string, unknown>[]
   }
 }

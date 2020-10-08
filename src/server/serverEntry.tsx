@@ -1,6 +1,6 @@
 import 'source-map-support/register'
 
-import * as Sentry from '@sentry/node' // tslint:disable-line ordered-imports
+import * as Sentry from '@sentry/node'
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 import Router from 'koa-router'
@@ -43,7 +43,7 @@ configureAssets(app)
 appLogger.info(`Booting server on ${getPort()} 👢`)
 appLogger.info(
   `Sentry is ${
-    Boolean(sentryConfig().enabled) ? 'enabled' : 'disabled'
+    sentryConfig().enabled ? 'enabled' : 'disabled'
   }, with environment "${sentryConfig().environment}"`,
 )
 appLogger.info(
@@ -80,7 +80,8 @@ if (process.env.USE_AUTH) {
   appLogger.info(
     `Protecting server using basic auth with user ${process.env.AUTH_NAME} 💂‍`,
   )
-  const basicAuth = require('koa-basic-auth') // tslint:disable-line no-var-requires
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const basicAuth = require('koa-basic-auth')
   const basicAuthMidleware = basicAuth({
     name: notNullable(process.env.AUTH_NAME),
     pass: notNullable(process.env.AUTH_PASS),

@@ -52,7 +52,9 @@ export enum ApplicationSpecificEvents {
   COMPLETED = 'completed',
 }
 
-const NOOP = () => {} // tslint:disable-line
+const NOOP = () => {
+  return
+}
 
 export const { TrackAction, IdentifyAction } = setupTrackers<
   ApplicationSpecificEvents
@@ -131,7 +133,7 @@ export const useTrack = ({ offerData, signState }: TrackProps) => {
   const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
   const redeemedCampaigns = redeemedCampaignsData?.redeemedCampaigns ?? []
   const { data: memberData } = useMemberQuery()
-  const memberId = memberData?.member.id!
+  const memberId = memberData?.member.id
 
   React.useEffect(() => {
     if (process.env.NODE_ENV === 'test') {
@@ -146,15 +148,17 @@ export const useTrack = ({ offerData, signState }: TrackProps) => {
       return
     }
 
-    adtraction(
-      parseFloat(offerData.cost.monthlyGross.amount),
-      memberId,
-      offerData.person.email || '',
-      redeemedCampaigns !== null && redeemedCampaigns.length !== 0
-        ? redeemedCampaigns[0].code
-        : null,
-      offerData,
-    )
+    if (memberId) {
+      adtraction(
+        parseFloat(offerData.cost.monthlyGross.amount),
+        memberId,
+        offerData.person.email || '',
+        redeemedCampaigns !== null && redeemedCampaigns.length !== 0
+          ? redeemedCampaigns[0].code
+          : null,
+        offerData,
+      )
+    }
 
     trackOfferGTM(
       'signed_customer',
@@ -166,7 +170,8 @@ export const useTrack = ({ offerData, signState }: TrackProps) => {
       redeemedCampaigns?.length > 0 &&
       ['studentkortet', 'stuk2'].includes(
         redeemedCampaigns[0].code.toLowerCase(),
-      )
+      ) &&
+      memberId
     ) {
       trackStudentkortet(memberId, offerData.cost.monthlyGross.amount)
     }

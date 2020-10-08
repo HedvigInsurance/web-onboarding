@@ -2,7 +2,7 @@
 // THIS IS BECAUSE FOR SOME REASON JEST WONT TRANSPILE IT, EVEN IF `node_modules` IS REMOVED FROM
 // `transformIgnorePatterns`. There's an issue on GitHub about this; https://github.com/apollographql/react-apollo/issues/2077
 // Until it's fixed, the original can be found at https://github.com/apollographql/react-apollo/blob/v2.2.4/src/test-links.ts
-// tslint:disable
+
 import {
   ApolloLink,
   FetchResult,
@@ -14,6 +14,7 @@ import {
 
 import { addTypenameToDocument } from 'apollo-utilities'
 import { print } from 'graphql/language/printer'
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const isEqual = require('lodash.isequal')
 
 export interface MockedResponse {
@@ -35,7 +36,7 @@ export interface MockedSubscription {
 }
 
 export class MockLink extends ApolloLink {
-  public addTypename: Boolean = true
+  public addTypename: boolean = true
   private mockedResponsesByKey: { [key: string]: MockedResponse[] } = {}
 
   constructor(
@@ -166,7 +167,7 @@ export class MockSubscriptionLink extends ApolloLink {
   }
 }
 
-function requestToKey(request: GraphQLRequest, addTypename: Boolean): string {
+function requestToKey(request: GraphQLRequest, addTypename: boolean): string {
   const queryString =
     request.query &&
     print(addTypename ? addTypenameToDocument(request.query) : request.query)
