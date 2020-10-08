@@ -155,166 +155,169 @@ const FooterExtraActions = styled.div`
   }
 `
 
-export const Sidebar = React.forwardRef<HTMLDivElement, Props>(function sidebar(
-  { sticky, offerData, refetch, onCheckoutOpen },
-  ref,
-) {
-  const textKeys = useTextKeys()
-  const market = useMarket()
-  const [discountCodeModalIsOpen, setDiscountCodeModalIsOpen] = React.useState(
-    false,
-  )
-  const [isSidebarVisible, setIsSidebarVisible] = React.useState(true)
+export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
+  ({ sticky, offerData, refetch, onCheckoutOpen }, ref) => {
+    const textKeys = useTextKeys()
+    const market = useMarket()
+    const [
+      discountCodeModalIsOpen,
+      setDiscountCodeModalIsOpen,
+    ] = React.useState(false)
+    const [isSidebarVisible, setIsSidebarVisible] = React.useState(true)
 
-  const [detailsModalIsOpen, setDetailsModalIsOpen] = React.useState(false)
+    const [detailsModalIsOpen, setDetailsModalIsOpen] = React.useState(false)
 
-  const [removeDiscountCode] = useRemoveDiscountCodeMutation()
-  const [redeemCode] = useRedeemCodeMutation()
-  const redeemedCampaignsQuery = useRedeemedCampaignsQuery()
-  const redeemedCampaigns = redeemedCampaignsQuery.data?.redeemedCampaigns ?? []
+    const [removeDiscountCode] = useRemoveDiscountCodeMutation()
+    const [redeemCode] = useRedeemCodeMutation()
+    const redeemedCampaignsQuery = useRedeemedCampaignsQuery()
+    const redeemedCampaigns =
+      redeemedCampaignsQuery.data?.redeemedCampaigns ?? []
 
-  const refetchAll = () =>
-    refetch()
-      .then(() => redeemedCampaignsQuery.refetch())
-      .then(() => {
-        return // void
-      })
+    const refetchAll = () =>
+      refetch()
+        .then(() => redeemedCampaignsQuery.refetch())
+        .then(() => {
+          return // void
+        })
 
-  React.useEffect(() => {
-    const campaignCodes =
-      redeemedCampaigns.map((campaign) => campaign!.code) ?? []
-    const cookieStorage = new CookieStorage()
-    const preRedeemedCode = cookieStorage.getItem('_hvcode')
-    if (
-      preRedeemedCode &&
-      !campaignCodes.includes(preRedeemedCode.toUpperCase())
-    ) {
-      redeemCode({ variables: { code: preRedeemedCode } }).then(() =>
-        refetchAll(),
-      )
-    }
-  }, [])
+    React.useEffect(() => {
+      const campaignCodes =
+        redeemedCampaigns.map((campaign) => campaign!.code) ?? []
+      const cookieStorage = new CookieStorage()
+      const preRedeemedCode = cookieStorage.getItem('_hvcode')
+      if (
+        preRedeemedCode &&
+        !campaignCodes.includes(preRedeemedCode.toUpperCase())
+      ) {
+        redeemCode({ variables: { code: preRedeemedCode } }).then(() =>
+          refetchAll(),
+        )
+      }
+    }, [])
 
-  const discountText = getDiscountText(textKeys)(redeemedCampaigns)
+    const discountText = getDiscountText(textKeys)(redeemedCampaigns)
 
-  return (
-    <>
-      <ReactVisibilitySensor partialVisibility onChange={setIsSidebarVisible}>
-        {() => (
-          <Wrapper ref={ref}>
-            <Container
-              sticky={sticky}
-              hasDiscount={redeemedCampaigns.length > 0}
-            >
-              {discountText && <DiscountInfo>{discountText}</DiscountInfo>}
-              <Header>
-                {market !== Market.No && (
-                  <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
-                )}
+    return (
+      <>
+        <ReactVisibilitySensor partialVisibility onChange={setIsSidebarVisible}>
+          {() => (
+            <Wrapper ref={ref}>
+              <Container
+                sticky={sticky}
+                hasDiscount={redeemedCampaigns.length > 0}
+              >
+                {discountText && <DiscountInfo>{discountText}</DiscountInfo>}
+                <Header>
+                  {market !== Market.No && (
+                    <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
+                  )}
 
-                <Title>
-                  {!isBundle(offerData) &&
-                    textKeys[
-                      insuranceTypeTextKeys[offerData.quotes[0].contractType]
-                    ]()}
-                  {isBundle(offerData) &&
-                    textKeys.SIDEBAR_INSURANCE_TYPE_NO_BUNDLE()}
-                </Title>
+                  <Title>
+                    {!isBundle(offerData) &&
+                      textKeys[
+                        insuranceTypeTextKeys[offerData.quotes[0].contractType]
+                      ]()}
+                    {isBundle(offerData) &&
+                      textKeys.SIDEBAR_INSURANCE_TYPE_NO_BUNDLE()}
+                  </Title>
 
-                <Price
-                  monthlyCostDeduction={
-                    isMonthlyCostDeduction(
-                      redeemedCampaigns[0]?.incentive ?? undefined,
-                    ) ||
-                    isPercentageDiscountMonths(
-                      redeemedCampaigns[0]?.incentive ?? undefined,
-                    )
-                  }
-                  monthlyGross={offerData.cost.monthlyGross}
-                  monthlyNet={offerData.cost.monthlyNet}
-                />
+                  <Price
+                    monthlyCostDeduction={
+                      isMonthlyCostDeduction(
+                        redeemedCampaigns[0]?.incentive ?? undefined,
+                      ) ||
+                      isPercentageDiscountMonths(
+                        redeemedCampaigns[0]?.incentive ?? undefined,
+                      )
+                    }
+                    monthlyGross={offerData.cost.monthlyGross}
+                    monthlyNet={offerData.cost.monthlyNet}
+                  />
 
-                {market === Market.Se && (
-                  <TextButton onClick={() => setDetailsModalIsOpen(true)}>
-                    {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
-                  </TextButton>
-                )}
-              </Header>
-
-              <Body>
-                <BodyTitle>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}</BodyTitle>
-                <StartDate
-                  offerData={offerData}
-                  refetch={refetch}
-                  modal={true}
-                />
-              </Body>
-
-              <Footer>
-                <Button
-                  size="lg"
-                  fullWidth
-                  onClick={() => onCheckoutOpen()}
-                  foreground={colorsV3.gray900}
-                  background="#c9abf5"
-                >
-                  {textKeys.SIDEBAR_GETHEDVIG_BUTTON()}
-                </Button>
-
-                <FooterExtraActions>
-                  {redeemedCampaigns.length === 0 && (
-                    <TextButton
-                      onClick={() => {
-                        setDiscountCodeModalIsOpen(true)
-                      }}
-                    >
-                      {textKeys.SIDEBAR_ADD_DISCOUNT_BUTTON()}
+                  {market === Market.Se && (
+                    <TextButton onClick={() => setDetailsModalIsOpen(true)}>
+                      {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
                     </TextButton>
                   )}
-                  {redeemedCampaigns.length > 0 &&
-                    !isNoDiscount(
-                      redeemedCampaigns[0]?.incentive ?? undefined,
-                    ) && (
+                </Header>
+
+                <Body>
+                  <BodyTitle>
+                    {textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}
+                  </BodyTitle>
+                  <StartDate
+                    offerData={offerData}
+                    refetch={refetch}
+                    modal={true}
+                  />
+                </Body>
+
+                <Footer>
+                  <Button
+                    size="lg"
+                    fullWidth
+                    onClick={() => onCheckoutOpen()}
+                    foreground={colorsV3.gray900}
+                    background="#c9abf5"
+                  >
+                    {textKeys.SIDEBAR_GETHEDVIG_BUTTON()}
+                  </Button>
+
+                  <FooterExtraActions>
+                    {redeemedCampaigns.length === 0 && (
                       <TextButton
-                        color={colorsV2.coral700}
                         onClick={() => {
-                          removeDiscountCode()
-                            .then(() => {
-                              const cookieStorage = new CookieStorage()
-                              cookieStorage.setItem('_hvcode', '', {
-                                path: '/',
-                              })
-                            })
-                            .then(() => refetchAll())
+                          setDiscountCodeModalIsOpen(true)
                         }}
                       >
-                        {textKeys.SIDEBAR_REMOVE_DISCOUNT_BUTTON()}
+                        {textKeys.SIDEBAR_ADD_DISCOUNT_BUTTON()}
                       </TextButton>
                     )}
-                </FooterExtraActions>
-              </Footer>
+                    {redeemedCampaigns.length > 0 &&
+                      !isNoDiscount(
+                        redeemedCampaigns[0]?.incentive ?? undefined,
+                      ) && (
+                        <TextButton
+                          color={colorsV2.coral700}
+                          onClick={() => {
+                            removeDiscountCode()
+                              .then(() => {
+                                const cookieStorage = new CookieStorage()
+                                cookieStorage.setItem('_hvcode', '', {
+                                  path: '/',
+                                })
+                              })
+                              .then(() => refetchAll())
+                          }}
+                        >
+                          {textKeys.SIDEBAR_REMOVE_DISCOUNT_BUTTON()}
+                        </TextButton>
+                      )}
+                  </FooterExtraActions>
+                </Footer>
 
-              <DiscountCodeModal
-                isOpen={discountCodeModalIsOpen}
-                close={() => setDiscountCodeModalIsOpen(false)}
-                refetch={() => refetchAll()}
-              />
-            </Container>
-            {market === Market.Se && (
-              <DetailsModal
-                offerQuote={offerData.quotes[0]}
-                refetch={refetchAll}
-                isVisible={detailsModalIsOpen}
-                onClose={() => setDetailsModalIsOpen(false)}
-              />
-            )}
-          </Wrapper>
-        )}
-      </ReactVisibilitySensor>
-      <StickyBottomSidebar
-        isVisible={!isSidebarVisible}
-        onCheckoutOpen={onCheckoutOpen}
-      />
-    </>
-  )
-})
+                <DiscountCodeModal
+                  isOpen={discountCodeModalIsOpen}
+                  close={() => setDiscountCodeModalIsOpen(false)}
+                  refetch={() => refetchAll()}
+                />
+              </Container>
+              {market === Market.Se && (
+                <DetailsModal
+                  offerQuote={offerData.quotes[0]}
+                  refetch={refetchAll}
+                  isVisible={detailsModalIsOpen}
+                  onClose={() => setDetailsModalIsOpen(false)}
+                />
+              )}
+            </Wrapper>
+          )}
+        </ReactVisibilitySensor>
+        <StickyBottomSidebar
+          isVisible={!isSidebarVisible}
+          onCheckoutOpen={onCheckoutOpen}
+        />
+      </>
+    )
+  },
+)
