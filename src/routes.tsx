@@ -136,7 +136,7 @@ export const reactPageRoutes: ReactPageRoute[] = [
   },
   {
     path: LOCALE_PATH_PATTERN + '/new-member/:name?/:id?',
-    render: function embarkRoutes({ match }: RouteComponentProps<any>) {
+    render: ({ match }: RouteComponentProps<any>) => {
       const getProps = () => {
         switch (match.params.locale) {
           case 'no':
