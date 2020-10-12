@@ -1,5 +1,8 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { match } from 'matchly'
+import React, { useEffect, useRef, useState } from 'react'
+import { useHistory } from 'react-router'
 import { Spinner } from 'components/utils'
 import {
   getLocaleIsoCode,
@@ -14,9 +17,6 @@ import {
   useSubmitAdditionalPaymentDetialsMutation,
   useTokenizePaymentDetailsMutation,
 } from 'data/graphql'
-import { match } from 'matchly'
-import React, { useEffect, useRef, useState } from 'react'
-import { useHistory } from 'react-router'
 import { SpinnerWrapper } from './Spinner'
 
 const Wrapper = styled('div')`

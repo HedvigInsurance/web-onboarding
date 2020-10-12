@@ -11,13 +11,13 @@ import React from 'react'
 import { useHistory } from 'react-router'
 
 import { colorsV3 } from '@hedviginsurance/brand'
+import gql from 'graphql-tag'
+import Helmet from 'react-helmet-async'
 import { apolloClient } from 'apolloClient'
 import {
   getPickedLocaleFromCurrentLocale,
   useCurrentLocale,
 } from 'components/utils/CurrentLocale'
-import gql from 'graphql-tag'
-import Helmet from 'react-helmet-async'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useTextKeys } from 'utils/textKeys'
 import { StorageContainer } from '../../utils/StorageContainer'

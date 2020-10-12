@@ -1,8 +1,8 @@
+import React from 'react'
 import { InsuranceValues } from 'pages/OfferNew/Perils/InsuranceValues'
 import { PerilCollection } from 'pages/OfferNew/Perils/PerilCollection'
 import { PerilModal } from 'pages/OfferNew/Perils/PerilModal'
 import { OfferQuote } from 'pages/OfferNew/types'
-import React from 'react'
 import { useTextKeys } from 'utils/textKeys'
 import { insuranceTypeTextKeys } from '../utils'
 

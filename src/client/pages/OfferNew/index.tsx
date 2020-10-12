@@ -1,3 +1,7 @@
+import { History } from 'history'
+import { SemanticEvents } from 'quepasa'
+import React from 'react'
+import { Redirect, useHistory, useRouteMatch } from 'react-router'
 import { LoadingPage } from 'components/LoadingPage'
 import { TopBar } from 'components/TopBar'
 import {
@@ -11,12 +15,8 @@ import {
   useQuoteBundleQuery,
   useRedeemedCampaignsQuery,
 } from 'data/graphql'
-import { History } from 'history'
 import { SwitchSafetySection } from 'pages/OfferNew/SwitchSafetySection'
 import { getOfferData } from 'pages/OfferNew/utils'
-import { SemanticEvents } from 'quepasa'
-import React from 'react'
-import { Redirect, useHistory, useRouteMatch } from 'react-router'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useStorage } from 'utils/StorageContainer'
 import { trackOfferGTM } from 'utils/tracking/gtm'

@@ -1,7 +1,7 @@
 import { colorsV3 } from '@hedviginsurance/brand'
+import React from 'react'
 import { Button } from 'components/buttons'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
-import React from 'react'
 import { useTextKeys } from 'utils/textKeys'
 import { useRegisterDirectDebitMutation } from '../containers/RegisterDirectDebitMutation'
 import { TrustlyModal } from './TrustlyModal'

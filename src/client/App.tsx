@@ -1,11 +1,11 @@
-import {
-  getLocaleIsoCode,
-  useCurrentLocale,
-} from 'components/utils/CurrentLocale'
 import { Provider } from 'constate'
 import React from 'react'
 import { hot } from 'react-hot-loader'
 import { Route, Switch, useHistory } from 'react-router-dom'
+import {
+  getLocaleIsoCode,
+  useCurrentLocale,
+} from 'components/utils/CurrentLocale'
 import { TextKeyProvider } from 'utils/textKeys'
 import { reactPageRoutes } from '../routes'
 import { AppTokenRetrieval } from './utils/AppTokenRetrieval'

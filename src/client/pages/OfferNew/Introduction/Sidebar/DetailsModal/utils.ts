@@ -1,3 +1,5 @@
+import { match } from 'matchly'
+import * as Yup from 'yup'
 import { inputTypes, masks } from 'components/inputs'
 import {
   ApartmentType,
@@ -9,9 +11,7 @@ import {
   SwedishApartmentQuoteDetails,
   SwedishHouseQuoteDetails,
 } from 'data/graphql'
-import { match } from 'matchly'
 import { OfferQuote } from 'pages/OfferNew/types'
-import * as Yup from 'yup'
 import { isStudent, isSwedishApartment, isSwedishHouse } from '../../../utils'
 import {
   ApartmentFieldSchema,

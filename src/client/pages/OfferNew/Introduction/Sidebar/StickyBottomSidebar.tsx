@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
+import React from 'react'
 import { Button } from 'components/buttons'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
-import React from 'react'
 import { useTextKeys } from 'utils/textKeys'
 
 interface Hidable {

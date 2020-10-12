@@ -1,8 +1,8 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { Tick } from 'components/icons/Tick'
 import { motion } from 'framer-motion'
 import React from 'react'
+import { Tick } from 'components/icons/Tick'
 
 const SwitchContainer = styled(motion.span)`
   display: inline-flex;

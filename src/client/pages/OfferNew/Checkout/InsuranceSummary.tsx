@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV3, fonts } from '@hedviginsurance/brand'
+import React from 'react'
 import { QuoteDetails } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import {
@@ -9,7 +10,6 @@ import {
   maskAndFormatRawSsn,
   quoteDetailsHasAddress,
 } from 'pages/OfferNew/utils'
-import React from 'react'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
 

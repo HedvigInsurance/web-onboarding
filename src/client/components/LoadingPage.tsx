@@ -1,8 +1,8 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand/dist'
+import React from 'react'
 import { TopBar } from 'components/TopBar'
 import { Spinner } from 'components/utils'
-import React from 'react'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 
 const OuterSpinnerWrapper = styled('div')`

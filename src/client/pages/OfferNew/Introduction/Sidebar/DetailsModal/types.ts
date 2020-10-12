@@ -1,6 +1,6 @@
+import * as Yup from 'yup'
 import { CoreInputFieldProps } from 'components/inputs'
 import { EditApartmentInput, EditHouseInput } from 'data/graphql'
-import * as Yup from 'yup'
 
 type Unarray<T> = T extends Array<infer U> ? U : T
 

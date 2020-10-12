@@ -1,10 +1,10 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
-import { LanguageIcon } from 'components/icons/LanguageIcon'
-import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { motion } from 'framer-motion'
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { Market, useMarket } from 'components/utils/CurrentLocale'
+import { LanguageIcon } from 'components/icons/LanguageIcon'
 
 const Wrapper = styled.div`
   position: relative;
