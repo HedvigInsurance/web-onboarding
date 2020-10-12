@@ -10,6 +10,7 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
     'prettier/@typescript-eslint',
+    'plugin:import/typescript',
     'plugin:prettier/recommended',
   ],
   parser: '@typescript-eslint/parser',
@@ -20,7 +21,7 @@ module.exports = {
       jsx: true,
     },
   },
-  plugins: ['react', '@typescript-eslint', 'prettier'],
+  plugins: ['import', 'react', '@typescript-eslint', 'prettier'],
   settings: {
     react: {
       version: 'detect',
@@ -30,6 +31,20 @@ module.exports = {
     },
   },
   rules: {
+    'import/order': [
+      'error',
+      {
+        groups: [
+          'builtin',
+          'external',
+          'internal',
+          'unknown',
+          'parent',
+          'sibling',
+          'index',
+        ],
+      },
+    ],
     'react/prop-types': 'off',
     'react/display-name': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
