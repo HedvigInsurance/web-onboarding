@@ -1,5 +1,5 @@
-import * as Sentry from '@sentry/node'
 import https from 'https'
+import * as Sentry from '@sentry/node'
 import { Context, Middleware } from 'koa'
 import { Logger } from 'typescript-logging'
 import { v4 as uuidV4 } from 'uuid'

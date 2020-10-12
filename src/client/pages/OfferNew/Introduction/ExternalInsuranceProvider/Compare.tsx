@@ -4,11 +4,10 @@ import { externalInsuranceProviders } from '@hedviginsurance/embark'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
 import React from 'react'
 import { useTextKeys } from 'utils/textKeys'
+import { InsuranceCost, InsuranceDataCollection } from 'data/graphql'
 import { Price } from '../../components'
 
 import { hedvigCompany, otherCompanies } from '../../Compare/mock'
-
-import { InsuranceCost, InsuranceDataCollection } from 'data/graphql'
 
 const Wrapper = styled.div`
   display: flex;

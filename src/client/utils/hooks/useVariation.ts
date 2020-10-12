@@ -1,5 +1,5 @@
-import { match } from 'matchly'
 import queryString from 'querystring'
+import { match } from 'matchly'
 import React from 'react'
 import { useHistory } from 'react-router'
 
