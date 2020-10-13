@@ -2,7 +2,7 @@ overwrite: true
 schema: 'https://graphql.dev.hedvigit.com/graphql'
 documents: 'src/**/*.graphql'
 generates:
-  src/data/graphql.tsx:
+  src/client/data/graphql.tsx:
     plugins:
       - 'typescript'
       - 'typescript-operations'
@@ -11,3 +11,4 @@ generates:
       withHOC: false
       withComponent: false
       withHooks: true
+      apolloReactCommonImportFrom: '@apollo/client' # hack until codegen has updated their implementation
