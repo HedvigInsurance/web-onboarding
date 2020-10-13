@@ -1,0 +1,241 @@
+{
+  "Node": [
+    "Language",
+    "Translation",
+    "Key",
+    "KeyGearItemCoverage",
+    "MarketingStory",
+    "Asset",
+    "CoreMLModel",
+    "AppMarketingImage",
+    "Faq",
+    "ImportantMessage",
+    "UserFeature"
+  ],
+  "ExtraBuilding": [
+    "ExtraBuildingGarage",
+    "ExtraBuildingCarport",
+    "ExtraBuildingShed",
+    "ExtraBuildingStorehouse",
+    "ExtraBuildingFriggebod",
+    "ExtraBuildingAttefall",
+    "ExtraBuildingOuthouse",
+    "ExtraBuildingGuesthouse",
+    "ExtraBuildingGazebo",
+    "ExtraBuildingGreenhouse",
+    "ExtraBuildingSauna",
+    "ExtraBuildingBarn",
+    "ExtraBuildingBoathouse",
+    "ExtraBuildingOther"
+  ],
+  "ExtraBuildingCore": [
+    "ExtraBuildingGarage",
+    "ExtraBuildingCarport",
+    "ExtraBuildingShed",
+    "ExtraBuildingStorehouse",
+    "ExtraBuildingFriggebod",
+    "ExtraBuildingAttefall",
+    "ExtraBuildingOuthouse",
+    "ExtraBuildingGuesthouse",
+    "ExtraBuildingGazebo",
+    "ExtraBuildingGreenhouse",
+    "ExtraBuildingSauna",
+    "ExtraBuildingBarn",
+    "ExtraBuildingBoathouse",
+    "ExtraBuildingOther"
+  ],
+  "MessageBody": [
+    "MessageBodySingleSelect",
+    "MessageBodyMultipleSelect",
+    "MessageBodyText",
+    "MessageBodyNumber",
+    "MessageBodyAudio",
+    "MessageBodyBankIdCollect",
+    "MessageBodyFile",
+    "MessageBodyParagraph",
+    "MessageBodyUndefined"
+  ],
+  "MessageBodyCore": [
+    "MessageBodySingleSelect",
+    "MessageBodyMultipleSelect",
+    "MessageBodyText",
+    "MessageBodyNumber",
+    "MessageBodyAudio",
+    "MessageBodyBankIdCollect",
+    "MessageBodyFile",
+    "MessageBodyParagraph",
+    "MessageBodyUndefined"
+  ],
+  "MessageBodyChoices": [
+    "MessageBodyChoicesUndefined",
+    "MessageBodyChoicesSelection",
+    "MessageBodyChoicesLink"
+  ],
+  "MessageBodyChoicesCore": [
+    "MessageBodyChoicesUndefined",
+    "MessageBodyChoicesSelection",
+    "MessageBodyChoicesLink"
+  ],
+  "Incentive": [
+    "MonthlyCostDeduction",
+    "FreeMonths",
+    "NoDiscount",
+    "VisibleNoDiscount",
+    "PercentageDiscountMonths",
+    "IndefinitePercentageDiscount"
+  ],
+  "Referral": [
+    "ActiveReferral",
+    "InProgressReferral",
+    "AcceptedReferral",
+    "TerminatedReferral"
+  ],
+  "ContractStatus": [
+    "PendingStatus",
+    "ActiveInFutureStatus",
+    "ActiveStatus",
+    "ActiveInFutureAndTerminatedInFutureStatus",
+    "TerminatedInFutureStatus",
+    "TerminatedTodayStatus",
+    "TerminatedStatus"
+  ],
+  "Agreement": [
+    "SwedishApartmentAgreement",
+    "SwedishHouseAgreement",
+    "NorwegianHomeContentAgreement",
+    "NorwegianTravelAgreement"
+  ],
+  "AgreementCore": [
+    "SwedishApartmentAgreement",
+    "SwedishHouseAgreement",
+    "NorwegianHomeContentAgreement",
+    "NorwegianTravelAgreement"
+  ],
+  "InsuranceDataCollectionV2": [
+    "PersonTravelInsuranceCollection",
+    "HouseInsuranceCollection"
+  ],
+  "BankIdExtraInfo": ["SwedishBankIdExtraInfo", "NorwegianBankIdExtraInfo"],
+  "Quote": ["CompleteQuote", "IncompleteQuote"],
+  "CompleteQuoteDetails": [
+    "CompleteApartmentQuoteDetails",
+    "CompleteHouseQuoteDetails",
+    "UnknownQuoteDetails"
+  ],
+  "QuoteDetails": [
+    "SwedishApartmentQuoteDetails",
+    "SwedishHouseQuoteDetails",
+    "NorwegianHomeContentsDetails",
+    "NorwegianTravelDetails",
+    "DanishHomeContentsDetails"
+  ],
+  "IncompleteQuoteDetails": [
+    "IncompleteApartmentQuoteDetails",
+    "IncompleteHouseQuoteDetails"
+  ],
+  "CommonClaimLayouts": ["TitleAndBulletPoints", "Emergency"],
+  "EmbarkApi": [
+    "EmbarkApiPersonalInformation",
+    "EmbarkApiHouseInformation",
+    "EmbarkApiCreateQuote",
+    "EmbarkApiGraphQLQuery",
+    "EmbarkApiGraphQLMutation"
+  ],
+  "EmbarkApiCore": [
+    "EmbarkApiPersonalInformation",
+    "EmbarkApiHouseInformation",
+    "EmbarkApiCreateQuote"
+  ],
+  "EmbarkAPIGraphQLVariable": [
+    "EmbarkAPIGraphQLSingleVariable",
+    "EmbarkAPIGraphQLGeneratedVariable",
+    "EmbarkAPIGraphQLMultiActionVariable"
+  ],
+  "EmbarkExpression": [
+    "EmbarkExpressionUnary",
+    "EmbarkExpressionBinary",
+    "EmbarkExpressionMultiple"
+  ],
+  "EmbarkAction": [
+    "EmbarkExternalInsuranceProviderAction",
+    "EmbarkPreviousInsuranceProviderAction",
+    "EmbarkNumberActionSet",
+    "EmbarkTextActionSet",
+    "EmbarkTextAction",
+    "EmbarkSelectAction",
+    "EmbarkNumberAction",
+    "EmbarkMultiAction"
+  ],
+  "EmbarkActionCore": [
+    "EmbarkExternalInsuranceProviderAction",
+    "EmbarkPreviousInsuranceProviderAction",
+    "EmbarkNumberActionSet",
+    "EmbarkTextActionSet",
+    "EmbarkTextAction",
+    "EmbarkSelectAction",
+    "EmbarkNumberAction",
+    "EmbarkMultiAction",
+    "EmbarkDropdownAction",
+    "EmbarkSwitchAction"
+  ],
+  "EmbarkMultiActionComponent": [
+    "EmbarkNumberAction",
+    "EmbarkDropdownAction",
+    "EmbarkSwitchAction"
+  ],
+  "EmbarkResponse": [
+    "EmbarkGroupedResponse",
+    "EmbarkResponseExpression",
+    "EmbarkMessage"
+  ],
+  "EmbarkRedirect": [
+    "EmbarkRedirectUnaryExpression",
+    "EmbarkRedirectBinaryExpression",
+    "EmbarkRedirectMultipleExpressions"
+  ],
+  "KeyGearItemValuation": [
+    "KeyGearItemValuationFixed",
+    "KeyGearItemValuationMarketValue"
+  ],
+  "ExchangeTokenResponse": [
+    "ExchangeTokenSuccessResponse",
+    "ExchangeTokenExpiredResponse",
+    "ExchangeTokenInvalidResponse"
+  ],
+  "TokenizationResponse": [
+    "TokenizationResponseFinished",
+    "TokenizationResponseAction"
+  ],
+  "AdditionalPaymentsDetailsResponse": [
+    "AdditionalPaymentsDetailsResponseFinished",
+    "AdditionalPaymentsDetailsResponseAction"
+  ],
+  "RedeemedCodeV2Result": [
+    "SuccessfulRedeemResult",
+    "CannotRedeemOwnCampaign",
+    "CampaignCannotBeCombinedWithExisting",
+    "CannotRedeemEmptyCode",
+    "CampaignHasExpired",
+    "MemberIsNotEligibleForCampaign",
+    "CampaignDoesNotExist",
+    "CannotRedeemCampaignFromDifferentMarket"
+  ],
+  "RemoveCampaignCodeResult": [
+    "SuccessfullyRemovedCampaignsResult",
+    "CannotRemoveActiveCampaignCode"
+  ],
+  "UpdateReferralCampaignCodeResult": [
+    "SuccessfullyUpdatedCode",
+    "CodeAlreadyTaken",
+    "CodeTooLong",
+    "CodeTooShort",
+    "ExceededMaximumUpdates"
+  ],
+  "CreateQuoteResult": ["CompleteQuote", "UnderwritingLimitsHit"],
+  "StartSignResponse": [
+    "SwedishBankIdSession",
+    "NorwegianBankIdSession",
+    "DanishBankIdSession",
+    "FailedToStartSign"
+  ]
+}

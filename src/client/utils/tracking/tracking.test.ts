@@ -6,7 +6,6 @@ jest.mock('cookie-storage', () => ({
     return { getItem: mockGetItem }
   },
 }))
-jest.mock('../apolloClient', () => ({}))
 
 describe('getUtmParamsFromCookie()', () => {
   it('Converts a regular set of utm parameters', () => {

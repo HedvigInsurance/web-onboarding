@@ -1,21 +1,21 @@
 language: node_js
 
 node_js:
-- 'v10.19.0'
+  - 'v12.19.0'
 
 cache:
   directories:
-  - node_modules
+    - node_modules
 
 install:
-- npm i -g yarn@1.22.0
-- yarn install
+  - npm i -g yarn@1.22.5
+  - yarn install
 
 script:
-- yarn lint
-- yarn test
-- yarn typecheck
-- yarn build
+  - yarn lint
+  - yarn test
+  - yarn typecheck
+  - yarn build
 
 notifications:
   email: false

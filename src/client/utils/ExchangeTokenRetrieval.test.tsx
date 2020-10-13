@@ -4,12 +4,7 @@ jest.mock('../apolloClient', () => ({
 jest.useFakeTimers()
 
 import { MockedResponse, MockLink } from '@apollo/react-testing'
-import {
-  InMemoryCache,
-  IntrospectionFragmentMatcher,
-} from 'apollo-cache-inmemory'
-import { NormalizedCacheObject } from 'apollo-cache-inmemory/lib/types'
-import ApolloClient from 'apollo-client'
+import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { Provider } from 'constate'
 import { ExchangeTokenDocument } from 'data/graphql'
 import { mount } from 'enzyme'
@@ -19,7 +14,7 @@ import { StaticRouter } from 'react-router'
 import { nextTickAsync } from 'utils/misc'
 import { MockStorage } from 'utils/storage/MockStorage'
 import { StorageContext } from 'utils/StorageContainer'
-import introspectionQueryResultData from '../../fragmentTypes.json'
+import possibleTypes from '../../../possibleGraphqlTypes.json'
 import { createSession, Session } from '../../shared/sessionStorage'
 import { ExchangeTokenRetrieval } from './ExchangeTokenRetrieval'
 
@@ -142,12 +137,10 @@ const mountWithApolloClient = (mocks: MockedResponse[], token: string) => {
   const session = createSession<Session>(new MockStorage({}))
 
   const link = new MockLink(mocks, true)
-  const client = new ApolloClient<NormalizedCacheObject>({
+  const client = new ApolloClient({
     link,
     cache: new InMemoryCache({
-      fragmentMatcher: new IntrospectionFragmentMatcher({
-        introspectionQueryResultData,
-      }),
+      possibleTypes,
     }),
   })
   const subscriptionClient = { close: jest.fn() } as any
