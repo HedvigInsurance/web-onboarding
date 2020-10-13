@@ -5,6 +5,7 @@ const defaultSrc = [
   "'self'",
   'localhost:8040',
   'hedvig.com',
+  'ion.hedvig.com',
   'www.hedvig.com',
   'cdn.hedvig.com',
   '*.hotjar.com',
