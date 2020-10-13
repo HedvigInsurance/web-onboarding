@@ -126,7 +126,10 @@ export const Offer: React.FC = () => {
                     },
                   }}
                   onSubmit={async (values) => {
-                    await createQuote(storage)({
+                    await createQuote(
+                      storage,
+                      localeIsoCode,
+                    )({
                       input: {
                         ...values,
                         id: quoteId,
@@ -165,7 +168,10 @@ export const Offer: React.FC = () => {
                     },
                   }}
                   onSubmit={async (values) => {
-                    await createQuote(storage)({
+                    await createQuote(
+                      storage,
+                      localeIsoCode,
+                    )({
                       input: {
                         ...values,
                         id: quoteId,
@@ -207,7 +213,10 @@ export const Offer: React.FC = () => {
                     },
                   }}
                   onSubmit={async (values) => {
-                    await createQuote(storage)({
+                    await createQuote(
+                      storage,
+                      localeIsoCode,
+                    )({
                       input: {
                         ...values,
                         id: quoteId,
