@@ -1,11 +1,11 @@
 import styled from '@emotion/styled'
 import { colorsV2, colorsV3 } from '@hedviginsurance/brand'
-import { DownArrow } from 'components/icons/DownArrow'
-import { WarningIcon } from 'components/icons/Warning'
 import { Field, GenericFieldHTMLAttributes } from 'formik'
 import { FieldInputProps } from 'formik/dist/types'
 import React from 'react'
 import InputMask from 'react-input-mask'
+import { WarningIcon } from 'components/icons/Warning'
+import { DownArrow } from 'components/icons/DownArrow'
 
 interface Mask {
   name: string

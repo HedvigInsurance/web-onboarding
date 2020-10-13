@@ -1,9 +1,9 @@
 import styled from '@emotion/styled'
 import { colors } from '@hedviginsurance/brand'
-import Modal from 'components/Modal'
-import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import React, { createRef, useEffect, useState } from 'react'
 import { Redirect } from 'react-router-dom'
+import Modal from 'components/Modal'
+import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
 
 const Header = styled('div')({

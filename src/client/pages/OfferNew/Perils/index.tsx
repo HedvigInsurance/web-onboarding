@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import React from 'react'
 import {
   Body,
   Column,
@@ -11,7 +12,6 @@ import {
 } from 'pages/OfferNew/components'
 import { PerilRow } from 'pages/OfferNew/Perils/PerilRow'
 import { OfferData } from 'pages/OfferNew/types'
-import React from 'react'
 import { useTextKeys } from 'utils/textKeys'
 
 interface Props {

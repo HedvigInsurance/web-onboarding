@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
-import { InfoIcon } from 'components/icons/Info'
 import React from 'react'
+import { InfoIcon } from 'components/icons/Info'
 import { useTextKeys } from 'utils/textKeys'
 
 const Wrapper = styled.div`

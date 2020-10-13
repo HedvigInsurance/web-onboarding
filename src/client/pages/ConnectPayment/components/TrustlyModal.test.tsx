@@ -1,13 +1,13 @@
 import { MockedProvider } from '@apollo/react-testing'
 import { mount } from 'enzyme'
+import React from 'react'
+import { act } from 'react-dom/test-utils'
+import { MemoryRouter, withRouter } from 'react-router-dom'
 import {
   handleIframeLoad,
   HandleIframeLoad,
   TrustlyModal,
 } from 'pages/ConnectPayment/components/TrustlyModal'
-import React from 'react'
-import { act } from 'react-dom/test-utils'
-import { MemoryRouter, withRouter } from 'react-router-dom'
 import { nextTickAsync, sleep } from 'utils/misc'
 import { StaticTextKeyProvider } from 'utils/textKeys'
 

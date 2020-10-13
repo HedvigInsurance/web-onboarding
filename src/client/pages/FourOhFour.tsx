@@ -1,9 +1,9 @@
 import styled from '@emotion/styled'
-import { LazyLottie } from 'components/animations/LazyLottie'
-import { TopBar } from 'components/TopBar'
 import React from 'react'
 import Helmet from 'react-helmet-async'
 import { RouteComponentProps } from 'react-router'
+import { TopBar } from 'components/TopBar'
+import { LazyLottie } from 'components/animations/LazyLottie'
 import { useTextKeys } from 'utils/textKeys'
 
 const FourOhFourWrapper = styled('div')({

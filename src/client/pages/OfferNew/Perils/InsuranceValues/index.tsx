@@ -1,9 +1,9 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import color from 'color'
+import React from 'react'
 import { Limits } from 'pages/OfferNew/Perils/InsuranceValues/Limits'
 import { OfferQuote } from 'pages/OfferNew/types'
-import React from 'react'
 import { useTextKeys } from 'utils/textKeys'
 import { SubSubHeadingBlack } from '../../components'
 

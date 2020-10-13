@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
-import { LoadingDots } from 'components/LoadingDots/LoadingDots'
 import React from 'react'
+import { LoadingDots } from 'components/LoadingDots/LoadingDots'
 
 const LoadingWrapper = styled.div`
   display: flex;

@@ -1,14 +1,14 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { isMobile } from 'is-mobile'
+import React from 'react'
 import { LinkButton } from 'components/buttons'
 import { LoadingPage } from 'components/LoadingPage'
 import { useMemberQuery } from 'data/graphql'
-import { isMobile } from 'is-mobile'
 import {
   AppleAppStoreIcon,
   GooglePlayStoreIcon,
 } from 'pages/Download/sections/appStoreIcons'
-import React from 'react'
 import { useTextKeys } from 'utils/textKeys'
 
 const SITE_WRAPPER = 1300

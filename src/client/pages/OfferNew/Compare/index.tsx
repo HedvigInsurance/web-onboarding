@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
+import React from 'react'
 import { CurrentInsurer } from 'data/graphql'
 import {
   Body,
@@ -10,7 +11,6 @@ import {
   HeadingWrapper,
   PreHeading,
 } from 'pages/OfferNew/components'
-import React from 'react'
 import { useTextKeys } from 'utils/textKeys'
 import { CompareTable } from './CompareTable'
 import { hedvigCompany, otherCompanies } from './mock'

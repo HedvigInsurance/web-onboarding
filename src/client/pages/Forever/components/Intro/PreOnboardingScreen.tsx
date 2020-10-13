@@ -1,9 +1,9 @@
 import { keyframes } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand/dist/colors'
+import React from 'react'
 import { LinkButton } from 'components/buttons'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
-import React from 'react'
 import { useTextKeys } from 'utils/textKeys'
 import { fadeIn, TextContent } from './components'
 

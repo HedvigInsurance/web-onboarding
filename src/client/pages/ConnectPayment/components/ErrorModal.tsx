@@ -1,8 +1,8 @@
 import styled from '@emotion/styled'
-import { Button } from 'components/buttons'
-import { Modal } from 'components/ModalNew'
 import React from 'react'
 import { useHistory } from 'react-router'
+import { Button } from 'components/buttons'
+import { Modal } from 'components/ModalNew'
 import { useTextKeys } from 'utils/textKeys'
 
 const ErrorMessage = styled('div')`

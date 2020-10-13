@@ -1,17 +1,17 @@
 import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand/dist'
+import { motion } from 'framer-motion'
+import React from 'react'
+import ReactMarkdown from 'react-markdown/with-html'
+import { useMediaQuery } from 'react-responsive'
 import { Button } from 'components/buttons'
 import { Spinner } from 'components/utils'
 import {
   InsuranceTermType,
   SignStatus as GraphQLSignStatus,
 } from 'data/graphql'
-import { motion } from 'framer-motion'
 import { OfferData } from 'pages/OfferNew/types'
 import { isNorwegian, isSwedish } from 'pages/OfferNew/utils'
-import React from 'react'
-import ReactMarkdown from 'react-markdown/with-html'
-import { useMediaQuery } from 'react-responsive'
 import { useTextKeys } from 'utils/textKeys'
 import { SignStatus } from './SignStatus'
 

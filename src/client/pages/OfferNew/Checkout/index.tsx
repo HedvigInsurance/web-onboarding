@@ -1,6 +1,10 @@
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { SemanticEvents } from 'quepasa'
+import React, { useEffect, useRef, useState } from 'react'
+import { Mount } from 'react-lifecycle-components'
+import { Redirect } from 'react-router-dom'
 import { BackArrow } from 'components/icons/BackArrow'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
@@ -12,10 +16,6 @@ import {
 } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import { getQuoteIds } from 'pages/OfferNew/utils'
-import { SemanticEvents } from 'quepasa'
-import React, { useEffect, useRef, useState } from 'react'
-import { Mount } from 'react-lifecycle-components'
-import { Redirect } from 'react-router-dom'
 import { handleSignedEvent } from 'utils/tracking/signing'
 import {
   getContractType,

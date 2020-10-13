@@ -1,16 +1,16 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { Button } from 'components/buttons'
-import { Cross } from 'components/icons/Cross'
-import { InputField } from 'components/inputs'
 import { CookieStorage } from 'cookie-storage'
-import { useRedeemCodeMutation } from 'data/graphql'
 import { Form, Formik } from 'formik'
 import { motion } from 'framer-motion'
 import hexToRgba from 'hex-to-rgba'
 import React from 'react'
-import { useTextKeys } from 'utils/textKeys'
 import * as Yup from 'yup'
+import { useTextKeys } from 'utils/textKeys'
+import { useRedeemCodeMutation } from 'data/graphql'
+import { InputField } from 'components/inputs'
+import { Cross } from 'components/icons/Cross'
+import { Button } from 'components/buttons'
 
 interface Props {
   isOpen: boolean

@@ -1,14 +1,14 @@
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import React from 'react'
+import AnimateHeight from 'react-animate-height'
+import ReactMarkdown from 'react-markdown/with-html'
+import { useFaqsQuery } from 'data/graphql'
 import {
   getLocaleIsoCode,
   useCurrentLocale,
 } from 'components/utils/CurrentLocale'
-import { useFaqsQuery } from 'data/graphql'
-import React from 'react'
-import AnimateHeight from 'react-animate-height'
-import ReactMarkdown from 'react-markdown/with-html'
 import { useTextKeys } from 'utils/textKeys'
 import {
   Column,

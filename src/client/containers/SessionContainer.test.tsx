@@ -15,9 +15,9 @@ import { Provider } from 'constate'
 import { mount } from 'enzyme'
 import React from 'react'
 
-import { Locale, UpdatePickedLocaleDocument } from 'data/graphql'
 import { act } from 'react-dom/test-utils'
 import { StaticRouter } from 'react-router-dom'
+import { Locale, UpdatePickedLocaleDocument } from 'data/graphql'
 import {
   createSession,
   IsomorphicSessionStorage,

@@ -2,8 +2,8 @@ import {
   HouseInformationData,
   HouseInformationVariables,
 } from '@hedviginsurance/embark'
-import { apolloClient } from 'apolloClient'
 import gql from 'graphql-tag'
+import { apolloClient } from 'apolloClient'
 
 const QUERY = gql`
   query HouseInformationQuery($input: HouseInformationInput!) {

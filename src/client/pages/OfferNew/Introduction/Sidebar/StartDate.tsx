@@ -2,6 +2,11 @@ import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { externalInsuranceProviders } from '@hedviginsurance/embark'
+import { format, isToday, Locale, parse } from 'date-fns'
+import { motion } from 'framer-motion'
+import hexToRgba from 'hex-to-rgba'
+import { match } from 'matchly'
+import React from 'react'
 import {
   DateInput as DateInputForm,
   getLocaleImport,
@@ -17,10 +22,6 @@ import {
   useRemoveStartDateMutation,
   useStartDateMutation,
 } from 'data/graphql'
-import { format, isToday, Locale, parse } from 'date-fns'
-import { motion } from 'framer-motion'
-import hexToRgba from 'hex-to-rgba'
-import { match } from 'matchly'
 import { CancellationOptions } from 'pages/OfferNew/Introduction/Sidebar/CancellationOptions'
 import { OfferData, OfferQuote } from 'pages/OfferNew/types'
 import {
@@ -28,7 +29,6 @@ import {
   insuranceTypeTextKeys,
   isBundle,
 } from 'pages/OfferNew/utils'
-import React from 'react'
 import { useTextKeys } from 'utils/textKeys'
 import { gqlDateFormat } from './utils'
 

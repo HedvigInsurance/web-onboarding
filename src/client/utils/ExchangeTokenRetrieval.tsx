@@ -1,8 +1,8 @@
-import { apolloClient as realApolloClient } from 'apolloClient'
-import { ExchangeTokenDocument } from 'data/graphql'
 import React from 'react'
 import { Mount } from 'react-lifecycle-components'
 import { useHistory } from 'react-router'
+import { ExchangeTokenDocument } from 'data/graphql'
+import { apolloClient as realApolloClient } from 'apolloClient'
 import { captureSentryError } from 'utils/sentry-client'
 import {
   StorageContainer,

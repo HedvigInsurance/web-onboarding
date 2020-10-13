@@ -1,8 +1,10 @@
 import styled from '@emotion/styled'
 import { colorsV2, colorsV3, fonts } from '@hedviginsurance/brand'
+import { CookieStorage } from 'cookie-storage'
+import React from 'react'
+import ReactVisibilitySensor from 'react-visibility-sensor'
 import { Button, TextButton } from 'components/buttons'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
-import { CookieStorage } from 'cookie-storage'
 import {
   useRedeemCodeMutation,
   useRedeemedCampaignsQuery,
@@ -15,8 +17,6 @@ import {
   isPercentageDiscountMonths,
 } from 'pages/OfferNew/Introduction/Sidebar/utils'
 import { OfferData } from 'pages/OfferNew/types'
-import React from 'react'
-import ReactVisibilitySensor from 'react-visibility-sensor'
 import { useTextKeys } from 'utils/textKeys'
 import { Price } from '../../components'
 import { insuranceTypeTextKeys, isBundle } from '../../utils'
