@@ -1,5 +1,6 @@
 import { Form, Formik, FormikProps } from 'formik'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { colorsV3 } from '@hedviginsurance/brand'
 import {
   ApartmentType,
   CreateQuoteInput,
@@ -12,8 +13,8 @@ import { StorageContainer, useStorage } from 'utils/StorageContainer'
 import {
   getLocaleIsoCode,
   useCurrentLocale,
+  useMarket,
 } from 'components/utils/CurrentLocale'
-import { colorsV3 } from '@hedviginsurance/brand'
 
 enum QuoteType {
   NorwegianHome = 'norwegian-home',
@@ -24,13 +25,40 @@ enum QuoteType {
 
 export const Offer: React.FC = () => {
   const [getQuote, { data, refetch }] = useQuoteLazyQuery()
-  const [quoteId, setQuoteId] = React.useState<string>('') // TODO handle multiple quotes
-  const [quoteType, setQuoteType] = React.useState(QuoteType.NorwegianHome)
+  const [quoteId, setQuoteId] = useState<string>('') // TODO handle multiple quotes
   const storageState = useStorage()
   const currentLocale = useCurrentLocale()
   const localeIsoCode = getLocaleIsoCode(currentLocale)
+  const currentMarket = useMarket()
 
-  React.useEffect(() => {
+  const quotesByMarket = {
+    NO: [
+      {
+        label: 'Norwegian Home',
+        value: QuoteType.NorwegianHome,
+      },
+      {
+        label: 'Norwegian Travel',
+        value: QuoteType.NorwegianTravel,
+      },
+    ],
+    SE: [
+      {
+        label: 'Swedish Apartment',
+        value: QuoteType.SwedishApartment,
+      },
+      {
+        label: 'Swedish House',
+        value: QuoteType.SwedishHouse,
+      },
+    ],
+  }
+
+  const [quoteType, setQuoteType] = useState(
+    quotesByMarket[currentMarket][0].value,
+  )
+
+  useEffect(() => {
     const quoteIds = storageState.session.getSession()?.quoteIds ?? []
     if (!quoteId && quoteIds[0]) {
       setQuoteId(quoteIds[0] ?? '')
@@ -80,24 +108,7 @@ export const Offer: React.FC = () => {
                   <InputField
                     label="Type"
                     placeholder=""
-                    options={[
-                      {
-                        label: 'Norwegian Home',
-                        value: QuoteType.NorwegianHome,
-                      },
-                      {
-                        label: 'Norwegian Travel',
-                        value: QuoteType.NorwegianTravel,
-                      },
-                      {
-                        label: 'Swedish Apartment',
-                        value: QuoteType.SwedishApartment,
-                      },
-                      {
-                        label: 'Swedish House',
-                        value: QuoteType.SwedishHouse,
-                      },
-                    ]}
+                    options={quotesByMarket[currentMarket]}
                     value={quoteType}
                     onChange={(value: React.ChangeEvent<HTMLSelectElement>) =>
                       setQuoteType(value.target.value as QuoteType)

@@ -136,7 +136,7 @@ export const reactPageRoutes: ReactPageRoute[] = [
     exact: true,
   },
   {
-    path: LOCALE_PATH_PATTERN + '/debugger',
+    path: LOCALE_PATH_PATTERN + '/new-member/debugger',
     Component: Debugger,
     exact: true,
   },
