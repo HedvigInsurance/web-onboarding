@@ -17,6 +17,7 @@ import {
 } from 'components/utils/CurrentLocale'
 
 enum QuoteType {
+  DanishHome = 'danish-home',
   NorwegianHome = 'norwegian-home',
   NorwegianTravel = 'norwegian-travel',
   SwedishApartment = 'swedish-apartment',
@@ -32,6 +33,12 @@ export const Offer: React.FC = () => {
   const currentMarket = useMarket()
 
   const quotesByMarket = {
+    DK: [
+      {
+        label: 'Danish Home',
+        value: QuoteType.DanishHome,
+      },
+    ],
     NO: [
       {
         label: 'Norwegian Home',
@@ -157,6 +164,50 @@ export const Offer: React.FC = () => {
                     <>
                       <QuoteForm formik={props}>
                         <NorwegianHome formik={props} />
+                      </QuoteForm>
+                    </>
+                  )}
+                </Formik>
+              )}
+
+              {quoteType === QuoteType.DanishHome && (
+                <Formik
+                  initialValues={{
+                    firstName: 'Blargh',
+                    lastName: 'Blarghson',
+                    currentInsurer: '',
+                    birthDate: '1988-09-16',
+                    ssn: '',
+                    startDate: '',
+                    email: 'blargis@hedvig.com',
+                    danishHomeContents: {
+                      coInsured: 0,
+                      livingSpace: 34,
+                      street: 'Nørrebrogade 50',
+                      zipCode: '',
+                    },
+                  }}
+                  onSubmit={async (values) => {
+                    await createQuote(
+                      storage,
+                      localeIsoCode,
+                    )({
+                      input: {
+                        ...values,
+                        id: quoteId,
+                        currentInsurer: values.currentInsurer || undefined,
+                        // @ts-ignore
+                        startDate: values.startDate || undefined,
+                      },
+                    })
+
+                    await refetch()
+                  }}
+                >
+                  {(props) => (
+                    <>
+                      <QuoteForm formik={props}>
+                        <DanishHome formik={props} />
                       </QuoteForm>
                     </>
                   )}
@@ -311,6 +362,35 @@ const QuoteForm: React.FC<WithFormikProps> = ({ children, formik }) => {
         Create quote
       </Button>
     </Form>
+  )
+}
+
+export const DanishHome: React.FC<WithFormikProps> = ({ formik }) => {
+  return (
+    <>
+      <InputField
+        label="Co-insured"
+        placeholder="1"
+        type="number"
+        {...formik.getFieldProps('danishHomeContents.coInsured')}
+      />
+      <InputField
+        label="Living space"
+        placeholder="34"
+        type="number"
+        {...formik.getFieldProps('danishHomeContents.livingSpace')}
+      />
+      <InputField
+        label="Street"
+        placeholder="Nørrebrogade 50"
+        {...formik.getFieldProps('danishHomeContents.street')}
+      />
+      <InputField
+        label="Zip code"
+        placeholder="2200"
+        {...formik.getFieldProps('danishHomeContents.zipCode')}
+      />
+    </>
   )
 }
 
