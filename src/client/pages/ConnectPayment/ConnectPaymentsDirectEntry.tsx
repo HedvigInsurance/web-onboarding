@@ -1,14 +1,14 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand/dist'
-import { Button } from 'components/buttons'
-import { LoadingPage } from 'components/LoadingPage'
-import { useCurrentLocale } from 'components/utils/CurrentLocale'
-import { Page } from 'components/utils/Page'
 import { motion } from 'framer-motion'
 import React from 'react'
 import Helmet from 'react-helmet-async'
 import { RouteComponentProps } from 'react-router'
 import { Redirect } from 'react-router-dom'
+import { Page } from 'components/utils/Page'
+import { useCurrentLocale } from 'components/utils/CurrentLocale'
+import { LoadingPage } from 'components/LoadingPage'
+import { Button } from 'components/buttons'
 import {
   ExchangeTokenRetrieval,
   ExchangeTokenRetrievalState,

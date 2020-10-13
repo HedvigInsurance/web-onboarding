@@ -1,10 +1,10 @@
 import styled from '@emotion/styled'
+import React from 'react'
 import {
   useExternalInsuranceDataQuery,
   useExternalInsuranceDataStatusSubscription,
 } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
-import React from 'react'
 
 import { useTextKeys } from 'utils/textKeys'
 import { Compare } from './Compare'

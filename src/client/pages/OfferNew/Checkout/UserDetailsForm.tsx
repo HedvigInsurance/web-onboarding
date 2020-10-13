@@ -1,11 +1,11 @@
 import styled from '@emotion/styled'
+import React from 'react'
+import * as yup from 'yup'
 import { RawInputField } from 'components/inputs'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { WithEmailForm, WithSsnForm } from 'pages/OfferNew/types'
 import { createSsnValidator } from 'pages/OfferNew/utils'
-import React from 'react'
 import { useTextKeys } from 'utils/textKeys'
-import * as yup from 'yup'
 
 const BottomSpacedRawInputField = styled(RawInputField)`
   margin-bottom: 1rem;

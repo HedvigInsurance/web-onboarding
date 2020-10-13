@@ -1,5 +1,5 @@
-import { Container, ContainerProps, EffectMap, EffectProps } from 'constate'
 import React from 'react'
+import { Container, ContainerProps, EffectMap, EffectProps } from 'constate'
 import { IsomorphicSessionStorage, Session } from '../../shared/sessionStorage'
 
 export interface StorageState {

@@ -1,7 +1,7 @@
+import gql from 'graphql-tag'
 import { apolloClient } from 'apolloClient'
 import { setupSession } from 'containers/SessionContainer'
 import { Locale } from 'data/graphql'
-import gql from 'graphql-tag'
 import { captureSentryError } from 'utils/sentry-client'
 import { Storage } from 'utils/StorageContainer'
 

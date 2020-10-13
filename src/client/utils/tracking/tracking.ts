@@ -1,15 +1,15 @@
 import { CookieStorage } from 'cookie-storage'
+import md5 from 'md5'
+import { SegmentAnalyticsJs, setupTrackers } from 'quepasa'
+import React from 'react'
 import {
   SignState,
   TypeOfContract,
   useMemberQuery,
   useRedeemedCampaignsQuery,
 } from 'data/graphql'
-import md5 from 'md5'
 import { OfferData } from 'pages/OfferNew/types'
 import { isBundle, isYouth } from 'pages/OfferNew/utils'
-import { SegmentAnalyticsJs, setupTrackers } from 'quepasa'
-import React from 'react'
 import { trackOfferGTM } from './gtm'
 
 const cookie = new CookieStorage()

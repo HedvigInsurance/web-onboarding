@@ -1,5 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
+import { FieldArray, Form, Formik } from 'formik'
+import React from 'react'
 import { Button } from 'components/buttons'
 import {
   InputGroup,
@@ -13,9 +15,7 @@ import {
   ExtraBuildingType,
   useEditQuoteMutation,
 } from 'data/graphql'
-import { FieldArray, Form, Formik } from 'formik'
 import { OfferQuote } from 'pages/OfferNew/types'
-import React from 'react'
 import { useTextKeys } from 'utils/textKeys'
 import { DetailInput } from './DetailInput'
 import { SupportSection } from './SupportSection'

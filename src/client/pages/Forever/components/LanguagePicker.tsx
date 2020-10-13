@@ -1,9 +1,9 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { Market, useMarket } from 'components/utils/CurrentLocale'
 import React from 'react'
 import { useParams } from 'react-router'
 import { NavLink } from 'react-router-dom'
+import { Market, useMarket } from 'components/utils/CurrentLocale'
 
 const LanguagePickerWrapper = styled.div`
   display: flex;

@@ -1,13 +1,13 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { Button } from 'components/buttons'
-import { InputField } from 'components/inputs'
-import { LoadingDots } from 'components/LoadingDots/LoadingDots'
 import { Form, Formik, FormikHelpers } from 'formik'
 import React, { useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown/with-html'
-import { useTextKeys } from 'utils/textKeys'
 import * as Yup from 'yup'
+import { Button } from 'components/buttons'
+import { InputField } from 'components/inputs'
+import { LoadingDots } from 'components/LoadingDots/LoadingDots'
+import { useTextKeys } from 'utils/textKeys'
 import { LanguagePicker } from './LanguagePicker'
 
 export interface RedeemCodeFormValue {

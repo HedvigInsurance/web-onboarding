@@ -1,15 +1,15 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { format } from 'date-fns'
+import React from 'react'
 import { Switch } from 'components/Switch'
 import { Spinner } from 'components/utils'
 import { useRemoveStartDateMutation, useStartDateMutation } from 'data/graphql'
-import { format } from 'date-fns'
 import { OfferData, OfferQuote } from 'pages/OfferNew/types'
 import {
   isNorwegianHomeContents,
   isNorwegianTravel,
 } from 'pages/OfferNew/utils'
-import React from 'react'
 import { useTextKeys } from 'utils/textKeys'
 import { gqlDateFormat } from './utils'
 

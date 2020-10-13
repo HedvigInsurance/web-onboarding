@@ -1,5 +1,8 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand/dist'
+import { motion } from 'framer-motion'
+import React, { useEffect, useState } from 'react'
+import { Redirect } from 'react-router'
 import { LinkButton } from 'components/buttons'
 import { LoadingPage } from 'components/LoadingPage'
 import {
@@ -13,10 +16,7 @@ import {
   useQuoteBundleQuery,
   useSignStatusQuery,
 } from 'data/graphql'
-import { motion } from 'framer-motion'
 import { getOfferData } from 'pages/OfferNew/utils'
-import React, { useEffect, useState } from 'react'
-import { Redirect } from 'react-router'
 import { useStorage } from 'utils/StorageContainer'
 import { useTextKeys } from 'utils/textKeys'
 import { handleSignedEvent } from 'utils/tracking/signing'

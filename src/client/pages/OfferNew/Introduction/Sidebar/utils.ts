@@ -1,3 +1,4 @@
+import React from 'react'
 import {
   FreeMonths,
   Incentive,
@@ -6,7 +7,6 @@ import {
   PercentageDiscountMonths,
   RedeemedCampaignsQuery,
 } from 'data/graphql'
-import React from 'react'
 
 type QueriedIncentive =
   | RedeemedCampaignsQuery['redeemedCampaigns'][0]['incentive']

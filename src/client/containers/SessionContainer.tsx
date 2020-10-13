@@ -1,15 +1,15 @@
 import { useApolloClient } from '@apollo/react-hooks'
+import { DocumentNode } from 'graphql'
+import gql from 'graphql-tag'
+import { SegmentAnalyticsJs } from 'quepasa'
+import React from 'react'
+import { Mount } from 'react-lifecycle-components'
+import { afterTick } from 'pages/Embark/utils'
+import { Locale, UpdatePickedLocaleDocument } from 'data/graphql'
 import {
   getPickedLocaleFromCurrentLocale,
   useCurrentLocale,
 } from 'components/utils/CurrentLocale'
-import { Locale, UpdatePickedLocaleDocument } from 'data/graphql'
-import { DocumentNode } from 'graphql'
-import gql from 'graphql-tag'
-import { afterTick } from 'pages/Embark/utils'
-import { SegmentAnalyticsJs } from 'quepasa'
-import React from 'react'
-import { Mount } from 'react-lifecycle-components'
 import { captureSentryError } from 'utils/sentry-client'
 import { Storage, StorageContainer } from 'utils/StorageContainer'
 import {

@@ -1,9 +1,9 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { Questionmark } from 'components/icons/Questionmark'
 import { motion } from 'framer-motion'
 import React from 'react'
 import { useMediaQuery } from 'react-responsive'
+import { Questionmark } from 'components/icons/Questionmark'
 import { Size } from './types'
 
 interface Props {
