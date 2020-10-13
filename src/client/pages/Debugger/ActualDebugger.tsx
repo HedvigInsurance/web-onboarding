@@ -1,10 +1,16 @@
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
-import * as React from 'react'
+import { colorsV2, colorsV3 } from '@hedviginsurance/brand'
+import React from 'react'
 import { Button } from 'components/buttons'
 import { StorageContainer } from 'utils/StorageContainer'
 import { Offer } from './components/Offer'
 import { Session } from './components/Session'
+
+const Wrapper = styled.div`
+  max-width: 900px;
+  margin: 0 auto;
+  color: ${colorsV3.gray100};
+`
 
 const Row = styled.div`
   padding-bottom: 1rem;
@@ -12,7 +18,7 @@ const Row = styled.div`
 
 export const ActualDebugger: React.FC = () => {
   return (
-    <>
+    <Wrapper>
       <h1>Web onboarding state debugger</h1>
 
       <Row>
@@ -45,6 +51,6 @@ export const ActualDebugger: React.FC = () => {
         <h3>Offer</h3>
         <Offer />
       </Row>
-    </>
+    </Wrapper>
   )
 }
