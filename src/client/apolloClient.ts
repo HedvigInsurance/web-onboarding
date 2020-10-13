@@ -2,9 +2,9 @@ import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { WebSocketLink } from '@apollo/link-ws'
 import { CookieStorage } from 'cookie-storage'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
+import { Quote } from 'data/graphql'
 import { createSession, Session } from '../shared/sessionStorage'
 import possibleTypes from '../../possibleGraphqlTypes.json'
-import { Quote } from 'data/graphql'
 
 export interface ApolloClientAndSubscriptionClient {
   subscriptionClient: SubscriptionClient

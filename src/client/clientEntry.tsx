@@ -1,12 +1,12 @@
 import { ApolloProvider } from '@apollo/react-hooks'
-import { HotApp } from 'App'
-import { PageTracker } from 'containers/PageTracker'
 import { CookieStorage } from 'cookie-storage'
 import { isMobile } from 'is-mobile'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter } from 'react-router-dom'
+import { PageTracker } from 'containers/PageTracker'
+import { HotApp } from 'App'
 import {
   createSession,
   SavingCookieStorage,
