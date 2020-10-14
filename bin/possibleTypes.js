@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable */
 const fetch = require('node-fetch')
 const fs = require('fs')
 const path = require('path')
@@ -25,18 +26,22 @@ fetch('https://graphql.dev.hedvigit.com/graphql', {
 })
   .then((result) => result.json())
   .then((result) => {
-    // here we're filtering out any type information unrelated to unions or interfaces
-    console.log('result: ', result)
-    const filteredData = result.data.__schema.types.filter(
-      (type) => type.possibleTypes !== null,
-    )
-    result.data.__schema.types = filteredData
+    const possibleTypes = {}
+
+    result.data.__schema.types.forEach((supertype) => {
+      if (supertype.possibleTypes) {
+        possibleTypes[supertype.name] = supertype.possibleTypes.map(
+          (subtype) => subtype.name,
+        )
+      }
+    })
+
     fs.writeFile(
-      path.resolve(__dirname, '../src/client/fragmentTypes.json'),
-      JSON.stringify(result.data),
+      path.resolve(__dirname, '../possibleGraphqlTypes.json'),
+      JSON.stringify(possibleTypes),
       (err) => {
         if (err) {
-          console.error('Error writing fragmentTypes file', err)
+          console.error('Error writing possibleTypes.json', err)
         } else {
           console.log('Fragment types successfully extracted!')
         }

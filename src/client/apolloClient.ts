@@ -1,18 +1,10 @@
-import {
-  InMemoryCache,
-  IntrospectionFragmentMatcher,
-} from 'apollo-cache-inmemory'
-import { ApolloClient } from 'apollo-client'
-import { WebSocketLink } from 'apollo-link-ws'
+import { ApolloClient, InMemoryCache } from '@apollo/client'
+import { WebSocketLink } from '@apollo/link-ws'
 import { CookieStorage } from 'cookie-storage'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
-import { dataIdFromObject } from 'utils/apolloClient'
-import introspectionQueryResultData from '../fragmentTypes.json'
+import { Quote } from 'data/graphql'
 import { createSession, Session } from '../shared/sessionStorage'
-
-const fragmentMatcher = new IntrospectionFragmentMatcher({
-  introspectionQueryResultData,
-})
+import possibleTypes from '../../possibleGraphqlTypes.json'
 
 export interface ApolloClientAndSubscriptionClient {
   subscriptionClient: SubscriptionClient
@@ -39,7 +31,21 @@ export const apolloClient = (() => {
     },
   )
   const client = new ApolloClient({
-    cache: new InMemoryCache({ fragmentMatcher, dataIdFromObject }),
+    cache: new InMemoryCache({
+      possibleTypes,
+      typePolicies: {
+        QuoteBundle: {
+          keyFields: (bundle) =>
+            (bundle.quotes as Quote[]).map((q) => q.id).join(','),
+        },
+        ActiveReferral: {
+          keyFields: (referral) => referral.name as string,
+        },
+        InProgressReferral: {
+          keyFields: (referral) => referral.name as string,
+        },
+      },
+    }),
     link: new WebSocketLink(subscriptionClient),
   })
 

@@ -54,7 +54,7 @@ const SpinnerWrapper = styled(motion.div)`
   overflow: hidden;
 `
 
-const Disclaimer = styled('p')`
+const Disclaimer = styled('div')`
   font-size: 0.75rem;
   margin: 1rem 0 0;
   color: ${colorsV2.gray};
@@ -132,35 +132,38 @@ export const Sign: React.FC<Props> = ({
         <SignStatus signStatus={signStatus} />
       </motion.div>
       {offerData.quotes.map((quote) => {
+        const seSignDisclaimer = textKeys.CHECKOUT_SIGN_DISCLAIMER({
+          PREBUY_LINK:
+            quote.insuranceTerms.get(InsuranceTermType.PreSaleInfoEuStandard)
+              ?.url ?? '',
+          TERMS_LINK:
+            quote.insuranceTerms.get(InsuranceTermType.TermsAndConditions)
+              ?.url ?? '',
+        })
+        const noSignDisclaimer = textKeys.CHECKOUT_SIGN_DISCLAIMER_NO({
+          TERMS_LINK:
+            quote.insuranceTerms.get(InsuranceTermType.TermsAndConditions)
+              ?.url ?? '',
+        })
         return (
           <Disclaimer key={quote.id}>
             {isSwedish(offerData) && (
               <ReactMarkdown
-                source={textKeys
-                  .CHECKOUT_SIGN_DISCLAIMER({
-                    PREBUY_LINK:
-                      quote.insuranceTerms.get(
-                        InsuranceTermType.PreSaleInfoEuStandard,
-                      )?.url ?? '',
-                    TERMS_LINK:
-                      quote.insuranceTerms.get(
-                        InsuranceTermType.TermsAndConditions,
-                      )?.url ?? '',
-                  })
-                  .join('')}
+                source={
+                  Array.isArray(seSignDisclaimer)
+                    ? seSignDisclaimer.join('')
+                    : seSignDisclaimer
+                }
                 linkTarget="_blank"
               />
             )}
             {isNorwegian(offerData) && (
               <ReactMarkdown
-                source={textKeys
-                  .CHECKOUT_SIGN_DISCLAIMER_NO({
-                    TERMS_LINK:
-                      quote.insuranceTerms.get(
-                        InsuranceTermType.TermsAndConditions,
-                      )?.url ?? '',
-                  })
-                  .join('')}
+                source={
+                  Array.isArray(noSignDisclaimer)
+                    ? noSignDisclaimer.join('')
+                    : noSignDisclaimer
+                }
                 linkTarget="_blank"
               />
             )}
