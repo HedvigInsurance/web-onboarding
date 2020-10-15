@@ -156,8 +156,9 @@ export const Offer: React.FC = () => {
                         startDate: values.startDate || undefined,
                       },
                     })
-
-                    await refetch()
+                    if (refetch) {
+                      await refetch()
+                    }
                   }}
                 >
                   {(props) => (
@@ -201,7 +202,9 @@ export const Offer: React.FC = () => {
                       },
                     })
 
-                    await refetch()
+                    if (refetch) {
+                      await refetch()
+                    }
                   }}
                 >
                   {(props) => (
@@ -243,7 +246,9 @@ export const Offer: React.FC = () => {
                       },
                     })
 
-                    await refetch()
+                    if (refetch) {
+                      await refetch()
+                    }
                   }}
                 >
                   {(props) => (
@@ -288,7 +293,9 @@ export const Offer: React.FC = () => {
                       },
                     })
 
-                    await refetch()
+                    if (refetch) {
+                      await refetch()
+                    }
                   }}
                 >
                   {(props) => (
