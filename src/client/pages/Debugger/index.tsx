@@ -7,18 +7,13 @@ const ActualDebugger = React.lazy(() =>
 )
 
 export const Debugger: React.FC = () => {
-  const [mounted, setMounted] = React.useState(false)
-  React.useEffect(() => setMounted(true), [])
-
   if (process.env.NODE_ENV === 'production') {
     return null
   }
 
-  return mounted ? (
+  return (
     <React.Suspense fallback="loading">
       <ActualDebugger />
     </React.Suspense>
-  ) : (
-    <>loading</>
   )
 }
