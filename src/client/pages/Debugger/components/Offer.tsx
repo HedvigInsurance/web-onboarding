@@ -410,7 +410,6 @@ export const NorwegianHome: React.FC<WithFormikProps> = ({ formik }) => {
         type="number"
         {...formik.getFieldProps('norwegianHomeContents.coInsured')}
       />
-      <div>isYouth TODO</div>
       <InputField
         label="Living space"
         placeholder="23"
