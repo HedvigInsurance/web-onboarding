@@ -2782,6 +2782,7 @@ export enum TypeOfContract {
   NoHomeContentYouthRent = 'NO_HOME_CONTENT_YOUTH_RENT',
   NoTravel = 'NO_TRAVEL',
   NoTravelYouth = 'NO_TRAVEL_YOUTH',
+  DkHomeContent = 'DK_HOME_CONTENT',
 }
 
 export type ContractStatus =
@@ -2960,6 +2961,8 @@ export enum Locale {
   EnSe = 'en_SE',
   NbNo = 'nb_NO',
   EnNo = 'en_NO',
+  DaDk = 'da_DK',
+  EnDk = 'en_DK',
 }
 
 export type PerilV2 = {

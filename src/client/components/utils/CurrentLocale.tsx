@@ -6,14 +6,18 @@ import { LOCALE_PATH_PATTERN } from 'shared/locale'
 
 export const getLocaleIsoCode = (locale: string): Locale => {
   switch (locale) {
-    case 'se-en':
-      return Locale.EnSe
+    case 'dk':
+      return Locale.DaDk
+    case 'dk-en':
+      return Locale.EnDk
     case 'no':
       return Locale.NbNo
     case 'no-en':
       return Locale.EnNo
     case 'se':
       return Locale.SvSe
+    case 'se-en':
+      return Locale.EnSe
     default:
       throw new Error(`Illegal locale "${locale}"`)
   }
@@ -48,6 +52,7 @@ export const useCurrentLocale = () => {
 export enum Market {
   Se = 'SE',
   No = 'NO',
+  Dk = 'DK',
 }
 export const useMarket = (): Market => {
   const currentLocale = useCurrentLocale()
@@ -57,6 +62,8 @@ export const useMarket = (): Market => {
     ['se-en', Market.Se],
     ['no', Market.No],
     ['no-en', Market.No],
+    ['dk', Market.Dk],
+    ['dk-en', Market.Dk],
   ])(currentLocale)!
 }
 

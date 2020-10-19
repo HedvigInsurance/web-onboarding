@@ -6,6 +6,7 @@ import { ConnectPayment } from './client/pages/ConnectPayment'
 import { TrustlyFailPage } from './client/pages/ConnectPayment/components/TrustlyFailPage'
 import { TrustlySpinnerPage } from './client/pages/ConnectPayment/components/TrustlySpinnerPage'
 import { ConnectPaymentsDirectEntry } from './client/pages/ConnectPayment/ConnectPaymentsDirectEntry'
+import { Debugger } from './client/pages/Debugger'
 import { Download } from './client/pages/Download'
 import { EmbarkRoot } from './client/pages/Embark'
 import { Forever } from './client/pages/Forever'
@@ -132,6 +133,11 @@ export const reactPageRoutes: ReactPageRoute[] = [
   {
     path: LOCALE_PATH_PATTERN + '/new-member/sign/fail',
     Component: SignLoading,
+    exact: true,
+  },
+  {
+    path: LOCALE_PATH_PATTERN + '/new-member/debugger',
+    Component: Debugger,
     exact: true,
   },
   {

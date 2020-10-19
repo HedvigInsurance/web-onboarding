@@ -10,7 +10,7 @@ interface TextKeyResolver {
 }
 
 type TextKeys = Record<string, string>
-type Locale = 'en' | 'en_SE' | 'en_NO' | 'sv_SE' | 'nb_NO'
+type Locale = 'en' | 'en_SE' | 'en_NO' | 'sv_SE' | 'nb_NO' | 'da_DK' | 'en_DK'
 export type Replacements = Record<string, string | number>
 export type TextKeyMap = Record<string, TextKeyResolver>
 
