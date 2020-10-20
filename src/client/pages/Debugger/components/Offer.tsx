@@ -24,42 +24,42 @@ enum QuoteType {
   SwedishHouse = 'swedish-house',
 }
 
+const quotesByMarket = {
+  DK: [
+    {
+      label: 'Danish Home',
+      value: QuoteType.DanishHome,
+    },
+  ],
+  NO: [
+    {
+      label: 'Norwegian Home',
+      value: QuoteType.NorwegianHome,
+    },
+    {
+      label: 'Norwegian Travel',
+      value: QuoteType.NorwegianTravel,
+    },
+  ],
+  SE: [
+    {
+      label: 'Swedish Apartment',
+      value: QuoteType.SwedishApartment,
+    },
+    {
+      label: 'Swedish House',
+      value: QuoteType.SwedishHouse,
+    },
+  ],
+}
+
 export const Offer: React.FC = () => {
-  const [getQuote, { data, refetch }] = useQuoteLazyQuery()
   const [quoteId, setQuoteId] = useState<string>('') // TODO handle multiple quotes
+  const [getQuote, { data, refetch }] = useQuoteLazyQuery()
   const storageState = useStorage()
   const currentLocale = useCurrentLocale()
   const localeIsoCode = getLocaleIsoCode(currentLocale)
   const currentMarket = useMarket()
-
-  const quotesByMarket = {
-    DK: [
-      {
-        label: 'Danish Home',
-        value: QuoteType.DanishHome,
-      },
-    ],
-    NO: [
-      {
-        label: 'Norwegian Home',
-        value: QuoteType.NorwegianHome,
-      },
-      {
-        label: 'Norwegian Travel',
-        value: QuoteType.NorwegianTravel,
-      },
-    ],
-    SE: [
-      {
-        label: 'Swedish Apartment',
-        value: QuoteType.SwedishApartment,
-      },
-      {
-        label: 'Swedish House',
-        value: QuoteType.SwedishHouse,
-      },
-    ],
-  }
 
   const [quoteType, setQuoteType] = useState(
     quotesByMarket[currentMarket][0].value,
@@ -93,7 +93,8 @@ export const Offer: React.FC = () => {
           >
             {() => (
               <InputField
-                label="Quote id"
+                label="Quote id - generated from https://www.uuidgenerator.net/api"
+                name="Quote id"
                 placeholder="d6c60432-dc7b-4405-840e-b4fd8164e310"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setQuoteId(e.target.value)
@@ -127,20 +128,20 @@ export const Offer: React.FC = () => {
               {quoteType === QuoteType.NorwegianHome && (
                 <Formik
                   initialValues={{
-                    firstName: 'Blargh',
-                    lastName: 'Blarghson',
+                    firstName: 'Ole',
+                    lastName: 'Olsen',
                     currentInsurer: '',
-                    birthDate: '1995-09-29',
-                    ssn: '',
+                    birthDate: '1959-11-23',
+                    ssn: '23115994336',
                     startDate: '',
-                    email: 'blargis@hedvig.com',
+                    email: 'ole.olsen@hedvig.com',
                     norwegianHomeContents: {
                       coInsured: 0,
                       isYouth: false,
-                      livingSpace: 0,
+                      livingSpace: 44,
                       street: 'Gulebøjsveien 1',
                       type: 'RENT',
-                      zipCode: '',
+                      zipCode: '1234',
                     },
                   }}
                   onSubmit={async (values) => {
@@ -156,6 +157,7 @@ export const Offer: React.FC = () => {
                         startDate: values.startDate || undefined,
                       },
                     })
+
                     if (refetch) {
                       await refetch()
                     }
@@ -174,18 +176,18 @@ export const Offer: React.FC = () => {
               {quoteType === QuoteType.DanishHome && (
                 <Formik
                   initialValues={{
-                    firstName: 'Blargh',
-                    lastName: 'Blarghson',
+                    firstName: 'Helle',
+                    lastName: 'Hansen',
                     currentInsurer: '',
-                    birthDate: '1988-09-16',
-                    ssn: '',
+                    birthDate: '1988-08-08',
+                    ssn: '8808081234',
                     startDate: '',
-                    email: 'blargis@hedvig.com',
+                    email: 'helle.hansen@hedvig.com',
                     danishHomeContents: {
                       coInsured: 0,
                       livingSpace: 34,
                       street: 'Nørrebrogade 50',
-                      zipCode: '',
+                      zipCode: '1234',
                     },
                   }}
                   onSubmit={async (values) => {
@@ -220,13 +222,13 @@ export const Offer: React.FC = () => {
               {quoteType === QuoteType.NorwegianTravel && (
                 <Formik
                   initialValues={{
-                    firstName: 'Blargh',
-                    lastName: 'Blarghson',
+                    firstName: 'Ole',
+                    lastName: 'Olsen',
                     currentInsurer: '',
-                    birthDate: '1995-09-29',
-                    ssn: '',
+                    birthDate: '1959-11-23',
+                    ssn: '23115994336',
                     startDate: '',
-                    email: 'blargis@hedvig.com',
+                    email: 'ole.olsen@hedvig.com',
                     norwegianTravel: {
                       coInsured: 0,
                       isYouth: false,
@@ -264,16 +266,16 @@ export const Offer: React.FC = () => {
               {quoteType === QuoteType.SwedishApartment && (
                 <Formik<Partial<CreateQuoteInput>>
                   initialValues={{
-                    firstName: 'Blargh',
-                    lastName: 'Blarghson',
+                    firstName: 'Sven',
+                    lastName: 'Svensson',
                     currentInsurer: '',
                     birthDate: '1995-09-29',
-                    ssn: '',
+                    ssn: '199509291234',
                     startDate: '',
-                    email: 'blargis@hedvig.com',
+                    email: 'sven.svensson@hedvig.com',
                     swedishApartment: {
                       street: 'Storgatan 1',
-                      zipCode: '',
+                      zipCode: '12345',
                       livingSpace: 23,
                       householdSize: 1,
                       type: ApartmentType.Rent,
@@ -325,17 +327,17 @@ const QuoteForm: React.FC<WithFormikProps> = ({ children, formik }) => {
     <Form>
       <InputField
         label="First name"
-        placeholder="First name"
+        placeholder=""
         {...formik.getFieldProps('firstName')}
       />
       <InputField
         label="Last name"
-        placeholder="Last name"
+        placeholder=""
         {...formik.getFieldProps('lastName')}
       />
       <InputField
-        label="Current Insurer"
-        placeholder="Current Insurer?"
+        label="Current Insurer (optional)"
+        placeholder=""
         {...formik.getFieldProps('currentInsurer')}
       />
       <InputField
@@ -343,19 +345,15 @@ const QuoteForm: React.FC<WithFormikProps> = ({ children, formik }) => {
         placeholder="2012-12-12"
         {...formik.getFieldProps('birthDate')}
       />
+      <InputField label="ssn" placeholder="" {...formik.getFieldProps('ssn')} />
       <InputField
-        label="ssn"
-        placeholder="ssn"
-        {...formik.getFieldProps('ssn')}
-      />
-      <InputField
-        label="Start Date"
+        label="Start Date (optional)"
         placeholder="2020-03-13"
         {...formik.getFieldProps('startDate')}
       />
       <InputField
         label="Email"
-        placeholder="Email?"
+        placeholder=""
         {...formik.getFieldProps('email')}
       />
 
