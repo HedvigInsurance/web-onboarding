@@ -67,6 +67,13 @@ export const Offer: React.FC = () => {
 
   useEffect(() => {
     const quoteIds = storageState.session.getSession()?.quoteIds ?? []
+
+    if (!quoteId && !quoteIds.length) {
+      fetch('https://www.uuidgenerator.net/api/version1')
+        .then((res) => res.text())
+        .then((res) => setQuoteId(res))
+    }
+
     if (!quoteId && quoteIds[0]) {
       setQuoteId(quoteIds[0] ?? '')
       return
