@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { colorsV3 } from '@hedviginsurance/brand'
 import {
   ApartmentType,
+  NorwegianHomeContentsType,
   CreateQuoteInput,
   useQuoteLazyQuery,
 } from 'data/graphql'
@@ -23,6 +24,8 @@ enum QuoteType {
   SwedishApartment = 'swedish-apartment',
   SwedishHouse = 'swedish-house',
 }
+
+type Values = Partial<CreateQuoteInput>
 
 const quotesByMarket = {
   DK: [
@@ -64,6 +67,28 @@ export const Offer: React.FC = () => {
   const [quoteType, setQuoteType] = useState(
     quotesByMarket[currentMarket][0].value,
   )
+
+  const handleSubmit = async (
+    values: Values,
+    storage: Record<string, unknown>,
+  ) => {
+    await createQuote(
+      storage,
+      localeIsoCode,
+    )({
+      input: {
+        ...values,
+        id: quoteId,
+        currentInsurer: values.currentInsurer || undefined,
+        // @ts-ignore
+        startDate: values.startDate || undefined,
+      },
+    })
+
+    if (refetch) {
+      await refetch()
+    }
+  }
 
   useEffect(() => {
     const quoteIds = storageState.session.getSession()?.quoteIds ?? []
@@ -143,32 +168,15 @@ export const Offer: React.FC = () => {
                     startDate: '',
                     email: 'ole.olsen@hedvig.com',
                     norwegianHomeContents: {
-                      coInsured: 0,
                       isYouth: false,
+                      coInsured: 0,
                       livingSpace: 44,
                       street: 'Gulebøjsveien 1',
-                      type: 'RENT',
                       zipCode: '1234',
+                      type: NorwegianHomeContentsType.Rent,
                     },
                   }}
-                  onSubmit={async (values) => {
-                    await createQuote(
-                      storage,
-                      localeIsoCode,
-                    )({
-                      input: {
-                        ...values,
-                        id: quoteId,
-                        currentInsurer: values.currentInsurer || undefined,
-                        // @ts-ignore
-                        startDate: values.startDate || undefined,
-                      },
-                    })
-
-                    if (refetch) {
-                      await refetch()
-                    }
-                  }}
+                  onSubmit={async (values) => handleSubmit(values, storage)}
                 >
                   {(props) => (
                     <>
@@ -197,24 +205,7 @@ export const Offer: React.FC = () => {
                       zipCode: '1234',
                     },
                   }}
-                  onSubmit={async (values) => {
-                    await createQuote(
-                      storage,
-                      localeIsoCode,
-                    )({
-                      input: {
-                        ...values,
-                        id: quoteId,
-                        currentInsurer: values.currentInsurer || undefined,
-                        // @ts-ignore
-                        startDate: values.startDate || undefined,
-                      },
-                    })
-
-                    if (refetch) {
-                      await refetch()
-                    }
-                  }}
+                  onSubmit={async (values) => handleSubmit(values, storage)}
                 >
                   {(props) => (
                     <>
@@ -241,24 +232,7 @@ export const Offer: React.FC = () => {
                       isYouth: false,
                     },
                   }}
-                  onSubmit={async (values) => {
-                    await createQuote(
-                      storage,
-                      localeIsoCode,
-                    )({
-                      input: {
-                        ...values,
-                        id: quoteId,
-                        currentInsurer: values.currentInsurer || undefined,
-                        // @ts-ignore
-                        startDate: values.startDate || undefined,
-                      },
-                    })
-
-                    if (refetch) {
-                      await refetch()
-                    }
-                  }}
+                  onSubmit={async (values) => handleSubmit(values, storage)}
                 >
                   {(props) => (
                     <>
@@ -288,24 +262,7 @@ export const Offer: React.FC = () => {
                       type: ApartmentType.Rent,
                     },
                   }}
-                  onSubmit={async (values) => {
-                    await createQuote(
-                      storage,
-                      localeIsoCode,
-                    )({
-                      input: {
-                        ...values,
-                        id: quoteId,
-                        currentInsurer: values.currentInsurer || undefined,
-                        // @ts-ignore
-                        startDate: values.startDate || undefined,
-                      },
-                    })
-
-                    if (refetch) {
-                      await refetch()
-                    }
-                  }}
+                  onSubmit={async (values) => handleSubmit(values, storage)}
                 >
                   {(props) => (
                     <>
