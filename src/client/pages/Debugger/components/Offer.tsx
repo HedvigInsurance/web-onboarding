@@ -1,5 +1,6 @@
-import { Form, Formik, FormikProps } from 'formik'
 import React, { useEffect, useState } from 'react'
+import { Form, Formik, FormikProps } from 'formik'
+import { v4 as uuid } from 'uuid'
 import { colorsV3 } from '@hedviginsurance/brand'
 import {
   ApartmentType,
@@ -16,6 +17,8 @@ import {
   useCurrentLocale,
   useMarket,
 } from 'components/utils/CurrentLocale'
+
+type OfferProps = { sessionToken?: string | null }
 
 enum QuoteType {
   DanishHome = 'danish-home',
@@ -56,9 +59,10 @@ const quotesByMarket = {
   ],
 }
 
-export const Offer: React.FC = () => {
+export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
   const [quoteId, setQuoteId] = useState<string>('') // TODO handle multiple quotes
   const [getQuote, { data, refetch }] = useQuoteLazyQuery()
+  const [hasQuoteCreatingError, setHasQuoteCreatingError] = useState(false)
   const storageState = useStorage()
   const currentLocale = useCurrentLocale()
   const localeIsoCode = getLocaleIsoCode(currentLocale)
@@ -72,46 +76,49 @@ export const Offer: React.FC = () => {
     values: Values,
     storage: Record<string, unknown>,
   ) => {
-    await createQuote(
-      storage,
-      localeIsoCode,
-    )({
-      input: {
-        ...values,
-        id: quoteId,
-        currentInsurer: values.currentInsurer || undefined,
-        // @ts-ignore
-        startDate: values.startDate || undefined,
-      },
-    })
+    if (sessionToken) {
+      await createQuote(
+        storage,
+        localeIsoCode,
+      )({
+        input: {
+          ...values,
+          id: quoteId,
+          currentInsurer: values.currentInsurer || undefined,
+          // @ts-ignore
+          startDate: values.startDate || undefined,
+        },
+      }).catch(() => setHasQuoteCreatingError(true))
 
-    if (refetch) {
-      await refetch()
+      if (refetch) {
+        await refetch()
+      }
     }
   }
 
   useEffect(() => {
     const quoteIds = storageState.session.getSession()?.quoteIds ?? []
 
-    if (!quoteId && !quoteIds.length) {
-      fetch('https://www.uuidgenerator.net/api/version1')
-        .then((res) => res.text())
-        .then((res) => setQuoteId(res))
-    }
-
     if (!quoteId && quoteIds[0]) {
       setQuoteId(quoteIds[0] ?? '')
       return
     }
 
-    if (quoteId) {
-      storageState.session.setSession({
-        ...storageState.session.getSession(),
-        quoteIds: [quoteId],
-      })
+    if (!quoteId && !quoteIds.length) {
+      setQuoteId(uuid())
+    }
+
+    storageState.session.setSession({
+      ...storageState.session.getSession(),
+      quoteIds: [quoteId],
+    })
+  }, [quoteId])
+
+  useEffect(() => {
+    if (quoteId?.length === 36 && sessionToken) {
       getQuote({ variables: { id: quoteId, perilsLocale: localeIsoCode } })
     }
-  }, [quoteId])
+  }, [quoteId, sessionToken])
 
   return (
     <StorageContainer>
@@ -125,7 +132,7 @@ export const Offer: React.FC = () => {
           >
             {() => (
               <InputField
-                label="Quote id - generated from https://www.uuidgenerator.net/api"
+                label="Quote id"
                 name="Quote id"
                 placeholder="d6c60432-dc7b-4405-840e-b4fd8164e310"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -136,7 +143,7 @@ export const Offer: React.FC = () => {
             )}
           </Formik>
 
-          {!data?.quote && (
+          {!data?.quote && !hasQuoteCreatingError && (
             <>
               <Formik
                 initialValues={{}}
@@ -276,6 +283,12 @@ export const Offer: React.FC = () => {
             </>
           )}
           {data?.quote && <pre>{JSON.stringify(data, null, 2)}</pre>}
+          {hasQuoteCreatingError && (
+            <>
+              <h3>Unfortunately something went wrong 😔</h3>
+              <div>👉 Try starting over by nuking all state!</div>
+            </>
+          )}
         </>
       )}
     </StorageContainer>

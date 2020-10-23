@@ -1,17 +1,12 @@
-import * as React from 'react'
-import { SessionContainer } from 'containers/SessionContainer'
+import React from 'react'
 
-export const Session = () => {
+type SessionProps = { token?: string | null }
+
+export const Session: React.FC<SessionProps> = ({ token }) => {
   return (
     <>
-      <SessionContainer>
-        {(token) => (
-          <>
-            {token && <>Token: {token}</>}
-            {!token && <>No token active</>}
-          </>
-        )}
-      </SessionContainer>
+      {token && <>Token: {token}</>}
+      {!token && <>No token active</>}
     </>
   )
 }
