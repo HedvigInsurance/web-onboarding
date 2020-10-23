@@ -2,12 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Form, Formik, FormikProps } from 'formik'
 import { v4 as uuid } from 'uuid'
 import { colorsV3 } from '@hedviginsurance/brand'
-import {
-  ApartmentType,
-  NorwegianHomeContentsType,
-  CreateQuoteInput,
-  useQuoteLazyQuery,
-} from 'data/graphql'
+import { CreateQuoteInput, useQuoteLazyQuery } from 'data/graphql'
 import { createQuote } from 'pages/Embark/createQuote'
 import { Button } from 'components/buttons'
 import { InputField } from 'components/inputs'
@@ -16,9 +11,24 @@ import {
   getLocaleIsoCode,
   useCurrentLocale,
   useMarket,
+  Market,
 } from 'components/utils/CurrentLocale'
+import { initialSeApartmentValues, SwedishApartment } from './QuoteFormSweden'
+import {
+  initialNoHomeValues,
+  initialNoTravelValues,
+  NorwegianHome,
+  NorwegianTravel,
+} from './QuoteFormNorway'
+import { DanishHome, initialDkHomeValues } from './QuoteFormDenmark'
 
 type OfferProps = { sessionToken?: string | null }
+
+type Values = Partial<CreateQuoteInput>
+
+export type WithFormikProps = {
+  formik: FormikProps<any>
+}
 
 enum QuoteType {
   DanishHome = 'danish-home',
@@ -28,35 +38,56 @@ enum QuoteType {
   SwedishHouse = 'swedish-house',
 }
 
-type Values = Partial<CreateQuoteInput>
+type QuoteData = {
+  label: string
+  value: QuoteType
+  initialFormValues?: Record<string, unknown>
+}
 
-const quotesByMarket = {
+type QuotesByMarket = Record<Market, QuoteData[]>
+
+const quotesByMarket: QuotesByMarket = {
   DK: [
     {
       label: 'Danish Home',
       value: QuoteType.DanishHome,
+      initialFormValues: initialDkHomeValues,
     },
   ],
   NO: [
     {
       label: 'Norwegian Home',
       value: QuoteType.NorwegianHome,
+      initialFormValues: initialNoHomeValues,
     },
     {
       label: 'Norwegian Travel',
       value: QuoteType.NorwegianTravel,
+      initialFormValues: initialNoTravelValues,
     },
   ],
   SE: [
     {
       label: 'Swedish Apartment',
       value: QuoteType.SwedishApartment,
+      initialFormValues: initialSeApartmentValues,
     },
     {
       label: 'Swedish House',
       value: QuoteType.SwedishHouse,
     },
   ],
+}
+
+const getCurrentAvailableQuoteData = (
+  currentMarket: Market,
+  currentQuoteType: QuoteType,
+) => {
+  const marketQuoteTypes = quotesByMarket[currentMarket]
+  const currentQuoteTypeData = marketQuoteTypes.find(
+    ({ value }) => value === currentQuoteType,
+  )
+  return currentQuoteTypeData
 }
 
 export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
@@ -164,122 +195,76 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
                 )}
               </Formik>
 
-              {quoteType === QuoteType.NorwegianHome && (
-                <Formik
-                  initialValues={{
-                    firstName: 'Ole',
-                    lastName: 'Olsen',
-                    currentInsurer: '',
-                    birthDate: '1959-11-23',
-                    ssn: '23115994336',
-                    startDate: '',
-                    email: 'ole.olsen@hedvig.com',
-                    norwegianHomeContents: {
-                      isYouth: false,
-                      coInsured: 0,
-                      livingSpace: 44,
-                      street: 'Gulebøjsveien 1',
-                      zipCode: '1234',
-                      type: NorwegianHomeContentsType.Rent,
-                    },
-                  }}
-                  onSubmit={async (values) => handleSubmit(values, storage)}
-                >
-                  {(props) => (
-                    <>
-                      <QuoteForm formik={props}>
-                        <NorwegianHome formik={props} />
-                      </QuoteForm>
-                    </>
-                  )}
-                </Formik>
-              )}
+              <Formik
+                initialValues={
+                  getCurrentAvailableQuoteData(currentMarket, quoteType)
+                    ?.initialFormValues || {}
+                }
+                onSubmit={async (values) => handleSubmit(values, storage)}
+              >
+                {(props) => (
+                  <>
+                    <Form>
+                      <InputField
+                        label="First name"
+                        placeholder=""
+                        {...props.getFieldProps('firstName')}
+                      />
+                      <InputField
+                        label="Last name"
+                        placeholder=""
+                        {...props.getFieldProps('lastName')}
+                      />
+                      <InputField
+                        label="Current Insurer (optional)"
+                        placeholder=""
+                        {...props.getFieldProps('currentInsurer')}
+                      />
+                      <InputField
+                        label="Birth date"
+                        placeholder="2012-12-12"
+                        {...props.getFieldProps('birthDate')}
+                      />
+                      <InputField
+                        label="ssn"
+                        placeholder=""
+                        {...props.getFieldProps('ssn')}
+                      />
+                      <InputField
+                        label="Start Date (optional)"
+                        placeholder="2020-03-13"
+                        {...props.getFieldProps('startDate')}
+                      />
+                      <InputField
+                        label="Email"
+                        placeholder=""
+                        {...props.getFieldProps('email')}
+                      />
 
-              {quoteType === QuoteType.DanishHome && (
-                <Formik
-                  initialValues={{
-                    firstName: 'Helle',
-                    lastName: 'Hansen',
-                    currentInsurer: '',
-                    birthDate: '1988-08-08',
-                    ssn: '8808081234',
-                    startDate: '',
-                    email: 'helle.hansen@hedvig.com',
-                    danishHomeContents: {
-                      coInsured: 0,
-                      livingSpace: 34,
-                      street: 'Nørrebrogade 50',
-                      zipCode: '1234',
-                    },
-                  }}
-                  onSubmit={async (values) => handleSubmit(values, storage)}
-                >
-                  {(props) => (
-                    <>
-                      <QuoteForm formik={props}>
-                        <DanishHome formik={props} />
-                      </QuoteForm>
-                    </>
-                  )}
-                </Formik>
-              )}
-
-              {quoteType === QuoteType.NorwegianTravel && (
-                <Formik
-                  initialValues={{
-                    firstName: 'Ole',
-                    lastName: 'Olsen',
-                    currentInsurer: '',
-                    birthDate: '1959-11-23',
-                    ssn: '23115994336',
-                    startDate: '',
-                    email: 'ole.olsen@hedvig.com',
-                    norwegianTravel: {
-                      coInsured: 0,
-                      isYouth: false,
-                    },
-                  }}
-                  onSubmit={async (values) => handleSubmit(values, storage)}
-                >
-                  {(props) => (
-                    <>
-                      <QuoteForm formik={props}>
-                        <NorwegianTravel formik={props} />
-                      </QuoteForm>
-                    </>
-                  )}
-                </Formik>
-              )}
-
-              {quoteType === QuoteType.SwedishApartment && (
-                <Formik<Partial<CreateQuoteInput>>
-                  initialValues={{
-                    firstName: 'Sven',
-                    lastName: 'Svensson',
-                    currentInsurer: '',
-                    birthDate: '1995-09-29',
-                    ssn: '199509291234',
-                    startDate: '',
-                    email: 'sven.svensson@hedvig.com',
-                    swedishApartment: {
-                      street: 'Storgatan 1',
-                      zipCode: '12345',
-                      livingSpace: 23,
-                      householdSize: 1,
-                      type: ApartmentType.Rent,
-                    },
-                  }}
-                  onSubmit={async (values) => handleSubmit(values, storage)}
-                >
-                  {(props) => (
-                    <>
-                      <QuoteForm formik={props}>
+                      {quoteType === QuoteType.SwedishApartment && (
                         <SwedishApartment formik={props} />
-                      </QuoteForm>
-                    </>
-                  )}
-                </Formik>
-              )}
+                      )}
+                      {quoteType === QuoteType.NorwegianHome && (
+                        <NorwegianHome formik={props} />
+                      )}
+                      {quoteType === QuoteType.NorwegianTravel && (
+                        <NorwegianTravel formik={props} />
+                      )}
+                      {quoteType === QuoteType.DanishHome && (
+                        <DanishHome formik={props} />
+                      )}
+
+                      <Button
+                        background={colorsV3.purple500}
+                        foreground={colorsV3.gray900}
+                        type="submit"
+                      >
+                        Create quote
+                      </Button>
+                    </Form>
+                  </>
+                )}
+              </Formik>
             </>
           )}
           {data?.quote && <pre>{JSON.stringify(data, null, 2)}</pre>}
@@ -292,178 +277,5 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
         </>
       )}
     </StorageContainer>
-  )
-}
-
-interface WithFormikProps {
-  formik: FormikProps<any>
-}
-
-const QuoteForm: React.FC<WithFormikProps> = ({ children, formik }) => {
-  return (
-    <Form>
-      <InputField
-        label="First name"
-        placeholder=""
-        {...formik.getFieldProps('firstName')}
-      />
-      <InputField
-        label="Last name"
-        placeholder=""
-        {...formik.getFieldProps('lastName')}
-      />
-      <InputField
-        label="Current Insurer (optional)"
-        placeholder=""
-        {...formik.getFieldProps('currentInsurer')}
-      />
-      <InputField
-        label="Birth date"
-        placeholder="2012-12-12"
-        {...formik.getFieldProps('birthDate')}
-      />
-      <InputField label="ssn" placeholder="" {...formik.getFieldProps('ssn')} />
-      <InputField
-        label="Start Date (optional)"
-        placeholder="2020-03-13"
-        {...formik.getFieldProps('startDate')}
-      />
-      <InputField
-        label="Email"
-        placeholder=""
-        {...formik.getFieldProps('email')}
-      />
-
-      {children}
-
-      <Button
-        background={colorsV3.purple500}
-        foreground={colorsV3.gray900}
-        type="submit"
-      >
-        Create quote
-      </Button>
-    </Form>
-  )
-}
-
-export const DanishHome: React.FC<WithFormikProps> = ({ formik }) => {
-  return (
-    <>
-      <InputField
-        label="Co-insured"
-        placeholder="1"
-        type="number"
-        {...formik.getFieldProps('danishHomeContents.coInsured')}
-      />
-      <InputField
-        label="Living space"
-        placeholder="34"
-        type="number"
-        {...formik.getFieldProps('danishHomeContents.livingSpace')}
-      />
-      <InputField
-        label="Street"
-        placeholder="Nørrebrogade 50"
-        {...formik.getFieldProps('danishHomeContents.street')}
-      />
-      <InputField
-        label="Zip code"
-        placeholder="2200"
-        {...formik.getFieldProps('danishHomeContents.zipCode')}
-      />
-    </>
-  )
-}
-
-export const NorwegianHome: React.FC<WithFormikProps> = ({ formik }) => {
-  return (
-    <>
-      <InputField
-        label="Co-insured"
-        placeholder="1"
-        type="number"
-        {...formik.getFieldProps('norwegianHomeContents.coInsured')}
-      />
-      <InputField
-        label="Living space"
-        placeholder="23"
-        type="number"
-        {...formik.getFieldProps('norwegianHomeContents.livingSpace')}
-      />
-      <InputField
-        label="Street"
-        placeholder="Gulebøjsveien 1"
-        {...formik.getFieldProps('norwegianHomeContents.street')}
-      />
-      <InputField
-        label="Zip code"
-        placeholder="1234"
-        {...formik.getFieldProps('norwegianHomeContents.zipCode')}
-      />
-      <InputField
-        label="Type"
-        placeholder=""
-        options={[
-          { label: 'Own', value: 'OWN' },
-          { label: 'Rent', value: 'RENT' },
-        ]}
-        {...formik.getFieldProps('norwegianHomeContents.type')}
-      />
-    </>
-  )
-}
-
-export const NorwegianTravel: React.FC<WithFormikProps> = ({ formik }) => {
-  return (
-    <>
-      <InputField
-        label="Co-insured"
-        placeholder="1"
-        type="number"
-        {...formik.getFieldProps('norwegianTravel.coInsured')}
-      />
-      <div>isYouth TODO</div>
-    </>
-  )
-}
-
-export const SwedishApartment: React.FC<WithFormikProps> = ({ formik }) => {
-  return (
-    <>
-      <InputField
-        label="Household size"
-        placeholder="1"
-        type="number"
-        {...formik.getFieldProps('swedishApartment.householdSize')}
-      />
-      <InputField
-        label="Living space"
-        placeholder="23"
-        type="number"
-        {...formik.getFieldProps('swedishApartment.livingSpace')}
-      />
-      <InputField
-        label="Street"
-        placeholder="Gulebøjsveien 1"
-        {...formik.getFieldProps('swedishApartment.street')}
-      />
-      <InputField
-        label="Zip code"
-        placeholder="12345"
-        {...formik.getFieldProps('swedishApartment.zipCode')}
-      />
-      <InputField
-        label="Type"
-        placeholder=""
-        options={[
-          { label: 'Brf', value: ApartmentType.Brf },
-          { label: 'Rent', value: ApartmentType.Rent },
-          { label: 'Brf (student)', value: ApartmentType.StudentBrf },
-          { label: 'Rent (student)', value: ApartmentType.StudentRent },
-        ]}
-        {...formik.getFieldProps('swedishApartment.type')}
-      />
-    </>
   )
 }
