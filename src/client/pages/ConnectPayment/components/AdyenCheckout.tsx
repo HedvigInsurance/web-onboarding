@@ -143,9 +143,31 @@ export const AdyenCheckout: React.FC<Props> = ({ onSuccess }) => {
       history,
       onSuccess,
     }).mount(adyenCheckoutRef.current)
-  }, [paymentMethodsResponse, adyenLoaded])
+  }, [
+    currentLocale,
+    paymentMethodsResponse,
+    tokenizePaymentMutation,
+    submitAdditionalPaymentDetails,
+    history,
+    onSuccess,
+    adyenLoaded,
+  ])
 
-  useEffect(mountAdyenJs(setAdyenLoaded), [])
+  useEffect(() => {
+    const script = document.createElement('script')
+
+    script.src =
+      'https://checkoutshopper-live.adyen.com/checkoutshopper/sdk/3.6.1/adyen.js'
+    script.integrity =
+      'sha384-hUb/CFxzLJZWUbDBmQfccbVjE3LFxAx3Wt4O37edYVLZmNhcmVUyYLgn6kWk3Hz+'
+    script.crossOrigin = 'anonymous'
+    script.id = 'adyen-script'
+    script.onload = () => setAdyenLoaded(true)
+    document.body.append(script)
+    return () => {
+      document.body.removeChild(script)
+    }
+  }, [])
 
   useEffect(mountAdyenCss, [])
 
@@ -314,21 +336,6 @@ const createAdyenCheckout = ({
   return adyenCheckout.create('dropin')
 }
 
-const mountAdyenJs = (setAdyenLoaded: (adyenLoaded: boolean) => void) => () => {
-  const script = document.createElement('script')
-
-  script.src =
-    'https://checkoutshopper-live.adyen.com/checkoutshopper/sdk/3.6.1/adyen.js'
-  script.integrity =
-    'sha384-hUb/CFxzLJZWUbDBmQfccbVjE3LFxAx3Wt4O37edYVLZmNhcmVUyYLgn6kWk3Hz+'
-  script.crossOrigin = 'anonymous'
-  script.id = 'adyen-script'
-  script.onload = () => setAdyenLoaded(true)
-  document.body.append(script)
-  return () => {
-    document.body.removeChild(script)
-  }
-}
 const mountAdyenCss = () => {
   const link = document.createElement('link')
 
