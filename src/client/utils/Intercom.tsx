@@ -28,6 +28,7 @@ export const Intercom: React.FC = () => {
   const isDirectConnectPaymentIntercomMatch = useRouteMatch(
     LOCALE_PATH_PATTERN + '/new-member/connect-payment/direct',
   )
+
   React.useEffect(() => {
     if (
       [Variation.IOS, Variation.ANDROID, Variation.AVY].includes(variation!)
@@ -35,18 +36,23 @@ export const Intercom: React.FC = () => {
       return
     }
 
-    const hasIntercomScript = window.document.getElementById('intercom-script')
-    const hasIntercomInstalled = typeof (window as any).Intercom !== 'undefined'
-    const isDefinitelyIntercomMatch =
-      isIntercomMatch || isDirectConnectPaymentIntercomMatch
-    if (isDefinitelyIntercomMatch && !hasIntercomScript) {
-      createIntercom()
-    } else if (isDefinitelyIntercomMatch && hasIntercomInstalled) {
-      ;(window as any).Intercom('boot')
-    } else if (!isDefinitelyIntercomMatch && hasIntercomInstalled) {
-      ;(window as any).Intercom('shutdown')
+    if (isIntercomMatch?.path || isDirectConnectPaymentIntercomMatch?.path) {
+      const hasIntercomScript = window.document.getElementById(
+        'intercom-script',
+      )
+      const hasIntercomInstalled =
+        typeof (window as any).Intercom !== 'undefined'
+      const isDefinitelyIntercomMatch =
+        isIntercomMatch || isDirectConnectPaymentIntercomMatch
+      if (isDefinitelyIntercomMatch && !hasIntercomScript) {
+        createIntercom()
+      } else if (isDefinitelyIntercomMatch && hasIntercomInstalled) {
+        ;(window as any).Intercom('boot')
+      } else if (!isDefinitelyIntercomMatch && hasIntercomInstalled) {
+        ;(window as any).Intercom('shutdown')
+      }
     }
-  }, [isIntercomMatch?.path, isDirectConnectPaymentIntercomMatch?.path])
+  }, [isIntercomMatch, isDirectConnectPaymentIntercomMatch, variation])
 
   return null
 }
