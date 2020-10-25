@@ -41,32 +41,22 @@ const Cta = styled(Button)`
   }
 `
 
-type BooleanSetter = (state: boolean) => void
-const avoidDisplayNoneGlitch = (
-  setVisible: BooleanSetter,
-  setDisplayNone: BooleanSetter,
-  isVisible: boolean,
-) => () => {
-  if (isVisible) {
-    setDisplayNone(false)
-    setTimeout(() => setVisible(true), 20)
-  } else {
-    setVisible(false)
-    setTimeout(() => {
-      setDisplayNone(true)
-    }, 500)
-  }
-}
-
 export const StickyBottomSidebar: React.FC<Hidable & {
   onCheckoutOpen: () => void
 }> = ({ isVisible, onCheckoutOpen }) => {
   const [reallyIsVisible, setReallyIsVisible] = React.useState(false)
   const [displayNone, setDisplayNone] = React.useState(false)
-  React.useEffect(
-    avoidDisplayNoneGlitch(setReallyIsVisible, setDisplayNone, isVisible),
-    [isVisible],
-  )
+  React.useEffect(() => {
+    if (isVisible) {
+      setDisplayNone(false)
+      setTimeout(() => setReallyIsVisible(true), 20)
+    } else {
+      setReallyIsVisible(false)
+      setTimeout(() => {
+        setDisplayNone(true)
+      }, 500)
+    }
+  }, [isVisible])
   const textKeys = useTextKeys()
 
   return (
