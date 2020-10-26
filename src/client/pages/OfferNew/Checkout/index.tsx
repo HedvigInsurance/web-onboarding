@@ -221,6 +221,31 @@ export const Checkout: React.FC<Props> = ({
       offerData.person.ssn,
   )
 
+  const startSign = async () => {
+    if (!canInitiateSign) {
+      return
+    }
+
+    const baseUrl = `${window.location.origin}/${locale}/new-member`
+    const result = await signQuotes({
+      variables: {
+        quoteIds: getQuoteIds(offerData),
+        successUrl: baseUrl + '/sign/success',
+        failUrl: baseUrl + '/sign/fail',
+      },
+    })
+    if (result.data?.signQuotes?.__typename === 'FailedToStartSign') {
+      setSignUiState(SignUiState.FAILED)
+      return
+    }
+    if (result.data?.signQuotes?.__typename === 'NorwegianBankIdSession') {
+      setSignUiState(SignUiState.STARTED_WITH_REDIRECT)
+      window.location.href = result.data.signQuotes.redirectUrl!
+      return
+    }
+    setSignUiState(SignUiState.STARTED)
+  }
+
   if (signStatus?.signState === SignState.Completed) {
     return (
       <TrackAction
@@ -263,6 +288,7 @@ export const Checkout: React.FC<Props> = ({
             </BackButtonWrapper>
 
             <CheckoutContent
+              onSubmit={startSign}
               offerData={offerData}
               onEmailUpdate={(onCompletion) => {
                 setEmailUpdateLoading(true)
@@ -292,32 +318,7 @@ export const Checkout: React.FC<Props> = ({
             signUiState === SignUiState.STARTED_WITH_REDIRECT ||
             emailUpdateLoading
           }
-          onSignStart={async () => {
-            if (!canInitiateSign) {
-              return
-            }
-
-            const baseUrl = `${window.location.origin}/${locale}/new-member`
-            const result = await signQuotes({
-              variables: {
-                quoteIds: getQuoteIds(offerData),
-                successUrl: baseUrl + '/sign/success',
-                failUrl: baseUrl + '/sign/fail',
-              },
-            })
-            if (result.data?.signQuotes?.__typename === 'FailedToStartSign') {
-              setSignUiState(SignUiState.FAILED)
-              return
-            }
-            if (
-              result.data?.signQuotes?.__typename === 'NorwegianBankIdSession'
-            ) {
-              setSignUiState(SignUiState.STARTED_WITH_REDIRECT)
-              window.location.href = result.data.signQuotes.redirectUrl!
-              return
-            }
-            setSignUiState(SignUiState.STARTED)
-          }}
+          onSignStart={startSign}
         />
       </OuterWrapper>
       <Backdrop visibilityState={visibilityState} onClick={onClose} />
