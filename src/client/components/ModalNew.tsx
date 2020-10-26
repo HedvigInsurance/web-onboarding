@@ -107,26 +107,32 @@ const CloseButton = styled('button')`
   }
 `
 
-export const Modal: React.FC<ModalProps> = (props) => {
+export const Modal: React.FC<ModalProps> = ({
+  onClose,
+  isVisible,
+  dynamicHeight,
+  children,
+}) => {
   const containerRef = React.useRef<HTMLDivElement>(null)
-  const handleClick = (e: MouseEvent) => {
-    if (
-      containerRef.current &&
-      !containerRef.current.contains(e.target as Node)
-    ) {
-      props.onClose()
-    }
-  }
 
   React.useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
+        onClose()
+      }
+    }
+
     document.addEventListener('mousedown', handleClick)
     return () => document.removeEventListener('mousedown', handleClick)
-  }, [])
+  }, [onClose])
 
   return (
     <Wrapper
       initial={'hidden'}
-      animate={props.isVisible ? 'visible' : 'hidden'}
+      animate={isVisible ? 'visible' : 'hidden'}
       variants={{
         visible: {
           visibility: 'visible',
@@ -141,7 +147,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
     >
       <Background
         initial={'hidden'}
-        animate={props.isVisible ? 'visible' : 'hidden'}
+        animate={isVisible ? 'visible' : 'hidden'}
         variants={{
           visible: {
             opacity: 1,
@@ -152,9 +158,9 @@ export const Modal: React.FC<ModalProps> = (props) => {
         }}
       >
         <ModalContainer
-          dynamicHeight={props.dynamicHeight}
+          dynamicHeight={dynamicHeight}
           initial={'hidden'}
-          animate={props.isVisible ? 'visible' : 'hidden'}
+          animate={isVisible ? 'visible' : 'hidden'}
           transition={{
             type: 'spring',
             stiffness: 400,
@@ -178,9 +184,9 @@ export const Modal: React.FC<ModalProps> = (props) => {
           }}
         >
           <ModalInnerContainer ref={containerRef}>
-            {props.children}
+            {children}
           </ModalInnerContainer>
-          <CloseButton onClick={props.onClose}>
+          <CloseButton onClick={onClose}>
             <Cross />
           </CloseButton>
         </ModalContainer>
