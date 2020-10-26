@@ -93,7 +93,9 @@ const getCurrentAvailableQuoteData = (
 export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
   const [quoteId, setQuoteId] = useState<string>('') // TODO handle multiple quotes
   const [getQuote, { data, refetch }] = useQuoteLazyQuery()
-  const [hasQuoteCreatingError, setHasQuoteCreatingError] = useState(false)
+  const [quoteCreatingError, setQuoteCreatingError] = useState<string | null>(
+    null,
+  )
   const storageState = useStorage()
   const currentLocale = useCurrentLocale()
   const localeIsoCode = getLocaleIsoCode(currentLocale)
@@ -119,7 +121,7 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
           // @ts-ignore
           startDate: values.startDate || undefined,
         },
-      }).catch(() => setHasQuoteCreatingError(true))
+      }).catch((error) => setQuoteCreatingError(error.message))
 
       if (refetch) {
         await refetch()
@@ -174,7 +176,7 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
             )}
           </Formik>
 
-          {!data?.quote && !hasQuoteCreatingError && (
+          {!data?.quote && !quoteCreatingError && (
             <>
               <Formik
                 initialValues={{}}
@@ -268,10 +270,13 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
             </>
           )}
           {data?.quote && <pre>{JSON.stringify(data, null, 2)}</pre>}
-          {hasQuoteCreatingError && (
+          {quoteCreatingError && (
             <>
-              <h3>Unfortunately something went wrong 😔</h3>
-              <div>👉 Try starting over by nuking all state!</div>
+              <h2>Something went wrong 😔</h2>
+              <p>
+                <u>Error message:</u> {quoteCreatingError}
+              </p>
+              <h3>👉 Try starting over by nuking all state!</h3>
             </>
           )}
         </>
