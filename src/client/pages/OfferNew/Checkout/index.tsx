@@ -199,7 +199,7 @@ export const Checkout: React.FC<Props> = ({
     }
 
     startPollingSignState()
-  }, [signUiState])
+  }, [signUiState, startPollingSignState])
 
   useTrack({
     offerData,
@@ -210,7 +210,7 @@ export const Checkout: React.FC<Props> = ({
       return
     }
     handleSignedEvent(member.data?.member ?? null)
-  }, [signStatus?.signState])
+  }, [member.data?.member, signStatus?.signState])
   useScrollLock(visibilityState, outerWrapper)
 
   const canInitiateSign = Boolean(

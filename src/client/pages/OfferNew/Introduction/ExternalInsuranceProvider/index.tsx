@@ -48,7 +48,7 @@ export const ExternalInsuranceProvider: React.FC<Props> = ({
 
   React.useEffect(() => {
     refetch()
-  }, [subscriptionData?.dataCollectionStatus?.status])
+  }, [subscriptionData?.dataCollectionStatus?.status, refetch])
 
   if (
     loading ||

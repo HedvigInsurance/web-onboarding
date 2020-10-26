@@ -70,7 +70,7 @@ export const Forever: React.FC<ForeverProps> = ({
   })
   useEffect(() => {
     updatePickedLocale()
-  }, [currentLocale])
+  }, [currentLocale, updatePickedLocale])
 
   return (
     <>

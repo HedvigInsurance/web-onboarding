@@ -79,7 +79,7 @@ export const Offer: React.FC = () => {
       })
       getQuote({ variables: { id: quoteId, perilsLocale: localeIsoCode } })
     }
-  }, [quoteId])
+  }, [getQuote, localeIsoCode, quoteId, storageState.session])
 
   return (
     <StorageContainer>
