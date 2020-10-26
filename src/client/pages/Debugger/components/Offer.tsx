@@ -140,12 +140,7 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
     if (!quoteId && !quoteIds.length) {
       setQuoteId(uuid())
     }
-
-    storageState.session.setSession({
-      ...storageState.session.getSession(),
-      quoteIds: [quoteId],
-    })
-  }, [quoteId])
+  }, [getQuote, localeIsoCode, quoteId, storageState.session])
 
   useEffect(() => {
     if (quoteId?.length === 36 && sessionToken) {

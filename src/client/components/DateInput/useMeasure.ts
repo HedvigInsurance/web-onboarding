@@ -27,6 +27,6 @@ export const useMeasure = <T extends Element>(): [
       ro.observe(ref.current)
     }
     return () => ro.disconnect()
-  }, [])
+  }, [ro])
   return [{ ref }, bounds]
 }

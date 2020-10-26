@@ -214,7 +214,8 @@ const DateForm: React.FC<{
 
   React.useEffect(() => {
     setDateValue(getDefaultDateValue(quote))
-  }, [quote.startDate])
+  }, [quote])
+
   React.useEffect(() => {
     getLocaleImport(locale).then((m) => setDateLocale(m.default))
   })

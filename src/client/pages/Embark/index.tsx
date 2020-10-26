@@ -72,20 +72,19 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
     embarkPassageId: string
     embarkPassageHistory: any
   }>()
+
+  const locationState = history.location.state
+
   const {
     reducer: [state, dispatch],
     goTo,
   } = useEmbark(() => {
-    if (
-      history.location.state &&
-      props.name === history.location.state.embarkPassageName
-    ) {
+    if (locationState && props.name === locationState.embarkPassageName) {
       return {
-        history: history.location.state.embarkPassageHistory || [
+        history: locationState.embarkPassageHistory || [
           props.data.startPassage,
         ],
-        passageId:
-          history.location.state.embarkPassageId || props.data.startPassage,
+        passageId: locationState.embarkPassageId || props.data.startPassage,
         data: props.data,
       }
     }
@@ -121,7 +120,7 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
         embarkPassageName: props.name,
       })
     }
-  }, [currentPassage.id])
+  }, [currentPassage, history, state, props.baseUrl, props.name])
 
   const variation = useVariation()
 
