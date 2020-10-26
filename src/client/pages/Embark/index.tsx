@@ -21,6 +21,7 @@ import {
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useTextKeys } from 'utils/textKeys'
 import { StorageContainer } from '../../utils/StorageContainer'
+import { Landing } from '../Landing/Landing'
 import { createQuote } from './createQuote'
 import {
   resolveExternalInsuranceProviderProviderStatus,
@@ -28,7 +29,6 @@ import {
 } from './externalInsuranceProvider'
 import { graphQLMutation, graphQLQuery } from './graphql'
 import { resolveHouseInformation } from './houseInformation'
-import { Landing } from './Landing'
 import { LanguagePicker } from './LanguagePicker'
 import { resolvePersonalInformation } from './personalInformation'
 

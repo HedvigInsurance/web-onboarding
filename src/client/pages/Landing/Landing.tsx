@@ -16,7 +16,7 @@ import {
 import { Page } from 'components/utils/Page'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
-import { LanguagePicker } from './LanguagePicker'
+import { LanguagePicker } from '../Embark/LanguagePicker'
 
 const Wrapper = styled.div`
   width: 100%;
