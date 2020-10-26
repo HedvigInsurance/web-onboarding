@@ -26,7 +26,11 @@ export const Intro: React.FC = () => {
               return (
                 <IntroStories
                   onFinished={() => {
-                    history.push(history.location.pathname + '/ready')
+                    history.push(
+                      history.location.pathname.endsWith('/')
+                        ? history.location.pathname + 'ready'
+                        : history.location.pathname + '/ready',
+                    )
                   }}
                   referrerName={referredBy.name || ''}
                 />
