@@ -202,7 +202,7 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
                   getCurrentAvailableQuoteData(currentMarket, quoteType)
                     ?.initialFormValues || {}
                 }
-                onSubmit={async (values) => handleSubmit(values, storage)}
+                onSubmit={(values) => handleSubmit(values, storage)}
               >
                 {(props) => (
                   <>
