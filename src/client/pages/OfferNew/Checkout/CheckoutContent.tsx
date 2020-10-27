@@ -59,6 +59,7 @@ interface Props {
   refetch: () => Promise<void>
   onEmailUpdate: (onCompletion: Promise<void>) => void
   onSsnUpdate: (onCompletion: Promise<void>) => void
+  onSubmit: () => void
 }
 
 export const CheckoutContent: React.FC<Props> = ({
@@ -66,6 +67,7 @@ export const CheckoutContent: React.FC<Props> = ({
   onEmailUpdate,
   onSsnUpdate,
   refetch,
+  onSubmit,
 }) => {
   const textKeys = useTextKeys()
   const market = useMarket()
@@ -108,6 +110,7 @@ export const CheckoutContent: React.FC<Props> = ({
         </Excerpt>
 
         <UserDetailsForm
+          onSubmit={onSubmit}
           email={offerData.person.email ?? ''}
           onEmailChange={(email) => {
             const onCompletion = new Promise<void>((resolve, reject) => {
