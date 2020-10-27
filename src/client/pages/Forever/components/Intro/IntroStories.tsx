@@ -124,7 +124,7 @@ interface IntroProps extends RouteComponentProps {
   referrerName: string
 }
 
-const incrementPage = (page: number, pages: JSX.Element[]) => {
+const getNextPageNumber = (page: number, pages: JSX.Element[]) => {
   if (page === pages.length) {
     return page
   }
@@ -163,7 +163,7 @@ const IntroStoriesComponent: React.FC<IntroProps> = ({
 
   useEffect(() => {
     const autoPaginationTimeout = window.setTimeout(() => {
-      setPage(incrementPage(page, pages))
+      setPage(getNextPageNumber(page, pages))
     }, 4000)
 
     return () => {
@@ -216,7 +216,7 @@ const IntroStoriesComponent: React.FC<IntroProps> = ({
         offset="30%"
         onClick={(e) => {
           e.preventDefault()
-          incrementPage(page, pages)
+          getNextPageNumber(page, pages)
         }}
       />
       <SkipButton
