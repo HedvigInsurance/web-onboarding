@@ -164,7 +164,7 @@ export const inputTypes: Record<string, string> = {
 
 export interface CoreInputFieldProps {
   label: string
-  placeholder: string
+  placeholder?: string
   type?: string
   options?: CoreInputFieldOptions[]
   mask?: Mask

@@ -60,7 +60,6 @@ export const NorwegianHome: React.FC<WithFormikProps> = ({ formik }) => {
       />
       <InputField
         label="Type"
-        placeholder=""
         options={[
           { label: 'Own', value: 'OWN' },
           { label: 'Rent', value: 'RENT' },

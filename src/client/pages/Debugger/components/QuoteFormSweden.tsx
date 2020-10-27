@@ -47,7 +47,6 @@ export const SwedishApartment: React.FC<WithFormikProps> = ({ formik }) => {
       />
       <InputField
         label="Type"
-        placeholder=""
         options={[
           { label: 'Brf', value: ApartmentType.Brf },
           { label: 'Rent', value: ApartmentType.Rent },
