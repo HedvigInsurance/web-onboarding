@@ -273,9 +273,12 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
           {quoteCreatingError && (
             <>
               <h2>Something went wrong 😔</h2>
-              <p>
-                <u>Error message:</u> {quoteCreatingError}
-              </p>
+              <div>
+                <u>Error message:</u>
+                <pre style={{ whiteSpace: 'pre-wrap' }}>
+                  {quoteCreatingError}
+                </pre>
+              </div>
               <h3>👉 Try starting over by nuking all state!</h3>
             </>
           )}
