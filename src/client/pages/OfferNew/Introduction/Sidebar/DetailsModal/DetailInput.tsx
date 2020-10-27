@@ -20,7 +20,7 @@ export const DetailInput: React.FC<DetailInputProps &
   return field ? (
     <InputField
       label={textKeys[field.label]()}
-      placeholder={textKeys[field.placeholder]()}
+      placeholder={textKeys[field.placeholder ? field.placeholder : '']()}
       name={formikName}
       mask={field.mask}
       type={field.type}
