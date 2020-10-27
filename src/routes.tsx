@@ -145,6 +145,16 @@ export const reactPageRoutes: ReactPageRoute[] = [
     render: ({ match }: RouteComponentProps<any>) => {
       const getProps = () => {
         switch (match.params.locale) {
+          case 'dk':
+            return {
+              baseUrl: '/dk/new-member/contents',
+              name: 'Web Onboarding DK - Danish Contents',
+            }
+          case 'dk-en':
+            return {
+              baseUrl: '/dk-en/new-member/contents',
+              name: 'Web Onboarding DK - Danish Contents',
+            }
           case 'no':
             switch (match.params.name) {
               case 'contents':
