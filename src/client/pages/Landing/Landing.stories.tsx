@@ -9,11 +9,41 @@ export default {
   component: Landing,
 }
 
-export const Default = () => (
+export const SwedenSE = () => (
   <MemoryRouter initialEntries={['/se/new-member']}>
     <HelmetProvider>
       <TextKeyProvider locale="sv_SE">
         <Landing language="se" />
+      </TextKeyProvider>
+    </HelmetProvider>
+  </MemoryRouter>
+)
+
+export const SwedenEN = () => (
+  <MemoryRouter initialEntries={['/se-en/new-member']}>
+    <HelmetProvider>
+      <TextKeyProvider locale="en_SE">
+        <Landing language="se-en" />
+      </TextKeyProvider>
+    </HelmetProvider>
+  </MemoryRouter>
+)
+
+export const NorwayNO = () => (
+  <MemoryRouter initialEntries={['/no/new-member']}>
+    <HelmetProvider>
+      <TextKeyProvider locale="nb_NO">
+        <Landing language="no" />
+      </TextKeyProvider>
+    </HelmetProvider>
+  </MemoryRouter>
+)
+
+export const NorwayEN = () => (
+  <MemoryRouter initialEntries={['/no-en/new-member']}>
+    <HelmetProvider>
+      <TextKeyProvider locale="en_NO">
+        <Landing language="no-en" />
       </TextKeyProvider>
     </HelmetProvider>
   </MemoryRouter>
