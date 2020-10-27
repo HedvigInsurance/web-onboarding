@@ -10,8 +10,11 @@ import { useTextKeys } from 'utils/textKeys'
 const BottomSpacedRawInputField = styled(RawInputField)`
   margin-bottom: 1rem;
 `
+const HiddenSubmit = styled.input`
+  display: none;
+`
 
-type Props = WithEmailForm & WithSsnForm
+type Props = WithEmailForm & WithSsnForm & { onSubmit?: () => void }
 
 export const emailValidation = yup
   .string()
@@ -23,6 +26,7 @@ export const UserDetailsForm: React.FC<Props> = ({
   onEmailChange,
   ssn: initialSsn,
   onSsnChange,
+  onSubmit,
 }) => {
   const textKeys = useTextKeys()
   const [email, reallySetEmail] = React.useState(() => initialEmail)
@@ -75,6 +79,9 @@ export const UserDetailsForm: React.FC<Props> = ({
     <form
       onSubmit={(e) => {
         e.preventDefault()
+        if (onSubmit) {
+          onSubmit()
+        }
       }}
     >
       <BottomSpacedRawInputField
@@ -112,6 +119,7 @@ export const UserDetailsForm: React.FC<Props> = ({
           }}
         />
       )}
+      <HiddenSubmit type="submit" />
     </form>
   )
 }
