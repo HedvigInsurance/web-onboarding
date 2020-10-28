@@ -2845,6 +2845,7 @@ export type Agreement =
   | SwedishHouseAgreement
   | NorwegianHomeContentAgreement
   | NorwegianTravelAgreement
+  | DanishHomeContentAgreement
 
 export type SwedishApartmentAgreement = AgreementCore & {
   __typename?: 'SwedishApartmentAgreement'
@@ -2948,6 +2949,19 @@ export type NorwegianTravelAgreement = AgreementCore & {
 export enum NorwegianTravelLineOfBusiness {
   Regular = 'REGULAR',
   Youth = 'YOUTH',
+}
+
+export type DanishHomeContentAgreement = AgreementCore & {
+  __typename?: 'DanishHomeContentAgreement'
+  id: Scalars['ID']
+  activeFrom?: Maybe<Scalars['LocalDate']>
+  activeTo?: Maybe<Scalars['LocalDate']>
+  premium: MonetaryAmountV2
+  certificateUrl?: Maybe<Scalars['String']>
+  status: AgreementStatus
+  address: Address
+  numberCoInsured: Scalars['Int']
+  squareMeters: Scalars['Int']
 }
 
 export type UpcomingRenewal = {
@@ -4164,6 +4178,7 @@ export type Mutation = {
   bankIdAuth: BankIdAuthResponse
   swedishBankIdAuth: BankIdAuthResponse
   norwegianBankIdAuth: NorwegianBankIdAuthResponse
+  danishBankIdAuth: DanishBankIdAuthResponse
   registerBranchCampaign?: Maybe<Scalars['Boolean']>
   updateLanguage: Scalars['Boolean']
   updatePickedLocale: Member
@@ -4504,6 +4519,11 @@ export type NorwegianBankIdAuthResponse = {
   redirectUrl: Scalars['String']
 }
 
+export type DanishBankIdAuthResponse = {
+  __typename?: 'DanishBankIdAuthResponse'
+  redirectUrl: Scalars['String']
+}
+
 export type ExchangeTokenInput = {
   exchangeToken: Scalars['String']
 }
@@ -4678,6 +4698,7 @@ export type CannotRedeemCampaignFromDifferentMarket = {
 export enum CampaignMarket {
   Se = 'SE',
   No = 'NO',
+  Dk = 'DK',
 }
 
 export type RemoveCampaignCodeResult =
@@ -8735,7 +8756,10 @@ export type SignQuotesMutation = { __typename?: 'Mutation' } & {
         NorwegianBankIdSession,
         'redirectUrl'
       >)
-    | { __typename: 'DanishBankIdSession' }
+    | ({ __typename: 'DanishBankIdSession' } & Pick<
+        DanishBankIdSession,
+        'redirectUrl'
+      >)
     | ({ __typename: 'FailedToStartSign' } & Pick<
         FailedToStartSign,
         'errorMessage'
@@ -10085,6 +10109,9 @@ export const SignQuotesDocument = gql`
         autoStartToken
       }
       ... on NorwegianBankIdSession {
+        redirectUrl
+      }
+      ... on DanishBankIdSession {
         redirectUrl
       }
     }

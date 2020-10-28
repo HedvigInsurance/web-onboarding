@@ -55,7 +55,7 @@ export const OfferNew: React.FC = () => {
 
   const history = useHistory()
   const checkoutMatch = useRouteMatch(
-    '/:locale(se-en|se|no-en|no)/new-member/sign',
+    '/:locale(se-en|se|no-en|no|dk-en|dk)/new-member/sign',
   )
   const toggleCheckout = createToggleCheckout(history, currentLocale)
 
