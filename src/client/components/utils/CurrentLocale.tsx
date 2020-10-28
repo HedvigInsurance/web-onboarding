@@ -75,4 +75,6 @@ export const getPickedLocaleFromCurrentLocale = (
     ['en_SE', Locale.EnSe],
     ['nb_NO', Locale.NbNo],
     ['en_NO', Locale.EnNo],
+    ['da_DK', Locale.DaDk],
+    ['en_DK', Locale.EnDk],
   ])(getLocaleIsoCode(currentLocale))!
