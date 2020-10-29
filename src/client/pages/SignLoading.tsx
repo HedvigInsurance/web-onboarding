@@ -21,6 +21,7 @@ import { useStorage } from 'utils/StorageContainer'
 import { useTextKeys } from 'utils/textKeys'
 import { handleSignedEvent } from 'utils/tracking/signing'
 import { useTrack } from 'utils/tracking/tracking'
+import { useVariation, Variation } from 'utils/hooks/useVariation'
 
 const InnerWrapper = styled(motion.div)`
   text-align: center;
@@ -38,6 +39,7 @@ export const SignLoading: React.FC = () => {
   })
   const textKeys = useTextKeys()
   const currentLocale = useCurrentLocale()
+  const variation = useVariation()
   const localeIsoCode = getLocaleIsoCode(currentLocale)
   const storage = useStorage()
   const quoteIds = storage.session.getSession()?.quoteIds ?? []
@@ -69,8 +71,9 @@ export const SignLoading: React.FC = () => {
     if (signStatusQuery.data?.signStatus?.signState !== SignState.Completed) {
       return
     }
-
-    handleSignedEvent(member.data?.member ?? null)
+    if (Variation.AVY === variation) {
+      handleSignedEvent(member.data?.member ?? null)
+    }
   }, [signStatusQuery.data?.signStatus?.signState])
 
   const failureReturnUrl = currentLocale
