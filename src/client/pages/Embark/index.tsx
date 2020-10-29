@@ -72,19 +72,20 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
     embarkPassageId: string
     embarkPassageHistory: any
   }>()
-
-  const locationState = history.location.state
-
   const {
     reducer: [state, dispatch],
     goTo,
   } = useEmbark(() => {
-    if (locationState && props.name === locationState.embarkPassageName) {
+    if (
+      history.location.state &&
+      props.name === history.location.state.embarkPassageName
+    ) {
       return {
-        history: locationState.embarkPassageHistory || [
+        history: history.location.state.embarkPassageHistory || [
           props.data.startPassage,
         ],
-        passageId: locationState.embarkPassageId || props.data.startPassage,
+        passageId:
+          history.location.state.embarkPassageId || props.data.startPassage,
         data: props.data,
       }
     }
