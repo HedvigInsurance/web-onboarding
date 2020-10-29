@@ -131,7 +131,6 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
 
   useEffect(() => {
     const quoteIds = storageState.session.getSession()?.quoteIds ?? []
-    console.log('🐐: quoteIds', quoteIds)
 
     if (!quoteId && quoteIds[0]) {
       setQuoteId(quoteIds[0] ?? '')
@@ -152,7 +151,7 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
     if (quoteId?.length === 36 && sessionToken) {
       getQuote({ variables: { id: quoteId, perilsLocale: localeIsoCode } })
     }
-  }, [quoteId, sessionToken])
+  }, [quoteId, sessionToken, localeIsoCode, getQuote])
 
   return (
     <StorageContainer>
