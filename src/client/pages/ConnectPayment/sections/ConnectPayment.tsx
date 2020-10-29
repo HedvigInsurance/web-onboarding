@@ -6,7 +6,7 @@ import { AdyenCheckout } from 'pages/ConnectPayment/components/AdyenCheckout'
 import { TrustlyCheckout } from 'pages/ConnectPayment/components/TrustlyCheckout'
 import { useTextKeys } from 'utils/textKeys'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
-import { AWYWindow } from 'utils/tracking/signing'
+import { AVYWindow } from 'utils/tracking/signing'
 import { ErrorModal } from '../components/ErrorModal'
 
 const SITEWRAPPER = 1300
@@ -113,10 +113,10 @@ export const ConnectPaymentPage: React.FC = () => {
   const onSuccess = () => {
     if (variation === Variation.AVY) {
       const message = JSON.stringify({ event: 'PaymentConnected' })
-      const awyWindow = window as AWYWindow
-      awyWindow.frames.parent.postMessage(message, '*')
-      if (awyWindow.ReactNativeWebView) {
-        awyWindow.ReactNativeWebView.postMessage(message, '*')
+      const avyWindow = window as AVYWindow
+      avyWindow.frames.parent.postMessage(message, '*')
+      if (avyWindow.ReactNativeWebView) {
+        avyWindow.ReactNativeWebView.postMessage(message)
       }
     }
   }

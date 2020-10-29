@@ -1,8 +1,8 @@
 import { MemberQuery } from 'data/graphql'
 
-export interface AWYWindow extends Window {
+export interface AVYWindow extends Window {
   ReactNativeWebView?: {
-    postMessage: (message: string, targetOrigin: string) => void
+    postMessage: (message: string) => void
   }
 }
 export const handleSignedEvent = (member: MemberQuery['member'] | null) => {
@@ -10,9 +10,9 @@ export const handleSignedEvent = (member: MemberQuery['member'] | null) => {
     event: 'Signed',
     payload: { memberId: member?.id },
   })
-  const awyWindow = window as AWYWindow
-  awyWindow.frames.parent.postMessage(message, '*')
-  if (awyWindow.ReactNativeWebView) {
-    awyWindow.ReactNativeWebView.postMessage(message, '*')
+  const avyWindow = window as AVYWindow
+  avyWindow.frames.parent.postMessage(message, '*')
+  if (avyWindow.ReactNativeWebView) {
+    avyWindow.ReactNativeWebView.postMessage(message)
   }
 }
