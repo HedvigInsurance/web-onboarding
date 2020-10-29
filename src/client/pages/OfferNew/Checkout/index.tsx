@@ -211,7 +211,7 @@ export const Checkout: React.FC<Props> = ({
     if (signStatus?.signState !== SignState.Completed) {
       return
     }
-    if (Variation.AVY === variation) {
+    if (variation === Variation.AVY) {
       handleSignedEvent(member.data?.member ?? null)
     }
   }, [signStatus?.signState])

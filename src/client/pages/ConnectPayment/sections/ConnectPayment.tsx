@@ -111,7 +111,7 @@ export const ConnectPaymentPage: React.FC = () => {
   const variation = useVariation()
 
   const onSuccess = () => {
-    if (Variation.AVY === variation) {
+    if (variation === Variation.AVY) {
       const message = JSON.stringify({ event: 'PaymentConnected' })
       const awyWindow = window as AWYWindow
       awyWindow.frames.parent.postMessage(message, '*')
