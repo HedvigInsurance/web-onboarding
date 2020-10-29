@@ -23,6 +23,7 @@ import {
   TrackAction,
   useTrack,
 } from 'utils/tracking/tracking'
+import { Variation, useVariation } from 'utils/hooks/useVariation'
 import { CheckoutContent } from './CheckoutContent'
 import { useScrollLock, VisibilityState } from './hooks'
 import { Sign, SignUiState } from './Sign'
@@ -186,6 +187,7 @@ export const Checkout: React.FC<Props> = ({
   const [signQuotes, signQuotesMutation] = useSignQuotesMutation()
   const member = useMemberQuery()
   const locale = useCurrentLocale()
+  const variation = useVariation()
 
   const outerWrapper = useRef<HTMLDivElement>()
 
@@ -209,7 +211,9 @@ export const Checkout: React.FC<Props> = ({
     if (signStatus?.signState !== SignState.Completed) {
       return
     }
-    handleSignedEvent(member.data?.member ?? null)
+    if (variation === Variation.AVY) {
+      handleSignedEvent(member.data?.member ?? null)
+    }
   }, [signStatus?.signState])
   useScrollLock(visibilityState, outerWrapper)
 
