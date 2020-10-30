@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router'
 import { Form, Formik, FormikProps } from 'formik'
 import { v4 as uuid } from 'uuid'
 import { colorsV3 } from '@hedviginsurance/brand'
@@ -102,8 +101,6 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
   const currentLocale = useCurrentLocale()
   const localeIsoCode = getLocaleIsoCode(currentLocale)
   const currentMarket = useMarket()
-  const location = useLocation()
-  console.log('🐐: location', location)
 
   const [quoteType, setQuoteType] = useState(
     quotesByMarket[currentMarket][0].value,
@@ -278,7 +275,7 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
               <LinkButton
                 background={colorsV3.gray100}
                 foreground={colorsV3.gray900}
-                to={location.pathname.replace('debugger', 'offer')}
+                to={`/${currentLocale}/new-member/offer`}
               >
                 Go to offer page →
               </LinkButton>
