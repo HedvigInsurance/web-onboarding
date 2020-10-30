@@ -7,10 +7,6 @@ const ActualDebugger = React.lazy(() =>
 )
 
 export const Debugger: React.FC = () => {
-  if (process.env.NODE_ENV === 'production') {
-    return null
-  }
-
   return (
     <React.Suspense fallback="loading">
       <ActualDebugger />
