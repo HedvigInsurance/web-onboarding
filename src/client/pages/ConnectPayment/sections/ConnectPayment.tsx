@@ -134,7 +134,9 @@ export const ConnectPaymentPage: React.FC = () => {
           </Header>
           <ConnectText>{textKeys.ONBOARDING_CONNECT_DD_BODY()}</ConnectText>
           {market === Market.Se && <TrustlyCheckout onSuccess={onSuccess} />}
-          {market === Market.No && <AdyenCheckout onSuccess={onSuccess} />}
+          {(market === Market.No || market === Market.Dk) && (
+            <AdyenCheckout onSuccess={onSuccess} />
+          )}
           <ErrorModal />
         </TextColumn>
         <ImageColumn>
