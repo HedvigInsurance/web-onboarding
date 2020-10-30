@@ -5,6 +5,8 @@ import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { AdyenCheckout } from 'pages/ConnectPayment/components/AdyenCheckout'
 import { TrustlyCheckout } from 'pages/ConnectPayment/components/TrustlyCheckout'
 import { useTextKeys } from 'utils/textKeys'
+import { useVariation, Variation } from 'utils/hooks/useVariation'
+import { AVYWindow } from 'utils/tracking/signing'
 import { ErrorModal } from '../components/ErrorModal'
 
 const SITEWRAPPER = 1300
@@ -106,10 +108,17 @@ const ConnectPaymentImage = styled('img')({
 export const ConnectPaymentPage: React.FC = () => {
   const textKeys = useTextKeys()
   const market = useMarket()
+  const variation = useVariation()
 
   const onSuccess = () => {
-    const message = JSON.stringify({ event: 'PaymentConnected' })
-    window.frames.parent.postMessage(message, '*')
+    if (variation === Variation.AVY) {
+      const message = JSON.stringify({ event: 'PaymentConnected' })
+      const avyWindow = window as AVYWindow
+      avyWindow.frames.parent.postMessage(message, '*')
+      if (avyWindow.ReactNativeWebView) {
+        avyWindow.ReactNativeWebView.postMessage(message)
+      }
+    }
   }
 
   return (
