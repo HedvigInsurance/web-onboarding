@@ -3,11 +3,11 @@ import { InputField } from 'components/inputs'
 import { WithFormikProps } from './Offer'
 
 export const initialDkHomeValues = {
-  firstName: 'Helle',
+  firstName: 'DanishTestUser2',
   lastName: 'Hansen',
   currentInsurer: '',
   birthDate: '1988-08-08',
-  ssn: '8808081234',
+  ssn: '1408300921',
   startDate: '',
   email: 'helle.hansen@hedvig.com',
   danishHomeContents: {

@@ -242,7 +242,10 @@ export const Checkout: React.FC<Props> = ({
       setSignUiState(SignUiState.FAILED)
       return
     }
-    if (result.data?.signQuotes?.__typename === 'NorwegianBankIdSession') {
+    if (
+      result.data?.signQuotes?.__typename === 'NorwegianBankIdSession' ||
+      result.data?.signQuotes?.__typename === 'DanishBankIdSession'
+    ) {
       setSignUiState(SignUiState.STARTED_WITH_REDIRECT)
       window.location.href = result.data.signQuotes.redirectUrl!
       return
