@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router'
 import { Form, Formik, FormikProps } from 'formik'
 import { v4 as uuid } from 'uuid'
 import { colorsV3 } from '@hedviginsurance/brand'
@@ -13,6 +14,7 @@ import {
   useMarket,
   Market,
 } from 'components/utils/CurrentLocale'
+import { LinkButton } from '../../../components/buttons'
 import { initialSeApartmentValues, SwedishApartment } from './QuoteFormSweden'
 import {
   initialNoHomeValues,
@@ -100,6 +102,8 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
   const currentLocale = useCurrentLocale()
   const localeIsoCode = getLocaleIsoCode(currentLocale)
   const currentMarket = useMarket()
+  const location = useLocation()
+  console.log('🐐: location', location)
 
   const [quoteType, setQuoteType] = useState(
     quotesByMarket[currentMarket][0].value,
@@ -269,7 +273,20 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
               </Formik>
             </>
           )}
-          {data?.quote && <pre>{JSON.stringify(data, null, 2)}</pre>}
+          {data?.quote && (
+            <>
+              <LinkButton
+                background={colorsV3.gray100}
+                foreground={colorsV3.gray900}
+                to={location.pathname.replace('debugger', 'offer')}
+              >
+                Go to offer page →
+              </LinkButton>
+              <div style={{ padding: '2rem 0' }}>
+                <pre>{JSON.stringify(data, null, 2)}</pre>
+              </div>
+            </>
+          )}
           {quoteCreatingError && (
             <>
               <h2>Something went wrong 😔</h2>
