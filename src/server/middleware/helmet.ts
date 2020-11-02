@@ -60,6 +60,8 @@ const defaultSrc = [
   'https://api-js.mixpanel.com',
   'checkoutshopper-live.adyen.com',
   'checkoutshopper-test.adyen.com',
+  'aff.addreax.com',
+  'js.go2sdk.com/v2/tune.js',
   GIRAFFE_WS_ENDPOINT!,
   CONTENT_SERVICE_ENDPOINT!,
 ]
