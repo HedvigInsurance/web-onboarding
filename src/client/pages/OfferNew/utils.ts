@@ -220,9 +220,11 @@ export const createSsnValidator = (market: Market) => (
 ): boolean => {
   if (market === Market.No) {
     return /^[0-9]{2}[0,1][0-9][0-9]{2}[ ]?[0-9]{5}$/.test(ssn)
+  } else if (market === Market.Dk) {
+    return /^[0-9]{2}[0,1][0-9][0-9]{2}[ ]?[0-9]{4}$/.test(ssn)
   } else if (market === Market.Se) {
     return /^([1-2][0-9])?[0-9]{2}[0-1][0-9][0-9]{2}[-+]?[0-9]{4}$/.test(ssn)
   }
 
-  throw new Error(`Expected market to be NO or SE but was ${market}`)
+  throw new Error(`Expected market to be NO, DK or SE but was ${market}`)
 }
