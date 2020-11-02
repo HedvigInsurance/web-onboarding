@@ -98,7 +98,7 @@ export const UserDetailsForm: React.FC<Props> = ({
         }}
       />
 
-      {market === Market.No && (
+      {(market === Market.No || market === Market.Dk) && (
         <BottomSpacedRawInputField
           label={textKeys.CHECKOUT_SSN_LABEL()}
           placeholder={textKeys.CHECKOUT_SSN_PLACEHOLDER()}
