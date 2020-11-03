@@ -17,36 +17,35 @@ import { LanguagePicker } from '../Embark/LanguagePicker'
 import { Card } from './components/Card'
 
 const Wrapper = styled.div`
+  display: flex;
   width: 100%;
   max-width: 80rem;
   margin: 0 auto;
-  display: flex;
   align-items: center;
-  padding: 25vh 2rem 4rem;
+  padding: 1rem 1rem 4rem;
 
-  @media (max-width: 850px) {
+  @media (min-width: 600px) {
     padding-top: 10vh;
   }
 
-  @media (max-width: 600px) {
-    padding-top: 1rem;
+  @media (min-width: 850px) {
+    padding-top: 25vh;
   }
 `
 
 const Container = styled.div`
-  width: 100%;
-  min-height: 100%;
-  display: flex;
-  justify-content: space-between;
   position: relative;
+  min-height: 100%;
   margin: 0;
+  width: calc(100% + 2.5rem);
 
-  @media (max-width: 1020px) {
-    width: calc(100% + 2.5rem);
+  @media (min-width: 850px) {
+    display: flex;
+    justify-content: center;
   }
 
-  @media (max-width: 850px) {
-    flex-direction: column;
+  @media (min-width: 1020px) {
+    width: 100%;
   }
 `
 const CardBanner = styled.div`
@@ -63,53 +62,36 @@ const CardBanner = styled.div`
 `
 
 const Headline = styled.h1`
-  font-size: 2.875rem;
-  line-height: 2.875rem;
-  font-weight: 500;
-  color: ${colorsV3.gray900};
-  letter-spacing: -1px;
-  margin: 0 0 1rem 0;
   width: 100%;
+  margin: 0 0 0.25rem 0;
+  font-size: 1.125rem;
+  line-height: 1.5rem;
+  color: ${colorsV3.gray900};
 
-  @media (max-width: 600px) {
-    font-size: 2.25rem;
-    line-height: 2.5rem;
+  @media (min-width: 500px) {
+    font-size: 1.5rem;
+    line-height: 1.25;
   }
 
-  @media (max-width: 400px) {
-    font-size: 1.75rem;
-    line-height: 2rem;
+  @media (min-width: 850px) {
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
   }
 `
 
 const Paragraph = styled.p`
-  font-size: 1.25rem;
-  line-height: 1.875rem;
   margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
   color: ${colorsV3.gray700};
-  min-height: 3.75rem;
-  width: 100%;
-
-  @media (max-width: 850px) {
-    min-height: 0;
-  }
-
-  @media (max-width: 600px) {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
-  }
-
-  @media (max-width: 500px) {
-    font-size: 1.125rem;
-    line-height: 1.5rem;
-  }
 `
 
 const DesktopProceedButton = styled(LinkButton)`
-  margin-top: 5rem;
+  display: none;
 
-  @media (max-width: 850px) {
-    display: none;
+  @media (min-width: 850px) {
+    display: block;
+    margin-top: 2.5rem;
   }
 `
 
