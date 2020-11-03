@@ -74,6 +74,7 @@ const Headline = styled.h1`
   }
 
   @media (min-width: 850px) {
+    max-width: 16ch;
     margin-bottom: 1.5rem;
     font-size: 2rem;
   }
@@ -84,6 +85,10 @@ const Paragraph = styled.p`
   font-size: 1rem;
   line-height: 1.5;
   color: ${colorsV3.gray700};
+
+  @media (min-width: 850px) {
+    max-width: 29ch;
+  }
 `
 
 const DesktopProceedButton = styled(LinkButton)`
