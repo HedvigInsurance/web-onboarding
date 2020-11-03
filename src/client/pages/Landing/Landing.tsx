@@ -3,10 +3,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
 import Helmet from 'react-helmet-async'
-import { useMediaQuery } from 'react-responsive'
-import { Link } from 'react-router-dom'
 import { LinkButton } from 'components/buttons'
-import { ForwardArrow } from 'components/icons/ForwardArrow'
 import { TopBar, TopBarFiller } from 'components/TopBar'
 import {
   Market,
@@ -16,135 +13,41 @@ import {
 import { Page } from 'components/utils/Page'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
-import { LanguagePicker } from './LanguagePicker'
+import { LanguagePicker } from '../Embark/LanguagePicker'
+import { Card } from './components/Card'
 
 const Wrapper = styled.div`
+  display: flex;
   width: 100%;
   max-width: 80rem;
   margin: 0 auto;
-  display: flex;
   align-items: center;
-  padding: 25vh 2rem 4rem;
+  padding: 1rem 1rem 4rem;
 
-  @media (max-width: 850px) {
+  @media (min-width: 600px) {
     padding-top: 10vh;
   }
 
-  @media (max-width: 600px) {
-    padding-top: 1rem;
+  @media (min-width: 850px) {
+    padding-top: 25vh;
   }
 `
 
 const Container = styled.div`
-  width: 100%;
+  position: relative;
   min-height: 100%;
-  display: flex;
-  justify-content: space-between;
-  position: relative;
   margin: 0;
+  width: calc(100% + 2.5rem);
 
-  @media (max-width: 1020px) {
-    width: calc(100% + 2.5rem);
-    margin: 0 -1.125rem;
+  @media (min-width: 850px) {
+    display: flex;
+    justify-content: center;
   }
 
-  @media (max-width: 850px) {
-    flex-direction: column;
-  }
-`
-
-const CardComponent = styled.div<{ banner?: boolean }>`
-  position: relative;
-  width: 100%;
-  background: ${colorsV3.white};
-  border-radius: 8px;
-  margin-top: ${(props) => (props.banner ? '-2rem' : 0)};
-  margin-right: 1rem;
-  margin-left: 1rem;
-  padding: 3.5rem 2.5rem 2.5rem 2.5rem;
-  padding-top: ${(props) => (props.banner ? '5.5rem' : '3.5rem')};
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  transition: all 0.35s;
-  text-decoration: none;
-
-  :hover {
-    transform: translateY(-6px);
-
-    @media (hover: none) {
-      transform: none;
-    }
-  }
-
-  @media (max-width: 1020px) {
-    justify-content: flex-end;
-    padding: 2.5rem 2rem 2rem 2rem;
-    padding-top: ${(props) => (props.banner ? '4.5rem' : '2.5rem')};
-    margin-right: 1.125rem;
-    margin-left: 1.125rem;
-  }
-
-  @media (max-width: 850px) {
-    margin: 0 0 1rem 0;
-    padding-right: 4rem;
-  }
-
-  @media (max-width: 600px) {
-    padding: 2rem 4rem 1.5rem 1.5rem;
-    padding-top: ${(props) => (props.banner ? '4rem' : '2rem')};
-    align-items: center;
-    box-shadow: 0 8px 13px rgba(0, 0, 0, 0.18);
+  @media (min-width: 1020px) {
+    width: 100%;
   }
 `
-
-const CardLink = CardComponent.withComponent(Link)
-
-const ChevronWrapper = styled.span<{ pushDown?: boolean }>`
-  display: none;
-  position: absolute;
-  right: 1.5rem;
-  top: 50%;
-  height: 1rem;
-  ${({ pushDown }) =>
-    pushDown
-      ? css`
-          transform: translateY(calc(-50% + 1rem));
-        `
-      : css`
-          transform: translateY(-50%);
-        `};
-
-  @media (max-width: 850px) {
-    display: block;
-  }
-`
-
-const Card: React.FC<{ to: string; banner?: boolean }> = ({
-  banner,
-  to,
-  children,
-}) => {
-  const isMobile = useMediaQuery({ query: '(max-width: 850px)' })
-
-  return isMobile ? (
-    <CardLink to={to} banner={banner}>
-      {children}
-      <ChevronWrapper pushDown={banner}>
-        <ForwardArrow />
-      </ChevronWrapper>
-    </CardLink>
-  ) : (
-    <CardComponent banner={banner}>
-      {children}
-      <ChevronWrapper>
-        <ForwardArrow />
-      </ChevronWrapper>
-    </CardComponent>
-  )
-}
-
 const CardBanner = styled.div`
   position: absolute;
   top: 0;
@@ -159,53 +62,42 @@ const CardBanner = styled.div`
 `
 
 const Headline = styled.h1`
-  font-size: 2.875rem;
-  line-height: 2.875rem;
-  font-weight: 500;
-  color: ${colorsV3.gray900};
-  letter-spacing: -1px;
-  margin: 0 0 1rem 0;
   width: 100%;
+  margin: 0 0 0.25rem 0;
+  font-size: 1.125rem;
+  line-height: 1.5rem;
+  color: ${colorsV3.gray900};
 
-  @media (max-width: 600px) {
-    font-size: 2.25rem;
-    line-height: 2.5rem;
+  @media (min-width: 500px) {
+    font-size: 1.5rem;
+    line-height: 1.25;
   }
 
-  @media (max-width: 400px) {
-    font-size: 1.75rem;
-    line-height: 2rem;
+  @media (min-width: 850px) {
+    max-width: 14ch;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    letter-spacing: -0.02em;
   }
 `
 
 const Paragraph = styled.p`
-  font-size: 1.25rem;
-  line-height: 1.875rem;
   margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
   color: ${colorsV3.gray700};
-  min-height: 3.75rem;
-  width: 100%;
 
-  @media (max-width: 850px) {
-    min-height: 0;
-  }
-
-  @media (max-width: 600px) {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
-  }
-
-  @media (max-width: 500px) {
-    font-size: 1.125rem;
-    line-height: 1.5rem;
+  @media (min-width: 850px) {
+    max-width: 29ch;
   }
 `
 
 const DesktopProceedButton = styled(LinkButton)`
-  margin-top: 5rem;
+  display: none;
 
-  @media (max-width: 850px) {
-    display: none;
+  @media (min-width: 850px) {
+    display: block;
+    margin-top: 2.5rem;
   }
 `
 
