@@ -125,9 +125,6 @@ export const trackStudentkortet = (memberId: string) => {
   }
   )`
   const scriptTag = window.document.createElement('script')
-  scriptTag.nonce = window.document.querySelector<HTMLScriptElement>(
-    '[nonce]',
-  )?.nonce
   scriptTag.innerHTML = script
   window.document.head.append(scriptTag)
 }
