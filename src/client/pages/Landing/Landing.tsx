@@ -74,9 +74,10 @@ const Headline = styled.h1`
   }
 
   @media (min-width: 850px) {
-    max-width: 16ch;
+    max-width: 14ch;
     margin-bottom: 1.5rem;
     font-size: 2rem;
+    letter-spacing: -0.02em;
   }
 `
 
