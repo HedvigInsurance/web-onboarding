@@ -17,7 +17,7 @@ export const initialDkHomeValues = {
     livingSpace: 34,
     street: 'Nørrebrogade 50',
     zipCode: '1234',
-    type: DanishHomeContentsType.Rent,
+    type: DanishHomeContentsType.Own,
     isStudent: false,
   },
 }
@@ -50,8 +50,8 @@ export const DanishHome: React.FC<WithFormikProps> = ({ formik }) => {
       <InputField
         label="Type"
         options={[
-          { label: 'Own', value: DanishHomeContentsType['Rent'] },
-          { label: 'Rent', value: DanishHomeContentsType['Own'] },
+          { label: 'Own', value: DanishHomeContentsType['Own'] },
+          { label: 'Rent', value: DanishHomeContentsType['Rent'] },
         ]}
         {...formik.getFieldProps('danishHomeContents.type')}
       />
