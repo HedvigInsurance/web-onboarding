@@ -10,6 +10,7 @@ const defaultSrc = [
   'cdn.hedvig.com',
   '*.hotjar.com',
   '*.hotjar.io',
+  'wss://*.hotjar.com',
   '*.intercom.io',
   '*.intercomcdn.com',
   '*.intercomassets.com',
