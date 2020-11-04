@@ -21,10 +21,6 @@ interface RedeemCodeProps {
   ) => void
 }
 
-const codeSchema = Yup.object({
-  code: Yup.string().required('FOREVER_CODE_ERROR'),
-})
-
 const INPUT_MAX_WIDTH = '21rem'
 
 const Wrapper = styled.div`
@@ -133,6 +129,10 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
   const [writtenCode, setWrittenCode] = useState('')
   const [charIndex, setCharIndex] = useState(0)
   const [printCodeTimeout, setPrintCodeTimeout] = useState<number | null>(null)
+
+  const codeSchema = Yup.object({
+    code: Yup.string().required(textKeys.FOREVER_CODE_ERROR()),
+  })
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
