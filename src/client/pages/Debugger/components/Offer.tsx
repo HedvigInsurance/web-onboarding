@@ -228,11 +228,13 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
                         placeholder="2012-12-12"
                         {...props.getFieldProps('birthDate')}
                       />
-                      <InputField
-                        label="ssn"
-                        placeholder=""
-                        {...props.getFieldProps('ssn')}
-                      />
+                      {currentMarket === Market.Se && (
+                        <InputField
+                          label="ssn"
+                          placeholder=""
+                          {...props.getFieldProps('ssn')}
+                        />
+                      )}
                       <InputField
                         label="Start Date (optional)"
                         placeholder="2020-03-13"
