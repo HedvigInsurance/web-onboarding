@@ -55,6 +55,11 @@ export const SwedishApartment: React.FC<WithFormikProps> = ({ formik }) => {
         ]}
         {...formik.getFieldProps('swedishApartment.type')}
       />
+      <InputField
+        label="Current Insurer (optional)"
+        placeholder=""
+        {...formik.getFieldProps('currentInsurer')}
+      />
     </>
   )
 }

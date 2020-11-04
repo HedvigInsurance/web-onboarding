@@ -7,6 +7,8 @@ import { TopBar } from 'components/TopBar'
 import {
   getLocaleIsoCode,
   useCurrentLocale,
+  Market,
+  useMarket,
 } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
@@ -40,6 +42,7 @@ export const OfferNew: React.FC = () => {
   const storage = useStorage()
   const currentLocale = useCurrentLocale()
   const localeIsoCode = getLocaleIsoCode(currentLocale)
+  const currentMarket = useMarket()
   const variation = useVariation()
   const quoteIds = storage.session.getSession()?.quoteIds ?? []
   const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
@@ -116,7 +119,7 @@ export const OfferNew: React.FC = () => {
               )}
             </TrackAction>
             <Perils offerData={offerData} />
-            <SwitchSafetySection />
+            {currentMarket !== Market.Dk && <SwitchSafetySection />}
             <FaqSection />
             <Checkout
               offerData={offerData}
