@@ -8,7 +8,6 @@ const initialBaseValues = {
   lastName: 'Olsen',
   currentInsurer: '',
   birthDate: '1959-11-23',
-  ssn: '23115994336',
   startDate: '',
   email: 'ole.olsen@hedvig.com',
 }
