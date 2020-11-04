@@ -9,7 +9,6 @@ export const initialDkHomeValues = {
   lastName: 'Hansen',
   currentInsurer: '',
   birthDate: '1988-08-08',
-  ssn: '1408300921',
   startDate: '',
   email: 'helle.hansen@hedvig.com',
   danishHomeContents: {
