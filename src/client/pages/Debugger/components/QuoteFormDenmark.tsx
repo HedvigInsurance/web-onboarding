@@ -7,7 +7,6 @@ import { WithFormikProps } from './Offer'
 export const initialDkHomeValues = {
   firstName: 'Helle',
   lastName: 'Hansen',
-  currentInsurer: '',
   birthDate: '1988-08-08',
   startDate: '',
   email: 'helle.hansen@hedvig.com',

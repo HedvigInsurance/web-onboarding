@@ -219,11 +219,6 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
                         {...props.getFieldProps('lastName')}
                       />
                       <InputField
-                        label="Current Insurer (optional)"
-                        placeholder=""
-                        {...props.getFieldProps('currentInsurer')}
-                      />
-                      <InputField
                         label="Birth date"
                         placeholder="2012-12-12"
                         {...props.getFieldProps('birthDate')}
