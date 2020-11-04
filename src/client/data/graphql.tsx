@@ -260,6 +260,7 @@ export type QueryHowClaimsWorkArgs = {
 
 export type QueryEmbarkStoryArgs = {
   name: Scalars['String']
+  locale: Scalars['String']
 }
 
 export type QueryKeyGearItemsArgs = {
@@ -2782,7 +2783,10 @@ export enum TypeOfContract {
   NoHomeContentYouthRent = 'NO_HOME_CONTENT_YOUTH_RENT',
   NoTravel = 'NO_TRAVEL',
   NoTravelYouth = 'NO_TRAVEL_YOUTH',
-  DkHomeContent = 'DK_HOME_CONTENT',
+  DkHomeContentOwn = 'DK_HOME_CONTENT_OWN',
+  DkHomeContentRent = 'DK_HOME_CONTENT_RENT',
+  DkHomeContentStudentOwn = 'DK_HOME_CONTENT_STUDENT_OWN',
+  DkHomeContentStudentRent = 'DK_HOME_CONTENT_STUDENT_RENT',
 }
 
 export type ContractStatus =
@@ -2928,10 +2932,10 @@ export type NorwegianHomeContentAgreement = AgreementCore & {
 }
 
 export enum NorwegianHomeContentLineOfBusiness {
-  YouthRent = 'YOUTH_RENT',
   Rent = 'RENT',
-  YouthOwn = 'YOUTH_OWN',
   Own = 'OWN',
+  YouthRent = 'YOUTH_RENT',
+  YouthOwn = 'YOUTH_OWN',
 }
 
 export type NorwegianTravelAgreement = AgreementCore & {
@@ -2962,6 +2966,14 @@ export type DanishHomeContentAgreement = AgreementCore & {
   address: Address
   numberCoInsured: Scalars['Int']
   squareMeters: Scalars['Int']
+  type?: Maybe<DanishHomeContentLineOfBusiness>
+}
+
+export enum DanishHomeContentLineOfBusiness {
+  Rent = 'RENT',
+  Own = 'OWN',
+  StudentRent = 'STUDENT_RENT',
+  StudentOwn = 'STUDENT_OWN',
 }
 
 export type UpcomingRenewal = {
@@ -3392,6 +3404,13 @@ export type DanishHomeContentsDetails = {
   zipCode: Scalars['String']
   livingSpace: Scalars['Int']
   coInsured: Scalars['Int']
+  isStudent: Scalars['Boolean']
+  type: DanishHomeContentsType
+}
+
+export enum DanishHomeContentsType {
+  Rent = 'RENT',
+  Own = 'OWN',
 }
 
 export type IncompleteQuote = {
@@ -4893,6 +4912,8 @@ export type CreateDanishHomeContentsInput = {
   zipCode: Scalars['String']
   livingSpace: Scalars['Int']
   coInsured: Scalars['Int']
+  isStudent: Scalars['Boolean']
+  type: DanishHomeContentsType
 }
 
 export type CreateQuoteResult = CompleteQuote | UnderwritingLimitsHit
