@@ -1,7 +1,7 @@
 import { css, Global } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import React from 'react'
+import React, { useState } from 'react'
 import Helmet from 'react-helmet-async'
 import { Redirect } from 'react-router'
 import { LinkButton } from 'components/buttons'
@@ -187,7 +187,43 @@ const DesktopProceedButton = styled(LinkButton)`
 const LandingPageContainer = styled.div`
   position: relative;
   min-height: 100vh;
-  backdrop-filter: blur(20px);
+  z-index: 1;
+`
+
+const BackgroundContainer = styled.div<{
+  backgroundLoaded: boolean
+}>`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  transition: opacity 1s ease-out;
+  transition-delay: 150ms;
+  z-index: -1;
+  opacity: ${(props) => (props.backgroundLoaded ? 1 : 0)};
+
+  &:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 200;
+    top: 0;
+    left: 0;
+    background-color: ${colorsV3.gray900};
+    opacity: 0.5;
+  }
+`
+
+const BackgroundImage = styled.img`
+  display: block;
+  position: absolute;
+  min-width: 100%;
+  min-height: 100%;
+  height: auto;
+  width: auto;
+  object-fit: cover;
 `
 
 export const Landing: React.FC<{ language: string }> = ({ language }) => {
@@ -195,6 +231,7 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
   const market = useMarket()
   const currentLocale = useCurrentLocale()
   const variation = useVariation()
+  const [backgroundLoaded, setBackgroundHasLoaded] = useState(false)
 
   if (currentLocale === 'dk' || currentLocale === 'dk-en') {
     return <Redirect to={`/${currentLocale}/new-member/contents`} />
@@ -275,6 +312,17 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
             )}
           </CardContainer>
         </Wrapper>
+        <BackgroundContainer backgroundLoaded={backgroundLoaded}>
+          <BackgroundImage
+            alt="laptop grip"
+            onLoad={() => setBackgroundHasLoaded(true)}
+            src="/new-member-assets/landing/laptop_grip_small.jpg"
+            sizes="100vw"
+            srcSet="
+            /new-member-assets/landing/laptop_grip_small.jpg 1600w,
+            /new-member-assets/landing/laptop_grip_medium.jpg 2200w"
+          />
+        </BackgroundContainer>
       </LandingPageContainer>
     </Page>
   )
