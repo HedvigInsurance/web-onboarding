@@ -120,6 +120,10 @@ const TermsLink = styled.a`
   }
 `
 
+const discountSchema = Yup.object({
+  code: Yup.string().required('SIDEBAR_ADD_DISCOUNT_ERROR'),
+})
+
 export const DiscountCodeModal: React.FC<Props> = ({
   isOpen,
   close,
@@ -127,10 +131,6 @@ export const DiscountCodeModal: React.FC<Props> = ({
 }) => {
   const textKeys = useTextKeys()
   const [redeemCode] = useRedeemCodeMutation()
-
-  const discountSchema = Yup.object({
-    code: Yup.string().required(textKeys.SIDEBAR_ADD_DISCOUNT_ERROR()),
-  })
 
   return (
     <Wrapper isOpen={isOpen}>
@@ -177,10 +177,7 @@ export const DiscountCodeModal: React.FC<Props> = ({
                 }
 
                 if (result.errors && result.errors.length > 0) {
-                  actions.setFieldError(
-                    'code',
-                    textKeys.SIDEBAR_ADD_DISCOUNT_ERROR(),
-                  )
+                  actions.setFieldError('code', 'SIDEBAR_ADD_DISCOUNT_ERROR')
                   return
                 }
               })
@@ -191,10 +188,7 @@ export const DiscountCodeModal: React.FC<Props> = ({
               })
               .then(() => close())
               .catch(() => {
-                actions.setFieldError(
-                  'code',
-                  textKeys.SIDEBAR_ADD_DISCOUNT_ERROR(),
-                )
+                actions.setFieldError('code', 'SIDEBAR_ADD_DISCOUNT_ERROR')
               })
           }
         >
@@ -208,7 +202,7 @@ export const DiscountCodeModal: React.FC<Props> = ({
                   type="text"
                   autoComplete="off"
                   touched={touched.code}
-                  errors={errors.code ? errors.code : ''}
+                  errors={errors.code ? textKeys[errors.code]() : ''}
                 />
               </DiscountInputWrapper>
 
