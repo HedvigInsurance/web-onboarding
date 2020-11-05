@@ -52,7 +52,7 @@
   "DETAILS_MODULE_EXTRABUILDINGS_TABLE_TITLE": "Extra buildings",
   "DETAILS_MODULE_EXTRABUILDINGS_TABLE_BUTTON": "Add extra building",
   "DETAILS_MODULE_EXTRABUILDINGS_TABLE_REMOVE_BUILDING_BUTTON": "Remove building",
-  "STARTPAGE_UNINSURED_HEADLINE": "I don't have home insurance",
+  "STARTPAGE_UNINSURED_HEADLINE": "I don't have\\nhome insurance",
   "STARTPAGE_UNINSURED_BODY": "Not insured? Get Hedvig's home insurance. It only takes 30 seconds.",
   "STARTPAGE_UNINSURED_BUTTON": "Get a price quote",
   "STARTPAGE_INSURED_HEADLINE": "Compare your insurance",
@@ -225,7 +225,9 @@
   "SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_OWN": "Contents insurance Youth",
   "SIDEBAR_INSURANCE_TYPE_NO_TRAVEL_YOUTH": "Travel insurance Youth",
   "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_OWN": "Contents insurance",
+  "SIDEBAR_ADD_DISCOUNT_ERROR": "The discount code is invalid",
   "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_RENT": "Contents insurance",
   "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_OWN": "Homeowner Student",
-  "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_RENT": "Rental Student"
+  "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_RENT": "Rental Student",
+  "FOREVER_CODE_ERROR": "This code doesn't exist."
 }
