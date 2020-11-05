@@ -21,6 +21,10 @@ interface RedeemCodeProps {
   ) => void
 }
 
+const codeSchema = Yup.object({
+  code: Yup.string().required('FOREVER_CODE_ERROR'),
+})
+
 const INPUT_MAX_WIDTH = '21rem'
 
 const Wrapper = styled.div`
@@ -130,10 +134,6 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
   const [charIndex, setCharIndex] = useState(0)
   const [printCodeTimeout, setPrintCodeTimeout] = useState<number | null>(null)
 
-  const codeSchema = Yup.object({
-    code: Yup.string().required(textKeys.FOREVER_CODE_ERROR()),
-  })
-
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     setFieldValue: any,
@@ -193,7 +193,7 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
                   autoComplete="off"
                   placeholder=""
                   touched={touched.code}
-                  errors={errors.code ? errors.code : ''}
+                  errors={errors.code ? textKeys[errors.code]() : ''}
                   variant="dark"
                 />
               </CodeField>
