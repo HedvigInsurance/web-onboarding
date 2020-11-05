@@ -193,7 +193,7 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
                   autoComplete="off"
                   placeholder=""
                   touched={touched.code}
-                  errors={errors.code ? textKeys[errors.code]() : ''}
+                  errors={errors.code ? errors.code : ''}
                   variant="dark"
                 />
               </CodeField>
