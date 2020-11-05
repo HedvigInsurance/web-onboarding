@@ -8431,7 +8431,10 @@ export type QuoteQuery = { __typename?: 'Query' } & {
                 NorwegianTravelDetails,
                 'coInsured'
               >)
-            | { __typename?: 'DanishHomeContentsDetails' }
+            | ({ __typename?: 'DanishHomeContentsDetails' } & Pick<
+                DanishHomeContentsDetails,
+                'street' | 'zipCode' | 'livingSpace' | 'coInsured' | 'isStudent'
+              > & { danishHomeType: DanishHomeContentsDetails['type'] })
         })
     | ({ __typename?: 'IncompleteQuote' } & Pick<IncompleteQuote, 'id'>)
 }
@@ -9519,6 +9522,14 @@ export const QuoteDocument = gql`
           }
           ... on NorwegianTravelDetails {
             coInsured
+          }
+          ... on DanishHomeContentsDetails {
+            street
+            zipCode
+            livingSpace
+            danishHomeType: type
+            coInsured
+            isStudent
           }
         }
       }

@@ -81,6 +81,15 @@ query Quote($id: ID!, $perilsLocale: Locale!) {
         ... on NorwegianTravelDetails {
           coInsured
         }
+
+        ... on DanishHomeContentsDetails {
+          street
+          zipCode
+          livingSpace
+          danishHomeType: type
+          coInsured
+          isStudent
+        }
       }
     }
 
