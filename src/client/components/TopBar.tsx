@@ -14,15 +14,15 @@ interface Props {
 const Wrapper = styled.div`
   width: 100%;
   top: 0;
-  height: 5rem;
+  height: 4rem;
   background: ${colorsV3.gray900};
   position: absolute;
   z-index: ${TOP_BAR_Z_INDEX};
   box-shadow: 0 2px 14px rgba(0, 0, 0, 0.08);
   color: ${colorsV3.white};
 
-  @media (max-width: 375px) {
-    height: 4rem;
+  @media (min-width: 420px) {
+    height: 5rem;
   }
 `
 
@@ -32,7 +32,11 @@ const TransparentWrapper = styled(Wrapper)`
 `
 
 export const TopBarFiller = styled.div`
-  height: 5rem;
+  height: 4rem;
+
+  @media (min-width: 420px) {
+    height: 5rem;
+  }
 `
 
 const Container = styled.div`

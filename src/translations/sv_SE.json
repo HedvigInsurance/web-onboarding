@@ -229,5 +229,10 @@
   "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_RENT": "",
   "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_OWN": "",
   "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_RENT": "",
-  "FOREVER_CODE_ERROR": "Felaktig kod."
+  "FOREVER_CODE_ERROR": "Felaktig kod.",
+  "STARTPAGE_HEADLINE": "Få ditt personliga prisförslag på 1 minut",
+  "STARTPAGE_PREAMBLE": "Gör som tiotusentals andra medlemmar, skaffa hemförsäkring utan bindningstid. ",
+  "STARTPAGE_USP_1": "10 gånger så nöjda kunder",
+  "STARTPAGE_USP_2": "Personlig service",
+  "STARTPAGE_USP_3": "Enkel skadeanmälan"
 }
