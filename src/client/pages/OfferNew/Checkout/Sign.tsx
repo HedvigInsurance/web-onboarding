@@ -145,6 +145,9 @@ export const Sign: React.FC<Props> = ({
             quote.insuranceTerms.get(InsuranceTermType.TermsAndConditions)
               ?.url ?? '',
         })
+
+        // TODO Add dkSignDisclaimer
+
         return (
           <Disclaimer key={quote.id}>
             {isSwedish(offerData) && (

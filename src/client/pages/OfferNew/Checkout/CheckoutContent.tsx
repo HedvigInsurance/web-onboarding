@@ -85,7 +85,8 @@ export const CheckoutContent: React.FC<Props> = ({
       <Section>
         <Excerpt>
           <div>
-            {market !== Market.No && (
+            {/* TODO Add sidebar labels for NO and DK? */}
+            {market === Market.Se && (
               <InsuranceTypeLabel>
                 {textKeys.SIDEBAR_LABEL()}
               </InsuranceTypeLabel>
