@@ -8584,7 +8584,10 @@ export type QuoteBundleQuery = { __typename?: 'Query' } & {
                 NorwegianTravelDetails,
                 'coInsured' | 'isYouth'
               >)
-            | { __typename?: 'DanishHomeContentsDetails' }
+            | ({ __typename?: 'DanishHomeContentsDetails' } & Pick<
+                DanishHomeContentsDetails,
+                'street' | 'zipCode' | 'livingSpace' | 'coInsured' | 'isStudent'
+              > & { danishHomeType: DanishHomeContentsDetails['type'] })
         }
     >
     bundleCost: { __typename?: 'InsuranceCost' } & Pick<
@@ -9667,6 +9670,14 @@ export const QuoteBundleDocument = gql`
           ... on NorwegianTravelDetails {
             coInsured
             isYouth
+          }
+          ... on DanishHomeContentsDetails {
+            street
+            zipCode
+            livingSpace
+            danishHomeType: type
+            coInsured
+            isStudent
           }
         }
       }
