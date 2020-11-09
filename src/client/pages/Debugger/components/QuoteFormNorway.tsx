@@ -8,7 +8,6 @@ const initialBaseValues = {
   lastName: 'Olsen',
   currentInsurer: '',
   birthDate: '1959-11-23',
-  ssn: '23115994336',
   startDate: '',
   email: 'ole.olsen@hedvig.com',
 }
@@ -33,15 +32,26 @@ export const initialNoTravelValues = {
   },
 }
 
+const NorwegianCommon: React.FC<WithFormikProps> = ({ formik }) => (
+  <>
+    <InputField
+      label="Co-insured"
+      placeholder="1"
+      type="number"
+      {...formik.getFieldProps('norwegianTravel.coInsured')}
+    />
+    <InputField
+      label="Current Insurer (optional)"
+      placeholder=""
+      {...formik.getFieldProps('currentInsurer')}
+    />
+  </>
+)
+
 export const NorwegianHome: React.FC<WithFormikProps> = ({ formik }) => {
   return (
     <>
-      <InputField
-        label="Co-insured"
-        placeholder="1"
-        type="number"
-        {...formik.getFieldProps('norwegianHomeContents.coInsured')}
-      />
+      <NorwegianCommon formik={formik} />
       <InputField
         label="Living space"
         placeholder="23"
@@ -73,12 +83,7 @@ export const NorwegianHome: React.FC<WithFormikProps> = ({ formik }) => {
 export const NorwegianTravel: React.FC<WithFormikProps> = ({ formik }) => {
   return (
     <>
-      <InputField
-        label="Co-insured"
-        placeholder="1"
-        type="number"
-        {...formik.getFieldProps('norwegianTravel.coInsured')}
-      />
+      <NorwegianCommon formik={formik} />
       <div>isYouth TODO</div>
     </>
   )

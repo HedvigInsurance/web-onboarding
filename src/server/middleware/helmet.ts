@@ -10,6 +10,7 @@ const defaultSrc = [
   'cdn.hedvig.com',
   '*.hotjar.com',
   '*.hotjar.io',
+  'wss://*.hotjar.com',
   '*.intercom.io',
   '*.intercomcdn.com',
   '*.intercomassets.com',
@@ -60,6 +61,8 @@ const defaultSrc = [
   'https://api-js.mixpanel.com',
   'checkoutshopper-live.adyen.com',
   'checkoutshopper-test.adyen.com',
+  'aff.addreax.com',
+  'js.go2sdk.com',
   GIRAFFE_WS_ENDPOINT!,
   CONTENT_SERVICE_ENDPOINT!,
 ]

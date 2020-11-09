@@ -210,6 +210,7 @@ const DateForm: React.FC<{
   const getDateFormat = match([
     [Market.Se, 'dd MMM yyyy'],
     [Market.No, 'dd/MM/yyyy'],
+    [Market.Dk, 'yyyy-MM-dd'],
   ])
 
   React.useEffect(() => {

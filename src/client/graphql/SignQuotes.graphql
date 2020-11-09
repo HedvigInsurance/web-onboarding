@@ -1,14 +1,6 @@
-mutation SignQuotes(
-  $quoteIds: [ID!]!
-  $successUrl: String
-  $failUrl: String
-) {
+mutation SignQuotes($quoteIds: [ID!]!, $successUrl: String, $failUrl: String) {
   signQuotes(
-    input: {
-      quoteIds: $quoteIds
-      successUrl: $successUrl
-      failUrl: $failUrl
-    }
+    input: { quoteIds: $quoteIds, successUrl: $successUrl, failUrl: $failUrl }
   ) {
     __typename
     ... on FailedToStartSign {
@@ -18,6 +10,9 @@ mutation SignQuotes(
       autoStartToken
     }
     ... on NorwegianBankIdSession {
+      redirectUrl
+    }
+    ... on DanishBankIdSession {
       redirectUrl
     }
   }

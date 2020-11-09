@@ -13,6 +13,7 @@ import {
   useMarket,
   Market,
 } from 'components/utils/CurrentLocale'
+import { LinkButton } from '../../../components/buttons'
 import { initialSeApartmentValues, SwedishApartment } from './QuoteFormSweden'
 import {
   initialNoHomeValues,
@@ -218,20 +219,17 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
                         {...props.getFieldProps('lastName')}
                       />
                       <InputField
-                        label="Current Insurer (optional)"
-                        placeholder=""
-                        {...props.getFieldProps('currentInsurer')}
-                      />
-                      <InputField
                         label="Birth date"
                         placeholder="2012-12-12"
                         {...props.getFieldProps('birthDate')}
                       />
-                      <InputField
-                        label="ssn"
-                        placeholder=""
-                        {...props.getFieldProps('ssn')}
-                      />
+                      {currentMarket === Market.Se && (
+                        <InputField
+                          label="ssn"
+                          placeholder=""
+                          {...props.getFieldProps('ssn')}
+                        />
+                      )}
                       <InputField
                         label="Start Date (optional)"
                         placeholder="2020-03-13"
@@ -269,7 +267,20 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
               </Formik>
             </>
           )}
-          {data?.quote && <pre>{JSON.stringify(data, null, 2)}</pre>}
+          {data?.quote && (
+            <>
+              <LinkButton
+                background={colorsV3.gray100}
+                foreground={colorsV3.gray900}
+                to={`/${currentLocale}/new-member/offer`}
+              >
+                Go to offer page →
+              </LinkButton>
+              <div style={{ padding: '2rem 0' }}>
+                <pre>{JSON.stringify(data, null, 2)}</pre>
+              </div>
+            </>
+          )}
           {quoteCreatingError && (
             <>
               <h2>Something went wrong 😔</h2>

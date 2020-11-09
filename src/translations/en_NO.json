@@ -140,7 +140,7 @@
   "FOREVER_INTRO_READY_CTA": "Yes, give me a price quote",
   "FOREVER_LANDINGPAGE_INPUT_TEXT": "Enter code",
   "FOREVER_LANDINGPAGE_BTN_LABEL": "Next",
-  "FOREVER_LANDINGPAGE_INFO_TEXT": "This is an exclusive site only intended for invited individuals. If you currently are not in possession of a code please do continue to our [regular website.](https:\/\/www.hedvig.com\/se-en\/new-member)",
+  "FOREVER_LANDINGPAGE_INFO_TEXT": "This is an exclusive site only intended for invited individuals. If you currently are not in possession of a code please do continue to our [regular website.](https:\/\/www.hedvig.com\/no-en\/new-member)",
   "FOREVER_LANDINGPAGE_DESCRIPTION": "Congratulations! You've been invited to Hedvig Forever. Use my code {CODE} to lower your monthly cost.",
   "FOREVER_DOWNLOAD_HEADING": "Welcome {FIRST_NAME}!",
   "FOREVER_DOWNLOAD_PARAGRAPH": "Now you’re a Hedvig member. Download the app to get started and don’t forget to invite your friends!",
@@ -224,5 +224,15 @@
   "SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_RENT": "Contents insurance Youth",
   "SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_OWN": "Contents insurance Youth",
   "SIDEBAR_INSURANCE_TYPE_NO_TRAVEL_YOUTH": "Travel insurance Youth",
-  "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_OWN": "Contents insurance"
+  "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_OWN": "Contents insurance",
+  "SIDEBAR_ADD_DISCOUNT_ERROR": "The discount code is invalid",
+  "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_RENT": "Contents insurance",
+  "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_OWN": "Homeowner Student",
+  "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_RENT": "Rental Student",
+  "FOREVER_CODE_ERROR": "This code doesn't exist.",
+  "STARTPAGE_HEADLINE": "Get a price quote in 1 minute",
+  "STARTPAGE_PREAMBLE": "Tens of thousands have already joined Hedvig. Cancel at any time.",
+  "STARTPAGE_USP_1": "10x satisfied customers",
+  "STARTPAGE_USP_2": "Personal service team",
+  "STARTPAGE_USP_3": "Easy claims process"
 }

@@ -140,7 +140,7 @@
   "FOREVER_INTRO_READY_CTA": "Ja, gi meg et prisforslag.",
   "FOREVER_LANDINGPAGE_INPUT_TEXT": "Fyll inn koden",
   "FOREVER_LANDINGPAGE_BTN_LABEL": "Neste",
-  "FOREVER_LANDINGPAGE_INFO_TEXT": "Dette er en eksklusiv nettside som er tiltenkt folk som er invitert. Hvis du for øyeblikket ikke har fått en invitasjon enda, så frykt ikke. Du kan fortsatt melde deg inn på (web onboarding link til NO)",
+  "FOREVER_LANDINGPAGE_INFO_TEXT": "Dette er en eksklusiv nettside som er tiltenkt folk som er invitert. Hvis du for øyeblikket ikke har fått en invitasjon enda, så frykt ikke. Du kan fortsatt melde deg inn på vårt [vanlige nettsted.](https:\/\/www.hedvig.com\/no\/new-member)",
   "FOREVER_LANDINGPAGE_DESCRIPTION": "Gratulerer! Du har blitt invitert til Hedvig Forever. Bruk min kode {CODE} for å senke din månedspris.",
   "FOREVER_DOWNLOAD_HEADING": "Velkommen {FIRST_NAME}!",
   "FOREVER_DOWNLOAD_PARAGRAPH": "Nå er du medlem av Hedvig. Last ned appen og kom igang. Ikke glem å invitere vennene dine!",
@@ -224,5 +224,15 @@
   "SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_RENT": "Innboforsikring Ungdom",
   "SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_OWN": "Innboforsikring Ungdom",
   "SIDEBAR_INSURANCE_TYPE_NO_TRAVEL_YOUTH": "Reiseforsikring Ungdom",
-  "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_OWN": ""
+  "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_OWN": "",
+  "SIDEBAR_ADD_DISCOUNT_ERROR": "Rabattkoden er ugyldig",
+  "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_RENT": "",
+  "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_OWN": "",
+  "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_RENT": "",
+  "FOREVER_CODE_ERROR": "Feil kode.",
+  "STARTPAGE_HEADLINE": "Få ditt personlige prisforslag på 1 minutt",
+  "STARTPAGE_PREAMBLE": "Gjør som tusenvis av andre medlemmer. Skaff deg innboforsikring uten bindingstid.",
+  "STARTPAGE_USP_1": "10 ganger så fornøyde kunder",
+  "STARTPAGE_USP_2": "Personlig service-team",
+  "STARTPAGE_USP_3": "Enkel skademelding"
 }

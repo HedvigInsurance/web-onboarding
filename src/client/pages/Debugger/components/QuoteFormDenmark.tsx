@@ -1,13 +1,13 @@
 import React from 'react'
+import { Field } from 'formik'
+import { DanishHomeContentsType } from 'data/graphql'
 import { InputField } from 'components/inputs'
 import { WithFormikProps } from './Offer'
 
 export const initialDkHomeValues = {
   firstName: 'Helle',
   lastName: 'Hansen',
-  currentInsurer: '',
   birthDate: '1988-08-08',
-  ssn: '8808081234',
   startDate: '',
   email: 'helle.hansen@hedvig.com',
   danishHomeContents: {
@@ -15,6 +15,8 @@ export const initialDkHomeValues = {
     livingSpace: 34,
     street: 'Nørrebrogade 50',
     zipCode: '1234',
+    type: DanishHomeContentsType.Own,
+    isStudent: false,
   },
 }
 
@@ -43,6 +45,20 @@ export const DanishHome: React.FC<WithFormikProps> = ({ formik }) => {
         placeholder="2200"
         {...formik.getFieldProps('danishHomeContents.zipCode')}
       />
+      <InputField
+        label="Type"
+        options={[
+          { label: 'Own', value: DanishHomeContentsType['Own'] },
+          { label: 'Rent', value: DanishHomeContentsType['Rent'] },
+        ]}
+        {...formik.getFieldProps('danishHomeContents.type')}
+      />
+      <div style={{ paddingBottom: '2rem', fontSize: '1.25rem' }}>
+        <label>
+          <Field type="checkbox" name="danishHomeContents.isStudent" />
+          {"I'm a student"}
+        </label>
+      </div>
     </>
   )
 }

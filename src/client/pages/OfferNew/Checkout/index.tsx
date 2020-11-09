@@ -23,6 +23,7 @@ import {
   TrackAction,
   useTrack,
 } from 'utils/tracking/tracking'
+import { Variation, useVariation } from 'utils/hooks/useVariation'
 import { CheckoutContent } from './CheckoutContent'
 import { useScrollLock, VisibilityState } from './hooks'
 import { Sign, SignUiState } from './Sign'
@@ -186,6 +187,7 @@ export const Checkout: React.FC<Props> = ({
   const [signQuotes, signQuotesMutation] = useSignQuotesMutation()
   const member = useMemberQuery()
   const locale = useCurrentLocale()
+  const variation = useVariation()
 
   const outerWrapper = useRef<HTMLDivElement>()
 
@@ -209,8 +211,10 @@ export const Checkout: React.FC<Props> = ({
     if (signStatus?.signState !== SignState.Completed) {
       return
     }
-    handleSignedEvent(member.data?.member ?? null)
-  }, [member.data?.member, signStatus?.signState])
+    if (variation === Variation.AVY) {
+      handleSignedEvent(member.data?.member ?? null)
+    }
+  }, [member.data?.member, signStatus?.signState, variation])
   useScrollLock(visibilityState, outerWrapper)
 
   const canInitiateSign = Boolean(
@@ -238,7 +242,10 @@ export const Checkout: React.FC<Props> = ({
       setSignUiState(SignUiState.FAILED)
       return
     }
-    if (result.data?.signQuotes?.__typename === 'NorwegianBankIdSession') {
+    if (
+      result.data?.signQuotes?.__typename === 'NorwegianBankIdSession' ||
+      result.data?.signQuotes?.__typename === 'DanishBankIdSession'
+    ) {
       setSignUiState(SignUiState.STARTED_WITH_REDIRECT)
       window.location.href = result.data.signQuotes.redirectUrl!
       return
