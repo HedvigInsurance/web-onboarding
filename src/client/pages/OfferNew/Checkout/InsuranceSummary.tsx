@@ -227,19 +227,19 @@ const getDetails = (
     ])
   }
 
-  const houseHoldSize = getHouseholdSize(quoteDetails)
+  const householdSize = getHouseholdSize(quoteDetails)
 
   detailsGroups.push([
     {
       key: 'antal-personer',
       label: textKeys.CHECKOUT_DETAILS_HOUSEHOLD_SIZE(),
       value:
-        houseHoldSize === 0
+        householdSize === 0
           ? '-'
-          : houseHoldSize === 1
+          : householdSize === 1
           ? textKeys.CHECKOUT_DETAILS_SINGLE_PERSON()
           : textKeys.CHECKOUT_DETAILS_PERSONS_VALUE({
-              VALUE: houseHoldSize,
+              VALUE: householdSize,
             }),
     },
   ])
