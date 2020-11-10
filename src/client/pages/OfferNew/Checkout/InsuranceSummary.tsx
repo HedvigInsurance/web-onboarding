@@ -239,7 +239,9 @@ const getDetails = (
         VALUE: householdSize,
       })
     }
-    return '-' // or should we just throw an error?
+    throw new Error(
+      'Total number of people covered by the insurance must be at least 1',
+    )
   }
 
   detailsGroups.push([

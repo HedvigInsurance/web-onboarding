@@ -64,7 +64,11 @@ export const getHouseholdSize = (quoteDetails: QuoteDetails) => {
   if ('coInsured' in quoteDetails) {
     return quoteDetails.coInsured + 1
   }
-  return 0
+  throw new Error(
+    `quoteDetails ${JSON.stringify(
+      quoteDetails,
+    )} must include one of the following: "householdSize" or "coInsured".`,
+  )
 }
 
 const getAddressFromBundledQuotes = (
