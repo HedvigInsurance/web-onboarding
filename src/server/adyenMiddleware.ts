@@ -1,4 +1,4 @@
-import Sentry from '@sentry/node'
+import * as Sentry from '@sentry/node'
 import Axios from 'axios'
 import Router from 'koa-router'
 import { ServerCookieStorage } from 'utils/storage/ServerCookieStorage'
