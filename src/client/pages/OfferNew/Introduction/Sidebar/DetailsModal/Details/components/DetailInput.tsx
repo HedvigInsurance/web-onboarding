@@ -3,7 +3,7 @@ import React from 'react'
 import { InputField } from 'components/inputs'
 import { EditQuoteInput } from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
-import { RegularFieldType } from './types'
+import { RegularFieldType } from '../../types'
 
 interface DetailInputProps {
   field?: RegularFieldType
