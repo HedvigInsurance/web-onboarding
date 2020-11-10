@@ -227,20 +227,26 @@ const getDetails = (
     ])
   }
 
-  const householdSize = getHouseholdSize(quoteDetails)
+  const getHouseHoldSizeValue = (
+    householdSize: number,
+    textKeys: TextKeyMap,
+  ) => {
+    if (householdSize === 1) {
+      return textKeys.CHECKOUT_DETAILS_SINGLE_PERSON()
+    }
+    if (householdSize > 1) {
+      return textKeys.CHECKOUT_DETAILS_PERSONS_VALUE({
+        VALUE: householdSize,
+      })
+    }
+    return '-' // or should we just throw an error?
+  }
 
   detailsGroups.push([
     {
       key: 'antal-personer',
       label: textKeys.CHECKOUT_DETAILS_HOUSEHOLD_SIZE(),
-      value:
-        householdSize === 0
-          ? '-'
-          : householdSize === 1
-          ? textKeys.CHECKOUT_DETAILS_SINGLE_PERSON()
-          : textKeys.CHECKOUT_DETAILS_PERSONS_VALUE({
-              VALUE: householdSize,
-            }),
+      value: getHouseHoldSizeValue(getHouseholdSize(quoteDetails), textKeys),
     },
   ])
 
