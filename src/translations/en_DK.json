@@ -153,7 +153,7 @@
   "STARTPAGE_TRAVEL_BODY": "Travel insurance protects you and your family when you're travelling",
   "STARTPAGE_CONTENTS_BUTTON": "Get a price quote",
   "STARTPAGE_TRAVEL_BUTTON": "Get a price quote",
-  "CHECKOUT_SSN_PLACEHOLDER": "DDMMYYXXXXX",
+  "CHECKOUT_SSN_PLACEHOLDER": "DDMMYYXXXX",
   "STARTPAGE_COMBO_HEADLINE": "Bundle",
   "STARTPAGE_COMBO_BODY": "Combination of both contents and travel insurance",
   "STARTPAGE_COMBO_BUTTON": "Get a price quote",
@@ -225,7 +225,14 @@
   "SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_OWN": "Contents insurance Youth",
   "SIDEBAR_INSURANCE_TYPE_NO_TRAVEL_YOUTH": "Travel insurance Youth",
   "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_OWN": "Contents insurance",
+  "SIDEBAR_ADD_DISCOUNT_ERROR": "The discount code is invalid",
   "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_RENT": "Contents insurance",
   "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_OWN": "Homeowner Student",
-  "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_RENT": ""
+  "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_RENT": "",
+  "FOREVER_CODE_ERROR": "This code doesn't exist.",
+  "STARTPAGE_HEADLINE": "Get a price quote in 1 minute",
+  "STARTPAGE_PREAMBLE": "Tens of thousands have already joined Hedvig. Cancel at any time.",
+  "STARTPAGE_USP_1": "10x satisfied customers",
+  "STARTPAGE_USP_2": "Personal service team",
+  "STARTPAGE_USP_3": "Easy claims process"
 }

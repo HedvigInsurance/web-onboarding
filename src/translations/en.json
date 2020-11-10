@@ -225,7 +225,14 @@
   "SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_OWN": "Contents insurance Youth",
   "SIDEBAR_INSURANCE_TYPE_NO_TRAVEL_YOUTH": "Travel insurance Youth",
   "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_OWN": "Contents insurance",
+  "SIDEBAR_ADD_DISCOUNT_ERROR": "The discount code is invalid",
   "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_RENT": "Contents insurance",
   "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_OWN": "Homeowner Student",
-  "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_RENT": "Rental Student"
+  "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_RENT": "Rental Student",
+  "FOREVER_CODE_ERROR": "This code doesn't exist.",
+  "STARTPAGE_HEADLINE": "Get a price quote in 1 minute",
+  "STARTPAGE_PREAMBLE": "Tens of thousands have already joined Hedvig. Cancel at any time.",
+  "STARTPAGE_USP_1": "10x satisfied customers",
+  "STARTPAGE_USP_2": "Personal service team",
+  "STARTPAGE_USP_3": "Easy claims process"
 }
