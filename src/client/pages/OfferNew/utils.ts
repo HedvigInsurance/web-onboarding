@@ -3,6 +3,7 @@ import {
   ApartmentType,
   BundledQuote,
   Campaign,
+  DanishHomeContentsDetails,
   InsurableLimit,
   InsurableLimitType,
   InsuranceTerm,
@@ -57,16 +58,17 @@ export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
 }
 
 export const getHouseholdSize = (quoteDetails: QuoteDetails) => {
-  if (isSwedishHouse(quoteDetails) || isSwedishApartment(quoteDetails)) {
+  if ('householdSize' in quoteDetails) {
     return quoteDetails.householdSize
   }
-  if (
-    isNorwegianHomeContents(quoteDetails) ||
-    isNorwegianTravel(quoteDetails)
-  ) {
+  if ('coInsured' in quoteDetails) {
     return quoteDetails.coInsured + 1
   }
-  return 0
+  throw new Error(
+    `quoteDetails ${JSON.stringify(
+      quoteDetails,
+    )} must include one of the following: "householdSize" or "coInsured".`,
+  )
 }
 
 const getAddressFromBundledQuotes = (
@@ -92,11 +94,13 @@ export const quoteDetailsHasAddress = (
 ): quoteDetails is
   | SwedishApartmentQuoteDetails
   | SwedishHouseQuoteDetails
-  | NorwegianHomeContentsDetails =>
+  | NorwegianHomeContentsDetails
+  | DanishHomeContentsDetails =>
   [
     'SwedishApartmentQuoteDetails',
     'SwedishHouseQuoteDetails',
     'NorwegianHomeContentsDetails',
+    'DanishHomeContentsDetails',
   ].includes(quoteDetails.__typename as string)
 
 export const getQuoteIds = (offerData: OfferData): string[] =>

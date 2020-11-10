@@ -89,6 +89,15 @@ query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
           coInsured
           isYouth
         }
+
+        ... on DanishHomeContentsDetails {
+          street
+          zipCode
+          livingSpace
+          danishHomeType: type
+          coInsured
+          isStudent
+        }
       }
     }
     bundleCost {

@@ -197,7 +197,8 @@ const getDetails = (
           label: textKeys.CHECKOUT_DETAILS_QUOTE_TYPE(),
           value:
             quoteDetails.__typename === 'SwedishApartmentQuoteDetails' ||
-            quoteDetails.__typename === 'NorwegianHomeContentsDetails'
+            quoteDetails.__typename === 'NorwegianHomeContentsDetails' ||
+            quoteDetails.__typename === 'DanishHomeContentsDetails'
               ? textKeys.CHECKOUT_APARTMENT()
               : textKeys.CHECKOUT_HOUSE(),
         },
@@ -226,16 +227,28 @@ const getDetails = (
     ])
   }
 
+  const getHouseHoldSizeValue = (
+    householdSize: number,
+    textKeys: TextKeyMap,
+  ) => {
+    if (householdSize === 1) {
+      return textKeys.CHECKOUT_DETAILS_SINGLE_PERSON()
+    }
+    if (householdSize > 1) {
+      return textKeys.CHECKOUT_DETAILS_PERSONS_VALUE({
+        VALUE: householdSize,
+      })
+    }
+    throw new Error(
+      'Total number of people covered by the insurance must be at least 1',
+    )
+  }
+
   detailsGroups.push([
     {
       key: 'antal-personer',
       label: textKeys.CHECKOUT_DETAILS_HOUSEHOLD_SIZE(),
-      value:
-        getHouseholdSize(quoteDetails) === 1
-          ? textKeys.CHECKOUT_DETAILS_SINGLE_PERSON()
-          : textKeys.CHECKOUT_DETAILS_PERSONS_VALUE({
-              VALUE: getHouseholdSize(quoteDetails),
-            }),
+      value: getHouseHoldSizeValue(getHouseholdSize(quoteDetails), textKeys),
     },
   ])
 
