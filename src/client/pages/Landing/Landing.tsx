@@ -4,7 +4,6 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import React, { useState } from 'react'
 import Helmet from 'react-helmet-async'
 import { Redirect } from 'react-router'
-import { LinkButton } from 'components/buttons'
 import { TopBar, TopBarFiller } from 'components/TopBar'
 import {
   Market,
@@ -131,23 +130,11 @@ const CardContainer = styled.div`
     width: 100%;
   }
 `
-const CardBanner = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  line-height: 2rem;
-  width: 100%;
-  text-align: center;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  color: ${colorsV3.gray900};
-  background-color: ${colorsV3.purple300};
-`
 
 const CardHeadline = styled.h1`
   width: 100%;
   margin: 0 0 0.25rem 0;
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   line-height: 1.5rem;
   color: ${colorsV3.gray900};
 
@@ -158,7 +145,6 @@ const CardHeadline = styled.h1`
 
   @media (min-width: 850px) {
     max-width: 14ch;
-    margin-bottom: 1.5rem;
     font-size: 2rem;
     letter-spacing: -0.02em;
   }
@@ -171,16 +157,13 @@ const CardParagraph = styled.p`
   color: ${colorsV3.gray700};
 
   @media (min-width: 850px) {
-    max-width: 29ch;
+    max-width: 20ch;
+    font-size: 1.125rem;
   }
-`
 
-const DesktopProceedButton = styled(LinkButton)`
-  display: none;
-
-  @media (min-width: 850px) {
-    display: block;
-    margin-top: 2.5rem;
+  @media (min-width: 1020px) {
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
   }
 `
 
@@ -198,7 +181,7 @@ const BackgroundContainer = styled.div<{
   left: 0;
   width: 100vw;
   height: 100vh;
-  transition: opacity 1s ease-out;
+  transition: opacity 1s cubic-bezier(0.33, 1, 0.68, 1);
   transition-delay: 150ms;
   z-index: -1;
   opacity: ${(props) => (props.backgroundLoaded ? 1 : 0)};
@@ -218,12 +201,16 @@ const BackgroundContainer = styled.div<{
 
 const BackgroundImage = styled.img`
   display: block;
-  position: absolute;
+  position: fixed;
   min-width: 100%;
   min-height: 100%;
   height: auto;
   width: auto;
   object-fit: cover;
+
+  @media (min-width: 1020px) {
+    object-position: 100% 50%;
+  }
 `
 
 export const Landing: React.FC<{ language: string }> = ({ language }) => {
@@ -337,24 +324,10 @@ const LandingPageCardsSe: React.FC<{
       <Card to={`/${language}/new-member/new`}>
         <CardHeadline>{textKeys.STARTPAGE_UNINSURED_HEADLINE()}</CardHeadline>
         <CardParagraph>{textKeys.STARTPAGE_UNINSURED_BODY()}</CardParagraph>
-        <DesktopProceedButton
-          size="lg"
-          fullWidth
-          to={`/${language}/new-member/new`}
-        >
-          {textKeys.STARTPAGE_UNINSURED_BUTTON()}
-        </DesktopProceedButton>
       </Card>
       <Card to={`/${language}/new-member/switch`}>
         <CardHeadline>{textKeys.STARTPAGE_INSURED_HEADLINE()}</CardHeadline>
         <CardParagraph>{textKeys.STARTPAGE_INSURED_BODY()}</CardParagraph>
-        <DesktopProceedButton
-          size="lg"
-          fullWidth
-          to={`/${language}/new-member/switch`}
-        >
-          {textKeys.STARTPAGE_INSURED_BUTTON()}
-        </DesktopProceedButton>
       </Card>
     </>
   )
@@ -366,39 +339,20 @@ const LandingPageCardsNo: React.FC<{
 }> = ({ textKeys, language }) => {
   return (
     <>
-      <Card banner to={`/${language}/new-member/combo`}>
-        <CardBanner>{textKeys.STARTPAGE_COMBO_DISCOUNT_TEXT()}</CardBanner>
+      <Card
+        banner={textKeys.STARTPAGE_COMBO_DISCOUNT_TEXT()}
+        to={`/${language}/new-member/combo`}
+      >
         <CardHeadline>{textKeys.STARTPAGE_COMBO_HEADLINE()}</CardHeadline>
         <CardParagraph>{textKeys.STARTPAGE_COMBO_BODY()}</CardParagraph>
-        <DesktopProceedButton
-          size="lg"
-          fullWidth
-          to={`/${language}/new-member/combo`}
-        >
-          {textKeys.STARTPAGE_COMBO_BUTTON()}
-        </DesktopProceedButton>
       </Card>
       <Card to={`/${language}/new-member/contents`}>
         <CardHeadline>{textKeys.STARTPAGE_CONTENTS_HEADLINE()}</CardHeadline>
         <CardParagraph>{textKeys.STARTPAGE_CONTENTS_BODY()}</CardParagraph>
-        <DesktopProceedButton
-          size="lg"
-          fullWidth
-          to={`/${language}/new-member/contents`}
-        >
-          {textKeys.STARTPAGE_CONTENTS_BUTTON()}
-        </DesktopProceedButton>
       </Card>
       <Card to={`/${language}/new-member/travel`}>
         <CardHeadline>{textKeys.STARTPAGE_TRAVEL_HEADLINE()}</CardHeadline>
         <CardParagraph>{textKeys.STARTPAGE_TRAVEL_BODY()}</CardParagraph>
-        <DesktopProceedButton
-          size="lg"
-          fullWidth
-          to={`/${language}/new-member/travel`}
-        >
-          {textKeys.STARTPAGE_TRAVEL_BUTTON()}
-        </DesktopProceedButton>
       </Card>
     </>
   )
