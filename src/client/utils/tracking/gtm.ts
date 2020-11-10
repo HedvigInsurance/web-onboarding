@@ -11,6 +11,7 @@ interface GTMOfferData {
   number_of_people: number
   insurance_price: number
   currency: string
+  member_id?: string
 }
 
 export interface DataLayerObject {
@@ -29,16 +30,20 @@ export const trackOfferGTM = (
   offerData: OfferData,
   referralCodeUsed: boolean,
 ) => {
+  const baseOfferData = {
+    insurance_type: getContractType(offerData),
+    referral_code: referralCodeUsed ? 'yes' : 'no',
+    number_of_people: offerData.person.householdSize,
+    insurance_price: parseFloat(offerData.cost.monthlyNet.amount),
+    currency: offerData.cost.monthlyNet.currency,
+  }
+  const gmtOfferData = (eventName === 'offer_created' || !offerData.memberId
+    ? baseOfferData
+    : { ...baseOfferData, member_id: offerData.memberId }) as GTMOfferData
   try {
     pushToGTMDataLayer({
       event: eventName,
-      offerData: {
-        insurance_type: getContractType(offerData),
-        referral_code: referralCodeUsed ? 'yes' : 'no',
-        number_of_people: offerData.person.householdSize,
-        insurance_price: parseFloat(offerData.cost.monthlyNet.amount),
-        currency: offerData.cost.monthlyNet.currency,
-      },
+      offerData: gmtOfferData,
     })
   } catch (e) {
     captureSentryError(e)

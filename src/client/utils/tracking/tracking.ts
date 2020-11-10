@@ -169,7 +169,7 @@ export const useTrack = ({ offerData, signState }: TrackProps) => {
 
     trackOfferGTM(
       'signed_customer',
-      offerData,
+      memberId ? { ...offerData, memberId: memberId } : offerData,
       redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction',
     )
 
