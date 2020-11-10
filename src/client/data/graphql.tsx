@@ -8431,7 +8431,10 @@ export type QuoteQuery = { __typename?: 'Query' } & {
                 NorwegianTravelDetails,
                 'coInsured'
               >)
-            | { __typename?: 'DanishHomeContentsDetails' }
+            | ({ __typename?: 'DanishHomeContentsDetails' } & Pick<
+                DanishHomeContentsDetails,
+                'street' | 'zipCode' | 'livingSpace' | 'coInsured' | 'isStudent'
+              > & { danishHomeType: DanishHomeContentsDetails['type'] })
         })
     | ({ __typename?: 'IncompleteQuote' } & Pick<IncompleteQuote, 'id'>)
 }
@@ -8581,7 +8584,10 @@ export type QuoteBundleQuery = { __typename?: 'Query' } & {
                 NorwegianTravelDetails,
                 'coInsured' | 'isYouth'
               >)
-            | { __typename?: 'DanishHomeContentsDetails' }
+            | ({ __typename?: 'DanishHomeContentsDetails' } & Pick<
+                DanishHomeContentsDetails,
+                'street' | 'zipCode' | 'livingSpace' | 'coInsured' | 'isStudent'
+              > & { danishHomeType: DanishHomeContentsDetails['type'] })
         }
     >
     bundleCost: { __typename?: 'InsuranceCost' } & Pick<
@@ -9520,6 +9526,14 @@ export const QuoteDocument = gql`
           ... on NorwegianTravelDetails {
             coInsured
           }
+          ... on DanishHomeContentsDetails {
+            street
+            zipCode
+            livingSpace
+            danishHomeType: type
+            coInsured
+            isStudent
+          }
         }
       }
       ... on IncompleteQuote {
@@ -9656,6 +9670,14 @@ export const QuoteBundleDocument = gql`
           ... on NorwegianTravelDetails {
             coInsured
             isYouth
+          }
+          ... on DanishHomeContentsDetails {
+            street
+            zipCode
+            livingSpace
+            danishHomeType: type
+            coInsured
+            isStudent
           }
         }
       }
