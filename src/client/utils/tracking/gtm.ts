@@ -39,7 +39,7 @@ export const trackOfferGTM = (
         number_of_people: offerData.person.householdSize,
         insurance_price: parseFloat(offerData.cost.monthlyNet.amount),
         currency: offerData.cost.monthlyNet.currency,
-        member_id: offerData.memberId,
+        ...(offerData.memberId && { member_id: offerData.memberId }),
       },
     })
   } catch (e) {
