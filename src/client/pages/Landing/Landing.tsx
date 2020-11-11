@@ -51,7 +51,7 @@ const UspContainer = styled.div`
 `
 const Headline = styled.h1`
   margin-top: 0;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
   font-size: 2rem;
   letter-spacing: -0.02em;
 

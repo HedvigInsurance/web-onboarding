@@ -53,14 +53,16 @@ const CardComponent = styled(Link)`
 const CardHeader = styled.div`
   display: flex;
   justify-content: space-between;
-  padding-bottom: 3rem;
+  padding-bottom: 1rem;
 
   svg {
-    display: block;
+    display: none;
   }
 
-  @media (min-width: 850px) {
+  @media (min-width: 1020px) {
+    padding-bottom: 3rem;
     svg {
+      display: block;
       width: 1.5rem;
       height: 1.5rem;
     }
