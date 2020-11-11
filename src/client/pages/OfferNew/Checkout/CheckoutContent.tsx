@@ -85,7 +85,7 @@ export const CheckoutContent: React.FC<Props> = ({
       <Section>
         <Excerpt>
           <div>
-            {market !== Market.No && (
+            {market === Market.Se && (
               <InsuranceTypeLabel>
                 {textKeys.SIDEBAR_LABEL()}
               </InsuranceTypeLabel>
