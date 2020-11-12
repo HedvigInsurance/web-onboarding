@@ -160,6 +160,11 @@ export const isNorwegianTravel = (
 ): details is NorwegianTravelDetails =>
   details.__typename === 'NorwegianTravelDetails'
 
+export const isDanishHomeContents = (
+  details: QuoteDetails,
+): details is DanishHomeContentsDetails =>
+  details.__typename === 'DanishHomeContentsDetails'
+
 export const isFreeMonths = (campaigns: Campaign[]) =>
   (campaigns.length > 0 &&
     campaigns[0].incentive &&

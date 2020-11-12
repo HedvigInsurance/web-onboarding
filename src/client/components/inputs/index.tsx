@@ -21,6 +21,11 @@ export const masks: Record<string, Mask> = {
     mask: '999 99',
     sanitize: (value) => value.replace(/\s+/, ''),
   },
+  zipCodeNoDk: {
+    name: 'ZipCode',
+    mask: '9999',
+    sanitize: (value) => value.replace(/\s+/, ''),
+  },
   area: {
     name: 'Area',
     mask: '99999 m2',

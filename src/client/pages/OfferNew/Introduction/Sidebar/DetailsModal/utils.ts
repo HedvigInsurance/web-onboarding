@@ -7,20 +7,62 @@ import {
   ExtraBuilding,
   ExtraBuildingType,
   NorwegianHomeContentsDetails,
+  NorwegianHomeContentsType,
   NorwegianTravelDetails,
   SwedishApartmentQuoteDetails,
   SwedishHouseQuoteDetails,
+  DanishHomeContentsDetails,
+  DanishHomeContentsType,
 } from 'data/graphql'
 import { OfferQuote } from 'pages/OfferNew/types'
-import { isStudent, isSwedishApartment, isSwedishHouse } from '../../../utils'
+import {
+  isStudent,
+  isSwedishApartment,
+  isSwedishHouse,
+  isNorwegianHomeContents,
+  isNorwegianTravel,
+  isDanishHomeContents,
+} from '../../../utils'
 import {
   ApartmentFieldSchema,
   ArrayFieldType,
   FieldSchema,
   FieldType,
   HouseFieldSchema,
+  NorwegianHomeContentFieldSchema,
+  NorwegianTravelContentFieldSchema,
   RegularFieldType,
+  DanishHomeContentFieldSchema,
 } from './types'
+
+export const isDanishHomeContentFieldSchema = (
+  fieldSchema: FieldSchema,
+  quote: OfferQuote,
+): fieldSchema is DanishHomeContentFieldSchema => {
+  return (
+    (fieldSchema as DanishHomeContentFieldSchema).danishHomeContents &&
+    isDanishHomeContents(quote.quoteDetails)
+  )
+}
+
+export const isNorwegianHomeContentFieldSchema = (
+  fieldSchema: FieldSchema,
+  quote: OfferQuote,
+): fieldSchema is NorwegianHomeContentFieldSchema => {
+  return (
+    (fieldSchema as NorwegianHomeContentFieldSchema).norwegianHomeContents &&
+    isNorwegianHomeContents(quote.quoteDetails)
+  )
+}
+export const isNorwegianTravelFieldSchema = (
+  fieldSchema: FieldSchema,
+  quote: OfferQuote,
+): fieldSchema is NorwegianTravelContentFieldSchema => {
+  return (
+    (fieldSchema as NorwegianTravelContentFieldSchema).norwegianTravel &&
+    isNorwegianTravel(quote.quoteDetails)
+  )
+}
 
 export const isApartmentFieldSchema = (
   fieldSchema: FieldSchema,
@@ -41,21 +83,9 @@ export const isHouseFieldSchema = (
     isSwedishHouse(quote.quoteDetails)
   )
 }
-
-export const getFieldSchema = (offerQuote: OfferQuote): FieldSchema => {
-  const base = {
-    street: {
-      label: 'DETAILS_MODULE_TABLE_ADDRESS_CELL_LABEL',
-      placeholder: 'DETAILS_MODULE_TABLE_ADDRESS_CELL_LABEL',
-      validation: Yup.string().required(),
-    },
-    zipCode: {
-      label: 'DETAILS_MODULE_TABLE_POSTALCODE_CELL_LABEL',
-      placeholder: 'DETAILS_MODULE_TABLE_POSTALCODE_CELL_LABEL',
-      mask: masks.zipCode,
-      type: inputTypes.string,
-      validation: Yup.string().matches(/^[0-9]{3}[0-9]{2}$/),
-    },
+const getSwedishSchema = (base: any, offerQuote: OfferQuote) => {
+  const swedishBase = {
+    ...base,
     householdSize: {
       label: 'DETAILS_MODULE_TABLE_INSUREDPEOPLE_CELL_LABEL',
       placeholder: 'DETAILS_MODULE_TABLE_INSUREDPEOPLE_CELL_LABEL',
@@ -63,11 +93,10 @@ export const getFieldSchema = (offerQuote: OfferQuote): FieldSchema => {
       validation: Yup.number().required(),
     },
   }
-
   return isSwedishApartment(offerQuote.quoteDetails)
     ? {
         apartment: {
-          ...base,
+          ...swedishBase,
           livingSpace: {
             label: 'DETAILS_MODULE_TABLE_SIZE_CELL_LABEL_APARTMENT',
             placeholder: 'DETAILS_MODULE_TABLE_SIZE_CELL_LABEL_APARTMENT',
@@ -110,7 +139,7 @@ export const getFieldSchema = (offerQuote: OfferQuote): FieldSchema => {
       }
     : {
         house: {
-          ...base,
+          ...swedishBase,
           livingSpace: {
             label: 'DETAILS_MODULE_TABLE_LIVINGSPACE_CELL_LABEL_HOUSE',
             placeholder: 'DETAILS_MODULE_TABLE_LIVINGSPACE_CELL_LABEL_HOUSE',
@@ -192,19 +221,166 @@ export const getFieldSchema = (offerQuote: OfferQuote): FieldSchema => {
         },
       }
 }
+const getNorwegianSchema = (base: any, offerQuote: OfferQuote) => {
+  const commonAttributes = {
+    coInsured: {
+      label: 'DETAILS_MODULE_TABLE_INSUREDPEOPLE_CELL_LABEL',
+      placeholder: 'DETAILS_MODULE_TABLE_INSUREDPEOPLE_CELL_LABEL',
+      type: inputTypes.number,
+      validation: Yup.number().required(),
+    },
+    isYouth: {
+      label: 'DETAILS_MODULE_TABLE_SUBLETTING_CELL_LABEL_HOUSE', //TODO: Change
+      placeholder: 'DETAILS_MODULE_TABLE_SUBLETTING_CELL_LABEL_HOUSE', //TODO: Change
+      options: [
+        { label: 'YES', value: 'true' },
+        { label: 'NO', value: 'false' },
+      ],
+      validation: Yup.boolean().required(),
+    },
+  }
+
+  return isNorwegianHomeContents(offerQuote.quoteDetails)
+    ? {
+        norwegianHomeContents: {
+          ...base,
+          ...commonAttributes,
+          livingSpace: {
+            label: 'DETAILS_MODULE_TABLE_LIVINGSPACE_CELL_LABEL_HOUSE',
+            placeholder: 'DETAILS_MODULE_TABLE_LIVINGSPACE_CELL_LABEL_HOUSE',
+            type: inputTypes.number,
+            validation: Yup.number().required(),
+          },
+          type: {
+            label: 'DETAILS_MODULE_TABLE_RECIDENCY_TYPE_CELL_LABEL_APARTMENT',
+            placeholder:
+              'DETAILS_MODULE_TABLE_RECIDENCY_TYPE_CELL_LABEL_APARTMENT',
+            options: [
+              {
+                label: 'SIDEBAR_INSURANCE_TYPE_BRF',
+                value: NorwegianHomeContentsType.Own,
+              },
+              {
+                label: 'SIDEBAR_INSURANCE_TYPE_RENT',
+                value: NorwegianHomeContentsType.Rent,
+              },
+            ],
+            validation: Yup.string().required(),
+          },
+        },
+      }
+    : { norwegianTravel: { ...commonAttributes } }
+}
+
+const getDanishSchema = (base: any) => {
+  return {
+    danishHomeContents: {
+      ...base,
+      coInsured: {
+        label: 'DETAILS_MODULE_TABLE_INSUREDPEOPLE_CELL_LABEL',
+        placeholder: 'DETAILS_MODULE_TABLE_INSUREDPEOPLE_CELL_LABEL',
+        type: inputTypes.number,
+        validation: Yup.number().required(),
+      },
+      isStudent: {
+        label: 'DETAILS_MODULE_TABLE_SUBLETTING_CELL_LABEL_HOUSE', //TODO: Change
+        placeholder: 'DETAILS_MODULE_TABLE_SUBLETTING_CELL_LABEL_HOUSE', //TODO: Change
+        options: [
+          { label: 'YES', value: 'true' },
+          { label: 'NO', value: 'false' },
+        ],
+        validation: Yup.boolean().required(),
+      },
+      livingSpace: {
+        label: 'DETAILS_MODULE_TABLE_LIVINGSPACE_CELL_LABEL_HOUSE',
+        placeholder: 'DETAILS_MODULE_TABLE_LIVINGSPACE_CELL_LABEL_HOUSE',
+        type: inputTypes.number,
+        validation: Yup.number().required(),
+      },
+      type: {
+        label: 'DETAILS_MODULE_TABLE_RECIDENCY_TYPE_CELL_LABEL_APARTMENT',
+        placeholder: 'DETAILS_MODULE_TABLE_RECIDENCY_TYPE_CELL_LABEL_APARTMENT',
+        options: [
+          {
+            label: 'SIDEBAR_INSURANCE_TYPE_BRF',
+            value: DanishHomeContentsType.Own,
+          },
+          {
+            label: 'SIDEBAR_INSURANCE_TYPE_RENT',
+            value: DanishHomeContentsType.Rent,
+          },
+        ],
+        validation: Yup.string().required(),
+      },
+    },
+  }
+}
+
+export const getFieldSchema = (offerQuote: OfferQuote): FieldSchema => {
+  const base = {
+    street: {
+      label: 'DETAILS_MODULE_TABLE_ADDRESS_CELL_LABEL',
+      placeholder: 'DETAILS_MODULE_TABLE_ADDRESS_CELL_LABEL',
+      validation: Yup.string().required(),
+    },
+    zipCode: {
+      label: 'DETAILS_MODULE_TABLE_POSTALCODE_CELL_LABEL',
+      placeholder: 'DETAILS_MODULE_TABLE_POSTALCODE_CELL_LABEL',
+      mask: offerQuote.quoteDetails.__typename?.includes('Swedish')
+        ? masks.zipCode
+        : masks.zipCodeNoDk,
+      type: inputTypes.string,
+      validation: offerQuote.quoteDetails.__typename?.includes('Swedish')
+        ? Yup.string().matches(/^[0-9]{3}[0-9]{2}$/)
+        : Yup.string().matches(/^[0-9]{4}$/),
+    },
+  }
+  if (offerQuote.quoteDetails.__typename?.includes('Norwegian')) {
+    return getNorwegianSchema(base, offerQuote)
+  } else if (offerQuote.quoteDetails.__typename?.includes('Danish')) {
+    return getDanishSchema(base)
+  }
+
+  return getSwedishSchema(base, offerQuote)
+}
+
+const getMarketFields = (fieldSchema: FieldSchema, offerQuote: OfferQuote) => {
+  if (offerQuote.quoteDetails.__typename?.includes('Norwegian')) {
+    const isNorwegianHomeContent = isNorwegianHomeContentFieldSchema(
+      fieldSchema,
+      offerQuote,
+    )
+    return {
+      fields: isNorwegianHomeContent
+        ? (fieldSchema as NorwegianHomeContentFieldSchema).norwegianHomeContents
+        : (fieldSchema as NorwegianTravelContentFieldSchema).norwegianTravel,
+      key: isNorwegianHomeContent ? 'norwegianHomeContents' : 'norwegianTravel',
+    }
+  }
+  if (offerQuote.quoteDetails.__typename?.includes('Danish')) {
+    return {
+      fields: (fieldSchema as DanishHomeContentFieldSchema).danishHomeContents,
+      key: 'danishHomeContents',
+    }
+  }
+
+  const isAppartment = isApartmentFieldSchema(fieldSchema, offerQuote)
+  return {
+    fields: isAppartment
+      ? (fieldSchema as ApartmentFieldSchema).apartment
+      : (fieldSchema as HouseFieldSchema).house,
+    key: isAppartment ? 'apartment' : 'house',
+  }
+}
 
 export const getValidationSchema = (
   fieldSchema: FieldSchema,
   offerQuote: OfferQuote,
 ): Yup.ObjectSchema<unknown> => {
-  const fields = isApartmentFieldSchema(fieldSchema, offerQuote)
-    ? fieldSchema.apartment
-    : fieldSchema.house
+  const { fields, key } = getMarketFields(fieldSchema, offerQuote)
 
   return Yup.object({
-    [isApartmentFieldSchema(fieldSchema, offerQuote)
-      ? 'apartment'
-      : 'house']: Yup.object({
+    [key]: Yup.object({
       ...Object.entries(fields).reduce(
         (acc, t) => ({
           ...acc,
@@ -340,14 +516,16 @@ export const getInitialSwedishHouseValues = (
       })),
   },
 })
-
+type NorwegianHomeContentsDetailsAlias = NorwegianHomeContentsDetails & {
+  norwegianHomeType: NorwegianHomeContentsType
+}
 export const getInitialNorwegianHomeContentValues = (
   quoteId: string,
-  quoteDetails: NorwegianHomeContentsDetails,
+  quoteDetails: NorwegianHomeContentsDetailsAlias,
 ): EditQuoteInput => ({
   id: quoteId,
   norwegianHomeContents: {
-    type: quoteDetails.type,
+    type: quoteDetails.norwegianHomeType,
     street: quoteDetails.street,
     zipCode: quoteDetails.zipCode,
     coInsured: quoteDetails.coInsured,
@@ -355,6 +533,27 @@ export const getInitialNorwegianHomeContentValues = (
     livingSpace: quoteDetails.livingSpace,
   },
 })
+
+type DanishHomeContentsDetailsAlias = DanishHomeContentsDetails & {
+  danishHomeType: DanishHomeContentsType
+}
+
+export const getInitialDanishHomeContentValues = (
+  quoteId: string,
+  quoteDetails: DanishHomeContentsDetailsAlias,
+): EditQuoteInput => {
+  return {
+    id: quoteId,
+    danishHomeContents: {
+      type: quoteDetails.danishHomeType,
+      street: quoteDetails.street,
+      zipCode: quoteDetails.zipCode,
+      coInsured: quoteDetails.coInsured,
+      isStudent: quoteDetails.isStudent,
+      livingSpace: quoteDetails.livingSpace,
+    },
+  }
+}
 
 const getInitialNorwegianTravelValues = (
   quoteId: string,
@@ -390,7 +589,7 @@ export const getInitialInputValues = (offerQuote: OfferQuote) =>
       () =>
         getInitialNorwegianHomeContentValues(
           offerQuote.id,
-          offerQuote.quoteDetails as NorwegianHomeContentsDetails,
+          offerQuote.quoteDetails as NorwegianHomeContentsDetailsAlias,
         ),
     ],
     [
@@ -399,6 +598,14 @@ export const getInitialInputValues = (offerQuote: OfferQuote) =>
         getInitialNorwegianTravelValues(
           offerQuote.id,
           offerQuote.quoteDetails as NorwegianTravelDetails,
+        ),
+    ],
+    [
+      'DanishHomeContentsDetails',
+      () =>
+        getInitialDanishHomeContentValues(
+          offerQuote.id,
+          offerQuote.quoteDetails as DanishHomeContentsDetailsAlias,
         ),
     ],
   ])(offerQuote.quoteDetails.__typename as string) ??
