@@ -47,7 +47,7 @@ const clientConfig: ClientConfig = {
   contentServiceEndpoint: CONTENT_SERVICE_ENDPOINT,
   giraffeEndpoint: GIRAFFE_ENDPOINT,
   giraffeWsEndpoint: GIRAFFE_WS_ENDPOINT,
-  appEnvironment: APP_ENVIRONMENT,
+  appEnvironment: APP_ENVIRONMENT as ClientConfig['appEnvironment'],
 }
 
 const template = (
