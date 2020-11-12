@@ -6,6 +6,27 @@ import { stripTrailingCharacter } from 'utils/misc'
 import { captureSentryError } from 'utils/sentry-client'
 import { RedeemCodeFormValue } from './components/RedeemCode'
 
+export const getSuccessPath = (
+  locationPathname: string,
+  code: RedeemCodeFormValue['code'],
+) => {
+  if (!locationPathname.includes('forever')) {
+    throw new Error('The path should include the word "forever"')
+  }
+
+  const pathWithoutTrailingSlash = stripTrailingCharacter('/', locationPathname)
+  const pathSplit = pathWithoutTrailingSlash.split('/')
+  const lastWordInPath = pathSplit[pathSplit.length - 1]
+
+  if (lastWordInPath === code) {
+    return pathWithoutTrailingSlash
+  }
+  if (lastWordInPath !== 'forever') {
+    return `${pathWithoutTrailingSlash.split('forever')[0]}forever/${code}`
+  }
+  return `${pathWithoutTrailingSlash}/${code}`
+}
+
 export const useRedeemCode = () => {
   const [redeemCode] = useRedeemCodeV2Mutation({
     refetchQueries: () => [
@@ -18,14 +39,16 @@ export const useRedeemCode = () => {
   })
   const locale = useCurrentLocale()
   const history = useHistory()
-  const location = useLocation()
+  const { pathname } = useLocation()
 
   const handleSubmit = async (
     form: RedeemCodeFormValue,
     actions: FormikHelpers<RedeemCodeFormValue>,
   ) => {
+    const { code } = form
+
     try {
-      const result = await redeemCode({ variables: { code: form.code } })
+      const result = await redeemCode({ variables: { code } })
       if (!result) {
         return
       }
@@ -36,9 +59,8 @@ export const useRedeemCode = () => {
             result.data.redeemCodeV2.campaigns[0]?.incentive?.__typename ===
             'MonthlyCostDeduction'
           ) {
-            history.push(
-              `${stripTrailingCharacter('/', location.pathname)}/intro`,
-            )
+            const successPath = getSuccessPath(pathname, code)
+            history.push(`${successPath}/intro`)
           } else {
             history.push(`/${locale}/new-member`)
           }
