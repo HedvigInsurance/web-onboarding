@@ -12,7 +12,7 @@ import {
   getInitialInputValues,
   getValidationSchema,
 } from './utils'
-import { SwedishDetails } from './Details'
+import Details from './Details'
 
 const Container = styled.div`
   width: 100%;
@@ -103,7 +103,6 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
     isUnderwritingGuidelineHit,
     setIsUnderwritingGuidelineHit,
   ] = React.useState(false)
-
   return (
     <Modal isVisible={isVisible} onClose={onClose} dynamicHeight>
       <LoadingDimmer visible={isUpdating} />
@@ -129,7 +128,6 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                 setIsUpdating(false)
                 return
               }
-
               await refetch()
               onClose()
             } catch (e) {
@@ -145,7 +143,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
           {(formikProps) => (
             <Form>
               <Headline>{textKeys.DETAILS_MODULE_HEADLINE()}</Headline>
-              <SwedishDetails
+              <Details
                 fieldSchema={fieldSchema}
                 formikProps={formikProps}
                 offerQuote={offerQuote}
