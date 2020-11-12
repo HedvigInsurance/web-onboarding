@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
 import Helmet from 'react-helmet-async'
+import { Redirect } from 'react-router'
 import { LinkButton } from 'components/buttons'
 import { TopBar, TopBarFiller } from 'components/TopBar'
 import {
@@ -194,6 +195,11 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
   const market = useMarket()
   const currentLocale = useCurrentLocale()
   const variation = useVariation()
+
+  if (currentLocale === 'dk' || currentLocale === 'dk-en') {
+    return <Redirect to={`/${currentLocale}/new-member/contents`} />
+  }
+
   return (
     <Page>
       <Global
