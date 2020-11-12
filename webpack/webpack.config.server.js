@@ -1,5 +1,5 @@
-const webpack = require('webpack')
 const path = require('path')
+const webpack = require('webpack')
 const { StatsWriterPlugin } = require('webpack-stats-plugin')
 const webpackConfig = require('./webpack.config.base')
 
@@ -41,6 +41,7 @@ module.exports = webpackConfig({
     __dirname: true,
   },
   mode: process.env.NODE_ENV || 'development',
+  bail: process.env.NODE_ENV !== 'development',
   context: root,
   output: {
     filename: '[name].js',

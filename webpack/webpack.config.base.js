@@ -1,6 +1,7 @@
+const path = require('path')
 const webpack = require('webpack')
 const threadLoader = require('thread-loader')
-const path = require('path')
+const pathBrowserifyPath = require.resolve('path-browserify')
 const babelrc = require('../.babelrc')
 
 threadLoader.warmup({}, ['babel-loader'])
@@ -21,6 +22,7 @@ module.exports = ({
     alias: {
       shared: path.resolve(context, 'src/shared'),
     },
+    fallback: { path: pathBrowserifyPath },
   },
   entry,
   module: {
@@ -33,6 +35,12 @@ module.exports = ({
             loader: 'babel-loader',
           },
         ],
+      },
+      {
+        test: /\.m?js$/,
+        resolve: {
+          fullySpecified: false,
+        },
       },
     ],
   },
