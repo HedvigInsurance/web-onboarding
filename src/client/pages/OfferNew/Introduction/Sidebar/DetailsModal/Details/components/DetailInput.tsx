@@ -8,7 +8,13 @@ import { RegularFieldType } from '../../types'
 interface DetailInputProps {
   field?: RegularFieldType
   formikProps: FormikProps<EditQuoteInput>
-  nameRoot: 'apartment' | 'house'
+  nameRoot:
+    | 'apartment'
+    | 'house'
+    | 'norwegianHomeContents'
+    | 'norwegianTravel'
+    | 'norwegianTravel'
+    | 'danishHomeContents'
   name: string
 }
 
