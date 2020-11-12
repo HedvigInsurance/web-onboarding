@@ -19,7 +19,12 @@ const CardComponent = styled(Link)`
   text-decoration: none;
 
   @media (min-width: 600px) {
-    padding: 2.5rem 2rem 1.5rem 1.5rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  @media (min-height: 620px) {
+    margin-bottom: 1rem;
   }
 
   @media (min-width: 850px) {
@@ -59,6 +64,10 @@ const CardHeader = styled.div`
     display: none;
   }
 
+  @media (min-height: 620px) {
+    padding-bottom: 1rem;
+  }
+
   @media (min-width: 1020px) {
     padding-bottom: 3rem;
     svg {
@@ -70,7 +79,6 @@ const CardHeader = styled.div`
 `
 
 const CardBanner = styled.div`
-  position: absolut;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
   border-top-left-radius: 8px;
