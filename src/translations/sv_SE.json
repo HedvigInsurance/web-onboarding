@@ -166,7 +166,7 @@
   "STARTPAGE_COMBO_DISCOUNT_TEXT": "",
   "CONNECT_PAYMENT_ERROR_HEADLINE": "",
   "CONNECT_PAYMENT_ERROR_PARAGRAPH": "",
-  "CONNECT_PAYMENT_ERROR_BUTTON": "",
+  "CONNECT_PAYMENT_ERROR_BUTTON": "Ok",
   "DETAILS_MODULE_TABLE_ADDRESS_CELL_LABEL": "Adress",
   "DETAILS_MODULE_TABLE_POSTALCODE_CELL_LABEL": "Postnummer",
   "DETAILS_MODULE_TABLE_RECIDENCY_TYPE_CELL_LABEL_APARTMENT": "Typ av boende",
@@ -230,9 +230,11 @@
   "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_OWN": "",
   "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_RENT": "",
   "FOREVER_CODE_ERROR": "Felaktig kod.",
-  "STARTPAGE_HEADLINE": "Få ditt personliga prisförslag på 1 minut",
-  "STARTPAGE_PREAMBLE": "Gör som tiotusentals andra medlemmar, skaffa hemförsäkring utan bindningstid.",
-  "STARTPAGE_USP_1": "10 gånger så nöjda kunder",
-  "STARTPAGE_USP_2": "Personlig service",
-  "STARTPAGE_USP_3": "Enkel skadeanmälan"
+  "STARTPAGE_HEADLINE": "Få ditt prisförslag",
+  "STARTPAGE_PREAMBLE": "Det finns en anledning till att tusentals människor har Hedvig. Se efter själv.",
+  "STARTPAGE_USP_1": "10x så nöjda kunder",
+  "STARTPAGE_USP_2": "Personligt service-team",
+  "STARTPAGE_USP_3": "Enkel skadeanmälan",
+  "DETAILS_MODULE_TABLE_YOUTH_CELL_LABEL": "",
+  "DETAILS_MODULE_TABLE_STUDENT_CELL_LABEL": ""
 }
