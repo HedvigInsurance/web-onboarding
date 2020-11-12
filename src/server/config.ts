@@ -17,3 +17,5 @@ export const CONTENT_SERVICE_ENDPOINT =
 
 export const ADYEN_ORIGIN_KEY = process.env.ADYEN_ORIGIN_KEY!
 export const ADYEN_ENVIRONMENT = process.env.ADYEN_ENVIRONMENT!
+
+export const APP_ENVIRONMENT = process.env.APP_ENVIRONMENT ?? 'development'

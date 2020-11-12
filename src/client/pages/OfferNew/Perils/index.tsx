@@ -37,7 +37,7 @@ export const getIconUrl = (iconPath: string) => {
     return ''
   }
 
-  return `${(window as any).CONTENT_SERVICE_ENDPOINT}${iconPath}`
+  return `${window.hedvigClientConfig.contentServiceEndpoint}${iconPath}`
 }
 
 export const Perils: React.FC<Props> = ({ offerData }) => {

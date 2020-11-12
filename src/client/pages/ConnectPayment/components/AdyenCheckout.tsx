@@ -207,8 +207,8 @@ const createAdyenCheckout = ({
 
   const configuration = {
     locale,
-    environment: (window as any).ADYEN_ENVIRONMENT,
-    originKey: (window as any).ADYEN_ORIGIN_KEY,
+    environment: window.hedvigClientConfig.adyenEnvironment,
+    originKey: window.hedvigClientConfig.adyenOriginKey,
     paymentMethodsResponse: JSON.parse(paymentMethodsResponse),
     paymentMethodsConfiguration: {
       card: {
