@@ -7,9 +7,8 @@ import {
 } from 'components/inputs'
 import { ExtraBuildingInput, ExtraBuildingType } from 'data/graphql'
 import { EditQuoteInput } from 'data/graphql'
-import { OfferQuote } from 'pages/OfferNew/types'
 import { isApartmentFieldSchema, isHouseFieldSchema } from '../utils'
-import { ApartmentFieldSchema, HouseFieldSchema, FieldSchema } from '../types'
+import { ApartmentFieldSchema, HouseFieldSchema } from '../types'
 import { DetailInput } from './components'
 import { SupportSection } from './components'
 
@@ -19,19 +18,14 @@ import {
   ContentColumnTitle,
   ContentColumn,
 } from './components'
+import { Details } from './types'
 
-type SwedishDetails = {
-  formikProps: FormikProps<EditQuoteInput>
-  fieldSchema: FieldSchema
-  offerQuote: OfferQuote
-  textKeys: any
-}
 export const SwedishDetails = ({
   fieldSchema,
   formikProps,
   offerQuote,
   textKeys,
-}: SwedishDetails) => (
+}: Details) => (
   <>
     {isApartmentFieldSchema(fieldSchema, offerQuote) && (
       <ApartmentDetails fieldSchema={fieldSchema} formikProps={formikProps} />
