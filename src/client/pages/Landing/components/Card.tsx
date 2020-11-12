@@ -9,8 +9,8 @@ const CardComponent = styled(Link)`
   position: relative;
   display: block;
   width: 100%;
-  margin-bottom: 1rem;
-  padding: 1.25rem 1rem;
+  margin-bottom: 0.5rem;
+  padding: 1rem;
   color: ${colorsV3.gray900};
   background: ${colorsV3.gray100};
   border-radius: 0.5rem;
@@ -27,8 +27,7 @@ const CardComponent = styled(Link)`
     flex-direction: column;
     justify-content: space-between;
     max-width: 28rem;
-    margin-right: 0.5rem;
-    margin-left: 0.5rem;
+    margin: 0 0.5rem 1rem;
     padding: 1.5rem;
   }
 
@@ -53,7 +52,8 @@ const CardComponent = styled(Link)`
 const CardHeader = styled.div`
   display: flex;
   justify-content: space-between;
-  padding-bottom: 1rem;
+  min-height: 1.5rem;
+  padding-bottom: 0.5rem;
 
   svg {
     display: none;

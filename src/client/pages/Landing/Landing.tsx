@@ -22,7 +22,7 @@ const Wrapper = styled.div`
   width: 100%;
   max-width: 80rem;
   margin: 0 auto;
-  padding: 1rem 1rem 4rem;
+  padding: 1rem 1rem 0;
 
   @media (min-width: 600px) {
     padding-top: 6vh;
@@ -131,14 +131,15 @@ const CardContainer = styled.div`
   }
 `
 
-const CardHeadline = styled.h1`
+const CardHeadline = styled.h2`
   width: 100%;
-  margin: 0 0 0.25rem 0;
+  margin: 0;
   font-size: 1.25rem;
-  line-height: 1.5rem;
+  line-height: 1.2;
   color: ${colorsV3.gray900};
 
   @media (min-width: 500px) {
+    margin-bottom: 0.25rem;
     font-size: 1.5rem;
     line-height: 1.25;
   }
@@ -176,7 +177,7 @@ const LandingPageContainer = styled.div`
 const BackgroundContainer = styled.div<{
   backgroundLoaded: boolean
 }>`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
@@ -275,20 +276,22 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
           <UspContainer>
             <Headline>{textKeys.STARTPAGE_HEADLINE()}</Headline>
             <Preamble>{textKeys.STARTPAGE_PREAMBLE()}</Preamble>
-            <UspList>
-              <UspItem>
-                <CheckmarkCircle size="1.25rem" />
-                <span>{textKeys.STARTPAGE_USP_1()}</span>
-              </UspItem>
-              <UspItem>
-                <CheckmarkCircle size="1.25rem" />
-                <span>{textKeys.STARTPAGE_USP_2()}</span>
-              </UspItem>
-              <UspItem>
-                <CheckmarkCircle size="1.25rem" />
-                <span>{textKeys.STARTPAGE_USP_3()}</span>
-              </UspItem>
-            </UspList>
+            {market === Market.Se && (
+              <UspList>
+                <UspItem>
+                  <CheckmarkCircle size="1.25rem" />
+                  <span>{textKeys.STARTPAGE_USP_1()}</span>
+                </UspItem>
+                <UspItem>
+                  <CheckmarkCircle size="1.25rem" />
+                  <span>{textKeys.STARTPAGE_USP_2()}</span>
+                </UspItem>
+                <UspItem>
+                  <CheckmarkCircle size="1.25rem" />
+                  <span>{textKeys.STARTPAGE_USP_3()}</span>
+                </UspItem>
+              </UspList>
+            )}
           </UspContainer>
           <CardContainer>
             {market === Market.Se && (
