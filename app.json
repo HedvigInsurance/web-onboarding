@@ -15,22 +15,12 @@
     "GIRAFFE_WS_ENDPOINT": {
       "required": true
     },
-    "FIREBASE_LINK_DOMAIN": {
+    "APP_ENVIRONMENT": "development",
+    "CONTENT_SERVICE_ENDPOINT": {
       "required": true
     },
-    "ANDROID_PACKAGE_NAME": {
-      "required": true
-    },
-    "ANDROID_MINIMUM_VERSION": {
-      "required": true
-    },
-    "APPLE_BUNDLE_ID": {
-      "required": true
-    },
-    "APP_STORE_ID": {
-      "required": true
-    },
-    "IOS_MINIMUM_VERSION": {
+    "ADYEN_ENVIRONMENT": "test",
+    "ADYEN_ORIGIN_KEY": {
       "required": true
     }
   },
