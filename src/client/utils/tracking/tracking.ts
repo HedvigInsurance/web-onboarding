@@ -169,10 +169,9 @@ export const useTrack = ({ offerData, signState }: TrackProps) => {
 
     trackOfferGTM(
       'signed_customer',
-      offerData,
+      { ...offerData, memberId: memberId || '' },
       redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction',
     )
-
     if (
       redeemedCampaigns?.length > 0 &&
       ['studentkortet', 'stuk2'].includes(

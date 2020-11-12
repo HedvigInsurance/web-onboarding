@@ -11,6 +11,7 @@ interface GTMOfferData {
   number_of_people: number
   insurance_price: number
   currency: string
+  member_id?: string
 }
 
 export interface DataLayerObject {
@@ -38,6 +39,7 @@ export const trackOfferGTM = (
         number_of_people: offerData.person.householdSize,
         insurance_price: parseFloat(offerData.cost.monthlyNet.amount),
         currency: offerData.cost.monthlyNet.currency,
+        ...(offerData.memberId && { member_id: offerData.memberId }),
       },
     })
   } catch (e) {
