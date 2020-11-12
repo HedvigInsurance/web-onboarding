@@ -81,7 +81,8 @@ const Preamble = styled.p`
   }
 `
 
-const UspList = styled.ul`
+const UspList = styled.ul<{ showInMobile?: boolean }>`
+  display: ${(props) => (props.showInMobile ? 'block' : 'none')};
   margin: 0;
   padding-left: 0;
   list-style: none;
@@ -276,22 +277,20 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
           <UspContainer>
             <Headline>{textKeys.STARTPAGE_HEADLINE()}</Headline>
             <Preamble>{textKeys.STARTPAGE_PREAMBLE()}</Preamble>
-            {market === Market.Se && (
-              <UspList>
-                <UspItem>
-                  <CheckmarkCircle size="1.25rem" />
-                  <span>{textKeys.STARTPAGE_USP_1()}</span>
-                </UspItem>
-                <UspItem>
-                  <CheckmarkCircle size="1.25rem" />
-                  <span>{textKeys.STARTPAGE_USP_2()}</span>
-                </UspItem>
-                <UspItem>
-                  <CheckmarkCircle size="1.25rem" />
-                  <span>{textKeys.STARTPAGE_USP_3()}</span>
-                </UspItem>
-              </UspList>
-            )}
+            <UspList showInMobile={market === Market.Se}>
+              <UspItem>
+                <CheckmarkCircle size="1.25rem" />
+                <span>{textKeys.STARTPAGE_USP_1()}</span>
+              </UspItem>
+              <UspItem>
+                <CheckmarkCircle size="1.25rem" />
+                <span>{textKeys.STARTPAGE_USP_2()}</span>
+              </UspItem>
+              <UspItem>
+                <CheckmarkCircle size="1.25rem" />
+                <span>{textKeys.STARTPAGE_USP_3()}</span>
+              </UspItem>
+            </UspList>
           </UspContainer>
           <CardContainer>
             {market === Market.Se && (
