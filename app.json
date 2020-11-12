@@ -14,6 +14,14 @@
     },
     "GIRAFFE_WS_ENDPOINT": {
       "required": true
+    },
+    "APP_ENVIRONMENT": "development",
+    "CONTENT_SERVICE_ENDPOINT": {
+      "required": true
+    },
+    "ADYEN_ENVIRONMENT": "test",
+    "ADYEN_ORIGIN_KEY": {
+      "required": true
     }
   },
   "addons": [],
