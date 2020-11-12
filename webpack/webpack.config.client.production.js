@@ -21,6 +21,7 @@ module.exports = webpackConfig({
   optimization: {
     splitChunks: {
       chunks: 'all',
+      name: 'common',
     },
   },
   devtool: 'source-map',
@@ -33,6 +34,9 @@ module.exports = webpackConfig({
       'process.env': {
         NODE_ENV: JSON.stringify('production'),
       },
+    }),
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
     }),
     new StatsWriterPlugin({ filename: 'stats.json' }),
     // new BundleAnalyzerPlugin(),

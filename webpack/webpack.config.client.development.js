@@ -35,6 +35,9 @@ module.exports = webpackConfig({
         NODE_ENV: JSON.stringify('development'),
       },
     }),
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+    }),
   ],
   context: root,
   watch: true,

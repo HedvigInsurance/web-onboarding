@@ -1,5 +1,3 @@
-import fs from 'fs'
-import path from 'path'
 import { min as createMinifiedSegmentSnippet } from '@segment/snippet'
 import escapeHTML from 'escape-html'
 import Router from 'koa-router'
@@ -21,17 +19,7 @@ import {
 import { favicons } from './favicons'
 import { getPageMeta } from './meta'
 import { WithRequestUuid } from './middleware/enhancers'
-
-const scriptLocation =
-  process.env.NODE_ENV === 'production'
-    ? '/new-member-assets/' +
-      JSON.parse(
-        fs.readFileSync(
-          path.resolve(__dirname, '../../build/new-member-assets/stats.json'),
-          'utf-8',
-        ),
-      ).assetsByChunkName.app[0]
-    : '/new-member-assets/app.js'
+import { getClientScripts } from './assets'
 
 const segmentSnippet = createMinifiedSegmentSnippet({
   apiKey: process.env.SEGMENT_API_KEY || '',
@@ -107,7 +95,7 @@ const template = (
       window.ADYEN_ORIGIN_KEY = ${JSON.stringify(ADYEN_ORIGIN_KEY)};
       window.ADYEN_ENVIRONMENT = ${JSON.stringify(ADYEN_ENVIRONMENT)};
     </script>
-    <script src="${scriptLocation}"></script>
+    ${getClientScripts().map((script) => `<script src="${script}"></script>`)}
   </body>
   </html>
   `
