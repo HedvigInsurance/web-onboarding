@@ -17,12 +17,18 @@ import { CheckmarkCircle } from 'components/icons/CheckmarkCircle'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import { Card } from './components/Card'
 
+const LandingPageContainer = styled.div`
+  position: relative;
+  min-height: 100%;
+  z-index: 1;
+`
+
 const Wrapper = styled.div`
   display: block;
   width: 100%;
   max-width: 80rem;
   margin: 0 auto;
-  padding: 1rem 1rem 0;
+  padding: 1rem;
 
   @media (min-width: 600px) {
     padding-top: 6vh;
@@ -39,6 +45,10 @@ const UspContainer = styled.div`
   padding-left: 0.5rem;
   padding-right: 0.5rem;
   color: ${colorsV3.gray100};
+
+  @media (min-height: 620px) {
+    margin-bottom: 2rem;
+  }
 
   @media (min-width: 800px) {
     margin-bottom: 2rem;
@@ -95,7 +105,7 @@ const UspList = styled.ul<{ showInMobile?: boolean }>`
 
 const UspItem = styled.li`
   display: flex;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   align-items: center;
 
   span {
@@ -169,19 +179,13 @@ const CardParagraph = styled.p`
   }
 `
 
-const LandingPageContainer = styled.div`
-  position: relative;
-  min-height: 100vh;
-  z-index: 1;
-`
-
 const BackgroundContainer = styled.div<{
   backgroundLoaded: boolean
 }>`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   transition: opacity 1s cubic-bezier(0.33, 1, 0.68, 1);
   transition-delay: 150ms;
@@ -279,15 +283,15 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
             <Preamble>{textKeys.STARTPAGE_PREAMBLE()}</Preamble>
             <UspList showInMobile={market === Market.Se}>
               <UspItem>
-                <CheckmarkCircle size="1.25rem" />
+                <CheckmarkCircle size="1.5rem" />
                 <span>{textKeys.STARTPAGE_USP_1()}</span>
               </UspItem>
               <UspItem>
-                <CheckmarkCircle size="1.25rem" />
+                <CheckmarkCircle size="1.5rem" />
                 <span>{textKeys.STARTPAGE_USP_2()}</span>
               </UspItem>
               <UspItem>
-                <CheckmarkCircle size="1.25rem" />
+                <CheckmarkCircle size="1.5rem" />
                 <span>{textKeys.STARTPAGE_USP_3()}</span>
               </UspItem>
             </UspList>
