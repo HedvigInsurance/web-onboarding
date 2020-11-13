@@ -166,7 +166,7 @@ const CardParagraph = styled.p`
   margin: 0;
   font-size: 1rem;
   line-height: 1.5;
-  color: ${colorsV3.gray700};
+  color: ${colorsV3.gray500};
 
   @media (min-width: 850px) {
     max-width: 20ch;
