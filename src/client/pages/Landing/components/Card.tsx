@@ -90,6 +90,10 @@ const CardBanner = styled.div`
   color: ${colorsV3.gray800};
   background-color: ${colorsV3.purple100};
   border-radius: 0.25rem;
+
+  @media (min-width: 1020px) {
+    font-size: 0.875rem;
+  }
 `
 
 const CardContent = styled.div`
@@ -102,11 +106,10 @@ const ArrowWrapper = styled.span`
   position: absolute;
   right: 1.25rem;
   bottom: 1.25rem;
-  height: 1rem;
 
   @media (min-width: 600px) {
     right: 1.5rem;
-    bottom: 2.5rem;
+    bottom: 2rem;
     svg {
       font-size: 1.75rem;
     }

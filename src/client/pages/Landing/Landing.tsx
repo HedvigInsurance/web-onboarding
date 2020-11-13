@@ -156,7 +156,7 @@ const CardHeadline = styled.h2`
   }
 
   @media (min-width: 850px) {
-    max-width: 14ch;
+    max-width: 13ch;
     font-size: 2rem;
     letter-spacing: -0.02em;
   }
