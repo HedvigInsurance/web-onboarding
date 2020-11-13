@@ -216,7 +216,7 @@ const IntroStoriesComponent: React.FC<IntroProps> = ({
         offset="30%"
         onClick={(e) => {
           e.preventDefault()
-          getNextPageNumber(page, pages)
+          setPage(getNextPageNumber(page, pages))
         }}
       />
       <SkipButton to={history.location.pathname + '/ready'}>
