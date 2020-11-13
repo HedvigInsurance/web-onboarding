@@ -230,8 +230,8 @@ const getNorwegianSchema = (base: any, offerQuote: OfferQuote) => {
       validation: Yup.number().required(),
     },
     isYouth: {
-      label: 'DETAILS_MODULE_TABLE_SUBLETTING_CELL_LABEL_HOUSE', //TODO: Change
-      placeholder: 'DETAILS_MODULE_TABLE_SUBLETTING_CELL_LABEL_HOUSE', //TODO: Change
+      label: 'DETAILS_MODULE_TABLE_YOUTH_CELL_LABEL',
+      placeholder: 'DETAILS_MODULE_TABLE_YOUTH_CELL_LABEL',
       options: [
         { label: 'YES', value: 'true' },
         { label: 'NO', value: 'false' },
@@ -283,8 +283,8 @@ const getDanishSchema = (base: any) => {
         validation: Yup.number().required(),
       },
       isStudent: {
-        label: 'DETAILS_MODULE_TABLE_SUBLETTING_CELL_LABEL_HOUSE', //TODO: Change
-        placeholder: 'DETAILS_MODULE_TABLE_SUBLETTING_CELL_LABEL_HOUSE', //TODO: Change
+        label: 'DETAILS_MODULE_TABLE_STUDENT_CELL_LABEL',
+        placeholder: 'DETAILS_MODULE_TABLE_STUDENT_CELL_LABEL',
         options: [
           { label: 'YES', value: 'true' },
           { label: 'NO', value: 'false' },
