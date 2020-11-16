@@ -1,3 +1,5 @@
+<!-- Please add the Jira issue id to the Pull Request title, like this: "[HVG-123] Make the Pull Request template great again" -->
+
 ## What?
 
 <!-- What changes are made? -->
