@@ -132,7 +132,6 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
   const textKeys = useTextKeys()
   const [writtenCode, setWrittenCode] = useState('')
   const [charIndex, setCharIndex] = useState(0)
-  const [printCodeTimeout, setPrintCodeTimeout] = useState<number | null>(null)
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -142,32 +141,29 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
     setFieldValue('code', e.target.value)
   }
 
-  const printCode = () => {
-    if (printCodeTimeout) {
-      window.clearTimeout(printCodeTimeout)
-    }
-
-    if (charIndex < referralCode.length) {
-      setWrittenCode(writtenCode + referralCode[charIndex])
-      setCharIndex(charIndex + 1)
-    }
-  }
-
   useEffect(() => {
-    if (printCodeTimeout) {
-      window.clearTimeout(printCodeTimeout)
+    const printCode = () => {
+      if (charIndex === referralCode.length) {
+        window.clearTimeout(printCodeTimeout)
+      }
+
+      if (charIndex < referralCode.length) {
+        setWrittenCode(writtenCode + referralCode[charIndex])
+        setCharIndex(charIndex + 1)
+      }
     }
 
     const isInitialTimeout = charIndex === 0
-    const timeout = window.setTimeout(printCode, isInitialTimeout ? 250 : 120)
-    setPrintCodeTimeout(timeout)
+
+    const printCodeTimeout = window.setTimeout(
+      printCode,
+      isInitialTimeout ? 250 : 120,
+    )
 
     return () => {
-      if (printCodeTimeout) {
-        window.clearTimeout(printCodeTimeout)
-      }
+      window.clearTimeout(printCodeTimeout)
     }
-  }, [charIndex])
+  }, [charIndex, referralCode, writtenCode])
 
   return (
     <Wrapper>
