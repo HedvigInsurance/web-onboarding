@@ -325,7 +325,9 @@ export const getFieldSchema = (offerQuote: OfferQuote): FieldSchema => {
     zipCode: {
       label: 'DETAILS_MODULE_TABLE_POSTALCODE_CELL_LABEL',
       placeholder: 'DETAILS_MODULE_TABLE_POSTALCODE_CELL_LABEL',
-      mask: isSwedishQuote(offerQuote) ? masks.zipCode : masks.zipCodeNoDk,
+      mask: isSwedishQuote(offerQuote)
+        ? masks.fiveDigitZipCode
+        : masks.fourDigitZipCode,
       type: inputTypes.string,
       validation: isSwedishQuote(offerQuote)
         ? Yup.string().matches(/^[0-9]{3}[0-9]{2}$/)

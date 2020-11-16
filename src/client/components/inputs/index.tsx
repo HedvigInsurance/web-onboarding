@@ -16,12 +16,12 @@ interface Mask {
 const INVISIBLE_MASK_CHAR = '\u200b'
 
 export const masks: Record<string, Mask> = {
-  zipCode: {
+  fiveDigitZipCode: {
     name: 'ZipCode',
     mask: '999 99',
     sanitize: (value) => value.replace(/\s+/, ''),
   },
-  zipCodeNoDk: {
+  fourDigitZipCode: {
     name: 'ZipCode',
     mask: '9999',
     sanitize: (value) => value.replace(/\s+/, ''),
