@@ -40,7 +40,7 @@ export const isDanishHomeContentFieldSchema = (
   quote: OfferQuote,
 ): fieldSchema is DanishHomeContentFieldSchema => {
   return (
-    (fieldSchema as DanishHomeContentFieldSchema).danishHomeContents &&
+    'danishHomeContents' in fieldSchema &&
     isDanishHomeContents(quote.quoteDetails)
   )
 }
@@ -50,7 +50,7 @@ export const isNorwegianHomeContentFieldSchema = (
   quote: OfferQuote,
 ): fieldSchema is NorwegianHomeContentFieldSchema => {
   return (
-    (fieldSchema as NorwegianHomeContentFieldSchema).norwegianHomeContents &&
+    'norwegianHomeContents' in fieldSchema &&
     isNorwegianHomeContents(quote.quoteDetails)
   )
 }
@@ -59,8 +59,7 @@ export const isNorwegianTravelFieldSchema = (
   quote: OfferQuote,
 ): fieldSchema is NorwegianTravelContentFieldSchema => {
   return (
-    (fieldSchema as NorwegianTravelContentFieldSchema).norwegianTravel &&
-    isNorwegianTravel(quote.quoteDetails)
+    'norwegianTravel' in fieldSchema && isNorwegianTravel(quote.quoteDetails)
   )
 }
 
@@ -68,20 +67,14 @@ export const isApartmentFieldSchema = (
   fieldSchema: FieldSchema,
   quote: OfferQuote,
 ): fieldSchema is ApartmentFieldSchema => {
-  return (
-    (fieldSchema as ApartmentFieldSchema).apartment &&
-    isSwedishApartment(quote.quoteDetails)
-  )
+  return 'apartment' in fieldSchema && isSwedishApartment(quote.quoteDetails)
 }
 
 export const isHouseFieldSchema = (
   fieldSchema: FieldSchema,
   quote: OfferQuote,
 ): fieldSchema is HouseFieldSchema => {
-  return (
-    (fieldSchema as HouseFieldSchema).house &&
-    isSwedishHouse(quote.quoteDetails)
-  )
+  return 'house' in fieldSchema && isSwedishHouse(quote.quoteDetails)
 }
 const getSwedishSchema = (base: any, offerQuote: OfferQuote) => {
   const swedishBase = {
