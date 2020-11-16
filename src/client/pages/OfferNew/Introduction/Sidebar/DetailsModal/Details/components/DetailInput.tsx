@@ -13,7 +13,6 @@ interface DetailInputProps {
     | 'house'
     | 'norwegianHomeContents'
     | 'norwegianTravel'
-    | 'norwegianTravel'
     | 'danishHomeContents'
   name: string
 }
