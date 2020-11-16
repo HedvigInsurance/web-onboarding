@@ -7,7 +7,7 @@ import InputMask from 'react-input-mask'
 import { WarningIcon } from 'components/icons/Warning'
 import { DownArrow } from 'components/icons/DownArrow'
 
-interface Mask {
+export interface Mask {
   name: string
   mask: string
   sanitize: (value: string) => string

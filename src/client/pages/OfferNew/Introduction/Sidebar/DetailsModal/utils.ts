@@ -1,17 +1,15 @@
 import { match } from 'matchly'
 import * as Yup from 'yup'
-import { inputTypes, masks } from 'components/inputs'
+import { inputTypes, masks, Mask } from 'components/inputs'
 import {
   ApartmentType,
   EditQuoteInput,
   ExtraBuilding,
   ExtraBuildingType,
-  NorwegianHomeContentsDetails,
   NorwegianHomeContentsType,
   NorwegianTravelDetails,
   SwedishApartmentQuoteDetails,
   SwedishHouseQuoteDetails,
-  DanishHomeContentsDetails,
   DanishHomeContentsType,
   QuoteBundleQuery,
 } from 'data/graphql'
@@ -81,7 +79,25 @@ export const isHouseFieldSchema = (
   return 'house' in fieldSchema && isSwedishHouse(quote.quoteDetails)
 }
 
-const getSwedishSchema = (base: any, offerQuote: OfferQuote) => {
+type BaseFieldSchema = {
+  street: {
+    label: string
+    placeholder: string
+    validation: Yup.StringSchema
+  }
+  zipCode: {
+    label: string
+    placeholder: string
+    mask: Mask
+    type: string
+    validation: Yup.StringSchema
+  }
+}
+
+const getSwedishSchema = (
+  base: BaseFieldSchema,
+  offerQuote: OfferQuote,
+): FieldSchema => {
   const swedishBase = {
     ...base,
     householdSize: {
@@ -220,7 +236,10 @@ const getSwedishSchema = (base: any, offerQuote: OfferQuote) => {
       }
 }
 
-const getNorwegianSchema = (base: any, offerQuote: OfferQuote) => {
+const getNorwegianSchema = (
+  base: BaseFieldSchema,
+  offerQuote: OfferQuote,
+): FieldSchema => {
   const commonAttributes = {
     coInsured: {
       label: 'DETAILS_MODULE_TABLE_INSUREDPEOPLE_CELL_LABEL',
@@ -271,7 +290,7 @@ const getNorwegianSchema = (base: any, offerQuote: OfferQuote) => {
     : { norwegianTravel: { ...commonAttributes } }
 }
 
-const getDanishSchema = (base: any) => {
+const getDanishSchema = (base: BaseFieldSchema): FieldSchema => {
   return {
     danishHomeContents: {
       ...base,
