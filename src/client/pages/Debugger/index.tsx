@@ -7,6 +7,10 @@ const ActualDebugger = React.lazy(() =>
 )
 
 export const Debugger: React.FC = () => {
+  if (window.hedvigClientConfig.appEnvironment === 'production') {
+    return null
+  }
+
   return (
     <React.Suspense fallback="loading">
       <ActualDebugger />

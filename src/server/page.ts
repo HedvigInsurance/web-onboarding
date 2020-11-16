@@ -3,6 +3,7 @@ import path from 'path'
 import { min as createMinifiedSegmentSnippet } from '@segment/snippet'
 import escapeHTML from 'escape-html'
 import Router from 'koa-router'
+import { ClientConfig } from 'shared/clientConfig'
 import { sentryConfig } from '../client/utils/sentry-server'
 import { ServerCookieStorage } from '../client/utils/storage/ServerCookieStorage'
 import { ServerSideRoute } from '../routes'
@@ -14,6 +15,7 @@ import {
 import {
   ADYEN_ENVIRONMENT,
   ADYEN_ORIGIN_KEY,
+  APP_ENVIRONMENT,
   CONTENT_SERVICE_ENDPOINT,
   GIRAFFE_ENDPOINT,
   GIRAFFE_WS_ENDPOINT,
@@ -38,6 +40,15 @@ const segmentSnippet = createMinifiedSegmentSnippet({
   page: true,
   load: true,
 })
+
+const clientConfig: ClientConfig = {
+  adyenEnvironment: ADYEN_ENVIRONMENT,
+  adyenOriginKey: ADYEN_ORIGIN_KEY,
+  contentServiceEndpoint: CONTENT_SERVICE_ENDPOINT,
+  giraffeEndpoint: GIRAFFE_ENDPOINT,
+  giraffeWsEndpoint: GIRAFFE_WS_ENDPOINT,
+  appEnvironment: APP_ENVIRONMENT as ClientConfig['appEnvironment'],
+}
 
 const template = (
   route: ServerSideRoute,
@@ -99,13 +110,10 @@ const template = (
     <div id="react-root"></div>
 
     <script>
-      window.GIRAFFE_WS_ENDPOINT = ${JSON.stringify(GIRAFFE_WS_ENDPOINT)};
-      window.GIRAFFE_ENDPOINT = ${JSON.stringify(GIRAFFE_ENDPOINT)};
-      window.CONTENT_SERVICE_ENDPOINT = ${JSON.stringify(
-        CONTENT_SERVICE_ENDPOINT,
-      )};
-      window.ADYEN_ORIGIN_KEY = ${JSON.stringify(ADYEN_ORIGIN_KEY)};
-      window.ADYEN_ENVIRONMENT = ${JSON.stringify(ADYEN_ENVIRONMENT)};
+      Object.defineProperty(window, 'hedvigClientConfig', {
+        value: Object.freeze(${JSON.stringify(clientConfig)}),
+        writable: false,
+      })
     </script>
     <script src="${scriptLocation}"></script>
   </body>
