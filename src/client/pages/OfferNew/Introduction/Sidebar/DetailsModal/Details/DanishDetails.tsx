@@ -4,13 +4,13 @@ import { isDanishHomeContentFieldSchema } from '../utils'
 import { DetailInput } from './components'
 import { SupportSection } from './components'
 import { Content, ContentColumn } from './components'
-import { Details } from './types'
+import { DetailsProps } from './types'
 
 export const DanishDetails = ({
   fieldSchema,
   formikProps,
   offerQuote,
-}: Details) => (
+}: DetailsProps) => (
   <>
     {isDanishHomeContentFieldSchema(fieldSchema, offerQuote) && (
       <Content>

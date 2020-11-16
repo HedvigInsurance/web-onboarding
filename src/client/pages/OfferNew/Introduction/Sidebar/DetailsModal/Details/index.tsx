@@ -3,14 +3,14 @@ import { useMarket, Market } from 'components/utils/CurrentLocale'
 import { DanishDetails } from './DanishDetails'
 import { NorwegianDetails } from './NorwegianDetails'
 import { SwedishDetails } from './SwedishDetails'
-import { Details } from './types'
+import { DetailsProps } from './types'
 
-export default ({
+export const Details = ({
   fieldSchema,
   formikProps,
   offerQuote,
   textKeys,
-}: Details) => {
+}: DetailsProps) => {
   const market = useMarket()
   return (
     <>

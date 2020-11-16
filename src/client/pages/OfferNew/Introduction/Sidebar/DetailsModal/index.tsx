@@ -12,7 +12,7 @@ import {
   getInitialInputValues,
   getValidationSchema,
 } from './utils'
-import Details from './Details'
+import { Details } from './Details'
 
 const Container = styled.div`
   width: 100%;

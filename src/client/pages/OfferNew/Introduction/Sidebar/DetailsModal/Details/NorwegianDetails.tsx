@@ -2,6 +2,7 @@ import React from 'react'
 import { FormikProps } from 'formik'
 import { InputGroup } from 'components/inputs'
 import { EditQuoteInput } from 'data/graphql'
+import { TextKeyMap } from 'src/client/utils/textKeys'
 import {
   isNorwegianHomeContentFieldSchema,
   isNorwegianTravelFieldSchema,
@@ -15,14 +16,14 @@ import { SupportSection } from './components'
 
 import { Content, ContentColumnTitle, ContentColumn } from './components'
 
-import { Details } from './types'
+import { DetailsProps } from './types'
 
 export const NorwegianDetails = ({
   fieldSchema,
   formikProps,
   offerQuote,
   textKeys,
-}: Details) => (
+}: DetailsProps) => (
   <>
     {isNorwegianHomeContentFieldSchema(fieldSchema, offerQuote) && (
       <NorwegianHomeContentDetails
@@ -100,7 +101,7 @@ const NorwegianHomeContentDetails = ({
 type TravelDetails = {
   formikProps: FormikProps<EditQuoteInput>
   fieldSchema: NorwegianTravelContentFieldSchema
-  textKeys: any
+  textKeys: TextKeyMap
 }
 const TravelDetails = ({
   fieldSchema,
