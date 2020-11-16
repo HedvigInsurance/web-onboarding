@@ -1,10 +1,9 @@
 import { css, Global } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import React from 'react'
+import React, { useState } from 'react'
 import Helmet from 'react-helmet-async'
 import { Redirect } from 'react-router'
-import { LinkButton } from 'components/buttons'
 import { TopBar, TopBarFiller } from 'components/TopBar'
 import {
   Market,
@@ -18,12 +17,18 @@ import { CheckmarkCircle } from 'components/icons/CheckmarkCircle'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import { Card } from './components/Card'
 
+const LandingPageContainer = styled.div`
+  position: relative;
+  min-height: 100%;
+  z-index: 1;
+`
+
 const Wrapper = styled.div`
   display: block;
   width: 100%;
   max-width: 80rem;
   margin: 0 auto;
-  padding: 1rem 1rem 4rem;
+  padding: 1rem;
 
   @media (min-width: 600px) {
     padding-top: 6vh;
@@ -41,6 +46,10 @@ const UspContainer = styled.div`
   padding-right: 0.5rem;
   color: ${colorsV3.gray100};
 
+  @media (min-height: 620px) {
+    margin-bottom: 2rem;
+  }
+
   @media (min-width: 800px) {
     margin-bottom: 2rem;
     text-align: center;
@@ -52,7 +61,7 @@ const UspContainer = styled.div`
 `
 const Headline = styled.h1`
   margin-top: 0;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
   font-size: 2rem;
   letter-spacing: -0.02em;
 
@@ -82,7 +91,8 @@ const Preamble = styled.p`
   }
 `
 
-const UspList = styled.ul`
+const UspList = styled.ul<{ isVisibleInMobile?: boolean }>`
+  display: ${(props) => (props.isVisibleInMobile ? 'block' : 'none')};
   margin: 0;
   padding-left: 0;
   list-style: none;
@@ -95,7 +105,7 @@ const UspList = styled.ul`
 
 const UspItem = styled.li`
   display: flex;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   align-items: center;
 
   span {
@@ -131,34 +141,22 @@ const CardContainer = styled.div`
     width: 100%;
   }
 `
-const CardBanner = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  line-height: 2rem;
-  width: 100%;
-  text-align: center;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  color: ${colorsV3.gray900};
-  background-color: ${colorsV3.purple300};
-`
 
-const CardHeadline = styled.h1`
+const CardHeadline = styled.h2`
   width: 100%;
-  margin: 0 0 0.25rem 0;
-  font-size: 1.125rem;
-  line-height: 1.5rem;
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.2;
   color: ${colorsV3.gray900};
 
   @media (min-width: 500px) {
+    margin-bottom: 0.25rem;
     font-size: 1.5rem;
     line-height: 1.25;
   }
 
   @media (min-width: 850px) {
-    max-width: 14ch;
-    margin-bottom: 1.5rem;
+    max-width: 13ch;
     font-size: 2rem;
     letter-spacing: -0.02em;
   }
@@ -168,26 +166,57 @@ const CardParagraph = styled.p`
   margin: 0;
   font-size: 1rem;
   line-height: 1.5;
-  color: ${colorsV3.gray700};
+  color: ${colorsV3.gray500};
 
   @media (min-width: 850px) {
-    max-width: 29ch;
+    max-width: 20ch;
+    font-size: 1.125rem;
+  }
+
+  @media (min-width: 1020px) {
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
   }
 `
 
-const DesktopProceedButton = styled(LinkButton)`
-  display: none;
+const BackgroundContainer = styled.div<{
+  backgroundLoaded: boolean
+}>`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  transition: opacity 1s cubic-bezier(0.33, 1, 0.68, 1);
+  transition-delay: 150ms;
+  z-index: -1;
+  opacity: ${(props) => (props.backgroundLoaded ? 1 : 0)};
 
-  @media (min-width: 850px) {
-    display: block;
-    margin-top: 2.5rem;
+  &:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 200;
+    top: 0;
+    left: 0;
+    background-color: ${colorsV3.gray900};
+    opacity: 0.5;
   }
 `
 
-const LandingPageContainer = styled.div`
-  position: relative;
-  min-height: 100vh;
-  backdrop-filter: blur(20px);
+const BackgroundImage = styled.img`
+  display: block;
+  position: fixed;
+  min-width: 100%;
+  min-height: 100%;
+  height: auto;
+  width: auto;
+  object-fit: cover;
+
+  @media (min-width: 1020px) {
+    object-position: 100% 50%;
+  }
 `
 
 export const Landing: React.FC<{ language: string }> = ({ language }) => {
@@ -195,6 +224,7 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
   const market = useMarket()
   const currentLocale = useCurrentLocale()
   const variation = useVariation()
+  const [backgroundLoaded, setBackgroundHasLoaded] = useState(false)
 
   if (currentLocale === 'dk' || currentLocale === 'dk-en') {
     return <Redirect to={`/${currentLocale}/new-member/contents`} />
@@ -251,17 +281,17 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
           <UspContainer>
             <Headline>{textKeys.STARTPAGE_HEADLINE()}</Headline>
             <Preamble>{textKeys.STARTPAGE_PREAMBLE()}</Preamble>
-            <UspList>
+            <UspList isVisibleInMobile={market === Market.Se}>
               <UspItem>
-                <CheckmarkCircle size="1.25rem" />
+                <CheckmarkCircle size="1.5rem" />
                 <span>{textKeys.STARTPAGE_USP_1()}</span>
               </UspItem>
               <UspItem>
-                <CheckmarkCircle size="1.25rem" />
+                <CheckmarkCircle size="1.5rem" />
                 <span>{textKeys.STARTPAGE_USP_2()}</span>
               </UspItem>
               <UspItem>
-                <CheckmarkCircle size="1.25rem" />
+                <CheckmarkCircle size="1.5rem" />
                 <span>{textKeys.STARTPAGE_USP_3()}</span>
               </UspItem>
             </UspList>
@@ -275,6 +305,17 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
             )}
           </CardContainer>
         </Wrapper>
+        <BackgroundContainer backgroundLoaded={backgroundLoaded}>
+          <BackgroundImage
+            alt="laptop grip"
+            onLoad={() => setBackgroundHasLoaded(true)}
+            src="/new-member-assets/landing/laptop_grip_small.jpg"
+            sizes="100vw"
+            srcSet="
+            /new-member-assets/landing/laptop_grip_small.jpg 1600w,
+            /new-member-assets/landing/laptop_grip_medium.jpg 2200w"
+          />
+        </BackgroundContainer>
       </LandingPageContainer>
     </Page>
   )
@@ -289,24 +330,10 @@ const LandingPageCardsSe: React.FC<{
       <Card to={`/${language}/new-member/new`}>
         <CardHeadline>{textKeys.STARTPAGE_UNINSURED_HEADLINE()}</CardHeadline>
         <CardParagraph>{textKeys.STARTPAGE_UNINSURED_BODY()}</CardParagraph>
-        <DesktopProceedButton
-          size="lg"
-          fullWidth
-          to={`/${language}/new-member/new`}
-        >
-          {textKeys.STARTPAGE_UNINSURED_BUTTON()}
-        </DesktopProceedButton>
       </Card>
       <Card to={`/${language}/new-member/switch`}>
         <CardHeadline>{textKeys.STARTPAGE_INSURED_HEADLINE()}</CardHeadline>
         <CardParagraph>{textKeys.STARTPAGE_INSURED_BODY()}</CardParagraph>
-        <DesktopProceedButton
-          size="lg"
-          fullWidth
-          to={`/${language}/new-member/switch`}
-        >
-          {textKeys.STARTPAGE_INSURED_BUTTON()}
-        </DesktopProceedButton>
       </Card>
     </>
   )
@@ -318,39 +345,20 @@ const LandingPageCardsNo: React.FC<{
 }> = ({ textKeys, language }) => {
   return (
     <>
-      <Card banner to={`/${language}/new-member/combo`}>
-        <CardBanner>{textKeys.STARTPAGE_COMBO_DISCOUNT_TEXT()}</CardBanner>
+      <Card
+        banner={textKeys.STARTPAGE_COMBO_DISCOUNT_TEXT()}
+        to={`/${language}/new-member/combo`}
+      >
         <CardHeadline>{textKeys.STARTPAGE_COMBO_HEADLINE()}</CardHeadline>
         <CardParagraph>{textKeys.STARTPAGE_COMBO_BODY()}</CardParagraph>
-        <DesktopProceedButton
-          size="lg"
-          fullWidth
-          to={`/${language}/new-member/combo`}
-        >
-          {textKeys.STARTPAGE_COMBO_BUTTON()}
-        </DesktopProceedButton>
       </Card>
       <Card to={`/${language}/new-member/contents`}>
         <CardHeadline>{textKeys.STARTPAGE_CONTENTS_HEADLINE()}</CardHeadline>
         <CardParagraph>{textKeys.STARTPAGE_CONTENTS_BODY()}</CardParagraph>
-        <DesktopProceedButton
-          size="lg"
-          fullWidth
-          to={`/${language}/new-member/contents`}
-        >
-          {textKeys.STARTPAGE_CONTENTS_BUTTON()}
-        </DesktopProceedButton>
       </Card>
       <Card to={`/${language}/new-member/travel`}>
         <CardHeadline>{textKeys.STARTPAGE_TRAVEL_HEADLINE()}</CardHeadline>
         <CardParagraph>{textKeys.STARTPAGE_TRAVEL_BODY()}</CardParagraph>
-        <DesktopProceedButton
-          size="lg"
-          fullWidth
-          to={`/${language}/new-member/travel`}
-        >
-          {textKeys.STARTPAGE_TRAVEL_BUTTON()}
-        </DesktopProceedButton>
       </Card>
     </>
   )
