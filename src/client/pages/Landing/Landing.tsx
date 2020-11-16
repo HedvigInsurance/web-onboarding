@@ -91,8 +91,8 @@ const Preamble = styled.p`
   }
 `
 
-const UspList = styled.ul<{ showInMobile?: boolean }>`
-  display: ${(props) => (props.showInMobile ? 'block' : 'none')};
+const UspList = styled.ul<{ isVisibleInMobile?: boolean }>`
+  display: ${(props) => (props.isVisibleInMobile ? 'block' : 'none')};
   margin: 0;
   padding-left: 0;
   list-style: none;
@@ -281,7 +281,7 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
           <UspContainer>
             <Headline>{textKeys.STARTPAGE_HEADLINE()}</Headline>
             <Preamble>{textKeys.STARTPAGE_PREAMBLE()}</Preamble>
-            <UspList showInMobile={market === Market.Se}>
+            <UspList isVisibleInMobile={market === Market.Se}>
               <UspItem>
                 <CheckmarkCircle size="1.5rem" />
                 <span>{textKeys.STARTPAGE_USP_1()}</span>
