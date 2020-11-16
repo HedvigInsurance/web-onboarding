@@ -13,6 +13,7 @@ import {
   SwedishHouseQuoteDetails,
   DanishHomeContentsDetails,
   DanishHomeContentsType,
+  QuoteBundleQuery,
 } from 'data/graphql'
 import { OfferQuote } from 'pages/OfferNew/types'
 import {
@@ -509,12 +510,13 @@ export const getInitialSwedishHouseValues = (
       })),
   },
 })
-type NorwegianHomeContentsDetailsAlias = NorwegianHomeContentsDetails & {
-  norwegianHomeType: NorwegianHomeContentsType
-}
+type QueryQuoteDetails = QuoteBundleQuery['quoteBundle']['quotes'][0]['quoteDetails']
+
 export const getInitialNorwegianHomeContentValues = (
   quoteId: string,
-  quoteDetails: NorwegianHomeContentsDetailsAlias,
+  quoteDetails: {
+    __typename: 'NorwegianHomeContentsDetails'
+  } & QueryQuoteDetails,
 ): EditQuoteInput => ({
   id: quoteId,
   norwegianHomeContents: {
@@ -527,13 +529,11 @@ export const getInitialNorwegianHomeContentValues = (
   },
 })
 
-type DanishHomeContentsDetailsAlias = DanishHomeContentsDetails & {
-  danishHomeType: DanishHomeContentsType
-}
-
 export const getInitialDanishHomeContentValues = (
   quoteId: string,
-  quoteDetails: DanishHomeContentsDetailsAlias,
+  quoteDetails: {
+    __typename: 'DanishHomeContentsDetails'
+  } & QueryQuoteDetails,
 ): EditQuoteInput => {
   return {
     id: quoteId,
@@ -582,7 +582,9 @@ export const getInitialInputValues = (offerQuote: OfferQuote) =>
       () =>
         getInitialNorwegianHomeContentValues(
           offerQuote.id,
-          offerQuote.quoteDetails as NorwegianHomeContentsDetailsAlias,
+          (offerQuote.quoteDetails as QueryQuoteDetails) as QueryQuoteDetails & {
+            __typename: 'NorwegianHomeContentsDetails'
+          },
         ),
     ],
     [
@@ -598,7 +600,9 @@ export const getInitialInputValues = (offerQuote: OfferQuote) =>
       () =>
         getInitialDanishHomeContentValues(
           offerQuote.id,
-          offerQuote.quoteDetails as DanishHomeContentsDetailsAlias,
+          (offerQuote.quoteDetails as QueryQuoteDetails) as {
+            __typename: 'DanishHomeContentsDetails'
+          } & QueryQuoteDetails,
         ),
     ],
   ])(offerQuote.quoteDetails.__typename as string) ??
