@@ -10,15 +10,14 @@ import { EditQuoteInput } from 'data/graphql'
 import { TextKeyMap } from 'src/client/utils/textKeys'
 import { isApartmentFieldSchema, isHouseFieldSchema } from '../utils'
 import { ApartmentFieldSchema, HouseFieldSchema } from '../types'
-import { DetailInput } from './components'
-import { SupportSection } from './components'
-
+import { DetailInput } from './components/DetailInput'
+import { SupportSection } from './components/SupportSection'
 import {
   Content,
   ContentColumnTitleButton,
   ContentColumnTitle,
   ContentColumn,
-} from './components'
+} from './components/Details.styles'
 import { DetailsProps } from './types'
 
 export const SwedishDetails = ({

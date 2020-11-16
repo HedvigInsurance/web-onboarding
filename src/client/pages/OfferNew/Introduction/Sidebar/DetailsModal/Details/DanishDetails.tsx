@@ -1,9 +1,9 @@
 import React from 'react'
 import { InputGroup } from 'components/inputs'
 import { isDanishHomeContentFieldSchema } from '../utils'
-import { DetailInput } from './components'
-import { SupportSection } from './components'
-import { Content, ContentColumn } from './components'
+import { DetailInput } from './components/DetailInput'
+import { SupportSection } from './components/SupportSection'
+import { Content, ContentColumn } from './components/Details.styles'
 import { DetailsProps } from './types'
 
 export const DanishDetails = ({
