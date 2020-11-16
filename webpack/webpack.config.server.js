@@ -35,6 +35,7 @@ module.exports = webpackConfig({
     __dirname: true,
   },
   mode: process.env.NODE_ENV || 'development',
+  bail: process.env.NODE_ENV !== 'development',
   context: root,
   output: {
     filename: '[name].js',
