@@ -18,10 +18,13 @@ import {
 import { OfferQuote } from 'pages/OfferNew/types'
 import {
   isStudent,
+  isSwedishQuote,
   isSwedishApartment,
   isSwedishHouse,
+  isNorwegianQuote,
   isNorwegianHomeContents,
   isNorwegianTravel,
+  isDanishQuote,
   isDanishHomeContents,
 } from '../../../utils'
 import {
@@ -77,6 +80,7 @@ export const isHouseFieldSchema = (
 ): fieldSchema is HouseFieldSchema => {
   return 'house' in fieldSchema && isSwedishHouse(quote.quoteDetails)
 }
+
 const getSwedishSchema = (base: any, offerQuote: OfferQuote) => {
   const swedishBase = {
     ...base,
@@ -215,6 +219,7 @@ const getSwedishSchema = (base: any, offerQuote: OfferQuote) => {
         },
       }
 }
+
 const getNorwegianSchema = (base: any, offerQuote: OfferQuote) => {
   const commonAttributes = {
     coInsured: {
@@ -320,18 +325,17 @@ export const getFieldSchema = (offerQuote: OfferQuote): FieldSchema => {
     zipCode: {
       label: 'DETAILS_MODULE_TABLE_POSTALCODE_CELL_LABEL',
       placeholder: 'DETAILS_MODULE_TABLE_POSTALCODE_CELL_LABEL',
-      mask: offerQuote.quoteDetails.__typename?.includes('Swedish')
-        ? masks.zipCode
-        : masks.zipCodeNoDk,
+      mask: isSwedishQuote(offerQuote) ? masks.zipCode : masks.zipCodeNoDk,
       type: inputTypes.string,
-      validation: offerQuote.quoteDetails.__typename?.includes('Swedish')
+      validation: isSwedishQuote(offerQuote)
         ? Yup.string().matches(/^[0-9]{3}[0-9]{2}$/)
         : Yup.string().matches(/^[0-9]{4}$/),
     },
   }
-  if (offerQuote.quoteDetails.__typename?.includes('Norwegian')) {
+  if (isNorwegianQuote(offerQuote)) {
     return getNorwegianSchema(base, offerQuote)
-  } else if (offerQuote.quoteDetails.__typename?.includes('Danish')) {
+  }
+  if (isDanishQuote(offerQuote)) {
     return getDanishSchema(base)
   }
 
@@ -339,7 +343,7 @@ export const getFieldSchema = (offerQuote: OfferQuote): FieldSchema => {
 }
 
 const getMarketFields = (fieldSchema: FieldSchema, offerQuote: OfferQuote) => {
-  if (offerQuote.quoteDetails.__typename?.includes('Norwegian')) {
+  if (isNorwegianQuote(offerQuote)) {
     const isNorwegianHomeContent = isNorwegianHomeContentFieldSchema(
       fieldSchema,
       offerQuote,
@@ -351,7 +355,7 @@ const getMarketFields = (fieldSchema: FieldSchema, offerQuote: OfferQuote) => {
       key: isNorwegianHomeContent ? 'norwegianHomeContents' : 'norwegianTravel',
     }
   }
-  if (offerQuote.quoteDetails.__typename?.includes('Danish')) {
+  if (isDanishQuote(offerQuote)) {
     return {
       fields: (fieldSchema as DanishHomeContentFieldSchema).danishHomeContents,
       key: 'danishHomeContents',
@@ -510,6 +514,7 @@ export const getInitialSwedishHouseValues = (
       })),
   },
 })
+
 type QueryQuoteDetails = QuoteBundleQuery['quoteBundle']['quotes'][0]['quoteDetails']
 
 export const getInitialNorwegianHomeContentValues = (

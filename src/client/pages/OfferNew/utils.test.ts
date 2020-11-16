@@ -1,10 +1,11 @@
 import { noCombo, noComboYouth } from 'utils/testData/offerDataMock'
-import { isBundle, isNorwegian, isSwedish, isYouth } from './utils'
+import { isBundle, isNorwegian, isSwedish, isDanish, isYouth } from './utils'
 
 describe('quote validation', () => {
   it('validates if quote is norwegian', () => {
     expect(isNorwegian(noComboYouth)).toBe(true)
     expect(isSwedish(noComboYouth)).toBe(false)
+    expect(isDanish(noComboYouth)).toBe(false)
   })
 
   it('validates if quote is combo', () => {
