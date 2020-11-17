@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 
 export const Content = styled.div`
   width: calc(100% + 2rem);
@@ -31,7 +31,7 @@ export const ContentColumn = styled.div`
 
 export const ContentColumnTitle = styled.div`
   font-size: 1rem;
-  color: ${colorsV2.gray};
+  color: ${colorsV3.gray500};
   margin-bottom: 1rem;
   padding-left: 0.5rem;
   display: flex;
@@ -48,9 +48,9 @@ export const ContentColumnTitle = styled.div`
 export const ContentColumnTitleButton = styled.button`
   padding: 0.375rem 1rem;
   font-size: 0.875rem;
-  color: ${colorsV2.gray};
+  color: ${colorsV3.gray500};
   border-radius: 24px;
-  border: 1px solid ${colorsV2.gray};
+  border: 1px solid ${colorsV3.gray500};
   cursor: pointer;
   transition: all 250ms;
   background: none;
@@ -60,7 +60,7 @@ export const ContentColumnTitleButton = styled.button`
   }
 
   :hover {
-    color: ${colorsV2.darkgray};
-    border-color: ${colorsV2.darkgray};
+    color: ${colorsV3.gray900};
+    border-color: ${colorsV3.gray900};
   }
 `
