@@ -6,17 +6,10 @@ const root = path.resolve(__dirname, '..')
 
 module.exports = webpackConfig({
   entry: {
-    app: [
-      'webpack-dev-server/client?http://0.0.0.0:8040/',
-      'webpack/hot/dev-server',
-      path.resolve(root, 'src/client/clientEntry.tsx'),
-    ],
+    app: [path.resolve(root, 'src/client/clientEntry.tsx')],
   },
-  target: 'web',
+  target: ['web', 'es5'],
   mode: 'development',
-  optimization: {
-    namedModules: true,
-  },
   devServer: {
     compress: true,
     hot: true,
@@ -28,6 +21,7 @@ module.exports = webpackConfig({
       'Access-Control-Allow-Origin': '*',
     },
     transportMode: 'ws',
+    publicPath: '/new-member-assets/',
   },
   devtool: 'eval-source-map',
   output: {
@@ -40,6 +34,9 @@ module.exports = webpackConfig({
       'process.env': {
         NODE_ENV: JSON.stringify('development'),
       },
+    }),
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
     }),
   ],
   context: root,
