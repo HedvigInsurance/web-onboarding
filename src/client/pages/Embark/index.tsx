@@ -7,7 +7,7 @@ import {
   useEmbark,
 } from '@hedviginsurance/embark'
 import { AnimatePresence, motion } from 'framer-motion'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useHistory } from 'react-router'
 
 import { colorsV3 } from '@hedviginsurance/brand'
@@ -259,6 +259,20 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
       setInitialStore({})
     }
   }, [props.name])
+
+  const isDenmarkInProduction =
+    (currentLocale === 'dk' || currentLocale === 'dk-en') &&
+    window.hedvigClientConfig.appEnvironment === 'production'
+
+  useEffect(() => {
+    if (isDenmarkInProduction) {
+      window.location.pathname = `/${currentLocale}`
+    }
+  }, [isDenmarkInProduction])
+
+  if (isDenmarkInProduction) {
+    return null
+  }
 
   return (
     <EmbarkStyling>

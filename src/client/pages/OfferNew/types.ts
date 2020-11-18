@@ -56,6 +56,7 @@ export interface OfferData {
   person: OfferPersonInfo
   quotes: ReadonlyArray<OfferQuote>
   cost: InsuranceCost
+  memberId?: string
 }
 
 export interface WithEmailForm {

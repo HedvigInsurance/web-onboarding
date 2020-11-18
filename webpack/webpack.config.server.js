@@ -1,5 +1,5 @@
-const webpack = require('webpack')
 const path = require('path')
+const webpack = require('webpack')
 const { StatsWriterPlugin } = require('webpack-stats-plugin')
 const webpackConfig = require('./webpack.config.base')
 
@@ -21,12 +21,6 @@ const whiteListedEnvVars = [
   'SENTRY_ENVIRONMENT',
   'HEROKU_SLUG_COMMIT',
   'HEROKU_DYNO_ID',
-  'FIREBASE_LINK_DOMAIN',
-  'ANDROID_PACKAGE_NAME',
-  'ANDROID_MINIMUM_VERSION',
-  'APPLE_BUNDLE_ID',
-  'APP_STORE_ID',
-  'IOS_MINIMUM_VERSION',
   'ADYEN_ORIGIN_KEY',
   'ADYEN_ENVIRONMENT',
   'NODE_ENV',
@@ -41,6 +35,7 @@ module.exports = webpackConfig({
     __dirname: true,
   },
   mode: process.env.NODE_ENV || 'development',
+  bail: process.env.NODE_ENV !== 'development',
   context: root,
   output: {
     filename: '[name].js',

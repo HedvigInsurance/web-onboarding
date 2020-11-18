@@ -63,6 +63,7 @@ const defaultSrc = [
   'checkoutshopper-test.adyen.com',
   'aff.addreax.com',
   'js.go2sdk.com',
+  'secure.adnxs.com',
   GIRAFFE_WS_ENDPOINT!,
   CONTENT_SERVICE_ENDPOINT!,
 ]

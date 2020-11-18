@@ -21,7 +21,7 @@ export const apolloClient = (() => {
     throw new Error("typeof WebSocket is undefined, can't connect to remote")
   }
   const subscriptionClient = new SubscriptionClient(
-    (window as any).GIRAFFE_WS_ENDPOINT,
+    window.hedvigClientConfig.giraffeWsEndpoint,
     {
       reconnect: true,
       connectionParams: () => ({
