@@ -44,4 +44,4 @@ export const useScrollLock = (
       window.removeEventListener('wheel', listener)
       window.removeEventListener('touchmove', listener)
     }
-  }, [visibilityState])
+  }, [outerWrapperRef, visibilityState])

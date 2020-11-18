@@ -1,7 +1,7 @@
+import React, { useEffect, useMemo, useState } from 'react'
 import { css, keyframes } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import React, { useEffect, useState } from 'react'
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom'
 import { stripTrailingCharacter } from 'utils/misc'
 import { useTextKeys } from 'utils/textKeys'
@@ -124,63 +124,61 @@ interface IntroProps extends RouteComponentProps {
   referrerName: string
 }
 
-export const IntroStoriesComponent: React.FC<IntroProps> = ({
+const getNextPageNumber = (page: number, pages: JSX.Element[]) => {
+  if (page === pages.length) {
+    return page
+  }
+  return page + 1
+}
+
+const IntroStoriesComponent: React.FC<IntroProps> = ({
   onFinished,
   history,
   referrerName,
 }) => {
   const textKeys = useTextKeys()
   const [page, setPage] = useState(0)
-  const [autoPaginationTimeout, setAutoPaginationTimeout] = useState<
-    number | null
-  >(null)
 
-  const pages = [
-    <Page key={0} visible={page === 0}>
-      <TextContent>
-        {textKeys.FOREVER_INTRO_PAGE_1({
-          REFERRER: stripTrailingCharacter('s', referrerName),
-        })}
-      </TextContent>
-    </Page>,
-    <Page key={1} visible={page === 1}>
-      <TextContent>{textKeys.FOREVER_INTRO_PAGE_2()}</TextContent>
-    </Page>,
-    <Page key={2} visible={page === 2}>
-      <TextContent>{textKeys.FOREVER_INTRO_PAGE_3()}</TextContent>
-    </Page>,
-    <Page key={3} visible={page === 3}>
-      <TextContent>{textKeys.FOREVER_INTRO_PAGE_4()}</TextContent>
-    </Page>,
-  ]
+  const pages = useMemo(
+    () => [
+      <Page key={0} visible={page === 0}>
+        <TextContent>
+          {textKeys.FOREVER_INTRO_PAGE_1({
+            REFERRER: stripTrailingCharacter('s', referrerName),
+          })}
+        </TextContent>
+      </Page>,
+      <Page key={1} visible={page === 1}>
+        <TextContent>{textKeys.FOREVER_INTRO_PAGE_2()}</TextContent>
+      </Page>,
+      <Page key={2} visible={page === 2}>
+        <TextContent>{textKeys.FOREVER_INTRO_PAGE_3()}</TextContent>
+      </Page>,
+      <Page key={3} visible={page === 3}>
+        <TextContent>{textKeys.FOREVER_INTRO_PAGE_4()}</TextContent>
+      </Page>,
+    ],
+    [page, referrerName, textKeys],
+  )
 
   useEffect(() => {
-    if (autoPaginationTimeout) {
-      window.clearTimeout(autoPaginationTimeout)
-    }
-
-    const timeout = window.setTimeout(() => {
-      incrementPage()
+    const autoPaginationTimeout = window.setTimeout(() => {
+      setPage(getNextPageNumber(page, pages))
     }, 4000)
-    setAutoPaginationTimeout(timeout)
 
     return () => {
-      if (autoPaginationTimeout) {
-        window.clearTimeout(autoPaginationTimeout)
-      }
+      window.clearTimeout(autoPaginationTimeout)
     }
-  }, [page])
+  }, [page, pages])
+
+  useEffect(() => {
+    if (page === pages.length && onFinished) {
+      onFinished()
+    }
+  }, [page, pages, onFinished])
 
   const decrementPage = () => {
     setPage(Math.max(page - 1, 0))
-  }
-
-  const incrementPage = () => {
-    if (page === pages.length - 1 && onFinished) {
-      onFinished()
-    } else {
-      setPage(page + 1)
-    }
   }
 
   return (
@@ -218,7 +216,7 @@ export const IntroStoriesComponent: React.FC<IntroProps> = ({
         offset="30%"
         onClick={(e) => {
           e.preventDefault()
-          incrementPage()
+          setPage(getNextPageNumber(page, pages))
         }}
       />
       <SkipButton to={history.location.pathname + '/ready'}>

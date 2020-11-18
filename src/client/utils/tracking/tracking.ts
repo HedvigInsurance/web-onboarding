@@ -138,11 +138,12 @@ interface TrackProps {
 }
 export const useTrack = ({ offerData, signState }: TrackProps) => {
   const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
-  const redeemedCampaigns = redeemedCampaignsData?.redeemedCampaigns ?? []
   const { data: memberData } = useMemberQuery()
   const memberId = memberData?.member.id
 
   React.useEffect(() => {
+    const redeemedCampaigns = redeemedCampaignsData?.redeemedCampaigns ?? []
+
     if (process.env.NODE_ENV === 'test') {
       return
     }
@@ -181,5 +182,5 @@ export const useTrack = ({ offerData, signState }: TrackProps) => {
     ) {
       trackStudentkortet(memberId)
     }
-  }, [signState])
+  }, [redeemedCampaignsData, memberId, offerData, signState])
 }
