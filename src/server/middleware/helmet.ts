@@ -117,6 +117,7 @@ export const helmet = koaHelmet({
         'gifs.intercomcdn.com',
         'cnv.adt686.net',
         'cnv.adt387.com',
+        'px.ads.linkedin.com',
       ],
       reportUri:
         process.env.CSP_REPORT_ENDPOINT || '/new-member/_report-csp-violation',
