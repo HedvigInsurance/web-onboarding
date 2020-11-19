@@ -7,7 +7,7 @@ import {
 } from 'components/inputs'
 import { ExtraBuildingInput, ExtraBuildingType } from 'data/graphql'
 import { EditQuoteInput } from 'data/graphql'
-import { TextKeyMap } from 'src/client/utils/textKeys'
+import { useTextKeys } from 'utils/textKeys'
 import { isApartmentFieldSchema, isHouseFieldSchema } from '../utils'
 import { ApartmentFieldSchema, HouseFieldSchema } from '../types'
 import { DetailInput } from './components/DetailInput'
@@ -24,7 +24,6 @@ export const SwedishDetails: React.FC<DetailsProps> = ({
   fieldSchema,
   formikProps,
   offerQuote,
-  textKeys,
 }) => (
   <>
     {isApartmentFieldSchema(fieldSchema, offerQuote) && (
@@ -32,11 +31,7 @@ export const SwedishDetails: React.FC<DetailsProps> = ({
     )}
 
     {isHouseFieldSchema(fieldSchema, offerQuote) && (
-      <HouseDetails
-        fieldSchema={fieldSchema}
-        formikProps={formikProps}
-        textKeys={textKeys}
-      />
+      <HouseDetails fieldSchema={fieldSchema} formikProps={formikProps} />
     )}
   </>
 )
@@ -97,147 +92,145 @@ const ApartmentDetails: React.FC<ApartmentDetails> = ({
 type HouseDetails = {
   formikProps: FormikProps<EditQuoteInput>
   fieldSchema: HouseFieldSchema
-  textKeys: TextKeyMap
 }
-const HouseDetails: React.FC<HouseDetails> = ({
-  fieldSchema,
-  formikProps,
-  textKeys,
-}) => (
-  <Content>
-    <ContentColumn>
-      <ContentColumnTitle>
-        {textKeys.DETAILS_MODULE_TABLE_TITLE()}
-      </ContentColumnTitle>
-      <InputGroup>
-        <DetailInput
-          field={fieldSchema.house.street}
-          formikProps={formikProps}
-          nameRoot="house"
-          name="street"
-        />
-        <DetailInput
-          field={fieldSchema.house.zipCode}
-          formikProps={formikProps}
-          nameRoot="house"
-          name="zipCode"
-        />
-        <InputGroupRow>
+const HouseDetails: React.FC<HouseDetails> = ({ fieldSchema, formikProps }) => {
+  const textKeys = useTextKeys()
+  return (
+    <Content>
+      <ContentColumn>
+        <ContentColumnTitle>
+          {textKeys.DETAILS_MODULE_TABLE_TITLE()}
+        </ContentColumnTitle>
+        <InputGroup>
           <DetailInput
-            field={fieldSchema.house.livingSpace}
+            field={fieldSchema.house.street}
             formikProps={formikProps}
             nameRoot="house"
-            name="livingSpace"
+            name="street"
           />
           <DetailInput
-            field={fieldSchema.house.ancillarySpace}
+            field={fieldSchema.house.zipCode}
             formikProps={formikProps}
             nameRoot="house"
-            name="ancillarySpace"
+            name="zipCode"
           />
-        </InputGroupRow>
+          <InputGroupRow>
+            <DetailInput
+              field={fieldSchema.house.livingSpace}
+              formikProps={formikProps}
+              nameRoot="house"
+              name="livingSpace"
+            />
+            <DetailInput
+              field={fieldSchema.house.ancillarySpace}
+              formikProps={formikProps}
+              nameRoot="house"
+              name="ancillarySpace"
+            />
+          </InputGroupRow>
 
-        <InputGroupRow>
+          <InputGroupRow>
+            <DetailInput
+              field={fieldSchema.house.numberOfBathrooms}
+              formikProps={formikProps}
+              nameRoot="house"
+              name="numberOfBathrooms"
+            />
+            <DetailInput
+              field={fieldSchema.house.yearOfConstruction}
+              formikProps={formikProps}
+              nameRoot="house"
+              name="yearOfConstruction"
+            />
+          </InputGroupRow>
+
           <DetailInput
-            field={fieldSchema.house.numberOfBathrooms}
+            field={fieldSchema.house.householdSize}
             formikProps={formikProps}
             nameRoot="house"
-            name="numberOfBathrooms"
+            name="householdSize"
           />
           <DetailInput
-            field={fieldSchema.house.yearOfConstruction}
+            field={fieldSchema.house.isSubleted}
             formikProps={formikProps}
             nameRoot="house"
-            name="yearOfConstruction"
+            name="isSubleted"
           />
-        </InputGroupRow>
-
-        <DetailInput
-          field={fieldSchema.house.householdSize}
-          formikProps={formikProps}
-          nameRoot="house"
-          name="householdSize"
-        />
-        <DetailInput
-          field={fieldSchema.house.isSubleted}
-          formikProps={formikProps}
-          nameRoot="house"
-          name="isSubleted"
-        />
-      </InputGroup>
-      <SupportSection onButtonClick={() => Intercom('show')} />
-    </ContentColumn>
-    <ContentColumn>
-      <FieldArray
-        name="house.extraBuildings"
-        render={(arrayHelpers) => (
-          <>
-            <ContentColumnTitle>
-              {textKeys.DETAILS_MODULE_EXTRABUILDINGS_TABLE_TITLE()}
-              <ContentColumnTitleButton
-                type="button"
-                onClick={() => {
-                  const defaultExtraBuilding: ExtraBuildingInput = {
-                    type: ExtraBuildingType.Garage,
-                    area: 10,
-                    hasWaterConnected: false,
-                  }
-                  arrayHelpers.insert(0, defaultExtraBuilding)
-                }}
-              >
-                {textKeys.DETAILS_MODULE_EXTRABUILDINGS_TABLE_BUTTON()}
-              </ContentColumnTitleButton>
-            </ContentColumnTitle>
-
-            {formikProps.values.house?.extraBuildings?.map((_, index) => (
-              <InputGroup key={index}>
-                <DetailInput
-                  field={fieldSchema.house.extraBuildings.type}
-                  formikProps={formikProps}
-                  nameRoot="house"
-                  name={`extraBuildings.${index}.type`}
-                />
-
-                <DetailInput
-                  field={fieldSchema.house.extraBuildings.area}
-                  formikProps={formikProps}
-                  nameRoot="house"
-                  name={`extraBuildings.${index}.area`}
-                />
-
-                <DetailInput
-                  field={fieldSchema.house.extraBuildings.hasWaterConnected}
-                  formikProps={formikProps}
-                  nameRoot="house"
-                  name={`extraBuildings.${index}.hasWaterConnected`}
-                />
-
-                <InputGroupDeleteButton
+        </InputGroup>
+        <SupportSection onButtonClick={() => Intercom('show')} />
+      </ContentColumn>
+      <ContentColumn>
+        <FieldArray
+          name="house.extraBuildings"
+          render={(arrayHelpers) => (
+            <>
+              <ContentColumnTitle>
+                {textKeys.DETAILS_MODULE_EXTRABUILDINGS_TABLE_TITLE()}
+                <ContentColumnTitleButton
                   type="button"
                   onClick={() => {
-                    const isLastItemLeft =
-                      formikProps.values.house?.extraBuildings?.length === 1
-
-                    arrayHelpers.remove(index)
-
-                    if (isLastItemLeft) {
-                      formikProps.setValues({
-                        ...formikProps.values,
-                        house: {
-                          ...formikProps.values.house,
-                          extraBuildings: [],
-                        },
-                      })
+                    const defaultExtraBuilding: ExtraBuildingInput = {
+                      type: ExtraBuildingType.Garage,
+                      area: 10,
+                      hasWaterConnected: false,
                     }
+                    arrayHelpers.insert(0, defaultExtraBuilding)
                   }}
                 >
-                  {textKeys.DETAILS_MODULE_EXTRABUILDINGS_TABLE_REMOVE_BUILDING_BUTTON()}
-                </InputGroupDeleteButton>
-              </InputGroup>
-            ))}
-          </>
-        )}
-      />
-    </ContentColumn>
-  </Content>
-)
+                  {textKeys.DETAILS_MODULE_EXTRABUILDINGS_TABLE_BUTTON()}
+                </ContentColumnTitleButton>
+              </ContentColumnTitle>
+
+              {formikProps.values.house?.extraBuildings?.map((_, index) => (
+                <InputGroup key={index}>
+                  <DetailInput
+                    field={fieldSchema.house.extraBuildings.type}
+                    formikProps={formikProps}
+                    nameRoot="house"
+                    name={`extraBuildings.${index}.type`}
+                  />
+
+                  <DetailInput
+                    field={fieldSchema.house.extraBuildings.area}
+                    formikProps={formikProps}
+                    nameRoot="house"
+                    name={`extraBuildings.${index}.area`}
+                  />
+
+                  <DetailInput
+                    field={fieldSchema.house.extraBuildings.hasWaterConnected}
+                    formikProps={formikProps}
+                    nameRoot="house"
+                    name={`extraBuildings.${index}.hasWaterConnected`}
+                  />
+
+                  <InputGroupDeleteButton
+                    type="button"
+                    onClick={() => {
+                      const isLastItemLeft =
+                        formikProps.values.house?.extraBuildings?.length === 1
+
+                      arrayHelpers.remove(index)
+
+                      if (isLastItemLeft) {
+                        formikProps.setValues({
+                          ...formikProps.values,
+                          house: {
+                            ...formikProps.values.house,
+                            extraBuildings: [],
+                          },
+                        })
+                      }
+                    }}
+                  >
+                    {textKeys.DETAILS_MODULE_EXTRABUILDINGS_TABLE_REMOVE_BUILDING_BUTTON()}
+                  </InputGroupDeleteButton>
+                </InputGroup>
+              ))}
+            </>
+          )}
+        />
+      </ContentColumn>
+    </Content>
+  )
+}

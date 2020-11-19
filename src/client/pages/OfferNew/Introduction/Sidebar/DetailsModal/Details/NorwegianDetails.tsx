@@ -2,7 +2,7 @@ import React from 'react'
 import { FormikProps } from 'formik'
 import { InputGroup } from 'components/inputs'
 import { EditQuoteInput } from 'data/graphql'
-import { TextKeyMap } from 'src/client/utils/textKeys'
+import { useTextKeys } from 'utils/textKeys'
 import {
   isNorwegianHomeContentFieldSchema,
   isNorwegianTravelFieldSchema,
@@ -24,7 +24,6 @@ export const NorwegianDetails: React.FC<DetailsProps> = ({
   fieldSchema,
   formikProps,
   offerQuote,
-  textKeys,
 }) => (
   <>
     {isNorwegianHomeContentFieldSchema(fieldSchema, offerQuote) && (
@@ -35,11 +34,7 @@ export const NorwegianDetails: React.FC<DetailsProps> = ({
     )}
 
     {isNorwegianTravelFieldSchema(fieldSchema, offerQuote) && (
-      <TravelDetails
-        fieldSchema={fieldSchema}
-        formikProps={formikProps}
-        textKeys={textKeys}
-      />
+      <TravelDetails fieldSchema={fieldSchema} formikProps={formikProps} />
     )}
   </>
 )
@@ -103,33 +98,34 @@ const NorwegianHomeContentDetails: React.FC<NorwegianHomeContentDetails> = ({
 type TravelDetails = {
   formikProps: FormikProps<EditQuoteInput>
   fieldSchema: NorwegianTravelContentFieldSchema
-  textKeys: TextKeyMap
 }
 const TravelDetails: React.FC<TravelDetails> = ({
   fieldSchema,
   formikProps,
-  textKeys,
-}) => (
-  <Content>
-    <ContentColumn>
-      <ContentColumnTitle>
-        {textKeys.DETAILS_MODULE_TABLE_TITLE()}
-      </ContentColumnTitle>
-      <InputGroup>
-        <DetailInput
-          field={fieldSchema.norwegianTravel.coInsured}
-          formikProps={formikProps}
-          nameRoot="norwegianTravel"
-          name="coInsured"
-        />
-        <DetailInput
-          field={fieldSchema.norwegianTravel.isYouth}
-          formikProps={formikProps}
-          nameRoot="norwegianTravel"
-          name="isYouth"
-        />
-      </InputGroup>
-      <SupportSection onButtonClick={() => Intercom('show')} />
-    </ContentColumn>
-  </Content>
-)
+}) => {
+  const textKeys = useTextKeys()
+  return (
+    <Content>
+      <ContentColumn>
+        <ContentColumnTitle>
+          {textKeys.DETAILS_MODULE_TABLE_TITLE()}
+        </ContentColumnTitle>
+        <InputGroup>
+          <DetailInput
+            field={fieldSchema.norwegianTravel.coInsured}
+            formikProps={formikProps}
+            nameRoot="norwegianTravel"
+            name="coInsured"
+          />
+          <DetailInput
+            field={fieldSchema.norwegianTravel.isYouth}
+            formikProps={formikProps}
+            nameRoot="norwegianTravel"
+            name="isYouth"
+          />
+        </InputGroup>
+        <SupportSection onButtonClick={() => Intercom('show')} />
+      </ContentColumn>
+    </Content>
+  )
+}
