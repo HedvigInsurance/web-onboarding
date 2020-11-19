@@ -88,8 +88,6 @@ export const OfferNew: React.FC = () => {
     )
   }
 
-  // TODO: Add error component to render if there's no offerData
-
   return (
     <Page>
       <SessionTokenGuard>
