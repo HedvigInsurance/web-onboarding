@@ -64,6 +64,7 @@ const defaultSrc = [
   'aff.addreax.com',
   'js.go2sdk.com',
   'secure.adnxs.com',
+  'snap.licdn.com',
   GIRAFFE_WS_ENDPOINT!,
   CONTENT_SERVICE_ENDPOINT!,
 ]
