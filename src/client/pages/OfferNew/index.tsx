@@ -2,6 +2,7 @@ import { History } from 'history'
 import { SemanticEvents } from 'quepasa'
 import React from 'react'
 import { Redirect, useHistory, useRouteMatch } from 'react-router'
+import { useMediaQuery } from 'react-responsive'
 import { LoadingPage } from 'components/LoadingPage'
 import { TopBar } from 'components/TopBar'
 import {
@@ -61,6 +62,7 @@ export const OfferNew: React.FC = () => {
     '/:locale(se-en|se|no-en|no|dk-en|dk)/new-member/sign',
   )
   const toggleCheckout = createToggleCheckout(history, currentLocale)
+  const isMobile = useMediaQuery({ maxWidth: 640 })
 
   if (quoteIds.length === 0) {
     return <Redirect to={`/${currentLocale}/new-member`} />
@@ -74,6 +76,13 @@ export const OfferNew: React.FC = () => {
 
   if (loadingQuoteBundle && !data?.quoteBundle) {
     return <LoadingPage />
+  }
+
+  const handleCheckoutToggle = (open: boolean) => {
+    toggleCheckout(open)
+    if (isMobile) {
+      Intercom('update', { hide_default_launcher: open })
+    }
   }
 
   const offerData = data?.quoteBundle
@@ -110,7 +119,7 @@ export const OfferNew: React.FC = () => {
                   offerData={offerData}
                   refetch={refetch as () => Promise<any>}
                   onCheckoutOpen={() => {
-                    toggleCheckout(true)
+                    handleCheckoutToggle(true)
                     track()
                   }}
                 />
@@ -122,7 +131,9 @@ export const OfferNew: React.FC = () => {
             <Checkout
               offerData={offerData}
               isOpen={checkoutMatch !== null}
-              onClose={() => toggleCheckout(false)}
+              onClose={() => {
+                handleCheckoutToggle(false)
+              }}
               refetch={refetch as () => Promise<any>}
             />
           </>
