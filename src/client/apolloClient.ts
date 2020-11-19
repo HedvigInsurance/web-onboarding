@@ -1,8 +1,10 @@
-import { ApolloClient, InMemoryCache } from '@apollo/client'
+import { ApolloClient, from, InMemoryCache } from '@apollo/client'
 import { WebSocketLink } from '@apollo/link-ws'
 import { CookieStorage } from 'cookie-storage'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
+import { onError } from '@apollo/client/link/error'
 import { Quote } from 'data/graphql'
+import { captureSentryError } from 'utils/sentry-client'
 import { createSession, Session } from '../shared/sessionStorage'
 import possibleTypes from '../../possibleGraphqlTypes.json'
 
@@ -30,6 +32,16 @@ export const apolloClient = (() => {
       }),
     },
   )
+  const errorHandler = onError((err) => {
+    if (err.graphQLErrors) {
+      err.graphQLErrors.forEach((graphqlError) =>
+        captureSentryError(graphqlError),
+      )
+    }
+    if (err.networkError) {
+      captureSentryError(err.networkError)
+    }
+  })
   const client = new ApolloClient({
     cache: new InMemoryCache({
       possibleTypes,
@@ -46,7 +58,7 @@ export const apolloClient = (() => {
         },
       },
     }),
-    link: new WebSocketLink(subscriptionClient),
+    link: from([errorHandler, new WebSocketLink(subscriptionClient)]),
   })
 
   return { subscriptionClient, client }

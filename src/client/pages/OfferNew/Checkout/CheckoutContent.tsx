@@ -5,6 +5,7 @@ import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { useEditQuoteMutation, useRedeemedCampaignsQuery } from 'data/graphql'
 import { Price } from 'pages/OfferNew/components'
 import { useTextKeys } from 'utils/textKeys'
+import { useUnderwritingLimitsHitReporter } from 'utils/sentry-client'
 import { StartDate } from '../Introduction/Sidebar/StartDate'
 import { OfferData } from '../types'
 import {
@@ -77,8 +78,14 @@ export const CheckoutContent: React.FC<Props> = ({
   )
   const [fakeLoading, setFakeLoading] = React.useState(false)
   const [reallyLoading, setReallyLoading] = React.useState(false)
-  const [editQuote] = useEditQuoteMutation()
+  const [editQuote, editQuoteResult] = useEditQuoteMutation()
   const quoteIds = getQuoteIds(offerData)
+
+  useUnderwritingLimitsHitReporter(
+    editQuoteResult.data?.editQuote?.__typename === 'UnderwritingLimitsHit' &&
+      editQuoteResult.data.editQuote.limits.map((limit) => limit.description),
+    quoteIds,
+  )
 
   return (
     <>
