@@ -197,7 +197,7 @@ const Calendar: React.FC<DayzedCalendarProps> = ({
         dateLocale.localize?.day(0, { width: 'abbreviated' }),
       ])
     })
-  }, [])
+  }, [locale])
 
   const [bind, measured] = useMeasure<HTMLDivElement>()
   const [animationDirection, setAnimationDirection] = React.useState(
