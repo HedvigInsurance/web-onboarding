@@ -267,7 +267,7 @@ export const danishHomeContents: OfferData = {
     },
     monthlyNet: {
       amount: '149.00',
-      currency: 'DEK',
+      currency: 'DKK',
       __typename: 'MonetaryAmountV2',
     },
     __typename: 'InsuranceCost',
