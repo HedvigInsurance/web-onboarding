@@ -26,11 +26,11 @@ import {
   isDanishHomeContents,
 } from '../../../utils'
 import {
-  ApartmentFieldSchema,
+  SwedishApartmentFieldSchema,
   ArrayFieldType,
   FieldSchema,
   FieldType,
-  HouseFieldSchema,
+  SwedishHouseFieldSchema,
   NorwegianHomeContentFieldSchema,
   NorwegianTravelContentFieldSchema,
   RegularFieldType,
@@ -65,18 +65,20 @@ export const isNorwegianTravelFieldSchema = (
   )
 }
 
-export const isApartmentFieldSchema = (
+export const isSwedishApartmentFieldSchema = (
   fieldSchema: FieldSchema,
   quote: OfferQuote,
-): fieldSchema is ApartmentFieldSchema => {
-  return 'apartment' in fieldSchema && isSwedishApartment(quote.quoteDetails)
+): fieldSchema is SwedishApartmentFieldSchema => {
+  return (
+    'swedishApartment' in fieldSchema && isSwedishApartment(quote.quoteDetails)
+  )
 }
 
-export const isHouseFieldSchema = (
+export const isSwedishHouseFieldSchema = (
   fieldSchema: FieldSchema,
   quote: OfferQuote,
-): fieldSchema is HouseFieldSchema => {
-  return 'house' in fieldSchema && isSwedishHouse(quote.quoteDetails)
+): fieldSchema is SwedishHouseFieldSchema => {
+  return 'swedishHouse' in fieldSchema && isSwedishHouse(quote.quoteDetails)
 }
 
 type BaseFieldSchema = {
@@ -109,7 +111,7 @@ const getSwedishSchema = (
   }
   return isSwedishApartment(offerQuote.quoteDetails)
     ? {
-        apartment: {
+        swedishApartment: {
           ...swedishBase,
           livingSpace: {
             label: 'DETAILS_MODULE_TABLE_SIZE_CELL_LABEL_APARTMENT',
@@ -152,7 +154,7 @@ const getSwedishSchema = (
         },
       }
     : {
-        house: {
+        swedishHouse: {
           ...swedishBase,
           livingSpace: {
             label: 'DETAILS_MODULE_TABLE_LIVINGSPACE_CELL_LABEL_HOUSE',
@@ -383,12 +385,15 @@ const getMarketFields = (fieldSchema: FieldSchema, offerQuote: OfferQuote) => {
     }
   }
 
-  const isAppartment = isApartmentFieldSchema(fieldSchema, offerQuote)
+  const isSwedishAppartment = isSwedishApartmentFieldSchema(
+    fieldSchema,
+    offerQuote,
+  )
   return {
-    fields: isAppartment
-      ? (fieldSchema as ApartmentFieldSchema).apartment
-      : (fieldSchema as HouseFieldSchema).house,
-    key: isAppartment ? 'apartment' : 'house',
+    fields: isSwedishAppartment
+      ? (fieldSchema as SwedishApartmentFieldSchema).swedishApartment
+      : (fieldSchema as SwedishHouseFieldSchema).swedishHouse,
+    key: isSwedishAppartment ? 'swedishApartment' : 'swedishHouse',
   }
 }
 
@@ -503,7 +508,7 @@ export const getInitialSwedishApartmentValues = (
   details: SwedishApartmentQuoteDetails,
 ): EditQuoteInput => ({
   id: quoteId,
-  apartment: {
+  swedishApartment: {
     street: details.street,
     zipCode: details.zipCode,
     householdSize: details.householdSize,
@@ -517,7 +522,7 @@ export const getInitialSwedishHouseValues = (
   details: SwedishHouseQuoteDetails,
 ): EditQuoteInput => ({
   id: quoteId,
-  house: {
+  swedishHouse: {
     street: details.street,
     zipCode: details.zipCode,
     householdSize: details.householdSize,

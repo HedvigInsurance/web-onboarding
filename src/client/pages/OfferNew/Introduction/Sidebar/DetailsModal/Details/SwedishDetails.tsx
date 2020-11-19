@@ -8,8 +8,11 @@ import {
 import { ExtraBuildingInput, ExtraBuildingType } from 'data/graphql'
 import { EditQuoteInput } from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
-import { isApartmentFieldSchema, isHouseFieldSchema } from '../utils'
-import { ApartmentFieldSchema, HouseFieldSchema } from '../types'
+import {
+  isSwedishApartmentFieldSchema,
+  isSwedishHouseFieldSchema,
+} from '../utils'
+import { SwedishApartmentFieldSchema, SwedishHouseFieldSchema } from '../types'
 import { DetailInput } from './components/DetailInput'
 import { SupportSection } from './components/SupportSection'
 import {
@@ -26,11 +29,11 @@ export const SwedishDetails: React.FC<DetailsProps> = ({
   offerQuote,
 }) => (
   <>
-    {isApartmentFieldSchema(fieldSchema, offerQuote) && (
+    {isSwedishApartmentFieldSchema(fieldSchema, offerQuote) && (
       <ApartmentDetails fieldSchema={fieldSchema} formikProps={formikProps} />
     )}
 
-    {isHouseFieldSchema(fieldSchema, offerQuote) && (
+    {isSwedishHouseFieldSchema(fieldSchema, offerQuote) && (
       <HouseDetails fieldSchema={fieldSchema} formikProps={formikProps} />
     )}
   </>
@@ -38,7 +41,7 @@ export const SwedishDetails: React.FC<DetailsProps> = ({
 
 type ApartmentDetails = {
   formikProps: FormikProps<EditQuoteInput>
-  fieldSchema: ApartmentFieldSchema
+  fieldSchema: SwedishApartmentFieldSchema
 }
 const ApartmentDetails: React.FC<ApartmentDetails> = ({
   formikProps,
@@ -48,37 +51,37 @@ const ApartmentDetails: React.FC<ApartmentDetails> = ({
     <ContentColumn>
       <InputGroup>
         <DetailInput
-          field={fieldSchema.apartment.street}
+          field={fieldSchema.swedishApartment.street}
           formikProps={formikProps}
-          nameRoot="apartment"
+          nameRoot="swedishApartment"
           name="street"
         />
 
         <DetailInput
-          field={fieldSchema.apartment.zipCode}
+          field={fieldSchema.swedishApartment.zipCode}
           formikProps={formikProps}
-          nameRoot="apartment"
+          nameRoot="swedishApartment"
           name="zipCode"
         />
 
         <DetailInput
-          field={fieldSchema.apartment.type}
+          field={fieldSchema.swedishApartment.type}
           formikProps={formikProps}
-          nameRoot="apartment"
+          nameRoot="swedishApartment"
           name="type"
         />
 
         <DetailInput
-          field={fieldSchema.apartment.livingSpace}
+          field={fieldSchema.swedishApartment.livingSpace}
           formikProps={formikProps}
-          nameRoot="apartment"
+          nameRoot="swedishApartment"
           name="livingSpace"
         />
 
         <DetailInput
-          field={fieldSchema.apartment.householdSize}
+          field={fieldSchema.swedishApartment.householdSize}
           formikProps={formikProps}
-          nameRoot="apartment"
+          nameRoot="swedishApartment"
           name="householdSize"
         />
       </InputGroup>
@@ -91,7 +94,7 @@ const ApartmentDetails: React.FC<ApartmentDetails> = ({
 
 type HouseDetails = {
   formikProps: FormikProps<EditQuoteInput>
-  fieldSchema: HouseFieldSchema
+  fieldSchema: SwedishHouseFieldSchema
 }
 const HouseDetails: React.FC<HouseDetails> = ({ fieldSchema, formikProps }) => {
   const textKeys = useTextKeys()
@@ -103,57 +106,57 @@ const HouseDetails: React.FC<HouseDetails> = ({ fieldSchema, formikProps }) => {
         </ContentColumnTitle>
         <InputGroup>
           <DetailInput
-            field={fieldSchema.house.street}
+            field={fieldSchema.swedishHouse.street}
             formikProps={formikProps}
-            nameRoot="house"
+            nameRoot="swedishHouse"
             name="street"
           />
           <DetailInput
-            field={fieldSchema.house.zipCode}
+            field={fieldSchema.swedishHouse.zipCode}
             formikProps={formikProps}
-            nameRoot="house"
+            nameRoot="swedishHouse"
             name="zipCode"
           />
           <InputGroupRow>
             <DetailInput
-              field={fieldSchema.house.livingSpace}
+              field={fieldSchema.swedishHouse.livingSpace}
               formikProps={formikProps}
-              nameRoot="house"
+              nameRoot="swedishHouse"
               name="livingSpace"
             />
             <DetailInput
-              field={fieldSchema.house.ancillarySpace}
+              field={fieldSchema.swedishHouse.ancillarySpace}
               formikProps={formikProps}
-              nameRoot="house"
+              nameRoot="swedishHouse"
               name="ancillarySpace"
             />
           </InputGroupRow>
 
           <InputGroupRow>
             <DetailInput
-              field={fieldSchema.house.numberOfBathrooms}
+              field={fieldSchema.swedishHouse.numberOfBathrooms}
               formikProps={formikProps}
-              nameRoot="house"
+              nameRoot="swedishHouse"
               name="numberOfBathrooms"
             />
             <DetailInput
-              field={fieldSchema.house.yearOfConstruction}
+              field={fieldSchema.swedishHouse.yearOfConstruction}
               formikProps={formikProps}
-              nameRoot="house"
+              nameRoot="swedishHouse"
               name="yearOfConstruction"
             />
           </InputGroupRow>
 
           <DetailInput
-            field={fieldSchema.house.householdSize}
+            field={fieldSchema.swedishHouse.householdSize}
             formikProps={formikProps}
-            nameRoot="house"
+            nameRoot="swedishHouse"
             name="householdSize"
           />
           <DetailInput
-            field={fieldSchema.house.isSubleted}
+            field={fieldSchema.swedishHouse.isSubleted}
             formikProps={formikProps}
-            nameRoot="house"
+            nameRoot="swedishHouse"
             name="isSubleted"
           />
         </InputGroup>
@@ -161,7 +164,7 @@ const HouseDetails: React.FC<HouseDetails> = ({ fieldSchema, formikProps }) => {
       </ContentColumn>
       <ContentColumn>
         <FieldArray
-          name="house.extraBuildings"
+          name="swedishHouse.extraBuildings"
           render={(arrayHelpers) => (
             <>
               <ContentColumnTitle>
@@ -181,52 +184,58 @@ const HouseDetails: React.FC<HouseDetails> = ({ fieldSchema, formikProps }) => {
                 </ContentColumnTitleButton>
               </ContentColumnTitle>
 
-              {formikProps.values.house?.extraBuildings?.map((_, index) => (
-                <InputGroup key={index}>
-                  <DetailInput
-                    field={fieldSchema.house.extraBuildings.type}
-                    formikProps={formikProps}
-                    nameRoot="house"
-                    name={`extraBuildings.${index}.type`}
-                  />
+              {formikProps.values.swedishHouse?.extraBuildings?.map(
+                (_, index) => (
+                  <InputGroup key={index}>
+                    <DetailInput
+                      field={fieldSchema.swedishHouse.extraBuildings.type}
+                      formikProps={formikProps}
+                      nameRoot="swedishHouse"
+                      name={`extraBuildings.${index}.type`}
+                    />
 
-                  <DetailInput
-                    field={fieldSchema.house.extraBuildings.area}
-                    formikProps={formikProps}
-                    nameRoot="house"
-                    name={`extraBuildings.${index}.area`}
-                  />
+                    <DetailInput
+                      field={fieldSchema.swedishHouse.extraBuildings.area}
+                      formikProps={formikProps}
+                      nameRoot="swedishHouse"
+                      name={`extraBuildings.${index}.area`}
+                    />
 
-                  <DetailInput
-                    field={fieldSchema.house.extraBuildings.hasWaterConnected}
-                    formikProps={formikProps}
-                    nameRoot="house"
-                    name={`extraBuildings.${index}.hasWaterConnected`}
-                  />
-
-                  <InputGroupDeleteButton
-                    type="button"
-                    onClick={() => {
-                      const isLastItemLeft =
-                        formikProps.values.house?.extraBuildings?.length === 1
-
-                      arrayHelpers.remove(index)
-
-                      if (isLastItemLeft) {
-                        formikProps.setValues({
-                          ...formikProps.values,
-                          house: {
-                            ...formikProps.values.house,
-                            extraBuildings: [],
-                          },
-                        })
+                    <DetailInput
+                      field={
+                        fieldSchema.swedishHouse.extraBuildings
+                          .hasWaterConnected
                       }
-                    }}
-                  >
-                    {textKeys.DETAILS_MODULE_EXTRABUILDINGS_TABLE_REMOVE_BUILDING_BUTTON()}
-                  </InputGroupDeleteButton>
-                </InputGroup>
-              ))}
+                      formikProps={formikProps}
+                      nameRoot="swedishHouse"
+                      name={`extraBuildings.${index}.hasWaterConnected`}
+                    />
+
+                    <InputGroupDeleteButton
+                      type="button"
+                      onClick={() => {
+                        const isLastItemLeft =
+                          formikProps.values.swedishHouse?.extraBuildings
+                            ?.length === 1
+
+                        arrayHelpers.remove(index)
+
+                        if (isLastItemLeft) {
+                          formikProps.setValues({
+                            ...formikProps.values,
+                            swedishHouse: {
+                              ...formikProps.values.swedishHouse,
+                              extraBuildings: [],
+                            },
+                          })
+                        }
+                      }}
+                    >
+                      {textKeys.DETAILS_MODULE_EXTRABUILDINGS_TABLE_REMOVE_BUILDING_BUTTON()}
+                    </InputGroupDeleteButton>
+                  </InputGroup>
+                ),
+              )}
             </>
           )}
         />

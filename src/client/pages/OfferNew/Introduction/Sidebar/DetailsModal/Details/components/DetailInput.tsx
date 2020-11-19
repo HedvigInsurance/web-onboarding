@@ -9,8 +9,8 @@ interface DetailInputProps {
   field?: RegularFieldType
   formikProps: FormikProps<EditQuoteInput>
   nameRoot:
-    | 'apartment'
-    | 'house'
+    | 'swedishApartment'
+    | 'swedishHouse'
     | 'norwegianHomeContents'
     | 'norwegianTravel'
     | 'danishHomeContents'
