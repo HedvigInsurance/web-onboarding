@@ -53,7 +53,7 @@ interface Props {
   offerData: OfferData
   signUiState: SignUiState
   signStatus: GraphQLSignStatus | null
-  loading: boolean
+  isLoading: boolean
   canInitiateSign: boolean
   onSignStart: () => void
 }
@@ -62,7 +62,7 @@ export const Sign: React.FC<Props> = ({
   offerData,
   signUiState,
   signStatus,
-  loading,
+  isLoading,
   canInitiateSign,
   onSignStart,
 }) => {
@@ -84,7 +84,7 @@ export const Sign: React.FC<Props> = ({
             onSignStart()
           }}
         >
-          {loading ? (
+          {isLoading ? (
             <SpinnerWrapper
               initial={{ width: 0, opacity: 0 }}
               animate={{ width: 'auto', opacity: 1 }}

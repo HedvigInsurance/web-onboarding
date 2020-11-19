@@ -300,7 +300,7 @@ export const Checkout: React.FC<Props> = ({
               }
               signUiState={signUiState}
               signStatus={signStatus}
-              loading={
+              isLoading={
                 signQuotesMutation.loading ||
                 signUiState === SignUiState.STARTED ||
                 signUiState === SignUiState.STARTED_WITH_REDIRECT ||
