@@ -29,10 +29,6 @@ const ButtonWrapper = styled('div')`
 
 const SpinnerWrapper = styled(motion.div)`
   display: inline-block;
-  padding-left: 0.5em;
-  margin-top: -1px;
-  vertical-align: text-top;
-  overflow: hidden;
 `
 
 const Disclaimer = styled('div')`
@@ -88,15 +84,16 @@ export const Sign: React.FC<Props> = ({
             onSignStart()
           }}
         >
-          {textKeys.CHECKOUT_SIGN_BUTTON_TEXT()}
-          <SpinnerWrapper
-            initial={{ width: 0, opacity: 0 }}
-            animate={
-              loading ? { opacity: 1, width: 'auto' } : { opacity: 0, width: 0 }
-            }
-          >
-            <Spinner />
-          </SpinnerWrapper>
+          {loading ? (
+            <SpinnerWrapper
+              initial={{ width: 0, opacity: 0 }}
+              animate={{ width: 'auto', opacity: 1 }}
+            >
+              <Spinner />
+            </SpinnerWrapper>
+          ) : (
+            textKeys.CHECKOUT_SIGN_BUTTON_TEXT()
+          )}
         </Button>
       </ButtonWrapper>
       <motion.div
