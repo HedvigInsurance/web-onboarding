@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 
 export const captureSentryError = (
-  e: Error | string | any,
+  e: Error | string,
   data?: Record<string, any>,
 ) => {
   const { Sentry } = window as any
