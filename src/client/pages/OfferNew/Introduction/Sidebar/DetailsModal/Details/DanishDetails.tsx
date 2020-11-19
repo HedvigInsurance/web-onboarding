@@ -6,11 +6,11 @@ import { SupportSection } from './components/SupportSection'
 import { Content, ContentColumn } from './components/Details.styles'
 import { DetailsProps } from './types'
 
-export const DanishDetails = ({
+export const DanishDetails: React.FC<DetailsProps> = ({
   fieldSchema,
   formikProps,
   offerQuote,
-}: DetailsProps) => (
+}) => (
   <>
     {isDanishHomeContentFieldSchema(fieldSchema, offerQuote) && (
       <Content>

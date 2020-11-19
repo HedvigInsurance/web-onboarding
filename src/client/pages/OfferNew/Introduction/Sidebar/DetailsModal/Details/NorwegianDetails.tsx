@@ -20,12 +20,12 @@ import {
 } from './components/Details.styles'
 import { DetailsProps } from './types'
 
-export const NorwegianDetails = ({
+export const NorwegianDetails: React.FC<DetailsProps> = ({
   fieldSchema,
   formikProps,
   offerQuote,
   textKeys,
-}: DetailsProps) => (
+}) => (
   <>
     {isNorwegianHomeContentFieldSchema(fieldSchema, offerQuote) && (
       <NorwegianHomeContentDetails
@@ -49,10 +49,10 @@ type NorwegianHomeContentDetails = {
   fieldSchema: NorwegianHomeContentFieldSchema
 }
 
-const NorwegianHomeContentDetails = ({
+const NorwegianHomeContentDetails: React.FC<NorwegianHomeContentDetails> = ({
   formikProps,
   fieldSchema,
-}: NorwegianHomeContentDetails) => (
+}) => (
   <Content>
     <ContentColumn>
       <InputGroup>
@@ -105,11 +105,11 @@ type TravelDetails = {
   fieldSchema: NorwegianTravelContentFieldSchema
   textKeys: TextKeyMap
 }
-const TravelDetails = ({
+const TravelDetails: React.FC<TravelDetails> = ({
   fieldSchema,
   formikProps,
   textKeys,
-}: TravelDetails) => (
+}) => (
   <Content>
     <ContentColumn>
       <ContentColumnTitle>

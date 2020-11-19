@@ -20,12 +20,12 @@ import {
 } from './components/Details.styles'
 import { DetailsProps } from './types'
 
-export const SwedishDetails = ({
+export const SwedishDetails: React.FC<DetailsProps> = ({
   fieldSchema,
   formikProps,
   offerQuote,
   textKeys,
-}: DetailsProps) => (
+}) => (
   <>
     {isApartmentFieldSchema(fieldSchema, offerQuote) && (
       <ApartmentDetails fieldSchema={fieldSchema} formikProps={formikProps} />
@@ -45,7 +45,10 @@ type ApartmentDetails = {
   formikProps: FormikProps<EditQuoteInput>
   fieldSchema: ApartmentFieldSchema
 }
-const ApartmentDetails = ({ formikProps, fieldSchema }: ApartmentDetails) => (
+const ApartmentDetails: React.FC<ApartmentDetails> = ({
+  formikProps,
+  fieldSchema,
+}) => (
   <Content>
     <ContentColumn>
       <InputGroup>
@@ -96,7 +99,11 @@ type HouseDetails = {
   fieldSchema: HouseFieldSchema
   textKeys: TextKeyMap
 }
-const HouseDetails = ({ fieldSchema, formikProps, textKeys }: HouseDetails) => (
+const HouseDetails: React.FC<HouseDetails> = ({
+  fieldSchema,
+  formikProps,
+  textKeys,
+}) => (
   <Content>
     <ContentColumn>
       <ContentColumnTitle>

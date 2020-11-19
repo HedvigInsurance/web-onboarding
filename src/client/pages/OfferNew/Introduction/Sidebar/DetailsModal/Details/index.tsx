@@ -5,12 +5,12 @@ import { NorwegianDetails } from './NorwegianDetails'
 import { SwedishDetails } from './SwedishDetails'
 import { DetailsProps } from './types'
 
-export const Details = ({
+export const Details: React.FC<DetailsProps> = ({
   fieldSchema,
   formikProps,
   offerQuote,
   textKeys,
-}: DetailsProps) => {
+}) => {
   const market = useMarket()
   return (
     <>
