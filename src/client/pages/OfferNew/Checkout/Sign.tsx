@@ -15,35 +15,16 @@ import { isNorwegian, isSwedish } from 'pages/OfferNew/utils'
 import { useTextKeys } from 'utils/textKeys'
 import { SignStatus } from './SignStatus'
 
-export const SignSpacer = styled('div')`
-  height: 250px;
-`
 const Wrapper = styled('div')`
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
   width: 100%;
-  padding: 0 8rem 2.5rem 4.5rem;
-  background-image: linear-gradient(
-    to bottom,
-    rgba(249, 250, 252, 0),
-    ${colorsV2.offwhite} 50%
-  );
-
-  @media (max-width: 40rem) {
-    padding: 1rem;
-    padding-top: 0;
-  }
+  padding: 3rem 0;
 `
 
 const ButtonWrapper = styled('div')`
-  display: flex;
   width: 100%;
-
-  @media (max-width: 600px) {
-    justify-content: center;
-  }
+  padding: 0 3rem;
+  display: flex;
+  justify-content: center;
 `
 
 const SpinnerWrapper = styled(motion.div)`
@@ -59,7 +40,6 @@ const Disclaimer = styled('div')`
   margin: 1rem 0 0;
   color: ${colorsV2.gray};
   line-height: 1.5;
-  padding: 0 0.5rem;
 
   @media (max-width: 600rem) {
     text-align: center;
@@ -75,7 +55,6 @@ export enum SignUiState {
 
 interface Props {
   offerData: OfferData
-  className?: string
   signUiState: SignUiState
   signStatus: GraphQLSignStatus | null
   loading: boolean
@@ -85,7 +64,6 @@ interface Props {
 
 export const Sign: React.FC<Props> = ({
   offerData,
-  className,
   signUiState,
   signStatus,
   loading,
@@ -96,10 +74,11 @@ export const Sign: React.FC<Props> = ({
   const textKeys = useTextKeys()
 
   return (
-    <Wrapper className={className}>
+    <Wrapper>
       <ButtonWrapper>
         <Button
           size={isMobile ? 'sm' : 'lg'}
+          fullWidth
           disabled={!canInitiateSign}
           onClick={async () => {
             if (!canInitiateSign) {

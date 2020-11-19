@@ -15,7 +15,6 @@ import {
   isMonthlyCostDeduction,
 } from '../utils'
 import { InsuranceSummary } from './InsuranceSummary'
-import { SignSpacer } from './Sign'
 import { UserDetailsForm } from './UserDetailsForm'
 
 const Section = styled('div')`
@@ -164,8 +163,6 @@ export const CheckoutContent: React.FC<Props> = ({
         </StartDateWrapper>
 
         <InsuranceSummary offerData={offerData} />
-
-        <SignSpacer />
       </Section>
     </>
   )

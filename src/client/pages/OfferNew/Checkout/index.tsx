@@ -32,21 +32,6 @@ interface Openable {
   visibilityState: VisibilityState
 }
 
-const OuterWrapper = styled('div')<Openable>`
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  height: 100%;
-  max-width: 40rem;
-  width: 100%;
-  overflow: hidden;
-  z-index: ${TOP_BAR_Z_INDEX + 1};
-
-  ${({ visibilityState }) =>
-    visibilityState === VisibilityState.CLOSED ? 'display: none;' : ''};
-`
-
 const slideInStyles = ({ visibilityState }: Openable) => {
   if (visibilityState === VisibilityState.CLOSED) {
     return css`
@@ -71,24 +56,25 @@ const slideInStyles = ({ visibilityState }: Openable) => {
   `
 }
 
-const OuterScrollWrapper = styled('div')<Openable>`
-  position: absolute;
+const OuterWrapper = styled('div')<Openable>`
+  position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   height: 100%;
+  max-width: 40rem;
   width: 100%;
-
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
-
+  z-index: ${TOP_BAR_Z_INDEX + 1};
   transition: transform 300ms, opacity 300ms;
   ${slideInStyles};
+
+  ${({ visibilityState }) =>
+    visibilityState === VisibilityState.CLOSED ? 'display: none;' : ''};
 `
 
-const SlidingSign = styled(Sign)<Openable>`
-  transition: transform 300ms, opacity 300ms;
-  ${slideInStyles};
+const ScrollWrapper = styled('div')<Openable>`
+  overflow-y: scroll;
+  height: 100vh;
 `
 
 const InnerWrapper = styled('div')`
@@ -283,7 +269,7 @@ export const Checkout: React.FC<Props> = ({
   return (
     <>
       <OuterWrapper visibilityState={visibilityState}>
-        <OuterScrollWrapper
+        <ScrollWrapper
           ref={outerWrapper as React.MutableRefObject<HTMLDivElement | null>}
           visibilityState={visibilityState}
         >
@@ -307,27 +293,25 @@ export const Checkout: React.FC<Props> = ({
               }}
               refetch={refetch}
             />
-            <div />
+            <Sign
+              offerData={offerData}
+              canInitiateSign={
+                canInitiateSign && !ssnUpdateLoading && !emailUpdateLoading
+              }
+              signUiState={signUiState}
+              signStatus={signStatus}
+              loading={
+                signQuotesMutation.loading ||
+                signUiState === SignUiState.STARTED ||
+                signUiState === SignUiState.STARTED_WITH_REDIRECT ||
+                emailUpdateLoading
+              }
+              onSignStart={startSign}
+            />
           </InnerWrapper>
-        </OuterScrollWrapper>
-
-        <SlidingSign
-          offerData={offerData}
-          visibilityState={visibilityState}
-          canInitiateSign={
-            canInitiateSign && !ssnUpdateLoading && !emailUpdateLoading
-          }
-          signUiState={signUiState}
-          signStatus={signStatus}
-          loading={
-            signQuotesMutation.loading ||
-            signUiState === SignUiState.STARTED ||
-            signUiState === SignUiState.STARTED_WITH_REDIRECT ||
-            emailUpdateLoading
-          }
-          onSignStart={startSign}
-        />
+        </ScrollWrapper>
       </OuterWrapper>
+
       <Backdrop visibilityState={visibilityState} onClick={onClose} />
     </>
   )
