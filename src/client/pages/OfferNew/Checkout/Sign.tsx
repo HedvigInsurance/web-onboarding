@@ -20,7 +20,6 @@ type WrapperProps = {
 }
 
 const Wrapper = styled('div')<WrapperProps>`
-  visibility: ${({ width }) => (width ? 'visible' : 'hidden')};
   background: ${colorsV3.gray100};
   box-shadow: 0 -1px 3px ${colorsV3.gray500};
   width: ${({ width }) => (width ? `${width}px` : 'auto')};
