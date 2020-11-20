@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand/dist'
+import { colorsV3 } from '@hedviginsurance/brand/dist'
 import { motion } from 'framer-motion'
 import React from 'react'
 import ReactMarkdown from 'react-markdown/with-html'
@@ -20,21 +20,13 @@ const Wrapper = styled('div')`
   padding: 3rem 0;
 `
 
-const ButtonWrapper = styled('div')`
-  width: 100%;
-  padding: 0 3rem;
-  display: flex;
-  justify-content: center;
-`
-
 const SpinnerWrapper = styled(motion.div)`
   display: inline-block;
 `
 
 const Disclaimer = styled('div')`
   font-size: 0.75rem;
-  margin: 1rem 0 0;
-  color: ${colorsV2.gray};
+  color: ${colorsV3.gray500};
   line-height: 1.5;
 
   @media (max-width: 600rem) {
@@ -75,31 +67,31 @@ export const Sign: React.FC<Props> = ({
 
   return (
     <Wrapper>
-      <ButtonWrapper>
-        <Button
-          size={isMobile ? 'sm' : 'lg'}
-          fullWidth
-          disabled={!canInitiateSign}
-          onClick={async () => {
-            if (!canInitiateSign) {
-              return
-            }
+      <Button
+        onClick={async () => {
+          if (!canInitiateSign) {
+            return
+          }
 
-            onSignStart()
-          }}
-        >
-          {isLoading ? (
-            <SpinnerWrapper
-              initial={{ width: 0, opacity: 0 }}
-              animate={{ width: 'auto', opacity: 1 }}
-            >
-              <Spinner />
-            </SpinnerWrapper>
-          ) : (
-            textKeys.CHECKOUT_SIGN_BUTTON_TEXT()
-          )}
-        </Button>
-      </ButtonWrapper>
+          onSignStart()
+        }}
+        size={isMobile ? 'sm' : 'lg'}
+        fullWidth
+        foreground={colorsV3.gray900}
+        background={colorsV3.purple500}
+        disabled={!canInitiateSign}
+      >
+        {isLoading ? (
+          <SpinnerWrapper
+            initial={{ width: 0, opacity: 0 }}
+            animate={{ width: 'auto', opacity: 1 }}
+          >
+            <Spinner />
+          </SpinnerWrapper>
+        ) : (
+          textKeys.CHECKOUT_SIGN_BUTTON_TEXT()
+        )}
+      </Button>
       <SignStatusWrapper
         initial={{ height: 'auto', opacity: 1 }}
         animate={
