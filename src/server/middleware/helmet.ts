@@ -118,6 +118,7 @@ export const helmet = koaHelmet({
         'cnv.adt686.net',
         'cnv.adt387.com',
         'px.ads.linkedin.com',
+        'www.linkedin.com',
       ],
       reportUri:
         process.env.CSP_REPORT_ENDPOINT || '/new-member/_report-csp-violation',
