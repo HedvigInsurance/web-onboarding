@@ -1,7 +1,7 @@
+import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand/dist'
 import { motion } from 'framer-motion'
-import React from 'react'
 import ReactMarkdown from 'react-markdown/with-html'
 import { useMediaQuery } from 'react-responsive'
 import { Button } from 'components/buttons'
@@ -15,9 +15,20 @@ import { isNorwegian, isSwedish } from 'pages/OfferNew/utils'
 import { useTextKeys } from 'utils/textKeys'
 import { SignStatus } from './SignStatus'
 
-const Wrapper = styled('div')`
-  width: 100%;
-  padding: 3rem 0;
+type WrapperProps = {
+  width?: number
+}
+
+const Wrapper = styled('div')<WrapperProps>`
+  visibility: ${({ width }) => (width ? 'visible' : 'hidden')};
+  background: ${colorsV3.gray100};
+  box-shadow: 0 -1px 3px ${colorsV3.gray500};
+  width: ${({ width }) => (width ? `${width}px` : 'auto')};
+  padding: 1rem;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  transition: visibility 3s;
 `
 
 const SpinnerWrapper = styled(motion.div)`
@@ -25,12 +36,17 @@ const SpinnerWrapper = styled(motion.div)`
 `
 
 const Disclaimer = styled('div')`
+  padding: 0 3rem;
   font-size: 0.75rem;
   color: ${colorsV3.gray500};
   line-height: 1.5;
 
   @media (max-width: 600rem) {
     text-align: center;
+  }
+
+  p {
+    margin: 0;
   }
 `
 
@@ -52,6 +68,7 @@ interface Props {
   isLoading: boolean
   canInitiateSign: boolean
   onSignStart: () => void
+  checkoutWrapperScrollWidth?: number
 }
 
 export const Sign: React.FC<Props> = ({
@@ -61,12 +78,13 @@ export const Sign: React.FC<Props> = ({
   isLoading,
   canInitiateSign,
   onSignStart,
+  checkoutWrapperScrollWidth,
 }) => {
   const isMobile = useMediaQuery({ maxWidth: 600 })
   const textKeys = useTextKeys()
 
   return (
-    <Wrapper>
+    <Wrapper width={checkoutWrapperScrollWidth}>
       <Button
         onClick={async () => {
           if (!canInitiateSign) {

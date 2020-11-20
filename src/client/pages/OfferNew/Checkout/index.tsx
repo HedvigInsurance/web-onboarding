@@ -57,11 +57,12 @@ const slideInStyles = ({ visibilityState }: Openable) => {
 }
 
 const OuterWrapper = styled('div')<Openable>`
+  background: ${colorsV3.white};
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
-  height: 100%;
+  height: 100vh;
   max-width: 40rem;
   width: 100%;
   z-index: ${TOP_BAR_Z_INDEX + 1};
@@ -83,7 +84,6 @@ const InnerWrapper = styled('div')`
   justify-content: space-between;
   width: 100%;
   min-height: 100%;
-  background: ${colorsV3.white};
   padding: 5rem 8rem 2.5rem 4.5rem;
 
   @media (max-width: 40rem) {
@@ -176,6 +176,16 @@ export const Checkout: React.FC<Props> = ({
   const variation = useVariation()
 
   const outerWrapper = useRef<HTMLDivElement>()
+
+  const [wrapperScrollWidth, setWrapperScrollWidth] = useState<
+    number | undefined
+  >()
+
+  useEffect(() => {
+    if (outerWrapper.current?.scrollWidth) {
+      setWrapperScrollWidth(outerWrapper.current?.scrollWidth)
+    }
+  }, [outerWrapper.current?.scrollWidth])
 
   useEffect(() => {
     if (
@@ -307,6 +317,7 @@ export const Checkout: React.FC<Props> = ({
                 emailUpdateLoading
               }
               onSignStart={startSign}
+              checkoutWrapperScrollWidth={wrapperScrollWidth}
             />
           </InnerWrapper>
         </ScrollWrapper>
