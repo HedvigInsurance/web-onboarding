@@ -8,6 +8,11 @@ jest.mock('../apolloClient', () => ({
     subscriptionClient: {
       close: jest.fn(),
     },
+    httpLink: {
+      options: {
+        headers: {},
+      },
+    },
   },
 }))
 
@@ -124,4 +129,5 @@ it('creates a new session', async () => {
     true,
     true,
   )
+  expect(apolloClient!.httpLink.options.headers.authorization).toBe('abc123')
 })

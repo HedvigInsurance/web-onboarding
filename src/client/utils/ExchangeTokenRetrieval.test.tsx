@@ -1,10 +1,14 @@
 jest.mock('../apolloClient', () => ({
-  apolloClient: { subscriptionClient: {}, client: {} },
+  apolloClient: {
+    subscriptionClient: {},
+    client: {},
+    httpLink: { options: { headers: {} } },
+  },
 }))
 jest.useFakeTimers()
 
 import { MockedResponse, MockLink } from '@apollo/react-testing'
-import { ApolloClient, InMemoryCache } from '@apollo/client'
+import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
 import { Provider } from 'constate'
 import { mount } from 'enzyme'
 import React from 'react'
@@ -144,6 +148,7 @@ const mountWithApolloClient = (mocks: MockedResponse[], token: string) => {
     }),
   })
   const subscriptionClient = { close: jest.fn() } as any
+  const httpLink = { options: { headers: {} } } as HttpLink
 
   return mount(
     <StorageContext.Provider value={{ session }}>
@@ -152,7 +157,9 @@ const mountWithApolloClient = (mocks: MockedResponse[], token: string) => {
           location={`http://localhost8080/se/new-member/connect-payment/direct#exchange-token=${token}`}
           context={{}}
         >
-          <ExchangeTokenRetrieval apolloClient={{ client, subscriptionClient }}>
+          <ExchangeTokenRetrieval
+            apolloClient={{ client, subscriptionClient, httpLink }}
+          >
             {({ exchangeTokenState }) => <>{exchangeTokenState.toString()}</>}
           </ExchangeTokenRetrieval>
         </StaticRouter>
