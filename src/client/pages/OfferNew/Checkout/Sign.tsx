@@ -24,7 +24,7 @@ const Wrapper = styled('div')<WrapperProps>`
   box-shadow: 0 -1px 3px ${colorsV3.gray500};
   width: ${({ width }) => (width ? `${width}px` : 'auto')};
   padding: 1rem;
-  position: fixed;
+  position: sticky;
   bottom: 0;
   left: 0;
   transition: visibility 3s;

@@ -303,23 +303,23 @@ export const Checkout: React.FC<Props> = ({
               }}
               refetch={refetch}
             />
-            <Sign
-              offerData={offerData}
-              canInitiateSign={
-                canInitiateSign && !ssnUpdateLoading && !emailUpdateLoading
-              }
-              signUiState={signUiState}
-              signStatus={signStatus}
-              isLoading={
-                signQuotesMutation.loading ||
-                signUiState === SignUiState.STARTED ||
-                signUiState === SignUiState.STARTED_WITH_REDIRECT ||
-                emailUpdateLoading
-              }
-              onSignStart={startSign}
-              checkoutWrapperScrollWidth={wrapperScrollWidth}
-            />
           </InnerWrapper>
+          <Sign
+            offerData={offerData}
+            canInitiateSign={
+              canInitiateSign && !ssnUpdateLoading && !emailUpdateLoading
+            }
+            signUiState={signUiState}
+            signStatus={signStatus}
+            isLoading={
+              signQuotesMutation.loading ||
+              signUiState === SignUiState.STARTED ||
+              signUiState === SignUiState.STARTED_WITH_REDIRECT ||
+              emailUpdateLoading
+            }
+            onSignStart={startSign}
+            checkoutWrapperScrollWidth={wrapperScrollWidth}
+          />
         </ScrollWrapper>
       </OuterWrapper>
 
