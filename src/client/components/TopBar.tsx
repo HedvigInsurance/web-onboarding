@@ -14,7 +14,7 @@ interface Props {
 const Wrapper = styled.div`
   width: 100%;
   top: 0;
-  height: 4rem;
+  height: 4.5rem;
   background: ${colorsV3.gray900};
   position: absolute;
   z-index: ${TOP_BAR_Z_INDEX};
@@ -32,7 +32,7 @@ const TransparentWrapper = styled(Wrapper)`
 `
 
 export const TopBarFiller = styled.div`
-  height: 4rem;
+  height: 4.5rem;
 
   @media (min-width: 420px) {
     height: 5rem;
@@ -42,12 +42,15 @@ export const TopBarFiller = styled.div`
 const Container = styled.div`
   width: 100%;
   height: 100%;
-  max-width: 80rem;
-  padding: 0 2rem !important;
+  padding: 0 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 0 auto !important;
+  margin: 0 auto;
+
+  @media (min-width: 480px) {
+    padding: 0 2rem;
+  }
 `
 
 const CenteredContainer = styled(Container)`
