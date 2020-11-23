@@ -16,13 +16,14 @@ import { useTextKeys } from 'utils/textKeys'
 import { SignStatus } from './SignStatus'
 
 type WrapperProps = {
-  width?: number
+  maxWidth?: number
 }
 
 const Wrapper = styled('div')<WrapperProps>`
   background: ${colorsV3.gray100};
   box-shadow: 0 -1px 3px ${colorsV3.gray500};
-  width: ${({ width }) => (width ? `${width}px` : 'auto')};
+  width: 100%;
+  max-width: ${({ maxWidth }) => (maxWidth ? `${maxWidth}px` : '100%')};
   padding: 1rem;
   position: sticky;
   bottom: 0;
@@ -83,7 +84,7 @@ export const Sign: React.FC<Props> = ({
   const textKeys = useTextKeys()
 
   return (
-    <Wrapper width={checkoutWrapperScrollWidth}>
+    <Wrapper maxWidth={checkoutWrapperScrollWidth}>
       <Button
         onClick={async () => {
           if (!canInitiateSign) {

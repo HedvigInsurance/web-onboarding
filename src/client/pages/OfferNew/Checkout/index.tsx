@@ -182,8 +182,18 @@ export const Checkout: React.FC<Props> = ({
   >()
 
   useEffect(() => {
-    if (outerWrapper.current?.scrollWidth) {
-      setWrapperScrollWidth(outerWrapper.current?.scrollWidth)
+    const setScrollWidth = () => {
+      if (outerWrapper.current?.scrollWidth) {
+        setWrapperScrollWidth(outerWrapper.current?.scrollWidth)
+      }
+    }
+
+    setScrollWidth()
+
+    window.addEventListener('resize', setScrollWidth)
+
+    return () => {
+      window.removeEventListener('resize', setScrollWidth)
     }
   }, [outerWrapper.current?.scrollWidth])
 
