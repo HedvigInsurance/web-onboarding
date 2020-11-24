@@ -116,19 +116,24 @@ export const isYouth = (offerData: OfferData): boolean =>
       (isNorwegianTravel(quote.quoteDetails) && quote.quoteDetails.isYouth),
   )
 
+export const isSwedishQuote = (quote: OfferQuote): boolean =>
+  isSwedishApartment(quote.quoteDetails) || isSwedishHouse(quote.quoteDetails)
+
 export const isSwedish = (offerData: OfferData): boolean =>
-  offerData.quotes.every(
-    (quote) =>
-      isSwedishApartment(quote.quoteDetails) ||
-      isSwedishHouse(quote.quoteDetails),
-  )
+  offerData.quotes.every((quote) => isSwedishQuote(quote))
+
+export const isNorwegianQuote = (quote: OfferQuote): boolean =>
+  isNorwegianHomeContents(quote.quoteDetails) ||
+  isNorwegianTravel(quote.quoteDetails)
 
 export const isNorwegian = (offerData: OfferData): boolean =>
-  offerData.quotes.every(
-    (quote) =>
-      isNorwegianHomeContents(quote.quoteDetails) ||
-      isNorwegianTravel(quote.quoteDetails),
-  )
+  offerData.quotes.every((quote) => isNorwegianQuote(quote))
+
+export const isDanishQuote = (quote: OfferQuote): boolean =>
+  isDanishHomeContents(quote.quoteDetails)
+
+export const isDanish = (offerData: OfferData): boolean =>
+  offerData.quotes.every((quote) => isDanishQuote(quote))
 
 export const hasAddress = (offerData: OfferData): boolean =>
   !!offerData.person.address
@@ -159,6 +164,11 @@ export const isNorwegianTravel = (
   details: QuoteDetails,
 ): details is NorwegianTravelDetails =>
   details.__typename === 'NorwegianTravelDetails'
+
+export const isDanishHomeContents = (
+  details: QuoteDetails,
+): details is DanishHomeContentsDetails =>
+  details.__typename === 'DanishHomeContentsDetails'
 
 export const isFreeMonths = (campaigns: Campaign[]) =>
   (campaigns.length > 0 &&

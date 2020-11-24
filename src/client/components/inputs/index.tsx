@@ -7,7 +7,7 @@ import InputMask from 'react-input-mask'
 import { WarningIcon } from 'components/icons/Warning'
 import { DownArrow } from 'components/icons/DownArrow'
 
-interface Mask {
+export interface Mask {
   name: string
   mask: string
   sanitize: (value: string) => string
@@ -16,9 +16,14 @@ interface Mask {
 const INVISIBLE_MASK_CHAR = '\u200b'
 
 export const masks: Record<string, Mask> = {
-  zipCode: {
+  fiveDigitZipCode: {
     name: 'ZipCode',
     mask: '999 99',
+    sanitize: (value) => value.replace(/\s+/, ''),
+  },
+  fourDigitZipCode: {
+    name: 'ZipCode',
+    mask: '9999',
     sanitize: (value) => value.replace(/\s+/, ''),
   },
   area: {
