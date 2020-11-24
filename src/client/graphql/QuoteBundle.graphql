@@ -80,7 +80,7 @@ query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
           coInsured
           livingSpace
           street
-          homeType: type
+          norwegianHomeType: type
           zipCode
           isYouth
         }

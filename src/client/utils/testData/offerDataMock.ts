@@ -6,6 +6,7 @@ import {
   NorwegianHomeContentsType,
   PerilV2,
   TypeOfContract,
+  DanishHomeContentsType,
 } from 'data/graphql'
 import { OfferData } from '../../pages/OfferNew/types'
 
@@ -212,6 +213,61 @@ export const noCombo: OfferData = {
     monthlyNet: {
       amount: '149.00',
       currency: 'NOK',
+      __typename: 'MonetaryAmountV2',
+    },
+    __typename: 'InsuranceCost',
+  },
+}
+
+export const danishHomeContents: OfferData = {
+  person: {
+    firstName: 'Judith',
+    lastName: 'Madsson',
+    email: 'mail@test.com',
+    ssn: '15126533427',
+    birthDate: '2965-12-15',
+    householdSize: 2,
+    address: {
+      street: 'Testgatan 23',
+      zipCode: '1214',
+    },
+  },
+  quotes: [
+    {
+      id: '187b050d-2096-4c0e-9afb-f3f20bcaf887',
+      startDate: null,
+      quoteDetails: {
+        street: 'Testgatan 23',
+        zipCode: '1214',
+        coInsured: 2,
+        livingSpace: 24,
+        type: DanishHomeContentsType.Own,
+        isStudent: false,
+        __typename: 'DanishHomeContentsDetails',
+      },
+      dataCollectionId: null,
+      currentInsurer: null,
+      contractType: TypeOfContract.NoHomeContentRent,
+      perils: perilsMock,
+      insurableLimits: insurableLimitMock,
+      insuranceTerms: insuranceTermsMock,
+    },
+  ],
+  cost: {
+    freeUntil: null,
+    monthlyDiscount: {
+      amount: '49.00',
+      currency: 'DEK',
+      __typename: 'MonetaryAmountV2',
+    },
+    monthlyGross: {
+      amount: '198.00',
+      currency: 'DEK',
+      __typename: 'MonetaryAmountV2',
+    },
+    monthlyNet: {
+      amount: '149.00',
+      currency: 'DKK',
       __typename: 'MonetaryAmountV2',
     },
     __typename: 'InsuranceCost',

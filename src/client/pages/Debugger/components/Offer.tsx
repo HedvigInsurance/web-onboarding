@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { CreateQuoteInput, useQuoteLazyQuery } from 'data/graphql'
 import { createQuote } from 'pages/Embark/createQuote'
-import { Button } from 'components/buttons'
+import { Button, LinkButton } from 'components/buttons'
 import { InputField } from 'components/inputs'
 import { StorageContainer, useStorage } from 'utils/StorageContainer'
 import {
@@ -13,7 +13,6 @@ import {
   useMarket,
   Market,
 } from 'components/utils/CurrentLocale'
-import { LinkButton } from '../../../components/buttons'
 import { initialSeApartmentValues, SwedishApartment } from './QuoteFormSweden'
 import {
   initialNoHomeValues,
