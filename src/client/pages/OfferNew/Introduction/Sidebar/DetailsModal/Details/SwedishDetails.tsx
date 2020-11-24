@@ -5,8 +5,11 @@ import {
   InputGroupDeleteButton,
   InputGroupRow,
 } from 'components/inputs'
-import { ExtraBuildingInput, ExtraBuildingType } from 'data/graphql'
-import { EditQuoteInput } from 'data/graphql'
+import {
+  ExtraBuildingInput,
+  ExtraBuildingType,
+  EditQuoteInput,
+} from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
 import {
   isSwedishApartmentFieldSchema,
