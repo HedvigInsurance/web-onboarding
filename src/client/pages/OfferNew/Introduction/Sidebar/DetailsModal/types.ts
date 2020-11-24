@@ -1,6 +1,12 @@
 import * as Yup from 'yup'
 import { CoreInputFieldProps } from 'components/inputs'
-import { EditApartmentInput, EditHouseInput } from 'data/graphql'
+import {
+  EditNorwegianHomeContentsInput,
+  EditNorwegianTravelInput,
+  EditDanishHomeContentsInput,
+  EditSwedishHouseInput,
+  EditSwedishApartmentInput,
+} from 'data/graphql'
 
 type Unarray<T> = T extends Array<infer U> ? U : T
 
@@ -18,14 +24,29 @@ export type ArrayFieldType<T> = {
 
 export type FieldType<T> = RegularFieldType | ArrayFieldType<T>
 
-export interface ApartmentFieldSchema {
-  apartment: FieldSchemaBuilder<RequiredFields<EditApartmentInput>>
+export interface SwedishApartmentFieldSchema {
+  swedishApartment: FieldSchemaBuilder<
+    RequiredFields<EditSwedishApartmentInput>
+  >
 }
 
-export interface HouseFieldSchema {
-  house: FieldSchemaBuilder<RequiredFields<EditHouseInput>>
+export interface SwedishHouseFieldSchema {
+  swedishHouse: FieldSchemaBuilder<RequiredFields<EditSwedishHouseInput>>
+}
+export interface NorwegianHomeContentFieldSchema {
+  norwegianHomeContents: FieldSchemaBuilder<
+    RequiredFields<EditNorwegianHomeContentsInput>
+  >
+}
+export interface NorwegianTravelContentFieldSchema {
+  norwegianTravel: FieldSchemaBuilder<RequiredFields<EditNorwegianTravelInput>>
 }
 
+export interface DanishHomeContentFieldSchema {
+  danishHomeContents: FieldSchemaBuilder<
+    RequiredFields<EditDanishHomeContentsInput>
+  >
+}
 export type FieldSchemaBuilder<T> = {
   [P in keyof T]: T[P] extends string | number | boolean
     ? RegularFieldType
@@ -34,4 +55,9 @@ export type FieldSchemaBuilder<T> = {
     : FieldSchemaBuilder<T[P]>
 }
 
-export type FieldSchema = ApartmentFieldSchema | HouseFieldSchema
+export type FieldSchema =
+  | SwedishApartmentFieldSchema
+  | SwedishHouseFieldSchema
+  | NorwegianHomeContentFieldSchema
+  | NorwegianTravelContentFieldSchema
+  | DanishHomeContentFieldSchema

@@ -74,20 +74,21 @@ query Quote($id: ID!, $perilsLocale: Locale!) {
           coInsured
           livingSpace
           street
-          homeType: type
+          norwegianHomeType: type
           zipCode
+          isYouth
         }
 
         ... on NorwegianTravelDetails {
           coInsured
+          isYouth
         }
-
         ... on DanishHomeContentsDetails {
-          street
-          zipCode
-          livingSpace
-          danishHomeType: type
           coInsured
+          livingSpace
+          street
+          danishHomeType: type
+          zipCode
           isStudent
         }
       }
