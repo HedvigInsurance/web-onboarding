@@ -2,29 +2,24 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand/dist'
 import { motion } from 'framer-motion'
-import ReactMarkdown from 'react-markdown/with-html'
 import { useMediaQuery } from 'react-responsive'
 import { Button } from 'components/buttons'
 import { Spinner } from 'components/utils'
-import {
-  InsuranceTermType,
-  SignStatus as GraphQLSignStatus,
-} from 'data/graphql'
-import { OfferData } from 'pages/OfferNew/types'
-import { isNorwegian, isSwedish } from 'pages/OfferNew/utils'
+import { SignStatus as GraphQLSignStatus } from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
 import { SignStatus } from './SignStatus'
 
 type WrapperProps = {
+  isDesktop: boolean
   maxWidth?: number
 }
 
 const Wrapper = styled('div')<WrapperProps>`
   background: ${colorsV3.gray100};
-  box-shadow: 0 -1px 3px ${colorsV3.gray500};
+  box-shadow: 0 -1px 4px ${colorsV3.gray500};
   width: 100%;
   max-width: ${({ maxWidth }) => (maxWidth ? `${maxWidth}px` : '100%')};
-  padding: 1rem;
+  padding: ${({ isDesktop }) => (isDesktop ? '1rem 2rem' : '1rem')};
   position: sticky;
   bottom: 0;
   left: 0;
@@ -33,21 +28,6 @@ const Wrapper = styled('div')<WrapperProps>`
 
 const SpinnerWrapper = styled(motion.div)`
   display: inline-block;
-`
-
-const Disclaimer = styled('div')`
-  padding: 0 3rem;
-  font-size: 0.75rem;
-  color: ${colorsV3.gray500};
-  line-height: 1.5;
-
-  @media (max-width: 600rem) {
-    text-align: center;
-  }
-
-  p {
-    margin: 0;
-  }
 `
 
 const SignStatusWrapper = styled(motion.div)`
@@ -62,7 +42,6 @@ export enum SignUiState {
 }
 
 interface Props {
-  offerData: OfferData
   signUiState: SignUiState
   signStatus: GraphQLSignStatus | null
   isLoading: boolean
@@ -72,7 +51,6 @@ interface Props {
 }
 
 export const Sign: React.FC<Props> = ({
-  offerData,
   signUiState,
   signStatus,
   isLoading,
@@ -80,11 +58,11 @@ export const Sign: React.FC<Props> = ({
   onSignStart,
   checkoutWrapperScrollWidth,
 }) => {
-  const isMobile = useMediaQuery({ maxWidth: 600 })
+  const isDesktop = useMediaQuery({ minWidth: 600 })
   const textKeys = useTextKeys()
 
   return (
-    <Wrapper maxWidth={checkoutWrapperScrollWidth}>
+    <Wrapper maxWidth={checkoutWrapperScrollWidth} isDesktop={isDesktop}>
       <Button
         onClick={async () => {
           if (!canInitiateSign) {
@@ -93,7 +71,7 @@ export const Sign: React.FC<Props> = ({
 
           onSignStart()
         }}
-        size={isMobile ? 'sm' : 'lg'}
+        size={isDesktop ? 'lg' : 'sm'}
         fullWidth
         foreground={colorsV3.gray900}
         background={colorsV3.purple500}
@@ -110,56 +88,19 @@ export const Sign: React.FC<Props> = ({
           textKeys.CHECKOUT_SIGN_BUTTON_TEXT()
         )}
       </Button>
-      <SignStatusWrapper
-        initial={{ height: 'auto', opacity: 1 }}
-        animate={
-          ![SignUiState.STARTED, SignUiState.FAILED].includes(signUiState)
-            ? { opacity: 0 }
-            : { opacity: 1 }
-        }
-        transition={{ type: 'spring', stiffness: 400, damping: 100 }}
-      >
-        <SignStatus signStatus={signStatus} />
-      </SignStatusWrapper>
-      {offerData.quotes.map((quote) => {
-        const seSignDisclaimer = textKeys.CHECKOUT_SIGN_DISCLAIMER({
-          PREBUY_LINK:
-            quote.insuranceTerms.get(InsuranceTermType.PreSaleInfoEuStandard)
-              ?.url ?? '',
-          TERMS_LINK:
-            quote.insuranceTerms.get(InsuranceTermType.TermsAndConditions)
-              ?.url ?? '',
-        })
-        const noSignDisclaimer = textKeys.CHECKOUT_SIGN_DISCLAIMER_NO({
-          TERMS_LINK:
-            quote.insuranceTerms.get(InsuranceTermType.TermsAndConditions)
-              ?.url ?? '',
-        })
-        return (
-          <Disclaimer key={quote.id}>
-            {isSwedish(offerData) && (
-              <ReactMarkdown
-                source={
-                  Array.isArray(seSignDisclaimer)
-                    ? seSignDisclaimer.join('')
-                    : seSignDisclaimer
-                }
-                linkTarget="_blank"
-              />
-            )}
-            {isNorwegian(offerData) && (
-              <ReactMarkdown
-                source={
-                  Array.isArray(noSignDisclaimer)
-                    ? noSignDisclaimer.join('')
-                    : noSignDisclaimer
-                }
-                linkTarget="_blank"
-              />
-            )}
-          </Disclaimer>
-        )
-      })}
+      {signStatus && (
+        <SignStatusWrapper
+          initial={{ height: 'auto', opacity: 1 }}
+          animate={
+            ![SignUiState.STARTED, SignUiState.FAILED].includes(signUiState)
+              ? { opacity: 0 }
+              : { opacity: 1 }
+          }
+          transition={{ type: 'spring', stiffness: 400, damping: 100 }}
+        >
+          <SignStatus signStatus={signStatus} />
+        </SignStatusWrapper>
+      )}
     </Wrapper>
   )
 }

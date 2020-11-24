@@ -27,6 +27,7 @@ import { Variation, useVariation } from 'utils/hooks/useVariation'
 import { CheckoutContent } from './CheckoutContent'
 import { useScrollLock, VisibilityState } from './hooks'
 import { Sign, SignUiState } from './Sign'
+import { SignDisclaimer } from './SignDisclaimer'
 
 interface Openable {
   visibilityState: VisibilityState
@@ -313,9 +314,10 @@ export const Checkout: React.FC<Props> = ({
               }}
               refetch={refetch}
             />
+
+            <SignDisclaimer offerData={offerData} />
           </InnerWrapper>
           <Sign
-            offerData={offerData}
             canInitiateSign={
               canInitiateSign && !ssnUpdateLoading && !emailUpdateLoading
             }
