@@ -64,7 +64,7 @@ const OuterWrapper = styled('div')<Openable>`
   right: 0;
   bottom: 0;
   height: 100vh;
-  max-width: 40rem;
+  max-width: 34rem;
   width: 100%;
   z-index: ${TOP_BAR_Z_INDEX + 1};
   transition: transform 300ms, opacity 300ms;
@@ -82,31 +82,36 @@ const ScrollWrapper = styled('div')<Openable>`
 const InnerWrapper = styled('div')`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-evenly;
   width: 100%;
   min-height: 100%;
-  padding: 5rem 8rem 2.5rem 4.5rem;
+  padding: 2rem;
 
   @media (max-width: 40rem) {
     padding: 1rem;
   }
 `
 
-const BackButtonWrapper = styled('div')`
-  padding-top: 1rem;
-  padding-bottom: 2rem;
-`
 const BackButton = styled('button')`
-  appearance: none;
   background: transparent;
   border: none;
+  border-radius: 100%;
   width: 2rem;
   height: 2rem;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  :focus {
+    outline: 0;
+    background: ${colorsV3.purple100};
+  }
 `
 
 const Backdrop = styled('div')<Openable>`
   position: fixed;
-  background: rgba(25, 25, 25, 0.4);
+  background: rgba(25, 25, 25, 0.5);
   top: 0;
   right: 0;
   bottom: 0;
@@ -295,11 +300,9 @@ export const Checkout: React.FC<Props> = ({
           visibilityState={visibilityState}
         >
           <InnerWrapper>
-            <BackButtonWrapper>
-              <BackButton onClick={onClose}>
-                <BackArrow />
-              </BackButton>
-            </BackButtonWrapper>
+            <BackButton onClick={onClose}>
+              <BackArrow />
+            </BackButton>
 
             <CheckoutContent
               onSubmit={startSign}

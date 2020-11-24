@@ -19,7 +19,7 @@ const Wrapper = styled('div')<WrapperProps>`
   box-shadow: 0 -1px 4px ${colorsV3.gray500};
   width: 100%;
   max-width: ${({ maxWidth }) => (maxWidth ? `${maxWidth}px` : '100%')};
-  padding: ${({ isDesktop }) => (isDesktop ? '1rem 2rem' : '1rem')};
+  padding: ${({ isDesktop }) => (isDesktop ? '1.5rem 2rem' : '1rem')};
   position: sticky;
   bottom: 0;
   left: 0;

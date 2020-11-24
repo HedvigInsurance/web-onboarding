@@ -7,8 +7,8 @@ import { useTextKeys } from 'utils/textKeys'
 import { OfferData } from 'pages/OfferNew/types'
 import { isNorwegian, isSwedish } from 'pages/OfferNew/utils'
 
-const Disclaimer = styled('div')`
-  padding: 2rem 0;
+const Wrapper = styled('div')`
+  padding-top: 2rem;
   font-size: 0.75rem;
   color: ${colorsV3.gray500};
   line-height: 1.5;
@@ -45,7 +45,7 @@ export const SignDisclaimer: React.FC<Props> = ({ offerData }) => {
               ?.url ?? '',
         })
         return (
-          <Disclaimer key={quote.id}>
+          <Wrapper key={quote.id}>
             {isSwedish(offerData) && (
               <ReactMarkdown
                 source={
@@ -66,7 +66,7 @@ export const SignDisclaimer: React.FC<Props> = ({ offerData }) => {
                 linkTarget="_blank"
               />
             )}
-          </Disclaimer>
+          </Wrapper>
         )
       })}
     </>
