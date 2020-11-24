@@ -30,10 +30,6 @@ const SpinnerWrapper = styled(motion.div)`
   display: inline-block;
 `
 
-const SignStatusWrapper = styled(motion.div)`
-  padding: 1rem 3rem 0;
-`
-
 export enum SignUiState {
   NOT_STARTED,
   STARTED_WITH_REDIRECT,
@@ -89,17 +85,7 @@ export const Sign: React.FC<Props> = ({
         )}
       </Button>
       {signStatus && (
-        <SignStatusWrapper
-          initial={{ height: 'auto', opacity: 1 }}
-          animate={
-            ![SignUiState.STARTED, SignUiState.FAILED].includes(signUiState)
-              ? { opacity: 0 }
-              : { opacity: 1 }
-          }
-          transition={{ type: 'spring', stiffness: 400, damping: 100 }}
-        >
-          <SignStatus signStatus={signStatus} />
-        </SignStatusWrapper>
+        <SignStatus signStatus={signStatus} signUiState={signUiState} />
       )}
     </Wrapper>
   )
