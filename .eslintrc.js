@@ -49,6 +49,7 @@ module.exports = {
         ],
       },
     ],
+    'import/no-duplicates': 'error',
     'react/prop-types': 'off',
     'react/display-name': 'off',
     'react-hooks/rules-of-hooks': 'error',
@@ -61,4 +62,12 @@ module.exports = {
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
   },
+  overrides: [
+    {
+      files: ['src/client/data/graphql.tsx'],
+      rules: {
+        'import/no-duplicates': 'off',
+      },
+    },
+  ],
 }
