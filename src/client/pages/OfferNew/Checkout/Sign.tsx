@@ -13,15 +13,19 @@ type WrapperProps = {
   isDesktop: boolean
 }
 
+const DESKTOP_BREAKPOINT = 600
+
 const Wrapper = styled('div')<WrapperProps>`
   background: ${colorsV3.gray100};
   box-shadow: 0 -1px 4px ${colorsV3.gray500};
   width: 100%;
-  padding: ${({ isDesktop }) => (isDesktop ? '1.5rem 2rem' : '1rem')};
+  padding: 1rem;
   position: sticky;
   bottom: 0;
-  left: 0;
   transition: visibility 3s;
+  @media screen and (min-width: ${DESKTOP_BREAKPOINT}px) {
+    padding: 1.5rem 2rem;
+  }
 `
 
 const SpinnerWrapper = styled(motion.div)`
@@ -50,7 +54,7 @@ export const Sign: React.FC<Props> = ({
   canInitiateSign,
   onSignStart,
 }) => {
-  const isDesktop = useMediaQuery({ minWidth: 600 })
+  const isDesktop = useMediaQuery({ minWidth: DESKTOP_BREAKPOINT })
   const textKeys = useTextKeys()
 
   return (
