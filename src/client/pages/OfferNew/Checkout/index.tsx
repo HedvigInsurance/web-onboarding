@@ -1,8 +1,8 @@
+import React, { useEffect, useRef, useState } from 'react'
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { SemanticEvents } from 'quepasa'
-import React, { useEffect, useRef, useState } from 'react'
 import { Mount } from 'react-lifecycle-components'
 import { Redirect } from 'react-router-dom'
 import { BackArrow } from 'components/icons/BackArrow'
@@ -29,8 +29,13 @@ import { useScrollLock, VisibilityState } from './hooks'
 import { Sign, SignUiState } from './Sign'
 import { SignDisclaimer } from './SignDisclaimer'
 
-interface Openable {
+type Openable = {
   visibilityState: VisibilityState
+}
+
+type OuterWrapperProps = {
+  visibilityState: VisibilityState
+  windowHeight: number
 }
 
 const slideInStyles = ({ visibilityState }: Openable) => {
@@ -57,13 +62,13 @@ const slideInStyles = ({ visibilityState }: Openable) => {
   `
 }
 
-const OuterWrapper = styled('div')<Openable>`
+const OuterWrapper = styled('div')<OuterWrapperProps>`
   background: ${colorsV3.white};
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
-  height: 100vh;
+  height: ${({ windowHeight }) => windowHeight}px;
   max-width: 34rem;
   width: 100%;
   z-index: ${TOP_BAR_Z_INDEX + 1};
@@ -181,6 +186,20 @@ export const Checkout: React.FC<Props> = ({
   const locale = useCurrentLocale()
   const variation = useVariation()
 
+  const [windowInnerHeight, setWindowInnerHeight] = useState(window.innerHeight)
+
+  useEffect(() => {
+    const setWindowHeight = () => {
+      setWindowInnerHeight(window.innerHeight)
+    }
+
+    window.addEventListener('resize', setWindowHeight)
+
+    return () => {
+      window.removeEventListener('resize', setWindowHeight)
+    }
+  })
+
   const outerWrapper = useRef<HTMLDivElement>()
 
   useEffect(() => {
@@ -274,7 +293,10 @@ export const Checkout: React.FC<Props> = ({
 
   return (
     <>
-      <OuterWrapper visibilityState={visibilityState}>
+      <OuterWrapper
+        visibilityState={visibilityState}
+        windowHeight={windowInnerHeight}
+      >
         <ScrollWrapper
           ref={outerWrapper as React.MutableRefObject<HTMLDivElement | null>}
           visibilityState={visibilityState}
