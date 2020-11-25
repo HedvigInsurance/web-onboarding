@@ -11,14 +11,12 @@ import { SignStatus } from './SignStatus'
 
 type WrapperProps = {
   isDesktop: boolean
-  maxWidth?: number
 }
 
 const Wrapper = styled('div')<WrapperProps>`
   background: ${colorsV3.gray100};
   box-shadow: 0 -1px 4px ${colorsV3.gray500};
   width: 100%;
-  max-width: ${({ maxWidth }) => (maxWidth ? `${maxWidth}px` : '100%')};
   padding: ${({ isDesktop }) => (isDesktop ? '1.5rem 2rem' : '1rem')};
   position: sticky;
   bottom: 0;
@@ -43,7 +41,6 @@ interface Props {
   isLoading: boolean
   canInitiateSign: boolean
   onSignStart: () => void
-  checkoutWrapperScrollWidth?: number
 }
 
 export const Sign: React.FC<Props> = ({
@@ -52,13 +49,12 @@ export const Sign: React.FC<Props> = ({
   isLoading,
   canInitiateSign,
   onSignStart,
-  checkoutWrapperScrollWidth,
 }) => {
   const isDesktop = useMediaQuery({ minWidth: 600 })
   const textKeys = useTextKeys()
 
   return (
-    <Wrapper maxWidth={checkoutWrapperScrollWidth} isDesktop={isDesktop}>
+    <Wrapper isDesktop={isDesktop}>
       <Button
         onClick={async () => {
           if (!canInitiateSign) {

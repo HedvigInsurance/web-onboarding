@@ -183,26 +183,6 @@ export const Checkout: React.FC<Props> = ({
 
   const outerWrapper = useRef<HTMLDivElement>()
 
-  const [wrapperScrollWidth, setWrapperScrollWidth] = useState<
-    number | undefined
-  >()
-
-  useEffect(() => {
-    const setScrollWidth = () => {
-      if (outerWrapper.current?.scrollWidth) {
-        setWrapperScrollWidth(outerWrapper.current?.scrollWidth)
-      }
-    }
-
-    setScrollWidth()
-
-    window.addEventListener('resize', setScrollWidth)
-
-    return () => {
-      window.removeEventListener('resize', setScrollWidth)
-    }
-  }, [outerWrapper.current?.scrollWidth])
-
   useEffect(() => {
     if (
       ![SignUiState.STARTED, SignUiState.STARTED_WITH_REDIRECT].includes(
@@ -333,7 +313,6 @@ export const Checkout: React.FC<Props> = ({
               emailUpdateLoading
             }
             onSignStart={startSign}
-            checkoutWrapperScrollWidth={wrapperScrollWidth}
           />
         </ScrollWrapper>
       </OuterWrapper>
