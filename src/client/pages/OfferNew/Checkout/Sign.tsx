@@ -22,7 +22,6 @@ const Wrapper = styled('div')<WrapperProps>`
   padding: 1rem;
   position: sticky;
   bottom: 0;
-  transition: visibility 3s;
   @media screen and (min-width: ${DESKTOP_BREAKPOINT}px) {
     padding: 1.5rem 2rem;
   }
