@@ -14,7 +14,7 @@ import { captureSentryError } from 'utils/sentry-client'
 import { Storage, StorageContainer } from 'utils/StorageContainer'
 import {
   apolloClient as realApolloClient,
-  ApolloClientAndSubscriptionClient,
+  ApolloClientUtils,
 } from '../apolloClient'
 
 export const CREATE_SESSION_TOKEN_MUTATION: DocumentNode = gql`
@@ -31,7 +31,7 @@ interface SessionContainerProps {
 }
 
 export const setupSession = async (
-  apolloClient: ApolloClientAndSubscriptionClient,
+  apolloClientUtils: ApolloClientUtils,
   storage: Storage,
   pickedLocale: Locale,
 ): Promise<
@@ -41,7 +41,7 @@ export const setupSession = async (
     }
   | undefined
 > => {
-  if (!apolloClient) {
+  if (!apolloClientUtils) {
     throw new Error('Missing apollo client')
   }
 
@@ -49,15 +49,17 @@ export const setupSession = async (
     return
   }
 
-  const sessionResult = await apolloClient.client.mutate({
+  const sessionResult = await apolloClientUtils.client.mutate({
     mutation: CREATE_SESSION_TOKEN_MUTATION,
   })
   await afterTick(() => {
-    apolloClient!.subscriptionClient.close(true, true)
+    apolloClientUtils!.subscriptionClient.close(true, true)
     storage.setToken(sessionResult.data.createSessionV2.token)
+    apolloClientUtils.httpLink.options.headers.authorization =
+      sessionResult.data.createSessionV2.token
   })
   // eslint-disable-next-line  @typescript-eslint/ban-types
-  await apolloClient.client.mutate<object, { pickedLocale: Locale }>({
+  await apolloClientUtils.client.mutate<object, { pickedLocale: Locale }>({
     mutation: UpdatePickedLocaleDocument,
     variables: { pickedLocale },
   })
@@ -93,6 +95,7 @@ export const SessionContainer: React.SFC<SessionContainerProps> = ({
                 {
                   client,
                   subscriptionClient: realApolloClient!.subscriptionClient,
+                  httpLink: realApolloClient!.httpLink,
                 },
                 storageState,
                 pickedLocale,
