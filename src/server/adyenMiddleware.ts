@@ -3,7 +3,7 @@ import Axios from 'axios'
 import Router from 'koa-router'
 import { ServerCookieStorage } from 'utils/storage/ServerCookieStorage'
 import { createSession, Session } from '../shared/sessionStorage'
-import { GIRAFFE_ENDPOINT } from './config'
+import { GIRAFFE_HOST } from './config'
 import { WithLoggerState } from './middleware/enhancers'
 
 interface Adyen3dsDetails {
@@ -28,7 +28,7 @@ export const handleAdyen3dsPostRedirect: Router.IMiddleware<
 
   try {
     const result = await httpClient.post(
-      GIRAFFE_ENDPOINT,
+      GIRAFFE_HOST + '/graphql',
       {
         operationName: 'SubmitAdyenRedirection',
         query: `

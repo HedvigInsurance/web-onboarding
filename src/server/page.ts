@@ -15,7 +15,6 @@ import {
   ADYEN_ORIGIN_KEY,
   APP_ENVIRONMENT,
   CONTENT_SERVICE_ENDPOINT,
-  GIRAFFE_ENDPOINT,
   GIRAFFE_WS_ENDPOINT,
 } from './config'
 import { favicons } from './favicons'
@@ -33,7 +32,7 @@ const clientConfig: ClientConfig = {
   adyenEnvironment: ADYEN_ENVIRONMENT,
   adyenOriginKey: ADYEN_ORIGIN_KEY,
   contentServiceEndpoint: CONTENT_SERVICE_ENDPOINT,
-  giraffeEndpoint: GIRAFFE_ENDPOINT,
+  giraffeEndpoint: '/new-member/graphql',
   giraffeWsEndpoint: GIRAFFE_WS_ENDPOINT,
   appEnvironment: APP_ENVIRONMENT as ClientConfig['appEnvironment'],
 }

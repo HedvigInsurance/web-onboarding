@@ -1,17 +1,25 @@
-import { ApolloClient, from, InMemoryCache } from '@apollo/client'
+import {
+  ApolloClient,
+  from,
+  HttpLink,
+  InMemoryCache,
+  split,
+} from '@apollo/client'
 import { WebSocketLink } from '@apollo/link-ws'
 import { CookieStorage } from 'cookie-storage'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { onError } from '@apollo/client/link/error'
+import { getMainDefinition } from '@apollo/client/utilities'
 import { Quote } from 'data/graphql'
 import { captureSentryError } from 'utils/sentry-client'
 import { createSession, Session } from '../shared/sessionStorage'
 import possibleTypes from '../../possibleGraphqlTypes.json'
 
-export interface ApolloClientAndSubscriptionClient {
+export interface ApolloClientUtils {
   subscriptionClient: SubscriptionClient
   // eslint-disable-next-line  @typescript-eslint/ban-types
   client: ApolloClient<object>
+  httpLink: HttpLink
 }
 
 export const apolloClient = (() => {
@@ -22,13 +30,15 @@ export const apolloClient = (() => {
   if (typeof WebSocket === 'undefined') {
     throw new Error("typeof WebSocket is undefined, can't connect to remote")
   }
+  const authorizationToken = createSession<Session>(
+    new CookieStorage(),
+  ).getSession()!.token
   const subscriptionClient = new SubscriptionClient(
     window.hedvigClientConfig.giraffeWsEndpoint,
     {
       reconnect: true,
       connectionParams: () => ({
-        Authorization: createSession<Session>(new CookieStorage()).getSession()!
-          .token,
+        Authorization: authorizationToken,
       }),
     },
   )
@@ -42,6 +52,14 @@ export const apolloClient = (() => {
       captureSentryError(err.networkError)
     }
   })
+  const httpLink = new HttpLink({
+    credentials: 'include',
+    uri: window.hedvigClientConfig.giraffeEndpoint,
+    headers: {
+      authorization: authorizationToken,
+    },
+  })
+
   const client = new ApolloClient({
     cache: new InMemoryCache({
       possibleTypes,
@@ -58,8 +76,21 @@ export const apolloClient = (() => {
         },
       },
     }),
-    link: from([errorHandler, new WebSocketLink(subscriptionClient)]),
+    link: from([
+      errorHandler,
+      split(
+        (op) => {
+          const definition = getMainDefinition(op.query)
+          return (
+            definition.kind === 'OperationDefinition' &&
+            definition.operation === 'subscription'
+          )
+        },
+        new WebSocketLink(subscriptionClient),
+        httpLink,
+      ),
+    ]),
   })
 
-  return { subscriptionClient, client }
+  return { subscriptionClient, client, httpLink }
 })()

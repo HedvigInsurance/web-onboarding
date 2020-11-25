@@ -5,12 +5,13 @@ import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 import Router from 'koa-router'
 import { Logger } from 'typescript-logging'
+import proxy from 'koa-server-http-proxy'
 import { notNullable } from 'utils/nullables'
 import { sentryConfig } from 'utils/sentry-server'
 import { serverSideRoutes } from '../routes'
 import { LOCALE_PATH_PATTERN } from '../shared/locale'
 import { handleAdyen3dsPostRedirect } from './adyenMiddleware'
-import { GIRAFFE_ENDPOINT, GIRAFFE_WS_ENDPOINT } from './config'
+import { GIRAFFE_HOST, GIRAFFE_WS_ENDPOINT } from './config'
 import { appLogger } from './logging'
 import { configureAssets } from './middleware/assets'
 import {
@@ -47,7 +48,17 @@ appLogger.info(
   }, with environment "${sentryConfig().environment}"`,
 )
 appLogger.info(
-  `Using giraffe at batchHttp:"${GIRAFFE_ENDPOINT}" ws:"${GIRAFFE_WS_ENDPOINT}" 🦒`,
+  `Using giraffe at http:"${GIRAFFE_HOST}" ws:"${GIRAFFE_WS_ENDPOINT}" 🦒`,
+)
+
+app.use(
+  proxy('/new-member/graphql', {
+    target: GIRAFFE_HOST,
+    changeOrigin: true,
+    pathRewrite: {
+      '/new-member/graphql': '/graphql',
+    },
+  }),
 )
 
 if (process.env.FORCE_HOST) {
