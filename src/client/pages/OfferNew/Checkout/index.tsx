@@ -33,8 +33,7 @@ type Openable = {
   visibilityState: VisibilityState
 }
 
-type OuterWrapperProps = {
-  visibilityState: VisibilityState
+type ScrollWrapperProps = {
   windowHeight: number
 }
 
@@ -62,13 +61,13 @@ const slideInStyles = ({ visibilityState }: Openable) => {
   `
 }
 
-const OuterWrapper = styled('div')<OuterWrapperProps>`
+const OuterWrapper = styled('div')<Openable>`
   background: ${colorsV3.white};
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
-  height: ${({ windowHeight }) => windowHeight}px;
+  height: 100vh;
   max-width: 34rem;
   width: 100%;
   z-index: ${TOP_BAR_Z_INDEX + 1};
@@ -79,9 +78,9 @@ const OuterWrapper = styled('div')<OuterWrapperProps>`
     visibilityState === VisibilityState.CLOSED ? 'display: none;' : ''};
 `
 
-const ScrollWrapper = styled('div')<Openable>`
+const ScrollWrapper = styled('div')<ScrollWrapperProps>`
+  height: ${({ windowHeight }) => windowHeight}px;
   overflow-y: scroll;
-  height: 100vh;
 `
 
 const InnerWrapper = styled('div')`
@@ -200,7 +199,7 @@ export const Checkout: React.FC<Props> = ({
     }
   })
 
-  const outerWrapper = useRef<HTMLDivElement>()
+  const scrollWrapper = useRef<HTMLDivElement>()
 
   useEffect(() => {
     if (
@@ -226,7 +225,7 @@ export const Checkout: React.FC<Props> = ({
       handleSignedEvent(member.data?.member ?? null)
     }
   }, [member.data?.member, signStatus?.signState, variation])
-  useScrollLock(visibilityState, outerWrapper)
+  useScrollLock(visibilityState, scrollWrapper)
 
   const canInitiateSign = Boolean(
     signUiState !== SignUiState.STARTED &&
@@ -293,13 +292,10 @@ export const Checkout: React.FC<Props> = ({
 
   return (
     <>
-      <OuterWrapper
-        visibilityState={visibilityState}
-        windowHeight={windowInnerHeight}
-      >
+      <OuterWrapper visibilityState={visibilityState}>
         <ScrollWrapper
-          ref={outerWrapper as React.MutableRefObject<HTMLDivElement | null>}
-          visibilityState={visibilityState}
+          ref={scrollWrapper as React.MutableRefObject<HTMLDivElement | null>}
+          windowHeight={windowInnerHeight}
         >
           <InnerWrapper>
             <BackButton onClick={onClose}>
