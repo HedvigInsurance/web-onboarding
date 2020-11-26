@@ -105,6 +105,8 @@ export const UserDetailsForm: React.FC<Props> = ({
           name="ssn"
           id="ssn"
           type="number"
+          inputMode="numeric"
+          pattern="[0-9]*"
           value={ssn}
           // errors={ssnError ? textKeys.SIGN_SSN_CHECK() : undefined} TODO error handling?
           onChange={(e: React.ChangeEvent<any>) => {
