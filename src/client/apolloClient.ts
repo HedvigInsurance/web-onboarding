@@ -45,7 +45,10 @@ export const apolloClient = (() => {
   const errorHandler = onError((err) => {
     if (err.graphQLErrors) {
       err.graphQLErrors.forEach((graphqlError) =>
-        captureSentryError(`${graphqlError.name}: ${graphqlError.message}`),
+        captureSentryError(
+          `GraphQL error: ${graphqlError.message}`,
+          graphqlError,
+        ),
       )
     }
     if (err.networkError) {
