@@ -1,7 +1,7 @@
 import { getSuccessPath } from './useRedeemCode'
 
-const foreverCode = 'hedvig'
-const correctPath = '/se/forever/hedvig'
+const foreverCode = 'hedvig4ever'
+const correctPath = '/se/forever/hedvig4ever'
 
 describe('getSuccessPath', () => {
   it('returns path when pathname includes code', () => {
@@ -10,7 +10,7 @@ describe('getSuccessPath', () => {
     expect(successPath).toBe(path)
   })
   it('returns path when path includes code, with trailing slash removed', () => {
-    const path = '/se/forever/hedvig/'
+    const path = '/se/forever/hedvig4ever/'
     const successPath = getSuccessPath(path, foreverCode)
     expect(successPath).toBe(correctPath)
   })
