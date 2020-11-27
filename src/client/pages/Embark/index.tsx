@@ -121,7 +121,16 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
         embarkPassageName: props.name,
       })
     }
-  }, [currentPassage.id])
+  }, [
+    currentPassage.id,
+    currentPassage.url,
+    currentPassage.api,
+    currentPassage.externalRedirect,
+    history,
+    state,
+    props.baseUrl,
+    props.name,
+  ])
 
   const variation = useVariation()
 

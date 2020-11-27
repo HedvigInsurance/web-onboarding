@@ -233,14 +233,12 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                     monthlyGross={offerData.cost.monthlyGross}
                     monthlyNet={offerData.cost.monthlyNet}
                   />
-
-                  {market === Market.Se && (
+                  {market !== Market.No && (
                     <TextButton onClick={() => setDetailsModalIsOpen(true)}>
                       {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
                     </TextButton>
                   )}
                 </Header>
-
                 <Body>
                   <BodyTitle>
                     {textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}
@@ -302,7 +300,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                   refetch={() => refetchAll()}
                 />
               </Container>
-              {market === Market.Se && (
+              {market !== Market.No && (
                 <DetailsModal
                   offerQuote={offerData.quotes[0]}
                   refetch={refetchAll}

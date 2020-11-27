@@ -5,6 +5,7 @@ import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { useEditQuoteMutation, useRedeemedCampaignsQuery } from 'data/graphql'
 import { Price } from 'pages/OfferNew/components'
 import { useTextKeys } from 'utils/textKeys'
+import { useUnderwritingLimitsHitReporter } from 'utils/sentry-client'
 import { StartDate } from '../Introduction/Sidebar/StartDate'
 import { OfferData } from '../types'
 import {
@@ -14,7 +15,6 @@ import {
   isMonthlyCostDeduction,
 } from '../utils'
 import { InsuranceSummary } from './InsuranceSummary'
-import { SignSpacer } from './Sign'
 import { UserDetailsForm } from './UserDetailsForm'
 
 const Section = styled('div')`
@@ -77,8 +77,14 @@ export const CheckoutContent: React.FC<Props> = ({
   )
   const [fakeLoading, setFakeLoading] = React.useState(false)
   const [reallyLoading, setReallyLoading] = React.useState(false)
-  const [editQuote] = useEditQuoteMutation()
+  const [editQuote, editQuoteResult] = useEditQuoteMutation()
   const quoteIds = getQuoteIds(offerData)
+
+  useUnderwritingLimitsHitReporter(
+    editQuoteResult.data?.editQuote?.__typename === 'UnderwritingLimitsHit' &&
+      editQuoteResult.data.editQuote.limits.map((limit) => limit.description),
+    quoteIds,
+  )
 
   return (
     <>
@@ -129,7 +135,6 @@ export const CheckoutContent: React.FC<Props> = ({
             onEmailUpdate(onCompletion)
           }}
           ssn={offerData.person.ssn ?? ''}
-          // TODO we somehow need to compare the birth date to the ssn to check so they match. In case they don't, we should warn (as they might get a different price)
           onSsnChange={(ssn) => {
             const onCompletion = new Promise<void>((resolve, reject) => {
               setFakeLoading(true)
@@ -158,8 +163,6 @@ export const CheckoutContent: React.FC<Props> = ({
         </StartDateWrapper>
 
         <InsuranceSummary offerData={offerData} />
-
-        <SignSpacer />
       </Section>
     </>
   )

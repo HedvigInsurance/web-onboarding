@@ -1,5 +1,3 @@
-import fs from 'fs'
-import path from 'path'
 import { min as createMinifiedSegmentSnippet } from '@segment/snippet'
 import escapeHTML from 'escape-html'
 import Router from 'koa-router'
@@ -17,23 +15,12 @@ import {
   ADYEN_ORIGIN_KEY,
   APP_ENVIRONMENT,
   CONTENT_SERVICE_ENDPOINT,
-  GIRAFFE_ENDPOINT,
   GIRAFFE_WS_ENDPOINT,
 } from './config'
 import { favicons } from './favicons'
 import { getPageMeta } from './meta'
 import { WithRequestUuid } from './middleware/enhancers'
-
-const scriptLocation =
-  process.env.NODE_ENV === 'production'
-    ? '/new-member-assets/' +
-      JSON.parse(
-        fs.readFileSync(
-          path.resolve(__dirname, '../../build/new-member-assets/stats.json'),
-          'utf-8',
-        ),
-      ).assetsByChunkName.app[0]
-    : '/new-member-assets/app.js'
+import { getClientScripts } from './assets'
 
 const segmentSnippet = createMinifiedSegmentSnippet({
   apiKey: process.env.SEGMENT_API_KEY || '',
@@ -45,7 +32,7 @@ const clientConfig: ClientConfig = {
   adyenEnvironment: ADYEN_ENVIRONMENT,
   adyenOriginKey: ADYEN_ORIGIN_KEY,
   contentServiceEndpoint: CONTENT_SERVICE_ENDPOINT,
-  giraffeEndpoint: GIRAFFE_ENDPOINT,
+  giraffeEndpoint: '/new-member/graphql',
   giraffeWsEndpoint: GIRAFFE_WS_ENDPOINT,
   appEnvironment: APP_ENVIRONMENT as ClientConfig['appEnvironment'],
 }
@@ -115,7 +102,7 @@ const template = (
         writable: false,
       })
     </script>
-    <script src="${scriptLocation}"></script>
+    ${getClientScripts().map((script) => `<script src="${script}"></script>`)}
   </body>
   </html>
   `

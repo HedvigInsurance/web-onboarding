@@ -9,7 +9,7 @@
     "AUTH_PASS": {
       "required": true
     },
-    "GIRAFFE_ENDPOINT": {
+    "GIRAFFE_HOST": {
       "required": true
     },
     "GIRAFFE_WS_ENDPOINT": {

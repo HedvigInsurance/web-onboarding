@@ -307,21 +307,26 @@ const InfoBoxBody = styled.div`
   letter-spacing: -0.26px;
 `
 
-export const PerilModal: React.FC<PerilModalProps & ModalProps> = (props) => {
+export const PerilModal: React.FC<PerilModalProps & ModalProps> = ({
+  perils,
+  currentPerilIndex,
+  setCurrentPeril,
+  isVisible,
+  onClose,
+}) => {
   const [transitionEnabled, setTransitionEnabled] = React.useState(true)
   const [actionsAllowed, setActionsAllowed] = React.useState(true)
   const textKeys = useTextKeys()
 
   React.useEffect(() => {
-    const isBelowBoundary = props.currentPerilIndex < props.perils.length
-    const isAboveBoundary = props.currentPerilIndex > props.perils.length * 2
+    const isBelowBoundary = currentPerilIndex < perils.length
+    const isAboveBoundary = currentPerilIndex > perils.length * 2
 
     if (isBelowBoundary || isAboveBoundary) {
       setTimeout(() => {
         setTransitionEnabled(false)
-        props.setCurrentPeril(
-          props.currentPerilIndex +
-            (isBelowBoundary ? 1 : -1) * props.perils.length,
+        setCurrentPeril(
+          currentPerilIndex + (isBelowBoundary ? 1 : -1) * perils.length,
         )
 
         setTimeout(() => setTransitionEnabled(true), TRANSITION_MS)
@@ -333,20 +338,19 @@ export const PerilModal: React.FC<PerilModalProps & ModalProps> = (props) => {
     setTimeout(() => {
       setActionsAllowed(true)
     }, TRANSITION_MS * 2)
-  }, [props.currentPerilIndex])
+  }, [perils.length, currentPerilIndex, setCurrentPeril])
 
-  const tripledPerils = props.perils.concat(props.perils).concat(props.perils)
+  const tripledPerils = perils.concat(perils).concat(perils)
 
-  const currentPeril =
-    props.perils[props.currentPerilIndex % props.perils.length]
+  const currentPeril = perils[currentPerilIndex % perils.length]
 
   return (
-    <Modal isVisible={props.isVisible} onClose={props.onClose}>
+    <Modal isVisible={isVisible} onClose={onClose}>
       <Header>
         <Picker>
           <PerilItemsContainer
-            currentPerilIndex={props.currentPerilIndex}
-            totalNumberOfPerils={props.perils.length}
+            currentPerilIndex={currentPerilIndex}
+            totalNumberOfPerils={perils.length}
             transition={transitionEnabled}
           >
             {tripledPerils.map((peril, index) => (
@@ -354,7 +358,7 @@ export const PerilModal: React.FC<PerilModalProps & ModalProps> = (props) => {
                 key={index}
                 onClick={() =>
                   actionsAllowed &&
-                  props.setCurrentPeril(index % tripledPerils.length)
+                  setCurrentPeril(index % tripledPerils.length)
                 }
               >
                 <img src={getIconUrl(peril.icon.variants.light.svgUrl)} />
@@ -368,8 +372,7 @@ export const PerilModal: React.FC<PerilModalProps & ModalProps> = (props) => {
         <LeftGradient>
           <BackButton
             onClick={() =>
-              actionsAllowed &&
-              props.setCurrentPeril(props.currentPerilIndex - 1)
+              actionsAllowed && setCurrentPeril(currentPerilIndex - 1)
             }
           >
             <BackArrow />
@@ -378,8 +381,7 @@ export const PerilModal: React.FC<PerilModalProps & ModalProps> = (props) => {
         <RightGradient>
           <ForwardButton
             onClick={() =>
-              actionsAllowed &&
-              props.setCurrentPeril(props.currentPerilIndex + 1)
+              actionsAllowed && setCurrentPeril(currentPerilIndex + 1)
             }
           >
             <ForwardArrow />

@@ -11,7 +11,7 @@ const whiteListedEnvVars = [
   'AUTH_NAME',
   'AUTH_PASS',
   'CSP_REPORT_ENDPOINT',
-  'GIRAFFE_ENDPOINT',
+  'GIRAFFE_HOST',
   'GIRAFFE_WS_ENDPOINT',
   'CONTENT_SERVICE_ENDPOINT',
   'USE_HELMET',
@@ -35,6 +35,7 @@ module.exports = webpackConfig({
     __dirname: true,
   },
   mode: process.env.NODE_ENV || 'development',
+  bail: process.env.NODE_ENV !== 'development',
   context: root,
   output: {
     filename: '[name].js',

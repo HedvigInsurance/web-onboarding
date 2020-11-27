@@ -11,6 +11,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'prettier/@typescript-eslint',
     'plugin:import/typescript',
+    'plugin:react-hooks/recommended',
     'plugin:prettier/recommended',
   ],
   parser: '@typescript-eslint/parser',
@@ -21,7 +22,7 @@ module.exports = {
       jsx: true,
     },
   },
-  plugins: ['import', 'react', '@typescript-eslint', 'prettier'],
+  plugins: ['import', 'react', 'react-hooks', '@typescript-eslint', 'prettier'],
   settings: {
     react: {
       version: 'detect',
@@ -48,8 +49,11 @@ module.exports = {
         ],
       },
     ],
+    'import/no-duplicates': 'error',
     'react/prop-types': 'off',
     'react/display-name': 'off',
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
@@ -58,4 +62,12 @@ module.exports = {
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
   },
+  overrides: [
+    {
+      files: ['src/client/data/graphql.tsx'],
+      rules: {
+        'import/no-duplicates': 'off',
+      },
+    },
+  ],
 }

@@ -32,7 +32,6 @@ const TextWrapper = styled('div')`
 `
 
 export const SignLoading: React.FC = () => {
-  const [timer, setTimer] = useState<number | null>(null)
   const [hasTakenLong, setHasTakenLong] = useState(false)
   const signStatusQuery = useSignStatusQuery({
     pollInterval: 1000,
@@ -61,9 +60,9 @@ export const SignLoading: React.FC = () => {
   })
 
   useEffect(() => {
-    setTimer(window.setTimeout(() => setHasTakenLong(true), 10000))
+    const timer = window.setTimeout(() => setHasTakenLong(true), 10000)
     return () => {
-      window.clearTimeout(timer!)
+      window.clearTimeout(timer)
     }
   }, [])
 
@@ -74,7 +73,11 @@ export const SignLoading: React.FC = () => {
     if (variation === Variation.AVY) {
       handleSignedEvent(member.data?.member ?? null)
     }
-  }, [signStatusQuery.data?.signStatus?.signState])
+  }, [
+    signStatusQuery.data?.signStatus?.signState,
+    member.data?.member,
+    variation,
+  ])
 
   const failureReturnUrl = currentLocale
     ? `/${currentLocale}/new-member/offer?sign-error=yes`

@@ -76,6 +76,11 @@ export const OfferNew: React.FC = () => {
     return <LoadingPage />
   }
 
+  const handleCheckoutToggle = (open: boolean) => {
+    toggleCheckout(open)
+    Intercom('update', { hide_default_launcher: open })
+  }
+
   const offerData = data?.quoteBundle
     ? getOfferData(data?.quoteBundle as QuoteBundle)
     : null
@@ -87,8 +92,6 @@ export const OfferNew: React.FC = () => {
       redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction',
     )
   }
-
-  // TODO: Add error component to render if there's no offerData
 
   return (
     <Page>
@@ -112,7 +115,7 @@ export const OfferNew: React.FC = () => {
                   offerData={offerData}
                   refetch={refetch as () => Promise<any>}
                   onCheckoutOpen={() => {
-                    toggleCheckout(true)
+                    handleCheckoutToggle(true)
                     track()
                   }}
                 />
@@ -124,7 +127,9 @@ export const OfferNew: React.FC = () => {
             <Checkout
               offerData={offerData}
               isOpen={checkoutMatch !== null}
-              onClose={() => toggleCheckout(false)}
+              onClose={() => {
+                handleCheckoutToggle(false)
+              }}
               refetch={refetch as () => Promise<any>}
             />
           </>

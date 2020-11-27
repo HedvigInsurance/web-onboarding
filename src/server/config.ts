@@ -1,10 +1,10 @@
 import * as dotenv from 'dotenv'
 dotenv.config()
 
-export const GIRAFFE_ENDPOINT =
+export const GIRAFFE_HOST =
   process.env.NODE_ENV === 'development'
-    ? process.env.GIRAFFE_ENDPOINT ?? 'https://graphql.dev.hedvigit.com/graphql'
-    : process.env.GIRAFFE_ENDPOINT!
+    ? process.env.GIRAFFE_HOST ?? 'https://graphql.dev.hedvigit.com'
+    : process.env.GIRAFFE_HOST!
 export const GIRAFFE_WS_ENDPOINT =
   process.env.NODE_ENV === 'development'
     ? process.env.GIRAFFE_WS_ENDPOINT ??

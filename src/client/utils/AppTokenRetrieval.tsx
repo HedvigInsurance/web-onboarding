@@ -15,10 +15,13 @@ export const AppTokenRetrieval: React.FC = ({ children }) => {
         <Mount
           on={() => {
             if (location.hash.includes('#token')) {
-              const token = location.hash.replace(/^#token=/, '')
+              const token = decodeURIComponent(
+                location.hash.replace(/^#token=/, ''),
+              )
 
-              storageState.setToken(decodeURIComponent(token))
+              storageState.setToken(token)
               apolloClient!.subscriptionClient.close(true, true)
+              apolloClient!.httpLink.options.headers.authorization = token
             }
           }}
         >

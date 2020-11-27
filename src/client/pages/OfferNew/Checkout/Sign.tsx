@@ -1,69 +1,34 @@
-import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand/dist'
-import { motion } from 'framer-motion'
 import React from 'react'
-import ReactMarkdown from 'react-markdown/with-html'
+import styled from '@emotion/styled'
+import { colorsV3 } from '@hedviginsurance/brand/dist'
+import { motion } from 'framer-motion'
 import { useMediaQuery } from 'react-responsive'
 import { Button } from 'components/buttons'
 import { Spinner } from 'components/utils'
-import {
-  InsuranceTermType,
-  SignStatus as GraphQLSignStatus,
-} from 'data/graphql'
-import { OfferData } from 'pages/OfferNew/types'
-import { isNorwegian, isSwedish } from 'pages/OfferNew/utils'
+import { SignStatus as GraphQLSignStatus } from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
 import { SignStatus } from './SignStatus'
 
-export const SignSpacer = styled('div')`
-  height: 250px;
-`
-const Wrapper = styled('div')`
-  position: absolute;
-  left: 0;
-  right: 0;
+type WrapperProps = {
+  isDesktop: boolean
+}
+
+const DESKTOP_BREAKPOINT = 600
+
+const Wrapper = styled('div')<WrapperProps>`
+  background: ${colorsV3.gray100};
+  box-shadow: 0 -1px 4px ${colorsV3.gray500};
+  width: 100%;
+  padding: 1rem;
+  position: sticky;
   bottom: 0;
-  width: 100%;
-  padding: 0 8rem 2.5rem 4.5rem;
-  background-image: linear-gradient(
-    to bottom,
-    rgba(249, 250, 252, 0),
-    ${colorsV2.offwhite} 50%
-  );
-
-  @media (max-width: 40rem) {
-    padding: 1rem;
-    padding-top: 0;
-  }
-`
-
-const ButtonWrapper = styled('div')`
-  display: flex;
-  width: 100%;
-
-  @media (max-width: 600px) {
-    justify-content: center;
+  @media screen and (min-width: ${DESKTOP_BREAKPOINT}px) {
+    padding: 1.5rem 2rem;
   }
 `
 
 const SpinnerWrapper = styled(motion.div)`
   display: inline-block;
-  padding-left: 0.5em;
-  margin-top: -1px;
-  vertical-align: text-top;
-  overflow: hidden;
-`
-
-const Disclaimer = styled('div')`
-  font-size: 0.75rem;
-  margin: 1rem 0 0;
-  color: ${colorsV2.gray};
-  line-height: 1.5;
-  padding: 0 0.5rem;
-
-  @media (max-width: 600rem) {
-    text-align: center;
-  }
 `
 
 export enum SignUiState {
@@ -74,102 +39,53 @@ export enum SignUiState {
 }
 
 interface Props {
-  offerData: OfferData
-  className?: string
   signUiState: SignUiState
   signStatus: GraphQLSignStatus | null
-  loading: boolean
+  isLoading: boolean
   canInitiateSign: boolean
   onSignStart: () => void
 }
 
 export const Sign: React.FC<Props> = ({
-  offerData,
-  className,
   signUiState,
   signStatus,
-  loading,
+  isLoading,
   canInitiateSign,
   onSignStart,
 }) => {
-  const isMobile = useMediaQuery({ maxWidth: 600 })
+  const isDesktop = useMediaQuery({ minWidth: DESKTOP_BREAKPOINT })
   const textKeys = useTextKeys()
 
   return (
-    <Wrapper className={className}>
-      <ButtonWrapper>
-        <Button
-          size={isMobile ? 'sm' : 'lg'}
-          disabled={!canInitiateSign}
-          onClick={async () => {
-            if (!canInitiateSign) {
-              return
-            }
+    <Wrapper isDesktop={isDesktop}>
+      <Button
+        onClick={async () => {
+          if (!canInitiateSign) {
+            return
+          }
 
-            onSignStart()
-          }}
-        >
-          {textKeys.CHECKOUT_SIGN_BUTTON_TEXT()}
+          onSignStart()
+        }}
+        size={isDesktop ? 'lg' : 'sm'}
+        fullWidth
+        foreground={colorsV3.gray900}
+        background={colorsV3.purple500}
+        disabled={!canInitiateSign}
+      >
+        {isLoading ? (
           <SpinnerWrapper
             initial={{ width: 0, opacity: 0 }}
-            animate={
-              loading ? { opacity: 1, width: 'auto' } : { opacity: 0, width: 0 }
-            }
+            animate={{ width: 'auto', opacity: 1 }}
           >
             <Spinner />
           </SpinnerWrapper>
-        </Button>
-      </ButtonWrapper>
-      <motion.div
-        initial={{ height: 'auto', opacity: 1 }}
-        animate={
-          ![SignUiState.STARTED, SignUiState.FAILED].includes(signUiState)
-            ? { opacity: 0, height: 0 }
-            : { opacity: 1, height: 'auto' }
-        }
-        transition={{ type: 'spring', stiffness: 400, damping: 100 }}
-      >
-        <SignStatus signStatus={signStatus} />
-      </motion.div>
-      {offerData.quotes.map((quote) => {
-        const seSignDisclaimer = textKeys.CHECKOUT_SIGN_DISCLAIMER({
-          PREBUY_LINK:
-            quote.insuranceTerms.get(InsuranceTermType.PreSaleInfoEuStandard)
-              ?.url ?? '',
-          TERMS_LINK:
-            quote.insuranceTerms.get(InsuranceTermType.TermsAndConditions)
-              ?.url ?? '',
-        })
-        const noSignDisclaimer = textKeys.CHECKOUT_SIGN_DISCLAIMER_NO({
-          TERMS_LINK:
-            quote.insuranceTerms.get(InsuranceTermType.TermsAndConditions)
-              ?.url ?? '',
-        })
-        return (
-          <Disclaimer key={quote.id}>
-            {isSwedish(offerData) && (
-              <ReactMarkdown
-                source={
-                  Array.isArray(seSignDisclaimer)
-                    ? seSignDisclaimer.join('')
-                    : seSignDisclaimer
-                }
-                linkTarget="_blank"
-              />
-            )}
-            {isNorwegian(offerData) && (
-              <ReactMarkdown
-                source={
-                  Array.isArray(noSignDisclaimer)
-                    ? noSignDisclaimer.join('')
-                    : noSignDisclaimer
-                }
-                linkTarget="_blank"
-              />
-            )}
-          </Disclaimer>
-        )
-      })}
+        ) : (
+          textKeys.CHECKOUT_SIGN_BUTTON_TEXT()
+        )}
+      </Button>
+      {signStatus && (
+        <SignStatus signStatus={signStatus} signUiState={signUiState} />
+      )}
     </Wrapper>
   )
 }

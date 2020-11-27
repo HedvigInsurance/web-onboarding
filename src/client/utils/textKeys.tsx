@@ -140,7 +140,8 @@ export const TextKeyProvider: React.FC<{
         setIsDebugmode(false)
       }
     }
-  }, [locationSearch?.includes(DEBUG_TEXTKEYS_QUERY)])
+  }, [locationSearch])
+
   useEffect(() => {
     sessionStorage.setItem(DEBUG_LOCAL_STORAGE_KEY, JSON.stringify(isDebugMode))
   }, [isDebugMode])
