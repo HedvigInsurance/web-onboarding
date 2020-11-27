@@ -1,5 +1,6 @@
 import { match } from 'matchly'
 import * as Yup from 'yup'
+import { FetchResult } from '@apollo/client'
 import { inputTypes, masks, Mask } from 'components/inputs'
 import {
   ApartmentType,
@@ -12,8 +13,12 @@ import {
   SwedishHouseQuoteDetails,
   DanishHomeContentsType,
   QuoteBundleQuery,
+  QuoteDetails,
+  EditQuoteMutation,
+  EditNorwegianHomeContentsInput,
+  EditDanishHomeContentsInput,
 } from 'data/graphql'
-import { OfferQuote } from 'pages/OfferNew/types'
+import { OfferQuote, OfferData } from 'pages/OfferNew/types'
 import {
   isStudent,
   isSwedishQuote,
@@ -22,8 +27,11 @@ import {
   isNorwegianQuote,
   isNorwegianHomeContents,
   isNorwegianTravel,
+  isDanish,
   isDanishQuote,
   isDanishHomeContents,
+  isBundle,
+  isNorwegian,
 } from '../../../utils'
 import {
   SwedishApartmentFieldSchema,
@@ -642,3 +650,85 @@ export const getInitialInputValues = (offerQuote: OfferQuote) =>
       `Expected quote details to be a valid type but was "${offerQuote.quoteDetails.__typename}"`,
     )
   })()
+
+export const getFormData = (form: EditQuoteInput, offerData: OfferData) => {
+  if (isDanish(offerData)) return form.danishHomeContents
+  return form.norwegianHomeContents
+}
+
+export type QuoteDetailsInput =
+  | EditDanishHomeContentsInput
+  | EditNorwegianHomeContentsInput
+
+export const getUpdatedQuoteDetails = (
+  quoteDetails: QuoteDetails,
+  input: QuoteDetailsInput,
+): Partial<QuoteDetails> => {
+  const { __typename, ...editQuoteDetails } = quoteDetails
+  return Object.keys(editQuoteDetails).reduce(
+    (newInput, key) => ({
+      ...newInput,
+      [key]: input![key as keyof QuoteDetailsInput],
+    }),
+    {},
+  )
+}
+
+const isResultUnderwritingLimitsHit = (
+  result: FetchResult<EditQuoteMutation>,
+) => result.data?.editQuote.__typename === 'UnderwritingLimitsHit'
+
+const isResultBundleUnderwritingLimitsHit = (
+  bundleResult: FetchResult<EditQuoteMutation>[],
+): boolean =>
+  bundleResult.some((result) => isResultUnderwritingLimitsHit(result))
+
+export const isUnderwritingLimitsHit = (
+  result: FetchResult<EditQuoteMutation> | FetchResult<EditQuoteMutation>[],
+) =>
+  Array.isArray(result)
+    ? isResultBundleUnderwritingLimitsHit(result)
+    : isResultUnderwritingLimitsHit(result)
+
+const hasEditQuoteError = (result: FetchResult<EditQuoteMutation>) =>
+  result.errors && result.errors.length > 0
+
+const hasEditQuoteBundleErrors = (
+  bundleResult: FetchResult<EditQuoteMutation>[],
+): boolean => bundleResult.some((result) => hasEditQuoteError(result))
+
+export const hasEditQuoteErrors = (
+  result: FetchResult<EditQuoteMutation> | FetchResult<EditQuoteMutation>[],
+) =>
+  !result || Array.isArray(result)
+    ? hasEditQuoteBundleErrors(result)
+    : hasEditQuoteError(result)
+
+export const getMainOfferQuote = (offerData: OfferData) => {
+  if (!isBundle(offerData)) return offerData.quotes[0]
+  if (isNorwegian(offerData)) {
+    const norwegianHomeContentQuote = offerData.quotes.find((quote) =>
+      isNorwegianHomeContents(quote.quoteDetails),
+    )
+    return norwegianHomeContentQuote ?? offerData.quotes[0]
+  }
+  const danishHomeContentQuote = offerData.quotes.find((quote) =>
+    isDanishHomeContents(quote.quoteDetails),
+  )
+  return danishHomeContentQuote ?? offerData.quotes[0]
+}
+
+export type QuoteType =
+  | 'swedishApartment'
+  | 'swedishHouse'
+  | 'norwegianHomeContents'
+  | 'norwegianTravel'
+  | 'danishHomeContents'
+
+export const getQuoteType = (quoteDetails: QuoteDetails): QuoteType => {
+  if (isSwedishApartment(quoteDetails)) return 'swedishApartment'
+  if (isSwedishHouse(quoteDetails)) return 'swedishHouse'
+  if (isNorwegianHomeContents(quoteDetails)) return 'norwegianHomeContents'
+  if (isNorwegianTravel(quoteDetails)) return 'norwegianTravel'
+  return 'danishHomeContents'
+}
