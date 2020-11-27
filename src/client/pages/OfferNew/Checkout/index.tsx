@@ -83,6 +83,10 @@ const ScrollWrapper = styled('div')<ScrollWrapperProps>`
   overflow-y: scroll;
 `
 
+const SignComponentSpacing = styled('div')`
+  height: 112px;
+`
+
 const InnerWrapper = styled('div')`
   display: flex;
   flex-direction: column;
@@ -318,21 +322,22 @@ export const Checkout: React.FC<Props> = ({
 
             <SignDisclaimer offerData={offerData} />
           </InnerWrapper>
-          <Sign
-            canInitiateSign={
-              canInitiateSign && !ssnUpdateLoading && !emailUpdateLoading
-            }
-            signUiState={signUiState}
-            signStatus={signStatus}
-            isLoading={
-              signQuotesMutation.loading ||
-              signUiState === SignUiState.STARTED ||
-              signUiState === SignUiState.STARTED_WITH_REDIRECT ||
-              emailUpdateLoading
-            }
-            onSignStart={startSign}
-          />
+          <SignComponentSpacing />
         </ScrollWrapper>
+        <Sign
+          canInitiateSign={
+            canInitiateSign && !ssnUpdateLoading && !emailUpdateLoading
+          }
+          signUiState={signUiState}
+          signStatus={signStatus}
+          isLoading={
+            signQuotesMutation.loading ||
+            signUiState === SignUiState.STARTED ||
+            signUiState === SignUiState.STARTED_WITH_REDIRECT ||
+            emailUpdateLoading
+          }
+          onSignStart={startSign}
+        />
       </OuterWrapper>
 
       <Backdrop visibilityState={visibilityState} onClick={onClose} />
