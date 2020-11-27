@@ -2,7 +2,6 @@ import { History } from 'history'
 import { SemanticEvents } from 'quepasa'
 import React from 'react'
 import { Redirect, useHistory, useRouteMatch } from 'react-router'
-import { useMediaQuery } from 'react-responsive'
 import { LoadingPage } from 'components/LoadingPage'
 import { TopBar } from 'components/TopBar'
 import {
@@ -62,7 +61,6 @@ export const OfferNew: React.FC = () => {
     '/:locale(se-en|se|no-en|no|dk-en|dk)/new-member/sign',
   )
   const toggleCheckout = createToggleCheckout(history, currentLocale)
-  const isMobile = useMediaQuery({ maxWidth: 640 })
 
   if (quoteIds.length === 0) {
     return <Redirect to={`/${currentLocale}/new-member`} />
@@ -80,9 +78,7 @@ export const OfferNew: React.FC = () => {
 
   const handleCheckoutToggle = (open: boolean) => {
     toggleCheckout(open)
-    if (isMobile) {
-      Intercom('update', { hide_default_launcher: open })
-    }
+    Intercom('update', { hide_default_launcher: open })
   }
 
   const offerData = data?.quoteBundle
@@ -96,8 +92,6 @@ export const OfferNew: React.FC = () => {
       redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction',
     )
   }
-
-  // TODO: Add error component to render if there's no offerData
 
   return (
     <Page>

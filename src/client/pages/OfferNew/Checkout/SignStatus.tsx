@@ -1,16 +1,16 @@
 import styled from '@emotion/styled'
 import React from 'react'
+import { motion } from 'framer-motion'
+import { colorsV3 } from '@hedviginsurance/brand/dist'
 import { SignState, SignStatus as GraphQLSignStatus } from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
+import { SignUiState } from './Sign'
 
-const Wrapper = styled('div')`
-  padding: 1rem 0.5rem 0 0.5rem;
-
-  @media (max-width: 600px) {
-    text-align: center;
-  }
+const SignStatusWrapper = styled(motion.div)`
+  padding: 2rem 0;
+  text-align: center;
+  color: ${colorsV3.gray900};
 `
-
 const BANK_ID_STATUS_TEXT_KEYS: Record<string, string> = {
   started: 'SIGN_BANKID_CODE_STARTED',
   userSign: 'SIGN_BANKID_CODE_USER_SIGN',
@@ -23,11 +23,12 @@ const BANK_ID_STATUS_TEXT_KEYS: Record<string, string> = {
   startFailed: 'SIGN_BANKID_CODE_START_FAILED',
 }
 
-interface Props {
+type Props = {
   signStatus: GraphQLSignStatus | null
+  signUiState: SignUiState
 }
 
-export const SignStatus: React.FC<Props> = ({ signStatus }) => {
+export const SignStatus: React.FC<Props> = ({ signStatus, signUiState }) => {
   const textKeys = useTextKeys()
 
   if (!signStatus) {
@@ -35,7 +36,15 @@ export const SignStatus: React.FC<Props> = ({ signStatus }) => {
   }
 
   return (
-    <Wrapper>
+    <SignStatusWrapper
+      initial={{ height: 0, opacity: 0 }}
+      animate={
+        ![SignUiState.STARTED, SignUiState.FAILED].includes(signUiState)
+          ? { height: 0, opacity: 0 }
+          : { height: 'auto', opacity: 1 }
+      }
+      transition={{ type: 'spring', stiffness: 400, damping: 100 }}
+    >
       {(() => {
         if (!signStatus?.signState) {
           return null
@@ -61,6 +70,6 @@ export const SignStatus: React.FC<Props> = ({ signStatus }) => {
 
         return null
       })()}
-    </Wrapper>
+    </SignStatusWrapper>
   )
 }

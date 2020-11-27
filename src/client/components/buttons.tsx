@@ -22,7 +22,7 @@ export const Button = styled.button<ButtonProps>`
   background: ${(props) =>
     props.disabled
       ? color(props.background ?? colorsV3.gray700)
-          .lighten(0.5)
+          .lighten(0.2)
           .toString()
       : props.background ?? colorsV3.gray900};
   color: ${(props) => props.foreground ?? colorsV3.white};
