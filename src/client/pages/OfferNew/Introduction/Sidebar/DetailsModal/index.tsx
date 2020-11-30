@@ -5,12 +5,20 @@ import React from 'react'
 import { Button } from 'components/buttons'
 import { Modal, ModalProps } from 'components/ModalNew'
 import { EditQuoteInput, useEditQuoteMutation } from 'data/graphql'
-import { OfferQuote } from 'pages/OfferNew/types'
+import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
+import { isBundle } from '../../../utils'
 import {
   getFieldSchema,
   getInitialInputValues,
   getValidationSchema,
+  getUpdatedQuoteDetails,
+  getFormData,
+  getQuoteType,
+  isUnderwritingLimitsHit,
+  hasEditQuoteErrors,
+  QuoteDetailsInput,
+  getMainOfferQuote,
 } from './utils'
 import { Details } from './Details'
 
@@ -83,26 +91,65 @@ const LoadingDimmer = styled.div<{ visible: boolean }>`
 `
 
 interface DetailsModalProps {
-  offerQuote: OfferQuote
+  offerData: OfferData
   refetch: () => Promise<void>
 }
 
 export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
-  offerQuote,
   refetch,
+  offerData,
   isVisible,
   onClose,
 }) => {
   const textKeys = useTextKeys()
   const [editQuote, editQuoteResult] = useEditQuoteMutation()
-  const fieldSchema = getFieldSchema(offerQuote)
-  const validationSchema = getValidationSchema(fieldSchema, offerQuote)
-  const initialValues = getInitialInputValues(offerQuote)
+  const mainOfferQuote = getMainOfferQuote(offerData)
+  const fieldSchema = getFieldSchema(mainOfferQuote)
+  const validationSchema = getValidationSchema(fieldSchema, mainOfferQuote)
+  const initialValues = getInitialInputValues(mainOfferQuote)
   const [isUpdating, setIsUpdating] = React.useState(false)
   const [
     isUnderwritingGuidelineHit,
     setIsUnderwritingGuidelineHit,
   ] = React.useState(false)
+
+  const bundleEditQuote = async (
+    form: EditQuoteInput,
+    offerData: OfferData,
+  ) => {
+    const mainQuoteResult = await editQuote({
+      variables: {
+        input: form,
+      },
+    })
+    if (
+      hasEditQuoteErrors(mainQuoteResult) ||
+      isUnderwritingLimitsHit(mainQuoteResult)
+    ) {
+      return mainQuoteResult
+    }
+    const quoutesToUpdate = offerData.quotes.filter(
+      (quote) => quote.id !== form.id,
+    )
+    const formValues = getFormData(form, offerData) as QuoteDetailsInput
+    return Promise.all(
+      quoutesToUpdate.map(async (quote) => {
+        const updateQuoteDetails = getUpdatedQuoteDetails(
+          quote.quoteDetails,
+          formValues,
+        )
+        const quoteType = getQuoteType(quote.quoteDetails)
+        return editQuote({
+          variables: {
+            input: {
+              id: quote.id,
+              [quoteType]: updateQuoteDetails,
+            },
+          },
+        })
+      }),
+    )
+  }
   return (
     <Modal isVisible={isVisible} onClose={onClose} dynamicHeight>
       <LoadingDimmer visible={isUpdating} />
@@ -115,15 +162,14 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
             setIsUpdating(true)
             setIsUnderwritingGuidelineHit(false)
             try {
-              const result = await editQuote({ variables: { input: form } })
-              if (!result || (result.errors && result.errors.length > 0)) {
+              const result = isBundle(offerData)
+                ? await bundleEditQuote(form, offerData)
+                : await editQuote({ variables: { input: form } })
+              if (hasEditQuoteErrors(result)) {
                 setIsUpdating(false)
                 return
               }
-
-              if (
-                result.data?.editQuote.__typename === 'UnderwritingLimitsHit'
-              ) {
+              if (isUnderwritingLimitsHit(result)) {
                 setIsUnderwritingGuidelineHit(true)
                 setIsUpdating(false)
                 return
@@ -146,7 +192,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
               <Details
                 fieldSchema={fieldSchema}
                 formikProps={formikProps}
-                offerQuote={offerQuote}
+                offerQuote={mainOfferQuote}
               />
               <Footer>
                 <Button type="submit" disabled={isUpdating}>
