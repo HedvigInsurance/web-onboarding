@@ -73,8 +73,10 @@ export const ExchangeTokenRetrieval: React.FC<{
     setTokenExchangeState(ExchangeTokenRetrievalState.Loading)
 
     if (!storageState.session.getSession()?.token) {
-      storageState.setToken('mock token to bypass initial auth layer')
+      const mockToken = 'mock token to bypass initial auth layer'
+      storageState.setToken(mockToken)
       apolloClient!.subscriptionClient.close(true, true)
+      apolloClient!.httpLink.options.headers.authorization = mockToken
     }
 
     let exchangeToken: string | null
@@ -100,6 +102,8 @@ export const ExchangeTokenRetrieval: React.FC<{
           case 'ExchangeTokenSuccessResponse':
             storageState.setToken(data.exchangeToken.token)
             apolloClient!.subscriptionClient.close(true, true)
+            apolloClient!.httpLink.options.headers.authorization =
+              data.exchangeToken.token
             setActualLoadingState(ExchangeTokenRetrievalState.Success)
             break
           case 'ExchangeTokenInvalidResponse':

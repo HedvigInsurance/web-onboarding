@@ -1,8 +1,8 @@
+import React, { useEffect, useRef, useState } from 'react'
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { SemanticEvents } from 'quepasa'
-import React, { useEffect, useRef, useState } from 'react'
 import { Mount } from 'react-lifecycle-components'
 import { Redirect } from 'react-router-dom'
 import { BackArrow } from 'components/icons/BackArrow'
@@ -27,25 +27,15 @@ import { Variation, useVariation } from 'utils/hooks/useVariation'
 import { CheckoutContent } from './CheckoutContent'
 import { useScrollLock, VisibilityState } from './hooks'
 import { Sign, SignUiState } from './Sign'
+import { SignDisclaimer } from './SignDisclaimer'
 
-interface Openable {
+type Openable = {
   visibilityState: VisibilityState
 }
 
-const OuterWrapper = styled('div')<Openable>`
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  height: 100%;
-  max-width: 40rem;
-  width: 100%;
-  overflow: hidden;
-  z-index: ${TOP_BAR_Z_INDEX + 1};
-
-  ${({ visibilityState }) =>
-    visibilityState === VisibilityState.CLOSED ? 'display: none;' : ''};
-`
+type ScrollWrapperProps = {
+  windowHeight: number
+}
 
 const slideInStyles = ({ visibilityState }: Openable) => {
   if (visibilityState === VisibilityState.CLOSED) {
@@ -71,55 +61,65 @@ const slideInStyles = ({ visibilityState }: Openable) => {
   `
 }
 
-const OuterScrollWrapper = styled('div')<Openable>`
-  position: absolute;
+const OuterWrapper = styled('div')<Openable>`
+  background: ${colorsV3.white};
+  position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
-  height: 100%;
+  height: 100vh;
+  max-width: 34rem;
   width: 100%;
-
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
-
+  z-index: ${TOP_BAR_Z_INDEX + 1};
   transition: transform 300ms, opacity 300ms;
   ${slideInStyles};
+
+  ${({ visibilityState }) =>
+    visibilityState === VisibilityState.CLOSED ? 'display: none;' : ''};
 `
 
-const SlidingSign = styled(Sign)<Openable>`
-  transition: transform 300ms, opacity 300ms;
-  ${slideInStyles};
+const ScrollWrapper = styled('div')<ScrollWrapperProps>`
+  height: ${({ windowHeight }) => windowHeight}px;
+  overflow-y: scroll;
+`
+
+const SignComponentSpacing = styled('div')`
+  height: 112px;
 `
 
 const InnerWrapper = styled('div')`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-evenly;
   width: 100%;
   min-height: 100%;
-  background: ${colorsV3.white};
-  padding: 5rem 8rem 2.5rem 4.5rem;
+  padding: 2rem;
 
   @media (max-width: 40rem) {
     padding: 1rem;
   }
 `
 
-const BackButtonWrapper = styled('div')`
-  padding-top: 1rem;
-  padding-bottom: 2rem;
-`
 const BackButton = styled('button')`
-  appearance: none;
   background: transparent;
   border: none;
+  border-radius: 100%;
   width: 2rem;
   height: 2rem;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  :focus {
+    outline: 0;
+    background: ${colorsV3.purple100};
+  }
 `
 
 const Backdrop = styled('div')<Openable>`
   position: fixed;
-  background: rgba(25, 25, 25, 0.4);
+  background: rgba(25, 25, 25, 0.5);
   top: 0;
   right: 0;
   bottom: 0;
@@ -189,7 +189,21 @@ export const Checkout: React.FC<Props> = ({
   const locale = useCurrentLocale()
   const variation = useVariation()
 
-  const outerWrapper = useRef<HTMLDivElement>()
+  const [windowInnerHeight, setWindowInnerHeight] = useState(window.innerHeight)
+
+  useEffect(() => {
+    const setWindowHeight = () => {
+      setWindowInnerHeight(window.innerHeight)
+    }
+
+    window.addEventListener('resize', setWindowHeight)
+
+    return () => {
+      window.removeEventListener('resize', setWindowHeight)
+    }
+  })
+
+  const scrollWrapper = useRef<HTMLDivElement>()
 
   useEffect(() => {
     if (
@@ -215,7 +229,7 @@ export const Checkout: React.FC<Props> = ({
       handleSignedEvent(member.data?.member ?? null)
     }
   }, [member.data?.member, signStatus?.signState, variation])
-  useScrollLock(visibilityState, outerWrapper)
+  useScrollLock(visibilityState, scrollWrapper)
 
   const canInitiateSign = Boolean(
     signUiState !== SignUiState.STARTED &&
@@ -283,16 +297,14 @@ export const Checkout: React.FC<Props> = ({
   return (
     <>
       <OuterWrapper visibilityState={visibilityState}>
-        <OuterScrollWrapper
-          ref={outerWrapper as React.MutableRefObject<HTMLDivElement | null>}
-          visibilityState={visibilityState}
+        <ScrollWrapper
+          ref={scrollWrapper as React.MutableRefObject<HTMLDivElement | null>}
+          windowHeight={windowInnerHeight}
         >
           <InnerWrapper>
-            <BackButtonWrapper>
-              <BackButton onClick={onClose}>
-                <BackArrow />
-              </BackButton>
-            </BackButtonWrapper>
+            <BackButton onClick={onClose}>
+              <BackArrow />
+            </BackButton>
 
             <CheckoutContent
               onSubmit={startSign}
@@ -307,19 +319,18 @@ export const Checkout: React.FC<Props> = ({
               }}
               refetch={refetch}
             />
-            <div />
-          </InnerWrapper>
-        </OuterScrollWrapper>
 
-        <SlidingSign
-          offerData={offerData}
-          visibilityState={visibilityState}
+            <SignDisclaimer offerData={offerData} />
+          </InnerWrapper>
+          <SignComponentSpacing />
+        </ScrollWrapper>
+        <Sign
           canInitiateSign={
             canInitiateSign && !ssnUpdateLoading && !emailUpdateLoading
           }
           signUiState={signUiState}
           signStatus={signStatus}
-          loading={
+          isLoading={
             signQuotesMutation.loading ||
             signUiState === SignUiState.STARTED ||
             signUiState === SignUiState.STARTED_WITH_REDIRECT ||
@@ -328,6 +339,7 @@ export const Checkout: React.FC<Props> = ({
           onSignStart={startSign}
         />
       </OuterWrapper>
+
       <Backdrop visibilityState={visibilityState} onClick={onClose} />
     </>
   )
