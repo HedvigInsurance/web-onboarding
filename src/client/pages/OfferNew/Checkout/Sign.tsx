@@ -20,7 +20,7 @@ const Wrapper = styled('div')<WrapperProps>`
   box-shadow: 0 -1px 4px ${colorsV3.gray500};
   width: 100%;
   padding: 1rem;
-  position: fixed;
+  position: sticky;
   bottom: 0;
   @media screen and (min-width: ${DESKTOP_BREAKPOINT}px) {
     padding: 1.5rem 2rem;
