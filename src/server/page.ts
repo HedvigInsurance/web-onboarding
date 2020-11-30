@@ -102,7 +102,9 @@ const template = (
         writable: false,
       })
     </script>
-    ${getClientScripts().map((script) => `<script src="${script}"></script>`)}
+    ${getClientScripts()
+      .map((script) => `<script src="${script}"></script>`)
+      .join('')}
   </body>
   </html>
   `
