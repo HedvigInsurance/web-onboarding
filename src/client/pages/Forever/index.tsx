@@ -16,6 +16,7 @@ import { useUpdatePickedLocaleMutation } from 'data/graphql'
 import { Intro } from 'pages/Forever/components/Intro'
 import { LOCALE_PATH_PATTERN } from 'shared/locale'
 import { useTextKeys } from 'utils/textKeys'
+import { useStorage } from 'utils/StorageContainer'
 import { RedeemCode } from './components/RedeemCode'
 import { useRedeemCode } from './useRedeemCode'
 
@@ -68,9 +69,14 @@ export const Forever: React.FC<ForeverProps> = ({
       pickedLocale: getPickedLocaleFromCurrentLocale(currentLocale),
     },
   })
+  const storage = useStorage()
+  const hasToken = Boolean(storage?.session?.getSession()?.token)
   useEffect(() => {
+    if (!hasToken) {
+      return
+    }
     updatePickedLocale()
-  }, [currentLocale, updatePickedLocale])
+  }, [currentLocale, updatePickedLocale, hasToken])
 
   return (
     <>
