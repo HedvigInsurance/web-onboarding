@@ -94,11 +94,16 @@ export const TrustlyModal: React.FC<Props> = ({
           ref={iframeRef}
           onLoad={async () => {
             const contentWindow = iframeRef.current?.contentWindow
-            await actualHandleIframeLoad(
-              setIsOpen,
-              setIsSuccess,
-              generateTrustlyUrl,
-            )(contentWindow)
+
+            try {
+              await actualHandleIframeLoad(
+                setIsOpen,
+                setIsSuccess,
+                generateTrustlyUrl,
+              )(contentWindow)
+            } catch (e) {
+              console.error(e.message)
+            }
           }}
         />
       )}
