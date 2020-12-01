@@ -67,7 +67,7 @@ const OuterWrapper = styled('div')<Openable>`
   top: 0;
   right: 0;
   bottom: 0;
-  height: 100vh;
+  height: 100%;
   max-width: 34rem;
   width: 100%;
   z-index: ${TOP_BAR_Z_INDEX + 1};
@@ -80,7 +80,7 @@ const OuterWrapper = styled('div')<Openable>`
 
 const ScrollWrapper = styled('div')<ScrollWrapperProps>`
   height: ${({ windowHeight }) => windowHeight}px;
-  overflow-y: scroll;
+  overflow-y: auto;
 `
 
 const SignComponentSpacing = styled('div')`
