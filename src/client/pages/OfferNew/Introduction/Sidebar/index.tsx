@@ -233,11 +233,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                     monthlyGross={offerData.cost.monthlyGross}
                     monthlyNet={offerData.cost.monthlyNet}
                   />
-                  {market !== Market.No && (
-                    <TextButton onClick={() => setDetailsModalIsOpen(true)}>
-                      {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
-                    </TextButton>
-                  )}
+                  <TextButton onClick={() => setDetailsModalIsOpen(true)}>
+                    {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
+                  </TextButton>
                 </Header>
                 <Body>
                   <BodyTitle>
@@ -300,14 +298,12 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                   refetch={() => refetchAll()}
                 />
               </Container>
-              {market !== Market.No && (
-                <DetailsModal
-                  offerQuote={offerData.quotes[0]}
-                  refetch={refetchAll}
-                  isVisible={detailsModalIsOpen}
-                  onClose={() => setDetailsModalIsOpen(false)}
-                />
-              )}
+              <DetailsModal
+                offerData={offerData}
+                refetch={refetchAll}
+                isVisible={detailsModalIsOpen}
+                onClose={() => setDetailsModalIsOpen(false)}
+              />
             </Wrapper>
           )}
         </ReactVisibilitySensor>
