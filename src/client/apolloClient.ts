@@ -56,7 +56,7 @@ export const apolloClient = (() => {
     }
   })
   const httpLink = new HttpLink({
-    credentials: 'include',
+    credentials: 'omit',
     uri: window.hedvigClientConfig.giraffeEndpoint,
     headers: {
       authorization: authorizationToken,
