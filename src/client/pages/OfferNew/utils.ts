@@ -234,6 +234,12 @@ export const maskAndFormatRawSsn = (ssn: string) => {
   return ssn.substr(CENTURY_LENGTH, DATE_LENGTH) + '-****'
 }
 
+export const ssnLengthByMarket: Record<Market, number> = {
+  SE: 12,
+  NO: 11,
+  DK: 10,
+}
+
 export const createSsnValidator = (market: Market) => (
   ssn: string,
 ): boolean => {
