@@ -4,7 +4,7 @@ import * as yup from 'yup'
 import { RawInputField } from 'components/inputs'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { WithEmailForm, WithSsnForm } from 'pages/OfferNew/types'
-import { createSsnValidator } from 'pages/OfferNew/utils'
+import { createSsnValidator, ssnLengthByMarket } from 'pages/OfferNew/utils'
 import { useTextKeys } from 'utils/textKeys'
 
 const BottomSpacedRawInputField = styled(RawInputField)`
@@ -41,9 +41,14 @@ export const UserDetailsForm: React.FC<Props> = ({
 
   // FIXME should we pick which ssn validation to use in a different way? or not really?
   const market = useMarket()
+  const ssnMaxLength = ssnLengthByMarket[market]
   const isValidSsn = createSsnValidator(market!)
 
-  const setSsn = (newSsn: string) => {
+  const handleSsnChange = (event: React.FormEvent<HTMLInputElement>) => {
+    const { value } = event.currentTarget
+    const nonNumbersRegex = /\D/
+    const newSsn = value.replace(nonNumbersRegex, '')
+
     if (ssnChangeTimout) {
       window.clearTimeout(ssnChangeTimout)
       setSsnChangeTimout(null)
@@ -104,14 +109,13 @@ export const UserDetailsForm: React.FC<Props> = ({
           placeholder={textKeys.CHECKOUT_SSN_PLACEHOLDER()}
           name="ssn"
           id="ssn"
-          type="number"
+          type="text"
           inputMode="numeric"
           pattern="[0-9]*"
+          maxLength={ssnMaxLength}
           value={ssn}
           // errors={ssnError ? textKeys.SIGN_SSN_CHECK() : undefined} TODO error handling?
-          onChange={(e: React.ChangeEvent<any>) => {
-            setSsn(e.target.value)
-          }}
+          onChange={handleSsnChange}
           onBlur={() => {
             if (!isValidSsn(ssn) || ssn === initialSsn) {
               return
