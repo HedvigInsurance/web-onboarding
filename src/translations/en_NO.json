@@ -146,7 +146,7 @@
   "FOREVER_DOWNLOAD_PARAGRAPH": "Now you’re a Hedvig member. Download the app to get started and don’t forget to invite your friends!",
   "FOREVER_DOWNLOAD_DOWNLOAD_APP_CTA": "Download the app",
   "WEB_GENERIC_CAMPAIGN_ADDEDPERK": "Code from {CAMPAIGN_NAME} has been registered.",
-  "CHECKOUT_SSN_LABEL": "National identity number",
+  "CHECKOUT_SSN_LABEL": "National identity number (DDMMYYXXXXX)",
   "STARTPAGE_CONTENTS_BODY": "Get your price",
   "STARTPAGE_CONTENTS_HEADLINE": "Contents insurance",
   "STARTPAGE_TRAVEL_HEADLINE": "Travel insurance",
