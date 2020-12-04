@@ -142,7 +142,7 @@
   "FOREVER_LANDINGPAGE_BTN_LABEL": "Næste",
   "FOREVER_LANDINGPAGE_INFO_TEXT": "Dette er en eksklusiv hjemmeside, som kun er for inviterede personer. Hvis du ikke har en kode på nuværende tidspunkt, bliver du stillet videre til [vores almindelige hjemmeside](https:\/\/www.hedvig.com\/se\/new-member).",
   "FOREVER_LANDINGPAGE_DESCRIPTION": "Tillykke! Du er blevet inviteret til Hedvig Forever. Brug min kode {CODE} til at sænke din månedlige pris. ",
-  "FOREVER_DOWNLOAD_HEADING": "Velkommen {first_name}!",
+  "FOREVER_DOWNLOAD_HEADING": "Velkommen {FIRST_NAME}!",
   "FOREVER_DOWNLOAD_PARAGRAPH": "Du er nu Hedvig-medlem. Download appen for at komme i gang, og husk at invitere dine venner!",
   "FOREVER_DOWNLOAD_DOWNLOAD_APP_CTA": "Download appen",
   "WEB_GENERIC_CAMPAIGN_ADDEDPERK": "Rabatkode fra {CAMPAIGN_NAME} er tilføjet.",
