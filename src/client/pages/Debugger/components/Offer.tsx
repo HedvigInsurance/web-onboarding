@@ -2,7 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { Form, Formik, FormikProps } from 'formik'
 import { v4 as uuid } from 'uuid'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { CreateQuoteInput, useQuoteLazyQuery } from 'data/graphql'
+import { CreateQuoteVariables } from '@hedviginsurance/embark'
+import {
+  CreateQuoteInput,
+  useQuoteLazyQuery,
+  useCreateDanishHomeAccidentQuoteMutation,
+  useCreateDanishHomeAccidentTravelQuoteMutation,
+} from 'data/graphql'
 import { createQuote } from 'pages/Embark/createQuote'
 import { Button, LinkButton } from 'components/buttons'
 import { InputField } from 'components/inputs'
@@ -102,9 +108,28 @@ const getCurrentAvailableQuoteData = (
   return currentQuoteTypeData
 }
 
+const getDanishQuoteValues = (
+  values: Values,
+  quoteType: 'danishTravel' | 'danishAccident',
+) => {
+  const quoteId = uuid()
+  const { danishHomeContents, ...filteredValues } = values!
+  const { type, livingSpace, ...QuoteTypeValues } = danishHomeContents!
+  return {
+    ...filteredValues,
+    id: quoteId,
+    [quoteType]: QuoteTypeValues,
+  } as CreateQuoteInput
+}
+
 export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
   const [quoteId, setQuoteId] = useState<string>('') // TODO handle multiple quotes
   const [getQuote, { data, refetch }] = useQuoteLazyQuery()
+  const [createHomeAccidentQuote] = useCreateDanishHomeAccidentQuoteMutation()
+  const [
+    createHomeAccidentTravelQuote,
+  ] = useCreateDanishHomeAccidentTravelQuoteMutation()
+
   const [quoteCreatingError, setQuoteCreatingError] = useState<string | null>(
     null,
   )
@@ -121,24 +146,42 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
     values: Values,
     storage: Record<string, unknown>,
   ) => {
-    if (sessionToken) {
-      const { danishQuoteType, ...filteredValues } = values
+    const input = {
+      ...values,
+      id: quoteId,
+      currentInsurer: values.currentInsurer || undefined,
+      // @ts-ignore
+      startDate: values.startDate || undefined,
+    }
+    if (quoteType === QuoteType.DanishHomeAccident) {
+      const accidentInput = getDanishQuoteValues(input, 'danishAccident')
+      await createHomeAccidentQuote({
+        variables: {
+          homeInput: input as CreateQuoteInput,
+          accidentInput,
+        },
+      })
+    } else if (quoteType === QuoteType.DanishHomeAccidentTravel) {
+      const accidentInput = getDanishQuoteValues(input, 'danishAccident')
+      const travelInput = getDanishQuoteValues(input, 'danishTravel')
+      await createHomeAccidentTravelQuote({
+        variables: {
+          homeInput: input as CreateQuoteInput,
+          accidentInput,
+          travelInput,
+        },
+      })
+    } else {
       await createQuote(
         storage,
         localeIsoCode,
       )({
-        input: {
-          ...filteredValues,
-          id: quoteId,
-          currentInsurer: values.currentInsurer || undefined,
-          // @ts-ignore
-          startDate: values.startDate || undefined,
-        },
+        input: input as CreateQuoteVariables['input'],
       }).catch((error) => setQuoteCreatingError(error.message))
+    }
 
-      if (refetch) {
-        await refetch()
-      }
+    if (refetch) {
+      await refetch()
     }
   }
 
