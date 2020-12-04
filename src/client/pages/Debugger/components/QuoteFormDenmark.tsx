@@ -20,7 +20,7 @@ export const initialDkHomeValues = {
   },
 }
 
-export const DanishHome: React.FC<WithFormikProps> = ({ formik }) => {
+export const DanishQuote: React.FC<WithFormikProps> = ({ formik }) => {
   return (
     <>
       <InputField

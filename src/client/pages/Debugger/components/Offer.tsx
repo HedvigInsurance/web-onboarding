@@ -20,7 +20,7 @@ import {
   NorwegianHome,
   NorwegianTravel,
 } from './QuoteFormNorway'
-import { DanishHome, initialDkHomeValues } from './QuoteFormDenmark'
+import { DanishQuote, initialDkHomeValues } from './QuoteFormDenmark'
 
 type OfferProps = { sessionToken?: string | null }
 
@@ -32,6 +32,8 @@ export type WithFormikProps = {
 
 enum QuoteType {
   DanishHome = 'danish-home',
+  DanishHomeAccident = 'danish-home-accident',
+  DanishHomeAccidentTravel = 'danish-home-accident-travel',
   NorwegianHome = 'norwegian-home',
   NorwegianTravel = 'norwegian-travel',
   SwedishApartment = 'swedish-apartment',
@@ -51,6 +53,16 @@ const quotesByMarket: QuotesByMarket = {
     {
       label: 'Danish Home',
       value: QuoteType.DanishHome,
+      initialFormValues: initialDkHomeValues,
+    },
+    {
+      label: 'Danish Home + Accident',
+      value: QuoteType.DanishHomeAccident,
+      initialFormValues: initialDkHomeValues,
+    },
+    {
+      label: 'Danish Home + Accident + Travel',
+      value: QuoteType.DanishHomeAccidentTravel,
       initialFormValues: initialDkHomeValues,
     },
   ],
@@ -110,12 +122,13 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
     storage: Record<string, unknown>,
   ) => {
     if (sessionToken) {
+      const { danishQuoteType, ...filteredValues } = values
       await createQuote(
         storage,
         localeIsoCode,
       )({
         input: {
-          ...values,
+          ...filteredValues,
           id: quoteId,
           currentInsurer: values.currentInsurer || undefined,
           // @ts-ignore
@@ -249,8 +262,10 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
                       {quoteType === QuoteType.NorwegianTravel && (
                         <NorwegianTravel formik={props} />
                       )}
-                      {quoteType === QuoteType.DanishHome && (
-                        <DanishHome formik={props} />
+                      {(quoteType === QuoteType.DanishHome ||
+                        quoteType === QuoteType.DanishHomeAccident ||
+                        quoteType === QuoteType.DanishHomeAccidentTravel) && (
+                        <DanishQuote formik={props} />
                       )}
 
                       <Button
