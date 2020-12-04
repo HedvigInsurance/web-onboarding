@@ -5,10 +5,6 @@ export type Maybe<T> = T | null
 export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K]
 }
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
-  { [SubKey in K]?: Maybe<T[SubKey]> }
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
-  { [SubKey in K]: Maybe<T[SubKey]> }
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string
@@ -8646,6 +8642,53 @@ export type CreateDanishHomeAccidentQuoteMutation = {
     | { __typename: 'UnderwritingLimitsHit' }
 }
 
+export type CreateDanishHomeAccidentTravelQuoteMutationVariables = Exact<{
+  homeInput: CreateQuoteInput
+  accidentInput: CreateQuoteInput
+  travelInput: CreateQuoteInput
+}>
+
+export type CreateDanishHomeAccidentTravelQuoteMutation = {
+  __typename?: 'Mutation'
+} & {
+  createHomeContents:
+    | ({ __typename: 'CompleteQuote' } & Pick<CompleteQuote, 'id'> & {
+          quoteDetails:
+            | { __typename: 'SwedishApartmentQuoteDetails' }
+            | { __typename: 'SwedishHouseQuoteDetails' }
+            | { __typename: 'NorwegianHomeContentsDetails' }
+            | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'DanishHomeContentsDetails' }
+            | { __typename: 'DanishAccidentDetails' }
+            | { __typename: 'DanishTravelDetails' }
+        })
+    | { __typename: 'UnderwritingLimitsHit' }
+  createAccident:
+    | ({ __typename: 'CompleteQuote' } & Pick<CompleteQuote, 'id'> & {
+          quoteDetails:
+            | { __typename: 'SwedishApartmentQuoteDetails' }
+            | { __typename: 'SwedishHouseQuoteDetails' }
+            | { __typename: 'NorwegianHomeContentsDetails' }
+            | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'DanishHomeContentsDetails' }
+            | { __typename: 'DanishAccidentDetails' }
+            | { __typename: 'DanishTravelDetails' }
+        })
+    | { __typename: 'UnderwritingLimitsHit' }
+  createTravel:
+    | ({ __typename: 'CompleteQuote' } & Pick<CompleteQuote, 'id'> & {
+          quoteDetails:
+            | { __typename: 'SwedishApartmentQuoteDetails' }
+            | { __typename: 'SwedishHouseQuoteDetails' }
+            | { __typename: 'NorwegianHomeContentsDetails' }
+            | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'DanishHomeContentsDetails' }
+            | { __typename: 'DanishAccidentDetails' }
+            | { __typename: 'DanishTravelDetails' }
+        })
+    | { __typename: 'UnderwritingLimitsHit' }
+}
+
 export type EditQuoteMutationVariables = Exact<{
   input: EditQuoteInput
 }>
@@ -9662,6 +9705,86 @@ export type CreateDanishHomeAccidentQuoteMutationResult = ApolloReactCommon.Muta
 export type CreateDanishHomeAccidentQuoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
   CreateDanishHomeAccidentQuoteMutation,
   CreateDanishHomeAccidentQuoteMutationVariables
+>
+export const CreateDanishHomeAccidentTravelQuoteDocument = gql`
+  mutation CreateDanishHomeAccidentTravelQuote(
+    $homeInput: CreateQuoteInput!
+    $accidentInput: CreateQuoteInput!
+    $travelInput: CreateQuoteInput!
+  ) {
+    createHomeContents: createQuote(input: $homeInput) {
+      __typename
+      ... on CompleteQuote {
+        id
+        quoteDetails {
+          __typename
+        }
+      }
+    }
+    createAccident: createQuote(input: $accidentInput) {
+      __typename
+      ... on CompleteQuote {
+        id
+        quoteDetails {
+          __typename
+        }
+      }
+    }
+    createTravel: createQuote(input: $travelInput) {
+      __typename
+      ... on CompleteQuote {
+        id
+        quoteDetails {
+          __typename
+        }
+      }
+    }
+  }
+`
+export type CreateDanishHomeAccidentTravelQuoteMutationFn = ApolloReactCommon.MutationFunction<
+  CreateDanishHomeAccidentTravelQuoteMutation,
+  CreateDanishHomeAccidentTravelQuoteMutationVariables
+>
+
+/**
+ * __useCreateDanishHomeAccidentTravelQuoteMutation__
+ *
+ * To run a mutation, you first call `useCreateDanishHomeAccidentTravelQuoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDanishHomeAccidentTravelQuoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createDanishHomeAccidentTravelQuoteMutation, { data, loading, error }] = useCreateDanishHomeAccidentTravelQuoteMutation({
+ *   variables: {
+ *      homeInput: // value for 'homeInput'
+ *      accidentInput: // value for 'accidentInput'
+ *      travelInput: // value for 'travelInput'
+ *   },
+ * });
+ */
+export function useCreateDanishHomeAccidentTravelQuoteMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateDanishHomeAccidentTravelQuoteMutation,
+    CreateDanishHomeAccidentTravelQuoteMutationVariables
+  >,
+) {
+  return Apollo.useMutation<
+    CreateDanishHomeAccidentTravelQuoteMutation,
+    CreateDanishHomeAccidentTravelQuoteMutationVariables
+  >(CreateDanishHomeAccidentTravelQuoteDocument, baseOptions)
+}
+export type CreateDanishHomeAccidentTravelQuoteMutationHookResult = ReturnType<
+  typeof useCreateDanishHomeAccidentTravelQuoteMutation
+>
+export type CreateDanishHomeAccidentTravelQuoteMutationResult = ApolloReactCommon.MutationResult<
+  CreateDanishHomeAccidentTravelQuoteMutation
+>
+export type CreateDanishHomeAccidentTravelQuoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  CreateDanishHomeAccidentTravelQuoteMutation,
+  CreateDanishHomeAccidentTravelQuoteMutationVariables
 >
 export const EditQuoteDocument = gql`
   mutation EditQuote($input: EditQuoteInput!) {
