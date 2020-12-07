@@ -5,7 +5,6 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { CreateQuoteVariables } from '@hedviginsurance/embark'
 import {
   CreateQuoteInput,
-  useQuoteLazyQuery,
   useCreateDanishHomeAccidentQuoteMutation,
   useCreateDanishHomeAccidentTravelQuoteMutation,
   useQuoteBundleLazyQuery,
