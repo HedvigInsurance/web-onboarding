@@ -54,7 +54,7 @@ const RowButton = styled.button<{ datePickerOpen: boolean; isSplit: boolean }>`
   height: 3.25rem;
   width: 100%;
   padding: 0 0.75rem;
-  border: 1px solid ${colorsV3.gray300};
+  border: 1px solid ${colorsV3.gray500};
   outline: 0;
   background-color: ${colorsV3.white};
   border-radius: 8px;

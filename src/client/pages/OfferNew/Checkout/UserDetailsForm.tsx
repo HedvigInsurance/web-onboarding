@@ -7,9 +7,6 @@ import { WithEmailForm, WithSsnForm } from 'pages/OfferNew/types'
 import { createSsnValidator, ssnLengthByMarket } from 'pages/OfferNew/utils'
 import { useTextKeys } from 'utils/textKeys'
 
-const BottomSpacedRawInputField = styled(RawInputField)`
-  margin-bottom: 1rem;
-`
 const HiddenSubmit = styled.input`
   display: none;
 `
@@ -99,7 +96,7 @@ export const UserDetailsForm: React.FC<Props> = ({
         }
       }}
     >
-      <BottomSpacedRawInputField
+      <RawInputField
         label={textKeys.CHECKOUT_EMAIL_LABEL()}
         placeholder={textKeys.CHECKOUT_EMAIL_PLACEHOLDER()}
         name="email"
@@ -114,7 +111,7 @@ export const UserDetailsForm: React.FC<Props> = ({
       />
 
       {(market === Market.No || market === Market.Dk) && (
-        <BottomSpacedRawInputField
+        <RawInputField
           label={textKeys.CHECKOUT_SSN_LABEL()}
           placeholder={textKeys.CHECKOUT_SSN_PLACEHOLDER()}
           name="ssn"
