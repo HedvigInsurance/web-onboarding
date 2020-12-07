@@ -7137,6 +7137,8 @@ export type Query = {
   adyenPublicKey: Scalars['String']
   /** Returns all the available payouts methods before the client requests a payout tokenization */
   availablePayoutMethods: AvailablePaymentMethodsResponse
+  /** Returns the active payout method which the member chose to tokenize */
+  activePayoutMethods?: Maybe<ActivePaymentMethodsResponse>
   /** Returns campaign associated with code */
   campaign: Campaign
   /** Returns information about the authed member's referralCampaign and referrals */
@@ -9231,8 +9233,14 @@ export type QuoteBundleQuery = { __typename?: 'Query' } & {
                 DanishHomeContentsDetails,
                 'street' | 'zipCode' | 'livingSpace' | 'coInsured' | 'isStudent'
               > & { danishHomeType: DanishHomeContentsDetails['type'] })
-            | { __typename?: 'DanishAccidentDetails' }
-            | { __typename?: 'DanishTravelDetails' }
+            | ({ __typename?: 'DanishAccidentDetails' } & Pick<
+                DanishAccidentDetails,
+                'street' | 'zipCode' | 'coInsured' | 'isStudent'
+              >)
+            | ({ __typename?: 'DanishTravelDetails' } & Pick<
+                DanishTravelDetails,
+                'street' | 'zipCode' | 'coInsured' | 'isStudent'
+              >)
         }
     >
     bundleCost: { __typename?: 'InsuranceCost' } & Pick<
@@ -10472,6 +10480,18 @@ export const QuoteBundleDocument = gql`
             zipCode
             livingSpace
             danishHomeType: type
+            coInsured
+            isStudent
+          }
+          ... on DanishAccidentDetails {
+            street
+            zipCode
+            coInsured
+            isStudent
+          }
+          ... on DanishTravelDetails {
+            street
+            zipCode
             coInsured
             isStudent
           }
