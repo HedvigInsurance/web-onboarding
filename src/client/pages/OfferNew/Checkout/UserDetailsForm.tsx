@@ -14,7 +14,8 @@ const HiddenSubmit = styled.input`
   display: none;
 `
 
-type Props = WithEmailForm & WithSsnForm & { onSubmit?: () => void }
+type Props = WithEmailForm &
+  WithSsnForm & { onSubmit?: () => void; ssnBackendError?: string }
 
 export const emailValidation = yup
   .string()
@@ -25,6 +26,7 @@ export const UserDetailsForm: React.FC<Props> = ({
   email: initialEmail,
   onEmailChange,
   ssn: initialSsn,
+  ssnBackendError,
   onSsnChange,
   onSubmit,
 }) => {
@@ -62,6 +64,14 @@ export const UserDetailsForm: React.FC<Props> = ({
         }
       }, 500),
     )
+  }
+
+  const handleSsnBlur = () => {
+    if (!isValidSsn(ssn) || ssn === initialSsn) {
+      return
+    }
+
+    onSsnChange(ssn)
   }
 
   const setEmailDebounced = (newEmail: string) => {
@@ -114,15 +124,9 @@ export const UserDetailsForm: React.FC<Props> = ({
           pattern="[0-9]*"
           maxLength={ssnMaxLength}
           value={ssn}
-          // errors={ssnError ? textKeys.SIGN_SSN_CHECK() : undefined} TODO error handling?
+          errors={ssnBackendError ? textKeys[ssnBackendError]() : undefined}
           onChange={handleSsnChange}
-          onBlur={() => {
-            if (!isValidSsn(ssn) || ssn === initialSsn) {
-              return
-            }
-
-            onSsnChange(ssn)
-          }}
+          onBlur={handleSsnBlur}
         />
       )}
       <HiddenSubmit type="submit" />

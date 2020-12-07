@@ -16,6 +16,7 @@ import {
 } from '../utils'
 import { InsuranceSummary } from './InsuranceSummary'
 import { UserDetailsForm } from './UserDetailsForm'
+import { useSsnError } from './hooks'
 
 const Section = styled('div')`
   width: 100%;
@@ -78,6 +79,7 @@ export const CheckoutContent: React.FC<Props> = ({
   const [fakeLoading, setFakeLoading] = React.useState(false)
   const [reallyLoading, setReallyLoading] = React.useState(false)
   const [editQuote, editQuoteResult] = useEditQuoteMutation()
+  const { ssnBackendError } = useSsnError(editQuoteResult)
   const quoteIds = getQuoteIds(offerData)
 
   useUnderwritingLimitsHitReporter(
@@ -135,6 +137,7 @@ export const CheckoutContent: React.FC<Props> = ({
             onEmailUpdate(onCompletion)
           }}
           ssn={offerData.person.ssn ?? ''}
+          ssnBackendError={ssnBackendError}
           onSsnChange={(ssn) => {
             const onCompletion = new Promise<void>((resolve, reject) => {
               setFakeLoading(true)

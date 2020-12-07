@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { EditQuoteMutationResult } from 'src/client/data/graphql'
 
 export enum VisibilityState {
   CLOSED = 'CLOSED',
@@ -45,3 +46,22 @@ export const useScrollLock = (
       window.removeEventListener('touchmove', listener)
     }
   }, [outerWrapperRef, visibilityState])
+
+export const useSsnError = (editQuoteResult: EditQuoteMutationResult) => {
+  const [ssnBackendError, setSsnBackendError] = useState('')
+  const editQuote = editQuoteResult.data?.editQuote
+
+  useEffect(() => {
+    if (
+      editQuote?.__typename === 'UnderwritingLimitsHit' &&
+      editQuote?.limits.length > 0
+    ) {
+      const { code } = editQuote.limits[editQuote.limits.length - 1]
+      setSsnBackendError(code)
+      return
+    }
+    setSsnBackendError('')
+  }, [editQuote])
+
+  return { ssnBackendError }
+}
