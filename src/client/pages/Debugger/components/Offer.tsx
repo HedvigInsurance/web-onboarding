@@ -8,6 +8,7 @@ import {
   useQuoteLazyQuery,
   useCreateDanishHomeAccidentQuoteMutation,
   useCreateDanishHomeAccidentTravelQuoteMutation,
+  useQuoteBundleLazyQuery,
 } from 'data/graphql'
 import { createQuote } from 'pages/Embark/createQuote'
 import { Button, LinkButton } from 'components/buttons'
@@ -112,19 +113,17 @@ const getDanishQuoteValues = (
   values: Values,
   quoteType: 'danishTravel' | 'danishAccident',
 ) => {
-  const quoteId = uuid()
   const { danishHomeContents, ...filteredValues } = values!
   const { type, livingSpace, ...QuoteTypeValues } = danishHomeContents!
   return {
     ...filteredValues,
-    id: quoteId,
     [quoteType]: QuoteTypeValues,
   } as CreateQuoteInput
 }
 
 export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
-  const [quoteId, setQuoteId] = useState<string>('') // TODO handle multiple quotes
-  const [getQuote, { data, refetch }] = useQuoteLazyQuery()
+  const [quoteIds, setQuoteIds] = useState<string[]>([])
+  const [getQuotes, { data, refetch }] = useQuoteBundleLazyQuery()
   const [createHomeAccidentQuote] = useCreateDanishHomeAccidentQuoteMutation()
   const [
     createHomeAccidentTravelQuote,
@@ -148,13 +147,16 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
   ) => {
     const input = {
       ...values,
-      id: quoteId,
+      id: quoteIds[0],
       currentInsurer: values.currentInsurer || undefined,
       // @ts-ignore
       startDate: values.startDate || undefined,
     }
     if (quoteType === QuoteType.DanishHomeAccident) {
-      const accidentInput = getDanishQuoteValues(input, 'danishAccident')
+      const accidentInput = getDanishQuoteValues(
+        { ...input, id: quoteIds[1] },
+        'danishAccident',
+      )
       await createHomeAccidentQuote({
         variables: {
           homeInput: input as CreateQuoteInput,
@@ -162,8 +164,14 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
         },
       })
     } else if (quoteType === QuoteType.DanishHomeAccidentTravel) {
-      const accidentInput = getDanishQuoteValues(input, 'danishAccident')
-      const travelInput = getDanishQuoteValues(input, 'danishTravel')
+      const accidentInput = getDanishQuoteValues(
+        { ...input, id: quoteIds[1] },
+        'danishAccident',
+      )
+      const travelInput = getDanishQuoteValues(
+        { ...input, id: quoteIds[2] },
+        'danishTravel',
+      )
       await createHomeAccidentTravelQuote({
         variables: {
           homeInput: input as CreateQuoteInput,
@@ -186,73 +194,91 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
   }
 
   useEffect(() => {
-    const quoteIds = storageState.session.getSession()?.quoteIds ?? []
-
-    if (!quoteId && quoteIds[0]) {
-      setQuoteId(quoteIds[0] ?? '')
+    const sessionQuoteIds = storageState.session.getSession()?.quoteIds ?? []
+    if (quoteIds.length === 0 && sessionQuoteIds[0]) {
+      setQuoteIds([...sessionQuoteIds])
       return
     }
-
-    if (!quoteId && !quoteIds.length) {
-      setQuoteId(uuid())
+    if (quoteIds.length === 0 && !sessionQuoteIds.length) {
+      setQuoteIds([uuid()])
     }
-
     storageState.session.setSession({
       ...storageState.session.getSession(),
-      quoteIds: [quoteId],
+      quoteIds: quoteIds,
     })
-  }, [getQuote, localeIsoCode, quoteId, storageState.session])
+  }, [getQuotes, localeIsoCode, quoteIds, storageState.session])
 
   useEffect(() => {
-    if (quoteId?.length === 36 && sessionToken) {
-      getQuote({ variables: { id: quoteId, perilsLocale: localeIsoCode } })
+    if (quoteIds.every((quote) => quote?.length === 36) && sessionToken) {
+      getQuotes({
+        variables: { input: { ids: quoteIds }, locale: localeIsoCode },
+      })
     }
-  }, [quoteId, sessionToken, localeIsoCode, getQuote])
+  }, [quoteIds, sessionToken, localeIsoCode, getQuotes])
+
+  useEffect(() => {
+    if (quoteType === QuoteType.DanishHomeAccident) {
+      setQuoteIds((prev) => [prev[0], uuid()])
+      return
+    }
+    if (quoteType === QuoteType.DanishHomeAccidentTravel) {
+      setQuoteIds((prev) => [prev[0], uuid(), uuid()])
+      return
+    }
+    setQuoteIds((prev) => [prev[0]])
+  }, [quoteType])
 
   return (
     <StorageContainer>
       {(storage) => (
         <>
           <Formik
-            initialValues={{ quoteId }}
+            initialValues={{}}
             onSubmit={() => {
               /* noop */
             }}
           >
             {() => (
               <InputField
-                label="Quote id"
-                name="Quote id"
-                placeholder="d6c60432-dc7b-4405-840e-b4fd8164e310"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setQuoteId(e.target.value)
-                }}
-                value={quoteId}
+                label="Type"
+                placeholder=""
+                options={quotesByMarket[currentMarket]}
+                value={quoteType}
+                onChange={(value: React.ChangeEvent<HTMLSelectElement>) =>
+                  setQuoteType(value.target.value as QuoteType)
+                }
               />
             )}
           </Formik>
+          <Formik
+            initialValues={{ quoteIds }}
+            onSubmit={() => {
+              /* noop */
+            }}
+          >
+            {() => {
+              return quoteIds.map((quoteId, index) => (
+                <InputField
+                  key={`quote_ids_${index}`}
+                  label="Quote id"
+                  name="Quote id"
+                  placeholder="d6c60432-dc7b-4405-840e-b4fd8164e310"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    const newValue = e.target.value
+                    setQuoteIds((prev) => {
+                      const newState = [...prev]
+                      newState[index] = newValue
+                      return newState
+                    })
+                  }}
+                  value={quoteId}
+                />
+              ))
+            }}
+          </Formik>
 
-          {!data?.quote && !quoteCreatingError && (
+          {!data?.quoteBundle && !quoteCreatingError && (
             <>
-              <Formik
-                initialValues={{}}
-                onSubmit={() => {
-                  /* noop */
-                }}
-              >
-                {() => (
-                  <InputField
-                    label="Type"
-                    placeholder=""
-                    options={quotesByMarket[currentMarket]}
-                    value={quoteType}
-                    onChange={(value: React.ChangeEvent<HTMLSelectElement>) =>
-                      setQuoteType(value.target.value as QuoteType)
-                    }
-                  />
-                )}
-              </Formik>
-
               <Formik
                 initialValues={
                   getCurrentAvailableQuoteData(currentMarket, quoteType)
@@ -324,7 +350,7 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
               </Formik>
             </>
           )}
-          {data?.quote && (
+          {data?.quoteBundle && (
             <>
               <LinkButton
                 background={colorsV3.gray100}
