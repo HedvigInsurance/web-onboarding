@@ -85,6 +85,10 @@ const adtractionProductMap: { [type in TypeOfContract]: number } = {
   DK_HOME_CONTENT_RENT: 0,
   DK_HOME_CONTENT_STUDENT_OWN: 0,
   DK_HOME_CONTENT_STUDENT_RENT: 0,
+  DK_ACCIDENT: 0,
+  DK_ACCIDENT_STUDENT: 0,
+  DK_TRAVEL: 0,
+  DK_TRAVEL_STUDENT: 0,
 }
 
 const getComboAdractionProductValue = (isYouthBundle: boolean) =>
