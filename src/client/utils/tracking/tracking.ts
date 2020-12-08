@@ -69,7 +69,19 @@ export const { TrackAction, IdentifyAction } = setupTrackers<
   { debug: process.env.NODE_ENV === 'development' },
 )
 
-const adtractionProductMap: { [type in TypeOfContract]: number } = {
+const NOT_VALID_CONTRACTS = <const>[
+  TypeOfContract.DkAccident,
+  TypeOfContract.DkAccidentStudent,
+  TypeOfContract.DkTravel,
+  TypeOfContract.DkTravelStudent,
+]
+type NotValidContracts = typeof NOT_VALID_CONTRACTS[number]
+
+type TypeOfContractExcludedUnused = Exclude<TypeOfContract, NotValidContracts>
+
+const adtractionProductMap: {
+  [type in TypeOfContractExcludedUnused]: number
+} = {
   SE_HOUSE: 1477448913,
   SE_APARTMENT_BRF: 1417356498,
   SE_APARTMENT_STUDENT_BRF: 1423041022,
@@ -110,9 +122,20 @@ export const adtraction = (
       adt.Tag.cpn = couponCode
     }
 
-    adt.Tag.tp = isBundle(offerData)
-      ? getComboAdractionProductValue(isYouth(offerData))
-      : adtractionProductMap[offerData.quotes[0].contractType]
+    const getTpTag = () => {
+      if (isBundle(offerData))
+        return getComboAdractionProductValue(isYouth(offerData))
+      const contractType = offerData.quotes[0].contractType
+      if (!(contractType in NOT_VALID_CONTRACTS)) {
+        return adtractionProductMap[
+          contractType as TypeOfContractExcludedUnused
+        ]
+      }
+      return null
+    }
+
+    const tpTag = getTpTag()
+    if (tpTag) adt.Tag.tp = tpTag
     adt.Tag.doEvent()
   } catch (e) {
     ;(window as any).Sentry.captureMessage(e)
