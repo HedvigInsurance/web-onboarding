@@ -229,6 +229,11 @@ export const insuranceTypeTextKeys: Record<TypeOfContract, string> = {
     'SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_OWN',
   [TypeOfContract.DkHomeContentStudentRent]:
     'SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_RENT',
+  [TypeOfContract.DkAccident]: 'SIDEBAR_INSURANCE_TYPE_DK_ACCIDENT',
+  [TypeOfContract.DkAccidentStudent]:
+    'SIDEBAR_INSURANCE_TYPE_DK_ACCIDENT_STUDENT',
+  [TypeOfContract.DkTravel]: 'SIDEBAR_INSURANCE_TYPE_DK_TRAVEL',
+  [TypeOfContract.DkTravelStudent]: 'SIDEBAR_INSURANCE_TYPE_DK_TRAVEL_STUDENT',
 }
 
 export const apartmentTypeTextKeys: Record<ApartmentType, string> = {
