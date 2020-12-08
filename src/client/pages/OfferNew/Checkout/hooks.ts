@@ -48,7 +48,7 @@ export const useScrollLock = (
   }, [outerWrapperRef, visibilityState])
 
 export const useSsnError = (editQuoteResult: EditQuoteMutationResult) => {
-  const [ssnBackendError, setSsnBackendError] = useState('')
+  const [ssnBackendError, setSsnBackendError] = useState<string | null>(null)
   const editQuote = editQuoteResult.data?.editQuote
 
   useEffect(() => {
@@ -60,7 +60,7 @@ export const useSsnError = (editQuoteResult: EditQuoteMutationResult) => {
       setSsnBackendError(code)
       return
     }
-    setSsnBackendError('')
+    setSsnBackendError(null)
   }, [editQuote])
 
   return { ssnBackendError }

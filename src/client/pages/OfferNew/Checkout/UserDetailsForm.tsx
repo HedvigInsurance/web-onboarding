@@ -12,7 +12,7 @@ const HiddenSubmit = styled.input`
 `
 
 type Props = WithEmailForm &
-  WithSsnForm & { onSubmit?: () => void; ssnBackendError?: string }
+  WithSsnForm & { onSubmit?: () => void; ssnBackendError: string | null }
 
 export const emailValidation = yup
   .string()
