@@ -69,12 +69,12 @@ export const { TrackAction, IdentifyAction } = setupTrackers<
   { debug: process.env.NODE_ENV === 'development' },
 )
 
-const NOT_VALID_CONTRACTS = <const>[
+const NOT_VALID_CONTRACTS = [
   TypeOfContract.DkAccident,
   TypeOfContract.DkAccidentStudent,
   TypeOfContract.DkTravel,
   TypeOfContract.DkTravelStudent,
-]
+] as const
 type NotValidContracts = typeof NOT_VALID_CONTRACTS[number]
 
 type TypeOfContractExcludedUnused = Exclude<TypeOfContract, NotValidContracts>
