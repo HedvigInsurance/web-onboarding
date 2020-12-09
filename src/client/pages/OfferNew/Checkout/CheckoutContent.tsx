@@ -26,10 +26,10 @@ const Excerpt = styled('div')`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 4rem;
+  padding: 1.5rem 0;
 
-  @media (max-width: 40rem) {
-    padding: 2rem 0;
+  @media (min-width: 40rem) {
+    padding-bottom: 2rem;
   }
 `
 
@@ -46,12 +46,12 @@ const InsuranceTypeLabel = styled('div')`
 `
 
 const InsuranceType = styled('div')`
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-family: ${fonts.FAVORIT};
   line-height: 1;
 
-  @media (max-width: 40rem) {
-    font-size: 1.5rem;
+  @media (min-width: 40rem) {
+    font-size: 2rem;
   }
 `
 
