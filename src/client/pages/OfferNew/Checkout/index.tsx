@@ -173,7 +173,7 @@ export const Checkout: React.FC<Props> = ({
     }
   }, [isOpen])
 
-  const [signUiState, setSignUiState] = useState(SignUiState.NOT_STARTED)
+  const [signUiState, setSignUiState] = useState<SignUiState>('NOT_STARTED')
   const [emailUpdateLoading, setEmailUpdateLoading] = useState(false)
   const [ssnUpdateLoading, setSsnUpdateLoading] = useState(false)
   const [startPollingSignState, signStatusQueryProps] = useSignStatusLazyQuery({
@@ -202,21 +202,16 @@ export const Checkout: React.FC<Props> = ({
   const scrollWrapper = useRef<HTMLDivElement>()
 
   useEffect(() => {
-    if (
-      ![SignUiState.STARTED, SignUiState.STARTED_WITH_REDIRECT].includes(
-        signUiState,
-      )
-    ) {
-      return
+    if (signUiState === 'STARTED' || signUiState === 'STARTED_WITH_REDIRECT') {
+      startPollingSignState()
     }
-
-    startPollingSignState()
   }, [signUiState, startPollingSignState])
 
   useTrack({
     offerData,
     signState: signStatus?.signState,
   })
+
   useEffect(() => {
     if (signStatus?.signState !== SignState.Completed) {
       return
@@ -225,11 +220,12 @@ export const Checkout: React.FC<Props> = ({
       handleSignedEvent(member.data?.member ?? null)
     }
   }, [member.data?.member, signStatus?.signState, variation])
+
   useScrollLock(visibilityState, scrollWrapper)
 
   const canInitiateSign = Boolean(
-    signUiState !== SignUiState.STARTED &&
-      signUiState !== SignUiState.STARTED_WITH_REDIRECT &&
+    signUiState !== 'STARTED' &&
+      signUiState !== 'STARTED_WITH_REDIRECT' &&
       !signQuotesMutation.loading &&
       offerData.person.email &&
       offerData.person.ssn,
@@ -249,18 +245,19 @@ export const Checkout: React.FC<Props> = ({
       },
     })
     if (result.data?.signQuotes?.__typename === 'FailedToStartSign') {
-      setSignUiState(SignUiState.FAILED)
+      setSignUiState('FAILED')
+
       return
     }
     if (
       result.data?.signQuotes?.__typename === 'NorwegianBankIdSession' ||
       result.data?.signQuotes?.__typename === 'DanishBankIdSession'
     ) {
-      setSignUiState(SignUiState.STARTED_WITH_REDIRECT)
+      setSignUiState('STARTED_WITH_REDIRECT')
       window.location.href = result.data.signQuotes.redirectUrl!
       return
     }
-    setSignUiState(SignUiState.STARTED)
+    setSignUiState('STARTED')
   }
 
   if (signStatus?.signState === SignState.Completed) {
@@ -326,8 +323,8 @@ export const Checkout: React.FC<Props> = ({
             signStatus={signStatus}
             isLoading={
               signQuotesMutation.loading ||
-              signUiState === SignUiState.STARTED ||
-              signUiState === SignUiState.STARTED_WITH_REDIRECT ||
+              signUiState === 'STARTED' ||
+              signUiState === 'STARTED_WITH_REDIRECT' ||
               emailUpdateLoading
             }
             onSignStart={startSign}
