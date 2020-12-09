@@ -108,8 +108,8 @@ const TextWrapper = styled.div`
 `
 
 const Label = styled.label`
-  font-size: 0.75rem;
-  line-height: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1;
   color: ${colorsV3.gray500};
   margin-bottom: 0.25rem;
 `
