@@ -17,7 +17,7 @@ const PriceGross = styled.div<{ visible: boolean }>`
   line-height: 1rem;
   color: ${colorsV3.gray500};
   text-decoration: line-through;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
   height: 0.875rem;
 
   ${({ visible }) => !visible && 'visibility: hidden;'};
@@ -26,7 +26,6 @@ const PriceGross = styled.div<{ visible: boolean }>`
 const PriceNumbers = styled.div`
   display: flex;
   flex-direction: row;
-  margin-bottom: 0.5rem;
 `
 
 const PriceNet = styled.div<{
@@ -61,19 +60,17 @@ const PriceSuffix = styled.div`
 `
 
 const PriceUnit = styled.div<{ lightAppearance?: boolean }>`
-  font-size: 1rem;
-  line-height: 1rem;
-  letter-spacing: -0.23px;
-  color: ${colorsV3.gray700};
-  margin-bottom: 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1;
+  color: ${colorsV3.gray800};
   ${({ lightAppearance }) => lightAppearance && `color: ${colorsV3.white}`};
 `
 
 const PriceInterval = styled.div<{ lightAppearance?: boolean }>`
-  font-size: 1rem;
-  line-height: 1rem;
+  font-size: 0.75rem;
+  line-height: 1;
   letter-spacing: -0.23px;
-  color: ${colorsV3.gray700};
+  color: ${colorsV3.gray800};
   white-space: nowrap;
   ${({ lightAppearance }) => lightAppearance && `color: ${colorsV3.white}`};
 `

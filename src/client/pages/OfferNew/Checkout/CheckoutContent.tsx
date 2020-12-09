@@ -26,7 +26,7 @@ const Excerpt = styled('div')`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 0;
+  padding: 1rem 0 1.5rem;
 
   @media (min-width: 40rem) {
     padding-bottom: 2rem;
@@ -37,6 +37,12 @@ const StartDateWrapper = styled.div`
   position: relative;
   margin-top: 0.375rem;
   margin-bottom: 2rem;
+`
+
+const StartDateLabel = styled.p`
+  margin: 0 0 0.5rem 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1;
 `
 
 const InsuranceTypeLabel = styled('div')`
@@ -162,6 +168,9 @@ export const CheckoutContent: React.FC<Props> = ({
         />
 
         <StartDateWrapper>
+          <StartDateLabel>
+            {textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}
+          </StartDateLabel>
           <StartDate offerData={offerData} refetch={refetch} />
         </StartDateWrapper>
 
