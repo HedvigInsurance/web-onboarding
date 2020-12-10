@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { colorsV3 } from '@hedviginsurance/brand/dist'
 import { SignState, SignStatus as GraphQLSignStatus } from 'data/graphql'
@@ -29,47 +29,36 @@ type Props = {
 }
 
 export const SignStatus: React.FC<Props> = ({ signStatus, signUiState }) => {
+  const [signStatusTextKey, setSignStatusTextKey] = useState<string | null>(
+    null,
+  )
   const textKeys = useTextKeys()
 
-  if (!signStatus) {
-    return null
-  }
+  useEffect(() => {
+    if (signStatus?.signState) {
+      const { signState } = signStatus
 
-  return (
+      if (signState === SignState.Initiated) {
+        setSignStatusTextKey('SIGN_BANKID_INITIATED')
+      }
+
+      if (
+        signState === SignState.InProgress ||
+        signState === SignState.Failed
+      ) {
+        const statusCode = signStatus?.collectStatus?.code || ''
+        setSignStatusTextKey(BANK_ID_STATUS_TEXT_KEYS[statusCode])
+      }
+    }
+  }, [signStatus])
+
+  return signStatusTextKey ? (
     <SignStatusWrapper
       initial={{ height: 0, opacity: 0 }}
-      animate={
-        ![SignUiState.STARTED, SignUiState.FAILED].includes(signUiState)
-          ? { height: 0, opacity: 0 }
-          : { height: 'auto', opacity: 1 }
-      }
+      animate={{ height: 'auto', opacity: 1 }}
       transition={{ type: 'spring', stiffness: 400, damping: 100 }}
     >
-      {(() => {
-        if (!signStatus?.signState) {
-          return null
-        }
-
-        if (signStatus?.signState === SignState.Initiated) {
-          return textKeys.SIGN_BANKID_INITIATED()
-        }
-
-        if (
-          [SignState.InProgress, SignState.Failed].includes(
-            signStatus?.signState,
-          )
-        ) {
-          const collectCode = signStatus.collectStatus?.code
-
-          if (!collectCode) {
-            return null
-          }
-
-          return textKeys[BANK_ID_STATUS_TEXT_KEYS[collectCode!]]()
-        }
-
-        return null
-      })()}
+      {textKeys[signStatusTextKey]()}
     </SignStatusWrapper>
-  )
+  ) : null
 }
