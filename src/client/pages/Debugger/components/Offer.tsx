@@ -148,7 +148,6 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
       ...values,
       id: quoteIds[0],
       currentInsurer: values.currentInsurer || undefined,
-      // @ts-ignore
       startDate: values.startDate || undefined,
     }
     if (quoteType === QuoteType.DanishHomeAccident) {
@@ -240,7 +239,6 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
             {() => (
               <InputField
                 label="Type"
-                placeholder=""
                 options={quotesByMarket[currentMarket]}
                 value={quoteType}
                 onChange={(value: React.ChangeEvent<HTMLSelectElement>) =>
