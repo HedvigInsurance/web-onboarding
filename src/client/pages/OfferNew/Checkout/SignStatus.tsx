@@ -35,6 +35,12 @@ export const SignStatus: React.FC<Props> = ({ signStatus, signUiState }) => {
   const textKeys = useTextKeys()
 
   useEffect(() => {
+    if (signUiState === 'FAILED') {
+      setSignStatusTextKey('CHECKOUT_SIGN_GENERIC_ERROR')
+    }
+  }, [signUiState])
+
+  useEffect(() => {
     if (signStatus?.signState) {
       const { signState } = signStatus
 
