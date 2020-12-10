@@ -9,7 +9,7 @@ import {
   useRedeemedCampaignsQuery,
 } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
-import { isBundle, isYouth } from 'pages/OfferNew/utils'
+import { isBundle, isYouth, isDanish } from 'pages/OfferNew/utils'
 import { trackOfferGTM } from './gtm'
 
 const cookie = new CookieStorage()
@@ -69,19 +69,19 @@ export const { TrackAction, IdentifyAction } = setupTrackers<
   { debug: process.env.NODE_ENV === 'development' },
 )
 
-const NOT_VALID_CONTRACTS = [
-  TypeOfContract.DkAccident,
-  TypeOfContract.DkAccidentStudent,
-  TypeOfContract.DkTravel,
-  TypeOfContract.DkTravelStudent,
-] as const
-type NotValidContracts = typeof NOT_VALID_CONTRACTS[number]
+type TypeOfContractExcludedUnused = Exclude<
+  TypeOfContract,
+  | 'DK_HOME_CONTENT_OWN'
+  | 'DK_HOME_CONTENT_RENT'
+  | 'DK_HOME_CONTENT_STUDENT_OWN'
+  | 'DK_HOME_CONTENT_STUDENT_RENT'
+  | 'DK_ACCIDENT'
+  | 'DK_ACCIDENT_STUDENT'
+  | 'DK_TRAVEL'
+  | 'DK_TRAVEL_STUDENT'
+>
 
-type TypeOfContractExcludedUnused = Exclude<TypeOfContract, NotValidContracts>
-
-const adtractionProductMap: {
-  [type in TypeOfContractExcludedUnused]: number
-} = {
+const adtractionProductMap: Record<TypeOfContractExcludedUnused, number> = {
   SE_HOUSE: 1477448913,
   SE_APARTMENT_BRF: 1417356498,
   SE_APARTMENT_STUDENT_BRF: 1423041022,
@@ -93,10 +93,6 @@ const adtractionProductMap: {
   NO_HOME_CONTENT_YOUTH_RENT: 1492623719,
   NO_TRAVEL: 1492623742,
   NO_TRAVEL_YOUTH: 1492623785,
-  DK_HOME_CONTENT_OWN: 0,
-  DK_HOME_CONTENT_RENT: 0,
-  DK_HOME_CONTENT_STUDENT_OWN: 0,
-  DK_HOME_CONTENT_STUDENT_RENT: 0,
 }
 
 const getComboAdractionProductValue = (isYouthBundle: boolean) =>
@@ -122,20 +118,13 @@ export const adtraction = (
       adt.Tag.cpn = couponCode
     }
 
-    const getTpTag = () => {
-      if (isBundle(offerData))
-        return getComboAdractionProductValue(isYouth(offerData))
-      const contractType = offerData.quotes[0].contractType
-      if (!(contractType in NOT_VALID_CONTRACTS)) {
-        return adtractionProductMap[
-          contractType as TypeOfContractExcludedUnused
-        ]
-      }
-      return null
+    if (!isDanish(offerData)) {
+      adt.Tag.tp = isBundle(offerData)
+        ? getComboAdractionProductValue(isYouth(offerData))
+        : adtractionProductMap[
+            offerData.quotes[0].contractType as TypeOfContractExcludedUnused
+          ]
     }
-
-    const tpTag = getTpTag()
-    if (tpTag) adt.Tag.tp = tpTag
     adt.Tag.doEvent()
   } catch (e) {
     ;(window as any).Sentry.captureMessage(e)
