@@ -18,11 +18,11 @@ import { InsuranceSummary } from './InsuranceSummary'
 import { UserDetailsForm } from './UserDetailsForm'
 import { useSsnError } from './hooks'
 
-const Section = styled('div')`
+const Section = styled.div`
   width: 100%;
 `
 
-const Excerpt = styled('div')`
+const Excerpt = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -45,13 +45,13 @@ const StartDateLabel = styled.p`
   line-height: 1;
 `
 
-const InsuranceTypeLabel = styled('div')`
+const InsuranceTypeLabel = styled.div`
   font-size: 0.75rem;
   color: ${colorsV3.gray500};
   text-transform: uppercase;
 `
 
-const InsuranceType = styled('div')`
+const InsuranceType = styled.div`
   font-size: 1.5rem;
   font-family: ${fonts.FAVORIT};
   line-height: 1;
