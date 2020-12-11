@@ -5,6 +5,10 @@ export type Maybe<T> = T | null
 export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K]
 }
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
+  { [SubKey in K]?: Maybe<T[SubKey]> }
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
+  { [SubKey in K]: Maybe<T[SubKey]> }
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string
@@ -1285,6 +1289,18 @@ export enum AuthState {
   InProgress = 'IN_PROGRESS',
   Failed = 'FAILED',
   Success = 'SUCCESS',
+}
+
+export type AutoCompleteResponse = {
+  __typename?: 'AutoCompleteResponse'
+  id?: Maybe<Scalars['String']>
+  address: Scalars['String']
+  houseNumber?: Maybe<Scalars['String']>
+  streetCode?: Maybe<Scalars['String']>
+  postalCode?: Maybe<Scalars['String']>
+  kommuneCode?: Maybe<Scalars['String']>
+  floor?: Maybe<Scalars['String']>
+  doorNumber?: Maybe<Scalars['String']>
 }
 
 export type AvailablePaymentMethodsResponse = {
@@ -2644,6 +2660,12 @@ export type EmbarkApiPersonalInformationData = {
   error: EmbarkLink
 }
 
+export type EmbarkComputedStoreValue = {
+  __typename?: 'EmbarkComputedStoreValue'
+  key: Scalars['String']
+  value: Scalars['String']
+}
+
 export type EmbarkDropdownAction = EmbarkActionCore & {
   __typename?: 'EmbarkDropdownAction'
   component: Scalars['String']
@@ -2942,6 +2964,7 @@ export type EmbarkStory = {
   startPassage: Scalars['String']
   name: Scalars['String']
   keywords: EmbarkKeywords
+  computedStoreValues?: Maybe<Array<EmbarkComputedStoreValue>>
   partnerConfigs: Array<EmbarkPartnerConfig>
   passages: Array<EmbarkPassage>
 }
@@ -2955,11 +2978,18 @@ export type EmbarkStoryMetadata = {
   metadata: Array<EmbarkStoryMetadataEntry>
 }
 
-export type EmbarkStoryMetadataEntry = EmbarkStoryMetadataEntryDiscount
+export type EmbarkStoryMetadataEntry =
+  | EmbarkStoryMetadataEntryDiscount
+  | EmbarkStoryMetaDataEntryWebUrlPath
 
 export type EmbarkStoryMetadataEntryDiscount = {
   __typename?: 'EmbarkStoryMetadataEntryDiscount'
   discount: Scalars['String']
+}
+
+export type EmbarkStoryMetaDataEntryWebUrlPath = {
+  __typename?: 'EmbarkStoryMetaDataEntryWebUrlPath'
+  path: Scalars['String']
 }
 
 export enum EmbarkStoryType {
@@ -7157,6 +7187,7 @@ export type Query = {
   personalInformation?: Maybe<PersonalInformation>
   houseInformation?: Maybe<HouseInformation>
   externalInsuranceProvider?: Maybe<ExternalInsuranceProvider>
+  autoCompleteAddress: Array<AutoCompleteResponse>
   quote: Quote
   lastQuoteOfMember: Quote
   quoteBundle: QuoteBundle
@@ -7282,6 +7313,10 @@ export type QueryPersonalInformationArgs = {
 
 export type QueryHouseInformationArgs = {
   input: HouseInformationInput
+}
+
+export type QueryAutoCompleteAddressArgs = {
+  input: Scalars['String']
 }
 
 export type QueryQuoteArgs = {
@@ -7520,6 +7555,11 @@ export type SignStatus = {
   signState?: Maybe<SignState>
 }
 
+export type SimpleSignSession = {
+  __typename?: 'SimpleSignSession'
+  id: Scalars['ID']
+}
+
 /** Stage system enumeration */
 export enum Stage {
   /** The Published stage is where you can publish your content to. */
@@ -7532,6 +7572,7 @@ export type StartSignResponse =
   | SwedishBankIdSession
   | NorwegianBankIdSession
   | DanishBankIdSession
+  | SimpleSignSession
   | FailedToStartSign
 
 export type StoredPaymentMethodsDetails = {
@@ -8608,6 +8649,87 @@ export type ContractsQuery = { __typename?: 'Query' } & {
   >
 }
 
+export type CreateDanishHomeAccidentQuoteMutationVariables = Exact<{
+  homeInput: CreateQuoteInput
+  accidentInput: CreateQuoteInput
+}>
+
+export type CreateDanishHomeAccidentQuoteMutation = {
+  __typename?: 'Mutation'
+} & {
+  createHomeContents:
+    | ({ __typename: 'CompleteQuote' } & Pick<CompleteQuote, 'id'> & {
+          quoteDetails:
+            | { __typename: 'SwedishApartmentQuoteDetails' }
+            | { __typename: 'SwedishHouseQuoteDetails' }
+            | { __typename: 'NorwegianHomeContentsDetails' }
+            | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'DanishHomeContentsDetails' }
+            | { __typename: 'DanishAccidentDetails' }
+            | { __typename: 'DanishTravelDetails' }
+        })
+    | { __typename: 'UnderwritingLimitsHit' }
+  createAccident:
+    | ({ __typename: 'CompleteQuote' } & Pick<CompleteQuote, 'id'> & {
+          quoteDetails:
+            | { __typename: 'SwedishApartmentQuoteDetails' }
+            | { __typename: 'SwedishHouseQuoteDetails' }
+            | { __typename: 'NorwegianHomeContentsDetails' }
+            | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'DanishHomeContentsDetails' }
+            | { __typename: 'DanishAccidentDetails' }
+            | { __typename: 'DanishTravelDetails' }
+        })
+    | { __typename: 'UnderwritingLimitsHit' }
+}
+
+export type CreateDanishHomeAccidentTravelQuoteMutationVariables = Exact<{
+  homeInput: CreateQuoteInput
+  accidentInput: CreateQuoteInput
+  travelInput: CreateQuoteInput
+}>
+
+export type CreateDanishHomeAccidentTravelQuoteMutation = {
+  __typename?: 'Mutation'
+} & {
+  createHomeContents:
+    | ({ __typename: 'CompleteQuote' } & Pick<CompleteQuote, 'id'> & {
+          quoteDetails:
+            | { __typename: 'SwedishApartmentQuoteDetails' }
+            | { __typename: 'SwedishHouseQuoteDetails' }
+            | { __typename: 'NorwegianHomeContentsDetails' }
+            | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'DanishHomeContentsDetails' }
+            | { __typename: 'DanishAccidentDetails' }
+            | { __typename: 'DanishTravelDetails' }
+        })
+    | { __typename: 'UnderwritingLimitsHit' }
+  createAccident:
+    | ({ __typename: 'CompleteQuote' } & Pick<CompleteQuote, 'id'> & {
+          quoteDetails:
+            | { __typename: 'SwedishApartmentQuoteDetails' }
+            | { __typename: 'SwedishHouseQuoteDetails' }
+            | { __typename: 'NorwegianHomeContentsDetails' }
+            | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'DanishHomeContentsDetails' }
+            | { __typename: 'DanishAccidentDetails' }
+            | { __typename: 'DanishTravelDetails' }
+        })
+    | { __typename: 'UnderwritingLimitsHit' }
+  createTravel:
+    | ({ __typename: 'CompleteQuote' } & Pick<CompleteQuote, 'id'> & {
+          quoteDetails:
+            | { __typename: 'SwedishApartmentQuoteDetails' }
+            | { __typename: 'SwedishHouseQuoteDetails' }
+            | { __typename: 'NorwegianHomeContentsDetails' }
+            | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'DanishHomeContentsDetails' }
+            | { __typename: 'DanishAccidentDetails' }
+            | { __typename: 'DanishTravelDetails' }
+        })
+    | { __typename: 'UnderwritingLimitsHit' }
+}
+
 export type EditQuoteMutationVariables = Exact<{
   input: EditQuoteInput
 }>
@@ -9150,8 +9272,14 @@ export type QuoteBundleQuery = { __typename?: 'Query' } & {
                 DanishHomeContentsDetails,
                 'street' | 'zipCode' | 'livingSpace' | 'coInsured' | 'isStudent'
               > & { danishHomeType: DanishHomeContentsDetails['type'] })
-            | { __typename?: 'DanishAccidentDetails' }
-            | { __typename?: 'DanishTravelDetails' }
+            | ({ __typename?: 'DanishAccidentDetails' } & Pick<
+                DanishAccidentDetails,
+                'street' | 'zipCode' | 'coInsured' | 'isStudent'
+              >)
+            | ({ __typename?: 'DanishTravelDetails' } & Pick<
+                DanishTravelDetails,
+                'street' | 'zipCode' | 'coInsured' | 'isStudent'
+              >)
         }
     >
     bundleCost: { __typename?: 'InsuranceCost' } & Pick<
@@ -9351,6 +9479,7 @@ export type SignQuotesMutation = { __typename?: 'Mutation' } & {
         DanishBankIdSession,
         'redirectUrl'
       >)
+    | { __typename: 'SimpleSignSession' }
     | ({ __typename: 'FailedToStartSign' } & Pick<
         FailedToStartSign,
         'errorMessage'
@@ -9555,6 +9684,155 @@ export type ContractsLazyQueryHookResult = ReturnType<
 export type ContractsQueryResult = ApolloReactCommon.QueryResult<
   ContractsQuery,
   ContractsQueryVariables
+>
+export const CreateDanishHomeAccidentQuoteDocument = gql`
+  mutation CreateDanishHomeAccidentQuote(
+    $homeInput: CreateQuoteInput!
+    $accidentInput: CreateQuoteInput!
+  ) {
+    createHomeContents: createQuote(input: $homeInput) {
+      __typename
+      ... on CompleteQuote {
+        id
+        quoteDetails {
+          __typename
+        }
+      }
+    }
+    createAccident: createQuote(input: $accidentInput) {
+      __typename
+      ... on CompleteQuote {
+        id
+        quoteDetails {
+          __typename
+        }
+      }
+    }
+  }
+`
+export type CreateDanishHomeAccidentQuoteMutationFn = ApolloReactCommon.MutationFunction<
+  CreateDanishHomeAccidentQuoteMutation,
+  CreateDanishHomeAccidentQuoteMutationVariables
+>
+
+/**
+ * __useCreateDanishHomeAccidentQuoteMutation__
+ *
+ * To run a mutation, you first call `useCreateDanishHomeAccidentQuoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDanishHomeAccidentQuoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createDanishHomeAccidentQuoteMutation, { data, loading, error }] = useCreateDanishHomeAccidentQuoteMutation({
+ *   variables: {
+ *      homeInput: // value for 'homeInput'
+ *      accidentInput: // value for 'accidentInput'
+ *   },
+ * });
+ */
+export function useCreateDanishHomeAccidentQuoteMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateDanishHomeAccidentQuoteMutation,
+    CreateDanishHomeAccidentQuoteMutationVariables
+  >,
+) {
+  return Apollo.useMutation<
+    CreateDanishHomeAccidentQuoteMutation,
+    CreateDanishHomeAccidentQuoteMutationVariables
+  >(CreateDanishHomeAccidentQuoteDocument, baseOptions)
+}
+export type CreateDanishHomeAccidentQuoteMutationHookResult = ReturnType<
+  typeof useCreateDanishHomeAccidentQuoteMutation
+>
+export type CreateDanishHomeAccidentQuoteMutationResult = ApolloReactCommon.MutationResult<
+  CreateDanishHomeAccidentQuoteMutation
+>
+export type CreateDanishHomeAccidentQuoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  CreateDanishHomeAccidentQuoteMutation,
+  CreateDanishHomeAccidentQuoteMutationVariables
+>
+export const CreateDanishHomeAccidentTravelQuoteDocument = gql`
+  mutation CreateDanishHomeAccidentTravelQuote(
+    $homeInput: CreateQuoteInput!
+    $accidentInput: CreateQuoteInput!
+    $travelInput: CreateQuoteInput!
+  ) {
+    createHomeContents: createQuote(input: $homeInput) {
+      __typename
+      ... on CompleteQuote {
+        id
+        quoteDetails {
+          __typename
+        }
+      }
+    }
+    createAccident: createQuote(input: $accidentInput) {
+      __typename
+      ... on CompleteQuote {
+        id
+        quoteDetails {
+          __typename
+        }
+      }
+    }
+    createTravel: createQuote(input: $travelInput) {
+      __typename
+      ... on CompleteQuote {
+        id
+        quoteDetails {
+          __typename
+        }
+      }
+    }
+  }
+`
+export type CreateDanishHomeAccidentTravelQuoteMutationFn = ApolloReactCommon.MutationFunction<
+  CreateDanishHomeAccidentTravelQuoteMutation,
+  CreateDanishHomeAccidentTravelQuoteMutationVariables
+>
+
+/**
+ * __useCreateDanishHomeAccidentTravelQuoteMutation__
+ *
+ * To run a mutation, you first call `useCreateDanishHomeAccidentTravelQuoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDanishHomeAccidentTravelQuoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createDanishHomeAccidentTravelQuoteMutation, { data, loading, error }] = useCreateDanishHomeAccidentTravelQuoteMutation({
+ *   variables: {
+ *      homeInput: // value for 'homeInput'
+ *      accidentInput: // value for 'accidentInput'
+ *      travelInput: // value for 'travelInput'
+ *   },
+ * });
+ */
+export function useCreateDanishHomeAccidentTravelQuoteMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateDanishHomeAccidentTravelQuoteMutation,
+    CreateDanishHomeAccidentTravelQuoteMutationVariables
+  >,
+) {
+  return Apollo.useMutation<
+    CreateDanishHomeAccidentTravelQuoteMutation,
+    CreateDanishHomeAccidentTravelQuoteMutationVariables
+  >(CreateDanishHomeAccidentTravelQuoteDocument, baseOptions)
+}
+export type CreateDanishHomeAccidentTravelQuoteMutationHookResult = ReturnType<
+  typeof useCreateDanishHomeAccidentTravelQuoteMutation
+>
+export type CreateDanishHomeAccidentTravelQuoteMutationResult = ApolloReactCommon.MutationResult<
+  CreateDanishHomeAccidentTravelQuoteMutation
+>
+export type CreateDanishHomeAccidentTravelQuoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  CreateDanishHomeAccidentTravelQuoteMutation,
+  CreateDanishHomeAccidentTravelQuoteMutationVariables
 >
 export const EditQuoteDocument = gql`
   mutation EditQuote($input: EditQuoteInput!) {
@@ -10243,6 +10521,18 @@ export const QuoteBundleDocument = gql`
             zipCode
             livingSpace
             danishHomeType: type
+            coInsured
+            isStudent
+          }
+          ... on DanishAccidentDetails {
+            street
+            zipCode
+            coInsured
+            isStudent
+          }
+          ... on DanishTravelDetails {
+            street
+            zipCode
             coInsured
             isStudent
           }

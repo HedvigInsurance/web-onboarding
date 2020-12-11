@@ -9,7 +9,7 @@ import {
   useRedeemedCampaignsQuery,
 } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
-import { isBundle, isYouth } from 'pages/OfferNew/utils'
+import { isBundle, isYouth, isDanish } from 'pages/OfferNew/utils'
 import { trackOfferGTM } from './gtm'
 
 const cookie = new CookieStorage()
@@ -69,7 +69,19 @@ export const { TrackAction, IdentifyAction } = setupTrackers<
   { debug: process.env.NODE_ENV === 'development' },
 )
 
-const adtractionProductMap: { [type in TypeOfContract]: number } = {
+type TypeOfContractExcludedUnused = Exclude<
+  TypeOfContract,
+  | 'DK_HOME_CONTENT_OWN'
+  | 'DK_HOME_CONTENT_RENT'
+  | 'DK_HOME_CONTENT_STUDENT_OWN'
+  | 'DK_HOME_CONTENT_STUDENT_RENT'
+  | 'DK_ACCIDENT'
+  | 'DK_ACCIDENT_STUDENT'
+  | 'DK_TRAVEL'
+  | 'DK_TRAVEL_STUDENT'
+>
+
+const adtractionProductMap: Record<TypeOfContractExcludedUnused, number> = {
   SE_HOUSE: 1477448913,
   SE_APARTMENT_BRF: 1417356498,
   SE_APARTMENT_STUDENT_BRF: 1423041022,
@@ -81,14 +93,6 @@ const adtractionProductMap: { [type in TypeOfContract]: number } = {
   NO_HOME_CONTENT_YOUTH_RENT: 1492623719,
   NO_TRAVEL: 1492623742,
   NO_TRAVEL_YOUTH: 1492623785,
-  DK_HOME_CONTENT_OWN: 0,
-  DK_HOME_CONTENT_RENT: 0,
-  DK_HOME_CONTENT_STUDENT_OWN: 0,
-  DK_HOME_CONTENT_STUDENT_RENT: 0,
-  DK_ACCIDENT: 0,
-  DK_ACCIDENT_STUDENT: 0,
-  DK_TRAVEL: 0,
-  DK_TRAVEL_STUDENT: 0,
 }
 
 const getComboAdractionProductValue = (isYouthBundle: boolean) =>
@@ -114,9 +118,13 @@ export const adtraction = (
       adt.Tag.cpn = couponCode
     }
 
-    adt.Tag.tp = isBundle(offerData)
-      ? getComboAdractionProductValue(isYouth(offerData))
-      : adtractionProductMap[offerData.quotes[0].contractType]
+    if (!isDanish(offerData)) {
+      adt.Tag.tp = isBundle(offerData)
+        ? getComboAdractionProductValue(isYouth(offerData))
+        : adtractionProductMap[
+            offerData.quotes[0].contractType as TypeOfContractExcludedUnused
+          ]
+    }
     adt.Tag.doEvent()
   } catch (e) {
     ;(window as any).Sentry.captureMessage(e)

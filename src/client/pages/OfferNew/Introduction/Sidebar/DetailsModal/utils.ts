@@ -32,6 +32,8 @@ import {
   isDanishHomeContents,
   isBundle,
   isNorwegian,
+  isDanishTravel,
+  isDanishAccident,
 } from '../../../utils'
 import {
   SwedishApartmentFieldSchema,
@@ -724,11 +726,16 @@ export type QuoteType =
   | 'norwegianHomeContents'
   | 'norwegianTravel'
   | 'danishHomeContents'
+  | 'danishTravel'
+  | 'danishAccident'
 
 export const getQuoteType = (quoteDetails: QuoteDetails): QuoteType => {
   if (isSwedishApartment(quoteDetails)) return 'swedishApartment'
   if (isSwedishHouse(quoteDetails)) return 'swedishHouse'
   if (isNorwegianHomeContents(quoteDetails)) return 'norwegianHomeContents'
   if (isNorwegianTravel(quoteDetails)) return 'norwegianTravel'
-  return 'danishHomeContents'
+  if (isDanishHomeContents(quoteDetails)) return 'danishHomeContents'
+  if (isDanishTravel(quoteDetails)) return 'danishTravel'
+  if (isDanishAccident(quoteDetails)) return 'danishAccident'
+  throw new Error(`Unknown quote type details, this should never happen`)
 }

@@ -15,6 +15,8 @@ import {
   SwedishApartmentQuoteDetails,
   SwedishHouseQuoteDetails,
   TypeOfContract,
+  DanishAccidentDetails,
+  DanishTravelDetails,
 } from 'data/graphql'
 import { Address, OfferData, OfferQuote } from 'pages/OfferNew/types'
 
@@ -130,7 +132,9 @@ export const isNorwegian = (offerData: OfferData): boolean =>
   offerData.quotes.every((quote) => isNorwegianQuote(quote))
 
 export const isDanishQuote = (quote: OfferQuote): boolean =>
-  isDanishHomeContents(quote.quoteDetails)
+  isDanishHomeContents(quote.quoteDetails) ||
+  isDanishAccident(quote.quoteDetails) ||
+  isDanishTravel(quote.quoteDetails)
 
 export const isDanish = (offerData: OfferData): boolean =>
   offerData.quotes.every((quote) => isDanishQuote(quote))
@@ -169,6 +173,16 @@ export const isDanishHomeContents = (
   details: QuoteDetails,
 ): details is DanishHomeContentsDetails =>
   details.__typename === 'DanishHomeContentsDetails'
+
+export const isDanishAccident = (
+  details: QuoteDetails,
+): details is DanishAccidentDetails =>
+  details.__typename === 'DanishAccidentDetails'
+
+export const isDanishTravel = (
+  details: QuoteDetails,
+): details is DanishTravelDetails =>
+  details.__typename === 'DanishTravelDetails'
 
 export const isFreeMonths = (campaigns: Campaign[]) =>
   (campaigns.length > 0 &&
