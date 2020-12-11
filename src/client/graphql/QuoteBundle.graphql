@@ -98,6 +98,18 @@ query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
           coInsured
           isStudent
         }
+        ... on DanishAccidentDetails {
+          street
+          zipCode
+          coInsured
+          isStudent
+        }
+        ... on DanishTravelDetails {
+          street
+          zipCode
+          coInsured
+          isStudent
+        }
       }
     }
     bundleCost {
