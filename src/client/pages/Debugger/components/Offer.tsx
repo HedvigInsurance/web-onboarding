@@ -112,7 +112,7 @@ const getDanishQuoteValues = (
   values: Values,
   quoteType: 'danishTravel' | 'danishAccident',
 ) => {
-  const { danishHomeContents, ...filteredValues } = values!
+  const { danishHomeContents, ...filteredValues } = values
   const { type, livingSpace, ...QuoteTypeValues } = danishHomeContents!
   return {
     ...filteredValues,
