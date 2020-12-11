@@ -236,5 +236,8 @@
   "STARTPAGE_USP_2": "Personligt service-team",
   "STARTPAGE_USP_3": "Enkel skadeanmälan",
   "DETAILS_MODULE_TABLE_YOUTH_CELL_LABEL": "",
-  "DETAILS_MODULE_TABLE_STUDENT_CELL_LABEL": ""
+  "DETAILS_MODULE_TABLE_STUDENT_CELL_LABEL": "",
+  "INVALID_SSN": "Det numret ser inte rätt ut. Försök igen.",
+  "SSN_DOES_NOT_MATCH_BIRTH_DATE": "Personnumret du angett stämmer ej med det du tidigare angivet",
+  "INVALID_SSN_LENGTH": "Personnummer behöver vara 10 eller 12 tecken"
 }

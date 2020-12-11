@@ -236,5 +236,8 @@
   "STARTPAGE_USP_2": "Personal service team",
   "STARTPAGE_USP_3": "Easy claims process",
   "DETAILS_MODULE_TABLE_YOUTH_CELL_LABEL": "Youth",
-  "DETAILS_MODULE_TABLE_STUDENT_CELL_LABEL": "Student"
+  "DETAILS_MODULE_TABLE_STUDENT_CELL_LABEL": "Student",
+  "INVALID_SSN": "That number doesn't look right. Try it again.",
+  "SSN_DOES_NOT_MATCH_BIRTH_DATE": "National identity number you've entered do not match what you previously chosen",
+  "INVALID_SSN_LENGTH": "National identity number should be 11 characters"
 }

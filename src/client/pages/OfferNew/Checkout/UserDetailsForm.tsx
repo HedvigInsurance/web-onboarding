@@ -7,14 +7,12 @@ import { WithEmailForm, WithSsnForm } from 'pages/OfferNew/types'
 import { createSsnValidator, ssnLengthByMarket } from 'pages/OfferNew/utils'
 import { useTextKeys } from 'utils/textKeys'
 
-const BottomSpacedRawInputField = styled(RawInputField)`
-  margin-bottom: 1rem;
-`
 const HiddenSubmit = styled.input`
   display: none;
 `
 
-type Props = WithEmailForm & WithSsnForm & { onSubmit?: () => void }
+type Props = WithEmailForm &
+  WithSsnForm & { onSubmit?: () => void; ssnBackendError: string | null }
 
 export const emailValidation = yup
   .string()
@@ -25,6 +23,7 @@ export const UserDetailsForm: React.FC<Props> = ({
   email: initialEmail,
   onEmailChange,
   ssn: initialSsn,
+  ssnBackendError,
   onSsnChange,
   onSubmit,
 }) => {
@@ -64,6 +63,14 @@ export const UserDetailsForm: React.FC<Props> = ({
     )
   }
 
+  const handleSsnBlur = () => {
+    if (!isValidSsn(ssn) || ssn === initialSsn) {
+      return
+    }
+
+    onSsnChange(ssn)
+  }
+
   const setEmailDebounced = (newEmail: string) => {
     if (emailChangeTimout) {
       window.clearTimeout(emailChangeTimout)
@@ -89,7 +96,7 @@ export const UserDetailsForm: React.FC<Props> = ({
         }
       }}
     >
-      <BottomSpacedRawInputField
+      <RawInputField
         label={textKeys.CHECKOUT_EMAIL_LABEL()}
         placeholder={textKeys.CHECKOUT_EMAIL_PLACEHOLDER()}
         name="email"
@@ -104,7 +111,7 @@ export const UserDetailsForm: React.FC<Props> = ({
       />
 
       {(market === Market.No || market === Market.Dk) && (
-        <BottomSpacedRawInputField
+        <RawInputField
           label={textKeys.CHECKOUT_SSN_LABEL()}
           placeholder={textKeys.CHECKOUT_SSN_PLACEHOLDER()}
           name="ssn"
@@ -114,15 +121,9 @@ export const UserDetailsForm: React.FC<Props> = ({
           pattern="[0-9]*"
           maxLength={ssnMaxLength}
           value={ssn}
-          // errors={ssnError ? textKeys.SIGN_SSN_CHECK() : undefined} TODO error handling?
+          errors={ssnBackendError ? textKeys[ssnBackendError]() : undefined}
           onChange={handleSsnChange}
-          onBlur={() => {
-            if (!isValidSsn(ssn) || ssn === initialSsn) {
-              return
-            }
-
-            onSsnChange(ssn)
-          }}
+          onBlur={handleSsnBlur}
         />
       )}
       <HiddenSubmit type="submit" />

@@ -51,10 +51,10 @@ const RowButtonWrapper = styled.div`
 const RowButton = styled.button<{ datePickerOpen: boolean; isSplit: boolean }>`
   display: flex;
   justify-content: space-between;
-  height: 3.25rem;
+  height: 4.375rem;
   width: 100%;
-  padding: 0 0.75rem;
-  border: 1px solid ${colorsV3.gray300};
+  padding: 0 1.5rem;
+  border: 1px solid ${colorsV3.gray500};
   outline: 0;
   background-color: ${colorsV3.white};
   border-radius: 8px;
@@ -113,11 +113,7 @@ const Value = styled.div`
   width: 100%;
   font-size: 1rem;
   line-height: 1.5rem;
-  color: ${colorsV3.gray700};
-
-  @media (max-width: 600px) {
-    font-size: 0.875rem;
-  }
+  color: ${colorsV3.gray900};
 `
 
 const ErrorMessage = styled(motion.div)`

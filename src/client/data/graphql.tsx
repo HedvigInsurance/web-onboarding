@@ -5,6 +5,10 @@ export type Maybe<T> = T | null
 export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K]
 }
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
+  { [SubKey in K]?: Maybe<T[SubKey]> }
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
+  { [SubKey in K]: Maybe<T[SubKey]> }
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string
@@ -1285,6 +1289,18 @@ export enum AuthState {
   InProgress = 'IN_PROGRESS',
   Failed = 'FAILED',
   Success = 'SUCCESS',
+}
+
+export type AutoCompleteResponse = {
+  __typename?: 'AutoCompleteResponse'
+  id?: Maybe<Scalars['String']>
+  address: Scalars['String']
+  houseNumber?: Maybe<Scalars['String']>
+  streetCode?: Maybe<Scalars['String']>
+  postalCode?: Maybe<Scalars['String']>
+  kommuneCode?: Maybe<Scalars['String']>
+  floor?: Maybe<Scalars['String']>
+  doorNumber?: Maybe<Scalars['String']>
 }
 
 export type AvailablePaymentMethodsResponse = {
@@ -2644,6 +2660,12 @@ export type EmbarkApiPersonalInformationData = {
   error: EmbarkLink
 }
 
+export type EmbarkComputedStoreValue = {
+  __typename?: 'EmbarkComputedStoreValue'
+  key: Scalars['String']
+  value: Scalars['String']
+}
+
 export type EmbarkDropdownAction = EmbarkActionCore & {
   __typename?: 'EmbarkDropdownAction'
   component: Scalars['String']
@@ -2942,6 +2964,7 @@ export type EmbarkStory = {
   startPassage: Scalars['String']
   name: Scalars['String']
   keywords: EmbarkKeywords
+  computedStoreValues?: Maybe<Array<EmbarkComputedStoreValue>>
   partnerConfigs: Array<EmbarkPartnerConfig>
   passages: Array<EmbarkPassage>
 }
@@ -2955,11 +2978,18 @@ export type EmbarkStoryMetadata = {
   metadata: Array<EmbarkStoryMetadataEntry>
 }
 
-export type EmbarkStoryMetadataEntry = EmbarkStoryMetadataEntryDiscount
+export type EmbarkStoryMetadataEntry =
+  | EmbarkStoryMetadataEntryDiscount
+  | EmbarkStoryMetaDataEntryWebUrlPath
 
 export type EmbarkStoryMetadataEntryDiscount = {
   __typename?: 'EmbarkStoryMetadataEntryDiscount'
   discount: Scalars['String']
+}
+
+export type EmbarkStoryMetaDataEntryWebUrlPath = {
+  __typename?: 'EmbarkStoryMetaDataEntryWebUrlPath'
+  path: Scalars['String']
 }
 
 export enum EmbarkStoryType {
@@ -7137,8 +7167,6 @@ export type Query = {
   adyenPublicKey: Scalars['String']
   /** Returns all the available payouts methods before the client requests a payout tokenization */
   availablePayoutMethods: AvailablePaymentMethodsResponse
-  /** Returns the active payout method which the member chose to tokenize */
-  activePayoutMethods?: Maybe<ActivePaymentMethodsResponse>
   /** Returns campaign associated with code */
   campaign: Campaign
   /** Returns information about the authed member's referralCampaign and referrals */
@@ -7159,6 +7187,7 @@ export type Query = {
   personalInformation?: Maybe<PersonalInformation>
   houseInformation?: Maybe<HouseInformation>
   externalInsuranceProvider?: Maybe<ExternalInsuranceProvider>
+  autoCompleteAddress: Array<AutoCompleteResponse>
   quote: Quote
   lastQuoteOfMember: Quote
   quoteBundle: QuoteBundle
@@ -7284,6 +7313,10 @@ export type QueryPersonalInformationArgs = {
 
 export type QueryHouseInformationArgs = {
   input: HouseInformationInput
+}
+
+export type QueryAutoCompleteAddressArgs = {
+  input: Scalars['String']
 }
 
 export type QueryQuoteArgs = {
@@ -7522,6 +7555,11 @@ export type SignStatus = {
   signState?: Maybe<SignState>
 }
 
+export type SimpleSignSession = {
+  __typename?: 'SimpleSignSession'
+  id: Scalars['ID']
+}
+
 /** Stage system enumeration */
 export enum Stage {
   /** The Published stage is where you can publish your content to. */
@@ -7534,6 +7572,7 @@ export type StartSignResponse =
   | SwedishBankIdSession
   | NorwegianBankIdSession
   | DanishBankIdSession
+  | SimpleSignSession
   | FailedToStartSign
 
 export type StoredPaymentMethodsDetails = {
@@ -8702,7 +8741,7 @@ export type EditQuoteMutation = { __typename?: 'Mutation' } & {
         limits: Array<
           { __typename?: 'UnderwritingLimit' } & Pick<
             UnderwritingLimit,
-            'description'
+            'description' | 'code'
           >
         >
       })
@@ -9440,6 +9479,7 @@ export type SignQuotesMutation = { __typename?: 'Mutation' } & {
         DanishBankIdSession,
         'redirectUrl'
       >)
+    | { __typename: 'SimpleSignSession' }
     | ({ __typename: 'FailedToStartSign' } & Pick<
         FailedToStartSign,
         'errorMessage'
@@ -9803,6 +9843,7 @@ export const EditQuoteDocument = gql`
       ... on UnderwritingLimitsHit {
         limits {
           description
+          code
         }
       }
     }
