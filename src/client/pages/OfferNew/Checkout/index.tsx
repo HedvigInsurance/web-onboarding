@@ -202,6 +202,15 @@ export const Checkout: React.FC<Props> = ({
   const scrollWrapper = useRef<HTMLDivElement>()
 
   useEffect(() => {
+    if (visibilityState === VisibilityState.OPEN) {
+      Intercom('update', { hide_default_launcher: true })
+    }
+    if (visibilityState === VisibilityState.CLOSED) {
+      Intercom('update', { hide_default_launcher: false })
+    }
+  }, [visibilityState])
+
+  useEffect(() => {
     if (signUiState === 'STARTED' || signUiState === 'STARTED_WITH_REDIRECT') {
       startPollingSignState()
     }

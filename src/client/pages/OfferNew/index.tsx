@@ -78,7 +78,6 @@ export const OfferNew: React.FC = () => {
 
   const handleCheckoutToggle = (open: boolean) => {
     toggleCheckout(open)
-    Intercom('update', { hide_default_launcher: open })
   }
 
   const offerData = data?.quoteBundle
