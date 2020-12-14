@@ -38,15 +38,14 @@ export const SignStatus: React.FC<Props> = ({ signStatus, signUiState }) => {
     if (signUiState === 'FAILED') {
       setSignStatusTextKey('CHECKOUT_SIGN_GENERIC_ERROR')
     }
+    if (signUiState === 'STARTED_WITH_REDIRECT') {
+      setSignStatusTextKey('CHECKOUT_SIGN_STARTED_WITH_REDIRECT')
+    }
   }, [signUiState])
 
   useEffect(() => {
     if (signStatus?.signState) {
       const { signState } = signStatus
-
-      if (signState === SignState.Initiated) {
-        setSignStatusTextKey('SIGN_BANKID_INITIATED')
-      }
 
       if (
         signState === SignState.InProgress ||
