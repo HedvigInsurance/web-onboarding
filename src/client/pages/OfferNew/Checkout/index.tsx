@@ -231,33 +231,34 @@ export const Checkout: React.FC<Props> = ({
       offerData.person.ssn,
   )
 
-  const startSign = async () => {
+  const startSign = () => {
     if (!canInitiateSign) {
       return
     }
 
     const baseUrl = `${window.location.origin}/${locale}/new-member`
-    const result = await signQuotes({
+    signQuotes({
       variables: {
         quoteIds: getQuoteIds(offerData),
         successUrl: baseUrl + '/sign/success',
         failUrl: baseUrl + '/sign/fail',
       },
     })
-    if (result.data?.signQuotes?.__typename === 'FailedToStartSign') {
-      setSignUiState('FAILED')
-
-      return
-    }
-    if (
-      result.data?.signQuotes?.__typename === 'NorwegianBankIdSession' ||
-      result.data?.signQuotes?.__typename === 'DanishBankIdSession'
-    ) {
-      setSignUiState('STARTED_WITH_REDIRECT')
-      window.location.href = result.data.signQuotes.redirectUrl!
-      return
-    }
-    setSignUiState('STARTED')
+      .then(({ data }) => {
+        if (data?.signQuotes?.__typename === 'FailedToStartSign') {
+          setSignUiState('FAILED')
+          return
+        }
+        if (data?.signQuotes && 'redirectUrl' in data?.signQuotes) {
+          setSignUiState('STARTED_WITH_REDIRECT')
+          if (data.signQuotes.redirectUrl) {
+            window.location.href = data.signQuotes.redirectUrl
+          }
+          return
+        }
+        setSignUiState('STARTED')
+      })
+      .catch(() => setSignUiState('FAILED'))
   }
 
   if (signStatus?.signState === SignState.Completed) {
