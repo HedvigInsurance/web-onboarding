@@ -58,13 +58,7 @@ export const Sign: React.FC<Props> = ({
   return (
     <Wrapper isDesktop={isDesktop}>
       <Button
-        onClick={async () => {
-          if (!canInitiateSign) {
-            return
-          }
-
-          onSignStart()
-        }}
+        onClick={() => onSignStart()}
         size={isDesktop ? 'lg' : 'sm'}
         fullWidth
         foreground={colorsV3.gray900}
