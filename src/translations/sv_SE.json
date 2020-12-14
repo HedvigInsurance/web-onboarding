@@ -241,5 +241,6 @@
   "SSN_DOES_NOT_MATCH_BIRTH_DATE": "Personnumret du angett stämmer ej med det du tidigare angivet",
   "INVALID_SSN_LENGTH": "Personnummer behöver vara 10 eller 12 tecken",
   "CHECKOUT_SIGN_GENERIC_ERROR": "Något gick fel. Försök igen eller kontakta oss.",
-  "CHECKOUT_SIGN_LINK_TO_OPEN_CHAT": "Chatta med oss"
+  "CHECKOUT_SIGN_LINK_TO_OPEN_CHAT": "Chatta med oss",
+  "CHECKOUT_SIGN_STARTED_WITH_REDIRECT": ""
 }

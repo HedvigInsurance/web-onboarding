@@ -241,5 +241,6 @@
   "SSN_DOES_NOT_MATCH_BIRTH_DATE": "",
   "INVALID_SSN_LENGTH": "",
   "CHECKOUT_SIGN_GENERIC_ERROR": "Noget gik galt. Prøv igen eller kontakt os.",
-  "CHECKOUT_SIGN_LINK_TO_OPEN_CHAT": "Chat med os"
+  "CHECKOUT_SIGN_LINK_TO_OPEN_CHAT": "Chat med os",
+  "CHECKOUT_SIGN_STARTED_WITH_REDIRECT": ""
 }

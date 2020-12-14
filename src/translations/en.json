@@ -241,5 +241,6 @@
   "SSN_DOES_NOT_MATCH_BIRTH_DATE": "Ssn doesn't match birth date",
   "INVALID_SSN_LENGTH": "Invalid ssn length",
   "CHECKOUT_SIGN_GENERIC_ERROR": "Something went wrong. Please try again or contact us.",
-  "CHECKOUT_SIGN_LINK_TO_OPEN_CHAT": "Chat with us"
+  "CHECKOUT_SIGN_LINK_TO_OPEN_CHAT": "Chat with us",
+  "CHECKOUT_SIGN_STARTED_WITH_REDIRECT": "Redirecting"
 }
