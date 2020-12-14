@@ -45,6 +45,7 @@ interface InputVariant {
   color: string
   background: string
   border: string
+  borderFocus: string
   error: string
 }
 
@@ -52,16 +53,22 @@ export const inputVariants: Record<string, InputVariant> = {
   light: {
     color: colorsV3.gray900,
     background: colorsV3.white,
-    border: colorsV2.lightgray,
+    border: colorsV3.gray500,
+    borderFocus: colorsV3.gray900,
     error: colorsV3.red700,
   },
   dark: {
     color: colorsV3.gray100,
     background: colorsV3.gray900,
     border: colorsV3.gray500,
+    borderFocus: colorsV3.gray300,
     error: colorsV3.red500,
   },
 }
+
+const InputFieldContainer = styled.div`
+  margin-bottom: 1.5rem;
+`
 
 const Wrapper = styled.div<{ errors?: string; variant: variantType }>`
   position: relative;
@@ -79,6 +86,14 @@ const Wrapper = styled.div<{ errors?: string; variant: variantType }>`
   transition: all 0.2s;
   color: ${(props) => inputVariants[props.variant].color};
 
+  &:focus-within {
+    border: 1px solid
+      ${(props) =>
+        props.errors
+          ? inputVariants[props.variant].error
+          : inputVariants[props.variant].borderFocus};
+  }
+
   select {
     cursor: pointer;
     appearance: none;
@@ -93,10 +108,10 @@ const TextWrapper = styled.div`
 `
 
 const Label = styled.label`
-  font-size: 0.75rem;
-  line-height: 0.75rem;
-  color: ${colorsV2.gray};
-  margin-bottom: 0.125rem;
+  font-size: 0.875rem;
+  line-height: 1;
+  color: ${colorsV3.gray500};
+  margin-bottom: 0.25rem;
 `
 
 const StyledField = styled(Field)`
@@ -115,7 +130,7 @@ const StyledField = styled(Field)`
   }
 
   ::placeholder {
-    color: ${colorsV2.semilightgray};
+    color: ${colorsV3.gray500};
   }
 
   ::-webkit-outer-spin-button,
@@ -189,16 +204,16 @@ const StyledRawInput = styled.input`
   -moz-appearance: textfield;
   background: none;
   border: none;
-  font-size: 1.125rem;
-  line-height: 1.625rem;
-  color: ${colorsV2.black};
+  font-size: 1rem;
+  line-height: 1.5;
+  color: ${colorsV3.gray900};
   padding: 0;
   margin: 0;
   :focus {
     outline: none;
   }
   ::placeholder {
-    color: ${colorsV2.semilightgray};
+    color: ${colorsV3.gray500};
   }
 `
 
@@ -209,8 +224,8 @@ export const RawInputField: React.FC<React.InputHTMLAttributes<
   errors?: string
   variant?: variantType
 }> = ({ errors, label, className, variant = 'light', ...props }) => (
-  <>
-    <Wrapper errors={errors} className={className} variant={variant}>
+  <InputFieldContainer className={className}>
+    <Wrapper errors={errors} variant={variant}>
       <TextWrapper>
         {label && <Label htmlFor={props.id}>{label}</Label>}
         <StyledRawInput {...props} />
@@ -220,7 +235,7 @@ export const RawInputField: React.FC<React.InputHTMLAttributes<
       </SymbolWrapper>
     </Wrapper>
     {errors && <ErrorText variant={variant}>{errors}</ErrorText>}
-  </>
+  </InputFieldContainer>
 )
 
 export const InputField: React.FC<TextInputProps &

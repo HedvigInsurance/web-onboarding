@@ -16,19 +16,20 @@ import {
 } from '../utils'
 import { InsuranceSummary } from './InsuranceSummary'
 import { UserDetailsForm } from './UserDetailsForm'
+import { useSsnError } from './hooks'
 
-const Section = styled('div')`
+const Section = styled.div`
   width: 100%;
 `
 
-const Excerpt = styled('div')`
+const Excerpt = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 4rem;
+  padding: 1rem 0 1.5rem;
 
-  @media (max-width: 40rem) {
-    padding: 2rem 0;
+  @media (min-width: 40rem) {
+    padding-bottom: 2rem;
   }
 `
 
@@ -38,19 +39,25 @@ const StartDateWrapper = styled.div`
   margin-bottom: 2rem;
 `
 
-const InsuranceTypeLabel = styled('div')`
+const StartDateLabel = styled.p`
+  margin: 0 0 0.5rem 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1;
+`
+
+const InsuranceTypeLabel = styled.div`
   font-size: 0.75rem;
   color: ${colorsV3.gray500};
   text-transform: uppercase;
 `
 
-const InsuranceType = styled('div')`
-  font-size: 2rem;
+const InsuranceType = styled.div`
+  font-size: 1.5rem;
   font-family: ${fonts.FAVORIT};
   line-height: 1;
 
-  @media (max-width: 40rem) {
-    font-size: 1.5rem;
+  @media (min-width: 40rem) {
+    font-size: 2rem;
   }
 `
 
@@ -78,6 +85,7 @@ export const CheckoutContent: React.FC<Props> = ({
   const [fakeLoading, setFakeLoading] = React.useState(false)
   const [reallyLoading, setReallyLoading] = React.useState(false)
   const [editQuote, editQuoteResult] = useEditQuoteMutation()
+  const { ssnBackendError } = useSsnError(editQuoteResult)
   const quoteIds = getQuoteIds(offerData)
 
   useUnderwritingLimitsHitReporter(
@@ -135,6 +143,7 @@ export const CheckoutContent: React.FC<Props> = ({
             onEmailUpdate(onCompletion)
           }}
           ssn={offerData.person.ssn ?? ''}
+          ssnBackendError={ssnBackendError}
           onSsnChange={(ssn) => {
             const onCompletion = new Promise<void>((resolve, reject) => {
               setFakeLoading(true)
@@ -159,6 +168,9 @@ export const CheckoutContent: React.FC<Props> = ({
         />
 
         <StartDateWrapper>
+          <StartDateLabel>
+            {textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}
+          </StartDateLabel>
           <StartDate offerData={offerData} refetch={refetch} />
         </StartDateWrapper>
 

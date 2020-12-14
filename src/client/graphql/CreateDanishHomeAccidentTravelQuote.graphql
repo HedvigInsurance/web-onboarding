@@ -1,0 +1,35 @@
+mutation CreateDanishHomeAccidentTravelQuote(
+  $homeInput: CreateQuoteInput!
+  $accidentInput: CreateQuoteInput!
+  $travelInput: CreateQuoteInput!
+) {
+  createHomeContents: createQuote(input: $homeInput) {
+    __typename
+    ... on CompleteQuote {
+      id
+      quoteDetails {
+        __typename
+      }
+    }
+  }
+
+  createAccident: createQuote(input: $accidentInput) {
+    __typename
+    ... on CompleteQuote {
+      id
+      quoteDetails {
+        __typename
+      }
+    }
+  }
+
+  createTravel: createQuote(input: $travelInput) {
+    __typename
+    ... on CompleteQuote {
+      id
+      quoteDetails {
+        __typename
+      }
+    }
+  }
+}

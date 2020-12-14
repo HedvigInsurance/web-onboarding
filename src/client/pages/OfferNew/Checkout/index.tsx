@@ -86,13 +86,12 @@ const ScrollWrapper = styled('div')<ScrollWrapperProps>`
 const InnerWrapper = styled('div')`
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
   width: 100%;
   min-height: 100%;
-  padding: 2rem;
+  padding: 1.5rem 1rem;
 
-  @media (max-width: 40rem) {
-    padding: 1rem;
+  @media (min-width: 40rem) {
+    padding: 2rem;
   }
 `
 
