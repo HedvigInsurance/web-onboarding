@@ -239,5 +239,7 @@
   "DETAILS_MODULE_TABLE_STUDENT_CELL_LABEL": "Student",
   "INVALID_SSN": "That number doesn't look right. Try it again.",
   "SSN_DOES_NOT_MATCH_BIRTH_DATE": "National identity number you've entered do not match what you previously chosen",
-  "INVALID_SSN_LENGTH": "National identity number should be 11 characters"
+  "INVALID_SSN_LENGTH": "National identity number should be 11 characters",
+  "CHECKOUT_SIGN_GENERIC_ERROR": "Something went wrong. Please try again or contact us.",
+  "CHECKOUT_SIGN_LINK_TO_OPEN_CHAT": "Chat with us"
 }

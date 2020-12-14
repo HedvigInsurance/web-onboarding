@@ -239,5 +239,7 @@
   "DETAILS_MODULE_TABLE_STUDENT_CELL_LABEL": "",
   "INVALID_SSN": "Det tallet ser ikke riktig ut. Prøv igjen.",
   "SSN_DOES_NOT_MATCH_BIRTH_DATE": "Fødselsnummer du har skrevet inn samsvarer ikke med det du tidligere skrev inn",
-  "INVALID_SSN_LENGTH": "Fødselsnummeret må bestå av 11 tegn"
+  "INVALID_SSN_LENGTH": "Fødselsnummeret må bestå av 11 tegn",
+  "CHECKOUT_SIGN_GENERIC_ERROR": "Noe gikk galt. Prøv igjen eller kontakt oss.",
+  "CHECKOUT_SIGN_LINK_TO_OPEN_CHAT": "Chatt med oss"
 }
