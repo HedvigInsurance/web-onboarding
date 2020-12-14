@@ -5,6 +5,7 @@ import { colorsV3 } from '@hedviginsurance/brand/dist'
 import { SignState, SignStatus as GraphQLSignStatus } from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
 import { SignUiState } from './Sign'
+import { LinkToChat } from './LinkToChat'
 
 const SignStatusWrapper = styled(motion.div)`
   padding: 2rem 0;
@@ -29,6 +30,7 @@ type Props = {
 }
 
 export const SignStatus: React.FC<Props> = ({ signStatus, signUiState }) => {
+  const [isChatLinkVisible, setIsChatLinkVisible] = useState(false)
   const [signStatusTextKey, setSignStatusTextKey] = useState<string | null>(
     null,
   )
@@ -37,6 +39,7 @@ export const SignStatus: React.FC<Props> = ({ signStatus, signUiState }) => {
   useEffect(() => {
     if (signUiState === 'FAILED') {
       setSignStatusTextKey('CHECKOUT_SIGN_GENERIC_ERROR')
+      setIsChatLinkVisible(true)
     }
     if (signUiState === 'STARTED_WITH_REDIRECT') {
       setSignStatusTextKey('CHECKOUT_SIGN_STARTED_WITH_REDIRECT')
@@ -54,6 +57,9 @@ export const SignStatus: React.FC<Props> = ({ signStatus, signUiState }) => {
         const statusCode = signStatus?.collectStatus?.code || ''
         setSignStatusTextKey(BANK_ID_STATUS_TEXT_KEYS[statusCode])
       }
+      if (signState === SignState.Failed) {
+        setIsChatLinkVisible(true)
+      }
     }
   }, [signStatus])
 
@@ -64,6 +70,7 @@ export const SignStatus: React.FC<Props> = ({ signStatus, signUiState }) => {
       transition={{ type: 'spring', stiffness: 400, damping: 100 }}
     >
       {textKeys[signStatusTextKey]()}
+      {isChatLinkVisible && <LinkToChat />}
     </SignStatusWrapper>
   ) : null
 }
