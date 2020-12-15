@@ -200,7 +200,7 @@
   "CHECKOUT_INSURANCE_APARTMENT_TYPE_RENT": "Hyresrätt",
   "SIGN_BANKID_CODE_STARTED": "Söker efter BankID, det kan ta en liten stund…\\nOm det har gått några sekunder och inget BankID har hittats har du sannolikt inget fungerande BankID och behöver hämta ett hos din internetbank. Appen laddar du ner från App Store eller Google Play.",
   "SIGN_BANKID_CODE_USER_SIGN": "Skriv in din säkerhetskod i BankID-appen och välj Legitimera eller Skriv under.",
-  "SIGN_BANKID_CODE_NO_CLIENT": "Starta BankID-appen.",
+  "SIGN_BANKID_CODE_NO_CLIENT": "Starta BankID-appen på din mobil eller surfplatta.",
   "SIGN_BANKID_CODE_OUTSTANDING_TRANSACTION": "Starta BankID-appen på din mobil eller surfplatta.",
   "SIGN_BANKID_CODE_EXPIRED_TRANSACTION": "BankID-appen svarar inte. Kontrollera att den är startad och att du har internetanslutning. Om du inte har något giltigt BankID kan du hämta ett hos din Bank. Försök sedan igen.",
   "SIGN_BANKID_CODE_CERTIFICATE_ERR": "Det BankID du försöker använda är för gammalt eller spärrat. Använd ett annat BankID eller hämta ett nytt hos din internetbank.",

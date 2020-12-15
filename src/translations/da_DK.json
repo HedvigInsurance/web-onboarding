@@ -200,7 +200,7 @@
   "CHECKOUT_INSURANCE_APARTMENT_TYPE_RENT": "Lejebolig",
   "SIGN_BANKID_CODE_STARTED": "Søger efter NemID-nøgle. Det kan tage lidt tid ...\\nHvis der er gået nogle sekunder, og der ikke er blevet genereret en NemID-nøgle, kan du sandsynligvis ikke bruge NemID til at logge på\/underskrive med på denne computer.   Hvis du ikke har NemID, kan du bestille det på nemid.nu. Hvis du har NemID-nøgleappen installeret på en anden enhed, kan du starte appen der.",
   "SIGN_BANKID_CODE_USER_SIGN": "Indtast din adgangskode i NemID-nøgleappen, og vælg Legitimer eller Underskriv.",
-  "SIGN_BANKID_CODE_NO_CLIENT": "Start NemID-nøgleappen.",
+  "SIGN_BANKID_CODE_NO_CLIENT": "",
   "SIGN_BANKID_CODE_OUTSTANDING_TRANSACTION": "",
   "SIGN_BANKID_CODE_EXPIRED_TRANSACTION": "NemID-nøgleappen svarer ikke. Kontroller, at den er startet, og at du har internetforbindelse. Hvis du ikke har et gyldigt NemID, kan du bestille det på nemid.nu. Prøv derefter igen.",
   "SIGN_BANKID_CODE_CERTIFICATE_ERR": "Det NemID, du forsøger at bruge, er for gammelt eller spærret. Bestil et nyt NemID, eller prøv med en ny NemID-nøgle.",
