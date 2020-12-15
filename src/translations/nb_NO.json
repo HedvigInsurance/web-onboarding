@@ -146,14 +146,14 @@
   "FOREVER_DOWNLOAD_PARAGRAPH": "Nå er du medlem av Hedvig. Last ned appen og kom igang. Ikke glem å invitere vennene dine!",
   "FOREVER_DOWNLOAD_DOWNLOAD_APP_CTA": "Last ned vår app",
   "WEB_GENERIC_CAMPAIGN_ADDEDPERK": "",
-  "CHECKOUT_SSN_LABEL": "Fødselsnummer (DDMMÅÅXXXXX)",
+  "CHECKOUT_SSN_LABEL_NO": "Fødselsnummer (DDMMÅÅXXXXX)",
   "STARTPAGE_CONTENTS_BODY": "Sjekk din pris",
   "STARTPAGE_CONTENTS_HEADLINE": "Innboforsikring",
   "STARTPAGE_TRAVEL_HEADLINE": "Reiseforsikring",
   "STARTPAGE_TRAVEL_BODY": "Sjekk din pris",
   "STARTPAGE_CONTENTS_BUTTON": "Få et prisforslag",
   "STARTPAGE_TRAVEL_BUTTON": "Få et prisforslag",
-  "CHECKOUT_SSN_PLACEHOLDER": "DDMMÅÅXXXXX",
+  "CHECKOUT_SSN_PLACEHOLDER_NO": "DDMMÅÅXXXXX",
   "STARTPAGE_COMBO_HEADLINE": "Innbo- og reiseforsikring",
   "STARTPAGE_COMBO_BODY": "Sjekk din pris",
   "STARTPAGE_COMBO_BUTTON": "Få et prisforslag",
@@ -242,5 +242,9 @@
   "INVALID_SSN_LENGTH": "Fødselsnummeret må bestå av 11 tegn",
   "CHECKOUT_SIGN_GENERIC_ERROR": "Noe gikk galt. Prøv igjen eller kontakt oss.",
   "CHECKOUT_SIGN_LINK_TO_OPEN_CHAT": "Chatt med oss",
-  "CHECKOUT_SIGN_STARTED_WITH_REDIRECT": "Omdirigerer til BankID"
+  "CHECKOUT_SIGN_STARTED_WITH_REDIRECT": "Omdirigerer til BankID",
+  "CHECKOUT_SSN_PLACEHOLDER_SE": "",
+  "CHECKOUT_SSN_LABEL_SE": "",
+  "CHECKOUT_SSN_LABEL_DK": "",
+  "CHECKOUT_SSN_PLACEHOLDER_DK": ""
 }
