@@ -187,7 +187,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
                 <Header>
                   <Title>
-                    {market !== Market.No && (
+                    {market === Market.Se && (
                       <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
                     )}
                     {!isBundle(offerData) &&
@@ -233,7 +233,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                     fullWidth
                     onClick={() => onCheckoutOpen()}
                     foreground={colorsV3.gray900}
-                    background="#c9abf5"
+                    background={colorsV3.purple500}
                   >
                     {textKeys.SIDEBAR_GETHEDVIG_BUTTON()}
                   </Button>
