@@ -257,6 +257,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                   <FooterExtraActions>
                     {redeemedCampaigns.length === 0 && (
                       <TextButton
+                        color={colorsV3.gray500}
                         onClick={() => {
                           setDiscountCodeModalIsOpen(true)
                         }}
@@ -269,7 +270,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                         redeemedCampaigns[0]?.incentive ?? undefined,
                       ) && (
                         <TextButton
-                          color={colorsV2.coral700}
+                          color={colorsV3.red500}
                           onClick={() => {
                             removeDiscountCode()
                               .then(() => {
