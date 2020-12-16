@@ -49,7 +49,7 @@ const Container = styled.div<{ sticky: boolean; hasDiscount: boolean }>`
   position: ${(props) => (props.sticky ? `fixed` : `relative`)};
   ${(props) => props.sticky && `top: 6rem`};
   width: 26rem;
-  padding: 1rem 0 1.5rem 0;
+  padding: 1rem;
   flex-shrink: 0;
   background-color: ${colorsV3.white};
   border-radius: 8px;
@@ -98,23 +98,18 @@ const PreTitle = styled.span`
 
 const Title = styled.h3`
   width: 100%;
-  margin-top: 0;
+  margin: 0;
   font-size: 1.5rem;
   line-height: 2rem;
 `
 
 const Body = styled.div`
-  padding: 2rem;
-  padding-top: 0;
+  margin-bottom: 1.5rem;
   font-size: 0.875rem;
-
-  @media (max-width: 600px) {
-    padding: 1rem;
-  }
 `
 const BodyTitle = styled.div`
+  margin-bottom: 0.75rem;
   color: ${colorsV3.gray700};
-  padding-bottom: 0.5rem;
 `
 
 const Footer = styled.div`
@@ -122,11 +117,6 @@ const Footer = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding: 0 1rem;
-
-  @media (max-width: 600px) {
-    padding: 2rem 1rem;
-  }
 `
 
 const FooterExtraActions = styled.div`
@@ -135,14 +125,8 @@ const FooterExtraActions = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin-top: 1.5rem;
-
-  > * {
-    margin-right: 1.375rem;
-    :last-child {
-      margin-right: 0;
-    }
-  }
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
 `
 
 export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
