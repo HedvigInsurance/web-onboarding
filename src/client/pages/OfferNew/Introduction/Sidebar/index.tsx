@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2, colorsV3, fonts } from '@hedviginsurance/brand'
+import { colorsV2, colorsV3, HedvigSymbol } from '@hedviginsurance/brand'
 import { CookieStorage } from 'cookie-storage'
 import React from 'react'
 import ReactVisibilitySensor from 'react-visibility-sensor'
@@ -79,17 +79,17 @@ const DiscountInfo = styled.div`
   text-align: center;
 `
 
-const Header = styled.div`
+const HeaderTop = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  width: 100%;
-  padding: 0 1rem 2rem 1rem;
+  margin-bottom: 2rem;
+`
 
-  @media (max-width: 600px) {
-    padding: 1.5rem;
-  }
+const Header = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1.5rem;
 `
 
 const PreTitle = styled.span`
@@ -197,6 +197,10 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 hasDiscount={redeemedCampaigns.length > 0}
               >
                 {discountText && <DiscountInfo>{discountText}</DiscountInfo>}
+                <HeaderTop>
+                  <HedvigSymbol />
+                </HeaderTop>
+
                 <Header>
                   <Title>
                     {market !== Market.No && (
@@ -222,10 +226,12 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                     monthlyGross={offerData.cost.monthlyGross}
                     monthlyNet={offerData.cost.monthlyNet}
                   />
-                  <TextButton onClick={() => setDetailsModalIsOpen(true)}>
-                    {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
-                  </TextButton>
                 </Header>
+
+                <TextButton onClick={() => setDetailsModalIsOpen(true)}>
+                  {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
+                </TextButton>
+
                 <Body>
                   <BodyTitle>
                     {textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}
