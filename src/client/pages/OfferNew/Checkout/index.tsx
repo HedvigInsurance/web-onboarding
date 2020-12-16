@@ -2,9 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { SemanticEvents } from 'quepasa'
-import { Mount } from 'react-lifecycle-components'
-import { Redirect } from 'react-router-dom'
 import { BackArrow } from 'components/icons/BackArrow'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
@@ -17,17 +14,13 @@ import {
 import { OfferData } from 'pages/OfferNew/types'
 import { getQuoteIds } from 'pages/OfferNew/utils'
 import { handleSignedEvent } from 'utils/tracking/signing'
-import {
-  getContractType,
-  getUtmParamsFromCookie,
-  TrackAction,
-  useTrack,
-} from 'utils/tracking/tracking'
+import { useTrack } from 'utils/tracking/tracking'
 import { Variation, useVariation } from 'utils/hooks/useVariation'
-import { CheckoutContent } from './CheckoutContent'
 import { useScrollLock, VisibilityState } from './hooks'
+import { CheckoutContent } from './CheckoutContent'
 import { Sign, SignUiState } from './Sign'
 import { SignDisclaimer } from './SignDisclaimer'
+import { CheckoutSuccessRedirect } from './CheckoutSuccessRedirect'
 
 type Openable = {
   visibilityState: VisibilityState
@@ -269,79 +262,61 @@ export const Checkout: React.FC<Props> = ({
       .catch(() => setSignUiState('FAILED'))
   }
 
-  if (signStatus?.signState === SignState.Completed) {
-    return (
-      <TrackAction
-        event={{
-          name: SemanticEvents.Ecommerce.OrderCompleted,
-          properties: {
-            category: 'web-onboarding-steps',
-            currency: offerData.cost.monthlyNet.currency,
-            total: Number(offerData.cost.monthlyNet.amount),
-            products: [
-              {
-                name: getContractType(offerData),
-              },
-            ],
-            ...getUtmParamsFromCookie(),
-          },
-        }}
-      >
-        {({ track: trackAction }) => (
-          <Mount on={trackAction}>
-            <Redirect to={`/${locale}/new-member/connect-payment`} />)
-          </Mount>
-        )}
-      </TrackAction>
-    )
-  }
-
   return (
     <>
-      <OuterWrapper visibilityState={visibilityState}>
-        <ScrollWrapper
-          ref={scrollWrapper as React.MutableRefObject<HTMLDivElement | null>}
-          windowHeight={windowInnerHeight}
-        >
-          <InnerWrapper>
-            <BackButton onClick={onClose}>
-              <BackArrow />
-            </BackButton>
+      {signStatus?.signState !== SignState.Completed && (
+        <>
+          <OuterWrapper visibilityState={visibilityState}>
+            <ScrollWrapper
+              ref={
+                scrollWrapper as React.MutableRefObject<HTMLDivElement | null>
+              }
+              windowHeight={windowInnerHeight}
+            >
+              <InnerWrapper>
+                <BackButton onClick={onClose}>
+                  <BackArrow />
+                </BackButton>
 
-            <CheckoutContent
-              onSubmit={startSign}
-              offerData={offerData}
-              onEmailUpdate={(onCompletion) => {
-                setEmailUpdateLoading(true)
-                onCompletion.finally(() => setEmailUpdateLoading(false))
-              }}
-              onSsnUpdate={(onCompletion) => {
-                setSsnUpdateLoading(true)
-                onCompletion.finally(() => setSsnUpdateLoading(false))
-              }}
-              refetch={refetch}
-            />
+                <CheckoutContent
+                  onSubmit={startSign}
+                  offerData={offerData}
+                  onEmailUpdate={(onCompletion) => {
+                    setEmailUpdateLoading(true)
+                    onCompletion.finally(() => setEmailUpdateLoading(false))
+                  }}
+                  onSsnUpdate={(onCompletion) => {
+                    setSsnUpdateLoading(true)
+                    onCompletion.finally(() => setSsnUpdateLoading(false))
+                  }}
+                  refetch={refetch}
+                />
 
-            <SignDisclaimer offerData={offerData} />
-          </InnerWrapper>
-          <Sign
-            canInitiateSign={
-              canInitiateSign && !ssnUpdateLoading && !emailUpdateLoading
-            }
-            signUiState={signUiState}
-            signStatus={signStatus}
-            isLoading={
-              signQuotesMutation.loading ||
-              signUiState === 'STARTED' ||
-              signUiState === 'STARTED_WITH_REDIRECT' ||
-              emailUpdateLoading
-            }
-            onSignStart={startSign}
-          />
-        </ScrollWrapper>
-      </OuterWrapper>
+                <SignDisclaimer offerData={offerData} />
+              </InnerWrapper>
+              <Sign
+                canInitiateSign={
+                  canInitiateSign && !ssnUpdateLoading && !emailUpdateLoading
+                }
+                signUiState={signUiState}
+                signStatus={signStatus}
+                isLoading={
+                  signQuotesMutation.loading ||
+                  signUiState === 'STARTED' ||
+                  signUiState === 'STARTED_WITH_REDIRECT' ||
+                  emailUpdateLoading
+                }
+                onSignStart={startSign}
+              />
+            </ScrollWrapper>
+          </OuterWrapper>
 
-      <Backdrop visibilityState={visibilityState} onClick={onClose} />
+          <Backdrop visibilityState={visibilityState} onClick={onClose} />
+        </>
+      )}
+      {signStatus?.signState === SignState.Completed && (
+        <CheckoutSuccessRedirect offerData={offerData} />
+      )}
     </>
   )
 }
