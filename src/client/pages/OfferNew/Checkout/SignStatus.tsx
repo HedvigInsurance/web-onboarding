@@ -63,6 +63,9 @@ export const SignStatus: React.FC<Props> = ({ signStatus, signUiState }) => {
     if (signUiState === 'STARTED_WITH_REDIRECT') {
       setSignStatusTextKey('CHECKOUT_SIGN_STARTED_WITH_REDIRECT')
     }
+    if (signUiState !== 'FAILED') {
+      setHasSigningError(false)
+    }
   }, [signUiState])
 
   useEffect(() => {
