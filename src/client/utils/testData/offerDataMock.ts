@@ -274,7 +274,7 @@ export const noCombo: OfferData = {
   },
 }
 
-export const danishHomeContents: OfferData = {
+export const dkHomeContentOwn: OfferData = {
   person: {
     firstName: 'Judith',
     lastName: 'Madsson',
@@ -302,7 +302,7 @@ export const danishHomeContents: OfferData = {
       },
       dataCollectionId: null,
       currentInsurer: null,
-      contractType: TypeOfContract.NoHomeContentRent,
+      contractType: TypeOfContract.DkHomeContentOwn,
       perils: perilsMock,
       insurableLimits: insurableLimitMock,
       insuranceTerms: insuranceTermsMock,
@@ -312,12 +312,12 @@ export const danishHomeContents: OfferData = {
     freeUntil: null,
     monthlyDiscount: {
       amount: '49.00',
-      currency: 'DEK',
+      currency: 'DKK',
       __typename: 'MonetaryAmountV2',
     },
     monthlyGross: {
       amount: '198.00',
-      currency: 'DEK',
+      currency: 'DKK',
       __typename: 'MonetaryAmountV2',
     },
     monthlyNet: {
