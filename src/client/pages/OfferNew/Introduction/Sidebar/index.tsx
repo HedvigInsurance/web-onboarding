@@ -49,7 +49,7 @@ const Container = styled.div<{ sticky: boolean; hasDiscount: boolean }>`
   position: ${(props) => (props.sticky ? `fixed` : `relative`)};
   ${(props) => props.sticky && `top: 6rem`};
   width: 26rem;
-  padding: 2rem 0 1.5rem 0;
+  padding: 1rem 0 1.5rem 0;
   flex-shrink: 0;
   background-color: ${colorsV3.white};
   border-radius: 8px;
@@ -92,25 +92,15 @@ const Header = styled.div`
   }
 `
 
-const PreTitle = styled.div`
-  font-family: ${fonts.FAVORIT};
-  font-size: 0.75rem;
-  line-height: 0.875rem;
-  letter-spacing: 0.075rem;
-  color: ${colorsV3.gray500};
-  text-transform: uppercase;
+const PreTitle = styled.span`
+  display: block;
 `
 
-const Title = styled.div`
-  text-align: center;
+const Title = styled.h3`
   width: 100%;
-  font-family: ${fonts.FAVORIT};
+  margin-top: 0;
   font-size: 1.5rem;
-  color: ${colorsV3.gray900};
-
-  @media (max-width: 600px) {
-    font-size: 1.5rem;
-  }
+  line-height: 2rem;
 `
 
 const Body = styled.div`
@@ -208,11 +198,10 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
               >
                 {discountText && <DiscountInfo>{discountText}</DiscountInfo>}
                 <Header>
-                  {market !== Market.No && (
-                    <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
-                  )}
-
                   <Title>
+                    {market !== Market.No && (
+                      <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
+                    )}
                     {!isBundle(offerData) &&
                       textKeys[
                         insuranceTypeTextKeys[offerData.quotes[0].contractType]

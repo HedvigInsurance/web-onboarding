@@ -19,6 +19,7 @@ export const GlobalCss: React.SFC = ({ children }) => (
           line-height: 1.25;
           margin: 0;
           padding: 0;
+          color: ${colorsV3.gray900};
           background: ${colorsV3.gray900};
         }
 
