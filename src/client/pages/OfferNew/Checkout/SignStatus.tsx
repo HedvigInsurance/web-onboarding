@@ -18,7 +18,7 @@ type StatusMessageTextKey =
   | 'CHECKOUT_SIGN_STARTED_WITH_REDIRECT'
   | 'CHECKOUT_SIGN_GENERIC_ERROR'
   | 'SE_BANKID_START_SIGN'
-  | 'SE_BANKID_CERTIFICATE_ERR'
+  | 'SE_BANKID_CERTIFICATE_ERROR'
   | 'SE_BANKID_SIGN_CANCELLED'
 
 type StatusTextKey = StatusMessageTextKey | null
@@ -54,7 +54,7 @@ const getStatusMessageFromCode = (bankIdStatusCode: string) => {
     case 'userSign':
       return 'SE_BANKID_START_SIGN'
     case 'certificateErr':
-      return 'SE_BANKID_CERTIFICATE_ERR'
+      return 'SE_BANKID_CERTIFICATE_ERROR'
     case 'userCancel':
     case 'cancelled':
       return 'SE_BANKID_SIGN_CANCELLED'
