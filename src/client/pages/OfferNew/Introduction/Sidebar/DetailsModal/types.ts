@@ -47,6 +47,13 @@ export interface DanishHomeContentFieldSchema {
     RequiredFields<EditDanishHomeContentsInput>
   >
 }
+
+export type CommonFieldSchema = {
+  firstName: RegularFieldType
+  lastName: RegularFieldType
+  birthDate: RegularFieldType
+}
+
 export type FieldSchemaBuilder<T> = {
   [P in keyof T]: T[P] extends string | number | boolean
     ? RegularFieldType
@@ -55,9 +62,18 @@ export type FieldSchemaBuilder<T> = {
     : FieldSchemaBuilder<T[P]>
 }
 
-export type FieldSchema =
+export type DetailsFieldSchema =
   | SwedishApartmentFieldSchema
   | SwedishHouseFieldSchema
   | NorwegianHomeContentFieldSchema
   | NorwegianTravelContentFieldSchema
   | DanishHomeContentFieldSchema
+
+export type FieldSchema = DetailsFieldSchema & CommonFieldSchema
+
+export type MarketFields =
+  | FieldSchemaBuilder<RequiredFields<EditSwedishApartmentInput>>
+  | FieldSchemaBuilder<RequiredFields<EditSwedishHouseInput>>
+  | FieldSchemaBuilder<RequiredFields<EditNorwegianHomeContentsInput>>
+  | FieldSchemaBuilder<RequiredFields<EditNorwegianTravelInput>>
+  | FieldSchemaBuilder<RequiredFields<EditDanishHomeContentsInput>>
