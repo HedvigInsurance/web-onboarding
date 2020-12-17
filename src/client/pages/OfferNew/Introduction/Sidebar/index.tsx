@@ -104,7 +104,7 @@ const Title = styled.h3`
 `
 
 const Body = styled.div`
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   font-size: 0.875rem;
 `
 const BodyTitle = styled.div`

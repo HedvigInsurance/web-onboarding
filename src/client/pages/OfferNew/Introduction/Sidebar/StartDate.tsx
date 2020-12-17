@@ -43,6 +43,7 @@ interface Props {
 const DateFormsWrapper = styled.div`
   display: flex;
   flex-direction: row;
+  margin-bottom: 1.5rem;
 `
 
 const RowButtonWrapper = styled.div`
@@ -105,8 +106,8 @@ const DateLabel = styled.span<{ hasStartDate: boolean }>`
   ${({ hasStartDate }) =>
     !hasStartDate &&
     css`
-      font-size: 0.75rem;
-      line-height: 0.75rem;
+      font-size: 0.875rem;
+      line-height: 1;
       color: ${colorsV3.gray500};
     `};
 `
