@@ -40,6 +40,9 @@ export type OfferPersonInfo = Pick<
 
 export type OfferQuote = Pick<
   BundledQuote,
+  | 'firstName'
+  | 'lastName'
+  | 'birthDate'
   | 'id'
   | 'startDate'
   | 'quoteDetails'

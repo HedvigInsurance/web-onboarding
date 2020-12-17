@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2, fonts } from '@hedviginsurance/brand'
+import { colorsV3, fonts } from '@hedviginsurance/brand'
 import { Form, Formik } from 'formik'
 import React from 'react'
 import { Button } from 'components/buttons'
@@ -8,6 +8,7 @@ import { EditQuoteInput, useEditQuoteMutation } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
 import { isBundle } from '../../../utils'
+
 import {
   getFieldSchema,
   getInitialInputValues,
@@ -25,7 +26,7 @@ import { Details } from './Details'
 const Container = styled.div`
   width: 100%;
   height: 100%;
-  padding: 4rem 5rem 1.5rem 5rem;
+  padding: 1rem 2rem;
   display: flex;
   flex-direction: column;
 
@@ -46,27 +47,39 @@ const Headline = styled.div`
   font-family: ${fonts.FAVORIT};
   font-size: 2.5rem;
   line-height: 3.5rem;
-  color: ${colorsV2.black};
+  color: ${colorsV3.black};
 
   @media (max-width: 600px) {
     font-size: 2rem;
     line-height: 3rem;
   }
 `
-
-const Footer = styled.div`
-  margin-top: 2.5rem;
+interface FooterProps {
+  position: 'sticky' | 'relative'
+}
+const Footer = styled.div<FooterProps>`
+  @media (max-device-width: 600px) {
+    position: ${(props) => props.position};
+  }
+  @media screen and (orientation: landscape) and (max-height: 480px) {
+    position: relative;
+  }
+  padding-bottom: 2.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background-color: ${colorsV3.white};
+  position: sticky;
+  bottom: 0px;
+  z-index: 1;
 `
 
 const Warning = styled.div`
   font-size: 0.75rem;
   line-height: 1rem;
   margin-top: 1rem;
-  color: ${colorsV2.darkgray};
+  color: ${colorsV3.gray900};
   text-align: center;
 `
 
@@ -74,7 +87,7 @@ const Error = styled.div`
   font-size: 0.75rem;
   line-height: 1rem;
   margin-top: 1rem;
-  color: ${colorsV2.coral500};
+  color: ${colorsV3.red500};
   text-align: center;
 `
 
@@ -89,6 +102,19 @@ const LoadingDimmer = styled.div<{ visible: boolean }>`
   opacity: ${(props) => (props.visible ? 1 : 0)};
   visibility: ${(props) => (props.visible ? 'visible' : 'hidden')};
 `
+
+const useWindowSize = () => {
+  const [size, setSize] = React.useState([0, 0])
+  React.useLayoutEffect(() => {
+    const updateSize = () => {
+      setSize([window.innerWidth, window.innerHeight])
+    }
+    window.addEventListener('resize', updateSize)
+    updateSize()
+    return () => window.removeEventListener('resize', updateSize)
+  }, [])
+  return size
+}
 
 interface DetailsModalProps {
   offerData: OfferData
@@ -106,12 +132,26 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   const mainOfferQuote = getMainOfferQuote(offerData)
   const fieldSchema = getFieldSchema(mainOfferQuote)
   const validationSchema = getValidationSchema(fieldSchema, mainOfferQuote)
-  const initialValues = getInitialInputValues(mainOfferQuote)
+  const initialValues = getInitialInputValues(offerData.person, mainOfferQuote)
   const [isUpdating, setIsUpdating] = React.useState(false)
   const [
     isUnderwritingGuidelineHit,
     setIsUnderwritingGuidelineHit,
   ] = React.useState(false)
+
+  const [, windowHeight] = useWindowSize()
+  const [initialWindowHeight, setInitialWindowHeight] = React.useState(
+    windowHeight,
+  )
+
+  React.useEffect(() => {
+    if (initialWindowHeight === 0) {
+      setInitialWindowHeight(windowHeight)
+    }
+  }, [initialWindowHeight, windowHeight])
+
+  const getFooterPosition = () =>
+    initialWindowHeight !== windowHeight ? 'relative' : 'sticky'
 
   const bundleEditQuote = async (
     form: EditQuoteInput,
@@ -150,70 +190,71 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
       }),
     )
   }
+
   return (
     <Modal isVisible={isVisible} onClose={onClose} dynamicHeight>
       <LoadingDimmer visible={isUpdating} />
-      <Container>
-        <Formik<EditQuoteInput>
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          validateOnBlur
-          onSubmit={async (form) => {
-            setIsUpdating(true)
-            setIsUnderwritingGuidelineHit(false)
-            try {
-              const result = isBundle(offerData)
-                ? await bundleEditQuote(form, offerData)
-                : await editQuote({ variables: { input: form } })
-              if (hasEditQuoteErrors(result)) {
-                setIsUpdating(false)
-                return
-              }
-              if (isUnderwritingLimitsHit(result)) {
-                setIsUnderwritingGuidelineHit(true)
-                setIsUpdating(false)
-                return
-              }
-              await refetch()
-              onClose()
-            } catch (e) {
-              console.error(e)
-              if ('Sentry' in window) {
-                ;(window as any).Sentry.captureException(e)
-              }
-              // noop
+      <Formik<EditQuoteInput>
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        validateOnBlur
+        onSubmit={async (form) => {
+          setIsUpdating(true)
+          setIsUnderwritingGuidelineHit(false)
+          try {
+            const result = isBundle(offerData)
+              ? await bundleEditQuote(form, offerData)
+              : await editQuote({ variables: { input: form } })
+            if (hasEditQuoteErrors(result)) {
+              setIsUpdating(false)
+              return
             }
-            setIsUpdating(false)
-          }}
-        >
-          {(formikProps) => (
-            <Form>
+            if (isUnderwritingLimitsHit(result)) {
+              setIsUnderwritingGuidelineHit(true)
+              setIsUpdating(false)
+              return
+            }
+            await refetch()
+            onClose()
+          } catch (e) {
+            console.error(e)
+            if ('Sentry' in window) {
+              ;(window as any).Sentry.captureException(e)
+            }
+            // noop
+          }
+          setIsUpdating(false)
+        }}
+      >
+        {(formikProps) => (
+          <Form>
+            <Container>
               <Headline>{textKeys.DETAILS_MODULE_HEADLINE()}</Headline>
               <Details
                 fieldSchema={fieldSchema}
                 formikProps={formikProps}
                 offerQuote={mainOfferQuote}
               />
-              <Footer>
-                <Button type="submit" disabled={isUpdating}>
-                  {textKeys.DETAILS_MODULE_BUTTON()}
-                </Button>
-                {editQuoteResult.error && (
-                  <Error>{textKeys.DETAILS_MODULE_BUTTON_ERROR()}</Error>
-                )}
-                {isUnderwritingGuidelineHit && (
-                  <Error>
-                    {textKeys.DETAILS_MODULE_BUTTON_UNDERWRITING_GUIDELINE_HIT()}
-                  </Error>
-                )}
-                {!editQuoteResult.error && !isUnderwritingGuidelineHit && (
-                  <Warning>{textKeys.DETAILS_MODULE_BUTTON_WARNING()}</Warning>
-                )}
-              </Footer>
-            </Form>
-          )}
-        </Formik>
-      </Container>
+            </Container>
+            <Footer position={getFooterPosition()}>
+              <Button type="submit" disabled={isUpdating}>
+                {textKeys.DETAILS_MODULE_BUTTON()}
+              </Button>
+              {editQuoteResult.error && (
+                <Error>{textKeys.DETAILS_MODULE_BUTTON_ERROR()}</Error>
+              )}
+              {isUnderwritingGuidelineHit && (
+                <Error>
+                  {textKeys.DETAILS_MODULE_BUTTON_UNDERWRITING_GUIDELINE_HIT()}
+                </Error>
+              )}
+              {!editQuoteResult.error && !isUnderwritingGuidelineHit && (
+                <Warning>{textKeys.DETAILS_MODULE_BUTTON_WARNING()}</Warning>
+              )}
+            </Footer>
+          </Form>
+        )}
+      </Formik>
     </Modal>
   )
 }
