@@ -46,9 +46,7 @@ const IconWrapper = styled.div`
   }
 `
 
-const getStatusMessageFromCode = (
-  bankIdStatusCode: string,
-): StatusMessageTextKey => {
+const getStatusMessageFromCode = (bankIdStatusCode: string) => {
   switch (bankIdStatusCode) {
     case 'noClient':
     case 'outstandingTransaction':
@@ -67,6 +65,30 @@ const getStatusMessageFromCode = (
   }
 }
 
+const getStatusText = ({
+  signStatus,
+  signUiState,
+  isLoading,
+}: Props): StatusTextKey => {
+  if (signUiState === 'STARTED_WITH_REDIRECT') {
+    return 'CHECKOUT_SIGN_STARTED_WITH_REDIRECT'
+  }
+
+  const bankIdStatus = signStatus?.collectStatus?.status
+  if (bankIdStatus === BankIdStatus.Failed && signUiState !== 'FAILED') {
+    return null
+  }
+  const bankIdStatusCode = signStatus?.collectStatus?.code
+  if (bankIdStatusCode) {
+    return getStatusMessageFromCode(bankIdStatusCode)
+  }
+  if (!bankIdStatusCode && signUiState === 'FAILED') {
+    return isLoading ? null : 'CHECKOUT_SIGN_GENERIC_ERROR'
+  }
+
+  return null
+}
+
 export const SignStatus: React.FC<Props> = ({
   signStatus,
   signUiState,
@@ -79,32 +101,8 @@ export const SignStatus: React.FC<Props> = ({
   useEffect(() => {
     setHasSigningError(signUiState === 'FAILED')
 
-    if (
-      (signUiState !== 'FAILED' &&
-        signStatus?.collectStatus?.status === BankIdStatus.Failed) ||
-      (signUiState === 'FAILED' && isLoading)
-    ) {
-      setStatusTextKey(null)
-      return
-    }
-
-    if (signUiState === 'STARTED_WITH_REDIRECT') {
-      setStatusTextKey('CHECKOUT_SIGN_STARTED_WITH_REDIRECT')
-      return
-    }
-
-    const statusCode = signStatus?.collectStatus?.code
-
-    if (statusCode) {
-      const statusMessage = getStatusMessageFromCode(statusCode)
-      setStatusTextKey(statusMessage)
-    }
-
-    if (!statusCode) {
-      const textKey =
-        signUiState === 'FAILED' ? 'CHECKOUT_SIGN_GENERIC_ERROR' : null
-      setStatusTextKey(textKey)
-    }
+    const textKey = getStatusText({ signStatus, signUiState, isLoading })
+    setStatusTextKey(textKey)
   }, [signUiState, signStatus, isLoading])
 
   return (
