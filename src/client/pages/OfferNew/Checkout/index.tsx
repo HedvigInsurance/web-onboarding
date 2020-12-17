@@ -192,12 +192,13 @@ export const Checkout: React.FC<Props> = ({
   })
 
   const scrollWrapper = useRef<HTMLDivElement>()
+  useScrollLock(visibilityState, scrollWrapper)
 
   useEffect(() => {
     if (visibilityState === VisibilityState.OPEN) {
       Intercom('update', { hide_default_launcher: true })
     }
-    if (visibilityState === VisibilityState.CLOSED) {
+    if (visibilityState === VisibilityState.CLOSING) {
       Intercom('update', { hide_default_launcher: false })
     }
   }, [visibilityState])
@@ -221,8 +222,6 @@ export const Checkout: React.FC<Props> = ({
       handleSignedEvent(member.data?.member ?? null)
     }
   }, [member.data?.member, signStatus?.signState, variation])
-
-  useScrollLock(visibilityState, scrollWrapper)
 
   const canInitiateSign = Boolean(
     signUiState !== 'STARTED' &&
