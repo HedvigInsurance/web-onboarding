@@ -1,5 +1,4 @@
 import styled from '@emotion/styled'
-import { colorsV3, fonts } from '@hedviginsurance/brand'
 import React from 'react'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { useEditQuoteMutation, useRedeemedCampaignsQuery } from 'data/graphql'
@@ -45,19 +44,12 @@ const StartDateLabel = styled.p`
   line-height: 1;
 `
 
-const InsuranceTypeLabel = styled.div`
-  font-size: 0.75rem;
-  color: ${colorsV3.gray500};
-  text-transform: uppercase;
-`
-
-const InsuranceType = styled.div`
+const InsuranceHeading = styled.h3`
   font-size: 1.5rem;
-  font-family: ${fonts.FAVORIT};
-  line-height: 1;
+  line-height: 2rem;
 
-  @media (min-width: 40rem) {
-    font-size: 2rem;
+  span {
+    display: block;
   }
 `
 
@@ -98,21 +90,17 @@ export const CheckoutContent: React.FC<Props> = ({
     <>
       <Section>
         <Excerpt>
-          <div>
-            {market === Market.Se && (
-              <InsuranceTypeLabel>
-                {textKeys.SIDEBAR_LABEL()}
-              </InsuranceTypeLabel>
-            )}
-            <InsuranceType>
+          <InsuranceHeading>
+            {market === Market.Se && <span>{textKeys.SIDEBAR_LABEL()}</span>}
+            <span>
               {!isBundle(offerData) &&
                 textKeys[
                   insuranceTypeTextKeys[offerData.quotes[0].contractType]
                 ]()}
               {isBundle(offerData) &&
                 textKeys.SIDEBAR_INSURANCE_TYPE_NO_BUNDLE()}
-            </InsuranceType>
-          </div>
+            </span>
+          </InsuranceHeading>
           <div>
             <Price
               loading={fakeLoading || reallyLoading}
