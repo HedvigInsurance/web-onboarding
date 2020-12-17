@@ -9,6 +9,7 @@ interface DetailInputProps {
   field?: RegularFieldType
   formikProps: FormikProps<EditQuoteInput>
   nameRoot:
+    | ''
     | 'swedishApartment'
     | 'swedishHouse'
     | 'norwegianHomeContents'
@@ -20,8 +21,7 @@ interface DetailInputProps {
 export const DetailInput: React.FC<DetailInputProps &
   GenericFieldHTMLAttributes> = ({ field, formikProps, nameRoot, name }) => {
   const textKeys = useTextKeys()
-  const formikName = `${nameRoot}.${name}`
-
+  const formikName = nameRoot !== '' ? `${nameRoot}.${name}` : name
   return field ? (
     <InputField
       label={textKeys[field.label]()}
@@ -34,8 +34,8 @@ export const DetailInput: React.FC<DetailInputProps &
         value: o.value,
       }))}
       showErrorMessage={false}
-      errors={getIn(formikProps.errors[nameRoot], name)}
-      touched={getIn(formikProps.touched[nameRoot], name)}
+      errors={getIn(formikProps.errors, formikName)}
+      touched={getIn(formikProps.touched, formikName)}
       autoComplete="off"
       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
         const value = field.mask

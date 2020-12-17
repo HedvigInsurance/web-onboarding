@@ -26,6 +26,9 @@ export const ContentColumn = styled.div`
   width: calc(50% - 2rem);
   margin: 0 1rem;
 `
+export const ContentRow = styled(ContentColumn)`
+  width: 100%;
+`
 
 export const ContentColumnTitle = styled.div`
   @media (max-width: 800px) {
