@@ -224,6 +224,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                     offerData={offerData}
                     refetch={refetch}
                     modal={true}
+                    size="sm"
                   />
                 </Body>
 
