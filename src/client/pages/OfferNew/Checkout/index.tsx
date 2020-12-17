@@ -7,6 +7,7 @@ import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import {
   SignState,
+  BankIdStatus,
   useMemberQuery,
   useSignQuotesMutation,
   useSignStatusLazyQuery,
@@ -208,6 +209,13 @@ export const Checkout: React.FC<Props> = ({
       startPollingSignState()
     }
   }, [signUiState, startPollingSignState])
+
+  useEffect(() => {
+    if (signStatus?.collectStatus?.status === BankIdStatus.Failed) {
+      setSignUiState('FAILED')
+      return
+    }
+  }, [signStatus?.collectStatus?.status])
 
   useTrack({
     offerData,

@@ -77,7 +77,11 @@ export const Sign: React.FC<Props> = ({
         )}
       </Button>
       {signUiState !== 'NOT_STARTED' && (
-        <SignStatus signStatus={signStatus} signUiState={signUiState} />
+        <SignStatus
+          signStatus={signStatus}
+          signUiState={signUiState}
+          isLoading={isLoading}
+        />
       )}
     </Wrapper>
   )
