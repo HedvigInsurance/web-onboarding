@@ -95,6 +95,9 @@ export const seApartementBrf: OfferData = {
   },
   quotes: [
     {
+      firstName: 'Bengt',
+      lastName: 'Bengtsson',
+      birthDate: '1995-09-29',
       id: '187b050d-2096-4c0e-9afb-f3f20bcaf887',
       startDate: null,
       quoteDetails: {
@@ -149,6 +152,9 @@ export const noComboYouth: OfferData = {
   },
   quotes: [
     {
+      firstName: 'Judith',
+      lastName: 'Moen',
+      birthDate: '2001-12-15',
       id: '187b050d-2096-4c0e-9afb-f3f20bcaf887',
       startDate: null,
       quoteDetails: {
@@ -164,6 +170,9 @@ export const noComboYouth: OfferData = {
       insuranceTerms: insuranceTermsMock,
     },
     {
+      firstName: 'Judith',
+      lastName: 'Moen',
+      birthDate: '2001-12-15',
       id: '86f0a15d-6aed-4051-9ec2-fee1daccfb29',
       startDate: null,
       quoteDetails: {
@@ -219,6 +228,9 @@ export const noCombo: OfferData = {
   },
   quotes: [
     {
+      firstName: 'Judith',
+      lastName: 'Moen',
+      birthDate: '2965-12-15',
       id: '187b050d-2096-4c0e-9afb-f3f20bcaf887',
       startDate: null,
       quoteDetails: {
@@ -234,6 +246,9 @@ export const noCombo: OfferData = {
       insuranceTerms: insuranceTermsMock,
     },
     {
+      firstName: 'Judith',
+      lastName: 'Moen',
+      birthDate: '2965-12-15',
       id: '86f0a15d-6aed-4051-9ec2-fee1daccfb29',
       startDate: null,
       quoteDetails: {
@@ -289,6 +304,9 @@ export const danishHomeContents: OfferData = {
   },
   quotes: [
     {
+      firstName: 'Judith',
+      lastName: 'Madsson',
+      birthDate: '2965-12-15',
       id: '187b050d-2096-4c0e-9afb-f3f20bcaf887',
       startDate: null,
       quoteDetails: {
