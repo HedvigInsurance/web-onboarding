@@ -229,7 +229,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
                 <Footer>
                   <Button
-                    size="lg"
+                    size="sm"
                     fullWidth
                     onClick={() => onCheckoutOpen()}
                     foreground={colorsV3.gray900}
