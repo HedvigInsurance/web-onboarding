@@ -129,13 +129,13 @@ const Backdrop = styled('div')<Openable>`
     ) {
       return `
        opacity: 0;
-       z-index: 1009;
+       z-index: 1000;
      `
     }
 
     return `
       opacity: 1;
-      z-index: 1009;
+      z-index: 1000;
     `
   }};
 `
