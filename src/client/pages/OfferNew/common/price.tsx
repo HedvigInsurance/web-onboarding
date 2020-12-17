@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV3, fonts } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
 import { Spinner } from 'components/utils'
 import { MonetaryAmount } from 'containers/types'
@@ -8,70 +8,53 @@ import { useTextKeys } from 'utils/textKeys'
 const PriceWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: flex-end;
   position: relative;
 `
 
-const PriceGross = styled.div<{ visible: boolean }>`
+const PriceGross = styled.div`
+  height: 0.875rem;
+  margin-bottom: 0.25rem;
   font-size: 1rem;
   line-height: 1rem;
   color: ${colorsV3.gray500};
   text-decoration: line-through;
-  margin-bottom: 0.25rem;
-  height: 0.875rem;
-
-  ${({ visible }) => !visible && 'visibility: hidden;'};
 `
 
-const PriceNumbers = styled.div`
-  display: flex;
-  flex-direction: row;
-`
-
-const PriceNet = styled.div<{
-  monthlyCostDeduction: boolean
+const PriceNumbers = styled.div<{
+  discount: boolean
   lightAppearance?: boolean
 }>`
-  font-size: 3.5rem;
-  line-height: 3.5rem;
-  color: ${(props) => {
-    if (props.monthlyCostDeduction) {
-      return colorsV3.purple500
-    }
-
-    return colorsV3.gray900
-  }};
-  font-family: ${fonts.FAVORIT};
-
+  display: flex;
+  align-items: baseline;
+  ${({ discount }) => discount && `color: ${colorsV3.purple700}`};
   ${({ lightAppearance }) => lightAppearance && `color: ${colorsV3.white}`};
+`
 
-  @media (max-width: 330px) {
-    font-size: 2.75rem;
-  }
+const PriceNet = styled.div`
+  font-size: 1.5rem;
 `
 
 const PriceSuffix = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding-bottom: 0.5rem;
+  display: block;
   flex-shrink: 0;
-  margin-left: 0.5rem;
+  margin-left: 0.25rem;
 `
 
-const PriceUnit = styled.div<{ lightAppearance?: boolean }>`
-  font-size: 0.75rem;
+const PriceUnit = styled.span`
+  margin-right: 0.125rem;
   line-height: 1;
-  color: ${colorsV3.gray800};
-  ${({ lightAppearance }) => lightAppearance && `color: ${colorsV3.white}`};
+  letter-spacing: -0.02rem;
 `
 
-const PriceInterval = styled.div<{ lightAppearance?: boolean }>`
-  font-size: 0.75rem;
+const PriceInterval = styled.span<{
+  discount: boolean
+  lightAppearance?: boolean
+}>`
+  font-size: 1rem;
   line-height: 1;
-  letter-spacing: -0.23px;
-  color: ${colorsV3.gray800};
-  white-space: nowrap;
+  color: ${colorsV3.gray500};
+  ${({ discount }) => discount && `color: ${colorsV3.purple700}`};
   ${({ lightAppearance }) => lightAppearance && `color: ${colorsV3.white}`};
 `
 
@@ -99,23 +82,20 @@ export const Price: React.FC<{
   const textKeys = useTextKeys()
   return (
     <PriceWrapper>
-      <PriceGross
-        visible={monthlyCostDeduction!}
-        aria-hidden={!monthlyCostDeduction}
-      >
-        {textKeys.SIDEBAR_OLD_PRICE({
-          PRICE: Math.round(Number(monthlyGross.amount)),
-        })}
-      </PriceGross>
+      {monthlyCostDeduction && (
+        <PriceGross>
+          {textKeys.SIDEBAR_OLD_PRICE({
+            PRICE: Math.round(Number(monthlyGross.amount)),
+          })}
+        </PriceGross>
+      )}
 
-      <PriceNumbers>
+      <PriceNumbers
+        discount={!!monthlyCostDeduction}
+        lightAppearance={lightAppearance}
+      >
         {!loading && (
-          <PriceNet
-            monthlyCostDeduction={!!monthlyCostDeduction}
-            lightAppearance={lightAppearance}
-          >
-            {Math.round(Number(monthlyNet.amount))}
-          </PriceNet>
+          <PriceNet>{Math.round(Number(monthlyNet.amount))}</PriceNet>
         )}
         {loading && (
           <SpinnerWrapper>
@@ -124,10 +104,11 @@ export const Price: React.FC<{
         )}
 
         <PriceSuffix>
-          <PriceUnit lightAppearance={lightAppearance}>
-            {monthlyGross.currency}
-          </PriceUnit>
-          <PriceInterval lightAppearance={lightAppearance}>
+          <PriceUnit>{monthlyGross.currency}</PriceUnit>
+          <PriceInterval
+            discount={!!monthlyCostDeduction}
+            lightAppearance={lightAppearance}
+          >
             {textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL()}
           </PriceInterval>
         </PriceSuffix>
