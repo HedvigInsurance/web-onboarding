@@ -4,6 +4,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Arrow } from 'components/icons/Arrow'
 import { HedvigSymbol } from 'components/icons/HedvigSymbol'
+import { Badge } from 'components/Badge/Badge'
 
 const CardComponent = styled(Link)`
   position: relative;
@@ -78,24 +79,6 @@ const CardHeader = styled.div`
   }
 `
 
-const CardBanner = styled.div`
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  font-size: 0.75rem;
-  line-height: 2;
-  text-transform: uppercase;
-  text-align: center;
-  color: ${colorsV3.gray800};
-  background-color: ${colorsV3.purple100};
-  border-radius: 0.25rem;
-
-  @media (min-width: 1020px) {
-    font-size: 0.875rem;
-  }
-`
-
 const CardContent = styled.div`
   padding-right: 2rem;
 `
@@ -120,15 +103,15 @@ const ArrowWrapper = styled.span`
   }
 `
 
-export const Card: React.FC<{ to: string; banner?: string }> = ({
-  banner,
+export const Card: React.FC<{ to: string; badge?: string }> = ({
+  badge,
   to,
   children,
 }) => (
   <CardLink to={to}>
     <CardHeader>
       <HedvigSymbol size="1.25rem" />
-      {banner && <CardBanner>{banner}</CardBanner>}
+      {badge && <Badge>{badge}</Badge>}
     </CardHeader>
     <CardContent>{children}</CardContent>
     <ArrowWrapper>
