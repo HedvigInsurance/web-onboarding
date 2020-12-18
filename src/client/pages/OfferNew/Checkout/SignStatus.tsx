@@ -14,12 +14,13 @@ type Props = {
   isLoading: boolean
 }
 
-type StatusMessageTextKey =
-  | 'CHECKOUT_SIGN_STARTED_WITH_REDIRECT'
-  | 'CHECKOUT_SIGN_GENERIC_ERROR'
-  | 'SE_BANKID_START_SIGN'
-  | 'SE_BANKID_CERTIFICATE_ERROR'
-  | 'SE_BANKID_SIGN_CANCELLED'
+enum StatusMessageTextKey {
+  REDIRECTING = 'CHECKOUT_SIGN_STARTED_WITH_REDIRECT',
+  GENERIC_ERR = 'CHECKOUT_SIGN_GENERIC_ERROR',
+  START_SIGNING = 'SE_BANKID_START_SIGN',
+  CERTIFICATE_ERR = 'SE_BANKID_CERTIFICATE_ERROR',
+  CANCELLED = 'SE_BANKID_SIGN_CANCELLED',
+}
 
 type StatusTextKey = StatusMessageTextKey | null
 
@@ -46,22 +47,24 @@ const IconWrapper = styled.div`
   }
 `
 
-const getStatusMessageFromCode = (bankIdStatusCode: string) => {
+const getStatusMessageFromCode = (
+  bankIdStatusCode: string,
+): StatusMessageTextKey => {
   switch (bankIdStatusCode) {
     case 'noClient':
     case 'outstandingTransaction':
     case 'started':
     case 'userSign':
-      return 'SE_BANKID_START_SIGN'
+      return StatusMessageTextKey.START_SIGNING
     case 'certificateErr':
-      return 'SE_BANKID_CERTIFICATE_ERROR'
+      return StatusMessageTextKey.CERTIFICATE_ERR
     case 'userCancel':
     case 'cancelled':
-      return 'SE_BANKID_SIGN_CANCELLED'
+      return StatusMessageTextKey.CANCELLED
     case 'startFailed':
     case 'expiredTransaction':
     default:
-      return 'CHECKOUT_SIGN_GENERIC_ERROR'
+      return StatusMessageTextKey.GENERIC_ERR
   }
 }
 
@@ -71,7 +74,7 @@ const getStatusText = ({
   isLoading,
 }: Props): StatusTextKey => {
   if (signUiState === 'STARTED_WITH_REDIRECT') {
-    return 'CHECKOUT_SIGN_STARTED_WITH_REDIRECT'
+    return StatusMessageTextKey.REDIRECTING
   }
 
   const bankIdStatus = signStatus?.collectStatus?.status
@@ -83,7 +86,7 @@ const getStatusText = ({
     return getStatusMessageFromCode(bankIdStatusCode)
   }
   if (!bankIdStatusCode && signUiState === 'FAILED') {
-    return isLoading ? null : 'CHECKOUT_SIGN_GENERIC_ERROR'
+    return isLoading ? null : StatusMessageTextKey.GENERIC_ERR
   }
 
   return null
