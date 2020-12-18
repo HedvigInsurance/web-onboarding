@@ -16,9 +16,9 @@ type Props = {
 
 enum StatusMessageTextKey {
   REDIRECTING = 'CHECKOUT_SIGN_STARTED_WITH_REDIRECT',
-  GENERIC_ERR = 'CHECKOUT_SIGN_GENERIC_ERROR',
+  GENERIC_ERROR = 'CHECKOUT_SIGN_GENERIC_ERROR',
   START_SIGNING = 'SE_BANKID_START_SIGN',
-  CERTIFICATE_ERR = 'SE_BANKID_CERTIFICATE_ERROR',
+  CERTIFICATE_ERROR = 'SE_BANKID_CERTIFICATE_ERROR',
   CANCELLED = 'SE_BANKID_SIGN_CANCELLED',
 }
 
@@ -57,14 +57,14 @@ const getStatusMessageFromCode = (
     case 'userSign':
       return StatusMessageTextKey.START_SIGNING
     case 'certificateErr':
-      return StatusMessageTextKey.CERTIFICATE_ERR
+      return StatusMessageTextKey.CERTIFICATE_ERROR
     case 'userCancel':
     case 'cancelled':
       return StatusMessageTextKey.CANCELLED
     case 'startFailed':
     case 'expiredTransaction':
     default:
-      return StatusMessageTextKey.GENERIC_ERR
+      return StatusMessageTextKey.GENERIC_ERROR
   }
 }
 
@@ -86,7 +86,7 @@ const getStatusText = ({
     return getStatusMessageFromCode(bankIdStatusCode)
   }
   if (!bankIdStatusCode && signUiState === 'FAILED') {
-    return isLoading ? null : StatusMessageTextKey.GENERIC_ERR
+    return isLoading ? null : StatusMessageTextKey.GENERIC_ERROR
   }
 
   return null
