@@ -9,6 +9,7 @@ export const Content = styled.div`
   }
   width: calc(100% + 2rem);
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   margin: 0 -1rem;
   margin-top: 2.5rem;
