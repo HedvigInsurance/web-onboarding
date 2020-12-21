@@ -155,67 +155,67 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   return (
     <Modal isVisible={isVisible} onClose={onClose} dynamicHeight>
       <LoadingDimmer visible={isUpdating} />
-      <Formik<EditQuoteInput>
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        validateOnBlur
-        onSubmit={async (form) => {
-          setIsUpdating(true)
-          setIsUnderwritingGuidelineHit(false)
-          try {
-            const result = isBundle(offerData)
-              ? await bundleEditQuote(form, offerData)
-              : await editQuote({ variables: { input: form } })
-            if (hasEditQuoteErrors(result)) {
-              setIsUpdating(false)
-              return
+      <Container>
+        <Formik<EditQuoteInput>
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          validateOnBlur
+          onSubmit={async (form) => {
+            setIsUpdating(true)
+            setIsUnderwritingGuidelineHit(false)
+            try {
+              const result = isBundle(offerData)
+                ? await bundleEditQuote(form, offerData)
+                : await editQuote({ variables: { input: form } })
+              if (hasEditQuoteErrors(result)) {
+                setIsUpdating(false)
+                return
+              }
+              if (isUnderwritingLimitsHit(result)) {
+                setIsUnderwritingGuidelineHit(true)
+                setIsUpdating(false)
+                return
+              }
+              await refetch()
+              onClose()
+            } catch (e) {
+              console.error(e)
+              if ('Sentry' in window) {
+                ;(window as any).Sentry.captureException(e)
+              }
+              // noop
             }
-            if (isUnderwritingLimitsHit(result)) {
-              setIsUnderwritingGuidelineHit(true)
-              setIsUpdating(false)
-              return
-            }
-            await refetch()
-            onClose()
-          } catch (e) {
-            console.error(e)
-            if ('Sentry' in window) {
-              ;(window as any).Sentry.captureException(e)
-            }
-            // noop
-          }
-          setIsUpdating(false)
-        }}
-      >
-        {(formikProps) => (
-          <Form>
-            <Container>
+            setIsUpdating(false)
+          }}
+        >
+          {(formikProps) => (
+            <Form>
               <Headline>{textKeys.DETAILS_MODULE_HEADLINE()}</Headline>
               <Details
                 fieldSchema={fieldSchema}
                 formikProps={formikProps}
                 offerQuote={mainOfferQuote}
               />
-            </Container>
-            <Footer>
-              <Button type="submit" disabled={isUpdating}>
-                {textKeys.DETAILS_MODULE_BUTTON()}
-              </Button>
-              {editQuoteResult.error && (
-                <Error>{textKeys.DETAILS_MODULE_BUTTON_ERROR()}</Error>
-              )}
-              {isUnderwritingGuidelineHit && (
-                <Error>
-                  {textKeys.DETAILS_MODULE_BUTTON_UNDERWRITING_GUIDELINE_HIT()}
-                </Error>
-              )}
-              {!editQuoteResult.error && !isUnderwritingGuidelineHit && (
-                <Warning>{textKeys.DETAILS_MODULE_BUTTON_WARNING()}</Warning>
-              )}
-            </Footer>
-          </Form>
-        )}
-      </Formik>
+              <Footer>
+                <Button type="submit" disabled={isUpdating}>
+                  {textKeys.DETAILS_MODULE_BUTTON()}
+                </Button>
+                {editQuoteResult.error && (
+                  <Error>{textKeys.DETAILS_MODULE_BUTTON_ERROR()}</Error>
+                )}
+                {isUnderwritingGuidelineHit && (
+                  <Error>
+                    {textKeys.DETAILS_MODULE_BUTTON_UNDERWRITING_GUIDELINE_HIT()}
+                  </Error>
+                )}
+                {!editQuoteResult.error && !isUnderwritingGuidelineHit && (
+                  <Warning>{textKeys.DETAILS_MODULE_BUTTON_WARNING()}</Warning>
+                )}
+              </Footer>
+            </Form>
+          )}
+        </Formik>
+      </Container>
     </Modal>
   )
 }
