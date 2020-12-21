@@ -94,9 +94,13 @@ const PreTitle = styled.span`
 
 const Title = styled.h3`
   width: 100%;
-  margin: 0;
-  font-size: 1.5rem;
-  line-height: 2rem;
+  margin: 0 1rem 0 0;
+  font-size: 1.375rem;
+  line-height: 1.3;
+
+  ${SIDEBAR_BP} {
+    font-size: 1.5rem;
+  }
 `
 
 const EditDetailsButton = styled(TextButton)`
