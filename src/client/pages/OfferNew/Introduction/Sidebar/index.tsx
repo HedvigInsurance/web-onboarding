@@ -208,7 +208,8 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                       ) ||
                       isPercentageDiscountMonths(
                         redeemedCampaigns[0]?.incentive ?? undefined,
-                      )
+                      ) ||
+                      isBundle(offerData)
                     }
                     monthlyGross={offerData.cost.monthlyGross}
                     monthlyNet={offerData.cost.monthlyNet}
