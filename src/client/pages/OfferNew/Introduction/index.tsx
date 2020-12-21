@@ -2,9 +2,7 @@ import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { Container, Section } from 'pages/OfferNew/components'
 import { OfferData } from 'pages/OfferNew/types'
-import { isBundle } from 'pages/OfferNew/utils'
 import { useDocumentScroll } from '../../../utils/hooks/useDocumentScroll'
-import { ExternalInsuranceProvider } from './ExternalInsuranceProvider'
 import { Sidebar } from './Sidebar'
 
 type Props = {
@@ -17,13 +15,17 @@ type HeroImageProps = {
   hasLoaded: boolean
 }
 
+const BREAKPOINT = 1000
+
 const Wrapper = styled.div`
   width: 100%;
+  height: 480px;
 `
 
-const Background = styled.div`
+const Hero = styled.div`
   height: 480px;
   overflow: hidden;
+  position: absolute;
 `
 
 const HeroImage = styled.img<HeroImageProps>`
@@ -33,25 +35,10 @@ const HeroImage = styled.img<HeroImageProps>`
   transition: opacity 0.8s;
 `
 
-const DesktopLeadingContainer = styled.div`
-  margin-right: 1.875rem;
-  display: none;
-  width: 100%;
-  min-height: 50vh;
-
-  @media (min-width: 1000px) {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-`
-
-const MobileLeadingContainer = styled.div`
-  display: none;
-  width: 100%;
-
-  @media (max-width: 1000px) {
-    display: block;
+const OfferDetails = styled.div`
+  margin: 0;
+  @media screen and (min-width: ${BREAKPOINT}px) {
+    margin-right: 1.875rem;
   }
 `
 
@@ -77,13 +64,10 @@ export const Introduction: React.FC<Props> = ({
     }
   })
 
-  const hasDataCollection =
-    !isBundle(offerData) && !!offerData.quotes[0].dataCollectionId
-
   return (
     <Section>
       <Wrapper>
-        <Background>
+        <Hero>
           <HeroImage
             alt="laptop grip"
             onLoad={() => setHasHeroImageLoaded(true)}
@@ -94,32 +78,17 @@ export const Introduction: React.FC<Props> = ({
           /new-member-assets/landing/laptop_grip_small.jpg 1600w,
           /new-member-assets/landing/laptop_grip_medium.jpg 2200w"
           />
-          <Container>
-            <DesktopLeadingContainer>
-              {hasDataCollection && (
-                <ExternalInsuranceProvider
-                  dataCollectionId={offerData.quotes[0].dataCollectionId || ''}
-                  offerData={offerData}
-                />
-              )}
-            </DesktopLeadingContainer>
-            <MobileLeadingContainer>
-              {hasDataCollection && (
-                <ExternalInsuranceProvider
-                  dataCollectionId={offerData.quotes[0].dataCollectionId || ''}
-                  offerData={offerData}
-                />
-              )}
-            </MobileLeadingContainer>
-            <Sidebar
-              ref={ref}
-              sticky={sidebarIsSticky}
-              offerData={offerData}
-              refetch={refetch}
-              onCheckoutOpen={onCheckoutOpen}
-            />
-          </Container>
-        </Background>
+        </Hero>
+        <Container>
+          <OfferDetails />
+          <Sidebar
+            ref={ref}
+            sticky={sidebarIsSticky}
+            offerData={offerData}
+            refetch={refetch}
+            onCheckoutOpen={onCheckoutOpen}
+          />
+        </Container>
       </Wrapper>
     </Section>
   )
