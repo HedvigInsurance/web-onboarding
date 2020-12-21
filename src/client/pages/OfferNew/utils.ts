@@ -262,13 +262,12 @@ export const ssnLengthByMarket: Record<Market, number> = {
 export const createSsnValidator = (market: Market) => (
   ssn: string,
 ): boolean => {
-  if (market === Market.No) {
-    return /^[0-9]{2}[0,1][0-9][0-9]{2}[ ]?[0-9]{5}$/.test(ssn)
-  } else if (market === Market.Dk) {
-    return /^[0-9]{2}[0,1][0-9][0-9]{2}[ ]?[0-9]{4}$/.test(ssn)
-  } else if (market === Market.Se) {
-    return /^([1-2][0-9])?[0-9]{2}[0-1][0-9][0-9]{2}[-+]?[0-9]{4}$/.test(ssn)
+  switch (market) {
+    case Market.No:
+      return /^[0-9]{2}[0,1][0-9][0-9]{2}[ ]?[0-9]{5}$/.test(ssn)
+    case Market.Dk:
+      return /^[0-9]{2}[0,1][0-9][0-9]{2}[ ]?[0-9]{4}$/.test(ssn)
+    case Market.Se:
+      return /^([1-2][0-9])?[0-9]{2}[0-1][0-9][0-9]{2}[-+]?[0-9]{4}$/.test(ssn)
   }
-
-  throw new Error(`Expected market to be NO, DK or SE but was ${market}`)
 }

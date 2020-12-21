@@ -5,7 +5,7 @@ import { RawInputField } from 'components/inputs'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { WithEmailForm, WithSsnForm } from 'pages/OfferNew/types'
 import { createSsnValidator, ssnLengthByMarket } from 'pages/OfferNew/utils'
-import { useTextKeys } from 'utils/textKeys'
+import { TextKeyMap, useTextKeys } from 'utils/textKeys'
 
 const HiddenSubmit = styled.input`
   display: none;
@@ -18,6 +18,28 @@ export const emailValidation = yup
   .string()
   .email()
   .required()
+
+const getSsnLabel = (market: Market, textKeys: TextKeyMap): string => {
+  switch (market) {
+    case Market.Se:
+      return textKeys.CHECKOUT_SSN_LABEL_SE()
+    case Market.No:
+      return textKeys.CHECKOUT_SSN_LABEL_NO()
+    case Market.Dk:
+      return textKeys.CHECKOUT_SSN_LABEL_DK()
+  }
+}
+
+const getSsnPlaceholder = (market: Market, textKeys: TextKeyMap) => {
+  switch (market) {
+    case Market.Se:
+      return textKeys.CHECKOUT_SSN_PLACEHOLDER_SE()
+    case Market.No:
+      return textKeys.CHECKOUT_SSN_PLACEHOLDER_NO()
+    case Market.Dk:
+      return textKeys.CHECKOUT_SSN_PLACEHOLDER_DK()
+  }
+}
 
 export const UserDetailsForm: React.FC<Props> = ({
   email: initialEmail,
@@ -86,7 +108,6 @@ export const UserDetailsForm: React.FC<Props> = ({
       }, 300),
     )
   }
-
   return (
     <form
       onSubmit={(e) => {
@@ -110,22 +131,20 @@ export const UserDetailsForm: React.FC<Props> = ({
         }}
       />
 
-      {(market === Market.No || market === Market.Dk) && (
-        <RawInputField
-          label={textKeys.CHECKOUT_SSN_LABEL()}
-          placeholder={textKeys.CHECKOUT_SSN_PLACEHOLDER()}
-          name="ssn"
-          id="ssn"
-          type="text"
-          inputMode="numeric"
-          pattern="[0-9]*"
-          maxLength={ssnMaxLength}
-          value={ssn}
-          errors={ssnBackendError ? textKeys[ssnBackendError]() : undefined}
-          onChange={handleSsnChange}
-          onBlur={handleSsnBlur}
-        />
-      )}
+      <RawInputField
+        label={getSsnLabel(market, textKeys)}
+        placeholder={getSsnPlaceholder(market, textKeys)}
+        name="ssn"
+        id="ssn"
+        type="text"
+        inputMode="numeric"
+        pattern="[0-9]*"
+        maxLength={ssnMaxLength}
+        value={ssn}
+        errors={ssnBackendError ? textKeys[ssnBackendError]() : undefined}
+        onChange={handleSsnChange}
+        onBlur={handleSsnBlur}
+      />
       <HiddenSubmit type="submit" />
     </form>
   )
