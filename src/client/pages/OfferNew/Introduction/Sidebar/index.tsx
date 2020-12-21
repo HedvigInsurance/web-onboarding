@@ -65,7 +65,14 @@ const Container = styled.div<{ sticky: boolean }>`
 `
 
 const DiscountInfo = styled.div`
-  margin-left: 1rem;
+  &,
+  * {
+    margin-left: 0.5rem;
+  }
+
+  *:not(:last-child) {
+    margin-bottom: 0.5rem;
+  }
 `
 
 const HeaderTop = styled.div`
@@ -169,6 +176,11 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 <HeaderTop>
                   <HedvigSymbol />
                   <DiscountInfo>
+                    {isBundle(offerData) && (
+                      <Badge>
+                        {textKeys.SIDEBAR_NO_BUNDLE_DISCOUNT_TEXT()}
+                      </Badge>
+                    )}
                     {discountText && <Badge>{discountText}</Badge>}
                   </DiscountInfo>
                 </HeaderTop>
