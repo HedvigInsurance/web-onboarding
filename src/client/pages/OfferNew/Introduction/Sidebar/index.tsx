@@ -85,7 +85,6 @@ const Header = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  margin-bottom: 1.5rem;
 `
 
 const PreTitle = styled.span`
@@ -97,6 +96,10 @@ const Title = styled.h3`
   margin: 0;
   font-size: 1.5rem;
   line-height: 2rem;
+`
+
+const EditDetailsButton = styled(TextButton)`
+  margin-bottom: 1.5rem;
 `
 
 const Body = styled.div`
@@ -212,9 +215,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                   />
                 </Header>
 
-                <TextButton onClick={() => setDetailsModalIsOpen(true)}>
+                <EditDetailsButton onClick={() => setDetailsModalIsOpen(true)}>
                   {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
-                </TextButton>
+                </EditDetailsButton>
 
                 <Body>
                   <BodyTitle>
