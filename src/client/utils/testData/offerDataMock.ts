@@ -7,6 +7,7 @@ import {
   PerilV2,
   TypeOfContract,
   DanishHomeContentsType,
+  ApartmentType,
 } from 'data/graphql'
 import { OfferData } from '../../pages/OfferNew/types'
 
@@ -78,6 +79,60 @@ const perilsMock: PerilV2[] = [
     __typename: 'PerilV2',
   },
 ]
+
+export const seApartementBrf: OfferData = {
+  person: {
+    firstName: 'Bengt',
+    lastName: 'Bengtsson',
+    email: 'mail@test.com',
+    ssn: '199509291234',
+    birthDate: '1995-09-29',
+    householdSize: 2,
+    address: {
+      street: 'Testgatan 23',
+      zipCode: '12345',
+    },
+  },
+  quotes: [
+    {
+      id: '187b050d-2096-4c0e-9afb-f3f20bcaf887',
+      startDate: null,
+      quoteDetails: {
+        street: 'Testgatan 23',
+        zipCode: '12345',
+        householdSize: 2,
+        livingSpace: 42,
+        type: ApartmentType.Rent,
+        __typename: 'SwedishApartmentQuoteDetails',
+      },
+      dataCollectionId: null,
+      currentInsurer: null,
+      contractType: TypeOfContract.SeApartmentBrf,
+      perils: perilsMock,
+      insurableLimits: insurableLimitMock,
+      insuranceTerms: insuranceTermsMock,
+    },
+  ],
+  cost: {
+    freeUntil: null,
+    monthlyDiscount: {
+      amount: '49.00',
+      currency: 'SEK',
+      __typename: 'MonetaryAmountV2',
+    },
+    monthlyGross: {
+      amount: '198.00',
+      currency: 'SEK',
+      __typename: 'MonetaryAmountV2',
+    },
+    monthlyNet: {
+      amount: '149.00',
+      currency: 'SEK',
+      __typename: 'MonetaryAmountV2',
+    },
+    __typename: 'InsuranceCost',
+  },
+}
 
 export const noComboYouth: OfferData = {
   person: {
