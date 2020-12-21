@@ -26,6 +26,8 @@ import { DiscountCodeModal } from './DiscountCodeModal'
 import { StartDate } from './StartDate'
 import { StickyBottomSidebar } from './StickyBottomSidebar'
 
+export const SIDEBAR_BP = '@media (min-width: 1020px)'
+
 interface Props {
   sticky: boolean
   offerData: OfferData
@@ -34,33 +36,32 @@ interface Props {
 }
 
 const Wrapper = styled.div`
-  width: 26rem;
-  flex-shrink: 0;
   position: relative;
-  height: 0;
+  flex-shrink: 0;
   z-index: 1000;
 
-  @media (max-width: 1020px) {
-    width: 100%;
-    height: auto;
+  ${SIDEBAR_BP} {
+    width: 26rem;
+    height: 0;
   }
 `
 
 const Container = styled.div<{ sticky: boolean }>`
-  position: ${(props) => (props.sticky ? `fixed` : `relative`)};
-  ${(props) => props.sticky && `top: 6rem`};
-  width: 26rem;
-  padding: 1rem;
+  position: relative;
+  top: 0;
   flex-shrink: 0;
+  width: 100%;
+  margin-bottom: 4rem;
+  padding: 1rem;
   background-color: ${colorsV3.white};
   border-radius: 8px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
 
-  @media (max-width: 1020px) {
-    width: 100%;
-    position: relative;
-    top: 0;
-    margin-bottom: 4rem;
+  ${SIDEBAR_BP} {
+    position: ${(props) => (props.sticky ? `fixed` : `relative`)};
+    ${(props) => props.sticky && `top: 6rem`};
+    width: 26rem;
+    margin-bottom: 0;
   }
 `
 
