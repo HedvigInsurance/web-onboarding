@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { motion } from 'framer-motion'
 import React from 'react'
 import { Cross } from './icons/Cross'
@@ -47,7 +47,7 @@ const ModalContainer = styled(motion.div)<ModalContainerProps>`
   height: 100%;
   min-height: 25rem;
   max-height: 56rem;`}
-  background: ${colorsV2.white};
+  background: ${colorsV3.white};
   border-radius: 9px;
   position: absolute;
   left: 50%;
@@ -87,7 +87,7 @@ const CloseButton = styled('button')`
   display: flex;
   align-items: center;
   text-align: center;
-  background-color: ${colorsV2.gray};
+  background-color: ${colorsV3.gray500};
   border-radius: 50%;
   border: none;
   cursor: pointer;
@@ -97,13 +97,13 @@ const CloseButton = styled('button')`
   }
 
   :hover {
-    background-color: ${colorsV2.darkgray};
+    background-color: ${colorsV3.gray900};
   }
 
   svg {
     width: 100%;
     height: 100%;
-    fill: ${colorsV2.white};
+    fill: ${colorsV3.white};
   }
 `
 
