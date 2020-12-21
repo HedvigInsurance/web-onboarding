@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2, colorsV3, HedvigSymbol } from '@hedviginsurance/brand'
+import { colorsV3, HedvigSymbol } from '@hedviginsurance/brand'
 import { CookieStorage } from 'cookie-storage'
 import React from 'react'
 import ReactVisibilitySensor from 'react-visibility-sensor'
@@ -18,6 +18,7 @@ import {
 } from 'pages/OfferNew/Introduction/Sidebar/utils'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
+import { Badge } from 'components/Badge/Badge'
 import { Price } from '../../components'
 import { insuranceTypeTextKeys, isBundle } from '../../utils'
 import { DetailsModal } from './DetailsModal'
@@ -45,7 +46,7 @@ const Wrapper = styled.div`
   }
 `
 
-const Container = styled.div<{ sticky: boolean; hasDiscount: boolean }>`
+const Container = styled.div<{ sticky: boolean }>`
   position: ${(props) => (props.sticky ? `fixed` : `relative`)};
   ${(props) => props.sticky && `top: 6rem`};
   width: 26rem;
@@ -53,7 +54,6 @@ const Container = styled.div<{ sticky: boolean; hasDiscount: boolean }>`
   flex-shrink: 0;
   background-color: ${colorsV3.white};
   border-radius: 8px;
-  ${(props) => props.hasDiscount && 'padding-top: 0;'};
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
 
   @media (max-width: 1020px) {
@@ -65,18 +65,7 @@ const Container = styled.div<{ sticky: boolean; hasDiscount: boolean }>`
 `
 
 const DiscountInfo = styled.div`
-  width: 100%;
-  border-radius: 8px 8px 0 0;
-  min-height: 2rem;
-  padding: 0.375rem 1rem;
-  margin-bottom: 2rem;
-  background: ${colorsV2.grass500};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 0.875rem;
-  color: ${colorsV3.white};
-  text-align: center;
+  margin-left: 1rem;
 `
 
 const HeaderTop = styled.div`
@@ -176,13 +165,12 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
         <ReactVisibilitySensor partialVisibility onChange={setIsSidebarVisible}>
           {() => (
             <Wrapper ref={ref}>
-              <Container
-                sticky={sticky}
-                hasDiscount={redeemedCampaigns.length > 0}
-              >
-                {discountText && <DiscountInfo>{discountText}</DiscountInfo>}
+              <Container sticky={sticky}>
                 <HeaderTop>
                   <HedvigSymbol />
+                  <DiscountInfo>
+                    {discountText && <Badge>{discountText}</Badge>}
+                  </DiscountInfo>
                 </HeaderTop>
 
                 <Header>
