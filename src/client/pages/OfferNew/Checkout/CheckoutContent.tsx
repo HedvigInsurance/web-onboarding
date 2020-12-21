@@ -106,7 +106,7 @@ export const CheckoutContent: React.FC<Props> = ({
               loading={fakeLoading || reallyLoading}
               monthlyGross={offerData.cost.monthlyGross}
               monthlyNet={offerData.cost.monthlyNet}
-              monthlyCostDeduction={monthlyCostDeduction}
+              isDiscountPrice={monthlyCostDeduction}
             />
           </div>
         </Excerpt>

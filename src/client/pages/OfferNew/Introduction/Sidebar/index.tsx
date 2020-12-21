@@ -202,7 +202,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                   </Title>
 
                   <Price
-                    monthlyCostDeduction={
+                    isDiscountPrice={
                       isMonthlyCostDeduction(
                         redeemedCampaigns[0]?.incentive ?? undefined,
                       ) ||

@@ -67,13 +67,13 @@ const SpinnerWrapper = styled.div`
 `
 
 export const Price: React.FC<{
-  monthlyCostDeduction?: boolean
+  isDiscountPrice?: boolean
   monthlyNet: MonetaryAmount
   monthlyGross: MonetaryAmount
   lightAppearance?: boolean
   loading?: boolean
 }> = ({
-  monthlyCostDeduction,
+  isDiscountPrice,
   monthlyNet,
   monthlyGross,
   lightAppearance,
@@ -82,7 +82,7 @@ export const Price: React.FC<{
   const textKeys = useTextKeys()
   return (
     <PriceWrapper>
-      {monthlyCostDeduction && (
+      {isDiscountPrice && (
         <PriceGross>
           {textKeys.SIDEBAR_OLD_PRICE({
             PRICE: Math.round(Number(monthlyGross.amount)),
@@ -91,7 +91,7 @@ export const Price: React.FC<{
       )}
 
       <PriceNumbers
-        discount={!!monthlyCostDeduction}
+        discount={!!isDiscountPrice}
         lightAppearance={lightAppearance}
       >
         {!loading && (
@@ -106,7 +106,7 @@ export const Price: React.FC<{
         <PriceSuffix>
           <PriceUnit>{monthlyGross.currency}</PriceUnit>
           <PriceInterval
-            discount={!!monthlyCostDeduction}
+            discount={!!isDiscountPrice}
             lightAppearance={lightAppearance}
           >
             {textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL()}
