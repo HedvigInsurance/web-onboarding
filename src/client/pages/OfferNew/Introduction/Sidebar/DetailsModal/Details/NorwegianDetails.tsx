@@ -18,7 +18,6 @@ import {
   ContentColumnTitle,
   ContentColumn,
 } from './components/Details.styles'
-import { CommonFields } from './components/CommonFields'
 import { DetailsProps } from './types'
 
 export const NorwegianDetails: React.FC<DetailsProps> = ({
@@ -56,7 +55,26 @@ const NorwegianHomeContentDetails: React.FC<NorwegianHomeContentDetails> = ({
         <ContentColumnTitle>
           {textKeys.DETAILS_MODULE_PERSONAL_INFORMATION()}
         </ContentColumnTitle>
-        <CommonFields fieldSchema={fieldSchema} formikProps={formikProps} />
+        <InputGroup>
+          <DetailInput
+            field={fieldSchema.firstName}
+            formikProps={formikProps}
+            nameRoot=""
+            name="firstName"
+          />
+          <DetailInput
+            field={fieldSchema.lastName}
+            formikProps={formikProps}
+            nameRoot=""
+            name="lastName"
+          />
+          <DetailInput
+            field={fieldSchema.birthDate}
+            formikProps={formikProps}
+            nameRoot=""
+            name="birthDate"
+          />
+        </InputGroup>
       </ContentColumn>
       <ContentColumn>
         <ContentColumnTitle>
@@ -121,7 +139,26 @@ const TravelDetails: React.FC<TravelDetails> = ({
           <ContentColumnTitle>
             {textKeys.DETAILS_MODULE_PERSONAL_INFORMATION()}
           </ContentColumnTitle>
-          <CommonFields fieldSchema={fieldSchema} formikProps={formikProps} />
+          <InputGroup>
+            <DetailInput
+              field={fieldSchema.firstName}
+              formikProps={formikProps}
+              nameRoot=""
+              name="firstName"
+            />
+            <DetailInput
+              field={fieldSchema.lastName}
+              formikProps={formikProps}
+              nameRoot=""
+              name="lastName"
+            />
+            <DetailInput
+              field={fieldSchema.birthDate}
+              formikProps={formikProps}
+              nameRoot=""
+              name="birthDate"
+            />
+          </InputGroup>
         </ContentColumn>
         <ContentColumn>
           <ContentColumnTitle>

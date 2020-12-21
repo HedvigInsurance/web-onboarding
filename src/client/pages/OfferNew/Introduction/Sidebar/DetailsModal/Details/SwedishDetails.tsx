@@ -29,7 +29,6 @@ import {
   ContentRow,
 } from './components/Details.styles'
 import { DetailsProps } from './types'
-import { CommonFields } from './components/CommonFields'
 
 export const SwedishDetails: React.FC<DetailsProps> = ({
   fieldSchema,
@@ -61,7 +60,20 @@ const ApartmentDetails: React.FC<ApartmentDetails> = ({
         <ContentColumnTitle>
           {textKeys.DETAILS_MODULE_PERSONAL_INFORMATION()}
         </ContentColumnTitle>
-        <CommonFields fieldSchema={fieldSchema} formikProps={formikProps} />
+        <InputGroup>
+          <DetailInput
+            field={fieldSchema.firstName}
+            formikProps={formikProps}
+            nameRoot=""
+            name="firstName"
+          />
+          <DetailInput
+            field={fieldSchema.lastName}
+            formikProps={formikProps}
+            nameRoot=""
+            name="lastName"
+          />
+        </InputGroup>
       </ContentColumn>
       <ContentColumn>
         <ContentColumnTitle>
@@ -119,7 +131,20 @@ const HouseDetails: React.FC<HouseDetails> = ({ fieldSchema, formikProps }) => {
           <ContentColumnTitle>
             {textKeys.DETAILS_MODULE_PERSONAL_INFORMATION()}
           </ContentColumnTitle>
-          <CommonFields fieldSchema={fieldSchema} formikProps={formikProps} />
+          <InputGroup>
+            <DetailInput
+              field={fieldSchema.firstName}
+              formikProps={formikProps}
+              nameRoot=""
+              name="firstName"
+            />
+            <DetailInput
+              field={fieldSchema.lastName}
+              formikProps={formikProps}
+              nameRoot=""
+              name="lastName"
+            />
+          </InputGroup>
         </ContentColumn>
         <ContentColumn>
           <ContentColumnTitle>

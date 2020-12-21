@@ -9,7 +9,6 @@ import {
   ContentColumnTitle,
 } from './components/Details.styles'
 import { DetailsProps } from './types'
-import { CommonFields } from './components/CommonFields'
 
 export const DanishDetails: React.FC<DetailsProps> = ({
   fieldSchema,
@@ -25,7 +24,26 @@ export const DanishDetails: React.FC<DetailsProps> = ({
             <ContentColumnTitle>
               {textKeys.DETAILS_MODULE_PERSONAL_INFORMATION()}
             </ContentColumnTitle>
-            <CommonFields fieldSchema={fieldSchema} formikProps={formikProps} />
+            <InputGroup>
+              <DetailInput
+                field={fieldSchema.firstName}
+                formikProps={formikProps}
+                nameRoot=""
+                name="firstName"
+              />
+              <DetailInput
+                field={fieldSchema.lastName}
+                formikProps={formikProps}
+                nameRoot=""
+                name="lastName"
+              />
+              <DetailInput
+                field={fieldSchema.birthDate}
+                formikProps={formikProps}
+                nameRoot=""
+                name="birthDate"
+              />
+            </InputGroup>
           </ContentColumn>
           <ContentColumn>
             <ContentColumnTitle>
