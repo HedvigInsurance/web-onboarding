@@ -1,6 +1,5 @@
+import React, { useState } from 'react'
 import styled from '@emotion/styled'
-import { colorsV3 } from '@hedviginsurance/brand'
-import React from 'react'
 import { Container, Section } from 'pages/OfferNew/components'
 import { OfferData } from 'pages/OfferNew/types'
 import { isBundle } from 'pages/OfferNew/utils'
@@ -8,28 +7,30 @@ import { useDocumentScroll } from '../../../utils/hooks/useDocumentScroll'
 import { ExternalInsuranceProvider } from './ExternalInsuranceProvider'
 import { Sidebar } from './Sidebar'
 
-import { Usps } from './USPS'
-
-interface Props {
+type Props = {
   offerData: OfferData
   refetch: () => Promise<void>
   onCheckoutOpen: () => void
 }
 
+type HeroImageProps = {
+  hasLoaded: boolean
+}
+
 const Wrapper = styled.div`
   width: 100%;
-  padding: 7rem 0;
-  background-color: ${colorsV3.gray900};
-  position: relative;
-  box-sizing: border-box;
+`
 
-  @media (max-width: 1020px) {
-    padding: 7rem 0 7rem 0;
-  }
+const Background = styled.div`
+  height: 480px;
+  overflow: hidden;
+`
 
-  @media (max-width: 600px) {
-    padding: 7rem 0 5rem 0;
-  }
+const HeroImage = styled.img<HeroImageProps>`
+  width: 100%;
+  height: auto;
+  opacity: ${({ hasLoaded }) => (hasLoaded ? 1 : 0)};
+  transition: opacity 0.8s;
 `
 
 const DesktopLeadingContainer = styled.div`
@@ -59,7 +60,8 @@ export const Introduction: React.FC<Props> = ({
   refetch,
   onCheckoutOpen,
 }) => {
-  const [sidebarIsSticky, setSidebarIsSticky] = React.useState(false)
+  const [hasHeroImageLoaded, setHasHeroImageLoaded] = useState(false)
+  const [sidebarIsSticky, setSidebarIsSticky] = useState(false)
   const ref = React.useRef<HTMLDivElement>(null)
 
   useDocumentScroll(() => {
@@ -81,33 +83,43 @@ export const Introduction: React.FC<Props> = ({
   return (
     <Section>
       <Wrapper>
-        <Container>
-          <DesktopLeadingContainer>
-            <Usps />
-            {hasDataCollection && (
-              <ExternalInsuranceProvider
-                dataCollectionId={offerData.quotes[0].dataCollectionId || ''}
-                offerData={offerData}
-              />
-            )}
-          </DesktopLeadingContainer>
-          <MobileLeadingContainer>
-            {hasDataCollection && (
-              <ExternalInsuranceProvider
-                dataCollectionId={offerData.quotes[0].dataCollectionId || ''}
-                offerData={offerData}
-              />
-            )}
-            <Usps />
-          </MobileLeadingContainer>
-          <Sidebar
-            ref={ref}
-            sticky={sidebarIsSticky}
-            offerData={offerData}
-            refetch={refetch}
-            onCheckoutOpen={onCheckoutOpen}
+        <Background>
+          <HeroImage
+            alt="laptop grip"
+            onLoad={() => setHasHeroImageLoaded(true)}
+            hasLoaded={hasHeroImageLoaded}
+            src="/new-member-assets/landing/laptop_grip_small.jpg"
+            sizes="100vw"
+            srcSet="
+          /new-member-assets/landing/laptop_grip_small.jpg 1600w,
+          /new-member-assets/landing/laptop_grip_medium.jpg 2200w"
           />
-        </Container>
+          <Container>
+            <DesktopLeadingContainer>
+              {hasDataCollection && (
+                <ExternalInsuranceProvider
+                  dataCollectionId={offerData.quotes[0].dataCollectionId || ''}
+                  offerData={offerData}
+                />
+              )}
+            </DesktopLeadingContainer>
+            <MobileLeadingContainer>
+              {hasDataCollection && (
+                <ExternalInsuranceProvider
+                  dataCollectionId={offerData.quotes[0].dataCollectionId || ''}
+                  offerData={offerData}
+                />
+              )}
+            </MobileLeadingContainer>
+            <Sidebar
+              ref={ref}
+              sticky={sidebarIsSticky}
+              offerData={offerData}
+              refetch={refetch}
+              onCheckoutOpen={onCheckoutOpen}
+            />
+          </Container>
+        </Background>
       </Wrapper>
     </Section>
   )
