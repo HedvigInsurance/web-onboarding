@@ -9,6 +9,12 @@ import { SignStatus as GraphQLSignStatus } from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
 import { SignStatus } from './SignStatus'
 
+export type SignUiState =
+  | 'NOT_STARTED'
+  | 'STARTED_WITH_REDIRECT'
+  | 'STARTED'
+  | 'FAILED'
+
 type WrapperProps = {
   isDesktop: boolean
 }
@@ -31,13 +37,6 @@ const SpinnerWrapper = styled(motion.div)`
   display: inline-block;
 `
 
-export enum SignUiState {
-  NOT_STARTED,
-  STARTED_WITH_REDIRECT,
-  STARTED,
-  FAILED,
-}
-
 interface Props {
   signUiState: SignUiState
   signStatus: GraphQLSignStatus | null
@@ -59,13 +58,7 @@ export const Sign: React.FC<Props> = ({
   return (
     <Wrapper isDesktop={isDesktop}>
       <Button
-        onClick={async () => {
-          if (!canInitiateSign) {
-            return
-          }
-
-          onSignStart()
-        }}
+        onClick={() => onSignStart()}
         size={isDesktop ? 'lg' : 'sm'}
         fullWidth
         foreground={colorsV3.gray900}
@@ -83,8 +76,12 @@ export const Sign: React.FC<Props> = ({
           textKeys.CHECKOUT_SIGN_BUTTON_TEXT()
         )}
       </Button>
-      {signStatus && (
-        <SignStatus signStatus={signStatus} signUiState={signUiState} />
+      {signUiState !== 'NOT_STARTED' && (
+        <SignStatus
+          signStatus={signStatus}
+          signUiState={signUiState}
+          isLoading={isLoading}
+        />
       )}
     </Wrapper>
   )
