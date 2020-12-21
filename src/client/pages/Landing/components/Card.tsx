@@ -111,7 +111,7 @@ export const Card: React.FC<{ to: string; badge?: string }> = ({
   <CardLink to={to}>
     <CardHeader>
       <HedvigSymbol size="1.25rem" />
-      {badge && <Badge>{badge}</Badge>}
+      {badge && <Badge size="lg">{badge}</Badge>}
     </CardHeader>
     <CardContent>{children}</CardContent>
     <ArrowWrapper>

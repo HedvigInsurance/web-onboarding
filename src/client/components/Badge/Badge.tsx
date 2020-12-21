@@ -1,7 +1,13 @@
+import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 
-export const Badge = styled.div`
+type BadgeProps = {
+  size?: 'sm' | 'lg'
+}
+
+export const BadgeContainer = styled.span<BadgeProps>`
+  display: inline-block;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
   border-top-left-radius: 8px;
@@ -14,7 +20,15 @@ export const Badge = styled.div`
   background-color: ${colorsV3.purple100};
   border-radius: 0.25rem;
 
-  @media (min-width: 1020px) {
+  ${({ size }) =>
+    size === 'lg' &&
+    `
+    @media (min-width: 1020px) {
     font-size: 0.875rem;
   }
+  `};
 `
+
+export const Badge: React.FC<BadgeProps> = ({ children, size = 'sm' }) => (
+  <BadgeContainer size={size}>{children}</BadgeContainer>
+)
