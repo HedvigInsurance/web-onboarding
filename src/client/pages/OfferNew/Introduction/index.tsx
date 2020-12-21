@@ -23,16 +23,24 @@ const Wrapper = styled.div`
 `
 
 const Hero = styled.div`
+  width: 100vw;
   height: 480px;
   overflow: hidden;
   position: absolute;
 `
 
 const HeroImage = styled.img<HeroImageProps>`
-  width: 100%;
-  height: auto;
+  width: 150%;
+  height: 150%;
+  object-fit: cover;
   opacity: ${({ hasLoaded }) => (hasLoaded ? 1 : 0)};
   transition: opacity 0.8s;
+
+  @media screen and (min-width: ${BREAKPOINT}px) {
+    object-position: left top;
+    width: 100%;
+    height: 100%;
+  }
 `
 
 const OfferDetails = styled.div`
