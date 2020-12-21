@@ -54,25 +54,13 @@ const Headline = styled.div`
     line-height: 3rem;
   }
 `
-interface FooterProps {
-  position: 'sticky' | 'relative'
-}
-const Footer = styled.div<FooterProps>`
-  @media (max-device-width: 600px) {
-    position: ${(props) => props.position};
-  }
-  @media screen and (orientation: landscape) and (max-height: 480px) {
-    position: relative;
-  }
+
+const Footer = styled.div`
   padding-bottom: 2.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: ${colorsV3.white};
-  position: sticky;
-  bottom: 0px;
-  z-index: 1;
 `
 
 const Warning = styled.div`
@@ -103,19 +91,6 @@ const LoadingDimmer = styled.div<{ visible: boolean }>`
   visibility: ${(props) => (props.visible ? 'visible' : 'hidden')};
 `
 
-const useWindowSize = () => {
-  const [size, setSize] = React.useState([0, 0])
-  React.useLayoutEffect(() => {
-    const updateSize = () => {
-      setSize([window.innerWidth, window.innerHeight])
-    }
-    window.addEventListener('resize', updateSize)
-    updateSize()
-    return () => window.removeEventListener('resize', updateSize)
-  }, [])
-  return size
-}
-
 interface DetailsModalProps {
   offerData: OfferData
   refetch: () => Promise<void>
@@ -138,20 +113,6 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
     isUnderwritingGuidelineHit,
     setIsUnderwritingGuidelineHit,
   ] = React.useState(false)
-
-  const [, windowHeight] = useWindowSize()
-  const [initialWindowHeight, setInitialWindowHeight] = React.useState(
-    windowHeight,
-  )
-
-  React.useEffect(() => {
-    if (initialWindowHeight === 0) {
-      setInitialWindowHeight(windowHeight)
-    }
-  }, [initialWindowHeight, windowHeight])
-
-  const getFooterPosition = () =>
-    initialWindowHeight !== windowHeight ? 'relative' : 'sticky'
 
   const bundleEditQuote = async (
     form: EditQuoteInput,
@@ -236,7 +197,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                 offerQuote={mainOfferQuote}
               />
             </Container>
-            <Footer position={getFooterPosition()}>
+            <Footer>
               <Button type="submit" disabled={isUpdating}>
                 {textKeys.DETAILS_MODULE_BUTTON()}
               </Button>
