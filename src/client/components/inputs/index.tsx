@@ -295,7 +295,7 @@ export const InputField: React.FC<TextInputProps &
 )
 
 export const InputGroupDeleteButton = styled.button`
-  background: ${colorsV2.white};
+  background: ${colorsV3.white};
   color: ${colorsV2.coral500};
   display: flex;
   width: 100%;
@@ -304,7 +304,7 @@ export const InputGroupDeleteButton = styled.button`
   justify-content: center;
   cursor: pointer;
   transition: all 350ms;
-  border: 1px solid ${colorsV2.lightgray};
+  border: 1px solid ${colorsV3.gray500};
   border-top: 0;
   border-radius: 8px;
   font-size: 0.875rem;
@@ -335,7 +335,7 @@ export const InputGroup = styled.div`
 
   ${Wrapper as any}, ${InputGroupDeleteButton} {
     border-radius: 0;
-    border-color: ${colorsV2.lightgray};
+    border-color: ${colorsV3.gray500};
 
     :not(:first-of-type) {
       border-top: none;

@@ -9,6 +9,7 @@ export const Content = styled.div`
   }
   width: calc(100% + 2rem);
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   margin: 0 -1rem;
   margin-top: 2.5rem;
@@ -25,6 +26,9 @@ export const ContentColumn = styled.div`
   }
   width: calc(50% - 2rem);
   margin: 0 1rem;
+`
+export const ContentRow = styled(ContentColumn)`
+  width: 100%;
 `
 
 export const ContentColumnTitle = styled.div`
