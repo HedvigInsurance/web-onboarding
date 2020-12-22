@@ -113,23 +113,6 @@ export const Modal: React.FC<ModalProps> = ({
   onClose,
   children,
 }) => {
-  const containerRef = React.useRef<HTMLDivElement>(null)
-
-  React.useEffect(() => {
-    const handleClick = (e: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(e.target as Node)
-      ) {
-        onClose()
-      }
-    }
-    document.addEventListener('mousedown', handleClick)
-    return () => {
-      document.removeEventListener('mousedown', handleClick)
-    }
-  }, [onClose])
-
   React.useEffect(() => {
     if (isVisible) {
       document.body.style.overflow = 'hidden'
@@ -156,6 +139,7 @@ export const Modal: React.FC<ModalProps> = ({
       }}
     >
       <Background
+        onClick={onClose}
         initial={'hidden'}
         animate={isVisible ? 'visible' : 'hidden'}
         variants={{
@@ -166,41 +150,38 @@ export const Modal: React.FC<ModalProps> = ({
             opacity: 0,
           },
         }}
+      />
+      <ModalContainer
+        dynamicHeight={dynamicHeight}
+        initial={'hidden'}
+        animate={isVisible ? 'visible' : 'hidden'}
+        transition={{
+          type: 'spring',
+          stiffness: 400,
+          damping: 100,
+        }}
+        variants={{
+          visible: {
+            opacity: 1,
+            transform: 'translateX(-50%) translateY(-50%) scale(1)',
+            transition: {
+              type: 'spring',
+              stiffness: 400,
+              damping: 100,
+              delay: 0.15,
+            },
+          },
+          hidden: {
+            opacity: 0,
+            transform: 'translateX(-50%) translateY(50%) scale(0.9)',
+          },
+        }}
       >
-        <ModalContainer
-          dynamicHeight={dynamicHeight}
-          initial={'hidden'}
-          animate={isVisible ? 'visible' : 'hidden'}
-          transition={{
-            type: 'spring',
-            stiffness: 400,
-            damping: 100,
-          }}
-          variants={{
-            visible: {
-              opacity: 1,
-              transform: 'translateX(-50%) translateY(-50%) scale(1)',
-              transition: {
-                type: 'spring',
-                stiffness: 400,
-                damping: 100,
-                delay: 0.15,
-              },
-            },
-            hidden: {
-              opacity: 0,
-              transform: 'translateX(-50%) translateY(50%) scale(0.9)',
-            },
-          }}
-        >
-          <ModalInnerContainer ref={containerRef}>
-            {children}
-          </ModalInnerContainer>
-          <CloseButton onClick={onClose}>
-            <Cross />
-          </CloseButton>
-        </ModalContainer>
-      </Background>
+        <ModalInnerContainer>{children}</ModalInnerContainer>
+        <CloseButton onClick={onClose}>
+          <Cross />
+        </CloseButton>
+      </ModalContainer>
     </Wrapper>
   )
 }
