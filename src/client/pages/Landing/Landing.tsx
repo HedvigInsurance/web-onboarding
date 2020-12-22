@@ -346,7 +346,7 @@ const LandingPageCardsNo: React.FC<{
   return (
     <>
       <Card
-        banner={textKeys.STARTPAGE_COMBO_DISCOUNT_TEXT()}
+        badge={textKeys.STARTPAGE_COMBO_DISCOUNT_TEXT()}
         to={`/${language}/new-member/combo`}
       >
         <CardHeadline>{textKeys.STARTPAGE_COMBO_HEADLINE()}</CardHeadline>

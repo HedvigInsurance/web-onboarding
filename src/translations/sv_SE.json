@@ -30,7 +30,7 @@
   "COMPARE_HEADLINE": "Jämför vårt skydd med de andra",
   "COMPARE_BODY": "Det är viktigt för oss att du känner dig säker på att du får bästa möjliga villkor.",
   "COMPARE_TABLE_TITLE": "Skydd",
-  "SIDEBAR_LABEL": "Hemförsäkring",
+  "SIDEBAR_INSURANCE_LABEL_SE": "Hemförsäkring",
   "SIDEBAR_SHOW_DETAILS_BUTTON": "Visa detaljer",
   "SIDEBAR_STARTDATE_CELL_LABEL": "Startdatum",
   "SIDEBAR_GETHEDVIG_BUTTON": "Skaffa Hedvig nu",
@@ -243,5 +243,6 @@
   "DETAILS_MODULE_TABLE_FIRSTNAME_CELL_LABEL": "Förnamn",
   "DETAILS_MODULE_TABLE_LASTNAME_CELL_LABEL": "Efternamn",
   "DETAILS_MODULE_TABLE_BIRTHDATE_CELL_LABEL": "Födelsedatum",
-  "DETAILS_MODULE_PERSONAL_INFORMATION": "Personuppgifter"
+  "DETAILS_MODULE_PERSONAL_INFORMATION": "Personuppgifter",
+  "SIDEBAR_NO_BUNDLE_DISCOUNT_TEXT": ""
 }

@@ -30,7 +30,7 @@
   "COMPARE_HEADLINE": "Compare our coverage to theirs ",
   "COMPARE_BODY": "It's important to us that you feel sure that you get the best possible coverage.",
   "COMPARE_TABLE_TITLE": "Coverage",
-  "SIDEBAR_LABEL": "Home insurance",
+  "SIDEBAR_INSURANCE_LABEL_SE": "Home insurance",
   "SIDEBAR_SHOW_DETAILS_BUTTON": "Show details",
   "SIDEBAR_STARTDATE_CELL_LABEL": "Start date",
   "SIDEBAR_GETHEDVIG_BUTTON": "Get Hedvig now",
@@ -243,5 +243,6 @@
   "DETAILS_MODULE_TABLE_FIRSTNAME_CELL_LABEL": "First name",
   "DETAILS_MODULE_TABLE_LASTNAME_CELL_LABEL": "Last name",
   "DETAILS_MODULE_TABLE_BIRTHDATE_CELL_LABEL": "Date of birth",
-  "DETAILS_MODULE_PERSONAL_INFORMATION": "Personal information"
+  "DETAILS_MODULE_PERSONAL_INFORMATION": "Personal information",
+  "SIDEBAR_NO_BUNDLE_DISCOUNT_TEXT": "25% discount"
 }
