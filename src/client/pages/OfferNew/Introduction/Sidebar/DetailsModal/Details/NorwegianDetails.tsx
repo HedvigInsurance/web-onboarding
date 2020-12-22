@@ -59,19 +59,16 @@ const NorwegianHomeContentDetails: React.FC<NorwegianHomeContentDetails> = ({
           <DetailInput
             field={fieldSchema.firstName}
             formikProps={formikProps}
-            nameRoot=""
             name="firstName"
           />
           <DetailInput
             field={fieldSchema.lastName}
             formikProps={formikProps}
-            nameRoot=""
             name="lastName"
           />
           <DetailInput
             field={fieldSchema.birthDate}
             formikProps={formikProps}
-            nameRoot=""
             name="birthDate"
           />
         </InputGroup>
@@ -143,19 +140,16 @@ const TravelDetails: React.FC<TravelDetails> = ({
             <DetailInput
               field={fieldSchema.firstName}
               formikProps={formikProps}
-              nameRoot=""
               name="firstName"
             />
             <DetailInput
               field={fieldSchema.lastName}
               formikProps={formikProps}
-              nameRoot=""
               name="lastName"
             />
             <DetailInput
               field={fieldSchema.birthDate}
               formikProps={formikProps}
-              nameRoot=""
               name="birthDate"
             />
           </InputGroup>

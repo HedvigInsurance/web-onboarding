@@ -8,8 +8,7 @@ import { RegularFieldType } from '../../types'
 interface DetailInputProps {
   field?: RegularFieldType
   formikProps: FormikProps<EditQuoteInput>
-  nameRoot:
-    | ''
+  nameRoot?:
     | 'swedishApartment'
     | 'swedishHouse'
     | 'norwegianHomeContents'
@@ -21,7 +20,7 @@ interface DetailInputProps {
 export const DetailInput: React.FC<DetailInputProps &
   GenericFieldHTMLAttributes> = ({ field, formikProps, nameRoot, name }) => {
   const textKeys = useTextKeys()
-  const formikName = nameRoot !== '' ? `${nameRoot}.${name}` : name
+  const formikName = nameRoot ? `${nameRoot}.${name}` : name
   return field ? (
     <InputField
       label={textKeys[field.label]()}

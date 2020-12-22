@@ -64,13 +64,11 @@ const ApartmentDetails: React.FC<ApartmentDetails> = ({
           <DetailInput
             field={fieldSchema.firstName}
             formikProps={formikProps}
-            nameRoot=""
             name="firstName"
           />
           <DetailInput
             field={fieldSchema.lastName}
             formikProps={formikProps}
-            nameRoot=""
             name="lastName"
           />
         </InputGroup>
@@ -135,13 +133,11 @@ const HouseDetails: React.FC<HouseDetails> = ({ fieldSchema, formikProps }) => {
             <DetailInput
               field={fieldSchema.firstName}
               formikProps={formikProps}
-              nameRoot=""
               name="firstName"
             />
             <DetailInput
               field={fieldSchema.lastName}
               formikProps={formikProps}
-              nameRoot=""
               name="lastName"
             />
           </InputGroup>

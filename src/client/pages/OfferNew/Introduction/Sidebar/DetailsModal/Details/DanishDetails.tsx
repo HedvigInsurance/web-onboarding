@@ -28,19 +28,16 @@ export const DanishDetails: React.FC<DetailsProps> = ({
               <DetailInput
                 field={fieldSchema.firstName}
                 formikProps={formikProps}
-                nameRoot=""
                 name="firstName"
               />
               <DetailInput
                 field={fieldSchema.lastName}
                 formikProps={formikProps}
-                nameRoot=""
                 name="lastName"
               />
               <DetailInput
                 field={fieldSchema.birthDate}
                 formikProps={formikProps}
-                nameRoot=""
                 name="birthDate"
               />
             </InputGroup>
