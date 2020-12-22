@@ -66,8 +66,8 @@ export const DKHomeContent = () => {
   const ref = useRef<HTMLDivElement>(null)
   return (
     <MockedProvider>
-      <MemoryRouter initialEntries={['/no/new-member/offer']}>
-        <TextKeyProvider locale="nb_NO">
+      <MemoryRouter initialEntries={['/dk/new-member/offer']}>
+        <TextKeyProvider locale="da_DK">
           <Sidebar
             ref={ref}
             sticky={false}
