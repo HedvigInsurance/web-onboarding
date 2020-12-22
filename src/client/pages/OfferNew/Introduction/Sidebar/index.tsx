@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV3, HedvigSymbol } from '@hedviginsurance/brand'
 import { CookieStorage } from 'cookie-storage'
-import React from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 import { Button, TextButton } from 'components/buttons'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
@@ -148,17 +148,22 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
     const [removeDiscountCode] = useRemoveDiscountCodeMutation()
     const [redeemCode] = useRedeemCodeMutation()
     const redeemedCampaignsQuery = useRedeemedCampaignsQuery()
-    const redeemedCampaigns =
-      redeemedCampaignsQuery.data?.redeemedCampaigns ?? []
+    const redeemedCampaigns = useMemo(
+      () => redeemedCampaignsQuery.data?.redeemedCampaigns ?? [],
+      [redeemedCampaignsQuery],
+    )
 
-    const refetchAll = () =>
-      refetch()
-        .then(() => redeemedCampaignsQuery.refetch())
-        .then(() => {
-          return // void
-        })
+    const refetchAll = useCallback(
+      () =>
+        refetch()
+          .then(() => redeemedCampaignsQuery.refetch())
+          .then(() => {
+            return // void
+          }),
+      [redeemedCampaignsQuery, refetch],
+    )
 
-    React.useEffect(() => {
+    useEffect(() => {
       const campaignCodes =
         redeemedCampaigns.map((campaign) => campaign!.code) ?? []
       const cookieStorage = new CookieStorage()
@@ -171,7 +176,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
           refetchAll(),
         )
       }
-    }, [])
+    }, [redeemCode, redeemedCampaigns, refetchAll])
 
     const discountText = getDiscountText(textKeys)(redeemedCampaigns)
 
