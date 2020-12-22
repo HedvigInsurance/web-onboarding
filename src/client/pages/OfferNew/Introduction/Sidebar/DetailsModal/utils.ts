@@ -633,10 +633,10 @@ const getInitialNorwegianTravelValues = (
 })
 
 export const getInitialInputValues = (
-  person: OfferPersonInfo,
+  personalInfo: OfferPersonInfo,
   offerQuote: OfferQuote,
 ) => {
-  const { firstName, lastName, birthDate } = person
+  const { firstName, lastName, birthDate } = personalInfo
   return {
     firstName,
     lastName,
