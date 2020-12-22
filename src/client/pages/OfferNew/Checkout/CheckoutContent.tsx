@@ -71,7 +71,7 @@ export const CheckoutContent: React.FC<Props> = ({
   const textKeys = useTextKeys()
   const market = useMarket()
   const redeemedCampaignsQuery = useRedeemedCampaignsQuery()
-  const monthlyCostDeduction = isMonthlyCostDeduction(
+  const isDiscountPrice = isMonthlyCostDeduction(
     redeemedCampaignsQuery.data?.redeemedCampaigns ?? [],
   )
   const [fakeLoading, setFakeLoading] = React.useState(false)
@@ -108,7 +108,7 @@ export const CheckoutContent: React.FC<Props> = ({
               loading={fakeLoading || reallyLoading}
               monthlyGross={offerData.cost.monthlyGross}
               monthlyNet={offerData.cost.monthlyNet}
-              isDiscountPrice={monthlyCostDeduction}
+              isDiscountPrice={isDiscountPrice}
             />
           </div>
         </Excerpt>
