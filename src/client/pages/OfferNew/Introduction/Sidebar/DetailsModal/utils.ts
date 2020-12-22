@@ -437,9 +437,9 @@ const getMarketFields = (fieldSchema: FieldSchema, offerQuote: OfferQuote) => {
 
 const validateFields = (fields: MarketFields | CommonFieldSchema) =>
   Object.entries(fields).reduce(
-    (acc, t) => ({
+    (acc, fieldKeyValuePair) => ({
       ...acc,
-      ...getValidationSchemaHelper(t),
+      ...getValidationSchemaHelper(fieldKeyValuePair),
     }),
     {},
   )
