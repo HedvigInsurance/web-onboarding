@@ -8,6 +8,7 @@ import {
   TypeOfContract,
   DanishHomeContentsType,
   ApartmentType,
+  CurrentInsurer,
 } from 'data/graphql'
 import { OfferData } from '../../pages/OfferNew/types'
 
@@ -80,6 +81,12 @@ const perilsMock: PerilV2[] = [
   },
 ]
 
+export const currentInsurerMock: CurrentInsurer = {
+  __typename: 'CurrentInsurer',
+  displayName: 'Folksam',
+  switchable: true,
+}
+
 export const seApartementBrf: OfferData = {
   person: {
     firstName: 'Bengt',
@@ -109,7 +116,7 @@ export const seApartementBrf: OfferData = {
         __typename: 'SwedishApartmentQuoteDetails',
       },
       dataCollectionId: null,
-      currentInsurer: null,
+      currentInsurer: currentInsurerMock,
       contractType: TypeOfContract.SeApartmentBrf,
       perils: perilsMock,
       insurableLimits: insurableLimitMock,
@@ -289,7 +296,7 @@ export const noCombo: OfferData = {
   },
 }
 
-export const danishHomeContents: OfferData = {
+export const dkHomeContentOwn: OfferData = {
   person: {
     firstName: 'Judith',
     lastName: 'Madsson',
@@ -320,7 +327,7 @@ export const danishHomeContents: OfferData = {
       },
       dataCollectionId: null,
       currentInsurer: null,
-      contractType: TypeOfContract.NoHomeContentRent,
+      contractType: TypeOfContract.DkHomeContentOwn,
       perils: perilsMock,
       insurableLimits: insurableLimitMock,
       insuranceTerms: insuranceTermsMock,
@@ -330,12 +337,12 @@ export const danishHomeContents: OfferData = {
     freeUntil: null,
     monthlyDiscount: {
       amount: '49.00',
-      currency: 'DEK',
+      currency: 'DKK',
       __typename: 'MonetaryAmountV2',
     },
     monthlyGross: {
       amount: '198.00',
-      currency: 'DEK',
+      currency: 'DKK',
       __typename: 'MonetaryAmountV2',
     },
     monthlyNet: {

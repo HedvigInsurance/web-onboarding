@@ -1,7 +1,7 @@
 import {
   noCombo,
   noComboYouth,
-  danishHomeContents,
+  dkHomeContentOwn,
 } from 'utils/testData/offerDataMock'
 import { isBundle, isNorwegian, isSwedish, isDanish, isYouth } from './utils'
 
@@ -22,8 +22,8 @@ describe('quote validation', () => {
     expect(isYouth(noComboYouth)).toBe(true)
   })
   it('validates if quote is danish', () => {
-    expect(isDanish(danishHomeContents)).toBe(true)
-    expect(isNorwegian(danishHomeContents)).toBe(false)
-    expect(isSwedish(danishHomeContents)).toBe(false)
+    expect(isDanish(dkHomeContentOwn)).toBe(true)
+    expect(isNorwegian(dkHomeContentOwn)).toBe(false)
+    expect(isSwedish(dkHomeContentOwn)).toBe(false)
   })
 })

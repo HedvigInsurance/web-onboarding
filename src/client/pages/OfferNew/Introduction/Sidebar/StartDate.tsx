@@ -30,17 +30,20 @@ import {
   isBundle,
 } from 'pages/OfferNew/utils'
 import { useTextKeys } from 'utils/textKeys'
+import { Size } from 'components/types'
 import { gqlDateFormat } from './utils'
 
 interface Props {
   offerData: OfferData
   refetch: () => Promise<void>
   modal?: boolean
+  size?: Size
 }
 
 const DateFormsWrapper = styled.div`
   display: flex;
   flex-direction: row;
+  margin-bottom: 1.5rem;
 `
 
 const RowButtonWrapper = styled.div`
@@ -48,10 +51,14 @@ const RowButtonWrapper = styled.div`
   flex: 1;
 `
 
-const RowButton = styled.button<{ datePickerOpen: boolean; isSplit: boolean }>`
+const RowButton = styled.button<{
+  datePickerOpen: boolean
+  isSplit: boolean
+  size: Size
+}>`
   display: flex;
   justify-content: space-between;
-  height: 4.375rem;
+  height: ${(props) => (props.size === 'lg' ? `4.375rem` : `3rem`)};
   width: 100%;
   padding: 0 1.5rem;
   border: 1px solid ${colorsV3.gray500};
@@ -99,8 +106,8 @@ const DateLabel = styled.span<{ hasStartDate: boolean }>`
   ${({ hasStartDate }) =>
     !hasStartDate &&
     css`
-      font-size: 0.75rem;
-      line-height: 0.75rem;
+      font-size: 0.875rem;
+      line-height: 1;
       color: ${colorsV3.gray500};
     `};
 `
@@ -185,7 +192,8 @@ const DateForm: React.FC<{
   setShowError: (showError: boolean) => void
   modal?: boolean
   refetch: () => Promise<void>
-}> = ({ quote, isSplit, setShowError, modal, refetch }) => {
+  size: Size
+}> = ({ quote, isSplit, setShowError, modal, refetch, size }) => {
   const [datePickerOpen, setDatePickerOpen] = React.useState(false)
   const [dateValue, setDateValue] = React.useState(() =>
     getDefaultDateValue(quote),
@@ -302,6 +310,7 @@ const DateForm: React.FC<{
         datePickerOpen={datePickerOpen}
         onClick={() => setDatePickerOpen(!datePickerOpen)}
         isSplit={isSplit}
+        size={size}
       >
         <Value>
           <DateLabel hasStartDate={Boolean(dateValue)}>
@@ -325,6 +334,7 @@ export const StartDate: React.FC<Props> = ({
   offerData,
   refetch,
   modal = false,
+  size = 'lg',
 }) => {
   const textKeys = useTextKeys()
   const [showError, setShowError] = React.useState(false)
@@ -356,6 +366,7 @@ export const StartDate: React.FC<Props> = ({
             modal={modal}
             refetch={refetch}
             isSplit={isBundle(offerData)}
+            size={size}
           />
         ))}
       </DateFormsWrapper>
