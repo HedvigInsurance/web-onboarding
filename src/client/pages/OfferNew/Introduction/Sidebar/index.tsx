@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2, colorsV3, fonts } from '@hedviginsurance/brand'
+import { colorsV3, HedvigSymbol } from '@hedviginsurance/brand'
 import { CookieStorage } from 'cookie-storage'
 import React from 'react'
 import ReactVisibilitySensor from 'react-visibility-sensor'
@@ -18,12 +18,15 @@ import {
 } from 'pages/OfferNew/Introduction/Sidebar/utils'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
+import { Badge } from 'components/Badge/Badge'
 import { Price } from '../../components'
 import { insuranceTypeTextKeys, isBundle } from '../../utils'
 import { DetailsModal } from './DetailsModal'
 import { DiscountCodeModal } from './DiscountCodeModal'
 import { StartDate } from './StartDate'
 import { StickyBottomSidebar } from './StickyBottomSidebar'
+
+export const SIDEBAR_TABLET_BP = '@media (min-width: 1020px)'
 
 interface Props {
   sticky: boolean
@@ -33,98 +36,84 @@ interface Props {
 }
 
 const Wrapper = styled.div`
-  width: 26rem;
-  flex-shrink: 0;
   position: relative;
-  height: 0;
+  flex-shrink: 0;
   z-index: 1000;
 
-  @media (max-width: 1020px) {
-    width: 100%;
-    height: auto;
+  ${SIDEBAR_TABLET_BP} {
+    width: 26rem;
+    height: 0;
   }
 `
 
-const Container = styled.div<{ sticky: boolean; hasDiscount: boolean }>`
-  position: ${(props) => (props.sticky ? `fixed` : `relative`)};
-  ${(props) => props.sticky && `top: 6rem`};
-  width: 26rem;
-  padding: 2rem 0 1.5rem 0;
+const Container = styled.div<{ sticky: boolean }>`
+  position: relative;
+  top: 0;
   flex-shrink: 0;
+  width: 100%;
+  margin-bottom: 4rem;
+  padding: 1rem;
   background-color: ${colorsV3.white};
   border-radius: 8px;
-  ${(props) => props.hasDiscount && 'padding-top: 0;'};
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
 
-  @media (max-width: 1020px) {
-    width: 100%;
-    position: relative;
-    top: 0;
-    margin-bottom: 4rem;
+  ${SIDEBAR_TABLET_BP} {
+    position: ${(props) => (props.sticky ? `fixed` : `relative`)};
+    ${(props) => props.sticky && `top: 6rem`};
+    width: 26rem;
+    margin-bottom: 0;
   }
 `
 
 const DiscountInfo = styled.div`
-  width: 100%;
-  border-radius: 8px 8px 0 0;
-  min-height: 2rem;
-  padding: 0.375rem 1rem;
-  margin-bottom: 2rem;
-  background: ${colorsV2.grass500};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 0.875rem;
-  color: ${colorsV3.white};
-  text-align: center;
-`
+  &,
+  * {
+    margin-left: 0.5rem;
+  }
 
-const Header = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  width: 100%;
-  padding: 0 1rem 2rem 1rem;
-
-  @media (max-width: 600px) {
-    padding: 1.5rem;
+  *:not(:last-child) {
+    margin-bottom: 0.5rem;
   }
 `
 
-const PreTitle = styled.div`
-  font-family: ${fonts.FAVORIT};
-  font-size: 0.75rem;
-  line-height: 0.875rem;
-  letter-spacing: 0.075rem;
-  color: ${colorsV3.gray500};
-  text-transform: uppercase;
+const HeaderTop = styled.div`
+  display: flex;
+  margin-bottom: 2rem;
 `
 
-const Title = styled.div`
-  text-align: center;
+const Header = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
   width: 100%;
-  font-family: ${fonts.FAVORIT};
-  font-size: 1.5rem;
-  color: ${colorsV3.gray900};
+`
 
-  @media (max-width: 600px) {
+const PreTitle = styled.span`
+  display: block;
+`
+
+const Title = styled.h3`
+  width: 100%;
+  margin: 0 1rem 0 0;
+  font-size: 1.375rem;
+  line-height: 1.3;
+
+  ${SIDEBAR_TABLET_BP} {
     font-size: 1.5rem;
   }
 `
 
-const Body = styled.div`
-  padding: 2rem;
-  padding-top: 0;
-  font-size: 0.875rem;
+const EditDetailsButton = styled(TextButton)`
+  margin-bottom: 1.5rem;
+`
 
-  @media (max-width: 600px) {
-    padding: 1rem;
-  }
+const Body = styled.div`
+  margin-bottom: 2rem;
+  font-size: 0.875rem;
 `
 const BodyTitle = styled.div`
+  margin-bottom: 0.75rem;
   color: ${colorsV3.gray700};
-  padding-bottom: 0.5rem;
 `
 
 const Footer = styled.div`
@@ -132,11 +121,6 @@ const Footer = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding: 0 1rem;
-
-  @media (max-width: 600px) {
-    padding: 2rem 1rem;
-  }
 `
 
 const FooterExtraActions = styled.div`
@@ -145,14 +129,8 @@ const FooterExtraActions = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin-top: 1.5rem;
-
-  > * {
-    margin-right: 1.375rem;
-    :last-child {
-      margin-right: 0;
-    }
-  }
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
 `
 
 export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
@@ -202,17 +180,26 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
         <ReactVisibilitySensor partialVisibility onChange={setIsSidebarVisible}>
           {() => (
             <Wrapper ref={ref}>
-              <Container
-                sticky={sticky}
-                hasDiscount={redeemedCampaigns.length > 0}
-              >
-                {discountText && <DiscountInfo>{discountText}</DiscountInfo>}
-                <Header>
-                  {market !== Market.No && (
-                    <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
-                  )}
+              <Container sticky={sticky}>
+                <HeaderTop>
+                  <HedvigSymbol />
+                  <DiscountInfo>
+                    {isBundle(offerData) && (
+                      <Badge>
+                        {textKeys.SIDEBAR_NO_BUNDLE_DISCOUNT_TEXT()}
+                      </Badge>
+                    )}
+                    {discountText && <Badge>{discountText}</Badge>}
+                  </DiscountInfo>
+                </HeaderTop>
 
+                <Header>
                   <Title>
+                    {market === Market.Se && (
+                      <PreTitle>
+                        {textKeys.SIDEBAR_INSURANCE_LABEL_SE()}
+                      </PreTitle>
+                    )}
                     {!isBundle(offerData) &&
                       textKeys[
                         insuranceTypeTextKeys[offerData.quotes[0].contractType]
@@ -222,21 +209,24 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                   </Title>
 
                   <Price
-                    monthlyCostDeduction={
+                    isDiscountPrice={
                       isMonthlyCostDeduction(
                         redeemedCampaigns[0]?.incentive ?? undefined,
                       ) ||
                       isPercentageDiscountMonths(
                         redeemedCampaigns[0]?.incentive ?? undefined,
-                      )
+                      ) ||
+                      isBundle(offerData)
                     }
                     monthlyGross={offerData.cost.monthlyGross}
                     monthlyNet={offerData.cost.monthlyNet}
                   />
-                  <TextButton onClick={() => setDetailsModalIsOpen(true)}>
-                    {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
-                  </TextButton>
                 </Header>
+
+                <EditDetailsButton onClick={() => setDetailsModalIsOpen(true)}>
+                  {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
+                </EditDetailsButton>
+
                 <Body>
                   <BodyTitle>
                     {textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}
@@ -245,16 +235,17 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                     offerData={offerData}
                     refetch={refetch}
                     modal={true}
+                    size="sm"
                   />
                 </Body>
 
                 <Footer>
                   <Button
-                    size="lg"
+                    size="sm"
                     fullWidth
                     onClick={() => onCheckoutOpen()}
                     foreground={colorsV3.gray900}
-                    background="#c9abf5"
+                    background={colorsV3.purple500}
                   >
                     {textKeys.SIDEBAR_GETHEDVIG_BUTTON()}
                   </Button>
@@ -262,6 +253,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                   <FooterExtraActions>
                     {redeemedCampaigns.length === 0 && (
                       <TextButton
+                        color={colorsV3.gray500}
                         onClick={() => {
                           setDiscountCodeModalIsOpen(true)
                         }}
@@ -274,7 +266,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                         redeemedCampaigns[0]?.incentive ?? undefined,
                       ) && (
                         <TextButton
-                          color={colorsV2.coral700}
+                          color={colorsV3.red500}
                           onClick={() => {
                             removeDiscountCode()
                               .then(() => {

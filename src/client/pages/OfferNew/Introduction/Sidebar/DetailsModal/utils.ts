@@ -18,7 +18,7 @@ import {
   EditNorwegianHomeContentsInput,
   EditDanishHomeContentsInput,
 } from 'data/graphql'
-import { OfferQuote, OfferData } from 'pages/OfferNew/types'
+import { OfferQuote, OfferData, OfferPersonInfo } from 'pages/OfferNew/types'
 import {
   isStudent,
   isSwedishQuote,
@@ -45,10 +45,13 @@ import {
   NorwegianTravelContentFieldSchema,
   RegularFieldType,
   DanishHomeContentFieldSchema,
+  DetailsFieldSchema,
+  CommonFieldSchema,
+  MarketFields,
 } from './types'
 
 export const isDanishHomeContentFieldSchema = (
-  fieldSchema: FieldSchema,
+  fieldSchema: DetailsFieldSchema,
   quote: OfferQuote,
 ): fieldSchema is DanishHomeContentFieldSchema => {
   return (
@@ -58,7 +61,7 @@ export const isDanishHomeContentFieldSchema = (
 }
 
 export const isNorwegianHomeContentFieldSchema = (
-  fieldSchema: FieldSchema,
+  fieldSchema: DetailsFieldSchema,
   quote: OfferQuote,
 ): fieldSchema is NorwegianHomeContentFieldSchema => {
   return (
@@ -67,7 +70,7 @@ export const isNorwegianHomeContentFieldSchema = (
   )
 }
 export const isNorwegianTravelFieldSchema = (
-  fieldSchema: FieldSchema,
+  fieldSchema: DetailsFieldSchema,
   quote: OfferQuote,
 ): fieldSchema is NorwegianTravelContentFieldSchema => {
   return (
@@ -76,7 +79,7 @@ export const isNorwegianTravelFieldSchema = (
 }
 
 export const isSwedishApartmentFieldSchema = (
-  fieldSchema: FieldSchema,
+  fieldSchema: DetailsFieldSchema,
   quote: OfferQuote,
 ): fieldSchema is SwedishApartmentFieldSchema => {
   return (
@@ -85,7 +88,7 @@ export const isSwedishApartmentFieldSchema = (
 }
 
 export const isSwedishHouseFieldSchema = (
-  fieldSchema: FieldSchema,
+  fieldSchema: DetailsFieldSchema,
   quote: OfferQuote,
 ): fieldSchema is SwedishHouseFieldSchema => {
   return 'swedishHouse' in fieldSchema && isSwedishHouse(quote.quoteDetails)
@@ -109,7 +112,7 @@ type BaseFieldSchema = {
 const getSwedishSchema = (
   base: BaseFieldSchema,
   offerQuote: OfferQuote,
-): FieldSchema => {
+): DetailsFieldSchema => {
   const swedishBase = {
     ...base,
     householdSize: {
@@ -251,7 +254,7 @@ const getSwedishSchema = (
 const getNorwegianSchema = (
   base: BaseFieldSchema,
   offerQuote: OfferQuote,
-): FieldSchema => {
+): DetailsFieldSchema => {
   const commonAttributes = {
     coInsured: {
       label: 'DETAILS_MODULE_TABLE_INSUREDPEOPLE_CELL_LABEL',
@@ -302,7 +305,7 @@ const getNorwegianSchema = (
     : { norwegianTravel: { ...commonAttributes } }
 }
 
-const getDanishSchema = (base: BaseFieldSchema): FieldSchema => {
+const getDanishSchema = (base: BaseFieldSchema): DetailsFieldSchema => {
   return {
     danishHomeContents: {
       ...base,
@@ -345,8 +348,32 @@ const getDanishSchema = (base: BaseFieldSchema): FieldSchema => {
     },
   }
 }
+const BIRTH_DATE_REGEX = /^[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/
 
 export const getFieldSchema = (offerQuote: OfferQuote): FieldSchema => {
+  const fieldSchemaDetails = getFieldSchemaDetails(offerQuote)
+  return {
+    firstName: {
+      label: 'DETAILS_MODULE_TABLE_FIRSTNAME_CELL_LABEL',
+      placeholder: 'DETAILS_MODULE_TABLE_FIRSTNAME_CELL_LABEL',
+      validation: Yup.string().required(),
+    },
+    lastName: {
+      label: 'DETAILS_MODULE_TABLE_LASTNAME_CELL_LABEL',
+      placeholder: 'DETAILS_MODULE_TABLE_LASTNAME_CELL_LABEL',
+      validation: Yup.string().required(),
+    },
+    birthDate: {
+      label: 'DETAILS_MODULE_TABLE_BIRTHDATE_CELL_LABEL',
+      placeholder: 'DETAILS_MODULE_TABLE_BIRTHDATE_CELL_LABEL',
+      validation: Yup.string().matches(BIRTH_DATE_REGEX),
+    },
+    ...fieldSchemaDetails,
+  }
+}
+export const getFieldSchemaDetails = (
+  offerQuote: OfferQuote,
+): DetailsFieldSchema => {
   const base = {
     street: {
       label: 'DETAILS_MODULE_TABLE_ADDRESS_CELL_LABEL',
@@ -382,7 +409,7 @@ const getMarketFields = (fieldSchema: FieldSchema, offerQuote: OfferQuote) => {
       offerQuote,
     )
     return {
-      fields: isNorwegianHomeContent
+      marketFields: isNorwegianHomeContent
         ? (fieldSchema as NorwegianHomeContentFieldSchema).norwegianHomeContents
         : (fieldSchema as NorwegianTravelContentFieldSchema).norwegianTravel,
       key: isNorwegianHomeContent ? 'norwegianHomeContents' : 'norwegianTravel',
@@ -390,7 +417,8 @@ const getMarketFields = (fieldSchema: FieldSchema, offerQuote: OfferQuote) => {
   }
   if (isDanishQuote(offerQuote)) {
     return {
-      fields: (fieldSchema as DanishHomeContentFieldSchema).danishHomeContents,
+      marketFields: (fieldSchema as DanishHomeContentFieldSchema)
+        .danishHomeContents,
       key: 'danishHomeContents',
     }
   }
@@ -400,28 +428,32 @@ const getMarketFields = (fieldSchema: FieldSchema, offerQuote: OfferQuote) => {
     offerQuote,
   )
   return {
-    fields: isSwedishAppartment
+    marketFields: isSwedishAppartment
       ? (fieldSchema as SwedishApartmentFieldSchema).swedishApartment
       : (fieldSchema as SwedishHouseFieldSchema).swedishHouse,
     key: isSwedishAppartment ? 'swedishApartment' : 'swedishHouse',
   }
 }
 
+const validateFields = (fields: MarketFields | CommonFieldSchema) =>
+  Object.entries(fields).reduce(
+    (acc, fieldKeyValuePair) => ({
+      ...acc,
+      ...getValidationSchemaHelper(fieldKeyValuePair),
+    }),
+    {},
+  )
 export const getValidationSchema = (
   fieldSchema: FieldSchema,
   offerQuote: OfferQuote,
 ): Yup.ObjectSchema<unknown> => {
-  const { fields, key } = getMarketFields(fieldSchema, offerQuote)
-
+  const { firstName, lastName, birthDate } = fieldSchema
+  const commonFields = { firstName, lastName, birthDate }
+  const { marketFields, key } = getMarketFields(fieldSchema, offerQuote)
   return Yup.object({
+    ...validateFields(commonFields),
     [key]: Yup.object({
-      ...Object.entries(fields).reduce(
-        (acc, t) => ({
-          ...acc,
-          ...getValidationSchemaHelper(t),
-        }),
-        {},
-      ),
+      ...validateFields(marketFields),
     }),
   })
 }
@@ -600,7 +632,20 @@ const getInitialNorwegianTravelValues = (
   },
 })
 
-export const getInitialInputValues = (offerQuote: OfferQuote) =>
+export const getInitialInputValues = (
+  personalInfo: OfferPersonInfo,
+  offerQuote: OfferQuote,
+) => {
+  const { firstName, lastName, birthDate } = personalInfo
+  return {
+    firstName,
+    lastName,
+    birthDate,
+    ...getInitialQuoteDetailsInputValues(offerQuote),
+  }
+}
+
+export const getInitialQuoteDetailsInputValues = (offerQuote: OfferQuote) =>
   match<string, EditQuoteInput>([
     [
       'SwedishHouseQuoteDetails',

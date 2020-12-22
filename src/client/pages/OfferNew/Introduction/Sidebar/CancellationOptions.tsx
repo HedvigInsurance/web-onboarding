@@ -14,7 +14,7 @@ import { useTextKeys } from 'utils/textKeys'
 import { gqlDateFormat } from './utils'
 
 const HandleSwitchingWrapper = styled.div`
-  margin-top: 10px;
+  margin-bottom: 0.75rem;
   display: flex;
   justify-content: space-between;
   padding: 0 0.25rem;

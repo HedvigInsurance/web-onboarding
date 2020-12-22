@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { motion } from 'framer-motion'
 import React from 'react'
 import { Cross } from './icons/Cross'
@@ -47,7 +47,7 @@ const ModalContainer = styled(motion.div)<ModalContainerProps>`
   height: 100%;
   min-height: 25rem;
   max-height: 56rem;`}
-  background: ${colorsV2.white};
+  background: ${colorsV3.white};
   border-radius: 9px;
   position: absolute;
   left: 50%;
@@ -87,7 +87,7 @@ const CloseButton = styled('button')`
   display: flex;
   align-items: center;
   text-align: center;
-  background-color: ${colorsV2.gray};
+  background-color: ${colorsV3.gray500};
   border-radius: 50%;
   border: none;
   cursor: pointer;
@@ -97,36 +97,35 @@ const CloseButton = styled('button')`
   }
 
   :hover {
-    background-color: ${colorsV2.darkgray};
+    background-color: ${colorsV3.gray900};
   }
 
   svg {
     width: 100%;
     height: 100%;
-    fill: ${colorsV2.white};
+    fill: ${colorsV3.white};
   }
 `
 
-export const Modal: React.FC<ModalProps> = (props) => {
-  const containerRef = React.useRef<HTMLDivElement>(null)
-  const handleClick = (e: MouseEvent) => {
-    if (
-      containerRef.current &&
-      !containerRef.current.contains(e.target as Node)
-    ) {
-      props.onClose()
-    }
-  }
-
+export const Modal: React.FC<ModalProps> = ({
+  isVisible,
+  dynamicHeight,
+  onClose,
+  children,
+}) => {
   React.useEffect(() => {
-    document.addEventListener('mousedown', handleClick)
-    return () => document.removeEventListener('mousedown', handleClick)
-  }, [])
+    if (isVisible) {
+      document.body.style.overflow = 'hidden'
+    }
+    return () => {
+      document.body.style.overflow = 'visible'
+    }
+  }, [isVisible])
 
   return (
     <Wrapper
       initial={'hidden'}
-      animate={props.isVisible ? 'visible' : 'hidden'}
+      animate={isVisible ? 'visible' : 'hidden'}
       variants={{
         visible: {
           visibility: 'visible',
@@ -140,8 +139,9 @@ export const Modal: React.FC<ModalProps> = (props) => {
       }}
     >
       <Background
+        onClick={onClose}
         initial={'hidden'}
-        animate={props.isVisible ? 'visible' : 'hidden'}
+        animate={isVisible ? 'visible' : 'hidden'}
         variants={{
           visible: {
             opacity: 1,
@@ -150,41 +150,38 @@ export const Modal: React.FC<ModalProps> = (props) => {
             opacity: 0,
           },
         }}
+      />
+      <ModalContainer
+        dynamicHeight={dynamicHeight}
+        initial={'hidden'}
+        animate={isVisible ? 'visible' : 'hidden'}
+        transition={{
+          type: 'spring',
+          stiffness: 400,
+          damping: 100,
+        }}
+        variants={{
+          visible: {
+            opacity: 1,
+            transform: 'translateX(-50%) translateY(-50%) scale(1)',
+            transition: {
+              type: 'spring',
+              stiffness: 400,
+              damping: 100,
+              delay: 0.15,
+            },
+          },
+          hidden: {
+            opacity: 0,
+            transform: 'translateX(-50%) translateY(50%) scale(0.9)',
+          },
+        }}
       >
-        <ModalContainer
-          dynamicHeight={props.dynamicHeight}
-          initial={'hidden'}
-          animate={props.isVisible ? 'visible' : 'hidden'}
-          transition={{
-            type: 'spring',
-            stiffness: 400,
-            damping: 100,
-          }}
-          variants={{
-            visible: {
-              opacity: 1,
-              transform: 'translateX(-50%) translateY(-50%) scale(1)',
-              transition: {
-                type: 'spring',
-                stiffness: 400,
-                damping: 100,
-                delay: 0.15,
-              },
-            },
-            hidden: {
-              opacity: 0,
-              transform: 'translateX(-50%) translateY(50%) scale(0.9)',
-            },
-          }}
-        >
-          <ModalInnerContainer ref={containerRef}>
-            {props.children}
-          </ModalInnerContainer>
-          <CloseButton onClick={props.onClose}>
-            <Cross />
-          </CloseButton>
-        </ModalContainer>
-      </Background>
+        <ModalInnerContainer>{children}</ModalInnerContainer>
+        <CloseButton onClick={onClose}>
+          <Cross />
+        </CloseButton>
+      </ModalContainer>
     </Wrapper>
   )
 }

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2, fonts } from '@hedviginsurance/brand'
+import { colorsV3, fonts } from '@hedviginsurance/brand'
 import { Form, Formik } from 'formik'
 import React from 'react'
 import { Button } from 'components/buttons'
@@ -8,6 +8,7 @@ import { EditQuoteInput, useEditQuoteMutation } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
 import { isBundle } from '../../../utils'
+
 import {
   getFieldSchema,
   getInitialInputValues,
@@ -25,7 +26,7 @@ import { Details } from './Details'
 const Container = styled.div`
   width: 100%;
   height: 100%;
-  padding: 4rem 5rem 1.5rem 5rem;
+  padding: 1rem 2rem;
   display: flex;
   flex-direction: column;
 
@@ -46,7 +47,7 @@ const Headline = styled.div`
   font-family: ${fonts.FAVORIT};
   font-size: 2.5rem;
   line-height: 3.5rem;
-  color: ${colorsV2.black};
+  color: ${colorsV3.black};
 
   @media (max-width: 600px) {
     font-size: 2rem;
@@ -55,7 +56,7 @@ const Headline = styled.div`
 `
 
 const Footer = styled.div`
-  margin-top: 2.5rem;
+  padding: 1rem 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -66,7 +67,7 @@ const Warning = styled.div`
   font-size: 0.75rem;
   line-height: 1rem;
   margin-top: 1rem;
-  color: ${colorsV2.darkgray};
+  color: ${colorsV3.gray900};
   text-align: center;
 `
 
@@ -74,7 +75,7 @@ const Error = styled.div`
   font-size: 0.75rem;
   line-height: 1rem;
   margin-top: 1rem;
-  color: ${colorsV2.coral500};
+  color: ${colorsV3.red500};
   text-align: center;
 `
 
@@ -106,7 +107,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   const mainOfferQuote = getMainOfferQuote(offerData)
   const fieldSchema = getFieldSchema(mainOfferQuote)
   const validationSchema = getValidationSchema(fieldSchema, mainOfferQuote)
-  const initialValues = getInitialInputValues(mainOfferQuote)
+  const initialValues = getInitialInputValues(offerData.person, mainOfferQuote)
   const [isUpdating, setIsUpdating] = React.useState(false)
   const [
     isUnderwritingGuidelineHit,
@@ -150,6 +151,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
       }),
     )
   }
+
   return (
     <Modal isVisible={isVisible} onClose={onClose} dynamicHeight>
       <LoadingDimmer visible={isUpdating} />

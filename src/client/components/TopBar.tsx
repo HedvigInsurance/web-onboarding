@@ -4,7 +4,7 @@ import React from 'react'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
 import { CurrentLocale } from './utils/CurrentLocale'
 
-export const TOP_BAR_Z_INDEX = 1009
+export const TOP_BAR_Z_INDEX = 1000
 
 interface Props {
   transparent?: boolean
