@@ -91,7 +91,9 @@ export const CheckoutContent: React.FC<Props> = ({
       <Section>
         <Excerpt>
           <InsuranceHeading>
-            {market === Market.Se && <span>{textKeys.SIDEBAR_LABEL()}</span>}
+            {market === Market.Se && (
+              <span>{textKeys.SIDEBAR_INSURANCE_LABEL_SE()}</span>
+            )}
             <span>
               {!isBundle(offerData) &&
                 textKeys[

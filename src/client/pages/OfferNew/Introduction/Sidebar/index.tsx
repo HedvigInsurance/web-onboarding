@@ -196,7 +196,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 <Header>
                   <Title>
                     {market === Market.Se && (
-                      <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
+                      <PreTitle>
+                        {textKeys.SIDEBAR_INSURANCE_LABEL_SE()}
+                      </PreTitle>
                     )}
                     {!isBundle(offerData) &&
                       textKeys[
