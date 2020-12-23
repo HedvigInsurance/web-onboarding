@@ -247,7 +247,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                     foreground={colorsV3.gray900}
                     background={colorsV3.purple500}
                   >
-                    {textKeys.SIDEBAR_GETHEDVIG_BUTTON()}
+                    {textKeys.SIDEBAR_PROCEED_BUTTON()}
                   </Button>
 
                   <FooterExtraActions>
