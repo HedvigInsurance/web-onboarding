@@ -26,7 +26,7 @@ import { DiscountCodeModal } from './DiscountCodeModal'
 import { StartDate } from './StartDate'
 import { StickyBottomSidebar } from './StickyBottomSidebar'
 
-export const SIDEBAR_BP = '@media (min-width: 1020px)'
+export const SIDEBAR_TABLET_BP = '@media (min-width: 1020px)'
 
 interface Props {
   sticky: boolean
@@ -40,7 +40,7 @@ const Wrapper = styled.div`
   flex-shrink: 0;
   z-index: 1000;
 
-  ${SIDEBAR_BP} {
+  ${SIDEBAR_TABLET_BP} {
     width: 26rem;
     height: 0;
   }
@@ -57,7 +57,7 @@ const Container = styled.div<{ sticky: boolean }>`
   border-radius: 8px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
 
-  ${SIDEBAR_BP} {
+  ${SIDEBAR_TABLET_BP} {
     position: ${(props) => (props.sticky ? `fixed` : `relative`)};
     ${(props) => props.sticky && `top: 6rem`};
     width: 26rem;
@@ -98,7 +98,7 @@ const Title = styled.h3`
   font-size: 1.375rem;
   line-height: 1.3;
 
-  ${SIDEBAR_BP} {
+  ${SIDEBAR_TABLET_BP} {
     font-size: 1.5rem;
   }
 `
@@ -201,7 +201,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 <Header>
                   <Title>
                     {market === Market.Se && (
-                      <PreTitle>{textKeys.SIDEBAR_LABEL()}</PreTitle>
+                      <PreTitle>
+                        {textKeys.SIDEBAR_INSURANCE_LABEL_SE()}
+                      </PreTitle>
                     )}
                     {!isBundle(offerData) &&
                       textKeys[
@@ -250,7 +252,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                     foreground={colorsV3.gray900}
                     background={colorsV3.purple500}
                   >
-                    {textKeys.SIDEBAR_GETHEDVIG_BUTTON()}
+                    {textKeys.SIDEBAR_PROCEED_BUTTON()}
                   </Button>
 
                   <FooterExtraActions>

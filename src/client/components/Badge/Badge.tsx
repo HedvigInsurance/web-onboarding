@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 
 type BadgeProps = {
+  children: ReactNode
   size?: 'sm' | 'lg'
 }
 

@@ -71,7 +71,7 @@ export const CheckoutContent: React.FC<Props> = ({
   const textKeys = useTextKeys()
   const market = useMarket()
   const redeemedCampaignsQuery = useRedeemedCampaignsQuery()
-  const monthlyCostDeduction = isMonthlyCostDeduction(
+  const isDiscountPrice = isMonthlyCostDeduction(
     redeemedCampaignsQuery.data?.redeemedCampaigns ?? [],
   )
   const [fakeLoading, setFakeLoading] = React.useState(false)
@@ -91,7 +91,9 @@ export const CheckoutContent: React.FC<Props> = ({
       <Section>
         <Excerpt>
           <InsuranceHeading>
-            {market === Market.Se && <span>{textKeys.SIDEBAR_LABEL()}</span>}
+            {market === Market.Se && (
+              <span>{textKeys.SIDEBAR_INSURANCE_LABEL_SE()}</span>
+            )}
             <span>
               {!isBundle(offerData) &&
                 textKeys[
@@ -106,7 +108,7 @@ export const CheckoutContent: React.FC<Props> = ({
               loading={fakeLoading || reallyLoading}
               monthlyGross={offerData.cost.monthlyGross}
               monthlyNet={offerData.cost.monthlyNet}
-              isDiscountPrice={monthlyCostDeduction}
+              isDiscountPrice={isDiscountPrice}
             />
           </div>
         </Excerpt>
