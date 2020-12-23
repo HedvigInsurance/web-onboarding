@@ -15,7 +15,7 @@ type HeroImageProps = {
   hasLoaded: boolean
 }
 
-const BREAKPOINT = 1000
+const MIN_WIDTH_MEDIA_QUERY = ' @media screen and (min-width: 1000px)'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -36,7 +36,7 @@ const HeroImage = styled.img<HeroImageProps>`
   opacity: ${({ hasLoaded }) => (hasLoaded ? 1 : 0)};
   transition: opacity 0.8s;
 
-  @media screen and (min-width: ${BREAKPOINT}px) {
+  ${MIN_WIDTH_MEDIA_QUERY} {
     object-position: left top;
     width: 100%;
     height: 100%;
@@ -45,7 +45,7 @@ const HeroImage = styled.img<HeroImageProps>`
 
 const OfferDetails = styled.div`
   margin: 0;
-  @media screen and (min-width: ${BREAKPOINT}px) {
+  ${MIN_WIDTH_MEDIA_QUERY} {
     margin-right: 1.875rem;
   }
 `
