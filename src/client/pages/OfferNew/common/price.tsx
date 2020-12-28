@@ -21,6 +21,9 @@ const PriceGross = styled.div`
   color: ${colorsV3.gray500};
   text-decoration: line-through;
 `
+const OldPriceSuffix = styled.span`
+  font-size: 0.875rem;
+`
 
 const PriceNumbers = styled.div<{
   discount: boolean
@@ -88,9 +91,11 @@ export const Price: React.FC<{
     <PriceWrapper>
       {isDiscountPrice && (
         <PriceGross>
-          {textKeys.SIDEBAR_OLD_PRICE({
-            PRICE: Math.round(Number(monthlyGross.amount)),
-          })}
+          {Math.round(Number(monthlyGross.amount))}{' '}
+          <OldPriceSuffix>
+            {monthlyGross.currency}
+            {textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL()}
+          </OldPriceSuffix>
         </PriceGross>
       )}
 

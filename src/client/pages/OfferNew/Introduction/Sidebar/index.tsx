@@ -175,7 +175,10 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
       }
     }, [redeemCode, campaignData, refetchAll])
 
-    const discountText = getDiscountText(textKeys)(redeemedCampaigns)
+    const discountText = getDiscountText(textKeys)(
+      redeemedCampaigns,
+      offerData.cost.monthlyGross.currency,
+    )
 
     return (
       <>
