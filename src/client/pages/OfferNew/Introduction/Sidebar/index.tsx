@@ -154,7 +154,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
     const redeemedCampaigns = campaignData ? campaignData.redeemedCampaigns : []
 
     const refetchAll = useCallback(async () => {
-      refetchOfferData().then(() => refetchCampaigns())
+      await refetchOfferData()
+      await refetchCampaigns()
+      return
     }, [refetchOfferData, refetchCampaigns])
 
     useEffect(() => {
