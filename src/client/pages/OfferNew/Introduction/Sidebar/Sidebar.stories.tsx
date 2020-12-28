@@ -29,7 +29,7 @@ export const SEApartmentBrf = () => {
             sticky={false}
             offerData={seApartementBrf}
             onCheckoutOpen={action('onCheckoutOpen')}
-            refetch={(...args: any[]) => {
+            refetchOfferData={(...args: any[]) => {
               action('refetch')(...args)
               return Promise.resolve()
             }}
@@ -51,7 +51,7 @@ export const NOCombo = () => {
             sticky={false}
             offerData={noCombo}
             onCheckoutOpen={action('onCheckoutOpen')}
-            refetch={(...args: any[]) => {
+            refetchOfferData={(...args: any[]) => {
               action('refetch')(...args)
               return Promise.resolve()
             }}
@@ -73,7 +73,7 @@ export const DKHomeContent = () => {
             sticky={false}
             offerData={dkHomeContentOwn}
             onCheckoutOpen={action('onCheckoutOpen')}
-            refetch={(...args: any[]) => {
+            refetchOfferData={(...args: any[]) => {
               action('refetch')(...args)
               return Promise.resolve()
             }}
