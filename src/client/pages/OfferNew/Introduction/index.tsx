@@ -104,7 +104,7 @@ export const Introduction: React.FC<Props> = ({
             ref={ref}
             sticky={sidebarIsSticky}
             offerData={offerData}
-            refetch={refetch}
+            refetchOfferData={refetch}
             onCheckoutOpen={onCheckoutOpen}
           />
         </Container>
