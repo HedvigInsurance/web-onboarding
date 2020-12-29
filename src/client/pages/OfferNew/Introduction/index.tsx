@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import styled from '@emotion/styled'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { Container, Section } from 'pages/OfferNew/components'
 import { OfferData } from 'pages/OfferNew/types'
 import { useDocumentScroll } from '../../../utils/hooks/useDocumentScroll'
@@ -15,31 +16,32 @@ type HeroImageProps = {
   hasLoaded: boolean
 }
 
-const MIN_WIDTH_MEDIA_QUERY = ' @media screen and (min-width: 1000px)'
+const MIN_WIDTH_MEDIA_QUERY = '@media screen and (min-width: 1000px)'
+const HERO_HEIGHT = '480px'
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 480px;
+  height: ${HERO_HEIGHT};
 `
 
 const Hero = styled.div`
   width: 100vw;
-  height: 480px;
+  height: ${HERO_HEIGHT};
+  background: ${colorsV3.gray900};
   overflow: hidden;
   position: absolute;
 `
 
 const HeroImage = styled.img<HeroImageProps>`
-  width: 150%;
-  height: 150%;
+  height: 1000px;
   object-fit: cover;
-  opacity: ${({ hasLoaded }) => (hasLoaded ? 1 : 0)};
+  object-position: -700px -100px;
+  opacity: ${({ hasLoaded }) => (hasLoaded ? 0.5 : 0)};
   transition: opacity 0.8s;
 
   ${MIN_WIDTH_MEDIA_QUERY} {
-    object-position: left top;
-    width: 100%;
-    height: 100%;
+    /* height: 1000px; */
+    object-position: right -88px;
   }
 `
 
