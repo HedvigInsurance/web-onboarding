@@ -95,7 +95,9 @@ export const OfferNew: React.FC = () => {
   return (
     <Page>
       <SessionTokenGuard>
-        {![Variation.IOS, Variation.ANDROID].includes(variation!) && <TopBar />}
+        {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
+          <TopBar isTransparent />
+        )}
         {offerData && (
           <>
             <TrackAction

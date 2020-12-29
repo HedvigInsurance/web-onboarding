@@ -7,7 +7,7 @@ import { CurrentLocale } from './utils/CurrentLocale'
 export const TOP_BAR_Z_INDEX = 1000
 
 interface Props {
-  transparent?: boolean
+  isTransparent?: boolean
   centered?: boolean
 }
 
@@ -68,11 +68,11 @@ const LogoLink = styled.a`
 `
 
 export const TopBar: React.FC<Props> = ({
-  transparent,
+  isTransparent,
   centered,
   children,
 }) => {
-  const ActualWrapper = transparent ? TransparentWrapper : Wrapper
+  const ActualWrapper = isTransparent ? TransparentWrapper : Wrapper
   const ActualContainer = centered ? CenteredContainer : Container
   return (
     <ActualWrapper>
