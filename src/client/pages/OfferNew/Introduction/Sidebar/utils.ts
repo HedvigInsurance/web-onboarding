@@ -36,6 +36,7 @@ export const isPercentageDiscountMonths = (
 
 export const getDiscountText = (textKeys: Record<string, any>) => (
   redeemedCampaigns: RedeemedCampaignsQuery['redeemedCampaigns'],
+  currency: string,
 ): React.ReactNode => {
   const incentive = redeemedCampaigns[0]?.incentive
   if (!incentive || isNoDiscount(incentive as any)) {
@@ -57,7 +58,7 @@ export const getDiscountText = (textKeys: Record<string, any>) => (
 
   if (isMonthlyCostDeduction(incentive)) {
     return textKeys.WEB_REFERRAL_ADDEDPERK({
-      REFERRAL_VALUE: `${Number(incentive.amount?.amount)} kr`,
+      REFERRAL_VALUE: `${Number(incentive.amount?.amount)} ${currency}`,
     })
   }
 
