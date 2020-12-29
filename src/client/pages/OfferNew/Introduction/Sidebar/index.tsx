@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV3, HedvigSymbol } from '@hedviginsurance/brand'
 import { CookieStorage } from 'cookie-storage'
-import React from 'react'
+import React, { useCallback, useEffect } from 'react'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 import { Button, TextButton } from 'components/buttons'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
@@ -31,7 +31,7 @@ export const SIDEBAR_TABLET_BP = '@media (min-width: 1020px)'
 interface Props {
   sticky: boolean
   offerData: OfferData
-  refetch: () => Promise<void>
+  refetchOfferData: () => Promise<void>
   onCheckoutOpen: () => void
 }
 
@@ -134,7 +134,7 @@ const FooterExtraActions = styled.div`
 `
 
 export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
-  ({ sticky, offerData, refetch, onCheckoutOpen }, ref) => {
+  ({ sticky, offerData, refetchOfferData, onCheckoutOpen }, ref) => {
     const textKeys = useTextKeys()
     const market = useMarket()
     const [
@@ -147,33 +147,38 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
     const [removeDiscountCode] = useRemoveDiscountCodeMutation()
     const [redeemCode] = useRedeemCodeMutation()
-    const redeemedCampaignsQuery = useRedeemedCampaignsQuery()
-    const redeemedCampaigns =
-      redeemedCampaignsQuery.data?.redeemedCampaigns ?? []
+    const {
+      data: campaignData,
+      refetch: refetchCampaigns,
+    } = useRedeemedCampaignsQuery()
+    const redeemedCampaigns = campaignData ? campaignData.redeemedCampaigns : []
 
-    const refetchAll = () =>
-      refetch()
-        .then(() => redeemedCampaignsQuery.refetch())
-        .then(() => {
-          return // void
-        })
+    const refetchAll = useCallback(async () => {
+      await refetchOfferData()
+      await refetchCampaigns()
+      return
+    }, [refetchOfferData, refetchCampaigns])
 
-    React.useEffect(() => {
-      const campaignCodes =
-        redeemedCampaigns.map((campaign) => campaign!.code) ?? []
+    useEffect(() => {
+      const campaignCodes = campaignData?.redeemedCampaigns.map(
+        (campaign) => campaign.code,
+      )
       const cookieStorage = new CookieStorage()
       const preRedeemedCode = cookieStorage.getItem('_hvcode')
       if (
         preRedeemedCode &&
-        !campaignCodes.includes(preRedeemedCode.toUpperCase())
+        !campaignCodes?.includes(preRedeemedCode.toUpperCase())
       ) {
         redeemCode({ variables: { code: preRedeemedCode } }).then(() =>
           refetchAll(),
         )
       }
-    }, [])
+    }, [redeemCode, campaignData, refetchAll])
 
-    const discountText = getDiscountText(textKeys)(redeemedCampaigns)
+    const discountText = getDiscountText(textKeys)(
+      redeemedCampaigns,
+      offerData.cost.monthlyGross.currency,
+    )
 
     return (
       <>
@@ -210,11 +215,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
 
                   <Price
                     isDiscountPrice={
-                      isMonthlyCostDeduction(
-                        redeemedCampaigns[0]?.incentive ?? undefined,
-                      ) ||
+                      isMonthlyCostDeduction(redeemedCampaigns[0]?.incentive) ||
                       isPercentageDiscountMonths(
-                        redeemedCampaigns[0]?.incentive ?? undefined,
+                        redeemedCampaigns[0]?.incentive,
                       ) ||
                       isBundle(offerData)
                     }
@@ -233,7 +236,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                   </BodyTitle>
                   <StartDate
                     offerData={offerData}
-                    refetch={refetch}
+                    refetch={refetchOfferData}
                     modal={true}
                     size="sm"
                   />
@@ -247,7 +250,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                     foreground={colorsV3.gray900}
                     background={colorsV3.purple500}
                   >
-                    {textKeys.SIDEBAR_GETHEDVIG_BUTTON()}
+                    {textKeys.SIDEBAR_PROCEED_BUTTON()}
                   </Button>
 
                   <FooterExtraActions>
@@ -287,7 +290,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, Props>(
                 <DiscountCodeModal
                   isOpen={discountCodeModalIsOpen}
                   close={() => setDiscountCodeModalIsOpen(false)}
-                  refetch={() => refetchAll()}
+                  refetch={refetchAll}
                 />
               </Container>
               <DetailsModal
