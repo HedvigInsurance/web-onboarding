@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { Container, Section } from 'pages/OfferNew/components'
+import { Section } from 'pages/OfferNew/components'
 import { OfferData } from 'pages/OfferNew/types'
-import { useDocumentScroll } from '../../../utils/hooks/useDocumentScroll'
 import { Sidebar } from './Sidebar'
 
 type Props = {
@@ -40,8 +39,31 @@ const HeroImage = styled.img<HeroImageProps>`
   transition: opacity 0.8s;
 
   ${MIN_WIDTH_MEDIA_QUERY} {
-    /* height: 1000px; */
     object-position: right -88px;
+  }
+`
+
+const HeroContentWrapper = styled.div`
+  width: 100%;
+  position: absolute;
+  padding-top: 4rem;
+
+  ${MIN_WIDTH_MEDIA_QUERY} {
+    padding-top: 8rem;
+  }
+`
+
+const ContentContainer = styled.div`
+  width: 100%;
+  max-width: 80rem;
+  padding: 0 2rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+
+  ${MIN_WIDTH_MEDIA_QUERY} {
+    flex-direction: row;
+    justify-content: space-between;
   }
 `
 
@@ -58,21 +80,6 @@ export const Introduction: React.FC<Props> = ({
   onCheckoutOpen,
 }) => {
   const [hasHeroImageLoaded, setHasHeroImageLoaded] = useState(false)
-  const [sidebarIsSticky, setSidebarIsSticky] = useState(false)
-  const ref = React.useRef<HTMLDivElement>(null)
-
-  useDocumentScroll(() => {
-    const distanceToTop =
-      ref.current !== null
-        ? ref.current.getBoundingClientRect().top
-        : Math.pow(10, 10)
-
-    if (distanceToTop <= 96) {
-      setSidebarIsSticky(true)
-    } else {
-      setSidebarIsSticky(false)
-    }
-  })
 
   return (
     <Section>
@@ -89,16 +96,16 @@ export const Introduction: React.FC<Props> = ({
           /new-member-assets/landing/laptop_grip_medium.jpg 2200w"
           />
         </Hero>
-        <Container>
-          <OfferDetails />
-          <Sidebar
-            ref={ref}
-            sticky={sidebarIsSticky}
-            offerData={offerData}
-            refetchOfferData={refetch}
-            onCheckoutOpen={onCheckoutOpen}
-          />
-        </Container>
+        <HeroContentWrapper>
+          <ContentContainer>
+            <OfferDetails />
+            <Sidebar
+              offerData={offerData}
+              refetchOfferData={refetch}
+              onCheckoutOpen={onCheckoutOpen}
+            />
+          </ContentContainer>
+        </HeroContentWrapper>
       </Wrapper>
     </Section>
   )
