@@ -27,8 +27,9 @@ import { DiscountCodeModal } from './DiscountCodeModal'
 import { StartDate } from './StartDate'
 import { StickyBottomSidebar } from './StickyBottomSidebar'
 
-export const SIDEBAR_TABLET_BP = '@media (min-width: 1020px)'
+export const SIDEBAR_TABLET_BP = '@media (min-width: 1021px)'
 const SIDEBAR_WIDTH = '26rem'
+const SIDEBAR_SPACING_RIGHT = '2rem'
 
 type Props = {
   offerData: OfferData
@@ -37,7 +38,7 @@ type Props = {
 }
 
 const Wrapper = styled.div`
-  width: ${SIDEBAR_WIDTH};
+  width: calc(${SIDEBAR_WIDTH} + ${SIDEBAR_SPACING_RIGHT});
   max-width: 100%;
   z-index: ${TOP_BAR_Z_INDEX};
 `
@@ -53,6 +54,7 @@ const Container = styled.div`
   ${SIDEBAR_TABLET_BP} {
     position: fixed;
     top: 8rem;
+    right: ${SIDEBAR_SPACING_RIGHT};
   }
 `
 

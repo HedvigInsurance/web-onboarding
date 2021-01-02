@@ -48,7 +48,7 @@ const Container = styled.div`
   align-items: center;
   margin: 0 auto;
 
-  @media (min-width: 480px) {
+  @media (min-width: 1000px) {
     padding: 0 2rem;
   }
 `

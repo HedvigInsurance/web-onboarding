@@ -18,10 +18,16 @@ interface Props {
   offerData: OfferData
 }
 
+const LARGER_SCREEN_MEDIA_QUERY = '@media screen and (min-width: 1000px)'
+
 const Wrapper = styled.div`
-  padding: 8.5rem 0 5rem 0;
+  padding: 16rem 0 5rem 0;
   background-color: ${colorsV3.gray100};
   display: flex;
+
+  ${LARGER_SCREEN_MEDIA_QUERY} {
+    padding: 8rem 0 5rem 0;
+  }
 `
 
 const PerilRowWrapper = styled.div`

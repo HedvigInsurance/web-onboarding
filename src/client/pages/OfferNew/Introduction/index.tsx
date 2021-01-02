@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { Section } from 'pages/OfferNew/components'
 import { OfferData } from 'pages/OfferNew/types'
+import { HeroOfferDetails } from './HeroOfferDetails'
 import { Sidebar } from './Sidebar'
 
 type Props = {
@@ -16,11 +17,14 @@ type HeroImageProps = {
 }
 
 const MIN_WIDTH_MEDIA_QUERY = '@media screen and (min-width: 1000px)'
-const HERO_HEIGHT = '480px'
+const HERO_HEIGHT = '400px'
 
 const Wrapper = styled.div`
   width: 100%;
   height: ${HERO_HEIGHT};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `
 
 const Hero = styled.div`
@@ -34,7 +38,7 @@ const Hero = styled.div`
 const HeroImage = styled.img<HeroImageProps>`
   height: 1000px;
   object-fit: cover;
-  object-position: -700px -100px;
+  object-position: -550px -100px;
   opacity: ${({ hasLoaded }) => (hasLoaded ? 0.5 : 0)};
   transition: opacity 0.8s;
 
@@ -45,8 +49,9 @@ const HeroImage = styled.img<HeroImageProps>`
 
 const HeroContentWrapper = styled.div`
   width: 100%;
+  max-width: 80rem;
   position: absolute;
-  padding-top: 4rem;
+  padding-top: 3rem;
 
   ${MIN_WIDTH_MEDIA_QUERY} {
     padding-top: 8rem;
@@ -55,22 +60,15 @@ const HeroContentWrapper = styled.div`
 
 const ContentContainer = styled.div`
   width: 100%;
-  max-width: 80rem;
-  padding: 0 2rem;
-  margin: 0 auto;
+  padding: 0 1rem;
   display: flex;
   flex-direction: column;
 
   ${MIN_WIDTH_MEDIA_QUERY} {
+    padding: 0 2rem;
     flex-direction: row;
     justify-content: space-between;
-  }
-`
-
-const OfferDetails = styled.div`
-  margin: 0;
-  ${MIN_WIDTH_MEDIA_QUERY} {
-    margin-right: 1.875rem;
+    align-items: flex-start;
   }
 `
 
@@ -98,7 +96,7 @@ export const Introduction: React.FC<Props> = ({
         </Hero>
         <HeroContentWrapper>
           <ContentContainer>
-            <OfferDetails />
+            <HeroOfferDetails {...{ offerData }} />
             <Sidebar
               offerData={offerData}
               refetchOfferData={refetch}
