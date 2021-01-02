@@ -1,7 +1,7 @@
+import React, { useState, useCallback, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3, HedvigSymbol } from '@hedviginsurance/brand'
 import { CookieStorage } from 'cookie-storage'
-import React, { useCallback, useEffect } from 'react'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 import { Button, TextButton } from 'components/buttons'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
@@ -133,12 +133,10 @@ export const Sidebar: React.FC<Props> = ({
 }) => {
   const textKeys = useTextKeys()
   const market = useMarket()
-  const [discountCodeModalIsOpen, setDiscountCodeModalIsOpen] = React.useState(
-    false,
-  )
-  const [isSidebarVisible, setIsSidebarVisible] = React.useState(true)
+  const [discountCodeModalIsOpen, setDiscountCodeModalIsOpen] = useState(false)
+  const [isSidebarVisible, setIsSidebarVisible] = useState(true)
 
-  const [detailsModalIsOpen, setDetailsModalIsOpen] = React.useState(false)
+  const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false)
 
   const [removeDiscountCode] = useRemoveDiscountCodeMutation()
   const [redeemCode] = useRedeemCodeMutation()
