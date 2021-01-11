@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import React from 'react'
+import { SIDEBAR_WIDTH } from './Introduction/Sidebar/index'
 
 export * from './common/price'
 
@@ -84,19 +85,17 @@ export const Body = styled('div')`
 export const Container = styled('div')`
   width: 100%;
   height: 100%;
-  padding: 0 2rem;
+  padding: 0 1rem;
   margin: 0 auto;
   max-width: 80rem;
   display: flex;
   justify-content: space-between;
+  flex-direction: column-reverse;
   position: relative;
 
-  @media (max-width: 1020px) {
-    flex-direction: column-reverse;
-  }
-
-  @media (max-width: 420px) {
-    padding: 0 1rem;
+  @media (min-width: 1000px) {
+    padding: 0 2rem;
+    flex-direction: row;
   }
 `
 
@@ -107,15 +106,14 @@ export const Column = styled('div')`
   width: 100%;
   flex-grow: 0;
   box-sizing: border-box;
-  padding-right: 1rem;
 
-  @media (max-width: 1020px) {
-    padding-right: 0;
+  @media (min-width: 1000px) {
+    padding-right: 1rem;
   }
 `
 
 export const ColumnSpacing = styled('div')`
-  width: 26rem;
+  width: ${SIDEBAR_WIDTH};
   flex-shrink: 0;
 `
 
