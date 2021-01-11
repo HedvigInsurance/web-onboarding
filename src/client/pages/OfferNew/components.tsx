@@ -5,7 +5,7 @@ import { SIDEBAR_WIDTH } from './Introduction/Sidebar/index'
 
 export * from './common/price'
 
-export const Heading = styled('h1')`
+export const Heading = styled('h2')`
   font-family: ${fonts.FAVORIT};
   font-size: 3rem;
   line-height: 3.5rem;
