@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
+import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { CurrentLocale } from './utils/CurrentLocale'
 
 export const TOP_BAR_Z_INDEX = 1000
@@ -48,7 +49,7 @@ const Container = styled.div`
   align-items: center;
   margin: 0 auto;
 
-  @media (min-width: 1000px) {
+  ${LARGE_SCREEN_MEDIA_QUERY} {
     padding: 0 2rem;
   }
 `

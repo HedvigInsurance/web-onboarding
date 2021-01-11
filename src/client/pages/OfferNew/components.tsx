@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV2, fonts } from '@hedviginsurance/brand'
 import React from 'react'
+import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { SIDEBAR_WIDTH } from './Introduction/Sidebar/index'
 
 export * from './common/price'
@@ -93,7 +94,7 @@ export const Container = styled('div')`
   flex-direction: column-reverse;
   position: relative;
 
-  @media (min-width: 1000px) {
+  ${LARGE_SCREEN_MEDIA_QUERY} {
     padding: 0 2rem;
     flex-direction: row;
   }
@@ -107,7 +108,7 @@ export const Column = styled('div')`
   flex-grow: 0;
   box-sizing: border-box;
 
-  @media (min-width: 1000px) {
+  ${LARGE_SCREEN_MEDIA_QUERY} {
     padding-right: 1rem;
   }
 `

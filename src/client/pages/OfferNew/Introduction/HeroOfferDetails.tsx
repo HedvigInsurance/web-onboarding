@@ -3,20 +3,19 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
+import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { getHouseholdSize } from '../utils'
 
 type Props = {
   offerData: OfferData
 }
 
-const MIN_WIDTH_MEDIA_QUERY = '@media screen and (min-width: 1000px)'
-
 const Container = styled.div`
   width: 100%;
   padding: 2rem 0;
   color: ${colorsV3.white};
 
-  ${MIN_WIDTH_MEDIA_QUERY} {
+  ${LARGE_SCREEN_MEDIA_QUERY} {
     width: auto;
     padding: 0;
   }
@@ -26,7 +25,7 @@ const Header = styled.div`
   text-transform: uppercase;
   font-size: 1rem;
 
-  ${MIN_WIDTH_MEDIA_QUERY} {
+  ${LARGE_SCREEN_MEDIA_QUERY} {
     font-size: 1rem;
   }
 `
@@ -35,7 +34,7 @@ const OfferInfo = styled.div`
   font-size: 2rem;
   word-break: break-all;
 
-  ${MIN_WIDTH_MEDIA_QUERY} {
+  ${LARGE_SCREEN_MEDIA_QUERY} {
     font-size: 3rem;
   }
 `

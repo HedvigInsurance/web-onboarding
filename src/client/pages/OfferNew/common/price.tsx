@@ -4,7 +4,7 @@ import React from 'react'
 import { Spinner } from 'components/utils'
 import { MonetaryAmount } from 'containers/types'
 import { useTextKeys } from 'utils/textKeys'
-import { SIDEBAR_TABLET_BP } from '../Introduction/Sidebar'
+import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
 const PriceWrapper = styled.div`
   display: flex;
@@ -37,7 +37,7 @@ const PriceNumbers = styled.div<{
 
 const PriceNet = styled.div`
   font-size: 1.125rem;
-  ${SIDEBAR_TABLET_BP} {
+  ${LARGE_SCREEN_MEDIA_QUERY} {
     font-size: 1.5rem;
   }
 `

@@ -18,6 +18,7 @@ import {
 } from 'pages/OfferNew/Introduction/Sidebar/utils'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
+import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { Badge } from 'components/Badge/Badge'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import { Price } from '../../components'
@@ -27,7 +28,6 @@ import { DiscountCodeModal } from './DiscountCodeModal'
 import { StartDate } from './StartDate'
 import { StickyBottomSidebar } from './StickyBottomSidebar'
 
-export const SIDEBAR_TABLET_BP = '@media (min-width: 1000px)'
 export const SIDEBAR_WIDTH = '26rem'
 const SIDEBAR_SPACING_LEFT = '2rem'
 
@@ -42,7 +42,7 @@ const Wrapper = styled.div`
   max-width: 100%;
   z-index: ${TOP_BAR_Z_INDEX};
 
-  ${SIDEBAR_TABLET_BP} {
+  ${LARGE_SCREEN_MEDIA_QUERY} {
     padding-left: ${SIDEBAR_SPACING_LEFT};
   }
 `
@@ -55,7 +55,7 @@ const Container = styled.div`
   border-radius: 8px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
 
-  ${SIDEBAR_TABLET_BP} {
+  ${LARGE_SCREEN_MEDIA_QUERY} {
     position: fixed;
     top: 8rem;
   }
@@ -94,7 +94,7 @@ const Title = styled.h3`
   font-size: 1.375rem;
   line-height: 1.3;
 
-  ${SIDEBAR_TABLET_BP} {
+  ${LARGE_SCREEN_MEDIA_QUERY} {
     font-size: 1.5rem;
   }
 `

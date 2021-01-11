@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { Section } from 'pages/OfferNew/components'
 import { OfferData } from 'pages/OfferNew/types'
+import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { HeroOfferDetails } from './HeroOfferDetails'
 import { Sidebar } from './Sidebar'
 
@@ -16,7 +17,6 @@ type HeroImageProps = {
   hasLoaded: boolean
 }
 
-const MIN_WIDTH_MEDIA_QUERY = '@media screen and (min-width: 1000px)'
 const HERO_HEIGHT = '400px'
 
 const Wrapper = styled.div`
@@ -42,7 +42,7 @@ const HeroImage = styled.img<HeroImageProps>`
   opacity: ${({ hasLoaded }) => (hasLoaded ? 0.5 : 0)};
   transition: opacity 0.8s;
 
-  ${MIN_WIDTH_MEDIA_QUERY} {
+  ${LARGE_SCREEN_MEDIA_QUERY} {
     object-position: right -88px;
   }
 `
@@ -53,7 +53,7 @@ const HeroContentWrapper = styled.div`
   position: absolute;
   padding-top: 3rem;
 
-  ${MIN_WIDTH_MEDIA_QUERY} {
+  ${LARGE_SCREEN_MEDIA_QUERY} {
     padding-top: 8rem;
   }
 `
@@ -64,7 +64,7 @@ const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
 
-  ${MIN_WIDTH_MEDIA_QUERY} {
+  ${LARGE_SCREEN_MEDIA_QUERY} {
     padding: 0 2rem;
     flex-direction: row;
     justify-content: space-between;
