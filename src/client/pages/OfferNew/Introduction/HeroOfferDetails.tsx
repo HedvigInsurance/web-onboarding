@@ -23,7 +23,7 @@ const Container = styled.div`
 
 const Header = styled.div`
   text-transform: uppercase;
-  font-size: 0.75rem;
+  font-size: 1rem;
 
   ${MIN_WIDTH_MEDIA_QUERY} {
     font-size: 1rem;
