@@ -18,6 +18,7 @@ const Container = styled.div`
 
   ${MIN_WIDTH_MEDIA_QUERY} {
     width: auto;
+    padding: 0;
   }
 `
 
