@@ -26,9 +26,9 @@ const Container = styled.div`
   }
 `
 
-const Header = styled.div`
+const Heading = styled.h1`
   text-transform: uppercase;
-  font-size: 1rem;
+  font-size: 0.75rem;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     font-size: 1rem;
@@ -65,7 +65,7 @@ export const HeroOfferDetails: React.FC<Props> = ({ offerData }) => {
   const textKeys = useTextKeys()
   return (
     <Container>
-      <Header>{textKeys.HERO_OFFER_DETAILS_HEADER()}</Header>
+      <Heading>{textKeys.HERO_OFFER_DETAILS_HEADER()}</Heading>
       <OfferInfo>
         {person.firstName}
         {!!numberCoInsured && ` +${numberCoInsured}`}
