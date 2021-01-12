@@ -43,7 +43,8 @@ const HeroImage = styled.img<HeroImageProps>`
   transition: opacity 0.8s;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
-    object-position: right -88px;
+    height: auto;
+    object-position: right -5vw;
   }
 `
 
