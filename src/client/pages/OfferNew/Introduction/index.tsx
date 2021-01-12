@@ -96,7 +96,7 @@ export const Introduction: React.FC<Props> = ({
         </Hero>
         <HeroContentWrapper>
           <ContentContainer>
-            <HeroOfferDetails {...{ offerData }} />
+            <HeroOfferDetails offerData={offerData} />
             <Sidebar
               offerData={offerData}
               refetchOfferData={refetch}
