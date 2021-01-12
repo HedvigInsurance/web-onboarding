@@ -19,7 +19,7 @@ type HeroImageProps = {
 
 const HERO_HEIGHT = '400px'
 
-const Wrapper = styled.div`
+const Hero = styled.div`
   width: 100%;
   height: ${HERO_HEIGHT};
   display: flex;
@@ -27,7 +27,7 @@ const Wrapper = styled.div`
   align-items: center;
 `
 
-const Hero = styled.div`
+const HeroImageWrapper = styled.div`
   width: 100vw;
   height: ${HERO_HEIGHT};
   background: ${colorsV3.gray900};
@@ -81,8 +81,8 @@ export const Introduction: React.FC<Props> = ({
 
   return (
     <Section>
-      <Wrapper>
-        <Hero>
+      <Hero>
+        <HeroImageWrapper>
           <HeroImage
             alt="laptop grip"
             onLoad={() => setHasHeroImageLoaded(true)}
@@ -93,7 +93,7 @@ export const Introduction: React.FC<Props> = ({
           /new-member-assets/landing/laptop_grip_small.jpg 1600w,
           /new-member-assets/landing/laptop_grip_medium.jpg 2200w"
           />
-        </Hero>
+        </HeroImageWrapper>
         <HeroContentWrapper>
           <ContentContainer>
             <HeroOfferDetails offerData={offerData} />
@@ -104,7 +104,7 @@ export const Introduction: React.FC<Props> = ({
             />
           </ContentContainer>
         </HeroContentWrapper>
-      </Wrapper>
+      </Hero>
     </Section>
   )
 }
