@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { Address } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
@@ -8,6 +9,10 @@ import { getHouseholdSize } from '../utils'
 
 type Props = {
   offerData: OfferData
+}
+
+type QuoteWithStreet = {
+  quoteDetails: { street: Address['street'] }
 }
 
 const Container = styled.div`
@@ -41,12 +46,20 @@ const OfferInfo = styled.div`
 
 export const HeroOfferDetails: React.FC<Props> = ({ offerData }) => {
   const [numberCoInsured, setNumberCoInsured] = useState<number | null>(null)
+  const [street, setStreet] = useState<Address['street'] | null>(null)
 
   const { person, quotes } = offerData
 
   useEffect(() => {
     const householdSize = getHouseholdSize(quotes[0].quoteDetails)
     setNumberCoInsured(householdSize - 1)
+
+    const quoteWithStreet = quotes.find((quote) => {
+      return 'street' in quote.quoteDetails
+    })
+    if (quoteWithStreet) {
+      setStreet((quoteWithStreet as QuoteWithStreet).quoteDetails.street)
+    }
   }, [quotes])
 
   const textKeys = useTextKeys()
@@ -57,9 +70,7 @@ export const HeroOfferDetails: React.FC<Props> = ({ offerData }) => {
         {person.firstName}
         {!!numberCoInsured && ` +${numberCoInsured}`}
       </OfferInfo>
-      {'street' in quotes[0].quoteDetails && (
-        <OfferInfo>{quotes[0].quoteDetails.street}</OfferInfo>
-      )}
+      {street && <OfferInfo>{street}</OfferInfo>}
     </Container>
   )
 }
