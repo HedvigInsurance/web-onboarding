@@ -1,5 +1,3 @@
-import styled from '@emotion/styled'
-import { colorsV3 } from '@hedviginsurance/brand/dist'
 import { SemanticEvents } from 'quepasa'
 import React from 'react'
 import Helmet from 'react-helmet-async'
@@ -15,10 +13,6 @@ import {
   DownloadAppHedvigForeverMember,
   DownloadAppRegular,
 } from './sections/DownloadApp'
-
-const TopBarWrapper = styled('div')`
-  color: ${colorsV3.black};
-`
 
 export const Download: React.FC = () => {
   const campaigns = useRedeemedCampaignsQuery()
@@ -40,9 +34,7 @@ export const Download: React.FC = () => {
           <Helmet>
             <title>{textKeys.ONBOARDING_DOWNLOAD_PAGE_TITLE()}</title>
           </Helmet>
-          <TopBarWrapper>
-            <TopBar centered />
-          </TopBarWrapper>
+          <TopBar />
 
           {isReferral ? (
             <DownloadAppHedvigForeverMember />
