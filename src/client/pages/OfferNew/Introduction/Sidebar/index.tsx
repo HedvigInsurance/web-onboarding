@@ -44,6 +44,7 @@ const Wrapper = styled.div`
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     padding-left: ${SIDEBAR_SPACING_LEFT};
+    flex-shrink: 0;
   }
 `
 

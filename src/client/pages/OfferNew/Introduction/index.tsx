@@ -40,7 +40,7 @@ const HeroImage = styled.img<HeroImageProps>`
   object-fit: cover;
   object-position: -550px -100px;
   opacity: ${({ hasLoaded }) => (hasLoaded ? 0.5 : 0)};
-  transition: opacity 0.8s;
+  transition: opacity 0.8s ease-out;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     height: auto;

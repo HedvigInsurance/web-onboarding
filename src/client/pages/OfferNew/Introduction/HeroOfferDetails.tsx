@@ -16,17 +16,16 @@ type QuoteWithStreet = {
 }
 
 const Container = styled.div`
-  width: 100%;
   padding: 2rem 0;
   color: ${colorsV3.white};
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
-    width: auto;
     padding: 0;
   }
 `
 
 const Heading = styled.h1`
+  margin: 0;
   text-transform: uppercase;
   font-size: 0.75rem;
 
