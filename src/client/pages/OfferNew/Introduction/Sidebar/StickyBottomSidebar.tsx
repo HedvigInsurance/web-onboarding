@@ -46,7 +46,7 @@ const avoidDisplayNoneGlitch = (
   setVisible: BooleanSetter,
   setDisplayNone: BooleanSetter,
   isVisible: boolean,
-) => () => {
+) => {
   if (isVisible) {
     setDisplayNone(false)
     setTimeout(() => setVisible(true), 20)
@@ -63,10 +63,11 @@ export const StickyBottomSidebar: React.FC<Hidable & {
 }> = ({ isVisible, onCheckoutOpen }) => {
   const [reallyIsVisible, setReallyIsVisible] = React.useState(false)
   const [displayNone, setDisplayNone] = React.useState(false)
-  React.useEffect(
-    avoidDisplayNoneGlitch(setReallyIsVisible, setDisplayNone, isVisible),
-    [isVisible],
-  )
+
+  React.useEffect(() => {
+    avoidDisplayNoneGlitch(setReallyIsVisible, setDisplayNone, isVisible)
+  }, [isVisible])
+
   const textKeys = useTextKeys()
 
   return (

@@ -13,15 +13,20 @@ import {
 import { PerilRow } from 'pages/OfferNew/Perils/PerilRow'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
+import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
 interface Props {
   offerData: OfferData
 }
 
 const Wrapper = styled.div`
-  padding: 8.5rem 0 5rem 0;
+  padding: 16rem 0 5rem 0;
   background-color: ${colorsV3.gray100};
   display: flex;
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    padding: 8rem 0 5rem 0;
+  }
 `
 
 const PerilRowWrapper = styled.div`

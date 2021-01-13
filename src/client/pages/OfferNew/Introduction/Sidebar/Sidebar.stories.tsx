@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { action } from '@storybook/addon-actions'
 import { MemoryRouter } from 'react-router-dom'
 import { MockedProvider } from '@apollo/react-testing'
@@ -19,14 +19,11 @@ export default {
 }
 
 export const SEApartmentBrf = () => {
-  const ref = useRef<HTMLDivElement>(null)
   return (
     <MockedProvider>
       <MemoryRouter initialEntries={['/se/new-member/offer']}>
         <TextKeyProvider locale="sv_SE">
           <Sidebar
-            ref={ref}
-            sticky={false}
             offerData={seApartementBrf}
             onCheckoutOpen={action('onCheckoutOpen')}
             refetchOfferData={(...args: any[]) => {
@@ -41,14 +38,11 @@ export const SEApartmentBrf = () => {
 }
 
 export const NOCombo = () => {
-  const ref = useRef<HTMLDivElement>(null)
   return (
     <MockedProvider>
       <MemoryRouter initialEntries={['/no/new-member/offer']}>
         <TextKeyProvider locale="nb_NO">
           <Sidebar
-            ref={ref}
-            sticky={false}
             offerData={noCombo}
             onCheckoutOpen={action('onCheckoutOpen')}
             refetchOfferData={(...args: any[]) => {
@@ -63,14 +57,11 @@ export const NOCombo = () => {
 }
 
 export const DKHomeContent = () => {
-  const ref = useRef<HTMLDivElement>(null)
   return (
     <MockedProvider>
       <MemoryRouter initialEntries={['/dk/new-member/offer']}>
         <TextKeyProvider locale="da_DK">
           <Sidebar
-            ref={ref}
-            sticky={false}
             offerData={dkHomeContentOwn}
             onCheckoutOpen={action('onCheckoutOpen')}
             refetchOfferData={(...args: any[]) => {

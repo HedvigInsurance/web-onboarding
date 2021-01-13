@@ -1,56 +1,75 @@
+import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import React from 'react'
-import { Container, Section } from 'pages/OfferNew/components'
+import { Section } from 'pages/OfferNew/components'
 import { OfferData } from 'pages/OfferNew/types'
-import { isBundle } from 'pages/OfferNew/utils'
-import { useDocumentScroll } from '../../../utils/hooks/useDocumentScroll'
-import { ExternalInsuranceProvider } from './ExternalInsuranceProvider'
+import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import { HeroOfferDetails } from './HeroOfferDetails'
 import { Sidebar } from './Sidebar'
 
-import { Usps } from './USPS'
-
-interface Props {
+type Props = {
   offerData: OfferData
   refetch: () => Promise<void>
   onCheckoutOpen: () => void
 }
 
-const Wrapper = styled.div`
+type HeroImageProps = {
+  hasLoaded: boolean
+}
+
+const HERO_HEIGHT = '400px'
+
+const Hero = styled.div`
   width: 100%;
-  padding: 7rem 0;
-  background-color: ${colorsV3.gray900};
-  position: relative;
-  box-sizing: border-box;
+  height: ${HERO_HEIGHT};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
 
-  @media (max-width: 1020px) {
-    padding: 7rem 0 7rem 0;
-  }
+const HeroImageWrapper = styled.div`
+  width: 100vw;
+  height: ${HERO_HEIGHT};
+  background: ${colorsV3.gray900};
+  overflow: hidden;
+  position: absolute;
+`
 
-  @media (max-width: 600px) {
-    padding: 7rem 0 5rem 0;
+const HeroImage = styled.img<HeroImageProps>`
+  height: 1000px;
+  object-fit: cover;
+  object-position: -550px -100px;
+  opacity: ${({ hasLoaded }) => (hasLoaded ? 0.5 : 0)};
+  transition: opacity 0.8s ease-out;
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    height: auto;
+    object-position: right -5vw;
   }
 `
 
-const DesktopLeadingContainer = styled.div`
-  margin-right: 1.875rem;
-  display: none;
+const HeroContentWrapper = styled.div`
   width: 100%;
-  min-height: 50vh;
+  max-width: 80rem;
+  position: absolute;
+  padding-top: 3rem;
 
-  @media (min-width: 1000px) {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    padding-top: 8rem;
   }
 `
 
-const MobileLeadingContainer = styled.div`
-  display: none;
+const ContentContainer = styled.div`
   width: 100%;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
 
-  @media (max-width: 1000px) {
-    display: block;
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    padding: 0 2rem;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
   }
 `
 
@@ -59,56 +78,34 @@ export const Introduction: React.FC<Props> = ({
   refetch,
   onCheckoutOpen,
 }) => {
-  const [sidebarIsSticky, setSidebarIsSticky] = React.useState(false)
-  const ref = React.useRef<HTMLDivElement>(null)
-
-  useDocumentScroll(() => {
-    const distanceToTop =
-      ref.current !== null
-        ? ref.current.getBoundingClientRect().top
-        : Math.pow(10, 10)
-
-    if (distanceToTop <= 96) {
-      setSidebarIsSticky(true)
-    } else {
-      setSidebarIsSticky(false)
-    }
-  })
-
-  const hasDataCollection =
-    !isBundle(offerData) && !!offerData.quotes[0].dataCollectionId
+  const [hasHeroImageLoaded, setHasHeroImageLoaded] = useState(false)
 
   return (
     <Section>
-      <Wrapper>
-        <Container>
-          <DesktopLeadingContainer>
-            <Usps />
-            {hasDataCollection && (
-              <ExternalInsuranceProvider
-                dataCollectionId={offerData.quotes[0].dataCollectionId || ''}
-                offerData={offerData}
-              />
-            )}
-          </DesktopLeadingContainer>
-          <MobileLeadingContainer>
-            {hasDataCollection && (
-              <ExternalInsuranceProvider
-                dataCollectionId={offerData.quotes[0].dataCollectionId || ''}
-                offerData={offerData}
-              />
-            )}
-            <Usps />
-          </MobileLeadingContainer>
-          <Sidebar
-            ref={ref}
-            sticky={sidebarIsSticky}
-            offerData={offerData}
-            refetchOfferData={refetch}
-            onCheckoutOpen={onCheckoutOpen}
+      <Hero>
+        <HeroImageWrapper>
+          <HeroImage
+            alt="laptop grip"
+            onLoad={() => setHasHeroImageLoaded(true)}
+            hasLoaded={hasHeroImageLoaded}
+            src="/new-member-assets/landing/laptop_grip_small.jpg"
+            sizes="100vw"
+            srcSet="
+          /new-member-assets/landing/laptop_grip_small.jpg 1600w,
+          /new-member-assets/landing/laptop_grip_medium.jpg 2200w"
           />
-        </Container>
-      </Wrapper>
+        </HeroImageWrapper>
+        <HeroContentWrapper>
+          <ContentContainer>
+            <HeroOfferDetails offerData={offerData} />
+            <Sidebar
+              offerData={offerData}
+              refetchOfferData={refetch}
+              onCheckoutOpen={onCheckoutOpen}
+            />
+          </ContentContainer>
+        </HeroContentWrapper>
+      </Hero>
     </Section>
   )
 }
