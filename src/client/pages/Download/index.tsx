@@ -7,7 +7,7 @@ import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import { useTextKeys } from 'utils/textKeys'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
-import { DownloadApp } from './sections/DownloadApp'
+import { DownloadApp } from './components/DownloadApp'
 
 export const Download: React.FC = () => {
   const textKeys = useTextKeys()

@@ -1,11 +1,8 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import {
-  AppleAppStoreIcon,
-  GooglePlayStoreIcon,
-} from 'pages/Download/sections/appStoreIcons'
 import { useTextKeys } from 'utils/textKeys'
+import { AppleAppStoreIcon, GooglePlayStoreIcon } from './appStoreIcons'
 
 const SITE_WRAPPER = 1300
 const TABLET_BP = 800
