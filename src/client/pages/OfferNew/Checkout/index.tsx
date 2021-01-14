@@ -196,6 +196,10 @@ export const Checkout: React.FC<Props> = ({
   useScrollLock(visibilityState, scrollWrapper)
 
   useEffect(() => {
+    if (typeof Intercom === 'undefined') {
+      return
+    }
+
     if (visibilityState === VisibilityState.OPEN) {
       Intercom('update', { hide_default_launcher: true })
     }
