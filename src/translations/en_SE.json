@@ -1,8 +1,8 @@
 {
-  "ONBOARDING_CONNECT_DD_HEADLINE": "Connect direct debit",
-  "ONBOARDING_CONNECT_DD_CTA": "Connect direct debit",
-  "ONBOARDING_CONNECT_DD_PRE_HEADLINE": "Psst, don't forget...",
-  "ONBOARDING_CONNECT_DD_BODY": "Money will be drawn via direct debit the 27th each month. We only start charging you once your insurance is activated.",
+  "ONBOARDING_CONNECT_DD_HEADLINE": "only two things left to do",
+  "ONBOARDING_CONNECT_DD_CTA": "Connect direct debit - activate Hedvig",
+  "ONBOARDING_CONNECT_DD_PRE_HEADLINE": "Welcome to Hedvig,",
+  "ONBOARDING_CONNECT_DD_BODY": "We are so happy to have you as a member. To start using your new home insurance, you need to:",
   "FOUR_OH_FOUR_TITLE": "404 - The page could not be found | Hedvig",
   "FOREVER_INTRO_READY_QUESTION": "Ready?",
   "FOUR_OH_FOUR_HEADLINE": "Blah",
@@ -245,5 +245,7 @@
   "DETAILS_MODULE_TABLE_BIRTHDATE_CELL_LABEL": "Date of birth",
   "DETAILS_MODULE_PERSONAL_INFORMATION": "Personal information",
   "SIDEBAR_NO_BUNDLE_DISCOUNT_TEXT": "25% discount",
-  "HERO_OFFER_DETAILS_HEADER": "Your price quote"
+  "HERO_OFFER_DETAILS_HEADER": "Your price quote",
+  "ONBOARDING_CONNECT_DD_INSTRUCTIONS_CONNECT_PAYMENT": "Activate Hedvig by connecting direct debit",
+  "ONBOARDING_CONNECT_DD_INSTRUCTIONS_DOWNLOAD_APP": "Download the Hedvig app"
 }
