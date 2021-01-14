@@ -1,8 +1,10 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { match } from 'matchly'
-import React, { useEffect, useRef, useState } from 'react'
+import color from 'color'
+import React, { useEffect, useRef, useState, useLayoutEffect } from 'react'
 import { useHistory } from 'react-router'
+import { useTextKeys } from 'utils/textKeys'
 import { Spinner } from 'components/utils'
 import {
   getLocaleIsoCode,
@@ -23,7 +25,7 @@ const Wrapper = styled('div')`
   position: relative;
 
   @media (min-width: 801px) {
-    padding-right: 5rem;
+    width: 62%;
   }
 
   .adyen-checkout__payment-method__header {
@@ -70,7 +72,7 @@ const Wrapper = styled('div')`
     border: 1px solid ${colorsV3.gray500};
     padding: 1rem;
     height: 4rem;
-    border-radius: 8px;
+    border-radius: 0px;
 
     &:focus {
       border: 1px solid ${colorsV3.gray300};
@@ -87,17 +89,19 @@ const Wrapper = styled('div')`
   }
 
   .adyen-checkout__button {
-    background-color: ${colorsV3.white};
+    background-color: ${colorsV3.purple500};
     color: ${colorsV3.gray900};
     transition: transform 300ms;
 
     &:hover {
-      background-color: ${colorsV3.white};
+      background-color: ${colorsV3.purple500};
       transform: translateY(-2px);
     }
   }
   .adyen-checkout__button.adyen-checkout__button--loading {
-    background-color: ${colorsV3.gray500};
+    background-color: ${color(colorsV3.purple500)
+      .lighten(0.2)
+      .toString()};
   }
   .adyen-checkout__button .adyen-checkout__spinner {
     border-color: transparent ${colorsV3.gray900} ${colorsV3.gray900};
@@ -126,6 +130,7 @@ export const AdyenCheckout: React.FC<Props> = ({ onSuccess }) => {
   ] = useSubmitAdditionalPaymentDetialsMutation()
   const history = useHistory()
   const currentLocale = useCurrentLocale()
+  const textKeys = useTextKeys()
 
   const paymentMethodsResponse =
     availablePaymentMethods.data?.availablePaymentMethods.paymentMethodsResponse
@@ -134,8 +139,8 @@ export const AdyenCheckout: React.FC<Props> = ({ onSuccess }) => {
     if (!paymentMethodsResponse || !adyenLoaded) {
       return
     }
-
     createAdyenCheckout({
+      payButtonText: textKeys.ONBOARDING_CONNECT_DD_CTA(),
       currentLocale,
       paymentMethodsResponse,
       tokenizePaymentMutation,
@@ -143,9 +148,20 @@ export const AdyenCheckout: React.FC<Props> = ({ onSuccess }) => {
       history,
       onSuccess,
     }).mount(adyenCheckoutRef.current)
-  }, [paymentMethodsResponse, adyenLoaded])
+  }, [
+    paymentMethodsResponse,
+    adyenLoaded,
+    textKeys,
+    currentLocale,
+    tokenizePaymentMutation,
+    submitAdditionalPaymentDetails,
+    history,
+    onSuccess,
+  ])
 
-  useEffect(mountAdyenJs(setAdyenLoaded), [])
+  useEffect(() => {
+    mountAdyenJs(setAdyenLoaded)()
+  }, [])
 
   useEffect(mountAdyenCss, [])
 
@@ -164,6 +180,7 @@ export const AdyenCheckout: React.FC<Props> = ({ onSuccess }) => {
 }
 
 interface AdyenCheckoutProps {
+  payButtonText: string
   currentLocale: string
   paymentMethodsResponse: Scalars['PaymentMethodsResponse']
   tokenizePaymentMutation: TokenizePaymentDetailsMutationFn
@@ -173,6 +190,7 @@ interface AdyenCheckoutProps {
 }
 
 const createAdyenCheckout = ({
+  payButtonText,
   currentLocale,
   paymentMethodsResponse,
   tokenizePaymentMutation,
@@ -207,6 +225,14 @@ const createAdyenCheckout = ({
 
   const configuration = {
     locale,
+    translations: {
+      'no-NO': {
+        payButton: payButtonText,
+      },
+      'en-US': {
+        payButton: payButtonText,
+      },
+    },
     environment: window.hedvigClientConfig.adyenEnvironment,
     originKey: window.hedvigClientConfig.adyenOriginKey,
     paymentMethodsResponse: JSON.parse(paymentMethodsResponse),
@@ -228,7 +254,6 @@ const createAdyenCheckout = ({
     },
     enableStoreDetails: true,
     returnUrl,
-    // onChange: console.log,
     onAdditionalDetails: async (state: any, dropinComponent: any) => {
       try {
         const result = await submitAdditionalPaymentDetails({
