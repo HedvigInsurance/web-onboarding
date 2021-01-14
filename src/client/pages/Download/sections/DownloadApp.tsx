@@ -1,10 +1,6 @@
+import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { isMobile } from 'is-mobile'
-import React from 'react'
-import { LinkButton } from 'components/buttons'
-import { LoadingPage } from 'components/LoadingPage'
-import { useMemberQuery } from 'data/graphql'
 import {
   AppleAppStoreIcon,
   GooglePlayStoreIcon,
@@ -81,19 +77,11 @@ const AppleLogo = styled(AppleAppStoreIcon)({
   marginRight: 24,
   fill: colorsV3.white,
 })
-const InlineAppleLogo = styled(AppleAppStoreIcon)({
-  width: '1.1em',
-  marginRight: '0.75em',
-  marginTop: '-0.2em',
-  fill: 'currentColor',
-  verticalAlign: 'middle',
-})
 
 const GooglePlayLogo = styled(GooglePlayStoreIcon)({
   width: 36,
   fill: colorsV3.white,
 })
-const InlinePlayLogo = InlineAppleLogo.withComponent(GooglePlayStoreIcon)
 
 const DownloadImage = styled('img')({
   marginBottom: '30px',
@@ -123,17 +111,31 @@ const Paragraph = styled('div')({
   },
 })
 
-const ButtonWrapper = styled('div')({
-  paddingTop: '3vh',
-})
+export const DownloadApp: React.FC = () => {
+  const textKeys = useTextKeys()
 
-const RealLinkButton = LinkButton.withComponent('a')
-
-export const DownloadApp: React.FC = ({ children }) => {
   return (
     <>
       <InnerWrapper>
-        <TextColumn>{children}</TextColumn>
+        <TextColumn>
+          <Heading>
+            {textKeys.ONBOARDING_DOWNLOAD_PRE_HEADLINE() +
+              ' ' +
+              textKeys.ONBOARDING_DOWNLOAD_HEADLINE()}
+          </Heading>
+          <TextSubColumn>
+            <Paragraph>{textKeys.ONBOARDING_DOWNLOAD_BODY()}</Paragraph>
+
+            <LogoWrapper>
+              <a href={APPLE_APP_STORE_LINK}>
+                <AppleLogo />
+              </a>
+              <a href={GOOGLE_PLAY_LINK}>
+                <GooglePlayLogo />
+              </a>
+            </LogoWrapper>
+          </TextSubColumn>
+        </TextColumn>
         <ImageColumn>
           <DownloadImage
             src={'/new-member-assets/download/welcome-illustration.svg'}
@@ -142,95 +144,4 @@ export const DownloadApp: React.FC = ({ children }) => {
       </InnerWrapper>
     </>
   )
-}
-
-export const DownloadAppRegular: React.FC = () => {
-  const textKeys = useTextKeys()
-
-  return (
-    <DownloadApp>
-      <Heading>
-        {textKeys.ONBOARDING_DOWNLOAD_PRE_HEADLINE() +
-          ' ' +
-          textKeys.ONBOARDING_DOWNLOAD_HEADLINE()}
-      </Heading>
-      <TextSubColumn>
-        <Paragraph>{textKeys.ONBOARDING_DOWNLOAD_BODY()}</Paragraph>
-
-        <LogoWrapper>
-          <a href={APPLE_APP_STORE_LINK}>
-            <AppleLogo />
-          </a>
-          <a href={GOOGLE_PLAY_LINK}>
-            <GooglePlayLogo />
-          </a>
-        </LogoWrapper>
-      </TextSubColumn>
-    </DownloadApp>
-  )
-}
-
-export const DownloadAppHedvigForeverMember: React.FC = () => {
-  const textKeys = useTextKeys()
-  const member = useMemberQuery()
-
-  if (!member.data?.member?.firstName) {
-    return <LoadingPage loading />
-  }
-
-  const isMobileOrTablet = isMobile({ tablet: true })
-  return (
-    <DownloadApp>
-      <Heading>
-        {textKeys.FOREVER_DOWNLOAD_HEADING({
-          FIRST_NAME: member.data?.member?.firstName,
-        })}
-      </Heading>
-      <Paragraph>{textKeys.FOREVER_DOWNLOAD_PARAGRAPH()}</Paragraph>
-      <ButtonWrapper>
-        {isMobileOrTablet && getIsAppleDevice() && (
-          <RealLinkButton
-            href={APPLE_APP_STORE_LINK}
-            foreground={colorsV3.gray900}
-            background={colorsV3.purple500}
-            fullWidth
-          >
-            <InlineAppleLogo />
-            {textKeys.FOREVER_DOWNLOAD_DOWNLOAD_APP_CTA()}
-          </RealLinkButton>
-        )}
-        {isMobileOrTablet && !getIsAppleDevice() && (
-          <RealLinkButton
-            href={GOOGLE_PLAY_LINK}
-            foreground={colorsV3.gray900}
-            background={colorsV3.purple500}
-            fullWidth
-          >
-            <InlinePlayLogo />
-            {textKeys.FOREVER_DOWNLOAD_DOWNLOAD_APP_CTA()}
-          </RealLinkButton>
-        )}
-        {!isMobileOrTablet && (
-          <LogoWrapper>
-            <a href={APPLE_APP_STORE_LINK}>
-              <AppleLogo />
-            </a>
-            <a href={GOOGLE_PLAY_LINK}>
-              <GooglePlayLogo />
-            </a>
-          </LogoWrapper>
-        )}
-      </ButtonWrapper>
-    </DownloadApp>
-  )
-}
-
-const getIsAppleDevice = () => {
-  let isAppleDevice = false
-  if (typeof window !== 'undefined') {
-    const { userAgent } = window.navigator
-    isAppleDevice = userAgent.includes('iPhone') || userAgent.includes('iPad')
-  }
-
-  return isAppleDevice
 }
