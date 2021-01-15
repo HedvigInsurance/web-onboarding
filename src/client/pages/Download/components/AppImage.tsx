@@ -2,11 +2,14 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 
-const Image = styled.img`
-  width: 560px;
+type Props = {
+  width: number
+}
+
+const Image = styled.img<Props>`
+  width: ${({ width }) => width}px;
   max-width: 100%;
   height: auto;
-  flex-shrink: 0;
 `
 
 const getImageSrc = (currentLocale: string) => {
@@ -23,10 +26,10 @@ const getImageSrc = (currentLocale: string) => {
   }
 }
 
-export const AppImage: React.FC = () => {
+export const AppImage: React.FC<Props> = ({ width }) => {
   const currentLocale = useCurrentLocale()
 
   const imageSrc = getImageSrc(currentLocale)
 
-  return <Image src={imageSrc} />
+  return <Image width={width} src={imageSrc} />
 }

@@ -12,6 +12,8 @@ const GOOGLE_PLAY_LINK =
   'https://play.google.com/store/apps/details?id=com.hedvig.app'
 const APPLE_APP_STORE_LINK = 'https://apps.apple.com/app/hedvig/id1303668531'
 
+const IMAGE_WIDTH = 560
+
 const Page = styled.div`
   background: ${colorsV3.gray900};
   max-width: 100vw;
@@ -23,7 +25,7 @@ const Page = styled.div`
 
 const ContentContainer = styled.div`
   width: 100%;
-  max-width: 560px;
+  max-width: ${IMAGE_WIDTH}px;
   padding-top: 2rem;
   display: flex;
   flex-direction: column;
@@ -39,8 +41,6 @@ const ContentContainer = styled.div`
 `
 
 const TextSection = styled.div`
-  max-width: 560px;
-
   ${LARGE_SCREEN_MEDIA_QUERY} {
     max-width: 30rem;
     padding-right: 3rem;
@@ -107,7 +107,7 @@ export const DownloadApp: React.FC = () => {
                 textKeys.ONBOARDING_DOWNLOAD_HEADLINE()}
             </Heading>
           </TextSection>
-          {!isLargeScreen && <AppImage />}
+          {!isLargeScreen && <AppImage width={IMAGE_WIDTH} />}
           <TextSection>
             <Text>{textKeys.ONBOARDING_DOWNLOAD_BODY()}</Text>
             <LogoWrapper>
@@ -120,7 +120,7 @@ export const DownloadApp: React.FC = () => {
             </LogoWrapper>
           </TextSection>
         </div>
-        {isLargeScreen && <AppImage />}
+        {isLargeScreen && <AppImage width={IMAGE_WIDTH} />}
       </ContentContainer>
     </Page>
   )
