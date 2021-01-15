@@ -1,0 +1,3 @@
+query SignMethodForQuotes($input: [ID!]!) {
+  signMethodForQuotes(input: $input)
+}

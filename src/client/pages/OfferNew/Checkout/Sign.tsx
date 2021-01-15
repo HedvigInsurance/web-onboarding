@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { useMediaQuery } from 'react-responsive'
 import { Button } from 'components/buttons'
 import { Spinner } from 'components/utils'
-import { SignStatus as GraphQLSignStatus } from 'data/graphql'
+import { SignMethod, SignStatus as GraphQLSignStatus } from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
 import { SignStatus } from './SignStatus'
 
@@ -38,6 +38,7 @@ const SpinnerWrapper = styled(motion.div)`
 `
 
 interface Props {
+  signMethod?: SignMethod
   signUiState: SignUiState
   signStatus: GraphQLSignStatus | null
   isLoading: boolean
@@ -46,6 +47,7 @@ interface Props {
 }
 
 export const Sign: React.FC<Props> = ({
+  signMethod,
   signUiState,
   signStatus,
   isLoading,
@@ -54,6 +56,10 @@ export const Sign: React.FC<Props> = ({
 }) => {
   const isDesktop = useMediaQuery({ minWidth: DESKTOP_BREAKPOINT })
   const textKeys = useTextKeys()
+  const signButtonText =
+    signMethod === SignMethod.SimpleSign
+      ? textKeys.CHECKOUT_SIMPLE_SIGN_BUTTON_TEXT()
+      : textKeys.CHECKOUT_SIGN_BUTTON_TEXT()
 
   return (
     <Wrapper isDesktop={isDesktop}>
@@ -65,7 +71,7 @@ export const Sign: React.FC<Props> = ({
         background={colorsV3.purple500}
         disabled={!canInitiateSign}
       >
-        {isLoading ? (
+        {isLoading || !signMethod ? (
           <SpinnerWrapper
             initial={{ width: 0, opacity: 0 }}
             animate={{ width: 'auto', opacity: 1 }}
@@ -73,7 +79,7 @@ export const Sign: React.FC<Props> = ({
             <Spinner />
           </SpinnerWrapper>
         ) : (
-          textKeys.CHECKOUT_SIGN_BUTTON_TEXT()
+          signButtonText
         )}
       </Button>
       {signUiState !== 'NOT_STARTED' && (

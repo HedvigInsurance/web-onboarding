@@ -249,5 +249,6 @@
   "ONBOARDING_CONNECT_DD_INSTRUCTIONS_DOWNLOAD_APP": "Download the Hedvig app",
   "ONBOARDING_DOWNLOAD_PARAGRAPH_ONE": "Everything related to your insurance, your coverage and your claims is handled through the Hedvig app.",
   "ONBOARDING_DOWNLOAD_PARAGRAPH_TWO": "Record your claim, chat with our service team, and get unlimited help every day until 10 p.m.",
-  "ONBOARDING_DOWNLOAD_BODY": ""
+  "ONBOARDING_DOWNLOAD_BODY": "",
+  "CHECKOUT_SIMPLE_SIGN_BUTTON_TEXT": "Get Hedvig"
 }
