@@ -5,12 +5,8 @@ import { useTextKeys } from 'utils/textKeys'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { useBreakpoint } from 'utils/hooks/useBreakpoint'
 import { TOP_BAR_HEIGHT } from 'components/TopBar'
-import { AppleAppStoreIcon, GooglePlayStoreIcon } from './appStoreIcons'
+import { DownloadAppButtons } from './DownloadAppButtons'
 import { AppImage } from './AppImage'
-
-const GOOGLE_PLAY_LINK =
-  'https://play.google.com/store/apps/details?id=com.hedvig.app'
-const APPLE_APP_STORE_LINK = 'https://apps.apple.com/app/hedvig/id1303668531'
 
 const IMAGE_WIDTH = 560
 
@@ -44,20 +40,6 @@ const TextSection = styled.div`
   ${LARGE_SCREEN_MEDIA_QUERY} {
     max-width: 30rem;
     padding-right: 3rem;
-  }
-`
-
-const LogoWrapper = styled.div`
-  width: 8rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-`
-
-const DownloadLink = styled.a`
-  svg {
-    width: 36px;
-    fill: ${colorsV3.white};
   }
 `
 
@@ -110,14 +92,7 @@ export const DownloadApp: React.FC = () => {
           {!isLargeScreen && <AppImage width={IMAGE_WIDTH} />}
           <TextSection>
             <Text>{textKeys.ONBOARDING_DOWNLOAD_BODY()}</Text>
-            <LogoWrapper>
-              <DownloadLink href={APPLE_APP_STORE_LINK}>
-                <AppleAppStoreIcon />
-              </DownloadLink>
-              <DownloadLink href={GOOGLE_PLAY_LINK}>
-                <GooglePlayStoreIcon />
-              </DownloadLink>
-            </LogoWrapper>
+            <DownloadAppButtons />
           </TextSection>
         </div>
         {isLargeScreen && <AppImage width={IMAGE_WIDTH} />}
