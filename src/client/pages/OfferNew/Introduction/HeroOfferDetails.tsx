@@ -16,11 +16,11 @@ type QuoteWithStreet = {
 }
 
 const Container = styled.div`
-  padding: 2rem 0;
+  padding: 2rem 0 1rem;
   color: ${colorsV3.white};
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
-    padding: 0;
+    padding-top: 0;
   }
 `
 

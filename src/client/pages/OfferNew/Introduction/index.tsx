@@ -4,8 +4,10 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { Section } from 'pages/OfferNew/components'
 import { OfferData } from 'pages/OfferNew/types'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import { isBundle } from '../utils'
 import { HeroOfferDetails } from './HeroOfferDetails'
 import { Sidebar } from './Sidebar'
+import { ExternalInsuranceProvider } from './ExternalInsuranceProvider'
 
 type Props = {
   offerData: OfferData
@@ -59,6 +61,10 @@ const HeroContentWrapper = styled.div`
   }
 `
 
+const HeroOfferDetailsContainer = styled.div`
+  width: 100%;
+`
+
 const ContentContainer = styled.div`
   width: 100%;
   padding: 0 1rem;
@@ -80,6 +86,9 @@ export const Introduction: React.FC<Props> = ({
 }) => {
   const [hasHeroImageLoaded, setHasHeroImageLoaded] = useState(false)
 
+  const hasDataCollection =
+    !isBundle(offerData) && !!offerData.quotes[0].dataCollectionId
+
   return (
     <Section>
       <Hero>
@@ -97,7 +106,15 @@ export const Introduction: React.FC<Props> = ({
         </HeroImageWrapper>
         <HeroContentWrapper>
           <ContentContainer>
-            <HeroOfferDetails offerData={offerData} />
+            <HeroOfferDetailsContainer>
+              <HeroOfferDetails offerData={offerData} />
+              {hasDataCollection && (
+                <ExternalInsuranceProvider
+                  dataCollectionId={offerData.quotes[0].dataCollectionId || ''}
+                  offerData={offerData}
+                />
+              )}
+            </HeroOfferDetailsContainer>
             <Sidebar
               offerData={offerData}
               refetchOfferData={refetch}
