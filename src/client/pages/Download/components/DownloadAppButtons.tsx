@@ -1,35 +1,33 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { AppleAppStoreIcon, GooglePlayStoreIcon } from './appStoreIcons'
+import { GooglePlayIcon } from './GooglePlayIcon'
+import { AppStoreIcon } from './AppStoreIcon'
 
-const GOOGLE_PLAY_LINK =
-  'https://play.google.com/store/apps/details?id=com.hedvig.app'
-const APPLE_APP_STORE_LINK = 'https://apps.apple.com/app/hedvig/id1303668531'
+const hrefs = {
+  google: 'https://play.google.com/store/apps/details?id=com.hedvig.app',
+  apple: 'https://apps.apple.com/app/hedvig/id1303668531',
+}
 
-const LogoWrapper = styled.div`
-  width: 8rem;
+const ICON_COLOR = colorsV3.white
+const ICON_WIDTH = 120
+
+const LogoContainer = styled.div`
+  width: 18rem;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
 `
 
-const DownloadLink = styled.a`
-  svg {
-    width: 36px;
-    fill: ${colorsV3.white};
-  }
-`
-
 export const DownloadAppButtons = () => {
   return (
-    <LogoWrapper>
-      <DownloadLink href={APPLE_APP_STORE_LINK}>
-        <AppleAppStoreIcon />
-      </DownloadLink>
-      <DownloadLink href={GOOGLE_PLAY_LINK}>
-        <GooglePlayStoreIcon />
-      </DownloadLink>
-    </LogoWrapper>
+    <LogoContainer>
+      <a href={hrefs.google}>
+        <GooglePlayIcon color={ICON_COLOR} width={ICON_WIDTH} />
+      </a>
+      <a href={hrefs.apple}>
+        <AppStoreIcon color={ICON_COLOR} width={ICON_WIDTH} />
+      </a>
+    </LogoContainer>
   )
 }
