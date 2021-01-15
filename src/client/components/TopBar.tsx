@@ -6,6 +6,7 @@ import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { CurrentLocale } from './utils/CurrentLocale'
 
 export const TOP_BAR_Z_INDEX = 1000
+export const TOP_BAR_HEIGHT = '4.5rem'
 
 interface Props {
   isTransparent?: boolean
@@ -15,7 +16,7 @@ interface Props {
 const Wrapper = styled.div`
   width: 100%;
   top: 0;
-  height: 4.5rem;
+  height: ${TOP_BAR_HEIGHT};
   background: ${colorsV3.gray900};
   position: absolute;
   z-index: ${TOP_BAR_Z_INDEX};

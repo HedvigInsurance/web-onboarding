@@ -2,143 +2,108 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { useTextKeys } from 'utils/textKeys'
+import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import { useBreakpoint } from 'utils/hooks/useBreakpoint'
+import { TOP_BAR_HEIGHT } from 'components/TopBar'
 import { AppleAppStoreIcon, GooglePlayStoreIcon } from './appStoreIcons'
-
-const SITE_WRAPPER = 1300
-const TABLET_BP = 800
-const MOBILE_BP = 450
+import { AppImage } from './AppImage'
 
 const GOOGLE_PLAY_LINK =
   'https://play.google.com/store/apps/details?id=com.hedvig.app'
 const APPLE_APP_STORE_LINK = 'https://apps.apple.com/app/hedvig/id1303668531'
 
-const InnerWrapper = styled('div')({
-  display: 'flex',
-  flexFlow: 'row wrap',
-  alignItems: 'center',
-  justifyContent: 'center',
-  maxWidth: SITE_WRAPPER,
-  minHeight: '100vh',
-  margin: 'auto',
-  paddingLeft: '10px',
-  paddingRight: '10px',
-  backgroundColor: colorsV3.gray900,
-  [`@media (max-width: ${TABLET_BP}px)`]: {
-    maxWidth: '100%',
-    flexDirection: 'column-reverse',
-    paddingTop: 'calc(64px + 1vh)',
-  },
-})
+const Page = styled.div`
+  background: ${colorsV3.gray900};
+  max-width: 100vw;
+  min-height: 100vh;
+  padding: ${TOP_BAR_HEIGHT} 2rem;
+  display: flex;
+  justify-content: center;
+`
 
-const TextColumn = styled('div')({
-  width: '60%',
-  paddingRight: 20,
-  paddingLeft: 20,
-  paddingBottom: 40,
+const ContentContainer = styled.div`
+  width: 100%;
+  padding-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-  [`@media (max-width: ${TABLET_BP}px)`]: {
-    width: '100%',
-    textAlign: 'center',
-  },
-})
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    max-width: 72rem;
+    padding-top: 5rem;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+`
 
-const TextSubColumn = styled('div')({
-  width: '65%',
-  [`@media (max-width: ${TABLET_BP}px)`]: {
-    width: '100%',
-  },
-})
+const TextSection = styled.div`
+  max-width: 29rem;
 
-const ImageColumn = styled('div')({
-  width: '40%',
-  paddingRight: 20,
-  paddingLeft: 20,
-  paddingBottom: 40,
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    padding-right: 2rem;
+  }
+`
 
-  [`@media (max-width: ${TABLET_BP}px)`]: {
-    width: '100%',
-    textAlign: 'center',
-  },
-})
+const LogoWrapper = styled.div`
+  width: 8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+`
 
-const LogoWrapper = styled('div')({
-  display: 'flex',
-  alignItems: 'center',
-  [`@media (max-width: ${TABLET_BP}px)`]: {
-    justifyContent: 'center',
-  },
-})
+const DownloadLink = styled.a`
+  svg {
+    width: 36px;
+    fill: ${colorsV3.white};
+  }
+`
 
-const AppleLogo = styled(AppleAppStoreIcon)({
-  width: 36,
-  marginRight: 24,
-  fill: colorsV3.white,
-})
+const Heading = styled.h1`
+  margin: 0;
+  padding-bottom: 3rem;
+  font-size: 1.75 rem;
+  line-height: 1.2;
+  color: ${colorsV3.gray100};
+`
 
-const GooglePlayLogo = styled(GooglePlayStoreIcon)({
-  width: 36,
-  fill: colorsV3.white,
-})
-
-const DownloadImage = styled('img')({
-  marginBottom: '30px',
-  marginTop: '30px',
-  marginLeft: 'auto',
-  width: '100%',
-  [`@media (max-width: ${TABLET_BP}px)`]: {
-    marginRight: 'auto',
-    width: '80%',
-  },
-})
-
-const Heading = styled('h1')({
-  marginTop: '0px',
-  marginBottom: '30px',
-  fontSize: '1.75 rem',
-  lineHeight: 1.2,
-  color: colorsV3.gray100,
-})
-
-const Paragraph = styled('div')({
-  marginBottom: 45,
-  color: colorsV3.gray100,
-  opacity: 0.65,
-  [`@media (max-width: ${MOBILE_BP}px)`]: {
-    marginBottom: 25,
-  },
-})
+const Text = styled.div`
+  padding: 3rem 0;
+  color: ${colorsV3.gray100};
+  opacity: 0.65;
+`
 
 export const DownloadApp: React.FC = () => {
   const textKeys = useTextKeys()
 
-  return (
-    <>
-      <InnerWrapper>
-        <TextColumn>
-          <Heading>
-            {textKeys.ONBOARDING_DOWNLOAD_PRE_HEADLINE() +
-              ' ' +
-              textKeys.ONBOARDING_DOWNLOAD_HEADLINE()}
-          </Heading>
-          <TextSubColumn>
-            <Paragraph>{textKeys.ONBOARDING_DOWNLOAD_BODY()}</Paragraph>
+  const { isLargeScreen } = useBreakpoint()
 
+  return (
+    <Page>
+      <ContentContainer>
+        <div>
+          <TextSection>
+            <Heading>
+              {textKeys.ONBOARDING_DOWNLOAD_PRE_HEADLINE() +
+                ' ' +
+                textKeys.ONBOARDING_DOWNLOAD_HEADLINE()}
+            </Heading>
+          </TextSection>
+          {!isLargeScreen && <AppImage />}
+          <TextSection>
+            <Text>{textKeys.ONBOARDING_DOWNLOAD_BODY()}</Text>
             <LogoWrapper>
-              <a href={APPLE_APP_STORE_LINK}>
-                <AppleLogo />
-              </a>
-              <a href={GOOGLE_PLAY_LINK}>
-                <GooglePlayLogo />
-              </a>
+              <DownloadLink href={APPLE_APP_STORE_LINK}>
+                <AppleAppStoreIcon />
+              </DownloadLink>
+              <DownloadLink href={GOOGLE_PLAY_LINK}>
+                <GooglePlayStoreIcon />
+              </DownloadLink>
             </LogoWrapper>
-          </TextSubColumn>
-        </TextColumn>
-        <ImageColumn>
-          <DownloadImage
-            src={'/new-member-assets/download/welcome-illustration.svg'}
-          />
-        </ImageColumn>
-      </InnerWrapper>
-    </>
+          </TextSection>
+        </div>
+        {isLargeScreen && <AppImage />}
+      </ContentContainer>
+    </Page>
   )
 }
