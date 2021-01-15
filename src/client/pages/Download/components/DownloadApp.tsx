@@ -62,7 +62,7 @@ const Heading = styled.h1`
 
 const Text = styled.div`
   max-width: 48ch;
-  padding: 3rem 0;
+  padding: 2rem 0;
   color: ${colorsV3.gray100};
   opacity: 0.65;
 

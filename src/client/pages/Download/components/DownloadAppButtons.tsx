@@ -1,33 +1,73 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { GooglePlayIcon } from './GooglePlayIcon'
 import { AppStoreIcon } from './AppStoreIcon'
 
-const hrefs = {
-  google: 'https://play.google.com/store/apps/details?id=com.hedvig.app',
-  apple: 'https://apps.apple.com/app/hedvig/id1303668531',
+const ICON_COLOR = colorsV3.white
+
+type ButtonData = {
+  url: string
+  iconComponent: React.ReactNode
 }
 
-const ICON_COLOR = colorsV3.white
-const ICON_WIDTH = 120
+const buttonData: ButtonData[] = [
+  {
+    url: 'https://play.google.com/store/apps/details?id=com.hedvig.app',
+    iconComponent: <GooglePlayIcon />,
+  },
+  {
+    url: 'https://apps.apple.com/app/hedvig/id1303668531',
+    iconComponent: <AppStoreIcon />,
+  },
+]
 
-const LogoContainer = styled.div`
-  width: 18rem;
+const ButtonContainer = styled.div`
+  width: 100%;
+  max-width: 23rem;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+  flex-wrap: wrap;
+`
+
+const AnchorLinkButton = styled.a`
+  padding: 8px 24px;
+  margin: 8px 0;
+  border: 1px solid ${ICON_COLOR};
+  border-radius: 8px;
+  display: inline-flex;
+  justify-content: center;
+  color: ${ICON_COLOR};
+  transition: 0.15s ease-in-out;
+
+  svg {
+    width: 100px;
+  }
+
+  :hover {
+    background: ${ICON_COLOR};
+    color: ${colorsV3.gray900};
+  }
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    padding: 8px 24px;
+
+    svg {
+      width: 120px;
+    }
+  }
 `
 
 export const DownloadAppButtons = () => {
   return (
-    <LogoContainer>
-      <a href={hrefs.google}>
-        <GooglePlayIcon color={ICON_COLOR} width={ICON_WIDTH} />
-      </a>
-      <a href={hrefs.apple}>
-        <AppStoreIcon color={ICON_COLOR} width={ICON_WIDTH} />
-      </a>
-    </LogoContainer>
+    <ButtonContainer>
+      {buttonData.map(({ url, iconComponent }) => (
+        <AnchorLinkButton key={url} href={url}>
+          {iconComponent}
+        </AnchorLinkButton>
+      ))}
+    </ButtonContainer>
   )
 }
