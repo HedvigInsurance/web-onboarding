@@ -16,13 +16,14 @@ const Page = styled.div`
   background: ${colorsV3.gray900};
   max-width: 100vw;
   min-height: 100vh;
-  padding: ${TOP_BAR_HEIGHT} 2rem;
+  padding: ${TOP_BAR_HEIGHT} 2rem 8rem;
   display: flex;
   justify-content: center;
 `
 
 const ContentContainer = styled.div`
   width: 100%;
+  max-width: 560px;
   padding-top: 2rem;
   display: flex;
   flex-direction: column;
@@ -38,10 +39,11 @@ const ContentContainer = styled.div`
 `
 
 const TextSection = styled.div`
-  max-width: 29rem;
+  max-width: 560px;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
-    padding-right: 2rem;
+    max-width: 30rem;
+    padding-right: 3rem;
   }
 `
 
@@ -61,16 +63,32 @@ const DownloadLink = styled.a`
 
 const Heading = styled.h1`
   margin: 0;
-  padding-bottom: 3rem;
+  width: 100%;
+  padding-bottom: 2rem;
   font-size: 1.75 rem;
-  line-height: 1.2;
+  line-height: 40px;
+  text-align: center;
   color: ${colorsV3.gray100};
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    padding: 0;
+    font-size: 3rem;
+    line-height: 56px;
+    text-align: left;
+  }
 `
 
 const Text = styled.div`
+  max-width: 48ch;
   padding: 3rem 0;
   color: ${colorsV3.gray100};
   opacity: 0.65;
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    padding: 3rem 0 4rem;
+    font-size: 1.5rem;
+    line-height: 32px;
+  }
 `
 
 export const DownloadApp: React.FC = () => {
