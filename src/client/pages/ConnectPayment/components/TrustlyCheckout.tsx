@@ -1,11 +1,17 @@
 import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
+import { useMediaQuery } from 'react-responsive'
+import styled from '@emotion/styled'
 import { Button } from 'components/buttons'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
+import { MS_BP } from 'utils/mediaQueries'
 import { useRegisterDirectDebitMutation } from '../containers/RegisterDirectDebitMutation'
 import { TrustlyModal } from './TrustlyModal'
 
+const ButtonWrapper = styled.div`
+  margin-top: 3rem;
+`
 interface Props {
   onSuccess?: () => void
 }
@@ -16,6 +22,7 @@ export const TrustlyCheckout: React.FC<Props> = ({ onSuccess }) => {
   const [trustlyUrl, setTrustlyUrl] = React.useState<string | null>(null)
   const currentLocale = useCurrentLocale()
   const [createTrustlyUrlMutation] = useRegisterDirectDebitMutation()
+  const isMobile = useMediaQuery({ maxWidth: MS_BP })
 
   const generateTrustlyUrl = async () => {
     const baseUrl = `${window.location.origin}/${currentLocale}/new-member/connect-payment`
@@ -41,8 +48,9 @@ export const TrustlyCheckout: React.FC<Props> = ({ onSuccess }) => {
   }
 
   return (
-    <>
+    <ButtonWrapper>
       <Button
+        fullWidth={isMobile}
         background={colorsV3.purple500}
         foreground={colorsV3.gray900}
         onClick={async () => {
@@ -66,6 +74,6 @@ export const TrustlyCheckout: React.FC<Props> = ({ onSuccess }) => {
         generateTrustlyUrl={generateTrustlyUrl}
         onSuccess={onSuccess}
       />
-    </>
+    </ButtonWrapper>
   )
 }
