@@ -25,7 +25,7 @@ const Wrapper = styled('div')`
   position: relative;
 
   @media (min-width: 801px) {
-    width: 62%;
+    width: 65%;
   }
 
   .adyen-checkout__payment-method__header {
@@ -72,7 +72,7 @@ const Wrapper = styled('div')`
     border: 1px solid ${colorsV3.gray500};
     padding: 1rem;
     height: 4rem;
-    border-radius: 0px;
+    border-radius: 0;
 
     &:focus {
       border: 1px solid ${colorsV3.gray300};

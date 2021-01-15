@@ -31,15 +31,13 @@ const InnerWrapper = styled.div`
   margin: 0 auto;
   flex-direction: row;
   align-items: flex-start;
-  max-width: ${SITEWRAPPER};
+  max-width: ${SITEWRAPPER}px;
   padding-left: 2rem;
   padding-right: 2rem;
   padding-top: 7.25rem;
-  color: ${colorsV3.gray500};
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     padding-left: 1rem;
     padding-right: 1rem;
-    max-width: 100%;
     padding-top: 6.75rem;
     flex-direction: column-reverse;
     width: 100%;
@@ -70,7 +68,6 @@ const Header = styled.h1`
   margin-top: 0;
   margin-bottom: 2.25rem;
   font-size: 3rem;
-  line-height: 3.75rem;
   color: ${colorsV3.white};
   ${MOBILE_SCREEN_MEDIA_QUERY} {
     text-align: center;
@@ -115,9 +112,7 @@ const InstructionWrapper = styled(ConnectText)`
 `
 
 const ConnectPaymentImage = styled.img`
-  margin-left: auto;
   width: 80%;
-  margin-right: auto;
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     width: 40%;
     margin-bottom: 2rem;
