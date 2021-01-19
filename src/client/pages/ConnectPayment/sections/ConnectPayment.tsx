@@ -64,16 +64,17 @@ const ImageColumn = styled.div`
 }
 `
 
-const Header = styled.h1`
+const Heading = styled.h1`
   margin-top: 0;
   margin-bottom: 2.25rem;
   font-size: 3rem;
+  line-height: 3.5rem;
   color: ${colorsV3.white};
   ${MOBILE_SCREEN_MEDIA_QUERY} {
     text-align: center;
     margin-bottom: 2rem;
     font-size: 2rem;
-    line-height: 2rem;
+    line-height: 2.5rem;
   }
 `
 
@@ -152,14 +153,14 @@ export const ConnectPaymentPage: React.FC = () => {
       <Background />
       <InnerWrapper>
         <TextColumn>
-          <Header>
+          <Heading>
             <HeaderPart>
               {textKeys.ONBOARDING_CONNECT_DD_PRE_HEADLINE()}
             </HeaderPart>
             <HeaderPart addWhiteSpace>
               {textKeys.ONBOARDING_CONNECT_DD_HEADLINE()}
             </HeaderPart>
-          </Header>
+          </Heading>
           <ConnectText>{textKeys.ONBOARDING_CONNECT_DD_BODY()}</ConnectText>
           <InstructionWrapper>
             <InstructionsList>
