@@ -23,16 +23,20 @@ const HERO_HEIGHT = '400px'
 
 const Hero = styled.div`
   width: 100%;
-  height: ${HERO_HEIGHT};
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: ${colorsV3.gray100};
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    height: ${HERO_HEIGHT};
+  }
 `
 
 const HeroImageWrapper = styled.div`
   width: 100vw;
   height: ${HERO_HEIGHT};
-  background: ${colorsV3.gray900};
+  background-color: ${colorsV3.gray900};
   overflow: hidden;
   position: absolute;
 `
@@ -53,7 +57,7 @@ const HeroImage = styled.img<HeroImageProps>`
 const HeroContentWrapper = styled.div`
   width: 100%;
   max-width: 80rem;
-  position: absolute;
+  position: relative;
   padding-top: 3rem;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {

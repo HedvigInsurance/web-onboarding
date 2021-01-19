@@ -3,11 +3,8 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { externalInsuranceProviders } from '@hedviginsurance/embark'
 import React from 'react'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
-import { useTextKeys } from 'utils/textKeys'
 import { InsuranceCost, InsuranceDataCollection } from 'data/graphql'
 import { Price } from '../../components'
-
-import { hedvigCompany, otherCompanies } from '../../Compare/mock'
 
 const Wrapper = styled.div`
   display: flex;
@@ -49,20 +46,10 @@ const CompareBoxTitle = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 0.25rem;
 `
 
 const Spacer = styled.div`
   width: 1.25rem;
-`
-
-const TrustpilotScoreWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-`
-
-const TrustpilotScoreName = styled.span`
-  color: ${colorsV3.gray500};
 `
 
 interface Props {
@@ -71,15 +58,11 @@ interface Props {
 }
 
 export const Compare: React.FC<Props> = ({ insuranceDataCollection, cost }) => {
-  const textKeys = useTextKeys()
   const externalInsuranceProvider = externalInsuranceProviders.find(
     (provider: { externalCollectionId?: string }) =>
       provider.externalCollectionId ===
       insuranceDataCollection.insuranceProvider?.toUpperCase(),
   )
-  const externalTrustpilotScore = otherCompanies.find(
-    (company) => externalInsuranceProvider?.id === company.id,
-  )?.trustpilotScore
 
   return (
     <Wrapper>
@@ -93,16 +76,6 @@ export const Compare: React.FC<Props> = ({ insuranceDataCollection, cost }) => {
             monthlyNet={cost.monthlyNet}
           />
         </CompareBoxTitle>
-        <TrustpilotScoreWrapper>
-          <TrustpilotScoreName>
-            {textKeys.EXTERNAL_PROVIDER_TRUSTPILOT_SCORE()}
-          </TrustpilotScoreName>
-          <span>
-            {textKeys.EXTERNAL_PROVIDER_TRUSTPILOT_SCORE_VALUE({
-              value: hedvigCompany.trustpilotScore,
-            })}
-          </span>
-        </TrustpilotScoreWrapper>
       </CompareBox>
       <Spacer />
       <CompareBox isExternalProvider>
@@ -124,16 +97,6 @@ export const Compare: React.FC<Props> = ({ insuranceDataCollection, cost }) => {
             }
           />
         </CompareBoxTitle>
-        <TrustpilotScoreWrapper>
-          <TrustpilotScoreName>
-            {textKeys.EXTERNAL_PROVIDER_TRUSTPILOT_SCORE()}
-          </TrustpilotScoreName>
-          <span>
-            {textKeys.EXTERNAL_PROVIDER_TRUSTPILOT_SCORE_VALUE({
-              value: externalTrustpilotScore,
-            })}
-          </span>
-        </TrustpilotScoreWrapper>
       </CompareBox>
     </Wrapper>
   )
