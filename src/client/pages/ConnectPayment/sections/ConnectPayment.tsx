@@ -13,8 +13,6 @@ import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { AVYWindow } from 'utils/tracking/signing'
 import { ErrorModal } from '../components/ErrorModal'
 
-const SITEWRAPPER = 1300
-
 const Background = styled.div`
   position: fixed;
   top: 0;
@@ -27,54 +25,56 @@ const Background = styled.div`
 
 const InnerWrapper = styled.div`
   display: flex;
-  width: 80%;
-  margin: 0 auto;
-  flex-direction: row;
+  flex-direction: column-reverse;
   align-items: flex-start;
-  max-width: ${SITEWRAPPER}px;
-  padding-left: 2rem;
-  padding-right: 2rem;
-  padding-top: 7.25rem;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 6.75rem;
+
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-top: 6.75rem;
-    flex-direction: column-reverse;
-    width: 100%;
+    flex-direction: row;
+
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-top: 7.25rem;
   }
 `
 
 const TextColumn = styled.div`
-  width: 60%;
   padding-bottom: 2.5rem;
+
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
-    width: 100%;
+    width: 60%;
   }
 `
 
 const ImageColumn = styled.div`
-  width: 40%;
+  display: flex;
+  justify-content: center;
   margin-top: 0.5rem;
-  padding-left: 2rem;
+
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
-    width: 100%;
-    padding: 0;
-    text-align: center;
-  },
-}
+    justify-content: flex-start;
+    width: 40%;
+    padding-left: 2rem;
+  }
 `
 
 const Heading = styled.h1`
   margin-top: 0;
-  margin-bottom: 2.25rem;
-  font-size: 3rem;
-  line-height: 3.5rem;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  line-height: 2.5rem;
+  text-align: center;
   color: ${colorsV3.white};
+
   ${MOBILE_SCREEN_MEDIA_QUERY} {
-    text-align: center;
-    margin-bottom: 2rem;
-    font-size: 2rem;
-    line-height: 2.5rem;
+    text-align: left;
+    margin-bottom: 2.25rem;
+    font-size: 3rem;
+    line-height: 3.5rem;
   }
 `
 
@@ -82,29 +82,30 @@ type HeaderPartProps = {
   addWhiteSpace?: boolean
 }
 const HeaderPart = styled.span<HeaderPartProps>`
-  display: block;
   font-family: ${fonts.FAVORIT};
   font-weight: 400;
+  ${(props) =>
+    props.addWhiteSpace &&
+    `
+        margin-left: 0.375rem;
+      `}
 
   ${MOBILE_SCREEN_MEDIA_QUERY} {
-    display: initial;
-    ${(props) =>
-      props.addWhiteSpace &&
-      `
-      :before {
-        content:'\\00a0';
-      }`}
+    display: block;
+    margin-left: 0;
+  }
 `
 const ConnectText = styled.div`
-  width: 65%;
   margin-bottom: 1rem;
-  font-size: 1.25rem;
+  font-size: 1rem;
   color: ${colorsV3.white};
-  ${MEDIUM_SCREEN_MEDIA_QUERY} {
-    width: 100%;
-  }
+
   ${MOBILE_SCREEN_MEDIA_QUERY} {
-    font-size: 1rem;
+    font-size: 1.25rem;
+  }
+
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
+    width: 65%;
   }
 `
 const InstructionWrapper = styled(ConnectText)`
@@ -113,10 +114,12 @@ const InstructionWrapper = styled(ConnectText)`
 `
 
 const ConnectPaymentImage = styled.img`
-  width: 80%;
+  display: block;
+  width: 40%;
+  margin-bottom: 2rem;
+
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
-    width: 40%;
-    margin-bottom: 2rem;
+    width: 80%;
   }
 `
 
@@ -127,7 +130,7 @@ const InstructionsList = styled.ol`
 `
 const InstructionItem = styled.li`
   counter-increment: styled-number;
-  :: before {
+  :before {
     content: counter(styled-number) '. ';
   }
 `
