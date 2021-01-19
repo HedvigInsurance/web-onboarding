@@ -69,8 +69,8 @@ const Heading = styled.h1`
   line-height: 2.5rem;
   text-align: center;
   color: ${colorsV3.white};
-
   ${MOBILE_SCREEN_MEDIA_QUERY} {
+    max-width: 38rem;
     text-align: left;
     margin-bottom: 2.25rem;
     font-size: 3rem;
@@ -96,7 +96,6 @@ const HeaderPart = styled.span<HeaderPartProps>`
   }
 `
 const ConnectText = styled.div`
-  margin-bottom: 1rem;
   font-size: 1rem;
   color: ${colorsV3.white};
 
@@ -109,7 +108,6 @@ const ConnectText = styled.div`
   }
 `
 const InstructionWrapper = styled(ConnectText)`
-  margin-bottom: 1rem;
   color: ${colorsV3.gray500};
 `
 
