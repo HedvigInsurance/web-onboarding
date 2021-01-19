@@ -61,7 +61,7 @@ const defaultSrc = [
   'https://api-js.mixpanel.com',
   'checkoutshopper-live.adyen.com',
   'checkoutshopper-test.adyen.com',
-  'aff.addreax.com',
+  'https://aff.addreax.com',
   'js.go2sdk.com',
   'secure.adnxs.com',
   'snap.licdn.com',
