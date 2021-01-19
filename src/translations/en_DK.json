@@ -1,6 +1,6 @@
 {
   "ONBOARDING_CONNECT_DD_HEADLINE": "Connect payment",
-  "ONBOARDING_CONNECT_DD_CTA": "Connect payment",
+  "ONBOARDING_CONNECT_DD_CTA": "Connect payment - activate Hedvig",
   "ONBOARDING_CONNECT_DD_PRE_HEADLINE": "Psst, don't forget...",
   "ONBOARDING_CONNECT_DD_BODY": "Money will be drawn the 1st each month. We only start charging you once your insurance is activated.",
   "FOUR_OH_FOUR_TITLE": "404 - The page could not be found | Hedvig",
@@ -18,8 +18,7 @@
   "ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_FAIL_BODY": "Something went wrong",
   "ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_FAIL_CTA": "Try again",
   "ONBOARDING_DOWNLOAD_PRE_HEADLINE": "Welcome!",
-  "ONBOARDING_DOWNLOAD_HEADLINE": "Download the app to get started",
-  "ONBOARDING_DOWNLOAD_BODY": "You find it on App Store and Google Play. If you are previously insured we will keep you informed with regards to the switch from your previous insurance company.",
+  "ONBOARDING_DOWNLOAD_HEADLINE": "Download Hedvig to get started!",
   "ONBOARDING_DOWNLOAD_PAGE_TITLE": "Download the Hedvig app | Hedvig",
   "ONBOARDING_CONNECT_DD_PAGE_TITLE": "Connect Direct Debit | Hedvig",
   "COVERAGE_LABEL": "The coverage",
@@ -245,5 +244,10 @@
   "DETAILS_MODULE_TABLE_BIRTHDATE_CELL_LABEL": "Date of birth",
   "DETAILS_MODULE_PERSONAL_INFORMATION": "Personal information",
   "SIDEBAR_NO_BUNDLE_DISCOUNT_TEXT": "25% discount",
-  "HERO_OFFER_DETAILS_HEADER": "Your price quote"
+  "HERO_OFFER_DETAILS_HEADER": "Your price quote",
+  "ONBOARDING_CONNECT_DD_INSTRUCTIONS_CONNECT_PAYMENT": "",
+  "ONBOARDING_CONNECT_DD_INSTRUCTIONS_DOWNLOAD_APP": "Download the Hedvig app",
+  "ONBOARDING_DOWNLOAD_PARAGRAPH_ONE": "Everything related to your insurance, your coverage and your claims is handled through the Hedvig app.",
+  "ONBOARDING_DOWNLOAD_PARAGRAPH_TWO": "Record your claim, chat with our service team, and get unlimited help every day until 10 p.m.",
+  "ONBOARDING_DOWNLOAD_BODY": ""
 }
