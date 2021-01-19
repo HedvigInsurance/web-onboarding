@@ -9,6 +9,7 @@ import { DownloadAppButtons } from './DownloadAppButtons'
 import { AppImage } from './AppImage'
 
 const IMAGE_WIDTH = 560
+const IMAGE_MAX_WIDTH_SMALL_SCREEN = 480
 
 const Page = styled.div`
   background: ${colorsV3.gray900};
@@ -23,31 +24,38 @@ const ContentContainer = styled.div`
   width: 100%;
   max-width: ${IMAGE_WIDTH}px;
   padding-top: 2rem;
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    max-width: 80rem;
+    padding-top: 5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+`
+
+const FlexColumnSmallScreen = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
-    max-width: 72rem;
-    padding-top: 5rem;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
+    display: block;
   }
 `
 
 const TextSection = styled.div`
   ${LARGE_SCREEN_MEDIA_QUERY} {
     max-width: 30rem;
-    padding-right: 3rem;
+    margin-right: 3rem;
   }
 `
 
 const Heading = styled.h1`
   margin: 0;
   width: 100%;
-  padding-bottom: 2rem;
-  font-size: 1.75 rem;
+  padding-bottom: 3rem;
+  font-size: 1.75rem;
   line-height: 40px;
   text-align: center;
   color: ${colorsV3.gray100};
@@ -60,16 +68,37 @@ const Heading = styled.h1`
   }
 `
 
-const Text = styled.div`
-  max-width: 48ch;
-  padding: 2rem 0;
+const TextWrapper = styled.div`
+  max-width: ${IMAGE_MAX_WIDTH_SMALL_SCREEN}px;
+  padding: 3rem 0;
   color: ${colorsV3.gray100};
   opacity: 0.65;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
-    padding: 3rem 0 4rem;
+    padding-bottom: 4rem;
+  }
+`
+
+const Paragraph = styled.div`
+  font-size: 1.125rem;
+  line-height: 24px;
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
     font-size: 1.5rem;
     line-height: 32px;
+  }
+
+  :not(:last-of-type) {
+    padding-bottom: 8px;
+  }
+`
+
+const ImageWrapper = styled.div`
+  max-width: ${IMAGE_MAX_WIDTH_SMALL_SCREEN}px;
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    max-width: 100%;
+    flex-shrink: 1;
   }
 `
 
@@ -83,19 +112,32 @@ export const DownloadApp: React.FC = () => {
       <ContentContainer>
         <div>
           <TextSection>
-            <Heading>
-              {textKeys.ONBOARDING_DOWNLOAD_PRE_HEADLINE() +
-                ' ' +
-                textKeys.ONBOARDING_DOWNLOAD_HEADLINE()}
-            </Heading>
+            <Heading>{textKeys.ONBOARDING_DOWNLOAD_HEADLINE()}</Heading>
           </TextSection>
-          {!isLargeScreen && <AppImage width={IMAGE_WIDTH} />}
-          <TextSection>
-            <Text>{textKeys.ONBOARDING_DOWNLOAD_BODY()}</Text>
-            <DownloadAppButtons />
-          </TextSection>
+          <FlexColumnSmallScreen>
+            {!isLargeScreen && (
+              <ImageWrapper>
+                <AppImage width={IMAGE_WIDTH} />
+              </ImageWrapper>
+            )}
+            <TextSection>
+              <TextWrapper>
+                <Paragraph>
+                  {textKeys.ONBOARDING_DOWNLOAD_PARAGRAPH_ONE()}
+                </Paragraph>
+                <Paragraph>
+                  {textKeys.ONBOARDING_DOWNLOAD_PARAGRAPH_TWO()}
+                </Paragraph>
+              </TextWrapper>
+              <DownloadAppButtons />
+            </TextSection>
+          </FlexColumnSmallScreen>
         </div>
-        {isLargeScreen && <AppImage width={IMAGE_WIDTH} />}
+        {isLargeScreen && (
+          <ImageWrapper>
+            <AppImage width={IMAGE_WIDTH} />
+          </ImageWrapper>
+        )}
       </ContentContainer>
     </Page>
   )
