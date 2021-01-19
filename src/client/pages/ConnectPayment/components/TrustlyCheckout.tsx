@@ -5,12 +5,15 @@ import styled from '@emotion/styled'
 import { Button } from 'components/buttons'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
-import { MS_BP } from 'utils/mediaQueries'
+import { MS_BP, MOBILE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { useRegisterDirectDebitMutation } from '../containers/RegisterDirectDebitMutation'
 import { TrustlyModal } from './TrustlyModal'
 
 const ButtonWrapper = styled.div`
-  margin-top: 3rem;
+  margin-top: 1rem;
+  ${MOBILE_SCREEN_MEDIA_QUERY} {
+    margin-top: 5.125rem;
+  }
 `
 interface Props {
   onSuccess?: () => void
