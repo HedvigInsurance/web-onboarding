@@ -25,11 +25,15 @@ const buttonData: ButtonData[] = [
 
 const ButtonContainer = styled.div`
   width: 100%;
-  max-width: 23rem;
+  max-width: 20rem;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   flex-wrap: wrap;
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    max-width: 23rem;
+  }
 `
 
 const AnchorLinkButton = styled.a`
