@@ -2,7 +2,7 @@
   "ONBOARDING_CONNECT_DD_HEADLINE": "only two things left to do",
   "ONBOARDING_CONNECT_DD_CTA": "Connect direct debit - activate Hedvig",
   "ONBOARDING_CONNECT_DD_PRE_HEADLINE": "Welcome to Hedvig,",
-  "ONBOARDING_CONNECT_DD_BODY": "We are so happy to have you as a member. To start using your new home insurance, you need to:",
+  "ONBOARDING_CONNECT_DD_BODY": "We are so happy to have you as a member. To start using your new insurance, you need to:",
   "FOUR_OH_FOUR_TITLE": "404 - The page could not be found | Hedvig",
   "FOREVER_INTRO_READY_QUESTION": "Ready?",
   "FOUR_OH_FOUR_HEADLINE": "Blah",
@@ -18,8 +18,7 @@
   "ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_FAIL_BODY": "Something went wrong",
   "ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_FAIL_CTA": "Try again",
   "ONBOARDING_DOWNLOAD_PRE_HEADLINE": "Welcome!",
-  "ONBOARDING_DOWNLOAD_HEADLINE": "Download the app to get started",
-  "ONBOARDING_DOWNLOAD_BODY": "You find it on App Store and Google Play. If you are previously insured we will keep you informed with regards to the switch from your previous insurance company.",
+  "ONBOARDING_DOWNLOAD_HEADLINE": "Download Hedvig to get started!",
   "ONBOARDING_DOWNLOAD_PAGE_TITLE": "Download the Hedvig app | Hedvig",
   "ONBOARDING_CONNECT_DD_PAGE_TITLE": "Connect Direct Debit | Hedvig",
   "COVERAGE_LABEL": "The coverage",
@@ -247,5 +246,8 @@
   "SIDEBAR_NO_BUNDLE_DISCOUNT_TEXT": "25% discount",
   "HERO_OFFER_DETAILS_HEADER": "Your price quote",
   "ONBOARDING_CONNECT_DD_INSTRUCTIONS_CONNECT_PAYMENT": "Activate Hedvig by connecting direct debit",
-  "ONBOARDING_CONNECT_DD_INSTRUCTIONS_DOWNLOAD_APP": "Download the Hedvig app"
+  "ONBOARDING_CONNECT_DD_INSTRUCTIONS_DOWNLOAD_APP": "Download the Hedvig app",
+  "ONBOARDING_DOWNLOAD_PARAGRAPH_ONE": "Everything related to your insurance, your coverage and your claims is handled through the Hedvig app.",
+  "ONBOARDING_DOWNLOAD_PARAGRAPH_TWO": "Record your claim, chat with our service team, and get unlimited help every day until 10 p.m.",
+  "ONBOARDING_DOWNLOAD_BODY": "You find it on App Store and Google Play. If you are previously insured we will keep you informed with regards to the switch from your previous insurance company."
 }

@@ -2,7 +2,7 @@
   "ONBOARDING_CONNECT_DD_HEADLINE": "nå er det bare to ting igjen å gjøre",
   "ONBOARDING_CONNECT_DD_CTA": "Legg inn ditt bankkort - aktiver Hedvig",
   "ONBOARDING_CONNECT_DD_PRE_HEADLINE": "Velkommen som medlem,",
-  "ONBOARDING_CONNECT_DD_BODY": "Så morsomt at du har blitt medlem. For å begynne å bruke din nye innboforsikring må du:",
+  "ONBOARDING_CONNECT_DD_BODY": "Så morsomt at du har blitt medlem. For å begynne å bruke din nye forsikring må du:",
   "FOUR_OH_FOUR_TITLE": "404 - Siden kunne ikke vises | Hedvig",
   "FOREVER_INTRO_READY_QUESTION": "Klar?",
   "FOUR_OH_FOUR_HEADLINE": "Ups! Her finnes ikke noe.",
@@ -18,8 +18,7 @@
   "ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_FAIL_BODY": "Noe gikk feil",
   "ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_FAIL_CTA": "Forsøk en gang til",
   "ONBOARDING_DOWNLOAD_PRE_HEADLINE": "Velkommen!",
-  "ONBOARDING_DOWNLOAD_HEADLINE": "Last ned appen for å komme i gang",
-  "ONBOARDING_DOWNLOAD_BODY": "Du finner den i App Store og på Google Play. Om du allerede har en forsikring kommer vi til å holde deg informert om byttet fra det gamle forsikringsselskapet ditt til Hedvig.",
+  "ONBOARDING_DOWNLOAD_HEADLINE": "Last ned Hedvig for å komme i gang!",
   "ONBOARDING_DOWNLOAD_PAGE_TITLE": "Last ned Hedvig-appen | Hedvig",
   "ONBOARDING_CONNECT_DD_PAGE_TITLE": "Start med autogiro | Hedvig",
   "COVERAGE_LABEL": "Dekningen",
@@ -247,5 +246,8 @@
   "SIDEBAR_NO_BUNDLE_DISCOUNT_TEXT": "25 % rabatt",
   "HERO_OFFER_DETAILS_HEADER": "Prisforslaget ditt",
   "ONBOARDING_CONNECT_DD_INSTRUCTIONS_CONNECT_PAYMENT": "Aktiver Hedvig ved å koble til bankkortet ditt",
-  "ONBOARDING_CONNECT_DD_INSTRUCTIONS_DOWNLOAD_APP": "Last ned Hedvig-appen"
+  "ONBOARDING_CONNECT_DD_INSTRUCTIONS_DOWNLOAD_APP": "Last ned Hedvig-appen",
+  "ONBOARDING_DOWNLOAD_PARAGRAPH_ONE": "Alt rundt din forsikring, din dekning og dine krav håndteres direkte i Hedvig-appen.",
+  "ONBOARDING_DOWNLOAD_PARAGRAPH_TWO": "Send inn ditt krav, chat med vårt serviceteam og få ubegrenset hjelp hver dag frem til klokken 22.",
+  "ONBOARDING_DOWNLOAD_BODY": "Du finner den i App Store og på Google Play. Om du allerede har en forsikring kommer vi til å holde deg informert om byttet fra det gamle forsikringsselskapet ditt til Hedvig."
 }

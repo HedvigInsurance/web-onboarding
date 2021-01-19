@@ -2,7 +2,7 @@
   "ONBOARDING_CONNECT_DD_HEADLINE": "bara två saker kvar att göra",
   "ONBOARDING_CONNECT_DD_CTA": "Koppla betalning - aktivera Hedvig",
   "ONBOARDING_CONNECT_DD_PRE_HEADLINE": "Välkommen som medlem,",
-  "ONBOARDING_CONNECT_DD_BODY": "Vad roligt att du blivit medlem. För att börja använda din nya hemförsäkring behöver du:",
+  "ONBOARDING_CONNECT_DD_BODY": "Vad roligt att du blivit medlem. För att börja använda din nya försäkring behöver du:",
   "FOUR_OH_FOUR_TITLE": "404 - Sidan kunde inte hittas | Hedvig",
   "FOREVER_INTRO_READY_QUESTION": "Redo?",
   "FOUR_OH_FOUR_HEADLINE": "Oj! Här fanns inget",
@@ -18,8 +18,7 @@
   "ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_FAIL_BODY": "Något gick snett",
   "ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_FAIL_CTA": "Försök igen",
   "ONBOARDING_DOWNLOAD_PRE_HEADLINE": "Välkommen!",
-  "ONBOARDING_DOWNLOAD_HEADLINE": " Ladda ner appen för att komma igång",
-  "ONBOARDING_DOWNLOAD_BODY": "Du hittar den på App Store och Google Play. Om du är tidigare försäkrad kommer vi hålla dig informerad om bytet från ditt gamla försäkringsbolag.",
+  "ONBOARDING_DOWNLOAD_HEADLINE": "Ladda ner Hedvig för att komma igång!",
   "ONBOARDING_DOWNLOAD_PAGE_TITLE": "Ladda ned Hedvig-appen | Hedvig",
   "ONBOARDING_CONNECT_DD_PAGE_TITLE": "Koppla ditt autogiro | Hedvig",
   "COVERAGE_LABEL": "Skyddet",
@@ -247,5 +246,8 @@
   "SIDEBAR_NO_BUNDLE_DISCOUNT_TEXT": "",
   "HERO_OFFER_DETAILS_HEADER": "Ditt prisförslag",
   "ONBOARDING_CONNECT_DD_INSTRUCTIONS_CONNECT_PAYMENT": "Aktivera Hedvig genom att koppla autogiro",
-  "ONBOARDING_CONNECT_DD_INSTRUCTIONS_DOWNLOAD_APP": "Ladda ner Hedvig-appen"
+  "ONBOARDING_CONNECT_DD_INSTRUCTIONS_DOWNLOAD_APP": "Ladda ner Hedvig-appen",
+  "ONBOARDING_DOWNLOAD_PARAGRAPH_ONE": "Allt som rör din försäkring, ditt skydd och dina skadeärenden sköts via Hedvig-appen.",
+  "ONBOARDING_DOWNLOAD_PARAGRAPH_TWO": "Spela in din skadeanmälan, chatta med ditt serviceteam och få obegränsad hjälp varje dag till klockan 22.",
+  "ONBOARDING_DOWNLOAD_BODY": "Du hittar den på App Store och Google Play. Om du är tidigare försäkrad kommer vi hålla dig informerad om bytet från ditt gamla försäkringsbolag."
 }
