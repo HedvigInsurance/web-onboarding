@@ -65,6 +65,8 @@ const defaultSrc = [
   'js.go2sdk.com',
   'secure.adnxs.com',
   'snap.licdn.com',
+  'https://bat.bing.com/bat.js',
+  'https://analytics.tiktok.com',
   GIRAFFE_WS_ENDPOINT!,
   CONTENT_SERVICE_ENDPOINT!,
 ]
