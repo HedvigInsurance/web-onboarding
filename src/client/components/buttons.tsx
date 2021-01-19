@@ -18,7 +18,7 @@ export const Button = styled.button<ButtonProps>`
   line-height: ${(props) => (props.size === 'lg' ? `1rem` : `1.25rem`)};
   width: ${(props) => (props.fullWidth ? '100%' : 'auto')};
   padding: ${(props) =>
-    props.size === 'lg' ? `1.5rem 2.5rem` : `1.125rem 1.5rem`};
+    props.size === 'lg' ? `1.5rem 2.5rem` : `0.875rem 1.5rem`};
   background: ${(props) =>
     props.disabled
       ? color(props.background ?? colorsV3.gray700)
