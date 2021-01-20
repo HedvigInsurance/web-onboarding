@@ -70,7 +70,6 @@ const Heading = styled.h1`
   text-align: center;
   color: ${colorsV3.white};
   ${MOBILE_SCREEN_MEDIA_QUERY} {
-    max-width: 38rem;
     text-align: left;
     margin-bottom: 2.25rem;
     font-size: 3rem;
