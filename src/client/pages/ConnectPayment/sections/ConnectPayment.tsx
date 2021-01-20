@@ -95,10 +95,11 @@ const HeaderPart = styled.span<HeaderPartProps>`
 `
 const ConnectText = styled.div`
   font-size: 1rem;
+  line-height: 1.5rem;
   color: ${colorsV3.white};
 
   ${MOBILE_SCREEN_MEDIA_QUERY} {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
   }
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
