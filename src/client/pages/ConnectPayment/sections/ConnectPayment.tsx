@@ -115,7 +115,8 @@ const ConnectPaymentImage = styled.img`
   height: 100%;
   margin-bottom: 2rem;
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
-    width: 80%;
+    width: 100%;
+    max-width: 430px;
   }
 `
 
