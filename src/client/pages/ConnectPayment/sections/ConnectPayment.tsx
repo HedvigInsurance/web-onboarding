@@ -54,7 +54,6 @@ const ImageColumn = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 0.5rem;
-
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     justify-content: flex-start;
     width: 40%;
@@ -113,8 +112,8 @@ const InstructionWrapper = styled(ConnectText)`
 const ConnectPaymentImage = styled.img`
   display: block;
   width: 40%;
+  height: 100%;
   margin-bottom: 2rem;
-
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     width: 80%;
   }
