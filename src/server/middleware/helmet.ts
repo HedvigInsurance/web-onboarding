@@ -61,10 +61,12 @@ const defaultSrc = [
   'https://api-js.mixpanel.com',
   'checkoutshopper-live.adyen.com',
   'checkoutshopper-test.adyen.com',
-  'aff.addreax.com',
+  'https://aff.addreax.com',
   'js.go2sdk.com',
   'secure.adnxs.com',
   'snap.licdn.com',
+  'https://bat.bing.com',
+  'https://analytics.tiktok.com',
   GIRAFFE_WS_ENDPOINT!,
   CONTENT_SERVICE_ENDPOINT!,
 ]
@@ -119,6 +121,7 @@ export const helmet = koaHelmet({
         'cnv.adt387.com',
         'px.ads.linkedin.com',
         'www.linkedin.com',
+        'https://bat.bing.com',
       ],
       reportUri:
         process.env.CSP_REPORT_ENDPOINT || '/new-member/_report-csp-violation',
