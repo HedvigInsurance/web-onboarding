@@ -23,7 +23,8 @@ const createIntercom = () => {
 export const Intercom: React.FC = () => {
   const variation = useVariation()
   const isIntercomMatch = useRouteMatch(
-    LOCALE_PATH_PATTERN + '/new-member/:place(offer|sign|download)',
+    LOCALE_PATH_PATTERN +
+      '/new-member/:place(offer|sign|download|connect-payment)',
   )
   const isDirectConnectPaymentIntercomMatch = useRouteMatch(
     LOCALE_PATH_PATTERN + '/new-member/connect-payment/direct',
@@ -46,7 +47,7 @@ export const Intercom: React.FC = () => {
     } else if (!isDefinitelyIntercomMatch && hasIntercomInstalled) {
       ;(window as any).Intercom('shutdown')
     }
-  }, [isIntercomMatch?.path, isDirectConnectPaymentIntercomMatch?.path])
+  }, [variation, isIntercomMatch, isDirectConnectPaymentIntercomMatch])
 
   return null
 }
