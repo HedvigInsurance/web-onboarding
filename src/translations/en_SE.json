@@ -156,7 +156,7 @@
   "STARTPAGE_COMBO_BODY": "Get your price",
   "STARTPAGE_COMBO_BUTTON": "Get a price quote",
   "SIDEBAR_INSURANCE_TYPE_NO_BUNDLE": "Contents and travel insurance",
-  "CHECKOUT_SIGN_DISCLAIMER_NO": "By clicking “Sign with BankID” I confirm that I have read and understood [the terms]({TERMS_LINK}) and that my personal data is handled [according to GDPR](https:\/\/www.hedvig.com\/no-en\/privacy).",
+  "CHECKOUT_SIGN_DISCLAIMER_NO": "",
   "BANKID_NOT_RESPONDING": "The response from BankID is taking longer than expected...",
   "RETRY_QUESTION": "Retry?",
   "SIDEBAR_REQUEST_CANCELLATION_HOME_INSURANCE": "Cancel my old home insurance",

@@ -156,7 +156,7 @@
   "STARTPAGE_COMBO_BODY": "Sjekk din pris",
   "STARTPAGE_COMBO_BUTTON": "Få et prisforslag",
   "SIDEBAR_INSURANCE_TYPE_NO_BUNDLE": "Innbo- og reiseforsikring",
-  "CHECKOUT_SIGN_DISCLAIMER_NO": "Ved å trykke på ”Signer med BankID” godkjenner jeg at jeg har tatt del av [vilkårene]({TERMS_LINK}) og at personopplysningene mine [behandles i tråd med GDPR](https:\/\/www.hedvig.com\/no\/privacy).",
+  "CHECKOUT_SIGN_DISCLAIMER_NO": "Ved å trykke på ”Skaff Hedvig” godkjenner jeg at jeg har tatt del av [vilkårene]({TERMS_LINK}) og at personopplysningene mine [behandles i tråd med GDPR](https:\/\/www.hedvig.com\/no\/privacy).",
   "BANKID_NOT_RESPONDING": "Respons fra BankID tar lengre tid enn antatt...",
   "RETRY_QUESTION": "Forsøk igjen?",
   "SIDEBAR_REQUEST_CANCELLATION_HOME_INSURANCE": "Kanseller min gamle innboforsikring",
