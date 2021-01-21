@@ -9,7 +9,7 @@ import { DownloadAppButtons } from './DownloadAppButtons'
 import { AppImage } from './AppImage'
 
 const IMAGE_WIDTH = 560
-const IMAGE_MAX_WIDTH_SMALL_SCREEN = 480
+const IMAGE_MAX_WIDTH_SMALL_SCREEN = 400
 
 const Page = styled.div`
   background: ${colorsV3.gray900};
@@ -51,20 +51,21 @@ const TextSection = styled.div`
   }
 `
 
-const Heading = styled.h1`
-  margin: 0;
+const Headline = styled.div`
   width: 100%;
   padding-bottom: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   font-size: 1.75rem;
   line-height: 40px;
-  text-align: center;
   color: ${colorsV3.gray100};
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     padding: 0;
     font-size: 3rem;
     line-height: 56px;
-    text-align: left;
+    align-items: flex-start;
   }
 `
 
@@ -112,7 +113,10 @@ export const DownloadApp: React.FC = () => {
       <ContentContainer>
         <div>
           <TextSection>
-            <Heading>{textKeys.ONBOARDING_DOWNLOAD_HEADLINE()}</Heading>
+            <Headline>
+              <div>{textKeys.ONBOARDING_DOWNLOAD_HEADLINE_PART_1()}</div>
+              <div>{textKeys.ONBOARDING_DOWNLOAD_HEADLINE_PART_2()}</div>
+            </Headline>
           </TextSection>
           <FlexColumnSmallScreen>
             {!isLargeScreen && (
