@@ -9,7 +9,7 @@ import { DownloadAppButtons } from './DownloadAppButtons'
 import { AppImage } from './AppImage'
 
 const IMAGE_WIDTH = 560
-const IMAGE_MAX_WIDTH_SMALL_SCREEN = 400
+const IMAGE_MAX_WIDTH_SMALL_SCREEN = 380
 
 const Page = styled.div`
   background: ${colorsV3.gray900};
@@ -53,20 +53,25 @@ const TextSection = styled.div`
 
 const Headline = styled.div`
   width: 100%;
-  padding-bottom: 3rem;
+  margin-bottom: 3rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 1.75rem;
+  font-size: 2rem;
   line-height: 40px;
   color: ${colorsV3.gray100};
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
-    padding: 0;
+    margin: 0;
     font-size: 3rem;
     line-height: 56px;
     align-items: flex-start;
   }
+`
+
+const MainHeadline = styled.h1`
+  margin: 0;
+  font-size: inherit;
 `
 
 const TextWrapper = styled.div`
@@ -84,13 +89,8 @@ const Paragraph = styled.div`
   font-size: 1.125rem;
   line-height: 24px;
 
-  ${LARGE_SCREEN_MEDIA_QUERY} {
-    font-size: 1.5rem;
-    line-height: 32px;
-  }
-
   :not(:last-of-type) {
-    padding-bottom: 8px;
+    margin-bottom: 8px;
   }
 `
 
@@ -100,6 +100,14 @@ const ImageWrapper = styled.div`
   ${LARGE_SCREEN_MEDIA_QUERY} {
     max-width: 100%;
     flex-shrink: 1;
+  }
+`
+
+const ButtonsWrapper = styled.div`
+  max-width: 20rem;
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    max-width: ${IMAGE_MAX_WIDTH_SMALL_SCREEN}px;
   }
 `
 
@@ -114,7 +122,9 @@ export const DownloadApp: React.FC = () => {
         <div>
           <TextSection>
             <Headline>
-              <div>{textKeys.ONBOARDING_DOWNLOAD_HEADLINE_PART_1()}</div>
+              <MainHeadline>
+                {textKeys.ONBOARDING_DOWNLOAD_HEADLINE_PART_1()}
+              </MainHeadline>
               <div>{textKeys.ONBOARDING_DOWNLOAD_HEADLINE_PART_2()}</div>
             </Headline>
           </TextSection>
@@ -133,7 +143,9 @@ export const DownloadApp: React.FC = () => {
                   {textKeys.ONBOARDING_DOWNLOAD_PARAGRAPH_TWO()}
                 </Paragraph>
               </TextWrapper>
-              <DownloadAppButtons />
+              <ButtonsWrapper>
+                <DownloadAppButtons />
+              </ButtonsWrapper>
             </TextSection>
           </FlexColumnSmallScreen>
         </div>
