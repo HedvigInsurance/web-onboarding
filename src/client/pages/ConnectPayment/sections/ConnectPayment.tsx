@@ -95,10 +95,11 @@ const HeaderPart = styled.span<HeaderPartProps>`
 `
 const ConnectText = styled.div`
   font-size: 1rem;
+  line-height: 1.5rem;
   color: ${colorsV3.white};
 
   ${MOBILE_SCREEN_MEDIA_QUERY} {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
   }
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
@@ -115,7 +116,8 @@ const ConnectPaymentImage = styled.img`
   height: 100%;
   margin-bottom: 2rem;
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
-    width: 80%;
+    width: 100%;
+    max-width: 430px;
   }
 `
 

@@ -11,6 +11,7 @@ import {
   useMemberQuery,
   useSignQuotesMutation,
   useSignStatusLazyQuery,
+  useSignMethodForQuotesQuery,
 } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import { getQuoteIds } from 'pages/OfferNew/utils'
@@ -177,6 +178,10 @@ export const Checkout: React.FC<Props> = ({
   const member = useMemberQuery()
   const locale = useCurrentLocale()
   const variation = useVariation()
+  const quoteIds = getQuoteIds(offerData)
+  const { data: signMethodData } = useSignMethodForQuotesQuery({
+    variables: { input: quoteIds },
+  })
 
   const [windowInnerHeight, setWindowInnerHeight] = useState(window.innerHeight)
 
@@ -309,6 +314,7 @@ export const Checkout: React.FC<Props> = ({
                 canInitiateSign={
                   canInitiateSign && !ssnUpdateLoading && !emailUpdateLoading
                 }
+                signMethod={signMethodData?.signMethodForQuotes}
                 signUiState={signUiState}
                 signStatus={signStatus}
                 isLoading={

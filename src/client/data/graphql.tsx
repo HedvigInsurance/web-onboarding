@@ -149,6 +149,11 @@ export type ActivePaymentMethodsResponse = {
   storedPaymentMethodsDetails: StoredPaymentMethodsDetails
 }
 
+export type ActivePayoutMethodsResponse = {
+  __typename?: 'ActivePayoutMethodsResponse'
+  status: PayoutMethodStatus
+}
+
 export type ActiveReferral = {
   __typename?: 'ActiveReferral'
   name?: Maybe<Scalars['String']>
@@ -1659,6 +1664,7 @@ export type CompleteQuote = {
   email?: Maybe<Scalars['String']>
   dataCollectionId?: Maybe<Scalars['ID']>
   typeOfContract: TypeOfContract
+  phoneNumber?: Maybe<Scalars['String']>
   perils: Array<PerilV2>
   insurableLimits: Array<InsurableLimit>
   termsAndConditions: InsuranceTerm
@@ -2178,6 +2184,7 @@ export type CreateQuoteInput = {
   danishTravel?: Maybe<CreateDanishTravelInput>
   email?: Maybe<Scalars['String']>
   dataCollectionId?: Maybe<Scalars['ID']>
+  phoneNumber?: Maybe<Scalars['String']>
 }
 
 export type CreateQuoteResult = CompleteQuote | UnderwritingLimitsHit
@@ -2497,6 +2504,7 @@ export type EditQuoteInput = {
   danishAccident?: Maybe<EditDanishAccidentInput>
   danishTravel?: Maybe<EditDanishTravelInput>
   email?: Maybe<Scalars['String']>
+  phoneNumber?: Maybe<Scalars['String']>
 }
 
 export type EditSwedishApartmentInput = {
@@ -7006,6 +7014,12 @@ export enum PayinMethodStatus {
   NeedsSetup = 'NEEDS_SETUP',
 }
 
+export enum PayoutMethodStatus {
+  Active = 'ACTIVE',
+  Pending = 'PENDING',
+  NeedsSetup = 'NEEDS_SETUP',
+}
+
 /** The contract is neither active or terminated, waiting to have an inception date set */
 export type PendingStatus = {
   __typename?: 'PendingStatus'
@@ -7167,6 +7181,8 @@ export type Query = {
   adyenPublicKey: Scalars['String']
   /** Returns all the available payouts methods before the client requests a payout tokenization */
   availablePayoutMethods: AvailablePaymentMethodsResponse
+  /** Returns the active payout method which the member chose to tokenize */
+  activePayoutMethods?: Maybe<ActivePayoutMethodsResponse>
   /** Returns campaign associated with code */
   campaign: Campaign
   /** Returns information about the authed member's referralCampaign and referrals */
@@ -7191,6 +7207,7 @@ export type Query = {
   quote: Quote
   lastQuoteOfMember: Quote
   quoteBundle: QuoteBundle
+  signMethodForQuotes: SignMethod
   commonClaims: Array<CommonClaim>
   news: Array<News>
   welcome: Array<Welcome>
@@ -7325,6 +7342,10 @@ export type QueryQuoteArgs = {
 
 export type QueryQuoteBundleArgs = {
   input: QuoteBundleInput
+}
+
+export type QuerySignMethodForQuotesArgs = {
+  input: Array<Scalars['ID']>
 }
 
 export type QueryCommonClaimsArgs = {
@@ -7534,6 +7555,13 @@ export type SignEvent = {
 export type SignInput = {
   personalNumber: Scalars['String']
   email: Scalars['String']
+}
+
+export enum SignMethod {
+  SwedishBankId = 'SWEDISH_BANK_ID',
+  NorwegianBankId = 'NORWEGIAN_BANK_ID',
+  DanishBankId = 'DANISH_BANK_ID',
+  SimpleSign = 'SIMPLE_SIGN',
 }
 
 export type SignQuotesInput = {
@@ -8234,6 +8262,7 @@ export enum TypeOfContract {
 
 export type UnderwritingLimit = {
   __typename?: 'UnderwritingLimit'
+  /** @deprecated Use code */
   description: Scalars['String']
   code: Scalars['String']
 }
@@ -9458,6 +9487,15 @@ export type RemoveStartDateMutation = { __typename?: 'Mutation' } & {
     | ({ __typename?: 'CompleteQuote' } & Pick<CompleteQuote, 'startDate'>)
     | { __typename?: 'UnderwritingLimitsHit' }
 }
+
+export type SignMethodForQuotesQueryVariables = Exact<{
+  input: Array<Scalars['ID']>
+}>
+
+export type SignMethodForQuotesQuery = { __typename?: 'Query' } & Pick<
+  Query,
+  'signMethodForQuotes'
+>
 
 export type SignQuotesMutationVariables = Exact<{
   quoteIds: Array<Scalars['ID']>
@@ -10991,6 +11029,60 @@ export type RemoveStartDateMutationResult = ApolloReactCommon.MutationResult<
 export type RemoveStartDateMutationOptions = ApolloReactCommon.BaseMutationOptions<
   RemoveStartDateMutation,
   RemoveStartDateMutationVariables
+>
+export const SignMethodForQuotesDocument = gql`
+  query SignMethodForQuotes($input: [ID!]!) {
+    signMethodForQuotes(input: $input)
+  }
+`
+
+/**
+ * __useSignMethodForQuotesQuery__
+ *
+ * To run a query within a React component, call `useSignMethodForQuotesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSignMethodForQuotesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSignMethodForQuotesQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSignMethodForQuotesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    SignMethodForQuotesQuery,
+    SignMethodForQuotesQueryVariables
+  >,
+) {
+  return Apollo.useQuery<
+    SignMethodForQuotesQuery,
+    SignMethodForQuotesQueryVariables
+  >(SignMethodForQuotesDocument, baseOptions)
+}
+export function useSignMethodForQuotesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    SignMethodForQuotesQuery,
+    SignMethodForQuotesQueryVariables
+  >,
+) {
+  return Apollo.useLazyQuery<
+    SignMethodForQuotesQuery,
+    SignMethodForQuotesQueryVariables
+  >(SignMethodForQuotesDocument, baseOptions)
+}
+export type SignMethodForQuotesQueryHookResult = ReturnType<
+  typeof useSignMethodForQuotesQuery
+>
+export type SignMethodForQuotesLazyQueryHookResult = ReturnType<
+  typeof useSignMethodForQuotesLazyQuery
+>
+export type SignMethodForQuotesQueryResult = ApolloReactCommon.QueryResult<
+  SignMethodForQuotesQuery,
+  SignMethodForQuotesQueryVariables
 >
 export const SignQuotesDocument = gql`
   mutation SignQuotes(

@@ -156,8 +156,7 @@
   "STARTPAGE_COMBO_BODY": "Get your price",
   "STARTPAGE_COMBO_BUTTON": "Get a price quote",
   "SIDEBAR_INSURANCE_TYPE_NO_BUNDLE": "Contents and travel insurance",
-  "CHECKOUT_SIGN_DISCLAIMER_NO": "By clicking “Sign with BankID” I confirm that I have read and understood [the terms]({TERMS_LINK}) and that my personal data is handled [according to GDPR](https:\/\/www.hedvig.com\/no-en\/privacy).",
-  "BANKID_NOT_RESPONDING": "The response from BankID is taking longer than expected...",
+  "CHECKOUT_SIGN_DISCLAIMER_NO": "",
   "RETRY_QUESTION": "Retry?",
   "SIDEBAR_REQUEST_CANCELLATION_HOME_INSURANCE": "Cancel my old home insurance",
   "SIDEBAR_REQUEST_CANCELLATION_TRAVEL_INSURANCE": "Cancel my old travel insurance",
@@ -249,5 +248,6 @@
   "ONBOARDING_CONNECT_DD_INSTRUCTIONS_DOWNLOAD_APP": "Download the Hedvig app",
   "ONBOARDING_DOWNLOAD_PARAGRAPH_ONE": "Everything related to your insurance, your coverage and your claims is handled through the Hedvig app.",
   "ONBOARDING_DOWNLOAD_PARAGRAPH_TWO": "Record your claim, chat with our service team, and get unlimited help every day until 10 p.m.",
-  "ONBOARDING_DOWNLOAD_BODY": ""
+  "ONBOARDING_DOWNLOAD_BODY": "",
+  "CHECKOUT_SIMPLE_SIGN_BUTTON_TEXT": "Get Hedvig"
 }
