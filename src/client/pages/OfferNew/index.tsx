@@ -1,6 +1,6 @@
 import { History } from 'history'
 import { SemanticEvents } from 'quepasa'
-import React from 'react'
+import React, { useState, createContext } from 'react'
 import { Redirect, useHistory, useRouteMatch } from 'react-router'
 import { LoadingPage } from 'components/LoadingPage'
 import { TopBar } from 'components/TopBar'
@@ -38,6 +38,25 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
   }
 }
 
+type DetailsModalState = {
+  onClose: () => void
+  onOpen: () => void
+  isDetailsModalOpen: boolean
+}
+export const DetailsModalContext = createContext<DetailsModalState | undefined>(
+  undefined,
+)
+
+export const useDetailsModalState = () => {
+  const context = React.useContext(DetailsModalContext)
+  if (context === undefined) {
+    throw new Error(
+      'useDetailsModalState must be used within a DetailsModalProvider',
+    )
+  }
+  return context
+}
+
 export const OfferNew: React.FC = () => {
   const storage = useStorage()
   const currentLocale = useCurrentLocale()
@@ -47,6 +66,10 @@ export const OfferNew: React.FC = () => {
   const quoteIds = storage.session.getSession()?.quoteIds ?? []
   const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
   const redeemedCampaigns = redeemedCampaignsData?.redeemedCampaigns ?? []
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
+  const onClose = () => setIsDetailsModalOpen(false)
+  const onOpen = () => setIsDetailsModalOpen(true)
+
   const { data, loading: loadingQuoteBundle, refetch } = useQuoteBundleQuery({
     variables: {
       input: {
@@ -93,49 +116,53 @@ export const OfferNew: React.FC = () => {
   }
 
   return (
-    <Page>
-      <SessionTokenGuard>
-        {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
-          <TopBar isTransparent />
-        )}
-        {offerData && (
-          <>
-            <TrackAction
-              event={{
-                name: SemanticEvents.Ecommerce.CheckoutStarted,
-                properties: {
-                  value: Number(offerData.cost.monthlyNet.amount),
-                  currency: offerData.cost.monthlyNet.currency,
-                  label: 'Offer',
-                  ...getUtmParamsFromCookie(),
-                },
-              }}
-            >
-              {({ track }) => (
-                <Introduction
-                  offerData={offerData}
-                  refetch={refetch as () => Promise<any>}
-                  onCheckoutOpen={() => {
-                    handleCheckoutToggle(true)
-                    track()
-                  }}
-                />
-              )}
-            </TrackAction>
-            <Perils offerData={offerData} />
-            {currentMarket !== Market.Dk && <SwitchSafetySection />}
-            <FaqSection />
-            <Checkout
-              offerData={offerData}
-              isOpen={checkoutMatch !== null}
-              onClose={() => {
-                handleCheckoutToggle(false)
-              }}
-              refetch={refetch as () => Promise<any>}
-            />
-          </>
-        )}
-      </SessionTokenGuard>
-    </Page>
+    <DetailsModalContext.Provider
+      value={{ isDetailsModalOpen, onClose, onOpen }}
+    >
+      <Page>
+        <SessionTokenGuard>
+          {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
+            <TopBar isTransparent />
+          )}
+          {offerData && (
+            <>
+              <TrackAction
+                event={{
+                  name: SemanticEvents.Ecommerce.CheckoutStarted,
+                  properties: {
+                    value: Number(offerData.cost.monthlyNet.amount),
+                    currency: offerData.cost.monthlyNet.currency,
+                    label: 'Offer',
+                    ...getUtmParamsFromCookie(),
+                  },
+                }}
+              >
+                {({ track }) => (
+                  <Introduction
+                    offerData={offerData}
+                    refetch={refetch as () => Promise<any>}
+                    onCheckoutOpen={() => {
+                      handleCheckoutToggle(true)
+                      track()
+                    }}
+                  />
+                )}
+              </TrackAction>
+              <Perils offerData={offerData} />
+              {currentMarket !== Market.Dk && <SwitchSafetySection />}
+              <FaqSection />
+              <Checkout
+                offerData={offerData}
+                isOpen={checkoutMatch !== null}
+                onClose={() => {
+                  handleCheckoutToggle(false)
+                }}
+                refetch={refetch as () => Promise<any>}
+              />
+            </>
+          )}
+        </SessionTokenGuard>
+      </Page>
+    </DetailsModalContext.Provider>
   )
 }
