@@ -139,10 +139,10 @@ export const DownloadApp: React.FC = () => {
           <TextSection>
             <TextWrapper>
               <Paragraph>
-                {textKeys.ONBOARDING_DOWNLOAD_PARAGRAPH_ONE()}
+                {textKeys.ONBOARDING_DOWNLOAD_PARAGRAPH_1()}
               </Paragraph>
               <Paragraph>
-                {textKeys.ONBOARDING_DOWNLOAD_PARAGRAPH_TWO()}
+                {textKeys.ONBOARDING_DOWNLOAD_PARAGRAPH_2()}
               </Paragraph>
             </TextWrapper>
             <ButtonsWrapper>
