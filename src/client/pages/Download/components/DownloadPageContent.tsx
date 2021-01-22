@@ -5,6 +5,7 @@ import { useTextKeys } from 'utils/textKeys'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { useBreakpoint } from 'utils/hooks/useBreakpoint'
 import { TOP_BAR_HEIGHT } from 'components/TopBar'
+import { DownloadHeadline } from './DownloadHeadline'
 import { GetAppButtons } from './GetAppButtons'
 import { AppImage } from './AppImage'
 
@@ -49,32 +50,6 @@ const TextSection = styled.div`
     max-width: 30rem;
     margin-right: 3rem;
   }
-`
-
-const Headline = styled.div`
-  width: 100%;
-  max-width: ${IMAGE_MAX_WIDTH_SMALL_SCREEN}px;
-  margin-bottom: 3rem;
-  font-size: 2rem;
-  line-height: 40px;
-  text-align: center;
-  color: ${colorsV3.gray100};
-
-  ${LARGE_SCREEN_MEDIA_QUERY} {
-    max-width: 100%;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    font-size: 3rem;
-    line-height: 56px;
-    text-align: left;
-  }
-`
-
-const MainHeadline = styled.h1`
-  margin: 0;
-  font-size: inherit;
-  display: inline;
 `
 
 const TextWrapper = styled.div`
@@ -124,12 +99,9 @@ export const DownloadPageContent: React.FC = () => {
       <ContentContainer>
         <FlexColumnSmallScreen>
           <TextSection>
-            <Headline>
-              <MainHeadline>
-                {textKeys.ONBOARDING_DOWNLOAD_HEADLINE_PART_1() + ' '}
-              </MainHeadline>
-              <span>{textKeys.ONBOARDING_DOWNLOAD_HEADLINE_PART_2()}</span>
-            </Headline>
+            <DownloadHeadline
+              maxWidthSmallScreen={IMAGE_MAX_WIDTH_SMALL_SCREEN}
+            />
           </TextSection>
           {!isLargeScreen && (
             <ImageWrapper>
