@@ -53,25 +53,28 @@ const TextSection = styled.div`
 
 const Headline = styled.div`
   width: 100%;
+  max-width: ${IMAGE_MAX_WIDTH_SMALL_SCREEN}px;
   margin-bottom: 3rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   font-size: 2rem;
   line-height: 40px;
+  text-align: center;
   color: ${colorsV3.gray100};
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
+    max-width: 100%;
     margin: 0;
+    display: flex;
+    flex-direction: column;
     font-size: 3rem;
     line-height: 56px;
-    align-items: flex-start;
+    text-align: left;
   }
 `
 
 const MainHeadline = styled.h1`
   margin: 0;
   font-size: inherit;
+  display: inline;
 `
 
 const TextWrapper = styled.div`
@@ -119,36 +122,34 @@ export const DownloadApp: React.FC = () => {
   return (
     <Page>
       <ContentContainer>
-        <div>
+        <FlexColumnSmallScreen>
           <TextSection>
             <Headline>
               <MainHeadline>
-                {textKeys.ONBOARDING_DOWNLOAD_HEADLINE_PART_1()}
+                {textKeys.ONBOARDING_DOWNLOAD_HEADLINE_PART_1() + ' '}
               </MainHeadline>
-              <div>{textKeys.ONBOARDING_DOWNLOAD_HEADLINE_PART_2()}</div>
+              <span>{textKeys.ONBOARDING_DOWNLOAD_HEADLINE_PART_2()}</span>
             </Headline>
           </TextSection>
-          <FlexColumnSmallScreen>
-            {!isLargeScreen && (
-              <ImageWrapper>
-                <AppImage width={IMAGE_WIDTH} />
-              </ImageWrapper>
-            )}
-            <TextSection>
-              <TextWrapper>
-                <Paragraph>
-                  {textKeys.ONBOARDING_DOWNLOAD_PARAGRAPH_ONE()}
-                </Paragraph>
-                <Paragraph>
-                  {textKeys.ONBOARDING_DOWNLOAD_PARAGRAPH_TWO()}
-                </Paragraph>
-              </TextWrapper>
-              <ButtonsWrapper>
-                <DownloadAppButtons />
-              </ButtonsWrapper>
-            </TextSection>
-          </FlexColumnSmallScreen>
-        </div>
+          {!isLargeScreen && (
+            <ImageWrapper>
+              <AppImage width={IMAGE_WIDTH} />
+            </ImageWrapper>
+          )}
+          <TextSection>
+            <TextWrapper>
+              <Paragraph>
+                {textKeys.ONBOARDING_DOWNLOAD_PARAGRAPH_ONE()}
+              </Paragraph>
+              <Paragraph>
+                {textKeys.ONBOARDING_DOWNLOAD_PARAGRAPH_TWO()}
+              </Paragraph>
+            </TextWrapper>
+            <ButtonsWrapper>
+              <DownloadAppButtons />
+            </ButtonsWrapper>
+          </TextSection>
+        </FlexColumnSmallScreen>
         {isLargeScreen && (
           <ImageWrapper>
             <AppImage width={IMAGE_WIDTH} />
