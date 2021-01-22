@@ -72,7 +72,7 @@ const Paragraph = styled.div`
   }
 `
 
-const ImageWrapper = styled.div`
+const ImageSection = styled.div`
   max-width: ${IMAGE_MAX_WIDTH_SMALL_SCREEN}px;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
@@ -104,9 +104,9 @@ export const DownloadPageContent: React.FC = () => {
             />
           </TextSection>
           {!isLargeScreen && (
-            <ImageWrapper>
+            <ImageSection>
               <AppImage width={IMAGE_WIDTH} />
-            </ImageWrapper>
+            </ImageSection>
           )}
           <TextSection>
             <TextWrapper>
@@ -123,9 +123,9 @@ export const DownloadPageContent: React.FC = () => {
           </TextSection>
         </FlexColumnSmallScreen>
         {isLargeScreen && (
-          <ImageWrapper>
+          <ImageSection>
             <AppImage width={IMAGE_WIDTH} />
-          </ImageWrapper>
+          </ImageSection>
         )}
       </ContentContainer>
     </Page>
