@@ -4,13 +4,8 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { useTextKeys } from 'utils/textKeys'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
-type Props = {
-  maxWidthSmallScreen: number
-}
-
-const Headline = styled.div<Props>`
+const Headline = styled.div`
   width: 100%;
-  max-width: ${({ maxWidthSmallScreen }) => maxWidthSmallScreen}px;
   margin-bottom: 3rem;
   font-size: 2rem;
   line-height: 40px;
@@ -18,7 +13,6 @@ const Headline = styled.div<Props>`
   color: ${colorsV3.gray100};
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
-    max-width: 100%;
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -34,11 +28,11 @@ const MainHeadline = styled.h1`
   display: inline;
 `
 
-export const DownloadHeadline: React.FC<Props> = ({ maxWidthSmallScreen }) => {
+export const DownloadHeadline: React.FC = () => {
   const textKeys = useTextKeys()
 
   return (
-    <Headline maxWidthSmallScreen={maxWidthSmallScreen}>
+    <Headline>
       <MainHeadline>
         {textKeys.ONBOARDING_DOWNLOAD_HEADLINE_PART_1() + ' '}
       </MainHeadline>

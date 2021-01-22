@@ -10,7 +10,6 @@ import { GetAppButtons } from './GetAppButtons'
 import { AppImage } from './AppImage'
 
 const IMAGE_WIDTH = 560
-const IMAGE_MAX_WIDTH_SMALL_SCREEN = 380
 
 const Page = styled.div`
   background: ${colorsV3.gray900};
@@ -23,29 +22,23 @@ const Page = styled.div`
 
 const ContentContainer = styled.div`
   width: 100%;
-  max-width: ${IMAGE_WIDTH}px;
+  max-width: 24rem;
   padding-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     max-width: 80rem;
     padding-top: 5rem;
-    display: flex;
-    justify-content: space-between;
+    flex-direction: row;
     align-items: flex-start;
+    justify-content: space-between;
   }
 `
 
-const FlexColumnSmallScreen = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  ${LARGE_SCREEN_MEDIA_QUERY} {
-    display: block;
-  }
-`
-
-const TextSection = styled.div`
+const HeadlineWrapper = styled.div`
   ${LARGE_SCREEN_MEDIA_QUERY} {
     max-width: 30rem;
     margin-right: 3rem;
@@ -53,10 +46,8 @@ const TextSection = styled.div`
 `
 
 const TextWrapper = styled.div`
-  max-width: ${IMAGE_MAX_WIDTH_SMALL_SCREEN}px;
+  max-width: 24rem;
   padding: 3rem 0;
-  color: ${colorsV3.gray100};
-  opacity: 0.65;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     padding-bottom: 4rem;
@@ -66,6 +57,8 @@ const TextWrapper = styled.div`
 const Paragraph = styled.div`
   font-size: 1.125rem;
   line-height: 24px;
+  color: ${colorsV3.gray100};
+  opacity: 0.65;
 
   :not(:last-of-type) {
     margin-bottom: 8px;
@@ -73,10 +66,7 @@ const Paragraph = styled.div`
 `
 
 const ImageSection = styled.div`
-  max-width: ${IMAGE_MAX_WIDTH_SMALL_SCREEN}px;
-
   ${LARGE_SCREEN_MEDIA_QUERY} {
-    max-width: 100%;
     flex-shrink: 1;
   }
 `
@@ -85,7 +75,7 @@ const ButtonsWrapper = styled.div`
   max-width: 20rem;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
-    max-width: ${IMAGE_MAX_WIDTH_SMALL_SCREEN}px;
+    max-width: 24rem;
   }
 `
 
@@ -97,31 +87,23 @@ export const DownloadPageContent: React.FC = () => {
   return (
     <Page>
       <ContentContainer>
-        <FlexColumnSmallScreen>
-          <TextSection>
-            <DownloadHeadline
-              maxWidthSmallScreen={IMAGE_MAX_WIDTH_SMALL_SCREEN}
-            />
-          </TextSection>
+        <div>
+          <HeadlineWrapper>
+            <DownloadHeadline />
+          </HeadlineWrapper>
           {!isLargeScreen && (
             <ImageSection>
               <AppImage width={IMAGE_WIDTH} />
             </ImageSection>
           )}
-          <TextSection>
-            <TextWrapper>
-              <Paragraph>
-                {textKeys.ONBOARDING_DOWNLOAD_PARAGRAPH_1()}
-              </Paragraph>
-              <Paragraph>
-                {textKeys.ONBOARDING_DOWNLOAD_PARAGRAPH_2()}
-              </Paragraph>
-            </TextWrapper>
-            <ButtonsWrapper>
-              <GetAppButtons />
-            </ButtonsWrapper>
-          </TextSection>
-        </FlexColumnSmallScreen>
+          <TextWrapper>
+            <Paragraph>{textKeys.ONBOARDING_DOWNLOAD_PARAGRAPH_1()}</Paragraph>
+            <Paragraph>{textKeys.ONBOARDING_DOWNLOAD_PARAGRAPH_2()}</Paragraph>
+          </TextWrapper>
+          <ButtonsWrapper>
+            <GetAppButtons />
+          </ButtonsWrapper>
+        </div>
         {isLargeScreen && (
           <ImageSection>
             <AppImage width={IMAGE_WIDTH} />
