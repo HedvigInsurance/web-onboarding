@@ -114,7 +114,7 @@ const ButtonsWrapper = styled.div`
   }
 `
 
-export const DownloadApp: React.FC = () => {
+export const DownloadPageContent: React.FC = () => {
   const textKeys = useTextKeys()
 
   const { isLargeScreen } = useBreakpoint()

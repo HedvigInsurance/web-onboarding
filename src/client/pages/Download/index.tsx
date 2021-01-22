@@ -7,7 +7,7 @@ import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import { useTextKeys } from 'utils/textKeys'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
-import { DownloadApp } from './components/DownloadApp'
+import { DownloadPageContent } from './components/DownloadPageContent'
 
 export const Download: React.FC = () => {
   const textKeys = useTextKeys()
@@ -20,7 +20,7 @@ export const Download: React.FC = () => {
             <title>{textKeys.ONBOARDING_DOWNLOAD_PAGE_TITLE()}</title>
           </Helmet>
           <TopBar />
-          <DownloadApp />
+          <DownloadPageContent />
           <TrackAction
             event={{
               name: SemanticEvents.Ecommerce.PaymentInfoEntered,
