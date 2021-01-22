@@ -34,7 +34,7 @@ import {
   isNorwegian,
   isDanishTravel,
   isDanishAccident,
-} from '../../../utils'
+} from '../../utils'
 import {
   SwedishApartmentFieldSchema,
   ArrayFieldType,
