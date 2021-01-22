@@ -31,7 +31,8 @@ const ButtonContainer = styled.div`
 `
 
 const AnchorLinkButton = styled.a`
-  padding: 8px 24px;
+  height: 48px;
+  padding: 0 24px;
   margin: 8px 0;
   border: 1px solid ${ICON_COLOR};
   border-radius: 8px;
