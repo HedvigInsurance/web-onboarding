@@ -5,7 +5,7 @@ import { useTextKeys } from 'utils/textKeys'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { useBreakpoint } from 'utils/hooks/useBreakpoint'
 import { TOP_BAR_HEIGHT } from 'components/TopBar'
-import { DownloadAppButtons } from './DownloadAppButtons'
+import { GetAppButtons } from './GetAppButtons'
 import { AppImage } from './AppImage'
 
 const IMAGE_WIDTH = 560
@@ -146,7 +146,7 @@ export const DownloadPageContent: React.FC = () => {
               </Paragraph>
             </TextWrapper>
             <ButtonsWrapper>
-              <DownloadAppButtons />
+              <GetAppButtons />
             </ButtonsWrapper>
           </TextSection>
         </FlexColumnSmallScreen>

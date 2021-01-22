@@ -57,7 +57,7 @@ const AnchorLinkButton = styled.a`
   }
 `
 
-export const DownloadAppButtons = () => {
+export const GetAppButtons = () => {
   return (
     <ButtonContainer>
       {buttonData.map(({ url, iconComponent }) => (
