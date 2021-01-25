@@ -6,7 +6,7 @@ import { AdyenCheckout } from 'pages/ConnectPayment/components/AdyenCheckout'
 import { TrustlyCheckout } from 'pages/ConnectPayment/components/TrustlyCheckout'
 import { useTextKeys } from 'utils/textKeys'
 import {
-  MOBILE_SCREEN_MEDIA_QUERY,
+  MEDIUM_SMALL_SCREEN_MEDIA_QUERY,
   MEDIUM_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
@@ -68,7 +68,7 @@ const Heading = styled.h1`
   line-height: 2.5rem;
   text-align: center;
   color: ${colorsV3.white};
-  ${MOBILE_SCREEN_MEDIA_QUERY} {
+  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
     text-align: left;
     margin-bottom: 2.25rem;
     font-size: 3rem;
@@ -88,7 +88,7 @@ const HeaderPart = styled.span<HeaderPartProps>`
         margin-left: 0.375rem;
       `}
 
-  ${MOBILE_SCREEN_MEDIA_QUERY} {
+  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
     display: block;
     margin-left: 0;
   }
@@ -98,7 +98,7 @@ const ConnectText = styled.div`
   line-height: 1.5rem;
   color: ${colorsV3.white};
 
-  ${MOBILE_SCREEN_MEDIA_QUERY} {
+  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
     font-size: 1.125rem;
   }
 
