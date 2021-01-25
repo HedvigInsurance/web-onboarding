@@ -5,7 +5,9 @@ import { Address } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import { TextButton } from 'components/buttons'
 import { getHouseholdSize } from '../utils'
+import { useDetailsModalState } from '..'
 
 type Props = {
   offerData: OfferData
@@ -43,10 +45,16 @@ const OfferInfo = styled.div`
   }
 `
 
+const EditDetailsButton = styled(TextButton)`
+  margin-top: 0.5rem;
+  color: ${colorsV3.purple100};
+  font-size: 1rem;
+`
+
 export const HeroOfferDetails: React.FC<Props> = ({ offerData }) => {
   const [numberCoInsured, setNumberCoInsured] = useState<number | null>(null)
   const [street, setStreet] = useState<Address['street'] | null>(null)
-
+  const { onOpen: openDetailsModal } = useDetailsModalState()
   const { person, quotes } = offerData
 
   useEffect(() => {
@@ -70,6 +78,9 @@ export const HeroOfferDetails: React.FC<Props> = ({ offerData }) => {
         {!!numberCoInsured && ` +${numberCoInsured}`}
       </OfferInfo>
       {street && <OfferInfo>{street}</OfferInfo>}
+      <EditDetailsButton onClick={openDetailsModal}>
+        {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
+      </EditDetailsButton>
     </Container>
   )
 }
