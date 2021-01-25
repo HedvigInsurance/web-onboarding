@@ -4,8 +4,10 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { Section } from 'pages/OfferNew/components'
 import { OfferData } from 'pages/OfferNew/types'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import { isBundle } from '../utils'
 import { HeroOfferDetails } from './HeroOfferDetails'
 import { Sidebar } from './Sidebar'
+import { ExternalInsuranceProvider } from './ExternalInsuranceProvider'
 
 type Props = {
   offerData: OfferData
@@ -21,16 +23,20 @@ const HERO_HEIGHT = '400px'
 
 const Hero = styled.div`
   width: 100%;
-  height: ${HERO_HEIGHT};
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: ${colorsV3.gray100};
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    height: ${HERO_HEIGHT};
+  }
 `
 
 const HeroImageWrapper = styled.div`
   width: 100vw;
   height: ${HERO_HEIGHT};
-  background: ${colorsV3.gray900};
+  background-color: ${colorsV3.gray900};
   overflow: hidden;
   position: absolute;
 `
@@ -51,12 +57,16 @@ const HeroImage = styled.img<HeroImageProps>`
 const HeroContentWrapper = styled.div`
   width: 100%;
   max-width: 80rem;
-  position: absolute;
+  position: relative;
   padding-top: 3rem;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     padding-top: 8rem;
   }
+`
+
+const HeroOfferDetailsContainer = styled.div`
+  width: 100%;
 `
 
 const ContentContainer = styled.div`
@@ -80,6 +90,9 @@ export const Introduction: React.FC<Props> = ({
 }) => {
   const [hasHeroImageLoaded, setHasHeroImageLoaded] = useState(false)
 
+  const hasDataCollection =
+    !isBundle(offerData) && !!offerData.quotes[0].dataCollectionId
+
   return (
     <Section>
       <Hero>
@@ -97,7 +110,15 @@ export const Introduction: React.FC<Props> = ({
         </HeroImageWrapper>
         <HeroContentWrapper>
           <ContentContainer>
-            <HeroOfferDetails offerData={offerData} />
+            <HeroOfferDetailsContainer>
+              <HeroOfferDetails offerData={offerData} />
+              {hasDataCollection && (
+                <ExternalInsuranceProvider
+                  dataCollectionId={offerData.quotes[0].dataCollectionId || ''}
+                  offerData={offerData}
+                />
+              )}
+            </HeroOfferDetailsContainer>
             <Sidebar
               offerData={offerData}
               refetchOfferData={refetch}
