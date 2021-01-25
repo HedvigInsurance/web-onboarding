@@ -61,7 +61,7 @@ const Paragraph = styled.div`
   opacity: 0.65;
 
   :not(:last-of-type) {
-    margin-bottom: 8px;
+    margin-bottom: 12px;
   }
 `
 
