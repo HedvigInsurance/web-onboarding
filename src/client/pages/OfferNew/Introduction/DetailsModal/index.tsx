@@ -1,14 +1,14 @@
 import styled from '@emotion/styled'
 import { colorsV3, fonts } from '@hedviginsurance/brand'
 import { Form, Formik } from 'formik'
-import React from 'react'
+import React, { useState } from 'react'
 import { Button } from 'components/buttons'
-import { Modal, ModalProps } from 'components/ModalNew'
+import { Modal } from 'components/ModalNew'
 import { EditQuoteInput, useEditQuoteMutation } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
-import { isBundle } from '../../../utils'
-
+import { isBundle } from '../../utils'
+import { useDetailsModalState } from '../..'
 import {
   getFieldSchema,
   getInitialInputValues,
@@ -96,11 +96,9 @@ interface DetailsModalProps {
   refetch: () => Promise<void>
 }
 
-export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
+export const DetailsModal: React.FC<DetailsModalProps> = ({
   refetch,
   offerData,
-  isVisible,
-  onClose,
 }) => {
   const textKeys = useTextKeys()
   const [editQuote, editQuoteResult] = useEditQuoteMutation()
@@ -108,7 +106,9 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   const fieldSchema = getFieldSchema(mainOfferQuote)
   const validationSchema = getValidationSchema(fieldSchema, mainOfferQuote)
   const initialValues = getInitialInputValues(offerData.person, mainOfferQuote)
-  const [isUpdating, setIsUpdating] = React.useState(false)
+  const [isUpdating, setIsUpdating] = useState(false)
+  const { isDetailsModalOpen, onClose } = useDetailsModalState()
+
   const [
     isUnderwritingGuidelineHit,
     setIsUnderwritingGuidelineHit,
@@ -153,7 +153,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   }
 
   return (
-    <Modal isVisible={isVisible} onClose={onClose} dynamicHeight>
+    <Modal isVisible={isDetailsModalOpen} onClose={onClose} dynamicHeight>
       <LoadingDimmer visible={isUpdating} />
       <Container>
         <Formik<EditQuoteInput>

@@ -6,9 +6,8 @@ import ReactVisibilitySensor from 'react-visibility-sensor'
 import { Button, TextButton } from 'components/buttons'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
 import {
-  useRedeemCodeMutation,
-  useRedeemedCampaignsQuery,
   useRemoveDiscountCodeMutation,
+  RedeemedCampaignsQuery,
 } from 'data/graphql'
 import {
   getDiscountText,
@@ -23,7 +22,6 @@ import { Badge } from 'components/Badge/Badge'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import { Price } from '../../components'
 import { insuranceTypeTextKeys, isBundle } from '../../utils'
-import { DetailsModal } from './DetailsModal'
 import { DiscountCodeModal } from './DiscountCodeModal'
 import { StartDate } from './StartDate'
 import { StickyBottomSidebar } from './StickyBottomSidebar'
@@ -33,7 +31,9 @@ const SIDEBAR_SPACING_LEFT = '2rem'
 
 type Props = {
   offerData: OfferData
+  campaignData: RedeemedCampaignsQuery | undefined
   refetchOfferData: () => Promise<void>
+  refetchAll: () => Promise<void>
   onCheckoutOpen: () => void
 }
 
@@ -100,10 +100,6 @@ const Title = styled.h3`
   }
 `
 
-const EditDetailsButton = styled(TextButton)`
-  margin-bottom: 1.5rem;
-`
-
 const Body = styled.div`
   margin-bottom: 2rem;
   font-size: 0.875rem;
@@ -132,7 +128,9 @@ const FooterExtraActions = styled.div`
 
 export const Sidebar: React.FC<Props> = ({
   offerData,
+  campaignData,
   refetchOfferData,
+  refetchAll,
   onCheckoutOpen,
 }) => {
   const textKeys = useTextKeys()
@@ -140,43 +138,13 @@ export const Sidebar: React.FC<Props> = ({
   const [discountCodeModalIsOpen, setDiscountCodeModalIsOpen] = useState(false)
   const [isSidebarVisible, setIsSidebarVisible] = useState(true)
 
-  const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false)
-
   const [removeDiscountCode] = useRemoveDiscountCodeMutation()
-  const [redeemCode] = useRedeemCodeMutation()
-  const {
-    data: campaignData,
-    refetch: refetchCampaigns,
-  } = useRedeemedCampaignsQuery()
   const redeemedCampaigns = campaignData ? campaignData.redeemedCampaigns : []
-
-  const refetchAll = useCallback(async () => {
-    await refetchOfferData()
-    await refetchCampaigns()
-    return
-  }, [refetchOfferData, refetchCampaigns])
-
-  useEffect(() => {
-    const campaignCodes = campaignData?.redeemedCampaigns.map(
-      (campaign) => campaign.code,
-    )
-    const cookieStorage = new CookieStorage()
-    const preRedeemedCode = cookieStorage.getItem('_hvcode')
-    if (
-      preRedeemedCode &&
-      !campaignCodes?.includes(preRedeemedCode.toUpperCase())
-    ) {
-      redeemCode({ variables: { code: preRedeemedCode } }).then(() =>
-        refetchAll(),
-      )
-    }
-  }, [redeemCode, campaignData, refetchAll])
 
   const discountText = getDiscountText(textKeys)(
     redeemedCampaigns,
     offerData.cost.monthlyGross.currency,
   )
-
   return (
     <>
       <ReactVisibilitySensor partialVisibility onChange={setIsSidebarVisible}>
@@ -218,11 +186,6 @@ export const Sidebar: React.FC<Props> = ({
                   monthlyNet={offerData.cost.monthlyNet}
                 />
               </Header>
-
-              <EditDetailsButton onClick={() => setDetailsModalIsOpen(true)}>
-                {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
-              </EditDetailsButton>
-
               <Body>
                 <BodyTitle>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}</BodyTitle>
                 <StartDate
@@ -284,12 +247,6 @@ export const Sidebar: React.FC<Props> = ({
                 refetch={refetchAll}
               />
             </Container>
-            <DetailsModal
-              offerData={offerData}
-              refetch={refetchAll}
-              isVisible={detailsModalIsOpen}
-              onClose={() => setDetailsModalIsOpen(false)}
-            />
           </Wrapper>
         )}
       </ReactVisibilitySensor>
