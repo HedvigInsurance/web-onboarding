@@ -152,7 +152,6 @@ export const Introduction: React.FC<Props> = ({
             </HeroOfferDetailsContainer>
             <Sidebar
               offerData={offerData}
-              campaignData={campaignData}
               refetchOfferData={refetch}
               refetchAll={refetchAll}
               onCheckoutOpen={onCheckoutOpen}

@@ -7,7 +7,7 @@ import { Button, TextButton } from 'components/buttons'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
 import {
   useRemoveDiscountCodeMutation,
-  RedeemedCampaignsQuery,
+  useRedeemedCampaignsQuery,
 } from 'data/graphql'
 import {
   getDiscountText,
@@ -31,7 +31,6 @@ const SIDEBAR_SPACING_LEFT = '2rem'
 
 type Props = {
   offerData: OfferData
-  campaignData?: RedeemedCampaignsQuery
   refetchOfferData: () => Promise<void>
   refetchAll: () => Promise<void>
   onCheckoutOpen: () => void
@@ -128,7 +127,6 @@ const FooterExtraActions = styled.div`
 
 export const Sidebar: React.FC<Props> = ({
   offerData,
-  campaignData,
   refetchOfferData,
   refetchAll,
   onCheckoutOpen,
@@ -138,6 +136,7 @@ export const Sidebar: React.FC<Props> = ({
   const [discountCodeModalIsOpen, setDiscountCodeModalIsOpen] = useState(false)
   const [isSidebarVisible, setIsSidebarVisible] = useState(true)
   const [removeDiscountCode] = useRemoveDiscountCodeMutation()
+  const { data: campaignData } = useRedeemedCampaignsQuery()
   const redeemedCampaigns = campaignData ? campaignData.redeemedCampaigns : []
 
   const discountText = getDiscountText(textKeys)(
