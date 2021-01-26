@@ -30,6 +30,10 @@ export const SEApartmentBrf = () => {
               action('refetch')(...args)
               return Promise.resolve()
             }}
+            refetchAll={(...args: any[]) => {
+              action('refetchAll')(...args)
+              return Promise.resolve()
+            }}
           />
         </TextKeyProvider>
       </MemoryRouter>
@@ -49,6 +53,10 @@ export const NOCombo = () => {
               action('refetch')(...args)
               return Promise.resolve()
             }}
+            refetchAll={(...args: any[]) => {
+              action('refetchAll')(...args)
+              return Promise.resolve()
+            }}
           />
         </TextKeyProvider>
       </MemoryRouter>
@@ -66,6 +74,10 @@ export const DKHomeContent = () => {
             onCheckoutOpen={action('onCheckoutOpen')}
             refetchOfferData={(...args: any[]) => {
               action('refetch')(...args)
+              return Promise.resolve()
+            }}
+            refetchAll={(...args: any[]) => {
+              action('refetchAll')(...args)
               return Promise.resolve()
             }}
           />

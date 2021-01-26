@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3, HedvigSymbol } from '@hedviginsurance/brand'
 import { CookieStorage } from 'cookie-storage'
@@ -31,7 +31,7 @@ const SIDEBAR_SPACING_LEFT = '2rem'
 
 type Props = {
   offerData: OfferData
-  campaignData: RedeemedCampaignsQuery | undefined
+  campaignData?: RedeemedCampaignsQuery
   refetchOfferData: () => Promise<void>
   refetchAll: () => Promise<void>
   onCheckoutOpen: () => void
@@ -137,7 +137,6 @@ export const Sidebar: React.FC<Props> = ({
   const market = useMarket()
   const [discountCodeModalIsOpen, setDiscountCodeModalIsOpen] = useState(false)
   const [isSidebarVisible, setIsSidebarVisible] = useState(true)
-
   const [removeDiscountCode] = useRemoveDiscountCodeMutation()
   const redeemedCampaigns = campaignData ? campaignData.redeemedCampaigns : []
 
