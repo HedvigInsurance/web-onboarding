@@ -39,8 +39,8 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
 }
 
 type DetailsModalState = {
-  onClose: () => void
-  onOpen: () => void
+  openDetailsModal: () => void
+  closeDetailsModal: () => void
   isDetailsModalOpen: boolean
 }
 export const DetailsModalContext = createContext<DetailsModalState | undefined>(
@@ -67,8 +67,8 @@ export const OfferNew: React.FC = () => {
   const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
   const redeemedCampaigns = redeemedCampaignsData?.redeemedCampaigns ?? []
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
-  const onClose = () => setIsDetailsModalOpen(false)
-  const onOpen = () => setIsDetailsModalOpen(true)
+  const closeDetailsModal = () => setIsDetailsModalOpen(false)
+  const openDetailsModal = () => setIsDetailsModalOpen(true)
 
   const { data, loading: loadingQuoteBundle, refetch } = useQuoteBundleQuery({
     variables: {
@@ -117,7 +117,7 @@ export const OfferNew: React.FC = () => {
 
   return (
     <DetailsModalContext.Provider
-      value={{ isDetailsModalOpen, onClose, onOpen }}
+      value={{ isDetailsModalOpen, closeDetailsModal, openDetailsModal }}
     >
       <Page>
         <SessionTokenGuard>

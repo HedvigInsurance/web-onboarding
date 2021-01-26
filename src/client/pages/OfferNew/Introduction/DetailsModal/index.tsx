@@ -107,7 +107,7 @@ export const DetailsModal: React.FC<DetailsModalProps> = ({
   const validationSchema = getValidationSchema(fieldSchema, mainOfferQuote)
   const initialValues = getInitialInputValues(offerData.person, mainOfferQuote)
   const [isUpdating, setIsUpdating] = useState(false)
-  const { isDetailsModalOpen, onClose } = useDetailsModalState()
+  const { isDetailsModalOpen, closeDetailsModal } = useDetailsModalState()
 
   const [
     isUnderwritingGuidelineHit,
@@ -153,7 +153,11 @@ export const DetailsModal: React.FC<DetailsModalProps> = ({
   }
 
   return (
-    <Modal isVisible={isDetailsModalOpen} onClose={onClose} dynamicHeight>
+    <Modal
+      isVisible={isDetailsModalOpen}
+      onClose={closeDetailsModal}
+      dynamicHeight
+    >
       <LoadingDimmer visible={isUpdating} />
       <Container>
         <Formik<EditQuoteInput>
@@ -177,7 +181,7 @@ export const DetailsModal: React.FC<DetailsModalProps> = ({
                 return
               }
               await refetch()
-              onClose()
+              closeDetailsModal()
             } catch (e) {
               console.error(e)
               if ('Sentry' in window) {

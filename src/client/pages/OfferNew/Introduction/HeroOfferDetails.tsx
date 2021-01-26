@@ -54,7 +54,7 @@ const EditDetailsButton = styled(TextButton)`
 export const HeroOfferDetails: React.FC<Props> = ({ offerData }) => {
   const [numberCoInsured, setNumberCoInsured] = useState<number | null>(null)
   const [street, setStreet] = useState<Address['street'] | null>(null)
-  const { onOpen: openDetailsModal } = useDetailsModalState()
+  const { openDetailsModal } = useDetailsModalState()
   const { person, quotes } = offerData
 
   useEffect(() => {
