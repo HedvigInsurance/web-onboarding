@@ -92,7 +92,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
   }
 
   const ssnSchema = Yup.object({
-    ssn: Yup.string().matches(ssnRegExp, 'INVALID_SSN'),
+    ssn: Yup.string().matches(ssnRegExp, 'LOGIN_APP_INAVLID_SSN'),
   })
 
   return (

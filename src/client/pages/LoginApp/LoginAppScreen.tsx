@@ -50,7 +50,7 @@ export const LoginAppScreen: React.FC = () => {
       }
 
       if (result.errors && result.errors.length > 0) {
-        actions.setErrors({ ssn: 'LOGIN_APP_ERROR_GENERIC' })
+        actions.setErrors({ ssn: 'LOGIN_APP_GENERIC_ERROR' })
         return
       }
 
@@ -58,7 +58,7 @@ export const LoginAppScreen: React.FC = () => {
         window.location.assign(result.data?.norwegianBankIdAuth.redirectUrl)
       }
     } catch (e) {
-      actions.setErrors({ ssn: 'LOGIN_APP_ERROR_GENERIC' })
+      actions.setErrors({ ssn: 'LOGIN_APP_GENERIC_ERROR' })
       captureSentryError(e)
     }
   }
