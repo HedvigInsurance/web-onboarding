@@ -56,12 +56,12 @@ const TextWrapper = styled.div`
 
 const Paragraph = styled.div`
   font-size: 1.125rem;
-  line-height: 24px;
+  line-height: 1.5rem;
   color: ${colorsV3.gray100};
   opacity: 0.65;
 
   :not(:last-of-type) {
-    margin-bottom: 12px;
+    margin-bottom: 0.75rem;
   }
 `
 
