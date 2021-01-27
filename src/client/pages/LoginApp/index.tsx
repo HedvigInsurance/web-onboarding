@@ -16,7 +16,7 @@ export const LoginApp: React.FC = () => {
   }
 
   return (
-    <React.Suspense fallback={<LoadingPage loading />}>
+    <React.Suspense fallback={<LoadingPage centeredTopBar loading />}>
       <LoginAppScreen />
     </React.Suspense>
   )

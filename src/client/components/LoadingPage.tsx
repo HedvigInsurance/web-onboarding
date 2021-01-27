@@ -5,6 +5,11 @@ import { TopBar } from 'components/TopBar'
 import { Spinner } from 'components/utils'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 
+type LoadingPageProps = {
+  centeredTopBar?: boolean
+  loading?: boolean
+}
+
 const OuterSpinnerWrapper = styled('div')`
   display: flex;
   flex-direction: column;
@@ -27,15 +32,18 @@ const ContentWrapper = styled('div')`
   color: ${colorsV3.white};
 `
 
-export const LoadingPage: React.FC<{ loading?: boolean }> = ({
+export const LoadingPage: React.FC<LoadingPageProps> = ({
   children,
+  centeredTopBar,
   loading,
 }) => {
   const variation = useVariation()
 
   return (
     <>
-      {![Variation.IOS, Variation.ANDROID].includes(variation!) && <TopBar />}
+      {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
+        <TopBar centered={centeredTopBar} />
+      )}
       <OuterSpinnerWrapper>
         <InnerSpinnerWrapper>
           {loading && <Spinner />}
