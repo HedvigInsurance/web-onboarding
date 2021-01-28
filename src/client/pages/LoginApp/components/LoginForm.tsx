@@ -134,7 +134,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
               />
             </SsnField>
             <SubmitButton
-              background={colorsV3.purple500}
               foreground={colorsV3.gray900}
               disabled={!values.ssn}
               type="submit"
