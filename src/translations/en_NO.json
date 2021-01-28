@@ -17,8 +17,6 @@
   "ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_TITLE": "Set up payment",
   "ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_FAIL_BODY": "Something went wrong",
   "ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_FAIL_CTA": "Try again",
-  "ONBOARDING_DOWNLOAD_PRE_HEADLINE": "Welcome!",
-  "ONBOARDING_DOWNLOAD_HEADLINE": "Download Hedvig to get started!",
   "ONBOARDING_DOWNLOAD_PAGE_TITLE": "Download the Hedvig app | Hedvig",
   "ONBOARDING_CONNECT_DD_PAGE_TITLE": "Connect Direct Debit | Hedvig",
   "COVERAGE_LABEL": "The coverage",
@@ -30,7 +28,7 @@
   "COMPARE_BODY": "It's important to us that you feel sure that you get the best possible coverage.",
   "COMPARE_TABLE_TITLE": "Coverage",
   "SIDEBAR_INSURANCE_LABEL_SE": "",
-  "SIDEBAR_SHOW_DETAILS_BUTTON": "Show details",
+  "SIDEBAR_SHOW_DETAILS_BUTTON": "Update details",
   "SIDEBAR_STARTDATE_CELL_LABEL": "Start date",
   "SIDEBAR_PROCEED_BUTTON": "Proceed",
   "SIDEBAR_ADD_DISCOUNT_BUTTON": "Add discount code",
@@ -247,8 +245,9 @@
   "HERO_OFFER_DETAILS_HEADER": "Your price quote",
   "ONBOARDING_CONNECT_DD_INSTRUCTIONS_CONNECT_PAYMENT": "Activate Hedvig by connecting your card",
   "ONBOARDING_CONNECT_DD_INSTRUCTIONS_DOWNLOAD_APP": "Download the Hedvig app",
-  "ONBOARDING_DOWNLOAD_PARAGRAPH_ONE": "Everything related to your insurance, your coverage and your claims is handled through the Hedvig app.",
-  "ONBOARDING_DOWNLOAD_PARAGRAPH_TWO": "Record your claim, chat with our service team, and get unlimited help every day until 10 p.m.",
-  "ONBOARDING_DOWNLOAD_BODY": "You find it on App Store and Google Play. If you are previously insured we will keep you informed with regards to the switch from your previous insurance company.",
-  "CHECKOUT_SIMPLE_SIGN_BUTTON_TEXT": "Get Hedvig"
+  "ONBOARDING_DOWNLOAD_PARAGRAPH_1": "Everything related to your insurance, your coverage and your claims is handled through the Hedvig app.",
+  "ONBOARDING_DOWNLOAD_PARAGRAPH_2": "Record your claim, chat with our service team, and get unlimited help every day until 10 p.m.",
+  "CHECKOUT_SIMPLE_SIGN_BUTTON_TEXT": "Get Hedvig",
+  "ONBOARDING_DOWNLOAD_HEADLINE_PART_2": "to get started!",
+  "ONBOARDING_DOWNLOAD_HEADLINE_PART_1": "Download Hedvig"
 }
