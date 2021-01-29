@@ -5,13 +5,16 @@ import styled from '@emotion/styled'
 import { Button } from 'components/buttons'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
-import { MS_BP, MOBILE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import {
+  BREAKPOINTS,
+  MEDIUM_SMALL_SCREEN_MEDIA_QUERY,
+} from 'utils/mediaQueries'
 import { useRegisterDirectDebitMutation } from '../containers/RegisterDirectDebitMutation'
 import { TrustlyModal } from './TrustlyModal'
 
 const ButtonWrapper = styled.div`
   margin-top: 1rem;
-  ${MOBILE_SCREEN_MEDIA_QUERY} {
+  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
     margin-top: 5.125rem;
   }
 `
@@ -25,7 +28,7 @@ export const TrustlyCheckout: React.FC<Props> = ({ onSuccess }) => {
   const [trustlyUrl, setTrustlyUrl] = React.useState<string | null>(null)
   const currentLocale = useCurrentLocale()
   const [createTrustlyUrlMutation] = useRegisterDirectDebitMutation()
-  const isMobile = useMediaQuery({ maxWidth: MS_BP })
+  const isMobile = useMediaQuery({ maxWidth: BREAKPOINTS.mediumScreen })
 
   const generateTrustlyUrl = async () => {
     const baseUrl = `${window.location.origin}/${currentLocale}/new-member/connect-payment`
