@@ -259,15 +259,21 @@ export const ssnLengthByMarket: Record<Market, number> = {
   DK: 10,
 }
 
+export const ssnRegExpByMarket: Record<Market, RegExp> = {
+  SE: /^([1-2][0-9])?[0-9]{2}[0-1][0-9][0-9]{2}[-+]?[0-9]{4}$/,
+  NO: /^[0-9]{2}[0,1][0-9][0-9]{2}[ ]?[0-9]{5}$/,
+  DK: /^[0-9]{2}[0,1][0-9][0-9]{2}[ ]?[0-9]{4}$/,
+}
+
 export const createSsnValidator = (market: Market) => (
   ssn: string,
 ): boolean => {
   switch (market) {
     case Market.No:
-      return /^[0-9]{2}[0,1][0-9][0-9]{2}[ ]?[0-9]{5}$/.test(ssn)
+      return ssnRegExpByMarket[Market.No].test(ssn)
     case Market.Dk:
-      return /^[0-9]{2}[0,1][0-9][0-9]{2}[ ]?[0-9]{4}$/.test(ssn)
+      return ssnRegExpByMarket[Market.Dk].test(ssn)
     case Market.Se:
-      return /^([1-2][0-9])?[0-9]{2}[0-1][0-9][0-9]{2}[-+]?[0-9]{4}$/.test(ssn)
+      return ssnRegExpByMarket[Market.Se].test(ssn)
   }
 }
