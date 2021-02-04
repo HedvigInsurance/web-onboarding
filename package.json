@@ -17,7 +17,8 @@
     "test": "NODE_ENV=test jest",
     "typecheck": "tsc --noEmit",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
-    "gen": "graphql-codegen --config codegen.yml",
+    "codegen": "graphql-codegen --config codegen.yml",
+    "codegen-formatted": "yarn codegen && yarn prettier --write src/client/data/graphql.tsx",
     "storybook": "start-storybook -p 6008",
     "build-storybook": "build-storybook",
     "download-translations": "./bin/download-translations.sh"
