@@ -1,13 +1,11 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import React, { useEffect } from 'react'
+import React from 'react'
 import Helmet from 'react-helmet-async'
 import { FormikHelpers } from 'formik'
 import { useTextKeys } from 'utils/textKeys'
 import { Page } from 'components/utils/Page'
-import { SessionContainer } from 'containers/SessionContainer'
 import { useNorwegianBankIdAuthMutation } from 'data/graphql'
-import { useStorage } from 'utils/StorageContainer'
 import { captureSentryError } from 'utils/sentry-client'
 import { TopBar } from 'components/TopBar'
 import { LoginForm, LoginFormValue } from './components/LoginForm'
@@ -23,16 +21,8 @@ const PageWrapper = styled.div`
 `
 
 export const LoginAppScreen: React.FC = () => {
-  const storage = useStorage()
   const textKeys = useTextKeys()
   const [norwegianBankIdAuthMutation] = useNorwegianBankIdAuthMutation()
-  const hasToken = Boolean(storage?.session?.getSession()?.token)
-
-  useEffect(() => {
-    if (!hasToken) {
-      return
-    }
-  }, [hasToken])
 
   const handleSubmit = async (
     form: LoginFormValue,
@@ -68,16 +58,12 @@ export const LoginAppScreen: React.FC = () => {
       <Helmet>
         <title>{textKeys.LOGIN_APP_PAGE_TITLE()}</title>
       </Helmet>
-      <SessionContainer>
-        {() => (
-          <Page>
-            <TopBar centered />
-            <PageWrapper>
-              <LoginForm onSubmit={handleSubmit} />
-            </PageWrapper>
-          </Page>
-        )}
-      </SessionContainer>
+      <Page>
+        <TopBar centered />
+        <PageWrapper>
+          <LoginForm onSubmit={handleSubmit} />
+        </PageWrapper>
+      </Page>
     </>
   )
 }
