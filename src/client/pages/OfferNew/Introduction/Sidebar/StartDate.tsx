@@ -205,7 +205,7 @@ const DateForm: React.FC<{
     }
   }
 
-  // calendar, should be broken out to a regular component
+  // TODO: make this function (which returns the calendar component) a regular React function component, in a file of its own
   const getDateInput = () => (
     <StyledDateInput
       open={datePickerOpen}
