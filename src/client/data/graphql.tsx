@@ -2896,6 +2896,7 @@ export type EmbarkPreviousInsuranceProviderActionData = {
   providers?: Maybe<EmbarkPreviousInsuranceProviderActionDataProviders>
   storeKey: Scalars['String']
   tooltip?: Maybe<EmbarkTooltip>
+  insuranceProviders: Array<InsuranceProvider>
 }
 
 export enum EmbarkPreviousInsuranceProviderActionDataProviders {
@@ -2981,7 +2982,9 @@ export type EmbarkStoryMetadata = {
   __typename?: 'EmbarkStoryMetadata'
   name: Scalars['String']
   type: EmbarkStoryType
+  /** Localized */
   title: Scalars['String']
+  /** Localized */
   description: Scalars['String']
   metadata: Array<EmbarkStoryMetadataEntry>
 }
@@ -2989,10 +2992,30 @@ export type EmbarkStoryMetadata = {
 export type EmbarkStoryMetadataEntry =
   | EmbarkStoryMetadataEntryDiscount
   | EmbarkStoryMetaDataEntryWebUrlPath
+  | EmbarkStoryMetadataEntryPill
+  | EmbarkStoryMetadataEntryBackground
+
+export type EmbarkStoryMetadataEntryBackground = {
+  __typename?: 'EmbarkStoryMetadataEntryBackground'
+  background: EmbarkStoryMetadataEntryBackgroundOption
+}
+
+export enum EmbarkStoryMetadataEntryBackgroundOption {
+  GradientOne = 'GRADIENT_ONE',
+  GradientTwo = 'GRADIENT_TWO',
+  GradientThree = 'GRADIENT_THREE',
+}
 
 export type EmbarkStoryMetadataEntryDiscount = {
   __typename?: 'EmbarkStoryMetadataEntryDiscount'
+  /** @deprecated Use `EmbarkStoryMetadataEntryPill`. */
   discount: Scalars['String']
+}
+
+export type EmbarkStoryMetadataEntryPill = {
+  __typename?: 'EmbarkStoryMetadataEntryPill'
+  /** Localized */
+  pill: Scalars['String']
 }
 
 export type EmbarkStoryMetaDataEntryWebUrlPath = {
@@ -6752,6 +6775,10 @@ export type MutationLogArgs = {
   input: LoggingInput
 }
 
+export type MutationNorwegianBankIdAuthArgs = {
+  personalNumber?: Maybe<Scalars['String']>
+}
+
 export type MutationRegisterBranchCampaignArgs = {
   campaign: CampaignInput
 }
@@ -9004,6 +9031,17 @@ export type MemberOfferQuery = { __typename?: 'Query' } & {
   >
 }
 
+export type NorwegianBankIdAuthMutationVariables = Exact<{
+  personalNumber: Scalars['String']
+}>
+
+export type NorwegianBankIdAuthMutation = { __typename?: 'Mutation' } & {
+  norwegianBankIdAuth: { __typename?: 'NorwegianBankIdAuthResponse' } & Pick<
+    NorwegianBankIdAuthResponse,
+    'redirectUrl'
+  >
+}
+
 export type QuoteQueryVariables = Exact<{
   id: Scalars['ID']
   perilsLocale: Locale
@@ -10326,6 +10364,56 @@ export type MemberOfferLazyQueryHookResult = ReturnType<
 export type MemberOfferQueryResult = ApolloReactCommon.QueryResult<
   MemberOfferQuery,
   MemberOfferQueryVariables
+>
+export const NorwegianBankIdAuthDocument = gql`
+  mutation NorwegianBankIdAuth($personalNumber: String!) {
+    norwegianBankIdAuth(personalNumber: $personalNumber) {
+      redirectUrl
+    }
+  }
+`
+export type NorwegianBankIdAuthMutationFn = ApolloReactCommon.MutationFunction<
+  NorwegianBankIdAuthMutation,
+  NorwegianBankIdAuthMutationVariables
+>
+
+/**
+ * __useNorwegianBankIdAuthMutation__
+ *
+ * To run a mutation, you first call `useNorwegianBankIdAuthMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useNorwegianBankIdAuthMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [norwegianBankIdAuthMutation, { data, loading, error }] = useNorwegianBankIdAuthMutation({
+ *   variables: {
+ *      personalNumber: // value for 'personalNumber'
+ *   },
+ * });
+ */
+export function useNorwegianBankIdAuthMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    NorwegianBankIdAuthMutation,
+    NorwegianBankIdAuthMutationVariables
+  >,
+) {
+  return Apollo.useMutation<
+    NorwegianBankIdAuthMutation,
+    NorwegianBankIdAuthMutationVariables
+  >(NorwegianBankIdAuthDocument, baseOptions)
+}
+export type NorwegianBankIdAuthMutationHookResult = ReturnType<
+  typeof useNorwegianBankIdAuthMutation
+>
+export type NorwegianBankIdAuthMutationResult = ApolloReactCommon.MutationResult<
+  NorwegianBankIdAuthMutation
+>
+export type NorwegianBankIdAuthMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  NorwegianBankIdAuthMutation,
+  NorwegianBankIdAuthMutationVariables
 >
 export const QuoteDocument = gql`
   query Quote($id: ID!, $perilsLocale: Locale!) {

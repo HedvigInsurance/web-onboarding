@@ -11,6 +11,7 @@ import { Download } from './client/pages/Download'
 import { EmbarkRoot } from './client/pages/Embark'
 import { Forever } from './client/pages/Forever'
 import { FourOhFour } from './client/pages/FourOhFour'
+import { LoginApp } from './client/pages/LoginApp'
 import { OfferNew } from './client/pages/OfferNew'
 import { SignLoading } from './client/pages/SignLoading'
 
@@ -69,6 +70,10 @@ export const serverSideRoutes: ServerSideRoute[] = [
   {
     path: LOCALE_PATH_PATTERN + '/new-member/:name?/:id?',
     titleTextKey: 'START_PAGE_TITLE',
+  },
+  {
+    path: LOCALE_PATH_PATTERN + '/login',
+    titleTextKey: 'Text',
   },
   {
     path: /^(?!\/?new-member-assets).*$/,
@@ -138,6 +143,11 @@ export const reactPageRoutes: ReactPageRoute[] = [
   {
     path: LOCALE_PATH_PATTERN + '/new-member/debugger',
     Component: Debugger,
+    exact: true,
+  },
+  {
+    path: LOCALE_PATH_PATTERN + '/login',
+    Component: LoginApp,
     exact: true,
   },
   {

@@ -19,7 +19,7 @@ export const emailValidation = yup
   .email()
   .required()
 
-const getSsnLabel = (market: Market, textKeys: TextKeyMap): string => {
+export const getSsnLabel = (market: Market, textKeys: TextKeyMap): string => {
   switch (market) {
     case Market.Se:
       return textKeys.CHECKOUT_SSN_LABEL_SE()
@@ -30,7 +30,7 @@ const getSsnLabel = (market: Market, textKeys: TextKeyMap): string => {
   }
 }
 
-const getSsnPlaceholder = (market: Market, textKeys: TextKeyMap) => {
+export const getSsnPlaceholder = (market: Market, textKeys: TextKeyMap) => {
   switch (market) {
     case Market.Se:
       return textKeys.CHECKOUT_SSN_PLACEHOLDER_SE()
