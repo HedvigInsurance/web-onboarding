@@ -255,7 +255,7 @@ const DateForm: React.FC<{
       >
         <Value>
           <DateLabel>
-            {!hasStartDate && quote.dataCollectionId && (
+            {!hasStartDate && hasCurrentInsurer(quote) && (
               <StartDateLabelSwitcher
                 dataCollectionId={quote.dataCollectionId}
               />
