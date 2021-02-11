@@ -1,13 +1,12 @@
-# TODO Replace 'dataCollection' and 'monthlyPremium' since they are deprecated and will not work when we implement Insurely in Norway
 query ExternalInsuranceData($reference: ID!) {
-  externalInsuranceProvider {
-    dataCollection(reference: $reference) {
-      renewalDate
-      insuranceProvider
-      monthlyPremium {
-        currency
-        amount
-      }
+    externalInsuranceProvider {
+        dataCollection(reference: $reference) {
+            renewalDate
+            insuranceProvider
+            monthlyPremium {
+                currency
+                amount
+            }
+        }
     }
-  }
 }
