@@ -20,7 +20,6 @@ import {
 import { SwitchSafetySection } from 'pages/OfferNew/SwitchSafetySection'
 import { getOfferData } from 'pages/OfferNew/utils'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
-import { useStorage } from 'utils/StorageContainer'
 import { trackOfferGTM } from 'utils/tracking/gtm'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { Checkout } from './Checkout'
@@ -40,7 +39,6 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
 }
 
 export const OfferNew: React.FC = () => {
-  const storage = useStorage()
   const currentLocale = useCurrentLocale()
   const localeIsoCode = getLocaleIsoCode(currentLocale)
   const currentMarket = useMarket()
@@ -48,7 +46,7 @@ export const OfferNew: React.FC = () => {
   const history = useHistory()
   const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
   const redeemedCampaigns = redeemedCampaignsData?.redeemedCampaigns ?? []
-  const quoteIds = useQuoteIds(storage, history)
+  const quoteIds = useQuoteIds()
   const { data, loading: loadingQuoteBundle, refetch } = useQuoteBundleQuery({
     variables: {
       input: {

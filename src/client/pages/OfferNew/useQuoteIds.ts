@@ -1,25 +1,28 @@
 import queryString from 'querystring'
-import { History } from 'history'
+import { Location } from 'history'
 import { useEffect, useState } from 'react'
-import { StorageState } from 'src/client/utils/StorageContainer'
+import { useLocation } from 'react-router'
+import { StorageState, useStorage } from 'src/client/utils/StorageContainer'
 
-export const useQuoteIds = (storage: StorageState, history: History) => {
+export const useQuoteIds = () => {
+  const storage = useStorage()
+  const location = useLocation()
   const [quoteIds, setQuoteIds] = useState<ReadonlyArray<string> | null>(null)
 
   useEffect(() => {
     if (quoteIds) {
       return
     }
-    const qids = getQuoteIds(storage, history)
+    const qids = getQuoteIds(storage, location)
     setQuoteIds(qids)
-  }, [history, storage, quoteIds])
+  }, [location, storage, quoteIds])
 
   return quoteIds
 }
 
 const getQuoteIds = (
   storage: StorageState,
-  history: History,
+  location: Location,
 ): ReadonlyArray<string> => {
   const storedIds = storage.session.getSession()?.quoteIds
   if (storedIds) {
@@ -27,7 +30,7 @@ const getQuoteIds = (
   }
 
   const { quoteIds: queryParamQuoteIds } = queryString.parse(
-    history.location.search.substr(1),
+    location.search.substr(1),
   )
 
   if (queryParamQuoteIds && typeof queryParamQuoteIds === 'string') {
