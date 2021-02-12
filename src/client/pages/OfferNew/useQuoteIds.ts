@@ -4,6 +4,11 @@ import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router'
 import { StorageState, useStorage } from 'src/client/utils/StorageContainer'
 
+/**
+ * Hook that allows general access to quote IDs.
+ * @returns Either an array of quote IDs, an empty array if none were found,
+ *          or `null` before quote IDs have been loaded.
+ */
 export const useQuoteIds = () => {
   const storage = useStorage()
   const location = useLocation()
