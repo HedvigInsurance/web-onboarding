@@ -27,6 +27,7 @@ import { Checkout } from './Checkout'
 import { FaqSection } from './FaqSection'
 import { Introduction } from './Introduction'
 import { Perils } from './Perils'
+import { useQuoteIds } from './quote-ids'
 
 const createToggleCheckout = (history: History<any>, locale?: string) => (
   isOpen: boolean,
@@ -44,24 +45,28 @@ export const OfferNew: React.FC = () => {
   const localeIsoCode = getLocaleIsoCode(currentLocale)
   const currentMarket = useMarket()
   const variation = useVariation()
-  const quoteIds = storage.session.getSession()?.quoteIds ?? []
+  const history = useHistory()
   const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
   const redeemedCampaigns = redeemedCampaignsData?.redeemedCampaigns ?? []
+  const quoteIds = useQuoteIds(storage, history)
   const { data, loading: loadingQuoteBundle, refetch } = useQuoteBundleQuery({
     variables: {
       input: {
-        ids: [...quoteIds],
+        ids: [...(quoteIds ?? [])],
       },
       locale: localeIsoCode,
     },
+    skip: quoteIds === null,
   })
 
-  const history = useHistory()
   const checkoutMatch = useRouteMatch(
     '/:locale(se-en|se|no-en|no|dk-en|dk)/new-member/sign',
   )
   const toggleCheckout = createToggleCheckout(history, currentLocale)
 
+  if (quoteIds === null) {
+    return <LoadingPage />
+  }
   if (quoteIds.length === 0) {
     return <Redirect to={`/${currentLocale}/new-member`} />
   }
