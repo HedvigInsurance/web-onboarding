@@ -34,7 +34,7 @@ const getQuoteIds = (
     const withoutBrackets = queryParamQuoteIds.replace(/[[\]]/g, '')
     const splitted = withoutBrackets.split(',')
     storage.session.setSession({
-      ...(storage.session.getSession() ?? {}),
+      ...(storage.session.getSession()),
       quoteIds: splitted,
     })
     return splitted
