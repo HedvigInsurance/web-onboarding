@@ -2,7 +2,7 @@ import queryString from 'querystring'
 import { Location } from 'history'
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router'
-import { StorageState, useStorage } from 'src/client/utils/StorageContainer'
+import { StorageState, useStorage } from '../../utils/StorageContainer'
 
 /**
  * Hook that allows general access to quote IDs.
