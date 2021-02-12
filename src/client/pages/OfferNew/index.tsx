@@ -27,7 +27,7 @@ import { Checkout } from './Checkout'
 import { FaqSection } from './FaqSection'
 import { Introduction } from './Introduction'
 import { Perils } from './Perils'
-import { useQuoteIds } from './quote-ids'
+import { useQuoteIds } from './useQuoteIds'
 
 const createToggleCheckout = (history: History<any>, locale?: string) => (
   isOpen: boolean,
