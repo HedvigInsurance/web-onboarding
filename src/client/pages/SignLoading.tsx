@@ -17,11 +17,11 @@ import {
   useSignStatusQuery,
 } from 'data/graphql'
 import { getOfferData } from 'pages/OfferNew/utils'
-import { useStorage } from 'utils/StorageContainer'
 import { useTextKeys } from 'utils/textKeys'
 import { handleSignedEvent } from 'utils/tracking/signing'
 import { useTrack } from 'utils/tracking/tracking'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
+import { useQuoteIds } from '../utils/hooks/useQuoteIds'
 
 const InnerWrapper = styled(motion.div)`
   text-align: center;
@@ -40,15 +40,15 @@ export const SignLoading: React.FC = () => {
   const currentLocale = useCurrentLocale()
   const variation = useVariation()
   const localeIsoCode = getLocaleIsoCode(currentLocale)
-  const storage = useStorage()
-  const quoteIds = storage.session.getSession()?.quoteIds ?? []
+  const quoteIds = useQuoteIds()
   const { data: quoteBundleData } = useQuoteBundleQuery({
     variables: {
       input: {
-        ids: [...quoteIds],
+        ids: [...(quoteIds ?? [])],
       },
       locale: localeIsoCode,
     },
+    skip: quoteIds === null,
   })
   const member = useMemberQuery()
 
