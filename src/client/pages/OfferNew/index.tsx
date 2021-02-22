@@ -62,10 +62,11 @@ export const OfferNew: React.FC = () => {
   )
   const toggleCheckout = createToggleCheckout(history, currentLocale)
 
-  if (quoteIds === null) {
+  if ((loadingQuoteBundle && !data?.quoteBundle) || quoteIds === null) {
     return <LoadingPage />
   }
-  if (quoteIds.length === 0) {
+
+  if (quoteIds?.length === 0) {
     return <Redirect to={`/${currentLocale}/new-member`} />
   }
 
@@ -73,10 +74,6 @@ export const OfferNew: React.FC = () => {
     throw new Error(
       `No quote returned to show offer with (quoteIds=${quoteIds}).`,
     )
-  }
-
-  if (loadingQuoteBundle && !data?.quoteBundle) {
-    return <LoadingPage />
   }
 
   const handleCheckoutToggle = (open: boolean) => {
