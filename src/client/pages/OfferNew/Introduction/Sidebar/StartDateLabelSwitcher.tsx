@@ -41,6 +41,7 @@ export const StartDateLabelSwitcher: React.FC<Props> = ({
     variables: {
       reference: dataCollectionId || '',
     },
+    skip: !dataCollectionId,
   })
   const textKeys = useTextKeys()
 
