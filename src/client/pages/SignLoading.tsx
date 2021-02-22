@@ -21,7 +21,7 @@ import { useTextKeys } from 'utils/textKeys'
 import { handleSignedEvent } from 'utils/tracking/signing'
 import { useTrack } from 'utils/tracking/tracking'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
-import { useQuoteIds } from '../utils/hooks/useQuoteIds'
+import { useQuoteIds } from 'utils/hooks/useQuoteIds'
 
 const InnerWrapper = styled(motion.div)`
   text-align: center;
