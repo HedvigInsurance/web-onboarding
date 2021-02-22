@@ -45,6 +45,7 @@ export const StartDateLabelSwitcher: React.FC<Props> = ({
   })
   const textKeys = useTextKeys()
 
+  // TODO: when implementing Insurely in Norway this 👇 needs to be remade since renewal dates can differ on the two existing insurances
   const firstExternalInsurance =
     externalInsuranceData?.externalInsuranceProvider?.dataCollection[0]
   const renewalDate = firstExternalInsurance?.renewalDate
