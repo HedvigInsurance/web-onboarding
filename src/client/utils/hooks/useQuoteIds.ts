@@ -17,7 +17,7 @@ export const useQuoteIds = () => {
     setQuoteIds(qids)
   }, [location, storage, quoteIds])
 
-  return quoteIds
+  return { isLoading: quoteIds === null, quoteIds: quoteIds ?? [] }
 }
 
 const getQuoteIds = (
