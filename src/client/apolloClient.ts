@@ -64,6 +64,7 @@ export const apolloClient = (() => {
   })
 
   const client = new ApolloClient({
+    name: 'Web:Onboarding',
     cache: new InMemoryCache({
       possibleTypes,
       typePolicies: {

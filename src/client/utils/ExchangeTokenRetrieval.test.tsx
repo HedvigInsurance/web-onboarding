@@ -142,6 +142,7 @@ const mountWithApolloClient = (mocks: MockedResponse[], token: string) => {
 
   const link = new MockLink(mocks, true)
   const client = new ApolloClient({
+    name: 'Web:Onboarding',
     link,
     cache: new InMemoryCache({
       possibleTypes,
