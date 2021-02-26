@@ -96,11 +96,6 @@ const StartDateRowLabel = styled.div`
   padding-bottom: 0.5rem;
 `
 
-const DateLabel = styled.span`
-  margin-right: 5px;
-  text-align: left;
-`
-
 const Value = styled.div`
   display: flex;
   flex-direction: row;
@@ -172,8 +167,14 @@ const DateForm: React.FC<{
   const [dateLocale, setDateLocale] = React.useState<Locale | null>(null)
 
   const textKeys = useTextKeys()
-  const [setStartDate] = useStartDateMutation()
-  const [removeStartDate] = useRemoveStartDateMutation()
+  const [
+    setStartDate,
+    { loading: isLoadingSetStartDate },
+  ] = useStartDateMutation()
+  const [
+    removeStartDate,
+    { loading: isLoadingRemoveStartDate },
+  ] = useRemoveStartDateMutation()
 
   const locale = useCurrentLocale()
   const market = useMarket()
@@ -254,15 +255,13 @@ const DateForm: React.FC<{
         size={size}
       >
         <Value>
-          <DateLabel>
-            {!hasStartDate && hasCurrentInsurer(quote) && (
-              <StartDateLabelSwitcher
-                dataCollectionId={quote.dataCollectionId}
-              />
-            )}
-            {hasStartDate && getDateLabel()}
-          </DateLabel>
-          <DownArrow />
+          {!hasStartDate && hasCurrentInsurer(quote) && (
+            <StartDateLabelSwitcher dataCollectionId={quote.dataCollectionId} />
+          )}
+          {hasStartDate && getDateLabel()}
+          {(!isLoadingRemoveStartDate || !isLoadingSetStartDate) && (
+            <DownArrow />
+          )}
         </Value>
       </RowButton>
       {modal ? (
