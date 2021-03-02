@@ -190,8 +190,8 @@ interface EmbarkRootProps {
 }
 
 const ANGEL_DATA_QUERY = gql`
-  query AngelStory($name: String!) {
-    angelStory(name: $name) {
+  query AngelStory($name: String!, $locale: String!) {
+    angelStory(name: $name, locale: $locale) {
       content
     }
   }
@@ -205,6 +205,7 @@ interface AngelData {
 
 interface AngelVariables {
   name: string
+  locale: string
 }
 
 export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
@@ -214,6 +215,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
     [key: string]: any
   }>()
   const currentLocale = useCurrentLocale()
+  const localeIsoCode = getPickedLocaleFromCurrentLocale(currentLocale)
 
   const textKeys = useTextKeys()
 
@@ -229,14 +231,17 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
       }
 
       const result = await apolloClient.client.query<AngelData, AngelVariables>(
-        { query: ANGEL_DATA_QUERY, variables: { name: props.name } },
+        {
+          query: ANGEL_DATA_QUERY,
+          variables: { name: props.name, locale: localeIsoCode },
+        },
       )
 
       if (result.data && result.data.angelStory) {
         setData([props.name, JSON.parse(result.data.angelStory.content)])
       }
     })()
-  }, [props.name])
+  }, [props.name, localeIsoCode])
 
   React.useEffect(() => {
     if (!props.name) {
