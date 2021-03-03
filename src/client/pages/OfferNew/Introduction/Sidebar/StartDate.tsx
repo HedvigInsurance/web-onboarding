@@ -16,6 +16,7 @@ import {
   useCurrentLocale,
   useMarket,
 } from 'components/utils/CurrentLocale'
+import { LoadingDots } from 'components/LoadingDots/LoadingDots'
 import { useRemoveStartDateMutation, useStartDateMutation } from 'data/graphql'
 import { CancellationOptions } from 'pages/OfferNew/Introduction/Sidebar/CancellationOptions'
 import { OfferData, OfferQuote } from 'pages/OfferNew/types'
@@ -106,6 +107,11 @@ const Value = styled.div`
   line-height: 1.5rem;
   color: ${colorsV3.gray900};
 `
+const LoadingDotsWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`
 
 const ErrorMessage = styled(motion.div)`
   background-color: #c9abf5;
@@ -165,16 +171,14 @@ const DateForm: React.FC<{
     getDefaultDateValue(quote),
   )
   const [dateLocale, setDateLocale] = React.useState<Locale | null>(null)
+  const [
+    isLoadingPickedStartDate,
+    setIsLoadingPickedStartDate,
+  ] = React.useState(false)
 
   const textKeys = useTextKeys()
-  const [
-    setStartDate,
-    { loading: isLoadingSetStartDate },
-  ] = useStartDateMutation()
-  const [
-    removeStartDate,
-    { loading: isLoadingRemoveStartDate },
-  ] = useRemoveStartDateMutation()
+  const [setStartDate] = useStartDateMutation()
+  const [removeStartDate] = useRemoveStartDateMutation()
 
   const locale = useCurrentLocale()
   const market = useMarket()
@@ -215,6 +219,7 @@ const DateForm: React.FC<{
       setDate={(newDateValue) => {
         setDateValue(newDateValue)
         setShowError(false)
+        setIsLoadingPickedStartDate(true)
         if (newDateValue === null) {
           removeStartDate({
             variables: {
@@ -223,6 +228,7 @@ const DateForm: React.FC<{
           })
             .then(() => refetch())
             .catch(handleFail)
+            .finally(() => setIsLoadingPickedStartDate(false))
         } else {
           setStartDate({
             variables: {
@@ -232,6 +238,7 @@ const DateForm: React.FC<{
           })
             .then(() => refetch())
             .catch(handleFail)
+            .finally(() => setIsLoadingPickedStartDate(false))
         }
       }}
       hasCurrentInsurer={hasCurrentInsurer(quote)}
@@ -255,13 +262,20 @@ const DateForm: React.FC<{
         size={size}
       >
         <Value>
-          {!hasStartDate && hasCurrentInsurer(quote) && (
-            <StartDateLabelSwitcher dataCollectionId={quote.dataCollectionId} />
+          {!hasStartDate &&
+            !isLoadingPickedStartDate &&
+            hasCurrentInsurer(quote) && (
+              <StartDateLabelSwitcher
+                dataCollectionId={quote.dataCollectionId}
+              />
+            )}
+          {isLoadingPickedStartDate && (
+            <LoadingDotsWrapper>
+              <LoadingDots color={colorsV3.gray500} />
+            </LoadingDotsWrapper>
           )}
-          {hasStartDate && getDateLabel()}
-          {(!isLoadingRemoveStartDate || !isLoadingSetStartDate) && (
-            <DownArrow />
-          )}
+          {hasStartDate && !isLoadingPickedStartDate && getDateLabel()}
+          {!isLoadingPickedStartDate && <DownArrow />}
         </Value>
       </RowButton>
       {modal ? (
