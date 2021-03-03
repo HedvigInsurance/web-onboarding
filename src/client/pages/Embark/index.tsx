@@ -15,7 +15,7 @@ import gql from 'graphql-tag'
 import Helmet from 'react-helmet-async'
 import { apolloClient } from 'apolloClient'
 import {
-  getPickedLocaleFromCurrentLocale,
+  getLocaleIsoCode,
   useCurrentLocale,
 } from 'components/utils/CurrentLocale'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
@@ -215,7 +215,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
     [key: string]: any
   }>()
   const currentLocale = useCurrentLocale()
-  const localeIsoCode = getPickedLocaleFromCurrentLocale(currentLocale)
+  const localeIsoCode = getLocaleIsoCode(currentLocale)
 
   const textKeys = useTextKeys()
 
@@ -329,17 +329,17 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                     resolvers={{
                       graphqlQuery: graphQLQuery(
                         storageState,
-                        getPickedLocaleFromCurrentLocale(currentLocale),
+                        getLocaleIsoCode(currentLocale),
                       ),
                       graphqlMutation: graphQLMutation(
                         storageState,
-                        getPickedLocaleFromCurrentLocale(currentLocale),
+                        getLocaleIsoCode(currentLocale),
                       ),
                       personalInformationApi: resolvePersonalInformation,
                       houseInformation: resolveHouseInformation,
                       createQuote: createQuote(
                         storageState,
-                        getPickedLocaleFromCurrentLocale(currentLocale),
+                        getLocaleIsoCode(currentLocale),
                       ),
                       externalInsuranceProviderProviderStatus: resolveExternalInsuranceProviderProviderStatus,
                       externalInsuranceProviderStartSession: resolveExternalInsuranceProviderStartSession,

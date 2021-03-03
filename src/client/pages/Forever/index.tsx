@@ -7,7 +7,7 @@ import { RouteComponentProps } from 'react-router'
 import { Route, Switch } from 'react-router-dom'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
 import {
-  getPickedLocaleFromCurrentLocale,
+  getLocaleIsoCode,
   useCurrentLocale,
 } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
@@ -66,7 +66,7 @@ export const Forever: React.FC<ForeverProps> = ({
   const { handleSubmit } = useRedeemCode()
   const [updatePickedLocale] = useUpdatePickedLocaleMutation({
     variables: {
-      pickedLocale: getPickedLocaleFromCurrentLocale(currentLocale),
+      pickedLocale: getLocaleIsoCode(currentLocale),
     },
   })
   const storage = useStorage()
