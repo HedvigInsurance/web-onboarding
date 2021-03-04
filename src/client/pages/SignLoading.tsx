@@ -5,10 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { Redirect } from 'react-router'
 import { LinkButton } from 'components/buttons'
 import { LoadingPage } from 'components/LoadingPage'
-import {
-  getLocaleIsoCode,
-  useCurrentLocale,
-} from 'components/utils/CurrentLocale'
+import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
 import {
   QuoteBundle,
   SignState,
@@ -39,7 +36,7 @@ export const SignLoading: React.FC = () => {
   const textKeys = useTextKeys()
   const currentLocale = useCurrentLocale()
   const variation = useVariation()
-  const localeIsoCode = getLocaleIsoCode(currentLocale)
+  const localeIsoCode = getIsoLocale(currentLocale)
   const { isLoading: quoteIdsIsLoading, quoteIds } = useQuoteIds()
   const { data: quoteBundleData } = useQuoteBundleQuery({
     variables: {

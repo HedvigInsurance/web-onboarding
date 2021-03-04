@@ -4,7 +4,7 @@ import { matchPath, useLocation } from 'react-router'
 import { Locale } from 'data/graphql'
 import { LOCALE_PATH_PATTERN } from 'shared/locale'
 
-export const getLocaleIsoCode = (locale: string): Locale => {
+export const getIsoLocale = (locale: string): Locale => {
   switch (locale) {
     case 'dk':
       return Locale.DaDk

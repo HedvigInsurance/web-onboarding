@@ -6,10 +6,7 @@ import React from 'react'
 import { Mount } from 'react-lifecycle-components'
 import { afterTick } from 'pages/Embark/utils'
 import { Locale, UpdatePickedLocaleDocument } from 'data/graphql'
-import {
-  getLocaleIsoCode,
-  useCurrentLocale,
-} from 'components/utils/CurrentLocale'
+import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
 import { captureSentryError } from 'utils/sentry-client'
 import { Storage, StorageContainer } from 'utils/StorageContainer'
 import {
@@ -78,7 +75,7 @@ export const setupSession = async (
 export const SessionContainer: React.SFC<SessionContainerProps> = ({
   children,
 }) => {
-  const pickedLocale = getLocaleIsoCode(useCurrentLocale())
+  const pickedLocale = getIsoLocale(useCurrentLocale())
   const [createSessionCalled, setCreateSessionCalled] = React.useState(false)
   const client = useApolloClient()
 

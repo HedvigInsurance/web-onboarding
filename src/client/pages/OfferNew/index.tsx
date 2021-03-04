@@ -5,7 +5,7 @@ import { Redirect, useHistory, useRouteMatch } from 'react-router'
 import { LoadingPage } from 'components/LoadingPage'
 import { TopBar } from 'components/TopBar'
 import {
-  getLocaleIsoCode,
+  getIsoLocale,
   useCurrentLocale,
   Market,
   useMarket,
@@ -40,7 +40,7 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
 
 export const OfferNew: React.FC = () => {
   const currentLocale = useCurrentLocale()
-  const localeIsoCode = getLocaleIsoCode(currentLocale)
+  const localeIsoCode = getIsoLocale(currentLocale)
   const currentMarket = useMarket()
   const variation = useVariation()
   const history = useHistory()

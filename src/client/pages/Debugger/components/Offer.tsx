@@ -14,7 +14,7 @@ import { Button, LinkButton } from 'components/buttons'
 import { InputField } from 'components/inputs'
 import { StorageContainer, useStorage } from 'utils/StorageContainer'
 import {
-  getLocaleIsoCode,
+  getIsoLocale,
   useCurrentLocale,
   useMarket,
   Market,
@@ -133,7 +133,7 @@ export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
   )
   const storageState = useStorage()
   const currentLocale = useCurrentLocale()
-  const localeIsoCode = getLocaleIsoCode(currentLocale)
+  const localeIsoCode = getIsoLocale(currentLocale)
   const currentMarket = useMarket()
 
   const [quoteType, setQuoteType] = useState(

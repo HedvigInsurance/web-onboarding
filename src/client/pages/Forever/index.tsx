@@ -6,10 +6,7 @@ import Helmet from 'react-helmet-async'
 import { RouteComponentProps } from 'react-router'
 import { Route, Switch } from 'react-router-dom'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
-import {
-  getLocaleIsoCode,
-  useCurrentLocale,
-} from 'components/utils/CurrentLocale'
+import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionContainer } from 'containers/SessionContainer'
 import { useUpdatePickedLocaleMutation } from 'data/graphql'
@@ -66,7 +63,7 @@ export const Forever: React.FC<ForeverProps> = ({
   const { handleSubmit } = useRedeemCode()
   const [updatePickedLocale] = useUpdatePickedLocaleMutation({
     variables: {
-      pickedLocale: getLocaleIsoCode(currentLocale),
+      pickedLocale: getIsoLocale(currentLocale),
     },
   })
   const storage = useStorage()
