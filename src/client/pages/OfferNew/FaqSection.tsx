@@ -5,10 +5,7 @@ import React from 'react'
 import AnimateHeight from 'react-animate-height'
 import ReactMarkdown from 'react-markdown/with-html'
 import { useFaqsQuery } from 'data/graphql'
-import {
-  getLocaleIsoCode,
-  useCurrentLocale,
-} from 'components/utils/CurrentLocale'
+import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
 import {
   Column,
@@ -140,7 +137,7 @@ export const Accordion: React.FC<AccordionProps> = ({ headline, body }) => {
 
 export const FaqSection: React.FC = () => {
   const pathLocale = useCurrentLocale()
-  const language = getLocaleIsoCode(pathLocale)
+  const language = getIsoLocale(pathLocale)
   const faqs = useFaqsQuery({ variables: { language } })
   const languageData = faqs?.data?.languages[0]
   const textKeys = useTextKeys()

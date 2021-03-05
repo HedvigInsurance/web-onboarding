@@ -14,10 +14,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import gql from 'graphql-tag'
 import Helmet from 'react-helmet-async'
 import { apolloClient } from 'apolloClient'
-import {
-  getPickedLocaleFromCurrentLocale,
-  useCurrentLocale,
-} from 'components/utils/CurrentLocale'
+import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useTextKeys } from 'utils/textKeys'
 import { StorageContainer } from '../../utils/StorageContainer'
@@ -215,7 +212,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
     [key: string]: any
   }>()
   const currentLocale = useCurrentLocale()
-  const localeIsoCode = getPickedLocaleFromCurrentLocale(currentLocale)
+  const localeIsoCode = getIsoLocale(currentLocale)
 
   const textKeys = useTextKeys()
 
@@ -329,17 +326,17 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                     resolvers={{
                       graphqlQuery: graphQLQuery(
                         storageState,
-                        getPickedLocaleFromCurrentLocale(currentLocale),
+                        getIsoLocale(currentLocale),
                       ),
                       graphqlMutation: graphQLMutation(
                         storageState,
-                        getPickedLocaleFromCurrentLocale(currentLocale),
+                        getIsoLocale(currentLocale),
                       ),
                       personalInformationApi: resolvePersonalInformation,
                       houseInformation: resolveHouseInformation,
                       createQuote: createQuote(
                         storageState,
-                        getPickedLocaleFromCurrentLocale(currentLocale),
+                        getIsoLocale(currentLocale),
                       ),
                       externalInsuranceProviderProviderStatus: resolveExternalInsuranceProviderProviderStatus,
                       externalInsuranceProviderStartSession: resolveExternalInsuranceProviderStartSession,

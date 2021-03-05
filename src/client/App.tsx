@@ -2,10 +2,7 @@ import { Provider } from 'constate'
 import React from 'react'
 import { hot } from 'react-hot-loader'
 import { Route, Switch, useHistory } from 'react-router-dom'
-import {
-  getLocaleIsoCode,
-  useCurrentLocale,
-} from 'components/utils/CurrentLocale'
+import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
 import { TextKeyProvider } from 'utils/textKeys'
 import { reactPageRoutes } from '../routes'
 import { AppTokenRetrieval } from './utils/AppTokenRetrieval'
@@ -25,7 +22,7 @@ export const App: React.ComponentType<StorageState> = ({ session }) => {
     <>
       <GlobalCss />
       <TextKeyProvider
-        locale={getLocaleIsoCode(currentLocale)}
+        locale={getIsoLocale(currentLocale)}
         locationSearch={history.location.search}
       >
         <Provider<WithStorageProps>
