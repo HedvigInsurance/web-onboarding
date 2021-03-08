@@ -1,7 +1,7 @@
 <!-- 
 If there is a Jira issue and the name of your branch doesn't include the issue key (e.g. GRW-123), please prefix your PR title with it. 
 Also, if applicable, include whether this is a Fix, Feature or Chore.
-Example: GRW-i23 / Feature / Awesome new thing
+Example: GRW-123 / Feature / Awesome new thing
 -->
 
 ## What?
