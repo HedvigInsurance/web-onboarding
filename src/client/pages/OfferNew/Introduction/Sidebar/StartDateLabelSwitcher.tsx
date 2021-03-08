@@ -87,22 +87,26 @@ export const StartDateLabelSwitcher: React.FC<Props> = ({
   return (
     <>
       {loading && <Empty />}
-      {renewalDate && !loading && (
-        <DataCollectedStartDateWrapper>
-          <DataCollectedStartDateValue>
-            {renewalDate}
-          </DataCollectedStartDateValue>
-          <DataCollectedStartDateDescription>
-            {textKeys.START_DATE_EXTERNAL_PROVIDER_SWITCH({
-              insuranceProvider: currentInsurerName,
-            })}
-          </DataCollectedStartDateDescription>
-        </DataCollectedStartDateWrapper>
-      )}
-      {!renewalDate && !loading && (
-        <GenericLabel>
-          {textKeys.SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER()}
-        </GenericLabel>
+      {!loading && (
+        <>
+          {renewalDate && (
+            <DataCollectedStartDateWrapper>
+              <DataCollectedStartDateValue>
+                {renewalDate}
+              </DataCollectedStartDateValue>
+              <DataCollectedStartDateDescription>
+                {textKeys.START_DATE_EXTERNAL_PROVIDER_SWITCH({
+                  insuranceProvider: currentInsurerName,
+                })}
+              </DataCollectedStartDateDescription>
+            </DataCollectedStartDateWrapper>
+          )}
+          {!renewalDate && (
+            <GenericLabel>
+              {textKeys.SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER()}
+            </GenericLabel>
+          )}
+        </>
       )}
     </>
   )
