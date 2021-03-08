@@ -1618,10 +1618,10 @@
   resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-4.0.3.tgz#60d222f6e08db65a5403e832d525147ab3cde956"
   integrity sha512-G6NjFFTg7rj4eVNj/QZc7xrupyJ41CTYUPVTzjkt0R7QWD3CqXStWkVKwgR8rRli51swpVY7xhlk7HX1mlJ8WQ==
 
-"@hedviginsurance/embark@^2.0.10":
-  version "2.0.10"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-2.0.10.tgz#101b69624c8f6f8205ab23643d1d6730daa301f8"
-  integrity sha512-a1NdVinIs6iNu0OrkFByQKlYLq7hU9wBJJBEFQm2ASo02U5CFSpY5qjQhaSn4z6MujM9P88BH191yaQ0fcw9kA==
+"@hedviginsurance/embark@^2.0.11":
+  version "2.0.11"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-2.0.11.tgz#09428ff6d2790afaea286b64eb4634f30e9d2d9b"
+  integrity sha512-2DuM2Ihq3eRGn8Y7xFiXXKigSptHAc9NK1Ukr0kknptrQxXtF4h+UEn0XNtOmWDT9PdSOXY4PI+7QTvhE3AX4g==
   dependencies:
     "@emotion/babel-plugin" "^11.0.0-next.12"
     "@emotion/core" "^10.0.21"
