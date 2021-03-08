@@ -6,10 +6,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router'
 import { useTextKeys } from 'utils/textKeys'
 import { Spinner } from 'components/utils'
-import {
-  getLocaleIsoCode,
-  useCurrentLocale,
-} from 'components/utils/CurrentLocale'
+import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
 import {
   Scalars,
   SubmitAdditionalPaymentDetialsMutationFn,
@@ -205,7 +202,7 @@ const createAdyenCheckout = ({
     ['en_SE', 'en-US'],
     ['nb_NO', 'no-NO'],
     ['en_NO', 'en-US'],
-  ])(getLocaleIsoCode(currentLocale))
+  ])(getIsoLocale(currentLocale))
 
   const returnUrl = `${window.location.origin}/${currentLocale}/new-member/connect-payment/adyen-callback`
 

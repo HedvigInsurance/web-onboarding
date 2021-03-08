@@ -5,7 +5,7 @@ import { Redirect, useHistory, useRouteMatch } from 'react-router'
 import { LoadingPage } from 'components/LoadingPage'
 import { TopBar } from 'components/TopBar'
 import {
-  getLocaleIsoCode,
+  getIsoLocale,
   useCurrentLocale,
   Market,
   useMarket,
@@ -20,9 +20,9 @@ import {
 import { SwitchSafetySection } from 'pages/OfferNew/SwitchSafetySection'
 import { getOfferData } from 'pages/OfferNew/utils'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
-import { useStorage } from 'utils/StorageContainer'
 import { trackOfferGTM } from 'utils/tracking/gtm'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
+import { useQuoteIds } from '../../utils/hooks/useQuoteIds'
 import { Checkout } from './Checkout'
 import { FaqSection } from './FaqSection'
 import { Introduction } from './Introduction'
@@ -39,14 +39,14 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
 }
 
 export const OfferNew: React.FC = () => {
-  const storage = useStorage()
   const currentLocale = useCurrentLocale()
-  const localeIsoCode = getLocaleIsoCode(currentLocale)
+  const localeIsoCode = getIsoLocale(currentLocale)
   const currentMarket = useMarket()
   const variation = useVariation()
-  const quoteIds = storage.session.getSession()?.quoteIds ?? []
+  const history = useHistory()
   const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
   const redeemedCampaigns = redeemedCampaignsData?.redeemedCampaigns ?? []
+  const { isLoading: quoteIdsIsLoading, quoteIds } = useQuoteIds()
   const { data, loading: loadingQuoteBundle, refetch } = useQuoteBundleQuery({
     variables: {
       input: {
@@ -54,13 +54,17 @@ export const OfferNew: React.FC = () => {
       },
       locale: localeIsoCode,
     },
+    skip: quoteIdsIsLoading,
   })
 
-  const history = useHistory()
   const checkoutMatch = useRouteMatch(
     '/:locale(se-en|se|no-en|no|dk-en|dk)/new-member/sign',
   )
   const toggleCheckout = createToggleCheckout(history, currentLocale)
+
+  if ((loadingQuoteBundle && !data?.quoteBundle) || quoteIdsIsLoading) {
+    return <LoadingPage />
+  }
 
   if (quoteIds.length === 0) {
     return <Redirect to={`/${currentLocale}/new-member`} />
@@ -70,10 +74,6 @@ export const OfferNew: React.FC = () => {
     throw new Error(
       `No quote returned to show offer with (quoteIds=${quoteIds}).`,
     )
-  }
-
-  if (loadingQuoteBundle && !data?.quoteBundle) {
-    return <LoadingPage />
   }
 
   const handleCheckoutToggle = (open: boolean) => {

@@ -1,11 +1,12 @@
 <!-- 
-If there is one, add the ID of the Jira issue to the Pull Request title.
-E.g. "[HVG-123] Make the Pull Request template great again" 
+If there is a Jira issue and the name of your branch doesn't include the issue key (e.g. GRW-123), please prefix your PR title with it. 
+Also, if applicable, include whether this is a Fix, Feature or Chore.
+Example: GRW-i23 / Feature / Awesome new thing
 -->
 
 ## What?
 
-<!-- What changes are made? If there are many significant changes, a list might be a good format. -->
+<!-- What changes are made? If there are many changes, a list might be a good format. -->
 
 
 ## Why?
@@ -13,8 +14,8 @@ E.g. "[HVG-123] Make the Pull Request template great again"
 <!-- Why are these changes made? -->
 
 
-<!-- If there is one, add a link to the Jira ticket below. -->
-_Referenced ticket [here]()_
+_Referenced ticket(s): []_
+<!-- If there is a Jira issue, add the id between brackets, and a link to that issue will be created. -->
 
 
-<!-- And, if that makes sense, add screenshots and/or GIF's below -->
+<!-- Finally, if that makes sense, add screenshots and/or screen recordings below, preferably with headlines and/or descriptions -->

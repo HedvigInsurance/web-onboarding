@@ -4,7 +4,7 @@ import { matchPath, useLocation } from 'react-router'
 import { Locale } from 'data/graphql'
 import { LOCALE_PATH_PATTERN } from 'shared/locale'
 
-export const getLocaleIsoCode = (locale: string): Locale => {
+export const getIsoLocale = (locale: string): Locale => {
   switch (locale) {
     case 'dk':
       return Locale.DaDk
@@ -66,15 +66,3 @@ export const useMarket = (): Market => {
     ['dk-en', Market.Dk],
   ])(currentLocale)!
 }
-
-export const getPickedLocaleFromCurrentLocale = (
-  currentLocale: string,
-): Locale =>
-  match<string, Locale>([
-    ['sv_SE', Locale.SvSe],
-    ['en_SE', Locale.EnSe],
-    ['nb_NO', Locale.NbNo],
-    ['en_NO', Locale.EnNo],
-    ['da_DK', Locale.DaDk],
-    ['en_DK', Locale.EnDk],
-  ])(getLocaleIsoCode(currentLocale))!
