@@ -262,20 +262,22 @@ const DateForm: React.FC<{
         size={size}
       >
         <Value>
-          {!hasStartDate &&
-            !isLoadingPickedStartDate &&
-            hasCurrentInsurer(quote) && (
-              <StartDateLabelSwitcher
-                dataCollectionId={quote.dataCollectionId}
-              />
-            )}
           {isLoadingPickedStartDate && (
             <LoadingDotsWrapper>
               <LoadingDots color={colorsV3.gray500} />
             </LoadingDotsWrapper>
           )}
-          {hasStartDate && !isLoadingPickedStartDate && getDateLabel()}
-          {!isLoadingPickedStartDate && <DownArrow />}
+          {!isLoadingPickedStartDate && (
+            <>
+              {!hasStartDate && hasCurrentInsurer(quote) && (
+                <StartDateLabelSwitcher
+                  dataCollectionId={quote.dataCollectionId}
+                />
+              )}
+              {hasStartDate && getDateLabel()}
+              <DownArrow />
+            </>
+          )}
         </Value>
       </RowButton>
       {modal ? (
