@@ -1,7 +1,6 @@
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { externalInsuranceProviders } from '@hedviginsurance/embark'
 import { format, isToday, Locale, parse } from 'date-fns'
 import { motion } from 'framer-motion'
 import hexToRgba from 'hex-to-rgba'
@@ -17,11 +16,8 @@ import {
   useCurrentLocale,
   useMarket,
 } from 'components/utils/CurrentLocale'
-import {
-  useExternalInsuranceDataQuery,
-  useRemoveStartDateMutation,
-  useStartDateMutation,
-} from 'data/graphql'
+import { LoadingDots } from 'components/LoadingDots/LoadingDots'
+import { useRemoveStartDateMutation, useStartDateMutation } from 'data/graphql'
 import { CancellationOptions } from 'pages/OfferNew/Introduction/Sidebar/CancellationOptions'
 import { OfferData, OfferQuote } from 'pages/OfferNew/types'
 import {
@@ -32,6 +28,7 @@ import {
 import { useTextKeys } from 'utils/textKeys'
 import { Size } from 'components/types'
 import { gqlDateFormat } from './utils'
+import { StartDateLabelSwitcher } from './StartDateLabelSwitcher'
 
 interface Props {
   offerData: OfferData
@@ -100,18 +97,6 @@ const StartDateRowLabel = styled.div`
   padding-bottom: 0.5rem;
 `
 
-const DateLabel = styled.span<{ hasStartDate: boolean }>`
-  margin-right: 5px;
-  text-align: left;
-  ${({ hasStartDate }) =>
-    !hasStartDate &&
-    css`
-      font-size: 0.875rem;
-      line-height: 1;
-      color: ${colorsV3.gray500};
-    `};
-`
-
 const Value = styled.div`
   display: flex;
   flex-direction: row;
@@ -122,6 +107,11 @@ const Value = styled.div`
   line-height: 1.5rem;
   color: ${colorsV3.gray900};
 `
+const LoadingDotsWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`
 
 const ErrorMessage = styled(motion.div)`
   background-color: #c9abf5;
@@ -129,24 +119,6 @@ const ErrorMessage = styled(motion.div)`
   padding: 1.25rem;
   margin-bottom: 10px;
   color: ${colorsV3.gray900};
-`
-
-const DataCollectedStartDateWrapper = styled.div`
-  display: flex;
-  align-items: flex-end;
-  flex-direction: column;
-  text-align: right;
-  margin-right: 0.5rem;
-`
-
-const DataCollectedStartDateDescription = styled.span`
-  font-size: 0.75rem;
-  line-height: 0.75rem;
-  color: ${colorsV3.gray700};
-`
-
-const DataCollectedStartDateValue = styled.span`
-  font-size: 1rem;
 `
 
 const DateInputModalWrapper = styled.div<{ isOpen: boolean }>`
@@ -199,15 +171,14 @@ const DateForm: React.FC<{
     getDefaultDateValue(quote),
   )
   const [dateLocale, setDateLocale] = React.useState<Locale | null>(null)
+  const [
+    isLoadingPickedStartDate,
+    setIsLoadingPickedStartDate,
+  ] = React.useState(false)
 
   const textKeys = useTextKeys()
   const [setStartDate] = useStartDateMutation()
   const [removeStartDate] = useRemoveStartDateMutation()
-  const { data: externalInsuranceData } = useExternalInsuranceDataQuery({
-    variables: {
-      reference: quote.dataCollectionId || '',
-    },
-  })
 
   const locale = useCurrentLocale()
   const market = useMarket()
@@ -237,35 +208,9 @@ const DateForm: React.FC<{
 
       return format(dateValue, getDateFormat(market)!, { locale: dateLocale! })
     }
-
-    const firstExternalInsurance =
-      externalInsuranceData?.externalInsuranceProvider?.dataCollection[0]
-    const renewalDate = firstExternalInsurance?.renewalDate
-
-    if (renewalDate) {
-      const externalInsuranceProvider = externalInsuranceProviders.find(
-        (provider: { externalCollectionId?: string }) =>
-          provider.externalCollectionId ===
-          firstExternalInsurance?.insuranceProvider?.toUpperCase(),
-      )
-
-      return (
-        <DataCollectedStartDateWrapper>
-          <DataCollectedStartDateValue>
-            {renewalDate}
-          </DataCollectedStartDateValue>
-          <DataCollectedStartDateDescription>
-            {textKeys.START_DATE_EXTERNAL_PROVIDER_SWITCH({
-              insuranceProvider: externalInsuranceProvider?.name,
-            })}
-          </DataCollectedStartDateDescription>
-        </DataCollectedStartDateWrapper>
-      )
-    }
-
-    return textKeys.SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER()
   }
 
+  // TODO: make this function (which returns the calendar component) a regular React function component, in a file of its own
   const getDateInput = () => (
     <StyledDateInput
       open={datePickerOpen}
@@ -274,6 +219,7 @@ const DateForm: React.FC<{
       setDate={(newDateValue) => {
         setDateValue(newDateValue)
         setShowError(false)
+        setIsLoadingPickedStartDate(true)
         if (newDateValue === null) {
           removeStartDate({
             variables: {
@@ -282,6 +228,7 @@ const DateForm: React.FC<{
           })
             .then(() => refetch())
             .catch(handleFail)
+            .finally(() => setIsLoadingPickedStartDate(false))
         } else {
           setStartDate({
             variables: {
@@ -291,6 +238,7 @@ const DateForm: React.FC<{
           })
             .then(() => refetch())
             .catch(handleFail)
+            .finally(() => setIsLoadingPickedStartDate(false))
         }
       }}
       hasCurrentInsurer={hasCurrentInsurer(quote)}
@@ -299,6 +247,7 @@ const DateForm: React.FC<{
   )
 
   const hasStartDate = Boolean(getDefaultDateValue(quote))
+
   return (
     <RowButtonWrapper>
       {isSplit && (
@@ -313,10 +262,22 @@ const DateForm: React.FC<{
         size={size}
       >
         <Value>
-          <DateLabel hasStartDate={Boolean(dateValue)}>
-            {getDateLabel()}
-          </DateLabel>
-          {hasStartDate && <DownArrow />}
+          {isLoadingPickedStartDate && (
+            <LoadingDotsWrapper>
+              <LoadingDots color={colorsV3.gray500} />
+            </LoadingDotsWrapper>
+          )}
+          {!isLoadingPickedStartDate && (
+            <>
+              {!hasStartDate && hasCurrentInsurer(quote) && (
+                <StartDateLabelSwitcher
+                  dataCollectionId={quote.dataCollectionId}
+                />
+              )}
+              {hasStartDate && getDateLabel()}
+              <DownArrow />
+            </>
+          )}
         </Value>
       </RowButton>
       {modal ? (
