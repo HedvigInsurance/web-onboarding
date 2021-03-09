@@ -154,17 +154,28 @@ export const reactPageRoutes: ReactPageRoute[] = [
     path: LOCALE_PATH_PATTERN + '/new-member/:name?/:id?',
     render: ({ match }: RouteComponentProps<any>) => {
       const getProps = () => {
+        match.params
         switch (match.params.locale) {
           case 'dk':
-            return {
-              baseUrl: '/dk/new-member/contents',
-              name: 'Web Onboarding DK - Contents',
-            }
           case 'dk-en':
-            return {
-              baseUrl: '/dk-en/new-member/contents',
-              name: 'Web Onboarding DK - Contents',
+            switch (match.params.name) {
+              case 'contents':
+                return {
+                  baseUrl: '/dk/new-member/contents',
+                  name: 'Web Onboarding DK - Contents',
+                }
+              case 'contents-accident':
+                return {
+                  baseUrl: '/dk/new-member/contents-accident',
+                  name: 'Web Onboarding DK - Danish Contents-Accident',
+                }
+              case 'contents-accident-travel':
+                return {
+                  baseUrl: '/dk/new-member/contents-accident-travel',
+                  name: 'Web Onboarding DK - Danish Contents-Accident-Travel',
+                }
             }
+            break
           case 'no':
             switch (match.params.name) {
               case 'contents':
