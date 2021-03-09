@@ -159,19 +159,19 @@ export const reactPageRoutes: ReactPageRoute[] = [
           case 'dk':
           case 'dk-en':
             switch (match.params.name) {
-              case 'contents':
+              case 'home':
                 return {
-                  baseUrl: '/dk/new-member/contents',
+                  baseUrl: '/dk/new-member/home',
                   name: 'Web Onboarding DK - Contents',
                 }
-              case 'contents-accident':
+              case 'home-accident':
                 return {
-                  baseUrl: '/dk/new-member/contents-accident',
+                  baseUrl: '/dk/new-member/home-accident',
                   name: 'Web Onboarding DK - Danish Contents-Accident',
                 }
-              case 'contents-accident-travel':
+              case 'home-accident-travel':
                 return {
-                  baseUrl: '/dk/new-member/contents-accident-travel',
+                  baseUrl: '/dk/new-member/home-accident-travel',
                   name: 'Web Onboarding DK - Danish Contents-Accident-Travel',
                 }
             }
