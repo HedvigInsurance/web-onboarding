@@ -229,6 +229,7 @@ export const reactPageRoutes: ReactPageRoute[] = [
                   baseUrl: '/se/new-member/switch',
                   name: 'Web Onboarding - Swedish Switcher',
                 }
+              // TODO: Remove this or? 👇
               case 'switch-beta':
                 return {
                   baseUrl: '/se/new-member/switch-beta',
