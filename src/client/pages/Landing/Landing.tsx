@@ -3,7 +3,6 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import React, { useState } from 'react'
 import Helmet from 'react-helmet-async'
-import { Redirect } from 'react-router'
 import { TopBar, TopBarFiller } from 'components/TopBar'
 import {
   Market,
@@ -226,10 +225,6 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
   const variation = useVariation()
   const [backgroundLoaded, setBackgroundHasLoaded] = useState(false)
 
-  if (currentLocale === 'dk' || currentLocale === 'dk-en') {
-    return <Redirect to={`/${currentLocale}/new-member/contents`} />
-  }
-
   return (
     <Page>
       <Global
@@ -261,6 +256,16 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
             rel="alternate"
             hrefLang="en-no"
             href="https://www.hedvig.com/no-en/new-member"
+          />
+          <link
+            rel="alternate"
+            hrefLang="da-dk"
+            href="https://www.hedvig.com/dk/new-member"
+          />
+          <link
+            rel="alternate"
+            hrefLang="en-dk"
+            href="https://www.hedvig.com/dk-en/new-member"
           />
           <link
             rel="canonical"
