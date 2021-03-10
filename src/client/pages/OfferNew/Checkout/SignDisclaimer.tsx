@@ -23,7 +23,7 @@ const Wrapper = styled('div')`
   }
 `
 
-const getTermsLinks = (currentLocale: string) => {
+export const getTermsLinks = (currentLocale: string) => {
   const baseUrl = `https://www.hedvig.com/${currentLocale}`
 
   const isPageInEnglish = currentLocale.includes('en')

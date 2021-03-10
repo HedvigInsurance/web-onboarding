@@ -4,12 +4,11 @@ import color from 'color'
 import React from 'react'
 import { Limits } from 'pages/OfferNew/Perils/InsuranceValues/Limits'
 import { OfferQuote } from 'pages/OfferNew/types'
+import { getTermsLinks } from 'pages/OfferNew/Checkout/SignDisclaimer'
 import { useTextKeys } from 'utils/textKeys'
+import { useCurrentLocale } from 'components/utils/CurrentLocale'
+import { InsuranceTermType } from '../../../../data/graphql'
 import { SubSubHeadingBlack } from '../../components'
-
-interface Props {
-  offerQuote: OfferQuote
-}
 
 const Wrapper = styled.div`
   margin-top: 4rem;
@@ -72,8 +71,22 @@ const Link = styled.a`
   }
 `
 
+type Props = {
+  offerQuote: OfferQuote
+}
+
 export const InsuranceValues: React.FC<Props> = ({ offerQuote }) => {
   const textKeys = useTextKeys()
+
+  const temporaryTermsToUse = [...offerQuote.insuranceTerms.entries()].filter(
+    ([insuranceTermType]) => {
+      return insuranceTermType !== InsuranceTermType.GeneralTerms
+    },
+  )
+
+  const currentLocale = useCurrentLocale()
+
+  const temporaryTermsLink = getTermsLinks(currentLocale)
 
   return (
     <Wrapper>
@@ -84,22 +97,23 @@ export const InsuranceValues: React.FC<Props> = ({ offerQuote }) => {
       </Header>
 
       <Limits insurableLimits={offerQuote.insurableLimits} />
-
       <Links>
-        {[...offerQuote.insuranceTerms.entries()].map(
-          ([insuranceTermType, insuranceTerm]) => {
-            return (
-              <Link
-                key={insuranceTermType}
-                href={insuranceTerm.url}
-                target="_blank"
-              >
-                {insuranceTerm.displayName}
-                {' ↗'}
-              </Link>
-            )
-          },
-        )}
+        {temporaryTermsToUse.map(([insuranceTermType, insuranceTerm]) => {
+          return (
+            <Link
+              key={insuranceTermType}
+              href={
+                insuranceTermType === InsuranceTermType.TermsAndConditions
+                  ? temporaryTermsLink
+                  : insuranceTerm.url
+              }
+              target="_blank"
+            >
+              {insuranceTerm.displayName}
+              {' ↗'}
+            </Link>
+          )
+        })}
       </Links>
     </Wrapper>
   )
