@@ -66,7 +66,7 @@
   "CHECKOUT_EMAIL_PLACEHOLDER": "din.epost@här.se",
   "CHECKOUT_SUMMARY_TITLE": "Dina detaljer",
   "CHECKOUT_SIGN_BUTTON_TEXT": "Signera med mobilt BankID",
-  "CHECKOUT_SIGN_DISCLAIMER": "Genom att trycka på ”Signera med BankId” godkänner jag att jag har tagit del av [förköpsinformation]({PREBUY_LINK}), [villkor]({TERMS_LINK}) och att mina personuppgifter [behandlas enligt GDPR](https:\/\/www.hedvig.com\/privacy).",
+  "CHECKOUT_SIGN_DISCLAIMER": "Genom att trycka på ”Signera med BankId” godkänner jag att jag har tagit del av [förköpsinformation]({PREBUY_LINK}), [villkor]({TERMS_LINK}) och att mina personuppgifter [behandlas enligt GDPR](https:\/\/www.hedvig.com\/se\/personuppgifter).",
   "CHECKOUT_DETAILS_ADDRESS": "Adress",
   "CHECKOUT_DETAILS_ZIPCODE": "Postnummer",
   "CHECKOUT_DETAILS_QUOTE_TYPE": "Bostadstyp",
