@@ -50,6 +50,9 @@ export const SignDisclaimer: React.FC<Props> = ({ offerData }) => {
     TERMS_LINK: `${baseUrl}/terms`,
   })
 
+  // These links are only temporarily hard coded since we can't get the correct ones from content-service ATM 👆
+  // Please note that this implementation only works with the cases where we have multiple contracts as long as we don't need to fetch the links from content-service
+
   return (
     <Wrapper>
       {isSwedish(offerData) && (
