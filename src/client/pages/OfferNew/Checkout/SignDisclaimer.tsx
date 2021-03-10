@@ -22,6 +22,7 @@ const Wrapper = styled('div')`
     margin: 0;
   }
 `
+
 type Props = {
   offerData: OfferData
 }
@@ -30,49 +31,47 @@ export const SignDisclaimer: React.FC<Props> = ({ offerData }) => {
   const textKeys = useTextKeys()
 
   const currentLocale = useCurrentLocale()
-  const isPageInEnglish = currentLocale.includes('en')
-
   const baseUrl = `https://www.hedvig.com/${currentLocale}`
 
+  const isPageInEnglish = currentLocale.includes('en')
+  const termslinkSE = isPageInEnglish
+    ? `${baseUrl}/terms`
+    : `${baseUrl}/villkor`
+
+  const seSignDisclaimer = textKeys.CHECKOUT_SIGN_DISCLAIMER({
+    PREBUY_LINK:
+      offerData.quotes[0].insuranceTerms.get(
+        InsuranceTermType.PreSaleInfoEuStandard,
+      )?.url ?? termslinkSE,
+    TERMS_LINK: termslinkSE,
+  })
+
+  const noSignDisclaimer = textKeys.CHECKOUT_SIGN_DISCLAIMER_NO({
+    TERMS_LINK: `${baseUrl}/terms`,
+  })
+
   return (
-    <>
-      {offerData.quotes.map((quote) => {
-        const seSignDisclaimer = textKeys.CHECKOUT_SIGN_DISCLAIMER({
-          PREBUY_LINK:
-            quote.insuranceTerms.get(InsuranceTermType.PreSaleInfoEuStandard)
-              ?.url ?? '',
-          TERMS_LINK: isPageInEnglish
-            ? `${baseUrl}/terms`
-            : `${baseUrl}/villkor`,
-        })
-        const noSignDisclaimer = textKeys.CHECKOUT_SIGN_DISCLAIMER_NO({
-          TERMS_LINK: `${baseUrl}/terms`,
-        })
-        return (
-          <Wrapper key={quote.id}>
-            {isSwedish(offerData) && (
-              <ReactMarkdown
-                source={
-                  Array.isArray(seSignDisclaimer)
-                    ? seSignDisclaimer.join('')
-                    : seSignDisclaimer
-                }
-                linkTarget="_blank"
-              />
-            )}
-            {isNorwegian(offerData) && (
-              <ReactMarkdown
-                source={
-                  Array.isArray(noSignDisclaimer)
-                    ? noSignDisclaimer.join('')
-                    : noSignDisclaimer
-                }
-                linkTarget="_blank"
-              />
-            )}
-          </Wrapper>
-        )
-      })}
-    </>
+    <Wrapper>
+      {isSwedish(offerData) && (
+        <ReactMarkdown
+          source={
+            Array.isArray(seSignDisclaimer)
+              ? seSignDisclaimer.join('')
+              : seSignDisclaimer
+          }
+          linkTarget="_blank"
+        />
+      )}
+      {isNorwegian(offerData) && (
+        <ReactMarkdown
+          source={
+            Array.isArray(noSignDisclaimer)
+              ? noSignDisclaimer.join('')
+              : noSignDisclaimer
+          }
+          linkTarget="_blank"
+        />
+      )}
+    </Wrapper>
   )
 }
