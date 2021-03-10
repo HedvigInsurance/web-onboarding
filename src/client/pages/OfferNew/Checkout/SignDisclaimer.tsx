@@ -6,6 +6,7 @@ import { InsuranceTermType } from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
 import { OfferData } from 'pages/OfferNew/types'
 import { isNorwegian, isSwedish } from 'pages/OfferNew/utils'
+import { useCurrentLocale } from 'components/utils/CurrentLocale'
 
 const Wrapper = styled('div')`
   padding: 2rem 0 1rem;
@@ -28,6 +29,11 @@ type Props = {
 export const SignDisclaimer: React.FC<Props> = ({ offerData }) => {
   const textKeys = useTextKeys()
 
+  const currentLocale = useCurrentLocale()
+  const isPageInEnglish = currentLocale.includes('en')
+
+  const baseUrl = `https://www.hedvig.com/${currentLocale}`
+
   return (
     <>
       {offerData.quotes.map((quote) => {
@@ -35,14 +41,12 @@ export const SignDisclaimer: React.FC<Props> = ({ offerData }) => {
           PREBUY_LINK:
             quote.insuranceTerms.get(InsuranceTermType.PreSaleInfoEuStandard)
               ?.url ?? '',
-          TERMS_LINK:
-            quote.insuranceTerms.get(InsuranceTermType.TermsAndConditions)
-              ?.url ?? '',
+          TERMS_LINK: isPageInEnglish
+            ? `${baseUrl}/terms`
+            : `${baseUrl}/villkor`,
         })
         const noSignDisclaimer = textKeys.CHECKOUT_SIGN_DISCLAIMER_NO({
-          TERMS_LINK:
-            quote.insuranceTerms.get(InsuranceTermType.TermsAndConditions)
-              ?.url ?? '',
+          TERMS_LINK: `${baseUrl}/terms`,
         })
         return (
           <Wrapper key={quote.id}>
