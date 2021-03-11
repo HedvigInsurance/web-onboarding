@@ -119,6 +119,16 @@ export const TextKeyProvider: React.FC<{
           /* webpackChunkName: 'translations-nb_no'*/ '../../translations/nb_NO.json'
         )
         break
+      case 'en_DK':
+        textKeyMap = import(
+          /* webpackChunkName: 'translations-en_no'*/ '../../translations/en_DK.json'
+        )
+        break
+      case 'da_DK':
+        textKeyMap = import(
+          /* webpackChunkName: 'translations-nb_no'*/ '../../translations/da_DK.json'
+        )
+        break
       case 'en':
       default:
         textKeyMap = import(
