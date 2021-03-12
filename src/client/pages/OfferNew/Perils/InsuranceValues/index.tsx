@@ -1,13 +1,13 @@
+import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import color from 'color'
-import React from 'react'
+import { InsuranceTermType } from 'data/graphql'
 import { Limits } from 'pages/OfferNew/Perils/InsuranceValues/Limits'
 import { OfferQuote } from 'pages/OfferNew/types'
 import { getTermsLinks } from 'pages/OfferNew/Checkout/SignDisclaimer'
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
-import { InsuranceTermType } from '../../../../data/graphql'
 import { SubSubHeadingBlack } from '../../components'
 
 const Wrapper = styled.div`
