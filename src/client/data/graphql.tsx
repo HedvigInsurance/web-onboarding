@@ -9440,10 +9440,6 @@ export type QuoteBundleQuery = { __typename?: 'Query' } & {
               'label' | 'limit' | 'description' | 'type'
             >
           >
-          termsAndConditions: { __typename?: 'InsuranceTerm' } & Pick<
-            InsuranceTerm,
-            'displayName' | 'url'
-          >
           insuranceTerms: Array<
             { __typename?: 'InsuranceTerm' } & Pick<
               InsuranceTerm,
@@ -10793,10 +10789,6 @@ export const QuoteBundleDocument = gql`
           limit
           description
           type
-        }
-        termsAndConditions(locale: $locale) {
-          displayName
-          url
         }
         insuranceTerms(locale: $locale) {
           displayName
