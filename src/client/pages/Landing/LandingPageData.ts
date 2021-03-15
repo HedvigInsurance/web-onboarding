@@ -17,12 +17,12 @@ export const landingPageData: LandingPageData = {
   'dk-en': { cardData: [] },
 }
 
-type AlternateLinkData = {
+type AlternateLinksData = {
   hrefLang: string
   locale: Locale
 }[]
 
-export const alternateLinkData: AlternateLinkData = [
+export const alternateLinksData: AlternateLinksData = [
   { hrefLang: 'sv-se', locale: 'se' },
   { hrefLang: 'en-se', locale: 'se-en' },
   { hrefLang: 'nb-no', locale: 'no' },

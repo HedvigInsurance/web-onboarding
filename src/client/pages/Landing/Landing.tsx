@@ -14,6 +14,7 @@ import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
 import { CheckmarkCircle } from 'components/icons/CheckmarkCircle'
 import { LanguagePicker } from '../Embark/LanguagePicker'
+import { alternateLinksData } from './LandingPageData'
 import { Card } from './components/Card'
 
 const LandingPageContainer = styled.div`
@@ -237,36 +238,14 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
       <LandingPageContainer>
         <Helmet>
           <title>{textKeys.STARTPAGE_PAGE_TITLE()}</title>
-          <link
-            rel="alternate"
-            hrefLang="sv-se"
-            href="https://www.hedvig.com/se/new-member"
-          />
-          <link
-            rel="alternate"
-            hrefLang="en-se"
-            href="https://www.hedvig.com/se-en/new-member"
-          />
-          <link
-            rel="alternate"
-            hrefLang="nb-no"
-            href="https://www.hedvig.com/no/new-member"
-          />
-          <link
-            rel="alternate"
-            hrefLang="en-no"
-            href="https://www.hedvig.com/no-en/new-member"
-          />
-          <link
-            rel="alternate"
-            hrefLang="da-dk"
-            href="https://www.hedvig.com/dk/new-member"
-          />
-          <link
-            rel="alternate"
-            hrefLang="en-dk"
-            href="https://www.hedvig.com/dk-en/new-member"
-          />
+          {alternateLinksData.map(({ hrefLang, locale }) => (
+            <link
+              rel="alternate"
+              hrefLang={hrefLang}
+              href={`https://www.hedvig.com/${locale}/new-member`}
+              key={locale}
+            />
+          ))}
           <link
             rel="canonical"
             href={`https://hedvig.com/${currentLocale}/new-member`}
