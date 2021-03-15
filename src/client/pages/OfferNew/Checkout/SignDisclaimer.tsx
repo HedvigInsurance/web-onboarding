@@ -23,24 +23,19 @@ const Wrapper = styled('div')`
   }
 `
 
-export const getTermsLinks = (currentLocale: string) => {
-  const baseUrl = `https://www.hedvig.com/${currentLocale}`
+export const getTermsLink = (currentLocale: string) => {
+  const baseUrl = 'https://www.hedvig.com'
 
-  const isPageInEnglish = currentLocale.includes('en')
-
-  const termslinkSE = isPageInEnglish
-    ? `${baseUrl}/terms`
-    : `${baseUrl}/villkor`
-
-  if (currentLocale.includes('se')) {
-    return termslinkSE
+  switch (currentLocale) {
+    case 'se':
+    case 'se-en':
+      return `${baseUrl}/${currentLocale}/villkor`
+    case 'no':
+    case 'no-en':
+      return `${baseUrl}/${currentLocale}/terms`
+    default:
+      return `${baseUrl}/${currentLocale}/404`
   }
-
-  if (currentLocale.includes('no')) {
-    return `${baseUrl}/terms`
-  }
-
-  return ''
 }
 
 type Props = {
@@ -52,7 +47,7 @@ export const SignDisclaimer: React.FC<Props> = ({ offerData }) => {
 
   const currentLocale = useCurrentLocale()
 
-  const temporaryTermsLink = getTermsLinks(currentLocale)
+  const temporaryTermsLink = getTermsLink(currentLocale)
 
   // This link is only temporary since we can't get the correct ones from content-service ATM 👆
   // Please note that this implementation only works with the cases where we have multiple contracts as long as we don't need to fetch the links from content-service

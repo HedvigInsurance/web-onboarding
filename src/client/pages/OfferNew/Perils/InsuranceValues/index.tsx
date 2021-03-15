@@ -5,7 +5,7 @@ import color from 'color'
 import { InsuranceTermType } from 'data/graphql'
 import { Limits } from 'pages/OfferNew/Perils/InsuranceValues/Limits'
 import { OfferQuote } from 'pages/OfferNew/types'
-import { getTermsLinks } from 'pages/OfferNew/Checkout/SignDisclaimer'
+import { getTermsLink } from 'pages/OfferNew/Checkout/SignDisclaimer'
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { SubSubHeadingBlack } from '../../components'
@@ -86,7 +86,7 @@ export const InsuranceValues: React.FC<Props> = ({ offerQuote }) => {
 
   const currentLocale = useCurrentLocale()
 
-  const temporaryTermsLink = getTermsLinks(currentLocale)
+  const temporaryTermsLink = getTermsLink(currentLocale)
 
   return (
     <Wrapper>
