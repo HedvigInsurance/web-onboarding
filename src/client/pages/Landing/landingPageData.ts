@@ -41,6 +41,26 @@ export const productsData: ProductsData = {
       paragraph: 'STARTPAGE_INSURED_BODY',
     },
   ],
-  NO: [],
+  NO: [
+    {
+      id: 'norwegianCombo',
+      linkSlug: '/combo',
+      headline: 'STARTPAGE_COMBO_HEADLINE',
+      paragraph: 'STARTPAGE_COMBO_BODY',
+      badge: 'STARTPAGE_COMBO_DISCOUNT_TEXT',
+    },
+    {
+      id: 'norwegianContents',
+      linkSlug: '/contents',
+      headline: 'STARTPAGE_CONTENTS_HEADLINE',
+      paragraph: 'STARTPAGE_CONTENTS_BODY',
+    },
+    {
+      id: 'norwegianTravel',
+      linkSlug: '/travel',
+      headline: 'STARTPAGE_TRAVEL_HEADLINE',
+      paragraph: 'STARTPAGE_TRAVEL_BODY',
+    },
+  ],
   DK: [],
 }

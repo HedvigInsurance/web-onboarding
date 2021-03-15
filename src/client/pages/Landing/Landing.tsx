@@ -11,7 +11,7 @@ import {
 } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
-import { TextKeyMap, useTextKeys } from 'utils/textKeys'
+import { useTextKeys } from 'utils/textKeys'
 import { CheckmarkCircle } from 'components/icons/CheckmarkCircle'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import { alternateLinksData, productsData } from './landingPageData'
@@ -293,9 +293,6 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
                 </Card>
               ),
             )}
-            {market === Market.No && (
-              <LandingPageCardsNo textKeys={textKeys} language={language} />
-            )}
           </CardContainer>
         </Wrapper>
         <BackgroundContainer backgroundLoaded={backgroundLoaded}>
@@ -311,30 +308,5 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
         </BackgroundContainer>
       </LandingPageContainer>
     </Page>
-  )
-}
-
-const LandingPageCardsNo: React.FC<{
-  textKeys: TextKeyMap
-  language: string | undefined
-}> = ({ textKeys, language }) => {
-  return (
-    <>
-      <Card
-        badge={textKeys.STARTPAGE_COMBO_DISCOUNT_TEXT()}
-        to={`/${language}/new-member/combo`}
-      >
-        <CardHeadline>{textKeys.STARTPAGE_COMBO_HEADLINE()}</CardHeadline>
-        <CardParagraph>{textKeys.STARTPAGE_COMBO_BODY()}</CardParagraph>
-      </Card>
-      <Card to={`/${language}/new-member/contents`}>
-        <CardHeadline>{textKeys.STARTPAGE_CONTENTS_HEADLINE()}</CardHeadline>
-        <CardParagraph>{textKeys.STARTPAGE_CONTENTS_BODY()}</CardParagraph>
-      </Card>
-      <Card to={`/${language}/new-member/travel`}>
-        <CardHeadline>{textKeys.STARTPAGE_TRAVEL_HEADLINE()}</CardHeadline>
-        <CardParagraph>{textKeys.STARTPAGE_TRAVEL_BODY()}</CardParagraph>
-      </Card>
-    </>
   )
 }
