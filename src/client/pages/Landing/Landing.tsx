@@ -14,7 +14,7 @@ import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
 import { CheckmarkCircle } from 'components/icons/CheckmarkCircle'
 import { LanguagePicker } from '../Embark/LanguagePicker'
-import { alternateLinksData, productsData } from './LandingPageData'
+import { alternateLinksData, productsData } from './landingPageData'
 import { Card } from './components/Card'
 
 const LandingPageContainer = styled.div`
