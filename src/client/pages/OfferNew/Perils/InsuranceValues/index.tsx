@@ -5,7 +5,6 @@ import color from 'color'
 import { InsuranceTermType } from 'data/graphql'
 import { Limits } from 'pages/OfferNew/Perils/InsuranceValues/Limits'
 import { OfferQuote } from 'pages/OfferNew/types'
-import { getTermsLink } from 'pages/OfferNew/Checkout/SignDisclaimer'
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { SubSubHeadingBlack } from '../../components'
@@ -70,6 +69,21 @@ const Link = styled.a`
     margin-bottom: 1rem;
   }
 `
+
+export const getTermsLink = (currentLocale: string) => {
+  const baseUrl = 'https://www.hedvig.com'
+
+  switch (currentLocale) {
+    case 'se':
+    case 'se-en':
+      return `${baseUrl}/${currentLocale}/villkor`
+    case 'no':
+    case 'no-en':
+      return `${baseUrl}/${currentLocale}/terms`
+    default:
+      return `${baseUrl}/${currentLocale}/404`
+  }
+}
 
 type Props = {
   offerQuote: OfferQuote

@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown/with-html'
 import { colorsV3 } from '@hedviginsurance/brand/dist'
 import { useTextKeys } from 'utils/textKeys'
 import { OfferData } from 'pages/OfferNew/types'
+import { getTermsLink } from 'pages/OfferNew/Perils/InsuranceValues/index'
 import { isNorwegian, isSwedish } from 'pages/OfferNew/utils'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { InsuranceTermType } from '../../../data/graphql'
@@ -22,21 +23,6 @@ const Wrapper = styled('div')`
     margin: 0;
   }
 `
-
-export const getTermsLink = (currentLocale: string) => {
-  const baseUrl = 'https://www.hedvig.com'
-
-  switch (currentLocale) {
-    case 'se':
-    case 'se-en':
-      return `${baseUrl}/${currentLocale}/villkor`
-    case 'no':
-    case 'no-en':
-      return `${baseUrl}/${currentLocale}/terms`
-    default:
-      return `${baseUrl}/${currentLocale}/404`
-  }
-}
 
 type Props = {
   offerData: OfferData
