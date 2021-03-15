@@ -14,7 +14,7 @@ import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
 import { CheckmarkCircle } from 'components/icons/CheckmarkCircle'
 import { LanguagePicker } from '../Embark/LanguagePicker'
-import { alternateLinksData } from './LandingPageData'
+import { alternateLinksData, productsData } from './LandingPageData'
 import { Card } from './components/Card'
 
 const LandingPageContainer = styled.div`
@@ -281,8 +281,17 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
             </UspList>
           </UspContainer>
           <CardContainer>
-            {market === Market.Se && (
-              <LandingPageCardsSe textKeys={textKeys} language={language} />
+            {productsData[market].map(
+              ({ id, linkSlug, badge, headline, paragraph }) => (
+                <Card
+                  to={`/${language}/new-member${linkSlug}`}
+                  badge={badge && textKeys[badge]()}
+                  key={id}
+                >
+                  <CardHeadline>{textKeys[headline]()}</CardHeadline>
+                  <CardParagraph>{textKeys[paragraph]()}</CardParagraph>
+                </Card>
+              ),
             )}
             {market === Market.No && (
               <LandingPageCardsNo textKeys={textKeys} language={language} />
@@ -302,24 +311,6 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
         </BackgroundContainer>
       </LandingPageContainer>
     </Page>
-  )
-}
-
-const LandingPageCardsSe: React.FC<{
-  textKeys: TextKeyMap
-  language: string | undefined
-}> = ({ textKeys, language }) => {
-  return (
-    <>
-      <Card to={`/${language}/new-member/new`}>
-        <CardHeadline>{textKeys.STARTPAGE_UNINSURED_HEADLINE()}</CardHeadline>
-        <CardParagraph>{textKeys.STARTPAGE_UNINSURED_BODY()}</CardParagraph>
-      </Card>
-      <Card to={`/${language}/new-member/switch`}>
-        <CardHeadline>{textKeys.STARTPAGE_INSURED_HEADLINE()}</CardHeadline>
-        <CardParagraph>{textKeys.STARTPAGE_INSURED_BODY()}</CardParagraph>
-      </Card>
-    </>
   )
 }
 

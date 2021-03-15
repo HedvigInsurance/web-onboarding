@@ -1,21 +1,6 @@
+import { Market } from 'components/utils/CurrentLocale'
+
 type Locale = 'se' | 'se-en' | 'no' | 'no-en' | 'dk' | 'dk-en'
-
-type LandingPageData = Record<Locale, MarketData>
-
-type MarketData = {
-  cardData: CardData
-}
-
-type CardData = []
-
-export const landingPageData: LandingPageData = {
-  se: { cardData: [] },
-  'se-en': { cardData: [] },
-  no: { cardData: [] },
-  'no-en': { cardData: [] },
-  dk: { cardData: [] },
-  'dk-en': { cardData: [] },
-}
 
 type AlternateLinksData = {
   hrefLang: string
@@ -30,3 +15,32 @@ export const alternateLinksData: AlternateLinksData = [
   { hrefLang: 'da-dk', locale: 'dk' },
   { hrefLang: 'en-dk', locale: 'dk-en' },
 ]
+
+type ProductData = {
+  id: string
+  linkSlug: string
+  headline: string
+  paragraph: string
+  badge?: string
+}[]
+
+type ProductsData = Record<Market, ProductData>
+
+export const productsData: ProductsData = {
+  SE: [
+    {
+      id: 'swedishNew',
+      linkSlug: '/new',
+      headline: 'STARTPAGE_UNINSURED_HEADLINE',
+      paragraph: 'STARTPAGE_UNINSURED_BODY',
+    },
+    {
+      id: 'swedishSwitch',
+      linkSlug: '/switch',
+      headline: 'STARTPAGE_INSURED_HEADLINE',
+      paragraph: 'STARTPAGE_INSURED_BODY',
+    },
+  ],
+  NO: [],
+  DK: [],
+}
