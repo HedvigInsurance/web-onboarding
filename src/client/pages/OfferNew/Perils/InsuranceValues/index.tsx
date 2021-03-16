@@ -76,10 +76,10 @@ export const getTermsLink = (currentLocale: string) => {
   switch (currentLocale) {
     case 'se':
     case 'se-en':
-      return `${baseUrl}/${currentLocale}/villkor`
+      return `${baseUrl}/se/villkor`
     case 'no':
     case 'no-en':
-      return `${baseUrl}/${currentLocale}/terms`
+      return `${baseUrl}/no/terms`
     default:
       return `${baseUrl}/${currentLocale}/404`
   }
