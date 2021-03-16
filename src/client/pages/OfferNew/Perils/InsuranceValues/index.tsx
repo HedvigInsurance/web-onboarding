@@ -92,12 +92,6 @@ type Props = {
 export const InsuranceValues: React.FC<Props> = ({ offerQuote }) => {
   const textKeys = useTextKeys()
 
-  const temporaryTermsToUse = [...offerQuote.insuranceTerms.entries()].filter(
-    ([insuranceTermType]) => {
-      return insuranceTermType !== InsuranceTermType.GeneralTerms
-    },
-  )
-
   const currentLocale = useCurrentLocale()
 
   const temporaryTermsLink = getTermsLink(currentLocale)
@@ -112,22 +106,24 @@ export const InsuranceValues: React.FC<Props> = ({ offerQuote }) => {
 
       <Limits insurableLimits={offerQuote.insurableLimits} />
       <Links>
-        {temporaryTermsToUse.map(([insuranceTermType, insuranceTerm]) => {
-          return (
-            <Link
-              key={insuranceTermType}
-              href={
-                insuranceTermType === InsuranceTermType.TermsAndConditions
-                  ? temporaryTermsLink
-                  : insuranceTerm.url
-              }
-              target="_blank"
-            >
-              {insuranceTerm.displayName}
-              {' ↗'}
-            </Link>
-          )
-        })}
+        {[...offerQuote.insuranceTerms.entries()].map(
+          ([insuranceTermType, insuranceTerm]) => {
+            return (
+              <Link
+                key={insuranceTermType}
+                href={
+                  insuranceTermType === InsuranceTermType.TermsAndConditions
+                    ? temporaryTermsLink
+                    : insuranceTerm.url
+                }
+                target="_blank"
+              >
+                {insuranceTerm.displayName}
+                {' ↗'}
+              </Link>
+            )
+          },
+        )}
       </Links>
     </Wrapper>
   )
