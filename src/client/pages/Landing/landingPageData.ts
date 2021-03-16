@@ -62,5 +62,26 @@ export const productsData: ProductsData = {
       paragraph: 'STARTPAGE_TRAVEL_BODY',
     },
   ],
-  DK: [],
+  DK: [
+    {
+      id: 'danishContents',
+      linkSlug: '/home',
+      headline: 'STARTPAGE_DK_CONTENTS_HEADLINE',
+      paragraph: 'STARTPAGE_DK_CONTENTS_BODY',
+    },
+    {
+      id: 'danishContentsAccident',
+      linkSlug: '/home-accident',
+      headline: 'STARTPAGE_DK_CONTENTS_ACCIDENT_HEADLINE',
+      paragraph: 'STARTPAGE_DK_CONTENTS_ACCIDENT_BODY',
+      badge: 'STARTPAGE_DK_CONTENTS_ACCIDENT_BADGE',
+    },
+    {
+      id: 'danishContentsAccidentTravel',
+      linkSlug: '/home-accident-travel',
+      headline: 'STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_HEADLINE',
+      paragraph: 'STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_BODY',
+      badge: 'STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_BADGE',
+    },
+  ],
 }
