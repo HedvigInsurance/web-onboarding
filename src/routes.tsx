@@ -154,7 +154,6 @@ export const reactPageRoutes: ReactPageRoute[] = [
     path: LOCALE_PATH_PATTERN + '/new-member/:name?/:id?',
     render: ({ match }: RouteComponentProps<any>) => {
       const getProps = () => {
-        match.params
         const { locale, name } = match.params
         switch (locale) {
           case 'dk':
