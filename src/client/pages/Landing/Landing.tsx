@@ -11,9 +11,10 @@ import {
 } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
-import { TextKeyMap, useTextKeys } from 'utils/textKeys'
+import { useTextKeys } from 'utils/textKeys'
 import { CheckmarkCircle } from 'components/icons/CheckmarkCircle'
 import { LanguagePicker } from '../Embark/LanguagePicker'
+import { alternateLinksData, productsData } from './landingPageData'
 import { Card } from './components/Card'
 
 const LandingPageContainer = styled.div`
@@ -237,36 +238,14 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
       <LandingPageContainer>
         <Helmet>
           <title>{textKeys.STARTPAGE_PAGE_TITLE()}</title>
-          <link
-            rel="alternate"
-            hrefLang="sv-se"
-            href="https://www.hedvig.com/se/new-member"
-          />
-          <link
-            rel="alternate"
-            hrefLang="en-se"
-            href="https://www.hedvig.com/se-en/new-member"
-          />
-          <link
-            rel="alternate"
-            hrefLang="nb-no"
-            href="https://www.hedvig.com/no/new-member"
-          />
-          <link
-            rel="alternate"
-            hrefLang="en-no"
-            href="https://www.hedvig.com/no-en/new-member"
-          />
-          <link
-            rel="alternate"
-            hrefLang="da-dk"
-            href="https://www.hedvig.com/dk/new-member"
-          />
-          <link
-            rel="alternate"
-            hrefLang="en-dk"
-            href="https://www.hedvig.com/dk-en/new-member"
-          />
+          {alternateLinksData.map(({ hrefLang, locale }) => (
+            <link
+              rel="alternate"
+              hrefLang={hrefLang}
+              href={`https://www.hedvig.com/${locale}/new-member`}
+              key={locale}
+            />
+          ))}
           <link
             rel="canonical"
             href={`https://hedvig.com/${currentLocale}/new-member`}
@@ -302,11 +281,17 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
             </UspList>
           </UspContainer>
           <CardContainer>
-            {market === Market.Se && (
-              <LandingPageCardsSe textKeys={textKeys} language={language} />
-            )}
-            {market === Market.No && (
-              <LandingPageCardsNo textKeys={textKeys} language={language} />
+            {productsData[market].map(
+              ({ id, linkSlug, badge, headline, paragraph }) => (
+                <Card
+                  to={`/${language}/new-member${linkSlug}`}
+                  badge={badge && textKeys[badge]()}
+                  key={id}
+                >
+                  <CardHeadline>{textKeys[headline]()}</CardHeadline>
+                  <CardParagraph>{textKeys[paragraph]()}</CardParagraph>
+                </Card>
+              ),
             )}
           </CardContainer>
         </Wrapper>
@@ -323,48 +308,5 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
         </BackgroundContainer>
       </LandingPageContainer>
     </Page>
-  )
-}
-
-const LandingPageCardsSe: React.FC<{
-  textKeys: TextKeyMap
-  language: string | undefined
-}> = ({ textKeys, language }) => {
-  return (
-    <>
-      <Card to={`/${language}/new-member/new`}>
-        <CardHeadline>{textKeys.STARTPAGE_UNINSURED_HEADLINE()}</CardHeadline>
-        <CardParagraph>{textKeys.STARTPAGE_UNINSURED_BODY()}</CardParagraph>
-      </Card>
-      <Card to={`/${language}/new-member/switch`}>
-        <CardHeadline>{textKeys.STARTPAGE_INSURED_HEADLINE()}</CardHeadline>
-        <CardParagraph>{textKeys.STARTPAGE_INSURED_BODY()}</CardParagraph>
-      </Card>
-    </>
-  )
-}
-
-const LandingPageCardsNo: React.FC<{
-  textKeys: TextKeyMap
-  language: string | undefined
-}> = ({ textKeys, language }) => {
-  return (
-    <>
-      <Card
-        badge={textKeys.STARTPAGE_COMBO_DISCOUNT_TEXT()}
-        to={`/${language}/new-member/combo`}
-      >
-        <CardHeadline>{textKeys.STARTPAGE_COMBO_HEADLINE()}</CardHeadline>
-        <CardParagraph>{textKeys.STARTPAGE_COMBO_BODY()}</CardParagraph>
-      </Card>
-      <Card to={`/${language}/new-member/contents`}>
-        <CardHeadline>{textKeys.STARTPAGE_CONTENTS_HEADLINE()}</CardHeadline>
-        <CardParagraph>{textKeys.STARTPAGE_CONTENTS_BODY()}</CardParagraph>
-      </Card>
-      <Card to={`/${language}/new-member/travel`}>
-        <CardHeadline>{textKeys.STARTPAGE_TRAVEL_HEADLINE()}</CardHeadline>
-        <CardParagraph>{textKeys.STARTPAGE_TRAVEL_BODY()}</CardParagraph>
-      </Card>
-    </>
   )
 }
