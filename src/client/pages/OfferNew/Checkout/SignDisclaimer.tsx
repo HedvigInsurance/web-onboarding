@@ -38,12 +38,19 @@ export const SignDisclaimer: React.FC<Props> = ({ offerData }) => {
   // This link is only temporary since we can't get the correct ones from content-service ATM 👆
   // Please note that this implementation only works with the cases where we have multiple contracts as long as we don't need to fetch the links from content-service
 
+  const firstQuote = offerData.quotes[0]
+
   const signDisclaimerSE = textKeys.CHECKOUT_SIGN_DISCLAIMER({
-    PREBUY_LINK:
-      offerData.quotes[0].insuranceTerms.get(
-        InsuranceTermType.PreSaleInfoEuStandard,
-      )?.url ?? temporaryTermsLink,
+    TERMS_TITLE: firstQuote.insuranceTerms.get(
+      InsuranceTermType.TermsAndConditions,
+    )?.displayName,
     TERMS_LINK: temporaryTermsLink,
+    IPID_TITLE: firstQuote.insuranceTerms.get(
+      InsuranceTermType.PreSaleInfoEuStandard,
+    )?.displayName,
+    PREBUY_LINK:
+      firstQuote.insuranceTerms.get(InsuranceTermType.PreSaleInfoEuStandard)
+        ?.url ?? temporaryTermsLink,
   })
 
   const signDisclaimerNO = textKeys.CHECKOUT_SIGN_DISCLAIMER_NO({
