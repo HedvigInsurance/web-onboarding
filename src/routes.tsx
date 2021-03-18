@@ -154,30 +154,30 @@ export const reactPageRoutes: ReactPageRoute[] = [
     path: LOCALE_PATH_PATTERN + '/new-member/:name?/:id?',
     render: ({ match }: RouteComponentProps<any>) => {
       const getProps = () => {
-        match.params
-        switch (match.params.locale) {
+        const { locale, name } = match.params
+        switch (locale) {
           case 'dk':
           case 'dk-en':
-            switch (match.params.name) {
+            switch (name) {
               case 'home':
                 return {
-                  baseUrl: '/dk/new-member/home',
+                  baseUrl: `/${locale}/new-member/home`,
                   name: 'Web Onboarding DK - Contents',
                 }
               case 'home-accident':
                 return {
-                  baseUrl: '/dk/new-member/home-accident',
+                  baseUrl: `/${locale}/new-member/home-accident`,
                   name: 'Web Onboarding DK - Danish Contents-Accident',
                 }
               case 'home-accident-travel':
                 return {
-                  baseUrl: '/dk/new-member/home-accident-travel',
+                  baseUrl: `/${locale}/new-member/home-accident-travel`,
                   name: 'Web Onboarding DK - Danish Contents-Accident-Travel',
                 }
             }
             break
           case 'no':
-            switch (match.params.name) {
+            switch (name) {
               case 'contents':
                 return {
                   baseUrl: '/no/new-member/contents',
@@ -196,7 +196,7 @@ export const reactPageRoutes: ReactPageRoute[] = [
             }
             break
           case 'no-en':
-            switch (match.params.name) {
+            switch (name) {
               case 'contents':
                 return {
                   baseUrl: '/no-en/new-member/contents',
@@ -215,7 +215,7 @@ export const reactPageRoutes: ReactPageRoute[] = [
             }
             break
           case 'se-en':
-            switch (match.params.name) {
+            switch (name) {
               case 'new':
                 return {
                   baseUrl: '/se-en/new-member/new',
@@ -229,7 +229,7 @@ export const reactPageRoutes: ReactPageRoute[] = [
             }
             break
           default:
-            switch (match.params.name) {
+            switch (name) {
               case 'new':
                 return {
                   baseUrl: '/se/new-member/new',

@@ -147,12 +147,10 @@
   "STARTPAGE_CONTENTS_HEADLINE": "Indbo",
   "STARTPAGE_TRAVEL_HEADLINE": "Rejseforsikring",
   "STARTPAGE_TRAVEL_BODY": "Få dit pristilbud",
-  "STARTPAGE_CONTENTS_BUTTON": "Få et pristilbud",
   "STARTPAGE_TRAVEL_BUTTON": "Få et pristilbud",
   "CHECKOUT_SSN_PLACEHOLDER_NO": "",
   "STARTPAGE_COMBO_HEADLINE": "Pakkeløsning",
-  "STARTPAGE_COMBO_BODY": "En kombineret indbo- og rejseforsikring",
-  "STARTPAGE_COMBO_BUTTON": "Få et pristilbud",
+  "STARTPAGE_COMBO_BODY": "",
   "SIDEBAR_INSURANCE_TYPE_NO_BUNDLE": "",
   "CHECKOUT_SIGN_DISCLAIMER_NO": "",
   "BANKID_NOT_RESPONDING": "Svaret fra NemID tager længere tid end forventet...",
@@ -254,5 +252,13 @@
   "LOGIN_APP_BTN_LABEL": "",
   "LOGIN_APP_PAGE_TITLE": "Sign in | Hedvig Insurance",
   "LOGIN_APP_INAVLID_SSN": "",
-  "LOGIN_APP_GENERIC_ERROR": "Noget gik galt. Prøv igen eller kontakt os."
+  "LOGIN_APP_GENERIC_ERROR": "Noget gik galt. Prøv igen eller kontakt os.",
+  "STARTPAGE_DK_CONTENTS_ACCIDENT_HEADLINE": "Indbo & Ulykke",
+  "STARTPAGE_DK_CONTENTS_HEADLINE": "Indbo",
+  "STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_HEADLINE": "Indbo, Ulykke & Rejse",
+  "STARTPAGE_DK_CONTENTS_ACCIDENT_BADGE": "2-IN-1",
+  "STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_BADGE": "3-IN-1",
+  "STARTPAGE_DK_CONTENTS_BODY": "Få indboforsikring",
+  "STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_BODY": "Få dem alle tre",
+  "STARTPAGE_DK_CONTENTS_ACCIDENT_BODY": "Få dem begge"
 }

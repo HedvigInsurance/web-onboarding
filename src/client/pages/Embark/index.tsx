@@ -377,6 +377,32 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                           ],
                         })
                       }
+                      if (
+                        store.danishHomeContentsQuoteId &&
+                        store.danishAccidentQuoteId
+                      ) {
+                        storageState.session.setSession({
+                          ...storageState.session.getSession(),
+                          quoteIds: [
+                            store.danishHomeContentsQuoteId,
+                            store.danishAccidentQuoteId,
+                          ],
+                        })
+                      }
+                      if (
+                        store.danishHomeContentsQuoteId &&
+                        store.danishAccidentQuoteId &&
+                        store.danishTravelQuoteId
+                      ) {
+                        storageState.session.setSession({
+                          ...storageState.session.getSession(),
+                          quoteIds: [
+                            store.danishHomeContentsQuoteId,
+                            store.danishAccidentQuoteId,
+                            store.danishTravelQuoteId,
+                          ],
+                        })
+                      }
                     }}
                   >
                     <Embark

@@ -147,12 +147,10 @@
   "STARTPAGE_CONTENTS_HEADLINE": "Innboforsikring",
   "STARTPAGE_TRAVEL_HEADLINE": "Reiseforsikring",
   "STARTPAGE_TRAVEL_BODY": "Sjekk din pris",
-  "STARTPAGE_CONTENTS_BUTTON": "Få et prisforslag",
   "STARTPAGE_TRAVEL_BUTTON": "Få et prisforslag",
   "CHECKOUT_SSN_PLACEHOLDER_NO": "DDMMÅÅXXXXX",
   "STARTPAGE_COMBO_HEADLINE": "Innbo- og reiseforsikring",
   "STARTPAGE_COMBO_BODY": "Sjekk din pris",
-  "STARTPAGE_COMBO_BUTTON": "Få et prisforslag",
   "SIDEBAR_INSURANCE_TYPE_NO_BUNDLE": "Innbo- og reiseforsikring",
   "CHECKOUT_SIGN_DISCLAIMER_NO": "Ved å trykke på ”Skaff Hedvig” godkjenner jeg at jeg har tatt del av [vilkårene]({TERMS_LINK}) og at personopplysningene mine [behandles i tråd med GDPR](https:\/\/www.hedvig.com\/no\/privacy).",
   "BANKID_NOT_RESPONDING": "Respons fra BankID tar lengre tid enn antatt...",
@@ -254,5 +252,13 @@
   "LOGIN_APP_BTN_LABEL": "Logg inn med BankID",
   "LOGIN_APP_PAGE_TITLE": "Logg inn | Hedvig Forsikring",
   "LOGIN_APP_INAVLID_SSN": "Det tallet ser ikke riktig ut. Prøv igjen.",
-  "LOGIN_APP_GENERIC_ERROR": "Noe gikk galt. Prøv igjen eller kontakt oss."
+  "LOGIN_APP_GENERIC_ERROR": "Noe gikk galt. Prøv igjen eller kontakt oss.",
+  "STARTPAGE_DK_CONTENTS_ACCIDENT_HEADLINE": "",
+  "STARTPAGE_DK_CONTENTS_HEADLINE": "",
+  "STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_HEADLINE": "",
+  "STARTPAGE_DK_CONTENTS_ACCIDENT_BADGE": "",
+  "STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_BADGE": "",
+  "STARTPAGE_DK_CONTENTS_BODY": "",
+  "STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_BODY": "",
+  "STARTPAGE_DK_CONTENTS_ACCIDENT_BODY": ""
 }
