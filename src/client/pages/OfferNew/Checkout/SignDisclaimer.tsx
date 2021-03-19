@@ -47,7 +47,7 @@ export const SignDisclaimer: React.FC<Props> = ({ offerData }) => {
     IPID_TITLE: firstQuote.insuranceTerms.get(
       InsuranceTermType.PreSaleInfoEuStandard,
     )?.displayName,
-    PREBUY_LINK:
+    IPID_LINK:
       firstQuote.insuranceTerms.get(InsuranceTermType.PreSaleInfoEuStandard)
         ?.url ?? temporaryTermsLink,
   })
