@@ -34,10 +34,9 @@ export const SignDisclaimer: React.FC<Props> = ({ offerData }) => {
   const currentLocale = useCurrentLocale()
 
   const temporaryTermsLink = getTermsLink(currentLocale)
+  // 👆 This link is only temporary since we can't get the correct ones from content-service right now
 
-  // This link is only temporary since we can't get the correct ones from content-service ATM 👆
-  // Please note that this implementation only works with the cases where we have multiple contracts as long as we don't need to fetch the links from content-service
-
+  // Please note that this implementation 👇 obviously won't work with multiple contracts and is only OK as long as we hard code the links and the links from the backend also just lead to a market-web pages.
   const firstQuote = offerData.quotes[0]
 
   const signDisclaimerSE = textKeys.CHECKOUT_SIGN_DISCLAIMER({

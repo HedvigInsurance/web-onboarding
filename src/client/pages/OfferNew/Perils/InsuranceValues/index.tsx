@@ -97,6 +97,7 @@ export const InsuranceValues: React.FC<Props> = ({ offerQuote }) => {
   const currentLocale = useCurrentLocale()
 
   const temporaryTermsLink = getTermsLink(currentLocale)
+  // 👆 This link is only temporary since we can't get the correct ones from content-service right now
 
   return (
     <Wrapper>
