@@ -3,11 +3,16 @@ import { colorsV2 } from '@hedviginsurance/brand'
 import { motion } from 'framer-motion'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Market, useMarket } from 'components/utils/CurrentLocale'
+import { useMarket } from 'components/utils/CurrentLocale'
 import { LanguageIcon } from 'components/icons/LanguageIcon'
+import { languagePickerData } from './languagePickerData'
 
 const Wrapper = styled.div`
   position: relative;
+`
+const Option = styled.div`
+  display: flex;
+  flex-direction: column;
 `
 
 const LanguageDropdownButton = styled.button`
@@ -25,7 +30,6 @@ const StyledLink = styled(Link)`
   text-decoration: none;
   padding: 10px 20px;
   transition: all 250ms;
-  background-color: white;
   font-size: 0.9rem;
 
   :active {
@@ -40,6 +44,7 @@ const Divider = styled.span`
 `
 
 const Dropdown = styled.div`
+  height: 80px;
   background-color: white;
   border-radius: 5px;
   position: absolute;
@@ -47,6 +52,7 @@ const Dropdown = styled.div`
   transform: translateY(10px);
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
   overflow: hidden;
   z-index: 9999;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
@@ -89,20 +95,12 @@ export const LanguagePicker: React.FC<{ path?: string }> = ({
         transition={{ type: 'spring', stiffness: 400, damping: 100 }}
       >
         <Dropdown>
-          {market === Market.Se && (
-            <>
-              <StyledLink to={`/se${path}`}>Svenska</StyledLink>
-              <Divider />
-              <StyledLink to={`/se-en${path}`}>English</StyledLink>
-            </>
-          )}
-          {market === Market.No && (
-            <>
-              <StyledLink to={`/no${path}`}>Norsk</StyledLink>
-              <Divider />
-              <StyledLink to={`/no-en${path}`}>English</StyledLink>
-            </>
-          )}
+          {languagePickerData[market].map(({ linkTo, title }, index) => (
+            <Option key={linkTo}>
+              <StyledLink to={`/${linkTo}${path}`}>{title}</StyledLink>
+              {index < languagePickerData[market].length - 1 && <Divider />}
+            </Option>
+          ))}
         </Dropdown>
       </motion.div>
     </Wrapper>
