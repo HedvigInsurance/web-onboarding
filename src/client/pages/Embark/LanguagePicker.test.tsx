@@ -37,6 +37,20 @@ it('renders NO without 💥', () => {
   expect(toJson(wrapper.find(LanguagePicker))).toMatchSnapshot()
 })
 
+it('renders DK without 💥', () => {
+  const wrapper = mount(
+    <MemoryRouter initialEntries={['/dk/new-member']}>
+      <LanguagePicker />
+    </MemoryRouter>,
+  )
+
+  expect(wrapper.find('Link')).toHaveLength(2)
+  expect(wrapper.find('Link[to*="/dk/new-member"]')).toHaveLength(1)
+  expect(wrapper.find('Link[to*="/dk-en/new-member"]')).toHaveLength(1)
+
+  expect(toJson(wrapper.find(LanguagePicker))).toMatchSnapshot()
+})
+
 it('opens when clicking icon', () => {
   const wrapper = mount(
     <MemoryRouter initialEntries={['/se/new-member']}>
