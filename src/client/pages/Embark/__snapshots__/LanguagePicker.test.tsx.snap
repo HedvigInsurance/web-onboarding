@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders DK without 💥 1`] = `
+exports[`Danish language picker renders without 💥 matches snaphot 1`] = `
 <LanguagePicker>
   <Wrapper>
     <div
@@ -460,7 +460,7 @@ exports[`renders DK without 💥 1`] = `
 </LanguagePicker>
 `;
 
-exports[`renders NO without 💥 1`] = `
+exports[`Norwegian language picker renders without 💥 matches snaphot 1`] = `
 <LanguagePicker>
   <Wrapper>
     <div
@@ -920,7 +920,7 @@ exports[`renders NO without 💥 1`] = `
 </LanguagePicker>
 `;
 
-exports[`renders SE without 💥 1`] = `
+exports[`Swedish language picker renders without 💥 matches snaphot 1`] = `
 <LanguagePicker>
   <Wrapper>
     <div
