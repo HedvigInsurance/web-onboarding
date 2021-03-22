@@ -77,7 +77,7 @@ exports[`Danish language picker renders without 💥 matches snaphot 1`] = `
         >
           <Dropdown>
             <div
-              className="css-1ohea3f-Dropdown e1g7xtvp5"
+              className="css-18z9q10-Dropdown e1g7xtvp5"
             >
               <Option
                 key="dk"
@@ -154,7 +154,7 @@ exports[`Danish language picker renders without 💥 matches snaphot 1`] = `
                 style="pointer-events: none; user-select: none; opacity: 0; transform: translateY(-20px) translateZ(0);"
               >
                 <div
-                  class="css-1ohea3f-Dropdown e1g7xtvp5"
+                  class="css-18z9q10-Dropdown e1g7xtvp5"
                 >
                   <div
                     class="css-1xjnew5-Option e1g7xtvp1"
@@ -537,7 +537,7 @@ exports[`Norwegian language picker renders without 💥 matches snaphot 1`] = `
         >
           <Dropdown>
             <div
-              className="css-1ohea3f-Dropdown e1g7xtvp5"
+              className="css-18z9q10-Dropdown e1g7xtvp5"
             >
               <Option
                 key="no"
@@ -614,7 +614,7 @@ exports[`Norwegian language picker renders without 💥 matches snaphot 1`] = `
                 style="pointer-events: none; user-select: none; opacity: 0; transform: translateY(-20px) translateZ(0);"
               >
                 <div
-                  class="css-1ohea3f-Dropdown e1g7xtvp5"
+                  class="css-18z9q10-Dropdown e1g7xtvp5"
                 >
                   <div
                     class="css-1xjnew5-Option e1g7xtvp1"
@@ -997,7 +997,7 @@ exports[`Swedish language picker renders without 💥 matches snaphot 1`] = `
         >
           <Dropdown>
             <div
-              className="css-1ohea3f-Dropdown e1g7xtvp5"
+              className="css-18z9q10-Dropdown e1g7xtvp5"
             >
               <Option
                 key="se"
@@ -1074,7 +1074,7 @@ exports[`Swedish language picker renders without 💥 matches snaphot 1`] = `
                 style="pointer-events: none; user-select: none; opacity: 0; transform: translateY(-20px) translateZ(0);"
               >
                 <div
-                  class="css-1ohea3f-Dropdown e1g7xtvp5"
+                  class="css-18z9q10-Dropdown e1g7xtvp5"
                 >
                   <div
                     class="css-1xjnew5-Option e1g7xtvp1"
