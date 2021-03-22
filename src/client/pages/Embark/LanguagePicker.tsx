@@ -44,15 +44,11 @@ const Divider = styled.span`
 `
 
 const Dropdown = styled.div`
-  height: 80px;
   background-color: white;
   border-radius: 5px;
   position: absolute;
   right: 0;
   transform: translateY(10px);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
   overflow: hidden;
   z-index: 9999;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
