@@ -116,8 +116,8 @@ const getSwedishSchema = (
   const swedishBase = {
     ...base,
     householdSize: {
-      label: 'DETAILS_MODULE_TABLE_INSUREDPEOPLE_CELL_LABEL',
-      placeholder: 'DETAILS_MODULE_TABLE_INSUREDPEOPLE_CELL_LABEL',
+      label: 'DETAILS_MODULE_TABLE_HOUSEHOLD_SIZE_CELL_LABEL',
+      placeholder: 'DETAILS_MODULE_TABLE_HOUSEHOLD_SIZE_CELL_LABEL',
       type: inputTypes.number,
       validation: Yup.number().required(),
     },
@@ -257,8 +257,8 @@ const getNorwegianSchema = (
 ): DetailsFieldSchema => {
   const commonAttributes = {
     coInsured: {
-      label: 'DETAILS_MODULE_TABLE_INSUREDPEOPLE_CELL_LABEL',
-      placeholder: 'DETAILS_MODULE_TABLE_INSUREDPEOPLE_CELL_LABEL',
+      label: 'DETAILS_MODULE_TABLE_COINSURED_CELL_LABEL',
+      placeholder: 'DETAILS_MODULE_TABLE_COINSURED_CELL_LABEL',
       type: inputTypes.number,
       validation: Yup.number().required(),
     },
@@ -310,8 +310,8 @@ const getDanishSchema = (base: BaseFieldSchema): DetailsFieldSchema => {
     danishHomeContents: {
       ...base,
       coInsured: {
-        label: 'DETAILS_MODULE_TABLE_INSUREDPEOPLE_CELL_LABEL',
-        placeholder: 'DETAILS_MODULE_TABLE_INSUREDPEOPLE_CELL_LABEL',
+        label: 'DETAILS_MODULE_TABLE_COINSURED_CELL_LABEL',
+        placeholder: 'DETAILS_MODULE_TABLE_COINSURED_CELL_LABEL',
         type: inputTypes.number,
         validation: Yup.number().required(),
       },

@@ -66,7 +66,7 @@
   "CHECKOUT_EMAIL_PLACEHOLDER": "your.email@here.com",
   "CHECKOUT_SUMMARY_TITLE": "Your details",
   "CHECKOUT_SIGN_BUTTON_TEXT": "Sign with NemID",
-  "CHECKOUT_SIGN_DISCLAIMER": "By clicking “Sign with NemID” I confirm that I have read and understood [the pre-sale information]({PREBUY_LINK}), [terms]({TERMS_LINK}) and that my personal data is handled [according to GDPR](https:\/\/www.hedvig.com\/privacy).",
+  "CHECKOUT_SIGN_DISCLAIMER": "By signing I confirm that I have read and understood the [{TERMS_TITLE}]({TERMS_LINK}) and the [{IPID_TITLE}]({IPID_LINK}), and that Hedvig handles my [personal information](https:\/\/www.hedvig.com\/privacy).",
   "CHECKOUT_DETAILS_ADDRESS": "Address",
   "CHECKOUT_DETAILS_ZIPCODE": "Post code",
   "CHECKOUT_DETAILS_QUOTE_TYPE": "Apartment type",
@@ -165,7 +165,7 @@
   "DETAILS_MODULE_TABLE_POSTALCODE_CELL_LABEL": "Postal code",
   "DETAILS_MODULE_TABLE_RECIDENCY_TYPE_CELL_LABEL_APARTMENT": "Type of recidency",
   "DETAILS_MODULE_TABLE_SIZE_CELL_LABEL_APARTMENT": "Size",
-  "DETAILS_MODULE_TABLE_INSUREDPEOPLE_CELL_LABEL": "Number of insured people (incl. yourself)",
+  "DETAILS_MODULE_TABLE_HOUSEHOLD_SIZE_CELL_LABEL": "",
   "DETAILS_MODULE_TABLE_LIVINGSPACE_CELL_LABEL_HOUSE": "Living space",
   "DETAILS_MODULE_TABLE_ANCILLARYAREA_CELL_LABEL_HOUSE": "Ancillary area",
   "DETAILS_MODULE_TABLE_BATHROOMS_CELL_LABEL_HOUSE": "Number of bathrooms",
@@ -241,7 +241,7 @@
   "DETAILS_MODULE_PERSONAL_INFORMATION": "Personal information",
   "SIDEBAR_NO_BUNDLE_DISCOUNT_TEXT": "25% discount",
   "HERO_OFFER_DETAILS_HEADER": "Your price quote",
-  "ONBOARDING_CONNECT_DD_INSTRUCTIONS_CONNECT_PAYMENT": "",
+  "ONBOARDING_CONNECT_DD_INSTRUCTIONS_CONNECT_PAYMENT": "Activate Hedvig by connecting your card",
   "ONBOARDING_CONNECT_DD_INSTRUCTIONS_DOWNLOAD_APP": "Download the Hedvig app",
   "ONBOARDING_DOWNLOAD_PARAGRAPH_1": "Everything related to your insurance, your coverage and your claims is handled through the Hedvig app.",
   "ONBOARDING_DOWNLOAD_PARAGRAPH_2": "Record your claim, chat with our service team, and get unlimited help every day until 10 p.m.",
@@ -260,5 +260,6 @@
   "STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_BADGE": "3-IN-1",
   "STARTPAGE_DK_CONTENTS_BODY": "Get home contents insurance",
   "STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_BODY": "Get all three of them",
-  "STARTPAGE_DK_CONTENTS_ACCIDENT_BODY": "Get both of them"
+  "STARTPAGE_DK_CONTENTS_ACCIDENT_BODY": "Get both of them",
+  "DETAILS_MODULE_TABLE_COINSURED_CELL_LABEL": "Number of co-insured"
 }
