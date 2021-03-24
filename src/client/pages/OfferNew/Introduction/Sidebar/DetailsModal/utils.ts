@@ -116,8 +116,8 @@ const getSwedishSchema = (
   const swedishBase = {
     ...base,
     householdSize: {
-      label: 'DETAILS_MODULE_TABLE_INSUREDPEOPLE_CELL_LABEL',
-      placeholder: 'DETAILS_MODULE_TABLE_INSUREDPEOPLE_CELL_LABEL',
+      label: 'DETAILS_MODULE_TABLE_HOUSEHOLD_SIZE_CELL_LABEL',
+      placeholder: '',
       type: inputTypes.number,
       validation: Yup.number().required(),
     },
@@ -128,7 +128,7 @@ const getSwedishSchema = (
           ...swedishBase,
           livingSpace: {
             label: 'DETAILS_MODULE_TABLE_SIZE_CELL_LABEL_APARTMENT',
-            placeholder: 'DETAILS_MODULE_TABLE_SIZE_CELL_LABEL_APARTMENT',
+            placeholder: '',
             mask: masks.area,
             type: inputTypes.number,
             validation: Yup.number()
@@ -137,8 +137,7 @@ const getSwedishSchema = (
           },
           type: {
             label: 'DETAILS_MODULE_TABLE_RECIDENCY_TYPE_CELL_LABEL_APARTMENT',
-            placeholder:
-              'DETAILS_MODULE_TABLE_RECIDENCY_TYPE_CELL_LABEL_APARTMENT',
+            placeholder: '',
             options: [
               ...(isStudent(offerQuote.quoteDetails)
                 ? [
@@ -171,7 +170,7 @@ const getSwedishSchema = (
           ...swedishBase,
           livingSpace: {
             label: 'DETAILS_MODULE_TABLE_LIVINGSPACE_CELL_LABEL_HOUSE',
-            placeholder: 'DETAILS_MODULE_TABLE_LIVINGSPACE_CELL_LABEL_HOUSE',
+            placeholder: '',
             mask: masks.area,
             type: inputTypes.number,
             validation: Yup.number()
@@ -180,7 +179,7 @@ const getSwedishSchema = (
           },
           ancillarySpace: {
             label: 'DETAILS_MODULE_TABLE_ANCILLARYAREA_CELL_LABEL_HOUSE',
-            placeholder: 'DETAILS_MODULE_TABLE_ANCILLARYAREA_CELL_LABEL_HOUSE',
+            placeholder: '',
             mask: masks.area,
             type: inputTypes.number,
             validation: Yup.number()
@@ -189,7 +188,7 @@ const getSwedishSchema = (
           },
           numberOfBathrooms: {
             label: 'DETAILS_MODULE_TABLE_BATHROOMS_CELL_LABEL_HOUSE',
-            placeholder: 'DETAILS_MODULE_TABLE_BATHROOMS_CELL_LABEL_HOUSE',
+            placeholder: '',
             type: inputTypes.number,
             validation: Yup.number()
               .min(0)
@@ -197,14 +196,14 @@ const getSwedishSchema = (
           },
           yearOfConstruction: {
             label: 'DETAILS_MODULE_TABLE_YEARBUILT_CELL_LABEL_HOUSE',
-            placeholder: 'DETAILS_MODULE_TABLE_YEARBUILT_CELL_LABEL_HOUSE',
+            placeholder: '',
             mask: masks.year,
             type: inputTypes.number,
             validation: Yup.number().required(),
           },
           isSubleted: {
             label: 'DETAILS_MODULE_TABLE_SUBLETTING_CELL_LABEL_HOUSE',
-            placeholder: 'DETAILS_MODULE_TABLE_SUBLETTING_CELL_LABEL_HOUSE',
+            placeholder: '',
             options: [
               { label: 'YES', value: 'true' },
               { label: 'NO', value: 'false' },
@@ -216,8 +215,7 @@ const getSwedishSchema = (
             type: {
               label:
                 'DETAILS_MODULE_EXTRABUILDINGS_TABLE_BUILDINGTYPE_CELL_LABEL_HOUSE',
-              placeholder:
-                'DETAILS_MODULE_EXTRABUILDINGS_TABLE_BUILDINGTYPE_CELL_LABEL_HOUSE',
+              placeholder: '',
               options: Object.values(ExtraBuildingType).map((value) => ({
                 label: getExtraBuilding(value),
                 value,
@@ -227,8 +225,7 @@ const getSwedishSchema = (
             area: {
               label:
                 'DETAILS_MODULE_EXTRABUILDINGS_TABLE_SIZE_CELL_LABEL_HOUSE',
-              placeholder:
-                'DETAILS_MODULE_EXTRABUILDINGS_TABLE_SIZE_CELL_LABEL_HOUSE',
+              placeholder: '',
               mask: masks.area,
               type: inputTypes.number,
               validation: Yup.number()
@@ -238,8 +235,7 @@ const getSwedishSchema = (
             hasWaterConnected: {
               label:
                 'DETAILS_MODULE_EXTRABUILDINGS_TABLE_WATER_CELL_LABEL_HOUSE',
-              placeholder:
-                'DETAILS_MODULE_EXTRABUILDINGS_TABLE_WATER_CELL_LABEL_HOUSE',
+              placeholder: '',
               options: [
                 { label: 'YES', value: 'true' },
                 { label: 'NO', value: 'false' },
@@ -257,14 +253,14 @@ const getNorwegianSchema = (
 ): DetailsFieldSchema => {
   const commonAttributes = {
     coInsured: {
-      label: 'DETAILS_MODULE_TABLE_INSUREDPEOPLE_CELL_LABEL',
-      placeholder: 'DETAILS_MODULE_TABLE_INSUREDPEOPLE_CELL_LABEL',
+      label: 'DETAILS_MODULE_TABLE_COINSURED_CELL_LABEL',
+      placeholder: '',
       type: inputTypes.number,
       validation: Yup.number().required(),
     },
     isYouth: {
       label: 'DETAILS_MODULE_TABLE_YOUTH_CELL_LABEL',
-      placeholder: 'DETAILS_MODULE_TABLE_YOUTH_CELL_LABEL',
+      placeholder: '',
       options: [
         { label: 'YES', value: 'true' },
         { label: 'NO', value: 'false' },
@@ -280,14 +276,13 @@ const getNorwegianSchema = (
           ...commonAttributes,
           livingSpace: {
             label: 'DETAILS_MODULE_TABLE_LIVINGSPACE_CELL_LABEL_HOUSE',
-            placeholder: 'DETAILS_MODULE_TABLE_LIVINGSPACE_CELL_LABEL_HOUSE',
+            placeholder: '',
             type: inputTypes.number,
             validation: Yup.number().required(),
           },
           type: {
             label: 'DETAILS_MODULE_TABLE_RECIDENCY_TYPE_CELL_LABEL_APARTMENT',
-            placeholder:
-              'DETAILS_MODULE_TABLE_RECIDENCY_TYPE_CELL_LABEL_APARTMENT',
+            placeholder: '',
             options: [
               {
                 label: 'SIDEBAR_INSURANCE_TYPE_BRF',
@@ -310,14 +305,14 @@ const getDanishSchema = (base: BaseFieldSchema): DetailsFieldSchema => {
     danishHomeContents: {
       ...base,
       coInsured: {
-        label: 'DETAILS_MODULE_TABLE_INSUREDPEOPLE_CELL_LABEL',
-        placeholder: 'DETAILS_MODULE_TABLE_INSUREDPEOPLE_CELL_LABEL',
+        label: 'DETAILS_MODULE_TABLE_COINSURED_CELL_LABEL',
+        placeholder: '',
         type: inputTypes.number,
         validation: Yup.number().required(),
       },
       isStudent: {
         label: 'DETAILS_MODULE_TABLE_STUDENT_CELL_LABEL',
-        placeholder: 'DETAILS_MODULE_TABLE_STUDENT_CELL_LABEL',
+        placeholder: '',
         options: [
           { label: 'YES', value: 'true' },
           { label: 'NO', value: 'false' },
@@ -326,13 +321,13 @@ const getDanishSchema = (base: BaseFieldSchema): DetailsFieldSchema => {
       },
       livingSpace: {
         label: 'DETAILS_MODULE_TABLE_LIVINGSPACE_CELL_LABEL_HOUSE',
-        placeholder: 'DETAILS_MODULE_TABLE_LIVINGSPACE_CELL_LABEL_HOUSE',
+        placeholder: '',
         type: inputTypes.number,
         validation: Yup.number().required(),
       },
       type: {
         label: 'DETAILS_MODULE_TABLE_RECIDENCY_TYPE_CELL_LABEL_APARTMENT',
-        placeholder: 'DETAILS_MODULE_TABLE_RECIDENCY_TYPE_CELL_LABEL_APARTMENT',
+        placeholder: '',
         options: [
           {
             label: 'SIDEBAR_INSURANCE_TYPE_BRF',
@@ -355,17 +350,17 @@ export const getFieldSchema = (offerQuote: OfferQuote): FieldSchema => {
   return {
     firstName: {
       label: 'DETAILS_MODULE_TABLE_FIRSTNAME_CELL_LABEL',
-      placeholder: 'DETAILS_MODULE_TABLE_FIRSTNAME_CELL_LABEL',
+      placeholder: '',
       validation: Yup.string().required(),
     },
     lastName: {
       label: 'DETAILS_MODULE_TABLE_LASTNAME_CELL_LABEL',
-      placeholder: 'DETAILS_MODULE_TABLE_LASTNAME_CELL_LABEL',
+      placeholder: '',
       validation: Yup.string().required(),
     },
     birthDate: {
       label: 'DETAILS_MODULE_TABLE_BIRTHDATE_CELL_LABEL',
-      placeholder: 'DETAILS_MODULE_TABLE_BIRTHDATE_CELL_LABEL',
+      placeholder: '',
       validation: Yup.string().matches(BIRTH_DATE_REGEX),
     },
     ...fieldSchemaDetails,
@@ -377,12 +372,12 @@ export const getFieldSchemaDetails = (
   const base = {
     street: {
       label: 'DETAILS_MODULE_TABLE_ADDRESS_CELL_LABEL',
-      placeholder: 'DETAILS_MODULE_TABLE_ADDRESS_CELL_LABEL',
+      placeholder: '',
       validation: Yup.string().required(),
     },
     zipCode: {
       label: 'DETAILS_MODULE_TABLE_POSTALCODE_CELL_LABEL',
-      placeholder: 'DETAILS_MODULE_TABLE_POSTALCODE_CELL_LABEL',
+      placeholder: '',
       mask: isSwedishQuote(offerQuote)
         ? masks.fiveDigitZipCode
         : masks.fourDigitZipCode,
