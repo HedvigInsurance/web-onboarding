@@ -23,6 +23,7 @@ import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { trackOfferGTM } from 'utils/tracking/gtm'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { useQuoteIds } from '../../utils/hooks/useQuoteIds'
+import { LanguagePicker } from '../Embark/LanguagePicker'
 import { Checkout } from './Checkout'
 import { FaqSection } from './FaqSection'
 import { Introduction } from './Introduction'
@@ -96,7 +97,9 @@ export const OfferNew: React.FC = () => {
     <Page>
       <SessionTokenGuard>
         {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
-          <TopBar isTransparent />
+          <TopBar isTransparent>
+            <LanguagePicker path="/new-member/offer" />
+          </TopBar>
         )}
         {offerData && (
           <>
