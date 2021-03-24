@@ -1,15 +1,13 @@
+import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import color from 'color'
-import React from 'react'
+import { InsuranceTermType } from 'data/graphql'
 import { Limits } from 'pages/OfferNew/Perils/InsuranceValues/Limits'
 import { OfferQuote } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
+import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { SubSubHeadingBlack } from '../../components'
-
-interface Props {
-  offerQuote: OfferQuote
-}
 
 const Wrapper = styled.div`
   margin-top: 4rem;
@@ -72,8 +70,34 @@ const Link = styled.a`
   }
 `
 
+export const getTermsLink = (currentLocale: string) => {
+  const baseUrl = 'https://www.hedvig.com'
+
+  switch (currentLocale) {
+    case 'se':
+      return `${baseUrl}/${currentLocale}/villkor`
+    case 'se-en':
+      return `${baseUrl}/${currentLocale}/terms`
+    case 'no':
+      return `${baseUrl}/${currentLocale}/terms`
+    case 'no-en':
+      return `${baseUrl}/${currentLocale}/terms`
+    default:
+      return `${baseUrl}/${currentLocale}/404`
+  }
+}
+
+type Props = {
+  offerQuote: OfferQuote
+}
+
 export const InsuranceValues: React.FC<Props> = ({ offerQuote }) => {
   const textKeys = useTextKeys()
+
+  const currentLocale = useCurrentLocale()
+
+  const temporaryTermsLink = getTermsLink(currentLocale)
+  // 👆 This link is only temporary since we can't get the correct ones from content-service right now
 
   return (
     <Wrapper>
@@ -84,14 +108,17 @@ export const InsuranceValues: React.FC<Props> = ({ offerQuote }) => {
       </Header>
 
       <Limits insurableLimits={offerQuote.insurableLimits} />
-
       <Links>
         {[...offerQuote.insuranceTerms.entries()].map(
           ([insuranceTermType, insuranceTerm]) => {
             return (
               <Link
                 key={insuranceTermType}
-                href={insuranceTerm.url}
+                href={
+                  insuranceTermType === InsuranceTermType.TermsAndConditions
+                    ? temporaryTermsLink
+                    : insuranceTerm.url
+                }
                 target="_blank"
               >
                 {insuranceTerm.displayName}

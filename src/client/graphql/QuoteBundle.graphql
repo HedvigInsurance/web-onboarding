@@ -41,10 +41,6 @@ query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
         description
         type
       }
-      termsAndConditions(locale: $locale) {
-        displayName
-        url
-      }
       insuranceTerms(locale: $locale) {
         displayName
         url
