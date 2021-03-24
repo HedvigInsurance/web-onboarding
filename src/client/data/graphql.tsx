@@ -81,6 +81,7 @@ export enum _FilterKind {
 export enum _MutationInputFieldKind {
   Scalar = 'scalar',
   RichText = 'richText',
+  RichTextWithEmbeds = 'richTextWithEmbeds',
   Enum = 'enum',
   Relation = 'relation',
   Union = 'union',
@@ -164,6 +165,7 @@ export type ActiveReferral = {
 export type ActiveStatus = {
   __typename?: 'ActiveStatus'
   pastInception?: Maybe<Scalars['LocalDate']>
+  upcomingAgreementChange?: Maybe<UpcomingAgreementChange>
 }
 
 export type AdditionalPaymentsDetailsRequest = {
@@ -182,6 +184,7 @@ export type AdditionalPaymentsDetailsResponseAction = {
 export type AdditionalPaymentsDetailsResponseFinished = {
   __typename?: 'AdditionalPaymentsDetailsResponseFinished'
   resultCode: Scalars['String']
+  tokenizationResult: TokenizationResultType
 }
 
 export type AddPhotoToKeyGearItemInput = {
@@ -222,6 +225,7 @@ export type AgreementCore = {
   activeTo?: Maybe<Scalars['LocalDate']>
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
+  termsAndConditions?: Maybe<InsuranceTerm>
 }
 
 export enum AgreementStatus {
@@ -2224,6 +2228,7 @@ export type DanishAccidentAgreement = AgreementCore & {
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   status: AgreementStatus
+  termsAndConditions?: Maybe<InsuranceTerm>
   address: Address
   numberCoInsured: Scalars['Int']
   type?: Maybe<DanishAccidentLineOfBusiness>
@@ -2260,6 +2265,7 @@ export type DanishHomeContentAgreement = AgreementCore & {
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   status: AgreementStatus
+  termsAndConditions?: Maybe<InsuranceTerm>
   address: Address
   numberCoInsured: Scalars['Int']
   squareMeters: Scalars['Int']
@@ -2296,6 +2302,7 @@ export type DanishTravelAgreement = AgreementCore & {
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   status: AgreementStatus
+  termsAndConditions?: Maybe<InsuranceTerm>
   address: Address
   numberCoInsured: Scalars['Int']
   type?: Maybe<DanishTravelLineOfBusiness>
@@ -2536,6 +2543,7 @@ export type EmbarkAction =
   | EmbarkSelectAction
   | EmbarkNumberAction
   | EmbarkMultiAction
+  | EmbarkDatePickerAction
 
 export type EmbarkActionCore = {
   component: Scalars['String']
@@ -2645,7 +2653,7 @@ export enum EmbarkApiGraphQlVariableGeneratedType {
 export type EmbarkApiHouseInformation = EmbarkApiCore & {
   __typename?: 'EmbarkApiHouseInformation'
   component: Scalars['String']
-  data: EmbarkApiHouseInformation
+  data: EmbarkApiHouseInformationData
 }
 
 export type EmbarkApiHouseInformationData = {
@@ -2672,6 +2680,15 @@ export type EmbarkComputedStoreValue = {
   __typename?: 'EmbarkComputedStoreValue'
   key: Scalars['String']
   value: Scalars['String']
+}
+
+export type EmbarkDatePickerAction = EmbarkActionCore & {
+  __typename?: 'EmbarkDatePickerAction'
+  component: Scalars['String']
+  next: EmbarkLink
+  storeKey: Scalars['String']
+  label: Scalars['String']
+  tooltip?: Maybe<EmbarkTooltip>
 }
 
 export type EmbarkDropdownAction = EmbarkActionCore & {
@@ -2750,7 +2767,18 @@ export type EmbarkExternalInsuranceProviderActionData = {
   skip: EmbarkLink
 }
 
-export enum EmbarkExternalRedirect {
+export type EmbarkExternalRedirect = {
+  __typename?: 'EmbarkExternalRedirect'
+  component: Scalars['String']
+  data: EmbarkExternalRedirectData
+}
+
+export type EmbarkExternalRedirectData = {
+  __typename?: 'EmbarkExternalRedirectData'
+  location: EmbarkExternalRedirectLocation
+}
+
+export enum EmbarkExternalRedirectLocation {
   MailingList = 'MailingList',
   Offer = 'Offer',
 }
@@ -2837,6 +2865,7 @@ export type EmbarkNumberActionData = {
   key: Scalars['String']
   placeholder: Scalars['String']
   unit?: Maybe<Scalars['String']>
+  label?: Maybe<Scalars['String']>
   maxValue?: Maybe<Scalars['Int']>
   minValue?: Maybe<Scalars['Int']>
   link: EmbarkLink
@@ -3098,7 +3127,7 @@ export type EmbarkTrack = {
   eventName: Scalars['String']
   eventKeys: Array<Maybe<Scalars['String']>>
   includeAllKeys: Scalars['Boolean']
-  customData: Scalars['JSONString']
+  customData?: Maybe<Scalars['JSONString']>
 }
 
 export type Emergency = {
@@ -4574,6 +4603,7 @@ export enum InsuranceTermType {
   TermsAndConditions = 'TERMS_AND_CONDITIONS',
   PreSaleInfoEuStandard = 'PRE_SALE_INFO_EU_STANDARD',
   GeneralTerms = 'GENERAL_TERMS',
+  PrivacyPolicy = 'PRIVACY_POLICY',
 }
 
 export enum InsuranceType {
@@ -6659,6 +6689,7 @@ export type Mutation = {
   registerBranchCampaign?: Maybe<Scalars['Boolean']>
   updateLanguage: Scalars['Boolean']
   updatePickedLocale: Member
+  createSelfChangeQuote: SelfChangeQuoteOutput
   exchangeToken: ExchangeTokenResponse
   registerDirectDebit: DirectDebitResponse
   cancelDirectDebitRequest: CancelDirectDebitStatus
@@ -6666,7 +6697,7 @@ export type Mutation = {
   tokenizePaymentDetails?: Maybe<TokenizationResponse>
   /** Tokenize payout details per member in order to be used in future and returns the status */
   tokenizePayoutDetails?: Maybe<TokenizationResponse>
-  /** Submite additional payment details */
+  /** Submit additional payment details */
   submitAdditionalPaymentDetails: AdditionalPaymentsDetailsResponse
   submitAdyenRedirection: SubmitAdyenRedirectionResponse
   /**
@@ -6789,6 +6820,10 @@ export type MutationUpdateLanguageArgs = {
 
 export type MutationUpdatePickedLocaleArgs = {
   pickedLocale: Locale
+}
+
+export type MutationCreateSelfChangeQuoteArgs = {
+  quoteInput: SelfChangeQuoteInput
 }
 
 export type MutationExchangeTokenArgs = {
@@ -6945,6 +6980,7 @@ export type NorwegianHomeContentAgreement = AgreementCore & {
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   status: AgreementStatus
+  termsAndConditions?: Maybe<InsuranceTerm>
   address: Address
   numberCoInsured: Scalars['Int']
   squareMeters: Scalars['Int']
@@ -6981,6 +7017,7 @@ export type NorwegianTravelAgreement = AgreementCore & {
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   status: AgreementStatus
+  termsAndConditions?: Maybe<InsuranceTerm>
   numberCoInsured: Scalars['Int']
   type?: Maybe<NorwegianTravelLineOfBusiness>
 }
@@ -7218,6 +7255,8 @@ export type Query = {
   redeemedCampaigns: Array<Campaign>
   /** Returns all contracts the member currently holds, regardless of activation/termination status */
   contracts: Array<Contract>
+  /** Returns a type describing whether the 'Self Change' functionality is possible. */
+  selfChangeEligibility: SelfChangeEligibility
   /** Returns the aggregated insurance cost of a member's PENDING, ACTIVE or ACTIVE_IN_FUTURE current agreements */
   insuranceCost?: Maybe<InsuranceCost>
   /** Returns whether a member has at least one contract */
@@ -7345,6 +7384,7 @@ export type QueryFileArgs = {
 
 export type QueryAngelStoryArgs = {
   name: Scalars['String']
+  locale?: Maybe<Scalars['String']>
 }
 
 export type QueryCampaignArgs = {
@@ -7398,11 +7438,13 @@ export type QueryPerilsArgs = {
 export type QueryInsuranceTermsArgs = {
   contractType: TypeOfContract
   locale: Locale
+  date?: Maybe<Scalars['LocalDate']>
 }
 
 export type QueryTermsAndConditionsArgs = {
   contractType: TypeOfContract
   locale: Locale
+  date?: Maybe<Scalars['LocalDate']>
 }
 
 export type QueryInsuranceProvidersArgs = {
@@ -7568,6 +7610,145 @@ export type S3FileInput = {
   key: Scalars['String']
 }
 
+/** These types represent reasons for why the self-change flow cannot be run. */
+export enum SelfChangeBlocker {
+  /** Contract is still pending, it can't be changed until it is active. */
+  StillPending = 'STILL_PENDING',
+  /** Contract has a termination date set. */
+  HasTermination = 'HAS_TERMINATION',
+  /** Contract is already undergoing future changes. */
+  HasFutureChanges = 'HAS_FUTURE_CHANGES',
+  /** Contract is not currently active. */
+  NotActiveToday = 'NOT_ACTIVE_TODAY',
+  /** Member has multiple contracts with mismatching number of co-insured. */
+  CoinsuredMismatch = 'COINSURED_MISMATCH',
+  /** Member has multiple contracts with mismatching 'youth' status. */
+  YouthMismatch = 'YOUTH_MISMATCH',
+  /** Member has too many contracts. */
+  TooManyContracts = 'TOO_MANY_CONTRACTS',
+}
+
+export type SelfChangeCreateDanishAccidentInput = {
+  street: Scalars['String']
+  zipCode: Scalars['String']
+  coInsured: Scalars['Int']
+  isStudent: Scalars['Boolean']
+}
+
+export type SelfChangeCreateDanishHomeContentsInput = {
+  street: Scalars['String']
+  zipCode: Scalars['String']
+  livingSpace: Scalars['Int']
+  coInsured: Scalars['Int']
+  isStudent: Scalars['Boolean']
+  type: SelfChangeDanishHomeContentsType
+}
+
+export type SelfChangeCreateDanishTravelInput = {
+  street: Scalars['String']
+  zipCode: Scalars['String']
+  coInsured: Scalars['Int']
+  isStudent: Scalars['Boolean']
+}
+
+export type SelfChangeCreateNorwegianHomeContentsInput = {
+  street: Scalars['String']
+  zipCode: Scalars['String']
+  coInsured: Scalars['Int']
+  livingSpace: Scalars['Int']
+  isYouth: Scalars['Boolean']
+  type: SelfChangeNorwegianHomeContentsType
+}
+
+export type SelfChangeCreateNorwegianTravelInput = {
+  coInsured: Scalars['Int']
+  isYouth: Scalars['Boolean']
+}
+
+export type SelfChangeCreateSwedishApartmentInput = {
+  street: Scalars['String']
+  zipCode: Scalars['String']
+  householdSize: Scalars['Int']
+  livingSpace: Scalars['Int']
+  type: SelfChangeSwedishApartmentType
+}
+
+export type SelfChangeCreateSwedishHouseInput = {
+  street: Scalars['String']
+  zipCode: Scalars['String']
+  householdSize: Scalars['Int']
+  livingSpace: Scalars['Int']
+  ancillarySpace: Scalars['Int']
+  yearOfConstruction: Scalars['Int']
+  numberOfBathrooms: Scalars['Int']
+  isSubleted: Scalars['Boolean']
+  extraBuildings: Array<SelfChangeExtraBuildingInput>
+}
+
+export enum SelfChangeDanishHomeContentsType {
+  Rent = 'RENT',
+  Own = 'OWN',
+}
+
+export type SelfChangeEligibility = {
+  __typename?: 'SelfChangeEligibility'
+  /** A list of reasons for why 'Self Change' is not possible - if empty 'Self Change' can be done. */
+  blockers: Array<SelfChangeBlocker>
+}
+
+export type SelfChangeExtraBuildingInput = {
+  type: SelfChangeExtraBuildingType
+  area: Scalars['Int']
+  hasWaterConnected: Scalars['Boolean']
+}
+
+export enum SelfChangeExtraBuildingType {
+  Garage = 'GARAGE',
+  Carport = 'CARPORT',
+  Shed = 'SHED',
+  Storehouse = 'STOREHOUSE',
+  Friggebod = 'FRIGGEBOD',
+  Attefall = 'ATTEFALL',
+  Outhouse = 'OUTHOUSE',
+  Guesthouse = 'GUESTHOUSE',
+  Gazebo = 'GAZEBO',
+  Greenhouse = 'GREENHOUSE',
+  Sauna = 'SAUNA',
+  Barn = 'BARN',
+  Boathouse = 'BOATHOUSE',
+  Other = 'OTHER',
+}
+
+export enum SelfChangeNorwegianHomeContentsType {
+  Rent = 'RENT',
+  Own = 'OWN',
+}
+
+export type SelfChangeQuoteInput = {
+  startDate: Scalars['LocalDate']
+  swedishApartment?: Maybe<SelfChangeCreateSwedishApartmentInput>
+  swedishHouse?: Maybe<SelfChangeCreateSwedishHouseInput>
+  norwegianHomeContents?: Maybe<SelfChangeCreateNorwegianHomeContentsInput>
+  norwegianTravel?: Maybe<SelfChangeCreateNorwegianTravelInput>
+  danishHomeContents?: Maybe<SelfChangeCreateDanishHomeContentsInput>
+  danishAccident?: Maybe<SelfChangeCreateDanishAccidentInput>
+  danishTravel?: Maybe<SelfChangeCreateDanishTravelInput>
+}
+
+export type SelfChangeQuoteOutput = {
+  __typename?: 'SelfChangeQuoteOutput'
+  id: Scalars['ID']
+  price: Scalars['Int']
+  validTo: Scalars['TimeStamp']
+}
+
+export enum SelfChangeSwedishApartmentType {
+  StudentRent = 'STUDENT_RENT',
+  Rent = 'RENT',
+  StudentBrf = 'STUDENT_BRF',
+  Brf = 'BRF',
+}
+
 export type SessionInformation = {
   __typename?: 'SessionInformation'
   token: Scalars['String']
@@ -7707,6 +7888,7 @@ export type SwedishApartmentAgreement = AgreementCore & {
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   status: AgreementStatus
+  termsAndConditions?: Maybe<InsuranceTerm>
   address: Address
   numberCoInsured: Scalars['Int']
   squareMeters: Scalars['Int']
@@ -7748,6 +7930,7 @@ export type SwedishHouseAgreement = AgreementCore & {
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   status: AgreementStatus
+  termsAndConditions?: Maybe<InsuranceTerm>
   address: Address
   numberCoInsured: Scalars['Int']
   squareMeters: Scalars['Int']
@@ -7781,6 +7964,7 @@ export enum SystemDateTimeFieldVariation {
 export type TerminatedInFutureStatus = {
   __typename?: 'TerminatedInFutureStatus'
   futureTermination?: Maybe<Scalars['LocalDate']>
+  upcomingAgreementChange?: Maybe<UpcomingAgreementChange>
 }
 
 export type TerminatedReferral = {
@@ -7801,6 +7985,7 @@ export type TerminatedStatus = {
 export type TerminatedTodayStatus = {
   __typename?: 'TerminatedTodayStatus'
   today?: Maybe<Scalars['LocalDate']>
+  upcomingAgreementChange?: Maybe<UpcomingAgreementChange>
 }
 
 export enum TextContentType {
@@ -7868,6 +8053,13 @@ export type TokenizationResponseAction = {
 export type TokenizationResponseFinished = {
   __typename?: 'TokenizationResponseFinished'
   resultCode: Scalars['String']
+  tokenizationResult: TokenizationResultType
+}
+
+export enum TokenizationResultType {
+  Completed = 'COMPLETED',
+  Pending = 'PENDING',
+  Failed = 'FAILED',
 }
 
 export type Translation = Node & {
@@ -8309,6 +8501,12 @@ export type UnpublishLocaleInput = {
   locale: Locale
   /** Stages to unpublish selected locales from */
   stages: Array<Stage>
+}
+
+/** If present, the upcomingAgreementChange contains info regarding the agreement that will succeed the current one */
+export type UpcomingAgreementChange = {
+  __typename?: 'UpcomingAgreementChange'
+  newAgreement: Agreement
 }
 
 export type UpcomingRenewal = {
@@ -9241,10 +9439,6 @@ export type QuoteBundleQuery = { __typename?: 'Query' } & {
               InsurableLimit,
               'label' | 'limit' | 'description' | 'type'
             >
-          >
-          termsAndConditions: { __typename?: 'InsuranceTerm' } & Pick<
-            InsuranceTerm,
-            'displayName' | 'url'
           >
           insuranceTerms: Array<
             { __typename?: 'InsuranceTerm' } & Pick<
@@ -10595,10 +10789,6 @@ export const QuoteBundleDocument = gql`
           limit
           description
           type
-        }
-        termsAndConditions(locale: $locale) {
-          displayName
-          url
         }
         insuranceTerms(locale: $locale) {
           displayName

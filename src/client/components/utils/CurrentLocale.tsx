@@ -4,6 +4,8 @@ import { matchPath, useLocation } from 'react-router'
 import { Locale } from 'data/graphql'
 import { LOCALE_PATH_PATTERN } from 'shared/locale'
 
+export type LocalePath = 'se' | 'se-en' | 'no' | 'no-en' | 'dk' | 'dk-en'
+
 export const getIsoLocale = (locale: string): Locale => {
   switch (locale) {
     case 'dk':

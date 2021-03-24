@@ -1,10 +1,8 @@
-import { Market } from 'components/utils/CurrentLocale'
-
-type Locale = 'se' | 'se-en' | 'no' | 'no-en' | 'dk' | 'dk-en'
+import { LocalePath, Market } from 'components/utils/CurrentLocale'
 
 type AlternateLinksData = {
   hrefLang: string
-  locale: Locale
+  locale: LocalePath
 }[]
 
 export const alternateLinksData: AlternateLinksData = [
