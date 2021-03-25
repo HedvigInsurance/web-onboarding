@@ -22,7 +22,7 @@ import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { Badge } from 'components/Badge/Badge'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import { Price } from '../../components'
-import { insuranceTypeTextKeys, isBundle } from '../../utils'
+import { insuranceTypeTextKeys, isBundle, isNorwegian } from '../../utils'
 import { DetailsModal } from './DetailsModal'
 import { DiscountCodeModal } from './DiscountCodeModal'
 import { StartDate } from './StartDate'
@@ -177,6 +177,8 @@ export const Sidebar: React.FC<Props> = ({
     offerData.cost.monthlyGross.currency,
   )
 
+  const isNorwegianBundle = isBundle(offerData) && isNorwegian(offerData)
+
   return (
     <>
       <ReactVisibilitySensor partialVisibility onChange={setIsSidebarVisible}>
@@ -186,7 +188,7 @@ export const Sidebar: React.FC<Props> = ({
               <HeaderTop>
                 <HedvigSymbol />
                 <DiscountInfo>
-                  {isBundle(offerData) && (
+                  {isNorwegianBundle && (
                     <Badge>{textKeys.SIDEBAR_NO_BUNDLE_DISCOUNT_TEXT()}</Badge>
                   )}
                   {discountText && <Badge>{discountText}</Badge>}
