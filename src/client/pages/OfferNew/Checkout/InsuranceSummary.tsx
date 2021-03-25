@@ -7,7 +7,6 @@ import {
   apartmentTypeTextKeys,
   getHouseholdSize,
   insuranceTypeTextKeys,
-  maskAndFormatRawSsn,
   quoteDetailsHasAddress,
 } from 'pages/OfferNew/utils'
 import { formatPostalNumber } from 'utils/postalNumbers'
@@ -68,11 +67,7 @@ export const InsuranceSummary: React.FC<Props> = ({ offerData }) => {
         return (
           <Table key={quote.id}>
             <h4>{textKeys[insuranceTypeTextKeys[quote.contractType]]()}</h4>
-            {getDetails(
-              quote.quoteDetails,
-              textKeys,
-              offerData.person.ssn || undefined,
-            ).map((group, index) => (
+            {getDetails(quote.quoteDetails, textKeys).map((group, index) => (
               <Group key={index}>
                 {group.map(({ key, value, label }) => (
                   <Row key={key}>
@@ -175,7 +170,6 @@ function getApartmentSummaryDetailsMaybe(
 const getDetails = (
   quoteDetails: QuoteDetails,
   textKeys: TextKeyMap,
-  ssn?: string,
 ): ReadonlyArray<DetailsGroup> => {
   const detailsGroups: DetailsGroup[] = []
 
@@ -215,16 +209,6 @@ const getDetails = (
 
       ...getHouseExtraBuildingsMaybe(textKeys, quoteDetails),
     )
-  }
-
-  if (ssn) {
-    detailsGroups.push([
-      {
-        key: 'ssn',
-        label: textKeys.CHECKOUT_DETAILS_SSN(),
-        value: maskAndFormatRawSsn(ssn),
-      },
-    ])
   }
 
   const getHouseHoldSizeValue = (
