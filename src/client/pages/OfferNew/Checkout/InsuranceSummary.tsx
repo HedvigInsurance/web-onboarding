@@ -6,8 +6,8 @@ import { OfferData } from 'pages/OfferNew/types'
 import {
   apartmentTypeTextKeys,
   getHouseholdSize,
-  insuranceTypeTextKeys,
   quoteDetailsHasAddress,
+  isBundle,
 } from 'pages/OfferNew/utils'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
@@ -16,7 +16,7 @@ const Wrapper = styled('div')`
   padding: 0 0.5rem;
 `
 const Title = styled('h3')`
-  font-size: 1rem;
+  font-size: 18px;
   letter-spacing: -0.23px;
   font-family: ${fonts.FAVORIT};
 `
@@ -60,26 +60,33 @@ interface Props {
 export const InsuranceSummary: React.FC<Props> = ({ offerData }) => {
   const textKeys = useTextKeys()
 
+  const mainQuoteInBundle = offerData.quotes.filter((quote) => {
+    return quoteDetailsHasAddress(quote.quoteDetails)
+  })
+
+  const mainQuote = isBundle(offerData)
+    ? mainQuoteInBundle[0]
+    : offerData.quotes[0]
+
   return (
     <Wrapper>
-      <Title>{textKeys.CHECKOUT_SUMMARY_TITLE()}</Title>
-      {offerData.quotes.map((quote) => {
-        return (
-          <Table key={quote.id}>
-            <h4>{textKeys[insuranceTypeTextKeys[quote.contractType]]()}</h4>
-            {getDetails(quote.quoteDetails, textKeys).map((group, index) => (
-              <Group key={index}>
-                {group.map(({ key, value, label }) => (
-                  <Row key={key}>
-                    <Label>{label}</Label>
-                    <Value>{value}</Value>
-                  </Row>
-                ))}
-              </Group>
-            ))}
-          </Table>
-        )
-      })}
+      <Group>
+        <Title>{textKeys.CHECKOUT_SUMMARY_TITLE()}</Title>
+      </Group>
+      <Table>
+        {getQuoteDetails(mainQuote.quoteDetails, textKeys).map(
+          (group, index) => (
+            <Group key={index}>
+              {group.map(({ key, value, label }) => (
+                <Row key={key}>
+                  <Label>{label}</Label>
+                  <Value>{value}</Value>
+                </Row>
+              ))}
+            </Group>
+          ),
+        )}
+      </Table>
     </Wrapper>
   )
 }
@@ -167,7 +174,7 @@ function getApartmentSummaryDetailsMaybe(
   ]
 }
 
-const getDetails = (
+const getQuoteDetails = (
   quoteDetails: QuoteDetails,
   textKeys: TextKeyMap,
 ): ReadonlyArray<DetailsGroup> => {
@@ -211,23 +218,6 @@ const getDetails = (
     )
   }
 
-  const getHouseHoldSizeValue = (
-    householdSize: number,
-    textKeys: TextKeyMap,
-  ) => {
-    if (householdSize === 1) {
-      return textKeys.CHECKOUT_DETAILS_SINGLE_PERSON()
-    }
-    if (householdSize > 1) {
-      return textKeys.CHECKOUT_DETAILS_PERSONS_VALUE({
-        VALUE: householdSize,
-      })
-    }
-    throw new Error(
-      'Total number of people covered by the insurance must be at least 1',
-    )
-  }
-
   detailsGroups.push([
     {
       key: 'antal-personer',
@@ -237,4 +227,18 @@ const getDetails = (
   ])
 
   return detailsGroups
+}
+
+const getHouseHoldSizeValue = (householdSize: number, textKeys: TextKeyMap) => {
+  if (householdSize === 1) {
+    return textKeys.CHECKOUT_DETAILS_SINGLE_PERSON()
+  }
+  if (householdSize > 1) {
+    return textKeys.CHECKOUT_DETAILS_PERSONS_VALUE({
+      VALUE: householdSize,
+    })
+  }
+  throw new Error(
+    'Total number of people covered by the insurance must be at least 1',
+  )
 }
