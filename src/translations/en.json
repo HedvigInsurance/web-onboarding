@@ -69,7 +69,7 @@
   "CHECKOUT_SIGN_DISCLAIMER": "By signing I confirm that I have read and understood the [{TERMS_TITLE}]({TERMS_LINK}) and the [{IPID_TITLE}]({IPID_LINK}), and that Hedvig handles my [personal information](https:\/\/www.hedvig.com\/privacy).",
   "CHECKOUT_DETAILS_ADDRESS": "Address",
   "CHECKOUT_DETAILS_ZIPCODE": "Post code",
-  "CHECKOUT_DETAILS_QUOTE_TYPE": "Apartment type",
+  "CHECKOUT_DETAILS_QUOTE_TYPE": "Home type",
   "CHECKOUT_APARTMENT": "Apartment",
   "CHECKOUT_HOUSE": "House",
   "CHECKOUT_DETAILS_APARTMENT_TYPE": "Home type",
@@ -263,5 +263,7 @@
   "STARTPAGE_DK_CONTENTS_ACCIDENT_BODY": "Get both of them",
   "DETAILS_MODULE_TABLE_COINSURED_CELL_LABEL": "Number of co-insured",
   "CHECKOUT_DETAILS_NAME": "Name",
-  "CHECKOUT_DETAILS_BIRTHDATE": "Birthdate"
+  "CHECKOUT_DETAILS_BIRTHDATE": "Birthdate",
+  "CHECKOUT_DETAILS_STUDENT": "Student",
+  "CHECKOUT_DETAILS_YOUTH": "Youth"
 }
