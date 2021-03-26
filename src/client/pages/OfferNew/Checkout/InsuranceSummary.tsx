@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { colorsV3, fonts } from '@hedviginsurance/brand'
 import React from 'react'
 import { QuoteDetails } from 'data/graphql'
-import { OfferData } from 'pages/OfferNew/types'
+import { OfferData, OfferPersonInfo } from 'pages/OfferNew/types'
 import {
   apartmentTypeTextKeys,
   getHouseholdSize,
@@ -74,6 +74,16 @@ export const InsuranceSummary: React.FC<Props> = ({ offerData }) => {
         <Title>{textKeys.CHECKOUT_SUMMARY_TITLE()}</Title>
       </Group>
       <Table>
+        <Group>
+          {getPersonalDetails(offerData.person, textKeys).map(
+            ({ key, label, value }) => (
+              <Row key={key}>
+                <Label>{label}</Label>
+                <Value>{value}</Value>
+              </Row>
+            ),
+          )}
+        </Group>
         {getQuoteDetails(mainQuote.quoteDetails, textKeys).map(
           (group, index) => (
             <Group key={index}>
@@ -241,4 +251,22 @@ const getHouseHoldSizeValue = (householdSize: number, textKeys: TextKeyMap) => {
   throw new Error(
     'Total number of people covered by the insurance must be at least 1',
   )
+}
+
+const getPersonalDetails = (
+  person: OfferPersonInfo,
+  textKeys: TextKeyMap,
+): DetailsGroup => {
+  return [
+    {
+      key: 'name',
+      label: textKeys.CHECKOUT_DETAILS_NAME(),
+      value: `${person.firstName} ${person.lastName}`,
+    },
+    {
+      key: 'birthDate',
+      label: textKeys.CHECKOUT_DETAILS_BIRTHDATE(),
+      value: person.birthDate,
+    },
+  ]
 }
