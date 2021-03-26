@@ -50,6 +50,8 @@ export const InsuranceSummaryDetails: React.FC<Props> = ({
 }) => {
   const textKeys = useTextKeys()
 
+  const studentOrYouthLabel = getStudentOrYouthLabel(quoteDetails, textKeys)
+
   return (
     <>
       <Group>
@@ -76,6 +78,14 @@ export const InsuranceSummaryDetails: React.FC<Props> = ({
           <Divider />
         </>
       ))}
+      {studentOrYouthLabel && (
+        <Group>
+          <Row>
+            <Label />
+            <Value>{studentOrYouthLabel}</Value>
+          </Row>
+        </Group>
+      )}
     </>
   )
 }
@@ -248,4 +258,19 @@ const getPersonalDetails = (
       value: person.birthDate,
     },
   ]
+}
+
+const getStudentOrYouthLabel = (
+  quoteDetails: QuoteDetails,
+  textKeys: TextKeyMap,
+) => {
+  if ('isStudent' in quoteDetails && quoteDetails.isStudent) {
+    return textKeys.CHECKOUT_DETAILS_STUDENT()
+  }
+
+  if ('isYouth' in quoteDetails && quoteDetails.isYouth) {
+    return textKeys.CHECKOUT_DETAILS_YOUTH()
+  }
+
+  return null
 }
