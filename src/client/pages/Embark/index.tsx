@@ -311,7 +311,14 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                 {(storageState) => (
                   <EmbarkProvider
                     externalRedirects={{
-                      Offer: () => {
+                      Offer: (quoteIds) => {
+                        if (quoteIds.length > 0) {
+                          storageState.session.setSession({
+                            ...storageState.session.getSession(),
+                            quoteIds,
+                          })
+                        }
+
                         history.push(
                           (props.language ? '/' + props.language : '') +
                             '/new-member/offer',
