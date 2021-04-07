@@ -19,6 +19,7 @@ import {
   DanishTravelDetails,
 } from 'data/graphql'
 import { Address, OfferData, OfferQuote } from 'pages/OfferNew/types'
+import { TextKeyMap } from 'utils/textKeys'
 
 export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
   const firstQuote = quoteBundle.quotes[0]
@@ -241,6 +242,22 @@ export const apartmentTypeTextKeys: Record<ApartmentType, string> = {
   [ApartmentType.Brf]: 'CHECKOUT_INSURANCE_APARTMENT_TYPE_BRF',
   [ApartmentType.StudentRent]: 'CHECKOUT_INSURANCE_APARTMENT_TYPE_RENT',
   [ApartmentType.StudentBrf]: 'CHECKOUT_INSURANCE_APARTMENT_TYPE_BRF',
+}
+
+export const getInsuranceTitle = (
+  offerData: OfferData,
+  textKeys: TextKeyMap,
+) => {
+  if (isBundle(offerData) && isNorwegian(offerData)) {
+    return textKeys.SIDEBAR_INSURANCE_TYPE_NO_BUNDLE()
+  }
+  if (isBundle(offerData) && isDanish(offerData)) {
+    return offerData.quotes.length === 2
+      ? textKeys.SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_ACCIDENT()
+      : textKeys.SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_ACCIDENT_TRAVEL()
+  }
+
+  return textKeys[insuranceTypeTextKeys[offerData.quotes[0].contractType]]()
 }
 
 export const maskAndFormatRawSsn = (ssn: string) => {
