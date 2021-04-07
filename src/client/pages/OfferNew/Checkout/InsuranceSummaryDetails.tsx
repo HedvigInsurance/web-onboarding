@@ -11,13 +11,13 @@ import {
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
 
-const Group = styled.div`
+export const Group = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0.5rem 0;
 `
 
-const Row = styled.div`
+export const Row = styled.div`
   font-size: 14px;
   display: flex;
   flex-direction: row;
@@ -167,7 +167,7 @@ function getApartmentSummaryDetailsMaybe(
   return [
     {
       key: 'subtype',
-      label: textKeys.CHECKOUT_DETAILS_APARTMENT_TYPE(),
+      label: textKeys.CHECKOUT_DETAILS_RESIDENCE_TYPE(),
       value: textKeys[apartmentTypeTextKeys[quoteDetails.type]](),
     },
   ]
@@ -199,8 +199,8 @@ const getQuoteDetails = (
             quoteDetails.__typename === 'SwedishApartmentQuoteDetails' ||
             quoteDetails.__typename === 'NorwegianHomeContentsDetails' ||
             quoteDetails.__typename === 'DanishHomeContentsDetails'
-              ? textKeys.CHECKOUT_APARTMENT()
-              : textKeys.CHECKOUT_HOUSE(),
+              ? textKeys.CHECKOUT_DETAILS_APARTMENT()
+              : textKeys.CHECKOUT_DETAILS_HOUSE(),
         },
         ...getApartmentSummaryDetailsMaybe(textKeys, quoteDetails),
         {

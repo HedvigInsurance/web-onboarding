@@ -64,15 +64,15 @@
   "SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER": "When your old one expires",
   "CHECKOUT_EMAIL_LABEL": "Email",
   "CHECKOUT_EMAIL_PLACEHOLDER": "your.email@here.com",
-  "CHECKOUT_SUMMARY_TITLE": "Your details",
+  "CHECKOUT_SUMMARY_HEADLINE": "Your details",
   "CHECKOUT_SIGN_BUTTON_TEXT": "Sign with mobile BankID",
   "CHECKOUT_SIGN_DISCLAIMER": "By signing I confirm that I have read and understood the [{TERMS_TITLE}]({TERMS_LINK}) and the [{IPID_TITLE}]({IPID_LINK}), and that Hedvig handles my [personal information](https:\/\/www.hedvig.com\/se-en\/privacy).",
   "CHECKOUT_DETAILS_ADDRESS": "Address",
   "CHECKOUT_DETAILS_ZIPCODE": "Post code",
   "CHECKOUT_DETAILS_QUOTE_TYPE": "Home type",
-  "CHECKOUT_APARTMENT": "Apartment",
-  "CHECKOUT_HOUSE": "House",
-  "CHECKOUT_DETAILS_APARTMENT_TYPE": "Home type",
+  "CHECKOUT_DETAILS_APARTMENT": "Apartment",
+  "CHECKOUT_DETAILS_HOUSE": "House",
+  "CHECKOUT_DETAILS_RESIDENCE_TYPE": "Type of residence",
   "CHECKOUT_DETAILS_LIVING_SPACE": "Living space",
   "CHECKOUT_DETAILS_SQM_VALUE": "{VALUE} m²",
   "CHECKOUT_DETAILS_ANCILLARY_SPACE": "Subsidiary area",
@@ -265,5 +265,6 @@
   "CHECKOUT_DETAILS_NAME": "Name",
   "CHECKOUT_DETAILS_BIRTHDATE": "Birthdate",
   "CHECKOUT_DETAILS_STUDENT": "",
-  "CHECKOUT_DETAILS_YOUTH": ""
+  "CHECKOUT_DETAILS_YOUTH": "",
+  "CHECKOUT_TERMS_HEADLINE": "Terms and conditions"
 }
