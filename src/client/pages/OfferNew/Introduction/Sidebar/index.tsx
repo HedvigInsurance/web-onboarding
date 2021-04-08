@@ -22,7 +22,7 @@ import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { Badge } from 'components/Badge/Badge'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import { Price } from '../../components'
-import { insuranceTypeTextKeys, isBundle, isNorwegian } from '../../utils'
+import { getInsuranceTitle, isBundle, isNorwegian } from '../../utils'
 import { DetailsModal } from './DetailsModal'
 import { DiscountCodeModal } from './DiscountCodeModal'
 import { StartDate } from './StartDate'
@@ -200,12 +200,7 @@ export const Sidebar: React.FC<Props> = ({
                   {market === Market.Se && (
                     <PreTitle>{textKeys.SIDEBAR_INSURANCE_LABEL_SE()}</PreTitle>
                   )}
-                  {!isBundle(offerData) &&
-                    textKeys[
-                      insuranceTypeTextKeys[offerData.quotes[0].contractType]
-                    ]()}
-                  {isBundle(offerData) &&
-                    textKeys.SIDEBAR_INSURANCE_TYPE_NO_BUNDLE()}
+                  {getInsuranceTitle(offerData, textKeys)}
                 </Title>
 
                 <Price
