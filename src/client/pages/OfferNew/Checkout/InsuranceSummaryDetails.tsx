@@ -10,25 +10,8 @@ import {
 } from 'pages/OfferNew/utils'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
+import { Group, Row } from './InsuranceSummary'
 
-export const Group = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 0.5rem 0;
-`
-
-export const Row = styled.div`
-  font-size: 14px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 0.5rem 0;
-  line-height: 1;
-`
-const Divider = styled.div`
-  width: 100%;
-  border-bottom: 1px solid ${colorsV3.gray300};
-`
 const Label = styled.div`
   width: 50%;
   color: ${colorsV3.gray500};
@@ -64,19 +47,15 @@ export const InsuranceSummaryDetails: React.FC<Props> = ({
           ),
         )}
       </Group>
-      <Divider />
       {getQuoteDetails(quoteDetails, textKeys).map((group, index) => (
-        <>
-          <Group key={index}>
-            {group.map(({ key, value, label }) => (
-              <Row key={key}>
-                <Label>{label}</Label>
-                <Value>{value}</Value>
-              </Row>
-            ))}
-          </Group>
-          <Divider />
-        </>
+        <Group key={index}>
+          {group.map(({ key, value, label }) => (
+            <Row key={key}>
+              <Label>{label}</Label>
+              <Value>{value}</Value>
+            </Row>
+          ))}
+        </Group>
       ))}
       {studentOrYouthLabel && (
         <Group>
