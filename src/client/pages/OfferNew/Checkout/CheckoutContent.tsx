@@ -8,9 +8,8 @@ import { useUnderwritingLimitsHitReporter } from 'utils/sentry-client'
 import { StartDate } from '../Introduction/Sidebar/StartDate'
 import { OfferData } from '../types'
 import {
+  getInsuranceTitle,
   getQuoteIds,
-  insuranceTypeTextKeys,
-  isBundle,
   isMonthlyCostDeduction,
 } from '../utils'
 import { InsuranceSummary } from './InsuranceSummary'
@@ -94,14 +93,7 @@ export const CheckoutContent: React.FC<Props> = ({
             {market === Market.Se && (
               <span>{textKeys.SIDEBAR_INSURANCE_LABEL_SE()}</span>
             )}
-            <span>
-              {!isBundle(offerData) &&
-                textKeys[
-                  insuranceTypeTextKeys[offerData.quotes[0].contractType]
-                ]()}
-              {isBundle(offerData) &&
-                textKeys.SIDEBAR_INSURANCE_TYPE_NO_BUNDLE()}
-            </span>
+            <span>{getInsuranceTitle(offerData, textKeys)}</span>
           </InsuranceHeading>
           <div>
             <Price
