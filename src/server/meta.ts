@@ -2,14 +2,18 @@ import { replacePlaceholders } from 'utils/textKeys'
 import { ServerSideRoute } from '../routes'
 import enNo from '../translations/en_NO.json'
 import enSe from '../translations/en_SE.json'
+import enDk from '../translations/en_DK.json'
 import nbNo from '../translations/nb_NO.json'
 import svSe from '../translations/sv_SE.json'
+import daDK from '../translations/da_DK.json'
 
 const translations: Record<string, any> = {
   se: svSe,
   'se-en': enSe,
   no: nbNo,
   'no-en': enNo,
+  dk: daDK,
+  'dk-en': enDk,
 }
 
 export const getPageMeta = (

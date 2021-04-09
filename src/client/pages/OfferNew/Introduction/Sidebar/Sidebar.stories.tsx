@@ -3,6 +3,8 @@ import { action } from '@storybook/addon-actions'
 import { MemoryRouter } from 'react-router-dom'
 import { MockedProvider } from '@apollo/react-testing'
 import {
+  dkHomeContentAccident,
+  dkHomeContentAccidentTravel,
   dkHomeContentOwn,
   noCombo,
   seApartementBrf,
@@ -63,6 +65,44 @@ export const DKHomeContent = () => {
         <TextKeyProvider locale="da_DK">
           <Sidebar
             offerData={dkHomeContentOwn}
+            onCheckoutOpen={action('onCheckoutOpen')}
+            refetchOfferData={(...args: any[]) => {
+              action('refetch')(...args)
+              return Promise.resolve()
+            }}
+          />
+        </TextKeyProvider>
+      </MemoryRouter>
+    </MockedProvider>
+  )
+}
+
+export const DKHomeContentAccident = () => {
+  return (
+    <MockedProvider>
+      <MemoryRouter initialEntries={['/dk/new-member/offer']}>
+        <TextKeyProvider locale="da_DK">
+          <Sidebar
+            offerData={dkHomeContentAccident}
+            onCheckoutOpen={action('onCheckoutOpen')}
+            refetchOfferData={(...args: any[]) => {
+              action('refetch')(...args)
+              return Promise.resolve()
+            }}
+          />
+        </TextKeyProvider>
+      </MemoryRouter>
+    </MockedProvider>
+  )
+}
+
+export const DKHomeContentAccidentTravel = () => {
+  return (
+    <MockedProvider>
+      <MemoryRouter initialEntries={['/dk/new-member/offer']}>
+        <TextKeyProvider locale="da_DK">
+          <Sidebar
+            offerData={dkHomeContentAccidentTravel}
             onCheckoutOpen={action('onCheckoutOpen')}
             refetchOfferData={(...args: any[]) => {
               action('refetch')(...args)
