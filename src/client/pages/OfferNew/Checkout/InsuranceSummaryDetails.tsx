@@ -2,10 +2,10 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { QuoteDetails } from 'data/graphql'
-import { OfferPersonInfo } from 'pages/OfferNew/types'
+import { OfferPersonInfo, OfferQuote } from 'pages/OfferNew/types'
 import {
-  apartmentTypeTextKeys,
   getHouseholdSize,
+  insuranceTypeTextKeys,
   quoteDetailsHasAddress,
 } from 'pages/OfferNew/utils'
 import { formatPostalNumber } from 'utils/postalNumbers'
@@ -24,14 +24,16 @@ const Value = styled.div`
 
 type Props = {
   personalDetails: OfferPersonInfo
-  quoteDetails: QuoteDetails
+  mainQuote: OfferQuote
 }
 
 export const InsuranceSummaryDetails: React.FC<Props> = ({
   personalDetails,
-  quoteDetails,
+  mainQuote,
 }) => {
   const textKeys = useTextKeys()
+
+  const { quoteDetails } = mainQuote
 
   const studentOrYouthLabel = getStudentOrYouthLabel(quoteDetails, textKeys)
 
@@ -47,7 +49,7 @@ export const InsuranceSummaryDetails: React.FC<Props> = ({
           ),
         )}
       </Group>
-      {getQuoteDetails(quoteDetails, textKeys).map((group, index) => (
+      {getQuoteDetails(mainQuote, textKeys).map((group, index) => (
         <Group key={index}>
           {group.map(({ key, value, label }) => (
             <Row key={key}>
@@ -135,27 +137,15 @@ const getHouseExtraBuildingsMaybe = (
   ])
 }
 
-function getApartmentSummaryDetailsMaybe(
-  textKeys: TextKeyMap,
-  quoteDetails: QuoteDetails,
-): DetailsGroup {
-  if (quoteDetails.__typename !== 'SwedishApartmentQuoteDetails') {
-    return []
-  }
-
-  return [
-    {
-      key: 'subtype',
-      label: textKeys.CHECKOUT_DETAILS_RESIDENCE_TYPE(),
-      value: textKeys[apartmentTypeTextKeys[quoteDetails.type]](),
-    },
-  ]
-}
-
 const getQuoteDetails = (
-  quoteDetails: QuoteDetails,
+  mainQuote: OfferQuote,
   textKeys: TextKeyMap,
 ): ReadonlyArray<DetailsGroup> => {
+  const { quoteDetails, contractType } = mainQuote
+
+  const typeOfResidenceTextKey =
+    insuranceTypeTextKeys[contractType].typeOfResidence
+
   const detailsGroups: DetailsGroup[] = []
 
   if (quoteDetailsHasAddress(quoteDetails)) {
@@ -172,16 +162,12 @@ const getQuoteDetails = (
           value: formatPostalNumber(quoteDetails.zipCode),
         },
         {
-          key: 'bostadstyp',
-          label: textKeys.CHECKOUT_DETAILS_QUOTE_TYPE(),
-          value:
-            quoteDetails.__typename === 'SwedishApartmentQuoteDetails' ||
-            quoteDetails.__typename === 'NorwegianHomeContentsDetails' ||
-            quoteDetails.__typename === 'DanishHomeContentsDetails'
-              ? textKeys.CHECKOUT_DETAILS_APARTMENT()
-              : textKeys.CHECKOUT_DETAILS_HOUSE(),
+          key: 'residence-type',
+          label: textKeys.CHECKOUT_DETAILS_RESIDENCE_TYPE(),
+          value: typeOfResidenceTextKey
+            ? textKeys[typeOfResidenceTextKey]()
+            : '',
         },
-        ...getApartmentSummaryDetailsMaybe(textKeys, quoteDetails),
         {
           key: 'livingspace',
           label: textKeys.CHECKOUT_DETAILS_LIVING_SPACE(),
@@ -243,6 +229,7 @@ const getStudentOrYouthLabel = (
   quoteDetails: QuoteDetails,
   textKeys: TextKeyMap,
 ) => {
+  // TODO add sedish students by fixing isStudent function in utils
   if ('isStudent' in quoteDetails && quoteDetails.isStudent) {
     return textKeys.CHECKOUT_DETAILS_STUDENT()
   }

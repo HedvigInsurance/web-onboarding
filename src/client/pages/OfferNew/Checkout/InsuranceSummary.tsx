@@ -62,7 +62,7 @@ export const InsuranceSummary: React.FC<Props> = ({ offerData }) => {
       <Table>
         <InsuranceSummaryDetails
           personalDetails={offerData.person}
-          quoteDetails={mainQuote.quoteDetails}
+          mainQuote={mainQuote}
         />
       </Table>
       <Title>{textKeys.CHECKOUT_TERMS_HEADLINE()}</Title>
