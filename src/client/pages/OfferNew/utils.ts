@@ -212,7 +212,6 @@ type ContractTextKeys = {
   typeOfContract: string
   typeOfResidence:
     | 'CHECKOUT_DETAILS_RESIDENCE_TYPE_RENT'
-    | 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_UNSPECIFIED'
     | 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT'
     | 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_HOUSE'
     | null
@@ -245,7 +244,7 @@ export const insuranceTypeTextKeys: Record<TypeOfContract, ContractTextKeys> = {
   },
   [TypeOfContract.NoHomeContentOwn]: {
     typeOfContract: 'SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_OWN',
-    typeOfResidence: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_UNSPECIFIED',
+    typeOfResidence: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT',
   },
   [TypeOfContract.NoHomeContentYouthRent]: {
     typeOfContract: 'SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_RENT',
@@ -253,7 +252,7 @@ export const insuranceTypeTextKeys: Record<TypeOfContract, ContractTextKeys> = {
   },
   [TypeOfContract.NoHomeContentYouthOwn]: {
     typeOfContract: 'SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_OWN',
-    typeOfResidence: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_UNSPECIFIED',
+    typeOfResidence: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT',
   },
   [TypeOfContract.NoTravel]: {
     typeOfContract: 'SIDEBAR_INSURANCE_TYPE_NO_TRAVEL',
@@ -265,7 +264,7 @@ export const insuranceTypeTextKeys: Record<TypeOfContract, ContractTextKeys> = {
   },
   [TypeOfContract.DkHomeContentOwn]: {
     typeOfContract: 'SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_OWN',
-    typeOfResidence: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_UNSPECIFIED',
+    typeOfResidence: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT',
   },
   [TypeOfContract.DkHomeContentRent]: {
     typeOfContract: 'SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_RENT',
@@ -273,7 +272,7 @@ export const insuranceTypeTextKeys: Record<TypeOfContract, ContractTextKeys> = {
   },
   [TypeOfContract.DkHomeContentStudentOwn]: {
     typeOfContract: 'SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_OWN',
-    typeOfResidence: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_UNSPECIFIED',
+    typeOfResidence: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT',
   },
   [TypeOfContract.DkHomeContentStudentRent]: {
     typeOfContract: 'SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_RENT',
