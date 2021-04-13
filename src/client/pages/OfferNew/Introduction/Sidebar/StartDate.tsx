@@ -24,6 +24,7 @@ import {
   hasCurrentInsurer,
   insuranceTypeTextKeys,
   isBundle,
+  isDanish,
 } from 'pages/OfferNew/utils'
 import { useTextKeys } from 'utils/textKeys'
 import { Size } from 'components/types'
@@ -210,37 +211,39 @@ const DateForm: React.FC<{
     }
   }
 
+  const setDate = async (newDateValue: Date | null) => {
+    setDateValue(newDateValue)
+    setShowError(false)
+    setIsLoadingPickedStartDate(true)
+    if (newDateValue === null) {
+      removeStartDate({
+        variables: {
+          quoteId: quote.id,
+        },
+      })
+        .then(() => refetch())
+        .catch(handleFail)
+        .finally(() => setIsLoadingPickedStartDate(false))
+    } else {
+      setStartDate({
+        variables: {
+          quoteId: quote.id,
+          date: format(newDateValue, gqlDateFormat),
+        },
+      })
+        .then(() => refetch())
+        .catch(handleFail)
+        .finally(() => setIsLoadingPickedStartDate(false))
+    }
+  }
+
   // TODO: make this function (which returns the calendar component) a regular React function component, in a file of its own
   const getDateInput = () => (
     <StyledDateInput
       open={datePickerOpen}
       setOpen={setDatePickerOpen}
       date={dateValue || new Date()}
-      setDate={(newDateValue) => {
-        setDateValue(newDateValue)
-        setShowError(false)
-        setIsLoadingPickedStartDate(true)
-        if (newDateValue === null) {
-          removeStartDate({
-            variables: {
-              quoteId: quote.id,
-            },
-          })
-            .then(() => refetch())
-            .catch(handleFail)
-            .finally(() => setIsLoadingPickedStartDate(false))
-        } else {
-          setStartDate({
-            variables: {
-              quoteId: quote.id,
-              date: format(newDateValue, gqlDateFormat),
-            },
-          })
-            .then(() => refetch())
-            .catch(handleFail)
-            .finally(() => setIsLoadingPickedStartDate(false))
-        }
-      }}
+      setDate={setDate}
       hasCurrentInsurer={hasCurrentInsurer(quote)}
       modal={Boolean(modal)}
     />
@@ -299,6 +302,8 @@ export const StartDate: React.FC<Props> = ({
 }) => {
   const textKeys = useTextKeys()
   const [showError, setShowError] = React.useState(false)
+  const isSingleBundleStartDate = (offerData: OfferData) =>
+    isBundle(offerData) && isDanish(offerData)
 
   return (
     <>
@@ -319,17 +324,31 @@ export const StartDate: React.FC<Props> = ({
         {textKeys.SIDEBAR_UPDATE_START_DATE_FAILED()}
       </ErrorMessage>
       <DateFormsWrapper>
-        {offerData.quotes.map((quote) => (
+        {isSingleBundleStartDate(offerData) ? (
           <DateForm
-            key={quote.id}
-            quote={quote}
+            key={offerData.quotes[0].id}
+            quote={offerData.quotes[0]}
             setShowError={setShowError}
             modal={modal}
             refetch={refetch}
-            isSplit={isBundle(offerData)}
+            isSplit={false}
             size={size}
           />
-        ))}
+        ) : (
+          <>
+            {offerData.quotes.map((quote) => (
+              <DateForm
+                key={quote.id}
+                quote={quote}
+                setShowError={setShowError}
+                modal={modal}
+                refetch={refetch}
+                isSplit={isBundle(offerData)}
+                size={size}
+              />
+            ))}
+          </>
+        )}
       </DateFormsWrapper>
 
       <CancellationOptions
