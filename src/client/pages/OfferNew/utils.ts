@@ -145,9 +145,18 @@ export const hasAddress = (offerData: OfferData): boolean =>
 export const hasCurrentInsurer = (quote: OfferQuote): boolean =>
   Boolean(quote.currentInsurer)
 
-export const isStudent = (details: QuoteDetails) =>
-  isSwedishApartment(details) &&
-  (details.type === 'STUDENT_BRF' || details.type === 'STUDENT_RENT')
+export const isStudent = (details: QuoteDetails) => {
+  const studentQuoteTypesSe = ['STUDENT_BRF', 'STUDENT_RENT']
+  if ('type' in details && studentQuoteTypesSe.includes(details.type)) {
+    return true
+  }
+
+  if ('isStudent' in details) {
+    return details.isStudent
+  }
+
+  return false
+}
 
 export const isSwedishApartment = (
   details: QuoteDetails,

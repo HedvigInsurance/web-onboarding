@@ -6,6 +6,7 @@ import { OfferPersonInfo, OfferQuote } from 'pages/OfferNew/types'
 import {
   getHouseholdSize,
   insuranceTypeTextKeys,
+  isStudent,
   quoteDetailsHasAddress,
 } from 'pages/OfferNew/utils'
 import { formatPostalNumber } from 'utils/postalNumbers'
@@ -62,7 +63,7 @@ export const InsuranceSummaryDetails: React.FC<Props> = ({
       {studentOrYouthLabel && (
         <Group>
           <Row>
-            <Label />
+            <Label>+</Label>
             <Value>{studentOrYouthLabel}</Value>
           </Row>
         </Group>
@@ -229,8 +230,7 @@ const getStudentOrYouthLabel = (
   quoteDetails: QuoteDetails,
   textKeys: TextKeyMap,
 ) => {
-  // TODO add sedish students by fixing isStudent function in utils
-  if ('isStudent' in quoteDetails && quoteDetails.isStudent) {
+  if (isStudent(quoteDetails)) {
     return textKeys.CHECKOUT_DETAILS_STUDENT()
   }
 
