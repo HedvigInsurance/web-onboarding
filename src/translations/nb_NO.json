@@ -66,7 +66,7 @@
   "CHECKOUT_EMAIL_PLACEHOLDER": "din.epost@her.no",
   "CHECKOUT_SUMMARY_HEADLINE": "Dine detaljer",
   "CHECKOUT_SIGN_BUTTON_TEXT": "Signer med BankID",
-  "CHECKOUT_SIGN_DISCLAIMER": "Ved å klikke \"{SIGN_BUTTON_LABEL}\" bekrefter jeg at jeg har tatt del av vilkårene og betingelsene, og at jeg godkjenner at Hedvig håndterer [personopplysningene mine]({PRIVACY_POLICY_LINK}).",
+  "CHECKOUT_SIGN_DISCLAIMER": "Ved å klikke \"{SIGN_BUTTON_LABEL}\" bekrefter jeg at jeg har lest og forstått vilkårene og betingelsene, og at jeg godkjenner at Hedvig håndterer [personopplysningene mine]({PRIVACY_POLICY_LINK}).",
   "CHECKOUT_DETAILS_ADDRESS": "Adresse",
   "CHECKOUT_DETAILS_ZIPCODE": "Postnummer",
   "CHECKOUT_DETAILS_QUOTE_TYPE": "Boligtype",
