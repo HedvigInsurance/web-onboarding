@@ -2,12 +2,10 @@ import React from 'react'
 import styled from '@emotion/styled'
 import ReactMarkdown from 'react-markdown/with-html'
 import { colorsV3 } from '@hedviginsurance/brand/dist'
-import { useTextKeys } from 'utils/textKeys'
-import { OfferData } from 'pages/OfferNew/types'
-import { getTermsLink } from 'pages/OfferNew/Perils/InsuranceValues/index'
-import { isNorwegian, isSwedish } from 'pages/OfferNew/utils'
+import { TextKeyMap, useTextKeys } from 'utils/textKeys'
+import { OfferData, OfferQuote } from 'pages/OfferNew/types'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
-import { InsuranceTermType } from '../../../data/graphql'
+import { InsuranceTermType, SignMethod } from '../../../data/graphql'
 
 const Wrapper = styled('div')`
   padding: 2rem 0 1rem;
@@ -23,61 +21,51 @@ const Wrapper = styled('div')`
     margin: 0;
   }
 `
+const getSignButtonLabel = (textKeys: TextKeyMap, signMethod?: SignMethod) => {
+  return signMethod === SignMethod.SimpleSign
+    ? textKeys.CHECKOUT_SIMPLE_SIGN_BUTTON_TEXT()
+    : textKeys.CHECKOUT_SIGN_BUTTON_TEXT()
+}
+
+const getPrivacyPolicyLink = (currentLocale: string, quote: OfferQuote) => {
+  const linkFromBackend = quote.insuranceTerms.get(
+    InsuranceTermType.PrivacyPolicy,
+  )?.url
+
+  if (linkFromBackend) {
+    return linkFromBackend
+  }
+
+  return `https://www.hedvig.com/${currentLocale}/privacy`
+}
 
 type Props = {
   offerData: OfferData
+  signMethod?: SignMethod
 }
 
-export const SignDisclaimer: React.FC<Props> = ({ offerData }) => {
+export const SignDisclaimer: React.FC<Props> = ({ offerData, signMethod }) => {
   const textKeys = useTextKeys()
 
   const currentLocale = useCurrentLocale()
 
-  const temporaryTermsLink = getTermsLink(currentLocale)
-  // 👆 This link is only temporary since we can't get the correct ones from content-service right now
-
-  // Please note that this implementation 👇 obviously won't work with multiple contracts and is only OK as long as we hard code the links and the links from the backend also just lead to a market-web pages.
   const firstQuote = offerData.quotes[0]
 
-  const signDisclaimerSE = textKeys.CHECKOUT_SIGN_DISCLAIMER({
-    TERMS_TITLE: firstQuote.insuranceTerms.get(
-      InsuranceTermType.TermsAndConditions,
-    )?.displayName,
-    TERMS_LINK: temporaryTermsLink,
-    IPID_TITLE: firstQuote.insuranceTerms.get(
-      InsuranceTermType.PreSaleInfoEuStandard,
-    )?.displayName,
-    IPID_LINK:
-      firstQuote.insuranceTerms.get(InsuranceTermType.PreSaleInfoEuStandard)
-        ?.url ?? temporaryTermsLink,
-  })
-
-  const signDisclaimerNO = textKeys.CHECKOUT_SIGN_DISCLAIMER_NO({
-    TERMS_LINK: temporaryTermsLink,
+  const signDisclaimer = textKeys.CHECKOUT_SIGN_DISCLAIMER({
+    SIGN_BUTTON_LABEL: getSignButtonLabel(textKeys, signMethod),
+    PRIVACY_POLICY_LINK: getPrivacyPolicyLink(currentLocale, firstQuote),
   })
 
   return (
     <Wrapper>
-      {isSwedish(offerData) && (
-        <ReactMarkdown
-          source={
-            Array.isArray(signDisclaimerSE)
-              ? signDisclaimerSE.join('')
-              : signDisclaimerSE
-          }
-          linkTarget="_blank"
-        />
-      )}
-      {isNorwegian(offerData) && (
-        <ReactMarkdown
-          source={
-            Array.isArray(signDisclaimerNO)
-              ? signDisclaimerNO.join('')
-              : signDisclaimerNO
-          }
-          linkTarget="_blank"
-        />
-      )}
+      <ReactMarkdown
+        source={
+          Array.isArray(signDisclaimer)
+            ? signDisclaimer.join('')
+            : signDisclaimer
+        }
+        linkTarget="_blank"
+      />
     </Wrapper>
   )
 }
