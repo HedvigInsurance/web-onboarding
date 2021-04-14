@@ -163,7 +163,7 @@ const getQuoteDetails = (
           value: formatPostalNumber(quoteDetails.zipCode),
         },
         {
-          key: 'residence-type',
+          key: 'residenceType',
           label: textKeys.CHECKOUT_DETAILS_RESIDENCE_TYPE(),
           value: typeOfResidenceTextKey
             ? textKeys[typeOfResidenceTextKey]()
@@ -185,16 +185,16 @@ const getQuoteDetails = (
 
   detailsGroups.push([
     {
-      key: 'antal-personer',
+      key: 'householdSize',
       label: textKeys.CHECKOUT_DETAILS_HOUSEHOLD_SIZE(),
-      value: getHouseHoldSizeValue(getHouseholdSize(quoteDetails), textKeys),
+      value: getHouseholdSizeValue(getHouseholdSize(quoteDetails), textKeys),
     },
   ])
 
   return detailsGroups
 }
 
-const getHouseHoldSizeValue = (householdSize: number, textKeys: TextKeyMap) => {
+const getHouseholdSizeValue = (householdSize: number, textKeys: TextKeyMap) => {
   if (householdSize === 1) {
     return textKeys.CHECKOUT_DETAILS_SINGLE_PERSON()
   }
