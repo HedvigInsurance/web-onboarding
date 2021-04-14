@@ -163,18 +163,18 @@ const getQuoteDetails = (
           value: formatPostalNumber(quoteDetails.zipCode),
         },
         {
-          key: 'residenceType',
-          label: textKeys.CHECKOUT_DETAILS_RESIDENCE_TYPE(),
-          value: typeOfResidenceTextKey
-            ? textKeys[typeOfResidenceTextKey]()
-            : '',
-        },
-        {
           key: 'livingspace',
           label: textKeys.CHECKOUT_DETAILS_LIVING_SPACE(),
           value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
             VALUE: quoteDetails.livingSpace,
           }),
+        },
+        {
+          key: 'residenceType',
+          label: textKeys.CHECKOUT_DETAILS_RESIDENCE_TYPE(),
+          value: typeOfResidenceTextKey
+            ? textKeys[typeOfResidenceTextKey]()
+            : '',
         },
         ...getHouseSummaryDetailsMaybe(textKeys, quoteDetails),
       ],
