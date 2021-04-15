@@ -67,6 +67,7 @@ export const InsuranceSummaryTermsLinks: React.FC<Props> = ({ mainQuote }) => {
                   urlFromBackend: url,
                 })}
                 target="_blank"
+                rel="noreferrer noopener"
               >
                 {displayName}
               </Link>
