@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { colorsV3, fonts } from '@hedviginsurance/brand'
 import React from 'react'
 import { OfferData } from 'pages/OfferNew/types'
-import { quoteDetailsHasAddress, isBundle } from 'pages/OfferNew/utils'
+import { getMainQuote } from 'pages/OfferNew/utils'
 import { useTextKeys } from 'utils/textKeys'
 import { InsuranceSummaryDetails } from './InsuranceSummaryDetails'
 import { InsuranceSummaryTermsLinks } from './InsuranceSummaryTermsLinks'
@@ -48,13 +48,7 @@ type Props = {
 export const InsuranceSummary: React.FC<Props> = ({ offerData }) => {
   const textKeys = useTextKeys()
 
-  const mainQuoteInBundle = offerData.quotes.filter((quote) => {
-    return quoteDetailsHasAddress(quote.quoteDetails)
-  })
-
-  const mainQuote = isBundle(offerData)
-    ? mainQuoteInBundle[0]
-    : offerData.quotes[0]
+  const mainQuote = getMainQuote(offerData)
 
   return (
     <Wrapper>

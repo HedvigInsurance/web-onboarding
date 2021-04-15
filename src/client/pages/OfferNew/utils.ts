@@ -106,17 +106,18 @@ export const quoteDetailsHasAddress = (
   ].includes(quoteDetails.__typename as string)
 
 export const getMainQuote = (offerData: OfferData) => {
-  if (!isBundle(offerData)) return offerData.quotes[0]
-  if (isNorwegian(offerData)) {
-    const norwegianHomeContentQuote = offerData.quotes.find((quote) =>
-      isNorwegianHomeContents(quote.quoteDetails),
-    )
-    return norwegianHomeContentQuote ?? offerData.quotes[0]
-  }
-  const danishHomeContentQuote = offerData.quotes.find((quote) =>
-    isDanishHomeContents(quote.quoteDetails),
-  )
-  return danishHomeContentQuote ?? offerData.quotes[0]
+  const mainQuoteInBundle = offerData.quotes.filter((quote) => {
+    const isHomeContentsQuote =
+      isNorwegianHomeContents(quote.quoteDetails) ||
+      isDanishHomeContents(quote.quoteDetails)
+    return isHomeContentsQuote
+  })
+
+  const mainQuote = isBundle(offerData)
+    ? mainQuoteInBundle[0]
+    : offerData.quotes[0]
+
+  return mainQuote
 }
 
 export const getQuoteIds = (offerData: OfferData): string[] =>
