@@ -64,7 +64,7 @@
   "SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER": "Når din gamle udløber",
   "CHECKOUT_EMAIL_LABEL": "E-mail",
   "CHECKOUT_EMAIL_PLACEHOLDER": "din.email@her.dk",
-  "CHECKOUT_SUMMARY_HEADLINE": "Dine oplysninger",
+  "CHECKOUT_SUMMARY_HEADLINE": "Opsummering",
   "CHECKOUT_SIGN_BUTTON_TEXT": "Underskriv med NemID",
   "CHECKOUT_SIGN_DISCLAIMER": "Ved at klikke på \"{SIGN_BUTTON_LABEL}\" tilkendegiver jeg, at jeg har læst og forstået vilkårene og betingelserne, og at jeg accepterer at Hedvig behandler [mine personoplysninger]({PRIVACY_POLICY_LINK}).",
   "CHECKOUT_DETAILS_ADDRESS": "Adresse",
@@ -269,7 +269,7 @@
   "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_ACCIDENT_TRAVEL": "Indbo, Ulykke & Rejse",
   "CHECKOUT_TERMS_HEADLINE": "Vilkår & betingelser",
   "CHECKOUT_DETAILS_RESIDENCE_TYPE_RENT": "Lejebolig",
-  "CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_UNSPECIFIED": "",
+  "CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_UNSPECIFIED": "Bolig jeg ejer",
   "CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_HOUSE": "",
-  "CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT": "Andelsbolig"
+  "CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT": "Lejlighed jeg ejer"
 }

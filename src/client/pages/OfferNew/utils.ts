@@ -238,6 +238,7 @@ type ContractTextKeys = {
     | 'CHECKOUT_DETAILS_RESIDENCE_TYPE_RENT'
     | 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT'
     | 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_HOUSE'
+    | 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_UNSPECIFIED'
     | null
 }
 
@@ -288,7 +289,7 @@ export const insuranceTypeTextKeys: Record<TypeOfContract, ContractTextKeys> = {
   },
   [TypeOfContract.DkHomeContentOwn]: {
     typeOfContract: 'SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_OWN',
-    typeOfResidence: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT',
+    typeOfResidence: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_UNSPECIFIED',
   },
   [TypeOfContract.DkHomeContentRent]: {
     typeOfContract: 'SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_RENT',
@@ -296,7 +297,7 @@ export const insuranceTypeTextKeys: Record<TypeOfContract, ContractTextKeys> = {
   },
   [TypeOfContract.DkHomeContentStudentOwn]: {
     typeOfContract: 'SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_OWN',
-    typeOfResidence: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT',
+    typeOfResidence: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_UNSPECIFIED',
   },
   [TypeOfContract.DkHomeContentStudentRent]: {
     typeOfContract: 'SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_RENT',

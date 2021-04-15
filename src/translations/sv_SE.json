@@ -64,7 +64,7 @@
   "SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER": "När din gamla löper ut",
   "CHECKOUT_EMAIL_LABEL": "E-mail",
   "CHECKOUT_EMAIL_PLACEHOLDER": "din.epost@här.se",
-  "CHECKOUT_SUMMARY_HEADLINE": "Dina detaljer",
+  "CHECKOUT_SUMMARY_HEADLINE": "Sammanfattning",
   "CHECKOUT_SIGN_BUTTON_TEXT": "Signera med mobilt BankID",
   "CHECKOUT_SIGN_DISCLAIMER": "Genom att klicka \"{SIGN_BUTTON_LABEL}\" bekräftar jag att jag läst och förstått villkoren, samt att jag godkänner att Hedvig hanterar [mina personuppgifter]({PRIVACY_POLICY_LINK}).",
   "CHECKOUT_DETAILS_ADDRESS": "Adress",

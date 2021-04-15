@@ -64,7 +64,7 @@
   "SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER": "Når den gamle forsikringen din utløper",
   "CHECKOUT_EMAIL_LABEL": "E-postadresse",
   "CHECKOUT_EMAIL_PLACEHOLDER": "din.epost@her.no",
-  "CHECKOUT_SUMMARY_HEADLINE": "Dine detaljer",
+  "CHECKOUT_SUMMARY_HEADLINE": "Sammendrag",
   "CHECKOUT_SIGN_BUTTON_TEXT": "Signer med BankID",
   "CHECKOUT_SIGN_DISCLAIMER": "Ved å klikke \"{SIGN_BUTTON_LABEL}\" bekrefter jeg at jeg har lest og forstått vilkårene og betingelsene, og at jeg godkjenner at Hedvig håndterer [personopplysningene mine]({PRIVACY_POLICY_LINK}).",
   "CHECKOUT_DETAILS_ADDRESS": "Adresse",
@@ -269,7 +269,7 @@
   "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_ACCIDENT_TRAVEL": "",
   "CHECKOUT_TERMS_HEADLINE": "Vilkår",
   "CHECKOUT_DETAILS_RESIDENCE_TYPE_RENT": "Leiebolig",
-  "CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_UNSPECIFIED": "Bolig som jeg eier",
+  "CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_UNSPECIFIED": "Bolig jeg eier",
   "CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_HOUSE": "",
-  "CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT": "Leilighet som jeg eier"
+  "CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT": "Leilighet jeg eier"
 }
