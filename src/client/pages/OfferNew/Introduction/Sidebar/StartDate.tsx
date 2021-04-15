@@ -161,12 +161,23 @@ const getDefaultDateValue = (quote: OfferQuote) => {
 
 const DateForm: React.FC<{
   quote: OfferQuote
+  offerData?: OfferData
+  isSingleStartDateBundle?: boolean
   isSplit: boolean
   setShowError: (showError: boolean) => void
   modal?: boolean
   refetch: () => Promise<void>
   size: Size
-}> = ({ quote, isSplit, setShowError, modal, refetch, size }) => {
+}> = ({
+  quote,
+  offerData,
+  isSingleStartDateBundle,
+  isSplit,
+  setShowError,
+  modal,
+  refetch,
+  size,
+}) => {
   const [datePickerOpen, setDatePickerOpen] = React.useState(false)
   const [dateValue, setDateValue] = React.useState(() =>
     getDefaultDateValue(quote),
@@ -197,6 +208,19 @@ const DateForm: React.FC<{
     getLocaleImport(locale).then((m) => setDateLocale(m.default))
   })
 
+  const bundleEditStartDate = (startDate: string, offerData: OfferData) => {
+    return Promise.all(
+      offerData.quotes.map((quote) => {
+        return setStartDate({
+          variables: {
+            quoteId: quote.id,
+            date: startDate,
+          },
+        })
+      }),
+    )
+  }
+
   const handleFail = () => {
     setShowError(true)
   }
@@ -216,24 +240,37 @@ const DateForm: React.FC<{
     setShowError(false)
     setIsLoadingPickedStartDate(true)
     if (newDateValue === null) {
-      removeStartDate({
-        variables: {
-          quoteId: quote.id,
-        },
-      })
-        .then(() => refetch())
-        .catch(handleFail)
-        .finally(() => setIsLoadingPickedStartDate(false))
+      try {
+        isSingleStartDateBundle && offerData
+          ? await bundleRemoveStartDate(offerData)
+          : await removeStartDate({
+              variables: {
+                quoteId: quote.id,
+              },
+            })
+        await refetch()
+      } catch {
+        handleFail()
+      } finally {
+        setIsLoadingPickedStartDate(false)
+      }
     } else {
-      setStartDate({
-        variables: {
-          quoteId: quote.id,
-          date: format(newDateValue, gqlDateFormat),
-        },
-      })
-        .then(() => refetch())
-        .catch(handleFail)
-        .finally(() => setIsLoadingPickedStartDate(false))
+      try {
+        const formatedStartDate = format(newDateValue, gqlDateFormat)
+        isSingleStartDateBundle && offerData
+          ? await bundleEditStartDate(formatedStartDate, offerData)
+          : await setStartDate({
+              variables: {
+                quoteId: quote.id,
+                date: formatedStartDate,
+              },
+            })
+        await refetch()
+      } catch {
+        handleFail()
+      } finally {
+        setIsLoadingPickedStartDate(false)
+      }
     }
   }
 
@@ -302,7 +339,7 @@ export const StartDate: React.FC<Props> = ({
 }) => {
   const textKeys = useTextKeys()
   const [showError, setShowError] = React.useState(false)
-  const isSingleBundleStartDate = (offerData: OfferData) =>
+  const isSingleStartDateBundle = (offerData: OfferData) =>
     isBundle(offerData) && isDanish(offerData)
 
   return (
@@ -324,13 +361,15 @@ export const StartDate: React.FC<Props> = ({
         {textKeys.SIDEBAR_UPDATE_START_DATE_FAILED()}
       </ErrorMessage>
       <DateFormsWrapper>
-        {isSingleBundleStartDate(offerData) ? (
+        {isSingleStartDateBundle(offerData) ? (
           <DateForm
             key={offerData.quotes[0].id}
             quote={offerData.quotes[0]}
+            offerData={offerData}
             setShowError={setShowError}
             modal={modal}
             refetch={refetch}
+            isSingleStartDateBundle={true}
             isSplit={false}
             size={size}
           />
