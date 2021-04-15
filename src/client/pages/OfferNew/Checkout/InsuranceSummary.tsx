@@ -11,7 +11,7 @@ const Wrapper = styled.div`
   padding: 0 8px;
 `
 const Title = styled.div`
-  font-size: 18px;
+  font-size: 1.125rem;
   letter-spacing: -0.23px;
   font-family: ${fonts.FAVORIT};
   padding: 1rem 0;
