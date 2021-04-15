@@ -47,9 +47,11 @@ export const InsuranceSummaryTermsLinks: React.FC<Props> = ({ mainQuote }) => {
 
   const { insuranceTerms } = mainQuote
 
-  const insuranceTermsArr = [...insuranceTerms].map(([termType, data]) => {
-    return { termType, data }
-  })
+  const insuranceTermsArr = [...insuranceTerms]
+    .map(([termType, data]) => {
+      return { termType, data }
+    })
+    .filter(({ termType }) => termType !== 'PRIVACY_POLICY')
 
   return (
     <Group>
@@ -59,7 +61,11 @@ export const InsuranceSummaryTermsLinks: React.FC<Props> = ({ mainQuote }) => {
           <Row key={termType}>
             <LinkWrapper>
               <Link
-                href={getUrl({ termType, currentLocale, urlFromBackend: url })}
+                href={getUrl({
+                  termType,
+                  currentLocale,
+                  urlFromBackend: url,
+                })}
                 target="_blank"
               >
                 {displayName}
