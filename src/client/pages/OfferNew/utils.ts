@@ -105,7 +105,7 @@ export const quoteDetailsHasAddress = (
     'DanishHomeContentsDetails',
   ].includes(quoteDetails.__typename as string)
 
-export const getMainOfferQuote = (offerData: OfferData) => {
+export const getMainQuote = (offerData: OfferData) => {
   if (!isBundle(offerData)) return offerData.quotes[0]
   if (isNorwegian(offerData)) {
     const norwegianHomeContentQuote = offerData.quotes.find((quote) =>
