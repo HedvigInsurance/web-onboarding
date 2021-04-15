@@ -7,8 +7,7 @@ import { Modal, ModalProps } from 'components/ModalNew'
 import { EditQuoteInput, useEditQuoteMutation } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
-import { isBundle } from '../../../utils'
-
+import { getMainOfferQuote, isBundle } from '../../../utils'
 import {
   getFieldSchema,
   getInitialInputValues,
@@ -19,7 +18,6 @@ import {
   isUnderwritingLimitsHit,
   hasEditQuoteErrors,
   QuoteDetailsInput,
-  getMainOfferQuote,
 } from './utils'
 import { Details } from './Details'
 

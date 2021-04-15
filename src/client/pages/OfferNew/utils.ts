@@ -105,6 +105,20 @@ export const quoteDetailsHasAddress = (
     'DanishHomeContentsDetails',
   ].includes(quoteDetails.__typename as string)
 
+export const getMainOfferQuote = (offerData: OfferData) => {
+  if (!isBundle(offerData)) return offerData.quotes[0]
+  if (isNorwegian(offerData)) {
+    const norwegianHomeContentQuote = offerData.quotes.find((quote) =>
+      isNorwegianHomeContents(quote.quoteDetails),
+    )
+    return norwegianHomeContentQuote ?? offerData.quotes[0]
+  }
+  const danishHomeContentQuote = offerData.quotes.find((quote) =>
+    isDanishHomeContents(quote.quoteDetails),
+  )
+  return danishHomeContentQuote ?? offerData.quotes[0]
+}
+
 export const getQuoteIds = (offerData: OfferData): string[] =>
   offerData.quotes.map((quote) => quote.id)
 
