@@ -268,13 +268,13 @@ const DateForm: React.FC<{
       }
     } else {
       try {
-        const formatedStartDate = format(newDateValue, gqlDateFormat)
+        const formattedStartDate = format(newDateValue, gqlDateFormat)
         isSingleStartDateBundle && offerData
-          ? await bundleEditStartDate(formatedStartDate, offerData)
+          ? await bundleEditStartDate(formattedStartDate, offerData)
           : await setStartDate({
               variables: {
                 quoteId: quote.id,
-                date: formatedStartDate,
+                date: formattedStartDate,
               },
             })
         await refetch()
