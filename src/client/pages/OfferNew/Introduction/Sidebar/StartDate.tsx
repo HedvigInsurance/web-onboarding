@@ -221,6 +221,18 @@ const DateForm: React.FC<{
     )
   }
 
+  const bundleRemoveStartDate = (offerData: OfferData) => {
+    return Promise.all(
+      offerData.quotes.map((quote) => {
+        return removeStartDate({
+          variables: {
+            quoteId: quote.id,
+          },
+        })
+      }),
+    )
+  }
+
   const handleFail = () => {
     setShowError(true)
   }
