@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { InsuranceTermType } from 'data/graphql'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
-import { OfferQuote } from '../types'
+import { OfferData } from '../types'
 import { getTermsLink } from '../Perils/InsuranceValues'
 import { Group, Row } from './InsuranceSummary'
 
@@ -38,27 +38,60 @@ const getUrl = ({ currentLocale, termType, urlFromBackend }: GetUrlParams) => {
   return urlFromBackend
 }
 
-type Props = {
-  mainQuote: OfferQuote
+type GetAllInsuranceTermsParams = {
+  offerData: OfferData
 }
 
-export const InsuranceSummaryTermsLinks: React.FC<Props> = ({ mainQuote }) => {
+const getInsuranceTerms = ({ offerData }: GetAllInsuranceTermsParams) => {
+  const allQuotesInsuranceTerms = offerData.quotes
+    .map((quote) => {
+      const { insuranceTerms } = quote
+      return [...insuranceTerms].map(([termType, data]) => {
+        return { termType, data }
+      })
+    })
+    .reduce((acc, cur) => {
+      return [...acc, ...cur]
+    })
+
+  const termsWithoutDuplicates = allQuotesInsuranceTerms.reduce(
+    (termsObjects, currentTermsObject) => {
+      const duplicate = termsObjects.find(
+        ({ data }) =>
+          data.displayName === currentTermsObject.data.displayName &&
+          data.url === currentTermsObject.data.url,
+      )
+      if (duplicate) {
+        return termsObjects
+      }
+
+      return [...termsObjects, currentTermsObject]
+    },
+    [allQuotesInsuranceTerms[0]],
+  )
+
+  const termsArrayMinusPrivacyPolicy = termsWithoutDuplicates.filter(
+    ({ termType }) => termType !== 'PRIVACY_POLICY',
+  )
+
+  return termsArrayMinusPrivacyPolicy
+}
+
+type Props = {
+  offerData: OfferData
+}
+
+export const InsuranceSummaryTermsLinks: React.FC<Props> = ({ offerData }) => {
   const currentLocale = useCurrentLocale()
 
-  const { insuranceTerms } = mainQuote
-
-  const insuranceTermsArr = [...insuranceTerms]
-    .map(([termType, data]) => {
-      return { termType, data }
-    })
-    .filter(({ termType }) => termType !== 'PRIVACY_POLICY')
+  const insuranceTerms = getInsuranceTerms({ offerData })
 
   return (
     <Group>
-      {insuranceTermsArr.map(({ termType, data }) => {
+      {insuranceTerms.map(({ termType, data }, index) => {
         const { displayName, url } = data
         return (
-          <Row key={termType}>
+          <Row key={termType + index}>
             <LinkWrapper>
               <Link
                 href={getUrl({
