@@ -229,7 +229,7 @@ export const noCombo: OfferData = {
       id: '187b050d-2096-4c0e-9afb-f3f20bcaf887',
       startDate: null,
       quoteDetails: {
-        coInsured: 2,
+        coInsured: 0,
         isYouth: false,
         __typename: 'NorwegianTravelDetails',
       },
@@ -278,6 +278,56 @@ export const noCombo: OfferData = {
       __typename: 'MonetaryAmountV2',
     },
     __typename: 'InsuranceCost',
+  },
+}
+
+export const noTravel: OfferData = {
+  person: {
+    firstName: 'Judith',
+    lastName: 'Moen',
+    email: 'mail@test.com',
+    ssn: '15126533427',
+    birthDate: '2965-12-15',
+    householdSize: 2,
+    address: {
+      street: 'Exampleveien 23',
+      zipCode: '1234',
+    },
+  },
+  quotes: [
+    {
+      id: '187b050d-2096-4c0e-9afb-f3f20bcaf887',
+      startDate: '2021-04-16',
+      quoteDetails: {
+        coInsured: 1,
+        isYouth: false,
+        __typename: 'NorwegianTravelDetails',
+      },
+      dataCollectionId: null,
+      currentInsurer: null,
+      contractType: TypeOfContract.NoTravel,
+      perils: perilsMock,
+      insurableLimits: insurableLimitMock,
+      insuranceTerms: insuranceTermsMock,
+    },
+  ],
+  cost: {
+    freeUntil: null,
+    monthlyDiscount: {
+      amount: '0.00',
+      currency: 'NOK',
+      __typename: 'MonetaryAmountV2',
+    },
+    monthlyGross: {
+      amount: '109.00',
+      currency: 'NOK',
+      __typename: 'MonetaryAmountV2',
+    },
+    monthlyNet: {
+      amount: '109.00',
+      currency: 'NOK',
+      __typename: 'MonetaryAmountV2',
+    },
   },
 }
 

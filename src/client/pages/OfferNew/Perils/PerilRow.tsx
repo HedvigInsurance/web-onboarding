@@ -17,7 +17,11 @@ export const PerilRow: React.FC<Props> = ({ offerQuote }) => {
 
   return (
     <>
-      <h3>{textKeys[insuranceTypeTextKeys[offerQuote.contractType]]()}</h3>
+      <h3>
+        {textKeys[
+          insuranceTypeTextKeys[offerQuote.contractType].typeOfContract
+        ]()}
+      </h3>
       <PerilCollection
         perils={offerQuote.perils}
         setCurrentPeril={setCurrentPeril}

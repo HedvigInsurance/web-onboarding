@@ -308,7 +308,10 @@ export const Checkout: React.FC<Props> = ({
                   refetch={refetch}
                 />
 
-                <SignDisclaimer offerData={offerData} />
+                <SignDisclaimer
+                  offerData={offerData}
+                  signMethod={signMethodData?.signMethodForQuotes}
+                />
               </InnerWrapper>
               <Sign
                 canInitiateSign={

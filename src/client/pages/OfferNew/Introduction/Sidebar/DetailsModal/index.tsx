@@ -7,8 +7,7 @@ import { Modal, ModalProps } from 'components/ModalNew'
 import { EditQuoteInput, useEditQuoteMutation } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
-import { isBundle } from '../../../utils'
-
+import { getMainQuote, isBundle } from '../../../utils'
 import {
   getFieldSchema,
   getInitialInputValues,
@@ -19,7 +18,6 @@ import {
   isUnderwritingLimitsHit,
   hasEditQuoteErrors,
   QuoteDetailsInput,
-  getMainOfferQuote,
 } from './utils'
 import { Details } from './Details'
 
@@ -104,7 +102,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
 }) => {
   const textKeys = useTextKeys()
   const [editQuote, editQuoteResult] = useEditQuoteMutation()
-  const mainOfferQuote = getMainOfferQuote(offerData)
+  const mainOfferQuote = getMainQuote(offerData)
   const fieldSchema = getFieldSchema(mainOfferQuote)
   const validationSchema = getValidationSchema(fieldSchema, mainOfferQuote)
   const initialValues = getInitialInputValues(offerData.person, mainOfferQuote)
