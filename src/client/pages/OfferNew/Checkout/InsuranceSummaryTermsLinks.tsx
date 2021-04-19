@@ -42,7 +42,9 @@ type GetAllInsuranceTermsParams = {
   offerData: OfferData
 }
 
-const getInsuranceTerms = ({ offerData }: GetAllInsuranceTermsParams) => {
+export const getInsuranceTerms = ({
+  offerData,
+}: GetAllInsuranceTermsParams) => {
   const allQuotesInsuranceTerms = offerData.quotes
     .map((quote) => {
       const { insuranceTerms } = quote
