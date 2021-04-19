@@ -6,7 +6,7 @@ import {
 import { getInsuranceTerms } from './InsuranceSummaryTermsLinks'
 
 describe('getInsuranceTerms function', () => {
-  describe('bundle insurance terms', () => {
+  describe('with bundle quotes', () => {
     const termsCombo = getInsuranceTerms({ offerData: noCombo })
     const termsComboDisplayNames = termsCombo.map(({ data }) => {
       return data.displayName
@@ -15,7 +15,7 @@ describe('getInsuranceTerms function', () => {
       return data.url
     })
 
-    it('returns an array with insurance terms objects where all insurance terms from every quotes exist', () => {
+    it('returns an array of insurance terms objects where all insurance terms from every quotes exist', () => {
       const termsNoTravel = [...insuranceTermsNoTravelMock].map(
         ([termType, data]) => {
           return { termType, data }
@@ -44,6 +44,18 @@ describe('getInsuranceTerms function', () => {
       )
       expect(homeContentsTermsMissingFromComboTerms).toHaveLength(0)
       expect(travelTermsMissingFromComboTerms).toHaveLength(0)
+    })
+
+    it('returns an array of insurance terms objects without duplicates', () => {
+      termsCombo.forEach(({ data }) => {
+        const { displayName, url } = data
+
+        const occurences = termsCombo.filter(({ data }) => {
+          return data.displayName === displayName && data.url === url
+        })
+
+        expect(occurences).toHaveLength(1)
+      })
     })
   })
 })
