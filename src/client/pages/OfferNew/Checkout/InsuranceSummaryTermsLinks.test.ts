@@ -47,15 +47,17 @@ describe('getInsuranceTerms function', () => {
     })
 
     it('returns an array of insurance terms objects without duplicates', () => {
-      termsCombo.forEach(({ data }) => {
+      const duplicates = termsCombo.filter(({ data }) => {
         const { displayName, url } = data
 
         const occurences = termsCombo.filter(({ data }) => {
           return data.displayName === displayName && data.url === url
         })
 
-        expect(occurences).toHaveLength(1)
+        return occurences.length > 1
       })
+
+      expect(duplicates).toHaveLength(0)
     })
   })
 })
