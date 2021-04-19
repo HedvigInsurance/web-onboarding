@@ -30,8 +30,6 @@ import {
   isDanish,
   isDanishQuote,
   isDanishHomeContents,
-  isBundle,
-  isNorwegian,
   isDanishTravel,
   isDanishAccident,
 } from '../../../utils'
@@ -745,20 +743,6 @@ export const hasEditQuoteErrors = (
   !result || Array.isArray(result)
     ? hasEditQuoteBundleErrors(result)
     : hasEditQuoteError(result)
-
-export const getMainOfferQuote = (offerData: OfferData) => {
-  if (!isBundle(offerData)) return offerData.quotes[0]
-  if (isNorwegian(offerData)) {
-    const norwegianHomeContentQuote = offerData.quotes.find((quote) =>
-      isNorwegianHomeContents(quote.quoteDetails),
-    )
-    return norwegianHomeContentQuote ?? offerData.quotes[0]
-  }
-  const danishHomeContentQuote = offerData.quotes.find((quote) =>
-    isDanishHomeContents(quote.quoteDetails),
-  )
-  return danishHomeContentQuote ?? offerData.quotes[0]
-}
 
 export type QuoteType =
   | 'swedishApartment'

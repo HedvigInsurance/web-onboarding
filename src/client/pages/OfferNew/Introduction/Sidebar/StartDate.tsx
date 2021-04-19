@@ -304,7 +304,7 @@ const DateForm: React.FC<{
     <RowButtonWrapper>
       {isSplit && (
         <StartDateRowLabel>
-          {textKeys[insuranceTypeTextKeys[quote.contractType]]()}
+          {textKeys[insuranceTypeTextKeys[quote.contractType].typeOfContract]()}
         </StartDateRowLabel>
       )}
       <RowButton
