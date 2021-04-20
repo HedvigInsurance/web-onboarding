@@ -120,6 +120,14 @@ export const getMainQuote = (offerData: OfferData) => {
   return mainQuote
 }
 
+export const checkIfMainQuote = (
+  offerData: OfferData,
+  quoteId: OfferQuote['id'],
+) => {
+  const mainQuote = getMainQuote(offerData)
+  return mainQuote.id === quoteId
+}
+
 export const getQuoteIds = (offerData: OfferData): string[] =>
   offerData.quotes.map((quote) => quote.id)
 
