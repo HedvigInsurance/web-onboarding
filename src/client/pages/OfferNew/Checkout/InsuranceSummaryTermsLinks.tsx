@@ -1,9 +1,10 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { InsuranceTermType } from 'data/graphql'
+import { InsuranceTerm, InsuranceTermType } from 'data/graphql'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
-import { OfferData } from '../types'
+import { OfferData, OfferQuote } from '../types'
+import { checkIfMainQuote } from '../utils'
 import { getTermsLink } from '../Perils/InsuranceValues'
 import { Group, Row } from './InsuranceSummary'
 
@@ -38,18 +39,48 @@ const getUrl = ({ currentLocale, termType, urlFromBackend }: GetUrlParams) => {
   return urlFromBackend
 }
 
-type GetAllInsuranceTermsParams = {
+export type Term = {
+  termType: InsuranceTermType
+  data: InsuranceTerm
+  quoteId: OfferQuote['id']
+}
+
+export type Terms = Term[]
+
+type GetSortedParams = {
+  termsArray: Terms
   offerData: OfferData
 }
 
-export const getInsuranceTerms = ({
-  offerData,
-}: GetAllInsuranceTermsParams) => {
+const getSorted = ({ termsArray, offerData }: GetSortedParams) => {
+  const termsAndConditionsSorted = termsArray
+    .filter(({ termType }) => termType === InsuranceTermType.TermsAndConditions)
+    .sort((firstElement, _sedondElement) => {
+      const { quoteId } = firstElement
+      const isMainQuote = checkIfMainQuote(offerData, quoteId)
+      if (isMainQuote) {
+        return -1
+      }
+      return 0
+    })
+
+  const restOfTerms = termsArray.filter(
+    ({ termType }) => termType !== InsuranceTermType.TermsAndConditions,
+  )
+  return [...termsAndConditionsSorted, ...restOfTerms]
+}
+
+type GetInsuranceTermsParams = {
+  offerData: OfferData
+}
+
+export const getInsuranceTerms = ({ offerData }: GetInsuranceTermsParams) => {
   const allQuotesInsuranceTerms = offerData.quotes
     .map((quote) => {
+      const quoteId = quote.id
       const { insuranceTerms } = quote
       return [...insuranceTerms].map(([termType, data]) => {
-        return { termType, data }
+        return { quoteId, termType, data }
       })
     })
     .reduce((acc, cur) => {
@@ -66,7 +97,6 @@ export const getInsuranceTerms = ({
       if (duplicate) {
         return termsObjects
       }
-
       return [...termsObjects, currentTermsObject]
     },
     [allQuotesInsuranceTerms[0]],
@@ -76,7 +106,12 @@ export const getInsuranceTerms = ({
     ({ termType }) => termType !== 'PRIVACY_POLICY',
   )
 
-  return termsArrayMinusPrivacyPolicy
+  const sortedTermsArray = getSorted({
+    termsArray: termsArrayMinusPrivacyPolicy,
+    offerData,
+  })
+
+  return sortedTermsArray
 }
 
 type Props = {

@@ -4,16 +4,9 @@ import {
   insuranceTermsNoHomeContentsMock,
   insuranceTermsNoTravelMock,
 } from 'utils/testData/offerDataMock'
-import { InsuranceTerm, InsuranceTermType } from 'data/graphql'
+import { InsuranceTermType } from 'data/graphql'
 import { InsuranceTerms } from '../types'
-import { getInsuranceTerms } from './InsuranceSummaryTermsLinks'
-
-type Term = {
-  termType: InsuranceTermType
-  data: InsuranceTerm
-}
-
-type Terms = Term[]
+import { getInsuranceTerms, Term, Terms } from './InsuranceSummaryTermsLinks'
 
 const getMockedInsuranceTermsArray = (insuranceTerms: InsuranceTerms) => {
   return [...insuranceTerms].map(([termType, data]) => ({
@@ -22,8 +15,10 @@ const getMockedInsuranceTermsArray = (insuranceTerms: InsuranceTerms) => {
   }))
 }
 
+type MockedTerms = Omit<Term, 'quoteId'>[]
+
 type GetTermsMissingParams = {
-  mockedTerms: Terms
+  mockedTerms: MockedTerms
   newTermsArray: Terms
 }
 
@@ -78,6 +73,23 @@ describe('getInsuranceTerms function', () => {
 
     expect(duplicatesInBundleTerms).toHaveLength(0)
     expect(duplicatesInSingleQuoteTerms).toHaveLength(0)
+  })
+
+  it('returns array of insurance terms objects, with terms sorted correctly', () => {
+    // sorting order should be
+    // 1) TERMS_AND_CONDITIONS type from main qoute
+    // 2) Other TERMS_AND_CONDITIONS type
+    // 3) Rest of the terms, no specific order
+
+    expect(termsSwedishApartment[0].termType).toBe('TERMS_AND_CONDITIONS')
+    expect(termsSwedishApartment[0].data.displayName).toBe('Försäkringsvillkor')
+    expect(termsCombo[0].termType).toBe('TERMS_AND_CONDITIONS')
+    expect(termsCombo[0].data.displayName).toBe(
+      'Forsikringsvilkår innboforsikring',
+    )
+    expect(termsCombo[1].data.displayName).toBe(
+      'Forsikringsvilkår reiseforsikring',
+    )
   })
 
   describe('with bundle quotes', () => {
