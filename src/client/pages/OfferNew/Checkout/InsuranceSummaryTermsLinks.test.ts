@@ -5,7 +5,39 @@ import {
   insuranceTermsNoTravelMock,
 } from 'utils/testData/offerDataMock'
 import { InsuranceTerm, InsuranceTermType } from 'data/graphql'
+import { InsuranceTerms } from '../types'
 import { getInsuranceTerms } from './InsuranceSummaryTermsLinks'
+
+type Term = {
+  termType: InsuranceTermType
+  data: InsuranceTerm
+}
+
+type Terms = Term[]
+
+const getMockedInsuranceTermsArray = (insuranceTerms: InsuranceTerms) => {
+  return [...insuranceTerms].map(([termType, data]) => ({
+    termType,
+    data,
+  }))
+}
+
+type GetTermsMissingParams = {
+  mockedTerms: Terms
+  newTermsArray: Terms
+}
+
+const getTermsMissingFromOrignialInsuranceTerms = ({
+  mockedTerms,
+  newTermsArray,
+}: GetTermsMissingParams) => {
+  const displayNames = newTermsArray.map(({ data }) => data.displayName)
+  const urls = newTermsArray.map(({ data }) => data.url)
+
+  return mockedTerms.filter(({ data }) => {
+    return !displayNames.includes(data.displayName) || !urls.includes(data.url)
+  })
+}
 
 const getPrivacyPolicyTerms = (terms: Terms) => {
   return terms.filter(
@@ -23,11 +55,6 @@ const getDuplicates = (terms: Terms) => {
     return occurences.length > 1
   })
 }
-
-type Terms = {
-  termType: InsuranceTermType
-  data: InsuranceTerm
-}[]
 
 describe('getInsuranceTerms function', () => {
   const termsCombo = getInsuranceTerms({ offerData: noCombo })
@@ -55,38 +82,25 @@ describe('getInsuranceTerms function', () => {
 
   describe('with bundle quotes', () => {
     it('returns array where every insurance term from all quotes exist, excluding privacy policy', () => {
-      const termsComboDisplayNames = termsCombo.map(({ data }) => {
-        return data.displayName
-      })
-      const termsComboUrls = termsCombo.map(({ data }) => {
-        return data.url
-      })
+      expect(termsCombo)
 
-      const termsNoTravelMock = [...insuranceTermsNoTravelMock].map(
-        ([termType, data]) => {
-          return { termType, data }
-        },
+      const termsNoTravelMock = getMockedInsuranceTermsArray(
+        insuranceTermsNoTravelMock,
       )
-      const termsNoHomeContentsMock = [...insuranceTermsNoHomeContentsMock].map(
-        ([termType, data]) => {
-          return { termType, data }
-        },
+      const termsNoHomeContentsMock = getMockedInsuranceTermsArray(
+        insuranceTermsNoHomeContentsMock,
       )
 
-      const homeContentsTermsMissingFromComboTerms = termsNoHomeContentsMock.filter(
-        ({ data }) => {
-          return (
-            !termsComboDisplayNames.includes(data.displayName) ||
-            !termsComboUrls.includes(data.url)
-          )
+      const homeContentsTermsMissingInComboTerms = getTermsMissingFromOrignialInsuranceTerms(
+        {
+          mockedTerms: termsNoHomeContentsMock,
+          newTermsArray: termsCombo,
         },
       )
-      const travelTermsMissingFromComboTerms = termsNoTravelMock.filter(
-        ({ data }) => {
-          return (
-            !termsComboDisplayNames.includes(data.displayName) ||
-            !termsComboUrls.includes(data.url)
-          )
+      const travelTermsMissingInComboTerms = getTermsMissingFromOrignialInsuranceTerms(
+        {
+          mockedTerms: termsNoTravelMock,
+          newTermsArray: termsCombo,
         },
       )
 
@@ -96,17 +110,17 @@ describe('getInsuranceTerms function', () => {
       const hasPrivacyPolicyInTravelTerms = insuranceTermsNoTravelMock.has(
         InsuranceTermType.PrivacyPolicy,
       )
-      const privacyPolicyInHomeContentTerms = homeContentsTermsMissingFromComboTerms.find(
+      const privacyPolicyInHomeContentTerms = homeContentsTermsMissingInComboTerms.find(
         ({ termType }) => termType === InsuranceTermType.PrivacyPolicy,
       )
-      const privacyPolicyInTravelTerms = travelTermsMissingFromComboTerms.find(
+      const privacyPolicyInTravelTerms = travelTermsMissingInComboTerms.find(
         ({ termType }) => termType === InsuranceTermType.PrivacyPolicy,
       )
 
-      expect(homeContentsTermsMissingFromComboTerms).toHaveLength(
+      expect(homeContentsTermsMissingInComboTerms).toHaveLength(
         hasPrivacyPolicyInHomeContentTerms ? 1 : 0,
       )
-      expect(travelTermsMissingFromComboTerms).toHaveLength(
+      expect(travelTermsMissingInComboTerms).toHaveLength(
         hasPrivacyPolicyInTravelTerms ? 1 : 0,
       )
       expect(privacyPolicyInHomeContentTerms?.termType).toBe(
@@ -123,14 +137,39 @@ describe('getInsuranceTerms function', () => {
   })
 
   describe('with single quote', () => {
+    const insuranceTermsSeApartmentMock =
+      seApartementBrf.quotes[0].insuranceTerms
+
     it('returns array that has the same length as the size of "insuranceTerms" property on quote', () => {
       const hasPrivacyPolicy = seApartementBrf.quotes[0].insuranceTerms.has(
         InsuranceTermType.PrivacyPolicy,
       )
-      const sizeOfTermsInQuote = seApartementBrf.quotes[0].insuranceTerms.size
+      const sizeOfTermsInQuote = insuranceTermsSeApartmentMock.size
 
       expect(termsSwedishApartment).toHaveLength(
         hasPrivacyPolicy ? sizeOfTermsInQuote - 1 : sizeOfTermsInQuote,
+      )
+    })
+
+    it('returns array where all insurance terms exist, excluding privacy policy', () => {
+      const termsSeApartmentMock = getMockedInsuranceTermsArray(
+        insuranceTermsSeApartmentMock,
+      )
+      const termsMissingInNewArray = getTermsMissingFromOrignialInsuranceTerms({
+        mockedTerms: termsSeApartmentMock,
+        newTermsArray: termsSwedishApartment,
+      })
+
+      const hasPrivacyPolicy = insuranceTermsSeApartmentMock.has(
+        InsuranceTermType.PrivacyPolicy,
+      )
+      const privacyPolicyInTerms = termsMissingInNewArray.find(
+        ({ termType }) => termType === InsuranceTermType.PrivacyPolicy,
+      )
+
+      expect(termsMissingInNewArray).toHaveLength(hasPrivacyPolicy ? 1 : 0)
+      expect(privacyPolicyInTerms?.termType).toBe(
+        hasPrivacyPolicy ? InsuranceTermType.PrivacyPolicy : undefined,
       )
     })
   })
