@@ -1,7 +1,6 @@
 import {
   InsurableLimit,
   InsurableLimitType,
-  InsuranceTerm,
   InsuranceTermType,
   NorwegianHomeContentsType,
   PerilV2,
@@ -10,7 +9,7 @@ import {
   ApartmentType,
   CurrentInsurer,
 } from 'data/graphql'
-import { OfferData } from '../../pages/OfferNew/types'
+import { InsuranceTerms, OfferData } from '../../pages/OfferNew/types'
 
 const insurableLimitMock = new Map([
   [
@@ -54,7 +53,7 @@ const insuranceTermsMock = new Map([
       __typename: 'InsuranceTerm',
     },
   ],
-]) as ReadonlyMap<InsuranceTermType, InsuranceTerm>
+]) as InsuranceTerms
 
 export const insuranceTermsNoHomeContentsMock = new Map([
   [
@@ -84,7 +83,7 @@ export const insuranceTermsNoHomeContentsMock = new Map([
       __typename: 'InsuranceTerm',
     },
   ],
-]) as ReadonlyMap<InsuranceTermType, InsuranceTerm>
+]) as InsuranceTerms
 
 export const insuranceTermsNoTravelMock = new Map([
   [
@@ -114,7 +113,7 @@ export const insuranceTermsNoTravelMock = new Map([
       __typename: 'InsuranceTerm',
     },
   ],
-]) as ReadonlyMap<InsuranceTermType, InsuranceTerm>
+]) as InsuranceTerms
 
 const perilsMock: PerilV2[] = [
   {

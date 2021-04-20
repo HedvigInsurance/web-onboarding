@@ -38,6 +38,8 @@ export type OfferPersonInfo = Pick<
   address: Address | null
 }
 
+export type InsuranceTerms = ReadonlyMap<InsuranceTermType, InsuranceTerm>
+
 export type OfferQuote = Pick<
   BundledQuote,
   | 'id'
@@ -49,7 +51,7 @@ export type OfferQuote = Pick<
 > & {
   contractType: TypeOfContract
   insurableLimits: ReadonlyMap<InsurableLimitType, InsurableLimit>
-  insuranceTerms: ReadonlyMap<InsuranceTermType, InsuranceTerm>
+  insuranceTerms: InsuranceTerms
 }
 
 export interface OfferData {
