@@ -16,15 +16,20 @@ type Ssn = {
   formatRegex: RegExp
 }
 
+type BirthDate = {
+  formatExample: string
+  formatRegex: RegExp
+}
+
 const ssnFormats = {
   se: /^([1-2][0-9])([0-9]{2})([0,1][0-9])([0-3][0-9])([0-9]{4})$/,
   no: /^([0-3][0-9])([0,1][0-9])([0-9]{2})([0-9]{5})$/,
   dk: /^([0-3][0-9])([0,1][0-9])([0-9]{2})([0-9]{4})$/,
 }
 
-type BirthDate = {
-  formatExample: string
-  formatRegex: RegExp
+const birthDateFormats = {
+  no: /^([0-3][0-9])-([0,1][0-9])-([1-2][0-9][0-9]{2})$/,
+  dk: /^([0-3][0-9])-([0,1][0-9])-([1-2][0-9][0-9]{2})$/,
 }
 
 export const locales: Record<LocaleLabel, LocaleData> = {
@@ -57,6 +62,10 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatExample: 'DDMMÅÅXXXXX',
       formatRegex: ssnFormats.no,
     },
+    birthDate: {
+      formatExample: 'DD-MM-ÅÅÅÅ',
+      formatRegex: birthDateFormats.no,
+    },
   },
   'no-en': {
     path: 'no-en',
@@ -66,6 +75,10 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     ssn: {
       formatExample: 'DDMMYYXXXXX',
       formatRegex: ssnFormats.no,
+    },
+    birthDate: {
+      formatExample: 'DD-MM-YYYY',
+      formatRegex: birthDateFormats.no,
     },
   },
   dk: {
@@ -77,6 +90,10 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatExample: 'DDMMÅÅSSSS',
       formatRegex: ssnFormats.dk,
     },
+    birthDate: {
+      formatExample: 'DD-MM-ÅÅÅÅ',
+      formatRegex: birthDateFormats.dk,
+    },
   },
   'dk-en': {
     path: 'dk-en',
@@ -86,6 +103,10 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     ssn: {
       formatExample: 'DDMMYYSSSS',
       formatRegex: ssnFormats.dk,
+    },
+    birthDate: {
+      formatExample: 'DD-MM-YYYY',
+      formatRegex: birthDateFormats.dk,
     },
   },
 }
