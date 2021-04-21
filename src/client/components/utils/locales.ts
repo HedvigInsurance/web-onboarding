@@ -5,7 +5,7 @@ type LocaleLabel = 'se' | 'se-en' | 'no' | 'no-en' | 'dk' | 'dk-en'
 type LocaleData = {
   path: LocaleLabel
   isoLocale: IsoLocale
-  marketLabel: 'se' | 'no' | 'dk'
+  marketLabel: 'SE' | 'NO' | 'DK'
   htmlLang: 'en' | 'sv' | 'no' | 'da'
   ssn: Ssn
   birthDate?: BirthDate
@@ -36,7 +36,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
   se: {
     path: 'se',
     isoLocale: IsoLocale.SvSe,
-    marketLabel: 'se',
+    marketLabel: 'SE',
     htmlLang: 'sv',
     ssn: {
       formatExample: 'ÅÅÅÅMMDDXXXX',
@@ -46,7 +46,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
   'se-en': {
     path: 'se-en',
     isoLocale: IsoLocale.EnSe,
-    marketLabel: 'se',
+    marketLabel: 'SE',
     htmlLang: 'en',
     ssn: {
       formatExample: 'YYYYMMDDXXXX',
@@ -56,7 +56,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
   no: {
     path: 'no',
     isoLocale: IsoLocale.NbNo,
-    marketLabel: 'se',
+    marketLabel: 'NO',
     htmlLang: 'no',
     ssn: {
       formatExample: 'DDMMÅÅXXXXX',
@@ -70,7 +70,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
   'no-en': {
     path: 'no-en',
     isoLocale: IsoLocale.EnNo,
-    marketLabel: 'se',
+    marketLabel: 'NO',
     htmlLang: 'en',
     ssn: {
       formatExample: 'DDMMYYXXXXX',
@@ -84,7 +84,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
   dk: {
     path: 'dk',
     isoLocale: IsoLocale.DaDk,
-    marketLabel: 'se',
+    marketLabel: 'DK',
     htmlLang: 'da',
     ssn: {
       formatExample: 'DDMMÅÅSSSS',
@@ -98,7 +98,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
   'dk-en': {
     path: 'dk-en',
     isoLocale: IsoLocale.EnDk,
-    marketLabel: 'se',
+    marketLabel: 'DK',
     htmlLang: 'en',
     ssn: {
       formatExample: 'DDMMYYSSSS',
