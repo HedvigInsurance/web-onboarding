@@ -30,7 +30,7 @@ const ssnFormats: Record<MarketLabel, RegExp> = {
   DK: /^([0-3][0-9])([0,1][0-9])([0-9]{2})([0-9]{4})$/,
 }
 
-const birthDateFormats: Record<MarketLabel | 'default', RegExp> = {
+export const birthDateFormats: Record<MarketLabel | 'default', RegExp> = {
   default: /^([1-2][0-9][0-9]{2})-([0,1][0-9])-([0-3][0-9])$/,
   SE: /^([1-2][0-9][0-9]{2})-([0,1][0-9])-([0-3][0-9])$/,
   NO: /^([0-3][0-9])-([0,1][0-9])-([1-2][0-9][0-9]{2})$/,

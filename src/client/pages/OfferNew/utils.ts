@@ -1,4 +1,3 @@
-import { Market } from 'components/utils/CurrentLocale'
 import {
   BundledQuote,
   Campaign,
@@ -19,6 +18,12 @@ import {
 } from 'data/graphql'
 import { Address, OfferData, OfferQuote } from 'pages/OfferNew/types'
 import { TextKeyMap } from 'utils/textKeys'
+import { Market } from 'components/utils/CurrentLocale'
+import {
+  birthDateFormats,
+  LocaleLabel,
+  locales,
+} from 'components/utils/locales'
 
 export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
   const firstQuote = quoteBundle.quotes[0]
@@ -362,4 +367,26 @@ export const createSsnValidator = (market: Market) => (
     case Market.Se:
       return ssnRegExpByMarket[Market.Se].test(ssn)
   }
+}
+
+export const getFormattedBirthdate = (
+  birthdate: string,
+  currentLocale: string,
+) => {
+  const localeFormatRegex =
+    locales[currentLocale as LocaleLabel].birthDate.formatRegex
+  const hasCorrectFormat = localeFormatRegex.test(birthdate)
+
+  // This is the format we expect from back-end, and if we'd get another format the reversing wouldn't work
+  const defaultFormatRegex = birthDateFormats.default
+  const hasDefaultFormat = defaultFormatRegex.test(birthdate)
+
+  if (hasCorrectFormat || !hasDefaultFormat) {
+    return birthdate
+  }
+
+  const reversedBirthdate = birthdate.replace(defaultFormatRegex, '$3-$2-$1')
+  const hasCorrectReversedFormat = localeFormatRegex.test(reversedBirthdate)
+
+  return hasCorrectReversedFormat ? reversedBirthdate : birthdate
 }
