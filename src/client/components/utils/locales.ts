@@ -1,6 +1,6 @@
 import { Locale as IsoLocale } from 'data/graphql'
 
-type LocaleLabel = 'se' | 'se-en' | 'no' | 'no-en' | 'dk' | 'dk-en'
+export type LocaleLabel = 'se' | 'se-en' | 'no' | 'no-en' | 'dk' | 'dk-en'
 
 type LocaleData = {
   path: LocaleLabel
@@ -12,6 +12,7 @@ type LocaleData = {
 }
 
 type Ssn = {
+  length: number
   formatExample: string
   formatRegex: RegExp
 }
@@ -28,6 +29,7 @@ const ssnFormats = {
 }
 
 const birthDateFormats = {
+  default: /^([1-2][0-9][0-9]{2})-([0,1][0-9])-([0-3][0-9])$/,
   no: /^([0-3][0-9])-([0,1][0-9])-([1-2][0-9][0-9]{2})$/,
   dk: /^([0-3][0-9])-([0,1][0-9])-([1-2][0-9][0-9]{2})$/,
 }
@@ -39,6 +41,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     marketLabel: 'SE',
     htmlLang: 'sv',
     ssn: {
+      length: 12,
       formatExample: 'ÅÅÅÅMMDDXXXX',
       formatRegex: ssnFormats.se,
     },
@@ -49,6 +52,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     marketLabel: 'SE',
     htmlLang: 'en',
     ssn: {
+      length: 12,
       formatExample: 'YYYYMMDDXXXX',
       formatRegex: ssnFormats.se,
     },
@@ -59,6 +63,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     marketLabel: 'NO',
     htmlLang: 'no',
     ssn: {
+      length: 11,
       formatExample: 'DDMMÅÅXXXXX',
       formatRegex: ssnFormats.no,
     },
@@ -73,6 +78,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     marketLabel: 'NO',
     htmlLang: 'en',
     ssn: {
+      length: 11,
       formatExample: 'DDMMYYXXXXX',
       formatRegex: ssnFormats.no,
     },
@@ -87,6 +93,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     marketLabel: 'DK',
     htmlLang: 'da',
     ssn: {
+      length: 10,
       formatExample: 'DDMMÅÅSSSS',
       formatRegex: ssnFormats.dk,
     },
@@ -101,6 +108,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     marketLabel: 'DK',
     htmlLang: 'en',
     ssn: {
+      length: 10,
       formatExample: 'DDMMYYSSSS',
       formatRegex: ssnFormats.dk,
     },
