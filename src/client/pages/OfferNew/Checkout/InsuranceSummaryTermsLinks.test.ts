@@ -1,6 +1,6 @@
 import {
-  noCombo,
-  seApartementBrf,
+  noCombo as mockedOfferDataNoCombo,
+  seApartementBrf as mockedOfferDataSeApartment,
   insuranceTermsNoHomeContentsMock,
   insuranceTermsNoTravelMock,
 } from 'utils/testData/offerDataMock'
@@ -52,9 +52,9 @@ const getDuplicates = (terms: Terms) => {
 }
 
 describe('getInsuranceTerms function', () => {
-  const termsCombo = getInsuranceTerms({ offerData: noCombo })
+  const termsCombo = getInsuranceTerms({ offerData: mockedOfferDataNoCombo })
   const termsSwedishApartment = getInsuranceTerms({
-    offerData: seApartementBrf,
+    offerData: mockedOfferDataSeApartment,
   })
 
   it('returns array of insurance terms objects excluding privacy policy', () => {
@@ -150,10 +150,10 @@ describe('getInsuranceTerms function', () => {
 
   describe('with single quote', () => {
     const insuranceTermsSeApartmentMock =
-      seApartementBrf.quotes[0].insuranceTerms
+      mockedOfferDataSeApartment.quotes[0].insuranceTerms
 
     it('returns array that has the same length as the size of "insuranceTerms" property on quote', () => {
-      const hasPrivacyPolicy = seApartementBrf.quotes[0].insuranceTerms.has(
+      const hasPrivacyPolicy = mockedOfferDataSeApartment.quotes[0].insuranceTerms.has(
         InsuranceTermType.PrivacyPolicy,
       )
       const sizeOfTermsInQuote = insuranceTermsSeApartmentMock.size
