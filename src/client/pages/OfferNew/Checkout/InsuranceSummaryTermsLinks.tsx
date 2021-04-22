@@ -70,11 +70,7 @@ const getSorted = ({ termsArray, offerData }: GetSortedParams) => {
   return [...termsAndConditionsSorted, ...restOfTerms]
 }
 
-type GetInsuranceTermsParams = {
-  offerData: OfferData
-}
-
-export const getInsuranceTerms = ({ offerData }: GetInsuranceTermsParams) => {
+export const getInsuranceTerms = ({ offerData }: { offerData: OfferData }) => {
   const allQuotesInsuranceTerms = offerData.quotes
     .map((quote) => {
       const quoteId = quote.id
