@@ -32,7 +32,7 @@ const ssnFormats: Record<MarketLabel, RegExp> = {
 
 const birthDateFormats: Record<MarketLabel | 'default', RegExp> = {
   default: /^([1-2][0-9][0-9]{2})-([0,1][0-9])-([0-3][0-9])$/,
-  SE: /^([0-3][0-9])-([0,1][0-9])-([1-2][0-9][0-9]{2})$/,
+  SE: /^([1-2][0-9][0-9]{2})-([0,1][0-9])-([0-3][0-9])$/,
   NO: /^([0-3][0-9])-([0,1][0-9])-([1-2][0-9][0-9]{2})$/,
   DK: /^([0-3][0-9])-([0,1][0-9])-([1-2][0-9][0-9]{2})$/,
 }
@@ -49,7 +49,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: ssnFormats.SE,
     },
     birthDate: {
-      formatExample: 'DD-MM-ÅÅÅÅ',
+      formatExample: 'ÅÅÅÅ-MM-DD',
       formatRegex: birthDateFormats.SE,
     },
   },
@@ -64,7 +64,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: ssnFormats.SE,
     },
     birthDate: {
-      formatExample: 'DD-MM-YYYY',
+      formatExample: 'YYYY-MM-DD',
       formatRegex: birthDateFormats.SE,
     },
   },
