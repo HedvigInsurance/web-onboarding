@@ -339,16 +339,6 @@ export const getInsuranceTitle = (
   ]()
 }
 
-export const maskAndFormatRawSsn = (ssn: string) => {
-  if (ssn.length !== 12) {
-    return ssn
-  }
-
-  const CENTURY_LENGTH = 2
-  const DATE_LENGTH = 6
-  return ssn.substr(CENTURY_LENGTH, DATE_LENGTH) + '-****'
-}
-
 export const ssnLengthByMarket: Record<Market, number> = {
   SE: 12,
   NO: 11,
