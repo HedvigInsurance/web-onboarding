@@ -83,8 +83,8 @@ export const getInsuranceTerms = ({ offerData }: GetInsuranceTermsParams) => {
         return { quoteId, termType, data }
       })
     })
-    .reduce((acc, cur) => {
-      return [...acc, ...cur]
+    .reduce((termsArray, termsArrayFromQuote) => {
+      return [...termsArray, ...termsArrayFromQuote]
     })
 
   const termsWithoutDuplicates = allQuotesInsuranceTerms.reduce(
