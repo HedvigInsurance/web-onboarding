@@ -62,7 +62,11 @@ export const createSession = <T>(
   storageKey: string = SESSION_KEY,
 ): IsomorphicSessionStorage<T> => ({
   setSession: (value: T): void => {
-    storage.setItem(storageKey, JSON.stringify(value), { path: '/' })
+    storage.setItem(storageKey, JSON.stringify(value), {
+      path: '/',
+      secure: true,
+      sameSite: 'None',
+    })
   },
   getSession: (): T | undefined => {
     try {
