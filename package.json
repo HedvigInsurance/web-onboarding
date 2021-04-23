@@ -128,7 +128,7 @@
     "axios": "^0.21.1",
     "color": "^3.1.2",
     "constate": "0.9.0",
-    "cookie-storage": "^3.2.0",
+    "cookie-storage": "^6.1.0",
     "core-js": "2",
     "dayzed": "^3.1.0",
     "dotenv": "^8.2.0",
