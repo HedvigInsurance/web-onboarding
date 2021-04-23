@@ -52,10 +52,8 @@ const getDuplicates = (terms: Terms) => {
 }
 
 describe('getInsuranceTerms function', () => {
-  const termsCombo = getInsuranceTerms({ offerData: mockedOfferDataNoCombo })
-  const termsSwedishApartment = getInsuranceTerms({
-    offerData: mockedOfferDataSeApartment,
-  })
+  const termsCombo = getInsuranceTerms(mockedOfferDataNoCombo)
+  const termsSwedishApartment = getInsuranceTerms(mockedOfferDataSeApartment)
 
   it('returns array of insurance terms objects excluding privacy policy', () => {
     const privacyPolicyComboTerms = getPrivacyPolicyTerms(termsCombo)

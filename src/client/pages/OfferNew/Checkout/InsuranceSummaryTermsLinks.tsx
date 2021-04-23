@@ -70,7 +70,7 @@ const getSorted = ({ termsArray, offerData }: GetSortedParams) => {
   return [...termsAndConditionsSorted, ...restOfTerms]
 }
 
-export const getInsuranceTerms = ({ offerData }: { offerData: OfferData }) => {
+export const getInsuranceTerms = (offerData: OfferData) => {
   const allQuotesInsuranceTerms = offerData.quotes
     .map((quote) => {
       const quoteId = quote.id
@@ -117,7 +117,7 @@ type Props = {
 export const InsuranceSummaryTermsLinks: React.FC<Props> = ({ offerData }) => {
   const currentLocale = useCurrentLocale()
 
-  const insuranceTerms = getInsuranceTerms({ offerData })
+  const insuranceTerms = getInsuranceTerms(offerData)
 
   return (
     <Group>
