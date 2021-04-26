@@ -23,6 +23,8 @@ export class ServerCookieStorage implements MinimalStorage {
       signed: false,
       expires: undefined,
       path: '/',
+      sameSite: 'None',
+      secure: true,
       httpOnly: false,
     })
   }
