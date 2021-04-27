@@ -369,10 +369,15 @@ export const createSsnValidator = (market: Market) => (
   }
 }
 
-export const getFormattedBirthdate = (
-  birthdate: string,
-  currentLocale: string,
-) => {
+type FormattedBirthdateParams = {
+  birthdate: string
+  currentLocale: string
+}
+
+export const getFormattedBirthdate = ({
+  birthdate,
+  currentLocale,
+}: FormattedBirthdateParams) => {
   const localeFormatRegex =
     locales[currentLocale as LocaleLabel].birthDate.formatRegex
   const hasCorrectFormat = localeFormatRegex.test(birthdate)

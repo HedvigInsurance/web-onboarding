@@ -234,7 +234,10 @@ const getPersonalDetails = ({
     {
       key: 'birthDate',
       label: textKeys.CHECKOUT_DETAILS_BIRTHDATE(),
-      value: getFormattedBirthdate(person.birthDate, currentLocale),
+      value: getFormattedBirthdate({
+        birthdate: person.birthDate,
+        currentLocale,
+      }),
     },
   ]
 }
