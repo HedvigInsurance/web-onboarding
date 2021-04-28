@@ -81,7 +81,7 @@ export const CheckoutContent: React.FC<Props> = ({
 
   useUnderwritingLimitsHitReporter(
     editQuoteResult.data?.editQuote?.__typename === 'UnderwritingLimitsHit' &&
-      editQuoteResult.data.editQuote.limits.map((limit) => limit.description),
+      editQuoteResult.data.editQuote.limits.map((limit) => limit.code),
     quoteIds,
   )
 
