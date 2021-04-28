@@ -30,6 +30,12 @@ const ssnFormats: Record<MarketLabel, RegExp> = {
   DK: /^([0-3][0-9])([0,1][0-9])([0-9]{2})([0-9]{4})$/,
 }
 
+const ssnLengths: Record<MarketLabel, number> = {
+  SE: 12,
+  NO: 11,
+  DK: 10,
+}
+
 export const birthDateFormats: Record<MarketLabel | 'default', RegExp> = {
   default: /^([1-2][0-9][0-9]{2})-([0,1][0-9])-([0-3][0-9])$/,
   SE: /^([1-2][0-9][0-9]{2})-([0,1][0-9])-([0-3][0-9])$/,
@@ -44,7 +50,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     marketLabel: 'SE',
     htmlLang: 'sv',
     ssn: {
-      length: 12,
+      length: ssnLengths.SE,
       formatExample: 'ÅÅÅÅMMDDXXXX',
       formatRegex: ssnFormats.SE,
     },
@@ -59,7 +65,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     marketLabel: 'SE',
     htmlLang: 'en',
     ssn: {
-      length: 12,
+      length: ssnLengths.SE,
       formatExample: 'YYYYMMDDXXXX',
       formatRegex: ssnFormats.SE,
     },
@@ -74,7 +80,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     marketLabel: 'NO',
     htmlLang: 'no',
     ssn: {
-      length: 11,
+      length: ssnLengths.NO,
       formatExample: 'DDMMÅÅXXXXX',
       formatRegex: ssnFormats.NO,
     },
@@ -89,7 +95,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     marketLabel: 'NO',
     htmlLang: 'en',
     ssn: {
-      length: 11,
+      length: ssnLengths.NO,
       formatExample: 'DDMMYYXXXXX',
       formatRegex: ssnFormats.NO,
     },
@@ -104,7 +110,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     marketLabel: 'DK',
     htmlLang: 'da',
     ssn: {
-      length: 10,
+      length: ssnLengths.DK,
       formatExample: 'DDMMÅÅSSSS',
       formatRegex: ssnFormats.DK,
     },
@@ -119,7 +125,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     marketLabel: 'DK',
     htmlLang: 'en',
     ssn: {
-      length: 10,
+      length: ssnLengths.DK,
       formatExample: 'DDMMYYSSSS',
       formatRegex: ssnFormats.DK,
     },
