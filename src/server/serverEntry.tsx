@@ -41,6 +41,7 @@ const router = new Router()
 
 configureAssets(app)
 
+app.proxy = true
 appLogger.info(`Booting server on ${getPort()} 👢`)
 appLogger.info(
   `Sentry is ${
