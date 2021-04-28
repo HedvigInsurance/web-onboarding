@@ -378,23 +378,24 @@ export const getFormattedBirthdate = ({
   birthdate,
   currentLocale,
 }: FormattedBirthdateParams) => {
-  const localeFormatRegex =
+  const localeBirthdateFormat =
     locales[currentLocale as LocaleLabel].birthDate.formatRegex
-  const hasCorrectFormat = localeFormatRegex.test(birthdate)
+
+  const hasCorrectFormat = localeBirthdateFormat.test(birthdate)
 
   if (hasCorrectFormat) {
     return birthdate
   }
 
-  const defaultFormatRegex = birthDateFormats.default // This is the format we expect from back-end
-  const hasDefaultFormat = defaultFormatRegex.test(birthdate)
+  const defaultFormat = birthDateFormats.default // This is the format we expect from back-end
+  const hasExpectedFormat = defaultFormat.test(birthdate)
 
-  if (!hasDefaultFormat) {
-    throw `Format of birthdate ${birthdate} doesn't match the expected default format YYYY-MM-DD`
+  if (!hasExpectedFormat) {
+    throw `Format of birthdate "${birthdate}" doesn't match the expected default format YYYY-MM-DD`
   }
 
-  const reversedBirthdate = birthdate.replace(defaultFormatRegex, '$3-$2-$1')
-  const hasCorrectReversedFormat = localeFormatRegex.test(reversedBirthdate)
+  const reversedBirthdate = birthdate.replace(defaultFormat, '$3-$2-$1')
+  const hasCorrectReversedFormat = localeBirthdateFormat.test(reversedBirthdate)
 
   return hasCorrectReversedFormat ? reversedBirthdate : birthdate
 }
