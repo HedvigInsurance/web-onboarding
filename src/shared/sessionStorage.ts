@@ -64,8 +64,10 @@ export const createSession = <T>(
   setSession: (value: T): void => {
     storage.setItem(storageKey, JSON.stringify(value), {
       path: '/',
-      secure: true,
-      sameSite: 'None',
+      ...(process.env.NODE_ENV !== 'development' && {
+        sameSite: 'None',
+        secure: true,
+      }),
     })
   },
   getSession: (): T | undefined => {
