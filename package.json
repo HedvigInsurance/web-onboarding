@@ -115,7 +115,7 @@
     "@emotion/core": "^10.0.22",
     "@emotion/styled": "^10.0.23",
     "@hedviginsurance/brand": "^4.0.2",
-    "@hedviginsurance/embark": "^2.0.15",
+    "@hedviginsurance/embark": "^2.0.16",
     "@segment/snippet": "^4.4.0",
     "@sentry/node": "^5.27.6",
     "@types/dayzed": "^2.2.1",
