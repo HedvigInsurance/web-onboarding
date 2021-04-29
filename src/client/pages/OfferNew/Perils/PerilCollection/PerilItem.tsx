@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2, colorsV3, fonts } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
 import { Icon } from 'data/graphql'
 import { getIconUrl } from '../index'
@@ -10,84 +10,103 @@ interface PerilItemProps {
   onClick: () => void
 }
 
-const OuterContainer = styled.button`
-  width: calc(50% - 0.5rem);
+const OuterContainer = styled.div`
+  position: relative;
+  display: flex;
+  color: ${colorsV3.gray900};
 
-  background-color: transparent;
-  border: 0;
-  margin: 0.25rem;
-  padding: 0;
+  &:before {
+    content: '';
 
-  &:focus {
-    box-shadow: none;
-    outline: none;
-  }
+    @media (min-width: 800px) {
+      position: relative;
+      padding-top: 75%;
+    }
 
-  @media (min-width: 400px) {
-    width: auto;
+    @media (min-width: 1200px) {
+      padding-top: 100%;
+    }
   }
 `
 
-const Container = styled.span`
+const Container = styled.button`
   display: flex;
-  flex-direction: row;
+  width: 100%;
   align-items: center;
   justify-content: flex-start;
   text-align: left;
-
-  padding: 0.75rem 0.5rem;
-  border-radius: 0.25rem;
-  background-color: ${colorsV2.white};
+  min-height: 3.75rem;
+  padding: 0.5rem 1rem 0.5rem 0.375rem;
+  color: inherit;
+  font-family: inherit;
+  border-radius: 0.375rem;
+  background-color: ${colorsV3.white};
+  border: 0;
   cursor: pointer;
   transition: all 150ms ease-in-out;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+  appearance: none;
 
-  @media (min-width: 400px) {
+  @media (min-width: 800px) {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 1.25rem;
+    border-radius: 0.5rem;
     flex-direction: column;
+    align-items: flex-start;
     justify-content: space-between;
-    text-align: center;
-    width: 7.25rem;
-    height: 5.75rem;
-    padding: 0.5rem;
-    border: 1px solid ${colorsV2.lightgray};
-  }
 
-  img {
-    width: 2rem;
-    height: 2rem;
-    margin-right: 0.5rem;
-
-    @media (min-width: 400px) {
-      margin-right: 0;
-      width: 100%;
-      height: 3rem;
-      min-width: 0;
-      min-height: 0;
+    &:hover {
+      box-shadow: 0 0 16px rgba(0, 0, 0, 0.08);
+      transform: translateY(-2px);
     }
   }
 
-  :focus {
+  &:focus {
     outline: none;
   }
 
-  @media (min-width: 400px) {
-    :hover {
-      box-shadow: 0 0 16px rgba(0, 0, 0, 0.08);
-      transform: translateY(-2%);
-    }
-  }
-
-  :active {
-    background-color: ${colorsV2.lightgray};
+  &:active {
+    background-color: ${colorsV3.gray300};
     box-shadow: none;
   }
 `
 
-const Title = styled('div')`
-  font-size: 1rem;
-  letter-spacing: -0.23px;
-  color: ${colorsV3.black};
-  font-family: ${fonts.FAVORIT};
+const PerilIcon = styled.img`
+  display: flex;
+  width: 2rem;
+  height: 2rem;
+  margin-right: 0.375rem;
+
+  @media (min-width: 800px) {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  svg {
+    width: 100%;
+    height: 100%;
+    @media (min-width: 800px) {
+      transform: translateX(-0.625rem);
+    }
+
+    path {
+      fill: currentColor;
+    }
+  }
+`
+
+const Title = styled('h4')`
+  margin: 0;
+  font-size: 0.875rem;
+
+  @media (min-width: 800px) {
+    font-size: 1rem;
+  }
 `
 
 export const PerilItem: React.FC<PerilItemProps> = ({
@@ -100,7 +119,7 @@ export const PerilItem: React.FC<PerilItemProps> = ({
   return (
     <OuterContainer>
       <Container onClick={onClick}>
-        {iconUrl && <img src={iconUrl} />}
+        {iconUrl && <PerilIcon src={iconUrl} />}
         <Title>{title}</Title>
       </Container>
     </OuterContainer>
