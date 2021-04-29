@@ -1,7 +1,6 @@
 import {
   InsurableLimit,
   InsurableLimitType,
-  InsuranceTerm,
   InsuranceTermType,
   NorwegianHomeContentsType,
   PerilV2,
@@ -10,7 +9,7 @@ import {
   ApartmentType,
   CurrentInsurer,
 } from 'data/graphql'
-import { OfferData } from '../../pages/OfferNew/types'
+import { InsuranceTerms, OfferData } from '../../pages/OfferNew/types'
 
 const insurableLimitMock = new Map([
   [
@@ -36,7 +35,85 @@ const insuranceTermsMock = new Map([
       __typename: 'InsuranceTerm',
     },
   ],
-]) as ReadonlyMap<InsuranceTermType, InsuranceTerm>
+  [
+    InsuranceTermType.PreSaleInfoEuStandard,
+    {
+      displayName: 'Produktfaktablad',
+      type: 'PRE_SALE_INFO_EU_STANDARD',
+      url: 'https://www.hedvig.com/se/villkor',
+      __typename: 'InsuranceTerm',
+    },
+  ],
+  [
+    InsuranceTermType.PrivacyPolicy,
+    {
+      displayName: 'Personuppgifter',
+      type: 'PRIVACY_POLICY',
+      url: 'https://www.hedvig.com/se/personuppgifter',
+      __typename: 'InsuranceTerm',
+    },
+  ],
+]) as InsuranceTerms
+
+export const insuranceTermsNoHomeContentsMock = new Map([
+  [
+    InsuranceTermType.TermsAndConditions,
+    {
+      displayName: 'Forsikringsvilkår innboforsikring',
+      type: 'TERMS_AND_CONDITIONS',
+      url: 'https://www.hedvig.com/no/villkar/villkar/innbo.pdf',
+      __typename: 'InsuranceTerm',
+    },
+  ],
+  [
+    InsuranceTermType.GeneralTerms,
+    {
+      displayName: 'Generelle vilkår',
+      type: 'GENERAL_TERMS',
+      url: 'https://www.hedvig.com/no/terms',
+      __typename: 'InsuranceTerm',
+    },
+  ],
+  [
+    InsuranceTermType.PreSaleInfoEuStandard,
+    {
+      displayName: 'Informasjon før kjøpet iht. EU-standard',
+      type: 'PRE_SALE_INFO_EU_STANDARD',
+      url: 'https://www.hedvig.com/no/terms',
+      __typename: 'InsuranceTerm',
+    },
+  ],
+]) as InsuranceTerms
+
+export const insuranceTermsNoTravelMock = new Map([
+  [
+    InsuranceTermType.TermsAndConditions,
+    {
+      displayName: 'Forsikringsvilkår reiseforsikring',
+      type: 'TERMS_AND_CONDITIONS',
+      url: 'https://www.hedvig.com/no/villkar/villkar/reise.pdf',
+      __typename: 'InsuranceTerm',
+    },
+  ],
+  [
+    InsuranceTermType.GeneralTerms,
+    {
+      displayName: 'Generelle vilkår',
+      type: 'GENERAL_TERMS',
+      url: 'https://www.hedvig.com/no/terms',
+      __typename: 'InsuranceTerm',
+    },
+  ],
+  [
+    InsuranceTermType.PreSaleInfoEuStandard,
+    {
+      displayName: 'Informasjon før kjøpet iht. EU-standard',
+      type: 'PRE_SALE_INFO_EU_STANDARD',
+      url: 'https://www.hedvig.com/no/terms',
+      __typename: 'InsuranceTerm',
+    },
+  ],
+]) as InsuranceTerms
 
 const perilsMock: PerilV2[] = [
   {
@@ -168,7 +245,7 @@ export const noComboYouth: OfferData = {
       contractType: TypeOfContract.NoTravelYouth,
       perils: perilsMock,
       insurableLimits: insurableLimitMock,
-      insuranceTerms: insuranceTermsMock,
+      insuranceTerms: insuranceTermsNoTravelMock,
     },
     {
       id: '86f0a15d-6aed-4051-9ec2-fee1daccfb29',
@@ -187,7 +264,7 @@ export const noComboYouth: OfferData = {
       contractType: TypeOfContract.NoHomeContentYouthRent,
       perils: perilsMock,
       insurableLimits: insurableLimitMock,
-      insuranceTerms: insuranceTermsMock,
+      insuranceTerms: insuranceTermsNoHomeContentsMock,
     },
   ],
   cost: {
@@ -238,7 +315,7 @@ export const noCombo: OfferData = {
       contractType: TypeOfContract.NoTravel,
       perils: perilsMock,
       insurableLimits: insurableLimitMock,
-      insuranceTerms: insuranceTermsMock,
+      insuranceTerms: insuranceTermsNoTravelMock,
     },
     {
       id: '86f0a15d-6aed-4051-9ec2-fee1daccfb29',
@@ -257,7 +334,7 @@ export const noCombo: OfferData = {
       contractType: TypeOfContract.NoHomeContentRent,
       perils: perilsMock,
       insurableLimits: insurableLimitMock,
-      insuranceTerms: insuranceTermsMock,
+      insuranceTerms: insuranceTermsNoHomeContentsMock,
     },
   ],
   cost: {

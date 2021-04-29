@@ -24,6 +24,10 @@ export class ServerCookieStorage implements MinimalStorage {
       expires: undefined,
       path: '/',
       httpOnly: false,
+      ...(process.env.NODE_ENV !== 'development' && {
+        sameSite: 'None',
+        secure: true,
+      }),
     })
   }
 

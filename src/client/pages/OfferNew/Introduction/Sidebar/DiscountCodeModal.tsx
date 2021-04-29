@@ -22,7 +22,7 @@ const Wrapper = styled.div<{ isOpen: boolean }>`
   width: 100%;
   height: 100%;
   position: absolute;
-  background: ${hexToRgba(colorsV3.white, 0.8)};
+  background: ${hexToRgba(colorsV3.white, 0.85)};
   top: 0;
   left: 0;
   transition: all 0.2s;
@@ -30,7 +30,7 @@ const Wrapper = styled.div<{ isOpen: boolean }>`
   opacity: ${(props) => (props.isOpen ? 1 : 0)};
   padding: 1rem;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   border-radius: 8px;
 `
 
@@ -49,8 +49,8 @@ const CloseButton = styled.button`
   width: 1.5rem;
   height: 1.5rem;
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
+  top: 1rem;
+  right: 1rem;
   padding: 0;
   display: flex;
   align-items: center;
@@ -90,10 +90,6 @@ const Paragraph = styled.div`
   margin-bottom: 1rem;
 `
 
-const DiscountInputWrapper = styled.div`
-  margin: 0 -0.5rem;
-`
-
 const Footer = styled.div`
   width: 100%;
   display: flex;
@@ -101,23 +97,6 @@ const Footer = styled.div`
   align-items: center;
   justify-content: center;
   margin-top: 1rem;
-`
-
-const Terms = styled.div`
-  font-size: 0.75rem;
-  line-height: 1rem;
-  text-align: center;
-  color: ${colorsV3.gray700};
-  margin-top: 1rem;
-`
-
-const TermsLink = styled.a`
-  color: ${colorsV3.purple500};
-  text-decoration: none;
-
-  :hover {
-    color: ${colorsV3.purple500};
-  }
 `
 
 const discountSchema = Yup.object({
@@ -194,28 +173,20 @@ export const DiscountCodeModal: React.FC<Props> = ({
         >
           {({ touched, errors, values }) => (
             <Form>
-              <DiscountInputWrapper>
-                <InputField
-                  label={textKeys.SIDEBAR_ADD_DISCOUNT_CELL_LABEL()}
-                  placeholder={textKeys.SIDEBAR_ADD_DISCOUNT_CELL_PLACEHOLDER()}
-                  name="code"
-                  type="text"
-                  autoComplete="off"
-                  touched={touched.code}
-                  errors={errors.code ? textKeys[errors.code]() : ''}
-                />
-              </DiscountInputWrapper>
+              <InputField
+                label={textKeys.SIDEBAR_ADD_DISCOUNT_CELL_LABEL()}
+                placeholder={textKeys.SIDEBAR_ADD_DISCOUNT_CELL_PLACEHOLDER()}
+                name="code"
+                type="text"
+                autoComplete="off"
+                touched={touched.code}
+                errors={errors.code ? textKeys[errors.code]() : ''}
+              />
 
               <Footer>
                 <Button type="submit" fullWidth disabled={!values.code}>
                   {textKeys.SIDEBAR_ADD_DISCOUNT_BUTTON()}
                 </Button>
-                <Terms>
-                  {`${textKeys.SIDEBAR_ADD_DISCOUNT_FINEPRINT()} `}
-                  <TermsLink href="" target="_blank" rel="noreferrer noopener">
-                    {textKeys.SIDEBAR_ADD_DISCOUNT_FINEPRINT_LINK_TEXT()}
-                  </TermsLink>
-                </Terms>
               </Footer>
             </Form>
           )}

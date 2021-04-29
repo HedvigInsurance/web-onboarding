@@ -62,7 +62,13 @@ export const createSession = <T>(
   storageKey: string = SESSION_KEY,
 ): IsomorphicSessionStorage<T> => ({
   setSession: (value: T): void => {
-    storage.setItem(storageKey, JSON.stringify(value), { path: '/' })
+    storage.setItem(storageKey, JSON.stringify(value), {
+      path: '/',
+      ...(process.env.NODE_ENV !== 'development' && {
+        sameSite: 'None',
+        secure: true,
+      }),
+    })
   },
   getSession: (): T | undefined => {
     try {
@@ -74,6 +80,12 @@ export const createSession = <T>(
   },
   keepAlive: () => {
     clearExpiredSession(storage, storageKey)
-    storage.setItem(KA_SESSION_KEY, String(Date.now()), { path: '/' })
+    storage.setItem(KA_SESSION_KEY, String(Date.now()), {
+      path: '/',
+      ...(process.env.NODE_ENV !== 'development' && {
+        sameSite: 'None',
+        secure: true,
+      }),
+    })
   },
 })
