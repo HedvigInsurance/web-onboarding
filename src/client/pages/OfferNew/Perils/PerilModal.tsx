@@ -57,9 +57,9 @@ const PickerItem = styled('button')`
   align-items: center;
   cursor: pointer;
 
-  svg {
-    width: 2.75rem;
-    height: 2.75rem;
+  img {
+    width: 2.5rem;
+    height: 2.5rem;
   }
 
   :focus {
