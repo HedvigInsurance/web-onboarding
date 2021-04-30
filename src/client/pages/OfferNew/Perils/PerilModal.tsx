@@ -68,11 +68,14 @@ const PickerItem = styled('button')`
 `
 
 const PickerItemLabel = styled('div')`
+  width: 6.25rem;
   font-size: 0.9375rem;
   letter-spacing: -0.23px;
   text-align: center;
   white-space: nowrap;
   color: ${colorsV3.gray700};
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 
 interface PerilItemsContainerProps {
