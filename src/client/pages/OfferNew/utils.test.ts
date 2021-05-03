@@ -1,8 +1,8 @@
-import { LocaleLabel } from 'src/client/components/utils/locales'
+import { LocaleLabel } from 'components/utils/locales'
 import {
   DanishHomeContentsDetails,
   NorwegianHomeContentsDetails,
-} from 'src/client/data/graphql'
+} from 'data/graphql'
 import {
   seApartementBrf,
   noCombo,
