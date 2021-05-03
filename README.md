@@ -38,11 +38,16 @@ $ yarn
 ## Development
 
 ```sh
+# Compile the source files (only needed the first time)
+$ yarn build
+
 # Start the app
 $ yarn watch
 ```
 
 The app is running on `http://localhost:8080`. Visit [http://localhost:8080/se/new-member/](http://localhost:8080/se/new-member/) to view the first screen of the onboarding flow.
+
+> The port might differ on your machine. Check the logs for this message: `Booting server on 8040 👢`.
 
 ## Analytics
 
