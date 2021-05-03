@@ -16,14 +16,10 @@ import {
   DanishAccidentDetails,
   DanishTravelDetails,
 } from 'data/graphql'
+import { birthDateFormats, LocaleLabel, locales } from 'localization/locales'
 import { Address, OfferData, OfferQuote } from 'pages/OfferNew/types'
 import { TextKeyMap } from 'utils/textKeys'
 import { Market } from 'components/utils/CurrentLocale'
-import {
-  birthDateFormats,
-  LocaleLabel,
-  locales,
-} from 'components/utils/locales'
 
 export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
   const firstQuote = quoteBundle.quotes[0]

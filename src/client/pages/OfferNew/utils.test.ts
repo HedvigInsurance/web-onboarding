@@ -1,4 +1,4 @@
-import { LocaleLabel } from 'components/utils/locales'
+import { LocaleLabel } from 'localization/locales'
 import {
   DanishHomeContentsDetails,
   NorwegianHomeContentsDetails,
