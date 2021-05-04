@@ -25,9 +25,9 @@ type BirthDate = {
 }
 
 const ssnFormats: Record<MarketLabel, RegExp> = {
-  SE: /^((19|20))([0-9]{2})([0-1][0-9])([0-3][0-9])([0-9]{4})$/,
-  NO: /^([0-3][0-9])([0-1][0-9])([0-9]{2})([0-9]{5})$/,
-  DK: /^([0-3][0-9])([0-1][0-9])([0-9]{2})([0-9]{4})$/,
+  SE: /^((19|20))([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])([0-9]{4})$/,
+  NO: /^(0[1-9]|[1-2][0-9]|3[0-1])(0[1-9]|1[0-2])([0-9]{2})([0-9]{5})$/,
+  DK: /^(0[1-9]|[1-2][0-9]|3[0-1])(0[1-9]|1[0-2])([0-9]{2})([0-9]{4})$/,
 }
 
 const ssnLengths: Record<MarketLabel, number> = {
@@ -36,11 +36,14 @@ const ssnLengths: Record<MarketLabel, number> = {
   DK: 10,
 }
 
+const yearMonthDayFormat = /^(19[0-9]{2}|20[0-9]{2})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/
+const dayMonthYearFormat = /^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-(19[0-9]{2}|20[0-9]{2})$/
+
 export const birthDateFormats: Record<MarketLabel | 'default', RegExp> = {
-  default: /^([1-2][0-9][0-9]{2})-([0-1][0-9])-([0-3][0-9])$/,
-  SE: /^([1-2][0-9][0-9]{2})-([0-1][0-9])-([0-3][0-9])$/,
-  NO: /^([0-3][0-9])-([0-1][0-9])-([1-2][0-9][0-9]{2})$/,
-  DK: /^([0-3][0-9])-([0-1][0-9])-([1-2][0-9][0-9]{2})$/,
+  default: yearMonthDayFormat,
+  SE: yearMonthDayFormat,
+  NO: dayMonthYearFormat,
+  DK: dayMonthYearFormat,
 }
 
 export const locales: Record<LocaleLabel, LocaleData> = {
