@@ -3,16 +3,13 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { Form, Formik, FormikHelpers } from 'formik'
 import React from 'react'
 import * as Yup from 'yup'
+import { LocaleLabel, locales } from 'localization/locales'
 import { Button } from 'components/buttons'
 import { InputField } from 'components/inputs'
 import { LoadingDots } from 'components/LoadingDots/LoadingDots'
 import { useTextKeys } from 'utils/textKeys'
-import { useMarket } from 'components/utils/CurrentLocale'
-import { ssnLengthByMarket, ssnRegExpByMarket } from 'pages/OfferNew/utils'
-import {
-  getSsnLabel,
-  getSsnPlaceholder,
-} from 'pages/OfferNew/Checkout/UserDetailsForm'
+import { useCurrentLocale, useMarket } from 'components/utils/CurrentLocale'
+import { getSsnLabel } from 'pages/OfferNew/Checkout/UserDetailsForm'
 
 export type LoginFormValue = {
   ssn: string
@@ -78,8 +75,12 @@ const SubmitButton = styled(Button)<{ disabled?: boolean }>`
 export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
   const textKeys = useTextKeys()
   const market = useMarket()
-  const ssnMaxLength = ssnLengthByMarket[market]
-  const ssnRegExp = ssnRegExpByMarket[market]
+
+  const currentLocale = useCurrentLocale()
+  const currentLocaleData = locales[currentLocale as LocaleLabel]
+  const ssnMaxLength = currentLocaleData.ssn.length
+  const ssnFormatRegex = currentLocaleData.ssn.formatRegex
+  const ssnFormatExample = currentLocaleData.ssn.formatExample
 
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -92,7 +93,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
   }
 
   const ssnSchema = Yup.object({
-    ssn: Yup.string().matches(ssnRegExp, 'LOGIN_APP_INAVLID_SSN'),
+    ssn: Yup.string().matches(ssnFormatRegex, 'LOGIN_APP_INAVLID_SSN'),
   })
 
   return (
@@ -116,7 +117,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
             <SsnField>
               <InputField
                 label={getSsnLabel(market, textKeys)}
-                placeholder={getSsnPlaceholder(market, textKeys)}
+                placeholder={ssnFormatExample}
                 value={values.ssn}
                 name="ssn"
                 id="ssn"

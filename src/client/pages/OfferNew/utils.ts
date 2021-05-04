@@ -19,7 +19,6 @@ import {
 import { birthDateFormats, LocaleLabel, locales } from 'localization/locales'
 import { Address, OfferData, OfferQuote } from 'pages/OfferNew/types'
 import { TextKeyMap } from 'utils/textKeys'
-import { Market } from 'components/utils/CurrentLocale'
 
 export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
   const firstQuote = quoteBundle.quotes[0]
@@ -346,31 +345,6 @@ export const getInsuranceTitle = (
   return textKeys[
     insuranceTypeTextKeys[offerData.quotes[0].contractType].typeOfContract
   ]()
-}
-
-export const ssnLengthByMarket: Record<Market, number> = {
-  SE: 12,
-  NO: 11,
-  DK: 10,
-}
-
-export const ssnRegExpByMarket: Record<Market, RegExp> = {
-  SE: /^([1-2][0-9])?[0-9]{2}[0-1][0-9][0-9]{2}[-+]?[0-9]{4}$/,
-  NO: /^[0-9]{2}[0,1][0-9][0-9]{2}[ ]?[0-9]{5}$/,
-  DK: /^[0-9]{2}[0,1][0-9][0-9]{2}[ ]?[0-9]{4}$/,
-}
-
-export const createSsnValidator = (market: Market) => (
-  ssn: string,
-): boolean => {
-  switch (market) {
-    case Market.No:
-      return ssnRegExpByMarket[Market.No].test(ssn)
-    case Market.Dk:
-      return ssnRegExpByMarket[Market.Dk].test(ssn)
-    case Market.Se:
-      return ssnRegExpByMarket[Market.Se].test(ssn)
-  }
 }
 
 type FormattedBirthdateParams = {
