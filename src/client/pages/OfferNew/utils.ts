@@ -16,7 +16,7 @@ import {
   DanishAccidentDetails,
   DanishTravelDetails,
 } from 'data/graphql'
-import { birthDateFormats, LocaleLabel, locales } from 'localization/locales'
+import { birthDateFormats, LocaleLabel, locales } from 'l10n/locales'
 import { Address, OfferData, OfferQuote } from 'pages/OfferNew/types'
 import { TextKeyMap } from 'utils/textKeys'
 

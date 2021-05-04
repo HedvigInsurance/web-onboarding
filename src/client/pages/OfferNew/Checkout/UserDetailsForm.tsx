@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import React from 'react'
 import * as yup from 'yup'
-import { LocaleLabel, locales } from 'localization/locales'
+import { LocaleLabel, locales } from 'l10n/locales'
 import { RawInputField } from 'components/inputs'
 import {
   Market,

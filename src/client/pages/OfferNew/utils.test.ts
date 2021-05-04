@@ -1,4 +1,4 @@
-import { LocaleLabel } from 'localization/locales'
+import { LocaleLabel } from 'l10n/locales'
 import {
   DanishHomeContentsDetails,
   NorwegianHomeContentsDetails,
