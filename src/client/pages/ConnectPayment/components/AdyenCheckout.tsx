@@ -198,7 +198,6 @@ const createAdyenCheckout = ({
   },
 }: AdyenCheckoutProps) => {
   const locale = match([
-    ['sv_SE', 'sv-SE'],
     ['nb_NO', 'no-NO'],
     ['da_DK', 'da-DK'],
     [match.any(), 'en-US'],
