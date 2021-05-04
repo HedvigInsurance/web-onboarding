@@ -4,6 +4,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 
 type BadgeProps = {
   children: ReactNode
+  disabled?: boolean
   size?: 'sm' | 'lg'
 }
 
@@ -17,8 +18,9 @@ export const BadgeContainer = styled.span<BadgeProps>`
   line-height: 2;
   text-transform: uppercase;
   text-align: center;
-  color: ${colorsV3.gray800};
-  background-color: ${colorsV3.purple100};
+  color: ${(props) => (props.disabled ? colorsV3.gray100 : colorsV3.gray800)};
+  background-color: ${(props) =>
+    props.disabled ? colorsV3.gray500 : colorsV3.purple100};
   border-radius: 0.25rem;
 
   ${({ size }) =>
@@ -30,6 +32,12 @@ export const BadgeContainer = styled.span<BadgeProps>`
   `};
 `
 
-export const Badge: React.FC<BadgeProps> = ({ children, size = 'sm' }) => (
-  <BadgeContainer size={size}>{children}</BadgeContainer>
+export const Badge: React.FC<BadgeProps> = ({
+  children,
+  disabled = false,
+  size = 'sm',
+}) => (
+  <BadgeContainer disabled={disabled} size={size}>
+    {children}
+  </BadgeContainer>
 )
