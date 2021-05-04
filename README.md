@@ -47,8 +47,6 @@ $ yarn watch
 
 The app is running on `http://localhost:8040`. Visit [http://localhost:8040/se/new-member/](http://localhost:8040/se/new-member/) to view the first screen of the onboarding flow.
 
-> The port might differ on your machine. Check the logs for this message: `Booting server on 8040 👢`.
-
 ## Analytics
 
 We use Segment, Mixpanel and Google Tag Manager as our analytics tools. You can read about the setup in [Notion](https://www.notion.so/hedviginsurance/Mixpanel-Setup-iOS-Web-Embark-d1abeb9ba7634adea6155f847d32cd8d)
