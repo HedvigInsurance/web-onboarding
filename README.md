@@ -51,7 +51,8 @@ The app is running on `http://localhost:8040`. Visit [http://localhost:8040/se/n
 
 Manually stepping through the onboarding flow becomes tedious. Therefore, you can use the "debugger UI" that let's you bypass the initial steps and takes you straight to the "Offer page".
 
-You access it on this URL: `http://localhost:8040/se/new-member/debugger`.
+You access it locally on this URL: `http://localhost:8040/se/new-member/debugger`.
+It also works in staging: `https://www.dev.hedvigit.com/se/new-member/debugger`.
 
 ![Debugger UI Preview](.github/assets/debugger-ui-preview.png)
 
