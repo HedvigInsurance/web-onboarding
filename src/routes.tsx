@@ -169,84 +169,53 @@ export const reactPageRoutes: ReactPageRoute[] = [
                   baseUrl: `/${locale}/new-member/home-accident`,
                   name: 'Web Onboarding DK - Danish Contents-Accident',
                 }
-              case 'home-accident-travel':
-                return {
-                  baseUrl: `/${locale}/new-member/home-accident-travel`,
-                  name: 'Web Onboarding DK - Danish Contents-Accident-Travel',
-                }
             }
             break
           case 'no':
-            switch (name) {
-              case 'contents':
-                return {
-                  baseUrl: '/no/new-member/contents',
-                  name: 'Web Onboarding NO - Norwegian Contents',
-                }
-              case 'travel':
-                return {
-                  baseUrl: '/no/new-member/travel',
-                  name: 'Web Onboarding NO - Norwegian Travel',
-                }
-              case 'combo':
-                return {
-                  baseUrl: '/no/new-member/combo',
-                  name: 'Web Onboarding NO - Norwegian Combo',
-                }
-            }
-            break
           case 'no-en':
             switch (name) {
               case 'contents':
                 return {
-                  baseUrl: '/no-en/new-member/contents',
-                  name: 'Web Onboarding NO - English Contents',
+                  baseUrl: `/${locale}/new-member/contents`,
+                  name: `Web Onboarding NO - ${
+                    locale === 'no' ? 'Norwegian Contents' : 'English Contents'
+                  }`,
                 }
               case 'travel':
                 return {
-                  baseUrl: '/no-en/new-member/travel',
-                  name: 'Web Onboarding NO - English Travel',
+                  baseUrl: `/${locale}/new-member/travel`,
+                  name: `Web Onboarding NO - ${
+                    locale === 'no' ? 'Norwegian Travel' : 'English Travel'
+                  }`,
                 }
               case 'combo':
                 return {
-                  baseUrl: '/no-en/new-member/combo',
-                  name: 'Web Onboarding NO - English Combo',
+                  baseUrl: `/${locale}/new-member/combo`,
+                  name: `Web Onboarding NO - ${
+                    locale === 'no' ? 'Norwegian Combo' : 'English Combo'
+                  }`,
                 }
             }
             break
+          case 'se':
           case 'se-en':
             switch (name) {
               case 'new':
                 return {
-                  baseUrl: '/se-en/new-member/new',
-                  name: 'Web Onboarding - English Needer',
+                  baseUrl: `/${locale}/new-member/new`,
+                  name: `Web Onboarding - ${
+                    locale === 'se' ? 'Swedish Needer' : 'English Needer'
+                  }`,
                 }
               case 'switch':
                 return {
-                  baseUrl: '/se-en/new-member/switch',
-                  name: 'Web Onboarding - English Switcher',
+                  baseUrl: `/${locale}/new-member/switch`,
+                  name: `Web Onboarding - ${
+                    locale === 'se' ? 'Swedish Switcher' : 'English Switcher'
+                  }`,
                 }
             }
             break
-          default:
-            switch (name) {
-              case 'new':
-                return {
-                  baseUrl: '/se/new-member/new',
-                  name: 'Web Onboarding - Swedish Needer',
-                }
-              case 'switch':
-                return {
-                  baseUrl: '/se/new-member/switch',
-                  name: 'Web Onboarding - Swedish Switcher',
-                }
-              // TODO: Remove this or? 👇
-              case 'switch-beta':
-                return {
-                  baseUrl: '/se/new-member/switch-beta',
-                  name: 'Switcher Onboarding Playground',
-                }
-            }
         }
 
         return null
@@ -257,8 +226,8 @@ export const reactPageRoutes: ReactPageRoute[] = [
       return (
         <EmbarkRoot
           language={match.params.locale}
-          name={(props && props.name) || undefined}
-          baseUrl={(props && props.baseUrl) || undefined}
+          name={props?.name}
+          baseUrl={props?.baseUrl}
           showLanding={!props}
         />
       )
