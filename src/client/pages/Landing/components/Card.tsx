@@ -6,7 +6,7 @@ import { Arrow } from 'components/icons/Arrow'
 import { HedvigSymbol } from 'components/icons/HedvigSymbol'
 import { Badge } from 'components/Badge/Badge'
 
-const CardComponent = styled(Link)<{ disabled?: boolean }>`
+const CardComponent = styled.div<{ disabled?: boolean }>`
   position: relative;
   display: block;
   width: 100%;
@@ -104,25 +104,40 @@ const ArrowWrapper = styled.span`
   }
 `
 
+const CardContainer: React.FC<{
+  disabled: boolean
+  to: string
+}> = ({ children, disabled, to }) => {
+  return disabled ? (
+    <CardComponent disabled={disabled}>{children}</CardComponent>
+  ) : (
+    <CardLink to={to}>{children}</CardLink>
+  )
+}
+
 export const Card: React.FC<{
   to: string
   badge?: string
   disabled?: boolean
-}> = ({ badge, to, children, disabled = false }) => (
-  <CardLink to={to} disabled={disabled}>
-    <CardHeader>
-      <HedvigSymbol size="1.25rem" />
-      {badge && (
-        <Badge disabled={disabled} size="lg">
-          {badge}
-        </Badge>
-      )}
-    </CardHeader>
-    <CardContent>{children}</CardContent>
-    {!disabled && (
-      <ArrowWrapper>
-        <Arrow size="1.25rem" color={colorsV3.gray900} />
-      </ArrowWrapper>
-    )}
-  </CardLink>
-)
+}> = ({ badge, to, children, disabled = false }) => {
+  return (
+    <>
+      <CardContainer disabled={disabled} to={to}>
+        <CardHeader>
+          <HedvigSymbol size="1.25rem" />
+          {badge && (
+            <Badge disabled={disabled} size="lg">
+              {badge}
+            </Badge>
+          )}
+        </CardHeader>
+        <CardContent>{children}</CardContent>
+        {!disabled && (
+          <ArrowWrapper>
+            <Arrow size="1.25rem" color={colorsV3.gray900} />
+          </ArrowWrapper>
+        )}
+      </CardContainer>
+    </>
+  )
+}
