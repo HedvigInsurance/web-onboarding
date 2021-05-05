@@ -15,6 +15,23 @@ import { LoginApp } from './client/pages/LoginApp'
 import { OfferNew } from './client/pages/OfferNew'
 import { SignLoading } from './client/pages/SignLoading'
 
+enum EmbarkStory {
+  DenmarkContents = 'Web Onboarding DK - Contents',
+  DenmarkContentsAccident = 'Web Onboarding DK - Danish Contents-Accident',
+
+  NorwayContentsNorwegian = 'Web Onboarding NO - Norwegian Contents',
+  NorwayContentsEnglish = 'Web Onboarding NO - English Contents',
+  NorwayTravelNorwegian = 'Web Onboarding NO - Norwegian Travel',
+  NorwayTravelEnglish = 'Web Onboarding NO - English Travel',
+  NorwayComboNorwegian = 'Web Onboarding NO - Norwegian Combo',
+  NorwayComboEnglish = 'Web Onboarding NO - English Combo',
+
+  SwedenNeederSwedish = 'Web Onboarding - Swedish Needer',
+  SwedenNeederEnglish = 'Web Onboarding - English Needer',
+  SwedenSwitcherSwedish = 'Web Onboarding - Swedish Switcher',
+  SwedenSwitcherEnglish = 'Web Onboarding - English Switcher',
+}
+
 export interface ServerSideRoute {
   path: string | RegExp
   titleTextKey: string
@@ -162,12 +179,12 @@ export const reactPageRoutes: ReactPageRoute[] = [
               case 'home':
                 return {
                   baseUrl: `/${locale}/new-member/home`,
-                  name: 'Web Onboarding DK - Contents',
+                  name: EmbarkStory.DenmarkContents,
                 }
               case 'home-accident':
                 return {
                   baseUrl: `/${locale}/new-member/home-accident`,
-                  name: 'Web Onboarding DK - Danish Contents-Accident',
+                  name: EmbarkStory.DenmarkContentsAccident,
                 }
             }
             break
@@ -177,23 +194,26 @@ export const reactPageRoutes: ReactPageRoute[] = [
               case 'contents':
                 return {
                   baseUrl: `/${locale}/new-member/contents`,
-                  name: `Web Onboarding NO - ${
-                    locale === 'no' ? 'Norwegian Contents' : 'English Contents'
-                  }`,
+                  name:
+                    locale === 'no'
+                      ? EmbarkStory.NorwayContentsNorwegian
+                      : EmbarkStory.NorwayContentsEnglish,
                 }
               case 'travel':
                 return {
                   baseUrl: `/${locale}/new-member/travel`,
-                  name: `Web Onboarding NO - ${
-                    locale === 'no' ? 'Norwegian Travel' : 'English Travel'
-                  }`,
+                  name:
+                    locale === 'no'
+                      ? EmbarkStory.NorwayTravelNorwegian
+                      : EmbarkStory.NorwayTravelEnglish,
                 }
               case 'combo':
                 return {
                   baseUrl: `/${locale}/new-member/combo`,
-                  name: `Web Onboarding NO - ${
-                    locale === 'no' ? 'Norwegian Combo' : 'English Combo'
-                  }`,
+                  name:
+                    locale === 'no'
+                      ? EmbarkStory.NorwayComboNorwegian
+                      : EmbarkStory.NorwayComboEnglish,
                 }
             }
             break
@@ -203,16 +223,18 @@ export const reactPageRoutes: ReactPageRoute[] = [
               case 'new':
                 return {
                   baseUrl: `/${locale}/new-member/new`,
-                  name: `Web Onboarding - ${
-                    locale === 'se' ? 'Swedish Needer' : 'English Needer'
-                  }`,
+                  name:
+                    locale === 'no'
+                      ? EmbarkStory.SwedenNeederSwedish
+                      : EmbarkStory.SwedenNeederEnglish,
                 }
               case 'switch':
                 return {
                   baseUrl: `/${locale}/new-member/switch`,
-                  name: `Web Onboarding - ${
-                    locale === 'se' ? 'Swedish Switcher' : 'English Switcher'
-                  }`,
+                  name:
+                    locale === 'no'
+                      ? EmbarkStory.SwedenSwitcherSwedish
+                      : EmbarkStory.SwedenSwitcherEnglish,
                 }
             }
             break
