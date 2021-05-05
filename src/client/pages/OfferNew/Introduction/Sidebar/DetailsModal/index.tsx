@@ -2,8 +2,10 @@ import styled from '@emotion/styled'
 import { colorsV3, fonts } from '@hedviginsurance/brand'
 import { Form, Formik } from 'formik'
 import React from 'react'
+import { LocaleLabel, locales } from 'l10n/locales'
 import { Button } from 'components/buttons'
 import { Modal, ModalProps } from 'components/ModalNew'
+import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { EditQuoteInput, useEditQuoteMutation } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
@@ -88,7 +90,6 @@ const LoadingDimmer = styled.div<{ visible: boolean }>`
   opacity: ${(props) => (props.visible ? 1 : 0)};
   visibility: ${(props) => (props.visible ? 'visible' : 'hidden')};
 `
-
 interface DetailsModalProps {
   offerData: OfferData
   refetch: () => Promise<void>
@@ -103,7 +104,12 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   const textKeys = useTextKeys()
   const [editQuote, editQuoteResult] = useEditQuoteMutation()
   const mainOfferQuote = getMainQuote(offerData)
-  const fieldSchema = getFieldSchema(mainOfferQuote)
+  const currentLocale = useCurrentLocale()
+  const currentLocaleData = locales[currentLocale as LocaleLabel]
+  const fieldSchema = getFieldSchema({
+    offerQuote: mainOfferQuote,
+    currentLocaleData,
+  })
   const validationSchema = getValidationSchema(fieldSchema, mainOfferQuote)
   const initialValues = getInitialInputValues(offerData.person, mainOfferQuote)
   const [isUpdating, setIsUpdating] = React.useState(false)

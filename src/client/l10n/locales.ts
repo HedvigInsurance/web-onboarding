@@ -2,7 +2,7 @@ import { Locale as IsoLocale } from 'data/graphql'
 
 export type LocaleLabel = 'se' | 'se-en' | 'no' | 'no-en' | 'dk' | 'dk-en'
 
-type LocaleData = {
+export type LocaleData = {
   path: LocaleLabel
   isoLocale: IsoLocale
   marketLabel: MarketLabel
@@ -22,6 +22,7 @@ type Ssn = {
 type BirthDate = {
   formatExample: string
   formatRegex: RegExp
+  defaultFormatExample: string
 }
 
 const ssnFormats: Record<MarketLabel, RegExp> = {
@@ -60,6 +61,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     birthDate: {
       formatExample: 'ÅÅÅÅ-MM-DD',
       formatRegex: birthDateFormats.SE,
+      defaultFormatExample: 'ÅÅÅÅ-MM-DD',
     },
   },
   'se-en': {
@@ -75,6 +77,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     birthDate: {
       formatExample: 'YYYY-MM-DD',
       formatRegex: birthDateFormats.SE,
+      defaultFormatExample: 'YYYY-MM-DD',
     },
   },
   no: {
@@ -90,6 +93,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     birthDate: {
       formatExample: 'DD-MM-ÅÅÅÅ',
       formatRegex: birthDateFormats.NO,
+      defaultFormatExample: 'ÅÅÅÅ-MM-DD',
     },
   },
   'no-en': {
@@ -105,6 +109,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     birthDate: {
       formatExample: 'DD-MM-YYYY',
       formatRegex: birthDateFormats.NO,
+      defaultFormatExample: 'YYYY-MM-DD',
     },
   },
   dk: {
@@ -120,6 +125,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     birthDate: {
       formatExample: 'DD-MM-ÅÅÅÅ',
       formatRegex: birthDateFormats.DK,
+      defaultFormatExample: 'ÅÅÅÅ-MM-DD',
     },
   },
   'dk-en': {
@@ -135,6 +141,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     birthDate: {
       formatExample: 'DD-MM-YYYY',
       formatRegex: birthDateFormats.DK,
+      defaultFormatExample: 'YYYY-MM-DD',
     },
   },
 }
