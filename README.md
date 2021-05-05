@@ -61,7 +61,9 @@ It also works in staging: `https://www.dev.hedvigit.com/se/new-member/debugger`.
 1. Fill in offer information.
 1. Click the "Create quote" button.
 1. You should see a bunch of GraphQL data and a button to take you to the "Offer page".
+
 Or, if you have an id of an existing quote you'd like to use it's possible to replace the quote id generated for this session - the existing quote will be fetched as soon as you add the id to the input field.
+
 ## Analytics
 
 We use Segment, Mixpanel and Google Tag Manager as our analytics tools. You can read about the setup in [Notion](https://www.notion.so/hedviginsurance/Mixpanel-Setup-iOS-Web-Embark-d1abeb9ba7634adea6155f847d32cd8d)
