@@ -19,7 +19,7 @@ import {
   EditDanishHomeContentsInput,
 } from 'data/graphql'
 import { OfferQuote, OfferData, OfferPersonInfo } from 'pages/OfferNew/types'
-import { birthDateFormats, LocaleData } from 'l10n/locales'
+import { birthdateFormats, LocaleData } from 'l10n/locales'
 import {
   isStudent,
   isSwedishQuote,
@@ -366,8 +366,8 @@ export const getFieldSchema = ({
     },
     birthDate: {
       label: 'DETAILS_MODULE_TABLE_BIRTHDATE_CELL_LABEL',
-      placeholder: currentLocaleData.birthDate.defaultFormatExample,
-      validation: Yup.string().matches(birthDateFormats.default),
+      placeholder: currentLocaleData.birthdate.defaultFormatExample,
+      validation: Yup.string().matches(birthdateFormats.default),
     },
     ...fieldSchemaDetails,
   }

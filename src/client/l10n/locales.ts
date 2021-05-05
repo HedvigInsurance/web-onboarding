@@ -8,7 +8,7 @@ export type LocaleData = {
   marketLabel: MarketLabel
   htmlLang: 'en' | 'sv' | 'no' | 'da'
   ssn: Ssn
-  birthDate: BirthDate
+  birthdate: Birthdate
 }
 
 type MarketLabel = 'SE' | 'NO' | 'DK'
@@ -19,7 +19,7 @@ type Ssn = {
   formatRegex: RegExp
 }
 
-type BirthDate = {
+type Birthdate = {
   formatExample: string
   formatRegex: RegExp
   defaultFormatExample: string
@@ -40,7 +40,7 @@ const ssnLengths: Record<MarketLabel, number> = {
 const yearMonthDayFormat = /^(19[0-9]{2}|20[0-9]{2})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/
 const dayMonthYearFormat = /^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-(19[0-9]{2}|20[0-9]{2})$/
 
-export const birthDateFormats: Record<MarketLabel | 'default', RegExp> = {
+export const birthdateFormats: Record<MarketLabel | 'default', RegExp> = {
   default: yearMonthDayFormat,
   SE: yearMonthDayFormat,
   NO: dayMonthYearFormat,
@@ -58,9 +58,9 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatExample: 'ÅÅÅÅMMDDXXXX',
       formatRegex: ssnFormats.SE,
     },
-    birthDate: {
+    birthdate: {
       formatExample: 'ÅÅÅÅ-MM-DD',
-      formatRegex: birthDateFormats.SE,
+      formatRegex: birthdateFormats.SE,
       defaultFormatExample: 'ÅÅÅÅ-MM-DD',
     },
   },
@@ -74,9 +74,9 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatExample: 'YYYYMMDDXXXX',
       formatRegex: ssnFormats.SE,
     },
-    birthDate: {
+    birthdate: {
       formatExample: 'YYYY-MM-DD',
-      formatRegex: birthDateFormats.SE,
+      formatRegex: birthdateFormats.SE,
       defaultFormatExample: 'YYYY-MM-DD',
     },
   },
@@ -90,9 +90,9 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatExample: 'DDMMÅÅXXXXX',
       formatRegex: ssnFormats.NO,
     },
-    birthDate: {
+    birthdate: {
       formatExample: 'DD-MM-ÅÅÅÅ',
-      formatRegex: birthDateFormats.NO,
+      formatRegex: birthdateFormats.NO,
       defaultFormatExample: 'ÅÅÅÅ-MM-DD',
     },
   },
@@ -106,9 +106,9 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatExample: 'DDMMYYXXXXX',
       formatRegex: ssnFormats.NO,
     },
-    birthDate: {
+    birthdate: {
       formatExample: 'DD-MM-YYYY',
-      formatRegex: birthDateFormats.NO,
+      formatRegex: birthdateFormats.NO,
       defaultFormatExample: 'YYYY-MM-DD',
     },
   },
@@ -122,9 +122,9 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatExample: 'DDMMÅÅSSSS',
       formatRegex: ssnFormats.DK,
     },
-    birthDate: {
+    birthdate: {
       formatExample: 'DD-MM-ÅÅÅÅ',
-      formatRegex: birthDateFormats.DK,
+      formatRegex: birthdateFormats.DK,
       defaultFormatExample: 'ÅÅÅÅ-MM-DD',
     },
   },
@@ -138,9 +138,9 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatExample: 'DDMMYYSSSS',
       formatRegex: ssnFormats.DK,
     },
-    birthDate: {
+    birthdate: {
       formatExample: 'DD-MM-YYYY',
-      formatRegex: birthDateFormats.DK,
+      formatRegex: birthdateFormats.DK,
       defaultFormatExample: 'YYYY-MM-DD',
     },
   },

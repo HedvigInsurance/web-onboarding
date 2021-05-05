@@ -16,7 +16,7 @@ import {
   DanishAccidentDetails,
   DanishTravelDetails,
 } from 'data/graphql'
-import { birthDateFormats, LocaleLabel, locales } from 'l10n/locales'
+import { birthdateFormats, LocaleLabel, locales } from 'l10n/locales'
 import { Address, OfferData, OfferQuote } from 'pages/OfferNew/types'
 import { TextKeyMap } from 'utils/textKeys'
 
@@ -357,7 +357,7 @@ export const getFormattedBirthdate = ({
   currentLocale,
 }: FormattedBirthdateParams) => {
   const localeBirthdateFormat =
-    locales[currentLocale as LocaleLabel].birthDate.formatRegex
+    locales[currentLocale as LocaleLabel].birthdate.formatRegex
 
   const hasCorrectFormat = localeBirthdateFormat.test(birthdate)
 
@@ -365,7 +365,7 @@ export const getFormattedBirthdate = ({
     return birthdate
   }
 
-  const defaultFormat = birthDateFormats.default // This is the format we expect from back-end
+  const defaultFormat = birthdateFormats.default // This is the format we expect from back-end
   const hasExpectedFormat = defaultFormat.test(birthdate)
 
   if (!hasExpectedFormat) {
