@@ -38,11 +38,14 @@ $ yarn
 ## Development
 
 ```sh
+# Compile the source files (only needed the first time)
+$ yarn build
+
 # Start the app
 $ yarn watch
 ```
 
-The app is running on `http://localhost:8080`. Visit [http://localhost:8080/se/new-member/](http://localhost:8080/se/new-member/) to view the first screen of the onboarding flow.
+The app is running on `http://localhost:8040`. Visit [http://localhost:8040/se/new-member/](http://localhost:8040/se/new-member/) to view the first screen of the onboarding flow.
 
 ## Analytics
 
@@ -54,7 +57,7 @@ Text keys live in [Lokalise](https://lokalise.com/) and are exported from there 
 
 This is the process for updating/adding text keys:
 
-1. Make updates to text keys in Lokalise, i.e. add new text keys or update translations. Preferrably we use the Figma/Sketch
+1. Make updates to text keys in Lokalise, i.e. add new text keys or update translations. Preferably we use the Figma/Sketch
     plugin to export text keys and translations directly from design.
 2. Download updates from Lokalise by using `yarn download-translations`
     1. Ensure you have installed  the [Lokalise CLI tool](https://github.com/lokalise/lokalise-cli-2-go)
