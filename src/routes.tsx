@@ -1,5 +1,5 @@
 import React from 'react'
-import { RouteComponentProps } from 'react-router'
+import { Redirect, RouteComponentProps } from 'react-router'
 
 import { LOCALE_PATH_PATTERN } from 'shared/locale'
 import { ConnectPayment } from './client/pages/ConnectPayment'
@@ -168,7 +168,19 @@ export const reactPageRoutes: ReactPageRoute[] = [
     exact: true,
   },
   {
-    path: LOCALE_PATH_PATTERN + '/new-member/:name?/:id?',
+    path: LOCALE_PATH_PATTERN + '/new-member',
+    render: ({ match }: RouteComponentProps<any>) => (
+      <EmbarkRoot
+        language={match.params.locale}
+        name={undefined}
+        baseUrl={undefined}
+        showLanding={true}
+      />
+    ),
+    exact: true,
+  },
+  {
+    path: LOCALE_PATH_PATTERN + '/new-member/:name/:id?',
     render: ({ match }: RouteComponentProps<any>) => {
       const getProps = () => {
         const { locale, name } = match.params
@@ -245,12 +257,15 @@ export const reactPageRoutes: ReactPageRoute[] = [
 
       const props = getProps()
 
+      if (props === null) {
+        return <Redirect to={`/${match.params.locale}/new-member`} />
+      }
+
       return (
         <EmbarkRoot
           language={match.params.locale}
-          name={props?.name}
-          baseUrl={props?.baseUrl}
-          showLanding={!props}
+          name={props.name}
+          baseUrl={props.baseUrl}
         />
       )
     },
