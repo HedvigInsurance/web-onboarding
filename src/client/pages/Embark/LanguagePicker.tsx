@@ -2,7 +2,6 @@ import styled from '@emotion/styled'
 import { colorsV2 } from '@hedviginsurance/brand'
 import { motion } from 'framer-motion'
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { useMarket } from 'components/utils/CurrentLocale'
 import { LanguageIcon } from 'components/icons/LanguageIcon'
 import { languagePickerData } from './languagePickerData'
@@ -24,7 +23,7 @@ const LanguageDropdownButton = styled.button`
   outline: 0;
 `
 
-const StyledLink = styled(Link)`
+const StyledLink = styled.a`
   outline: 0;
   color: ${colorsV2.black};
   text-decoration: none;
@@ -93,7 +92,7 @@ export const LanguagePicker: React.FC<{ path?: string }> = ({
         <Dropdown>
           {languagePickerData[market].map(({ linkTo, title }, index) => (
             <Option key={linkTo}>
-              <StyledLink to={`/${linkTo}${path}`}>{title}</StyledLink>
+              <StyledLink href={`/${linkTo}${path}`}>{title}</StyledLink>
               {index < languagePickerData[market].length - 1 && <Divider />}
             </Option>
           ))}
