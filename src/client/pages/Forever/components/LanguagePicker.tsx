@@ -38,19 +38,14 @@ export const LanguagePicker: React.FC = () => {
 
   return (
     <LanguagePickerWrapper>
-      {languagePickerData[market]
-        .map((item) => (
-          <Language key={item.linkTo} to={`/${item.linkTo}/forever/${code}`}>
+      {languagePickerData[market].map((item, index) => (
+        <React.Fragment key={item.linkTo}>
+          {index !== 0 && <Divider />}
+          <Language to={`/${item.linkTo}/forever/${code}`}>
             {item.shortTitle}
           </Language>
-        ))
-        .reduce((prevOptions, option) => (
-          <>
-            {prevOptions}
-            <Divider />
-            {option}
-          </>
-        ))}
+        </React.Fragment>
+      ))}
     </LanguagePickerWrapper>
   )
 }
