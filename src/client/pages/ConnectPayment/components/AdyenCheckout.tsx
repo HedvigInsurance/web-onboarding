@@ -198,10 +198,9 @@ const createAdyenCheckout = ({
   },
 }: AdyenCheckoutProps) => {
   const locale = match([
-    ['sv_SE', 'sv-SE'],
-    ['en_SE', 'en-US'],
     ['nb_NO', 'no-NO'],
-    ['en_NO', 'en-US'],
+    ['da_DK', 'da-DK'],
+    [match.any(), 'en-US'],
   ])(getIsoLocale(currentLocale))
 
   const returnUrl = `${window.location.origin}/${currentLocale}/new-member/connect-payment/adyen-callback`
@@ -224,6 +223,9 @@ const createAdyenCheckout = ({
     locale,
     translations: {
       'no-NO': {
+        payButton: payButtonText,
+      },
+      'da-DK': {
         payButton: payButtonText,
       },
       'en-US': {

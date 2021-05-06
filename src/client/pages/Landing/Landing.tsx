@@ -142,12 +142,12 @@ const CardContainer = styled.div`
   }
 `
 
-const CardHeadline = styled.h2`
+const CardHeadline = styled.h2<{ disabled?: boolean }>`
   width: 100%;
   margin: 0;
   font-size: 1.25rem;
   line-height: 1.2;
-  color: ${colorsV3.gray900};
+  color: ${(props) => (props.disabled ? colorsV3.gray500 : colorsV3.gray900)};
 
   @media (min-width: 500px) {
     margin-bottom: 0.25rem;
@@ -282,13 +282,16 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
           </UspContainer>
           <CardContainer>
             {productsData[market].map(
-              ({ id, linkSlug, badge, headline, paragraph }) => (
+              ({ id, linkSlug, badge, headline, paragraph, disabled }) => (
                 <Card
                   to={`/${language}/new-member${linkSlug}`}
                   badge={badge && textKeys[badge]()}
+                  disabled={disabled}
                   key={id}
                 >
-                  <CardHeadline>{textKeys[headline]()}</CardHeadline>
+                  <CardHeadline disabled={disabled}>
+                    {textKeys[headline]()}
+                  </CardHeadline>
                   <CardParagraph>{textKeys[paragraph]()}</CardParagraph>
                 </Card>
               ),

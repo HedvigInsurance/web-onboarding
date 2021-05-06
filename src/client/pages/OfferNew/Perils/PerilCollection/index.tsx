@@ -10,10 +10,31 @@ interface Props {
 }
 
 const Wrapper = styled('div')`
-  width: 100%;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  width: 100%;
+  margin-left: -0.5rem;
+
+  @media (min-width: 800px) {
+    margin-left: -1rem;
+  }
+
+  & > * {
+    width: calc(50% - 0.5rem);
+    margin-left: 0.5rem;
+    margin-bottom: 0.5rem;
+
+    @media (min-width: 800px) {
+      width: calc(100% / 3 - 1rem);
+      margin-left: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    @media (min-width: 1200px) {
+      width: calc(25% - 1rem);
+    }
+  }
 `
 
 export const PerilCollection: React.FC<Props> = ({
