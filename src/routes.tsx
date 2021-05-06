@@ -244,7 +244,7 @@ export const reactPageRoutes: ReactPageRoute[] = [
                 return {
                   baseUrl: `/${locale}/new-member/switch`,
                   name:
-                    locale === 'no'
+                    locale === 'se'
                       ? EmbarkStory.SwedenSwitcherSwedish
                       : EmbarkStory.SwedenSwitcherEnglish,
                 }
