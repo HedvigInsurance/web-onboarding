@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom'
 import { Card } from './Card'
 
 export default {
-  title: 'Landing Card',
+  title: 'Landing/Card',
   component: Card,
 }
 
