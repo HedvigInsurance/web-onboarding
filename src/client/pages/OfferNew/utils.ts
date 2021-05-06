@@ -369,7 +369,9 @@ export const getFormattedBirthdate = ({
   const hasExpectedFormat = defaultFormat.test(birthdate)
 
   if (!hasExpectedFormat) {
-    throw `Format of birthdate "${birthdate}" doesn't match the expected default format YYYY-MM-DD`
+    throw new Error(
+      `Format of birthdate "${birthdate}" doesn't match the expected default format YYYY-MM-DD`,
+    )
   }
 
   const reversedBirthdate = birthdate.replace(defaultFormat, '$3-$2-$1')
