@@ -366,7 +366,7 @@ export const getFieldSchema = ({
     },
     birthDate: {
       label: 'DETAILS_MODULE_TABLE_BIRTHDATE_CELL_LABEL',
-      placeholder: currentLocaleData.birthdate.defaultFormatExample,
+      placeholder: currentLocaleData.birthdate.backendFormatExample,
       validation: Yup.string().matches(birthdateFormats.default),
     },
     ...fieldSchemaDetails,
