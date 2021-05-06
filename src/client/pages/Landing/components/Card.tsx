@@ -80,6 +80,7 @@ const CardHeader = styled.div`
   }
 
   @media (min-width: 1020px) {
+    flex-direction: row-reverse;
     padding-bottom: 3rem;
     svg {
       display: block;
