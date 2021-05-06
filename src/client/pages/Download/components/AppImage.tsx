@@ -21,6 +21,9 @@ const getImageSrc = (currentLocale: string) => {
     case 'no':
       return `${basePath}/hedvig-app-no.png`
     case 'dk':
+      return `${basePath}/hedvig-connect-payment-dk.png`
+    case 'dk-en':
+      return `${basePath}/hedvig-connect-payment-dk-en.png`
     default:
       return `${basePath}/hedvig-app-en.png`
   }
