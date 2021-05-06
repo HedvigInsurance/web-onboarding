@@ -1,4 +1,5 @@
 import styled from '@emotion/styled'
+import { css } from '@emotion/core'
 import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
 import { Link } from 'react-router-dom'
@@ -12,9 +13,6 @@ const CardComponent = styled.div<{ disabled?: boolean }>`
   width: 100%;
   margin-bottom: 0.5rem;
   padding: 1rem;
-  color: ${(props) => (props.disabled ? colorsV3.gray500 : colorsV3.gray900)};
-  background-color: ${(props) =>
-    props.disabled ? colorsV3.gray300 : colorsV3.gray100};
   border-radius: 0.5rem;
   box-shadow: 0px 2px 4px 0 rgba(0, 0, 0, 0.1);
   transition: all 0.35s;
@@ -46,14 +44,25 @@ const CardComponent = styled.div<{ disabled?: boolean }>`
     border-radius: 0.75rem;
   }
 
-  :hover {
-    transform: translateY(-6px);
-    color: ${colorsV3.gray900};
+  ${(props) =>
+    props.disabled
+      ? css`
+          color: ${colorsV3.gray500};
+          background-color: ${colorsV3.gray300};
+        `
+      : css`
+          color: ${colorsV3.gray900};
+          background-color: ${colorsV3.gray100};
 
-    @media (hover: none) {
-      transform: none;
-    }
-  }
+          :hover {
+            transform: translateY(-6px);
+            color: ${colorsV3.gray900};
+
+            @media (hover: none) {
+              transform: none;
+            }
+          }
+        `}
 `
 
 const CardHeader = styled.div`
