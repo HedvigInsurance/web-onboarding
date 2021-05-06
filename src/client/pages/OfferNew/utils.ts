@@ -1,4 +1,3 @@
-import { Market } from 'components/utils/CurrentLocale'
 import {
   BundledQuote,
   Campaign,
@@ -17,6 +16,7 @@ import {
   DanishAccidentDetails,
   DanishTravelDetails,
 } from 'data/graphql'
+import { birthdateFormats, LocaleLabel, locales } from 'l10n/locales'
 import { Address, OfferData, OfferQuote } from 'pages/OfferNew/types'
 import { TextKeyMap } from 'utils/textKeys'
 
@@ -347,37 +347,35 @@ export const getInsuranceTitle = (
   ]()
 }
 
-export const maskAndFormatRawSsn = (ssn: string) => {
-  if (ssn.length !== 12) {
-    return ssn
+type FormattedBirthdateParams = {
+  birthdate: string
+  currentLocale: string
+}
+
+export const getFormattedBirthdate = ({
+  birthdate,
+  currentLocale,
+}: FormattedBirthdateParams) => {
+  const localeBirthdateFormat =
+    locales[currentLocale as LocaleLabel].birthdate.formatRegex
+
+  const hasCorrectFormat = localeBirthdateFormat.test(birthdate)
+
+  if (hasCorrectFormat) {
+    return birthdate
   }
 
-  const CENTURY_LENGTH = 2
-  const DATE_LENGTH = 6
-  return ssn.substr(CENTURY_LENGTH, DATE_LENGTH) + '-****'
-}
+  const defaultFormat = birthdateFormats.default // This is the format we expect from back-end
+  const hasExpectedFormat = defaultFormat.test(birthdate)
 
-export const ssnLengthByMarket: Record<Market, number> = {
-  SE: 12,
-  NO: 11,
-  DK: 10,
-}
-
-export const ssnRegExpByMarket: Record<Market, RegExp> = {
-  SE: /^([1-2][0-9])?[0-9]{2}[0-1][0-9][0-9]{2}[-+]?[0-9]{4}$/,
-  NO: /^[0-9]{2}[0,1][0-9][0-9]{2}[ ]?[0-9]{5}$/,
-  DK: /^[0-9]{2}[0,1][0-9][0-9]{2}[ ]?[0-9]{4}$/,
-}
-
-export const createSsnValidator = (market: Market) => (
-  ssn: string,
-): boolean => {
-  switch (market) {
-    case Market.No:
-      return ssnRegExpByMarket[Market.No].test(ssn)
-    case Market.Dk:
-      return ssnRegExpByMarket[Market.Dk].test(ssn)
-    case Market.Se:
-      return ssnRegExpByMarket[Market.Se].test(ssn)
+  if (!hasExpectedFormat) {
+    throw new Error(
+      `Format of birthdate "${birthdate}" doesn't match the expected default format YYYY-MM-DD`,
+    )
   }
+
+  const reversedBirthdate = birthdate.replace(defaultFormat, '$3-$2-$1')
+  const hasCorrectReversedFormat = localeBirthdateFormat.test(reversedBirthdate)
+
+  return hasCorrectReversedFormat ? reversedBirthdate : birthdate
 }

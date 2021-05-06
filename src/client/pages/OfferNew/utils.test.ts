@@ -1,7 +1,8 @@
+import { LocaleLabel } from 'l10n/locales'
 import {
   DanishHomeContentsDetails,
   NorwegianHomeContentsDetails,
-} from 'src/client/data/graphql'
+} from 'data/graphql'
 import {
   seApartementBrf,
   noCombo,
@@ -17,6 +18,7 @@ import {
   isDanish,
   isYouth,
   getMainQuote,
+  getFormattedBirthdate,
 } from './utils'
 
 describe('quote validation', () => {
@@ -72,5 +74,55 @@ describe('getMainQuote function', () => {
     expect(
       (mainQuote.quoteDetails as DanishHomeContentsDetails).street,
     ).toBeTruthy()
+  })
+})
+
+describe('getFormattedBirthdate function', () => {
+  const swedishLocale: LocaleLabel = 'se'
+  const norwegianLocale: LocaleLabel = 'no'
+  const danishLocale: LocaleLabel = 'dk'
+
+  describe('when birthdate on quote is the expected format', () => {
+    const mockedQuoteBirthdate = '1990-09-19'
+
+    it('returns birthdate unchanged when the described format in locales object is the same as the format we get from back-end', () => {
+      const swedishFormattedBirthdate = getFormattedBirthdate({
+        birthdate: mockedQuoteBirthdate,
+        currentLocale: swedishLocale,
+      })
+
+      expect(swedishFormattedBirthdate).toBe(mockedQuoteBirthdate)
+    })
+
+    it('returns birthdate in the format that is described in the locales object', () => {
+      const reversedFormattedBirthdate = '19-09-1990'
+
+      const norwegianFormattedBirthdate = getFormattedBirthdate({
+        birthdate: mockedQuoteBirthdate,
+        currentLocale: norwegianLocale,
+      })
+      const danishFormattedBirthdate = getFormattedBirthdate({
+        birthdate: mockedQuoteBirthdate,
+        currentLocale: danishLocale,
+      })
+
+      expect(norwegianFormattedBirthdate).toBe(reversedFormattedBirthdate)
+      expect(danishFormattedBirthdate).toBe(reversedFormattedBirthdate)
+    })
+  })
+
+  describe('when birthdate on quote is not the expected format', () => {
+    it('throws error 💥', () => {
+      const mockedIncorrectQuoteBirthdate = '19-09-1990'
+
+      const formattingFunction = () => {
+        getFormattedBirthdate({
+          birthdate: mockedIncorrectQuoteBirthdate,
+          currentLocale: swedishLocale,
+        })
+      }
+
+      expect(formattingFunction).toThrow()
+    })
   })
 })

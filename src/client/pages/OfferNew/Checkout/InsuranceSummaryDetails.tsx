@@ -4,6 +4,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { QuoteDetails } from 'data/graphql'
 import { OfferPersonInfo, OfferQuote } from 'pages/OfferNew/types'
 import {
+  getFormattedBirthdate,
   getHouseholdSize,
   insuranceTypeTextKeys,
   isStudent,
@@ -11,6 +12,7 @@ import {
 } from 'pages/OfferNew/utils'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
+import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { Group, Row } from './InsuranceSummary'
 
 const Label = styled.div`
@@ -36,19 +38,23 @@ export const InsuranceSummaryDetails: React.FC<Props> = ({
 
   const { quoteDetails } = mainQuote
 
+  const currentLocale = useCurrentLocale()
+
   const studentOrYouthLabel = getStudentOrYouthLabel(quoteDetails, textKeys)
 
   return (
     <>
       <Group>
-        {getPersonalDetails(personalDetails, textKeys).map(
-          ({ key, label, value }) => (
-            <Row key={key}>
-              <Label>{label}</Label>
-              <Value>{value}</Value>
-            </Row>
-          ),
-        )}
+        {getPersonalDetails({
+          person: personalDetails,
+          textKeys,
+          currentLocale,
+        }).map(({ key, label, value }) => (
+          <Row key={key}>
+            <Label>{label}</Label>
+            <Value>{value}</Value>
+          </Row>
+        ))}
       </Group>
       {getQuoteDetails(mainQuote, textKeys).map((group, index) => (
         <Group key={index}>
@@ -208,10 +214,17 @@ const getHouseholdSizeValue = (householdSize: number, textKeys: TextKeyMap) => {
   )
 }
 
-const getPersonalDetails = (
-  person: OfferPersonInfo,
-  textKeys: TextKeyMap,
-): DetailsGroup => {
+type GetPersonalDetailsParams = {
+  person: OfferPersonInfo
+  textKeys: TextKeyMap
+  currentLocale: string
+}
+
+const getPersonalDetails = ({
+  person,
+  textKeys,
+  currentLocale,
+}: GetPersonalDetailsParams): DetailsGroup => {
   return [
     {
       key: 'name',
@@ -221,7 +234,10 @@ const getPersonalDetails = (
     {
       key: 'birthDate',
       label: textKeys.CHECKOUT_DETAILS_BIRTHDATE(),
-      value: person.birthDate,
+      value: getFormattedBirthdate({
+        birthdate: person.birthDate,
+        currentLocale,
+      }),
     },
   ]
 }

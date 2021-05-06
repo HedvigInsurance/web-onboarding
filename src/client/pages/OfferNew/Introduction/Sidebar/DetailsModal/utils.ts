@@ -19,6 +19,7 @@ import {
   EditDanishHomeContentsInput,
 } from 'data/graphql'
 import { OfferQuote, OfferData, OfferPersonInfo } from 'pages/OfferNew/types'
+import { birthdateFormats, LocaleData } from 'l10n/locales'
 import {
   isStudent,
   isSwedishQuote,
@@ -341,9 +342,16 @@ const getDanishSchema = (base: BaseFieldSchema): DetailsFieldSchema => {
     },
   }
 }
-const BIRTH_DATE_REGEX = /^[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/
 
-export const getFieldSchema = (offerQuote: OfferQuote): FieldSchema => {
+type GetFieldSchemaParams = {
+  offerQuote: OfferQuote
+  currentLocaleData: LocaleData
+}
+
+export const getFieldSchema = ({
+  offerQuote,
+  currentLocaleData,
+}: GetFieldSchemaParams): FieldSchema => {
   const fieldSchemaDetails = getFieldSchemaDetails(offerQuote)
   return {
     firstName: {
@@ -358,8 +366,8 @@ export const getFieldSchema = (offerQuote: OfferQuote): FieldSchema => {
     },
     birthDate: {
       label: 'DETAILS_MODULE_TABLE_BIRTHDATE_CELL_LABEL',
-      placeholder: '',
-      validation: Yup.string().matches(BIRTH_DATE_REGEX),
+      placeholder: currentLocaleData.birthdate.backendFormatExample,
+      validation: Yup.string().matches(birthdateFormats.default),
     },
     ...fieldSchemaDetails,
   }

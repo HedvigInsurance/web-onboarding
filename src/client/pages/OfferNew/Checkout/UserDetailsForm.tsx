@@ -1,10 +1,14 @@
 import styled from '@emotion/styled'
 import React from 'react'
 import * as yup from 'yup'
+import { LocaleLabel, locales } from 'l10n/locales'
 import { RawInputField } from 'components/inputs'
-import { Market, useMarket } from 'components/utils/CurrentLocale'
+import {
+  Market,
+  useCurrentLocale,
+  useMarket,
+} from 'components/utils/CurrentLocale'
 import { WithEmailForm, WithSsnForm } from 'pages/OfferNew/types'
-import { createSsnValidator, ssnLengthByMarket } from 'pages/OfferNew/utils'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
 
 const HiddenSubmit = styled.input`
@@ -19,6 +23,7 @@ export const emailValidation = yup
   .email()
   .required()
 
+// TODO: replace these with one market agnostic CHECKOUT_SSN_LABEL + currentLocaleData.ssn.formatExample
 export const getSsnLabel = (market: Market, textKeys: TextKeyMap): string => {
   switch (market) {
     case Market.Se:
@@ -27,17 +32,6 @@ export const getSsnLabel = (market: Market, textKeys: TextKeyMap): string => {
       return textKeys.CHECKOUT_SSN_LABEL_NO()
     case Market.Dk:
       return textKeys.CHECKOUT_SSN_LABEL_DK()
-  }
-}
-
-export const getSsnPlaceholder = (market: Market, textKeys: TextKeyMap) => {
-  switch (market) {
-    case Market.Se:
-      return textKeys.CHECKOUT_SSN_PLACEHOLDER_SE()
-    case Market.No:
-      return textKeys.CHECKOUT_SSN_PLACEHOLDER_NO()
-    case Market.Dk:
-      return textKeys.CHECKOUT_SSN_PLACEHOLDER_DK()
   }
 }
 
@@ -60,10 +54,18 @@ export const UserDetailsForm: React.FC<Props> = ({
     null,
   )
 
-  // FIXME should we pick which ssn validation to use in a different way? or not really?
   const market = useMarket()
-  const ssnMaxLength = ssnLengthByMarket[market]
-  const isValidSsn = createSsnValidator(market!)
+
+  const currentLocale = useCurrentLocale()
+  const currentLocaleData = locales[currentLocale as LocaleLabel]
+  const ssnMaxLength = currentLocaleData.ssn.length
+  const ssnFormatRegex = currentLocaleData.ssn.formatRegex
+
+  const isValidSsn = (ssn: string) => {
+    return ssnFormatRegex.test(ssn)
+  }
+
+  const ssnFormatExample = currentLocaleData.ssn.formatExample
 
   const handleSsnChange = (event: React.FormEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget
@@ -133,7 +135,7 @@ export const UserDetailsForm: React.FC<Props> = ({
 
       <RawInputField
         label={getSsnLabel(market, textKeys)}
-        placeholder={getSsnPlaceholder(market, textKeys)}
+        placeholder={ssnFormatExample}
         name="ssn"
         id="ssn"
         type="text"
