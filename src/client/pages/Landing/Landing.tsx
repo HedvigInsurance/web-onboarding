@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
 import Helmet from 'react-helmet-async'
+import { AnimatePresence, motion } from 'framer-motion'
 import { TopBar, TopBarFiller } from 'components/TopBar'
 import { BackgroundImage } from 'components/BackgroundImage'
 import {
@@ -158,79 +159,93 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
   const variation = useVariation()
 
   return (
-    <Page>
-      <Global
-        styles={css`
-          body {
-            overflow: visible !important;
-          }
-        `}
-      />
-      <LandingPageContainer>
-        <Helmet>
-          <title>{textKeys.STARTPAGE_PAGE_TITLE()}</title>
-          {alternateLinksData.map(({ hrefLang, locale }) => (
-            <link
-              rel="alternate"
-              hrefLang={hrefLang}
-              href={`https://www.hedvig.com/${locale}/new-member`}
-              key={locale}
-            />
-          ))}
-          <link
-            rel="canonical"
-            href={`https://hedvig.com/${currentLocale}/new-member`}
+    <AnimatePresence>
+      <motion.div
+        key="landing"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{
+          ease: 'easeOut',
+          duration: 0.5,
+          delay: 0.25,
+        }}
+      >
+        <Page>
+          <Global
+            styles={css`
+              body {
+                overflow: visible !important;
+              }
+            `}
           />
-        </Helmet>
+          <LandingPageContainer>
+            <Helmet>
+              <title>{textKeys.STARTPAGE_PAGE_TITLE()}</title>
+              {alternateLinksData.map(({ hrefLang, locale }) => (
+                <link
+                  rel="alternate"
+                  hrefLang={hrefLang}
+                  href={`https://www.hedvig.com/${locale}/new-member`}
+                  key={locale}
+                />
+              ))}
+              <link
+                rel="canonical"
+                href={`https://hedvig.com/${currentLocale}/new-member`}
+              />
+            </Helmet>
 
-        {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
-          <>
-            <TopBar isTransparent>
-              <LanguagePicker />
-            </TopBar>
-            <TopBarFiller />
-          </>
-        )}
-
-        <Wrapper>
-          <UspContainer>
-            <Headline>{textKeys.STARTPAGE_HEADLINE()}</Headline>
-            <Preamble>{textKeys.STARTPAGE_PREAMBLE()}</Preamble>
-            <UspList isVisibleInMobile={market === Market.Se}>
-              <UspItem>
-                <CheckmarkCircle size="1.5rem" />
-                <span>{textKeys.STARTPAGE_USP_1()}</span>
-              </UspItem>
-              <UspItem>
-                <CheckmarkCircle size="1.5rem" />
-                <span>{textKeys.STARTPAGE_USP_2()}</span>
-              </UspItem>
-              <UspItem>
-                <CheckmarkCircle size="1.5rem" />
-                <span>{textKeys.STARTPAGE_USP_3()}</span>
-              </UspItem>
-            </UspList>
-          </UspContainer>
-          <CardContainer>
-            {productsData[market].map(
-              ({ id, linkSlug, badge, headline, paragraph, disabled }) => (
-                <Card
-                  to={`/${language}/new-member${linkSlug}`}
-                  badge={badge && textKeys[badge]()}
-                  disabled={disabled}
-                  key={id}
-                >
-                  <CardHeadline disabled={disabled}>
-                    {textKeys[headline]()}
-                  </CardHeadline>
-                  <CardParagraph>{textKeys[paragraph]()}</CardParagraph>
-                </Card>
-              ),
+            {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
+              <>
+                <TopBar isTransparent>
+                  <LanguagePicker />
+                </TopBar>
+                <TopBarFiller />
+              </>
             )}
-          </CardContainer>
-        </Wrapper>
-        <BackgroundImage isFullScreen zIndex={-1} />
-      </LandingPageContainer>
-    </Page>
+
+            <Wrapper>
+              <UspContainer>
+                <Headline>{textKeys.STARTPAGE_HEADLINE()}</Headline>
+                <Preamble>{textKeys.STARTPAGE_PREAMBLE()}</Preamble>
+                <UspList isVisibleInMobile={market === Market.Se}>
+                  <UspItem>
+                    <CheckmarkCircle size="1.5rem" />
+                    <span>{textKeys.STARTPAGE_USP_1()}</span>
+                  </UspItem>
+                  <UspItem>
+                    <CheckmarkCircle size="1.5rem" />
+                    <span>{textKeys.STARTPAGE_USP_2()}</span>
+                  </UspItem>
+                  <UspItem>
+                    <CheckmarkCircle size="1.5rem" />
+                    <span>{textKeys.STARTPAGE_USP_3()}</span>
+                  </UspItem>
+                </UspList>
+              </UspContainer>
+              <CardContainer>
+                {productsData[market].map(
+                  ({ id, linkSlug, badge, headline, paragraph, disabled }) => (
+                    <Card
+                      to={`/${language}/new-member${linkSlug}`}
+                      badge={badge && textKeys[badge]()}
+                      disabled={disabled}
+                      key={id}
+                    >
+                      <CardHeadline disabled={disabled}>
+                        {textKeys[headline]()}
+                      </CardHeadline>
+                      <CardParagraph>{textKeys[paragraph]()}</CardParagraph>
+                    </Card>
+                  ),
+                )}
+              </CardContainer>
+            </Wrapper>
+            <BackgroundImage isFullScreen zIndex={-1} />
+          </LandingPageContainer>
+        </Page>
+      </motion.div>
+    </AnimatePresence>
   )
 }
