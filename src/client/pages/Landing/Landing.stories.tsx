@@ -48,3 +48,23 @@ export const NorwayEN = () => (
     </HelmetProvider>
   </MemoryRouter>
 )
+
+export const DenmarkDK = () => (
+  <MemoryRouter initialEntries={['/dk/new-member']}>
+    <HelmetProvider>
+      <TextKeyProvider locale="da_DK">
+        <Landing language="dk" />
+      </TextKeyProvider>
+    </HelmetProvider>
+  </MemoryRouter>
+)
+
+export const DenmarkEN = () => (
+  <MemoryRouter initialEntries={['/dk-en/new-member']}>
+    <HelmetProvider>
+      <TextKeyProvider locale="en_DK">
+        <Landing language="dk-en" />
+      </TextKeyProvider>
+    </HelmetProvider>
+  </MemoryRouter>
+)

@@ -6,14 +6,15 @@ import { Arrow } from 'components/icons/Arrow'
 import { HedvigSymbol } from 'components/icons/HedvigSymbol'
 import { Badge } from 'components/Badge/Badge'
 
-const CardComponent = styled(Link)`
+const CardComponent = styled.div<{ disabled?: boolean }>`
   position: relative;
   display: block;
   width: 100%;
   margin-bottom: 0.5rem;
   padding: 1rem;
-  color: ${colorsV3.gray900};
-  background: ${colorsV3.gray100};
+  color: ${(props) => (props.disabled ? colorsV3.gray500 : colorsV3.gray900)};
+  background-color: ${(props) =>
+    props.disabled ? colorsV3.gray300 : colorsV3.gray100};
   border-radius: 0.5rem;
   box-shadow: 0px 2px 4px 0 rgba(0, 0, 0, 0.1);
   transition: all 0.35s;
@@ -103,19 +104,40 @@ const ArrowWrapper = styled.span`
   }
 `
 
-export const Card: React.FC<{ to: string; badge?: string }> = ({
-  badge,
-  to,
-  children,
-}) => (
-  <CardLink to={to}>
-    <CardHeader>
-      <HedvigSymbol size="1.25rem" />
-      {badge && <Badge size="lg">{badge}</Badge>}
-    </CardHeader>
-    <CardContent>{children}</CardContent>
-    <ArrowWrapper>
-      <Arrow size="1.25rem" color={colorsV3.gray900} />
-    </ArrowWrapper>
-  </CardLink>
-)
+const CardContainer: React.FC<{
+  disabled: boolean
+  to: string
+}> = ({ children, disabled, to }) => {
+  return disabled ? (
+    <CardComponent disabled={disabled}>{children}</CardComponent>
+  ) : (
+    <CardLink to={to}>{children}</CardLink>
+  )
+}
+
+export const Card: React.FC<{
+  to: string
+  badge?: string
+  disabled?: boolean
+}> = ({ badge, to, children, disabled = false }) => {
+  return (
+    <>
+      <CardContainer disabled={disabled} to={to}>
+        <CardHeader>
+          <HedvigSymbol size="1.25rem" />
+          {badge && (
+            <Badge disabled={disabled} size="lg">
+              {badge}
+            </Badge>
+          )}
+        </CardHeader>
+        <CardContent>{children}</CardContent>
+        {!disabled && (
+          <ArrowWrapper>
+            <Arrow size="1.25rem" color={colorsV3.gray900} />
+          </ArrowWrapper>
+        )}
+      </CardContainer>
+    </>
+  )
+}
