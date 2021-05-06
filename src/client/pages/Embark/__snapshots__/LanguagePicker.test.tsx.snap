@@ -86,26 +86,14 @@ exports[`Danish language picker renders without 💥 matches snaphot 1`] = `
                   className="css-1xjnew5-Option e1g7xtvp1"
                 >
                   <StyledLink
-                    to="/dk/new-member"
+                    href="/dk/new-member"
                   >
-                    <Link
+                    <a
                       className="css-3wdfps-StyledLink e1g7xtvp3"
-                      to="/dk/new-member"
+                      href="/dk/new-member"
                     >
-                      <LinkAnchor
-                        className="css-3wdfps-StyledLink e1g7xtvp3"
-                        href="/dk/new-member"
-                        navigate={[Function]}
-                      >
-                        <a
-                          className="css-3wdfps-StyledLink e1g7xtvp3"
-                          href="/dk/new-member"
-                          onClick={[Function]}
-                        >
-                          Dansk
-                        </a>
-                      </LinkAnchor>
-                    </Link>
+                      Dansk
+                    </a>
                   </StyledLink>
                   <Divider>
                     <span
@@ -121,26 +109,14 @@ exports[`Danish language picker renders without 💥 matches snaphot 1`] = `
                   className="css-1xjnew5-Option e1g7xtvp1"
                 >
                   <StyledLink
-                    to="/dk-en/new-member"
+                    href="/dk-en/new-member"
                   >
-                    <Link
+                    <a
                       className="css-3wdfps-StyledLink e1g7xtvp3"
-                      to="/dk-en/new-member"
+                      href="/dk-en/new-member"
                     >
-                      <LinkAnchor
-                        className="css-3wdfps-StyledLink e1g7xtvp3"
-                        href="/dk-en/new-member"
-                        navigate={[Function]}
-                      >
-                        <a
-                          className="css-3wdfps-StyledLink e1g7xtvp3"
-                          href="/dk-en/new-member"
-                          onClick={[Function]}
-                        >
-                          English
-                        </a>
-                      </LinkAnchor>
-                    </Link>
+                      English
+                    </a>
                   </StyledLink>
                 </div>
               </Option>
@@ -266,7 +242,7 @@ exports[`Danish language picker renders without 💥 matches snaphot 1`] = `
                 "children": <Dropdown>
                   <Option>
                     <StyledLink
-                      to="/dk/new-member"
+                      href="/dk/new-member"
                     >
                       Dansk
                     </StyledLink>
@@ -274,7 +250,7 @@ exports[`Danish language picker renders without 💥 matches snaphot 1`] = `
                   </Option>
                   <Option>
                     <StyledLink
-                      to="/dk-en/new-member"
+                      href="/dk-en/new-member"
                     >
                       English
                     </StyledLink>
@@ -546,26 +522,14 @@ exports[`Norwegian language picker renders without 💥 matches snaphot 1`] = `
                   className="css-1xjnew5-Option e1g7xtvp1"
                 >
                   <StyledLink
-                    to="/no/new-member"
+                    href="/no/new-member"
                   >
-                    <Link
+                    <a
                       className="css-3wdfps-StyledLink e1g7xtvp3"
-                      to="/no/new-member"
+                      href="/no/new-member"
                     >
-                      <LinkAnchor
-                        className="css-3wdfps-StyledLink e1g7xtvp3"
-                        href="/no/new-member"
-                        navigate={[Function]}
-                      >
-                        <a
-                          className="css-3wdfps-StyledLink e1g7xtvp3"
-                          href="/no/new-member"
-                          onClick={[Function]}
-                        >
-                          Norsk
-                        </a>
-                      </LinkAnchor>
-                    </Link>
+                      Norsk
+                    </a>
                   </StyledLink>
                   <Divider>
                     <span
@@ -581,26 +545,14 @@ exports[`Norwegian language picker renders without 💥 matches snaphot 1`] = `
                   className="css-1xjnew5-Option e1g7xtvp1"
                 >
                   <StyledLink
-                    to="/no-en/new-member"
+                    href="/no-en/new-member"
                   >
-                    <Link
+                    <a
                       className="css-3wdfps-StyledLink e1g7xtvp3"
-                      to="/no-en/new-member"
+                      href="/no-en/new-member"
                     >
-                      <LinkAnchor
-                        className="css-3wdfps-StyledLink e1g7xtvp3"
-                        href="/no-en/new-member"
-                        navigate={[Function]}
-                      >
-                        <a
-                          className="css-3wdfps-StyledLink e1g7xtvp3"
-                          href="/no-en/new-member"
-                          onClick={[Function]}
-                        >
-                          English
-                        </a>
-                      </LinkAnchor>
-                    </Link>
+                      English
+                    </a>
                   </StyledLink>
                 </div>
               </Option>
@@ -726,7 +678,7 @@ exports[`Norwegian language picker renders without 💥 matches snaphot 1`] = `
                 "children": <Dropdown>
                   <Option>
                     <StyledLink
-                      to="/no/new-member"
+                      href="/no/new-member"
                     >
                       Norsk
                     </StyledLink>
@@ -734,7 +686,7 @@ exports[`Norwegian language picker renders without 💥 matches snaphot 1`] = `
                   </Option>
                   <Option>
                     <StyledLink
-                      to="/no-en/new-member"
+                      href="/no-en/new-member"
                     >
                       English
                     </StyledLink>
@@ -1006,26 +958,14 @@ exports[`Swedish language picker renders without 💥 matches snaphot 1`] = `
                   className="css-1xjnew5-Option e1g7xtvp1"
                 >
                   <StyledLink
-                    to="/se/new-member"
+                    href="/se/new-member"
                   >
-                    <Link
+                    <a
                       className="css-3wdfps-StyledLink e1g7xtvp3"
-                      to="/se/new-member"
+                      href="/se/new-member"
                     >
-                      <LinkAnchor
-                        className="css-3wdfps-StyledLink e1g7xtvp3"
-                        href="/se/new-member"
-                        navigate={[Function]}
-                      >
-                        <a
-                          className="css-3wdfps-StyledLink e1g7xtvp3"
-                          href="/se/new-member"
-                          onClick={[Function]}
-                        >
-                          Svenska
-                        </a>
-                      </LinkAnchor>
-                    </Link>
+                      Svenska
+                    </a>
                   </StyledLink>
                   <Divider>
                     <span
@@ -1041,26 +981,14 @@ exports[`Swedish language picker renders without 💥 matches snaphot 1`] = `
                   className="css-1xjnew5-Option e1g7xtvp1"
                 >
                   <StyledLink
-                    to="/se-en/new-member"
+                    href="/se-en/new-member"
                   >
-                    <Link
+                    <a
                       className="css-3wdfps-StyledLink e1g7xtvp3"
-                      to="/se-en/new-member"
+                      href="/se-en/new-member"
                     >
-                      <LinkAnchor
-                        className="css-3wdfps-StyledLink e1g7xtvp3"
-                        href="/se-en/new-member"
-                        navigate={[Function]}
-                      >
-                        <a
-                          className="css-3wdfps-StyledLink e1g7xtvp3"
-                          href="/se-en/new-member"
-                          onClick={[Function]}
-                        >
-                          English
-                        </a>
-                      </LinkAnchor>
-                    </Link>
+                      English
+                    </a>
                   </StyledLink>
                 </div>
               </Option>
@@ -1186,7 +1114,7 @@ exports[`Swedish language picker renders without 💥 matches snaphot 1`] = `
                 "children": <Dropdown>
                   <Option>
                     <StyledLink
-                      to="/se/new-member"
+                      href="/se/new-member"
                     >
                       Svenska
                     </StyledLink>
@@ -1194,7 +1122,7 @@ exports[`Swedish language picker renders without 💥 matches snaphot 1`] = `
                   </Option>
                   <Option>
                     <StyledLink
-                      to="/se-en/new-member"
+                      href="/se-en/new-member"
                     >
                       English
                     </StyledLink>

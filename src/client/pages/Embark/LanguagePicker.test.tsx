@@ -15,10 +15,10 @@ describe('Swedish language picker renders without 💥', () => {
   )
 
   it('has the correct links', () => {
-    expect(wrapper.find('Link[to*="/se/new-member"]')).toHaveLength(1)
-    expect(wrapper.find('Link[to*="/se-en/new-member"]')).toHaveLength(1)
-    expect(wrapper.find('Link[to*="/no/new-member"]')).toHaveLength(0)
-    expect(wrapper.find('Link[to*="/no-en/new-member"]')).toHaveLength(0)
+    expect(wrapper.find('a[href*="/se/new-member"]')).toHaveLength(1)
+    expect(wrapper.find('a[href*="/se-en/new-member"]')).toHaveLength(1)
+    expect(wrapper.find('a[href*="/no/new-member"]')).toHaveLength(0)
+    expect(wrapper.find('a[href*="/no-en/new-member"]')).toHaveLength(0)
   })
 
   it('matches snaphot', () => {
@@ -34,10 +34,10 @@ describe('Norwegian language picker renders without 💥', () => {
   )
 
   it('has the correct links', () => {
-    expect(wrapper.find('Link[to*="/no/new-member"]')).toHaveLength(1)
-    expect(wrapper.find('Link[to*="/no-en/new-member"]')).toHaveLength(1)
-    expect(wrapper.find('Link[to*="/se/new-member"]')).toHaveLength(0)
-    expect(wrapper.find('Link[to*="/se-en/new-member"]')).toHaveLength(0)
+    expect(wrapper.find('a[href*="/no/new-member"]')).toHaveLength(1)
+    expect(wrapper.find('a[href*="/no-en/new-member"]')).toHaveLength(1)
+    expect(wrapper.find('a[href*="/se/new-member"]')).toHaveLength(0)
+    expect(wrapper.find('a[href*="/se-en/new-member"]')).toHaveLength(0)
   })
 
   it('matches snaphot', () => {
@@ -53,9 +53,9 @@ describe('Danish language picker renders without 💥', () => {
   )
 
   it('has the correct links', () => {
-    expect(wrapper.find('Link')).toHaveLength(2)
-    expect(wrapper.find('Link[to*="/dk/new-member"]')).toHaveLength(1)
-    expect(wrapper.find('Link[to*="/dk-en/new-member"]')).toHaveLength(1)
+    expect(wrapper.find('a')).toHaveLength(2)
+    expect(wrapper.find('a[href*="/dk/new-member"]')).toHaveLength(1)
+    expect(wrapper.find('a[href*="/dk-en/new-member"]')).toHaveLength(1)
   })
 
   it('matches snaphot', () => {
