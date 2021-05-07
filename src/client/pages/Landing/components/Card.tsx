@@ -71,6 +71,7 @@ const CardHeader = styled.div`
   min-height: 1.5rem;
   padding-bottom: 0.5rem;
 
+  /* HedvigSymbol */
   svg {
     display: none;
   }
@@ -80,12 +81,14 @@ const CardHeader = styled.div`
   }
 
   @media (min-width: 1020px) {
-    flex-direction: row-reverse;
     padding-bottom: 3rem;
+
+    /* HedvigSymbol */
     svg {
       display: block;
       width: 1.5rem;
       height: 1.5rem;
+      margin-left: auto;
     }
   }
 `
@@ -134,12 +137,12 @@ export const Card: React.FC<{
     <>
       <CardContainer disabled={disabled} to={to}>
         <CardHeader>
-          <HedvigSymbol size="1.25rem" />
           {badge && (
             <Badge disabled={disabled} size="lg">
               {badge}
             </Badge>
           )}
+          <HedvigSymbol size="1.25rem" />
         </CardHeader>
         <CardContent>{children}</CardContent>
         {!disabled && (
