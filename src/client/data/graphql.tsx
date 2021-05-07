@@ -9,6 +9,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
   { [SubKey in K]?: Maybe<T[SubKey]> }
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
   { [SubKey in K]: Maybe<T[SubKey]> }
+const defaultOptions = {}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string
@@ -19,24 +20,24 @@ export type Scalars = {
   /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the date-timeformat outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representationof dates and times using the Gregorian calendar. */
   DateTime: any
   LocalDate: any
-  Object: any
-  URL: any
   /** A String-representation of Adyen's PaymentMethodsResponse */
   PaymentMethodsResponse: any
   /** An ISO-8601 String representation of a `java.time.Instant`, e.g. 2019-07-03T19:07:38.494081Z */
   Instant: any
+  URL: any
   JSONString: any
-  UUID: any
-  /** The `Upload` scalar type represents a file upload. */
-  Upload: any
-  TimeStamp: any
-  JSONObject: any
+  Object: any
   /** A String-representation of Adyen's payment method details */
   PaymentMethodDetails: any
   /** A String-representation of Adyen's checkout payments action */
   CheckoutPaymentsAction: any
   /** A String-representation of Adyen's payments details request */
   PaymentsDetailsRequest: any
+  UUID: any
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: any
+  TimeStamp: any
+  JSONObject: any
   /** Raw JSON value */
   Json: any
   /** The Long scalar type represents non-fractional signed whole numeric values. Long can represent values between -(2^63) and 2^63 - 1. */
@@ -202,6 +203,8 @@ export type Address = {
   street: Scalars['String']
   postalCode: Scalars['String']
   city?: Maybe<Scalars['String']>
+  apartment?: Maybe<Scalars['String']>
+  floor?: Maybe<Scalars['String']>
 }
 
 export type Aggregate = {
@@ -262,10 +265,16 @@ export type AppMarketingImage = Node & {
   id: Scalars['ID']
   /** The time the document was created */
   createdAt: Scalars['DateTime']
+  /** User that created this document */
+  createdBy?: Maybe<User>
   /** The time the document was updated */
   updatedAt: Scalars['DateTime']
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>
+  /** User that last published this document */
+  publishedBy?: Maybe<User>
   image?: Maybe<Asset>
   language?: Maybe<Language>
   blurhash?: Maybe<Scalars['String']>
@@ -279,6 +288,21 @@ export type AppMarketingImageDocumentInStagesArgs = {
   stages?: Array<Stage>
   includeCurrent?: Scalars['Boolean']
   inheritLocale?: Scalars['Boolean']
+}
+
+/** The background image for the login screen */
+export type AppMarketingImageCreatedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+/** The background image for the login screen */
+export type AppMarketingImageUpdatedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+/** The background image for the login screen */
+export type AppMarketingImagePublishedByArgs = {
+  locales?: Maybe<Array<Locale>>
 }
 
 /** The background image for the login screen */
@@ -391,6 +415,7 @@ export type AppMarketingImageManyWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -406,6 +431,7 @@ export type AppMarketingImageManyWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
+  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -421,6 +447,7 @@ export type AppMarketingImageManyWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedBy?: Maybe<UserWhereInput>
   image?: Maybe<AssetWhereInput>
   language?: Maybe<LanguageWhereInput>
   blurhash?: Maybe<Scalars['String']>
@@ -582,6 +609,7 @@ export type AppMarketingImageWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -597,6 +625,7 @@ export type AppMarketingImageWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
+  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -612,6 +641,7 @@ export type AppMarketingImageWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedBy?: Maybe<UserWhereInput>
   image?: Maybe<AssetWhereInput>
   language?: Maybe<LanguageWhereInput>
   blurhash?: Maybe<Scalars['String']>
@@ -669,10 +699,16 @@ export type Asset = Node & {
   id: Scalars['ID']
   /** The time the document was created */
   createdAt: Scalars['DateTime']
+  /** User that created this document */
+  createdBy?: Maybe<User>
   /** The time the document was updated */
   updatedAt: Scalars['DateTime']
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>
+  /** User that last published this document */
+  publishedBy?: Maybe<User>
   /** The file handle */
   handle: Scalars['String']
   /** The file name */
@@ -713,13 +749,28 @@ export type AssetCreatedAtArgs = {
 }
 
 /** Asset system model */
+export type AssetCreatedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+/** Asset system model */
 export type AssetUpdatedAtArgs = {
   variation?: SystemDateTimeFieldVariation
 }
 
 /** Asset system model */
+export type AssetUpdatedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+/** Asset system model */
 export type AssetPublishedAtArgs = {
   variation?: SystemDateTimeFieldVariation
+}
+
+/** Asset system model */
+export type AssetPublishedByArgs = {
+  locales?: Maybe<Array<Locale>>
 }
 
 /** Asset system model */
@@ -892,6 +943,7 @@ export type AssetManyWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -907,6 +959,7 @@ export type AssetManyWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
+  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -922,6 +975,7 @@ export type AssetManyWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedBy?: Maybe<UserWhereInput>
   assetMarketingStory_every?: Maybe<MarketingStoryWhereInput>
   assetMarketingStory_some?: Maybe<MarketingStoryWhereInput>
   assetMarketingStory_none?: Maybe<MarketingStoryWhereInput>
@@ -1140,6 +1194,7 @@ export type AssetWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -1155,6 +1210,7 @@ export type AssetWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
+  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -1170,6 +1226,7 @@ export type AssetWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedBy?: Maybe<UserWhereInput>
   handle?: Maybe<Scalars['String']>
   /** All values that are not equal to given value. */
   handle_not?: Maybe<Scalars['String']>
@@ -1304,12 +1361,14 @@ export type AutoCompleteResponse = {
   __typename?: 'AutoCompleteResponse'
   id?: Maybe<Scalars['String']>
   address: Scalars['String']
-  houseNumber?: Maybe<Scalars['String']>
+  streetName?: Maybe<Scalars['String']>
+  streetNumber?: Maybe<Scalars['String']>
   streetCode?: Maybe<Scalars['String']>
   postalCode?: Maybe<Scalars['String']>
-  kommuneCode?: Maybe<Scalars['String']>
+  municipalityCode?: Maybe<Scalars['String']>
   floor?: Maybe<Scalars['String']>
-  doorNumber?: Maybe<Scalars['String']>
+  apartment?: Maybe<Scalars['String']>
+  city?: Maybe<Scalars['String']>
 }
 
 export type AvailablePaymentMethodsResponse = {
@@ -1402,6 +1461,8 @@ export type BundledQuote = {
   insurableLimits: Array<InsurableLimit>
   termsAndConditions: InsuranceTerm
   insuranceTerms: Array<InsuranceTerm>
+  detailsTable: Table
+  displayName: Scalars['String']
 }
 
 export type BundledQuotePerilsArgs = {
@@ -1420,12 +1481,25 @@ export type BundledQuoteInsuranceTermsArgs = {
   locale: Locale
 }
 
+export type BundledQuoteDetailsTableArgs = {
+  locale: Locale
+}
+
+export type BundledQuoteDisplayNameArgs = {
+  locale: Locale
+}
+
 export type Campaign = {
   __typename?: 'Campaign'
   incentive?: Maybe<Incentive>
   code: Scalars['String']
   /** Will be null if campaign is of type referralCampaign */
   owner?: Maybe<CampaignOwner>
+  displayValue?: Maybe<Scalars['String']>
+}
+
+export type CampaignDisplayValueArgs = {
+  locale: Locale
 }
 
 export type CampaignCannotBeCombinedWithExisting = {
@@ -1673,6 +1747,8 @@ export type CompleteQuote = {
   insurableLimits: Array<InsurableLimit>
   termsAndConditions: InsuranceTerm
   insuranceTerms: Array<InsuranceTerm>
+  detailsTable: Table
+  displayName: Scalars['String']
 }
 
 export type CompleteQuotePerilsArgs = {
@@ -1688,6 +1764,14 @@ export type CompleteQuoteTermsAndConditionsArgs = {
 }
 
 export type CompleteQuoteInsuranceTermsArgs = {
+  locale: Locale
+}
+
+export type CompleteQuoteDetailsTableArgs = {
+  locale: Locale
+}
+
+export type CompleteQuoteDisplayNameArgs = {
   locale: Locale
 }
 
@@ -1731,6 +1815,8 @@ export type Contract = {
   insurableLimits: Array<InsurableLimit>
   termsAndConditions: InsuranceTerm
   insuranceTerms: Array<InsuranceTerm>
+  currentAgreementDetailsTable: Table
+  upcomingAgreementDetailsTable: Table
 }
 
 export type ContractPerilsArgs = {
@@ -1746,6 +1832,14 @@ export type ContractTermsAndConditionsArgs = {
 }
 
 export type ContractInsuranceTermsArgs = {
+  locale: Locale
+}
+
+export type ContractCurrentAgreementDetailsTableArgs = {
+  locale: Locale
+}
+
+export type ContractUpcomingAgreementDetailsTableArgs = {
   locale: Locale
 }
 
@@ -1769,10 +1863,16 @@ export type CoreMlModel = Node & {
   id: Scalars['ID']
   /** The time the document was created */
   createdAt: Scalars['DateTime']
+  /** User that created this document */
+  createdBy?: Maybe<User>
   /** The time the document was updated */
   updatedAt: Scalars['DateTime']
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>
+  /** User that last published this document */
+  publishedBy?: Maybe<User>
   type?: Maybe<CoreMlModelType>
   file?: Maybe<Asset>
   /** List of CoreMLModel versions */
@@ -1784,6 +1884,21 @@ export type CoreMlModelDocumentInStagesArgs = {
   stages?: Array<Stage>
   includeCurrent?: Scalars['Boolean']
   inheritLocale?: Scalars['Boolean']
+}
+
+/** All of our CoreML models used in the iOS app */
+export type CoreMlModelCreatedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+/** All of our CoreML models used in the iOS app */
+export type CoreMlModelUpdatedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+/** All of our CoreML models used in the iOS app */
+export type CoreMlModelPublishedByArgs = {
+  locales?: Maybe<Array<Locale>>
 }
 
 /** All of our CoreML models used in the iOS app */
@@ -1889,6 +2004,7 @@ export type CoreMlModelManyWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -1904,6 +2020,7 @@ export type CoreMlModelManyWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
+  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -1919,6 +2036,7 @@ export type CoreMlModelManyWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedBy?: Maybe<UserWhereInput>
   type?: Maybe<CoreMlModelType>
   /** All values that are not equal to given value. */
   type_not?: Maybe<CoreMlModelType>
@@ -2059,6 +2177,7 @@ export type CoreMlModelWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -2074,6 +2193,7 @@ export type CoreMlModelWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
+  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -2089,6 +2209,7 @@ export type CoreMlModelWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedBy?: Maybe<UserWhereInput>
   type?: Maybe<CoreMlModelType>
   /** All values that are not equal to given value. */
   type_not?: Maybe<CoreMlModelType>
@@ -2115,6 +2236,10 @@ export type CreateApartmentInput = {
 export type CreateDanishAccidentInput = {
   street: Scalars['String']
   zipCode: Scalars['String']
+  bbrId?: Maybe<Scalars['String']>
+  apartment?: Maybe<Scalars['String']>
+  floor?: Maybe<Scalars['String']>
+  city?: Maybe<Scalars['String']>
   coInsured: Scalars['Int']
   isStudent: Scalars['Boolean']
 }
@@ -2122,6 +2247,10 @@ export type CreateDanishAccidentInput = {
 export type CreateDanishHomeContentsInput = {
   street: Scalars['String']
   zipCode: Scalars['String']
+  bbrId?: Maybe<Scalars['String']>
+  apartment?: Maybe<Scalars['String']>
+  floor?: Maybe<Scalars['String']>
+  city?: Maybe<Scalars['String']>
   livingSpace: Scalars['Int']
   coInsured: Scalars['Int']
   isStudent: Scalars['Boolean']
@@ -2131,6 +2260,10 @@ export type CreateDanishHomeContentsInput = {
 export type CreateDanishTravelInput = {
   street: Scalars['String']
   zipCode: Scalars['String']
+  bbrId?: Maybe<Scalars['String']>
+  apartment?: Maybe<Scalars['String']>
+  floor?: Maybe<Scalars['String']>
+  city?: Maybe<Scalars['String']>
   coInsured: Scalars['Int']
   isStudent: Scalars['Boolean']
 }
@@ -2238,6 +2371,10 @@ export type DanishAccidentDetails = {
   __typename?: 'DanishAccidentDetails'
   street: Scalars['String']
   zipCode: Scalars['String']
+  apartment?: Maybe<Scalars['String']>
+  floor?: Maybe<Scalars['String']>
+  bbrId?: Maybe<Scalars['String']>
+  city?: Maybe<Scalars['String']>
   coInsured: Scalars['Int']
   isStudent: Scalars['Boolean']
 }
@@ -2254,6 +2391,7 @@ export type DanishBankIdAuthResponse = {
 
 export type DanishBankIdSession = {
   __typename?: 'DanishBankIdSession'
+  /** @deprecated This type i not in use any more */
   redirectUrl?: Maybe<Scalars['String']>
 }
 
@@ -2283,6 +2421,10 @@ export type DanishHomeContentsDetails = {
   __typename?: 'DanishHomeContentsDetails'
   street: Scalars['String']
   zipCode: Scalars['String']
+  apartment?: Maybe<Scalars['String']>
+  floor?: Maybe<Scalars['String']>
+  bbrId?: Maybe<Scalars['String']>
+  city?: Maybe<Scalars['String']>
   livingSpace: Scalars['Int']
   coInsured: Scalars['Int']
   isStudent: Scalars['Boolean']
@@ -2312,6 +2454,10 @@ export type DanishTravelDetails = {
   __typename?: 'DanishTravelDetails'
   street: Scalars['String']
   zipCode: Scalars['String']
+  apartment?: Maybe<Scalars['String']>
+  floor?: Maybe<Scalars['String']>
+  bbrId?: Maybe<Scalars['String']>
+  city?: Maybe<Scalars['String']>
   coInsured: Scalars['Int']
   isStudent: Scalars['Boolean']
 }
@@ -2447,13 +2593,21 @@ export type EditApartmentInput = {
 export type EditDanishAccidentInput = {
   street?: Maybe<Scalars['String']>
   zipCode?: Maybe<Scalars['String']>
+  apartment?: Maybe<Scalars['String']>
+  floor?: Maybe<Scalars['String']>
+  city?: Maybe<Scalars['String']>
+  bbrId?: Maybe<Scalars['String']>
   coInsured?: Maybe<Scalars['Int']>
   isStudent?: Maybe<Scalars['Boolean']>
 }
 
 export type EditDanishHomeContentsInput = {
   street?: Maybe<Scalars['String']>
+  apartment?: Maybe<Scalars['String']>
+  floor?: Maybe<Scalars['String']>
   zipCode?: Maybe<Scalars['String']>
+  city?: Maybe<Scalars['String']>
+  bbrId?: Maybe<Scalars['String']>
   coInsured?: Maybe<Scalars['Int']>
   livingSpace?: Maybe<Scalars['Int']>
   isStudent?: Maybe<Scalars['Boolean']>
@@ -2463,6 +2617,10 @@ export type EditDanishHomeContentsInput = {
 export type EditDanishTravelInput = {
   street?: Maybe<Scalars['String']>
   zipCode?: Maybe<Scalars['String']>
+  apartment?: Maybe<Scalars['String']>
+  floor?: Maybe<Scalars['String']>
+  city?: Maybe<Scalars['String']>
+  bbrId?: Maybe<Scalars['String']>
   coInsured?: Maybe<Scalars['Int']>
   isStudent?: Maybe<Scalars['Boolean']>
 }
@@ -2851,6 +3009,10 @@ export type EmbarkMultiActionComponent =
 
 export type EmbarkMultiActionData = {
   __typename?: 'EmbarkMultiActionData'
+  key?: Maybe<Scalars['String']>
+  addLabel?: Maybe<Scalars['String']>
+  maxAmount: Scalars['String']
+  link: EmbarkLink
   components: Array<EmbarkMultiActionComponent>
 }
 
@@ -2880,6 +3042,34 @@ export type EmbarkNumberActionSet = EmbarkActionCore & {
 export type EmbarkNumberActionSetData = {
   __typename?: 'EmbarkNumberActionSetData'
   link: EmbarkLink
+  numberActions: Array<EmbarkNumberActionSetNumberAction>
+}
+
+export type EmbarkNumberActionSetNumberAction = {
+  __typename?: 'EmbarkNumberActionSetNumberAction'
+  data?: Maybe<EmbarkNumberActionSetNumberActionData>
+}
+
+export type EmbarkNumberActionSetNumberActionData = {
+  __typename?: 'EmbarkNumberActionSetNumberActionData'
+  key: Scalars['String']
+  placeholder: Scalars['String']
+  unit?: Maybe<Scalars['String']>
+  label?: Maybe<Scalars['String']>
+  maxValue?: Maybe<Scalars['Int']>
+  minValue?: Maybe<Scalars['Int']>
+  title: Scalars['String']
+}
+
+export type EmbarkOfferRedirect = {
+  __typename?: 'EmbarkOfferRedirect'
+  component: Scalars['String']
+  data: EmbarkOfferRedirectData
+}
+
+export type EmbarkOfferRedirectData = {
+  __typename?: 'EmbarkOfferRedirectData'
+  keys: Array<Scalars['String']>
 }
 
 export type EmbarkPartnerConfig = {
@@ -2905,6 +3095,7 @@ export type EmbarkPassage = {
   api?: Maybe<EmbarkApi>
   messages: Array<EmbarkMessage>
   externalRedirect?: Maybe<EmbarkExternalRedirect>
+  offerRedirect?: Maybe<EmbarkOfferRedirect>
   action?: Maybe<EmbarkAction>
   response: EmbarkResponse
   tooltips: Array<EmbarkTooltip>
@@ -2965,6 +3156,7 @@ export type EmbarkRedirectUnaryExpression = {
   passedExpressionValue?: Maybe<Scalars['String']>
 }
 
+/** Returning EmbarkMessage from EmbarkResponse is deprecated and will be removed in a future version. */
 export type EmbarkResponse =
   | EmbarkGroupedResponse
   | EmbarkResponseExpression
@@ -3005,6 +3197,7 @@ export type EmbarkStory = {
   computedStoreValues?: Maybe<Array<EmbarkComputedStoreValue>>
   partnerConfigs: Array<EmbarkPartnerConfig>
   passages: Array<EmbarkPassage>
+  trackableProperties: Array<Scalars['String']>
 }
 
 export type EmbarkStoryMetadata = {
@@ -3385,10 +3578,16 @@ export type Faq = Node & {
   id: Scalars['ID']
   /** The time the document was created */
   createdAt: Scalars['DateTime']
+  /** User that created this document */
+  createdBy?: Maybe<User>
   /** The time the document was updated */
   updatedAt: Scalars['DateTime']
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>
+  /** User that last published this document */
+  publishedBy?: Maybe<User>
   language?: Maybe<Language>
   headline?: Maybe<Scalars['String']>
   body?: Maybe<Scalars['String']>
@@ -3401,6 +3600,21 @@ export type FaqDocumentInStagesArgs = {
   stages?: Array<Stage>
   includeCurrent?: Scalars['Boolean']
   inheritLocale?: Scalars['Boolean']
+}
+
+/** Frequently asked questions */
+export type FaqCreatedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+/** Frequently asked questions */
+export type FaqUpdatedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+/** Frequently asked questions */
+export type FaqPublishedByArgs = {
+  locales?: Maybe<Array<Locale>>
 }
 
 /** Frequently asked questions */
@@ -3507,6 +3721,7 @@ export type FaqManyWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -3522,6 +3737,7 @@ export type FaqManyWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
+  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -3537,6 +3753,7 @@ export type FaqManyWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedBy?: Maybe<UserWhereInput>
   language?: Maybe<LanguageWhereInput>
   headline?: Maybe<Scalars['String']>
   /** All values that are not equal to given value. */
@@ -3708,6 +3925,7 @@ export type FaqWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -3723,6 +3941,7 @@ export type FaqWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
+  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -3738,6 +3957,7 @@ export type FaqWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedBy?: Maybe<UserWhereInput>
   language?: Maybe<LanguageWhereInput>
   headline?: Maybe<Scalars['String']>
   /** All values that are not equal to given value. */
@@ -3946,10 +4166,16 @@ export type ImportantMessage = Node & {
   id: Scalars['ID']
   /** The time the document was created */
   createdAt: Scalars['DateTime']
+  /** User that created this document */
+  createdBy?: Maybe<User>
   /** The time the document was updated */
   updatedAt: Scalars['DateTime']
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>
+  /** User that last published this document */
+  publishedBy?: Maybe<User>
   title?: Maybe<Scalars['String']>
   message?: Maybe<Scalars['String']>
   language?: Maybe<Language>
@@ -3963,6 +4189,18 @@ export type ImportantMessageDocumentInStagesArgs = {
   stages?: Array<Stage>
   includeCurrent?: Scalars['Boolean']
   inheritLocale?: Scalars['Boolean']
+}
+
+export type ImportantMessageCreatedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+export type ImportantMessageUpdatedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+export type ImportantMessagePublishedByArgs = {
+  locales?: Maybe<Array<Locale>>
 }
 
 export type ImportantMessageLanguageArgs = {
@@ -4069,6 +4307,7 @@ export type ImportantMessageManyWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -4084,6 +4323,7 @@ export type ImportantMessageManyWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
+  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -4099,6 +4339,7 @@ export type ImportantMessageManyWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedBy?: Maybe<UserWhereInput>
   title?: Maybe<Scalars['String']>
   /** All values that are not equal to given value. */
   title_not?: Maybe<Scalars['String']>
@@ -4316,6 +4557,7 @@ export type ImportantMessageWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -4331,6 +4573,7 @@ export type ImportantMessageWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
+  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -4346,6 +4589,7 @@ export type ImportantMessageWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedBy?: Maybe<UserWhereInput>
   title?: Maybe<Scalars['String']>
   /** All values that are not equal to given value. */
   title_not?: Maybe<Scalars['String']>
@@ -4507,6 +4751,11 @@ export enum InsurableLimitType {
   GoodsFamily = 'GOODS_FAMILY',
   TravelDays = 'TRAVEL_DAYS',
   MedicalExpenses = 'MEDICAL_EXPENSES',
+  LostLuggage = 'LOST_LUGGAGE',
+  Bike = 'BIKE',
+  PermanentInjury = 'PERMANENT_INJURY',
+  Treatment = 'TREATMENT',
+  DentalTreatment = 'DENTAL_TREATMENT',
 }
 
 export type Insurance = {
@@ -4571,6 +4820,7 @@ export type InsuranceDataCollectionV2 =
 
 export type InsuranceProvider = {
   __typename?: 'InsuranceProvider'
+  id: Scalars['String']
   name: Scalars['String']
   switchable: Scalars['Boolean']
   externalCollectionId?: Maybe<Scalars['String']>
@@ -4624,10 +4874,16 @@ export type Key = Node & {
   id: Scalars['ID']
   /** The time the document was created */
   createdAt: Scalars['DateTime']
+  /** User that created this document */
+  createdBy?: Maybe<User>
   /** The time the document was updated */
   updatedAt: Scalars['DateTime']
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>
+  /** User that last published this document */
+  publishedBy?: Maybe<User>
   value: Scalars['String']
   /** Describe what the translation is for, never shown to a user. */
   description?: Maybe<Scalars['String']>
@@ -4642,6 +4898,18 @@ export type KeyDocumentInStagesArgs = {
   stages?: Array<Stage>
   includeCurrent?: Scalars['Boolean']
   inheritLocale?: Scalars['Boolean']
+}
+
+export type KeyCreatedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+export type KeyUpdatedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+export type KeyPublishedByArgs = {
+  locales?: Maybe<Array<Locale>>
 }
 
 export type KeyTranslationsArgs = {
@@ -4774,10 +5042,16 @@ export type KeyGearItemCoverage = Node & {
   id: Scalars['ID']
   /** The time the document was created */
   createdAt: Scalars['DateTime']
+  /** User that created this document */
+  createdBy?: Maybe<User>
   /** The time the document was updated */
   updatedAt: Scalars['DateTime']
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>
+  /** User that last published this document */
+  publishedBy?: Maybe<User>
   title?: Maybe<Key>
   description?: Maybe<Key>
   /** List of KeyGearItemCoverage versions */
@@ -4788,6 +5062,18 @@ export type KeyGearItemCoverageDocumentInStagesArgs = {
   stages?: Array<Stage>
   includeCurrent?: Scalars['Boolean']
   inheritLocale?: Scalars['Boolean']
+}
+
+export type KeyGearItemCoverageCreatedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+export type KeyGearItemCoverageUpdatedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+export type KeyGearItemCoveragePublishedByArgs = {
+  locales?: Maybe<Array<Locale>>
 }
 
 export type KeyGearItemCoverageTitleArgs = {
@@ -4895,6 +5181,7 @@ export type KeyGearItemCoverageManyWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -4910,6 +5197,7 @@ export type KeyGearItemCoverageManyWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
+  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -4925,6 +5213,7 @@ export type KeyGearItemCoverageManyWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedBy?: Maybe<UserWhereInput>
   title?: Maybe<KeyWhereInput>
   description?: Maybe<KeyWhereInput>
 }
@@ -5054,6 +5343,7 @@ export type KeyGearItemCoverageWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -5069,6 +5359,7 @@ export type KeyGearItemCoverageWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
+  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -5084,6 +5375,7 @@ export type KeyGearItemCoverageWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedBy?: Maybe<UserWhereInput>
   title?: Maybe<KeyWhereInput>
   description?: Maybe<KeyWhereInput>
 }
@@ -5173,6 +5465,7 @@ export type KeyManyWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -5188,6 +5481,7 @@ export type KeyManyWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
+  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -5203,6 +5497,7 @@ export type KeyManyWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedBy?: Maybe<UserWhereInput>
   value?: Maybe<Scalars['String']>
   /** All values that are not equal to given value. */
   value_not?: Maybe<Scalars['String']>
@@ -5381,6 +5676,7 @@ export type KeyWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -5396,6 +5692,7 @@ export type KeyWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
+  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -5411,6 +5708,7 @@ export type KeyWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedBy?: Maybe<UserWhereInput>
   value?: Maybe<Scalars['String']>
   /** All values that are not equal to given value. */
   value_not?: Maybe<Scalars['String']>
@@ -5472,10 +5770,16 @@ export type Language = Node & {
   id: Scalars['ID']
   /** The time the document was created */
   createdAt: Scalars['DateTime']
+  /** User that created this document */
+  createdBy?: Maybe<User>
   /** The time the document was updated */
   updatedAt: Scalars['DateTime']
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>
+  /** User that last published this document */
+  publishedBy?: Maybe<User>
   translations: Array<Translation>
   name: Scalars['String']
   code: Scalars['String']
@@ -5491,6 +5795,18 @@ export type LanguageDocumentInStagesArgs = {
   stages?: Array<Stage>
   includeCurrent?: Scalars['Boolean']
   inheritLocale?: Scalars['Boolean']
+}
+
+export type LanguageCreatedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+export type LanguageUpdatedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+export type LanguagePublishedByArgs = {
+  locales?: Maybe<Array<Locale>>
 }
 
 export type LanguageTranslationsArgs = {
@@ -5650,6 +5966,7 @@ export type LanguageManyWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -5665,6 +5982,7 @@ export type LanguageManyWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
+  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -5680,6 +5998,7 @@ export type LanguageManyWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedBy?: Maybe<UserWhereInput>
   translations_every?: Maybe<TranslationWhereInput>
   translations_some?: Maybe<TranslationWhereInput>
   translations_none?: Maybe<TranslationWhereInput>
@@ -5869,6 +6188,7 @@ export type LanguageWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -5884,6 +6204,7 @@ export type LanguageWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
+  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -5899,6 +6220,7 @@ export type LanguageWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedBy?: Maybe<UserWhereInput>
   translations_every?: Maybe<TranslationWhereInput>
   translations_some?: Maybe<TranslationWhereInput>
   translations_none?: Maybe<TranslationWhereInput>
@@ -6023,10 +6345,16 @@ export type MarketingStory = Node & {
   id: Scalars['ID']
   /** The time the document was created */
   createdAt: Scalars['DateTime']
+  /** User that created this document */
+  createdBy?: Maybe<User>
   /** The time the document was updated */
   updatedAt: Scalars['DateTime']
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>
+  /** User that last published this document */
+  publishedBy?: Maybe<User>
   asset: Asset
   duration?: Maybe<Scalars['Float']>
   importance?: Maybe<Scalars['Int']>
@@ -6041,6 +6369,18 @@ export type MarketingStoryDocumentInStagesArgs = {
   stages?: Array<Stage>
   includeCurrent?: Scalars['Boolean']
   inheritLocale?: Scalars['Boolean']
+}
+
+export type MarketingStoryCreatedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+export type MarketingStoryUpdatedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+export type MarketingStoryPublishedByArgs = {
+  locales?: Maybe<Array<Locale>>
 }
 
 export type MarketingStoryAssetArgs = {
@@ -6152,6 +6492,7 @@ export type MarketingStoryManyWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -6167,6 +6508,7 @@ export type MarketingStoryManyWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
+  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -6182,6 +6524,7 @@ export type MarketingStoryManyWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedBy?: Maybe<UserWhereInput>
   asset?: Maybe<AssetWhereInput>
   duration?: Maybe<Scalars['Float']>
   /** All values that are not equal to given value. */
@@ -6369,6 +6712,7 @@ export type MarketingStoryWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -6384,6 +6728,7 @@ export type MarketingStoryWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
+  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -6399,6 +6744,7 @@ export type MarketingStoryWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedBy?: Maybe<UserWhereInput>
   asset?: Maybe<AssetWhereInput>
   duration?: Maybe<Scalars['Float']>
   /** All values that are not equal to given value. */
@@ -6651,6 +6997,50 @@ export type MonthlyCostDeduction = {
 
 export type Mutation = {
   __typename?: 'Mutation'
+  exchangeToken: ExchangeTokenResponse
+  registerDirectDebit: DirectDebitResponse
+  cancelDirectDebitRequest: CancelDirectDebitStatus
+  /** Tokenize payment details per member in order to be used in future and returns the status */
+  tokenizePaymentDetails?: Maybe<TokenizationResponse>
+  /** Tokenize payout details per member in order to be used in future and returns the status */
+  tokenizePayoutDetails?: Maybe<TokenizationResponse>
+  /** Submit additional payment details */
+  submitAdditionalPaymentDetails: AdditionalPaymentsDetailsResponse
+  submitAdyenRedirection: SubmitAdyenRedirectionResponse
+  /**
+   * Will be called from the client when 1) redeem manually a code, 2) click the link  --Fails if the code is invalid?--
+   * @deprecated Use redeemCodeOnV2
+   */
+  redeemCode: RedemedCodeResult
+  redeemCodeV2: RedeemedCodeV2Result
+  /** @deprecated Use removeDiscountCodeV2 */
+  removeDiscountCode: RedemedCodeResult
+  removeAllDiscountCodes: RemoveCampaignCodeResult
+  updateReferralCampaignCode: UpdateReferralCampaignCodeResult
+  createQuote: CreateQuoteResult
+  editQuote: CreateQuoteResult
+  removeCurrentInsurer: CreateQuoteResult
+  removeStartDate: CreateQuoteResult
+  signQuotes: StartSignResponse
+  createKeyGearItem: KeyGearItem
+  addPhotoToKeyGearItem: KeyGearItem
+  deletePhotoFromKeyGearItem: KeyGearItem
+  addReceiptToKeyGearItem: KeyGearItem
+  deleteReceiptFromKeyGearItem: KeyGearItem
+  updateCategoryForKeyGearItem: KeyGearItem
+  /** # send null to remove */
+  updatePurchasePriceForKeyGearItem: KeyGearItem
+  /** # send null to remove */
+  updateTimeOfPurchaseForKeyGearItem: KeyGearItem
+  updateKeyGearItemName: KeyGearItem
+  /**
+   * """
+   * When we've deleted an item, we mark it as deleted and should probably redact all information
+   * except for the physicalReferenceHash.
+   * """
+   */
+  deleteKeyGearItem: KeyGearItem
+  externalInsuranceProvider?: Maybe<ExternalInsuranceProviderMutation>
   logout: Scalars['Boolean']
   createSession: Scalars['String']
   createSessionV2?: Maybe<SessionInformation>
@@ -6690,140 +7080,6 @@ export type Mutation = {
   updateLanguage: Scalars['Boolean']
   updatePickedLocale: Member
   createSelfChangeQuote: SelfChangeQuoteOutput
-  exchangeToken: ExchangeTokenResponse
-  registerDirectDebit: DirectDebitResponse
-  cancelDirectDebitRequest: CancelDirectDebitStatus
-  /** Tokenize payment details per member in order to be used in future and returns the status */
-  tokenizePaymentDetails?: Maybe<TokenizationResponse>
-  /** Tokenize payout details per member in order to be used in future and returns the status */
-  tokenizePayoutDetails?: Maybe<TokenizationResponse>
-  /** Submit additional payment details */
-  submitAdditionalPaymentDetails: AdditionalPaymentsDetailsResponse
-  submitAdyenRedirection: SubmitAdyenRedirectionResponse
-  /**
-   * Will be called from the client when 1) redeem manually a code, 2) click the link  --Fails if the code is invalid?--
-   * @deprecated Use redeemCodeOnV2
-   */
-  redeemCode: RedemedCodeResult
-  redeemCodeV2: RedeemedCodeV2Result
-  /** @deprecated Use removeDiscountCodeV2 */
-  removeDiscountCode: RedemedCodeResult
-  removeAllDiscountCodes: RemoveCampaignCodeResult
-  updateReferralCampaignCode: UpdateReferralCampaignCodeResult
-  externalInsuranceProvider?: Maybe<ExternalInsuranceProviderMutation>
-  createQuote: CreateQuoteResult
-  editQuote: CreateQuoteResult
-  removeCurrentInsurer: CreateQuoteResult
-  removeStartDate: CreateQuoteResult
-  signQuotes: StartSignResponse
-  createKeyGearItem: KeyGearItem
-  addPhotoToKeyGearItem: KeyGearItem
-  deletePhotoFromKeyGearItem: KeyGearItem
-  addReceiptToKeyGearItem: KeyGearItem
-  deleteReceiptFromKeyGearItem: KeyGearItem
-  updateCategoryForKeyGearItem: KeyGearItem
-  /** # send null to remove */
-  updatePurchasePriceForKeyGearItem: KeyGearItem
-  /** # send null to remove */
-  updateTimeOfPurchaseForKeyGearItem: KeyGearItem
-  updateKeyGearItemName: KeyGearItem
-  /**
-   * """
-   * When we've deleted an item, we mark it as deleted and should probably redact all information
-   * except for the physicalReferenceHash.
-   * """
-   */
-  deleteKeyGearItem: KeyGearItem
-}
-
-export type MutationCreateSessionArgs = {
-  campaign?: Maybe<CampaignInput>
-  trackingId?: Maybe<Scalars['UUID']>
-}
-
-export type MutationCreateOfferArgs = {
-  details: OfferInput
-}
-
-export type MutationSignOfferArgs = {
-  details: SignInput
-}
-
-export type MutationSignOfferV2Args = {
-  details?: Maybe<SignInput>
-}
-
-export type MutationUploadFileArgs = {
-  file: Scalars['Upload']
-}
-
-export type MutationUploadFilesArgs = {
-  files: Array<Scalars['Upload']>
-}
-
-export type MutationSelectCashbackOptionArgs = {
-  id: Scalars['ID']
-  locale?: Maybe<Locale>
-}
-
-export type MutationSendChatTextResponseArgs = {
-  input: ChatResponseTextInput
-}
-
-export type MutationSendChatSingleSelectResponseArgs = {
-  input: ChatResponseSingleSelectInput
-}
-
-export type MutationSendChatFileResponseArgs = {
-  input: ChatResponseFileInput
-}
-
-export type MutationSendChatAudioResponseArgs = {
-  input: ChatResponseAudioInput
-}
-
-export type MutationUpdateEmailArgs = {
-  input: Scalars['String']
-}
-
-export type MutationUpdatePhoneNumberArgs = {
-  input: Scalars['String']
-}
-
-export type MutationRegisterPushTokenArgs = {
-  pushToken: Scalars['String']
-}
-
-export type MutationTriggerClaimChatArgs = {
-  input: TriggerClaimChatInput
-}
-
-export type MutationMarkMessageAsReadArgs = {
-  globalId: Scalars['ID']
-}
-
-export type MutationLogArgs = {
-  input: LoggingInput
-}
-
-export type MutationNorwegianBankIdAuthArgs = {
-  personalNumber?: Maybe<Scalars['String']>
-}
-
-export type MutationRegisterBranchCampaignArgs = {
-  campaign: CampaignInput
-}
-
-export type MutationUpdateLanguageArgs = {
-  input: Scalars['String']
-}
-
-export type MutationUpdatePickedLocaleArgs = {
-  pickedLocale: Locale
-}
-
-export type MutationCreateSelfChangeQuoteArgs = {
-  quoteInput: SelfChangeQuoteInput
 }
 
 export type MutationExchangeTokenArgs = {
@@ -6933,6 +7189,100 @@ export type MutationDeleteKeyGearItemArgs = {
   id: Scalars['ID']
 }
 
+export type MutationCreateSessionArgs = {
+  campaign?: Maybe<CampaignInput>
+  trackingId?: Maybe<Scalars['UUID']>
+}
+
+export type MutationCreateOfferArgs = {
+  details: OfferInput
+}
+
+export type MutationSignOfferArgs = {
+  details: SignInput
+}
+
+export type MutationSignOfferV2Args = {
+  details?: Maybe<SignInput>
+}
+
+export type MutationUploadFileArgs = {
+  file: Scalars['Upload']
+}
+
+export type MutationUploadFilesArgs = {
+  files: Array<Scalars['Upload']>
+}
+
+export type MutationSelectCashbackOptionArgs = {
+  id: Scalars['ID']
+  locale?: Maybe<Locale>
+}
+
+export type MutationSendChatTextResponseArgs = {
+  input: ChatResponseTextInput
+}
+
+export type MutationSendChatSingleSelectResponseArgs = {
+  input: ChatResponseSingleSelectInput
+}
+
+export type MutationSendChatFileResponseArgs = {
+  input: ChatResponseFileInput
+}
+
+export type MutationSendChatAudioResponseArgs = {
+  input: ChatResponseAudioInput
+}
+
+export type MutationUpdateEmailArgs = {
+  input: Scalars['String']
+}
+
+export type MutationUpdatePhoneNumberArgs = {
+  input: Scalars['String']
+}
+
+export type MutationRegisterPushTokenArgs = {
+  pushToken: Scalars['String']
+}
+
+export type MutationTriggerClaimChatArgs = {
+  input: TriggerClaimChatInput
+}
+
+export type MutationMarkMessageAsReadArgs = {
+  globalId: Scalars['ID']
+}
+
+export type MutationLogArgs = {
+  input: LoggingInput
+}
+
+export type MutationNorwegianBankIdAuthArgs = {
+  personalNumber?: Maybe<Scalars['String']>
+}
+
+export type MutationDanishBankIdAuthArgs = {
+  personalNumber: Scalars['String']
+}
+
+export type MutationRegisterBranchCampaignArgs = {
+  campaign: CampaignInput
+}
+
+export type MutationUpdateLanguageArgs = {
+  input: Scalars['String']
+}
+
+export type MutationUpdatePickedLocaleArgs = {
+  pickedLocale: Locale
+}
+
+export type MutationCreateSelfChangeQuoteArgs = {
+  quoteInput: SelfChangeQuoteInput
+}
+
 /** A page in the `What's new`-screen in the app */
 export type News = {
   __typename?: 'News'
@@ -6969,6 +7319,7 @@ export type NorwegianBankIdExtraInfo = {
 
 export type NorwegianBankIdSession = {
   __typename?: 'NorwegianBankIdSession'
+  /** @deprecated This type i not in use any more */
   redirectUrl?: Maybe<Scalars['String']>
 }
 
@@ -7204,6 +7555,8 @@ export type Query = {
   appMarketingImages: Array<AppMarketingImage>
   /** Retrieve multiple coreMLModels */
   coreMLModels: Array<CoreMlModel>
+  /** Retrieve multiple faqs */
+  faqs: Array<Faq>
   /** Retrieve multiple importantMessages */
   importantMessages: Array<ImportantMessage>
   /** Retrieve multiple keyGearItemCoverages */
@@ -7212,21 +7565,6 @@ export type Query = {
   languages: Array<Language>
   /** Retrieve multiple marketingStories */
   marketingStories: Array<MarketingStory>
-  /** @deprecated Use `contracts` instead */
-  insurance: Insurance
-  cashback?: Maybe<Cashback>
-  cashbackOptions: Array<Maybe<Cashback>>
-  signStatus?: Maybe<SignStatus>
-  member: Member
-  gifs: Array<Maybe<Gif>>
-  file: File
-  messages: Array<Maybe<Message>>
-  currentChatResponse?: Maybe<ChatResponse>
-  chatState: ChatState
-  avatars?: Maybe<Array<Maybe<Avatar>>>
-  chatActions?: Maybe<Array<Maybe<ChatAction>>>
-  geo: Geo
-  angelStory?: Maybe<AngelStory>
   gateway__?: Maybe<Scalars['Boolean']>
   bankAccount?: Maybe<BankAccount>
   /** @deprecated Use `nextChargeDate` */
@@ -7255,8 +7593,6 @@ export type Query = {
   redeemedCampaigns: Array<Campaign>
   /** Returns all contracts the member currently holds, regardless of activation/termination status */
   contracts: Array<Contract>
-  /** Returns a type describing whether the 'Self Change' functionality is possible. */
-  selfChangeEligibility: SelfChangeEligibility
   /** Returns the aggregated insurance cost of a member's PENDING, ACTIVE or ACTIVE_IN_FUTURE current agreements */
   insuranceCost?: Maybe<InsuranceCost>
   /** Returns whether a member has at least one contract */
@@ -7266,10 +7602,6 @@ export type Query = {
   balance: Balance
   chargeEstimation: ChargeEstimation
   chargeHistory: Array<Charge>
-  personalInformation?: Maybe<PersonalInformation>
-  houseInformation?: Maybe<HouseInformation>
-  externalInsuranceProvider?: Maybe<ExternalInsuranceProvider>
-  autoCompleteAddress: Array<AutoCompleteResponse>
   quote: Quote
   lastQuoteOfMember: Quote
   quoteBundle: QuoteBundle
@@ -7292,6 +7624,29 @@ export type Query = {
   /** Used */
   keyGearItems: Array<KeyGearItem>
   keyGearItem?: Maybe<KeyGearItem>
+  personalInformation?: Maybe<PersonalInformation>
+  houseInformation?: Maybe<HouseInformation>
+  externalInsuranceProvider?: Maybe<ExternalInsuranceProvider>
+  autoCompleteAddress: Array<AutoCompleteResponse>
+  /** @deprecated Use `contracts` instead */
+  insurance: Insurance
+  cashback?: Maybe<Cashback>
+  cashbackOptions: Array<Maybe<Cashback>>
+  signStatus?: Maybe<SignStatus>
+  member: Member
+  gifs: Array<Maybe<Gif>>
+  file: File
+  messages: Array<Maybe<Message>>
+  currentChatResponse?: Maybe<ChatResponse>
+  chatState: ChatState
+  avatars?: Maybe<Array<Maybe<Avatar>>>
+  chatActions?: Maybe<Array<Maybe<ChatAction>>>
+  geo: Geo
+  angelStory?: Maybe<AngelStory>
+  /** Returns a type describing whether the 'Self Change' functionality is possible. */
+  selfChangeEligibility: SelfChangeEligibility
+  /** All locales that are available and activated */
+  availableLocales: Array<Locale>
 }
 
 export type QueryAppMarketingImagesArgs = {
@@ -7309,6 +7664,18 @@ export type QueryAppMarketingImagesArgs = {
 export type QueryCoreMlModelsArgs = {
   where?: Maybe<CoreMlModelWhereInput>
   orderBy?: Maybe<CoreMlModelOrderByInput>
+  skip?: Maybe<Scalars['Int']>
+  after?: Maybe<Scalars['String']>
+  before?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+  stage?: Stage
+  locales?: Array<Locale>
+}
+
+export type QueryFaqsArgs = {
+  where?: Maybe<FaqWhereInput>
+  orderBy?: Maybe<FaqOrderByInput>
   skip?: Maybe<Scalars['Int']>
   after?: Maybe<Scalars['String']>
   before?: Maybe<Scalars['String']>
@@ -7366,41 +7733,8 @@ export type QueryMarketingStoriesArgs = {
   locales?: Array<Locale>
 }
 
-export type QueryCashbackArgs = {
-  locale?: Maybe<Locale>
-}
-
-export type QueryCashbackOptionsArgs = {
-  locale?: Maybe<Locale>
-}
-
-export type QueryGifsArgs = {
-  query: Scalars['String']
-}
-
-export type QueryFileArgs = {
-  key: Scalars['String']
-}
-
-export type QueryAngelStoryArgs = {
-  name: Scalars['String']
-  locale?: Maybe<Scalars['String']>
-}
-
 export type QueryCampaignArgs = {
   code: Scalars['String']
-}
-
-export type QueryPersonalInformationArgs = {
-  input: PersonalInformationInput
-}
-
-export type QueryHouseInformationArgs = {
-  input: HouseInformationInput
-}
-
-export type QueryAutoCompleteAddressArgs = {
-  input: Scalars['String']
 }
 
 export type QueryQuoteArgs = {
@@ -7481,12 +7815,50 @@ export type QueryKeyGearItemArgs = {
   id: Scalars['ID']
 }
 
+export type QueryPersonalInformationArgs = {
+  input: PersonalInformationInput
+}
+
+export type QueryHouseInformationArgs = {
+  input: HouseInformationInput
+}
+
+export type QueryAutoCompleteAddressArgs = {
+  input: Scalars['String']
+}
+
+export type QueryCashbackArgs = {
+  locale?: Maybe<Locale>
+}
+
+export type QueryCashbackOptionsArgs = {
+  locale?: Maybe<Locale>
+}
+
+export type QueryGifsArgs = {
+  query: Scalars['String']
+}
+
+export type QueryFileArgs = {
+  key: Scalars['String']
+}
+
+export type QueryAngelStoryArgs = {
+  name: Scalars['String']
+  locale?: Maybe<Scalars['String']>
+}
+
 export type Quote = CompleteQuote | IncompleteQuote
 
 export type QuoteBundle = {
   __typename?: 'QuoteBundle'
   quotes: Array<BundledQuote>
   bundleCost: InsuranceCost
+  frequentlyAskedQuestions: Array<Faq>
+}
+
+export type QuoteBundleFrequentlyAskedQuestionsArgs = {
+  locale: Locale
 }
 
 export type QuoteBundleInput = {
@@ -7612,6 +7984,10 @@ export type S3FileInput = {
 
 /** These types represent reasons for why the self-change flow cannot be run. */
 export enum SelfChangeBlocker {
+  /** Member has no contracts - changing them makes no sense. */
+  NoContracts = 'NO_CONTRACTS',
+  /** Member has at least one contract that is not supported at this time */
+  UnsupportedContract = 'UNSUPPORTED_CONTRACT',
   /** Contract is still pending, it can't be changed until it is active. */
   StillPending = 'STILL_PENDING',
   /** Contract has a termination date set. */
@@ -7692,8 +8068,12 @@ export enum SelfChangeDanishHomeContentsType {
 
 export type SelfChangeEligibility = {
   __typename?: 'SelfChangeEligibility'
-  /** A list of reasons for why 'Self Change' is not possible - if empty 'Self Change' can be done. */
+  /**
+   * A list of reasons for why 'Self Change' is not possible - if empty 'Self Change' can be done.
+   * @deprecated Use embarkStoryId to determine if it is eligible or not
+   */
   blockers: Array<SelfChangeBlocker>
+  embarkStoryId?: Maybe<Scalars['ID']>
 }
 
 export type SelfChangeExtraBuildingInput = {
@@ -7834,6 +8214,9 @@ export type SubmitAdyenRedirectionResponse = {
 
 export type Subscription = {
   __typename?: 'Subscription'
+  /** @deprecated use dataCollectionStatusV2 instead */
+  dataCollectionStatus?: Maybe<DataCollectingStatusResponse>
+  dataCollectionStatusV2: DataCollectingStatusResponseV2
   /** @deprecated Use Quotes instead */
   offer?: Maybe<OfferEvent>
   /** @deprecated Use Quotes instead */
@@ -7842,17 +8225,6 @@ export type Subscription = {
   currentChatResponse?: Maybe<ChatResponse>
   chatState: ChatState
   authStatus?: Maybe<AuthEvent>
-  /** @deprecated use dataCollectionStatusV2 instead */
-  dataCollectionStatus?: Maybe<DataCollectingStatusResponse>
-  dataCollectionStatusV2: DataCollectingStatusResponseV2
-}
-
-export type SubscriptionCurrentChatResponseArgs = {
-  mostRecentTimestamp: Scalars['String']
-}
-
-export type SubscriptionChatStateArgs = {
-  mostRecentTimestamp: Scalars['String']
 }
 
 export type SubscriptionDataCollectionStatusArgs = {
@@ -7861,6 +8233,14 @@ export type SubscriptionDataCollectionStatusArgs = {
 
 export type SubscriptionDataCollectionStatusV2Args = {
   reference: Scalars['ID']
+}
+
+export type SubscriptionCurrentChatResponseArgs = {
+  mostRecentTimestamp: Scalars['String']
+}
+
+export type SubscriptionChatStateArgs = {
+  mostRecentTimestamp: Scalars['String']
 }
 
 export type SuccessfullyRemovedCampaignsResult = {
@@ -7958,6 +8338,25 @@ export enum SystemDateTimeFieldVariation {
   Base = 'BASE',
   Localization = 'LOCALIZATION',
   Combined = 'COMBINED',
+}
+
+export type Table = {
+  __typename?: 'Table'
+  title: Scalars['String']
+  sections: Array<TableSection>
+}
+
+export type TableRow = {
+  __typename?: 'TableRow'
+  title: Scalars['String']
+  subtitle?: Maybe<Scalars['String']>
+  value: Scalars['String']
+}
+
+export type TableSection = {
+  __typename?: 'TableSection'
+  title: Scalars['String']
+  rows: Array<TableRow>
 }
 
 /** The contract is active today but will be terminated in the future, i.e. is active today but will not be in the future */
@@ -8072,10 +8471,16 @@ export type Translation = Node & {
   id: Scalars['ID']
   /** The time the document was created */
   createdAt: Scalars['DateTime']
+  /** User that created this document */
+  createdBy?: Maybe<User>
   /** The time the document was updated */
   updatedAt: Scalars['DateTime']
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>
+  /** User that last published this document */
+  publishedBy?: Maybe<User>
   language?: Maybe<Language>
   project?: Maybe<Project>
   key?: Maybe<Key>
@@ -8088,6 +8493,18 @@ export type TranslationDocumentInStagesArgs = {
   stages?: Array<Stage>
   includeCurrent?: Scalars['Boolean']
   inheritLocale?: Scalars['Boolean']
+}
+
+export type TranslationCreatedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+export type TranslationUpdatedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+export type TranslationPublishedByArgs = {
+  locales?: Maybe<Array<Locale>>
 }
 
 export type TranslationLanguageArgs = {
@@ -8197,6 +8614,7 @@ export type TranslationManyWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -8212,6 +8630,7 @@ export type TranslationManyWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
+  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -8227,6 +8646,7 @@ export type TranslationManyWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedBy?: Maybe<UserWhereInput>
   language?: Maybe<LanguageWhereInput>
   project?: Maybe<Project>
   /** All values that are not equal to given value. */
@@ -8388,6 +8808,7 @@ export type TranslationWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -8403,6 +8824,7 @@ export type TranslationWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
+  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -8418,6 +8840,7 @@ export type TranslationWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedBy?: Maybe<UserWhereInput>
   language?: Maybe<LanguageWhereInput>
   project?: Maybe<Project>
   /** All values that are not equal to given value. */
@@ -8522,6 +8945,57 @@ export type UpdateReferralCampaignCodeResult =
   | CodeTooShort
   | ExceededMaximumUpdates
 
+/** User system model */
+export type User = Node & {
+  __typename?: 'User'
+  /** System stage field */
+  stage: Stage
+  /** Get the document in other stages */
+  documentInStages: Array<User>
+  /** The unique identifier */
+  id: Scalars['ID']
+  /** The time the document was created */
+  createdAt: Scalars['DateTime']
+  /** The time the document was updated */
+  updatedAt: Scalars['DateTime']
+  /** The time the document was published. Null on documents in draft stage. */
+  publishedAt?: Maybe<Scalars['DateTime']>
+  /** The username */
+  name: Scalars['String']
+  /** Profile Picture url */
+  picture?: Maybe<Scalars['String']>
+  /** User Kind. Can be either MEMBER, PAT or PUBLIC */
+  kind: UserKind
+  /** Flag to determine if user is active or not */
+  isActive: Scalars['Boolean']
+}
+
+/** User system model */
+export type UserDocumentInStagesArgs = {
+  stages?: Array<Stage>
+  includeCurrent?: Scalars['Boolean']
+  inheritLocale?: Scalars['Boolean']
+}
+
+/** A connection to a list of items. */
+export type UserConnection = {
+  __typename?: 'UserConnection'
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo
+  /** A list of edges. */
+  edges: Array<UserEdge>
+  aggregate: Aggregate
+}
+
+/** An edge in a connection. */
+export type UserEdge = {
+  __typename?: 'UserEdge'
+  /** The item at the end of the edge. */
+  node: User
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']
+}
+
 export type UserFeature = Node & {
   __typename?: 'UserFeature'
   /** System stage field */
@@ -8532,10 +9006,16 @@ export type UserFeature = Node & {
   id: Scalars['ID']
   /** The time the document was created */
   createdAt: Scalars['DateTime']
+  /** User that created this document */
+  createdBy?: Maybe<User>
   /** The time the document was updated */
   updatedAt: Scalars['DateTime']
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>
+  /** User that last published this document */
+  publishedBy?: Maybe<User>
   feature?: Maybe<Feature>
   memberId?: Maybe<Scalars['String']>
   /** List of UserFeature versions */
@@ -8548,10 +9028,29 @@ export type UserFeatureDocumentInStagesArgs = {
   inheritLocale?: Scalars['Boolean']
 }
 
+export type UserFeatureCreatedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+export type UserFeatureUpdatedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+export type UserFeaturePublishedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
 export type UserFeatureHistoryArgs = {
   limit?: Scalars['Int']
   skip?: Scalars['Int']
   stageOverride?: Maybe<Stage>
+}
+
+export type UserFeatureConnectInput = {
+  /** Document to connect */
+  where: UserFeatureWhereUniqueInput
+  /** Allow to specify document position in list of connected documents, will default to appending at end of list */
+  position?: Maybe<ConnectPositionInput>
 }
 
 /** A connection to a list of items. */
@@ -8569,6 +9068,20 @@ export type UserFeatureCreateInput = {
   updatedAt?: Maybe<Scalars['DateTime']>
   feature?: Maybe<Feature>
   memberId?: Maybe<Scalars['String']>
+}
+
+export type UserFeatureCreateManyInlineInput = {
+  /** Create and connect multiple existing UserFeature documents */
+  create?: Maybe<Array<UserFeatureCreateInput>>
+  /** Connect multiple existing UserFeature documents */
+  connect?: Maybe<Array<UserFeatureWhereUniqueInput>>
+}
+
+export type UserFeatureCreateOneInlineInput = {
+  /** Create and connect one UserFeature document */
+  create?: Maybe<UserFeatureCreateInput>
+  /** Connect one existing UserFeature document */
+  connect?: Maybe<UserFeatureWhereUniqueInput>
 }
 
 /** An edge in a connection. */
@@ -8624,6 +9137,7 @@ export type UserFeatureManyWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -8639,6 +9153,7 @@ export type UserFeatureManyWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
+  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -8654,6 +9169,7 @@ export type UserFeatureManyWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedBy?: Maybe<UserWhereInput>
   feature?: Maybe<Feature>
   /** All values that are not equal to given value. */
   feature_not?: Maybe<Feature>
@@ -8702,6 +9218,23 @@ export type UserFeatureUpdateInput = {
   memberId?: Maybe<Scalars['String']>
 }
 
+export type UserFeatureUpdateManyInlineInput = {
+  /** Create and connect multiple UserFeature documents */
+  create?: Maybe<Array<UserFeatureCreateInput>>
+  /** Connect multiple existing UserFeature documents */
+  connect?: Maybe<Array<UserFeatureConnectInput>>
+  /** Override currently-connected documents with multiple existing UserFeature documents */
+  set?: Maybe<Array<UserFeatureWhereUniqueInput>>
+  /** Update multiple UserFeature documents */
+  update?: Maybe<Array<UserFeatureUpdateWithNestedWhereUniqueInput>>
+  /** Upsert multiple UserFeature documents */
+  upsert?: Maybe<Array<UserFeatureUpsertWithNestedWhereUniqueInput>>
+  /** Disconnect multiple UserFeature documents */
+  disconnect?: Maybe<Array<UserFeatureWhereUniqueInput>>
+  /** Delete multiple UserFeature documents */
+  delete?: Maybe<Array<UserFeatureWhereUniqueInput>>
+}
+
 export type UserFeatureUpdateManyInput = {
   feature?: Maybe<Feature>
   memberId?: Maybe<Scalars['String']>
@@ -8712,6 +9245,21 @@ export type UserFeatureUpdateManyWithNestedWhereInput = {
   where: UserFeatureWhereInput
   /** Update many input */
   data: UserFeatureUpdateManyInput
+}
+
+export type UserFeatureUpdateOneInlineInput = {
+  /** Create and connect one UserFeature document */
+  create?: Maybe<UserFeatureCreateInput>
+  /** Update single UserFeature document */
+  update?: Maybe<UserFeatureUpdateWithNestedWhereUniqueInput>
+  /** Upsert single UserFeature document */
+  upsert?: Maybe<UserFeatureUpsertWithNestedWhereUniqueInput>
+  /** Connect existing UserFeature document */
+  connect?: Maybe<UserFeatureWhereUniqueInput>
+  /** Disconnect currently connected UserFeature document */
+  disconnect?: Maybe<Scalars['Boolean']>
+  /** Delete currently connected UserFeature document */
+  delete?: Maybe<Scalars['Boolean']>
 }
 
 export type UserFeatureUpdateWithNestedWhereUniqueInput = {
@@ -8779,6 +9327,7 @@ export type UserFeatureWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -8794,6 +9343,7 @@ export type UserFeatureWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
+  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -8809,6 +9359,7 @@ export type UserFeatureWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedBy?: Maybe<UserWhereInput>
   feature?: Maybe<Feature>
   /** All values that are not equal to given value. */
   feature_not?: Maybe<Feature>
@@ -8853,6 +9404,278 @@ export enum UserKind {
   Pat = 'PAT',
   Public = 'PUBLIC',
   Webhook = 'WEBHOOK',
+}
+
+/** Identifies documents */
+export type UserManyWhereInput = {
+  /** Contains search across all appropriate fields. */
+  _search?: Maybe<Scalars['String']>
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<UserWhereInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<UserWhereInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<UserWhereInput>>
+  id?: Maybe<Scalars['ID']>
+  /** All values that are not equal to given value. */
+  id_not?: Maybe<Scalars['ID']>
+  /** All values that are contained in given list. */
+  id_in?: Maybe<Array<Scalars['ID']>>
+  /** All values that are not contained in given list. */
+  id_not_in?: Maybe<Array<Scalars['ID']>>
+  /** All values containing the given string. */
+  id_contains?: Maybe<Scalars['ID']>
+  /** All values not containing the given string. */
+  id_not_contains?: Maybe<Scalars['ID']>
+  /** All values starting with the given string. */
+  id_starts_with?: Maybe<Scalars['ID']>
+  /** All values not starting with the given string. */
+  id_not_starts_with?: Maybe<Scalars['ID']>
+  /** All values ending with the given string. */
+  id_ends_with?: Maybe<Scalars['ID']>
+  /** All values not ending with the given string */
+  id_not_ends_with?: Maybe<Scalars['ID']>
+  createdAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  createdAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  createdAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  createdAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  createdAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  createdAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  createdAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  createdAt_gte?: Maybe<Scalars['DateTime']>
+  updatedAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  updatedAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  updatedAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  updatedAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  updatedAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  updatedAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  updatedAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  updatedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  publishedAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  publishedAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  publishedAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  publishedAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  publishedAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  publishedAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  publishedAt_gte?: Maybe<Scalars['DateTime']>
+  name?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  name_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  name_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  name_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values containing the given string. */
+  name_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  name_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  name_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  name_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  name_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string */
+  name_not_ends_with?: Maybe<Scalars['String']>
+  picture?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  picture_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  picture_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  picture_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values containing the given string. */
+  picture_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  picture_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  picture_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  picture_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  picture_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string */
+  picture_not_ends_with?: Maybe<Scalars['String']>
+  kind?: Maybe<UserKind>
+  /** All values that are not equal to given value. */
+  kind_not?: Maybe<UserKind>
+  /** All values that are contained in given list. */
+  kind_in?: Maybe<Array<UserKind>>
+  /** All values that are not contained in given list. */
+  kind_not_in?: Maybe<Array<UserKind>>
+  isActive?: Maybe<Scalars['Boolean']>
+  /** All values that are not equal to given value. */
+  isActive_not?: Maybe<Scalars['Boolean']>
+}
+
+export enum UserOrderByInput {
+  IdAsc = 'id_ASC',
+  IdDesc = 'id_DESC',
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC',
+  PublishedAtAsc = 'publishedAt_ASC',
+  PublishedAtDesc = 'publishedAt_DESC',
+  NameAsc = 'name_ASC',
+  NameDesc = 'name_DESC',
+  PictureAsc = 'picture_ASC',
+  PictureDesc = 'picture_DESC',
+  KindAsc = 'kind_ASC',
+  KindDesc = 'kind_DESC',
+  IsActiveAsc = 'isActive_ASC',
+  IsActiveDesc = 'isActive_DESC',
+}
+
+/** Identifies documents */
+export type UserWhereInput = {
+  /** Contains search across all appropriate fields. */
+  _search?: Maybe<Scalars['String']>
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<UserWhereInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<UserWhereInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<UserWhereInput>>
+  id?: Maybe<Scalars['ID']>
+  /** All values that are not equal to given value. */
+  id_not?: Maybe<Scalars['ID']>
+  /** All values that are contained in given list. */
+  id_in?: Maybe<Array<Scalars['ID']>>
+  /** All values that are not contained in given list. */
+  id_not_in?: Maybe<Array<Scalars['ID']>>
+  /** All values containing the given string. */
+  id_contains?: Maybe<Scalars['ID']>
+  /** All values not containing the given string. */
+  id_not_contains?: Maybe<Scalars['ID']>
+  /** All values starting with the given string. */
+  id_starts_with?: Maybe<Scalars['ID']>
+  /** All values not starting with the given string. */
+  id_not_starts_with?: Maybe<Scalars['ID']>
+  /** All values ending with the given string. */
+  id_ends_with?: Maybe<Scalars['ID']>
+  /** All values not ending with the given string */
+  id_not_ends_with?: Maybe<Scalars['ID']>
+  createdAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  createdAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  createdAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  createdAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  createdAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  createdAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  createdAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  createdAt_gte?: Maybe<Scalars['DateTime']>
+  updatedAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  updatedAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  updatedAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  updatedAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  updatedAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  updatedAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  updatedAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  updatedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  publishedAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  publishedAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  publishedAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  publishedAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  publishedAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  publishedAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  publishedAt_gte?: Maybe<Scalars['DateTime']>
+  name?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  name_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  name_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  name_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values containing the given string. */
+  name_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  name_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  name_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  name_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  name_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string */
+  name_not_ends_with?: Maybe<Scalars['String']>
+  picture?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  picture_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  picture_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  picture_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values containing the given string. */
+  picture_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  picture_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  picture_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  picture_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  picture_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string */
+  picture_not_ends_with?: Maybe<Scalars['String']>
+  kind?: Maybe<UserKind>
+  /** All values that are not equal to given value. */
+  kind_not?: Maybe<UserKind>
+  /** All values that are contained in given list. */
+  kind_in?: Maybe<Array<UserKind>>
+  /** All values that are not contained in given list. */
+  kind_not_in?: Maybe<Array<UserKind>>
+  isActive?: Maybe<Scalars['Boolean']>
+  /** All values that are not equal to given value. */
+  isActive_not?: Maybe<Scalars['Boolean']>
+}
+
+/** References User record uniquely */
+export type UserWhereUniqueInput = {
+  id?: Maybe<Scalars['ID']>
 }
 
 export type Version = {
@@ -9721,7 +10544,7 @@ export type RemoveStartDateMutation = { __typename?: 'Mutation' } & {
 }
 
 export type SignMethodForQuotesQueryVariables = Exact<{
-  input: Array<Scalars['ID']>
+  input: Array<Scalars['ID']> | Scalars['ID']
 }>
 
 export type SignMethodForQuotesQuery = { __typename?: 'Query' } & Pick<
@@ -9730,7 +10553,7 @@ export type SignMethodForQuotesQuery = { __typename?: 'Query' } & Pick<
 >
 
 export type SignQuotesMutationVariables = Exact<{
-  quoteIds: Array<Scalars['ID']>
+  quoteIds: Array<Scalars['ID']> | Scalars['ID']
   successUrl?: Maybe<Scalars['String']>
   failUrl?: Maybe<Scalars['String']>
 }>
@@ -9875,10 +10698,11 @@ export function useAvailablePaymentMethodsQuery(
     AvailablePaymentMethodsQueryVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<
     AvailablePaymentMethodsQuery,
     AvailablePaymentMethodsQueryVariables
-  >(AvailablePaymentMethodsDocument, baseOptions)
+  >(AvailablePaymentMethodsDocument, options)
 }
 export function useAvailablePaymentMethodsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
@@ -9886,10 +10710,11 @@ export function useAvailablePaymentMethodsLazyQuery(
     AvailablePaymentMethodsQueryVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useLazyQuery<
     AvailablePaymentMethodsQuery,
     AvailablePaymentMethodsQueryVariables
-  >(AvailablePaymentMethodsDocument, baseOptions)
+  >(AvailablePaymentMethodsDocument, options)
 }
 export type AvailablePaymentMethodsQueryHookResult = ReturnType<
   typeof useAvailablePaymentMethodsQuery
@@ -9931,9 +10756,10 @@ export function useContractsQuery(
     ContractsQueryVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<ContractsQuery, ContractsQueryVariables>(
     ContractsDocument,
-    baseOptions,
+    options,
   )
 }
 export function useContractsLazyQuery(
@@ -9942,9 +10768,10 @@ export function useContractsLazyQuery(
     ContractsQueryVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useLazyQuery<ContractsQuery, ContractsQueryVariables>(
     ContractsDocument,
-    baseOptions,
+    options,
   )
 }
 export type ContractsQueryHookResult = ReturnType<typeof useContractsQuery>
@@ -10009,10 +10836,11 @@ export function useCreateDanishHomeAccidentQuoteMutation(
     CreateDanishHomeAccidentQuoteMutationVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useMutation<
     CreateDanishHomeAccidentQuoteMutation,
     CreateDanishHomeAccidentQuoteMutationVariables
-  >(CreateDanishHomeAccidentQuoteDocument, baseOptions)
+  >(CreateDanishHomeAccidentQuoteDocument, options)
 }
 export type CreateDanishHomeAccidentQuoteMutationHookResult = ReturnType<
   typeof useCreateDanishHomeAccidentQuoteMutation
@@ -10089,10 +10917,11 @@ export function useCreateDanishHomeAccidentTravelQuoteMutation(
     CreateDanishHomeAccidentTravelQuoteMutationVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useMutation<
     CreateDanishHomeAccidentTravelQuoteMutation,
     CreateDanishHomeAccidentTravelQuoteMutationVariables
-  >(CreateDanishHomeAccidentTravelQuoteDocument, baseOptions)
+  >(CreateDanishHomeAccidentTravelQuoteDocument, options)
 }
 export type CreateDanishHomeAccidentTravelQuoteMutationHookResult = ReturnType<
   typeof useCreateDanishHomeAccidentTravelQuoteMutation
@@ -10147,9 +10976,10 @@ export function useEditQuoteMutation(
     EditQuoteMutationVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useMutation<EditQuoteMutation, EditQuoteMutationVariables>(
     EditQuoteDocument,
-    baseOptions,
+    options,
   )
 }
 export type EditQuoteMutationHookResult = ReturnType<
@@ -10206,10 +11036,11 @@ export function useExchangeTokenMutation(
     ExchangeTokenMutationVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useMutation<
     ExchangeTokenMutation,
     ExchangeTokenMutationVariables
-  >(ExchangeTokenDocument, baseOptions)
+  >(ExchangeTokenDocument, options)
 }
 export type ExchangeTokenMutationHookResult = ReturnType<
   typeof useExchangeTokenMutation
@@ -10258,10 +11089,11 @@ export function useExternalInsuranceDataQuery(
     ExternalInsuranceDataQueryVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<
     ExternalInsuranceDataQuery,
     ExternalInsuranceDataQueryVariables
-  >(ExternalInsuranceDataDocument, baseOptions)
+  >(ExternalInsuranceDataDocument, options)
 }
 export function useExternalInsuranceDataLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
@@ -10269,10 +11101,11 @@ export function useExternalInsuranceDataLazyQuery(
     ExternalInsuranceDataQueryVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useLazyQuery<
     ExternalInsuranceDataQuery,
     ExternalInsuranceDataQueryVariables
-  >(ExternalInsuranceDataDocument, baseOptions)
+  >(ExternalInsuranceDataDocument, options)
 }
 export type ExternalInsuranceDataQueryHookResult = ReturnType<
   typeof useExternalInsuranceDataQuery
@@ -10314,10 +11147,11 @@ export function useExternalInsuranceDataStatusSubscription(
     ExternalInsuranceDataStatusSubscriptionVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSubscription<
     ExternalInsuranceDataStatusSubscription,
     ExternalInsuranceDataStatusSubscriptionVariables
-  >(ExternalInsuranceDataStatusDocument, baseOptions)
+  >(ExternalInsuranceDataStatusDocument, options)
 }
 export type ExternalInsuranceDataStatusSubscriptionHookResult = ReturnType<
   typeof useExternalInsuranceDataStatusSubscription
@@ -10356,17 +11190,16 @@ export const FaqsDocument = gql`
 export function useFaqsQuery(
   baseOptions: Apollo.QueryHookOptions<FaqsQuery, FaqsQueryVariables>,
 ) {
-  return Apollo.useQuery<FaqsQuery, FaqsQueryVariables>(
-    FaqsDocument,
-    baseOptions,
-  )
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<FaqsQuery, FaqsQueryVariables>(FaqsDocument, options)
 }
 export function useFaqsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<FaqsQuery, FaqsQueryVariables>,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useLazyQuery<FaqsQuery, FaqsQueryVariables>(
     FaqsDocument,
-    baseOptions,
+    options,
   )
 }
 export type FaqsQueryHookResult = ReturnType<typeof useFaqsQuery>
@@ -10403,17 +11236,19 @@ export const MemberDocument = gql`
 export function useMemberQuery(
   baseOptions?: Apollo.QueryHookOptions<MemberQuery, MemberQueryVariables>,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<MemberQuery, MemberQueryVariables>(
     MemberDocument,
-    baseOptions,
+    options,
   )
 }
 export function useMemberLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<MemberQuery, MemberQueryVariables>,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useLazyQuery<MemberQuery, MemberQueryVariables>(
     MemberDocument,
-    baseOptions,
+    options,
   )
 }
 export type MemberQueryHookResult = ReturnType<typeof useMemberQuery>
@@ -10535,9 +11370,10 @@ export function useMemberOfferQuery(
     MemberOfferQueryVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<MemberOfferQuery, MemberOfferQueryVariables>(
     MemberOfferDocument,
-    baseOptions,
+    options,
   )
 }
 export function useMemberOfferLazyQuery(
@@ -10546,9 +11382,10 @@ export function useMemberOfferLazyQuery(
     MemberOfferQueryVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useLazyQuery<MemberOfferQuery, MemberOfferQueryVariables>(
     MemberOfferDocument,
-    baseOptions,
+    options,
   )
 }
 export type MemberOfferQueryHookResult = ReturnType<typeof useMemberOfferQuery>
@@ -10594,10 +11431,11 @@ export function useNorwegianBankIdAuthMutation(
     NorwegianBankIdAuthMutationVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useMutation<
     NorwegianBankIdAuthMutation,
     NorwegianBankIdAuthMutationVariables
-  >(NorwegianBankIdAuthDocument, baseOptions)
+  >(NorwegianBankIdAuthDocument, options)
 }
 export type NorwegianBankIdAuthMutationHookResult = ReturnType<
   typeof useNorwegianBankIdAuthMutation
@@ -10728,17 +11566,19 @@ export const QuoteDocument = gql`
 export function useQuoteQuery(
   baseOptions: Apollo.QueryHookOptions<QuoteQuery, QuoteQueryVariables>,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<QuoteQuery, QuoteQueryVariables>(
     QuoteDocument,
-    baseOptions,
+    options,
   )
 }
 export function useQuoteLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<QuoteQuery, QuoteQueryVariables>,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useLazyQuery<QuoteQuery, QuoteQueryVariables>(
     QuoteDocument,
-    baseOptions,
+    options,
   )
 }
 export type QuoteQueryHookResult = ReturnType<typeof useQuoteQuery>
@@ -10896,9 +11736,10 @@ export function useQuoteBundleQuery(
     QuoteBundleQueryVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<QuoteBundleQuery, QuoteBundleQueryVariables>(
     QuoteBundleDocument,
-    baseOptions,
+    options,
   )
 }
 export function useQuoteBundleLazyQuery(
@@ -10907,9 +11748,10 @@ export function useQuoteBundleLazyQuery(
     QuoteBundleQueryVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useLazyQuery<QuoteBundleQuery, QuoteBundleQueryVariables>(
     QuoteBundleDocument,
-    baseOptions,
+    options,
   )
 }
 export type QuoteBundleQueryHookResult = ReturnType<typeof useQuoteBundleQuery>
@@ -10981,9 +11823,10 @@ export function useRedeemCodeMutation(
     RedeemCodeMutationVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useMutation<RedeemCodeMutation, RedeemCodeMutationVariables>(
     RedeemCodeDocument,
-    baseOptions,
+    options,
   )
 }
 export type RedeemCodeMutationHookResult = ReturnType<
@@ -11046,10 +11889,11 @@ export function useRedeemCodeV2Mutation(
     RedeemCodeV2MutationVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useMutation<
     RedeemCodeV2Mutation,
     RedeemCodeV2MutationVariables
-  >(RedeemCodeV2Document, baseOptions)
+  >(RedeemCodeV2Document, options)
 }
 export type RedeemCodeV2MutationHookResult = ReturnType<
   typeof useRedeemCodeV2Mutation
@@ -11115,10 +11959,11 @@ export function useRedeemedCampaignsQuery(
     RedeemedCampaignsQueryVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<
     RedeemedCampaignsQuery,
     RedeemedCampaignsQueryVariables
-  >(RedeemedCampaignsDocument, baseOptions)
+  >(RedeemedCampaignsDocument, options)
 }
 export function useRedeemedCampaignsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
@@ -11126,10 +11971,11 @@ export function useRedeemedCampaignsLazyQuery(
     RedeemedCampaignsQueryVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useLazyQuery<
     RedeemedCampaignsQuery,
     RedeemedCampaignsQueryVariables
-  >(RedeemedCampaignsDocument, baseOptions)
+  >(RedeemedCampaignsDocument, options)
 }
 export type RedeemedCampaignsQueryHookResult = ReturnType<
   typeof useRedeemedCampaignsQuery
@@ -11181,9 +12027,10 @@ export function useReferrerNameQuery(
     ReferrerNameQueryVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<ReferrerNameQuery, ReferrerNameQueryVariables>(
     ReferrerNameDocument,
-    baseOptions,
+    options,
   )
 }
 export function useReferrerNameLazyQuery(
@@ -11192,9 +12039,10 @@ export function useReferrerNameLazyQuery(
     ReferrerNameQueryVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useLazyQuery<ReferrerNameQuery, ReferrerNameQueryVariables>(
     ReferrerNameDocument,
-    baseOptions,
+    options,
   )
 }
 export type ReferrerNameQueryHookResult = ReturnType<
@@ -11241,10 +12089,11 @@ export function useRemoveDiscountCodeMutation(
     RemoveDiscountCodeMutationVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useMutation<
     RemoveDiscountCodeMutation,
     RemoveDiscountCodeMutationVariables
-  >(RemoveDiscountCodeDocument, baseOptions)
+  >(RemoveDiscountCodeDocument, options)
 }
 export type RemoveDiscountCodeMutationHookResult = ReturnType<
   typeof useRemoveDiscountCodeMutation
@@ -11293,10 +12142,11 @@ export function useRemoveStartDateMutation(
     RemoveStartDateMutationVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useMutation<
     RemoveStartDateMutation,
     RemoveStartDateMutationVariables
-  >(RemoveStartDateDocument, baseOptions)
+  >(RemoveStartDateDocument, options)
 }
 export type RemoveStartDateMutationHookResult = ReturnType<
   typeof useRemoveStartDateMutation
@@ -11336,10 +12186,11 @@ export function useSignMethodForQuotesQuery(
     SignMethodForQuotesQueryVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<
     SignMethodForQuotesQuery,
     SignMethodForQuotesQueryVariables
-  >(SignMethodForQuotesDocument, baseOptions)
+  >(SignMethodForQuotesDocument, options)
 }
 export function useSignMethodForQuotesLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
@@ -11347,10 +12198,11 @@ export function useSignMethodForQuotesLazyQuery(
     SignMethodForQuotesQueryVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useLazyQuery<
     SignMethodForQuotesQuery,
     SignMethodForQuotesQueryVariables
-  >(SignMethodForQuotesDocument, baseOptions)
+  >(SignMethodForQuotesDocument, options)
 }
 export type SignMethodForQuotesQueryHookResult = ReturnType<
   typeof useSignMethodForQuotesQuery
@@ -11417,9 +12269,10 @@ export function useSignQuotesMutation(
     SignQuotesMutationVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useMutation<SignQuotesMutation, SignQuotesMutationVariables>(
     SignQuotesDocument,
-    baseOptions,
+    options,
   )
 }
 export type SignQuotesMutationHookResult = ReturnType<
@@ -11465,9 +12318,10 @@ export function useSignStatusQuery(
     SignStatusQueryVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<SignStatusQuery, SignStatusQueryVariables>(
     SignStatusDocument,
-    baseOptions,
+    options,
   )
 }
 export function useSignStatusLazyQuery(
@@ -11476,9 +12330,10 @@ export function useSignStatusLazyQuery(
     SignStatusQueryVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useLazyQuery<SignStatusQuery, SignStatusQueryVariables>(
     SignStatusDocument,
-    baseOptions,
+    options,
   )
 }
 export type SignStatusQueryHookResult = ReturnType<typeof useSignStatusQuery>
@@ -11524,10 +12379,11 @@ export function useSignStatusListenerSubscription(
     SignStatusListenerSubscriptionVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSubscription<
     SignStatusListenerSubscription,
     SignStatusListenerSubscriptionVariables
-  >(SignStatusListenerDocument, baseOptions)
+  >(SignStatusListenerDocument, options)
 }
 export type SignStatusListenerSubscriptionHookResult = ReturnType<
   typeof useSignStatusListenerSubscription
@@ -11573,9 +12429,10 @@ export function useStartDateMutation(
     StartDateMutationVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useMutation<StartDateMutation, StartDateMutationVariables>(
     StartDateDocument,
-    baseOptions,
+    options,
   )
 }
 export type StartDateMutationHookResult = ReturnType<
@@ -11630,10 +12487,11 @@ export function useSubmitAdditionalPaymentDetialsMutation(
     SubmitAdditionalPaymentDetialsMutationVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useMutation<
     SubmitAdditionalPaymentDetialsMutation,
     SubmitAdditionalPaymentDetialsMutationVariables
-  >(SubmitAdditionalPaymentDetialsDocument, baseOptions)
+  >(SubmitAdditionalPaymentDetialsDocument, options)
 }
 export type SubmitAdditionalPaymentDetialsMutationHookResult = ReturnType<
   typeof useSubmitAdditionalPaymentDetialsMutation
@@ -11685,10 +12543,11 @@ export function useTokenizePaymentDetailsMutation(
     TokenizePaymentDetailsMutationVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useMutation<
     TokenizePaymentDetailsMutation,
     TokenizePaymentDetailsMutationVariables
-  >(TokenizePaymentDetailsDocument, baseOptions)
+  >(TokenizePaymentDetailsDocument, options)
 }
 export type TokenizePaymentDetailsMutationHookResult = ReturnType<
   typeof useTokenizePaymentDetailsMutation
@@ -11735,10 +12594,11 @@ export function useUpdatePickedLocaleMutation(
     UpdatePickedLocaleMutationVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useMutation<
     UpdatePickedLocaleMutation,
     UpdatePickedLocaleMutationVariables
-  >(UpdatePickedLocaleDocument, baseOptions)
+  >(UpdatePickedLocaleDocument, options)
 }
 export type UpdatePickedLocaleMutationHookResult = ReturnType<
   typeof useUpdatePickedLocaleMutation
