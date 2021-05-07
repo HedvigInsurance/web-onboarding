@@ -5,7 +5,7 @@ import { InsuranceTerm, InsuranceTermType } from 'data/graphql'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { OfferData, OfferQuote } from '../types'
 import { checkIfMainQuote } from '../utils'
-import { getTermsLink } from '../Perils/InsuranceValues'
+import { getTemporaryTermsLink } from '../Perils/InsuranceValues'
 import { Group, Row } from './InsuranceSummary'
 
 const linkColor = colorsV3.gray700
@@ -30,8 +30,11 @@ type GetUrlParams = {
 }
 
 const getUrl = ({ currentLocale, termType, urlFromBackend }: GetUrlParams) => {
-  const temporaryTermsLink = getTermsLink(currentLocale)
-  // 👆 This link is temporary since we can't get the correct ones from content-service right now
+  const temporaryTermsLink = getTemporaryTermsLink({
+    currentLocale,
+    urlFromBackend,
+  })
+  // 👆 This is temporary since we can't get the correct ones from back-end for all markets right now
 
   if (termType === 'TERMS_AND_CONDITIONS') {
     return temporaryTermsLink
