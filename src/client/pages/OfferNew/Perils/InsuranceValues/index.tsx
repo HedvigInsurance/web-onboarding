@@ -70,7 +70,7 @@ const Link = styled.a`
   }
 `
 
-export const getTermsLink = (currentLocale: string) => {
+export const getTemporaryTermsLink = (currentLocale: string) => {
   const baseUrl = 'https://www.hedvig.com'
 
   switch (currentLocale) {
@@ -96,7 +96,7 @@ export const InsuranceValues: React.FC<Props> = ({ offerQuote }) => {
 
   const currentLocale = useCurrentLocale()
 
-  const temporaryTermsLink = getTermsLink(currentLocale)
+  const temporaryTermsLink = getTemporaryTermsLink(currentLocale)
   // 👆 This link is only temporary since we can't get the correct ones from content-service right now
 
   return (
