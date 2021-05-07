@@ -42,9 +42,14 @@ export interface NorwegianTravelContentFieldSchema {
   norwegianTravel: FieldSchemaBuilder<RequiredFields<EditNorwegianTravelInput>>
 }
 
+export type PartialEditDanishHomeContentsInput = Omit<
+  EditDanishHomeContentsInput,
+  'apartment' | 'floor' | 'city' | 'bbrId'
+>
+
 export interface DanishHomeContentFieldSchema {
   danishHomeContents: FieldSchemaBuilder<
-    RequiredFields<EditDanishHomeContentsInput>
+    RequiredFields<PartialEditDanishHomeContentsInput>
   >
 }
 
@@ -76,4 +81,4 @@ export type MarketFields =
   | FieldSchemaBuilder<RequiredFields<EditSwedishHouseInput>>
   | FieldSchemaBuilder<RequiredFields<EditNorwegianHomeContentsInput>>
   | FieldSchemaBuilder<RequiredFields<EditNorwegianTravelInput>>
-  | FieldSchemaBuilder<RequiredFields<EditDanishHomeContentsInput>>
+  | FieldSchemaBuilder<RequiredFields<PartialEditDanishHomeContentsInput>>
