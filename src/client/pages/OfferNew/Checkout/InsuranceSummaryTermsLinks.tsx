@@ -30,8 +30,11 @@ type GetUrlParams = {
 }
 
 const getUrl = ({ currentLocale, termType, urlFromBackend }: GetUrlParams) => {
-  const temporaryTermsLink = getTemporaryTermsLink(currentLocale)
-  // 👆 This link is temporary since we can't get the correct ones from content-service right now
+  const temporaryTermsLink = getTemporaryTermsLink({
+    currentLocale,
+    urlFromBackend,
+  })
+  // 👆 This is temporary since we can't get the correct ones from back-end for all markets right now
 
   if (termType === 'TERMS_AND_CONDITIONS') {
     return temporaryTermsLink
