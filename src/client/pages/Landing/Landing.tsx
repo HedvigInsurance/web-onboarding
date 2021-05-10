@@ -135,10 +135,18 @@ const CardContainer = styled.div`
   @media (min-width: 850px) {
     display: flex;
     justify-content: center;
+
+    > * + * {
+      margin-left: 1rem;
+    }
   }
 
   @media (min-width: 1020px) {
     width: 100%;
+
+    > * + * {
+      margin-left: 1.5rem;
+    }
   }
 `
 

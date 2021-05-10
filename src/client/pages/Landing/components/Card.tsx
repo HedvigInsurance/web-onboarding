@@ -32,14 +32,11 @@ const CardComponent = styled.div<{ disabled?: boolean }>`
     flex-direction: column;
     justify-content: space-between;
     max-width: 28rem;
-    margin: 0 0.5rem 1rem;
     padding: 1.5rem;
   }
 
   @media (min-width: 1020px) {
     justify-content: space-between;
-    margin-right: 0.75rem;
-    margin-left: 0.75rem;
     padding: 2rem;
     border-radius: 0.75rem;
   }
