@@ -152,7 +152,7 @@ const CardContainer = styled.div`
   }
 `
 
-export const Landing: React.FC<{ language: string }> = ({ language }) => {
+export const Landing: React.FC = () => {
   const textKeys = useTextKeys()
   const market = useMarket()
   const currentLocale = useCurrentLocale()
@@ -228,7 +228,7 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
                 {productsData[market].map(
                   ({ id, linkSlug, badge, headline, paragraph, disabled }) => (
                     <Card
-                      to={`/${language}/new-member${linkSlug}`}
+                      to={`/${currentLocale}/new-member${linkSlug}`}
                       badge={badge && textKeys[badge]()}
                       disabled={disabled}
                       key={id}

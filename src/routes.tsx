@@ -170,9 +170,7 @@ export const reactPageRoutes: ReactPageRoute[] = [
   },
   {
     path: LOCALE_PATH_PATTERN + '/new-member',
-    render: ({ match }: RouteComponentProps<any>) => (
-      <Landing language={match.params.locale} />
-    ),
+    Component: Landing,
     exact: true,
   },
   {
