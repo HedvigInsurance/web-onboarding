@@ -81,10 +81,11 @@ export const Limits: React.FC<Props> = ({ insurableLimits }) => {
                 <Label>{insurableLimit.label}</Label>
                 <Value>{insurableLimit.limit}</Value>
               </TextContainer>
-
-              <TooltipWrapper>
-                <Tooltip size="lg" body={insurableLimit.description} />
-              </TooltipWrapper>
+              {insurableLimit.description && (
+                <TooltipWrapper>
+                  <Tooltip size="lg" body={insurableLimit.description} />
+                </TooltipWrapper>
+              )}
             </Container>
           )
         },
