@@ -76,7 +76,7 @@ const CardHeader = styled.div`
     display: none;
   }
 
-  @media (min-height: 600px) {
+  @media (min-height: 620px) {
     padding-bottom: 1rem;
   }
 
@@ -121,17 +121,6 @@ const ArrowWrapper = styled.span`
   }
 `
 
-const CardContainer: React.FC<{
-  disabled: boolean
-  to: string
-}> = ({ children, disabled, to }) => {
-  return disabled ? (
-    <CardComponent disabled={disabled}>{children}</CardComponent>
-  ) : (
-    <CardLink to={to}>{children}</CardLink>
-  )
-}
-
 export const CardHeadline = styled.h2<{ disabled?: boolean }>`
   width: 100%;
   margin: 0;
@@ -171,6 +160,17 @@ export const CardParagraph = styled.p`
     max-width: 21ch;
   }
 `
+
+const CardContainer: React.FC<{
+  disabled: boolean
+  to: string
+}> = ({ children, disabled, to }) => {
+  return disabled ? (
+    <CardComponent disabled={disabled}>{children}</CardComponent>
+  ) : (
+    <CardLink to={to}>{children}</CardLink>
+  )
+}
 
 interface Props {
   to: string
