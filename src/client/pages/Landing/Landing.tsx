@@ -15,7 +15,7 @@ import { useTextKeys } from 'utils/textKeys'
 import { CheckmarkCircle } from 'components/icons/CheckmarkCircle'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import { alternateLinksData, productsData } from './landingPageData'
-import { Card } from './components/Card'
+import { Card, CardHeadline, CardParagraph } from './components/Card'
 
 const LandingPageContainer = styled.div`
   position: relative;
@@ -139,43 +139,6 @@ const CardContainer = styled.div`
 
   @media (min-width: 1020px) {
     width: 100%;
-  }
-`
-
-const CardHeadline = styled.h2<{ disabled?: boolean }>`
-  width: 100%;
-  margin: 0;
-  font-size: 1.25rem;
-  line-height: 1.2;
-  color: ${(props) => (props.disabled ? colorsV3.gray500 : colorsV3.gray900)};
-
-  @media (min-width: 500px) {
-    margin-bottom: 0.25rem;
-    font-size: 1.5rem;
-    line-height: 1.25;
-  }
-
-  @media (min-width: 850px) {
-    max-width: 13ch;
-    font-size: 2rem;
-    letter-spacing: -0.02em;
-  }
-`
-
-const CardParagraph = styled.p`
-  margin: 0;
-  font-size: 1rem;
-  line-height: 1.5;
-  color: ${colorsV3.gray500};
-
-  @media (min-width: 850px) {
-    max-width: 20ch;
-    font-size: 1.125rem;
-  }
-
-  @media (min-width: 1020px) {
-    font-size: 1.5rem;
-    letter-spacing: -0.02em;
   }
 `
 
