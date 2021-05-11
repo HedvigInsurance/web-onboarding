@@ -275,5 +275,6 @@
   "SIDEBAR_INSURANCE_TYPE_DK_ACCIDENT_STUDENT": "Accident insurance",
   "SIDEBAR_INSURANCE_TYPE_DK_TRAVEL": "Travel insurance",
   "SIDEBAR_INSURANCE_TYPE_DK_TRAVEL_STUDENT": "Travel insurance",
-  "WEB_REFERRAL_ADDEDPERK": "{REFERRAL_VALUE} \/ month discount via Hedvig Forever"
+  "WEB_REFERRAL_ADDEDPERK": "{REFERRAL_VALUE} \/ month discount via Hedvig Forever",
+  "DETAILS_MODULE_TABLE_RESIDENCE_TYPE_CELL_LABEL": "Type of residence"
 }
