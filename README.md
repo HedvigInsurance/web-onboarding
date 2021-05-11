@@ -75,12 +75,12 @@ Text keys live in [Lokalise](https://lokalise.com/) and are exported from there 
 This is the process for updating/adding text keys:
 
 1. Make updates to text keys in Lokalise, i.e. add new text keys or update translations. Preferably we use the Figma/Sketch
-    plugin to export text keys and translations directly from design.
+   plugin to export text keys and translations directly from design.
 2. Download updates from Lokalise by using `yarn download-translations`
-    1. Ensure you have installed  the [Lokalise CLI tool](https://github.com/lokalise/lokalise-cli-2-go)
-    2. Generate an API token in your [Lokalise profile page](https://app.lokalise.com/profile)
-    3. Run `yarn download-translations` and follow the instructions
-    4. All text keys tagged with "web-onboarding" will be exported to the translation JSON files. 🤑
+   1. Ensure you have installed the [Lokalise CLI tool](https://github.com/lokalise/lokalise-cli-2-go)
+   2. Generate an API token with "Read-only access" in your [Lokalise profile page](https://app.lokalise.com/profile)
+   3. Run `yarn download-translations` and follow the instructions
+   4. All text keys tagged with "web-onboarding" will be exported to the translation JSON files. 🤑
 
 ### Debugging
 
