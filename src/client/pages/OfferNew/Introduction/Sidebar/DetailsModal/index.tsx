@@ -122,23 +122,9 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
     form: EditQuoteInput,
     offerData: OfferData,
   ) => {
-    const mainQuoteResult = await editQuote({
-      variables: {
-        input: form,
-      },
-    })
-    if (
-      hasEditQuoteErrors(mainQuoteResult) ||
-      isUnderwritingLimitsHit(mainQuoteResult)
-    ) {
-      return mainQuoteResult
-    }
-    const quoutesToUpdate = offerData.quotes.filter(
-      (quote) => quote.id !== form.id,
-    )
     const formValues = getFormData(form, offerData) as QuoteDetailsInput
     return Promise.all(
-      quoutesToUpdate.map(async (quote) => {
+      offerData.quotes.map(async (quote) => {
         const updateQuoteDetails = getUpdatedQuoteDetails(
           quote.quoteDetails,
           formValues,
@@ -148,6 +134,9 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
           variables: {
             input: {
               id: quote.id,
+              firstName: form.firstName,
+              lastName: form.lastName,
+              birthDate: form.birthDate,
               [quoteType]: updateQuoteDetails,
             },
           },
