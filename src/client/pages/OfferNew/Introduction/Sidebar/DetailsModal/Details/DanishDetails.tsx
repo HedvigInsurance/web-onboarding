@@ -1,13 +1,8 @@
 import React from 'react'
 import { InputGroup } from 'components/inputs'
-import { useTextKeys } from 'utils/textKeys'
 import { isDanishHomeContentFieldSchema } from '../utils'
 import { DetailInput } from './components/DetailInput'
-import {
-  Content,
-  ContentColumn,
-  ContentColumnTitle,
-} from './components/Details.styles'
+import { Content, ContentColumn } from './components/Details.styles'
 import { DetailsProps } from './types'
 
 export const DanishDetails: React.FC<DetailsProps> = ({
@@ -15,15 +10,11 @@ export const DanishDetails: React.FC<DetailsProps> = ({
   formikProps,
   offerQuote,
 }) => {
-  const textKeys = useTextKeys()
   return (
     <>
       {isDanishHomeContentFieldSchema(fieldSchema, offerQuote) && (
         <Content>
           <ContentColumn>
-            <ContentColumnTitle>
-              {textKeys.DETAILS_MODULE_PERSONAL_INFORMATION()}
-            </ContentColumnTitle>
             <InputGroup>
               <DetailInput
                 field={fieldSchema.firstName}
@@ -43,9 +34,6 @@ export const DanishDetails: React.FC<DetailsProps> = ({
             </InputGroup>
           </ContentColumn>
           <ContentColumn>
-            <ContentColumnTitle>
-              {textKeys.DETAILS_MODULE_TABLE_TITLE()}
-            </ContentColumnTitle>
             <InputGroup>
               <DetailInput
                 field={fieldSchema.danishHomeContents.street}
