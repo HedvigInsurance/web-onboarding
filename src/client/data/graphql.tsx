@@ -22,7 +22,6 @@ export type Scalars = {
   LocalDate: any
   /** A String-representation of Adyen's PaymentMethodsResponse */
   PaymentMethodsResponse: any
-  /** An ISO-8601 String representation of a `java.time.Instant`, e.g. 2019-07-03T19:07:38.494081Z */
   Instant: any
   URL: any
   JSONString: any
@@ -207,6 +206,72 @@ export type Address = {
   floor?: Maybe<Scalars['String']>
 }
 
+/** A quote-agnostic payload type for changing the addess. */
+export type AddressChangeInput = {
+  /** The target bundle that should have its address changed. */
+  contractBundleId: Scalars['ID']
+  /** Is this an apartment or a house. */
+  type: AddressHomeType
+  /** Street value, including number. */
+  street: Scalars['String']
+  /** Zip code. */
+  zip: Scalars['String']
+  /** The total living space, in square meters. */
+  livingSpace: Scalars['Int']
+  /** Number co-insured, the number of people on the contract except for the policy holder. */
+  numberCoInsured: Scalars['Int']
+  /** Is this a rental or do does the policy holder own it? */
+  ownership: AddressOwnership
+  /** The date the member gets access to this new home. */
+  startDate: Scalars['LocalDate']
+  /** Set to true if the insurance is concerning a youth. Concept used in Norway */
+  isYouth?: Maybe<Scalars['Boolean']>
+  /** Set to true if the insurance is concerning a student. Concept used in Sweden, Denmark */
+  isStudent?: Maybe<Scalars['Boolean']>
+  /** Ancillary area. Required if type == HOUSE. */
+  ancillaryArea?: Maybe<Scalars['Int']>
+  /** Year of construction. Required if type == HOUSE. */
+  yearOfConstruction?: Maybe<Scalars['Int']>
+  /** Number of bathrooms. Required if type == HOUSE. */
+  numberOfBathrooms?: Maybe<Scalars['Int']>
+  /** Number of floors. Required if type == HOUSE. */
+  numberOfFloors?: Maybe<Scalars['Int']>
+  /** Is this property subleted? Required if type == HOUSE. */
+  isSubleted?: Maybe<Scalars['Boolean']>
+  /** A list of extra buildings outside of the main property. Required if type == HOUSE. */
+  extraBuildings?: Maybe<Array<AddressHouseExtraBuilding>>
+}
+
+export type AddressChangeQuoteFailure = {
+  __typename?: 'AddressChangeQuoteFailure'
+  breachedUnderwritingGuidelines: Array<Scalars['String']>
+}
+
+export type AddressChangeQuoteResult =
+  | AddressChangeQuoteSuccess
+  | AddressChangeQuoteFailure
+
+export type AddressChangeQuoteSuccess = {
+  __typename?: 'AddressChangeQuoteSuccess'
+  quoteIds: Array<Scalars['ID']>
+}
+
+export enum AddressHomeType {
+  Apartment = 'APARTMENT',
+  House = 'HOUSE',
+}
+
+export type AddressHouseExtraBuilding = {
+  type: Scalars['String']
+  area: Scalars['Int']
+  hasWaterConnected: Scalars['Boolean']
+}
+
+export enum AddressOwnership {
+  Own = 'OWN',
+  Rent = 'RENT',
+}
+
 export type Aggregate = {
   __typename?: 'Aggregate'
   count: Scalars['Int']
@@ -228,7 +293,6 @@ export type AgreementCore = {
   activeTo?: Maybe<Scalars['LocalDate']>
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
-  termsAndConditions?: Maybe<InsuranceTerm>
 }
 
 export enum AgreementStatus {
@@ -1843,6 +1907,18 @@ export type ContractUpcomingAgreementDetailsTableArgs = {
   locale: Locale
 }
 
+export type ContractBundle = {
+  __typename?: 'ContractBundle'
+  id: Scalars['ID']
+  contracts: Array<Contract>
+  angelStories: ContractBundleAngelStories
+}
+
+export type ContractBundleAngelStories = {
+  __typename?: 'ContractBundleAngelStories'
+  addressChange?: Maybe<Scalars['ID']>
+}
+
 export type ContractStatus =
   | PendingStatus
   | ActiveInFutureStatus
@@ -2361,7 +2437,6 @@ export type DanishAccidentAgreement = AgreementCore & {
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   status: AgreementStatus
-  termsAndConditions?: Maybe<InsuranceTerm>
   address: Address
   numberCoInsured: Scalars['Int']
   type?: Maybe<DanishAccidentLineOfBusiness>
@@ -2403,7 +2478,6 @@ export type DanishHomeContentAgreement = AgreementCore & {
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   status: AgreementStatus
-  termsAndConditions?: Maybe<InsuranceTerm>
   address: Address
   numberCoInsured: Scalars['Int']
   squareMeters: Scalars['Int']
@@ -2444,7 +2518,6 @@ export type DanishTravelAgreement = AgreementCore & {
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   status: AgreementStatus
-  termsAndConditions?: Maybe<InsuranceTerm>
   address: Address
   numberCoInsured: Scalars['Int']
   type?: Maybe<DanishTravelLineOfBusiness>
@@ -3418,21 +3491,7 @@ export type ExternalInsuranceProviderMutationInitiateDataCollectionWithNorwegian
   input: DataCollectionPhoneNumberInput
 }
 
-export type ExtraBuilding =
-  | ExtraBuildingGarage
-  | ExtraBuildingCarport
-  | ExtraBuildingShed
-  | ExtraBuildingStorehouse
-  | ExtraBuildingFriggebod
-  | ExtraBuildingAttefall
-  | ExtraBuildingOuthouse
-  | ExtraBuildingGuesthouse
-  | ExtraBuildingGazebo
-  | ExtraBuildingGreenhouse
-  | ExtraBuildingSauna
-  | ExtraBuildingBarn
-  | ExtraBuildingBoathouse
-  | ExtraBuildingOther
+export type ExtraBuilding = ExtraBuildingValue
 
 export type ExtraBuildingAttefall = ExtraBuildingCore & {
   __typename?: 'ExtraBuildingAttefall'
@@ -3559,6 +3618,13 @@ export enum ExtraBuildingType {
   Barn = 'BARN',
   Boathouse = 'BOATHOUSE',
   Other = 'OTHER',
+}
+
+export type ExtraBuildingValue = ExtraBuildingCore & {
+  __typename?: 'ExtraBuildingValue'
+  area: Scalars['Int']
+  displayName: Scalars['String']
+  hasWaterConnected: Scalars['Boolean']
 }
 
 export type FailedToStartSign = {
@@ -7079,7 +7145,8 @@ export type Mutation = {
   registerBranchCampaign?: Maybe<Scalars['Boolean']>
   updateLanguage: Scalars['Boolean']
   updatePickedLocale: Member
-  createSelfChangeQuote: SelfChangeQuoteOutput
+  /** Create all the quotes needed in relation to a change of address, based on the current state of the member's insurance. */
+  createAddressChangeQuotes: AddressChangeQuoteResult
 }
 
 export type MutationExchangeTokenArgs = {
@@ -7279,8 +7346,8 @@ export type MutationUpdatePickedLocaleArgs = {
   pickedLocale: Locale
 }
 
-export type MutationCreateSelfChangeQuoteArgs = {
-  quoteInput: SelfChangeQuoteInput
+export type MutationCreateAddressChangeQuotesArgs = {
+  input: AddressChangeInput
 }
 
 /** A page in the `What's new`-screen in the app */
@@ -7331,7 +7398,6 @@ export type NorwegianHomeContentAgreement = AgreementCore & {
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   status: AgreementStatus
-  termsAndConditions?: Maybe<InsuranceTerm>
   address: Address
   numberCoInsured: Scalars['Int']
   squareMeters: Scalars['Int']
@@ -7368,7 +7434,6 @@ export type NorwegianTravelAgreement = AgreementCore & {
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   status: AgreementStatus
-  termsAndConditions?: Maybe<InsuranceTerm>
   numberCoInsured: Scalars['Int']
   type?: Maybe<NorwegianTravelLineOfBusiness>
 }
@@ -7643,6 +7708,8 @@ export type Query = {
   chatActions?: Maybe<Array<Maybe<ChatAction>>>
   geo: Geo
   angelStory?: Maybe<AngelStory>
+  /** Returns all the currently active contracts, combined into bundles. */
+  activeContractBundles: Array<ContractBundle>
   /** Returns a type describing whether the 'Self Change' functionality is possible. */
   selfChangeEligibility: SelfChangeEligibility
   /** All locales that are available and activated */
@@ -8004,129 +8071,14 @@ export enum SelfChangeBlocker {
   TooManyContracts = 'TOO_MANY_CONTRACTS',
 }
 
-export type SelfChangeCreateDanishAccidentInput = {
-  street: Scalars['String']
-  zipCode: Scalars['String']
-  coInsured: Scalars['Int']
-  isStudent: Scalars['Boolean']
-}
-
-export type SelfChangeCreateDanishHomeContentsInput = {
-  street: Scalars['String']
-  zipCode: Scalars['String']
-  livingSpace: Scalars['Int']
-  coInsured: Scalars['Int']
-  isStudent: Scalars['Boolean']
-  type: SelfChangeDanishHomeContentsType
-}
-
-export type SelfChangeCreateDanishTravelInput = {
-  street: Scalars['String']
-  zipCode: Scalars['String']
-  coInsured: Scalars['Int']
-  isStudent: Scalars['Boolean']
-}
-
-export type SelfChangeCreateNorwegianHomeContentsInput = {
-  street: Scalars['String']
-  zipCode: Scalars['String']
-  coInsured: Scalars['Int']
-  livingSpace: Scalars['Int']
-  isYouth: Scalars['Boolean']
-  type: SelfChangeNorwegianHomeContentsType
-}
-
-export type SelfChangeCreateNorwegianTravelInput = {
-  coInsured: Scalars['Int']
-  isYouth: Scalars['Boolean']
-}
-
-export type SelfChangeCreateSwedishApartmentInput = {
-  street: Scalars['String']
-  zipCode: Scalars['String']
-  householdSize: Scalars['Int']
-  livingSpace: Scalars['Int']
-  type: SelfChangeSwedishApartmentType
-}
-
-export type SelfChangeCreateSwedishHouseInput = {
-  street: Scalars['String']
-  zipCode: Scalars['String']
-  householdSize: Scalars['Int']
-  livingSpace: Scalars['Int']
-  ancillarySpace: Scalars['Int']
-  yearOfConstruction: Scalars['Int']
-  numberOfBathrooms: Scalars['Int']
-  isSubleted: Scalars['Boolean']
-  extraBuildings: Array<SelfChangeExtraBuildingInput>
-}
-
-export enum SelfChangeDanishHomeContentsType {
-  Rent = 'RENT',
-  Own = 'OWN',
-}
-
 export type SelfChangeEligibility = {
   __typename?: 'SelfChangeEligibility'
-  /**
-   * A list of reasons for why 'Self Change' is not possible - if empty 'Self Change' can be done.
-   * @deprecated Use embarkStoryId to determine if it is eligible or not
-   */
+  /** @deprecated Use addressChangeEmbarkStoryId instead */
   blockers: Array<SelfChangeBlocker>
+  /** @deprecated Use addressChangeEmbarkStoryId instead */
   embarkStoryId?: Maybe<Scalars['ID']>
-}
-
-export type SelfChangeExtraBuildingInput = {
-  type: SelfChangeExtraBuildingType
-  area: Scalars['Int']
-  hasWaterConnected: Scalars['Boolean']
-}
-
-export enum SelfChangeExtraBuildingType {
-  Garage = 'GARAGE',
-  Carport = 'CARPORT',
-  Shed = 'SHED',
-  Storehouse = 'STOREHOUSE',
-  Friggebod = 'FRIGGEBOD',
-  Attefall = 'ATTEFALL',
-  Outhouse = 'OUTHOUSE',
-  Guesthouse = 'GUESTHOUSE',
-  Gazebo = 'GAZEBO',
-  Greenhouse = 'GREENHOUSE',
-  Sauna = 'SAUNA',
-  Barn = 'BARN',
-  Boathouse = 'BOATHOUSE',
-  Other = 'OTHER',
-}
-
-export enum SelfChangeNorwegianHomeContentsType {
-  Rent = 'RENT',
-  Own = 'OWN',
-}
-
-export type SelfChangeQuoteInput = {
-  startDate: Scalars['LocalDate']
-  swedishApartment?: Maybe<SelfChangeCreateSwedishApartmentInput>
-  swedishHouse?: Maybe<SelfChangeCreateSwedishHouseInput>
-  norwegianHomeContents?: Maybe<SelfChangeCreateNorwegianHomeContentsInput>
-  norwegianTravel?: Maybe<SelfChangeCreateNorwegianTravelInput>
-  danishHomeContents?: Maybe<SelfChangeCreateDanishHomeContentsInput>
-  danishAccident?: Maybe<SelfChangeCreateDanishAccidentInput>
-  danishTravel?: Maybe<SelfChangeCreateDanishTravelInput>
-}
-
-export type SelfChangeQuoteOutput = {
-  __typename?: 'SelfChangeQuoteOutput'
-  id: Scalars['ID']
-  price: Scalars['Int']
-  validTo: Scalars['TimeStamp']
-}
-
-export enum SelfChangeSwedishApartmentType {
-  StudentRent = 'STUDENT_RENT',
-  Rent = 'RENT',
-  StudentBrf = 'STUDENT_BRF',
-  Brf = 'BRF',
+  /** The ID of an embark story that contains an address change flow, if eligible. */
+  addressChangeEmbarkStoryId?: Maybe<Scalars['ID']>
 }
 
 export type SessionInformation = {
@@ -8268,7 +8220,6 @@ export type SwedishApartmentAgreement = AgreementCore & {
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   status: AgreementStatus
-  termsAndConditions?: Maybe<InsuranceTerm>
   address: Address
   numberCoInsured: Scalars['Int']
   squareMeters: Scalars['Int']
@@ -8310,7 +8261,6 @@ export type SwedishHouseAgreement = AgreementCore & {
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   status: AgreementStatus
-  termsAndConditions?: Maybe<InsuranceTerm>
   address: Address
   numberCoInsured: Scalars['Int']
   squareMeters: Scalars['Int']
@@ -9960,62 +9910,10 @@ export type MemberOfferQuery = { __typename?: 'Query' } & {
                 | 'isSubleted'
               > & {
                   extraBuildings: Array<
-                    | ({ __typename?: 'ExtraBuildingGarage' } & Pick<
-                        ExtraBuildingGarage,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingCarport' } & Pick<
-                        ExtraBuildingCarport,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingShed' } & Pick<
-                        ExtraBuildingShed,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingStorehouse' } & Pick<
-                        ExtraBuildingStorehouse,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingFriggebod' } & Pick<
-                        ExtraBuildingFriggebod,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingAttefall' } & Pick<
-                        ExtraBuildingAttefall,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingOuthouse' } & Pick<
-                        ExtraBuildingOuthouse,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingGuesthouse' } & Pick<
-                        ExtraBuildingGuesthouse,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingGazebo' } & Pick<
-                        ExtraBuildingGazebo,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingGreenhouse' } & Pick<
-                        ExtraBuildingGreenhouse,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingSauna' } & Pick<
-                        ExtraBuildingSauna,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingBarn' } & Pick<
-                        ExtraBuildingBarn,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingBoathouse' } & Pick<
-                        ExtraBuildingBoathouse,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingOther' } & Pick<
-                        ExtraBuildingOther,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
+                    { __typename?: 'ExtraBuildingValue' } & Pick<
+                      ExtraBuildingValue,
+                      'area' | 'displayName' | 'hasWaterConnected'
+                    >
                   >
                 })
             | { __typename?: 'UnknownQuoteDetails' }
@@ -10135,62 +10033,10 @@ export type QuoteQuery = { __typename?: 'Query' } & {
                 | 'isSubleted'
               > & {
                   extraBuildings: Array<
-                    | ({ __typename?: 'ExtraBuildingGarage' } & Pick<
-                        ExtraBuildingGarage,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingCarport' } & Pick<
-                        ExtraBuildingCarport,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingShed' } & Pick<
-                        ExtraBuildingShed,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingStorehouse' } & Pick<
-                        ExtraBuildingStorehouse,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingFriggebod' } & Pick<
-                        ExtraBuildingFriggebod,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingAttefall' } & Pick<
-                        ExtraBuildingAttefall,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingOuthouse' } & Pick<
-                        ExtraBuildingOuthouse,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingGuesthouse' } & Pick<
-                        ExtraBuildingGuesthouse,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingGazebo' } & Pick<
-                        ExtraBuildingGazebo,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingGreenhouse' } & Pick<
-                        ExtraBuildingGreenhouse,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingSauna' } & Pick<
-                        ExtraBuildingSauna,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingBarn' } & Pick<
-                        ExtraBuildingBarn,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingBoathouse' } & Pick<
-                        ExtraBuildingBoathouse,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingOther' } & Pick<
-                        ExtraBuildingOther,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
+                    { __typename?: 'ExtraBuildingValue' } & Pick<
+                      ExtraBuildingValue,
+                      'area' | 'displayName' | 'hasWaterConnected'
+                    >
                   >
                 })
             | ({ __typename?: 'NorwegianHomeContentsDetails' } & Pick<
@@ -10286,62 +10132,10 @@ export type QuoteBundleQuery = { __typename?: 'Query' } & {
                 | 'isSubleted'
               > & {
                   extraBuildings: Array<
-                    | ({ __typename?: 'ExtraBuildingGarage' } & Pick<
-                        ExtraBuildingGarage,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingCarport' } & Pick<
-                        ExtraBuildingCarport,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingShed' } & Pick<
-                        ExtraBuildingShed,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingStorehouse' } & Pick<
-                        ExtraBuildingStorehouse,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingFriggebod' } & Pick<
-                        ExtraBuildingFriggebod,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingAttefall' } & Pick<
-                        ExtraBuildingAttefall,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingOuthouse' } & Pick<
-                        ExtraBuildingOuthouse,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingGuesthouse' } & Pick<
-                        ExtraBuildingGuesthouse,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingGazebo' } & Pick<
-                        ExtraBuildingGazebo,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingGreenhouse' } & Pick<
-                        ExtraBuildingGreenhouse,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingSauna' } & Pick<
-                        ExtraBuildingSauna,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingBarn' } & Pick<
-                        ExtraBuildingBarn,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingBoathouse' } & Pick<
-                        ExtraBuildingBoathouse,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
-                    | ({ __typename?: 'ExtraBuildingOther' } & Pick<
-                        ExtraBuildingOther,
-                        'area' | 'displayName' | 'hasWaterConnected'
-                      >)
+                    { __typename?: 'ExtraBuildingValue' } & Pick<
+                      ExtraBuildingValue,
+                      'area' | 'displayName' | 'hasWaterConnected'
+                    >
                   >
                 })
             | ({ __typename?: 'NorwegianHomeContentsDetails' } & Pick<
