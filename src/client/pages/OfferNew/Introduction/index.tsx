@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { Section } from 'pages/OfferNew/components'
 import { OfferData } from 'pages/OfferNew/types'
+import { BackgroundImage } from 'components/BackgroundImage'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { isBundle } from '../utils'
 import { HeroOfferDetails } from './HeroOfferDetails'
@@ -15,11 +16,7 @@ type Props = {
   onCheckoutOpen: () => void
 }
 
-type HeroImageProps = {
-  hasLoaded: boolean
-}
-
-const HERO_HEIGHT = '400px'
+const HERO_HEIGHT = 400
 
 const Hero = styled.div`
   width: 100%;
@@ -29,28 +26,7 @@ const Hero = styled.div`
   background-color: ${colorsV3.gray100};
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
-    height: ${HERO_HEIGHT};
-  }
-`
-
-const HeroImageWrapper = styled.div`
-  width: 100vw;
-  height: ${HERO_HEIGHT};
-  background-color: ${colorsV3.gray900};
-  overflow: hidden;
-  position: absolute;
-`
-
-const HeroImage = styled.img<HeroImageProps>`
-  height: 1000px;
-  object-fit: cover;
-  object-position: -550px -100px;
-  opacity: ${({ hasLoaded }) => (hasLoaded ? 0.5 : 0)};
-  transition: opacity 0.8s ease-out;
-
-  ${LARGE_SCREEN_MEDIA_QUERY} {
-    height: auto;
-    object-position: right -5vw;
+    height: ${HERO_HEIGHT}px;
   }
 `
 
@@ -88,26 +64,13 @@ export const Introduction: React.FC<Props> = ({
   refetch,
   onCheckoutOpen,
 }) => {
-  const [hasHeroImageLoaded, setHasHeroImageLoaded] = useState(false)
-
   const hasDataCollection =
     !isBundle(offerData) && !!offerData.quotes[0].dataCollectionId
 
   return (
     <Section>
       <Hero>
-        <HeroImageWrapper>
-          <HeroImage
-            alt="laptop grip"
-            onLoad={() => setHasHeroImageLoaded(true)}
-            hasLoaded={hasHeroImageLoaded}
-            src="/new-member-assets/landing/laptop_grip_small.jpg"
-            sizes="100vw"
-            srcSet="
-          /new-member-assets/landing/laptop_grip_small.jpg 1600w,
-          /new-member-assets/landing/laptop_grip_medium.jpg 2200w"
-          />
-        </HeroImageWrapper>
+        <BackgroundImage zIndex={0} height={HERO_HEIGHT} />
         <HeroContentWrapper>
           <ContentContainer>
             <HeroOfferDetailsContainer>
