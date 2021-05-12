@@ -38,6 +38,7 @@ export const productsData: ProductsData = {
       linkSlug: '/switch',
       headline: 'STARTPAGE_INSURED_HEADLINE',
       paragraph: 'STARTPAGE_INSURED_BODY',
+      badge: 'STARTPAGE_SE_INSURED_BADGE',
     },
   ],
   NO: [
