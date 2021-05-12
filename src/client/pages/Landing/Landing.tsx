@@ -172,7 +172,7 @@ const BackgroundContainer = styled.div<{
     top: 0;
     left: 0;
     background-color: ${colorsV3.gray900};
-    opacity: 0.5;
+    opacity: 0.3;
   }
 `
 
@@ -270,15 +270,20 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
           </CardContainer>
         </Wrapper>
         <BackgroundContainer backgroundLoaded={backgroundLoaded}>
-          <BackgroundImage
-            alt="laptop grip"
-            onLoad={() => setBackgroundHasLoaded(true)}
-            src="/new-member-assets/landing/laptop_grip_small.jpg"
-            sizes="100vw"
-            srcSet="
-            /new-member-assets/landing/laptop_grip_small.jpg 1600w,
-            /new-member-assets/landing/laptop_grip_medium.jpg 2200w"
-          />
+          <picture>
+            <source
+              media="(orientation: portrait)"
+              srcSet="/new-member-assets/landing/hedvig_table_portrait_small.jpg 900w, /new-member-assets/landing/hedvig_table_portrait_medium.jpg 1600w"
+            />
+            <source
+              media="(orientation: landscape)"
+              srcSet="/new-member-assets/landing/hedvig_table_landscape_small.jpg 1600w, /new-member-assets/landing/hedvig_table_landscape_medium.jpg 2200w"
+            />
+            <BackgroundImage
+              onLoad={() => setBackgroundHasLoaded(true)}
+              src="/new-member-assets/landing/hedvig_table_small.jpg"
+            />
+          </picture>
         </BackgroundContainer>
       </LandingPageContainer>
     </Page>
