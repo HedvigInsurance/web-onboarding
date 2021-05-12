@@ -1,4 +1,3 @@
-import { colorsV3 } from '@hedviginsurance/brand'
 import { text, withKnobs } from '@storybook/addon-knobs'
 import React from 'react'
 import { withFormik } from 'storybook-formik'
@@ -47,13 +46,15 @@ export const Dark = () => (
 )
 
 Light.story = {
-  parameters: {
-    backgrounds: [{ name: 'gray100', value: colorsV3.gray100, default: true }],
+  backgrounds: {
+    default: 'gray100',
   },
 }
 
 Dark.story = {
   parameters: {
-    backgrounds: [{ name: 'gray900', value: colorsV3.gray900, default: true }],
+    backgrounds: {
+      default: 'gray900',
+    },
   },
 }

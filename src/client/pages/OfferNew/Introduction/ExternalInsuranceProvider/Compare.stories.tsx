@@ -1,4 +1,3 @@
-import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
 import { InsuranceCost, InsuranceDataCollection } from 'src/client/data/graphql'
 import { TextKeyProvider } from 'utils/textKeys'
@@ -8,7 +7,7 @@ export default {
   title: 'Offer/Compare',
   component: Compare,
   parameters: {
-    backgrounds: [{ name: 'gray900', value: colorsV3.gray900, default: true }],
+    backgrounds: { default: 'gray900' },
     paddings: [{ name: 'Medium', value: '48px', default: true }],
   },
 }

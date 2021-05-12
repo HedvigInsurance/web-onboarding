@@ -3,11 +3,10 @@ const path = require('path')
 module.exports = {
   stories: ['../src/**/*.stories.tsx'],
   addons: [
-    '@storybook/addon-backgrounds/register',
-    '@storybook/addon-knobs/register',
-    '@storybook/addon-actions/register',
-    '@storybook/addon-viewport/register',
+    '@storybook/addon-knobs/preset',
+    '@storybook/addon-actions',
     'storybook-addon-paddings',
+    '@storybook/addon-essentials',
   ],
   webpackFinal: async (config) => {
     config.resolve.modules.push(path.resolve(__dirname, '../src/client'))
