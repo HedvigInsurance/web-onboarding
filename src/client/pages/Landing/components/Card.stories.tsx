@@ -1,6 +1,6 @@
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
-import { Card } from './Card'
+import { Card, CardHeadline, CardParagraph } from './Card'
 
 export default {
   title: 'Landing/Card',
@@ -10,7 +10,8 @@ export default {
 export const Enabled = () => (
   <MemoryRouter initialEntries={['/se/new-member']}>
     <Card to="/se/new-member/offer-1" badge="Best value" key="offer-1">
-      <h1>Home Contents & Accident</h1>
+      <CardHeadline>Home Contents & Accident</CardHeadline>
+      <CardParagraph>Get both of them</CardParagraph>
     </Card>
   </MemoryRouter>
 )
@@ -18,7 +19,8 @@ export const Enabled = () => (
 export const Disabled = () => (
   <MemoryRouter initialEntries={['/se/new-member']}>
     <Card to="" badge="Coming soon" disabled={true} key="offer-2">
-      <h1>Home Contents</h1>
+      <CardHeadline>Home Contents</CardHeadline>
+      <CardParagraph>Available soon</CardParagraph>
     </Card>
   </MemoryRouter>
 )
@@ -26,7 +28,8 @@ export const Disabled = () => (
 export const NoBadge = () => (
   <MemoryRouter initialEntries={['/se/new-member']}>
     <Card to="/se/new-member/offer-3" key="offer-3">
-      <h1>Home Contents, Accident & Travel</h1>
+      <CardHeadline>Home Contents, Accident & Travel</CardHeadline>
+      <CardParagraph>Get your price</CardParagraph>
     </Card>
   </MemoryRouter>
 )
