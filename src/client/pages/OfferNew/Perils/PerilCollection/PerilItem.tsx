@@ -47,13 +47,7 @@ const Container = styled.button`
   appearance: none;
 
   @media (min-width: 800px) {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    min-height: 8.75rem;
     padding: 1.25rem;
     border-radius: 0.5rem;
     flex-direction: column;
