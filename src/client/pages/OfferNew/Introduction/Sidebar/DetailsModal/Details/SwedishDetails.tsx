@@ -53,13 +53,9 @@ const ApartmentDetails: React.FC<ApartmentDetails> = ({
   formikProps,
   fieldSchema,
 }) => {
-  const textKeys = useTextKeys()
   return (
     <Content>
       <ContentColumn>
-        <ContentColumnTitle>
-          {textKeys.DETAILS_MODULE_PERSONAL_INFORMATION()}
-        </ContentColumnTitle>
         <InputGroup>
           <DetailInput
             field={fieldSchema.firstName}
@@ -74,9 +70,6 @@ const ApartmentDetails: React.FC<ApartmentDetails> = ({
         </InputGroup>
       </ContentColumn>
       <ContentColumn>
-        <ContentColumnTitle>
-          {textKeys.DETAILS_MODULE_TABLE_TITLE()}
-        </ContentColumnTitle>
         <InputGroup>
           <DetailInput
             field={fieldSchema.swedishApartment.street}
@@ -126,9 +119,6 @@ const HouseDetails: React.FC<HouseDetails> = ({ fieldSchema, formikProps }) => {
     <>
       <Content>
         <ContentColumn>
-          <ContentColumnTitle>
-            {textKeys.DETAILS_MODULE_PERSONAL_INFORMATION()}
-          </ContentColumnTitle>
           <InputGroup>
             <DetailInput
               field={fieldSchema.firstName}
@@ -143,9 +133,6 @@ const HouseDetails: React.FC<HouseDetails> = ({ fieldSchema, formikProps }) => {
           </InputGroup>
         </ContentColumn>
         <ContentColumn>
-          <ContentColumnTitle>
-            {textKeys.DETAILS_MODULE_TABLE_TITLE()}
-          </ContentColumnTitle>
           <InputGroup>
             <DetailInput
               field={fieldSchema.swedishHouse.street}
