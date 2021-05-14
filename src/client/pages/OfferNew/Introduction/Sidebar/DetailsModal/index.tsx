@@ -9,7 +9,7 @@ import { EditQuoteInput, useEditQuoteMutation } from 'data/graphql'
 import { LocaleLabel, locales } from 'l10n/locales'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
-import { getMainQuote } from '../../../utils'
+import { getMainQuote, isSwedish } from '../../../utils'
 import { Details } from './Details'
 import {
   getFieldSchema,
@@ -118,7 +118,12 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
     setIsUnderwritingGuidelineHit,
   ] = React.useState(false)
 
-  const editQuotes = async (form: EditQuoteInput, offerData: OfferData) => {
+  const editQuotes = async (form: EditQuoteInput) => {
+    if (isSwedish(offerData)) {
+      // No quote bundles available in Sweden, assume one quote per offer.
+      return editQuoteMutation({ variables: { input: form } })
+    }
+
     const formValues = getFormData(form, offerData) as QuoteDetailsInput
     return Promise.all(
       offerData.quotes.map((quote) => {
@@ -155,7 +160,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
             setIsUpdating(true)
             setIsUnderwritingGuidelineHit(false)
             try {
-              const result = await editQuotes(form, offerData)
+              const result = await editQuotes(form)
               if (hasEditQuoteErrors(result)) {
                 setIsUpdating(false)
                 return
