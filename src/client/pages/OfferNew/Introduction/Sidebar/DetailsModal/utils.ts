@@ -135,7 +135,7 @@ const getSwedishSchema = (
               .required(),
           },
           type: {
-            label: 'DETAILS_MODULE_TABLE_RECIDENCY_TYPE_CELL_LABEL_APARTMENT',
+            label: 'DETAILS_MODULE_TABLE_RESIDENCE_TYPE_CELL_LABEL',
             placeholder: '',
             options: [
               ...(isStudent(offerQuote.quoteDetails)
@@ -280,7 +280,7 @@ const getNorwegianSchema = (
             validation: Yup.number().required(),
           },
           type: {
-            label: 'DETAILS_MODULE_TABLE_RECIDENCY_TYPE_CELL_LABEL_APARTMENT',
+            label: 'DETAILS_MODULE_TABLE_RESIDENCE_TYPE_CELL_LABEL',
             placeholder: '',
             options: [
               {
@@ -325,7 +325,7 @@ const getDanishSchema = (base: BaseFieldSchema): DetailsFieldSchema => {
         validation: Yup.number().required(),
       },
       type: {
-        label: 'DETAILS_MODULE_TABLE_RECIDENCY_TYPE_CELL_LABEL_APARTMENT',
+        label: 'DETAILS_MODULE_TABLE_RESIDENCE_TYPE_CELL_LABEL',
         placeholder: '',
         options: [
           {

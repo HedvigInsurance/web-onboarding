@@ -2,7 +2,6 @@ import React from 'react'
 import { FormikProps } from 'formik'
 import { InputGroup } from 'components/inputs'
 import { EditQuoteInput } from 'data/graphql'
-import { useTextKeys } from 'utils/textKeys'
 import {
   isNorwegianHomeContentFieldSchema,
   isNorwegianTravelFieldSchema,
@@ -13,11 +12,7 @@ import {
   CommonFieldSchema,
 } from '../types'
 import { DetailInput } from './components/DetailInput'
-import {
-  Content,
-  ContentColumnTitle,
-  ContentColumn,
-} from './components/Details.styles'
+import { Content, ContentColumn } from './components/Details.styles'
 import { DetailsProps } from './types'
 
 export const NorwegianDetails: React.FC<DetailsProps> = ({
@@ -47,14 +42,9 @@ const NorwegianHomeContentDetails: React.FC<NorwegianHomeContentDetails> = ({
   formikProps,
   fieldSchema,
 }) => {
-  const textKeys = useTextKeys()
-
   return (
     <Content>
       <ContentColumn>
-        <ContentColumnTitle>
-          {textKeys.DETAILS_MODULE_PERSONAL_INFORMATION()}
-        </ContentColumnTitle>
         <InputGroup>
           <DetailInput
             field={fieldSchema.firstName}
@@ -74,9 +64,6 @@ const NorwegianHomeContentDetails: React.FC<NorwegianHomeContentDetails> = ({
         </InputGroup>
       </ContentColumn>
       <ContentColumn>
-        <ContentColumnTitle>
-          {textKeys.DETAILS_MODULE_TABLE_TITLE()}
-        </ContentColumnTitle>
         <InputGroup>
           <DetailInput
             field={fieldSchema.norwegianHomeContents.street}
@@ -128,14 +115,10 @@ const TravelDetails: React.FC<TravelDetails> = ({
   fieldSchema,
   formikProps,
 }) => {
-  const textKeys = useTextKeys()
   return (
     <>
       <Content>
         <ContentColumn>
-          <ContentColumnTitle>
-            {textKeys.DETAILS_MODULE_PERSONAL_INFORMATION()}
-          </ContentColumnTitle>
           <InputGroup>
             <DetailInput
               field={fieldSchema.firstName}
@@ -155,9 +138,6 @@ const TravelDetails: React.FC<TravelDetails> = ({
           </InputGroup>
         </ContentColumn>
         <ContentColumn>
-          <ContentColumnTitle>
-            {textKeys.DETAILS_MODULE_TABLE_TITLE()}
-          </ContentColumnTitle>
           <InputGroup>
             <DetailInput
               field={fieldSchema.norwegianTravel.coInsured}
