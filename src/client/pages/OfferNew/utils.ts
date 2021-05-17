@@ -162,6 +162,15 @@ export const isDanishQuote = (quote: OfferQuote): boolean =>
 export const isDanish = (offerData: OfferData): boolean =>
   offerData.quotes.every((quote) => isDanishQuote(quote))
 
+export const isDanishAccidentBundle = (offerData: OfferData): boolean =>
+  isDanish(offerData) && offerData.quotes.length === 2
+
+export const isDanishTravelBundle = (offerData: OfferData): boolean =>
+  isDanish(offerData) && offerData.quotes.length === 3
+
+export const isStudentOffer = (offerData: OfferData): boolean =>
+  offerData.quotes.every((quote) => isStudent(quote.quoteDetails))
+
 export const hasAddress = (offerData: OfferData): boolean =>
   !!offerData.person.address
 
