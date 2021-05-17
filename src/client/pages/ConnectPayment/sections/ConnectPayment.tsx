@@ -156,10 +156,10 @@ export const ConnectPaymentPage: React.FC = () => {
         <TextColumn>
           <Heading>
             <HeaderPart>
-              {textKeys.ONBOARDING_CONNECT_DD_PRE_HEADLINE()}
+              {textKeys.ONBOARDING_CONNECT_DD_HEADLINE_PART_1()}
             </HeaderPart>
             <HeaderPart addWhiteSpace>
-              {textKeys.ONBOARDING_CONNECT_DD_HEADLINE()}
+              {textKeys.ONBOARDING_CONNECT_DD_HEADLINE_PART_2()}
             </HeaderPart>
           </Heading>
           <ConnectText>{textKeys.ONBOARDING_CONNECT_DD_BODY()}</ConnectText>
