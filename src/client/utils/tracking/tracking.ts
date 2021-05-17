@@ -16,6 +16,7 @@ import {
   isNorwegian,
   isDanishAccidentBundle,
   isDanishTravelBundle,
+  isStudentOffer,
 } from 'pages/OfferNew/utils'
 import { trackOfferGTM } from './gtm'
 
@@ -50,7 +51,9 @@ export enum NoComboTypes {
 
 export enum DkBundleTypes {
   DkAccidentBundle = 'DK_ACCIDENT_BUNDLE',
+  DkAccidentBundleStudent = 'DK_ACCIDENT_BUNDLE_STUDENT',
   DkTravelBundle = 'DK_TRAVEL_BUNDLE',
+  DkTravelBundleStudent = 'DK_TRAVEL_BUNDLE_STUDENT',
 }
 
 export const getContractType = (offerData: OfferData) => {
@@ -62,11 +65,15 @@ export const getContractType = (offerData: OfferData) => {
     }
 
     if (isDanishAccidentBundle(offerData)) {
-      return DkBundleTypes.DkAccidentBundle
+      return isStudentOffer(offerData)
+        ? DkBundleTypes.DkAccidentBundleStudent
+        : DkBundleTypes.DkAccidentBundle
     }
 
     if (isDanishTravelBundle(offerData)) {
-      return DkBundleTypes.DkTravelBundle
+      return isStudentOffer(offerData)
+        ? DkBundleTypes.DkTravelBundleStudent
+        : DkBundleTypes.DkTravelBundle
     }
   }
   return offerData.quotes[0].contractType
