@@ -9,7 +9,14 @@ import {
   useRedeemedCampaignsQuery,
 } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
-import { isBundle, isYouth, isDanish } from 'pages/OfferNew/utils'
+import {
+  isBundle,
+  isYouth,
+  isDanish,
+  isNorwegian,
+  isDanishAccidentBundle,
+  isDanishTravelBundle,
+} from 'pages/OfferNew/utils'
 import { trackOfferGTM } from './gtm'
 
 const cookie = new CookieStorage()
@@ -41,9 +48,26 @@ export enum NoComboTypes {
   NoComboYouth = 'NO_COMBO_YOUTH',
 }
 
+export enum DkBundleTypes {
+  DkAccidentBundle = 'DK_ACCIDENT_BUNDLE',
+  DkTravelBundle = 'DK_TRAVEL_BUNDLE',
+}
+
 export const getContractType = (offerData: OfferData) => {
   if (isBundle(offerData)) {
-    return isYouth(offerData) ? NoComboTypes.NoComboYouth : NoComboTypes.NoCombo
+    if (isNorwegian(offerData)) {
+      return isYouth(offerData)
+        ? NoComboTypes.NoComboYouth
+        : NoComboTypes.NoCombo
+    }
+
+    if (isDanishAccidentBundle(offerData)) {
+      return DkBundleTypes.DkAccidentBundle
+    }
+
+    if (isDanishTravelBundle(offerData)) {
+      return DkBundleTypes.DkTravelBundle
+    }
   }
   return offerData.quotes[0].contractType
 }
