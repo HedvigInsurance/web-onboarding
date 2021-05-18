@@ -24,11 +24,12 @@ const Wrapper = styled.div`
 `
 
 const InnerWrapper = styled.div`
+  max-width: 80rem;
+  padding: 6rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 80rem;
-  padding: 6rem 1rem;
+  justify-content: space-between;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     flex-direction: row-reverse;
@@ -40,28 +41,26 @@ const InnerWrapper = styled.div`
   }
 `
 const ImageContainer = styled.div`
+  width: 50%;
   display: flex;
   justify-content: center;
   padding-bottom: 2rem;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     justify-content: flex-start;
-    width: 40%;
+    width: 45%;
     padding-top: 2rem;
     padding-left: 2rem;
   }
 `
 const ConnectPaymentImage = styled.img`
-  width: 50%;
   height: auto;
-
-  ${LARGE_SCREEN_MEDIA_QUERY} {
-    width: 100%;
-  }
+  width: 100%;
 `
 const TextContainer = styled.div`
   padding-bottom: 2.5rem;
   flex-shrink: 0;
+  max-width: 480px;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     width: 60%;
@@ -76,29 +75,22 @@ const Headline = styled.h1`
   font-family: ${fonts.FAVORIT};
   font-weight: 400;
 
-  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
-    font-size: 2.5rem;
-  }
-
   ${LARGE_SCREEN_MEDIA_QUERY} {
     text-align: left;
-    font-size: 3rem;
-    line-height: 3.5rem;
   }
 `
 const HeadlinePart = styled.span`
-  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
-    display: block;
-  }
+  display: block;
 `
 const Body = styled.div`
   width: 100%;
-  max-width: 480px;
+  max-width: 400px;
   padding: 2rem 0;
   font-size: 1rem;
   line-height: 1.5rem;
 
   ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
+    padding: 3rem 0;
     font-size: 1.125rem;
   }
 `
@@ -109,9 +101,10 @@ const Instructions = styled.div`
   color: ${colorsV3.gray500};
 `
 const InstructionsList = styled.ol`
-  list-style: none;
+  max-width: 400px;
   padding: 1rem 0;
   margin: 0;
+  list-style: none;
   counter-reset: styled-number;
 `
 const InstructionItem = styled.li`

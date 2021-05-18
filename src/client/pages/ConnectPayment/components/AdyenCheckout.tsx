@@ -21,7 +21,7 @@ import { SpinnerWrapper } from './Spinner'
 const Wrapper = styled('div')`
   position: relative;
   width: 100%;
-  max-width: 480px;
+  max-width: 440px;
 
   .adyen-checkout__payment-method__header {
     color: ${colorsV3.gray500};

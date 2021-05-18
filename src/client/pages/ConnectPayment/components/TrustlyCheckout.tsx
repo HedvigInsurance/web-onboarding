@@ -12,7 +12,7 @@ const ButtonWrapper = styled.div`
   width: 100%;
   ${LARGE_SCREEN_MEDIA_QUERY} {
     margin-top: 5rem;
-    max-width: 480px;
+    max-width: 400px;
   }
 `
 interface Props {
