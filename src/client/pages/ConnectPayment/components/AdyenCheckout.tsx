@@ -20,10 +20,8 @@ import { SpinnerWrapper } from './Spinner'
 
 const Wrapper = styled('div')`
   position: relative;
-
-  @media (min-width: 801px) {
-    width: 65%;
-  }
+  width: 100%;
+  max-width: 480px;
 
   .adyen-checkout__payment-method__header {
     color: ${colorsV3.gray500};
@@ -68,7 +66,7 @@ const Wrapper = styled('div')`
     background: ${colorsV3.gray900};
     border: 1px solid ${colorsV3.gray500};
     padding: 1rem;
-    height: 4rem;
+    height: 3.5rem;
     border-radius: 0;
 
     &:focus {
