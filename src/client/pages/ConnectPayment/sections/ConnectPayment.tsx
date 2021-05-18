@@ -28,9 +28,7 @@ const InnerWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   max-width: 80rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 6.75rem;
+  padding: 6rem 1rem;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     flex-direction: row-reverse;
@@ -38,7 +36,7 @@ const InnerWrapper = styled.div`
     margin: 0 auto;
     padding-left: 2rem;
     padding-right: 2rem;
-    padding-top: 7.25rem;
+    padding-top: 8rem;
   }
 `
 const ImageContainer = styled.div`
