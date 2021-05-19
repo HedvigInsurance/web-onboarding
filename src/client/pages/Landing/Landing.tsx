@@ -1,9 +1,10 @@
 import { css, Global } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import React, { useState } from 'react'
+import React from 'react'
 import Helmet from 'react-helmet-async'
 import { TopBar, TopBarFiller } from 'components/TopBar'
+import { BackgroundImage } from 'components/BackgroundImage'
 import {
   Market,
   useCurrentLocale,
@@ -150,52 +151,11 @@ const CardContainer = styled.div`
   }
 `
 
-const BackgroundContainer = styled.div<{
-  backgroundLoaded: boolean
-}>`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  transition: opacity 1s cubic-bezier(0.33, 1, 0.68, 1);
-  transition-delay: 150ms;
-  z-index: -1;
-  opacity: ${(props) => (props.backgroundLoaded ? 1 : 0)};
-
-  &:before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 200;
-    top: 0;
-    left: 0;
-    background-color: ${colorsV3.gray900};
-    opacity: 0.3;
-  }
-`
-
-const BackgroundImage = styled.img`
-  display: block;
-  position: fixed;
-  min-width: 100%;
-  min-height: 100%;
-  height: auto;
-  width: auto;
-  object-fit: cover;
-
-  @media (min-width: 1020px) {
-    object-position: 100% 50%;
-  }
-`
-
 export const Landing: React.FC<{ language: string }> = ({ language }) => {
   const textKeys = useTextKeys()
   const market = useMarket()
   const currentLocale = useCurrentLocale()
   const variation = useVariation()
-  const [backgroundLoaded, setBackgroundHasLoaded] = useState(false)
 
   return (
     <Page>
@@ -269,22 +229,7 @@ export const Landing: React.FC<{ language: string }> = ({ language }) => {
             )}
           </CardContainer>
         </Wrapper>
-        <BackgroundContainer backgroundLoaded={backgroundLoaded}>
-          <picture>
-            <source
-              media="(orientation: portrait)"
-              srcSet="/new-member-assets/landing/hedvig_table_portrait_small.jpg 900w, /new-member-assets/landing/hedvig_table_portrait_medium.jpg 1600w"
-            />
-            <source
-              media="(orientation: landscape)"
-              srcSet="/new-member-assets/landing/hedvig_table_landscape_small.jpg 1600w, /new-member-assets/landing/hedvig_table_landscape_medium.jpg 2200w"
-            />
-            <BackgroundImage
-              onLoad={() => setBackgroundHasLoaded(true)}
-              src="/new-member-assets/landing/hedvig_table_small.jpg"
-            />
-          </picture>
-        </BackgroundContainer>
+        <BackgroundImage isFullScreen zIndex={-1} />
       </LandingPageContainer>
     </Page>
   )
