@@ -64,7 +64,7 @@ query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
           yearOfConstruction
           isSubleted
           extraBuildings {
-            ... on ExtraBuildingCore {
+            ... on ExtraBuildingValue {
               area
               displayName
               hasWaterConnected

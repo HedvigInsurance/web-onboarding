@@ -5,7 +5,6 @@ import { inputTypes, masks, Mask } from 'components/inputs'
 import {
   ApartmentType,
   EditQuoteInput,
-  ExtraBuilding,
   ExtraBuildingType,
   NorwegianHomeContentsType,
   NorwegianTravelDetails,
@@ -527,9 +526,7 @@ export const getExtraBuilding = (
   return map[extraBuildingType]
 }
 
-export const extraBuildingTypes: {
-  [key in Required<ExtraBuilding>['__typename']]: ExtraBuildingType
-} = {
+export const extraBuildingTypes: Record<string, ExtraBuildingType> = {
   ExtraBuildingAttefall: ExtraBuildingType.Attefall,
   ExtraBuildingBarn: ExtraBuildingType.Barn,
   ExtraBuildingBoathouse: ExtraBuildingType.Boathouse,
@@ -575,11 +572,12 @@ export const getInitialSwedishHouseValues = (
     yearOfConstruction: details.yearOfConstruction,
     isSubleted: details.isSubleted,
     extraBuildings: details.extraBuildings
-      .filter((b) => !!b.__typename)
-      .map((b) => ({
-        type: extraBuildingTypes[b.__typename!],
-        area: b.area,
-        hasWaterConnected: b.hasWaterConnected,
+      .filter((building) => Boolean(building.__typename))
+      .map((building) => ({
+        type: building.type,
+        displayName: building.displayName,
+        area: building.area,
+        hasWaterConnected: building.hasWaterConnected,
       })),
   },
 })
