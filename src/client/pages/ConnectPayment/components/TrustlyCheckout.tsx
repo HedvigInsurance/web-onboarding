@@ -1,21 +1,18 @@
 import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
-import { useMediaQuery } from 'react-responsive'
 import styled from '@emotion/styled'
 import { Button } from 'components/buttons'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
-import {
-  BREAKPOINTS,
-  MEDIUM_SMALL_SCREEN_MEDIA_QUERY,
-} from 'utils/mediaQueries'
+import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { useRegisterDirectDebitMutation } from '../containers/RegisterDirectDebitMutation'
 import { TrustlyModal } from './TrustlyModal'
 
 const ButtonWrapper = styled.div`
-  margin-top: 1rem;
-  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
-    margin-top: 5.125rem;
+  width: 100%;
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    margin-top: 5rem;
+    max-width: 400px;
   }
 `
 interface Props {
@@ -28,7 +25,6 @@ export const TrustlyCheckout: React.FC<Props> = ({ onSuccess }) => {
   const [trustlyUrl, setTrustlyUrl] = React.useState<string | null>(null)
   const currentLocale = useCurrentLocale()
   const [createTrustlyUrlMutation] = useRegisterDirectDebitMutation()
-  const isMobile = useMediaQuery({ maxWidth: BREAKPOINTS.mediumScreen })
 
   const generateTrustlyUrl = async () => {
     const baseUrl = `${window.location.origin}/${currentLocale}/new-member/connect-payment`
@@ -56,7 +52,7 @@ export const TrustlyCheckout: React.FC<Props> = ({ onSuccess }) => {
   return (
     <ButtonWrapper>
       <Button
-        fullWidth={isMobile}
+        fullWidth
         background={colorsV3.purple500}
         foreground={colorsV3.gray900}
         onClick={async () => {
