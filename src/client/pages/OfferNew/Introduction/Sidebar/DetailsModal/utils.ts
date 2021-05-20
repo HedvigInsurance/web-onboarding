@@ -554,15 +554,7 @@ export const getInitialSwedishHouseValues = (
     numberOfBathrooms: details.numberOfBathrooms,
     yearOfConstruction: details.yearOfConstruction,
     isSubleted: details.isSubleted,
-    extraBuildings: details.extraBuildings
-      .filter((building) => Boolean(building.__typename))
-      .map(({ type, area, hasWaterConnected }) => {
-        return {
-          type,
-          area,
-          hasWaterConnected,
-        }
-      }),
+    extraBuildings: details.extraBuildings,
   },
 })
 
