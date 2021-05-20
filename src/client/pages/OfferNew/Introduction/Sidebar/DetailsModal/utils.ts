@@ -526,23 +526,6 @@ export const getExtraBuilding = (
   return map[extraBuildingType]
 }
 
-export const extraBuildingTypes: Record<string, ExtraBuildingType> = {
-  ExtraBuildingAttefall: ExtraBuildingType.Attefall,
-  ExtraBuildingBarn: ExtraBuildingType.Barn,
-  ExtraBuildingBoathouse: ExtraBuildingType.Boathouse,
-  ExtraBuildingCarport: ExtraBuildingType.Carport,
-  ExtraBuildingFriggebod: ExtraBuildingType.Friggebod,
-  ExtraBuildingGarage: ExtraBuildingType.Garage,
-  ExtraBuildingGazebo: ExtraBuildingType.Gazebo,
-  ExtraBuildingGreenhouse: ExtraBuildingType.Greenhouse,
-  ExtraBuildingGuesthouse: ExtraBuildingType.Guesthouse,
-  ExtraBuildingOther: ExtraBuildingType.Other,
-  ExtraBuildingOuthouse: ExtraBuildingType.Outhouse,
-  ExtraBuildingSauna: ExtraBuildingType.Sauna,
-  ExtraBuildingShed: ExtraBuildingType.Shed,
-  ExtraBuildingStorehouse: ExtraBuildingType.Storehouse,
-}
-
 export const getInitialSwedishApartmentValues = (
   quoteId: string,
   details: SwedishApartmentQuoteDetails,
@@ -573,12 +556,13 @@ export const getInitialSwedishHouseValues = (
     isSubleted: details.isSubleted,
     extraBuildings: details.extraBuildings
       .filter((building) => Boolean(building.__typename))
-      .map((building) => ({
-        type: building.type,
-        displayName: building.displayName,
-        area: building.area,
-        hasWaterConnected: building.hasWaterConnected,
-      })),
+      .map(({ type, area, hasWaterConnected }) => {
+        return {
+          type,
+          area,
+          hasWaterConnected,
+        }
+      }),
   },
 })
 

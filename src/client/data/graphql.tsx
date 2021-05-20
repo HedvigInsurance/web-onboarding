@@ -22,10 +22,10 @@ export type Scalars = {
   LocalDate: any
   /** A String-representation of Adyen's PaymentMethodsResponse */
   PaymentMethodsResponse: any
-  Instant: any
   URL: any
   JSONString: any
   Object: any
+  Instant: any
   /** A String-representation of Adyen's payment method details */
   PaymentMethodDetails: any
   /** A String-representation of Adyen's checkout payments action */
@@ -3019,7 +3019,7 @@ export type EmbarkGroupedResponse = {
   component: Scalars['String']
   title: EmbarkResponseExpression
   items: Array<EmbarkMessage>
-  each: Array<EmbarkGroupedResponseEach>
+  each?: Maybe<EmbarkGroupedResponseEach>
 }
 
 export type EmbarkGroupedResponseEach = {
@@ -3076,7 +3076,7 @@ export type EmbarkMultiAction = EmbarkActionCore & {
 }
 
 export type EmbarkMultiActionComponent =
-  | EmbarkNumberAction
+  | EmbarkMultiActionNumberAction
   | EmbarkDropdownAction
   | EmbarkSwitchAction
 
@@ -3087,6 +3087,19 @@ export type EmbarkMultiActionData = {
   maxAmount: Scalars['String']
   link: EmbarkLink
   components: Array<EmbarkMultiActionComponent>
+}
+
+export type EmbarkMultiActionNumberAction = EmbarkActionCore & {
+  __typename?: 'EmbarkMultiActionNumberAction'
+  component: Scalars['String']
+  data: EmbarkMultiActionNumberActionData
+}
+
+export type EmbarkMultiActionNumberActionData = {
+  __typename?: 'EmbarkMultiActionNumberActionData'
+  key: Scalars['String']
+  placeholder: Scalars['String']
+  unit?: Maybe<Scalars['String']>
 }
 
 export type EmbarkNumberAction = EmbarkActionCore & {
@@ -3493,70 +3506,8 @@ export type ExternalInsuranceProviderMutationInitiateDataCollectionWithNorwegian
 
 export type ExtraBuilding = ExtraBuildingValue
 
-export type ExtraBuildingAttefall = ExtraBuildingCore & {
-  __typename?: 'ExtraBuildingAttefall'
-  area: Scalars['Int']
-  displayName: Scalars['String']
-  hasWaterConnected: Scalars['Boolean']
-}
-
-export type ExtraBuildingBarn = ExtraBuildingCore & {
-  __typename?: 'ExtraBuildingBarn'
-  area: Scalars['Int']
-  displayName: Scalars['String']
-  hasWaterConnected: Scalars['Boolean']
-}
-
-export type ExtraBuildingBoathouse = ExtraBuildingCore & {
-  __typename?: 'ExtraBuildingBoathouse'
-  area: Scalars['Int']
-  displayName: Scalars['String']
-  hasWaterConnected: Scalars['Boolean']
-}
-
-export type ExtraBuildingCarport = ExtraBuildingCore & {
-  __typename?: 'ExtraBuildingCarport'
-  area: Scalars['Int']
-  displayName: Scalars['String']
-  hasWaterConnected: Scalars['Boolean']
-}
-
 export type ExtraBuildingCore = {
-  area: Scalars['Int']
-  displayName: Scalars['String']
-  hasWaterConnected: Scalars['Boolean']
-}
-
-export type ExtraBuildingFriggebod = ExtraBuildingCore & {
-  __typename?: 'ExtraBuildingFriggebod'
-  area: Scalars['Int']
-  displayName: Scalars['String']
-  hasWaterConnected: Scalars['Boolean']
-}
-
-export type ExtraBuildingGarage = ExtraBuildingCore & {
-  __typename?: 'ExtraBuildingGarage'
-  area: Scalars['Int']
-  displayName: Scalars['String']
-  hasWaterConnected: Scalars['Boolean']
-}
-
-export type ExtraBuildingGazebo = ExtraBuildingCore & {
-  __typename?: 'ExtraBuildingGazebo'
-  area: Scalars['Int']
-  displayName: Scalars['String']
-  hasWaterConnected: Scalars['Boolean']
-}
-
-export type ExtraBuildingGreenhouse = ExtraBuildingCore & {
-  __typename?: 'ExtraBuildingGreenhouse'
-  area: Scalars['Int']
-  displayName: Scalars['String']
-  hasWaterConnected: Scalars['Boolean']
-}
-
-export type ExtraBuildingGuesthouse = ExtraBuildingCore & {
-  __typename?: 'ExtraBuildingGuesthouse'
+  type: ExtraBuildingType
   area: Scalars['Int']
   displayName: Scalars['String']
   hasWaterConnected: Scalars['Boolean']
@@ -3565,41 +3516,6 @@ export type ExtraBuildingGuesthouse = ExtraBuildingCore & {
 export type ExtraBuildingInput = {
   type: ExtraBuildingType
   area: Scalars['Int']
-  hasWaterConnected: Scalars['Boolean']
-}
-
-export type ExtraBuildingOther = ExtraBuildingCore & {
-  __typename?: 'ExtraBuildingOther'
-  area: Scalars['Int']
-  displayName: Scalars['String']
-  hasWaterConnected: Scalars['Boolean']
-}
-
-export type ExtraBuildingOuthouse = ExtraBuildingCore & {
-  __typename?: 'ExtraBuildingOuthouse'
-  area: Scalars['Int']
-  displayName: Scalars['String']
-  hasWaterConnected: Scalars['Boolean']
-}
-
-export type ExtraBuildingSauna = ExtraBuildingCore & {
-  __typename?: 'ExtraBuildingSauna'
-  area: Scalars['Int']
-  displayName: Scalars['String']
-  hasWaterConnected: Scalars['Boolean']
-}
-
-export type ExtraBuildingShed = ExtraBuildingCore & {
-  __typename?: 'ExtraBuildingShed'
-  area: Scalars['Int']
-  displayName: Scalars['String']
-  hasWaterConnected: Scalars['Boolean']
-}
-
-export type ExtraBuildingStorehouse = ExtraBuildingCore & {
-  __typename?: 'ExtraBuildingStorehouse'
-  area: Scalars['Int']
-  displayName: Scalars['String']
   hasWaterConnected: Scalars['Boolean']
 }
 
@@ -3622,6 +3538,7 @@ export enum ExtraBuildingType {
 
 export type ExtraBuildingValue = ExtraBuildingCore & {
   __typename?: 'ExtraBuildingValue'
+  type: ExtraBuildingType
   area: Scalars['Int']
   displayName: Scalars['String']
   hasWaterConnected: Scalars['Boolean']
@@ -7656,12 +7573,8 @@ export type Query = {
   referralInformation: Referrals
   /** Returns redeemed campaigns belonging to authedUser */
   redeemedCampaigns: Array<Campaign>
-  /** Returns all contracts the member currently holds, regardless of activation/termination status */
-  contracts: Array<Contract>
   /** Returns the aggregated insurance cost of a member's PENDING, ACTIVE or ACTIVE_IN_FUTURE current agreements */
   insuranceCost?: Maybe<InsuranceCost>
-  /** Returns whether a member has at least one contract */
-  hasContract: Scalars['Boolean']
   /** Returns whether a member is eligible to create a claim, i.e. if a member has an active contract */
   isEligibleToCreateClaim: Scalars['Boolean']
   balance: Balance
@@ -7710,6 +7623,10 @@ export type Query = {
   angelStory?: Maybe<AngelStory>
   /** Returns all the currently active contracts, combined into bundles. */
   activeContractBundles: Array<ContractBundle>
+  /** Returns all contracts the member currently holds, regardless of activation/termination status */
+  contracts: Array<Contract>
+  /** Returns whether a member has at least one contract */
+  hasContract: Scalars['Boolean']
   /** Returns a type describing whether the 'Self Change' functionality is possible. */
   selfChangeEligibility: SelfChangeEligibility
   /** All locales that are available and activated */
@@ -10035,7 +9952,7 @@ export type QuoteQuery = { __typename?: 'Query' } & {
                   extraBuildings: Array<
                     { __typename?: 'ExtraBuildingValue' } & Pick<
                       ExtraBuildingValue,
-                      'area' | 'displayName' | 'hasWaterConnected'
+                      'type' | 'area' | 'displayName' | 'hasWaterConnected'
                     >
                   >
                 })
@@ -10134,7 +10051,7 @@ export type QuoteBundleQuery = { __typename?: 'Query' } & {
                   extraBuildings: Array<
                     { __typename?: 'ExtraBuildingValue' } & Pick<
                       ExtraBuildingValue,
-                      'area' | 'displayName' | 'hasWaterConnected'
+                      'type' | 'area' | 'displayName' | 'hasWaterConnected'
                     >
                   >
                 })
@@ -11305,6 +11222,7 @@ export const QuoteDocument = gql`
             isSubleted
             extraBuildings {
               ... on ExtraBuildingValue {
+                type
                 area
                 displayName
                 hasWaterConnected
@@ -11448,6 +11366,7 @@ export const QuoteBundleDocument = gql`
             isSubleted
             extraBuildings {
               ... on ExtraBuildingValue {
+                type
                 area
                 displayName
                 hasWaterConnected
