@@ -5,7 +5,6 @@ import { inputTypes, masks, Mask } from 'components/inputs'
 import {
   ApartmentType,
   EditQuoteInput,
-  ExtraBuilding,
   ExtraBuildingType,
   NorwegianHomeContentsType,
   NorwegianTravelDetails,
@@ -527,25 +526,6 @@ export const getExtraBuilding = (
   return map[extraBuildingType]
 }
 
-export const extraBuildingTypes: {
-  [key in Required<ExtraBuilding>['__typename']]: ExtraBuildingType
-} = {
-  ExtraBuildingAttefall: ExtraBuildingType.Attefall,
-  ExtraBuildingBarn: ExtraBuildingType.Barn,
-  ExtraBuildingBoathouse: ExtraBuildingType.Boathouse,
-  ExtraBuildingCarport: ExtraBuildingType.Carport,
-  ExtraBuildingFriggebod: ExtraBuildingType.Friggebod,
-  ExtraBuildingGarage: ExtraBuildingType.Garage,
-  ExtraBuildingGazebo: ExtraBuildingType.Gazebo,
-  ExtraBuildingGreenhouse: ExtraBuildingType.Greenhouse,
-  ExtraBuildingGuesthouse: ExtraBuildingType.Guesthouse,
-  ExtraBuildingOther: ExtraBuildingType.Other,
-  ExtraBuildingOuthouse: ExtraBuildingType.Outhouse,
-  ExtraBuildingSauna: ExtraBuildingType.Sauna,
-  ExtraBuildingShed: ExtraBuildingType.Shed,
-  ExtraBuildingStorehouse: ExtraBuildingType.Storehouse,
-}
-
 export const getInitialSwedishApartmentValues = (
   quoteId: string,
   details: SwedishApartmentQuoteDetails,
@@ -574,13 +554,7 @@ export const getInitialSwedishHouseValues = (
     numberOfBathrooms: details.numberOfBathrooms,
     yearOfConstruction: details.yearOfConstruction,
     isSubleted: details.isSubleted,
-    extraBuildings: details.extraBuildings
-      .filter((b) => !!b.__typename)
-      .map((b) => ({
-        type: extraBuildingTypes[b.__typename!],
-        area: b.area,
-        hasWaterConnected: b.hasWaterConnected,
-      })),
+    extraBuildings: details.extraBuildings,
   },
 })
 
