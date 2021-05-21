@@ -16,6 +16,7 @@ import {
   EditQuoteMutation,
   EditNorwegianHomeContentsInput,
   EditDanishHomeContentsInput,
+  ExtraBuildingInput,
 } from 'data/graphql'
 import { OfferQuote, OfferData, OfferPersonInfo } from 'pages/OfferNew/types'
 import { birthdateFormats, LocaleData } from 'l10n/locales'
@@ -554,7 +555,13 @@ export const getInitialSwedishHouseValues = (
     numberOfBathrooms: details.numberOfBathrooms,
     yearOfConstruction: details.yearOfConstruction,
     isSubleted: details.isSubleted,
-    extraBuildings: details.extraBuildings,
+    extraBuildings: details.extraBuildings.map<ExtraBuildingInput>(
+      ({ type, area, hasWaterConnected }) => ({
+        type,
+        area,
+        hasWaterConnected,
+      }),
+    ),
   },
 })
 
