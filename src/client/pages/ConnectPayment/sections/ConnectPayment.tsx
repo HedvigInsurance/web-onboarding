@@ -29,7 +29,7 @@ const InnerWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     flex-direction: row-reverse;
@@ -38,32 +38,41 @@ const InnerWrapper = styled.div`
     padding-left: 2rem;
     padding-right: 2rem;
     padding-top: 8rem;
+    justify-content: space-between;
   }
 `
 const ImageContainer = styled.div`
-  width: 50%;
+  padding-bottom: 3rem;
   display: flex;
   justify-content: center;
-  padding-bottom: 2rem;
+  align-items: flex-start;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
-    justify-content: flex-start;
     width: 45%;
-    padding-top: 2rem;
+    padding-top: 1rem;
     padding-left: 2rem;
+    justify-content: flex-start;
   }
 `
 const ConnectPaymentImage = styled.img`
-  height: auto;
-  width: 100%;
+  max-width: 40vw;
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    width: 100%;
+    max-width: 100%;
+  }
 `
 const TextContainer = styled.div`
   padding-bottom: 2.5rem;
   flex-shrink: 0;
   max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     width: 60%;
+    align-items: flex-start;
   }
 `
 const Headline = styled.h1`
