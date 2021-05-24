@@ -18,7 +18,10 @@ import {
 } from 'pages/OfferNew/Introduction/Sidebar/utils'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
-import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import {
+  LARGE_SCREEN_MEDIA_QUERY,
+  SMALL_SCREEN_MEDIA_QUERY,
+} from 'utils/mediaQueries'
 import { Badge } from 'components/Badge/Badge'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import { Price } from '../../components'
@@ -83,6 +86,11 @@ const Header = styled.div`
   display: flex;
   align-items: flex-start;
   width: 100%;
+  flex-wrap: wrap;
+
+  ${SMALL_SCREEN_MEDIA_QUERY} {
+    flex-wrap: nowrap;
+  }
 `
 
 const PreTitle = styled.span`
