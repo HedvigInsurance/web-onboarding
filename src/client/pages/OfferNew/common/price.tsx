@@ -36,7 +36,9 @@ const PriceNumbers = styled.div<{
 `
 
 const PriceNet = styled.div`
-  font-size: 1.125rem;
+  font-size: 1.375rem;
+  line-height: 1.5;
+
   ${LARGE_SCREEN_MEDIA_QUERY} {
     font-size: 1.5rem;
   }

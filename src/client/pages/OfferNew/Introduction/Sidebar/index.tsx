@@ -81,7 +81,7 @@ const HeaderTop = styled.div`
 const Header = styled.div`
   position: relative;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
 `
 
@@ -93,7 +93,7 @@ const Title = styled.h3`
   width: 100%;
   margin: 0 1rem 0 0;
   font-size: 1.375rem;
-  line-height: 1.3;
+  line-height: 1.5;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     font-size: 1.5rem;
