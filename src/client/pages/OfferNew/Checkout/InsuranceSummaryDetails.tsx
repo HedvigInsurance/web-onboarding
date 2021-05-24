@@ -133,7 +133,7 @@ const getHouseExtraBuildingsMaybe = (
       key: 'buildingSize',
       label: textKeys.CHECKOUT_DETAILS_EXTRA_BUILDINGS_SIZE(),
       value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
-        VALUE: extraBuilding.area ?? 'blah',
+        VALUE: extraBuilding.area ?? '',
       }),
     },
     {
