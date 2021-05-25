@@ -18,7 +18,6 @@ import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useTextKeys } from 'utils/textKeys'
 import { StorageContainer } from '../../utils/StorageContainer'
-import { Landing } from '../Landing/Landing'
 import { createQuote } from './createQuote'
 import {
   resolveExternalInsuranceProviderProviderStatus,
@@ -182,7 +181,6 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
 interface EmbarkRootProps {
   name?: string
   baseUrl?: string
-  showLanding?: boolean
   language: string
 }
 
@@ -215,8 +213,6 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
   const localeIsoCode = getIsoLocale(currentLocale)
 
   const textKeys = useTextKeys()
-
-  const isShowingLanding = props.showLanding || false
 
   React.useEffect(() => {
     ;(async () => {
@@ -280,153 +276,133 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
         `}
       />
       <AnimatePresence>
-        {!isShowingLanding && (
-          <motion.div
-            key="embark"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{
-              ease: 'easeOut',
-              duration: 0.5,
-              delay: 0.25,
-            }}
-          >
-            {data && initialStore && data[0] === props.name && (
-              <StorageContainer>
-                {(storageState) => (
-                  <EmbarkProvider
-                    externalRedirects={{
-                      Offer: (quoteIds) => {
-                        if (quoteIds.length > 0) {
-                          storageState.session.setSession({
-                            ...storageState.session.getSession(),
-                            quoteIds,
-                          })
-                        }
+        <motion.div
+          key="embark"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{
+            ease: 'easeOut',
+            duration: 0.5,
+            delay: 0.25,
+          }}
+        >
+          {data && initialStore && data[0] === props.name && (
+            <StorageContainer>
+              {(storageState) => (
+                <EmbarkProvider
+                  externalRedirects={{
+                    Offer: (quoteIds) => {
+                      if (quoteIds.length > 0) {
+                        storageState.session.setSession({
+                          ...storageState.session.getSession(),
+                          quoteIds,
+                        })
+                      }
 
-                        history.push(
-                          (props.language ? '/' + props.language : '') +
-                            '/new-member/offer',
-                        )
-                      },
-                      MailingList: () => {
-                        location.href =
-                          'https://hedvigapp.typeform.com/to/xiTKWi'
-                      },
-                    }}
-                    data={data[1]}
-                    resolvers={{
-                      graphqlQuery: graphQLQuery(
-                        storageState,
-                        getIsoLocale(currentLocale),
-                      ),
-                      graphqlMutation: graphQLMutation(
-                        storageState,
-                        getIsoLocale(currentLocale),
-                      ),
-                      personalInformationApi: resolvePersonalInformation,
-                      houseInformation: resolveHouseInformation,
-                      createQuote: createQuote(
-                        storageState,
-                        getIsoLocale(currentLocale),
-                      ),
-                      externalInsuranceProviderProviderStatus: resolveExternalInsuranceProviderProviderStatus,
-                      externalInsuranceProviderStartSession: resolveExternalInsuranceProviderStartSession,
-                      track: (eventName, payload) => {
-                        const castedWindow = window as any
-                        if (castedWindow && castedWindow.analytics) {
-                          castedWindow.analytics.track(eventName, {
-                            ...payload,
-                            originatedFromEmbarkStory: props.name,
-                          })
-                        }
-                      },
-                    }}
-                    initialStore={initialStore}
-                    onStoreChange={(store) => {
-                      const storeKey = `embark-store-${encodeURIComponent(
-                        props.name!,
-                      )}`
-                      window.sessionStorage.setItem(
-                        storeKey,
-                        JSON.stringify(store),
+                      history.push(
+                        (props.language ? '/' + props.language : '') +
+                          '/new-member/offer',
                       )
-                      if (store.quoteId) {
-                        storageState.session.setSession({
-                          ...storageState.session.getSession(),
-                          quoteIds: [store.quoteId],
+                    },
+                    MailingList: () => {
+                      location.href = 'https://hedvigapp.typeform.com/to/xiTKWi'
+                    },
+                  }}
+                  data={data[1]}
+                  resolvers={{
+                    graphqlQuery: graphQLQuery(
+                      storageState,
+                      getIsoLocale(currentLocale),
+                    ),
+                    graphqlMutation: graphQLMutation(
+                      storageState,
+                      getIsoLocale(currentLocale),
+                    ),
+                    personalInformationApi: resolvePersonalInformation,
+                    houseInformation: resolveHouseInformation,
+                    createQuote: createQuote(
+                      storageState,
+                      getIsoLocale(currentLocale),
+                    ),
+                    externalInsuranceProviderProviderStatus: resolveExternalInsuranceProviderProviderStatus,
+                    externalInsuranceProviderStartSession: resolveExternalInsuranceProviderStartSession,
+                    track: (eventName, payload) => {
+                      const castedWindow = window as any
+                      if (castedWindow && castedWindow.analytics) {
+                        castedWindow.analytics.track(eventName, {
+                          ...payload,
+                          originatedFromEmbarkStory: props.name,
                         })
                       }
-                      if (
-                        store.norwegianHomeContentsQuoteId &&
-                        store.norwegianTravelQuoteId
-                      ) {
-                        storageState.session.setSession({
-                          ...storageState.session.getSession(),
-                          quoteIds: [
-                            store.norwegianHomeContentsQuoteId,
-                            store.norwegianTravelQuoteId,
-                          ],
-                        })
-                      }
-                      if (
-                        store.danishHomeContentsQuoteId &&
-                        store.danishAccidentQuoteId
-                      ) {
-                        storageState.session.setSession({
-                          ...storageState.session.getSession(),
-                          quoteIds: [
-                            store.danishHomeContentsQuoteId,
-                            store.danishAccidentQuoteId,
-                          ],
-                        })
-                      }
-                      if (
-                        store.danishHomeContentsQuoteId &&
-                        store.danishAccidentQuoteId &&
-                        store.danishTravelQuoteId
-                      ) {
-                        storageState.session.setSession({
-                          ...storageState.session.getSession(),
-                          quoteIds: [
-                            store.danishHomeContentsQuoteId,
-                            store.danishAccidentQuoteId,
-                            store.danishTravelQuoteId,
-                          ],
-                        })
-                      }
-                    }}
-                  >
-                    <Embark
-                      baseUrl={props.baseUrl!}
-                      data={data[1]}
-                      name={props.name!}
-                      startPageLink={
-                        props.language ? '/' + props.language : '/'
-                      }
-                    />
-                  </EmbarkProvider>
-                )}
-              </StorageContainer>
-            )}
-          </motion.div>
-        )}
-        {isShowingLanding && (
-          <motion.div
-            key="landing"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{
-              ease: 'easeOut',
-              duration: 0.5,
-              delay: 0.25,
-            }}
-          >
-            <Landing language={props.language} />
-          </motion.div>
-        )}
+                    },
+                  }}
+                  initialStore={initialStore}
+                  onStoreChange={(store) => {
+                    const storeKey = `embark-store-${encodeURIComponent(
+                      props.name!,
+                    )}`
+                    window.sessionStorage.setItem(
+                      storeKey,
+                      JSON.stringify(store),
+                    )
+                    if (store.quoteId) {
+                      storageState.session.setSession({
+                        ...storageState.session.getSession(),
+                        quoteIds: [store.quoteId],
+                      })
+                    }
+                    if (
+                      store.norwegianHomeContentsQuoteId &&
+                      store.norwegianTravelQuoteId
+                    ) {
+                      storageState.session.setSession({
+                        ...storageState.session.getSession(),
+                        quoteIds: [
+                          store.norwegianHomeContentsQuoteId,
+                          store.norwegianTravelQuoteId,
+                        ],
+                      })
+                    }
+                    if (
+                      store.danishHomeContentsQuoteId &&
+                      store.danishAccidentQuoteId
+                    ) {
+                      storageState.session.setSession({
+                        ...storageState.session.getSession(),
+                        quoteIds: [
+                          store.danishHomeContentsQuoteId,
+                          store.danishAccidentQuoteId,
+                        ],
+                      })
+                    }
+                    if (
+                      store.danishHomeContentsQuoteId &&
+                      store.danishAccidentQuoteId &&
+                      store.danishTravelQuoteId
+                    ) {
+                      storageState.session.setSession({
+                        ...storageState.session.getSession(),
+                        quoteIds: [
+                          store.danishHomeContentsQuoteId,
+                          store.danishAccidentQuoteId,
+                          store.danishTravelQuoteId,
+                        ],
+                      })
+                    }
+                  }}
+                >
+                  <Embark
+                    baseUrl={props.baseUrl!}
+                    data={data[1]}
+                    name={props.name!}
+                    startPageLink={props.language ? '/' + props.language : '/'}
+                  />
+                </EmbarkProvider>
+              )}
+            </StorageContainer>
+          )}
+        </motion.div>
       </AnimatePresence>
     </EmbarkStyling>
   )

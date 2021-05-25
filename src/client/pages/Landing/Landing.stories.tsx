@@ -13,7 +13,7 @@ export const SwedenSE = () => (
   <MemoryRouter initialEntries={['/se/new-member']}>
     <HelmetProvider>
       <TextKeyProvider locale="sv_SE">
-        <Landing language="se" />
+        <Landing />
       </TextKeyProvider>
     </HelmetProvider>
   </MemoryRouter>
@@ -23,7 +23,7 @@ export const SwedenEN = () => (
   <MemoryRouter initialEntries={['/se-en/new-member']}>
     <HelmetProvider>
       <TextKeyProvider locale="en_SE">
-        <Landing language="se-en" />
+        <Landing />
       </TextKeyProvider>
     </HelmetProvider>
   </MemoryRouter>
@@ -33,7 +33,7 @@ export const NorwayNO = () => (
   <MemoryRouter initialEntries={['/no/new-member']}>
     <HelmetProvider>
       <TextKeyProvider locale="nb_NO">
-        <Landing language="no" />
+        <Landing />
       </TextKeyProvider>
     </HelmetProvider>
   </MemoryRouter>
@@ -43,7 +43,7 @@ export const NorwayEN = () => (
   <MemoryRouter initialEntries={['/no-en/new-member']}>
     <HelmetProvider>
       <TextKeyProvider locale="en_NO">
-        <Landing language="no-en" />
+        <Landing />
       </TextKeyProvider>
     </HelmetProvider>
   </MemoryRouter>
@@ -53,7 +53,7 @@ export const DenmarkDK = () => (
   <MemoryRouter initialEntries={['/dk/new-member']}>
     <HelmetProvider>
       <TextKeyProvider locale="da_DK">
-        <Landing language="dk" />
+        <Landing />
       </TextKeyProvider>
     </HelmetProvider>
   </MemoryRouter>
@@ -63,7 +63,7 @@ export const DenmarkEN = () => (
   <MemoryRouter initialEntries={['/dk-en/new-member']}>
     <HelmetProvider>
       <TextKeyProvider locale="en_DK">
-        <Landing language="dk-en" />
+        <Landing />
       </TextKeyProvider>
     </HelmetProvider>
   </MemoryRouter>

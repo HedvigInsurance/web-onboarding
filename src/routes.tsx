@@ -11,6 +11,7 @@ import { Download } from './client/pages/Download'
 import { EmbarkRoot } from './client/pages/Embark'
 import { Forever } from './client/pages/Forever'
 import { FourOhFour } from './client/pages/FourOhFour'
+import { Landing } from './client/pages/Landing/Landing'
 import { LoginApp } from './client/pages/LoginApp'
 import { OfferNew } from './client/pages/OfferNew'
 import { SignLoading } from './client/pages/SignLoading'
@@ -169,14 +170,7 @@ export const reactPageRoutes: ReactPageRoute[] = [
   },
   {
     path: LOCALE_PATH_PATTERN + '/new-member',
-    render: ({ match }: RouteComponentProps<any>) => (
-      <EmbarkRoot
-        language={match.params.locale}
-        name={undefined}
-        baseUrl={undefined}
-        showLanding={true}
-      />
-    ),
+    Component: Landing,
     exact: true,
   },
   {
