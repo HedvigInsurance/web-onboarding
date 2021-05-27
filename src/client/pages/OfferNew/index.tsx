@@ -22,6 +22,7 @@ import { getOfferData } from 'pages/OfferNew/utils'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { trackOfferGTM } from 'utils/tracking/gtm'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
+import { captureSentryError } from 'utils/sentry-client'
 import { useQuoteIds } from '../../utils/hooks/useQuoteIds'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import { Checkout } from './Checkout'
@@ -72,9 +73,10 @@ export const OfferNew: React.FC = () => {
   }
 
   if (!loadingQuoteBundle && !data?.quoteBundle) {
-    throw new Error(
+    captureSentryError(
       `No quote returned to show offer with (quoteIds=${quoteIds}).`,
     )
+    return <Redirect to={`/${currentLocale}/new-member`} />
   }
 
   const handleCheckoutToggle = (open: boolean) => {
