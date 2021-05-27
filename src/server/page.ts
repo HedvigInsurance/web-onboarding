@@ -1,6 +1,7 @@
 import { min as createMinifiedSegmentSnippet } from '@segment/snippet'
 import escapeHTML from 'escape-html'
 import Router from 'koa-router'
+import { match } from 'matchly'
 import { ClientConfig } from 'shared/clientConfig'
 import { sentryConfig } from '../client/utils/sentry-server'
 import { ServerCookieStorage } from '../client/utils/storage/ServerCookieStorage'
@@ -40,7 +41,7 @@ const clientConfig: ClientConfig = {
 const template = (
   route: ServerSideRoute,
   locale: string,
-  adtractionTag: string,
+  adtractionTag: string | null,
   code: string | null,
 ) => {
   const pageMeta = getPageMeta(locale, route, code)
@@ -86,7 +87,7 @@ const template = (
     <!-- End Google Tag Manager -->
 
     <script key="segment-snippet">${segmentSnippet}</script>
-    <script defer src="${adtractionTag}"></script>
+    ${adtractionTag ? `<script defer src="${adtractionTag}"></script>` : ''}
   </head>
   <body>
     <!-- Google Tag Manager (noscript) -->
@@ -147,14 +148,22 @@ export const getPage = (
     ctx.status = route.status
   }
 
-  const ADRTRACTION_NO = 'https://cdn.adt387.com/jsTag?ap=1492109567'
+  const ADTRACTION_NO = 'https://cdn.adt387.com/jsTag?ap=1492109567'
   const ADTRACTION_SE = 'https://cdn.adt387.com/jsTag?ap=1412531808'
+  const ADTRACTION_DK = 'https://cdn.adt387.com/jsTag?ap=1589794294'
+  const adtractionTag = match([
+    ['se', ADTRACTION_SE],
+    ['se-en', ADTRACTION_SE],
+    ['no', ADTRACTION_NO],
+    ['no-en', ADTRACTION_NO],
+    ['dk', ADTRACTION_DK],
+    ['dk-en', ADTRACTION_DK],
+  ])(ctx.params.locale)!
+
   ctx.body = template(
     route,
     ctx.params.locale,
-    ['no', 'no-en'].includes(ctx.params.locale)
-      ? ADRTRACTION_NO
-      : ADTRACTION_SE,
+    adtractionTag,
     ctx.params.code ?? null,
   )
 
