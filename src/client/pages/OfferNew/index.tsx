@@ -74,7 +74,7 @@ export const OfferNew: React.FC = () => {
 
   if (!loadingQuoteBundle && !data?.quoteBundle) {
     captureSentryError(
-      `No quote returned to show offer with (quoteIds=${quoteIds}).`,
+      `No quote data could be returned for quoteIds: ${quoteIds}.`,
     )
     return <Redirect to={`/${currentLocale}/new-member`} />
   }
