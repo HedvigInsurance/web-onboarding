@@ -1,8 +1,8 @@
 import { min as createMinifiedSegmentSnippet } from '@segment/snippet'
 import escapeHTML from 'escape-html'
 import Router from 'koa-router'
-import { match } from 'matchly'
 import { ClientConfig } from 'shared/clientConfig'
+import { LocaleLabel, locales } from '../client/l10n/locales'
 import { sentryConfig } from '../client/utils/sentry-server'
 import { ServerCookieStorage } from '../client/utils/storage/ServerCookieStorage'
 import { ServerSideRoute } from '../routes'
@@ -148,22 +148,13 @@ export const getPage = (
     ctx.status = route.status
   }
 
-  const ADTRACTION_NO = 'https://cdn.adt387.com/jsTag?ap=1492109567'
-  const ADTRACTION_SE = 'https://cdn.adt387.com/jsTag?ap=1412531808'
-  const ADTRACTION_DK = 'https://cdn.adt387.com/jsTag?ap=1589794294'
-  const adtractionTag = match([
-    ['se', ADTRACTION_SE],
-    ['se-en', ADTRACTION_SE],
-    ['no', ADTRACTION_NO],
-    ['no-en', ADTRACTION_NO],
-    ['dk', ADTRACTION_DK],
-    ['dk-en', ADTRACTION_DK],
-  ])(ctx.params.locale)!
+  const adtractionScript =
+    locales[ctx.params.locale as LocaleLabel].adtractionScript ?? null
 
   ctx.body = template(
     route,
     ctx.params.locale,
-    adtractionTag,
+    adtractionScript,
     ctx.params.code ?? null,
   )
 
