@@ -9,18 +9,16 @@ import { EditQuoteInput, useEditQuoteMutation } from 'data/graphql'
 import { LocaleLabel, locales } from 'l10n/locales'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
-import { getMainQuote, isSwedish } from '../../../utils'
+import { getMainQuote } from '../../../utils'
 import { Details } from './Details'
 import {
   getFieldSchema,
-  getFormData,
+  getQuoteDetailsFormData,
   getInitialInputValues,
   getQuoteType,
-  getUpdatedQuoteDetails,
   getValidationSchema,
   hasEditQuoteErrors,
   isUnderwritingLimitsHit,
-  QuoteDetailsInput,
 } from './utils'
 
 const Container = styled.div`
@@ -90,7 +88,25 @@ const LoadingDimmer = styled.div<{ visible: boolean }>`
   opacity: ${(props) => (props.visible ? 1 : 0)};
   visibility: ${(props) => (props.visible ? 'visible' : 'hidden')};
 `
-interface DetailsModalProps {
+
+export type DetailsForm = {
+  id: EditQuoteInput['id']
+  firstName?: EditQuoteInput['firstName']
+  lastName?: EditQuoteInput['lastName']
+  birthDate?: EditQuoteInput['birthDate']
+  quoteDetails: FormQuoteDetails
+}
+
+export type FormQuoteDetails =
+  | EditQuoteInput['swedishApartment']
+  | EditQuoteInput['swedishHouse']
+  | EditQuoteInput['norwegianHomeContents']
+  | EditQuoteInput['norwegianTravel']
+  | EditQuoteInput['danishHomeContents']
+  | EditQuoteInput['danishAccident']
+  | EditQuoteInput['danishTravel']
+
+type DetailsModalProps = {
   offerData: OfferData
   refetch: () => Promise<void>
 }
@@ -119,28 +135,23 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   ] = React.useState(false)
 
   const editQuotes = async (form: EditQuoteInput) => {
-    if (isSwedish(offerData)) {
-      // No quote bundles available in Sweden, assume one quote per offer.
-      return editQuoteMutation({ variables: { input: form } })
-    }
-
-    const formValues = getFormData(form, offerData) as QuoteDetailsInput
     return Promise.all(
-      offerData.quotes.map((quote) => {
-        const updateQuoteDetails = getUpdatedQuoteDetails(
-          quote.quoteDetails,
-          formValues,
-        )
-        const quoteType = getQuoteType(quote.quoteDetails)
+      offerData.quotes.map(({ quoteDetails, id }) => {
+        const quoteType = getQuoteType(quoteDetails)
+        const quoteDetailsFormValues = getQuoteDetailsFormData({
+          form,
+          quoteDetails,
+          offerData,
+        })
         const { firstName, lastName, birthDate } = form
         return editQuoteMutation({
           variables: {
             input: {
-              id: quote.id,
+              id,
               firstName,
               lastName,
               birthDate,
-              [quoteType]: updateQuoteDetails,
+              [quoteType]: quoteDetailsFormValues,
             },
           },
         })

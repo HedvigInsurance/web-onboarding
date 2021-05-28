@@ -1,4 +1,3 @@
-import { match } from 'matchly'
 import * as Yup from 'yup'
 import { FetchResult } from '@apollo/client'
 import { inputTypes, masks, Mask } from 'components/inputs'
@@ -11,12 +10,13 @@ import {
   SwedishApartmentQuoteDetails,
   SwedishHouseQuoteDetails,
   DanishHomeContentsType,
-  QuoteBundleQuery,
   QuoteDetails,
   EditQuoteMutation,
-  EditNorwegianHomeContentsInput,
-  EditDanishHomeContentsInput,
   ExtraBuildingInput,
+  NorwegianHomeContentsDetails,
+  DanishHomeContentsDetails,
+  EditDanishAccidentInput,
+  EditNorwegianTravelInput,
 } from 'data/graphql'
 import { OfferQuote, OfferData, OfferPersonInfo } from 'pages/OfferNew/types'
 import { birthdateFormats, LocaleData } from 'l10n/locales'
@@ -28,11 +28,11 @@ import {
   isNorwegianQuote,
   isNorwegianHomeContents,
   isNorwegianTravel,
-  isDanish,
   isDanishQuote,
   isDanishHomeContents,
   isDanishTravel,
   isDanishAccident,
+  isBundle,
 } from '../../../utils'
 import {
   SwedishApartmentFieldSchema,
@@ -372,9 +372,7 @@ export const getFieldSchema = ({
     ...fieldSchemaDetails,
   }
 }
-export const getFieldSchemaDetails = (
-  offerQuote: OfferQuote,
-): DetailsFieldSchema => {
+const getFieldSchemaDetails = (offerQuote: OfferQuote): DetailsFieldSchema => {
   const base = {
     street: {
       label: 'DETAILS_MODULE_TABLE_ADDRESS_CELL_LABEL',
@@ -565,13 +563,13 @@ export const getInitialSwedishHouseValues = (
   },
 })
 
-type QueryQuoteDetails = QuoteBundleQuery['quoteBundle']['quotes'][0]['quoteDetails']
+type NorwegianHomeContentsFormDetails = NorwegianHomeContentsDetails & {
+  norwegianHomeType: NorwegianHomeContentsType
+}
 
 export const getInitialNorwegianHomeContentValues = (
   quoteId: string,
-  quoteDetails: {
-    __typename: 'NorwegianHomeContentsDetails'
-  } & QueryQuoteDetails,
+  quoteDetails: NorwegianHomeContentsFormDetails,
 ): EditQuoteInput => ({
   id: quoteId,
   norwegianHomeContents: {
@@ -584,11 +582,24 @@ export const getInitialNorwegianHomeContentValues = (
   },
 })
 
+const getInitialNorwegianTravelValues = (
+  quoteId: string,
+  quoteDetails: NorwegianTravelDetails,
+): EditQuoteInput => ({
+  id: quoteId,
+  norwegianTravel: {
+    coInsured: quoteDetails.coInsured,
+    isYouth: quoteDetails.isYouth,
+  },
+})
+
+type DanishHomeContentsFormDetails = DanishHomeContentsDetails & {
+  danishHomeType: DanishHomeContentsType
+}
+
 export const getInitialDanishHomeContentValues = (
   quoteId: string,
-  quoteDetails: {
-    __typename: 'DanishHomeContentsDetails'
-  } & QueryQuoteDetails,
+  quoteDetails: DanishHomeContentsFormDetails,
 ): EditQuoteInput => {
   return {
     id: quoteId,
@@ -603,17 +614,6 @@ export const getInitialDanishHomeContentValues = (
   }
 }
 
-const getInitialNorwegianTravelValues = (
-  quoteId: string,
-  quoteDetails: NorwegianTravelDetails,
-): EditQuoteInput => ({
-  id: quoteId,
-  norwegianTravel: {
-    coInsured: quoteDetails.coInsured,
-    isYouth: quoteDetails.isYouth,
-  },
-})
-
 export const getInitialInputValues = (
   personalInfo: OfferPersonInfo,
   offerQuote: OfferQuote,
@@ -627,80 +627,102 @@ export const getInitialInputValues = (
   }
 }
 
-export const getInitialQuoteDetailsInputValues = (offerQuote: OfferQuote) =>
-  match<string, EditQuoteInput>([
-    [
-      'SwedishHouseQuoteDetails',
-      () =>
-        getInitialSwedishHouseValues(
-          offerQuote.id,
-          offerQuote.quoteDetails as SwedishHouseQuoteDetails,
-        ),
-    ],
-    [
-      'SwedishApartmentQuoteDetails',
-      () =>
-        getInitialSwedishApartmentValues(
-          offerQuote.id,
-          offerQuote.quoteDetails as SwedishApartmentQuoteDetails,
-        ),
-    ],
-    [
-      'NorwegianHomeContentsDetails',
-      () =>
-        getInitialNorwegianHomeContentValues(
-          offerQuote.id,
-          (offerQuote.quoteDetails as QueryQuoteDetails) as QueryQuoteDetails & {
-            __typename: 'NorwegianHomeContentsDetails'
-          },
-        ),
-    ],
-    [
-      'NorwegianTravelDetails',
-      () =>
-        getInitialNorwegianTravelValues(
-          offerQuote.id,
-          offerQuote.quoteDetails as NorwegianTravelDetails,
-        ),
-    ],
-    [
-      'DanishHomeContentsDetails',
-      () =>
-        getInitialDanishHomeContentValues(
-          offerQuote.id,
-          (offerQuote.quoteDetails as QueryQuoteDetails) as {
-            __typename: 'DanishHomeContentsDetails'
-          } & QueryQuoteDetails,
-        ),
-    ],
-  ])(offerQuote.quoteDetails.__typename as string) ??
-  (() => {
-    throw new window.Error(
-      `Expected quote details to be a valid type but was "${offerQuote.quoteDetails.__typename}"`,
-    )
-  })()
+export const getInitialQuoteDetailsInputValues = (offerQuote: OfferQuote) => {
+  const { id: quoteId, quoteDetails } = offerQuote
 
-export const getFormData = (form: EditQuoteInput, offerData: OfferData) => {
-  if (isDanish(offerData)) return form.danishHomeContents
-  return form.norwegianHomeContents
+  switch (quoteDetails.__typename) {
+    case 'SwedishHouseQuoteDetails':
+      return getInitialSwedishHouseValues(
+        quoteId,
+        quoteDetails as SwedishHouseQuoteDetails,
+      )
+    case 'SwedishApartmentQuoteDetails':
+      return getInitialSwedishApartmentValues(
+        quoteId,
+        quoteDetails as SwedishApartmentQuoteDetails,
+      )
+    case 'NorwegianHomeContentsDetails':
+      return getInitialNorwegianHomeContentValues(
+        quoteId,
+        quoteDetails as NorwegianHomeContentsFormDetails,
+      )
+    case 'NorwegianTravelDetails':
+      return getInitialNorwegianTravelValues(
+        quoteId,
+        quoteDetails as NorwegianTravelDetails,
+      )
+    case 'DanishHomeContentsDetails':
+      return getInitialDanishHomeContentValues(
+        quoteId,
+        quoteDetails as DanishHomeContentsFormDetails,
+      )
+    default:
+      throw new Error(
+        `Unknown type of quote details "${quoteDetails.__typename}".`,
+      )
+  }
+}
+type GetFormDataParams = {
+  form: EditQuoteInput
+  quoteDetails: QuoteDetails
+  offerData: OfferData
 }
 
-export type QuoteDetailsInput =
-  | EditDanishHomeContentsInput
-  | EditNorwegianHomeContentsInput
+export const getQuoteDetailsFormData = ({
+  form,
+  quoteDetails,
+  offerData,
+}: GetFormDataParams) => {
+  const {
+    swedishApartment: swedishApartmentFormData,
+    swedishHouse: swedishHouseFormData,
+    danishHomeContents: danishHomeContentsFormData,
+    norwegianHomeContents: norwegianHomeContentsFormData,
+    norwegianTravel: norwegianTravelFormData,
+  } = form
 
-export const getUpdatedQuoteDetails = (
-  quoteDetails: QuoteDetails,
-  input: QuoteDetailsInput,
-): Partial<QuoteDetails> => {
-  const { __typename, ...editQuoteDetails } = quoteDetails
-  return Object.keys(editQuoteDetails).reduce(
-    (newInput, key) => ({
-      ...newInput,
-      [key]: input![key as keyof QuoteDetailsInput],
-    }),
-    {},
-  )
+  const danishAccidentOrTravelFormData: EditDanishAccidentInput = {
+    coInsured: danishHomeContentsFormData?.coInsured,
+    isStudent: danishHomeContentsFormData?.isStudent,
+    street: danishHomeContentsFormData?.street,
+    zipCode: danishHomeContentsFormData?.zipCode,
+  }
+
+  const norwegianBundleTravelFormData: EditNorwegianTravelInput = {
+    coInsured: norwegianHomeContentsFormData?.coInsured,
+    isYouth: norwegianHomeContentsFormData?.isYouth,
+  }
+
+  switch (quoteDetails.__typename) {
+    case 'SwedishApartmentQuoteDetails':
+      return swedishApartmentFormData
+
+    case 'SwedishHouseQuoteDetails':
+      return swedishHouseFormData
+
+    case 'NorwegianHomeContentsDetails':
+      return norwegianHomeContentsFormData
+
+    case 'NorwegianTravelDetails':
+      if (isBundle(offerData)) {
+        return norwegianBundleTravelFormData
+      }
+      return norwegianTravelFormData
+
+    case 'DanishHomeContentsDetails':
+      return danishHomeContentsFormData
+
+    case 'DanishAccidentDetails':
+      return danishAccidentOrTravelFormData
+
+    case 'DanishTravelDetails':
+      return danishAccidentOrTravelFormData
+
+    default:
+      throw new Error(
+        `Unknown type of quote details "${quoteDetails.__typename}".`,
+      )
+  }
 }
 
 const isResultUnderwritingLimitsHit = (
@@ -733,16 +755,18 @@ export const hasEditQuoteErrors = (
     ? hasEditQuoteBundleErrors(result)
     : hasEditQuoteError(result)
 
-export type QuoteType =
+type EditQuoteType = keyof Pick<
+  EditQuoteInput,
   | 'swedishApartment'
   | 'swedishHouse'
   | 'norwegianHomeContents'
   | 'norwegianTravel'
   | 'danishHomeContents'
-  | 'danishTravel'
   | 'danishAccident'
+  | 'danishTravel'
+>
 
-export const getQuoteType = (quoteDetails: QuoteDetails): QuoteType => {
+export const getQuoteType = (quoteDetails: QuoteDetails): EditQuoteType => {
   if (isSwedishApartment(quoteDetails)) return 'swedishApartment'
   if (isSwedishHouse(quoteDetails)) return 'swedishHouse'
   if (isNorwegianHomeContents(quoteDetails)) return 'norwegianHomeContents'
