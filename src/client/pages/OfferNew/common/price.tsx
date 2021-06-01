@@ -21,14 +21,15 @@ const PriceWrapper = styled.div`
 
 const PriceGross = styled.div`
   font-size: 1rem;
+  line-height: 1.625rem;
   color: ${colorsV3.gray500};
   text-decoration: line-through;
 
-  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
-    position: absolute;
-    top: -1rem;
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    line-height: 2rem;
   }
 `
+
 const OldPriceSuffix = styled.span`
   font-size: 0.875rem;
 `
@@ -45,10 +46,11 @@ const PriceNumbers = styled.div<{
 
 const PriceNet = styled.div`
   font-size: 1.375rem;
-  line-height: 1.5;
+  line-height: 1.625rem;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     font-size: 1.5rem;
+    line-height: 2rem;
   }
 `
 

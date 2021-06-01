@@ -48,12 +48,14 @@ const StartDateLabel = styled.p`
 `
 
 const InsuranceHeading = styled.h3`
-  font-size: 1.375rem;
-  line-height: 1.5;
   margin: 0;
+
+  font-size: 1.375rem;
+  line-height: 1.625rem;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     font-size: 1.5rem;
+    line-height: 2rem;
   }
 
   span {
