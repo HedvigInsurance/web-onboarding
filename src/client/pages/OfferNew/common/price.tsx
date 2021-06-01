@@ -6,7 +6,7 @@ import { MonetaryAmount } from 'containers/types'
 import { useTextKeys } from 'utils/textKeys'
 import {
   LARGE_SCREEN_MEDIA_QUERY,
-  MEDIUM_SMALL_SCREEN_MEDIA_QUERY,
+  SMALL_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
 
 const PriceWrapper = styled.div`
@@ -14,7 +14,7 @@ const PriceWrapper = styled.div`
   flex-direction: column;
   position: relative;
 
-  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
+  ${SMALL_SCREEN_MEDIA_QUERY} {
     align-items: flex-end;
   }
 `
