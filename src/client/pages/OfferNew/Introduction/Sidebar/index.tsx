@@ -83,9 +83,9 @@ const HeaderTop = styled.div`
 
 const Header = styled.div`
   position: relative;
-  display: flex;
-  align-items: flex-start;
   width: 100%;
+  display: flex;
+  align-items: baseline;
   flex-wrap: wrap;
 
   ${SMALL_SCREEN_MEDIA_QUERY} {
