@@ -13,12 +13,11 @@ import { getMainQuote } from '../../../utils'
 import { Details } from './Details'
 import {
   getFieldSchema,
-  getQuoteDetailsFormData,
   getInitialInputValues,
-  getQuoteType,
   getValidationSchema,
   hasEditQuoteErrors,
   isUnderwritingLimitsHit,
+  getEditQuoteInput,
 } from './utils'
 
 const Container = styled.div`
@@ -136,23 +135,16 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
 
   const editQuotes = async (form: EditQuoteInput) => {
     return Promise.all(
-      offerData.quotes.map(({ quoteDetails, id }) => {
-        const quoteType = getQuoteType(quoteDetails)
-        const quoteDetailsFormValues = getQuoteDetailsFormData({
+      offerData.quotes.map((quote) => {
+        const editQuoteInput = getEditQuoteInput({
+          quote,
           form,
-          quoteDetails,
           offerData,
         })
-        const { firstName, lastName, birthDate } = form
+
         return editQuoteMutation({
           variables: {
-            input: {
-              id,
-              firstName,
-              lastName,
-              birthDate,
-              [quoteType]: quoteDetailsFormValues,
-            },
+            input: editQuoteInput,
           },
         })
       }),

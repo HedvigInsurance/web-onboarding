@@ -725,6 +725,37 @@ export const getQuoteDetailsFormData = ({
   }
 }
 
+type GetEditQuoteInputParams = {
+  quote: OfferQuote
+  form: EditQuoteInput
+  offerData: OfferData
+}
+
+export const getEditQuoteInput = ({
+  quote,
+  form,
+  offerData,
+}: GetEditQuoteInputParams): EditQuoteInput => {
+  const { quoteDetails, id } = quote
+  const quoteType = getQuoteType(quoteDetails)
+  const quoteDetailsFormValues = getQuoteDetailsFormData({
+    form,
+    quoteDetails,
+    offerData,
+  })
+  const { firstName, lastName, birthDate } = form
+
+  const input: EditQuoteInput = {
+    id,
+    firstName,
+    lastName,
+    birthDate,
+    [quoteType]: quoteDetailsFormValues,
+  }
+
+  return input
+}
+
 const isResultUnderwritingLimitsHit = (
   result: FetchResult<EditQuoteMutation>,
 ) => result.data?.editQuote.__typename === 'UnderwritingLimitsHit'
