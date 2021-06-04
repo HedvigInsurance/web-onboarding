@@ -88,23 +88,6 @@ const LoadingDimmer = styled.div<{ visible: boolean }>`
   visibility: ${(props) => (props.visible ? 'visible' : 'hidden')};
 `
 
-export type DetailsForm = {
-  id: EditQuoteInput['id']
-  firstName?: EditQuoteInput['firstName']
-  lastName?: EditQuoteInput['lastName']
-  birthDate?: EditQuoteInput['birthDate']
-  quoteDetails: FormQuoteDetails
-}
-
-export type FormQuoteDetails =
-  | EditQuoteInput['swedishApartment']
-  | EditQuoteInput['swedishHouse']
-  | EditQuoteInput['norwegianHomeContents']
-  | EditQuoteInput['norwegianTravel']
-  | EditQuoteInput['danishHomeContents']
-  | EditQuoteInput['danishAccident']
-  | EditQuoteInput['danishTravel']
-
 type DetailsModalProps = {
   offerData: OfferData
   refetch: () => Promise<void>
