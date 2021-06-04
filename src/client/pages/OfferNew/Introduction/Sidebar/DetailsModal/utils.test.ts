@@ -13,13 +13,92 @@ import {
   seApartementBrf as mockedSeApartmentOfferData,
   dkHomeContentAccident as mockedDkHomeAccidentOfferData,
   noCombo as mockedNoComboOfferData,
+  noComboYouth as mockedNoComboYouthOfferData,
 } from 'utils/testData/offerDataMock'
-import { getQuoteDetailsFormData } from './utils'
+import { getQuoteDetailsFormData, getEditQuoteInput } from './utils'
+
+const mockedNoHomeQuoteDetails = mockedNoComboOfferData.quotes.find(
+  ({ quoteDetails }) => {
+    return quoteDetails.__typename === 'NorwegianHomeContentsDetails'
+  },
+)?.quoteDetails
+
+const mockedNoTravelQuoteDetails = mockedNoTravelOfferData.quotes.find(
+  ({ quoteDetails }) => {
+    return quoteDetails.__typename === 'NorwegianTravelDetails'
+  },
+)?.quoteDetails
+
+const mockedNoHomeYouthQuote = mockedNoComboYouthOfferData.quotes.find(
+  ({ quoteDetails }) => {
+    return quoteDetails.__typename === 'NorwegianHomeContentsDetails'
+  },
+)
+
+const mockedNoTravelYouthQuote = mockedNoComboYouthOfferData.quotes.find(
+  ({ quoteDetails }) => {
+    return quoteDetails.__typename === 'NorwegianTravelDetails'
+  },
+)
+
+const norwegianComboForm: EditQuoteInput = {
+  id: '111',
+  firstName: 'Karl Ove',
+  lastName: 'Knausgård',
+  birthDate: '1968-12-06',
+  norwegianHomeContents: {
+    street: 'Gate 1',
+    zipCode: '1111',
+    coInsured: 2,
+    livingSpace: 111,
+    isYouth: false,
+    type: NorwegianHomeContentsType.Own,
+  },
+}
+
+const mockedSeApartmentQuote = mockedSeApartmentOfferData.quotes[0]
+
+const swedishApartmentForm: EditQuoteInput = {
+  id: '222',
+  firstName: 'Anna',
+  lastName: 'Odell',
+  swedishApartment: {
+    street: 'Gatan 1',
+    zipCode: '11111',
+    householdSize: 2,
+    livingSpace: 100,
+    type: ApartmentType.Brf,
+  },
+}
+
+const mockedDkHomeQuote = mockedDkHomeAccidentOfferData.quotes.find(
+  ({ quoteDetails }) => {
+    return quoteDetails.__typename === 'DanishHomeContentsDetails'
+  },
+)
+
+const mockedDkAccidentQuote = mockedDkHomeAccidentOfferData.quotes.find(
+  ({ quoteDetails }) => {
+    return quoteDetails.__typename === 'DanishAccidentDetails'
+  },
+)
+
+const danishHomeAccidentForm: EditQuoteInput = {
+  id: '333',
+  firstName: 'Mads',
+  lastName: 'Mikkelsen',
+  birthDate: '1965-11-22',
+  danishHomeContents: {
+    street: 'Gade. 1',
+    zipCode: '1111',
+    coInsured: 1,
+    livingSpace: 100,
+    isStudent: false,
+    type: DanishHomeContentsType.Rent,
+  },
+}
 
 describe('getQuoteDetailsFormData function', () => {
-  const mockedNoTravelQuoteDetails =
-    mockedNoTravelOfferData.quotes[0].quoteDetails
-
   const norwegianTravelForm: EditQuoteInput = {
     id: '111',
     firstName: 'Karl Ove',
@@ -35,7 +114,7 @@ describe('getQuoteDetailsFormData function', () => {
     const norwegianTravelDetailsFormData = getQuoteDetailsFormData({
       form: norwegianTravelForm,
       offerData: mockedNoTravelOfferData,
-      quoteDetails: mockedNoTravelQuoteDetails,
+      quoteDetails: mockedNoTravelQuoteDetails!,
     })
     const hasCoInsured = 'coInsured' in norwegianTravelDetailsFormData!
     const hasIsYouth = 'isYouth' in norwegianTravelDetailsFormData!
@@ -48,27 +127,6 @@ describe('getQuoteDetailsFormData function', () => {
       (norwegianTravelDetailsFormData as EditNorwegianTravelInput)?.coInsured,
     ).toBe(1)
   })
-
-  const mockedNoHomeQuoteDetails = mockedNoComboOfferData.quotes.find(
-    ({ quoteDetails }) => {
-      return quoteDetails.__typename === 'NorwegianHomeContentsDetails'
-    },
-  )?.quoteDetails
-
-  const norwegianComboForm: EditQuoteInput = {
-    id: '111',
-    firstName: 'Karl Ove',
-    lastName: 'Knausgård',
-    birthDate: '1968-12-06',
-    norwegianHomeContents: {
-      street: 'Gate 1',
-      zipCode: '1111',
-      coInsured: 2,
-      livingSpace: 111,
-      isYouth: false,
-      type: NorwegianHomeContentsType.Own,
-    },
-  }
 
   it('returns the correct quote details properties for Norwegian combo quote form', () => {
     const norwegianComboDetailsFormData = getQuoteDetailsFormData({
@@ -89,27 +147,11 @@ describe('getQuoteDetailsFormData function', () => {
     ).toBe(111)
   })
 
-  const mockedSeApartmentQuoteDetails =
-    mockedSeApartmentOfferData.quotes[0].quoteDetails
-
-  const swedishApartmentForm: EditQuoteInput = {
-    id: '222',
-    firstName: 'Anna',
-    lastName: 'Odell',
-    swedishApartment: {
-      street: 'Gatan 1',
-      zipCode: '11111',
-      householdSize: 2,
-      livingSpace: 100,
-      type: ApartmentType.Brf,
-    },
-  }
-
   it('returns the correct updated quote details properties for Swedish apartment quote form', () => {
     const swedishApartmentDetailsFormData = getQuoteDetailsFormData({
       form: swedishApartmentForm,
       offerData: mockedSeApartmentOfferData,
-      quoteDetails: mockedSeApartmentQuoteDetails,
+      quoteDetails: mockedSeApartmentQuote.quoteDetails,
     })
     const hasStreet = 'street' in swedishApartmentDetailsFormData!
     const hasHouseholdSize = 'householdSize' in swedishApartmentDetailsFormData!
@@ -123,29 +165,11 @@ describe('getQuoteDetailsFormData function', () => {
     ).toBe(ApartmentType.Brf)
   })
 
-  const mockedDkHomeAccidentQuoteDetails =
-    mockedDkHomeAccidentOfferData.quotes[0].quoteDetails
-
-  const danishHomeAccidentForm: EditQuoteInput = {
-    id: '333',
-    firstName: 'Mads',
-    lastName: 'Mikkelsen',
-    birthDate: '1965-11-22',
-    danishHomeContents: {
-      street: 'Gade. 1',
-      zipCode: '1111',
-      coInsured: 1,
-      livingSpace: 100,
-      isStudent: false,
-      type: DanishHomeContentsType.Own,
-    },
-  }
-
   it('returns the correct updated quote details properties for Danish home & accident bundle quote form', () => {
     const danishHomeAccidentDetailsFormData = getQuoteDetailsFormData({
       form: danishHomeAccidentForm,
       offerData: mockedDkHomeAccidentOfferData,
-      quoteDetails: mockedDkHomeAccidentQuoteDetails,
+      quoteDetails: mockedDkHomeQuote!.quoteDetails,
     })
     const hasStreet = 'street' in danishHomeAccidentDetailsFormData!
     const hasCoInsured = 'coInsured' in danishHomeAccidentDetailsFormData!
@@ -156,6 +180,70 @@ describe('getQuoteDetailsFormData function', () => {
     expect(hasCoInsured).toBe(true)
     expect(
       (danishHomeAccidentDetailsFormData as EditDanishHomeContentsInput)?.type,
-    ).toBe(DanishHomeContentsType.Own)
+    ).toBe(DanishHomeContentsType.Rent)
+  })
+})
+
+describe('getEditQuoteInput function', () => {
+  it('returns input with the correct updates to pass to editQuoteMutation with a Norwegian combo bundle', () => {
+    const editHomeQuoteInput = getEditQuoteInput({
+      quote: mockedNoHomeYouthQuote!,
+      form: norwegianComboForm,
+      offerData: mockedNoComboYouthOfferData,
+    })
+    const editTravelQuoteInput = getEditQuoteInput({
+      form: norwegianComboForm,
+      quote: mockedNoTravelYouthQuote!,
+      offerData: mockedNoComboYouthOfferData,
+    })
+
+    const hasCorrectHomeContentsType =
+      'norwegianHomeContents' in editHomeQuoteInput
+    const hasCorrectTravelType = 'norwegianTravel' in editTravelQuoteInput
+
+    expect(hasCorrectHomeContentsType).toBe(true)
+    expect(hasCorrectTravelType).toBe(true)
+    expect(editTravelQuoteInput.norwegianTravel?.isYouth).toBe(false)
+    expect(editTravelQuoteInput.norwegianTravel?.coInsured).toBe(
+      editHomeQuoteInput.norwegianHomeContents?.coInsured,
+    )
+  })
+
+  it('returns input with the correct updates to pass to editQuoteMutation with a Swedish apartment quote', () => {
+    const editSwedishApartmentQuoteInput = getEditQuoteInput({
+      quote: mockedSeApartmentQuote!,
+      form: swedishApartmentForm,
+      offerData: mockedSeApartmentOfferData,
+    })
+
+    const hasCorrectType = 'swedishApartment' in editSwedishApartmentQuoteInput
+
+    expect(hasCorrectType).toBe(true)
+    expect(editSwedishApartmentQuoteInput.firstName).toBe('Anna')
+  })
+
+  it('returns input with the correct updates to pass to editQuoteMutation with a Danish home & accident bundle', () => {
+    const editHomeInput = getEditQuoteInput({
+      quote: mockedDkHomeQuote!,
+      form: danishHomeAccidentForm,
+      offerData: mockedDkHomeAccidentOfferData,
+    })
+    const editAccidentInput = getEditQuoteInput({
+      quote: mockedDkAccidentQuote!,
+      form: danishHomeAccidentForm,
+      offerData: mockedDkHomeAccidentOfferData,
+    })
+
+    const hasCorrectHomeContentsType = 'danishHomeContents' in editHomeInput
+    const hasCorrectAccidentType = 'danishAccident' in editAccidentInput
+
+    expect(hasCorrectHomeContentsType).toBe(true)
+    expect(hasCorrectAccidentType).toBe(true)
+    expect(editAccidentInput.danishAccident?.street).toBe(
+      editHomeInput.danishHomeContents?.street,
+    )
+    expect(editHomeInput.danishHomeContents?.type).toBe(
+      DanishHomeContentsType.Rent,
+    )
   })
 })
