@@ -7,6 +7,7 @@ export type LocaleData = {
   isoLocale: IsoLocale
   marketLabel: MarketLabel
   htmlLang: 'en' | 'sv' | 'no' | 'da'
+  adtractionScript?: string
   ssn: Ssn
   birthdate: Birthdate
 }
@@ -53,6 +54,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     isoLocale: IsoLocale.SvSe,
     marketLabel: 'SE',
     htmlLang: 'sv',
+    adtractionScript: 'https://cdn.adt387.com/jsTag?ap=1412531808',
     ssn: {
       length: ssnLengths.SE,
       formatExample: 'ÅÅÅÅMMDDXXXX',
@@ -69,6 +71,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     isoLocale: IsoLocale.EnSe,
     marketLabel: 'SE',
     htmlLang: 'en',
+    adtractionScript: 'https://cdn.adt387.com/jsTag?ap=1412531808',
     ssn: {
       length: ssnLengths.SE,
       formatExample: 'YYYYMMDDXXXX',
@@ -85,6 +88,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     isoLocale: IsoLocale.NbNo,
     marketLabel: 'NO',
     htmlLang: 'no',
+    adtractionScript: 'https://cdn.adt387.com/jsTag?ap=1492109567',
     ssn: {
       length: ssnLengths.NO,
       formatExample: 'DDMMÅÅXXXXX',
@@ -101,6 +105,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     isoLocale: IsoLocale.EnNo,
     marketLabel: 'NO',
     htmlLang: 'en',
+    adtractionScript: 'https://cdn.adt387.com/jsTag?ap=1492109567',
     ssn: {
       length: ssnLengths.NO,
       formatExample: 'DDMMYYXXXXX',
@@ -117,6 +122,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     isoLocale: IsoLocale.DaDk,
     marketLabel: 'DK',
     htmlLang: 'da',
+    adtractionScript: 'https://cdn.adt387.com/jsTag?ap=1589794294',
     ssn: {
       length: ssnLengths.DK,
       formatExample: 'DDMMÅÅSSSS',
@@ -133,6 +139,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     isoLocale: IsoLocale.EnDk,
     marketLabel: 'DK',
     htmlLang: 'en',
+    adtractionScript: 'https://cdn.adt387.com/jsTag?ap=1589794294',
     ssn: {
       length: ssnLengths.DK,
       formatExample: 'DDMMYYSSSS',

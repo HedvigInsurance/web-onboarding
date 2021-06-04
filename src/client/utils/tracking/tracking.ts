@@ -12,7 +12,6 @@ import { OfferData } from 'pages/OfferNew/types'
 import {
   isBundle,
   isYouth,
-  isDanish,
   isNorwegian,
   isDanishAccidentBundle,
   isDanishTravelBundle,
@@ -101,15 +100,8 @@ export const { TrackAction, IdentifyAction } = setupTrackers<
 )
 
 type TypeOfContractExcludedUnused = Exclude<
-  TypeOfContract,
-  | 'DK_HOME_CONTENT_OWN'
-  | 'DK_HOME_CONTENT_RENT'
-  | 'DK_HOME_CONTENT_STUDENT_OWN'
-  | 'DK_HOME_CONTENT_STUDENT_RENT'
-  | 'DK_ACCIDENT'
-  | 'DK_ACCIDENT_STUDENT'
-  | 'DK_TRAVEL'
-  | 'DK_TRAVEL_STUDENT'
+  TypeOfContract | NoComboTypes | DkBundleTypes,
+  'DK_ACCIDENT' | 'DK_ACCIDENT_STUDENT' | 'DK_TRAVEL' | 'DK_TRAVEL_STUDENT'
 >
 
 const adtractionProductMap: Record<TypeOfContractExcludedUnused, number> = {
@@ -124,10 +116,42 @@ const adtractionProductMap: Record<TypeOfContractExcludedUnused, number> = {
   NO_HOME_CONTENT_YOUTH_RENT: 1492623719,
   NO_TRAVEL: 1492623742,
   NO_TRAVEL_YOUTH: 1492623785,
+  NO_COMBO: 1492623841,
+  NO_COMBO_YOUTH: 1492623841,
+  DK_HOME_CONTENT_OWN: 1589961514,
+  DK_HOME_CONTENT_RENT: 1589961514,
+  DK_HOME_CONTENT_STUDENT_OWN: 1589962112,
+  DK_HOME_CONTENT_STUDENT_RENT: 1589962112,
+  DK_ACCIDENT_BUNDLE: 1589962152,
+  DK_ACCIDENT_BUNDLE_STUDENT: 1613410547,
+  DK_TRAVEL_BUNDLE: 1589962256,
+  DK_TRAVEL_BUNDLE_STUDENT: 1613410728,
 }
 
-const getComboAdractionProductValue = (isYouthBundle: boolean) =>
-  isYouthBundle ? 1492623841 : 1492623821
+export const getBundleAdtractionProductValue = (offerData: OfferData) => {
+  if (isBundle(offerData)) {
+    if (isNorwegian(offerData)) {
+      return isYouth(offerData)
+        ? adtractionProductMap[NoComboTypes.NoComboYouth]
+        : adtractionProductMap[NoComboTypes.NoCombo]
+    }
+
+    if (isDanishAccidentBundle(offerData)) {
+      return isStudentOffer(offerData)
+        ? adtractionProductMap[DkBundleTypes.DkAccidentBundleStudent]
+        : adtractionProductMap[DkBundleTypes.DkAccidentBundle]
+    }
+
+    if (isDanishTravelBundle(offerData)) {
+      return isStudentOffer(offerData)
+        ? adtractionProductMap[DkBundleTypes.DkTravelBundleStudent]
+        : adtractionProductMap[DkBundleTypes.DkTravelBundle]
+    }
+  }
+  return adtractionProductMap[
+    offerData.quotes[0].contractType as TypeOfContractExcludedUnused
+  ]
+}
 
 export const adtraction = (
   orderValue: number,
@@ -149,13 +173,7 @@ export const adtraction = (
       adt.Tag.cpn = couponCode
     }
 
-    if (!isDanish(offerData)) {
-      adt.Tag.tp = isBundle(offerData)
-        ? getComboAdractionProductValue(isYouth(offerData))
-        : adtractionProductMap[
-            offerData.quotes[0].contractType as TypeOfContractExcludedUnused
-          ]
-    }
+    adt.Tag.tp = getBundleAdtractionProductValue(offerData)
     adt.Tag.doEvent()
   } catch (e) {
     ;(window as any).Sentry.captureMessage(e)
