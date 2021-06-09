@@ -5,7 +5,6 @@ import { inputTypes, masks, Mask } from 'components/inputs'
 import {
   ApartmentType,
   EditQuoteInput,
-  ExtraBuilding,
   ExtraBuildingType,
   NorwegianHomeContentsType,
   NorwegianTravelDetails,
@@ -17,6 +16,7 @@ import {
   EditQuoteMutation,
   EditNorwegianHomeContentsInput,
   EditDanishHomeContentsInput,
+  ExtraBuildingInput,
 } from 'data/graphql'
 import { OfferQuote, OfferData, OfferPersonInfo } from 'pages/OfferNew/types'
 import { birthdateFormats, LocaleData } from 'l10n/locales'
@@ -135,7 +135,7 @@ const getSwedishSchema = (
               .required(),
           },
           type: {
-            label: 'DETAILS_MODULE_TABLE_RECIDENCY_TYPE_CELL_LABEL_APARTMENT',
+            label: 'DETAILS_MODULE_TABLE_RESIDENCE_TYPE_CELL_LABEL',
             placeholder: '',
             options: [
               ...(isStudent(offerQuote.quoteDetails)
@@ -280,7 +280,7 @@ const getNorwegianSchema = (
             validation: Yup.number().required(),
           },
           type: {
-            label: 'DETAILS_MODULE_TABLE_RECIDENCY_TYPE_CELL_LABEL_APARTMENT',
+            label: 'DETAILS_MODULE_TABLE_RESIDENCE_TYPE_CELL_LABEL',
             placeholder: '',
             options: [
               {
@@ -325,7 +325,7 @@ const getDanishSchema = (base: BaseFieldSchema): DetailsFieldSchema => {
         validation: Yup.number().required(),
       },
       type: {
-        label: 'DETAILS_MODULE_TABLE_RECIDENCY_TYPE_CELL_LABEL_APARTMENT',
+        label: 'DETAILS_MODULE_TABLE_RESIDENCE_TYPE_CELL_LABEL',
         placeholder: '',
         options: [
           {
@@ -527,25 +527,6 @@ export const getExtraBuilding = (
   return map[extraBuildingType]
 }
 
-export const extraBuildingTypes: {
-  [key in Required<ExtraBuilding>['__typename']]: ExtraBuildingType
-} = {
-  ExtraBuildingAttefall: ExtraBuildingType.Attefall,
-  ExtraBuildingBarn: ExtraBuildingType.Barn,
-  ExtraBuildingBoathouse: ExtraBuildingType.Boathouse,
-  ExtraBuildingCarport: ExtraBuildingType.Carport,
-  ExtraBuildingFriggebod: ExtraBuildingType.Friggebod,
-  ExtraBuildingGarage: ExtraBuildingType.Garage,
-  ExtraBuildingGazebo: ExtraBuildingType.Gazebo,
-  ExtraBuildingGreenhouse: ExtraBuildingType.Greenhouse,
-  ExtraBuildingGuesthouse: ExtraBuildingType.Guesthouse,
-  ExtraBuildingOther: ExtraBuildingType.Other,
-  ExtraBuildingOuthouse: ExtraBuildingType.Outhouse,
-  ExtraBuildingSauna: ExtraBuildingType.Sauna,
-  ExtraBuildingShed: ExtraBuildingType.Shed,
-  ExtraBuildingStorehouse: ExtraBuildingType.Storehouse,
-}
-
 export const getInitialSwedishApartmentValues = (
   quoteId: string,
   details: SwedishApartmentQuoteDetails,
@@ -574,13 +555,13 @@ export const getInitialSwedishHouseValues = (
     numberOfBathrooms: details.numberOfBathrooms,
     yearOfConstruction: details.yearOfConstruction,
     isSubleted: details.isSubleted,
-    extraBuildings: details.extraBuildings
-      .filter((b) => !!b.__typename)
-      .map((b) => ({
-        type: extraBuildingTypes[b.__typename!],
-        area: b.area,
-        hasWaterConnected: b.hasWaterConnected,
-      })),
+    extraBuildings: details.extraBuildings.map<ExtraBuildingInput>(
+      ({ type, area, hasWaterConnected }) => ({
+        type,
+        area,
+        hasWaterConnected,
+      }),
+    ),
   },
 })
 

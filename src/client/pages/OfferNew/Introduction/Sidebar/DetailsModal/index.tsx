@@ -1,27 +1,27 @@
-import styled from '@emotion/styled'
-import { colorsV3, fonts } from '@hedviginsurance/brand'
-import { Form, Formik } from 'formik'
 import React from 'react'
-import { LocaleLabel, locales } from 'l10n/locales'
+import styled from '@emotion/styled'
+import { Form, Formik } from 'formik'
+import { colorsV3, fonts } from '@hedviginsurance/brand'
 import { Button } from 'components/buttons'
 import { Modal, ModalProps } from 'components/ModalNew'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { EditQuoteInput, useEditQuoteMutation } from 'data/graphql'
+import { LocaleLabel, locales } from 'l10n/locales'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
-import { getMainQuote, isBundle } from '../../../utils'
+import { getMainQuote, isSwedish } from '../../../utils'
+import { Details } from './Details'
 import {
   getFieldSchema,
-  getInitialInputValues,
-  getValidationSchema,
-  getUpdatedQuoteDetails,
   getFormData,
+  getInitialInputValues,
   getQuoteType,
-  isUnderwritingLimitsHit,
+  getUpdatedQuoteDetails,
+  getValidationSchema,
   hasEditQuoteErrors,
+  isUnderwritingLimitsHit,
   QuoteDetailsInput,
 } from './utils'
-import { Details } from './Details'
 
 const Container = styled.div`
   width: 100%;
@@ -102,7 +102,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   onClose,
 }) => {
   const textKeys = useTextKeys()
-  const [editQuote, editQuoteResult] = useEditQuoteMutation()
+  const [editQuoteMutation, editQuoteResult] = useEditQuoteMutation()
   const mainOfferQuote = getMainQuote(offerData)
   const currentLocale = useCurrentLocale()
   const currentLocaleData = locales[currentLocale as LocaleLabel]
@@ -118,36 +118,28 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
     setIsUnderwritingGuidelineHit,
   ] = React.useState(false)
 
-  const bundleEditQuote = async (
-    form: EditQuoteInput,
-    offerData: OfferData,
-  ) => {
-    const mainQuoteResult = await editQuote({
-      variables: {
-        input: form,
-      },
-    })
-    if (
-      hasEditQuoteErrors(mainQuoteResult) ||
-      isUnderwritingLimitsHit(mainQuoteResult)
-    ) {
-      return mainQuoteResult
+  const editQuotes = async (form: EditQuoteInput) => {
+    if (isSwedish(offerData)) {
+      // No quote bundles available in Sweden, assume one quote per offer.
+      return editQuoteMutation({ variables: { input: form } })
     }
-    const quoutesToUpdate = offerData.quotes.filter(
-      (quote) => quote.id !== form.id,
-    )
+
     const formValues = getFormData(form, offerData) as QuoteDetailsInput
     return Promise.all(
-      quoutesToUpdate.map(async (quote) => {
+      offerData.quotes.map((quote) => {
         const updateQuoteDetails = getUpdatedQuoteDetails(
           quote.quoteDetails,
           formValues,
         )
         const quoteType = getQuoteType(quote.quoteDetails)
-        return editQuote({
+        const { firstName, lastName, birthDate } = form
+        return editQuoteMutation({
           variables: {
             input: {
               id: quote.id,
+              firstName,
+              lastName,
+              birthDate,
               [quoteType]: updateQuoteDetails,
             },
           },
@@ -168,9 +160,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
             setIsUpdating(true)
             setIsUnderwritingGuidelineHit(false)
             try {
-              const result = isBundle(offerData)
-                ? await bundleEditQuote(form, offerData)
-                : await editQuote({ variables: { input: form } })
+              const result = await editQuotes(form)
               if (hasEditQuoteErrors(result)) {
                 setIsUpdating(false)
                 return

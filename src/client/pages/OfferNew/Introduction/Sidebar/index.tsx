@@ -209,7 +209,7 @@ export const Sidebar: React.FC<Props> = ({
                     isPercentageDiscountMonths(
                       redeemedCampaigns[0]?.incentive,
                     ) ||
-                    isBundle(offerData)
+                    isNorwegianBundle
                   }
                   monthlyGross={offerData.cost.monthlyGross}
                   monthlyNet={offerData.cost.monthlyNet}

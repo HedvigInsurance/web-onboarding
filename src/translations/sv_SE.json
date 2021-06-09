@@ -1,8 +1,8 @@
 {
-  "ONBOARDING_CONNECT_DD_HEADLINE": "bara två saker kvar att göra",
-  "ONBOARDING_CONNECT_DD_CTA": "Koppla betalning - aktivera Hedvig",
-  "ONBOARDING_CONNECT_DD_PRE_HEADLINE": "Välkommen som medlem,",
-  "ONBOARDING_CONNECT_DD_BODY": "Vad roligt att du blivit medlem. För att börja använda din nya försäkring behöver du:",
+  "ONBOARDING_CONNECT_DD_HEADLINE_PART_2": "din försäkring är nu aktiv",
+  "ONBOARDING_CONNECT_DD_CTA": "Koppla autogiro",
+  "ONBOARDING_CONNECT_DD_HEADLINE_PART_1": "Välkommen till Hedvig,",
+  "ONBOARDING_CONNECT_DD_BODY": "Vi är så glada att ha dig som medlem, bara två små saker kvar att göra:",
   "FOUR_OH_FOUR_TITLE": "404 - Sidan kunde inte hittas | Hedvig",
   "FOREVER_INTRO_READY_QUESTION": "Redo?",
   "FOUR_OH_FOUR_HEADLINE": "Oj! Här fanns inget",
@@ -239,8 +239,8 @@
   "DETAILS_MODULE_PERSONAL_INFORMATION": "Personuppgifter",
   "SIDEBAR_NO_BUNDLE_DISCOUNT_TEXT": "",
   "HERO_OFFER_DETAILS_HEADER": "Ditt prisförslag",
-  "ONBOARDING_CONNECT_DD_INSTRUCTIONS_CONNECT_PAYMENT": "Aktivera Hedvig genom att koppla autogiro",
-  "ONBOARDING_CONNECT_DD_INSTRUCTIONS_DOWNLOAD_APP": "Ladda ner Hedvig-appen",
+  "ONBOARDING_CONNECT_DD_INSTRUCTIONS_CONNECT_PAYMENT": "Koppla autogiro, månadskostnaden dras i slutet av varje månad",
+  "ONBOARDING_CONNECT_DD_INSTRUCTIONS_DOWNLOAD_APP": "Ladda ner Hedvig-appen för att få översikt över din försäkring",
   "ONBOARDING_DOWNLOAD_PARAGRAPH_1": "Allt som rör din försäkring, ditt skydd och dina skadeärenden sköts via Hedvig-appen.",
   "ONBOARDING_DOWNLOAD_PARAGRAPH_2": "Spela in din skadeanmälan, chatta med ditt serviceteam och få obegränsad hjälp varje dag till klockan 22.",
   "CHECKOUT_SIMPLE_SIGN_BUTTON_TEXT": "Skaffa Hedvig",
@@ -275,5 +275,7 @@
   "SIDEBAR_INSURANCE_TYPE_DK_ACCIDENT_STUDENT": "",
   "SIDEBAR_INSURANCE_TYPE_DK_TRAVEL": "",
   "SIDEBAR_INSURANCE_TYPE_DK_TRAVEL_STUDENT": "",
-  "WEB_REFERRAL_ADDEDPERK": "{REFERRAL_VALUE}\/mån rabatt via Hedvig Forever"
+  "WEB_REFERRAL_ADDEDPERK": "{REFERRAL_VALUE}\/mån rabatt via Hedvig Forever",
+  "DETAILS_MODULE_TABLE_RESIDENCE_TYPE_CELL_LABEL": "Bostadstyp",
+  "STARTPAGE_SE_INSURED_BADGE": "Jag har försäkring"
 }

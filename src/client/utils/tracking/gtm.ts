@@ -1,9 +1,9 @@
 import { TypeOfContract } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import { captureSentryError } from 'utils/sentry-client'
-import { getContractType, NoComboTypes } from './tracking'
+import { getContractType, DkBundleTypes, NoComboTypes } from './tracking'
 
-type GAContractType = NoComboTypes | TypeOfContract
+type GAContractType = NoComboTypes | DkBundleTypes | TypeOfContract
 
 interface GTMOfferData {
   insurance_type: GAContractType

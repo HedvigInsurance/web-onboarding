@@ -62,7 +62,8 @@ query Quote($id: ID!, $perilsLocale: Locale!) {
           yearOfConstruction
           isSubleted
           extraBuildings {
-            ... on ExtraBuildingCore {
+            ... on ExtraBuildingValue {
+              type
               area
               displayName
               hasWaterConnected
