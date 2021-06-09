@@ -486,21 +486,19 @@ const getValidationSchemaHelper = <T>([key, value]: FieldTuple<T>): any => {
   return { [key]: Yup.object().shape({ ...getValidationSchemaHelper(value) }) }
 }
 
-export const isRegularFieldType = <T>(
+const isRegularFieldType = <T>(
   field: FieldType<T>,
 ): field is RegularFieldType => {
   return {}.hasOwnProperty.call(field, 'validation')
 }
 
-export const isArrayFieldType = <T>(
+const isArrayFieldType = <T>(
   field: FieldType<T>,
 ): field is ArrayFieldType<T> => {
   return {}.hasOwnProperty.call(field, 'arrayValidation')
 }
 
-export const getExtraBuilding = (
-  extraBuildingType: ExtraBuildingType,
-): string => {
+const getExtraBuilding = (extraBuildingType: ExtraBuildingType): string => {
   const map = {
     [ExtraBuildingType.Attefall]: 'DETAILS_MODULE_EXTRABUILDINGS_ATTEFALL',
     [ExtraBuildingType.Barn]: 'DETAILS_MODULE_EXTRABUILDINGS_BARN',
@@ -525,7 +523,7 @@ export const getExtraBuilding = (
   return map[extraBuildingType]
 }
 
-export const getInitialSwedishApartmentValues = (
+const getInitialSwedishApartmentValues = (
   quoteId: string,
   details: SwedishApartmentQuoteDetails,
 ): EditQuoteInput => ({
@@ -539,7 +537,7 @@ export const getInitialSwedishApartmentValues = (
   },
 })
 
-export const getInitialSwedishHouseValues = (
+const getInitialSwedishHouseValues = (
   quoteId: string,
   details: SwedishHouseQuoteDetails,
 ): EditQuoteInput => ({
@@ -567,7 +565,7 @@ type NorwegianHomeContentsFormDetails = NorwegianHomeContentsDetails & {
   norwegianHomeType: NorwegianHomeContentsType
 }
 
-export const getInitialNorwegianHomeContentValues = (
+const getInitialNorwegianHomeContentValues = (
   quoteId: string,
   quoteDetails: NorwegianHomeContentsFormDetails,
 ): EditQuoteInput => ({
@@ -597,7 +595,7 @@ type DanishHomeContentsFormDetails = DanishHomeContentsDetails & {
   danishHomeType: DanishHomeContentsType
 }
 
-export const getInitialDanishHomeContentValues = (
+const getInitialDanishHomeContentValues = (
   quoteId: string,
   quoteDetails: DanishHomeContentsFormDetails,
 ): EditQuoteInput => {
@@ -627,30 +625,21 @@ export const getInitialInputValues = (
   }
 }
 
-export const getInitialQuoteDetailsInputValues = (offerQuote: OfferQuote) => {
+const getInitialQuoteDetailsInputValues = (offerQuote: OfferQuote) => {
   const { id: quoteId, quoteDetails } = offerQuote
 
   switch (quoteDetails.__typename) {
     case 'SwedishHouseQuoteDetails':
-      return getInitialSwedishHouseValues(
-        quoteId,
-        quoteDetails as SwedishHouseQuoteDetails,
-      )
+      return getInitialSwedishHouseValues(quoteId, quoteDetails)
     case 'SwedishApartmentQuoteDetails':
-      return getInitialSwedishApartmentValues(
-        quoteId,
-        quoteDetails as SwedishApartmentQuoteDetails,
-      )
+      return getInitialSwedishApartmentValues(quoteId, quoteDetails)
     case 'NorwegianHomeContentsDetails':
       return getInitialNorwegianHomeContentValues(
         quoteId,
         quoteDetails as NorwegianHomeContentsFormDetails,
       )
     case 'NorwegianTravelDetails':
-      return getInitialNorwegianTravelValues(
-        quoteId,
-        quoteDetails as NorwegianTravelDetails,
-      )
+      return getInitialNorwegianTravelValues(quoteId, quoteDetails)
     case 'DanishHomeContentsDetails':
       return getInitialDanishHomeContentValues(
         quoteId,
@@ -797,7 +786,7 @@ type EditQuoteType = keyof Pick<
   | 'danishTravel'
 >
 
-export const getQuoteType = (quoteDetails: QuoteDetails): EditQuoteType => {
+const getQuoteType = (quoteDetails: QuoteDetails): EditQuoteType => {
   if (isSwedishApartment(quoteDetails)) return 'swedishApartment'
   if (isSwedishHouse(quoteDetails)) return 'swedishHouse'
   if (isNorwegianHomeContents(quoteDetails)) return 'norwegianHomeContents'
