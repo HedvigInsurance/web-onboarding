@@ -9,18 +9,15 @@ import { EditQuoteInput, useEditQuoteMutation } from 'data/graphql'
 import { LocaleLabel, locales } from 'l10n/locales'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
-import { getMainQuote, isSwedish } from '../../../utils'
+import { getMainQuote } from '../../../utils'
 import { Details } from './Details'
 import {
   getFieldSchema,
-  getFormData,
   getInitialInputValues,
-  getQuoteType,
-  getUpdatedQuoteDetails,
   getValidationSchema,
   hasEditQuoteErrors,
   isUnderwritingLimitsHit,
-  QuoteDetailsInput,
+  getEditQuoteInput,
 } from './utils'
 
 const Container = styled.div`
@@ -90,7 +87,8 @@ const LoadingDimmer = styled.div<{ visible: boolean }>`
   opacity: ${(props) => (props.visible ? 1 : 0)};
   visibility: ${(props) => (props.visible ? 'visible' : 'hidden')};
 `
-interface DetailsModalProps {
+
+type DetailsModalProps = {
   offerData: OfferData
   refetch: () => Promise<void>
 }
@@ -119,29 +117,17 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   ] = React.useState(false)
 
   const editQuotes = async (form: EditQuoteInput) => {
-    if (isSwedish(offerData)) {
-      // No quote bundles available in Sweden, assume one quote per offer.
-      return editQuoteMutation({ variables: { input: form } })
-    }
-
-    const formValues = getFormData(form, offerData) as QuoteDetailsInput
     return Promise.all(
       offerData.quotes.map((quote) => {
-        const updateQuoteDetails = getUpdatedQuoteDetails(
-          quote.quoteDetails,
-          formValues,
-        )
-        const quoteType = getQuoteType(quote.quoteDetails)
-        const { firstName, lastName, birthDate } = form
+        const editQuoteInput = getEditQuoteInput({
+          quote,
+          form,
+          offerData,
+        })
+
         return editQuoteMutation({
           variables: {
-            input: {
-              id: quote.id,
-              firstName,
-              lastName,
-              birthDate,
-              [quoteType]: updateQuoteDetails,
-            },
+            input: editQuoteInput,
           },
         })
       }),

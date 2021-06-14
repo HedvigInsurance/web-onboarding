@@ -294,7 +294,7 @@ export const noCombo: OfferData = {
     lastName: 'Moen',
     email: 'mail@test.com',
     ssn: '15126533427',
-    birthDate: '2965-12-15',
+    birthDate: '1965-12-15',
     householdSize: 2,
     address: {
       street: 'Exampleveien 23',
