@@ -1,12 +1,12 @@
-import { text, withKnobs } from '@storybook/addon-knobs'
 import React from 'react'
 import { withFormik } from 'storybook-formik'
-import { InputField } from './index'
+import { Story } from '@storybook/react'
+import { InputField, TextInputProps } from './index'
 
 export default {
   title: 'Components/InputField',
   component: InputField,
-  decorators: [withFormik, withKnobs],
+  decorators: [withFormik],
   parameters: {
     formik: {
       initialValues: {
@@ -14,47 +14,31 @@ export default {
       },
     },
   },
+  args: {
+    label: '',
+    name: 'foo',
+    type: 'text',
+    autoComplete: 'off',
+    placeholder: 'Some placeholder',
+    touched: false,
+    errors: '',
+  },
 }
 
-export const Light = () => (
-  <div style={{ maxWidth: '320px', margin: '40px auto' }}>
-    <InputField
-      label={text('Label', '')}
-      name="foo"
-      type="text"
-      autoComplete="off"
-      placeholder=""
-      touched={false}
-      errors={text('Error text', '')}
-    />
+const Template: Story<TextInputProps> = (args) => (
+  <div style={{ maxWidth: '320px' }}>
+    <InputField {...args} />
   </div>
 )
 
-export const Dark = () => (
-  <div style={{ maxWidth: '320px', margin: '40px auto' }}>
-    <InputField
-      label={text('Label', '')}
-      name="foo"
-      type="text"
-      autoComplete="off"
-      placeholder=""
-      touched={false}
-      errors={text('Error text', '')}
-      variant="dark"
-    />
-  </div>
-)
-
-Light.story = {
+export const Light = Template.bind({})
+Light.parameters = {
   backgrounds: {
     default: 'gray100',
   },
 }
 
-Dark.story = {
-  parameters: {
-    backgrounds: {
-      default: 'gray900',
-    },
-  },
+export const Dark = Template.bind({})
+Dark.args = {
+  variant: 'dark',
 }
