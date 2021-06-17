@@ -7,6 +7,7 @@ import { Landing } from './Landing'
 export default {
   title: 'Landing',
   component: Landing,
+  parameters: { layout: '' },
 }
 
 export const SwedenSE = () => (
