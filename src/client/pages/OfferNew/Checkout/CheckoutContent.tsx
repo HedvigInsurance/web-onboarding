@@ -5,6 +5,10 @@ import { useEditQuoteMutation, useRedeemedCampaignsQuery } from 'data/graphql'
 import { Price } from 'pages/OfferNew/components'
 import { useTextKeys } from 'utils/textKeys'
 import { useUnderwritingLimitsHitReporter } from 'utils/sentry-client'
+import {
+  LARGE_SCREEN_MEDIA_QUERY,
+  MEDIUM_SCREEN_MEDIA_QUERY,
+} from 'utils/mediaQueries'
 import { StartDate } from '../Introduction/Sidebar/StartDate'
 import { OfferData } from '../types'
 import {
@@ -23,11 +27,11 @@ const Section = styled.div`
 const Excerpt = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 1rem 0 1.5rem;
+  align-items: flex-start;
+  padding: 2rem 0 2.5rem;
 
-  @media (min-width: 40rem) {
-    padding-bottom: 2rem;
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
+    padding-bottom: 3rem;
   }
 `
 
@@ -44,8 +48,15 @@ const StartDateLabel = styled.p`
 `
 
 const InsuranceHeading = styled.h3`
-  font-size: 1.5rem;
-  line-height: 2rem;
+  margin: 0;
+
+  font-size: 1.375rem;
+  line-height: 1.625rem;
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
 
   span {
     display: block;

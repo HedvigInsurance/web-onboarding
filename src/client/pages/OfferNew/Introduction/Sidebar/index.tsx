@@ -18,7 +18,10 @@ import {
 } from 'pages/OfferNew/Introduction/Sidebar/utils'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
-import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import {
+  LARGE_SCREEN_MEDIA_QUERY,
+  SMALL_SCREEN_MEDIA_QUERY,
+} from 'utils/mediaQueries'
 import { Badge } from 'components/Badge/Badge'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import { Price } from '../../components'
@@ -80,9 +83,14 @@ const HeaderTop = styled.div`
 
 const Header = styled.div`
   position: relative;
-  display: flex;
-  align-items: center;
   width: 100%;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+
+  ${SMALL_SCREEN_MEDIA_QUERY} {
+    flex-wrap: nowrap;
+  }
 `
 
 const PreTitle = styled.span`
@@ -93,10 +101,11 @@ const Title = styled.h3`
   width: 100%;
   margin: 0 1rem 0 0;
   font-size: 1.375rem;
-  line-height: 1.3;
+  line-height: 1.625rem;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     font-size: 1.5rem;
+    line-height: 2rem;
   }
 `
 
