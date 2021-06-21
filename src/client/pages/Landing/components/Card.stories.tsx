@@ -5,6 +5,7 @@ import { Card, CardHeadline, CardParagraph } from './Card'
 export default {
   title: 'Landing/Card',
   component: Card,
+  parameters: { layout: '' },
 }
 
 export const Enabled = () => (

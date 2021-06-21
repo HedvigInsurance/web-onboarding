@@ -4,23 +4,32 @@ import React from 'react'
 import { Spinner } from 'components/utils'
 import { MonetaryAmount } from 'containers/types'
 import { useTextKeys } from 'utils/textKeys'
-import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import {
+  LARGE_SCREEN_MEDIA_QUERY,
+  SMALL_SCREEN_MEDIA_QUERY,
+} from 'utils/mediaQueries'
 
 const PriceWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
   position: relative;
+
+  ${SMALL_SCREEN_MEDIA_QUERY} {
+    align-items: flex-end;
+  }
 `
 
 const PriceGross = styled.div`
-  height: 0.875rem;
-  margin-bottom: 0.25rem;
   font-size: 1rem;
-  line-height: 1rem;
+  line-height: 1.625rem;
   color: ${colorsV3.gray500};
   text-decoration: line-through;
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    line-height: 2rem;
+  }
 `
+
 const OldPriceSuffix = styled.span`
   font-size: 0.875rem;
 `
@@ -36,9 +45,12 @@ const PriceNumbers = styled.div<{
 `
 
 const PriceNet = styled.div`
-  font-size: 1.125rem;
+  font-size: 1.375rem;
+  line-height: 1.625rem;
+
   ${LARGE_SCREEN_MEDIA_QUERY} {
     font-size: 1.5rem;
+    line-height: 2rem;
   }
 `
 

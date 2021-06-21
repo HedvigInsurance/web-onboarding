@@ -1,4 +1,3 @@
-import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import { TextKeyProvider } from 'utils/textKeys'
@@ -8,7 +7,9 @@ export default {
   title: 'Forever/Intro/PreOnboardingScreen',
   component: PreOnboardingScreen,
   parameters: {
-    backgrounds: [{ name: 'gray900', value: colorsV3.gray900, default: true }],
+    backgrounds: {
+      default: 'gray900',
+    },
   },
 }
 
