@@ -1,17 +1,6 @@
 import { gql } from '@apollo/client'
+import { AddressSuggestion } from '@hedviginsurance/embark'
 import { apolloClient } from 'apolloClient'
-
-// This interface should be imported from Embark when we've bumped to new version that doesn't exist yet
-interface AddressSuggestion {
-  id?: string
-  address: string
-  streetName?: string
-  streetNumber?: string
-  floor?: string
-  apartment?: string
-  postalCode?: string
-  city?: string
-}
 
 const query = gql`
   query AutoComplete($term: String!) {
