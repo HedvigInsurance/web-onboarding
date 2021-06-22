@@ -19,9 +19,9 @@ const query = gql`
 
 export const resolveAddressAutocomplete = async (
   term: string,
-): Promise<AddressSuggestion | Error> => {
+): Promise<AddressSuggestion[]> => {
   if (!apolloClient) {
-    return Error('Missing apollo client')
+    throw new Error('Missing apollo client')
   }
 
   const result = await apolloClient.client.query({ query, variables: { term } })
