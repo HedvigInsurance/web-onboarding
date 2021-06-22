@@ -141,7 +141,7 @@ const Backdrop = styled('div')<Openable>`
   }};
 `
 
-interface Props {
+export interface Props {
   offerData: OfferData
   isOpen?: boolean
   onClose?: () => void
