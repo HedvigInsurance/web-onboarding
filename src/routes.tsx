@@ -18,6 +18,7 @@ import { SignLoading } from './client/pages/SignLoading'
 
 enum EmbarkStory {
   DenmarkContents = 'Web Onboarding DK - Contents',
+  DenmarkContentsWithAddressAutocomplete = 'Web Onboarding DK - Contents With Autocomplete',
   DenmarkContentsAccident = 'Web Onboarding DK - Danish Contents-Accident',
 
   NorwayContentsNorwegian = 'Web Onboarding NO - Norwegian Contents',
@@ -185,7 +186,7 @@ export const reactPageRoutes: ReactPageRoute[] = [
               case 'home':
                 return {
                   baseUrl: `/${locale}/new-member/home`,
-                  name: EmbarkStory.DenmarkContents,
+                  name: EmbarkStory.DenmarkContentsWithAddressAutocomplete,
                 }
               case 'home-accident':
                 return {
