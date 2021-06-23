@@ -299,10 +299,9 @@ const getNorwegianSchema = (
     : { norwegianTravel: { ...commonAttributes } }
 }
 
-const getDanishSchema = (base: BaseFieldSchema): DetailsFieldSchema => {
+const getDanishSchema = (): DetailsFieldSchema => {
   return {
     danishHomeContents: {
-      ...base,
       coInsured: {
         label: 'DETAILS_MODULE_TABLE_COINSURED_CELL_LABEL',
         placeholder: '',
@@ -395,7 +394,7 @@ const getFieldSchemaDetails = (offerQuote: OfferQuote): DetailsFieldSchema => {
     return getNorwegianSchema(base, offerQuote)
   }
   if (isDanishQuote(offerQuote)) {
-    return getDanishSchema(base)
+    return getDanishSchema()
   }
 
   return getSwedishSchema(base, offerQuote)
