@@ -39,10 +39,10 @@ export const GlobalCss: React.SFC = ({ children }) => (
         }
 
         a {
-          color: ${colorsV3.purple500};
+          color: ${colorsV3.purple900};
           &:hover,
           &:focus {
-            color: ${colorsV3.purple500};
+            color: ${colorsV3.purple900};
           }
         }
       `}

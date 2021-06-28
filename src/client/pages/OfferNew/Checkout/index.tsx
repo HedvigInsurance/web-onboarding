@@ -103,7 +103,7 @@ const BackButton = styled('button')`
 
   :focus {
     outline: 0;
-    background: ${colorsV3.purple100};
+    background: ${colorsV3.purple300};
   }
 `
 

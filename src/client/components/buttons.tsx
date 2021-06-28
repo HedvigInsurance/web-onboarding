@@ -62,7 +62,7 @@ export const TextButton = styled.button<TextButtonProps>`
   background: none;
   padding: 0;
   margin: 0;
-  color: ${(props) => props.color || colorsV3.purple500};
+  color: ${(props) => props.color || colorsV3.purple900};
   font-size: 0.875rem;
   line-height: 1.5rem;
   border: none;
@@ -72,7 +72,7 @@ export const TextButton = styled.button<TextButtonProps>`
 
   :hover {
     color: ${(props) =>
-      color(props.color ?? colorsV3.purple500)
+      color(props.color ?? colorsV3.purple900)
         .darken(0.1)
         .toString()};
   }

@@ -20,7 +20,7 @@ export const BadgeContainer = styled.span<BadgeProps>`
   text-align: center;
   color: ${(props) => (props.disabled ? colorsV3.gray100 : colorsV3.gray800)};
   background-color: ${(props) =>
-    props.disabled ? colorsV3.gray500 : colorsV3.purple100};
+    props.disabled ? colorsV3.gray500 : colorsV3.purple500};
   border-radius: 0.25rem;
 
   ${({ size }) =>

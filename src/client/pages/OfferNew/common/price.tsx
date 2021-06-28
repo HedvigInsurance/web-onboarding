@@ -40,7 +40,7 @@ const PriceNumbers = styled.div<{
 }>`
   display: flex;
   align-items: baseline;
-  ${({ discount }) => discount && `color: ${colorsV3.purple700}`};
+  ${({ discount }) => discount && `color: ${colorsV3.purple900}`};
   ${({ lightAppearance }) => lightAppearance && `color: ${colorsV3.white}`};
 `
 
@@ -73,7 +73,7 @@ const PriceInterval = styled.span<{
   font-size: 1rem;
   line-height: 1;
   color: ${colorsV3.gray500};
-  ${({ discount }) => discount && `color: ${colorsV3.purple700}`};
+  ${({ discount }) => discount && `color: ${colorsV3.purple900}`};
   ${({ lightAppearance }) => lightAppearance && `color: ${colorsV3.white}`};
 `
 
