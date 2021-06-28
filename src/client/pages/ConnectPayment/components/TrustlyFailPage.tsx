@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colors } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
 import { Button } from 'components/buttons'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
@@ -27,8 +27,8 @@ export const TrustlyFailPage: React.FC = () => {
       <Text>{textKeys.ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_FAIL_BODY()}</Text>
 
       <Button
-        background={colors.PURPLE}
-        foreground={colors.WHITE}
+        background={colorsV3.purple500}
+        foreground={colorsV3.gray900}
         onClick={() => {
           const baseUrl = `${window.location.origin}/${currentLocale}/new-member/connect-payment`
 
