@@ -2,7 +2,7 @@ import React from 'react'
 import { Field } from 'formik'
 import { DanishHomeContentsType } from 'data/graphql'
 import { InputField } from 'components/inputs'
-import { WithFormikProps } from './Offer'
+import { WithFormikProps } from './QuoteData'
 
 export const initialDkHomeValues = {
   firstName: 'Helle',
