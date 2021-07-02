@@ -1,10 +1,10 @@
 import { gql } from '@apollo/client'
-import { AddressSuggestion } from '@hedviginsurance/embark'
+import { AddressAutocompleteQuery } from '@hedviginsurance/embark'
 import { apolloClient } from 'apolloClient'
 
 const query = gql`
-  query AutoComplete($term: String!) {
-    autoCompleteAddress(input: $term) {
+  query AutoComplete($term: String!, $type: AddressAutocompleteType!) {
+    autoCompleteAddress(input: $term, options: { type: $type }) {
       id
       address
       streetName
@@ -17,13 +17,17 @@ const query = gql`
   }
 `
 
-export const resolveAddressAutocomplete = async (
+export const resolveAddressAutocomplete: AddressAutocompleteQuery = async (
   term: string,
-): Promise<AddressSuggestion[]> => {
+  { type } = { type: 'STREET' },
+) => {
   if (!apolloClient) {
     throw new Error('Missing apollo client')
   }
 
-  const result = await apolloClient.client.query({ query, variables: { term } })
+  const result = await apolloClient.client.query({
+    query,
+    variables: { term, type },
+  })
   return result.data.autoCompleteAddress || []
 }
