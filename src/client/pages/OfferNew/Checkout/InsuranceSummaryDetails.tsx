@@ -161,7 +161,7 @@ const getQuoteDetails = (
         {
           key: 'address',
           label: textKeys.CHECKOUT_DETAILS_ADDRESS(),
-          value: quoteDetails.street,
+          value: getAddress(quoteDetails),
         },
         {
           key: 'zipcode',
@@ -198,6 +198,29 @@ const getQuoteDetails = (
   ])
 
   return detailsGroups
+}
+
+export const getAddress = (quoteDetails: QuoteDetails) => {
+  if (!quoteDetailsHasAddress(quoteDetails)) {
+    return null
+  }
+
+  const { street } = quoteDetails
+
+  if ('floor' in quoteDetails && 'apartment' in quoteDetails) {
+    const { floor, apartment } = quoteDetails
+
+    if (floor || apartment) {
+      const formattedFloor = floor ? `${floor}.` : ''
+      const apartmentString = apartment ? ` ${apartment}` : ''
+
+      return `${street}, ${formattedFloor}${apartmentString}`
+    }
+
+    return street
+  }
+
+  return street
 }
 
 const getHouseholdSizeValue = (householdSize: number, textKeys: TextKeyMap) => {
