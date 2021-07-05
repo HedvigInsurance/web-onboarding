@@ -16,13 +16,14 @@ import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { Group, Row } from './InsuranceSummary'
 
 const Label = styled.div`
-  width: 50%;
   color: ${colorsV3.gray500};
 `
 const Value = styled.div`
-  width: 50%;
   color: ${colorsV3.gray700};
   text-align: right;
+`
+const HorizontalSpacer = styled.div`
+  width: 48px;
 `
 
 type Props = {
@@ -52,6 +53,7 @@ export const InsuranceSummaryDetails: React.FC<Props> = ({
         }).map(({ key, label, value }) => (
           <Row key={key}>
             <Label>{label}</Label>
+            <HorizontalSpacer />
             <Value>{value}</Value>
           </Row>
         ))}
@@ -61,6 +63,7 @@ export const InsuranceSummaryDetails: React.FC<Props> = ({
           {group.map(({ key, value, label }) => (
             <Row key={key}>
               <Label>{label}</Label>
+              <HorizontalSpacer />
               <Value>{value}</Value>
             </Row>
           ))}
