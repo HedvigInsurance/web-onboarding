@@ -1,7 +1,7 @@
 import React from 'react'
 import { NorwegianHomeContentsType } from 'data/graphql'
 import { InputField } from 'components/inputs'
-import { WithFormikProps } from './Offer'
+import { WithFormikProps } from './QuoteData'
 
 const initialBaseValues = {
   firstName: 'Ole',
