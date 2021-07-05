@@ -20,6 +20,7 @@ enum EmbarkStory {
   DenmarkContents = 'Web Onboarding DK - Contents',
   DenmarkContentsWithAddressAutocomplete = 'Web Onboarding DK - Contents With Autocomplete',
   DenmarkContentsAccident = 'Web Onboarding DK - Danish Contents-Accident',
+  DenmarkContentsAccidentWithAddressAutocomplete = 'Web Onboarding DK - Danish Contents-Accident With Autocomplete',
 
   NorwayContentsNorwegian = 'Web Onboarding NO - Norwegian Contents',
   NorwayContentsEnglish = 'Web Onboarding NO - English Contents',
@@ -191,7 +192,8 @@ export const reactPageRoutes: ReactPageRoute[] = [
               case 'home-accident':
                 return {
                   baseUrl: `/${locale}/new-member/home-accident`,
-                  name: EmbarkStory.DenmarkContentsAccident,
+                  name:
+                    EmbarkStory.DenmarkContentsAccidentWithAddressAutocomplete,
                 }
             }
             break
