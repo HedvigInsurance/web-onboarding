@@ -7,7 +7,7 @@ import { getAddress } from './InsuranceSummaryDetails'
 
 describe('getAddress function', () => {
   describe('with Swedish quote', () => {
-    it('only returns street name and street number when quote is Swedish', () => {
+    it('returns only street name and street number when quote is Swedish', () => {
       const swedishApartmentQuoteDetails =
         mockedOfferDataSeApartment.quotes[0].quoteDetails
 
@@ -17,7 +17,7 @@ describe('getAddress function', () => {
   })
 
   describe('with Norwegian quotes', () => {
-    it('only returns street name and street number when quote is Norwegian Home Contents quote', () => {
+    it('returns only street name and street number when quote is Norwegian Home Contents quote', () => {
       const norwegianHomeContentsQuote = mockedOfferDataNoCombo.quotes[1]
 
       const norwegianHomeContentsQuoteDetails =
@@ -49,7 +49,7 @@ describe('getAddress function', () => {
       expect(address).toBe('Theodore Roosevelts Vej 1, 2. tv')
     })
 
-    it('only returns street name and street number when no other properties exist', () => {
+    it('returns only street name and street number when no other properties exist', () => {
       const danishHomeContentsQuoteDetailsWithoutFloorAndApartment = {
         ...danishHomeContentsQuote.quoteDetails,
         floor: null,
