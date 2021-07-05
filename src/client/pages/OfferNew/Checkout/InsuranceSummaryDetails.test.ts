@@ -27,13 +27,14 @@ describe('getAddress function', () => {
       expect(address).toBe('Testveien 23')
     })
 
-    it('returns null when quote is Norwegian Travel quote', () => {
+    it('throws Error when quote is Norwegian Travel quote since it lacks address', () => {
       const norwegianTravelQuote = mockedOfferDataNoCombo.quotes[0]
 
       const norwegianTravelQuoteDetails = norwegianTravelQuote.quoteDetails
 
-      const address = getAddress(norwegianTravelQuoteDetails)
-      expect(address).toBe(null)
+      expect(() => {
+        getAddress(norwegianTravelQuoteDetails)
+      }).toThrow()
     })
   })
 

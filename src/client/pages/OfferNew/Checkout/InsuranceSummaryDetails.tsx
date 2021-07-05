@@ -205,7 +205,7 @@ const getQuoteDetails = (
 
 export const getAddress = (quoteDetails: QuoteDetails) => {
   if (!quoteDetailsHasAddress(quoteDetails)) {
-    return null
+    throw new Error('Quote details need to include address field')
   }
 
   const { street } = quoteDetails
@@ -216,7 +216,6 @@ export const getAddress = (quoteDetails: QuoteDetails) => {
     if (floor || apartment) {
       const formattedFloor = floor ? `${floor}.` : ''
       const apartmentString = apartment ? ` ${apartment}` : ''
-
       return `${street}, ${formattedFloor}${apartmentString}`
     }
 
