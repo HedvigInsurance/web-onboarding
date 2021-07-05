@@ -13,7 +13,9 @@ export const initialDkHomeValues = {
   danishHomeContents: {
     coInsured: 0,
     livingSpace: 34,
-    street: 'Willemoesgade 4, 5. th',
+    street: 'Theodore Roosevelts Vej 1',
+    floor: '2',
+    apartment: 'tv',
     zipCode: '2100',
     type: DanishHomeContentsType.Own,
     isStudent: false,
@@ -37,8 +39,18 @@ export const DanishQuote: React.FC<WithFormikProps> = ({ formik }) => {
       />
       <InputField
         label="Street"
-        placeholder="Willemoesgade 4, 5. th"
+        placeholder="Theodore Roosevelts Vej 1"
         {...formik.getFieldProps('danishHomeContents.street')}
+      />
+      <InputField
+        label="Floor"
+        placeholder="2"
+        {...formik.getFieldProps('danishHomeContents.floor')}
+      />
+      <InputField
+        label="Apartment"
+        placeholder="tv"
+        {...formik.getFieldProps('danishHomeContents.apartment')}
       />
       <InputField
         label="Zip code"
