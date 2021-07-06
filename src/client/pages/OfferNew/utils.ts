@@ -36,6 +36,7 @@ export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
     quotes: quoteBundle.quotes.map((bundleQuote) => {
       return {
         id: bundleQuote.id,
+        displayName: bundleQuote.displayName,
         startDate: bundleQuote.startDate,
         quoteDetails: bundleQuote.quoteDetails,
         dataCollectionId: bundleQuote.dataCollectionId,
