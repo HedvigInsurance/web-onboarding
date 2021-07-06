@@ -206,6 +206,16 @@ export type Address = {
   floor?: Maybe<Scalars['String']>
 }
 
+export type AddressAutocompleteOptions = {
+  type?: Maybe<AddressAutocompleteType>
+}
+
+export enum AddressAutocompleteType {
+  Street = 'STREET',
+  Building = 'BUILDING',
+  Apartment = 'APARTMENT',
+}
+
 /** A quote-agnostic payload type for changing the addess. */
 export type AddressChangeInput = {
   /** The target bundle that should have its address changed. */
@@ -234,8 +244,6 @@ export type AddressChangeInput = {
   yearOfConstruction?: Maybe<Scalars['Int']>
   /** Number of bathrooms. Required if type == HOUSE. */
   numberOfBathrooms?: Maybe<Scalars['Int']>
-  /** Number of floors. Required if type == HOUSE. */
-  numberOfFloors?: Maybe<Scalars['Int']>
   /** Is this property subleted? Required if type == HOUSE. */
   isSubleted?: Maybe<Scalars['Boolean']>
   /** A list of extra buildings outside of the main property. Required if type == HOUSE. */
@@ -304,6 +312,11 @@ export enum AgreementStatus {
   Active = 'ACTIVE',
   /** An agreement that either was never active that is now terminated or was active in the past of a now terminated contract */
   Terminated = 'TERMINATED',
+}
+
+export type AlreadyCompleted = {
+  __typename?: 'AlreadyCompleted'
+  ignore?: Maybe<Scalars['Boolean']>
 }
 
 export type AngelStory = {
@@ -1426,6 +1439,7 @@ export type AutoCompleteResponse = {
   id?: Maybe<Scalars['String']>
   address: Scalars['String']
   streetName?: Maybe<Scalars['String']>
+  streetDisplayName?: Maybe<Scalars['String']>
   streetNumber?: Maybe<Scalars['String']>
   streetCode?: Maybe<Scalars['String']>
   postalCode?: Maybe<Scalars['String']>
@@ -1521,6 +1535,7 @@ export type BundledQuote = {
   email?: Maybe<Scalars['String']>
   dataCollectionId?: Maybe<Scalars['ID']>
   typeOfContract: TypeOfContract
+  initiatedFrom: Scalars['String']
   perils: Array<PerilV2>
   insurableLimits: Array<InsurableLimit>
   termsAndConditions: InsuranceTerm
@@ -1843,6 +1858,14 @@ export type CompleteQuoteDetails =
   | CompleteApartmentQuoteDetails
   | CompleteHouseQuoteDetails
   | UnknownQuoteDetails
+
+/** An inception where all quotes need to have the same startDate and currentInsurer */
+export type ConcurrentInception = {
+  __typename?: 'ConcurrentInception'
+  correspondingQuotes: Array<Quote>
+  startDate?: Maybe<Scalars['LocalDate']>
+  currentInsurer?: Maybe<CurrentInsurer>
+}
 
 export type ConnectPositionInput = {
   /** Connect document after specified document */
@@ -2780,6 +2803,22 @@ export type EmbarkActionCore = {
   component: Scalars['String']
 }
 
+export type EmbarkAddressAutocompleteAction = EmbarkActionCore & {
+  __typename?: 'EmbarkAddressAutocompleteAction'
+  component: Scalars['String']
+  data: EmbarkAddressAutocompleteActionData
+}
+
+export type EmbarkAddressAutocompleteActionData = {
+  __typename?: 'EmbarkAddressAutocompleteActionData'
+  placeholder: Scalars['String']
+  key: Scalars['String']
+  api?: Maybe<EmbarkApi>
+  link: EmbarkLink
+  large?: Maybe<Scalars['Boolean']>
+  tooltip?: Maybe<EmbarkTooltip>
+}
+
 export type EmbarkApi =
   | EmbarkApiPersonalInformation
   | EmbarkApiHouseInformation
@@ -3033,6 +3072,9 @@ export type EmbarkKeywords = {
   selectActionSelectLabel?: Maybe<Scalars['String']>
   tooltipModalInformationLabel?: Maybe<Scalars['String']>
   backButton?: Maybe<Scalars['String']>
+  addressAutoCompleteModalTitle?: Maybe<Scalars['String']>
+  addressAutoCompleteModalDismiss?: Maybe<Scalars['String']>
+  addressAutoCompleteModalNotFound?: Maybe<Scalars['String']>
   externalInsuranceProviderConfirmTitle?: Maybe<Scalars['String']>
   externalInsuranceProviderConfirmPrivacyPolicy?: Maybe<Scalars['String']>
   externalInsuranceProviderConfirmMessage?: Maybe<Scalars['String']>
@@ -3100,6 +3142,7 @@ export type EmbarkMultiActionNumberActionData = {
   key: Scalars['String']
   placeholder: Scalars['String']
   unit?: Maybe<Scalars['String']>
+  label?: Maybe<Scalars['String']>
 }
 
 export type EmbarkNumberAction = EmbarkActionCore & {
@@ -4706,6 +4749,20 @@ export type IndefinitePercentageDiscount = {
   percentageDiscount: Scalars['Float']
 }
 
+/** An inception that may be switchable and has a single date */
+export type IndependentInception = {
+  __typename?: 'IndependentInception'
+  correspondingQuote: Quote
+  startDate?: Maybe<Scalars['LocalDate']>
+  currentInsurer?: Maybe<CurrentInsurer>
+}
+
+/** A bundle inception where each quote may have an inception different from the others */
+export type IndependentInceptions = {
+  __typename?: 'IndependentInceptions'
+  inceptions: Array<IndependentInception>
+}
+
 export type InitiateDataCollectionInput = {
   reference: Scalars['ID']
   insuranceProvider: Scalars['String']
@@ -4739,6 +4796,10 @@ export enum InsurableLimitType {
   PermanentInjury = 'PERMANENT_INJURY',
   Treatment = 'TREATMENT',
   DentalTreatment = 'DENTAL_TREATMENT',
+  TravelIllnessInjuryTransportationHome = 'TRAVEL_ILLNESS_INJURY_TRANSPORTATION_HOME',
+  TravelDelayedOnTrip = 'TRAVEL_DELAYED_ON_TRIP',
+  TravelDelayedLuggage = 'TRAVEL_DELAYED_LUGGAGE',
+  TravelCancellation = 'TRAVEL_CANCELLATION',
 }
 
 export type Insurance = {
@@ -7627,7 +7688,10 @@ export type Query = {
   contracts: Array<Contract>
   /** Returns whether a member has at least one contract */
   hasContract: Scalars['Boolean']
-  /** Returns a type describing whether the 'Self Change' functionality is possible. */
+  /**
+   * Returns a type describing whether the 'Self Change' functionality is possible.
+   * @deprecated Use angelStories in `activeContractBundles` instead
+   */
   selfChangeEligibility: SelfChangeEligibility
   /** All locales that are available and activated */
   availableLocales: Array<Locale>
@@ -7809,6 +7873,7 @@ export type QueryHouseInformationArgs = {
 
 export type QueryAutoCompleteAddressArgs = {
   input: Scalars['String']
+  options?: Maybe<AddressAutocompleteOptions>
 }
 
 export type QueryCashbackArgs = {
@@ -7838,12 +7903,39 @@ export type QuoteBundle = {
   __typename?: 'QuoteBundle'
   quotes: Array<BundledQuote>
   bundleCost: InsuranceCost
+  inception: QuoteBundleInception
   frequentlyAskedQuestions: Array<Faq>
+  appConfiguration: QuoteBundleAppConfiguration
+  displayName: Scalars['String']
 }
 
 export type QuoteBundleFrequentlyAskedQuestionsArgs = {
   locale: Locale
 }
+
+export type QuoteBundleDisplayNameArgs = {
+  locale: Locale
+}
+
+export type QuoteBundleAppConfiguration = {
+  __typename?: 'QuoteBundleAppConfiguration'
+  showCampaignManagement: Scalars['Boolean']
+  title: QuoteBundleAppConfigurationTitle
+  gradientOption: QuoteBundleAppConfigurationGradientOption
+}
+
+export enum QuoteBundleAppConfigurationGradientOption {
+  GradientOne = 'GRADIENT_ONE',
+  GradientTwo = 'GRADIENT_TWO',
+  GradientThree = 'GRADIENT_THREE',
+}
+
+export enum QuoteBundleAppConfigurationTitle {
+  Logo = 'LOGO',
+  UpdateSummary = 'UPDATE_SUMMARY',
+}
+
+export type QuoteBundleInception = ConcurrentInception | IndependentInceptions
 
 export type QuoteBundleInput = {
   ids: Array<Scalars['ID']>
@@ -8019,6 +8111,7 @@ export enum SignMethod {
   NorwegianBankId = 'NORWEGIAN_BANK_ID',
   DanishBankId = 'DANISH_BANK_ID',
   SimpleSign = 'SIMPLE_SIGN',
+  ApproveOnly = 'APPROVE_ONLY',
 }
 
 export type SignQuotesInput = {
@@ -8058,6 +8151,7 @@ export type StartSignResponse =
   | NorwegianBankIdSession
   | DanishBankIdSession
   | SimpleSignSession
+  | AlreadyCompleted
   | FailedToStartSign
 
 export type StoredPaymentMethodsDetails = {
@@ -9994,6 +10088,7 @@ export type QuoteBundleQuery = { __typename?: 'Query' } & {
         | 'expiresAt'
         | 'email'
         | 'typeOfContract'
+        | 'displayName'
       > & {
           currentInsurer?: Maybe<
             { __typename?: 'CurrentInsurer' } & Pick<
@@ -10284,6 +10379,7 @@ export type SignQuotesMutation = { __typename?: 'Mutation' } & {
         'redirectUrl'
       >)
     | { __typename: 'SimpleSignSession' }
+    | { __typename: 'AlreadyCompleted' }
     | ({ __typename: 'FailedToStartSign' } & Pick<
         FailedToStartSign,
         'errorMessage'
@@ -11322,6 +11418,7 @@ export const QuoteBundleDocument = gql`
         expiresAt
         email
         typeOfContract
+        displayName(locale: $locale)
         perils(locale: $locale) {
           title
           description
