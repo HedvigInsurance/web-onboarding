@@ -89,6 +89,8 @@ query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
 
         ... on DanishHomeContentsDetails {
           street
+          floor
+          apartment
           zipCode
           livingSpace
           danishHomeType: type

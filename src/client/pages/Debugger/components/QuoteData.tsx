@@ -120,7 +120,7 @@ const getDanishQuoteValues = (
   } as CreateQuoteInput
 }
 
-export const Offer: React.FC<OfferProps> = ({ sessionToken }) => {
+export const QuoteData: React.FC<OfferProps> = ({ sessionToken }) => {
   const [quoteIds, setQuoteIds] = useState<string[]>([])
   const [getQuotes, { data, refetch }] = useQuoteBundleLazyQuery()
   const [createHomeAccidentQuote] = useCreateDanishHomeAccidentQuoteMutation()

@@ -72,6 +72,7 @@ export const apolloClient = (() => {
           keyFields: (bundle) =>
             (bundle.quotes as Quote[]).map((q) => q.id).join(','),
         },
+        AutoCompleteResponse: { keyFields: ['address'] },
         ActiveReferral: {
           keyFields: (referral) => referral.name as string,
         },
