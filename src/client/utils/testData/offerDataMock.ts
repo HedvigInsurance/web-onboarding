@@ -538,14 +538,14 @@ export const dkHomeContentAccident: OfferData = {
 export const dkHomeContentAccidentTravel: OfferData = {
   person: {
     firstName: 'Judith',
-    lastName: 'Madsson',
+    lastName: 'Madsen',
     email: 'mail@test.com',
     ssn: '15126533427',
-    birthDate: '2965-12-15',
+    birthDate: '1965-12-15',
     householdSize: 2,
     address: {
-      street: 'Testgatan 23',
-      zipCode: '1214',
+      street: 'Theodore Roosevelts Vej 1',
+      zipCode: '2450',
     },
   },
   quotes: [
