@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { Address } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
@@ -42,7 +41,7 @@ const OfferInfo = styled.div`
 
 export const HeroOfferDetails: React.FC<Props> = ({ offerData }) => {
   const [numberCoInsured, setNumberCoInsured] = useState<number | null>(null)
-  const [address, setAddress] = useState<Address['street'] | null>(null)
+  const [address, setAddress] = useState<string | null>(null)
 
   const { person, quotes } = offerData
 
