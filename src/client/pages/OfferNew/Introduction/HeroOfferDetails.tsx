@@ -5,14 +5,11 @@ import { Address } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
-import { getHouseholdSize } from '../utils'
+import { getHouseholdSize, quoteDetailsHasAddress } from '../utils'
+import { getAddress } from '../Checkout/InsuranceSummaryDetails'
 
 type Props = {
   offerData: OfferData
-}
-
-type QuoteWithStreet = {
-  quoteDetails: { street: Address['street'] }
 }
 
 const Container = styled.div`
@@ -53,11 +50,12 @@ export const HeroOfferDetails: React.FC<Props> = ({ offerData }) => {
     const householdSize = getHouseholdSize(quotes[0].quoteDetails)
     setNumberCoInsured(householdSize - 1)
 
-    const quoteWithStreet = quotes.find((quote) => {
-      return 'street' in quote.quoteDetails
+    const quoteWithAddress = quotes.find((quote) => {
+      return quoteDetailsHasAddress(quote.quoteDetails)
     })
-    if (quoteWithStreet) {
-      setStreet((quoteWithStreet as QuoteWithStreet).quoteDetails.street)
+    if (quoteWithAddress) {
+      const address = getAddress(quoteWithAddress.quoteDetails)
+      setStreet(address)
     }
   }, [quotes])
 
