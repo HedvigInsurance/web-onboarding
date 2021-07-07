@@ -42,7 +42,7 @@ const OfferInfo = styled.div`
 
 export const HeroOfferDetails: React.FC<Props> = ({ offerData }) => {
   const [numberCoInsured, setNumberCoInsured] = useState<number | null>(null)
-  const [street, setStreet] = useState<Address['street'] | null>(null)
+  const [address, setAddress] = useState<Address['street'] | null>(null)
 
   const { person, quotes } = offerData
 
@@ -55,7 +55,7 @@ export const HeroOfferDetails: React.FC<Props> = ({ offerData }) => {
     })
     if (quoteWithAddress) {
       const address = getAddress(quoteWithAddress.quoteDetails)
-      setStreet(address)
+      setAddress(address)
     }
   }, [quotes])
 
@@ -67,7 +67,7 @@ export const HeroOfferDetails: React.FC<Props> = ({ offerData }) => {
         {person.firstName}
         {Boolean(numberCoInsured) && ` +${numberCoInsured}`}
       </OfferInfo>
-      {street && <OfferInfo>{street}</OfferInfo>}
+      {address && <OfferInfo>{address}</OfferInfo>}
     </Container>
   )
 }
