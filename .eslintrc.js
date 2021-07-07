@@ -13,6 +13,7 @@ module.exports = {
     'plugin:import/typescript',
     'plugin:react-hooks/recommended',
     'plugin:prettier/recommended',
+    'plugin:jest-dom/recommended',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -22,7 +23,15 @@ module.exports = {
       jsx: true,
     },
   },
-  plugins: ['import', 'react', 'react-hooks', '@typescript-eslint', 'prettier'],
+  plugins: [
+    'import',
+    'react',
+    'react-hooks',
+    '@typescript-eslint',
+    'prettier',
+    'testing-library',
+    'jest-dom',
+  ],
   settings: {
     react: {
       version: 'detect',
