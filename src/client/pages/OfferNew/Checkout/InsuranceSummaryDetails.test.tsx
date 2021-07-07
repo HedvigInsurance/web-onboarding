@@ -1,9 +1,34 @@
+import React from 'react'
+import { StaticRouter } from 'react-router-dom'
+import { render, screen } from '@testing-library/react'
+import '@testing-library/jest-dom'
 import {
   noCombo as mockedOfferDataNoCombo,
   seApartementBrf as mockedOfferDataSeApartment,
   dkHomeContentAccidentTravel as mockedOfferDataDkHomeAccidentTravel,
 } from 'utils/testData/offerDataMock'
-import { getAddress } from './InsuranceSummaryDetails'
+import { getAddress, InsuranceSummaryDetails } from './InsuranceSummaryDetails'
+
+describe('InsuranceSummaryDetails', () => {
+  it('renders component', async () => {
+    const danishHomeContentsQuote =
+      mockedOfferDataDkHomeAccidentTravel.quotes[0]
+
+    render(
+      <StaticRouter location="/dk/new-member/sign">
+        <InsuranceSummaryDetails
+          mainQuote={danishHomeContentsQuote}
+          personalDetails={mockedOfferDataDkHomeAccidentTravel.person}
+        />
+      </StaticRouter>,
+    )
+
+    const { findByText } = screen
+    expect(await findByText('Judith Madsen')).toBeVisible()
+    expect(await findByText('Navn')).toBeVisible()
+    screen.debug()
+  })
+})
 
 describe('getAddress function', () => {
   describe('with Swedish quote', () => {
