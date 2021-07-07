@@ -3,7 +3,10 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
-import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import {
+  LARGE_SCREEN_MEDIA_QUERY,
+  MEDIUM_SCREEN_MEDIA_QUERY,
+} from 'utils/mediaQueries'
 import { getHouseholdSize, quoteDetailsHasAddress } from '../utils'
 import { getAddress } from '../Checkout/InsuranceSummaryDetails'
 
@@ -11,31 +14,38 @@ type Props = {
   offerData: OfferData
 }
 
-const Container = styled.div`
-  padding: 2rem 0 1rem;
+const Wrapper = styled.div`
+  padding: 2.5rem 0 1rem;
   color: ${colorsV3.white};
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     padding-top: 0;
   }
 `
-
-const Heading = styled.h1`
+const Headline = styled.h1`
   margin: 0;
   text-transform: uppercase;
-  font-size: 0.75rem;
+  font-size: 1rem;
+`
+const OfferInfoWrapper = styled.div`
+  padding: 1rem 0;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
-    font-size: 1rem;
+    padding-top: 0;
   }
 `
-
-const OfferInfo = styled.div`
+const NameAndCoInsured = styled.div`
   font-size: 2rem;
-  word-break: break-all;
 
-  ${LARGE_SCREEN_MEDIA_QUERY} {
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
     font-size: 3rem;
+  }
+`
+const Address = styled.div`
+  font-size: 1.375rem;
+
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
+    font-size: 2.5rem;
   }
 `
 
@@ -60,13 +70,15 @@ export const HeroOfferDetails: React.FC<Props> = ({ offerData }) => {
 
   const textKeys = useTextKeys()
   return (
-    <Container>
-      <Heading>{textKeys.HERO_OFFER_DETAILS_HEADER()}</Heading>
-      <OfferInfo>
-        {person.firstName}
-        {Boolean(numberCoInsured) && ` +${numberCoInsured}`}
-      </OfferInfo>
-      {address && <OfferInfo>{address}</OfferInfo>}
-    </Container>
+    <Wrapper>
+      <Headline>{textKeys.HERO_OFFER_DETAILS_HEADER()}</Headline>
+      <OfferInfoWrapper>
+        <NameAndCoInsured>
+          {person.firstName}
+          {Boolean(numberCoInsured) && ` +${numberCoInsured}`}
+        </NameAndCoInsured>
+        {address && <Address>{address}</Address>}
+      </OfferInfoWrapper>
+    </Wrapper>
   )
 }
