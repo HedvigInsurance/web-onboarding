@@ -67,7 +67,7 @@ export const HeroOfferDetails: React.FC<Props> = ({ offerData }) => {
       <Heading>{textKeys.HERO_OFFER_DETAILS_HEADER()}</Heading>
       <OfferInfo>
         {person.firstName}
-        {!!numberCoInsured && ` +${numberCoInsured}`}
+        {Boolean(numberCoInsured) && ` +${numberCoInsured}`}
       </OfferInfo>
       {street && <OfferInfo>{street}</OfferInfo>}
     </Container>
