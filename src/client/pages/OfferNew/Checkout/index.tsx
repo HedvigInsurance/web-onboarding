@@ -141,14 +141,14 @@ const Backdrop = styled('div')<Openable>`
   }};
 `
 
-export interface Props {
+export type CheckoutProps = {
   offerData: OfferData
   isOpen?: boolean
   onClose?: () => void
   refetch: () => Promise<void>
 }
 
-export const Checkout: React.FC<Props> = ({
+export const Checkout: React.FC<CheckoutProps> = ({
   offerData,
   isOpen,
   onClose,

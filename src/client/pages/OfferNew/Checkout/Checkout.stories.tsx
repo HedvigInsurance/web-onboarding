@@ -12,7 +12,7 @@ import {
   seApartementBrf,
 } from 'utils/testData/offerDataMock'
 import { TextKeyProvider, Locale } from 'utils/textKeys'
-import { Checkout, Props } from '.'
+import { Checkout, CheckoutProps } from '.'
 
 export default {
   title: 'Offer/Checkout',
@@ -25,7 +25,7 @@ export default {
 type StoryProps = {
   initialEntries: LocationDescriptor
   locale: Locale
-  componentProps: Props
+  componentProps: CheckoutProps
 }
 
 const Template: Story<StoryProps> = (args) => (
