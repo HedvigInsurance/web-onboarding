@@ -82,7 +82,6 @@ export const productsData: ProductsData = {
       headline: 'STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_HEADLINE',
       paragraph: 'STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_BODY',
       badge: 'STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_BADGE',
-      disabled: true,
     },
   ],
 }
