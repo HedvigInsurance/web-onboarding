@@ -1,14 +1,11 @@
+import * as Sentry from '@sentry/react'
 import { useEffect } from 'react'
 
 export const captureSentryError = (
   e: Error | string,
   data?: Record<string, any>,
 ) => {
-  const { Sentry } = window as any
-
-  if (Sentry !== undefined) {
-    Sentry.captureException(e, { data })
-  }
+  Sentry.captureException(e, data)
 
   console.error(e, { data })
 }
