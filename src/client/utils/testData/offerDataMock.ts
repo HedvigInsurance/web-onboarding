@@ -364,7 +364,7 @@ export const noTravel: OfferData = {
     lastName: 'Moen',
     email: 'mail@test.com',
     ssn: '15126533427',
-    birthDate: '2965-12-15',
+    birthDate: '1965-12-15',
     householdSize: 2,
     address: {
       street: 'Exampleveien 23',
@@ -414,7 +414,7 @@ export const dkHomeContentOwn: OfferData = {
     lastName: 'Madsson',
     email: 'mail@test.com',
     ssn: '15126533427',
-    birthDate: '2965-12-15',
+    birthDate: '1965-12-15',
     householdSize: 2,
     address: {
       street: 'Testgatan 23',
@@ -469,7 +469,7 @@ export const dkHomeContentAccident: OfferData = {
     lastName: 'Madsson',
     email: 'mail@test.com',
     ssn: '15126533427',
-    birthDate: '2965-12-15',
+    birthDate: '1965-12-15',
     householdSize: 2,
     address: {
       street: 'Testgatan 23',
@@ -541,7 +541,7 @@ export const dkHomeContentAccidentTravel: OfferData = {
     lastName: 'Madsson',
     email: 'mail@test.com',
     ssn: '15126533427',
-    birthDate: '2965-12-15',
+    birthDate: '1965-12-15',
     householdSize: 2,
     address: {
       street: 'Testgatan 23',
