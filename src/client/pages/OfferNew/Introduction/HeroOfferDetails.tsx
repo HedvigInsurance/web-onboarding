@@ -46,32 +46,25 @@ const Address = styled.div`
 `
 
 export const HeroOfferDetails: React.FC<Props> = ({ offerData }) => {
-  const [numberCoInsured, setNumberCoInsured] = useState<number | null>(null)
-  const [address, setAddress] = useState<string | null>(null)
-
   const { person, quotes } = offerData
+  const numberCoInsured = getHouseholdSize(quotes[0].quoteDetails) - 1
 
-  useEffect(() => {
-    const householdSize = getHouseholdSize(quotes[0].quoteDetails)
-    setNumberCoInsured(householdSize - 1)
-
-    const quoteWithAddress = quotes.find((quote) => {
-      return quoteDetailsHasAddress(quote.quoteDetails)
-    })
-    if (quoteWithAddress) {
-      const address = getAddress(quoteWithAddress.quoteDetails)
-      setAddress(address)
-    }
-  }, [quotes])
+  const quoteWithAddress = quotes.find((quote) => {
+    return quoteDetailsHasAddress(quote.quoteDetails)
+  })
+  const address = quoteWithAddress
+    ? getAddress(quoteWithAddress.quoteDetails)
+    : null
 
   const textKeys = useTextKeys()
+
   return (
     <Wrapper>
       <Headline>{textKeys.HERO_OFFER_DETAILS_HEADER()}</Headline>
       <OfferInfoWrapper>
         <NameAndCoInsured>
           {person.firstName}
-          {Boolean(numberCoInsured) && ` +${numberCoInsured}`}
+          {numberCoInsured > 0 && ` +${numberCoInsured}`}
         </NameAndCoInsured>
         {address && <Address>{address}</Address>}
       </OfferInfoWrapper>
