@@ -2,8 +2,8 @@ import { min as createMinifiedSegmentSnippet } from '@segment/snippet'
 import escapeHTML from 'escape-html'
 import Router from 'koa-router'
 import { ClientConfig } from 'shared/clientConfig'
-import { LocaleLabel, locales } from '../client/l10n/locales'
 import { sentryConfig } from '../client/utils/sentry-server'
+import { LocaleLabel, locales } from '../client/l10n/locales'
 import { ServerCookieStorage } from '../client/utils/storage/ServerCookieStorage'
 import { ServerSideRoute } from '../routes'
 import {
@@ -68,11 +68,6 @@ const template = (
           'https://www.hedvig.com/f/62762/1920x1080/a8d806bbbf/background.png'}"
      />
      <meta name="google-site-verification" content="AZ5rW7lm8fgkGEsSI8BbV4i45ylXAnGEicXf6HPQE-Q" />
-
-    <script src="https://browser.sentry-cdn.com/4.2.3/bundle.min.js" crossorigin="anonymous"></script>
-    <script>
-      Sentry.init(${JSON.stringify(sentryConfig())})
-    </script>
 
     <script>
       dataLayer = [];
