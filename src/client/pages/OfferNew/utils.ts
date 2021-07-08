@@ -60,7 +60,7 @@ export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
   }
 }
 
-export const getHouseholdSize = (quoteDetails: QuoteDetails) => {
+export const getHouseholdSize = (quoteDetails: QuoteDetails): number => {
   if ('householdSize' in quoteDetails) {
     return quoteDetails.householdSize
   }
