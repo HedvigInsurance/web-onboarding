@@ -89,16 +89,16 @@ exports[`Danish language picker renders without 💥 matches snaphot 1`] = `
                     to="/dk/new-member"
                   >
                     <Link
-                      className="css-3wdfps-StyledLink e1g7xtvp3"
+                      className="css-oc63j8-StyledLink e1g7xtvp3"
                       to="/dk/new-member"
                     >
                       <LinkAnchor
-                        className="css-3wdfps-StyledLink e1g7xtvp3"
+                        className="css-oc63j8-StyledLink e1g7xtvp3"
                         href="/dk/new-member"
                         navigate={[Function]}
                       >
                         <a
-                          className="css-3wdfps-StyledLink e1g7xtvp3"
+                          className="css-oc63j8-StyledLink e1g7xtvp3"
                           href="/dk/new-member"
                           onClick={[Function]}
                         >
@@ -124,16 +124,16 @@ exports[`Danish language picker renders without 💥 matches snaphot 1`] = `
                     to="/dk-en/new-member"
                   >
                     <Link
-                      className="css-3wdfps-StyledLink e1g7xtvp3"
+                      className="css-oc63j8-StyledLink e1g7xtvp3"
                       to="/dk-en/new-member"
                     >
                       <LinkAnchor
-                        className="css-3wdfps-StyledLink e1g7xtvp3"
+                        className="css-oc63j8-StyledLink e1g7xtvp3"
                         href="/dk-en/new-member"
                         navigate={[Function]}
                       >
                         <a
-                          className="css-3wdfps-StyledLink e1g7xtvp3"
+                          className="css-oc63j8-StyledLink e1g7xtvp3"
                           href="/dk-en/new-member"
                           onClick={[Function]}
                         >
@@ -160,7 +160,7 @@ exports[`Danish language picker renders without 💥 matches snaphot 1`] = `
                     class="css-1xjnew5-Option e1g7xtvp1"
                   >
                     <a
-                      class="css-3wdfps-StyledLink e1g7xtvp3"
+                      class="css-oc63j8-StyledLink e1g7xtvp3"
                       href="/dk/new-member"
                     >
                       Dansk
@@ -173,7 +173,7 @@ exports[`Danish language picker renders without 💥 matches snaphot 1`] = `
                     class="css-1xjnew5-Option e1g7xtvp1"
                   >
                     <a
-                      class="css-3wdfps-StyledLink e1g7xtvp3"
+                      class="css-oc63j8-StyledLink e1g7xtvp3"
                       href="/dk-en/new-member"
                     >
                       English
@@ -549,16 +549,16 @@ exports[`Norwegian language picker renders without 💥 matches snaphot 1`] = `
                     to="/no/new-member"
                   >
                     <Link
-                      className="css-3wdfps-StyledLink e1g7xtvp3"
+                      className="css-oc63j8-StyledLink e1g7xtvp3"
                       to="/no/new-member"
                     >
                       <LinkAnchor
-                        className="css-3wdfps-StyledLink e1g7xtvp3"
+                        className="css-oc63j8-StyledLink e1g7xtvp3"
                         href="/no/new-member"
                         navigate={[Function]}
                       >
                         <a
-                          className="css-3wdfps-StyledLink e1g7xtvp3"
+                          className="css-oc63j8-StyledLink e1g7xtvp3"
                           href="/no/new-member"
                           onClick={[Function]}
                         >
@@ -584,16 +584,16 @@ exports[`Norwegian language picker renders without 💥 matches snaphot 1`] = `
                     to="/no-en/new-member"
                   >
                     <Link
-                      className="css-3wdfps-StyledLink e1g7xtvp3"
+                      className="css-oc63j8-StyledLink e1g7xtvp3"
                       to="/no-en/new-member"
                     >
                       <LinkAnchor
-                        className="css-3wdfps-StyledLink e1g7xtvp3"
+                        className="css-oc63j8-StyledLink e1g7xtvp3"
                         href="/no-en/new-member"
                         navigate={[Function]}
                       >
                         <a
-                          className="css-3wdfps-StyledLink e1g7xtvp3"
+                          className="css-oc63j8-StyledLink e1g7xtvp3"
                           href="/no-en/new-member"
                           onClick={[Function]}
                         >
@@ -620,7 +620,7 @@ exports[`Norwegian language picker renders without 💥 matches snaphot 1`] = `
                     class="css-1xjnew5-Option e1g7xtvp1"
                   >
                     <a
-                      class="css-3wdfps-StyledLink e1g7xtvp3"
+                      class="css-oc63j8-StyledLink e1g7xtvp3"
                       href="/no/new-member"
                     >
                       Norsk
@@ -633,7 +633,7 @@ exports[`Norwegian language picker renders without 💥 matches snaphot 1`] = `
                     class="css-1xjnew5-Option e1g7xtvp1"
                   >
                     <a
-                      class="css-3wdfps-StyledLink e1g7xtvp3"
+                      class="css-oc63j8-StyledLink e1g7xtvp3"
                       href="/no-en/new-member"
                     >
                       English
@@ -1009,16 +1009,16 @@ exports[`Swedish language picker renders without 💥 matches snaphot 1`] = `
                     to="/se/new-member"
                   >
                     <Link
-                      className="css-3wdfps-StyledLink e1g7xtvp3"
+                      className="css-oc63j8-StyledLink e1g7xtvp3"
                       to="/se/new-member"
                     >
                       <LinkAnchor
-                        className="css-3wdfps-StyledLink e1g7xtvp3"
+                        className="css-oc63j8-StyledLink e1g7xtvp3"
                         href="/se/new-member"
                         navigate={[Function]}
                       >
                         <a
-                          className="css-3wdfps-StyledLink e1g7xtvp3"
+                          className="css-oc63j8-StyledLink e1g7xtvp3"
                           href="/se/new-member"
                           onClick={[Function]}
                         >
@@ -1044,16 +1044,16 @@ exports[`Swedish language picker renders without 💥 matches snaphot 1`] = `
                     to="/se-en/new-member"
                   >
                     <Link
-                      className="css-3wdfps-StyledLink e1g7xtvp3"
+                      className="css-oc63j8-StyledLink e1g7xtvp3"
                       to="/se-en/new-member"
                     >
                       <LinkAnchor
-                        className="css-3wdfps-StyledLink e1g7xtvp3"
+                        className="css-oc63j8-StyledLink e1g7xtvp3"
                         href="/se-en/new-member"
                         navigate={[Function]}
                       >
                         <a
-                          className="css-3wdfps-StyledLink e1g7xtvp3"
+                          className="css-oc63j8-StyledLink e1g7xtvp3"
                           href="/se-en/new-member"
                           onClick={[Function]}
                         >
@@ -1080,7 +1080,7 @@ exports[`Swedish language picker renders without 💥 matches snaphot 1`] = `
                     class="css-1xjnew5-Option e1g7xtvp1"
                   >
                     <a
-                      class="css-3wdfps-StyledLink e1g7xtvp3"
+                      class="css-oc63j8-StyledLink e1g7xtvp3"
                       href="/se/new-member"
                     >
                       Svenska
@@ -1093,7 +1093,7 @@ exports[`Swedish language picker renders without 💥 matches snaphot 1`] = `
                     class="css-1xjnew5-Option e1g7xtvp1"
                   >
                     <a
-                      class="css-3wdfps-StyledLink e1g7xtvp3"
+                      class="css-oc63j8-StyledLink e1g7xtvp3"
                       href="/se-en/new-member"
                     >
                       English
