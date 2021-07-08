@@ -28,11 +28,7 @@ const Headline = styled.h1`
   font-size: 1rem;
 `
 const OfferInfoWrapper = styled.div`
-  padding: 1rem 0;
-
-  ${LARGE_SCREEN_MEDIA_QUERY} {
-    padding-top: 0;
-  }
+  padding-bottom: 2rem;
 `
 const NameAndCoInsured = styled.div`
   font-size: 2rem;
