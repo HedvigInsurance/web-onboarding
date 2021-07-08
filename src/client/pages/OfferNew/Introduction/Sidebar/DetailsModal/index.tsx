@@ -9,6 +9,7 @@ import { EditQuoteInput, useEditQuoteMutation } from 'data/graphql'
 import { LocaleLabel, locales } from 'l10n/locales'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
+import { captureSentryError } from 'utils/sentry-client'
 import { getMainQuote } from '../../../utils'
 import { Details } from './Details'
 import {
@@ -160,9 +161,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
               onClose()
             } catch (e) {
               console.error(e)
-              if ('Sentry' in window) {
-                ;(window as any).Sentry.captureException(e)
-              }
+              captureSentryError(e)
               // noop
             }
             setIsUpdating(false)
