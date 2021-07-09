@@ -1,24 +1,31 @@
 import styled from '@emotion/styled'
 import { colorsV3, fonts } from '@hedviginsurance/brand'
-import hexToRgba from 'hex-to-rgba'
 import React from 'react'
-import { BackArrow } from 'components/icons/BackArrow'
+import hexToRgba from 'hex-to-rgba'
 import { Checkmark } from 'components/icons/Checkmark'
-import { Crossmark } from 'components/icons/Crossmark'
-import { ForwardArrow } from 'components/icons/ForwardArrow'
 import { InfoIcon } from 'components/icons/Info'
 import { Modal, ModalProps } from 'components/ModalNew'
 import { PerilV2 } from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
+import { Crossmark } from 'components/icons/Crossmark'
+import { BackArrow } from 'components/icons/BackArrow'
+import { ForwardArrow } from 'components/icons/ForwardArrow'
 import { getIconUrl } from './index'
 
-const TRANSITION_MS = 250
+const PICKER_ITEM_WIDTH_REMS = 6.25
+const PICKER_ITEM_MARGIN_REMS = 0.5
 
 interface PerilModalProps {
   perils: ReadonlyArray<PerilV2>
   currentPerilIndex: number
   setCurrentPeril: (perilIndex: number) => void
 }
+
+const Container = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`
 
 const Header = styled('div')`
   width: 100%;
@@ -29,8 +36,8 @@ const Header = styled('div')`
   align-items: center;
   justify-content: flex-end;
   position: relative;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   margin-bottom: 0.125rem;
+  flex-shrink: 0;
 `
 
 const Picker = styled('div')`
@@ -39,16 +46,16 @@ const Picker = styled('div')`
   display: flex;
   flex-direction: row;
   margin: 0 -0.75rem;
-  overflow: hidden;
+  overflow-x: auto;
   position: relative;
   box-sizing: border-box;
 `
 
 const PickerItem = styled('button')`
-  width: 6.25rem;
+  width: ${PICKER_ITEM_WIDTH_REMS}rem;
   flex-shrink: 0;
   padding: 0.5rem 0.5rem 0.625rem 0.5rem;
-  margin: 0 0.5rem;
+  margin: 0 ${PICKER_ITEM_MARGIN_REMS}rem;
   background: none;
   border: none;
   display: flex;
@@ -68,7 +75,7 @@ const PickerItem = styled('button')`
 `
 
 const PickerItemLabel = styled('div')`
-  width: 6.25rem;
+  width: ${PICKER_ITEM_WIDTH_REMS}rem;
   font-size: 0.9375rem;
   letter-spacing: -0.23px;
   text-align: center;
@@ -78,47 +85,26 @@ const PickerItemLabel = styled('div')`
   text-overflow: ellipsis;
 `
 
-interface PerilItemsContainerProps {
-  currentPerilIndex: number
-  totalNumberOfPerils: number
-  transition: boolean
-}
-
-const PerilItemsContainer = styled('div')<PerilItemsContainerProps>`
+const PerilItemsContainer = styled('div')`
   position: relative;
   height: 5.5rem;
   display: flex;
-  ${(props) =>
-    props.transition && `transition: all ${TRANSITION_MS}ms ease-in-out;`}
-
-  ${(props) =>
-    `transform: translateX(${
-      props.currentPerilIndex !== 0
-        ? `calc((-100%/3) - ${(props.currentPerilIndex -
-            props.totalNumberOfPerils -
-            1) *
-            (100 + 16) +
-            8}px)`
-        : `calc((-100%/3) + 6.75rem)`
-    });`}
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 `
 
 const Indicator = styled('div')`
   position: absolute;
-  width: 6.25rem;
-  height: 0.125rem;
+  width: ${PICKER_ITEM_WIDTH_REMS}rem;
+  height: 2px;
   bottom: 0;
-  left: 0;
   background-color: ${colorsV3.gray900};
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
-  transition: transform 0.15s ease-in-out;
-  left: 7.25rem;
 `
 
 const Gradient = styled('div')`
   height: 5rem;
-  width: 6.25rem;
+  width: ${PICKER_ITEM_WIDTH_REMS}rem;
   position: absolute;
   display: flex;
   align-items: center;
@@ -144,10 +130,17 @@ const RightGradient = styled(Gradient)`
   );
 `
 
+const GradientDisplacer = styled('div')`
+  height: 5rem;
+  width: 3.5rem;
+  flex-shrink: 0;
+`
+
 const DirectionButton = styled('button')`
   width: 100%;
   height: 100%;
   display: flex;
+  align-items: center;
   cursor: pointer;
   background: none;
   border: none;
@@ -176,6 +169,7 @@ const ForwardButton = styled(DirectionButton)`
 `
 
 const Content = styled('div')`
+  overflow-y: auto;
   padding: 3.5rem;
 
   @media (max-width: 450px) {
@@ -317,122 +311,109 @@ export const PerilModal: React.FC<PerilModalProps & ModalProps> = ({
   isVisible,
   onClose,
 }) => {
-  const [transitionEnabled, setTransitionEnabled] = React.useState(true)
-  const [actionsAllowed, setActionsAllowed] = React.useState(true)
   const textKeys = useTextKeys()
+  const pickerRef = React.useRef<HTMLDivElement | null>(null)
 
-  React.useEffect(() => {
-    const isBelowBoundary = currentPerilIndex < perils.length
-    const isAboveBoundary = currentPerilIndex > perils.length * 2
-
-    if (isBelowBoundary || isAboveBoundary) {
-      setTimeout(() => {
-        setTransitionEnabled(false)
-        setCurrentPeril(
-          currentPerilIndex + (isBelowBoundary ? 1 : -1) * perils.length,
-        )
-
-        setTimeout(() => setTransitionEnabled(true), TRANSITION_MS)
-      }, TRANSITION_MS)
+  React.useLayoutEffect(() => {
+    if (isVisible) {
+      pickerRef.current?.scroll({
+        left:
+          currentPerilIndex *
+          (PICKER_ITEM_WIDTH_REMS + PICKER_ITEM_MARGIN_REMS) *
+          16,
+      })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isVisible])
 
-    setActionsAllowed(false)
-
-    setTimeout(() => {
-      setActionsAllowed(true)
-    }, TRANSITION_MS * 2)
-  }, [perils.length, currentPerilIndex, setCurrentPeril])
-
-  const tripledPerils = perils.concat(perils).concat(perils)
-
-  const currentPeril = perils[currentPerilIndex % perils.length]
+  const currentPeril = perils[currentPerilIndex]
 
   return (
     <Modal isVisible={isVisible} onClose={onClose}>
-      <Header>
-        <Picker>
-          <PerilItemsContainer
-            currentPerilIndex={currentPerilIndex}
-            totalNumberOfPerils={perils.length}
-            transition={transitionEnabled}
-          >
-            {tripledPerils.map((peril, index) => (
-              <PickerItem
-                key={index}
-                onClick={() =>
-                  actionsAllowed &&
-                  setCurrentPeril(index % tripledPerils.length)
-                }
-              >
-                <img src={getIconUrl(peril.icon.variants.light.svgUrl)} />
-                <PickerItemLabel>{peril.title}</PickerItemLabel>
-              </PickerItem>
-            ))}
-          </PerilItemsContainer>
-          <Indicator />
-        </Picker>
+      <Container>
+        <Header>
+          <Picker ref={pickerRef}>
+            <PerilItemsContainer>
+              <GradientDisplacer />
+              {perils.map((peril, index) => (
+                <PickerItem
+                  id={peril.title}
+                  key={peril.title}
+                  onClick={() => setCurrentPeril(index)}
+                >
+                  <img src={getIconUrl(peril.icon.variants.light.svgUrl)} />
+                  <PickerItemLabel>{peril.title}</PickerItemLabel>
+                  {index === currentPerilIndex ? <Indicator /> : null}
+                </PickerItem>
+              ))}
+              <GradientDisplacer />
+            </PerilItemsContainer>
+          </Picker>
 
-        <LeftGradient>
-          <BackButton
-            onClick={() =>
-              actionsAllowed && setCurrentPeril(currentPerilIndex - 1)
-            }
-          >
-            <BackArrow />
-          </BackButton>
-        </LeftGradient>
-        <RightGradient>
-          <ForwardButton
-            onClick={() =>
-              actionsAllowed && setCurrentPeril(currentPerilIndex + 1)
-            }
-          >
-            <ForwardArrow />
-          </ForwardButton>
-        </RightGradient>
-      </Header>
-      <Content>
-        <Title>{currentPeril.title}</Title>
-        <Description>{currentPeril.description}</Description>
+          <LeftGradient>
+            <BackButton
+              onClick={() =>
+                setCurrentPeril(Math.max(currentPerilIndex - 1, 0))
+              }
+            >
+              <BackArrow />
+            </BackButton>
+          </LeftGradient>
+          <RightGradient>
+            <ForwardButton
+              onClick={() =>
+                setCurrentPeril(
+                  Math.min(currentPerilIndex + 1, perils.length - 1),
+                )
+              }
+            >
+              <ForwardArrow />
+            </ForwardButton>
+          </RightGradient>
+        </Header>
+        <Content>
+          <Title>{currentPeril.title}</Title>
+          <Description>{currentPeril.description}</Description>
 
-        <CoverageWrapper>
-          <CoverageList>
-            <CoverageListTitle>
-              {textKeys.PERIL_MODAL_COVERAGE_TITLE()}
-            </CoverageListTitle>
-            {currentPeril.covered.map((text) => (
-              <CoverageListItem key={text}>
-                <Checkmark />
-                {text}
-              </CoverageListItem>
-            ))}
-          </CoverageList>
-
-          {currentPeril.exceptions.length > 0 && (
+          <CoverageWrapper>
             <CoverageList>
               <CoverageListTitle>
-                {textKeys.PERIL_MODAL_EXCEPTIONS_TITLE()}
+                {textKeys.PERIL_MODAL_COVERAGE_TITLE()}
               </CoverageListTitle>
-              {currentPeril.exceptions.map((text) => (
+              {currentPeril.covered.map((text) => (
                 <CoverageListItem key={text}>
-                  <Crossmark />
+                  <Checkmark />
                   {text}
                 </CoverageListItem>
               ))}
             </CoverageList>
-          )}
-        </CoverageWrapper>
 
-        {currentPeril.info && (
-          <InfoBoxWrapper>
-            <InfoBox>
-              <InfoIcon />
-              <InfoBoxTitle>{textKeys.PERIL_MODAL_INFO_TITLE()}</InfoBoxTitle>
-              <InfoBoxBody>{currentPeril.info}</InfoBoxBody>
-            </InfoBox>
-          </InfoBoxWrapper>
-        )}
-      </Content>
+            {currentPeril.exceptions.length > 0 && (
+              <CoverageList>
+                <CoverageListTitle>
+                  {textKeys.PERIL_MODAL_EXCEPTIONS_TITLE()}
+                </CoverageListTitle>
+                {currentPeril.exceptions.map((text) => (
+                  <CoverageListItem key={text}>
+                    <Crossmark />
+                    {text}
+                  </CoverageListItem>
+                ))}
+              </CoverageList>
+            )}
+          </CoverageWrapper>
+
+          {currentPeril.info && (
+            <InfoBoxWrapper>
+              <InfoBox>
+                <InfoIcon />
+                <InfoBoxTitle>{textKeys.PERIL_MODAL_INFO_TITLE()}</InfoBoxTitle>
+                <InfoBoxBody>{currentPeril.info}</InfoBoxBody>
+              </InfoBox>
+            </InfoBoxWrapper>
+          )}
+        </Content>
+      </Container>
     </Modal>
   )
 }
