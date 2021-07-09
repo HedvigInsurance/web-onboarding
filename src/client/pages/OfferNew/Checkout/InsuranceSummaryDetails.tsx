@@ -16,13 +16,14 @@ import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { Group, Row } from './InsuranceSummary'
 
 const Label = styled.div`
-  width: 50%;
   color: ${colorsV3.gray500};
 `
 const Value = styled.div`
-  width: 50%;
   color: ${colorsV3.gray700};
   text-align: right;
+`
+const HorizontalSpacer = styled.div`
+  width: 48px;
 `
 
 type Props = {
@@ -52,6 +53,7 @@ export const InsuranceSummaryDetails: React.FC<Props> = ({
         }).map(({ key, label, value }) => (
           <Row key={key}>
             <Label>{label}</Label>
+            <HorizontalSpacer />
             <Value>{value}</Value>
           </Row>
         ))}
@@ -61,6 +63,7 @@ export const InsuranceSummaryDetails: React.FC<Props> = ({
           {group.map(({ key, value, label }) => (
             <Row key={key}>
               <Label>{label}</Label>
+              <HorizontalSpacer />
               <Value>{value}</Value>
             </Row>
           ))}
@@ -161,7 +164,7 @@ const getQuoteDetails = (
         {
           key: 'address',
           label: textKeys.CHECKOUT_DETAILS_ADDRESS(),
-          value: quoteDetails.street,
+          value: getAddress(quoteDetails),
         },
         {
           key: 'zipcode',
@@ -198,6 +201,28 @@ const getQuoteDetails = (
   ])
 
   return detailsGroups
+}
+
+export const getAddress = (quoteDetails: QuoteDetails) => {
+  if (!quoteDetailsHasAddress(quoteDetails)) {
+    throw new Error('Quote details need to include address field')
+  }
+
+  const { street } = quoteDetails
+
+  if ('floor' in quoteDetails && 'apartment' in quoteDetails) {
+    const { floor, apartment } = quoteDetails
+
+    if (floor || apartment) {
+      const formattedFloor = floor ? `${floor}.` : ''
+      const apartmentString = apartment ? ` ${apartment}` : ''
+      return `${street}, ${formattedFloor}${apartmentString}`
+    }
+
+    return street
+  }
+
+  return street
 }
 
 const getHouseholdSizeValue = (householdSize: number, textKeys: TextKeyMap) => {

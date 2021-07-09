@@ -2,7 +2,7 @@ import React from 'react'
 import { Field } from 'formik'
 import { DanishHomeContentsType } from 'data/graphql'
 import { InputField } from 'components/inputs'
-import { WithFormikProps } from './Offer'
+import { WithFormikProps } from './QuoteData'
 
 export const initialDkHomeValues = {
   firstName: 'Helle',
@@ -13,8 +13,10 @@ export const initialDkHomeValues = {
   danishHomeContents: {
     coInsured: 0,
     livingSpace: 34,
-    street: 'Nørrebrogade 50',
-    zipCode: '1234',
+    street: 'Theodore Roosevelts Vej 1',
+    floor: '2',
+    apartment: 'tv',
+    zipCode: '2100',
     type: DanishHomeContentsType.Own,
     isStudent: false,
   },
@@ -37,12 +39,22 @@ export const DanishQuote: React.FC<WithFormikProps> = ({ formik }) => {
       />
       <InputField
         label="Street"
-        placeholder="Nørrebrogade 50"
+        placeholder="Theodore Roosevelts Vej 1"
         {...formik.getFieldProps('danishHomeContents.street')}
       />
       <InputField
+        label="Floor"
+        placeholder="2"
+        {...formik.getFieldProps('danishHomeContents.floor')}
+      />
+      <InputField
+        label="Apartment"
+        placeholder="tv"
+        {...formik.getFieldProps('danishHomeContents.apartment')}
+      />
+      <InputField
         label="Zip code"
-        placeholder="2200"
+        placeholder="2100"
         {...formik.getFieldProps('danishHomeContents.zipCode')}
       />
       <InputField

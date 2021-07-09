@@ -1,4 +1,3 @@
-import { colorsV3 } from '@hedviginsurance/brand'
 import { action, withActions } from '@storybook/addon-actions'
 import React from 'react'
 import { BrowserRouter } from 'react-router-dom'
@@ -9,7 +8,9 @@ export default {
   title: 'Forever/Intro/Stories',
   component: IntroStories,
   parameters: {
-    backgrounds: [{ name: 'gray900', value: colorsV3.gray900, default: true }],
+    backgrounds: {
+      default: 'gray900',
+    },
   },
   decorators: [withActions()],
 }

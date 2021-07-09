@@ -4,7 +4,7 @@ import { colorsV2, colorsV3 } from '@hedviginsurance/brand'
 import { SessionContainer } from 'containers/SessionContainer'
 import { Button } from 'components/buttons'
 import { StorageContainer } from 'utils/StorageContainer'
-import { Offer } from './components/Offer'
+import { QuoteData } from './components/QuoteData'
 import { Session } from './components/Session'
 
 const Wrapper = styled.div`
@@ -53,7 +53,7 @@ export const ActualDebugger: React.FC = () => {
 
             <Row>
               <h3>Offer</h3>
-              <Offer sessionToken={token} />
+              <QuoteData sessionToken={token} />
             </Row>
           </>
         )}

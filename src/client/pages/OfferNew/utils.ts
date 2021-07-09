@@ -15,6 +15,7 @@ import {
   TypeOfContract,
   DanishAccidentDetails,
   DanishTravelDetails,
+  ApartmentType,
 } from 'data/graphql'
 import { birthdateFormats, LocaleLabel, locales } from 'l10n/locales'
 import { Address, OfferData, OfferQuote } from 'pages/OfferNew/types'
@@ -59,7 +60,7 @@ export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
   }
 }
 
-export const getHouseholdSize = (quoteDetails: QuoteDetails) => {
+export const getHouseholdSize = (quoteDetails: QuoteDetails): number => {
   if ('householdSize' in quoteDetails) {
     return quoteDetails.householdSize
   }
@@ -178,8 +179,14 @@ export const hasCurrentInsurer = (quote: OfferQuote): boolean =>
   Boolean(quote.currentInsurer)
 
 export const isStudent = (details: QuoteDetails) => {
-  const studentQuoteTypesSe = ['STUDENT_BRF', 'STUDENT_RENT']
-  if ('type' in details && studentQuoteTypesSe.includes(details.type)) {
+  const studentQuoteTypesSe = [
+    ApartmentType.StudentBrf,
+    ApartmentType.StudentRent,
+  ]
+  if (
+    'type' in details &&
+    studentQuoteTypesSe.includes(details.type as ApartmentType)
+  ) {
     return true
   }
 

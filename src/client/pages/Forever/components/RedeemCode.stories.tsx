@@ -1,4 +1,3 @@
-import { colorsV3 } from '@hedviginsurance/brand'
 import { action } from '@storybook/addon-actions'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
@@ -9,7 +8,9 @@ export default {
   title: 'Forever/RedeemCode',
   component: RedeemCode,
   parameters: {
-    backgrounds: [{ name: 'gray900', value: colorsV3.gray900, default: true }],
+    backgrounds: {
+      default: 'gray900',
+    },
   },
 }
 
