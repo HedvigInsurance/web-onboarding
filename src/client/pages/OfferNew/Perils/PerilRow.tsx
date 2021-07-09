@@ -4,7 +4,7 @@ import { PerilCollection } from 'pages/OfferNew/Perils/PerilCollection'
 import { PerilModal } from 'pages/OfferNew/Perils/PerilModal'
 import { OfferQuote } from 'pages/OfferNew/types'
 
-interface Props {
+type Props = {
   offerQuote: OfferQuote
 }
 
