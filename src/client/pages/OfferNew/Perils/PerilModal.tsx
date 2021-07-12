@@ -87,6 +87,7 @@ const PickerItemLabel = styled('div')`
 
 const PerilItemsContainer = styled('div')`
   position: relative;
+  width: 100%;
   height: 5.5rem;
   display: flex;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
