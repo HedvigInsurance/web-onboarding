@@ -143,7 +143,7 @@ export const getPage = (
   }
 
   const adtractionScript =
-    locales[ctx.params.locale as LocaleLabel].adtractionScript ?? null
+    locales[ctx.params.locale as LocaleLabel]?.adtractionScript ?? null
 
   ctx.body = template(
     route,
