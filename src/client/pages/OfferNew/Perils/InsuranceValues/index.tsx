@@ -5,6 +5,7 @@ import color from 'color'
 import { Limits } from 'pages/OfferNew/Perils/InsuranceValues/Limits'
 import { OfferQuote } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
+import { RawLink } from 'components/RawLink'
 import { SubSubHeadingBlack } from '../../components'
 
 const Wrapper = styled.div`
@@ -33,7 +34,7 @@ const Links = styled.div`
   }
 `
 
-const Link = styled.a`
+const TermsLink = styled(RawLink)`
   display: flex;
   align-items: center;
   padding: 0.75rem 1.5rem 0.75rem 1rem;
@@ -88,14 +89,14 @@ export const InsuranceValues: React.FC<Props> = ({ offerQuote }) => {
         {[...offerQuote.insuranceTerms.entries()].map(
           ([insuranceTermType, insuranceTerm]) => {
             return (
-              <Link
+              <TermsLink
                 key={insuranceTermType}
                 href={insuranceTerm.url}
-                target="_blank"
+                external
               >
                 {insuranceTerm.displayName}
                 {' ↗'}
-              </Link>
+              </TermsLink>
             )
           },
         )}
