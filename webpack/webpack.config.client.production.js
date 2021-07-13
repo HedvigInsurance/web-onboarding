@@ -1,6 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
 const { StatsWriterPlugin } = require('webpack-stats-plugin')
+const SentryWebpackPlugin = require('@sentry/webpack-plugin')
 const webpackConfig = require('./webpack.config.base')
 
 const root = path.resolve(__dirname, '..')
@@ -41,6 +42,16 @@ module.exports = webpackConfig({
       process: 'process/browser',
     }),
     new StatsWriterPlugin({ filename: 'stats.json' }),
+    process.env.SENTRY_AUTH_TOKEN
+      ? new SentryWebpackPlugin({
+          authToken: process.env.SENTRY_AUTH_TOKEN,
+          org: 'hedvig',
+          project: 'web-onboarding',
+          release: process.env.HEROKU_SLUG_COMMIT,
+          include: './build/new-member-assets',
+          ignore: ['node_modules', 'webpack.*.js'],
+        })
+      : null,
     // new BundleAnalyzerPlugin(),
   ].filter(Boolean),
 })
