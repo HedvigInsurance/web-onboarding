@@ -110,6 +110,7 @@ export const helmet = koaHelmet({
         'www.google.com',
         'www.google.se',
         'www.google.no',
+        'www.google.dk',
         'www.facebook.com',
         'downloads.intercomcdn.com',
         'online.adservicemedia.dk',
