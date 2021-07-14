@@ -107,7 +107,7 @@ export const InsuranceSummaryTermsLinks: React.FC<Props> = ({ offerData }) => {
         return (
           <Row key={termType + index}>
             <LinkWrapper>
-              <Link href={url} openInNewTab={true}>
+              <Link href={url} target="_blank">
                 {displayName}
               </Link>
               {' ↗'}
