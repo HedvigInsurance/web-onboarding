@@ -92,7 +92,7 @@ export const InsuranceValues: React.FC<Props> = ({ offerQuote }) => {
               <TermsLink
                 key={insuranceTermType}
                 href={insuranceTerm.url}
-                external
+                openInNewTab={true}
               >
                 {insuranceTerm.displayName}
                 {' ↗'}

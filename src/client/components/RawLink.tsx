@@ -3,20 +3,20 @@ import { useVariation, Variation } from 'utils/hooks/useVariation'
 
 type RawLinkProps = {
   className?: string
-  external?: boolean
+  openInNewTab?: boolean
   href: string
 }
 
 export const RawLink: React.FC<RawLinkProps> = ({
   className,
   children,
-  external,
+  openInNewTab,
   href,
 }) => {
   const variation = useVariation()
-  const externalCondition =
-    external && ![Variation.IOS, Variation.ANDROID].includes(variation!)
-  const linkAttributes = externalCondition
+  const linkCondition =
+    openInNewTab && ![Variation.IOS, Variation.ANDROID].includes(variation!)
+  const linkAttributes = linkCondition
     ? { target: '_blank', rel: 'noreferrer noopener' }
     : {}
 
