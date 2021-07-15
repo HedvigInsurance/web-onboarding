@@ -1,8 +1,9 @@
 const path = require('path')
-const webpack = require('webpack')
+const dotenv = require('dotenv')
 const threadLoader = require('thread-loader')
 const pathBrowserifyPath = require.resolve('path-browserify')
-const babelrc = require('../.babelrc')
+
+dotenv.config()
 
 threadLoader.warmup({}, ['babel-loader'])
 

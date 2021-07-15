@@ -5,6 +5,8 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter } from 'react-router-dom'
+import * as Sentry from '@sentry/react'
+import { Integrations } from '@sentry/tracing'
 import { PageTracker } from 'containers/PageTracker'
 import { HotApp } from 'App'
 import {
@@ -14,6 +16,14 @@ import {
 } from '../shared/sessionStorage'
 import { apolloClient } from './apolloClient'
 import { MobileContext } from './utils/mobileContext'
+
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  environment: process.env.SENTRY_ENVIRONMENT,
+  integrations: [new Integrations.BrowserTracing()],
+  enabled: Boolean(process.env.SENTRY_DSN),
+  release: process.env.SENTRY_RELEASE,
+})
 
 const session = createSession<Session>(
   new SavingCookieStorage(new CookieStorage({ expires: null, path: '/' })),

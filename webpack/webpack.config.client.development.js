@@ -33,6 +33,8 @@ module.exports = webpackConfig({
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('development'),
+        SENTRY_DSN: JSON.stringify(process.env.SENTRY_DSN),
+        SENTRY_ENVIRONMENT: JSON.stringify('local'),
       },
     }),
     new webpack.ProvidePlugin({
