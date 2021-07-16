@@ -35,7 +35,7 @@ const TooltipIcon = styled(motion.div)<{ size: Size }>`
     :hover {
       background-color: ${colorsV3.purple500};
       .fillColor {
-        fill: ${colorsV3.white};
+        fill: ${colorsV3.gray900};
       }
     }
   }
@@ -85,7 +85,7 @@ const TooltipContainer = styled.div<{ visible: boolean }>`
 const TooltipText = styled.div`
   font-size: 0.875rem;
   line-height: 1rem;
-  color: ${colorsV3.white};
+  color: ${colorsV3.gray900};
   text-align: center;
 `
 
