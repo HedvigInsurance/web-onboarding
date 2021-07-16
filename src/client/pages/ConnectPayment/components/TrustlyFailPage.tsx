@@ -5,18 +5,18 @@ import { Button } from 'components/buttons'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
 
-const Wrapper = styled('div')({
-  width: '100%',
-  minHeight: '100vh',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  flexFlow: 'column',
-})
+const Wrapper = styled.div`
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: column;
+`
 
-const Text = styled('div')({
-  marginBottom: 16,
-})
+const Text = styled.div`
+  margin-bottom: 16px;
+`
 
 export const TrustlyFailPage: React.FC = () => {
   const textKeys = useTextKeys()
