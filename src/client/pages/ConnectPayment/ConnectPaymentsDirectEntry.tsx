@@ -66,7 +66,7 @@ export const ConnectPaymentsDirectEntry: React.FC<RouteComponentProps<
               <ButtonWrapper>
                 <Button
                   foreground={colorsV3.gray900}
-                  background={colorsV3.purple300}
+                  background={colorsV3.purple500}
                   onClick={() => {
                     retry()
                   }}
@@ -86,7 +86,7 @@ export const ConnectPaymentsDirectEntry: React.FC<RouteComponentProps<
               <ButtonWrapper>
                 <Button
                   foreground={colorsV3.gray900}
-                  background={colorsV3.purple300}
+                  background={colorsV3.purple500}
                   onClick={() => {
                     location.reload()
                   }}

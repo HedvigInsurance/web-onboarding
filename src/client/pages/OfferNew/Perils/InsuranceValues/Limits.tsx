@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
-import { Tooltip } from 'components/Tooltip'
+import { Tooltip } from 'components/Tooltip/Tooltip'
 import { InsurableLimit, InsurableLimitType } from 'data/graphql'
 
 interface Props {
