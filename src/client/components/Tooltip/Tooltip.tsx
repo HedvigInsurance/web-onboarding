@@ -1,12 +1,12 @@
+import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { motion } from 'framer-motion'
-import React from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { Questionmark } from 'components/icons/Questionmark'
-import { Size } from './types'
+import { Size } from 'components/types'
 
-interface Props {
+export type TooltipProps = {
   body: string
   size?: Size
 }
@@ -89,7 +89,7 @@ const TooltipText = styled.div`
   text-align: center;
 `
 
-export const Tooltip: React.FC<Props> = ({ body, size = 'sm' }) => {
+export const Tooltip: React.FC<TooltipProps> = ({ body, size = 'sm' }) => {
   const tooltipIconRef = React.useRef<HTMLDivElement>()
   const [visible, setVisible] = React.useState(false)
   React.useEffect(() => {
