@@ -65,7 +65,7 @@ export const BackgroundImage: React.FC<Props> = ({
           srcSet="/new-member-assets/landing/hedvig_table_landscape_small.jpg 1600w, /new-member-assets/landing/hedvig_table_landscape_medium.jpg 2200w"
         />
         <Image
-          src="/new-member-assets/landing/hedvig_table_small.jpg"
+          src="/new-member-assets/landing/hedvig_table_landscape_small.jpg"
           onLoad={() => setHasImageLoaded(true)}
           hasLoaded={hasImageLoaded}
           isFullScreen={isFullScreen}
