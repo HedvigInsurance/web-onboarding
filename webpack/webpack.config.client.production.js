@@ -42,16 +42,17 @@ module.exports = webpackConfig({
       process: 'process/browser',
     }),
     new StatsWriterPlugin({ filename: 'stats.json' }),
-    process.env.SENTRY_AUTH_TOKEN
-      ? new SentryWebpackPlugin({
-          authToken: process.env.SENTRY_AUTH_TOKEN,
-          org: 'hedvig',
-          project: 'web-onboarding',
-          release: process.env.HEROKU_SLUG_COMMIT,
-          include: './build/new-member-assets',
-          ignore: ['node_modules', 'webpack.*.js'],
-        })
-      : null,
+    ...(process.env.SENTRY_AUTH_TOKEN
+      ? [
+          new SentryWebpackPlugin({
+            release: process.env.HEROKU_SLUG_COMMIT,
+            include: './build',
+            org: 'hedvig',
+            project: 'web-onboarding',
+            ignore: ['node_modules', 'webpack.*.js'],
+          }),
+        ]
+      : []),
     // new BundleAnalyzerPlugin(),
   ].filter(Boolean),
 })
