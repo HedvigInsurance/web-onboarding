@@ -1,8 +1,25 @@
-import { mount } from 'enzyme'
 import React from 'react'
-import { act } from 'react-dom/test-utils'
-import { nextTickAsync } from './misc'
-import { makeTextKeyResolver, TextKeyProvider, useTextKeys } from './textKeys'
+import { renderHook } from '@testing-library/react-hooks'
+import {
+  makeTextKeyResolver,
+  useTextKeys,
+  TextKeyProvider,
+  Locale,
+} from './textKeys'
+interface AllProvidersProps {
+  locale?: Locale
+  locationSearch?: string
+}
+
+const AllProviders: React.FC<AllProvidersProps> = ({
+  locale = 'en',
+  locationSearch,
+  children,
+}) => (
+  <TextKeyProvider locale={locale} locationSearch={locationSearch}>
+    {children}
+  </TextKeyProvider>
+)
 
 describe('useTextKeys', () => {
   describe('resolver', () => {
@@ -32,40 +49,20 @@ describe('useTextKeys', () => {
 
 describe('TextKeyProvider', () => {
   it('lazy loads text keys and shows correct text', async () => {
-    const Component = () => {
-      const textKeys = useTextKeys()
-
-      return <>{textKeys.YES()}</>
-    }
-
-    const wrapper = mount(
-      <TextKeyProvider locale="en">
-        <Component />
-      </TextKeyProvider>,
-    )
-
-    await act(() => nextTickAsync())
-    wrapper.update()
-
-    expect(wrapper.text()).toBe('Yes')
+    const { result, waitForNextUpdate } = renderHook(useTextKeys, {
+      wrapper: AllProviders,
+      initialProps: { locale: 'en' },
+    })
+    await waitForNextUpdate()
+    expect(result.current.YES()).toBe('Yes')
   })
 
   it('enables debug mode', async () => {
-    const Component = () => {
-      const textKeys = useTextKeys()
-
-      return <>{textKeys.YES()}</>
-    }
-
-    const wrapper = mount(
-      <TextKeyProvider locale="en" locationSearch="?debug=textkeys">
-        <Component />
-      </TextKeyProvider>,
-    )
-
-    await act(() => nextTickAsync())
-    wrapper.update()
-
-    expect(wrapper.text()).toBe('YES')
+    const { result, waitForNextUpdate } = renderHook(useTextKeys, {
+      wrapper: AllProviders,
+      initialProps: { locale: 'en', locationSearch: '?debug=textkeys' },
+    })
+    await waitForNextUpdate()
+    expect(result.current.YES()).toBe('YES')
   })
 })
