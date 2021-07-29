@@ -151,6 +151,9 @@ export const ConnectPaymentPage: React.FC = () => {
             src={
               '/new-member-assets/connect-payment/connect-payments-illustration-mono.svg'
             }
+            alt=""
+            width={637}
+            height={600}
           />
         </ImageContainer>
         <TextContainer>
