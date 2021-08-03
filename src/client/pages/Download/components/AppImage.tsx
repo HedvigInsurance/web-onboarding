@@ -6,7 +6,7 @@ type Props = {
   width: number
 }
 
-const Image = styled.img<{ imageWidth: number }>`
+const Image = styled.img<{ imageWidth: Props['width'] }>`
   width: ${({ imageWidth }) => imageWidth}px;
   max-width: 100%;
   height: auto;
