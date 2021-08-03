@@ -30,13 +30,13 @@ const getImageProps = (currentLocale: string) => {
       }
     case 'dk':
       return {
-        src: `${basePath}/hedvig-connect-payment-dk.png`,
+        src: `${basePath}/hedvig-app-dk.png`,
         width: 755,
         height: 761,
       }
     case 'dk-en':
       return {
-        src: `${basePath}/hedvig-connect-payment-dk-en.png`,
+        src: `${basePath}/hedvig-app-dk-en.png`,
         width: 755,
         height: 761,
       }
