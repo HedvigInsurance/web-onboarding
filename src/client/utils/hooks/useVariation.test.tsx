@@ -1,7 +1,7 @@
 import { useVariation } from 'utils/hooks/useVariation'
 import { renderHook } from 'test/utils'
 
-it('returns null on no variation', () => {
+it('returns null on invalid variation', () => {
   const { result } = renderHook(() => useVariation(), {
     initialProps: { location: '/a-path?variation=blargh' },
   })
