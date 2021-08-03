@@ -27,6 +27,7 @@ import { graphQLMutation, graphQLQuery } from './graphql'
 import { resolveHouseInformation } from './houseInformation'
 import { LanguagePicker } from './LanguagePicker'
 import { resolvePersonalInformation } from './personalInformation'
+import { resolveAddressAutocomplete } from './addressAutocompleteProvider'
 
 const EmbarkStyling = styled.div`
   height: 100%;
@@ -325,6 +326,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                       storageState,
                       getIsoLocale(currentLocale),
                     ),
+                    addressAutocompleteQuery: resolveAddressAutocomplete,
                     externalInsuranceProviderProviderStatus: resolveExternalInsuranceProviderProviderStatus,
                     externalInsuranceProviderStartSession: resolveExternalInsuranceProviderStartSession,
                     track: (eventName, payload) => {

@@ -36,18 +36,6 @@ export const DanishDetails: React.FC<DetailsProps> = ({
           <ContentColumn>
             <InputGroup>
               <DetailInput
-                field={fieldSchema.danishHomeContents.street}
-                formikProps={formikProps}
-                nameRoot="danishHomeContents"
-                name="street"
-              />
-              <DetailInput
-                field={fieldSchema.danishHomeContents.zipCode}
-                formikProps={formikProps}
-                nameRoot="danishHomeContents"
-                name="zipCode"
-              />
-              <DetailInput
                 field={fieldSchema.danishHomeContents.coInsured}
                 formikProps={formikProps}
                 nameRoot="danishHomeContents"

@@ -80,6 +80,7 @@ export const Forever: React.FC<ForeverProps> = ({
       <Helmet>
         <title>{textKeys.FOREVER_LANDINGPAGE_TITLE()}</title>
         <meta property="og:image" content="" />
+        <meta name="robots" content="noindex" />
       </Helmet>
       <SessionContainer>
         {() => (

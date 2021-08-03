@@ -2,11 +2,10 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import color from 'color'
-import { InsuranceTermType } from 'data/graphql'
 import { Limits } from 'pages/OfferNew/Perils/InsuranceValues/Limits'
 import { OfferQuote } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
-import { useCurrentLocale } from 'components/utils/CurrentLocale'
+import { RawLink } from 'components/RawLink'
 import { SubSubHeadingBlack } from '../../components'
 
 const Wrapper = styled.div`
@@ -35,7 +34,7 @@ const Links = styled.div`
   }
 `
 
-const Link = styled.a`
+const TermsLink = styled(RawLink)`
   display: flex;
   align-items: center;
   padding: 0.75rem 1.5rem 0.75rem 1rem;
@@ -70,43 +69,12 @@ const Link = styled.a`
   }
 `
 
-type GetTemporaryTermsLinkParams = {
-  currentLocale: string
-  urlFromBackend: string
-}
-
-export const getTemporaryTermsLink = ({
-  currentLocale,
-  urlFromBackend,
-}: GetTemporaryTermsLinkParams) => {
-  const baseUrl = 'https://www.hedvig.com'
-
-  // 👇 The hard coded urls are temporary since we don't get the correct ones from back-end for all markets right now
-  switch (currentLocale) {
-    case 'se':
-      return `${baseUrl}/${currentLocale}/villkor`
-    case 'se-en':
-      return `${baseUrl}/${currentLocale}/terms`
-    case 'no':
-      return `${baseUrl}/${currentLocale}/terms`
-    case 'no-en':
-      return `${baseUrl}/${currentLocale}/terms`
-    case 'dk':
-    case 'dk-en':
-      return urlFromBackend
-    default:
-      return `${baseUrl}/${currentLocale}/404`
-  }
-}
-
 type Props = {
   offerQuote: OfferQuote
 }
 
 export const InsuranceValues: React.FC<Props> = ({ offerQuote }) => {
   const textKeys = useTextKeys()
-
-  const currentLocale = useCurrentLocale()
 
   return (
     <Wrapper>
@@ -121,21 +89,14 @@ export const InsuranceValues: React.FC<Props> = ({ offerQuote }) => {
         {[...offerQuote.insuranceTerms.entries()].map(
           ([insuranceTermType, insuranceTerm]) => {
             return (
-              <Link
+              <TermsLink
                 key={insuranceTermType}
-                href={
-                  insuranceTermType === InsuranceTermType.TermsAndConditions
-                    ? getTemporaryTermsLink({
-                        currentLocale,
-                        urlFromBackend: insuranceTerm.url,
-                      })
-                    : insuranceTerm.url
-                }
+                href={insuranceTerm.url}
                 target="_blank"
               >
                 {insuranceTerm.displayName}
                 {' ↗'}
-              </Link>
+              </TermsLink>
             )
           },
         )}

@@ -44,7 +44,7 @@ export interface NorwegianTravelContentFieldSchema {
 
 export type PartialEditDanishHomeContentsInput = Omit<
   EditDanishHomeContentsInput,
-  'apartment' | 'floor' | 'city' | 'bbrId'
+  'street' | 'zipCode' | 'apartment' | 'floor' | 'city' | 'bbrId'
 >
 
 export interface DanishHomeContentFieldSchema {

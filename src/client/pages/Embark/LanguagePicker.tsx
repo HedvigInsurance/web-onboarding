@@ -28,9 +28,13 @@ const StyledLink = styled(Link)`
   outline: 0;
   color: ${colorsV2.black};
   text-decoration: none;
-  padding: 10px 20px;
   transition: all 250ms;
   font-size: 0.9rem;
+
+  /* Override EmbarkStyling reset */
+  & {
+    padding: 10px 20px;
+  }
 
   :active {
     background-color: ${colorsV2.lightgray};

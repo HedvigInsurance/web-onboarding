@@ -1,7 +1,7 @@
 import React from 'react'
 import { ApartmentType } from 'data/graphql'
 import { InputField } from 'components/inputs'
-import { WithFormikProps } from './Offer'
+import { WithFormikProps } from './QuoteData'
 
 export const initialSeApartmentValues = {
   firstName: 'Sven',

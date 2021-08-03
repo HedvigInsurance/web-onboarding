@@ -1,75 +1,73 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { Address } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
-import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
-import { getHouseholdSize } from '../utils'
+import {
+  LARGE_SCREEN_MEDIA_QUERY,
+  MEDIUM_SCREEN_MEDIA_QUERY,
+} from 'utils/mediaQueries'
+import { getHouseholdSize, quoteDetailsHasAddress } from '../utils'
+import { getAddress } from '../Checkout/InsuranceSummaryDetails'
 
 type Props = {
   offerData: OfferData
 }
 
-type QuoteWithStreet = {
-  quoteDetails: { street: Address['street'] }
-}
-
-const Container = styled.div`
-  padding: 2rem 0 1rem;
+const Wrapper = styled.div`
+  padding: 2.5rem 0 1rem;
   color: ${colorsV3.white};
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     padding-top: 0;
   }
 `
-
-const Heading = styled.h1`
+const Headline = styled.h1`
   margin: 0;
   text-transform: uppercase;
-  font-size: 0.75rem;
+  font-size: 1rem;
+`
+const OfferInfoWrapper = styled.div`
+  padding-bottom: 2rem;
+`
+const NameAndCoInsured = styled.div`
+  font-size: 2rem;
 
-  ${LARGE_SCREEN_MEDIA_QUERY} {
-    font-size: 1rem;
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
+    font-size: 3rem;
   }
 `
+const Address = styled.div`
+  font-size: 1.375rem;
 
-const OfferInfo = styled.div`
-  font-size: 2rem;
-  word-break: break-all;
-
-  ${LARGE_SCREEN_MEDIA_QUERY} {
-    font-size: 3rem;
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
+    font-size: 2.5rem;
   }
 `
 
 export const HeroOfferDetails: React.FC<Props> = ({ offerData }) => {
-  const [numberCoInsured, setNumberCoInsured] = useState<number | null>(null)
-  const [street, setStreet] = useState<Address['street'] | null>(null)
-
   const { person, quotes } = offerData
+  const numberCoInsured = getHouseholdSize(quotes[0].quoteDetails) - 1
 
-  useEffect(() => {
-    const householdSize = getHouseholdSize(quotes[0].quoteDetails)
-    setNumberCoInsured(householdSize - 1)
-
-    const quoteWithStreet = quotes.find((quote) => {
-      return 'street' in quote.quoteDetails
-    })
-    if (quoteWithStreet) {
-      setStreet((quoteWithStreet as QuoteWithStreet).quoteDetails.street)
-    }
-  }, [quotes])
+  const quoteWithAddress = quotes.find((quote) => {
+    return quoteDetailsHasAddress(quote.quoteDetails)
+  })
+  const address = quoteWithAddress
+    ? getAddress(quoteWithAddress.quoteDetails)
+    : null
 
   const textKeys = useTextKeys()
+
   return (
-    <Container>
-      <Heading>{textKeys.HERO_OFFER_DETAILS_HEADER()}</Heading>
-      <OfferInfo>
-        {person.firstName}
-        {!!numberCoInsured && ` +${numberCoInsured}`}
-      </OfferInfo>
-      {street && <OfferInfo>{street}</OfferInfo>}
-    </Container>
+    <Wrapper>
+      <Headline>{textKeys.HERO_OFFER_DETAILS_HEADER()}</Headline>
+      <OfferInfoWrapper>
+        <NameAndCoInsured>
+          {person.firstName}
+          {numberCoInsured > 0 && ` +${numberCoInsured}`}
+        </NameAndCoInsured>
+        {address && <Address>{address}</Address>}
+      </OfferInfoWrapper>
+    </Wrapper>
   )
 }

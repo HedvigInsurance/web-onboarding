@@ -2,10 +2,9 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { InsuranceTerm, InsuranceTermType } from 'data/graphql'
-import { useCurrentLocale } from 'components/utils/CurrentLocale'
+import { RawLink } from 'components/RawLink'
 import { OfferData, OfferQuote } from '../types'
 import { checkIfMainQuote } from '../utils'
-import { getTemporaryTermsLink } from '../Perils/InsuranceValues'
 import { Group, Row } from './InsuranceSummary'
 
 const linkColor = colorsV3.gray700
@@ -13,7 +12,7 @@ const linkColor = colorsV3.gray700
 const LinkWrapper = styled.div`
   color: ${colorsV3.gray900};
 `
-const Link = styled.a`
+const Link = styled(RawLink)`
   font-size: 14px;
   color: ${linkColor};
   :hover,
@@ -22,25 +21,6 @@ const Link = styled.a`
     text-decoration: none;
   }
 `
-
-type GetUrlParams = {
-  currentLocale: string
-  termType: InsuranceTermType
-  urlFromBackend: string
-}
-
-const getUrl = ({ currentLocale, termType, urlFromBackend }: GetUrlParams) => {
-  const temporaryTermsLink = getTemporaryTermsLink({
-    currentLocale,
-    urlFromBackend,
-  })
-  // 👆 This is temporary since we can't get the correct ones from back-end for all markets right now
-
-  if (termType === 'TERMS_AND_CONDITIONS') {
-    return temporaryTermsLink
-  }
-  return urlFromBackend
-}
 
 export type Term = {
   termType: InsuranceTermType
@@ -118,8 +98,6 @@ type Props = {
 }
 
 export const InsuranceSummaryTermsLinks: React.FC<Props> = ({ offerData }) => {
-  const currentLocale = useCurrentLocale()
-
   const insuranceTerms = getInsuranceTerms(offerData)
 
   return (
@@ -129,15 +107,7 @@ export const InsuranceSummaryTermsLinks: React.FC<Props> = ({ offerData }) => {
         return (
           <Row key={termType + index}>
             <LinkWrapper>
-              <Link
-                href={getUrl({
-                  termType,
-                  currentLocale,
-                  urlFromBackend: url,
-                })}
-                target="_blank"
-                rel="noreferrer noopener"
-              >
+              <Link href={url} target="_blank">
                 {displayName}
               </Link>
               {' ↗'}

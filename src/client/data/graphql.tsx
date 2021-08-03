@@ -9972,102 +9972,6 @@ export type NorwegianBankIdAuthMutation = { __typename?: 'Mutation' } & {
   >
 }
 
-export type QuoteQueryVariables = Exact<{
-  id: Scalars['ID']
-  perilsLocale: Locale
-}>
-
-export type QuoteQuery = { __typename?: 'Query' } & {
-  quote:
-    | ({ __typename?: 'CompleteQuote' } & Pick<
-        CompleteQuote,
-        | 'id'
-        | 'dataCollectionId'
-        | 'ssn'
-        | 'email'
-        | 'firstName'
-        | 'lastName'
-        | 'startDate'
-      > & {
-          currentInsurer?: Maybe<
-            { __typename?: 'CurrentInsurer' } & Pick<
-              CurrentInsurer,
-              'id' | 'displayName' | 'switchable'
-            >
-          >
-          insuranceCost: { __typename?: 'InsuranceCost' } & Pick<
-            InsuranceCost,
-            'freeUntil'
-          > & {
-              monthlyDiscount: { __typename?: 'MonetaryAmountV2' } & Pick<
-                MonetaryAmountV2,
-                'amount' | 'currency'
-              >
-              monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
-                MonetaryAmountV2,
-                'amount' | 'currency'
-              >
-              monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
-                MonetaryAmountV2,
-                'amount' | 'currency'
-              >
-            }
-          perils: Array<
-            { __typename?: 'PerilV2' } & Pick<
-              PerilV2,
-              'title' | 'description' | 'covered' | 'exceptions' | 'info'
-            > & {
-                icon: { __typename?: 'Icon' } & {
-                  variants: { __typename?: 'IconVariants' } & {
-                    light: { __typename?: 'IconVariant' } & Pick<
-                      IconVariant,
-                      'svgUrl'
-                    >
-                  }
-                }
-              }
-          >
-          quoteDetails:
-            | ({ __typename?: 'SwedishApartmentQuoteDetails' } & Pick<
-                SwedishApartmentQuoteDetails,
-                'street' | 'zipCode' | 'householdSize' | 'livingSpace' | 'type'
-              >)
-            | ({ __typename?: 'SwedishHouseQuoteDetails' } & Pick<
-                SwedishHouseQuoteDetails,
-                | 'street'
-                | 'zipCode'
-                | 'householdSize'
-                | 'livingSpace'
-                | 'ancillarySpace'
-                | 'numberOfBathrooms'
-                | 'yearOfConstruction'
-                | 'isSubleted'
-              > & {
-                  extraBuildings: Array<
-                    { __typename?: 'ExtraBuildingValue' } & Pick<
-                      ExtraBuildingValue,
-                      'type' | 'area' | 'displayName' | 'hasWaterConnected'
-                    >
-                  >
-                })
-            | ({ __typename?: 'NorwegianHomeContentsDetails' } & Pick<
-                NorwegianHomeContentsDetails,
-                'coInsured' | 'livingSpace' | 'street' | 'zipCode' | 'isYouth'
-              > & { norwegianHomeType: NorwegianHomeContentsDetails['type'] })
-            | ({ __typename?: 'NorwegianTravelDetails' } & Pick<
-                NorwegianTravelDetails,
-                'coInsured' | 'isYouth'
-              >)
-            | ({ __typename?: 'DanishHomeContentsDetails' } & Pick<
-                DanishHomeContentsDetails,
-                'coInsured' | 'livingSpace' | 'street' | 'zipCode' | 'isStudent'
-              > & { danishHomeType: DanishHomeContentsDetails['type'] })
-            | { __typename?: 'DanishAccidentDetails' }
-            | { __typename?: 'DanishTravelDetails' }
-        })
-    | ({ __typename?: 'IncompleteQuote' } & Pick<IncompleteQuote, 'id'>)
-}
-
 export type QuoteBundleQueryVariables = Exact<{
   input: QuoteBundleInput
   locale: Locale
@@ -10160,7 +10064,13 @@ export type QuoteBundleQuery = { __typename?: 'Query' } & {
               >)
             | ({ __typename?: 'DanishHomeContentsDetails' } & Pick<
                 DanishHomeContentsDetails,
-                'street' | 'zipCode' | 'livingSpace' | 'coInsured' | 'isStudent'
+                | 'street'
+                | 'floor'
+                | 'apartment'
+                | 'zipCode'
+                | 'livingSpace'
+                | 'coInsured'
+                | 'isStudent'
               > & { danishHomeType: DanishHomeContentsDetails['type'] })
             | ({ __typename?: 'DanishAccidentDetails' } & Pick<
                 DanishAccidentDetails,
@@ -11254,147 +11164,6 @@ export type NorwegianBankIdAuthMutationOptions = ApolloReactCommon.BaseMutationO
   NorwegianBankIdAuthMutation,
   NorwegianBankIdAuthMutationVariables
 >
-export const QuoteDocument = gql`
-  query Quote($id: ID!, $perilsLocale: Locale!) {
-    quote(id: $id) {
-      ... on CompleteQuote {
-        id
-        dataCollectionId
-        ssn
-        email
-        firstName
-        lastName
-        startDate
-        currentInsurer {
-          id
-          displayName
-          switchable
-        }
-        insuranceCost {
-          freeUntil
-          monthlyDiscount {
-            amount
-            currency
-          }
-          monthlyGross {
-            amount
-            currency
-          }
-          monthlyNet {
-            amount
-            currency
-          }
-        }
-        perils(locale: $perilsLocale) {
-          title
-          description
-          covered
-          exceptions
-          info
-          icon {
-            variants {
-              light {
-                svgUrl
-              }
-            }
-          }
-        }
-        quoteDetails {
-          ... on SwedishApartmentQuoteDetails {
-            street
-            zipCode
-            householdSize
-            livingSpace
-            type
-          }
-          ... on SwedishHouseQuoteDetails {
-            street
-            zipCode
-            householdSize
-            livingSpace
-            ancillarySpace
-            numberOfBathrooms
-            yearOfConstruction
-            isSubleted
-            extraBuildings {
-              ... on ExtraBuildingValue {
-                type
-                area
-                displayName
-                hasWaterConnected
-              }
-            }
-          }
-          ... on NorwegianHomeContentsDetails {
-            coInsured
-            livingSpace
-            street
-            norwegianHomeType: type
-            zipCode
-            isYouth
-          }
-          ... on NorwegianTravelDetails {
-            coInsured
-            isYouth
-          }
-          ... on DanishHomeContentsDetails {
-            coInsured
-            livingSpace
-            street
-            danishHomeType: type
-            zipCode
-            isStudent
-          }
-        }
-      }
-      ... on IncompleteQuote {
-        id
-      }
-    }
-  }
-`
-
-/**
- * __useQuoteQuery__
- *
- * To run a query within a React component, call `useQuoteQuery` and pass it any options that fit your needs.
- * When your component renders, `useQuoteQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useQuoteQuery({
- *   variables: {
- *      id: // value for 'id'
- *      perilsLocale: // value for 'perilsLocale'
- *   },
- * });
- */
-export function useQuoteQuery(
-  baseOptions: Apollo.QueryHookOptions<QuoteQuery, QuoteQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<QuoteQuery, QuoteQueryVariables>(
-    QuoteDocument,
-    options,
-  )
-}
-export function useQuoteLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<QuoteQuery, QuoteQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<QuoteQuery, QuoteQueryVariables>(
-    QuoteDocument,
-    options,
-  )
-}
-export type QuoteQueryHookResult = ReturnType<typeof useQuoteQuery>
-export type QuoteLazyQueryHookResult = ReturnType<typeof useQuoteLazyQuery>
-export type QuoteQueryResult = ApolloReactCommon.QueryResult<
-  QuoteQuery,
-  QuoteQueryVariables
->
 export const QuoteBundleDocument = gql`
   query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
     quoteBundle(input: $input) {
@@ -11484,6 +11253,8 @@ export const QuoteBundleDocument = gql`
           }
           ... on DanishHomeContentsDetails {
             street
+            floor
+            apartment
             zipCode
             livingSpace
             danishHomeType: type
