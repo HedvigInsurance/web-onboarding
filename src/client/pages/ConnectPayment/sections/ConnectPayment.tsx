@@ -56,6 +56,7 @@ const ImageContainer = styled.div`
 `
 const ConnectPaymentImage = styled.img`
   max-width: 40vw;
+  height: auto;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     width: 100%;
