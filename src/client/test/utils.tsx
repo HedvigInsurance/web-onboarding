@@ -4,7 +4,7 @@ import { render, RenderOptions } from '@testing-library/react'
 import { renderHook, RenderHookOptions } from '@testing-library/react-hooks'
 
 interface AllProvidersProps {
-  location?: string
+  location?: string | Record<string, unknown>
 }
 
 const AllProviders: React.FC<AllProvidersProps> = ({ children, location }) => {
@@ -14,7 +14,7 @@ const AllProviders: React.FC<AllProvidersProps> = ({ children, location }) => {
 const customRender = (
   ui: React.ReactElement,
   options?: Omit<RenderOptions, 'wrapper'> & {
-    wrapperProps?: Record<string, any>
+    wrapperProps?: AllProvidersProps
   },
 ) =>
   render(ui, {
