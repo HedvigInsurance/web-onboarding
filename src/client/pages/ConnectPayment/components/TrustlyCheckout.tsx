@@ -42,11 +42,7 @@ export const TrustlyCheckout: React.FC<Props> = ({ onSuccess }) => {
       return null
     }
 
-    const finalUrl = res.data.registerDirectDebit.url.includes('?')
-      ? `${res.data.registerDirectDebit.url}&NotifyParent=1`
-      : `${res.data.registerDirectDebit.url}?NotifyParent=1`
-
-    return finalUrl
+    return res.data.registerDirectDebit.url
   }
 
   return (

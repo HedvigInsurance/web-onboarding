@@ -74,7 +74,5 @@ it('opens trustly modal and renders correct iframe url', async () => {
   })
 
   expect(wrapper.find(TrustlyModal).prop('isOpen')).toBe(true)
-  expect(wrapper.find(TrustlyModal).prop('trustlyUrl')).toBe(
-    trustlyUrl + '&NotifyParent=1',
-  )
+  expect(wrapper.find(TrustlyModal).prop('trustlyUrl')).toBe(trustlyUrl)
 })
