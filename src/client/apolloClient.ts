@@ -8,10 +8,8 @@ import {
 import { WebSocketLink } from '@apollo/link-ws'
 import { CookieStorage } from 'cookie-storage'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
-import { onError } from '@apollo/client/link/error'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { Quote } from 'data/graphql'
-import { captureSentryError } from 'utils/sentry-client'
 import { createSession, Session } from '../shared/sessionStorage'
 import possibleTypes from '../../possibleGraphqlTypes.json'
 
@@ -30,9 +28,11 @@ export const apolloClient = (() => {
   if (typeof WebSocket === 'undefined') {
     throw new Error("typeof WebSocket is undefined, can't connect to remote")
   }
+
   const authorizationToken = createSession<Session>(
     new CookieStorage(),
   ).getSession()!.token
+
   const subscriptionClient = new SubscriptionClient(
     window.hedvigClientConfig.giraffeWsEndpoint,
     {
@@ -42,19 +42,7 @@ export const apolloClient = (() => {
       }),
     },
   )
-  const errorHandler = onError((err) => {
-    if (err.graphQLErrors) {
-      err.graphQLErrors.forEach((graphqlError) =>
-        captureSentryError(
-          `GraphQL error: ${graphqlError.message}`,
-          graphqlError,
-        ),
-      )
-    }
-    if (err.networkError) {
-      captureSentryError(err.networkError)
-    }
-  })
+
   const httpLink = new HttpLink({
     credentials: 'omit',
     uri: window.hedvigClientConfig.giraffeEndpoint,
@@ -82,7 +70,6 @@ export const apolloClient = (() => {
       },
     }),
     link: from([
-      errorHandler,
       split(
         (op) => {
           const definition = getMainDefinition(op.query)
