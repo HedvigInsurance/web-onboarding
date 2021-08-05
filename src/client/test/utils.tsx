@@ -2,13 +2,18 @@ import React from 'react'
 import { StaticRouter } from 'react-router'
 import { render, RenderOptions } from '@testing-library/react'
 import { renderHook, RenderHookOptions } from '@testing-library/react-hooks'
+import { StaticTextKeyProvider } from '../utils/textKeys'
 
 interface AllProvidersProps {
   location?: string | Record<string, unknown>
 }
 
 const AllProviders: React.FC<AllProvidersProps> = ({ children, location }) => {
-  return <StaticRouter location={location}>{children}</StaticRouter>
+  return (
+    <StaticRouter location={location}>
+      <StaticTextKeyProvider>{children}</StaticTextKeyProvider>
+    </StaticRouter>
+  )
 }
 
 const customRender = (
@@ -26,7 +31,7 @@ const customRender = (
 
 const customRenderHook = (
   callback: (props: any) => any,
-  options?: Omit<RenderHookOptions<AllProvidersProps>, 'wrapper'>,
+  options?: RenderHookOptions<AllProvidersProps>,
 ) => renderHook(callback, { wrapper: AllProviders, ...options })
 
 export * from '@testing-library/react'

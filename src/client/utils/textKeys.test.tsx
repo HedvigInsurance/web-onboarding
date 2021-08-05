@@ -1,25 +1,6 @@
 import React from 'react'
-import { renderHook } from '@testing-library/react-hooks'
-import {
-  makeTextKeyResolver,
-  useTextKeys,
-  TextKeyProvider,
-  Locale,
-} from './textKeys'
-interface AllProvidersProps {
-  locale?: Locale
-  locationSearch?: string
-}
-
-const AllProviders: React.FC<AllProvidersProps> = ({
-  locale = 'en',
-  locationSearch,
-  children,
-}) => (
-  <TextKeyProvider locale={locale} locationSearch={locationSearch}>
-    {children}
-  </TextKeyProvider>
-)
+import { renderHook } from '../test/utils'
+import { makeTextKeyResolver, useTextKeys, TextKeyProvider } from './textKeys'
 
 describe('useTextKeys', () => {
   describe('resolver', () => {
@@ -50,8 +31,7 @@ describe('useTextKeys', () => {
 describe('TextKeyProvider', () => {
   it('lazy loads text keys and shows correct text', async () => {
     const { result, waitForNextUpdate } = renderHook(useTextKeys, {
-      wrapper: AllProviders,
-      initialProps: { locale: 'en' },
+      wrapper: (props) => <TextKeyProvider locale="en" {...props} />,
     })
     await waitForNextUpdate()
     expect(result.current.YES()).toBe('Yes')
@@ -59,9 +39,15 @@ describe('TextKeyProvider', () => {
 
   it('enables debug mode', async () => {
     const { result, waitForNextUpdate } = renderHook(useTextKeys, {
-      wrapper: AllProviders,
-      initialProps: { locale: 'en', locationSearch: '?debug=textkeys' },
+      wrapper: (props) => (
+        <TextKeyProvider
+          locale="en"
+          locationSearch="?debug=textkeys"
+          {...props}
+        />
+      ),
     })
+
     await waitForNextUpdate()
     expect(result.current.YES()).toBe('YES')
   })
