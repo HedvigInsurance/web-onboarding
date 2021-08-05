@@ -1,11 +1,8 @@
 const path = require('path')
 const dotenv = require('dotenv')
-const threadLoader = require('thread-loader')
 const pathBrowserifyPath = require.resolve('path-browserify')
 
 dotenv.config()
-
-threadLoader.warmup({}, ['babel-loader'])
 
 module.exports = ({
   mode,
@@ -30,12 +27,7 @@ module.exports = ({
     rules: [
       {
         test: /\.(tsx?|js)$/,
-        use: [
-          'thread-loader',
-          {
-            loader: 'babel-loader',
-          },
-        ],
+        use: ['babel-loader'],
       },
       {
         test: /\.m?js$/,
