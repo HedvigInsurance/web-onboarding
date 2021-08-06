@@ -1,1 +1,1 @@
-window.analytics = {track:jest.fn(), identify:jest.fn()}
+window.analytics = { track: jest.fn(), identify: jest.fn() }

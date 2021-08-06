@@ -17,11 +17,8 @@ jest.mock('../apolloClient', () => ({
 }))
 
 import { Provider } from 'constate'
-import { mount } from 'enzyme'
 import React from 'react'
 
-import { act } from 'react-dom/test-utils'
-import { StaticRouter } from 'react-router-dom'
 import { Locale, UpdatePickedLocaleDocument } from 'data/graphql'
 import {
   createSession,
@@ -29,8 +26,8 @@ import {
   Session,
   SESSION_KEY,
 } from 'shared/sessionStorage'
+import { renderComponent, waitFor } from 'test/utils'
 import { apolloClient } from '../apolloClient'
-import { sleep } from '../utils/misc'
 import { MockStorage } from '../utils/storage/MockStorage'
 import {
   CREATE_SESSION_TOKEN_MUTATION,
@@ -38,31 +35,31 @@ import {
 } from './SessionContainer'
 
 it('picks up any stored session token in session without actually creating a new session', () => {
-  const wrapper = mount(
-    <StaticRouter location="/se/new-member" context={{}}>
-      <MockedProvider>
-        <Provider<{
-          storage: { session: IsomorphicSessionStorage<Session> }
-        }>
-          initialState={{
-            storage: {
-              session: createSession(
-                new MockStorage({
-                  [SESSION_KEY]: JSON.stringify({ token: 'abc123' }),
-                }),
-              ),
-            },
-          }}
-        >
-          <SessionContainer>
-            {(sessionToken) => <div>{sessionToken}</div>}
-          </SessionContainer>
-        </Provider>
-      </MockedProvider>
-    </StaticRouter>,
+  const token = 'abc123'
+  const { baseElement } = renderComponent(
+    <MockedProvider>
+      <Provider<{
+        storage: { session: IsomorphicSessionStorage<Session> }
+      }>
+        initialState={{
+          storage: {
+            session: createSession(
+              new MockStorage({
+                [SESSION_KEY]: JSON.stringify({ token }),
+              }),
+            ),
+          },
+        }}
+      >
+        <SessionContainer>
+          {(sessionToken) => <div>{sessionToken}</div>}
+        </SessionContainer>
+      </Provider>
+    </MockedProvider>,
+    { wrapperProps: { location: '/se/new-member' } },
   )
 
-  expect(wrapper.find('div').contains('abc123')).toBe(true)
+  expect(baseElement.textContent).toContain(token)
 })
 
 it('creates a new session', async () => {
@@ -96,35 +93,31 @@ it('creates a new session', async () => {
       },
     },
   ]
-  const wrapper = mount(
-    <StaticRouter location="/se/new-member" context={{}}>
-      <MockedProvider mocks={mocks}>
-        <Provider<{
-          storage: { session: IsomorphicSessionStorage<Session> }
-        }>
-          initialState={{
-            storage: {
-              session: createSession(
-                new MockStorage({
-                  [SESSION_KEY]: JSON.stringify({}),
-                }),
-              ),
-            },
-          }}
-        >
-          <SessionContainer>
-            {(sessionToken) => <div>{sessionToken}</div>}
-          </SessionContainer>
-        </Provider>
-      </MockedProvider>
-    </StaticRouter>,
+  const { baseElement } = renderComponent(
+    <MockedProvider mocks={mocks}>
+      <Provider<{
+        storage: { session: IsomorphicSessionStorage<Session> }
+      }>
+        initialState={{
+          storage: {
+            session: createSession(
+              new MockStorage({
+                [SESSION_KEY]: JSON.stringify({}),
+              }),
+            ),
+          },
+        }}
+      >
+        <SessionContainer>
+          {(sessionToken) => <div>{sessionToken}</div>}
+        </SessionContainer>
+      </Provider>
+    </MockedProvider>,
+    { wrapperProps: { location: '/se/new-member' } },
   )
 
-  expect(wrapper.find('div').contains('abc123')).toBe(false)
-  await act(() => sleep())
-  await act(() => sleep(2))
-  wrapper.update()
-  expect(wrapper.find('div').contains('abc123')).toBe(true)
+  expect(baseElement.textContent).not.toContain('abc123')
+  await waitFor(() => expect(baseElement.textContent).toContain('abc123'))
   expect(apolloClient!.subscriptionClient.close).toHaveBeenCalledWith(
     true,
     true,

@@ -10,12 +10,10 @@ jest.useFakeTimers()
 import { MockedResponse, MockLink } from '@apollo/react-testing'
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
 import { Provider } from 'constate'
-import { mount } from 'enzyme'
 import React from 'react'
-import { act } from 'react-dom/test-utils'
 import { StaticRouter } from 'react-router'
+import { render, act, waitFor } from '@testing-library/react'
 import { ExchangeTokenDocument } from 'data/graphql'
-import { nextTickAsync } from 'utils/misc'
 import { MockStorage } from 'utils/storage/MockStorage'
 import { StorageContext } from 'utils/StorageContainer'
 import possibleTypes from '../../../possibleGraphqlTypes.json'
@@ -23,31 +21,33 @@ import { createSession, Session } from '../../shared/sessionStorage'
 import { ExchangeTokenRetrieval } from './ExchangeTokenRetrieval'
 
 it("moves to taking too long when location doesn't have exchange-token", async () => {
-  const wrapper = mountWithApolloClient([], '')
+  const { baseElement } = renderWithApolloClient({
+    mocks: [],
+    token: '',
+  })
 
-  expect(wrapper.text()).toBe('Loading')
+  expect(baseElement.textContent).toBe('Loading')
 
-  await act(nextTickAsync)
   act(() => {
     jest.runTimersToTime(3001)
   })
-  await act(nextTickAsync)
-  wrapper.update()
-  expect(wrapper.text()).toBe('Loading')
+  expect(baseElement.textContent).toBe('Loading')
+
   act(() => {
     jest.runTimersToTime(15001)
   })
-  wrapper.update()
-  expect(wrapper.text()).toBe('TakingTooLong')
+  expect(baseElement.textContent).toBe('TakingTooLong')
 })
 
 it('exchanges valid token', async () => {
-  const wrapper = mountWithApolloClient(
-    [
+  const exchangeToken = 'the-token'
+
+  const { baseElement } = renderWithApolloClient({
+    mocks: [
       {
         request: {
           query: ExchangeTokenDocument,
-          variables: { exchangeToken: 'the-token' },
+          variables: { exchangeToken },
         },
         result: {
           data: {
@@ -59,29 +59,25 @@ it('exchanges valid token', async () => {
         },
       },
     ],
-    'the-token',
-  )
+    token: exchangeToken,
+  })
 
-  expect(wrapper.text()).toBe('Loading')
-  await act(nextTickAsync)
-  wrapper.update()
-  expect(wrapper.text()).toBe('Loading') // still fake loading
-
+  expect(baseElement.textContent).toBe('Loading')
   act(() => {
     jest.runTimersToTime(3001)
   })
-  await act(nextTickAsync)
-  wrapper.update()
-  expect(wrapper.text()).toBe('Success')
+  await waitFor(() => baseElement.textContent !== 'Loading')
+  expect(baseElement.textContent).toBe('Success')
 })
 
 it('shows invalid token on invalid token', async () => {
-  const wrapper = mountWithApolloClient(
-    [
+  const exchangeToken = 'invalid-token'
+  const { baseElement } = renderWithApolloClient({
+    mocks: [
       {
         request: {
           query: ExchangeTokenDocument,
-          variables: { exchangeToken: 'invalid-token' },
+          variables: { exchangeToken },
         },
         result: {
           data: {
@@ -93,26 +89,25 @@ it('shows invalid token on invalid token', async () => {
         },
       },
     ],
-    'invalid-token',
-  )
+    token: exchangeToken,
+  })
 
-  expect(wrapper.text()).toBe('Loading')
-  await act(nextTickAsync)
+  expect(baseElement.textContent).toBe('Loading')
   act(() => {
     jest.runTimersToTime(3001)
   })
-  await act(nextTickAsync)
-  wrapper.update()
-  expect(wrapper.text()).toBe('InvalidToken')
+  await waitFor(() => baseElement.textContent !== 'Loading')
+  expect(baseElement.textContent).toBe('InvalidToken')
 })
 
 it('shows expired token on expired token', async () => {
-  const wrapper = mountWithApolloClient(
-    [
+  const exchangeToken = 'expired-token'
+  const { baseElement } = renderWithApolloClient({
+    mocks: [
       {
         request: {
           query: ExchangeTokenDocument,
-          variables: { exchangeToken: 'expired-token' },
+          variables: { exchangeToken },
         },
         result: {
           data: {
@@ -124,20 +119,24 @@ it('shows expired token on expired token', async () => {
         },
       },
     ],
-    'expired-token',
-  )
+    token: exchangeToken,
+  })
 
-  expect(wrapper.text()).toBe('Loading')
-  await act(nextTickAsync)
+  expect(baseElement.textContent).toBe('Loading')
   act(() => {
     jest.runTimersToTime(3001)
   })
-  await act(nextTickAsync)
-  wrapper.update()
-  expect(wrapper.text()).toBe('ExpiredToken')
+  await waitFor(() => baseElement.textContent !== 'Loading')
+  expect(baseElement.textContent).toBe('ExpiredToken')
 })
 
-const mountWithApolloClient = (mocks: MockedResponse[], token: string) => {
+const renderWithApolloClient = ({
+  mocks,
+  token,
+}: {
+  mocks: MockedResponse[]
+  token: string
+}) => {
   const session = createSession<Session>(new MockStorage({}))
 
   const link = new MockLink(mocks, true)
@@ -151,7 +150,7 @@ const mountWithApolloClient = (mocks: MockedResponse[], token: string) => {
   const subscriptionClient = { close: jest.fn() } as any
   const httpLink = { options: { headers: {} } } as HttpLink
 
-  return mount(
+  return render(
     <StorageContext.Provider value={{ session }}>
       <Provider initialState={{ storage: { session } }}>
         <StaticRouter

@@ -1,15 +1,12 @@
 import { MockedProvider } from '@apollo/react-testing'
-import { mount } from 'enzyme'
 import React from 'react'
-import { act } from 'react-dom/test-utils'
 import { MemoryRouter, withRouter } from 'react-router-dom'
 import {
   handleIframeLoad,
   HandleIframeLoad,
   TrustlyModal,
 } from 'pages/ConnectPayment/components/TrustlyModal'
-import { nextTickAsync, sleep } from 'utils/misc'
-import { StaticTextKeyProvider } from 'utils/textKeys'
+import { renderComponent, fireEvent, waitFor } from 'test/utils'
 
 describe('HandleIframeLoad', () => {
   it('handles a successful load', async () => {
@@ -59,28 +56,26 @@ describe('HandleIframeLoad', () => {
 describe('TrustlyModal', () => {
   it('renders open with link without 💥', () => {
     const trustlyUrl = 'http://trustly.com/blah'
-    const wrapper = mount(
+    const result = renderComponent(
       <MemoryRouter
         initialEntries={[{ pathname: '/se/new-member/connect-payment' }]}
       >
         <MockedProvider>
-          <StaticTextKeyProvider>
-            <TrustlyModal
-              isOpen
-              // eslint-disable-next-line  @typescript-eslint/no-empty-function
-              setIsOpen={() => {}}
-              trustlyUrl={trustlyUrl}
-              generateTrustlyUrl={async () => 'blah'}
-            />
-          </StaticTextKeyProvider>
+          <TrustlyModal
+            isOpen
+            // eslint-disable-next-line  @typescript-eslint/no-empty-function
+            setIsOpen={() => {}}
+            trustlyUrl={trustlyUrl}
+            generateTrustlyUrl={async () => 'blah'}
+          />
         </MockedProvider>
       </MemoryRouter>,
     )
 
-    expect(wrapper.find('Header').text()).toBe(
-      'ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_TITLE',
-    )
-    expect(wrapper.find('iframe').prop('src')).toBe(trustlyUrl)
+    expect(
+      result.getByText('ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_TITLE'),
+    ).toBeInTheDocument()
+    expect(result.baseElement.querySelector('iframe')?.src).toBe(trustlyUrl)
   })
 
   it('redirects to success page and triggers onSuccess when iframe is successful', async () => {
@@ -99,37 +94,30 @@ describe('TrustlyModal', () => {
     }
     const onSuccess = jest.fn()
 
-    const wrapper = mount(
+    const result = renderComponent(
       <MemoryRouter
         initialEntries={[{ pathname: '/se/new-member/connect-payment' }]}
         initialIndex={0}
       >
         <MockedProvider>
-          <StaticTextKeyProvider>
-            <>
-              <TrustlyModal
-                isOpen
-                // eslint-disable-next-line  @typescript-eslint/no-empty-function
-                setIsOpen={() => {}}
-                trustlyUrl={trustlyUrl}
-                generateTrustlyUrl={async () => 'blah'}
-                handleIframeLoad={handleIframeLoadFn}
-                onSuccess={onSuccess}
-              />
-              <ShowPath />
-            </>
-          </StaticTextKeyProvider>
+          <>
+            <TrustlyModal
+              isOpen
+              // eslint-disable-next-line  @typescript-eslint/no-empty-function
+              setIsOpen={() => {}}
+              trustlyUrl={trustlyUrl}
+              generateTrustlyUrl={async () => 'blah'}
+              handleIframeLoad={handleIframeLoadFn}
+              onSuccess={onSuccess}
+            />
+            <ShowPath />
+          </>
         </MockedProvider>
       </MemoryRouter>,
     )
 
-    await act(async () => {
-      wrapper.find('iframe').simulate('load')
-      await nextTickAsync()
-      wrapper.update()
-    })
-
-    expect(wrapper.find(ShowPath).text()).toBe('/se/new-member/download')
+    fireEvent(result.baseElement.querySelector('iframe')!, new Event('load'))
+    await result.findByText('/se/new-member/download')
     expect(onSuccess).toHaveBeenCalledTimes(1)
   })
 
@@ -137,30 +125,32 @@ describe('TrustlyModal', () => {
     const trustlyUrl = 'https://trustly.com/blah'
 
     Object.defineProperty(window, 'location', {
-      value: { assign: jest.fn() },
+      value: {
+        assign: jest.fn(),
+      },
     })
     const mockTrustlyIframe = window.document.createElement('iframe')
     mockTrustlyIframe.setAttribute('src', 'https://trustly.com')
     window.document.body.append(mockTrustlyIframe)
 
-    mount(
+    renderComponent(
       <MemoryRouter
-        initialEntries={[{ pathname: '/se/new-member/connect-payment' }]}
+        initialEntries={[
+          {
+            pathname: '/se/new-member/connect-payment',
+          },
+        ]}
         initialIndex={0}
       >
         <MockedProvider>
-          <StaticTextKeyProvider>
-            <>
-              <TrustlyModal
-                isOpen
-                // eslint-disable-next-line  @typescript-eslint/no-empty-function
-                setIsOpen={() => {}}
-                trustlyUrl={trustlyUrl}
-                generateTrustlyUrl={async () => trustlyUrl}
-                handleIframeLoad={() => () => Promise.resolve()}
-              />
-            </>
-          </StaticTextKeyProvider>
+          <TrustlyModal
+            isOpen
+            // eslint-disable-next-line  @typescript-eslint/no-empty-function
+            setIsOpen={() => {}}
+            trustlyUrl={trustlyUrl}
+            generateTrustlyUrl={async () => trustlyUrl}
+            handleIframeLoad={() => () => Promise.resolve()}
+          />
         </MockedProvider>
       </MemoryRouter>,
     )
@@ -173,8 +163,12 @@ describe('TrustlyModal', () => {
       JSON.stringify(trustlyMessage),
       '*',
     )
-    await sleep(10) // wait for postmessage to propagate
 
-    expect(window.location.assign).toHaveBeenCalledWith(trustlyMessage.appURL)
+    // wait for postmessage to propagate
+    await waitFor(() =>
+      expect(window.location.assign).toHaveBeenCalledWith(
+        trustlyMessage.appURL,
+      ),
+    )
   })
 })

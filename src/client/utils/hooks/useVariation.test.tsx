@@ -1,44 +1,30 @@
-import { mount } from 'enzyme'
-import React from 'react'
-import { StaticRouter } from 'react-router'
 import { useVariation } from 'utils/hooks/useVariation'
+import { renderHook } from 'test/utils'
 
-const VariationShower: React.FC = () => {
-  const variation = useVariation()
-
-  return <>{variation}</>
-}
-
-it('returns null on no variation', () => {
-  const wrapper = mount(
-    <StaticRouter location="/a-path?variation=blargh">
-      <VariationShower />
-    </StaticRouter>,
-  )
-  expect(wrapper.find(VariationShower).text()).toBe('')
+it('returns null on invalid variation', () => {
+  const { result } = renderHook(() => useVariation(), {
+    initialProps: { location: '/a-path?variation=blargh' },
+  })
+  expect(result.current).toBe(null)
 })
 
 it('returns ios on ios variation, case insensitively', () => {
-  const wrapper = mount(
-    <StaticRouter location="/a-path?variation=IOS">
-      <VariationShower />
-    </StaticRouter>,
-  )
-  expect(wrapper.find(VariationShower).text()).toBe('ios')
+  const { result } = renderHook(() => useVariation(), {
+    initialProps: { location: '/a-path?variation=IOS' },
+  })
+  expect(result.current).toBe('ios')
 })
 
 it('stores and retrieves variations in sessionStorage', async () => {
-  mount(
-    <StaticRouter location="/a-path?variation=IOS">
-      <VariationShower />
-    </StaticRouter>,
-  )
+  renderHook(() => useVariation(), {
+    initialProps: { location: '/a-path?variation=IOS' },
+  })
+
   expect(sessionStorage.getItem('hvg:variation')).toBe('"ios"')
 
-  const wrapperWithoutVariationQuery = mount(
-    <StaticRouter location="/a-path">
-      <VariationShower />
-    </StaticRouter>,
-  )
-  expect(wrapperWithoutVariationQuery.find(VariationShower).text()).toBe('ios')
+  const { result } = renderHook(() => useVariation(), {
+    initialProps: { location: '/a-path' },
+  })
+
+  expect(result.current).toBe('ios')
 })

@@ -1,8 +1,6 @@
-import { mount } from 'enzyme'
 import React from 'react'
-import { act } from 'react-dom/test-utils'
-import { nextTickAsync } from './misc'
-import { makeTextKeyResolver, TextKeyProvider, useTextKeys } from './textKeys'
+import { renderHook } from '../test/utils'
+import { makeTextKeyResolver, useTextKeys, TextKeyProvider } from './textKeys'
 
 describe('useTextKeys', () => {
   describe('resolver', () => {
@@ -32,40 +30,25 @@ describe('useTextKeys', () => {
 
 describe('TextKeyProvider', () => {
   it('lazy loads text keys and shows correct text', async () => {
-    const Component = () => {
-      const textKeys = useTextKeys()
-
-      return <>{textKeys.YES()}</>
-    }
-
-    const wrapper = mount(
-      <TextKeyProvider locale="en">
-        <Component />
-      </TextKeyProvider>,
-    )
-
-    await act(() => nextTickAsync())
-    wrapper.update()
-
-    expect(wrapper.text()).toBe('Yes')
+    const { result, waitForNextUpdate } = renderHook(useTextKeys, {
+      wrapper: (props) => <TextKeyProvider locale="en" {...props} />,
+    })
+    await waitForNextUpdate()
+    expect(result.current.YES()).toBe('Yes')
   })
 
   it('enables debug mode', async () => {
-    const Component = () => {
-      const textKeys = useTextKeys()
+    const { result, waitForNextUpdate } = renderHook(useTextKeys, {
+      wrapper: (props) => (
+        <TextKeyProvider
+          locale="en"
+          locationSearch="?debug=textkeys"
+          {...props}
+        />
+      ),
+    })
 
-      return <>{textKeys.YES()}</>
-    }
-
-    const wrapper = mount(
-      <TextKeyProvider locale="en" locationSearch="?debug=textkeys">
-        <Component />
-      </TextKeyProvider>,
-    )
-
-    await act(() => nextTickAsync())
-    wrapper.update()
-
-    expect(wrapper.text()).toBe('YES')
+    await waitForNextUpdate()
+    expect(result.current.YES()).toBe('YES')
   })
 })
