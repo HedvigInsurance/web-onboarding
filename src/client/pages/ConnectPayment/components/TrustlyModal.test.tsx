@@ -6,7 +6,6 @@ import {
   HandleIframeLoad,
   TrustlyModal,
 } from 'pages/ConnectPayment/components/TrustlyModal'
-import { StaticTextKeyProvider } from 'utils/textKeys'
 import { renderComponent, fireEvent, waitFor } from 'test/utils'
 
 describe('HandleIframeLoad', () => {
@@ -62,15 +61,13 @@ describe('TrustlyModal', () => {
         initialEntries={[{ pathname: '/se/new-member/connect-payment' }]}
       >
         <MockedProvider>
-          <StaticTextKeyProvider>
-            <TrustlyModal
-              isOpen
-              // eslint-disable-next-line  @typescript-eslint/no-empty-function
-              setIsOpen={() => {}}
-              trustlyUrl={trustlyUrl}
-              generateTrustlyUrl={async () => 'blah'}
-            />
-          </StaticTextKeyProvider>
+          <TrustlyModal
+            isOpen
+            // eslint-disable-next-line  @typescript-eslint/no-empty-function
+            setIsOpen={() => {}}
+            trustlyUrl={trustlyUrl}
+            generateTrustlyUrl={async () => 'blah'}
+          />
         </MockedProvider>
       </MemoryRouter>,
     )
@@ -103,20 +100,18 @@ describe('TrustlyModal', () => {
         initialIndex={0}
       >
         <MockedProvider>
-          <StaticTextKeyProvider>
-            <>
-              <TrustlyModal
-                isOpen
-                // eslint-disable-next-line  @typescript-eslint/no-empty-function
-                setIsOpen={() => {}}
-                trustlyUrl={trustlyUrl}
-                generateTrustlyUrl={async () => 'blah'}
-                handleIframeLoad={handleIframeLoadFn}
-                onSuccess={onSuccess}
-              />
-              <ShowPath />
-            </>
-          </StaticTextKeyProvider>
+          <>
+            <TrustlyModal
+              isOpen
+              // eslint-disable-next-line  @typescript-eslint/no-empty-function
+              setIsOpen={() => {}}
+              trustlyUrl={trustlyUrl}
+              generateTrustlyUrl={async () => 'blah'}
+              handleIframeLoad={handleIframeLoadFn}
+              onSuccess={onSuccess}
+            />
+            <ShowPath />
+          </>
         </MockedProvider>
       </MemoryRouter>,
     )
@@ -148,18 +143,14 @@ describe('TrustlyModal', () => {
         initialIndex={0}
       >
         <MockedProvider>
-          <StaticTextKeyProvider>
-            <>
-              <TrustlyModal
-                isOpen
-                // eslint-disable-next-line  @typescript-eslint/no-empty-function
-                setIsOpen={() => {}}
-                trustlyUrl={trustlyUrl}
-                generateTrustlyUrl={async () => trustlyUrl}
-                handleIframeLoad={() => () => Promise.resolve()}
-              />
-            </>
-          </StaticTextKeyProvider>
+          <TrustlyModal
+            isOpen
+            // eslint-disable-next-line  @typescript-eslint/no-empty-function
+            setIsOpen={() => {}}
+            trustlyUrl={trustlyUrl}
+            generateTrustlyUrl={async () => trustlyUrl}
+            handleIframeLoad={() => () => Promise.resolve()}
+          />
         </MockedProvider>
       </MemoryRouter>,
     )
