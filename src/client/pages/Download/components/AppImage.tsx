@@ -6,33 +6,50 @@ type Props = {
   width: number
 }
 
-const Image = styled.img<Props>`
-  width: ${({ width }) => width}px;
+const Image = styled.img<{ imageWidth: Props['width'] }>`
+  width: ${({ imageWidth }) => imageWidth}px;
   max-width: 100%;
   height: auto;
 `
 
-const getImageSrc = (currentLocale: string) => {
+const getImageProps = (currentLocale: string) => {
   const basePath = '/new-member-assets/download'
 
   switch (currentLocale) {
     case 'se':
-      return `${basePath}/hedvig-app-se.png`
+      return {
+        src: `${basePath}/hedvig-app-se.png`,
+        width: 1660,
+        height: 1400,
+      }
     case 'no':
-      return `${basePath}/hedvig-app-no.png`
+      return {
+        src: `${basePath}/hedvig-app-no.png`,
+        width: 1660,
+        height: 1400,
+      }
     case 'dk':
-      return `${basePath}/hedvig-connect-payment-dk.png`
+      return {
+        src: `${basePath}/hedvig-app-dk.png`,
+        width: 755,
+        height: 761,
+      }
     case 'dk-en':
-      return `${basePath}/hedvig-connect-payment-dk-en.png`
+      return {
+        src: `${basePath}/hedvig-app-dk-en.png`,
+        width: 755,
+        height: 761,
+      }
     default:
-      return `${basePath}/hedvig-app-en.png`
+      return {
+        src: `${basePath}/hedvig-app-en.png`,
+        width: 1660,
+        height: 1400,
+      }
   }
 }
 
 export const AppImage: React.FC<Props> = ({ width }) => {
   const currentLocale = useCurrentLocale()
-
-  const imageSrc = getImageSrc(currentLocale)
-
-  return <Image width={width} src={imageSrc} />
+  return <Image {...getImageProps(currentLocale)} imageWidth={width} />
 }

@@ -113,7 +113,7 @@ export const PerilItem: React.FC<PerilItemProps> = ({
   return (
     <OuterContainer>
       <Container onClick={onClick}>
-        {iconUrl && <PerilIcon src={iconUrl} />}
+        {iconUrl && <PerilIcon src={iconUrl} alt="" width={24} height={24} />}
         <Title>{title}</Title>
       </Container>
     </OuterContainer>
