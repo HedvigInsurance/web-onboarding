@@ -90,6 +90,7 @@ export const helmet = koaHelmet({
         "'unsafe-inline'",
         "'self'",
         'checkoutshopper-live.adyen.com',
+        'https://tagmanager.google.com',
         'https://www.googletagmanager.com',
         'https://fonts.googleapis.com',
         'https://optimize.google.com',
