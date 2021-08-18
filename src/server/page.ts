@@ -40,6 +40,7 @@ const clientConfig: ClientConfig = {
 const template = (
   route: ServerSideRoute,
   locale: string,
+  cspNonce: string,
   adtractionTag: string | null,
   code: string | null,
 ) => {
@@ -68,20 +69,24 @@ const template = (
      />
      <meta name="google-site-verification" content="AZ5rW7lm8fgkGEsSI8BbV4i45ylXAnGEicXf6HPQE-Q" />
 
-    <script>
+    <script nonce="${cspNonce}">
       dataLayer = [];
     </script>
 
     <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    <script id="gtmScript" nonce="${cspNonce}" data-nonce="${cspNonce}">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;j.setAttribute('nonce','${cspNonce}');f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-WWMKHK5');</script>
     <!-- End Google Tag Manager -->
 
-    <script key="segment-snippet">${segmentSnippet}</script>
-    ${adtractionTag ? `<script defer src="${adtractionTag}"></script>` : ''}
+    <script key="segment-snippet" nonce="${cspNonce}">${segmentSnippet}</script>
+    ${
+      adtractionTag
+        ? `<script nonce="${cspNonce}" defer src="${adtractionTag}"></script>`
+        : ''
+    }
   </head>
   <body>
     <!-- Google Tag Manager (noscript) -->
@@ -91,14 +96,14 @@ const template = (
 
     <div id="react-root"></div>
 
-    <script>
+    <script nonce="${cspNonce}">
       Object.defineProperty(window, 'hedvigClientConfig', {
         value: Object.freeze(${JSON.stringify(clientConfig)}),
         writable: false,
       })
     </script>
     ${getClientScripts()
-      .map((script) => `<script src="${script}"></script>`)
+      .map((script) => `<script nonce="${cspNonce}" src="${script}"></script>`)
       .join('')}
   </body>
   </html>
@@ -148,6 +153,7 @@ export const getPage = (
   ctx.body = template(
     route,
     ctx.params.locale,
+    (ctx.res as any).cspNonce,
     adtractionScript,
     ctx.params.code ?? null,
   )
