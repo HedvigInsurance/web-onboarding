@@ -364,7 +364,12 @@ export const PerilModal: React.FC<PerilModalProps & ModalProps> = ({
                   setCurrentPeril(index % tripledPerils.length)
                 }
               >
-                <img src={getIconUrl(peril.icon.variants.light.svgUrl)} />
+                <img
+                  src={getIconUrl(peril.icon.variants.light.svgUrl)}
+                  alt=""
+                  width={24}
+                  height={24}
+                />
                 <PickerItemLabel>{peril.title}</PickerItemLabel>
               </PickerItem>
             ))}

@@ -1,28 +1,27 @@
 import { MockedProvider } from '@apollo/react-testing'
-import { mount } from 'enzyme'
 import React from 'react'
-import { act } from 'react-dom/test-utils'
-import { StaticRouter } from 'react-router'
-import { Button } from 'components/buttons'
-import { sleep } from 'utils/misc'
+import userEvent from '@testing-library/user-event'
 import { StaticTextKeyProvider } from 'utils/textKeys'
+import { renderComponent, waitFor } from 'test/utils'
 import { REGISTER_DIRECT_DEBIT_MUTATION } from '../containers/RegisterDirectDebitMutation'
 import { TrustlyCheckout } from './TrustlyCheckout'
-import { TrustlyModal } from './TrustlyModal'
 
 it('renders without 💥', () => {
-  const wrapper = mount(
-    <StaticRouter location="http://localhost:8040/se/new-member/connect-payment">
-      <StaticTextKeyProvider>
-        <MockedProvider>
-          <TrustlyCheckout />
-        </MockedProvider>
-      </StaticTextKeyProvider>
-    </StaticRouter>,
+  const { getByRole, queryByText } = renderComponent(
+    <StaticTextKeyProvider>
+      <MockedProvider>
+        <TrustlyCheckout />
+      </MockedProvider>
+    </StaticTextKeyProvider>,
+    {
+      wrapperProps: {
+        location: 'http://localhost:8040/se/new-member/connect-payment',
+      },
+    },
   )
 
-  expect(wrapper.find(Button).text()).toBe('ONBOARDING_CONNECT_DD_CTA')
-  expect(wrapper.find(TrustlyModal).prop('isOpen')).toBe(false)
+  expect(getByRole('button').textContent).toBe('ONBOARDING_CONNECT_DD_CTA')
+  expect(queryByText('ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_TITLE')).toBeNull()
 })
 
 it('opens trustly modal and renders correct iframe url', async () => {
@@ -33,46 +32,42 @@ it('opens trustly modal and renders correct iframe url', async () => {
   // @ts-ignore
   window.location = new URL(location)
 
-  const wrapper = mount(
-    <StaticRouter location={basePath}>
-      <MockedProvider
-        mocks={[
-          {
-            request: {
-              query: REGISTER_DIRECT_DEBIT_MUTATION,
-              variables: {
-                clientContext: {
-                  successUrl: location + '/success',
-                  failureUrl: location + '/fail',
-                },
-              },
-            },
-            result: {
-              data: {
-                registerDirectDebit: {
-                  orderId: 'abc123',
-                  url: trustlyUrl,
-                  __typename: 'DirectDebitResponse',
-                },
+  const { getByRole, getByText } = renderComponent(
+    <MockedProvider
+      mocks={[
+        {
+          request: {
+            query: REGISTER_DIRECT_DEBIT_MUTATION,
+            variables: {
+              clientContext: {
+                successUrl: location + '/success',
+                failureUrl: location + '/fail',
               },
             },
           },
-        ]}
-      >
-        <StaticTextKeyProvider>
-          <TrustlyCheckout />
-        </StaticTextKeyProvider>
-      </MockedProvider>
-    </StaticRouter>,
+          result: {
+            data: {
+              registerDirectDebit: {
+                orderId: 'abc123',
+                url: trustlyUrl,
+                __typename: 'DirectDebitResponse',
+              },
+            },
+          },
+        },
+      ]}
+    >
+      <StaticTextKeyProvider>
+        <TrustlyCheckout />
+      </StaticTextKeyProvider>
+    </MockedProvider>,
+    { wrapperProps: { location: basePath } },
   )
 
-  wrapper.find(Button).simulate('click')
-
-  await act(() => sleep(1))
-  act(() => {
-    wrapper.update()
-  })
-
-  expect(wrapper.find(TrustlyModal).prop('isOpen')).toBe(true)
-  expect(wrapper.find(TrustlyModal).prop('trustlyUrl')).toBe(trustlyUrl)
+  userEvent.click(getByRole('button'))
+  await waitFor(() =>
+    expect(
+      getByText('ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_TITLE'),
+    ).toBeInTheDocument(),
+  )
 })

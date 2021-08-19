@@ -56,6 +56,7 @@ const ImageContainer = styled.div`
 `
 const ConnectPaymentImage = styled.img`
   max-width: 40vw;
+  height: auto;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     width: 100%;
@@ -151,6 +152,9 @@ export const ConnectPaymentPage: React.FC = () => {
             src={
               '/new-member-assets/connect-payment/connect-payments-illustration-mono.svg'
             }
+            alt=""
+            width={637}
+            height={600}
           />
         </ImageContainer>
         <TextContainer>
