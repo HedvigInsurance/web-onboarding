@@ -6,9 +6,10 @@ import { OfferPersonInfo, OfferQuote } from 'pages/OfferNew/types'
 import {
   getFormattedBirthdate,
   getHouseholdSize,
-  insuranceTypeTextKeys,
+  typeOfResidenceTextKeys,
   isStudent,
   quoteDetailsHasAddress,
+  HomeInsuranceTypeOfContract,
 } from 'pages/OfferNew/utils'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
@@ -154,7 +155,7 @@ const getQuoteDetails = (
   const { quoteDetails, contractType } = mainQuote
 
   const typeOfResidenceTextKey =
-    insuranceTypeTextKeys[contractType].typeOfResidence
+    typeOfResidenceTextKeys[contractType as HomeInsuranceTypeOfContract]
 
   const detailsGroups: DetailsGroup[] = []
 

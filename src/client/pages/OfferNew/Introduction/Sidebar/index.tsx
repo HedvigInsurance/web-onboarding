@@ -4,7 +4,6 @@ import { colorsV3, HedvigSymbol } from '@hedviginsurance/brand'
 import { CookieStorage } from 'cookie-storage'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 import { Button, TextButton } from 'components/buttons'
-import { Market, useMarket } from 'components/utils/CurrentLocale'
 import {
   useRedeemCodeMutation,
   useRedeemedCampaignsQuery,
@@ -93,10 +92,6 @@ const Header = styled.div`
   }
 `
 
-const PreTitle = styled.span`
-  display: block;
-`
-
 const Title = styled.h3`
   width: 100%;
   margin: 0 1rem 0 0;
@@ -145,7 +140,6 @@ export const Sidebar: React.FC<Props> = ({
   onCheckoutOpen,
 }) => {
   const textKeys = useTextKeys()
-  const market = useMarket()
   const [discountCodeModalIsOpen, setDiscountCodeModalIsOpen] = useState(false)
   const [isSidebarVisible, setIsSidebarVisible] = useState(true)
 
@@ -205,12 +199,7 @@ export const Sidebar: React.FC<Props> = ({
               </HeaderTop>
 
               <Header>
-                <Title>
-                  {market === Market.Se && (
-                    <PreTitle>{textKeys.SIDEBAR_INSURANCE_LABEL_SE()}</PreTitle>
-                  )}
-                  {getInsuranceTitle(offerData, textKeys)}
-                </Title>
+                <Title>{getInsuranceTitle(offerData, textKeys)}</Title>
 
                 <Price
                   isDiscountPrice={

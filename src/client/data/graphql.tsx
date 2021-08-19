@@ -7906,9 +7906,14 @@ export type QuoteBundle = {
   inception: QuoteBundleInception
   frequentlyAskedQuestions: Array<Faq>
   appConfiguration: QuoteBundleAppConfiguration
+  displayName: Scalars['String']
 }
 
 export type QuoteBundleFrequentlyAskedQuestionsArgs = {
+  locale: Locale
+}
+
+export type QuoteBundleDisplayNameArgs = {
   locale: Locale
 }
 
@@ -7916,6 +7921,13 @@ export type QuoteBundleAppConfiguration = {
   __typename?: 'QuoteBundleAppConfiguration'
   showCampaignManagement: Scalars['Boolean']
   title: QuoteBundleAppConfigurationTitle
+  gradientOption: QuoteBundleAppConfigurationGradientOption
+}
+
+export enum QuoteBundleAppConfigurationGradientOption {
+  GradientOne = 'GRADIENT_ONE',
+  GradientTwo = 'GRADIENT_TWO',
+  GradientThree = 'GRADIENT_THREE',
 }
 
 export enum QuoteBundleAppConfigurationTitle {
@@ -9980,6 +9992,7 @@ export type QuoteBundleQuery = { __typename?: 'Query' } & {
         | 'expiresAt'
         | 'email'
         | 'typeOfContract'
+        | 'displayName'
       > & {
           currentInsurer?: Maybe<
             { __typename?: 'CurrentInsurer' } & Pick<
@@ -11174,6 +11187,7 @@ export const QuoteBundleDocument = gql`
         expiresAt
         email
         typeOfContract
+        displayName(locale: $locale)
         perils(locale: $locale) {
           title
           description

@@ -20,12 +20,7 @@ import { LoadingDots } from 'components/LoadingDots/LoadingDots'
 import { useRemoveStartDateMutation, useStartDateMutation } from 'data/graphql'
 import { CancellationOptions } from 'pages/OfferNew/Introduction/Sidebar/CancellationOptions'
 import { OfferData, OfferQuote } from 'pages/OfferNew/types'
-import {
-  hasCurrentInsurer,
-  insuranceTypeTextKeys,
-  isBundle,
-  isDanish,
-} from 'pages/OfferNew/utils'
+import { hasCurrentInsurer, isBundle, isDanish } from 'pages/OfferNew/utils'
 import { useTextKeys } from 'utils/textKeys'
 import { Size } from 'components/types'
 import { gqlDateFormat } from './utils'
@@ -302,11 +297,7 @@ const DateForm: React.FC<{
 
   return (
     <RowButtonWrapper>
-      {isSplit && (
-        <StartDateRowLabel>
-          {textKeys[insuranceTypeTextKeys[quote.contractType].typeOfContract]()}
-        </StartDateRowLabel>
-      )}
+      {isSplit && <StartDateRowLabel>{quote.displayName}</StartDateRowLabel>}
       <RowButton
         datePickerOpen={datePickerOpen}
         onClick={() => setDatePickerOpen(!datePickerOpen)}
