@@ -1,6 +1,6 @@
 import md5 from 'md5'
-import { TypeOfContract } from 'src/client/data/graphql'
-import { OfferData } from 'src/client/pages/OfferNew/types'
+import { TypeOfContract } from 'data/graphql'
+import { OfferData } from 'pages/OfferNew/types'
 import {
   isBundle,
   isNorwegian,
@@ -8,7 +8,7 @@ import {
   isDanishAccidentBundle,
   isStudentOffer,
   isDanishTravelBundle,
-} from 'src/client/pages/OfferNew/utils'
+} from 'pages/OfferNew/utils'
 import { NoComboTypes, DkBundleTypes } from './tracking'
 
 type TypeOfContractExcludedUnused = Exclude<
