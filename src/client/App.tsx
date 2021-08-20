@@ -13,10 +13,12 @@ import {
   StorageState,
   WithStorageProps,
 } from './utils/StorageContainer'
+import { usePageview } from './utils/tracking/gtm'
 
 export const App: React.ComponentType<StorageState> = ({ session }) => {
   const currentLocale = useCurrentLocale()
   const history = useHistory()
+  usePageview()
 
   return (
     <>

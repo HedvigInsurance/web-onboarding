@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { useLocation } from 'react-router'
 import { TypeOfContract } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import { captureSentryError } from 'utils/sentry-client'
@@ -5,7 +7,7 @@ import { getContractType, DkBundleTypes, NoComboTypes } from './tracking'
 
 type GAContractType = NoComboTypes | DkBundleTypes | TypeOfContract
 
-interface GTMOfferData {
+type GTMOfferData = {
   insurance_type: GAContractType
   referral_code: 'yes' | 'no'
   number_of_people: number
@@ -14,9 +16,32 @@ interface GTMOfferData {
   member_id?: string
 }
 
-export interface DataLayerObject {
+type GTMPageData = {
+  page: string
+  search?: string
+}
+
+type DataLayerObject = {
   event: string
   offerData?: GTMOfferData
+  pageData?: GTMPageData
+}
+
+/**
+ * Track virtual page view when route changes
+ */
+export const usePageview = () => {
+  const location = useLocation()
+
+  useEffect(() => {
+    pushToGTMDataLayer({
+      event: 'virtual_page_view',
+      pageData: {
+        page: location.pathname,
+        search: location.search,
+      },
+    })
+  }, [location])
 }
 
 const pushToGTMDataLayer = (obj: DataLayerObject) => {
