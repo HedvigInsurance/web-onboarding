@@ -19,6 +19,7 @@ type GTMOfferData = {
 type GTMPageData = {
   page: string
   search?: string
+  title: string
 }
 
 type DataLayerObject = {
@@ -39,6 +40,7 @@ export const usePageview = () => {
       pageData: {
         page: location.pathname,
         search: location.search,
+        title: document.title,
       },
     })
   }, [location])
