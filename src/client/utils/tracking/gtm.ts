@@ -3,6 +3,7 @@ import { useLocation } from 'react-router'
 import { TypeOfContract } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import { captureSentryError } from 'utils/sentry-client'
+import { useMarket } from 'components/utils/CurrentLocale'
 import { getContractType, DkBundleTypes, NoComboTypes } from './tracking'
 
 type GAContractType = NoComboTypes | DkBundleTypes | TypeOfContract
@@ -20,6 +21,7 @@ type GTMPageData = {
   page: string
   search?: string
   title: string
+  market: string
 }
 
 type DataLayerObject = {
@@ -33,6 +35,7 @@ type DataLayerObject = {
  */
 export const usePageview = () => {
   const location = useLocation()
+  const market = useMarket().toLowerCase()
 
   useEffect(() => {
     pushToGTMDataLayer({
@@ -41,9 +44,10 @@ export const usePageview = () => {
         page: location.pathname,
         search: location.search,
         title: document.title,
+        market: market,
       },
     })
-  }, [location])
+  }, [location, market])
 }
 
 const pushToGTMDataLayer = (obj: DataLayerObject) => {
