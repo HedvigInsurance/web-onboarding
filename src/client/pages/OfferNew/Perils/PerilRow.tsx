@@ -1,27 +1,31 @@
 import React from 'react'
+import styled from '@emotion/styled'
 import { InsuranceValues } from 'pages/OfferNew/Perils/InsuranceValues'
 import { PerilCollection } from 'pages/OfferNew/Perils/PerilCollection'
 import { PerilModal } from 'pages/OfferNew/Perils/PerilModal'
 import { OfferQuote } from 'pages/OfferNew/types'
-import { useTextKeys } from 'utils/textKeys'
-import { insuranceTypeTextKeys } from '../utils'
+import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
-interface Props {
+const InsuranceTypeHeadline = styled.div`
+  padding: 16px 0;
+  font-size: 1.375rem;
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    font-size: 1.5rem;
+  }
+`
+
+type Props = {
   offerQuote: OfferQuote
 }
 
 export const PerilRow: React.FC<Props> = ({ offerQuote }) => {
   const [isShowingPeril, setIsShowingPeril] = React.useState(false)
   const [currentPeril, setCurrentPeril] = React.useState(0)
-  const textKeys = useTextKeys()
 
   return (
     <>
-      <h3>
-        {textKeys[
-          insuranceTypeTextKeys[offerQuote.contractType].typeOfContract
-        ]()}
-      </h3>
+      <InsuranceTypeHeadline>{offerQuote.displayName}</InsuranceTypeHeadline>
       <PerilCollection
         perils={offerQuote.perils}
         setCurrentPeril={setCurrentPeril}

@@ -43,6 +43,7 @@ export type InsuranceTerms = ReadonlyMap<InsuranceTermType, InsuranceTerm>
 export type OfferQuote = Pick<
   BundledQuote,
   | 'id'
+  | 'displayName'
   | 'startDate'
   | 'quoteDetails'
   | 'dataCollectionId'

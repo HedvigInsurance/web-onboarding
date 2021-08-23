@@ -1,6 +1,5 @@
 import styled from '@emotion/styled'
 import React from 'react'
-import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { useEditQuoteMutation, useRedeemedCampaignsQuery } from 'data/graphql'
 import { Price } from 'pages/OfferNew/components'
 import { useTextKeys } from 'utils/textKeys'
@@ -57,10 +56,6 @@ const InsuranceHeading = styled.h3`
     font-size: 1.5rem;
     line-height: 2rem;
   }
-
-  span {
-    display: block;
-  }
 `
 
 interface Props {
@@ -79,7 +74,6 @@ export const CheckoutContent: React.FC<Props> = ({
   onSubmit,
 }) => {
   const textKeys = useTextKeys()
-  const market = useMarket()
   const redeemedCampaignsQuery = useRedeemedCampaignsQuery()
   const isDiscountPrice = isMonthlyCostDeduction(
     redeemedCampaignsQuery.data?.redeemedCampaigns ?? [],
@@ -101,10 +95,7 @@ export const CheckoutContent: React.FC<Props> = ({
       <Section>
         <Excerpt>
           <InsuranceHeading>
-            {market === Market.Se && (
-              <span>{textKeys.SIDEBAR_INSURANCE_LABEL_SE()}</span>
-            )}
-            <span>{getInsuranceTitle(offerData, textKeys)}</span>
+            {getInsuranceTitle(offerData, textKeys)}
           </InsuranceHeading>
           <div>
             <Price

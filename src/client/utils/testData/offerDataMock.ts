@@ -180,6 +180,7 @@ export const seApartementBrf: OfferData = {
   quotes: [
     {
       id: '187b050d-2096-4c0e-9afb-f3f20bcaf887',
+      displayName: 'Hemförsäkring Bostadsrätt',
       startDate: null,
       quoteDetails: {
         street: 'Testgatan 23',
@@ -234,6 +235,7 @@ export const noComboYouth: OfferData = {
   quotes: [
     {
       id: '187b050d-2096-4c0e-9afb-f3f20bcaf887',
+      displayName: 'Reiseforsikring Ungdom',
       startDate: null,
       quoteDetails: {
         coInsured: 0,
@@ -249,6 +251,7 @@ export const noComboYouth: OfferData = {
     },
     {
       id: '86f0a15d-6aed-4051-9ec2-fee1daccfb29',
+      displayName: 'Innboforsikring Ungdom',
       startDate: null,
       quoteDetails: {
         coInsured: 0,
@@ -304,6 +307,7 @@ export const noCombo: OfferData = {
   quotes: [
     {
       id: '187b050d-2096-4c0e-9afb-f3f20bcaf887',
+      displayName: 'Reiseforsikring',
       startDate: null,
       quoteDetails: {
         coInsured: 0,
@@ -319,6 +323,7 @@ export const noCombo: OfferData = {
     },
     {
       id: '86f0a15d-6aed-4051-9ec2-fee1daccfb29',
+      displayName: 'Innboforsikring',
       startDate: null,
       quoteDetails: {
         coInsured: 0,
@@ -374,6 +379,7 @@ export const noTravel: OfferData = {
   quotes: [
     {
       id: '187b050d-2096-4c0e-9afb-f3f20bcaf887',
+      displayName: 'Reiseforsikring',
       startDate: '2021-04-16',
       quoteDetails: {
         coInsured: 1,
@@ -424,6 +430,7 @@ export const dkHomeContentOwn: OfferData = {
   quotes: [
     {
       id: '187b050d-2096-4c0e-9afb-f3f20bcaf887',
+      displayName: 'Indboforsikring',
       startDate: null,
       quoteDetails: {
         street: 'Testgatan 23',
@@ -479,6 +486,7 @@ export const dkHomeContentAccident: OfferData = {
   quotes: [
     {
       id: '187b050d-2096-4c0e-9afb-f3f20bcaf887',
+      displayName: 'Indboforsikring',
       startDate: null,
       quoteDetails: {
         street: 'Testgatan 23',
@@ -498,6 +506,7 @@ export const dkHomeContentAccident: OfferData = {
     },
     {
       id: '86f0a15d-6aed-4051-9ec2-fee1daccfb29',
+      displayName: 'Ulykkesforsikring',
       startDate: null,
       quoteDetails: {
         street: 'Testgatan 23',
@@ -551,6 +560,7 @@ export const dkHomeContentAccidentTravel: OfferData = {
   quotes: [
     {
       id: '187b050d-2096-4c0e-9afb-f3f20bcaf887',
+      displayName: 'Indboforsikring',
       startDate: null,
       quoteDetails: {
         street: 'Theodore Roosevelts Vej 1',
@@ -573,6 +583,7 @@ export const dkHomeContentAccidentTravel: OfferData = {
     },
     {
       id: '86f0a15d-6aed-4051-9ec2-fee1daccfb29',
+      displayName: 'Ulykkesforsikring',
       startDate: null,
       quoteDetails: {
         street: 'Theodore Roosevelts Vej 1',
@@ -593,6 +604,7 @@ export const dkHomeContentAccidentTravel: OfferData = {
     },
     {
       id: '86f0a15d-6aed-4051-9ec2-fee1daccfb29',
+      displayName: 'Rejseforsikring',
       startDate: null,
       quoteDetails: {
         street: 'Theodore Roosevelts Vej 1',

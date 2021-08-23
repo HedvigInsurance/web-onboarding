@@ -36,6 +36,7 @@ export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
     quotes: quoteBundle.quotes.map((bundleQuote) => {
       return {
         id: bundleQuote.id,
+        displayName: bundleQuote.displayName,
         startDate: bundleQuote.startDate,
         quoteDetails: bundleQuote.quoteDetails,
         dataCollectionId: bundleQuote.dataCollectionId,
@@ -256,111 +257,107 @@ export const isNoDiscount = (campaigns: Campaign[]) =>
     campaigns[0].incentive.__typename === 'NoDiscount') ||
   false
 
-type ContractTextKeys = {
-  typeOfContract: string
-  typeOfResidence:
-    | 'CHECKOUT_DETAILS_RESIDENCE_TYPE_RENT'
-    | 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT'
-    | 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_HOUSE'
-    | 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_UNSPECIFIED'
-    | null
+export type HomeInsuranceTypeOfContract = Exclude<
+  TypeOfContract,
+  | TypeOfContract.NoTravel
+  | TypeOfContract.NoTravelYouth
+  | TypeOfContract.DkAccident
+  | TypeOfContract.DkAccidentStudent
+  | TypeOfContract.DkTravel
+  | TypeOfContract.DkTravelStudent
+>
+
+type TypeOfResidenceTextKeys =
+  | 'CHECKOUT_DETAILS_RESIDENCE_TYPE_RENT'
+  | 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT'
+  | 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_HOUSE'
+  | 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_UNSPECIFIED'
+
+export const typeOfResidenceTextKeys: Record<
+  HomeInsuranceTypeOfContract,
+  TypeOfResidenceTextKeys
+> = {
+  [TypeOfContract.SeApartmentRent]: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_RENT',
+  [TypeOfContract.SeApartmentBrf]:
+    'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT',
+  [TypeOfContract.SeApartmentStudentRent]:
+    'CHECKOUT_DETAILS_RESIDENCE_TYPE_RENT',
+  [TypeOfContract.SeApartmentStudentBrf]:
+    'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT',
+  [TypeOfContract.SeHouse]: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_HOUSE',
+  [TypeOfContract.NoHomeContentRent]: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_RENT',
+  [TypeOfContract.NoHomeContentOwn]:
+    'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT',
+  [TypeOfContract.NoHomeContentYouthRent]:
+    'CHECKOUT_DETAILS_RESIDENCE_TYPE_RENT',
+  [TypeOfContract.NoHomeContentYouthOwn]:
+    'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT',
+  [TypeOfContract.DkHomeContentOwn]:
+    'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_UNSPECIFIED',
+  [TypeOfContract.DkHomeContentRent]: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_RENT',
+  [TypeOfContract.DkHomeContentStudentOwn]:
+    'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_UNSPECIFIED',
+  [TypeOfContract.DkHomeContentStudentRent]:
+    'CHECKOUT_DETAILS_RESIDENCE_TYPE_RENT',
 }
 
-export const insuranceTypeTextKeys: Record<TypeOfContract, ContractTextKeys> = {
-  [TypeOfContract.SeApartmentRent]: {
-    typeOfContract: 'SIDEBAR_INSURANCE_TYPE_RENT',
-    typeOfResidence: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_RENT',
-  },
-  [TypeOfContract.SeApartmentBrf]: {
-    typeOfContract: 'SIDEBAR_INSURANCE_TYPE_BRF',
-    typeOfResidence: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT',
-  },
-  [TypeOfContract.SeApartmentStudentRent]: {
-    typeOfContract: 'SIDEBAR_INSURANCE_TYPE_STUDENT_RENT',
-    typeOfResidence: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_RENT',
-  },
-  [TypeOfContract.SeApartmentStudentBrf]: {
-    typeOfContract: 'SIDEBAR_INSURANCE_TYPE_STUDENT_BRF',
-    typeOfResidence: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT',
-  },
-  [TypeOfContract.SeHouse]: {
-    typeOfContract: 'SIDEBAR_INSURANCE_TYPE_HOUSE',
-    typeOfResidence: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_HOUSE',
-  },
-  [TypeOfContract.NoHomeContentRent]: {
-    typeOfContract: 'SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_RENT',
-    typeOfResidence: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_RENT',
-  },
-  [TypeOfContract.NoHomeContentOwn]: {
-    typeOfContract: 'SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_OWN',
-    typeOfResidence: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT',
-  },
-  [TypeOfContract.NoHomeContentYouthRent]: {
-    typeOfContract: 'SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_RENT',
-    typeOfResidence: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_RENT',
-  },
-  [TypeOfContract.NoHomeContentYouthOwn]: {
-    typeOfContract: 'SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_OWN',
-    typeOfResidence: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT',
-  },
-  [TypeOfContract.NoTravel]: {
-    typeOfContract: 'SIDEBAR_INSURANCE_TYPE_NO_TRAVEL',
-    typeOfResidence: null,
-  },
-  [TypeOfContract.NoTravelYouth]: {
-    typeOfContract: 'SIDEBAR_INSURANCE_TYPE_NO_TRAVEL_YOUTH',
-    typeOfResidence: null,
-  },
-  [TypeOfContract.DkHomeContentOwn]: {
-    typeOfContract: 'SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_OWN',
-    typeOfResidence: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_UNSPECIFIED',
-  },
-  [TypeOfContract.DkHomeContentRent]: {
-    typeOfContract: 'SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_RENT',
-    typeOfResidence: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_RENT',
-  },
-  [TypeOfContract.DkHomeContentStudentOwn]: {
-    typeOfContract: 'SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_OWN',
-    typeOfResidence: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_UNSPECIFIED',
-  },
-  [TypeOfContract.DkHomeContentStudentRent]: {
-    typeOfContract: 'SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_RENT',
-    typeOfResidence: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_RENT',
-  },
-  [TypeOfContract.DkAccident]: {
-    typeOfContract: 'SIDEBAR_INSURANCE_TYPE_DK_ACCIDENT',
-    typeOfResidence: null,
-  },
-  [TypeOfContract.DkAccidentStudent]: {
-    typeOfContract: 'SIDEBAR_INSURANCE_TYPE_DK_ACCIDENT_STUDENT',
-    typeOfResidence: null,
-  },
-  [TypeOfContract.DkTravel]: {
-    typeOfContract: 'SIDEBAR_INSURANCE_TYPE_DK_TRAVEL',
-    typeOfResidence: null,
-  },
-  [TypeOfContract.DkTravelStudent]: {
-    typeOfContract: 'SIDEBAR_INSURANCE_TYPE_DK_TRAVEL_STUDENT',
-    typeOfResidence: null,
-  },
-}
+type SingleInsuranceTypeOfContract = Exclude<
+  TypeOfContract,
+  | TypeOfContract.DkAccident
+  | TypeOfContract.DkAccidentStudent
+  | TypeOfContract.DkTravel
+  | TypeOfContract.DkTravelStudent
+>
 
 export const getInsuranceTitle = (
   offerData: OfferData,
   textKeys: TextKeyMap,
 ) => {
+  const { quotes } = offerData
+
   if (isBundle(offerData) && isNorwegian(offerData)) {
-    return textKeys.SIDEBAR_INSURANCE_TYPE_NO_BUNDLE()
+    const { quoteDetails } = offerData.quotes[0]
+    const isYouthOffer = 'isYouth' in quoteDetails && quoteDetails.isYouth
+    return isYouthOffer
+      ? textKeys.QUOTE_TITLE_HOME_TRAVEL_YOUTH()
+      : textKeys.QUOTE_TITLE_HOME_TRAVEL()
   }
   if (isBundle(offerData) && isDanish(offerData)) {
-    return offerData.quotes.length === 2
-      ? textKeys.SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_ACCIDENT()
-      : textKeys.SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_ACCIDENT_TRAVEL()
+    const isStudentOffer = isStudent(quotes[0].quoteDetails)
+
+    if (offerData.quotes.length === 2) {
+      return isStudentOffer
+        ? textKeys.QUOTE_TITLE_HOME_ACCIDENT_STUDENT()
+        : textKeys.QUOTE_TITLE_HOME_ACCIDENT()
+    }
+    if (offerData.quotes.length === 3) {
+      return isStudentOffer
+        ? textKeys.QUOTE_TITLE_HOME_ACCIDENT_TRAVEL_STUDENT()
+        : textKeys.QUOTE_TITLE_HOME_ACCIDENT_TRAVEL()
+    }
   }
 
-  return textKeys[
-    insuranceTypeTextKeys[offerData.quotes[0].contractType].typeOfContract
-  ]()
+  const singleInsuranceTitles: Record<SingleInsuranceTypeOfContract, string> = {
+    [TypeOfContract.SeApartmentRent]: textKeys.QUOTE_TITLE_RENT(),
+    [TypeOfContract.SeApartmentBrf]: textKeys.QUOTE_TITLE_BRF(),
+    [TypeOfContract.SeApartmentStudentRent]: textKeys.QUOTE_TITLE_RENT_STUDENT(),
+    [TypeOfContract.SeApartmentStudentBrf]: textKeys.QUOTE_TITLE_BRF_STUDENT(),
+    [TypeOfContract.SeHouse]: textKeys.QUOTE_TITLE_HOUSE(),
+    [TypeOfContract.NoHomeContentRent]: textKeys.QUOTE_TITLE_HOME_CONTENTS(),
+    [TypeOfContract.NoHomeContentOwn]: textKeys.QUOTE_TITLE_HOME_CONTENTS(),
+    [TypeOfContract.NoHomeContentYouthRent]: textKeys.QUOTE_TITLE_HOME_CONTENTS_YOUTH(),
+    [TypeOfContract.NoHomeContentYouthOwn]: textKeys.QUOTE_TITLE_HOME_CONTENTS_YOUTH(),
+    [TypeOfContract.NoTravel]: textKeys.QUOTE_TITLE_TRAVEL(),
+    [TypeOfContract.NoTravelYouth]: textKeys.QUOTE_TITLE_TRAVEL_YOUTH(),
+    [TypeOfContract.DkHomeContentOwn]: textKeys.QUOTE_TITLE_HOME_CONTENTS(),
+    [TypeOfContract.DkHomeContentRent]: textKeys.QUOTE_TITLE_HOME_CONTENTS(),
+    [TypeOfContract.DkHomeContentStudentOwn]: textKeys.QUOTE_TITLE_HOME_CONTENTS_STUDENT(),
+    [TypeOfContract.DkHomeContentStudentRent]: textKeys.QUOTE_TITLE_HOME_CONTENTS_STUDENT(),
+  }
+
+  return singleInsuranceTitles[
+    quotes[0].contractType as SingleInsuranceTypeOfContract
+  ]
 }
 
 type FormattedBirthdateParams = {
