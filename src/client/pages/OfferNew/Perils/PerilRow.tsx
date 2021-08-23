@@ -4,15 +4,10 @@ import { InsuranceValues } from 'pages/OfferNew/Perils/InsuranceValues'
 import { PerilCollection } from 'pages/OfferNew/Perils/PerilCollection'
 import { PerilModal } from 'pages/OfferNew/Perils/PerilModal'
 import { OfferQuote } from 'pages/OfferNew/types'
-import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
 const InsuranceTypeHeadline = styled.div`
-  padding: 16px 0;
-  font-size: 1.375rem;
-
-  ${LARGE_SCREEN_MEDIA_QUERY} {
-    font-size: 1.5rem;
-  }
+  padding: 1rem 0;
+  font-size: 1rem;
 `
 
 type Props = {
