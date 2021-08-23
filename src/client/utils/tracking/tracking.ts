@@ -1,10 +1,8 @@
 import { CookieStorage } from 'cookie-storage'
-import md5 from 'md5'
 import { SegmentAnalyticsJs, setupTrackers } from 'quepasa'
 import React from 'react'
 import {
   SignState,
-  TypeOfContract,
   useMemberQuery,
   useRedeemedCampaignsQuery,
 } from 'data/graphql'
@@ -18,6 +16,8 @@ import {
   isStudentOffer,
 } from 'pages/OfferNew/utils'
 import { trackOfferGTM } from './gtm'
+import { adtraction } from './adTraction'
+import { trackStudentkortet } from './studentkortet'
 
 const cookie = new CookieStorage()
 
@@ -98,101 +98,6 @@ export const { TrackAction, IdentifyAction } = setupTrackers<
   },
   { debug: process.env.NODE_ENV === 'development' },
 )
-
-type TypeOfContractExcludedUnused = Exclude<
-  TypeOfContract | NoComboTypes | DkBundleTypes,
-  'DK_ACCIDENT' | 'DK_ACCIDENT_STUDENT' | 'DK_TRAVEL' | 'DK_TRAVEL_STUDENT'
->
-
-const adtractionProductMap: Record<TypeOfContractExcludedUnused, number> = {
-  SE_HOUSE: 1477448913,
-  SE_APARTMENT_BRF: 1417356498,
-  SE_APARTMENT_STUDENT_BRF: 1423041022,
-  SE_APARTMENT_RENT: 1417356528,
-  SE_APARTMENT_STUDENT_RENT: 1412601108,
-  NO_HOME_CONTENT_OWN: 1492623645,
-  NO_HOME_CONTENT_RENT: 1492623645,
-  NO_HOME_CONTENT_YOUTH_OWN: 1492623719,
-  NO_HOME_CONTENT_YOUTH_RENT: 1492623719,
-  NO_TRAVEL: 1492623742,
-  NO_TRAVEL_YOUTH: 1492623785,
-  NO_COMBO: 1492623841,
-  NO_COMBO_YOUTH: 1492623841,
-  DK_HOME_CONTENT_OWN: 1589961514,
-  DK_HOME_CONTENT_RENT: 1589961514,
-  DK_HOME_CONTENT_STUDENT_OWN: 1589962112,
-  DK_HOME_CONTENT_STUDENT_RENT: 1589962112,
-  DK_ACCIDENT_BUNDLE: 1589962152,
-  DK_ACCIDENT_BUNDLE_STUDENT: 1613410547,
-  DK_TRAVEL_BUNDLE: 1589962256,
-  DK_TRAVEL_BUNDLE_STUDENT: 1613410728,
-}
-
-export const getBundleAdtractionProductValue = (offerData: OfferData) => {
-  if (isBundle(offerData)) {
-    if (isNorwegian(offerData)) {
-      return isYouth(offerData)
-        ? adtractionProductMap[NoComboTypes.NoComboYouth]
-        : adtractionProductMap[NoComboTypes.NoCombo]
-    }
-
-    if (isDanishAccidentBundle(offerData)) {
-      return isStudentOffer(offerData)
-        ? adtractionProductMap[DkBundleTypes.DkAccidentBundleStudent]
-        : adtractionProductMap[DkBundleTypes.DkAccidentBundle]
-    }
-
-    if (isDanishTravelBundle(offerData)) {
-      return isStudentOffer(offerData)
-        ? adtractionProductMap[DkBundleTypes.DkTravelBundleStudent]
-        : adtractionProductMap[DkBundleTypes.DkTravelBundle]
-    }
-  }
-  return adtractionProductMap[
-    offerData.quotes[0].contractType as TypeOfContractExcludedUnused
-  ]
-}
-
-export const adtraction = (
-  orderValue: number,
-  orderId: string,
-  emailAddress: string,
-  couponCode: string | null,
-  offerData: OfferData,
-) => {
-  try {
-    const adt = ADT
-    adt.Tag = adt.Tag || {}
-    adt.Tag.t = 3
-    adt.Tag.c = offerData.cost.monthlyGross.currency
-    adt.Tag.am = orderValue
-    adt.Tag.ti = orderId
-    adt.Tag.xd = md5(emailAddress)
-
-    if (couponCode !== null) {
-      adt.Tag.cpn = couponCode
-    }
-
-    adt.Tag.tp = getBundleAdtractionProductValue(offerData)
-    adt.Tag.doEvent()
-  } catch (e) {
-    ;(window as any).Sentry.captureMessage(e)
-  }
-}
-
-export const trackStudentkortet = (memberId: string) => {
-  const script = `!function(){var o=window.tdl=window.tdl||[];if(o.invoked)window.console&&console.error&&console.error("Tune snippet has been included more than once.");else{o.invoked=!0,o.methods=["init","identify","convert"],o.factory=function(n){return function(){var e=Array.prototype.slice.call(arguments);return e.unshift(n),o.push(e),o}};for(var e=0;e<o.methods.length;e++){var n=o.methods[e];o[n]=o.factory(n)}o.init=function(e){var n=document.createElement("script");n.type="text/javascript",n.async=!0,n.src="https://js.go2sdk.com/v2/tune.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(n,t),o.domain=e}}}();
-  tdl.init("https://aff.addreax.com/")
-  tdl.convert(
-  {
-  'adv_sub': '${memberId}'
-  }
-  )`
-  const scriptTag = window.document.createElement('script')
-  scriptTag.innerHTML = script
-  window.document.head.append(scriptTag)
-}
-
 interface TrackProps {
   offerData?: OfferData | null
   signState?: SignState | null
