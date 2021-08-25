@@ -4,9 +4,15 @@ import { TypeOfContract } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import { captureSentryError } from 'utils/sentry-client'
 import { useMarket } from 'components/utils/CurrentLocale'
+import { AppEnvironment } from 'shared/clientConfig'
 import { getContractType, DkBundleTypes, NoComboTypes } from './tracking'
 
 type GAContractType = NoComboTypes | DkBundleTypes | TypeOfContract
+
+type GTMUserProperties = {
+  market: string
+  environment: AppEnvironment
+}
 
 type GTMOfferData = {
   insurance_type: GAContractType
@@ -25,7 +31,8 @@ type GTMPageData = {
 }
 
 type DataLayerObject = {
-  event: string
+  event?: string
+  userProperties?: GTMUserProperties
   offerData?: GTMOfferData
   pageData?: GTMPageData
 }
@@ -34,10 +41,18 @@ type DataLayerObject = {
  * Track virtual page view when route changes
  */
 export const usePageview = () => {
-  const location = useLocation()
+  const environment = window.hedvigClientConfig.appEnvironment
   const market = useMarket().toLowerCase()
+  const location = useLocation()
 
   useEffect(() => {
+    pushToGTMDataLayer({
+      userProperties: {
+        environment: environment,
+        market: market,
+      },
+    })
+
     pushToGTMDataLayer({
       event: 'virtual_page_view',
       pageData: {
@@ -47,7 +62,7 @@ export const usePageview = () => {
         market: market,
       },
     })
-  }, [location, market])
+  }, [environment, location, market])
 }
 
 const pushToGTMDataLayer = (obj: DataLayerObject) => {
