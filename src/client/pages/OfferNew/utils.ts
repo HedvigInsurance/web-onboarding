@@ -17,7 +17,8 @@ import {
   DanishTravelDetails,
   ApartmentType,
 } from 'data/graphql'
-import { birthdateFormats, LocaleLabel, locales } from 'l10n/locales'
+import { LocaleLabel, locales } from 'l10n/locales'
+import { birthdateFormats } from 'l10n/birthdateAndSsnFormats'
 import { Address, OfferData, OfferQuote } from 'pages/OfferNew/types'
 import { TextKeyMap } from 'utils/textKeys'
 

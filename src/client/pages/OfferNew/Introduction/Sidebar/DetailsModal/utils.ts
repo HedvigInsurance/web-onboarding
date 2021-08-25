@@ -19,7 +19,8 @@ import {
   EditNorwegianTravelInput,
 } from 'data/graphql'
 import { OfferQuote, OfferData, OfferPersonInfo } from 'pages/OfferNew/types'
-import { birthdateFormats, LocaleData } from 'l10n/locales'
+import { LocaleData } from 'l10n/locales'
+import { birthdateFormats } from 'l10n/birthdateAndSsnFormats'
 import {
   isStudent,
   isSwedishQuote,
