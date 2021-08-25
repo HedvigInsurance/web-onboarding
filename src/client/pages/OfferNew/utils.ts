@@ -18,7 +18,7 @@ import {
   ApartmentType,
 } from 'data/graphql'
 import { LocaleLabel, locales } from 'l10n/locales'
-import { birthdateFormats } from 'l10n/birthdateAndSsnFormats'
+import { birthdateFormats } from 'l10n/birthDateAndSsnFormats'
 import { Address, OfferData, OfferQuote } from 'pages/OfferNew/types'
 import { TextKeyMap } from 'utils/textKeys'
 
@@ -362,34 +362,34 @@ export const getInsuranceTitle = (
 }
 
 type FormattedBirthdateParams = {
-  birthdate: string
+  birthDate: string
   currentLocale: string
 }
 
 export const getFormattedBirthdate = ({
-  birthdate,
+  birthDate,
   currentLocale,
 }: FormattedBirthdateParams) => {
   const localeBirthdateFormat =
-    locales[currentLocale as LocaleLabel].birthdate.formatRegex
+    locales[currentLocale as LocaleLabel].birthDate.formatRegex
 
-  const hasCorrectFormat = localeBirthdateFormat.test(birthdate)
+  const hasCorrectFormat = localeBirthdateFormat.test(birthDate)
 
   if (hasCorrectFormat) {
-    return birthdate
+    return birthDate
   }
 
   const defaultFormat = birthdateFormats.default // This is the format we expect from back-end
-  const hasExpectedFormat = defaultFormat.test(birthdate)
+  const hasExpectedFormat = defaultFormat.test(birthDate)
 
   if (!hasExpectedFormat) {
     throw new Error(
-      `Format of birthdate "${birthdate}" doesn't match the expected default format YYYY-MM-DD`,
+      `Format of birthDate "${birthDate}" doesn't match the expected default format YYYY-MM-DD`,
     )
   }
 
-  const reversedBirthdate = birthdate.replace(defaultFormat, '$3-$2-$1')
+  const reversedBirthdate = birthDate.replace(defaultFormat, '$3-$2-$1')
   const hasCorrectReversedFormat = localeBirthdateFormat.test(reversedBirthdate)
 
-  return hasCorrectReversedFormat ? reversedBirthdate : birthdate
+  return hasCorrectReversedFormat ? reversedBirthdate : birthDate
 }

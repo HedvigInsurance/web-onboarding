@@ -3,7 +3,7 @@ import {
   ssnLengths,
   ssnFormats,
   birthdateFormats,
-} from './birthdateAndSsnFormats'
+} from './birthDateAndSsnFormats'
 
 export type LocaleLabel = 'se' | 'se-en' | 'no' | 'no-en' | 'dk' | 'dk-en'
 
@@ -18,7 +18,7 @@ export type LocaleData = {
     formatExample: string
     formatRegex: RegExp
   }
-  birthdate: {
+  birthDate: {
     formatExample: string
     formatRegex: RegExp
     backendFormatExample: string
@@ -39,7 +39,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatExample: 'ÅÅÅÅMMDDXXXX',
       formatRegex: ssnFormats.SE,
     },
-    birthdate: {
+    birthDate: {
       formatExample: 'ÅÅÅÅ-MM-DD',
       formatRegex: birthdateFormats.SE,
       backendFormatExample: 'ÅÅÅÅ-MM-DD',
@@ -56,7 +56,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatExample: 'YYYYMMDDXXXX',
       formatRegex: ssnFormats.SE,
     },
-    birthdate: {
+    birthDate: {
       formatExample: 'YYYY-MM-DD',
       formatRegex: birthdateFormats.SE,
       backendFormatExample: 'YYYY-MM-DD',
@@ -73,7 +73,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatExample: 'DDMMÅÅXXXXX',
       formatRegex: ssnFormats.NO,
     },
-    birthdate: {
+    birthDate: {
       formatExample: 'DD-MM-ÅÅÅÅ',
       formatRegex: birthdateFormats.NO,
       backendFormatExample: 'ÅÅÅÅ-MM-DD',
@@ -90,7 +90,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatExample: 'DDMMYYXXXXX',
       formatRegex: ssnFormats.NO,
     },
-    birthdate: {
+    birthDate: {
       formatExample: 'DD-MM-YYYY',
       formatRegex: birthdateFormats.NO,
       backendFormatExample: 'YYYY-MM-DD',
@@ -107,7 +107,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatExample: 'DDMMÅÅSSSS',
       formatRegex: ssnFormats.DK,
     },
-    birthdate: {
+    birthDate: {
       formatExample: 'DD-MM-ÅÅÅÅ',
       formatRegex: birthdateFormats.DK,
       backendFormatExample: 'ÅÅÅÅ-MM-DD',
@@ -124,7 +124,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatExample: 'DDMMYYSSSS',
       formatRegex: ssnFormats.DK,
     },
-    birthdate: {
+    birthDate: {
       formatExample: 'DD-MM-YYYY',
       formatRegex: birthdateFormats.DK,
       backendFormatExample: 'YYYY-MM-DD',

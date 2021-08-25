@@ -82,27 +82,27 @@ describe('getFormattedBirthdate function', () => {
   const norwegianLocale: LocaleLabel = 'no'
   const danishLocale: LocaleLabel = 'dk'
 
-  describe('when birthdate on quote is the expected format', () => {
+  describe('when birthDate on quote is the expected format', () => {
     const mockedQuoteBirthdate = '1990-09-19'
 
-    it('returns birthdate unchanged when the described format in locales object is the same as the format we get from back-end', () => {
+    it('returns birthDate unchanged when the described format in locales object is the same as the format we get from back-end', () => {
       const swedishFormattedBirthdate = getFormattedBirthdate({
-        birthdate: mockedQuoteBirthdate,
+        birthDate: mockedQuoteBirthdate,
         currentLocale: swedishLocale,
       })
 
       expect(swedishFormattedBirthdate).toBe(mockedQuoteBirthdate)
     })
 
-    it('returns birthdate in the format that is described in the locales object', () => {
+    it('returns birthDate in the format that is described in the locales object', () => {
       const reversedFormattedBirthdate = '19-09-1990'
 
       const norwegianFormattedBirthdate = getFormattedBirthdate({
-        birthdate: mockedQuoteBirthdate,
+        birthDate: mockedQuoteBirthdate,
         currentLocale: norwegianLocale,
       })
       const danishFormattedBirthdate = getFormattedBirthdate({
-        birthdate: mockedQuoteBirthdate,
+        birthDate: mockedQuoteBirthdate,
         currentLocale: danishLocale,
       })
 
@@ -111,13 +111,13 @@ describe('getFormattedBirthdate function', () => {
     })
   })
 
-  describe('when birthdate on quote is not the expected format', () => {
+  describe('when birthDate on quote is not the expected format', () => {
     it('throws error 💥', () => {
       const mockedIncorrectQuoteBirthdate = '19-09-1990'
 
       const formattingFunction = () => {
         getFormattedBirthdate({
-          birthdate: mockedIncorrectQuoteBirthdate,
+          birthDate: mockedIncorrectQuoteBirthdate,
           currentLocale: swedishLocale,
         })
       }
