@@ -14,9 +14,10 @@ import {
   isDanishAccidentBundle,
   isDanishTravelBundle,
   isStudentOffer,
+  getMainQuote,
 } from 'pages/OfferNew/utils'
 import { trackOfferGTM } from './gtm'
-import { adtraction } from './adTraction'
+import { adtraction } from './adtraction'
 import { trackStudentkortet } from './studentkortet'
 
 const cookie = new CookieStorage()
@@ -75,7 +76,7 @@ export const getContractType = (offerData: OfferData) => {
         : DkBundleTypes.DkTravelBundle
     }
   }
-  return offerData.quotes[0].contractType
+  return getMainQuote(offerData).contractType
 }
 
 export enum ApplicationSpecificEvents {
