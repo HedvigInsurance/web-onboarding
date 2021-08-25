@@ -38,9 +38,10 @@ type DataLayerObject = {
 }
 
 /**
+ * Track user properties
  * Track virtual page view when route changes
  */
-export const usePageview = () => {
+export const useGTMTracking = () => {
   const environment = window.hedvigClientConfig.appEnvironment
   const market = useMarket().toLowerCase()
   const location = useLocation()
@@ -52,7 +53,9 @@ export const usePageview = () => {
         market: market,
       },
     })
+  }, [environment, market])
 
+  useEffect(() => {
     pushToGTMDataLayer({
       event: 'virtual_page_view',
       pageData: {
@@ -62,7 +65,7 @@ export const usePageview = () => {
         market: market,
       },
     })
-  }, [environment, location, market])
+  }, [location, market])
 }
 
 const pushToGTMDataLayer = (obj: DataLayerObject) => {
