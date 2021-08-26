@@ -49,8 +49,8 @@ export const useGTMTracking = () => {
   useEffect(() => {
     pushToGTMDataLayer({
       userProperties: {
-        environment: environment,
-        market: market,
+        environment,
+        market,
       },
     })
   }, [environment, market])
@@ -62,7 +62,7 @@ export const useGTMTracking = () => {
         page: location.pathname,
         search: location.search,
         title: document.title,
-        market: market,
+        market,
       },
     })
   }, [location, market])
