@@ -32,9 +32,9 @@ export type Scalars = {
   CheckoutPaymentsAction: any
   /** A String-representation of Adyen's payments details request */
   PaymentsDetailsRequest: any
-  UUID: any
   /** The `Upload` scalar type represents a file upload. */
   Upload: any
+  UUID: any
   TimeStamp: any
   JSONObject: any
   /** Raw JSON value */
@@ -246,7 +246,7 @@ export type AddressChangeInput = {
   numberOfBathrooms?: Maybe<Scalars['Int']>
   /** Is this property subleted? Required if type == HOUSE. */
   isSubleted?: Maybe<Scalars['Boolean']>
-  /** A list of extra buildings outside of the main property. Required if type == HOUSE. */
+  /** A list of extra buildings outside of the main property. */
   extraBuildings?: Maybe<Array<AddressHouseExtraBuilding>>
 }
 
@@ -277,6 +277,7 @@ export type AddressHouseExtraBuilding = {
 
 export enum AddressOwnership {
   Own = 'OWN',
+  Brf = 'BRF',
   Rent = 'RENT',
 }
 
@@ -312,11 +313,6 @@ export enum AgreementStatus {
   Active = 'ACTIVE',
   /** An agreement that either was never active that is now terminated or was active in the past of a now terminated contract */
   Terminated = 'TERMINATED',
-}
-
-export type AlreadyCompleted = {
-  __typename?: 'AlreadyCompleted'
-  ignore?: Maybe<Scalars['Boolean']>
 }
 
 export type AngelStory = {
@@ -752,6 +748,11 @@ export type AppMarketingImageWhereInput = {
 /** References AppMarketingImage record uniquely */
 export type AppMarketingImageWhereUniqueInput = {
   id?: Maybe<Scalars['ID']>
+}
+
+export type ApproveQuoteResponse = {
+  __typename?: 'ApproveQuoteResponse'
+  approved: Scalars['Boolean']
 }
 
 export type ArrangedPerilCategories = {
@@ -1726,6 +1727,25 @@ export type ChatState = {
   onboardingDone: Scalars['Boolean']
 }
 
+export type Claim = {
+  __typename?: 'Claim'
+  id: Scalars['String']
+  contract?: Maybe<Contract>
+  status: ClaimStatus
+  outcome?: Maybe<ClaimOutcome>
+  submittedAt: Scalars['Instant']
+  closedAt?: Maybe<Scalars['Instant']>
+  files: Array<File>
+  signedAudioURL?: Maybe<Scalars['String']>
+  payout?: Maybe<MonetaryAmountV2>
+}
+
+export enum ClaimOutcome {
+  Paid = 'PAID',
+  NotCompensated = 'NOT_COMPENSATED',
+  NotCovered = 'NOT_COVERED',
+}
+
 /** A page in the `How Claims Work`-screen in the app */
 export type ClaimsExplainerPage = {
   __typename?: 'ClaimsExplainerPage'
@@ -1734,6 +1754,13 @@ export type ClaimsExplainerPage = {
   illustration: Icon
   /** Text for the body shown below the title */
   body: Scalars['String']
+}
+
+export enum ClaimStatus {
+  Submitted = 'SUBMITTED',
+  BeingHandled = 'BEING_HANDLED',
+  Closed = 'CLOSED',
+  Reopened = 'REOPENED',
 }
 
 export type CodeAlreadyTaken = {
@@ -1904,6 +1931,10 @@ export type Contract = {
   insuranceTerms: Array<InsuranceTerm>
   currentAgreementDetailsTable: Table
   upcomingAgreementDetailsTable: Table
+  /** localised information about the current status of the contract */
+  statusPills: Array<Scalars['String']>
+  /** localised information about the details of the contract, for example address / amount of people it covers */
+  detailPills: Array<Scalars['String']>
 }
 
 export type ContractPerilsArgs = {
@@ -1930,11 +1961,20 @@ export type ContractUpcomingAgreementDetailsTableArgs = {
   locale: Locale
 }
 
+export type ContractStatusPillsArgs = {
+  locale: Locale
+}
+
+export type ContractDetailPillsArgs = {
+  locale: Locale
+}
+
 export type ContractBundle = {
   __typename?: 'ContractBundle'
   id: Scalars['ID']
   contracts: Array<Contract>
   angelStories: ContractBundleAngelStories
+  potentialCrossSells: Array<CrossSell>
 }
 
 export type ContractBundleAngelStories = {
@@ -2413,6 +2453,7 @@ export type CreateQuoteInput = {
   house?: Maybe<CreateHouseInput>
   swedishApartment?: Maybe<CreateSwedishApartmentInput>
   swedishHouse?: Maybe<CreateSwedishHouseInput>
+  swedishAccident?: Maybe<CreateSwedishAccidentInput>
   norwegianHomeContents?: Maybe<CreateNorwegianHomeContentsInput>
   norwegianTravel?: Maybe<CreateNorwegianTravelInput>
   danishHomeContents?: Maybe<CreateDanishHomeContentsInput>
@@ -2424,6 +2465,14 @@ export type CreateQuoteInput = {
 }
 
 export type CreateQuoteResult = CompleteQuote | UnderwritingLimitsHit
+
+export type CreateSwedishAccidentInput = {
+  street: Scalars['String']
+  zipCode: Scalars['String']
+  householdSize: Scalars['Int']
+  livingSpace: Scalars['Int']
+  isStudent: Scalars['Boolean']
+}
 
 export type CreateSwedishApartmentInput = {
   street: Scalars['String']
@@ -2443,6 +2492,54 @@ export type CreateSwedishHouseInput = {
   numberOfBathrooms: Scalars['Int']
   isSubleted: Scalars['Boolean']
   extraBuildings: Array<ExtraBuildingInput>
+}
+
+export type CrossSell = {
+  __typename?: 'CrossSell'
+  title: Scalars['String']
+  description: Scalars['String']
+  imageUrl: Scalars['String']
+  blurHash: Scalars['String']
+  callToAction: Scalars['String']
+  action: CrossSellAction
+}
+
+export type CrossSellAction = CrossSellChat | CrossSellEmbark
+
+export type CrossSellChat = {
+  __typename?: 'CrossSellChat'
+  _?: Maybe<Scalars['Boolean']>
+}
+
+export type CrossSellEmbark = {
+  __typename?: 'CrossSellEmbark'
+  embarkStoryId: Scalars['ID']
+}
+
+export type CrossSellQuotesFailure = {
+  __typename?: 'CrossSellQuotesFailure'
+  breachedUnderwritingGuidelines: Array<Scalars['String']>
+}
+
+export type CrossSellQuotesInput = {
+  /** Number co-insured, the number of people on the contract except for the policy holder. */
+  numberCoInsured: Scalars['Int']
+  /** Types to Cross-Sell. */
+  crossSellTypes: Array<CrossSellType>
+}
+
+export type CrossSellQuotesResult =
+  | CrossSellQuotesSuccess
+  | CrossSellQuotesFailure
+
+export type CrossSellQuotesSuccess = {
+  __typename?: 'CrossSellQuotesSuccess'
+  quoteIds: Array<Scalars['ID']>
+}
+
+export enum CrossSellType {
+  Accident = 'ACCIDENT',
+  Travel = 'TRAVEL',
 }
 
 export type CurrentInsurer = {
@@ -2759,6 +2856,7 @@ export type EditQuoteInput = {
   swedishApartment?: Maybe<EditSwedishApartmentInput>
   house?: Maybe<EditHouseInput>
   swedishHouse?: Maybe<EditSwedishHouseInput>
+  swedishAccident?: Maybe<EditSwedishAccidentInput>
   norwegianHomeContents?: Maybe<EditNorwegianHomeContentsInput>
   norwegianTravel?: Maybe<EditNorwegianTravelInput>
   danishHomeContents?: Maybe<EditDanishHomeContentsInput>
@@ -2766,6 +2864,14 @@ export type EditQuoteInput = {
   danishTravel?: Maybe<EditDanishTravelInput>
   email?: Maybe<Scalars['String']>
   phoneNumber?: Maybe<Scalars['String']>
+}
+
+export type EditSwedishAccidentInput = {
+  street?: Maybe<Scalars['String']>
+  zipCode?: Maybe<Scalars['String']>
+  householdSize?: Maybe<Scalars['Int']>
+  livingSpace?: Maybe<Scalars['Int']>
+  isStudent?: Maybe<Scalars['Boolean']>
 }
 
 export type EditSwedishApartmentInput = {
@@ -2798,6 +2904,7 @@ export type EmbarkAction =
   | EmbarkNumberAction
   | EmbarkMultiAction
   | EmbarkDatePickerAction
+  | EmbarkAddressAutocompleteAction
 
 export type EmbarkActionCore = {
   component: Scalars['String']
@@ -3051,6 +3158,8 @@ export type EmbarkExternalRedirectData = {
 export enum EmbarkExternalRedirectLocation {
   MailingList = 'MailingList',
   Offer = 'Offer',
+  Close = 'Close',
+  Chat = 'Chat',
 }
 
 export type EmbarkGroupedResponse = {
@@ -3456,6 +3565,8 @@ export type Emergency = {
   __typename?: 'Emergency'
   color: HedvigColor
   title: Scalars['String']
+  /** Phone Number on E.164-format  */
+  emergencyNumber: Scalars['String']
 }
 
 export enum Environment {
@@ -4104,46 +4215,29 @@ export type HouseInsuranceCollection = {
   postalCode?: Maybe<Scalars['String']>
 }
 
-/** A vectorized image to show to the user */
 export type Icon = {
   __typename?: 'Icon'
-  /**
-   * For iOS use
-   * @deprecated use an icon from a variant instead
-   */
-  pdfUrl: Scalars['String']
-  /**
-   * For Web use
-   * @deprecated use an icon from a variant instead
-   */
-  svgUrl: Scalars['String']
-  /**
-   * For Android use
-   * @deprecated use an icon from a variant instead
-   */
-  vectorDrawableUrl: Scalars['String']
-  /** Icons with variants for light and dark mode */
   variants: IconVariants
+  /** @deprecated use an icon from a variant instead */
+  pdfUrl: Scalars['String']
+  /** @deprecated use an icon from a variant instead */
+  svgUrl: Scalars['String']
+  /** @deprecated Field no longer supported */
+  vectorDrawableUrl: Scalars['String']
 }
 
-/** A vectorized image to show to the user */
 export type IconVariant = {
   __typename?: 'IconVariant'
-  /** For iOS use */
   pdfUrl: Scalars['String']
-  /** For Web use */
   svgUrl: Scalars['String']
-  /** For Android use */
+  /** @deprecated Field no longer supported */
   vectorDrawableUrl: Scalars['String']
 }
 
-/** Icons with variants for light and dark mode */
 export type IconVariants = {
   __typename?: 'IconVariants'
-  /** A variant to use for dark user interfaces */
-  dark: IconVariant
-  /** A variant to use for light user interfaces */
   light: IconVariant
+  dark: IconVariant
 }
 
 export enum ImageFit {
@@ -6848,6 +6942,7 @@ export type Member = {
   firstName?: Maybe<Scalars['String']>
   lastName?: Maybe<Scalars['String']>
   email?: Maybe<Scalars['String']>
+  age?: Maybe<Scalars['Int']>
   phoneNumber?: Maybe<Scalars['String']>
   acceptLanguage?: Maybe<Scalars['String']>
   features: Array<Feature>
@@ -7066,6 +7161,7 @@ export type Mutation = {
   removeCurrentInsurer: CreateQuoteResult
   removeStartDate: CreateQuoteResult
   signQuotes: StartSignResponse
+  approveQuotes?: Maybe<Scalars['Boolean']>
   createKeyGearItem: KeyGearItem
   addPhotoToKeyGearItem: KeyGearItem
   deletePhotoFromKeyGearItem: KeyGearItem
@@ -7086,6 +7182,7 @@ export type Mutation = {
   deleteKeyGearItem: KeyGearItem
   externalInsuranceProvider?: Maybe<ExternalInsuranceProviderMutation>
   logout: Scalars['Boolean']
+  createClaim: Scalars['ID']
   createSession: Scalars['String']
   createSessionV2?: Maybe<SessionInformation>
   /** @deprecated Use Quotes instead */
@@ -7125,6 +7222,9 @@ export type Mutation = {
   updatePickedLocale: Member
   /** Create all the quotes needed in relation to a change of address, based on the current state of the member's insurance. */
   createAddressChangeQuotes: AddressChangeQuoteResult
+  /** Create all the quotes needed as a result of one of more Cross-Sells */
+  createCrossSellQuotes: CrossSellQuotesResult
+  signOrApproveQuotes: SignOrApprove
 }
 
 export type MutationExchangeTokenArgs = {
@@ -7188,6 +7288,10 @@ export type MutationSignQuotesArgs = {
   input: SignQuotesInput
 }
 
+export type MutationApproveQuotesArgs = {
+  quoteIds: Array<Scalars['ID']>
+}
+
 export type MutationCreateKeyGearItemArgs = {
   input: CreateKeyGearItemInput
 }
@@ -7232,6 +7336,10 @@ export type MutationUpdateKeyGearItemNameArgs = {
 
 export type MutationDeleteKeyGearItemArgs = {
   id: Scalars['ID']
+}
+
+export type MutationCreateClaimArgs = {
+  audioFile: Scalars['Upload']
 }
 
 export type MutationCreateSessionArgs = {
@@ -7326,6 +7434,14 @@ export type MutationUpdatePickedLocaleArgs = {
 
 export type MutationCreateAddressChangeQuotesArgs = {
   input: AddressChangeInput
+}
+
+export type MutationCreateCrossSellQuotesArgs = {
+  input: CrossSellQuotesInput
+}
+
+export type MutationSignOrApproveQuotesArgs = {
+  quoteIds: Array<Scalars['ID']>
 }
 
 /** A page in the `What's new`-screen in the app */
@@ -7509,13 +7625,12 @@ export type PerilCategory = {
 export type PerilV2 = {
   __typename?: 'PerilV2'
   title: Scalars['String']
-  shortDescription: Scalars['String']
   description: Scalars['String']
+  info: Scalars['String']
+  shortDescription: Scalars['String']
   covered: Array<Scalars['String']>
   exceptions: Array<Scalars['String']>
-  info: Scalars['String']
   icon: Icon
-  iconName: Scalars['String']
 }
 
 export type PersonalInformation = {
@@ -7695,6 +7810,10 @@ export type Query = {
   selfChangeEligibility: SelfChangeEligibility
   /** All locales that are available and activated */
   availableLocales: Array<Locale>
+  /**  Returns all claims the member has  */
+  claims: Array<Claim>
+  /**  Returns perils from promise-cms  */
+  perilsV2: Array<PerilV2>
 }
 
 export type QueryAppMarketingImagesArgs = {
@@ -7897,6 +8016,11 @@ export type QueryAngelStoryArgs = {
   locale?: Maybe<Scalars['String']>
 }
 
+export type QueryPerilsV2Args = {
+  contractType: TypeOfContract
+  locale: Locale
+}
+
 export type Quote = CompleteQuote | IncompleteQuote
 
 export type QuoteBundle = {
@@ -7920,6 +8044,8 @@ export type QuoteBundleDisplayNameArgs = {
 export type QuoteBundleAppConfiguration = {
   __typename?: 'QuoteBundleAppConfiguration'
   showCampaignManagement: Scalars['Boolean']
+  showFAQ: Scalars['Boolean']
+  startDateTerminology: QuoteBundleAppConfigurationStartDateTerminology
   title: QuoteBundleAppConfigurationTitle
   gradientOption: QuoteBundleAppConfigurationGradientOption
 }
@@ -7928,6 +8054,11 @@ export enum QuoteBundleAppConfigurationGradientOption {
   GradientOne = 'GRADIENT_ONE',
   GradientTwo = 'GRADIENT_TWO',
   GradientThree = 'GRADIENT_THREE',
+}
+
+export enum QuoteBundleAppConfigurationStartDateTerminology {
+  StartDate = 'START_DATE',
+  AccessDate = 'ACCESS_DATE',
 }
 
 export enum QuoteBundleAppConfigurationTitle {
@@ -7944,6 +8075,7 @@ export type QuoteBundleInput = {
 export type QuoteDetails =
   | SwedishApartmentQuoteDetails
   | SwedishHouseQuoteDetails
+  | SwedishAccidentDetails
   | NorwegianHomeContentsDetails
   | NorwegianTravelDetails
   | DanishHomeContentsDetails
@@ -8114,6 +8246,13 @@ export enum SignMethod {
   ApproveOnly = 'APPROVE_ONLY',
 }
 
+export type SignOrApprove = SignQuoteResponse | ApproveQuoteResponse
+
+export type SignQuoteResponse = {
+  __typename?: 'SignQuoteResponse'
+  signResponse: StartSignResponse
+}
+
 export type SignQuotesInput = {
   quoteIds: Array<Scalars['ID']>
   successUrl?: Maybe<Scalars['String']>
@@ -8151,7 +8290,6 @@ export type StartSignResponse =
   | NorwegianBankIdSession
   | DanishBankIdSession
   | SimpleSignSession
-  | AlreadyCompleted
   | FailedToStartSign
 
 export type StoredPaymentMethodsDetails = {
@@ -8182,7 +8320,6 @@ export type Subscription = {
   dataCollectionStatusV2: DataCollectingStatusResponseV2
   /** @deprecated Use Quotes instead */
   offer?: Maybe<OfferEvent>
-  /** @deprecated Use Quotes instead */
   signStatus?: Maybe<SignEvent>
   message: Message
   currentChatResponse?: Maybe<ChatResponse>
@@ -8221,6 +8358,15 @@ export type SuccessfulRedeemResult = {
   __typename?: 'SuccessfulRedeemResult'
   campaigns: Array<Campaign>
   cost?: Maybe<InsuranceCost>
+}
+
+export type SwedishAccidentDetails = {
+  __typename?: 'SwedishAccidentDetails'
+  street: Scalars['String']
+  zipCode: Scalars['String']
+  householdSize: Scalars['Int']
+  livingSpace: Scalars['Int']
+  isStudent: Scalars['Boolean']
 }
 
 export type SwedishApartmentAgreement = AgreementCore & {
@@ -8938,6 +9084,13 @@ export type UserDocumentInStagesArgs = {
   inheritLocale?: Scalars['Boolean']
 }
 
+export type UserConnectInput = {
+  /** Document to connect */
+  where: UserWhereUniqueInput
+  /** Allow to specify document position in list of connected documents, will default to appending at end of list */
+  position?: Maybe<ConnectPositionInput>
+}
+
 /** A connection to a list of items. */
 export type UserConnection = {
   __typename?: 'UserConnection'
@@ -8946,6 +9099,16 @@ export type UserConnection = {
   /** A list of edges. */
   edges: Array<UserEdge>
   aggregate: Aggregate
+}
+
+export type UserCreateManyInlineInput = {
+  /** Connect multiple existing User documents */
+  connect?: Maybe<Array<UserWhereUniqueInput>>
+}
+
+export type UserCreateOneInlineInput = {
+  /** Connect one existing User document */
+  connect?: Maybe<UserWhereUniqueInput>
 }
 
 /** An edge in a connection. */
@@ -9510,6 +9673,22 @@ export enum UserOrderByInput {
   IsActiveDesc = 'isActive_DESC',
 }
 
+export type UserUpdateManyInlineInput = {
+  /** Connect multiple existing User documents */
+  connect?: Maybe<Array<UserConnectInput>>
+  /** Override currently-connected documents with multiple existing User documents */
+  set?: Maybe<Array<UserWhereUniqueInput>>
+  /** Disconnect multiple User documents */
+  disconnect?: Maybe<Array<UserWhereUniqueInput>>
+}
+
+export type UserUpdateOneInlineInput = {
+  /** Connect existing User document */
+  connect?: Maybe<UserWhereUniqueInput>
+  /** Disconnect currently connected User document */
+  disconnect?: Maybe<Scalars['Boolean']>
+}
+
 /** Identifies documents */
 export type UserWhereInput = {
   /** Contains search across all appropriate fields. */
@@ -9700,6 +9879,7 @@ export type CreateDanishHomeAccidentQuoteMutation = {
           quoteDetails:
             | { __typename: 'SwedishApartmentQuoteDetails' }
             | { __typename: 'SwedishHouseQuoteDetails' }
+            | { __typename: 'SwedishAccidentDetails' }
             | { __typename: 'NorwegianHomeContentsDetails' }
             | { __typename: 'NorwegianTravelDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
@@ -9712,6 +9892,7 @@ export type CreateDanishHomeAccidentQuoteMutation = {
           quoteDetails:
             | { __typename: 'SwedishApartmentQuoteDetails' }
             | { __typename: 'SwedishHouseQuoteDetails' }
+            | { __typename: 'SwedishAccidentDetails' }
             | { __typename: 'NorwegianHomeContentsDetails' }
             | { __typename: 'NorwegianTravelDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
@@ -9735,6 +9916,7 @@ export type CreateDanishHomeAccidentTravelQuoteMutation = {
           quoteDetails:
             | { __typename: 'SwedishApartmentQuoteDetails' }
             | { __typename: 'SwedishHouseQuoteDetails' }
+            | { __typename: 'SwedishAccidentDetails' }
             | { __typename: 'NorwegianHomeContentsDetails' }
             | { __typename: 'NorwegianTravelDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
@@ -9747,6 +9929,7 @@ export type CreateDanishHomeAccidentTravelQuoteMutation = {
           quoteDetails:
             | { __typename: 'SwedishApartmentQuoteDetails' }
             | { __typename: 'SwedishHouseQuoteDetails' }
+            | { __typename: 'SwedishAccidentDetails' }
             | { __typename: 'NorwegianHomeContentsDetails' }
             | { __typename: 'NorwegianTravelDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
@@ -9759,6 +9942,7 @@ export type CreateDanishHomeAccidentTravelQuoteMutation = {
           quoteDetails:
             | { __typename: 'SwedishApartmentQuoteDetails' }
             | { __typename: 'SwedishHouseQuoteDetails' }
+            | { __typename: 'SwedishAccidentDetails' }
             | { __typename: 'NorwegianHomeContentsDetails' }
             | { __typename: 'NorwegianTravelDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
@@ -9766,6 +9950,50 @@ export type CreateDanishHomeAccidentTravelQuoteMutation = {
             | { __typename: 'DanishTravelDetails' }
         })
     | { __typename: 'UnderwritingLimitsHit' }
+}
+
+export type CreateSwedishHomeAccidentQuoteMutationVariables = Exact<{
+  homeInput: CreateQuoteInput
+  accidentInput: CreateQuoteInput
+}>
+
+export type CreateSwedishHomeAccidentQuoteMutation = {
+  __typename?: 'Mutation'
+} & {
+  createHomeContents:
+    | ({ __typename: 'CompleteQuote' } & Pick<CompleteQuote, 'id'> & {
+          quoteDetails:
+            | { __typename: 'SwedishApartmentQuoteDetails' }
+            | { __typename: 'SwedishHouseQuoteDetails' }
+            | { __typename: 'SwedishAccidentDetails' }
+            | { __typename: 'NorwegianHomeContentsDetails' }
+            | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'DanishHomeContentsDetails' }
+            | { __typename: 'DanishAccidentDetails' }
+            | { __typename: 'DanishTravelDetails' }
+        })
+    | ({ __typename: 'UnderwritingLimitsHit' } & {
+        limits: Array<
+          { __typename?: 'UnderwritingLimit' } & Pick<UnderwritingLimit, 'code'>
+        >
+      })
+  createAccident:
+    | ({ __typename: 'CompleteQuote' } & Pick<CompleteQuote, 'id'> & {
+          quoteDetails:
+            | { __typename: 'SwedishApartmentQuoteDetails' }
+            | { __typename: 'SwedishHouseQuoteDetails' }
+            | { __typename: 'SwedishAccidentDetails' }
+            | { __typename: 'NorwegianHomeContentsDetails' }
+            | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'DanishHomeContentsDetails' }
+            | { __typename: 'DanishAccidentDetails' }
+            | { __typename: 'DanishTravelDetails' }
+        })
+    | ({ __typename: 'UnderwritingLimitsHit' } & {
+        limits: Array<
+          { __typename?: 'UnderwritingLimit' } & Pick<UnderwritingLimit, 'code'>
+        >
+      })
 }
 
 export type EditQuoteMutationVariables = Exact<{
@@ -10054,6 +10282,10 @@ export type QuoteBundleQuery = { __typename?: 'Query' } & {
                     >
                   >
                 })
+            | ({ __typename?: 'SwedishAccidentDetails' } & Pick<
+                SwedishAccidentDetails,
+                'isStudent'
+              >)
             | ({ __typename?: 'NorwegianHomeContentsDetails' } & Pick<
                 NorwegianHomeContentsDetails,
                 'coInsured' | 'livingSpace' | 'street' | 'zipCode' | 'isYouth'
@@ -10289,7 +10521,6 @@ export type SignQuotesMutation = { __typename?: 'Mutation' } & {
         'redirectUrl'
       >)
     | { __typename: 'SimpleSignSession' }
-    | { __typename: 'AlreadyCompleted' }
     | ({ __typename: 'FailedToStartSign' } & Pick<
         FailedToStartSign,
         'errorMessage'
@@ -10649,6 +10880,86 @@ export type CreateDanishHomeAccidentTravelQuoteMutationResult = ApolloReactCommo
 export type CreateDanishHomeAccidentTravelQuoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
   CreateDanishHomeAccidentTravelQuoteMutation,
   CreateDanishHomeAccidentTravelQuoteMutationVariables
+>
+export const CreateSwedishHomeAccidentQuoteDocument = gql`
+  mutation CreateSwedishHomeAccidentQuote(
+    $homeInput: CreateQuoteInput!
+    $accidentInput: CreateQuoteInput!
+  ) {
+    createHomeContents: createQuote(input: $homeInput) {
+      __typename
+      ... on CompleteQuote {
+        id
+        quoteDetails {
+          __typename
+        }
+      }
+      ... on UnderwritingLimitsHit {
+        limits {
+          code
+        }
+      }
+    }
+    createAccident: createQuote(input: $accidentInput) {
+      __typename
+      ... on CompleteQuote {
+        id
+        quoteDetails {
+          __typename
+        }
+      }
+      ... on UnderwritingLimitsHit {
+        limits {
+          code
+        }
+      }
+    }
+  }
+`
+export type CreateSwedishHomeAccidentQuoteMutationFn = ApolloReactCommon.MutationFunction<
+  CreateSwedishHomeAccidentQuoteMutation,
+  CreateSwedishHomeAccidentQuoteMutationVariables
+>
+
+/**
+ * __useCreateSwedishHomeAccidentQuoteMutation__
+ *
+ * To run a mutation, you first call `useCreateSwedishHomeAccidentQuoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateSwedishHomeAccidentQuoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createSwedishHomeAccidentQuoteMutation, { data, loading, error }] = useCreateSwedishHomeAccidentQuoteMutation({
+ *   variables: {
+ *      homeInput: // value for 'homeInput'
+ *      accidentInput: // value for 'accidentInput'
+ *   },
+ * });
+ */
+export function useCreateSwedishHomeAccidentQuoteMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateSwedishHomeAccidentQuoteMutation,
+    CreateSwedishHomeAccidentQuoteMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    CreateSwedishHomeAccidentQuoteMutation,
+    CreateSwedishHomeAccidentQuoteMutationVariables
+  >(CreateSwedishHomeAccidentQuoteDocument, options)
+}
+export type CreateSwedishHomeAccidentQuoteMutationHookResult = ReturnType<
+  typeof useCreateSwedishHomeAccidentQuoteMutation
+>
+export type CreateSwedishHomeAccidentQuoteMutationResult = ApolloReactCommon.MutationResult<
+  CreateSwedishHomeAccidentQuoteMutation
+>
+export type CreateSwedishHomeAccidentQuoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  CreateSwedishHomeAccidentQuoteMutation,
+  CreateSwedishHomeAccidentQuoteMutationVariables
 >
 export const EditQuoteDocument = gql`
   mutation EditQuote($input: EditQuoteInput!) {
@@ -11238,6 +11549,9 @@ export const QuoteBundleDocument = gql`
                 hasWaterConnected
               }
             }
+          }
+          ... on SwedishAccidentDetails {
+            isStudent
           }
           ... on NorwegianHomeContentsDetails {
             coInsured

@@ -7,7 +7,9 @@ import {
   CreateQuoteInput,
   useCreateDanishHomeAccidentQuoteMutation,
   useCreateDanishHomeAccidentTravelQuoteMutation,
+  useCreateSwedishHomeAccidentQuoteMutation,
   useQuoteBundleLazyQuery,
+  ApartmentType,
 } from 'data/graphql'
 import { createQuote } from 'pages/Embark/createQuote'
 import { Button, LinkButton } from 'components/buttons'
@@ -44,6 +46,7 @@ enum QuoteType {
   NorwegianTravel = 'norwegian-travel',
   SwedishApartment = 'swedish-apartment',
   SwedishHouse = 'swedish-house',
+  SwedishApartmentAccident = 'swedish-apartment-accident',
 }
 
 type QuoteData = {
@@ -94,6 +97,11 @@ const quotesByMarket: QuotesByMarket = {
       label: 'Swedish House',
       value: QuoteType.SwedishHouse,
     },
+    {
+      label: 'Swedish Apartment + Accident',
+      value: QuoteType.SwedishApartmentAccident,
+      initialFormValues: initialSeApartmentValues,
+    },
   ],
 }
 
@@ -120,6 +128,19 @@ const getDanishQuoteValues = (
   } as CreateQuoteInput
 }
 
+const getSwedishAccidentQuoteValues = (values: Values) => {
+  const { swedishApartment, ...filteredValues } = values
+  const { type, ...QuoteTypeValues } = swedishApartment!
+  return {
+    ...filteredValues,
+    swedishAccident: {
+      ...QuoteTypeValues,
+      isStudent:
+        type === ApartmentType.StudentBrf || type === ApartmentType.StudentRent,
+    },
+  } as CreateQuoteInput
+}
+
 export const QuoteData: React.FC<OfferProps> = ({ sessionToken }) => {
   const [quoteIds, setQuoteIds] = useState<string[]>([])
   const [getQuotes, { data, refetch }] = useQuoteBundleLazyQuery()
@@ -127,6 +148,9 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionToken }) => {
   const [
     createHomeAccidentTravelQuote,
   ] = useCreateDanishHomeAccidentTravelQuoteMutation()
+  const [
+    createSwedishHomeAccidentQuote,
+  ] = useCreateSwedishHomeAccidentQuoteMutation()
 
   const [quoteCreatingError, setQuoteCreatingError] = useState<string | null>(
     null,
@@ -177,6 +201,17 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionToken }) => {
           travelInput,
         },
       })
+    } else if (quoteType === QuoteType.SwedishApartmentAccident) {
+      const accidentInput = getSwedishAccidentQuoteValues({
+        ...input,
+        id: quoteIds[1],
+      })
+      await createSwedishHomeAccidentQuote({
+        variables: {
+          homeInput: input as CreateQuoteInput,
+          accidentInput,
+        },
+      })
     } else {
       await createQuote(
         storage,
@@ -221,6 +256,10 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionToken }) => {
     }
     if (quoteType === QuoteType.DanishHomeAccidentTravel) {
       setQuoteIds((prev) => [prev[0], uuid(), uuid()])
+      return
+    }
+    if (quoteType === QuoteType.SwedishApartmentAccident) {
+      setQuoteIds((prev) => [prev[0], uuid()])
       return
     }
     setQuoteIds((prev) => [prev[0]])
@@ -319,7 +358,10 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionToken }) => {
                         {...props.getFieldProps('email')}
                       />
 
-                      {quoteType === QuoteType.SwedishApartment && (
+                      {[
+                        QuoteType.SwedishApartment,
+                        QuoteType.SwedishApartmentAccident,
+                      ].includes(quoteType) && (
                         <SwedishApartment formik={props} />
                       )}
                       {quoteType === QuoteType.NorwegianHome && (

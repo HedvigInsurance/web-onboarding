@@ -1,0 +1,36 @@
+mutation CreateSwedishHomeAccidentQuote(
+  $homeInput: CreateQuoteInput!
+  $accidentInput: CreateQuoteInput!
+) {
+  createHomeContents: createQuote(input: $homeInput) {
+    __typename
+    ... on CompleteQuote {
+      id
+      quoteDetails {
+        __typename
+      }
+    }
+
+    ... on UnderwritingLimitsHit {
+      limits {
+        code
+      }
+    }
+  }
+
+  createAccident: createQuote(input: $accidentInput) {
+    __typename
+    ... on CompleteQuote {
+      id
+      quoteDetails {
+        __typename
+      }
+    }
+
+    ... on UnderwritingLimitsHit {
+      limits {
+        code
+      }
+    }
+  }
+}
