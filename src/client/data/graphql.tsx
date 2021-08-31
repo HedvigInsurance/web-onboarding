@@ -1931,6 +1931,7 @@ export type Contract = {
   insuranceTerms: Array<InsuranceTerm>
   currentAgreementDetailsTable: Table
   upcomingAgreementDetailsTable: Table
+  gradientOption: TypeOfContractGradientOption
   /** localised information about the current status of the contract */
   statusPills: Array<Scalars['String']>
   /** localised information about the details of the contract, for example address / amount of people it covers */
@@ -8047,13 +8048,7 @@ export type QuoteBundleAppConfiguration = {
   showFAQ: Scalars['Boolean']
   startDateTerminology: QuoteBundleAppConfigurationStartDateTerminology
   title: QuoteBundleAppConfigurationTitle
-  gradientOption: QuoteBundleAppConfigurationGradientOption
-}
-
-export enum QuoteBundleAppConfigurationGradientOption {
-  GradientOne = 'GRADIENT_ONE',
-  GradientTwo = 'GRADIENT_TWO',
-  GradientThree = 'GRADIENT_THREE',
+  gradientOption: TypeOfContractGradientOption
 }
 
 export enum QuoteBundleAppConfigurationStartDateTerminology {
@@ -9007,6 +9002,12 @@ export enum TypeOfContract {
   DkAccidentStudent = 'DK_ACCIDENT_STUDENT',
   DkTravel = 'DK_TRAVEL',
   DkTravelStudent = 'DK_TRAVEL_STUDENT',
+}
+
+export enum TypeOfContractGradientOption {
+  GradientOne = 'GRADIENT_ONE',
+  GradientTwo = 'GRADIENT_TWO',
+  GradientThree = 'GRADIENT_THREE',
 }
 
 export type UnderwritingLimit = {
