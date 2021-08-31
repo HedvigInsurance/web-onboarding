@@ -152,7 +152,6 @@ const perilsMock: PerilV2[] = [
       vectorDrawableUrl: '',
       __typename: 'Icon',
     },
-    iconName: '',
     shortDescription: '',
     __typename: 'PerilV2',
   },
