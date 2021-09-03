@@ -4,8 +4,9 @@ import {
   ssnFormats,
   birthdateFormats,
 } from './birthDateAndSsnFormats'
+import { LocaleUrlParams } from './localePathPattern'
 
-export type LocaleLabel = 'se' | 'se-en' | 'no' | 'no-en' | 'dk' | 'dk-en'
+export type LocaleLabel = LocaleUrlParams[number]
 
 export type LocaleData = {
   path: LocaleLabel
