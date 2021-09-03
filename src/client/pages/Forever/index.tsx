@@ -11,7 +11,7 @@ import { Page } from 'components/utils/Page'
 import { SessionContainer } from 'containers/SessionContainer'
 import { useUpdatePickedLocaleMutation } from 'data/graphql'
 import { Intro } from 'pages/Forever/components/Intro'
-import { LOCALE_PATH_PATTERN } from 'shared/locale'
+import { localePathPattern } from 'l10n/localePathPattern'
 import { useTextKeys } from 'utils/textKeys'
 import { useStorage } from 'utils/StorageContainer'
 import { RedeemCode } from './components/RedeemCode'
@@ -101,14 +101,14 @@ export const Forever: React.FC<ForeverProps> = ({
 
               <Switch>
                 <Route
-                  path={LOCALE_PATH_PATTERN + '/forever/:code?'}
+                  path={localePathPattern + '/forever/:code?'}
                   exact
                   render={() => (
                     <RedeemCode referralCode={code} onSubmit={handleSubmit} />
                   )}
                 />
                 <Route
-                  path={LOCALE_PATH_PATTERN + '/forever/:code/intro'}
+                  path={localePathPattern + '/forever/:code/intro'}
                   component={Intro}
                 />
               </Switch>
