@@ -2077,6 +2077,11 @@
   resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-4.0.4.tgz#4147928d89d4a23e2d8b4443465624fa1cdbd115"
   integrity sha512-jvvS6lJAdIjjZj27lAPLMFnW0nuOAJzgra6yZFnHaF0L8u35WSmHCZUMZTmWMsTOJ69KNbVdpccb0yMEPIc6ww==
 
+"@hedviginsurance/brand@^4.0.5":
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-4.0.5.tgz#c9e474b803c492b8d159bd8f145eb23468a9c368"
+  integrity sha512-r3JawLPpPAJZ0mbYIp1Jtxk5M1uNspChJVwU6xoaKd3bev9ZNqMgqI9iaSIvetI/EGrxn2WxAwIItfeA+ivuUw==
+
 "@hedviginsurance/embark@^2.1.5":
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-2.1.5.tgz#1c389d0e5f331daa0dc7dedb5ee978dbafc23d67"
