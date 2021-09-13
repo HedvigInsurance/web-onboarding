@@ -23,9 +23,9 @@ export type Scalars = {
   /** A String-representation of Adyen's PaymentMethodsResponse */
   PaymentMethodsResponse: any
   URL: any
-  JSONString: any
   Object: any
   Instant: any
+  JSONString: any
   /** A String-representation of Adyen's payment method details */
   PaymentMethodDetails: any
   /** A String-representation of Adyen's checkout payments action */
@@ -289,6 +289,7 @@ export type Aggregate = {
 export type Agreement =
   | SwedishApartmentAgreement
   | SwedishHouseAgreement
+  | SwedishAccidentAgreement
   | NorwegianHomeContentAgreement
   | NorwegianTravelAgreement
   | DanishHomeContentAgreement
@@ -338,19 +339,19 @@ export type AppMarketingImage = Node & {
   id: Scalars['ID']
   /** The time the document was created */
   createdAt: Scalars['DateTime']
-  /** User that created this document */
-  createdBy?: Maybe<User>
   /** The time the document was updated */
   updatedAt: Scalars['DateTime']
-  /** User that last updated this document */
-  updatedBy?: Maybe<User>
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>
+  blurhash?: Maybe<Scalars['String']>
+  /** User that created this document */
+  createdBy?: Maybe<User>
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>
   /** User that last published this document */
   publishedBy?: Maybe<User>
   image?: Maybe<Asset>
   language?: Maybe<Language>
-  blurhash?: Maybe<Scalars['String']>
   userInterfaceStyle: UserInterfaceStyle
   /** List of AppMarketingImage versions */
   history: Array<Version>
@@ -415,9 +416,9 @@ export type AppMarketingImageConnection = {
 export type AppMarketingImageCreateInput = {
   createdAt?: Maybe<Scalars['DateTime']>
   updatedAt?: Maybe<Scalars['DateTime']>
+  blurhash?: Maybe<Scalars['String']>
   image?: Maybe<AssetCreateOneInlineInput>
   language?: Maybe<LanguageCreateOneInlineInput>
-  blurhash?: Maybe<Scalars['String']>
   userInterfaceStyle: UserInterfaceStyle
 }
 
@@ -488,7 +489,6 @@ export type AppMarketingImageManyWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
-  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -504,7 +504,6 @@ export type AppMarketingImageManyWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
-  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -520,9 +519,6 @@ export type AppMarketingImageManyWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
-  publishedBy?: Maybe<UserWhereInput>
-  image?: Maybe<AssetWhereInput>
-  language?: Maybe<LanguageWhereInput>
   blurhash?: Maybe<Scalars['String']>
   /** All values that are not equal to given value. */
   blurhash_not?: Maybe<Scalars['String']>
@@ -542,6 +538,11 @@ export type AppMarketingImageManyWhereInput = {
   blurhash_ends_with?: Maybe<Scalars['String']>
   /** All values not ending with the given string */
   blurhash_not_ends_with?: Maybe<Scalars['String']>
+  createdBy?: Maybe<UserWhereInput>
+  updatedBy?: Maybe<UserWhereInput>
+  publishedBy?: Maybe<UserWhereInput>
+  image?: Maybe<AssetWhereInput>
+  language?: Maybe<LanguageWhereInput>
   userInterfaceStyle?: Maybe<UserInterfaceStyle>
   /** All values that are not equal to given value. */
   userInterfaceStyle_not?: Maybe<UserInterfaceStyle>
@@ -567,9 +568,9 @@ export enum AppMarketingImageOrderByInput {
 }
 
 export type AppMarketingImageUpdateInput = {
+  blurhash?: Maybe<Scalars['String']>
   image?: Maybe<AssetUpdateOneInlineInput>
   language?: Maybe<LanguageUpdateOneInlineInput>
-  blurhash?: Maybe<Scalars['String']>
   userInterfaceStyle?: Maybe<UserInterfaceStyle>
 }
 
@@ -682,7 +683,6 @@ export type AppMarketingImageWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
-  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -698,7 +698,6 @@ export type AppMarketingImageWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
-  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -714,9 +713,6 @@ export type AppMarketingImageWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
-  publishedBy?: Maybe<UserWhereInput>
-  image?: Maybe<AssetWhereInput>
-  language?: Maybe<LanguageWhereInput>
   blurhash?: Maybe<Scalars['String']>
   /** All values that are not equal to given value. */
   blurhash_not?: Maybe<Scalars['String']>
@@ -736,6 +732,11 @@ export type AppMarketingImageWhereInput = {
   blurhash_ends_with?: Maybe<Scalars['String']>
   /** All values not ending with the given string */
   blurhash_not_ends_with?: Maybe<Scalars['String']>
+  createdBy?: Maybe<UserWhereInput>
+  updatedBy?: Maybe<UserWhereInput>
+  publishedBy?: Maybe<UserWhereInput>
+  image?: Maybe<AssetWhereInput>
+  language?: Maybe<LanguageWhereInput>
   userInterfaceStyle?: Maybe<UserInterfaceStyle>
   /** All values that are not equal to given value. */
   userInterfaceStyle_not?: Maybe<UserInterfaceStyle>
@@ -777,16 +778,10 @@ export type Asset = Node & {
   id: Scalars['ID']
   /** The time the document was created */
   createdAt: Scalars['DateTime']
-  /** User that created this document */
-  createdBy?: Maybe<User>
   /** The time the document was updated */
   updatedAt: Scalars['DateTime']
-  /** User that last updated this document */
-  updatedBy?: Maybe<User>
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>
-  /** User that last published this document */
-  publishedBy?: Maybe<User>
   /** The file handle */
   handle: Scalars['String']
   /** The file name */
@@ -799,6 +794,12 @@ export type Asset = Node & {
   size?: Maybe<Scalars['Float']>
   /** The mime type of the file */
   mimeType?: Maybe<Scalars['String']>
+  /** User that created this document */
+  createdBy?: Maybe<User>
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>
+  /** User that last published this document */
+  publishedBy?: Maybe<User>
   assetMarketingStory: Array<MarketingStory>
   fileCoreMLModel: Array<CoreMlModel>
   imageAppMarketingImage: Array<AppMarketingImage>
@@ -827,23 +828,23 @@ export type AssetCreatedAtArgs = {
 }
 
 /** Asset system model */
-export type AssetCreatedByArgs = {
-  locales?: Maybe<Array<Locale>>
-}
-
-/** Asset system model */
 export type AssetUpdatedAtArgs = {
   variation?: SystemDateTimeFieldVariation
 }
 
 /** Asset system model */
-export type AssetUpdatedByArgs = {
+export type AssetPublishedAtArgs = {
+  variation?: SystemDateTimeFieldVariation
+}
+
+/** Asset system model */
+export type AssetCreatedByArgs = {
   locales?: Maybe<Array<Locale>>
 }
 
 /** Asset system model */
-export type AssetPublishedAtArgs = {
-  variation?: SystemDateTimeFieldVariation
+export type AssetUpdatedByArgs = {
+  locales?: Maybe<Array<Locale>>
 }
 
 /** Asset system model */
@@ -1021,7 +1022,6 @@ export type AssetManyWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
-  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -1037,7 +1037,6 @@ export type AssetManyWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
-  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -1053,6 +1052,8 @@ export type AssetManyWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
+  updatedBy?: Maybe<UserWhereInput>
   publishedBy?: Maybe<UserWhereInput>
   assetMarketingStory_every?: Maybe<MarketingStoryWhereInput>
   assetMarketingStory_some?: Maybe<MarketingStoryWhereInput>
@@ -1272,7 +1273,6 @@ export type AssetWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
-  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -1288,7 +1288,6 @@ export type AssetWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
-  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -1304,7 +1303,6 @@ export type AssetWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
-  publishedBy?: Maybe<UserWhereInput>
   handle?: Maybe<Scalars['String']>
   /** All values that are not equal to given value. */
   handle_not?: Maybe<Scalars['String']>
@@ -1407,6 +1405,9 @@ export type AssetWhereInput = {
   mimeType_ends_with?: Maybe<Scalars['String']>
   /** All values not ending with the given string */
   mimeType_not_ends_with?: Maybe<Scalars['String']>
+  createdBy?: Maybe<UserWhereInput>
+  updatedBy?: Maybe<UserWhereInput>
+  publishedBy?: Maybe<UserWhereInput>
   assetMarketingStory_every?: Maybe<MarketingStoryWhereInput>
   assetMarketingStory_some?: Maybe<MarketingStoryWhereInput>
   assetMarketingStory_none?: Maybe<MarketingStoryWhereInput>
@@ -1538,6 +1539,7 @@ export type BundledQuote = {
   typeOfContract: TypeOfContract
   initiatedFrom: Scalars['String']
   perils: Array<PerilV2>
+  contractPerils: Array<PerilV2>
   insurableLimits: Array<InsurableLimit>
   termsAndConditions: InsuranceTerm
   insuranceTerms: Array<InsuranceTerm>
@@ -1546,6 +1548,10 @@ export type BundledQuote = {
 }
 
 export type BundledQuotePerilsArgs = {
+  locale: Locale
+}
+
+export type BundledQuoteContractPerilsArgs = {
   locale: Locale
 }
 
@@ -1850,6 +1856,7 @@ export type CompleteQuote = {
   typeOfContract: TypeOfContract
   phoneNumber?: Maybe<Scalars['String']>
   perils: Array<PerilV2>
+  contractPerils: Array<PerilV2>
   insurableLimits: Array<InsurableLimit>
   termsAndConditions: InsuranceTerm
   insuranceTerms: Array<InsuranceTerm>
@@ -1858,6 +1865,10 @@ export type CompleteQuote = {
 }
 
 export type CompleteQuotePerilsArgs = {
+  locale: Locale
+}
+
+export type CompleteQuoteContractPerilsArgs = {
   locale: Locale
 }
 
@@ -1926,6 +1937,7 @@ export type Contract = {
   upcomingRenewal?: Maybe<UpcomingRenewal>
   createdAt: Scalars['Instant']
   perils: Array<PerilV2>
+  contractPerils: Array<PerilV2>
   insurableLimits: Array<InsurableLimit>
   termsAndConditions: InsuranceTerm
   insuranceTerms: Array<InsuranceTerm>
@@ -1939,6 +1951,10 @@ export type Contract = {
 }
 
 export type ContractPerilsArgs = {
+  locale: Locale
+}
+
+export type ContractContractPerilsArgs = {
   locale: Locale
 }
 
@@ -2003,18 +2019,18 @@ export type CoreMlModel = Node & {
   id: Scalars['ID']
   /** The time the document was created */
   createdAt: Scalars['DateTime']
-  /** User that created this document */
-  createdBy?: Maybe<User>
   /** The time the document was updated */
   updatedAt: Scalars['DateTime']
-  /** User that last updated this document */
-  updatedBy?: Maybe<User>
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>
+  /** User that created this document */
+  createdBy?: Maybe<User>
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>
   /** User that last published this document */
   publishedBy?: Maybe<User>
-  type?: Maybe<CoreMlModelType>
   file?: Maybe<Asset>
+  type?: Maybe<CoreMlModelType>
   /** List of CoreMLModel versions */
   history: Array<Version>
 }
@@ -2073,8 +2089,8 @@ export type CoreMlModelConnection = {
 export type CoreMlModelCreateInput = {
   createdAt?: Maybe<Scalars['DateTime']>
   updatedAt?: Maybe<Scalars['DateTime']>
-  type?: Maybe<CoreMlModelType>
   file?: Maybe<AssetCreateOneInlineInput>
+  type?: Maybe<CoreMlModelType>
 }
 
 export type CoreMlModelCreateManyInlineInput = {
@@ -2144,7 +2160,6 @@ export type CoreMlModelManyWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
-  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -2160,7 +2175,6 @@ export type CoreMlModelManyWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
-  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -2176,7 +2190,10 @@ export type CoreMlModelManyWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
+  updatedBy?: Maybe<UserWhereInput>
   publishedBy?: Maybe<UserWhereInput>
+  file?: Maybe<AssetWhereInput>
   type?: Maybe<CoreMlModelType>
   /** All values that are not equal to given value. */
   type_not?: Maybe<CoreMlModelType>
@@ -2184,7 +2201,6 @@ export type CoreMlModelManyWhereInput = {
   type_in?: Maybe<Array<CoreMlModelType>>
   /** All values that are not contained in given list. */
   type_not_in?: Maybe<Array<CoreMlModelType>>
-  file?: Maybe<AssetWhereInput>
 }
 
 export enum CoreMlModelOrderByInput {
@@ -2205,8 +2221,8 @@ export enum CoreMlModelType {
 }
 
 export type CoreMlModelUpdateInput = {
-  type?: Maybe<CoreMlModelType>
   file?: Maybe<AssetUpdateOneInlineInput>
+  type?: Maybe<CoreMlModelType>
 }
 
 export type CoreMlModelUpdateManyInlineInput = {
@@ -2317,7 +2333,6 @@ export type CoreMlModelWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
-  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -2333,7 +2348,6 @@ export type CoreMlModelWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
-  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -2349,7 +2363,10 @@ export type CoreMlModelWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
+  updatedBy?: Maybe<UserWhereInput>
   publishedBy?: Maybe<UserWhereInput>
+  file?: Maybe<AssetWhereInput>
   type?: Maybe<CoreMlModelType>
   /** All values that are not equal to given value. */
   type_not?: Maybe<CoreMlModelType>
@@ -2357,7 +2374,6 @@ export type CoreMlModelWhereInput = {
   type_in?: Maybe<Array<CoreMlModelType>>
   /** All values that are not contained in given list. */
   type_not_in?: Maybe<Array<CoreMlModelType>>
-  file?: Maybe<AssetWhereInput>
 }
 
 /** References CoreMLModel record uniquely */
@@ -2514,7 +2530,11 @@ export type CrossSellChat = {
 
 export type CrossSellEmbark = {
   __typename?: 'CrossSellEmbark'
-  embarkStoryId: Scalars['ID']
+  embarkStory: EmbarkStory
+}
+
+export type CrossSellEmbarkEmbarkStoryArgs = {
+  locale: Locale
 }
 
 export type CrossSellQuotesFailure = {
@@ -3395,7 +3415,6 @@ export type EmbarkRedirectUnaryExpression = {
   passedExpressionValue?: Maybe<Scalars['String']>
 }
 
-/** Returning EmbarkMessage from EmbarkResponse is deprecated and will be removed in a future version. */
 export type EmbarkResponse =
   | EmbarkGroupedResponse
   | EmbarkResponseExpression
@@ -3716,19 +3735,19 @@ export type Faq = Node & {
   id: Scalars['ID']
   /** The time the document was created */
   createdAt: Scalars['DateTime']
-  /** User that created this document */
-  createdBy?: Maybe<User>
   /** The time the document was updated */
   updatedAt: Scalars['DateTime']
-  /** User that last updated this document */
-  updatedBy?: Maybe<User>
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>
+  headline?: Maybe<Scalars['String']>
+  body?: Maybe<Scalars['String']>
+  /** User that created this document */
+  createdBy?: Maybe<User>
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>
   /** User that last published this document */
   publishedBy?: Maybe<User>
   language?: Maybe<Language>
-  headline?: Maybe<Scalars['String']>
-  body?: Maybe<Scalars['String']>
   /** List of Faq versions */
   history: Array<Version>
 }
@@ -3787,9 +3806,9 @@ export type FaqConnection = {
 export type FaqCreateInput = {
   createdAt?: Maybe<Scalars['DateTime']>
   updatedAt?: Maybe<Scalars['DateTime']>
-  language?: Maybe<LanguageCreateOneInlineInput>
   headline?: Maybe<Scalars['String']>
   body?: Maybe<Scalars['String']>
+  language?: Maybe<LanguageCreateOneInlineInput>
 }
 
 export type FaqCreateManyInlineInput = {
@@ -3859,7 +3878,6 @@ export type FaqManyWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
-  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -3875,7 +3893,6 @@ export type FaqManyWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
-  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -3891,8 +3908,6 @@ export type FaqManyWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
-  publishedBy?: Maybe<UserWhereInput>
-  language?: Maybe<LanguageWhereInput>
   headline?: Maybe<Scalars['String']>
   /** All values that are not equal to given value. */
   headline_not?: Maybe<Scalars['String']>
@@ -3931,6 +3946,10 @@ export type FaqManyWhereInput = {
   body_ends_with?: Maybe<Scalars['String']>
   /** All values not ending with the given string */
   body_not_ends_with?: Maybe<Scalars['String']>
+  createdBy?: Maybe<UserWhereInput>
+  updatedBy?: Maybe<UserWhereInput>
+  publishedBy?: Maybe<UserWhereInput>
+  language?: Maybe<LanguageWhereInput>
 }
 
 export enum FaqOrderByInput {
@@ -3949,9 +3968,9 @@ export enum FaqOrderByInput {
 }
 
 export type FaqUpdateInput = {
-  language?: Maybe<LanguageUpdateOneInlineInput>
   headline?: Maybe<Scalars['String']>
   body?: Maybe<Scalars['String']>
+  language?: Maybe<LanguageUpdateOneInlineInput>
 }
 
 export type FaqUpdateManyInlineInput = {
@@ -4063,7 +4082,6 @@ export type FaqWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
-  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -4079,7 +4097,6 @@ export type FaqWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
-  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -4095,8 +4112,6 @@ export type FaqWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
-  publishedBy?: Maybe<UserWhereInput>
-  language?: Maybe<LanguageWhereInput>
   headline?: Maybe<Scalars['String']>
   /** All values that are not equal to given value. */
   headline_not?: Maybe<Scalars['String']>
@@ -4135,6 +4150,10 @@ export type FaqWhereInput = {
   body_ends_with?: Maybe<Scalars['String']>
   /** All values not ending with the given string */
   body_not_ends_with?: Maybe<Scalars['String']>
+  createdBy?: Maybe<UserWhereInput>
+  updatedBy?: Maybe<UserWhereInput>
+  publishedBy?: Maybe<UserWhereInput>
+  language?: Maybe<LanguageWhereInput>
 }
 
 /** References Faq record uniquely */
@@ -4287,21 +4306,21 @@ export type ImportantMessage = Node & {
   id: Scalars['ID']
   /** The time the document was created */
   createdAt: Scalars['DateTime']
-  /** User that created this document */
-  createdBy?: Maybe<User>
   /** The time the document was updated */
   updatedAt: Scalars['DateTime']
-  /** User that last updated this document */
-  updatedBy?: Maybe<User>
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>
-  /** User that last published this document */
-  publishedBy?: Maybe<User>
   title?: Maybe<Scalars['String']>
   message?: Maybe<Scalars['String']>
-  language?: Maybe<Language>
   button?: Maybe<Scalars['String']>
   link?: Maybe<Scalars['String']>
+  /** User that created this document */
+  createdBy?: Maybe<User>
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>
+  /** User that last published this document */
+  publishedBy?: Maybe<User>
+  language?: Maybe<Language>
   /** List of ImportantMessage versions */
   history: Array<Version>
 }
@@ -4356,9 +4375,9 @@ export type ImportantMessageCreateInput = {
   updatedAt?: Maybe<Scalars['DateTime']>
   title?: Maybe<Scalars['String']>
   message?: Maybe<Scalars['String']>
-  language?: Maybe<LanguageCreateOneInlineInput>
   button?: Maybe<Scalars['String']>
   link?: Maybe<Scalars['String']>
+  language?: Maybe<LanguageCreateOneInlineInput>
 }
 
 export type ImportantMessageCreateManyInlineInput = {
@@ -4428,7 +4447,6 @@ export type ImportantMessageManyWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
-  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -4444,7 +4462,6 @@ export type ImportantMessageManyWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
-  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -4460,7 +4477,6 @@ export type ImportantMessageManyWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
-  publishedBy?: Maybe<UserWhereInput>
   title?: Maybe<Scalars['String']>
   /** All values that are not equal to given value. */
   title_not?: Maybe<Scalars['String']>
@@ -4499,7 +4515,6 @@ export type ImportantMessageManyWhereInput = {
   message_ends_with?: Maybe<Scalars['String']>
   /** All values not ending with the given string */
   message_not_ends_with?: Maybe<Scalars['String']>
-  language?: Maybe<LanguageWhereInput>
   button?: Maybe<Scalars['String']>
   /** All values that are not equal to given value. */
   button_not?: Maybe<Scalars['String']>
@@ -4538,6 +4553,10 @@ export type ImportantMessageManyWhereInput = {
   link_ends_with?: Maybe<Scalars['String']>
   /** All values not ending with the given string */
   link_not_ends_with?: Maybe<Scalars['String']>
+  createdBy?: Maybe<UserWhereInput>
+  updatedBy?: Maybe<UserWhereInput>
+  publishedBy?: Maybe<UserWhereInput>
+  language?: Maybe<LanguageWhereInput>
 }
 
 export enum ImportantMessageOrderByInput {
@@ -4562,9 +4581,9 @@ export enum ImportantMessageOrderByInput {
 export type ImportantMessageUpdateInput = {
   title?: Maybe<Scalars['String']>
   message?: Maybe<Scalars['String']>
-  language?: Maybe<LanguageUpdateOneInlineInput>
   button?: Maybe<Scalars['String']>
   link?: Maybe<Scalars['String']>
+  language?: Maybe<LanguageUpdateOneInlineInput>
 }
 
 export type ImportantMessageUpdateManyInlineInput = {
@@ -4678,7 +4697,6 @@ export type ImportantMessageWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
-  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -4694,7 +4712,6 @@ export type ImportantMessageWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
-  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -4710,7 +4727,6 @@ export type ImportantMessageWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
-  publishedBy?: Maybe<UserWhereInput>
   title?: Maybe<Scalars['String']>
   /** All values that are not equal to given value. */
   title_not?: Maybe<Scalars['String']>
@@ -4749,7 +4765,6 @@ export type ImportantMessageWhereInput = {
   message_ends_with?: Maybe<Scalars['String']>
   /** All values not ending with the given string */
   message_not_ends_with?: Maybe<Scalars['String']>
-  language?: Maybe<LanguageWhereInput>
   button?: Maybe<Scalars['String']>
   /** All values that are not equal to given value. */
   button_not?: Maybe<Scalars['String']>
@@ -4788,6 +4803,10 @@ export type ImportantMessageWhereInput = {
   link_ends_with?: Maybe<Scalars['String']>
   /** All values not ending with the given string */
   link_not_ends_with?: Maybe<Scalars['String']>
+  createdBy?: Maybe<UserWhereInput>
+  updatedBy?: Maybe<UserWhereInput>
+  publishedBy?: Maybe<UserWhereInput>
+  language?: Maybe<LanguageWhereInput>
 }
 
 /** References ImportantMessage record uniquely */
@@ -5013,22 +5032,22 @@ export type Key = Node & {
   id: Scalars['ID']
   /** The time the document was created */
   createdAt: Scalars['DateTime']
-  /** User that created this document */
-  createdBy?: Maybe<User>
   /** The time the document was updated */
   updatedAt: Scalars['DateTime']
-  /** User that last updated this document */
-  updatedBy?: Maybe<User>
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>
-  /** User that last published this document */
-  publishedBy?: Maybe<User>
   value: Scalars['String']
   /** Describe what the translation is for, never shown to a user. */
   description?: Maybe<Scalars['String']>
-  translations: Array<Translation>
+  /** User that created this document */
+  createdBy?: Maybe<User>
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>
+  /** User that last published this document */
+  publishedBy?: Maybe<User>
   keyGearItemCoverageTitle?: Maybe<KeyGearItemCoverage>
   keyGearItemCoverageDescription?: Maybe<KeyGearItemCoverage>
+  translations: Array<Translation>
   /** List of Key versions */
   history: Array<Version>
 }
@@ -5051,6 +5070,14 @@ export type KeyPublishedByArgs = {
   locales?: Maybe<Array<Locale>>
 }
 
+export type KeyKeyGearItemCoverageTitleArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+export type KeyKeyGearItemCoverageDescriptionArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
 export type KeyTranslationsArgs = {
   where?: Maybe<TranslationWhereInput>
   orderBy?: Maybe<TranslationOrderByInput>
@@ -5059,14 +5086,6 @@ export type KeyTranslationsArgs = {
   before?: Maybe<Scalars['String']>
   first?: Maybe<Scalars['Int']>
   last?: Maybe<Scalars['Int']>
-  locales?: Maybe<Array<Locale>>
-}
-
-export type KeyKeyGearItemCoverageTitleArgs = {
-  locales?: Maybe<Array<Locale>>
-}
-
-export type KeyKeyGearItemCoverageDescriptionArgs = {
   locales?: Maybe<Array<Locale>>
 }
 
@@ -5107,11 +5126,12 @@ export type KeyCreateInput = {
   updatedAt?: Maybe<Scalars['DateTime']>
   value: Scalars['String']
   description?: Maybe<Scalars['String']>
-  translations?: Maybe<TranslationCreateManyInlineInput>
   keyGearItemCoverageTitle?: Maybe<KeyGearItemCoverageCreateOneInlineInput>
   keyGearItemCoverageDescription?: Maybe<
     KeyGearItemCoverageCreateOneInlineInput
   >
+  ckt8upxgl306b01z00bg1gkdd?: Maybe<TranslationCreateManyInlineInput>
+  translations?: Maybe<TranslationCreateManyInlineInput>
 }
 
 export type KeyCreateManyInlineInput = {
@@ -5181,14 +5201,14 @@ export type KeyGearItemCoverage = Node & {
   id: Scalars['ID']
   /** The time the document was created */
   createdAt: Scalars['DateTime']
-  /** User that created this document */
-  createdBy?: Maybe<User>
   /** The time the document was updated */
   updatedAt: Scalars['DateTime']
-  /** User that last updated this document */
-  updatedBy?: Maybe<User>
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>
+  /** User that created this document */
+  createdBy?: Maybe<User>
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>
   /** User that last published this document */
   publishedBy?: Maybe<User>
   title?: Maybe<Key>
@@ -5320,7 +5340,6 @@ export type KeyGearItemCoverageManyWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
-  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -5336,7 +5355,6 @@ export type KeyGearItemCoverageManyWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
-  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -5352,6 +5370,8 @@ export type KeyGearItemCoverageManyWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
+  updatedBy?: Maybe<UserWhereInput>
   publishedBy?: Maybe<UserWhereInput>
   title?: Maybe<KeyWhereInput>
   description?: Maybe<KeyWhereInput>
@@ -5482,7 +5502,6 @@ export type KeyGearItemCoverageWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
-  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -5498,7 +5517,6 @@ export type KeyGearItemCoverageWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
-  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -5514,6 +5532,8 @@ export type KeyGearItemCoverageWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
+  updatedBy?: Maybe<UserWhereInput>
   publishedBy?: Maybe<UserWhereInput>
   title?: Maybe<KeyWhereInput>
   description?: Maybe<KeyWhereInput>
@@ -5604,7 +5624,6 @@ export type KeyManyWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
-  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -5620,7 +5639,6 @@ export type KeyManyWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
-  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -5636,7 +5654,6 @@ export type KeyManyWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
-  publishedBy?: Maybe<UserWhereInput>
   value?: Maybe<Scalars['String']>
   /** All values that are not equal to given value. */
   value_not?: Maybe<Scalars['String']>
@@ -5675,11 +5692,14 @@ export type KeyManyWhereInput = {
   description_ends_with?: Maybe<Scalars['String']>
   /** All values not ending with the given string */
   description_not_ends_with?: Maybe<Scalars['String']>
+  createdBy?: Maybe<UserWhereInput>
+  updatedBy?: Maybe<UserWhereInput>
+  publishedBy?: Maybe<UserWhereInput>
+  keyGearItemCoverageTitle?: Maybe<KeyGearItemCoverageWhereInput>
+  keyGearItemCoverageDescription?: Maybe<KeyGearItemCoverageWhereInput>
   translations_every?: Maybe<TranslationWhereInput>
   translations_some?: Maybe<TranslationWhereInput>
   translations_none?: Maybe<TranslationWhereInput>
-  keyGearItemCoverageTitle?: Maybe<KeyGearItemCoverageWhereInput>
-  keyGearItemCoverageDescription?: Maybe<KeyGearItemCoverageWhereInput>
 }
 
 export enum KeyOrderByInput {
@@ -5700,11 +5720,12 @@ export enum KeyOrderByInput {
 export type KeyUpdateInput = {
   value?: Maybe<Scalars['String']>
   description?: Maybe<Scalars['String']>
-  translations?: Maybe<TranslationUpdateManyInlineInput>
   keyGearItemCoverageTitle?: Maybe<KeyGearItemCoverageUpdateOneInlineInput>
   keyGearItemCoverageDescription?: Maybe<
     KeyGearItemCoverageUpdateOneInlineInput
   >
+  ckt8upxgl306b01z00bg1gkdd?: Maybe<TranslationUpdateManyInlineInput>
+  translations?: Maybe<TranslationUpdateManyInlineInput>
 }
 
 export type KeyUpdateManyInlineInput = {
@@ -5815,7 +5836,6 @@ export type KeyWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
-  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -5831,7 +5851,6 @@ export type KeyWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
-  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -5847,7 +5866,6 @@ export type KeyWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
-  publishedBy?: Maybe<UserWhereInput>
   value?: Maybe<Scalars['String']>
   /** All values that are not equal to given value. */
   value_not?: Maybe<Scalars['String']>
@@ -5886,11 +5904,14 @@ export type KeyWhereInput = {
   description_ends_with?: Maybe<Scalars['String']>
   /** All values not ending with the given string */
   description_not_ends_with?: Maybe<Scalars['String']>
+  createdBy?: Maybe<UserWhereInput>
+  updatedBy?: Maybe<UserWhereInput>
+  publishedBy?: Maybe<UserWhereInput>
+  keyGearItemCoverageTitle?: Maybe<KeyGearItemCoverageWhereInput>
+  keyGearItemCoverageDescription?: Maybe<KeyGearItemCoverageWhereInput>
   translations_every?: Maybe<TranslationWhereInput>
   translations_some?: Maybe<TranslationWhereInput>
   translations_none?: Maybe<TranslationWhereInput>
-  keyGearItemCoverageTitle?: Maybe<KeyGearItemCoverageWhereInput>
-  keyGearItemCoverageDescription?: Maybe<KeyGearItemCoverageWhereInput>
 }
 
 /** References Key record uniquely */
@@ -5909,23 +5930,23 @@ export type Language = Node & {
   id: Scalars['ID']
   /** The time the document was created */
   createdAt: Scalars['DateTime']
-  /** User that created this document */
-  createdBy?: Maybe<User>
   /** The time the document was updated */
   updatedAt: Scalars['DateTime']
-  /** User that last updated this document */
-  updatedBy?: Maybe<User>
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>
-  /** User that last published this document */
-  publishedBy?: Maybe<User>
-  translations: Array<Translation>
   name: Scalars['String']
   code: Scalars['String']
+  /** User that created this document */
+  createdBy?: Maybe<User>
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>
+  /** User that last published this document */
+  publishedBy?: Maybe<User>
   marketingStories: Array<MarketingStory>
   faqs: Array<Faq>
   importantMessageses: Array<ImportantMessage>
   appMarketingImages: Array<AppMarketingImage>
+  translation: Array<Translation>
   /** List of Language versions */
   history: Array<Version>
 }
@@ -5945,17 +5966,6 @@ export type LanguageUpdatedByArgs = {
 }
 
 export type LanguagePublishedByArgs = {
-  locales?: Maybe<Array<Locale>>
-}
-
-export type LanguageTranslationsArgs = {
-  where?: Maybe<TranslationWhereInput>
-  orderBy?: Maybe<TranslationOrderByInput>
-  skip?: Maybe<Scalars['Int']>
-  after?: Maybe<Scalars['String']>
-  before?: Maybe<Scalars['String']>
-  first?: Maybe<Scalars['Int']>
-  last?: Maybe<Scalars['Int']>
   locales?: Maybe<Array<Locale>>
 }
 
@@ -6003,6 +6013,17 @@ export type LanguageAppMarketingImagesArgs = {
   locales?: Maybe<Array<Locale>>
 }
 
+export type LanguageTranslationArgs = {
+  where?: Maybe<TranslationWhereInput>
+  orderBy?: Maybe<TranslationOrderByInput>
+  skip?: Maybe<Scalars['Int']>
+  after?: Maybe<Scalars['String']>
+  before?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+  locales?: Maybe<Array<Locale>>
+}
+
 export type LanguageHistoryArgs = {
   limit?: Scalars['Int']
   skip?: Scalars['Int']
@@ -6029,13 +6050,13 @@ export type LanguageConnection = {
 export type LanguageCreateInput = {
   createdAt?: Maybe<Scalars['DateTime']>
   updatedAt?: Maybe<Scalars['DateTime']>
-  translations?: Maybe<TranslationCreateManyInlineInput>
   name: Scalars['String']
   code: Scalars['String']
   marketingStories?: Maybe<MarketingStoryCreateManyInlineInput>
   faqs?: Maybe<FaqCreateManyInlineInput>
   importantMessageses?: Maybe<ImportantMessageCreateManyInlineInput>
   appMarketingImages?: Maybe<AppMarketingImageCreateManyInlineInput>
+  translation?: Maybe<TranslationCreateManyInlineInput>
 }
 
 export type LanguageCreateManyInlineInput = {
@@ -6105,7 +6126,6 @@ export type LanguageManyWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
-  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -6121,7 +6141,6 @@ export type LanguageManyWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
-  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -6137,10 +6156,6 @@ export type LanguageManyWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
-  publishedBy?: Maybe<UserWhereInput>
-  translations_every?: Maybe<TranslationWhereInput>
-  translations_some?: Maybe<TranslationWhereInput>
-  translations_none?: Maybe<TranslationWhereInput>
   name?: Maybe<Scalars['String']>
   /** All values that are not equal to given value. */
   name_not?: Maybe<Scalars['String']>
@@ -6179,6 +6194,9 @@ export type LanguageManyWhereInput = {
   code_ends_with?: Maybe<Scalars['String']>
   /** All values not ending with the given string */
   code_not_ends_with?: Maybe<Scalars['String']>
+  createdBy?: Maybe<UserWhereInput>
+  updatedBy?: Maybe<UserWhereInput>
+  publishedBy?: Maybe<UserWhereInput>
   marketingStories_every?: Maybe<MarketingStoryWhereInput>
   marketingStories_some?: Maybe<MarketingStoryWhereInput>
   marketingStories_none?: Maybe<MarketingStoryWhereInput>
@@ -6191,6 +6209,9 @@ export type LanguageManyWhereInput = {
   appMarketingImages_every?: Maybe<AppMarketingImageWhereInput>
   appMarketingImages_some?: Maybe<AppMarketingImageWhereInput>
   appMarketingImages_none?: Maybe<AppMarketingImageWhereInput>
+  translation_every?: Maybe<TranslationWhereInput>
+  translation_some?: Maybe<TranslationWhereInput>
+  translation_none?: Maybe<TranslationWhereInput>
 }
 
 export enum LanguageOrderByInput {
@@ -6209,13 +6230,13 @@ export enum LanguageOrderByInput {
 }
 
 export type LanguageUpdateInput = {
-  translations?: Maybe<TranslationUpdateManyInlineInput>
   name?: Maybe<Scalars['String']>
   code?: Maybe<Scalars['String']>
   marketingStories?: Maybe<MarketingStoryUpdateManyInlineInput>
   faqs?: Maybe<FaqUpdateManyInlineInput>
   importantMessageses?: Maybe<ImportantMessageUpdateManyInlineInput>
   appMarketingImages?: Maybe<AppMarketingImageUpdateManyInlineInput>
+  translation?: Maybe<TranslationUpdateManyInlineInput>
 }
 
 export type LanguageUpdateManyInlineInput = {
@@ -6327,7 +6348,6 @@ export type LanguageWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
-  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -6343,7 +6363,6 @@ export type LanguageWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
-  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -6359,10 +6378,6 @@ export type LanguageWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
-  publishedBy?: Maybe<UserWhereInput>
-  translations_every?: Maybe<TranslationWhereInput>
-  translations_some?: Maybe<TranslationWhereInput>
-  translations_none?: Maybe<TranslationWhereInput>
   name?: Maybe<Scalars['String']>
   /** All values that are not equal to given value. */
   name_not?: Maybe<Scalars['String']>
@@ -6401,6 +6416,9 @@ export type LanguageWhereInput = {
   code_ends_with?: Maybe<Scalars['String']>
   /** All values not ending with the given string */
   code_not_ends_with?: Maybe<Scalars['String']>
+  createdBy?: Maybe<UserWhereInput>
+  updatedBy?: Maybe<UserWhereInput>
+  publishedBy?: Maybe<UserWhereInput>
   marketingStories_every?: Maybe<MarketingStoryWhereInput>
   marketingStories_some?: Maybe<MarketingStoryWhereInput>
   marketingStories_none?: Maybe<MarketingStoryWhereInput>
@@ -6413,6 +6431,9 @@ export type LanguageWhereInput = {
   appMarketingImages_every?: Maybe<AppMarketingImageWhereInput>
   appMarketingImages_some?: Maybe<AppMarketingImageWhereInput>
   appMarketingImages_none?: Maybe<AppMarketingImageWhereInput>
+  translation_every?: Maybe<TranslationWhereInput>
+  translation_some?: Maybe<TranslationWhereInput>
+  translation_none?: Maybe<TranslationWhereInput>
 }
 
 /** References Language record uniquely */
@@ -6484,22 +6505,22 @@ export type MarketingStory = Node & {
   id: Scalars['ID']
   /** The time the document was created */
   createdAt: Scalars['DateTime']
-  /** User that created this document */
-  createdBy?: Maybe<User>
   /** The time the document was updated */
   updatedAt: Scalars['DateTime']
-  /** User that last updated this document */
-  updatedBy?: Maybe<User>
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>
+  duration?: Maybe<Scalars['Float']>
+  importance?: Maybe<Scalars['Int']>
+  /** User that created this document */
+  createdBy?: Maybe<User>
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>
   /** User that last published this document */
   publishedBy?: Maybe<User>
   asset: Asset
-  duration?: Maybe<Scalars['Float']>
-  importance?: Maybe<Scalars['Int']>
+  language?: Maybe<Language>
   backgroundColor: HedvigColor
   environment?: Maybe<Environment>
-  language?: Maybe<Language>
   /** List of MarketingStory versions */
   history: Array<Version>
 }
@@ -6556,12 +6577,12 @@ export type MarketingStoryConnection = {
 export type MarketingStoryCreateInput = {
   createdAt?: Maybe<Scalars['DateTime']>
   updatedAt?: Maybe<Scalars['DateTime']>
-  asset: AssetCreateOneInlineInput
   duration?: Maybe<Scalars['Float']>
   importance?: Maybe<Scalars['Int']>
+  asset: AssetCreateOneInlineInput
+  language?: Maybe<LanguageCreateOneInlineInput>
   backgroundColor: HedvigColor
   environment?: Maybe<Environment>
-  language?: Maybe<LanguageCreateOneInlineInput>
 }
 
 export type MarketingStoryCreateManyInlineInput = {
@@ -6631,7 +6652,6 @@ export type MarketingStoryManyWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
-  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -6647,7 +6667,6 @@ export type MarketingStoryManyWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
-  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -6663,8 +6682,6 @@ export type MarketingStoryManyWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
-  publishedBy?: Maybe<UserWhereInput>
-  asset?: Maybe<AssetWhereInput>
   duration?: Maybe<Scalars['Float']>
   /** All values that are not equal to given value. */
   duration_not?: Maybe<Scalars['Float']>
@@ -6695,6 +6712,11 @@ export type MarketingStoryManyWhereInput = {
   importance_gt?: Maybe<Scalars['Int']>
   /** All values greater than or equal the given value. */
   importance_gte?: Maybe<Scalars['Int']>
+  createdBy?: Maybe<UserWhereInput>
+  updatedBy?: Maybe<UserWhereInput>
+  publishedBy?: Maybe<UserWhereInput>
+  asset?: Maybe<AssetWhereInput>
+  language?: Maybe<LanguageWhereInput>
   backgroundColor?: Maybe<HedvigColor>
   /** All values that are not equal to given value. */
   backgroundColor_not?: Maybe<HedvigColor>
@@ -6709,7 +6731,6 @@ export type MarketingStoryManyWhereInput = {
   environment_in?: Maybe<Array<Environment>>
   /** All values that are not contained in given list. */
   environment_not_in?: Maybe<Array<Environment>>
-  language?: Maybe<LanguageWhereInput>
 }
 
 export enum MarketingStoryOrderByInput {
@@ -6732,12 +6753,12 @@ export enum MarketingStoryOrderByInput {
 }
 
 export type MarketingStoryUpdateInput = {
-  asset?: Maybe<AssetUpdateOneInlineInput>
   duration?: Maybe<Scalars['Float']>
   importance?: Maybe<Scalars['Int']>
+  asset?: Maybe<AssetUpdateOneInlineInput>
+  language?: Maybe<LanguageUpdateOneInlineInput>
   backgroundColor?: Maybe<HedvigColor>
   environment?: Maybe<Environment>
-  language?: Maybe<LanguageUpdateOneInlineInput>
 }
 
 export type MarketingStoryUpdateManyInlineInput = {
@@ -6851,7 +6872,6 @@ export type MarketingStoryWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
-  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -6867,7 +6887,6 @@ export type MarketingStoryWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
-  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -6883,8 +6902,6 @@ export type MarketingStoryWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
-  publishedBy?: Maybe<UserWhereInput>
-  asset?: Maybe<AssetWhereInput>
   duration?: Maybe<Scalars['Float']>
   /** All values that are not equal to given value. */
   duration_not?: Maybe<Scalars['Float']>
@@ -6915,6 +6932,11 @@ export type MarketingStoryWhereInput = {
   importance_gt?: Maybe<Scalars['Int']>
   /** All values greater than or equal the given value. */
   importance_gte?: Maybe<Scalars['Int']>
+  createdBy?: Maybe<UserWhereInput>
+  updatedBy?: Maybe<UserWhereInput>
+  publishedBy?: Maybe<UserWhereInput>
+  asset?: Maybe<AssetWhereInput>
+  language?: Maybe<LanguageWhereInput>
   backgroundColor?: Maybe<HedvigColor>
   /** All values that are not equal to given value. */
   backgroundColor_not?: Maybe<HedvigColor>
@@ -6929,7 +6951,6 @@ export type MarketingStoryWhereInput = {
   environment_in?: Maybe<Array<Environment>>
   /** All values that are not contained in given list. */
   environment_not_in?: Maybe<Array<Environment>>
-  language?: Maybe<LanguageWhereInput>
 }
 
 /** References MarketingStory record uniquely */
@@ -7674,18 +7695,18 @@ export type PreviousInsurer = {
 }
 
 export enum Project {
-  All = 'All',
-  Android = 'Android',
-  App = 'App',
-  AppContentService = 'AppContentService',
-  BotService = 'BotService',
-  Ios = 'IOS',
-  MemberService = 'MemberService',
   NotificationService = 'NotificationService',
-  ProductPricing = 'ProductPricing',
   Underwriter = 'Underwriter',
   Web = 'Web',
   WebOnboarding = 'WebOnboarding',
+  App = 'App',
+  All = 'All',
+  Android = 'Android',
+  Ios = 'IOS',
+  AppContentService = 'AppContentService',
+  BotService = 'BotService',
+  ProductPricing = 'ProductPricing',
+  MemberService = 'MemberService',
 }
 
 export type ProviderStatus = {
@@ -7710,16 +7731,16 @@ export type PublishLocaleInput = {
 
 export type Query = {
   __typename?: 'Query'
-  /** Retrieve multiple appMarketingImages */
-  appMarketingImages: Array<AppMarketingImage>
-  /** Retrieve multiple coreMLModels */
-  coreMLModels: Array<CoreMlModel>
   /** Retrieve multiple faqs */
   faqs: Array<Faq>
-  /** Retrieve multiple importantMessages */
-  importantMessages: Array<ImportantMessage>
+  /** Retrieve multiple coreMLModels */
+  coreMLModels: Array<CoreMlModel>
   /** Retrieve multiple keyGearItemCoverages */
   keyGearItemCoverages: Array<KeyGearItemCoverage>
+  /** Retrieve multiple importantMessages */
+  importantMessages: Array<ImportantMessage>
+  /** Retrieve multiple appMarketingImages */
+  appMarketingImages: Array<AppMarketingImage>
   /** Retrieve multiple languages */
   languages: Array<Language>
   /** Retrieve multiple marketingStories */
@@ -7772,10 +7793,6 @@ export type Query = {
   insurableLimits: Array<InsurableLimit>
   referralTerms: ReferralTerm
   howClaimsWork: Array<ClaimsExplainerPage>
-  embarkStory?: Maybe<EmbarkStory>
-  /** returns names of all available embark stories */
-  embarkStoryNames: Array<Scalars['String']>
-  embarkStories: Array<EmbarkStoryMetadata>
   /** Used */
   keyGearItems: Array<KeyGearItem>
   keyGearItem?: Maybe<KeyGearItem>
@@ -7814,12 +7831,16 @@ export type Query = {
   /**  Returns all claims the member has  */
   claims: Array<Claim>
   /**  Returns perils from promise-cms  */
-  perilsV2: Array<PerilV2>
+  contractPerils: Array<PerilV2>
+  embarkStory?: Maybe<EmbarkStory>
+  /**  returns names of all available embark stories  */
+  embarkStoryNames: Array<Scalars['String']>
+  embarkStories: Array<EmbarkStoryMetadata>
 }
 
-export type QueryAppMarketingImagesArgs = {
-  where?: Maybe<AppMarketingImageWhereInput>
-  orderBy?: Maybe<AppMarketingImageOrderByInput>
+export type QueryFaqsArgs = {
+  where?: Maybe<FaqWhereInput>
+  orderBy?: Maybe<FaqOrderByInput>
   skip?: Maybe<Scalars['Int']>
   after?: Maybe<Scalars['String']>
   before?: Maybe<Scalars['String']>
@@ -7841,9 +7862,9 @@ export type QueryCoreMlModelsArgs = {
   locales?: Array<Locale>
 }
 
-export type QueryFaqsArgs = {
-  where?: Maybe<FaqWhereInput>
-  orderBy?: Maybe<FaqOrderByInput>
+export type QueryKeyGearItemCoveragesArgs = {
+  where?: Maybe<KeyGearItemCoverageWhereInput>
+  orderBy?: Maybe<KeyGearItemCoverageOrderByInput>
   skip?: Maybe<Scalars['Int']>
   after?: Maybe<Scalars['String']>
   before?: Maybe<Scalars['String']>
@@ -7865,9 +7886,9 @@ export type QueryImportantMessagesArgs = {
   locales?: Array<Locale>
 }
 
-export type QueryKeyGearItemCoveragesArgs = {
-  where?: Maybe<KeyGearItemCoverageWhereInput>
-  orderBy?: Maybe<KeyGearItemCoverageOrderByInput>
+export type QueryAppMarketingImagesArgs = {
+  where?: Maybe<AppMarketingImageWhereInput>
+  orderBy?: Maybe<AppMarketingImageOrderByInput>
   skip?: Maybe<Scalars['Int']>
   after?: Maybe<Scalars['String']>
   before?: Maybe<Scalars['String']>
@@ -7966,15 +7987,6 @@ export type QueryHowClaimsWorkArgs = {
   locale: Locale
 }
 
-export type QueryEmbarkStoryArgs = {
-  name: Scalars['String']
-  locale: Scalars['String']
-}
-
-export type QueryEmbarkStoriesArgs = {
-  locale: Scalars['String']
-}
-
 export type QueryKeyGearItemsArgs = {
   where?: Maybe<KeyGearItemsFilter>
 }
@@ -8017,9 +8029,18 @@ export type QueryAngelStoryArgs = {
   locale?: Maybe<Scalars['String']>
 }
 
-export type QueryPerilsV2Args = {
+export type QueryContractPerilsArgs = {
   contractType: TypeOfContract
   locale: Locale
+}
+
+export type QueryEmbarkStoryArgs = {
+  name: Scalars['String']
+  locale: Scalars['String']
+}
+
+export type QueryEmbarkStoriesArgs = {
+  locale: Scalars['String']
 }
 
 export type Quote = CompleteQuote | IncompleteQuote
@@ -8274,10 +8295,10 @@ export type SimpleSignSession = {
 
 /** Stage system enumeration */
 export enum Stage {
-  /** The Published stage is where you can publish your content to. */
-  Published = 'PUBLISHED',
   /** The Draft is the default stage for all your content. */
   Draft = 'DRAFT',
+  /** The Published stage is where you can publish your content to. */
+  Published = 'PUBLISHED',
 }
 
 export type StartSignResponse =
@@ -8355,6 +8376,20 @@ export type SuccessfulRedeemResult = {
   cost?: Maybe<InsuranceCost>
 }
 
+export type SwedishAccidentAgreement = AgreementCore & {
+  __typename?: 'SwedishAccidentAgreement'
+  id: Scalars['ID']
+  activeFrom?: Maybe<Scalars['LocalDate']>
+  activeTo?: Maybe<Scalars['LocalDate']>
+  premium: MonetaryAmountV2
+  certificateUrl?: Maybe<Scalars['String']>
+  status: AgreementStatus
+  address: Address
+  numberCoInsured: Scalars['Int']
+  squareMeters: Scalars['Int']
+  type: SwedishAccidentLineOfBusiness
+}
+
 export type SwedishAccidentDetails = {
   __typename?: 'SwedishAccidentDetails'
   street: Scalars['String']
@@ -8362,6 +8397,11 @@ export type SwedishAccidentDetails = {
   householdSize: Scalars['Int']
   livingSpace: Scalars['Int']
   isStudent: Scalars['Boolean']
+}
+
+export enum SwedishAccidentLineOfBusiness {
+  Regular = 'REGULAR',
+  Student = 'STUDENT',
 }
 
 export type SwedishApartmentAgreement = AgreementCore & {
@@ -8573,20 +8613,19 @@ export type Translation = Node & {
   id: Scalars['ID']
   /** The time the document was created */
   createdAt: Scalars['DateTime']
-  /** User that created this document */
-  createdBy?: Maybe<User>
   /** The time the document was updated */
   updatedAt: Scalars['DateTime']
-  /** User that last updated this document */
-  updatedBy?: Maybe<User>
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>
+  /** User that created this document */
+  createdBy?: Maybe<User>
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>
   /** User that last published this document */
   publishedBy?: Maybe<User>
   language?: Maybe<Language>
-  project?: Maybe<Project>
   key?: Maybe<Key>
-  text: Scalars['String']
+  keys: Array<Key>
   /** List of Translation versions */
   history: Array<Version>
 }
@@ -8617,6 +8656,17 @@ export type TranslationKeyArgs = {
   locales?: Maybe<Array<Locale>>
 }
 
+export type TranslationKeysArgs = {
+  where?: Maybe<KeyWhereInput>
+  orderBy?: Maybe<KeyOrderByInput>
+  skip?: Maybe<Scalars['Int']>
+  after?: Maybe<Scalars['String']>
+  before?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+  locales?: Maybe<Array<Locale>>
+}
+
 export type TranslationHistoryArgs = {
   limit?: Scalars['Int']
   skip?: Scalars['Int']
@@ -8644,9 +8694,8 @@ export type TranslationCreateInput = {
   createdAt?: Maybe<Scalars['DateTime']>
   updatedAt?: Maybe<Scalars['DateTime']>
   language?: Maybe<LanguageCreateOneInlineInput>
-  project?: Maybe<Project>
   key?: Maybe<KeyCreateOneInlineInput>
-  text: Scalars['String']
+  keys?: Maybe<KeyCreateManyInlineInput>
 }
 
 export type TranslationCreateManyInlineInput = {
@@ -8716,7 +8765,6 @@ export type TranslationManyWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
-  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -8732,7 +8780,6 @@ export type TranslationManyWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
-  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -8748,35 +8795,14 @@ export type TranslationManyWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
+  updatedBy?: Maybe<UserWhereInput>
   publishedBy?: Maybe<UserWhereInput>
   language?: Maybe<LanguageWhereInput>
-  project?: Maybe<Project>
-  /** All values that are not equal to given value. */
-  project_not?: Maybe<Project>
-  /** All values that are contained in given list. */
-  project_in?: Maybe<Array<Project>>
-  /** All values that are not contained in given list. */
-  project_not_in?: Maybe<Array<Project>>
   key?: Maybe<KeyWhereInput>
-  text?: Maybe<Scalars['String']>
-  /** All values that are not equal to given value. */
-  text_not?: Maybe<Scalars['String']>
-  /** All values that are contained in given list. */
-  text_in?: Maybe<Array<Scalars['String']>>
-  /** All values that are not contained in given list. */
-  text_not_in?: Maybe<Array<Scalars['String']>>
-  /** All values containing the given string. */
-  text_contains?: Maybe<Scalars['String']>
-  /** All values not containing the given string. */
-  text_not_contains?: Maybe<Scalars['String']>
-  /** All values starting with the given string. */
-  text_starts_with?: Maybe<Scalars['String']>
-  /** All values not starting with the given string. */
-  text_not_starts_with?: Maybe<Scalars['String']>
-  /** All values ending with the given string. */
-  text_ends_with?: Maybe<Scalars['String']>
-  /** All values not ending with the given string */
-  text_not_ends_with?: Maybe<Scalars['String']>
+  keys_every?: Maybe<KeyWhereInput>
+  keys_some?: Maybe<KeyWhereInput>
+  keys_none?: Maybe<KeyWhereInput>
 }
 
 export enum TranslationOrderByInput {
@@ -8788,17 +8814,12 @@ export enum TranslationOrderByInput {
   UpdatedAtDesc = 'updatedAt_DESC',
   PublishedAtAsc = 'publishedAt_ASC',
   PublishedAtDesc = 'publishedAt_DESC',
-  ProjectAsc = 'project_ASC',
-  ProjectDesc = 'project_DESC',
-  TextAsc = 'text_ASC',
-  TextDesc = 'text_DESC',
 }
 
 export type TranslationUpdateInput = {
   language?: Maybe<LanguageUpdateOneInlineInput>
-  project?: Maybe<Project>
   key?: Maybe<KeyUpdateOneInlineInput>
-  text?: Maybe<Scalars['String']>
+  keys?: Maybe<KeyUpdateManyInlineInput>
 }
 
 export type TranslationUpdateManyInlineInput = {
@@ -8819,8 +8840,8 @@ export type TranslationUpdateManyInlineInput = {
 }
 
 export type TranslationUpdateManyInput = {
-  project?: Maybe<Project>
-  text?: Maybe<Scalars['String']>
+  /** No fields in updateMany data input */
+  _?: Maybe<Scalars['String']>
 }
 
 export type TranslationUpdateManyWithNestedWhereInput = {
@@ -8910,7 +8931,6 @@ export type TranslationWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
-  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -8926,7 +8946,6 @@ export type TranslationWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
-  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -8942,35 +8961,14 @@ export type TranslationWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
+  updatedBy?: Maybe<UserWhereInput>
   publishedBy?: Maybe<UserWhereInput>
   language?: Maybe<LanguageWhereInput>
-  project?: Maybe<Project>
-  /** All values that are not equal to given value. */
-  project_not?: Maybe<Project>
-  /** All values that are contained in given list. */
-  project_in?: Maybe<Array<Project>>
-  /** All values that are not contained in given list. */
-  project_not_in?: Maybe<Array<Project>>
   key?: Maybe<KeyWhereInput>
-  text?: Maybe<Scalars['String']>
-  /** All values that are not equal to given value. */
-  text_not?: Maybe<Scalars['String']>
-  /** All values that are contained in given list. */
-  text_in?: Maybe<Array<Scalars['String']>>
-  /** All values that are not contained in given list. */
-  text_not_in?: Maybe<Array<Scalars['String']>>
-  /** All values containing the given string. */
-  text_contains?: Maybe<Scalars['String']>
-  /** All values not containing the given string. */
-  text_not_contains?: Maybe<Scalars['String']>
-  /** All values starting with the given string. */
-  text_starts_with?: Maybe<Scalars['String']>
-  /** All values not starting with the given string. */
-  text_not_starts_with?: Maybe<Scalars['String']>
-  /** All values ending with the given string. */
-  text_ends_with?: Maybe<Scalars['String']>
-  /** All values not ending with the given string */
-  text_not_ends_with?: Maybe<Scalars['String']>
+  keys_every?: Maybe<KeyWhereInput>
+  keys_some?: Maybe<KeyWhereInput>
+  keys_none?: Maybe<KeyWhereInput>
 }
 
 /** References Translation record uniquely */
@@ -8988,6 +8986,8 @@ export enum TypeOfContract {
   SeApartmentRent = 'SE_APARTMENT_RENT',
   SeApartmentStudentBrf = 'SE_APARTMENT_STUDENT_BRF',
   SeApartmentStudentRent = 'SE_APARTMENT_STUDENT_RENT',
+  SeAccident = 'SE_ACCIDENT',
+  SeAccidentStudent = 'SE_ACCIDENT_STUDENT',
   NoHomeContentOwn = 'NO_HOME_CONTENT_OWN',
   NoHomeContentRent = 'NO_HOME_CONTENT_RENT',
   NoHomeContentYouthOwn = 'NO_HOME_CONTENT_YOUTH_OWN',
@@ -9072,10 +9072,10 @@ export type User = Node & {
   name: Scalars['String']
   /** Profile Picture url */
   picture?: Maybe<Scalars['String']>
-  /** User Kind. Can be either MEMBER, PAT or PUBLIC */
-  kind: UserKind
   /** Flag to determine if user is active or not */
   isActive: Scalars['Boolean']
+  /** User Kind. Can be either MEMBER, PAT or PUBLIC */
+  kind: UserKind
 }
 
 /** User system model */
@@ -9131,18 +9131,18 @@ export type UserFeature = Node & {
   id: Scalars['ID']
   /** The time the document was created */
   createdAt: Scalars['DateTime']
-  /** User that created this document */
-  createdBy?: Maybe<User>
   /** The time the document was updated */
   updatedAt: Scalars['DateTime']
-  /** User that last updated this document */
-  updatedBy?: Maybe<User>
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>
+  memberId?: Maybe<Scalars['String']>
+  /** User that created this document */
+  createdBy?: Maybe<User>
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>
   /** User that last published this document */
   publishedBy?: Maybe<User>
   feature?: Maybe<Feature>
-  memberId?: Maybe<Scalars['String']>
   /** List of UserFeature versions */
   history: Array<Version>
 }
@@ -9191,8 +9191,8 @@ export type UserFeatureConnection = {
 export type UserFeatureCreateInput = {
   createdAt?: Maybe<Scalars['DateTime']>
   updatedAt?: Maybe<Scalars['DateTime']>
-  feature?: Maybe<Feature>
   memberId?: Maybe<Scalars['String']>
+  feature?: Maybe<Feature>
 }
 
 export type UserFeatureCreateManyInlineInput = {
@@ -9262,7 +9262,6 @@ export type UserFeatureManyWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
-  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -9278,7 +9277,6 @@ export type UserFeatureManyWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
-  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -9294,14 +9292,6 @@ export type UserFeatureManyWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
-  publishedBy?: Maybe<UserWhereInput>
-  feature?: Maybe<Feature>
-  /** All values that are not equal to given value. */
-  feature_not?: Maybe<Feature>
-  /** All values that are contained in given list. */
-  feature_in?: Maybe<Array<Feature>>
-  /** All values that are not contained in given list. */
-  feature_not_in?: Maybe<Array<Feature>>
   memberId?: Maybe<Scalars['String']>
   /** All values that are not equal to given value. */
   memberId_not?: Maybe<Scalars['String']>
@@ -9321,6 +9311,16 @@ export type UserFeatureManyWhereInput = {
   memberId_ends_with?: Maybe<Scalars['String']>
   /** All values not ending with the given string */
   memberId_not_ends_with?: Maybe<Scalars['String']>
+  createdBy?: Maybe<UserWhereInput>
+  updatedBy?: Maybe<UserWhereInput>
+  publishedBy?: Maybe<UserWhereInput>
+  feature?: Maybe<Feature>
+  /** All values that are not equal to given value. */
+  feature_not?: Maybe<Feature>
+  /** All values that are contained in given list. */
+  feature_in?: Maybe<Array<Feature>>
+  /** All values that are not contained in given list. */
+  feature_not_in?: Maybe<Array<Feature>>
 }
 
 export enum UserFeatureOrderByInput {
@@ -9332,15 +9332,15 @@ export enum UserFeatureOrderByInput {
   UpdatedAtDesc = 'updatedAt_DESC',
   PublishedAtAsc = 'publishedAt_ASC',
   PublishedAtDesc = 'publishedAt_DESC',
-  FeatureAsc = 'feature_ASC',
-  FeatureDesc = 'feature_DESC',
   MemberIdAsc = 'memberId_ASC',
   MemberIdDesc = 'memberId_DESC',
+  FeatureAsc = 'feature_ASC',
+  FeatureDesc = 'feature_DESC',
 }
 
 export type UserFeatureUpdateInput = {
-  feature?: Maybe<Feature>
   memberId?: Maybe<Scalars['String']>
+  feature?: Maybe<Feature>
 }
 
 export type UserFeatureUpdateManyInlineInput = {
@@ -9361,8 +9361,8 @@ export type UserFeatureUpdateManyInlineInput = {
 }
 
 export type UserFeatureUpdateManyInput = {
-  feature?: Maybe<Feature>
   memberId?: Maybe<Scalars['String']>
+  feature?: Maybe<Feature>
 }
 
 export type UserFeatureUpdateManyWithNestedWhereInput = {
@@ -9452,7 +9452,6 @@ export type UserFeatureWhereInput = {
   createdAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>
-  createdBy?: Maybe<UserWhereInput>
   updatedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>
@@ -9468,7 +9467,6 @@ export type UserFeatureWhereInput = {
   updatedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>
-  updatedBy?: Maybe<UserWhereInput>
   publishedAt?: Maybe<Scalars['DateTime']>
   /** All values that are not equal to given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>
@@ -9484,14 +9482,6 @@ export type UserFeatureWhereInput = {
   publishedAt_gt?: Maybe<Scalars['DateTime']>
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>
-  publishedBy?: Maybe<UserWhereInput>
-  feature?: Maybe<Feature>
-  /** All values that are not equal to given value. */
-  feature_not?: Maybe<Feature>
-  /** All values that are contained in given list. */
-  feature_in?: Maybe<Array<Feature>>
-  /** All values that are not contained in given list. */
-  feature_not_in?: Maybe<Array<Feature>>
   memberId?: Maybe<Scalars['String']>
   /** All values that are not equal to given value. */
   memberId_not?: Maybe<Scalars['String']>
@@ -9511,6 +9501,16 @@ export type UserFeatureWhereInput = {
   memberId_ends_with?: Maybe<Scalars['String']>
   /** All values not ending with the given string */
   memberId_not_ends_with?: Maybe<Scalars['String']>
+  createdBy?: Maybe<UserWhereInput>
+  updatedBy?: Maybe<UserWhereInput>
+  publishedBy?: Maybe<UserWhereInput>
+  feature?: Maybe<Feature>
+  /** All values that are not equal to given value. */
+  feature_not?: Maybe<Feature>
+  /** All values that are contained in given list. */
+  feature_in?: Maybe<Array<Feature>>
+  /** All values that are not contained in given list. */
+  feature_not_in?: Maybe<Array<Feature>>
 }
 
 /** References UserFeature record uniquely */
@@ -9519,8 +9519,8 @@ export type UserFeatureWhereUniqueInput = {
 }
 
 export enum UserInterfaceStyle {
-  Dark = 'Dark',
   Light = 'Light',
+  Dark = 'Dark',
 }
 
 /** System User Kind */
@@ -9643,6 +9643,9 @@ export type UserManyWhereInput = {
   picture_ends_with?: Maybe<Scalars['String']>
   /** All values not ending with the given string */
   picture_not_ends_with?: Maybe<Scalars['String']>
+  isActive?: Maybe<Scalars['Boolean']>
+  /** All values that are not equal to given value. */
+  isActive_not?: Maybe<Scalars['Boolean']>
   kind?: Maybe<UserKind>
   /** All values that are not equal to given value. */
   kind_not?: Maybe<UserKind>
@@ -9650,9 +9653,6 @@ export type UserManyWhereInput = {
   kind_in?: Maybe<Array<UserKind>>
   /** All values that are not contained in given list. */
   kind_not_in?: Maybe<Array<UserKind>>
-  isActive?: Maybe<Scalars['Boolean']>
-  /** All values that are not equal to given value. */
-  isActive_not?: Maybe<Scalars['Boolean']>
 }
 
 export enum UserOrderByInput {
@@ -9668,10 +9668,10 @@ export enum UserOrderByInput {
   NameDesc = 'name_DESC',
   PictureAsc = 'picture_ASC',
   PictureDesc = 'picture_DESC',
-  KindAsc = 'kind_ASC',
-  KindDesc = 'kind_DESC',
   IsActiveAsc = 'isActive_ASC',
   IsActiveDesc = 'isActive_DESC',
+  KindAsc = 'kind_ASC',
+  KindDesc = 'kind_DESC',
 }
 
 export type UserUpdateManyInlineInput = {
@@ -9802,6 +9802,9 @@ export type UserWhereInput = {
   picture_ends_with?: Maybe<Scalars['String']>
   /** All values not ending with the given string */
   picture_not_ends_with?: Maybe<Scalars['String']>
+  isActive?: Maybe<Scalars['Boolean']>
+  /** All values that are not equal to given value. */
+  isActive_not?: Maybe<Scalars['Boolean']>
   kind?: Maybe<UserKind>
   /** All values that are not equal to given value. */
   kind_not?: Maybe<UserKind>
@@ -9809,9 +9812,6 @@ export type UserWhereInput = {
   kind_in?: Maybe<Array<UserKind>>
   /** All values that are not contained in given list. */
   kind_not_in?: Maybe<Array<UserKind>>
-  isActive?: Maybe<Scalars['Boolean']>
-  /** All values that are not equal to given value. */
-  isActive_not?: Maybe<Scalars['Boolean']>
 }
 
 /** References User record uniquely */

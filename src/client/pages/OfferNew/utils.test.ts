@@ -10,6 +10,7 @@ import {
   noTravel,
   dkHomeContentOwn,
   dkHomeContentAccidentTravel,
+  seHomeAccident,
 } from 'utils/testData/offerDataMock'
 import {
   isBundle,
@@ -74,6 +75,11 @@ describe('getMainQuote function', () => {
     expect(
       (mainQuote.quoteDetails as DanishHomeContentsDetails).street,
     ).toBeTruthy()
+  })
+
+  it('returns the Home quote from Swedish Home-Accident bundle', () => {
+    const mainQuote = getMainQuote(seHomeAccident)
+    expect(mainQuote.contractType).toBe('SE_APARTMENT_BRF')
   })
 })
 
