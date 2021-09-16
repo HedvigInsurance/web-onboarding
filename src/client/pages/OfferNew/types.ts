@@ -44,6 +44,7 @@ export type OfferQuote = Pick<
   BundledQuote,
   | 'id'
   | 'displayName'
+  | 'price'
   | 'startDate'
   | 'quoteDetails'
   | 'dataCollectionId'

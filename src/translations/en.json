@@ -293,5 +293,7 @@
   "QUOTE_TITLE_HOME_CONTENTS_YOUTH": "Home Contents Youth",
   "QUOTE_TITLE_TRAVEL": "Travel Insurance",
   "QUOTE_TITLE_TRAVEL_YOUTH": "Travel Insurance Youth",
-  "QUOTE_TITLE_HOME_CONTENTS_STUDENT": "Home Contents Student"
+  "QUOTE_TITLE_HOME_CONTENTS_STUDENT": "Home Contents Student",
+  "CHECKOUT_PRICE_TOTAL": "Total",
+  "CHECKOUT_HEADING": "Checkout"
 }

@@ -21,8 +21,9 @@ const PriceWrapper = styled.div`
 
 const PriceGross = styled.div`
   font-size: 1rem;
+  margin-right: 0.5rem;
   line-height: 1.625rem;
-  color: ${colorsV3.gray500};
+  color: ${colorsV3.gray700};
   text-decoration: line-through;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
@@ -35,12 +36,11 @@ const OldPriceSuffix = styled.span`
 `
 
 const PriceNumbers = styled.div<{
-  discount: boolean
   lightAppearance?: boolean
 }>`
   display: flex;
   align-items: baseline;
-  ${({ discount }) => discount && `color: ${colorsV3.purple900}`};
+  color: ${colorsV3.gray900};
   ${({ lightAppearance }) => lightAppearance && `color: ${colorsV3.white}`};
 `
 
@@ -67,13 +67,10 @@ const PriceUnit = styled.span`
 `
 
 const PriceInterval = styled.span<{
-  discount: boolean
   lightAppearance?: boolean
 }>`
   font-size: 1rem;
   line-height: 1;
-  color: ${colorsV3.gray500};
-  ${({ discount }) => discount && `color: ${colorsV3.purple900}`};
   ${({ lightAppearance }) => lightAppearance && `color: ${colorsV3.white}`};
 `
 
@@ -99,38 +96,30 @@ export const Price: React.FC<{
   loading,
 }) => {
   const textKeys = useTextKeys()
+  const grossPrice = Math.round(Number(monthlyGross.amount))
+  const netPrice = Math.round(Number(monthlyNet.amount))
+  const currency = monthlyGross.currency
+  const localizedPerMonth = textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL()
   return (
     <PriceWrapper>
-      {isDiscountPrice && (
-        <PriceGross>
-          {Math.round(Number(monthlyGross.amount))}{' '}
-          <OldPriceSuffix>
-            {monthlyGross.currency}
-            {textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL()}
-          </OldPriceSuffix>
-        </PriceGross>
-      )}
-
-      <PriceNumbers
-        discount={!!isDiscountPrice}
-        lightAppearance={lightAppearance}
-      >
-        {!loading && (
-          <PriceNet>{Math.round(Number(monthlyNet.amount))}</PriceNet>
+      <PriceNumbers lightAppearance={lightAppearance}>
+        {isDiscountPrice && (
+          <PriceGross>
+            {grossPrice}
+            <OldPriceSuffix>{currency}</OldPriceSuffix>
+          </PriceGross>
         )}
-        {loading && (
+        {!loading ? (
+          <PriceNet>{netPrice}</PriceNet>
+        ) : (
           <SpinnerWrapper>
             <Spinner />
           </SpinnerWrapper>
         )}
-
         <PriceSuffix>
-          <PriceUnit>{monthlyGross.currency}</PriceUnit>
-          <PriceInterval
-            discount={!!isDiscountPrice}
-            lightAppearance={lightAppearance}
-          >
-            {textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL()}
+          <PriceUnit>{currency}</PriceUnit>
+          <PriceInterval lightAppearance={lightAppearance}>
+            {localizedPerMonth}
           </PriceInterval>
         </PriceSuffix>
       </PriceNumbers>

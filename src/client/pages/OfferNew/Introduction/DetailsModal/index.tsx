@@ -10,7 +10,7 @@ import { LocaleLabel, locales } from 'l10n/locales'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
 import { captureSentryError } from 'utils/sentry-client'
-import { getMainQuote } from '../../../utils'
+import { getMainQuote } from '../../utils'
 import { Details } from './Details'
 import {
   getFieldSchema,

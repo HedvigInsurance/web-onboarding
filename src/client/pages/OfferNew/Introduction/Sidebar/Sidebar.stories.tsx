@@ -8,6 +8,7 @@ import {
   dkHomeContentOwn,
   noCombo,
   seApartementBrf,
+  seApartmentBrfAccident,
 } from 'utils/testData/offerDataMock'
 import { TextKeyProvider } from 'utils/textKeys'
 import { Sidebar } from '.'
@@ -103,6 +104,25 @@ export const DKHomeContentAccidentTravel = () => {
         <TextKeyProvider locale="da_DK">
           <Sidebar
             offerData={dkHomeContentAccidentTravel}
+            onCheckoutOpen={action('onCheckoutOpen')}
+            refetchOfferData={(...args: any[]) => {
+              action('refetch')(...args)
+              return Promise.resolve()
+            }}
+          />
+        </TextKeyProvider>
+      </MemoryRouter>
+    </MockedProvider>
+  )
+}
+
+export const SEApartmentAccident = () => {
+  return (
+    <MockedProvider>
+      <MemoryRouter initialEntries={['/se/new-member/offer']}>
+        <TextKeyProvider locale="sv_SE">
+          <Sidebar
+            offerData={seApartmentBrfAccident}
             onCheckoutOpen={action('onCheckoutOpen')}
             refetchOfferData={(...args: any[]) => {
               action('refetch')(...args)

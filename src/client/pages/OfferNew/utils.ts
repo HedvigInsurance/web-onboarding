@@ -38,6 +38,7 @@ export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
       return {
         id: bundleQuote.id,
         displayName: bundleQuote.displayName,
+        price: bundleQuote.price,
         startDate: bundleQuote.startDate,
         quoteDetails: bundleQuote.quoteDetails,
         dataCollectionId: bundleQuote.dataCollectionId,
@@ -162,8 +163,10 @@ export const isYouth = (offerData: OfferData): boolean =>
       (isNorwegianTravel(quote.quoteDetails) && quote.quoteDetails.isYouth),
   )
 
-export const isSwedishQuote = (quote: OfferQuote): boolean =>
-  isSwedishApartment(quote.quoteDetails) || isSwedishHouse(quote.quoteDetails)
+export const isSwedishQuote = ({ quoteDetails }: OfferQuote): boolean =>
+  isSwedishApartment(quoteDetails) ||
+  isSwedishHouse(quoteDetails) ||
+  isSwedishAccident(quoteDetails)
 
 export const isSwedish = (offerData: OfferData): boolean =>
   offerData.quotes.every((quote) => isSwedishQuote(quote))
@@ -226,6 +229,11 @@ export const isSwedishHouse = (
   details: QuoteDetails,
 ): details is SwedishHouseQuoteDetails =>
   details.__typename === 'SwedishHouseQuoteDetails'
+
+export const isSwedishAccident = (
+  details: QuoteDetails,
+): details is SwedishHouseQuoteDetails =>
+  details.__typename === 'SwedishAccidentDetails'
 
 export const isNorwegianHomeContents = (
   details: QuoteDetails,

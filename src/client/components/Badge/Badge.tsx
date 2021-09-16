@@ -6,6 +6,7 @@ type BadgeProps = {
   children: ReactNode
   disabled?: boolean
   size?: 'sm' | 'lg'
+  className?: string
 }
 
 export const BadgeContainer = styled.span<BadgeProps>`
@@ -20,7 +21,7 @@ export const BadgeContainer = styled.span<BadgeProps>`
   text-align: center;
   color: ${(props) => (props.disabled ? colorsV3.gray100 : colorsV3.gray800)};
   background-color: ${(props) =>
-    props.disabled ? colorsV3.gray500 : colorsV3.purple500};
+    props.disabled ? colorsV3.gray500 : colorsV3.purple300};
   border-radius: 0.25rem;
 
   ${({ size }) =>
@@ -36,8 +37,9 @@ export const Badge: React.FC<BadgeProps> = ({
   children,
   disabled = false,
   size = 'sm',
+  className,
 }) => (
-  <BadgeContainer disabled={disabled} size={size}>
+  <BadgeContainer disabled={disabled} size={size} className={className}>
     {children}
   </BadgeContainer>
 )
