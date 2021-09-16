@@ -15,7 +15,12 @@ import { NoComboTypes, DkBundleTypes } from './tracking'
 // Exclude single contract types that are only sold as part of bundles
 type TypeOfContractExcludedUnused = Exclude<
   TypeOfContract | NoComboTypes | DkBundleTypes,
-  'DK_ACCIDENT' | 'DK_ACCIDENT_STUDENT' | 'DK_TRAVEL' | 'DK_TRAVEL_STUDENT'
+  | TypeOfContract.DkAccident
+  | TypeOfContract.DkAccidentStudent
+  | TypeOfContract.DkTravel
+  | TypeOfContract.DkTravelStudent
+  | TypeOfContract.SeAccident
+  | TypeOfContract.SeAccidentStudent
 >
 
 const adtractionContractValues: Record<TypeOfContractExcludedUnused, number> = {
