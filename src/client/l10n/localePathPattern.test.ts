@@ -1,9 +1,18 @@
-import { getLocalePathPattern, LOCALE_URL_PARAMS } from './localePathPattern'
+import {
+  getLocalePathPattern,
+  LocaleUrlParams,
+  PARAM_PLACEHOLDER,
+} from './localePathPattern'
+
+const MOCKED_URL_PARAMS = ['se', 'se-en', 'no']
 
 describe('getLocalePathPattern function', () => {
   it('returns string with correct options for URL parameter "locale"', () => {
-    const localePathPattern = getLocalePathPattern(LOCALE_URL_PARAMS)
+    const localePathPattern = getLocalePathPattern(
+      (MOCKED_URL_PARAMS as unknown) as LocaleUrlParams,
+    )
 
-    expect(localePathPattern).toBe('/:locale(se|se-en|no|no-en|dk|dk-en)')
+    expect(localePathPattern.includes(PARAM_PLACEHOLDER)).toBe(true)
+    expect(localePathPattern).toBe(`/:${PARAM_PLACEHOLDER}(se|se-en|no)`)
   })
 })
