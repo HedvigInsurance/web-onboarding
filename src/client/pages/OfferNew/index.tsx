@@ -1,6 +1,6 @@
 import { History } from 'history'
 import { SemanticEvents } from 'quepasa'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Redirect, useHistory, useRouteMatch } from 'react-router'
 import { LoadingPage } from 'components/LoadingPage'
 import { TopBar } from 'components/TopBar'
@@ -40,6 +40,48 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
   }
 }
 
+interface QuoteBundleVariation {
+  id: string
+  tag?: string
+  bundle: QuoteBundle
+}
+
+const BUNDLE_VARIATIONS = [
+  {
+    tag: 'Most popular',
+    bundle: {
+      quotes: [
+        {
+          id: 'oaiwdjia-adw2-311-123-123o123oij',
+          displayName: 'Hemförsäkring Hyresrätt',
+        },
+        {
+          id: 'dsefsef89-oii23j423-po23kp4-io32',
+          displayName: 'Olycksfallsförsäkring',
+        },
+      ],
+      bundleCost: {
+        monthlyGross: { amount: 143, currency: 'EUR' },
+        monthlyNet: { amount: 133, currency: 'EUR' },
+      },
+    },
+  },
+  {
+    bundle: {
+      quotes: [
+        {
+          id: 'oaiwdjia-adw2-311-123-123o123oij',
+          displayName: 'Hemförsäkring Hyresrätt',
+        },
+      ],
+      bundleCost: {
+        monthlyGross: { amount: 123, currency: 'EUR' },
+        monthlyNet: { amount: 113, currency: 'EUR' },
+      },
+    },
+  },
+]
+
 export const OfferNew: React.FC = () => {
   const currentLocale = useCurrentLocale()
   const localeIsoCode = getIsoLocale(currentLocale)
@@ -59,10 +101,33 @@ export const OfferNew: React.FC = () => {
     skip: quoteIdsIsLoading,
   })
 
+  const quoteBundleVariations = BUNDLE_VARIATIONS.map<QuoteBundleVariation>(
+    (variation) => ({
+      id: variation.bundle.quotes.map(({ id }) => id).join(''),
+      tag: variation.tag,
+      bundle: (variation.bundle as unknown) as QuoteBundle,
+    }),
+  )
+  const [bundleVariation, setBundleVariation] = React.useState<
+    QuoteBundleVariation
+  >()
+
+  useEffect(() => {
+    // Reset selected bundle when variation is no longer valid
+    if (bundleVariation) {
+      const matchingVariation = quoteBundleVariations.find(
+        ({ id }) => id === bundleVariation.id,
+      )
+      if (matchingVariation === undefined) {
+        setBundleVariation(undefined)
+      }
+    }
+  }, [bundleVariation, quoteBundleVariations])
+
   const checkoutMatch = useRouteMatch(`${localePathPattern}/new-member/sign`)
   const toggleCheckout = createToggleCheckout(history, currentLocale)
 
-  if ((loadingQuoteBundle && !data?.quoteBundle) || quoteIdsIsLoading) {
+  if ((loadingQuoteBundle && !data) || quoteIdsIsLoading) {
     return <LoadingPage />
   }
 
@@ -70,7 +135,7 @@ export const OfferNew: React.FC = () => {
     return <Redirect to={`/${currentLocale}/new-member`} />
   }
 
-  if (!loadingQuoteBundle && !data?.quoteBundle) {
+  if (!loadingQuoteBundle && !data) {
     throw new Error(
       `No quote returned to show offer with (quoteIds=${quoteIds}).`,
     )
@@ -80,8 +145,8 @@ export const OfferNew: React.FC = () => {
     toggleCheckout(open)
   }
 
-  const offerData = data?.quoteBundle
-    ? getOfferData(data?.quoteBundle as QuoteBundle)
+  const offerData = bundleVariation
+    ? getOfferData(bundleVariation.bundle)
     : null
 
   if (offerData) {
@@ -124,6 +189,24 @@ export const OfferNew: React.FC = () => {
                 />
               )}
             </TrackAction>
+            <div style={{ backgroundColor: 'white' }}>
+              {quoteBundleVariations.map((variation) => (
+                <label key={variation.id}>
+                  <input
+                    name={variation.tag}
+                    type="radio"
+                    checked={bundleVariation?.id === variation.id}
+                    onChange={() => setBundleVariation(variation)}
+                  />
+                  <span>
+                    {variation.tag} -{' '}
+                    {variation.bundle.quotes
+                      .map((quote) => quote.displayName)
+                      .join(' & ')}
+                  </span>
+                </label>
+              ))}
+            </div>
             <Perils offerData={offerData} />
             {currentMarket !== Market.Dk && <SwitchSafetySection />}
             <FaqSection />
