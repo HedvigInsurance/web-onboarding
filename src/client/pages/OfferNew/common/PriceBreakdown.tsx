@@ -99,9 +99,11 @@ export const PriceBreakdown: React.FC<{
 
   const {
     monthlyNet: { amount: totalNetPrice, currency },
+    monthlyGross: { amount: totalGrossPrice },
   } = offerData.cost
 
   const roundedTotalNetPrice = Math.round(Number(totalNetPrice))
+  const roundedTotalGrossPrice = Math.round(Number(totalGrossPrice))
 
   return (
     <PriceDetails>
@@ -124,7 +126,11 @@ export const PriceBreakdown: React.FC<{
               currency={currency}
               timeInterval={localizedPerMonth}
               isLoading={isLoading}
-              nonDiscountedPrice={288}
+              nonDiscountedPrice={
+                roundedTotalNetPrice !== roundedTotalGrossPrice
+                  ? roundedTotalGrossPrice
+                  : undefined
+              }
             />
           </TotalPrice>
         </TotalRow>

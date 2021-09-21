@@ -6,6 +6,7 @@ import { useTextKeys } from 'utils/textKeys'
 import {
   LARGE_SCREEN_MEDIA_QUERY,
   MEDIUM_SCREEN_MEDIA_QUERY,
+  MEDIUM_SMALL_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
 import { Button } from 'components/buttons'
 import { quoteDetailsHasAddress } from '../utils'
@@ -77,10 +78,13 @@ const EditDetailsButton = styled(Button)`
   color: ${colorsV3.gray900};
   width: 100%;
 
+  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
+    width: auto;
+  }
+
   ${LARGE_SCREEN_MEDIA_QUERY} {
     border: 1px solid ${colorsV3.gray100};
     color: ${colorsV3.gray100};
-    width: auto;
   }
 
   &:hover {
