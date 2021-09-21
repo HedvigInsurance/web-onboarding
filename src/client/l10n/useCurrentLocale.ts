@@ -1,9 +1,9 @@
 import { matchPath, useLocation } from 'react-router-dom'
 import { LocaleLabel, locales } from './locales'
-import { localePathPattern } from './localePathPattern'
+import { localePathPattern, PARAM_PLACEHOLDER } from './localePathPattern'
 
 type LocaleUrlParam = {
-  locale: LocaleLabel
+  [PARAM_PLACEHOLDER]: LocaleLabel
 }
 
 const FALLBACK_LOCALE: LocaleLabel = 'se-en'
