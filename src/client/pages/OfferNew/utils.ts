@@ -18,7 +18,7 @@ import {
   ApartmentType,
 } from 'data/graphql'
 import { LocaleLabel, locales } from 'l10n/locales'
-import { birthdateFormats } from 'l10n/birthDateAndSsnFormats'
+import { birthDateFormats } from 'l10n/birthDateAndSsnFormats'
 import { Address, OfferData, OfferQuote } from 'pages/OfferNew/types'
 import { TextKeyMap } from 'utils/textKeys'
 
@@ -379,7 +379,7 @@ export const getFormattedBirthdate = ({
     return birthDate
   }
 
-  const defaultFormat = birthdateFormats.default // This is the format we expect from back-end
+  const defaultFormat = birthDateFormats.default // This is the format we expect from back-end
   const hasExpectedFormat = defaultFormat.test(birthDate)
 
   if (!hasExpectedFormat) {

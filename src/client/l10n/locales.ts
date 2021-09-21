@@ -2,7 +2,7 @@ import { Locale as IsoLocale } from 'data/graphql'
 import {
   ssnLengths,
   ssnFormats,
-  birthdateFormats,
+  birthDateFormats,
 } from './birthDateAndSsnFormats'
 import { LocaleUrlParams } from './localePathPattern'
 
@@ -42,7 +42,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     },
     birthDate: {
       formatExample: 'ÅÅÅÅ-MM-DD',
-      formatRegex: birthdateFormats.SE,
+      formatRegex: birthDateFormats.SE,
       backendFormatExample: 'ÅÅÅÅ-MM-DD',
     },
   },
@@ -59,7 +59,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     },
     birthDate: {
       formatExample: 'YYYY-MM-DD',
-      formatRegex: birthdateFormats.SE,
+      formatRegex: birthDateFormats.SE,
       backendFormatExample: 'YYYY-MM-DD',
     },
   },
@@ -76,7 +76,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     },
     birthDate: {
       formatExample: 'DD-MM-ÅÅÅÅ',
-      formatRegex: birthdateFormats.NO,
+      formatRegex: birthDateFormats.NO,
       backendFormatExample: 'ÅÅÅÅ-MM-DD',
     },
   },
@@ -93,7 +93,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     },
     birthDate: {
       formatExample: 'DD-MM-YYYY',
-      formatRegex: birthdateFormats.NO,
+      formatRegex: birthDateFormats.NO,
       backendFormatExample: 'YYYY-MM-DD',
     },
   },
@@ -110,7 +110,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     },
     birthDate: {
       formatExample: 'DD-MM-ÅÅÅÅ',
-      formatRegex: birthdateFormats.DK,
+      formatRegex: birthDateFormats.DK,
       backendFormatExample: 'ÅÅÅÅ-MM-DD',
     },
   },
@@ -127,7 +127,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     },
     birthDate: {
       formatExample: 'DD-MM-YYYY',
-      formatRegex: birthdateFormats.DK,
+      formatRegex: birthDateFormats.DK,
       backendFormatExample: 'YYYY-MM-DD',
     },
   },
