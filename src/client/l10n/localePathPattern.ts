@@ -12,16 +12,7 @@ export type LocaleUrlParams = typeof LOCALE_URL_PARAMS
 export const getLocalePathPattern = (
   permittedLocaleUrlParams: LocaleUrlParams,
 ) => {
-  const labelsString = permittedLocaleUrlParams.reduce(
-    (accumulated, currentLabel) => {
-      return accumulated.length
-        ? `${accumulated}|${currentLabel}`
-        : currentLabel
-    },
-    '',
-  )
-
-  return `/:locale(${labelsString})`
+  return `/:locale(${permittedLocaleUrlParams.join('|')})`
 }
 
 export const localePathPattern = getLocalePathPattern(LOCALE_URL_PARAMS)
