@@ -38,6 +38,48 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
   }
 }
 
+interface QuoteBundleVariation {
+  id: string
+  tag?: string
+  bundle: QuoteBundle
+}
+
+const BUNDLE_VARIATIONS = [
+  {
+    tag: 'Most popular',
+    bundle: {
+      quotes: [
+        {
+          id: 'oaiwdjia-adw2-311-123-123o123oij',
+          displayName: 'Hemförsäkring Hyresrätt',
+        },
+        {
+          id: 'dsefsef89-oii23j423-po23kp4-io32',
+          displayName: 'Olycksfallsförsäkring',
+        },
+      ],
+      bundleCost: {
+        monthlyGross: { amount: 143, currency: 'EUR' },
+        monthlyNet: { amount: 133, currency: 'EUR' },
+      },
+    },
+  },
+  {
+    bundle: {
+      quotes: [
+        {
+          id: 'oaiwdjia-adw2-311-123-123o123oij',
+          displayName: 'Hemförsäkring Hyresrätt',
+        },
+      ],
+      bundleCost: {
+        monthlyGross: { amount: 123, currency: 'EUR' },
+        monthlyNet: { amount: 113, currency: 'EUR' },
+      },
+    },
+  },
+]
+
 export const OfferNew: React.FC = () => {
   const currentLocale = useCurrentLocale()
   const localeIsoCode = getIsoLocale(currentLocale)
