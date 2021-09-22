@@ -47,7 +47,7 @@ export const UserDetailsForm: React.FC<Props> = ({
   const textKeys = useTextKeys()
   const [email, reallySetEmail] = useState(() => initialEmail)
   const [emailError, setEmailError] = useState<boolean>(false)
-  const [ssn, setSsn] = useState(() => initialSsn)
+  const [ssn, reallySetSsn] = useState(() => initialSsn)
   const [showCreditCheckInfo, setShowCreditCheckInfo] = useState(false)
   const [emailChangeTimout, setEmailChangeTimout] = useState<number | null>(
     null,
@@ -77,7 +77,7 @@ export const UserDetailsForm: React.FC<Props> = ({
       setSsnChangeTimout(null)
     }
 
-    setSsn(newSsn)
+    reallySetSsn(newSsn)
     setSsnChangeTimout(
       window.setTimeout(() => {
         if (isValidSsn(newSsn)) {
