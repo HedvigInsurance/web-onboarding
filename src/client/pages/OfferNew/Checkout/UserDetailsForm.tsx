@@ -1,7 +1,6 @@
 import styled from '@emotion/styled'
 import React, { useState } from 'react'
 import * as yup from 'yup'
-import { colorsV2, colorsV3 } from '@hedviginsurance/brand'
 import { LocaleLabel, locales } from 'l10n/locales'
 import { RawInputField } from 'components/inputs'
 import {
@@ -11,8 +10,6 @@ import {
 } from 'components/utils/CurrentLocale'
 import { WithEmailForm, WithSsnForm } from 'pages/OfferNew/types'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
-import { FadeIn } from 'components/animations/appearings'
-import { InfoIcon } from 'components/icons/Info'
 import { CreditCheckInfo } from './CreditCheckInfo'
 
 const HiddenSubmit = styled.input`
