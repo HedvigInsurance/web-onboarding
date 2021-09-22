@@ -156,8 +156,8 @@
   "SIDEBAR_REQUEST_CANCELLATION_HOME_INSURANCE": "Kanseller min gamle innboforsikring",
   "SIDEBAR_REQUEST_CANCELLATION_TRAVEL_INSURANCE": "Kanseller min gamle reiseforsikring",
   "STARTPAGE_COMBO_DISCOUNT_TEXT": "25 % komborabatt",
-  "CONNECT_PAYMENT_ERROR_HEADLINE": "",
-  "CONNECT_PAYMENT_ERROR_PARAGRAPH": "",
+  "CONNECT_PAYMENT_ERROR_HEADLINE": "Hoppsideisi! Noe gikk galt",
+  "CONNECT_PAYMENT_ERROR_PARAGRAPH": "Noe gikk galt, vennligst prøv igjen.",
   "CONNECT_PAYMENT_ERROR_BUTTON": "Ok",
   "DETAILS_MODULE_TABLE_ADDRESS_CELL_LABEL": "Adresse",
   "DETAILS_MODULE_TABLE_POSTALCODE_CELL_LABEL": "Postnummer",
@@ -293,5 +293,11 @@
   "QUOTE_TITLE_HOME_CONTENTS_YOUTH": "Innboforsikring",
   "QUOTE_TITLE_TRAVEL": "Reiseforsikring",
   "QUOTE_TITLE_TRAVEL_YOUTH": "Reiseforsikring Ung",
-  "QUOTE_TITLE_HOME_CONTENTS_STUDENT": ""
+  "QUOTE_TITLE_HOME_CONTENTS_STUDENT": "",
+  "CHECKOUT_PRICE_TOTAL": "",
+  "CHECKOUT_HEADING": "",
+  "CHECKOUT_CREDIT_CHECK_INFO_HEADER": "Vi kredittvurderer nye kunder",
+  "CHECKOUT_CREDIT_CHECK_INFO_CONTENT": "Kunder med betalingsnamerkninger betaler i enkelte tilfeller forskuddsvis. Dersom dette gjelder deg vil du få beskjed ved kontakt med oss.",
+  "CHECKOUT_SIGN_FAIL_HEADER": "Vi kan ikke tilby deg kjøp",
+  "CHECKOUT_SIGN_FAIL_CONTENT": "Vi kan dessverre ikke tilby deg kjøp av forsikring på nett. Vennligst ta kontakt på epost@hedvig.com så hjelper vi deg videre!"
 }

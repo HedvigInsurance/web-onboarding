@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
-import React from 'react'
+import React, { useState } from 'react'
 import * as yup from 'yup'
+import { colorsV2, colorsV3 } from '@hedviginsurance/brand'
 import { LocaleLabel, locales } from 'l10n/locales'
 import { RawInputField } from 'components/inputs'
 import {
@@ -10,6 +11,9 @@ import {
 } from 'components/utils/CurrentLocale'
 import { WithEmailForm, WithSsnForm } from 'pages/OfferNew/types'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
+import { FadeIn } from 'components/animations/appearings'
+import { InfoIcon } from 'components/icons/Info'
+import { CreditCheckInfo } from './CreditCheckInfo'
 
 const HiddenSubmit = styled.input`
   display: none;
@@ -44,15 +48,14 @@ export const UserDetailsForm: React.FC<Props> = ({
   onSubmit,
 }) => {
   const textKeys = useTextKeys()
-  const [email, reallySetEmail] = React.useState(() => initialEmail)
-  const [emailError, setEmailError] = React.useState<boolean>(false)
-  const [ssn, reallySetSsn] = React.useState(() => initialSsn)
-  const [emailChangeTimout, setEmailChangeTimout] = React.useState<
-    number | null
-  >(null)
-  const [ssnChangeTimout, setSsnChangeTimout] = React.useState<number | null>(
+  const [email, reallySetEmail] = useState(() => initialEmail)
+  const [emailError, setEmailError] = useState<boolean>(false)
+  const [ssn, setSsn] = useState(() => initialSsn)
+  const [showCreditCheckInfo, setShowCreditCheckInfo] = useState(false)
+  const [emailChangeTimout, setEmailChangeTimout] = useState<number | null>(
     null,
   )
+  const [ssnChangeTimout, setSsnChangeTimout] = useState<number | null>(null)
 
   const market = useMarket()
 
@@ -77,7 +80,7 @@ export const UserDetailsForm: React.FC<Props> = ({
       setSsnChangeTimout(null)
     }
 
-    reallySetSsn(newSsn)
+    setSsn(newSsn)
     setSsnChangeTimout(
       window.setTimeout(() => {
         if (isValidSsn(newSsn)) {
@@ -142,11 +145,13 @@ export const UserDetailsForm: React.FC<Props> = ({
         inputMode="numeric"
         pattern="[0-9]*"
         maxLength={ssnMaxLength}
+        onFocus={() => setShowCreditCheckInfo(true)}
         value={ssn}
         errors={ssnBackendError ? textKeys[ssnBackendError]() : undefined}
         onChange={handleSsnChange}
         onBlur={handleSsnBlur}
       />
+      {market === Market.No && showCreditCheckInfo && <CreditCheckInfo />}
       <HiddenSubmit type="submit" />
     </form>
   )
