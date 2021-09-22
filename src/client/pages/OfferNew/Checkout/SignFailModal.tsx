@@ -7,17 +7,18 @@ import { WarningTriangle } from 'components/icons/WarningTriangle'
 
 interface Props {
   onClose: () => void
-  isVisible: boolean
+  show: boolean
 }
 
 const Container = styled.div`
   padding: 3rem;
+  padding-left: 5rem;
   max-width: 36rem;
   position: relative;
 
   svg {
     position: absolute;
-    left: 1.125rem;
+    left: 3rem;
   }
 `
 
@@ -33,11 +34,17 @@ const Content = styled.p`
   line-height: 20px;
 `
 
-export const SignFailModal = ({ isVisible, onClose }: Props) => {
+export const SignFailModal = ({ show, onClose }: Props) => {
   const textKeys = useTextKeys()
 
   return (
-    <Modal isVisible={isVisible} onClose={onClose} dynamicHeight>
+    <Modal
+      isVisible={show}
+      onClose={onClose}
+      dynamicHeight
+      overflowX="auto"
+      maxWidth="36rem"
+    >
       <Container>
         <WarningTriangle />
         <Header> {textKeys.CHECKOUT_SIGN_FAIL_HEADER()}</Header>

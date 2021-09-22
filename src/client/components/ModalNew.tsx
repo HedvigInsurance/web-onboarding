@@ -7,6 +7,8 @@ import { Cross } from './icons/Cross'
 export interface ModalProps {
   isVisible: boolean
   dynamicHeight?: boolean
+  maxWidth?: string
+  overflowX?: string
   onClose: () => void
 }
 
@@ -34,12 +36,14 @@ const Background = styled(motion.div)`
 
 interface ModalContainerProps {
   dynamicHeight?: boolean
+  maxWidth?: string
+  overflowX?: string
 }
 
 const ModalContainer = styled(motion.div)<ModalContainerProps>`
   position: relative;
   width: 100%;
-  max-width: 56rem;
+  max-width: ${({ maxWidth }) => maxWidth || '56rem'};
   max-height: 100vh;
   ${(props) =>
     !props.dynamicHeight &&
@@ -55,7 +59,7 @@ const ModalContainer = styled(motion.div)<ModalContainerProps>`
   transform: translateX(-50%) translateY(-50%);
   box-shadow: 0 0 14px rgba(0, 0, 0, 0.06);
   box-sizing: border-box;
-  overflow-x: scroll;
+  overflow-x: ${({ overflowX }) => overflowX || 'auto'};
 
   @media (max-height: 900px) {
     max-height: calc(100vh - 2rem);
@@ -110,6 +114,8 @@ const CloseButton = styled('button')`
 export const Modal: React.FC<ModalProps> = ({
   isVisible,
   dynamicHeight,
+  maxWidth,
+  overflowX,
   onClose,
   children,
 }) => {
@@ -153,6 +159,8 @@ export const Modal: React.FC<ModalProps> = ({
       />
       <ModalContainer
         dynamicHeight={dynamicHeight}
+        maxWidth={maxWidth}
+        overflowX={overflowX}
         initial={'hidden'}
         animate={isVisible ? 'visible' : 'hidden'}
         transition={{

@@ -341,7 +341,7 @@ export const Checkout: React.FC<CheckoutProps> = ({
         <CheckoutSuccessRedirect offerData={offerData} />
       )}
       <SignFailModal
-        isVisible={showFailModal}
+        show={showFailModal}
         onClose={() => setShowFailModal(false)}
       />
     </>
