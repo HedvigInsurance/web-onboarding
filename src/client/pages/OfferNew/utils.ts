@@ -22,6 +22,9 @@ import { birthDateFormats } from 'l10n/birthDateAndSsnFormats'
 import { Address, OfferData, OfferQuote } from 'pages/OfferNew/types'
 import { TextKeyMap } from 'utils/textKeys'
 
+export const getBundleId = (bundle: QuoteBundle) =>
+  bundle.quotes.map(({ id }) => id).join('+')
+
 export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
   const firstQuote = quoteBundle.quotes[0]
   return {
