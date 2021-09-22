@@ -4,7 +4,11 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { BackArrow } from 'components/icons/BackArrow'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
-import { useCurrentLocale } from 'components/utils/CurrentLocale'
+import {
+  Market,
+  useCurrentLocale,
+  useMarket,
+} from 'components/utils/CurrentLocale'
 import {
   SignState,
   BankIdStatus,
@@ -185,6 +189,8 @@ export const Checkout: React.FC<CheckoutProps> = ({
     variables: { input: quoteIds },
   })
 
+  const market = useMarket()
+
   const [windowInnerHeight, setWindowInnerHeight] = useState(window.innerHeight)
 
   useEffect(() => {
@@ -265,8 +271,11 @@ export const Checkout: React.FC<CheckoutProps> = ({
     })
       .then(({ data }) => {
         if (data?.signQuotes?.__typename === 'FailedToStartSign') {
+          if (data?.signQuotes.errorCode === 'MANUAL_REVIEW_REQUIRED') {
+            setShowFailModal(true)
+            return
+          }
           setSignUiState('FAILED')
-          setShowFailModal(true)
           return
         }
         if (data?.signQuotes && 'redirectUrl' in data?.signQuotes) {
@@ -340,10 +349,12 @@ export const Checkout: React.FC<CheckoutProps> = ({
       {signStatus?.signState === SignState.Completed && (
         <CheckoutSuccessRedirect offerData={offerData} />
       )}
-      <SignFailModal
-        show={showFailModal}
-        onClose={() => setShowFailModal(false)}
-      />
+      {market === Market.No && (
+        <SignFailModal
+          show={showFailModal}
+          onClose={() => setShowFailModal(false)}
+        />
+      )}
     </>
   )
 }
