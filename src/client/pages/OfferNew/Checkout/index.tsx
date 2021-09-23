@@ -4,11 +4,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { BackArrow } from 'components/icons/BackArrow'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
-import {
-  Market,
-  useCurrentLocale,
-  useMarket,
-} from 'components/utils/CurrentLocale'
+import { useCurrentLocale, useMarket } from 'components/utils/CurrentLocale'
 import {
   SignState,
   BankIdStatus,
@@ -349,12 +345,10 @@ export const Checkout: React.FC<CheckoutProps> = ({
       {signStatus?.signState === SignState.Completed && (
         <CheckoutSuccessRedirect offerData={offerData} />
       )}
-      {market === Market.No && (
-        <SignFailModal
-          show={showFailModal}
-          onClose={() => setShowFailModal(false)}
-        />
-      )}
+      <SignFailModal
+        show={showFailModal}
+        onClose={() => setShowFailModal(false)}
+      />
     </>
   )
 }

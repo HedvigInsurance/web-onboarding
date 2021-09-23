@@ -10,6 +10,7 @@ import {
 } from 'components/utils/CurrentLocale'
 import { WithEmailForm, WithSsnForm } from 'pages/OfferNew/types'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
+import { useCreditCheckInfo } from 'src/client/components/utils/MarketFeatures'
 import { CreditCheckInfo } from './CreditCheckInfo'
 
 const HiddenSubmit = styled.input`
@@ -148,7 +149,7 @@ export const UserDetailsForm: React.FC<Props> = ({
         onChange={handleSsnChange}
         onBlur={handleSsnBlur}
       />
-      {market === Market.No && showCreditCheckInfo && <CreditCheckInfo />}
+      {useCreditCheckInfo() && showCreditCheckInfo && <CreditCheckInfo />}
       <HiddenSubmit type="submit" />
     </form>
   )
