@@ -10,7 +10,7 @@ import {
 } from 'components/utils/CurrentLocale'
 import { WithEmailForm, WithSsnForm } from 'pages/OfferNew/types'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
-import { useCreditCheckInfo } from 'src/client/components/utils/MarketFeatures'
+import { useCreditCheckInfo } from 'components/utils/MarketFeatures'
 import { CreditCheckInfo } from './CreditCheckInfo'
 
 const HiddenSubmit = styled.input`
