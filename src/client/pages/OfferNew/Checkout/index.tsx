@@ -171,7 +171,7 @@ export const Checkout: React.FC<CheckoutProps> = ({
   const [signUiState, setSignUiState] = useState<SignUiState>('NOT_STARTED')
   const [emailUpdateLoading, setEmailUpdateLoading] = useState(false)
   const [ssnUpdateLoading, setSsnUpdateLoading] = useState(false)
-  const [showFailModal, setShowFailModal] = useState(true)
+  const [showFailModal, setShowFailModal] = useState(false)
   const [startPollingSignState, signStatusQueryProps] = useSignStatusLazyQuery({
     pollInterval: 1000,
   })
