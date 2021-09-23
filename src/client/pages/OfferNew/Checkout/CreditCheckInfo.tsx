@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2, colorsV3 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
 import { FadeIn } from 'components/animations/appearings'
 import { InfoIcon } from 'components/icons/Info'
@@ -9,7 +9,7 @@ const InfoBox = styled.div`
   padding: 1rem;
   padding-left: 3rem;
   margin-bottom: 1.5rem;
-  background-color: ${colorsV2.violet100};
+  background-color: ${colorsV3.purple100};
   position: relative;
   border-radius: 8px;
   svg {

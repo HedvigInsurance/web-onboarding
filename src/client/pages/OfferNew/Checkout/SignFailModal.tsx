@@ -34,22 +34,21 @@ const Content = styled.p`
   line-height: 1.25rem;
 `
 
+const CustomModal = styled(Modal)`
+  overflow-x: auto;
+  max-width: 36rem;
+`
+
 export const SignFailModal = ({ show, onClose }: Props) => {
   const textKeys = useTextKeys()
 
   return (
-    <Modal
-      isVisible={show}
-      onClose={onClose}
-      dynamicHeight
-      overflowX="auto"
-      maxWidth="36rem"
-    >
+    <CustomModal isVisible={show} onClose={onClose} dynamicHeight>
       <Container>
         <WarningTriangle />
         <Header> {textKeys.CHECKOUT_SIGN_FAIL_HEADER()}</Header>
         <Content>{textKeys.CHECKOUT_SIGN_FAIL_CONTENT()}</Content>
       </Container>
-    </Modal>
+    </CustomModal>
   )
 }
