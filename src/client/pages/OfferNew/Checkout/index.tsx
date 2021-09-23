@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { BackArrow } from 'components/icons/BackArrow'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
-import { useCurrentLocale, useMarket } from 'components/utils/CurrentLocale'
+import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import {
   SignState,
   BankIdStatus,
@@ -184,8 +184,6 @@ export const Checkout: React.FC<CheckoutProps> = ({
   const { data: signMethodData } = useSignMethodForQuotesQuery({
     variables: { input: quoteIds },
   })
-
-  const market = useMarket()
 
   const [windowInnerHeight, setWindowInnerHeight] = useState(window.innerHeight)
 
