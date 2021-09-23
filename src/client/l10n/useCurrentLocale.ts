@@ -20,7 +20,7 @@ const getLocaleFromPath = (path: string): LocaleLabel => {
 
 export const useCurrentLocale = () => {
   const location = useLocation()
-  const locale = getLocaleFromPath(location.pathname)
+  const locale = getLocaleFromPath(location.pathname.toLowerCase())
   const currentLocale = locales[locale]
   return currentLocale
 }
