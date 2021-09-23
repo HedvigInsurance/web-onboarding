@@ -15,8 +15,11 @@ export const ssnLengths: Record<MarketLabel, number> = {
 const yearMonthDayFormat = /^(19[0-9]{2}|20[0-9]{2})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/
 const dayMonthYearFormat = /^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-(19[0-9]{2}|20[0-9]{2})$/
 
-export const birthDateFormats: Record<MarketLabel | 'default', RegExp> = {
-  default: yearMonthDayFormat,
+export const birthDateFormats: Record<
+  MarketLabel | 'backEndDefault',
+  RegExp
+> = {
+  backEndDefault: yearMonthDayFormat,
   SE: yearMonthDayFormat,
   NO: dayMonthYearFormat,
   DK: dayMonthYearFormat,

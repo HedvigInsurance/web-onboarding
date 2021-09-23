@@ -379,7 +379,7 @@ export const getFormattedBirthdate = ({
     return birthDate
   }
 
-  const defaultFormat = birthDateFormats.default // This is the format we expect from back-end
+  const defaultFormat = birthDateFormats.backEndDefault // This is the format we expect from back-end
   const hasExpectedFormat = defaultFormat.test(birthDate)
 
   if (!hasExpectedFormat) {
