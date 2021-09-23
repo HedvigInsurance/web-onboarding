@@ -46,7 +46,7 @@ export const SignFailModal = ({ show, onClose }: Props) => {
     <CustomModal isVisible={show} onClose={onClose} dynamicHeight>
       <Container>
         <WarningTriangle />
-        <Header> {textKeys.CHECKOUT_SIGN_FAIL_HEADER()}</Header>
+        <Header>{textKeys.CHECKOUT_SIGN_FAIL_HEADER()}</Header>
         <Content>{textKeys.CHECKOUT_SIGN_FAIL_CONTENT()}</Content>
       </Container>
     </CustomModal>
