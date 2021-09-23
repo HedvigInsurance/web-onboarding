@@ -110,7 +110,7 @@ const LoadingDotsWrapper = styled.div`
 `
 
 const ErrorMessage = styled(motion.div)`
-  background-color: #c9abf5;
+  background-color: ${colorsV3.purple500};
   border-radius: 8px;
   padding: 1.25rem;
   margin-bottom: 10px;

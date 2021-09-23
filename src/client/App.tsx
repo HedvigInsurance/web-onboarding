@@ -13,12 +13,12 @@ import {
   WithStorageProps,
 } from './utils/StorageContainer'
 import { useCurrentLocale } from './l10n/useCurrentLocale'
-import { usePageview } from './utils/tracking/gtm'
+import { useGTMTracking } from './utils/tracking/gtm'
 
 export const App: React.ComponentType<StorageState> = ({ session }) => {
   const currentLocale = useCurrentLocale()
   const history = useHistory()
-  usePageview()
+  useGTMTracking()
 
   return (
     <>

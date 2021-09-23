@@ -31,7 +31,7 @@ export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
       email: firstQuote.email,
       ssn: firstQuote.ssn,
       birthDate: firstQuote.birthDate,
-      householdSize: getHouseholdSize(firstQuote.quoteDetails),
+      householdSize: getHouseholdSizeFromBundledQuotes(quoteBundle.quotes),
       address: getAddressFromBundledQuotes(quoteBundle.quotes),
     },
     quotes: quoteBundle.quotes.map((bundleQuote) => {
@@ -60,6 +60,21 @@ export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
     }),
     cost: quoteBundle.bundleCost,
   }
+}
+
+const getHouseholdSizeFromBundledQuotes = (quotes: BundledQuote[]): number => {
+  const quoteDetails = quotes.map((quote) => quote.quoteDetails)
+
+  for (const details of quoteDetails) {
+    if ('householdSize' in details) return details.householdSize
+    if ('coInsured' in details) return details.coInsured + 1
+  }
+
+  throw new Error(
+    `quoteDetails ${JSON.stringify(
+      quoteDetails,
+    )} must include one of the following: "householdSize" or "coInsured".`,
+  )
 }
 
 export const getHouseholdSize = (quoteDetails: QuoteDetails): number => {
@@ -94,33 +109,36 @@ const getAddressFromBundledQuotes = (
   return null
 }
 
-export const quoteDetailsHasAddress = (
+const isHomeQuote = (
   quoteDetails: QuoteDetails,
 ): quoteDetails is
   | SwedishApartmentQuoteDetails
   | SwedishHouseQuoteDetails
   | NorwegianHomeContentsDetails
   | DanishHomeContentsDetails =>
-  [
-    'SwedishApartmentQuoteDetails',
-    'SwedishHouseQuoteDetails',
-    'NorwegianHomeContentsDetails',
-    'DanishHomeContentsDetails',
-  ].includes(quoteDetails.__typename as string)
+  isNorwegianHomeContents(quoteDetails) ||
+  isDanishHomeContents(quoteDetails) ||
+  isSwedishHouse(quoteDetails) ||
+  isSwedishApartment(quoteDetails)
+
+export const quoteDetailsHasAddress = isHomeQuote
 
 export const getMainQuote = (offerData: OfferData) => {
-  const mainQuoteInBundle = offerData.quotes.filter((quote) => {
-    const isHomeContentsQuote =
-      isNorwegianHomeContents(quote.quoteDetails) ||
-      isDanishHomeContents(quote.quoteDetails)
-    return isHomeContentsQuote
-  })
+  if (isBundle(offerData)) {
+    const mainQuoteInBundle = offerData.quotes.find(({ quoteDetails }) =>
+      isHomeQuote(quoteDetails),
+    )
 
-  const mainQuote = isBundle(offerData)
-    ? mainQuoteInBundle[0]
-    : offerData.quotes[0]
+    if (!mainQuoteInBundle) {
+      throw new Error(
+        `Bundle offer ${JSON.stringify(offerData)} is missing a home quote".`,
+      )
+    }
 
-  return mainQuote
+    return mainQuoteInBundle
+  }
+
+  return offerData.quotes[0]
 }
 
 export const checkIfMainQuote = (
@@ -258,6 +276,7 @@ export const isNoDiscount = (campaigns: Campaign[]) =>
     campaigns[0].incentive.__typename === 'NoDiscount') ||
   false
 
+// TODO: Make Contract Types more generic
 export type HomeInsuranceTypeOfContract = Exclude<
   TypeOfContract,
   | TypeOfContract.NoTravel
@@ -266,6 +285,8 @@ export type HomeInsuranceTypeOfContract = Exclude<
   | TypeOfContract.DkAccidentStudent
   | TypeOfContract.DkTravel
   | TypeOfContract.DkTravelStudent
+  | TypeOfContract.SeAccident
+  | TypeOfContract.SeAccidentStudent
 >
 
 type TypeOfResidenceTextKeys =
@@ -302,12 +323,15 @@ export const typeOfResidenceTextKeys: Record<
     'CHECKOUT_DETAILS_RESIDENCE_TYPE_RENT',
 }
 
+// TODO: Make Contract Types more generic
 type SingleInsuranceTypeOfContract = Exclude<
   TypeOfContract,
   | TypeOfContract.DkAccident
   | TypeOfContract.DkAccidentStudent
   | TypeOfContract.DkTravel
   | TypeOfContract.DkTravelStudent
+  | TypeOfContract.SeAccident
+  | TypeOfContract.SeAccidentStudent
 >
 
 export const getInsuranceTitle = (

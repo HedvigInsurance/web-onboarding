@@ -110,7 +110,7 @@
     "@babel/polyfill": "^7.10.4",
     "@emotion/core": "^10.0.22",
     "@emotion/styled": "^10.0.23",
-    "@hedviginsurance/brand": "^4.0.2",
+    "@hedviginsurance/brand": "^4.0.5",
     "@hedviginsurance/embark": "^2.1.5",
     "@segment/snippet": "^4.4.0",
     "@sentry/node": "^6.10.0",

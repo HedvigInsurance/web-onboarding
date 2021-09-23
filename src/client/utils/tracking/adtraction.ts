@@ -8,15 +8,22 @@ import {
   isDanishAccidentBundle,
   isStudentOffer,
   isDanishTravelBundle,
+  getMainQuote,
 } from 'pages/OfferNew/utils'
 import { NoComboTypes, DkBundleTypes } from './tracking'
 
+// Exclude single contract types that are only sold as part of bundles
 type TypeOfContractExcludedUnused = Exclude<
   TypeOfContract | NoComboTypes | DkBundleTypes,
-  'DK_ACCIDENT' | 'DK_ACCIDENT_STUDENT' | 'DK_TRAVEL' | 'DK_TRAVEL_STUDENT'
+  | TypeOfContract.DkAccident
+  | TypeOfContract.DkAccidentStudent
+  | TypeOfContract.DkTravel
+  | TypeOfContract.DkTravelStudent
+  | TypeOfContract.SeAccident
+  | TypeOfContract.SeAccidentStudent
 >
 
-const adtractionProductMap: Record<TypeOfContractExcludedUnused, number> = {
+const adtractionContractValues: Record<TypeOfContractExcludedUnused, number> = {
   SE_HOUSE: 1477448913,
   SE_APARTMENT_BRF: 1417356498,
   SE_APARTMENT_STUDENT_BRF: 1423041022,
@@ -44,24 +51,24 @@ export const getBundleAdtractionProductValue = (offerData: OfferData) => {
   if (isBundle(offerData)) {
     if (isNorwegian(offerData)) {
       return isYouth(offerData)
-        ? adtractionProductMap[NoComboTypes.NoComboYouth]
-        : adtractionProductMap[NoComboTypes.NoCombo]
+        ? adtractionContractValues[NoComboTypes.NoComboYouth]
+        : adtractionContractValues[NoComboTypes.NoCombo]
     }
 
     if (isDanishAccidentBundle(offerData)) {
       return isStudentOffer(offerData)
-        ? adtractionProductMap[DkBundleTypes.DkAccidentBundleStudent]
-        : adtractionProductMap[DkBundleTypes.DkAccidentBundle]
+        ? adtractionContractValues[DkBundleTypes.DkAccidentBundleStudent]
+        : adtractionContractValues[DkBundleTypes.DkAccidentBundle]
     }
 
     if (isDanishTravelBundle(offerData)) {
       return isStudentOffer(offerData)
-        ? adtractionProductMap[DkBundleTypes.DkTravelBundleStudent]
-        : adtractionProductMap[DkBundleTypes.DkTravelBundle]
+        ? adtractionContractValues[DkBundleTypes.DkTravelBundleStudent]
+        : adtractionContractValues[DkBundleTypes.DkTravelBundle]
     }
   }
-  return adtractionProductMap[
-    offerData.quotes[0].contractType as TypeOfContractExcludedUnused
+  return adtractionContractValues[
+    getMainQuote(offerData).contractType as TypeOfContractExcludedUnused
   ]
 }
 

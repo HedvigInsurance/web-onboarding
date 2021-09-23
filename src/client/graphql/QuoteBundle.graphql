@@ -72,6 +72,9 @@ query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
             }
           }
         }
+        ... on SwedishAccidentDetails {
+          isStudent
+        }
 
         ... on NorwegianHomeContentsDetails {
           coInsured
