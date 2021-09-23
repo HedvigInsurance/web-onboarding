@@ -295,5 +295,9 @@
   "QUOTE_TITLE_TRAVEL_YOUTH": "Travel Insurance Youth",
   "QUOTE_TITLE_HOME_CONTENTS_STUDENT": "",
   "CHECKOUT_PRICE_TOTAL": "Total",
-  "CHECKOUT_HEADING": "Checkout"
+  "CHECKOUT_HEADING": "Checkout",
+  "CHECKOUT_CREDIT_CHECK_INFO_HEADER": "We perform credit checks on all new customers",
+  "CHECKOUT_CREDIT_CHECK_INFO_CONTENT": "",
+  "CHECKOUT_SIGN_FAIL_HEADER": "",
+  "CHECKOUT_SIGN_FAIL_CONTENT": ""
 }

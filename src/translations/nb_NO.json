@@ -294,6 +294,10 @@
   "QUOTE_TITLE_TRAVEL": "Reiseforsikring",
   "QUOTE_TITLE_TRAVEL_YOUTH": "Reiseforsikring Ung",
   "QUOTE_TITLE_HOME_CONTENTS_STUDENT": "",
-  "CHECKOUT_PRICE_TOTAL": "",
-  "CHECKOUT_HEADING": ""
+  "CHECKOUT_PRICE_TOTAL": "Totalt",
+  "CHECKOUT_HEADING": "Kasse",
+  "CHECKOUT_CREDIT_CHECK_INFO_HEADER": "Vi kredittvurderer nye kunder",
+  "CHECKOUT_CREDIT_CHECK_INFO_CONTENT": "Kunder med betalingsnamerkninger betaler i enkelte tilfeller forskuddsvis. Dersom dette gjelder deg vil du få beskjed ved kontakt med oss.",
+  "CHECKOUT_SIGN_FAIL_HEADER": "Vi kan ikke tilby deg kjøp",
+  "CHECKOUT_SIGN_FAIL_CONTENT": "Vi kan dessverre ikke tilby deg kjøp av forsikring på nett. Vennligst ta kontakt på epost@hedvig.com så hjelper vi deg videre!"
 }
