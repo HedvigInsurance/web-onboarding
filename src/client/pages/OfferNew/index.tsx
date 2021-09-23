@@ -48,6 +48,7 @@ const BUNDLE_VARIATIONS = [
   {
     tag: 'Most popular',
     bundle: {
+      displayName: 'Hemförsäkring & Olycksfall',
       quotes: [
         {
           id: 'oaiwdjia-adw2-311-123-123o123oij',
@@ -66,6 +67,7 @@ const BUNDLE_VARIATIONS = [
   },
   {
     bundle: {
+      displayName: 'Hemförsäkring Hyresrätt',
       quotes: [
         {
           id: 'oaiwdjia-adw2-311-123-123o123oij',
@@ -131,6 +133,14 @@ export const OfferNew: React.FC = () => {
   useEffect(() => {
     updateBundleVariant(bundleVariants, selectedBundleVariant)
   }, [bundleVariants])
+
+  useEffect(() => {
+    // Preselect initial bundle variation after it's loaded
+    // @TODO: this should be picked up from Embark
+    if (bundleVariation === undefined) {
+      setBundleVariation(quoteBundleVariations[0])
+    }
+  }, [bundleVariation, quoteBundleVariations])
 
   const checkoutMatch = useRouteMatch(`${localePathPattern}/new-member/sign`)
   const toggleCheckout = createToggleCheckout(history, currentLocale)
