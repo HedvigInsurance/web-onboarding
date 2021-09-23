@@ -47,7 +47,7 @@ export const SignFailModal = ({ show, onClose }: Props) => {
     >
       <Container>
         <WarningTriangle />
-        <Header> {textKeys.CHECKOUT_SIGN_FAIL_HEADER()}</Header>
+        <Header>{textKeys.CHECKOUT_SIGN_FAIL_HEADER()}</Header>
         <Content>{textKeys.CHECKOUT_SIGN_FAIL_CONTENT()}</Content>
       </Container>
     </Modal>
