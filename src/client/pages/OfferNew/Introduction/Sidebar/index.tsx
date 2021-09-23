@@ -97,6 +97,7 @@ const Title = styled.h3`
   margin: 0 1rem 0 0;
   font-size: 1.375rem;
   line-height: 1.625rem;
+  white-space: pre-line;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     font-size: 1.5rem;

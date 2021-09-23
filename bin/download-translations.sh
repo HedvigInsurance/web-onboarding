@@ -23,6 +23,7 @@ lokalise2 \
   --format json \
   --export-sort first_added \
   --add-newline-eof \
+  --replace-breaks=false \
   --original-filenames=false \
   --bundle-structure 'src/translations/%LANG_ISO%.json' \
   --placeholder-format icu \
