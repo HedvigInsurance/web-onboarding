@@ -50,6 +50,7 @@ const BUNDLE_VARIATIONS = [
   {
     tag: 'Most popular',
     bundle: {
+      displayName: 'Hemförsäkring & Olycksfall',
       quotes: [
         {
           id: 'oaiwdjia-adw2-311-123-123o123oij',
@@ -68,6 +69,7 @@ const BUNDLE_VARIATIONS = [
   },
   {
     bundle: {
+      displayName: 'Hemförsäkring Hyresrätt',
       quotes: [
         {
           id: 'oaiwdjia-adw2-311-123-123o123oij',
@@ -103,8 +105,8 @@ export const OfferNew: React.FC = () => {
 
   const quoteBundleVariations = BUNDLE_VARIATIONS.map<QuoteBundleVariation>(
     (variation) => ({
+      ...variation,
       id: variation.bundle.quotes.map(({ id }) => id).join(''),
-      tag: variation.tag,
       bundle: (variation.bundle as unknown) as QuoteBundle,
     }),
   )
@@ -121,6 +123,14 @@ export const OfferNew: React.FC = () => {
       if (matchingVariation === undefined) {
         setBundleVariation(undefined)
       }
+    }
+  }, [bundleVariation, quoteBundleVariations])
+
+  useEffect(() => {
+    // Preselect initial bundle variation after it's loaded
+    // @TODO: this should be picked up from Embark
+    if (bundleVariation === undefined) {
+      setBundleVariation(quoteBundleVariations[0])
     }
   }, [bundleVariation, quoteBundleVariations])
 
@@ -189,24 +199,23 @@ export const OfferNew: React.FC = () => {
                 />
               )}
             </TrackAction>
-            <div style={{ backgroundColor: 'white' }}>
-              {quoteBundleVariations.map((variation) => (
-                <label key={variation.id}>
-                  <input
-                    name={variation.tag}
-                    type="radio"
-                    checked={bundleVariation?.id === variation.id}
-                    onChange={() => setBundleVariation(variation)}
-                  />
-                  <span>
-                    {variation.tag} -{' '}
-                    {variation.bundle.quotes
-                      .map((quote) => quote.displayName)
-                      .join(' & ')}
-                  </span>
-                </label>
-              ))}
-            </div>
+            {quoteBundleVariations.length > 1 ? (
+              <div style={{ backgroundColor: 'white' }}>
+                {quoteBundleVariations.map((variation) => (
+                  <label key={variation.id}>
+                    <input
+                      name={variation.tag}
+                      type="radio"
+                      checked={bundleVariation?.id === variation.id}
+                      onChange={() => setBundleVariation(variation)}
+                    />
+                    <span>
+                      {variation.tag} - {variation.bundle.displayName}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            ) : null}
             <Perils offerData={offerData} />
             {currentMarket !== Market.Dk && <SwitchSafetySection />}
             <FaqSection />
