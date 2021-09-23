@@ -1,8 +1,5 @@
-import {
-  getLocalePathPattern,
-  LocaleUrlParams,
-  PARAM_PLACEHOLDER,
-} from './localePathPattern'
+import { getLocalePathPattern, PARAM_PLACEHOLDER } from './localePathPattern'
+import { LocaleUrlParams } from './locales'
 
 const MOCKED_URL_PARAMS = ['se', 'se-en', 'no']
 

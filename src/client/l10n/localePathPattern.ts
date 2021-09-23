@@ -1,6 +1,4 @@
-const LOCALE_URL_PARAMS = ['se', 'se-en', 'no', 'no-en', 'dk', 'dk-en'] as const
-
-export type LocaleUrlParams = typeof LOCALE_URL_PARAMS
+import { LOCALE_URL_PARAMS, LocaleUrlParams } from './locales'
 
 export const PARAM_PLACEHOLDER = 'locale'
 

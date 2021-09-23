@@ -4,8 +4,16 @@ import {
   ssnFormats,
   birthDateFormats,
 } from './birthDateAndSsnFormats'
-import { LocaleUrlParams } from './localePathPattern'
 
+export const LOCALE_URL_PARAMS = [
+  'se',
+  'se-en',
+  'no',
+  'no-en',
+  'dk',
+  'dk-en',
+] as const
+export type LocaleUrlParams = typeof LOCALE_URL_PARAMS
 export type LocaleLabel = LocaleUrlParams[number]
 
 export type LocaleData = {
