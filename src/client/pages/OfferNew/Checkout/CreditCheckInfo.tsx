@@ -22,14 +22,14 @@ const InfoBox = styled.div`
 const InfoHeader = styled.p`
   color: ${colorsV3.gray900};
   margin: 0;
-  line-height: 24px;
+  line-height: 1.5rem;
 `
 const InfoContent = styled.p`
   color: ${colorsV3.gray700};
   margin: 0;
   margin-top: 0.25rem;
   font-size: 0.875rem;
-  line-height: 20px;
+  line-height: 1.25rem;
 `
 
 export const CreditCheckInfo = () => {

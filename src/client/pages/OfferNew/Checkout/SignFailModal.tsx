@@ -25,13 +25,13 @@ const Container = styled.div`
 const Header = styled.h2`
   color: ${colorsV3.gray900};
   margin: 0;
-  line-height: 24px;
+  line-height: 1.5rem;
 `
 const Content = styled.p`
   color: ${colorsV3.gray700};
   margin: 0;
   margin-top: 0.5rem;
-  line-height: 20px;
+  line-height: 1.25rem;
 `
 
 export const SignFailModal = ({ show, onClose }: Props) => {
