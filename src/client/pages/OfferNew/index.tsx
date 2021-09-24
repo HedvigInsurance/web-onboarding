@@ -22,6 +22,7 @@ import { getOfferData } from 'pages/OfferNew/utils'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { trackOfferGTM } from 'utils/tracking/gtm'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
+import { localePathPattern } from 'l10n/localePathPattern'
 import { useQuoteIds } from '../../utils/hooks/useQuoteIds'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import { Checkout } from './Checkout'
@@ -58,9 +59,7 @@ export const OfferNew: React.FC = () => {
     skip: quoteIdsIsLoading,
   })
 
-  const checkoutMatch = useRouteMatch(
-    '/:locale(se-en|se|no-en|no|dk-en|dk)/new-member/sign',
-  )
+  const checkoutMatch = useRouteMatch(`${localePathPattern}/new-member/sign`)
   const toggleCheckout = createToggleCheckout(history, currentLocale)
 
   if ((loadingQuoteBundle && !data?.quoteBundle) || quoteIdsIsLoading) {

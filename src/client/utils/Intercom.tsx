@@ -1,6 +1,6 @@
 import React from 'react'
 import { useRouteMatch } from 'react-router'
-import { LOCALE_PATH_PATTERN } from 'shared/locale'
+import { localePathPattern } from 'l10n/localePathPattern'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 
 const createIntercom = () => {
@@ -23,7 +23,7 @@ const createIntercom = () => {
 export const Intercom: React.FC = () => {
   const variation = useVariation()
   const isIntercomMatch = useRouteMatch(
-    LOCALE_PATH_PATTERN +
+    localePathPattern +
       '/new-member/:place(offer|sign|download|connect-payment)',
   )
 

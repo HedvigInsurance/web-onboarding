@@ -10,7 +10,7 @@ interface TextKeyResolver {
 }
 
 type TextKeys = Record<string, string>
-export type Locale =
+export type TranslationsLocale =
   | 'en'
   | 'en_SE'
   | 'en_NO'
@@ -88,7 +88,7 @@ const DEBUG_NONE_QUERY = 'debug=none'
 const DEBUG_LOCAL_STORAGE_KEY = 'hvg:debug:textkeys'
 
 export const TextKeyProvider: React.FC<{
-  locale: Locale
+  locale: TranslationsLocale
   locationSearch?: string
 }> = ({ locale, locationSearch, children }) => {
   const [textKeys, setTextKeys] = useState<TextKeys | null>(null)

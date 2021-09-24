@@ -3,7 +3,7 @@ import { useHistory } from 'react-router'
 import { Route, Switch } from 'react-router-dom'
 import { useReferrerNameQuery } from 'data/graphql'
 import { LoadingDots } from 'components/LoadingDots/LoadingDots'
-import { LOCALE_PATH_PATTERN } from 'shared/locale'
+import { localePathPattern } from 'l10n/localePathPattern'
 import { IntroStories } from './IntroStories'
 import { PreOnboardingScreen } from './PreOnboardingScreen'
 
@@ -14,7 +14,7 @@ export const Intro: React.FC = () => {
     <>
       <Switch>
         <Route
-          path={LOCALE_PATH_PATTERN + '/forever/:code/intro'}
+          path={localePathPattern + '/forever/:code/intro'}
           exact
           render={() => {
             const referredBy =
@@ -37,7 +37,7 @@ export const Intro: React.FC = () => {
           }}
         />
         <Route
-          path={LOCALE_PATH_PATTERN + '/forever/:code/intro/ready'}
+          path={localePathPattern + '/forever/:code/intro/ready'}
           component={PreOnboardingScreen}
         />
       </Switch>
