@@ -1,4 +1,4 @@
-import { Market, useMarket } from './CurrentLocale'
+import { Market, useMarket } from '../components/utils/CurrentLocale'
 
 export const useCreditCheckInfo = () => {
   const market = useMarket()

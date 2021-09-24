@@ -10,7 +10,7 @@ import {
 } from 'components/utils/CurrentLocale'
 import { WithEmailForm, WithSsnForm } from 'pages/OfferNew/types'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
-import { useCreditCheckInfo } from 'components/utils/featureToggles'
+import { useCreditCheckInfo } from 'utils/featureToggles'
 import { CreditCheckInfo } from './CreditCheckInfo'
 
 const HiddenSubmit = styled.input`
@@ -47,9 +47,11 @@ export const UserDetailsForm: React.FC<Props> = ({
 }) => {
   const textKeys = useTextKeys()
   const [email, reallySetEmail] = useState(() => initialEmail)
-  const [emailError, setEmailError] = useState<boolean>(false)
+  const [hasEmailError, setHasEmailError] = useState<boolean>(false)
   const [ssn, reallySetSsn] = useState(() => initialSsn)
-  const [showCreditCheckInfo, setShowCreditCheckInfo] = useState(false)
+  const [isShowingCreditCheckInfo, setIsShowingCreditCheckInfo] = useState(
+    false,
+  )
   const [emailChangeTimout, setEmailChangeTimout] = useState<number | null>(
     null,
   )
@@ -127,10 +129,10 @@ export const UserDetailsForm: React.FC<Props> = ({
         id="email"
         type="email"
         value={email}
-        errors={emailError ? textKeys.SIGN_EMAIL_CHECK() : undefined}
+        errors={hasEmailError ? textKeys.SIGN_EMAIL_CHECK() : undefined}
         onChange={(e: React.ChangeEvent<any>) => {
           setEmailDebounced(e.target.value)
-          setEmailError(false)
+          setHasEmailError(false)
         }}
       />
 
@@ -143,13 +145,13 @@ export const UserDetailsForm: React.FC<Props> = ({
         inputMode="numeric"
         pattern="[0-9]*"
         maxLength={ssnMaxLength}
-        onFocus={() => setShowCreditCheckInfo(true)}
+        onFocus={() => setIsShowingCreditCheckInfo(true)}
         value={ssn}
         errors={ssnBackendError ? textKeys[ssnBackendError]() : undefined}
         onChange={handleSsnChange}
         onBlur={handleSsnBlur}
       />
-      {useCreditCheckInfo() && showCreditCheckInfo && <CreditCheckInfo />}
+      {useCreditCheckInfo() && isShowingCreditCheckInfo && <CreditCheckInfo />}
       <HiddenSubmit type="submit" />
     </form>
   )

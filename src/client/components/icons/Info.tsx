@@ -1,10 +1,10 @@
 import React from 'react'
 
-export const InfoIcon = ({ height = 16, width = 16 }) => (
+export const InfoIcon = ({ size = 16 }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width={width}
-    height={height}
+    width={size}
+    height={size}
     viewBox="0 0 16 16"
   >
     <g fill="none" fillRule="evenodd">

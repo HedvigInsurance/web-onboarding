@@ -1,9 +1,9 @@
 import React from 'react'
 
-export const WarningTriangle = ({ height = 24, width = 24 }) => (
+export const WarningTriangle = ({ size = 24 }) => (
   <svg
-    width={width}
-    height={height}
+    width={size}
+    height={size}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >

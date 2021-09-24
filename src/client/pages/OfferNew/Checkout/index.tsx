@@ -171,7 +171,7 @@ export const Checkout: React.FC<CheckoutProps> = ({
   const [signUiState, setSignUiState] = useState<SignUiState>('NOT_STARTED')
   const [emailUpdateLoading, setEmailUpdateLoading] = useState(false)
   const [ssnUpdateLoading, setSsnUpdateLoading] = useState(false)
-  const [showFailModal, setShowFailModal] = useState(false)
+  const [isShowingFailModal, setIsShowingFailModal] = useState(false)
   const [startPollingSignState, signStatusQueryProps] = useSignStatusLazyQuery({
     pollInterval: 1000,
   })
@@ -266,7 +266,7 @@ export const Checkout: React.FC<CheckoutProps> = ({
       .then(({ data }) => {
         if (data?.signQuotes?.__typename === 'FailedToStartSign') {
           if (data?.signQuotes.errorCode === 'MANUAL_REVIEW_REQUIRED') {
-            setShowFailModal(true)
+            setIsShowingFailModal(true)
             return
           }
           setSignUiState('FAILED')
@@ -344,8 +344,8 @@ export const Checkout: React.FC<CheckoutProps> = ({
         <CheckoutSuccessRedirect offerData={offerData} />
       )}
       <SignFailModal
-        show={showFailModal}
-        onClose={() => setShowFailModal(false)}
+        isVisible={isShowingFailModal}
+        onClose={() => setIsShowingFailModal(false)}
       />
     </>
   )
