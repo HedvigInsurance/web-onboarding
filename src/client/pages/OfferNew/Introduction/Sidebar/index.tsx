@@ -203,16 +203,14 @@ export const Sidebar: React.FC<Props> = ({
         {() => (
           <Wrapper>
             <Container>
-              {discountText && (
-                <DiscountInfo>
-                  {isNorwegianBundle && (
-                    <DiscountBadge>
-                      {textKeys.SIDEBAR_NO_BUNDLE_DISCOUNT_TEXT()}
-                    </DiscountBadge>
-                  )}
-                  <DiscountBadge>{discountText}</DiscountBadge>
-                </DiscountInfo>
-              )}
+              <DiscountInfo>
+                {isNorwegianBundle && (
+                  <DiscountBadge>
+                    {textKeys.SIDEBAR_NO_BUNDLE_DISCOUNT_TEXT()}
+                  </DiscountBadge>
+                )}
+                {discountText && <DiscountBadge>{discountText}</DiscountBadge>}
+              </DiscountInfo>
               <Header>
                 <Title>Hedvig</Title>
                 <Price
