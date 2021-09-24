@@ -193,6 +193,7 @@ export const Sidebar: React.FC<Props> = ({
       })
       .then(() => refetchAll())
   }
+  const hasMultipleQuotes = offerData.quotes.length > 1
 
   const hasRedeemedCampaigns = redeemedCampaigns.length > 0
 
@@ -227,8 +228,7 @@ export const Sidebar: React.FC<Props> = ({
                 />
               </Header>
               <Body>
-                <PriceBreakdown offerData={offerData} />
-
+                {hasMultipleQuotes && <PriceBreakdown offerData={offerData} />}
                 <BodyTitle>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}</BodyTitle>
                 <StartDate
                   offerData={offerData}
