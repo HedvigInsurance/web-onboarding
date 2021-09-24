@@ -1,7 +1,7 @@
 import React from 'react'
 import { Redirect, RouteComponentProps } from 'react-router'
 
-import { LOCALE_PATH_PATTERN } from 'shared/locale'
+import { localePathPattern } from './client/l10n/localePathPattern'
 import { ConnectPayment } from './client/pages/ConnectPayment'
 import { TrustlyFailPage } from './client/pages/ConnectPayment/components/TrustlyFailPage'
 import { TrustlySpinnerPage } from './client/pages/ConnectPayment/components/TrustlySpinnerPage'
@@ -47,54 +47,54 @@ export interface ServerSideRoute {
 
 export const serverSideRoutes: ServerSideRoute[] = [
   {
-    path: LOCALE_PATH_PATTERN + '/forever/:code?',
+    path: localePathPattern + '/forever/:code?',
     titleTextKey: 'FOREVER_LANDINGPAGE_TITLE',
     metaDescriptionTextKey: 'FOREVER_LANDINGPAGE_DESCRIPTION',
     ogImage:
       'https://www.hedvig.com/new-member-assets/social/forever-notifications.jpg',
   },
   {
-    path: LOCALE_PATH_PATTERN + '/new-member/download',
+    path: localePathPattern + '/new-member/download',
     titleTextKey: 'DOWNLOAD_PAGE_TITLE',
   },
   {
-    path: LOCALE_PATH_PATTERN + '/new-member/connect-payment',
+    path: localePathPattern + '/new-member/connect-payment',
     titleTextKey: 'ONBOARDING_CONNECT_DD_PAGE_TITLE',
   },
   {
-    path: LOCALE_PATH_PATTERN + '/new-member/connect-payment/direct',
+    path: localePathPattern + '/new-member/connect-payment/direct',
     titleTextKey: 'ONBOARDING_CONNECT_DD_PAGE_TITLE',
   },
   {
-    path: LOCALE_PATH_PATTERN + '/new-member/connect-payment/success',
+    path: localePathPattern + '/new-member/connect-payment/success',
     titleTextKey: 'ONBOARDING_CONNECT_DD_PAGE_TITLE',
   },
   {
-    path: LOCALE_PATH_PATTERN + '/new-member/connect-payment/fail',
+    path: localePathPattern + '/new-member/connect-payment/fail',
     titleTextKey: 'ONBOARDING_CONNECT_DD_PAGE_TITLE',
   },
   {
-    path: LOCALE_PATH_PATTERN + '/new-member/connect-payment/retry',
+    path: localePathPattern + '/new-member/connect-payment/retry',
     titleTextKey: 'ONBOARDING_CONNECT_DD_PAGE_TITLE',
   },
   {
-    path: LOCALE_PATH_PATTERN + '/new-member/(offer|sign)',
+    path: localePathPattern + '/new-member/(offer|sign)',
     titleTextKey: 'OFFER_PAGE_TITLE',
   },
   {
-    path: LOCALE_PATH_PATTERN + '/new-member/sign/success',
+    path: localePathPattern + '/new-member/sign/success',
     titleTextKey: '',
   },
   {
-    path: LOCALE_PATH_PATTERN + '/new-member/sign/fail',
+    path: localePathPattern + '/new-member/sign/fail',
     titleTextKey: '',
   },
   {
-    path: LOCALE_PATH_PATTERN + '/new-member/:name?/:id?',
+    path: localePathPattern + '/new-member/:name?/:id?',
     titleTextKey: 'START_PAGE_TITLE',
   },
   {
-    path: LOCALE_PATH_PATTERN + '/login',
+    path: localePathPattern + '/login',
     titleTextKey: 'Text',
   },
   {
@@ -113,72 +113,72 @@ interface ReactPageRoute {
 
 export const reactPageRoutes: ReactPageRoute[] = [
   {
-    path: LOCALE_PATH_PATTERN + '/forever/:code?',
+    path: localePathPattern + '/forever/:code?',
     Component: Forever,
     exact: false,
   },
   {
-    path: LOCALE_PATH_PATTERN + '/new-member/download',
+    path: localePathPattern + '/new-member/download',
     Component: Download,
     exact: true,
   },
   {
-    path: LOCALE_PATH_PATTERN + '/new-member/connect-payment',
+    path: localePathPattern + '/new-member/connect-payment',
     Component: ConnectPayment,
     exact: true,
   },
   {
-    path: LOCALE_PATH_PATTERN + '/new-member/connect-payment/direct',
+    path: localePathPattern + '/new-member/connect-payment/direct',
     Component: ConnectPaymentsDirectEntry,
     exact: true,
   },
   {
-    path: LOCALE_PATH_PATTERN + '/new-member/connect-payment/success',
+    path: localePathPattern + '/new-member/connect-payment/success',
     Component: TrustlySpinnerPage,
     exact: true,
   },
   {
-    path: LOCALE_PATH_PATTERN + '/new-member/connect-payment/fail',
+    path: localePathPattern + '/new-member/connect-payment/fail',
     Component: TrustlyFailPage,
     exact: true,
   },
   {
-    path: LOCALE_PATH_PATTERN + '/new-member/connect-payment/retry',
+    path: localePathPattern + '/new-member/connect-payment/retry',
     Component: TrustlySpinnerPage,
     exact: true,
   },
   {
-    path: LOCALE_PATH_PATTERN + '/new-member/(offer|sign)',
+    path: localePathPattern + '/new-member/(offer|sign)',
     Component: OfferNew,
     exact: true,
   },
   {
-    path: LOCALE_PATH_PATTERN + '/new-member/sign/success',
+    path: localePathPattern + '/new-member/sign/success',
     Component: SignLoading,
     exact: true,
   },
   {
-    path: LOCALE_PATH_PATTERN + '/new-member/sign/fail',
+    path: localePathPattern + '/new-member/sign/fail',
     Component: SignLoading,
     exact: true,
   },
   {
-    path: LOCALE_PATH_PATTERN + '/new-member/debugger',
+    path: localePathPattern + '/new-member/debugger',
     Component: Debugger,
     exact: true,
   },
   {
-    path: LOCALE_PATH_PATTERN + '/login',
+    path: localePathPattern + '/login',
     Component: LoginApp,
     exact: true,
   },
   {
-    path: LOCALE_PATH_PATTERN + '/new-member',
+    path: localePathPattern + '/new-member',
     Component: Landing,
     exact: true,
   },
   {
-    path: LOCALE_PATH_PATTERN + '/new-member/:name/:id?',
+    path: localePathPattern + '/new-member/:name/:id?',
     render: ({ match }: RouteComponentProps<any>) => {
       const getProps = () => {
         const { locale, name } = match.params

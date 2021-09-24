@@ -9,7 +9,7 @@ import proxy from 'koa-server-http-proxy'
 import { notNullable } from 'utils/nullables'
 import { sentryConfig } from 'utils/sentry-server'
 import { serverSideRoutes } from '../routes'
-import { LOCALE_PATH_PATTERN } from '../shared/locale'
+import { localePathPattern } from '../client/l10n/localePathPattern'
 import { handleAdyen3dsPostRedirect } from './adyenMiddleware'
 import { GIRAFFE_HOST, GIRAFFE_WS_ENDPOINT } from './config'
 import { appLogger } from './logging'
@@ -117,7 +117,7 @@ router.post('/new-member/_report-csp-violation', (ctx) => {
 })
 
 router.post(
-  LOCALE_PATH_PATTERN + '/new-member/connect-payment/adyen-callback',
+  localePathPattern + '/new-member/connect-payment/adyen-callback',
   handleAdyen3dsPostRedirect,
 )
 

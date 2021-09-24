@@ -1,52 +1,40 @@
 import { Locale as IsoLocale } from 'data/graphql'
+import {
+  ssnLengths,
+  ssnFormats,
+  birthDateFormats,
+} from './birthDateAndSsnFormats'
 
-export type LocaleLabel = 'se' | 'se-en' | 'no' | 'no-en' | 'dk' | 'dk-en'
+export const LOCALE_URL_PARAMS = [
+  'se',
+  'se-en',
+  'no',
+  'no-en',
+  'dk',
+  'dk-en',
+] as const
+export type LocaleUrlParams = typeof LOCALE_URL_PARAMS
+export type LocaleLabel = LocaleUrlParams[number]
 
 export type LocaleData = {
   path: LocaleLabel
   isoLocale: IsoLocale
   marketLabel: MarketLabel
   htmlLang: 'en' | 'sv' | 'no' | 'da'
-  adtractionScript?: string
-  ssn: Ssn
-  birthdate: Birthdate
+  adtractionScriptSrc?: string
+  ssn: {
+    length: number
+    formatExample: string
+    formatRegex: RegExp
+  }
+  birthDate: {
+    formatExample: string
+    formatRegex: RegExp
+    backendFormatExample: string
+  }
 }
 
-type MarketLabel = 'SE' | 'NO' | 'DK'
-
-type Ssn = {
-  length: number
-  formatExample: string
-  formatRegex: RegExp
-}
-
-type Birthdate = {
-  formatExample: string
-  formatRegex: RegExp
-  backendFormatExample: string
-}
-
-const ssnFormats: Record<MarketLabel, RegExp> = {
-  SE: /^((19|20))([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])([0-9]{4})$/,
-  NO: /^(0[1-9]|[1-2][0-9]|3[0-1])(0[1-9]|1[0-2])([0-9]{2})([0-9]{5})$/,
-  DK: /^(0[1-9]|[1-2][0-9]|3[0-1])(0[1-9]|1[0-2])([0-9]{2})([0-9]{4})$/,
-}
-
-const ssnLengths: Record<MarketLabel, number> = {
-  SE: 12,
-  NO: 11,
-  DK: 10,
-}
-
-const yearMonthDayFormat = /^(19[0-9]{2}|20[0-9]{2})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/
-const dayMonthYearFormat = /^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-(19[0-9]{2}|20[0-9]{2})$/
-
-export const birthdateFormats: Record<MarketLabel | 'default', RegExp> = {
-  default: yearMonthDayFormat,
-  SE: yearMonthDayFormat,
-  NO: dayMonthYearFormat,
-  DK: dayMonthYearFormat,
-}
+export type MarketLabel = 'SE' | 'NO' | 'DK'
 
 export const locales: Record<LocaleLabel, LocaleData> = {
   se: {
@@ -54,15 +42,15 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     isoLocale: IsoLocale.SvSe,
     marketLabel: 'SE',
     htmlLang: 'sv',
-    adtractionScript: 'https://cdn.adt387.com/jsTag?ap=1412531808',
+    adtractionScriptSrc: 'https://cdn.adt387.com/jsTag?ap=1412531808',
     ssn: {
       length: ssnLengths.SE,
       formatExample: 'ÅÅÅÅMMDDXXXX',
       formatRegex: ssnFormats.SE,
     },
-    birthdate: {
+    birthDate: {
       formatExample: 'ÅÅÅÅ-MM-DD',
-      formatRegex: birthdateFormats.SE,
+      formatRegex: birthDateFormats.SE,
       backendFormatExample: 'ÅÅÅÅ-MM-DD',
     },
   },
@@ -71,15 +59,15 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     isoLocale: IsoLocale.EnSe,
     marketLabel: 'SE',
     htmlLang: 'en',
-    adtractionScript: 'https://cdn.adt387.com/jsTag?ap=1412531808',
+    adtractionScriptSrc: 'https://cdn.adt387.com/jsTag?ap=1412531808',
     ssn: {
       length: ssnLengths.SE,
       formatExample: 'YYYYMMDDXXXX',
       formatRegex: ssnFormats.SE,
     },
-    birthdate: {
+    birthDate: {
       formatExample: 'YYYY-MM-DD',
-      formatRegex: birthdateFormats.SE,
+      formatRegex: birthDateFormats.SE,
       backendFormatExample: 'YYYY-MM-DD',
     },
   },
@@ -88,15 +76,15 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     isoLocale: IsoLocale.NbNo,
     marketLabel: 'NO',
     htmlLang: 'no',
-    adtractionScript: 'https://cdn.adt387.com/jsTag?ap=1492109567',
+    adtractionScriptSrc: 'https://cdn.adt387.com/jsTag?ap=1492109567',
     ssn: {
       length: ssnLengths.NO,
       formatExample: 'DDMMÅÅXXXXX',
       formatRegex: ssnFormats.NO,
     },
-    birthdate: {
+    birthDate: {
       formatExample: 'DD-MM-ÅÅÅÅ',
-      formatRegex: birthdateFormats.NO,
+      formatRegex: birthDateFormats.NO,
       backendFormatExample: 'ÅÅÅÅ-MM-DD',
     },
   },
@@ -105,15 +93,15 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     isoLocale: IsoLocale.EnNo,
     marketLabel: 'NO',
     htmlLang: 'en',
-    adtractionScript: 'https://cdn.adt387.com/jsTag?ap=1492109567',
+    adtractionScriptSrc: 'https://cdn.adt387.com/jsTag?ap=1492109567',
     ssn: {
       length: ssnLengths.NO,
       formatExample: 'DDMMYYXXXXX',
       formatRegex: ssnFormats.NO,
     },
-    birthdate: {
+    birthDate: {
       formatExample: 'DD-MM-YYYY',
-      formatRegex: birthdateFormats.NO,
+      formatRegex: birthDateFormats.NO,
       backendFormatExample: 'YYYY-MM-DD',
     },
   },
@@ -122,15 +110,15 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     isoLocale: IsoLocale.DaDk,
     marketLabel: 'DK',
     htmlLang: 'da',
-    adtractionScript: 'https://cdn.adt387.com/jsTag?ap=1589794294',
+    adtractionScriptSrc: 'https://cdn.adt387.com/jsTag?ap=1589794294',
     ssn: {
       length: ssnLengths.DK,
       formatExample: 'DDMMÅÅSSSS',
       formatRegex: ssnFormats.DK,
     },
-    birthdate: {
+    birthDate: {
       formatExample: 'DD-MM-ÅÅÅÅ',
-      formatRegex: birthdateFormats.DK,
+      formatRegex: birthDateFormats.DK,
       backendFormatExample: 'ÅÅÅÅ-MM-DD',
     },
   },
@@ -139,15 +127,15 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     isoLocale: IsoLocale.EnDk,
     marketLabel: 'DK',
     htmlLang: 'en',
-    adtractionScript: 'https://cdn.adt387.com/jsTag?ap=1589794294',
+    adtractionScriptSrc: 'https://cdn.adt387.com/jsTag?ap=1589794294',
     ssn: {
       length: ssnLengths.DK,
       formatExample: 'DDMMYYSSSS',
       formatRegex: ssnFormats.DK,
     },
-    birthdate: {
+    birthDate: {
       formatExample: 'DD-MM-YYYY',
-      formatRegex: birthdateFormats.DK,
+      formatRegex: birthDateFormats.DK,
       backendFormatExample: 'YYYY-MM-DD',
     },
   },

@@ -2,7 +2,7 @@ import { match } from 'matchly'
 import React from 'react'
 import { matchPath, useLocation } from 'react-router'
 import { Locale } from 'data/graphql'
-import { LOCALE_PATH_PATTERN } from 'shared/locale'
+import { localePathPattern } from 'l10n/localePathPattern'
 
 export type LocalePath = 'se' | 'se-en' | 'no' | 'no-en' | 'dk' | 'dk-en'
 
@@ -27,7 +27,7 @@ export const getIsoLocale = (locale: string): Locale => {
 
 const getLocaleFromPath = (path: string) => {
   const localeMatch = matchPath<WithLocale>(path, {
-    path: LOCALE_PATH_PATTERN + '/*',
+    path: localePathPattern + '/*',
   })
   return localeMatch?.params?.locale?.toLowerCase() || ''
 }
