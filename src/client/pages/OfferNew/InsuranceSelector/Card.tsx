@@ -5,14 +5,18 @@ import { SelectedOptionCheckmark } from 'components/icons/SelectedOptionCheckmar
 import { UnselectedOptionCircle } from 'components/icons/UnselectedOptionCircle'
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
-const Container = styled.div<{ selected?: boolean }>`
+const Container = styled.div<{ selected?: boolean; focused?: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   border-width: 2px;
   border-style: solid;
-  border-color: ${({ selected }) =>
-    selected ? colorsV3.gray900 : colorsV3.gray500};
+  border-color: ${({ selected, focused }) =>
+    selected
+      ? colorsV3.gray900
+      : focused
+      ? colorsV3.gray700
+      : colorsV3.gray500};
   border-radius: 0.5rem;
   padding: 1rem;
   font-size: 1rem;
@@ -21,6 +25,10 @@ const Container = styled.div<{ selected?: boolean }>`
 
   ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
     height: 9.25rem;
+  }
+
+  &:hover {
+    border-color: ${colorsV3.gray700};
   }
 `
 
@@ -58,6 +66,7 @@ interface Props {
   price: number
   label?: string
   selected?: boolean
+  focused?: boolean
   currency: string
   onClick: () => void
 }
@@ -69,9 +78,10 @@ export const Card: React.FC<Props> = ({
   label,
   selected,
   onClick,
+  focused,
 }) => {
   return (
-    <Container selected={selected} onClick={onClick}>
+    <Container selected={selected} focused={focused} onClick={onClick}>
       <LabelWrapper>
         {selected ? <SelectedOptionCheckmark /> : <UnselectedOptionCircle />}
         {label && <Label>{label}</Label>}

@@ -1,41 +1,21 @@
-import React, { useState, KeyboardEvent } from 'react'
+import React, { useState, KeyboardEvent, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { Card } from './Card'
 
 const CardListContainer = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: auto;
+  gap: 1rem;
   background-color: ${colorsV3.gray100};
-
-  &:focus {
-    div#${(props) => CSS.escape(props['aria-activedescendant'] || 'test')} {
-      background-color: red;
-      box-shaddow: 0 0 0 8px #f1f2f6;
-    }
-  }
+  outline: none;
 `
 
 const CardWrapper = styled.div`
-  width: 100%;
-  margin-bottom: 1rem;
-
-  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
-    width: calc(50% - 1rem);
-    margin-right: 1rem;
-  }
+  outline: none;
+  cursor: pointer;
 `
-
-const KeyCodes = {
-  arrowLeft: 37,
-  arrowUp: 38,
-  arrowRight: 39,
-  arrowDown: 40,
-  space: 32,
-}
 
 interface Props {
   insurances: {
@@ -50,48 +30,40 @@ interface Props {
 }
 
 export const Selector: React.FC<Props> = ({ insurances, onChange }) => {
-  const [focusId, setFocusId] = useState('')
+  const [focusId, setFocusId] = useState<string | null>(null)
 
-  const handleInitialFocus = () => {
-    if (!focusId) setFocusId(`${insurances[0].id}`)
-  }
+  const selectedInsuranceId = insurances.find(({ selected }) => selected)?.id
+  useEffect(() => setFocusId(selectedInsuranceId ?? null), [
+    selectedInsuranceId,
+  ])
 
   const handleCardClick = (id: string) => {
-    setFocusId(id)
     onChange(id)
   }
 
   const handleContainerKeyPress = (event: KeyboardEvent) => {
-    switch (event.keyCode) {
-      case KeyCodes.arrowLeft:
-      case KeyCodes.arrowUp:
+    const currentFocusIndex = insurances.findIndex(
+      (item) => item.id === focusId,
+    )
+
+    switch (event.key) {
+      case 'ArrowLeft':
+      case 'ArrowUp':
         event.preventDefault()
-        const previousInsuranceIndex =
-          insurances.findIndex((x) => x.id === focusId) - 1
-        if (previousInsuranceIndex >= 0) {
-          const previousInsuranceId = insurances[previousInsuranceIndex].id
-          setFocusId(previousInsuranceId)
-          onChange(previousInsuranceId)
-        } else {
-          const lastInsuranceId = insurances[insurances.length - 1].id
-          setFocusId(lastInsuranceId)
-          onChange(lastInsuranceId)
-        }
+        onChange(
+          currentFocusIndex >= 1
+            ? insurances[currentFocusIndex - 1].id
+            : insurances[insurances.length - 1].id,
+        )
         break
-      case KeyCodes.arrowRight:
-      case KeyCodes.arrowDown:
+      case 'ArrowRight':
+      case 'ArrowDown':
         event.preventDefault()
-        const nextInsuranceIndex =
-          insurances.findIndex((x) => x.id === focusId) + 1
-        if (nextInsuranceIndex < insurances.length) {
-          const nextInsuranceId = insurances[nextInsuranceIndex].id
-          setFocusId(nextInsuranceId)
-          onChange(nextInsuranceId)
-        } else {
-          const firstInsuranceId = insurances[0].id
-          setFocusId(firstInsuranceId)
-          onChange(firstInsuranceId)
-        }
+        onChange(
+          currentFocusIndex <= insurances.length - 1 - 1
+            ? insurances[currentFocusIndex + 1].id
+            : insurances[0].id,
+        )
         break
       default:
         break
@@ -100,23 +72,22 @@ export const Selector: React.FC<Props> = ({ insurances, onChange }) => {
 
   return (
     <CardListContainer
-      tabIndex={0}
-      role="radio-group"
-      aria-activedescendant={focusId}
-      onFocus={handleInitialFocus}
+      role="radiogroup"
+      aria-activedescendant={focusId ?? undefined}
       onKeyDown={handleContainerKeyPress}
     >
       {insurances.map(({ id, name, price, label, selected, currency }) => (
         <CardWrapper
-          id={`${id}`}
+          id={id}
           key={id}
-          tabIndex={0}
+          tabIndex={selected ? 0 : -1}
           role="radio"
           aria-checked={selected}
         >
           <Card
             onClick={() => handleCardClick(id)}
             selected={selected}
+            focused={focusId === id}
             name={name}
             price={price}
             label={label}
