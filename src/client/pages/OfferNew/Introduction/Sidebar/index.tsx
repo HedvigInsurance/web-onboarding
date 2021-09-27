@@ -193,8 +193,13 @@ export const Sidebar: React.FC<Props> = ({
       })
       .then(() => refetchAll())
   }
-  const hasMultipleQuotes = offerData.quotes.length > 1
 
+  const discounts: Array<React.ReactNode> = [
+    ...(isNorwegianBundle ? [textKeys.SIDEBAR_NO_BUNDLE_DISCOUNT_TEXT()] : []),
+    ...(discountText ? [discountText] : []),
+  ]
+
+  const hasMultipleQuotes = offerData.quotes.length > 1
   const hasRedeemedCampaigns = redeemedCampaigns.length > 0
 
   return (
@@ -203,14 +208,13 @@ export const Sidebar: React.FC<Props> = ({
         {() => (
           <Wrapper>
             <Container>
-              <DiscountInfo>
-                {isNorwegianBundle && (
-                  <DiscountBadge>
-                    {textKeys.SIDEBAR_NO_BUNDLE_DISCOUNT_TEXT()}
-                  </DiscountBadge>
-                )}
-                {discountText && <DiscountBadge>{discountText}</DiscountBadge>}
-              </DiscountInfo>
+              {discounts.length > 0 ? (
+                <DiscountInfo>
+                  {discounts.map((text, index) => (
+                    <DiscountBadge key={index}>{text}</DiscountBadge>
+                  ))}
+                </DiscountInfo>
+              ) : null}
               <Header>
                 <Title>Hedvig</Title>
                 <Price
