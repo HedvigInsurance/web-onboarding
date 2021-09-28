@@ -49,6 +49,7 @@ const NameAndPriceWrapper = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-end;
+  gap: 1rem;
   margin-top: 1.75rem;
 `
 
@@ -57,24 +58,35 @@ const Name = styled.div`
   line-height: 1.5rem;
 `
 
+const PriceWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+`
+
 const Price = styled.div`
   color: ${colorsV3.gray700};
 `
 
+const FullPrice = styled(Price)`
+  font-size: 0.875rem;
+  text-decoration: line-through;
+`
+
 interface Props {
   name: string
-  price: number
+  price: string
+  fullPrice?: string
   label?: string
   selected?: boolean
   focused?: boolean
-  currency: string
   onClick: () => void
 }
 
 export const Card: React.FC<Props> = ({
   name,
   price,
-  currency,
+  fullPrice,
   label,
   selected,
   onClick,
@@ -88,10 +100,10 @@ export const Card: React.FC<Props> = ({
       </LabelWrapper>
       <NameAndPriceWrapper>
         <Name>{name}</Name>
-        <Price>
-          {price}
-          {currency}
-        </Price>
+        <PriceWrapper>
+          {fullPrice ? <FullPrice>{fullPrice}</FullPrice> : null}
+          <Price>{price}</Price>
+        </PriceWrapper>
       </NameAndPriceWrapper>
     </Container>
   )

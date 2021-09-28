@@ -1,15 +1,20 @@
 import React, { useState, KeyboardEvent, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { Card } from './Card'
 
 const CardListContainer = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   grid-auto-rows: auto;
   gap: 1rem;
   background-color: ${colorsV3.gray100};
   outline: none;
+
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
+    grid-template-columns: 1fr 1fr;
+  }
 `
 
 const CardWrapper = styled.div`
@@ -21,10 +26,10 @@ interface Props {
   insurances: {
     id: string
     name: string
-    price: number
+    price: string
+    fullPrice?: string
     label?: string
     selected?: boolean
-    currency: string
   }[]
   onChange: (id: string) => void
 }
@@ -76,7 +81,7 @@ export const Selector: React.FC<Props> = ({ insurances, onChange }) => {
       aria-activedescendant={focusId ?? undefined}
       onKeyDown={handleContainerKeyPress}
     >
-      {insurances.map(({ id, name, price, label, selected, currency }) => (
+      {insurances.map(({ id, name, price, fullPrice, label, selected }) => (
         <CardWrapper
           id={id}
           key={id}
@@ -90,8 +95,8 @@ export const Selector: React.FC<Props> = ({ insurances, onChange }) => {
             focused={focusId === id}
             name={name}
             price={price}
+            fullPrice={fullPrice}
             label={label}
-            currency={currency}
           />
         </CardWrapper>
       ))}

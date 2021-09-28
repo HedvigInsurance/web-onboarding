@@ -5,24 +5,22 @@ const mockInsurances = [
   {
     id: '1',
     name: 'Inbo, Ulykke & Rejse',
-    price: 329,
-    currency: 'kr/md',
+    price: '329 kr/md',
+    fullPrice: '369 kr',
     label: '3-in-1',
     selected: true,
   },
   {
     id: '2',
     name: 'Inbo &  Ulykke',
-    price: 279,
-    currency: 'kr/md',
+    price: '279 kr/md',
     label: '2-in-1',
     selected: false,
   },
   {
     id: '3',
     name: 'Inbo',
-    price: 189,
-    currency: 'kr/md',
+    price: '189 kr/md',
     selected: false,
   },
 ]
