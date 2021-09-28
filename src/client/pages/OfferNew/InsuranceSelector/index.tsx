@@ -1,18 +1,16 @@
 import React, { useMemo } from 'react'
-import { QuoteBundle } from 'src/client/data/graphql'
-import { getBundleId } from 'pages/OfferNew/utils'
+import { QuoteBundleVariant } from 'src/client/data/graphql'
 import { Selector } from './Selector'
 
-// TODO: To be replaced once the new type for variations is in place
 interface Variation {
   label?: string
-  bundle: QuoteBundle
+  bundle: QuoteBundleVariant
 }
 
 interface Props {
   variations: Variation[]
-  selectedQuoteBundle?: QuoteBundle
-  onChange: (bundle?: QuoteBundle) => void
+  selectedQuoteBundle?: QuoteBundleVariant
+  onChange: (bundle?: QuoteBundleVariant) => void
 }
 
 export const InsuranceSelector: React.FC<Props> = ({
@@ -21,11 +19,11 @@ export const InsuranceSelector: React.FC<Props> = ({
   onChange,
 }) => {
   const memoizedQuoteMap = useMemo(() => {
-    const quoteMap: Record<string, QuoteBundle> = variations.reduce(
+    const quoteMap: Record<string, QuoteBundleVariant> = variations.reduce(
       (acc, { bundle }) => {
         return {
           ...acc,
-          [getBundleId(bundle)]: bundle,
+          [bundle.id]: bundle,
         }
       },
       {},
@@ -35,20 +33,26 @@ export const InsuranceSelector: React.FC<Props> = ({
 
   const insurances = variations.map(({ label, bundle }) => {
     const {
-      displayName,
-      bundleCost: {
-        monthlyNet: { amount, currency },
+      id: bundleId,
+      bundle: {
+        displayName,
+        bundleCost: {
+          monthlyNet: { amount, currency },
+          monthlyGross: { amount: grossAmount, currency: grossCurrency },
+        },
       },
     } = bundle
-    const bundleId = getBundleId(bundle)
+
     return {
       id: bundleId,
       label,
       name: displayName,
-      price: Math.round(Number(amount)),
-      currency,
-      selected:
-        selectedQuoteBundle && bundleId === getBundleId(selectedQuoteBundle),
+      price: `${Math.round(Number(amount))} ${currency}`,
+      fullPrice:
+        amount !== grossAmount
+          ? `${Math.round(Number(grossAmount))} ${grossCurrency}`
+          : undefined,
+      selected: selectedQuoteBundle && bundleId === selectedQuoteBundle.id,
     }
   })
 
