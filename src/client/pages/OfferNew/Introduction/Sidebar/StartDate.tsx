@@ -20,7 +20,12 @@ import { LoadingDots } from 'components/LoadingDots/LoadingDots'
 import { useRemoveStartDateMutation, useStartDateMutation } from 'data/graphql'
 import { CancellationOptions } from 'pages/OfferNew/Introduction/Sidebar/CancellationOptions'
 import { OfferData, OfferQuote } from 'pages/OfferNew/types'
-import { hasCurrentInsurer, isBundle, isDanish } from 'pages/OfferNew/utils'
+import {
+  hasCurrentInsurer,
+  isBundle,
+  isDanish,
+  isSwedish,
+} from 'pages/OfferNew/utils'
 import { useTextKeys } from 'utils/textKeys'
 import { Size } from 'components/types'
 import { gqlDateFormat } from './utils'
@@ -54,7 +59,7 @@ const RowButton = styled.button<{
   height: ${(props) => (props.size === 'lg' ? `4.375rem` : `3rem`)};
   width: 100%;
   padding: 0 1.5rem;
-  border: 1px solid ${colorsV3.gray500};
+  border: 1px solid ${colorsV3.gray300};
   outline: 0;
   background-color: ${colorsV3.white};
   border-radius: 8px;
@@ -342,8 +347,10 @@ export const StartDate: React.FC<Props> = ({
 }) => {
   const textKeys = useTextKeys()
   const [showError, setShowError] = React.useState(false)
+
+  // TODO: Make this flag more generic. This logic should not live here.
   const isSingleStartDateBundle = (offerData: OfferData) =>
-    isBundle(offerData) && isDanish(offerData)
+    isBundle(offerData) && (isDanish(offerData) || isSwedish(offerData))
 
   return (
     <>

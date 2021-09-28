@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import styled from '@emotion/styled'
-import { colorsV3, HedvigSymbol } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { CookieStorage } from 'cookie-storage'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 import { Button, TextButton } from 'components/buttons'
@@ -23,9 +23,10 @@ import {
 } from 'utils/mediaQueries'
 import { Badge } from 'components/Badge/Badge'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
-import { Price } from '../../components'
-import { getInsuranceTitle, isBundle, isNorwegian } from '../../utils'
-import { DetailsModal } from './DetailsModal'
+import { Price } from '../../common/price'
+import { PriceBreakdown } from '../../common/PriceBreakdown'
+
+import { isBundle, isNorwegian } from '../../utils'
 import { DiscountCodeModal } from './DiscountCodeModal'
 import { StartDate } from './StartDate'
 import { StickyBottomSidebar } from './StickyBottomSidebar'
@@ -53,7 +54,8 @@ const Wrapper = styled.div`
 const Container = styled.div`
   width: ${SIDEBAR_WIDTH};
   max-width: 100%;
-  padding: 1rem;
+  padding: 1.25rem 1rem 1rem 1rem;
+  margin-top: 3rem;
   background-color: ${colorsV3.white};
   border-radius: 8px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
@@ -61,23 +63,25 @@ const Container = styled.div`
   ${LARGE_SCREEN_MEDIA_QUERY} {
     position: fixed;
     top: 8rem;
+    margin-top: 0;
   }
 `
 
 const DiscountInfo = styled.div`
-  &,
-  * {
-    margin-left: 0.5rem;
-  }
+  display: flex;
+  margin-bottom: 0.5rem;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  align-items: flex-start;
 
   *:not(:last-child) {
-    margin-bottom: 0.5rem;
+    margin-right: 0.5rem;
   }
 `
 
-const HeaderTop = styled.div`
-  display: flex;
-  margin-bottom: 2rem;
+const DiscountBadge = styled(Badge)`
+  margin-bottom: 0.5rem;
 `
 
 const Header = styled.div`
@@ -85,6 +89,8 @@ const Header = styled.div`
   width: 100%;
   display: flex;
   align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
   flex-wrap: wrap;
 
   ${SMALL_SCREEN_MEDIA_QUERY} {
@@ -105,17 +111,15 @@ const Title = styled.h3`
   }
 `
 
-const EditDetailsButton = styled(TextButton)`
-  margin-bottom: 1.5rem;
+const Body = styled.div`
+  margin-bottom: 2.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
 `
 
-const Body = styled.div`
-  margin-bottom: 2rem;
-  font-size: 0.875rem;
-`
 const BodyTitle = styled.div`
   margin-bottom: 0.75rem;
-  color: ${colorsV3.gray700};
+  color: ${colorsV3.gray900};
 `
 
 const Footer = styled.div`
@@ -143,8 +147,6 @@ export const Sidebar: React.FC<Props> = ({
   const textKeys = useTextKeys()
   const [discountCodeModalIsOpen, setDiscountCodeModalIsOpen] = useState(false)
   const [isSidebarVisible, setIsSidebarVisible] = useState(true)
-
-  const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false)
 
   const [removeDiscountCode] = useRemoveDiscountCodeMutation()
   const [redeemCode] = useRedeemCodeMutation()
@@ -176,12 +178,29 @@ export const Sidebar: React.FC<Props> = ({
     }
   }, [redeemCode, campaignData, refetchAll])
 
+  const isNorwegianBundle = isBundle(offerData) && isNorwegian(offerData)
   const discountText = getDiscountText(textKeys)(
     redeemedCampaigns,
     offerData.cost.monthlyGross.currency,
   )
+  const clearDiscountCode = () => {
+    removeDiscountCode()
+      .then(() => {
+        const cookieStorage = new CookieStorage()
+        cookieStorage.setItem('_hvcode', '', {
+          path: '/',
+        })
+      })
+      .then(() => refetchAll())
+  }
 
-  const isNorwegianBundle = isBundle(offerData) && isNorwegian(offerData)
+  const discounts: Array<React.ReactNode> = [
+    ...(isNorwegianBundle ? [textKeys.SIDEBAR_NO_BUNDLE_DISCOUNT_TEXT()] : []),
+    ...(discountText ? [discountText] : []),
+  ]
+
+  const hasMultipleQuotes = offerData.quotes.length > 1
+  const hasRedeemedCampaigns = redeemedCampaigns.length > 0
 
   return (
     <>
@@ -189,19 +208,15 @@ export const Sidebar: React.FC<Props> = ({
         {() => (
           <Wrapper>
             <Container>
-              <HeaderTop>
-                <HedvigSymbol />
+              {discounts.length > 0 ? (
                 <DiscountInfo>
-                  {isNorwegianBundle && (
-                    <Badge>{textKeys.SIDEBAR_NO_BUNDLE_DISCOUNT_TEXT()}</Badge>
-                  )}
-                  {discountText && <Badge>{discountText}</Badge>}
+                  {discounts.map((text, index) => (
+                    <DiscountBadge key={index}>{text}</DiscountBadge>
+                  ))}
                 </DiscountInfo>
-              </HeaderTop>
-
+              ) : null}
               <Header>
-                <Title>{getInsuranceTitle(offerData, textKeys)}</Title>
-
+                <Title>Hedvig</Title>
                 <Price
                   isDiscountPrice={
                     isMonthlyCostDeduction(redeemedCampaigns[0]?.incentive) ||
@@ -214,12 +229,8 @@ export const Sidebar: React.FC<Props> = ({
                   monthlyNet={offerData.cost.monthlyNet}
                 />
               </Header>
-
-              <EditDetailsButton onClick={() => setDetailsModalIsOpen(true)}>
-                {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
-              </EditDetailsButton>
-
               <Body>
+                {hasMultipleQuotes && <PriceBreakdown offerData={offerData} />}
                 <BodyTitle>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}</BodyTitle>
                 <StartDate
                   offerData={offerData}
@@ -228,7 +239,6 @@ export const Sidebar: React.FC<Props> = ({
                   size="sm"
                 />
               </Body>
-
               <Footer>
                 <Button
                   size="sm"
@@ -241,51 +251,32 @@ export const Sidebar: React.FC<Props> = ({
                 </Button>
 
                 <FooterExtraActions>
-                  {redeemedCampaigns.length === 0 && (
+                  {!hasRedeemedCampaigns && (
                     <TextButton
-                      color={colorsV3.gray500}
-                      onClick={() => {
-                        setDiscountCodeModalIsOpen(true)
-                      }}
+                      onClick={() => setDiscountCodeModalIsOpen(true)}
                     >
                       {textKeys.SIDEBAR_ADD_DISCOUNT_BUTTON()}
                     </TextButton>
                   )}
-                  {redeemedCampaigns.length > 0 &&
+                  {hasRedeemedCampaigns &&
                     !isNoDiscount(
                       redeemedCampaigns[0]?.incentive ?? undefined,
                     ) && (
                       <TextButton
                         color={colorsV3.red500}
-                        onClick={() => {
-                          removeDiscountCode()
-                            .then(() => {
-                              const cookieStorage = new CookieStorage()
-                              cookieStorage.setItem('_hvcode', '', {
-                                path: '/',
-                              })
-                            })
-                            .then(() => refetchAll())
-                        }}
+                        onClick={clearDiscountCode}
                       >
                         {textKeys.SIDEBAR_REMOVE_DISCOUNT_BUTTON()}
                       </TextButton>
                     )}
                 </FooterExtraActions>
               </Footer>
-
               <DiscountCodeModal
                 isOpen={discountCodeModalIsOpen}
                 close={() => setDiscountCodeModalIsOpen(false)}
                 refetch={refetchAll}
               />
             </Container>
-            <DetailsModal
-              offerData={offerData}
-              refetch={refetchAll}
-              isVisible={detailsModalIsOpen}
-              onClose={() => setDetailsModalIsOpen(false)}
-            />
           </Wrapper>
         )}
       </ReactVisibilitySensor>

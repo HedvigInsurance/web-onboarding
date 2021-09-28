@@ -117,6 +117,7 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
   }
 
   return (
+    // TODO: This logic needs some clarification
     <HandleSwitchingWrapper>
       <HandleSwitchingLabel onClick={toggle}>
         {(() => {
