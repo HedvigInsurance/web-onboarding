@@ -68,7 +68,7 @@ const Price = styled.div`
   color: ${colorsV3.gray700};
 `
 
-const FullPrice = styled(Price)`
+const GrossPrice = styled(Price)`
   font-size: 0.875rem;
   text-decoration: line-through;
 `
@@ -76,7 +76,7 @@ const FullPrice = styled(Price)`
 interface Props {
   name: string
   price: string
-  fullPrice?: string
+  grossPrice?: string
   label?: string
   selected?: boolean
   focused?: boolean
@@ -86,7 +86,7 @@ interface Props {
 export const Card: React.FC<Props> = ({
   name,
   price,
-  fullPrice,
+  grossPrice,
   label,
   selected,
   onClick,
@@ -101,7 +101,7 @@ export const Card: React.FC<Props> = ({
       <NameAndPriceWrapper>
         <Name>{name}</Name>
         <PriceWrapper>
-          {fullPrice ? <FullPrice>{fullPrice}</FullPrice> : null}
+          {grossPrice ? <GrossPrice>{grossPrice}</GrossPrice> : null}
           <Price>{price}</Price>
         </PriceWrapper>
       </NameAndPriceWrapper>

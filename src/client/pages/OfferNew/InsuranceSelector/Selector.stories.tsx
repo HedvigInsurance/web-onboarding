@@ -6,7 +6,7 @@ const mockInsurances = [
     id: '1',
     name: 'Inbo, Ulykke & Rejse',
     price: '329 kr/md',
-    fullPrice: '369 kr',
+    grossPrice: '369 kr',
     label: '3-in-1',
     selected: true,
   },

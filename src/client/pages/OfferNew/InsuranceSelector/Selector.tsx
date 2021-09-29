@@ -27,7 +27,7 @@ interface Props {
     id: string
     name: string
     price: string
-    fullPrice?: string
+    grossPrice?: string
     label?: string
     selected?: boolean
   }[]
@@ -81,7 +81,7 @@ export const Selector: React.FC<Props> = ({ insurances, onChange }) => {
       aria-activedescendant={focusId ?? undefined}
       onKeyDown={handleContainerKeyPress}
     >
-      {insurances.map(({ id, name, price, fullPrice, label, selected }) => (
+      {insurances.map(({ id, name, price, grossPrice, label, selected }) => (
         <CardWrapper
           id={id}
           key={id}
@@ -95,7 +95,7 @@ export const Selector: React.FC<Props> = ({ insurances, onChange }) => {
             focused={focusId === id}
             name={name}
             price={price}
-            fullPrice={fullPrice}
+            grossPrice={grossPrice}
             label={label}
           />
         </CardWrapper>

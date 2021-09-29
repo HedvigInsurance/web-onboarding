@@ -48,7 +48,7 @@ export const InsuranceSelector: React.FC<Props> = ({
       label,
       name: displayName,
       price: `${Math.round(Number(amount))} ${currency}`,
-      fullPrice:
+      grossPrice:
         amount !== grossAmount
           ? `${Math.round(Number(grossAmount))} ${grossCurrency}`
           : undefined,
