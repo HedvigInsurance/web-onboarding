@@ -18,18 +18,14 @@ export const InsuranceSelector: React.FC<Props> = ({
   selectedQuoteBundle,
   onChange,
 }) => {
-  const memoizedQuoteMap = useMemo(() => {
-    const quoteMap: Record<string, QuoteBundleVariant> = variations.reduce(
-      (acc, { bundle }) => {
-        return {
-          ...acc,
-          [bundle.id]: bundle,
-        }
-      },
-      {},
-    )
-    return quoteMap
-  }, [variations])
+  const quoteMap = useMemo(
+    () =>
+      variations.reduce<Record<string, QuoteBundleVariant>>(
+        (acc, { bundle }) => ({ ...acc, [bundle.id]: bundle }),
+        {},
+      ),
+    [variations],
+  )
 
   const insurances = variations.map(({ label, bundle }) => {
     const {
@@ -59,7 +55,7 @@ export const InsuranceSelector: React.FC<Props> = ({
   return (
     <Selector
       insurances={insurances}
-      onChange={(id: string) => onChange(memoizedQuoteMap[id])}
+      onChange={(id: string) => onChange(quoteMap[id])}
     />
   )
 }
