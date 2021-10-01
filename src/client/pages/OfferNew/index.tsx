@@ -13,7 +13,7 @@ import {
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import {
-  QuoteBundle,
+  QuoteBundleVariant,
   useQuoteBundleQuery,
   useRedeemedCampaignsQuery,
 } from 'data/graphql'
@@ -29,6 +29,7 @@ import { Checkout } from './Checkout'
 import { FaqSection } from './FaqSection'
 import { Introduction } from './Introduction'
 import { Perils } from './Perils'
+import { InsuranceSelector } from './InsuranceSelector'
 
 const createToggleCheckout = (history: History<any>, locale?: string) => (
   isOpen: boolean,
@@ -39,50 +40,6 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
     history.goBack()
   }
 }
-
-interface QuoteBundleVariation {
-  id: string
-  tag?: string
-  bundle: QuoteBundle
-}
-
-const BUNDLE_VARIATIONS = [
-  {
-    tag: 'Most popular',
-    bundle: {
-      displayName: 'Hemförsäkring & Olycksfall',
-      quotes: [
-        {
-          id: 'oaiwdjia-adw2-311-123-123o123oij',
-          displayName: 'Hemförsäkring Hyresrätt',
-        },
-        {
-          id: 'dsefsef89-oii23j423-po23kp4-io32',
-          displayName: 'Olycksfallsförsäkring',
-        },
-      ],
-      bundleCost: {
-        monthlyGross: { amount: 143, currency: 'EUR' },
-        monthlyNet: { amount: 133, currency: 'EUR' },
-      },
-    },
-  },
-  {
-    bundle: {
-      displayName: 'Hemförsäkring Hyresrätt',
-      quotes: [
-        {
-          id: 'oaiwdjia-adw2-311-123-123o123oij',
-          displayName: 'Hemförsäkring Hyresrätt',
-        },
-      ],
-      bundleCost: {
-        monthlyGross: { amount: 123, currency: 'EUR' },
-        monthlyNet: { amount: 113, currency: 'EUR' },
-      },
-    },
-  },
-]
 
 export const OfferNew: React.FC = () => {
   const currentLocale = useCurrentLocale()
@@ -103,36 +60,32 @@ export const OfferNew: React.FC = () => {
     skip: quoteIdsIsLoading,
   })
 
-  const quoteBundleVariations = BUNDLE_VARIATIONS.map<QuoteBundleVariation>(
-    (variation) => ({
-      ...variation,
-      id: variation.bundle.quotes.map(({ id }) => id).join(''),
-      bundle: (variation.bundle as unknown) as QuoteBundle,
-    }),
+  const bundleVariations = React.useMemo(
+    () =>
+      (data?.quoteBundle.possibleVariations as Array<QuoteBundleVariant>) ?? [],
+    [data?.quoteBundle.possibleVariations],
   )
-  const [bundleVariation, setBundleVariation] = React.useState<
-    QuoteBundleVariation
-  >()
+  const [bundleVariant, setBundleVariant] = React.useState<QuoteBundleVariant>()
 
   useEffect(() => {
     // Reset selected bundle when variation is no longer valid
-    if (bundleVariation) {
-      const matchingVariation = quoteBundleVariations.find(
-        ({ id }) => id === bundleVariation.id,
+    if (bundleVariant) {
+      const matchingVariant = bundleVariations.find(
+        ({ id }) => id === bundleVariant.id,
       )
-      if (matchingVariation === undefined) {
-        setBundleVariation(undefined)
+      if (matchingVariant === undefined) {
+        setBundleVariant(undefined)
       }
     }
-  }, [bundleVariation, quoteBundleVariations])
+  }, [bundleVariant, bundleVariations])
 
   useEffect(() => {
     // Preselect initial bundle variation after it's loaded
     // @TODO: this should be picked up from Embark
-    if (bundleVariation === undefined) {
-      setBundleVariation(quoteBundleVariations[0])
+    if (bundleVariant === undefined) {
+      setBundleVariant(bundleVariations[0])
     }
-  }, [bundleVariation, quoteBundleVariations])
+  }, [bundleVariant, bundleVariations])
 
   const checkoutMatch = useRouteMatch(`${localePathPattern}/new-member/sign`)
   const toggleCheckout = createToggleCheckout(history, currentLocale)
@@ -155,9 +108,7 @@ export const OfferNew: React.FC = () => {
     toggleCheckout(open)
   }
 
-  const offerData = bundleVariation
-    ? getOfferData(bundleVariation.bundle)
-    : null
+  const offerData = bundleVariant ? getOfferData(bundleVariant.bundle) : null
 
   if (offerData) {
     trackOfferGTM(
@@ -199,22 +150,12 @@ export const OfferNew: React.FC = () => {
                 />
               )}
             </TrackAction>
-            {quoteBundleVariations.length > 1 ? (
-              <div style={{ backgroundColor: 'white' }}>
-                {quoteBundleVariations.map((variation) => (
-                  <label key={variation.id}>
-                    <input
-                      name={variation.tag}
-                      type="radio"
-                      checked={bundleVariation?.id === variation.id}
-                      onChange={() => setBundleVariation(variation)}
-                    />
-                    <span>
-                      {variation.tag} - {variation.bundle.displayName}
-                    </span>
-                  </label>
-                ))}
-              </div>
+            {bundleVariations.length > 1 ? (
+              <InsuranceSelector
+                variants={bundleVariations}
+                selectedQuoteBundle={bundleVariant}
+                onChange={setBundleVariant}
+              />
             ) : null}
             <Perils offerData={offerData} />
             {currentMarket !== Market.Dk && <SwitchSafetySection />}
