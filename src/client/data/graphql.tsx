@@ -1938,6 +1938,7 @@ export type Contract = {
   insuranceTerms: Array<InsuranceTerm>
   insurableLimits: Array<InsurableLimit>
   termsAndConditions: InsuranceTerm
+  supportsAddressChange: Scalars['Boolean']
   perils: Array<PerilV2>
   currentAgreementDetailsTable: Table
   upcomingAgreementDetailsTable: Table
@@ -10264,6 +10265,130 @@ export type NorwegianBankIdAuthMutation = { __typename?: 'Mutation' } & {
   >
 }
 
+export type QuoteDataFragment = { __typename?: 'BundledQuote' } & Pick<
+  BundledQuote,
+  | 'id'
+  | 'dataCollectionId'
+  | 'firstName'
+  | 'lastName'
+  | 'ssn'
+  | 'birthDate'
+  | 'startDate'
+  | 'expiresAt'
+  | 'email'
+  | 'typeOfContract'
+  | 'displayName'
+> & {
+    currentInsurer?: Maybe<
+      { __typename?: 'CurrentInsurer' } & Pick<
+        CurrentInsurer,
+        'id' | 'displayName' | 'switchable'
+      >
+    >
+    price: { __typename?: 'MonetaryAmountV2' } & Pick<
+      MonetaryAmountV2,
+      'amount' | 'currency'
+    >
+    perils: Array<
+      { __typename?: 'PerilV2' } & Pick<
+        PerilV2,
+        'title' | 'description' | 'covered' | 'exceptions' | 'info'
+      > & {
+          icon: { __typename?: 'Icon' } & {
+            variants: { __typename?: 'IconVariants' } & {
+              light: { __typename?: 'IconVariant' } & Pick<
+                IconVariant,
+                'svgUrl'
+              >
+            }
+          }
+        }
+    >
+    insurableLimits: Array<
+      { __typename?: 'InsurableLimit' } & Pick<
+        InsurableLimit,
+        'label' | 'limit' | 'description' | 'type'
+      >
+    >
+    insuranceTerms: Array<
+      { __typename?: 'InsuranceTerm' } & Pick<
+        InsuranceTerm,
+        'displayName' | 'url' | 'type'
+      >
+    >
+    quoteDetails:
+      | ({ __typename?: 'SwedishApartmentQuoteDetails' } & Pick<
+          SwedishApartmentQuoteDetails,
+          'street' | 'zipCode' | 'householdSize' | 'livingSpace' | 'type'
+        >)
+      | ({ __typename?: 'SwedishHouseQuoteDetails' } & Pick<
+          SwedishHouseQuoteDetails,
+          | 'street'
+          | 'zipCode'
+          | 'householdSize'
+          | 'livingSpace'
+          | 'ancillarySpace'
+          | 'numberOfBathrooms'
+          | 'yearOfConstruction'
+          | 'isSubleted'
+        > & {
+            extraBuildings: Array<
+              { __typename?: 'ExtraBuildingValue' } & Pick<
+                ExtraBuildingValue,
+                'type' | 'area' | 'displayName' | 'hasWaterConnected'
+              >
+            >
+          })
+      | ({ __typename?: 'SwedishAccidentDetails' } & Pick<
+          SwedishAccidentDetails,
+          'isStudent'
+        >)
+      | ({ __typename?: 'NorwegianHomeContentsDetails' } & Pick<
+          NorwegianHomeContentsDetails,
+          'coInsured' | 'livingSpace' | 'street' | 'zipCode' | 'isYouth'
+        > & { norwegianHomeType: NorwegianHomeContentsDetails['type'] })
+      | ({ __typename?: 'NorwegianTravelDetails' } & Pick<
+          NorwegianTravelDetails,
+          'coInsured' | 'isYouth'
+        >)
+      | ({ __typename?: 'DanishHomeContentsDetails' } & Pick<
+          DanishHomeContentsDetails,
+          | 'street'
+          | 'floor'
+          | 'apartment'
+          | 'zipCode'
+          | 'livingSpace'
+          | 'coInsured'
+          | 'isStudent'
+        > & { danishHomeType: DanishHomeContentsDetails['type'] })
+      | ({ __typename?: 'DanishAccidentDetails' } & Pick<
+          DanishAccidentDetails,
+          'street' | 'zipCode' | 'coInsured' | 'isStudent'
+        >)
+      | ({ __typename?: 'DanishTravelDetails' } & Pick<
+          DanishTravelDetails,
+          'street' | 'zipCode' | 'coInsured' | 'isStudent'
+        >)
+  }
+
+export type BundleCostDataFragment = { __typename?: 'InsuranceCost' } & Pick<
+  InsuranceCost,
+  'freeUntil'
+> & {
+    monthlyDiscount: { __typename?: 'MonetaryAmountV2' } & Pick<
+      MonetaryAmountV2,
+      'amount' | 'currency'
+    >
+    monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
+      MonetaryAmountV2,
+      'amount' | 'currency'
+    >
+    monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
+      MonetaryAmountV2,
+      'amount' | 'currency'
+    >
+  }
+
 export type QuoteBundleQueryVariables = Exact<{
   input: QuoteBundleInput
   locale: Locale
@@ -10271,130 +10396,24 @@ export type QuoteBundleQueryVariables = Exact<{
 
 export type QuoteBundleQuery = { __typename?: 'Query' } & {
   quoteBundle: { __typename?: 'QuoteBundle' } & {
-    quotes: Array<
-      { __typename?: 'BundledQuote' } & Pick<
-        BundledQuote,
-        | 'id'
-        | 'dataCollectionId'
-        | 'firstName'
-        | 'lastName'
-        | 'ssn'
-        | 'birthDate'
-        | 'startDate'
-        | 'expiresAt'
-        | 'email'
-        | 'typeOfContract'
-        | 'displayName'
+    possibleVariations: Array<
+      { __typename?: 'QuoteBundleVariant' } & Pick<
+        QuoteBundleVariant,
+        'id' | 'tag'
       > & {
-          currentInsurer?: Maybe<
-            { __typename?: 'CurrentInsurer' } & Pick<
-              CurrentInsurer,
-              'id' | 'displayName' | 'switchable'
-            >
-          >
-          price: { __typename?: 'MonetaryAmountV2' } & Pick<
-            MonetaryAmountV2,
-            'amount' | 'currency'
-          >
-          perils: Array<
-            { __typename?: 'PerilV2' } & Pick<
-              PerilV2,
-              'title' | 'description' | 'covered' | 'exceptions' | 'info'
-            > & {
-                icon: { __typename?: 'Icon' } & {
-                  variants: { __typename?: 'IconVariants' } & {
-                    light: { __typename?: 'IconVariant' } & Pick<
-                      IconVariant,
-                      'svgUrl'
-                    >
-                  }
-                }
-              }
-          >
-          insurableLimits: Array<
-            { __typename?: 'InsurableLimit' } & Pick<
-              InsurableLimit,
-              'label' | 'limit' | 'description' | 'type'
-            >
-          >
-          insuranceTerms: Array<
-            { __typename?: 'InsuranceTerm' } & Pick<
-              InsuranceTerm,
-              'displayName' | 'url' | 'type'
-            >
-          >
-          quoteDetails:
-            | ({ __typename?: 'SwedishApartmentQuoteDetails' } & Pick<
-                SwedishApartmentQuoteDetails,
-                'street' | 'zipCode' | 'householdSize' | 'livingSpace' | 'type'
-              >)
-            | ({ __typename?: 'SwedishHouseQuoteDetails' } & Pick<
-                SwedishHouseQuoteDetails,
-                | 'street'
-                | 'zipCode'
-                | 'householdSize'
-                | 'livingSpace'
-                | 'ancillarySpace'
-                | 'numberOfBathrooms'
-                | 'yearOfConstruction'
-                | 'isSubleted'
-              > & {
-                  extraBuildings: Array<
-                    { __typename?: 'ExtraBuildingValue' } & Pick<
-                      ExtraBuildingValue,
-                      'type' | 'area' | 'displayName' | 'hasWaterConnected'
-                    >
-                  >
-                })
-            | ({ __typename?: 'SwedishAccidentDetails' } & Pick<
-                SwedishAccidentDetails,
-                'isStudent'
-              >)
-            | ({ __typename?: 'NorwegianHomeContentsDetails' } & Pick<
-                NorwegianHomeContentsDetails,
-                'coInsured' | 'livingSpace' | 'street' | 'zipCode' | 'isYouth'
-              > & { norwegianHomeType: NorwegianHomeContentsDetails['type'] })
-            | ({ __typename?: 'NorwegianTravelDetails' } & Pick<
-                NorwegianTravelDetails,
-                'coInsured' | 'isYouth'
-              >)
-            | ({ __typename?: 'DanishHomeContentsDetails' } & Pick<
-                DanishHomeContentsDetails,
-                | 'street'
-                | 'floor'
-                | 'apartment'
-                | 'zipCode'
-                | 'livingSpace'
-                | 'coInsured'
-                | 'isStudent'
-              > & { danishHomeType: DanishHomeContentsDetails['type'] })
-            | ({ __typename?: 'DanishAccidentDetails' } & Pick<
-                DanishAccidentDetails,
-                'street' | 'zipCode' | 'coInsured' | 'isStudent'
-              >)
-            | ({ __typename?: 'DanishTravelDetails' } & Pick<
-                DanishTravelDetails,
-                'street' | 'zipCode' | 'coInsured' | 'isStudent'
-              >)
+          bundle: { __typename?: 'QuoteBundle' } & Pick<
+            QuoteBundle,
+            'displayName'
+          > & {
+              bundleCost: {
+                __typename?: 'InsuranceCost'
+              } & BundleCostDataFragment
+              quotes: Array<{ __typename?: 'BundledQuote' } & QuoteDataFragment>
+            }
         }
     >
-    bundleCost: { __typename?: 'InsuranceCost' } & Pick<
-      InsuranceCost,
-      'freeUntil'
-    > & {
-        monthlyDiscount: { __typename?: 'MonetaryAmountV2' } & Pick<
-          MonetaryAmountV2,
-          'amount' | 'currency'
-        >
-        monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
-          MonetaryAmountV2,
-          'amount' | 'currency'
-        >
-        monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
-          MonetaryAmountV2,
-          'amount' | 'currency'
-        >
-      }
+    quotes: Array<{ __typename?: 'BundledQuote' } & QuoteDataFragment>
+    bundleCost: { __typename?: 'InsuranceCost' } & BundleCostDataFragment
   }
 }
 
@@ -10681,6 +10700,136 @@ export type UpdatePickedLocaleMutation = { __typename?: 'Mutation' } & {
   updatePickedLocale: { __typename?: 'Member' } & Pick<Member, 'id'>
 }
 
+export const QuoteDataFragmentDoc = gql`
+  fragment QuoteData on BundledQuote {
+    id
+    dataCollectionId
+    currentInsurer {
+      id
+      displayName
+      switchable
+    }
+    price {
+      amount
+      currency
+    }
+    firstName
+    lastName
+    ssn
+    birthDate
+    startDate
+    expiresAt
+    email
+    typeOfContract
+    displayName(locale: $locale)
+    perils(locale: $locale) {
+      title
+      description
+      covered
+      exceptions
+      info
+      icon {
+        variants {
+          light {
+            svgUrl
+          }
+        }
+      }
+    }
+    insurableLimits(locale: $locale) {
+      label
+      limit
+      description
+      type
+    }
+    insuranceTerms(locale: $locale) {
+      displayName
+      url
+      type
+    }
+    quoteDetails {
+      ... on SwedishApartmentQuoteDetails {
+        street
+        zipCode
+        householdSize
+        livingSpace
+        type
+      }
+      ... on SwedishHouseQuoteDetails {
+        street
+        zipCode
+        householdSize
+        livingSpace
+        ancillarySpace
+        numberOfBathrooms
+        yearOfConstruction
+        isSubleted
+        extraBuildings {
+          ... on ExtraBuildingValue {
+            type
+            area
+            displayName
+            hasWaterConnected
+          }
+        }
+      }
+      ... on SwedishAccidentDetails {
+        isStudent
+      }
+      ... on NorwegianHomeContentsDetails {
+        coInsured
+        livingSpace
+        street
+        norwegianHomeType: type
+        zipCode
+        isYouth
+      }
+      ... on NorwegianTravelDetails {
+        coInsured
+        isYouth
+      }
+      ... on DanishHomeContentsDetails {
+        street
+        floor
+        apartment
+        zipCode
+        livingSpace
+        danishHomeType: type
+        coInsured
+        isStudent
+      }
+      ... on DanishAccidentDetails {
+        street
+        zipCode
+        coInsured
+        isStudent
+      }
+      ... on DanishTravelDetails {
+        street
+        zipCode
+        coInsured
+        isStudent
+      }
+    }
+  }
+`
+export const BundleCostDataFragmentDoc = gql`
+  fragment BundleCostData on InsuranceCost {
+    freeUntil
+    monthlyDiscount {
+      amount
+      currency
+    }
+    monthlyGross {
+      amount
+      currency
+    }
+    monthlyNet {
+      amount
+      currency
+    }
+  }
+`
 export const AvailablePaymentMethodsDocument = gql`
   query AvailablePaymentMethods {
     availablePaymentMethods {
@@ -11542,134 +11691,29 @@ export type NorwegianBankIdAuthMutationOptions = ApolloReactCommon.BaseMutationO
 export const QuoteBundleDocument = gql`
   query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
     quoteBundle(input: $input) {
-      quotes {
+      possibleVariations {
         id
-        dataCollectionId
-        currentInsurer {
-          id
-          displayName
-          switchable
-        }
-        price {
-          amount
-          currency
-        }
-        firstName
-        lastName
-        ssn
-        birthDate
-        startDate
-        expiresAt
-        email
-        typeOfContract
-        displayName(locale: $locale)
-        perils(locale: $locale) {
-          title
-          description
-          covered
-          exceptions
-          info
-          icon {
-            variants {
-              light {
-                svgUrl
-              }
-            }
+        tag(locale: $locale)
+        bundle {
+          displayName(locale: $locale)
+          bundleCost {
+            ...BundleCostData
           }
-        }
-        insurableLimits(locale: $locale) {
-          label
-          limit
-          description
-          type
-        }
-        insuranceTerms(locale: $locale) {
-          displayName
-          url
-          type
-        }
-        quoteDetails {
-          ... on SwedishApartmentQuoteDetails {
-            street
-            zipCode
-            householdSize
-            livingSpace
-            type
-          }
-          ... on SwedishHouseQuoteDetails {
-            street
-            zipCode
-            householdSize
-            livingSpace
-            ancillarySpace
-            numberOfBathrooms
-            yearOfConstruction
-            isSubleted
-            extraBuildings {
-              ... on ExtraBuildingValue {
-                type
-                area
-                displayName
-                hasWaterConnected
-              }
-            }
-          }
-          ... on SwedishAccidentDetails {
-            isStudent
-          }
-          ... on NorwegianHomeContentsDetails {
-            coInsured
-            livingSpace
-            street
-            norwegianHomeType: type
-            zipCode
-            isYouth
-          }
-          ... on NorwegianTravelDetails {
-            coInsured
-            isYouth
-          }
-          ... on DanishHomeContentsDetails {
-            street
-            floor
-            apartment
-            zipCode
-            livingSpace
-            danishHomeType: type
-            coInsured
-            isStudent
-          }
-          ... on DanishAccidentDetails {
-            street
-            zipCode
-            coInsured
-            isStudent
-          }
-          ... on DanishTravelDetails {
-            street
-            zipCode
-            coInsured
-            isStudent
+          quotes {
+            ...QuoteData
           }
         }
       }
+      quotes {
+        ...QuoteData
+      }
       bundleCost {
-        freeUntil
-        monthlyDiscount {
-          amount
-          currency
-        }
-        monthlyGross {
-          amount
-          currency
-        }
-        monthlyNet {
-          amount
-          currency
-        }
+        ...BundleCostData
       }
     }
   }
+  ${BundleCostDataFragmentDoc}
+  ${QuoteDataFragmentDoc}
 `
 
 /**
