@@ -38,50 +38,6 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
   }
 }
 
-interface QuoteBundleVariation {
-  id: string
-  tag?: string
-  bundle: QuoteBundle
-}
-
-const BUNDLE_VARIATIONS = [
-  {
-    tag: 'Most popular',
-    bundle: {
-      displayName: 'Hemförsäkring & Olycksfall',
-      quotes: [
-        {
-          id: 'oaiwdjia-adw2-311-123-123o123oij',
-          displayName: 'Hemförsäkring Hyresrätt',
-        },
-        {
-          id: 'dsefsef89-oii23j423-po23kp4-io32',
-          displayName: 'Olycksfallsförsäkring',
-        },
-      ],
-      bundleCost: {
-        monthlyGross: { amount: 143, currency: 'EUR' },
-        monthlyNet: { amount: 133, currency: 'EUR' },
-      },
-    },
-  },
-  {
-    bundle: {
-      displayName: 'Hemförsäkring Hyresrätt',
-      quotes: [
-        {
-          id: 'oaiwdjia-adw2-311-123-123o123oij',
-          displayName: 'Hemförsäkring Hyresrätt',
-        },
-      ],
-      bundleCost: {
-        monthlyGross: { amount: 123, currency: 'EUR' },
-        monthlyNet: { amount: 113, currency: 'EUR' },
-      },
-    },
-  },
-]
-
 export const OfferNew: React.FC = () => {
   const currentLocale = useCurrentLocale()
   const localeIsoCode = getIsoLocale(currentLocale)
@@ -137,10 +93,10 @@ export const OfferNew: React.FC = () => {
   useEffect(() => {
     // Preselect initial bundle variation after it's loaded
     // @TODO: this should be picked up from Embark
-    if (bundleVariation === undefined) {
-      setBundleVariation(quoteBundleVariations[0])
+    if (bundleVariant === undefined) {
+      setBundleVariant(bundleVariations[0])
     }
-  }, [bundleVariation, quoteBundleVariations])
+  }, [bundleVariant, bundleVariations])
 
   const checkoutMatch = useRouteMatch(`${localePathPattern}/new-member/sign`)
   const toggleCheckout = createToggleCheckout(history, currentLocale)
