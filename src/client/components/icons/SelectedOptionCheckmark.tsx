@@ -10,4 +10,3 @@ export const SelectedOptionCheckmark: React.FC<IconRootProps> = (props) => (
     />
   </IconRoot>
 )
-
