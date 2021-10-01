@@ -22,7 +22,7 @@ const CardWrapper = styled.div`
   cursor: pointer;
 `
 
-interface Props {
+type Props = {
   insurances: {
     id: string
     name: string

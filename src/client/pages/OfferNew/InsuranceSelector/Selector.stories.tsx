@@ -35,14 +35,11 @@ export default {
 
 export const Default = () => {
   const [insurances, setInsurances] = React.useState(mockInsurances)
-  return (
-    <Selector
-      insurances={insurances}
-      onChange={(id) =>
-        setInsurances((prev) =>
-          prev.map((item) => ({ ...item, selected: item.id === id })),
-        )
-      }
-    />
-  )
+
+  const handleOnChange = (id: string) =>
+    setInsurances((prev) =>
+      prev.map((item) => ({ ...item, selected: item.id === id })),
+    )
+
+  return <Selector insurances={insurances} onChange={handleOnChange} />
 }
