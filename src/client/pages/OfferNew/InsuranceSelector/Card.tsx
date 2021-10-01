@@ -101,7 +101,7 @@ export const Card: React.FC<Props> = ({
       <NameAndPriceWrapper>
         <Name>{name}</Name>
         <PriceWrapper>
-          {grossPrice ? <GrossPrice>{grossPrice}</GrossPrice> : null}
+          {grossPrice && <GrossPrice>{grossPrice}</GrossPrice>}
           <Price>{price}</Price>
         </PriceWrapper>
       </NameAndPriceWrapper>
