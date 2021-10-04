@@ -43,6 +43,10 @@ const HeroContentWrapper = styled.div`
   }
 `
 
+const InsuranceProviderWrapper = styled.div`
+  margin-top: 3rem;
+`
+
 const HeroOfferDetailsContainer = styled.div`
   width: 100%;
 `
@@ -88,10 +92,14 @@ export const Introduction: React.FC<Props> = ({
                 refetchOfferData={refetch}
               />
               {hasDataCollection && (
-                <ExternalInsuranceProvider
-                  dataCollectionId={offerData.quotes[0].dataCollectionId || ''}
-                  offerData={offerData}
-                />
+                <InsuranceProviderWrapper>
+                  <ExternalInsuranceProvider
+                    dataCollectionId={
+                      offerData.quotes[0].dataCollectionId || ''
+                    }
+                    offerData={offerData}
+                  />
+                </InsuranceProviderWrapper>
               )}
             </HeroOfferDetailsContainer>
             <Sidebar

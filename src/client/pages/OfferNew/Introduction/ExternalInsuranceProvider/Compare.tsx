@@ -2,7 +2,6 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { externalInsuranceProviders } from '@hedviginsurance/embark'
 import React from 'react'
-import { HedvigLogo } from 'components/icons/HedvigLogo'
 import { InsuranceCost, InsuranceDataCollection } from 'data/graphql'
 import { Price } from '../../components'
 
@@ -28,11 +27,14 @@ const CompareBox = styled.div<{ isExternalProvider?: boolean }>`
   padding: 1.25rem;
   border-radius: 0.5rem;
   width: 100%;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+
   ${({ isExternalProvider }) =>
     isExternalProvider &&
     `
-    background-color: rgba(255,255,255,0.25);
-    color: ${colorsV3.white};
+    background-color: ${colorsV3.gray300};
+    color: ${colorsV3.gray700};
+    box-shadow: none;  
   `};
 `
 
@@ -40,6 +42,8 @@ const CompareBoxName = styled.div`
   display: flex;
   align-items: center;
   font-weight: 300;
+  line-height: 2rem;
+  font-size: 1.5rem;
 `
 
 const CompareBoxTitle = styled.div`
@@ -68,9 +72,7 @@ export const Compare: React.FC<Props> = ({ insuranceDataCollection, cost }) => {
     <Wrapper>
       <CompareBox>
         <CompareBoxTitle>
-          <CompareBoxName>
-            <HedvigLogo width={94} />
-          </CompareBoxName>
+          <CompareBoxName>Hedvig</CompareBoxName>
           <Price
             monthlyGross={cost.monthlyGross}
             monthlyNet={cost.monthlyNet}
@@ -82,7 +84,6 @@ export const Compare: React.FC<Props> = ({ insuranceDataCollection, cost }) => {
         <CompareBoxTitle>
           <CompareBoxName>{externalInsuranceProvider?.name}</CompareBoxName>
           <Price
-            lightAppearance
             monthlyGross={
               insuranceDataCollection.monthlyPremium || {
                 amount: '0',
