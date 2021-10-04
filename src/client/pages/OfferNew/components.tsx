@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2, fonts } from '@hedviginsurance/brand'
+import { colorsV2, fonts, colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { SIDEBAR_WIDTH } from './Introduction/Sidebar/index'
@@ -80,6 +80,15 @@ export const Body = styled('div')`
   @media (max-width: 600px) {
     padding-right: 0;
     text-align: center;
+  }
+`
+
+export const ContainerWrapper = styled.div`
+  padding-top: 5rem;
+  background-color: ${colorsV3.gray100};
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    padding-top: 7.5rem;
   }
 `
 

@@ -1,5 +1,15 @@
 import React, { useMemo } from 'react'
-import { QuoteBundleVariant } from 'src/client/data/graphql'
+import { QuoteBundleVariant } from 'data/graphql'
+import { useTextKeys } from 'utils/textKeys'
+import {
+  ContainerWrapper,
+  Container,
+  Column,
+  HeadingWrapper,
+  HeadingBlack,
+  Body,
+  ColumnSpacing,
+} from '../components'
 import { Selector } from './Selector'
 
 interface Props {
@@ -13,6 +23,7 @@ export const InsuranceSelector: React.FC<Props> = ({
   selectedQuoteBundle,
   onChange,
 }) => {
+  const textKeys = useTextKeys()
   const variantMap = useMemo(
     () =>
       variants.reduce<Record<string, QuoteBundleVariant>>(
@@ -45,9 +56,27 @@ export const InsuranceSelector: React.FC<Props> = ({
   })
 
   return (
-    <Selector
-      insurances={insurances}
-      onChange={(id: string) => onChange(variantMap[id])}
-    />
+    <ContainerWrapper>
+      <Container>
+        <Column>
+          <HeadingWrapper>
+            <HeadingBlack>
+              {textKeys.OFFER_BUNDLE_SELECTOR_TITLE()}
+            </HeadingBlack>
+            <Body>
+              {selectedQuoteBundle &&
+                textKeys.OFFER_BUNDLE_SELECTOR_DESCRIPTION({
+                  date: selectedQuoteBundle.bundle.quotes[0].startDate,
+                })}
+            </Body>
+          </HeadingWrapper>
+          <Selector
+            insurances={insurances}
+            onChange={(id: string) => onChange(variantMap[id])}
+          />
+        </Column>
+        <ColumnSpacing />
+      </Container>
+    </ContainerWrapper>
   )
 }
