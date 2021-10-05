@@ -91,12 +91,8 @@ export const OfferNew: React.FC = () => {
   }, [bundleVariants])
 
   useEffect(() => {
-    // Preselect initial bundle variation after it's loaded
-    // @TODO: this should be picked up from Embark
-    if (bundleVariant === undefined) {
-      setBundleVariant(bundleVariations[0])
-    }
-  }, [bundleVariant, bundleVariations])
+    updateBundleVariant(bundleVariants, selectedBundleVariant)
+  }, [bundleVariants])
 
   const checkoutMatch = useRouteMatch(`${localePathPattern}/new-member/sign`)
   const toggleCheckout = createToggleCheckout(history, currentLocale)
