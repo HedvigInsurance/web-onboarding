@@ -65,9 +65,9 @@ export const Selector: React.FC<Props> = ({ insurances, onChange }) => {
       case 'ArrowDown':
         event.preventDefault()
         onChange(
-          currentFocusIndex <= insurances.length - 1 - 1
-            ? insurances[currentFocusIndex + 1].id
-            : insurances[0].id,
+          currentFocusIndex === insurances.length - 1
+            ? insurances[0].id
+            : insurances[currentFocusIndex + 1].id,
         )
         break
       default:
