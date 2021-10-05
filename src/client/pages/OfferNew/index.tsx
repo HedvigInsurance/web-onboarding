@@ -4,22 +4,19 @@ import React, { useEffect } from 'react'
 import { Redirect, useHistory, useRouteMatch } from 'react-router'
 import { LoadingPage } from 'components/LoadingPage'
 import { TopBar } from 'components/TopBar'
-import {
-  getIsoLocale,
-  useCurrentLocale,
-  Market,
-  useMarket,
-} from 'components/utils/CurrentLocale'
+import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import {
   QuoteBundleVariant,
   useQuoteBundleQuery,
   useRedeemedCampaignsQuery,
+  QuoteBundle,
 } from 'data/graphql'
 import { SwitchSafetySection } from 'pages/OfferNew/SwitchSafetySection'
-import { getOfferData } from 'pages/OfferNew/utils'
+import { getOfferData as getOfferDataFromBundle } from 'pages/OfferNew/utils'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
+import { useFeature, Features } from 'utils/hooks/useFeature'
 import { trackOfferGTM } from 'utils/tracking/gtm'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { localePathPattern } from 'l10n/localePathPattern'
@@ -44,8 +41,11 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
 export const OfferNew: React.FC = () => {
   const currentLocale = useCurrentLocale()
   const localeIsoCode = getIsoLocale(currentLocale)
-  const currentMarket = useMarket()
   const variation = useVariation()
+  const [isInsuranceToggleEnabled, isSwitchSafetySectionEnabled] = useFeature([
+    Features.OFFER_PAGE_INSURANCE_TOGGLE,
+    Features.OFFER_PAGE_SWITCH_SAFETY,
+  ])
   const history = useHistory()
   const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
   const redeemedCampaigns = redeemedCampaignsData?.redeemedCampaigns ?? []
@@ -60,32 +60,35 @@ export const OfferNew: React.FC = () => {
     skip: quoteIdsIsLoading,
   })
 
-  const bundleVariations = React.useMemo(
+  const bundleVariants = React.useMemo(
     () =>
       (data?.quoteBundle.possibleVariations as Array<QuoteBundleVariant>) ?? [],
     [data?.quoteBundle.possibleVariations],
   )
-  const [bundleVariant, setBundleVariant] = React.useState<QuoteBundleVariant>()
+  const canShowInsuranceSelector =
+    isInsuranceToggleEnabled && bundleVariants.length > 1
+  const [selectedBundleVariant, setSelectedBundleVariant] = React.useState<
+    QuoteBundleVariant
+  >()
+
+  const updateBundleVariant = (
+    bundleVariations: QuoteBundleVariant[],
+    selectedBundleVariant?: QuoteBundleVariant,
+  ) => {
+    if (!selectedBundleVariant) {
+      return setSelectedBundleVariant(bundleVariations[0])
+    }
+
+    const matchingVariant = bundleVariations.find(
+      ({ id }) => id === selectedBundleVariant.id,
+    )
+    if (!matchingVariant) return setSelectedBundleVariant(bundleVariations[0])
+    return setSelectedBundleVariant(matchingVariant)
+  }
 
   useEffect(() => {
-    // Reset selected bundle when variation is no longer valid
-    if (bundleVariant) {
-      const matchingVariant = bundleVariations.find(
-        ({ id }) => id === bundleVariant.id,
-      )
-      if (matchingVariant === undefined) {
-        setBundleVariant(undefined)
-      }
-    }
-  }, [bundleVariant, bundleVariations])
-
-  useEffect(() => {
-    // Preselect initial bundle variation after it's loaded
-    // @TODO: this should be picked up from Embark
-    if (bundleVariant === undefined) {
-      setBundleVariant(bundleVariations[0])
-    }
-  }, [bundleVariant, bundleVariations])
+    updateBundleVariant(bundleVariants, selectedBundleVariant)
+  }, [bundleVariants])
 
   const checkoutMatch = useRouteMatch(`${localePathPattern}/new-member/sign`)
   const toggleCheckout = createToggleCheckout(history, currentLocale)
@@ -108,7 +111,18 @@ export const OfferNew: React.FC = () => {
     toggleCheckout(open)
   }
 
-  const offerData = bundleVariant ? getOfferData(bundleVariant.bundle) : null
+  const getOfferData = () => {
+    if (isInsuranceToggleEnabled) {
+      return selectedBundleVariant
+        ? getOfferDataFromBundle(selectedBundleVariant.bundle)
+        : null
+    } else {
+      return data?.quoteBundle
+        ? getOfferDataFromBundle(data?.quoteBundle as QuoteBundle)
+        : null
+    }
+  }
+  const offerData = getOfferData()
 
   if (offerData) {
     trackOfferGTM(
@@ -150,15 +164,15 @@ export const OfferNew: React.FC = () => {
                 />
               )}
             </TrackAction>
-            {bundleVariations.length > 1 ? (
+            {canShowInsuranceSelector && (
               <InsuranceSelector
-                variants={bundleVariations}
-                selectedQuoteBundle={bundleVariant}
-                onChange={setBundleVariant}
+                variants={bundleVariants}
+                selectedQuoteBundle={selectedBundleVariant}
+                onChange={setSelectedBundleVariant}
               />
-            ) : null}
+            )}
             <Perils offerData={offerData} />
-            {currentMarket !== Market.Dk && <SwitchSafetySection />}
+            {isSwitchSafetySectionEnabled && <SwitchSafetySection />}
             <FaqSection />
             <Checkout
               offerData={offerData}
