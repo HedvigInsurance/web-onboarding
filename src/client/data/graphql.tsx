@@ -1839,8 +1839,6 @@ export type CompleteQuote = {
   __typename?: 'CompleteQuote'
   id: Scalars['ID']
   currentInsurer?: Maybe<CurrentInsurer>
-  /** @deprecated Use insuranceCost */
-  price: MonetaryAmountV2
   insuranceCost: InsuranceCost
   firstName: Scalars['String']
   lastName: Scalars['String']
@@ -1936,25 +1934,25 @@ export type Contract = {
   /** An upcoming renewal, present if the member has been notified and the renewal is within 31 days */
   upcomingRenewal?: Maybe<UpcomingRenewal>
   createdAt: Scalars['Instant']
-  perils: Array<PerilV2>
   contractPerils: Array<PerilV2>
+  insuranceTerms: Array<InsuranceTerm>
   insurableLimits: Array<InsurableLimit>
   termsAndConditions: InsuranceTerm
-  insuranceTerms: Array<InsuranceTerm>
+  perils: Array<PerilV2>
   currentAgreementDetailsTable: Table
   upcomingAgreementDetailsTable: Table
-  gradientOption: TypeOfContractGradientOption
+  gradientOption?: Maybe<TypeOfContractGradientOption>
   /** localised information about the current status of the contract */
   statusPills: Array<Scalars['String']>
   /** localised information about the details of the contract, for example address / amount of people it covers */
   detailPills: Array<Scalars['String']>
 }
 
-export type ContractPerilsArgs = {
+export type ContractContractPerilsArgs = {
   locale: Locale
 }
 
-export type ContractContractPerilsArgs = {
+export type ContractInsuranceTermsArgs = {
   locale: Locale
 }
 
@@ -1966,7 +1964,7 @@ export type ContractTermsAndConditionsArgs = {
   locale: Locale
 }
 
-export type ContractInsuranceTermsArgs = {
+export type ContractPerilsArgs = {
   locale: Locale
 }
 
@@ -1997,6 +1995,18 @@ export type ContractBundle = {
 export type ContractBundleAngelStories = {
   __typename?: 'ContractBundleAngelStories'
   addressChange?: Maybe<Scalars['ID']>
+}
+
+export type ContractFaq = {
+  __typename?: 'ContractFaq'
+  headline: Scalars['String']
+  body: Scalars['String']
+}
+
+export type ContractHighlight = {
+  __typename?: 'ContractHighlight'
+  title: Scalars['String']
+  description: Scalars['String']
 }
 
 export type ContractStatus =
@@ -2513,12 +2523,18 @@ export type CreateSwedishHouseInput = {
 
 export type CrossSell = {
   __typename?: 'CrossSell'
+  contractType: TypeOfContract
   title: Scalars['String']
   description: Scalars['String']
   imageUrl: Scalars['String']
   blurHash: Scalars['String']
   callToAction: Scalars['String']
   action: CrossSellAction
+  info?: Maybe<CrossSellInfo>
+}
+
+export type CrossSellInfoArgs = {
+  locale: Locale
 }
 
 export type CrossSellAction = CrossSellChat | CrossSellEmbark
@@ -2535,6 +2551,16 @@ export type CrossSellEmbark = {
 
 export type CrossSellEmbarkEmbarkStoryArgs = {
   locale: Locale
+}
+
+export type CrossSellInfo = {
+  __typename?: 'CrossSellInfo'
+  displayName: Scalars['String']
+  contractPerils: Array<PerilV2>
+  insuranceTerms: Array<InsuranceTerm>
+  highlights: Array<ContractHighlight>
+  faq: Array<ContractFaq>
+  insurableLimits: Array<InsurableLimit>
 }
 
 export type CrossSellQuotesFailure = {
@@ -7179,6 +7205,7 @@ export type Mutation = {
   removeAllDiscountCodes: RemoveCampaignCodeResult
   updateReferralCampaignCode: UpdateReferralCampaignCodeResult
   createQuote: CreateQuoteResult
+  createQuoteV2: CreateQuoteResult
   editQuote: CreateQuoteResult
   removeCurrentInsurer: CreateQuoteResult
   removeStartDate: CreateQuoteResult
@@ -7291,6 +7318,10 @@ export type MutationUpdateReferralCampaignCodeArgs = {
 }
 
 export type MutationCreateQuoteArgs = {
+  input: CreateQuoteInput
+}
+
+export type MutationCreateQuoteV2Args = {
   input: CreateQuoteInput
 }
 
@@ -7787,6 +7818,7 @@ export type Query = {
   welcome: Array<Welcome>
   perils: Array<PerilV2>
   insuranceTerms: Array<InsuranceTerm>
+  /** Returns termsAndConditions from promise-cms (from product-pricing) */
   termsAndConditions: InsuranceTerm
   /** other external insurance providers, use to figure out if we can switch and or fetch data externally */
   insuranceProviders: Array<InsuranceProvider>
@@ -7828,12 +7860,12 @@ export type Query = {
   selfChangeEligibility: SelfChangeEligibility
   /** All locales that are available and activated */
   availableLocales: Array<Locale>
-  /**  Returns all claims the member has  */
+  /** Returns all claims the member has */
   claims: Array<Claim>
-  /**  Returns perils from promise-cms  */
+  /** Returns perils from promise-cms */
   contractPerils: Array<PerilV2>
   embarkStory?: Maybe<EmbarkStory>
-  /**  returns names of all available embark stories  */
+  /** returns names of all available embark stories */
   embarkStoryNames: Array<Scalars['String']>
   embarkStories: Array<EmbarkStoryMetadata>
 }
@@ -8053,6 +8085,8 @@ export type QuoteBundle = {
   frequentlyAskedQuestions: Array<Faq>
   appConfiguration: QuoteBundleAppConfiguration
   displayName: Scalars['String']
+  /** All possible other variations of the current set of bundle ids */
+  possibleVariations: Array<QuoteBundleVariant>
 }
 
 export type QuoteBundleFrequentlyAskedQuestionsArgs = {
@@ -8066,10 +8100,25 @@ export type QuoteBundleDisplayNameArgs = {
 export type QuoteBundleAppConfiguration = {
   __typename?: 'QuoteBundleAppConfiguration'
   showCampaignManagement: Scalars['Boolean']
+  /** If true, ignore net price fully and always display gross price to the user */
+  ignoreCampaigns: Scalars['Boolean']
   showFAQ: Scalars['Boolean']
   startDateTerminology: QuoteBundleAppConfigurationStartDateTerminology
+  approveButtonTerminology: QuoteBundleAppConfigurationApproveButtonTerminology
   title: QuoteBundleAppConfigurationTitle
   gradientOption: TypeOfContractGradientOption
+  postSignStep: QuoteBundleAppConfigurationPostSignStep
+}
+
+export enum QuoteBundleAppConfigurationApproveButtonTerminology {
+  ApproveChanges = 'APPROVE_CHANGES',
+  ConfirmPurchase = 'CONFIRM_PURCHASE',
+}
+
+export enum QuoteBundleAppConfigurationPostSignStep {
+  CrossSell = 'CROSS_SELL',
+  Move = 'MOVE',
+  ConnectPayin = 'CONNECT_PAYIN',
 }
 
 export enum QuoteBundleAppConfigurationStartDateTerminology {
@@ -8086,6 +8135,20 @@ export type QuoteBundleInception = ConcurrentInception | IndependentInceptions
 
 export type QuoteBundleInput = {
   ids: Array<Scalars['ID']>
+}
+
+/** A possible alternative bundling variant */
+export type QuoteBundleVariant = {
+  __typename?: 'QuoteBundleVariant'
+  /** A describing tag of this variant, for example "Most popular" */
+  tag?: Maybe<Scalars['String']>
+  id: Scalars['ID']
+  bundle: QuoteBundle
+}
+
+/** A possible alternative bundling variant */
+export type QuoteBundleVariantTagArgs = {
+  locale: Locale
 }
 
 export type QuoteDetails =
