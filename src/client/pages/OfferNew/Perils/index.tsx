@@ -20,12 +20,12 @@ interface Props {
 }
 
 const Wrapper = styled.div`
-  padding: 3rem 0 5rem;
+  padding: 5rem 0 5rem;
   background-color: ${colorsV3.gray100};
   display: flex;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
-    padding: 8rem 0 5rem 0;
+    padding: 7.5rem 0 5rem 0;
   }
 `
 

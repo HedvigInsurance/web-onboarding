@@ -16,6 +16,7 @@ type Props = {
   onCheckoutOpen: () => void
 }
 
+const HERO_HEIGHT_LARGE_SCREEN = 600
 const HERO_HEIGHT = 400
 
 const Hero = styled.div`
@@ -24,9 +25,10 @@ const Hero = styled.div`
   flex-direction: column;
   align-items: center;
   background-color: ${colorsV3.gray100};
+  height: auto;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
-    height: ${HERO_HEIGHT}px;
+    height: ${HERO_HEIGHT_LARGE_SCREEN}px;
   }
 `
 
@@ -37,8 +39,12 @@ const HeroContentWrapper = styled.div`
   padding-top: 3rem;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
-    padding-top: 8rem;
+    padding-top: 12.5rem;
   }
+`
+
+const InsuranceProviderWrapper = styled.div`
+  margin-top: 3rem;
 `
 
 const HeroOfferDetailsContainer = styled.div`
@@ -49,13 +55,20 @@ const ContentContainer = styled.div`
   width: 100%;
   padding: 0 1rem;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     padding: 0 2rem;
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
+  }
+`
+const HeroBackgroundImage = styled(BackgroundImage)`
+  height: ${HERO_HEIGHT}px;
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    height: ${HERO_HEIGHT_LARGE_SCREEN}px;
   }
 `
 
@@ -70,16 +83,23 @@ export const Introduction: React.FC<Props> = ({
   return (
     <Section>
       <Hero>
-        <BackgroundImage zIndex={0} height={HERO_HEIGHT} />
+        <HeroBackgroundImage zIndex={0} />
         <HeroContentWrapper>
           <ContentContainer>
             <HeroOfferDetailsContainer>
-              <HeroOfferDetails offerData={offerData} />
+              <HeroOfferDetails
+                offerData={offerData}
+                refetchOfferData={refetch}
+              />
               {hasDataCollection && (
-                <ExternalInsuranceProvider
-                  dataCollectionId={offerData.quotes[0].dataCollectionId || ''}
-                  offerData={offerData}
-                />
+                <InsuranceProviderWrapper>
+                  <ExternalInsuranceProvider
+                    dataCollectionId={
+                      offerData.quotes[0].dataCollectionId || ''
+                    }
+                    offerData={offerData}
+                  />
+                </InsuranceProviderWrapper>
               )}
             </HeroOfferDetailsContainer>
             <Sidebar

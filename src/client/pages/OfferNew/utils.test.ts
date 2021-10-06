@@ -5,12 +5,12 @@ import {
 } from 'data/graphql'
 import {
   seApartementBrf,
+  seApartmentBrfAccident,
   noCombo,
   noComboYouth,
   noTravel,
   dkHomeContentOwn,
   dkHomeContentAccidentTravel,
-  seHomeAccident,
 } from 'utils/testData/offerDataMock'
 import {
   isBundle,
@@ -78,7 +78,7 @@ describe('getMainQuote function', () => {
   })
 
   it('returns the Home quote from Swedish Home-Accident bundle', () => {
-    const mainQuote = getMainQuote(seHomeAccident)
+    const mainQuote = getMainQuote(seApartmentBrfAccident)
     expect(mainQuote.contractType).toBe('SE_APARTMENT_BRF')
   })
 })

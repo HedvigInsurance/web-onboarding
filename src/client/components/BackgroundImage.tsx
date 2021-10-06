@@ -4,6 +4,13 @@ import { css } from '@emotion/core'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
+type Props = {
+  height?: number
+  isFullScreen?: boolean
+  zIndex: number
+  className?: string
+}
+
 const ImageContainer = styled.div<Props>`
   background-color: ${colorsV3.gray900};
   width: 100vw;
@@ -40,21 +47,21 @@ const Image = styled.img<ImageProps>`
   }
 `
 
-type Props = {
-  height?: number
-  isFullScreen?: boolean
-  zIndex: number
-}
-
 export const BackgroundImage: React.FC<Props> = ({
   height,
   isFullScreen = false,
   zIndex,
+  className,
 }) => {
   const [hasImageLoaded, setHasImageLoaded] = useState(false)
 
   return (
-    <ImageContainer height={height} isFullScreen={isFullScreen} zIndex={zIndex}>
+    <ImageContainer
+      className={className}
+      height={height}
+      isFullScreen={isFullScreen}
+      zIndex={zIndex}
+    >
       <picture>
         <source
           media="(orientation: portrait)"

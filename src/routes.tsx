@@ -35,6 +35,9 @@ enum EmbarkStory {
   SwedenNeederEnglish = 'Web Onboarding - English Needer',
   SwedenSwitcherSwedish = 'Web Onboarding - Swedish Switcher',
   SwedenSwitcherEnglish = 'Web Onboarding - English Switcher',
+  // New Swedish flows with Lokalise & Accident
+  SwedenNeeder = 'Web Onboarding SE - Needer',
+  SwedenSwitcher = 'Web Onboarding SE - Switcher',
 }
 
 export interface ServerSideRoute {
@@ -252,6 +255,22 @@ export const reactPageRoutes: ReactPageRoute[] = [
                     locale === 'se'
                       ? EmbarkStory.SwedenSwitcherSwedish
                       : EmbarkStory.SwedenSwitcherEnglish,
+                }
+              case 'home-accident-needer':
+                if (window.hedvigClientConfig.appEnvironment === 'production') {
+                  return null
+                }
+                return {
+                  baseUrl: `/${locale}/new-member/home-accident-needer`,
+                  name: EmbarkStory.SwedenNeeder,
+                }
+              case 'home-accident-switcher':
+                if (window.hedvigClientConfig.appEnvironment === 'production') {
+                  return null
+                }
+                return {
+                  baseUrl: `/${locale}/new-member/home-accident-switcher`,
+                  name: EmbarkStory.SwedenSwitcher,
                 }
             }
             break

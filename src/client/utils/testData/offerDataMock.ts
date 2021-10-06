@@ -181,6 +181,10 @@ export const seApartementBrf: OfferData = {
       id: '187b050d-2096-4c0e-9afb-f3f20bcaf887',
       displayName: 'Hemförsäkring Bostadsrätt',
       startDate: null,
+      price: {
+        amount: '149.00',
+        currency: 'SEK',
+      },
       quoteDetails: {
         street: 'Testgatan 23',
         zipCode: '12345',
@@ -218,7 +222,7 @@ export const seApartementBrf: OfferData = {
   },
 }
 
-export const seHomeAccident: OfferData = {
+export const seApartmentBrfAccident: OfferData = {
   person: {
     firstName: 'Bengt',
     lastName: 'Bengtsson',
@@ -236,16 +240,21 @@ export const seHomeAccident: OfferData = {
       id: '187b050d-2096-4c0e-9afb-f3f20bcaf887',
       displayName: 'Hemförsäkring Bostadsrätt',
       startDate: null,
+      price: {
+        amount: '149.00',
+        currency: 'SEK',
+      },
       quoteDetails: {
         street: 'Testgatan 23',
         zipCode: '12345',
         householdSize: 2,
         livingSpace: 42,
+
         type: ApartmentType.Brf,
         __typename: 'SwedishApartmentQuoteDetails',
       },
       dataCollectionId: null,
-      currentInsurer: currentInsurerMock,
+      currentInsurer: null,
       contractType: TypeOfContract.SeApartmentBrf,
       perils: perilsMock,
       insurableLimits: insurableLimitMock,
@@ -255,17 +264,20 @@ export const seHomeAccident: OfferData = {
       id: '187b050d-2096-4c0e-9afb-f3f20bcaf888',
       displayName: 'Olycksfall',
       startDate: null,
+      price: {
+        amount: '149.00',
+        currency: 'SEK',
+      },
       quoteDetails: {
         street: 'Testgatan 23',
         zipCode: '12345',
         householdSize: 2,
         livingSpace: 42,
-        type: ApartmentType.Rent,
         isStudent: false,
         __typename: 'SwedishAccidentDetails',
       },
       dataCollectionId: null,
-      currentInsurer: currentInsurerMock,
+      currentInsurer: null,
       contractType: TypeOfContract.SeAccident,
       perils: perilsMock,
       insurableLimits: insurableLimitMock,
@@ -311,6 +323,10 @@ export const noComboYouth: OfferData = {
       id: '187b050d-2096-4c0e-9afb-f3f20bcaf887',
       displayName: 'Reiseforsikring Ungdom',
       startDate: null,
+      price: {
+        amount: '149.00',
+        currency: 'NOK',
+      },
       quoteDetails: {
         coInsured: 0,
         isYouth: true,
@@ -327,6 +343,10 @@ export const noComboYouth: OfferData = {
       id: '86f0a15d-6aed-4051-9ec2-fee1daccfb29',
       displayName: 'Innboforsikring Ungdom',
       startDate: null,
+      price: {
+        amount: '149.00',
+        currency: 'NOK',
+      },
       quoteDetails: {
         coInsured: 0,
         livingSpace: 34,
@@ -383,6 +403,10 @@ export const noCombo: OfferData = {
       id: '187b050d-2096-4c0e-9afb-f3f20bcaf887',
       displayName: 'Reiseforsikring',
       startDate: null,
+      price: {
+        amount: '149.00',
+        currency: 'NOK',
+      },
       quoteDetails: {
         coInsured: 0,
         isYouth: false,
@@ -399,6 +423,10 @@ export const noCombo: OfferData = {
       id: '86f0a15d-6aed-4051-9ec2-fee1daccfb29',
       displayName: 'Innboforsikring',
       startDate: null,
+      price: {
+        amount: '149.00',
+        currency: 'NOK',
+      },
       quoteDetails: {
         coInsured: 0,
         livingSpace: 34,
@@ -455,6 +483,10 @@ export const noTravel: OfferData = {
       id: '187b050d-2096-4c0e-9afb-f3f20bcaf887',
       displayName: 'Reiseforsikring',
       startDate: '2021-04-16',
+      price: {
+        amount: '109.00',
+        currency: 'NOK',
+      },
       quoteDetails: {
         coInsured: 1,
         isYouth: false,
@@ -506,6 +538,10 @@ export const dkHomeContentOwn: OfferData = {
       id: '187b050d-2096-4c0e-9afb-f3f20bcaf887',
       displayName: 'Indboforsikring',
       startDate: null,
+      price: {
+        amount: '149.00',
+        currency: 'DKK',
+      },
       quoteDetails: {
         street: 'Testgatan 23',
         zipCode: '1214',
@@ -562,6 +598,10 @@ export const dkHomeContentAccident: OfferData = {
       id: '187b050d-2096-4c0e-9afb-f3f20bcaf887',
       displayName: 'Indboforsikring',
       startDate: null,
+      price: {
+        amount: '149.00',
+        currency: 'DDK',
+      },
       quoteDetails: {
         street: 'Testgatan 23',
         zipCode: '1214',
@@ -582,6 +622,10 @@ export const dkHomeContentAccident: OfferData = {
       id: '86f0a15d-6aed-4051-9ec2-fee1daccfb29',
       displayName: 'Ulykkesforsikring',
       startDate: null,
+      price: {
+        amount: '149.00',
+        currency: 'DDK',
+      },
       quoteDetails: {
         street: 'Testgatan 23',
         zipCode: '1214',
@@ -636,6 +680,10 @@ export const dkHomeContentAccidentTravel: OfferData = {
       id: '187b050d-2096-4c0e-9afb-f3f20bcaf887',
       displayName: 'Indboforsikring',
       startDate: null,
+      price: {
+        amount: '149.00',
+        currency: 'DDK',
+      },
       quoteDetails: {
         street: 'Theodore Roosevelts Vej 1',
         zipCode: '2450',
@@ -659,6 +707,10 @@ export const dkHomeContentAccidentTravel: OfferData = {
       id: '86f0a15d-6aed-4051-9ec2-fee1daccfb29',
       displayName: 'Ulykkesforsikring',
       startDate: null,
+      price: {
+        amount: '149.00',
+        currency: 'DDK',
+      },
       quoteDetails: {
         street: 'Theodore Roosevelts Vej 1',
         zipCode: '2450',
@@ -680,6 +732,10 @@ export const dkHomeContentAccidentTravel: OfferData = {
       id: '86f0a15d-6aed-4051-9ec2-fee1daccfb29',
       displayName: 'Rejseforsikring',
       startDate: null,
+      price: {
+        amount: '149.00',
+        currency: 'DDK',
+      },
       quoteDetails: {
         street: 'Theodore Roosevelts Vej 1',
         zipCode: '2450',

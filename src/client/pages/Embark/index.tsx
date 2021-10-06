@@ -306,6 +306,20 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                           '/new-member/offer',
                       )
                     },
+                    VariantedOffer: (quoteIds, selectedQuoteIds) => {
+                      if (quoteIds.length > 0) {
+                        storageState.session.setSession({
+                          ...storageState.session.getSession(),
+                          quoteIds,
+                          selectedQuoteIds,
+                        })
+                      }
+
+                      history.push(
+                        (props.language ? '/' + props.language : '') +
+                          '/new-member/offer',
+                      )
+                    },
                     MailingList: () => {
                       location.href = 'https://hedvigapp.typeform.com/to/xiTKWi'
                     },

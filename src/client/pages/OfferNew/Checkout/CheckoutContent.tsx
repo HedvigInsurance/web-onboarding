@@ -1,37 +1,18 @@
 import styled from '@emotion/styled'
 import React from 'react'
-import { useEditQuoteMutation, useRedeemedCampaignsQuery } from 'data/graphql'
-import { Price } from 'pages/OfferNew/components'
+import { useEditQuoteMutation } from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
 import { useUnderwritingLimitsHitReporter } from 'utils/sentry-client'
-import {
-  LARGE_SCREEN_MEDIA_QUERY,
-  MEDIUM_SCREEN_MEDIA_QUERY,
-} from 'utils/mediaQueries'
+import { PriceBreakdown } from '../common/PriceBreakdown'
 import { StartDate } from '../Introduction/Sidebar/StartDate'
 import { OfferData } from '../types'
-import {
-  getInsuranceTitle,
-  getQuoteIds,
-  isMonthlyCostDeduction,
-} from '../utils'
+import { getQuoteIds } from '../utils'
 import { InsuranceSummary } from './InsuranceSummary'
 import { UserDetailsForm } from './UserDetailsForm'
 import { useSsnError } from './hooks'
 
 const Section = styled.div`
   width: 100%;
-`
-
-const Excerpt = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 2rem 0 2.5rem;
-
-  ${MEDIUM_SCREEN_MEDIA_QUERY} {
-    padding-bottom: 3rem;
-  }
 `
 
 const StartDateWrapper = styled.div`
@@ -46,16 +27,11 @@ const StartDateLabel = styled.p`
   line-height: 1;
 `
 
-const InsuranceHeading = styled.h3`
+const Heading = styled.h3`
   margin: 0;
-  white-space: pre-line;
-  font-size: 1.375rem;
-  line-height: 1.625rem;
-
-  ${LARGE_SCREEN_MEDIA_QUERY} {
-    font-size: 1.5rem;
-    line-height: 2rem;
-  }
+  font-size: 2rem;
+  line-height: 2.5rem;
+  padding-top: 1.875rem;
 `
 
 interface Props {
@@ -74,10 +50,6 @@ export const CheckoutContent: React.FC<Props> = ({
   onSubmit,
 }) => {
   const textKeys = useTextKeys()
-  const redeemedCampaignsQuery = useRedeemedCampaignsQuery()
-  const isDiscountPrice = isMonthlyCostDeduction(
-    redeemedCampaignsQuery.data?.redeemedCampaigns ?? [],
-  )
   const [fakeLoading, setFakeLoading] = React.useState(false)
   const [reallyLoading, setReallyLoading] = React.useState(false)
   const [editQuote, editQuoteResult] = useEditQuoteMutation()
@@ -93,20 +65,12 @@ export const CheckoutContent: React.FC<Props> = ({
   return (
     <>
       <Section>
-        <Excerpt>
-          <InsuranceHeading>
-            {getInsuranceTitle(offerData, textKeys)}
-          </InsuranceHeading>
-          <div>
-            <Price
-              loading={fakeLoading || reallyLoading}
-              monthlyGross={offerData.cost.monthlyGross}
-              monthlyNet={offerData.cost.monthlyNet}
-              isDiscountPrice={isDiscountPrice}
-            />
-          </div>
-        </Excerpt>
-
+        <Heading>{textKeys.CHECKOUT_HEADING()}</Heading>
+        <PriceBreakdown
+          offerData={offerData}
+          showTotal={true}
+          isLoading={fakeLoading || reallyLoading}
+        />
         <UserDetailsForm
           onSubmit={onSubmit}
           email={offerData.person.email ?? ''}

@@ -8084,6 +8084,8 @@ export type QuoteBundle = {
   frequentlyAskedQuestions: Array<Faq>
   appConfiguration: QuoteBundleAppConfiguration
   displayName: Scalars['String']
+  /** All possible other variations of the current set of bundle ids */
+  possibleVariations: Array<QuoteBundleVariant>
 }
 
 export type QuoteBundleFrequentlyAskedQuestionsArgs = {
@@ -8132,6 +8134,20 @@ export type QuoteBundleInception = ConcurrentInception | IndependentInceptions
 
 export type QuoteBundleInput = {
   ids: Array<Scalars['ID']>
+}
+
+/** A possible alternative bundling variant */
+export type QuoteBundleVariant = {
+  __typename?: 'QuoteBundleVariant'
+  /** A describing tag of this variant, for example "Most popular" */
+  tag?: Maybe<Scalars['String']>
+  id: Scalars['ID']
+  bundle: QuoteBundle
+}
+
+/** A possible alternative bundling variant */
+export type QuoteBundleVariantTagArgs = {
+  locale: Locale
 }
 
 export type QuoteDetails =
