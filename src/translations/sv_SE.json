@@ -299,5 +299,7 @@
   "CHECKOUT_CREDIT_CHECK_INFO_HEADER": "",
   "CHECKOUT_CREDIT_CHECK_INFO_CONTENT": "",
   "CHECKOUT_SIGN_FAIL_HEADER": "",
-  "CHECKOUT_SIGN_FAIL_CONTENT": ""
+  "CHECKOUT_SIGN_FAIL_CONTENT": "",
+  "OFFER_BUNDLE_SELECTOR_TITLE": "Ditt försäkringspaket",
+  "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "Försäkringarna gäller för alla medförsäkrade. Priset är beräknat med startdatum {date}."
 }
