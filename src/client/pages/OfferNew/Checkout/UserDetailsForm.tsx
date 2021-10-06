@@ -64,6 +64,8 @@ export const UserDetailsForm: React.FC<Props> = ({
   const ssnMaxLength = currentLocaleData.ssn.length
   const ssnFormatRegex = currentLocaleData.ssn.formatRegex
 
+  const hasEnabledCreditCheckInfo = useCreditCheckInfo()
+
   const isValidSsn = (ssn: string) => {
     return ssnFormatRegex.test(ssn)
   }
@@ -151,7 +153,9 @@ export const UserDetailsForm: React.FC<Props> = ({
         onChange={handleSsnChange}
         onBlur={handleSsnBlur}
       />
-      {useCreditCheckInfo() && isShowingCreditCheckInfo && <CreditCheckInfo />}
+      {hasEnabledCreditCheckInfo && isShowingCreditCheckInfo && (
+        <CreditCheckInfo />
+      )}
       <HiddenSubmit type="submit" />
     </form>
   )
