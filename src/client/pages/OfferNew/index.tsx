@@ -123,7 +123,7 @@ export const OfferNew: React.FC = () => {
         selectedBundleVariant.bundle.quotes.map((quote) => quote.id),
       )
     }
-  }, [selectedBundleVariant, selectedQuoteIds])
+  }, [selectedBundleVariant, selectedQuoteIds, setSelectedQuoteIds])
 
   const checkoutMatch = useRouteMatch(`${localePathPattern}/new-member/sign`)
   const toggleCheckout = createToggleCheckout(history, currentLocale)
