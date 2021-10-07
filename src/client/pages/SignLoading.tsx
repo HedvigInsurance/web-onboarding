@@ -37,11 +37,11 @@ export const SignLoading: React.FC = () => {
   const currentLocale = useCurrentLocale()
   const variation = useVariation()
   const localeIsoCode = getIsoLocale(currentLocale)
-  const { isLoading: quoteIdsIsLoading, quoteIds } = useQuoteIds()
+  const { isLoading: quoteIdsIsLoading, selectedQuoteIds } = useQuoteIds()
   const { data: quoteBundleData } = useQuoteBundleQuery({
     variables: {
       input: {
-        ids: [...quoteIds],
+        ids: [...selectedQuoteIds],
       },
       locale: localeIsoCode,
     },

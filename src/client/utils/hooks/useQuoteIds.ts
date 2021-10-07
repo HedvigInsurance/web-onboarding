@@ -27,6 +27,7 @@ export const useQuoteIds = () => {
     isLoading: quoteIds === null,
     quoteIds: quoteIds ?? [],
     selectedQuoteIds: selectedQuoteIds ?? [],
+    setSelectedQuoteIds,
   }
 }
 

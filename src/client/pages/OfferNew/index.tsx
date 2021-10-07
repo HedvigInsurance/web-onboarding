@@ -38,20 +38,27 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
   }
 }
 
+const isBundleVariantMatchingQuoteIds = (
+  variant: QuoteBundleVariant,
+  quoteIds: readonly string[],
+) => {
+  const variantQuoteIds = variant.bundle.quotes.map((quote) => quote.id)
+  return (
+    variantQuoteIds.sort().join(',') ===
+    quoteIds
+      .concat()
+      .sort()
+      .join(',')
+  )
+}
+
 const getBundleVariantFromQuoteIds = (
   quoteIds: readonly string[],
   bundleVariants: QuoteBundleVariant[],
 ) => {
-  return bundleVariants.find((variant) => {
-    const variantQuoteIds = variant.bundle.quotes.map((quote) => quote.id)
-    return (
-      variantQuoteIds.sort().join(',') ===
-      quoteIds
-        .concat()
-        .sort()
-        .join(',')
-    )
-  })
+  return bundleVariants.find((variant) =>
+    isBundleVariantMatchingQuoteIds(variant, quoteIds),
+  )
 }
 
 export const OfferNew: React.FC = () => {
@@ -69,6 +76,7 @@ export const OfferNew: React.FC = () => {
     isLoading: quoteIdsIsLoading,
     quoteIds,
     selectedQuoteIds,
+    setSelectedQuoteIds,
   } = useQuoteIds()
 
   const { data, loading: loadingQuoteBundle, refetch } = useQuoteBundleQuery({
@@ -92,26 +100,30 @@ export const OfferNew: React.FC = () => {
     QuoteBundleVariant
   >()
 
-  const updateBundleVariant = (
-    bundleVariations: QuoteBundleVariant[],
-    selectedBundleVariant?: QuoteBundleVariant,
-  ) => {
+  useEffect(() => {
     if (!selectedBundleVariant) {
       return setSelectedBundleVariant(
         getBundleVariantFromQuoteIds(selectedQuoteIds, bundleVariants),
       )
     }
 
-    const matchingVariant = bundleVariations.find(
+    const matchingVariant = bundleVariants.find(
       ({ id }) => id === selectedBundleVariant.id,
     )
-    if (!matchingVariant) return setSelectedBundleVariant(bundleVariations[0])
+    if (!matchingVariant) return setSelectedBundleVariant(bundleVariants[0])
     return setSelectedBundleVariant(matchingVariant)
-  }
+  }, [bundleVariants, selectedBundleVariant, selectedQuoteIds])
 
   useEffect(() => {
-    updateBundleVariant(bundleVariants, selectedBundleVariant)
-  }, [bundleVariants, selectedBundleVariant])
+    if (
+      selectedBundleVariant &&
+      !isBundleVariantMatchingQuoteIds(selectedBundleVariant, selectedQuoteIds)
+    ) {
+      setSelectedQuoteIds(
+        selectedBundleVariant.bundle.quotes.map((quote) => quote.id),
+      )
+    }
+  }, [selectedBundleVariant, selectedQuoteIds])
 
   const checkoutMatch = useRouteMatch(`${localePathPattern}/new-member/sign`)
   const toggleCheckout = createToggleCheckout(history, currentLocale)
