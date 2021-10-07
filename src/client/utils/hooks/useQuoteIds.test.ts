@@ -25,17 +25,18 @@ jest.mock('react-router', () => ({
   }),
 }))
 
-it.only('should return correct quoteIds from storage', () => {
+it('should return correct quoteIds from storage', () => {
   const { result } = renderHook(() => useQuoteIds())
 
   expect(result.current).toEqual({
     isLoading: false,
     quoteIds: ['1', '2', '3'],
     selectedQuoteIds: ['1', '2'],
+    setSelectedQuoteIds: expect.any(Function),
   })
 })
 
-it.only('should return quoteIds from urlParams if missing in storage', () => {
+it('should return quoteIds from urlParams if missing in storage', () => {
   mockSession = {
     quoteIds: null,
     selectedQuoteIds: ['1', '2'],
@@ -46,5 +47,6 @@ it.only('should return quoteIds from urlParams if missing in storage', () => {
     isLoading: false,
     quoteIds: ['1', '2', '3'],
     selectedQuoteIds: ['1', '2', '3'],
+    setSelectedQuoteIds: expect.any(Function),
   })
 })
