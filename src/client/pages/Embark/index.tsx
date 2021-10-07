@@ -259,6 +259,11 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
     }
   }, [props.name])
 
+  const redirectToOfferPage = () =>
+    history.push(
+      (props.language ? '/' + props.language : '') + '/new-member/offer',
+    )
+
   return (
     <EmbarkStyling>
       <Helmet>
@@ -300,11 +305,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                           quoteIds,
                         })
                       }
-
-                      history.push(
-                        (props.language ? '/' + props.language : '') +
-                          '/new-member/offer',
-                      )
+                      redirectToOfferPage()
                     },
                     VariantedOffer: (quoteIds, selectedQuoteIds) => {
                       if (quoteIds.length > 0) {
@@ -314,11 +315,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                           selectedQuoteIds,
                         })
                       }
-
-                      history.push(
-                        (props.language ? '/' + props.language : '') +
-                          '/new-member/offer',
-                      )
+                      redirectToOfferPage()
                     },
                     MailingList: () => {
                       location.href = 'https://hedvigapp.typeform.com/to/xiTKWi'

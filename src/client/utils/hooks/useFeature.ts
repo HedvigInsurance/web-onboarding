@@ -51,7 +51,6 @@ export const useFeature = (features: Features[] = []) => {
   return features.reduce((acc, feature) => {
     const featureConfig = Config.find((x) => x.name === feature)
     const isEnabled = isFeatureEnabled({ config: featureConfig, env, market })
-    console.log(feature, isEnabled)
     return [...acc, isEnabled]
   }, [] as boolean[])
 }

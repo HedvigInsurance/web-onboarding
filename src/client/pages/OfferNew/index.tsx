@@ -38,6 +38,22 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
   }
 }
 
+const getBundleVariantFromQuoteIds = (
+  quoteIds: readonly string[],
+  bundleVariants: QuoteBundleVariant[],
+) => {
+  return bundleVariants.find((variant) => {
+    const variantQuoteIds = variant.bundle.quotes.map((quote) => quote.id)
+    return (
+      variantQuoteIds.sort().join(',') ===
+      quoteIds
+        .concat()
+        .sort()
+        .join(',')
+    )
+  })
+}
+
 export const OfferNew: React.FC = () => {
   const currentLocale = useCurrentLocale()
   const localeIsoCode = getIsoLocale(currentLocale)
@@ -49,7 +65,12 @@ export const OfferNew: React.FC = () => {
   const history = useHistory()
   const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
   const redeemedCampaigns = redeemedCampaignsData?.redeemedCampaigns ?? []
-  const { isLoading: quoteIdsIsLoading, quoteIds } = useQuoteIds()
+  const {
+    isLoading: quoteIdsIsLoading,
+    quoteIds,
+    selectedQuoteIds,
+  } = useQuoteIds()
+
   const { data, loading: loadingQuoteBundle, refetch } = useQuoteBundleQuery({
     variables: {
       input: {
@@ -76,7 +97,9 @@ export const OfferNew: React.FC = () => {
     selectedBundleVariant?: QuoteBundleVariant,
   ) => {
     if (!selectedBundleVariant) {
-      return setSelectedBundleVariant(bundleVariations[0])
+      return setSelectedBundleVariant(
+        getBundleVariantFromQuoteIds(selectedQuoteIds, bundleVariants),
+      )
     }
 
     const matchingVariant = bundleVariations.find(
@@ -88,15 +111,7 @@ export const OfferNew: React.FC = () => {
 
   useEffect(() => {
     updateBundleVariant(bundleVariants, selectedBundleVariant)
-  }, [bundleVariants])
-
-  useEffect(() => {
-    updateBundleVariant(bundleVariants, selectedBundleVariant)
-  }, [bundleVariants])
-
-  useEffect(() => {
-    updateBundleVariant(bundleVariants, selectedBundleVariant)
-  }, [bundleVariants])
+  }, [bundleVariants, selectedBundleVariant])
 
   const checkoutMatch = useRouteMatch(`${localePathPattern}/new-member/sign`)
   const toggleCheckout = createToggleCheckout(history, currentLocale)
