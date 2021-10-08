@@ -1938,6 +1938,7 @@ export type Contract = {
   insuranceTerms: Array<InsuranceTerm>
   insurableLimits: Array<InsurableLimit>
   termsAndConditions: InsuranceTerm
+  supportsAddressChange: Scalars['Boolean']
   perils: Array<PerilV2>
   currentAgreementDetailsTable: Table
   upcomingAgreementDetailsTable: Table
@@ -2556,6 +2557,7 @@ export type CrossSellEmbarkEmbarkStoryArgs = {
 export type CrossSellInfo = {
   __typename?: 'CrossSellInfo'
   displayName: Scalars['String']
+  aboutSection: Scalars['String']
   contractPerils: Array<PerilV2>
   insuranceTerms: Array<InsuranceTerm>
   highlights: Array<ContractHighlight>
@@ -7205,7 +7207,6 @@ export type Mutation = {
   removeAllDiscountCodes: RemoveCampaignCodeResult
   updateReferralCampaignCode: UpdateReferralCampaignCodeResult
   createQuote: CreateQuoteResult
-  createQuoteV2: CreateQuoteResult
   editQuote: CreateQuoteResult
   removeCurrentInsurer: CreateQuoteResult
   removeStartDate: CreateQuoteResult
@@ -7318,10 +7319,6 @@ export type MutationUpdateReferralCampaignCodeArgs = {
 }
 
 export type MutationCreateQuoteArgs = {
-  input: CreateQuoteInput
-}
-
-export type MutationCreateQuoteV2Args = {
   input: CreateQuoteInput
 }
 
@@ -10296,7 +10293,7 @@ export type QuoteBundleQuery = { __typename?: 'Query' } & {
             MonetaryAmountV2,
             'amount' | 'currency'
           >
-          perils: Array<
+          contractPerils: Array<
             { __typename?: 'PerilV2' } & Pick<
               PerilV2,
               'title' | 'description' | 'covered' | 'exceptions' | 'info'
@@ -11563,7 +11560,7 @@ export const QuoteBundleDocument = gql`
         email
         typeOfContract
         displayName(locale: $locale)
-        perils(locale: $locale) {
+        contractPerils(locale: $locale) {
           title
           description
           covered

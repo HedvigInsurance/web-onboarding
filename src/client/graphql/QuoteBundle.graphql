@@ -21,7 +21,7 @@ query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
       email
       typeOfContract
       displayName(locale: $locale)
-      perils(locale: $locale) {
+      contractPerils(locale: $locale) {
         title
         description
         covered
