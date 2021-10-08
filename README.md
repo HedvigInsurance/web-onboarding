@@ -35,6 +35,13 @@ Use one of the following `yarn` or `yvm`
 $ yarn
 ```
 
+## Storybook
+
+```sh
+# Start Storybook
+$ yarn storybook
+```
+
 ## Development
 
 ```sh
