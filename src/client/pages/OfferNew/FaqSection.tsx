@@ -7,13 +7,8 @@ import ReactMarkdown from 'react-markdown/with-html'
 import { useFaqsQuery } from 'data/graphql'
 import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
-import {
-  Column,
-  ColumnSpacing,
-  Container,
-  HeadingWhite,
-  PreHeading,
-} from './components'
+import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import { Column, ColumnSpacing, Container, Heading } from './components'
 
 const SectionWrapper = styled.div`
   padding: 8rem 2rem 12rem 2rem;
@@ -27,29 +22,42 @@ const SectionWrapper = styled.div`
   }
 `
 
-const SmallerHeading = styled(HeadingWhite)`
-  font-size: 3.5rem;
-  line-height: 3.5rem;
-  margin-bottom: 4rem;
+export const HeadingWhite = styled(Heading)`
+  color: ${colorsV3.gray100};
 `
 
 const AccordionsWrapper = styled.div`
   list-style: none;
   padding: 0;
   margin: 0;
+  margin-top: 1.5rem;
 `
 
 const AccordionWrapper = styled('li')`
   padding: 0;
   margin: 0;
+
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+
+    ${LARGE_SCREEN_MEDIA_QUERY} {
+      margin-bottom: 2.5rem;
+    }
+  }
 `
 
 const AccordionHeadline = styled('h3')`
   font-size: 1.25rem;
-  line-height: 1.25;
+  line-height: 1.4;
+  margin: 0;
 `
 
 const AccordionBody = styled(ReactMarkdown)`
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
+  color: ${colorsV3.gray100};
+  line-height: 1.6;
+
   p,
   h1,
   h2,
@@ -147,10 +155,9 @@ export const FaqSection: React.FC = () => {
       <SectionWrapper>
         <Container>
           <Column>
-            <PreHeading>{textKeys.OFFER_FAQ_PRE_HEADING()}</PreHeading>
-            <SmallerHeading>{textKeys.OFFER_FAQ_HEADING()}</SmallerHeading>
+            <HeadingWhite>{textKeys.OFFER_FAQ_HEADING()}</HeadingWhite>
             <AccordionsWrapper>
-              {(languageData?.faqs ?? []).map((faq) => (
+              {languageData?.faqs?.map((faq) => (
                 <Accordion
                   key={faq?.id}
                   id={faq?.id}

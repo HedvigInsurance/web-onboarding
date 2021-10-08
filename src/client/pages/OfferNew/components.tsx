@@ -21,10 +21,6 @@ export const Heading = styled('h2')`
   }
 `
 
-export const HeadingWhite = styled(Heading)`
-  color: ${colorsV2.white};
-`
-
 export const HeadingBlack = styled(Heading)`
   color: ${colorsV2.black};
 `
