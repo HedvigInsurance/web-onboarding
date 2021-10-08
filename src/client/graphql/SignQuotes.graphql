@@ -5,6 +5,7 @@ mutation SignQuotes($quoteIds: [ID!]!, $successUrl: String, $failUrl: String) {
     __typename
     ... on FailedToStartSign {
       errorMessage
+      errorCode
     }
     ... on SwedishBankIdSession {
       autoStartToken

@@ -23,6 +23,7 @@ import { CheckoutContent } from './CheckoutContent'
 import { Sign, SignUiState } from './Sign'
 import { SignDisclaimer } from './SignDisclaimer'
 import { CheckoutSuccessRedirect } from './CheckoutSuccessRedirect'
+import { SignFailModal } from './SignFailModal'
 
 type Openable = {
   visibilityState: VisibilityState
@@ -170,6 +171,7 @@ export const Checkout: React.FC<CheckoutProps> = ({
   const [signUiState, setSignUiState] = useState<SignUiState>('NOT_STARTED')
   const [emailUpdateLoading, setEmailUpdateLoading] = useState(false)
   const [ssnUpdateLoading, setSsnUpdateLoading] = useState(false)
+  const [isShowingFailModal, setIsShowingFailModal] = useState(false)
   const [startPollingSignState, signStatusQueryProps] = useSignStatusLazyQuery({
     pollInterval: 1000,
   })
@@ -263,6 +265,10 @@ export const Checkout: React.FC<CheckoutProps> = ({
     })
       .then(({ data }) => {
         if (data?.signQuotes?.__typename === 'FailedToStartSign') {
+          if (data?.signQuotes.errorCode === 'MANUAL_REVIEW_REQUIRED') {
+            setIsShowingFailModal(true)
+            return
+          }
           setSignUiState('FAILED')
           return
         }
@@ -337,6 +343,10 @@ export const Checkout: React.FC<CheckoutProps> = ({
       {signStatus?.signState === SignState.Completed && (
         <CheckoutSuccessRedirect offerData={offerData} />
       )}
+      <SignFailModal
+        isVisible={isShowingFailModal}
+        onClose={() => setIsShowingFailModal(false)}
+      />
     </>
   )
 }
