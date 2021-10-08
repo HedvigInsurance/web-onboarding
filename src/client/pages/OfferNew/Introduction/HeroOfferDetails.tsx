@@ -77,15 +77,12 @@ const Address = styled.div`
 const EditDetailsButton = styled(Button)`
   border: 1px solid ${colorsV3.gray900};
   color: ${colorsV3.gray900};
-  width: 100%;
-
-  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
-    width: auto;
-  }
+  padding: 0.5rem 1rem;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     border: 1px solid ${colorsV3.gray100};
     color: ${colorsV3.gray100};
+    padding: 1rem 2rem;
   }
 
   &:hover {
