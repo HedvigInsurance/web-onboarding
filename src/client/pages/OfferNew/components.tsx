@@ -1,22 +1,23 @@
 import styled from '@emotion/styled'
-import { colorsV2, fonts } from '@hedviginsurance/brand'
+import { colorsV2, fonts, colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
-import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import {
+  LARGE_SCREEN_MEDIA_QUERY,
+  MEDIUM_SCREEN_MEDIA_QUERY,
+} from 'utils/mediaQueries'
 import { SIDEBAR_WIDTH } from './Introduction/Sidebar/index'
 
 export * from './common/price'
 
 export const Heading = styled('h2')`
   font-family: ${fonts.FAVORIT};
-  font-size: 3rem;
-  line-height: 3.5rem;
+  font-size: 2rem;
+  line-height: 1.25;
   letter-spacing: -0.91px;
   margin: 0;
 
-  @media (max-width: 600px) {
-    font-size: 2rem;
-    line-height: 2rem;
-    text-align: center;
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
+    font-size: 3rem;
   }
 `
 
@@ -70,16 +71,16 @@ export const HeadingWrapper = styled('div')`
   margin-bottom: 3.875rem;
 `
 
-export const Body = styled('div')`
-  font-size: 1.25rem;
-  line-height: 1.626rem;
-  color: ${colorsV2.darkgray};
-  margin-top: 2rem;
-  padding-right: 7.5rem;
+export const Body = styled('p')`
+  color: ${colorsV3.gray700};
+  font-size: 1rem;
+  line-height: 1.5;
 
-  @media (max-width: 600px) {
-    padding-right: 0;
-    text-align: center;
+  margin-top: 0.5rem;
+
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
+    font-size: 1.125rem;
+    margin-top: 1.5rem;
   }
 `
 
