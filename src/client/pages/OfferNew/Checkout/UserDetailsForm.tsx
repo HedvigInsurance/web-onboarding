@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import React from 'react'
+import React, { useState } from 'react'
 import * as yup from 'yup'
 import { LocaleLabel, locales } from 'l10n/locales'
 import { RawInputField } from 'components/inputs'
@@ -10,6 +10,8 @@ import {
 } from 'components/utils/CurrentLocale'
 import { WithEmailForm, WithSsnForm } from 'pages/OfferNew/types'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
+import { useCreditCheckInfo } from 'utils/featureToggles'
+import { CreditCheckInfo } from './CreditCheckInfo'
 
 const HiddenSubmit = styled.input`
   display: none;
@@ -44,15 +46,16 @@ export const UserDetailsForm: React.FC<Props> = ({
   onSubmit,
 }) => {
   const textKeys = useTextKeys()
-  const [email, reallySetEmail] = React.useState(() => initialEmail)
-  const [emailError, setEmailError] = React.useState<boolean>(false)
-  const [ssn, reallySetSsn] = React.useState(() => initialSsn)
-  const [emailChangeTimout, setEmailChangeTimout] = React.useState<
-    number | null
-  >(null)
-  const [ssnChangeTimout, setSsnChangeTimout] = React.useState<number | null>(
+  const [email, reallySetEmail] = useState(() => initialEmail)
+  const [hasEmailError, setHasEmailError] = useState<boolean>(false)
+  const [ssn, reallySetSsn] = useState(() => initialSsn)
+  const [isShowingCreditCheckInfo, setIsShowingCreditCheckInfo] = useState(
+    false,
+  )
+  const [emailChangeTimout, setEmailChangeTimout] = useState<number | null>(
     null,
   )
+  const [ssnChangeTimout, setSsnChangeTimout] = useState<number | null>(null)
 
   const market = useMarket()
 
@@ -60,6 +63,8 @@ export const UserDetailsForm: React.FC<Props> = ({
   const currentLocaleData = locales[currentLocale as LocaleLabel]
   const ssnMaxLength = currentLocaleData.ssn.length
   const ssnFormatRegex = currentLocaleData.ssn.formatRegex
+
+  const hasEnabledCreditCheckInfo = useCreditCheckInfo()
 
   const isValidSsn = (ssn: string) => {
     return ssnFormatRegex.test(ssn)
@@ -126,10 +131,10 @@ export const UserDetailsForm: React.FC<Props> = ({
         id="email"
         type="email"
         value={email}
-        errors={emailError ? textKeys.SIGN_EMAIL_CHECK() : undefined}
+        errors={hasEmailError ? textKeys.SIGN_EMAIL_CHECK() : undefined}
         onChange={(e: React.ChangeEvent<any>) => {
           setEmailDebounced(e.target.value)
-          setEmailError(false)
+          setHasEmailError(false)
         }}
       />
 
@@ -142,11 +147,15 @@ export const UserDetailsForm: React.FC<Props> = ({
         inputMode="numeric"
         pattern="[0-9]*"
         maxLength={ssnMaxLength}
+        onFocus={() => setIsShowingCreditCheckInfo(true)}
         value={ssn}
         errors={ssnBackendError ? textKeys[ssnBackendError]() : undefined}
         onChange={handleSsnChange}
         onBlur={handleSsnBlur}
       />
+      {hasEnabledCreditCheckInfo && isShowingCreditCheckInfo && (
+        <CreditCheckInfo />
+      )}
       <HiddenSubmit type="submit" />
     </form>
   )

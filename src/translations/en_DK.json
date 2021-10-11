@@ -259,7 +259,7 @@
   "STARTPAGE_DK_CONTENTS_BODY": "Get home contents",
   "STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_BODY": "Get all three of them",
   "STARTPAGE_DK_CONTENTS_ACCIDENT_BODY": "Get both of them",
-  "DETAILS_MODULE_TABLE_COINSURED_CELL_LABEL": "Number of co-insured",
+  "DETAILS_MODULE_TABLE_COINSURED_CELL_LABEL": "Amount of insured people",
   "CHECKOUT_DETAILS_NAME": "Name",
   "CHECKOUT_DETAILS_BIRTHDATE": "Birthdate",
   "CHECKOUT_DETAILS_STUDENT": "Student",
@@ -299,5 +299,7 @@
   "CHECKOUT_CREDIT_CHECK_INFO_HEADER": "",
   "CHECKOUT_CREDIT_CHECK_INFO_CONTENT": "",
   "CHECKOUT_SIGN_FAIL_HEADER": "",
-  "CHECKOUT_SIGN_FAIL_CONTENT": ""
+  "CHECKOUT_SIGN_FAIL_CONTENT": "",
+  "OFFER_BUNDLE_SELECTOR_TITLE": "Your insurance bundle",
+  "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "The insurances are valid for all co-insured. The price is calculated based on the start date {date}."
 }

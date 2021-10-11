@@ -7996,7 +7996,6 @@ export type QueryInsuranceTermsArgs = {
 export type QueryTermsAndConditionsArgs = {
   contractType: TypeOfContract
   locale: Locale
-  date?: Maybe<Scalars['LocalDate']>
 }
 
 export type QueryInsuranceProvidersArgs = {
@@ -10584,7 +10583,7 @@ export type SignQuotesMutation = { __typename?: 'Mutation' } & {
     | { __typename: 'SimpleSignSession' }
     | ({ __typename: 'FailedToStartSign' } & Pick<
         FailedToStartSign,
-        'errorMessage'
+        'errorMessage' | 'errorCode'
       >)
 }
 
@@ -12182,6 +12181,7 @@ export const SignQuotesDocument = gql`
       __typename
       ... on FailedToStartSign {
         errorMessage
+        errorCode
       }
       ... on SwedishBankIdSession {
         autoStartToken

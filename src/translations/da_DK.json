@@ -299,5 +299,7 @@
   "CHECKOUT_CREDIT_CHECK_INFO_HEADER": "",
   "CHECKOUT_CREDIT_CHECK_INFO_CONTENT": "",
   "CHECKOUT_SIGN_FAIL_HEADER": "",
-  "CHECKOUT_SIGN_FAIL_CONTENT": ""
+  "CHECKOUT_SIGN_FAIL_CONTENT": "",
+  "OFFER_BUNDLE_SELECTOR_TITLE": "Din forsikringspakke",
+  "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "Forsikringen gælder for alle medforsikrede. Prisen er beregnet på baggrund af startdatoen."
 }
