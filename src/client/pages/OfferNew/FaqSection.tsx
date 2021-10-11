@@ -7,18 +7,29 @@ import ReactMarkdown from 'react-markdown/with-html'
 import { useFaqsQuery } from 'data/graphql'
 import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
-import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
-import { Column, ColumnSpacing, Container, Heading } from './components'
+import {
+  LARGE_SCREEN_MEDIA_QUERY,
+  MEDIUM_SCREEN_MEDIA_QUERY,
+} from 'utils/mediaQueries'
+import { Container, Heading } from './components'
 
 const SectionWrapper = styled.div`
-  padding: 8rem 2rem 12rem 2rem;
-  margin-top: -10px;
+  padding-top: 5rem;
+  /* Clear footer CTA */
+  padding-bottom: calc(5rem + 135px);
   background: ${colorsV3.gray900};
-  color: ${colorsV3.white};
+  color: ${colorsV3.gray100};
 
-  @media (max-width: 420px) {
-    padding-left: 1rem;
-    padding-right: 1rem;
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    padding-bottom: 5rem;
+  }
+`
+
+const FAQContainer = styled(Container)`
+  flex-direction: column;
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    flex-direction: column;
   }
 `
 
@@ -31,6 +42,10 @@ const AccordionsWrapper = styled.div`
   padding: 0;
   margin: 0;
   margin-top: 1.5rem;
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    margin-top: 3.5rem;
+  }
 `
 
 const AccordionWrapper = styled('li')`
@@ -38,7 +53,7 @@ const AccordionWrapper = styled('li')`
   margin: 0;
 
   &:not(:last-child) {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 
     ${LARGE_SCREEN_MEDIA_QUERY} {
       margin-bottom: 2.5rem;
@@ -73,9 +88,6 @@ const AccordionBody = styled(ReactMarkdown)`
 
 const ExpandToggler = styled('button')`
   appearance: none;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
   text-align: inherit;
   line-height: inherit;
   font-size: inherit;
@@ -86,10 +98,14 @@ const ExpandToggler = styled('button')`
   padding: 0;
   color: inherit;
   cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-  @media (max-width: 480px) {
-    width: 100%;
-    justify-content: space-between;
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
+    width: auto;
+    justify-content: flex-start;
   }
 
   &:focus {
@@ -153,23 +169,19 @@ export const FaqSection: React.FC = () => {
   return (
     <>
       <SectionWrapper>
-        <Container>
-          <Column>
-            <HeadingWhite>{textKeys.OFFER_FAQ_HEADING()}</HeadingWhite>
-            <AccordionsWrapper>
-              {languageData?.faqs?.map((faq) => (
-                <Accordion
-                  key={faq?.id}
-                  id={faq?.id}
-                  headline={faq!.headline!}
-                  body={faq!.body!}
-                />
-              ))}
-            </AccordionsWrapper>
-          </Column>
-
-          <ColumnSpacing />
-        </Container>
+        <FAQContainer>
+          <HeadingWhite>{textKeys.OFFER_FAQ_HEADING()}</HeadingWhite>
+          <AccordionsWrapper>
+            {languageData?.faqs?.map((faq) => (
+              <Accordion
+                key={faq?.id}
+                id={faq?.id}
+                headline={faq!.headline!}
+                body={faq!.body!}
+              />
+            ))}
+          </AccordionsWrapper>
+        </FAQContainer>
       </SectionWrapper>
     </>
   )
