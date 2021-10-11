@@ -4,7 +4,12 @@ import React from 'react'
 import { Redirect, useHistory, useRouteMatch } from 'react-router'
 import { LoadingPage } from 'components/LoadingPage'
 import { TopBar } from 'components/TopBar'
-import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
+import {
+  getIsoLocale,
+  useCurrentLocale,
+  useMarket,
+  Market,
+} from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import {
@@ -44,6 +49,7 @@ const getQuoteIdsFromBundleVariant = (bundleVariant: QuoteBundleVariant) =>
 export const OfferNew: React.FC = () => {
   const currentLocale = useCurrentLocale()
   const localeIsoCode = getIsoLocale(currentLocale)
+  const currentMarket = useMarket()
   const variation = useVariation()
   const [isInsuranceToggleEnabled] = useFeature([
     Features.OFFER_PAGE_INSURANCE_TOGGLE,
