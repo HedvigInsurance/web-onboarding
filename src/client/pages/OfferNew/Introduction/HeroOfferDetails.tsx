@@ -6,7 +6,6 @@ import { useTextKeys } from 'utils/textKeys'
 import {
   LARGE_SCREEN_MEDIA_QUERY,
   MEDIUM_SCREEN_MEDIA_QUERY,
-  MEDIUM_SMALL_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
 import { Button } from 'components/buttons'
 import { quoteDetailsHasAddress } from '../utils'
