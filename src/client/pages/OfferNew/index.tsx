@@ -7,8 +7,8 @@ import { TopBar } from 'components/TopBar'
 import {
   getIsoLocale,
   useCurrentLocale,
-  useMarket,
   Market,
+  useMarket,
 } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
