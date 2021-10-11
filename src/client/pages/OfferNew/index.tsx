@@ -4,7 +4,12 @@ import React from 'react'
 import { Redirect, useHistory, useRouteMatch } from 'react-router'
 import { LoadingPage } from 'components/LoadingPage'
 import { TopBar } from 'components/TopBar'
-import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
+import {
+  getIsoLocale,
+  useCurrentLocale,
+  useMarket,
+  Market,
+} from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import {
@@ -19,7 +24,7 @@ import { localePathPattern } from 'l10n/localePathPattern'
 import { useQuoteIds } from '../../utils/hooks/useQuoteIds'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import { getOfferData } from './utils'
-import { AppInfoSection } from './AppInfoSection'
+import { SwitchSafetySection } from './SwitchSafetySection'
 import { Checkout } from './Checkout'
 import { FaqSection } from './FaqSection'
 import { Introduction } from './Introduction'
@@ -38,6 +43,7 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
 export const OfferNew: React.FC = () => {
   const currentLocale = useCurrentLocale()
   const localeIsoCode = getIsoLocale(currentLocale)
+  const currentMarket = useMarket()
   const variation = useVariation()
   const history = useHistory()
   const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
@@ -119,7 +125,7 @@ export const OfferNew: React.FC = () => {
               )}
             </TrackAction>
             <Perils offerData={offerData} />
-            <AppInfoSection />
+            {currentMarket !== Market.Dk && <SwitchSafetySection />}
             <FaqSection />
             <Checkout
               offerData={offerData}
