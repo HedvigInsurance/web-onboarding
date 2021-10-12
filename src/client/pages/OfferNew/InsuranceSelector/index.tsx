@@ -65,9 +65,7 @@ export const InsuranceSelector: React.FC<Props> = ({
             </HeadingBlack>
             <Body>
               {selectedQuoteBundle &&
-                textKeys.OFFER_BUNDLE_SELECTOR_DESCRIPTION({
-                  date: selectedQuoteBundle.bundle.quotes[0].startDate,
-                })}
+                textKeys.OFFER_BUNDLE_SELECTOR_DESCRIPTION()}
             </Body>
           </HeadingWrapper>
           <Selector
