@@ -1,4 +1,5 @@
 import React from 'react'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { IconRoot, IconRootProps } from './IconRoot'
 
 export const SelectedOptionCheckmark: React.FC<IconRootProps> = (props) => (
@@ -10,3 +11,7 @@ export const SelectedOptionCheckmark: React.FC<IconRootProps> = (props) => (
     />
   </IconRoot>
 )
+
+SelectedOptionCheckmark.defaultProps = {
+  color: colorsV3.gray900,
+}
