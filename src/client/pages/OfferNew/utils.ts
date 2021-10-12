@@ -44,7 +44,7 @@ export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
         dataCollectionId: bundleQuote.dataCollectionId,
         currentInsurer: bundleQuote.currentInsurer,
         contractType: bundleQuote.typeOfContract,
-        perils: bundleQuote.perils,
+        perils: bundleQuote.contractPerils,
         insurableLimits: new Map(
           bundleQuote.insurableLimits.map((insurableLimit) => [
             insurableLimit.type,

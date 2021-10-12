@@ -37,14 +37,6 @@ const PerilRowWrapper = styled.div`
   }
 `
 
-export const getIconUrl = (iconPath: string) => {
-  if (typeof window === 'undefined') {
-    return ''
-  }
-
-  return `${window.hedvigClientConfig.contentServiceEndpoint}${iconPath}`
-}
-
 export const Perils: React.FC<Props> = ({ offerData }) => {
   const textKeys = useTextKeys()
 

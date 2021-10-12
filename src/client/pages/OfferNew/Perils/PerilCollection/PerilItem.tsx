@@ -2,7 +2,6 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
 import { Icon } from 'data/graphql'
-import { getIconUrl } from '../index'
 
 interface PerilItemProps {
   title: React.ReactNode
@@ -109,7 +108,7 @@ export const PerilItem: React.FC<PerilItemProps> = ({
   icon,
   onClick,
 }) => {
-  const iconUrl = getIconUrl(icon.variants.light.svgUrl)
+  const iconUrl = icon.variants.light.svgUrl
 
   return (
     <OuterContainer>
