@@ -134,7 +134,7 @@
     "escape-html": "^1.0.3",
     "eventemitter3": "^4.0.7",
     "formik": "^2.0.8",
-    "framer-motion": "^1.6.15",
+    "framer-motion": "^4.1.17",
     "graphql": "^14",
     "graphql-tag": "^2.10.0",
     "hex-to-rgba": "^2.0.1",

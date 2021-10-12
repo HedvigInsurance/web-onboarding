@@ -45,6 +45,7 @@ const Container = styled.button`
   cursor: pointer;
   transition: all 150ms ease-in-out;
   appearance: none;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
 
   @media (min-width: 800px) {
     min-height: 8.75rem;
