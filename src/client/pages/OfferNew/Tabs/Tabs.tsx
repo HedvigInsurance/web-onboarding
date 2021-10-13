@@ -7,8 +7,11 @@ import styled from '@emotion/styled'
 const TabGroup = styled.div`
   border-bottom: 1px solid ${colorsV3.gray500};
   display: flex;
+  overflow: hidden;
+  margin-top: 1rem;
+  margin-bottom: 2.5rem;
+  margin-right: 1rem;
 `
-
 type Props = {
   insurances: {
     id: string
