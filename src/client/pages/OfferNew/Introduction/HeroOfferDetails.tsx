@@ -68,7 +68,8 @@ const Address = styled.div`
   display: inline-block;
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
-    font-size: 2.5rem;
+    font-size: 3rem;
+    line-height: 3.5rem;
     display: block;
   }
 `
