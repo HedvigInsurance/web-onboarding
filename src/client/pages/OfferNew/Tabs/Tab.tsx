@@ -2,8 +2,6 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { UnderlineComponent } from './Underline'
-import { useMediaQuery } from 'react-responsive'
-import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
 const TabContainer = styled.div<{
   selected?: boolean
@@ -35,7 +33,6 @@ export const Tab: React.FC<Props> = ({ onClick, selected, name }) => {
 
   const scroll = () => {
     onClick()
-
     if (ref.current) {
       ref.current.scrollIntoView({
         behavior: 'smooth',
