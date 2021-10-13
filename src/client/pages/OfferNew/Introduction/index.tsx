@@ -56,6 +56,7 @@ const ContentContainer = styled.div`
   padding: 0 1rem;
   display: flex;
   flex-direction: column-reverse;
+  align-items: center;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     padding: 0 2rem;
