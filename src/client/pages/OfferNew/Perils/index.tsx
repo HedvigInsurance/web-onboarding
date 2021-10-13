@@ -49,7 +49,6 @@ export const Perils: React.FC<Props> = ({ offerData }) => {
             <HeadingBlack>{textKeys.COVERAGE_HEADLINE()}</HeadingBlack>
             <Body>{textKeys.COVERAGE_BODY()}</Body>
           </HeadingWrapper>
-          hello
           {offerData.quotes.map((quote) => (
             <PerilRowWrapper key={quote.id}>
               <PerilRow offerQuote={quote} />
