@@ -34,5 +34,5 @@ export const Default = () => {
       prev.map((item) => ({ ...item, selected: item.id === id })),
     )
 
-  return <Tabs insurances={insurances} onChange={handleOnChange}></Tabs>
+  return <Tabs insurances={insurances} onChange={handleOnChange} />
 }

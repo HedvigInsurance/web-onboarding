@@ -1,11 +1,15 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { motion } from 'framer-motion'
+import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
 const Underline = styled(motion.div)`
   width: 100%;
-  top: 2.2rem;
   position: absolute;
+  top: 1.9rem;
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
+    top: 2.125rem;
+  }
 `
 
 export const UnderlineComponent = (
