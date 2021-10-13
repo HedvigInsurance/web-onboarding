@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { Tab } from './Tab'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { AnimateSharedLayout } from 'framer-motion'
 import styled from '@emotion/styled'
 import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import { Tab } from './Tab'
 
 const TabGroup = styled.div`
   border-bottom: 1px solid ${colorsV3.gray500};
