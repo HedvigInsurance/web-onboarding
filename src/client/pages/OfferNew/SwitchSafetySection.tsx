@@ -5,13 +5,8 @@ import React from 'react'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 import { HedvigSymbol } from 'components/icons/HedvigSymbol'
 import { useTextKeys } from 'utils/textKeys'
-import {
-  Column,
-  ColumnSpacing,
-  Container,
-  Heading,
-  PreHeading,
-} from './components'
+import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import { Column, ColumnSpacing, Container, Heading } from './components'
 
 const MEDIA_MIN_WIDTH = '@media (min-width: 550px)'
 
@@ -25,8 +20,12 @@ const OuterWrapper = styled.div`
 `
 
 const BodyText = styled.p`
-  margin: 2rem 0;
+  margin: 0.5rem 0 1.5rem;
   color: ${colorsV3.gray700};
+
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
+    margin: 1.5rem 0 3.5rem;
+  }
 `
 
 const NotificationArea = styled.div`
@@ -200,9 +199,6 @@ export const SwitchSafetySection: React.FC = () => {
     <OuterWrapper>
       <Container>
         <Column>
-          <PreHeading>
-            {textKeys.OFFER_SWITCHER_SAFETY_PRE_HEADING()}
-          </PreHeading>
           <Heading>{textKeys.OFFER_SWITCHER_SAFETY_HEADING()}</Heading>
 
           <BodyText>{textKeys.OFFER_SWITCHER_SAFETY_PARAGRAPH()}</BodyText>

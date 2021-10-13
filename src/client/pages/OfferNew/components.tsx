@@ -64,7 +64,11 @@ export const PreHeading = styled('div')`
 `
 
 export const HeadingWrapper = styled('div')`
-  margin-bottom: 3.875rem;
+  margin-bottom: 1.5rem;
+
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
+    margin-bottom: 3.5rem;
+  }
 `
 
 export const Body = styled('p')`
@@ -72,7 +76,7 @@ export const Body = styled('p')`
   font-size: 1rem;
   line-height: 1.5;
 
-  margin-top: 0.5rem;
+  margin: 0.5rem 0 0;
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     font-size: 1.125rem;

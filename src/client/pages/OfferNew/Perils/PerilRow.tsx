@@ -7,7 +7,7 @@ import { OfferQuote } from 'pages/OfferNew/types'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
 const InsuranceTypeHeadline = styled.div`
-  padding: 1rem 0;
+  padding-bottom: 1rem;
   font-size: 1.375rem;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
