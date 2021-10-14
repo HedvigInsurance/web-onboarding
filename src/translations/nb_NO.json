@@ -299,7 +299,9 @@
   "CHECKOUT_CREDIT_CHECK_INFO_HEADER": "Vi kredittvurderer nye kunder",
   "CHECKOUT_CREDIT_CHECK_INFO_CONTENT": "Kunder med betalingsnamerkninger betaler i enkelte tilfeller forskuddsvis. Dersom dette gjelder deg vil du få beskjed ved kontakt med oss.",
   "CHECKOUT_SIGN_FAIL_HEADER": "Vi kan ikke tilby deg kjøp",
-  "CHECKOUT_SIGN_FAIL_CONTENT": "Vi kan dessverre ikke tilby deg kjøp av forsikring på nett. Vennligst ta kontakt på epost@hedvig.com så hjelper vi deg videre!",
+  "CHECKOUT_SIGN_FAIL_CONTENT": "Vi kan dessverre ikke tilby deg kjøp av forsikring på nett. Vennligst ta kontakt på betaling@hedvig.com så hjelper vi deg videre!",
   "OFFER_BUNDLE_SELECTOR_TITLE": "Forsikringspakken din",
-  "OFFER_BUNDLE_SELECTOR_DESCRIPTION": ""
+  "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "",
+  "OFFER_APP_PROMOTION_HEADING": "En forsikrings-app som løser problemene dine",
+  "OFFER_APP_PROMOTION_PARAGRAPH": ""
 }
