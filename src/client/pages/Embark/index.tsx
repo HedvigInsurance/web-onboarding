@@ -223,7 +223,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
     },
   ) => {
     const filteredArray = Object.entries(payload).filter(
-      ([key, value]) => value !== undefined,
+      (property) => property[1] !== undefined,
     )
 
     const payloadObject = filteredArray.reduce((prev, item) => {
