@@ -10,7 +10,6 @@ import { InfoIcon } from 'components/icons/Info'
 import { Modal, ModalProps } from 'components/ModalNew'
 import { PerilV2 } from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
-import { getIconUrl } from './index'
 
 const TRANSITION_MS = 250
 
@@ -365,7 +364,7 @@ export const PerilModal: React.FC<PerilModalProps & ModalProps> = ({
                 }
               >
                 <img
-                  src={getIconUrl(peril.icon.variants.light.svgUrl)}
+                  src={peril.icon.variants.light.svgUrl}
                   alt=""
                   width={24}
                   height={24}

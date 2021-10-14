@@ -8,6 +8,7 @@ export interface ModalProps {
   isVisible: boolean
   dynamicHeight?: boolean
   onClose: () => void
+  className?: string
 }
 
 const Wrapper = styled(motion.div)`
@@ -110,6 +111,7 @@ const CloseButton = styled('button')`
 export const Modal: React.FC<ModalProps> = ({
   isVisible,
   dynamicHeight,
+  className,
   onClose,
   children,
 }) => {
@@ -153,6 +155,7 @@ export const Modal: React.FC<ModalProps> = ({
       />
       <ModalContainer
         dynamicHeight={dynamicHeight}
+        className={className}
         initial={'hidden'}
         animate={isVisible ? 'visible' : 'hidden'}
         transition={{

@@ -1561,10 +1561,12 @@ export type BundledQuoteInsurableLimitsArgs = {
 
 export type BundledQuoteTermsAndConditionsArgs = {
   locale: Locale
+  date?: Maybe<Scalars['LocalDate']>
 }
 
 export type BundledQuoteInsuranceTermsArgs = {
   locale: Locale
+  date?: Maybe<Scalars['LocalDate']>
 }
 
 export type BundledQuoteDetailsTableArgs = {
@@ -1752,13 +1754,10 @@ export enum ClaimOutcome {
   NotCovered = 'NOT_COVERED',
 }
 
-/** A page in the `How Claims Work`-screen in the app */
 export type ClaimsExplainerPage = {
   __typename?: 'ClaimsExplainerPage'
   id: Scalars['ID']
-  /** Illustration shown for the page */
   illustration: Icon
-  /** Text for the body shown below the title */
   body: Scalars['String']
 }
 
@@ -1876,10 +1875,12 @@ export type CompleteQuoteInsurableLimitsArgs = {
 
 export type CompleteQuoteTermsAndConditionsArgs = {
   locale: Locale
+  date?: Maybe<Scalars['LocalDate']>
 }
 
 export type CompleteQuoteInsuranceTermsArgs = {
   locale: Locale
+  date?: Maybe<Scalars['LocalDate']>
 }
 
 export type CompleteQuoteDetailsTableArgs = {
@@ -1955,6 +1956,7 @@ export type ContractContractPerilsArgs = {
 
 export type ContractInsuranceTermsArgs = {
   locale: Locale
+  date?: Maybe<Scalars['LocalDate']>
 }
 
 export type ContractInsurableLimitsArgs = {
@@ -1963,6 +1965,7 @@ export type ContractInsurableLimitsArgs = {
 
 export type ContractTermsAndConditionsArgs = {
   locale: Locale
+  date?: Maybe<Scalars['LocalDate']>
 }
 
 export type ContractPerilsArgs = {
@@ -2557,6 +2560,7 @@ export type CrossSellEmbarkEmbarkStoryArgs = {
 export type CrossSellInfo = {
   __typename?: 'CrossSellInfo'
   displayName: Scalars['String']
+  aboutSection: Scalars['String']
   contractPerils: Array<PerilV2>
   insuranceTerms: Array<InsuranceTerm>
   highlights: Array<ContractHighlight>
@@ -2953,6 +2957,7 @@ export type EmbarkAction =
   | EmbarkMultiAction
   | EmbarkDatePickerAction
   | EmbarkAddressAutocompleteAction
+  | EmbarkAudioRecorderAction
 
 export type EmbarkActionCore = {
   component: Scalars['String']
@@ -3064,6 +3069,7 @@ export enum EmbarkApiGraphQlSingleVariableCasting {
   String = 'string',
   Int = 'int',
   Boolean = 'boolean',
+  File = 'file',
 }
 
 export type EmbarkApiGraphQlVariable =
@@ -3099,6 +3105,19 @@ export type EmbarkApiPersonalInformationData = {
   match: EmbarkLink
   noMatch: EmbarkLink
   error: EmbarkLink
+}
+
+export type EmbarkAudioRecorderAction = EmbarkActionCore & {
+  __typename?: 'EmbarkAudioRecorderAction'
+  component: Scalars['String']
+  data: EmbarkAudioRecorderActionData
+}
+
+export type EmbarkAudioRecorderActionData = {
+  __typename?: 'EmbarkAudioRecorderActionData'
+  storeKey: Scalars['String']
+  label: Scalars['String']
+  next: EmbarkLink
 }
 
 export type EmbarkComputedStoreValue = {
@@ -3612,7 +3631,7 @@ export type Emergency = {
   __typename?: 'Emergency'
   color: HedvigColor
   title: Scalars['String']
-  /** Phone Number on E.164-format  */
+  /**  Phone Number on E.164-format  */
   emergencyNumber: Scalars['String']
 }
 
@@ -7206,7 +7225,6 @@ export type Mutation = {
   removeAllDiscountCodes: RemoveCampaignCodeResult
   updateReferralCampaignCode: UpdateReferralCampaignCodeResult
   createQuote: CreateQuoteResult
-  createQuoteV2: CreateQuoteResult
   editQuote: CreateQuoteResult
   removeCurrentInsurer: CreateQuoteResult
   removeStartDate: CreateQuoteResult
@@ -7319,10 +7337,6 @@ export type MutationUpdateReferralCampaignCodeArgs = {
 }
 
 export type MutationCreateQuoteArgs = {
-  input: CreateQuoteInput
-}
-
-export type MutationCreateQuoteV2Args = {
   input: CreateQuoteInput
 }
 
@@ -7498,14 +7512,10 @@ export type MutationSignOrApproveQuotesArgs = {
   quoteIds: Array<Scalars['ID']>
 }
 
-/** A page in the `What's new`-screen in the app */
 export type News = {
   __typename?: 'News'
-  /** Illustration shown for the page */
   illustration: Icon
-  /** Text for the title of the page */
   title: Scalars['String']
-  /** Text for the paragraph shown below the title */
   paragraph: Scalars['String']
 }
 
@@ -7819,9 +7829,8 @@ export type Query = {
   welcome: Array<Welcome>
   perils: Array<PerilV2>
   insuranceTerms: Array<InsuranceTerm>
-  /** Returns termsAndConditions from promise-cms (from product-pricing) */
+  /** Returns termsAndConditions from promise-cms */
   termsAndConditions: InsuranceTerm
-  /** other external insurance providers, use to figure out if we can switch and or fetch data externally */
   insuranceProviders: Array<InsuranceProvider>
   insurableLimits: Array<InsurableLimit>
   referralTerms: ReferralTerm
@@ -9902,14 +9911,10 @@ export type VisibleNoDiscount = {
   _?: Maybe<Scalars['Boolean']>
 }
 
-/** A page in the `Welcome`-screen in the app */
 export type Welcome = {
   __typename?: 'Welcome'
-  /** Illustration shown for the page */
   illustration: Icon
-  /** Text for the title of the page */
   title: Scalars['String']
-  /** Text for the paragraph shown below the title */
   paragraph: Scalars['String']
 }
 
@@ -10606,7 +10611,7 @@ export type SignQuotesMutation = { __typename?: 'Mutation' } & {
     | { __typename: 'SimpleSignSession' }
     | ({ __typename: 'FailedToStartSign' } & Pick<
         FailedToStartSign,
-        'errorMessage'
+        'errorMessage' | 'errorCode'
       >)
 }
 
@@ -12229,6 +12234,7 @@ export const SignQuotesDocument = gql`
       __typename
       ... on FailedToStartSign {
         errorMessage
+        errorCode
       }
       ... on SwedishBankIdSession {
         autoStartToken
