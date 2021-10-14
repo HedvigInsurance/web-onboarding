@@ -5,7 +5,6 @@ mutation EditQuote($input: EditQuoteInput!) {
     }
     ... on UnderwritingLimitsHit {
       limits {
-        description
         code
       }
     }
