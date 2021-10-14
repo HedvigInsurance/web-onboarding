@@ -55,12 +55,6 @@ export const productsData: ProductsData = {
       headline: 'STARTPAGE_CONTENTS_HEADLINE',
       paragraph: 'STARTPAGE_CONTENTS_BODY',
     },
-    {
-      id: 'norwegianTravel',
-      linkSlug: '/travel',
-      headline: 'STARTPAGE_TRAVEL_HEADLINE',
-      paragraph: 'STARTPAGE_TRAVEL_BODY',
-    },
   ],
   DK: [
     {
