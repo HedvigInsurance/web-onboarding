@@ -1,26 +1,27 @@
-import React from 'react'
+import React, { createRef } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { UnderlineComponent } from './Underline'
 
-const TabContainer = styled.div<{
+const TabContainer = styled.button<{
   selected?: boolean
   focused?: boolean
 }>`
+  background-color: transparent;
+  border: 0;
   color: ${({ selected }) => (selected ? colorsV3.gray900 : colorsV3.gray500)};
   cursor: pointer;
   display: flex;
   font-size: 1.25rem;
-  line-height: 1.75rem;
-  padding-bottom: 0.25rem;
-  position: relative;
-  text-transform: capitalize;
+  line-height: 1.4;
   margin-right: 1rem;
+  padding: 0 0 0.25rem 0;
+  position: relative;
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     font-size: 1.5rem;
-    line-height: 2rem;
+    line-height: 1.33;
     margin-right: 2.5rem;
   }
 
@@ -36,7 +37,7 @@ type Props = {
 }
 
 export const Tab: React.FC<Props> = ({ onClick, selected, name }) => {
-  const ref = React.useRef<HTMLDivElement>()
+  const ref = createRef<HTMLButtonElement>()
 
   const scroll = () => {
     onClick()
@@ -50,11 +51,7 @@ export const Tab: React.FC<Props> = ({ onClick, selected, name }) => {
   }
 
   return (
-    <TabContainer
-      onClick={() => scroll()}
-      selected={selected}
-      ref={ref as React.MutableRefObject<HTMLDivElement>}
-    >
+    <TabContainer onClick={() => scroll()} selected={selected} ref={ref}>
       {name}
       {selected ? UnderlineComponent : null}
     </TabContainer>

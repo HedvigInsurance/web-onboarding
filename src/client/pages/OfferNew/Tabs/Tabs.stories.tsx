@@ -5,11 +5,13 @@ const mockInsurances = [
     id: '1',
     name: 'Hemförsäkring',
     selected: true,
+    content: 'one',
   },
   {
     id: '2',
     name: 'Olycksfallsförsäkring',
     selected: false,
+    content: 'two ',
   },
   {
     id: '3',
