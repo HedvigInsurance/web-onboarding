@@ -69,7 +69,7 @@ const Address = styled.div`
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     font-size: 3rem;
-    line-height: 3.5rem;
+    line-height: 1.17;
     display: block;
   }
 `
