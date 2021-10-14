@@ -35,7 +35,7 @@ export const Tabs: React.FC<Props> = ({ insurances }) => {
             onClick={() => setSelected(item)}
             selected={selected === item}
             name={item.name}
-          ></Tab>
+          />
         ))}
       </AnimateSharedLayout>
     </TabGroup>
