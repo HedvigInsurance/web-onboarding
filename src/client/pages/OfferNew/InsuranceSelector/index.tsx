@@ -63,10 +63,7 @@ export const InsuranceSelector: React.FC<Props> = ({
             <HeadingBlack>
               {textKeys.OFFER_BUNDLE_SELECTOR_TITLE()}
             </HeadingBlack>
-            <Body>
-              {selectedQuoteBundle &&
-                textKeys.OFFER_BUNDLE_SELECTOR_DESCRIPTION()}
-            </Body>
+            <Body>{textKeys.OFFER_BUNDLE_SELECTOR_DESCRIPTION()}</Body>
           </HeadingWrapper>
           <Selector
             insurances={insurances}

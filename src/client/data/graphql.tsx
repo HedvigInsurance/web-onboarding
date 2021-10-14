@@ -10294,7 +10294,7 @@ export type QuoteDataFragment = { __typename?: 'BundledQuote' } & Pick<
       MonetaryAmountV2,
       'amount' | 'currency'
     >
-    perils: Array<
+    contractPerils: Array<
       { __typename?: 'PerilV2' } & Pick<
         PerilV2,
         'title' | 'description' | 'covered' | 'exceptions' | 'info'
@@ -10727,7 +10727,7 @@ export const QuoteDataFragmentDoc = gql`
     email
     typeOfContract
     displayName(locale: $locale)
-    perils(locale: $locale) {
+    contractPerils(locale: $locale) {
       title
       description
       covered

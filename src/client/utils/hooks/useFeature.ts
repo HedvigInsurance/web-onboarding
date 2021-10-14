@@ -36,11 +36,10 @@ const isFeatureEnabled = ({
   env,
   market,
 }: {
-  config?: FeatureConfig
+  config: FeatureConfig
   env: AppEnvironment
   market: Market
 }) => {
-  if (!config) return false
   return config.envs.includes(env) && config.markets.includes(market)
 }
 
@@ -49,7 +48,9 @@ export const useFeature = (features: Features[] = []) => {
   const env = window.hedvigClientConfig.appEnvironment
 
   return features.reduce((acc, feature) => {
-    const featureConfig = Config.find((x) => x.name === feature)
+    const featureConfig = Config.find(
+      (x) => x.name === feature,
+    ) as FeatureConfig
     const isEnabled = isFeatureEnabled({ config: featureConfig, env, market })
     return [...acc, isEnabled]
   }, [] as boolean[])
