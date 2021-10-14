@@ -15,7 +15,7 @@ import { Selector } from './Selector'
 interface Props {
   variants: QuoteBundleVariant[]
   selectedQuoteBundle?: QuoteBundleVariant
-  onChange: (bundle?: QuoteBundleVariant) => void
+  onChange: (bundle: QuoteBundleVariant) => void
 }
 
 export const InsuranceSelector: React.FC<Props> = ({
@@ -67,7 +67,10 @@ export const InsuranceSelector: React.FC<Props> = ({
           </HeadingWrapper>
           <Selector
             insurances={insurances}
-            onChange={(id: string) => onChange(variantMap[id])}
+            onChange={(id: string) => {
+              const variant = variantMap[id]
+              variant && onChange(variant)
+            }}
           />
         </Column>
         <ColumnSpacing />

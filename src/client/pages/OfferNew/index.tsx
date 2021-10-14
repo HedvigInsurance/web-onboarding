@@ -1,6 +1,6 @@
 import { History } from 'history'
 import { SemanticEvents } from 'quepasa'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Redirect, useHistory, useRouteMatch } from 'react-router'
 import { LoadingPage } from 'components/LoadingPage'
 import { TopBar } from 'components/TopBar'
@@ -61,6 +61,10 @@ const getBundleVariantFromQuoteIds = (
   )
 }
 
+const getQuoteIdsFromBundleVariant = (bundleVariant: QuoteBundleVariant) => {
+  return bundleVariant.bundle.quotes.map((q) => q.id)
+}
+
 export const OfferNew: React.FC = () => {
   const currentLocale = useCurrentLocale()
   const localeIsoCode = getIsoLocale(currentLocale)
@@ -89,41 +93,21 @@ export const OfferNew: React.FC = () => {
     skip: quoteIdsIsLoading,
   })
 
-  const bundleVariants = React.useMemo(
-    () =>
-      (data?.quoteBundle.possibleVariations as Array<QuoteBundleVariant>) ?? [],
-    [data?.quoteBundle.possibleVariations],
-  )
+  const bundleVariants = (data?.quoteBundle.possibleVariations ??
+    []) as QuoteBundleVariant[]
   const canShowInsuranceSelector =
     isInsuranceToggleEnabled && bundleVariants.length > 1
-  const [selectedBundleVariant, setSelectedBundleVariant] = React.useState<
-    QuoteBundleVariant
-  >()
 
-  useEffect(() => {
-    if (!selectedBundleVariant) {
-      return setSelectedBundleVariant(
-        getBundleVariantFromQuoteIds(selectedQuoteIds, bundleVariants),
-      )
-    }
+  const selectedBundleVariant =
+    getBundleVariantFromQuoteIds(selectedQuoteIds, bundleVariants) ||
+    bundleVariants?.[0]
 
-    const matchingVariant = bundleVariants.find(
-      ({ id }) => id === selectedBundleVariant.id,
-    )
-    if (!matchingVariant) return setSelectedBundleVariant(bundleVariants[0])
-    return setSelectedBundleVariant(matchingVariant)
-  }, [bundleVariants, selectedBundleVariant, selectedQuoteIds])
-
-  useEffect(() => {
-    if (
-      selectedBundleVariant &&
-      !isBundleVariantMatchingQuoteIds(selectedBundleVariant, selectedQuoteIds)
-    ) {
-      setSelectedQuoteIds(
-        selectedBundleVariant.bundle.quotes.map((quote) => quote.id),
-      )
-    }
-  }, [selectedBundleVariant, selectedQuoteIds, setSelectedQuoteIds])
+  const onInsuranceSelectorChange = (
+    selectedBundleVariant: QuoteBundleVariant,
+  ) => {
+    const quoteIds = getQuoteIdsFromBundleVariant(selectedBundleVariant)
+    setSelectedQuoteIds(quoteIds)
+  }
 
   const checkoutMatch = useRouteMatch(`${localePathPattern}/new-member/sign`)
   const toggleCheckout = createToggleCheckout(history, currentLocale)
@@ -203,7 +187,7 @@ export const OfferNew: React.FC = () => {
               <InsuranceSelector
                 variants={bundleVariants}
                 selectedQuoteBundle={selectedBundleVariant}
-                onChange={setSelectedBundleVariant}
+                onChange={onInsuranceSelectorChange}
               />
             )}
             <Perils offerData={offerData} />
