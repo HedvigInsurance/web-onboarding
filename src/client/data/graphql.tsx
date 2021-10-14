@@ -37,6 +37,7 @@ export type Scalars = {
   UUID: any
   TimeStamp: any
   JSONObject: any
+  QuoteData: any
   /** Raw JSON value */
   Json: any
   /** The Long scalar type represents non-fractional signed whole numeric values. Long can represent values between -(2^63) and 2^63 - 1. */
@@ -166,6 +167,11 @@ export type ActiveStatus = {
   __typename?: 'ActiveStatus'
   pastInception?: Maybe<Scalars['LocalDate']>
   upcomingAgreementChange?: Maybe<UpcomingAgreementChange>
+}
+
+export type AddCampaignError = {
+  __typename?: 'AddCampaignError'
+  errorCode: Scalars['String']
 }
 
 export type AdditionalPaymentsDetailsRequest = {
@@ -1561,10 +1567,12 @@ export type BundledQuoteInsurableLimitsArgs = {
 
 export type BundledQuoteTermsAndConditionsArgs = {
   locale: Locale
+  date?: Maybe<Scalars['LocalDate']>
 }
 
 export type BundledQuoteInsuranceTermsArgs = {
   locale: Locale
+  date?: Maybe<Scalars['LocalDate']>
 }
 
 export type BundledQuoteDetailsTableArgs = {
@@ -1579,8 +1587,8 @@ export type Campaign = {
   __typename?: 'Campaign'
   incentive?: Maybe<Incentive>
   code: Scalars['String']
-  /** Will be null if campaign is of type referralCampaign */
   owner?: Maybe<CampaignOwner>
+  expiresAt?: Maybe<Scalars['LocalDate']>
   displayValue?: Maybe<Scalars['String']>
 }
 
@@ -1752,13 +1760,10 @@ export enum ClaimOutcome {
   NotCovered = 'NOT_COVERED',
 }
 
-/** A page in the `How Claims Work`-screen in the app */
 export type ClaimsExplainerPage = {
   __typename?: 'ClaimsExplainerPage'
   id: Scalars['ID']
-  /** Illustration shown for the page */
   illustration: Icon
-  /** Text for the body shown below the title */
   body: Scalars['String']
 }
 
@@ -1876,10 +1881,12 @@ export type CompleteQuoteInsurableLimitsArgs = {
 
 export type CompleteQuoteTermsAndConditionsArgs = {
   locale: Locale
+  date?: Maybe<Scalars['LocalDate']>
 }
 
 export type CompleteQuoteInsuranceTermsArgs = {
   locale: Locale
+  date?: Maybe<Scalars['LocalDate']>
 }
 
 export type CompleteQuoteDetailsTableArgs = {
@@ -1955,6 +1962,7 @@ export type ContractContractPerilsArgs = {
 
 export type ContractInsuranceTermsArgs = {
   locale: Locale
+  date?: Maybe<Scalars['LocalDate']>
 }
 
 export type ContractInsurableLimitsArgs = {
@@ -1963,6 +1971,7 @@ export type ContractInsurableLimitsArgs = {
 
 export type ContractTermsAndConditionsArgs = {
   locale: Locale
+  date?: Maybe<Scalars['LocalDate']>
 }
 
 export type ContractPerilsArgs = {
@@ -2469,6 +2478,46 @@ export type CreateNorwegianTravelInput = {
   isYouth: Scalars['Boolean']
 }
 
+export type CreateOnboardingQuoteError = {
+  __typename?: 'CreateOnboardingQuoteError'
+  limits: Array<UnderwritingLimit>
+}
+
+export type CreateOnboardingQuoteInput = {
+  id?: Maybe<Scalars['ID']>
+  firstName: Scalars['String']
+  lastName: Scalars['String']
+  email?: Maybe<Scalars['String']>
+  dataCollectionId?: Maybe<Scalars['ID']>
+  phoneNumber?: Maybe<Scalars['String']>
+  currentInsurer?: Maybe<Scalars['String']>
+  ssn?: Maybe<Scalars['String']>
+  birthDate?: Maybe<Scalars['LocalDate']>
+  startDate?: Maybe<Scalars['LocalDate']>
+  swedishApartmentData?: Maybe<Scalars['QuoteData']>
+  swedishHouseData?: Maybe<Scalars['QuoteData']>
+  swedishAccidentData?: Maybe<Scalars['QuoteData']>
+  norwegianHomeContentsData?: Maybe<Scalars['QuoteData']>
+  norwegianTravelData?: Maybe<Scalars['QuoteData']>
+  danishHomeContentsData?: Maybe<Scalars['QuoteData']>
+  danishAccidentData?: Maybe<Scalars['QuoteData']>
+  danishTravelData?: Maybe<Scalars['QuoteData']>
+}
+
+export type CreateOnboardingQuoteResult =
+  | CreateOnboardingQuoteSuccess
+  | CreateOnboardingQuoteError
+
+export type CreateOnboardingQuoteSuccess = {
+  __typename?: 'CreateOnboardingQuoteSuccess'
+  id: Scalars['ID']
+}
+
+export type CreateOnboardingSessionInput = {
+  country: Scalars['String']
+  locale: Scalars['String']
+}
+
 export type CreateQuoteInput = {
   id: Scalars['ID']
   firstName: Scalars['String']
@@ -2954,6 +3003,7 @@ export type EmbarkAction =
   | EmbarkMultiAction
   | EmbarkDatePickerAction
   | EmbarkAddressAutocompleteAction
+  | EmbarkAudioRecorderAction
 
 export type EmbarkActionCore = {
   component: Scalars['String']
@@ -3065,6 +3115,7 @@ export enum EmbarkApiGraphQlSingleVariableCasting {
   String = 'string',
   Int = 'int',
   Boolean = 'boolean',
+  File = 'file',
 }
 
 export type EmbarkApiGraphQlVariable =
@@ -3100,6 +3151,19 @@ export type EmbarkApiPersonalInformationData = {
   match: EmbarkLink
   noMatch: EmbarkLink
   error: EmbarkLink
+}
+
+export type EmbarkAudioRecorderAction = EmbarkActionCore & {
+  __typename?: 'EmbarkAudioRecorderAction'
+  component: Scalars['String']
+  data: EmbarkAudioRecorderActionData
+}
+
+export type EmbarkAudioRecorderActionData = {
+  __typename?: 'EmbarkAudioRecorderActionData'
+  storeKey: Scalars['String']
+  label: Scalars['String']
+  next: EmbarkLink
 }
 
 export type EmbarkComputedStoreValue = {
@@ -3613,7 +3677,7 @@ export type Emergency = {
   __typename?: 'Emergency'
   color: HedvigColor
   title: Scalars['String']
-  /** Phone Number on E.164-format  */
+  /**  Phone Number on E.164-format  */
   emergencyNumber: Scalars['String']
 }
 
@@ -7274,6 +7338,12 @@ export type Mutation = {
   createAddressChangeQuotes: AddressChangeQuoteResult
   /** Create all the quotes needed as a result of one of more Cross-Sells */
   createCrossSellQuotes: CrossSellQuotesResult
+  onboardingSession_create: Scalars['ID']
+  onboardingSession_createQuote: CreateOnboardingQuoteResult
+  onboardingSession_addCampaign?: Maybe<AddCampaignError>
+  onboardingSession_removeCampaign: Scalars['Boolean']
+  onboardingSession_startSigning: OnboardingStartSignResponse
+  onboardingSession_createAccessToken: OnboardingSessionAccessTokenResult
   signOrApproveQuotes: SignOrApprove
 }
 
@@ -7490,18 +7560,41 @@ export type MutationCreateCrossSellQuotesArgs = {
   input: CrossSellQuotesInput
 }
 
+export type MutationOnboardingSession_CreateArgs = {
+  input: CreateOnboardingSessionInput
+}
+
+export type MutationOnboardingSession_CreateQuoteArgs = {
+  id: Scalars['ID']
+  input: CreateOnboardingQuoteInput
+}
+
+export type MutationOnboardingSession_AddCampaignArgs = {
+  id: Scalars['ID']
+  campaignCode: Scalars['String']
+}
+
+export type MutationOnboardingSession_RemoveCampaignArgs = {
+  id: Scalars['ID']
+}
+
+export type MutationOnboardingSession_StartSigningArgs = {
+  id: Scalars['ID']
+  quoteIds?: Maybe<Array<Scalars['ID']>>
+}
+
+export type MutationOnboardingSession_CreateAccessTokenArgs = {
+  id: Scalars['ID']
+}
+
 export type MutationSignOrApproveQuotesArgs = {
   quoteIds: Array<Scalars['ID']>
 }
 
-/** A page in the `What's new`-screen in the app */
 export type News = {
   __typename?: 'News'
-  /** Illustration shown for the page */
   illustration: Icon
-  /** Text for the title of the page */
   title: Scalars['String']
-  /** Text for the paragraph shown below the title */
   paragraph: Scalars['String']
 }
 
@@ -7617,6 +7710,55 @@ export enum OfferStatus {
   Fail = 'FAIL',
 }
 
+export type OnboardingSession = {
+  __typename?: 'OnboardingSession'
+  id: Scalars['ID']
+  campaign?: Maybe<Campaign>
+  bundle?: Maybe<QuoteBundle>
+  signing?: Maybe<OnboardingSessionSigning>
+  tokenCreationUrl?: Maybe<Scalars['String']>
+}
+
+export type OnboardingSessionAccessTokenResult = {
+  __typename?: 'OnboardingSessionAccessTokenResult'
+  accessToken: Scalars['String']
+}
+
+export type OnboardingSessionSigning = {
+  __typename?: 'OnboardingSessionSigning'
+  status: OnboardingSessionSignStatus
+  statusText?: Maybe<Scalars['String']>
+}
+
+export enum OnboardingSessionSignStatus {
+  Pending = 'PENDING',
+  Signed = 'SIGNED',
+  Completed = 'COMPLETED',
+  Failed = 'FAILED',
+}
+
+export type OnboardingSigningFailure = {
+  __typename?: 'OnboardingSigningFailure'
+  errorMessage: Scalars['String']
+  errorCode: Scalars['String']
+}
+
+export type OnboardingSigningSuccess = {
+  __typename?: 'OnboardingSigningSuccess'
+  status?: Maybe<OnboardingSessionSignStatus>
+}
+
+export type OnboardingSigningSwedishBankId = {
+  __typename?: 'OnboardingSigningSwedishBankId'
+  status?: Maybe<OnboardingSessionSignStatus>
+  autoStartToken?: Maybe<Scalars['String']>
+}
+
+export type OnboardingStartSignResponse =
+  | OnboardingSigningSwedishBankId
+  | OnboardingSigningSuccess
+  | OnboardingSigningFailure
+
 /** Information about pagination in a connection. */
 export type PageInfo = {
   __typename?: 'PageInfo'
@@ -7722,6 +7864,13 @@ export type PreviousInsurer = {
   switchable: Scalars['Boolean']
 }
 
+export type Price = {
+  __typename?: 'Price'
+  monthlyGross: MonetaryAmountV2
+  monthlyDiscount: MonetaryAmountV2
+  monthlyNet: MonetaryAmountV2
+}
+
 export enum Project {
   NotificationService = 'NotificationService',
   Underwriter = 'Underwriter',
@@ -7815,9 +7964,8 @@ export type Query = {
   welcome: Array<Welcome>
   perils: Array<PerilV2>
   insuranceTerms: Array<InsuranceTerm>
-  /** Returns termsAndConditions from promise-cms (from product-pricing) */
+  /** Returns termsAndConditions from promise-cms */
   termsAndConditions: InsuranceTerm
-  /** other external insurance providers, use to figure out if we can switch and or fetch data externally */
   insuranceProviders: Array<InsuranceProvider>
   insurableLimits: Array<InsurableLimit>
   referralTerms: ReferralTerm
@@ -7865,6 +8013,7 @@ export type Query = {
   /** returns names of all available embark stories */
   embarkStoryNames: Array<Scalars['String']>
   embarkStories: Array<EmbarkStoryMetadata>
+  onboardingSession: OnboardingSession
 }
 
 export type QueryFaqsArgs = {
@@ -7996,6 +8145,7 @@ export type QueryInsuranceTermsArgs = {
 export type QueryTermsAndConditionsArgs = {
   contractType: TypeOfContract
   locale: Locale
+  date?: Maybe<Scalars['LocalDate']>
 }
 
 export type QueryInsuranceProvidersArgs = {
@@ -8071,18 +8221,22 @@ export type QueryEmbarkStoriesArgs = {
   locale: Scalars['String']
 }
 
+export type QueryOnboardingSessionArgs = {
+  id: Scalars['ID']
+}
+
 export type Quote = CompleteQuote | IncompleteQuote
 
 export type QuoteBundle = {
   __typename?: 'QuoteBundle'
   quotes: Array<BundledQuote>
   bundleCost: InsuranceCost
+  /** All possible other variations of the current set of bundle ids */
+  possibleVariations: Array<QuoteBundleVariant>
   inception: QuoteBundleInception
   frequentlyAskedQuestions: Array<Faq>
   appConfiguration: QuoteBundleAppConfiguration
   displayName: Scalars['String']
-  /** All possible other variations of the current set of bundle ids */
-  possibleVariations: Array<QuoteBundleVariant>
 }
 
 export type QuoteBundleFrequentlyAskedQuestionsArgs = {
@@ -9071,8 +9225,6 @@ export enum TypeOfContractGradientOption {
 
 export type UnderwritingLimit = {
   __typename?: 'UnderwritingLimit'
-  /** @deprecated Use code */
-  description: Scalars['String']
   code: Scalars['String']
 }
 
@@ -9897,14 +10049,10 @@ export type VisibleNoDiscount = {
   _?: Maybe<Scalars['Boolean']>
 }
 
-/** A page in the `Welcome`-screen in the app */
 export type Welcome = {
   __typename?: 'Welcome'
-  /** Illustration shown for the page */
   illustration: Icon
-  /** Text for the title of the page */
   title: Scalars['String']
-  /** Text for the paragraph shown below the title */
   paragraph: Scalars['String']
 }
 
@@ -10065,10 +10213,7 @@ export type EditQuoteMutation = { __typename?: 'Mutation' } & {
     | ({ __typename?: 'CompleteQuote' } & Pick<CompleteQuote, 'id'>)
     | ({ __typename?: 'UnderwritingLimitsHit' } & {
         limits: Array<
-          { __typename?: 'UnderwritingLimit' } & Pick<
-            UnderwritingLimit,
-            'description' | 'code'
-          >
+          { __typename?: 'UnderwritingLimit' } & Pick<UnderwritingLimit, 'code'>
         >
       })
 }
@@ -11029,7 +11174,6 @@ export const EditQuoteDocument = gql`
       }
       ... on UnderwritingLimitsHit {
         limits {
-          description
           code
         }
       }
