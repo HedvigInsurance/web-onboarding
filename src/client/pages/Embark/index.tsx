@@ -216,6 +216,39 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
 
   const textKeys = useTextKeys()
 
+  const trackPassageData = (
+    eventName: string,
+    payload: {
+      [key: string]: any
+    },
+  ) => {
+    const filteredArray = Object.entries(payload).filter(
+      ([key, value]) => value !== undefined,
+    )
+
+    const payloadObject = filteredArray.reduce((prev, item) => {
+      const [key, value] = item
+      return { ...prev, [key]: value }
+    }, {})
+
+    pushToGTMDataLayer({
+      event: eventName,
+      passageData: {
+        originatedFromEmbarkStory: props.name,
+        ...payloadObject,
+      },
+    })
+
+    // Push data to Segment
+    const castedWindow = window as any
+    if (castedWindow && castedWindow.analytics) {
+      castedWindow.analytics.track(eventName, {
+        originatedFromEmbarkStory: props.name,
+        ...payloadObject,
+      })
+    }
+  }
+
   React.useEffect(() => {
     ;(async () => {
       if (!props.name) {
@@ -342,35 +375,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                     addressAutocompleteQuery: resolveAddressAutocomplete,
                     externalInsuranceProviderProviderStatus: resolveExternalInsuranceProviderProviderStatus,
                     externalInsuranceProviderStartSession: resolveExternalInsuranceProviderStartSession,
-                    track: (eventName, payload) => {
-                      const filteredArray = Object.entries(payload).filter(
-                        ([key, value]) => value !== undefined,
-                      )
-
-                      const payloadObject = filteredArray.reduce(
-                        (prev, item) => {
-                          const [key, value] = item
-                          return { ...prev, [key]: value }
-                        },
-                        {},
-                      )
-
-                      pushToGTMDataLayer({
-                        event: eventName,
-                        passageData: {
-                          originatedFromEmbarkStory: props.name,
-                          ...payloadObject,
-                        },
-                      })
-
-                      const castedWindow = window as any
-                      if (castedWindow && castedWindow.analytics) {
-                        castedWindow.analytics.track(eventName, {
-                          originatedFromEmbarkStory: props.name,
-                          ...payloadObject,
-                        })
-                      }
-                    },
+                    track: trackPassageData,
                   }}
                   initialStore={initialStore}
                   onStoreChange={(store) => {
