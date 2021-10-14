@@ -17,6 +17,7 @@ import { apolloClient } from 'apolloClient'
 import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useTextKeys } from 'utils/textKeys'
+import { pushToGTMDataLayer } from '../../utils/tracking/gtm'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
 import {
@@ -342,13 +343,25 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                     externalInsuranceProviderProviderStatus: resolveExternalInsuranceProviderProviderStatus,
                     externalInsuranceProviderStartSession: resolveExternalInsuranceProviderStartSession,
                     track: (eventName, payload) => {
-                      const castedWindow = window as any
-                      if (castedWindow && castedWindow.analytics) {
-                        castedWindow.analytics.track(eventName, {
-                          ...payload,
+                      const filteredArray = Object.entries(payload).filter(
+                        ([key, value]) => value !== undefined,
+                      )
+
+                      const payloadObject = filteredArray.reduce(
+                        (prev, item) => {
+                          const [key, value] = item
+                          return { ...prev, [key]: value }
+                        },
+                        {},
+                      )
+
+                      pushToGTMDataLayer({
+                        event: eventName,
+                        passageData: {
                           originatedFromEmbarkStory: props.name,
-                        })
-                      }
+                          ...payloadObject,
+                        },
+                      })
                     },
                   }}
                   initialStore={initialStore}
