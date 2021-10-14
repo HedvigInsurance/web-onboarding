@@ -362,6 +362,14 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                           ...payloadObject,
                         },
                       })
+
+                      const castedWindow = window as any
+                      if (castedWindow && castedWindow.analytics) {
+                        castedWindow.analytics.track(eventName, {
+                          originatedFromEmbarkStory: props.name,
+                          ...payloadObject,
+                        })
+                      }
                     },
                   }}
                   initialStore={initialStore}
