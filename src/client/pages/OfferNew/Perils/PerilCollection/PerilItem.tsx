@@ -14,7 +14,6 @@ const OuterContainer = styled.div`
   position: relative;
   display: flex;
   color: ${colorsV3.gray900};
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
 
   &:before {
     content: '';
@@ -46,6 +45,7 @@ const Container = styled.button`
   cursor: pointer;
   transition: all 150ms ease-in-out;
   appearance: none;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     min-height: 8.75rem;
