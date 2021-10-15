@@ -15,6 +15,14 @@ const OuterWrapper = styled.div`
   }
 `
 
+const PromotionImage = styled(LocalizedImage)`
+  margin-top: 1.5rem;
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    margin-top: 2.5rem;
+  }
+`
+
 export const AppPromotionSection: React.FC = () => {
   const textKeys = useTextKeys()
 
@@ -24,7 +32,7 @@ export const AppPromotionSection: React.FC = () => {
         <Column>
           <Heading>{textKeys.OFFER_APP_PROMOTION_HEADING()}</Heading>
           <Body>{textKeys.OFFER_APP_PROMOTION_PARAGRAPH()}</Body>
-          <LocalizedImage
+          <PromotionImage
             src="/new-member-assets/offer/app-promotion.jpg"
             alt="App promotion"
           />
