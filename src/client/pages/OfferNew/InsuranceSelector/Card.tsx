@@ -62,6 +62,7 @@ const PriceWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  flex-shrink: 0;
 `
 
 const Price = styled.div`
