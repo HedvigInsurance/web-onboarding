@@ -36,14 +36,12 @@ export const Tabs: React.FC<Props> = ({ insurances }) => {
       <TabList>
         <AnimateSharedLayout>
           {insurances.map((item, index) => (
-            <>
-              <Tab
-                key={index}
-                onClick={() => setSelected(item)}
-                selected={selected === item}
-                name={item.name}
-              />
-            </>
+            <Tab
+              key={index}
+              onClick={() => setSelected(item)}
+              selected={selected === item}
+              name={item.name}
+            />
           ))}
         </AnimateSharedLayout>
       </TabList>
