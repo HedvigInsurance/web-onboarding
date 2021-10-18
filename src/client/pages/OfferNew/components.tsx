@@ -84,6 +84,15 @@ export const Body = styled('p')`
   }
 `
 
+export const ContainerWrapper = styled.div`
+  padding-top: 5rem;
+  background-color: ${colorsV3.gray100};
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    padding-top: 7.5rem;
+  }
+`
+
 export const Container = styled('div')`
   width: 100%;
   height: 100%;
