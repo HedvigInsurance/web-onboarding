@@ -10,7 +10,7 @@ import {
 } from 'components/utils/CurrentLocale'
 import { WithEmailForm, WithSsnForm } from 'pages/OfferNew/types'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
-import { useCreditCheckInfo } from 'utils/featureToggles'
+import { useFeature, Features } from 'utils/hooks/useFeature'
 import { CreditCheckInfo } from './CreditCheckInfo'
 
 const HiddenSubmit = styled.input`
@@ -64,7 +64,9 @@ export const UserDetailsForm: React.FC<Props> = ({
   const ssnMaxLength = currentLocaleData.ssn.length
   const ssnFormatRegex = currentLocaleData.ssn.formatRegex
 
-  const hasEnabledCreditCheckInfo = useCreditCheckInfo()
+  const [hasEnabledCreditCheckInfo] = useFeature([
+    Features.CHECKOUT_CREDIT_CHECK,
+  ])
 
   const isValidSsn = (ssn: string) => {
     return ssnFormatRegex.test(ssn)
