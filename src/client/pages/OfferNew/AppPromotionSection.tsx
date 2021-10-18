@@ -7,11 +7,11 @@ import { LocalizedImage } from 'components/LocalizedImage'
 import { Column, ColumnSpacing, Container, Heading, Body } from './components'
 
 const OuterWrapper = styled.div`
-  padding: 5rem 0;
+  padding: 0 0 5rem;
   background-color: ${colorsV3.gray100};
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
-    padding: 10rem 0;
+    padding: 5rem 0 10rem;
   }
 `
 
