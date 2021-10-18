@@ -47,11 +47,13 @@ export const useFeature = (features: Features[] = []) => {
   const market = useMarket()
   const env = window.hedvigClientConfig.appEnvironment
 
-  return features.reduce((acc, feature) => {
-    const featureConfig = Config.find(
-      (x) => x.name === feature,
-    ) as FeatureConfig
-    const isEnabled = isFeatureEnabled({ config: featureConfig, env, market })
-    return [...acc, isEnabled]
-  }, [] as boolean[])
+  return features.reduce<Array<boolean>>((acc, feature) => {
+    const featureConfig = Config.find((item) => item.name === feature)
+    if (featureConfig) {
+      const isEnabled = isFeatureEnabled({ config: featureConfig, env, market })
+      return [...acc, isEnabled]
+    } else {
+      throw new Error(`Unknown feature: ${feature}`)
+    }
+  }, [])
 }
