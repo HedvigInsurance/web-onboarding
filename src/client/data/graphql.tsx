@@ -2580,7 +2580,7 @@ export type CrossSell = {
   blurHash: Scalars['String']
   callToAction: Scalars['String']
   action: CrossSellAction
-  info?: Maybe<CrossSellInfo>
+  info: CrossSellInfo
 }
 
 export type CrossSellInfoArgs = {
@@ -7957,7 +7957,6 @@ export type Query = {
   chargeHistory: Array<Charge>
   quote: Quote
   lastQuoteOfMember: Quote
-  quoteBundle: QuoteBundle
   signMethodForQuotes: SignMethod
   commonClaims: Array<CommonClaim>
   news: Array<News>
@@ -8014,6 +8013,7 @@ export type Query = {
   embarkStoryNames: Array<Scalars['String']>
   embarkStories: Array<EmbarkStoryMetadata>
   onboardingSession: OnboardingSession
+  quoteBundle: QuoteBundle
 }
 
 export type QueryFaqsArgs = {
@@ -8106,10 +8106,6 @@ export type QueryCampaignArgs = {
 
 export type QueryQuoteArgs = {
   id?: Maybe<Scalars['ID']>
-}
-
-export type QueryQuoteBundleArgs = {
-  input: QuoteBundleInput
 }
 
 export type QuerySignMethodForQuotesArgs = {
@@ -8223,6 +8219,10 @@ export type QueryEmbarkStoriesArgs = {
 
 export type QueryOnboardingSessionArgs = {
   id: Scalars['ID']
+}
+
+export type QueryQuoteBundleArgs = {
+  input: QuoteBundleInput
 }
 
 export type Quote = CompleteQuote | IncompleteQuote
