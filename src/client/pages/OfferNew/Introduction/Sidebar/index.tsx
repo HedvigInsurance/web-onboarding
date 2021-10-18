@@ -104,6 +104,7 @@ const Title = styled.h3`
   font-size: 1.375rem;
   line-height: 1.625rem;
   white-space: pre-line;
+  color: ${colorsV3.gray900};
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     font-size: 1.5rem;

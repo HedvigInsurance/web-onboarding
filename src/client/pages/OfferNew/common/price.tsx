@@ -40,8 +40,8 @@ const PriceNumbers = styled.div<{
 }>`
   display: flex;
   align-items: baseline;
-  color: ${colorsV3.gray900};
-  ${({ lightAppearance }) => lightAppearance && `color: ${colorsV3.white}`};
+  color: ${({ lightAppearance }) =>
+    lightAppearance ? colorsV3.white : colorsV3.gray900};
 `
 
 const PriceNet = styled.div`
@@ -71,7 +71,8 @@ const PriceInterval = styled.span<{
 }>`
   font-size: 1rem;
   line-height: 1;
-  ${({ lightAppearance }) => lightAppearance && `color: ${colorsV3.white}`};
+  color: ${({ lightAppearance }) =>
+    lightAppearance ? colorsV3.white : colorsV3.gray900};
 `
 
 const SpinnerWrapper = styled.div`

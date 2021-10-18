@@ -17,14 +17,14 @@ import {
   useQuoteBundleQuery,
   useRedeemedCampaignsQuery,
 } from 'data/graphql'
-import { SwitchSafetySection } from 'pages/OfferNew/SwitchSafetySection'
-import { getOfferData } from 'pages/OfferNew/utils'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { trackOfferGTM } from 'utils/tracking/gtm'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { useQuoteIds } from '../../utils/hooks/useQuoteIds'
 import { LanguagePicker } from '../Embark/LanguagePicker'
+import { getOfferData } from './utils'
+import { SwitchSafetySection } from './SwitchSafetySection'
 import { Checkout } from './Checkout'
 import { FaqSection } from './FaqSection'
 import { Introduction } from './Introduction'
