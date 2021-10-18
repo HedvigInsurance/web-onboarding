@@ -9,7 +9,7 @@ const Container = styled.div<{ selected?: boolean; focused?: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-width: 2px;
+  border-width: ${({ selected }) => (selected ? '2px' : '1px')};
   border-style: solid;
   border-color: ${({ selected, focused }) =>
     selected
@@ -18,7 +18,7 @@ const Container = styled.div<{ selected?: boolean; focused?: boolean }>`
       ? colorsV3.gray700
       : colorsV3.gray500};
   border-radius: 0.5rem;
-  padding: 1rem;
+  padding: ${({ selected }) => (selected ? '1rem' : 'calc(1rem + 1px)')};
   font-size: 1rem;
   line-height: 1.5rem;
   min-height: 6.625rem;
