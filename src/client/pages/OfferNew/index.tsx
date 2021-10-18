@@ -11,11 +11,13 @@ import {
   QuoteBundle,
   useQuoteBundleQuery,
   useRedeemedCampaignsQuery,
+  QuoteBundleVariant,
 } from 'data/graphql'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { trackOfferGTM } from 'utils/tracking/gtm'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { localePathPattern } from 'l10n/localePathPattern'
+import { Features, useFeature } from 'utils/hooks/useFeature'
 import { useQuoteIds } from '../../utils/hooks/useQuoteIds'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import { getOfferData } from './utils'
@@ -24,6 +26,7 @@ import { Checkout } from './Checkout'
 import { FaqSection } from './FaqSection'
 import { Introduction } from './Introduction'
 import { Perils } from './Perils'
+import { InsuranceSelector } from './InsuranceSelector'
 
 const createToggleCheckout = (history: History<any>, locale?: string) => (
   isOpen: boolean,
@@ -35,14 +38,49 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
   }
 }
 
+const isBundleVariantMatchingQuoteIds = (
+  variant: QuoteBundleVariant,
+  quoteIds: readonly string[],
+) => {
+  const variantQuoteIds = variant.bundle.quotes.map((quote) => quote.id)
+  return (
+    variantQuoteIds.sort().join(',') ===
+    quoteIds
+      .concat()
+      .sort()
+      .join(',')
+  )
+}
+
+const getBundleVariantFromQuoteIds = (
+  quoteIds: readonly string[],
+  bundleVariants: QuoteBundleVariant[],
+) =>
+  bundleVariants.find((variant) =>
+    isBundleVariantMatchingQuoteIds(variant, quoteIds),
+  )
+
+const getQuoteIdsFromBundleVariant = (bundleVariant: QuoteBundleVariant) =>
+  bundleVariant.bundle.quotes.map((quote) => quote.id)
+
 export const OfferNew: React.FC = () => {
   const currentLocale = useCurrentLocale()
   const localeIsoCode = getIsoLocale(currentLocale)
   const variation = useVariation()
+  const [isInsuranceToggleEnabled] = useFeature([
+    Features.OFFER_PAGE_INSURANCE_TOGGLE,
+  ])
   const history = useHistory()
   const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
   const redeemedCampaigns = redeemedCampaignsData?.redeemedCampaigns ?? []
-  const { isLoading: quoteIdsIsLoading, quoteIds } = useQuoteIds()
+
+  const {
+    isLoading: quoteIdsIsLoading,
+    quoteIds,
+    selectedQuoteIds,
+    setSelectedQuoteIds,
+  } = useQuoteIds()
+
   const { data, loading: loadingQuoteBundle, refetch } = useQuoteBundleQuery({
     variables: {
       input: {
@@ -53,10 +91,27 @@ export const OfferNew: React.FC = () => {
     skip: quoteIdsIsLoading,
   })
 
+  const bundleVariants = (data?.quoteBundle.possibleVariations ??
+    []) as QuoteBundleVariant[]
+
+  const canShowInsuranceSelector =
+    isInsuranceToggleEnabled && bundleVariants.length > 1
+
+  const selectedBundleVariant =
+    getBundleVariantFromQuoteIds(selectedQuoteIds, bundleVariants) ||
+    bundleVariants?.[0]
+
+  const onInsuranceSelectorChange = (
+    selectedBundleVariant: QuoteBundleVariant,
+  ) => {
+    const quoteIds = getQuoteIdsFromBundleVariant(selectedBundleVariant)
+    setSelectedQuoteIds(quoteIds)
+  }
+
   const checkoutMatch = useRouteMatch(`${localePathPattern}/new-member/sign`)
   const toggleCheckout = createToggleCheckout(history, currentLocale)
 
-  if ((loadingQuoteBundle && !data?.quoteBundle) || quoteIdsIsLoading) {
+  if ((loadingQuoteBundle && !data) || quoteIdsIsLoading) {
     return <LoadingPage />
   }
 
@@ -64,7 +119,7 @@ export const OfferNew: React.FC = () => {
     return <Redirect to={`/${currentLocale}/new-member`} />
   }
 
-  if (!loadingQuoteBundle && !data?.quoteBundle) {
+  if (!loadingQuoteBundle && !data) {
     throw new Error(
       `No quote returned to show offer with (quoteIds=${quoteIds}).`,
     )
@@ -74,9 +129,18 @@ export const OfferNew: React.FC = () => {
     toggleCheckout(open)
   }
 
-  const offerData = data?.quoteBundle
-    ? getOfferData(data?.quoteBundle as QuoteBundle)
-    : null
+  const getFeatureSpecificOfferData = () => {
+    if (isInsuranceToggleEnabled) {
+      return selectedBundleVariant
+        ? getOfferData(selectedBundleVariant.bundle)
+        : null
+    } else {
+      return data?.quoteBundle
+        ? getOfferData(data?.quoteBundle as QuoteBundle)
+        : null
+    }
+  }
+  const offerData = getFeatureSpecificOfferData()
 
   if (offerData) {
     trackOfferGTM(
@@ -118,6 +182,13 @@ export const OfferNew: React.FC = () => {
                 />
               )}
             </TrackAction>
+            {canShowInsuranceSelector && (
+              <InsuranceSelector
+                variants={bundleVariants}
+                selectedQuoteBundle={selectedBundleVariant}
+                onChange={onInsuranceSelectorChange}
+              />
+            )}
             <Perils offerData={offerData} />
             <AppPromotionSection />
             <FaqSection />
