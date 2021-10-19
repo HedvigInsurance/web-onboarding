@@ -8,11 +8,11 @@ const Underline = styled(motion.div)`
   box-shadow: 0px 2px 0px ${colorsV3.gray900};
   height: 2px;
   position: absolute;
-  top: calc(100% - 4px);
-  width: 100%;
+  bottom: 0;
+  width: calc(100% - 1rem);
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
-    top: calc(100% - 2px);
+    width: calc(100% - 2.5rem);
   }
 `
 

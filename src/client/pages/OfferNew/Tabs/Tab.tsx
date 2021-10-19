@@ -4,25 +4,23 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { UnderlineComponent } from './Underline'
 
-const TabContainer = styled.button<{
-  selected?: boolean
-  focused?: boolean
-}>`
+const TabContainer = styled.button<{ selected?: boolean }>`
   background-color: transparent;
   border: 0;
+  border-bottom: 2px solid ${colorsV3.gray300};
   color: ${({ selected }) => (selected ? colorsV3.gray900 : colorsV3.gray500)};
   cursor: pointer;
   display: flex;
   font-size: 1.25rem;
   line-height: 1.4;
-  margin-right: 1rem;
-  padding: 0 0 0.25rem 0;
+  padding: 0 1rem 0.25rem 0;
+  white-space: nowrap;
   position: relative;
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     font-size: 1.5rem;
     line-height: 1.33;
-    margin-right: 2.5rem;
+    padding-right: 2.5rem;
   }
 
   &:hover {
@@ -39,19 +37,17 @@ type Props = {
 export const Tab: React.FC<Props> = ({ onClick, selected, name }) => {
   const ref = createRef<HTMLButtonElement>()
 
-  const scroll = () => {
-    onClick()
-    if (ref.current) {
-      ref.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'center',
-      })
-    }
-  }
-
   return (
-    <TabContainer onClick={() => scroll()} selected={selected} ref={ref}>
+    <TabContainer
+      onClick={onClick}
+      selected={selected}
+      ref={ref}
+      role="tab"
+      aria-selected={selected ? 'true' : 'false'}
+      aria-controls={name}
+      id={name}
+      tabIndex={selected ? undefined : -1}
+    >
       {name}
       {selected ? UnderlineComponent : null}
     </TabContainer>
