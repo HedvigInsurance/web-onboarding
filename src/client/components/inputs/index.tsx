@@ -5,7 +5,7 @@ import { FieldInputProps } from 'formik/dist/types'
 import React from 'react'
 import InputMask from 'react-input-mask'
 import { WarningIcon } from 'components/icons/Warning'
-import { DownArrow } from 'components/icons/DownArrow'
+import { ChevronDown } from 'components/icons/ChevronDown'
 
 export interface Mask {
   name: string
@@ -284,7 +284,7 @@ export const InputField: React.FC<TextInputProps &
       </TextWrapper>
       <SymbolWrapper>
         {options && options.length > 0 ? (
-          <DownArrow />
+          <ChevronDown />
         ) : (
           errors && <WarningIcon color={inputVariants[variant].error} />
         )}
