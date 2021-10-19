@@ -17,6 +17,7 @@ const mockInsurances = [
     id: '3',
     name: 'Inbo',
     selected: false,
+    content: 'three',
   },
 ]
 
