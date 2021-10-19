@@ -20,7 +20,7 @@ import { localePathPattern } from 'l10n/localePathPattern'
 import { Features, useFeature } from 'utils/hooks/useFeature'
 import { useQuoteIds } from '../../utils/hooks/useQuoteIds'
 import { LanguagePicker } from '../Embark/LanguagePicker'
-import { getOfferData } from './utils'
+import { getOfferData, getBundleVariantFromQuoteIds } from './utils'
 import { AppPromotionSection } from './AppPromotionSection'
 import { Checkout } from './Checkout'
 import { FaqSection } from './FaqSection'
@@ -37,28 +37,6 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
     history.goBack()
   }
 }
-
-const isBundleVariantMatchingQuoteIds = (
-  variant: QuoteBundleVariant,
-  quoteIds: readonly string[],
-) => {
-  const variantQuoteIds = variant.bundle.quotes.map((quote) => quote.id)
-  return (
-    variantQuoteIds.sort().join(',') ===
-    quoteIds
-      .concat()
-      .sort()
-      .join(',')
-  )
-}
-
-const getBundleVariantFromQuoteIds = (
-  quoteIds: readonly string[],
-  bundleVariants: QuoteBundleVariant[],
-) =>
-  bundleVariants.find((variant) =>
-    isBundleVariantMatchingQuoteIds(variant, quoteIds),
-  )
 
 const getQuoteIdsFromBundleVariant = (bundleVariant: QuoteBundleVariant) =>
   bundleVariant.bundle.quotes.map((quote) => quote.id)
@@ -94,7 +72,7 @@ export const OfferNew: React.FC = () => {
   const bundleVariants = (data?.quoteBundle.possibleVariations ??
     []) as QuoteBundleVariant[]
 
-  const canShowInsuranceSelector =
+  const isInsuranceSelectorVisible =
     isInsuranceToggleEnabled && bundleVariants.length > 1
 
   const selectedBundleVariant =
@@ -182,7 +160,7 @@ export const OfferNew: React.FC = () => {
                 />
               )}
             </TrackAction>
-            {canShowInsuranceSelector && (
+            {isInsuranceSelectorVisible && (
               <InsuranceSelector
                 variants={bundleVariants}
                 selectedQuoteBundle={selectedBundleVariant}

@@ -7,26 +7,28 @@ export enum Features {
   TEST_FEATURE = 'TEST_FEATURE', // For unit testing purposes
 }
 
+type Env = 'staging' | 'production'
+
 interface FeatureConfig {
   name: Features
-  envs: AppEnvironment[]
+  envs: Env[]
   markets: Market[]
 }
 
 const Config: readonly FeatureConfig[] = [
   {
     name: Features.OFFER_PAGE_INSURANCE_TOGGLE,
-    envs: ['development', 'staging'],
+    envs: ['staging'],
     markets: [Market.Se],
   },
   {
     name: Features.CHECKOUT_CREDIT_CHECK,
-    envs: ['development', 'staging', 'production'],
+    envs: ['staging', 'production'],
     markets: [Market.No],
   },
   {
     name: Features.TEST_FEATURE,
-    envs: ['development', 'staging'],
+    envs: ['staging'],
     markets: [Market.Se],
   },
 ]
@@ -40,7 +42,11 @@ const isFeatureEnabled = ({
   env: AppEnvironment
   market: Market
 }) => {
-  return config.envs.includes(env) && config.markets.includes(market)
+  if (env === 'development') {
+    return config.envs.includes('staging') && config.markets.includes(market)
+  } else {
+    return config.envs.includes(env) && config.markets.includes(market)
+  }
 }
 
 export const useFeature = (features: Features[] = []) => {
