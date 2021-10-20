@@ -6,18 +6,15 @@ import { Tab } from './Tab'
 
 const TabList = styled.div`
   display: flex;
-  margin-bottom: 1.25rem;
-  margin-right: 1rem;
-  margin-top: 1rem;
-  max-width: 100%;
+  margin: 1rem 1rem 1.25rem 0;
   overflow-x: scroll;
-  -webkit-overflow-scrolling: touch;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* Internet Explorer 10+ */
   &::-webkit-scrollbar {
     width: 0;
     height: 0;
   }
+  z-index: 1;
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     margin-bottom: 2.5rem;
     margin-top: 1rem;
@@ -27,15 +24,15 @@ const TabList = styled.div`
 const TabPanel = styled.div``
 
 type Props = {
-  insurances: {
+  items: {
     id: string
     name: string
     content: React.ReactNode
   }[]
   onChange: (id: string) => void
 }
-export const Tabs: React.FC<Props> = ({ insurances }) => {
-  const [selected, setSelected] = useState(insurances[0])
+export const Tabs: React.FC<Props> = ({ items }) => {
+  const [selected, setSelected] = useState(items[0])
   return (
     <>
       <TabList
@@ -44,7 +41,7 @@ export const Tabs: React.FC<Props> = ({ insurances }) => {
         aria-label="InsurancePick"
       >
         <AnimateSharedLayout>
-          {insurances.map((item, index) => (
+          {items.map((item, index) => (
             <Tab
               key={index}
               onClick={() => setSelected(item)}

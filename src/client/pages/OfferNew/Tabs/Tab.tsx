@@ -16,7 +16,6 @@ const TabContainer = styled.button<{ selected?: boolean }>`
   padding: 0 1rem 0.25rem 0;
   white-space: nowrap;
   position: relative;
-
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     font-size: 1.5rem;
     line-height: 1.33;
@@ -36,7 +35,6 @@ type Props = {
 
 export const Tab: React.FC<Props> = ({ onClick, selected, name }) => {
   const ref = createRef<HTMLButtonElement>()
-
   return (
     <TabContainer
       onClick={onClick}
@@ -49,7 +47,7 @@ export const Tab: React.FC<Props> = ({ onClick, selected, name }) => {
       tabIndex={selected ? undefined : -1}
     >
       {name}
-      {selected ? UnderlineComponent : null}
+      {selected && <UnderlineComponent />}
     </TabContainer>
   )
 }
