@@ -219,14 +219,6 @@ export const reactPageRoutes: ReactPageRoute[] = [
                       ? EmbarkStory.NorwayContentsNorwegian
                       : EmbarkStory.NorwayContentsEnglish,
                 }
-              case 'travel':
-                return {
-                  baseUrl: `/${locale}/new-member/travel`,
-                  name:
-                    locale === 'no'
-                      ? EmbarkStory.NorwayTravelNorwegian
-                      : EmbarkStory.NorwayTravelEnglish,
-                }
               case 'combo':
                 return {
                   baseUrl: `/${locale}/new-member/combo`,
