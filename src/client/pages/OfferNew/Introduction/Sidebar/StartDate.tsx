@@ -10,7 +10,7 @@ import {
   DateInput as DateInputForm,
   getLocaleImport,
 } from 'components/DateInput'
-import { DownArrow } from 'components/icons/DownArrow'
+import { ChevronDown } from 'components/icons/ChevronDown'
 import {
   Market,
   useCurrentLocale,
@@ -323,7 +323,7 @@ const DateForm: React.FC<{
                 />
               )}
               {hasStartDate && getDateLabel()}
-              <DownArrow />
+              <ChevronDown />
             </>
           )}
         </Value>

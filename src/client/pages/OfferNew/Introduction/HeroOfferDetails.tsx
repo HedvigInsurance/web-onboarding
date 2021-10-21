@@ -6,7 +6,6 @@ import { useTextKeys } from 'utils/textKeys'
 import {
   LARGE_SCREEN_MEDIA_QUERY,
   MEDIUM_SCREEN_MEDIA_QUERY,
-  MEDIUM_SMALL_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
 import { Button } from 'components/buttons'
 import { quoteDetailsHasAddress } from '../utils'
@@ -75,17 +74,18 @@ const Address = styled.div`
 `
 
 const EditDetailsButton = styled(Button)`
+  font-size: 0.875rem;
   border: 1px solid ${colorsV3.gray900};
   color: ${colorsV3.gray900};
-  width: 100%;
-
-  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
-    width: auto;
-  }
+  padding: 0.375rem 0.75rem;
+  border-radius: 6px;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
+    font-size: 1rem;
     border: 1px solid ${colorsV3.gray100};
     color: ${colorsV3.gray100};
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
   }
 
   &:hover {

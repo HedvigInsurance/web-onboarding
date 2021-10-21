@@ -3,6 +3,7 @@ import React from 'react'
 import { Button } from 'components/buttons'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import { useTextKeys } from 'utils/textKeys'
+import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
 interface Hidable {
   isVisible: boolean
@@ -27,7 +28,7 @@ const Wrapper = styled.div<Hidable & { displayNone: boolean }>`
   background: #fff;
   padding: 1rem 1rem 54px 1rem; // 54px = spacing needed before ios safari opens bottom toolbar
 
-  @media (min-width: 601px) {
+  ${LARGE_SCREEN_MEDIA_QUERY} {
     display: none;
   }
 `

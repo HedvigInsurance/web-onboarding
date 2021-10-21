@@ -8,7 +8,6 @@ import {
   Container,
   HeadingBlack,
   HeadingWrapper,
-  PreHeading,
 } from 'pages/OfferNew/components'
 import { PerilRow } from 'pages/OfferNew/Perils/PerilRow'
 import { OfferData } from 'pages/OfferNew/types'
@@ -45,7 +44,6 @@ export const Perils: React.FC<Props> = ({ offerData }) => {
       <Container>
         <Column>
           <HeadingWrapper>
-            <PreHeading>{textKeys.COVERAGE_LABEL()}</PreHeading>
             <HeadingBlack>{textKeys.COVERAGE_HEADLINE()}</HeadingBlack>
             <Body>{textKeys.COVERAGE_BODY()}</Body>
           </HeadingWrapper>

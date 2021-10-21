@@ -7,28 +7,53 @@ import { StorageState, useStorage } from '../StorageContainer'
 export const useQuoteIds = () => {
   const storage = useStorage()
   const location = useLocation()
-  const [quoteIds, setQuoteIds] = useState<ReadonlyArray<string> | null>(null)
+  const [quoteIds, setQuoteIds] = useState<ReadonlyArray<string>>()
+  const [selectedQuoteIds, setSelectedQuoteIds] = useState<
+    ReadonlyArray<string>
+  >()
 
   useEffect(() => {
-    if (quoteIds) {
-      return
+    if (!quoteIds && !selectedQuoteIds) {
+      const { quoteIds: ids, selectedQuoteIds: selected } = getQuoteIds(
+        storage,
+        location,
+      )
+      setQuoteIds(ids)
+      setSelectedQuoteIds(selected)
     }
-    const qids = getQuoteIds(storage, location)
-    setQuoteIds(qids)
-  }, [location, storage, quoteIds])
+  }, [location, storage, quoteIds, selectedQuoteIds])
 
-  return { isLoading: quoteIds === null, quoteIds: quoteIds ?? [] }
+  return {
+    isLoading: quoteIds === undefined,
+    quoteIds: quoteIds ?? [],
+    selectedQuoteIds: selectedQuoteIds ?? [],
+    setSelectedQuoteIds,
+  }
 }
 
 const getQuoteIds = (
   storage: StorageState,
   location: Location,
-): ReadonlyArray<string> => {
+): {
+  quoteIds: ReadonlyArray<string>
+  selectedQuoteIds: ReadonlyArray<string>
+} => {
   const storedIds = storage.session.getSession()?.quoteIds
-  if (storedIds) {
-    return storedIds
+  const selectedQuoteIds = storage.session.getSession()?.selectedQuoteIds
+  if (storedIds?.length) {
+    return {
+      quoteIds: storedIds,
+      selectedQuoteIds: selectedQuoteIds?.length ? selectedQuoteIds : storedIds,
+    }
   }
 
+  return getQuoteIdsFromUrlParamsAndSetToStorage(storage, location)
+}
+
+const getQuoteIdsFromUrlParamsAndSetToStorage = (
+  storage: StorageState,
+  location: Location,
+) => {
   const { quoteIds: queryParamQuoteIds } = queryString.parse(
     location.search.substr(1),
   )
@@ -39,9 +64,14 @@ const getQuoteIds = (
     storage.session.setSession({
       ...storage.session.getSession(),
       quoteIds: splitted,
+      selectedQuoteIds: splitted,
     })
-    return splitted
+
+    return {
+      quoteIds: splitted,
+      selectedQuoteIds: splitted,
+    }
   }
 
-  return []
+  return { quoteIds: [], selectedQuoteIds: [] }
 }
