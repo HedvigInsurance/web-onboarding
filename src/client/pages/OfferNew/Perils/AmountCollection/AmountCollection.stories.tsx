@@ -1,15 +1,16 @@
 import React from 'react'
-import AmountCollection, { AmountItemData } from '.'
+import Grid from './Grid'
+import AmountItem from './AmountItem'
 
 export default {
   title: 'Offer/AmountCollection/AmountCollection',
-  component: AmountCollection,
+  component: Grid,
   parameters: {
     backgrounds: { default: 'gray100' },
   },
 }
 
-const ITEMS: Array<AmountItemData> = [
+const ITEMS = [
   {
     key: '1',
     label: 'Maksimal sum forsikringen',
@@ -19,6 +20,8 @@ const ITEMS: Array<AmountItemData> = [
     key: '2',
     label: 'Egenandel for all-risk skader',
     value: 'kr 2 000',
+    tooltip:
+      'Alle dine eiendeler er samlet forsikret for opptil 1 million kroner.',
   },
   {
     key: '3',
@@ -28,5 +31,14 @@ const ITEMS: Array<AmountItemData> = [
 ]
 
 export const Default = () => {
-  return <AmountCollection items={ITEMS} />
+  return (
+    <Grid>
+      {ITEMS.map((item) => (
+        <AmountItem key={item.key} tooltip={item.tooltip}>
+          <AmountItem.Label>{item.label}</AmountItem.Label>
+          <AmountItem.Value>{item.value}</AmountItem.Value>
+        </AmountItem>
+      ))}
+    </Grid>
+  )
 }

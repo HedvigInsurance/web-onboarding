@@ -5,6 +5,7 @@ import { PerilCollection } from 'pages/OfferNew/Perils/PerilCollection'
 import { PerilModal } from 'pages/OfferNew/Perils/PerilModal'
 import { OfferQuote } from 'pages/OfferNew/types'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import AmountCollection from './AmountCollection'
 
 const InsuranceTypeHeadline = styled.div`
   padding-bottom: 1rem;
@@ -12,6 +13,14 @@ const InsuranceTypeHeadline = styled.div`
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     font-size: 1.5rem;
+  }
+`
+
+const Spacer = styled.div`
+  height: 2rem;
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    height: 4rem;
   }
 `
 
@@ -32,7 +41,14 @@ export const PerilRow: React.FC<Props> = ({ offerQuote }) => {
         setIsShowingPeril={setIsShowingPeril}
       />
 
+      <Spacer />
+
+      <AmountCollection offer={offerQuote} />
+
+      <Spacer />
+
       <InsuranceValues offerQuote={offerQuote} />
+
       {offerQuote.perils.length > 0 && (
         <PerilModal
           perils={offerQuote.perils}

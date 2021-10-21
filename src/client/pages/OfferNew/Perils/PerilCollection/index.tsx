@@ -18,6 +18,7 @@ const Wrapper = styled('div')`
 
   @media (min-width: 800px) {
     margin-left: -1rem;
+    width: calc(100% + 1rem);
   }
 
   & > * {

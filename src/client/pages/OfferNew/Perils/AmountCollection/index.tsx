@@ -3,7 +3,9 @@ import styled from '@emotion/styled'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { useTextKeys } from 'utils/textKeys'
 import { HeadingXS } from '../../components'
+import { OfferQuote } from '../../types'
 import AmountItem from './AmountItem'
+import Grid from './Grid'
 
 const Container = styled.div`
   display: grid;
@@ -14,37 +16,23 @@ const Container = styled.div`
   }
 `
 
-const Grid = styled.div`
-  display: grid;
-  gap: 0.5rem;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto;
-
-  ${LARGE_SCREEN_MEDIA_QUERY} {
-    gap: 1rem;
-    grid-template-columns: 1fr 1fr;
-  }
-`
-
-export interface AmountItemData {
-  key: string
-  label: string
-  value: string
+interface Props {
+  offer: OfferQuote
 }
 
-type AmountCollectionType = React.FC<{ items: Array<AmountItemData> }>
-
-const AmountCollection: AmountCollectionType = ({ items }) => {
+const AmountCollection: React.FC<Props> = ({ offer }) => {
   const textKeys = useTextKeys()
+
+  const limits = [...offer.insurableLimits.entries()]
 
   return (
     <Container>
       <HeadingXS>{textKeys.COVERAGE_INFO_HEADLINE()}</HeadingXS>
       <Grid>
-        {items.map((item) => (
-          <AmountItem key={item.key}>
-            <AmountItem.Label>{item.label}</AmountItem.Label>
-            <AmountItem.Value>{item.value}</AmountItem.Value>
+        {limits.map(([type, limit]) => (
+          <AmountItem key={type} tooltip={limit.description}>
+            <AmountItem.Label>{limit.label}</AmountItem.Label>
+            <AmountItem.Value>{limit.limit}</AmountItem.Value>
           </AmountItem>
         ))}
       </Grid>

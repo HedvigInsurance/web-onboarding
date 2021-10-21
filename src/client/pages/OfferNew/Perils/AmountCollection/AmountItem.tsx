@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { InfoIcon } from 'components/icons/Info'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import { Tooltip } from 'components/Tooltip/Tooltip'
 
 const CONTAINER_PADDING = '0.75rem'
 const DESKTOP_CONTAINER_PADDING = '1rem'
@@ -72,16 +73,35 @@ StyledInfoIcon.defaultProps = {
   size: ICON_SIZE,
 }
 
-type AmountItemType = React.FC & {
+const TooltipWrapper = styled.div`
+  position: absolute;
+  bottom: ${ICON_MARGIN};
+  right: ${ICON_MARGIN};
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    bottom: ${DESKTOP_ICON_MARGIN};
+    right: ${DESKTOP_ICON_MARGIN};
+  }
+`
+
+interface Props {
+  tooltip?: string
+}
+
+type AmountItemType = React.FC<Props> & {
   Label: typeof Label
   Value: typeof Value
 }
 
-const AmountItem: AmountItemType = ({ children }) => {
+const AmountItem: AmountItemType = ({ children, tooltip }) => {
   return (
     <Container>
       {children}
-      <StyledInfoIcon />
+      {tooltip && (
+        <TooltipWrapper>
+          <Tooltip body={tooltip} />
+        </TooltipWrapper>
+      )}
     </Container>
   )
 }

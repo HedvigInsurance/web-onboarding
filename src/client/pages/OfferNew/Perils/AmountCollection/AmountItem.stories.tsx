@@ -11,8 +11,8 @@ export default {
 
 export const Default = () => {
   return (
-    <AmountItem>
-      <AmountItem.Label>Dina saker försäkras till</AmountItem.Label>
+    <AmountItem tooltip="Alle dine eiendeler er samlet forsikret for opptil 1 million kroner.">
+      <AmountItem.Label>Tingene dine er forsikret med</AmountItem.Label>
       <AmountItem.Value>1 000 000 kr</AmountItem.Value>
     </AmountItem>
   )
