@@ -24,7 +24,7 @@ export const useQuoteIds = () => {
   }, [location, storage, quoteIds, selectedQuoteIds])
 
   return {
-    isLoading: quoteIds === null,
+    isLoading: quoteIds === undefined,
     quoteIds: quoteIds ?? [],
     selectedQuoteIds: selectedQuoteIds ?? [],
     setSelectedQuoteIds,
