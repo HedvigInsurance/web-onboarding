@@ -7,7 +7,7 @@ import { StorageState, useStorage } from '../StorageContainer'
 export const useQuoteIds = () => {
   const storage = useStorage()
   const location = useLocation()
-  const [quoteIds, setQuoteIds] = useState<ReadonlyArray<string>>()
+  const [quoteIds, setQuoteIds] = useState<ReadonlyArray<string> | null>(null)
   const [selectedQuoteIds, setSelectedQuoteIds] = useState<
     ReadonlyArray<string>
   >()
@@ -24,7 +24,7 @@ export const useQuoteIds = () => {
   }, [location, storage, quoteIds, selectedQuoteIds])
 
   return {
-    isLoading: quoteIds === undefined,
+    isLoading: quoteIds === null,
     quoteIds: quoteIds ?? [],
     selectedQuoteIds: selectedQuoteIds ?? [],
     setSelectedQuoteIds,
