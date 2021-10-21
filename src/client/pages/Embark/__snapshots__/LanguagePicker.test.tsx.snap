@@ -5,7 +5,7 @@ exports[`Danish language picker renders without 💥 1`] = `
   class="css-1prqaxz-Wrapper e1g7xtvp0"
 >
   <div
-    class="css-1bmgknn-ActiveOption e1g7xtvp1"
+    class="css-cddkmz-ActiveOption e1g7xtvp1"
   >
     Da
   </div>
@@ -13,7 +13,7 @@ exports[`Danish language picker renders without 💥 1`] = `
     class="css-1wop701-Divider e1g7xtvp3"
   />
   <a
-    class="css-6l8jlr-LinkOption e1g7xtvp2"
+    class="css-1odoamw-LinkOption e1g7xtvp2"
     href="/dk-en/new-member"
   >
     En
@@ -26,7 +26,7 @@ exports[`Norwegian language picker renders without 💥 1`] = `
   class="css-1prqaxz-Wrapper e1g7xtvp0"
 >
   <div
-    class="css-1bmgknn-ActiveOption e1g7xtvp1"
+    class="css-cddkmz-ActiveOption e1g7xtvp1"
   >
     No
   </div>
@@ -34,7 +34,7 @@ exports[`Norwegian language picker renders without 💥 1`] = `
     class="css-1wop701-Divider e1g7xtvp3"
   />
   <a
-    class="css-6l8jlr-LinkOption e1g7xtvp2"
+    class="css-1odoamw-LinkOption e1g7xtvp2"
     href="/no-en/new-member"
   >
     En
@@ -47,7 +47,7 @@ exports[`Swedish language picker renders without 💥 1`] = `
   class="css-1prqaxz-Wrapper e1g7xtvp0"
 >
   <div
-    class="css-1bmgknn-ActiveOption e1g7xtvp1"
+    class="css-cddkmz-ActiveOption e1g7xtvp1"
   >
     Sv
   </div>
@@ -55,7 +55,7 @@ exports[`Swedish language picker renders without 💥 1`] = `
     class="css-1wop701-Divider e1g7xtvp3"
   />
   <a
-    class="css-6l8jlr-LinkOption e1g7xtvp2"
+    class="css-1odoamw-LinkOption e1g7xtvp2"
     href="/se-en/new-member"
   >
     En

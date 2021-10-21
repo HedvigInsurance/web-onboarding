@@ -14,13 +14,14 @@ const Wrapper = styled.div`
 const ActiveOption = styled.div`
   color: ${colorsV3.gray100};
   font-size: 1rem;
-  opacity: 0.5;
+  cursor: default;
 `
 
 const LinkOption = styled(Link)`
   text-decoration: none;
   color: ${colorsV3.gray100};
   font-size: 1rem;
+  opacity: 0.5;
 
   &:hover {
     color: ${colorsV3.gray100};
