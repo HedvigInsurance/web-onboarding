@@ -218,9 +218,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
 
   const trackPassageData = (
     eventName: string,
-    payload: {
-      [key: string]: any
-    },
+    payload: Record<string, any>,
   ) => {
     const filteredArray = Object.entries(payload).filter(
       (property) => property[1] !== undefined,
