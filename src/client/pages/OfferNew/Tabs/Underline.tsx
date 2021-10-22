@@ -13,9 +13,8 @@ export const UnderlineComponent: React.FC = () => {
         height: '2px',
         backgroundColor: colorsV3.gray900,
         position: 'absolute',
-        bottom: '-2px',
+        bottom: '0px',
         width: isMobile ? 'calc(100% - 1rem)' : 'calc(100% - 2.5rem)',
-        zIndex: 1,
       }}
       transition={{
         duration: 0.5,

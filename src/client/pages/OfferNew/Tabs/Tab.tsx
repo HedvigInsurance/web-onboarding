@@ -7,7 +7,6 @@ import { UnderlineComponent } from './Underline'
 const TabContainer = styled.button<{ selected?: boolean }>`
   background-color: transparent;
   border: 0;
-  border-bottom: 2px solid ${colorsV3.gray300};
   color: ${({ selected }) => (selected ? colorsV3.gray900 : colorsV3.gray500)};
   cursor: pointer;
   display: flex;
