@@ -1,9 +1,6 @@
 import React from 'react'
 import { action } from '@storybook/addon-actions'
-import { MemoryRouter } from 'react-router-dom'
-import { MockedProvider } from '@apollo/react-testing'
 import { perilsMock } from 'utils/testData/offerDataMock'
-import { TextKeyProvider } from 'utils/textKeys'
 import { PerilCollection } from '.'
 
 export default {
