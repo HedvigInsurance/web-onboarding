@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
 import { Icon } from 'data/graphql'
+import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
 interface PerilItemProps {
   title: React.ReactNode
@@ -17,7 +18,7 @@ const OuterContainer = styled.div`
   &:before {
     content: '';
 
-    @media (min-width: 800px) {
+    ${MEDIUM_SCREEN_MEDIA_QUERY} {
       position: relative;
       padding-top: 75%;
     }
@@ -44,8 +45,9 @@ const Container = styled.button`
   cursor: pointer;
   transition: all 150ms ease-in-out;
   appearance: none;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
 
-  @media (min-width: 800px) {
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
     min-height: 8.75rem;
     padding: 1.25rem;
     border-radius: 0.5rem;
@@ -75,7 +77,7 @@ const PerilIcon = styled.img`
   height: 2rem;
   margin-right: 0.375rem;
 
-  @media (min-width: 800px) {
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
     width: 3rem;
     height: 3rem;
   }
@@ -83,7 +85,7 @@ const PerilIcon = styled.img`
   svg {
     width: 100%;
     height: 100%;
-    @media (min-width: 800px) {
+    ${MEDIUM_SCREEN_MEDIA_QUERY} {
       transform: translateX(-0.625rem);
     }
 
@@ -97,7 +99,7 @@ const Title = styled('h4')`
   margin: 0;
   font-size: 0.875rem;
 
-  @media (min-width: 800px) {
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
     font-size: 1rem;
   }
 `

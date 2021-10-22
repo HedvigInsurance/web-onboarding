@@ -12,6 +12,7 @@ import {
   dkHomeContentOwn,
   dkHomeContentAccidentTravel,
 } from 'utils/testData/offerDataMock'
+import { possibleVariationsHomeAccidentSE } from 'utils/testData/possibleVariationsMock'
 import {
   isBundle,
   isNorwegian,
@@ -20,6 +21,8 @@ import {
   isYouth,
   getMainQuote,
   getFormattedBirthdate,
+  isBundleVariantMatchingQuoteIds,
+  getBundleVariantFromQuoteIds,
 } from './utils'
 
 describe('quote validation', () => {
@@ -130,5 +133,63 @@ describe('getFormattedBirthdate function', () => {
 
       expect(formattingFunction).toThrow()
     })
+  })
+})
+
+describe('isBundleVariantMatchingQuoteIds function', () => {
+  it('should return true if quoteIds are matching variant', () => {
+    const isMatching = isBundleVariantMatchingQuoteIds(
+      possibleVariationsHomeAccidentSE[0],
+      [
+        '418cf2f7-2c2b-4e84-9f6c-f4dcf0d51e46',
+        'ecaecdd3-5e23-4cea-8f4e-981df29e4f73',
+      ],
+    )
+
+    expect(isMatching).toBeTruthy()
+  })
+
+  it('should return true if quoteIds are matching variant in any order', () => {
+    const isMatching = isBundleVariantMatchingQuoteIds(
+      possibleVariationsHomeAccidentSE[0],
+      [
+        'ecaecdd3-5e23-4cea-8f4e-981df29e4f73',
+        '418cf2f7-2c2b-4e84-9f6c-f4dcf0d51e46',
+      ],
+    )
+
+    expect(isMatching).toBeTruthy()
+  })
+
+  it('should return false if quoteIds are not matching variant', () => {
+    const isMatching = isBundleVariantMatchingQuoteIds(
+      possibleVariationsHomeAccidentSE[0],
+      ['ecaecdd3-5e23-4cea-8f4e-981df29e4f73'],
+    )
+
+    expect(isMatching).toBeFalsy()
+  })
+})
+
+describe('getBundleVariantFromQuoteIds function', () => {
+  it('should return BundleVariant if quoteIds are matching variant', () => {
+    const match = getBundleVariantFromQuoteIds(
+      [
+        '418cf2f7-2c2b-4e84-9f6c-f4dcf0d51e46',
+        'ecaecdd3-5e23-4cea-8f4e-981df29e4f73',
+      ],
+      possibleVariationsHomeAccidentSE,
+    )
+
+    expect(match).toBe(possibleVariationsHomeAccidentSE[0])
+  })
+
+  it('should return undefined if quoteIds not matching any variant', () => {
+    const match = getBundleVariantFromQuoteIds(
+      ['ecaecdd3-5e23-4cea-8f4e-981df29e4f73'],
+      possibleVariationsHomeAccidentSE,
+    )
+
+    expect(match).toBe(undefined)
   })
 })

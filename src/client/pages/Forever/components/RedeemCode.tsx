@@ -8,7 +8,7 @@ import { Button } from 'components/buttons'
 import { InputField } from 'components/inputs'
 import { LoadingDots } from 'components/LoadingDots/LoadingDots'
 import { useTextKeys } from 'utils/textKeys'
-import { LanguagePicker } from './LanguagePicker'
+import { LanguagePicker } from '../../Embark/LanguagePicker'
 
 export interface RedeemCodeFormValue {
   code: string
@@ -214,7 +214,7 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
         <Info>
           <ReactMarkdown source={textKeys.FOREVER_LANDINGPAGE_INFO_TEXT()} />
         </Info>
-        <LanguagePicker />
+        <LanguagePicker path={`/forever/${referralCode}`} />
       </Footer>
     </Wrapper>
   )

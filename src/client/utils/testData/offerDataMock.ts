@@ -115,7 +115,7 @@ export const insuranceTermsNoTravelMock = new Map([
   ],
 ]) as InsuranceTerms
 
-const perilsMock: PerilV2[] = [
+export const perilsMock: PerilV2[] = [
   {
     title: 'Forsinkelser',
     description:

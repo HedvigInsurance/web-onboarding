@@ -16,6 +16,7 @@ import {
   DanishAccidentDetails,
   DanishTravelDetails,
   ApartmentType,
+  QuoteBundleVariant,
 } from 'data/graphql'
 import { LocaleLabel, locales } from 'l10n/locales'
 import { birthDateFormats } from 'l10n/birthDateAndSsnFormats'
@@ -425,3 +426,25 @@ export const getFormattedBirthdate = ({
 
   return hasCorrectReversedFormat ? reversedBirthdate : birthDate
 }
+
+export const isBundleVariantMatchingQuoteIds = (
+  variant: QuoteBundleVariant,
+  quoteIds: readonly string[],
+) => {
+  const variantQuoteIds = variant.bundle.quotes.map((quote) => quote.id)
+  return (
+    variantQuoteIds.sort().join(',') ===
+    quoteIds
+      .concat()
+      .sort()
+      .join(',')
+  )
+}
+
+export const getBundleVariantFromQuoteIds = (
+  quoteIds: readonly string[],
+  bundleVariants: QuoteBundleVariant[],
+) =>
+  bundleVariants.find((variant) =>
+    isBundleVariantMatchingQuoteIds(variant, quoteIds),
+  )
