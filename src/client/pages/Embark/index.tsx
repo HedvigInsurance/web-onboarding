@@ -220,14 +220,10 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
     eventName: string,
     payload: Record<string, any>,
   ) => {
-    const filteredArray = Object.entries(payload).filter(
-      (property) => property[1] !== undefined,
+    const payloadObject = { ...payload }
+    Object.keys(payloadObject).forEach(
+      (key) => payloadObject[key] === undefined && delete payloadObject[key],
     )
-
-    const payloadObject = filteredArray.reduce((prev, item) => {
-      const [key, value] = item
-      return { ...prev, [key]: value }
-    }, {})
 
     pushToGTMDataLayer({
       event: eventName,
