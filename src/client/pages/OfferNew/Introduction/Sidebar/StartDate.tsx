@@ -364,8 +364,8 @@ export const StartDate: React.FC<Props> = ({
         }
         transition={{
           type: 'spring',
-          stiffness: 400,
-          damping: 100,
+          stiffness: 500,
+          damping: 50,
         }}
       >
         {textKeys.SIDEBAR_UPDATE_START_DATE_FAILED()}

@@ -114,7 +114,7 @@ export const SignStatus: React.FC<Props> = ({
         <SignStatusWrapper
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: 'auto', opacity: 1 }}
-          transition={{ type: 'spring', stiffness: 400, damping: 100 }}
+          transition={{ type: 'spring', stiffness: 500, damping: 50 }}
         >
           <StatusText>
             {hasSigningError && (

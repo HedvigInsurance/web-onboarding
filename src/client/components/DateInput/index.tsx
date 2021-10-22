@@ -320,8 +320,8 @@ export const DateInput: React.FC<DateInputProps> = ({
         }
         transition={{
           type: 'spring',
-          stiffness: 400,
-          damping: 100,
+          stiffness: 500,
+          damping: 50,
         }}
       >
         <Dayzed
