@@ -9,7 +9,6 @@ import { WebSocketLink } from '@apollo/link-ws'
 import { CookieStorage } from 'cookie-storage'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { getMainDefinition } from '@apollo/client/utilities'
-import { Quote } from 'data/graphql'
 import { createSession, Session } from '../shared/sessionStorage'
 import possibleTypes from '../../possibleGraphqlTypes.json'
 
