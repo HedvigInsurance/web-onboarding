@@ -1,7 +1,6 @@
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
-import userEvent from '@testing-library/user-event'
-import { renderComponent, waitFor } from 'test/utils'
+import { renderComponent } from 'test/utils'
 import { LanguagePicker } from './LanguagePicker'
 
 jest.mock('../../apolloClient', () => ({}))
@@ -13,9 +12,9 @@ test('Swedish language picker renders without 💥', () => {
     </MemoryRouter>,
   )
 
-  expect(getByText('Svenska').getAttribute('href')).toBe('/se/new-member')
-  expect(getByText('English').getAttribute('href')).toBe('/se-en/new-member')
-  expect(queryByText('Norsk')).toBeNull()
+  expect(getByText('Sv')).toBeVisible()
+  expect(getByText('En').getAttribute('href')).toBe('/se-en/new-member')
+  expect(queryByText('No')).toBeNull()
 
   expect(container.firstChild).toMatchSnapshot()
 })
@@ -27,9 +26,9 @@ test('Norwegian language picker renders without 💥', () => {
     </MemoryRouter>,
   )
 
-  expect(getByText('Norsk').getAttribute('href')).toBe('/no/new-member')
-  expect(getByText('English').getAttribute('href')).toBe('/no-en/new-member')
-  expect(queryByText('Svenska')).toBeNull()
+  expect(getByText('No')).toBeVisible()
+  expect(getByText('En').getAttribute('href')).toBe('/no-en/new-member')
+  expect(queryByText('Sv')).toBeNull()
 
   expect(container.firstChild).toMatchSnapshot()
 })
@@ -41,23 +40,9 @@ test('Danish language picker renders without 💥', () => {
     </MemoryRouter>,
   )
 
-  expect(getByText('Dansk').getAttribute('href')).toBe('/dk/new-member')
-  expect(getByText('English').getAttribute('href')).toBe('/dk-en/new-member')
-  expect(queryByText('Svenska')).toBeNull()
+  expect(getByText('Da')).toBeVisible()
+  expect(getByText('En').getAttribute('href')).toBe('/dk-en/new-member')
+  expect(queryByText('Sv')).toBeNull()
 
   expect(container.firstChild).toMatchSnapshot()
-})
-
-test('opens when clicking icon', async () => {
-  const { getByText, getByRole } = renderComponent(
-    <MemoryRouter initialEntries={['/se/new-member']}>
-      <LanguagePicker />
-    </MemoryRouter>,
-  )
-
-  expect(getByText('Svenska')).not.toBeVisible()
-
-  userEvent.click(getByRole('button'))
-
-  await waitFor(() => expect(getByText('Svenska')).toBeVisible())
 })

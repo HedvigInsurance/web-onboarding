@@ -1,108 +1,70 @@
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
-import { motion } from 'framer-motion'
+import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useMarket } from 'components/utils/CurrentLocale'
-import { LanguageIcon } from 'components/icons/LanguageIcon'
 import { languagePickerData } from './languagePickerData'
 
 const Wrapper = styled.div`
-  position: relative;
-`
-const Option = styled.div`
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  height: 1.5rem;
 `
 
-const LanguageDropdownButton = styled.button`
-  background: none;
-  padding: 0;
-  margin: 0;
-  border: none;
-  cursor: pointer;
-  outline: 0;
+const ActiveOption = styled.div`
+  color: ${colorsV3.gray100};
+  font-size: 1rem;
+  cursor: default;
 `
 
-const StyledLink = styled(Link)`
-  outline: 0;
-  color: ${colorsV2.black};
+const LinkOption = styled(Link)`
   text-decoration: none;
-  transition: all 250ms;
-  font-size: 0.9rem;
+  color: ${colorsV3.gray100};
+  font-size: 1rem;
+  opacity: 0.5;
 
-  /* Override EmbarkStyling reset */
-  & {
-    padding: 10px 20px;
+  &:hover {
+    color: ${colorsV3.gray100};
+    opacity: 0.8;
   }
 
-  :active {
-    background-color: ${colorsV2.lightgray};
+  &:active {
+    color: ${colorsV3.gray100};
+    opacity: 1;
   }
 `
 
 const Divider = styled.span`
-  height: 1px;
-  width: 100%;
-  background-color: ${colorsV2.lightgray};
+  height: 100%;
+  width: 1px;
+  background-color: ${colorsV3.gray100};
+
+  /* Override global Embark styling */
+  & {
+    margin: 0 0.5rem;
+  }
 `
 
-const Dropdown = styled.div`
-  background-color: white;
-  border-radius: 5px;
-  position: absolute;
-  right: 0;
-  transform: translateY(10px);
-  overflow: hidden;
-  z-index: 9999;
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
-`
+interface Props {
+  path?: string
+}
 
-export const LanguagePicker: React.FC<{ path?: string }> = ({
-  path = '/new-member',
-}) => {
-  const [isOpen, setIsOpen] = React.useState(false)
+export const LanguagePicker: React.FC<Props> = ({ path = '/new-member' }) => {
+  const location = useLocation()
   const market = useMarket()
-
-  React.useEffect(() => {
-    const clickListener = () => {
-      setIsOpen(false)
-    }
-    document.body.addEventListener('click', clickListener)
-
-    return () => document.body.removeEventListener('click', clickListener)
-  }, [])
 
   return (
     <Wrapper>
-      <LanguageDropdownButton onClick={() => setIsOpen(!isOpen)}>
-        <LanguageIcon />
-      </LanguageDropdownButton>
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        variants={{
-          open: { opacity: 1, y: 0 },
-          closed: {
-            opacity: 0,
-            y: -20,
-          },
-        }}
-        animate={isOpen ? 'open' : 'closed'}
-        style={{
-          pointerEvents: isOpen ? 'auto' : 'none',
-          userSelect: isOpen ? 'auto' : 'none',
-        }}
-        transition={{ type: 'spring', stiffness: 400, damping: 100 }}
-      >
-        <Dropdown>
-          {languagePickerData[market].map(({ linkTo, title }, index) => (
-            <Option key={linkTo}>
-              <StyledLink to={`/${linkTo}${path}`}>{title}</StyledLink>
-              {index < languagePickerData[market].length - 1 && <Divider />}
-            </Option>
-          ))}
-        </Dropdown>
-      </motion.div>
+      {languagePickerData[market].map(({ linkTo, shortTitle }, index) => (
+        <React.Fragment key={linkTo}>
+          {location.pathname.startsWith(`/${linkTo}/`) ? (
+            <ActiveOption>{shortTitle}</ActiveOption>
+          ) : (
+            <LinkOption to={`/${linkTo}${path}`}>{shortTitle}</LinkOption>
+          )}
+          {index < languagePickerData[market].length - 1 && <Divider />}
+        </React.Fragment>
+      ))}
     </Wrapper>
   )
 }
