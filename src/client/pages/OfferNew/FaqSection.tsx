@@ -11,7 +11,13 @@ import {
   LARGE_SCREEN_MEDIA_QUERY,
   MEDIUM_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
-import { Container, Heading } from './components'
+import {
+  Container,
+  Heading,
+  Column,
+  COLUMN_WIDTH_REM,
+  CONTAINER_MAX_WIDTH_REM,
+} from './components'
 
 const SectionWrapper = styled.div`
   padding-top: 5rem;
@@ -30,6 +36,28 @@ const FAQContainer = styled(Container)`
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     flex-direction: column;
+  }
+`
+
+const MIN_COLUMN_WIDTH = 32
+const MAX_COLUMN_WIDTH = COLUMN_WIDTH_REM
+const MIN_VIEWPORT_WIDTH = 62.5 // 1000px
+const MAX_VIEWPORT_WIDTH = CONTAINER_MAX_WIDTH_REM
+
+const FAQColumn = styled(Column)`
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    /* Reference: https://css-tricks.com/snippets/css/fluid-typography/ */
+    max-width: calc(
+      ${MIN_COLUMN_WIDTH}rem + ${MAX_COLUMN_WIDTH - MIN_COLUMN_WIDTH} *
+        (
+          (100vw - ${MIN_VIEWPORT_WIDTH}rem) /
+            (${MAX_VIEWPORT_WIDTH} - ${MIN_VIEWPORT_WIDTH})
+        )
+    );
+  }
+
+  @media screen and (min-width: ${MAX_VIEWPORT_WIDTH}rem) {
+    max-width: ${MAX_COLUMN_WIDTH}rem;
   }
 `
 
@@ -170,17 +198,19 @@ export const FaqSection: React.FC = () => {
     <>
       <SectionWrapper>
         <FAQContainer>
-          <HeadingWhite>{textKeys.OFFER_FAQ_HEADING()}</HeadingWhite>
-          <AccordionsWrapper>
-            {languageData?.faqs?.map((faq) => (
-              <Accordion
-                key={faq?.id}
-                id={faq?.id}
-                headline={faq!.headline!}
-                body={faq!.body!}
-              />
-            ))}
-          </AccordionsWrapper>
+          <FAQColumn>
+            <HeadingWhite>{textKeys.OFFER_FAQ_HEADING()}</HeadingWhite>
+            <AccordionsWrapper>
+              {languageData?.faqs?.map((faq) => (
+                <Accordion
+                  key={faq?.id}
+                  id={faq?.id}
+                  headline={faq!.headline!}
+                  body={faq!.body!}
+                />
+              ))}
+            </AccordionsWrapper>
+          </FAQColumn>
         </FAQContainer>
       </SectionWrapper>
     </>
