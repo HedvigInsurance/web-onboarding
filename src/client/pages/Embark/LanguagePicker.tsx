@@ -40,7 +40,7 @@ const Divider = styled.span`
   background-color: ${colorsV3.gray100};
 
   /* Override global Embark styling */
-  & {
+  && {
     margin: 0 0.5rem;
   }
 `
