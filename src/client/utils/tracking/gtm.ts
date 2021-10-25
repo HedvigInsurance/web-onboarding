@@ -35,6 +35,7 @@ type DataLayerObject = {
   userProperties?: GTMUserProperties
   offerData?: GTMOfferData
   pageData?: GTMPageData
+  passageData?: Record<string, string | undefined>
 }
 
 /**
@@ -68,7 +69,7 @@ export const useGTMTracking = () => {
   }, [location, market])
 }
 
-const pushToGTMDataLayer = (obj: DataLayerObject) => {
+export const pushToGTMDataLayer = (obj: DataLayerObject) => {
   const castedWindow = window as any
   castedWindow.dataLayer = castedWindow.dataLayer || []
   castedWindow.dataLayer.push(obj)
