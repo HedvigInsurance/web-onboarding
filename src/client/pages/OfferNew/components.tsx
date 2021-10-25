@@ -93,13 +93,12 @@ export const ContainerWrapper = styled.div`
   }
 `
 
-export const CONTAINER_MAX_WIDTH_REM = 80
 export const Container = styled('div')`
   width: 100%;
   height: 100%;
   padding: 0 1rem;
   margin: 0 auto;
-  max-width: ${CONTAINER_MAX_WIDTH_REM}rem;
+  max-width: 80rem;
   display: flex;
   justify-content: space-between;
   flex-direction: column-reverse;
@@ -111,11 +110,10 @@ export const Container = styled('div')`
   }
 `
 
-export const COLUMN_WIDTH_REM = 47.5
 export const Column = styled('div')`
   display: flex;
   flex-direction: column;
-  max-width: ${COLUMN_WIDTH_REM}rem;
+  max-width: 47.5rem;
   width: 100%;
   flex-grow: 0;
   box-sizing: border-box;
