@@ -20,7 +20,11 @@ import { localePathPattern } from 'l10n/localePathPattern'
 import { Features, useFeature } from 'utils/hooks/useFeature'
 import { useQuoteIds } from '../../utils/hooks/useQuoteIds'
 import { LanguagePicker } from '../Embark/LanguagePicker'
-import { getOfferData, getBundleVariantFromQuoteIds } from './utils'
+import {
+  getOfferData,
+  getBundleVariantFromQuoteIds,
+  getUniqueQuotesFromVariantList,
+} from './utils'
 import { AppPromotionSection } from './AppPromotionSection'
 import { Checkout } from './Checkout'
 import { FaqSection } from './FaqSection'
@@ -151,6 +155,7 @@ export const OfferNew: React.FC = () => {
             >
               {({ track }) => (
                 <Introduction
+                  allQuotes={getUniqueQuotesFromVariantList(bundleVariants)}
                   offerData={offerData}
                   refetch={refetch as () => Promise<any>}
                   onCheckoutOpen={() => {

@@ -5,12 +5,16 @@ import { colorsV3, fonts } from '@hedviginsurance/brand'
 import { Button } from 'components/buttons'
 import { Modal, ModalProps } from 'components/ModalNew'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
-import { EditQuoteInput, useEditQuoteMutation } from 'data/graphql'
+import {
+  BundledQuote,
+  EditQuoteInput,
+  useEditQuoteMutation,
+} from 'data/graphql'
 import { LocaleLabel, locales } from 'l10n/locales'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
 import { captureSentryError } from 'utils/sentry-client'
-import { getMainQuote } from '../../utils'
+import { getMainQuote, isBundle } from '../../utils'
 import { Details } from './Details'
 import {
   getFieldSchema,
@@ -91,12 +95,14 @@ const LoadingDimmer = styled.div<{ visible: boolean }>`
 
 type DetailsModalProps = {
   offerData: OfferData
+  allQuotes: BundledQuote[]
   refetch: () => Promise<void>
 }
 
 export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   refetch,
   offerData,
+  allQuotes,
   isVisible,
   onClose,
 }) => {
@@ -119,11 +125,12 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
 
   const editQuotes = async (form: EditQuoteInput) => {
     return Promise.all(
-      offerData.quotes.map((quote) => {
+      allQuotes.map(({ quoteDetails, id }) => {
         const editQuoteInput = getEditQuoteInput({
-          quote,
+          id,
+          quoteDetails,
           form,
-          offerData,
+          isPartOfBundle: isBundle(offerData),
         })
 
         return editQuoteMutation({

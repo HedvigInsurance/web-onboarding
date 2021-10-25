@@ -5,6 +5,7 @@ import { Section } from 'pages/OfferNew/components'
 import { OfferData } from 'pages/OfferNew/types'
 import { BackgroundImage } from 'components/BackgroundImage'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import { BundledQuote } from 'src/client/data/graphql'
 import { isBundle } from '../utils'
 import { HeroOfferDetails } from './HeroOfferDetails'
 import { Sidebar } from './Sidebar'
@@ -12,6 +13,7 @@ import { ExternalInsuranceProvider } from './ExternalInsuranceProvider'
 
 type Props = {
   offerData: OfferData
+  allQuotes: BundledQuote[]
   refetch: () => Promise<void>
   onCheckoutOpen: () => void
 }
@@ -75,6 +77,7 @@ const HeroBackgroundImage = styled(BackgroundImage)`
 
 export const Introduction: React.FC<Props> = ({
   offerData,
+  allQuotes,
   refetch,
   onCheckoutOpen,
 }) => {
@@ -90,6 +93,7 @@ export const Introduction: React.FC<Props> = ({
             <HeroOfferDetailsContainer>
               <HeroOfferDetails
                 offerData={offerData}
+                allQuotes={allQuotes}
                 refetchOfferData={refetch}
               />
               {hasDataCollection && (
