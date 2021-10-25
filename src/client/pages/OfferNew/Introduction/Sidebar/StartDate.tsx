@@ -20,12 +20,7 @@ import { LoadingDots } from 'components/LoadingDots/LoadingDots'
 import { useRemoveStartDateMutation, useStartDateMutation } from 'data/graphql'
 import { CancellationOptions } from 'pages/OfferNew/Introduction/Sidebar/CancellationOptions'
 import { OfferData, OfferQuote } from 'pages/OfferNew/types'
-import {
-  hasCurrentInsurer,
-  isBundle,
-  isDanish,
-  isSwedish,
-} from 'pages/OfferNew/utils'
+import { hasCurrentInsurer, isBundle, isDanish } from 'pages/OfferNew/utils'
 import { useTextKeys } from 'utils/textKeys'
 import { Size } from 'components/types'
 import { gqlDateFormat } from './utils'
@@ -350,7 +345,7 @@ export const StartDate: React.FC<Props> = ({
 
   // TODO: Make this flag more generic. This logic should not live here.
   const isSingleStartDateBundle = (offerData: OfferData) =>
-    isBundle(offerData) && (isDanish(offerData) || isSwedish(offerData))
+    isBundle(offerData) && isDanish(offerData)
 
   return (
     <>

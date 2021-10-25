@@ -78,6 +78,7 @@ const CalendarDay = styled.button<{ selected: boolean; selectable: boolean }>`
   border-radius: 2px;
   transition: background-color 250ms, color 250ms;
   background: ${colorsV3.white};
+  color: ${colorsV3.gray900};
 
   svg {
     width: 13px;
