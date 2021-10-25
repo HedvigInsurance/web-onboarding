@@ -301,5 +301,7 @@
   "CHECKOUT_SIGN_FAIL_HEADER": "",
   "CHECKOUT_SIGN_FAIL_CONTENT": "",
   "OFFER_BUNDLE_SELECTOR_TITLE": "Din forsikringspakke",
-  "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "Forsikringen gælder for alle medforsikrede. Prisen er beregnet på baggrund af startdatoen."
+  "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "",
+  "OFFER_APP_PROMOTION_HEADING": "En forsikringsapp, der løser dine problemer",
+  "OFFER_APP_PROMOTION_PARAGRAPH": ""
 }

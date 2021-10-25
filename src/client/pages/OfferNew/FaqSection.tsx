@@ -8,48 +8,71 @@ import { useFaqsQuery } from 'data/graphql'
 import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
 import {
-  Column,
-  ColumnSpacing,
-  Container,
-  HeadingWhite,
-  PreHeading,
-} from './components'
+  LARGE_SCREEN_MEDIA_QUERY,
+  MEDIUM_SCREEN_MEDIA_QUERY,
+} from 'utils/mediaQueries'
+import { Container, Heading } from './components'
 
 const SectionWrapper = styled.div`
-  padding: 8rem 2rem 12rem 2rem;
-  margin-top: -10px;
+  padding-top: 5rem;
+  /* Clear footer CTA */
+  padding-bottom: calc(5rem + 135px);
   background: ${colorsV3.gray900};
-  color: ${colorsV3.white};
+  color: ${colorsV3.gray100};
 
-  @media (max-width: 420px) {
-    padding-left: 1rem;
-    padding-right: 1rem;
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    padding-bottom: 5rem;
   }
 `
 
-const SmallerHeading = styled(HeadingWhite)`
-  font-size: 3.5rem;
-  line-height: 3.5rem;
-  margin-bottom: 4rem;
+const FAQContainer = styled(Container)`
+  flex-direction: column;
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    flex-direction: column;
+  }
+`
+
+export const HeadingWhite = styled(Heading)`
+  color: ${colorsV3.gray100};
 `
 
 const AccordionsWrapper = styled.div`
   list-style: none;
   padding: 0;
   margin: 0;
+  margin-top: 1.5rem;
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    margin-top: 3.5rem;
+  }
 `
 
 const AccordionWrapper = styled('li')`
   padding: 0;
   margin: 0;
+
+  &:not(:last-child) {
+    margin-bottom: 1.5rem;
+
+    ${LARGE_SCREEN_MEDIA_QUERY} {
+      margin-bottom: 2.5rem;
+    }
+  }
 `
 
 const AccordionHeadline = styled('h3')`
   font-size: 1.25rem;
-  line-height: 1.25;
+  line-height: 1.4;
+  margin: 0;
 `
 
 const AccordionBody = styled(ReactMarkdown)`
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
+  color: ${colorsV3.gray100};
+  line-height: 1.6;
+
   p,
   h1,
   h2,
@@ -65,9 +88,6 @@ const AccordionBody = styled(ReactMarkdown)`
 
 const ExpandToggler = styled('button')`
   appearance: none;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
   text-align: inherit;
   line-height: inherit;
   font-size: inherit;
@@ -78,10 +98,14 @@ const ExpandToggler = styled('button')`
   padding: 0;
   color: inherit;
   cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-  @media (max-width: 480px) {
-    width: 100%;
-    justify-content: space-between;
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
+    width: auto;
+    justify-content: flex-start;
   }
 
   &:focus {
@@ -145,24 +169,19 @@ export const FaqSection: React.FC = () => {
   return (
     <>
       <SectionWrapper>
-        <Container>
-          <Column>
-            <PreHeading>{textKeys.OFFER_FAQ_PRE_HEADING()}</PreHeading>
-            <SmallerHeading>{textKeys.OFFER_FAQ_HEADING()}</SmallerHeading>
-            <AccordionsWrapper>
-              {(languageData?.faqs ?? []).map((faq) => (
-                <Accordion
-                  key={faq?.id}
-                  id={faq?.id}
-                  headline={faq!.headline!}
-                  body={faq!.body!}
-                />
-              ))}
-            </AccordionsWrapper>
-          </Column>
-
-          <ColumnSpacing />
-        </Container>
+        <FAQContainer>
+          <HeadingWhite>{textKeys.OFFER_FAQ_HEADING()}</HeadingWhite>
+          <AccordionsWrapper>
+            {languageData?.faqs?.map((faq) => (
+              <Accordion
+                key={faq?.id}
+                id={faq?.id}
+                headline={faq!.headline!}
+                body={faq!.body!}
+              />
+            ))}
+          </AccordionsWrapper>
+        </FAQContainer>
       </SectionWrapper>
     </>
   )

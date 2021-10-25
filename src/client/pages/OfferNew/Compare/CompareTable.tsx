@@ -4,7 +4,7 @@ import hexToRgba from 'hex-to-rgba'
 import React from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { Checkmark } from 'components/icons/Checkmark'
-import { DownArrow } from 'components/icons/DownArrow'
+import { ChevronDown } from 'components/icons/ChevronDown'
 import { HedvigSymbol } from 'components/icons/HedvigSymbol'
 import { XMark } from 'components/icons/Xmark'
 import { Tooltip } from 'components/Tooltip/Tooltip'
@@ -288,7 +288,7 @@ const MobileDropdownWrapper = styled('div')`
   max-width: 85px;
   margin-bottom: 3.25rem;
 `
-const TinyDownArrow = styled(DownArrow)`
+const TinyDownArrow = styled(ChevronDown)`
   width: 7px;
   height: 7px;
 `
@@ -308,7 +308,8 @@ const MobileDropdown = styled('select')`
     font-size: 1rem;
     transform: scale(0.875);
     transform-origin: left center;
-    -moz-transform: none; // firefox closes dropdown if you transform it on activation
+    /* firefox closes dropdown if you transform it on activation */
+    -moz-transform: none;
   }
   :focus {
     outline: none;
@@ -409,7 +410,7 @@ export const CompareTable = (props: Props) => {
               ) : (
                 <>{textKeys.COMPARE_TABLE_DROPDOWN_LABEL()}</>
               )}
-              <DownArrow />
+              <ChevronDown />
             </OtherCompanyHead>
             <Dropdown visible={dropdownIsVisible}>
               {props.otherCompanies.map((company) => (

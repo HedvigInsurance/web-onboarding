@@ -301,5 +301,7 @@
   "CHECKOUT_SIGN_FAIL_HEADER": "",
   "CHECKOUT_SIGN_FAIL_CONTENT": "",
   "OFFER_BUNDLE_SELECTOR_TITLE": "Ditt försäkringspaket",
-  "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "Försäkringarna gäller för alla medförsäkrade. Priset är beräknat med startdatum {date}."
+  "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "Välj vilket försäkringspaket som passar dig. Försäkringarna gäller för dig och alla medförsäkrade.",
+  "OFFER_APP_PROMOTION_HEADING": "Allt sköts via vår enkla app",
+  "OFFER_APP_PROMOTION_PARAGRAPH": "Råkar du ut för en skada kan du enkelt anmäla skadan direkt i appen - var de än befinner sig. För de allra enklaste skadorna behöver du inte ens vänta i 5 minuter på din ersättning. Vi är tillgängliga mellan 08-22 på vardagar och 9-18 på helger."
 }

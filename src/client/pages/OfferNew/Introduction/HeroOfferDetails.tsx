@@ -6,7 +6,6 @@ import { useTextKeys } from 'utils/textKeys'
 import {
   LARGE_SCREEN_MEDIA_QUERY,
   MEDIUM_SCREEN_MEDIA_QUERY,
-  MEDIUM_SMALL_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
 import { Button } from 'components/buttons'
 import { quoteDetailsHasAddress } from '../utils'
@@ -28,28 +27,28 @@ const Wrapper = styled.div`
   }
 `
 const Headline = styled.h1`
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
   text-transform: uppercase;
   font-size: 0.875rem;
-  line-height: 1.375rem;
+  line-height: 1.57;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     font-size: 1rem;
-    line-height: 1.5rem;
+    line-height: 1.5;
   }
 `
 const OfferInfoWrapper = styled.div`
-  padding-bottom: 1.5rem;
+  padding-bottom: 1rem;
 `
 const NameAndCoInsured = styled.div`
   font-size: 1.5rem;
-  line-height: 2rem;
+  line-height: 1.33;
   display: inline-block;
   margin-right: 0.5rem;
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     font-size: 3rem;
-    line-height: 3.5rem;
+    line-height: 1.17;
   }
 
   &:after {
@@ -64,27 +63,29 @@ const NameAndCoInsured = styled.div`
 
 const Address = styled.div`
   font-size: 1.5rem;
-  line-height: 2rem;
+  line-height: 1.3;
   display: inline-block;
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
-    font-size: 2.5rem;
+    font-size: 3rem;
+    line-height: 1.17;
     display: block;
   }
 `
 
 const EditDetailsButton = styled(Button)`
+  font-size: 0.875rem;
   border: 1px solid ${colorsV3.gray900};
   color: ${colorsV3.gray900};
-  width: 100%;
-
-  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
-    width: auto;
-  }
+  padding: 0.375rem 0.75rem;
+  border-radius: 6px;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
+    font-size: 1rem;
     border: 1px solid ${colorsV3.gray100};
     color: ${colorsV3.gray100};
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
   }
 
   &:hover {
