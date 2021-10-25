@@ -38,6 +38,7 @@ enum EmbarkStory {
   // New Swedish flows with Lokalise & Accident
   SwedenNeeder = 'Web Onboarding SE - Needer',
   SwedenSwitcher = 'Web Onboarding SE - Switcher',
+  SwedenSwitcherWithoutAccident = 'Web Onboarding SE - Switcher Without Accident',
 }
 
 export interface ServerSideRoute {
@@ -255,6 +256,14 @@ export const reactPageRoutes: ReactPageRoute[] = [
                 return {
                   baseUrl: `/${locale}/new-member/home-accident-needer`,
                   name: EmbarkStory.SwedenNeeder,
+                }
+              case 'home-switcher':
+                if (window.hedvigClientConfig.appEnvironment === 'production') {
+                  return null
+                }
+                return {
+                  baseUrl: `/${locale}/new-member/home-switcher`,
+                  name: EmbarkStory.SwedenSwitcherWithoutAccident,
                 }
               case 'home-accident-switcher':
                 if (window.hedvigClientConfig.appEnvironment === 'production') {
