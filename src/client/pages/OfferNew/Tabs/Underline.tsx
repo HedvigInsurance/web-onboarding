@@ -2,9 +2,10 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { useMediaQuery } from 'react-responsive'
+import { BREAKPOINTS } from 'utils/mediaQueries'
 
 export const UnderlineComponent: React.FC = () => {
-  const isDesktop = useMediaQuery({ minWidth: 800 })
+  const isDesktop = useMediaQuery({ minWidth: BREAKPOINTS.mediumScreen })
 
   return (
     <motion.div
