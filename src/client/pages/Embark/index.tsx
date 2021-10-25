@@ -17,6 +17,7 @@ import { apolloClient } from 'apolloClient'
 import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useTextKeys } from 'utils/textKeys'
+import { pushToGTMDataLayer } from '../../utils/tracking/gtm'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
 import {
@@ -215,6 +216,33 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
 
   const textKeys = useTextKeys()
 
+  const trackPassageData = (
+    eventName: string,
+    payload: Record<string, any>,
+  ) => {
+    const payloadObject = { ...payload }
+    Object.keys(payloadObject).forEach(
+      (key) => payloadObject[key] === undefined && delete payloadObject[key],
+    )
+
+    pushToGTMDataLayer({
+      event: eventName,
+      passageData: {
+        originatedFromEmbarkStory: props.name,
+        ...payloadObject,
+      },
+    })
+
+    // Push data to Segment
+    const castedWindow = window as any
+    if (castedWindow && castedWindow.analytics) {
+      castedWindow.analytics.track(eventName, {
+        originatedFromEmbarkStory: props.name,
+        ...payloadObject,
+      })
+    }
+  }
+
   React.useEffect(() => {
     ;(async () => {
       if (!props.name) {
@@ -341,15 +369,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                     addressAutocompleteQuery: resolveAddressAutocomplete,
                     externalInsuranceProviderProviderStatus: resolveExternalInsuranceProviderProviderStatus,
                     externalInsuranceProviderStartSession: resolveExternalInsuranceProviderStartSession,
-                    track: (eventName, payload) => {
-                      const castedWindow = window as any
-                      if (castedWindow && castedWindow.analytics) {
-                        castedWindow.analytics.track(eventName, {
-                          ...payload,
-                          originatedFromEmbarkStory: props.name,
-                        })
-                      }
-                    },
+                    track: trackPassageData,
                   }}
                   initialStore={initialStore}
                   onStoreChange={(store) => {
