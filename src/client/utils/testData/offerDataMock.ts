@@ -117,43 +117,114 @@ export const insuranceTermsNoTravelMock = new Map([
 
 export const perilsMock: PerilV2[] = [
   {
-    title: 'Forsinkelser',
+    title: 'Fire',
+    shortDescription: '',
     description:
-      'Hvis det blir forsinkelser når du er ute og reiser erstatter vi ekstrautgiftene dette medfører, for eksempel hvis bagasjen ikke dukker opp eller flyet er forsinket og du må overnatte en ekstra natt på et hotell.',
+      'We will cover fire damage, e.g. an over-heated mobile charger or a failed attempt to fry fries. In case of an apartment fire, we can reimburse you for fire and smoke damages.',
     covered: [
-      'Bagasje (minst 4 timer): utgifter for toalettsaker mens bagasjen er borte, inntil 5000 kroner per person og 8000 kroner for familie',
-      'Avreise grunnet værforhold, teknisk feil eller trafikkuhell: utgifter for nødvendig overnatting inntil 1500 kroner per person og 3000 kroner for familie, når reisen har begynt og transportmiddel allerede er betalt',
-      'Ankomst grunnet værforhold, teknisk feil eller trafikuhell: ekstra utgifter (opptil 20 000 kroner per person og 50 000 kroner for familie) for å endre billetter eller kjøpe nye. ',
+      'Fire due to open flames (not just glow)',
+      'Explosion',
+      'Lightning',
+      'Corrosive gas created by unintentional burning of plastics',
+      'Cleaning of soot caused by open fire',
+      'Sudden damage caused by soot',
     ],
-    exceptions: [
-      'Bagasje på hjemreisen',
-      'Flyforsinkelse, kansellering eller overbooking som omfattes av EU-direktiv 261/2004 og som flyselskapene selv har erstatningsansvaret',
-      'Økonomisk tap eller skade som direkte/indirekte skyldes streik, arbeidskonflikt, lockout eller konkurs',
-    ],
-    info: '',
+    exceptions: ['Explosive work', 'Soot from lit candles'],
+    info: 'Be careful with candles and fires.',
     icon: {
+      svgUrl: 'https://promise.hedvig.com/media/fire_97796e0790.svg',
+      pdfUrl: 'https://promise.hedvig.com/media/fire_2b4db0c75f.pdf',
+      vectorDrawableUrl: '',
       variants: {
         light: {
-          svgUrl: '/app-content-service/delayed_luggage.svg',
-          pdfUrl: '',
+          svgUrl: 'https://promise.hedvig.com/media/fire_97796e0790.svg',
+          pdfUrl: 'https://promise.hedvig.com/media/fire_2b4db0c75f.pdf',
           vectorDrawableUrl: '',
-          __typename: 'IconVariant',
         },
         dark: {
-          svgUrl: '/app-content-service/delayed_luggage.svg',
-          pdfUrl: '',
+          svgUrl: 'https://promise.hedvig.com/media/fire_dark_942da46f6f.svg',
+          pdfUrl: 'https://promise.hedvig.com/media/fire_dark_b25d17c420.pdf',
           vectorDrawableUrl: '',
-          __typename: 'IconVariant',
         },
-        __typename: 'IconVariants',
       },
-      svgUrl: '/app-content-service/delayed_luggage.svg',
-      pdfUrl: '',
-      vectorDrawableUrl: '',
-      __typename: 'Icon',
     },
+  },
+  {
+    title: 'Behandlingskostnader',
     shortDescription: '',
-    __typename: 'PerilV2',
+    description:
+      'We cover different types of water damages, for example if a washing machine leaks uncontrollably or if a bathroom is flooded. We can reimburse you for damages to the apartment and for other costs incurred during the reparations.',
+    covered: [
+      'Unexpected escape of liquid/steam from the pipework system, connected appliances or kitchen, laundry room and bathroom.',
+      'Leaking fridge/freezer',
+      'Leaking fire extinguisher',
+      'Leaking sink',
+      'Leaking aquarium',
+    ],
+    exceptions: [
+      'Surface and water barrier installed by uncertified plumber',
+      'Damage to the leaking unit itself',
+      'Damage caused by roof gutters or external downspouts',
+    ],
+    info:
+      'Make sure that faucets are sealed and turned off when not in use. Place drip trays that collect water below the fridge/freezer/washing machine. Make sure that the piping system and devices connected to it do not freeze. If you leave your apartment for more than seven days, shut the main water valve.',
+    icon: {
+      svgUrl: 'https://promise.hedvig.com/media/water_damage_e25b83cd0b.svg',
+      pdfUrl: 'https://promise.hedvig.com/media/water_damage_40c8d05caa.pdf',
+      vectorDrawableUrl: '',
+      variants: {
+        light: {
+          svgUrl:
+            'https://promise.hedvig.com/media/water_damage_e25b83cd0b.svg',
+          pdfUrl:
+            'https://promise.hedvig.com/media/water_damage_40c8d05caa.pdf',
+          vectorDrawableUrl: '',
+        },
+        dark: {
+          svgUrl:
+            'https://promise.hedvig.com/media/water_damage_dark_227105c1de.svg',
+          pdfUrl:
+            'https://promise.hedvig.com/media/water_damage_dark_747fb516a1.pdf',
+          vectorDrawableUrl: '',
+        },
+      },
+    },
+  },
+  {
+    title: 'Stöld och skadegörelse',
+    shortDescription: '',
+    description:
+      'Vid stöld och skadegörelse av dina saker så täcks dem och ersätts av oss. Oavsett om du är hemma eller på resande fot kan du alltid känna dig trygg med oss.',
+    covered: [
+      'Stöld och skadegörelse i ditt hem',
+      'Stöld ur gemensamhetsutrymme, t.ex. cykel- eller barnvagnsförråd',
+      'Stöld och skadegörelse av saker du tar med dig till ditt arbete eller hotellrum',
+      'Stöld och skadegörelse vid förvaring hos t.ex. Shurgard',
+      'Stöld utanför bostaden',
+      'Stöld ur bil när du är på resa',
+    ],
+    exceptions: [
+      'För vissa typer av saker, t.ex. pengar, hemelektronik, mobiltelefoner, datorer, kameror, sprit och smycken gäller speciella regler beroende på var stölden inträffat.',
+    ],
+    info:
+      'Ha alltid uppsikt över dina saker. Lämna inte värdesaker på t.ex. ett bord på ett café. Lås alltid bilen om du förvarar saker där och stöldbegärlig egendom (smycke, dator) ska alltid döljas. Och lås alltid din cykel.',
+    icon: {
+      svgUrl: 'https://promise.hedvig.com/media/theft_701fa78317.svg',
+      pdfUrl: 'https://promise.hedvig.com/media/theft_a3509c7f24.pdf',
+      vectorDrawableUrl: '',
+      variants: {
+        light: {
+          svgUrl: 'https://promise.hedvig.com/media/theft_701fa78317.svg',
+          pdfUrl: 'https://promise.hedvig.com/media/theft_a3509c7f24.pdf',
+          vectorDrawableUrl: '',
+        },
+        dark: {
+          svgUrl: 'https://promise.hedvig.com/media/theft_dark_71deb24845.svg',
+          pdfUrl: 'https://promise.hedvig.com/media/theft_dark_8b98af07d7.pdf',
+          vectorDrawableUrl: '',
+        },
+      },
+    },
   },
 ]
 
