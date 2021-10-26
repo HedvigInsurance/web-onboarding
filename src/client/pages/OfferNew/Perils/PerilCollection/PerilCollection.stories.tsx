@@ -7,7 +7,7 @@ export default {
   title: 'Offer/Perils/PerilCollection',
   component: PerilCollection,
   parameters: {
-    paddings: [{ name: 'Medium', value: '16px', default: true }],
+    layout: 'padded',
   },
 }
 
