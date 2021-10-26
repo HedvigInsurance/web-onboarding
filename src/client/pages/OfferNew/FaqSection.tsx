@@ -11,7 +11,7 @@ import {
   LARGE_SCREEN_MEDIA_QUERY,
   MEDIUM_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
-import { Container, Heading } from './components'
+import { Container, Heading, Column, ColumnSpacing } from './components'
 
 const SectionWrapper = styled.div`
   padding-top: 5rem;
@@ -22,14 +22,6 @@ const SectionWrapper = styled.div`
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     padding-bottom: 5rem;
-  }
-`
-
-const FAQContainer = styled(Container)`
-  flex-direction: column;
-
-  ${LARGE_SCREEN_MEDIA_QUERY} {
-    flex-direction: column;
   }
 `
 
@@ -169,19 +161,22 @@ export const FaqSection: React.FC = () => {
   return (
     <>
       <SectionWrapper>
-        <FAQContainer>
-          <HeadingWhite>{textKeys.OFFER_FAQ_HEADING()}</HeadingWhite>
-          <AccordionsWrapper>
-            {languageData?.faqs?.map((faq) => (
-              <Accordion
-                key={faq?.id}
-                id={faq?.id}
-                headline={faq!.headline!}
-                body={faq!.body!}
-              />
-            ))}
-          </AccordionsWrapper>
-        </FAQContainer>
+        <Container>
+          <Column>
+            <HeadingWhite>{textKeys.OFFER_FAQ_HEADING()}</HeadingWhite>
+            <AccordionsWrapper>
+              {languageData?.faqs?.map((faq) => (
+                <Accordion
+                  key={faq?.id}
+                  id={faq?.id}
+                  headline={faq!.headline!}
+                  body={faq!.body!}
+                />
+              ))}
+            </AccordionsWrapper>
+          </Column>
+          <ColumnSpacing />
+        </Container>
       </SectionWrapper>
     </>
   )
