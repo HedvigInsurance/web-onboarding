@@ -71,8 +71,8 @@ export const Animator: React.FC<AnimatorProps> = ({
           }}
           transition={{
             type: 'spring',
-            stiffness: 250,
-            damping: 800,
+            stiffness: 500,
+            damping: 50,
           }}
         >
           {previousContent}
@@ -90,8 +90,8 @@ export const Animator: React.FC<AnimatorProps> = ({
         animate={{ opacity: 1, x: 0 }}
         transition={{
           type: 'spring',
-          stiffness: 250,
-          damping: 800,
+          stiffness: 500,
+          damping: 50,
         }}
       >
         {mainContent}
