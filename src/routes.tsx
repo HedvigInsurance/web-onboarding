@@ -251,7 +251,7 @@ export const reactPageRoutes: ReactPageRoute[] = [
                 }
               case 'home-accident-needer':
                 if (window.hedvigClientConfig.appEnvironment === 'production') {
-                  return null
+                  return <Redirect to={`/${match.params.locale}/new-member`} />
                 }
                 return {
                   baseUrl: `/${locale}/new-member/home-accident-needer`,
@@ -259,7 +259,7 @@ export const reactPageRoutes: ReactPageRoute[] = [
                 }
               case 'home-switcher':
                 if (window.hedvigClientConfig.appEnvironment === 'production') {
-                  return null
+                  return <Redirect to={`/${match.params.locale}/new-member`} />
                 }
                 return {
                   baseUrl: `/${locale}/new-member/home-switcher`,
@@ -267,7 +267,7 @@ export const reactPageRoutes: ReactPageRoute[] = [
                 }
               case 'home-accident-switcher':
                 if (window.hedvigClientConfig.appEnvironment === 'production') {
-                  return null
+                  return <Redirect to={`/${match.params.locale}/new-member`} />
                 }
                 return {
                   baseUrl: `/${locale}/new-member/home-accident-switcher`,
