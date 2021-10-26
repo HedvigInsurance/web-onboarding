@@ -251,7 +251,9 @@ export const reactPageRoutes: ReactPageRoute[] = [
                 }
               case 'home-accident-needer':
                 if (window.hedvigClientConfig.appEnvironment === 'production') {
-                  return <Redirect to={`/${match.params.locale}/new-member`} />
+                  return {
+                    redirect: `/${locale}/new-member`,
+                  }
                 }
                 return {
                   baseUrl: `/${locale}/new-member/home-accident-needer`,
@@ -259,7 +261,9 @@ export const reactPageRoutes: ReactPageRoute[] = [
                 }
               case 'home-switcher':
                 if (window.hedvigClientConfig.appEnvironment === 'production') {
-                  return <Redirect to={`/${match.params.locale}/new-member`} />
+                  return {
+                    redirect: `/${locale}/new-member`,
+                  }
                 }
                 return {
                   baseUrl: `/${locale}/new-member/home-switcher`,
@@ -267,7 +271,9 @@ export const reactPageRoutes: ReactPageRoute[] = [
                 }
               case 'home-accident-switcher':
                 if (window.hedvigClientConfig.appEnvironment === 'production') {
-                  return <Redirect to={`/${match.params.locale}/new-member`} />
+                  return {
+                    redirect: `/${locale}/new-member`,
+                  }
                 }
                 return {
                   baseUrl: `/${locale}/new-member/home-accident-switcher`,
@@ -277,13 +283,15 @@ export const reactPageRoutes: ReactPageRoute[] = [
             break
         }
 
-        return null
+        return {
+          redirect: `/${locale}/new-member`,
+        }
       }
 
       const props = getProps()
 
-      if (props === null) {
-        return <Redirect to={`/${match.params.locale}/new-member`} />
+      if (props.redirect) {
+        return <Redirect to={props.redirect} />
       }
 
       return (
