@@ -85,6 +85,7 @@ const PerilIcon = styled.img`
   svg {
     width: 100%;
     height: 100%;
+
     ${MEDIUM_SCREEN_MEDIA_QUERY} {
       transform: translateX(-0.625rem);
     }
@@ -100,13 +101,15 @@ const Title = styled('h4')`
   font-size: 0.875rem;
   overflow: hidden;
   text-overflow: ellipsis;
+  /* allow ellipsis to overlap right padding */
+  width: calc(100% + 0.25rem);
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     font-size: 1rem;
   }
 `
 
-const LongTitle = styled(Title)`
+const MultiLineTitle = styled(Title)`
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -118,13 +121,17 @@ export const PerilItem: React.FC<PerilItemProps> = ({
   onClick,
 }) => {
   const iconUrl = icon.variants.light.svgUrl
-  const isLongTitle = title.length > 25
+  const isMultiWordTitle = title.includes(' ')
 
   return (
     <OuterContainer>
       <Container onClick={onClick}>
         {iconUrl && <PerilIcon src={iconUrl} alt="" width={24} height={24} />}
-        {isLongTitle ? <LongTitle>{title}</LongTitle> : <Title>{title}</Title>}
+        {isMultiWordTitle ? (
+          <MultiLineTitle>{title}</MultiLineTitle>
+        ) : (
+          <Title>{title}</Title>
+        )}
       </Container>
     </OuterContainer>
   )
