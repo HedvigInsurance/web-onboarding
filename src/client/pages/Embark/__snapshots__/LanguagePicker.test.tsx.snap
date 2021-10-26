@@ -10,7 +10,7 @@ exports[`Danish language picker renders without 💥 1`] = `
     Da
   </div>
   <span
-    class="css-1wop701-Divider e1g7xtvp3"
+    class="css-au3ti5-Divider e1g7xtvp3"
   />
   <a
     class="css-1odoamw-LinkOption e1g7xtvp2"
@@ -31,7 +31,7 @@ exports[`Norwegian language picker renders without 💥 1`] = `
     No
   </div>
   <span
-    class="css-1wop701-Divider e1g7xtvp3"
+    class="css-au3ti5-Divider e1g7xtvp3"
   />
   <a
     class="css-1odoamw-LinkOption e1g7xtvp2"
@@ -52,7 +52,7 @@ exports[`Swedish language picker renders without 💥 1`] = `
     Sv
   </div>
   <span
-    class="css-1wop701-Divider e1g7xtvp3"
+    class="css-au3ti5-Divider e1g7xtvp3"
   />
   <a
     class="css-1odoamw-LinkOption e1g7xtvp2"
