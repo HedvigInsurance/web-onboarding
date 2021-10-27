@@ -2,7 +2,6 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { motion } from 'framer-motion'
-import { useMediaQuery } from 'react-responsive'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { InfoIcon } from '../icons/Info'
 
@@ -16,7 +15,8 @@ const Wrapper = styled.div`
 `
 
 const TooltipIcon = styled(motion.div)`
-  display: flex;
+  /* remove extra space under child SVG: https://stackoverflow.com/a/51161925 */
+  font-size: 0;
 `
 
 const TooltipContainer = styled.div<{ visible: boolean }>`
@@ -65,41 +65,31 @@ const TooltipText = styled.p`
 `
 
 export const Tooltip: React.FC<TooltipProps> = ({ body }) => {
-  const tooltipIconRef = React.useRef<HTMLDivElement>()
-  const [visible, setVisible] = React.useState(false)
+  const ref = React.useRef<HTMLDivElement>(null)
+  const [isVisible, setVisible] = React.useState(false)
 
   React.useEffect(() => {
-    const listener = (e: TouchEvent) => {
-      if (
-        tooltipIconRef.current &&
-        !(e.target as Node)?.contains(tooltipIconRef.current)
-      ) {
+    if (isVisible === false) return
+
+    const handleClickOutside = (event: TouchEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
         setVisible(false)
       }
     }
 
-    window.addEventListener('touchstart', listener)
-    return () => window.removeEventListener('touchstart', listener)
-  }, [])
-
-  const isHover = useMediaQuery({ query: '(hover: hover)' })
+    window.addEventListener('touchstart', handleClickOutside)
+    return () => window.removeEventListener('touchstart', handleClickOutside)
+  }, [isVisible])
 
   return (
     <Wrapper>
-      <TooltipContainer visible={visible}>
+      <TooltipContainer visible={isVisible} ref={ref}>
         <TooltipText>{body}</TooltipText>
       </TooltipContainer>
       <TooltipIcon
-        onHoverStart={
-          !isHover
-            ? undefined
-            : () => {
-                setVisible(true)
-              }
-        }
-        onHoverEnd={!isHover ? undefined : () => setVisible(false)}
+        onHoverStart={() => setVisible(true)}
+        onHoverEnd={() => setVisible(false)}
         onTouchStart={() => setVisible(true)}
-        ref={tooltipIconRef as React.MutableRefObject<HTMLDivElement>}
       >
         <InfoIcon size="20px" />
       </TooltipIcon>
