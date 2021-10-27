@@ -19,7 +19,7 @@ const Container = styled.div`
 
 const StyledTermsLink = styled(RawLink)`
   border-radius: 8px;
-  border: 1px solid ${colorsV3.gray500};
+  border: 1px solid ${colorsV3.gray900};
 
   text-align: center;
   font-size: 1rem;
@@ -35,8 +35,8 @@ const StyledTermsLink = styled(RawLink)`
 
   &:hover,
   &:focus {
-    color: ${colorsV3.gray900};
-    border-color: ${colorsV3.gray900};
+    color: ${colorsV3.gray700};
+    border-color: ${colorsV3.gray700};
   }
 
   ${Container} &:not(:last-child) {
