@@ -118,8 +118,8 @@ export const DiscountCodeModal: React.FC<Props> = ({
         animate={isOpen ? 'visible' : 'hidden'}
         transition={{
           type: 'spring',
-          stiffness: 400,
-          damping: 100,
+          stiffness: 500,
+          damping: 50,
         }}
         variants={{
           visible: {
@@ -127,8 +127,8 @@ export const DiscountCodeModal: React.FC<Props> = ({
             transform: 'translateY(0%) scale(1)',
             transition: {
               type: 'spring',
-              stiffness: 400,
-              damping: 100,
+              stiffness: 500,
+              damping: 50,
               delay: 0.15,
             },
           },

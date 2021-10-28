@@ -58,7 +58,7 @@
   "SIDEBAR_PRICE_SUFFIX_INTERVAL": "\/mån",
   "SIDEBAR_ADD_DISCOUNT_FINEPRINT_LINK_TEXT": "villkoren",
   "COMPARE_TABLE_DROPDOWN_LABEL": "Välj bolag",
-  "SIDEBAR_ADD_DISCOUNT_CELL_PLACEHOLDER": "XXXXXX",
+  "SIDEBAR_ADD_DISCOUNT_CELL_PLACEHOLDER": "Din kod",
   "SIDEBAR_STARTDATE_CELL_VALUE_NEW": "Idag",
   "SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER": "När din gamla löper ut",
   "CHECKOUT_EMAIL_LABEL": "E-mail",
@@ -300,8 +300,8 @@
   "CHECKOUT_CREDIT_CHECK_INFO_CONTENT": "",
   "CHECKOUT_SIGN_FAIL_HEADER": "",
   "CHECKOUT_SIGN_FAIL_CONTENT": "",
-  "OFFER_BUNDLE_SELECTOR_TITLE": "Ditt försäkringspaket",
-  "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "Välj vilket försäkringspaket som passar dig. Försäkringarna gäller för dig och alla medförsäkrade.",
-  "OFFER_APP_PROMOTION_HEADING": "Allt sköts via vår enkla app",
-  "OFFER_APP_PROMOTION_PARAGRAPH": "Råkar du ut för en skada kan du enkelt anmäla skadan direkt i appen - var de än befinner sig. För de allra enklaste skadorna behöver du inte ens vänta i 5 minuter på din ersättning. Vi är tillgängliga mellan 08-22 på vardagar och 9-18 på helger."
+  "OFFER_BUNDLE_SELECTOR_TITLE": "Välj ditt försäkringspaket",
+  "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "Välj vilket försäkringspaket som passar dig bäst. Försäkringarna gäller för dig och alla medförsäkrade. Du kan alltid lägga till olycksfallsförsäkringen vid ett senare tillfälle. Det gör du enkelt i din Hedvig-app.",
+  "OFFER_APP_PROMOTION_HEADING": "Du sköter allt i Hedvig-appen",
+  "OFFER_APP_PROMOTION_PARAGRAPH": "Om du råkat ut för en olycka kan du enkelt anmäla skadan direkt i appen, oavsett var du befinner dig. I vissa fall behöver du knappt ens vänta i 5 minuter på din ersättning. Vi är tillgängliga mellan 08-22 på vardagar och 9-18 på helger."
 }

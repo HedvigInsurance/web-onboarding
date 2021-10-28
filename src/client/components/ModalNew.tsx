@@ -160,8 +160,8 @@ export const Modal: React.FC<ModalProps> = ({
         animate={isVisible ? 'visible' : 'hidden'}
         transition={{
           type: 'spring',
-          stiffness: 400,
-          damping: 100,
+          stiffness: 500,
+          damping: 50,
         }}
         variants={{
           visible: {
@@ -169,8 +169,8 @@ export const Modal: React.FC<ModalProps> = ({
             transform: 'translateX(-50%) translateY(-50%) scale(1)',
             transition: {
               type: 'spring',
-              stiffness: 400,
-              damping: 100,
+              stiffness: 500,
+              damping: 50,
               delay: 0.15,
             },
           },
