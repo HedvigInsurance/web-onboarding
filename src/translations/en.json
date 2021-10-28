@@ -58,7 +58,7 @@
   "SIDEBAR_PRICE_SUFFIX_INTERVAL": "\/month",
   "SIDEBAR_ADD_DISCOUNT_FINEPRINT_LINK_TEXT": "terms & conditions",
   "COMPARE_TABLE_DROPDOWN_LABEL": "Pick company",
-  "SIDEBAR_ADD_DISCOUNT_CELL_PLACEHOLDER": "XXXXXX",
+  "SIDEBAR_ADD_DISCOUNT_CELL_PLACEHOLDER": "Your code",
   "SIDEBAR_STARTDATE_CELL_VALUE_NEW": "Today",
   "SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER": "When your old one expires",
   "CHECKOUT_EMAIL_LABEL": "Email",
@@ -300,8 +300,8 @@
   "CHECKOUT_CREDIT_CHECK_INFO_CONTENT": "Customers with a record of non-payment pay in advance in some cases. If this applies to you, you will be notified by contacting us.",
   "CHECKOUT_SIGN_FAIL_HEADER": "Your purchase can’t be completed",
   "CHECKOUT_SIGN_FAIL_CONTENT": "Unfortunately, we can't offer you to purchase an insurance online. Please contact betaling@hedvig.com and we'll assist you.",
-  "OFFER_BUNDLE_SELECTOR_TITLE": "Your insurance bundle",
-  "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "Pick the insurance plan that fits you. The insurances are valid for you and all co-insured.",
-  "OFFER_APP_PROMOTION_HEADING": "Take care of everything in our simple app",
-  "OFFER_APP_PROMOTION_PARAGRAPH": "You can easily report accidents directly in the app - wherever you are. For the simplest damages you will be reimbursed within 5 minutes. We are available between 08-22 on weekdays and 9-18 on weekends."
+  "OFFER_BUNDLE_SELECTOR_TITLE": "Choose your insurance bundle",
+  "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "Pick the insurance plan that fits you best. The insurances cover you and all co-insured. You can always add the accident insurance in the app later on.",
+  "OFFER_APP_PROMOTION_HEADING": "Take care of everything in the Hedvig app",
+  "OFFER_APP_PROMOTION_PARAGRAPH": "If you've had an accident, you can easily report the injury directly in the app, no matter where you are. In some cases, you won't even have to wait 5 minutes for your compensation. We are available between 08-22 on weekdays and 9-18 on weekends."
 }
