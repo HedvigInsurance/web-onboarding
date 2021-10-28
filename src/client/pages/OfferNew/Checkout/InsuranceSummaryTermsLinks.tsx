@@ -40,23 +40,26 @@ type Props = {
 const removePrivacyPolicy = (terms: InsuranceTerm[]) =>
   terms.filter(({ type }) => InsuranceTermType.PrivacyPolicy === type)
 
-export const InsuranceSummaryTermsLinks = ({ offerData }: Props) =>
-  offerData.quotes.map(({ id, displayName, insuranceTerms }) => (
-    <Group key={id}>
-      <Row>
-        <TermHeader>{displayName}</TermHeader>
-      </Row>
-      {removePrivacyPolicy(insuranceTerms).map(
-        ({ displayName: termDisplayName, url }, index) => (
-          <Row key={index}>
-            <LinkWrapper>
-              <Link href={url} target="_blank">
-                {termDisplayName}
-              </Link>
-              {' ↗'}
-            </LinkWrapper>
-          </Row>
-        ),
-      )}
-    </Group>
-  ))
+export const InsuranceSummaryTermsLinks = ({ offerData }: Props) => (
+  <>
+    {offerData.quotes.map(({ id, displayName, insuranceTerms }) => (
+      <Group key={id}>
+        <Row>
+          <TermHeader>{displayName}</TermHeader>
+        </Row>
+        {removePrivacyPolicy(insuranceTerms).map(
+          ({ displayName: termDisplayName, url }, index) => (
+            <Row key={index}>
+              <LinkWrapper>
+                <Link href={url} target="_blank">
+                  {termDisplayName}
+                </Link>
+                {' ↗'}
+              </LinkWrapper>
+            </Row>
+          ),
+        )}
+      </Group>
+    ))}
+  </>
+)
