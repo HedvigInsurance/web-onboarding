@@ -5,7 +5,7 @@ import { Icon } from 'data/graphql'
 import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
 interface PerilItemProps {
-  title: React.ReactNode
+  title: string
   icon: Icon
   onClick: () => void
 }
@@ -36,7 +36,7 @@ const Container = styled.button`
   justify-content: flex-start;
   text-align: left;
   min-height: 3.75rem;
-  padding: 0.5rem 1rem 0.5rem 0.375rem;
+  padding: 0.5rem 0.5rem 0.5rem 0.375rem;
   color: inherit;
   font-family: inherit;
   border-radius: 0.375rem;
@@ -85,6 +85,7 @@ const PerilIcon = styled.img`
   svg {
     width: 100%;
     height: 100%;
+
     ${MEDIUM_SCREEN_MEDIA_QUERY} {
       transform: translateX(-0.625rem);
     }
@@ -98,10 +99,20 @@ const PerilIcon = styled.img`
 const Title = styled('h4')`
   margin: 0;
   font-size: 0.875rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* allow ellipsis to overlap right padding */
+  width: calc(100% + 0.25rem);
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     font-size: 1rem;
   }
+`
+
+const MultiLineTitle = styled(Title)`
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 `
 
 export const PerilItem: React.FC<PerilItemProps> = ({
@@ -110,12 +121,17 @@ export const PerilItem: React.FC<PerilItemProps> = ({
   onClick,
 }) => {
   const iconUrl = icon.variants.light.svgUrl
+  const isMultiWordTitle = title.includes(' ')
 
   return (
     <OuterContainer>
       <Container onClick={onClick}>
         {iconUrl && <PerilIcon src={iconUrl} alt="" width={24} height={24} />}
-        <Title>{title}</Title>
+        {isMultiWordTitle ? (
+          <MultiLineTitle>{title}</MultiLineTitle>
+        ) : (
+          <Title>{title}</Title>
+        )}
       </Container>
     </OuterContainer>
   )

@@ -13,7 +13,7 @@ type Props = {
 
 const ImageContainer = styled.div<Props>`
   background-color: ${colorsV3.gray900};
-  width: 100vw;
+  width: 100%;
   height: ${({ height }) => (height ? `${height}px` : '100%')};
   position: absolute;
   top: 0;
