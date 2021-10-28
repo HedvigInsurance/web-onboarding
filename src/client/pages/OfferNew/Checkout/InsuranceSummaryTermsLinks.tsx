@@ -4,7 +4,6 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { InsuranceTerm, InsuranceTermType } from 'data/graphql'
 import { RawLink } from 'components/RawLink'
 import { OfferData, OfferQuote } from '../types'
-import { checkIfMainQuote } from '../utils'
 import { Group, Row } from './InsuranceSummary'
 
 const linkColor = colorsV3.gray700
@@ -21,6 +20,10 @@ const Link = styled(RawLink)`
     text-decoration: none;
   }
 `
+const TermHeader = styled.span`
+  indexmargin-top: 0.5rem;
+  font-weight: bold;
+`
 
 export type Term = {
   termType: InsuranceTermType
@@ -30,91 +33,30 @@ export type Term = {
 
 export type Terms = Term[]
 
-type GetSortedParams = {
-  termsArray: Terms
-  offerData: OfferData
-}
-
-const getSorted = ({ termsArray, offerData }: GetSortedParams) => {
-  const termsAndConditionsSorted = termsArray
-    .filter(({ termType }) => termType === InsuranceTermType.TermsAndConditions)
-    .sort((firstElement, _sedondElement) => {
-      const { quoteId } = firstElement
-      const isMainQuote = checkIfMainQuote(offerData, quoteId)
-      if (isMainQuote) {
-        return -1
-      }
-      return 0
-    })
-
-  const restOfTerms = termsArray.filter(
-    ({ termType }) => termType !== InsuranceTermType.TermsAndConditions,
-  )
-  return [...termsAndConditionsSorted, ...restOfTerms]
-}
-
-export const getInsuranceTerms = (offerData: OfferData) => {
-  const allQuotesInsuranceTerms = offerData.quotes
-    .map((quote) => {
-      const quoteId = quote.id
-      const { insuranceTerms } = quote
-      return [...insuranceTerms].map(([termType, data]) => {
-        return { quoteId, termType, data }
-      })
-    })
-    .reduce((termsArray, termsArrayFromQuote) => {
-      return [...termsArray, ...termsArrayFromQuote]
-    })
-
-  const termsWithoutDuplicates = allQuotesInsuranceTerms.reduce(
-    (termsObjects, currentTermsObject) => {
-      const duplicate = termsObjects.find(
-        ({ data }) =>
-          data.displayName === currentTermsObject.data.displayName &&
-          data.url === currentTermsObject.data.url,
-      )
-      if (duplicate) {
-        return termsObjects
-      }
-      return [...termsObjects, currentTermsObject]
-    },
-    [allQuotesInsuranceTerms[0]],
-  )
-
-  const termsArrayMinusPrivacyPolicy = termsWithoutDuplicates.filter(
-    ({ termType }) => termType !== 'PRIVACY_POLICY',
-  )
-
-  const sortedTermsArray = getSorted({
-    termsArray: termsArrayMinusPrivacyPolicy,
-    offerData,
-  })
-
-  return sortedTermsArray
-}
-
 type Props = {
   offerData: OfferData
 }
 
-export const InsuranceSummaryTermsLinks: React.FC<Props> = ({ offerData }) => {
-  const insuranceTerms = getInsuranceTerms(offerData)
+const removePrivacyPolicy = (terms: InsuranceTerm[]) =>
+  terms.filter(({ type }) => InsuranceTermType.PrivacyPolicy === type)
 
-  return (
-    <Group>
-      {insuranceTerms.map(({ termType, data }, index) => {
-        const { displayName, url } = data
-        return (
-          <Row key={termType + index}>
+export const InsuranceSummaryTermsLinks = ({ offerData }: Props) =>
+  offerData.quotes.map(({ id, displayName, insuranceTerms }) => (
+    <Group key={id}>
+      <Row>
+        <TermHeader>{displayName}</TermHeader>
+      </Row>
+      {removePrivacyPolicy(insuranceTerms).map(
+        ({ displayName: termDisplayName, url }, index) => (
+          <Row key={index}>
             <LinkWrapper>
               <Link href={url} target="_blank">
-                {displayName}
+                {termDisplayName}
               </Link>
               {' ↗'}
             </LinkWrapper>
           </Row>
-        )
-      })}
+        ),
+      )}
     </Group>
-  )
-}
+  ))

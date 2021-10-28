@@ -4,8 +4,6 @@ import {
   DanishHomeContentsDetails,
   InsurableLimit,
   InsurableLimitType,
-  InsuranceTerm,
-  InsuranceTermType,
   NorwegianHomeContentsDetails,
   NorwegianTravelDetails,
   QuoteBundle,
@@ -37,13 +35,7 @@ export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
     },
     quotes: quoteBundle.quotes.map((bundleQuote) => {
       return {
-        id: bundleQuote.id,
-        displayName: bundleQuote.displayName,
-        price: bundleQuote.price,
-        startDate: bundleQuote.startDate,
-        quoteDetails: bundleQuote.quoteDetails,
-        dataCollectionId: bundleQuote.dataCollectionId,
-        currentInsurer: bundleQuote.currentInsurer,
+        ...bundleQuote,
         contractType: bundleQuote.typeOfContract,
         perils: bundleQuote.contractPerils,
         insurableLimits: new Map(
@@ -52,12 +44,6 @@ export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
             insurableLimit,
           ]),
         ) as ReadonlyMap<InsurableLimitType, InsurableLimit>,
-        insuranceTerms: new Map(
-          bundleQuote.insuranceTerms.map((insuranceTerm) => [
-            insuranceTerm.type,
-            insuranceTerm,
-          ]),
-        ) as ReadonlyMap<InsuranceTermType, InsuranceTerm>,
       }
     }),
     cost: quoteBundle.bundleCost,

@@ -83,23 +83,14 @@ export const InsuranceValues: React.FC<Props> = ({ offerQuote }) => {
           {textKeys.COVERAGE_INFO_HEADLINE()}
         </SubSubHeadingBlack>
       </Header>
-
       <Limits insurableLimits={offerQuote.insurableLimits} />
       <Links>
-        {[...offerQuote.insuranceTerms.entries()].map(
-          ([insuranceTermType, insuranceTerm]) => {
-            return (
-              <TermsLink
-                key={insuranceTermType}
-                href={insuranceTerm.url}
-                target="_blank"
-              >
-                {insuranceTerm.displayName}
-                {' ↗'}
-              </TermsLink>
-            )
-          },
-        )}
+        {offerQuote.insuranceTerms.map(({ type, url, displayName }) => (
+          <TermsLink key={type} href={url} target="_blank">
+            {displayName}
+            {' ↗'}
+          </TermsLink>
+        ))}
       </Links>
     </Wrapper>
   )
