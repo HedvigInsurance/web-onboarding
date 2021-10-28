@@ -5,7 +5,12 @@ import { OfferData } from 'pages/OfferNew/types'
 import { captureSentryError } from 'utils/sentry-client'
 import { useMarket } from 'components/utils/CurrentLocale'
 import { AppEnvironment } from 'shared/clientConfig'
-import { isStudentOffer, hasHomeQuote } from 'pages/OfferNew/utils'
+import {
+  isStudentOffer,
+  hasHomeQuote,
+  hasAccidentQuote,
+  hasTravelQuote,
+} from 'pages/OfferNew/utils'
 import { getContractType, DkBundleTypes, NoComboTypes } from './tracking'
 
 type GAContractType = NoComboTypes | DkBundleTypes | TypeOfContract
@@ -22,7 +27,9 @@ type GTMOfferData = {
   insurance_price: number
   currency: string
   is_student: boolean
-  has_home?: boolean
+  has_home: boolean
+  has_accident: boolean
+  has_travel: boolean
   member_id?: string
 }
 
@@ -94,6 +101,8 @@ export const trackOfferGTM = (
         currency: offerData.cost.monthlyNet.currency,
         is_student: isStudentOffer(offerData),
         has_home: hasHomeQuote(offerData),
+        has_accident: hasAccidentQuote(offerData),
+        has_travel: hasTravelQuote(offerData),
         ...(offerData.memberId && { member_id: offerData.memberId }),
       },
     })
