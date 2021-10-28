@@ -10616,6 +10616,18 @@ export type QuoteBundleQueryVariables = Exact<{
 
 export type QuoteBundleQuery = { __typename?: 'Query' } & {
   quoteBundle: { __typename?: 'QuoteBundle' } & {
+    quotes: Array<{ __typename?: 'BundledQuote' } & QuoteDataFragment>
+    bundleCost: { __typename?: 'InsuranceCost' } & BundleCostDataFragment
+  }
+}
+
+export type QuoteBundleVariantsQueryVariables = Exact<{
+  input: QuoteBundleInput
+  locale: Locale
+}>
+
+export type QuoteBundleVariantsQuery = { __typename?: 'Query' } & {
+  quoteBundle: { __typename?: 'QuoteBundle' } & {
     possibleVariations: Array<
       { __typename?: 'QuoteBundleVariant' } & Pick<
         QuoteBundleVariant,
@@ -10632,8 +10644,6 @@ export type QuoteBundleQuery = { __typename?: 'Query' } & {
             }
         }
     >
-    quotes: Array<{ __typename?: 'BundledQuote' } & QuoteDataFragment>
-    bundleCost: { __typename?: 'InsuranceCost' } & BundleCostDataFragment
   }
 }
 
@@ -11910,19 +11920,6 @@ export type NorwegianBankIdAuthMutationOptions = ApolloReactCommon.BaseMutationO
 export const QuoteBundleDocument = gql`
   query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
     quoteBundle(input: $input) {
-      possibleVariations {
-        id
-        tag(locale: $locale)
-        bundle {
-          displayName(locale: $locale)
-          bundleCost {
-            ...BundleCostData
-          }
-          quotes {
-            ...QuoteData
-          }
-        }
-      }
       quotes {
         ...QuoteData
       }
@@ -11931,8 +11928,8 @@ export const QuoteBundleDocument = gql`
       }
     }
   }
-  ${BundleCostDataFragmentDoc}
   ${QuoteDataFragmentDoc}
+  ${BundleCostDataFragmentDoc}
 `
 
 /**
@@ -11983,6 +11980,79 @@ export type QuoteBundleLazyQueryHookResult = ReturnType<
 export type QuoteBundleQueryResult = ApolloReactCommon.QueryResult<
   QuoteBundleQuery,
   QuoteBundleQueryVariables
+>
+export const QuoteBundleVariantsDocument = gql`
+  query QuoteBundleVariants($input: QuoteBundleInput!, $locale: Locale!) {
+    quoteBundle(input: $input) {
+      possibleVariations {
+        id
+        tag(locale: $locale)
+        bundle {
+          displayName(locale: $locale)
+          bundleCost {
+            ...BundleCostData
+          }
+          quotes {
+            ...QuoteData
+          }
+        }
+      }
+    }
+  }
+  ${BundleCostDataFragmentDoc}
+  ${QuoteDataFragmentDoc}
+`
+
+/**
+ * __useQuoteBundleVariantsQuery__
+ *
+ * To run a query within a React component, call `useQuoteBundleVariantsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQuoteBundleVariantsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQuoteBundleVariantsQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *      locale: // value for 'locale'
+ *   },
+ * });
+ */
+export function useQuoteBundleVariantsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    QuoteBundleVariantsQuery,
+    QuoteBundleVariantsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    QuoteBundleVariantsQuery,
+    QuoteBundleVariantsQueryVariables
+  >(QuoteBundleVariantsDocument, options)
+}
+export function useQuoteBundleVariantsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    QuoteBundleVariantsQuery,
+    QuoteBundleVariantsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    QuoteBundleVariantsQuery,
+    QuoteBundleVariantsQueryVariables
+  >(QuoteBundleVariantsDocument, options)
+}
+export type QuoteBundleVariantsQueryHookResult = ReturnType<
+  typeof useQuoteBundleVariantsQuery
+>
+export type QuoteBundleVariantsLazyQueryHookResult = ReturnType<
+  typeof useQuoteBundleVariantsLazyQuery
+>
+export type QuoteBundleVariantsQueryResult = ApolloReactCommon.QueryResult<
+  QuoteBundleVariantsQuery,
+  QuoteBundleVariantsQueryVariables
 >
 export const RedeemCodeDocument = gql`
   mutation RedeemCode($code: String!) {
