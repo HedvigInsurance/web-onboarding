@@ -1,10 +1,10 @@
 import React from 'react'
 import { MemoryRouter } from 'react-router'
-import TermsCollection from './TermsCollection'
+import ExternalLinkList from './ExternalLinkList'
 
 export default {
-  title: 'Offer/TermsCollection',
-  component: TermsCollection,
+  title: 'Offer/DocumentCollection',
+  component: ExternalLinkList,
   parameters: {
     backgrounds: { default: 'gray100' },
     layout: 'padded',
@@ -42,13 +42,13 @@ const ITEMS = [
 export const Default = () => {
   return (
     <MemoryRouter initialEntries={['/se/new-member/offer']}>
-      <TermsCollection>
+      <ExternalLinkList>
         {ITEMS.map((item) => (
-          <TermsCollection.Link key={item.key} href={item.link}>
+          <ExternalLinkList.Link key={item.key} href={item.link}>
             {item.label}
-          </TermsCollection.Link>
+          </ExternalLinkList.Link>
         ))}
-      </TermsCollection>
+      </ExternalLinkList>
     </MemoryRouter>
   )
 }

@@ -60,24 +60,24 @@ const StyledTermsLink = styled(RawLink)`
   }
 `
 
-type TermsLinkProps = RawLinkProps & {
+type ExternalLinkProps = RawLinkProps & {
   children: string
 }
 
-const TermsLink: React.FC<TermsLinkProps> = ({ children, ...props }) => (
+const ExternalLink: React.FC<ExternalLinkProps> = ({ children, ...props }) => (
   <StyledTermsLink target="_blank" {...props}>
     {`${children} ↗︎`}
   </StyledTermsLink>
 )
 
-type TermsCollectionType = React.FC & {
-  Link: typeof TermsLink
+type ExternalLinkListType = React.FC & {
+  Link: typeof ExternalLink
 }
 
-const TermsCollection: TermsCollectionType = ({ children }) => {
-  return <Container>{children}</Container>
-}
+const ExternalLinkList: ExternalLinkListType = ({ children }) => (
+  <Container>{children}</Container>
+)
 
-TermsCollection.Link = TermsLink
+ExternalLinkList.Link = ExternalLink
 
-export default TermsCollection
+export default ExternalLinkList
