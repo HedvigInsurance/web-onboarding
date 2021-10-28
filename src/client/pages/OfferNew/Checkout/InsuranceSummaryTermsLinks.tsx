@@ -8,7 +8,7 @@ import { Group, Row } from './InsuranceSummary'
 
 const linkColor = colorsV3.gray700
 
-const LinkWrapper = styled.div`
+const DisplayNameWrapper = styled.div`
   color: ${colorsV3.gray900};
 `
 const Link = styled(RawLink)`
@@ -19,10 +19,6 @@ const Link = styled(RawLink)`
     color: ${linkColor};
     text-decoration: none;
   }
-`
-const TermHeader = styled.span`
-  indexmargin-top: 0.5rem;
-  font-weight: bold;
 `
 
 export type Term = {
@@ -38,24 +34,24 @@ type Props = {
 }
 
 const removePrivacyPolicy = (terms: InsuranceTerm[]) =>
-  terms.filter(({ type }) => InsuranceTermType.PrivacyPolicy === type)
+  terms.filter(({ type }) => InsuranceTermType.PrivacyPolicy !== type)
 
 export const InsuranceSummaryTermsLinks = ({ offerData }: Props) => (
   <>
     {offerData.quotes.map(({ id, displayName, insuranceTerms }) => (
       <Group key={id}>
         <Row>
-          <TermHeader>{displayName}</TermHeader>
+          <DisplayNameWrapper>{displayName}</DisplayNameWrapper>
         </Row>
         {removePrivacyPolicy(insuranceTerms).map(
           ({ displayName: termDisplayName, url }, index) => (
             <Row key={index}>
-              <LinkWrapper>
+              <DisplayNameWrapper>
                 <Link href={url} target="_blank">
                   {termDisplayName}
                 </Link>
                 {' ↗'}
-              </LinkWrapper>
+              </DisplayNameWrapper>
             </Row>
           ),
         )}
