@@ -1,6 +1,6 @@
 import React from 'react'
 import { MemoryRouter } from 'react-router'
-import CollapsingList from './CollapsingList'
+import { CollapsingList } from './CollapsingList'
 
 export default {
   title: 'Offer/DocumentCollection',
