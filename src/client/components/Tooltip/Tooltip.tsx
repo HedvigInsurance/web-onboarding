@@ -5,6 +5,8 @@ import { motion } from 'framer-motion'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { InfoIcon } from '../icons/Info'
 
+const ICON_SIZE = '20px'
+
 export type TooltipProps = {
   body: string
 }
@@ -16,38 +18,55 @@ const Wrapper = styled.div`
 
 const TooltipIcon = styled(motion.div)`
   /* remove extra space under child SVG: https://stackoverflow.com/a/51161925 */
-  font-size: 0;
+  display: flex;
 `
 
 const TooltipContainer = styled.div<{ visible: boolean }>`
+  transition: all 0.25s ease;
+
   background-color: ${colorsV3.gray800};
   box-shadow: 0px 16px 40px rgba(0, 0, 0, 0.15);
   padding: 0.75rem 1rem;
-  position: absolute;
-  top: 0px;
-  left: 50%;
   border-radius: 8px;
-  transition: all 0.25s ease;
-  opacity: ${(props) => (props.visible ? 1 : 0)};
-  transform: translateX(-50%)
-    ${(props) =>
-      props.visible
-        ? `translateY(calc(-100% - 0.75rem))`
-        : `translateY(-100%)`};
-  visibility: ${(props) => (props.visible ? `visible` : `hidden`)};
 
-  :after {
+  opacity: ${(props) => (props.visible ? 1 : 0)};
+  visibility: ${(props) => (props.visible ? 'visible' : 'hidden')};
+
+  position: absolute;
+  top: 0;
+  right: 100%;
+  transform: translateY(calc(-50% + ${ICON_SIZE} / 2))
+    ${(props) =>
+      props.visible ? 'translateX(calc(-0.75rem))' : 'translateX(0)'};
+
+  &:after {
     content: ' ';
-    top: 100%;
-    left: 50%;
-    border: solid transparent;
-    height: 0;
-    width: 0;
     position: absolute;
-    pointer-events: none;
-    border-top-color: ${colorsV3.gray800};
+    top: 50%;
+    left: 100%; /* To the right of the tooltip */
+    margin-top: -7px;
     border-width: 7px;
-    margin-left: -7px;
+    border-style: solid;
+    border-color: transparent transparent transparent ${colorsV3.gray800};
+    pointer-events: none;
+  }
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    left: 50%;
+    right: unset;
+    transform: translateX(-50%)
+      ${(props) =>
+        props.visible
+          ? `translateY(calc(-100% - 0.75rem))`
+          : `translateY(-100%)`};
+
+    &:after {
+      top: 100%; /* At the bottom of the tooltip */
+      left: 50%;
+      margin-left: -7px;
+      margin-top: 0;
+      border-color: ${colorsV3.gray800} transparent transparent transparent;
+    }
   }
 `
 
@@ -91,7 +110,10 @@ export const Tooltip: React.FC<TooltipProps> = ({ body }) => {
         onHoverEnd={() => setVisible(false)}
         onTouchStart={() => setVisible(true)}
       >
-        <InfoIcon size="20px" />
+        <InfoIcon
+          size={ICON_SIZE}
+          color={isVisible ? colorsV3.gray700 : colorsV3.gray900}
+        />
       </TooltipIcon>
     </Wrapper>
   )
