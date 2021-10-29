@@ -4,7 +4,7 @@ import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { useTextKeys } from 'utils/textKeys'
 import { OfferQuote } from '../../types'
 import { HeadingXS } from '../../components'
-import CollapsingList from './CollapsingList'
+import { CollapsingList } from './CollapsingList'
 
 const Container = styled.div`
   display: grid;
@@ -19,7 +19,7 @@ interface Props {
   offer: OfferQuote
 }
 
-const DocumentCollection: React.FC<Props> = ({ offer }) => {
+export const DocumentCollection: React.FC<Props> = ({ offer }) => {
   const textKeys = useTextKeys()
 
   return (
@@ -37,5 +37,3 @@ const DocumentCollection: React.FC<Props> = ({ offer }) => {
     </Container>
   )
 }
-
-export default DocumentCollection

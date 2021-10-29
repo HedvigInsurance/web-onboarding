@@ -93,7 +93,7 @@ type AmountItemType = React.FC<Props> & {
   Value: typeof Value
 }
 
-const AmountItem: AmountItemType = ({ children, tooltip }) => {
+export const AmountItem: AmountItemType = ({ children, tooltip }) => {
   return (
     <Container>
       {children}
@@ -108,5 +108,3 @@ const AmountItem: AmountItemType = ({ children, tooltip }) => {
 
 AmountItem.Label = Label
 AmountItem.Value = Value
-
-export default AmountItem

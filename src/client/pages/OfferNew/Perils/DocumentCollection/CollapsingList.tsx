@@ -74,10 +74,8 @@ type ExternalLinkListType = React.FC & {
   ExternalLink: typeof ExternalLink
 }
 
-const CollapsingList: ExternalLinkListType = ({ children }) => (
+export const CollapsingList: ExternalLinkListType = ({ children }) => (
   <Container>{children}</Container>
 )
 
 CollapsingList.ExternalLink = ExternalLink
-
-export default CollapsingList

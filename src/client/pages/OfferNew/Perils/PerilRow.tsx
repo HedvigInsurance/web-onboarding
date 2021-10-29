@@ -4,8 +4,8 @@ import { OfferQuote } from 'pages/OfferNew/types'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { PerilModal } from './PerilModal'
 import { PerilCollection } from './PerilCollection'
-import AmountCollection from './AmountCollection'
-import DocumentCollection from './DocumentCollection'
+import { AmountCollection } from './AmountCollection'
+import { DocumentCollection } from './DocumentCollection'
 
 const InsuranceTypeHeadline = styled.div`
   padding-bottom: 1rem;
