@@ -25,6 +25,7 @@ type GTMOfferData = {
   referral_code: 'yes' | 'no'
   number_of_people: number
   insurance_price: number
+  discounted_premium?: number
   currency: string
   is_student: boolean
   has_home: boolean
@@ -90,6 +91,8 @@ export const trackOfferGTM = (
   offerData: OfferData,
   referralCodeUsed: boolean,
 ) => {
+  const grossPrice = Math.round(Number(offerData.cost.monthlyGross.amount))
+  const netPrice = Math.round(Number(offerData.cost.monthlyNet.amount))
   try {
     pushToGTMDataLayer({
       event: eventName,
@@ -97,7 +100,8 @@ export const trackOfferGTM = (
         insurance_type: getContractType(offerData),
         referral_code: referralCodeUsed ? 'yes' : 'no',
         number_of_people: offerData.person.householdSize,
-        insurance_price: parseFloat(offerData.cost.monthlyNet.amount),
+        insurance_price: grossPrice,
+        ...(grossPrice !== netPrice && { discounted_premium: netPrice }),
         currency: offerData.cost.monthlyNet.currency,
         is_student: isStudentOffer(offerData),
         has_home: hasHomeQuote(offerData),
