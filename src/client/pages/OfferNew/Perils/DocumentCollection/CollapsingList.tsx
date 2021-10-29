@@ -71,13 +71,13 @@ const ExternalLink: React.FC<ExternalLinkProps> = ({ children, ...props }) => (
 )
 
 type ExternalLinkListType = React.FC & {
-  Link: typeof ExternalLink
+  ExternalLink: typeof ExternalLink
 }
 
-const ExternalLinkList: ExternalLinkListType = ({ children }) => (
+const CollapsingList: ExternalLinkListType = ({ children }) => (
   <Container>{children}</Container>
 )
 
-ExternalLinkList.Link = ExternalLink
+CollapsingList.ExternalLink = ExternalLink
 
-export default ExternalLinkList
+export default CollapsingList

@@ -4,7 +4,7 @@ import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { useTextKeys } from 'utils/textKeys'
 import { OfferQuote } from '../../types'
 import { HeadingXS } from '../../components'
-import ExternalLinkList from './ExternalLinkList'
+import CollapsingList from './CollapsingList'
 
 const Container = styled.div`
   display: grid;
@@ -25,15 +25,15 @@ const DocumentCollection: React.FC<Props> = ({ offer }) => {
   return (
     <Container>
       <HeadingXS>{textKeys.WEB_OFFER_DOCUMENTS_SECTION_TITLE()}</HeadingXS>
-      <ExternalLinkList>
+      <CollapsingList>
         {offer.insuranceTerms.map(({ type, url, displayName }) => {
           return (
-            <ExternalLinkList.Link key={type} href={url}>
+            <CollapsingList.ExternalLink key={type} href={url}>
               {displayName}
-            </ExternalLinkList.Link>
+            </CollapsingList.ExternalLink>
           )
         })}
-      </ExternalLinkList>
+      </CollapsingList>
     </Container>
   )
 }
