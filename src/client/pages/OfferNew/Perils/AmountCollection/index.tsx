@@ -16,7 +16,7 @@ const Container = styled.div`
   }
 `
 
-interface Props {
+type Props = {
   offer: OfferQuote
 }
 

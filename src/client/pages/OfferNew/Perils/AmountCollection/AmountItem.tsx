@@ -84,7 +84,7 @@ const TooltipWrapper = styled.div`
   }
 `
 
-interface Props {
+type Props = {
   tooltip?: string
 }
 
