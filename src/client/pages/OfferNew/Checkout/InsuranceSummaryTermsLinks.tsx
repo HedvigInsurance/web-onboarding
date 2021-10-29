@@ -34,7 +34,7 @@ type Props = {
 }
 
 const removePrivacyPolicy = (terms: InsuranceTerm[]) =>
-  terms.filter(({ type }) => InsuranceTermType.PrivacyPolicy !== type)
+  terms.filter(({ type }) => type !== InsuranceTermType.PrivacyPolicy)
 
 export const InsuranceSummaryTermsLinks = ({ offerData }: Props) => (
   <>
