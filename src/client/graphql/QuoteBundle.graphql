@@ -131,6 +131,17 @@ fragment BundleCostData on InsuranceCost {
 
 query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
   quoteBundle(input: $input) {
+    quotes {
+      ...QuoteData
+    }
+    bundleCost {
+      ...BundleCostData
+    }
+  }
+}
+
+query QuoteBundleVariants($input: QuoteBundleInput!, $locale: Locale!) {
+  quoteBundle(input: $input) {
     possibleVariations {
       id
       tag(locale: $locale)
@@ -143,13 +154,6 @@ query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
           ...QuoteData
         }
       }
-    }
-
-    quotes {
-      ...QuoteData
-    }
-    bundleCost {
-      ...BundleCostData
     }
   }
 }

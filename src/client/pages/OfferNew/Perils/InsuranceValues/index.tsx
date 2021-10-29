@@ -2,31 +2,13 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import color from 'color'
-import { Limits } from 'pages/OfferNew/Perils/InsuranceValues/Limits'
 import { OfferQuote } from 'pages/OfferNew/types'
-import { useTextKeys } from 'utils/textKeys'
 import { RawLink } from 'components/RawLink'
-import { SubSubHeadingBlack } from '../../components'
-
-const Wrapper = styled.div`
-  margin-top: 4rem;
-
-  @media (max-width: 600px) {
-    margin-top: 2.5rem;
-  }
-`
-
-const Header = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`
 
 const Links = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  margin-top: 4rem;
   align-items: center;
 
   @media (max-width: 600px) {
@@ -74,33 +56,22 @@ type Props = {
 }
 
 export const InsuranceValues: React.FC<Props> = ({ offerQuote }) => {
-  const textKeys = useTextKeys()
-
   return (
-    <Wrapper>
-      <Header>
-        <SubSubHeadingBlack>
-          {textKeys.COVERAGE_INFO_HEADLINE()}
-        </SubSubHeadingBlack>
-      </Header>
-
-      <Limits insurableLimits={offerQuote.insurableLimits} />
-      <Links>
-        {[...offerQuote.insuranceTerms.entries()].map(
-          ([insuranceTermType, insuranceTerm]) => {
-            return (
-              <TermsLink
-                key={insuranceTermType}
-                href={insuranceTerm.url}
-                target="_blank"
-              >
-                {insuranceTerm.displayName}
-                {' ↗'}
-              </TermsLink>
-            )
-          },
-        )}
-      </Links>
-    </Wrapper>
+    <Links>
+      {[...offerQuote.insuranceTerms.entries()].map(
+        ([insuranceTermType, insuranceTerm]) => {
+          return (
+            <TermsLink
+              key={insuranceTermType}
+              href={insuranceTerm.url}
+              target="_blank"
+            >
+              {insuranceTerm.displayName}
+              {' ↗'}
+            </TermsLink>
+          )
+        },
+      )}
+    </Links>
   )
 }

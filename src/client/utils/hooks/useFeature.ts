@@ -51,7 +51,7 @@ const isFeatureEnabled = ({
 
 export const useFeature = (features: Features[] = []) => {
   const market = useMarket()
-  const env = window.hedvigClientConfig.appEnvironment
+  const env = window.hedvigClientConfig?.appEnvironment ?? 'development'
 
   return features.reduce<Array<boolean>>((acc, feature) => {
     const featureConfig = Config.find((item) => item.name === feature)

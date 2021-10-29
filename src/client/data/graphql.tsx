@@ -7338,11 +7338,36 @@ export type Mutation = {
   createAddressChangeQuotes: AddressChangeQuoteResult
   /** Create all the quotes needed as a result of one of more Cross-Sells */
   createCrossSellQuotes: CrossSellQuotesResult
+  /**
+   * Create a new onboarding session. This is not an authentication session, but rather an object that
+   * ties the onboarding journey together.
+   */
   onboardingSession_create: Scalars['ID']
+  /** Create a quote as part of this onboarding session. */
   onboardingSession_createQuote: CreateOnboardingQuoteResult
+  /**
+   * Add a campaign by its code to this onboarding session. This campaign won't be "redeemed", but rather
+   * left in a pending state on the onboarding until signing occurs and a member is created.
+   *
+   * Returns an error if there was a problem with redeeming it, or null upon success.
+   */
   onboardingSession_addCampaign?: Maybe<AddCampaignError>
+  /** Remove the existing campaign. */
   onboardingSession_removeCampaign: Scalars['Boolean']
+  /**
+   * Initiate signing of this onboarding, optionally tagging a subset of the quotes if not all of them are wanted.
+   *
+   * Note, the session should only be moved into its signing state once the prior things, such as campaign, are
+   * considered done.
+   */
   onboardingSession_startSigning: OnboardingStartSignResponse
+  /**
+   * Once an onboarding session is "signed", it can be finalized/consumed by this method, which will produce
+   * an access token. This access token will serve as the means of authorization towards the member that was
+   * created as part of the onboarding.
+   *
+   * This is needed at this stage because the "connecting payments" stage will happen with an actual signed member.
+   */
   onboardingSession_createAccessToken: OnboardingSessionAccessTokenResult
   signOrApproveQuotes: SignOrApprove
 }
@@ -7710,13 +7735,20 @@ export enum OfferStatus {
   Fail = 'FAIL',
 }
 
+/**
+ * An onboarding session is a type that exists to guide the client through an onboarding journey,
+ * as a means of storing intermediate state up until the point where it is "signed" and then flushed
+ * into a proper "member".
+ */
 export type OnboardingSession = {
   __typename?: 'OnboardingSession'
   id: Scalars['ID']
+  /**  Campaign, if one has been attached by a code  */
   campaign?: Maybe<Campaign>
+  /**  The quote bundle "view" of the quotes created as part of this onboarding  */
   bundle?: Maybe<QuoteBundle>
+  /**  The ongoing signing state, if it has been initiated - or null if it has not.  */
   signing?: Maybe<OnboardingSessionSigning>
-  tokenCreationUrl?: Maybe<Scalars['String']>
 }
 
 export type OnboardingSessionAccessTokenResult = {
@@ -7724,16 +7756,27 @@ export type OnboardingSessionAccessTokenResult = {
   accessToken: Scalars['String']
 }
 
+/** The signing of an onboarding session, that contains information about the current signing status. */
 export type OnboardingSessionSigning = {
   __typename?: 'OnboardingSessionSigning'
+  /**  Current signing status of the session  */
   status: OnboardingSessionSignStatus
+  /**  A user-visible text that explains the current status. Useful for async signing like SE BankID.  */
   statusText?: Maybe<Scalars['String']>
 }
 
 export enum OnboardingSessionSignStatus {
+  /**  This signing session is ongoing. Only for async signing like SE BankID.  */
   Pending = 'PENDING',
+  /**
+   * This signing session is signed, and can be completed (producing an access token).
+   *
+   * Synchronous signing methods, like simple sign, immediately produce this state.
+   */
   Signed = 'SIGNED',
+  /** This signing is completed, which means the onboarding session has reached its terminal state. */
   Completed = 'COMPLETED',
+  /** The signing has failed - which means it also can be retried. */
   Failed = 'FAILED',
 }
 
@@ -8012,6 +8055,7 @@ export type Query = {
   /** returns names of all available embark stories */
   embarkStoryNames: Array<Scalars['String']>
   embarkStories: Array<EmbarkStoryMetadata>
+  /** Fetch onboarding session by its ID. */
   onboardingSession: OnboardingSession
   quoteBundle: QuoteBundle
 }
@@ -10536,6 +10580,18 @@ export type QuoteBundleQueryVariables = Exact<{
 
 export type QuoteBundleQuery = { __typename?: 'Query' } & {
   quoteBundle: { __typename?: 'QuoteBundle' } & {
+    quotes: Array<{ __typename?: 'BundledQuote' } & QuoteDataFragment>
+    bundleCost: { __typename?: 'InsuranceCost' } & BundleCostDataFragment
+  }
+}
+
+export type QuoteBundleVariantsQueryVariables = Exact<{
+  input: QuoteBundleInput
+  locale: Locale
+}>
+
+export type QuoteBundleVariantsQuery = { __typename?: 'Query' } & {
+  quoteBundle: { __typename?: 'QuoteBundle' } & {
     possibleVariations: Array<
       { __typename?: 'QuoteBundleVariant' } & Pick<
         QuoteBundleVariant,
@@ -10552,8 +10608,6 @@ export type QuoteBundleQuery = { __typename?: 'Query' } & {
             }
         }
     >
-    quotes: Array<{ __typename?: 'BundledQuote' } & QuoteDataFragment>
-    bundleCost: { __typename?: 'InsuranceCost' } & BundleCostDataFragment
   }
 }
 
@@ -11830,19 +11884,6 @@ export type NorwegianBankIdAuthMutationOptions = ApolloReactCommon.BaseMutationO
 export const QuoteBundleDocument = gql`
   query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
     quoteBundle(input: $input) {
-      possibleVariations {
-        id
-        tag(locale: $locale)
-        bundle {
-          displayName(locale: $locale)
-          bundleCost {
-            ...BundleCostData
-          }
-          quotes {
-            ...QuoteData
-          }
-        }
-      }
       quotes {
         ...QuoteData
       }
@@ -11851,8 +11892,8 @@ export const QuoteBundleDocument = gql`
       }
     }
   }
-  ${BundleCostDataFragmentDoc}
   ${QuoteDataFragmentDoc}
+  ${BundleCostDataFragmentDoc}
 `
 
 /**
@@ -11903,6 +11944,79 @@ export type QuoteBundleLazyQueryHookResult = ReturnType<
 export type QuoteBundleQueryResult = ApolloReactCommon.QueryResult<
   QuoteBundleQuery,
   QuoteBundleQueryVariables
+>
+export const QuoteBundleVariantsDocument = gql`
+  query QuoteBundleVariants($input: QuoteBundleInput!, $locale: Locale!) {
+    quoteBundle(input: $input) {
+      possibleVariations {
+        id
+        tag(locale: $locale)
+        bundle {
+          displayName(locale: $locale)
+          bundleCost {
+            ...BundleCostData
+          }
+          quotes {
+            ...QuoteData
+          }
+        }
+      }
+    }
+  }
+  ${BundleCostDataFragmentDoc}
+  ${QuoteDataFragmentDoc}
+`
+
+/**
+ * __useQuoteBundleVariantsQuery__
+ *
+ * To run a query within a React component, call `useQuoteBundleVariantsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQuoteBundleVariantsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQuoteBundleVariantsQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *      locale: // value for 'locale'
+ *   },
+ * });
+ */
+export function useQuoteBundleVariantsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    QuoteBundleVariantsQuery,
+    QuoteBundleVariantsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    QuoteBundleVariantsQuery,
+    QuoteBundleVariantsQueryVariables
+  >(QuoteBundleVariantsDocument, options)
+}
+export function useQuoteBundleVariantsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    QuoteBundleVariantsQuery,
+    QuoteBundleVariantsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    QuoteBundleVariantsQuery,
+    QuoteBundleVariantsQueryVariables
+  >(QuoteBundleVariantsDocument, options)
+}
+export type QuoteBundleVariantsQueryHookResult = ReturnType<
+  typeof useQuoteBundleVariantsQuery
+>
+export type QuoteBundleVariantsLazyQueryHookResult = ReturnType<
+  typeof useQuoteBundleVariantsLazyQuery
+>
+export type QuoteBundleVariantsQueryResult = ApolloReactCommon.QueryResult<
+  QuoteBundleVariantsQuery,
+  QuoteBundleVariantsQueryVariables
 >
 export const RedeemCodeDocument = gql`
   mutation RedeemCode($code: String!) {

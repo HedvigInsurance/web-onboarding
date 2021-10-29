@@ -1,8 +1,6 @@
-import React from 'react';
+import React from 'react'
 import { GlobalCss } from '../src/client/utils/globalStyles'
 import { colorsV3 } from '@hedviginsurance/brand'
-
-
 
 export const parameters = {
   backgrounds: {
@@ -21,7 +19,7 @@ export const parameters = {
     default: 'Medium',
   },
   layout: 'centered',
-};
+}
 
 export const decorators = [
   (Story) => (
@@ -30,4 +28,4 @@ export const decorators = [
       <Story />
     </>
   ),
-];
+]

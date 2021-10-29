@@ -8,8 +8,7 @@ import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import {
-  QuoteBundle,
-  useQuoteBundleQuery,
+  useQuoteBundleVariantsQuery,
   useRedeemedCampaignsQuery,
   QuoteBundleVariant,
 } from 'data/graphql'
@@ -63,7 +62,11 @@ export const OfferNew: React.FC = () => {
     setSelectedQuoteIds,
   } = useQuoteIds()
 
-  const { data, loading: loadingQuoteBundle, refetch } = useQuoteBundleQuery({
+  const {
+    data,
+    loading: loadingQuoteBundle,
+    refetch,
+  } = useQuoteBundleVariantsQuery({
     variables: {
       input: {
         ids: [...quoteIds],
@@ -111,18 +114,9 @@ export const OfferNew: React.FC = () => {
     toggleCheckout(open)
   }
 
-  const getFeatureSpecificOfferData = () => {
-    if (isInsuranceToggleEnabled) {
-      return selectedBundleVariant
-        ? getOfferData(selectedBundleVariant.bundle)
-        : null
-    } else {
-      return data?.quoteBundle
-        ? getOfferData(data?.quoteBundle as QuoteBundle)
-        : null
-    }
-  }
-  const offerData = getFeatureSpecificOfferData()
+  const offerData = selectedBundleVariant
+    ? getOfferData(selectedBundleVariant.bundle)
+    : null
 
   if (offerData) {
     trackOfferGTM(
