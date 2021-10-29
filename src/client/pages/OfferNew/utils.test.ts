@@ -23,6 +23,7 @@ import {
   getFormattedBirthdate,
   isBundleVariantMatchingQuoteIds,
   getBundleVariantFromQuoteIds,
+  getUniqueQuotesFromVariantList,
 } from './utils'
 
 describe('quote validation', () => {
@@ -191,5 +192,20 @@ describe('getBundleVariantFromQuoteIds function', () => {
     )
 
     expect(match).toBe(undefined)
+  })
+})
+
+describe('getUniqueQuotesFromVariantList function', () => {
+  it('should return Quote list without duplicates', () => {
+    const quotes = getUniqueQuotesFromVariantList(
+      possibleVariationsHomeAccidentSE,
+    )
+
+    expect(quotes.length).toEqual(2)
+
+    expect(quotes.map((x) => x.id)).toEqual([
+      '418cf2f7-2c2b-4e84-9f6c-f4dcf0d51e46',
+      'ecaecdd3-5e23-4cea-8f4e-981df29e4f73',
+    ])
   })
 })
