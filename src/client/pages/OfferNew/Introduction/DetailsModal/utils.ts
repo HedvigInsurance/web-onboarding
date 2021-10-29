@@ -15,10 +15,11 @@ import {
   ExtraBuildingInput,
   NorwegianHomeContentsDetails,
   DanishHomeContentsDetails,
+  EditSwedishAccidentInput,
   EditDanishAccidentInput,
   EditNorwegianTravelInput,
 } from 'data/graphql'
-import { OfferQuote, OfferData, OfferPersonInfo } from 'pages/OfferNew/types'
+import { OfferQuote, OfferPersonInfo } from 'pages/OfferNew/types'
 import { LocaleData } from 'l10n/locales'
 import { birthDateFormats } from 'l10n/birthDateAndSsnFormats'
 import {
@@ -33,7 +34,7 @@ import {
   isDanishHomeContents,
   isDanishTravel,
   isDanishAccident,
-  isBundle,
+  isSwedishAccident,
 } from '../../utils'
 import {
   SwedishApartmentFieldSchema,
@@ -654,13 +655,13 @@ const getInitialQuoteDetailsInputValues = (offerQuote: OfferQuote) => {
 type GetFormDataParams = {
   form: EditQuoteInput
   quoteDetails: QuoteDetails
-  offerData: OfferData
+  isPartOfBundle: boolean
 }
 
 export const getQuoteDetailsFormData = ({
   form,
   quoteDetails,
-  offerData,
+  isPartOfBundle,
 }: GetFormDataParams) => {
   const {
     swedishApartment: swedishApartmentFormData,
@@ -669,6 +670,17 @@ export const getQuoteDetailsFormData = ({
     norwegianHomeContents: norwegianHomeContentsFormData,
     norwegianTravel: norwegianTravelFormData,
   } = form
+
+  const swedishAccidentFormData: EditSwedishAccidentInput = {
+    householdSize:
+      swedishApartmentFormData?.householdSize ??
+      swedishHouseFormData?.householdSize,
+    livingSpace:
+      swedishApartmentFormData?.livingSpace ??
+      swedishHouseFormData?.livingSpace,
+    street: swedishApartmentFormData?.street ?? swedishHouseFormData?.street,
+    zipCode: swedishApartmentFormData?.zipCode ?? swedishHouseFormData?.zipCode,
+  }
 
   const danishAccidentOrTravelFormData: EditDanishAccidentInput = {
     coInsured: danishHomeContentsFormData?.coInsured,
@@ -689,11 +701,14 @@ export const getQuoteDetailsFormData = ({
     case 'SwedishHouseQuoteDetails':
       return swedishHouseFormData
 
+    case 'SwedishAccidentDetails':
+      return swedishAccidentFormData
+
     case 'NorwegianHomeContentsDetails':
       return norwegianHomeContentsFormData
 
     case 'NorwegianTravelDetails':
-      if (isBundle(offerData)) {
+      if (isPartOfBundle) {
         return norwegianBundleTravelFormData
       }
       return norwegianTravelFormData
@@ -702,8 +717,6 @@ export const getQuoteDetailsFormData = ({
       return danishHomeContentsFormData
 
     case 'DanishAccidentDetails':
-      return danishAccidentOrTravelFormData
-
     case 'DanishTravelDetails':
       return danishAccidentOrTravelFormData
 
@@ -715,22 +728,23 @@ export const getQuoteDetailsFormData = ({
 }
 
 type GetEditQuoteInputParams = {
-  quote: OfferQuote
+  id: string
+  quoteDetails: QuoteDetails
   form: EditQuoteInput
-  offerData: OfferData
+  isPartOfBundle?: boolean
 }
 
 export const getEditQuoteInput = ({
-  quote,
+  id,
+  quoteDetails,
   form,
-  offerData,
+  isPartOfBundle = false,
 }: GetEditQuoteInputParams): EditQuoteInput => {
-  const { quoteDetails, id } = quote
   const quoteType = getQuoteType(quoteDetails)
   const quoteDetailsFormValues = getQuoteDetailsFormData({
     form,
     quoteDetails,
-    offerData,
+    isPartOfBundle,
   })
   const { firstName, lastName, birthDate } = form
 
@@ -779,6 +793,7 @@ type EditQuoteType = keyof Pick<
   EditQuoteInput,
   | 'swedishApartment'
   | 'swedishHouse'
+  | 'swedishAccident'
   | 'norwegianHomeContents'
   | 'norwegianTravel'
   | 'danishHomeContents'
@@ -789,6 +804,7 @@ type EditQuoteType = keyof Pick<
 const getQuoteType = (quoteDetails: QuoteDetails): EditQuoteType => {
   if (isSwedishApartment(quoteDetails)) return 'swedishApartment'
   if (isSwedishHouse(quoteDetails)) return 'swedishHouse'
+  if (isSwedishAccident(quoteDetails)) return 'swedishAccident'
   if (isNorwegianHomeContents(quoteDetails)) return 'norwegianHomeContents'
   if (isNorwegianTravel(quoteDetails)) return 'norwegianTravel'
   if (isDanishHomeContents(quoteDetails)) return 'danishHomeContents'

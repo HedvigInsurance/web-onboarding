@@ -454,3 +454,19 @@ export const getBundleVariantFromQuoteIds = (
   bundleVariants.find((variant) =>
     isBundleVariantMatchingQuoteIds(variant, quoteIds),
   )
+
+export const getUniqueQuotesFromVariantList = (
+  variants: QuoteBundleVariant[],
+) => {
+  const quotesWithDuplicates = variants.reduce((acc, variant) => {
+    return [...acc, ...variant.bundle.quotes]
+  }, [] as BundledQuote[])
+
+  const uniqueQuoteIds = [...new Set(quotesWithDuplicates.map(({ id }) => id))]
+
+  const uniqueQuotes = uniqueQuoteIds.map((id) =>
+    quotesWithDuplicates.find((quote) => quote.id === id),
+  ) as BundledQuote[]
+
+  return uniqueQuotes
+}

@@ -15,6 +15,8 @@ import {
   noCombo as mockedNoComboOfferData,
   noComboYouth as mockedNoComboYouthOfferData,
 } from 'utils/testData/offerDataMock'
+import { OfferQuote } from '../../types'
+import { isBundle } from '../../utils'
 import { getQuoteDetailsFormData, getEditQuoteInput } from './utils'
 
 const mockedNoHomeQuoteDetails = mockedNoComboOfferData.quotes.find(
@@ -33,13 +35,13 @@ const mockedNoHomeYouthQuote = mockedNoComboYouthOfferData.quotes.find(
   ({ quoteDetails }) => {
     return quoteDetails.__typename === 'NorwegianHomeContentsDetails'
   },
-)
+) as OfferQuote
 
 const mockedNoTravelYouthQuote = mockedNoComboYouthOfferData.quotes.find(
   ({ quoteDetails }) => {
     return quoteDetails.__typename === 'NorwegianTravelDetails'
   },
-)
+) as OfferQuote
 
 const norwegianComboForm: EditQuoteInput = {
   id: '111',
@@ -75,13 +77,13 @@ const mockedDkHomeQuote = mockedDkHomeAccidentOfferData.quotes.find(
   ({ quoteDetails }) => {
     return quoteDetails.__typename === 'DanishHomeContentsDetails'
   },
-)
+) as OfferQuote
 
 const mockedDkAccidentQuote = mockedDkHomeAccidentOfferData.quotes.find(
   ({ quoteDetails }) => {
     return quoteDetails.__typename === 'DanishAccidentDetails'
   },
-)
+) as OfferQuote
 
 const danishHomeAccidentForm: EditQuoteInput = {
   id: '333',
@@ -113,7 +115,7 @@ describe('getQuoteDetailsFormData function', () => {
   it('returns the correct quote details properties for Norwegian travel quote form', () => {
     const norwegianTravelDetailsFormData = getQuoteDetailsFormData({
       form: norwegianTravelForm,
-      offerData: mockedNoTravelOfferData,
+      isPartOfBundle: isBundle(mockedNoTravelOfferData),
       quoteDetails: mockedNoTravelQuoteDetails!,
     })
     const hasCoInsured = 'coInsured' in norwegianTravelDetailsFormData!
@@ -131,7 +133,7 @@ describe('getQuoteDetailsFormData function', () => {
   it('returns the correct quote details properties for Norwegian combo quote form', () => {
     const norwegianComboDetailsFormData = getQuoteDetailsFormData({
       form: norwegianComboForm,
-      offerData: mockedNoComboOfferData,
+      isPartOfBundle: isBundle(mockedNoComboOfferData),
       quoteDetails: mockedNoHomeQuoteDetails!,
     })
     const hasStreet = 'street' in norwegianComboDetailsFormData!
@@ -150,7 +152,7 @@ describe('getQuoteDetailsFormData function', () => {
   it('returns the correct updated quote details properties for Swedish apartment quote form', () => {
     const swedishApartmentDetailsFormData = getQuoteDetailsFormData({
       form: swedishApartmentForm,
-      offerData: mockedSeApartmentOfferData,
+      isPartOfBundle: isBundle(mockedSeApartmentOfferData),
       quoteDetails: mockedSeApartmentQuote.quoteDetails,
     })
     const hasStreet = 'street' in swedishApartmentDetailsFormData!
@@ -168,7 +170,7 @@ describe('getQuoteDetailsFormData function', () => {
   it('returns the correct updated quote details properties for Danish home & accident bundle quote form', () => {
     const danishHomeAccidentDetailsFormData = getQuoteDetailsFormData({
       form: danishHomeAccidentForm,
-      offerData: mockedDkHomeAccidentOfferData,
+      isPartOfBundle: isBundle(mockedDkHomeAccidentOfferData),
       quoteDetails: mockedDkHomeQuote!.quoteDetails,
     })
     const hasStreet = 'street' in danishHomeAccidentDetailsFormData!
@@ -187,14 +189,16 @@ describe('getQuoteDetailsFormData function', () => {
 describe('getEditQuoteInput function', () => {
   it('returns input with the correct updates to pass to editQuoteMutation with a Norwegian combo bundle', () => {
     const editHomeQuoteInput = getEditQuoteInput({
-      quote: mockedNoHomeYouthQuote!,
+      id: mockedNoHomeYouthQuote.id,
+      quoteDetails: mockedNoHomeYouthQuote.quoteDetails,
       form: norwegianComboForm,
-      offerData: mockedNoComboYouthOfferData,
+      isPartOfBundle: isBundle(mockedNoComboYouthOfferData),
     })
     const editTravelQuoteInput = getEditQuoteInput({
+      id: mockedNoTravelYouthQuote.id,
+      quoteDetails: mockedNoTravelYouthQuote.quoteDetails,
       form: norwegianComboForm,
-      quote: mockedNoTravelYouthQuote!,
-      offerData: mockedNoComboYouthOfferData,
+      isPartOfBundle: isBundle(mockedNoComboOfferData),
     })
 
     const hasCorrectHomeContentsType =
@@ -211,9 +215,10 @@ describe('getEditQuoteInput function', () => {
 
   it('returns input with the correct updates to pass to editQuoteMutation with a Swedish apartment quote', () => {
     const editSwedishApartmentQuoteInput = getEditQuoteInput({
-      quote: mockedSeApartmentQuote!,
+      id: mockedSeApartmentQuote.id,
+      quoteDetails: mockedSeApartmentQuote.quoteDetails,
       form: swedishApartmentForm,
-      offerData: mockedSeApartmentOfferData,
+      isPartOfBundle: isBundle(mockedSeApartmentOfferData),
     })
 
     const hasCorrectType = 'swedishApartment' in editSwedishApartmentQuoteInput
@@ -224,14 +229,16 @@ describe('getEditQuoteInput function', () => {
 
   it('returns input with the correct updates to pass to editQuoteMutation with a Danish home & accident bundle', () => {
     const editHomeInput = getEditQuoteInput({
-      quote: mockedDkHomeQuote!,
+      id: mockedDkHomeQuote.id,
+      quoteDetails: mockedDkHomeQuote.quoteDetails,
       form: danishHomeAccidentForm,
-      offerData: mockedDkHomeAccidentOfferData,
+      isPartOfBundle: isBundle(mockedDkHomeAccidentOfferData),
     })
     const editAccidentInput = getEditQuoteInput({
-      quote: mockedDkAccidentQuote!,
+      id: mockedDkAccidentQuote.id,
+      quoteDetails: mockedDkAccidentQuote.quoteDetails,
       form: danishHomeAccidentForm,
-      offerData: mockedDkHomeAccidentOfferData,
+      isPartOfBundle: isBundle(mockedDkHomeAccidentOfferData),
     })
 
     const hasCorrectHomeContentsType = 'danishHomeContents' in editHomeInput
