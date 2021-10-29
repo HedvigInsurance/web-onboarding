@@ -2,10 +2,7 @@ const path = require('path')
 
 module.exports = {
   stories: ['../src/**/*.stories.tsx'],
-  addons: [
-    'storybook-addon-paddings',
-    '@storybook/addon-essentials',
-  ],
+  addons: ['storybook-addon-paddings', '@storybook/addon-essentials'],
   webpackFinal: async (config) => {
     config.resolve.modules.push(path.resolve(__dirname, '../src/client'))
     config.resolve.alias = {

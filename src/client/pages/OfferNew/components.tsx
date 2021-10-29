@@ -21,6 +21,19 @@ export const Heading = styled('h2')`
   }
 `
 
+export const HeadingXS = styled.h3`
+  margin: 0;
+  font-family: ${fonts.FAVORIT};
+  font-size: 1.25rem;
+  line-height: 1.4;
+  color: ${colorsV3.gray900};
+
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
+    font-size: 1.5rem;
+    line-height: 1.33;
+  }
+`
+
 export const HeadingBlack = styled(Heading)`
   color: ${colorsV2.black};
 `

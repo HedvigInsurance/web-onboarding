@@ -38,7 +38,7 @@ export const CreditCheckInfo = () => {
     <FadeIn>
       <InfoBox>
         <InfoHeader>
-          <InfoIcon size={20} />
+          <InfoIcon size="20px" />
           {textKeys.CHECKOUT_CREDIT_CHECK_INFO_HEADER()}
         </InfoHeader>
         <InfoContent>

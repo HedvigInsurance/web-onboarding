@@ -73,7 +73,7 @@ export const SupportSection: React.FC<Props> = ({ onButtonClick }) => {
   return (
     <Wrapper>
       <IconWrapper>
-        <InfoIcon />
+        <InfoIcon size="20px" />
       </IconWrapper>
       <Content>
         <Headline>{textKeys.DETAILS_MODULE_INFOBOX_TITLE()}</Headline>
