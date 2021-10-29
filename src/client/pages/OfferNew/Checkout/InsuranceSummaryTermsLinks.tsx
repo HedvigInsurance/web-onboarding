@@ -38,24 +38,27 @@ const removePrivacyPolicy = (terms: InsuranceTerm[]) =>
 
 export const InsuranceSummaryTermsLinks = ({ offerData }: Props) => (
   <>
-    {offerData.quotes.map(({ id, displayName, insuranceTerms }) => (
-      <Group key={id}>
-        <Row>
-          <DisplayNameWrapper>{displayName}</DisplayNameWrapper>
-        </Row>
-        {removePrivacyPolicy(insuranceTerms).map(
-          ({ displayName: termDisplayName, url }, index) => (
-            <Row key={index}>
-              <DisplayNameWrapper>
-                <Link href={url} target="_blank">
-                  {termDisplayName}
-                </Link>
-                {' ↗'}
-              </DisplayNameWrapper>
-            </Row>
-          ),
-        )}
-      </Group>
-    ))}
+    {offerData.quotes.map(({ id, displayName, insuranceTerms }) => {
+      const termsWithoutPrivacyPolicy = removePrivacyPolicy(insuranceTerms)
+      return (
+        <Group key={id}>
+          <Row>
+            <DisplayNameWrapper>{displayName}</DisplayNameWrapper>
+          </Row>
+          {termsWithoutPrivacyPolicy.map(
+            ({ displayName: termDisplayName, url }, index) => (
+              <Row key={index}>
+                <DisplayNameWrapper>
+                  <Link href={url} target="_blank">
+                    {termDisplayName}
+                  </Link>
+                  {' ↗'}
+                </DisplayNameWrapper>
+              </Row>
+            ),
+          )}
+        </Group>
+      )
+    })}
   </>
 )
