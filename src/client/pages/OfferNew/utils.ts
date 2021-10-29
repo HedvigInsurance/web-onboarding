@@ -459,7 +459,7 @@ export const getUniqueQuotesFromVariantList = (
   const uniqueQuoteIds = [...new Set(quotesWithDuplicates.map(({ id }) => id))]
 
   const uniqueQuotes = uniqueQuoteIds.map((id) =>
-    quotesWithDuplicates.find((q) => q.id === id),
+    quotesWithDuplicates.find((quote) => quote.id === id),
   ) as BundledQuote[]
 
   return uniqueQuotes
