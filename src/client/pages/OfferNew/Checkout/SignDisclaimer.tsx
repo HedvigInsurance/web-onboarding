@@ -28,8 +28,8 @@ const getSignButtonLabel = (textKeys: TextKeyMap, signMethod?: SignMethod) => {
 }
 
 const getPrivacyPolicyLink = (currentLocale: string, quote: OfferQuote) => {
-  const linkFromBackend = quote.insuranceTerms.get(
-    InsuranceTermType.PrivacyPolicy,
+  const linkFromBackend = quote.insuranceTerms.find(
+    ({ type }) => type === InsuranceTermType.PrivacyPolicy,
   )?.url
 
   if (linkFromBackend) {

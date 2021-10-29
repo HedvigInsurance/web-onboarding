@@ -55,23 +55,13 @@ type Props = {
   offerQuote: OfferQuote
 }
 
-export const InsuranceValues: React.FC<Props> = ({ offerQuote }) => {
-  return (
-    <Links>
-      {[...offerQuote.insuranceTerms.entries()].map(
-        ([insuranceTermType, insuranceTerm]) => {
-          return (
-            <TermsLink
-              key={insuranceTermType}
-              href={insuranceTerm.url}
-              target="_blank"
-            >
-              {insuranceTerm.displayName}
-              {' ↗'}
-            </TermsLink>
-          )
-        },
-      )}
-    </Links>
-  )
-}
+export const InsuranceValues: React.FC<Props> = ({ offerQuote }) => (
+  <Links>
+    {offerQuote.insuranceTerms.map(({ type, url, displayName }) => (
+      <TermsLink key={type} href={url} target="_blank">
+        {displayName}
+        {' ↗'}
+      </TermsLink>
+    ))}
+  </Links>
+)
