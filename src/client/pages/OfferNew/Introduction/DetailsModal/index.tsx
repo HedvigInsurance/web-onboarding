@@ -109,6 +109,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   const textKeys = useTextKeys()
   const [editQuoteMutation, editQuoteResult] = useEditQuoteMutation()
   const mainOfferQuote = getMainQuote(offerData)
+  const isBundleOffer = isBundle(offerData)
   const currentLocale = useCurrentLocale()
   const currentLocaleData = locales[currentLocale as LocaleLabel]
   const fieldSchema = getFieldSchema({
@@ -123,14 +124,14 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
     setIsUnderwritingGuidelineHit,
   ] = React.useState(false)
 
-  const editQuotes = async (form: EditQuoteInput) => {
+  const editQuotes = (form: EditQuoteInput) => {
     return Promise.all(
       allQuotes.map(({ quoteDetails, id }) => {
         const editQuoteInput = getEditQuoteInput({
           id,
           quoteDetails,
           form,
-          isPartOfBundle: isBundle(offerData),
+          isPartOfBundle: isBundleOffer,
         })
 
         return editQuoteMutation({
