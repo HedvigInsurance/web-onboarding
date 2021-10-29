@@ -15,6 +15,7 @@ import {
   DanishTravelDetails,
   ApartmentType,
   QuoteBundleVariant,
+  SwedishAccidentDetails,
 } from 'data/graphql'
 import { LocaleLabel, locales } from 'l10n/locales'
 import { birthDateFormats } from 'l10n/birthDateAndSsnFormats'
@@ -109,6 +110,16 @@ const isHomeQuote = (
   isSwedishHouse(quoteDetails) ||
   isSwedishApartment(quoteDetails)
 
+const isAccidentQuote = (
+  quoteDetails: QuoteDetails,
+): quoteDetails is SwedishAccidentDetails | DanishAccidentDetails =>
+  isDanishAccident(quoteDetails) || isSwedishAccident(quoteDetails)
+
+const isTravelQuote = (
+  quoteDetails: QuoteDetails,
+): quoteDetails is NorwegianTravelDetails | DanishTravelDetails =>
+  isDanishTravel(quoteDetails) || isNorwegianTravel(quoteDetails)
+
 export const quoteDetailsHasAddress = isHomeQuote
 
 export const getMainQuote = (offerData: OfferData) => {
@@ -181,6 +192,15 @@ export const isDanishTravelBundle = (offerData: OfferData): boolean =>
 
 export const isStudentOffer = (offerData: OfferData): boolean =>
   offerData.quotes.every((quote) => isStudent(quote.quoteDetails))
+
+export const hasHomeQuote = (offerData: OfferData) =>
+  offerData.quotes.some(({ quoteDetails }) => isHomeQuote(quoteDetails))
+
+export const hasAccidentQuote = (offerData: OfferData) =>
+  offerData.quotes.some(({ quoteDetails }) => isAccidentQuote(quoteDetails))
+
+export const hasTravelQuote = (offerData: OfferData) =>
+  offerData.quotes.some(({ quoteDetails }) => isTravelQuote(quoteDetails))
 
 export const hasAddress = (offerData: OfferData): boolean =>
   !!offerData.person.address
