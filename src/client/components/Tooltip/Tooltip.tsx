@@ -16,7 +16,7 @@ const Wrapper = styled.div`
 
 const TooltipIcon = styled(motion.div)`
   /* remove extra space under child SVG: https://stackoverflow.com/a/51161925 */
-  font-size: 0;
+  display: flex;
 `
 
 const TooltipContainer = styled.div<{ visible: boolean }>`
@@ -91,7 +91,10 @@ export const Tooltip: React.FC<TooltipProps> = ({ body }) => {
         onHoverEnd={() => setVisible(false)}
         onTouchStart={() => setVisible(true)}
       >
-        <InfoIcon size="20px" />
+        <InfoIcon
+          size="20px"
+          color={isVisible ? colorsV3.gray700 : colorsV3.gray900}
+        />
       </TooltipIcon>
     </Wrapper>
   )
