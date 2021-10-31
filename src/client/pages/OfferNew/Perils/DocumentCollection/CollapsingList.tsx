@@ -17,7 +17,7 @@ const Container = styled.div`
   }
 `
 
-const StyledTermsLink = styled(RawLink)`
+const OutlineButtonLink = styled(RawLink)`
   border-radius: 8px;
   border: 1px solid ${colorsV3.gray900};
 
@@ -64,18 +64,15 @@ type ExternalLinkProps = RawLinkProps & {
   children: string
 }
 
-const ExternalLink: React.FC<ExternalLinkProps> = ({ children, ...props }) => (
-  <StyledTermsLink target="_blank" {...props}>
+export const ExternalLink: React.FC<ExternalLinkProps> = ({
+  children,
+  ...props
+}) => (
+  <OutlineButtonLink target="_blank" {...props}>
     {`${children} ↗︎`}
-  </StyledTermsLink>
+  </OutlineButtonLink>
 )
 
-type ExternalLinkListType = React.FC & {
-  ExternalLink: typeof ExternalLink
-}
-
-export const CollapsingList: ExternalLinkListType = ({ children }) => (
+export const CollapsingList: React.FC = ({ children }) => (
   <Container>{children}</Container>
 )
-
-CollapsingList.ExternalLink = ExternalLink

@@ -4,7 +4,7 @@ import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { useTextKeys } from 'utils/textKeys'
 import { OfferQuote } from '../../types'
 import { HeadingXS } from '../../components'
-import { CollapsingList } from './CollapsingList'
+import { CollapsingList, ExternalLink } from './CollapsingList'
 
 const Container = styled.div`
   display: grid;
@@ -28,9 +28,9 @@ export const DocumentCollection: React.FC<Props> = ({ offer }) => {
       <CollapsingList>
         {offer.insuranceTerms.map(({ type, url, displayName }) => {
           return (
-            <CollapsingList.ExternalLink key={type} href={url}>
+            <ExternalLink key={type} href={url}>
               {displayName}
-            </CollapsingList.ExternalLink>
+            </ExternalLink>
           )
         })}
       </CollapsingList>
