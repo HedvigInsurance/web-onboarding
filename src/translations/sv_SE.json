@@ -301,8 +301,8 @@
   "CHECKOUT_SIGN_FAIL_HEADER": "",
   "CHECKOUT_SIGN_FAIL_CONTENT": "",
   "OFFER_BUNDLE_SELECTOR_TITLE": "Välj ditt försäkringspaket",
-  "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "Välj vilket försäkringspaket som passar dig bäst. Försäkringarna gäller för dig och alla medförsäkrade. Du kan alltid lägga till olycksfallsförsäkringen vid ett senare tillfälle. Det gör du enkelt i din Hedvig-app.",
+  "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "Här kan du välja den kombination som passar just dig. Alla försäkringar gäller för dig och dina medförsäkrade. Du kan alltid lägga till olycksfallsförsäkringen eller ändra startdatum för dina försäkringar vid ett senare tillfälle. Det gör du enkelt i din Hedvig-app.",
   "OFFER_APP_PROMOTION_HEADING": "Du sköter allt i Hedvig-appen",
-  "OFFER_APP_PROMOTION_PARAGRAPH": "Om du råkat ut för en olycka kan du enkelt anmäla skadan direkt i appen, oavsett var du befinner dig. I vissa fall behöver du knappt ens vänta i 5 minuter på din ersättning. Vi är tillgängliga mellan 08-22 på vardagar och 9-18 på helger.",
+  "OFFER_APP_PROMOTION_PARAGRAPH": "Anmäl skador, hantera dina försäkringar eller ställ frågor. Med appen får du full kontroll över dina försäkringar och hjälp på direkten om något hänt.",
   "WEB_OFFER_DOCUMENTS_SECTION_TITLE": "Viktiga dokument"
 }

@@ -147,7 +147,7 @@
   "STARTPAGE_TRAVEL_HEADLINE": "Travel insurance",
   "STARTPAGE_TRAVEL_BODY": "Get your price",
   "STARTPAGE_TRAVEL_BUTTON": "Get a price quote",
-  "CHECKOUT_SSN_PLACEHOLDER_NO": "",
+  "CHECKOUT_SSN_PLACEHOLDER_NO": "DDMMYYXXXXX",
   "STARTPAGE_COMBO_HEADLINE": "Bundle",
   "STARTPAGE_COMBO_BODY": "",
   "SIDEBAR_INSURANCE_TYPE_NO_BUNDLE": "Contents and travel insurance",
@@ -301,8 +301,8 @@
   "CHECKOUT_SIGN_FAIL_HEADER": "",
   "CHECKOUT_SIGN_FAIL_CONTENT": "",
   "OFFER_BUNDLE_SELECTOR_TITLE": "Choose your insurance bundle",
-  "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "Pick the insurance plan that fits you best. The insurances cover you and all co-insured. You can always add the accident insurance in the app later on.",
+  "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "Pick the insurance plan that fits you best. The insurances cover you and all co-insured. You can always add the accident insurance or change the activation date for your insurances in the app later on.",
   "OFFER_APP_PROMOTION_HEADING": "Take care of everything in the Hedvig app",
-  "OFFER_APP_PROMOTION_PARAGRAPH": "If you've had an accident, you can easily report the injury directly in the app, no matter where you are. In some cases, you won't even have to wait 5 minutes for your compensation. We are available between 08-22 on weekdays and 9-18 on weekends.",
+  "OFFER_APP_PROMOTION_PARAGRAPH": "Make a claim, manage your insurances or ask questions. With the app you’ll have full control over your insurances and get instant help if something has happened.",
   "WEB_OFFER_DOCUMENTS_SECTION_TITLE": "Important documents"
 }

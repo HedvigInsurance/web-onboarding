@@ -301,8 +301,8 @@
   "CHECKOUT_SIGN_FAIL_HEADER": "Your purchase can’t be completed",
   "CHECKOUT_SIGN_FAIL_CONTENT": "Unfortunately, we can't offer you to purchase an insurance online. Please contact betaling@hedvig.com and we'll assist you.",
   "OFFER_BUNDLE_SELECTOR_TITLE": "Choose your insurance bundle",
-  "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "Pick the insurance plan that fits you best. The insurances cover you and all co-insured. You can always add the accident insurance in the app later on.",
+  "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "Pick the insurance plan that fits you best. The insurances cover you and all co-insured. You can always add the accident insurance or change the activation date for your insurances in the app later on.",
   "OFFER_APP_PROMOTION_HEADING": "Take care of everything in the Hedvig app",
-  "OFFER_APP_PROMOTION_PARAGRAPH": "If you've had an accident, you can easily report the injury directly in the app, no matter where you are. In some cases, you won't even have to wait 5 minutes for your compensation. We are available between 08-22 on weekdays and 9-18 on weekends.",
+  "OFFER_APP_PROMOTION_PARAGRAPH": "Make a claim, manage your insurances or ask questions. With the app you’ll have full control over your insurances and get instant help if something has happened.",
   "WEB_OFFER_DOCUMENTS_SECTION_TITLE": "Important documents"
 }

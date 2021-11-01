@@ -6,6 +6,11 @@ import { Link } from 'react-router-dom'
 import { Arrow } from 'components/icons/Arrow'
 import { HedvigSymbol } from 'components/icons/HedvigSymbol'
 import { Badge } from 'components/Badge/Badge'
+import {
+  LARGE_SCREEN_MEDIA_QUERY,
+  MEDIUM_SMALL_SCREEN_MEDIA_QUERY,
+  MEDIUM_SCREEN_MEDIA_QUERY,
+} from 'utils/mediaQueries'
 
 const CardComponent = styled.div<{ disabled?: boolean }>`
   position: relative;
@@ -18,16 +23,13 @@ const CardComponent = styled.div<{ disabled?: boolean }>`
   transition: all 0.35s;
   text-decoration: none;
 
-  @media (min-width: 600px) {
+  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
     padding-left: 2rem;
     padding-right: 2rem;
-  }
-
-  @media (min-height: 620px) {
     margin-bottom: 1rem;
   }
 
-  @media (min-width: 850px) {
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -35,7 +37,7 @@ const CardComponent = styled.div<{ disabled?: boolean }>`
     padding: 1.5rem;
   }
 
-  @media (min-width: 1020px) {
+  ${LARGE_SCREEN_MEDIA_QUERY} {
     justify-content: space-between;
     padding: 2rem;
     border-radius: 0.75rem;
@@ -73,11 +75,11 @@ const CardHeader = styled.div`
     display: none;
   }
 
-  @media (min-height: 620px) {
+  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
     padding-bottom: 1rem;
   }
 
-  @media (min-width: 1020px) {
+  ${LARGE_SCREEN_MEDIA_QUERY} {
     padding-bottom: 3rem;
 
     /* HedvigSymbol */
@@ -99,20 +101,16 @@ const ArrowWrapper = styled.span`
   right: 1.25rem;
   bottom: 0.8rem;
 
-  @media (min-width: 600px) {
+  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
     right: 1.5rem;
-    bottom: 0.7rem;
+    bottom: 1.2rem;
 
     svg {
       font-size: 1.75rem;
     }
   }
 
-  @media (min-width: 600px) {
-    bottom: 1.2rem;
-  }
-
-  @media (min-width: 1020px) {
+  ${LARGE_SCREEN_MEDIA_QUERY} {
     right: 2rem;
     bottom: 2rem;
   }
@@ -121,40 +119,29 @@ const ArrowWrapper = styled.span`
 export const CardHeadline = styled.h2<{ disabled?: boolean }>`
   width: 100%;
   margin: 0;
-  font-size: 1.25rem;
-  line-height: 1.2;
+  margin-bottom: 0.25rem;
   color: ${(props) => (props.disabled ? colorsV3.gray500 : colorsV3.gray900)};
 
-  @media (min-width: 600px) {
-    margin-bottom: 0.25rem;
-    font-size: 1.5rem;
-    line-height: 1.25;
-  }
+  font-size: 1.25rem;
+  line-height: 1.4;
 
-  @media (min-width: 1020px) {
-    font-size: 1.9rem;
-    letter-spacing: -0.02em;
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    font-size: 1.5rem;
+    line-height: 1.33;
+    letter-spacing: -2%;
   }
 `
 
 export const CardParagraph = styled.p`
   margin: 0;
+  padding-right: 2rem;
   font-size: 1rem;
   line-height: 1.5;
-  color: ${colorsV3.gray500};
+  color: ${colorsV3.gray700};
+  opacity: 0.76;
 
-  @media (min-width: 600px) {
-    font-size: 1.125rem;
-  }
-
-  @media (min-width: 850px) {
-    max-width: 25ch;
-  }
-
-  @media (min-width: 1020px) {
-    font-size: 1.5rem;
-    letter-spacing: -0.02em;
-    max-width: 21ch;
+  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
+    padding-right: 2.5rem;
   }
 `
 
