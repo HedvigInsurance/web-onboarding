@@ -15,6 +15,7 @@ import {
   isDanishTravelBundle,
   isStudentOffer,
   getMainQuote,
+  isSwedish,
 } from 'pages/OfferNew/utils'
 import { trackOfferGTM } from './gtm'
 import { adtraction } from './adtraction'
@@ -66,6 +67,11 @@ export enum DkBundleTypes {
 
 export const getContractType = (offerData: OfferData) => {
   if (isBundle(offerData)) {
+    if (isSwedish(offerData)) {
+      return isStudentOffer(offerData)
+        ? SeBundleTypes.SeHomeAccidentBundleStudentBrf
+        : SeBundleTypes.SeHomeAccidentBundleBrf
+    }
     if (isNorwegian(offerData)) {
       return isYouth(offerData)
         ? NoComboTypes.NoComboYouth

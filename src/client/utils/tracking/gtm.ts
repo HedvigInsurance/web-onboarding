@@ -11,9 +11,18 @@ import {
   hasAccidentQuote,
   hasTravelQuote,
 } from 'pages/OfferNew/utils'
-import { getContractType, DkBundleTypes, NoComboTypes } from './tracking'
+import {
+  getContractType,
+  DkBundleTypes,
+  NoComboTypes,
+  SeBundleTypes,
+} from './tracking'
 
-type GAContractType = NoComboTypes | DkBundleTypes | TypeOfContract
+type GAContractType =
+  | SeBundleTypes
+  | NoComboTypes
+  | DkBundleTypes
+  | TypeOfContract
 
 type GTMUserProperties = {
   market: string
