@@ -3,7 +3,12 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { IconRoot, IconRootProps } from './IconRoot'
 
 export const InfoIcon: React.FC<IconRootProps> = (props) => (
-  <IconRoot viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" {...props}>
+  <IconRoot
+    viewBox="0 0 16 16"
+    xmlns="http://www.w3.org/2000/svg"
+    color={colorsV3.gray900}
+    {...props}
+  >
     <g fill="none" fillRule="evenodd">
       <circle cx="8" cy="8" r="7.5" stroke="currentColor" />
       <path
@@ -13,7 +18,3 @@ export const InfoIcon: React.FC<IconRootProps> = (props) => (
     </g>
   </IconRoot>
 )
-
-IconRoot.defaultProps = {
-  color: colorsV3.gray900,
-}
