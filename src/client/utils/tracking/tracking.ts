@@ -1,8 +1,10 @@
 import { CookieStorage } from 'cookie-storage'
 import { SegmentAnalyticsJs, setupTrackers } from 'quepasa'
 import React from 'react'
+import { match } from 'matchly'
 import {
   SignState,
+  TypeOfContract,
   useMemberQuery,
   useRedeemedCampaignsQuery,
 } from 'data/graphql'
@@ -65,6 +67,12 @@ export enum DkBundleTypes {
   DkTravelBundleStudent = 'DK_TRAVEL_BUNDLE_STUDENT',
 }
 
+export type TrackableContractType =
+  | SeBundleTypes
+  | NoComboTypes
+  | DkBundleTypes
+  | TypeOfContract
+
 export const getContractType = (offerData: OfferData) => {
   if (isBundle(offerData)) {
     if (isSwedish(offerData)) {
@@ -91,6 +99,50 @@ export const getContractType = (offerData: OfferData) => {
     }
   }
   return getMainQuote(offerData).contractType
+}
+
+export enum TrackableContractCategory {
+  Home = 'home',
+  Travel = 'travel',
+  HomeTravel = 'home_travel',
+  HomeAccident = 'home_accident',
+  HomeAccidentTravel = 'home_accident_travel',
+}
+export const getTrackableContractCategory = match([
+  [
+    SeBundleTypes.SeAccidentBundle ||
+      SeBundleTypes.SeAccidentBundle ||
+      DkBundleTypes.DkAccidentBundle ||
+      DkBundleTypes.DkAccidentBundleStudent,
+    TrackableContractCategory.HomeAccident,
+  ],
+  [
+    NoComboTypes.NoCombo || NoComboTypes.NoComboYouth,
+    TrackableContractCategory.HomeTravel,
+  ],
+  [
+    DkBundleTypes.DkTravelBundle || DkBundleTypes.DkTravelBundleStudent,
+    TrackableContractCategory.HomeAccidentTravel,
+  ],
+  [
+    TypeOfContract.NoTravel || TypeOfContract.NoTravelYouth,
+    TrackableContractCategory.Travel,
+  ],
+  [match.any(), TrackableContractCategory.Home],
+])
+
+export const getInitialOfferFromCookie = (
+  contractType: TrackableContractType,
+) => {
+  const initialtOffer = cookie.getItem('initial_offer')
+
+  if (initialtOffer) {
+    return initialtOffer
+  }
+
+  const contractCategory = getTrackableContractCategory(contractType)!
+  cookie.setItem('initial_offer', contractCategory, { path: '/' })
+  return contractCategory
 }
 
 export enum ApplicationSpecificEvents {

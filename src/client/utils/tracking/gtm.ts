@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router'
-import { TypeOfContract } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import { captureSentryError } from 'utils/sentry-client'
 import { useMarket } from 'components/utils/CurrentLocale'
@@ -13,16 +12,9 @@ import {
 } from 'pages/OfferNew/utils'
 import {
   getContractType,
-  DkBundleTypes,
-  NoComboTypes,
-  SeBundleTypes,
+  getInitialOfferFromCookie,
+  TrackableContractType,
 } from './tracking'
-
-type GAContractType =
-  | SeBundleTypes
-  | NoComboTypes
-  | DkBundleTypes
-  | TypeOfContract
 
 type GTMUserProperties = {
   market: string
@@ -30,7 +22,7 @@ type GTMUserProperties = {
 }
 
 type GTMOfferData = {
-  insurance_type: GAContractType
+  insurance_type: TrackableContractType
   referral_code: 'yes' | 'no'
   number_of_people: number
   insurance_price: number
@@ -40,6 +32,7 @@ type GTMOfferData = {
   has_home: boolean
   has_accident: boolean
   has_travel: boolean
+  initial_offer: string
   member_id?: string
 }
 
@@ -100,13 +93,15 @@ export const trackOfferGTM = (
   offerData: OfferData,
   referralCodeUsed: boolean,
 ) => {
+  const contractType = getContractType(offerData)
+  const initialOffer = getInitialOfferFromCookie(contractType)
   const grossPrice = Math.round(Number(offerData.cost.monthlyGross.amount))
   const netPrice = Math.round(Number(offerData.cost.monthlyNet.amount))
   try {
     pushToGTMDataLayer({
       event: eventName,
       offerData: {
-        insurance_type: getContractType(offerData),
+        insurance_type: contractType,
         referral_code: referralCodeUsed ? 'yes' : 'no',
         number_of_people: offerData.person.householdSize,
         insurance_price: grossPrice,
@@ -116,6 +111,7 @@ export const trackOfferGTM = (
         has_home: hasHomeQuote(offerData),
         has_accident: hasAccidentQuote(offerData),
         has_travel: hasTravelQuote(offerData),
+        initial_offer: initialOffer,
         ...(offerData.memberId && { member_id: offerData.memberId }),
       },
     })
