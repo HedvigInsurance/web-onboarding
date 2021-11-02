@@ -7,15 +7,6 @@ import { OfferQuote } from 'pages/OfferNew/types'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import AmountCollection from './AmountCollection'
 
-const InsuranceTypeHeadline = styled.div`
-  padding-bottom: 1rem;
-  font-size: 1.375rem;
-
-  ${LARGE_SCREEN_MEDIA_QUERY} {
-    font-size: 1.5rem;
-  }
-`
-
 const Spacer = styled.div`
   height: 2rem;
 
@@ -34,7 +25,6 @@ export const PerilRow: React.FC<Props> = ({ offerQuote }) => {
 
   return (
     <>
-      <InsuranceTypeHeadline>{offerQuote.displayName}</InsuranceTypeHeadline>
       <PerilCollection
         perils={offerQuote.perils}
         setCurrentPeril={setCurrentPeril}

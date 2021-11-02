@@ -2,23 +2,42 @@ import React, { useState } from 'react'
 import { AnimateSharedLayout } from 'framer-motion'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import {
+  MEDIUM_SCREEN_MEDIA_QUERY,
+  LARGE_SCREEN_MEDIA_QUERY,
+} from 'utils/mediaQueries'
 import { Tab } from './Tab'
 
 const TabList = styled.div`
   display: flex;
   margin: 1rem 0 1.25rem 0;
-  box-shadow: 0px 2px 0px ${colorsV3.gray300};
-  overflow-x: scroll;
+  overflow-y: hidden;
+  overflow-x: auto;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* Internet Explorer 10+ */
+  position: relative;
+
   &::-webkit-scrollbar {
     width: 0;
     height: 0;
   }
+
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
-    margin: 1rem 1rem 2.5rem 0;
+    margin: 1rem 0 2.5rem 0;
   }
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    overflow: visible;
+    width: 100%;
+  }
+`
+
+const UnderlineBackground = styled.div`
+  width: 100%;
+  height: 2px;
+  background-color: ${colorsV3.gray300};
+  position: absolute;
+  bottom: 0;
 `
 
 const TabPanel = styled.div``
@@ -31,6 +50,7 @@ type Props = {
   }[]
   onChange: (id: string) => void
 }
+
 export const Tabs: React.FC<Props> = ({ items }) => {
   const [selected, setSelected] = useState(items[0])
   return (
@@ -50,6 +70,7 @@ export const Tabs: React.FC<Props> = ({ items }) => {
             />
           ))}
         </AnimateSharedLayout>
+        <UnderlineBackground />
       </TabList>
       {selected.content && (
         <TabPanel

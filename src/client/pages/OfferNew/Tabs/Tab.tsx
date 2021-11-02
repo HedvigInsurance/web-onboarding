@@ -1,7 +1,10 @@
 import React, { createRef } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import {
+  MEDIUM_SCREEN_MEDIA_QUERY,
+  LARGE_SCREEN_MEDIA_QUERY,
+} from 'utils/mediaQueries'
 import { UnderlineComponent } from './Underline'
 
 const TabContainer = styled.button<{ selected?: boolean }>`
@@ -15,14 +18,19 @@ const TabContainer = styled.button<{ selected?: boolean }>`
   padding: 0 1rem 0.25rem 0;
   white-space: nowrap;
   position: relative;
+
+  &:hover {
+    color: ${colorsV3.gray900};
+  }
+
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     font-size: 1.5rem;
     line-height: 1.33;
     padding-right: 2.5rem;
   }
 
-  &:hover {
-    color: ${colorsV3.gray900};
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    flex: 1;
   }
 `
 
