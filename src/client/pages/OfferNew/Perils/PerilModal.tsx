@@ -430,7 +430,7 @@ export const PerilModal: React.FC<PerilModalProps & ModalProps> = ({
         {currentPeril.info && (
           <InfoBoxWrapper>
             <InfoBox>
-              <InfoIcon size="20px" color={colorsV3.gray900} />
+              <InfoIcon size="20px" />
               <InfoBoxTitle>{textKeys.PERIL_MODAL_INFO_TITLE()}</InfoBoxTitle>
               <InfoBoxBody>{currentPeril.info}</InfoBoxBody>
             </InfoBox>

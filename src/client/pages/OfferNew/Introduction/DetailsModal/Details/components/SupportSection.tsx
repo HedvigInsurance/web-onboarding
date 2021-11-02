@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2, colorsV3 } from '@hedviginsurance/brand'
+import { colorsV2 } from '@hedviginsurance/brand'
 import React from 'react'
 import { InfoIcon } from 'components/icons/Info'
 import { useTextKeys } from 'utils/textKeys'
@@ -73,7 +73,7 @@ export const SupportSection: React.FC<Props> = ({ onButtonClick }) => {
   return (
     <Wrapper>
       <IconWrapper>
-        <InfoIcon size="20px" color={colorsV3.gray900} />
+        <InfoIcon size="20px" />
       </IconWrapper>
       <Content>
         <Headline>{textKeys.DETAILS_MODULE_INFOBOX_TITLE()}</Headline>
