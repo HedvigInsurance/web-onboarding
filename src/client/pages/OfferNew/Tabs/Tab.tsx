@@ -1,10 +1,7 @@
 import React, { createRef } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import {
-  MEDIUM_SCREEN_MEDIA_QUERY,
-  LARGE_SCREEN_MEDIA_QUERY,
-} from 'utils/mediaQueries'
+import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { UnderlineComponent } from './Underline'
 
 const TabContainer = styled.button<{ selected?: boolean }>`
