@@ -7338,6 +7338,10 @@ export type Mutation = {
   createAddressChangeQuotes: AddressChangeQuoteResult
   /** Create all the quotes needed as a result of one of more Cross-Sells */
   createCrossSellQuotes: CrossSellQuotesResult
+  /** Creates a login attempt which sends an OTP to the provided credential */
+  login_createOtpAttempt: Scalars['ID']
+  /** Verifies an ongoing login attempt, returning an access token on success */
+  login_verifyOtpAttempt: VerifyOtpLoginAttemptResult
   /**
    * Create a new onboarding session. This is not an authentication session, but rather an object that
    * ties the onboarding journey together.
@@ -7585,6 +7589,15 @@ export type MutationCreateCrossSellQuotesArgs = {
   input: CrossSellQuotesInput
 }
 
+export type MutationLogin_CreateOtpAttemptArgs = {
+  input: OtpLoginAttemptInput
+}
+
+export type MutationLogin_VerifyOtpAttemptArgs = {
+  id: Scalars['ID']
+  otp: Scalars['String']
+}
+
 export type MutationOnboardingSession_CreateArgs = {
   input: CreateOnboardingSessionInput
 }
@@ -7801,6 +7814,15 @@ export type OnboardingStartSignResponse =
   | OnboardingSigningSwedishBankId
   | OnboardingSigningSuccess
   | OnboardingSigningFailure
+
+export type OtpLoginAttemptInput = {
+  otpType: OtpType
+  credential: Scalars['String']
+}
+
+export enum OtpType {
+  Email = 'EMAIL',
+}
 
 /** Information about pagination in a connection. */
 export type PageInfo = {
@@ -10072,6 +10094,20 @@ export type UserWhereInput = {
 /** References User record uniquely */
 export type UserWhereUniqueInput = {
   id?: Maybe<Scalars['ID']>
+}
+
+export type VerifyOtpLoginAttemptError = {
+  __typename?: 'VerifyOtpLoginAttemptError'
+  errorCode: Scalars['String']
+}
+
+export type VerifyOtpLoginAttemptResult =
+  | VerifyOtpLoginAttemptSuccess
+  | VerifyOtpLoginAttemptError
+
+export type VerifyOtpLoginAttemptSuccess = {
+  __typename?: 'VerifyOtpLoginAttemptSuccess'
+  accessToken: Scalars['String']
 }
 
 export type Version = {

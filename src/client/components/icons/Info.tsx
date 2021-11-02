@@ -1,5 +1,4 @@
 import React from 'react'
-import { colorsV3 } from '@hedviginsurance/brand'
 import { IconRoot, IconRootProps } from './IconRoot'
 
 export const InfoIcon: React.FC<IconRootProps> = (props) => (
@@ -13,7 +12,3 @@ export const InfoIcon: React.FC<IconRootProps> = (props) => (
     </g>
   </IconRoot>
 )
-
-IconRoot.defaultProps = {
-  color: colorsV3.gray900,
-}

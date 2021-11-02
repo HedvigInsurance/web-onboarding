@@ -7,7 +7,6 @@ import {
   InsurableLimitType,
   InsuranceCost,
   InsuranceTerm,
-  InsuranceTermType,
   Query,
   TypeOfContract,
 } from 'data/graphql'
@@ -38,8 +37,6 @@ export type OfferPersonInfo = Pick<
   address: Address | null
 }
 
-export type InsuranceTerms = ReadonlyMap<InsuranceTermType, InsuranceTerm>
-
 export type OfferQuote = Pick<
   BundledQuote,
   | 'id'
@@ -53,7 +50,7 @@ export type OfferQuote = Pick<
 > & {
   contractType: TypeOfContract
   insurableLimits: ReadonlyMap<InsurableLimitType, InsurableLimit>
-  insuranceTerms: InsuranceTerms
+  insuranceTerms: InsuranceTerm[]
 }
 
 export interface OfferData {

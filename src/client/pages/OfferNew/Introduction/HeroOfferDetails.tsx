@@ -8,12 +8,14 @@ import {
   MEDIUM_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
 import { Button } from 'components/buttons'
+import { BundledQuote } from 'src/client/data/graphql'
 import { quoteDetailsHasAddress } from '../utils'
 import { getAddress } from '../Checkout/InsuranceSummaryDetails'
 import { DetailsModal } from './DetailsModal'
 
 type Props = {
   offerData: OfferData
+  allQuotes: BundledQuote[]
   refetchOfferData: () => Promise<void>
 }
 
@@ -103,6 +105,7 @@ const EditDetailsButton = styled(Button)`
 
 export const HeroOfferDetails: React.FC<Props> = ({
   offerData,
+  allQuotes,
   refetchOfferData,
 }) => {
   const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false)
@@ -140,6 +143,7 @@ export const HeroOfferDetails: React.FC<Props> = ({
       </EditDetailsButton>
       <DetailsModal
         offerData={offerData}
+        allQuotes={allQuotes}
         refetch={refetchOfferData}
         isVisible={detailsModalIsOpen}
         onClose={() => setDetailsModalIsOpen(false)}

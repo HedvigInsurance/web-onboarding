@@ -4,8 +4,6 @@ import {
   DanishHomeContentsDetails,
   InsurableLimit,
   InsurableLimitType,
-  InsuranceTerm,
-  InsuranceTermType,
   NorwegianHomeContentsDetails,
   NorwegianTravelDetails,
   QuoteBundle,
@@ -17,6 +15,7 @@ import {
   DanishTravelDetails,
   ApartmentType,
   QuoteBundleVariant,
+  SwedishAccidentDetails,
 } from 'data/graphql'
 import { LocaleLabel, locales } from 'l10n/locales'
 import { birthDateFormats } from 'l10n/birthDateAndSsnFormats'
@@ -37,13 +36,7 @@ export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
     },
     quotes: quoteBundle.quotes.map((bundleQuote) => {
       return {
-        id: bundleQuote.id,
-        displayName: bundleQuote.displayName,
-        price: bundleQuote.price,
-        startDate: bundleQuote.startDate,
-        quoteDetails: bundleQuote.quoteDetails,
-        dataCollectionId: bundleQuote.dataCollectionId,
-        currentInsurer: bundleQuote.currentInsurer,
+        ...bundleQuote,
         contractType: bundleQuote.typeOfContract,
         perils: bundleQuote.contractPerils,
         insurableLimits: new Map(
@@ -52,12 +45,6 @@ export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
             insurableLimit,
           ]),
         ) as ReadonlyMap<InsurableLimitType, InsurableLimit>,
-        insuranceTerms: new Map(
-          bundleQuote.insuranceTerms.map((insuranceTerm) => [
-            insuranceTerm.type,
-            insuranceTerm,
-          ]),
-        ) as ReadonlyMap<InsuranceTermType, InsuranceTerm>,
       }
     }),
     cost: quoteBundle.bundleCost,
@@ -122,6 +109,16 @@ const isHomeQuote = (
   isDanishHomeContents(quoteDetails) ||
   isSwedishHouse(quoteDetails) ||
   isSwedishApartment(quoteDetails)
+
+const isAccidentQuote = (
+  quoteDetails: QuoteDetails,
+): quoteDetails is SwedishAccidentDetails | DanishAccidentDetails =>
+  isDanishAccident(quoteDetails) || isSwedishAccident(quoteDetails)
+
+const isTravelQuote = (
+  quoteDetails: QuoteDetails,
+): quoteDetails is NorwegianTravelDetails | DanishTravelDetails =>
+  isDanishTravel(quoteDetails) || isNorwegianTravel(quoteDetails)
 
 export const quoteDetailsHasAddress = isHomeQuote
 
@@ -195,6 +192,15 @@ export const isDanishTravelBundle = (offerData: OfferData): boolean =>
 
 export const isStudentOffer = (offerData: OfferData): boolean =>
   offerData.quotes.every((quote) => isStudent(quote.quoteDetails))
+
+export const hasHomeQuote = (offerData: OfferData) =>
+  offerData.quotes.some(({ quoteDetails }) => isHomeQuote(quoteDetails))
+
+export const hasAccidentQuote = (offerData: OfferData) =>
+  offerData.quotes.some(({ quoteDetails }) => isAccidentQuote(quoteDetails))
+
+export const hasTravelQuote = (offerData: OfferData) =>
+  offerData.quotes.some(({ quoteDetails }) => isTravelQuote(quoteDetails))
 
 export const hasAddress = (offerData: OfferData): boolean =>
   !!offerData.person.address
@@ -454,3 +460,19 @@ export const getBundleVariantFromQuoteIds = (
   bundleVariants.find((variant) =>
     isBundleVariantMatchingQuoteIds(variant, quoteIds),
   )
+
+export const getUniqueQuotesFromVariantList = (
+  variants: QuoteBundleVariant[],
+) => {
+  const quotesWithDuplicates = variants.reduce((acc, variant) => {
+    return [...acc, ...variant.bundle.quotes]
+  }, [] as BundledQuote[])
+
+  const uniqueQuoteIds = [...new Set(quotesWithDuplicates.map(({ id }) => id))]
+
+  const uniqueQuotes = uniqueQuoteIds.map((id) =>
+    quotesWithDuplicates.find((quote) => quote.id === id),
+  ) as BundledQuote[]
+
+  return uniqueQuotes
+}
