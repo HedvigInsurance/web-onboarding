@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { InfoIcon } from 'components/icons/Info'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { Tooltip } from 'components/Tooltip/Tooltip'
 
@@ -58,21 +57,6 @@ const Value = styled.p`
   }
 `
 
-const StyledInfoIcon = styled(InfoIcon)`
-  position: absolute;
-  bottom: ${ICON_MARGIN};
-  right: ${ICON_MARGIN};
-
-  ${LARGE_SCREEN_MEDIA_QUERY} {
-    bottom: ${DESKTOP_ICON_MARGIN};
-    right: ${DESKTOP_ICON_MARGIN};
-  }
-`
-
-StyledInfoIcon.defaultProps = {
-  size: ICON_SIZE,
-}
-
 const TooltipWrapper = styled.div`
   position: absolute;
   bottom: ${ICON_MARGIN};
@@ -84,7 +68,7 @@ const TooltipWrapper = styled.div`
   }
 `
 
-interface Props {
+type Props = {
   tooltip?: string
 }
 
@@ -93,7 +77,7 @@ type AmountItemType = React.FC<Props> & {
   Value: typeof Value
 }
 
-const AmountItem: AmountItemType = ({ children, tooltip }) => {
+export const AmountItem: AmountItemType = ({ children, tooltip }) => {
   return (
     <Container>
       {children}
@@ -108,5 +92,3 @@ const AmountItem: AmountItemType = ({ children, tooltip }) => {
 
 AmountItem.Label = Label
 AmountItem.Value = Value
-
-export default AmountItem
