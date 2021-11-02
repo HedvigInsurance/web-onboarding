@@ -12,7 +12,7 @@ import {
 } from 'pages/OfferNew/utils'
 import {
   getContractType,
-  getInitialOfferFromCookie,
+  getInitialOfferFromSessionStorage,
   TrackableContractType,
 } from './tracking'
 
@@ -94,7 +94,7 @@ export const trackOfferGTM = (
   referralCodeUsed: boolean,
 ) => {
   const contractType = getContractType(offerData)
-  const initialOffer = getInitialOfferFromCookie(contractType)
+  const initialOffer = getInitialOfferFromSessionStorage(contractType)
   const grossPrice = Math.round(Number(offerData.cost.monthlyGross.amount))
   const netPrice = Math.round(Number(offerData.cost.monthlyNet.amount))
   try {

@@ -131,17 +131,17 @@ export const getTrackableContractCategory = match([
   [match.any(), TrackableContractCategory.Home],
 ])
 
-export const getInitialOfferFromCookie = (
+export const getInitialOfferFromSessionStorage = (
   contractType: TrackableContractType,
 ) => {
-  const initialtOffer = cookie.getItem('initial_offer')
+  const initialtOffer = sessionStorage.getItem('initial_offer')
 
   if (initialtOffer) {
     return initialtOffer
   }
 
   const contractCategory = getTrackableContractCategory(contractType)!
-  cookie.setItem('initial_offer', contractCategory, { path: '/' })
+  sessionStorage.setItem('initial_offer', contractCategory)
   return contractCategory
 }
 
