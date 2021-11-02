@@ -29,13 +29,13 @@ export const productsData: ProductsData = {
   SE: [
     {
       id: 'swedishNew',
-      linkSlug: '/home-accident-needer',
+      linkSlug: '/new',
       headline: 'STARTPAGE_UNINSURED_HEADLINE',
       paragraph: 'STARTPAGE_UNINSURED_BODY_WITHOUT_ACCIDENT',
     },
     {
       id: 'swedishSwitch',
-      linkSlug: '/home-switcher',
+      linkSlug: '/switch',
       headline: 'STARTPAGE_INSURED_HEADLINE',
       paragraph: 'STARTPAGE_INSURED_BODY',
       badge: 'STARTPAGE_SE_INSURED_BADGE',
