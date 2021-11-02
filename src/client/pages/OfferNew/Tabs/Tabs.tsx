@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { AnimateSharedLayout } from 'framer-motion'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
@@ -53,6 +53,11 @@ type Props = {
 
 export const Tabs: React.FC<Props> = ({ items }) => {
   const [selected, setSelected] = useState(items[0])
+
+  useEffect(() => {
+    setSelected(items[0])
+  }, [items])
+
   return (
     <>
       <TabList

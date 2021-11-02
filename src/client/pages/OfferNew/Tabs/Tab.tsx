@@ -28,10 +28,6 @@ const TabContainer = styled.button<{ selected?: boolean }>`
     line-height: 1.33;
     padding-right: 2.5rem;
   }
-
-  ${LARGE_SCREEN_MEDIA_QUERY} {
-    flex: 1;
-  }
 `
 
 type Props = {
