@@ -1,6 +1,6 @@
 import React from 'react'
-import Grid from './Grid'
-import AmountItem from './AmountItem'
+import { Grid } from './Grid'
+import { AmountItem } from './AmountItem'
 
 export default {
   title: 'Offer/AmountCollection/AmountCollection',
