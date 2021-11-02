@@ -9,12 +9,15 @@ import {
   isStudentOffer,
   isDanishTravelBundle,
   getMainQuote,
+  isSwedishHouse,
+  isSwedishApartment,
+  isBRF,
 } from 'pages/OfferNew/utils'
-import { NoComboTypes, DkBundleTypes } from './tracking'
+import { NoComboTypes, DkBundleTypes, SeBundleTypes } from './tracking'
 
 // Exclude single contract types that are only sold as part of bundles
 type TypeOfContractExcludedUnused = Exclude<
-  TypeOfContract | NoComboTypes | DkBundleTypes,
+  TypeOfContract | NoComboTypes | DkBundleTypes | SeBundleTypes,
   | TypeOfContract.DkAccident
   | TypeOfContract.DkAccidentStudent
   | TypeOfContract.DkTravel
@@ -23,12 +26,20 @@ type TypeOfContractExcludedUnused = Exclude<
   | TypeOfContract.SeAccidentStudent
 >
 
-const adtractionContractValues: Record<TypeOfContractExcludedUnused, number> = {
+export const adtractionContractValues: Record<
+  TypeOfContractExcludedUnused,
+  number
+> = {
   SE_HOUSE: 1477448913,
   SE_APARTMENT_BRF: 1417356498,
   SE_APARTMENT_STUDENT_BRF: 1423041022,
   SE_APARTMENT_RENT: 1417356528,
   SE_APARTMENT_STUDENT_RENT: 1412601108,
+  SE_ACCIDENT_BUNDLE_BRF: 1660489918,
+  SE_ACCIDENT_BUNDLE_RENT: 1660489989,
+  SE_ACCIDENT_BUNDLE_STUDENT_BRF: 1660489963,
+  SE_ACCIDENT_BUNDLE_STUDENT_RENT: 1660490018,
+  SE_ACCIDENT_BUNDLE_HOUSE: 1660490052,
   NO_HOME_CONTENT_OWN: 1492623645,
   NO_HOME_CONTENT_RENT: 1492623645,
   NO_HOME_CONTENT_YOUTH_OWN: 1492623719,
@@ -49,6 +60,28 @@ const adtractionContractValues: Record<TypeOfContractExcludedUnused, number> = {
 
 export const getBundleAdtractionProductValue = (offerData: OfferData) => {
   if (isBundle(offerData)) {
+    const { quoteDetails: homeQuoteDetails } = getMainQuote(offerData)
+
+    if (isSwedishHouse(homeQuoteDetails)) {
+      return adtractionContractValues[SeBundleTypes.SeHomeAccidentBundleHouse]
+    }
+
+    if (isSwedishApartment(homeQuoteDetails)) {
+      if (isBRF(homeQuoteDetails)) {
+        return isStudentOffer(offerData)
+          ? adtractionContractValues[
+              SeBundleTypes.SeHomeAccidentBundleStudentBrf
+            ]
+          : adtractionContractValues[SeBundleTypes.SeHomeAccidentBundleBrf]
+      } else {
+        return isStudentOffer(offerData)
+          ? adtractionContractValues[
+              SeBundleTypes.SeHomeAccidentBundleStudentRent
+            ]
+          : adtractionContractValues[SeBundleTypes.SeHomeAccidentBundleRent]
+      }
+    }
+
     if (isNorwegian(offerData)) {
       return isYouth(offerData)
         ? adtractionContractValues[NoComboTypes.NoComboYouth]

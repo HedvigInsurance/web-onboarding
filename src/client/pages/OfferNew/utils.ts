@@ -226,6 +226,12 @@ export const isSwedishApartment = (
 ): details is SwedishApartmentQuoteDetails =>
   details.__typename === 'SwedishApartmentQuoteDetails'
 
+export const isBRF = (
+  details: QuoteDetails,
+): details is SwedishApartmentQuoteDetails =>
+  details.__typename === 'SwedishApartmentQuoteDetails' &&
+  details.type === ApartmentType.Brf
+
 export const isSwedishHouse = (
   details: QuoteDetails,
 ): details is SwedishHouseQuoteDetails =>

@@ -44,6 +44,14 @@ export const getUtmParamsFromCookie = (): UtmParams | undefined => {
   }
 }
 
+export enum SeBundleTypes {
+  SeHomeAccidentBundleStudentBrf = 'SE_ACCIDENT_BUNDLE_STUDENT_BRF',
+  SeHomeAccidentBundleBrf = 'SE_ACCIDENT_BUNDLE_BRF',
+  SeHomeAccidentBundleStudentRent = 'SE_ACCIDENT_BUNDLE_STUDENT_RENT',
+  SeHomeAccidentBundleRent = 'SE_ACCIDENT_BUNDLE_RENT',
+  SeHomeAccidentBundleHouse = 'SE_ACCIDENT_BUNDLE_HOUSE',
+}
+
 export enum NoComboTypes {
   NoCombo = 'NO_COMBO',
   NoComboYouth = 'NO_COMBO_YOUTH',
