@@ -279,8 +279,8 @@
   "DETAILS_MODULE_TABLE_RESIDENCE_TYPE_CELL_LABEL": "Type of residence",
   "STARTPAGE_SE_INSURED_BADGE": "",
   "QUOTE_TITLE_HOME_CONTENTS": "Home Contents",
-  "QUOTE_TITLE_HOME_TRAVEL_YOUTH": "Home Contents & Travel Youth",
-  "QUOTE_TITLE_HOME_TRAVEL": "Home Contents & Travel",
+  "QUOTE_TITLE_HOME_TRAVEL_YOUTH": "",
+  "QUOTE_TITLE_HOME_TRAVEL": "",
   "QUOTE_TITLE_HOME_ACCIDENT_STUDENT": "Home & Accident Student",
   "QUOTE_TITLE_HOME_ACCIDENT": "Home & Accident",
   "QUOTE_TITLE_HOME_ACCIDENT_TRAVEL_STUDENT": "Home, Accident & Travel Student",
@@ -290,7 +290,7 @@
   "QUOTE_TITLE_RENT_STUDENT": "Home Insurance Renter Student",
   "QUOTE_TITLE_BRF_STUDENT": "Home Insurance Homeowner Student",
   "QUOTE_TITLE_HOUSE": "Home Insurance House & Villa",
-  "QUOTE_TITLE_HOME_CONTENTS_YOUTH": "Home Contents Youth",
+  "QUOTE_TITLE_HOME_CONTENTS_YOUTH": "",
   "QUOTE_TITLE_TRAVEL": "Travel Insurance",
   "QUOTE_TITLE_TRAVEL_YOUTH": "Travel Insurance Youth",
   "QUOTE_TITLE_HOME_CONTENTS_STUDENT": "Home Contents Student",
@@ -304,5 +304,6 @@
   "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "Pick the insurance plan that fits you best. The insurances cover you and all co-insured. You can always add the accident insurance or change the activation date for your incuranses in the app later on.",
   "OFFER_APP_PROMOTION_HEADING": "Take care of everything in the Hedvig app",
   "OFFER_APP_PROMOTION_PARAGRAPH": "Make a claim, manage your insurances or ask questions. With the app you’ll have full control over your insurances and get instant help if something has happened.",
-  "WEB_OFFER_DOCUMENTS_SECTION_TITLE": "Important documents"
+  "WEB_OFFER_DOCUMENTS_SECTION_TITLE": "Important documents",
+  "STARTPAGE_UNINSURED_BODY_WITHOUT_ACCIDENT": "Get a price Get a price quote on our home insurance and the new complementary accident insurance.quote on a new home insurance with Hedvig"
 }

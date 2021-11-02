@@ -31,7 +31,7 @@ export const productsData: ProductsData = {
       id: 'swedishNew',
       linkSlug: '/home-accident-needer',
       headline: 'STARTPAGE_UNINSURED_HEADLINE',
-      paragraph: 'STARTPAGE_UNINSURED_BODY',
+      paragraph: 'STARTPAGE_UNINSURED_BODY_WITHOUT_ACCIDENT',
     },
     {
       id: 'swedishSwitch',

@@ -304,5 +304,6 @@
   "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "Här kan du välja den kombination som passar just dig. Alla försäkringar gäller för dig och dina medförsäkrade. Du kan alltid lägga till olycksfallsförsäkringen eller ändra startdatum för dina försäkringar vid ett senare tillfälle. Det gör du enkelt i din Hedvig-app.",
   "OFFER_APP_PROMOTION_HEADING": "Du sköter allt i Hedvig-appen",
   "OFFER_APP_PROMOTION_PARAGRAPH": "Anmäl skador, hantera dina försäkringar eller ställ frågor. Med appen får du full kontroll över dina försäkringar och hjälp på direkten om något hänt.",
-  "WEB_OFFER_DOCUMENTS_SECTION_TITLE": "Viktiga dokument"
+  "WEB_OFFER_DOCUMENTS_SECTION_TITLE": "Viktiga dokument",
+  "STARTPAGE_UNINSURED_BODY_WITHOUT_ACCIDENT": "Få ett prisförslag på hemförsäkring."
 }

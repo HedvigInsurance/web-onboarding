@@ -150,7 +150,7 @@
   "CHECKOUT_SSN_PLACEHOLDER_NO": "DDMMYYXXXXX",
   "STARTPAGE_COMBO_HEADLINE": "Bundle",
   "STARTPAGE_COMBO_BODY": "",
-  "SIDEBAR_INSURANCE_TYPE_NO_BUNDLE": "Contents and travel insurance",
+  "SIDEBAR_INSURANCE_TYPE_NO_BUNDLE": "",
   "BANKID_NOT_RESPONDING": "The response from BankID is taking longer than expected...",
   "RETRY_QUESTION": "Retry?",
   "SIDEBAR_REQUEST_CANCELLATION_HOME_INSURANCE": "Cancel my old home insurance",
@@ -206,8 +206,8 @@
   "SIDEBAR_INSURANCE_TYPE_STUDENT_BRF": "Homeowner Student",
   "SIDEBAR_INSURANCE_TYPE_STUDENT_RENT": "Rental Student",
   "SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_OWN": "",
-  "SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_RENT": "Contents insurance Youth",
-  "SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_OWN": "Contents insurance Youth",
+  "SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_RENT": "",
+  "SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_OWN": "",
   "SIDEBAR_INSURANCE_TYPE_NO_TRAVEL_YOUTH": "Travel insurance Youth",
   "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_OWN": "",
   "SIDEBAR_ADD_DISCOUNT_ERROR": "The discount code is invalid",
@@ -304,5 +304,6 @@
   "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "Pick the insurance plan that fits you best. The insurances cover you and all co-insured. You can always add the accident insurance or change the activation date for your insurances in the app later on.",
   "OFFER_APP_PROMOTION_HEADING": "Take care of everything in the Hedvig app",
   "OFFER_APP_PROMOTION_PARAGRAPH": "Make a claim, manage your insurances or ask questions. With the app you’ll have full control over your insurances and get instant help if something has happened.",
-  "WEB_OFFER_DOCUMENTS_SECTION_TITLE": "Important documents"
+  "WEB_OFFER_DOCUMENTS_SECTION_TITLE": "Important documents",
+  "STARTPAGE_UNINSURED_BODY_WITHOUT_ACCIDENT": "Get a price quote on our home insurance."
 }
