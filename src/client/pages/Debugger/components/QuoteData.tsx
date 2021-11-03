@@ -21,6 +21,7 @@ import {
   useMarket,
   Market,
 } from 'components/utils/CurrentLocale'
+import { LoadingDots } from '../../../components/LoadingDots/LoadingDots'
 import { initialSeApartmentValues, SwedishApartment } from './QuoteFormSweden'
 import {
   initialNoHomeValues,
@@ -377,11 +378,15 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionToken }) => {
                       )}
 
                       <Button
+                        type="submit"
                         background={colorsV3.purple500}
                         foreground={colorsV3.gray900}
-                        type="submit"
+                        disabled={props.isSubmitting}
                       >
                         Create quote
+                        {props.isSubmitting && (
+                          <LoadingDots color={colorsV3.gray900} />
+                        )}
                       </Button>
                     </Form>
                   </>
