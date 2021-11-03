@@ -2124,15 +2124,15 @@
   resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-4.0.7.tgz#c57c5d9c05ebf7a45eba42992344ca4aaf990036"
   integrity sha512-ygaF/S4UCK0WJPushFgjcZAU6NaXFdAd7wkKAJFgR93St5/brUufDh9ArPchteMCc+E/Wl12v15g6NKj4at81Q==
 
-"@hedviginsurance/embark@^2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-2.2.0.tgz#1ca25339e1e279d295af13349e3b823b1df69978"
-  integrity sha512-FHYBRIrQvd5J8ifzAJw9oAM9zUFtz6zFyRR17i/LZtrQpAyCflgtuOzeC2ye5Ue5SA2tqp15tFxEJLIHA2uPFA==
+"@hedviginsurance/embark@^2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-2.2.2.tgz#312a1a8db5b994671c113d17f987acbe5b0c7c78"
+  integrity sha512-zBJL7lXHtF2jg1QFQeU1Ag98RCnnphpnhKyPrsBOYNzSQmX0X6R2emm2ynUUmJlO+HB7xhKx95usFprdOX1pwA==
   dependencies:
     "@emotion/react" "^11.4.1"
     "@emotion/styled" "^11.3.0"
     "@hedviginsurance/brand" "^4.0.7"
-    "@hedviginsurance/textkeyfy" "^2.0.0"
+    "@hedviginsurance/textkeyfy" "^2.0.1"
     "@juggle/resize-observer" "^3.3.1"
     "@koa/cors" "^2.2.3"
     "@types/koa" "^2.0.51"
@@ -2170,10 +2170,10 @@
     typescript "^4.4.2"
     uuid "^8.3.2"
 
-"@hedviginsurance/textkeyfy@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/textkeyfy/-/textkeyfy-2.0.0.tgz#113671f767e4b5aa8c73a5bb7bce4aff2b4bcf33"
-  integrity sha512-1bTIbFR2pCyJ47ntEFey7HHJKF0pBPQMAT+NWtKOhL2FhTJQ5BDwXuxrxiIi0fUoN6xS+2turoJ3/mKtXBcvHg==
+"@hedviginsurance/textkeyfy@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/textkeyfy/-/textkeyfy-2.0.1.tgz#70c0eaf8c674bbec0b50f7c88e46567c5390b2e8"
+  integrity sha512-9h7oKrvObiSpt088alzIYp8rpQh/vgNhAhl3JRxUGTYrWRls04WUIqJfB8xu4ctEEgI1VDUHpnEdXzK/1DgoUg==
 
 "@iarna/toml@^2.2.5":
   version "2.2.5"
