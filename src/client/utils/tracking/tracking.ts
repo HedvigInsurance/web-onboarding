@@ -1,7 +1,6 @@
 import { CookieStorage } from 'cookie-storage'
 import { SegmentAnalyticsJs, setupTrackers } from 'quepasa'
 import React from 'react'
-import { match } from 'matchly'
 import {
   SignState,
   TypeOfContract,
@@ -122,27 +121,35 @@ export enum TrackableContractCategory {
   HomeAccident = 'home_accident',
   HomeAccidentTravel = 'home_accident_travel',
 }
-export const getTrackableContractCategory = match([
-  [
-    SeBundleTypes ||
-      DkBundleTypes.DkAccidentBundle ||
-      DkBundleTypes.DkAccidentBundleStudent,
-    TrackableContractCategory.HomeAccident,
-  ],
-  [
-    NoComboTypes.NoCombo || NoComboTypes.NoComboYouth,
-    TrackableContractCategory.HomeTravel,
-  ],
-  [
-    DkBundleTypes.DkTravelBundle || DkBundleTypes.DkTravelBundleStudent,
-    TrackableContractCategory.HomeAccidentTravel,
-  ],
-  [
-    TypeOfContract.NoTravel || TypeOfContract.NoTravelYouth,
-    TrackableContractCategory.Travel,
-  ],
-  [match.any(), TrackableContractCategory.Home],
-])
+
+export const getTrackableContractCategory = (
+  contractType: TrackableContractType,
+) => {
+  switch (contractType) {
+    case SeBundleTypes.SeHomeAccidentBundleBrf:
+    case SeBundleTypes.SeHomeAccidentBundleRent:
+    case SeBundleTypes.SeHomeAccidentBundleHouse:
+    case SeBundleTypes.SeHomeAccidentBundleStudentBrf:
+    case SeBundleTypes.SeHomeAccidentBundleStudentRent:
+    case DkBundleTypes.DkAccidentBundle:
+    case DkBundleTypes.DkAccidentBundleStudent:
+      return TrackableContractCategory.HomeAccident
+
+    case NoComboTypes.NoCombo:
+    case NoComboTypes.NoComboYouth:
+      return TrackableContractCategory.HomeTravel
+
+    case DkBundleTypes.DkTravelBundle:
+    case DkBundleTypes.DkTravelBundleStudent:
+      return TrackableContractCategory.HomeAccidentTravel
+
+    case TypeOfContract.NoTravel:
+    case TypeOfContract.NoTravelYouth:
+      return TrackableContractCategory.Travel
+    default:
+      return TrackableContractCategory.Home
+  }
+}
 
 export const getInitialOfferFromSessionStorage = (
   contractType: TrackableContractType,
@@ -153,7 +160,7 @@ export const getInitialOfferFromSessionStorage = (
     return initialtOffer
   }
 
-  const contractCategory = getTrackableContractCategory(contractType)!
+  const contractCategory = getTrackableContractCategory(contractType)
   sessionStorage.setItem('initial_offer', contractCategory)
   return contractCategory
 }
