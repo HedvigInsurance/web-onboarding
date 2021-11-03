@@ -173,7 +173,13 @@ const DateForm: React.FC<{
   refetch,
   size,
 }) => {
+  console.log('🚀 ~ file: StartDate.tsx ~ line 176 ~ modal', modal)
   const [datePickerOpen, setDatePickerOpen] = React.useState(false)
+  console.log(
+    '🚀 ~ file: StartDate.tsx ~ line 177 ~ datePickerOpen',
+    datePickerOpen,
+  )
+
   const [dateValue, setDateValue] = React.useState(() =>
     getDefaultDateValue(quote),
   )
@@ -282,16 +288,6 @@ const DateForm: React.FC<{
   }
 
   // TODO: make this function (which returns the calendar component) a regular React function component, in a file of its own
-  const getDateInput = () => (
-    <StyledDateInput
-      open={datePickerOpen}
-      setOpen={setDatePickerOpen}
-      date={dateValue || new Date()}
-      setDate={setDate}
-      hasCurrentInsurer={hasCurrentInsurer(quote)}
-      modal={Boolean(modal)}
-    />
-  )
 
   const hasStartDate = Boolean(getDefaultDateValue(quote))
 
@@ -325,12 +321,54 @@ const DateForm: React.FC<{
       </RowButton>
       {modal ? (
         <DateInputModalWrapper isOpen={datePickerOpen}>
-          {getDateInput()}
+          <DateInput
+            datePickerOpen={datePickerOpen}
+            setDatePickerOpen={setDatePickerOpen}
+            dateValue={dateValue}
+            setDate={setDate}
+            quote={quote}
+            modal={modal}
+          />
         </DateInputModalWrapper>
       ) : (
-        getDateInput()
+        <DateInput
+          datePickerOpen={datePickerOpen}
+          setDatePickerOpen={setDatePickerOpen}
+          dateValue={dateValue}
+          setDate={setDate}
+          quote={quote}
+        />
       )}
     </RowButtonWrapper>
+  )
+}
+
+type DateInputProps = {
+  datePickerOpen: boolean
+  setDatePickerOpen: (isOpen: boolean) => void
+  dateValue: Date | null
+  setDate: (date: Date | null) => void
+  quote: OfferQuote
+  modal?: boolean
+}
+
+const DateInput: React.FC<DateInputProps> = ({
+  datePickerOpen,
+  setDatePickerOpen,
+  dateValue,
+  setDate,
+  quote,
+  modal,
+}) => {
+  return (
+    <StyledDateInput
+      open={datePickerOpen}
+      setOpen={setDatePickerOpen}
+      date={dateValue || new Date()}
+      setDate={setDate}
+      hasCurrentInsurer={hasCurrentInsurer(quote)}
+      modal={Boolean(modal)}
+    />
   )
 }
 
