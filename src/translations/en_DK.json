@@ -147,7 +147,7 @@
   "STARTPAGE_TRAVEL_HEADLINE": "Travel insurance",
   "STARTPAGE_TRAVEL_BODY": "Get your price",
   "STARTPAGE_TRAVEL_BUTTON": "Get a price quote",
-  "CHECKOUT_SSN_PLACEHOLDER_NO": "",
+  "CHECKOUT_SSN_PLACEHOLDER_NO": "DDMMYYXXXXX",
   "STARTPAGE_COMBO_HEADLINE": "Bundle",
   "STARTPAGE_COMBO_BODY": "",
   "SIDEBAR_INSURANCE_TYPE_NO_BUNDLE": "Contents and travel insurance",
@@ -206,8 +206,8 @@
   "SIDEBAR_INSURANCE_TYPE_STUDENT_BRF": "Home Contents Student",
   "SIDEBAR_INSURANCE_TYPE_STUDENT_RENT": "Rental Student",
   "SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_OWN": "",
-  "SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_RENT": "Contents insurance Youth",
-  "SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_OWN": "Contents insurance Youth",
+  "SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_RENT": "",
+  "SIDEBAR_INSURANCE_TYPE_NO_CONTENTS_YOUTH_OWN": "",
   "SIDEBAR_INSURANCE_TYPE_NO_TRAVEL_YOUTH": "Travel insurance Youth",
   "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_OWN": "Home Contents Insurance",
   "SIDEBAR_ADD_DISCOUNT_ERROR": "The discount code is invalid",
@@ -304,5 +304,6 @@
   "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "",
   "OFFER_APP_PROMOTION_HEADING": "Take care of everything in our simple app",
   "OFFER_APP_PROMOTION_PARAGRAPH": "If you've had an accident, you can easily report the injury directly in the app, no matter where you are. In some cases, you won't even have to wait 5 minutes for your compensation. We are available between 08-22 on weekdays and 9-18 on weekends.",
-  "WEB_OFFER_DOCUMENTS_SECTION_TITLE": "Important documents"
+  "WEB_OFFER_DOCUMENTS_SECTION_TITLE": "Important documents",
+  "STARTPAGE_UNINSURED_BODY_WITHOUT_ACCIDENT": "Get a price quote on a new home insurance with Hedvig"
 }
