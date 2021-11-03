@@ -232,7 +232,7 @@ export const isSwedishApartment = (
 ): details is SwedishApartmentQuoteDetails =>
   details.__typename === 'SwedishApartmentQuoteDetails'
 
-export const isBRF = (
+export const isSwedishBRF = (
   details: QuoteDetails,
 ): details is SwedishApartmentQuoteDetails =>
   details.__typename === 'SwedishApartmentQuoteDetails' &&

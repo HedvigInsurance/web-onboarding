@@ -11,7 +11,7 @@ import {
   getMainQuote,
   isSwedishHouse,
   isSwedishApartment,
-  isBRF,
+  isSwedishBRF,
 } from 'pages/OfferNew/utils'
 import { NoComboTypes, DkBundleTypes, SeBundleTypes } from './tracking'
 
@@ -67,7 +67,7 @@ export const getBundleAdtractionProductValue = (offerData: OfferData) => {
     }
 
     if (isSwedishApartment(homeQuoteDetails)) {
-      if (isBRF(homeQuoteDetails)) {
+      if (isSwedishBRF(homeQuoteDetails)) {
         return isStudentOffer(offerData)
           ? adtractionContractValues[
               SeBundleTypes.SeHomeAccidentBundleStudentBrf
