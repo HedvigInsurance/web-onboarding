@@ -17,7 +17,9 @@ import {
   isDanishTravelBundle,
   isStudentOffer,
   getMainQuote,
-  isSwedish,
+  isSwedishHouse,
+  isSwedishApartment,
+  isSwedishBRF,
 } from 'pages/OfferNew/utils'
 import { trackOfferGTM } from './gtm'
 import { adtraction } from './adtraction'
@@ -75,10 +77,22 @@ export type TrackableContractType =
 
 export const getContractType = (offerData: OfferData) => {
   if (isBundle(offerData)) {
-    if (isSwedish(offerData)) {
-      return isStudentOffer(offerData)
-        ? SeBundleTypes.SeHomeAccidentBundleStudentBrf
-        : SeBundleTypes.SeHomeAccidentBundleBrf
+    const { quoteDetails: homeQuoteDetails } = getMainQuote(offerData)
+
+    if (isSwedishHouse(homeQuoteDetails)) {
+      return SeBundleTypes.SeHomeAccidentBundleHouse
+    }
+
+    if (isSwedishApartment(homeQuoteDetails)) {
+      if (isSwedishBRF(homeQuoteDetails)) {
+        return isStudentOffer(offerData)
+          ? SeBundleTypes.SeHomeAccidentBundleStudentBrf
+          : SeBundleTypes.SeHomeAccidentBundleBrf
+      } else {
+        return isStudentOffer(offerData)
+          ? SeBundleTypes.SeHomeAccidentBundleStudentRent
+          : SeBundleTypes.SeHomeAccidentBundleRent
+      }
     }
     if (isNorwegian(offerData)) {
       return isYouth(offerData)
@@ -110,8 +124,7 @@ export enum TrackableContractCategory {
 }
 export const getTrackableContractCategory = match([
   [
-    SeBundleTypes.SeAccidentBundle ||
-      SeBundleTypes.SeAccidentBundle ||
+    SeBundleTypes ||
       DkBundleTypes.DkAccidentBundle ||
       DkBundleTypes.DkAccidentBundleStudent,
     TrackableContractCategory.HomeAccident,
