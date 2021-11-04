@@ -1,7 +1,7 @@
 import React from 'react'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 
-type RawLinkProps = {
+export type RawLinkProps = {
   className?: string
   target?: '_blank'
   href: string
