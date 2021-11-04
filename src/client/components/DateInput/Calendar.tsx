@@ -12,10 +12,18 @@ const Content = styled.div`
   width: 100%;
 `
 
+const CalendarMonthWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
 const CalendarMonth = styled.div`
   display: inline-block;
-  width: 100%;
-  padding: 0 0.625rem 1.875rem;
+  width: 82%;
+  padding: 0 0.625rem;
   box-sizing: border-box;
   user-select: none;
   text-align: center;
@@ -97,8 +105,12 @@ const ArrowButton = styled.button<{
   background: transparent;
   ${(props) => (props.position === 'left' ? `left: 1rem;` : `right: 1rem;`)};
   ${(props) => props.disabled && `opacity: 0.5;`};
-  top: 3.5rem;
+  top: 150px;
   cursor: pointer;
+
+  :hover svg {
+    fill: ${colorsV3.gray900};
+  }
 
   :active {
     transform: translateY(2px);
@@ -151,37 +163,39 @@ export const Calendar: React.FC<DayzedCalendarProps> = ({
   )
 
   const content = calendars.map((calendar) => (
-    <CalendarMonth key={`${calendar.month}${calendar.year}`}>
-      <CalendarMonthHeader>
-        {monthNamesShort[calendar.month]} {calendar.year}
-      </CalendarMonthHeader>
-      {weekdayNamesShort.map((weekday) => (
-        <CalendarWeekday key={`${calendar.month}${calendar.year}${weekday}`}>
-          {weekday}
-        </CalendarWeekday>
-      ))}
-      {calendar.weeks.map((week, weekIndex) =>
-        week.map((dateObj, index) => {
-          const key = `${calendar.month}${calendar.year}${weekIndex}${index}`
-          if (!dateObj) {
-            return <EmptyDay key={key} />
-          }
+    <CalendarMonthWrapper key={`${calendar.month}${calendar.year}`}>
+      <CalendarMonth>
+        <CalendarMonthHeader>
+          {monthNamesShort[calendar.month]} {calendar.year}
+        </CalendarMonthHeader>
+        {weekdayNamesShort.map((weekday) => (
+          <CalendarWeekday key={`${calendar.month}${calendar.year}${weekday}`}>
+            {weekday}
+          </CalendarWeekday>
+        ))}
+        {calendar.weeks.map((week, weekIndex) =>
+          week.map((dateObj, index) => {
+            const key = `${calendar.month}${calendar.year}${weekIndex}${index}`
+            if (!dateObj) {
+              return <EmptyDay key={key} />
+            }
 
-          const { date, selected, selectable } = dateObj
+            const { date, selected, selectable } = dateObj
 
-          return (
-            <CalendarDay
-              selected={selected}
-              selectable={selectable}
-              key={key}
-              {...getDateProps({ dateObj })}
-            >
-              {date.getDate()}
-            </CalendarDay>
-          )
-        }),
-      )}
-    </CalendarMonth>
+            return (
+              <CalendarDay
+                selected={selected}
+                selectable={selectable}
+                key={key}
+                {...getDateProps({ dateObj })}
+              >
+                {date.getDate()}
+              </CalendarDay>
+            )
+          }),
+        )}
+      </CalendarMonth>
+    </CalendarMonthWrapper>
   ))
 
   if (calendars.length) {
