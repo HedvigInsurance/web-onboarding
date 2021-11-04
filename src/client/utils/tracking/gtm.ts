@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router'
-import { TypeOfContract } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import { captureSentryError } from 'utils/sentry-client'
 import { useMarket } from 'components/utils/CurrentLocale'
@@ -11,9 +10,11 @@ import {
   hasAccidentQuote,
   hasTravelQuote,
 } from 'pages/OfferNew/utils'
-import { getContractType, DkBundleTypes, NoComboTypes } from './tracking'
-
-type GAContractType = NoComboTypes | DkBundleTypes | TypeOfContract
+import {
+  getContractType,
+  getInitialOfferFromSessionStorage,
+  TrackableContractType,
+} from './tracking'
 
 type GTMUserProperties = {
   market: string
@@ -21,15 +22,17 @@ type GTMUserProperties = {
 }
 
 type GTMOfferData = {
-  insurance_type: GAContractType
+  insurance_type: TrackableContractType
   referral_code: 'yes' | 'no'
   number_of_people: number
   insurance_price: number
+  discounted_premium?: number
   currency: string
   is_student: boolean
   has_home: boolean
   has_accident: boolean
   has_travel: boolean
+  initial_offer: string
   member_id?: string
 }
 
@@ -90,19 +93,25 @@ export const trackOfferGTM = (
   offerData: OfferData,
   referralCodeUsed: boolean,
 ) => {
+  const contractType = getContractType(offerData)
+  const initialOffer = getInitialOfferFromSessionStorage(contractType)
+  const grossPrice = Math.round(Number(offerData.cost.monthlyGross.amount))
+  const netPrice = Math.round(Number(offerData.cost.monthlyNet.amount))
   try {
     pushToGTMDataLayer({
       event: eventName,
       offerData: {
-        insurance_type: getContractType(offerData),
+        insurance_type: contractType,
         referral_code: referralCodeUsed ? 'yes' : 'no',
         number_of_people: offerData.person.householdSize,
-        insurance_price: parseFloat(offerData.cost.monthlyNet.amount),
+        insurance_price: grossPrice,
+        ...(grossPrice !== netPrice && { discounted_premium: netPrice }),
         currency: offerData.cost.monthlyNet.currency,
         is_student: isStudentOffer(offerData),
         has_home: hasHomeQuote(offerData),
         has_accident: hasAccidentQuote(offerData),
         has_travel: hasTravelQuote(offerData),
+        initial_offer: initialOffer,
         ...(offerData.memberId && { member_id: offerData.memberId }),
       },
     })

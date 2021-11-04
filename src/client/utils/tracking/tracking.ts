@@ -3,6 +3,7 @@ import { SegmentAnalyticsJs, setupTrackers } from 'quepasa'
 import React from 'react'
 import {
   SignState,
+  TypeOfContract,
   useMemberQuery,
   useRedeemedCampaignsQuery,
 } from 'data/graphql'
@@ -15,6 +16,9 @@ import {
   isDanishTravelBundle,
   isStudentOffer,
   getMainQuote,
+  isSwedishHouse,
+  isSwedishApartment,
+  isSwedishBRF,
 } from 'pages/OfferNew/utils'
 import { trackOfferGTM } from './gtm'
 import { adtraction } from './adtraction'
@@ -64,8 +68,31 @@ export enum DkBundleTypes {
   DkTravelBundleStudent = 'DK_TRAVEL_BUNDLE_STUDENT',
 }
 
+export type TrackableContractType =
+  | SeBundleTypes
+  | NoComboTypes
+  | DkBundleTypes
+  | TypeOfContract
+
 export const getContractType = (offerData: OfferData) => {
   if (isBundle(offerData)) {
+    const { quoteDetails: homeQuoteDetails } = getMainQuote(offerData)
+
+    if (isSwedishHouse(homeQuoteDetails)) {
+      return SeBundleTypes.SeHomeAccidentBundleHouse
+    }
+
+    if (isSwedishApartment(homeQuoteDetails)) {
+      if (isSwedishBRF(homeQuoteDetails)) {
+        return isStudentOffer(offerData)
+          ? SeBundleTypes.SeHomeAccidentBundleStudentBrf
+          : SeBundleTypes.SeHomeAccidentBundleBrf
+      } else {
+        return isStudentOffer(offerData)
+          ? SeBundleTypes.SeHomeAccidentBundleStudentRent
+          : SeBundleTypes.SeHomeAccidentBundleRent
+      }
+    }
     if (isNorwegian(offerData)) {
       return isYouth(offerData)
         ? NoComboTypes.NoComboYouth
@@ -85,6 +112,57 @@ export const getContractType = (offerData: OfferData) => {
     }
   }
   return getMainQuote(offerData).contractType
+}
+
+export enum TrackableContractCategory {
+  Home = 'home',
+  Travel = 'travel',
+  HomeTravel = 'home_travel',
+  HomeAccident = 'home_accident',
+  HomeAccidentTravel = 'home_accident_travel',
+}
+
+export const getTrackableContractCategory = (
+  contractType: TrackableContractType,
+) => {
+  switch (contractType) {
+    case SeBundleTypes.SeHomeAccidentBundleBrf:
+    case SeBundleTypes.SeHomeAccidentBundleRent:
+    case SeBundleTypes.SeHomeAccidentBundleHouse:
+    case SeBundleTypes.SeHomeAccidentBundleStudentBrf:
+    case SeBundleTypes.SeHomeAccidentBundleStudentRent:
+    case DkBundleTypes.DkAccidentBundle:
+    case DkBundleTypes.DkAccidentBundleStudent:
+      return TrackableContractCategory.HomeAccident
+
+    case NoComboTypes.NoCombo:
+    case NoComboTypes.NoComboYouth:
+      return TrackableContractCategory.HomeTravel
+
+    case DkBundleTypes.DkTravelBundle:
+    case DkBundleTypes.DkTravelBundleStudent:
+      return TrackableContractCategory.HomeAccidentTravel
+
+    case TypeOfContract.NoTravel:
+    case TypeOfContract.NoTravelYouth:
+      return TrackableContractCategory.Travel
+    default:
+      return TrackableContractCategory.Home
+  }
+}
+
+export const getInitialOfferFromSessionStorage = (
+  contractType: TrackableContractType,
+) => {
+  const initialtOffer = sessionStorage.getItem('initial_offer')
+
+  if (initialtOffer) {
+    return initialtOffer
+  }
+
+  const contractCategory = getTrackableContractCategory(contractType)
+  sessionStorage.setItem('initial_offer', contractCategory)
+  return contractCategory
 }
 
 export enum ApplicationSpecificEvents {
