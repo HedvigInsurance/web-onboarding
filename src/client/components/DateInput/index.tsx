@@ -56,6 +56,7 @@ interface DateInputProps {
   date: Date
   setDate: (date: Date | null) => void
   hasCurrentInsurer: boolean
+  onClick: () => void
 }
 
 export const DateInput: React.FC<DateInputProps> = ({
@@ -64,6 +65,7 @@ export const DateInput: React.FC<DateInputProps> = ({
   date,
   setDate,
   hasCurrentInsurer,
+  onClick,
 }) => {
   const textKeys = useTextKeys()
 
@@ -79,6 +81,7 @@ export const DateInput: React.FC<DateInputProps> = ({
           : { visibility: 'hidden' }
       }
       transition={{ ease: 'linear', delay: open ? 0 : 0.5, duration: 0 }}
+      onClick={onClick}
     >
       <Container
         initial={{ y: 0, opacity: 0, pointerEvents: 'none' }}

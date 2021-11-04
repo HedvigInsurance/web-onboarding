@@ -117,7 +117,10 @@ const ErrorMessage = styled(motion.div)`
   color: ${colorsV3.gray900};
 `
 
-const DateInputModalWrapper = styled.div<{ isOpen: boolean }>`
+const DateInputModalWrapper = styled.div<{
+  isOpen: boolean
+  onClick: () => void
+}>`
   width: 100%;
   height: 100%;
   position: absolute;
@@ -313,7 +316,10 @@ const DateForm: React.FC<{
         </Value>
       </RowButton>
       {modal ? (
-        <DateInputModalWrapper isOpen={datePickerOpen}>
+        <DateInputModalWrapper
+          isOpen={datePickerOpen}
+          onClick={() => setDatePickerOpen(false)}
+        >
           <DateInput
             datePickerOpen={datePickerOpen}
             setDatePickerOpen={setDatePickerOpen}
@@ -321,6 +327,9 @@ const DateForm: React.FC<{
             setDate={setDate}
             quote={quote}
             modal={modal}
+            onClick={(e) => {
+              e.stopPropagation()
+            }}
           />
         </DateInputModalWrapper>
       ) : (
@@ -330,6 +339,9 @@ const DateForm: React.FC<{
           dateValue={dateValue}
           setDate={setDate}
           quote={quote}
+          onClick={(e) => {
+            e.stopPropagation()
+          }}
         />
       )}
     </RowButtonWrapper>
@@ -343,6 +355,7 @@ type DateInputProps = {
   setDate: (date: Date | null) => void
   quote: OfferQuote
   modal?: boolean
+  onClick: () => void
 }
 
 const DateInput: React.FC<DateInputProps> = ({
@@ -352,6 +365,7 @@ const DateInput: React.FC<DateInputProps> = ({
   setDate,
   quote,
   modal,
+  onClick,
 }) => {
   return (
     <StyledDateInput
@@ -361,6 +375,7 @@ const DateInput: React.FC<DateInputProps> = ({
       setDate={setDate}
       hasCurrentInsurer={hasCurrentInsurer(quote)}
       modal={Boolean(modal)}
+      onClick={onClick}
     />
   )
 }
