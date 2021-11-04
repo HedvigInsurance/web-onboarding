@@ -137,8 +137,7 @@ export const CardParagraph = styled.p`
   padding-right: 2rem;
   font-size: 1rem;
   line-height: 1.5;
-  /* Gray/@gray600 */
-  color: #777777;
+  color: ${colorsV3.gray600};
 
   ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
     padding-right: 2.5rem;
