@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV2, colorsV3 } from '@hedviginsurance/brand'
 import { SessionContainer } from 'containers/SessionContainer'
 import { Button } from 'components/buttons'
 import { StorageContainer } from 'utils/StorageContainer'
-import { LoadingDots } from '../../components/LoadingDots/LoadingDots'
 import { QuoteData } from './components/QuoteData'
 import { Session } from './components/Session'
 
@@ -19,8 +18,6 @@ const Row = styled.div`
 `
 
 export const ActualDebugger: React.FC = () => {
-  const [isCleaningQuoteState, setIsClearningQuoteState] = useState(false)
-
   return (
     <Wrapper>
       <h1>Web onboarding state debugger</h1>
@@ -30,9 +27,7 @@ export const ActualDebugger: React.FC = () => {
           {(storage) => (
             <>
               <Button
-                disabled={isCleaningQuoteState}
                 onClick={() => {
-                  setIsClearningQuoteState(true)
                   localStorage.clear()
                   sessionStorage.clear()
                   storage.session.setSession({})
@@ -41,7 +36,7 @@ export const ActualDebugger: React.FC = () => {
                 }}
                 background={colorsV2.coral500}
               >
-                Nuke all state {isCleaningQuoteState ? <LoadingDots /> : '💣'}
+                Nuke all state 💣
               </Button>
             </>
           )}
