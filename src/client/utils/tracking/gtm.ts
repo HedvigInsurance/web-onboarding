@@ -13,6 +13,7 @@ import {
 import {
   getContractType,
   getInitialOfferFromSessionStorage,
+  getTrackableContractCategory,
   TrackableContractType,
 } from './tracking'
 
@@ -88,10 +89,17 @@ export const pushToGTMDataLayer = (obj: DataLayerObject) => {
   castedWindow.dataLayer.push(obj)
 }
 
+export enum EventName {
+  OfferCreated = 'offer_created',
+  SignedCustomer = 'signed_customer',
+  InsuranceSelectionToggle = 'insurance_selection_toggle',
+}
+
 export const trackOfferGTM = (
-  eventName: 'offer_created' | 'signed_customer',
+  eventName: EventName,
   offerData: OfferData,
   referralCodeUsed: boolean,
+  switchedFrom?: OfferData,
 ) => {
   const contractType = getContractType(offerData)
   const initialOffer = getInitialOfferFromSessionStorage(contractType)
@@ -113,6 +121,13 @@ export const trackOfferGTM = (
         has_travel: hasTravelQuote(offerData),
         initial_offer: initialOffer,
         ...(offerData.memberId && { member_id: offerData.memberId }),
+        ...(eventName === EventName.InsuranceSelectionToggle &&
+          switchedFrom && {
+            switched_from: getTrackableContractCategory(
+              getContractType(switchedFrom),
+            ),
+            switched_to: getTrackableContractCategory(contractType),
+          }),
       },
     })
   } catch (e) {
