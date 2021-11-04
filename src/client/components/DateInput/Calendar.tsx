@@ -95,9 +95,9 @@ const ArrowButton = styled.button<{
   position: absolute;
   transition: opacity 250ms, transform 250ms;
   background: transparent;
-  ${(props) => (props.position === 'left' ? `left: 10px;` : `right: 10px;`)};
+  ${(props) => (props.position === 'left' ? `left: 1rem;` : `right: 1rem;`)};
   ${(props) => props.disabled && `opacity: 0.5;`};
-  top: 22px;
+  top: 3.5rem;
   cursor: pointer;
 
   :active {

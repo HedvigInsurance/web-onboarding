@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import React from 'react'
 import { useTextKeys } from 'utils/textKeys'
 import { TextButton } from '../buttons'
+import { CloseButton } from '../CloseButton/CloseButton'
 import { Calendar } from './Calendar'
 
 const Wrapper = styled(motion.div)`
@@ -22,8 +23,23 @@ const Container = styled(motion.div)`
   border-radius: 8px;
   box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
   background-color: ${colorsV3.white};
-  height: 320px;
   overflow: hidden;
+`
+const TopSection = styled.div`
+  width: 100%;
+`
+
+const InnerContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`
+
+const CalendarWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  height: 300px;
 `
 
 const AtStartDateContainer = styled.div`
@@ -82,30 +98,37 @@ export const DateInput: React.FC<DateInputProps> = ({
           damping: 50,
         }}
       >
-        <Dayzed
-          date={new Date()}
-          firstDayOfWeek={1}
-          selected={date}
-          minDate={subDays(new Date(), 1)}
-          maxDate={addYears(new Date(), 1)}
-          onDateSelected={(dateObj) => {
-            setDate(dateObj.date)
-            setOpen(false)
-          }}
-          render={(dayzedData) => <Calendar {...dayzedData} />}
-        />
-        {hasCurrentInsurer && (
-          <AtStartDateContainer>
-            <TextButton
-              onClick={() => {
-                setDate(null)
+        <InnerContainer>
+          <TopSection>
+            <CloseButton onClose={() => setOpen(false)} />
+          </TopSection>
+          <CalendarWrapper>
+            <Dayzed
+              date={new Date()}
+              firstDayOfWeek={1}
+              selected={date}
+              minDate={subDays(new Date(), 1)}
+              maxDate={addYears(new Date(), 1)}
+              onDateSelected={(dateObj) => {
+                setDate(dateObj.date)
                 setOpen(false)
               }}
-            >
-              {textKeys.START_DATE_WHEN_OLD_EXPIRES()}
-            </TextButton>
-          </AtStartDateContainer>
-        )}
+              render={(dayzedData) => <Calendar {...dayzedData} />}
+            />
+          </CalendarWrapper>
+          {hasCurrentInsurer && (
+            <AtStartDateContainer>
+              <TextButton
+                onClick={() => {
+                  setDate(null)
+                  setOpen(false)
+                }}
+              >
+                {textKeys.START_DATE_WHEN_OLD_EXPIRES()}
+              </TextButton>
+            </AtStartDateContainer>
+          )}
+        </InnerContainer>
       </Container>
     </Wrapper>
   )

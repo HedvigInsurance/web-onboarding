@@ -173,12 +173,7 @@ const DateForm: React.FC<{
   refetch,
   size,
 }) => {
-  console.log('🚀 ~ file: StartDate.tsx ~ line 176 ~ modal', modal)
   const [datePickerOpen, setDatePickerOpen] = React.useState(false)
-  console.log(
-    '🚀 ~ file: StartDate.tsx ~ line 177 ~ datePickerOpen',
-    datePickerOpen,
-  )
 
   const [dateValue, setDateValue] = React.useState(() =>
     getDefaultDateValue(quote),
@@ -286,8 +281,6 @@ const DateForm: React.FC<{
       }
     }
   }
-
-  // TODO: make this function (which returns the calendar component) a regular React function component, in a file of its own
 
   const hasStartDate = Boolean(getDefaultDateValue(quote))
 
