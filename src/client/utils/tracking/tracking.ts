@@ -20,7 +20,7 @@ import {
   isSwedishApartment,
   isSwedishBRF,
 } from 'pages/OfferNew/utils'
-import { trackOfferGTM } from './gtm'
+import { trackOfferGTM, EventName } from './gtm'
 import { adtraction } from './adtraction'
 import { trackStudentkortet } from './studentkortet'
 
@@ -222,7 +222,7 @@ export const useTrack = ({ offerData, signState }: TrackProps) => {
     }
 
     trackOfferGTM(
-      'signed_customer',
+      EventName.SignedCustomer,
       { ...offerData, memberId: memberId || '' },
       redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction',
     )
