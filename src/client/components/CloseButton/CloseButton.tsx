@@ -13,23 +13,21 @@ const Button = styled.button`
   display: flex;
   align-items: center;
   text-align: center;
-  background-color: ${colorsV3.gray500};
   border-radius: 50%;
   border: none;
   cursor: pointer;
+  background: ${colorsV3.white};
 
   :focus {
     outline: none;
   }
 
-  :hover {
-    background-color: ${colorsV3.gray900};
+  :hover path {
+    fill: ${colorsV3.gray700};
   }
 
-  svg {
-    width: 100%;
-    height: 100%;
-    fill: ${colorsV3.white};
+  path {
+    fill: ${colorsV3.gray900};
   }
 `
 

@@ -1,7 +1,18 @@
 import React from 'react'
 
 export const BackArrow = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="11" height="18" fill="#9B9BAA">
-    <path d="M9.895 2.79a.8.8 0 000-1.139l-.562-.554a.8.8 0 00-1.124 0L.772 8.43a.8.8 0 000 1.14l7.437 7.333a.8.8 0 001.124 0l.562-.554a.8.8 0 000-1.14L3.597 9l6.298-6.21z" />
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M9.06066 12L16.5303 4.53033L15.4697 3.46967L6.93934 12L15.4697 20.5303L16.5303 19.4697L9.06066 12Z"
+      fill="#777777"
+    />
   </svg>
 )

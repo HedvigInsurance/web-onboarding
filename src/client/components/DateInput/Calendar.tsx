@@ -31,8 +31,9 @@ const CalendarMonth = styled.div`
 
 const CalendarMonthHeader = styled.span`
   display: block;
-  padding: 1.25rem;
+  padding: 2.25rem 0 1.25rem;
   font-size: 1rem;
+  text-transform: capitalize;
 `
 
 const CalendarWeekday = styled.span`
@@ -103,13 +104,18 @@ const ArrowButton = styled.button<{
   position: absolute;
   transition: opacity 250ms, transform 250ms;
   background: transparent;
-  ${(props) => (props.position === 'left' ? `left: 1rem;` : `right: 1rem;`)};
+  ${(props) =>
+    props.position === 'left' ? `left: 0.5rem;` : `right: 0.5rem;`};
   ${(props) => props.disabled && `opacity: 0.5;`};
   top: 150px;
   cursor: pointer;
 
-  :hover svg {
+  path {
     fill: ${colorsV3.gray900};
+  }
+
+  :hover path {
+    fill: ${colorsV3.gray700};
   }
 
   :active {

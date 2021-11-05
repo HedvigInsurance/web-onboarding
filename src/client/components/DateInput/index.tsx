@@ -32,23 +32,15 @@ const Container = styled(motion.div)`
   box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
   background-color: ${colorsV3.white};
   overflow: hidden;
+  padding: 1.25rem 0;
 `
 const TopSection = styled.div`
   width: 100%;
 `
 
-const InnerContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 0 0 1.25rem;
-`
-
 const CalendarWrapper = styled.div`
   width: 100%;
-  height: 100%;
-  height: 300px;
+  height: 17.25rem;
 `
 
 const AtStartDateContainer = styled.div`
@@ -108,39 +100,37 @@ export const DateInput: React.FC<DateInputProps> = ({
             damping: 50,
           }}
         >
-          <InnerContainer>
-            <CalendarWrapper>
-              <Dayzed
-                date={new Date()}
-                firstDayOfWeek={1}
-                selected={date}
-                minDate={subDays(new Date(), 1)}
-                maxDate={addYears(new Date(), 1)}
-                onDateSelected={(dateObj) => {
-                  setDate(dateObj.date)
+          <CalendarWrapper>
+            <Dayzed
+              date={new Date()}
+              firstDayOfWeek={1}
+              selected={date}
+              minDate={subDays(new Date(), 1)}
+              maxDate={addYears(new Date(), 1)}
+              onDateSelected={(dateObj) => {
+                setDate(dateObj.date)
+                setOpen(false)
+              }}
+              render={(dayzedData) => <Calendar {...dayzedData} />}
+            />
+          </CalendarWrapper>
+
+          <TopSection>
+            <CloseButton onClose={() => setOpen(false)} />
+          </TopSection>
+
+          {hasCurrentInsurer && (
+            <AtStartDateContainer>
+              <TextButton
+                onClick={() => {
+                  setDate(null)
                   setOpen(false)
                 }}
-                render={(dayzedData) => <Calendar {...dayzedData} />}
-              />
-            </CalendarWrapper>
-
-            <TopSection>
-              <CloseButton onClose={() => setOpen(false)} />
-            </TopSection>
-
-            {hasCurrentInsurer && (
-              <AtStartDateContainer>
-                <TextButton
-                  onClick={() => {
-                    setDate(null)
-                    setOpen(false)
-                  }}
-                >
-                  {textKeys.START_DATE_WHEN_OLD_EXPIRES()}
-                </TextButton>
-              </AtStartDateContainer>
-            )}
-          </InnerContainer>
+              >
+                {textKeys.START_DATE_WHEN_OLD_EXPIRES()}
+              </TextButton>
+            </AtStartDateContainer>
+          )}
         </Container>
       </Wrapper>
     </>
