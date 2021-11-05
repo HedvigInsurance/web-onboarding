@@ -103,7 +103,7 @@ export const trackOfferGTM = (
 ) => {
   const contractType = getContractType(offerData)
   const contractCategory = getTrackableContractCategory(contractType)
-  const initialOffer = getInitialOfferFromSessionStorage(contractType)
+  const initialOffer = getInitialOfferFromSessionStorage(contractCategory)
   const grossPrice = Math.round(Number(offerData.cost.monthlyGross.amount))
   const netPrice = Math.round(Number(offerData.cost.monthlyNet.amount))
   try {

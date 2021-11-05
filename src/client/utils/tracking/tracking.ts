@@ -152,7 +152,7 @@ export const getTrackableContractCategory = (
 }
 
 export const getInitialOfferFromSessionStorage = (
-  contractType: TrackableContractType,
+  contractCategory: TrackableContractCategory,
 ) => {
   const initialtOffer = sessionStorage.getItem('initial_offer')
 
@@ -160,7 +160,6 @@ export const getInitialOfferFromSessionStorage = (
     return initialtOffer
   }
 
-  const contractCategory = getTrackableContractCategory(contractType)
   sessionStorage.setItem('initial_offer', contractCategory)
   return contractCategory
 }
