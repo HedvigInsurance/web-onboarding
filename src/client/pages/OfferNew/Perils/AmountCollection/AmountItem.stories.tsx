@@ -1,5 +1,5 @@
 import React from 'react'
-import AmountItem from './AmountItem'
+import { AmountItem } from './AmountItem'
 
 export default {
   title: 'Offer/AmountCollection/AmountItem',

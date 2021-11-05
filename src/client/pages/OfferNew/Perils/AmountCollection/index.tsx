@@ -4,8 +4,8 @@ import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { useTextKeys } from 'utils/textKeys'
 import { HeadingXS } from '../../components'
 import { OfferQuote } from '../../types'
-import AmountItem from './AmountItem'
-import Grid from './Grid'
+import { AmountItem } from './AmountItem'
+import { Grid } from './Grid'
 
 const Container = styled.div`
   display: grid;
@@ -16,11 +16,11 @@ const Container = styled.div`
   }
 `
 
-interface Props {
+type Props = {
   offer: OfferQuote
 }
 
-const AmountCollection: React.FC<Props> = ({ offer }) => {
+export const AmountCollection: React.FC<Props> = ({ offer }) => {
   const textKeys = useTextKeys()
 
   const limits = [...offer.insurableLimits.entries()]
@@ -39,5 +39,3 @@ const AmountCollection: React.FC<Props> = ({ offer }) => {
     </Container>
   )
 }
-
-export default AmountCollection

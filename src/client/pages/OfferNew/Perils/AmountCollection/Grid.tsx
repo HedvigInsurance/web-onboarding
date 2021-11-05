@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
-const Grid = styled.div`
+export const Grid = styled.div`
   display: grid;
   gap: 0.5rem;
   grid-template-columns: 1fr;
@@ -12,5 +12,3 @@ const Grid = styled.div`
     grid-template-columns: 1fr 1fr;
   }
 `
-
-export default Grid
