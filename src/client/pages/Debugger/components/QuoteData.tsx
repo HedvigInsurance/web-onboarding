@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import styled from '@emotion/styled'
 import { Form, Formik, FormikProps } from 'formik'
 import { v4 as uuid } from 'uuid'
 import { colorsV3 } from '@hedviginsurance/brand'
@@ -21,6 +22,7 @@ import {
   useMarket,
   Market,
 } from 'components/utils/CurrentLocale'
+import { LoadingDots } from '../../../components/LoadingDots/LoadingDots'
 import { initialSeApartmentValues, SwedishApartment } from './QuoteFormSweden'
 import {
   initialNoHomeValues,
@@ -140,6 +142,11 @@ const getSwedishAccidentQuoteValues = (values: Values) => {
     },
   } as CreateQuoteInput
 }
+
+const ButtonLoadingIndicator = styled(LoadingDots)`
+  display: inline-flex;
+  margin-left: 0.5rem;
+`
 
 export const QuoteData: React.FC<OfferProps> = ({ sessionToken }) => {
   const [quoteIds, setQuoteIds] = useState<string[]>([])
@@ -325,63 +332,72 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionToken }) => {
                 {(props) => (
                   <>
                     <Form>
-                      <InputField
-                        label="First name"
-                        placeholder=""
-                        {...props.getFieldProps('firstName')}
-                      />
-                      <InputField
-                        label="Last name"
-                        placeholder=""
-                        {...props.getFieldProps('lastName')}
-                      />
-                      <InputField
-                        label="Birth date"
-                        placeholder="2012-12-12"
-                        {...props.getFieldProps('birthDate')}
-                      />
-                      {currentMarket === Market.Se && (
-                        <InputField
-                          label="ssn"
-                          placeholder=""
-                          {...props.getFieldProps('ssn')}
-                        />
-                      )}
-                      <InputField
-                        label="Start Date (optional)"
-                        placeholder="2020-03-13"
-                        {...props.getFieldProps('startDate')}
-                      />
-                      <InputField
-                        label="Email"
-                        placeholder=""
-                        {...props.getFieldProps('email')}
-                      />
+                      {!props.isSubmitting && (
+                        <>
+                          <InputField
+                            label="First name"
+                            placeholder=""
+                            {...props.getFieldProps('firstName')}
+                          />
+                          <InputField
+                            label="Last name"
+                            placeholder=""
+                            {...props.getFieldProps('lastName')}
+                          />
+                          <InputField
+                            label="Birth date"
+                            placeholder="2012-12-12"
+                            {...props.getFieldProps('birthDate')}
+                          />
+                          {currentMarket === Market.Se && (
+                            <InputField
+                              label="ssn"
+                              placeholder=""
+                              {...props.getFieldProps('ssn')}
+                            />
+                          )}
+                          <InputField
+                            label="Start Date (optional)"
+                            placeholder="2020-03-13"
+                            {...props.getFieldProps('startDate')}
+                          />
+                          <InputField
+                            label="Email"
+                            placeholder=""
+                            {...props.getFieldProps('email')}
+                          />
 
-                      {[
-                        QuoteType.SwedishApartment,
-                        QuoteType.SwedishApartmentAccident,
-                      ].includes(quoteType) && (
-                        <SwedishApartment formik={props} />
-                      )}
-                      {quoteType === QuoteType.NorwegianHome && (
-                        <NorwegianHome formik={props} />
-                      )}
-                      {quoteType === QuoteType.NorwegianTravel && (
-                        <NorwegianTravel formik={props} />
-                      )}
-                      {(quoteType === QuoteType.DanishHome ||
-                        quoteType === QuoteType.DanishHomeAccident ||
-                        quoteType === QuoteType.DanishHomeAccidentTravel) && (
-                        <DanishQuote formik={props} />
+                          {[
+                            QuoteType.SwedishApartment,
+                            QuoteType.SwedishApartmentAccident,
+                          ].includes(quoteType) && (
+                            <SwedishApartment formik={props} />
+                          )}
+                          {quoteType === QuoteType.NorwegianHome && (
+                            <NorwegianHome formik={props} />
+                          )}
+                          {quoteType === QuoteType.NorwegianTravel && (
+                            <NorwegianTravel formik={props} />
+                          )}
+                          {(quoteType === QuoteType.DanishHome ||
+                            quoteType === QuoteType.DanishHomeAccident ||
+                            quoteType ===
+                              QuoteType.DanishHomeAccidentTravel) && (
+                            <DanishQuote formik={props} />
+                          )}
+                        </>
                       )}
 
                       <Button
+                        type="submit"
                         background={colorsV3.purple500}
                         foreground={colorsV3.gray900}
-                        type="submit"
+                        disabled={props.isSubmitting}
                       >
                         Create quote
+                        {props.isSubmitting && (
+                          <ButtonLoadingIndicator color={colorsV3.gray900} />
+                        )}
                       </Button>
                     </Form>
                   </>
