@@ -34,6 +34,7 @@ type GTMOfferData = {
   has_accident: boolean
   has_travel: boolean
   initial_offer: string
+  current_offer: string
   member_id?: string
 }
 
@@ -121,9 +122,7 @@ export const trackOfferGTM = (
         has_accident: hasAccidentQuote(offerData),
         has_travel: hasTravelQuote(offerData),
         initial_offer: initialOffer,
-        ...(eventName === EventName.SignedCustomer && {
-          signed_offer: contractCategory,
-        }),
+        current_offer: contractCategory,
         ...(switchedFrom && {
           switched_from: getTrackableContractCategory(
             getContractType(switchedFrom),
