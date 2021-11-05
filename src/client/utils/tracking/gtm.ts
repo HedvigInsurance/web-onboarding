@@ -102,6 +102,7 @@ export const trackOfferGTM = (
   switchedFrom?: OfferData,
 ) => {
   const contractType = getContractType(offerData)
+  const contractCategory = getTrackableContractCategory(contractType)
   const initialOffer = getInitialOfferFromSessionStorage(contractType)
   const grossPrice = Math.round(Number(offerData.cost.monthlyGross.amount))
   const netPrice = Math.round(Number(offerData.cost.monthlyNet.amount))
@@ -120,13 +121,16 @@ export const trackOfferGTM = (
         has_accident: hasAccidentQuote(offerData),
         has_travel: hasTravelQuote(offerData),
         initial_offer: initialOffer,
-        ...(offerData.memberId && { member_id: offerData.memberId }),
+        ...(eventName === EventName.SignedCustomer && {
+          signed_offer: contractCategory,
+        }),
         ...(switchedFrom && {
           switched_from: getTrackableContractCategory(
             getContractType(switchedFrom),
           ),
-          switched_to: getTrackableContractCategory(contractType),
+          switched_to: contractCategory,
         }),
+        ...(offerData.memberId && { member_id: offerData.memberId }),
       },
     })
   } catch (e) {
