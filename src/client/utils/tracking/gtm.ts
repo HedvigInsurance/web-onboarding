@@ -121,13 +121,12 @@ export const trackOfferGTM = (
         has_travel: hasTravelQuote(offerData),
         initial_offer: initialOffer,
         ...(offerData.memberId && { member_id: offerData.memberId }),
-        ...(eventName === EventName.InsuranceSelectionToggle &&
-          switchedFrom && {
-            switched_from: getTrackableContractCategory(
-              getContractType(switchedFrom),
-            ),
-            switched_to: getTrackableContractCategory(contractType),
-          }),
+        ...(switchedFrom && {
+          switched_from: getTrackableContractCategory(
+            getContractType(switchedFrom),
+          ),
+          switched_to: getTrackableContractCategory(contractType),
+        }),
       },
     })
   } catch (e) {
