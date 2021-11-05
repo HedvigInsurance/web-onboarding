@@ -200,7 +200,6 @@ export const Sidebar: React.FC<Props> = ({
     ...(discountText ? [discountText] : []),
   ]
 
-  const hasMultipleQuotes = offerData.quotes.length > 1
   const hasRedeemedCampaigns = redeemedCampaigns.length > 0
 
   return (
