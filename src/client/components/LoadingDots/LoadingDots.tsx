@@ -4,6 +4,7 @@ import { colorsV3 } from '@hedviginsurance/brand/dist'
 import React from 'react'
 
 interface DotsProps {
+  className?: string
   color?: string
 }
 
@@ -47,10 +48,11 @@ const Dot = styled.span`
 `
 
 export const LoadingDots: React.FC<DotsProps> = ({
+  className,
   color = colorsV3.gray100,
 }) => {
   return (
-    <Dots color={color}>
+    <Dots className={className} color={color}>
       <Dot />
       <Dot />
       <Dot />

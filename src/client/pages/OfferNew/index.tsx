@@ -13,7 +13,7 @@ import {
   QuoteBundleVariant,
 } from 'data/graphql'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
-import { trackOfferGTM } from 'utils/tracking/gtm'
+import { trackOfferGTM, EventName } from 'utils/tracking/gtm'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { Features, useFeature } from 'utils/hooks/useFeature'
@@ -89,8 +89,21 @@ export const OfferNew: React.FC = () => {
   const onInsuranceSelectorChange = (
     selectedBundleVariant: QuoteBundleVariant,
   ) => {
+    const previouslySelectedBundleVariant = getBundleVariantFromQuoteIds(
+      selectedQuoteIds,
+      bundleVariants,
+    )
     const quoteIds = getQuoteIdsFromBundleVariant(selectedBundleVariant)
     setSelectedQuoteIds(quoteIds)
+    if (offerData) {
+      trackOfferGTM(
+        EventName.InsuranceSelectionToggle,
+        getOfferData(selectedBundleVariant.bundle),
+        redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction',
+        previouslySelectedBundleVariant &&
+          getOfferData(previouslySelectedBundleVariant?.bundle),
+      )
+    }
   }
 
   const checkoutMatch = useRouteMatch(`${localePathPattern}/new-member/sign`)
@@ -120,7 +133,7 @@ export const OfferNew: React.FC = () => {
 
   if (offerData) {
     trackOfferGTM(
-      'offer_created',
+      EventName.OfferCreated,
       offerData,
       redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction',
     )
