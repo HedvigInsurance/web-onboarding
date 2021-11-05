@@ -77,7 +77,7 @@ export const DateInput: React.FC<DateInputProps> = ({
 
   return (
     <>
-      <BackgroundCloser onClick={() => setOpen(false)} />
+      {open && <BackgroundCloser onClick={() => setOpen(false)} />}
       <Wrapper
         aria-hidden={!open}
         initial={{ visibility: 'hidden' }}
