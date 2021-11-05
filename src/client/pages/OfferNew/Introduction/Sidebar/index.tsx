@@ -231,7 +231,7 @@ export const Sidebar: React.FC<Props> = ({
                 />
               </Header>
               <Body>
-                {hasMultipleQuotes && <PriceBreakdown offerData={offerData} />}
+                {<PriceBreakdown offerData={offerData} />}
                 <BodyTitle>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}</BodyTitle>
                 <StartDate
                   offerData={offerData}
