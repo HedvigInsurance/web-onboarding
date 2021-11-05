@@ -98,7 +98,7 @@ const getAddressFromBundledQuotes = (
   return null
 }
 
-export const isHomeQuote = (
+const isHomeQuote = (
   quoteDetails: QuoteDetails,
 ): quoteDetails is
   | SwedishApartmentQuoteDetails
@@ -110,12 +110,12 @@ export const isHomeQuote = (
   isSwedishHouse(quoteDetails) ||
   isSwedishApartment(quoteDetails)
 
-export const isAccidentQuote = (
+const isAccidentQuote = (
   quoteDetails: QuoteDetails,
 ): quoteDetails is SwedishAccidentDetails | DanishAccidentDetails =>
   isDanishAccident(quoteDetails) || isSwedishAccident(quoteDetails)
 
-export const isTravelQuote = (
+const isTravelQuote = (
   quoteDetails: QuoteDetails,
 ): quoteDetails is NorwegianTravelDetails | DanishTravelDetails =>
   isDanishTravel(quoteDetails) || isNorwegianTravel(quoteDetails)
