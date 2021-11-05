@@ -130,7 +130,6 @@ export const Column = styled('div')`
   width: 100%;
   flex-grow: 0;
   box-sizing: border-box;
-  overflow: hidden;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     padding-right: 1rem;

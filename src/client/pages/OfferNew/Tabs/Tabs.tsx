@@ -2,33 +2,26 @@ import React, { useState, useEffect } from 'react'
 import { AnimateSharedLayout } from 'framer-motion'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import {
-  MEDIUM_SCREEN_MEDIA_QUERY,
-  LARGE_SCREEN_MEDIA_QUERY,
-} from 'utils/mediaQueries'
+import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { Tab } from './Tab'
 
 const TabList = styled.div`
   display: flex;
-  margin: 1rem 0 1.25rem 0;
-  overflow-y: hidden;
   overflow-x: auto;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* Internet Explorer 10+ */
-  position: relative;
 
   &::-webkit-scrollbar {
     width: 0;
     height: 0;
   }
+`
 
-  ${MEDIUM_SCREEN_MEDIA_QUERY} {
-    margin: 1rem 0 2.5rem 0;
-  }
-
+const TabContainer = styled.div`
+  position: relative;
+  margin-bottom: 1.25rem;
   ${LARGE_SCREEN_MEDIA_QUERY} {
-    overflow: visible;
-    width: 100%;
+    margin-bottom: 2.5rem;
   }
 `
 
@@ -50,33 +43,45 @@ type Props = {
   }[]
   onChange: (id: string) => void
 }
+type Item = {
+  id: string
+  name: string
+  content: React.ReactNode
+}
 
-export const Tabs: React.FC<Props> = ({ items }) => {
+export const Tabs: React.FC<Props> = ({ items, onChange }) => {
   const [selected, setSelected] = useState(items[0])
 
+  const handleClick = (item: Item) => {
+    setSelected(item)
+    onChange(item.id)
+  }
   useEffect(() => {
     setSelected(items[0])
   }, [items])
 
   return (
     <>
-      <TabList
-        role="tablist"
-        aria-orientation="horizontal"
-        aria-label="InsurancePick"
-      >
-        <AnimateSharedLayout>
-          {items.map((item, index) => (
-            <Tab
-              key={index}
-              onClick={() => setSelected(item)}
-              selected={selected === item}
-              name={item.name}
-            />
-          ))}
-        </AnimateSharedLayout>
+      <TabContainer>
+        <TabList
+          role="tablist"
+          aria-orientation="horizontal"
+          aria-label="InsurancePick"
+        >
+          <AnimateSharedLayout>
+            {items.map((item, index) => (
+              <Tab
+                key={index}
+                onClick={() => handleClick(item)}
+                selected={selected === item}
+                name={item.name}
+              />
+            ))}
+          </AnimateSharedLayout>
+        </TabList>
         <UnderlineBackground />
-      </TabList>
+      </TabContainer>
+
       {selected.content && (
         <TabPanel
           tabIndex={0}

@@ -13,8 +13,8 @@ const TabContainer = styled.button<{ selected?: boolean }>`
   font-size: 1.25rem;
   line-height: 1.4;
   padding: 0 1rem 0.25rem 0;
-  white-space: nowrap;
   position: relative;
+  flex-shrink: 0;
 
   &:hover {
     color: ${colorsV3.gray900};
