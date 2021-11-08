@@ -108,10 +108,9 @@ export const trackOfferGTM = (
   const grossPrice = Math.round(Number(offerData.cost.monthlyGross.amount))
   const netPrice = Math.round(Number(offerData.cost.monthlyNet.amount))
 
-  let initialOffer = getInitialOfferFromSessionStorage()
+  const initialOffer = getInitialOfferFromSessionStorage()
   if (!initialOffer) {
     setInitialOfferToSessionStorage(contractCategory)
-    initialOffer = contractCategory
   }
   try {
     pushToGTMDataLayer({
@@ -127,7 +126,7 @@ export const trackOfferGTM = (
         has_home: hasHomeQuote(offerData),
         has_accident: hasAccidentQuote(offerData),
         has_travel: hasTravelQuote(offerData),
-        initial_offer: initialOffer,
+        initial_offer: initialOffer ?? contractCategory,
         current_offer: contractCategory,
         ...(switchedFrom && {
           switched_from: getTrackableContractCategory(
