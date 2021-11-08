@@ -14,6 +14,7 @@ import {
   getContractType,
   getInitialOfferFromSessionStorage,
   getTrackableContractCategory,
+  setInitialOfferToSessionStorage,
   TrackableContractType,
 } from './tracking'
 
@@ -34,6 +35,7 @@ type GTMOfferData = {
   has_accident: boolean
   has_travel: boolean
   initial_offer: string
+  current_offer: string
   member_id?: string
 }
 
@@ -102,9 +104,14 @@ export const trackOfferGTM = (
   switchedFrom?: OfferData,
 ) => {
   const contractType = getContractType(offerData)
-  const initialOffer = getInitialOfferFromSessionStorage(contractType)
+  const contractCategory = getTrackableContractCategory(contractType)
   const grossPrice = Math.round(Number(offerData.cost.monthlyGross.amount))
   const netPrice = Math.round(Number(offerData.cost.monthlyNet.amount))
+
+  const initialOffer = getInitialOfferFromSessionStorage()
+  if (!initialOffer) {
+    setInitialOfferToSessionStorage(contractCategory)
+  }
   try {
     pushToGTMDataLayer({
       event: eventName,
@@ -119,14 +126,15 @@ export const trackOfferGTM = (
         has_home: hasHomeQuote(offerData),
         has_accident: hasAccidentQuote(offerData),
         has_travel: hasTravelQuote(offerData),
-        initial_offer: initialOffer,
-        ...(offerData.memberId && { member_id: offerData.memberId }),
+        initial_offer: initialOffer ?? contractCategory,
+        current_offer: contractCategory,
         ...(switchedFrom && {
           switched_from: getTrackableContractCategory(
             getContractType(switchedFrom),
           ),
-          switched_to: getTrackableContractCategory(contractType),
+          switched_to: contractCategory,
         }),
+        ...(offerData.memberId && { member_id: offerData.memberId }),
       },
     })
   } catch (e) {
