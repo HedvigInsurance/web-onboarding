@@ -20,6 +20,7 @@ const TabList = styled.div`
 const TabContainer = styled.div`
   position: relative;
   margin-bottom: 1.25rem;
+
   ${LARGE_SCREEN_MEDIA_QUERY} {
     margin-bottom: 2.5rem;
   }
