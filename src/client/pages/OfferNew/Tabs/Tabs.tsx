@@ -43,7 +43,7 @@ type Props = {
   }[]
   onChange: (id: string) => void
 }
-type Item = {
+type TabItem = {
   id: string
   name: string
   content: React.ReactNode
@@ -52,12 +52,16 @@ type Item = {
 export const Tabs: React.FC<Props> = ({ items, onChange }) => {
   const [selected, setSelected] = useState(items[0])
 
-  const handleClick = (item: Item) => {
+  const handleClick = (item: TabItem) => {
     setSelected(item)
     onChange(item.id)
   }
+
   useEffect(() => {
-    setSelected(items[0])
+    setSelected((selectedItem) => {
+      const matchingItem = items.find((item) => item.id === selectedItem.id)
+      return matchingItem ?? items[0]
+    })
   }, [items])
 
   return (
