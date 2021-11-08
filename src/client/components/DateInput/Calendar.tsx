@@ -134,12 +134,8 @@ export const Calendar: React.FC<DayzedCalendarProps> = ({
   getForwardProps,
   getDateProps,
 }) => {
-  const [weekdayNamesShort, setWeekdayNamesShort] = React.useState<string[]>(
-    [] as string[],
-  )
-  const [monthNamesShort, setMonthNamesShort] = React.useState<string[]>(
-    [] as string[],
-  )
+  const [weekdayNamesShort, setWeekdayNamesShort] = React.useState<string[]>([])
+  const [monthNamesShort, setMonthNamesShort] = React.useState<string[]>([])
   const locale = useCurrentLocale()
 
   useEffect(() => {
