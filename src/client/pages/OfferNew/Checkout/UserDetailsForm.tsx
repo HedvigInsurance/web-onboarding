@@ -8,7 +8,11 @@ import {
   useCurrentLocale,
   useMarket,
 } from 'components/utils/CurrentLocale'
-import { WithEmailForm, WithSsnForm } from 'pages/OfferNew/types'
+import {
+  WithEmailForm,
+  WithSsnForm,
+  WithFirstAndLastNameForm,
+} from 'pages/OfferNew/types'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
 import { useFeature, Features } from 'utils/hooks/useFeature'
 import { CreditCheckInfo } from './CreditCheckInfo'
@@ -18,12 +22,18 @@ const HiddenSubmit = styled.input`
 `
 
 type Props = WithEmailForm &
-  WithSsnForm & { onSubmit?: () => void; ssnBackendError: string | null }
+  WithSsnForm &
+  WithFirstAndLastNameForm & {
+    onSubmit?: () => void
+    ssnBackendError: string | null
+  }
 
 export const emailValidation = yup
   .string()
   .email()
   .required()
+
+export const nameValidation = yup.string().required()
 
 // TODO: replace these with one market agnostic CHECKOUT_SSN_LABEL + currentLocaleData.ssn.formatExample
 export const getSsnLabel = (market: Market, textKeys: TextKeyMap): string => {
@@ -39,6 +49,11 @@ export const getSsnLabel = (market: Market, textKeys: TextKeyMap): string => {
 
 export const UserDetailsForm: React.FC<Props> = ({
   email: initialEmail,
+  firstName,
+  lastName,
+  onFirstNameChange,
+  onLastNameChange,
+  isFirstAndLastNameVisible,
   onEmailChange,
   ssn: initialSsn,
   ssnBackendError,
@@ -47,6 +62,8 @@ export const UserDetailsForm: React.FC<Props> = ({
 }) => {
   const textKeys = useTextKeys()
   const [email, reallySetEmail] = useState(() => initialEmail)
+  const [hasFirstNameError, setHasFirstNameError] = useState<boolean>(false)
+  const [hasLastNameError, setHasLastNameError] = useState<boolean>(false)
   const [hasEmailError, setHasEmailError] = useState<boolean>(false)
   const [ssn, reallySetSsn] = useState(() => initialSsn)
   const [isShowingCreditCheckInfo, setIsShowingCreditCheckInfo] = useState(
@@ -73,6 +90,18 @@ export const UserDetailsForm: React.FC<Props> = ({
   }
 
   const ssnFormatExample = currentLocaleData.ssn.formatExample
+
+  const validateFirstName = (firstName: string) => {
+    if (!nameValidation.isValidSync(firstName)) {
+      setHasFirstNameError(true)
+    }
+  }
+
+  const validateLastName = (lastName: string) => {
+    if (!nameValidation.isValidSync(lastName)) {
+      setHasLastNameError(true)
+    }
+  }
 
   const handleSsnChange = (event: React.FormEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget
@@ -113,6 +142,8 @@ export const UserDetailsForm: React.FC<Props> = ({
       window.setTimeout(() => {
         if (emailValidation.isValidSync(newEmail)) {
           onEmailChange(newEmail)
+        } else {
+          setHasEmailError(true)
         }
       }, 300),
     )
@@ -126,6 +157,40 @@ export const UserDetailsForm: React.FC<Props> = ({
         }
       }}
     >
+      {isFirstAndLastNameVisible && (
+        <>
+          <RawInputField
+            label={textKeys.CHECKOUT_FIRSTNAME_LABEL()}
+            placeholder={textKeys.CHECKOUT_FIRSTNAME_PLACEHOLDER()}
+            name="firstname"
+            id="firstname"
+            value={firstName}
+            errors={
+              hasFirstNameError ? textKeys.SIGN_FIRSTNAME_CHECK() : undefined
+            }
+            onChange={(e: React.ChangeEvent<any>) => {
+              onFirstNameChange(e.target.value)
+              validateFirstName(e.target.value)
+            }}
+          />
+
+          <RawInputField
+            label={textKeys.CHECKOUT_LASTNAME_LABEL()}
+            placeholder={textKeys.CHECKOUT_LASTNAME_PLACEHOLDER()}
+            name="lastName"
+            id="lastName"
+            value={lastName}
+            errors={
+              hasLastNameError ? textKeys.SIGN_LASTNAME_CHECK() : undefined
+            }
+            onChange={(e: React.ChangeEvent<any>) => {
+              onLastNameChange(e.target.value)
+              validateLastName(e.target.value)
+            }}
+          />
+        </>
+      )}
+
       <RawInputField
         label={textKeys.CHECKOUT_EMAIL_LABEL()}
         placeholder={textKeys.CHECKOUT_EMAIL_PLACEHOLDER()}

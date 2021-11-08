@@ -14,6 +14,7 @@ export type SignUiState =
   | 'STARTED_WITH_REDIRECT'
   | 'STARTED'
   | 'FAILED'
+  | 'INITIALIZED'
 
 type WrapperProps = {
   isDesktop: boolean

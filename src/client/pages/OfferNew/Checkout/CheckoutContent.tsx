@@ -1,15 +1,10 @@
 import styled from '@emotion/styled'
 import React from 'react'
-import { useEditQuoteMutation } from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
-import { useUnderwritingLimitsHitReporter } from 'utils/sentry-client'
 import { PriceBreakdown } from '../common/PriceBreakdown'
 import { StartDate } from '../Introduction/Sidebar/StartDate'
 import { OfferData } from '../types'
-import { getQuoteIds } from '../utils'
 import { InsuranceSummary } from './InsuranceSummary'
-import { UserDetailsForm } from './UserDetailsForm'
-import { useSsnError } from './hooks'
 
 const Section = styled.div`
   width: 100%;
@@ -36,31 +31,17 @@ const Heading = styled.h3`
 
 interface Props {
   offerData: OfferData
+  isLoading: boolean
   refetch: () => Promise<void>
-  onEmailUpdate: (onCompletion: Promise<void>) => void
-  onSsnUpdate: (onCompletion: Promise<void>) => void
-  onSubmit: () => void
 }
 
 export const CheckoutContent: React.FC<Props> = ({
   offerData,
-  onEmailUpdate,
-  onSsnUpdate,
+  children,
+  isLoading,
   refetch,
-  onSubmit,
 }) => {
   const textKeys = useTextKeys()
-  const [fakeLoading, setFakeLoading] = React.useState(false)
-  const [reallyLoading, setReallyLoading] = React.useState(false)
-  const [editQuote, editQuoteResult] = useEditQuoteMutation()
-  const { ssnBackendError } = useSsnError(editQuoteResult)
-  const quoteIds = getQuoteIds(offerData)
-
-  useUnderwritingLimitsHitReporter(
-    editQuoteResult.data?.editQuote?.__typename === 'UnderwritingLimitsHit' &&
-      editQuoteResult.data.editQuote.limits.map((limit) => limit.code),
-    quoteIds,
-  )
 
   return (
     <>
@@ -69,51 +50,10 @@ export const CheckoutContent: React.FC<Props> = ({
         <PriceBreakdown
           offerData={offerData}
           showTotal={true}
-          isLoading={fakeLoading || reallyLoading}
+          isLoading={isLoading}
         />
-        <UserDetailsForm
-          onSubmit={onSubmit}
-          email={offerData.person.email ?? ''}
-          onEmailChange={(email) => {
-            const onCompletion = new Promise<void>((resolve, reject) => {
-              Promise.all(
-                quoteIds.map((quoteId) =>
-                  editQuote({ variables: { input: { id: quoteId, email } } }),
-                ),
-              )
-                .then(() => refetch())
-                .then(() => resolve())
-                .catch((e) => {
-                  reject(e)
-                  throw e
-                })
-            })
-            onEmailUpdate(onCompletion)
-          }}
-          ssn={offerData.person.ssn ?? ''}
-          ssnBackendError={ssnBackendError}
-          onSsnChange={(ssn) => {
-            const onCompletion = new Promise<void>((resolve, reject) => {
-              setFakeLoading(true)
-              setReallyLoading(true)
-              window.setTimeout(() => setFakeLoading(false), 1000)
-              Promise.all(
-                quoteIds.map((quoteId) =>
-                  editQuote({ variables: { input: { id: quoteId, ssn } } }),
-                ),
-              )
-                .then(() => refetch())
-                .then(() => setReallyLoading(false))
-                .then(() => resolve())
-                .catch((e) => {
-                  setReallyLoading(false)
-                  reject(e)
-                  throw e
-                })
-            })
-            onSsnUpdate(onCompletion)
-          }}
-        />
+
+        {children}
 
         <StartDateWrapper>
           <StartDateLabel>
