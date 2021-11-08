@@ -31,7 +31,7 @@ export const productsData: ProductsData = {
       id: 'swedishNew',
       linkSlug: '/new',
       headline: 'STARTPAGE_UNINSURED_HEADLINE',
-      paragraph: 'STARTPAGE_UNINSURED_BODY_WITHOUT_ACCIDENT',
+      paragraph: 'STARTPAGE_UNINSURED_BODY',
     },
     {
       id: 'swedishSwitch',
