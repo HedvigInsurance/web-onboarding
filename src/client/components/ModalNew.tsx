@@ -151,7 +151,7 @@ export const Modal: React.FC<ModalProps> = ({
         }}
       >
         <ModalInnerContainer>{children}</ModalInnerContainer>
-        <CloseButton onClose={onClose} />
+        <CloseButton onClick={onClose} />
       </ModalContainer>
     </Wrapper>
   )

@@ -110,7 +110,7 @@ export const DiscountCodeModal: React.FC<Props> = ({
       >
         <Title>{textKeys.SIDEBAR_ADD_DISCOUNT_HEADLINE()}</Title>
         <Paragraph>{textKeys.SIDEBAR_ADD_DISCOUNT_BODY()}</Paragraph>
-        <CloseButton onClose={close} />
+        <CloseButton onClick={close} />
         <Formik
           validateOnBlur
           validationSchema={discountSchema}

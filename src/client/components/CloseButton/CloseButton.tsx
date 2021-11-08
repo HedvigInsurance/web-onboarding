@@ -31,13 +31,11 @@ const Button = styled.button`
   }
 `
 
-type Props = {
-  onClose: () => void
-}
+type Props = React.HTMLProps<HTMLButtonElement>
 
-export const CloseButton = ({ onClose }: Props) => {
+export const CloseButton = ({ onClick }: Props) => {
   return (
-    <Button onClick={onClose}>
+    <Button onClick={onClick}>
       <Cross />
     </Button>
   )
