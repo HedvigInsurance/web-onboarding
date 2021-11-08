@@ -14,6 +14,7 @@ import {
   getContractType,
   getInitialOfferFromSessionStorage,
   getTrackableContractCategory,
+  setInitialOfferToSessionStorage,
   TrackableContractType,
 } from './tracking'
 
@@ -104,9 +105,14 @@ export const trackOfferGTM = (
 ) => {
   const contractType = getContractType(offerData)
   const contractCategory = getTrackableContractCategory(contractType)
-  const initialOffer = getInitialOfferFromSessionStorage(contractCategory)
   const grossPrice = Math.round(Number(offerData.cost.monthlyGross.amount))
   const netPrice = Math.round(Number(offerData.cost.monthlyNet.amount))
+
+  let initialOffer = getInitialOfferFromSessionStorage()
+  if (!initialOffer) {
+    setInitialOfferToSessionStorage(contractCategory)
+    initialOffer = contractCategory
+  }
   try {
     pushToGTMDataLayer({
       event: eventName,

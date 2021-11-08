@@ -151,17 +151,14 @@ export const getTrackableContractCategory = (
   }
 }
 
-export const getInitialOfferFromSessionStorage = (
+export const getInitialOfferFromSessionStorage = () => {
+  return sessionStorage.getItem('initial_offer')
+}
+
+export const setInitialOfferToSessionStorage = (
   contractCategory: TrackableContractCategory,
 ) => {
-  const initialtOffer = sessionStorage.getItem('initial_offer')
-
-  if (initialtOffer) {
-    return initialtOffer
-  }
-
   sessionStorage.setItem('initial_offer', contractCategory)
-  return contractCategory
 }
 
 export enum ApplicationSpecificEvents {
