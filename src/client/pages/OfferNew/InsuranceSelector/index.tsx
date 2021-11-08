@@ -24,6 +24,8 @@ export const InsuranceSelector: React.FC<Props> = ({
   onChange,
 }) => {
   const textKeys = useTextKeys()
+  const localizedPerMonth = textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL()
+
   const variantMap = useMemo(
     () =>
       variants.reduce<Record<string, QuoteBundleVariant>>(
@@ -46,10 +48,12 @@ export const InsuranceSelector: React.FC<Props> = ({
       id,
       label: tag ?? undefined,
       name: displayName,
-      price: `${Math.round(Number(amount))} ${currency}`,
+      price: `${Math.round(Number(amount))} ${currency}${localizedPerMonth}`,
       grossPrice:
         amount !== grossAmount
-          ? `${Math.round(Number(grossAmount))} ${grossCurrency}`
+          ? `${Math.round(
+              Number(grossAmount),
+            )} ${grossCurrency}${localizedPerMonth}`
           : undefined,
       selected: selectedQuoteBundle && id === selectedQuoteBundle.id,
     }
