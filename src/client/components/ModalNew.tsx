@@ -3,7 +3,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { motion } from 'framer-motion'
 import React from 'react'
 
-import useLockBodyScroll from '../utils/hooks/useLockBodyScroll'
+import { useLockBodyScroll } from '../utils/hooks/useLockBodyScroll'
 
 import { Cross } from './icons/Cross'
 export interface ModalProps {

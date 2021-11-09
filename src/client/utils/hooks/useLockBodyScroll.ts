@@ -2,7 +2,7 @@ import { useLayoutEffect } from 'react'
 
 type UseLockBodyScrollConfig = { lock: boolean }
 
-function useLockBodyScroll({ lock }: UseLockBodyScrollConfig = { lock: true }) {
+export const useLockBodyScroll = ({ lock = true }: UseLockBodyScrollConfig) => {
   useLayoutEffect(() => {
     const previousOverflowStyle = window.getComputedStyle(document.body)
       .overflow
@@ -16,5 +16,3 @@ function useLockBodyScroll({ lock }: UseLockBodyScrollConfig = { lock: true }) {
     }
   }, [lock])
 }
-
-export default useLockBodyScroll
