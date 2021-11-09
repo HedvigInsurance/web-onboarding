@@ -61,7 +61,6 @@
   "SIDEBAR_ADD_DISCOUNT_CELL_PLACEHOLDER": "Koden din",
   "SIDEBAR_STARTDATE_CELL_VALUE_NEW": "I dag",
   "SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER": "Når den gamle forsikringen din utløper",
-  "CHECKOUT_EMAIL_LABEL": "E-postadresse",
   "CHECKOUT_EMAIL_PLACEHOLDER": "din.epost@her.no",
   "CHECKOUT_SUMMARY_HEADLINE": "Sammendrag",
   "CHECKOUT_SIGN_BUTTON_TEXT": "Signer med BankID",
@@ -305,5 +304,8 @@
   "OFFER_APP_PROMOTION_HEADING": "En forsikrings-app som løser problemene dine",
   "OFFER_APP_PROMOTION_PARAGRAPH": "Hvis du har hatt en ulykke så kan du enkelt rapportere skaden direkte i appen, uansett hvor du er. I noen tilfeller trenger du ikke å vente 5 minutter engang for å få kompensasjon. Vi er tilgjengelige mellom 08-22 på hverdager og mellom 09-18 i helgene. ",
   "WEB_OFFER_DOCUMENTS_SECTION_TITLE": "Viktige dokumenter",
-  "STARTPAGE_UNINSURED_BODY_WITHOUT_ACCIDENT": "Beregn prisen på en ny innboforsikring hos Hedvig"
+  "STARTPAGE_UNINSURED_BODY_WITHOUT_ACCIDENT": "Beregn prisen på en ny innboforsikring hos Hedvig",
+  "CHECKOUT_FIRSTNAME_LABEL": "Fornavn",
+  "CHECKOUT_LASTNAME_LABEL": "Etternavn",
+  "HERO_FIRSTNAME_PLACEHOLDER": "Du"
 }

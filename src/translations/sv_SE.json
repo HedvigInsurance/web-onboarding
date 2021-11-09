@@ -51,7 +51,7 @@
   "STARTPAGE_UNINSURED_BODY": "Få ett prisförslag på hemförsäkring och vår nya kompletterande olycksfallsförsäkring.",
   "STARTPAGE_UNINSURED_BUTTON": "Få ett prisförslag",
   "STARTPAGE_INSURED_HEADLINE": "Jämför din nuvarande hemförsäkring med Hedvig",
-  "STARTPAGE_INSURED_BODY": "Ett byte till Hedvig är det bara ett knapptryck bort. Vi hjälper dig hela vägen.",
+  "STARTPAGE_INSURED_BODY": "Ett byte till Hedvig är bara ett knapptryck bort. Vi hjälper dig hela vägen.",
   "STARTPAGE_INSURED_BUTTON": "Jämför din hemförsäkring",
   "STARTPAGE_PAGE_TITLE": "Få ett prisförslag | Hedvig",
   "SIDEBAR_OLD_PRICE": "{PRICE} kr\/mån",
@@ -61,7 +61,6 @@
   "SIDEBAR_ADD_DISCOUNT_CELL_PLACEHOLDER": "Din kod",
   "SIDEBAR_STARTDATE_CELL_VALUE_NEW": "Idag",
   "SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER": "När din gamla löper ut",
-  "CHECKOUT_EMAIL_LABEL": "E-mail",
   "CHECKOUT_EMAIL_PLACEHOLDER": "din.epost@här.se",
   "CHECKOUT_SUMMARY_HEADLINE": "Sammanfattning",
   "CHECKOUT_SIGN_BUTTON_TEXT": "Signera med mobilt BankID",
@@ -305,5 +304,8 @@
   "OFFER_APP_PROMOTION_HEADING": "Sköt allt i Hedvig-appen",
   "OFFER_APP_PROMOTION_PARAGRAPH": "Anmäl skador, hantera dina försäkringar eller ställ frågor. Med appen får du full kontroll över dina försäkringar och hjälp på direkten om något hänt.",
   "WEB_OFFER_DOCUMENTS_SECTION_TITLE": "Viktiga dokument",
-  "STARTPAGE_UNINSURED_BODY_WITHOUT_ACCIDENT": "Få ett prisförslag på hemförsäkring."
+  "STARTPAGE_UNINSURED_BODY_WITHOUT_ACCIDENT": "Få ett prisförslag på hemförsäkring.",
+  "CHECKOUT_FIRSTNAME_LABEL": "Förnamn",
+  "CHECKOUT_LASTNAME_LABEL": "Efternamn",
+  "HERO_FIRSTNAME_PLACEHOLDER": "Du"
 }

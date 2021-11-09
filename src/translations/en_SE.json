@@ -61,7 +61,6 @@
   "SIDEBAR_ADD_DISCOUNT_CELL_PLACEHOLDER": "Your code",
   "SIDEBAR_STARTDATE_CELL_VALUE_NEW": "Today",
   "SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER": "When your old one expires",
-  "CHECKOUT_EMAIL_LABEL": "Email",
   "CHECKOUT_EMAIL_PLACEHOLDER": "your.email@here.com",
   "CHECKOUT_SUMMARY_HEADLINE": "Summary",
   "CHECKOUT_SIGN_BUTTON_TEXT": "Sign with mobile BankID",
@@ -216,7 +215,7 @@
   "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_RENT": "",
   "FOREVER_CODE_ERROR": "This code doesn't exist.",
   "STARTPAGE_HEADLINE": "Get a price quote",
-  "STARTPAGE_PREAMBLE": "There´s a reason tens of thousands people have Hedvig. See for yourself.",
+  "STARTPAGE_PREAMBLE": "There´s a reason tens of thousands of people have Hedvig. See for yourself.",
   "STARTPAGE_USP_1": "100% digital insurance",
   "STARTPAGE_USP_2": "Make a claim directly in the app",
   "STARTPAGE_USP_3": "Fast service",
@@ -305,5 +304,8 @@
   "OFFER_APP_PROMOTION_HEADING": "Take care of everything in the Hedvig app",
   "OFFER_APP_PROMOTION_PARAGRAPH": "Make a claim, manage your insurances or ask questions. With the app you’ll have full control over your insurances and get instant help if something has happened.",
   "WEB_OFFER_DOCUMENTS_SECTION_TITLE": "Important documents",
-  "STARTPAGE_UNINSURED_BODY_WITHOUT_ACCIDENT": "Get a price quote on our home insurance."
+  "STARTPAGE_UNINSURED_BODY_WITHOUT_ACCIDENT": "Get a price quote on our home insurance.",
+  "CHECKOUT_FIRSTNAME_LABEL": "First name",
+  "CHECKOUT_LASTNAME_LABEL": "Last name",
+  "HERO_FIRSTNAME_PLACEHOLDER": "You"
 }

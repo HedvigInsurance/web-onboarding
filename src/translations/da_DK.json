@@ -61,7 +61,6 @@
   "SIDEBAR_ADD_DISCOUNT_CELL_PLACEHOLDER": "Din kode",
   "SIDEBAR_STARTDATE_CELL_VALUE_NEW": "I dag",
   "SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER": "Når din gamle udløber",
-  "CHECKOUT_EMAIL_LABEL": "E-mail",
   "CHECKOUT_EMAIL_PLACEHOLDER": "din.email@her.dk",
   "CHECKOUT_SUMMARY_HEADLINE": "Opsummering",
   "CHECKOUT_SIGN_BUTTON_TEXT": "Underskriv med NemID",
@@ -305,5 +304,8 @@
   "OFFER_APP_PROMOTION_HEADING": "En forsikringsapp, der løser dine problemer",
   "OFFER_APP_PROMOTION_PARAGRAPH": "",
   "WEB_OFFER_DOCUMENTS_SECTION_TITLE": "Vigtige dokumenter",
-  "STARTPAGE_UNINSURED_BODY_WITHOUT_ACCIDENT": "Beregn prisen på en ny indboforsikring hos Hedvig"
+  "STARTPAGE_UNINSURED_BODY_WITHOUT_ACCIDENT": "Beregn prisen på en ny indboforsikring hos Hedvig",
+  "CHECKOUT_FIRSTNAME_LABEL": "Fornavn",
+  "CHECKOUT_LASTNAME_LABEL": "Efternavn",
+  "HERO_FIRSTNAME_PLACEHOLDER": "Dig"
 }

@@ -161,13 +161,10 @@ export const UserDetailsForm: React.FC<Props> = ({
         <>
           <RawInputField
             label={textKeys.CHECKOUT_FIRSTNAME_LABEL()}
-            placeholder={textKeys.CHECKOUT_FIRSTNAME_PLACEHOLDER()}
             name="firstname"
             id="firstname"
             value={firstName}
-            errors={
-              hasFirstNameError ? textKeys.SIGN_FIRSTNAME_CHECK() : undefined
-            }
+            showErrorIcon={hasFirstNameError}
             onChange={(e: React.ChangeEvent<any>) => {
               onFirstNameChange(e.target.value)
               validateFirstName(e.target.value)
@@ -176,13 +173,10 @@ export const UserDetailsForm: React.FC<Props> = ({
 
           <RawInputField
             label={textKeys.CHECKOUT_LASTNAME_LABEL()}
-            placeholder={textKeys.CHECKOUT_LASTNAME_PLACEHOLDER()}
             name="lastName"
             id="lastName"
             value={lastName}
-            errors={
-              hasLastNameError ? textKeys.SIGN_LASTNAME_CHECK() : undefined
-            }
+            showErrorIcon={hasLastNameError}
             onChange={(e: React.ChangeEvent<any>) => {
               onLastNameChange(e.target.value)
               validateLastName(e.target.value)
