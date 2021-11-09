@@ -2,8 +2,10 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { motion } from 'framer-motion'
 import React from 'react'
-import { Cross } from './icons/Cross'
 
+import useLockBodyScroll from '../utils/hooks/useLockBodyScroll'
+
+import { Cross } from './icons/Cross'
 export interface ModalProps {
   isVisible: boolean
   dynamicHeight?: boolean
@@ -13,23 +15,13 @@ export interface ModalProps {
 
 const Wrapper = styled(motion.div)`
   position: fixed;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
+  inset: 0;
   z-index: 3000;
 `
 
 const Background = styled(motion.div)`
   position: fixed;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
+  inset: 0;
   background-color: rgba(25, 25, 25, 0.4);
 `
 
@@ -39,24 +31,23 @@ interface ModalContainerProps {
 
 const ModalContainer = styled(motion.div)<ModalContainerProps>`
   position: relative;
+  left: 50%;
+  top: 50%;
   width: 100%;
   max-width: 56rem;
   max-height: 100vh;
+
   ${(props) =>
     !props.dynamicHeight &&
     `
-  height: 100%;
   min-height: 25rem;
   max-height: 56rem;`}
   background: ${colorsV3.white};
-  border-radius: 9px;
+  border-radius: 8px;
   position: absolute;
-  left: 50%;
-  top: 50%;
   transform: translateX(-50%) translateY(-50%);
   box-shadow: 0 0 14px rgba(0, 0, 0, 0.06);
-  box-sizing: border-box;
-  overflow-x: scroll;
+  overflow-y: auto;
 
   @media (max-height: 900px) {
     max-height: calc(100vh - 2rem);
@@ -115,14 +106,7 @@ export const Modal: React.FC<ModalProps> = ({
   onClose,
   children,
 }) => {
-  React.useEffect(() => {
-    if (isVisible) {
-      document.body.style.overflow = 'hidden'
-    }
-    return () => {
-      document.body.style.overflow = 'visible'
-    }
-  }, [isVisible])
+  useLockBodyScroll({ lock: isVisible })
 
   return (
     <Wrapper
