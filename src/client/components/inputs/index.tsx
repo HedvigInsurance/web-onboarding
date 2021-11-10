@@ -55,7 +55,7 @@ export const inputVariants: Record<string, InputVariant> = {
     background: colorsV3.white,
     border: colorsV3.gray500,
     borderFocus: colorsV3.gray900,
-    error: colorsV3.red700,
+    error: colorsV3.red600,
   },
   dark: {
     color: colorsV3.gray100,

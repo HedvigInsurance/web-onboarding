@@ -236,37 +236,11 @@ export const reactPageRoutes: ReactPageRoute[] = [
               case 'new':
                 return {
                   baseUrl: `/${locale}/new-member/new`,
-                  name:
-                    locale === 'se'
-                      ? EmbarkStory.SwedenNeederSwedish
-                      : EmbarkStory.SwedenNeederEnglish,
+                  name: EmbarkStory.SwedenNeeder,
                 }
               case 'switch':
                 return {
                   baseUrl: `/${locale}/new-member/switch`,
-                  name:
-                    locale === 'se'
-                      ? EmbarkStory.SwedenSwitcherSwedish
-                      : EmbarkStory.SwedenSwitcherEnglish,
-                }
-              case 'home-accident-needer':
-                if (window.hedvigClientConfig.appEnvironment === 'production') {
-                  return {
-                    redirect: `/${locale}/new-member`,
-                  }
-                }
-                return {
-                  baseUrl: `/${locale}/new-member/home-accident-needer`,
-                  name: EmbarkStory.SwedenNeeder,
-                }
-              case 'home-switcher':
-                if (window.hedvigClientConfig.appEnvironment === 'production') {
-                  return {
-                    redirect: `/${locale}/new-member`,
-                  }
-                }
-                return {
-                  baseUrl: `/${locale}/new-member/home-switcher`,
                   name: EmbarkStory.SwedenSwitcherWithoutAccident,
                 }
               case 'home-accident-switcher':

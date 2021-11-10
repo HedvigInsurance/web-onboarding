@@ -3,6 +3,7 @@ import { SegmentAnalyticsJs, setupTrackers } from 'quepasa'
 import React from 'react'
 import {
   SignState,
+  TypeOfContract,
   useMemberQuery,
   useRedeemedCampaignsQuery,
 } from 'data/graphql'
@@ -15,8 +16,11 @@ import {
   isDanishTravelBundle,
   isStudentOffer,
   getMainQuote,
+  isSwedishHouse,
+  isSwedishApartment,
+  isSwedishBRF,
 } from 'pages/OfferNew/utils'
-import { trackOfferGTM } from './gtm'
+import { trackOfferGTM, EventName } from './gtm'
 import { adtraction } from './adtraction'
 import { trackStudentkortet } from './studentkortet'
 
@@ -44,6 +48,14 @@ export const getUtmParamsFromCookie = (): UtmParams | undefined => {
   }
 }
 
+export enum SeBundleTypes {
+  SeHomeAccidentBundleStudentBrf = 'SE_ACCIDENT_BUNDLE_STUDENT_BRF',
+  SeHomeAccidentBundleBrf = 'SE_ACCIDENT_BUNDLE_BRF',
+  SeHomeAccidentBundleStudentRent = 'SE_ACCIDENT_BUNDLE_STUDENT_RENT',
+  SeHomeAccidentBundleRent = 'SE_ACCIDENT_BUNDLE_RENT',
+  SeHomeAccidentBundleHouse = 'SE_ACCIDENT_BUNDLE_HOUSE',
+}
+
 export enum NoComboTypes {
   NoCombo = 'NO_COMBO',
   NoComboYouth = 'NO_COMBO_YOUTH',
@@ -56,8 +68,31 @@ export enum DkBundleTypes {
   DkTravelBundleStudent = 'DK_TRAVEL_BUNDLE_STUDENT',
 }
 
+export type TrackableContractType =
+  | SeBundleTypes
+  | NoComboTypes
+  | DkBundleTypes
+  | TypeOfContract
+
 export const getContractType = (offerData: OfferData) => {
   if (isBundle(offerData)) {
+    const { quoteDetails: homeQuoteDetails } = getMainQuote(offerData)
+
+    if (isSwedishHouse(homeQuoteDetails)) {
+      return SeBundleTypes.SeHomeAccidentBundleHouse
+    }
+
+    if (isSwedishApartment(homeQuoteDetails)) {
+      if (isSwedishBRF(homeQuoteDetails)) {
+        return isStudentOffer(offerData)
+          ? SeBundleTypes.SeHomeAccidentBundleStudentBrf
+          : SeBundleTypes.SeHomeAccidentBundleBrf
+      } else {
+        return isStudentOffer(offerData)
+          ? SeBundleTypes.SeHomeAccidentBundleStudentRent
+          : SeBundleTypes.SeHomeAccidentBundleRent
+      }
+    }
     if (isNorwegian(offerData)) {
       return isYouth(offerData)
         ? NoComboTypes.NoComboYouth
@@ -77,6 +112,53 @@ export const getContractType = (offerData: OfferData) => {
     }
   }
   return getMainQuote(offerData).contractType
+}
+
+export enum TrackableContractCategory {
+  Home = 'home',
+  Travel = 'travel',
+  HomeTravel = 'home_travel',
+  HomeAccident = 'home_accident',
+  HomeAccidentTravel = 'home_accident_travel',
+}
+
+export const getTrackableContractCategory = (
+  contractType: TrackableContractType,
+) => {
+  switch (contractType) {
+    case SeBundleTypes.SeHomeAccidentBundleBrf:
+    case SeBundleTypes.SeHomeAccidentBundleRent:
+    case SeBundleTypes.SeHomeAccidentBundleHouse:
+    case SeBundleTypes.SeHomeAccidentBundleStudentBrf:
+    case SeBundleTypes.SeHomeAccidentBundleStudentRent:
+    case DkBundleTypes.DkAccidentBundle:
+    case DkBundleTypes.DkAccidentBundleStudent:
+      return TrackableContractCategory.HomeAccident
+
+    case NoComboTypes.NoCombo:
+    case NoComboTypes.NoComboYouth:
+      return TrackableContractCategory.HomeTravel
+
+    case DkBundleTypes.DkTravelBundle:
+    case DkBundleTypes.DkTravelBundleStudent:
+      return TrackableContractCategory.HomeAccidentTravel
+
+    case TypeOfContract.NoTravel:
+    case TypeOfContract.NoTravelYouth:
+      return TrackableContractCategory.Travel
+    default:
+      return TrackableContractCategory.Home
+  }
+}
+
+export const getInitialOfferFromSessionStorage = () => {
+  return sessionStorage.getItem('initial_offer')
+}
+
+export const setInitialOfferToSessionStorage = (
+  contractCategory: TrackableContractCategory,
+) => {
+  sessionStorage.setItem('initial_offer', contractCategory)
 }
 
 export enum ApplicationSpecificEvents {
@@ -136,7 +218,7 @@ export const useTrack = ({ offerData, signState }: TrackProps) => {
     }
 
     trackOfferGTM(
-      'signed_customer',
+      EventName.SignedCustomer,
       { ...offerData, memberId: memberId || '' },
       redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction',
     )

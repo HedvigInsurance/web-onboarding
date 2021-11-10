@@ -1,6 +1,6 @@
 {
   "engines": {
-    "node": "12.19.0",
+    "node": "14.17",
     "yarn": "^1.22.10"
   },
   "scripts": {
@@ -110,8 +110,8 @@
     "@babel/polyfill": "^7.10.4",
     "@emotion/core": "^10.0.22",
     "@emotion/styled": "^10.0.23",
-    "@hedviginsurance/brand": "^4.0.7",
-    "@hedviginsurance/embark": "^2.2.0",
+    "@hedviginsurance/brand": "^4.1.0",
+    "@hedviginsurance/embark": "^2.2.3",
     "@segment/snippet": "^4.4.0",
     "@sentry/node": "^6.10.0",
     "@sentry/react": "^6.10.0",

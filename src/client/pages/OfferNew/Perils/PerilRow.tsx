@@ -7,15 +7,6 @@ import { PerilCollection } from './PerilCollection'
 import { AmountCollection } from './AmountCollection'
 import { DocumentCollection } from './DocumentCollection'
 
-const InsuranceTypeHeadline = styled.div`
-  padding-bottom: 1rem;
-  font-size: 1.375rem;
-
-  ${LARGE_SCREEN_MEDIA_QUERY} {
-    font-size: 1.5rem;
-  }
-`
-
 const Spacer = styled.div`
   height: 2rem;
 
@@ -34,7 +25,6 @@ export const PerilRow: React.FC<Props> = ({ offerQuote }) => {
 
   return (
     <>
-      <InsuranceTypeHeadline>{offerQuote.displayName}</InsuranceTypeHeadline>
       <PerilCollection
         perils={offerQuote.perils}
         setCurrentPeril={setCurrentPeril}

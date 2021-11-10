@@ -15,6 +15,11 @@ import { Page } from 'components/utils/Page'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useTextKeys } from 'utils/textKeys'
 import { CheckmarkCircle } from 'components/icons/CheckmarkCircle'
+import {
+  LARGE_SCREEN_MEDIA_QUERY,
+  MEDIUM_SCREEN_MEDIA_QUERY,
+  MEDIUM_SMALL_SCREEN_MEDIA_QUERY,
+} from 'utils/mediaQueries'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import { alternateLinksData, productsData } from './landingPageData'
 import { Card, CardHeadline, CardParagraph } from './components/Card'
@@ -32,11 +37,11 @@ const Wrapper = styled.div`
   margin: 0 auto;
   padding: 1rem;
 
-  @media (min-width: 600px) {
+  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
     padding-top: 6vh;
   }
 
-  @media (min-height: 900px) and (min-width: 1020px) {
+  ${LARGE_SCREEN_MEDIA_QUERY} {
     padding-top: calc(25vh - 10.5rem);
   }
 `
@@ -48,16 +53,16 @@ const UspContainer = styled.div`
   padding-right: 0.5rem;
   color: ${colorsV3.gray100};
 
-  @media (min-height: 620px) {
+  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
     margin-bottom: 2rem;
   }
 
-  @media (min-width: 800px) {
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
     margin-bottom: 2rem;
     text-align: center;
   }
 
-  @media (min-width: 1020px) {
+  ${LARGE_SCREEN_MEDIA_QUERY} {
     margin-bottom: 4rem;
   }
 `
@@ -67,11 +72,11 @@ const Headline = styled.h1`
   font-size: 2rem;
   letter-spacing: -0.02em;
 
-  @media (min-width: 800px) {
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
     margin-bottom: 0.75rem;
   }
 
-  @media (min-width: 1020px) {
+  ${LARGE_SCREEN_MEDIA_QUERY} {
     font-size: 3rem;
     line-height: 3.5rem;
   }
@@ -80,16 +85,14 @@ const Headline = styled.h1`
 const Preamble = styled.p`
   margin-top: 0;
   margin-bottom: 1.25rem;
-  line-height: 1.5;
+  font-size: 1.25rem;
+  line-height: 1.4;
 
-  @media (min-width: 800px) {
-    margin-bottom: 2rem;
-    font-size: 1.125rem;
-  }
-
-  @media (min-width: 1020px) {
+  ${LARGE_SCREEN_MEDIA_QUERY} {
     margin-bottom: 2rem;
     font-size: 1.5rem;
+    line-height: 1.33;
+    letter-spacing: -2%;
   }
 `
 
@@ -100,7 +103,7 @@ const UspList = styled.ul<{ isVisibleInMobile?: boolean }>`
   list-style: none;
   text-align: left;
 
-  @media (min-width: 800px) {
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
     display: inline-flex;
   }
 `
@@ -112,10 +115,11 @@ const UspItem = styled.li`
 
   span {
     margin-left: 1rem;
+    font-size: 1rem;
     line-height: 1.5;
   }
 
-  @media (min-width: 800px) {
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
     display: inline-flex;
 
     span {
@@ -123,7 +127,7 @@ const UspItem = styled.li`
     }
   }
 
-  @media (min-width: 1020px) {
+  ${LARGE_SCREEN_MEDIA_QUERY} {
     span {
       margin-right: 3rem;
     }
@@ -134,7 +138,7 @@ const CardContainer = styled.div`
   position: relative;
   margin: 0;
 
-  @media (min-width: 850px) {
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
     display: flex;
     justify-content: center;
 
@@ -143,7 +147,7 @@ const CardContainer = styled.div`
     }
   }
 
-  @media (min-width: 1020px) {
+  ${LARGE_SCREEN_MEDIA_QUERY} {
     width: 100%;
 
     > * + * {
