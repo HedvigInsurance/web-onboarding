@@ -102,6 +102,7 @@ const Value = styled.div`
   font-size: 1rem;
   line-height: 1.5rem;
   color: ${colorsV3.gray900};
+  text-transform: capitalize;
 `
 const LoadingDotsWrapper = styled.div`
   width: 100%;
