@@ -39,8 +39,10 @@ const DateFormsWrapper = styled.div`
   margin-bottom: 1.5rem;
 `
 
-const RowButtonWrapper = styled.div`
-  width: 100%;
+const RowButtonWrapper = styled.div<{
+  isSplit: boolean
+}>`
+  width: ${({ isSplit }) => (isSplit ? `50%` : `100%`)};
   flex: 1;
 `
 
@@ -91,6 +93,9 @@ const StartDateRowLabel = styled.div`
   color: ${colorsV3.gray500};
   font-size: 0.75rem;
   padding-bottom: 0.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `
 
 const Value = styled.div`
@@ -296,7 +301,7 @@ const DateForm: React.FC<{
   const hasStartDate = Boolean(getDefaultDateValue(quote))
 
   return (
-    <RowButtonWrapper>
+    <RowButtonWrapper isSplit={isSplit}>
       {isSplit && <StartDateRowLabel>{quote.displayName}</StartDateRowLabel>}
       <RowButton
         datePickerOpen={datePickerOpen}
