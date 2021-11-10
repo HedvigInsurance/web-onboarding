@@ -13,16 +13,17 @@ const TabContainer = styled.button<{ selected?: boolean }>`
   font-size: 1.25rem;
   line-height: 1.4;
   padding: 0 1rem 0.25rem 0;
-  white-space: nowrap;
   position: relative;
+  flex-shrink: 0;
+
+  &:hover {
+    color: ${colorsV3.gray900};
+  }
+
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     font-size: 1.5rem;
     line-height: 1.33;
     padding-right: 2.5rem;
-  }
-
-  &:hover {
-    color: ${colorsV3.gray900};
   }
 `
 

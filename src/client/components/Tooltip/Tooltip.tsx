@@ -13,7 +13,6 @@ export type TooltipProps = {
 
 const Wrapper = styled.div`
   position: relative;
-  z-index: 1000;
 `
 
 const TooltipIcon = styled(motion.div)`
@@ -33,6 +32,7 @@ const TooltipContainer = styled.div<{ visible: boolean }>`
   visibility: ${(props) => (props.visible ? 'visible' : 'hidden')};
 
   position: absolute;
+  z-index: 1000;
   top: 0;
   right: 100%;
   transform: translateY(calc(-50% + ${ICON_SIZE} / 2))

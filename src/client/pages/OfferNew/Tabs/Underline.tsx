@@ -16,10 +16,7 @@ export const UnderlineComponent: React.FC = () => {
         position: 'absolute',
         bottom: '0px',
         width: isDesktop ? 'calc(100% - 2.5rem)' : 'calc(100% - 1rem)',
-      }}
-      transition={{
-        duration: 0.5,
-        ease: [0.4, 0, 0.2, 1],
+        zIndex: 1,
       }}
     />
   )
