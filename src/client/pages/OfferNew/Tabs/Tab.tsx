@@ -16,6 +16,7 @@ const TabContainer = styled.button<{ selected?: boolean }>`
   position: relative;
   flex-shrink: 0;
   overflow-wrap: anywhere;
+  margin: 0;
 
   &:hover {
     color: ${colorsV3.gray900};

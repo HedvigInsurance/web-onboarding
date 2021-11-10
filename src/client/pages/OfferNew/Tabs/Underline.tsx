@@ -14,7 +14,7 @@ export const UnderlineComponent: React.FC = () => {
         height: '2px',
         backgroundColor: colorsV3.gray900,
         position: 'absolute',
-        bottom: '0px',
+        bottom: 0,
         width: isDesktop ? 'calc(100% - 2.5rem)' : 'calc(100% - 1rem)',
         zIndex: 1,
       }}
