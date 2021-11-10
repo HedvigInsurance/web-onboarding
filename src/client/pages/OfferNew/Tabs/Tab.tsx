@@ -12,7 +12,7 @@ const TabContainer = styled.button<{ selected?: boolean }>`
   display: flex;
   font-size: 1.25rem;
   line-height: 1.4;
-  padding: 0 1rem 0.25rem 0;
+  padding: 0 1rem calc(0.25rem + 2px) 0;
   position: relative;
   flex-shrink: 0;
   overflow-wrap: anywhere;
