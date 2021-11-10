@@ -18,7 +18,7 @@ interface FeatureConfig {
 const Config: readonly FeatureConfig[] = [
   {
     name: Features.OFFER_PAGE_INSURANCE_TOGGLE,
-    envs: ['staging'],
+    envs: ['staging', 'production'],
     markets: [Market.Se],
   },
   {
