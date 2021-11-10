@@ -135,7 +135,9 @@ const DateInputModalWrapper = styled.div<{
   border-radius: 8px;
 `
 
-const StyledDateInput = styled(DateInputForm)<{ modal: boolean }>`
+const StyledDateInput = styled(DateInputForm)<{
+  modal: boolean
+}>`
   ${(props) =>
     props.modal &&
     `
@@ -316,56 +318,57 @@ const DateForm: React.FC<{
       </RowButton>
       {modal ? (
         <DateInputModalWrapper isOpen={datePickerOpen}>
-          <DateInput
-            datePickerOpen={datePickerOpen}
-            setDatePickerOpen={setDatePickerOpen}
-            dateValue={dateValue}
+          <StyledDateInput
+            open={datePickerOpen}
+            setOpen={setDatePickerOpen}
+            date={dateValue || new Date()}
             setDate={setDate}
-            quote={quote}
-            modal={modal}
+            hasCurrentInsurer={hasCurrentInsurer(quote)}
+            modal={Boolean(modal)}
           />
         </DateInputModalWrapper>
       ) : (
-        <DateInput
-          datePickerOpen={datePickerOpen}
-          setDatePickerOpen={setDatePickerOpen}
-          dateValue={dateValue}
+        <StyledDateInput
+          open={datePickerOpen}
+          setOpen={setDatePickerOpen}
+          date={dateValue || new Date()}
           setDate={setDate}
-          quote={quote}
+          hasCurrentInsurer={hasCurrentInsurer(quote)}
+          modal={Boolean(modal)}
         />
       )}
     </RowButtonWrapper>
   )
 }
 
-type DateInputProps = {
-  datePickerOpen: boolean
-  setDatePickerOpen: (isOpen: boolean) => void
-  dateValue: Date | null
-  setDate: (date: Date | null) => void
-  quote: OfferQuote
-  modal?: boolean
-}
+// type DateInputProps = {
+//   datePickerOpen: boolean
+//   setDatePickerOpen: (isOpen: boolean) => void
+//   dateValue: Date | null
+//   setDate: (date: Date | null) => void
+//   quote: OfferQuote
+//   modal?: boolean
+// }
 
-const DateInput: React.FC<DateInputProps> = ({
-  datePickerOpen,
-  setDatePickerOpen,
-  dateValue,
-  setDate,
-  quote,
-  modal,
-}) => {
-  return (
-    <StyledDateInput
-      open={datePickerOpen}
-      setOpen={setDatePickerOpen}
-      date={dateValue || new Date()}
-      setDate={setDate}
-      hasCurrentInsurer={hasCurrentInsurer(quote)}
-      modal={Boolean(modal)}
-    />
-  )
-}
+// const DateInput: React.FC<DateInputProps> = ({
+//   datePickerOpen,
+//   setDatePickerOpen,
+//   dateValue,
+//   setDate,
+//   quote,
+//   modal,
+// }) => {
+//   return (
+//     <StyledDateInput
+//       open={datePickerOpen}
+//       setOpen={setDatePickerOpen}
+//       date={dateValue || new Date()}
+//       setDate={setDate}
+//       hasCurrentInsurer={hasCurrentInsurer(quote)}
+//       modal={Boolean(modal)}
+//     />
+//   )
+// }
 
 export const StartDate: React.FC<Props> = ({
   offerData,

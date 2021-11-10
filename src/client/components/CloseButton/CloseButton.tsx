@@ -16,7 +16,7 @@ const Button = styled.button`
   border-radius: 50%;
   border: none;
   cursor: pointer;
-  background: ${colorsV3.white};
+  background-color: ${colorsV3.white};
 
   :focus {
     outline: none;
