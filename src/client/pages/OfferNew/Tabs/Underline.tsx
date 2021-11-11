@@ -4,6 +4,8 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { useMediaQuery } from 'react-responsive'
 import { BREAKPOINTS } from 'utils/mediaQueries'
 
+export const UNDERLINE_HEIGHT = '2px'
+
 export const UnderlineComponent: React.FC = () => {
   const isDesktop = useMediaQuery({ minWidth: BREAKPOINTS.mediumScreen })
 
@@ -11,7 +13,7 @@ export const UnderlineComponent: React.FC = () => {
     <motion.div
       layoutId="underline"
       style={{
-        height: '2px',
+        height: UNDERLINE_HEIGHT,
         backgroundColor: colorsV3.gray900,
         position: 'absolute',
         bottom: 0,

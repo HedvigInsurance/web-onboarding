@@ -2,7 +2,7 @@ import React, { createRef } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
-import { UnderlineComponent } from './Underline'
+import { UnderlineComponent, UNDERLINE_HEIGHT } from './Underline'
 
 const TabContainer = styled.button<{ selected?: boolean }>`
   background-color: transparent;
@@ -12,7 +12,7 @@ const TabContainer = styled.button<{ selected?: boolean }>`
   display: flex;
   font-size: 1.25rem;
   line-height: 1.4;
-  padding: 0 1rem calc(0.25rem + 2px) 0;
+  padding: 0 1rem calc(0.25rem + ${UNDERLINE_HEIGHT}) 0;
   position: relative;
   flex-shrink: 0;
   overflow-wrap: anywhere;
