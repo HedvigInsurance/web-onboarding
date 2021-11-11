@@ -13,7 +13,6 @@ const Wrapper = styled('div')`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  width: 100%;
   margin-left: -0.5rem;
 
   @media (min-width: 800px) {

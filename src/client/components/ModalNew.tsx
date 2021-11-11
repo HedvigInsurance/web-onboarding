@@ -2,10 +2,9 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { motion } from 'framer-motion'
 import React from 'react'
-
 import { useLockBodyScroll } from '../utils/hooks/useLockBodyScroll'
+import { CloseButton } from './CloseButton/CloseButton'
 
-import { Cross } from './icons/Cross'
 export interface ModalProps {
   isVisible: boolean
   dynamicHeight?: boolean
@@ -75,36 +74,6 @@ const ModalInnerContainer = styled('div')`
   height: 100%;
 `
 
-const CloseButton = styled('button')`
-  width: 1.5rem;
-  height: 1.5rem;
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  text-align: center;
-  background-color: ${colorsV3.gray500};
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-
-  :focus {
-    outline: none;
-  }
-
-  :hover {
-    background-color: ${colorsV3.gray900};
-  }
-
-  svg {
-    width: 100%;
-    height: 100%;
-    fill: ${colorsV3.white};
-  }
-`
-
 export const Modal: React.FC<ModalProps> = ({
   isVisible,
   dynamicHeight,
@@ -171,9 +140,7 @@ export const Modal: React.FC<ModalProps> = ({
         }}
       >
         <ModalInnerContainer>{children}</ModalInnerContainer>
-        <CloseButton onClick={onClose}>
-          <Cross />
-        </CloseButton>
+        <CloseButton onClick={onClose} />
       </ModalContainer>
     </Wrapper>
   )

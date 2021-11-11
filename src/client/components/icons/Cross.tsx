@@ -1,17 +1,8 @@
 import React from 'react'
+import { IconRoot, IconRootProps } from './IconRoot'
 
-export const Cross = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="27"
-    height="27"
-    viewBox="0 0 27 27"
-  >
-    <g fill="none" fillRule="nonzero">
-      <path
-        fill="#FFF"
-        d="M15.402 13.5l3.329 3.329a1.345 1.345 0 0 1-1.902 1.902L13.5 15.402l-3.329 3.329a1.345 1.345 0 0 1-1.902-1.902l3.329-3.329-3.329-3.329a1.345 1.345 0 1 1 1.902-1.902l3.329 3.329 3.329-3.329a1.345 1.345 0 1 1 1.902 1.902L15.402 13.5z"
-      />
-    </g>
-  </svg>
+export const Cross: React.FC<IconRootProps> = (props) => (
+  <IconRoot {...props} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 13.0607L19.4697 20.5303L20.5303 19.4697L13.0607 12L20.5303 4.53033L19.4697 3.46967L12 10.9393L4.53033 3.46967L3.46967 4.53033L10.9393 12L3.46967 19.4697L4.53033 20.5303L12 13.0607Z" />
+  </IconRoot>
 )
