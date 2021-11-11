@@ -4,8 +4,7 @@ type UseLockBodyScrollConfig = { lock: boolean }
 
 export const useLockBodyScroll = ({ lock = true }: UseLockBodyScrollConfig) => {
   useLayoutEffect(() => {
-    const previousOverflowStyle = window.getComputedStyle(document.body)
-      .overflow
+    const previousOverflowStyle = document.body.style.overflow
 
     if (lock) {
       document.body.style.overflow = 'hidden'
