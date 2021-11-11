@@ -60,8 +60,10 @@ const CenteredContainer = styled(Container)`
 `
 
 const LogoLink = styled.a`
+  display: block;
   color: inherit;
-  display: flex;
+  /* remove extra space under child SVG: https://stackoverflow.com/a/51161925 */
+  font-size: 0;
 
   &:hover,
   &:focus {

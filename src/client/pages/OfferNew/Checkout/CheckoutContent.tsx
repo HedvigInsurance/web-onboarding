@@ -114,14 +114,12 @@ export const CheckoutContent: React.FC<Props> = ({
             onSsnUpdate(onCompletion)
           }}
         />
-
         <StartDateWrapper>
           <StartDateLabel>
             {textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}
           </StartDateLabel>
           <StartDate offerData={offerData} refetch={refetch} />
         </StartDateWrapper>
-
         <InsuranceSummary offerData={offerData} />
       </Section>
     </>
