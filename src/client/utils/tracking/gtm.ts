@@ -46,12 +46,17 @@ type GTMPageData = {
   market: string
 }
 
+type GTMEventData = {
+  type: string
+}
+
 type DataLayerObject = {
   event?: string
   userProperties?: GTMUserProperties
   offerData?: GTMOfferData
   pageData?: GTMPageData
   passageData?: Record<string, string | undefined>
+  eventData?: GTMEventData
 }
 
 /**

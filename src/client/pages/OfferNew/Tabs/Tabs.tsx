@@ -55,7 +55,7 @@ export const Tabs: React.FC<Props> = ({ items, onChange }) => {
 
   const handleClick = (item: TabItem) => {
     setSelected(item)
-    onChange(item.id)
+    onChange(item.name)
   }
 
   useEffect(() => {

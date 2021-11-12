@@ -6,9 +6,6 @@ import { Cross } from '../icons/Cross'
 const Button = styled.button`
   width: 1.5rem;
   height: 1.5rem;
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
   padding: 0;
   display: flex;
   align-items: center;

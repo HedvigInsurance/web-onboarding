@@ -347,35 +347,6 @@ const DateForm: React.FC<{
   )
 }
 
-// type DateInputProps = {
-//   datePickerOpen: boolean
-//   setDatePickerOpen: (isOpen: boolean) => void
-//   dateValue: Date | null
-//   setDate: (date: Date | null) => void
-//   quote: OfferQuote
-//   modal?: boolean
-// }
-
-// const DateInput: React.FC<DateInputProps> = ({
-//   datePickerOpen,
-//   setDatePickerOpen,
-//   dateValue,
-//   setDate,
-//   quote,
-//   modal,
-// }) => {
-//   return (
-//     <StyledDateInput
-//       open={datePickerOpen}
-//       setOpen={setDatePickerOpen}
-//       date={dateValue || new Date()}
-//       setDate={setDate}
-//       hasCurrentInsurer={hasCurrentInsurer(quote)}
-//       modal={Boolean(modal)}
-//     />
-//   )
-// }
-
 export const StartDate: React.FC<Props> = ({
   offerData,
   refetch,
