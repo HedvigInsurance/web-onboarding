@@ -44,6 +44,11 @@ const Container = styled(motion.div)`
   border: 1px solid ${colorsV3.gray300};
   position: relative;
 `
+const ButtonWrapper = styled.div`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+`
 
 const Title = styled.div`
   font-size: 1.25rem;
@@ -110,7 +115,9 @@ export const DiscountCodeModal: React.FC<Props> = ({
       >
         <Title>{textKeys.SIDEBAR_ADD_DISCOUNT_HEADLINE()}</Title>
         <Paragraph>{textKeys.SIDEBAR_ADD_DISCOUNT_BODY()}</Paragraph>
-        <CloseButton onClick={close} position="right" />
+        <ButtonWrapper>
+          <CloseButton onClick={close} />
+        </ButtonWrapper>
         <Formik
           validateOnBlur
           validationSchema={discountSchema}

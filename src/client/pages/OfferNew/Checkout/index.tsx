@@ -279,7 +279,7 @@ export const Checkout: React.FC<CheckoutProps> = ({
               windowHeight={windowInnerHeight}
             >
               <InnerWrapper>
-                <CloseButton onClick={onClose} position="left" />
+                <CloseButton onClick={onClose} />
                 <CheckoutContent
                   onSubmit={startSign}
                   offerData={offerData}
