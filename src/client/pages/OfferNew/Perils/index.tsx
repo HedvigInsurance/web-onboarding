@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
+import * as changeCase from 'change-case'
 import {
   Body,
   Column,
@@ -43,9 +44,10 @@ export const Perils: React.FC<Props> = ({ offerData }) => {
     [offerData.quotes],
   )
 
-  const handleChangeTab = () => {
+  const handleChangeTab = (name: string) => {
     pushToGTMDataLayer({
-      event: 'offer-tab-click',
+      event: 'perils_tab_click',
+      eventData: { type: changeCase.snakeCase(name) },
     })
   }
 
