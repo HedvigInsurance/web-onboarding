@@ -68,7 +68,7 @@ export const Debugger: React.FC = () => {
       {sessionId && (
         <Row>
           <h3>Offer</h3>
-          <QuoteData sessionToken={sessionId} />
+          <QuoteData sessionId={sessionId} />
         </Row>
       )}
     </Wrapper>

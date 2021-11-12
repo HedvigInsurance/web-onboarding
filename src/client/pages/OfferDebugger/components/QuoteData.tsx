@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { Form, Formik, FormikProps } from 'formik'
-import { v4 as uuid } from 'uuid'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { CreateQuoteVariables } from '@hedviginsurance/embark'
 import {
@@ -15,13 +14,9 @@ import {
 import { createQuote } from 'pages/Embark/createQuote'
 import { Button, LinkButton } from 'components/buttons'
 import { InputField } from 'components/inputs'
-import { StorageContainer, useStorage } from 'utils/StorageContainer'
-import {
-  getIsoLocale,
-  useCurrentLocale,
-  useMarket,
-  Market,
-} from 'components/utils/CurrentLocale'
+import { StorageContainer } from 'utils/StorageContainer'
+import { useMarket, Market } from 'components/utils/CurrentLocale'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { LoadingDots } from '../../../components/LoadingDots/LoadingDots'
 import { initialSeApartmentValues, SwedishApartment } from './QuoteFormSweden'
 import {
@@ -32,7 +27,7 @@ import {
 } from './QuoteFormNorway'
 import { DanishQuote, initialDkHomeValues } from './QuoteFormDenmark'
 
-type OfferProps = { sessionToken?: string | null }
+type OfferProps = { sessionId: string }
 
 type Values = Partial<CreateQuoteInput>
 
@@ -148,8 +143,7 @@ const ButtonLoadingIndicator = styled(LoadingDots)`
   margin-left: 0.5rem;
 `
 
-export const QuoteData: React.FC<OfferProps> = ({ sessionToken }) => {
-  const [quoteIds, setQuoteIds] = useState<string[]>([])
+export const QuoteData: React.FC<OfferProps> = ({ sessionId }) => {
   const [getQuotes, { data, refetch }] = useQuoteBundleLazyQuery()
   const [createHomeAccidentQuote] = useCreateDanishHomeAccidentQuoteMutation()
   const [
@@ -162,9 +156,7 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionToken }) => {
   const [quoteCreatingError, setQuoteCreatingError] = useState<string | null>(
     null,
   )
-  const storageState = useStorage()
   const currentLocale = useCurrentLocale()
-  const localeIsoCode = getIsoLocale(currentLocale)
   const currentMarket = useMarket()
 
   const [quoteType, setQuoteType] = useState(
@@ -177,15 +169,11 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionToken }) => {
   ) => {
     const input = {
       ...values,
-      id: quoteIds[0],
       currentInsurer: values.currentInsurer || undefined,
       startDate: values.startDate || undefined,
     }
     if (quoteType === QuoteType.DanishHomeAccident) {
-      const accidentInput = getDanishQuoteValues(
-        { ...input, id: quoteIds[1] },
-        'danishAccident',
-      )
+      const accidentInput = getDanishQuoteValues(input, 'danishAccident')
       await createHomeAccidentQuote({
         variables: {
           homeInput: input as CreateQuoteInput,
@@ -193,14 +181,8 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionToken }) => {
         },
       })
     } else if (quoteType === QuoteType.DanishHomeAccidentTravel) {
-      const accidentInput = getDanishQuoteValues(
-        { ...input, id: quoteIds[1] },
-        'danishAccident',
-      )
-      const travelInput = getDanishQuoteValues(
-        { ...input, id: quoteIds[2] },
-        'danishTravel',
-      )
+      const accidentInput = getDanishQuoteValues(input, 'danishAccident')
+      const travelInput = getDanishQuoteValues(input, 'danishTravel')
       await createHomeAccidentTravelQuote({
         variables: {
           homeInput: input as CreateQuoteInput,
@@ -209,10 +191,7 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionToken }) => {
         },
       })
     } else if (quoteType === QuoteType.SwedishApartmentAccident) {
-      const accidentInput = getSwedishAccidentQuoteValues({
-        ...input,
-        id: quoteIds[1],
-      })
+      const accidentInput = getSwedishAccidentQuoteValues(input)
       await createSwedishHomeAccidentQuote({
         variables: {
           homeInput: input as CreateQuoteInput,
@@ -222,7 +201,7 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionToken }) => {
     } else {
       await createQuote(
         storage,
-        localeIsoCode,
+        currentLocale.isoLocale,
       )({
         input: input as CreateQuoteVariables['input'],
       }).catch((error) => setQuoteCreatingError(error.message))
@@ -232,45 +211,6 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionToken }) => {
       await refetch()
     }
   }
-
-  useEffect(() => {
-    const sessionQuoteIds = storageState.session.getSession()?.quoteIds ?? []
-    if (quoteIds.length === 0 && sessionQuoteIds[0]) {
-      setQuoteIds([...sessionQuoteIds])
-      return
-    }
-    if (quoteIds.length === 0 && !sessionQuoteIds.length) {
-      setQuoteIds([uuid()])
-    }
-    storageState.session.setSession({
-      ...storageState.session.getSession(),
-      quoteIds: quoteIds,
-    })
-  }, [getQuotes, localeIsoCode, quoteIds, storageState.session])
-
-  useEffect(() => {
-    if (quoteIds.every((quote) => quote?.length === 36) && sessionToken) {
-      getQuotes({
-        variables: { input: { ids: quoteIds }, locale: localeIsoCode },
-      })
-    }
-  }, [quoteIds, sessionToken, localeIsoCode, getQuotes])
-
-  useEffect(() => {
-    if (quoteType === QuoteType.DanishHomeAccident) {
-      setQuoteIds((prev) => [prev[0], uuid()])
-      return
-    }
-    if (quoteType === QuoteType.DanishHomeAccidentTravel) {
-      setQuoteIds((prev) => [prev[0], uuid(), uuid()])
-      return
-    }
-    if (quoteType === QuoteType.SwedishApartmentAccident) {
-      setQuoteIds((prev) => [prev[0], uuid()])
-      return
-    }
-    setQuoteIds((prev) => [prev[0]])
-  }, [quoteType])
 
   return (
     <StorageContainer>
@@ -292,32 +232,6 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionToken }) => {
                 }
               />
             )}
-          </Formik>
-          <Formik
-            initialValues={{ quoteIds }}
-            onSubmit={() => {
-              /* noop */
-            }}
-          >
-            {() => {
-              return quoteIds.map((quoteId, index) => (
-                <InputField
-                  key={`quote_ids_${index}`}
-                  label="Quote id"
-                  name="Quote id"
-                  placeholder="d6c60432-dc7b-4405-840e-b4fd8164e310"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    const newValue = e.target.value
-                    setQuoteIds((prev) => {
-                      const newState = [...prev]
-                      newState[index] = newValue
-                      return newState
-                    })
-                  }}
-                  value={quoteId}
-                />
-              ))
-            }}
           </Formik>
 
           {!data?.quoteBundle && !quoteCreatingError && (
@@ -410,7 +324,7 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionToken }) => {
               <LinkButton
                 background={colorsV3.gray100}
                 foreground={colorsV3.gray900}
-                to={`/${currentLocale}/new-member/offer`}
+                to={`/${currentLocale.path}/new-member/offer`}
               >
                 Go to offer page →
               </LinkButton>
