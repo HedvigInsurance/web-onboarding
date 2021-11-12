@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV3 } from '@hedviginsurance/brand'
+import { colors, colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
@@ -29,6 +29,10 @@ const PhoneLink = styled.a`
   text-decoration: none;
   color: inherit;
   font-size: 0.875rem;
+
+  :hover {
+    color: ${colorsV3.gray600};
+  }
 `
 
 const Text = styled.p<Props>`
