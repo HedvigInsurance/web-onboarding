@@ -3,12 +3,15 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { Cross } from '../icons/Cross'
 
-const Button = styled.button`
+const Button = styled.button<{
+  position: 'left' | 'right'
+}>`
   width: 1.5rem;
   height: 1.5rem;
   position: absolute;
   top: 1rem;
   right: 1rem;
+  ${(props) => (props.position === 'left' ? `left: 1rem;` : `right: 1rem;`)};
   padding: 0;
   display: flex;
   align-items: center;
@@ -31,11 +34,13 @@ const Button = styled.button`
   }
 `
 
-type Props = React.HTMLProps<HTMLButtonElement>
+type Props = React.HTMLProps<HTMLButtonElement> & {
+  position: 'left' | 'right'
+}
 
-export const CloseButton = ({ onClick }: Props) => {
+export const CloseButton = ({ onClick, position }: Props) => {
   return (
-    <Button onClick={onClick}>
+    <Button onClick={onClick} position={position}>
       <Cross />
     </Button>
   )

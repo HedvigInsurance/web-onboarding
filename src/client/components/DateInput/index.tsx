@@ -116,7 +116,7 @@ export const DateInput: React.FC<DateInputProps> = ({
           </CalendarWrapper>
 
           <TopSection>
-            <CloseButton onClick={() => setOpen(false)} />
+            <CloseButton onClick={() => setOpen(false)} position="right" />
           </TopSection>
 
           {hasCurrentInsurer && (
