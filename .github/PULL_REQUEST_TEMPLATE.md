@@ -27,7 +27,7 @@ Example PR title: GRW-123 / Feature / Awesome new thing
 ## Screenshots / recordings 
 -->
 
-<!-- Finally, you can create a review app on Heroku if you think that will be helpful to the reviewers -->
+<!-- Finally, you can create a review app on Heroku if you think that will be helpful to the reviewers and getting input from the design team before merging -->
 <!--
 ## Review app
 -->
