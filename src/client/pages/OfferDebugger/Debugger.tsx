@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { colorsV2, colorsV3 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { FetchResult } from '@apollo/client'
 import { Button } from 'components/buttons'
 import {
@@ -13,6 +13,7 @@ import { QuoteData } from './components/QuoteData'
 
 const Wrapper = styled.div`
   max-width: 900px;
+  padding: 1rem;
   margin: 0 auto;
   color: ${colorsV3.gray100};
 `
@@ -43,22 +44,17 @@ export const Debugger: React.FC = () => {
   const session = useOnboardingSession()
   const sessionId = session.result?.data?.onboardingSession_create
 
+  const handleClickNewSession = async () => {
+    await session.create()
+  }
+
   return (
     <Wrapper>
       <h1>Offer Page Debugger</h1>
 
       <Row>
-        <Button
-          onClick={() => localStorage.clear()}
-          background={colorsV2.coral500}
-        >
-          Nuke all state 💣
-        </Button>
-      </Row>
-
-      <Row>
         <h3>Session</h3>
-        <Button background={colorsV3.purple900} onClick={session.create}>
+        <Button background={colorsV3.purple900} onClick={handleClickNewSession}>
           Create new session
         </Button>
 

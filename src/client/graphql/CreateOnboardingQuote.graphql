@@ -1,0 +1,12 @@
+mutation CreateOnboardingQuote($id: ID!, $input: CreateOnboardingQuoteInput!) {
+  onboardingSession_createQuote(id: $id, input: $input) {
+    ... on CreateOnboardingQuoteSuccess {
+      id
+    }
+    ... on CreateOnboardingQuoteError {
+      limits {
+        code
+      }
+    }
+  }
+}

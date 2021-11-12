@@ -10191,6 +10191,24 @@ export type CreateDanishHomeAccidentTravelQuoteMutation = {
     | { __typename: 'UnderwritingLimitsHit' }
 }
 
+export type CreateOnboardingQuoteMutationVariables = Exact<{
+  id: Scalars['ID']
+  input: CreateOnboardingQuoteInput
+}>
+
+export type CreateOnboardingQuoteMutation = { __typename?: 'Mutation' } & {
+  onboardingSession_createQuote:
+    | ({ __typename?: 'CreateOnboardingQuoteSuccess' } & Pick<
+        CreateOnboardingQuoteSuccess,
+        'id'
+      >)
+    | ({ __typename?: 'CreateOnboardingQuoteError' } & {
+        limits: Array<
+          { __typename?: 'UnderwritingLimit' } & Pick<UnderwritingLimit, 'code'>
+        >
+      })
+}
+
 export type CreateOnboardingSessionMutationVariables = Exact<{
   country: Scalars['String']
   locale: Scalars['String']
@@ -10443,6 +10461,137 @@ export type NorwegianBankIdAuthMutation = { __typename?: 'Mutation' } & {
     NorwegianBankIdAuthResponse,
     'redirectUrl'
   >
+}
+
+export type OnboardingSessionQueryVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type OnboardingSessionQuery = { __typename?: 'Query' } & {
+  onboardingSession: { __typename?: 'OnboardingSession' } & Pick<
+    OnboardingSession,
+    'id'
+  > & {
+      bundle?: Maybe<
+        { __typename?: 'QuoteBundle' } & {
+          possibleVariations: Array<
+            { __typename?: 'QuoteBundleVariant' } & Pick<
+              QuoteBundleVariant,
+              'id' | 'tag'
+            > & {
+                bundle: { __typename?: 'QuoteBundle' } & {
+                  bundleCost: { __typename?: 'InsuranceCost' } & {
+                    monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
+                      MonetaryAmountV2,
+                      'amount' | 'currency'
+                    >
+                  }
+                }
+              }
+          >
+          bundleCost: { __typename?: 'InsuranceCost' } & Pick<
+            InsuranceCost,
+            'freeUntil'
+          > & {
+              monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount' | 'currency'
+              >
+              monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount' | 'currency'
+              >
+              monthlyDiscount: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount' | 'currency'
+              >
+            }
+          quotes: Array<
+            { __typename?: 'BundledQuote' } & Pick<
+              BundledQuote,
+              | 'id'
+              | 'firstName'
+              | 'lastName'
+              | 'ssn'
+              | 'birthDate'
+              | 'startDate'
+              | 'expiresAt'
+              | 'email'
+              | 'dataCollectionId'
+              | 'typeOfContract'
+              | 'initiatedFrom'
+            > & {
+                currentInsurer?: Maybe<
+                  { __typename?: 'CurrentInsurer' } & Pick<
+                    CurrentInsurer,
+                    'id' | 'displayName' | 'switchable'
+                  >
+                >
+                price: { __typename?: 'MonetaryAmountV2' } & Pick<
+                  MonetaryAmountV2,
+                  'amount' | 'currency'
+                >
+                quoteDetails:
+                  | ({ __typename: 'SwedishApartmentQuoteDetails' } & Pick<
+                      SwedishApartmentQuoteDetails,
+                      | 'street'
+                      | 'zipCode'
+                      | 'householdSize'
+                      | 'livingSpace'
+                      | 'type'
+                    >)
+                  | ({ __typename: 'SwedishHouseQuoteDetails' } & Pick<
+                      SwedishHouseQuoteDetails,
+                      'street'
+                    >)
+                  | ({ __typename: 'SwedishAccidentDetails' } & Pick<
+                      SwedishAccidentDetails,
+                      'street'
+                    >)
+                  | { __typename: 'NorwegianHomeContentsDetails' }
+                  | { __typename: 'NorwegianTravelDetails' }
+                  | { __typename: 'DanishHomeContentsDetails' }
+                  | { __typename: 'DanishAccidentDetails' }
+                  | { __typename: 'DanishTravelDetails' }
+              }
+          >
+        }
+      >
+      campaign?: Maybe<
+        { __typename?: 'Campaign' } & Pick<Campaign, 'code' | 'expiresAt'> & {
+            incentive?: Maybe<
+              | ({ __typename?: 'MonthlyCostDeduction' } & {
+                  amount?: Maybe<
+                    { __typename?: 'MonetaryAmountV2' } & Pick<
+                      MonetaryAmountV2,
+                      'amount' | 'currency'
+                    >
+                  >
+                })
+              | { __typename?: 'FreeMonths' }
+              | { __typename?: 'NoDiscount' }
+              | { __typename?: 'VisibleNoDiscount' }
+              | ({ __typename?: 'PercentageDiscountMonths' } & Pick<
+                  PercentageDiscountMonths,
+                  'percentageDiscount' | 'quantity'
+                >)
+              | { __typename?: 'IndefinitePercentageDiscount' }
+            >
+            owner?: Maybe<
+              { __typename?: 'CampaignOwner' } & Pick<
+                CampaignOwner,
+                'displayName' | 'id'
+              >
+            >
+          }
+      >
+      signing?: Maybe<
+        { __typename?: 'OnboardingSessionSigning' } & Pick<
+          OnboardingSessionSigning,
+          'status'
+        >
+      >
+    }
 }
 
 export type QuoteDataFragment = { __typename?: 'BundledQuote' } & Pick<
@@ -11284,6 +11433,68 @@ export type CreateDanishHomeAccidentTravelQuoteMutationOptions = ApolloReactComm
   CreateDanishHomeAccidentTravelQuoteMutation,
   CreateDanishHomeAccidentTravelQuoteMutationVariables
 >
+export const CreateOnboardingQuoteDocument = gql`
+  mutation CreateOnboardingQuote(
+    $id: ID!
+    $input: CreateOnboardingQuoteInput!
+  ) {
+    onboardingSession_createQuote(id: $id, input: $input) {
+      ... on CreateOnboardingQuoteSuccess {
+        id
+      }
+      ... on CreateOnboardingQuoteError {
+        limits {
+          code
+        }
+      }
+    }
+  }
+`
+export type CreateOnboardingQuoteMutationFn = ApolloReactCommon.MutationFunction<
+  CreateOnboardingQuoteMutation,
+  CreateOnboardingQuoteMutationVariables
+>
+
+/**
+ * __useCreateOnboardingQuoteMutation__
+ *
+ * To run a mutation, you first call `useCreateOnboardingQuoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOnboardingQuoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createOnboardingQuoteMutation, { data, loading, error }] = useCreateOnboardingQuoteMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateOnboardingQuoteMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateOnboardingQuoteMutation,
+    CreateOnboardingQuoteMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    CreateOnboardingQuoteMutation,
+    CreateOnboardingQuoteMutationVariables
+  >(CreateOnboardingQuoteDocument, options)
+}
+export type CreateOnboardingQuoteMutationHookResult = ReturnType<
+  typeof useCreateOnboardingQuoteMutation
+>
+export type CreateOnboardingQuoteMutationResult = ApolloReactCommon.MutationResult<
+  CreateOnboardingQuoteMutation
+>
+export type CreateOnboardingQuoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  CreateOnboardingQuoteMutation,
+  CreateOnboardingQuoteMutationVariables
+>
 export const CreateOnboardingSessionDocument = gql`
   mutation CreateOnboardingSession($country: String!, $locale: String!) {
     onboardingSession_create(input: { country: $country, locale: $locale })
@@ -11926,6 +12137,154 @@ export type NorwegianBankIdAuthMutationResult = ApolloReactCommon.MutationResult
 export type NorwegianBankIdAuthMutationOptions = ApolloReactCommon.BaseMutationOptions<
   NorwegianBankIdAuthMutation,
   NorwegianBankIdAuthMutationVariables
+>
+export const OnboardingSessionDocument = gql`
+  query OnboardingSession($id: ID!) {
+    onboardingSession(id: $id) {
+      id
+      bundle {
+        possibleVariations {
+          id
+          tag(locale: sv_SE)
+          bundle {
+            bundleCost {
+              monthlyGross {
+                amount
+                currency
+              }
+            }
+          }
+        }
+        bundleCost {
+          monthlyGross {
+            amount
+            currency
+          }
+          monthlyNet {
+            amount
+            currency
+          }
+          monthlyDiscount {
+            amount
+            currency
+          }
+          freeUntil
+        }
+        quotes {
+          id
+          currentInsurer {
+            id
+            displayName
+            switchable
+          }
+          price {
+            amount
+            currency
+          }
+          firstName
+          lastName
+          ssn
+          birthDate
+          quoteDetails {
+            __typename
+            ... on SwedishApartmentQuoteDetails {
+              street
+              zipCode
+              householdSize
+              livingSpace
+              type
+            }
+            ... on SwedishHouseQuoteDetails {
+              street
+            }
+            ... on SwedishAccidentDetails {
+              street
+            }
+          }
+          startDate
+          expiresAt
+          email
+          dataCollectionId
+          typeOfContract
+          initiatedFrom
+        }
+      }
+      campaign {
+        incentive {
+          ... on MonthlyCostDeduction {
+            amount {
+              amount
+              currency
+            }
+          }
+          ... on PercentageDiscountMonths {
+            percentageDiscount
+            quantity
+          }
+        }
+        code
+        owner {
+          displayName
+          id
+        }
+        expiresAt
+      }
+      signing {
+        status
+      }
+    }
+  }
+`
+
+/**
+ * __useOnboardingSessionQuery__
+ *
+ * To run a query within a React component, call `useOnboardingSessionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOnboardingSessionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnboardingSessionQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useOnboardingSessionQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    OnboardingSessionQuery,
+    OnboardingSessionQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    OnboardingSessionQuery,
+    OnboardingSessionQueryVariables
+  >(OnboardingSessionDocument, options)
+}
+export function useOnboardingSessionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    OnboardingSessionQuery,
+    OnboardingSessionQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    OnboardingSessionQuery,
+    OnboardingSessionQueryVariables
+  >(OnboardingSessionDocument, options)
+}
+export type OnboardingSessionQueryHookResult = ReturnType<
+  typeof useOnboardingSessionQuery
+>
+export type OnboardingSessionLazyQueryHookResult = ReturnType<
+  typeof useOnboardingSessionLazyQuery
+>
+export type OnboardingSessionQueryResult = ApolloReactCommon.QueryResult<
+  OnboardingSessionQuery,
+  OnboardingSessionQueryVariables
 >
 export const QuoteBundleDocument = gql`
   query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {

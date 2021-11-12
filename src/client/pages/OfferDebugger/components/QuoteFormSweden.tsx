@@ -11,12 +11,12 @@ export const initialSeApartmentValues = {
   ssn: '199509291234',
   startDate: '',
   email: 'sven.svensson@hedvig.com',
-  swedishApartment: {
+  swedishApartmentData: {
     street: 'Storgatan 1',
     zipCode: '12345',
     livingSpace: 23,
     householdSize: 1,
-    type: ApartmentType.Rent,
+    subType: ApartmentType.Rent,
   },
 }
 
@@ -27,23 +27,23 @@ export const SwedishApartment: React.FC<WithFormikProps> = ({ formik }) => {
         label="Household size"
         placeholder="1"
         type="number"
-        {...formik.getFieldProps('swedishApartment.householdSize')}
+        {...formik.getFieldProps('swedishApartmentData.householdSize')}
       />
       <InputField
         label="Living space"
         placeholder="23"
         type="number"
-        {...formik.getFieldProps('swedishApartment.livingSpace')}
+        {...formik.getFieldProps('swedishApartmentData.livingSpace')}
       />
       <InputField
         label="Street"
         placeholder="Gulebøjsveien 1"
-        {...formik.getFieldProps('swedishApartment.street')}
+        {...formik.getFieldProps('swedishApartmentData.street')}
       />
       <InputField
         label="Zip code"
         placeholder="12345"
-        {...formik.getFieldProps('swedishApartment.zipCode')}
+        {...formik.getFieldProps('swedishApartmentData.zipCode')}
       />
       <InputField
         label="Type"
@@ -53,7 +53,7 @@ export const SwedishApartment: React.FC<WithFormikProps> = ({ formik }) => {
           { label: 'Brf (student)', value: ApartmentType.StudentBrf },
           { label: 'Rent (student)', value: ApartmentType.StudentRent },
         ]}
-        {...formik.getFieldProps('swedishApartment.type')}
+        {...formik.getFieldProps('swedishApartmentData.subType')}
       />
       <InputField
         label="Current Insurer (optional)"

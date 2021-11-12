@@ -1,20 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { Form, Formik, FormikProps } from 'formik'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { CreateQuoteVariables } from '@hedviginsurance/embark'
 import {
-  CreateQuoteInput,
-  useCreateDanishHomeAccidentQuoteMutation,
-  useCreateDanishHomeAccidentTravelQuoteMutation,
-  useCreateSwedishHomeAccidentQuoteMutation,
-  useQuoteBundleLazyQuery,
+  CreateOnboardingQuoteInput,
+  useCreateOnboardingQuoteMutation,
+  useOnboardingSessionQuery,
   ApartmentType,
 } from 'data/graphql'
-import { createQuote } from 'pages/Embark/createQuote'
 import { Button, LinkButton } from 'components/buttons'
 import { InputField } from 'components/inputs'
-import { StorageContainer } from 'utils/StorageContainer'
 import { useMarket, Market } from 'components/utils/CurrentLocale'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { LoadingDots } from '../../../components/LoadingDots/LoadingDots'
@@ -29,7 +25,7 @@ import { DanishQuote, initialDkHomeValues } from './QuoteFormDenmark'
 
 type OfferProps = { sessionId: string }
 
-type Values = Partial<CreateQuoteInput>
+type Values = Partial<CreateOnboardingQuoteInput>
 
 export type WithFormikProps = {
   formik: FormikProps<any>
@@ -117,25 +113,26 @@ const getDanishQuoteValues = (
   values: Values,
   quoteType: 'danishTravel' | 'danishAccident',
 ) => {
-  const { danishHomeContents, ...filteredValues } = values
-  const { type, livingSpace, ...QuoteTypeValues } = danishHomeContents!
+  const { danishHomeContentsData, ...filteredValues } = values
+  const { type, livingSpace, ...quoteTypeValues } = danishHomeContentsData!
   return {
     ...filteredValues,
-    [quoteType]: QuoteTypeValues,
-  } as CreateQuoteInput
+    [quoteType]: quoteTypeValues,
+  } as CreateOnboardingQuoteInput
 }
 
 const getSwedishAccidentQuoteValues = (values: Values) => {
-  const { swedishApartment, ...filteredValues } = values
-  const { type, ...QuoteTypeValues } = swedishApartment!
+  const { swedishApartmentData, ...filteredValues } = values
+  const { subType, ...quoteTypeValues } = swedishApartmentData!
   return {
     ...filteredValues,
-    swedishAccident: {
-      ...QuoteTypeValues,
+    swedishAccidentData: {
+      ...quoteTypeValues,
       isStudent:
-        type === ApartmentType.StudentBrf || type === ApartmentType.StudentRent,
+        subType === ApartmentType.StudentBrf ||
+        subType === ApartmentType.StudentRent,
     },
-  } as CreateQuoteInput
+  } as CreateOnboardingQuoteInput
 }
 
 const ButtonLoadingIndicator = styled(LoadingDots)`
@@ -144,14 +141,10 @@ const ButtonLoadingIndicator = styled(LoadingDots)`
 `
 
 export const QuoteData: React.FC<OfferProps> = ({ sessionId }) => {
-  const [getQuotes, { data, refetch }] = useQuoteBundleLazyQuery()
-  const [createHomeAccidentQuote] = useCreateDanishHomeAccidentQuoteMutation()
-  const [
-    createHomeAccidentTravelQuote,
-  ] = useCreateDanishHomeAccidentTravelQuoteMutation()
-  const [
-    createSwedishHomeAccidentQuote,
-  ] = useCreateSwedishHomeAccidentQuoteMutation()
+  const { data, refetch } = useOnboardingSessionQuery({
+    variables: { id: sessionId },
+  })
+  const [createOnboardingQuote] = useCreateOnboardingQuoteMutation()
 
   const [quoteCreatingError, setQuoteCreatingError] = useState<string | null>(
     null,
@@ -163,190 +156,205 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionId }) => {
     quotesByMarket[currentMarket][0].value,
   )
 
-  const handleSubmit = async (
-    values: Values,
-    storage: Record<string, unknown>,
-  ) => {
+  useEffect(() => {
+    setQuoteCreatingError(null)
+  }, [sessionId])
+
+  const handleSubmit = async (values: Values) => {
     const input = {
       ...values,
       currentInsurer: values.currentInsurer || undefined,
       startDate: values.startDate || undefined,
     }
-    if (quoteType === QuoteType.DanishHomeAccident) {
-      const accidentInput = getDanishQuoteValues(input, 'danishAccident')
-      await createHomeAccidentQuote({
-        variables: {
-          homeInput: input as CreateQuoteInput,
-          accidentInput,
-        },
-      })
-    } else if (quoteType === QuoteType.DanishHomeAccidentTravel) {
-      const accidentInput = getDanishQuoteValues(input, 'danishAccident')
-      const travelInput = getDanishQuoteValues(input, 'danishTravel')
-      await createHomeAccidentTravelQuote({
-        variables: {
-          homeInput: input as CreateQuoteInput,
-          accidentInput,
-          travelInput,
-        },
-      })
-    } else if (quoteType === QuoteType.SwedishApartmentAccident) {
-      const accidentInput = getSwedishAccidentQuoteValues(input)
-      await createSwedishHomeAccidentQuote({
-        variables: {
-          homeInput: input as CreateQuoteInput,
-          accidentInput,
-        },
-      })
-    } else {
-      await createQuote(
-        storage,
-        currentLocale.isoLocale,
-      )({
-        input: input as CreateQuoteVariables['input'],
-      }).catch((error) => setQuoteCreatingError(error.message))
+    try {
+      if (quoteType === QuoteType.DanishHomeAccident) {
+        await Promise.all([
+          createOnboardingQuote({
+            variables: {
+              id: sessionId,
+              input: input as CreateOnboardingQuoteInput,
+            },
+          }),
+          createOnboardingQuote({
+            variables: {
+              id: sessionId,
+              input: getDanishQuoteValues(input, 'danishAccident'),
+            },
+          }),
+        ])
+      } else if (quoteType === QuoteType.DanishHomeAccidentTravel) {
+        await Promise.all([
+          createOnboardingQuote({
+            variables: {
+              id: sessionId,
+              input: input as CreateOnboardingQuoteInput,
+            },
+          }),
+          createOnboardingQuote({
+            variables: {
+              id: sessionId,
+              input: getDanishQuoteValues(input, 'danishAccident'),
+            },
+          }),
+          createOnboardingQuote({
+            variables: {
+              id: sessionId,
+              input: getDanishQuoteValues(input, 'danishTravel'),
+            },
+          }),
+        ])
+      } else if (quoteType === QuoteType.SwedishApartmentAccident) {
+        await Promise.all([
+          createOnboardingQuote({
+            variables: {
+              id: sessionId,
+              input: input as CreateOnboardingQuoteInput,
+            },
+          }),
+          createOnboardingQuote({
+            variables: {
+              id: sessionId,
+              input: getSwedishAccidentQuoteValues(input),
+            },
+          }),
+        ])
+      } else {
+        await createOnboardingQuote({
+          variables: {
+            id: sessionId,
+            input: input as CreateQuoteVariables['input'],
+          },
+        })
+      }
+    } catch (error) {
+      setQuoteCreatingError(error.message)
     }
 
-    if (refetch) {
-      await refetch()
-    }
+    await refetch()
   }
 
   return (
-    <StorageContainer>
-      {(storage) => (
-        <>
-          <Formik
-            initialValues={{}}
-            onSubmit={() => {
-              /* noop */
-            }}
-          >
-            {() => (
-              <InputField
-                label="Type"
-                options={quotesByMarket[currentMarket]}
-                value={quoteType}
-                onChange={(value: React.ChangeEvent<HTMLSelectElement>) =>
-                  setQuoteType(value.target.value as QuoteType)
-                }
-              />
-            )}
-          </Formik>
+    <>
+      <Formik
+        initialValues={{}}
+        onSubmit={() => {
+          /* noop */
+        }}
+      >
+        {() => (
+          <InputField
+            label="Type"
+            options={quotesByMarket[currentMarket]}
+            value={quoteType}
+            onChange={(value: React.ChangeEvent<HTMLSelectElement>) =>
+              setQuoteType(value.target.value as QuoteType)
+            }
+          />
+        )}
+      </Formik>
 
-          {!data?.quoteBundle && !quoteCreatingError && (
-            <>
-              <Formik
-                initialValues={
-                  getCurrentAvailableQuoteData(currentMarket, quoteType)
-                    ?.initialFormValues || {}
-                }
-                onSubmit={(values) => handleSubmit(values, storage)}
-              >
-                {(props) => (
-                  <>
-                    <Form>
-                      {!props.isSubmitting && (
-                        <>
-                          <InputField
-                            label="First name"
-                            placeholder=""
-                            {...props.getFieldProps('firstName')}
-                          />
-                          <InputField
-                            label="Last name"
-                            placeholder=""
-                            {...props.getFieldProps('lastName')}
-                          />
-                          <InputField
-                            label="Birth date"
-                            placeholder="2012-12-12"
-                            {...props.getFieldProps('birthDate')}
-                          />
-                          {currentMarket === Market.Se && (
-                            <InputField
-                              label="ssn"
-                              placeholder=""
-                              {...props.getFieldProps('ssn')}
-                            />
-                          )}
-                          <InputField
-                            label="Start Date (optional)"
-                            placeholder="2020-03-13"
-                            {...props.getFieldProps('startDate')}
-                          />
-                          <InputField
-                            label="Email"
-                            placeholder=""
-                            {...props.getFieldProps('email')}
-                          />
+      {!data?.onboardingSession.bundle && !quoteCreatingError && (
+        <Formik
+          initialValues={
+            getCurrentAvailableQuoteData(currentMarket, quoteType)
+              ?.initialFormValues || {}
+          }
+          onSubmit={handleSubmit}
+        >
+          {(props) => (
+            <Form>
+              {!props.isSubmitting && (
+                <>
+                  <InputField
+                    label="First name"
+                    placeholder=""
+                    {...props.getFieldProps('firstName')}
+                  />
+                  <InputField
+                    label="Last name"
+                    placeholder=""
+                    {...props.getFieldProps('lastName')}
+                  />
+                  <InputField
+                    label="Birth date"
+                    placeholder="2012-12-12"
+                    {...props.getFieldProps('birthDate')}
+                  />
+                  {currentMarket === Market.Se && (
+                    <InputField
+                      label="ssn"
+                      placeholder=""
+                      {...props.getFieldProps('ssn')}
+                    />
+                  )}
+                  <InputField
+                    label="Start Date (optional)"
+                    placeholder="2020-03-13"
+                    {...props.getFieldProps('startDate')}
+                  />
+                  <InputField
+                    label="Email"
+                    placeholder=""
+                    {...props.getFieldProps('email')}
+                  />
 
-                          {[
-                            QuoteType.SwedishApartment,
-                            QuoteType.SwedishApartmentAccident,
-                          ].includes(quoteType) && (
-                            <SwedishApartment formik={props} />
-                          )}
-                          {quoteType === QuoteType.NorwegianHome && (
-                            <NorwegianHome formik={props} />
-                          )}
-                          {quoteType === QuoteType.NorwegianTravel && (
-                            <NorwegianTravel formik={props} />
-                          )}
-                          {(quoteType === QuoteType.DanishHome ||
-                            quoteType === QuoteType.DanishHomeAccident ||
-                            quoteType ===
-                              QuoteType.DanishHomeAccidentTravel) && (
-                            <DanishQuote formik={props} />
-                          )}
-                        </>
-                      )}
+                  {[
+                    QuoteType.SwedishApartment,
+                    QuoteType.SwedishApartmentAccident,
+                  ].includes(quoteType) && <SwedishApartment formik={props} />}
+                  {quoteType === QuoteType.NorwegianHome && (
+                    <NorwegianHome formik={props} />
+                  )}
+                  {quoteType === QuoteType.NorwegianTravel && (
+                    <NorwegianTravel formik={props} />
+                  )}
+                  {(quoteType === QuoteType.DanishHome ||
+                    quoteType === QuoteType.DanishHomeAccident ||
+                    quoteType === QuoteType.DanishHomeAccidentTravel) && (
+                    <DanishQuote formik={props} />
+                  )}
+                </>
+              )}
 
-                      <Button
-                        type="submit"
-                        background={colorsV3.purple500}
-                        foreground={colorsV3.gray900}
-                        disabled={props.isSubmitting}
-                      >
-                        Create quote
-                        {props.isSubmitting && (
-                          <ButtonLoadingIndicator color={colorsV3.gray900} />
-                        )}
-                      </Button>
-                    </Form>
-                  </>
-                )}
-              </Formik>
-            </>
-          )}
-          {data?.quoteBundle && (
-            <>
-              <LinkButton
-                background={colorsV3.gray100}
+              <Button
+                type="submit"
+                background={colorsV3.purple500}
                 foreground={colorsV3.gray900}
-                to={`/${currentLocale.path}/new-member/offer`}
+                disabled={props.isSubmitting}
               >
-                Go to offer page →
-              </LinkButton>
-              <div style={{ padding: '2rem 0' }}>
-                <pre>{JSON.stringify(data, null, 2)}</pre>
-              </div>
-            </>
+                Create quote
+                {props.isSubmitting && (
+                  <ButtonLoadingIndicator color={colorsV3.gray900} />
+                )}
+              </Button>
+            </Form>
           )}
-          {quoteCreatingError && (
-            <>
-              <h2>Something went wrong 😔</h2>
-              <div>
-                <u>Error message:</u>
-                <pre style={{ whiteSpace: 'pre-wrap' }}>
-                  {quoteCreatingError}
-                </pre>
-              </div>
-              <h3>👉 Try starting over by nuking all state!</h3>
-            </>
-          )}
+        </Formik>
+      )}
+      {data?.onboardingSession.bundle && (
+        <>
+          <LinkButton
+            background={colorsV3.gray100}
+            foreground={colorsV3.gray900}
+            to={`/${currentLocale.path}/new-member/offer`}
+          >
+            Go to offer page →
+          </LinkButton>
+          <div style={{ padding: '2rem 0' }}>
+            <pre>{JSON.stringify(data, null, 2)}</pre>
+          </div>
         </>
       )}
-    </StorageContainer>
+      {quoteCreatingError && (
+        <>
+          <h2>Something went wrong 😔</h2>
+          <div>
+            <u>Error message:</u>
+            <pre style={{ whiteSpace: 'pre-wrap' }}>{quoteCreatingError}</pre>
+          </div>
+          <h3>👉 Try starting over by nuking all state!</h3>
+        </>
+      )}
+    </>
   )
 }
