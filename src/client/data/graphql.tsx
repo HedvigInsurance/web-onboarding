@@ -19,25 +19,27 @@ export type Scalars = {
   Float: number
   /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the date-timeformat outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representationof dates and times using the Gregorian calendar. */
   DateTime: any
+  /** An ISO-8601 String representation of a `java.time.LocalDate`, e.g. "2019-07-03". */
   LocalDate: any
   /** A String-representation of Adyen's PaymentMethodsResponse */
   PaymentMethodsResponse: any
   URL: any
-  Object: any
+  /** An ISO-8601 String representation of a `java.time.Instant`, e.g. "2019-07-03T19:07:38.494081Z". */
   Instant: any
   JSONString: any
+  Object: any
   /** A String-representation of Adyen's payment method details */
   PaymentMethodDetails: any
   /** A String-representation of Adyen's checkout payments action */
   CheckoutPaymentsAction: any
   /** A String-representation of Adyen's payments details request */
   PaymentsDetailsRequest: any
+  QuoteData: any
   /** The `Upload` scalar type represents a file upload. */
   Upload: any
   UUID: any
   TimeStamp: any
   JSONObject: any
-  QuoteData: any
   /** Raw JSON value */
   Json: any
   /** The Long scalar type represents non-fractional signed whole numeric values. Long can represent values between -(2^63) and 2^63 - 1. */
@@ -1492,12 +1494,6 @@ export type BankIdAuthResponse = {
 
 export type BankIdExtraInfo = SwedishBankIdExtraInfo | NorwegianBankIdExtraInfo
 
-export type BankIdSignResponse = {
-  __typename?: 'BankIdSignResponse'
-  autoStartToken?: Maybe<Scalars['String']>
-  redirectUrl?: Maybe<Scalars['String']>
-}
-
 export enum BankIdStatus {
   Pending = 'pending',
   Failed = 'failed',
@@ -2573,6 +2569,7 @@ export type CreateSwedishHouseInput = {
 
 export type CrossSell = {
   __typename?: 'CrossSell'
+  type: CrossSellType
   contractType: TypeOfContract
   title: Scalars['String']
   description: Scalars['String']
@@ -2638,6 +2635,7 @@ export type CrossSellQuotesSuccess = {
 export enum CrossSellType {
   Accident = 'ACCIDENT',
   Travel = 'TRAVEL',
+  HomeContent = 'HOME_CONTENT',
 }
 
 export type CurrentInsurer = {
@@ -3447,6 +3445,7 @@ export type EmbarkPassage = {
   messages: Array<EmbarkMessage>
   externalRedirect?: Maybe<EmbarkExternalRedirect>
   offerRedirect?: Maybe<EmbarkOfferRedirect>
+  variantedOfferRedirects: Array<EmbarkVariantedOfferRedirect>
   action?: Maybe<EmbarkAction>
   response: EmbarkResponse
   tooltips: Array<EmbarkTooltip>
@@ -3671,6 +3670,19 @@ export type EmbarkTrack = {
   eventKeys: Array<Maybe<Scalars['String']>>
   includeAllKeys: Scalars['Boolean']
   customData?: Maybe<Scalars['JSONString']>
+}
+
+export type EmbarkVariantedOfferRedirect = {
+  __typename?: 'EmbarkVariantedOfferRedirect'
+  component: Scalars['String']
+  data: EmbarkVariantedOfferRedirectData
+}
+
+export type EmbarkVariantedOfferRedirectData = {
+  __typename?: 'EmbarkVariantedOfferRedirectData'
+  expression: EmbarkExpression
+  allKeys: Array<Scalars['String']>
+  selectedKeys: Array<Scalars['String']>
 }
 
 export type Emergency = {
@@ -6535,6 +6547,7 @@ export type LanguageWhereUniqueInput = {
   code?: Maybe<Scalars['String']>
 }
 
+/** An enum representing explicitly endorsed Locales supported by our system. */
 export enum Locale {
   SvSe = 'sv_SE',
   EnSe = 'en_SE',
@@ -7295,49 +7308,12 @@ export type Mutation = {
    */
   deleteKeyGearItem: KeyGearItem
   externalInsuranceProvider?: Maybe<ExternalInsuranceProviderMutation>
-  logout: Scalars['Boolean']
-  createClaim: Scalars['ID']
-  createSession: Scalars['String']
-  createSessionV2?: Maybe<SessionInformation>
-  /** @deprecated Use Quotes instead */
-  createOffer?: Maybe<Scalars['Boolean']>
-  /** @deprecated Use `signOfferV2`. */
-  signOffer?: Maybe<Scalars['Boolean']>
-  /** @deprecated Use Quotes instead */
-  signOfferV2: BankIdSignResponse
-  uploadFile: File
-  uploadFiles?: Maybe<Array<File>>
-  selectCashbackOption: Cashback
-  /** @deprecated Use Quotes instead */
-  offerClosed: Scalars['Boolean']
-  startDirectDebitRegistration: Scalars['URL']
-  sendChatTextResponse: Scalars['Boolean']
-  sendChatSingleSelectResponse: Scalars['Boolean']
-  sendChatFileResponse: Scalars['Boolean']
-  sendChatAudioResponse: Scalars['Boolean']
-  resetConversation: Scalars['Boolean']
-  editLastResponse: Scalars['Boolean']
-  updateEmail: Member
-  updatePhoneNumber: Member
-  registerPushToken?: Maybe<Scalars['Boolean']>
-  triggerFreeTextChat?: Maybe<Scalars['Boolean']>
-  triggerClaimChat?: Maybe<Scalars['Boolean']>
-  triggerCallMeChat?: Maybe<Scalars['Boolean']>
-  emailSign?: Maybe<Scalars['Boolean']>
-  markMessageAsRead: Message
-  log?: Maybe<Scalars['Boolean']>
+  _?: Maybe<Scalars['Boolean']>
   /** @deprecated Use `swedishBankIdAuth`. */
   bankIdAuth: BankIdAuthResponse
   swedishBankIdAuth: BankIdAuthResponse
   norwegianBankIdAuth: NorwegianBankIdAuthResponse
   danishBankIdAuth: DanishBankIdAuthResponse
-  registerBranchCampaign?: Maybe<Scalars['Boolean']>
-  updateLanguage: Scalars['Boolean']
-  updatePickedLocale: Member
-  /** Create all the quotes needed in relation to a change of address, based on the current state of the member's insurance. */
-  createAddressChangeQuotes: AddressChangeQuoteResult
-  /** Create all the quotes needed as a result of one of more Cross-Sells */
-  createCrossSellQuotes: CrossSellQuotesResult
   /** Creates a login attempt which sends an OTP to the provided credential */
   login_createOtpAttempt: Scalars['ID']
   /** Verifies an ongoing login attempt, returning an access token on success */
@@ -7373,6 +7349,37 @@ export type Mutation = {
    * This is needed at this stage because the "connecting payments" stage will happen with an actual signed member.
    */
   onboardingSession_createAccessToken: OnboardingSessionAccessTokenResult
+  logout: Scalars['Boolean']
+  createClaim: Scalars['ID']
+  createSession: Scalars['String']
+  createSessionV2?: Maybe<SessionInformation>
+  uploadFile: File
+  uploadFiles?: Maybe<Array<File>>
+  selectCashbackOption: Cashback
+  offerClosed: Scalars['Boolean']
+  startDirectDebitRegistration: Scalars['URL']
+  sendChatTextResponse: Scalars['Boolean']
+  sendChatSingleSelectResponse: Scalars['Boolean']
+  sendChatFileResponse: Scalars['Boolean']
+  sendChatAudioResponse: Scalars['Boolean']
+  resetConversation: Scalars['Boolean']
+  editLastResponse: Scalars['Boolean']
+  updateEmail: Member
+  updatePhoneNumber: Member
+  registerPushToken?: Maybe<Scalars['Boolean']>
+  triggerFreeTextChat?: Maybe<Scalars['Boolean']>
+  triggerClaimChat?: Maybe<Scalars['Boolean']>
+  triggerCallMeChat?: Maybe<Scalars['Boolean']>
+  emailSign?: Maybe<Scalars['Boolean']>
+  markMessageAsRead: Message
+  log?: Maybe<Scalars['Boolean']>
+  registerBranchCampaign?: Maybe<Scalars['Boolean']>
+  updateLanguage: Scalars['Boolean']
+  updatePickedLocale: Member
+  /** Create all the quotes needed in relation to a change of address, based on the current state of the member's insurance. */
+  createAddressChangeQuotes: AddressChangeQuoteResult
+  /** Create all the quotes needed as a result of one of more Cross-Sells */
+  createCrossSellQuotes: CrossSellQuotesResult
   signOrApproveQuotes: SignOrApprove
 }
 
@@ -7487,6 +7494,50 @@ export type MutationDeleteKeyGearItemArgs = {
   id: Scalars['ID']
 }
 
+export type MutationNorwegianBankIdAuthArgs = {
+  personalNumber?: Maybe<Scalars['String']>
+}
+
+export type MutationDanishBankIdAuthArgs = {
+  personalNumber: Scalars['String']
+}
+
+export type MutationLogin_CreateOtpAttemptArgs = {
+  input: OtpLoginAttemptInput
+}
+
+export type MutationLogin_VerifyOtpAttemptArgs = {
+  id: Scalars['ID']
+  otp: Scalars['String']
+}
+
+export type MutationOnboardingSession_CreateArgs = {
+  input: CreateOnboardingSessionInput
+}
+
+export type MutationOnboardingSession_CreateQuoteArgs = {
+  id: Scalars['ID']
+  input: CreateOnboardingQuoteInput
+}
+
+export type MutationOnboardingSession_AddCampaignArgs = {
+  id: Scalars['ID']
+  campaignCode: Scalars['String']
+}
+
+export type MutationOnboardingSession_RemoveCampaignArgs = {
+  id: Scalars['ID']
+}
+
+export type MutationOnboardingSession_StartSigningArgs = {
+  id: Scalars['ID']
+  quoteIds?: Maybe<Array<Scalars['ID']>>
+}
+
+export type MutationOnboardingSession_CreateAccessTokenArgs = {
+  id: Scalars['ID']
+}
+
 export type MutationCreateClaimArgs = {
   audioFile: Scalars['Upload']
 }
@@ -7494,18 +7545,6 @@ export type MutationCreateClaimArgs = {
 export type MutationCreateSessionArgs = {
   campaign?: Maybe<CampaignInput>
   trackingId?: Maybe<Scalars['UUID']>
-}
-
-export type MutationCreateOfferArgs = {
-  details: OfferInput
-}
-
-export type MutationSignOfferArgs = {
-  details: SignInput
-}
-
-export type MutationSignOfferV2Args = {
-  details?: Maybe<SignInput>
 }
 
 export type MutationUploadFileArgs = {
@@ -7561,14 +7600,6 @@ export type MutationLogArgs = {
   input: LoggingInput
 }
 
-export type MutationNorwegianBankIdAuthArgs = {
-  personalNumber?: Maybe<Scalars['String']>
-}
-
-export type MutationDanishBankIdAuthArgs = {
-  personalNumber: Scalars['String']
-}
-
 export type MutationRegisterBranchCampaignArgs = {
   campaign: CampaignInput
 }
@@ -7587,42 +7618,6 @@ export type MutationCreateAddressChangeQuotesArgs = {
 
 export type MutationCreateCrossSellQuotesArgs = {
   input: CrossSellQuotesInput
-}
-
-export type MutationLogin_CreateOtpAttemptArgs = {
-  input: OtpLoginAttemptInput
-}
-
-export type MutationLogin_VerifyOtpAttemptArgs = {
-  id: Scalars['ID']
-  otp: Scalars['String']
-}
-
-export type MutationOnboardingSession_CreateArgs = {
-  input: CreateOnboardingSessionInput
-}
-
-export type MutationOnboardingSession_CreateQuoteArgs = {
-  id: Scalars['ID']
-  input: CreateOnboardingQuoteInput
-}
-
-export type MutationOnboardingSession_AddCampaignArgs = {
-  id: Scalars['ID']
-  campaignCode: Scalars['String']
-}
-
-export type MutationOnboardingSession_RemoveCampaignArgs = {
-  id: Scalars['ID']
-}
-
-export type MutationOnboardingSession_StartSigningArgs = {
-  id: Scalars['ID']
-  quoteIds?: Maybe<Array<Scalars['ID']>>
-}
-
-export type MutationOnboardingSession_CreateAccessTokenArgs = {
-  id: Scalars['ID']
 }
 
 export type MutationSignOrApproveQuotesArgs = {
@@ -7722,30 +7717,6 @@ export type NorwegianTravelDetails = {
 export enum NorwegianTravelLineOfBusiness {
   Regular = 'REGULAR',
   Youth = 'YOUTH',
-}
-
-export type OfferEvent = {
-  __typename?: 'OfferEvent'
-  status: OfferStatus
-  insurance?: Maybe<Insurance>
-}
-
-export type OfferInput = {
-  firstName: Scalars['String']
-  lastName: Scalars['String']
-  age: Scalars['Int']
-  address: Scalars['String']
-  postalNumber: Scalars['String']
-  city?: Maybe<Scalars['String']>
-  insuranceType: InsuranceType
-  squareMeters: Scalars['Int']
-  personsInHousehold: Scalars['Int']
-  previousInsurer?: Maybe<Scalars['String']>
-}
-
-export enum OfferStatus {
-  Success = 'SUCCESS',
-  Fail = 'FAIL',
 }
 
 /**
@@ -7989,13 +7960,7 @@ export type Query = {
   marketingStories: Array<MarketingStory>
   gateway__?: Maybe<Scalars['Boolean']>
   bankAccount?: Maybe<BankAccount>
-  /** @deprecated Use `nextChargeDate` */
-  chargeDate: Scalars['LocalDate']
   nextChargeDate?: Maybe<Scalars['LocalDate']>
-  /** @deprecated Use `directDebitStatus` */
-  registerAccountProcessingStatus: RegisterAccountProcessingStatus
-  /** @deprecated Use `payinMethodStatus` */
-  directDebitStatus: DirectDebitStatus
   /** Returns the status for the payin method (Trustly's direct debit for Sweden) (Adyen for Norway) */
   payinMethodStatus: PayinMethodStatus
   /** Returns all the available payments methods before the client requests a tokenization */
@@ -8041,6 +8006,16 @@ export type Query = {
   houseInformation?: Maybe<HouseInformation>
   externalInsuranceProvider?: Maybe<ExternalInsuranceProvider>
   autoCompleteAddress: Array<AutoCompleteResponse>
+  _?: Maybe<Scalars['Boolean']>
+  /** Returns all the currently active contracts, combined into bundles. */
+  activeContractBundles: Array<ContractBundle>
+  /** Returns all contracts the member currently holds, regardless of activation/termination status */
+  contracts: Array<Contract>
+  /** Returns whether a member has at least one contract */
+  hasContract: Scalars['Boolean']
+  /** Fetch onboarding session by its ID. */
+  onboardingSession: OnboardingSession
+  quoteBundle: QuoteBundle
   /** @deprecated Use `contracts` instead */
   insurance: Insurance
   cashback?: Maybe<Cashback>
@@ -8056,12 +8031,6 @@ export type Query = {
   chatActions?: Maybe<Array<Maybe<ChatAction>>>
   geo: Geo
   angelStory?: Maybe<AngelStory>
-  /** Returns all the currently active contracts, combined into bundles. */
-  activeContractBundles: Array<ContractBundle>
-  /** Returns all contracts the member currently holds, regardless of activation/termination status */
-  contracts: Array<Contract>
-  /** Returns whether a member has at least one contract */
-  hasContract: Scalars['Boolean']
   /**
    * Returns a type describing whether the 'Self Change' functionality is possible.
    * @deprecated Use angelStories in `activeContractBundles` instead
@@ -8077,9 +8046,6 @@ export type Query = {
   /** returns names of all available embark stories */
   embarkStoryNames: Array<Scalars['String']>
   embarkStories: Array<EmbarkStoryMetadata>
-  /** Fetch onboarding session by its ID. */
-  onboardingSession: OnboardingSession
-  quoteBundle: QuoteBundle
 }
 
 export type QueryFaqsArgs = {
@@ -8248,6 +8214,14 @@ export type QueryAutoCompleteAddressArgs = {
   options?: Maybe<AddressAutocompleteOptions>
 }
 
+export type QueryOnboardingSessionArgs = {
+  id: Scalars['ID']
+}
+
+export type QueryQuoteBundleArgs = {
+  input: QuoteBundleInput
+}
+
 export type QueryCashbackArgs = {
   locale?: Maybe<Locale>
 }
@@ -8281,14 +8255,6 @@ export type QueryEmbarkStoryArgs = {
 
 export type QueryEmbarkStoriesArgs = {
   locale: Scalars['String']
-}
-
-export type QueryOnboardingSessionArgs = {
-  id: Scalars['ID']
-}
-
-export type QueryQuoteBundleArgs = {
-  input: QuoteBundleInput
 }
 
 export type Quote = CompleteQuote | IncompleteQuote
@@ -8413,15 +8379,6 @@ export type ReferralTerm = {
   url: Scalars['URL']
 }
 
-export enum RegisterAccountProcessingStatus {
-  NotInitiated = 'NOT_INITIATED',
-  Initiated = 'INITIATED',
-  Requested = 'REQUESTED',
-  InProgress = 'IN_PROGRESS',
-  Confirmed = 'CONFIRMED',
-  Cancelled = 'CANCELLED',
-}
-
 export type RegisterDirectDebitClientContext = {
   successUrl: Scalars['String']
   failureUrl: Scalars['String']
@@ -8528,11 +8485,6 @@ export type SignEvent = {
   status?: Maybe<SignStatus>
 }
 
-export type SignInput = {
-  personalNumber: Scalars['String']
-  email: Scalars['String']
-}
-
 export enum SignMethod {
   SwedishBankId = 'SWEDISH_BANK_ID',
   NorwegianBankId = 'NORWEGIAN_BANK_ID',
@@ -8613,13 +8565,12 @@ export type Subscription = {
   /** @deprecated use dataCollectionStatusV2 instead */
   dataCollectionStatus?: Maybe<DataCollectingStatusResponse>
   dataCollectionStatusV2: DataCollectingStatusResponseV2
-  /** @deprecated Use Quotes instead */
-  offer?: Maybe<OfferEvent>
+  _?: Maybe<Scalars['Boolean']>
+  authStatus?: Maybe<AuthEvent>
   signStatus?: Maybe<SignEvent>
   message: Message
   currentChatResponse?: Maybe<ChatResponse>
   chatState: ChatState
-  authStatus?: Maybe<AuthEvent>
 }
 
 export type SubscriptionDataCollectionStatusArgs = {
@@ -10240,6 +10191,15 @@ export type CreateDanishHomeAccidentTravelQuoteMutation = {
     | { __typename: 'UnderwritingLimitsHit' }
 }
 
+export type CreateOnboardingSessionMutationVariables = Exact<{
+  country: Scalars['String']
+  locale: Scalars['String']
+}>
+
+export type CreateOnboardingSessionMutation = {
+  __typename?: 'Mutation'
+} & Pick<Mutation, 'onboardingSession_create'>
+
 export type CreateSwedishHomeAccidentQuoteMutationVariables = Exact<{
   homeInput: CreateQuoteInput
   accidentInput: CreateQuoteInput
@@ -11323,6 +11283,56 @@ export type CreateDanishHomeAccidentTravelQuoteMutationResult = ApolloReactCommo
 export type CreateDanishHomeAccidentTravelQuoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
   CreateDanishHomeAccidentTravelQuoteMutation,
   CreateDanishHomeAccidentTravelQuoteMutationVariables
+>
+export const CreateOnboardingSessionDocument = gql`
+  mutation CreateOnboardingSession($country: String!, $locale: String!) {
+    onboardingSession_create(input: { country: $country, locale: $locale })
+  }
+`
+export type CreateOnboardingSessionMutationFn = ApolloReactCommon.MutationFunction<
+  CreateOnboardingSessionMutation,
+  CreateOnboardingSessionMutationVariables
+>
+
+/**
+ * __useCreateOnboardingSessionMutation__
+ *
+ * To run a mutation, you first call `useCreateOnboardingSessionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOnboardingSessionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createOnboardingSessionMutation, { data, loading, error }] = useCreateOnboardingSessionMutation({
+ *   variables: {
+ *      country: // value for 'country'
+ *      locale: // value for 'locale'
+ *   },
+ * });
+ */
+export function useCreateOnboardingSessionMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateOnboardingSessionMutation,
+    CreateOnboardingSessionMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    CreateOnboardingSessionMutation,
+    CreateOnboardingSessionMutationVariables
+  >(CreateOnboardingSessionDocument, options)
+}
+export type CreateOnboardingSessionMutationHookResult = ReturnType<
+  typeof useCreateOnboardingSessionMutation
+>
+export type CreateOnboardingSessionMutationResult = ApolloReactCommon.MutationResult<
+  CreateOnboardingSessionMutation
+>
+export type CreateOnboardingSessionMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  CreateOnboardingSessionMutation,
+  CreateOnboardingSessionMutationVariables
 >
 export const CreateSwedishHomeAccidentQuoteDocument = gql`
   mutation CreateSwedishHomeAccidentQuote(

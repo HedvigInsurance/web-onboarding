@@ -1,0 +1,3 @@
+mutation CreateOnboardingSession($country: String!, $locale: String!) {
+  onboardingSession_create(input: { country: $country, locale: $locale })
+}
