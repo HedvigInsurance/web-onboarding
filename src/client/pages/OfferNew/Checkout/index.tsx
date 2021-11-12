@@ -18,6 +18,7 @@ import { getQuoteIds } from 'pages/OfferNew/utils'
 import { handleSignedEvent } from 'utils/tracking/signing'
 import { useTrack } from 'utils/tracking/tracking'
 import { Variation, useVariation } from 'utils/hooks/useVariation'
+import { useLockBodyScroll } from 'utils/hooks/useLockBodyScroll'
 import { useScrollLock, VisibilityState } from './hooks'
 import { CheckoutContent } from './CheckoutContent'
 import { Sign, SignUiState } from './Sign'
@@ -167,6 +168,8 @@ export const Checkout: React.FC<CheckoutProps> = ({
       setVisibilityState(VisibilityState.CLOSING)
     }
   }, [isOpen])
+
+  useLockBodyScroll({ lock: visibilityState === VisibilityState.OPEN })
 
   const [signUiState, setSignUiState] = useState<SignUiState>('NOT_STARTED')
   const [emailUpdateLoading, setEmailUpdateLoading] = useState(false)
