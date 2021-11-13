@@ -26,8 +26,8 @@ const ErrorFallback: React.FC<FallbackProps> = ({
   <div>
     <h2>Something went wrong 😔</h2>
     <div>
-      <p>Error message:</p>
-      <pre style={{ whiteSpace: 'pre-wrap' }}>{error}</pre>
+      <p>Error message: {error.message}</p>
+      <pre style={{ whiteSpace: 'pre-wrap' }}>{error.stack}</pre>
     </div>
     <Button
       background={colorsV3.red500}

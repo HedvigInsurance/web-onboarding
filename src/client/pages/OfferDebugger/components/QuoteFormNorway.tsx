@@ -14,7 +14,7 @@ const initialBaseValues = {
 
 export const initialNoHomeValues = {
   ...initialBaseValues,
-  norwegianHomeContents: {
+  norwegianHomeContentsData: {
     isYouth: false,
     coInsured: 0,
     livingSpace: 44,
@@ -26,7 +26,7 @@ export const initialNoHomeValues = {
 
 export const initialNoTravelValues = {
   ...initialBaseValues,
-  norwegianTravel: {
+  norwegianTravelData: {
     coInsured: 0,
     isYouth: false,
   },
