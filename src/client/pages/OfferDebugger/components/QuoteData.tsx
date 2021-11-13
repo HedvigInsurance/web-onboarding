@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from '@emotion/styled'
-import { Form, Formik, FormikProps } from 'formik'
+import { Form, Formik, FormikProps, ErrorMessage } from 'formik'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { CreateQuoteVariables } from '@hedviginsurance/embark'
 import {
@@ -111,7 +111,7 @@ const getCurrentAvailableQuoteData = (
 
 const getDanishQuoteValues = (
   values: Values,
-  quoteType: 'danishTravel' | 'danishAccident',
+  quoteType: 'danishTravelData' | 'danishAccidentData',
 ) => {
   const { danishHomeContentsData, ...filteredValues } = values
   const { type, livingSpace, ...quoteTypeValues } = danishHomeContentsData!
@@ -153,6 +153,7 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionId }) => {
     quotesByMarket[currentMarket][0].value,
   )
 
+  const [submitError, setSubmitError] = useState<Error>()
   const handleSubmit = async (values: Values) => {
     const input = {
       ...values,
@@ -173,7 +174,7 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionId }) => {
             createOnboardingQuote({
               variables: {
                 id: sessionId,
-                input: getDanishQuoteValues(input, 'danishAccident'),
+                input: getDanishQuoteValues(input, 'danishAccidentData'),
               },
             }),
           ])
@@ -190,13 +191,13 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionId }) => {
             createOnboardingQuote({
               variables: {
                 id: sessionId,
-                input: getDanishQuoteValues(input, 'danishAccident'),
+                input: getDanishQuoteValues(input, 'danishAccidentData'),
               },
             }),
             createOnboardingQuote({
               variables: {
                 id: sessionId,
-                input: getDanishQuoteValues(input, 'danishTravel'),
+                input: getDanishQuoteValues(input, 'danishTravelData'),
               },
             }),
           ])
@@ -229,10 +230,13 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionId }) => {
       }
 
       await refetch()
-    } catch (e) {
-      console.error(e)
-      throw e
+    } catch (error) {
+      setSubmitError(error)
     }
+  }
+
+  if (submitError) {
+    throw submitError
   }
 
   return (

@@ -10,7 +10,7 @@ export const initialDkHomeValues = {
   birthDate: '1988-08-08',
   startDate: '',
   email: 'helle.hansen@hedvig.com',
-  danishHomeContents: {
+  danishHomeContentsData: {
     coInsured: 0,
     livingSpace: 34,
     street: 'Theodore Roosevelts Vej 1',
