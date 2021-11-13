@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { Form, Formik, FormikProps } from 'formik'
 import { colorsV3 } from '@hedviginsurance/brand'
@@ -146,9 +146,6 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionId }) => {
   })
   const [createOnboardingQuote] = useCreateOnboardingQuoteMutation()
 
-  const [quoteCreatingError, setQuoteCreatingError] = useState<string | null>(
-    null,
-  )
   const currentLocale = useCurrentLocale()
   const currentMarket = useMarket()
 
@@ -156,81 +153,86 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionId }) => {
     quotesByMarket[currentMarket][0].value,
   )
 
-  useEffect(() => {
-    setQuoteCreatingError(null)
-  }, [sessionId])
-
   const handleSubmit = async (values: Values) => {
     const input = {
       ...values,
       currentInsurer: values.currentInsurer || undefined,
       startDate: values.startDate || undefined,
     }
-    try {
-      if (quoteType === QuoteType.DanishHomeAccident) {
-        await Promise.all([
-          createOnboardingQuote({
-            variables: {
-              id: sessionId,
-              input: input as CreateOnboardingQuoteInput,
-            },
-          }),
-          createOnboardingQuote({
-            variables: {
-              id: sessionId,
-              input: getDanishQuoteValues(input, 'danishAccident'),
-            },
-          }),
-        ])
-      } else if (quoteType === QuoteType.DanishHomeAccidentTravel) {
-        await Promise.all([
-          createOnboardingQuote({
-            variables: {
-              id: sessionId,
-              input: input as CreateOnboardingQuoteInput,
-            },
-          }),
-          createOnboardingQuote({
-            variables: {
-              id: sessionId,
-              input: getDanishQuoteValues(input, 'danishAccident'),
-            },
-          }),
-          createOnboardingQuote({
-            variables: {
-              id: sessionId,
-              input: getDanishQuoteValues(input, 'danishTravel'),
-            },
-          }),
-        ])
-      } else if (quoteType === QuoteType.SwedishApartmentAccident) {
-        await Promise.all([
-          createOnboardingQuote({
-            variables: {
-              id: sessionId,
-              input: input as CreateOnboardingQuoteInput,
-            },
-          }),
-          createOnboardingQuote({
-            variables: {
-              id: sessionId,
-              input: getSwedishAccidentQuoteValues(input),
-            },
-          }),
-        ])
-      } else {
-        await createOnboardingQuote({
-          variables: {
-            id: sessionId,
-            input: input as CreateQuoteVariables['input'],
-          },
-        })
-      }
-    } catch (error) {
-      setQuoteCreatingError(error.message)
-    }
 
-    await refetch()
+    try {
+      switch (quoteType) {
+        case QuoteType.DanishHomeAccident:
+          await Promise.all([
+            createOnboardingQuote({
+              variables: {
+                id: sessionId,
+                input: input as CreateOnboardingQuoteInput,
+              },
+            }),
+            createOnboardingQuote({
+              variables: {
+                id: sessionId,
+                input: getDanishQuoteValues(input, 'danishAccident'),
+              },
+            }),
+          ])
+          break
+
+        case QuoteType.DanishHomeAccidentTravel:
+          await Promise.all([
+            createOnboardingQuote({
+              variables: {
+                id: sessionId,
+                input: input as CreateOnboardingQuoteInput,
+              },
+            }),
+            createOnboardingQuote({
+              variables: {
+                id: sessionId,
+                input: getDanishQuoteValues(input, 'danishAccident'),
+              },
+            }),
+            createOnboardingQuote({
+              variables: {
+                id: sessionId,
+                input: getDanishQuoteValues(input, 'danishTravel'),
+              },
+            }),
+          ])
+          break
+
+        case QuoteType.SwedishApartmentAccident:
+          await Promise.all([
+            createOnboardingQuote({
+              variables: {
+                id: sessionId,
+                input: input as CreateOnboardingQuoteInput,
+              },
+            }),
+            createOnboardingQuote({
+              variables: {
+                id: sessionId,
+                input: getSwedishAccidentQuoteValues(input),
+              },
+            }),
+          ])
+          break
+
+        default:
+          await createOnboardingQuote({
+            variables: {
+              id: sessionId,
+              input: input as CreateQuoteVariables['input'],
+            },
+          })
+      }
+
+      await refetch()
+    } catch (e) {
+      console.error(e)
+      throw e
+    }
   }
 
   return (
@@ -253,7 +255,7 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionId }) => {
         )}
       </Formik>
 
-      {!data?.onboardingSession.bundle && !quoteCreatingError && (
+      {!data?.onboardingSession.bundle ? (
         <Formik
           initialValues={
             getCurrentAvailableQuoteData(currentMarket, quoteType)
@@ -330,29 +332,21 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionId }) => {
             </Form>
           )}
         </Formik>
-      )}
-      {data?.onboardingSession.bundle && (
+      ) : (
         <>
           <LinkButton
             background={colorsV3.gray100}
             foreground={colorsV3.gray900}
-            to={`/${currentLocale.path}/new-member/offer`}
+            to={{
+              pathname: `/${currentLocale.path}/new-member/offer`,
+              search: `?session=${sessionId}`,
+            }}
           >
             Go to offer page →
           </LinkButton>
           <div style={{ padding: '2rem 0' }}>
             <pre>{JSON.stringify(data, null, 2)}</pre>
           </div>
-        </>
-      )}
-      {quoteCreatingError && (
-        <>
-          <h2>Something went wrong 😔</h2>
-          <div>
-            <u>Error message:</u>
-            <pre style={{ whiteSpace: 'pre-wrap' }}>{quoteCreatingError}</pre>
-          </div>
-          <h3>👉 Try starting over by nuking all state!</h3>
         </>
       )}
     </>

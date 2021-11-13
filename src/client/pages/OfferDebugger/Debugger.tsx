@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect, useCallback } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { ErrorBoundary, FallbackProps } from 'react-error-boundary'
 import { Button } from 'components/buttons'
 import { useCreateOnboardingSessionMutation } from 'data/graphql'
 import { useMarket } from 'components/utils/CurrentLocale'
@@ -18,6 +19,26 @@ const Row = styled.div`
   padding-bottom: 1rem;
 `
 
+const ErrorFallback: React.FC<FallbackProps> = ({
+  error,
+  resetErrorBoundary,
+}) => (
+  <div>
+    <h2>Something went wrong 😔</h2>
+    <div>
+      <p>Error message:</p>
+      <pre style={{ whiteSpace: 'pre-wrap' }}>{error}</pre>
+    </div>
+    <Button
+      background={colorsV3.red500}
+      foreground={colorsV3.gray100}
+      onClick={resetErrorBoundary}
+    >
+      👉 Try starting over by creating a new session!
+    </Button>
+  </div>
+)
+
 export const Debugger: React.FC = () => {
   const market = useMarket()
   const locale = useCurrentLocale().isoLocale
@@ -27,27 +48,39 @@ export const Debugger: React.FC = () => {
   ] = useCreateOnboardingSessionMutation()
   const sessionId = data?.onboardingSession_create
 
-  const handleClickNewSession = async () => {
+  const createNewSession = useCallback(async () => {
     await createOnboardingSession({ variables: { country: market, locale } })
-  }
+  }, [createOnboardingSession, market, locale])
+
+  useEffect(() => {
+    // create initial onboarding session
+    createNewSession()
+  }, [createNewSession])
 
   return (
     <Wrapper>
       <h1>Offer Page Debugger</h1>
 
       <Row>
-        <h3>Session</h3>
-        <Button background={colorsV3.purple900} onClick={handleClickNewSession}>
+        <h3>Session: {sessionId}</h3>
+        <Button
+          background={colorsV3.purple500}
+          foreground={colorsV3.gray900}
+          onClick={createNewSession}
+        >
           Create new session
         </Button>
-
-        {sessionId && <p>Active session: {sessionId}</p>}
       </Row>
 
       {sessionId && (
         <Row>
-          <h3>Offer</h3>
-          <QuoteData sessionId={sessionId} />
+          <ErrorBoundary
+            FallbackComponent={ErrorFallback}
+            onReset={createNewSession}
+          >
+            <h3>Offer</h3>
+            <QuoteData sessionId={sessionId} />
+          </ErrorBoundary>
         </Row>
       )}
     </Wrapper>
