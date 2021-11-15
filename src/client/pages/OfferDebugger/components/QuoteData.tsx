@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from '@emotion/styled'
-import { Form, Formik, FormikProps, ErrorMessage } from 'formik'
+import { Form, Formik, FormikProps } from 'formik'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { CreateQuoteVariables } from '@hedviginsurance/embark'
 import {
