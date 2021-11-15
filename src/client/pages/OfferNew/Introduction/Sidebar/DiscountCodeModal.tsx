@@ -9,8 +9,8 @@ import * as Yup from 'yup'
 import { useTextKeys } from 'utils/textKeys'
 import { useRedeemCodeMutation } from 'data/graphql'
 import { InputField } from 'components/inputs'
-import { Cross } from 'components/icons/Cross'
 import { Button } from 'components/buttons'
+import { CloseButton } from 'components/CloseButton/CloseButton'
 
 interface Props {
   isOpen: boolean
@@ -44,35 +44,10 @@ const Container = styled(motion.div)`
   border: 1px solid ${colorsV3.gray300};
   position: relative;
 `
-
-const CloseButton = styled.button`
-  width: 1.5rem;
-  height: 1.5rem;
+const ButtonWrapper = styled.div`
   position: absolute;
   top: 1rem;
   right: 1rem;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  text-align: center;
-  background-color: ${colorsV3.gray500};
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-
-  :focus {
-    outline: none;
-  }
-
-  :hover {
-    background-color: ${colorsV3.gray700};
-  }
-
-  svg {
-    width: 100%;
-    height: 100%;
-    fill: ${colorsV3.white};
-  }
 `
 
 const Title = styled.div`
@@ -140,10 +115,9 @@ export const DiscountCodeModal: React.FC<Props> = ({
       >
         <Title>{textKeys.SIDEBAR_ADD_DISCOUNT_HEADLINE()}</Title>
         <Paragraph>{textKeys.SIDEBAR_ADD_DISCOUNT_BODY()}</Paragraph>
-        <CloseButton onClick={close}>
-          <Cross />
-        </CloseButton>
-
+        <ButtonWrapper>
+          <CloseButton onClick={close} />
+        </ButtonWrapper>
         <Formik
           validateOnBlur
           validationSchema={discountSchema}

@@ -39,8 +39,10 @@ const DateFormsWrapper = styled.div`
   margin-bottom: 1.5rem;
 `
 
-const RowButtonWrapper = styled.div`
-  width: 100%;
+const RowButtonWrapper = styled.div<{
+  isSplit: boolean
+}>`
+  width: ${({ isSplit }) => (isSplit ? `50%` : `100%`)};
   flex: 1;
 `
 
@@ -91,6 +93,9 @@ const StartDateRowLabel = styled.div`
   color: ${colorsV3.gray500};
   font-size: 0.75rem;
   padding-bottom: 0.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `
 
 const Value = styled.div`
@@ -102,6 +107,7 @@ const Value = styled.div`
   font-size: 1rem;
   line-height: 1.5rem;
   color: ${colorsV3.gray900};
+  text-transform: capitalize;
 `
 const LoadingDotsWrapper = styled.div`
   width: 100%;
@@ -117,7 +123,9 @@ const ErrorMessage = styled(motion.div)`
   color: ${colorsV3.gray900};
 `
 
-const DateInputModalWrapper = styled.div<{ isOpen: boolean }>`
+const DateInputModalWrapper = styled.div<{
+  isOpen: boolean
+}>`
   width: 100%;
   height: 100%;
   position: absolute;
@@ -133,7 +141,9 @@ const DateInputModalWrapper = styled.div<{ isOpen: boolean }>`
   border-radius: 8px;
 `
 
-const StyledDateInput = styled(DateInputForm)<{ modal: boolean }>`
+const StyledDateInput = styled(DateInputForm)<{
+  modal: boolean
+}>`
   ${(props) =>
     props.modal &&
     `
@@ -174,6 +184,7 @@ const DateForm: React.FC<{
   size,
 }) => {
   const [datePickerOpen, setDatePickerOpen] = React.useState(false)
+
   const [dateValue, setDateValue] = React.useState(() =>
     getDefaultDateValue(quote),
   )
@@ -281,22 +292,10 @@ const DateForm: React.FC<{
     }
   }
 
-  // TODO: make this function (which returns the calendar component) a regular React function component, in a file of its own
-  const getDateInput = () => (
-    <StyledDateInput
-      open={datePickerOpen}
-      setOpen={setDatePickerOpen}
-      date={dateValue || new Date()}
-      setDate={setDate}
-      hasCurrentInsurer={hasCurrentInsurer(quote)}
-      modal={Boolean(modal)}
-    />
-  )
-
   const hasStartDate = Boolean(getDefaultDateValue(quote))
 
   return (
-    <RowButtonWrapper>
+    <RowButtonWrapper isSplit={isSplit}>
       {isSplit && <StartDateRowLabel>{quote.displayName}</StartDateRowLabel>}
       <RowButton
         datePickerOpen={datePickerOpen}
@@ -325,10 +324,24 @@ const DateForm: React.FC<{
       </RowButton>
       {modal ? (
         <DateInputModalWrapper isOpen={datePickerOpen}>
-          {getDateInput()}
+          <StyledDateInput
+            open={datePickerOpen}
+            setOpen={setDatePickerOpen}
+            date={dateValue || new Date()}
+            setDate={setDate}
+            hasCurrentInsurer={hasCurrentInsurer(quote)}
+            modal={Boolean(modal)}
+          />
         </DateInputModalWrapper>
       ) : (
-        getDateInput()
+        <StyledDateInput
+          open={datePickerOpen}
+          setOpen={setDatePickerOpen}
+          date={dateValue || new Date()}
+          setDate={setDate}
+          hasCurrentInsurer={hasCurrentInsurer(quote)}
+          modal={Boolean(modal)}
+        />
       )}
     </RowButtonWrapper>
   )

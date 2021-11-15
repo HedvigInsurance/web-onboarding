@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
+import * as changeCase from 'change-case'
 import {
   Body,
   Column,
@@ -13,6 +14,8 @@ import { PerilRow } from 'pages/OfferNew/Perils/PerilRow'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import { pushToGTMDataLayer } from 'utils/tracking/gtm'
+import { Tabs } from '../Tabs/Tabs'
 
 interface Props {
   offerData: OfferData
@@ -28,16 +31,25 @@ const Wrapper = styled.div`
   }
 `
 
-const PerilRowWrapper = styled.div`
-  padding-bottom: 8rem;
-
-  :last-child {
-    padding-bottom: 0;
-  }
-`
-
 export const Perils: React.FC<Props> = ({ offerData }) => {
   const textKeys = useTextKeys()
+
+  const tabItems = React.useMemo(
+    () =>
+      offerData.quotes.map((quote) => ({
+        id: quote.id,
+        name: quote.displayName,
+        content: <PerilRow offerQuote={quote} />,
+      })),
+    [offerData.quotes],
+  )
+
+  const handleChangeTab = (name: string) => {
+    pushToGTMDataLayer({
+      event: 'perils_tab_click',
+      eventData: { type: changeCase.snakeCase(name) },
+    })
+  }
 
   return (
     <Wrapper>
@@ -47,11 +59,7 @@ export const Perils: React.FC<Props> = ({ offerData }) => {
             <HeadingBlack>{textKeys.COVERAGE_HEADLINE()}</HeadingBlack>
             <Body>{textKeys.COVERAGE_BODY()}</Body>
           </HeadingWrapper>
-          {offerData.quotes.map((quote) => (
-            <PerilRowWrapper key={quote.id}>
-              <PerilRow offerQuote={quote} />
-            </PerilRowWrapper>
-          ))}
+          <Tabs items={tabItems} onChange={handleChangeTab} />
         </Column>
         <ColumnSpacing />
       </Container>
