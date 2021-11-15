@@ -128,7 +128,7 @@ const getSwedishAccidentQuoteValues = (values: Values) => {
     ...filteredValues,
     swedishAccidentData: {
       ...quoteTypeValues,
-      isStudent:
+      student:
         subType === ApartmentType.StudentBrf ||
         subType === ApartmentType.StudentRent,
     },
