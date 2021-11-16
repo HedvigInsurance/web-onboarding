@@ -306,6 +306,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
         styles={css`
           body {
             overflow: hidden;
+            background-color: ${colorsV3.gray100};
           }
         `}
       />
