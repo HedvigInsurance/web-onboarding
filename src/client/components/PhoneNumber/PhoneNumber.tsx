@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colors, colorsV3 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
@@ -37,7 +37,7 @@ const PhoneLink = styled.a`
 
 const Text = styled.p<Props>`
   color: ${(props) =>
-    props.color === 'black' ? colorsV3.gray800 : colorsV3.gray600};
+    props.color === 'black' ? colorsV3.gray800 : colorsV3.gray500};
   font-size: 0.75rem;
   margin: 0.2rem 0 0 1.4rem;
 `

@@ -4,7 +4,12 @@ import React from 'react'
 import { Redirect, useHistory, useRouteMatch } from 'react-router'
 import { LoadingPage } from 'components/LoadingPage'
 import { TopBar } from 'components/TopBar'
-import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
+import {
+  getIsoLocale,
+  Market,
+  useCurrentLocale,
+  useMarket,
+} from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import {
@@ -17,6 +22,7 @@ import { trackOfferGTM, EventName } from 'utils/tracking/gtm'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { Features, useFeature } from 'utils/hooks/useFeature'
+import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
 import { useQuoteIds } from '../../utils/hooks/useQuoteIds'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import {
@@ -48,6 +54,8 @@ export const OfferNew: React.FC = () => {
   const currentLocale = useCurrentLocale()
   const localeIsoCode = getIsoLocale(currentLocale)
   const variation = useVariation()
+  const market = useMarket()
+
   const [isInsuranceToggleEnabled] = useFeature([
     Features.OFFER_PAGE_INSURANCE_TOGGLE,
   ])
@@ -144,7 +152,11 @@ export const OfferNew: React.FC = () => {
       <SessionTokenGuard>
         {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
           <TopBar isTransparent>
-            <LanguagePicker path="/new-member/offer" />
+            {market === Market.Se ? (
+              <PhoneNumber />
+            ) : (
+              <LanguagePicker path="/new-member/offer" />
+            )}
           </TopBar>
         )}
         {offerData && (

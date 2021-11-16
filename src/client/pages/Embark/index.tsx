@@ -14,9 +14,15 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import gql from 'graphql-tag'
 import Helmet from 'react-helmet-async'
 import { apolloClient } from 'apolloClient'
-import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
+import {
+  getIsoLocale,
+  Market,
+  useCurrentLocale,
+  useMarket,
+} from 'components/utils/CurrentLocale'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useTextKeys } from 'utils/textKeys'
+import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
 import { pushToGTMDataLayer } from '../../utils/tracking/gtm'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
@@ -65,6 +71,8 @@ interface EmbarkProps {
 }
 
 const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
+  const market = useMarket()
+
   const history = useHistory<{
     embarkPassageName: string
     embarkPassageId: string
@@ -152,7 +160,9 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
                 passage={currentPassage}
                 storyData={state.data}
                 startPageLink={props.startPageLink}
-                customTrailingContent={<LanguagePicker />}
+                customTrailingContent={
+                  market === Market.Se ? <PhoneNumber /> : <LanguagePicker />
+                }
               />
             )}
           </StorageContainer>
