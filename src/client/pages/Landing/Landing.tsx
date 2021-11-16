@@ -1,16 +1,12 @@
 import { css, Global } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Helmet from 'react-helmet-async'
 import { AnimatePresence, motion } from 'framer-motion'
 import { TopBar, TopBarFiller } from 'components/TopBar'
 import { BackgroundImage } from 'components/BackgroundImage'
-import {
-  Market,
-  useCurrentLocale,
-  useMarket,
-} from 'components/utils/CurrentLocale'
+import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useTextKeys } from 'utils/textKeys'
@@ -20,6 +16,8 @@ import {
   MEDIUM_SCREEN_MEDIA_QUERY,
   MEDIUM_SMALL_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
+import { useCreateOnboardingSessionMutation } from 'data/graphql'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import { alternateLinksData, productsData } from './landingPageData'
 import { Card, CardHeadline, CardParagraph } from './components/Card'
@@ -162,6 +160,14 @@ export const Landing: React.FC = () => {
   const currentLocale = useCurrentLocale()
   const variation = useVariation()
 
+  const [createOnboardingCart, { data }] = useCreateOnboardingSessionMutation({
+    variables: { country: market, locale: currentLocale.isoLocale },
+  })
+
+  useEffect(() => {
+    createOnboardingCart()
+  }, [createOnboardingCart])
+
   return (
     <AnimatePresence>
       <motion.div
@@ -196,7 +202,7 @@ export const Landing: React.FC = () => {
               ))}
               <link
                 rel="canonical"
-                href={`https://hedvig.com/${currentLocale}/new-member`}
+                href={`https://hedvig.com/${currentLocale.path}/new-member`}
               />
             </Helmet>
 
@@ -232,7 +238,7 @@ export const Landing: React.FC = () => {
                 {productsData[market].map(
                   ({ id, linkSlug, badge, headline, paragraph, disabled }) => (
                     <Card
-                      to={`/${currentLocale}/new-member${linkSlug}`}
+                      to={`/${currentLocale.path}/new-member${linkSlug}?quoteCart=${data?.onboardingSession_create}`}
                       badge={badge && textKeys[badge]()}
                       disabled={disabled}
                       key={id}

@@ -182,6 +182,7 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
 interface EmbarkRootProps {
   name?: string
   baseUrl?: string
+  quoteCartId?: string
   language: string
 }
 
@@ -207,9 +208,9 @@ interface AngelVariables {
 export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
   const history = useHistory()
   const [data, setData] = React.useState<[string, any] | null>(null)
-  const [initialStore, setInitialStore] = React.useState<null | {
-    [key: string]: any
-  }>()
+  const [initialStore, setInitialStore] = React.useState<Record<string, any>>({
+    quoteCartId: props.quoteCartId,
+  })
   const currentLocale = useCurrentLocale()
   const localeIsoCode = getIsoLocale(currentLocale)
 
@@ -274,15 +275,15 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
     )
 
     if (!prevStore) {
-      setInitialStore({})
+      setInitialStore((prev) => ({ quoteCartId: prev.quoteCartId }))
       return
     }
 
     try {
       const parsedPrevStore = JSON.parse(prevStore)
-      setInitialStore(parsedPrevStore as { [key: string]: any })
+      setInitialStore(parsedPrevStore as Record<string, any>)
     } catch (err) {
-      setInitialStore({})
+      setInitialStore((prev) => ({ quoteCartId: prev.quoteCartId }))
     }
   }, [props.name])
 

@@ -181,7 +181,7 @@ export const reactPageRoutes: ReactPageRoute[] = [
   },
   {
     path: localePathPattern + '/new-member/:name/:id?',
-    render: ({ match }: RouteComponentProps<any>) => {
+    render: ({ match, location: { search } }: RouteComponentProps<any>) => {
       const getProps = () => {
         const { locale, name } = match.params
         switch (locale) {
@@ -266,11 +266,13 @@ export const reactPageRoutes: ReactPageRoute[] = [
         return <Redirect to={props.redirect} />
       }
 
+      const quoteCartId = new URLSearchParams(search).get('quoteCart')
       return (
         <EmbarkRoot
           language={match.params.locale}
           name={props.name}
           baseUrl={props.baseUrl}
+          quoteCartId={quoteCartId ?? undefined}
         />
       )
     },
