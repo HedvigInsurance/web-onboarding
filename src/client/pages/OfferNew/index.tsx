@@ -1,22 +1,23 @@
 import { History } from 'history'
 import { SemanticEvents } from 'quepasa'
 import React from 'react'
-import { Redirect, useHistory, useRouteMatch } from 'react-router'
+import { Redirect, useHistory, useRouteMatch, useLocation } from 'react-router'
 import { LoadingPage } from 'components/LoadingPage'
 import { TopBar } from 'components/TopBar'
-import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import {
   useQuoteBundleVariantsQuery,
   useRedeemedCampaignsQuery,
   QuoteBundleVariant,
+  useOnboardingSessionQuery,
 } from 'data/graphql'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { trackOfferGTM, EventName } from 'utils/tracking/gtm'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { Features, useFeature } from 'utils/hooks/useFeature'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useQuoteIds } from '../../utils/hooks/useQuoteIds'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import {
@@ -45,15 +46,12 @@ const getQuoteIdsFromBundleVariant = (bundleVariant: QuoteBundleVariant) =>
   bundleVariant.bundle.quotes.map((quote) => quote.id)
 
 export const OfferNew: React.FC = () => {
-  const currentLocale = useCurrentLocale()
-  const localeIsoCode = getIsoLocale(currentLocale)
+  const { isoLocale: localeIsoCode, path: currentLocale } = useCurrentLocale()
   const variation = useVariation()
   const [isInsuranceToggleEnabled] = useFeature([
     Features.OFFER_PAGE_INSURANCE_TOGGLE,
   ])
   const history = useHistory()
-  const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
-  const redeemedCampaigns = redeemedCampaignsData?.redeemedCampaigns ?? []
 
   const {
     isLoading: quoteIdsIsLoading,
@@ -62,6 +60,16 @@ export const OfferNew: React.FC = () => {
     setSelectedQuoteIds,
   } = useQuoteIds()
 
+  const { search } = useLocation()
+  const sessionId = new URLSearchParams(search).get('session')
+  const isUsingQuoteCartApi = sessionId !== null
+
+  const { data: cartData, loading: isLoadingCart } = useOnboardingSessionQuery({
+    variables: { id: sessionId || '', locale: localeIsoCode },
+    skip: !isUsingQuoteCartApi,
+  })
+
+  // TODO: remove when we have migrated to the QuoteCart API
   const {
     data,
     loading: loadingQuoteBundle,
@@ -73,10 +81,26 @@ export const OfferNew: React.FC = () => {
       },
       locale: localeIsoCode,
     },
-    skip: quoteIdsIsLoading,
+    skip: isUsingQuoteCartApi || quoteIdsIsLoading,
   })
 
-  const bundleVariants = (data?.quoteBundle.possibleVariations ??
+  const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
+  // END TODO
+
+  const isLoadingQuoteBundle = isUsingQuoteCartApi
+    ? isLoadingCart
+    : loadingQuoteBundle
+
+  const redeemedCampaigns =
+    (isUsingQuoteCartApi
+      ? [cartData?.onboardingSession.campaign]
+      : redeemedCampaignsData?.redeemedCampaigns) ?? []
+
+  const bundleData = isUsingQuoteCartApi
+    ? cartData?.onboardingSession.bundle
+    : data?.quoteBundle
+
+  const bundleVariants = (bundleData?.possibleVariations ??
     []) as QuoteBundleVariant[]
 
   const isInsuranceSelectorVisible =
@@ -109,7 +133,7 @@ export const OfferNew: React.FC = () => {
   const checkoutMatch = useRouteMatch(`${localePathPattern}/new-member/sign`)
   const toggleCheckout = createToggleCheckout(history, currentLocale)
 
-  if ((loadingQuoteBundle && !data) || quoteIdsIsLoading) {
+  if ((isLoadingQuoteBundle && !bundleData) || quoteIdsIsLoading) {
     return <LoadingPage />
   }
 
@@ -117,7 +141,7 @@ export const OfferNew: React.FC = () => {
     return <Redirect to={`/${currentLocale}/new-member`} />
   }
 
-  if (!loadingQuoteBundle && !data) {
+  if (!isLoadingQuoteBundle && !bundleData) {
     throw new Error(
       `No quote returned to show offer with (quoteIds=${quoteIds}).`,
     )

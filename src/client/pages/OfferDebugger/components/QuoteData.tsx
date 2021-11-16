@@ -167,13 +167,13 @@ const ButtonLoadingIndicator = styled(LoadingDots)`
 `
 
 export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
-  const { data, refetch } = useQuoteCartQuery({
-    variables: { id: quoteCartId },
-  })
-  const [createQuoteBundle] = useCreateQuoteBundleMutation()
-
   const currentLocale = useCurrentLocale()
   const currentMarket = useMarket()
+
+  const { data, refetch } = useQuoteCartQuery({
+    variables: { id: quoteCartId, locale: currentLocale.isoLocale },
+  })
+  const [createQuoteBundle] = useCreateQuoteBundleMutation()
 
   const [quoteBundleType, setQuoteBundleType] = useState(
     quotesByMarket[currentMarket][0].value,
