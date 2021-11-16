@@ -17,11 +17,8 @@ import { OfferNew } from './client/pages/OfferNew'
 import { SignLoading } from './client/pages/SignLoading'
 
 enum EmbarkStory {
-  DenmarkContents = 'Web Onboarding DK - Contents',
   DenmarkContentsWithAddressAutocomplete = 'Web Onboarding DK - Contents With Autocomplete',
-  DenmarkContentsAccident = 'Web Onboarding DK - Danish Contents-Accident',
   DenmarkContentsAccidentWithAddressAutocomplete = 'Web Onboarding DK - Danish Contents-Accident With Autocomplete',
-  DenmarkContentsAccidentTravel = 'Web Onboarding DK - Danish Contents-Accident-Travel',
   DenmarkContentsAccidentTravelWithAddressAutocomplete = 'Web Onboarding DK - Danish Contents-Accident-Travel With Autocomplete',
 
   NorwayContentsNorwegian = 'Web Onboarding NO - Norwegian Contents',
@@ -31,11 +28,6 @@ enum EmbarkStory {
   NorwayComboNorwegian = 'Web Onboarding NO - Norwegian Combo',
   NorwayComboEnglish = 'Web Onboarding NO - English Combo',
 
-  SwedenNeederSwedish = 'Web Onboarding - Swedish Needer',
-  SwedenNeederEnglish = 'Web Onboarding - English Needer',
-  SwedenSwitcherSwedish = 'Web Onboarding - Swedish Switcher',
-  SwedenSwitcherEnglish = 'Web Onboarding - English Switcher',
-  // New Swedish flows with Lokalise & Accident
   SwedenNeeder = 'Web Onboarding SE - Needer',
   SwedenSwitcher = 'Web Onboarding SE - Switcher',
   SwedenSwitcherWithoutAccident = 'Web Onboarding SE - Switcher Without Accident',

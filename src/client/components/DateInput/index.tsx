@@ -38,6 +38,12 @@ const TopSection = styled.div`
   width: 100%;
 `
 
+const ButtonWrapper = styled.div`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+`
+
 const CalendarWrapper = styled.div`
   width: 100%;
   height: 17.25rem;
@@ -116,7 +122,9 @@ export const DateInput: React.FC<DateInputProps> = ({
           </CalendarWrapper>
 
           <TopSection>
-            <CloseButton onClick={() => setOpen(false)} />
+            <ButtonWrapper>
+              <CloseButton onClick={() => setOpen(false)} />
+            </ButtonWrapper>
           </TopSection>
 
           {hasCurrentInsurer && (

@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { BackArrow } from 'components/icons/BackArrow'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import {
@@ -18,6 +17,8 @@ import { getQuoteIds } from 'pages/OfferNew/utils'
 import { handleSignedEvent } from 'utils/tracking/signing'
 import { useTrack } from 'utils/tracking/tracking'
 import { Variation, useVariation } from 'utils/hooks/useVariation'
+import { useLockBodyScroll } from 'utils/hooks/useLockBodyScroll'
+import { CloseButton } from 'components/CloseButton/CloseButton'
 import { useScrollLock, VisibilityState } from './hooks'
 import { CheckoutContent } from './CheckoutContent'
 import { Sign, SignUiState } from './Sign'
@@ -91,23 +92,6 @@ const InnerWrapper = styled('div')`
   }
 `
 
-const BackButton = styled('button')`
-  background: transparent;
-  border: none;
-  border-radius: 100%;
-  width: 2rem;
-  height: 2rem;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  :focus {
-    outline: 0;
-    background: ${colorsV3.purple300};
-  }
-`
-
 const Backdrop = styled('div')<Openable>`
   position: fixed;
   background: rgba(25, 25, 25, 0.5);
@@ -167,6 +151,8 @@ export const Checkout: React.FC<CheckoutProps> = ({
       setVisibilityState(VisibilityState.CLOSING)
     }
   }, [isOpen])
+
+  useLockBodyScroll({ lock: visibilityState === VisibilityState.OPEN })
 
   const [signUiState, setSignUiState] = useState<SignUiState>('NOT_STARTED')
   const [emailUpdateLoading, setEmailUpdateLoading] = useState(false)
@@ -296,10 +282,7 @@ export const Checkout: React.FC<CheckoutProps> = ({
               windowHeight={windowInnerHeight}
             >
               <InnerWrapper>
-                <BackButton onClick={onClose}>
-                  <BackArrow />
-                </BackButton>
-
+                <CloseButton onClick={onClose} />
                 <CheckoutContent
                   onSubmit={startSign}
                   offerData={offerData}

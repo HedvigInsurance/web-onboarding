@@ -29,6 +29,11 @@ const Background = styled(motion.div)`
   left: 0;
   background-color: rgba(25, 25, 25, 0.4);
 `
+const ButtonWrapper = styled.div`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+`
 
 interface ModalContainerProps {
   dynamicHeight?: boolean
@@ -140,7 +145,9 @@ export const Modal: React.FC<ModalProps> = ({
         }}
       >
         <ModalInnerContainer>{children}</ModalInnerContainer>
-        <CloseButton onClick={onClose} />
+        <ButtonWrapper>
+          <CloseButton onClick={onClose} />
+        </ButtonWrapper>
       </ModalContainer>
     </Wrapper>
   )
