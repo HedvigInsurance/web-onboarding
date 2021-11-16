@@ -21,9 +21,11 @@ const InnerWrapper = styled.div`
 `
 
 const IconWrapper = styled.div`
-  margin-right: 0.4rem;
   display: flex;
   align-items: center;
+  && {
+    margin-right: 0.4rem;
+  }
 `
 
 const PhoneLink = styled.a`
@@ -40,7 +42,9 @@ const Text = styled.p<Props>`
   color: ${(props) =>
     props.color === 'black' ? colorsV3.gray800 : colorsV3.gray500};
   font-size: 0.75rem;
-  margin: 0.2rem 0 0 1.4rem;
+  && {
+    margin: 0.2rem 0 0 1.4rem;
+  }
 `
 
 export const PhoneNumber: React.FC<Props> = ({ color }: Props) => {
