@@ -24,7 +24,7 @@ export const ConnectPayment: React.FC = () => {
         </Helmet>
         <TopBar>
           {market === Market.Se ? (
-            <PhoneNumber />
+            <PhoneNumber color="white" />
           ) : (
             <LanguagePicker path="/new-member/connect-payment" />
           )}

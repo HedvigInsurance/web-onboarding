@@ -71,12 +71,12 @@ export const PhoneNumber: React.FC<Props> = ({ color }: Props) => {
         </PhoneLink>
       </InnerWrapper>
       {isPhoneOpen() ? (
-        <Text>
+        <Text color={color}>
           {textKeys.PHONE_OPEN_TODAY()} {currentLocale.phoneNumber?.opens}-
           {currentLocale.phoneNumber?.closes}
         </Text>
       ) : (
-        <Text>
+        <Text color={color}>
           {textKeys.PHONE_CLOSED_UNTIL()} {currentLocale.phoneNumber?.opens}
         </Text>
       )}

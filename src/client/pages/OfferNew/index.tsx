@@ -153,7 +153,7 @@ export const OfferNew: React.FC = () => {
         {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
           <TopBar isTransparent>
             {market === Market.Se ? (
-              <PhoneNumber />
+              <PhoneNumber color="white" />
             ) : (
               <LanguagePicker path="/new-member/offer" />
             )}

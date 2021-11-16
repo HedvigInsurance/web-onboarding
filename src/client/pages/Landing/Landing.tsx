@@ -204,7 +204,11 @@ export const Landing: React.FC = () => {
             {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
               <>
                 <TopBar isTransparent>
-                  {market === Market.Se ? <PhoneNumber /> : <LanguagePicker />}
+                  {market === Market.Se ? (
+                    <PhoneNumber color="white" />
+                  ) : (
+                    <LanguagePicker />
+                  )}
                 </TopBar>
                 <TopBarFiller />
               </>
