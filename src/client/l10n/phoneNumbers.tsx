@@ -14,6 +14,6 @@ export const phoneNumbers: PhoneNumbers = {
     displayNumber: '075-101 20 00',
     hrefNumber: '0751012000',
     opens: '09',
-    closes: '22',
+    closes: '18',
   },
 }
