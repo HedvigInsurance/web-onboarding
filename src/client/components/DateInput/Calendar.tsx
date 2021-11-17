@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import React, { useEffect } from 'react'
 import { RenderProps as DayzedCalendarProps } from 'dayzed'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { useCurrentLocale } from '../utils/CurrentLocale'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { BackArrow } from '../icons/BackArrow'
 import { ForwardArrow } from '../icons/ForwardArrow'
 import { AnimationDirection, Animator } from './Animator'
@@ -136,10 +136,11 @@ export const Calendar: React.FC<DayzedCalendarProps> = ({
 }) => {
   const [weekdayNamesShort, setWeekdayNamesShort] = React.useState<string[]>([])
   const [monthNamesShort, setMonthNamesShort] = React.useState<string[]>([])
-  const locale = useCurrentLocale()
+  const currentLocale = useCurrentLocale()
+  const currentLocalePath = currentLocale.path
 
   useEffect(() => {
-    getLocaleImport(locale).then((module) => {
+    getLocaleImport(currentLocalePath).then((module) => {
       const dateLocale = module.default
 
       setMonthNamesShort(
@@ -158,7 +159,7 @@ export const Calendar: React.FC<DayzedCalendarProps> = ({
         dateLocale.localize?.day(0, { width: 'abbreviated' }),
       ])
     })
-  }, [locale])
+  }, [currentLocalePath])
 
   const [animationDirection, setAnimationDirection] = React.useState(
     AnimationDirection.FORWARDS,
