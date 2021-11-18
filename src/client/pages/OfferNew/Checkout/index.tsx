@@ -197,6 +197,19 @@ export const Checkout: React.FC<CheckoutProps> = ({
   const scrollWrapper = useRef<HTMLDivElement>()
   useScrollLock(visibilityState, scrollWrapper)
 
+  useEffect(
+    function syncFirstnameLastnameStates() {
+      if (offerData.person.firstName) {
+        setFirstName(offerData.person.firstName)
+      }
+
+      if (offerData.person.lastName) {
+        setLastName(offerData.person.lastName)
+      }
+    },
+    [offerData.person.firstName, offerData.person.lastName],
+  )
+
   useEffect(() => {
     if (typeof Intercom === 'undefined') {
       return
@@ -357,9 +370,6 @@ export const Checkout: React.FC<CheckoutProps> = ({
                     lastName={lastName}
                     onFirstNameChange={setFirstName}
                     onLastNameChange={setLastName}
-                    isFirstAndLastNameVisible={
-                      !offerData.person.firstName || !offerData.person.lastName
-                    }
                     email={offerData.person.email ?? ''}
                     onEmailChange={onEmailChange}
                     ssn={offerData.person.ssn ?? ''}
