@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useCallback, useRef } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { motion } from 'framer-motion'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import { useClickOutside } from 'utils/hooks/useClickOutside'
 import { InfoIcon } from '../icons/Info'
 
 const ICON_SIZE = '20px'
@@ -87,18 +88,12 @@ export const Tooltip: React.FC<TooltipProps> = ({ body }) => {
   const ref = useRef<HTMLDivElement>(null)
   const [isVisible, setVisible] = useState(false)
 
-  useEffect(() => {
-    if (!isVisible) return
-
-    const handleClickOutside = (event: TouchEvent) => {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
-        setVisible(false)
-      }
+  const handleClickOutside = useCallback(() => {
+    if (isVisible) {
+      setVisible(false)
     }
-
-    window.addEventListener('touchstart', handleClickOutside)
-    return () => window.removeEventListener('touchstart', handleClickOutside)
-  }, [isVisible])
+  }, [isVisible, setVisible])
+  useClickOutside(ref, handleClickOutside)
 
   return (
     <Wrapper>
