@@ -177,8 +177,8 @@ export const Checkout: React.FC<CheckoutProps> = ({
 
   const [windowInnerHeight, setWindowInnerHeight] = useState(window.innerHeight)
 
-  const [firstName, setFirstName] = useState(offerData.person.firstName)
-  const [lastName, setLastName] = useState(offerData.person.lastName)
+  const [firstName, setFirstName] = useState(offerData.person.firstName ?? '')
+  const [lastName, setLastName] = useState(offerData.person.lastName ?? '')
   const [editQuote, editQuoteResult] = useEditQuoteMutation()
   const { ssnBackendError } = useSsnError(editQuoteResult)
 
