@@ -309,5 +309,10 @@
   "CHECKOUT_LASTNAME_LABEL": "Last name",
   "HERO_FIRSTNAME_PLACEHOLDER": "You",
   "PHONE_OPEN_TODAY": "Open today",
+<<<<<<< HEAD
   "PHONE_CLOSED_UNTIL": "Closed until"
+=======
+  "PHONE_CLOSED_UNTIL": "Closed until",
+  "CHECKOUT_EMAIL_LABEL": "Email"
+>>>>>>> master
 }

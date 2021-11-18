@@ -309,5 +309,10 @@
   "CHECKOUT_LASTNAME_LABEL": "Efternavn",
   "HERO_FIRSTNAME_PLACEHOLDER": "Dig",
   "PHONE_OPEN_TODAY": "",
+<<<<<<< HEAD
   "PHONE_CLOSED_UNTIL": ""
+=======
+  "PHONE_CLOSED_UNTIL": "",
+  "CHECKOUT_EMAIL_LABEL": "E-mail"
+>>>>>>> master
 }

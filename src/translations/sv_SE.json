@@ -309,5 +309,10 @@
   "CHECKOUT_LASTNAME_LABEL": "Efternamn",
   "HERO_FIRSTNAME_PLACEHOLDER": "Du",
   "PHONE_OPEN_TODAY": "Öppet idag kl",
+<<<<<<< HEAD
   "PHONE_CLOSED_UNTIL": "Stängt till kl"
+=======
+  "PHONE_CLOSED_UNTIL": "Stängt till kl",
+  "CHECKOUT_EMAIL_LABEL": "E-mail"
+>>>>>>> master
 }
