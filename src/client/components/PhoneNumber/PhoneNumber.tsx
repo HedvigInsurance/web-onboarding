@@ -54,14 +54,13 @@ export const PhoneNumber: React.FC<Props> = ({ color }: Props) => {
   const currentTime = format(new Date(), 'HH')
 
   const isPhoneOpen = (): boolean => {
-    if (
-      (currentLocale.phoneNumber &&
-        currentTime < currentLocale.phoneNumber?.closes) ||
-      (currentLocale.phoneNumber &&
-        currentTime > currentLocale.phoneNumber?.opens)
-    ) {
-      return true
-    } else return false
+  const isCallServiceAvailable = () => {
+    if (!currentLocale.phoneNumber) {
+      return false
+    }
+
+    const { opens, closes } = currentLocale.phoneNumber
+    return currentTime >= opens && currentTime >= closes
   }
 
   return (
