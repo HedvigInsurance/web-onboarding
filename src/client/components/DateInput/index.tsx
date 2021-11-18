@@ -1,10 +1,11 @@
+import React, { useRef, useCallback } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { addYears, subDays } from 'date-fns'
 import Dayzed from 'dayzed'
 import { motion } from 'framer-motion'
-import React from 'react'
 import { useTextKeys } from 'utils/textKeys'
+import { useClickOutside } from 'utils/hooks/useClickOutside'
 import { TextButton } from '../buttons'
 import { CloseButton } from '../CloseButton/CloseButton'
 import { Calendar } from './Calendar'
@@ -14,14 +15,6 @@ const Wrapper = styled(motion.div)`
   left: 0;
   width: 100%;
   padding: 0.625rem 1.25rem;
-`
-
-const BackgroundCloser = styled.div`
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
 `
 
 const Container = styled(motion.div)`
@@ -72,10 +65,17 @@ export const DateInput: React.FC<DateInputProps> = ({
   hasCurrentInsurer,
 }) => {
   const textKeys = useTextKeys()
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  const handleClickOutside = useCallback(() => {
+    if (open) {
+      setOpen(false)
+    }
+  }, [open, setOpen])
+  useClickOutside(containerRef, handleClickOutside)
 
   return (
     <>
-      {open && <BackgroundCloser onClick={() => setOpen(false)} />}
       <Wrapper
         aria-hidden={!open}
         initial={{ visibility: 'hidden' }}
@@ -89,6 +89,7 @@ export const DateInput: React.FC<DateInputProps> = ({
         transition={{ ease: 'linear', delay: open ? 0 : 0.5, duration: 0 }}
       >
         <Container
+          ref={containerRef}
           initial={{ y: 0, opacity: 0, pointerEvents: 'none' }}
           animate={
             open
