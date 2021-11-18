@@ -160,7 +160,7 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
                 storyData={state.data}
                 startPageLink={props.startPageLink}
                 customTrailingContent={
-                  market === Market.Se ? (
+                  currentLocale.phoneNumber ? (
                     <PhoneNumber color="white" />
                   ) : (
                     <LanguagePicker />
