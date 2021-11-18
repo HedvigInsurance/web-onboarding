@@ -11,8 +11,8 @@ type Props = {
 }
 
 const Wrapper = styled.div<Props>`
-  color: ${(props) =>
-    props.color === 'black' ? colorsV3.black : colorsV3.white};
+  color: ${({ color }) =>
+    color === 'black' ? colorsV3.black : colorsV3.white};
 `
 
 const InnerWrapper = styled.div`
