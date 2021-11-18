@@ -61,7 +61,6 @@
   "SIDEBAR_ADD_DISCOUNT_CELL_PLACEHOLDER": "Koden din",
   "SIDEBAR_STARTDATE_CELL_VALUE_NEW": "I dag",
   "SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER": "Når den gamle forsikringen din utløper",
-  "CHECKOUT_EMAIL_LABEL": "E-postadresse",
   "CHECKOUT_EMAIL_PLACEHOLDER": "din.epost@her.no",
   "CHECKOUT_SUMMARY_HEADLINE": "Sammendrag",
   "CHECKOUT_SIGN_BUTTON_TEXT": "Signer med BankID",
@@ -302,8 +301,14 @@
   "CHECKOUT_SIGN_FAIL_CONTENT": "Vi kan dessverre ikke tilby deg kjøp av forsikring på nett. Vennligst ta kontakt på betaling@hedvig.com så hjelper vi deg videre!",
   "OFFER_BUNDLE_SELECTOR_TITLE": "Forsikringspakken din",
   "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "Velg forsikringsplanen som passer deg best. Forsikringen dekker deg og alle medforsikrede. Du kan alltids legge til ulykkesforsikringen i appen på et senere tidspunkt. ",
-  "OFFER_APP_PROMOTION_HEADING": "En forsikrings-app som løser problemene dine",
-  "OFFER_APP_PROMOTION_PARAGRAPH": "Hvis du har hatt en ulykke så kan du enkelt rapportere skaden direkte i appen, uansett hvor du er. I noen tilfeller trenger du ikke å vente 5 minutter engang for å få kompensasjon. Vi er tilgjengelige mellom 08-22 på hverdager og mellom 09-18 i helgene. ",
+  "OFFER_APP_PROMOTION_HEADING": "En forsikrings-app som løser dine problemer",
+  "OFFER_APP_PROMOTION_PARAGRAPH": "Meld inn skader, håndter dine forsikringer eller still spørsmål. Med appen får du full kontroll over dine forsikringer og hjelp på direkten om noe har skjedd.",
   "WEB_OFFER_DOCUMENTS_SECTION_TITLE": "Viktige dokumenter",
-  "STARTPAGE_UNINSURED_BODY_WITHOUT_ACCIDENT": "Beregn prisen på en ny innboforsikring hos Hedvig"
+  "STARTPAGE_UNINSURED_BODY_WITHOUT_ACCIDENT": "Beregn prisen på en ny innboforsikring hos Hedvig",
+  "CHECKOUT_FIRSTNAME_LABEL": "Fornavn",
+  "CHECKOUT_LASTNAME_LABEL": "Etternavn",
+  "HERO_FIRSTNAME_PLACEHOLDER": "Du",
+  "PHONE_OPEN_TODAY": "",
+  "PHONE_CLOSED_UNTIL": "",
+  "CHECKOUT_EMAIL_LABEL": "E-postadresse"
 }

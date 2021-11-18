@@ -61,7 +61,6 @@
   "SIDEBAR_ADD_DISCOUNT_CELL_PLACEHOLDER": "Your code",
   "SIDEBAR_STARTDATE_CELL_VALUE_NEW": "Today",
   "SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER": "When your old one expires",
-  "CHECKOUT_EMAIL_LABEL": "Email",
   "CHECKOUT_EMAIL_PLACEHOLDER": "your.email@here.com",
   "CHECKOUT_SUMMARY_HEADLINE": "Summary",
   "CHECKOUT_SIGN_BUTTON_TEXT": "Sign with BankID",
@@ -302,8 +301,14 @@
   "CHECKOUT_SIGN_FAIL_CONTENT": "Unfortunately, we can't offer you to purchase an insurance online. Please contact betaling@hedvig.com and we'll assist you.",
   "OFFER_BUNDLE_SELECTOR_TITLE": "Your insurance bundle",
   "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "",
-  "OFFER_APP_PROMOTION_HEADING": "Take care of everything in our simple app",
-  "OFFER_APP_PROMOTION_PARAGRAPH": "If you've had an accident, you can easily report the injury directly in the app, no matter where you are. In some cases, you won't even have to wait 5 minutes for your compensation. We are available between 08-22 on weekdays and 9-18 on weekends.",
+  "OFFER_APP_PROMOTION_HEADING": "An insurance-app that solves all your problems",
+  "OFFER_APP_PROMOTION_PARAGRAPH": "Make a claim, manage your insurances or ask questions. With the app you’ll have full control over your insurances and get instant help if something has happened.",
   "WEB_OFFER_DOCUMENTS_SECTION_TITLE": "Important documents",
-  "STARTPAGE_UNINSURED_BODY_WITHOUT_ACCIDENT": "Get a price quote on a new home insurance with Hedvig"
+  "STARTPAGE_UNINSURED_BODY_WITHOUT_ACCIDENT": "Get a price quote on a new home insurance with Hedvig",
+  "CHECKOUT_FIRSTNAME_LABEL": "First name",
+  "CHECKOUT_LASTNAME_LABEL": "Last name",
+  "HERO_FIRSTNAME_PLACEHOLDER": "You",
+  "PHONE_OPEN_TODAY": "Open today",
+  "PHONE_CLOSED_UNTIL": "Closed until",
+  "CHECKOUT_EMAIL_LABEL": "Email"
 }
