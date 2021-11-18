@@ -301,11 +301,14 @@
   "CHECKOUT_SIGN_FAIL_CONTENT": "",
   "OFFER_BUNDLE_SELECTOR_TITLE": "Välj ditt Hedvig-paket",
   "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "Alla försäkringar gäller för dig och dina medförsäkrade. Du kan när som helst uppgradera eller nedgradera ditt paket eller ändra ditt startdatum i Hedvig-appen.",
-  "OFFER_APP_PROMOTION_HEADING": "Sköt allt i Hedvig-appen",
+  "OFFER_APP_PROMOTION_HEADING": "En försäkrings-app som löser alla dina problem",
   "OFFER_APP_PROMOTION_PARAGRAPH": "Anmäl skador, hantera dina försäkringar eller ställ frågor. Med appen får du full kontroll över dina försäkringar och hjälp på direkten om något hänt.",
   "WEB_OFFER_DOCUMENTS_SECTION_TITLE": "Viktiga dokument",
   "STARTPAGE_UNINSURED_BODY_WITHOUT_ACCIDENT": "Få ett prisförslag på hemförsäkring.",
   "CHECKOUT_FIRSTNAME_LABEL": "Förnamn",
   "CHECKOUT_LASTNAME_LABEL": "Efternamn",
-  "HERO_FIRSTNAME_PLACEHOLDER": "Du"
+  "HERO_FIRSTNAME_PLACEHOLDER": "Du",
+  "PHONE_OPEN_TODAY": "Öppet idag kl",
+  "PHONE_CLOSED_UNTIL": "Stängt till kl",
+  "CHECKOUT_EMAIL_LABEL": "E-mail"
 }

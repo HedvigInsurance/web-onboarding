@@ -301,11 +301,14 @@
   "CHECKOUT_SIGN_FAIL_CONTENT": "Unfortunately, we can't offer you to purchase an insurance online. Please contact betaling@hedvig.com and we'll assist you.",
   "OFFER_BUNDLE_SELECTOR_TITLE": "Choose your Hedvig-bundle",
   "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "All insurances cover you and your co-insured. You can upgrade or downgrade your bundle or change your start date in the Hedvig-app.",
-  "OFFER_APP_PROMOTION_HEADING": "Take care of everything in the Hedvig app",
+  "OFFER_APP_PROMOTION_HEADING": "An insurance-app that solves all your problems",
   "OFFER_APP_PROMOTION_PARAGRAPH": "Make a claim, manage your insurances or ask questions. With the app you’ll have full control over your insurances and get instant help if something has happened.",
   "WEB_OFFER_DOCUMENTS_SECTION_TITLE": "Important documents",
   "STARTPAGE_UNINSURED_BODY_WITHOUT_ACCIDENT": "Get a price quote on our home insurance and the new complementary accident insurance.",
   "CHECKOUT_FIRSTNAME_LABEL": "First name",
   "CHECKOUT_LASTNAME_LABEL": "Last name",
-  "HERO_FIRSTNAME_PLACEHOLDER": "You"
+  "HERO_FIRSTNAME_PLACEHOLDER": "You",
+  "PHONE_OPEN_TODAY": "Open today",
+  "PHONE_CLOSED_UNTIL": "Closed until",
+  "CHECKOUT_EMAIL_LABEL": "Email"
 }
