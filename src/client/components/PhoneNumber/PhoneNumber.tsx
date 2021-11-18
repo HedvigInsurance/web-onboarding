@@ -11,8 +11,8 @@ type Props = {
 }
 
 const Wrapper = styled.div<Props>`
-  color: ${(props) =>
-    props.color === 'black' ? colorsV3.black : colorsV3.white};
+  color: ${({ color }) =>
+    color === 'black' ? colorsV3.black : colorsV3.white};
 `
 
 const InnerWrapper = styled.div`
@@ -39,8 +39,8 @@ const PhoneLink = styled.a`
 `
 
 const Text = styled.p<Props>`
-  color: ${(props) =>
-    props.color === 'black' ? colorsV3.gray800 : colorsV3.gray500};
+  color: ${({ color }) =>
+    color === 'black' ? colorsV3.gray800 : colorsV3.gray500};
   font-size: 0.75rem;
   && {
     margin: 0.2rem 0 0 1.4rem;
@@ -54,14 +54,12 @@ export const PhoneNumber: React.FC<Props> = ({ color }) => {
   const currentTime = formatDate(new Date(), 'HH')
 
   const isPhoneOpen = (): boolean => {
-    if (
-      (currentLocale.phoneNumber &&
-        currentTime < currentLocale.phoneNumber?.closesAt) ||
-      (currentLocale.phoneNumber &&
-        currentTime > currentLocale.phoneNumber?.opensAt)
-    ) {
-      return true
-    } else return false
+    if (!currentLocale.phoneNumber) {
+      return false
+    }
+
+    const { opensAt, closesAt } = currentLocale.phoneNumber
+    return currentTime >= opensAt && currentTime >= closesAt
   }
 
   return (
