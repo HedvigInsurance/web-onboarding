@@ -61,7 +61,6 @@ export const CheckoutContent: React.FC<Props> = ({
           </StartDateLabel>
           <StartDate offerData={offerData} refetch={refetch} />
         </StartDateWrapper>
-
         <InsuranceSummary offerData={offerData} />
       </Section>
     </>

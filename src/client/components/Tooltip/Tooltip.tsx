@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { motion } from 'framer-motion'
@@ -13,7 +13,6 @@ export type TooltipProps = {
 
 const Wrapper = styled.div`
   position: relative;
-  z-index: 1000;
 `
 
 const TooltipIcon = styled(motion.div)`
@@ -33,11 +32,11 @@ const TooltipContainer = styled.div<{ visible: boolean }>`
   visibility: ${(props) => (props.visible ? 'visible' : 'hidden')};
 
   position: absolute;
+  z-index: 1000;
   top: 0;
   right: 100%;
   transform: translateY(calc(-50% + ${ICON_SIZE} / 2))
-    ${(props) =>
-      props.visible ? 'translateX(calc(-0.75rem))' : 'translateX(0)'};
+    ${(props) => (props.visible ? 'translateX(-0.75rem)' : 'translateX(0)')};
 
   &:after {
     content: ' ';
@@ -76,6 +75,7 @@ const TooltipText = styled.p`
   color: ${colorsV3.gray100};
   text-align: center;
   margin: 0;
+  min-width: 12.5rem;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     width: max-content;
@@ -84,11 +84,11 @@ const TooltipText = styled.p`
 `
 
 export const Tooltip: React.FC<TooltipProps> = ({ body }) => {
-  const ref = React.useRef<HTMLDivElement>(null)
-  const [isVisible, setVisible] = React.useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  const [isVisible, setVisible] = useState(false)
 
-  React.useEffect(() => {
-    if (isVisible === false) return
+  useEffect(() => {
+    if (!isVisible) return
 
     const handleClickOutside = (event: TouchEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {
