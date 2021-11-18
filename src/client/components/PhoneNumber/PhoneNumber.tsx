@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
-import { format } from 'date-fns'
+import { format as formatDate } from 'date-fns'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
 import { Telephone } from '../icons/Telephone'
@@ -33,7 +33,7 @@ const PhoneLink = styled.a`
   color: inherit;
   font-size: 0.875rem;
 
-  :hover {
+  &:hover {
     color: ${colorsV3.gray600};
   }
 `
@@ -47,18 +47,18 @@ const Text = styled.p<Props>`
   }
 `
 
-export const PhoneNumber: React.FC<Props> = ({ color }: Props) => {
+export const PhoneNumber: React.FC<Props> = ({ color }) => {
   const textKeys = useTextKeys()
   const currentLocale = useCurrentLocale()
 
-  const currentTime = format(new Date(), 'HH')
+  const currentTime = formatDate(new Date(), 'HH')
 
   const isPhoneOpen = (): boolean => {
     if (
       (currentLocale.phoneNumber &&
-        currentTime < currentLocale.phoneNumber?.closes) ||
+        currentTime < currentLocale.phoneNumber?.closesAt) ||
       (currentLocale.phoneNumber &&
-        currentTime > currentLocale.phoneNumber?.opens)
+        currentTime > currentLocale.phoneNumber?.opensAt)
     ) {
       return true
     } else return false
@@ -76,12 +76,12 @@ export const PhoneNumber: React.FC<Props> = ({ color }: Props) => {
       </InnerWrapper>
       {isPhoneOpen() ? (
         <Text color={color}>
-          {textKeys.PHONE_OPEN_TODAY()} {currentLocale.phoneNumber?.opens}-
-          {currentLocale.phoneNumber?.closes}
+          {textKeys.PHONE_OPEN_TODAY()} {currentLocale.phoneNumber?.opensAt}-
+          {currentLocale.phoneNumber?.closesAt}
         </Text>
       ) : (
         <Text color={color}>
-          {textKeys.PHONE_CLOSED_UNTIL()} {currentLocale.phoneNumber?.opens}
+          {textKeys.PHONE_CLOSED_UNTIL()} {currentLocale.phoneNumber?.opensAt}
         </Text>
       )}
     </Wrapper>
