@@ -20,7 +20,6 @@ import {
   MEDIUM_SCREEN_MEDIA_QUERY,
   MEDIUM_SMALL_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
-import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import { alternateLinksData, productsData } from './landingPageData'
 import { Card, CardHeadline, CardParagraph } from './components/Card'
@@ -204,11 +203,7 @@ export const Landing: React.FC = () => {
             {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
               <>
                 <TopBar isTransparent>
-                  {market === Market.Se ? (
-                    <PhoneNumber color="white" />
-                  ) : (
-                    <LanguagePicker />
-                  )}
+                  <LanguagePicker />
                 </TopBar>
                 <TopBarFiller />
               </>

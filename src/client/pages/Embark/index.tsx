@@ -14,10 +14,10 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import gql from 'graphql-tag'
 import Helmet from 'react-helmet-async'
 import { apolloClient } from 'apolloClient'
-import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useTextKeys } from 'utils/textKeys'
 import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { pushToGTMDataLayer } from '../../utils/tracking/gtm'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
@@ -156,7 +156,7 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
                 startPageLink={props.startPageLink}
                 customTrailingContent={
                   currentLocale.phoneNumber ? (
-                    <PhoneNumber color="white" />
+                    <PhoneNumber color="black" />
                   ) : (
                     <LanguagePicker />
                   )
@@ -220,7 +220,8 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
     [key: string]: any
   }>()
   const currentLocale = useCurrentLocale()
-  const localeIsoCode = getIsoLocale(currentLocale)
+
+  const localeIsoCode = currentLocale.isoLocale
 
   const textKeys = useTextKeys()
 
@@ -361,20 +362,14 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                   }}
                   data={data[1]}
                   resolvers={{
-                    graphqlQuery: graphQLQuery(
-                      storageState,
-                      getIsoLocale(currentLocale),
-                    ),
+                    graphqlQuery: graphQLQuery(storageState, localeIsoCode),
                     graphqlMutation: graphQLMutation(
                       storageState,
-                      getIsoLocale(currentLocale),
+                      localeIsoCode,
                     ),
                     personalInformationApi: resolvePersonalInformation,
                     houseInformation: resolveHouseInformation,
-                    createQuote: createQuote(
-                      storageState,
-                      getIsoLocale(currentLocale),
-                    ),
+                    createQuote: createQuote(storageState, localeIsoCode),
                     addressAutocompleteQuery: resolveAddressAutocomplete,
                     externalInsuranceProviderProviderStatus: resolveExternalInsuranceProviderProviderStatus,
                     externalInsuranceProviderStartSession: resolveExternalInsuranceProviderStartSession,

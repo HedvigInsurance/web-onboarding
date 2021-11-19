@@ -34,13 +34,14 @@ const PhoneLink = styled.a`
   font-size: 0.875rem;
 
   &:hover {
-    color: ${colorsV3.gray600};
+    color: ${({ color }) =>
+      color === 'black' ? colorsV3.gray700 : colorsV3.gray500};
   }
 `
 
 const Text = styled.p<Props>`
   color: ${({ color }) =>
-    color === 'black' ? colorsV3.gray800 : colorsV3.gray500};
+    color === 'black' ? colorsV3.gray700 : colorsV3.gray500};
   font-size: 0.75rem;
   && {
     margin: 0.2rem 0 0 1.4rem;
@@ -50,15 +51,16 @@ const Text = styled.p<Props>`
 export const PhoneNumber: React.FC<Props> = ({ color }) => {
   const textKeys = useTextKeys()
   const currentLocale = useCurrentLocale()
+  const { phoneNumber } = currentLocale
 
   const currentTime = formatDate(new Date(), 'HH')
 
   const isPhoneOpen = (): boolean => {
-    if (!currentLocale.phoneNumber) {
+    if (!phoneNumber) {
       return false
     }
 
-    const { opensAt, closesAt } = currentLocale.phoneNumber
+    const { opensAt, closesAt } = phoneNumber
     return currentTime >= opensAt && currentTime >= closesAt
   }
 
@@ -68,18 +70,18 @@ export const PhoneNumber: React.FC<Props> = ({ color }) => {
         <IconWrapper>
           <Telephone size="1rem" />
         </IconWrapper>
-        <PhoneLink href={currentLocale.phoneNumber?.hrefNumber}>
-          {currentLocale.phoneNumber?.displayNumber}
+        <PhoneLink href={phoneNumber?.hrefNumber}>
+          {phoneNumber?.displayNumber}
         </PhoneLink>
       </InnerWrapper>
       {isPhoneOpen() ? (
         <Text color={color}>
-          {textKeys.PHONE_OPEN_TODAY()} {currentLocale.phoneNumber?.opensAt}-
-          {currentLocale.phoneNumber?.closesAt}
+          {textKeys.PHONE_OPEN_TODAY()} {phoneNumber?.opensAt}-
+          {phoneNumber?.closesAt}
         </Text>
       ) : (
         <Text color={color}>
-          {textKeys.PHONE_CLOSED_UNTIL()} {currentLocale.phoneNumber?.opensAt}
+          {textKeys.PHONE_CLOSED_UNTIL()} {phoneNumber?.opensAt}
         </Text>
       )}
     </Wrapper>
