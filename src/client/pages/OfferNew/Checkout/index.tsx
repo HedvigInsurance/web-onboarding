@@ -375,6 +375,9 @@ export const Checkout: React.FC<CheckoutProps> = ({
                     ssn={offerData.person.ssn ?? ''}
                     ssnBackendError={ssnBackendError}
                     onSsnChange={onSsnChange}
+                    isFirstAndLastNameVisible={
+                      !offerData.person.firstName || !offerData.person.lastName
+                    }
                   />
                 </CheckoutContent>
 

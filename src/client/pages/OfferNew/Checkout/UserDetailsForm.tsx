@@ -53,6 +53,7 @@ export const UserDetailsForm: React.FC<Props> = ({
   lastName,
   onFirstNameChange,
   onLastNameChange,
+  isFirstAndLastNameVisible,
   onEmailChange,
   ssn: initialSsn,
   ssnBackendError,
@@ -89,7 +90,6 @@ export const UserDetailsForm: React.FC<Props> = ({
   }
 
   const ssnFormatExample = currentLocaleData.ssn.formatExample
-  const showFirstnameLastnameFields = !firstName || !lastName
 
   const validateFirstName = (firstName: string) => {
     if (!nameValidation.isValidSync(firstName)) {
@@ -158,7 +158,7 @@ export const UserDetailsForm: React.FC<Props> = ({
         }
       }}
     >
-      {showFirstnameLastnameFields && (
+      {isFirstAndLastNameVisible && (
         <>
           <RawInputField
             label={textKeys.CHECKOUT_FIRSTNAME_LABEL()}

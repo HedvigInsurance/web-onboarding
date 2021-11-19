@@ -75,4 +75,5 @@ export interface WithFirstAndLastNameForm {
   lastName: string
   onFirstNameChange: (name: string) => void
   onLastNameChange: (name: string) => void
+  isFirstAndLastNameVisible: boolean
 }
