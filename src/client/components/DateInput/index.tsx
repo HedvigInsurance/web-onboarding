@@ -68,81 +68,77 @@ export const DateInput: React.FC<DateInputProps> = ({
   const containerRef = useRef<HTMLDivElement>(null)
 
   const handleClickOutside = useCallback(() => {
-    if (open) {
-      setOpen(false)
-    }
-  }, [open, setOpen])
+    setOpen(false)
+  }, [setOpen])
   useClickOutside(containerRef, handleClickOutside)
 
   return (
-    <>
-      <Wrapper
-        aria-hidden={!open}
-        initial={{ visibility: 'hidden' }}
+    <Wrapper
+      aria-hidden={!open}
+      initial={{ visibility: 'hidden' }}
+      animate={
+        open
+          ? {
+              visibility: 'visible',
+            }
+          : { visibility: 'hidden' }
+      }
+      transition={{ ease: 'linear', delay: open ? 0 : 0.5, duration: 0 }}
+    >
+      <Container
+        ref={containerRef}
+        initial={{ y: 0, opacity: 0, pointerEvents: 'none' }}
         animate={
           open
             ? {
-                visibility: 'visible',
+                display: 'inline-block',
+                y: 0,
+                opacity: 1,
+                pointerEvents: 'all',
               }
-            : { visibility: 'hidden' }
+            : { y: 50, opacity: 0, pointerEvents: 'none' }
         }
-        transition={{ ease: 'linear', delay: open ? 0 : 0.5, duration: 0 }}
+        transition={{
+          type: 'spring',
+          stiffness: 500,
+          damping: 50,
+        }}
       >
-        <Container
-          ref={containerRef}
-          initial={{ y: 0, opacity: 0, pointerEvents: 'none' }}
-          animate={
-            open
-              ? {
-                  display: 'inline-block',
-                  y: 0,
-                  opacity: 1,
-                  pointerEvents: 'all',
-                }
-              : { y: 50, opacity: 0, pointerEvents: 'none' }
-          }
-          transition={{
-            type: 'spring',
-            stiffness: 500,
-            damping: 50,
-          }}
-        >
-          <CalendarWrapper>
-            <Dayzed
-              date={new Date()}
-              firstDayOfWeek={1}
-              selected={date}
-              minDate={subDays(new Date(), 1)}
-              maxDate={addYears(new Date(), 1)}
-              onDateSelected={(dateObj) => {
-                setDate(dateObj.date)
+        <CalendarWrapper>
+          <Dayzed
+            date={new Date()}
+            firstDayOfWeek={1}
+            selected={date}
+            minDate={subDays(new Date(), 1)}
+            maxDate={addYears(new Date(), 1)}
+            onDateSelected={(dateObj) => {
+              setDate(dateObj.date)
+              setOpen(false)
+            }}
+            render={(dayzedData) => <Calendar {...dayzedData} />}
+          />
+        </CalendarWrapper>
+
+        <TopSection>
+          <ButtonWrapper>
+            <CloseButton onClick={() => setOpen(false)} />
+          </ButtonWrapper>
+        </TopSection>
+
+        {hasCurrentInsurer && (
+          <AtStartDateContainer>
+            <TextButton
+              onClick={() => {
+                setDate(null)
                 setOpen(false)
               }}
-              render={(dayzedData) => <Calendar {...dayzedData} />}
-            />
-          </CalendarWrapper>
-
-          <TopSection>
-            <ButtonWrapper>
-              <CloseButton onClick={() => setOpen(false)} />
-            </ButtonWrapper>
-          </TopSection>
-
-          {hasCurrentInsurer && (
-            <AtStartDateContainer>
-              <TextButton
-                onClick={() => {
-                  setDate(null)
-                  setOpen(false)
-                }}
-              >
-                {textKeys.START_DATE_WHEN_OLD_EXPIRES()}
-              </TextButton>
-            </AtStartDateContainer>
-          )}
-        </Container>
-      </Wrapper>
-    </>
+            >
+              {textKeys.START_DATE_WHEN_OLD_EXPIRES()}
+            </TextButton>
+          </AtStartDateContainer>
+        )}
+      </Container>
+    </Wrapper>
   )
 }
 
