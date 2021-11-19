@@ -4,12 +4,6 @@ import React from 'react'
 import { Redirect, useHistory, useRouteMatch } from 'react-router'
 import { LoadingPage } from 'components/LoadingPage'
 import { TopBar } from 'components/TopBar'
-import {
-  getIsoLocale,
-  Market,
-  useCurrentLocale,
-  useMarket,
-} from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import {
@@ -23,6 +17,7 @@ import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { Features, useFeature } from 'utils/hooks/useFeature'
 import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
+import { useCurrentLocale } from 'src/client/l10n/useCurrentLocale'
 import { useQuoteIds } from '../../utils/hooks/useQuoteIds'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import {
@@ -52,9 +47,8 @@ const getQuoteIdsFromBundleVariant = (bundleVariant: QuoteBundleVariant) =>
 
 export const OfferNew: React.FC = () => {
   const currentLocale = useCurrentLocale()
-  const localeIsoCode = getIsoLocale(currentLocale)
+  const localeIsoCode = currentLocale.isoLocale
   const variation = useVariation()
-  const market = useMarket()
 
   const [isInsuranceToggleEnabled] = useFeature([
     Features.OFFER_PAGE_INSURANCE_TOGGLE,
@@ -115,7 +109,7 @@ export const OfferNew: React.FC = () => {
   }
 
   const checkoutMatch = useRouteMatch(`${localePathPattern}/new-member/sign`)
-  const toggleCheckout = createToggleCheckout(history, currentLocale)
+  const toggleCheckout = createToggleCheckout(history, currentLocale.path)
 
   if ((loadingQuoteBundle && !data) || quoteIdsIsLoading) {
     return <LoadingPage />
@@ -152,10 +146,10 @@ export const OfferNew: React.FC = () => {
       <SessionTokenGuard>
         {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
           <TopBar isTransparent>
-            {market === Market.Se ? (
+            {currentLocale.phoneNumber ? (
               <PhoneNumber color="white" />
             ) : (
-              <LanguagePicker path="/new-member/offer" />
+              <LanguagePicker />
             )}
           </TopBar>
         )}

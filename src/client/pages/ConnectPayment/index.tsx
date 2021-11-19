@@ -8,13 +8,13 @@ import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import { LanguagePicker } from 'pages/Embark/LanguagePicker'
 import { useTextKeys } from 'utils/textKeys'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
-import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
+import { useCurrentLocale } from 'src/client/l10n/useCurrentLocale'
 import { ConnectPaymentPage } from './sections/ConnectPayment'
 
 export const ConnectPayment: React.FC = () => {
   const textKeys = useTextKeys()
-  const market = useMarket()
+  const currentLocale = useCurrentLocale()
 
   return (
     <Page>
@@ -23,10 +23,10 @@ export const ConnectPayment: React.FC = () => {
           <title>{textKeys.ONBOARDING_CONNECT_DD_PAGE_TITLE()}</title>
         </Helmet>
         <TopBar>
-          {market === Market.Se ? (
-            <PhoneNumber color="white" />
+          {currentLocale.phoneNumber ? (
+            <PhoneNumber color="black" />
           ) : (
-            <LanguagePicker path="/new-member/connect-payment" />
+            <LanguagePicker />
           )}
         </TopBar>
         <ConnectPaymentPage />
