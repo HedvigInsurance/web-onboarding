@@ -7,6 +7,8 @@ export type PhoneNumberData = {
   hrefNumber: string
   opensAt: string
   closesAt: string
+  lunchStartsAt: string
+  lunchEndsAt: string
 }
 
 export const phoneNumbers: PhoneNumbers = {
@@ -15,5 +17,7 @@ export const phoneNumbers: PhoneNumbers = {
     hrefNumber: '0751012000',
     opensAt: '09',
     closesAt: '18',
+    lunchStartsAt: '12',
+    lunchEndsAt: '13',
   },
 }

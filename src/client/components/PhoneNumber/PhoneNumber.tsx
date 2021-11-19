@@ -4,6 +4,7 @@ import React from 'react'
 import { format as formatDate } from 'date-fns'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
+import { PhoneNumberData } from 'l10n/phoneNumbers'
 import { Telephone } from '../icons/Telephone'
 
 type Props = {
@@ -48,21 +49,54 @@ const Text = styled.p<Props>`
   }
 `
 
-export const PhoneNumber: React.FC<Props> = ({ color }) => {
+const PhoneOpeningHours: React.VFC<{
+  phoneNumber?: PhoneNumberData
+  currentTime: string
+  color: Props['color']
+}> = ({ phoneNumber, currentTime, color }) => {
   const textKeys = useTextKeys()
+
+  if (!phoneNumber) {
+    return null
+  }
+
+  const { opensAt, closesAt, lunchStartsAt, lunchEndsAt } = phoneNumber
+
+  const isPhoneOpen = currentTime > opensAt && currentTime < closesAt
+
+  const isLunchHour = currentTime >= lunchStartsAt && currentTime < lunchEndsAt
+
+  if (isLunchHour) {
+    return (
+      <Text color={color}>
+        {textKeys.PHONE_CLOSED_UNTIL()} {phoneNumber?.lunchEndsAt}
+      </Text>
+    )
+  }
+
+  if (isPhoneOpen) {
+    return (
+      <Text color={color}>
+        {textKeys.PHONE_OPEN_TODAY()} {phoneNumber?.opensAt}-
+        {phoneNumber?.closesAt}
+      </Text>
+    )
+  } else {
+    return (
+      <Text color={color}>
+        {textKeys.PHONE_CLOSED_UNTIL()} {phoneNumber?.opensAt}
+      </Text>
+    )
+  }
+}
+
+export const PhoneNumber: React.FC<Props> = ({ color }) => {
   const currentLocale = useCurrentLocale()
   const { phoneNumber } = currentLocale
 
   const currentTime = formatDate(new Date(), 'HH')
 
-  const isPhoneOpen = (): boolean => {
-    if (!phoneNumber) {
-      return false
-    }
-
-    const { opensAt, closesAt } = phoneNumber
-    return currentTime >= opensAt && currentTime >= closesAt
-  }
+  console.log(currentTime)
 
   return (
     <Wrapper color={color}>
@@ -74,16 +108,11 @@ export const PhoneNumber: React.FC<Props> = ({ color }) => {
           {phoneNumber?.displayNumber}
         </PhoneLink>
       </InnerWrapper>
-      {isPhoneOpen() ? (
-        <Text color={color}>
-          {textKeys.PHONE_OPEN_TODAY()} {phoneNumber?.opensAt}-
-          {phoneNumber?.closesAt}
-        </Text>
-      ) : (
-        <Text color={color}>
-          {textKeys.PHONE_CLOSED_UNTIL()} {phoneNumber?.opensAt}
-        </Text>
-      )}
+      <PhoneOpeningHours
+        phoneNumber={phoneNumber}
+        currentTime={currentTime}
+        color={color}
+      />
     </Wrapper>
   )
 }
