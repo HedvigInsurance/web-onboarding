@@ -9,7 +9,7 @@ import { LanguagePicker } from 'pages/Embark/LanguagePicker'
 import { useTextKeys } from 'utils/textKeys'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
-import { useCurrentLocale } from 'src/client/l10n/useCurrentLocale'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { ConnectPaymentPage } from './sections/ConnectPayment'
 
 export const ConnectPayment: React.FC = () => {

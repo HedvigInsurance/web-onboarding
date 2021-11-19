@@ -17,7 +17,7 @@ import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { Features, useFeature } from 'utils/hooks/useFeature'
 import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
-import { useCurrentLocale } from 'src/client/l10n/useCurrentLocale'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useQuoteIds } from '../../utils/hooks/useQuoteIds'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import {
