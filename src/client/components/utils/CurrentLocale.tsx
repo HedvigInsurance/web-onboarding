@@ -46,6 +46,9 @@ export const CurrentLocale: React.ComponentType<{
   )
 }
 
+/**
+ * @deprecated This function should not be used - use the one exported from "/l10n/useCurrentLocale.ts" instead.
+ */
 export const useCurrentLocale = () => {
   const location = useLocation()
   return getLocaleFromPath(location.pathname)
