@@ -2,11 +2,9 @@ import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { Form, Formik, FormikProps } from 'formik'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { CreateQuoteVariables } from '@hedviginsurance/embark'
 import {
-  CreateOnboardingQuoteInput,
-  useCreateOnboardingQuoteMutation,
-  useOnboardingSessionQuery,
+  useCreateQuoteBundleMutation,
+  useQuoteCartQuery,
   ApartmentType,
 } from 'data/graphql'
 import { Button, LinkButton } from 'components/buttons'
@@ -23,15 +21,13 @@ import {
 } from './QuoteFormNorway'
 import { DanishQuote, initialDkHomeValues } from './QuoteFormDenmark'
 
-type OfferProps = { sessionId: string }
-
-type Values = Partial<CreateOnboardingQuoteInput>
+type OfferProps = { quoteCartId: string }
 
 export type WithFormikProps = {
   formik: FormikProps<any>
 }
 
-enum QuoteType {
+enum QuoteBundleType {
   DanishHome = 'danish-home',
   DanishHomeAccident = 'danish-home-accident',
   DanishHomeAccidentTravel = 'danish-home-accident-travel',
@@ -42,9 +38,37 @@ enum QuoteType {
   SwedishApartmentAccident = 'swedish-apartment-accident',
 }
 
+enum QuoteType {
+  DanishHome = 'DANISH_HOME_CONTENT',
+  DanishAccident = 'DANISH_ACCIDENT',
+  DanishTravel = 'DANISH_TRAVEL',
+  NorwegianHome = 'NORWEGIAN_HOME_CONTENT',
+  NorwegianTravel = 'NORWEGIAN_TRAVEL',
+  SwedishApartment = 'SWEDISH_APARTMENT',
+  SwedishHouse = 'SWEDISH_HOUSE',
+  SwedishAccident = 'SWEDISH_ACCIDENT',
+}
+
+const singleQuoteBundleToQuoteType = (
+  bundleType: QuoteBundleType,
+): QuoteType => {
+  switch (bundleType) {
+    case QuoteBundleType.DanishHome:
+      return QuoteType.DanishHome
+    case QuoteBundleType.NorwegianHome:
+      return QuoteType.NorwegianHome
+    case QuoteBundleType.SwedishApartment:
+      return QuoteType.SwedishApartment
+    case QuoteBundleType.SwedishHouse:
+      return QuoteType.SwedishHouse
+    default:
+      throw new Error(`Unsupported single quote bundle type: ${bundleType}`)
+  }
+}
+
 type QuoteData = {
   label: string
-  value: QuoteType
+  value: QuoteBundleType
   initialFormValues?: Record<string, unknown>
 }
 
@@ -54,45 +78,45 @@ const quotesByMarket: QuotesByMarket = {
   DK: [
     {
       label: 'Danish Home',
-      value: QuoteType.DanishHome,
+      value: QuoteBundleType.DanishHome,
       initialFormValues: initialDkHomeValues,
     },
     {
       label: 'Danish Home + Accident',
-      value: QuoteType.DanishHomeAccident,
+      value: QuoteBundleType.DanishHomeAccident,
       initialFormValues: initialDkHomeValues,
     },
     {
       label: 'Danish Home + Accident + Travel',
-      value: QuoteType.DanishHomeAccidentTravel,
+      value: QuoteBundleType.DanishHomeAccidentTravel,
       initialFormValues: initialDkHomeValues,
     },
   ],
   NO: [
     {
       label: 'Norwegian Home',
-      value: QuoteType.NorwegianHome,
+      value: QuoteBundleType.NorwegianHome,
       initialFormValues: initialNoHomeValues,
     },
     {
       label: 'Norwegian Travel',
-      value: QuoteType.NorwegianTravel,
+      value: QuoteBundleType.NorwegianTravel,
       initialFormValues: initialNoTravelValues,
     },
   ],
   SE: [
     {
       label: 'Swedish Apartment',
-      value: QuoteType.SwedishApartment,
+      value: QuoteBundleType.SwedishApartment,
       initialFormValues: initialSeApartmentValues,
     },
     {
       label: 'Swedish House',
-      value: QuoteType.SwedishHouse,
+      value: QuoteBundleType.SwedishHouse,
     },
     {
       label: 'Swedish Apartment + Accident',
-      value: QuoteType.SwedishApartmentAccident,
+      value: QuoteBundleType.SwedishApartmentAccident,
       initialFormValues: initialSeApartmentValues,
     },
   ],
@@ -100,7 +124,7 @@ const quotesByMarket: QuotesByMarket = {
 
 const getCurrentAvailableQuoteData = (
   currentMarket: Market,
-  currentQuoteType: QuoteType,
+  currentQuoteType: QuoteBundleType,
 ) => {
   const marketQuoteTypes = quotesByMarket[currentMarket]
   const currentQuoteTypeData = marketQuoteTypes.find(
@@ -110,7 +134,7 @@ const getCurrentAvailableQuoteData = (
 }
 
 const getDanishQuoteValues = (
-  values: Values,
+  values: any,
   quoteType: 'danishTravelData' | 'danishAccidentData',
 ) => {
   const { danishHomeContentsData, ...filteredValues } = values
@@ -118,10 +142,10 @@ const getDanishQuoteValues = (
   return {
     ...filteredValues,
     [quoteType]: quoteTypeValues,
-  } as CreateOnboardingQuoteInput
+  }
 }
 
-const getSwedishAccidentQuoteValues = (values: Values) => {
+const getSwedishAccidentQuoteValues = (values: any) => {
   const { swedishApartmentData, ...filteredValues } = values
   const { subType, ...quoteTypeValues } = swedishApartmentData!
   return {
@@ -132,7 +156,7 @@ const getSwedishAccidentQuoteValues = (values: Values) => {
         subType === ApartmentType.StudentBrf ||
         subType === ApartmentType.StudentRent,
     },
-  } as CreateOnboardingQuoteInput
+  }
 }
 
 const ButtonLoadingIndicator = styled(LoadingDots)`
@@ -140,21 +164,21 @@ const ButtonLoadingIndicator = styled(LoadingDots)`
   margin-left: 0.5rem;
 `
 
-export const QuoteData: React.FC<OfferProps> = ({ sessionId }) => {
-  const { data, refetch } = useOnboardingSessionQuery({
-    variables: { id: sessionId },
+export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
+  const { data, refetch } = useQuoteCartQuery({
+    variables: { id: quoteCartId },
   })
-  const [createOnboardingQuote] = useCreateOnboardingQuoteMutation()
+  const [createQuoteBundle] = useCreateQuoteBundleMutation()
 
   const currentLocale = useCurrentLocale()
   const currentMarket = useMarket()
 
-  const [quoteType, setQuoteType] = useState(
+  const [quoteBundleType, setQuoteBundleType] = useState(
     quotesByMarket[currentMarket][0].value,
   )
 
   const [submitError, setSubmitError] = useState<Error>()
-  const handleSubmit = async (values: Values) => {
+  const handleSubmit = async (values: any) => {
     const input = {
       ...values,
       currentInsurer: values.currentInsurer || undefined,
@@ -162,69 +186,75 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionId }) => {
     }
 
     try {
-      switch (quoteType) {
-        case QuoteType.DanishHomeAccident:
-          await Promise.all([
-            createOnboardingQuote({
-              variables: {
-                id: sessionId,
-                input: input as CreateOnboardingQuoteInput,
-              },
-            }),
-            createOnboardingQuote({
-              variables: {
-                id: sessionId,
-                input: getDanishQuoteValues(input, 'danishAccidentData'),
-              },
-            }),
-          ])
+      switch (quoteBundleType) {
+        case QuoteBundleType.DanishHomeAccident:
+          await createQuoteBundle({
+            variables: {
+              id: quoteCartId,
+              quotes: [
+                {
+                  type: QuoteType.DanishHome,
+                  payload: input,
+                },
+                {
+                  type: QuoteType.DanishAccident,
+                  payload: getDanishQuoteValues(input, 'danishAccidentData'),
+                },
+              ],
+            },
+          })
           break
 
-        case QuoteType.DanishHomeAccidentTravel:
-          await Promise.all([
-            createOnboardingQuote({
-              variables: {
-                id: sessionId,
-                input: input as CreateOnboardingQuoteInput,
-              },
-            }),
-            createOnboardingQuote({
-              variables: {
-                id: sessionId,
-                input: getDanishQuoteValues(input, 'danishAccidentData'),
-              },
-            }),
-            createOnboardingQuote({
-              variables: {
-                id: sessionId,
-                input: getDanishQuoteValues(input, 'danishTravelData'),
-              },
-            }),
-          ])
+        case QuoteBundleType.DanishHomeAccidentTravel:
+          await createQuoteBundle({
+            variables: {
+              id: quoteCartId,
+              quotes: [
+                {
+                  type: QuoteType.DanishHome,
+                  payload: input,
+                },
+                {
+                  type: QuoteType.DanishAccident,
+                  payload: getDanishQuoteValues(input, 'danishAccidentData'),
+                },
+                {
+                  type: QuoteType.DanishTravel,
+                  payload: getDanishQuoteValues(input, 'danishTravelData'),
+                },
+              ],
+            },
+          })
           break
 
-        case QuoteType.SwedishApartmentAccident:
-          await Promise.all([
-            createOnboardingQuote({
-              variables: {
-                id: sessionId,
-                input: input as CreateOnboardingQuoteInput,
-              },
-            }),
-            createOnboardingQuote({
-              variables: {
-                id: sessionId,
-                input: getSwedishAccidentQuoteValues(input),
-              },
-            }),
-          ])
+        case QuoteBundleType.SwedishApartmentAccident:
+          await createQuoteBundle({
+            variables: {
+              id: quoteCartId,
+              quotes: [
+                {
+                  type: QuoteType.SwedishApartment,
+                  payload: input,
+                },
+                {
+                  type: QuoteType.SwedishAccident,
+                  payload: getSwedishAccidentQuoteValues(input),
+                },
+              ],
+            },
+          })
           break
 
         default:
-          await createOnboardingQuote({
+          await createQuoteBundle({
             variables: {
-              id: sessionId,
-              input: input as CreateQuoteVariables['input'],
+              id: quoteCartId,
+              quotes: [
+                {
+                  type: singleQuoteBundleToQuoteType(quoteBundleType),
+                  payload: input,
+                },
+              ],
             },
           })
       }
@@ -251,18 +281,18 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionId }) => {
           <InputField
             label="Type"
             options={quotesByMarket[currentMarket]}
-            value={quoteType}
+            value={quoteBundleType}
             onChange={(value: React.ChangeEvent<HTMLSelectElement>) =>
-              setQuoteType(value.target.value as QuoteType)
+              setQuoteBundleType(value.target.value as QuoteBundleType)
             }
           />
         )}
       </Formik>
 
-      {!data?.onboardingSession.bundle ? (
+      {!data?.quoteCart.bundle ? (
         <Formik
           initialValues={
-            getCurrentAvailableQuoteData(currentMarket, quoteType)
+            getCurrentAvailableQuoteData(currentMarket, quoteBundleType)
               ?.initialFormValues || {}
           }
           onSubmit={handleSubmit}
@@ -305,18 +335,21 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionId }) => {
                   />
 
                   {[
-                    QuoteType.SwedishApartment,
-                    QuoteType.SwedishApartmentAccident,
-                  ].includes(quoteType) && <SwedishApartment formik={props} />}
-                  {quoteType === QuoteType.NorwegianHome && (
+                    QuoteBundleType.SwedishApartment,
+                    QuoteBundleType.SwedishApartmentAccident,
+                  ].includes(quoteBundleType) && (
+                    <SwedishApartment formik={props} />
+                  )}
+                  {quoteBundleType === QuoteBundleType.NorwegianHome && (
                     <NorwegianHome formik={props} />
                   )}
-                  {quoteType === QuoteType.NorwegianTravel && (
+                  {quoteBundleType === QuoteBundleType.NorwegianTravel && (
                     <NorwegianTravel formik={props} />
                   )}
-                  {(quoteType === QuoteType.DanishHome ||
-                    quoteType === QuoteType.DanishHomeAccident ||
-                    quoteType === QuoteType.DanishHomeAccidentTravel) && (
+                  {(quoteBundleType === QuoteBundleType.DanishHome ||
+                    quoteBundleType === QuoteBundleType.DanishHomeAccident ||
+                    quoteBundleType ===
+                      QuoteBundleType.DanishHomeAccidentTravel) && (
                     <DanishQuote formik={props} />
                   )}
                 </>
@@ -343,7 +376,7 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionId }) => {
             foreground={colorsV3.gray900}
             to={{
               pathname: `/${currentLocale.path}/new-member/offer`,
-              search: `?session=${sessionId}`,
+              search: `?quoteCart=${quoteCartId}`,
             }}
           >
             Go to offer page →
