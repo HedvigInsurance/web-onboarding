@@ -57,6 +57,8 @@ const singleQuoteBundleToQuoteType = (
       return QuoteType.DanishHome
     case QuoteBundleType.NorwegianHome:
       return QuoteType.NorwegianHome
+    case QuoteBundleType.NorwegianTravel:
+      return QuoteType.NorwegianTravel
     case QuoteBundleType.SwedishApartment:
       return QuoteType.SwedishApartment
     case QuoteBundleType.SwedishHouse:

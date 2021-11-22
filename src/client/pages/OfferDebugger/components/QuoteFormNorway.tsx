@@ -15,12 +15,12 @@ const initialBaseValues = {
 export const initialNoHomeValues = {
   ...initialBaseValues,
   norwegianHomeContentsData: {
-    isYouth: false,
+    youth: false,
     coInsured: 0,
     livingSpace: 44,
     street: 'Gulebøjsveien 1',
     zipCode: '1234',
-    type: NorwegianHomeContentsType.Rent,
+    subType: NorwegianHomeContentsType.Rent,
   },
 }
 
@@ -28,7 +28,7 @@ export const initialNoTravelValues = {
   ...initialBaseValues,
   norwegianTravelData: {
     coInsured: 0,
-    isYouth: false,
+    youth: false,
   },
 }
 
@@ -74,17 +74,12 @@ export const NorwegianHome: React.FC<WithFormikProps> = ({ formik }) => {
           { label: 'Own', value: 'OWN' },
           { label: 'Rent', value: 'RENT' },
         ]}
-        {...formik.getFieldProps('norwegianHomeContents.type')}
+        {...formik.getFieldProps('norwegianHomeContents.subType')}
       />
     </>
   )
 }
 
 export const NorwegianTravel: React.FC<WithFormikProps> = ({ formik }) => {
-  return (
-    <>
-      <NorwegianCommon formik={formik} />
-      <div>isYouth TODO</div>
-    </>
-  )
+  return <NorwegianCommon formik={formik} />
 }
