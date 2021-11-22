@@ -6,7 +6,7 @@ import Helmet from 'react-helmet-async'
 import { AnimatePresence, motion } from 'framer-motion'
 import { TopBar, TopBarFiller } from 'components/TopBar'
 import { BackgroundImage } from 'components/BackgroundImage'
-import { Market, useMarket } from 'components/utils/CurrentLocale'
+import { Market } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useTextKeys } from 'utils/textKeys'
@@ -16,7 +16,7 @@ import {
   MEDIUM_SCREEN_MEDIA_QUERY,
   MEDIUM_SMALL_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
-import { useCreateOnboardingSessionMutation } from 'data/graphql'
+import { useCreateOnboardingQuoteCartMutation } from 'data/graphql'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import { alternateLinksData, productsData } from './landingPageData'
@@ -156,17 +156,23 @@ const CardContainer = styled.div`
 
 export const Landing: React.FC = () => {
   const textKeys = useTextKeys()
-  const market = useMarket()
   const currentLocale = useCurrentLocale()
   const variation = useVariation()
 
-  const [createOnboardingCart, { data }] = useCreateOnboardingSessionMutation({
-    variables: { country: market, locale: currentLocale.isoLocale },
+  const [
+    createOnboardingQuoteCart,
+    { data },
+  ] = useCreateOnboardingQuoteCartMutation({
+    variables: {
+      market: currentLocale.apiMarket,
+      locale: currentLocale.isoLocale,
+    },
   })
+  const quoteCartId = data?.onboardingQuoteCart_create
 
   useEffect(() => {
-    createOnboardingCart()
-  }, [createOnboardingCart])
+    createOnboardingQuoteCart()
+  }, [createOnboardingQuoteCart])
 
   return (
     <AnimatePresence>
@@ -219,7 +225,9 @@ export const Landing: React.FC = () => {
               <UspContainer>
                 <Headline>{textKeys.STARTPAGE_HEADLINE()}</Headline>
                 <Preamble>{textKeys.STARTPAGE_PREAMBLE()}</Preamble>
-                <UspList isVisibleInMobile={market === Market.Se}>
+                <UspList
+                  isVisibleInMobile={currentLocale.marketLabel === Market.Se}
+                >
                   <UspItem>
                     <CheckmarkCircle size="1.5rem" />
                     <span>{textKeys.STARTPAGE_USP_1()}</span>
@@ -235,10 +243,10 @@ export const Landing: React.FC = () => {
                 </UspList>
               </UspContainer>
               <CardContainer>
-                {productsData[market].map(
+                {productsData[currentLocale.marketLabel].map(
                   ({ id, linkSlug, badge, headline, paragraph, disabled }) => (
                     <Card
-                      to={`/${currentLocale.path}/new-member${linkSlug}?quoteCart=${data?.onboardingSession_create}`}
+                      to={`/${currentLocale.path}/new-member${linkSlug}?quoteCart=${quoteCartId}`}
                       badge={badge && textKeys[badge]()}
                       disabled={disabled}
                       key={id}
