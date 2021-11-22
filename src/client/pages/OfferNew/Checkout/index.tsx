@@ -137,12 +137,12 @@ export type CheckoutProps = {
   refetch: () => Promise<void>
 }
 
-export const Checkout: React.FC<CheckoutProps> = ({
+export const Checkout = ({
   offerData,
   isOpen,
   onClose,
   refetch,
-}) => {
+}: CheckoutProps) => {
   const [visibilityState, setVisibilityState] = useState(VisibilityState.CLOSED)
   useEffect(() => {
     if (isOpen) {
