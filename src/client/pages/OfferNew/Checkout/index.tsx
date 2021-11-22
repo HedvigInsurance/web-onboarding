@@ -295,7 +295,7 @@ export const Checkout = ({
       return
     }
 
-    setSignUiState('INITIALIZED')
+    setSignUiState('PREPARING')
 
     const quoteIds = getQuoteIds(offerData)
     const firstAndLastNameAreSet = firstName !== null && lastName !== null
@@ -365,7 +365,6 @@ export const Checkout = ({
                   refetch={refetch}
                 >
                   <UserDetailsForm
-                    onSubmit={() => undefined}
                     firstName={firstName}
                     lastName={lastName}
                     onFirstNameChange={setFirstName}
@@ -397,7 +396,7 @@ export const Checkout = ({
                   signQuotesMutation.loading ||
                   signUiState === 'STARTED' ||
                   signUiState === 'STARTED_WITH_REDIRECT' ||
-                  signUiState === 'INITIALIZED' ||
+                  signUiState === 'PREPARING' ||
                   emailUpdateLoading
                 }
                 onSignStart={startSign}

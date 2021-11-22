@@ -62,9 +62,9 @@ export const UserDetailsForm: React.FC<Props> = ({
 }) => {
   const textKeys = useTextKeys()
   const [email, reallySetEmail] = useState(() => initialEmail)
-  const [hasFirstNameError, setHasFirstNameError] = useState<boolean>(false)
-  const [hasLastNameError, setHasLastNameError] = useState<boolean>(false)
-  const [hasEmailError, setHasEmailError] = useState<boolean>(false)
+  const [hasFirstNameError, setHasFirstNameError] = useState(false)
+  const [hasLastNameError, setHasLastNameError] = useState(false)
+  const [hasEmailError, setHasEmailError] = useState(false)
   const [ssn, reallySetSsn] = useState(() => initialSsn)
   const [isShowingCreditCheckInfo, setIsShowingCreditCheckInfo] = useState(
     false,
@@ -162,13 +162,13 @@ export const UserDetailsForm: React.FC<Props> = ({
         <>
           <RawInputField
             label={textKeys.CHECKOUT_FIRSTNAME_LABEL()}
-            name="firstname"
-            id="firstname"
+            name="firstName"
+            id="firstName"
             value={firstName}
             showErrorIcon={hasFirstNameError}
-            onChange={(e: React.ChangeEvent<any>) => {
-              onFirstNameChange(e.target.value)
-              validateFirstName(e.target.value)
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              onFirstNameChange(event.target.value)
+              validateFirstName(event.target.value)
             }}
           />
 
@@ -178,9 +178,9 @@ export const UserDetailsForm: React.FC<Props> = ({
             id="lastName"
             value={lastName}
             showErrorIcon={hasLastNameError}
-            onChange={(e: React.ChangeEvent<any>) => {
-              onLastNameChange(e.target.value)
-              validateLastName(e.target.value)
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              onLastNameChange(event.target.value)
+              validateLastName(event.target.value)
             }}
           />
         </>
