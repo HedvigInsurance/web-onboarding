@@ -138,7 +138,7 @@ const getDanishQuoteValues = (
   quoteType: 'danishTravelData' | 'danishAccidentData',
 ) => {
   const { danishHomeContentsData, ...filteredValues } = values
-  const { type, livingSpace, ...quoteTypeValues } = danishHomeContentsData!
+  const { subType, livingSpace, ...quoteTypeValues } = danishHomeContentsData!
   return {
     ...filteredValues,
     [quoteType]: quoteTypeValues,
