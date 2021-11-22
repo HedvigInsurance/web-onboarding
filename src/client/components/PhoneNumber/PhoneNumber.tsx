@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
-import { format as formatDate } from 'date-fns'
+import { format as formatDate, getDay } from 'date-fns'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
 import { PhoneNumberData } from 'l10n/phoneNumbers'
@@ -51,25 +51,30 @@ const Text = styled.p<Props>`
 
 const PhoneOpeningHours: React.VFC<{
   phoneNumber?: PhoneNumberData
-  currentTime: string
   color: Props['color']
-}> = ({ phoneNumber, currentTime, color }) => {
+}> = ({ phoneNumber, color }) => {
   const textKeys = useTextKeys()
+  const currentTime = formatDate(new Date(), 'HH')
+  const currentDay = getDay(new Date())
 
   if (!phoneNumber) {
     return null
   }
 
   const { opensAt, closesAt, lunchStartsAt, lunchEndsAt } = phoneNumber
-
-  const isPhoneOpen = currentTime > opensAt && currentTime < closesAt
-
+  const isPhoneOpen = currentTime >= opensAt && currentTime < closesAt
   const isLunchHour = currentTime >= lunchStartsAt && currentTime < lunchEndsAt
+  const isFridayAfterHours = currentDay === 5 && currentTime >= closesAt
+  const isWeekend = currentDay === 6 || currentDay === 0
+
+  if (isFridayAfterHours || isWeekend) {
+    return <Text>weekend text</Text>
+  }
 
   if (isLunchHour) {
     return (
       <Text color={color}>
-        {textKeys.PHONE_CLOSED_UNTIL()} {phoneNumber?.lunchEndsAt}
+        {textKeys.PHONE_OPENS_AT()} {phoneNumber?.lunchEndsAt}
       </Text>
     )
   }
@@ -94,10 +99,6 @@ export const PhoneNumber: React.FC<Props> = ({ color }) => {
   const currentLocale = useCurrentLocale()
   const { phoneNumber } = currentLocale
 
-  const currentTime = formatDate(new Date(), 'HH')
-
-  console.log(currentTime)
-
   return (
     <Wrapper color={color}>
       <InnerWrapper>
@@ -108,11 +109,7 @@ export const PhoneNumber: React.FC<Props> = ({ color }) => {
           {phoneNumber?.displayNumber}
         </PhoneLink>
       </InnerWrapper>
-      <PhoneOpeningHours
-        phoneNumber={phoneNumber}
-        currentTime={currentTime}
-        color={color}
-      />
+      <PhoneOpeningHours phoneNumber={phoneNumber} color={color} />
     </Wrapper>
   )
 }
