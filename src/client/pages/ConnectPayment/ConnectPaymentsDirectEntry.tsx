@@ -6,7 +6,6 @@ import Helmet from 'react-helmet-async'
 import { RouteComponentProps } from 'react-router'
 import { Redirect } from 'react-router-dom'
 import { Page } from 'components/utils/Page'
-import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { LoadingPage } from 'components/LoadingPage'
 import { Button } from 'components/buttons'
 import {
@@ -14,6 +13,7 @@ import {
   ExchangeTokenRetrievalState,
 } from 'utils/ExchangeTokenRetrieval'
 import { useTextKeys } from 'utils/textKeys'
+import { useCurrentLocale } from 'src/client/l10n/useCurrentLocale'
 
 const ButtonWrapper = styled.div`
   padding-top: 1rem;
@@ -22,7 +22,7 @@ const ButtonWrapper = styled.div`
 export const ConnectPaymentsDirectEntry: React.FC<RouteComponentProps<
   Record<string, string | undefined>
 >> = () => {
-  const locale = useCurrentLocale()
+  const currentLocale = useCurrentLocale()
   const textKeys = useTextKeys()
 
   return (
@@ -45,7 +45,9 @@ export const ConnectPaymentsDirectEntry: React.FC<RouteComponentProps<
             loading={exchangeTokenState === ExchangeTokenRetrievalState.Loading}
           >
             {exchangeTokenState === ExchangeTokenRetrievalState.Success && (
-              <Redirect to={`/${locale}/new-member/connect-payment`} />
+              <Redirect
+                to={`/${currentLocale.path}/new-member/connect-payment`}
+              />
             )}
             <FadeInUp
               visible={[
