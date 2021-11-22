@@ -17,8 +17,8 @@ export const initialDkHomeValues = {
     floor: '2',
     apartment: 'tv',
     zipCode: '2100',
-    type: DanishHomeContentsType.Own,
-    isStudent: false,
+    subType: DanishHomeContentsType.Own,
+    student: false,
   },
 }
 
@@ -63,11 +63,11 @@ export const DanishQuote: React.FC<WithFormikProps> = ({ formik }) => {
           { label: 'Own', value: DanishHomeContentsType['Own'] },
           { label: 'Rent', value: DanishHomeContentsType['Rent'] },
         ]}
-        {...formik.getFieldProps('danishHomeContents.type')}
+        {...formik.getFieldProps('danishHomeContents.subType')}
       />
       <div style={{ paddingBottom: '2rem', fontSize: '1.25rem' }}>
         <label>
-          <Field type="checkbox" name="danishHomeContents.isStudent" />
+          <Field type="checkbox" name="danishHomeContents.student" />
           {"I'm a student"}
         </label>
       </div>
