@@ -19,6 +19,8 @@ export type Scalars = {
   Float: number
   /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the date-timeformat outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representationof dates and times using the Gregorian calendar. */
   DateTime: any
+  /** Raw JSON value */
+  Json: any
   /** An ISO-8601 String representation of a `java.time.LocalDate`, e.g. "2019-07-03". */
   LocalDate: any
   /** A String-representation of Adyen's PaymentMethodsResponse */
@@ -34,14 +36,12 @@ export type Scalars = {
   CheckoutPaymentsAction: any
   /** A String-representation of Adyen's payments details request */
   PaymentsDetailsRequest: any
-  QuoteData: any
+  JSON: any
   /** The `Upload` scalar type represents a file upload. */
   Upload: any
   UUID: any
   TimeStamp: any
   JSONObject: any
-  /** Raw JSON value */
-  Json: any
   /** The Long scalar type represents non-fractional signed whole numeric values. Long can represent values between -(2^63) and 2^63 - 1. */
   Long: any
   Hex: any
@@ -171,10 +171,7 @@ export type ActiveStatus = {
   upcomingAgreementChange?: Maybe<UpcomingAgreementChange>
 }
 
-export type AddCampaignError = {
-  __typename?: 'AddCampaignError'
-  errorCode: Scalars['String']
-}
+export type AddCampaignResult = QuoteCart | BasicError
 
 export type AdditionalPaymentsDetailsRequest = {
   paymentsDetailsRequest: Scalars['PaymentsDetailsRequest']
@@ -361,6 +358,7 @@ export type AppMarketingImage = Node & {
   image?: Maybe<Asset>
   language?: Maybe<Language>
   userInterfaceStyle: UserInterfaceStyle
+  scheduledIn: Array<ScheduledOperation>
   /** List of AppMarketingImage versions */
   history: Array<Version>
 }
@@ -394,6 +392,17 @@ export type AppMarketingImageImageArgs = {
 
 /** The background image for the login screen */
 export type AppMarketingImageLanguageArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+/** The background image for the login screen */
+export type AppMarketingImageScheduledInArgs = {
+  where?: Maybe<ScheduledOperationWhereInput>
+  skip?: Maybe<Scalars['Int']>
+  after?: Maybe<Scalars['String']>
+  before?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
   locales?: Maybe<Array<Locale>>
 }
 
@@ -558,6 +567,9 @@ export type AppMarketingImageManyWhereInput = {
   userInterfaceStyle_in?: Maybe<Array<UserInterfaceStyle>>
   /** All values that are not contained in given list. */
   userInterfaceStyle_not_in?: Maybe<Array<UserInterfaceStyle>>
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
 }
 
 export enum AppMarketingImageOrderByInput {
@@ -752,6 +764,9 @@ export type AppMarketingImageWhereInput = {
   userInterfaceStyle_in?: Maybe<Array<UserInterfaceStyle>>
   /** All values that are not contained in given list. */
   userInterfaceStyle_not_in?: Maybe<Array<UserInterfaceStyle>>
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
 }
 
 /** References AppMarketingImage record uniquely */
@@ -811,6 +826,7 @@ export type Asset = Node & {
   assetMarketingStory: Array<MarketingStory>
   fileCoreMLModel: Array<CoreMlModel>
   imageAppMarketingImage: Array<AppMarketingImage>
+  scheduledIn: Array<ScheduledOperation>
   /** List of Asset versions */
   history: Array<Version>
   /** Get the url for the asset with provided transformations applied. */
@@ -888,6 +904,17 @@ export type AssetFileCoreMlModelArgs = {
 export type AssetImageAppMarketingImageArgs = {
   where?: Maybe<AppMarketingImageWhereInput>
   orderBy?: Maybe<AppMarketingImageOrderByInput>
+  skip?: Maybe<Scalars['Int']>
+  after?: Maybe<Scalars['String']>
+  before?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+  locales?: Maybe<Array<Locale>>
+}
+
+/** Asset system model */
+export type AssetScheduledInArgs = {
+  where?: Maybe<ScheduledOperationWhereInput>
   skip?: Maybe<Scalars['Int']>
   after?: Maybe<Scalars['String']>
   before?: Maybe<Scalars['String']>
@@ -1072,6 +1099,9 @@ export type AssetManyWhereInput = {
   imageAppMarketingImage_every?: Maybe<AppMarketingImageWhereInput>
   imageAppMarketingImage_some?: Maybe<AppMarketingImageWhereInput>
   imageAppMarketingImage_none?: Maybe<AppMarketingImageWhereInput>
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
 }
 
 export enum AssetOrderByInput {
@@ -1425,6 +1455,9 @@ export type AssetWhereInput = {
   imageAppMarketingImage_every?: Maybe<AppMarketingImageWhereInput>
   imageAppMarketingImage_some?: Maybe<AppMarketingImageWhereInput>
   imageAppMarketingImage_none?: Maybe<AppMarketingImageWhereInput>
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
 }
 
 /** References Asset record uniquely */
@@ -1500,6 +1533,11 @@ export enum BankIdStatus {
   Complete = 'complete',
 }
 
+export type BasicError = Error & {
+  __typename?: 'BasicError'
+  message: Scalars['String']
+}
+
 export type BatchPayload = {
   __typename?: 'BatchPayload'
   /** The number of nodes that have been affected by the Batch operation. */
@@ -1529,8 +1567,8 @@ export type BundledQuote = {
   id: Scalars['ID']
   currentInsurer?: Maybe<CurrentInsurer>
   price: MonetaryAmountV2
-  firstName: Scalars['String']
-  lastName: Scalars['String']
+  firstName?: Maybe<Scalars['String']>
+  lastName?: Maybe<Scalars['String']>
   ssn?: Maybe<Scalars['String']>
   birthDate: Scalars['LocalDate']
   quoteDetails: QuoteDetails
@@ -1737,6 +1775,38 @@ export type ChatState = {
   onboardingDone: Scalars['Boolean']
 }
 
+/** The signing of an onboarding session, that contains information about the current signing status. */
+export type Checkout = {
+  __typename?: 'Checkout'
+  /**  Current signing status of the session  */
+  status: CheckoutStatus
+  /**  A user-visible text that explains the current status. Useful for async signing like SE BankID.  */
+  statusText?: Maybe<Scalars['String']>
+}
+
+export enum CheckoutMethod {
+  SwedishBankId = 'SWEDISH_BANK_ID',
+  NorwegianBankId = 'NORWEGIAN_BANK_ID',
+  DanishBankId = 'DANISH_BANK_ID',
+  SimpleSign = 'SIMPLE_SIGN',
+  ApproveOnly = 'APPROVE_ONLY',
+}
+
+export enum CheckoutStatus {
+  /**  This signing session is ongoing. Only for async signing like SE BankID.  */
+  Pending = 'PENDING',
+  /**
+   * This signing session is signed, and can be completed (producing an access token).
+   *
+   * Synchronous signing methods, like simple sign, immediately produce this state.
+   */
+  Signed = 'SIGNED',
+  /** This signing is completed, which means the onboarding session has reached its terminal state. */
+  Completed = 'COMPLETED',
+  /** The signing has failed - which means it also can be retried. */
+  Failed = 'FAILED',
+}
+
 export type Claim = {
   __typename?: 'Claim'
   id: Scalars['String']
@@ -1767,6 +1837,42 @@ export enum ClaimStatus {
   Submitted = 'SUBMITTED',
   BeingHandled = 'BEING_HANDLED',
   Closed = 'CLOSED',
+  Reopened = 'REOPENED',
+}
+
+export type ClaimStatusCard = {
+  __typename?: 'ClaimStatusCard'
+  id: Scalars['ID']
+  pills: Array<ClaimStatusCardPill>
+  title: Scalars['String']
+  subtitle: Scalars['String']
+  progressSegments: Array<ClaimStatusProgressSegment>
+}
+
+export type ClaimStatusCardPill = {
+  __typename?: 'ClaimStatusCardPill'
+  text: Scalars['String']
+  type: ClaimStatusCardPillType
+}
+
+export enum ClaimStatusCardPillType {
+  Open = 'OPEN',
+  Closed = 'CLOSED',
+  Reopened = 'REOPENED',
+  Payment = 'PAYMENT',
+}
+
+export type ClaimStatusProgressSegment = {
+  __typename?: 'ClaimStatusProgressSegment'
+  text: Scalars['String']
+  type: ClaimStatusProgressType
+}
+
+export enum ClaimStatusProgressType {
+  PastInactive = 'PAST_INACTIVE',
+  CurrentlyActive = 'CURRENTLY_ACTIVE',
+  FutureInactive = 'FUTURE_INACTIVE',
+  Paid = 'PAID',
   Reopened = 'REOPENED',
 }
 
@@ -1807,6 +1913,7 @@ export type ColorInput = {
 
 export type CommonClaim = {
   __typename?: 'CommonClaim'
+  id: Scalars['String']
   icon: Icon
   title: Scalars['String']
   layout: CommonClaimLayouts
@@ -2047,6 +2154,7 @@ export type CoreMlModel = Node & {
   publishedBy?: Maybe<User>
   file?: Maybe<Asset>
   type?: Maybe<CoreMlModelType>
+  scheduledIn: Array<ScheduledOperation>
   /** List of CoreMLModel versions */
   history: Array<Version>
 }
@@ -2075,6 +2183,17 @@ export type CoreMlModelPublishedByArgs = {
 
 /** All of our CoreML models used in the iOS app */
 export type CoreMlModelFileArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+/** All of our CoreML models used in the iOS app */
+export type CoreMlModelScheduledInArgs = {
+  where?: Maybe<ScheduledOperationWhereInput>
+  skip?: Maybe<Scalars['Int']>
+  after?: Maybe<Scalars['String']>
+  before?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
   locales?: Maybe<Array<Locale>>
 }
 
@@ -2217,6 +2336,9 @@ export type CoreMlModelManyWhereInput = {
   type_in?: Maybe<Array<CoreMlModelType>>
   /** All values that are not contained in given list. */
   type_not_in?: Maybe<Array<CoreMlModelType>>
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
 }
 
 export enum CoreMlModelOrderByInput {
@@ -2390,6 +2512,9 @@ export type CoreMlModelWhereInput = {
   type_in?: Maybe<Array<CoreMlModelType>>
   /** All values that are not contained in given list. */
   type_not_in?: Maybe<Array<CoreMlModelType>>
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
 }
 
 /** References CoreMLModel record uniquely */
@@ -2474,44 +2599,31 @@ export type CreateNorwegianTravelInput = {
   isYouth: Scalars['Boolean']
 }
 
-export type CreateOnboardingQuoteError = {
-  __typename?: 'CreateOnboardingQuoteError'
+export type CreateOnboardingQuoteCartInput = {
+  market: Market
+  locale: Scalars['String']
+}
+
+export type CreateQuoteBundleError = Error & {
+  __typename?: 'CreateQuoteBundleError'
+  message: Scalars['String']
   limits: Array<UnderwritingLimit>
 }
 
-export type CreateOnboardingQuoteInput = {
-  id?: Maybe<Scalars['ID']>
-  firstName: Scalars['String']
-  lastName: Scalars['String']
-  email?: Maybe<Scalars['String']>
-  dataCollectionId?: Maybe<Scalars['ID']>
-  phoneNumber?: Maybe<Scalars['String']>
-  currentInsurer?: Maybe<Scalars['String']>
-  ssn?: Maybe<Scalars['String']>
-  birthDate?: Maybe<Scalars['LocalDate']>
-  startDate?: Maybe<Scalars['LocalDate']>
-  swedishApartmentData?: Maybe<Scalars['QuoteData']>
-  swedishHouseData?: Maybe<Scalars['QuoteData']>
-  swedishAccidentData?: Maybe<Scalars['QuoteData']>
-  norwegianHomeContentsData?: Maybe<Scalars['QuoteData']>
-  norwegianTravelData?: Maybe<Scalars['QuoteData']>
-  danishHomeContentsData?: Maybe<Scalars['QuoteData']>
-  danishAccidentData?: Maybe<Scalars['QuoteData']>
-  danishTravelData?: Maybe<Scalars['QuoteData']>
+export type CreateQuoteBundleInput = {
+  quoteData: Array<QuoteData>
 }
 
-export type CreateOnboardingQuoteResult =
-  | CreateOnboardingQuoteSuccess
-  | CreateOnboardingQuoteError
+export type CreateQuoteBundleResult = QuoteCart | CreateQuoteBundleError
 
-export type CreateOnboardingQuoteSuccess = {
-  __typename?: 'CreateOnboardingQuoteSuccess'
+export type CreateQuoteBundleSuccess = {
+  __typename?: 'CreateQuoteBundleSuccess'
   id: Scalars['ID']
 }
 
-export type CreateOnboardingSessionInput = {
-  country: Scalars['String']
-  locale: Scalars['String']
+export type CreateQuoteCartAccessTokenResult = {
+  __typename?: 'CreateQuoteCartAccessTokenResult'
+  accessToken: Scalars['String']
 }
 
 export type CreateQuoteInput = {
@@ -3689,13 +3801,18 @@ export type Emergency = {
   __typename?: 'Emergency'
   color: HedvigColor
   title: Scalars['String']
-  /**  Phone Number on E.164-format  */
+  /** Phone Number on E.164-format */
   emergencyNumber: Scalars['String']
 }
 
 export enum Environment {
   Production = 'Production',
   Staging = 'Staging',
+}
+
+/**  Base Error interface that contains displayable error message.  */
+export type Error = {
+  message: Scalars['String']
 }
 
 export type ExceededMaximumUpdates = {
@@ -3852,6 +3969,7 @@ export type Faq = Node & {
   /** User that last published this document */
   publishedBy?: Maybe<User>
   language?: Maybe<Language>
+  scheduledIn: Array<ScheduledOperation>
   /** List of Faq versions */
   history: Array<Version>
 }
@@ -3880,6 +3998,17 @@ export type FaqPublishedByArgs = {
 
 /** Frequently asked questions */
 export type FaqLanguageArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+/** Frequently asked questions */
+export type FaqScheduledInArgs = {
+  where?: Maybe<ScheduledOperationWhereInput>
+  skip?: Maybe<Scalars['Int']>
+  after?: Maybe<Scalars['String']>
+  before?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
   locales?: Maybe<Array<Locale>>
 }
 
@@ -4054,6 +4183,9 @@ export type FaqManyWhereInput = {
   updatedBy?: Maybe<UserWhereInput>
   publishedBy?: Maybe<UserWhereInput>
   language?: Maybe<LanguageWhereInput>
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
 }
 
 export enum FaqOrderByInput {
@@ -4258,6 +4390,9 @@ export type FaqWhereInput = {
   updatedBy?: Maybe<UserWhereInput>
   publishedBy?: Maybe<UserWhereInput>
   language?: Maybe<LanguageWhereInput>
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
 }
 
 /** References Faq record uniquely */
@@ -4425,6 +4560,7 @@ export type ImportantMessage = Node & {
   /** User that last published this document */
   publishedBy?: Maybe<User>
   language?: Maybe<Language>
+  scheduledIn: Array<ScheduledOperation>
   /** List of ImportantMessage versions */
   history: Array<Version>
 }
@@ -4448,6 +4584,16 @@ export type ImportantMessagePublishedByArgs = {
 }
 
 export type ImportantMessageLanguageArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+export type ImportantMessageScheduledInArgs = {
+  where?: Maybe<ScheduledOperationWhereInput>
+  skip?: Maybe<Scalars['Int']>
+  after?: Maybe<Scalars['String']>
+  before?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
   locales?: Maybe<Array<Locale>>
 }
 
@@ -4661,6 +4807,9 @@ export type ImportantMessageManyWhereInput = {
   updatedBy?: Maybe<UserWhereInput>
   publishedBy?: Maybe<UserWhereInput>
   language?: Maybe<LanguageWhereInput>
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
 }
 
 export enum ImportantMessageOrderByInput {
@@ -4911,6 +5060,9 @@ export type ImportantMessageWhereInput = {
   updatedBy?: Maybe<UserWhereInput>
   publishedBy?: Maybe<UserWhereInput>
   language?: Maybe<LanguageWhereInput>
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
 }
 
 /** References ImportantMessage record uniquely */
@@ -5152,6 +5304,7 @@ export type Key = Node & {
   keyGearItemCoverageTitle?: Maybe<KeyGearItemCoverage>
   keyGearItemCoverageDescription?: Maybe<KeyGearItemCoverage>
   translations: Array<Translation>
+  scheduledIn: Array<ScheduledOperation>
   /** List of Key versions */
   history: Array<Version>
 }
@@ -5185,6 +5338,16 @@ export type KeyKeyGearItemCoverageDescriptionArgs = {
 export type KeyTranslationsArgs = {
   where?: Maybe<TranslationWhereInput>
   orderBy?: Maybe<TranslationOrderByInput>
+  skip?: Maybe<Scalars['Int']>
+  after?: Maybe<Scalars['String']>
+  before?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+  locales?: Maybe<Array<Locale>>
+}
+
+export type KeyScheduledInArgs = {
+  where?: Maybe<ScheduledOperationWhereInput>
   skip?: Maybe<Scalars['Int']>
   after?: Maybe<Scalars['String']>
   before?: Maybe<Scalars['String']>
@@ -5317,6 +5480,7 @@ export type KeyGearItemCoverage = Node & {
   publishedBy?: Maybe<User>
   title?: Maybe<Key>
   description?: Maybe<Key>
+  scheduledIn: Array<ScheduledOperation>
   /** List of KeyGearItemCoverage versions */
   history: Array<Version>
 }
@@ -5344,6 +5508,16 @@ export type KeyGearItemCoverageTitleArgs = {
 }
 
 export type KeyGearItemCoverageDescriptionArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+export type KeyGearItemCoverageScheduledInArgs = {
+  where?: Maybe<ScheduledOperationWhereInput>
+  skip?: Maybe<Scalars['Int']>
+  after?: Maybe<Scalars['String']>
+  before?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
   locales?: Maybe<Array<Locale>>
 }
 
@@ -5479,6 +5653,9 @@ export type KeyGearItemCoverageManyWhereInput = {
   publishedBy?: Maybe<UserWhereInput>
   title?: Maybe<KeyWhereInput>
   description?: Maybe<KeyWhereInput>
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
 }
 
 export enum KeyGearItemCoverageOrderByInput {
@@ -5641,6 +5818,9 @@ export type KeyGearItemCoverageWhereInput = {
   publishedBy?: Maybe<UserWhereInput>
   title?: Maybe<KeyWhereInput>
   description?: Maybe<KeyWhereInput>
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
 }
 
 /** References KeyGearItemCoverage record uniquely */
@@ -5804,6 +5984,9 @@ export type KeyManyWhereInput = {
   translations_every?: Maybe<TranslationWhereInput>
   translations_some?: Maybe<TranslationWhereInput>
   translations_none?: Maybe<TranslationWhereInput>
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
 }
 
 export enum KeyOrderByInput {
@@ -6016,6 +6199,9 @@ export type KeyWhereInput = {
   translations_every?: Maybe<TranslationWhereInput>
   translations_some?: Maybe<TranslationWhereInput>
   translations_none?: Maybe<TranslationWhereInput>
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
 }
 
 /** References Key record uniquely */
@@ -6051,6 +6237,7 @@ export type Language = Node & {
   importantMessageses: Array<ImportantMessage>
   appMarketingImages: Array<AppMarketingImage>
   translation: Array<Translation>
+  scheduledIn: Array<ScheduledOperation>
   /** List of Language versions */
   history: Array<Version>
 }
@@ -6120,6 +6307,16 @@ export type LanguageAppMarketingImagesArgs = {
 export type LanguageTranslationArgs = {
   where?: Maybe<TranslationWhereInput>
   orderBy?: Maybe<TranslationOrderByInput>
+  skip?: Maybe<Scalars['Int']>
+  after?: Maybe<Scalars['String']>
+  before?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+  locales?: Maybe<Array<Locale>>
+}
+
+export type LanguageScheduledInArgs = {
+  where?: Maybe<ScheduledOperationWhereInput>
   skip?: Maybe<Scalars['Int']>
   after?: Maybe<Scalars['String']>
   before?: Maybe<Scalars['String']>
@@ -6316,6 +6513,9 @@ export type LanguageManyWhereInput = {
   translation_every?: Maybe<TranslationWhereInput>
   translation_some?: Maybe<TranslationWhereInput>
   translation_none?: Maybe<TranslationWhereInput>
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
 }
 
 export enum LanguageOrderByInput {
@@ -6538,6 +6738,9 @@ export type LanguageWhereInput = {
   translation_every?: Maybe<TranslationWhereInput>
   translation_some?: Maybe<TranslationWhereInput>
   translation_none?: Maybe<TranslationWhereInput>
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
 }
 
 /** References Language record uniquely */
@@ -6600,6 +6803,12 @@ export enum LoggingSource {
   Android = 'ANDROID',
 }
 
+export enum Market {
+  Sweden = 'SWEDEN',
+  Norway = 'NORWAY',
+  Denmark = 'DENMARK',
+}
+
 export type MarketingStory = Node & {
   __typename?: 'MarketingStory'
   /** System stage field */
@@ -6626,6 +6835,7 @@ export type MarketingStory = Node & {
   language?: Maybe<Language>
   backgroundColor: HedvigColor
   environment?: Maybe<Environment>
+  scheduledIn: Array<ScheduledOperation>
   /** List of MarketingStory versions */
   history: Array<Version>
 }
@@ -6653,6 +6863,16 @@ export type MarketingStoryAssetArgs = {
 }
 
 export type MarketingStoryLanguageArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+export type MarketingStoryScheduledInArgs = {
+  where?: Maybe<ScheduledOperationWhereInput>
+  skip?: Maybe<Scalars['Int']>
+  after?: Maybe<Scalars['String']>
+  before?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
   locales?: Maybe<Array<Locale>>
 }
 
@@ -6836,6 +7056,9 @@ export type MarketingStoryManyWhereInput = {
   environment_in?: Maybe<Array<Environment>>
   /** All values that are not contained in given list. */
   environment_not_in?: Maybe<Array<Environment>>
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
 }
 
 export enum MarketingStoryOrderByInput {
@@ -7056,6 +7279,9 @@ export type MarketingStoryWhereInput = {
   environment_in?: Maybe<Array<Environment>>
   /** All values that are not contained in given list. */
   environment_not_in?: Maybe<Array<Environment>>
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
 }
 
 /** References MarketingStory record uniquely */
@@ -7318,29 +7544,31 @@ export type Mutation = {
   login_createOtpAttempt: Scalars['ID']
   /** Verifies an ongoing login attempt, returning an access token on success */
   login_verifyOtpAttempt: VerifyOtpLoginAttemptResult
+  /** Resends the OTP to the provided credential */
+  login_resendOtp: Scalars['ID']
   /**
    * Create a new onboarding session. This is not an authentication session, but rather an object that
    * ties the onboarding journey together.
    */
-  onboardingSession_create: Scalars['ID']
+  onboardingQuoteCart_create: Scalars['ID']
   /** Create a quote as part of this onboarding session. */
-  onboardingSession_createQuote: CreateOnboardingQuoteResult
+  quoteCart_createQuoteBundle: CreateQuoteBundleResult
   /**
    * Add a campaign by its code to this onboarding session. This campaign won't be "redeemed", but rather
    * left in a pending state on the onboarding until signing occurs and a member is created.
    *
    * Returns an error if there was a problem with redeeming it, or null upon success.
    */
-  onboardingSession_addCampaign?: Maybe<AddCampaignError>
+  quoteCart_addCampaign: AddCampaignResult
   /** Remove the existing campaign. */
-  onboardingSession_removeCampaign: Scalars['Boolean']
+  quoteCart_removeCampaign: RemoveCampaignResult
   /**
    * Initiate signing of this onboarding, optionally tagging a subset of the quotes if not all of them are wanted.
    *
    * Note, the session should only be moved into its signing state once the prior things, such as campaign, are
    * considered done.
    */
-  onboardingSession_startSigning: OnboardingStartSignResponse
+  quoteCart_startCheckout: StartCheckoutResult
   /**
    * Once an onboarding session is "signed", it can be finalized/consumed by this method, which will produce
    * an access token. This access token will serve as the means of authorization towards the member that was
@@ -7348,7 +7576,7 @@ export type Mutation = {
    *
    * This is needed at this stage because the "connecting payments" stage will happen with an actual signed member.
    */
-  onboardingSession_createAccessToken: OnboardingSessionAccessTokenResult
+  quoteCart_createAccessToken: CreateQuoteCartAccessTokenResult
   logout: Scalars['Boolean']
   createClaim: Scalars['ID']
   createSession: Scalars['String']
@@ -7511,30 +7739,34 @@ export type MutationLogin_VerifyOtpAttemptArgs = {
   otp: Scalars['String']
 }
 
-export type MutationOnboardingSession_CreateArgs = {
-  input: CreateOnboardingSessionInput
-}
-
-export type MutationOnboardingSession_CreateQuoteArgs = {
-  id: Scalars['ID']
-  input: CreateOnboardingQuoteInput
-}
-
-export type MutationOnboardingSession_AddCampaignArgs = {
-  id: Scalars['ID']
-  campaignCode: Scalars['String']
-}
-
-export type MutationOnboardingSession_RemoveCampaignArgs = {
+export type MutationLogin_ResendOtpArgs = {
   id: Scalars['ID']
 }
 
-export type MutationOnboardingSession_StartSigningArgs = {
+export type MutationOnboardingQuoteCart_CreateArgs = {
+  input: CreateOnboardingQuoteCartInput
+}
+
+export type MutationQuoteCart_CreateQuoteBundleArgs = {
+  id: Scalars['ID']
+  input: CreateQuoteBundleInput
+}
+
+export type MutationQuoteCart_AddCampaignArgs = {
+  id: Scalars['ID']
+  code: Scalars['String']
+}
+
+export type MutationQuoteCart_RemoveCampaignArgs = {
+  id: Scalars['ID']
+}
+
+export type MutationQuoteCart_StartCheckoutArgs = {
   id: Scalars['ID']
   quoteIds?: Maybe<Array<Scalars['ID']>>
 }
 
-export type MutationOnboardingSession_CreateAccessTokenArgs = {
+export type MutationQuoteCart_CreateAccessTokenArgs = {
   id: Scalars['ID']
 }
 
@@ -7719,72 +7951,10 @@ export enum NorwegianTravelLineOfBusiness {
   Youth = 'YOUTH',
 }
 
-/**
- * An onboarding session is a type that exists to guide the client through an onboarding journey,
- * as a means of storing intermediate state up until the point where it is "signed" and then flushed
- * into a proper "member".
- */
-export type OnboardingSession = {
-  __typename?: 'OnboardingSession'
-  id: Scalars['ID']
-  /**  Campaign, if one has been attached by a code  */
-  campaign?: Maybe<Campaign>
-  /**  The quote bundle "view" of the quotes created as part of this onboarding  */
-  bundle?: Maybe<QuoteBundle>
-  /**  The ongoing signing state, if it has been initiated - or null if it has not.  */
-  signing?: Maybe<OnboardingSessionSigning>
-}
-
-export type OnboardingSessionAccessTokenResult = {
-  __typename?: 'OnboardingSessionAccessTokenResult'
-  accessToken: Scalars['String']
-}
-
-/** The signing of an onboarding session, that contains information about the current signing status. */
-export type OnboardingSessionSigning = {
-  __typename?: 'OnboardingSessionSigning'
-  /**  Current signing status of the session  */
-  status: OnboardingSessionSignStatus
-  /**  A user-visible text that explains the current status. Useful for async signing like SE BankID.  */
-  statusText?: Maybe<Scalars['String']>
-}
-
-export enum OnboardingSessionSignStatus {
-  /**  This signing session is ongoing. Only for async signing like SE BankID.  */
-  Pending = 'PENDING',
-  /**
-   * This signing session is signed, and can be completed (producing an access token).
-   *
-   * Synchronous signing methods, like simple sign, immediately produce this state.
-   */
-  Signed = 'SIGNED',
-  /** This signing is completed, which means the onboarding session has reached its terminal state. */
-  Completed = 'COMPLETED',
-  /** The signing has failed - which means it also can be retried. */
-  Failed = 'FAILED',
-}
-
-export type OnboardingSigningFailure = {
-  __typename?: 'OnboardingSigningFailure'
-  errorMessage: Scalars['String']
-  errorCode: Scalars['String']
-}
-
 export type OnboardingSigningSuccess = {
   __typename?: 'OnboardingSigningSuccess'
-  status?: Maybe<OnboardingSessionSignStatus>
+  status?: Maybe<CheckoutStatus>
 }
-
-export type OnboardingSigningSwedishBankId = {
-  __typename?: 'OnboardingSigningSwedishBankId'
-  status?: Maybe<OnboardingSessionSignStatus>
-  autoStartToken?: Maybe<Scalars['String']>
-}
-
-export type OnboardingStartSignResponse =
-  | OnboardingSigningSwedishBankId
-  | OnboardingSigningSuccess
-  | OnboardingSigningFailure
 
 export type OtpLoginAttemptInput = {
   otpType: OtpType
@@ -8007,15 +8177,17 @@ export type Query = {
   externalInsuranceProvider?: Maybe<ExternalInsuranceProvider>
   autoCompleteAddress: Array<AutoCompleteResponse>
   _?: Maybe<Scalars['Boolean']>
+  /** Returns all claims the member has */
+  claims: Array<Claim>
   /** Returns all the currently active contracts, combined into bundles. */
   activeContractBundles: Array<ContractBundle>
   /** Returns all contracts the member currently holds, regardless of activation/termination status */
   contracts: Array<Contract>
   /** Returns whether a member has at least one contract */
   hasContract: Scalars['Boolean']
-  /** Fetch onboarding session by its ID. */
-  onboardingSession: OnboardingSession
   quoteBundle: QuoteBundle
+  /** Fetch onboarding session by its ID. */
+  quoteCart: QuoteCart
   /** @deprecated Use `contracts` instead */
   insurance: Insurance
   cashback?: Maybe<Cashback>
@@ -8038,14 +8210,13 @@ export type Query = {
   selfChangeEligibility: SelfChangeEligibility
   /** All locales that are available and activated */
   availableLocales: Array<Locale>
-  /** Returns all claims the member has */
-  claims: Array<Claim>
   /** Returns perils from promise-cms */
   contractPerils: Array<PerilV2>
   embarkStory?: Maybe<EmbarkStory>
   /** returns names of all available embark stories */
   embarkStoryNames: Array<Scalars['String']>
   embarkStories: Array<EmbarkStoryMetadata>
+  claims_statusCards: Array<ClaimStatusCard>
 }
 
 export type QueryFaqsArgs = {
@@ -8214,12 +8385,12 @@ export type QueryAutoCompleteAddressArgs = {
   options?: Maybe<AddressAutocompleteOptions>
 }
 
-export type QueryOnboardingSessionArgs = {
-  id: Scalars['ID']
-}
-
 export type QueryQuoteBundleArgs = {
   input: QuoteBundleInput
+}
+
+export type QueryQuoteCartArgs = {
+  id: Scalars['ID']
 }
 
 export type QueryCashbackArgs = {
@@ -8255,6 +8426,10 @@ export type QueryEmbarkStoryArgs = {
 
 export type QueryEmbarkStoriesArgs = {
   locale: Scalars['String']
+}
+
+export type QueryClaims_StatusCardsArgs = {
+  locale: Locale
 }
 
 export type Quote = CompleteQuote | IncompleteQuote
@@ -8333,6 +8508,29 @@ export type QuoteBundleVariantTagArgs = {
   locale: Locale
 }
 
+/**
+ * An onboarding session is a type that exists to guide the client through an onboarding journey,
+ * as a means of storing intermediate state up until the point where it is "signed" and then flushed
+ * into a proper "member".
+ */
+export type QuoteCart = {
+  __typename?: 'QuoteCart'
+  id: Scalars['ID']
+  /**  Campaign, if one has been attached by a code  */
+  campaign?: Maybe<Campaign>
+  /**  The quote bundle "view" of the quotes created as part of this onboarding  */
+  bundle?: Maybe<QuoteBundle>
+  /**  The ongoing signing state, if it has been initiated - or null if it has not.  */
+  checkout?: Maybe<Checkout>
+  /**  The accepted checkout methods.  */
+  checkoutMethods: Array<CheckoutMethod>
+}
+
+export type QuoteData = {
+  type: Scalars['String']
+  payload: Scalars['JSON']
+}
+
 export type QuoteDetails =
   | SwedishApartmentQuoteDetails
   | SwedishHouseQuoteDetails
@@ -8388,6 +8586,8 @@ export type RemoveCampaignCodeResult =
   | SuccessfullyRemovedCampaignsResult
   | CannotRemoveActiveCampaignCode
 
+export type RemoveCampaignResult = QuoteCart | BasicError
+
 export type RemoveCurrentInsurerInput = {
   id: Scalars['ID']
 }
@@ -8440,6 +8640,994 @@ export type S3File = {
 export type S3FileInput = {
   bucket: Scalars['String']
   key: Scalars['String']
+}
+
+/** Scheduled Operation system model */
+export type ScheduledOperation = Node & {
+  __typename?: 'ScheduledOperation'
+  /** System stage field */
+  stage: Stage
+  /** Get the document in other stages */
+  documentInStages: Array<ScheduledOperation>
+  /** The unique identifier */
+  id: Scalars['ID']
+  /** The time the document was created */
+  createdAt: Scalars['DateTime']
+  /** The time the document was updated */
+  updatedAt: Scalars['DateTime']
+  /** The time the document was published. Null on documents in draft stage. */
+  publishedAt?: Maybe<Scalars['DateTime']>
+  /** Operation description */
+  description?: Maybe<Scalars['String']>
+  /** Operation error message */
+  errorMessage?: Maybe<Scalars['String']>
+  /** Raw operation payload including all details, this field is subject to change */
+  rawPayload: Scalars['Json']
+  /** User that created this document */
+  createdBy?: Maybe<User>
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>
+  /** User that last published this document */
+  publishedBy?: Maybe<User>
+  /** The release this operation is scheduled for */
+  release?: Maybe<ScheduledRelease>
+  /** operation Status */
+  status: ScheduledOperationStatus
+  affectedDocuments: Array<ScheduledOperationAffectedDocument>
+}
+
+/** Scheduled Operation system model */
+export type ScheduledOperationDocumentInStagesArgs = {
+  stages?: Array<Stage>
+  includeCurrent?: Scalars['Boolean']
+  inheritLocale?: Scalars['Boolean']
+}
+
+/** Scheduled Operation system model */
+export type ScheduledOperationCreatedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+/** Scheduled Operation system model */
+export type ScheduledOperationUpdatedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+/** Scheduled Operation system model */
+export type ScheduledOperationPublishedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+/** Scheduled Operation system model */
+export type ScheduledOperationReleaseArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+/** Scheduled Operation system model */
+export type ScheduledOperationAffectedDocumentsArgs = {
+  skip?: Maybe<Scalars['Int']>
+  after?: Maybe<Scalars['String']>
+  before?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+  locales?: Maybe<Array<Locale>>
+}
+
+export type ScheduledOperationAffectedDocument =
+  | AppMarketingImage
+  | Asset
+  | CoreMlModel
+  | Faq
+  | ImportantMessage
+  | Key
+  | KeyGearItemCoverage
+  | Language
+  | MarketingStory
+  | Translation
+  | UserFeature
+
+export type ScheduledOperationConnectInput = {
+  /** Document to connect */
+  where: ScheduledOperationWhereUniqueInput
+  /** Allow to specify document position in list of connected documents, will default to appending at end of list */
+  position?: Maybe<ConnectPositionInput>
+}
+
+/** A connection to a list of items. */
+export type ScheduledOperationConnection = {
+  __typename?: 'ScheduledOperationConnection'
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo
+  /** A list of edges. */
+  edges: Array<ScheduledOperationEdge>
+  aggregate: Aggregate
+}
+
+export type ScheduledOperationCreateManyInlineInput = {
+  /** Connect multiple existing ScheduledOperation documents */
+  connect?: Maybe<Array<ScheduledOperationWhereUniqueInput>>
+}
+
+export type ScheduledOperationCreateOneInlineInput = {
+  /** Connect one existing ScheduledOperation document */
+  connect?: Maybe<ScheduledOperationWhereUniqueInput>
+}
+
+/** An edge in a connection. */
+export type ScheduledOperationEdge = {
+  __typename?: 'ScheduledOperationEdge'
+  /** The item at the end of the edge. */
+  node: ScheduledOperation
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']
+}
+
+/** Identifies documents */
+export type ScheduledOperationManyWhereInput = {
+  /** Contains search across all appropriate fields. */
+  _search?: Maybe<Scalars['String']>
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<ScheduledOperationWhereInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<ScheduledOperationWhereInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<ScheduledOperationWhereInput>>
+  id?: Maybe<Scalars['ID']>
+  /** All values that are not equal to given value. */
+  id_not?: Maybe<Scalars['ID']>
+  /** All values that are contained in given list. */
+  id_in?: Maybe<Array<Scalars['ID']>>
+  /** All values that are not contained in given list. */
+  id_not_in?: Maybe<Array<Scalars['ID']>>
+  /** All values containing the given string. */
+  id_contains?: Maybe<Scalars['ID']>
+  /** All values not containing the given string. */
+  id_not_contains?: Maybe<Scalars['ID']>
+  /** All values starting with the given string. */
+  id_starts_with?: Maybe<Scalars['ID']>
+  /** All values not starting with the given string. */
+  id_not_starts_with?: Maybe<Scalars['ID']>
+  /** All values ending with the given string. */
+  id_ends_with?: Maybe<Scalars['ID']>
+  /** All values not ending with the given string */
+  id_not_ends_with?: Maybe<Scalars['ID']>
+  createdAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  createdAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  createdAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  createdAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  createdAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  createdAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  createdAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  createdAt_gte?: Maybe<Scalars['DateTime']>
+  updatedAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  updatedAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  updatedAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  updatedAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  updatedAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  updatedAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  updatedAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  updatedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  publishedAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  publishedAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  publishedAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  publishedAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  publishedAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  publishedAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  publishedAt_gte?: Maybe<Scalars['DateTime']>
+  description?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  description_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  description_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  description_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values containing the given string. */
+  description_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  description_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  description_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  description_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  description_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string */
+  description_not_ends_with?: Maybe<Scalars['String']>
+  errorMessage?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  errorMessage_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  errorMessage_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  errorMessage_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values containing the given string. */
+  errorMessage_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  errorMessage_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  errorMessage_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  errorMessage_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  errorMessage_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string */
+  errorMessage_not_ends_with?: Maybe<Scalars['String']>
+  createdBy?: Maybe<UserWhereInput>
+  updatedBy?: Maybe<UserWhereInput>
+  publishedBy?: Maybe<UserWhereInput>
+  release?: Maybe<ScheduledReleaseWhereInput>
+  status?: Maybe<ScheduledOperationStatus>
+  /** All values that are not equal to given value. */
+  status_not?: Maybe<ScheduledOperationStatus>
+  /** All values that are contained in given list. */
+  status_in?: Maybe<Array<ScheduledOperationStatus>>
+  /** All values that are not contained in given list. */
+  status_not_in?: Maybe<Array<ScheduledOperationStatus>>
+}
+
+export enum ScheduledOperationOrderByInput {
+  IdAsc = 'id_ASC',
+  IdDesc = 'id_DESC',
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC',
+  PublishedAtAsc = 'publishedAt_ASC',
+  PublishedAtDesc = 'publishedAt_DESC',
+  DescriptionAsc = 'description_ASC',
+  DescriptionDesc = 'description_DESC',
+  ErrorMessageAsc = 'errorMessage_ASC',
+  ErrorMessageDesc = 'errorMessage_DESC',
+  StatusAsc = 'status_ASC',
+  StatusDesc = 'status_DESC',
+}
+
+/** System Scheduled Operation Status */
+export enum ScheduledOperationStatus {
+  Pending = 'PENDING',
+  InProgress = 'IN_PROGRESS',
+  Completed = 'COMPLETED',
+  Failed = 'FAILED',
+  Canceled = 'CANCELED',
+}
+
+export type ScheduledOperationUpdateManyInlineInput = {
+  /** Connect multiple existing ScheduledOperation documents */
+  connect?: Maybe<Array<ScheduledOperationConnectInput>>
+  /** Override currently-connected documents with multiple existing ScheduledOperation documents */
+  set?: Maybe<Array<ScheduledOperationWhereUniqueInput>>
+  /** Disconnect multiple ScheduledOperation documents */
+  disconnect?: Maybe<Array<ScheduledOperationWhereUniqueInput>>
+}
+
+export type ScheduledOperationUpdateOneInlineInput = {
+  /** Connect existing ScheduledOperation document */
+  connect?: Maybe<ScheduledOperationWhereUniqueInput>
+  /** Disconnect currently connected ScheduledOperation document */
+  disconnect?: Maybe<Scalars['Boolean']>
+}
+
+/** Identifies documents */
+export type ScheduledOperationWhereInput = {
+  /** Contains search across all appropriate fields. */
+  _search?: Maybe<Scalars['String']>
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<ScheduledOperationWhereInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<ScheduledOperationWhereInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<ScheduledOperationWhereInput>>
+  id?: Maybe<Scalars['ID']>
+  /** All values that are not equal to given value. */
+  id_not?: Maybe<Scalars['ID']>
+  /** All values that are contained in given list. */
+  id_in?: Maybe<Array<Scalars['ID']>>
+  /** All values that are not contained in given list. */
+  id_not_in?: Maybe<Array<Scalars['ID']>>
+  /** All values containing the given string. */
+  id_contains?: Maybe<Scalars['ID']>
+  /** All values not containing the given string. */
+  id_not_contains?: Maybe<Scalars['ID']>
+  /** All values starting with the given string. */
+  id_starts_with?: Maybe<Scalars['ID']>
+  /** All values not starting with the given string. */
+  id_not_starts_with?: Maybe<Scalars['ID']>
+  /** All values ending with the given string. */
+  id_ends_with?: Maybe<Scalars['ID']>
+  /** All values not ending with the given string */
+  id_not_ends_with?: Maybe<Scalars['ID']>
+  createdAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  createdAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  createdAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  createdAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  createdAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  createdAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  createdAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  createdAt_gte?: Maybe<Scalars['DateTime']>
+  updatedAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  updatedAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  updatedAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  updatedAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  updatedAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  updatedAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  updatedAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  updatedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  publishedAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  publishedAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  publishedAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  publishedAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  publishedAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  publishedAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  publishedAt_gte?: Maybe<Scalars['DateTime']>
+  description?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  description_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  description_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  description_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values containing the given string. */
+  description_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  description_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  description_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  description_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  description_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string */
+  description_not_ends_with?: Maybe<Scalars['String']>
+  errorMessage?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  errorMessage_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  errorMessage_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  errorMessage_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values containing the given string. */
+  errorMessage_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  errorMessage_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  errorMessage_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  errorMessage_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  errorMessage_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string */
+  errorMessage_not_ends_with?: Maybe<Scalars['String']>
+  createdBy?: Maybe<UserWhereInput>
+  updatedBy?: Maybe<UserWhereInput>
+  publishedBy?: Maybe<UserWhereInput>
+  release?: Maybe<ScheduledReleaseWhereInput>
+  status?: Maybe<ScheduledOperationStatus>
+  /** All values that are not equal to given value. */
+  status_not?: Maybe<ScheduledOperationStatus>
+  /** All values that are contained in given list. */
+  status_in?: Maybe<Array<ScheduledOperationStatus>>
+  /** All values that are not contained in given list. */
+  status_not_in?: Maybe<Array<ScheduledOperationStatus>>
+}
+
+/** References ScheduledOperation record uniquely */
+export type ScheduledOperationWhereUniqueInput = {
+  id?: Maybe<Scalars['ID']>
+}
+
+/** Scheduled Release system model */
+export type ScheduledRelease = Node & {
+  __typename?: 'ScheduledRelease'
+  /** System stage field */
+  stage: Stage
+  /** Get the document in other stages */
+  documentInStages: Array<ScheduledRelease>
+  /** The unique identifier */
+  id: Scalars['ID']
+  /** The time the document was created */
+  createdAt: Scalars['DateTime']
+  /** The time the document was updated */
+  updatedAt: Scalars['DateTime']
+  /** The time the document was published. Null on documents in draft stage. */
+  publishedAt?: Maybe<Scalars['DateTime']>
+  /** Release Title */
+  title?: Maybe<Scalars['String']>
+  /** Release description */
+  description?: Maybe<Scalars['String']>
+  /** Release error message */
+  errorMessage?: Maybe<Scalars['String']>
+  /** Whether scheduled release should be run */
+  isActive: Scalars['Boolean']
+  /** Whether scheduled release is implicit */
+  isImplicit: Scalars['Boolean']
+  /** Release date and time */
+  releaseAt?: Maybe<Scalars['DateTime']>
+  /** User that created this document */
+  createdBy?: Maybe<User>
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>
+  /** User that last published this document */
+  publishedBy?: Maybe<User>
+  /** Operations to run with this release */
+  operations: Array<ScheduledOperation>
+  /** Release Status */
+  status: ScheduledReleaseStatus
+}
+
+/** Scheduled Release system model */
+export type ScheduledReleaseDocumentInStagesArgs = {
+  stages?: Array<Stage>
+  includeCurrent?: Scalars['Boolean']
+  inheritLocale?: Scalars['Boolean']
+}
+
+/** Scheduled Release system model */
+export type ScheduledReleaseCreatedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+/** Scheduled Release system model */
+export type ScheduledReleaseUpdatedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+/** Scheduled Release system model */
+export type ScheduledReleasePublishedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+/** Scheduled Release system model */
+export type ScheduledReleaseOperationsArgs = {
+  where?: Maybe<ScheduledOperationWhereInput>
+  orderBy?: Maybe<ScheduledOperationOrderByInput>
+  skip?: Maybe<Scalars['Int']>
+  after?: Maybe<Scalars['String']>
+  before?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+  locales?: Maybe<Array<Locale>>
+}
+
+export type ScheduledReleaseConnectInput = {
+  /** Document to connect */
+  where: ScheduledReleaseWhereUniqueInput
+  /** Allow to specify document position in list of connected documents, will default to appending at end of list */
+  position?: Maybe<ConnectPositionInput>
+}
+
+/** A connection to a list of items. */
+export type ScheduledReleaseConnection = {
+  __typename?: 'ScheduledReleaseConnection'
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo
+  /** A list of edges. */
+  edges: Array<ScheduledReleaseEdge>
+  aggregate: Aggregate
+}
+
+export type ScheduledReleaseCreateInput = {
+  createdAt?: Maybe<Scalars['DateTime']>
+  updatedAt?: Maybe<Scalars['DateTime']>
+  title?: Maybe<Scalars['String']>
+  description?: Maybe<Scalars['String']>
+  errorMessage?: Maybe<Scalars['String']>
+  isActive?: Maybe<Scalars['Boolean']>
+  releaseAt?: Maybe<Scalars['DateTime']>
+}
+
+export type ScheduledReleaseCreateManyInlineInput = {
+  /** Create and connect multiple existing ScheduledRelease documents */
+  create?: Maybe<Array<ScheduledReleaseCreateInput>>
+  /** Connect multiple existing ScheduledRelease documents */
+  connect?: Maybe<Array<ScheduledReleaseWhereUniqueInput>>
+}
+
+export type ScheduledReleaseCreateOneInlineInput = {
+  /** Create and connect one ScheduledRelease document */
+  create?: Maybe<ScheduledReleaseCreateInput>
+  /** Connect one existing ScheduledRelease document */
+  connect?: Maybe<ScheduledReleaseWhereUniqueInput>
+}
+
+/** An edge in a connection. */
+export type ScheduledReleaseEdge = {
+  __typename?: 'ScheduledReleaseEdge'
+  /** The item at the end of the edge. */
+  node: ScheduledRelease
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']
+}
+
+/** Identifies documents */
+export type ScheduledReleaseManyWhereInput = {
+  /** Contains search across all appropriate fields. */
+  _search?: Maybe<Scalars['String']>
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<ScheduledReleaseWhereInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<ScheduledReleaseWhereInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<ScheduledReleaseWhereInput>>
+  id?: Maybe<Scalars['ID']>
+  /** All values that are not equal to given value. */
+  id_not?: Maybe<Scalars['ID']>
+  /** All values that are contained in given list. */
+  id_in?: Maybe<Array<Scalars['ID']>>
+  /** All values that are not contained in given list. */
+  id_not_in?: Maybe<Array<Scalars['ID']>>
+  /** All values containing the given string. */
+  id_contains?: Maybe<Scalars['ID']>
+  /** All values not containing the given string. */
+  id_not_contains?: Maybe<Scalars['ID']>
+  /** All values starting with the given string. */
+  id_starts_with?: Maybe<Scalars['ID']>
+  /** All values not starting with the given string. */
+  id_not_starts_with?: Maybe<Scalars['ID']>
+  /** All values ending with the given string. */
+  id_ends_with?: Maybe<Scalars['ID']>
+  /** All values not ending with the given string */
+  id_not_ends_with?: Maybe<Scalars['ID']>
+  createdAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  createdAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  createdAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  createdAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  createdAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  createdAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  createdAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  createdAt_gte?: Maybe<Scalars['DateTime']>
+  updatedAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  updatedAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  updatedAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  updatedAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  updatedAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  updatedAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  updatedAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  updatedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  publishedAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  publishedAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  publishedAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  publishedAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  publishedAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  publishedAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  publishedAt_gte?: Maybe<Scalars['DateTime']>
+  title?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  title_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  title_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  title_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values containing the given string. */
+  title_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  title_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  title_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  title_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  title_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string */
+  title_not_ends_with?: Maybe<Scalars['String']>
+  description?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  description_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  description_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  description_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values containing the given string. */
+  description_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  description_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  description_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  description_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  description_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string */
+  description_not_ends_with?: Maybe<Scalars['String']>
+  errorMessage?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  errorMessage_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  errorMessage_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  errorMessage_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values containing the given string. */
+  errorMessage_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  errorMessage_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  errorMessage_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  errorMessage_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  errorMessage_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string */
+  errorMessage_not_ends_with?: Maybe<Scalars['String']>
+  isActive?: Maybe<Scalars['Boolean']>
+  /** All values that are not equal to given value. */
+  isActive_not?: Maybe<Scalars['Boolean']>
+  isImplicit?: Maybe<Scalars['Boolean']>
+  /** All values that are not equal to given value. */
+  isImplicit_not?: Maybe<Scalars['Boolean']>
+  releaseAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  releaseAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  releaseAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  releaseAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  releaseAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  releaseAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  releaseAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  releaseAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
+  updatedBy?: Maybe<UserWhereInput>
+  publishedBy?: Maybe<UserWhereInput>
+  operations_every?: Maybe<ScheduledOperationWhereInput>
+  operations_some?: Maybe<ScheduledOperationWhereInput>
+  operations_none?: Maybe<ScheduledOperationWhereInput>
+  status?: Maybe<ScheduledReleaseStatus>
+  /** All values that are not equal to given value. */
+  status_not?: Maybe<ScheduledReleaseStatus>
+  /** All values that are contained in given list. */
+  status_in?: Maybe<Array<ScheduledReleaseStatus>>
+  /** All values that are not contained in given list. */
+  status_not_in?: Maybe<Array<ScheduledReleaseStatus>>
+}
+
+export enum ScheduledReleaseOrderByInput {
+  IdAsc = 'id_ASC',
+  IdDesc = 'id_DESC',
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC',
+  PublishedAtAsc = 'publishedAt_ASC',
+  PublishedAtDesc = 'publishedAt_DESC',
+  TitleAsc = 'title_ASC',
+  TitleDesc = 'title_DESC',
+  DescriptionAsc = 'description_ASC',
+  DescriptionDesc = 'description_DESC',
+  ErrorMessageAsc = 'errorMessage_ASC',
+  ErrorMessageDesc = 'errorMessage_DESC',
+  IsActiveAsc = 'isActive_ASC',
+  IsActiveDesc = 'isActive_DESC',
+  IsImplicitAsc = 'isImplicit_ASC',
+  IsImplicitDesc = 'isImplicit_DESC',
+  ReleaseAtAsc = 'releaseAt_ASC',
+  ReleaseAtDesc = 'releaseAt_DESC',
+  StatusAsc = 'status_ASC',
+  StatusDesc = 'status_DESC',
+}
+
+/** System Scheduled Release Status */
+export enum ScheduledReleaseStatus {
+  Pending = 'PENDING',
+  InProgress = 'IN_PROGRESS',
+  Completed = 'COMPLETED',
+  Failed = 'FAILED',
+}
+
+export type ScheduledReleaseUpdateInput = {
+  title?: Maybe<Scalars['String']>
+  description?: Maybe<Scalars['String']>
+  errorMessage?: Maybe<Scalars['String']>
+  isActive?: Maybe<Scalars['Boolean']>
+  releaseAt?: Maybe<Scalars['DateTime']>
+}
+
+export type ScheduledReleaseUpdateManyInlineInput = {
+  /** Create and connect multiple ScheduledRelease documents */
+  create?: Maybe<Array<ScheduledReleaseCreateInput>>
+  /** Connect multiple existing ScheduledRelease documents */
+  connect?: Maybe<Array<ScheduledReleaseConnectInput>>
+  /** Override currently-connected documents with multiple existing ScheduledRelease documents */
+  set?: Maybe<Array<ScheduledReleaseWhereUniqueInput>>
+  /** Update multiple ScheduledRelease documents */
+  update?: Maybe<Array<ScheduledReleaseUpdateWithNestedWhereUniqueInput>>
+  /** Upsert multiple ScheduledRelease documents */
+  upsert?: Maybe<Array<ScheduledReleaseUpsertWithNestedWhereUniqueInput>>
+  /** Disconnect multiple ScheduledRelease documents */
+  disconnect?: Maybe<Array<ScheduledReleaseWhereUniqueInput>>
+  /** Delete multiple ScheduledRelease documents */
+  delete?: Maybe<Array<ScheduledReleaseWhereUniqueInput>>
+}
+
+export type ScheduledReleaseUpdateManyInput = {
+  title?: Maybe<Scalars['String']>
+  description?: Maybe<Scalars['String']>
+  errorMessage?: Maybe<Scalars['String']>
+  isActive?: Maybe<Scalars['Boolean']>
+  releaseAt?: Maybe<Scalars['DateTime']>
+}
+
+export type ScheduledReleaseUpdateManyWithNestedWhereInput = {
+  /** Document search */
+  where: ScheduledReleaseWhereInput
+  /** Update many input */
+  data: ScheduledReleaseUpdateManyInput
+}
+
+export type ScheduledReleaseUpdateOneInlineInput = {
+  /** Create and connect one ScheduledRelease document */
+  create?: Maybe<ScheduledReleaseCreateInput>
+  /** Update single ScheduledRelease document */
+  update?: Maybe<ScheduledReleaseUpdateWithNestedWhereUniqueInput>
+  /** Upsert single ScheduledRelease document */
+  upsert?: Maybe<ScheduledReleaseUpsertWithNestedWhereUniqueInput>
+  /** Connect existing ScheduledRelease document */
+  connect?: Maybe<ScheduledReleaseWhereUniqueInput>
+  /** Disconnect currently connected ScheduledRelease document */
+  disconnect?: Maybe<Scalars['Boolean']>
+  /** Delete currently connected ScheduledRelease document */
+  delete?: Maybe<Scalars['Boolean']>
+}
+
+export type ScheduledReleaseUpdateWithNestedWhereUniqueInput = {
+  /** Unique document search */
+  where: ScheduledReleaseWhereUniqueInput
+  /** Document to update */
+  data: ScheduledReleaseUpdateInput
+}
+
+export type ScheduledReleaseUpsertInput = {
+  /** Create document if it didn't exist */
+  create: ScheduledReleaseCreateInput
+  /** Update document if it exists */
+  update: ScheduledReleaseUpdateInput
+}
+
+export type ScheduledReleaseUpsertWithNestedWhereUniqueInput = {
+  /** Unique document search */
+  where: ScheduledReleaseWhereUniqueInput
+  /** Upsert data */
+  data: ScheduledReleaseUpsertInput
+}
+
+/** Identifies documents */
+export type ScheduledReleaseWhereInput = {
+  /** Contains search across all appropriate fields. */
+  _search?: Maybe<Scalars['String']>
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<ScheduledReleaseWhereInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<ScheduledReleaseWhereInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<ScheduledReleaseWhereInput>>
+  id?: Maybe<Scalars['ID']>
+  /** All values that are not equal to given value. */
+  id_not?: Maybe<Scalars['ID']>
+  /** All values that are contained in given list. */
+  id_in?: Maybe<Array<Scalars['ID']>>
+  /** All values that are not contained in given list. */
+  id_not_in?: Maybe<Array<Scalars['ID']>>
+  /** All values containing the given string. */
+  id_contains?: Maybe<Scalars['ID']>
+  /** All values not containing the given string. */
+  id_not_contains?: Maybe<Scalars['ID']>
+  /** All values starting with the given string. */
+  id_starts_with?: Maybe<Scalars['ID']>
+  /** All values not starting with the given string. */
+  id_not_starts_with?: Maybe<Scalars['ID']>
+  /** All values ending with the given string. */
+  id_ends_with?: Maybe<Scalars['ID']>
+  /** All values not ending with the given string */
+  id_not_ends_with?: Maybe<Scalars['ID']>
+  createdAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  createdAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  createdAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  createdAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  createdAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  createdAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  createdAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  createdAt_gte?: Maybe<Scalars['DateTime']>
+  updatedAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  updatedAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  updatedAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  updatedAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  updatedAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  updatedAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  updatedAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  updatedAt_gte?: Maybe<Scalars['DateTime']>
+  publishedAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  publishedAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  publishedAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  publishedAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  publishedAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  publishedAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  publishedAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  publishedAt_gte?: Maybe<Scalars['DateTime']>
+  title?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  title_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  title_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  title_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values containing the given string. */
+  title_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  title_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  title_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  title_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  title_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string */
+  title_not_ends_with?: Maybe<Scalars['String']>
+  description?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  description_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  description_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  description_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values containing the given string. */
+  description_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  description_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  description_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  description_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  description_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string */
+  description_not_ends_with?: Maybe<Scalars['String']>
+  errorMessage?: Maybe<Scalars['String']>
+  /** All values that are not equal to given value. */
+  errorMessage_not?: Maybe<Scalars['String']>
+  /** All values that are contained in given list. */
+  errorMessage_in?: Maybe<Array<Scalars['String']>>
+  /** All values that are not contained in given list. */
+  errorMessage_not_in?: Maybe<Array<Scalars['String']>>
+  /** All values containing the given string. */
+  errorMessage_contains?: Maybe<Scalars['String']>
+  /** All values not containing the given string. */
+  errorMessage_not_contains?: Maybe<Scalars['String']>
+  /** All values starting with the given string. */
+  errorMessage_starts_with?: Maybe<Scalars['String']>
+  /** All values not starting with the given string. */
+  errorMessage_not_starts_with?: Maybe<Scalars['String']>
+  /** All values ending with the given string. */
+  errorMessage_ends_with?: Maybe<Scalars['String']>
+  /** All values not ending with the given string */
+  errorMessage_not_ends_with?: Maybe<Scalars['String']>
+  isActive?: Maybe<Scalars['Boolean']>
+  /** All values that are not equal to given value. */
+  isActive_not?: Maybe<Scalars['Boolean']>
+  isImplicit?: Maybe<Scalars['Boolean']>
+  /** All values that are not equal to given value. */
+  isImplicit_not?: Maybe<Scalars['Boolean']>
+  releaseAt?: Maybe<Scalars['DateTime']>
+  /** All values that are not equal to given value. */
+  releaseAt_not?: Maybe<Scalars['DateTime']>
+  /** All values that are contained in given list. */
+  releaseAt_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values that are not contained in given list. */
+  releaseAt_not_in?: Maybe<Array<Scalars['DateTime']>>
+  /** All values less than the given value. */
+  releaseAt_lt?: Maybe<Scalars['DateTime']>
+  /** All values less than or equal the given value. */
+  releaseAt_lte?: Maybe<Scalars['DateTime']>
+  /** All values greater than the given value. */
+  releaseAt_gt?: Maybe<Scalars['DateTime']>
+  /** All values greater than or equal the given value. */
+  releaseAt_gte?: Maybe<Scalars['DateTime']>
+  createdBy?: Maybe<UserWhereInput>
+  updatedBy?: Maybe<UserWhereInput>
+  publishedBy?: Maybe<UserWhereInput>
+  operations_every?: Maybe<ScheduledOperationWhereInput>
+  operations_some?: Maybe<ScheduledOperationWhereInput>
+  operations_none?: Maybe<ScheduledOperationWhereInput>
+  status?: Maybe<ScheduledReleaseStatus>
+  /** All values that are not equal to given value. */
+  status_not?: Maybe<ScheduledReleaseStatus>
+  /** All values that are contained in given list. */
+  status_in?: Maybe<Array<ScheduledReleaseStatus>>
+  /** All values that are not contained in given list. */
+  status_not_in?: Maybe<Array<ScheduledReleaseStatus>>
+}
+
+/** References ScheduledRelease record uniquely */
+export type ScheduledReleaseWhereUniqueInput = {
+  id?: Maybe<Scalars['ID']>
 }
 
 /** These types represent reasons for why the self-change flow cannot be run. */
@@ -8532,6 +9720,8 @@ export enum Stage {
   Published = 'PUBLISHED',
 }
 
+export type StartCheckoutResult = QuoteCart | BasicError
+
 export type StartSignResponse =
   | SwedishBankIdSession
   | NorwegianBankIdSession
@@ -8587,6 +9777,12 @@ export type SubscriptionCurrentChatResponseArgs = {
 
 export type SubscriptionChatStateArgs = {
   mostRecentTimestamp: Scalars['String']
+}
+
+/**  Generic success type for mutation success cases when there is nothing to return.  */
+export type Success = {
+  __typename?: 'Success'
+  _?: Maybe<Scalars['Boolean']>
 }
 
 export type SuccessfullyRemovedCampaignsResult = {
@@ -8661,7 +9857,14 @@ export type SwedishApartmentQuoteDetails = {
   zipCode: Scalars['String']
   householdSize: Scalars['Int']
   livingSpace: Scalars['Int']
-  type: ApartmentType
+  type: SwedishApartmentType
+}
+
+export enum SwedishApartmentType {
+  StudentRent = 'STUDENT_RENT',
+  Rent = 'RENT',
+  StudentBrf = 'STUDENT_BRF',
+  Brf = 'BRF',
 }
 
 export type SwedishBankIdExtraInfo = {
@@ -8791,11 +9994,8 @@ export enum TextContentType {
 export type TitleAndBulletPoints = {
   __typename?: 'TitleAndBulletPoints'
   color: HedvigColor
-  icon: Icon
   title: Scalars['String']
   buttonTitle: Scalars['String']
-  /** @deprecated not used */
-  claimFirstMessage: Scalars['String']
   bulletPoints: Array<BulletPoints>
 }
 
@@ -8856,6 +10056,7 @@ export type Translation = Node & {
   language?: Maybe<Language>
   key?: Maybe<Key>
   keys: Array<Key>
+  scheduledIn: Array<ScheduledOperation>
   /** List of Translation versions */
   history: Array<Version>
 }
@@ -8889,6 +10090,16 @@ export type TranslationKeyArgs = {
 export type TranslationKeysArgs = {
   where?: Maybe<KeyWhereInput>
   orderBy?: Maybe<KeyOrderByInput>
+  skip?: Maybe<Scalars['Int']>
+  after?: Maybe<Scalars['String']>
+  before?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+  locales?: Maybe<Array<Locale>>
+}
+
+export type TranslationScheduledInArgs = {
+  where?: Maybe<ScheduledOperationWhereInput>
   skip?: Maybe<Scalars['Int']>
   after?: Maybe<Scalars['String']>
   before?: Maybe<Scalars['String']>
@@ -9033,6 +10244,9 @@ export type TranslationManyWhereInput = {
   keys_every?: Maybe<KeyWhereInput>
   keys_some?: Maybe<KeyWhereInput>
   keys_none?: Maybe<KeyWhereInput>
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
 }
 
 export enum TranslationOrderByInput {
@@ -9199,6 +10413,9 @@ export type TranslationWhereInput = {
   keys_every?: Maybe<KeyWhereInput>
   keys_some?: Maybe<KeyWhereInput>
   keys_none?: Maybe<KeyWhereInput>
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
 }
 
 /** References Translation record uniquely */
@@ -9371,6 +10588,7 @@ export type UserFeature = Node & {
   /** User that last published this document */
   publishedBy?: Maybe<User>
   feature?: Maybe<Feature>
+  scheduledIn: Array<ScheduledOperation>
   /** List of UserFeature versions */
   history: Array<Version>
 }
@@ -9390,6 +10608,16 @@ export type UserFeatureUpdatedByArgs = {
 }
 
 export type UserFeaturePublishedByArgs = {
+  locales?: Maybe<Array<Locale>>
+}
+
+export type UserFeatureScheduledInArgs = {
+  where?: Maybe<ScheduledOperationWhereInput>
+  skip?: Maybe<Scalars['Int']>
+  after?: Maybe<Scalars['String']>
+  before?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
   locales?: Maybe<Array<Locale>>
 }
 
@@ -9549,6 +10777,9 @@ export type UserFeatureManyWhereInput = {
   feature_in?: Maybe<Array<Feature>>
   /** All values that are not contained in given list. */
   feature_not_in?: Maybe<Array<Feature>>
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
 }
 
 export enum UserFeatureOrderByInput {
@@ -9739,6 +10970,9 @@ export type UserFeatureWhereInput = {
   feature_in?: Maybe<Array<Feature>>
   /** All values that are not contained in given list. */
   feature_not_in?: Maybe<Array<Feature>>
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
 }
 
 /** References UserFeature record uniquely */
@@ -10191,32 +11425,37 @@ export type CreateDanishHomeAccidentTravelQuoteMutation = {
     | { __typename: 'UnderwritingLimitsHit' }
 }
 
-export type CreateOnboardingQuoteMutationVariables = Exact<{
-  id: Scalars['ID']
-  input: CreateOnboardingQuoteInput
+export type CreateOnboardingQuoteCartMutationVariables = Exact<{
+  market: Market
+  locale: Scalars['String']
 }>
 
-export type CreateOnboardingQuoteMutation = { __typename?: 'Mutation' } & {
-  onboardingSession_createQuote:
-    | ({ __typename?: 'CreateOnboardingQuoteSuccess' } & Pick<
-        CreateOnboardingQuoteSuccess,
-        'id'
-      >)
-    | ({ __typename?: 'CreateOnboardingQuoteError' } & {
+export type CreateOnboardingQuoteCartMutation = {
+  __typename?: 'Mutation'
+} & Pick<Mutation, 'onboardingQuoteCart_create'>
+
+export type CreateQuoteBundleMutationVariables = Exact<{
+  id: Scalars['ID']
+  quotes: Array<QuoteData> | QuoteData
+}>
+
+export type CreateQuoteBundleMutation = { __typename?: 'Mutation' } & {
+  quoteCart_createQuoteBundle:
+    | ({ __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'> & {
+          bundle?: Maybe<
+            { __typename?: 'QuoteBundle' } & {
+              quotes: Array<
+                { __typename?: 'BundledQuote' } & Pick<BundledQuote, 'id'>
+              >
+            }
+          >
+        })
+    | ({ __typename?: 'CreateQuoteBundleError' } & {
         limits: Array<
           { __typename?: 'UnderwritingLimit' } & Pick<UnderwritingLimit, 'code'>
         >
       })
 }
-
-export type CreateOnboardingSessionMutationVariables = Exact<{
-  country: Scalars['String']
-  locale: Scalars['String']
-}>
-
-export type CreateOnboardingSessionMutation = {
-  __typename?: 'Mutation'
-} & Pick<Mutation, 'onboardingSession_create'>
 
 export type CreateSwedishHomeAccidentQuoteMutationVariables = Exact<{
   homeInput: CreateQuoteInput
@@ -10463,137 +11702,6 @@ export type NorwegianBankIdAuthMutation = { __typename?: 'Mutation' } & {
   >
 }
 
-export type OnboardingSessionQueryVariables = Exact<{
-  id: Scalars['ID']
-}>
-
-export type OnboardingSessionQuery = { __typename?: 'Query' } & {
-  onboardingSession: { __typename?: 'OnboardingSession' } & Pick<
-    OnboardingSession,
-    'id'
-  > & {
-      bundle?: Maybe<
-        { __typename?: 'QuoteBundle' } & {
-          possibleVariations: Array<
-            { __typename?: 'QuoteBundleVariant' } & Pick<
-              QuoteBundleVariant,
-              'id' | 'tag'
-            > & {
-                bundle: { __typename?: 'QuoteBundle' } & {
-                  bundleCost: { __typename?: 'InsuranceCost' } & {
-                    monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
-                      MonetaryAmountV2,
-                      'amount' | 'currency'
-                    >
-                  }
-                }
-              }
-          >
-          bundleCost: { __typename?: 'InsuranceCost' } & Pick<
-            InsuranceCost,
-            'freeUntil'
-          > & {
-              monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
-                MonetaryAmountV2,
-                'amount' | 'currency'
-              >
-              monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
-                MonetaryAmountV2,
-                'amount' | 'currency'
-              >
-              monthlyDiscount: { __typename?: 'MonetaryAmountV2' } & Pick<
-                MonetaryAmountV2,
-                'amount' | 'currency'
-              >
-            }
-          quotes: Array<
-            { __typename?: 'BundledQuote' } & Pick<
-              BundledQuote,
-              | 'id'
-              | 'firstName'
-              | 'lastName'
-              | 'ssn'
-              | 'birthDate'
-              | 'startDate'
-              | 'expiresAt'
-              | 'email'
-              | 'dataCollectionId'
-              | 'typeOfContract'
-              | 'initiatedFrom'
-            > & {
-                currentInsurer?: Maybe<
-                  { __typename?: 'CurrentInsurer' } & Pick<
-                    CurrentInsurer,
-                    'id' | 'displayName' | 'switchable'
-                  >
-                >
-                price: { __typename?: 'MonetaryAmountV2' } & Pick<
-                  MonetaryAmountV2,
-                  'amount' | 'currency'
-                >
-                quoteDetails:
-                  | ({ __typename: 'SwedishApartmentQuoteDetails' } & Pick<
-                      SwedishApartmentQuoteDetails,
-                      | 'street'
-                      | 'zipCode'
-                      | 'householdSize'
-                      | 'livingSpace'
-                      | 'type'
-                    >)
-                  | ({ __typename: 'SwedishHouseQuoteDetails' } & Pick<
-                      SwedishHouseQuoteDetails,
-                      'street'
-                    >)
-                  | ({ __typename: 'SwedishAccidentDetails' } & Pick<
-                      SwedishAccidentDetails,
-                      'street'
-                    >)
-                  | { __typename: 'NorwegianHomeContentsDetails' }
-                  | { __typename: 'NorwegianTravelDetails' }
-                  | { __typename: 'DanishHomeContentsDetails' }
-                  | { __typename: 'DanishAccidentDetails' }
-                  | { __typename: 'DanishTravelDetails' }
-              }
-          >
-        }
-      >
-      campaign?: Maybe<
-        { __typename?: 'Campaign' } & Pick<Campaign, 'code' | 'expiresAt'> & {
-            incentive?: Maybe<
-              | ({ __typename?: 'MonthlyCostDeduction' } & {
-                  amount?: Maybe<
-                    { __typename?: 'MonetaryAmountV2' } & Pick<
-                      MonetaryAmountV2,
-                      'amount' | 'currency'
-                    >
-                  >
-                })
-              | { __typename?: 'FreeMonths' }
-              | { __typename?: 'NoDiscount' }
-              | { __typename?: 'VisibleNoDiscount' }
-              | ({ __typename?: 'PercentageDiscountMonths' } & Pick<
-                  PercentageDiscountMonths,
-                  'percentageDiscount' | 'quantity'
-                >)
-              | { __typename?: 'IndefinitePercentageDiscount' }
-            >
-            owner?: Maybe<
-              { __typename?: 'CampaignOwner' } & Pick<
-                CampaignOwner,
-                'displayName' | 'id'
-              >
-            >
-          }
-      >
-      signing?: Maybe<
-        { __typename?: 'OnboardingSessionSigning' } & Pick<
-          OnboardingSessionSigning,
-          'status'
-        >
-      >
-    }
-}
-
 export type QuoteDataFragment = { __typename?: 'BundledQuote' } & Pick<
   BundledQuote,
   | 'id'
@@ -10754,6 +11862,132 @@ export type QuoteBundleVariantsQuery = { __typename?: 'Query' } & {
         }
     >
   }
+}
+
+export type QuoteCartQueryVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type QuoteCartQuery = { __typename?: 'Query' } & {
+  quoteCart: { __typename?: 'QuoteCart' } & Pick<
+    QuoteCart,
+    'id' | 'checkoutMethods'
+  > & {
+      bundle?: Maybe<
+        { __typename?: 'QuoteBundle' } & {
+          possibleVariations: Array<
+            { __typename?: 'QuoteBundleVariant' } & Pick<
+              QuoteBundleVariant,
+              'id' | 'tag'
+            > & {
+                bundle: { __typename?: 'QuoteBundle' } & {
+                  bundleCost: { __typename?: 'InsuranceCost' } & {
+                    monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
+                      MonetaryAmountV2,
+                      'amount' | 'currency'
+                    >
+                  }
+                }
+              }
+          >
+          bundleCost: { __typename?: 'InsuranceCost' } & Pick<
+            InsuranceCost,
+            'freeUntil'
+          > & {
+              monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount' | 'currency'
+              >
+              monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount' | 'currency'
+              >
+              monthlyDiscount: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount' | 'currency'
+              >
+            }
+          quotes: Array<
+            { __typename?: 'BundledQuote' } & Pick<
+              BundledQuote,
+              | 'id'
+              | 'firstName'
+              | 'lastName'
+              | 'ssn'
+              | 'birthDate'
+              | 'startDate'
+              | 'expiresAt'
+              | 'email'
+              | 'dataCollectionId'
+              | 'typeOfContract'
+              | 'initiatedFrom'
+            > & {
+                currentInsurer?: Maybe<
+                  { __typename?: 'CurrentInsurer' } & Pick<
+                    CurrentInsurer,
+                    'id' | 'displayName' | 'switchable'
+                  >
+                >
+                price: { __typename?: 'MonetaryAmountV2' } & Pick<
+                  MonetaryAmountV2,
+                  'amount' | 'currency'
+                >
+                quoteDetails:
+                  | ({ __typename: 'SwedishApartmentQuoteDetails' } & Pick<
+                      SwedishApartmentQuoteDetails,
+                      | 'street'
+                      | 'zipCode'
+                      | 'householdSize'
+                      | 'livingSpace'
+                      | 'type'
+                    >)
+                  | ({ __typename: 'SwedishHouseQuoteDetails' } & Pick<
+                      SwedishHouseQuoteDetails,
+                      'street'
+                    >)
+                  | ({ __typename: 'SwedishAccidentDetails' } & Pick<
+                      SwedishAccidentDetails,
+                      'street'
+                    >)
+                  | { __typename: 'NorwegianHomeContentsDetails' }
+                  | { __typename: 'NorwegianTravelDetails' }
+                  | { __typename: 'DanishHomeContentsDetails' }
+                  | { __typename: 'DanishAccidentDetails' }
+                  | { __typename: 'DanishTravelDetails' }
+              }
+          >
+        }
+      >
+      campaign?: Maybe<
+        { __typename?: 'Campaign' } & Pick<Campaign, 'code' | 'expiresAt'> & {
+            incentive?: Maybe<
+              | ({ __typename?: 'MonthlyCostDeduction' } & {
+                  amount?: Maybe<
+                    { __typename?: 'MonetaryAmountV2' } & Pick<
+                      MonetaryAmountV2,
+                      'amount' | 'currency'
+                    >
+                  >
+                })
+              | { __typename?: 'FreeMonths' }
+              | { __typename?: 'NoDiscount' }
+              | { __typename?: 'VisibleNoDiscount' }
+              | ({ __typename?: 'PercentageDiscountMonths' } & Pick<
+                  PercentageDiscountMonths,
+                  'percentageDiscount' | 'quantity'
+                >)
+              | { __typename?: 'IndefinitePercentageDiscount' }
+            >
+            owner?: Maybe<
+              { __typename?: 'CampaignOwner' } & Pick<
+                CampaignOwner,
+                'displayName' | 'id'
+              >
+            >
+          }
+      >
+      checkout?: Maybe<{ __typename?: 'Checkout' } & Pick<Checkout, 'status'>>
+    }
 }
 
 export type RedeemCodeMutationVariables = Exact<{
@@ -11433,16 +12667,68 @@ export type CreateDanishHomeAccidentTravelQuoteMutationOptions = ApolloReactComm
   CreateDanishHomeAccidentTravelQuoteMutation,
   CreateDanishHomeAccidentTravelQuoteMutationVariables
 >
-export const CreateOnboardingQuoteDocument = gql`
-  mutation CreateOnboardingQuote(
-    $id: ID!
-    $input: CreateOnboardingQuoteInput!
-  ) {
-    onboardingSession_createQuote(id: $id, input: $input) {
-      ... on CreateOnboardingQuoteSuccess {
+export const CreateOnboardingQuoteCartDocument = gql`
+  mutation CreateOnboardingQuoteCart($market: Market!, $locale: String!) {
+    onboardingQuoteCart_create(input: { market: $market, locale: $locale })
+  }
+`
+export type CreateOnboardingQuoteCartMutationFn = ApolloReactCommon.MutationFunction<
+  CreateOnboardingQuoteCartMutation,
+  CreateOnboardingQuoteCartMutationVariables
+>
+
+/**
+ * __useCreateOnboardingQuoteCartMutation__
+ *
+ * To run a mutation, you first call `useCreateOnboardingQuoteCartMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOnboardingQuoteCartMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createOnboardingQuoteCartMutation, { data, loading, error }] = useCreateOnboardingQuoteCartMutation({
+ *   variables: {
+ *      market: // value for 'market'
+ *      locale: // value for 'locale'
+ *   },
+ * });
+ */
+export function useCreateOnboardingQuoteCartMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateOnboardingQuoteCartMutation,
+    CreateOnboardingQuoteCartMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    CreateOnboardingQuoteCartMutation,
+    CreateOnboardingQuoteCartMutationVariables
+  >(CreateOnboardingQuoteCartDocument, options)
+}
+export type CreateOnboardingQuoteCartMutationHookResult = ReturnType<
+  typeof useCreateOnboardingQuoteCartMutation
+>
+export type CreateOnboardingQuoteCartMutationResult = ApolloReactCommon.MutationResult<
+  CreateOnboardingQuoteCartMutation
+>
+export type CreateOnboardingQuoteCartMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  CreateOnboardingQuoteCartMutation,
+  CreateOnboardingQuoteCartMutationVariables
+>
+export const CreateQuoteBundleDocument = gql`
+  mutation CreateQuoteBundle($id: ID!, $quotes: [QuoteData!]!) {
+    quoteCart_createQuoteBundle(id: $id, input: { quoteData: $quotes }) {
+      ... on QuoteCart {
         id
+        bundle {
+          quotes {
+            id
+          }
+        }
       }
-      ... on CreateOnboardingQuoteError {
+      ... on CreateQuoteBundleError {
         limits {
           code
         }
@@ -11450,100 +12736,50 @@ export const CreateOnboardingQuoteDocument = gql`
     }
   }
 `
-export type CreateOnboardingQuoteMutationFn = ApolloReactCommon.MutationFunction<
-  CreateOnboardingQuoteMutation,
-  CreateOnboardingQuoteMutationVariables
+export type CreateQuoteBundleMutationFn = ApolloReactCommon.MutationFunction<
+  CreateQuoteBundleMutation,
+  CreateQuoteBundleMutationVariables
 >
 
 /**
- * __useCreateOnboardingQuoteMutation__
+ * __useCreateQuoteBundleMutation__
  *
- * To run a mutation, you first call `useCreateOnboardingQuoteMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateOnboardingQuoteMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateQuoteBundleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateQuoteBundleMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createOnboardingQuoteMutation, { data, loading, error }] = useCreateOnboardingQuoteMutation({
+ * const [createQuoteBundleMutation, { data, loading, error }] = useCreateQuoteBundleMutation({
  *   variables: {
  *      id: // value for 'id'
- *      input: // value for 'input'
+ *      quotes: // value for 'quotes'
  *   },
  * });
  */
-export function useCreateOnboardingQuoteMutation(
+export function useCreateQuoteBundleMutation(
   baseOptions?: Apollo.MutationHookOptions<
-    CreateOnboardingQuoteMutation,
-    CreateOnboardingQuoteMutationVariables
+    CreateQuoteBundleMutation,
+    CreateQuoteBundleMutationVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useMutation<
-    CreateOnboardingQuoteMutation,
-    CreateOnboardingQuoteMutationVariables
-  >(CreateOnboardingQuoteDocument, options)
+    CreateQuoteBundleMutation,
+    CreateQuoteBundleMutationVariables
+  >(CreateQuoteBundleDocument, options)
 }
-export type CreateOnboardingQuoteMutationHookResult = ReturnType<
-  typeof useCreateOnboardingQuoteMutation
+export type CreateQuoteBundleMutationHookResult = ReturnType<
+  typeof useCreateQuoteBundleMutation
 >
-export type CreateOnboardingQuoteMutationResult = ApolloReactCommon.MutationResult<
-  CreateOnboardingQuoteMutation
+export type CreateQuoteBundleMutationResult = ApolloReactCommon.MutationResult<
+  CreateQuoteBundleMutation
 >
-export type CreateOnboardingQuoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  CreateOnboardingQuoteMutation,
-  CreateOnboardingQuoteMutationVariables
->
-export const CreateOnboardingSessionDocument = gql`
-  mutation CreateOnboardingSession($country: String!, $locale: String!) {
-    onboardingSession_create(input: { country: $country, locale: $locale })
-  }
-`
-export type CreateOnboardingSessionMutationFn = ApolloReactCommon.MutationFunction<
-  CreateOnboardingSessionMutation,
-  CreateOnboardingSessionMutationVariables
->
-
-/**
- * __useCreateOnboardingSessionMutation__
- *
- * To run a mutation, you first call `useCreateOnboardingSessionMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateOnboardingSessionMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createOnboardingSessionMutation, { data, loading, error }] = useCreateOnboardingSessionMutation({
- *   variables: {
- *      country: // value for 'country'
- *      locale: // value for 'locale'
- *   },
- * });
- */
-export function useCreateOnboardingSessionMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateOnboardingSessionMutation,
-    CreateOnboardingSessionMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    CreateOnboardingSessionMutation,
-    CreateOnboardingSessionMutationVariables
-  >(CreateOnboardingSessionDocument, options)
-}
-export type CreateOnboardingSessionMutationHookResult = ReturnType<
-  typeof useCreateOnboardingSessionMutation
->
-export type CreateOnboardingSessionMutationResult = ApolloReactCommon.MutationResult<
-  CreateOnboardingSessionMutation
->
-export type CreateOnboardingSessionMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  CreateOnboardingSessionMutation,
-  CreateOnboardingSessionMutationVariables
+export type CreateQuoteBundleMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  CreateQuoteBundleMutation,
+  CreateQuoteBundleMutationVariables
 >
 export const CreateSwedishHomeAccidentQuoteDocument = gql`
   mutation CreateSwedishHomeAccidentQuote(
@@ -12138,154 +13374,6 @@ export type NorwegianBankIdAuthMutationOptions = ApolloReactCommon.BaseMutationO
   NorwegianBankIdAuthMutation,
   NorwegianBankIdAuthMutationVariables
 >
-export const OnboardingSessionDocument = gql`
-  query OnboardingSession($id: ID!) {
-    onboardingSession(id: $id) {
-      id
-      bundle {
-        possibleVariations {
-          id
-          tag(locale: sv_SE)
-          bundle {
-            bundleCost {
-              monthlyGross {
-                amount
-                currency
-              }
-            }
-          }
-        }
-        bundleCost {
-          monthlyGross {
-            amount
-            currency
-          }
-          monthlyNet {
-            amount
-            currency
-          }
-          monthlyDiscount {
-            amount
-            currency
-          }
-          freeUntil
-        }
-        quotes {
-          id
-          currentInsurer {
-            id
-            displayName
-            switchable
-          }
-          price {
-            amount
-            currency
-          }
-          firstName
-          lastName
-          ssn
-          birthDate
-          quoteDetails {
-            __typename
-            ... on SwedishApartmentQuoteDetails {
-              street
-              zipCode
-              householdSize
-              livingSpace
-              type
-            }
-            ... on SwedishHouseQuoteDetails {
-              street
-            }
-            ... on SwedishAccidentDetails {
-              street
-            }
-          }
-          startDate
-          expiresAt
-          email
-          dataCollectionId
-          typeOfContract
-          initiatedFrom
-        }
-      }
-      campaign {
-        incentive {
-          ... on MonthlyCostDeduction {
-            amount {
-              amount
-              currency
-            }
-          }
-          ... on PercentageDiscountMonths {
-            percentageDiscount
-            quantity
-          }
-        }
-        code
-        owner {
-          displayName
-          id
-        }
-        expiresAt
-      }
-      signing {
-        status
-      }
-    }
-  }
-`
-
-/**
- * __useOnboardingSessionQuery__
- *
- * To run a query within a React component, call `useOnboardingSessionQuery` and pass it any options that fit your needs.
- * When your component renders, `useOnboardingSessionQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useOnboardingSessionQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useOnboardingSessionQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    OnboardingSessionQuery,
-    OnboardingSessionQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<
-    OnboardingSessionQuery,
-    OnboardingSessionQueryVariables
-  >(OnboardingSessionDocument, options)
-}
-export function useOnboardingSessionLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    OnboardingSessionQuery,
-    OnboardingSessionQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<
-    OnboardingSessionQuery,
-    OnboardingSessionQueryVariables
-  >(OnboardingSessionDocument, options)
-}
-export type OnboardingSessionQueryHookResult = ReturnType<
-  typeof useOnboardingSessionQuery
->
-export type OnboardingSessionLazyQueryHookResult = ReturnType<
-  typeof useOnboardingSessionLazyQuery
->
-export type OnboardingSessionQueryResult = ApolloReactCommon.QueryResult<
-  OnboardingSessionQuery,
-  OnboardingSessionQueryVariables
->
 export const QuoteBundleDocument = gql`
   query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
     quoteBundle(input: $input) {
@@ -12422,6 +13510,150 @@ export type QuoteBundleVariantsLazyQueryHookResult = ReturnType<
 export type QuoteBundleVariantsQueryResult = ApolloReactCommon.QueryResult<
   QuoteBundleVariantsQuery,
   QuoteBundleVariantsQueryVariables
+>
+export const QuoteCartDocument = gql`
+  query QuoteCart($id: ID!) {
+    quoteCart(id: $id) {
+      id
+      bundle {
+        possibleVariations {
+          id
+          tag(locale: sv_SE)
+          bundle {
+            bundleCost {
+              monthlyGross {
+                amount
+                currency
+              }
+            }
+          }
+        }
+        bundleCost {
+          monthlyGross {
+            amount
+            currency
+          }
+          monthlyNet {
+            amount
+            currency
+          }
+          monthlyDiscount {
+            amount
+            currency
+          }
+          freeUntil
+        }
+        quotes {
+          id
+          currentInsurer {
+            id
+            displayName
+            switchable
+          }
+          price {
+            amount
+            currency
+          }
+          firstName
+          lastName
+          ssn
+          birthDate
+          quoteDetails {
+            __typename
+            ... on SwedishApartmentQuoteDetails {
+              street
+              zipCode
+              householdSize
+              livingSpace
+              type
+            }
+            ... on SwedishHouseQuoteDetails {
+              street
+            }
+            ... on SwedishAccidentDetails {
+              street
+            }
+          }
+          startDate
+          expiresAt
+          email
+          dataCollectionId
+          typeOfContract
+          initiatedFrom
+        }
+      }
+      campaign {
+        incentive {
+          ... on MonthlyCostDeduction {
+            amount {
+              amount
+              currency
+            }
+          }
+          ... on PercentageDiscountMonths {
+            percentageDiscount
+            quantity
+          }
+        }
+        code
+        owner {
+          displayName
+          id
+        }
+        expiresAt
+      }
+      checkoutMethods
+      checkout {
+        status
+      }
+    }
+  }
+`
+
+/**
+ * __useQuoteCartQuery__
+ *
+ * To run a query within a React component, call `useQuoteCartQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQuoteCartQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQuoteCartQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useQuoteCartQuery(
+  baseOptions: Apollo.QueryHookOptions<QuoteCartQuery, QuoteCartQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<QuoteCartQuery, QuoteCartQueryVariables>(
+    QuoteCartDocument,
+    options,
+  )
+}
+export function useQuoteCartLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    QuoteCartQuery,
+    QuoteCartQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<QuoteCartQuery, QuoteCartQueryVariables>(
+    QuoteCartDocument,
+    options,
+  )
+}
+export type QuoteCartQueryHookResult = ReturnType<typeof useQuoteCartQuery>
+export type QuoteCartLazyQueryHookResult = ReturnType<
+  typeof useQuoteCartLazyQuery
+>
+export type QuoteCartQueryResult = ApolloReactCommon.QueryResult<
+  QuoteCartQuery,
+  QuoteCartQueryVariables
 >
 export const RedeemCodeDocument = gql`
   mutation RedeemCode($code: String!) {

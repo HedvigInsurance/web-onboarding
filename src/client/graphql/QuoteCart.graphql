@@ -1,5 +1,5 @@
-query OnboardingSession($id: ID!) {
-  onboardingSession(id: $id) {
+query QuoteCart($id: ID!) {
+  quoteCart(id: $id) {
     id
     bundle {
       possibleVariations {
@@ -88,7 +88,8 @@ query OnboardingSession($id: ID!) {
       }
       expiresAt
     }
-    signing {
+    checkoutMethods
+    checkout {
       status
     }
   }

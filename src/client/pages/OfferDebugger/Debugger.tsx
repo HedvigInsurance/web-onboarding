@@ -3,8 +3,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary'
 import { Button } from 'components/buttons'
-import { useCreateOnboardingSessionMutation } from 'data/graphql'
-import { useMarket } from 'components/utils/CurrentLocale'
+import { useCreateOnboardingQuoteCartMutation } from 'data/graphql'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { QuoteData } from './components/QuoteData'
 
@@ -40,46 +39,47 @@ const ErrorFallback: React.FC<FallbackProps> = ({
 )
 
 export const Debugger: React.FC = () => {
-  const market = useMarket()
-  const locale = useCurrentLocale().isoLocale
+  const locale = useCurrentLocale()
   const [
     createOnboardingSession,
     { data },
-  ] = useCreateOnboardingSessionMutation()
-  const sessionId = data?.onboardingSession_create
+  ] = useCreateOnboardingQuoteCartMutation()
+  const quoteCartId = data?.onboardingQuoteCart_create
 
-  const createNewSession = useCallback(async () => {
-    await createOnboardingSession({ variables: { country: market, locale } })
-  }, [createOnboardingSession, market, locale])
+  const createNewQuoteCart = useCallback(async () => {
+    await createOnboardingSession({
+      variables: { market: locale.apiMarket, locale: locale.isoLocale },
+    })
+  }, [createOnboardingSession, locale.apiMarket, locale.isoLocale])
 
   useEffect(() => {
     // create initial onboarding session
-    createNewSession()
-  }, [createNewSession])
+    createNewQuoteCart()
+  }, [createNewQuoteCart])
 
   return (
     <Wrapper>
       <h1>Offer Page Debugger</h1>
 
       <Row>
-        <h3>Session: {sessionId}</h3>
+        <h3>Session: {quoteCartId}</h3>
         <Button
           background={colorsV3.purple500}
           foreground={colorsV3.gray900}
-          onClick={createNewSession}
+          onClick={createNewQuoteCart}
         >
           Create new session
         </Button>
       </Row>
 
-      {sessionId && (
+      {quoteCartId && (
         <Row>
           <ErrorBoundary
             FallbackComponent={ErrorFallback}
-            onReset={createNewSession}
+            onReset={createNewQuoteCart}
           >
             <h3>Offer</h3>
-            <QuoteData sessionId={sessionId} />
+            <QuoteData quoteCartId={quoteCartId} />
           </ErrorBoundary>
         </Row>
       )}
