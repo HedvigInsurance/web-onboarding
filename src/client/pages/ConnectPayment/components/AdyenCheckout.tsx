@@ -5,8 +5,9 @@ import color from 'color'
 import React, { useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router'
 import { useTextKeys } from 'utils/textKeys'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import { LocaleData } from 'l10n/locales'
 import { Spinner } from 'components/utils'
-import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
 import {
   Scalars,
   SubmitAdditionalPaymentDetialsMutationFn,
@@ -176,7 +177,7 @@ export const AdyenCheckout: React.FC<Props> = ({ onSuccess }) => {
 
 interface AdyenCheckoutProps {
   payButtonText: string
-  currentLocale: string
+  currentLocale: LocaleData
   paymentMethodsResponse: Scalars['PaymentMethodsResponse']
   tokenizePaymentMutation: TokenizePaymentDetailsMutationFn
   submitAdditionalPaymentDetails: SubmitAdditionalPaymentDetialsMutationFn
@@ -195,11 +196,11 @@ const createAdyenCheckout = ({
     /* noop */
   },
 }: AdyenCheckoutProps) => {
-  const locale = match([
+  const locale = match<LocaleData['isoLocale'], string>([
     ['nb_NO', 'no-NO'],
     ['da_DK', 'da-DK'],
     [match.any(), 'en-US'],
-  ])(getIsoLocale(currentLocale))
+  ])(currentLocale.isoLocale)
 
   const returnUrl = `${window.location.origin}/${currentLocale}/new-member/connect-payment/adyen-callback`
 
