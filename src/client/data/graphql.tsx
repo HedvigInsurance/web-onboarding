@@ -36,7 +36,7 @@ export type Scalars = {
   CheckoutPaymentsAction: any
   /** A String-representation of Adyen's payments details request */
   PaymentsDetailsRequest: any
-  QuoteData: any
+  JSON: any
   /** The `Upload` scalar type represents a file upload. */
   Upload: any
   UUID: any
@@ -171,10 +171,7 @@ export type ActiveStatus = {
   upcomingAgreementChange?: Maybe<UpcomingAgreementChange>
 }
 
-export type AddCampaignError = {
-  __typename?: 'AddCampaignError'
-  errorCode: Scalars['String']
-}
+export type AddCampaignResult = QuoteCart | BasicError
 
 export type AdditionalPaymentsDetailsRequest = {
   paymentsDetailsRequest: Scalars['PaymentsDetailsRequest']
@@ -1536,6 +1533,11 @@ export enum BankIdStatus {
   Complete = 'complete',
 }
 
+export type BasicError = Error & {
+  __typename?: 'BasicError'
+  message: Scalars['String']
+}
+
 export type BatchPayload = {
   __typename?: 'BatchPayload'
   /** The number of nodes that have been affected by the Batch operation. */
@@ -1773,6 +1775,38 @@ export type ChatState = {
   onboardingDone: Scalars['Boolean']
 }
 
+/** The signing of an onboarding session, that contains information about the current signing status. */
+export type Checkout = {
+  __typename?: 'Checkout'
+  /**  Current signing status of the session  */
+  status: CheckoutStatus
+  /**  A user-visible text that explains the current status. Useful for async signing like SE BankID.  */
+  statusText?: Maybe<Scalars['String']>
+}
+
+export enum CheckoutMethod {
+  SwedishBankId = 'SWEDISH_BANK_ID',
+  NorwegianBankId = 'NORWEGIAN_BANK_ID',
+  DanishBankId = 'DANISH_BANK_ID',
+  SimpleSign = 'SIMPLE_SIGN',
+  ApproveOnly = 'APPROVE_ONLY',
+}
+
+export enum CheckoutStatus {
+  /**  This signing session is ongoing. Only for async signing like SE BankID.  */
+  Pending = 'PENDING',
+  /**
+   * This signing session is signed, and can be completed (producing an access token).
+   *
+   * Synchronous signing methods, like simple sign, immediately produce this state.
+   */
+  Signed = 'SIGNED',
+  /** This signing is completed, which means the onboarding session has reached its terminal state. */
+  Completed = 'COMPLETED',
+  /** The signing has failed - which means it also can be retried. */
+  Failed = 'FAILED',
+}
+
 export type Claim = {
   __typename?: 'Claim'
   id: Scalars['String']
@@ -1803,6 +1837,42 @@ export enum ClaimStatus {
   Submitted = 'SUBMITTED',
   BeingHandled = 'BEING_HANDLED',
   Closed = 'CLOSED',
+  Reopened = 'REOPENED',
+}
+
+export type ClaimStatusCard = {
+  __typename?: 'ClaimStatusCard'
+  id: Scalars['ID']
+  pills: Array<ClaimStatusCardPill>
+  title: Scalars['String']
+  subtitle: Scalars['String']
+  progressSegments: Array<ClaimStatusProgressSegment>
+}
+
+export type ClaimStatusCardPill = {
+  __typename?: 'ClaimStatusCardPill'
+  text: Scalars['String']
+  type: ClaimStatusCardPillType
+}
+
+export enum ClaimStatusCardPillType {
+  Open = 'OPEN',
+  Closed = 'CLOSED',
+  Reopened = 'REOPENED',
+  Payment = 'PAYMENT',
+}
+
+export type ClaimStatusProgressSegment = {
+  __typename?: 'ClaimStatusProgressSegment'
+  text: Scalars['String']
+  type: ClaimStatusProgressType
+}
+
+export enum ClaimStatusProgressType {
+  PastInactive = 'PAST_INACTIVE',
+  CurrentlyActive = 'CURRENTLY_ACTIVE',
+  FutureInactive = 'FUTURE_INACTIVE',
+  Paid = 'PAID',
   Reopened = 'REOPENED',
 }
 
@@ -1843,6 +1913,7 @@ export type ColorInput = {
 
 export type CommonClaim = {
   __typename?: 'CommonClaim'
+  id: Scalars['String']
   icon: Icon
   title: Scalars['String']
   layout: CommonClaimLayouts
@@ -2528,44 +2599,31 @@ export type CreateNorwegianTravelInput = {
   isYouth: Scalars['Boolean']
 }
 
-export type CreateOnboardingQuoteError = {
-  __typename?: 'CreateOnboardingQuoteError'
+export type CreateOnboardingQuoteCartInput = {
+  market: Market
+  locale: Scalars['String']
+}
+
+export type CreateQuoteBundleError = Error & {
+  __typename?: 'CreateQuoteBundleError'
+  message: Scalars['String']
   limits: Array<UnderwritingLimit>
 }
 
-export type CreateOnboardingQuoteInput = {
-  id?: Maybe<Scalars['ID']>
-  firstName: Scalars['String']
-  lastName: Scalars['String']
-  email?: Maybe<Scalars['String']>
-  dataCollectionId?: Maybe<Scalars['ID']>
-  phoneNumber?: Maybe<Scalars['String']>
-  currentInsurer?: Maybe<Scalars['String']>
-  ssn?: Maybe<Scalars['String']>
-  birthDate?: Maybe<Scalars['LocalDate']>
-  startDate?: Maybe<Scalars['LocalDate']>
-  swedishApartmentData?: Maybe<Scalars['QuoteData']>
-  swedishHouseData?: Maybe<Scalars['QuoteData']>
-  swedishAccidentData?: Maybe<Scalars['QuoteData']>
-  norwegianHomeContentsData?: Maybe<Scalars['QuoteData']>
-  norwegianTravelData?: Maybe<Scalars['QuoteData']>
-  danishHomeContentsData?: Maybe<Scalars['QuoteData']>
-  danishAccidentData?: Maybe<Scalars['QuoteData']>
-  danishTravelData?: Maybe<Scalars['QuoteData']>
+export type CreateQuoteBundleInput = {
+  quoteData: Array<QuoteData>
 }
 
-export type CreateOnboardingQuoteResult =
-  | CreateOnboardingQuoteSuccess
-  | CreateOnboardingQuoteError
+export type CreateQuoteBundleResult = QuoteCart | CreateQuoteBundleError
 
-export type CreateOnboardingQuoteSuccess = {
-  __typename?: 'CreateOnboardingQuoteSuccess'
+export type CreateQuoteBundleSuccess = {
+  __typename?: 'CreateQuoteBundleSuccess'
   id: Scalars['ID']
 }
 
-export type CreateOnboardingSessionInput = {
-  country: Scalars['String']
-  locale: Scalars['String']
+export type CreateQuoteCartAccessTokenResult = {
+  __typename?: 'CreateQuoteCartAccessTokenResult'
+  accessToken: Scalars['String']
 }
 
 export type CreateQuoteInput = {
@@ -3743,13 +3801,18 @@ export type Emergency = {
   __typename?: 'Emergency'
   color: HedvigColor
   title: Scalars['String']
-  /**  Phone Number on E.164-format  */
+  /** Phone Number on E.164-format */
   emergencyNumber: Scalars['String']
 }
 
 export enum Environment {
   Production = 'Production',
   Staging = 'Staging',
+}
+
+/**  Base Error interface that contains displayable error message.  */
+export type Error = {
+  message: Scalars['String']
 }
 
 export type ExceededMaximumUpdates = {
@@ -6740,6 +6803,12 @@ export enum LoggingSource {
   Android = 'ANDROID',
 }
 
+export enum Market {
+  Sweden = 'SWEDEN',
+  Norway = 'NORWAY',
+  Denmark = 'DENMARK',
+}
+
 export type MarketingStory = Node & {
   __typename?: 'MarketingStory'
   /** System stage field */
@@ -7481,25 +7550,25 @@ export type Mutation = {
    * Create a new onboarding session. This is not an authentication session, but rather an object that
    * ties the onboarding journey together.
    */
-  onboardingSession_create: Scalars['ID']
+  onboardingQuoteCart_create: Scalars['ID']
   /** Create a quote as part of this onboarding session. */
-  onboardingSession_createQuote: CreateOnboardingQuoteResult
+  quoteCart_createQuoteBundle: CreateQuoteBundleResult
   /**
    * Add a campaign by its code to this onboarding session. This campaign won't be "redeemed", but rather
    * left in a pending state on the onboarding until signing occurs and a member is created.
    *
    * Returns an error if there was a problem with redeeming it, or null upon success.
    */
-  onboardingSession_addCampaign?: Maybe<AddCampaignError>
+  quoteCart_addCampaign: AddCampaignResult
   /** Remove the existing campaign. */
-  onboardingSession_removeCampaign: Scalars['Boolean']
+  quoteCart_removeCampaign: RemoveCampaignResult
   /**
    * Initiate signing of this onboarding, optionally tagging a subset of the quotes if not all of them are wanted.
    *
    * Note, the session should only be moved into its signing state once the prior things, such as campaign, are
    * considered done.
    */
-  onboardingSession_startSigning: OnboardingStartSignResponse
+  quoteCart_startCheckout: StartCheckoutResult
   /**
    * Once an onboarding session is "signed", it can be finalized/consumed by this method, which will produce
    * an access token. This access token will serve as the means of authorization towards the member that was
@@ -7507,7 +7576,7 @@ export type Mutation = {
    *
    * This is needed at this stage because the "connecting payments" stage will happen with an actual signed member.
    */
-  onboardingSession_createAccessToken: OnboardingSessionAccessTokenResult
+  quoteCart_createAccessToken: CreateQuoteCartAccessTokenResult
   logout: Scalars['Boolean']
   createClaim: Scalars['ID']
   createSession: Scalars['String']
@@ -7674,30 +7743,30 @@ export type MutationLogin_ResendOtpArgs = {
   id: Scalars['ID']
 }
 
-export type MutationOnboardingSession_CreateArgs = {
-  input: CreateOnboardingSessionInput
+export type MutationOnboardingQuoteCart_CreateArgs = {
+  input: CreateOnboardingQuoteCartInput
 }
 
-export type MutationOnboardingSession_CreateQuoteArgs = {
+export type MutationQuoteCart_CreateQuoteBundleArgs = {
   id: Scalars['ID']
-  input: CreateOnboardingQuoteInput
+  input: CreateQuoteBundleInput
 }
 
-export type MutationOnboardingSession_AddCampaignArgs = {
+export type MutationQuoteCart_AddCampaignArgs = {
   id: Scalars['ID']
-  campaignCode: Scalars['String']
+  code: Scalars['String']
 }
 
-export type MutationOnboardingSession_RemoveCampaignArgs = {
+export type MutationQuoteCart_RemoveCampaignArgs = {
   id: Scalars['ID']
 }
 
-export type MutationOnboardingSession_StartSigningArgs = {
+export type MutationQuoteCart_StartCheckoutArgs = {
   id: Scalars['ID']
   quoteIds?: Maybe<Array<Scalars['ID']>>
 }
 
-export type MutationOnboardingSession_CreateAccessTokenArgs = {
+export type MutationQuoteCart_CreateAccessTokenArgs = {
   id: Scalars['ID']
 }
 
@@ -7882,72 +7951,10 @@ export enum NorwegianTravelLineOfBusiness {
   Youth = 'YOUTH',
 }
 
-/**
- * An onboarding session is a type that exists to guide the client through an onboarding journey,
- * as a means of storing intermediate state up until the point where it is "signed" and then flushed
- * into a proper "member".
- */
-export type OnboardingSession = {
-  __typename?: 'OnboardingSession'
-  id: Scalars['ID']
-  /**  Campaign, if one has been attached by a code  */
-  campaign?: Maybe<Campaign>
-  /**  The quote bundle "view" of the quotes created as part of this onboarding  */
-  bundle?: Maybe<QuoteBundle>
-  /**  The ongoing signing state, if it has been initiated - or null if it has not.  */
-  signing?: Maybe<OnboardingSessionSigning>
-}
-
-export type OnboardingSessionAccessTokenResult = {
-  __typename?: 'OnboardingSessionAccessTokenResult'
-  accessToken: Scalars['String']
-}
-
-/** The signing of an onboarding session, that contains information about the current signing status. */
-export type OnboardingSessionSigning = {
-  __typename?: 'OnboardingSessionSigning'
-  /**  Current signing status of the session  */
-  status: OnboardingSessionSignStatus
-  /**  A user-visible text that explains the current status. Useful for async signing like SE BankID.  */
-  statusText?: Maybe<Scalars['String']>
-}
-
-export enum OnboardingSessionSignStatus {
-  /**  This signing session is ongoing. Only for async signing like SE BankID.  */
-  Pending = 'PENDING',
-  /**
-   * This signing session is signed, and can be completed (producing an access token).
-   *
-   * Synchronous signing methods, like simple sign, immediately produce this state.
-   */
-  Signed = 'SIGNED',
-  /** This signing is completed, which means the onboarding session has reached its terminal state. */
-  Completed = 'COMPLETED',
-  /** The signing has failed - which means it also can be retried. */
-  Failed = 'FAILED',
-}
-
-export type OnboardingSigningFailure = {
-  __typename?: 'OnboardingSigningFailure'
-  errorMessage: Scalars['String']
-  errorCode: Scalars['String']
-}
-
 export type OnboardingSigningSuccess = {
   __typename?: 'OnboardingSigningSuccess'
-  status?: Maybe<OnboardingSessionSignStatus>
+  status?: Maybe<CheckoutStatus>
 }
-
-export type OnboardingSigningSwedishBankId = {
-  __typename?: 'OnboardingSigningSwedishBankId'
-  status?: Maybe<OnboardingSessionSignStatus>
-  autoStartToken?: Maybe<Scalars['String']>
-}
-
-export type OnboardingStartSignResponse =
-  | OnboardingSigningSwedishBankId
-  | OnboardingSigningSuccess
-  | OnboardingSigningFailure
 
 export type OtpLoginAttemptInput = {
   otpType: OtpType
@@ -8170,15 +8177,17 @@ export type Query = {
   externalInsuranceProvider?: Maybe<ExternalInsuranceProvider>
   autoCompleteAddress: Array<AutoCompleteResponse>
   _?: Maybe<Scalars['Boolean']>
+  /** Returns all claims the member has */
+  claims: Array<Claim>
   /** Returns all the currently active contracts, combined into bundles. */
   activeContractBundles: Array<ContractBundle>
   /** Returns all contracts the member currently holds, regardless of activation/termination status */
   contracts: Array<Contract>
   /** Returns whether a member has at least one contract */
   hasContract: Scalars['Boolean']
-  /** Fetch onboarding session by its ID. */
-  onboardingSession: OnboardingSession
   quoteBundle: QuoteBundle
+  /** Fetch onboarding session by its ID. */
+  quoteCart: QuoteCart
   /** @deprecated Use `contracts` instead */
   insurance: Insurance
   cashback?: Maybe<Cashback>
@@ -8201,14 +8210,13 @@ export type Query = {
   selfChangeEligibility: SelfChangeEligibility
   /** All locales that are available and activated */
   availableLocales: Array<Locale>
-  /** Returns all claims the member has */
-  claims: Array<Claim>
   /** Returns perils from promise-cms */
   contractPerils: Array<PerilV2>
   embarkStory?: Maybe<EmbarkStory>
   /** returns names of all available embark stories */
   embarkStoryNames: Array<Scalars['String']>
   embarkStories: Array<EmbarkStoryMetadata>
+  claims_statusCards: Array<ClaimStatusCard>
 }
 
 export type QueryFaqsArgs = {
@@ -8377,12 +8385,12 @@ export type QueryAutoCompleteAddressArgs = {
   options?: Maybe<AddressAutocompleteOptions>
 }
 
-export type QueryOnboardingSessionArgs = {
-  id: Scalars['ID']
-}
-
 export type QueryQuoteBundleArgs = {
   input: QuoteBundleInput
+}
+
+export type QueryQuoteCartArgs = {
+  id: Scalars['ID']
 }
 
 export type QueryCashbackArgs = {
@@ -8418,6 +8426,10 @@ export type QueryEmbarkStoryArgs = {
 
 export type QueryEmbarkStoriesArgs = {
   locale: Scalars['String']
+}
+
+export type QueryClaims_StatusCardsArgs = {
+  locale: Locale
 }
 
 export type Quote = CompleteQuote | IncompleteQuote
@@ -8496,6 +8508,29 @@ export type QuoteBundleVariantTagArgs = {
   locale: Locale
 }
 
+/**
+ * An onboarding session is a type that exists to guide the client through an onboarding journey,
+ * as a means of storing intermediate state up until the point where it is "signed" and then flushed
+ * into a proper "member".
+ */
+export type QuoteCart = {
+  __typename?: 'QuoteCart'
+  id: Scalars['ID']
+  /**  Campaign, if one has been attached by a code  */
+  campaign?: Maybe<Campaign>
+  /**  The quote bundle "view" of the quotes created as part of this onboarding  */
+  bundle?: Maybe<QuoteBundle>
+  /**  The ongoing signing state, if it has been initiated - or null if it has not.  */
+  checkout?: Maybe<Checkout>
+  /**  The accepted checkout methods.  */
+  checkoutMethods: Array<CheckoutMethod>
+}
+
+export type QuoteData = {
+  type: Scalars['String']
+  payload: Scalars['JSON']
+}
+
 export type QuoteDetails =
   | SwedishApartmentQuoteDetails
   | SwedishHouseQuoteDetails
@@ -8550,6 +8585,8 @@ export type RegisterDirectDebitClientContext = {
 export type RemoveCampaignCodeResult =
   | SuccessfullyRemovedCampaignsResult
   | CannotRemoveActiveCampaignCode
+
+export type RemoveCampaignResult = QuoteCart | BasicError
 
 export type RemoveCurrentInsurerInput = {
   id: Scalars['ID']
@@ -9683,6 +9720,8 @@ export enum Stage {
   Published = 'PUBLISHED',
 }
 
+export type StartCheckoutResult = QuoteCart | BasicError
+
 export type StartSignResponse =
   | SwedishBankIdSession
   | NorwegianBankIdSession
@@ -9738,6 +9777,12 @@ export type SubscriptionCurrentChatResponseArgs = {
 
 export type SubscriptionChatStateArgs = {
   mostRecentTimestamp: Scalars['String']
+}
+
+/**  Generic success type for mutation success cases when there is nothing to return.  */
+export type Success = {
+  __typename?: 'Success'
+  _?: Maybe<Scalars['Boolean']>
 }
 
 export type SuccessfullyRemovedCampaignsResult = {
@@ -9942,12 +9987,11 @@ export enum TextContentType {
 export type TitleAndBulletPoints = {
   __typename?: 'TitleAndBulletPoints'
   color: HedvigColor
-  icon: Icon
   title: Scalars['String']
   buttonTitle: Scalars['String']
+  bulletPoints: Array<BulletPoints>
   /** @deprecated not used */
   claimFirstMessage: Scalars['String']
-  bulletPoints: Array<BulletPoints>
 }
 
 export enum TokenizationChannel {
