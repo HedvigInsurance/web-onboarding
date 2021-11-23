@@ -11430,7 +11430,7 @@ export type CreateOnboardingQuoteCartMutation = {
 } & Pick<Mutation, 'onboardingQuoteCart_create'>
 
 export type CreateQuoteBundleMutationVariables = Exact<{
-  id: Scalars['ID']
+  quoteCartId: Scalars['ID']
   quotes: Array<QuoteData> | QuoteData
 }>
 
@@ -11861,6 +11861,7 @@ export type QuoteBundleVariantsQuery = { __typename?: 'Query' } & {
 
 export type QuoteCartQueryVariables = Exact<{
   id: Scalars['ID']
+  locale: Locale
 }>
 
 export type QuoteCartQuery = { __typename?: 'Query' } & {
@@ -12713,8 +12714,11 @@ export type CreateOnboardingQuoteCartMutationOptions = ApolloReactCommon.BaseMut
   CreateOnboardingQuoteCartMutationVariables
 >
 export const CreateQuoteBundleDocument = gql`
-  mutation CreateQuoteBundle($id: ID!, $quotes: [QuoteData!]!) {
-    quoteCart_createQuoteBundle(id: $id, input: { quoteData: $quotes }) {
+  mutation CreateQuoteBundle($quoteCartId: ID!, $quotes: [QuoteData!]!) {
+    quoteCart_createQuoteBundle(
+      id: $quoteCartId
+      input: { quoteData: $quotes }
+    ) {
       ... on QuoteCart {
         id
         bundle {
@@ -12749,7 +12753,7 @@ export type CreateQuoteBundleMutationFn = ApolloReactCommon.MutationFunction<
  * @example
  * const [createQuoteBundleMutation, { data, loading, error }] = useCreateQuoteBundleMutation({
  *   variables: {
- *      id: // value for 'id'
+ *      quoteCartId: // value for 'quoteCartId'
  *      quotes: // value for 'quotes'
  *   },
  * });
@@ -13507,13 +13511,13 @@ export type QuoteBundleVariantsQueryResult = ApolloReactCommon.QueryResult<
   QuoteBundleVariantsQueryVariables
 >
 export const QuoteCartDocument = gql`
-  query QuoteCart($id: ID!) {
+  query QuoteCart($id: ID!, $locale: Locale!) {
     quoteCart(id: $id) {
       id
       bundle {
         possibleVariations {
           id
-          tag(locale: sv_SE)
+          tag(locale: $locale)
           bundle {
             bundleCost {
               monthlyGross {
@@ -13618,6 +13622,7 @@ export const QuoteCartDocument = gql`
  * const { data, loading, error } = useQuoteCartQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      locale: // value for 'locale'
  *   },
  * });
  */

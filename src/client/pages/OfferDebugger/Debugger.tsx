@@ -41,16 +41,16 @@ const ErrorFallback: React.FC<FallbackProps> = ({
 export const Debugger: React.FC = () => {
   const locale = useCurrentLocale()
   const [
-    createOnboardingSession,
+    createOnboardingQuoteCart,
     { data },
   ] = useCreateOnboardingQuoteCartMutation()
   const quoteCartId = data?.onboardingQuoteCart_create
 
   const createNewQuoteCart = useCallback(async () => {
-    await createOnboardingSession({
+    await createOnboardingQuoteCart({
       variables: { market: locale.apiMarket, locale: locale.isoLocale },
     })
-  }, [createOnboardingSession, locale.apiMarket, locale.isoLocale])
+  }, [createOnboardingQuoteCart, locale.apiMarket, locale.isoLocale])
 
   useEffect(() => {
     // create initial onboarding session
