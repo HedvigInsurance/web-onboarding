@@ -44,8 +44,10 @@ const Text = styled.p<Props>`
   color: ${({ color }) =>
     color === 'black' ? colorsV3.gray700 : colorsV3.gray500};
   font-size: 0.75rem;
+  text-align: right;
+
   && {
-    margin: 0.2rem 0 0 1.4rem;
+    margin-top: 0.2rem;
   }
 `
 
@@ -68,7 +70,11 @@ const PhoneOpeningHours: React.VFC<{
   const isWeekend = currentDay === 6 || currentDay === 0
 
   if (isFridayAfterHours || isWeekend) {
-    return <Text>weekend text</Text>
+    return (
+      <Text>
+        {textKeys.PHONE_OPENS_MONDAY_AT()} {phoneNumber?.opensAt}
+      </Text>
+    )
   }
 
   if (isLunchHour) {
