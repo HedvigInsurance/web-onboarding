@@ -4,11 +4,6 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import {
-  Market,
-  useCurrentLocale,
-  useMarket,
-} from 'components/utils/CurrentLocale'
-import {
   useMemberQuery,
   useSignQuotesMutation,
   useSignStatusLazyQuery,
@@ -30,6 +25,7 @@ import { useTextKeys } from 'utils/textKeys'
 import { useTrack } from 'utils/tracking/tracking'
 import { Variation, useVariation } from 'utils/hooks/useVariation'
 import { useLockBodyScroll } from 'utils/hooks/useLockBodyScroll'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { CloseButton } from 'components/CloseButton/CloseButton'
 import { StartDate } from '../Introduction/Sidebar/StartDate'
 import { useScrollLock, VisibilityState, useSsnError } from './hooks'
@@ -239,7 +235,6 @@ export const Checkout = ({
 }: CheckoutProps) => {
   const textKeys = useTextKeys()
   const locale = useCurrentLocale()
-  const market = useMarket()
   const variation = useVariation()
 
   const [visibilityState, setVisibilityState] = useState(VisibilityState.CLOSED)
@@ -453,7 +448,7 @@ export const Checkout = ({
                       onCompletion.finally(() => setSsnUpdateLoading(false))
                     }}
                   />
-                  {market === Market.Se &&
+                  {locale.marketLabel == 'SE' &&
                     renderUpsellCard(
                       quoteBundleVariants,
                       selectedQuoteBundleVariant,
