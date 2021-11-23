@@ -13,6 +13,7 @@ import {
   BankIdStatus,
   QuoteBundleVariant,
   BundledQuote,
+  EditQuoteInput,
 } from 'data/graphql'
 import {
   getQuoteIds,
@@ -24,6 +25,7 @@ import { handleSignedEvent } from 'utils/tracking/signing'
 import { useTextKeys } from 'utils/textKeys'
 import { useTrack } from 'utils/tracking/tracking'
 import { Variation, useVariation } from 'utils/hooks/useVariation'
+import { useUnderwritingLimitsHitReporter } from 'utils/sentry-client'
 import { useLockBodyScroll } from 'utils/hooks/useLockBodyScroll'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { CloseButton } from 'components/CloseButton/CloseButton'
@@ -256,8 +258,6 @@ export const Checkout = ({
   const [emailUpdateLoading, setEmailUpdateLoading] = useState(false)
   const [ssnUpdateLoading, setSsnUpdateLoading] = useState(false)
   const [isShowingFailModal, setIsShowingFailModal] = useState(false)
-  const [fakeLoading, setFakeLoading] = React.useState(false)
-  const [reallyLoading, setReallyLoading] = React.useState(false)
 
   const offerData = getOfferData(selectedQuoteBundleVariant.bundle)
   const quoteIds = getQuoteIds(offerData)
@@ -278,6 +278,9 @@ export const Checkout = ({
 
   const [windowInnerHeight, setWindowInnerHeight] = useState(window.innerHeight)
 
+  const [firstName, setFirstName] = useState(offerData.person.firstName ?? '')
+  const [lastName, setLastName] = useState(offerData.person.lastName ?? '')
+
   useEffect(() => {
     const setWindowHeight = () => {
       setWindowInnerHeight(window.innerHeight)
@@ -292,6 +295,19 @@ export const Checkout = ({
 
   const scrollWrapper = useRef<HTMLDivElement>()
   useScrollLock(visibilityState, scrollWrapper)
+
+  useEffect(
+    function syncFirstnameLastnameStates() {
+      if (offerData.person.firstName) {
+        setFirstName(offerData.person.firstName)
+      }
+
+      if (offerData.person.lastName) {
+        setLastName(offerData.person.lastName)
+      }
+    },
+    [offerData.person.firstName, offerData.person.lastName],
+  )
 
   useEffect(() => {
     if (typeof Intercom === 'undefined') {
@@ -337,19 +353,67 @@ export const Checkout = ({
     signUiState !== 'STARTED' &&
       signUiState !== 'STARTED_WITH_REDIRECT' &&
       !signQuotesMutation.loading &&
+      firstName &&
+      lastName &&
       offerData.person.email &&
       offerData.person.ssn,
   )
 
-  const startSign = () => {
+  const editQuotes = async (
+    quoteIds: string[],
+    input: Omit<EditQuoteInput, 'id'>,
+  ) => {
+    await Promise.all(
+      quoteIds.map((id) =>
+        editQuote({ variables: { input: { ...input, id } } }),
+      ),
+    )
+    refetch()
+  }
+
+  const onEmailChange = async (email: string) => {
+    const { email: currentEmail } = offerData.person
+    if (!email || currentEmail === email) return
+
+    setEmailUpdateLoading(true)
+    await editQuotes(quoteIds, { email })
+    setEmailUpdateLoading(false)
+  }
+
+  const onSsnChange = async (ssn: string) => {
+    const { ssn: currentSsn } = offerData.person
+    if (!ssn || currentSsn === ssn) return
+
+    setSsnUpdateLoading(true)
+    await editQuotes(quoteIds, { ssn })
+    setSsnUpdateLoading(false)
+  }
+
+  const startSign = async () => {
     if (!canInitiateSign) {
       return
+    }
+
+    setSignUiState('PREPARING')
+
+    const quoteIds = getQuoteIds(offerData)
+    const firstAndLastNameAreSet = firstName !== null && lastName !== null
+    const firstOrLastNameHasChanged =
+      offerData.person.firstName !== firstName ||
+      offerData.person.lastName !== lastName
+
+    if (firstAndLastNameAreSet && firstOrLastNameHasChanged) {
+      await Promise.all(
+        quoteIds.map((id) =>
+          editQuote({ variables: { input: { id, firstName, lastName } } }),
+        ),
+      )
     }
 
     const baseUrl = `${window.location.origin}/${locale}/new-member`
     signQuotes({
       variables: {
-        quoteIds: getQuoteIds(offerData),
+        quoteIds,
         successUrl: baseUrl + '/sign/success',
         failUrl: baseUrl + '/sign/fail',
       },
@@ -375,6 +439,12 @@ export const Checkout = ({
       .catch(() => setSignUiState('FAILED'))
   }
 
+  useUnderwritingLimitsHitReporter(
+    editQuoteResult.data?.editQuote?.__typename === 'UnderwritingLimitsHit' &&
+      editQuoteResult.data.editQuote.limits.map((limit) => limit.code),
+    quoteIds,
+  )
+
   return (
     <>
       {signStatus?.signState !== SignState.Completed && (
@@ -393,60 +463,22 @@ export const Checkout = ({
                   <PriceBreakdown
                     offerData={offerData}
                     showTotal={true}
-                    isLoading={fakeLoading || reallyLoading}
+                    isLoading={ssnUpdateLoading}
                   />
                   <UserDetailsForm
-                    onSubmit={startSign}
+                    firstName={firstName}
+                    lastName={lastName}
+                    onFirstNameChange={setFirstName}
+                    onLastNameChange={setLastName}
                     email={offerData.person.email ?? ''}
-                    onEmailChange={(email) => {
-                      const onCompletion = new Promise<void>(
-                        (resolve, reject) => {
-                          Promise.all(
-                            quoteIds.map((quoteId) =>
-                              editQuote({
-                                variables: { input: { id: quoteId, email } },
-                              }),
-                            ),
-                          )
-                            .then(() => refetch())
-                            .then(() => resolve())
-                            .catch((e) => {
-                              reject(e)
-                              throw e
-                            })
-                        },
-                      )
-                      setEmailUpdateLoading(true)
-                      onCompletion.finally(() => setEmailUpdateLoading(false))
-                    }}
+                    onEmailChange={onEmailChange}
                     ssn={offerData.person.ssn ?? ''}
+                    onSsnChange={onSsnChange}
                     ssnBackendError={ssnBackendError}
-                    onSsnChange={(ssn) => {
-                      const onCompletion = new Promise<void>(
-                        (resolve, reject) => {
-                          setFakeLoading(true)
-                          setReallyLoading(true)
-                          window.setTimeout(() => setFakeLoading(false), 1000)
-                          Promise.all(
-                            quoteIds.map((quoteId) =>
-                              editQuote({
-                                variables: { input: { id: quoteId, ssn } },
-                              }),
-                            ),
-                          )
-                            .then(() => refetch())
-                            .then(() => setReallyLoading(false))
-                            .then(() => resolve())
-                            .catch((e) => {
-                              setReallyLoading(false)
-                              reject(e)
-                              throw e
-                            })
-                        },
-                      )
-                      setSsnUpdateLoading(true)
-                      onCompletion.finally(() => setSsnUpdateLoading(false))
-                    }}
+                    isFirstAndLastNameVisible={
+                      !offerData.person.firstName || !offerData.person.lastName
+                    }
+                    onSubmit={startSign}
                   />
                   {locale.marketLabel == 'SE' &&
                     renderUpsellCard(
@@ -464,7 +496,6 @@ export const Checkout = ({
 
                   <InsuranceSummary offerData={offerData} />
                 </Section>
-
                 <SignDisclaimer
                   offerData={offerData}
                   signMethod={signMethodData?.signMethodForQuotes}
@@ -481,6 +512,7 @@ export const Checkout = ({
                   signQuotesMutation.loading ||
                   signUiState === 'STARTED' ||
                   signUiState === 'STARTED_WITH_REDIRECT' ||
+                  signUiState === 'PREPARING' ||
                   emailUpdateLoading
                 }
                 onSignStart={startSign}

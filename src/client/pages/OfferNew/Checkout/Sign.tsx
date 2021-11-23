@@ -11,6 +11,7 @@ import { SignStatus } from './SignStatus'
 
 export type SignUiState =
   | 'NOT_STARTED'
+  | 'PREPARING'
   | 'STARTED_WITH_REDIRECT'
   | 'STARTED'
   | 'FAILED'

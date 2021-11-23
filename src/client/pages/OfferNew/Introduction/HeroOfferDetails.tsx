@@ -128,7 +128,7 @@ export const HeroOfferDetails: React.FC<Props> = ({
       <Headline>{textKeys.HERO_OFFER_DETAILS_HEADER()}</Headline>
       <OfferInfoWrapper>
         <NameAndCoInsured>
-          {person.firstName}
+          {person.firstName || textKeys.HERO_FIRSTNAME_PLACEHOLDER()}
           {numberCoInsured > 0 && ` +${numberCoInsured}`}
         </NameAndCoInsured>
 
