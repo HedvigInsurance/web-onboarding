@@ -29,6 +29,7 @@ import { handleSignedEvent } from 'utils/tracking/signing'
 import { useTextKeys } from 'utils/textKeys'
 import { useTrack } from 'utils/tracking/tracking'
 import { Variation, useVariation } from 'utils/hooks/useVariation'
+import { useLockBodyScroll } from 'utils/hooks/useLockBodyScroll'
 import { CloseButton } from 'components/CloseButton/CloseButton'
 import { StartDate } from '../Introduction/Sidebar/StartDate'
 import { useScrollLock, VisibilityState, useSsnError } from './hooks'
@@ -202,13 +203,13 @@ const renderUpsellCard = (
     return null
   }
 
+  const localizedPerMonth = textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL()
   const { amount, currency } = accidentInsuranceQuote.price
-  const price = `${amount} ${currency}`
+  const price = `${amount} ${currency}${localizedPerMonth}`
   const betterDealQuoteIds = betterDealBundleVariant.bundle.quotes.map(
     ({ id }) => id,
   )
 
-  console.log(textKeys)
   return (
     <UpsellCard
       title={textKeys.UPSELL_TITLE()}
@@ -228,14 +229,14 @@ export type CheckoutProps = {
   refetch: () => Promise<void>
 }
 
-export const Checkout: React.FC<CheckoutProps> = ({
+export const Checkout = ({
   variants,
   selectedQuoteBundle,
   onAddQuotes,
   isOpen,
   onClose,
   refetch,
-}) => {
+}: CheckoutProps) => {
   const textKeys = useTextKeys()
   const locale = useCurrentLocale()
   const market = useMarket()
@@ -253,6 +254,8 @@ export const Checkout: React.FC<CheckoutProps> = ({
       setVisibilityState(VisibilityState.CLOSING)
     }
   }, [isOpen])
+
+  useLockBodyScroll({ lock: visibilityState === VisibilityState.OPEN })
 
   const [signUiState, setSignUiState] = useState<SignUiState>('NOT_STARTED')
   const [emailUpdateLoading, setEmailUpdateLoading] = useState(false)
