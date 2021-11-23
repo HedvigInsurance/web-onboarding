@@ -8,7 +8,11 @@ import {
   useCurrentLocale,
   useMarket,
 } from 'components/utils/CurrentLocale'
-import { WithEmailForm, WithSsnForm } from 'pages/OfferNew/types'
+import {
+  WithEmailForm,
+  WithSsnForm,
+  WithFirstAndLastNameForm,
+} from 'pages/OfferNew/types'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
 import { useFeature, Features } from 'utils/hooks/useFeature'
 import { CreditCheckInfo } from './CreditCheckInfo'
@@ -18,12 +22,18 @@ const HiddenSubmit = styled.input`
 `
 
 type Props = WithEmailForm &
-  WithSsnForm & { onSubmit?: () => void; ssnBackendError: string | null }
+  WithSsnForm &
+  WithFirstAndLastNameForm & {
+    onSubmit?: () => void
+    ssnBackendError: string | null
+  }
 
 export const emailValidation = yup
   .string()
   .email()
   .required()
+
+export const nameValidation = yup.string().required()
 
 // TODO: replace these with one market agnostic CHECKOUT_SSN_LABEL + currentLocaleData.ssn.formatExample
 export const getSsnLabel = (market: Market, textKeys: TextKeyMap): string => {
@@ -39,6 +49,11 @@ export const getSsnLabel = (market: Market, textKeys: TextKeyMap): string => {
 
 export const UserDetailsForm: React.FC<Props> = ({
   email: initialEmail,
+  firstName,
+  lastName,
+  onFirstNameChange,
+  onLastNameChange,
+  isFirstAndLastNameVisible,
   onEmailChange,
   ssn: initialSsn,
   ssnBackendError,
@@ -47,7 +62,9 @@ export const UserDetailsForm: React.FC<Props> = ({
 }) => {
   const textKeys = useTextKeys()
   const [email, reallySetEmail] = useState(() => initialEmail)
-  const [hasEmailError, setHasEmailError] = useState<boolean>(false)
+  const [hasFirstNameError, setHasFirstNameError] = useState(false)
+  const [hasLastNameError, setHasLastNameError] = useState(false)
+  const [hasEmailError, setHasEmailError] = useState(false)
   const [ssn, reallySetSsn] = useState(() => initialSsn)
   const [isShowingCreditCheckInfo, setIsShowingCreditCheckInfo] = useState(
     false,
@@ -73,6 +90,18 @@ export const UserDetailsForm: React.FC<Props> = ({
   }
 
   const ssnFormatExample = currentLocaleData.ssn.formatExample
+
+  const validateFirstName = (firstName: string) => {
+    if (!nameValidation.isValidSync(firstName)) {
+      setHasFirstNameError(true)
+    }
+  }
+
+  const validateLastName = (lastName: string) => {
+    if (!nameValidation.isValidSync(lastName)) {
+      setHasLastNameError(true)
+    }
+  }
 
   const handleSsnChange = (event: React.FormEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget
@@ -113,10 +142,13 @@ export const UserDetailsForm: React.FC<Props> = ({
       window.setTimeout(() => {
         if (emailValidation.isValidSync(newEmail)) {
           onEmailChange(newEmail)
+        } else {
+          setHasEmailError(true)
         }
       }, 300),
     )
   }
+
   return (
     <form
       onSubmit={(e) => {
@@ -126,6 +158,34 @@ export const UserDetailsForm: React.FC<Props> = ({
         }
       }}
     >
+      {isFirstAndLastNameVisible && (
+        <>
+          <RawInputField
+            label={textKeys.CHECKOUT_FIRSTNAME_LABEL()}
+            name="firstName"
+            id="firstName"
+            value={firstName}
+            showErrorIcon={hasFirstNameError}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              onFirstNameChange(event.target.value)
+              validateFirstName(event.target.value)
+            }}
+          />
+
+          <RawInputField
+            label={textKeys.CHECKOUT_LASTNAME_LABEL()}
+            name="lastName"
+            id="lastName"
+            value={lastName}
+            showErrorIcon={hasLastNameError}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              onLastNameChange(event.target.value)
+              validateLastName(event.target.value)
+            }}
+          />
+        </>
+      )}
+
       <RawInputField
         label={textKeys.CHECKOUT_EMAIL_LABEL()}
         placeholder={textKeys.CHECKOUT_EMAIL_PLACEHOLDER()}
