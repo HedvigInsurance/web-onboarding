@@ -3,27 +3,42 @@ import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
-import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import {
-  SignState,
-  BankIdStatus,
+  Market,
+  useCurrentLocale,
+  useMarket,
+} from 'components/utils/CurrentLocale'
+import {
   useMemberQuery,
   useSignQuotesMutation,
   useSignStatusLazyQuery,
   useSignMethodForQuotesQuery,
+  useEditQuoteMutation,
+  SignState,
+  BankIdStatus,
+  QuoteBundleVariant,
+  BundledQuote,
 } from 'data/graphql'
-import { OfferData } from 'pages/OfferNew/types'
-import { getQuoteIds } from 'pages/OfferNew/utils'
+import {
+  getQuoteIds,
+  getOfferData,
+  isSwedishAccident,
+} from 'pages/OfferNew/utils'
+import { PriceBreakdown } from 'pages/OfferNew/common/PriceBreakdown'
 import { handleSignedEvent } from 'utils/tracking/signing'
+import { useTextKeys } from 'utils/textKeys'
 import { useTrack } from 'utils/tracking/tracking'
 import { Variation, useVariation } from 'utils/hooks/useVariation'
 import { CloseButton } from 'components/CloseButton/CloseButton'
-import { useScrollLock, VisibilityState } from './hooks'
-import { CheckoutContent } from './CheckoutContent'
+import { StartDate } from '../Introduction/Sidebar/StartDate'
+import { useScrollLock, VisibilityState, useSsnError } from './hooks'
 import { Sign, SignUiState } from './Sign'
 import { SignDisclaimer } from './SignDisclaimer'
 import { CheckoutSuccessRedirect } from './CheckoutSuccessRedirect'
 import { SignFailModal } from './SignFailModal'
+import { UserDetailsForm } from './UserDetailsForm'
+import { InsuranceSummary } from './InsuranceSummary'
+import { UpsellCard } from './UpsellCard'
 
 type Openable = {
   visibilityState: VisibilityState
@@ -91,6 +106,29 @@ const InnerWrapper = styled('div')`
   }
 `
 
+const Section = styled.div`
+  width: 100%;
+`
+
+const StartDateWrapper = styled.div`
+  position: relative;
+  margin-top: 0.375rem;
+  margin-bottom: 2rem;
+`
+
+const StartDateLabel = styled.p`
+  margin: 0 0 0.5rem 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1;
+`
+
+const Heading = styled.h3`
+  margin: 0;
+  font-size: 2rem;
+  line-height: 2.5rem;
+  padding-top: 1.875rem;
+`
+
 const Backdrop = styled('div')<Openable>`
   position: fixed;
   background: rgba(25, 25, 25, 0.5);
@@ -125,19 +163,84 @@ const Backdrop = styled('div')<Openable>`
   }};
 `
 
+const renderUpsellCard = (
+  variants: QuoteBundleVariant[],
+  selectedQuoteBundle: QuoteBundleVariant,
+  onAcceptDeal: (quoteIds: string[]) => void,
+  textKeys: Record<string, any>,
+) => {
+  const isSwedishAccidentAdded = selectedQuoteBundle.bundle.quotes.some(
+    ({ quoteDetails }) => isSwedishAccident(quoteDetails),
+  )
+  if (isSwedishAccidentAdded) {
+    return null
+  }
+
+  // Look for a bundle variant that includes Accident Insurance.
+  // In case it founds it, store the bundle variant and the accident
+  // insurance quote so we can use them to accept UpsellCard deal and
+  // get the price of Accident Insurance.
+  const remainingBundleVariants = variants.filter(
+    ({ id }) => id !== selectedQuoteBundle.id,
+  )
+  let betterDealBundleVariant: QuoteBundleVariant | null = null
+  let accidentInsuranceQuote: BundledQuote | null = null
+  for (const bundleVariant of remainingBundleVariants) {
+    const accidentInsuranceIndex = bundleVariant.bundle.quotes.findIndex(
+      ({ quoteDetails }) => isSwedishAccident(quoteDetails),
+    )
+
+    if (accidentInsuranceIndex !== -1) {
+      betterDealBundleVariant = bundleVariant
+      accidentInsuranceQuote =
+        betterDealBundleVariant.bundle.quotes[accidentInsuranceIndex]
+      break
+    }
+  }
+
+  if (betterDealBundleVariant === null || accidentInsuranceQuote === null) {
+    return null
+  }
+
+  const { amount, currency } = accidentInsuranceQuote.price
+  const price = `${amount} ${currency}`
+  const betterDealQuoteIds = betterDealBundleVariant.bundle.quotes.map(
+    ({ id }) => id,
+  )
+
+  console.log(textKeys)
+  return (
+    <UpsellCard
+      title={textKeys.UPSELL_TITLE()}
+      description={textKeys.UPSELL_DESCRIPTION()}
+      price={price}
+      onAcceptDeal={() => onAcceptDeal(betterDealQuoteIds)}
+    />
+  )
+}
+
 export type CheckoutProps = {
-  offerData: OfferData
+  variants: QuoteBundleVariant[]
+  selectedQuoteBundle: QuoteBundleVariant
+  onAddQuotes: (quoteIds: string[]) => void
   isOpen?: boolean
   onClose?: () => void
   refetch: () => Promise<void>
 }
 
 export const Checkout: React.FC<CheckoutProps> = ({
-  offerData,
+  variants,
+  selectedQuoteBundle,
+  onAddQuotes,
   isOpen,
   onClose,
   refetch,
 }) => {
+  const textKeys = useTextKeys()
+  const locale = useCurrentLocale()
+  const market = useMarket()
+  const variation = useVariation()
+
   const [visibilityState, setVisibilityState] = useState(VisibilityState.CLOSED)
   useEffect(() => {
     if (isOpen) {
@@ -155,18 +258,25 @@ export const Checkout: React.FC<CheckoutProps> = ({
   const [emailUpdateLoading, setEmailUpdateLoading] = useState(false)
   const [ssnUpdateLoading, setSsnUpdateLoading] = useState(false)
   const [isShowingFailModal, setIsShowingFailModal] = useState(false)
+  const [fakeLoading, setFakeLoading] = React.useState(false)
+  const [reallyLoading, setReallyLoading] = React.useState(false)
+
+  const offerData = getOfferData(selectedQuoteBundle.bundle)
+  const quoteIds = getQuoteIds(offerData)
+
   const [startPollingSignState, signStatusQueryProps] = useSignStatusLazyQuery({
     pollInterval: 1000,
   })
   const signStatus = signStatusQueryProps.data?.signStatus ?? null
+
   const [signQuotes, signQuotesMutation] = useSignQuotesMutation()
   const member = useMemberQuery()
-  const locale = useCurrentLocale()
-  const variation = useVariation()
-  const quoteIds = getQuoteIds(offerData)
   const { data: signMethodData } = useSignMethodForQuotesQuery({
     variables: { input: quoteIds },
   })
+  const [editQuote, editQuoteResult] = useEditQuoteMutation()
+
+  const { ssnBackendError } = useSsnError(editQuoteResult)
 
   const [windowInnerHeight, setWindowInnerHeight] = useState(window.innerHeight)
 
@@ -280,19 +390,82 @@ export const Checkout: React.FC<CheckoutProps> = ({
             >
               <InnerWrapper>
                 <CloseButton onClick={onClose} />
-                <CheckoutContent
-                  onSubmit={startSign}
-                  offerData={offerData}
-                  onEmailUpdate={(onCompletion) => {
-                    setEmailUpdateLoading(true)
-                    onCompletion.finally(() => setEmailUpdateLoading(false))
-                  }}
-                  onSsnUpdate={(onCompletion) => {
-                    setSsnUpdateLoading(true)
-                    onCompletion.finally(() => setSsnUpdateLoading(false))
-                  }}
-                  refetch={refetch}
-                />
+                <Section>
+                  <Heading>{textKeys.CHECKOUT_HEADING()}</Heading>
+                  <PriceBreakdown
+                    offerData={offerData}
+                    showTotal={true}
+                    isLoading={fakeLoading || reallyLoading}
+                  />
+                  <UserDetailsForm
+                    onSubmit={startSign}
+                    email={offerData.person.email ?? ''}
+                    onEmailChange={(email) => {
+                      const onCompletion = new Promise<void>(
+                        (resolve, reject) => {
+                          Promise.all(
+                            quoteIds.map((quoteId) =>
+                              editQuote({
+                                variables: { input: { id: quoteId, email } },
+                              }),
+                            ),
+                          )
+                            .then(() => refetch())
+                            .then(() => resolve())
+                            .catch((e) => {
+                              reject(e)
+                              throw e
+                            })
+                        },
+                      )
+                      setEmailUpdateLoading(true)
+                      onCompletion.finally(() => setEmailUpdateLoading(false))
+                    }}
+                    ssn={offerData.person.ssn ?? ''}
+                    ssnBackendError={ssnBackendError}
+                    onSsnChange={(ssn) => {
+                      const onCompletion = new Promise<void>(
+                        (resolve, reject) => {
+                          setFakeLoading(true)
+                          setReallyLoading(true)
+                          window.setTimeout(() => setFakeLoading(false), 1000)
+                          Promise.all(
+                            quoteIds.map((quoteId) =>
+                              editQuote({
+                                variables: { input: { id: quoteId, ssn } },
+                              }),
+                            ),
+                          )
+                            .then(() => refetch())
+                            .then(() => setReallyLoading(false))
+                            .then(() => resolve())
+                            .catch((e) => {
+                              setReallyLoading(false)
+                              reject(e)
+                              throw e
+                            })
+                        },
+                      )
+                      setSsnUpdateLoading(true)
+                      onCompletion.finally(() => setSsnUpdateLoading(false))
+                    }}
+                  />
+                  {market === Market.Se &&
+                    renderUpsellCard(
+                      variants,
+                      selectedQuoteBundle,
+                      onAddQuotes,
+                      textKeys,
+                    )}
+                  <StartDateWrapper>
+                    <StartDateLabel>
+                      {textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}
+                    </StartDateLabel>
+                    <StartDate offerData={offerData} refetch={refetch} />
+                  </StartDateWrapper>
+
+                  <InsuranceSummary offerData={offerData} />
+                </Section>
 
                 <SignDisclaimer
                   offerData={offerData}

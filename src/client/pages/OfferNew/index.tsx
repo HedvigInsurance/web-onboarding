@@ -183,11 +183,11 @@ export const OfferNew: React.FC = () => {
             <AppPromotionSection />
             <FaqSection />
             <Checkout
-              offerData={offerData}
+              variants={bundleVariants}
+              selectedQuoteBundle={selectedBundleVariant}
+              onAddQuotes={setSelectedQuoteIds}
               isOpen={checkoutMatch !== null}
-              onClose={() => {
-                handleCheckoutToggle(false)
-              }}
+              onClose={() => handleCheckoutToggle(false)}
               refetch={refetch as () => Promise<any>}
             />
           </>

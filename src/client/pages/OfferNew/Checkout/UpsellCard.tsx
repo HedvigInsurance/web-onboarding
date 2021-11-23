@@ -48,15 +48,25 @@ const AddButton = styled(Button)`
   padding: 0.875em 1.5em;
 `
 
-export function UpsellCard() {
+type UpsellCardProps = {
+  title: string
+  description: string
+  price: string
+  onAcceptDeal: () => void
+}
+
+export const UpsellCard = ({
+  title,
+  description,
+  price,
+  onAcceptDeal,
+}: UpsellCardProps) => {
   return (
     <UpsellCardRoot>
-      <Title>Accident Sweden</Title>
-      <Description>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui, quos!
-      </Description>
-      <Price>68 kr/mån</Price>
-      <AddButton>Add to your plan</AddButton>
+      <Title>{title}</Title>
+      <Description>{description}</Description>
+      <Price>{price}</Price>
+      <AddButton onClick={onAcceptDeal}>Add to your plan</AddButton>
     </UpsellCardRoot>
   )
 }
