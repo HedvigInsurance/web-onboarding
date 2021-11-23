@@ -1,10 +1,11 @@
+import React, { useRef, useCallback } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { addYears, subDays } from 'date-fns'
 import Dayzed from 'dayzed'
 import { motion } from 'framer-motion'
-import React from 'react'
 import { useTextKeys } from 'utils/textKeys'
+import { useClickOutside } from 'utils/hooks/useClickOutside'
 import { TextButton } from '../buttons'
 import { CloseButton } from '../CloseButton/CloseButton'
 import { Calendar } from './Calendar'
@@ -14,14 +15,6 @@ const Wrapper = styled(motion.div)`
   left: 0;
   width: 100%;
   padding: 0.625rem 1.25rem;
-`
-
-const BackgroundCloser = styled.div`
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
 `
 
 const Container = styled(motion.div)`
@@ -72,76 +65,80 @@ export const DateInput: React.FC<DateInputProps> = ({
   hasCurrentInsurer,
 }) => {
   const textKeys = useTextKeys()
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  const handleClickOutside = useCallback(() => {
+    setOpen(false)
+  }, [setOpen])
+  useClickOutside(containerRef, handleClickOutside)
 
   return (
-    <>
-      {open && <BackgroundCloser onClick={() => setOpen(false)} />}
-      <Wrapper
-        aria-hidden={!open}
-        initial={{ visibility: 'hidden' }}
+    <Wrapper
+      aria-hidden={!open}
+      initial={{ visibility: 'hidden' }}
+      animate={
+        open
+          ? {
+              visibility: 'visible',
+            }
+          : { visibility: 'hidden' }
+      }
+      transition={{ ease: 'linear', delay: open ? 0 : 0.5, duration: 0 }}
+    >
+      <Container
+        ref={containerRef}
+        initial={{ y: 0, opacity: 0, pointerEvents: 'none' }}
         animate={
           open
             ? {
-                visibility: 'visible',
+                display: 'inline-block',
+                y: 0,
+                opacity: 1,
+                pointerEvents: 'all',
               }
-            : { visibility: 'hidden' }
+            : { y: 50, opacity: 0, pointerEvents: 'none' }
         }
-        transition={{ ease: 'linear', delay: open ? 0 : 0.5, duration: 0 }}
+        transition={{
+          type: 'spring',
+          stiffness: 500,
+          damping: 50,
+        }}
       >
-        <Container
-          initial={{ y: 0, opacity: 0, pointerEvents: 'none' }}
-          animate={
-            open
-              ? {
-                  display: 'inline-block',
-                  y: 0,
-                  opacity: 1,
-                  pointerEvents: 'all',
-                }
-              : { y: 50, opacity: 0, pointerEvents: 'none' }
-          }
-          transition={{
-            type: 'spring',
-            stiffness: 500,
-            damping: 50,
-          }}
-        >
-          <CalendarWrapper>
-            <Dayzed
-              date={new Date()}
-              firstDayOfWeek={1}
-              selected={date}
-              minDate={subDays(new Date(), 1)}
-              maxDate={addYears(new Date(), 1)}
-              onDateSelected={(dateObj) => {
-                setDate(dateObj.date)
+        <CalendarWrapper>
+          <Dayzed
+            date={new Date()}
+            firstDayOfWeek={1}
+            selected={date}
+            minDate={subDays(new Date(), 1)}
+            maxDate={addYears(new Date(), 1)}
+            onDateSelected={(dateObj) => {
+              setDate(dateObj.date)
+              setOpen(false)
+            }}
+            render={(dayzedData) => <Calendar {...dayzedData} />}
+          />
+        </CalendarWrapper>
+
+        <TopSection>
+          <ButtonWrapper>
+            <CloseButton onClick={() => setOpen(false)} />
+          </ButtonWrapper>
+        </TopSection>
+
+        {hasCurrentInsurer && (
+          <AtStartDateContainer>
+            <TextButton
+              onClick={() => {
+                setDate(null)
                 setOpen(false)
               }}
-              render={(dayzedData) => <Calendar {...dayzedData} />}
-            />
-          </CalendarWrapper>
-
-          <TopSection>
-            <ButtonWrapper>
-              <CloseButton onClick={() => setOpen(false)} />
-            </ButtonWrapper>
-          </TopSection>
-
-          {hasCurrentInsurer && (
-            <AtStartDateContainer>
-              <TextButton
-                onClick={() => {
-                  setDate(null)
-                  setOpen(false)
-                }}
-              >
-                {textKeys.START_DATE_WHEN_OLD_EXPIRES()}
-              </TextButton>
-            </AtStartDateContainer>
-          )}
-        </Container>
-      </Wrapper>
-    </>
+            >
+              {textKeys.START_DATE_WHEN_OLD_EXPIRES()}
+            </TextButton>
+          </AtStartDateContainer>
+        )}
+      </Container>
+    </Wrapper>
   )
 }
 

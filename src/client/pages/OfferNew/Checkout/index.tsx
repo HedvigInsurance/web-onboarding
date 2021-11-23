@@ -11,20 +11,24 @@ import {
   useSignQuotesMutation,
   useSignStatusLazyQuery,
   useSignMethodForQuotesQuery,
+  useEditQuoteMutation,
+  EditQuoteInput,
 } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import { getQuoteIds } from 'pages/OfferNew/utils'
 import { handleSignedEvent } from 'utils/tracking/signing'
 import { useTrack } from 'utils/tracking/tracking'
 import { Variation, useVariation } from 'utils/hooks/useVariation'
+import { useUnderwritingLimitsHitReporter } from 'utils/sentry-client'
 import { useLockBodyScroll } from 'utils/hooks/useLockBodyScroll'
 import { CloseButton } from 'components/CloseButton/CloseButton'
-import { useScrollLock, VisibilityState } from './hooks'
+import { useScrollLock, VisibilityState, useSsnError } from './hooks'
 import { CheckoutContent } from './CheckoutContent'
 import { Sign, SignUiState } from './Sign'
 import { SignDisclaimer } from './SignDisclaimer'
 import { CheckoutSuccessRedirect } from './CheckoutSuccessRedirect'
 import { SignFailModal } from './SignFailModal'
+import { UserDetailsForm } from './UserDetailsForm'
 
 type Openable = {
   visibilityState: VisibilityState
@@ -133,12 +137,12 @@ export type CheckoutProps = {
   refetch: () => Promise<void>
 }
 
-export const Checkout: React.FC<CheckoutProps> = ({
+export const Checkout = ({
   offerData,
   isOpen,
   onClose,
   refetch,
-}) => {
+}: CheckoutProps) => {
   const [visibilityState, setVisibilityState] = useState(VisibilityState.CLOSED)
   useEffect(() => {
     if (isOpen) {
@@ -173,6 +177,11 @@ export const Checkout: React.FC<CheckoutProps> = ({
 
   const [windowInnerHeight, setWindowInnerHeight] = useState(window.innerHeight)
 
+  const [firstName, setFirstName] = useState(offerData.person.firstName ?? '')
+  const [lastName, setLastName] = useState(offerData.person.lastName ?? '')
+  const [editQuote, editQuoteResult] = useEditQuoteMutation()
+  const { ssnBackendError } = useSsnError(editQuoteResult)
+
   useEffect(() => {
     const setWindowHeight = () => {
       setWindowInnerHeight(window.innerHeight)
@@ -187,6 +196,19 @@ export const Checkout: React.FC<CheckoutProps> = ({
 
   const scrollWrapper = useRef<HTMLDivElement>()
   useScrollLock(visibilityState, scrollWrapper)
+
+  useEffect(
+    function syncFirstnameLastnameStates() {
+      if (offerData.person.firstName) {
+        setFirstName(offerData.person.firstName)
+      }
+
+      if (offerData.person.lastName) {
+        setLastName(offerData.person.lastName)
+      }
+    },
+    [offerData.person.firstName, offerData.person.lastName],
+  )
 
   useEffect(() => {
     if (typeof Intercom === 'undefined') {
@@ -232,19 +254,67 @@ export const Checkout: React.FC<CheckoutProps> = ({
     signUiState !== 'STARTED' &&
       signUiState !== 'STARTED_WITH_REDIRECT' &&
       !signQuotesMutation.loading &&
+      firstName &&
+      lastName &&
       offerData.person.email &&
       offerData.person.ssn,
   )
 
-  const startSign = () => {
+  const editQuotes = async (
+    quoteIds: string[],
+    input: Omit<EditQuoteInput, 'id'>,
+  ) => {
+    await Promise.all(
+      quoteIds.map((id) =>
+        editQuote({ variables: { input: { ...input, id } } }),
+      ),
+    )
+    refetch()
+  }
+
+  const onEmailChange = async (email: string) => {
+    const { email: currentEmail } = offerData.person
+    if (!email || currentEmail === email) return
+
+    setEmailUpdateLoading(true)
+    await editQuotes(quoteIds, { email })
+    setEmailUpdateLoading(false)
+  }
+
+  const onSsnChange = async (ssn: string) => {
+    const { ssn: currentSsn } = offerData.person
+    if (!ssn || currentSsn === ssn) return
+
+    setSsnUpdateLoading(true)
+    await editQuotes(quoteIds, { ssn })
+    setSsnUpdateLoading(false)
+  }
+
+  const startSign = async () => {
     if (!canInitiateSign) {
       return
+    }
+
+    setSignUiState('PREPARING')
+
+    const quoteIds = getQuoteIds(offerData)
+    const firstAndLastNameAreSet = firstName !== null && lastName !== null
+    const firstOrLastNameHasChanged =
+      offerData.person.firstName !== firstName ||
+      offerData.person.lastName !== lastName
+
+    if (firstAndLastNameAreSet && firstOrLastNameHasChanged) {
+      await Promise.all(
+        quoteIds.map((id) =>
+          editQuote({ variables: { input: { id, firstName, lastName } } }),
+        ),
+      )
     }
 
     const baseUrl = `${window.location.origin}/${locale}/new-member`
     signQuotes({
       variables: {
-        quoteIds: getQuoteIds(offerData),
+        quoteIds,
         successUrl: baseUrl + '/sign/success',
         failUrl: baseUrl + '/sign/fail',
       },
@@ -270,6 +340,12 @@ export const Checkout: React.FC<CheckoutProps> = ({
       .catch(() => setSignUiState('FAILED'))
   }
 
+  useUnderwritingLimitsHitReporter(
+    editQuoteResult.data?.editQuote?.__typename === 'UnderwritingLimitsHit' &&
+      editQuoteResult.data.editQuote.limits.map((limit) => limit.code),
+    quoteIds,
+  )
+
   return (
     <>
       {signStatus?.signState !== SignState.Completed && (
@@ -284,18 +360,25 @@ export const Checkout: React.FC<CheckoutProps> = ({
               <InnerWrapper>
                 <CloseButton onClick={onClose} />
                 <CheckoutContent
-                  onSubmit={startSign}
                   offerData={offerData}
-                  onEmailUpdate={(onCompletion) => {
-                    setEmailUpdateLoading(true)
-                    onCompletion.finally(() => setEmailUpdateLoading(false))
-                  }}
-                  onSsnUpdate={(onCompletion) => {
-                    setSsnUpdateLoading(true)
-                    onCompletion.finally(() => setSsnUpdateLoading(false))
-                  }}
+                  isLoading={ssnUpdateLoading}
                   refetch={refetch}
-                />
+                >
+                  <UserDetailsForm
+                    firstName={firstName}
+                    lastName={lastName}
+                    onFirstNameChange={setFirstName}
+                    onLastNameChange={setLastName}
+                    email={offerData.person.email ?? ''}
+                    onEmailChange={onEmailChange}
+                    ssn={offerData.person.ssn ?? ''}
+                    ssnBackendError={ssnBackendError}
+                    onSsnChange={onSsnChange}
+                    isFirstAndLastNameVisible={
+                      !offerData.person.firstName || !offerData.person.lastName
+                    }
+                  />
+                </CheckoutContent>
 
                 <SignDisclaimer
                   offerData={offerData}
@@ -313,6 +396,7 @@ export const Checkout: React.FC<CheckoutProps> = ({
                   signQuotesMutation.loading ||
                   signUiState === 'STARTED' ||
                   signUiState === 'STARTED_WITH_REDIRECT' ||
+                  signUiState === 'PREPARING' ||
                   emailUpdateLoading
                 }
                 onSignStart={startSign}
