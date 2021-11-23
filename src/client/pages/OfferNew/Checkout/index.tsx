@@ -165,12 +165,12 @@ const Backdrop = styled('div')<Openable>`
 `
 
 const renderUpsellCard = (
-  variants: QuoteBundleVariant[],
-  selectedQuoteBundle: QuoteBundleVariant,
+  quoteBundleVariants: QuoteBundleVariant[],
+  selectedQuoteBundleVariant: QuoteBundleVariant,
   onAcceptDeal: (quoteIds: string[]) => void,
   textKeys: Record<string, any>,
 ) => {
-  const isSwedishAccidentAdded = selectedQuoteBundle.bundle.quotes.some(
+  const isSwedishAccidentAdded = selectedQuoteBundleVariant.bundle.quotes.some(
     ({ quoteDetails }) => isSwedishAccident(quoteDetails),
   )
   if (isSwedishAccidentAdded) {
@@ -181,8 +181,8 @@ const renderUpsellCard = (
   // In case it founds it, store the bundle variant and the accident
   // insurance quote so we can use them to accept UpsellCard deal and
   // get the price of Accident Insurance.
-  const remainingBundleVariants = variants.filter(
-    ({ id }) => id !== selectedQuoteBundle.id,
+  const remainingBundleVariants = quoteBundleVariants.filter(
+    ({ id }) => id !== selectedQuoteBundleVariant.id,
   )
   let betterDealBundleVariant: QuoteBundleVariant | null = null
   let accidentInsuranceQuote: BundledQuote | null = null
@@ -221,8 +221,8 @@ const renderUpsellCard = (
 }
 
 export type CheckoutProps = {
-  variants: QuoteBundleVariant[]
-  selectedQuoteBundle: QuoteBundleVariant
+  quoteBundleVariants: QuoteBundleVariant[]
+  selectedQuoteBundleVariant: QuoteBundleVariant
   onAddQuotes: (quoteIds: string[]) => void
   isOpen?: boolean
   onClose?: () => void
@@ -230,8 +230,8 @@ export type CheckoutProps = {
 }
 
 export const Checkout = ({
-  variants,
-  selectedQuoteBundle,
+  quoteBundleVariants,
+  selectedQuoteBundleVariant,
   onAddQuotes,
   isOpen,
   onClose,
@@ -264,7 +264,7 @@ export const Checkout = ({
   const [fakeLoading, setFakeLoading] = React.useState(false)
   const [reallyLoading, setReallyLoading] = React.useState(false)
 
-  const offerData = getOfferData(selectedQuoteBundle.bundle)
+  const offerData = getOfferData(selectedQuoteBundleVariant.bundle)
   const quoteIds = getQuoteIds(offerData)
 
   const [startPollingSignState, signStatusQueryProps] = useSignStatusLazyQuery({
@@ -455,8 +455,8 @@ export const Checkout = ({
                   />
                   {market === Market.Se &&
                     renderUpsellCard(
-                      variants,
-                      selectedQuoteBundle,
+                      quoteBundleVariants,
+                      selectedQuoteBundleVariant,
                       onAddQuotes,
                       textKeys,
                     )}

@@ -183,8 +183,8 @@ export const OfferNew: React.FC = () => {
             <AppPromotionSection />
             <FaqSection />
             <Checkout
-              variants={bundleVariants}
-              selectedQuoteBundle={selectedBundleVariant}
+              quoteBundleVariants={bundleVariants}
+              selectedQuoteBundleVariant={selectedBundleVariant}
               onAddQuotes={setSelectedQuoteIds}
               isOpen={checkoutMatch !== null}
               onClose={() => handleCheckoutToggle(false)}
