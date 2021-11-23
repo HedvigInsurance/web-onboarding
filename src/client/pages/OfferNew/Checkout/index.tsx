@@ -208,8 +208,8 @@ const renderUpsellCard = (
 
   return (
     <UpsellCard
-      title={textKeys.UPSELL_TITLE()}
-      description={textKeys.UPSELL_DESCRIPTION()}
+      title={textKeys.ACCIDENT_SWEDEN_UPSELL_TITLE()}
+      description={textKeys.ACCIDENT_SWEDEN_UPSELL_DESCRIPTION()}
       price={price}
       onAcceptDeal={() => onAcceptDeal(betterDealQuoteIds)}
     />
