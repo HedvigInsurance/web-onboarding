@@ -39,7 +39,7 @@ const ErrorFallback: React.FC<FallbackProps> = ({
 )
 
 export const Debugger: React.FC = () => {
-  const locale = useCurrentLocale()
+  const { apiMarket, isoLocale } = useCurrentLocale()
   const [
     createOnboardingQuoteCart,
     { data },
@@ -48,9 +48,9 @@ export const Debugger: React.FC = () => {
 
   const createNewQuoteCart = useCallback(async () => {
     await createOnboardingQuoteCart({
-      variables: { market: locale.apiMarket, locale: locale.isoLocale },
+      variables: { market: apiMarket, locale: isoLocale },
     })
-  }, [createOnboardingQuoteCart, locale.apiMarket, locale.isoLocale])
+  }, [createOnboardingQuoteCart, apiMarket, isoLocale])
 
   useEffect(() => {
     // create initial onboarding session
@@ -62,7 +62,7 @@ export const Debugger: React.FC = () => {
       <h1>Offer Page Debugger</h1>
 
       <Row>
-        <h3>Session: {quoteCartId}</h3>
+        <h3>Quote Cart: {quoteCartId}</h3>
         <Button
           background={colorsV3.purple500}
           foreground={colorsV3.gray900}

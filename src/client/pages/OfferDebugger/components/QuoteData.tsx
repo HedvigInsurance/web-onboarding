@@ -9,8 +9,8 @@ import {
 } from 'data/graphql'
 import { Button, LinkButton } from 'components/buttons'
 import { InputField } from 'components/inputs'
-import { useMarket, Market } from 'components/utils/CurrentLocale'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import { MarketLabel } from 'l10n/locales'
 import { LoadingDots } from '../../../components/LoadingDots/LoadingDots'
 import { initialSeApartmentValues, SwedishApartment } from './QuoteFormSweden'
 import {
@@ -74,7 +74,7 @@ type QuoteData = {
   initialFormValues?: Record<string, unknown>
 }
 
-type QuotesByMarket = Record<Market, QuoteData[]>
+type QuotesByMarket = Record<MarketLabel, QuoteData[]>
 
 const quotesByMarket: QuotesByMarket = {
   DK: [
@@ -125,7 +125,7 @@ const quotesByMarket: QuotesByMarket = {
 }
 
 const getCurrentAvailableQuoteData = (
-  currentMarket: Market,
+  currentMarket: MarketLabel,
   currentQuoteType: QuoteBundleType,
 ) => {
   const marketQuoteTypes = quotesByMarket[currentMarket]
@@ -167,16 +167,15 @@ const ButtonLoadingIndicator = styled(LoadingDots)`
 `
 
 export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
-  const currentLocale = useCurrentLocale()
-  const currentMarket = useMarket()
+  const { isoLocale, marketLabel, path: localePath } = useCurrentLocale()
 
   const { data, refetch } = useQuoteCartQuery({
-    variables: { id: quoteCartId, locale: currentLocale.isoLocale },
+    variables: { id: quoteCartId, locale: isoLocale },
   })
   const [createQuoteBundle] = useCreateQuoteBundleMutation()
 
   const [quoteBundleType, setQuoteBundleType] = useState(
-    quotesByMarket[currentMarket][0].value,
+    quotesByMarket[marketLabel][0].value,
   )
 
   const [submitError, setSubmitError] = useState<Error>()
@@ -282,7 +281,7 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
         {() => (
           <InputField
             label="Type"
-            options={quotesByMarket[currentMarket]}
+            options={quotesByMarket[marketLabel]}
             value={quoteBundleType}
             onChange={(value: React.ChangeEvent<HTMLSelectElement>) =>
               setQuoteBundleType(value.target.value as QuoteBundleType)
@@ -294,7 +293,7 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
       {!data?.quoteCart.bundle ? (
         <Formik
           initialValues={
-            getCurrentAvailableQuoteData(currentMarket, quoteBundleType)
+            getCurrentAvailableQuoteData(marketLabel, quoteBundleType)
               ?.initialFormValues || {}
           }
           onSubmit={handleSubmit}
@@ -318,7 +317,7 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
                     placeholder="2012-12-12"
                     {...props.getFieldProps('birthDate')}
                   />
-                  {currentMarket === Market.Se && (
+                  {marketLabel === 'SE' && (
                     <InputField
                       label="ssn"
                       placeholder=""
@@ -377,7 +376,7 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
             background={colorsV3.gray100}
             foreground={colorsV3.gray900}
             to={{
-              pathname: `/${currentLocale.path}/new-member/offer`,
+              pathname: `/${localePath}/new-member/offer`,
               search: `?quoteCart=${quoteCartId}`,
             }}
           >

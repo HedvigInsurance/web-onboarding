@@ -1,5 +1,7 @@
 import React from 'react'
+import { Redirect } from 'react-router'
 import { LoadingDots } from 'components/LoadingDots/LoadingDots'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 
 const ActualDebugger = React.lazy(async () => {
   const module = await import(
@@ -9,8 +11,9 @@ const ActualDebugger = React.lazy(async () => {
 })
 
 export const OfferDebugger: React.FC = () => {
+  const { path: localePath } = useCurrentLocale()
   if (window.hedvigClientConfig.appEnvironment === 'production') {
-    return null
+    return <Redirect to={`/${localePath}/new-member`} />
   }
 
   return (
