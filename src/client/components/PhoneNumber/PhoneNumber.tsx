@@ -51,7 +51,7 @@ const Text = styled.p<Props>`
   }
 `
 
-const PhoneOpeningHours: React.VFC<{
+const PhoneOpeningHours: React.FC<{
   phoneNumber?: PhoneNumberData
   color: Props['color']
 }> = ({ phoneNumber, color }) => {
