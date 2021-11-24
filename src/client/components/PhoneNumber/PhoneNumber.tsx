@@ -29,7 +29,7 @@ const IconWrapper = styled.div`
   }
 `
 
-const PhoneLink = styled.a`
+const PhoneLink = styled.a<Props>`
   text-decoration: none;
   color: inherit;
   font-size: 0.875rem;
