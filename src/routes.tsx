@@ -7,6 +7,7 @@ import { TrustlyFailPage } from './client/pages/ConnectPayment/components/Trustl
 import { TrustlySpinnerPage } from './client/pages/ConnectPayment/components/TrustlySpinnerPage'
 import { ConnectPaymentsDirectEntry } from './client/pages/ConnectPayment/ConnectPaymentsDirectEntry'
 import { Debugger } from './client/pages/Debugger'
+import { OfferDebugger } from './client/pages/OfferDebugger'
 import { Download } from './client/pages/Download'
 import { EmbarkRoot } from './client/pages/Embark'
 import { Forever } from './client/pages/Forever'
@@ -161,6 +162,11 @@ export const reactPageRoutes: ReactPageRoute[] = [
   {
     path: localePathPattern + '/new-member/debugger',
     Component: Debugger,
+    exact: true,
+  },
+  {
+    path: localePathPattern + '/new-member/offer-debugger',
+    Component: OfferDebugger,
     exact: true,
   },
   {
