@@ -52,16 +52,12 @@ const Text = styled.p<Props>`
 `
 
 const PhoneOpeningHours: React.VFC<{
-  phoneNumber?: PhoneNumberData
+  phoneNumber: PhoneNumberData
   color: Props['color']
 }> = ({ phoneNumber, color }) => {
   const textKeys = useTextKeys()
   const currentTime = formatDate(new Date(), 'HH')
   const currentDay = getDay(new Date())
-
-  if (!phoneNumber) {
-    return null
-  }
 
   const { opensAt, closesAt, lunchStartsAt, lunchEndsAt } = phoneNumber
   const isPhoneOpen = currentTime >= opensAt && currentTime < closesAt
@@ -115,7 +111,9 @@ export const PhoneNumber: React.FC<Props> = ({ color }) => {
           {phoneNumber?.displayNumber}
         </PhoneLink>
       </InnerWrapper>
-      <PhoneOpeningHours phoneNumber={phoneNumber} color={color} />
+      {phoneNumber ? (
+        <PhoneOpeningHours phoneNumber={phoneNumber} color={color} />
+      ) : null}
     </Wrapper>
   )
 }
