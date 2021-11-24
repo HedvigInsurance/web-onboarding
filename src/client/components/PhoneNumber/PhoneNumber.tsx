@@ -30,7 +30,7 @@ const IconWrapper = styled.div`
   }
 `
 
-const PhoneLink = styled.a`
+const PhoneLink = styled.a<Props>`
   text-decoration: none;
   color: inherit;
   font-size: 0.875rem;
@@ -50,7 +50,7 @@ const Text = styled.p<Props>`
   }
 `
 
-const PhoneOpeningHours: React.VFC<{
+const PhoneOpeningHours: React.FC<{
   phoneNumber: PhoneNumberData
   color: Props['color']
 }> = ({ phoneNumber, color }) => {
