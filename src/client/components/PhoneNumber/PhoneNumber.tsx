@@ -6,14 +6,15 @@ import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
 import { PhoneNumberData } from 'l10n/phoneNumbers'
 import { Telephone } from '../icons/Telephone'
+
 const { black, white, gray700, gray500 } = colorsV3
+
 type Props = {
   color?: 'black' | 'white'
 }
 
 const Wrapper = styled.div<Props>`
-  color: ${({ color }) =>
-    color === 'black' ? colorsV3.black : colorsV3.white};
+  color: ${({ color }) => (color === 'black' ? black : white)};
 `
 
 const InnerWrapper = styled.div`
@@ -35,14 +36,12 @@ const PhoneLink = styled.a`
   font-size: 0.875rem;
 
   &:hover {
-    color: ${({ color }) =>
-      color === 'black' ? colorsV3.gray700 : colorsV3.gray500};
+    color: ${({ color }) => (color === 'black' ? gray700 : gray500)};
   }
 `
 
 const Text = styled.p<Props>`
-  color: ${({ color }) =>
-    color === 'black' ? colorsV3.gray700 : colorsV3.gray500};
+  color: ${({ color }) => (color === 'black' ? gray700 : gray500)};
   font-size: 0.75rem;
   text-align: right;
 
