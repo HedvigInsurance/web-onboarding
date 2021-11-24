@@ -35,7 +35,7 @@ const Config: readonly FeatureConfig[] = [
   },
   {
     name: Features.QUOTE_CART_API,
-    envs: [],
+    envs: process.env.ENABLE_QUOTE_CART_API === 'true' ? ['staging'] : [],
     markets: ['SE', 'DK', 'NO'],
   },
 ]
