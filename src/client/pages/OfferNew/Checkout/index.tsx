@@ -124,7 +124,7 @@ const StartDateLabel = styled.p`
 const Heading = styled.h3`
   margin: 0;
   font-size: 2rem;
-  line-height: 2.5rem;
+  line-height: 1.25;
   padding-top: 1.875rem;
 `
 
@@ -212,6 +212,7 @@ const renderUpsellCard = (
     <UpsellCard
       title={textKeys.ACCIDENT_SWEDEN_UPSELL_TITLE()}
       description={textKeys.ACCIDENT_SWEDEN_UPSELL_DESCRIPTION()}
+      actionButtonLabel={textKeys.ACCIDENT_SWEDEN_UPSELL_BUTTON()}
       price={price}
       onAcceptDeal={() => onAcceptDeal(betterDealQuoteIds)}
     />

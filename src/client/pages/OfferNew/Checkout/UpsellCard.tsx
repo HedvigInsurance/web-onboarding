@@ -19,7 +19,8 @@ const UpsellCardRoot = styled.div`
 
 const Title = styled.h1`
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
+  ine-height: 1.33;
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     font-size: 1.5rem;
@@ -52,6 +53,7 @@ type UpsellCardProps = {
   title: string
   description: string
   price: string
+  actionButtonLabel: string
   onAcceptDeal: () => void
 }
 
@@ -59,6 +61,7 @@ export const UpsellCard = ({
   title,
   description,
   price,
+  actionButtonLabel,
   onAcceptDeal,
 }: UpsellCardProps) => {
   return (
@@ -66,7 +69,7 @@ export const UpsellCard = ({
       <Title>{title}</Title>
       <Description>{description}</Description>
       <Price>{price}</Price>
-      <AddButton onClick={onAcceptDeal}>Add to your plan</AddButton>
+      <AddButton onClick={onAcceptDeal}>{actionButtonLabel}</AddButton>
     </UpsellCardRoot>
   )
 }
