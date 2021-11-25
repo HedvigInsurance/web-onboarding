@@ -5,6 +5,7 @@ import React from 'react'
 import Helmet from 'react-helmet-async'
 import { RouteComponentProps } from 'react-router'
 import { Redirect } from 'react-router-dom'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { Page } from 'components/utils/Page'
 import { LoadingPage } from 'components/LoadingPage'
 import { Button } from 'components/buttons'
@@ -13,7 +14,6 @@ import {
   ExchangeTokenRetrievalState,
 } from 'utils/ExchangeTokenRetrieval'
 import { useTextKeys } from 'utils/textKeys'
-import { useCurrentLocale } from 'src/client/l10n/useCurrentLocale'
 
 const ButtonWrapper = styled.div`
   padding-top: 1rem;
