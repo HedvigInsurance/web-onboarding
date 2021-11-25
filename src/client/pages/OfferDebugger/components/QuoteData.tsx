@@ -39,14 +39,14 @@ enum QuoteBundleType {
 }
 
 enum QuoteType {
-  DanishHome = 'DANISH_HOME_CONTENT',
-  DanishAccident = 'DANISH_ACCIDENT',
-  DanishTravel = 'DANISH_TRAVEL',
-  NorwegianHome = 'NORWEGIAN_HOME_CONTENT',
-  NorwegianTravel = 'NORWEGIAN_TRAVEL',
-  SwedishApartment = 'SWEDISH_APARTMENT',
-  SwedishHouse = 'SWEDISH_HOUSE',
-  SwedishAccident = 'SWEDISH_ACCIDENT',
+  DanishHome = 'danishHomeContent',
+  DanishAccident = 'danishAccident',
+  DanishTravel = 'danishTravel',
+  NorwegianHome = 'norwegianHomeContent',
+  NorwegianTravel = 'norwegianTravel',
+  SwedishApartment = 'apartment',
+  SwedishHouse = 'house',
+  SwedishAccident = 'swedishAccident',
 }
 
 const singleQuoteBundleToQuoteType = (
@@ -135,24 +135,21 @@ const getCurrentAvailableQuoteData = (
   return currentQuoteTypeData
 }
 
-const getDanishQuoteValues = (
-  values: any,
-  quoteType: 'danishTravelData' | 'danishAccidentData',
-) => {
-  const { danishHomeContentsData, ...filteredValues } = values
-  const { subType, livingSpace, ...quoteTypeValues } = danishHomeContentsData!
+const getDanishQuoteValues = (values: any) => {
+  const { data: danishHomeContent, ...filteredValues } = values
+  const { subType, livingSpace, ...quoteTypeValues } = danishHomeContent
   return {
     ...filteredValues,
-    [quoteType]: quoteTypeValues,
+    data: quoteTypeValues,
   }
 }
 
 const getSwedishAccidentQuoteValues = (values: any) => {
-  const { swedishApartmentData, ...filteredValues } = values
-  const { subType, ...quoteTypeValues } = swedishApartmentData!
+  const { data: swedishApartmentData, ...filteredValues } = values
+  const { subType, ...quoteTypeValues } = swedishApartmentData
   return {
     ...filteredValues,
-    swedishAccidentData: {
+    data: {
       ...quoteTypeValues,
       student:
         subType === ApartmentType.StudentBrf ||
@@ -187,77 +184,96 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
     }
 
     try {
-      switch (quoteBundleType) {
-        case QuoteBundleType.DanishHomeAccident:
-          await createQuoteBundle({
-            variables: {
-              quoteCartId,
-              quotes: [
-                {
-                  type: QuoteType.DanishHome,
-                  payload: input,
-                },
-                {
-                  type: QuoteType.DanishAccident,
-                  payload: getDanishQuoteValues(input, 'danishAccidentData'),
-                },
-              ],
-            },
-          })
-          break
-
-        case QuoteBundleType.DanishHomeAccidentTravel:
-          await createQuoteBundle({
-            variables: {
-              quoteCartId,
-              quotes: [
-                {
-                  type: QuoteType.DanishHome,
-                  payload: input,
-                },
-                {
-                  type: QuoteType.DanishAccident,
-                  payload: getDanishQuoteValues(input, 'danishAccidentData'),
-                },
-                {
-                  type: QuoteType.DanishTravel,
-                  payload: getDanishQuoteValues(input, 'danishTravelData'),
-                },
-              ],
-            },
-          })
-          break
-
-        case QuoteBundleType.SwedishApartmentAccident:
-          await createQuoteBundle({
-            variables: {
-              quoteCartId,
-              quotes: [
-                {
+      if (quoteBundleType === QuoteBundleType.SwedishApartmentAccident) {
+        await createQuoteBundle({
+          variables: {
+            quoteCartId,
+            quotes: [
+              {
+                ...input,
+                data: {
+                  ...input.data,
                   type: QuoteType.SwedishApartment,
-                  payload: input,
                 },
-                {
+              },
+              {
+                ...input,
+                data: {
+                  ...getSwedishAccidentQuoteValues(input),
                   type: QuoteType.SwedishAccident,
-                  payload: getSwedishAccidentQuoteValues(input),
                 },
-              ],
-            },
-          })
-          break
+              },
+            ],
+          },
+        })
+      } else if (quoteBundleType === QuoteBundleType.DanishHomeAccident) {
+        await createQuoteBundle({
+          variables: {
+            quoteCartId,
+            quotes: [
+              {
+                ...input,
+                data: {
+                  ...input.data,
+                  type: QuoteType.DanishHome,
+                },
+              },
+              {
+                ...input,
+                data: {
+                  ...getDanishQuoteValues(input),
+                  type: QuoteType.DanishAccident,
+                },
+              },
+            ],
+          },
+        })
+      } else if (quoteBundleType === QuoteBundleType.DanishHomeAccidentTravel) {
+        const danishQuoteValues = getDanishQuoteValues(input)
 
-        default:
-          await createQuoteBundle({
-            variables: {
-              quoteCartId,
-              quotes: [
-                {
-                  type: singleQuoteBundleToQuoteType(quoteBundleType),
-                  payload: input,
+        await createQuoteBundle({
+          variables: {
+            quoteCartId,
+            quotes: [
+              {
+                ...input,
+                data: {
+                  ...input.data,
+                  type: QuoteType.DanishHome,
                 },
-              ],
-            },
-          })
+              },
+              {
+                ...input,
+                data: {
+                  ...danishQuoteValues,
+                  type: QuoteType.DanishAccident,
+                },
+              },
+              {
+                ...input,
+                data: {
+                  ...danishQuoteValues,
+                  type: QuoteType.DanishTravel,
+                },
+              },
+            ],
+          },
+        })
+      } else {
+        await createQuoteBundle({
+          variables: {
+            quoteCartId,
+            quotes: [
+              {
+                ...input,
+                data: {
+                  ...input.data,
+                  type: singleQuoteBundleToQuoteType(quoteBundleType),
+                },
+              },
+            ],
+          },
+        })
       }
 
       await refetch()
