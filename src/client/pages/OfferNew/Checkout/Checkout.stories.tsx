@@ -5,12 +5,12 @@ import { MemoryRouter } from 'react-router-dom'
 import { MockedProvider } from '@apollo/react-testing'
 import { LocationDescriptor } from 'history'
 import {
-  dkHomeContentAccident,
-  dkHomeContentAccidentTravel,
-  dkHomeContentOwn,
-  noCombo,
-  seApartementBrf,
-} from 'utils/testData/offerDataMock'
+  possibleVariationsApartmentSE,
+  possibleVariationsNoCombo,
+  possibleVariationsDkHome,
+  possibleVariationsDkHomeAccident,
+  possibleVariationsDkHomeAccidentTravel,
+} from 'utils/testData/possibleVariationsMock'
 import { TextKeyProvider, TranslationsLocale } from 'utils/textKeys'
 import { Checkout, CheckoutProps } from '.'
 
@@ -41,6 +41,7 @@ const Template: Story<StoryProps> = (args) => (
 const defaultArgs = {
   isOpen: true,
   onClose: action('onClose'),
+  onAddQuotes: action('onAddQuotes'),
   refetch: (...args: any[]) => {
     action('refetch')(...args)
     return Promise.resolve()
@@ -53,7 +54,8 @@ SEApartmentBrf.args = {
   translationsLocale: 'sv_SE',
   componentProps: {
     ...defaultArgs,
-    offerData: seApartementBrf,
+    quoteBundleVariants: possibleVariationsApartmentSE,
+    selectedQuoteBundleVariant: possibleVariationsApartmentSE[1],
   },
 }
 
@@ -63,7 +65,8 @@ NOCombo.args = {
   translationsLocale: 'nb_NO',
   componentProps: {
     ...defaultArgs,
-    offerData: noCombo,
+    quoteBundleVariants: possibleVariationsNoCombo,
+    selectedQuoteBundleVariant: possibleVariationsNoCombo[0],
   },
 }
 
@@ -73,7 +76,8 @@ DKHomeContent.args = {
   translationsLocale: 'da_DK',
   componentProps: {
     ...defaultArgs,
-    offerData: dkHomeContentOwn,
+    quoteBundleVariants: possibleVariationsDkHome,
+    selectedQuoteBundleVariant: possibleVariationsDkHome[0],
   },
 }
 
@@ -83,7 +87,8 @@ DKHomeContentAccident.args = {
   translationsLocale: 'da_DK',
   componentProps: {
     ...defaultArgs,
-    offerData: dkHomeContentAccident,
+    quoteBundleVariants: possibleVariationsDkHomeAccident,
+    selectedQuoteBundleVariant: possibleVariationsDkHomeAccident[0],
   },
 }
 
@@ -93,6 +98,7 @@ DKHomeContentAccidentTravel.args = {
   translationsLocale: 'da_DK',
   componentProps: {
     ...defaultArgs,
-    offerData: dkHomeContentAccidentTravel,
+    quoteBundleVariants: possibleVariationsDkHomeAccidentTravel,
+    selectedQuoteBundleVariant: possibleVariationsDkHomeAccidentTravel[0],
   },
 }
