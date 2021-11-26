@@ -1,14 +1,14 @@
 import { History } from 'history'
 import { SemanticEvents } from 'quepasa'
-import React from 'react'
-import { Redirect, useHistory, useRouteMatch } from 'react-router'
+import React, { useState, useEffect } from 'react'
+import { Redirect, useHistory, useLocation, useRouteMatch } from 'react-router'
 import { LoadingPage } from 'components/LoadingPage'
 import { TopBar } from 'components/TopBar'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import {
-  useQuoteBundleVariantsQuery,
   useRedeemedCampaignsQuery,
+  useQuoteCartQuery,
   QuoteBundleVariant,
 } from 'data/graphql'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
@@ -32,6 +32,8 @@ import { Introduction } from './Introduction'
 import { Perils } from './Perils'
 import { InsuranceSelector } from './InsuranceSelector'
 
+const QUOTE_CART_ID_URL_PARAM = 'quoteCart'
+
 const createToggleCheckout = (history: History<any>, locale?: string) => (
   isOpen: boolean,
 ) => {
@@ -53,9 +55,6 @@ export const OfferNew: React.FC = () => {
   const [isInsuranceToggleEnabled] = useFeature([
     Features.OFFER_PAGE_INSURANCE_TOGGLE,
   ])
-  const history = useHistory()
-  const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
-  const redeemedCampaigns = redeemedCampaignsData?.redeemedCampaigns ?? []
 
   const {
     isLoading: quoteIdsIsLoading,
@@ -64,29 +63,34 @@ export const OfferNew: React.FC = () => {
     setSelectedQuoteIds,
   } = useQuoteIds()
 
+  const history = useHistory()
+  const { search } = useLocation()
+
+  const quoteCartId = new URLSearchParams(search).get(QUOTE_CART_ID_URL_PARAM)
   const {
-    data,
-    loading: loadingQuoteBundle,
+    data: quoteCartData,
+    loading: loadingQuoteCart,
     refetch,
-  } = useQuoteBundleVariantsQuery({
+  } = useQuoteCartQuery({
     variables: {
-      input: {
-        ids: [...quoteIds],
-      },
+      id: quoteCartId!,
       locale: localeIsoCode,
     },
-    skip: quoteIdsIsLoading,
+    skip: !quoteCartId,
   })
-
-  const bundleVariants = (data?.quoteBundle.possibleVariations ??
+  const bundleVariants = (quoteCartData?.quoteCart.bundle?.possibleVariations ??
     []) as QuoteBundleVariant[]
+  const selectedBundleVariant = bundleVariants?.[0]
+
+  const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
+  const redeemedCampaigns = redeemedCampaignsData?.redeemedCampaigns ?? []
 
   const isInsuranceSelectorVisible =
     isInsuranceToggleEnabled && bundleVariants.length > 1
 
-  const selectedBundleVariant =
-    getBundleVariantFromQuoteIds(selectedQuoteIds, bundleVariants) ||
-    bundleVariants?.[0]
+  // const selectedBundleVariant =
+  //   getBundleVariantFromQuoteIds(selectedQuoteIds, bundleVariants) ||
+  //   bundleVariants?.[0]
 
   const onInsuranceSelectorChange = (
     selectedBundleVariant: QuoteBundleVariant,
@@ -137,7 +141,7 @@ export const OfferNew: React.FC = () => {
   const checkoutMatch = useRouteMatch(`${localePathPattern}/new-member/sign`)
   const toggleCheckout = createToggleCheckout(history, localePath)
 
-  if ((loadingQuoteBundle && !data) || quoteIdsIsLoading) {
+  if ((loadingQuoteCart && !quoteCartData) || quoteIdsIsLoading) {
     return <LoadingPage />
   }
 
@@ -145,7 +149,7 @@ export const OfferNew: React.FC = () => {
     return <Redirect to={`/${localePath}/new-member`} />
   }
 
-  if (!loadingQuoteBundle && !data) {
+  if (!loadingQuoteCart && !quoteCartData) {
     throw new Error(
       `No quote returned to show offer with (quoteIds=${quoteIds}).`,
     )
