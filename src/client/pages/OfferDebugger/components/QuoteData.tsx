@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { Form, Formik, FormikProps } from 'formik'
 import { colorsV3 } from '@hedviginsurance/brand'
