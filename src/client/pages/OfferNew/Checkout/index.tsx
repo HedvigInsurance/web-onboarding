@@ -481,6 +481,12 @@ export const Checkout = ({
                     }
                     onSubmit={startSign}
                   />
+                  <StartDateWrapper>
+                    <StartDateLabel>
+                      {textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}
+                    </StartDateLabel>
+                    <StartDate offerData={offerData} refetch={refetch} />
+                  </StartDateWrapper>
                   {locale.marketLabel == 'SE' &&
                     renderUpsellCard(
                       quoteBundleVariants,
@@ -488,13 +494,6 @@ export const Checkout = ({
                       onAddQuotes,
                       textKeys,
                     )}
-                  <StartDateWrapper>
-                    <StartDateLabel>
-                      {textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}
-                    </StartDateLabel>
-                    <StartDate offerData={offerData} refetch={refetch} />
-                  </StartDateWrapper>
-
                   <InsuranceSummary offerData={offerData} />
                 </Section>
                 <SignDisclaimer
