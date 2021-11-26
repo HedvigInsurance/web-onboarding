@@ -132,7 +132,19 @@ const getCurrentAvailableQuoteData = (
   const currentQuoteTypeData = marketQuoteTypes.find(
     ({ value }) => value === currentQuoteType,
   )
-  return currentQuoteTypeData
+
+  const randomId = Math.random()
+    .toString(36)
+    .substr(2, 5)
+  const email = `sven.svensson.${randomId}@hedvig.com`
+
+  return {
+    ...currentQuoteTypeData,
+    initialFormValues: {
+      ...currentQuoteTypeData?.initialFormValues,
+      email,
+    },
+  }
 }
 
 const getDanishQuoteValues = (values: any) => {
@@ -151,6 +163,7 @@ const getSwedishAccidentQuoteValues = (values: any) => {
     ...filteredValues,
     data: {
       ...quoteTypeValues,
+      type: QuoteType.SwedishAccident,
       student:
         subType === ApartmentType.StudentBrf ||
         subType === ApartmentType.StudentRent,
@@ -196,13 +209,7 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
                   type: QuoteType.SwedishApartment,
                 },
               },
-              {
-                ...input,
-                data: {
-                  ...getSwedishAccidentQuoteValues(input),
-                  type: QuoteType.SwedishAccident,
-                },
-              },
+              getSwedishAccidentQuoteValues(input),
             ],
           },
         })
@@ -374,6 +381,7 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
 
               <Button
                 type="submit"
+                size="lg"
                 background={colorsV3.purple500}
                 foreground={colorsV3.gray900}
                 disabled={props.isSubmitting}
