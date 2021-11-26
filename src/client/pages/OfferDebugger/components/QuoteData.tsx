@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { Form, Formik, FormikProps } from 'formik'
 import { colorsV3 } from '@hedviginsurance/brand'
@@ -39,10 +39,10 @@ enum QuoteBundleType {
 }
 
 enum QuoteType {
-  DanishHome = 'danishHomeContent',
+  DanishHome = 'danishHomeContents',
   DanishAccident = 'danishAccident',
   DanishTravel = 'danishTravel',
-  NorwegianHome = 'norwegianHomeContent',
+  NorwegianHome = 'norwegianHomeContents',
   NorwegianTravel = 'norwegianTravel',
   SwedishApartment = 'apartment',
   SwedishHouse = 'house',
@@ -147,13 +147,9 @@ const getCurrentAvailableQuoteData = (
   }
 }
 
-const getDanishQuoteValues = (values: any) => {
-  const { data: danishHomeContent, ...filteredValues } = values
-  const { subType, livingSpace, ...quoteTypeValues } = danishHomeContent
-  return {
-    ...filteredValues,
-    data: quoteTypeValues,
-  }
+const getDanishQuoteDetailValues = (values: any) => {
+  const { subType, livingSpace, ...quoteTypeValues } = values.data
+  return quoteTypeValues
 }
 
 const getSwedishAccidentQuoteValues = (values: any) => {
@@ -228,7 +224,7 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
               {
                 ...input,
                 data: {
-                  ...getDanishQuoteValues(input),
+                  ...getDanishQuoteDetailValues(input),
                   type: QuoteType.DanishAccident,
                 },
               },
@@ -236,7 +232,7 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
           },
         })
       } else if (quoteBundleType === QuoteBundleType.DanishHomeAccidentTravel) {
-        const danishQuoteValues = getDanishQuoteValues(input)
+        const danishQuoteDetailValues = getDanishQuoteDetailValues(input)
 
         await createQuoteBundle({
           variables: {
@@ -252,14 +248,14 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
               {
                 ...input,
                 data: {
-                  ...danishQuoteValues,
+                  ...danishQuoteDetailValues,
                   type: QuoteType.DanishAccident,
                 },
               },
               {
                 ...input,
                 data: {
-                  ...danishQuoteValues,
+                  ...danishQuoteDetailValues,
                   type: QuoteType.DanishTravel,
                 },
               },
