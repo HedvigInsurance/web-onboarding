@@ -50,6 +50,11 @@ type GTMEventData = {
   type: string
 }
 
+type GTMPhoneNumberData = {
+  path: string
+  status: 'opened' | 'closed'
+}
+
 type DataLayerObject = {
   event?: string
   userProperties?: GTMUserProperties
@@ -57,6 +62,7 @@ type DataLayerObject = {
   pageData?: GTMPageData
   passageData?: Record<string, string | undefined>
   eventData?: GTMEventData
+  phoneNumberData?: GTMPhoneNumberData
 }
 
 /**

@@ -14,7 +14,7 @@ export type PhoneNumberData = {
 export const phoneNumbers: PhoneNumbers = {
   SE: {
     displayNumber: '075-101 20 00',
-    hrefNumber: '0751012000',
+    hrefNumber: 'tel:0751012000',
     opensAt: '09',
     closesAt: '18',
     lunchStartsAt: '12',
