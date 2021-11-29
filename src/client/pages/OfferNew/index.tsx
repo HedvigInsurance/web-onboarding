@@ -185,7 +185,7 @@ export const OfferNew: React.FC = () => {
     return <LoadingPage />
   }
 
-  if (quoteIds.length === 0) {
+  if (quoteIds.length === 0 && !isUsingQuoteCartApi) {
     return <Redirect to={`/${localePath}/new-member`} />
   }
 
@@ -224,7 +224,7 @@ export const OfferNew: React.FC = () => {
 
   return (
     <Page>
-      <SessionTokenGuard>
+      <SessionTokenGuard disable={isUsingQuoteCartApi}>
         {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
           <TopBar isTransparent>
             {phoneNumber ? (
