@@ -31,6 +31,7 @@ import { resolveHouseInformation } from './houseInformation'
 import { LanguagePicker } from './LanguagePicker'
 import { resolvePersonalInformation } from './personalInformation'
 import { resolveAddressAutocomplete } from './addressAutocompleteProvider'
+import { SetupFailedModal } from './ErrorModal'
 
 const EmbarkStyling = styled.div`
   height: 100%;
@@ -206,12 +207,12 @@ interface AngelVariables {
   locale: string
 }
 
-const useQuoteCartId = ({ skip = false }) => {
+const useCreateQuoteCartId = ({ skip = false }) => {
   const { isoLocale, apiMarket } = useCurrentLocale()
 
   const [
     createOnboardingQuoteCart,
-    { data },
+    { data, error },
   ] = useCreateOnboardingQuoteCartMutation()
 
   useEffect(() => {
@@ -222,7 +223,7 @@ const useQuoteCartId = ({ skip = false }) => {
     }
   }, [skip, createOnboardingQuoteCart, apiMarket, isoLocale])
 
-  return data?.onboardingQuoteCart_create
+  return { quoteCartId: data?.onboardingQuoteCart_create, error }
 }
 
 export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
@@ -234,7 +235,9 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
   const { isoLocale } = useCurrentLocale()
 
   const [isQuoteCartApiEnabled] = useFeature([Features.QUOTE_CART_API])
-  const quoteCartId = useQuoteCartId({ skip: !isQuoteCartApiEnabled })
+  const { quoteCartId, error: quoteCartIdError } = useCreateQuoteCartId({
+    skip: !isQuoteCartApiEnabled,
+  })
 
   const textKeys = useTextKeys()
 
@@ -292,8 +295,8 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
       return
     }
 
-    const defaultStore = isQuoteCartApiEnabled
-      ? ({ quoteCartId } as Record<string, string>)
+    const defaultStore: Record<string, string> = quoteCartId
+      ? { quoteCartId }
       : {}
 
     const prevStore = window.sessionStorage.getItem(
@@ -456,6 +459,8 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
           )}
         </motion.div>
       </AnimatePresence>
+
+      <SetupFailedModal isVisible={quoteCartIdError !== undefined} />
     </EmbarkStyling>
   )
 }
