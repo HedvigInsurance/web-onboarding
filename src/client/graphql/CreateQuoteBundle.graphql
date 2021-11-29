@@ -1,5 +1,5 @@
-mutation CreateQuoteBundle($quoteCartId: ID!, $quotes: [QuoteData!]!) {
-  quoteCart_createQuoteBundle(id: $quoteCartId, input: { quoteData: $quotes }) {
+mutation CreateQuoteBundle($quoteCartId: ID!, $quotes: [JSON!]!) {
+  quoteCart_createQuoteBundle(id: $quoteCartId, input: { payload: $quotes }) {
     ... on QuoteCart {
       id
       bundle {

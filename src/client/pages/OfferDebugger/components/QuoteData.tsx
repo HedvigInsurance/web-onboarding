@@ -39,14 +39,14 @@ enum QuoteBundleType {
 }
 
 enum QuoteType {
-  DanishHome = 'DANISH_HOME_CONTENT',
-  DanishAccident = 'DANISH_ACCIDENT',
-  DanishTravel = 'DANISH_TRAVEL',
-  NorwegianHome = 'NORWEGIAN_HOME_CONTENT',
-  NorwegianTravel = 'NORWEGIAN_TRAVEL',
-  SwedishApartment = 'SWEDISH_APARTMENT',
-  SwedishHouse = 'SWEDISH_HOUSE',
-  SwedishAccident = 'SWEDISH_ACCIDENT',
+  DanishHome = 'danishHomeContents',
+  DanishAccident = 'danishAccident',
+  DanishTravel = 'danishTravel',
+  NorwegianHome = 'norwegianHomeContents',
+  NorwegianTravel = 'norwegianTravel',
+  SwedishApartment = 'apartment',
+  SwedishHouse = 'house',
+  SwedishAccident = 'swedishAccident',
 }
 
 const singleQuoteBundleToQuoteType = (
@@ -132,28 +132,34 @@ const getCurrentAvailableQuoteData = (
   const currentQuoteTypeData = marketQuoteTypes.find(
     ({ value }) => value === currentQuoteType,
   )
-  return currentQuoteTypeData
-}
 
-const getDanishQuoteValues = (
-  values: any,
-  quoteType: 'danishTravelData' | 'danishAccidentData',
-) => {
-  const { danishHomeContentsData, ...filteredValues } = values
-  const { subType, livingSpace, ...quoteTypeValues } = danishHomeContentsData!
+  const randomId = Math.random()
+    .toString(36)
+    .substr(2, 5)
+  const email = `sven.svensson.${randomId}@hedvig.com`
+
   return {
-    ...filteredValues,
-    [quoteType]: quoteTypeValues,
+    ...currentQuoteTypeData,
+    initialFormValues: {
+      ...currentQuoteTypeData?.initialFormValues,
+      email,
+    },
   }
 }
 
+const getDanishQuoteDetailValues = (values: any) => {
+  const { subType, livingSpace, ...quoteTypeValues } = values.data
+  return quoteTypeValues
+}
+
 const getSwedishAccidentQuoteValues = (values: any) => {
-  const { swedishApartmentData, ...filteredValues } = values
-  const { subType, ...quoteTypeValues } = swedishApartmentData!
+  const { data: swedishApartmentData, ...filteredValues } = values
+  const { subType, ...quoteTypeValues } = swedishApartmentData
   return {
     ...filteredValues,
-    swedishAccidentData: {
+    data: {
       ...quoteTypeValues,
+      type: QuoteType.SwedishAccident,
       student:
         subType === ApartmentType.StudentBrf ||
         subType === ApartmentType.StudentRent,
@@ -187,77 +193,90 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
     }
 
     try {
-      switch (quoteBundleType) {
-        case QuoteBundleType.DanishHomeAccident:
-          await createQuoteBundle({
-            variables: {
-              quoteCartId,
-              quotes: [
-                {
-                  type: QuoteType.DanishHome,
-                  payload: input,
-                },
-                {
-                  type: QuoteType.DanishAccident,
-                  payload: getDanishQuoteValues(input, 'danishAccidentData'),
-                },
-              ],
-            },
-          })
-          break
-
-        case QuoteBundleType.DanishHomeAccidentTravel:
-          await createQuoteBundle({
-            variables: {
-              quoteCartId,
-              quotes: [
-                {
-                  type: QuoteType.DanishHome,
-                  payload: input,
-                },
-                {
-                  type: QuoteType.DanishAccident,
-                  payload: getDanishQuoteValues(input, 'danishAccidentData'),
-                },
-                {
-                  type: QuoteType.DanishTravel,
-                  payload: getDanishQuoteValues(input, 'danishTravelData'),
-                },
-              ],
-            },
-          })
-          break
-
-        case QuoteBundleType.SwedishApartmentAccident:
-          await createQuoteBundle({
-            variables: {
-              quoteCartId,
-              quotes: [
-                {
+      if (quoteBundleType === QuoteBundleType.SwedishApartmentAccident) {
+        await createQuoteBundle({
+          variables: {
+            quoteCartId,
+            quotes: [
+              {
+                ...input,
+                data: {
+                  ...input.data,
                   type: QuoteType.SwedishApartment,
-                  payload: input,
                 },
-                {
-                  type: QuoteType.SwedishAccident,
-                  payload: getSwedishAccidentQuoteValues(input),
+              },
+              getSwedishAccidentQuoteValues(input),
+            ],
+          },
+        })
+      } else if (quoteBundleType === QuoteBundleType.DanishHomeAccident) {
+        await createQuoteBundle({
+          variables: {
+            quoteCartId,
+            quotes: [
+              {
+                ...input,
+                data: {
+                  ...input.data,
+                  type: QuoteType.DanishHome,
                 },
-              ],
-            },
-          })
-          break
+              },
+              {
+                ...input,
+                data: {
+                  ...getDanishQuoteDetailValues(input),
+                  type: QuoteType.DanishAccident,
+                },
+              },
+            ],
+          },
+        })
+      } else if (quoteBundleType === QuoteBundleType.DanishHomeAccidentTravel) {
+        const danishQuoteDetailValues = getDanishQuoteDetailValues(input)
 
-        default:
-          await createQuoteBundle({
-            variables: {
-              quoteCartId,
-              quotes: [
-                {
-                  type: singleQuoteBundleToQuoteType(quoteBundleType),
-                  payload: input,
+        await createQuoteBundle({
+          variables: {
+            quoteCartId,
+            quotes: [
+              {
+                ...input,
+                data: {
+                  ...input.data,
+                  type: QuoteType.DanishHome,
                 },
-              ],
-            },
-          })
+              },
+              {
+                ...input,
+                data: {
+                  ...danishQuoteDetailValues,
+                  type: QuoteType.DanishAccident,
+                },
+              },
+              {
+                ...input,
+                data: {
+                  ...danishQuoteDetailValues,
+                  type: QuoteType.DanishTravel,
+                },
+              },
+            ],
+          },
+        })
+      } else {
+        await createQuoteBundle({
+          variables: {
+            quoteCartId,
+            quotes: [
+              {
+                ...input,
+                data: {
+                  ...input.data,
+                  type: singleQuoteBundleToQuoteType(quoteBundleType),
+                },
+              },
+            ],
+          },
+        })
       }
 
       await refetch()
@@ -358,6 +377,7 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
 
               <Button
                 type="submit"
+                size="lg"
                 background={colorsV3.purple500}
                 foreground={colorsV3.gray900}
                 disabled={props.isSubmitting}

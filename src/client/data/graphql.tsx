@@ -2607,11 +2607,13 @@ export type CreateOnboardingQuoteCartInput = {
 export type CreateQuoteBundleError = Error & {
   __typename?: 'CreateQuoteBundleError'
   message: Scalars['String']
+  /**  The type of the quote that could not be created.  */
+  type: Scalars['String']
   limits: Array<UnderwritingLimit>
 }
 
 export type CreateQuoteBundleInput = {
-  quoteData: Array<QuoteData>
+  payload: Array<Scalars['JSON']>
 }
 
 export type CreateQuoteBundleResult = QuoteCart | CreateQuoteBundleError
@@ -8526,11 +8528,6 @@ export type QuoteCart = {
   checkoutMethods: Array<CheckoutMethod>
 }
 
-export type QuoteData = {
-  type: Scalars['String']
-  payload: Scalars['JSON']
-}
-
 export type QuoteDetails =
   | SwedishApartmentQuoteDetails
   | SwedishHouseQuoteDetails
@@ -11431,7 +11428,7 @@ export type CreateOnboardingQuoteCartMutation = {
 
 export type CreateQuoteBundleMutationVariables = Exact<{
   quoteCartId: Scalars['ID']
-  quotes: Array<QuoteData> | QuoteData
+  quotes: Array<Scalars['JSON']> | Scalars['JSON']
 }>
 
 export type CreateQuoteBundleMutation = { __typename?: 'Mutation' } & {
@@ -12620,11 +12617,8 @@ export type CreateOnboardingQuoteCartMutationOptions = ApolloReactCommon.BaseMut
   CreateOnboardingQuoteCartMutationVariables
 >
 export const CreateQuoteBundleDocument = gql`
-  mutation CreateQuoteBundle($quoteCartId: ID!, $quotes: [QuoteData!]!) {
-    quoteCart_createQuoteBundle(
-      id: $quoteCartId
-      input: { quoteData: $quotes }
-    ) {
+  mutation CreateQuoteBundle($quoteCartId: ID!, $quotes: [JSON!]!) {
+    quoteCart_createQuoteBundle(id: $quoteCartId, input: { payload: $quotes }) {
       ... on QuoteCart {
         id
         bundle {
