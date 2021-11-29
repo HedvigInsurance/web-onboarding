@@ -44,7 +44,7 @@ export const Debugger: React.FC = () => {
     createOnboardingQuoteCart,
     { data },
   ] = useCreateOnboardingQuoteCartMutation()
-  const quoteCartId = data?.onboardingQuoteCart_create
+  const quoteCartId = data?.onboardingQuoteCart_create.id
 
   const createNewQuoteCart = useCallback(async () => {
     await createOnboardingQuoteCart({
