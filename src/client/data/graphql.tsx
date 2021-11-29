@@ -11420,6 +11420,38 @@ export type CreateDanishHomeAccidentTravelQuoteMutation = {
     | { __typename: 'UnderwritingLimitsHit' }
 }
 
+export type CreateOnboardingQuoteCartMutationVariables = Exact<{
+  market: Market
+  locale: Scalars['String']
+}>
+
+export type CreateOnboardingQuoteCartMutation = {
+  __typename?: 'Mutation'
+} & Pick<Mutation, 'onboardingQuoteCart_create'>
+
+export type CreateQuoteBundleMutationVariables = Exact<{
+  quoteCartId: Scalars['ID']
+  quotes: Array<QuoteData> | QuoteData
+}>
+
+export type CreateQuoteBundleMutation = { __typename?: 'Mutation' } & {
+  quoteCart_createQuoteBundle:
+    | ({ __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'> & {
+          bundle?: Maybe<
+            { __typename?: 'QuoteBundle' } & {
+              quotes: Array<
+                { __typename?: 'BundledQuote' } & Pick<BundledQuote, 'id'>
+              >
+            }
+          >
+        })
+    | ({ __typename?: 'CreateQuoteBundleError' } & {
+        limits: Array<
+          { __typename?: 'UnderwritingLimit' } & Pick<UnderwritingLimit, 'code'>
+        >
+      })
+}
+
 export type CreateSwedishHomeAccidentQuoteMutationVariables = Exact<{
   homeInput: CreateQuoteInput
   accidentInput: CreateQuoteInput
@@ -11731,6 +11763,133 @@ export type QuoteBundleVariantsQuery = { __typename?: 'Query' } & {
         }
     >
   }
+}
+
+export type QuoteCartQueryVariables = Exact<{
+  id: Scalars['ID']
+  locale: Locale
+}>
+
+export type QuoteCartQuery = { __typename?: 'Query' } & {
+  quoteCart: { __typename?: 'QuoteCart' } & Pick<
+    QuoteCart,
+    'id' | 'checkoutMethods'
+  > & {
+      bundle?: Maybe<
+        { __typename?: 'QuoteBundle' } & {
+          possibleVariations: Array<
+            { __typename?: 'QuoteBundleVariant' } & Pick<
+              QuoteBundleVariant,
+              'id' | 'tag'
+            > & {
+                bundle: { __typename?: 'QuoteBundle' } & {
+                  bundleCost: { __typename?: 'InsuranceCost' } & {
+                    monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
+                      MonetaryAmountV2,
+                      'amount' | 'currency'
+                    >
+                  }
+                }
+              }
+          >
+          bundleCost: { __typename?: 'InsuranceCost' } & Pick<
+            InsuranceCost,
+            'freeUntil'
+          > & {
+              monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount' | 'currency'
+              >
+              monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount' | 'currency'
+              >
+              monthlyDiscount: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount' | 'currency'
+              >
+            }
+          quotes: Array<
+            { __typename?: 'BundledQuote' } & Pick<
+              BundledQuote,
+              | 'id'
+              | 'firstName'
+              | 'lastName'
+              | 'ssn'
+              | 'birthDate'
+              | 'startDate'
+              | 'expiresAt'
+              | 'email'
+              | 'dataCollectionId'
+              | 'typeOfContract'
+              | 'initiatedFrom'
+            > & {
+                currentInsurer?: Maybe<
+                  { __typename?: 'CurrentInsurer' } & Pick<
+                    CurrentInsurer,
+                    'id' | 'displayName' | 'switchable'
+                  >
+                >
+                price: { __typename?: 'MonetaryAmountV2' } & Pick<
+                  MonetaryAmountV2,
+                  'amount' | 'currency'
+                >
+                quoteDetails:
+                  | ({ __typename: 'SwedishApartmentQuoteDetails' } & Pick<
+                      SwedishApartmentQuoteDetails,
+                      | 'street'
+                      | 'zipCode'
+                      | 'householdSize'
+                      | 'livingSpace'
+                      | 'type'
+                    >)
+                  | ({ __typename: 'SwedishHouseQuoteDetails' } & Pick<
+                      SwedishHouseQuoteDetails,
+                      'street'
+                    >)
+                  | ({ __typename: 'SwedishAccidentDetails' } & Pick<
+                      SwedishAccidentDetails,
+                      'street'
+                    >)
+                  | { __typename: 'NorwegianHomeContentsDetails' }
+                  | { __typename: 'NorwegianTravelDetails' }
+                  | { __typename: 'DanishHomeContentsDetails' }
+                  | { __typename: 'DanishAccidentDetails' }
+                  | { __typename: 'DanishTravelDetails' }
+              }
+          >
+        }
+      >
+      campaign?: Maybe<
+        { __typename?: 'Campaign' } & Pick<Campaign, 'code' | 'expiresAt'> & {
+            incentive?: Maybe<
+              | ({ __typename?: 'MonthlyCostDeduction' } & {
+                  amount?: Maybe<
+                    { __typename?: 'MonetaryAmountV2' } & Pick<
+                      MonetaryAmountV2,
+                      'amount' | 'currency'
+                    >
+                  >
+                })
+              | { __typename?: 'FreeMonths' }
+              | { __typename?: 'NoDiscount' }
+              | { __typename?: 'VisibleNoDiscount' }
+              | ({ __typename?: 'PercentageDiscountMonths' } & Pick<
+                  PercentageDiscountMonths,
+                  'percentageDiscount' | 'quantity'
+                >)
+              | { __typename?: 'IndefinitePercentageDiscount' }
+            >
+            owner?: Maybe<
+              { __typename?: 'CampaignOwner' } & Pick<
+                CampaignOwner,
+                'displayName' | 'id'
+              >
+            >
+          }
+      >
+      checkout?: Maybe<{ __typename?: 'Checkout' } & Pick<Checkout, 'status'>>
+    }
 }
 
 export type RedeemCodeMutationVariables = Exact<{
@@ -12410,6 +12569,123 @@ export type CreateDanishHomeAccidentTravelQuoteMutationOptions = ApolloReactComm
   CreateDanishHomeAccidentTravelQuoteMutation,
   CreateDanishHomeAccidentTravelQuoteMutationVariables
 >
+export const CreateOnboardingQuoteCartDocument = gql`
+  mutation CreateOnboardingQuoteCart($market: Market!, $locale: String!) {
+    onboardingQuoteCart_create(input: { market: $market, locale: $locale })
+  }
+`
+export type CreateOnboardingQuoteCartMutationFn = ApolloReactCommon.MutationFunction<
+  CreateOnboardingQuoteCartMutation,
+  CreateOnboardingQuoteCartMutationVariables
+>
+
+/**
+ * __useCreateOnboardingQuoteCartMutation__
+ *
+ * To run a mutation, you first call `useCreateOnboardingQuoteCartMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOnboardingQuoteCartMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createOnboardingQuoteCartMutation, { data, loading, error }] = useCreateOnboardingQuoteCartMutation({
+ *   variables: {
+ *      market: // value for 'market'
+ *      locale: // value for 'locale'
+ *   },
+ * });
+ */
+export function useCreateOnboardingQuoteCartMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateOnboardingQuoteCartMutation,
+    CreateOnboardingQuoteCartMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    CreateOnboardingQuoteCartMutation,
+    CreateOnboardingQuoteCartMutationVariables
+  >(CreateOnboardingQuoteCartDocument, options)
+}
+export type CreateOnboardingQuoteCartMutationHookResult = ReturnType<
+  typeof useCreateOnboardingQuoteCartMutation
+>
+export type CreateOnboardingQuoteCartMutationResult = ApolloReactCommon.MutationResult<
+  CreateOnboardingQuoteCartMutation
+>
+export type CreateOnboardingQuoteCartMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  CreateOnboardingQuoteCartMutation,
+  CreateOnboardingQuoteCartMutationVariables
+>
+export const CreateQuoteBundleDocument = gql`
+  mutation CreateQuoteBundle($quoteCartId: ID!, $quotes: [QuoteData!]!) {
+    quoteCart_createQuoteBundle(
+      id: $quoteCartId
+      input: { quoteData: $quotes }
+    ) {
+      ... on QuoteCart {
+        id
+        bundle {
+          quotes {
+            id
+          }
+        }
+      }
+      ... on CreateQuoteBundleError {
+        limits {
+          code
+        }
+      }
+    }
+  }
+`
+export type CreateQuoteBundleMutationFn = ApolloReactCommon.MutationFunction<
+  CreateQuoteBundleMutation,
+  CreateQuoteBundleMutationVariables
+>
+
+/**
+ * __useCreateQuoteBundleMutation__
+ *
+ * To run a mutation, you first call `useCreateQuoteBundleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateQuoteBundleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createQuoteBundleMutation, { data, loading, error }] = useCreateQuoteBundleMutation({
+ *   variables: {
+ *      quoteCartId: // value for 'quoteCartId'
+ *      quotes: // value for 'quotes'
+ *   },
+ * });
+ */
+export function useCreateQuoteBundleMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateQuoteBundleMutation,
+    CreateQuoteBundleMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    CreateQuoteBundleMutation,
+    CreateQuoteBundleMutationVariables
+  >(CreateQuoteBundleDocument, options)
+}
+export type CreateQuoteBundleMutationHookResult = ReturnType<
+  typeof useCreateQuoteBundleMutation
+>
+export type CreateQuoteBundleMutationResult = ApolloReactCommon.MutationResult<
+  CreateQuoteBundleMutation
+>
+export type CreateQuoteBundleMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  CreateQuoteBundleMutation,
+  CreateQuoteBundleMutationVariables
+>
 export const CreateSwedishHomeAccidentQuoteDocument = gql`
   mutation CreateSwedishHomeAccidentQuote(
     $homeInput: CreateQuoteInput!
@@ -13000,6 +13276,151 @@ export type QuoteBundleVariantsLazyQueryHookResult = ReturnType<
 export type QuoteBundleVariantsQueryResult = ApolloReactCommon.QueryResult<
   QuoteBundleVariantsQuery,
   QuoteBundleVariantsQueryVariables
+>
+export const QuoteCartDocument = gql`
+  query QuoteCart($id: ID!, $locale: Locale!) {
+    quoteCart(id: $id) {
+      id
+      bundle {
+        possibleVariations {
+          id
+          tag(locale: $locale)
+          bundle {
+            bundleCost {
+              monthlyGross {
+                amount
+                currency
+              }
+            }
+          }
+        }
+        bundleCost {
+          monthlyGross {
+            amount
+            currency
+          }
+          monthlyNet {
+            amount
+            currency
+          }
+          monthlyDiscount {
+            amount
+            currency
+          }
+          freeUntil
+        }
+        quotes {
+          id
+          currentInsurer {
+            id
+            displayName
+            switchable
+          }
+          price {
+            amount
+            currency
+          }
+          firstName
+          lastName
+          ssn
+          birthDate
+          quoteDetails {
+            __typename
+            ... on SwedishApartmentQuoteDetails {
+              street
+              zipCode
+              householdSize
+              livingSpace
+              type
+            }
+            ... on SwedishHouseQuoteDetails {
+              street
+            }
+            ... on SwedishAccidentDetails {
+              street
+            }
+          }
+          startDate
+          expiresAt
+          email
+          dataCollectionId
+          typeOfContract
+          initiatedFrom
+        }
+      }
+      campaign {
+        incentive {
+          ... on MonthlyCostDeduction {
+            amount {
+              amount
+              currency
+            }
+          }
+          ... on PercentageDiscountMonths {
+            percentageDiscount
+            quantity
+          }
+        }
+        code
+        owner {
+          displayName
+          id
+        }
+        expiresAt
+      }
+      checkoutMethods
+      checkout {
+        status
+      }
+    }
+  }
+`
+
+/**
+ * __useQuoteCartQuery__
+ *
+ * To run a query within a React component, call `useQuoteCartQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQuoteCartQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQuoteCartQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      locale: // value for 'locale'
+ *   },
+ * });
+ */
+export function useQuoteCartQuery(
+  baseOptions: Apollo.QueryHookOptions<QuoteCartQuery, QuoteCartQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<QuoteCartQuery, QuoteCartQueryVariables>(
+    QuoteCartDocument,
+    options,
+  )
+}
+export function useQuoteCartLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    QuoteCartQuery,
+    QuoteCartQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<QuoteCartQuery, QuoteCartQueryVariables>(
+    QuoteCartDocument,
+    options,
+  )
+}
+export type QuoteCartQueryHookResult = ReturnType<typeof useQuoteCartQuery>
+export type QuoteCartLazyQueryHookResult = ReturnType<
+  typeof useQuoteCartLazyQuery
+>
+export type QuoteCartQueryResult = ApolloReactCommon.QueryResult<
+  QuoteCartQuery,
+  QuoteCartQueryVariables
 >
 export const RedeemCodeDocument = gql`
   mutation RedeemCode($code: String!) {
