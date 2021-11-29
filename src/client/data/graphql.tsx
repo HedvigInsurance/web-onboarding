@@ -11323,14 +11323,6 @@ export type AvailablePaymentMethodsQuery = { __typename?: 'Query' } & {
   } & Pick<AvailablePaymentMethodsResponse, 'paymentMethodsResponse'>
 }
 
-export type ContractsQueryVariables = Exact<{ [key: string]: never }>
-
-export type ContractsQuery = { __typename?: 'Query' } & {
-  contracts: Array<
-    { __typename?: 'Contract' } & Pick<Contract, 'id' | 'typeOfContract'>
-  >
-}
-
 export type CreateDanishHomeAccidentQuoteMutationVariables = Exact<{
   homeInput: CreateQuoteInput
   accidentInput: CreateQuoteInput
@@ -12358,62 +12350,6 @@ export type AvailablePaymentMethodsLazyQueryHookResult = ReturnType<
 export type AvailablePaymentMethodsQueryResult = ApolloReactCommon.QueryResult<
   AvailablePaymentMethodsQuery,
   AvailablePaymentMethodsQueryVariables
->
-export const ContractsDocument = gql`
-  query Contracts {
-    contracts {
-      id
-      typeOfContract
-    }
-  }
-`
-
-/**
- * __useContractsQuery__
- *
- * To run a query within a React component, call `useContractsQuery` and pass it any options that fit your needs.
- * When your component renders, `useContractsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useContractsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useContractsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    ContractsQuery,
-    ContractsQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<ContractsQuery, ContractsQueryVariables>(
-    ContractsDocument,
-    options,
-  )
-}
-export function useContractsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ContractsQuery,
-    ContractsQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<ContractsQuery, ContractsQueryVariables>(
-    ContractsDocument,
-    options,
-  )
-}
-export type ContractsQueryHookResult = ReturnType<typeof useContractsQuery>
-export type ContractsLazyQueryHookResult = ReturnType<
-  typeof useContractsLazyQuery
->
-export type ContractsQueryResult = ApolloReactCommon.QueryResult<
-  ContractsQuery,
-  ContractsQueryVariables
 >
 export const CreateDanishHomeAccidentQuoteDocument = gql`
   mutation CreateDanishHomeAccidentQuote(
