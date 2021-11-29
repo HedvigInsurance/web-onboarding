@@ -10,7 +10,7 @@ export const initialDkHomeValues = {
   birthDate: '1988-08-08',
   startDate: '',
   email: 'helle.hansen@hedvig.com',
-  danishHomeContentsData: {
+  data: {
     coInsured: 0,
     livingSpace: 34,
     street: 'Theodore Roosevelts Vej 1',
@@ -29,33 +29,33 @@ export const DanishQuote: React.FC<WithFormikProps> = ({ formik }) => {
         label="Co-insured"
         placeholder="1"
         type="number"
-        {...formik.getFieldProps('danishHomeContents.coInsured')}
+        {...formik.getFieldProps('data.coInsured')}
       />
       <InputField
         label="Living space"
         placeholder="34"
         type="number"
-        {...formik.getFieldProps('danishHomeContents.livingSpace')}
+        {...formik.getFieldProps('data.livingSpace')}
       />
       <InputField
         label="Street"
         placeholder="Theodore Roosevelts Vej 1"
-        {...formik.getFieldProps('danishHomeContents.street')}
+        {...formik.getFieldProps('data.street')}
       />
       <InputField
         label="Floor"
         placeholder="2"
-        {...formik.getFieldProps('danishHomeContents.floor')}
+        {...formik.getFieldProps('data.floor')}
       />
       <InputField
         label="Apartment"
         placeholder="tv"
-        {...formik.getFieldProps('danishHomeContents.apartment')}
+        {...formik.getFieldProps('data.apartment')}
       />
       <InputField
         label="Zip code"
         placeholder="2100"
-        {...formik.getFieldProps('danishHomeContents.zipCode')}
+        {...formik.getFieldProps('data.zipCode')}
       />
       <InputField
         label="Type"
@@ -63,11 +63,11 @@ export const DanishQuote: React.FC<WithFormikProps> = ({ formik }) => {
           { label: 'Own', value: DanishHomeContentsType['Own'] },
           { label: 'Rent', value: DanishHomeContentsType['Rent'] },
         ]}
-        {...formik.getFieldProps('danishHomeContents.subType')}
+        {...formik.getFieldProps('data.subType')}
       />
       <div style={{ paddingBottom: '2rem', fontSize: '1.25rem' }}>
         <label>
-          <Field type="checkbox" name="danishHomeContents.student" />
+          <Field type="checkbox" name="data.student" />
           {"I'm a student"}
         </label>
       </div>

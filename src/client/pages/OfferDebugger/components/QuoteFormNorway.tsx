@@ -14,7 +14,7 @@ const initialBaseValues = {
 
 export const initialNoHomeValues = {
   ...initialBaseValues,
-  norwegianHomeContentsData: {
+  data: {
     youth: false,
     coInsured: 0,
     livingSpace: 44,
@@ -26,7 +26,7 @@ export const initialNoHomeValues = {
 
 export const initialNoTravelValues = {
   ...initialBaseValues,
-  norwegianTravelData: {
+  data: {
     coInsured: 0,
     youth: false,
   },
@@ -38,7 +38,7 @@ const NorwegianCommon: React.FC<WithFormikProps> = ({ formik }) => (
       label="Co-insured"
       placeholder="1"
       type="number"
-      {...formik.getFieldProps('norwegianTravel.coInsured')}
+      {...formik.getFieldProps('data.coInsured')}
     />
     <InputField
       label="Current Insurer (optional)"
@@ -56,17 +56,17 @@ export const NorwegianHome: React.FC<WithFormikProps> = ({ formik }) => {
         label="Living space"
         placeholder="23"
         type="number"
-        {...formik.getFieldProps('norwegianHomeContents.livingSpace')}
+        {...formik.getFieldProps('data.livingSpace')}
       />
       <InputField
         label="Street"
         placeholder="Gulebøjsveien 1"
-        {...formik.getFieldProps('norwegianHomeContents.street')}
+        {...formik.getFieldProps('data.street')}
       />
       <InputField
         label="Zip code"
         placeholder="1234"
-        {...formik.getFieldProps('norwegianHomeContents.zipCode')}
+        {...formik.getFieldProps('data.zipCode')}
       />
       <InputField
         label="Type"
@@ -74,7 +74,7 @@ export const NorwegianHome: React.FC<WithFormikProps> = ({ formik }) => {
           { label: 'Own', value: 'OWN' },
           { label: 'Rent', value: 'RENT' },
         ]}
-        {...formik.getFieldProps('norwegianHomeContents.subType')}
+        {...formik.getFieldProps('data.subType')}
       />
     </>
   )
