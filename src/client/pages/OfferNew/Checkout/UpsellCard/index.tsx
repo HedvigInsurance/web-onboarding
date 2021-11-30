@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTextKeys } from 'utils/textKeys'
 import { QuoteBundleVariant, BundledQuote } from 'data/graphql'
 import { isSwedishAccident } from 'pages/OfferNew/utils'
 import { Card } from './Card'
@@ -7,15 +8,15 @@ type UpsellCardProps = {
   quoteBundleVariants: QuoteBundleVariant[]
   selectedQuoteBundleVariant: QuoteBundleVariant
   onAcceptDeal: (quoteIds: string[]) => void
-  textKeys: Record<string, any>
 }
 
 export const UpsellCard = ({
   quoteBundleVariants,
   selectedQuoteBundleVariant,
   onAcceptDeal,
-  textKeys,
 }: UpsellCardProps) => {
+  const textKeys = useTextKeys()
+
   const isSwedishAccidentAdded = selectedQuoteBundleVariant.bundle.quotes.some(
     ({ quoteDetails }) => isSwedishAccident(quoteDetails),
   )

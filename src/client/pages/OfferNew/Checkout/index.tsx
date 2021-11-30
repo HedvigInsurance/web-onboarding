@@ -434,7 +434,6 @@ export const Checkout = ({
                       quoteBundleVariants={quoteBundleVariants}
                       selectedQuoteBundleVariant={selectedQuoteBundleVariant}
                       onAcceptDeal={onAddQuotes}
-                      textKeys={textKeys}
                     />
                   )}
                   <InsuranceSummary offerData={offerData} />
