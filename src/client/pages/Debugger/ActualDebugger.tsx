@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { colorsV2, colorsV3 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { SessionContainer } from 'containers/SessionContainer'
 import { Button } from 'components/buttons'
 import { StorageContainer } from 'utils/StorageContainer'
@@ -34,7 +34,7 @@ export const ActualDebugger: React.FC = () => {
                   storage.setToken(undefined)
                   window.location.reload() // sorry, not sorry
                 }}
-                background={colorsV2.coral500}
+                background={colorsV3.red500}
               >
                 Nuke all state 💣
               </Button>

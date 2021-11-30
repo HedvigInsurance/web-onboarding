@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2, colorsV3 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { Field, GenericFieldHTMLAttributes } from 'formik'
 import { FieldInputProps } from 'formik/dist/types'
 import React from 'react'
@@ -306,7 +306,7 @@ export const InputField: React.FC<TextInputProps &
 
 export const InputGroupDeleteButton = styled.button`
   background: ${colorsV3.white};
-  color: ${colorsV2.coral500};
+  color: ${colorsV3.red500};
   display: flex;
   width: 100%;
   height: 3.125rem;
@@ -325,7 +325,8 @@ export const InputGroupDeleteButton = styled.button`
   }
 
   :hover {
-    background: ${colorsV2.coral100};
+    /* HEX value with opcaity (1a = 10% transparency) */
+    background-color: ${colorsV3.red500}1a;
   }
 `
 
