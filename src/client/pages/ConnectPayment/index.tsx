@@ -2,6 +2,7 @@ import { SemanticEvents } from 'quepasa'
 import React from 'react'
 import Helmet from 'react-helmet-async'
 import { Mount } from 'react-lifecycle-components/dist'
+import { useHistory } from 'react-router'
 import { TopBar } from 'components/TopBar'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
@@ -16,6 +17,8 @@ export const ConnectPayment: React.FC = () => {
   const textKeys = useTextKeys()
   const currentLocale = useCurrentLocale()
 
+  const history = useHistory()
+
   return (
     <Page>
       <SessionTokenGuard>
@@ -24,7 +27,7 @@ export const ConnectPayment: React.FC = () => {
         </Helmet>
         <TopBar>
           {currentLocale.phoneNumber ? (
-            <PhoneNumber color="black" />
+            <PhoneNumber color="white" path={history.location.pathname} />
           ) : (
             <LanguagePicker />
           )}

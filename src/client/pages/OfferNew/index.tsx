@@ -147,7 +147,7 @@ export const OfferNew: React.FC = () => {
         {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
           <TopBar isTransparent>
             {currentLocale.phoneNumber ? (
-              <PhoneNumber color="white" />
+              <PhoneNumber color="white" path={history.location.pathname} />
             ) : (
               <LanguagePicker />
             )}

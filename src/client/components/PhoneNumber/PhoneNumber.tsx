@@ -5,16 +5,14 @@ import { format as formatDate, getDay } from 'date-fns'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
 import { PhoneNumberData } from 'l10n/phoneNumbers'
-//import { pushToGTMDataLayer } from 'utils/tracking/gtm'
+import { GTMOfferData, pushToGTMDataLayer } from 'utils/tracking/gtm'
 import { Telephone } from '../icons/Telephone'
 
 const { black, white, gray700, gray500 } = colorsV3
 
-type Props = {
-  color?: 'black' | 'white'
-}
+type Color = 'black' | 'white'
 
-const Wrapper = styled.div<Props>`
+const Wrapper = styled.div<{ color: Color }>`
   color: ${({ color }) => (color === 'black' ? black : white)};
 `
 
@@ -31,7 +29,7 @@ const IconWrapper = styled.div`
   }
 `
 
-const PhoneLink = styled.a<Props>`
+const PhoneLink = styled.a<{ color: Color }>`
   text-decoration: none;
   color: inherit;
   font-size: 0.875rem;
@@ -41,7 +39,7 @@ const PhoneLink = styled.a<Props>`
   }
 `
 
-const Text = styled.p<Props>`
+const Text = styled.p<{ color: Color }>`
   color: ${({ color }) => (color === 'black' ? gray700 : gray500)};
   font-size: 0.75rem;
   text-align: right;
@@ -51,62 +49,82 @@ const Text = styled.p<Props>`
   }
 `
 
+const isLunchHour = (currentTime: string, data: PhoneNumberData): boolean =>
+  currentTime >= data.lunchStartsAt && currentTime < data.lunchEndsAt
+
+const isWeekend = (): boolean => {
+  const currentDay = getDay(new Date())
+  return currentDay === 6 || currentDay === 0
+}
+const phoneIsOpen = (currentTime: string, data: PhoneNumberData): boolean =>
+  !isLunchHour(currentTime, data) &&
+  !isWeekend() &&
+  currentTime >= data.opensAt &&
+  currentTime < data.closesAt
+
 const PhoneOpeningHours: React.FC<{
   phoneNumber: PhoneNumberData
-  color: Props['color']
+  color: Color
 }> = ({ phoneNumber, color }) => {
   const textKeys = useTextKeys()
   const currentTime = formatDate(new Date(), 'HH')
   const currentDay = getDay(new Date())
 
-  const { opensAt, closesAt, lunchStartsAt, lunchEndsAt } = phoneNumber
-  const isPhoneOpen = currentTime >= opensAt && currentTime < closesAt
-  const isLunchHour = currentTime >= lunchStartsAt && currentTime < lunchEndsAt
-  const isFridayAfterHours = currentDay === 5 && currentTime >= closesAt
-  const isWeekend = currentDay === 6 || currentDay === 0
+  const isFridayAfterHours =
+    currentDay === 5 && currentTime >= phoneNumber.closesAt
 
-  if (isFridayAfterHours || isWeekend) {
+  if (isFridayAfterHours || isWeekend()) {
     return (
-      <Text>
-        {textKeys.PHONE_OPENS_MONDAY_AT()} {phoneNumber?.opensAt}
+      <Text color={color}>
+        {textKeys.PHONE_OPENS_MONDAY_AT()} {phoneNumber.opensAt}
       </Text>
     )
   }
 
-  if (isLunchHour) {
+  if (isLunchHour(currentTime, phoneNumber)) {
     return (
       <Text color={color}>
-        {textKeys.PHONE_OPENS_AT()} {phoneNumber?.lunchEndsAt}
+        {textKeys.PHONE_OPENS_AT()} {phoneNumber.lunchEndsAt}
       </Text>
     )
   }
 
-  if (isPhoneOpen) {
+  if (phoneIsOpen(currentTime, phoneNumber)) {
     return (
       <Text color={color}>
-        {textKeys.PHONE_OPEN_TODAY()} {phoneNumber?.opensAt}-
+        {textKeys.PHONE_OPEN_TODAY()} {phoneNumber.opensAt}-
         {phoneNumber?.closesAt}
       </Text>
     )
-  } else {
-    return (
-      <Text color={color}>
-        {textKeys.PHONE_CLOSED_UNTIL()} {phoneNumber?.opensAt}
-      </Text>
-    )
   }
+
+  return (
+    <Text color={color}>
+      {textKeys.PHONE_CLOSED_UNTIL()} {phoneNumber.opensAt}
+    </Text>
+  )
 }
 
-export const PhoneNumber: React.FC<Props> = ({ color }) => {
+export const PhoneNumber: React.FC<{
+  color: Color
+  path: string
+  offerData?: GTMOfferData
+}> = ({ color, path, offerData }) => {
   const currentLocale = useCurrentLocale()
+  const currentTime = formatDate(new Date(), 'HH')
   const { phoneNumber } = currentLocale
 
-  const onClick = () => {
-    // pushToGTMDataLayer({
-    //   event: 'click_call_number',
-    //   phoneNumberData: { path: 'embark', status: 'closed' },
-    // })
-    console.log('click')
+  if (!phoneNumber) return null
+
+  const onClick = (path: string) => {
+    pushToGTMDataLayer({
+      event: 'click_call_number',
+      phoneNumberData: {
+        path,
+        status: phoneIsOpen(currentTime, phoneNumber) ? 'opened' : 'closed',
+      },
+      offerData,
+    })
   }
 
   return (
@@ -115,13 +133,15 @@ export const PhoneNumber: React.FC<Props> = ({ color }) => {
         <IconWrapper>
           <Telephone size="1rem" />
         </IconWrapper>
-        <PhoneLink href={phoneNumber?.hrefNumber} onClick={onClick}>
-          {phoneNumber?.displayNumber}
+        <PhoneLink
+          color={color}
+          href={phoneNumber.hrefNumber}
+          onClick={() => onClick(path)}
+        >
+          {phoneNumber.displayNumber}
         </PhoneLink>
       </InnerWrapper>
-      {phoneNumber ? (
-        <PhoneOpeningHours phoneNumber={phoneNumber} color={color} />
-      ) : null}
+      <PhoneOpeningHours phoneNumber={phoneNumber} color={color} />
     </Wrapper>
   )
 }

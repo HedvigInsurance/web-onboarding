@@ -156,7 +156,10 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
                 startPageLink={props.startPageLink}
                 customTrailingContent={
                   currentLocale.phoneNumber ? (
-                    <PhoneNumber color="black" />
+                    <PhoneNumber
+                      color="black"
+                      path={history.location.pathname}
+                    />
                   ) : (
                     <LanguagePicker />
                   )
