@@ -22,7 +22,7 @@ const ButtonWrapper = styled.div`
 export const ConnectPaymentsDirectEntry: React.FC<RouteComponentProps<
   Record<string, string | undefined>
 >> = () => {
-  const currentLocale = useCurrentLocale()
+  const { path: currentLocalePath } = useCurrentLocale()
   const textKeys = useTextKeys()
 
   return (
@@ -46,7 +46,7 @@ export const ConnectPaymentsDirectEntry: React.FC<RouteComponentProps<
           >
             {exchangeTokenState === ExchangeTokenRetrievalState.Success && (
               <Redirect
-                to={`/${currentLocale.path}/new-member/connect-payment`}
+                to={`/${currentLocalePath}/new-member/connect-payment`}
               />
             )}
             <FadeInUp

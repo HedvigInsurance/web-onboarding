@@ -24,7 +24,12 @@ const getLocaleSuffix = (currentLocale: LocaleLabel) => {
   }
 }
 
-const getLocaleSrc = (basePath: string, currentLocale: LocaleLabel) => {
+type GetLocaleSrcParams = {
+  basePath: string
+  currentLocale: LocaleLabel
+}
+
+const getLocaleSrc = ({ basePath, currentLocale }: GetLocaleSrcParams) => {
   const pathParts = basePath.split('.')
   const localePath = [
     ...pathParts.slice(0, -1),
@@ -35,7 +40,7 @@ const getLocaleSrc = (basePath: string, currentLocale: LocaleLabel) => {
 }
 
 export const LocalizedImage: React.FC<Props> = ({ src, ...props }) => {
-  const currentLocale = useCurrentLocale()
-  const localeSrc = getLocaleSrc(src, currentLocale.path)
+  const { path } = useCurrentLocale()
+  const localeSrc = getLocaleSrc({ basePath: src, currentLocale: path })
   return <Image src={localeSrc} {...props} />
 }

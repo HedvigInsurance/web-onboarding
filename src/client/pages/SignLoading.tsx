@@ -34,9 +34,7 @@ export const SignLoading: React.FC = () => {
     pollInterval: 1000,
   })
   const textKeys = useTextKeys()
-  const currentLocale = useCurrentLocale()
-  const localeIsoCode = currentLocale.isoLocale
-  const currentLocalePath = currentLocale.path
+  const { isoLocale, path: currentLocalePath } = useCurrentLocale()
   const variation = useVariation()
   const { isLoading: quoteIdsIsLoading, selectedQuoteIds } = useQuoteIds()
   const { data: quoteBundleData } = useQuoteBundleQuery({
@@ -44,7 +42,7 @@ export const SignLoading: React.FC = () => {
       input: {
         ids: [...selectedQuoteIds],
       },
-      locale: localeIsoCode,
+      locale: isoLocale,
     },
     skip: quoteIdsIsLoading,
   })

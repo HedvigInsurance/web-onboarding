@@ -79,8 +79,7 @@ export const setupSession = async (
 export const SessionContainer: React.SFC<SessionContainerProps> = ({
   children,
 }) => {
-  const currentLocale = useCurrentLocale()
-  const { isoLocale } = currentLocale
+  const { isoLocale } = useCurrentLocale()
 
   const [createSessionCalled, setCreateSessionCalled] = React.useState(false)
   const client = useApolloClient()

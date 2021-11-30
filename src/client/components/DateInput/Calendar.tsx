@@ -136,8 +136,7 @@ export const Calendar: React.FC<DayzedCalendarProps> = ({
 }) => {
   const [weekdayNamesShort, setWeekdayNamesShort] = React.useState<string[]>([])
   const [monthNamesShort, setMonthNamesShort] = React.useState<string[]>([])
-  const currentLocale = useCurrentLocale()
-  const currentLocalePath = currentLocale.path
+  const { path: currentLocalePath } = useCurrentLocale()
 
   useEffect(() => {
     getLocaleImport(currentLocalePath).then((module) => {
