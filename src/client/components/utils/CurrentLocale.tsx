@@ -59,6 +59,9 @@ export enum Market {
   No = 'NO',
   Dk = 'DK',
 }
+/**
+ * @deprecated This function should not be used - use useCurrentLocale from "/l10n/useCurrentLocale.ts" and extract the "marketLabel" property instead.
+ */
 export const useMarket = (): Market => {
   const currentLocale = useCurrentLocale()
 
