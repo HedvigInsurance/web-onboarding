@@ -476,3 +476,27 @@ export const getUniqueQuotesFromVariantList = (
 
   return uniqueQuotes
 }
+
+const isBundleVariantMatchingContractTypes = (
+  variant: QuoteBundleVariant,
+  contractTypes: Array<TypeOfContract>,
+) => {
+  const variantContractTypes = variant.bundle.quotes.map(
+    (quote) => quote.typeOfContract,
+  )
+  return (
+    variantContractTypes.sort().join(',') ===
+    contractTypes
+      .concat()
+      .sort()
+      .join(',')
+  )
+}
+
+export const getBundleVariantFromContractTypes = (
+  variants: Array<QuoteBundleVariant>,
+  contractTypes: Array<TypeOfContract>,
+) =>
+  variants.find((variant) =>
+    isBundleVariantMatchingContractTypes(variant, contractTypes),
+  )
