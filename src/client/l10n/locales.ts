@@ -1,4 +1,4 @@
-import { Locale as IsoLocale } from 'data/graphql'
+import { Locale as IsoLocale, Market as ApiMarket } from 'data/graphql'
 import {
   ssnLengths,
   ssnFormats,
@@ -21,6 +21,7 @@ export type LocaleData = {
   path: LocaleLabel
   isoLocale: IsoLocale
   marketLabel: MarketLabel
+  apiMarket: ApiMarket
   htmlLang: 'en' | 'sv' | 'no' | 'da'
   adtractionScriptSrc?: string
   ssn: {
@@ -43,6 +44,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     path: 'se',
     isoLocale: IsoLocale.SvSe,
     marketLabel: 'SE',
+    apiMarket: ApiMarket.Sweden,
     htmlLang: 'sv',
     adtractionScriptSrc: 'https://cdn.adt387.com/jsTag?ap=1412531808',
     ssn: {
@@ -61,6 +63,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     path: 'se-en',
     isoLocale: IsoLocale.EnSe,
     marketLabel: 'SE',
+    apiMarket: ApiMarket.Sweden,
     htmlLang: 'en',
     adtractionScriptSrc: 'https://cdn.adt387.com/jsTag?ap=1412531808',
     ssn: {
@@ -79,6 +82,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     path: 'no',
     isoLocale: IsoLocale.NbNo,
     marketLabel: 'NO',
+    apiMarket: ApiMarket.Norway,
     htmlLang: 'no',
     adtractionScriptSrc: 'https://cdn.adt387.com/jsTag?ap=1492109567',
     ssn: {
@@ -96,6 +100,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     path: 'no-en',
     isoLocale: IsoLocale.EnNo,
     marketLabel: 'NO',
+    apiMarket: ApiMarket.Norway,
     htmlLang: 'en',
     adtractionScriptSrc: 'https://cdn.adt387.com/jsTag?ap=1492109567',
     ssn: {
@@ -113,6 +118,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     path: 'dk',
     isoLocale: IsoLocale.DaDk,
     marketLabel: 'DK',
+    apiMarket: ApiMarket.Denmark,
     htmlLang: 'da',
     adtractionScriptSrc: 'https://cdn.adt387.com/jsTag?ap=1589794294',
     ssn: {
@@ -130,6 +136,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     path: 'dk-en',
     isoLocale: IsoLocale.EnDk,
     marketLabel: 'DK',
+    apiMarket: ApiMarket.Denmark,
     htmlLang: 'en',
     adtractionScriptSrc: 'https://cdn.adt387.com/jsTag?ap=1589794294',
     ssn: {

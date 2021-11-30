@@ -69,3 +69,11 @@ export interface WithSsnForm {
   ssn: string
   onSsnChange: (ssn: string) => void
 }
+
+export interface WithFirstAndLastNameForm {
+  firstName: string
+  lastName: string
+  onFirstNameChange: (name: string) => void
+  onLastNameChange: (name: string) => void
+  isFirstAndLastNameVisible: boolean
+}

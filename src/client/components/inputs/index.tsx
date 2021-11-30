@@ -223,7 +223,15 @@ export const RawInputField: React.FC<React.InputHTMLAttributes<
   label?: string
   errors?: string
   variant?: variantType
-}> = ({ errors, label, className, variant = 'light', ...props }) => (
+  showErrorIcon?: boolean
+}> = ({
+  errors,
+  showErrorIcon = false,
+  label,
+  className,
+  variant = 'light',
+  ...props
+}) => (
   <InputFieldContainer className={className}>
     <Wrapper errors={errors} variant={variant}>
       <TextWrapper>
@@ -231,7 +239,9 @@ export const RawInputField: React.FC<React.InputHTMLAttributes<
         <StyledRawInput {...props} />
       </TextWrapper>
       <SymbolWrapper>
-        {errors && <WarningIcon color={inputVariants[variant].error} />}
+        {(errors || showErrorIcon) && (
+          <WarningIcon color={inputVariants[variant].error} />
+        )}
       </SymbolWrapper>
     </Wrapper>
     {errors && <ErrorText variant={variant}>{errors}</ErrorText>}
