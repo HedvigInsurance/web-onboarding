@@ -41,7 +41,7 @@ const Template: Story<StoryProps> = (args) => (
 const defaultArgs = {
   isOpen: true,
   onClose: action('onClose'),
-  onAddQuotes: action('onAddQuotes'),
+  onUpsellAccepted: action('onUpsellAccepted'),
   refetch: (...args: any[]) => {
     action('refetch')(...args)
     return Promise.resolve()
