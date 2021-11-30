@@ -130,7 +130,8 @@ export const Modal: React.FC<ModalProps> = ({
         variants={{
           visible: {
             opacity: 1,
-            transform: 'translateX(-50%) translateY(-50%) scale(1)',
+            x: '-50%',
+            y: '-50%',
             transition: {
               type: 'spring',
               stiffness: 500,
@@ -140,7 +141,8 @@ export const Modal: React.FC<ModalProps> = ({
           },
           hidden: {
             opacity: 0,
-            transform: 'translateX(-50%) translateY(50%) scale(0.9)',
+            x: '-50%',
+            y: '50%',
           },
         }}
       >

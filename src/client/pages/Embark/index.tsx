@@ -32,8 +32,7 @@ import { resolveAddressAutocomplete } from './addressAutocompleteProvider'
 
 const EmbarkStyling = styled.div`
   height: 100%;
-  background-color: ${colorsV3.gray900};
-  color: ${colorsV3.white};
+  color: ${colorsV3.gray900};
 
   * {
     margin: 0;
@@ -54,7 +53,7 @@ const PassageContainer = styled.div`
   left: 0;
   height: 100%;
   width: 100%;
-  background-color: ${colorsV3.gray900};
+  background-color: ${colorsV3.gray100};
 `
 
 interface EmbarkProps {
@@ -307,6 +306,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
         styles={css`
           body {
             overflow: hidden;
+            background-color: ${colorsV3.gray100};
           }
         `}
       />

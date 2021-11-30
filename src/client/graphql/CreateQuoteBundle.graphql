@@ -1,0 +1,17 @@
+mutation CreateQuoteBundle($quoteCartId: ID!, $quotes: [JSON!]!) {
+  quoteCart_createQuoteBundle(id: $quoteCartId, input: { payload: $quotes }) {
+    ... on QuoteCart {
+      id
+      bundle {
+        quotes {
+          id
+        }
+      }
+    }
+    ... on CreateQuoteBundleError {
+      limits {
+        code
+      }
+    }
+  }
+}

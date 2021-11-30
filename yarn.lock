@@ -2129,10 +2129,10 @@
   resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-4.1.0.tgz#e8de34dbfb826c15dbaeb582585c3a5f720b9ced"
   integrity sha512-TYlxSmMQPiv8+DfgwKrV9B1Xr+vQA5VBx1EdfZR1gZNcc5QDK4Bk90oYC4A5nu3er71RyEHfjlHWJdqfAMGOJQ==
 
-"@hedviginsurance/embark@^2.2.3":
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-2.2.3.tgz#a76c5d7474b22c10e193f2bbe38b13e57360353b"
-  integrity sha512-0UBAYOQw+Is+bCEI9HV08zqNocx6pu71SBAZKgcqxtOofFDEro2ORodt6/Zl7nT2c49tCBdvpjOkp24XfDyqRQ==
+"@hedviginsurance/embark@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-2.3.0.tgz#4d7f96c46963015ab44a7a4b864356497655416d"
+  integrity sha512-A9ie6ifgcvTBL0INxWAFMUynXqLdz7JJqSysK+1hHSl7Jo4JW4g/sWY5uIzimO3slIf6CCRYCH18yYilpcQuDw==
   dependencies:
     "@emotion/react" "^11.4.1"
     "@emotion/styled" "^11.3.0"
@@ -14190,6 +14190,13 @@ react-error-boundary@^3.1.0:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/react-error-boundary/-/react-error-boundary-3.1.3.tgz#276bfa05de8ac17b863587c9e0647522c25e2a0b"
   integrity sha512-A+F9HHy9fvt9t8SNDlonq01prnU8AmkjvGKV4kk8seB9kU3xMEO8J/PQlLVmoOIDODl5U2kufSBs4vrWIqhsAA==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+
+react-error-boundary@^3.1.4:
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/react-error-boundary/-/react-error-boundary-3.1.4.tgz#255db92b23197108757a888b01e5b729919abde0"
+  integrity sha512-uM9uPzZJTF6wRQORmSrvOIgt4lJ9MC1sNgEOj2XGsDTRE4kmpWxg7ENK9EWNKJRMAOY9z0MuF4yIfl6gp4sotA==
   dependencies:
     "@babel/runtime" "^7.12.5"
 
