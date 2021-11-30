@@ -11,6 +11,7 @@ import { useTextKeys } from 'utils/textKeys'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import { pushToGTMDataLayer } from 'utils/tracking/gtm'
 import { ConnectPaymentPage } from './sections/ConnectPayment'
 
 export const ConnectPayment: React.FC = () => {
@@ -18,6 +19,16 @@ export const ConnectPayment: React.FC = () => {
   const currentLocale = useCurrentLocale()
 
   const history = useHistory()
+
+  const onClickPhoneTracking = (path: string, status: 'opened' | 'closed') => {
+    pushToGTMDataLayer({
+      event: 'click_call_number',
+      phoneNumberData: {
+        path,
+        status,
+      },
+    })
+  }
 
   return (
     <Page>
@@ -27,7 +38,12 @@ export const ConnectPayment: React.FC = () => {
         </Helmet>
         <TopBar>
           {currentLocale.phoneNumber ? (
-            <PhoneNumber color="white" path={history.location.pathname} />
+            <PhoneNumber
+              color="white"
+              onClick={(status) =>
+                onClickPhoneTracking(history.location.pathname, status)
+              }
+            />
           ) : (
             <LanguagePicker />
           )}

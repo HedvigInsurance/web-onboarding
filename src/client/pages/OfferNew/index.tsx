@@ -12,7 +12,11 @@ import {
   QuoteBundleVariant,
 } from 'data/graphql'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
-import { trackOfferGTM, EventName } from 'utils/tracking/gtm'
+import {
+  trackOfferGTM,
+  EventName,
+  pushToGTMDataLayer,
+} from 'utils/tracking/gtm'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { Features, useFeature } from 'utils/hooks/useFeature'
@@ -141,13 +145,35 @@ export const OfferNew: React.FC = () => {
     )
   }
 
+  const onClickPhoneTracking = (path: string, status: 'opened' | 'closed') => {
+    pushToGTMDataLayer({
+      event: 'click_call_number',
+      phoneNumberData: {
+        path,
+        status,
+      },
+    })
+    if (offerData) {
+      trackOfferGTM(
+        EventName.ClickCallNumber,
+        offerData,
+        redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction',
+      )
+    }
+  }
+
   return (
     <Page>
       <SessionTokenGuard>
         {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
           <TopBar isTransparent>
             {currentLocale.phoneNumber ? (
-              <PhoneNumber color="white" path={history.location.pathname} />
+              <PhoneNumber
+                color="white"
+                onClick={(status) =>
+                  onClickPhoneTracking(history.location.pathname, status)
+                }
+              />
             ) : (
               <LanguagePicker />
             )}

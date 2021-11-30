@@ -5,7 +5,11 @@ import { format as formatDate, getDay } from 'date-fns'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
 import { PhoneNumberData } from 'l10n/phoneNumbers'
-import { GTMOfferData, pushToGTMDataLayer } from 'utils/tracking/gtm'
+import {
+  EventName,
+  pushToGTMDataLayer,
+  trackOfferGTM,
+} from 'utils/tracking/gtm'
 import { Telephone } from '../icons/Telephone'
 
 const { black, white, gray700, gray500 } = colorsV3
@@ -63,6 +67,9 @@ const phoneIsOpen = (currentTime: string, data: PhoneNumberData): boolean =>
   currentTime >= data.opensAt &&
   currentTime < data.closesAt
 
+const getStatus = (currentTime: string, phoneNumber: PhoneNumberData) =>
+  phoneIsOpen(currentTime, phoneNumber) ? 'opened' : 'closed'
+
 const PhoneOpeningHours: React.FC<{
   phoneNumber: PhoneNumberData
   color: Color
@@ -108,25 +115,13 @@ const PhoneOpeningHours: React.FC<{
 
 export const PhoneNumber: React.FC<{
   color: Color
-  path: string
-  offerData?: GTMOfferData
-}> = ({ color, path, offerData }) => {
+  onClick: (status: 'opened' | 'closed') => void
+}> = ({ color, onClick }) => {
   const currentLocale = useCurrentLocale()
   const currentTime = formatDate(new Date(), 'HH')
   const { phoneNumber } = currentLocale
 
   if (!phoneNumber) return null
-
-  const onClick = (path: string) => {
-    pushToGTMDataLayer({
-      event: 'click_call_number',
-      phoneNumberData: {
-        path,
-        status: phoneIsOpen(currentTime, phoneNumber) ? 'opened' : 'closed',
-      },
-      offerData,
-    })
-  }
 
   return (
     <Wrapper color={color}>
@@ -137,7 +132,7 @@ export const PhoneNumber: React.FC<{
         <PhoneLink
           color={color}
           href={phoneNumber.hrefNumber}
-          onClick={() => onClick(path)}
+          onClick={() => onClick(getStatus(currentTime, phoneNumber))}
         >
           {phoneNumber.displayNumber}
         </PhoneLink>

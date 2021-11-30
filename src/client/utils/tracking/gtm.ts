@@ -106,6 +106,7 @@ export enum EventName {
   OfferCreated = 'offer_created',
   SignedCustomer = 'signed_customer',
   InsuranceSelectionToggle = 'insurance_selection_toggle',
+  ClickCallNumber = 'click_call_number',
 }
 
 export const trackOfferGTM = (

@@ -134,6 +134,16 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
 
   const variation = useVariation()
 
+  const onClickPhoneTracking = (path: string, status: 'opened' | 'closed') => {
+    pushToGTMDataLayer({
+      event: 'click_call_number',
+      phoneNumberData: {
+        path,
+        status,
+      },
+    })
+  }
+
   return (
     <PassageContainer>
       <motion.div
@@ -158,7 +168,9 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
                   currentLocale.phoneNumber ? (
                     <PhoneNumber
                       color="black"
-                      path={history.location.pathname}
+                      onClick={(status) =>
+                        onClickPhoneTracking(history.location.pathname, status)
+                      }
                     />
                   ) : (
                     <LanguagePicker />
