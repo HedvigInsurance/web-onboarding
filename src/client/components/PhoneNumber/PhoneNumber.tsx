@@ -34,7 +34,8 @@ const PhoneLink = styled.a<{ color: Color }>`
   color: inherit;
   font-size: 0.875rem;
 
-  &:hover {
+  &:hover,
+  &:focus {
     color: ${({ color }) => (color === 'black' ? gray700 : gray500)};
   }
 `
