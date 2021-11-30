@@ -7,7 +7,7 @@ import { Card } from './Card'
 type UpsellCardProps = {
   quoteBundleVariants: QuoteBundleVariant[]
   selectedQuoteBundleVariant: QuoteBundleVariant
-  onAcceptDeal: (quoteIds: string[]) => void
+  onAcceptDeal: (selectedBundleVariant: QuoteBundleVariant) => void
 }
 
 const getSwedishAccidentQuoteFromVariant = (
@@ -48,9 +48,6 @@ export const UpsellCard = ({
   const localizedPerMonth = textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL()
   const { amount, currency } = accidentInsuranceQuote.price
   const price = `${amount} ${currency}${localizedPerMonth}`
-  const newSelectedQuoteIds = bundleWithAccidentQuote.bundle.quotes.map(
-    ({ id }) => id,
-  )
 
   return (
     <Card
@@ -58,7 +55,7 @@ export const UpsellCard = ({
       description={textKeys.ACCIDENT_SWEDEN_UPSELL_DESCRIPTION()}
       actionButtonLabel={textKeys.ACCIDENT_SWEDEN_UPSELL_BUTTON()}
       price={price}
-      onAcceptDeal={() => onAcceptDeal(newSelectedQuoteIds)}
+      onAcceptDeal={() => onAcceptDeal(bundleWithAccidentQuote)}
     />
   )
 }

@@ -161,7 +161,7 @@ const Backdrop = styled('div')<Openable>`
 export type CheckoutProps = {
   quoteBundleVariants: QuoteBundleVariant[]
   selectedQuoteBundleVariant: QuoteBundleVariant
-  onAddQuotes: (quoteIds: string[]) => void
+  onUpsellAccepted: (selectedBundleVariant: QuoteBundleVariant) => void
   isOpen?: boolean
   onClose?: () => void
   refetch: () => Promise<void>
@@ -170,7 +170,7 @@ export type CheckoutProps = {
 export const Checkout = ({
   quoteBundleVariants,
   selectedQuoteBundleVariant,
-  onAddQuotes,
+  onUpsellAccepted,
   isOpen,
   onClose,
   refetch,
@@ -433,7 +433,7 @@ export const Checkout = ({
                     <UpsellCard
                       quoteBundleVariants={quoteBundleVariants}
                       selectedQuoteBundleVariant={selectedQuoteBundleVariant}
-                      onAcceptDeal={onAddQuotes}
+                      onAcceptDeal={onUpsellAccepted}
                     />
                   )}
                   <InsuranceSummary offerData={offerData} />
