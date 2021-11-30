@@ -6,7 +6,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router'
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { LocaleData } from 'l10n/locales'
+import { LocaleData, LocaleLabel } from 'l10n/locales'
 import { Spinner } from 'components/utils'
 import {
   Scalars,
@@ -175,6 +175,22 @@ export const AdyenCheckout: React.FC<Props> = ({ onSuccess }) => {
   )
 }
 
+const getReturnUrl = ({
+  currentLocalePath,
+}: {
+  currentLocalePath: LocaleLabel
+}) => {
+  return `${window.location.origin}/${currentLocalePath}/new-member/connect-payment/adyen-callback`
+}
+
+const getOnSuccessRedirectUrl = ({
+  currentLocalePath,
+}: {
+  currentLocalePath: LocaleLabel
+}) => {
+  return `/${currentLocalePath}/new-member/download`
+}
+
 interface AdyenCheckoutProps {
   payButtonText: string
   currentLocale: LocaleData
@@ -196,17 +212,18 @@ const createAdyenCheckout = ({
     /* noop */
   },
 }: AdyenCheckoutProps) => {
+  const { isoLocale, path } = currentLocale
   const locale = match<LocaleData['isoLocale'], string>([
     ['nb_NO', 'no-NO'],
     ['da_DK', 'da-DK'],
     [match.any(), 'en-US'],
-  ])(currentLocale.isoLocale)
+  ])(isoLocale)
 
-  const returnUrl = `${window.location.origin}/${currentLocale}/new-member/connect-payment/adyen-callback`
+  const returnUrl = getReturnUrl({ currentLocalePath: path })
 
   const handleResult = (dropinComponent: any, resultCode: string) => {
     if (['Authorised', 'Pending'].includes(resultCode)) {
-      history.push(`/${currentLocale}/new-member/download`)
+      history.push(getOnSuccessRedirectUrl({ currentLocalePath: path }))
       onSuccess()
     } else {
       console.error(
