@@ -12,11 +12,7 @@ import {
   QuoteBundleVariant,
 } from 'data/graphql'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
-import {
-  trackOfferGTM,
-  EventName,
-  pushToGTMDataLayer,
-} from 'utils/tracking/gtm'
+import { trackOfferGTM, EventName } from 'utils/tracking/gtm'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { Features, useFeature } from 'utils/hooks/useFeature'
@@ -106,8 +102,11 @@ export const OfferNew: React.FC = () => {
         EventName.InsuranceSelectionToggle,
         getOfferData(selectedBundleVariant.bundle),
         redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction',
-        previouslySelectedBundleVariant &&
-          getOfferData(previouslySelectedBundleVariant?.bundle),
+        {
+          switchedFrom:
+            previouslySelectedBundleVariant &&
+            getOfferData(previouslySelectedBundleVariant?.bundle),
+        },
       )
     }
   }
@@ -146,18 +145,12 @@ export const OfferNew: React.FC = () => {
   }
 
   const onClickPhoneTracking = (path: string, status: 'opened' | 'closed') => {
-    pushToGTMDataLayer({
-      event: 'click_call_number',
-      phoneNumberData: {
-        path,
-        status,
-      },
-    })
     if (offerData) {
       trackOfferGTM(
         EventName.ClickCallNumber,
         offerData,
         redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction',
+        { phoneNumberData: { path, status } },
       )
     }
   }
