@@ -1,3 +1,5 @@
 mutation CreateOnboardingQuoteCart($market: Market!, $locale: String!) {
-  onboardingQuoteCart_create(input: { market: $market, locale: $locale })
+  onboardingQuoteCart_create(input: { market: $market, locale: $locale }) {
+    id
+  }
 }
