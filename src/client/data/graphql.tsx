@@ -2628,6 +2628,11 @@ export type CreateQuoteCartAccessTokenResult = {
   accessToken: Scalars['String']
 }
 
+export type CreateQuoteCartResult = {
+  __typename?: 'CreateQuoteCartResult'
+  id: Scalars['ID']
+}
+
 export type CreateQuoteInput = {
   id: Scalars['ID']
   firstName: Scalars['String']
@@ -3367,6 +3372,7 @@ export type EmbarkExternalInsuranceProviderActionData = {
   __typename?: 'EmbarkExternalInsuranceProviderActionData'
   next: EmbarkLink
   skip: EmbarkLink
+  storeKey: Scalars['String']
 }
 
 export type EmbarkExternalRedirect = {
@@ -3648,6 +3654,7 @@ export type EmbarkSelectActionOption = {
   values: Array<Scalars['String']>
   link: EmbarkLink
   tooltip?: Maybe<EmbarkTooltip>
+  badge?: Maybe<Scalars['String']>
   api?: Maybe<EmbarkApi>
 }
 
@@ -7552,7 +7559,7 @@ export type Mutation = {
    * Create a new onboarding session. This is not an authentication session, but rather an object that
    * ties the onboarding journey together.
    */
-  onboardingQuoteCart_create: Scalars['ID']
+  onboardingQuoteCart_create: CreateQuoteCartResult
   /** Create a quote as part of this onboarding session. */
   quoteCart_createQuoteBundle: CreateQuoteBundleResult
   /**
@@ -11323,14 +11330,6 @@ export type AvailablePaymentMethodsQuery = { __typename?: 'Query' } & {
   } & Pick<AvailablePaymentMethodsResponse, 'paymentMethodsResponse'>
 }
 
-export type ContractsQueryVariables = Exact<{ [key: string]: never }>
-
-export type ContractsQuery = { __typename?: 'Query' } & {
-  contracts: Array<
-    { __typename?: 'Contract' } & Pick<Contract, 'id' | 'typeOfContract'>
-  >
-}
-
 export type CreateDanishHomeAccidentQuoteMutationVariables = Exact<{
   homeInput: CreateQuoteInput
   accidentInput: CreateQuoteInput
@@ -11422,9 +11421,12 @@ export type CreateOnboardingQuoteCartMutationVariables = Exact<{
   locale: Scalars['String']
 }>
 
-export type CreateOnboardingQuoteCartMutation = {
-  __typename?: 'Mutation'
-} & Pick<Mutation, 'onboardingQuoteCart_create'>
+export type CreateOnboardingQuoteCartMutation = { __typename?: 'Mutation' } & {
+  onboardingQuoteCart_create: { __typename?: 'CreateQuoteCartResult' } & Pick<
+    CreateQuoteCartResult,
+    'id'
+  >
+}
 
 export type CreateQuoteBundleMutationVariables = Exact<{
   quoteCartId: Scalars['ID']
@@ -11586,100 +11588,6 @@ export type MemberQuery = { __typename?: 'Query' } & {
   member: { __typename?: 'Member' } & Pick<
     Member,
     'id' | 'firstName' | 'lastName'
-  >
-}
-
-export type MemberOfferQueryVariables = Exact<{ [key: string]: never }>
-
-export type MemberOfferQuery = { __typename?: 'Query' } & {
-  lastQuoteOfMember:
-    | ({ __typename?: 'CompleteQuote' } & Pick<
-        CompleteQuote,
-        | 'id'
-        | 'dataCollectionId'
-        | 'ssn'
-        | 'email'
-        | 'firstName'
-        | 'lastName'
-        | 'startDate'
-      > & {
-          currentInsurer?: Maybe<
-            { __typename?: 'CurrentInsurer' } & Pick<
-              CurrentInsurer,
-              'id' | 'displayName' | 'switchable'
-            >
-          >
-          insuranceCost: { __typename?: 'InsuranceCost' } & Pick<
-            InsuranceCost,
-            'freeUntil'
-          > & {
-              monthlyDiscount: { __typename?: 'MonetaryAmountV2' } & Pick<
-                MonetaryAmountV2,
-                'amount' | 'currency'
-              >
-              monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
-                MonetaryAmountV2,
-                'amount' | 'currency'
-              >
-              monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
-                MonetaryAmountV2,
-                'amount' | 'currency'
-              >
-            }
-          details:
-            | ({ __typename?: 'CompleteApartmentQuoteDetails' } & Pick<
-                CompleteApartmentQuoteDetails,
-                'street' | 'zipCode' | 'householdSize' | 'livingSpace' | 'type'
-              >)
-            | ({ __typename?: 'CompleteHouseQuoteDetails' } & Pick<
-                CompleteHouseQuoteDetails,
-                | 'street'
-                | 'zipCode'
-                | 'householdSize'
-                | 'livingSpace'
-                | 'ancillarySpace'
-                | 'numberOfBathrooms'
-                | 'yearOfConstruction'
-                | 'isSubleted'
-              > & {
-                  extraBuildings: Array<
-                    { __typename?: 'ExtraBuildingValue' } & Pick<
-                      ExtraBuildingValue,
-                      'area' | 'displayName' | 'hasWaterConnected'
-                    >
-                  >
-                })
-            | { __typename?: 'UnknownQuoteDetails' }
-        })
-    | ({ __typename?: 'IncompleteQuote' } & Pick<IncompleteQuote, 'id'>)
-  redeemedCampaigns: Array<
-    { __typename?: 'Campaign' } & Pick<Campaign, 'code'> & {
-        incentive?: Maybe<
-          | ({ __typename?: 'MonthlyCostDeduction' } & {
-              amount?: Maybe<
-                { __typename?: 'MonetaryAmountV2' } & Pick<
-                  MonetaryAmountV2,
-                  'amount' | 'currency'
-                >
-              >
-            })
-          | ({ __typename?: 'FreeMonths' } & Pick<FreeMonths, 'quantity'>)
-          | { __typename?: 'NoDiscount' }
-          | { __typename?: 'VisibleNoDiscount' }
-          | ({ __typename?: 'PercentageDiscountMonths' } & Pick<
-              PercentageDiscountMonths,
-              'percentageDiscount'
-            > & { quantityMonths: PercentageDiscountMonths['quantity'] })
-          | { __typename?: 'IndefinitePercentageDiscount' }
-        >
-        owner?: Maybe<
-          { __typename?: 'CampaignOwner' } & Pick<CampaignOwner, 'displayName'>
-        >
-      }
-  >
-  member: { __typename?: 'Member' } & Pick<
-    Member,
-    'id' | 'firstName' | 'lastName' | 'email'
   >
 }
 
@@ -12453,62 +12361,6 @@ export type AvailablePaymentMethodsQueryResult = ApolloReactCommon.QueryResult<
   AvailablePaymentMethodsQuery,
   AvailablePaymentMethodsQueryVariables
 >
-export const ContractsDocument = gql`
-  query Contracts {
-    contracts {
-      id
-      typeOfContract
-    }
-  }
-`
-
-/**
- * __useContractsQuery__
- *
- * To run a query within a React component, call `useContractsQuery` and pass it any options that fit your needs.
- * When your component renders, `useContractsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useContractsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useContractsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    ContractsQuery,
-    ContractsQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<ContractsQuery, ContractsQueryVariables>(
-    ContractsDocument,
-    options,
-  )
-}
-export function useContractsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ContractsQuery,
-    ContractsQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<ContractsQuery, ContractsQueryVariables>(
-    ContractsDocument,
-    options,
-  )
-}
-export type ContractsQueryHookResult = ReturnType<typeof useContractsQuery>
-export type ContractsLazyQueryHookResult = ReturnType<
-  typeof useContractsLazyQuery
->
-export type ContractsQueryResult = ApolloReactCommon.QueryResult<
-  ContractsQuery,
-  ContractsQueryVariables
->
 export const CreateDanishHomeAccidentQuoteDocument = gql`
   mutation CreateDanishHomeAccidentQuote(
     $homeInput: CreateQuoteInput!
@@ -12662,7 +12514,9 @@ export type CreateDanishHomeAccidentTravelQuoteMutationOptions = ApolloReactComm
 >
 export const CreateOnboardingQuoteCartDocument = gql`
   mutation CreateOnboardingQuoteCart($market: Market!, $locale: String!) {
-    onboardingQuoteCart_create(input: { market: $market, locale: $locale })
+    onboardingQuoteCart_create(input: { market: $market, locale: $locale }) {
+      id
+    }
   }
 `
 export type CreateOnboardingQuoteCartMutationFn = ApolloReactCommon.MutationFunction<
@@ -13176,145 +13030,6 @@ export type MemberLazyQueryHookResult = ReturnType<typeof useMemberLazyQuery>
 export type MemberQueryResult = ApolloReactCommon.QueryResult<
   MemberQuery,
   MemberQueryVariables
->
-export const MemberOfferDocument = gql`
-  query MemberOffer {
-    lastQuoteOfMember {
-      ... on CompleteQuote {
-        id
-        dataCollectionId
-        ssn
-        email
-        firstName
-        lastName
-        startDate
-        currentInsurer {
-          id
-          displayName
-          switchable
-        }
-        insuranceCost {
-          freeUntil
-          monthlyDiscount {
-            amount
-            currency
-          }
-          monthlyGross {
-            amount
-            currency
-          }
-          monthlyNet {
-            amount
-            currency
-          }
-        }
-        details {
-          ... on CompleteApartmentQuoteDetails {
-            street
-            zipCode
-            householdSize
-            livingSpace
-            type
-          }
-          ... on CompleteHouseQuoteDetails {
-            street
-            zipCode
-            householdSize
-            livingSpace
-            ancillarySpace
-            numberOfBathrooms
-            yearOfConstruction
-            isSubleted
-            extraBuildings {
-              ... on ExtraBuildingCore {
-                area
-                displayName
-                hasWaterConnected
-              }
-            }
-          }
-        }
-      }
-      ... on IncompleteQuote {
-        id
-      }
-    }
-    redeemedCampaigns {
-      incentive {
-        ... on FreeMonths {
-          quantity
-        }
-        ... on MonthlyCostDeduction {
-          amount {
-            amount
-            currency
-          }
-        }
-        ... on PercentageDiscountMonths {
-          percentageDiscount
-          quantityMonths: quantity
-        }
-      }
-      code
-      owner {
-        displayName
-      }
-    }
-    member {
-      id
-      firstName
-      lastName
-      email
-    }
-  }
-`
-
-/**
- * __useMemberOfferQuery__
- *
- * To run a query within a React component, call `useMemberOfferQuery` and pass it any options that fit your needs.
- * When your component renders, `useMemberOfferQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useMemberOfferQuery({
- *   variables: {
- *   },
- * });
- */
-export function useMemberOfferQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    MemberOfferQuery,
-    MemberOfferQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<MemberOfferQuery, MemberOfferQueryVariables>(
-    MemberOfferDocument,
-    options,
-  )
-}
-export function useMemberOfferLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    MemberOfferQuery,
-    MemberOfferQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<MemberOfferQuery, MemberOfferQueryVariables>(
-    MemberOfferDocument,
-    options,
-  )
-}
-export type MemberOfferQueryHookResult = ReturnType<typeof useMemberOfferQuery>
-export type MemberOfferLazyQueryHookResult = ReturnType<
-  typeof useMemberOfferLazyQuery
->
-export type MemberOfferQueryResult = ApolloReactCommon.QueryResult<
-  MemberOfferQuery,
-  MemberOfferQueryVariables
 >
 export const NorwegianBankIdAuthDocument = gql`
   mutation NorwegianBankIdAuth($personalNumber: String!) {
