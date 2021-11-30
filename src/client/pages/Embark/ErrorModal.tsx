@@ -38,6 +38,11 @@ export const ErrorText = styled.p`
   margin-bottom: 1rem;
 `
 
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+`
+
 export const ErrorModal = ({ isVisible, onClose, children }: Props) => (
   <Modal isVisible={isVisible} onClose={onClose} dynamicHeight>
     <Container>
@@ -47,9 +52,14 @@ export const ErrorModal = ({ isVisible, onClose, children }: Props) => (
   </Modal>
 )
 
-type SetupFailedModalProps = Omit<ModalProps, 'onClose'>
+type SetupFailedModalProps = Omit<ModalProps, 'onClose'> & {
+  onRetry: () => void
+}
 
-export const SetupFailedModal = (props: SetupFailedModalProps) => {
+export const SetupFailedModal = ({
+  onRetry,
+  ...props
+}: SetupFailedModalProps) => {
   const textKeys = useTextKeys()
   const { path: localePath } = useCurrentLocale()
   const history = useHistory()
@@ -59,9 +69,14 @@ export const SetupFailedModal = (props: SetupFailedModalProps) => {
     <ErrorModal {...props} dynamicHeight={true} onClose={goToLandingPage}>
       <ErrorHeading>{textKeys.GENERIC_ERROR_HEADING()}</ErrorHeading>
       <ErrorText>{textKeys.GENERIC_ERROR_TEXT()}</ErrorText>
-      <Button onClick={goToLandingPage}>
-        {textKeys.GENERIC_ERROR_ACTION()}
-      </Button>
+      <ButtonContainer>
+        <Button onClick={onRetry}>
+          {textKeys.GENERIC_ERROR_ACTION_RETRY()}
+        </Button>
+        <Button onClick={goToLandingPage}>
+          {textKeys.GENERIC_ERROR_ACTION()}
+        </Button>
+      </ButtonContainer>
     </ErrorModal>
   )
 }

@@ -7,7 +7,7 @@ import {
   useEmbark,
 } from '@hedviginsurance/embark'
 import { AnimatePresence, motion } from 'framer-motion'
-import React, { useEffect } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import { useHistory } from 'react-router'
 
 import { colorsV3 } from '@hedviginsurance/brand'
@@ -215,15 +215,23 @@ const useCreateQuoteCartId = ({ skip = false }) => {
     { data, error },
   ] = useCreateOnboardingQuoteCartMutation()
 
+  const createQuoteCart = useCallback(() => {
+    createOnboardingQuoteCart({
+      variables: { market: apiMarket, locale: isoLocale },
+    })
+  }, [createOnboardingQuoteCart, apiMarket, isoLocale])
+
   useEffect(() => {
     if (!skip) {
-      createOnboardingQuoteCart({
-        variables: { market: apiMarket, locale: isoLocale },
-      })
+      createQuoteCart()
     }
-  }, [skip, createOnboardingQuoteCart, apiMarket, isoLocale])
+  }, [skip, createQuoteCart])
 
-  return { quoteCartId: data?.onboardingQuoteCart_create, error }
+  return {
+    createQuoteCart,
+    quoteCartId: data?.onboardingQuoteCart_create,
+    error,
+  }
 }
 
 export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
@@ -235,7 +243,11 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
   const { isoLocale } = useCurrentLocale()
 
   const [isQuoteCartApiEnabled] = useFeature([Features.QUOTE_CART_API])
-  const { quoteCartId, error: quoteCartIdError } = useCreateQuoteCartId({
+  const {
+    createQuoteCart,
+    quoteCartId,
+    error: quoteCartIdError,
+  } = useCreateQuoteCartId({
     skip: !isQuoteCartApiEnabled,
   })
 
@@ -460,7 +472,10 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
         </motion.div>
       </AnimatePresence>
 
-      <SetupFailedModal isVisible={quoteCartIdError !== undefined} />
+      <SetupFailedModal
+        isVisible={quoteCartIdError !== undefined}
+        onRetry={createQuoteCart}
+      />
     </EmbarkStyling>
   )
 }
