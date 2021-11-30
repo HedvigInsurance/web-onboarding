@@ -1,7 +1,7 @@
 import { History } from 'history'
 import { SemanticEvents } from 'quepasa'
 import React from 'react'
-import { Redirect, useHistory, useLocation, useRouteMatch } from 'react-router'
+import { Redirect, useHistory, useRouteMatch } from 'react-router'
 import { LoadingPage } from 'components/LoadingPage'
 import { TopBar } from 'components/TopBar'
 import { Page } from 'components/utils/Page'
@@ -19,12 +19,21 @@ import { localePathPattern } from 'l10n/localePathPattern'
 import { Features, useFeature } from 'utils/hooks/useFeature'
 import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import {
+  useContractTypes,
+  useContractTypesFromQueryParam,
+} from 'utils/hooks/useContractTypes'
+import {
+  useQuoteCartId,
+  useQuoteCartIdFromQueryParam,
+} from 'utils/hooks/useQuoteCartId'
 import { useQuoteIds } from '../../utils/hooks/useQuoteIds'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import {
   getOfferData,
   getBundleVariantFromQuoteIds,
   getUniqueQuotesFromVariantList,
+  getBundleVariantFromContractTypes,
 } from './utils'
 import { AppPromotionSection } from './AppPromotionSection'
 import { Checkout } from './Checkout'
@@ -32,8 +41,6 @@ import { FaqSection } from './FaqSection'
 import { Introduction } from './Introduction'
 import { Perils } from './Perils'
 import { InsuranceSelector } from './InsuranceSelector'
-
-const QUOTE_CART_QUERY_PARAMETER = 'quoteCart'
 
 const createToggleCheckout = (history: History<any>, locale?: string) => (
   isOpen: boolean,
@@ -48,10 +55,8 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
 const getQuoteIdsFromBundleVariant = (bundleVariant: QuoteBundleVariant) =>
   bundleVariant.bundle.quotes.map((quote) => quote.id)
 
-const useQuoteCartId = () => {
-  const { search } = useLocation()
-  return new URLSearchParams(search).get(QUOTE_CART_QUERY_PARAMETER)
-}
+const getContractTypesFromBundleVariant = (bundleVariant: QuoteBundleVariant) =>
+  bundleVariant.bundle.quotes.map((quote) => quote.typeOfContract)
 
 export const OfferNew: React.FC = () => {
   const { path: localePath, isoLocale, phoneNumber } = useCurrentLocale()
@@ -62,6 +67,11 @@ export const OfferNew: React.FC = () => {
     Features.OFFER_PAGE_INSURANCE_TOGGLE,
   ])
 
+  const initialContractTypes = useContractTypesFromQueryParam()
+  const [selectedContractTypes, setSelectedContractTypes] = useContractTypes(
+    initialContractTypes ?? undefined,
+  )
+
   const {
     isLoading: quoteIdsIsLoading,
     quoteIds,
@@ -71,7 +81,8 @@ export const OfferNew: React.FC = () => {
 
   const history = useHistory()
 
-  const quoteCartId = useQuoteCartId()
+  const initialQuoteCartId = useQuoteCartIdFromQueryParam()
+  const [quoteCartId] = useQuoteCartId(initialQuoteCartId ?? undefined)
   const isUsingQuoteCartApi = quoteCartId !== null
 
   const {
@@ -129,7 +140,9 @@ export const OfferNew: React.FC = () => {
     isInsuranceToggleEnabled && bundleVariants.length > 1
 
   const selectedBundleVariant =
-    getBundleVariantFromQuoteIds(selectedQuoteIds, bundleVariants) ||
+    (isUsingQuoteCartApi
+      ? getBundleVariantFromContractTypes(bundleVariants, selectedContractTypes)
+      : getBundleVariantFromQuoteIds(selectedQuoteIds, bundleVariants)) ||
     bundleVariants?.[0]
 
   const onInsuranceSelectorChange = (
@@ -139,8 +152,10 @@ export const OfferNew: React.FC = () => {
       selectedQuoteIds,
       bundleVariants,
     )
-    const quoteIds = getQuoteIdsFromBundleVariant(selectedBundleVariant)
-    setSelectedQuoteIds(quoteIds)
+    setSelectedQuoteIds(getQuoteIdsFromBundleVariant(selectedBundleVariant))
+    setSelectedContractTypes(
+      getContractTypesFromBundleVariant(selectedBundleVariant),
+    )
     if (offerData) {
       trackOfferGTM(
         EventName.InsuranceSelectionToggle,
