@@ -5,14 +5,15 @@ import { SegmentAnalyticsJs } from 'quepasa'
 import React from 'react'
 import { Mount } from 'react-lifecycle-components'
 import { afterTick } from 'pages/Embark/utils'
-import { Locale, UpdatePickedLocaleDocument } from 'data/graphql'
-import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
+import { UpdatePickedLocaleDocument } from 'data/graphql'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { captureSentryError } from 'utils/sentry-client'
 import { Storage, StorageContainer } from 'utils/StorageContainer'
 import {
   apolloClient as realApolloClient,
   ApolloClientUtils,
 } from '../apolloClient'
+import { LocaleData } from '../l10n/locales'
 
 export const CREATE_SESSION_TOKEN_MUTATION: DocumentNode = gql`
   mutation CreateSessionToken {
@@ -30,7 +31,7 @@ interface SessionContainerProps {
 export const setupSession = async (
   apolloClientUtils: ApolloClientUtils,
   storage: Storage,
-  pickedLocale: Locale,
+  pickedLocale: LocaleData['isoLocale'],
 ): Promise<
   | {
       id: string
@@ -55,8 +56,11 @@ export const setupSession = async (
     apolloClientUtils.httpLink.options.headers.authorization =
       sessionResult.data.createSessionV2.token
   })
-  // eslint-disable-next-line  @typescript-eslint/ban-types
-  await apolloClientUtils.client.mutate<object, { pickedLocale: Locale }>({
+  await apolloClientUtils.client.mutate<
+    // eslint-disable-next-line  @typescript-eslint/ban-types
+    object,
+    { pickedLocale: LocaleData['isoLocale'] }
+  >({
     mutation: UpdatePickedLocaleDocument,
     variables: { pickedLocale },
   })
@@ -75,7 +79,8 @@ export const setupSession = async (
 export const SessionContainer: React.SFC<SessionContainerProps> = ({
   children,
 }) => {
-  const pickedLocale = getIsoLocale(useCurrentLocale())
+  const { isoLocale } = useCurrentLocale()
+
   const [createSessionCalled, setCreateSessionCalled] = React.useState(false)
   const client = useApolloClient()
 
@@ -95,7 +100,7 @@ export const SessionContainer: React.SFC<SessionContainerProps> = ({
                   httpLink: realApolloClient!.httpLink,
                 },
                 storageState,
-                pickedLocale,
+                isoLocale,
               )
               setCreateSessionCalled(true)
             }

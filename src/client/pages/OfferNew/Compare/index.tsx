@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
 import { CurrentInsurer } from 'data/graphql'
 import {
@@ -18,7 +18,7 @@ import { InsuranceProperties } from './types'
 
 const Wrapper = styled.div`
   padding: 5rem 0;
-  background-color: ${colorsV2.offwhite};
+  background-color: ${colorsV3.gray100};
 `
 
 const insuranceProperties: InsuranceProperties = {

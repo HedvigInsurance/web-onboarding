@@ -16,7 +16,7 @@ import { useCurrentLocale } from './l10n/useCurrentLocale'
 import { useGTMTracking } from './utils/tracking/gtm'
 
 export const App: React.ComponentType<StorageState> = ({ session }) => {
-  const currentLocale = useCurrentLocale()
+  const { isoLocale } = useCurrentLocale()
   const history = useHistory()
   useGTMTracking()
 
@@ -24,7 +24,7 @@ export const App: React.ComponentType<StorageState> = ({ session }) => {
     <>
       <GlobalCss />
       <TextKeyProvider
-        locale={currentLocale.isoLocale}
+        locale={isoLocale}
         locationSearch={history.location.search}
       >
         <Provider<WithStorageProps>
