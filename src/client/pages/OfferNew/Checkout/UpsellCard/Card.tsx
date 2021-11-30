@@ -4,9 +4,9 @@ import { colorsV3 } from '@hedviginsurance/brand'
 
 import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
-import { Button } from '../../../components/buttons'
+import { Button } from '../../../../components/buttons'
 
-const UpsellCardRoot = styled.div`
+const CardRoot = styled.div`
   background-color: ${colorsV3.gray200};
   border-radius: 8px;
   padding: 1.5em;
@@ -57,7 +57,7 @@ type UpsellCardProps = {
   onAcceptDeal: () => void
 }
 
-export const UpsellCard = ({
+export const Card = ({
   title,
   description,
   price,
@@ -65,11 +65,11 @@ export const UpsellCard = ({
   onAcceptDeal,
 }: UpsellCardProps) => {
   return (
-    <UpsellCardRoot>
+    <CardRoot>
       <Title>{title}</Title>
       <Description>{description}</Description>
       <Price>{price}</Price>
       <AddButton onClick={onAcceptDeal}>{actionButtonLabel}</AddButton>
-    </UpsellCardRoot>
+    </CardRoot>
   )
 }

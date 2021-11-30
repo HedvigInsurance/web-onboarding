@@ -12,14 +12,9 @@ import {
   SignState,
   BankIdStatus,
   QuoteBundleVariant,
-  BundledQuote,
   EditQuoteInput,
 } from 'data/graphql'
-import {
-  getQuoteIds,
-  getOfferData,
-  isSwedishAccident,
-} from 'pages/OfferNew/utils'
+import { getQuoteIds, getOfferData } from 'pages/OfferNew/utils'
 import { PriceBreakdown } from 'pages/OfferNew/common/PriceBreakdown'
 import { handleSignedEvent } from 'utils/tracking/signing'
 import { useTextKeys } from 'utils/textKeys'
@@ -27,6 +22,7 @@ import { useTrack } from 'utils/tracking/tracking'
 import { Variation, useVariation } from 'utils/hooks/useVariation'
 import { useUnderwritingLimitsHitReporter } from 'utils/sentry-client'
 import { useLockBodyScroll } from 'utils/hooks/useLockBodyScroll'
+import { useFeature, Features } from 'utils/hooks/useFeature'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { CloseButton } from 'components/CloseButton/CloseButton'
 import { StartDate } from '../Introduction/Sidebar/StartDate'
@@ -162,63 +158,6 @@ const Backdrop = styled('div')<Openable>`
   }};
 `
 
-const renderUpsellCard = (
-  quoteBundleVariants: QuoteBundleVariant[],
-  selectedQuoteBundleVariant: QuoteBundleVariant,
-  onAcceptDeal: (quoteIds: string[]) => void,
-  textKeys: Record<string, any>,
-) => {
-  const isSwedishAccidentAdded = selectedQuoteBundleVariant.bundle.quotes.some(
-    ({ quoteDetails }) => isSwedishAccident(quoteDetails),
-  )
-  if (isSwedishAccidentAdded) {
-    return null
-  }
-
-  // Look for a bundle variant that includes Accident Insurance.
-  // In case it founds it, store the bundle variant and the accident
-  // insurance quote so we can use them to accept UpsellCard deal and
-  // get the price of Accident Insurance.
-  const remainingBundleVariants = quoteBundleVariants.filter(
-    ({ id }) => id !== selectedQuoteBundleVariant.id,
-  )
-  let betterDealBundleVariant: QuoteBundleVariant | null = null
-  let accidentInsuranceQuote: BundledQuote | null = null
-  for (const bundleVariant of remainingBundleVariants) {
-    const accidentInsuranceIndex = bundleVariant.bundle.quotes.findIndex(
-      ({ quoteDetails }) => isSwedishAccident(quoteDetails),
-    )
-
-    if (accidentInsuranceIndex !== -1) {
-      betterDealBundleVariant = bundleVariant
-      accidentInsuranceQuote =
-        betterDealBundleVariant.bundle.quotes[accidentInsuranceIndex]
-      break
-    }
-  }
-
-  if (betterDealBundleVariant === null || accidentInsuranceQuote === null) {
-    return null
-  }
-
-  const localizedPerMonth = textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL()
-  const { amount, currency } = accidentInsuranceQuote.price
-  const price = `${amount} ${currency}${localizedPerMonth}`
-  const betterDealQuoteIds = betterDealBundleVariant.bundle.quotes.map(
-    ({ id }) => id,
-  )
-
-  return (
-    <UpsellCard
-      title={textKeys.ACCIDENT_SWEDEN_UPSELL_TITLE()}
-      description={textKeys.ACCIDENT_SWEDEN_UPSELL_DESCRIPTION()}
-      actionButtonLabel={textKeys.ACCIDENT_SWEDEN_UPSELL_BUTTON()}
-      price={price}
-      onAcceptDeal={() => onAcceptDeal(betterDealQuoteIds)}
-    />
-  )
-}
-
 export type CheckoutProps = {
   quoteBundleVariants: QuoteBundleVariant[]
   selectedQuoteBundleVariant: QuoteBundleVariant
@@ -241,6 +180,7 @@ export const Checkout = ({
   const variation = useVariation()
 
   const [visibilityState, setVisibilityState] = useState(VisibilityState.CLOSED)
+
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => setVisibilityState(VisibilityState.OPEN), 50)
@@ -281,6 +221,8 @@ export const Checkout = ({
 
   const [firstName, setFirstName] = useState(offerData.person.firstName ?? '')
   const [lastName, setLastName] = useState(offerData.person.lastName ?? '')
+
+  const [isUpsellCardVisible] = useFeature([Features.CHECKOUT_UPSELL_CARD])
 
   useEffect(() => {
     const setWindowHeight = () => {
@@ -487,13 +429,14 @@ export const Checkout = ({
                     </StartDateLabel>
                     <StartDate offerData={offerData} refetch={refetch} />
                   </StartDateWrapper>
-                  {locale.marketLabel == 'SE' &&
-                    renderUpsellCard(
-                      quoteBundleVariants,
-                      selectedQuoteBundleVariant,
-                      onAddQuotes,
-                      textKeys,
-                    )}
+                  {isUpsellCardVisible && (
+                    <UpsellCard
+                      quoteBundleVariants={quoteBundleVariants}
+                      selectedQuoteBundleVariant={selectedQuoteBundleVariant}
+                      onAcceptDeal={onAddQuotes}
+                      textKeys={textKeys}
+                    />
+                  )}
                   <InsuranceSummary offerData={offerData} />
                 </Section>
                 <SignDisclaimer
