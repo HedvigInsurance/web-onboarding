@@ -4,7 +4,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 
 import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
-import { Button } from '../../../../components/buttons'
+import { Button } from 'components/buttons'
 
 const CardRoot = styled.div`
   background-color: ${colorsV3.gray200};
