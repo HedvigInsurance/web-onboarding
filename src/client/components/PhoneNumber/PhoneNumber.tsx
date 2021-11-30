@@ -5,11 +5,6 @@ import { format as formatDate, getDay } from 'date-fns'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
 import { PhoneNumberData } from 'l10n/phoneNumbers'
-import {
-  EventName,
-  pushToGTMDataLayer,
-  trackOfferGTM,
-} from 'utils/tracking/gtm'
 import { Telephone } from '../icons/Telephone'
 
 const { black, white, gray700, gray500 } = colorsV3

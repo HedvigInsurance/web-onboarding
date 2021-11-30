@@ -14,7 +14,7 @@ export default {
 export const Default = () => (
   <MemoryRouter initialEntries={['/se/new-member']}>
     <TextKeyProvider locale="sv_SE">
-      <PhoneNumber color="white" />
+      <PhoneNumber color="white" onClick={(status) => status} />
     </TextKeyProvider>
   </MemoryRouter>
 )
