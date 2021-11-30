@@ -2628,6 +2628,11 @@ export type CreateQuoteCartAccessTokenResult = {
   accessToken: Scalars['String']
 }
 
+export type CreateQuoteCartResult = {
+  __typename?: 'CreateQuoteCartResult'
+  id: Scalars['ID']
+}
+
 export type CreateQuoteInput = {
   id: Scalars['ID']
   firstName: Scalars['String']
@@ -3367,6 +3372,7 @@ export type EmbarkExternalInsuranceProviderActionData = {
   __typename?: 'EmbarkExternalInsuranceProviderActionData'
   next: EmbarkLink
   skip: EmbarkLink
+  storeKey: Scalars['String']
 }
 
 export type EmbarkExternalRedirect = {
@@ -3648,6 +3654,7 @@ export type EmbarkSelectActionOption = {
   values: Array<Scalars['String']>
   link: EmbarkLink
   tooltip?: Maybe<EmbarkTooltip>
+  badge?: Maybe<Scalars['String']>
   api?: Maybe<EmbarkApi>
 }
 
@@ -7552,7 +7559,7 @@ export type Mutation = {
    * Create a new onboarding session. This is not an authentication session, but rather an object that
    * ties the onboarding journey together.
    */
-  onboardingQuoteCart_create: Scalars['ID']
+  onboardingQuoteCart_create: CreateQuoteCartResult
   /** Create a quote as part of this onboarding session. */
   quoteCart_createQuoteBundle: CreateQuoteBundleResult
   /**
@@ -11414,9 +11421,12 @@ export type CreateOnboardingQuoteCartMutationVariables = Exact<{
   locale: Scalars['String']
 }>
 
-export type CreateOnboardingQuoteCartMutation = {
-  __typename?: 'Mutation'
-} & Pick<Mutation, 'onboardingQuoteCart_create'>
+export type CreateOnboardingQuoteCartMutation = { __typename?: 'Mutation' } & {
+  onboardingQuoteCart_create: { __typename?: 'CreateQuoteCartResult' } & Pick<
+    CreateQuoteCartResult,
+    'id'
+  >
+}
 
 export type CreateQuoteBundleMutationVariables = Exact<{
   quoteCartId: Scalars['ID']
@@ -12504,7 +12514,9 @@ export type CreateDanishHomeAccidentTravelQuoteMutationOptions = ApolloReactComm
 >
 export const CreateOnboardingQuoteCartDocument = gql`
   mutation CreateOnboardingQuoteCart($market: Market!, $locale: String!) {
-    onboardingQuoteCart_create(input: { market: $market, locale: $locale })
+    onboardingQuoteCart_create(input: { market: $market, locale: $locale }) {
+      id
+    }
   }
 `
 export type CreateOnboardingQuoteCartMutationFn = ApolloReactCommon.MutationFunction<
