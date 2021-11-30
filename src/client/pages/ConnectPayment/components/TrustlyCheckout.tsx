@@ -1,8 +1,8 @@
+import { useLocation } from 'react-router'
 import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
 import styled from '@emotion/styled'
 import { Button } from 'components/buttons'
-import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { useRegisterDirectDebitMutation } from '../containers/RegisterDirectDebitMutation'
@@ -23,11 +23,11 @@ export const TrustlyCheckout: React.FC<Props> = ({ onSuccess }) => {
   const textKeys = useTextKeys()
   const [trustlyModalIsOpen, setTrustlyModalIsOpen] = React.useState(false)
   const [trustlyUrl, setTrustlyUrl] = React.useState<string | null>(null)
-  const currentLocale = useCurrentLocale()
   const [createTrustlyUrlMutation] = useRegisterDirectDebitMutation()
+  const { pathname } = useLocation()
 
   const generateTrustlyUrl = async () => {
-    const baseUrl = `${window.location.origin}/${currentLocale}/new-member/connect-payment`
+    const baseUrl = `${window.location.origin}${pathname}`
 
     const res = await createTrustlyUrlMutation({
       variables: {

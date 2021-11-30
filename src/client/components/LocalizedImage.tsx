@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { useCurrentLocale } from 'components/utils/CurrentLocale'
+import { useCurrentLocale } from '../l10n/useCurrentLocale'
+import { LocaleLabel } from '../l10n/locales'
 
 type Props = React.ComponentPropsWithoutRef<'img'> & {
   src: string
@@ -10,7 +11,7 @@ const Image = styled.img`
   max-width: 100%;
 `
 
-const getLocaleSuffix = (currentLocale: string) => {
+const getLocaleSuffix = (currentLocale: LocaleLabel) => {
   switch (currentLocale) {
     case 'se':
       return 'se'
@@ -23,7 +24,12 @@ const getLocaleSuffix = (currentLocale: string) => {
   }
 }
 
-const getLocaleSrc = (basePath: string, currentLocale: string) => {
+type GetLocaleSrcParams = {
+  basePath: string
+  currentLocale: LocaleLabel
+}
+
+const getLocaleSrc = ({ basePath, currentLocale }: GetLocaleSrcParams) => {
   const pathParts = basePath.split('.')
   const localePath = [
     ...pathParts.slice(0, -1),
@@ -34,7 +40,7 @@ const getLocaleSrc = (basePath: string, currentLocale: string) => {
 }
 
 export const LocalizedImage: React.FC<Props> = ({ src, ...props }) => {
-  const currentLocale = useCurrentLocale()
-  const localeSrc = getLocaleSrc(src, currentLocale)
+  const { path } = useCurrentLocale()
+  const localeSrc = getLocaleSrc({ basePath: src, currentLocale: path })
   return <Image src={localeSrc} {...props} />
 }
