@@ -8,7 +8,7 @@ type LocaleUrlParam = {
 
 const FALLBACK_LOCALE: LocaleLabel = 'se-en'
 
-export const getLocaleParamFromPath = (path: string): LocaleLabel => {
+const getLocaleParamFromPath = (path: string): LocaleLabel => {
   const localeMatch = matchPath<LocaleUrlParam>(path, {
     path: localePathPattern + '/*',
   })

@@ -3,11 +3,7 @@ import { Redirect } from 'react-router-dom'
 import { CurrentLocale } from '../components/utils/CurrentLocale'
 import { StorageContainer } from '../utils/StorageContainer'
 
-type SessionTokenGuardProps = {
-  children: React.ReactNode
-}
-
-export const SessionTokenGuard = ({ children }: SessionTokenGuardProps) => (
+export const SessionTokenGuard: React.SFC = ({ children }) => (
   <StorageContainer>
     {(storageState) =>
       storageState.session.getSession()?.token ? (
