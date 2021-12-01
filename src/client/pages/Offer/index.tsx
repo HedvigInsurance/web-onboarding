@@ -165,7 +165,7 @@ export const OfferPage = ({
     <Page>
       {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
         <TopBar isTransparent>
-          <LanguagePicker path="/new-member/offer" />
+          <LanguagePicker path={`/new-member/offer/${quoteCartId}`} />
         </TopBar>
       )}
       {offerData && (
