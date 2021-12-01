@@ -42,7 +42,7 @@ const Config: readonly FeatureConfig[] = [
   {
     name: Features.CHECKOUT_UPSELL_CARD,
     envs: ['staging', 'production'],
-    markets: [Market.Se],
+    markets: ['SE'],
   },
 ]
 
