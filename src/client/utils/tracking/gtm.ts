@@ -107,6 +107,7 @@ export enum EventName {
   SignedCustomer = 'signed_customer',
   InsuranceSelectionToggle = 'insurance_selection_toggle',
   ClickCallNumber = 'click_call_number',
+  OfferCrossSell = 'offer_cross_sell',
 }
 
 type OptionalParameters = {

@@ -111,6 +111,26 @@ export const OfferNew: React.FC = () => {
     }
   }
 
+  const handleCheckoutUpsellCardAccepted = (
+    selectedBundleVariant: QuoteBundleVariant,
+  ) => {
+    const previouslySelectedBundleVariant = getBundleVariantFromQuoteIds(
+      selectedQuoteIds,
+      bundleVariants,
+    )
+    const quoteIds = getQuoteIdsFromBundleVariant(selectedBundleVariant)
+    setSelectedQuoteIds(quoteIds)
+    if (offerData) {
+      trackOfferGTM(
+        EventName.OfferCrossSell,
+        getOfferData(selectedBundleVariant.bundle),
+        redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction',
+        previouslySelectedBundleVariant &&
+          getOfferData(previouslySelectedBundleVariant?.bundle),
+      )
+    }
+  }
+
   const checkoutMatch = useRouteMatch(`${localePathPattern}/new-member/sign`)
   const toggleCheckout = createToggleCheckout(history, currentLocale.path)
 
@@ -208,11 +228,11 @@ export const OfferNew: React.FC = () => {
             <AppPromotionSection />
             <FaqSection />
             <Checkout
-              offerData={offerData}
+              quoteBundleVariants={bundleVariants}
+              selectedQuoteBundleVariant={selectedBundleVariant}
+              onUpsellAccepted={handleCheckoutUpsellCardAccepted}
               isOpen={checkoutMatch !== null}
-              onClose={() => {
-                handleCheckoutToggle(false)
-              }}
+              onClose={() => handleCheckoutToggle(false)}
               refetch={refetch as () => Promise<any>}
             />
           </>

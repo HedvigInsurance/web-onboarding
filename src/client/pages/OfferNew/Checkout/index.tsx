@@ -3,32 +3,37 @@ import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
-import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import {
-  SignState,
-  BankIdStatus,
   useMemberQuery,
   useSignQuotesMutation,
   useSignStatusLazyQuery,
   useSignMethodForQuotesQuery,
   useEditQuoteMutation,
+  SignState,
+  BankIdStatus,
+  QuoteBundleVariant,
   EditQuoteInput,
 } from 'data/graphql'
-import { OfferData } from 'pages/OfferNew/types'
-import { getQuoteIds } from 'pages/OfferNew/utils'
+import { getQuoteIds, getOfferData } from 'pages/OfferNew/utils'
+import { PriceBreakdown } from 'pages/OfferNew/common/PriceBreakdown'
 import { handleSignedEvent } from 'utils/tracking/signing'
+import { useTextKeys } from 'utils/textKeys'
 import { useTrack } from 'utils/tracking/tracking'
 import { Variation, useVariation } from 'utils/hooks/useVariation'
 import { useUnderwritingLimitsHitReporter } from 'utils/sentry-client'
 import { useLockBodyScroll } from 'utils/hooks/useLockBodyScroll'
+import { useFeature, Features } from 'utils/hooks/useFeature'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { CloseButton } from 'components/CloseButton/CloseButton'
+import { StartDate } from '../Introduction/Sidebar/StartDate'
 import { useScrollLock, VisibilityState, useSsnError } from './hooks'
-import { CheckoutContent } from './CheckoutContent'
 import { Sign, SignUiState } from './Sign'
 import { SignDisclaimer } from './SignDisclaimer'
 import { CheckoutSuccessRedirect } from './CheckoutSuccessRedirect'
 import { SignFailModal } from './SignFailModal'
 import { UserDetailsForm } from './UserDetailsForm'
+import { InsuranceSummary } from './InsuranceSummary'
+import { UpsellCard } from './UpsellCard'
 
 type Openable = {
   visibilityState: VisibilityState
@@ -96,6 +101,29 @@ const InnerWrapper = styled('div')`
   }
 `
 
+const Section = styled.div`
+  width: 100%;
+`
+
+const StartDateWrapper = styled.div`
+  position: relative;
+  margin-top: 0.375rem;
+  margin-bottom: 2rem;
+`
+
+const StartDateLabel = styled.p`
+  margin: 0 0 0.5rem 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1;
+`
+
+const Heading = styled.h3`
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1.25;
+  padding-top: 1.875rem;
+`
+
 const Backdrop = styled('div')<Openable>`
   position: fixed;
   background: rgba(25, 25, 25, 0.5);
@@ -131,19 +159,28 @@ const Backdrop = styled('div')<Openable>`
 `
 
 export type CheckoutProps = {
-  offerData: OfferData
+  quoteBundleVariants: QuoteBundleVariant[]
+  selectedQuoteBundleVariant: QuoteBundleVariant
+  onUpsellAccepted: (selectedBundleVariant: QuoteBundleVariant) => void
   isOpen?: boolean
   onClose?: () => void
   refetch: () => Promise<void>
 }
 
 export const Checkout = ({
-  offerData,
+  quoteBundleVariants,
+  selectedQuoteBundleVariant,
+  onUpsellAccepted,
   isOpen,
   onClose,
   refetch,
 }: CheckoutProps) => {
+  const textKeys = useTextKeys()
+  const locale = useCurrentLocale()
+  const variation = useVariation()
+
   const [visibilityState, setVisibilityState] = useState(VisibilityState.CLOSED)
+
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => setVisibilityState(VisibilityState.OPEN), 50)
@@ -162,25 +199,30 @@ export const Checkout = ({
   const [emailUpdateLoading, setEmailUpdateLoading] = useState(false)
   const [ssnUpdateLoading, setSsnUpdateLoading] = useState(false)
   const [isShowingFailModal, setIsShowingFailModal] = useState(false)
+
+  const offerData = getOfferData(selectedQuoteBundleVariant.bundle)
+  const quoteIds = getQuoteIds(offerData)
+
   const [startPollingSignState, signStatusQueryProps] = useSignStatusLazyQuery({
     pollInterval: 1000,
   })
   const signStatus = signStatusQueryProps.data?.signStatus ?? null
+
   const [signQuotes, signQuotesMutation] = useSignQuotesMutation()
   const member = useMemberQuery()
-  const locale = useCurrentLocale()
-  const variation = useVariation()
-  const quoteIds = getQuoteIds(offerData)
   const { data: signMethodData } = useSignMethodForQuotesQuery({
     variables: { input: quoteIds },
   })
+  const [editQuote, editQuoteResult] = useEditQuoteMutation()
+
+  const { ssnBackendError } = useSsnError(editQuoteResult)
 
   const [windowInnerHeight, setWindowInnerHeight] = useState(window.innerHeight)
 
   const [firstName, setFirstName] = useState(offerData.person.firstName ?? '')
   const [lastName, setLastName] = useState(offerData.person.lastName ?? '')
-  const [editQuote, editQuoteResult] = useEditQuoteMutation()
-  const { ssnBackendError } = useSsnError(editQuoteResult)
+
+  const [isUpsellCardVisible] = useFeature([Features.CHECKOUT_UPSELL_CARD])
 
   useEffect(() => {
     const setWindowHeight = () => {
@@ -359,11 +401,13 @@ export const Checkout = ({
             >
               <InnerWrapper>
                 <CloseButton onClick={onClose} />
-                <CheckoutContent
-                  offerData={offerData}
-                  isLoading={ssnUpdateLoading}
-                  refetch={refetch}
-                >
+                <Section>
+                  <Heading>{textKeys.CHECKOUT_HEADING()}</Heading>
+                  <PriceBreakdown
+                    offerData={offerData}
+                    showTotal={true}
+                    isLoading={ssnUpdateLoading}
+                  />
                   <UserDetailsForm
                     firstName={firstName}
                     lastName={lastName}
@@ -372,14 +416,28 @@ export const Checkout = ({
                     email={offerData.person.email ?? ''}
                     onEmailChange={onEmailChange}
                     ssn={offerData.person.ssn ?? ''}
-                    ssnBackendError={ssnBackendError}
                     onSsnChange={onSsnChange}
+                    ssnBackendError={ssnBackendError}
                     isFirstAndLastNameVisible={
                       !offerData.person.firstName || !offerData.person.lastName
                     }
+                    onSubmit={startSign}
                   />
-                </CheckoutContent>
-
+                  <StartDateWrapper>
+                    <StartDateLabel>
+                      {textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}
+                    </StartDateLabel>
+                    <StartDate offerData={offerData} refetch={refetch} />
+                  </StartDateWrapper>
+                  {isUpsellCardVisible && (
+                    <UpsellCard
+                      quoteBundleVariants={quoteBundleVariants}
+                      selectedQuoteBundleVariant={selectedQuoteBundleVariant}
+                      onUpsellAccepted={onUpsellAccepted}
+                    />
+                  )}
+                  <InsuranceSummary offerData={offerData} />
+                </Section>
                 <SignDisclaimer
                   offerData={offerData}
                   signMethod={signMethodData?.signMethodForQuotes}

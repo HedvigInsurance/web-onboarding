@@ -311,5 +311,8 @@
   "PHONE_OPEN_TODAY": "Öppet idag kl",
   "PHONE_CLOSED_UNTIL": "Stängt till kl",
   "CHECKOUT_EMAIL_LABEL": "E-mail",
-  "PHONE_OPENS_MONDAY_AT": "Öppnar måndag kl"
+  "PHONE_OPENS_MONDAY_AT": "Öppnar måndag kl",
+  "ACCIDENT_SWEDEN_UPSELL_TITLE": "Olycksfallsförsäkring",
+  "ACCIDENT_SWEDEN_UPSELL_DESCRIPTION": "Täcker olyckor, skador på fritiden utanför hemmet, tandskador, ärr, kosmetiska skador, sjukhusvistelser och mycket mer. Försäkringen gäller alla medförsäkrade. Ingen självrisk.",
+  "ACCIDENT_SWEDEN_UPSELL_BUTTON": "Lägg till skydd"
 }

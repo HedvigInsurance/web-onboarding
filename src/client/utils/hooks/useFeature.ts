@@ -5,6 +5,7 @@ export enum Features {
   OFFER_PAGE_INSURANCE_TOGGLE = 'OFFER_PAGE_INSURANCE_TOGGLE',
   CHECKOUT_CREDIT_CHECK = 'CHECKOUT_CREDIT_CHECK',
   TEST_FEATURE = 'TEST_FEATURE', // For unit testing purposes
+  CHECKOUT_UPSELL_CARD = 'CHECKOUT_UPSELL_CARD',
 }
 
 type Env = 'staging' | 'production'
@@ -29,6 +30,11 @@ const Config: readonly FeatureConfig[] = [
   {
     name: Features.TEST_FEATURE,
     envs: ['staging'],
+    markets: [Market.Se],
+  },
+  {
+    name: Features.CHECKOUT_UPSELL_CARD,
+    envs: ['staging', 'production'],
     markets: [Market.Se],
   },
 ]
