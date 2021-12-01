@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV2 } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import hexToRgba from 'hex-to-rgba'
 import React from 'react'
 import { useMediaQuery } from 'react-responsive'
@@ -25,8 +25,8 @@ const Container = styled('div')`
   border-radius: 4px;
   display: flex;
   flex-direction: row;
-  background-color: ${colorsV2.white};
-  border: 1px solid ${colorsV2.lightgray};
+  background-color: ${colorsV3.white};
+  border: 1px solid ${colorsV3.gray300};
   margin: 0 -1rem;
 
   @media (max-width: 1020px) {
@@ -64,14 +64,14 @@ const ColumnRow = styled('div')`
   display: flex;
   height: 1.25rem;
   margin-bottom: 1.5rem;
-  color: ${colorsV2.gray};
+  color: ${colorsV3.gray500};
   :last-child {
     margin-bottom: 0.875rem;
   }
 `
 
 const ColumnRowPrimaryContent = styled('span')`
-  color: ${colorsV2.black};
+  color: ${colorsV3.gray900};
   margin-right: 4px;
 `
 
@@ -105,7 +105,7 @@ const PrimaryCompanySection = styled('div')`
   height: 100%;
   padding: 2rem 1rem;
   box-sizing: border-box;
-  background-color: ${colorsV2.lightgray};
+  background-color: ${colorsV3.gray300};
   position: relative;
 
   :before,
@@ -113,7 +113,7 @@ const PrimaryCompanySection = styled('div')`
     content: '';
     position: absolute;
     left: 0;
-    background-color: ${colorsV2.lightgray};
+    background-color: ${colorsV3.gray300};
     width: 100%;
     height: 10px;
   }
@@ -183,7 +183,7 @@ const OtherCompanyHead = styled('button')<OtherCompanyHeadProps>`
   font-weight: 500;
   color: ${(props) =>
     hexToRgba(
-      colorsV2.black,
+      colorsV3.gray900,
       props.currentCompany !== null && !props.dropdownIsVisible ? 1 : 0.2,
     )};
   transition: all 0.1s ease;
@@ -202,14 +202,14 @@ const OtherCompanyHead = styled('button')<OtherCompanyHeadProps>`
     width: 14px;
     transition: all 0.1s ease;
     ${(props) => props.dropdownIsVisible && `transform: rotate(180deg);`}
-    ${(props) => props.dropdownIsVisible && `fill: ${colorsV2.violet500};`}
+    ${(props) => props.dropdownIsVisible && `fill: ${colorsV3.purple900};`}
   }
 
   :hover {
-    ${(props) => !props.dropdownIsVisible && `color: ${colorsV2.black};`}
+    ${(props) => !props.dropdownIsVisible && `color: ${colorsV3.gray900};`}
 
     svg {
-      fill: ${colorsV2.violet500};
+      fill: ${colorsV3.purple900};
     }
   }
 
@@ -223,7 +223,7 @@ const OtherCompanyHead = styled('button')<OtherCompanyHeadProps>`
       position: absolute;
       left: 50%;
       bottom: -1.75rem;
-      fill: ${colorsV2.violet500};
+      fill: ${colorsV3.purple900};
       ${(props) =>
         props.dropdownIsVisible
           ? `transform: translateX(-50%) rotate(180deg);`
@@ -233,7 +233,7 @@ const OtherCompanyHead = styled('button')<OtherCompanyHeadProps>`
 `
 
 const Dropdown = styled('div')<{ visible: boolean }>`
-  background: ${colorsV2.white};
+  background: ${colorsV3.white};
   width: 100%;
   position: absolute;
   left: 0;
@@ -244,7 +244,7 @@ const Dropdown = styled('div')<{ visible: boolean }>`
   visibility: ${(props) => (props.visible ? 'visible' : 'hidden')};
   padding: 1rem;
   box-sizing: border-box;
-  border-top: 1px solid ${colorsV2.lightgray};
+  border-top: 1px solid ${colorsV3.gray300};
   max-height: 90%;
   overflow-y: scroll;
 
@@ -261,7 +261,7 @@ const DropdownRow = styled('button')`
   font-size: 1rem;
   line-height: 1.5rem;
   text-align: left;
-  color: ${colorsV2.darkgray};
+  color: ${colorsV3.gray700};
   margin-bottom: 0.875rem;
   cursor: pointer;
   padding: 0 0.375rem;
@@ -272,7 +272,7 @@ const DropdownRow = styled('button')`
   }
 
   :hover {
-    color: ${colorsV2.violet500};
+    color: ${colorsV3.purple900};
   }
 
   @media (max-width: 600px) {
