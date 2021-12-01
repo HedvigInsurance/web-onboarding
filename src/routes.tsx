@@ -16,6 +16,7 @@ import { Landing } from './client/pages/Landing/Landing'
 import { LoginApp } from './client/pages/LoginApp'
 import { OfferNew } from './client/pages/OfferNew'
 import { SignLoading } from './client/pages/SignLoading'
+import { OfferPage } from './client/pages/Offer'
 
 enum EmbarkStory {
   DenmarkContentsWithAddressAutocomplete = 'Web Onboarding DK - Contents With Autocomplete',
@@ -76,6 +77,10 @@ export const serverSideRoutes: ServerSideRoute[] = [
   },
   {
     path: localePathPattern + '/new-member/(offer|sign)',
+    titleTextKey: 'OFFER_PAGE_TITLE',
+  },
+  {
+    path: localePathPattern + '/new-member/(offer|sign)/:id',
     titleTextKey: 'OFFER_PAGE_TITLE',
   },
   {
@@ -147,6 +152,11 @@ export const reactPageRoutes: ReactPageRoute[] = [
   {
     path: localePathPattern + '/new-member/(offer|sign)',
     Component: OfferNew,
+    exact: true,
+  },
+  {
+    path: localePathPattern + '/new-member/(offer|sign)/:id',
+    Component: OfferPage,
     exact: true,
   },
   {
