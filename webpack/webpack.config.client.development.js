@@ -35,6 +35,9 @@ module.exports = webpackConfig({
         NODE_ENV: JSON.stringify('development'),
         SENTRY_DSN: JSON.stringify(process.env.SENTRY_DSN),
         SENTRY_ENVIRONMENT: JSON.stringify('local'),
+        ENABLE_QUOTE_CART_API: JSON.stringify(
+          process.env.ENABLE_QUOTE_CART_API,
+        ),
       },
     }),
     new webpack.ProvidePlugin({

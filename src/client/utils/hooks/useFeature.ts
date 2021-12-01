@@ -1,9 +1,11 @@
 import { AppEnvironment } from 'src/shared/clientConfig'
-import { Market, useMarket } from 'components/utils/CurrentLocale'
+import { MarketLabel } from 'l10n/locales'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 
 export enum Features {
   OFFER_PAGE_INSURANCE_TOGGLE = 'OFFER_PAGE_INSURANCE_TOGGLE',
   CHECKOUT_CREDIT_CHECK = 'CHECKOUT_CREDIT_CHECK',
+  QUOTE_CART_API = 'QUOTE_CART_API',
   TEST_FEATURE = 'TEST_FEATURE', // For unit testing purposes
   CHECKOUT_UPSELL_CARD = 'CHECKOUT_UPSELL_CARD',
 }
@@ -13,29 +15,34 @@ type Env = 'staging' | 'production'
 interface FeatureConfig {
   name: Features
   envs: Env[]
-  markets: Market[]
+  markets: MarketLabel[]
 }
 
 const Config: readonly FeatureConfig[] = [
   {
     name: Features.OFFER_PAGE_INSURANCE_TOGGLE,
     envs: ['staging', 'production'],
-    markets: [Market.Se],
+    markets: ['SE'],
   },
   {
     name: Features.CHECKOUT_CREDIT_CHECK,
     envs: ['staging', 'production'],
-    markets: [Market.No],
+    markets: ['NO'],
   },
   {
     name: Features.TEST_FEATURE,
     envs: ['staging'],
-    markets: [Market.Se],
+    markets: ['SE'],
+  },
+  {
+    name: Features.QUOTE_CART_API,
+    envs: process.env.ENABLE_QUOTE_CART_API === 'true' ? ['staging'] : [],
+    markets: ['SE', 'DK', 'NO'],
   },
   {
     name: Features.CHECKOUT_UPSELL_CARD,
     envs: ['staging', 'production'],
-    markets: [Market.Se],
+    markets: ['SE'],
   },
 ]
 
@@ -46,7 +53,7 @@ const isFeatureEnabled = ({
 }: {
   config: FeatureConfig
   env: AppEnvironment
-  market: Market
+  market: MarketLabel
 }) => {
   if (env === 'development') {
     return config.envs.includes('staging') && config.markets.includes(market)
@@ -56,13 +63,17 @@ const isFeatureEnabled = ({
 }
 
 export const useFeature = (features: Features[] = []) => {
-  const market = useMarket()
+  const { marketLabel } = useCurrentLocale()
   const env = window.hedvigClientConfig?.appEnvironment ?? 'development'
 
   return features.reduce<Array<boolean>>((acc, feature) => {
     const featureConfig = Config.find((item) => item.name === feature)
     if (featureConfig) {
-      const isEnabled = isFeatureEnabled({ config: featureConfig, env, market })
+      const isEnabled = isFeatureEnabled({
+        config: featureConfig,
+        env,
+        market: marketLabel,
+      })
       return [...acc, isEnabled]
     } else {
       throw new Error(`Unknown feature: ${feature}`)
