@@ -167,13 +167,13 @@ export const OfferNew: React.FC = () => {
     )
   }
 
-  const onClickPhoneTracking = (path: string, status: 'opened' | 'closed') => {
+  const handleClickPhoneNumber = (status: 'opened' | 'closed') => {
     if (offerData) {
       trackOfferGTM(
         EventName.ClickCallNumber,
         offerData,
         redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction',
-        { phoneNumberData: { path, status } },
+        { phoneNumberData: { path: history.location.pathname, status } },
       )
     }
   }
@@ -186,9 +186,7 @@ export const OfferNew: React.FC = () => {
             {currentLocale.phoneNumber ? (
               <PhoneNumber
                 color="white"
-                onClick={(status) =>
-                  onClickPhoneTracking(history.location.pathname, status)
-                }
+                onClick={(status) => handleClickPhoneNumber(status)}
               />
             ) : (
               <LanguagePicker />

@@ -20,11 +20,11 @@ export const ConnectPayment: React.FC = () => {
 
   const history = useHistory()
 
-  const onClickPhoneTracking = (path: string, status: 'opened' | 'closed') => {
+  const handleClickPhoneNumber = (status: 'opened' | 'closed') => {
     pushToGTMDataLayer({
       event: 'click_call_number',
       phoneNumberData: {
-        path,
+        path: history.location.pathname,
         status,
       },
     })
@@ -40,9 +40,7 @@ export const ConnectPayment: React.FC = () => {
           {currentLocale.phoneNumber ? (
             <PhoneNumber
               color="white"
-              onClick={(status) =>
-                onClickPhoneTracking(history.location.pathname, status)
-              }
+              onClick={(status) => handleClickPhoneNumber(status)}
             />
           ) : (
             <LanguagePicker />
