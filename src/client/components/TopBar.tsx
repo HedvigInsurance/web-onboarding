@@ -1,9 +1,9 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
-import { CurrentLocale } from './utils/CurrentLocale'
 
 export const TOP_BAR_Z_INDEX = 1000
 export const TOP_BAR_HEIGHT = '4.5rem'
@@ -76,19 +76,15 @@ export const TopBar: React.FC<Props> = ({
   centered,
   children,
 }) => {
+  const { path } = useCurrentLocale()
   const ActualWrapper = isTransparent ? TransparentWrapper : Wrapper
   const ActualContainer = centered ? CenteredContainer : Container
   return (
     <ActualWrapper>
       <ActualContainer>
-        <CurrentLocale>
-          {({ currentLocale }) => (
-            <LogoLink href={'/' + currentLocale}>
-              <HedvigLogo width={94} />
-            </LogoLink>
-          )}
-        </CurrentLocale>
-
+        <LogoLink href={'/' + path}>
+          <HedvigLogo width={94} />
+        </LogoLink>
         {children}
       </ActualContainer>
     </ActualWrapper>
