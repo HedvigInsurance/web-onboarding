@@ -106,7 +106,7 @@ export const OfferNew: React.FC = () => {
     }
   }
 
-  const onCheckoutUpsellCardAccepted = (
+  const handleCheckoutUpsellCardAccepted = (
     selectedBundleVariant: QuoteBundleVariant,
   ) => {
     const previouslySelectedBundleVariant = getBundleVariantFromQuoteIds(
@@ -205,7 +205,7 @@ export const OfferNew: React.FC = () => {
             <Checkout
               quoteBundleVariants={bundleVariants}
               selectedQuoteBundleVariant={selectedBundleVariant}
-              onUpsellAccepted={onCheckoutUpsellCardAccepted}
+              onUpsellAccepted={handleCheckoutUpsellCardAccepted}
               isOpen={checkoutMatch !== null}
               onClose={() => handleCheckoutToggle(false)}
               refetch={refetch as () => Promise<any>}

@@ -54,7 +54,7 @@ type UpsellCardProps = {
   description: string
   price: string
   actionButtonLabel: string
-  onAcceptDeal: () => void
+  onConfirm: () => void
 }
 
 export const Card = ({
@@ -62,14 +62,14 @@ export const Card = ({
   description,
   price,
   actionButtonLabel,
-  onAcceptDeal,
+  onConfirm,
 }: UpsellCardProps) => {
   return (
     <CardRoot>
       <Title>{title}</Title>
       <Description>{description}</Description>
       <Price>{price}</Price>
-      <AddButton onClick={onAcceptDeal}>{actionButtonLabel}</AddButton>
+      <AddButton onClick={onConfirm}>{actionButtonLabel}</AddButton>
     </CardRoot>
   )
 }

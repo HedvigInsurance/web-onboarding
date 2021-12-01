@@ -433,7 +433,7 @@ export const Checkout = ({
                     <UpsellCard
                       quoteBundleVariants={quoteBundleVariants}
                       selectedQuoteBundleVariant={selectedQuoteBundleVariant}
-                      onAcceptDeal={onUpsellAccepted}
+                      onUpsellAccepted={onUpsellAccepted}
                     />
                   )}
                   <InsuranceSummary offerData={offerData} />

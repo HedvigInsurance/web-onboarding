@@ -7,7 +7,7 @@ import { Card } from './Card'
 type UpsellCardProps = {
   quoteBundleVariants: QuoteBundleVariant[]
   selectedQuoteBundleVariant: QuoteBundleVariant
-  onAcceptDeal: (selectedBundleVariant: QuoteBundleVariant) => void
+  onUpsellAccepted: (selectedBundleVariant: QuoteBundleVariant) => void
 }
 
 const getSwedishAccidentQuoteFromVariant = (
@@ -27,7 +27,7 @@ const isSwedishAccidentQuoteInVariant = (bundleVariant: QuoteBundleVariant) => {
 export const UpsellCard = ({
   quoteBundleVariants,
   selectedQuoteBundleVariant,
-  onAcceptDeal,
+  onUpsellAccepted,
 }: UpsellCardProps) => {
   const textKeys = useTextKeys()
 
@@ -55,7 +55,7 @@ export const UpsellCard = ({
       description={textKeys.ACCIDENT_SWEDEN_UPSELL_DESCRIPTION()}
       actionButtonLabel={textKeys.ACCIDENT_SWEDEN_UPSELL_BUTTON()}
       price={price}
-      onAcceptDeal={() => onAcceptDeal(bundleWithAccidentQuote)}
+      onConfirm={() => onUpsellAccepted(bundleWithAccidentQuote)}
     />
   )
 }
