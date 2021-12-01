@@ -1,7 +1,12 @@
 import { History } from 'history'
 import { SemanticEvents } from 'quepasa'
 import React, { useEffect } from 'react'
-import { useHistory, useRouteMatch, RouteComponentProps } from 'react-router'
+import {
+  useHistory,
+  useRouteMatch,
+  RouteComponentProps,
+  Redirect,
+} from 'react-router'
 import { LoadingPage } from 'components/LoadingPage'
 import { TopBar } from 'components/TopBar'
 import { Page } from 'components/utils/Page'
@@ -51,8 +56,9 @@ export const OfferPage = ({
 }: OfferPageProps) => {
   const { isoLocale, path: pathLocale } = useCurrentLocale()
   const variation = useVariation()
-  const [isInsuranceToggleEnabled] = useFeature([
+  const [isInsuranceToggleEnabled, isQuoteCartEnabled] = useFeature([
     Features.OFFER_PAGE_INSURANCE_TOGGLE,
+    Features.QUOTE_CART_API,
   ])
 
   const initialContractTypes = useContractTypesFromQueryParam()
@@ -155,6 +161,10 @@ export const OfferPage = ({
 
   const handleCheckoutToggle = (open: boolean) => {
     toggleCheckout(open)
+  }
+
+  if (!isQuoteCartEnabled) {
+    return <Redirect to={`/${pathLocale}/new-member`} />
   }
 
   if (isLoadingQuoteCart) {
