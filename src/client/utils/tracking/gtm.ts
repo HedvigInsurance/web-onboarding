@@ -23,7 +23,7 @@ type GTMUserProperties = {
   environment: AppEnvironment
 }
 
-export type GTMOfferData = {
+type GTMOfferData = {
   insurance_type: TrackableContractType
   referral_code: 'yes' | 'no'
   number_of_people: number
