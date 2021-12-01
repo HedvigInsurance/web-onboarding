@@ -5,16 +5,12 @@ import { StorageContainer } from '../utils/StorageContainer'
 
 type SessionTokenGuardProps = {
   children: React.ReactNode
-  disable?: boolean
 }
 
-export const SessionTokenGuard = ({
-  children,
-  disable = false,
-}: SessionTokenGuardProps) => (
+export const SessionTokenGuard = ({ children }: SessionTokenGuardProps) => (
   <StorageContainer>
     {(storageState) =>
-      storageState.session.getSession()?.token || disable ? (
+      storageState.session.getSession()?.token ? (
         <>{children}</>
       ) : (
         <CurrentLocale>
