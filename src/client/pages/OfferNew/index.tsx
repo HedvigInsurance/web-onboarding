@@ -7,10 +7,9 @@ import { TopBar } from 'components/TopBar'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import {
-  useRedeemedCampaignsQuery,
-  useQuoteCartQuery,
-  QuoteBundleVariant,
   useQuoteBundleVariantsQuery,
+  useRedeemedCampaignsQuery,
+  QuoteBundleVariant,
 } from 'data/graphql'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { trackOfferGTM, EventName } from 'utils/tracking/gtm'
@@ -19,21 +18,12 @@ import { localePathPattern } from 'l10n/localePathPattern'
 import { Features, useFeature } from 'utils/hooks/useFeature'
 import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import {
-  useContractTypes,
-  useContractTypesFromQueryParam,
-} from 'utils/hooks/useContractTypes'
-import {
-  useQuoteCartId,
-  useQuoteCartIdFromQueryParam,
-} from 'utils/hooks/useQuoteCartId'
 import { useQuoteIds } from '../../utils/hooks/useQuoteIds'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import {
   getOfferData,
   getBundleVariantFromQuoteIds,
   getUniqueQuotesFromVariantList,
-  getBundleVariantFromContractTypes,
 } from './utils'
 import { AppPromotionSection } from './AppPromotionSection'
 import { Checkout } from './Checkout'
@@ -55,9 +45,6 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
 const getQuoteIdsFromBundleVariant = (bundleVariant: QuoteBundleVariant) =>
   bundleVariant.bundle.quotes.map((quote) => quote.id)
 
-const getContractTypesFromBundleVariant = (bundleVariant: QuoteBundleVariant) =>
-  bundleVariant.bundle.quotes.map((quote) => quote.typeOfContract)
-
 export const OfferNew: React.FC = () => {
   const { path: localePath, isoLocale, phoneNumber } = useCurrentLocale()
   const localeIsoCode = isoLocale
@@ -66,11 +53,9 @@ export const OfferNew: React.FC = () => {
   const [isInsuranceToggleEnabled] = useFeature([
     Features.OFFER_PAGE_INSURANCE_TOGGLE,
   ])
-
-  const initialContractTypes = useContractTypesFromQueryParam()
-  const [selectedContractTypes, setSelectedContractTypes] = useContractTypes(
-    initialContractTypes ?? undefined,
-  )
+  const history = useHistory()
+  const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
+  const redeemedCampaigns = redeemedCampaignsData?.redeemedCampaigns ?? []
 
   const {
     isLoading: quoteIdsIsLoading,
@@ -79,25 +64,6 @@ export const OfferNew: React.FC = () => {
     setSelectedQuoteIds,
   } = useQuoteIds()
 
-  const history = useHistory()
-
-  const initialQuoteCartId = useQuoteCartIdFromQueryParam()
-  const [quoteCartId] = useQuoteCartId(initialQuoteCartId ?? undefined)
-  const isUsingQuoteCartApi = quoteCartId !== null
-
-  const {
-    data: quoteCartData,
-    loading: isLoadingQuoteCart,
-    refetch: referchQuoteCart,
-  } = useQuoteCartQuery({
-    variables: {
-      id: quoteCartId || '',
-      locale: localeIsoCode,
-    },
-    skip: !isUsingQuoteCartApi,
-  })
-
-  // TODO: remove when we have migrated to the QuoteCart API
   const {
     data,
     loading: loadingQuoteBundle,
@@ -109,40 +75,17 @@ export const OfferNew: React.FC = () => {
       },
       locale: localeIsoCode,
     },
-    skip: isUsingQuoteCartApi || quoteIdsIsLoading,
+    skip: quoteIdsIsLoading,
   })
 
-  const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery({
-    skip: isUsingQuoteCartApi,
-  })
-  // END TODO
-
-  const refetchData = isUsingQuoteCartApi ? referchQuoteCart : refetch
-
-  const isLoadingQuoteBundle = isUsingQuoteCartApi
-    ? isLoadingQuoteCart
-    : loadingQuoteBundle
-
-  const redeemedCampaigns =
-    (isUsingQuoteCartApi
-      ? [quoteCartData?.quoteCart.campaign]
-      : redeemedCampaignsData?.redeemedCampaigns) ?? []
-
-  const bundleData = isUsingQuoteCartApi
-    ? quoteCartData?.quoteCart.bundle
-    : data?.quoteBundle
-
-  const bundleVariants = (bundleData?.possibleVariations ?? []) as Array<
-    QuoteBundleVariant
-  >
+  const bundleVariants = (data?.quoteBundle.possibleVariations ??
+    []) as QuoteBundleVariant[]
 
   const isInsuranceSelectorVisible =
     isInsuranceToggleEnabled && bundleVariants.length > 1
 
   const selectedBundleVariant =
-    (isUsingQuoteCartApi
-      ? getBundleVariantFromContractTypes(bundleVariants, selectedContractTypes)
-      : getBundleVariantFromQuoteIds(selectedQuoteIds, bundleVariants)) ||
+    getBundleVariantFromQuoteIds(selectedQuoteIds, bundleVariants) ||
     bundleVariants?.[0]
 
   const onInsuranceSelectorChange = (
@@ -152,10 +95,8 @@ export const OfferNew: React.FC = () => {
       selectedQuoteIds,
       bundleVariants,
     )
-    setSelectedQuoteIds(getQuoteIdsFromBundleVariant(selectedBundleVariant))
-    setSelectedContractTypes(
-      getContractTypesFromBundleVariant(selectedBundleVariant),
-    )
+    const quoteIds = getQuoteIdsFromBundleVariant(selectedBundleVariant)
+    setSelectedQuoteIds(quoteIds)
     if (offerData) {
       trackOfferGTM(
         EventName.InsuranceSelectionToggle,
@@ -196,15 +137,15 @@ export const OfferNew: React.FC = () => {
   const checkoutMatch = useRouteMatch(`${localePathPattern}/new-member/sign`)
   const toggleCheckout = createToggleCheckout(history, localePath)
 
-  if ((isLoadingQuoteBundle && !bundleData) || quoteIdsIsLoading) {
+  if ((loadingQuoteBundle && !data) || quoteIdsIsLoading) {
     return <LoadingPage />
   }
 
-  if (quoteIds.length === 0 && !isUsingQuoteCartApi) {
+  if (quoteIds.length === 0) {
     return <Redirect to={`/${localePath}/new-member`} />
   }
 
-  if (!isLoadingQuoteBundle && !bundleData) {
+  if (!loadingQuoteBundle && !data) {
     throw new Error(
       `No quote returned to show offer with (quoteIds=${quoteIds}).`,
     )
@@ -239,7 +180,7 @@ export const OfferNew: React.FC = () => {
 
   return (
     <Page>
-      <SessionTokenGuard disable={isUsingQuoteCartApi}>
+      <SessionTokenGuard>
         {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
           <TopBar isTransparent>
             {phoneNumber ? (
@@ -269,7 +210,7 @@ export const OfferNew: React.FC = () => {
                 <Introduction
                   allQuotes={getUniqueQuotesFromVariantList(bundleVariants)}
                   offerData={offerData}
-                  refetch={refetchData as () => Promise<any>}
+                  refetch={refetch as () => Promise<any>}
                   onCheckoutOpen={() => {
                     handleCheckoutToggle(true)
                     track()
@@ -293,7 +234,7 @@ export const OfferNew: React.FC = () => {
               onUpsellAccepted={handleCheckoutUpsellCardAccepted}
               isOpen={checkoutMatch !== null}
               onClose={() => handleCheckoutToggle(false)}
-              refetch={refetchData as () => Promise<any>}
+              refetch={refetch as () => Promise<any>}
             />
           </>
         )}

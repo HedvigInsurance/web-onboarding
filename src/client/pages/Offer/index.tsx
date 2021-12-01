@@ -118,6 +118,26 @@ export const OfferPage = ({
     }
   }
 
+  const handleCheckoutUpsellCardAccepted = (
+    newSelectedBundleVariant: QuoteBundleVariant,
+  ) => {
+    setSelectedContractTypes(
+      getContractTypesFromBundleVariant(newSelectedBundleVariant),
+    )
+    if (offerData) {
+      const isReferralCodeUsed =
+        redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction'
+      const switchedFromOffer =
+        selectedBundleVariant && getOfferData(selectedBundleVariant?.bundle)
+      trackOfferGTM(
+        EventName.OfferCrossSell,
+        getOfferData(newSelectedBundleVariant.bundle),
+        isReferralCodeUsed,
+        switchedFromOffer,
+      )
+    }
+  }
+
   const checkoutMatch = useRouteMatch(`${localePathPattern}/new-member/sign`)
   const toggleCheckout = createToggleCheckout(history, pathLocale)
 
@@ -184,11 +204,11 @@ export const OfferPage = ({
           <AppPromotionSection />
           <FaqSection />
           <Checkout
-            offerData={offerData}
+            quoteBundleVariants={bundleVariants}
+            selectedQuoteBundleVariant={selectedBundleVariant}
+            onUpsellAccepted={handleCheckoutUpsellCardAccepted}
             isOpen={checkoutMatch !== null}
-            onClose={() => {
-              handleCheckoutToggle(false)
-            }}
+            onClose={() => handleCheckoutToggle(false)}
             refetch={refetchQuoteCart as () => Promise<any>}
           />
         </>
