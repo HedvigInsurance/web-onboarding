@@ -229,7 +229,7 @@ const useCreateQuoteCartId = ({ skip = false }) => {
 
   return {
     createQuoteCart,
-    quoteCartId: data?.onboardingQuoteCart_create,
+    quoteCartId: data?.onboardingQuoteCart_create.id,
     error,
   }
 }
