@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react'
 import { Redirect } from 'react-router'
 import { LinkButton } from 'components/buttons'
 import { LoadingPage } from 'components/LoadingPage'
-import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
 import {
   QuoteBundle,
   SignState,
@@ -19,6 +18,7 @@ import { handleSignedEvent } from 'utils/tracking/signing'
 import { useTrack } from 'utils/tracking/tracking'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useQuoteIds } from 'utils/hooks/useQuoteIds'
+import { useCurrentLocale } from '../l10n/useCurrentLocale'
 
 const InnerWrapper = styled(motion.div)`
   text-align: center;
@@ -34,16 +34,15 @@ export const SignLoading: React.FC = () => {
     pollInterval: 1000,
   })
   const textKeys = useTextKeys()
-  const currentLocale = useCurrentLocale()
+  const { isoLocale, path: currentLocalePath } = useCurrentLocale()
   const variation = useVariation()
-  const localeIsoCode = getIsoLocale(currentLocale)
   const { isLoading: quoteIdsIsLoading, selectedQuoteIds } = useQuoteIds()
   const { data: quoteBundleData } = useQuoteBundleQuery({
     variables: {
       input: {
         ids: [...selectedQuoteIds],
       },
-      locale: localeIsoCode,
+      locale: isoLocale,
     },
     skip: quoteIdsIsLoading,
   })
@@ -76,22 +75,12 @@ export const SignLoading: React.FC = () => {
     variation,
   ])
 
-  const failureReturnUrl = currentLocale
-    ? `/${currentLocale}/new-member/offer?sign-error=yes`
-    : '/new-member/offer?sign-error=yes'
+  const failureReturnUrl = `/${currentLocalePath}/new-member/offer?sign-error=yes`
   if (signStatusQuery.data?.signStatus?.signState === SignState.Failed) {
     return <Redirect to={failureReturnUrl} />
   }
   if (signStatusQuery.data?.signStatus?.signState === SignState.Completed) {
-    return (
-      <Redirect
-        to={
-          currentLocale
-            ? `/${currentLocale}/new-member/connect-payment`
-            : '/new-member/connect-payment'
-        }
-      />
-    )
+    return <Redirect to={`/${currentLocalePath}/new-member/connect-payment`} />
   }
 
   return (

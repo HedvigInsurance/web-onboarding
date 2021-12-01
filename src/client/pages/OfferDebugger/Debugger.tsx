@@ -44,7 +44,7 @@ export const Debugger: React.FC = () => {
     createOnboardingQuoteCart,
     { data },
   ] = useCreateOnboardingQuoteCartMutation()
-  const quoteCartId = data?.onboardingQuoteCart_create
+  const quoteCartId = data?.onboardingQuoteCart_create.id
 
   const createNewQuoteCart = useCallback(async () => {
     await createOnboardingQuoteCart({
@@ -64,11 +64,11 @@ export const Debugger: React.FC = () => {
       <Row>
         <h3>Quote Cart: {quoteCartId}</h3>
         <Button
-          background={colorsV3.purple500}
+          background={colorsV3.gray100}
           foreground={colorsV3.gray900}
           onClick={createNewQuoteCart}
         >
-          Create new session
+          Create new cart
         </Button>
       </Row>
 
