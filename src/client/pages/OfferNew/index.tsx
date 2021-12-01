@@ -125,8 +125,11 @@ export const OfferNew: React.FC = () => {
         EventName.OfferCrossSell,
         getOfferData(selectedBundleVariant.bundle),
         redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction',
-        previouslySelectedBundleVariant &&
-          getOfferData(previouslySelectedBundleVariant?.bundle),
+        {
+          switchedFrom:
+            previouslySelectedBundleVariant &&
+            getOfferData(previouslySelectedBundleVariant?.bundle),
+        },
       )
     }
   }
