@@ -7,13 +7,13 @@ import { Mount } from 'react-lifecycle-components'
 import { afterTick } from 'pages/Embark/utils'
 import { UpdatePickedLocaleDocument } from 'data/graphql'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import { LocaleData } from 'l10n/locales'
 import { captureSentryError } from 'utils/sentry-client'
 import { Storage, StorageContainer } from 'utils/StorageContainer'
 import {
   apolloClient as realApolloClient,
   ApolloClientUtils,
 } from '../apolloClient'
-import { LocaleData } from '../l10n/locales'
 
 export const CREATE_SESSION_TOKEN_MUTATION: DocumentNode = gql`
   mutation CreateSessionToken {
