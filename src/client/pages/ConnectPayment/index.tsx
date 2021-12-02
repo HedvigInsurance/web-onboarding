@@ -38,10 +38,7 @@ export const ConnectPayment: React.FC = () => {
         </Helmet>
         <TopBar>
           {currentLocale.phoneNumber ? (
-            <PhoneNumber
-              color="white"
-              onClick={handleClickPhoneNumber}
-            />
+            <PhoneNumber color="white" onClick={handleClickPhoneNumber} />
           ) : (
             <LanguagePicker />
           )}
