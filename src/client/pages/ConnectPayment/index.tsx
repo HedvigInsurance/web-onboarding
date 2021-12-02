@@ -40,7 +40,7 @@ export const ConnectPayment: React.FC = () => {
           {currentLocale.phoneNumber ? (
             <PhoneNumber
               color="white"
-              onClick={(status) => handleClickPhoneNumber(status)}
+              onClick={handleClickPhoneNumber}
             />
           ) : (
             <LanguagePicker />
