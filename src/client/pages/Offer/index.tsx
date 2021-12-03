@@ -117,12 +117,11 @@ export const OfferPage = ({
     if (offerData) {
       const isReferralCodeUsed =
         redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction'
-      const switchedFromOffer = offerData
       trackOfferGTM(
         EventName.InsuranceSelectionToggle,
         getOfferData(newSelectedBundleVariant.bundle),
         isReferralCodeUsed,
-        switchedFromOffer,
+        { switchedFrom: offerData },
       )
     }
   }
@@ -136,12 +135,11 @@ export const OfferPage = ({
     if (offerData) {
       const isReferralCodeUsed =
         redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction'
-      const switchedFromOffer = offerData
       trackOfferGTM(
         EventName.OfferCrossSell,
         getOfferData(newSelectedBundleVariant.bundle),
         isReferralCodeUsed,
-        switchedFromOffer,
+        { switchedFrom: offerData },
       )
     }
   }
