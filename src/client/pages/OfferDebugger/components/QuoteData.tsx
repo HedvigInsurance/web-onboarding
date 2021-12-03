@@ -11,6 +11,7 @@ import { Button, LinkButton } from 'components/buttons'
 import { InputField } from 'components/inputs'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { MarketLabel } from 'l10n/locales'
+import { CreateQuoteInsuranceType } from 'utils/insuranceType'
 import { LoadingDots } from '../../../components/LoadingDots/LoadingDots'
 import { initialSeApartmentValues, SwedishApartment } from './QuoteFormSweden'
 import {
@@ -38,31 +39,20 @@ enum QuoteBundleType {
   SwedishApartmentAccident = 'swedish-apartment-accident',
 }
 
-enum QuoteType {
-  DanishHome = 'danishHomeContents',
-  DanishAccident = 'danishAccident',
-  DanishTravel = 'danishTravel',
-  NorwegianHome = 'norwegianHomeContents',
-  NorwegianTravel = 'norwegianTravel',
-  SwedishApartment = 'apartment',
-  SwedishHouse = 'house',
-  SwedishAccident = 'swedishAccident',
-}
-
-const singleQuoteBundleToQuoteType = (
+const singleQuoteBundleToInsuranceType = (
   bundleType: QuoteBundleType,
-): QuoteType => {
+): CreateQuoteInsuranceType => {
   switch (bundleType) {
     case QuoteBundleType.DanishHome:
-      return QuoteType.DanishHome
+      return CreateQuoteInsuranceType.DanishHome
     case QuoteBundleType.NorwegianHome:
-      return QuoteType.NorwegianHome
+      return CreateQuoteInsuranceType.NorwegianHome
     case QuoteBundleType.NorwegianTravel:
-      return QuoteType.NorwegianTravel
+      return CreateQuoteInsuranceType.NorwegianTravel
     case QuoteBundleType.SwedishApartment:
-      return QuoteType.SwedishApartment
+      return CreateQuoteInsuranceType.SwedishApartment
     case QuoteBundleType.SwedishHouse:
-      return QuoteType.SwedishHouse
+      return CreateQuoteInsuranceType.SwedishHouse
     default:
       throw new Error(`Unsupported single quote bundle type: ${bundleType}`)
   }
@@ -159,7 +149,7 @@ const getSwedishAccidentQuoteValues = (values: any) => {
     ...filteredValues,
     data: {
       ...quoteTypeValues,
-      type: QuoteType.SwedishAccident,
+      type: CreateQuoteInsuranceType.SwedishAccident,
       student:
         subType === ApartmentType.StudentBrf ||
         subType === ApartmentType.StudentRent,
@@ -203,7 +193,7 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
                 ...input,
                 data: {
                   ...input.data,
-                  type: QuoteType.SwedishApartment,
+                  type: CreateQuoteInsuranceType.SwedishApartment,
                 },
               },
               getSwedishAccidentQuoteValues(input),
@@ -219,14 +209,14 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
                 ...input,
                 data: {
                   ...input.data,
-                  type: QuoteType.DanishHome,
+                  type: CreateQuoteInsuranceType.DanishHome,
                 },
               },
               {
                 ...input,
                 data: {
                   ...getDanishQuoteDetailValues(input),
-                  type: QuoteType.DanishAccident,
+                  type: CreateQuoteInsuranceType.DanishAccident,
                 },
               },
             ],
@@ -243,21 +233,21 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
                 ...input,
                 data: {
                   ...input.data,
-                  type: QuoteType.DanishHome,
+                  type: CreateQuoteInsuranceType.DanishHome,
                 },
               },
               {
                 ...input,
                 data: {
                   ...danishQuoteDetailValues,
-                  type: QuoteType.DanishAccident,
+                  type: CreateQuoteInsuranceType.DanishAccident,
                 },
               },
               {
                 ...input,
                 data: {
                   ...danishQuoteDetailValues,
-                  type: QuoteType.DanishTravel,
+                  type: CreateQuoteInsuranceType.DanishTravel,
                 },
               },
             ],
@@ -272,7 +262,7 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
                 ...input,
                 data: {
                   ...input.data,
-                  type: singleQuoteBundleToQuoteType(quoteBundleType),
+                  type: singleQuoteBundleToInsuranceType(quoteBundleType),
                 },
               },
             ],

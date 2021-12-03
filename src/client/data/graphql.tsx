@@ -11851,7 +11851,34 @@ export type QuoteDataFragmentFragment = { __typename?: 'BundledQuote' } & Pick<
         'displayName' | 'url' | 'type'
       >
     >
-    data: { __typename?: 'QuoteData' } & Pick<QuoteData, 'insuranceType'>
+    data: { __typename?: 'QuoteData' } & Pick<
+      QuoteData,
+      | 'insuranceType'
+      | 'typeOfContract'
+      | 'market'
+      | 'street'
+      | 'postalCode'
+      | 'city'
+      | 'floor'
+      | 'bbrId'
+      | 'apartment'
+      | 'numberCoInsured'
+      | 'squareMeters'
+      | 'subType'
+      | 'ancillaryArea'
+      | 'yearOfConstruction'
+      | 'numberOfBathrooms'
+      | 'isSubleted'
+      | 'isStudent'
+      | 'isYouth'
+    > & {
+        extraBuildings: Array<
+          { __typename?: 'ExtraBuildingValue' } & Pick<
+            ExtraBuildingValue,
+            'type' | 'area' | 'displayName' | 'hasWaterConnected'
+          >
+        >
+      }
     quoteDetails:
       | ({ __typename?: 'SwedishApartmentQuoteDetails' } & Pick<
           SwedishApartmentQuoteDetails,
@@ -12435,6 +12462,29 @@ export const QuoteDataFragmentFragmentDoc = gql`
     }
     data {
       insuranceType
+      typeOfContract
+      market
+      street
+      postalCode
+      city
+      floor
+      bbrId
+      apartment
+      numberCoInsured
+      squareMeters
+      subType
+      ancillaryArea
+      yearOfConstruction
+      numberOfBathrooms
+      extraBuildings {
+        type
+        area
+        displayName
+        hasWaterConnected
+      }
+      isSubleted
+      isStudent
+      isYouth
     }
     quoteDetails {
       ... on SwedishApartmentQuoteDetails {

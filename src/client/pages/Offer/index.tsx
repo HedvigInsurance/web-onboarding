@@ -28,9 +28,9 @@ import {
 import { AppPromotionSection } from '../OfferNew/AppPromotionSection'
 import { Checkout } from '../OfferNew/Checkout'
 import { FaqSection } from '../OfferNew/FaqSection'
-import { Introduction } from '../OfferNew/Introduction'
 import { Perils } from '../OfferNew/Perils'
 import { InsuranceSelector } from '../OfferNew/InsuranceSelector'
+import { Introduction } from './Introduction'
 
 const createToggleCheckout = (history: History<any>, locale?: string) => (
   isOpen: boolean,

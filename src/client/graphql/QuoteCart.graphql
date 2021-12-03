@@ -46,6 +46,29 @@ fragment QuoteDataFragment on BundledQuote {
   }
   data {
     insuranceType
+    typeOfContract
+    market
+    street
+    postalCode
+    city
+    floor
+    bbrId
+    apartment
+    numberCoInsured
+    squareMeters
+    subType
+    ancillaryArea
+    yearOfConstruction
+    numberOfBathrooms
+    extraBuildings {
+      type
+      area
+      displayName
+      hasWaterConnected
+    }
+    isSubleted
+    isStudent
+    isYouth
   }
   quoteDetails {
     ... on SwedishApartmentQuoteDetails {
