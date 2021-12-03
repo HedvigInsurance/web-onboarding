@@ -66,6 +66,10 @@ const Container = styled.div`
   }
 `
 
+const DiscountTagWrapper = styled.div`
+  margin-bottom: 1rem;
+`
+
 const Header = styled.div`
   position: relative;
   width: 100%;
@@ -182,7 +186,9 @@ export const Sidebar: React.FC<Props> = ({
         {() => (
           <Wrapper>
             <Container>
-              <DiscountTag offerData={offerData} />
+              <DiscountTagWrapper>
+                <DiscountTag offerData={offerData} />
+              </DiscountTagWrapper>
               <Header>
                 <Title>Hedvig</Title>
                 <Price

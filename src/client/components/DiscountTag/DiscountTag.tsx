@@ -13,7 +13,6 @@ type DiscountTagProps = {
 
 const DiscountInfo = styled.div`
   display: flex;
-  margin-bottom: 0.5rem;
   flex-direction: row;
   justify-content: flex-start;
   flex-wrap: wrap;
@@ -22,10 +21,6 @@ const DiscountInfo = styled.div`
   *:not(:last-child) {
     margin-right: 0.5rem;
   }
-`
-
-const DiscountBadge = styled(Badge)`
-  margin-bottom: 0.5rem;
 `
 
 export const DiscountTag: React.FC<DiscountTagProps> = ({ offerData }) => {
@@ -46,7 +41,7 @@ export const DiscountTag: React.FC<DiscountTagProps> = ({ offerData }) => {
   return discounts.length > 0 ? (
     <DiscountInfo>
       {discounts.map((text, index) => (
-        <DiscountBadge key={index}>{text}</DiscountBadge>
+        <Badge key={index}>{text}</Badge>
       ))}
     </DiscountInfo>
   ) : null
