@@ -4,29 +4,25 @@ import { Form, Formik } from 'formik'
 import { colorsV3, fonts } from '@hedviginsurance/brand'
 import { Button } from 'components/buttons'
 import { Modal, ModalProps } from 'components/ModalNew'
-import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import {
   BundledQuote,
   useCreateQuoteBundleMutation,
   QuoteData,
   ExtraBuildingInput,
   CreateQuoteInput,
+  useQuoteCartQuery,
+  QuoteBundleVariant,
 } from 'data/graphql'
-import { LocaleLabel, locales } from 'l10n/locales'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
 import { captureSentryError } from 'utils/sentry-client'
 import { CreateQuoteInsuranceType } from 'utils/insuranceType'
-import { getMainQuote, isBundle } from '../../../OfferNew/utils'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import { getBundleVariantFromInsuranceTypes } from 'pages/OfferNew/utils'
+import { useSelectedInsuranceTypes } from 'src/client/utils/hooks/useSelectedInsuranceTypes'
 import { useQuoteCartIdFromUrl } from '../../useQuoteCartIdFromUrl'
 import { Details } from './Details'
-import {
-  getFieldSchema,
-  getInitialInputValues,
-  getValidationSchema,
-  hasEditQuoteErrors,
-  isUnderwritingLimitsHit,
-} from './utils'
+import { hasEditQuoteErrors, isUnderwritingLimitsHit } from './utils'
 
 const Container = styled.div`
   width: 100%;
@@ -96,10 +92,6 @@ const LoadingDimmer = styled.div<{ visible: boolean }>`
   visibility: ${(props) => (props.visible ? 'visible' : 'hidden')};
 `
 
-type QuoteInput = QuoteHolderInput & {
-  data: QuoteDetailsInput
-}
-
 type QuoteHolderInput = Pick<
   CreateQuoteInput,
   | 'firstName'
@@ -128,6 +120,10 @@ type QuoteDetailsInput = {
   coInsured?: number | null
   student?: boolean | null
   ancillarySpace?: number | null
+}
+
+type QuoteInput = QuoteHolderInput & {
+  data: QuoteDetailsInput
 }
 
 const quoteDataInsuranceTypeToInput = (insuranceType: string) => {
@@ -180,34 +176,40 @@ type DetailsModalProps = {
 
 export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   refetch,
-  offerData,
   allQuotes,
   isVisible,
   onClose,
 }) => {
+  const currentLocale = useCurrentLocale()
   const quoteCartId = useQuoteCartIdFromUrl()
+
+  const { data } = useQuoteCartQuery({
+    variables: { id: quoteCartId, locale: currentLocale.isoLocale },
+  })
+  const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
+
+  const bundleVariants = (data?.quoteCart.bundle?.possibleVariations ??
+    []) as Array<QuoteBundleVariant>
+  const selectedQuoteBundle = getBundleVariantFromInsuranceTypes(
+    bundleVariants,
+    selectedInsuranceTypes,
+  )
+  const mainQuote = selectedQuoteBundle?.bundle.quotes[0]
+  const initialValues = mainQuote
+    ? transformQuoteDataToInput(mainQuote.data)
+    : null
+
   const textKeys = useTextKeys()
   const [
     createQuoteBundle,
     createQuoteBundleResult,
   ] = useCreateQuoteBundleMutation()
-  const mainOfferQuote = getMainQuote(offerData)
-  const isBundleOffer = isBundle(offerData)
-  const currentLocale = useCurrentLocale()
-  const currentLocaleData = locales[currentLocale as LocaleLabel]
-  const fieldSchema = getFieldSchema({
-    offerQuote: mainOfferQuote,
-    currentLocaleData,
-  })
-  const validationSchema = getValidationSchema(fieldSchema, mainOfferQuote)
-  const initialValues = getInitialInputValues(offerData.person, mainOfferQuote)
+
   const [isUpdating, setIsUpdating] = React.useState(false)
   const [
     isUnderwritingGuidelineHit,
     setIsUnderwritingGuidelineHit,
   ] = React.useState(false)
-
-  const initialValues = transformQuoteDataToInput(mainOfferQuote.data)
 
   const reCreateQuoteBundle = (form: QuoteInput) => {
     return createQuoteBundle({
