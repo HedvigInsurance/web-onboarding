@@ -10,7 +10,6 @@ import {
   useRemoveDiscountCodeMutation,
 } from 'data/graphql'
 import {
-  getDiscountText,
   isMonthlyCostDeduction,
   isNoDiscount,
   isPercentageDiscountMonths,
@@ -21,8 +20,8 @@ import {
   LARGE_SCREEN_MEDIA_QUERY,
   SMALL_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
-import { Badge } from 'components/Badge/Badge'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
+import { DiscountTag } from 'components/DiscountTag/DiscountTag'
 import { Price } from '../../common/price'
 import { PriceBreakdown } from '../../common/PriceBreakdown'
 
@@ -65,23 +64,6 @@ const Container = styled.div`
     top: 8rem;
     margin-top: 0;
   }
-`
-
-const DiscountInfo = styled.div`
-  display: flex;
-  margin-bottom: 0.5rem;
-  flex-direction: row;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  align-items: flex-start;
-
-  *:not(:last-child) {
-    margin-right: 0.5rem;
-  }
-`
-
-const DiscountBadge = styled(Badge)`
-  margin-bottom: 0.5rem;
 `
 
 const Header = styled.div`
@@ -180,10 +162,7 @@ export const Sidebar: React.FC<Props> = ({
   }, [redeemCode, campaignData, refetchAll])
 
   const isNorwegianBundle = isBundle(offerData) && isNorwegian(offerData)
-  const discountText = getDiscountText(textKeys)(
-    redeemedCampaigns,
-    offerData.cost.monthlyGross.currency,
-  )
+
   const clearDiscountCode = () => {
     removeDiscountCode()
       .then(() => {
@@ -195,11 +174,6 @@ export const Sidebar: React.FC<Props> = ({
       .then(() => refetchAll())
   }
 
-  const discounts: Array<React.ReactNode> = [
-    ...(isNorwegianBundle ? [textKeys.SIDEBAR_NO_BUNDLE_DISCOUNT_TEXT()] : []),
-    ...(discountText ? [discountText] : []),
-  ]
-
   const hasRedeemedCampaigns = redeemedCampaigns.length > 0
 
   return (
@@ -208,13 +182,7 @@ export const Sidebar: React.FC<Props> = ({
         {() => (
           <Wrapper>
             <Container>
-              {discounts.length > 0 ? (
-                <DiscountInfo>
-                  {discounts.map((text, index) => (
-                    <DiscountBadge key={index}>{text}</DiscountBadge>
-                  ))}
-                </DiscountInfo>
-              ) : null}
+              <DiscountTag offerData={offerData} />
               <Header>
                 <Title>Hedvig</Title>
                 <Price
