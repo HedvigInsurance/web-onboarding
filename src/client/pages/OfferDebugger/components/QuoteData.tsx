@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { Form, Formik, FormikProps } from 'formik'
 import { colorsV3 } from '@hedviginsurance/brand'
@@ -13,7 +13,6 @@ import { Button, LinkButton } from 'components/buttons'
 import { InputField } from 'components/inputs'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { MarketLabel } from 'l10n/locales'
-import { ContractTypes } from 'utils/hooks/useContractTypes'
 import { LoadingDots } from '../../../components/LoadingDots/LoadingDots'
 import { initialSeApartmentValues, SwedishApartment } from './QuoteFormSweden'
 import {
@@ -198,17 +197,6 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
   const { data, refetch } = useQuoteCartQuery({
     variables: { id: quoteCartId, locale: isoLocale },
   })
-
-  const offerPageSearchParams = useMemo(() => {
-    const searchParams = new URLSearchParams()
-    if (data?.quoteCart.bundle) {
-      const quotes = data.quoteCart.bundle.possibleVariations[0].bundle.quotes
-      for (const quote of quotes) {
-        searchParams.append(ContractTypes.queryParameter, quote.typeOfContract)
-      }
-    }
-    return searchParams
-  }, [data])
 
   const [createQuoteBundle] = useCreateQuoteBundleMutation()
 
@@ -442,10 +430,7 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
           <LinkButton
             background={colorsV3.gray100}
             foreground={colorsV3.gray900}
-            to={{
-              pathname: `/${localePath}/new-member/offer/${quoteCartId}`,
-              search: offerPageSearchParams.toString(),
-            }}
+            to={`/${localePath}/new-member/offer/${quoteCartId}`}
           >
             Go to offer page →
           </LinkButton>

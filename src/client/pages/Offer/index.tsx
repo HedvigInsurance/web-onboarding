@@ -16,16 +16,14 @@ import { trackOfferGTM, EventName } from 'utils/tracking/gtm'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { Features, useFeature } from 'utils/hooks/useFeature'
-import {
-  useContractTypes,
-  useContractTypesFromQueryParam,
-} from 'utils/hooks/useContractTypes'
+import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import {
   getOfferData,
   getUniqueQuotesFromVariantList,
-  getBundleVariantFromContractTypes,
+  getBundleVariantFromInsuranceTypes,
+  getInsuranceTypesFromBundleVariant,
 } from '../OfferNew/utils'
 import { AppPromotionSection } from '../OfferNew/AppPromotionSection'
 import { Checkout } from '../OfferNew/Checkout'
@@ -44,9 +42,6 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
   }
 }
 
-const getContractTypesFromBundleVariant = (bundleVariant: QuoteBundleVariant) =>
-  bundleVariant.bundle.quotes.map((quote) => quote.typeOfContract)
-
 type OfferPageProps = RouteComponentProps<{ id: string }>
 
 export const OfferPage = ({
@@ -61,10 +56,10 @@ export const OfferPage = ({
     Features.QUOTE_CART_API,
   ])
 
-  const initialContractTypes = useContractTypesFromQueryParam()
-  const [selectedContractTypes, setSelectedContractTypes] = useContractTypes(
-    initialContractTypes ?? undefined,
-  )
+  const [
+    selectedInsuranceTypes,
+    setSelectedInsuranceTypes,
+  ] = useSelectedInsuranceTypes()
 
   const history = useHistory()
 
@@ -101,14 +96,16 @@ export const OfferPage = ({
     isInsuranceToggleEnabled && bundleVariants.length > 1
 
   const selectedBundleVariant =
-    getBundleVariantFromContractTypes(bundleVariants, selectedContractTypes) ||
-    bundleVariants?.[0]
+    getBundleVariantFromInsuranceTypes(
+      bundleVariants,
+      selectedInsuranceTypes,
+    ) || bundleVariants?.[0]
 
   const onInsuranceSelectorChange = (
     newSelectedBundleVariant: QuoteBundleVariant,
   ) => {
-    setSelectedContractTypes(
-      getContractTypesFromBundleVariant(newSelectedBundleVariant),
+    setSelectedInsuranceTypes(
+      getInsuranceTypesFromBundleVariant(newSelectedBundleVariant),
     )
     if (offerData) {
       const isReferralCodeUsed =
@@ -127,8 +124,8 @@ export const OfferPage = ({
   const handleCheckoutUpsellCardAccepted = (
     newSelectedBundleVariant: QuoteBundleVariant,
   ) => {
-    setSelectedContractTypes(
-      getContractTypesFromBundleVariant(newSelectedBundleVariant),
+    setSelectedInsuranceTypes(
+      getInsuranceTypesFromBundleVariant(newSelectedBundleVariant),
     )
     if (offerData) {
       const isReferralCodeUsed =
