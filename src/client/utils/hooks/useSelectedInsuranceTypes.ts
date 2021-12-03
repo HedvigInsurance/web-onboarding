@@ -14,18 +14,19 @@ export enum InsuranceType {
 }
 
 const ALL_INSURANCE_TYPES = Object.values(InsuranceType)
+const SEARCH_PARAM_NAME = 'type'
 
-export const SelectedInsuranceTypes = {
-  queryParameter: 'type',
-  deserialize: (searchParams: URLSearchParams) => {
-    const matches = searchParams.getAll(SelectedInsuranceTypes.queryParameter)
-    return SelectedInsuranceTypes.validate(matches)
-  },
-  validate: (rawTypes: Array<string>): Array<InsuranceType> =>
-    rawTypes.filter((type) =>
-      ALL_INSURANCE_TYPES.includes((type as unknown) as InsuranceType),
-    ) as Array<InsuranceType>,
+const deserializeSearchParams = (searchParams: URLSearchParams) => {
+  const matches = searchParams.getAll(SEARCH_PARAM_NAME)
+  return validateInsuranceTypes(matches)
 }
+
+const validateInsuranceTypes = (
+  rawTypes: Array<string>,
+): Array<InsuranceType> =>
+  rawTypes.filter((type) =>
+    ALL_INSURANCE_TYPES.includes((type as unknown) as InsuranceType),
+  ) as Array<InsuranceType>
 
 export const useSelectedInsuranceTypes = () => {
   const location = useLocation()
@@ -34,14 +35,16 @@ export const useSelectedInsuranceTypes = () => {
   const searchParams = useMemo(() => new URLSearchParams(location.search), [
     location.search,
   ])
-  const insuranceTypes = SelectedInsuranceTypes.deserialize(searchParams)
+  const insuranceTypes = useMemo(() => deserializeSearchParams(searchParams), [
+    searchParams,
+  ])
 
   const changeSelectedInsuranceTypes = useCallback(
     (newTypes: Array<InsuranceType>) => {
-      searchParams.delete(SelectedInsuranceTypes.queryParameter)
+      searchParams.delete(SEARCH_PARAM_NAME)
 
       for (const type of newTypes) {
-        searchParams.append(SelectedInsuranceTypes.queryParameter, type)
+        searchParams.append(SEARCH_PARAM_NAME, type)
       }
 
       history.replace({
