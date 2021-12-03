@@ -21,6 +21,7 @@ import { LocaleLabel, locales } from 'l10n/locales'
 import { birthDateFormats } from 'l10n/birthDateAndSsnFormats'
 import { Address, OfferData, OfferQuote } from 'pages/OfferNew/types'
 import { TextKeyMap } from 'utils/textKeys'
+import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
 
 export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
   const firstQuote = quoteBundle.quotes[0]
@@ -477,26 +478,31 @@ export const getUniqueQuotesFromVariantList = (
   return uniqueQuotes
 }
 
-const isBundleVariantMatchingContractTypes = (
+const isBundleVariantMatchingInsuranceTypes = (
   variant: QuoteBundleVariant,
-  contractTypes: Array<TypeOfContract>,
+  insuranceTypes: Array<InsuranceType>,
 ) => {
-  const variantContractTypes = variant.bundle.quotes.map(
-    (quote) => quote.typeOfContract,
-  )
+  const variantInsuranceTypes = getInsuranceTypesFromBundleVariant(variant)
   return (
-    variantContractTypes.sort().join(',') ===
-    contractTypes
+    variantInsuranceTypes.sort().join(',') ===
+    insuranceTypes
       .concat()
       .sort()
       .join(',')
   )
 }
 
-export const getBundleVariantFromContractTypes = (
+export const getBundleVariantFromInsuranceTypes = (
   variants: Array<QuoteBundleVariant>,
-  contractTypes: Array<TypeOfContract>,
+  insuranceTypes: Array<InsuranceType>,
 ) =>
   variants.find((variant) =>
-    isBundleVariantMatchingContractTypes(variant, contractTypes),
+    isBundleVariantMatchingInsuranceTypes(variant, insuranceTypes),
+  )
+
+export const getInsuranceTypesFromBundleVariant = (
+  bundleVariant: QuoteBundleVariant,
+) =>
+  bundleVariant.bundle.quotes.map<InsuranceType>(
+    (quote) => quote.data.insuranceType as InsuranceType,
   )

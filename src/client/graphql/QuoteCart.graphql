@@ -1,4 +1,4 @@
-fragment QuoteData on BundledQuote {
+fragment QuoteDataFragment on BundledQuote {
   id
   dataCollectionId
   currentInsurer {
@@ -43,6 +43,9 @@ fragment QuoteData on BundledQuote {
     displayName
     url
     type
+  }
+  data {
+    insuranceType
   }
   quoteDetails {
     ... on SwedishApartmentQuoteDetails {
@@ -142,7 +145,7 @@ query QuoteCart($id: ID!, $locale: Locale!) {
             ...BundleCostData
           }
           quotes {
-            ...QuoteData
+            ...QuoteDataFragment
           }
         }
       }

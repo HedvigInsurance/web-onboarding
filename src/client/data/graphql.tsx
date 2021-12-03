@@ -1571,7 +1571,9 @@ export type BundledQuote = {
   lastName?: Maybe<Scalars['String']>
   ssn?: Maybe<Scalars['String']>
   birthDate: Scalars['LocalDate']
+  /** @deprecated Use data instead. */
   quoteDetails: QuoteDetails
+  data: QuoteData
   startDate?: Maybe<Scalars['LocalDate']>
   expiresAt: Scalars['LocalDate']
   email?: Maybe<Scalars['String']>
@@ -1621,8 +1623,10 @@ export type Campaign = {
   __typename?: 'Campaign'
   incentive?: Maybe<Incentive>
   code: Scalars['String']
-  owner?: Maybe<CampaignOwner>
+  ownerName?: Maybe<Scalars['String']>
   expiresAt?: Maybe<Scalars['LocalDate']>
+  /** @deprecated Don't use for quoteCart API, this is here to fix stitching issues with the old APIs in PP */
+  owner?: Maybe<CampaignOwner>
   displayValue?: Maybe<Scalars['String']>
 }
 
@@ -1697,9 +1701,10 @@ export type Cashback = {
   id?: Maybe<Scalars['ID']>
   name?: Maybe<Scalars['String']>
   imageUrl?: Maybe<Scalars['String']>
-  selectedUrl?: Maybe<Scalars['String']>
   description?: Maybe<Scalars['String']>
+  /** @deprecated use name instead */
   title?: Maybe<Scalars['String']>
+  /** @deprecated use description instead */
   paragraph?: Maybe<Scalars['String']>
 }
 
@@ -1818,6 +1823,11 @@ export type Claim = {
   files: Array<File>
   signedAudioURL?: Maybe<Scalars['String']>
   payout?: Maybe<MonetaryAmountV2>
+  /** Localized end-user presentable `Claim`-type */
+  type?: Maybe<Scalars['String']>
+  /** Brief explanation of the current status of this `Claim` */
+  statusParagraph: Scalars['String']
+  progressSegments: Array<ClaimStatusProgressSegment>
 }
 
 export enum ClaimOutcome {
@@ -1847,6 +1857,8 @@ export type ClaimStatusCard = {
   title: Scalars['String']
   subtitle: Scalars['String']
   progressSegments: Array<ClaimStatusProgressSegment>
+  /** The underlying Claim represented by this status-card */
+  claim: Claim
 }
 
 export type ClaimStatusCardPill = {
@@ -8535,6 +8547,29 @@ export type QuoteCart = {
   checkoutMethods: Array<CheckoutMethod>
 }
 
+export type QuoteData = {
+  __typename?: 'QuoteData'
+  insuranceType: Scalars['String']
+  typeOfContract: Scalars['String']
+  market: Market
+  street?: Maybe<Scalars['String']>
+  postalCode?: Maybe<Scalars['String']>
+  city?: Maybe<Scalars['String']>
+  floor?: Maybe<Scalars['String']>
+  bbrId?: Maybe<Scalars['String']>
+  apartment?: Maybe<Scalars['String']>
+  numberCoInsured?: Maybe<Scalars['Int']>
+  squareMeters?: Maybe<Scalars['Int']>
+  subType?: Maybe<Scalars['String']>
+  ancillaryArea?: Maybe<Scalars['Int']>
+  yearOfConstruction?: Maybe<Scalars['Int']>
+  numberOfBathrooms?: Maybe<Scalars['Int']>
+  extraBuildings: Array<ExtraBuildingValue>
+  isSubleted?: Maybe<Scalars['Boolean']>
+  isStudent?: Maybe<Scalars['Boolean']>
+  isYouth?: Maybe<Scalars['Boolean']>
+}
+
 export type QuoteDetails =
   | SwedishApartmentQuoteDetails
   | SwedishHouseQuoteDetails
@@ -9846,6 +9881,7 @@ export type SwedishApartmentAgreement = AgreementCore & {
   numberCoInsured: Scalars['Int']
   squareMeters: Scalars['Int']
   type: SwedishApartmentLineOfBusiness
+  partner?: Maybe<Scalars['String']>
 }
 
 export enum SwedishApartmentLineOfBusiness {
@@ -11764,6 +11800,113 @@ export type QuoteBundleVariantsQuery = { __typename?: 'Query' } & {
   }
 }
 
+export type QuoteDataFragmentFragment = { __typename?: 'BundledQuote' } & Pick<
+  BundledQuote,
+  | 'id'
+  | 'dataCollectionId'
+  | 'firstName'
+  | 'lastName'
+  | 'ssn'
+  | 'birthDate'
+  | 'startDate'
+  | 'expiresAt'
+  | 'email'
+  | 'typeOfContract'
+  | 'displayName'
+> & {
+    currentInsurer?: Maybe<
+      { __typename?: 'CurrentInsurer' } & Pick<
+        CurrentInsurer,
+        'id' | 'displayName' | 'switchable'
+      >
+    >
+    price: { __typename?: 'MonetaryAmountV2' } & Pick<
+      MonetaryAmountV2,
+      'amount' | 'currency'
+    >
+    contractPerils: Array<
+      { __typename?: 'PerilV2' } & Pick<
+        PerilV2,
+        'title' | 'description' | 'covered' | 'exceptions' | 'info'
+      > & {
+          icon: { __typename?: 'Icon' } & {
+            variants: { __typename?: 'IconVariants' } & {
+              light: { __typename?: 'IconVariant' } & Pick<
+                IconVariant,
+                'svgUrl'
+              >
+            }
+          }
+        }
+    >
+    insurableLimits: Array<
+      { __typename?: 'InsurableLimit' } & Pick<
+        InsurableLimit,
+        'label' | 'limit' | 'description' | 'type'
+      >
+    >
+    insuranceTerms: Array<
+      { __typename?: 'InsuranceTerm' } & Pick<
+        InsuranceTerm,
+        'displayName' | 'url' | 'type'
+      >
+    >
+    data: { __typename?: 'QuoteData' } & Pick<QuoteData, 'insuranceType'>
+    quoteDetails:
+      | ({ __typename?: 'SwedishApartmentQuoteDetails' } & Pick<
+          SwedishApartmentQuoteDetails,
+          'street' | 'zipCode' | 'householdSize' | 'livingSpace' | 'type'
+        >)
+      | ({ __typename?: 'SwedishHouseQuoteDetails' } & Pick<
+          SwedishHouseQuoteDetails,
+          | 'street'
+          | 'zipCode'
+          | 'householdSize'
+          | 'livingSpace'
+          | 'ancillarySpace'
+          | 'numberOfBathrooms'
+          | 'yearOfConstruction'
+          | 'isSubleted'
+        > & {
+            extraBuildings: Array<
+              { __typename?: 'ExtraBuildingValue' } & Pick<
+                ExtraBuildingValue,
+                'type' | 'area' | 'displayName' | 'hasWaterConnected'
+              >
+            >
+          })
+      | ({ __typename?: 'SwedishAccidentDetails' } & Pick<
+          SwedishAccidentDetails,
+          'isStudent'
+        >)
+      | ({ __typename?: 'NorwegianHomeContentsDetails' } & Pick<
+          NorwegianHomeContentsDetails,
+          'coInsured' | 'livingSpace' | 'street' | 'zipCode' | 'isYouth'
+        > & { norwegianHomeType: NorwegianHomeContentsDetails['type'] })
+      | ({ __typename?: 'NorwegianTravelDetails' } & Pick<
+          NorwegianTravelDetails,
+          'coInsured' | 'isYouth'
+        >)
+      | ({ __typename?: 'DanishHomeContentsDetails' } & Pick<
+          DanishHomeContentsDetails,
+          | 'street'
+          | 'floor'
+          | 'apartment'
+          | 'zipCode'
+          | 'livingSpace'
+          | 'coInsured'
+          | 'isStudent'
+        > & { danishHomeType: DanishHomeContentsDetails['type'] })
+      | ({ __typename?: 'DanishAccidentDetails' } & Pick<
+          DanishAccidentDetails,
+          'street' | 'zipCode' | 'coInsured' | 'isStudent'
+        >)
+      | ({ __typename?: 'DanishTravelDetails' } & Pick<
+          DanishTravelDetails,
+          'street' | 'zipCode' | 'coInsured' | 'isStudent'
+        >)
+  }
+
 export type QuoteCartQueryVariables = Exact<{
   id: Scalars['ID']
   locale: Locale
@@ -11789,7 +11932,9 @@ export type QuoteCartQuery = { __typename?: 'Query' } & {
                       __typename?: 'InsuranceCost'
                     } & BundleCostDataFragment
                     quotes: Array<
-                      { __typename?: 'BundledQuote' } & QuoteDataFragment
+                      {
+                        __typename?: 'BundledQuote'
+                      } & QuoteDataFragmentFragment
                     >
                   }
               }
@@ -12238,6 +12383,122 @@ export const BundleCostDataFragmentDoc = gql`
     monthlyNet {
       amount
       currency
+    }
+  }
+`
+export const QuoteDataFragmentFragmentDoc = gql`
+  fragment QuoteDataFragment on BundledQuote {
+    id
+    dataCollectionId
+    currentInsurer {
+      id
+      displayName
+      switchable
+    }
+    price {
+      amount
+      currency
+    }
+    firstName
+    lastName
+    ssn
+    birthDate
+    startDate
+    expiresAt
+    email
+    typeOfContract
+    displayName(locale: $locale)
+    contractPerils(locale: $locale) {
+      title
+      description
+      covered
+      exceptions
+      info
+      icon {
+        variants {
+          light {
+            svgUrl
+          }
+        }
+      }
+    }
+    insurableLimits(locale: $locale) {
+      label
+      limit
+      description
+      type
+    }
+    insuranceTerms(locale: $locale) {
+      displayName
+      url
+      type
+    }
+    data {
+      insuranceType
+    }
+    quoteDetails {
+      ... on SwedishApartmentQuoteDetails {
+        street
+        zipCode
+        householdSize
+        livingSpace
+        type
+      }
+      ... on SwedishHouseQuoteDetails {
+        street
+        zipCode
+        householdSize
+        livingSpace
+        ancillarySpace
+        numberOfBathrooms
+        yearOfConstruction
+        isSubleted
+        extraBuildings {
+          ... on ExtraBuildingValue {
+            type
+            area
+            displayName
+            hasWaterConnected
+          }
+        }
+      }
+      ... on SwedishAccidentDetails {
+        isStudent
+      }
+      ... on NorwegianHomeContentsDetails {
+        coInsured
+        livingSpace
+        street
+        norwegianHomeType: type
+        zipCode
+        isYouth
+      }
+      ... on NorwegianTravelDetails {
+        coInsured
+        isYouth
+      }
+      ... on DanishHomeContentsDetails {
+        street
+        floor
+        apartment
+        zipCode
+        livingSpace
+        danishHomeType: type
+        coInsured
+        isStudent
+      }
+      ... on DanishAccidentDetails {
+        street
+        zipCode
+        coInsured
+        isStudent
+      }
+      ... on DanishTravelDetails {
+        street
+        zipCode
+        coInsured
+        isStudent
+      }
     }
   }
 `
@@ -13170,7 +13431,7 @@ export const QuoteCartDocument = gql`
               ...BundleCostData
             }
             quotes {
-              ...QuoteData
+              ...QuoteDataFragment
             }
           }
         }
@@ -13202,7 +13463,7 @@ export const QuoteCartDocument = gql`
     }
   }
   ${BundleCostDataFragmentDoc}
-  ${QuoteDataFragmentDoc}
+  ${QuoteDataFragmentFragmentDoc}
 `
 
 /**
