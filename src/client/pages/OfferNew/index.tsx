@@ -4,7 +4,6 @@ import React from 'react'
 import { Redirect, useHistory, useRouteMatch } from 'react-router'
 import { LoadingPage } from 'components/LoadingPage'
 import { TopBar } from 'components/TopBar'
-import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import {
@@ -17,6 +16,8 @@ import { trackOfferGTM, EventName } from 'utils/tracking/gtm'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { Features, useFeature } from 'utils/hooks/useFeature'
+import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useQuoteIds } from '../../utils/hooks/useQuoteIds'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import {
@@ -46,8 +47,9 @@ const getQuoteIdsFromBundleVariant = (bundleVariant: QuoteBundleVariant) =>
 
 export const OfferNew: React.FC = () => {
   const currentLocale = useCurrentLocale()
-  const localeIsoCode = getIsoLocale(currentLocale)
+  const localeIsoCode = currentLocale.isoLocale
   const variation = useVariation()
+
   const [isInsuranceToggleEnabled] = useFeature([
     Features.OFFER_PAGE_INSURANCE_TOGGLE,
   ])
@@ -100,8 +102,11 @@ export const OfferNew: React.FC = () => {
         EventName.InsuranceSelectionToggle,
         getOfferData(selectedBundleVariant.bundle),
         redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction',
-        previouslySelectedBundleVariant &&
-          getOfferData(previouslySelectedBundleVariant?.bundle),
+        {
+          switchedFrom:
+            previouslySelectedBundleVariant &&
+            getOfferData(previouslySelectedBundleVariant?.bundle),
+        },
       )
     }
   }
@@ -120,14 +125,17 @@ export const OfferNew: React.FC = () => {
         EventName.OfferCrossSell,
         getOfferData(selectedBundleVariant.bundle),
         redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction',
-        previouslySelectedBundleVariant &&
-          getOfferData(previouslySelectedBundleVariant?.bundle),
+        {
+          switchedFrom:
+            previouslySelectedBundleVariant &&
+            getOfferData(previouslySelectedBundleVariant?.bundle),
+        },
       )
     }
   }
 
   const checkoutMatch = useRouteMatch(`${localePathPattern}/new-member/sign`)
-  const toggleCheckout = createToggleCheckout(history, currentLocale)
+  const toggleCheckout = createToggleCheckout(history, currentLocale.path)
 
   if ((loadingQuoteBundle && !data) || quoteIdsIsLoading) {
     return <LoadingPage />
@@ -159,12 +167,30 @@ export const OfferNew: React.FC = () => {
     )
   }
 
+  const handleClickPhoneNumber = (status: 'opened' | 'closed') => {
+    if (offerData) {
+      trackOfferGTM(
+        EventName.ClickCallNumber,
+        offerData,
+        redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction',
+        { phoneNumberData: { path: history.location.pathname, status } },
+      )
+    }
+  }
+
   return (
     <Page>
       <SessionTokenGuard>
         {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
           <TopBar isTransparent>
-            <LanguagePicker path="/new-member/offer" />
+            {currentLocale.phoneNumber ? (
+              <PhoneNumber
+                color="white"
+                onClick={(status) => handleClickPhoneNumber(status)}
+              />
+            ) : (
+              <LanguagePicker />
+            )}
           </TopBar>
         )}
         {offerData && (

@@ -16,6 +16,7 @@ import Helmet from 'react-helmet-async'
 import { apolloClient } from 'apolloClient'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useTextKeys } from 'utils/textKeys'
+import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useCreateOnboardingQuoteCartMutation } from 'data/graphql'
 import { useFeature, Features } from 'utils/hooks/useFeature'
@@ -67,6 +68,8 @@ interface EmbarkProps {
 }
 
 const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
+  const currentLocale = useCurrentLocale()
+
   const history = useHistory<{
     embarkPassageName: string
     embarkPassageId: string
@@ -134,6 +137,16 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
 
   const variation = useVariation()
 
+  const handleClickPhoneNumber = (status: 'opened' | 'closed') => {
+    pushToGTMDataLayer({
+      event: 'click_call_number',
+      phoneNumberData: {
+        path: history.location.pathname,
+        status,
+      },
+    })
+  }
+
   return (
     <PassageContainer>
       <motion.div
@@ -154,7 +167,16 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
                 passage={currentPassage}
                 storyData={state.data}
                 startPageLink={props.startPageLink}
-                customTrailingContent={<LanguagePicker />}
+                customTrailingContent={
+                  currentLocale.phoneNumber ? (
+                    <PhoneNumber
+                      color="black"
+                      onClick={(status) => handleClickPhoneNumber(status)}
+                    />
+                  ) : (
+                    <LanguagePicker />
+                  )
+                }
               />
             )}
           </StorageContainer>
