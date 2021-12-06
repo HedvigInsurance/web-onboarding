@@ -46,8 +46,8 @@ const getQuoteIdsFromBundleVariant = (bundleVariant: QuoteBundleVariant) =>
   bundleVariant.bundle.quotes.map((quote) => quote.id)
 
 export const OfferNew: React.FC = () => {
-  const currentLocale = useCurrentLocale()
-  const localeIsoCode = currentLocale.isoLocale
+  const { path: localePath, isoLocale, phoneNumber } = useCurrentLocale()
+  const localeIsoCode = isoLocale
   const variation = useVariation()
 
   const [isInsuranceToggleEnabled] = useFeature([
@@ -135,14 +135,14 @@ export const OfferNew: React.FC = () => {
   }
 
   const checkoutMatch = useRouteMatch(`${localePathPattern}/new-member/sign`)
-  const toggleCheckout = createToggleCheckout(history, currentLocale.path)
+  const toggleCheckout = createToggleCheckout(history, localePath)
 
   if ((loadingQuoteBundle && !data) || quoteIdsIsLoading) {
     return <LoadingPage />
   }
 
   if (quoteIds.length === 0) {
-    return <Redirect to={`/${currentLocale}/new-member`} />
+    return <Redirect to={`/${localePath}/new-member`} />
   }
 
   if (!loadingQuoteBundle && !data) {
@@ -183,7 +183,7 @@ export const OfferNew: React.FC = () => {
       <SessionTokenGuard>
         {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
           <TopBar isTransparent>
-            {currentLocale.phoneNumber ? (
+            {phoneNumber ? (
               <PhoneNumber
                 color="white"
                 onClick={(status) => handleClickPhoneNumber(status)}
