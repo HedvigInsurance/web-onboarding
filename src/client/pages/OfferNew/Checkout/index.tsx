@@ -193,7 +193,7 @@ export const Checkout = ({
     }
   }, [isOpen])
 
-  useLockBodyScroll({ lock: visibilityState === VisibilityState.OPEN })
+  useLockBodyScroll({ isLocked: visibilityState === VisibilityState.OPEN })
 
   const [signUiState, setSignUiState] = useState<SignUiState>('NOT_STARTED')
   const [emailUpdateLoading, setEmailUpdateLoading] = useState(false)
