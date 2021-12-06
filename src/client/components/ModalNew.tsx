@@ -5,7 +5,7 @@ import React from 'react'
 import { useLockBodyScroll } from '../utils/hooks/useLockBodyScroll'
 import { CloseButton } from './CloseButton/CloseButton'
 
-export interface ModalProps {
+export type ModalProps = {
   isVisible: boolean
   dynamicHeight?: boolean
   onClose: () => void
@@ -35,7 +35,7 @@ const ButtonWrapper = styled.div`
   right: 1rem;
 `
 
-interface ModalContainerProps {
+type ModalContainerProps = {
   dynamicHeight?: boolean
 }
 
@@ -47,8 +47,8 @@ const ModalContainer = styled(motion.div)<ModalContainerProps>`
   max-width: 56rem;
   max-height: 100vh;
 
-  ${(props) =>
-    !props.dynamicHeight &&
+  ${({ dynamicHeight }) =>
+    !dynamicHeight &&
     `
   min-height: 25rem;
   max-height: 56rem;`}
@@ -74,7 +74,7 @@ const ModalContainer = styled(motion.div)<ModalContainerProps>`
   }
 `
 
-const ModalInnerContainer = styled('div')`
+const ModalInnerContainer = styled.div`
   width: 100%;
   height: 100%;
 `
