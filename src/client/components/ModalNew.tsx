@@ -86,8 +86,7 @@ export const Modal: React.FC<ModalProps> = ({
   onClose,
   children,
 }) => {
-  useLockBodyScroll({ lock: isVisible })
-
+  useLockBodyScroll({ isLocked: isVisible })
   return (
     <Wrapper
       initial={'hidden'}
