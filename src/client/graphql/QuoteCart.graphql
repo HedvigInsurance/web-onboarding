@@ -1,3 +1,137 @@
+fragment QuoteDataFragment on BundledQuote {
+  id
+  dataCollectionId
+  currentInsurer {
+    id
+    displayName
+    switchable
+  }
+  price {
+    amount
+    currency
+  }
+  firstName
+  lastName
+  ssn
+  birthDate
+  startDate
+  expiresAt
+  email
+  typeOfContract
+  displayName(locale: $locale)
+  contractPerils(locale: $locale) {
+    title
+    description
+    covered
+    exceptions
+    info
+    icon {
+      variants {
+        light {
+          svgUrl
+        }
+      }
+    }
+  }
+  insurableLimits(locale: $locale) {
+    label
+    limit
+    description
+    type
+  }
+  insuranceTerms(locale: $locale) {
+    displayName
+    url
+    type
+  }
+  data {
+    insuranceType
+  }
+  quoteDetails {
+    ... on SwedishApartmentQuoteDetails {
+      street
+      zipCode
+      householdSize
+      livingSpace
+      type
+    }
+    ... on SwedishHouseQuoteDetails {
+      street
+      zipCode
+      householdSize
+      livingSpace
+      ancillarySpace
+      numberOfBathrooms
+      yearOfConstruction
+      isSubleted
+      extraBuildings {
+        ... on ExtraBuildingValue {
+          type
+          area
+          displayName
+          hasWaterConnected
+        }
+      }
+    }
+    ... on SwedishAccidentDetails {
+      isStudent
+    }
+
+    ... on NorwegianHomeContentsDetails {
+      coInsured
+      livingSpace
+      street
+      norwegianHomeType: type
+      zipCode
+      isYouth
+    }
+
+    ... on NorwegianTravelDetails {
+      coInsured
+      isYouth
+    }
+
+    ... on DanishHomeContentsDetails {
+      street
+      floor
+      apartment
+      zipCode
+      livingSpace
+      danishHomeType: type
+      coInsured
+      isStudent
+    }
+    ... on DanishAccidentDetails {
+      street
+      zipCode
+      coInsured
+      isStudent
+    }
+    ... on DanishTravelDetails {
+      street
+      zipCode
+      coInsured
+      isStudent
+    }
+  }
+}
+
+fragment BundleCostData on InsuranceCost {
+  freeUntil
+  monthlyDiscount {
+    amount
+    currency
+  }
+  monthlyGross {
+    amount
+    currency
+  }
+  monthlyNet {
+    amount
+    currency
+  }
+}
+
 query QuoteCart($id: ID!, $locale: Locale!) {
   quoteCart(id: $id) {
     id
@@ -6,66 +140,14 @@ query QuoteCart($id: ID!, $locale: Locale!) {
         id
         tag(locale: $locale)
         bundle {
+          displayName(locale: $locale)
           bundleCost {
-            monthlyGross {
-              amount
-              currency
-            }
+            ...BundleCostData
+          }
+          quotes {
+            ...QuoteDataFragment
           }
         }
-      }
-      bundleCost {
-        monthlyGross {
-          amount
-          currency
-        }
-        monthlyNet {
-          amount
-          currency
-        }
-        monthlyDiscount {
-          amount
-          currency
-        }
-        freeUntil
-      }
-      quotes {
-        id
-        currentInsurer {
-          id
-          displayName
-          switchable
-        }
-        price {
-          amount
-          currency
-        }
-        firstName
-        lastName
-        ssn
-        birthDate
-        quoteDetails {
-          __typename
-          ... on SwedishApartmentQuoteDetails {
-            street
-            zipCode
-            householdSize
-            livingSpace
-            type
-          }
-          ... on SwedishHouseQuoteDetails {
-            street
-          }
-          ... on SwedishAccidentDetails {
-            street
-          }
-        }
-        startDate
-        expiresAt
-        email
-        dataCollectionId
-        typeOfContract
-        initiatedFrom
       }
     }
     campaign {

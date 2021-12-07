@@ -11818,6 +11818,113 @@ export type QuoteBundleVariantsQuery = { __typename?: 'Query' } & {
   }
 }
 
+export type QuoteDataFragmentFragment = { __typename?: 'BundledQuote' } & Pick<
+  BundledQuote,
+  | 'id'
+  | 'dataCollectionId'
+  | 'firstName'
+  | 'lastName'
+  | 'ssn'
+  | 'birthDate'
+  | 'startDate'
+  | 'expiresAt'
+  | 'email'
+  | 'typeOfContract'
+  | 'displayName'
+> & {
+    currentInsurer?: Maybe<
+      { __typename?: 'CurrentInsurer' } & Pick<
+        CurrentInsurer,
+        'id' | 'displayName' | 'switchable'
+      >
+    >
+    price: { __typename?: 'MonetaryAmountV2' } & Pick<
+      MonetaryAmountV2,
+      'amount' | 'currency'
+    >
+    contractPerils: Array<
+      { __typename?: 'PerilV2' } & Pick<
+        PerilV2,
+        'title' | 'description' | 'covered' | 'exceptions' | 'info'
+      > & {
+          icon: { __typename?: 'Icon' } & {
+            variants: { __typename?: 'IconVariants' } & {
+              light: { __typename?: 'IconVariant' } & Pick<
+                IconVariant,
+                'svgUrl'
+              >
+            }
+          }
+        }
+    >
+    insurableLimits: Array<
+      { __typename?: 'InsurableLimit' } & Pick<
+        InsurableLimit,
+        'label' | 'limit' | 'description' | 'type'
+      >
+    >
+    insuranceTerms: Array<
+      { __typename?: 'InsuranceTerm' } & Pick<
+        InsuranceTerm,
+        'displayName' | 'url' | 'type'
+      >
+    >
+    data: { __typename?: 'QuoteData' } & Pick<QuoteData, 'insuranceType'>
+    quoteDetails:
+      | ({ __typename?: 'SwedishApartmentQuoteDetails' } & Pick<
+          SwedishApartmentQuoteDetails,
+          'street' | 'zipCode' | 'householdSize' | 'livingSpace' | 'type'
+        >)
+      | ({ __typename?: 'SwedishHouseQuoteDetails' } & Pick<
+          SwedishHouseQuoteDetails,
+          | 'street'
+          | 'zipCode'
+          | 'householdSize'
+          | 'livingSpace'
+          | 'ancillarySpace'
+          | 'numberOfBathrooms'
+          | 'yearOfConstruction'
+          | 'isSubleted'
+        > & {
+            extraBuildings: Array<
+              { __typename?: 'ExtraBuildingValue' } & Pick<
+                ExtraBuildingValue,
+                'type' | 'area' | 'displayName' | 'hasWaterConnected'
+              >
+            >
+          })
+      | ({ __typename?: 'SwedishAccidentDetails' } & Pick<
+          SwedishAccidentDetails,
+          'isStudent'
+        >)
+      | ({ __typename?: 'NorwegianHomeContentsDetails' } & Pick<
+          NorwegianHomeContentsDetails,
+          'coInsured' | 'livingSpace' | 'street' | 'zipCode' | 'isYouth'
+        > & { norwegianHomeType: NorwegianHomeContentsDetails['type'] })
+      | ({ __typename?: 'NorwegianTravelDetails' } & Pick<
+          NorwegianTravelDetails,
+          'coInsured' | 'isYouth'
+        >)
+      | ({ __typename?: 'DanishHomeContentsDetails' } & Pick<
+          DanishHomeContentsDetails,
+          | 'street'
+          | 'floor'
+          | 'apartment'
+          | 'zipCode'
+          | 'livingSpace'
+          | 'coInsured'
+          | 'isStudent'
+        > & { danishHomeType: DanishHomeContentsDetails['type'] })
+      | ({ __typename?: 'DanishAccidentDetails' } & Pick<
+          DanishAccidentDetails,
+          'street' | 'zipCode' | 'coInsured' | 'isStudent'
+        >)
+      | ({ __typename?: 'DanishTravelDetails' } & Pick<
+          DanishTravelDetails,
+          'street' | 'zipCode' | 'coInsured' | 'isStudent'
+        >)
+  }
+
 export type QuoteCartQueryVariables = Exact<{
   id: Scalars['ID']
   locale: Locale
@@ -11835,80 +11942,19 @@ export type QuoteCartQuery = { __typename?: 'Query' } & {
               QuoteBundleVariant,
               'id' | 'tag'
             > & {
-                bundle: { __typename?: 'QuoteBundle' } & {
-                  bundleCost: { __typename?: 'InsuranceCost' } & {
-                    monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
-                      MonetaryAmountV2,
-                      'amount' | 'currency'
+                bundle: { __typename?: 'QuoteBundle' } & Pick<
+                  QuoteBundle,
+                  'displayName'
+                > & {
+                    bundleCost: {
+                      __typename?: 'InsuranceCost'
+                    } & BundleCostDataFragment
+                    quotes: Array<
+                      {
+                        __typename?: 'BundledQuote'
+                      } & QuoteDataFragmentFragment
                     >
                   }
-                }
-              }
-          >
-          bundleCost: { __typename?: 'InsuranceCost' } & Pick<
-            InsuranceCost,
-            'freeUntil'
-          > & {
-              monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
-                MonetaryAmountV2,
-                'amount' | 'currency'
-              >
-              monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
-                MonetaryAmountV2,
-                'amount' | 'currency'
-              >
-              monthlyDiscount: { __typename?: 'MonetaryAmountV2' } & Pick<
-                MonetaryAmountV2,
-                'amount' | 'currency'
-              >
-            }
-          quotes: Array<
-            { __typename?: 'BundledQuote' } & Pick<
-              BundledQuote,
-              | 'id'
-              | 'firstName'
-              | 'lastName'
-              | 'ssn'
-              | 'birthDate'
-              | 'startDate'
-              | 'expiresAt'
-              | 'email'
-              | 'dataCollectionId'
-              | 'typeOfContract'
-              | 'initiatedFrom'
-            > & {
-                currentInsurer?: Maybe<
-                  { __typename?: 'CurrentInsurer' } & Pick<
-                    CurrentInsurer,
-                    'id' | 'displayName' | 'switchable'
-                  >
-                >
-                price: { __typename?: 'MonetaryAmountV2' } & Pick<
-                  MonetaryAmountV2,
-                  'amount' | 'currency'
-                >
-                quoteDetails:
-                  | ({ __typename: 'SwedishApartmentQuoteDetails' } & Pick<
-                      SwedishApartmentQuoteDetails,
-                      | 'street'
-                      | 'zipCode'
-                      | 'householdSize'
-                      | 'livingSpace'
-                      | 'type'
-                    >)
-                  | ({ __typename: 'SwedishHouseQuoteDetails' } & Pick<
-                      SwedishHouseQuoteDetails,
-                      'street'
-                    >)
-                  | ({ __typename: 'SwedishAccidentDetails' } & Pick<
-                      SwedishAccidentDetails,
-                      'street'
-                    >)
-                  | { __typename: 'NorwegianHomeContentsDetails' }
-                  | { __typename: 'NorwegianTravelDetails' }
-                  | { __typename: 'DanishHomeContentsDetails' }
-                  | { __typename: 'DanishAccidentDetails' }
-                  | { __typename: 'DanishTravelDetails' }
               }
           >
         }
@@ -12334,6 +12380,122 @@ export const BundleCostDataFragmentDoc = gql`
     monthlyNet {
       amount
       currency
+    }
+  }
+`
+export const QuoteDataFragmentFragmentDoc = gql`
+  fragment QuoteDataFragment on BundledQuote {
+    id
+    dataCollectionId
+    currentInsurer {
+      id
+      displayName
+      switchable
+    }
+    price {
+      amount
+      currency
+    }
+    firstName
+    lastName
+    ssn
+    birthDate
+    startDate
+    expiresAt
+    email
+    typeOfContract
+    displayName(locale: $locale)
+    contractPerils(locale: $locale) {
+      title
+      description
+      covered
+      exceptions
+      info
+      icon {
+        variants {
+          light {
+            svgUrl
+          }
+        }
+      }
+    }
+    insurableLimits(locale: $locale) {
+      label
+      limit
+      description
+      type
+    }
+    insuranceTerms(locale: $locale) {
+      displayName
+      url
+      type
+    }
+    data {
+      insuranceType
+    }
+    quoteDetails {
+      ... on SwedishApartmentQuoteDetails {
+        street
+        zipCode
+        householdSize
+        livingSpace
+        type
+      }
+      ... on SwedishHouseQuoteDetails {
+        street
+        zipCode
+        householdSize
+        livingSpace
+        ancillarySpace
+        numberOfBathrooms
+        yearOfConstruction
+        isSubleted
+        extraBuildings {
+          ... on ExtraBuildingValue {
+            type
+            area
+            displayName
+            hasWaterConnected
+          }
+        }
+      }
+      ... on SwedishAccidentDetails {
+        isStudent
+      }
+      ... on NorwegianHomeContentsDetails {
+        coInsured
+        livingSpace
+        street
+        norwegianHomeType: type
+        zipCode
+        isYouth
+      }
+      ... on NorwegianTravelDetails {
+        coInsured
+        isYouth
+      }
+      ... on DanishHomeContentsDetails {
+        street
+        floor
+        apartment
+        zipCode
+        livingSpace
+        danishHomeType: type
+        coInsured
+        isStudent
+      }
+      ... on DanishAccidentDetails {
+        street
+        zipCode
+        coInsured
+        isStudent
+      }
+      ... on DanishTravelDetails {
+        street
+        zipCode
+        coInsured
+        isStudent
+      }
     }
   }
 `
@@ -13318,66 +13480,14 @@ export const QuoteCartDocument = gql`
           id
           tag(locale: $locale)
           bundle {
+            displayName(locale: $locale)
             bundleCost {
-              monthlyGross {
-                amount
-                currency
-              }
+              ...BundleCostData
+            }
+            quotes {
+              ...QuoteDataFragment
             }
           }
-        }
-        bundleCost {
-          monthlyGross {
-            amount
-            currency
-          }
-          monthlyNet {
-            amount
-            currency
-          }
-          monthlyDiscount {
-            amount
-            currency
-          }
-          freeUntil
-        }
-        quotes {
-          id
-          currentInsurer {
-            id
-            displayName
-            switchable
-          }
-          price {
-            amount
-            currency
-          }
-          firstName
-          lastName
-          ssn
-          birthDate
-          quoteDetails {
-            __typename
-            ... on SwedishApartmentQuoteDetails {
-              street
-              zipCode
-              householdSize
-              livingSpace
-              type
-            }
-            ... on SwedishHouseQuoteDetails {
-              street
-            }
-            ... on SwedishAccidentDetails {
-              street
-            }
-          }
-          startDate
-          expiresAt
-          email
-          dataCollectionId
-          typeOfContract
-          initiatedFrom
         }
       }
       campaign {
@@ -13406,6 +13516,8 @@ export const QuoteCartDocument = gql`
       }
     }
   }
+  ${BundleCostDataFragmentDoc}
+  ${QuoteDataFragmentFragmentDoc}
 `
 
 /**
