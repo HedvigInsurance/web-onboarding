@@ -3,7 +3,7 @@ import React from 'react'
 import { useRedeemedCampaignsQuery } from 'data/graphql'
 import { getDiscountText } from 'pages/OfferNew/Introduction/Sidebar/utils'
 import { OfferData } from 'pages/OfferNew/types'
-import { isBundle, isNorwegian } from 'pages/OfferNew/utils'
+import { isNorwegianBundle } from 'pages/OfferNew/utils'
 import { useTextKeys } from 'utils/textKeys'
 import { Badge } from '../Badge/Badge'
 
@@ -18,14 +18,13 @@ const DiscountInfo = styled.div`
   flex-wrap: wrap;
   align-items: flex-start;
 
-  *:not(:last-child) {
+  & > *:not(:last-child) {
     margin-right: 0.5rem;
   }
 `
 
 export const DiscountTag: React.FC<DiscountTagProps> = ({ offerData }) => {
   const textKeys = useTextKeys()
-  const isNorwegianBundle = isBundle(offerData) && isNorwegian(offerData)
   const { data: campaignData } = useRedeemedCampaignsQuery()
   const redeemedCampaigns = campaignData ? campaignData.redeemedCampaigns : []
 
@@ -35,7 +34,9 @@ export const DiscountTag: React.FC<DiscountTagProps> = ({ offerData }) => {
   )
 
   const discounts: Array<React.ReactNode> = [
-    ...(isNorwegianBundle ? [textKeys.SIDEBAR_NO_BUNDLE_DISCOUNT_TEXT()] : []),
+    ...(isNorwegianBundle(offerData)
+      ? [textKeys.SIDEBAR_NO_BUNDLE_DISCOUNT_TEXT()]
+      : []),
     ...(discountText ? [discountText] : []),
   ]
   return discounts.length > 0 ? (

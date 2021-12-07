@@ -297,6 +297,10 @@ export const isNoDiscount = (campaigns: Campaign[]) =>
     campaigns[0].incentive.__typename === 'NoDiscount') ||
   false
 
+export const isNorwegianBundle = (offerData: OfferData) => {
+  return (isBundle(offerData) && isNorwegian(offerData)) || false
+}
+
 // TODO: Make Contract Types more generic
 export type HomeInsuranceTypeOfContract = Exclude<
   TypeOfContract,
