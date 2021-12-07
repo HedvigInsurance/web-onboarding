@@ -4,6 +4,7 @@ import {
   ssnFormats,
   birthDateFormats,
 } from './birthDateAndSsnFormats'
+import { PhoneNumberData, phoneNumbers } from './phoneNumbers'
 
 export const LOCALE_URL_PARAMS = [
   'se',
@@ -33,6 +34,7 @@ export type LocaleData = {
     formatRegex: RegExp
     backendFormatExample: string
   }
+  phoneNumber?: PhoneNumberData
 }
 
 export type MarketLabel = 'SE' | 'NO' | 'DK'
@@ -55,6 +57,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: birthDateFormats.SE,
       backendFormatExample: 'ÅÅÅÅ-MM-DD',
     },
+    phoneNumber: phoneNumbers.SE,
   },
   'se-en': {
     path: 'se-en',
@@ -73,6 +76,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: birthDateFormats.SE,
       backendFormatExample: 'YYYY-MM-DD',
     },
+    phoneNumber: phoneNumbers.SE,
   },
   no: {
     path: 'no',

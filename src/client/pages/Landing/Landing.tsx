@@ -6,11 +6,6 @@ import Helmet from 'react-helmet-async'
 import { AnimatePresence, motion } from 'framer-motion'
 import { TopBar, TopBarFiller } from 'components/TopBar'
 import { BackgroundImage } from 'components/BackgroundImage'
-import {
-  Market,
-  useCurrentLocale,
-  useMarket,
-} from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useTextKeys } from 'utils/textKeys'
@@ -20,6 +15,7 @@ import {
   MEDIUM_SCREEN_MEDIA_QUERY,
   MEDIUM_SMALL_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import { alternateLinksData, productsData } from './landingPageData'
 import { Card, CardHeadline, CardParagraph } from './components/Card'
@@ -158,8 +154,7 @@ const CardContainer = styled.div`
 
 export const Landing: React.FC = () => {
   const textKeys = useTextKeys()
-  const market = useMarket()
-  const currentLocale = useCurrentLocale()
+  const { marketLabel, path: localePath } = useCurrentLocale()
   const variation = useVariation()
 
   return (
@@ -196,7 +191,7 @@ export const Landing: React.FC = () => {
               ))}
               <link
                 rel="canonical"
-                href={`https://hedvig.com/${currentLocale}/new-member`}
+                href={`https://hedvig.com/${localePath}/new-member`}
               />
             </Helmet>
 
@@ -213,7 +208,7 @@ export const Landing: React.FC = () => {
               <UspContainer>
                 <Headline>{textKeys.STARTPAGE_HEADLINE()}</Headline>
                 <Preamble>{textKeys.STARTPAGE_PREAMBLE()}</Preamble>
-                <UspList isVisibleInMobile={market === Market.Se}>
+                <UspList isVisibleInMobile={marketLabel === 'SE'}>
                   <UspItem>
                     <CheckmarkCircle size="1.5rem" />
                     <span>{textKeys.STARTPAGE_USP_1()}</span>
@@ -229,10 +224,10 @@ export const Landing: React.FC = () => {
                 </UspList>
               </UspContainer>
               <CardContainer>
-                {productsData[market].map(
+                {productsData[marketLabel].map(
                   ({ id, linkSlug, badge, headline, paragraph, disabled }) => (
                     <Card
-                      to={`/${currentLocale}/new-member${linkSlug}`}
+                      to={`/${localePath}/new-member${linkSlug}`}
                       badge={badge && textKeys[badge]()}
                       disabled={disabled}
                       key={id}

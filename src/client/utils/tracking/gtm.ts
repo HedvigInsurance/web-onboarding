@@ -50,6 +50,11 @@ type GTMEventData = {
   type: string
 }
 
+type GTMPhoneNumberData = {
+  path: string
+  status: 'opened' | 'closed'
+}
+
 type DataLayerObject = {
   event?: string
   userProperties?: GTMUserProperties
@@ -57,6 +62,7 @@ type DataLayerObject = {
   pageData?: GTMPageData
   passageData?: Record<string, string | undefined>
   eventData?: GTMEventData
+  phoneNumberData?: GTMPhoneNumberData
 }
 
 /**
@@ -100,13 +106,20 @@ export enum EventName {
   OfferCreated = 'offer_created',
   SignedCustomer = 'signed_customer',
   InsuranceSelectionToggle = 'insurance_selection_toggle',
+  ClickCallNumber = 'click_call_number',
+  OfferCrossSell = 'offer_cross_sell',
+}
+
+type OptionalParameters = {
+  switchedFrom?: OfferData
+  phoneNumberData?: GTMPhoneNumberData
 }
 
 export const trackOfferGTM = (
   eventName: EventName,
   offerData: OfferData,
   referralCodeUsed: boolean,
-  switchedFrom?: OfferData,
+  { switchedFrom, phoneNumberData }: OptionalParameters = {},
 ) => {
   const contractType = getContractType(offerData)
   const contractCategory = getTrackableContractCategory(contractType)
@@ -141,6 +154,7 @@ export const trackOfferGTM = (
         }),
         ...(offerData.memberId && { member_id: offerData.memberId }),
       },
+      ...phoneNumberData,
     })
   } catch (e) {
     captureSentryError(e)

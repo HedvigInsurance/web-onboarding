@@ -7,16 +7,19 @@ import {
   useEmbark,
 } from '@hedviginsurance/embark'
 import { AnimatePresence, motion } from 'framer-motion'
-import React from 'react'
+import React, { useEffect, useCallback } from 'react'
 import { useHistory } from 'react-router'
 
 import { colorsV3 } from '@hedviginsurance/brand'
 import gql from 'graphql-tag'
 import Helmet from 'react-helmet-async'
 import { apolloClient } from 'apolloClient'
-import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useTextKeys } from 'utils/textKeys'
+import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import { useCreateOnboardingQuoteCartMutation } from 'data/graphql'
+import { useFeature, Features } from 'utils/hooks/useFeature'
 import { pushToGTMDataLayer } from '../../utils/tracking/gtm'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
@@ -29,6 +32,7 @@ import { resolveHouseInformation } from './houseInformation'
 import { LanguagePicker } from './LanguagePicker'
 import { resolvePersonalInformation } from './personalInformation'
 import { resolveAddressAutocomplete } from './addressAutocompleteProvider'
+import { SetupFailedModal } from './ErrorModal'
 
 const EmbarkStyling = styled.div`
   height: 100%;
@@ -64,6 +68,8 @@ interface EmbarkProps {
 }
 
 const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
+  const currentLocale = useCurrentLocale()
+
   const history = useHistory<{
     embarkPassageName: string
     embarkPassageId: string
@@ -131,6 +137,16 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
 
   const variation = useVariation()
 
+  const handleClickPhoneNumber = (status: 'opened' | 'closed') => {
+    pushToGTMDataLayer({
+      event: 'click_call_number',
+      phoneNumberData: {
+        path: history.location.pathname,
+        status,
+      },
+    })
+  }
+
   return (
     <PassageContainer>
       <motion.div
@@ -151,7 +167,16 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
                 passage={currentPassage}
                 storyData={state.data}
                 startPageLink={props.startPageLink}
-                customTrailingContent={<LanguagePicker />}
+                customTrailingContent={
+                  currentLocale.phoneNumber ? (
+                    <PhoneNumber
+                      color="black"
+                      onClick={(status) => handleClickPhoneNumber(status)}
+                    />
+                  ) : (
+                    <LanguagePicker />
+                  )
+                }
               />
             )}
           </StorageContainer>
@@ -204,14 +229,49 @@ interface AngelVariables {
   locale: string
 }
 
+const useCreateQuoteCartId = ({ skip = false }) => {
+  const { isoLocale, apiMarket } = useCurrentLocale()
+
+  const [
+    createOnboardingQuoteCart,
+    { data, error },
+  ] = useCreateOnboardingQuoteCartMutation()
+
+  const createQuoteCart = useCallback(() => {
+    createOnboardingQuoteCart({
+      variables: { market: apiMarket, locale: isoLocale },
+    })
+  }, [createOnboardingQuoteCart, apiMarket, isoLocale])
+
+  useEffect(() => {
+    if (!skip) {
+      createQuoteCart()
+    }
+  }, [skip, createQuoteCart])
+
+  return {
+    createQuoteCart,
+    quoteCartId: data?.onboardingQuoteCart_create.id,
+    error,
+  }
+}
+
 export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
   const history = useHistory()
   const [data, setData] = React.useState<[string, any] | null>(null)
-  const [initialStore, setInitialStore] = React.useState<null | {
-    [key: string]: any
-  }>()
-  const currentLocale = useCurrentLocale()
-  const localeIsoCode = getIsoLocale(currentLocale)
+  const [initialStore, setInitialStore] = React.useState<
+    Record<string, string>
+  >()
+  const { isoLocale } = useCurrentLocale()
+
+  const [isQuoteCartApiEnabled] = useFeature([Features.QUOTE_CART_API])
+  const {
+    createQuoteCart,
+    quoteCartId,
+    error: quoteCartIdError,
+  } = useCreateQuoteCartId({
+    skip: !isQuoteCartApiEnabled,
+  })
 
   const textKeys = useTextKeys()
 
@@ -254,7 +314,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
       const result = await apolloClient.client.query<AngelData, AngelVariables>(
         {
           query: ANGEL_DATA_QUERY,
-          variables: { name: props.name, locale: localeIsoCode },
+          variables: { name: props.name, locale: isoLocale },
         },
       )
 
@@ -262,29 +322,33 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
         setData([props.name, JSON.parse(result.data.angelStory.content)])
       }
     })()
-  }, [props.name, localeIsoCode])
+  }, [props.name, isoLocale])
 
   React.useEffect(() => {
-    if (!props.name) {
+    if (!props.name || (isQuoteCartApiEnabled && !quoteCartId)) {
       return
     }
+
+    const defaultStore: Record<string, string> = quoteCartId
+      ? { quoteCartId }
+      : {}
 
     const prevStore = window.sessionStorage.getItem(
       `embark-store-${encodeURIComponent(props.name)}`,
     )
 
     if (!prevStore) {
-      setInitialStore({})
+      setInitialStore(defaultStore)
       return
     }
 
     try {
       const parsedPrevStore = JSON.parse(prevStore)
-      setInitialStore(parsedPrevStore as { [key: string]: any })
+      setInitialStore({ ...parsedPrevStore, ...defaultStore })
     } catch (err) {
-      setInitialStore({})
+      setInitialStore(defaultStore)
     }
-  }, [props.name])
+  }, [props.name, isQuoteCartApiEnabled, quoteCartId])
 
   const redirectToOfferPage = () => {
     history.push(
@@ -305,7 +369,6 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
       <Global
         styles={css`
           body {
-            overflow: hidden;
             background-color: ${colorsV3.gray100};
           }
         `}
@@ -352,20 +415,11 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                   }}
                   data={data[1]}
                   resolvers={{
-                    graphqlQuery: graphQLQuery(
-                      storageState,
-                      getIsoLocale(currentLocale),
-                    ),
-                    graphqlMutation: graphQLMutation(
-                      storageState,
-                      getIsoLocale(currentLocale),
-                    ),
+                    graphqlQuery: graphQLQuery(storageState, isoLocale),
+                    graphqlMutation: graphQLMutation(storageState, isoLocale),
                     personalInformationApi: resolvePersonalInformation,
                     houseInformation: resolveHouseInformation,
-                    createQuote: createQuote(
-                      storageState,
-                      getIsoLocale(currentLocale),
-                    ),
+                    createQuote: createQuote(storageState, isoLocale),
                     addressAutocompleteQuery: resolveAddressAutocomplete,
                     externalInsuranceProviderProviderStatus: resolveExternalInsuranceProviderProviderStatus,
                     externalInsuranceProviderStartSession: resolveExternalInsuranceProviderStartSession,
@@ -438,6 +492,11 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
           )}
         </motion.div>
       </AnimatePresence>
+
+      <SetupFailedModal
+        isVisible={quoteCartIdError !== undefined}
+        onRetry={createQuoteCart}
+      />
     </EmbarkStyling>
   )
 }

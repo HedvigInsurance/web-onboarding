@@ -4,7 +4,6 @@ import React from 'react'
 import { Redirect, useHistory, useRouteMatch } from 'react-router'
 import { LoadingPage } from 'components/LoadingPage'
 import { TopBar } from 'components/TopBar'
-import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import {
@@ -17,6 +16,8 @@ import { trackOfferGTM, EventName } from 'utils/tracking/gtm'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { Features, useFeature } from 'utils/hooks/useFeature'
+import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useQuoteIds } from '../../utils/hooks/useQuoteIds'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import {
@@ -45,9 +46,10 @@ const getQuoteIdsFromBundleVariant = (bundleVariant: QuoteBundleVariant) =>
   bundleVariant.bundle.quotes.map((quote) => quote.id)
 
 export const OfferNew: React.FC = () => {
-  const currentLocale = useCurrentLocale()
-  const localeIsoCode = getIsoLocale(currentLocale)
+  const { path: localePath, isoLocale, phoneNumber } = useCurrentLocale()
+  const localeIsoCode = isoLocale
   const variation = useVariation()
+
   const [isInsuranceToggleEnabled] = useFeature([
     Features.OFFER_PAGE_INSURANCE_TOGGLE,
   ])
@@ -100,21 +102,47 @@ export const OfferNew: React.FC = () => {
         EventName.InsuranceSelectionToggle,
         getOfferData(selectedBundleVariant.bundle),
         redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction',
-        previouslySelectedBundleVariant &&
-          getOfferData(previouslySelectedBundleVariant?.bundle),
+        {
+          switchedFrom:
+            previouslySelectedBundleVariant &&
+            getOfferData(previouslySelectedBundleVariant?.bundle),
+        },
+      )
+    }
+  }
+
+  const handleCheckoutUpsellCardAccepted = (
+    selectedBundleVariant: QuoteBundleVariant,
+  ) => {
+    const previouslySelectedBundleVariant = getBundleVariantFromQuoteIds(
+      selectedQuoteIds,
+      bundleVariants,
+    )
+    const quoteIds = getQuoteIdsFromBundleVariant(selectedBundleVariant)
+    setSelectedQuoteIds(quoteIds)
+    if (offerData) {
+      trackOfferGTM(
+        EventName.OfferCrossSell,
+        getOfferData(selectedBundleVariant.bundle),
+        redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction',
+        {
+          switchedFrom:
+            previouslySelectedBundleVariant &&
+            getOfferData(previouslySelectedBundleVariant?.bundle),
+        },
       )
     }
   }
 
   const checkoutMatch = useRouteMatch(`${localePathPattern}/new-member/sign`)
-  const toggleCheckout = createToggleCheckout(history, currentLocale)
+  const toggleCheckout = createToggleCheckout(history, localePath)
 
   if ((loadingQuoteBundle && !data) || quoteIdsIsLoading) {
     return <LoadingPage />
   }
 
   if (quoteIds.length === 0) {
-    return <Redirect to={`/${currentLocale}/new-member`} />
+    return <Redirect to={`/${localePath}/new-member`} />
   }
 
   if (!loadingQuoteBundle && !data) {
@@ -139,12 +167,30 @@ export const OfferNew: React.FC = () => {
     )
   }
 
+  const handleClickPhoneNumber = (status: 'opened' | 'closed') => {
+    if (offerData) {
+      trackOfferGTM(
+        EventName.ClickCallNumber,
+        offerData,
+        redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction',
+        { phoneNumberData: { path: history.location.pathname, status } },
+      )
+    }
+  }
+
   return (
     <Page>
       <SessionTokenGuard>
         {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
           <TopBar isTransparent>
-            <LanguagePicker path="/new-member/offer" />
+            {phoneNumber ? (
+              <PhoneNumber
+                color="white"
+                onClick={(status) => handleClickPhoneNumber(status)}
+              />
+            ) : (
+              <LanguagePicker />
+            )}
           </TopBar>
         )}
         {offerData && (
@@ -183,11 +229,11 @@ export const OfferNew: React.FC = () => {
             <AppPromotionSection />
             <FaqSection />
             <Checkout
-              offerData={offerData}
+              quoteBundleVariants={bundleVariants}
+              selectedQuoteBundleVariant={selectedBundleVariant}
+              onUpsellAccepted={handleCheckoutUpsellCardAccepted}
               isOpen={checkoutMatch !== null}
-              onClose={() => {
-                handleCheckoutToggle(false)
-              }}
+              onClose={() => handleCheckoutToggle(false)}
               refetch={refetch as () => Promise<any>}
             />
           </>

@@ -36,6 +36,9 @@ module.exports = webpackConfig({
         SENTRY_DSN: JSON.stringify(process.env.SENTRY_DSN),
         SENTRY_ENVIRONMENT: JSON.stringify(process.env.SENTRY_ENVIRONMENT),
         SENTRY_RELEASE: JSON.stringify(process.env.HEROKU_SLUG_COMMIT),
+        ENABLE_QUOTE_CART_API: JSON.stringify(
+          process.env.ENABLE_QUOTE_CART_API,
+        ),
       },
     }),
     new webpack.ProvidePlugin({
