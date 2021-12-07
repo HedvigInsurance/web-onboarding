@@ -1697,9 +1697,10 @@ export type Cashback = {
   id?: Maybe<Scalars['ID']>
   name?: Maybe<Scalars['String']>
   imageUrl?: Maybe<Scalars['String']>
-  selectedUrl?: Maybe<Scalars['String']>
   description?: Maybe<Scalars['String']>
+  /** @deprecated use name instead */
   title?: Maybe<Scalars['String']>
+  /** @deprecated use description instead */
   paragraph?: Maybe<Scalars['String']>
 }
 
@@ -12099,27 +12100,6 @@ export type SignStatusQuery = { __typename?: 'Query' } & {
   >
 }
 
-export type SignStatusListenerSubscriptionVariables = Exact<{
-  [key: string]: never
-}>
-
-export type SignStatusListenerSubscription = { __typename?: 'Subscription' } & {
-  signStatus?: Maybe<
-    { __typename?: 'SignEvent' } & {
-      status?: Maybe<
-        { __typename?: 'SignStatus' } & Pick<SignStatus, 'signState'> & {
-            collectStatus?: Maybe<
-              { __typename?: 'CollectStatus' } & Pick<
-                CollectStatus,
-                'status' | 'code'
-              >
-            >
-          }
-      >
-    }
-  >
-}
-
 export type StartDateMutationVariables = Exact<{
   quoteId: Scalars['ID']
   date?: Maybe<Scalars['LocalDate']>
@@ -13946,53 +13926,6 @@ export type SignStatusLazyQueryHookResult = ReturnType<
 export type SignStatusQueryResult = ApolloReactCommon.QueryResult<
   SignStatusQuery,
   SignStatusQueryVariables
->
-export const SignStatusListenerDocument = gql`
-  subscription SignStatusListener {
-    signStatus {
-      status {
-        signState
-        collectStatus {
-          status
-          code
-        }
-      }
-    }
-  }
-`
-
-/**
- * __useSignStatusListenerSubscription__
- *
- * To run a query within a React component, call `useSignStatusListenerSubscription` and pass it any options that fit your needs.
- * When your component renders, `useSignStatusListenerSubscription` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSignStatusListenerSubscription({
- *   variables: {
- *   },
- * });
- */
-export function useSignStatusListenerSubscription(
-  baseOptions?: Apollo.SubscriptionHookOptions<
-    SignStatusListenerSubscription,
-    SignStatusListenerSubscriptionVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useSubscription<
-    SignStatusListenerSubscription,
-    SignStatusListenerSubscriptionVariables
-  >(SignStatusListenerDocument, options)
-}
-export type SignStatusListenerSubscriptionHookResult = ReturnType<
-  typeof useSignStatusListenerSubscription
->
-export type SignStatusListenerSubscriptionResult = ApolloReactCommon.SubscriptionResult<
-  SignStatusListenerSubscription
 >
 export const StartDateDocument = gql`
   mutation StartDate($quoteId: ID!, $date: LocalDate) {
