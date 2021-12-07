@@ -1571,7 +1571,9 @@ export type BundledQuote = {
   lastName?: Maybe<Scalars['String']>
   ssn?: Maybe<Scalars['String']>
   birthDate: Scalars['LocalDate']
+  /** @deprecated Use data instead. */
   quoteDetails: QuoteDetails
+  data: QuoteData
   startDate?: Maybe<Scalars['LocalDate']>
   expiresAt: Scalars['LocalDate']
   email?: Maybe<Scalars['String']>
@@ -1621,8 +1623,10 @@ export type Campaign = {
   __typename?: 'Campaign'
   incentive?: Maybe<Incentive>
   code: Scalars['String']
-  owner?: Maybe<CampaignOwner>
+  ownerName?: Maybe<Scalars['String']>
   expiresAt?: Maybe<Scalars['LocalDate']>
+  /** @deprecated Don't use for quoteCart API, this is here to fix stitching issues with the old APIs in PP */
+  owner?: Maybe<CampaignOwner>
   displayValue?: Maybe<Scalars['String']>
 }
 
@@ -1819,6 +1823,11 @@ export type Claim = {
   files: Array<File>
   signedAudioURL?: Maybe<Scalars['String']>
   payout?: Maybe<MonetaryAmountV2>
+  /** Localized end-user presentable `Claim`-type */
+  type?: Maybe<Scalars['String']>
+  /** Brief explanation of the current status of this `Claim` */
+  statusParagraph: Scalars['String']
+  progressSegments: Array<ClaimStatusProgressSegment>
 }
 
 export enum ClaimOutcome {
@@ -1848,6 +1857,8 @@ export type ClaimStatusCard = {
   title: Scalars['String']
   subtitle: Scalars['String']
   progressSegments: Array<ClaimStatusProgressSegment>
+  /** The underlying Claim represented by this status-card */
+  claim: Claim
 }
 
 export type ClaimStatusCardPill = {
@@ -8536,6 +8547,29 @@ export type QuoteCart = {
   checkoutMethods: Array<CheckoutMethod>
 }
 
+export type QuoteData = {
+  __typename?: 'QuoteData'
+  insuranceType: Scalars['String']
+  typeOfContract: Scalars['String']
+  market: Market
+  street?: Maybe<Scalars['String']>
+  postalCode?: Maybe<Scalars['String']>
+  city?: Maybe<Scalars['String']>
+  floor?: Maybe<Scalars['String']>
+  bbrId?: Maybe<Scalars['String']>
+  apartment?: Maybe<Scalars['String']>
+  numberCoInsured?: Maybe<Scalars['Int']>
+  squareMeters?: Maybe<Scalars['Int']>
+  subType?: Maybe<Scalars['String']>
+  ancillaryArea?: Maybe<Scalars['Int']>
+  yearOfConstruction?: Maybe<Scalars['Int']>
+  numberOfBathrooms?: Maybe<Scalars['Int']>
+  extraBuildings: Array<ExtraBuildingValue>
+  isSubleted?: Maybe<Scalars['Boolean']>
+  isStudent?: Maybe<Scalars['Boolean']>
+  isYouth?: Maybe<Scalars['Boolean']>
+}
+
 export type QuoteDetails =
   | SwedishApartmentQuoteDetails
   | SwedishHouseQuoteDetails
@@ -9847,6 +9881,7 @@ export type SwedishApartmentAgreement = AgreementCore & {
   numberCoInsured: Scalars['Int']
   squareMeters: Scalars['Int']
   type: SwedishApartmentLineOfBusiness
+  partner?: Maybe<Scalars['String']>
 }
 
 export enum SwedishApartmentLineOfBusiness {
@@ -9862,7 +9897,14 @@ export type SwedishApartmentQuoteDetails = {
   zipCode: Scalars['String']
   householdSize: Scalars['Int']
   livingSpace: Scalars['Int']
-  type: ApartmentType
+  type: SwedishApartmentType
+}
+
+export enum SwedishApartmentType {
+  StudentRent = 'STUDENT_RENT',
+  Rent = 'RENT',
+  StudentBrf = 'STUDENT_BRF',
+  Brf = 'BRF',
 }
 
 export type SwedishBankIdExtraInfo = {
@@ -11321,6 +11363,17 @@ export type Welcome = {
   paragraph: Scalars['String']
 }
 
+export type AddCampaignCodeMutationVariables = Exact<{
+  id: Scalars['ID']
+  code: Scalars['String']
+}>
+
+export type AddCampaignCodeMutation = { __typename?: 'Mutation' } & {
+  quoteCart_addCampaign:
+    | ({ __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'>)
+    | ({ __typename?: 'BasicError' } & { errorMessage: BasicError['message'] })
+}
+
 export type AvailablePaymentMethodsQueryVariables = Exact<{
   [key: string]: never
 }>
@@ -12284,6 +12337,63 @@ export const BundleCostDataFragmentDoc = gql`
     }
   }
 `
+export const AddCampaignCodeDocument = gql`
+  mutation AddCampaignCode($id: ID!, $code: String!) {
+    quoteCart_addCampaign(id: $id, code: $code) {
+      ... on QuoteCart {
+        id
+      }
+      ... on BasicError {
+        errorMessage: message
+      }
+    }
+  }
+`
+export type AddCampaignCodeMutationFn = ApolloReactCommon.MutationFunction<
+  AddCampaignCodeMutation,
+  AddCampaignCodeMutationVariables
+>
+
+/**
+ * __useAddCampaignCodeMutation__
+ *
+ * To run a mutation, you first call `useAddCampaignCodeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddCampaignCodeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addCampaignCodeMutation, { data, loading, error }] = useAddCampaignCodeMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useAddCampaignCodeMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AddCampaignCodeMutation,
+    AddCampaignCodeMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    AddCampaignCodeMutation,
+    AddCampaignCodeMutationVariables
+  >(AddCampaignCodeDocument, options)
+}
+export type AddCampaignCodeMutationHookResult = ReturnType<
+  typeof useAddCampaignCodeMutation
+>
+export type AddCampaignCodeMutationResult = ApolloReactCommon.MutationResult<
+  AddCampaignCodeMutation
+>
+export type AddCampaignCodeMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  AddCampaignCodeMutation,
+  AddCampaignCodeMutationVariables
+>
 export const AvailablePaymentMethodsDocument = gql`
   query AvailablePaymentMethods {
     availablePaymentMethods {
