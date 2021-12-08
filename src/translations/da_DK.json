@@ -302,7 +302,7 @@
   "OFFER_BUNDLE_SELECTOR_TITLE": "Din forsikringspakke",
   "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "",
   "OFFER_APP_PROMOTION_HEADING": "En forsikrings-app, der løser alle dine problemer",
-  "OFFER_APP_PROMOTION_PARAGRAPH": "Anmeld skader, håndter dine forsikringer eller stil spørgsmål. Med appen får du fuld kontrol over dine forsikringer - og omgående hjælp hvis der er sket noget.",
+  "OFFER_APP_PROMOTION_PARAGRAPH": "Anmeld skader, håndter dine forsikringer eller stil spørgsmål. Med appen får du fuld kontrol over dine forsikringer - og omgående hjælp, hvis der er sket noget.",
   "WEB_OFFER_DOCUMENTS_SECTION_TITLE": "Vigtige dokumenter",
   "STARTPAGE_UNINSURED_BODY_WITHOUT_ACCIDENT": "Beregn prisen på en ny indboforsikring hos Hedvig",
   "CHECKOUT_FIRSTNAME_LABEL": "Fornavn",
@@ -314,5 +314,6 @@
   "PHONE_OPENS_MONDAY_AT": "",
   "ACCIDENT_SWEDEN_UPSELL_TITLE": "",
   "ACCIDENT_SWEDEN_UPSELL_DESCRIPTION": "",
-  "ACCIDENT_SWEDEN_UPSELL_BUTTON": ""
+  "ACCIDENT_SWEDEN_UPSELL_BUTTON": "",
+  "PHONE_OPENS_AT": ""
 }
