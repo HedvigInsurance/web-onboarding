@@ -28,7 +28,7 @@ import {
 import { AppPromotionSection } from '../OfferNew/AppPromotionSection'
 import { Checkout } from '../OfferNew/Checkout'
 import { FaqSection } from '../OfferNew/FaqSection'
-import { Introduction } from '../OfferNew/Introduction'
+import { Introduction } from '../OfferNew/Introduction/Introduction'
 import { Perils } from '../OfferNew/Perils'
 import { InsuranceSelector } from '../OfferNew/InsuranceSelector'
 
@@ -186,6 +186,7 @@ export const OfferPage = ({
           >
             {({ track }) => (
               <Introduction
+                quoteCartId={quoteCartId}
                 allQuotes={getUniqueQuotesFromVariantList(bundleVariants)}
                 offerData={offerData}
                 refetch={refetchQuoteCart as () => Promise<any>}
