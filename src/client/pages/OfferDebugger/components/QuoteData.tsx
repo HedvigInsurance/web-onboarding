@@ -43,7 +43,7 @@ enum QuoteType {
   DanishAccident = 'DANISH_ACCIDENT',
   DanishTravel = 'DANIEL_TRAVEL',
   NorwegianHome = 'NORWEGIAN_HOME_CONTENT',
-  NorwegianTravel = 'NORWEIGAN_TRAVEL',
+  NorwegianTravel = 'NORWEGIAN_TRAVEL',
   SwedishApartment = 'SWEDISH_APARTMENT',
   SwedishHouse = 'SWEDISH_HOUSE',
   SwedishAccident = 'SWEDISH_ACCIDENT',
