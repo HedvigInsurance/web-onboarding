@@ -15,8 +15,8 @@ const initialBaseValues = {
 export const initialNoHomeValues = {
   ...initialBaseValues,
   data: {
-    youth: false,
-    coInsured: 0,
+    isYouth: false,
+    numberCoInsured: 0,
     livingSpace: 44,
     street: 'Gulebøjsveien 1',
     zipCode: '1234',
@@ -27,8 +27,8 @@ export const initialNoHomeValues = {
 export const initialNoTravelValues = {
   ...initialBaseValues,
   data: {
-    coInsured: 0,
-    youth: false,
+    numberCoInsured: 0,
+    isYouth: false,
   },
 }
 
@@ -38,7 +38,7 @@ const NorwegianCommon: React.FC<WithFormikProps> = ({ formik }) => (
       label="Co-insured"
       placeholder="1"
       type="number"
-      {...formik.getFieldProps('data.coInsured')}
+      {...formik.getFieldProps('data.numberCoInsured')}
     />
     <InputField
       label="Current Insurer (optional)"

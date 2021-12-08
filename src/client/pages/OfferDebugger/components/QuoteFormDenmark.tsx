@@ -11,14 +11,14 @@ export const initialDkHomeValues = {
   startDate: '',
   email: 'helle.hansen@hedvig.com',
   data: {
-    coInsured: 0,
+    numberCoInsured: 0,
     livingSpace: 34,
     street: 'Theodore Roosevelts Vej 1',
     floor: '2',
     apartment: 'tv',
     zipCode: '2100',
     subType: DanishHomeContentsType.Own,
-    student: false,
+    isStudent: false,
   },
 }
 
@@ -29,7 +29,7 @@ export const DanishQuote: React.FC<WithFormikProps> = ({ formik }) => {
         label="Co-insured"
         placeholder="1"
         type="number"
-        {...formik.getFieldProps('data.coInsured')}
+        {...formik.getFieldProps('data.numberCoInsured')}
       />
       <InputField
         label="Living space"
@@ -67,7 +67,7 @@ export const DanishQuote: React.FC<WithFormikProps> = ({ formik }) => {
       />
       <div style={{ paddingBottom: '2rem', fontSize: '1.25rem' }}>
         <label>
-          <Field type="checkbox" name="data.student" />
+          <Field type="checkbox" name="data.isStudent" />
           {"I'm a student"}
         </label>
       </div>

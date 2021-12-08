@@ -198,7 +198,7 @@
   "FOREVER_ERROR_CANNOT_REDEEM_OWN_CAMPAIGN": "Kan ej applicera egen kod",
   "FOREVER_ERROR_CAMPAIGN_CANNOT_BE_COMBINED_WITH_EXISTING": "Koden kan inte kombineras med andra rabattkoder.",
   "FOREVER_ERROR_CAMPAIGN_HAS_EXPIRED": "Koden har gått ut.",
-  "FOREVER_ERROR_MEMBER_IS_NOT_ELIGIBLE_FOR_CAMPAIGN": "Ej tillgänglig för kampanj.",
+  "FOREVER_ERROR_MEMBER_IS_NOT_ELIGIBLE_FOR_CAMPAIGN": "Inte berättigad till kampanj.",
   "FOREVER_ERROR_CAMPAIGN_DOES_NOT_EXIST": "Felaktig kod.",
   "FOREVER_ERROR_CANNOT_REDEEM_CAMPAIGN_FROM_DIFFERENT_MARKET": "Felaktig kod.",
   "START_PAGE_TITLE": "Få ett prisförslag | Hedvig",
@@ -314,5 +314,6 @@
   "PHONE_OPENS_MONDAY_AT": "Öppnar måndag kl",
   "ACCIDENT_SWEDEN_UPSELL_TITLE": "Olycksfallsförsäkring",
   "ACCIDENT_SWEDEN_UPSELL_DESCRIPTION": "Täcker olyckor, skador på fritiden utanför hemmet, tandskador, ärr, kosmetiska skador, sjukhusvistelser och mycket mer. Försäkringen gäller alla medförsäkrade. Ingen självrisk.",
-  "ACCIDENT_SWEDEN_UPSELL_BUTTON": "Lägg till skydd"
+  "ACCIDENT_SWEDEN_UPSELL_BUTTON": "Lägg till skydd",
+  "PHONE_OPENS_AT": "Öppnar kl"
 }
