@@ -75,7 +75,7 @@ const campaignCodeFormSchema = Yup.object({
 export type CampaignCodeModalProps = {
   isOpen: boolean
   close: () => void
-  onAddCampaignCode: (code: string) => Promise<{ error: string }>
+  onAddCampaignCode: (code: string) => Promise<{ hasError: boolean }>
 }
 
 export const CampaignCodeModal = ({
@@ -123,11 +123,12 @@ export const CampaignCodeModal = ({
           initialValues={{ code: '' }}
           onSubmit={async ({ code }, actions) => {
             try {
-              const { error } = await onAddCampaignCode(code)
+              const { hasError } = await onAddCampaignCode(code)
 
-              if (error) {
+              if (hasError) {
                 actions.setFieldError('code', 'SIDEBAR_ADD_DISCOUNT_ERROR')
-                return
+              } else {
+                close()
               }
             } catch {
               actions.setFieldError('code', 'SIDEBAR_ADD_DISCOUNT_ERROR')
