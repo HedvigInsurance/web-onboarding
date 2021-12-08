@@ -1,0 +1,27 @@
+fragment CampaignData on Campaign {
+  code
+  incentive {
+    ... on FreeMonths {
+      quantity
+    }
+    ... on MonthlyCostDeduction {
+      amount {
+        amount
+        currency
+      }
+    }
+    ... on PercentageDiscountMonths {
+      percentageDiscount
+      quantityMonths: quantity
+    }
+  }
+  ownerName
+}
+
+query AppliedCampaign($quoteCartId: ID!) {
+  quoteCart(id: $quoteCartId) {
+    campaign {
+      ...CampaignData
+    }
+  }
+}
