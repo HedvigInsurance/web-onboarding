@@ -39,14 +39,14 @@ enum QuoteBundleType {
 }
 
 enum QuoteType {
-  DanishHome = 'danishHomeContents',
-  DanishAccident = 'danishAccident',
-  DanishTravel = 'danishTravel',
-  NorwegianHome = 'norwegianHomeContents',
-  NorwegianTravel = 'norwegianTravel',
-  SwedishApartment = 'apartment',
-  SwedishHouse = 'house',
-  SwedishAccident = 'swedishAccident',
+  DanishHome = 'DANISH_HOME_CONTENT',
+  DanishAccident = 'DANISH_ACCIDENT',
+  DanishTravel = 'DANIEL_TRAVEL',
+  NorwegianHome = 'NORWEGIAN_HOME_CONTENT',
+  NorwegianTravel = 'NORWEIGAN_TRAVEL',
+  SwedishApartment = 'SWEDISH_APARTMENT',
+  SwedishHouse = 'SWEDISH_HOUSE',
+  SwedishAccident = 'SWEDISH_ACCIDENT',
 }
 
 const singleQuoteBundleToQuoteType = (
@@ -160,9 +160,26 @@ const getSwedishAccidentQuoteValues = (values: any) => {
     data: {
       ...quoteTypeValues,
       type: QuoteType.SwedishAccident,
-      student:
+      isStudent:
         subType === ApartmentType.StudentBrf ||
         subType === ApartmentType.StudentRent,
+    },
+  }
+}
+
+const getSwedishHouseQuoteValues = (values: any) => {
+  const { data: swedishApartmentData, ...holderData } = values
+  const { subType: _, ...quoteTypeValues } = swedishApartmentData
+  return {
+    ...holderData,
+    data: {
+      ...quoteTypeValues,
+      type: QuoteType.SwedishHouse,
+      ancillaryArea: 0,
+      yearOfConstruction: 1977,
+      numberOfBathrooms: 2,
+      extraBuildings: [],
+      isSubleted: false,
     },
   }
 }
@@ -260,6 +277,14 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
                 },
               },
             ],
+          },
+        })
+      } else if (quoteBundleType === QuoteBundleType.SwedishHouse) {
+        const swedishHouseQuote = getSwedishHouseQuoteValues(input)
+        await createQuoteBundle({
+          variables: {
+            quoteCartId,
+            quotes: [swedishHouseQuote],
           },
         })
       } else {
