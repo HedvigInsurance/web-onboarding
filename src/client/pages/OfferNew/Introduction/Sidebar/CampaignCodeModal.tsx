@@ -6,11 +6,11 @@ import * as Yup from 'yup'
 import hexToRgba from 'hex-to-rgba'
 import { colorsV3 } from '@hedviginsurance/brand'
 
-import { InputField } from '../../../../components/inputs/index'
-import { Button } from '../../../../components/buttons'
-import { CloseButton } from '../../../../components/CloseButton/CloseButton'
+import { InputField } from 'components/inputs/index'
+import { Button } from 'components/buttons'
+import { CloseButton } from 'components/CloseButton/CloseButton'
 
-import { useTextKeys } from '../../../../utils/textKeys'
+import { useTextKeys } from 'utils/textKeys'
 
 const Wrapper = styled.div<{ isOpen: boolean }>`
   width: 100%;
