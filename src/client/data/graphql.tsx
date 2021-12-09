@@ -23,20 +23,20 @@ export type Scalars = {
   Json: any
   /** An ISO-8601 String representation of a `java.time.LocalDate`, e.g. "2019-07-03". */
   LocalDate: any
-  /** A String-representation of Adyen's PaymentMethodsResponse */
   PaymentMethodsResponse: any
   URL: any
   /** An ISO-8601 String representation of a `java.time.Instant`, e.g. "2019-07-03T19:07:38.494081Z". */
   Instant: any
   JSONString: any
+  JSON: any
   Object: any
-  /** A String-representation of Adyen's payment method details */
   PaymentMethodDetails: any
   /** A String-representation of Adyen's checkout payments action */
   CheckoutPaymentsAction: any
   /** A String-representation of Adyen's payments details request */
   PaymentsDetailsRequest: any
-  JSON: any
+  CheckoutPaymentAction: any
+  PaymentDetailsInput: any
   /** The `Upload` scalar type represents a file upload. */
   Upload: any
   UUID: any
@@ -135,6 +135,11 @@ export type AcceptedReferral = {
   quantity?: Maybe<Scalars['Int']>
 }
 
+export type ActionRequired = {
+  __typename?: 'ActionRequired'
+  action: Scalars['CheckoutPaymentAction']
+}
+
 /** The contract has an inception date in the future and a termination date in the future */
 export type ActiveInFutureAndTerminatedInFutureStatus = {
   __typename?: 'ActiveInFutureAndTerminatedInFutureStatus'
@@ -172,6 +177,10 @@ export type ActiveStatus = {
 }
 
 export type AddCampaignResult = QuoteCart | BasicError
+
+export type AdditionalPaymentDetailsInput = {
+  paymentDetailsInput: Scalars['PaymentDetailsInput']
+}
 
 export type AdditionalPaymentsDetailsRequest = {
   paymentsDetailsRequest: Scalars['PaymentsDetailsRequest']
@@ -1573,7 +1582,7 @@ export type BundledQuote = {
   birthDate: Scalars['LocalDate']
   /** @deprecated Use data instead. */
   quoteDetails: QuoteDetails
-  data: QuoteData
+  data: Scalars['JSON']
   startDate?: Maybe<Scalars['LocalDate']>
   expiresAt: Scalars['LocalDate']
   email?: Maybe<Scalars['String']>
@@ -2024,6 +2033,15 @@ export type ConcurrentInception = {
   startDate?: Maybe<Scalars['LocalDate']>
   currentInsurer?: Maybe<CurrentInsurer>
 }
+
+export type ConnectPaymentInput = {
+  paymentMethodDetails: Scalars['PaymentMethodDetails']
+  channel: PaymentConnectChannel
+  browserInfo?: Maybe<BrowserInfo>
+  returnUrl: Scalars['String']
+}
+
+export type ConnectPaymentResult = PaymentResultCode | ActionRequired
 
 export type ConnectPositionInput = {
   /** Connect document after specified document */
@@ -7567,6 +7585,9 @@ export type Mutation = {
   login_verifyOtpAttempt: VerifyOtpLoginAttemptResult
   /** Resends the OTP to the provided credential */
   login_resendOtp: Scalars['ID']
+  paymentConnection_connectPayment: ConnectPaymentResult
+  paymentConnection_submitAdditionalPaymentDetails: ConnectPaymentResult
+  paymentConnection_submitAdyenRedirection: PaymentResultCode
   /**
    * Create a new onboarding session. This is not an authentication session, but rather an object that
    * ties the onboarding journey together.
@@ -7762,6 +7783,21 @@ export type MutationLogin_VerifyOtpAttemptArgs = {
 
 export type MutationLogin_ResendOtpArgs = {
   id: Scalars['ID']
+}
+
+export type MutationPaymentConnection_ConnectPaymentArgs = {
+  onboardingId?: Maybe<Scalars['ID']>
+  input: ConnectPaymentInput
+}
+
+export type MutationPaymentConnection_SubmitAdditionalPaymentDetailsArgs = {
+  id: Scalars['ID']
+  input: AdditionalPaymentDetailsInput
+}
+
+export type MutationPaymentConnection_SubmitAdyenRedirectionArgs = {
+  id: Scalars['ID']
+  input: SubmitAdyenRedirectionInput
 }
 
 export type MutationOnboardingQuoteCart_CreateArgs = {
@@ -8007,6 +8043,23 @@ export enum PayinMethodStatus {
   NeedsSetup = 'NEEDS_SETUP',
 }
 
+export enum PaymentConnectChannel {
+  Android = 'ANDROID',
+  Ios = 'IOS',
+  Web = 'WEB',
+}
+
+export type PaymentConnection = {
+  __typename?: 'PaymentConnection'
+  id?: Maybe<Scalars['ID']>
+  providers: Array<Maybe<Provider>>
+}
+
+export type PaymentResultCode = {
+  __typename?: 'PaymentResultCode'
+  resultCode: Scalars['String']
+}
+
 export enum PayoutMethodStatus {
   Active = 'ACTIVE',
   Pending = 'PENDING',
@@ -8113,6 +8166,12 @@ export enum Project {
   MemberService = 'MemberService',
 }
 
+export type Provider = {
+  __typename?: 'Provider'
+  name: Scalars['String']
+  availablePaymentOptions: Array<Maybe<Scalars['PaymentMethodsResponse']>>
+}
+
 export type ProviderStatus = {
   __typename?: 'ProviderStatus'
   functional: Scalars['Boolean']
@@ -8207,7 +8266,7 @@ export type Query = {
   /** Returns whether a member has at least one contract */
   hasContract: Scalars['Boolean']
   quoteBundle: QuoteBundle
-  /** Fetch onboarding session by its ID. */
+  /** Fetch quote cart by its ID. */
   quoteCart: QuoteCart
   /** @deprecated Use `contracts` instead */
   insurance: Insurance
@@ -8408,6 +8467,7 @@ export type QueryAutoCompleteAddressArgs = {
 
 export type QueryQuoteBundleArgs = {
   input: QuoteBundleInput
+  locale?: Maybe<Locale>
 }
 
 export type QueryQuoteCartArgs = {
@@ -8529,6 +8589,11 @@ export type QuoteBundleVariantTagArgs = {
   locale: Locale
 }
 
+/** A possible alternative bundling variant */
+export type QuoteBundleVariantBundleArgs = {
+  locale?: Maybe<Locale>
+}
+
 /**
  * An onboarding session is a type that exists to guide the client through an onboarding journey,
  * as a means of storing intermediate state up until the point where it is "signed" and then flushed
@@ -8545,29 +8610,16 @@ export type QuoteCart = {
   checkout?: Maybe<Checkout>
   /**  The accepted checkout methods.  */
   checkoutMethods: Array<CheckoutMethod>
+  paymentConnection?: Maybe<PaymentConnection>
 }
 
-export type QuoteData = {
-  __typename?: 'QuoteData'
-  insuranceType: Scalars['String']
-  typeOfContract: Scalars['String']
-  market: Market
-  street?: Maybe<Scalars['String']>
-  postalCode?: Maybe<Scalars['String']>
-  city?: Maybe<Scalars['String']>
-  floor?: Maybe<Scalars['String']>
-  bbrId?: Maybe<Scalars['String']>
-  apartment?: Maybe<Scalars['String']>
-  numberCoInsured?: Maybe<Scalars['Int']>
-  squareMeters?: Maybe<Scalars['Int']>
-  subType?: Maybe<Scalars['String']>
-  ancillaryArea?: Maybe<Scalars['Int']>
-  yearOfConstruction?: Maybe<Scalars['Int']>
-  numberOfBathrooms?: Maybe<Scalars['Int']>
-  extraBuildings: Array<ExtraBuildingValue>
-  isSubleted?: Maybe<Scalars['Boolean']>
-  isStudent?: Maybe<Scalars['Boolean']>
-  isYouth?: Maybe<Scalars['Boolean']>
+/**
+ * An onboarding session is a type that exists to guide the client through an onboarding journey,
+ * as a means of storing intermediate state up until the point where it is "signed" and then flushed
+ * into a proper "member".
+ */
+export type QuoteCartBundleArgs = {
+  locale?: Maybe<Locale>
 }
 
 export type QuoteDetails =
@@ -9779,6 +9831,11 @@ export type StoredPaymentMethodsDetails = {
   holderName?: Maybe<Scalars['String']>
 }
 
+export type SubmitAdyenRedirectionInput = {
+  md: Scalars['String']
+  pares: Scalars['String']
+}
+
 export type SubmitAdyenRedirectionRequest = {
   md: Scalars['String']
   pares: Scalars['String']
@@ -9796,6 +9853,7 @@ export type Subscription = {
   dataCollectionStatusV2: DataCollectingStatusResponseV2
   _?: Maybe<Scalars['Boolean']>
   authStatus?: Maybe<AuthEvent>
+  quoteCart?: Maybe<QuoteCart>
   signStatus?: Maybe<SignEvent>
   message: Message
   currentChatResponse?: Maybe<ChatResponse>
@@ -9808,6 +9866,10 @@ export type SubscriptionDataCollectionStatusArgs = {
 
 export type SubscriptionDataCollectionStatusV2Args = {
   reference: Scalars['ID']
+}
+
+export type SubscriptionQuoteCartArgs = {
+  id: Scalars['ID']
 }
 
 export type SubscriptionCurrentChatResponseArgs = {
@@ -11813,6 +11875,7 @@ export type QuoteDataFragmentFragment = { __typename?: 'BundledQuote' } & Pick<
   | 'email'
   | 'typeOfContract'
   | 'displayName'
+  | 'data'
 > & {
     currentInsurer?: Maybe<
       { __typename?: 'CurrentInsurer' } & Pick<
@@ -11851,34 +11914,6 @@ export type QuoteDataFragmentFragment = { __typename?: 'BundledQuote' } & Pick<
         'displayName' | 'url' | 'type'
       >
     >
-    data: { __typename?: 'QuoteData' } & Pick<
-      QuoteData,
-      | 'insuranceType'
-      | 'typeOfContract'
-      | 'market'
-      | 'street'
-      | 'postalCode'
-      | 'city'
-      | 'floor'
-      | 'bbrId'
-      | 'apartment'
-      | 'numberCoInsured'
-      | 'squareMeters'
-      | 'subType'
-      | 'ancillaryArea'
-      | 'yearOfConstruction'
-      | 'numberOfBathrooms'
-      | 'isSubleted'
-      | 'isStudent'
-      | 'isYouth'
-    > & {
-        extraBuildings: Array<
-          { __typename?: 'ExtraBuildingValue' } & Pick<
-            ExtraBuildingValue,
-            'type' | 'area' | 'displayName' | 'hasWaterConnected'
-          >
-        >
-      }
     quoteDetails:
       | ({ __typename?: 'SwedishApartmentQuoteDetails' } & Pick<
           SwedishApartmentQuoteDetails,
@@ -12208,27 +12243,6 @@ export type SignStatusQuery = { __typename?: 'Query' } & {
   >
 }
 
-export type SignStatusListenerSubscriptionVariables = Exact<{
-  [key: string]: never
-}>
-
-export type SignStatusListenerSubscription = { __typename?: 'Subscription' } & {
-  signStatus?: Maybe<
-    { __typename?: 'SignEvent' } & {
-      status?: Maybe<
-        { __typename?: 'SignStatus' } & Pick<SignStatus, 'signState'> & {
-            collectStatus?: Maybe<
-              { __typename?: 'CollectStatus' } & Pick<
-                CollectStatus,
-                'status' | 'code'
-              >
-            >
-          }
-      >
-    }
-  >
-}
-
 export type StartDateMutationVariables = Exact<{
   quoteId: Scalars['ID']
   date?: Maybe<Scalars['LocalDate']>
@@ -12460,32 +12474,7 @@ export const QuoteDataFragmentFragmentDoc = gql`
       url
       type
     }
-    data {
-      insuranceType
-      typeOfContract
-      market
-      street
-      postalCode
-      city
-      floor
-      bbrId
-      apartment
-      numberCoInsured
-      squareMeters
-      subType
-      ancillaryArea
-      yearOfConstruction
-      numberOfBathrooms
-      extraBuildings {
-        type
-        area
-        displayName
-        hasWaterConnected
-      }
-      isSubleted
-      isStudent
-      isYouth
-    }
+    data
     quoteDetails {
       ... on SwedishApartmentQuoteDetails {
         street
@@ -14144,53 +14133,6 @@ export type SignStatusLazyQueryHookResult = ReturnType<
 export type SignStatusQueryResult = ApolloReactCommon.QueryResult<
   SignStatusQuery,
   SignStatusQueryVariables
->
-export const SignStatusListenerDocument = gql`
-  subscription SignStatusListener {
-    signStatus {
-      status {
-        signState
-        collectStatus {
-          status
-          code
-        }
-      }
-    }
-  }
-`
-
-/**
- * __useSignStatusListenerSubscription__
- *
- * To run a query within a React component, call `useSignStatusListenerSubscription` and pass it any options that fit your needs.
- * When your component renders, `useSignStatusListenerSubscription` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSignStatusListenerSubscription({
- *   variables: {
- *   },
- * });
- */
-export function useSignStatusListenerSubscription(
-  baseOptions?: Apollo.SubscriptionHookOptions<
-    SignStatusListenerSubscription,
-    SignStatusListenerSubscriptionVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useSubscription<
-    SignStatusListenerSubscription,
-    SignStatusListenerSubscriptionVariables
-  >(SignStatusListenerDocument, options)
-}
-export type SignStatusListenerSubscriptionHookResult = ReturnType<
-  typeof useSignStatusListenerSubscription
->
-export type SignStatusListenerSubscriptionResult = ApolloReactCommon.SubscriptionResult<
-  SignStatusListenerSubscription
 >
 export const StartDateDocument = gql`
   mutation StartDate($quoteId: ID!, $date: LocalDate) {

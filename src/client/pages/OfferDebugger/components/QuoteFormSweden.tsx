@@ -15,7 +15,7 @@ export const initialSeApartmentValues = {
     street: 'Storgatan 1',
     zipCode: '12345',
     livingSpace: 23,
-    householdSize: 1,
+    numberCoInsured: 1,
     subType: ApartmentType.Rent,
   },
 }
@@ -24,10 +24,10 @@ export const SwedishApartment: React.FC<WithFormikProps> = ({ formik }) => {
   return (
     <>
       <InputField
-        label="Household size"
-        placeholder="1"
+        label="Number of co-insured"
+        placeholder="0"
         type="number"
-        {...formik.getFieldProps('data.householdSize')}
+        {...formik.getFieldProps('data.numberCoInsured')}
       />
       <InputField
         label="Living space"
