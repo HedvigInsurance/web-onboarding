@@ -23,7 +23,6 @@ export type Scalars = {
   Json: any
   /** An ISO-8601 String representation of a `java.time.LocalDate`, e.g. "2019-07-03". */
   LocalDate: any
-  /** A String-representation of Adyen's PaymentMethodsResponse */
   PaymentMethodsResponse: any
   URL: any
   /** An ISO-8601 String representation of a `java.time.Instant`, e.g. "2019-07-03T19:07:38.494081Z". */
@@ -31,12 +30,13 @@ export type Scalars = {
   JSONString: any
   JSON: any
   Object: any
-  /** A String-representation of Adyen's payment method details */
   PaymentMethodDetails: any
   /** A String-representation of Adyen's checkout payments action */
   CheckoutPaymentsAction: any
   /** A String-representation of Adyen's payments details request */
   PaymentsDetailsRequest: any
+  CheckoutPaymentAction: any
+  PaymentDetailsInput: any
   /** The `Upload` scalar type represents a file upload. */
   Upload: any
   UUID: any
@@ -135,6 +135,11 @@ export type AcceptedReferral = {
   quantity?: Maybe<Scalars['Int']>
 }
 
+export type ActionRequired = {
+  __typename?: 'ActionRequired'
+  action: Scalars['CheckoutPaymentAction']
+}
+
 /** The contract has an inception date in the future and a termination date in the future */
 export type ActiveInFutureAndTerminatedInFutureStatus = {
   __typename?: 'ActiveInFutureAndTerminatedInFutureStatus'
@@ -172,6 +177,10 @@ export type ActiveStatus = {
 }
 
 export type AddCampaignResult = QuoteCart | BasicError
+
+export type AdditionalPaymentDetailsInput = {
+  paymentDetailsInput: Scalars['PaymentDetailsInput']
+}
 
 export type AdditionalPaymentsDetailsRequest = {
   paymentsDetailsRequest: Scalars['PaymentsDetailsRequest']
@@ -2024,6 +2033,15 @@ export type ConcurrentInception = {
   startDate?: Maybe<Scalars['LocalDate']>
   currentInsurer?: Maybe<CurrentInsurer>
 }
+
+export type ConnectPaymentInput = {
+  paymentMethodDetails: Scalars['PaymentMethodDetails']
+  channel: PaymentConnectChannel
+  browserInfo?: Maybe<BrowserInfo>
+  returnUrl: Scalars['String']
+}
+
+export type ConnectPaymentResult = PaymentResultCode | ActionRequired
 
 export type ConnectPositionInput = {
   /** Connect document after specified document */
@@ -7567,6 +7585,9 @@ export type Mutation = {
   login_verifyOtpAttempt: VerifyOtpLoginAttemptResult
   /** Resends the OTP to the provided credential */
   login_resendOtp: Scalars['ID']
+  paymentConnection_connectPayment: ConnectPaymentResult
+  paymentConnection_submitAdditionalPaymentDetails: ConnectPaymentResult
+  paymentConnection_submitAdyenRedirection: PaymentResultCode
   /**
    * Create a new onboarding session. This is not an authentication session, but rather an object that
    * ties the onboarding journey together.
@@ -7762,6 +7783,21 @@ export type MutationLogin_VerifyOtpAttemptArgs = {
 
 export type MutationLogin_ResendOtpArgs = {
   id: Scalars['ID']
+}
+
+export type MutationPaymentConnection_ConnectPaymentArgs = {
+  onboardingId?: Maybe<Scalars['ID']>
+  input: ConnectPaymentInput
+}
+
+export type MutationPaymentConnection_SubmitAdditionalPaymentDetailsArgs = {
+  id: Scalars['ID']
+  input: AdditionalPaymentDetailsInput
+}
+
+export type MutationPaymentConnection_SubmitAdyenRedirectionArgs = {
+  id: Scalars['ID']
+  input: SubmitAdyenRedirectionInput
 }
 
 export type MutationOnboardingQuoteCart_CreateArgs = {
@@ -8007,6 +8043,23 @@ export enum PayinMethodStatus {
   NeedsSetup = 'NEEDS_SETUP',
 }
 
+export enum PaymentConnectChannel {
+  Android = 'ANDROID',
+  Ios = 'IOS',
+  Web = 'WEB',
+}
+
+export type PaymentConnection = {
+  __typename?: 'PaymentConnection'
+  id?: Maybe<Scalars['ID']>
+  providers: Array<Maybe<Provider>>
+}
+
+export type PaymentResultCode = {
+  __typename?: 'PaymentResultCode'
+  resultCode: Scalars['String']
+}
+
 export enum PayoutMethodStatus {
   Active = 'ACTIVE',
   Pending = 'PENDING',
@@ -8111,6 +8164,12 @@ export enum Project {
   BotService = 'BotService',
   ProductPricing = 'ProductPricing',
   MemberService = 'MemberService',
+}
+
+export type Provider = {
+  __typename?: 'Provider'
+  name: Scalars['String']
+  availablePaymentOptions: Array<Maybe<Scalars['PaymentMethodsResponse']>>
 }
 
 export type ProviderStatus = {
@@ -8551,6 +8610,7 @@ export type QuoteCart = {
   checkout?: Maybe<Checkout>
   /**  The accepted checkout methods.  */
   checkoutMethods: Array<CheckoutMethod>
+  paymentConnection?: Maybe<PaymentConnection>
 }
 
 /**
@@ -9769,6 +9829,11 @@ export type StoredPaymentMethodsDetails = {
   expiryMonth: Scalars['String']
   expiryYear: Scalars['String']
   holderName?: Maybe<Scalars['String']>
+}
+
+export type SubmitAdyenRedirectionInput = {
+  md: Scalars['String']
+  pares: Scalars['String']
 }
 
 export type SubmitAdyenRedirectionRequest = {
@@ -11797,113 +11862,6 @@ export type QuoteBundleVariantsQuery = { __typename?: 'Query' } & {
   }
 }
 
-export type QuoteDataFragmentFragment = { __typename?: 'BundledQuote' } & Pick<
-  BundledQuote,
-  | 'id'
-  | 'dataCollectionId'
-  | 'firstName'
-  | 'lastName'
-  | 'ssn'
-  | 'birthDate'
-  | 'startDate'
-  | 'expiresAt'
-  | 'email'
-  | 'typeOfContract'
-  | 'displayName'
-  | 'data'
-> & {
-    currentInsurer?: Maybe<
-      { __typename?: 'CurrentInsurer' } & Pick<
-        CurrentInsurer,
-        'id' | 'displayName' | 'switchable'
-      >
-    >
-    price: { __typename?: 'MonetaryAmountV2' } & Pick<
-      MonetaryAmountV2,
-      'amount' | 'currency'
-    >
-    contractPerils: Array<
-      { __typename?: 'PerilV2' } & Pick<
-        PerilV2,
-        'title' | 'description' | 'covered' | 'exceptions' | 'info'
-      > & {
-          icon: { __typename?: 'Icon' } & {
-            variants: { __typename?: 'IconVariants' } & {
-              light: { __typename?: 'IconVariant' } & Pick<
-                IconVariant,
-                'svgUrl'
-              >
-            }
-          }
-        }
-    >
-    insurableLimits: Array<
-      { __typename?: 'InsurableLimit' } & Pick<
-        InsurableLimit,
-        'label' | 'limit' | 'description' | 'type'
-      >
-    >
-    insuranceTerms: Array<
-      { __typename?: 'InsuranceTerm' } & Pick<
-        InsuranceTerm,
-        'displayName' | 'url' | 'type'
-      >
-    >
-    quoteDetails:
-      | ({ __typename?: 'SwedishApartmentQuoteDetails' } & Pick<
-          SwedishApartmentQuoteDetails,
-          'street' | 'zipCode' | 'householdSize' | 'livingSpace' | 'type'
-        >)
-      | ({ __typename?: 'SwedishHouseQuoteDetails' } & Pick<
-          SwedishHouseQuoteDetails,
-          | 'street'
-          | 'zipCode'
-          | 'householdSize'
-          | 'livingSpace'
-          | 'ancillarySpace'
-          | 'numberOfBathrooms'
-          | 'yearOfConstruction'
-          | 'isSubleted'
-        > & {
-            extraBuildings: Array<
-              { __typename?: 'ExtraBuildingValue' } & Pick<
-                ExtraBuildingValue,
-                'type' | 'area' | 'displayName' | 'hasWaterConnected'
-              >
-            >
-          })
-      | ({ __typename?: 'SwedishAccidentDetails' } & Pick<
-          SwedishAccidentDetails,
-          'isStudent'
-        >)
-      | ({ __typename?: 'NorwegianHomeContentsDetails' } & Pick<
-          NorwegianHomeContentsDetails,
-          'coInsured' | 'livingSpace' | 'street' | 'zipCode' | 'isYouth'
-        > & { norwegianHomeType: NorwegianHomeContentsDetails['type'] })
-      | ({ __typename?: 'NorwegianTravelDetails' } & Pick<
-          NorwegianTravelDetails,
-          'coInsured' | 'isYouth'
-        >)
-      | ({ __typename?: 'DanishHomeContentsDetails' } & Pick<
-          DanishHomeContentsDetails,
-          | 'street'
-          | 'floor'
-          | 'apartment'
-          | 'zipCode'
-          | 'livingSpace'
-          | 'coInsured'
-          | 'isStudent'
-        > & { danishHomeType: DanishHomeContentsDetails['type'] })
-      | ({ __typename?: 'DanishAccidentDetails' } & Pick<
-          DanishAccidentDetails,
-          'street' | 'zipCode' | 'coInsured' | 'isStudent'
-        >)
-      | ({ __typename?: 'DanishTravelDetails' } & Pick<
-          DanishTravelDetails,
-          'street' | 'zipCode' | 'coInsured' | 'isStudent'
-        >)
-  }
-
 export type QuoteCartQueryVariables = Exact<{
   id: Scalars['ID']
   locale: Locale
@@ -11927,7 +11885,7 @@ export type QuoteCartQuery = { __typename?: 'Query' } & {
                 > & {
                     bundleCost: {
                       __typename?: 'InsuranceCost'
-                    } & BundleCostDataFragment
+                    } & BundleCostDataFragmentFragment
                     quotes: Array<
                       {
                         __typename?: 'BundledQuote'
@@ -12232,6 +12190,130 @@ export type UpdatePickedLocaleMutation = { __typename?: 'Mutation' } & {
   updatePickedLocale: { __typename?: 'Member' } & Pick<Member, 'id'>
 }
 
+export type BundleCostDataFragmentFragment = {
+  __typename?: 'InsuranceCost'
+} & Pick<InsuranceCost, 'freeUntil'> & {
+    monthlyDiscount: { __typename?: 'MonetaryAmountV2' } & Pick<
+      MonetaryAmountV2,
+      'amount' | 'currency'
+    >
+    monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
+      MonetaryAmountV2,
+      'amount' | 'currency'
+    >
+    monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
+      MonetaryAmountV2,
+      'amount' | 'currency'
+    >
+  }
+
+export type QuoteDataFragmentFragment = { __typename?: 'BundledQuote' } & Pick<
+  BundledQuote,
+  | 'id'
+  | 'dataCollectionId'
+  | 'firstName'
+  | 'lastName'
+  | 'ssn'
+  | 'birthDate'
+  | 'startDate'
+  | 'expiresAt'
+  | 'email'
+  | 'typeOfContract'
+  | 'displayName'
+  | 'data'
+> & {
+    currentInsurer?: Maybe<
+      { __typename?: 'CurrentInsurer' } & Pick<
+        CurrentInsurer,
+        'id' | 'displayName' | 'switchable'
+      >
+    >
+    price: { __typename?: 'MonetaryAmountV2' } & Pick<
+      MonetaryAmountV2,
+      'amount' | 'currency'
+    >
+    contractPerils: Array<
+      { __typename?: 'PerilV2' } & Pick<
+        PerilV2,
+        'title' | 'description' | 'covered' | 'exceptions' | 'info'
+      > & {
+          icon: { __typename?: 'Icon' } & {
+            variants: { __typename?: 'IconVariants' } & {
+              light: { __typename?: 'IconVariant' } & Pick<
+                IconVariant,
+                'svgUrl'
+              >
+            }
+          }
+        }
+    >
+    insurableLimits: Array<
+      { __typename?: 'InsurableLimit' } & Pick<
+        InsurableLimit,
+        'label' | 'limit' | 'description' | 'type'
+      >
+    >
+    insuranceTerms: Array<
+      { __typename?: 'InsuranceTerm' } & Pick<
+        InsuranceTerm,
+        'displayName' | 'url' | 'type'
+      >
+    >
+    quoteDetails:
+      | ({ __typename?: 'SwedishApartmentQuoteDetails' } & Pick<
+          SwedishApartmentQuoteDetails,
+          'street' | 'zipCode' | 'householdSize' | 'livingSpace' | 'type'
+        >)
+      | ({ __typename?: 'SwedishHouseQuoteDetails' } & Pick<
+          SwedishHouseQuoteDetails,
+          | 'street'
+          | 'zipCode'
+          | 'householdSize'
+          | 'livingSpace'
+          | 'ancillarySpace'
+          | 'numberOfBathrooms'
+          | 'yearOfConstruction'
+          | 'isSubleted'
+        > & {
+            extraBuildings: Array<
+              { __typename?: 'ExtraBuildingValue' } & Pick<
+                ExtraBuildingValue,
+                'type' | 'area' | 'displayName' | 'hasWaterConnected'
+              >
+            >
+          })
+      | ({ __typename?: 'SwedishAccidentDetails' } & Pick<
+          SwedishAccidentDetails,
+          'isStudent'
+        >)
+      | ({ __typename?: 'NorwegianHomeContentsDetails' } & Pick<
+          NorwegianHomeContentsDetails,
+          'coInsured' | 'livingSpace' | 'street' | 'zipCode' | 'isYouth'
+        > & { norwegianHomeType: NorwegianHomeContentsDetails['type'] })
+      | ({ __typename?: 'NorwegianTravelDetails' } & Pick<
+          NorwegianTravelDetails,
+          'coInsured' | 'isYouth'
+        >)
+      | ({ __typename?: 'DanishHomeContentsDetails' } & Pick<
+          DanishHomeContentsDetails,
+          | 'street'
+          | 'floor'
+          | 'apartment'
+          | 'zipCode'
+          | 'livingSpace'
+          | 'coInsured'
+          | 'isStudent'
+        > & { danishHomeType: DanishHomeContentsDetails['type'] })
+      | ({ __typename?: 'DanishAccidentDetails' } & Pick<
+          DanishAccidentDetails,
+          'street' | 'zipCode' | 'coInsured' | 'isStudent'
+        >)
+      | ({ __typename?: 'DanishTravelDetails' } & Pick<
+          DanishTravelDetails,
+          'street' | 'zipCode' | 'coInsured' | 'isStudent'
+        >)
+  }
+
 export const QuoteDataFragmentDoc = gql`
   fragment QuoteData on BundledQuote {
     id
@@ -12347,6 +12429,23 @@ export const QuoteDataFragmentDoc = gql`
 `
 export const BundleCostDataFragmentDoc = gql`
   fragment BundleCostData on InsuranceCost {
+    freeUntil
+    monthlyDiscount {
+      amount
+      currency
+    }
+    monthlyGross {
+      amount
+      currency
+    }
+    monthlyNet {
+      amount
+      currency
+    }
+  }
+`
+export const BundleCostDataFragmentFragmentDoc = gql`
+  fragment BundleCostDataFragment on InsuranceCost {
     freeUntil
     monthlyDiscount {
       amount
@@ -13402,7 +13501,7 @@ export const QuoteCartDocument = gql`
           bundle {
             displayName(locale: $locale)
             bundleCost {
-              ...BundleCostData
+              ...BundleCostDataFragment
             }
             quotes {
               ...QuoteDataFragment
@@ -13436,7 +13535,7 @@ export const QuoteCartDocument = gql`
       }
     }
   }
-  ${BundleCostDataFragmentDoc}
+  ${BundleCostDataFragmentFragmentDoc}
   ${QuoteDataFragmentFragmentDoc}
 `
 
