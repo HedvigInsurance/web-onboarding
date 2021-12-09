@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useLocation, useHistory } from 'react-router'
 
 // TODO: we should get this from giraffe schema
