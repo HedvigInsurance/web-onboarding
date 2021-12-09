@@ -29,6 +29,7 @@ export type Scalars = {
   /** An ISO-8601 String representation of a `java.time.Instant`, e.g. "2019-07-03T19:07:38.494081Z". */
   Instant: any
   JSONString: any
+  JSON: any
   Object: any
   /** A String-representation of Adyen's payment method details */
   PaymentMethodDetails: any
@@ -36,7 +37,6 @@ export type Scalars = {
   CheckoutPaymentsAction: any
   /** A String-representation of Adyen's payments details request */
   PaymentsDetailsRequest: any
-  JSON: any
   /** The `Upload` scalar type represents a file upload. */
   Upload: any
   UUID: any
@@ -1573,7 +1573,7 @@ export type BundledQuote = {
   birthDate: Scalars['LocalDate']
   /** @deprecated Use data instead. */
   quoteDetails: QuoteDetails
-  data: QuoteData
+  data: Scalars['JSON']
   startDate?: Maybe<Scalars['LocalDate']>
   expiresAt: Scalars['LocalDate']
   email?: Maybe<Scalars['String']>
@@ -8207,7 +8207,7 @@ export type Query = {
   /** Returns whether a member has at least one contract */
   hasContract: Scalars['Boolean']
   quoteBundle: QuoteBundle
-  /** Fetch onboarding session by its ID. */
+  /** Fetch quote cart by its ID. */
   quoteCart: QuoteCart
   /** @deprecated Use `contracts` instead */
   insurance: Insurance
@@ -9796,6 +9796,7 @@ export type Subscription = {
   dataCollectionStatusV2: DataCollectingStatusResponseV2
   _?: Maybe<Scalars['Boolean']>
   authStatus?: Maybe<AuthEvent>
+  quoteCart?: Maybe<QuoteCart>
   signStatus?: Maybe<SignEvent>
   message: Message
   currentChatResponse?: Maybe<ChatResponse>
@@ -9808,6 +9809,10 @@ export type SubscriptionDataCollectionStatusArgs = {
 
 export type SubscriptionDataCollectionStatusV2Args = {
   reference: Scalars['ID']
+}
+
+export type SubscriptionQuoteCartArgs = {
+  id: Scalars['ID']
 }
 
 export type SubscriptionCurrentChatResponseArgs = {
