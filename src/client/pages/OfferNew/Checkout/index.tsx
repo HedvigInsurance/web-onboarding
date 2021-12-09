@@ -25,6 +25,7 @@ import { useLockBodyScroll } from 'utils/hooks/useLockBodyScroll'
 import { useFeature, Features } from 'utils/hooks/useFeature'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { CloseButton } from 'components/CloseButton/CloseButton'
+import { DiscountTag } from 'components/DiscountTag/DiscountTag'
 import { StartDate } from '../Introduction/Sidebar/StartDate'
 import { useScrollLock, VisibilityState, useSsnError } from './hooks'
 import { Sign, SignUiState } from './Sign'
@@ -105,6 +106,10 @@ const Section = styled.div`
   width: 100%;
 `
 
+const DiscountTagWrapper = styled.div`
+  margin-top: 2rem;
+`
+
 const StartDateWrapper = styled.div`
   position: relative;
   margin-top: 0.375rem;
@@ -121,7 +126,7 @@ const Heading = styled.h3`
   margin: 0;
   font-size: 2rem;
   line-height: 1.25;
-  padding-top: 1.875rem;
+  padding-top: 1rem;
 `
 
 const Backdrop = styled('div')<Openable>`
@@ -402,6 +407,9 @@ export const Checkout = ({
               <InnerWrapper>
                 <CloseButton onClick={onClose} />
                 <Section>
+                  <DiscountTagWrapper>
+                    <DiscountTag offerData={offerData} />
+                  </DiscountTagWrapper>
                   <Heading>{textKeys.CHECKOUT_HEADING()}</Heading>
                   <PriceBreakdown
                     offerData={offerData}
