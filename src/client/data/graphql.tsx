@@ -29,6 +29,7 @@ export type Scalars = {
   /** An ISO-8601 String representation of a `java.time.Instant`, e.g. "2019-07-03T19:07:38.494081Z". */
   Instant: any
   JSONString: any
+  JSON: any
   Object: any
   /** A String-representation of Adyen's payment method details */
   PaymentMethodDetails: any
@@ -36,7 +37,6 @@ export type Scalars = {
   CheckoutPaymentsAction: any
   /** A String-representation of Adyen's payments details request */
   PaymentsDetailsRequest: any
-  JSON: any
   /** The `Upload` scalar type represents a file upload. */
   Upload: any
   UUID: any
@@ -1571,7 +1571,9 @@ export type BundledQuote = {
   lastName?: Maybe<Scalars['String']>
   ssn?: Maybe<Scalars['String']>
   birthDate: Scalars['LocalDate']
+  /** @deprecated Use data instead. */
   quoteDetails: QuoteDetails
+  data: Scalars['JSON']
   startDate?: Maybe<Scalars['LocalDate']>
   expiresAt: Scalars['LocalDate']
   email?: Maybe<Scalars['String']>
@@ -1621,8 +1623,10 @@ export type Campaign = {
   __typename?: 'Campaign'
   incentive?: Maybe<Incentive>
   code: Scalars['String']
-  owner?: Maybe<CampaignOwner>
+  ownerName?: Maybe<Scalars['String']>
   expiresAt?: Maybe<Scalars['LocalDate']>
+  /** @deprecated Don't use for quoteCart API, this is here to fix stitching issues with the old APIs in PP */
+  owner?: Maybe<CampaignOwner>
   displayValue?: Maybe<Scalars['String']>
 }
 
@@ -1819,6 +1823,11 @@ export type Claim = {
   files: Array<File>
   signedAudioURL?: Maybe<Scalars['String']>
   payout?: Maybe<MonetaryAmountV2>
+  /** Localized end-user presentable `Claim`-type */
+  type?: Maybe<Scalars['String']>
+  /** Brief explanation of the current status of this `Claim` */
+  statusParagraph: Scalars['String']
+  progressSegments: Array<ClaimStatusProgressSegment>
 }
 
 export enum ClaimOutcome {
@@ -1848,6 +1857,8 @@ export type ClaimStatusCard = {
   title: Scalars['String']
   subtitle: Scalars['String']
   progressSegments: Array<ClaimStatusProgressSegment>
+  /** The underlying Claim represented by this status-card */
+  claim: Claim
 }
 
 export type ClaimStatusCardPill = {
@@ -8196,7 +8207,7 @@ export type Query = {
   /** Returns whether a member has at least one contract */
   hasContract: Scalars['Boolean']
   quoteBundle: QuoteBundle
-  /** Fetch onboarding session by its ID. */
+  /** Fetch quote cart by its ID. */
   quoteCart: QuoteCart
   /** @deprecated Use `contracts` instead */
   insurance: Insurance
@@ -9762,6 +9773,7 @@ export type Subscription = {
   dataCollectionStatusV2: DataCollectingStatusResponseV2
   _?: Maybe<Scalars['Boolean']>
   authStatus?: Maybe<AuthEvent>
+  quoteCart?: Maybe<QuoteCart>
   signStatus?: Maybe<SignEvent>
   message: Message
   currentChatResponse?: Maybe<ChatResponse>
@@ -9774,6 +9786,10 @@ export type SubscriptionDataCollectionStatusArgs = {
 
 export type SubscriptionDataCollectionStatusV2Args = {
   reference: Scalars['ID']
+}
+
+export type SubscriptionQuoteCartArgs = {
+  id: Scalars['ID']
 }
 
 export type SubscriptionCurrentChatResponseArgs = {
@@ -9847,6 +9863,7 @@ export type SwedishApartmentAgreement = AgreementCore & {
   numberCoInsured: Scalars['Int']
   squareMeters: Scalars['Int']
   type: SwedishApartmentLineOfBusiness
+  partner?: Maybe<Scalars['String']>
 }
 
 export enum SwedishApartmentLineOfBusiness {
