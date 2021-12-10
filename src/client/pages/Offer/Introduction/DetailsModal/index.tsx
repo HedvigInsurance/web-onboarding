@@ -1,4 +1,5 @@
 import React from 'react'
+import * as Yup from 'yup'
 import styled from '@emotion/styled'
 import { Form, Formik } from 'formik'
 import { colorsV3, fonts } from '@hedviginsurance/brand'
@@ -7,22 +8,20 @@ import { Modal, ModalProps } from 'components/ModalNew'
 import {
   BundledQuote,
   useCreateQuoteBundleMutation,
-  QuoteData,
-  ExtraBuildingInput,
-  CreateQuoteInput,
   useQuoteCartQuery,
   QuoteBundleVariant,
 } from 'data/graphql'
-import { OfferData } from 'pages/OfferNew/types'
+
 import { useTextKeys } from 'utils/textKeys'
-import { captureSentryError } from 'utils/sentry-client'
 import { CreateQuoteInsuranceType } from 'utils/insuranceType'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import { birthDateFormats } from 'l10n/birthDateAndSsnFormats'
+import { MarketLabel } from 'l10n/locales'
 import { getBundleVariantFromInsuranceTypes } from 'pages/OfferNew/utils'
-import { useSelectedInsuranceTypes } from 'src/client/utils/hooks/useSelectedInsuranceTypes'
+import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import { useQuoteCartIdFromUrl } from '../../useQuoteCartIdFromUrl'
+import { QuoteInput } from './types'
 import { Details } from './Details'
-import { hasEditQuoteErrors, isUnderwritingLimitsHit } from './utils'
 
 const Container = styled.div`
   width: 100%;
@@ -90,86 +89,60 @@ const LoadingDimmer = styled.div<{ visible: boolean }>`
   transition: all 350ms;
   opacity: ${(props) => (props.visible ? 1 : 0)};
   visibility: ${(props) => (props.visible ? 'visible' : 'hidden')};
+  z-index: 2;
 `
 
-type QuoteHolderInput = Pick<
-  CreateQuoteInput,
-  | 'firstName'
-  | 'lastName'
-  | 'email'
-  | 'phoneNumber'
-  | 'startDate'
-  | 'currentInsurer'
-  | 'ssn'
-  | 'dataCollectionId'
->
+const getValidationSchema = (
+  market: MarketLabel,
+  type: CreateQuoteInsuranceType,
+) => {
+  const isSwedishHouse = type === CreateQuoteInsuranceType.SwedishHouse
 
-type QuoteDetailsInput = {
-  street?: string | null
-  subType?: string | null
-  floor?: string | null
-  apartment?: string | null
-  yearOfConstruction?: number | null
-  numberOfBathrooms?: number | null
-  isSubleted?: boolean | null
-  extraBuildings?: Array<ExtraBuildingInput> | null
-  zipCode?: string | null
-  livingSpace?: number | null
-  householdSize?: number | null
-  youth?: boolean | null
-  coInsured?: number | null
-  student?: boolean | null
-  ancillarySpace?: number | null
+  return Yup.object().shape({
+    firstName: Yup.string().required(),
+    lastName: Yup.string().required(),
+    birthDate: Yup.string().matches(birthDateFormats.backEndDefault),
+    data: Yup.object({
+      street: Yup.string().required(),
+      zipCode:
+        market === 'SE'
+          ? Yup.string().matches(/^[0-9]{3}[0-9]{2}$/)
+          : Yup.string().matches(/^[0-9]{4}$/),
+      livingSpace: Yup.number()
+        .min(1)
+        .required(),
+      householdSize: Yup.number()
+        .min(1)
+        .required(),
+      isYouth: Yup.boolean(),
+      isStudent: Yup.boolean(),
+
+      ...(!isSwedishHouse && { subType: Yup.string().required() }),
+
+      ...(isSwedishHouse && {
+        ancillaryArea: Yup.number()
+          .min(1)
+          .required(),
+        numberOfBathrooms: Yup.number()
+          .min(0)
+          .required(),
+        yearOfConstruction: Yup.number().required(),
+        isSubleted: Yup.boolean().required(),
+        extraBuildings: Yup.array().of(
+          Yup.object().shape({
+            type: Yup.string().required(),
+            area: Yup.number()
+              .min(1)
+              .required(),
+            hasWaterConnected: Yup.boolean().required(),
+          }),
+        ),
+      }),
+    }).required(),
+  })
 }
-
-type QuoteInput = QuoteHolderInput & {
-  data: QuoteDetailsInput
-}
-
-const quoteDataInsuranceTypeToInput = (insuranceType: string) => {
-  switch (insuranceType) {
-    case 'SWEDISH_APARTMENT':
-      return CreateQuoteInsuranceType.SwedishApartment
-    case 'SWEDISH_HOUSE':
-      return CreateQuoteInsuranceType.SwedishHouse
-    case 'SWEDISH_ACCIDENT':
-      return CreateQuoteInsuranceType.SwedishAccident
-    case 'NORWEGIAN_HOME_CONTENT':
-      return CreateQuoteInsuranceType.NorwegianHome
-    case 'NORWEGIAN_TRAVEL':
-      return CreateQuoteInsuranceType.NorwegianTravel
-    case 'DANISH_HOME_CONTENT':
-      return CreateQuoteInsuranceType.DanishHome
-    case 'DANISH_TRAVEL':
-      return CreateQuoteInsuranceType.DanishTravel
-    case 'DANISH_ACCIDENT':
-      return CreateQuoteInsuranceType.DanishAccident
-    default:
-      throw new Error(`Unknown insurance type: ${insuranceType}`)
-  }
-}
-
-const transformQuoteDataToInput = (data: QuoteData): QuoteDetailsInput => ({
-  street: data.street,
-  subType: data.subType,
-  floor: data.floor,
-  apartment: data.apartment,
-  yearOfConstruction: data.yearOfConstruction,
-  numberOfBathrooms: data.numberOfBathrooms,
-  isSubleted: data.isSubleted,
-  extraBuildings: data.extraBuildings,
-
-  zipCode: data.postalCode,
-  livingSpace: data.squareMeters,
-  householdSize: data.numberCoInsured,
-  youth: data.isYouth,
-  coInsured: data.numberCoInsured,
-  student: data.isStudent,
-  ancillarySpace: data.ancillaryArea,
-})
 
 type DetailsModalProps = {
-  offerData: OfferData
   allQuotes: BundledQuote[]
   refetch: () => Promise<void>
 }
@@ -180,97 +153,100 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   isVisible,
   onClose,
 }) => {
-  const currentLocale = useCurrentLocale()
+  const textKeys = useTextKeys()
+  const { isoLocale, marketLabel } = useCurrentLocale()
   const quoteCartId = useQuoteCartIdFromUrl()
 
-  const { data } = useQuoteCartQuery({
-    variables: { id: quoteCartId, locale: currentLocale.isoLocale },
-  })
-  const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
-
-  const bundleVariants = (data?.quoteCart.bundle?.possibleVariations ??
-    []) as Array<QuoteBundleVariant>
-  const selectedQuoteBundle = getBundleVariantFromInsuranceTypes(
-    bundleVariants,
-    selectedInsuranceTypes,
-  )
-  const mainQuote = selectedQuoteBundle?.bundle.quotes[0]
-  const initialValues = mainQuote
-    ? transformQuoteDataToInput(mainQuote.data)
-    : null
-
-  const textKeys = useTextKeys()
   const [
     createQuoteBundle,
-    createQuoteBundleResult,
+    { error: createQuoteBundleError, loading: isBundleCreationInProgress },
   ] = useCreateQuoteBundleMutation()
-
-  const [isUpdating, setIsUpdating] = React.useState(false)
   const [
     isUnderwritingGuidelineHit,
     setIsUnderwritingGuidelineHit,
   ] = React.useState(false)
 
+  const { data } = useQuoteCartQuery({
+    variables: { id: quoteCartId, locale: isoLocale },
+  })
+  const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
+
+  const bundleVariants = (data?.quoteCart.bundle?.possibleVariations ??
+    []) as Array<QuoteBundleVariant>
+  const selectedQuoteBundle =
+    getBundleVariantFromInsuranceTypes(
+      bundleVariants,
+      selectedInsuranceTypes,
+    ) || bundleVariants[0]
+
+  if (!selectedQuoteBundle) return null
+
+  const mainQuote = selectedQuoteBundle?.bundle.quotes[0]
+  const initialValues = {
+    firstName: mainQuote.firstName,
+    lastName: mainQuote.lastName,
+    birthDate: mainQuote.birthDate,
+    ssn: mainQuote.ssn,
+    data: {
+      ...mainQuote.data,
+      householdSize: mainQuote.data.numberCoInsured + 1,
+    },
+  } as QuoteInput
+
   const reCreateQuoteBundle = (form: QuoteInput) => {
     return createQuoteBundle({
       variables: {
         quoteCartId,
-        quotes: allQuotes.map((quote) => ({
-          ...form,
-          data: {
-            ...form.data,
-            type: quoteDataInsuranceTypeToInput(quote.data.insuranceType),
-          },
-        })),
+        quotes: allQuotes.map(({ data: { type, typeOfContract } }) => {
+          return {
+            ...form,
+            data: {
+              ...form.data,
+              numberCoInsured:
+                form.data.householdSize && form.data.householdSize - 1,
+              type,
+              typeOfContract,
+            },
+          }
+        }),
       },
     })
   }
 
+  const onSubmit = async (form: QuoteInput) => {
+    const { data } = await reCreateQuoteBundle(form)
+    const isLimitHit =
+      data?.quoteCart_createQuoteBundle.__typename === 'CreateQuoteBundleError'
+
+    if (isLimitHit) {
+      setIsUnderwritingGuidelineHit(true)
+    } else {
+      refetch()
+      onClose()
+    }
+  }
+
   return (
     <Modal isVisible={isVisible} onClose={onClose} dynamicHeight>
-      <LoadingDimmer visible={isUpdating} />
+      <LoadingDimmer visible={isBundleCreationInProgress} />
       <Container>
-        <Formik<QuoteInput>
+        <Formik
           initialValues={initialValues}
-          validationSchema={validationSchema}
-          validateOnBlur
-          onSubmit={async (form) => {
-            setIsUpdating(true)
-            setIsUnderwritingGuidelineHit(false)
-            try {
-              const result = await reCreateQuoteBundle(form)
-              if (hasEditQuoteErrors(result)) {
-                setIsUpdating(false)
-                return
-              }
-              if (isUnderwritingLimitsHit(result)) {
-                setIsUnderwritingGuidelineHit(true)
-                setIsUpdating(false)
-                return
-              }
-              await refetch()
-              onClose()
-            } catch (e) {
-              console.error(e)
-              captureSentryError(e)
-              // noop
-            }
-            setIsUpdating(false)
-          }}
+          validationSchema={getValidationSchema(
+            marketLabel,
+            mainQuote.data.type,
+          )}
+          onSubmit={onSubmit}
         >
           {(formikProps) => (
             <Form>
               <Headline>{textKeys.DETAILS_MODULE_HEADLINE()}</Headline>
-              <Details
-                fieldSchema={fieldSchema}
-                formikProps={formikProps}
-                offerQuote={mainOfferQuote}
-              />
+              <Details formikProps={formikProps} />
               <Footer>
-                <Button type="submit" disabled={isUpdating}>
+                <Button type="submit" disabled={isBundleCreationInProgress}>
                   {textKeys.DETAILS_MODULE_BUTTON()}
                 </Button>
-                {createQuoteBundleResult.error && (
+                {createQuoteBundleError && (
                   <ErrorMessage>
                     {textKeys.DETAILS_MODULE_BUTTON_ERROR()}
                   </ErrorMessage>
@@ -280,12 +256,9 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                     {textKeys.DETAILS_MODULE_BUTTON_UNDERWRITING_GUIDELINE_HIT()}
                   </ErrorMessage>
                 )}
-                {!createQuoteBundleResult.error &&
-                  !isUnderwritingGuidelineHit && (
-                    <Warning>
-                      {textKeys.DETAILS_MODULE_BUTTON_WARNING()}
-                    </Warning>
-                  )}
+                {!createQuoteBundleError && !isUnderwritingGuidelineHit && (
+                  <Warning>{textKeys.DETAILS_MODULE_BUTTON_WARNING()}</Warning>
+                )}
               </Footer>
             </Form>
           )}

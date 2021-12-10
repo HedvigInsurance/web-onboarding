@@ -1,84 +1,39 @@
-import * as Yup from 'yup'
-import { CoreInputFieldProps } from 'components/inputs'
-import {
-  EditNorwegianHomeContentsInput,
-  EditNorwegianTravelInput,
-  EditDanishHomeContentsInput,
-  EditSwedishHouseInput,
-  EditSwedishApartmentInput,
-} from 'data/graphql'
+import { ExtraBuildingInput, CreateQuoteInput } from 'data/graphql'
+import { CreateQuoteInsuranceType } from 'utils/insuranceType'
 
-type Unarray<T> = T extends Array<infer U> ? U : T
-
-type RequiredFields<T> = {
-  [P in keyof T]-?: NonNullable<T[P]>
-}
-
-export interface RegularFieldType extends CoreInputFieldProps {
-  validation: Yup.Schema<string | number | boolean>
-}
-
-export type ArrayFieldType<T> = {
-  arrayValidation: Yup.ArraySchema<any[]>
-} & FieldSchemaBuilder<Unarray<T>>
-
-export type FieldType<T> = RegularFieldType | ArrayFieldType<T>
-
-export interface SwedishApartmentFieldSchema {
-  swedishApartment: FieldSchemaBuilder<
-    RequiredFields<EditSwedishApartmentInput>
-  >
-}
-
-export interface SwedishHouseFieldSchema {
-  swedishHouse: FieldSchemaBuilder<RequiredFields<EditSwedishHouseInput>>
-}
-export interface NorwegianHomeContentFieldSchema {
-  norwegianHomeContents: FieldSchemaBuilder<
-    RequiredFields<EditNorwegianHomeContentsInput>
-  >
-}
-export interface NorwegianTravelContentFieldSchema {
-  norwegianTravel: FieldSchemaBuilder<RequiredFields<EditNorwegianTravelInput>>
-}
-
-export type PartialEditDanishHomeContentsInput = Omit<
-  EditDanishHomeContentsInput,
-  'street' | 'zipCode' | 'apartment' | 'floor' | 'city' | 'bbrId'
+type QuoteHolderInput = Pick<
+  CreateQuoteInput,
+  | 'firstName'
+  | 'lastName'
+  | 'birthDate'
+  | 'email'
+  | 'phoneNumber'
+  | 'startDate'
+  | 'currentInsurer'
+  | 'ssn'
+  | 'dataCollectionId'
 >
 
-export interface DanishHomeContentFieldSchema {
-  danishHomeContents: FieldSchemaBuilder<
-    RequiredFields<PartialEditDanishHomeContentsInput>
-  >
+export type QuoteDetailsInput = {
+  street?: string | null
+  type: CreateQuoteInsuranceType
+  subType?: string | null
+  floor?: string | null
+  apartment?: string | null
+  yearOfConstruction?: number | null
+  numberOfBathrooms?: number | null
+  isSubleted?: boolean | null
+  extraBuildings?: Array<ExtraBuildingInput> | null
+  zipCode?: string | null
+  livingSpace?: number | null
+  householdSize?: number | null
+  youth?: boolean | null
+  coInsured?: number | null
+  student?: boolean | null
+  ancillarySpace?: number | null
+  isStudent?: boolean | null
 }
 
-export type CommonFieldSchema = {
-  firstName: RegularFieldType
-  lastName: RegularFieldType
-  birthDate: RegularFieldType
+export type QuoteInput = Partial<QuoteHolderInput> & {
+  data: QuoteDetailsInput
 }
-
-export type FieldSchemaBuilder<T> = {
-  [P in keyof T]: T[P] extends string | number | boolean
-    ? RegularFieldType
-    : T[P] extends any[]
-    ? ArrayFieldType<T[P]>
-    : FieldSchemaBuilder<T[P]>
-}
-
-export type DetailsFieldSchema =
-  | SwedishApartmentFieldSchema
-  | SwedishHouseFieldSchema
-  | NorwegianHomeContentFieldSchema
-  | NorwegianTravelContentFieldSchema
-  | DanishHomeContentFieldSchema
-
-export type FieldSchema = DetailsFieldSchema & CommonFieldSchema
-
-export type MarketFields =
-  | FieldSchemaBuilder<RequiredFields<EditSwedishApartmentInput>>
-  | FieldSchemaBuilder<RequiredFields<EditSwedishHouseInput>>
-  | FieldSchemaBuilder<RequiredFields<EditNorwegianHomeContentsInput>>
-  | FieldSchemaBuilder<RequiredFields<EditNorwegianTravelInput>>
-  | FieldSchemaBuilder<RequiredFields<PartialEditDanishHomeContentsInput>>

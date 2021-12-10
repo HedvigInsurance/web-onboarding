@@ -142,7 +142,6 @@ export const HeroOfferDetails: React.FC<Props> = ({
         {textKeys.SIDEBAR_SHOW_DETAILS_BUTTON()}
       </EditDetailsButton>
       <DetailsModal
-        offerData={offerData}
         allQuotes={allQuotes}
         refetch={refetchOfferData}
         isVisible={detailsModalIsOpen}
