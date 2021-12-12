@@ -1,7 +1,9 @@
 import React from 'react'
 import { StaticRouter } from 'react-router'
+import { ApolloProvider } from '@apollo/client'
 import { render, RenderOptions } from '@testing-library/react'
 import { renderHook, RenderHookOptions } from '@testing-library/react-hooks'
+import { apolloClient } from 'apolloClient'
 import { StaticTextKeyProvider } from '../utils/textKeys'
 
 interface AllProvidersProps {
@@ -11,7 +13,11 @@ interface AllProvidersProps {
 const AllProviders: React.FC<AllProvidersProps> = ({ children, location }) => {
   return (
     <StaticRouter location={location}>
-      <StaticTextKeyProvider>{children}</StaticTextKeyProvider>
+      <StaticTextKeyProvider>
+        <ApolloProvider client={apolloClient!.client}>
+          {children}
+        </ApolloProvider>
+      </StaticTextKeyProvider>
     </StaticRouter>
   )
 }
