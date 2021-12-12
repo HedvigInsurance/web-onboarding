@@ -5,6 +5,7 @@ import {
   InMemoryCache,
   split,
 } from '@apollo/client'
+import fetch from 'cross-fetch'
 import { WebSocketLink } from '@apollo/link-ws'
 import { CookieStorage } from 'cookie-storage'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
@@ -48,6 +49,7 @@ export const apolloClient = (() => {
     headers: {
       authorization: authorizationToken,
     },
+    fetch,
   })
 
   const client = new ApolloClient({

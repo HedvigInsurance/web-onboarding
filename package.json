@@ -129,6 +129,7 @@
     "constate": "0.9.0",
     "cookie-storage": "^6.1.0",
     "core-js": "2",
+    "cross-fetch": "^3.1.4",
     "date-fns": "^2.8.1",
     "dayzed": "^3.1.0",
     "dotenv": "^8.2.0",
