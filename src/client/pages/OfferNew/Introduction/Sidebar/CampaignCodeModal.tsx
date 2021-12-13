@@ -9,6 +9,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { InputField } from 'components/inputs/index'
 import { Button } from 'components/buttons'
 import { CloseButton } from 'components/CloseButton/CloseButton'
+import { LoadingDots } from 'components/LoadingDots/LoadingDots'
 
 import { useTextKeys } from 'utils/textKeys'
 
@@ -68,6 +69,11 @@ const Footer = styled.div`
   margin-top: 1rem;
 `
 
+const ButtonLoadingIndicator = styled(LoadingDots)`
+  display: inline-flex;
+  margin-left: 0.5rem;
+`
+
 const campaignCodeFormSchema = Yup.object({
   code: Yup.string().required('SIDEBAR_ADD_DISCOUNT_ERROR'),
 })
@@ -114,9 +120,6 @@ export const CampaignCodeModal = ({
       >
         <Title>{textKeys.SIDEBAR_ADD_DISCOUNT_HEADLINE()}</Title>
         <Paragraph>{textKeys.SIDEBAR_ADD_DISCOUNT_BODY()}</Paragraph>
-        <ButtonWrapper>
-          <CloseButton onClick={close} />
-        </ButtonWrapper>
         <Formik
           validateOnBlur
           validationSchema={campaignCodeFormSchema}
@@ -135,24 +138,40 @@ export const CampaignCodeModal = ({
             }
           }}
         >
-          {({ touched, errors, values }) => (
-            <Form>
-              <InputField
-                label={textKeys.SIDEBAR_ADD_DISCOUNT_CELL_LABEL()}
-                placeholder={textKeys.SIDEBAR_ADD_DISCOUNT_CELL_PLACEHOLDER()}
-                name="code"
-                type="text"
-                autoComplete="off"
-                touched={touched.code}
-                errors={errors.code ? textKeys[errors.code]() : ''}
-              />
+          {({ touched, errors, values, isSubmitting, resetForm }) => (
+            <>
+              <ButtonWrapper>
+                <CloseButton
+                  onClick={() => {
+                    close()
+                    resetForm()
+                  }}
+                />
+              </ButtonWrapper>
 
-              <Footer>
-                <Button type="submit" fullWidth disabled={!values.code}>
-                  {textKeys.SIDEBAR_ADD_DISCOUNT_BUTTON()}
-                </Button>
-              </Footer>
-            </Form>
+              <Form>
+                <InputField
+                  label={textKeys.SIDEBAR_ADD_DISCOUNT_CELL_LABEL()}
+                  placeholder={textKeys.SIDEBAR_ADD_DISCOUNT_CELL_PLACEHOLDER()}
+                  name="code"
+                  type="text"
+                  autoComplete="off"
+                  touched={touched.code}
+                  errors={errors.code ? textKeys[errors.code]() : ''}
+                />
+
+                <Footer>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    disabled={!values.code || isSubmitting}
+                  >
+                    {textKeys.SIDEBAR_ADD_DISCOUNT_BUTTON()}
+                    {isSubmitting && <ButtonLoadingIndicator />}
+                  </Button>
+                </Footer>
+              </Form>
+            </>
           )}
         </Formik>
       </Container>
