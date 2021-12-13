@@ -1,5 +1,4 @@
 import React from 'react'
-import * as Yup from 'yup'
 import styled from '@emotion/styled'
 import { Form, Formik } from 'formik'
 import { colorsV3, fonts } from '@hedviginsurance/brand'
@@ -13,15 +12,12 @@ import {
 } from 'data/graphql'
 
 import { useTextKeys } from 'utils/textKeys'
-import { CreateQuoteInsuranceType } from 'utils/insuranceType'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { birthDateFormats } from 'l10n/birthDateAndSsnFormats'
-import { MarketLabel } from 'l10n/locales'
 import { getBundleVariantFromInsuranceTypes } from 'pages/OfferNew/utils'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import { useQuoteCartIdFromUrl } from '../../useQuoteCartIdFromUrl'
 import { QuoteInput } from './types'
-import { Details } from './Details'
+import { Details, getValidationSchema } from './Details'
 
 const Container = styled.div`
   width: 100%;
@@ -92,56 +88,6 @@ const LoadingDimmer = styled.div<{ visible: boolean }>`
   z-index: 2;
 `
 
-const getValidationSchema = (
-  market: MarketLabel,
-  type: CreateQuoteInsuranceType,
-) => {
-  const isSwedishHouse = type === CreateQuoteInsuranceType.SwedishHouse
-
-  return Yup.object().shape({
-    firstName: Yup.string().required(),
-    lastName: Yup.string().required(),
-    birthDate: Yup.string().matches(birthDateFormats.backEndDefault),
-    data: Yup.object({
-      street: Yup.string().required(),
-      zipCode:
-        market === 'SE'
-          ? Yup.string().matches(/^[0-9]{3}[0-9]{2}$/)
-          : Yup.string().matches(/^[0-9]{4}$/),
-      livingSpace: Yup.number()
-        .min(1)
-        .required(),
-      householdSize: Yup.number()
-        .min(1)
-        .required(),
-      isYouth: Yup.boolean(),
-      isStudent: Yup.boolean(),
-
-      ...(!isSwedishHouse && { subType: Yup.string().required() }),
-
-      ...(isSwedishHouse && {
-        ancillaryArea: Yup.number()
-          .min(1)
-          .required(),
-        numberOfBathrooms: Yup.number()
-          .min(0)
-          .required(),
-        yearOfConstruction: Yup.number().required(),
-        isSubleted: Yup.boolean().required(),
-        extraBuildings: Yup.array().of(
-          Yup.object().shape({
-            type: Yup.string().required(),
-            area: Yup.number()
-              .min(1)
-              .required(),
-            hasWaterConnected: Yup.boolean().required(),
-          }),
-        ),
-      }),
-    }).required(),
-  })
-}
-
 type DetailsModalProps = {
   allQuotes: BundledQuote[]
   refetch: () => Promise<void>
@@ -159,7 +105,11 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
 
   const [
     createQuoteBundle,
-    { error: createQuoteBundleError, loading: isBundleCreationInProgress },
+    {
+      data: createQuoteBundleData,
+      error: createQuoteBundleError,
+      loading: isBundleCreationInProgress,
+    },
   ] = useCreateQuoteBundleMutation()
   const [
     isUnderwritingGuidelineHit,
@@ -192,6 +142,10 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
       householdSize: mainQuote.data.numberCoInsured + 1,
     },
   } as QuoteInput
+
+  const isInvalidCreateQuoteBundleInput =
+    createQuoteBundleData?.quoteCart_createQuoteBundle.__typename ===
+    'CreateQuoteBundleError'
 
   const reCreateQuoteBundle = (form: QuoteInput) => {
     return createQuoteBundle({
@@ -241,7 +195,11 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
           {(formikProps) => (
             <Form>
               <Headline>{textKeys.DETAILS_MODULE_HEADLINE()}</Headline>
-              <Details formikProps={formikProps} />
+              <Details
+                market={marketLabel}
+                type={mainQuote.data.type}
+                formikProps={formikProps}
+              />
               <Footer>
                 <Button type="submit" disabled={isBundleCreationInProgress}>
                   {textKeys.DETAILS_MODULE_BUTTON()}
@@ -251,7 +209,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                     {textKeys.DETAILS_MODULE_BUTTON_ERROR()}
                   </ErrorMessage>
                 )}
-                {isUnderwritingGuidelineHit && (
+                {isInvalidCreateQuoteBundleInput && (
                   <ErrorMessage>
                     {textKeys.DETAILS_MODULE_BUTTON_UNDERWRITING_GUIDELINE_HIT()}
                   </ErrorMessage>
