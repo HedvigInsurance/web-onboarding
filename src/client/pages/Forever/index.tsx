@@ -3,19 +3,21 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import React, { useEffect } from 'react'
 import Helmet from 'react-helmet-async'
-import { RouteComponentProps } from 'react-router'
+import { RouteComponentProps, useHistory } from 'react-router'
 import { Route, Switch } from 'react-router-dom'
+import { FormikHelpers } from 'formik'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
 import { Page } from 'components/utils/Page'
 import { SessionContainer } from 'containers/SessionContainer'
-import { useUpdatePickedLocaleMutation } from 'data/graphql'
+import { useCampaignQuery, useUpdatePickedLocaleMutation } from 'data/graphql'
 import { Intro } from 'pages/Forever/components/Intro'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { useTextKeys } from 'utils/textKeys'
 import { useStorage } from 'utils/StorageContainer'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { Features, useFeature } from 'utils/hooks/useFeature'
-import { RedeemCode } from './components/RedeemCode'
+import { captureSentryError } from 'utils/sentry-client'
+import { RedeemCode, RedeemCodeFormValue } from './components/RedeemCode'
 import { useRedeemCode } from './useRedeemCode'
 
 type ForeverProps = RouteComponentProps<{
@@ -128,6 +130,28 @@ const QuoteCartForeverPage: React.FC<ForeverProps> = ({
 }) => {
   const { path: pathLocale } = useCurrentLocale()
   const textKeys = useTextKeys()
+  const history = useHistory()
+
+  const { refetch: fetchCampaign } = useCampaignQuery({ skip: true })
+
+  const handleSubmit = async (
+    form: RedeemCodeFormValue,
+    actions: FormikHelpers<RedeemCodeFormValue>,
+  ) => {
+    const { code } = form
+    try {
+      const result = await fetchCampaign({ code })
+
+      if (result.data.campaign.code) {
+        history.push({ pathname: `/${pathLocale}/new-member` })
+      } else {
+        actions.setErrors({ code: 'FOREVER_ERROR_GENERIC' })
+      }
+    } catch (error) {
+      captureSentryError(error)
+      actions.setErrors({ code: 'FOREVER_ERROR_GENERIC' })
+    }
+  }
 
   return (
     <>
@@ -156,10 +180,7 @@ const QuoteCartForeverPage: React.FC<ForeverProps> = ({
               path={localePathPattern + '/forever/:code?'}
               exact
               render={() => (
-                <RedeemCode
-                  referralCode={code}
-                  onSubmit={() => console.log('submit')}
-                />
+                <RedeemCode referralCode={code} onSubmit={handleSubmit} />
               )}
             />
             <Route
