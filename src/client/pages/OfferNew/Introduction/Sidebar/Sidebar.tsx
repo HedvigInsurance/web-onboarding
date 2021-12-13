@@ -62,19 +62,18 @@ const Container = styled.div`
 
 const DiscountInfo = styled.div`
   display: flex;
-  margin-bottom: 0.5rem;
   flex-direction: row;
   justify-content: flex-start;
   flex-wrap: wrap;
   align-items: flex-start;
-
-  *:not(:last-child) {
-    margin-right: 0.5rem;
-  }
+  margin-bottom: 0.5rem;
 `
 
 const DiscountBadge = styled(Badge)`
-  margin-bottom: 0.5rem;
+  &:not(:last-child) {
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
 `
 
 const Header = styled.div`
@@ -226,7 +225,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const campaign = campaignData?.quoteCart.campaign
 
   const isNorwegianBundle = isBundle(offerData) && isNorwegian(offerData)
-
   const campaignText = campaign
     ? getAppliedCampaignText(campaign, textKeys)
     : ''
