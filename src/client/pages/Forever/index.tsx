@@ -17,6 +17,7 @@ import { useStorage } from 'utils/StorageContainer'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { Features, useFeature } from 'utils/hooks/useFeature'
 import { captureSentryError } from 'utils/sentry-client'
+import { CampaignCode } from 'utils/campaignCode'
 import { RedeemCode, RedeemCodeFormValue } from './components/RedeemCode'
 import { useRedeemCode } from './useRedeemCode'
 
@@ -141,8 +142,8 @@ const QuoteCartForeverPage: React.FC<ForeverProps> = ({
     const { code } = form
     try {
       const result = await fetchCampaign({ code })
-
       if (result.data.campaign.code) {
+        CampaignCode.save(code)
         history.push({ pathname: `/${pathLocale}/new-member` })
       } else {
         actions.setErrors({ code: 'FOREVER_ERROR_GENERIC' })
