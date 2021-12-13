@@ -29,9 +29,9 @@ import {
 import { AppPromotionSection } from '../OfferNew/AppPromotionSection'
 import { Checkout } from '../OfferNew/Checkout'
 import { FaqSection } from '../OfferNew/FaqSection'
-import { Introduction } from '../OfferNew/Introduction'
 import { Perils } from '../OfferNew/Perils'
 import { InsuranceSelector } from '../OfferNew/InsuranceSelector'
+import { Introduction } from './Introduction'
 
 const createToggleCheckout = (history: History<any>, locale?: LocaleLabel) => (
   isOpen: boolean,
@@ -187,6 +187,7 @@ export const OfferPage = ({
           >
             {({ track }) => (
               <Introduction
+                quoteCartId={quoteCartId}
                 allQuotes={getUniqueQuotesFromVariantList(bundleVariants)}
                 offerData={offerData}
                 refetch={refetchQuoteCart as () => Promise<any>}
