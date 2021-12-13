@@ -6,7 +6,6 @@ import Helmet from 'react-helmet-async'
 import { RouteComponentProps } from 'react-router'
 import { Route, Switch } from 'react-router-dom'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
-import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
 import { Page } from 'components/utils/Page'
 import { SessionContainer } from 'containers/SessionContainer'
 import { useUpdatePickedLocaleMutation } from 'data/graphql'
@@ -14,6 +13,8 @@ import { Intro } from 'pages/Forever/components/Intro'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { useTextKeys } from 'utils/textKeys'
 import { useStorage } from 'utils/StorageContainer'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import { Features, useFeature } from 'utils/hooks/useFeature'
 import { RedeemCode } from './components/RedeemCode'
 import { useRedeemCode } from './useRedeemCode'
 
@@ -53,17 +54,17 @@ const LogoLink = styled.a`
   color: ${colorsV3.gray100};
 `
 
-export const Forever: React.FC<ForeverProps> = ({
+export const OldForeverPage: React.FC<ForeverProps> = ({
   match: {
     params: { code },
   },
 }) => {
-  const currentLocale = useCurrentLocale()
+  const { isoLocale, path: pathLocale } = useCurrentLocale()
   const textKeys = useTextKeys()
   const { handleSubmit } = useRedeemCode()
   const [updatePickedLocale] = useUpdatePickedLocaleMutation({
     variables: {
-      pickedLocale: getIsoLocale(currentLocale),
+      pickedLocale: isoLocale,
     },
   })
   const storage = useStorage()
@@ -73,7 +74,7 @@ export const Forever: React.FC<ForeverProps> = ({
       return
     }
     updatePickedLocale()
-  }, [currentLocale, updatePickedLocale, hasToken])
+  }, [isoLocale, updatePickedLocale, hasToken])
 
   return (
     <>
@@ -94,7 +95,7 @@ export const Forever: React.FC<ForeverProps> = ({
             />
             <PageWrapper>
               <Header>
-                <LogoLink href={'/' + currentLocale}>
+                <LogoLink href={'/' + pathLocale}>
                   <HedvigLogo width={94} />
                 </LogoLink>
               </Header>
@@ -117,5 +118,66 @@ export const Forever: React.FC<ForeverProps> = ({
         )}
       </SessionContainer>
     </>
+  )
+}
+
+const QuoteCartForeverPage: React.FC<ForeverProps> = ({
+  match: {
+    params: { code },
+  },
+}) => {
+  const { path: pathLocale } = useCurrentLocale()
+  const textKeys = useTextKeys()
+
+  return (
+    <>
+      <Helmet>
+        <title>{textKeys.FOREVER_LANDINGPAGE_TITLE()}</title>
+        <meta property="og:image" content="" />
+        <meta name="robots" content="noindex" />
+      </Helmet>
+      <Page>
+        <Global
+          styles={css`
+            body {
+              background-color: ${colorsV3.gray900};
+            }
+          `}
+        />
+        <PageWrapper>
+          <Header>
+            <LogoLink href={'/' + pathLocale}>
+              <HedvigLogo width={94} />
+            </LogoLink>
+          </Header>
+
+          <Switch>
+            <Route
+              path={localePathPattern + '/forever/:code?'}
+              exact
+              render={() => (
+                <RedeemCode
+                  referralCode={code}
+                  onSubmit={() => console.log('submit')}
+                />
+              )}
+            />
+            <Route
+              path={localePathPattern + '/forever/:code/intro'}
+              component={Intro}
+            />
+          </Switch>
+        </PageWrapper>
+      </Page>
+    </>
+  )
+}
+
+export const Forever = (props: ForeverProps) => {
+  const [isUsingQuoteCartApi] = useFeature([Features.QUOTE_CART_API])
+  return isUsingQuoteCartApi ? (
+    <QuoteCartForeverPage {...props} />
+  ) : (
+    <OldForeverPage {...props} />
   )
 }
