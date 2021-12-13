@@ -197,6 +197,7 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
   const { data, refetch } = useQuoteCartQuery({
     variables: { id: quoteCartId, locale: isoLocale },
   })
+
   const [createQuoteBundle] = useCreateQuoteBundleMutation()
 
   const [quoteBundleType, setQuoteBundleType] = useState(
@@ -429,10 +430,7 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
           <LinkButton
             background={colorsV3.gray100}
             foreground={colorsV3.gray900}
-            to={{
-              pathname: `/${localePath}/new-member/offer`,
-              search: `?quoteCart=${quoteCartId}`,
-            }}
+            to={`/${localePath}/new-member/offer/${quoteCartId}`}
           >
             Go to offer page →
           </LinkButton>
