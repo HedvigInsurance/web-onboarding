@@ -1,16 +1,9 @@
-import { MockedProvider } from '@apollo/react-testing'
 import { Provider } from 'constate'
 import React from 'react'
 import { createSession, SESSION_KEY } from 'shared/sessionStorage'
 import { MockStorage } from 'utils/storage/MockStorage'
 import { renderComponent } from 'test/utils'
 import { SessionTokenGuard } from './SessionTokenGuard'
-
-jest.mock('../apolloClient', () => ({
-  apolloClient: {
-    subscriptionClient: { close: jest.fn() },
-  },
-}))
 
 jest.mock('react-router-dom', () => {
   return {
@@ -20,17 +13,15 @@ jest.mock('react-router-dom', () => {
 
 it('redirects when there is no session', () => {
   const { getByText } = renderComponent(
-    <MockedProvider>
-      <Provider
-        initialState={{
-          storage: { session: createSession(new MockStorage()) },
-        }}
-      >
-        <SessionTokenGuard>
-          <div />
-        </SessionTokenGuard>
-      </Provider>
-    </MockedProvider>,
+    <Provider
+      initialState={{
+        storage: { session: createSession(new MockStorage()) },
+      }}
+    >
+      <SessionTokenGuard>
+        <div />
+      </SessionTokenGuard>
+    </Provider>,
     { wrapperProps: { location: { pathname: '/se/new-member/blah' } } },
   )
 
@@ -39,23 +30,21 @@ it('redirects when there is no session', () => {
 
 it('does not redirect when there is a session token', () => {
   const { queryByText } = renderComponent(
-    <MockedProvider>
-      <Provider
-        initialState={{
-          storage: {
-            session: createSession(
-              new MockStorage({
-                [SESSION_KEY]: JSON.stringify({ token: 'blargh' }),
-              }),
-            ),
-          },
-        }}
-      >
-        <SessionTokenGuard>
-          <div />
-        </SessionTokenGuard>
-      </Provider>
-    </MockedProvider>,
+    <Provider
+      initialState={{
+        storage: {
+          session: createSession(
+            new MockStorage({
+              [SESSION_KEY]: JSON.stringify({ token: 'blargh' }),
+            }),
+          ),
+        },
+      }}
+    >
+      <SessionTokenGuard>
+        <div />
+      </SessionTokenGuard>
+    </Provider>,
   )
 
   expect(queryByText(/redirected to .*/i)).toBeNull()
