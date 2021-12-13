@@ -3,8 +3,6 @@ import { MemoryRouter } from 'react-router-dom'
 import { renderComponent } from 'test/utils'
 import { LanguagePicker } from './LanguagePicker'
 
-jest.mock('../../apolloClient', () => ({}))
-
 test('Swedish language picker renders without 💥', () => {
   const { getByText, queryByText, container } = renderComponent(
     <MemoryRouter initialEntries={['/se/new-member']}>
