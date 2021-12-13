@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import styled from '@emotion/styled'
 import ReactVisibilitySensor from 'react-visibility-sensor'
-import { CookieStorage } from 'cookie-storage'
 import { colorsV3 } from '@hedviginsurance/brand'
 
 import {
@@ -182,10 +181,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
       const hasError = result?.quoteCart_addCampaign.__typename === 'BasicError'
 
       if (!hasError) {
-        const cookieStorage = new CookieStorage()
-        cookieStorage.setItem('_hvcode', code, {
-          path: '/',
-        })
         await refetchAll()
       }
 
@@ -197,11 +192,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const handleRemoveCampaign = useCallback(async () => {
     await removeCampaignCode({ variables: { quoteCartId } })
     await refetchAll()
-
-    const cookieStorage = new CookieStorage()
-    cookieStorage.setItem('_hvcode', '', {
-      path: '/',
-    })
   }, [quoteCartId, removeCampaignCode, refetchAll])
 
   const showRemoveCampaignButton =
