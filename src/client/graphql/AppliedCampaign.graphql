@@ -1,27 +1,20 @@
-fragment CampaignData on Campaign {
-  code
-  incentive {
-    ... on FreeMonths {
-      quantity
-    }
-    ... on MonthlyCostDeduction {
-      amount {
-        amount
-        currency
-      }
-    }
-    ... on PercentageDiscountMonths {
-      percentageDiscount
-      quantityMonths: quantity
-    }
-  }
-  ownerName
-}
-
-query AppliedCampaign($quoteCartId: ID!) {
+query AppliedCampaign($quoteCartId: ID!, $locale: Locale!) {
   quoteCart(id: $quoteCartId) {
     campaign {
-      ...CampaignData
+      code
+      incentive {
+        ... on FreeMonths {
+          __typename
+        }
+        ... on MonthlyCostDeduction {
+          __typename
+        }
+        ... on PercentageDiscountMonths {
+          __typename
+        }
+      }
+      ownerName
+      displayValue(locale: $locale)
     }
   }
 }

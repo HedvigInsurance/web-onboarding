@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import styled from '@emotion/styled'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 import { CookieStorage } from 'cookie-storage'
@@ -8,7 +8,6 @@ import {
   useAppliedCampaignQuery,
   useAddCampaignCodeMutation,
   useRemoveCampaignCodeMutation,
-  CampaignDataFragment,
 } from 'data/graphql'
 
 import { Button, TextButton } from 'components/buttons'
@@ -18,6 +17,7 @@ import { Price } from 'pages/OfferNew/common/price'
 import { PriceBreakdown } from 'pages/OfferNew/common/PriceBreakdown'
 
 import { useTextKeys } from 'utils/textKeys'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 
 import {
   LARGE_SCREEN_MEDIA_QUERY,
@@ -131,43 +131,6 @@ const FooterExtraActions = styled.div`
   margin-top: 0.75rem;
   margin-bottom: 0.25rem;
 `
-
-const getAppliedCampaignText = (
-  campaign: CampaignDataFragment,
-  textKeys: Record<string, any>,
-): React.ReactNode => {
-  const { incentive, ownerName } = campaign
-
-  switch (incentive?.__typename) {
-    case 'VisibleNoDiscount':
-      return textKeys.WEB_GENERIC_CAMPAIGN_ADDEDPERK({
-        CAMPAIGN_NAME: ownerName,
-      })
-
-    case 'FreeMonths':
-      return textKeys.WEB_VOUCHER_ADDEDPERK({
-        FREE_MONTHS: incentive.quantity,
-        CAMPAIGN_NAME: ownerName,
-      })
-
-    case 'MonthlyCostDeduction':
-      return textKeys.WEB_REFERRAL_ADDEDPERK({
-        REFERRAL_VALUE: `${Number(incentive.amount?.amount)} ${
-          incentive.amount?.currency
-        }`,
-      })
-
-    case 'PercentageDiscountMonths':
-      return textKeys.WEB_PERCENTAGE_DISCOUNT_MONTHS_ADDEDPERK({
-        PERCENTAGE: incentive.percentageDiscount,
-        QUANTITY: incentive.quantityMonths,
-      })
-
-    default:
-      return ownerName ?? null
-  }
-}
-
 export type SidebarProps = {
   quoteCartId: string
   offerData: OfferData
@@ -182,6 +145,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onCheckoutOpen,
 }) => {
   const textKeys = useTextKeys()
+  const { isoLocale: locale } = useCurrentLocale()
 
   const [campaignCodeModalIsOpen, setCampaignCodeModalIsOpen] = useState(false)
   const [isSidebarVisible, setIsSidebarVisible] = useState(true)
@@ -190,7 +154,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     data: campaignData,
     refetch: refetchAppliedCampaign,
   } = useAppliedCampaignQuery({
-    variables: { quoteCartId },
+    variables: { quoteCartId, locale },
   })
 
   const [addCampaignCode] = useAddCampaignCodeMutation()
@@ -201,33 +165,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
     await refetchAppliedCampaign()
   }, [refetchOfferData, refetchAppliedCampaign])
 
-  useEffect(() => {
-    async function loadCampaignFromStorage() {
-      const code = campaignData?.quoteCart.campaign?.code ?? ''
-      const cookieStorage = new CookieStorage()
-      const preRedeemedCampaignCode = cookieStorage.getItem('_hvcode')
-
-      if (!preRedeemedCampaignCode) {
-        return
-      }
-
-      if (preRedeemedCampaignCode.toLowerCase() !== code.toLowerCase()) {
-        await addCampaignCode({
-          variables: { id: quoteCartId, code: preRedeemedCampaignCode },
-        })
-        await refetchAll()
-      }
-    }
-
-    loadCampaignFromStorage()
-  }, [quoteCartId, campaignData, addCampaignCode, refetchAll])
-
   const campaign = campaignData?.quoteCart.campaign
+  const campaignText = campaign?.displayValue ?? ''
 
   const isNorwegianBundle = isBundle(offerData) && isNorwegian(offerData)
-  const campaignText = campaign
-    ? getAppliedCampaignText(campaign, textKeys)
-    : ''
   const discounts: Array<React.ReactNode> = [
     ...(isNorwegianBundle ? [textKeys.SIDEBAR_NO_BUNDLE_DISCOUNT_TEXT()] : []),
     ...(campaignText ? [campaignText] : []),
