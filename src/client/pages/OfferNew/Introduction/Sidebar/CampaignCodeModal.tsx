@@ -132,6 +132,8 @@ export const CampaignCodeModal = ({
                 actions.setFieldError('code', 'SIDEBAR_ADD_DISCOUNT_ERROR')
               } else {
                 close()
+                actions.resetForm()
+                actions.setErrors({})
               }
             } catch {
               actions.setFieldError('code', 'SIDEBAR_ADD_DISCOUNT_ERROR')
