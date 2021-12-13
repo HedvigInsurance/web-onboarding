@@ -23,7 +23,6 @@ export type Scalars = {
   Json: any
   /** An ISO-8601 String representation of a `java.time.LocalDate`, e.g. "2019-07-03". */
   LocalDate: any
-  /** A String-representation of Adyen's PaymentMethodsResponse */
   PaymentMethodsResponse: any
   URL: any
   /** An ISO-8601 String representation of a `java.time.Instant`, e.g. "2019-07-03T19:07:38.494081Z". */
@@ -31,12 +30,13 @@ export type Scalars = {
   JSONString: any
   JSON: any
   Object: any
-  /** A String-representation of Adyen's payment method details */
   PaymentMethodDetails: any
   /** A String-representation of Adyen's checkout payments action */
   CheckoutPaymentsAction: any
   /** A String-representation of Adyen's payments details request */
   PaymentsDetailsRequest: any
+  CheckoutPaymentAction: any
+  PaymentDetailsInput: any
   /** The `Upload` scalar type represents a file upload. */
   Upload: any
   UUID: any
@@ -135,6 +135,11 @@ export type AcceptedReferral = {
   quantity?: Maybe<Scalars['Int']>
 }
 
+export type ActionRequired = {
+  __typename?: 'ActionRequired'
+  action: Scalars['CheckoutPaymentAction']
+}
+
 /** The contract has an inception date in the future and a termination date in the future */
 export type ActiveInFutureAndTerminatedInFutureStatus = {
   __typename?: 'ActiveInFutureAndTerminatedInFutureStatus'
@@ -172,6 +177,10 @@ export type ActiveStatus = {
 }
 
 export type AddCampaignResult = QuoteCart | BasicError
+
+export type AdditionalPaymentDetailsInput = {
+  paymentDetailsInput: Scalars['PaymentDetailsInput']
+}
 
 export type AdditionalPaymentsDetailsRequest = {
   paymentsDetailsRequest: Scalars['PaymentsDetailsRequest']
@@ -308,6 +317,8 @@ export type AgreementCore = {
   activeTo?: Maybe<Scalars['LocalDate']>
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export enum AgreementStatus {
@@ -2025,6 +2036,15 @@ export type ConcurrentInception = {
   currentInsurer?: Maybe<CurrentInsurer>
 }
 
+export type ConnectPaymentInput = {
+  paymentMethodDetails: Scalars['PaymentMethodDetails']
+  channel: PaymentConnectChannel
+  browserInfo?: Maybe<BrowserInfo>
+  returnUrl: Scalars['String']
+}
+
+export type ConnectPaymentResult = PaymentResultCode | ActionRequired
+
 export type ConnectPositionInput = {
   /** Connect document after specified document */
   after?: Maybe<Scalars['ID']>
@@ -2048,7 +2068,7 @@ export type Contract = {
    * "The 'best guess' of the agreement that depicts the member's insurance, either
    * the pending, future, current or, if terminated, past agreement
    */
-  currentAgreement: Agreement
+  currentAgreement?: Maybe<Agreement>
   /** The date the contract agreement timeline begin, if it has been activated */
   inception?: Maybe<Scalars['LocalDate']>
   /** The date the contract agreement timelinen end, on if it has been terminated */
@@ -2787,6 +2807,8 @@ export type DanishAccidentAgreement = AgreementCore & {
   address: Address
   numberCoInsured: Scalars['Int']
   type?: Maybe<DanishAccidentLineOfBusiness>
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export type DanishAccidentDetails = {
@@ -2829,6 +2851,8 @@ export type DanishHomeContentAgreement = AgreementCore & {
   numberCoInsured: Scalars['Int']
   squareMeters: Scalars['Int']
   type?: Maybe<DanishHomeContentLineOfBusiness>
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export enum DanishHomeContentLineOfBusiness {
@@ -2868,6 +2892,8 @@ export type DanishTravelAgreement = AgreementCore & {
   address: Address
   numberCoInsured: Scalars['Int']
   type?: Maybe<DanishTravelLineOfBusiness>
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export type DanishTravelDetails = {
@@ -7567,6 +7593,9 @@ export type Mutation = {
   login_verifyOtpAttempt: VerifyOtpLoginAttemptResult
   /** Resends the OTP to the provided credential */
   login_resendOtp: Scalars['ID']
+  paymentConnection_connectPayment: ConnectPaymentResult
+  paymentConnection_submitAdditionalPaymentDetails: ConnectPaymentResult
+  paymentConnection_submitAdyenRedirection: PaymentResultCode
   /**
    * Create a new onboarding session. This is not an authentication session, but rather an object that
    * ties the onboarding journey together.
@@ -7764,6 +7793,21 @@ export type MutationLogin_ResendOtpArgs = {
   id: Scalars['ID']
 }
 
+export type MutationPaymentConnection_ConnectPaymentArgs = {
+  onboardingId?: Maybe<Scalars['ID']>
+  input: ConnectPaymentInput
+}
+
+export type MutationPaymentConnection_SubmitAdditionalPaymentDetailsArgs = {
+  id: Scalars['ID']
+  input: AdditionalPaymentDetailsInput
+}
+
+export type MutationPaymentConnection_SubmitAdyenRedirectionArgs = {
+  id: Scalars['ID']
+  input: SubmitAdyenRedirectionInput
+}
+
 export type MutationOnboardingQuoteCart_CreateArgs = {
   input: CreateOnboardingQuoteCartInput
 }
@@ -7925,6 +7969,8 @@ export type NorwegianHomeContentAgreement = AgreementCore & {
   numberCoInsured: Scalars['Int']
   squareMeters: Scalars['Int']
   type?: Maybe<NorwegianHomeContentLineOfBusiness>
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export enum NorwegianHomeContentLineOfBusiness {
@@ -7959,6 +8005,8 @@ export type NorwegianTravelAgreement = AgreementCore & {
   status: AgreementStatus
   numberCoInsured: Scalars['Int']
   type?: Maybe<NorwegianTravelLineOfBusiness>
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export type NorwegianTravelDetails = {
@@ -8005,6 +8053,23 @@ export enum PayinMethodStatus {
   Active = 'ACTIVE',
   Pending = 'PENDING',
   NeedsSetup = 'NEEDS_SETUP',
+}
+
+export enum PaymentConnectChannel {
+  Android = 'ANDROID',
+  Ios = 'IOS',
+  Web = 'WEB',
+}
+
+export type PaymentConnection = {
+  __typename?: 'PaymentConnection'
+  id?: Maybe<Scalars['ID']>
+  providers: Array<Maybe<Provider>>
+}
+
+export type PaymentResultCode = {
+  __typename?: 'PaymentResultCode'
+  resultCode: Scalars['String']
 }
 
 export enum PayoutMethodStatus {
@@ -8111,6 +8176,12 @@ export enum Project {
   BotService = 'BotService',
   ProductPricing = 'ProductPricing',
   MemberService = 'MemberService',
+}
+
+export type Provider = {
+  __typename?: 'Provider'
+  name: Scalars['String']
+  availablePaymentOptions: Array<Maybe<Scalars['PaymentMethodsResponse']>>
 }
 
 export type ProviderStatus = {
@@ -8360,12 +8431,16 @@ export type QueryInsuranceTermsArgs = {
   contractType: TypeOfContract
   locale: Locale
   date?: Maybe<Scalars['LocalDate']>
+  carrier?: Maybe<Scalars['String']>
+  partner?: Maybe<Scalars['String']>
 }
 
 export type QueryTermsAndConditionsArgs = {
   contractType: TypeOfContract
   locale: Locale
   date?: Maybe<Scalars['LocalDate']>
+  carrier?: Maybe<Scalars['String']>
+  partner?: Maybe<Scalars['String']>
 }
 
 export type QueryInsuranceProvidersArgs = {
@@ -8408,6 +8483,7 @@ export type QueryAutoCompleteAddressArgs = {
 
 export type QueryQuoteBundleArgs = {
   input: QuoteBundleInput
+  locale?: Maybe<Locale>
 }
 
 export type QueryQuoteCartArgs = {
@@ -8529,6 +8605,11 @@ export type QuoteBundleVariantTagArgs = {
   locale: Locale
 }
 
+/** A possible alternative bundling variant */
+export type QuoteBundleVariantBundleArgs = {
+  locale?: Maybe<Locale>
+}
+
 /**
  * An onboarding session is a type that exists to guide the client through an onboarding journey,
  * as a means of storing intermediate state up until the point where it is "signed" and then flushed
@@ -8545,29 +8626,16 @@ export type QuoteCart = {
   checkout?: Maybe<Checkout>
   /**  The accepted checkout methods.  */
   checkoutMethods: Array<CheckoutMethod>
+  paymentConnection?: Maybe<PaymentConnection>
 }
 
-export type QuoteData = {
-  __typename?: 'QuoteData'
-  insuranceType: Scalars['String']
-  typeOfContract: Scalars['String']
-  market: Market
-  street?: Maybe<Scalars['String']>
-  postalCode?: Maybe<Scalars['String']>
-  city?: Maybe<Scalars['String']>
-  floor?: Maybe<Scalars['String']>
-  bbrId?: Maybe<Scalars['String']>
-  apartment?: Maybe<Scalars['String']>
-  numberCoInsured?: Maybe<Scalars['Int']>
-  squareMeters?: Maybe<Scalars['Int']>
-  subType?: Maybe<Scalars['String']>
-  ancillaryArea?: Maybe<Scalars['Int']>
-  yearOfConstruction?: Maybe<Scalars['Int']>
-  numberOfBathrooms?: Maybe<Scalars['Int']>
-  extraBuildings: Array<ExtraBuildingValue>
-  isSubleted?: Maybe<Scalars['Boolean']>
-  isStudent?: Maybe<Scalars['Boolean']>
-  isYouth?: Maybe<Scalars['Boolean']>
+/**
+ * An onboarding session is a type that exists to guide the client through an onboarding journey,
+ * as a means of storing intermediate state up until the point where it is "signed" and then flushed
+ * into a proper "member".
+ */
+export type QuoteCartBundleArgs = {
+  locale?: Maybe<Locale>
 }
 
 export type QuoteDetails =
@@ -9779,6 +9847,11 @@ export type StoredPaymentMethodsDetails = {
   holderName?: Maybe<Scalars['String']>
 }
 
+export type SubmitAdyenRedirectionInput = {
+  md: Scalars['String']
+  pares: Scalars['String']
+}
+
 export type SubmitAdyenRedirectionRequest = {
   md: Scalars['String']
   pares: Scalars['String']
@@ -9858,6 +9931,8 @@ export type SwedishAccidentAgreement = AgreementCore & {
   numberCoInsured: Scalars['Int']
   squareMeters: Scalars['Int']
   type: SwedishAccidentLineOfBusiness
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export type SwedishAccidentDetails = {
@@ -9887,6 +9962,7 @@ export type SwedishApartmentAgreement = AgreementCore & {
   squareMeters: Scalars['Int']
   type: SwedishApartmentLineOfBusiness
   partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export enum SwedishApartmentLineOfBusiness {
@@ -9939,6 +10015,8 @@ export type SwedishHouseAgreement = AgreementCore & {
   numberOfBathrooms: Scalars['Int']
   extraBuildings: Array<Maybe<ExtraBuilding>>
   isSubleted: Scalars['Boolean']
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export type SwedishHouseQuoteDetails = {
@@ -11379,6 +11457,40 @@ export type AddCampaignCodeMutation = { __typename?: 'Mutation' } & {
     | ({ __typename?: 'BasicError' } & { errorMessage: BasicError['message'] })
 }
 
+export type CampaignDataFragment = { __typename?: 'Campaign' } & Pick<
+  Campaign,
+  'code' | 'ownerName'
+> & {
+    incentive?: Maybe<
+      | ({ __typename?: 'MonthlyCostDeduction' } & {
+          amount?: Maybe<
+            { __typename?: 'MonetaryAmountV2' } & Pick<
+              MonetaryAmountV2,
+              'amount' | 'currency'
+            >
+          >
+        })
+      | ({ __typename?: 'FreeMonths' } & Pick<FreeMonths, 'quantity'>)
+      | { __typename?: 'NoDiscount' }
+      | { __typename?: 'VisibleNoDiscount' }
+      | ({ __typename?: 'PercentageDiscountMonths' } & Pick<
+          PercentageDiscountMonths,
+          'percentageDiscount'
+        > & { quantityMonths: PercentageDiscountMonths['quantity'] })
+      | { __typename?: 'IndefinitePercentageDiscount' }
+    >
+  }
+
+export type AppliedCampaignQueryVariables = Exact<{
+  quoteCartId: Scalars['ID']
+}>
+
+export type AppliedCampaignQuery = { __typename?: 'Query' } & {
+  quoteCart: { __typename?: 'QuoteCart' } & {
+    campaign?: Maybe<{ __typename?: 'Campaign' } & CampaignDataFragment>
+  }
+}
+
 export type AvailablePaymentMethodsQueryVariables = Exact<{
   [key: string]: never
 }>
@@ -11823,113 +11935,6 @@ export type QuoteBundleVariantsQuery = { __typename?: 'Query' } & {
   }
 }
 
-export type QuoteDataFragmentFragment = { __typename?: 'BundledQuote' } & Pick<
-  BundledQuote,
-  | 'id'
-  | 'dataCollectionId'
-  | 'firstName'
-  | 'lastName'
-  | 'ssn'
-  | 'birthDate'
-  | 'startDate'
-  | 'expiresAt'
-  | 'email'
-  | 'typeOfContract'
-  | 'displayName'
-> & {
-    currentInsurer?: Maybe<
-      { __typename?: 'CurrentInsurer' } & Pick<
-        CurrentInsurer,
-        'id' | 'displayName' | 'switchable'
-      >
-    >
-    price: { __typename?: 'MonetaryAmountV2' } & Pick<
-      MonetaryAmountV2,
-      'amount' | 'currency'
-    >
-    contractPerils: Array<
-      { __typename?: 'PerilV2' } & Pick<
-        PerilV2,
-        'title' | 'description' | 'covered' | 'exceptions' | 'info'
-      > & {
-          icon: { __typename?: 'Icon' } & {
-            variants: { __typename?: 'IconVariants' } & {
-              light: { __typename?: 'IconVariant' } & Pick<
-                IconVariant,
-                'svgUrl'
-              >
-            }
-          }
-        }
-    >
-    insurableLimits: Array<
-      { __typename?: 'InsurableLimit' } & Pick<
-        InsurableLimit,
-        'label' | 'limit' | 'description' | 'type'
-      >
-    >
-    insuranceTerms: Array<
-      { __typename?: 'InsuranceTerm' } & Pick<
-        InsuranceTerm,
-        'displayName' | 'url' | 'type'
-      >
-    >
-    data: { __typename?: 'QuoteData' } & Pick<QuoteData, 'insuranceType'>
-    quoteDetails:
-      | ({ __typename?: 'SwedishApartmentQuoteDetails' } & Pick<
-          SwedishApartmentQuoteDetails,
-          'street' | 'zipCode' | 'householdSize' | 'livingSpace' | 'type'
-        >)
-      | ({ __typename?: 'SwedishHouseQuoteDetails' } & Pick<
-          SwedishHouseQuoteDetails,
-          | 'street'
-          | 'zipCode'
-          | 'householdSize'
-          | 'livingSpace'
-          | 'ancillarySpace'
-          | 'numberOfBathrooms'
-          | 'yearOfConstruction'
-          | 'isSubleted'
-        > & {
-            extraBuildings: Array<
-              { __typename?: 'ExtraBuildingValue' } & Pick<
-                ExtraBuildingValue,
-                'type' | 'area' | 'displayName' | 'hasWaterConnected'
-              >
-            >
-          })
-      | ({ __typename?: 'SwedishAccidentDetails' } & Pick<
-          SwedishAccidentDetails,
-          'isStudent'
-        >)
-      | ({ __typename?: 'NorwegianHomeContentsDetails' } & Pick<
-          NorwegianHomeContentsDetails,
-          'coInsured' | 'livingSpace' | 'street' | 'zipCode' | 'isYouth'
-        > & { norwegianHomeType: NorwegianHomeContentsDetails['type'] })
-      | ({ __typename?: 'NorwegianTravelDetails' } & Pick<
-          NorwegianTravelDetails,
-          'coInsured' | 'isYouth'
-        >)
-      | ({ __typename?: 'DanishHomeContentsDetails' } & Pick<
-          DanishHomeContentsDetails,
-          | 'street'
-          | 'floor'
-          | 'apartment'
-          | 'zipCode'
-          | 'livingSpace'
-          | 'coInsured'
-          | 'isStudent'
-        > & { danishHomeType: DanishHomeContentsDetails['type'] })
-      | ({ __typename?: 'DanishAccidentDetails' } & Pick<
-          DanishAccidentDetails,
-          'street' | 'zipCode' | 'coInsured' | 'isStudent'
-        >)
-      | ({ __typename?: 'DanishTravelDetails' } & Pick<
-          DanishTravelDetails,
-          'street' | 'zipCode' | 'coInsured' | 'isStudent'
-        >)
-  }
-
 export type QuoteCartQueryVariables = Exact<{
   id: Scalars['ID']
   locale: Locale
@@ -11953,7 +11958,7 @@ export type QuoteCartQuery = { __typename?: 'Query' } & {
                 > & {
                     bundleCost: {
                       __typename?: 'InsuranceCost'
-                    } & BundleCostDataFragment
+                    } & BundleCostDataFragmentFragment
                     quotes: Array<
                       {
                         __typename?: 'BundledQuote'
@@ -12135,6 +12140,16 @@ export type ReferrerNameQuery = { __typename?: 'Query' } & {
   }
 }
 
+export type RemoveCampaignCodeMutationVariables = Exact<{
+  quoteCartId: Scalars['ID']
+}>
+
+export type RemoveCampaignCodeMutation = { __typename?: 'Mutation' } & {
+  quoteCart_removeCampaign:
+    | ({ __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'>)
+    | ({ __typename?: 'BasicError' } & { errorMessage: BasicError['message'] })
+}
+
 export type RemoveDiscountCodeMutationVariables = Exact<{
   [key: string]: never
 }>
@@ -12258,6 +12273,151 @@ export type UpdatePickedLocaleMutation = { __typename?: 'Mutation' } & {
   updatePickedLocale: { __typename?: 'Member' } & Pick<Member, 'id'>
 }
 
+export type BundleCostDataFragmentFragment = {
+  __typename?: 'InsuranceCost'
+} & Pick<InsuranceCost, 'freeUntil'> & {
+    monthlyDiscount: { __typename?: 'MonetaryAmountV2' } & Pick<
+      MonetaryAmountV2,
+      'amount' | 'currency'
+    >
+    monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
+      MonetaryAmountV2,
+      'amount' | 'currency'
+    >
+    monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
+      MonetaryAmountV2,
+      'amount' | 'currency'
+    >
+  }
+
+export type QuoteDataFragmentFragment = { __typename?: 'BundledQuote' } & Pick<
+  BundledQuote,
+  | 'id'
+  | 'dataCollectionId'
+  | 'firstName'
+  | 'lastName'
+  | 'ssn'
+  | 'birthDate'
+  | 'startDate'
+  | 'expiresAt'
+  | 'email'
+  | 'typeOfContract'
+  | 'displayName'
+  | 'data'
+> & {
+    currentInsurer?: Maybe<
+      { __typename?: 'CurrentInsurer' } & Pick<
+        CurrentInsurer,
+        'id' | 'displayName' | 'switchable'
+      >
+    >
+    price: { __typename?: 'MonetaryAmountV2' } & Pick<
+      MonetaryAmountV2,
+      'amount' | 'currency'
+    >
+    contractPerils: Array<
+      { __typename?: 'PerilV2' } & Pick<
+        PerilV2,
+        'title' | 'description' | 'covered' | 'exceptions' | 'info'
+      > & {
+          icon: { __typename?: 'Icon' } & {
+            variants: { __typename?: 'IconVariants' } & {
+              light: { __typename?: 'IconVariant' } & Pick<
+                IconVariant,
+                'svgUrl'
+              >
+            }
+          }
+        }
+    >
+    insurableLimits: Array<
+      { __typename?: 'InsurableLimit' } & Pick<
+        InsurableLimit,
+        'label' | 'limit' | 'description' | 'type'
+      >
+    >
+    insuranceTerms: Array<
+      { __typename?: 'InsuranceTerm' } & Pick<
+        InsuranceTerm,
+        'displayName' | 'url' | 'type'
+      >
+    >
+    quoteDetails:
+      | ({ __typename?: 'SwedishApartmentQuoteDetails' } & Pick<
+          SwedishApartmentQuoteDetails,
+          'street' | 'zipCode' | 'householdSize' | 'livingSpace' | 'type'
+        >)
+      | ({ __typename?: 'SwedishHouseQuoteDetails' } & Pick<
+          SwedishHouseQuoteDetails,
+          | 'street'
+          | 'zipCode'
+          | 'householdSize'
+          | 'livingSpace'
+          | 'ancillarySpace'
+          | 'numberOfBathrooms'
+          | 'yearOfConstruction'
+          | 'isSubleted'
+        > & {
+            extraBuildings: Array<
+              { __typename?: 'ExtraBuildingValue' } & Pick<
+                ExtraBuildingValue,
+                'type' | 'area' | 'displayName' | 'hasWaterConnected'
+              >
+            >
+          })
+      | ({ __typename?: 'SwedishAccidentDetails' } & Pick<
+          SwedishAccidentDetails,
+          'isStudent'
+        >)
+      | ({ __typename?: 'NorwegianHomeContentsDetails' } & Pick<
+          NorwegianHomeContentsDetails,
+          'coInsured' | 'livingSpace' | 'street' | 'zipCode' | 'isYouth'
+        > & { norwegianHomeType: NorwegianHomeContentsDetails['type'] })
+      | ({ __typename?: 'NorwegianTravelDetails' } & Pick<
+          NorwegianTravelDetails,
+          'coInsured' | 'isYouth'
+        >)
+      | ({ __typename?: 'DanishHomeContentsDetails' } & Pick<
+          DanishHomeContentsDetails,
+          | 'street'
+          | 'floor'
+          | 'apartment'
+          | 'zipCode'
+          | 'livingSpace'
+          | 'coInsured'
+          | 'isStudent'
+        > & { danishHomeType: DanishHomeContentsDetails['type'] })
+      | ({ __typename?: 'DanishAccidentDetails' } & Pick<
+          DanishAccidentDetails,
+          'street' | 'zipCode' | 'coInsured' | 'isStudent'
+        >)
+      | ({ __typename?: 'DanishTravelDetails' } & Pick<
+          DanishTravelDetails,
+          'street' | 'zipCode' | 'coInsured' | 'isStudent'
+        >)
+  }
+
+export const CampaignDataFragmentDoc = gql`
+  fragment CampaignData on Campaign {
+    code
+    incentive {
+      ... on FreeMonths {
+        quantity
+      }
+      ... on MonthlyCostDeduction {
+        amount {
+          amount
+          currency
+        }
+      }
+      ... on PercentageDiscountMonths {
+        percentageDiscount
+        quantityMonths: quantity
+      }
+    }
+    ownerName
+  }
+`
 export const QuoteDataFragmentDoc = gql`
   fragment QuoteData on BundledQuote {
     id
@@ -12388,6 +12548,23 @@ export const BundleCostDataFragmentDoc = gql`
     }
   }
 `
+export const BundleCostDataFragmentFragmentDoc = gql`
+  fragment BundleCostDataFragment on InsuranceCost {
+    freeUntil
+    monthlyDiscount {
+      amount
+      currency
+    }
+    monthlyGross {
+      amount
+      currency
+    }
+    monthlyNet {
+      amount
+      currency
+    }
+  }
+`
 export const QuoteDataFragmentFragmentDoc = gql`
   fragment QuoteDataFragment on BundledQuote {
     id
@@ -12435,9 +12612,7 @@ export const QuoteDataFragmentFragmentDoc = gql`
       url
       type
     }
-    data {
-      insuranceType
-    }
+    data
     quoteDetails {
       ... on SwedishApartmentQuoteDetails {
         street
@@ -12560,6 +12735,67 @@ export type AddCampaignCodeMutationResult = ApolloReactCommon.MutationResult<
 export type AddCampaignCodeMutationOptions = ApolloReactCommon.BaseMutationOptions<
   AddCampaignCodeMutation,
   AddCampaignCodeMutationVariables
+>
+export const AppliedCampaignDocument = gql`
+  query AppliedCampaign($quoteCartId: ID!) {
+    quoteCart(id: $quoteCartId) {
+      campaign {
+        ...CampaignData
+      }
+    }
+  }
+  ${CampaignDataFragmentDoc}
+`
+
+/**
+ * __useAppliedCampaignQuery__
+ *
+ * To run a query within a React component, call `useAppliedCampaignQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAppliedCampaignQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAppliedCampaignQuery({
+ *   variables: {
+ *      quoteCartId: // value for 'quoteCartId'
+ *   },
+ * });
+ */
+export function useAppliedCampaignQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    AppliedCampaignQuery,
+    AppliedCampaignQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<AppliedCampaignQuery, AppliedCampaignQueryVariables>(
+    AppliedCampaignDocument,
+    options,
+  )
+}
+export function useAppliedCampaignLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    AppliedCampaignQuery,
+    AppliedCampaignQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    AppliedCampaignQuery,
+    AppliedCampaignQueryVariables
+  >(AppliedCampaignDocument, options)
+}
+export type AppliedCampaignQueryHookResult = ReturnType<
+  typeof useAppliedCampaignQuery
+>
+export type AppliedCampaignLazyQueryHookResult = ReturnType<
+  typeof useAppliedCampaignLazyQuery
+>
+export type AppliedCampaignQueryResult = ApolloReactCommon.QueryResult<
+  AppliedCampaignQuery,
+  AppliedCampaignQueryVariables
 >
 export const AvailablePaymentMethodsDocument = gql`
   query AvailablePaymentMethods {
@@ -13487,7 +13723,7 @@ export const QuoteCartDocument = gql`
           bundle {
             displayName(locale: $locale)
             bundleCost {
-              ...BundleCostData
+              ...BundleCostDataFragment
             }
             quotes {
               ...QuoteDataFragment
@@ -13521,7 +13757,7 @@ export const QuoteCartDocument = gql`
       }
     }
   }
-  ${BundleCostDataFragmentDoc}
+  ${BundleCostDataFragmentFragmentDoc}
   ${QuoteDataFragmentFragmentDoc}
 `
 
@@ -13863,6 +14099,62 @@ export type ReferrerNameLazyQueryHookResult = ReturnType<
 export type ReferrerNameQueryResult = ApolloReactCommon.QueryResult<
   ReferrerNameQuery,
   ReferrerNameQueryVariables
+>
+export const RemoveCampaignCodeDocument = gql`
+  mutation RemoveCampaignCode($quoteCartId: ID!) {
+    quoteCart_removeCampaign(id: $quoteCartId) {
+      ... on QuoteCart {
+        id
+      }
+      ... on BasicError {
+        errorMessage: message
+      }
+    }
+  }
+`
+export type RemoveCampaignCodeMutationFn = ApolloReactCommon.MutationFunction<
+  RemoveCampaignCodeMutation,
+  RemoveCampaignCodeMutationVariables
+>
+
+/**
+ * __useRemoveCampaignCodeMutation__
+ *
+ * To run a mutation, you first call `useRemoveCampaignCodeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveCampaignCodeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeCampaignCodeMutation, { data, loading, error }] = useRemoveCampaignCodeMutation({
+ *   variables: {
+ *      quoteCartId: // value for 'quoteCartId'
+ *   },
+ * });
+ */
+export function useRemoveCampaignCodeMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RemoveCampaignCodeMutation,
+    RemoveCampaignCodeMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    RemoveCampaignCodeMutation,
+    RemoveCampaignCodeMutationVariables
+  >(RemoveCampaignCodeDocument, options)
+}
+export type RemoveCampaignCodeMutationHookResult = ReturnType<
+  typeof useRemoveCampaignCodeMutation
+>
+export type RemoveCampaignCodeMutationResult = ApolloReactCommon.MutationResult<
+  RemoveCampaignCodeMutation
+>
+export type RemoveCampaignCodeMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  RemoveCampaignCodeMutation,
+  RemoveCampaignCodeMutationVariables
 >
 export const RemoveDiscountCodeDocument = gql`
   mutation RemoveDiscountCode {

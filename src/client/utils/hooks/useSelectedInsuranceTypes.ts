@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useLocation, useHistory } from 'react-router'
 
 // TODO: we should get this from giraffe schema
@@ -39,20 +39,17 @@ export const useSelectedInsuranceTypes = () => {
     searchParams,
   ])
 
-  const changeSelectedInsuranceTypes = useCallback(
-    (newTypes: Array<InsuranceType>) => {
-      searchParams.delete(SEARCH_PARAM_NAME)
+  const changeSelectedInsuranceTypes = (newTypes: Array<InsuranceType>) => {
+    searchParams.delete(SEARCH_PARAM_NAME)
 
-      for (const type of newTypes) {
-        searchParams.append(SEARCH_PARAM_NAME, type)
-      }
+    for (const type of newTypes) {
+      searchParams.append(SEARCH_PARAM_NAME, type)
+    }
 
-      history.replace({
-        search: searchParams.toString(),
-      })
-    },
-    [searchParams, history],
-  )
+    history.replace({
+      search: searchParams.toString(),
+    })
+  }
 
   return [insuranceTypes, changeSelectedInsuranceTypes] as const
 }

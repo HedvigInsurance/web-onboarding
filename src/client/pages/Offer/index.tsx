@@ -18,6 +18,7 @@ import { localePathPattern } from 'l10n/localePathPattern'
 import { Features, useFeature } from 'utils/hooks/useFeature'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import { LocaleLabel } from 'l10n/locales'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import {
   getOfferData,
@@ -32,7 +33,7 @@ import { Introduction } from '../OfferNew/Introduction/Introduction'
 import { Perils } from '../OfferNew/Perils'
 import { InsuranceSelector } from '../OfferNew/InsuranceSelector'
 
-const createToggleCheckout = (history: History<any>, locale?: string) => (
+const createToggleCheckout = (history: History<any>, locale?: LocaleLabel) => (
   isOpen: boolean,
 ) => {
   if (isOpen) {
