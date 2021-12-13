@@ -317,6 +317,8 @@ export type AgreementCore = {
   activeTo?: Maybe<Scalars['LocalDate']>
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export enum AgreementStatus {
@@ -2066,7 +2068,7 @@ export type Contract = {
    * "The 'best guess' of the agreement that depicts the member's insurance, either
    * the pending, future, current or, if terminated, past agreement
    */
-  currentAgreement: Agreement
+  currentAgreement?: Maybe<Agreement>
   /** The date the contract agreement timeline begin, if it has been activated */
   inception?: Maybe<Scalars['LocalDate']>
   /** The date the contract agreement timelinen end, on if it has been terminated */
@@ -2805,6 +2807,8 @@ export type DanishAccidentAgreement = AgreementCore & {
   address: Address
   numberCoInsured: Scalars['Int']
   type?: Maybe<DanishAccidentLineOfBusiness>
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export type DanishAccidentDetails = {
@@ -2847,6 +2851,8 @@ export type DanishHomeContentAgreement = AgreementCore & {
   numberCoInsured: Scalars['Int']
   squareMeters: Scalars['Int']
   type?: Maybe<DanishHomeContentLineOfBusiness>
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export enum DanishHomeContentLineOfBusiness {
@@ -2886,6 +2892,8 @@ export type DanishTravelAgreement = AgreementCore & {
   address: Address
   numberCoInsured: Scalars['Int']
   type?: Maybe<DanishTravelLineOfBusiness>
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export type DanishTravelDetails = {
@@ -7961,6 +7969,8 @@ export type NorwegianHomeContentAgreement = AgreementCore & {
   numberCoInsured: Scalars['Int']
   squareMeters: Scalars['Int']
   type?: Maybe<NorwegianHomeContentLineOfBusiness>
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export enum NorwegianHomeContentLineOfBusiness {
@@ -7995,6 +8005,8 @@ export type NorwegianTravelAgreement = AgreementCore & {
   status: AgreementStatus
   numberCoInsured: Scalars['Int']
   type?: Maybe<NorwegianTravelLineOfBusiness>
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export type NorwegianTravelDetails = {
@@ -8419,12 +8431,16 @@ export type QueryInsuranceTermsArgs = {
   contractType: TypeOfContract
   locale: Locale
   date?: Maybe<Scalars['LocalDate']>
+  carrier?: Maybe<Scalars['String']>
+  partner?: Maybe<Scalars['String']>
 }
 
 export type QueryTermsAndConditionsArgs = {
   contractType: TypeOfContract
   locale: Locale
   date?: Maybe<Scalars['LocalDate']>
+  carrier?: Maybe<Scalars['String']>
+  partner?: Maybe<Scalars['String']>
 }
 
 export type QueryInsuranceProvidersArgs = {
@@ -9915,6 +9931,8 @@ export type SwedishAccidentAgreement = AgreementCore & {
   numberCoInsured: Scalars['Int']
   squareMeters: Scalars['Int']
   type: SwedishAccidentLineOfBusiness
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export type SwedishAccidentDetails = {
@@ -9944,6 +9962,7 @@ export type SwedishApartmentAgreement = AgreementCore & {
   squareMeters: Scalars['Int']
   type: SwedishApartmentLineOfBusiness
   partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export enum SwedishApartmentLineOfBusiness {
@@ -9989,6 +10008,8 @@ export type SwedishHouseAgreement = AgreementCore & {
   numberOfBathrooms: Scalars['Int']
   extraBuildings: Array<Maybe<ExtraBuilding>>
   isSubleted: Scalars['Boolean']
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export type SwedishHouseQuoteDetails = {
@@ -11992,7 +12013,7 @@ export type QuoteCartQuery = { __typename?: 'Query' } & {
                 > & {
                     bundleCost: {
                       __typename?: 'InsuranceCost'
-                    } & BundleCostDataFragment
+                    } & BundleCostDataFragmentFragment
                     quotes: Array<
                       {
                         __typename?: 'BundledQuote'
@@ -12297,6 +12318,23 @@ export type UpdatePickedLocaleMutation = { __typename?: 'Mutation' } & {
   updatePickedLocale: { __typename?: 'Member' } & Pick<Member, 'id'>
 }
 
+export type BundleCostDataFragmentFragment = {
+  __typename?: 'InsuranceCost'
+} & Pick<InsuranceCost, 'freeUntil'> & {
+    monthlyDiscount: { __typename?: 'MonetaryAmountV2' } & Pick<
+      MonetaryAmountV2,
+      'amount' | 'currency'
+    >
+    monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
+      MonetaryAmountV2,
+      'amount' | 'currency'
+    >
+    monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
+      MonetaryAmountV2,
+      'amount' | 'currency'
+    >
+  }
+
 export const QuoteDataFragmentDoc = gql`
   fragment QuoteData on BundledQuote {
     id
@@ -12538,6 +12576,23 @@ export const QuoteDataFragmentFragmentDoc = gql`
         coInsured
         isStudent
       }
+    }
+  }
+`
+export const BundleCostDataFragmentFragmentDoc = gql`
+  fragment BundleCostDataFragment on InsuranceCost {
+    freeUntil
+    monthlyDiscount {
+      amount
+      currency
+    }
+    monthlyGross {
+      amount
+      currency
+    }
+    monthlyNet {
+      amount
+      currency
     }
   }
 `
@@ -13467,7 +13522,7 @@ export const QuoteCartDocument = gql`
           bundle {
             displayName(locale: $locale)
             bundleCost {
-              ...BundleCostData
+              ...BundleCostDataFragment
             }
             quotes {
               ...QuoteDataFragment
@@ -13501,7 +13556,7 @@ export const QuoteCartDocument = gql`
       }
     }
   }
-  ${BundleCostDataFragmentDoc}
+  ${BundleCostDataFragmentFragmentDoc}
   ${QuoteDataFragmentFragmentDoc}
 `
 
