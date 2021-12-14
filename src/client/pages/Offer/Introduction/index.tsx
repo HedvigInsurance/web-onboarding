@@ -10,9 +10,10 @@ import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { BundledQuote } from 'src/client/data/graphql'
 import { isBundle } from 'pages/OfferNew/utils'
 
-import { HeroOfferDetails } from './HeroOfferDetails'
-import { Sidebar } from './Sidebar/Sidebar'
-import { ExternalInsuranceProvider } from './ExternalInsuranceProvider'
+import { HeroOfferDetails } from '../../OfferNew/Introduction/HeroOfferDetails'
+import { ExternalInsuranceProvider } from '../../OfferNew/Introduction/ExternalInsuranceProvider'
+
+import { Sidebar } from './Sidebar'
 
 const HERO_HEIGHT_LARGE_SCREEN = 600
 const HERO_HEIGHT = 400
