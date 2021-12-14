@@ -262,7 +262,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
   const [initialStore, setInitialStore] = React.useState<
     Record<string, string>
   >()
-  const { isoLocale } = useCurrentLocale()
+  const { isoLocale, path: pathLocale } = useCurrentLocale()
 
   const [isQuoteCartApiEnabled] = useFeature([Features.QUOTE_CART_API])
   const {
@@ -408,6 +408,19 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                         })
                       }
                       redirectToOfferPage()
+                    },
+                    QuoteCartOfferRedirect: (
+                      quoteCartId,
+                      selectedInsuranceTypes,
+                    ) => {
+                      const searchParams = new URLSearchParams()
+                      selectedInsuranceTypes.forEach((insuranceType) => {
+                        searchParams.append('type', insuranceType)
+                      })
+
+                      history.push(
+                        `${pathLocale}/new-member/offer/${quoteCartId}?${searchParams.toString()}`,
+                      )
                     },
                     MailingList: () => {
                       location.href = 'https://hedvigapp.typeform.com/to/xiTKWi'
