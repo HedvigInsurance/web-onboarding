@@ -25,13 +25,11 @@ type ProductData = {
 
 type ProductsData = Record<Market, ProductData>
 
-const isQuoteCartApiEnabled = process.env.ENABLE_QUOTE_CART_API === 'true'
-
 export const productsData: ProductsData = {
   SE: [
     {
       id: 'swedishNew',
-      linkSlug: isQuoteCartApiEnabled ? '/home-accident-needer' : '/new',
+      linkSlug: '/new',
       headline: 'STARTPAGE_UNINSURED_HEADLINE',
       paragraph: 'STARTPAGE_UNINSURED_BODY',
     },
