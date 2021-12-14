@@ -9979,14 +9979,7 @@ export type SwedishApartmentQuoteDetails = {
   zipCode: Scalars['String']
   householdSize: Scalars['Int']
   livingSpace: Scalars['Int']
-  type: SwedishApartmentType
-}
-
-export enum SwedishApartmentType {
-  StudentRent = 'STUDENT_RENT',
-  Rent = 'RENT',
-  StudentBrf = 'STUDENT_BRF',
-  Brf = 'BRF',
+  type: ApartmentType
 }
 
 export type SwedishBankIdExtraInfo = {
