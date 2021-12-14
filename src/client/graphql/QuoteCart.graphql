@@ -6,66 +6,14 @@ query QuoteCart($id: ID!, $locale: Locale!) {
         id
         tag(locale: $locale)
         bundle {
+          displayName(locale: $locale)
           bundleCost {
-            monthlyGross {
-              amount
-              currency
-            }
+            ...BundleCostDataFragment
+          }
+          quotes {
+            ...QuoteDataFragment
           }
         }
-      }
-      bundleCost {
-        monthlyGross {
-          amount
-          currency
-        }
-        monthlyNet {
-          amount
-          currency
-        }
-        monthlyDiscount {
-          amount
-          currency
-        }
-        freeUntil
-      }
-      quotes {
-        id
-        currentInsurer {
-          id
-          displayName
-          switchable
-        }
-        price {
-          amount
-          currency
-        }
-        firstName
-        lastName
-        ssn
-        birthDate
-        quoteDetails {
-          __typename
-          ... on SwedishApartmentQuoteDetails {
-            street
-            zipCode
-            householdSize
-            livingSpace
-            type
-          }
-          ... on SwedishHouseQuoteDetails {
-            street
-          }
-          ... on SwedishAccidentDetails {
-            street
-          }
-        }
-        startDate
-        expiresAt
-        email
-        dataCollectionId
-        typeOfContract
-        initiatedFrom
       }
     }
     campaign {
