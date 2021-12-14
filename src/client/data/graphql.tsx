@@ -295,6 +295,11 @@ export enum AddressOwnership {
   Rent = 'RENT',
 }
 
+export type Adyen = {
+  __typename?: 'Adyen'
+  availablePaymentOptions: Array<Scalars['PaymentMethodsResponse']>
+}
+
 export type Aggregate = {
   __typename?: 'Aggregate'
   count: Scalars['Int']
@@ -8178,11 +8183,7 @@ export enum Project {
   MemberService = 'MemberService',
 }
 
-export type Provider = {
-  __typename?: 'Provider'
-  name: Scalars['String']
-  availablePaymentOptions: Array<Maybe<Scalars['PaymentMethodsResponse']>>
-}
+export type Provider = Adyen | Trustly
 
 export type ProviderStatus = {
   __typename?: 'ProviderStatus'
@@ -9978,7 +9979,14 @@ export type SwedishApartmentQuoteDetails = {
   zipCode: Scalars['String']
   householdSize: Scalars['Int']
   livingSpace: Scalars['Int']
-  type: ApartmentType
+  type: SwedishApartmentType
+}
+
+export enum SwedishApartmentType {
+  StudentRent = 'STUDENT_RENT',
+  Rent = 'RENT',
+  StudentBrf = 'STUDENT_BRF',
+  Brf = 'BRF',
 }
 
 export type SwedishBankIdExtraInfo = {
@@ -10543,6 +10551,11 @@ export type TranslationWhereUniqueInput = {
 
 export type TriggerClaimChatInput = {
   claimTypeId?: Maybe<Scalars['ID']>
+}
+
+export type Trustly = {
+  __typename?: 'Trustly'
+  _?: Maybe<Scalars['Boolean']>
 }
 
 export enum TypeOfContract {
@@ -11437,6 +11450,19 @@ export type Welcome = {
   illustration: Icon
   title: Scalars['String']
   paragraph: Scalars['String']
+}
+
+export type AddCampaignCodeMutationVariables = Exact<{
+  id: Scalars['ID']
+  code: Scalars['String']
+}>
+
+export type AddCampaignCodeMutation = { __typename?: 'Mutation' } & {
+  quoteCart_addCampaign:
+    | ({ __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'> & {
+          campaign?: Maybe<{ __typename?: 'Campaign' } & Pick<Campaign, 'code'>>
+        })
+    | ({ __typename?: 'BasicError' } & { errorMessage: BasicError['message'] })
 }
 
 export type AvailablePaymentMethodsQueryVariables = Exact<{
@@ -12604,6 +12630,66 @@ export const QuoteDataFragmentFragmentDoc = gql`
     }
   }
 `
+export const AddCampaignCodeDocument = gql`
+  mutation AddCampaignCode($id: ID!, $code: String!) {
+    quoteCart_addCampaign(id: $id, code: $code) {
+      ... on QuoteCart {
+        id
+        campaign {
+          code
+        }
+      }
+      ... on BasicError {
+        errorMessage: message
+      }
+    }
+  }
+`
+export type AddCampaignCodeMutationFn = ApolloReactCommon.MutationFunction<
+  AddCampaignCodeMutation,
+  AddCampaignCodeMutationVariables
+>
+
+/**
+ * __useAddCampaignCodeMutation__
+ *
+ * To run a mutation, you first call `useAddCampaignCodeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddCampaignCodeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addCampaignCodeMutation, { data, loading, error }] = useAddCampaignCodeMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useAddCampaignCodeMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AddCampaignCodeMutation,
+    AddCampaignCodeMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    AddCampaignCodeMutation,
+    AddCampaignCodeMutationVariables
+  >(AddCampaignCodeDocument, options)
+}
+export type AddCampaignCodeMutationHookResult = ReturnType<
+  typeof useAddCampaignCodeMutation
+>
+export type AddCampaignCodeMutationResult = ApolloReactCommon.MutationResult<
+  AddCampaignCodeMutation
+>
+export type AddCampaignCodeMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  AddCampaignCodeMutation,
+  AddCampaignCodeMutationVariables
+>
 export const AvailablePaymentMethodsDocument = gql`
   query AvailablePaymentMethods {
     availablePaymentMethods {

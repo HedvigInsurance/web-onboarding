@@ -18,8 +18,12 @@ import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useTextKeys } from 'utils/textKeys'
 import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { useCreateOnboardingQuoteCartMutation } from 'data/graphql'
+import {
+  useCreateOnboardingQuoteCartMutation,
+  useAddCampaignCodeMutation,
+} from 'data/graphql'
 import { useFeature, Features } from 'utils/hooks/useFeature'
+import { CampaignCode } from 'utils/campaignCode'
 import { pushToGTMDataLayer } from '../../utils/tracking/gtm'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
@@ -237,11 +241,24 @@ const useCreateQuoteCartId = ({ skip = false }) => {
     { data, error },
   ] = useCreateOnboardingQuoteCartMutation()
 
-  const createQuoteCart = useCallback(() => {
-    createOnboardingQuoteCart({
+  const [addCampaignCode] = useAddCampaignCodeMutation()
+
+  const createQuoteCart = useCallback(async () => {
+    const result = await createOnboardingQuoteCart({
       variables: { market: apiMarket, locale: isoLocale },
     })
-  }, [createOnboardingQuoteCart, apiMarket, isoLocale])
+    const quoteCartId = result.data?.onboardingQuoteCart_create.id
+    const savedCampaignCode = CampaignCode.get()
+
+    if (quoteCartId && savedCampaignCode !== null) {
+      addCampaignCode({
+        variables: {
+          id: quoteCartId,
+          code: savedCampaignCode,
+        },
+      })
+    }
+  }, [createOnboardingQuoteCart, apiMarket, isoLocale, addCampaignCode])
 
   useEffect(() => {
     if (!skip) {
