@@ -13437,7 +13437,7 @@ export type NorwegianBankIdAuthMutationOptions = ApolloReactCommon.BaseMutationO
 >
 export const QuoteBundleDocument = gql`
   query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
-    quoteBundle(input: $input) {
+    quoteBundle(input: $input, locale: $locale) {
       quotes {
         ...QuoteData
       }
@@ -13501,7 +13501,7 @@ export type QuoteBundleQueryResult = ApolloReactCommon.QueryResult<
 >
 export const QuoteBundleVariantsDocument = gql`
   query QuoteBundleVariants($input: QuoteBundleInput!, $locale: Locale!) {
-    quoteBundle(input: $input) {
+    quoteBundle(input: $input, locale: $locale) {
       possibleVariations {
         id
         tag(locale: $locale)
