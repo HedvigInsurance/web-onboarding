@@ -33,6 +33,7 @@ enum EmbarkStory {
   SwedenNeeder = 'Web Onboarding SE - Needer',
   SwedenSwitcher = 'Web Onboarding SE - Switcher',
   SwedenSwitcherWithoutAccident = 'Web Onboarding SE - Switcher Without Accident',
+  SwedenQuoteCartNeeder = 'Web Onboarding SE - Quote Cart Needer',
 }
 
 export interface ServerSideRoute {
@@ -260,6 +261,16 @@ export const reactPageRoutes: ReactPageRoute[] = [
                 return {
                   baseUrl: `/${locale}/new-member/home-accident-switcher`,
                   name: EmbarkStory.SwedenSwitcher,
+                }
+              case 'home-accident-needer':
+                if (window.hedvigClientConfig.appEnvironment === 'production') {
+                  return {
+                    redirect: `/${locale}/new-member`,
+                  }
+                }
+                return {
+                  baseUrl: `/${locale}/new-member/home-accident-needer`,
+                  name: EmbarkStory.SwedenQuoteCartNeeder,
                 }
             }
             break
