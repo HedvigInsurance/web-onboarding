@@ -144,7 +144,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onCheckoutOpen,
 }) => {
   const textKeys = useTextKeys()
-  const { isoLocale: locale } = useCurrentLocale()
+  const { isoLocale } = useCurrentLocale()
 
   const [campaignCodeModalIsOpen, setCampaignCodeModalIsOpen] = useState(false)
   const [isSidebarVisible, setIsSidebarVisible] = useState(true)
@@ -153,7 +153,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     data: campaignData,
     refetch: refetchAppliedCampaign,
   } = useAppliedCampaignQuery({
-    variables: { quoteCartId, locale },
+    variables: { quoteCartId, locale: isoLocale },
   })
 
   const [addCampaignCode] = useAddCampaignCodeMutation()
@@ -236,7 +236,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <Button
                   size="sm"
                   fullWidth
-                  onClick={() => onCheckoutOpen()}
+                  onClick={onCheckoutOpen}
                   foreground={colorsV3.gray900}
                   background={colorsV3.purple500}
                 >
