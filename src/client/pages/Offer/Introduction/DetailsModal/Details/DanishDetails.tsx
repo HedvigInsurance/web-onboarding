@@ -12,6 +12,7 @@ import {
   AreaInput,
   BooleanInput,
   HomeOwnershipTypeInput,
+  BirthDateInput,
 } from './components/DetailInput'
 import { Content, ContentColumn } from './components/Details.styles'
 
@@ -36,7 +37,7 @@ export const DanishValidationSchema = Yup.object().shape({
 export const DanishDetails: React.FC<{
   formikProps: FormikProps<QuoteInput>
 }> = ({ formikProps }) => {
-  const { birthDate } = useCurrentLocale()
+  const { birthDate: birthDateFormat } = useCurrentLocale()
   return (
     <Content>
       <ContentColumn>
@@ -51,12 +52,9 @@ export const DanishDetails: React.FC<{
             label="DETAILS_MODULE_TABLE_LASTNAME_CELL_LABEL"
             formikProps={formikProps}
           />
-          <DetailInput
+          <BirthDateInput
             name="birthDate"
-            field={{
-              label: 'DETAILS_MODULE_TABLE_BIRTHDATE_CELL_LABEL',
-              placeholder: birthDate.backendFormatExample,
-            }}
+            placeholder={birthDateFormat.backendFormatExample}
             formikProps={formikProps}
           />
         </InputGroup>

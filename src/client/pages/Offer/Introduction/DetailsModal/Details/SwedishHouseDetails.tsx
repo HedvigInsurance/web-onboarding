@@ -29,9 +29,8 @@ export const SwedishHouseValidationSchema = Yup.object().shape({
     householdSize: Yup.number()
       .min(1)
       .required(),
-
     ancillaryArea: Yup.number()
-      .min(1)
+      .min(0)
       .required(),
     numberOfBathrooms: Yup.number()
       .min(0)

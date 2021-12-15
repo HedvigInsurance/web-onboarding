@@ -1,7 +1,8 @@
 import React from 'react'
 import { FormikProps } from 'formik'
 import { MarketLabel } from 'l10n/locales'
-import { QuoteInput, CreateQuoteInsuranceType } from '../types'
+import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
+import { QuoteInput } from '../types'
 import {
   SwedishApartmentDetails,
   SwedishApartmentValidationSchema,
@@ -18,9 +19,9 @@ import { DanishDetails, DanishValidationSchema } from './DanishDetails'
 
 export const getValidationSchema = (
   market: MarketLabel,
-  type: CreateQuoteInsuranceType,
+  type: InsuranceType,
 ) => {
-  const isSwedishHouse = type === CreateQuoteInsuranceType.SwedishHouse
+  const isSwedishHouse = type === InsuranceType.SWEDISH_HOUSE
 
   switch (market) {
     case 'SE':
@@ -31,7 +32,6 @@ export const getValidationSchema = (
       return NorwegianValidationSchema
     case 'DK':
       return DanishValidationSchema
-
     default:
       throw 'Unknown market'
   }
@@ -39,10 +39,10 @@ export const getValidationSchema = (
 
 export const Details: React.FC<{
   market: MarketLabel
-  type: CreateQuoteInsuranceType
+  type: InsuranceType
   formikProps: FormikProps<QuoteInput>
 }> = ({ market, type, formikProps }) => {
-  const isSwedishHouse = type === CreateQuoteInsuranceType.SwedishHouse
+  const isSwedishHouse = type === InsuranceType.SWEDISH_HOUSE
 
   switch (market) {
     case 'SE':

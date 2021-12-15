@@ -66,6 +66,27 @@ export const DetailInput: React.FC<DetailInputProps &
   ) : null
 }
 
+interface BirthDateInputProps {
+  formikProps: FormikProps<QuoteInput>
+  name: string
+  placeholder: string
+}
+
+export const BirthDateInput: React.FC<BirthDateInputProps> = ({
+  name,
+  placeholder,
+  formikProps,
+}) => (
+  <DetailInput
+    name={name}
+    field={{
+      label: 'DETAILS_MODULE_TABLE_BIRTHDATE_CELL_LABEL',
+      placeholder: placeholder,
+    }}
+    formikProps={formikProps}
+  />
+)
+
 type TextInputProps = {
   name: string
   label: string

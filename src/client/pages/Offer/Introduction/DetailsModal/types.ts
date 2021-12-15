@@ -1,15 +1,5 @@
 import { ExtraBuildingInput, CreateQuoteInput } from 'data/graphql'
-
-export enum CreateQuoteInsuranceType {
-  DanishHome = 'danishHomeContents',
-  DanishAccident = 'danishAccident',
-  DanishTravel = 'danishTravel',
-  NorwegianHome = 'norwegianHomeContents',
-  NorwegianTravel = 'norwegianTravel',
-  SwedishApartment = 'apartment',
-  SwedishHouse = 'house',
-  SwedishAccident = 'swedishAccident',
-}
+import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
 
 type QuoteHolderInput = Pick<
   CreateQuoteInput,
@@ -26,7 +16,7 @@ type QuoteHolderInput = Pick<
 
 export type QuoteDetailsInput = {
   street?: string | null
-  type: CreateQuoteInsuranceType
+  type: InsuranceType
   subType?: string | null
   floor?: string | null
   apartment?: string | null
