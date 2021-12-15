@@ -251,12 +251,16 @@ const useCreateQuoteCartId = ({ skip = false }) => {
     const savedCampaignCode = CampaignCode.get()
 
     if (quoteCartId && savedCampaignCode !== null) {
-      addCampaignCode({
-        variables: {
-          id: quoteCartId,
-          code: savedCampaignCode,
-        },
-      })
+      try {
+        await addCampaignCode({
+          variables: {
+            id: quoteCartId,
+            code: savedCampaignCode,
+          },
+        })
+      } catch {
+        CampaignCode.remove()
+      }
     }
   }, [createOnboardingQuoteCart, apiMarket, isoLocale, addCampaignCode])
 
