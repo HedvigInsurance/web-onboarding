@@ -263,7 +263,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </Footer>
               <CampaignCodeModal
                 isOpen={campaignCodeModalIsOpen}
-                close={() => setCampaignCodeModalIsOpen(false)}
+                onClose={() => setCampaignCodeModalIsOpen(false)}
                 onAddCampaignCode={handleAddCampaignCode}
               />
             </Container>

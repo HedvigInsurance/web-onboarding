@@ -80,13 +80,13 @@ const campaignCodeFormSchema = Yup.object({
 
 export type CampaignCodeModalProps = {
   isOpen: boolean
-  close: () => void
+  onClose: () => void
   onAddCampaignCode: (code: string) => Promise<{ hasError: boolean }>
 }
 
 export const CampaignCodeModal = ({
   isOpen,
-  close,
+  onClose,
   onAddCampaignCode,
 }: CampaignCodeModalProps) => {
   const textKeys = useTextKeys()
@@ -131,7 +131,7 @@ export const CampaignCodeModal = ({
               if (hasError) {
                 actions.setFieldError('code', 'SIDEBAR_ADD_DISCOUNT_ERROR')
               } else {
-                close()
+                onClose()
                 actions.resetForm()
                 actions.setErrors({})
               }
@@ -145,7 +145,7 @@ export const CampaignCodeModal = ({
               <ButtonWrapper>
                 <CloseButton
                   onClick={() => {
-                    close()
+                    onClose()
                     resetForm()
                   }}
                 />
