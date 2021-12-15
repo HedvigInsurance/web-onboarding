@@ -11492,6 +11492,14 @@ export type AvailablePaymentMethodsQuery = { __typename?: 'Query' } & {
   } & Pick<AvailablePaymentMethodsResponse, 'paymentMethodsResponse'>
 }
 
+export type CampaignQueryVariables = Exact<{
+  code: Scalars['String']
+}>
+
+export type CampaignQuery = { __typename?: 'Query' } & {
+  campaign: { __typename?: 'Campaign' } & Pick<Campaign, 'code'>
+}
+
 export type CreateDanishHomeAccidentQuoteMutationVariables = Exact<{
   homeInput: CreateQuoteInput
   accidentInput: CreateQuoteInput
@@ -12837,6 +12845,59 @@ export type AvailablePaymentMethodsQueryResult = ApolloReactCommon.QueryResult<
   AvailablePaymentMethodsQuery,
   AvailablePaymentMethodsQueryVariables
 >
+export const CampaignDocument = gql`
+  query Campaign($code: String!) {
+    campaign(code: $code) {
+      code
+    }
+  }
+`
+
+/**
+ * __useCampaignQuery__
+ *
+ * To run a query within a React component, call `useCampaignQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCampaignQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCampaignQuery({
+ *   variables: {
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useCampaignQuery(
+  baseOptions: Apollo.QueryHookOptions<CampaignQuery, CampaignQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<CampaignQuery, CampaignQueryVariables>(
+    CampaignDocument,
+    options,
+  )
+}
+export function useCampaignLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    CampaignQuery,
+    CampaignQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<CampaignQuery, CampaignQueryVariables>(
+    CampaignDocument,
+    options,
+  )
+}
+export type CampaignQueryHookResult = ReturnType<typeof useCampaignQuery>
+export type CampaignLazyQueryHookResult = ReturnType<
+  typeof useCampaignLazyQuery
+>
+export type CampaignQueryResult = ApolloReactCommon.QueryResult<
+  CampaignQuery,
+  CampaignQueryVariables
+>
 export const CreateDanishHomeAccidentQuoteDocument = gql`
   mutation CreateDanishHomeAccidentQuote(
     $homeInput: CreateQuoteInput!
@@ -13560,7 +13621,7 @@ export type NorwegianBankIdAuthMutationOptions = ApolloReactCommon.BaseMutationO
 >
 export const QuoteBundleDocument = gql`
   query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
-    quoteBundle(input: $input) {
+    quoteBundle(input: $input, locale: $locale) {
       quotes {
         ...QuoteData
       }
@@ -13624,7 +13685,7 @@ export type QuoteBundleQueryResult = ApolloReactCommon.QueryResult<
 >
 export const QuoteBundleVariantsDocument = gql`
   query QuoteBundleVariants($input: QuoteBundleInput!, $locale: Locale!) {
-    quoteBundle(input: $input) {
+    quoteBundle(input: $input, locale: $locale) {
       possibleVariations {
         id
         tag(locale: $locale)
