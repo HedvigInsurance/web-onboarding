@@ -317,6 +317,8 @@ export type AgreementCore = {
   activeTo?: Maybe<Scalars['LocalDate']>
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export enum AgreementStatus {
@@ -2066,7 +2068,7 @@ export type Contract = {
    * "The 'best guess' of the agreement that depicts the member's insurance, either
    * the pending, future, current or, if terminated, past agreement
    */
-  currentAgreement: Agreement
+  currentAgreement?: Maybe<Agreement>
   /** The date the contract agreement timeline begin, if it has been activated */
   inception?: Maybe<Scalars['LocalDate']>
   /** The date the contract agreement timelinen end, on if it has been terminated */
@@ -2805,6 +2807,8 @@ export type DanishAccidentAgreement = AgreementCore & {
   address: Address
   numberCoInsured: Scalars['Int']
   type?: Maybe<DanishAccidentLineOfBusiness>
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export type DanishAccidentDetails = {
@@ -2847,6 +2851,8 @@ export type DanishHomeContentAgreement = AgreementCore & {
   numberCoInsured: Scalars['Int']
   squareMeters: Scalars['Int']
   type?: Maybe<DanishHomeContentLineOfBusiness>
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export enum DanishHomeContentLineOfBusiness {
@@ -2886,6 +2892,8 @@ export type DanishTravelAgreement = AgreementCore & {
   address: Address
   numberCoInsured: Scalars['Int']
   type?: Maybe<DanishTravelLineOfBusiness>
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export type DanishTravelDetails = {
@@ -7961,6 +7969,8 @@ export type NorwegianHomeContentAgreement = AgreementCore & {
   numberCoInsured: Scalars['Int']
   squareMeters: Scalars['Int']
   type?: Maybe<NorwegianHomeContentLineOfBusiness>
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export enum NorwegianHomeContentLineOfBusiness {
@@ -7995,6 +8005,8 @@ export type NorwegianTravelAgreement = AgreementCore & {
   status: AgreementStatus
   numberCoInsured: Scalars['Int']
   type?: Maybe<NorwegianTravelLineOfBusiness>
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export type NorwegianTravelDetails = {
@@ -8419,12 +8431,16 @@ export type QueryInsuranceTermsArgs = {
   contractType: TypeOfContract
   locale: Locale
   date?: Maybe<Scalars['LocalDate']>
+  carrier?: Maybe<Scalars['String']>
+  partner?: Maybe<Scalars['String']>
 }
 
 export type QueryTermsAndConditionsArgs = {
   contractType: TypeOfContract
   locale: Locale
   date?: Maybe<Scalars['LocalDate']>
+  carrier?: Maybe<Scalars['String']>
+  partner?: Maybe<Scalars['String']>
 }
 
 export type QueryInsuranceProvidersArgs = {
@@ -9915,6 +9931,8 @@ export type SwedishAccidentAgreement = AgreementCore & {
   numberCoInsured: Scalars['Int']
   squareMeters: Scalars['Int']
   type: SwedishAccidentLineOfBusiness
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export type SwedishAccidentDetails = {
@@ -9944,6 +9962,7 @@ export type SwedishApartmentAgreement = AgreementCore & {
   squareMeters: Scalars['Int']
   type: SwedishApartmentLineOfBusiness
   partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export enum SwedishApartmentLineOfBusiness {
@@ -9989,6 +10008,8 @@ export type SwedishHouseAgreement = AgreementCore & {
   numberOfBathrooms: Scalars['Int']
   extraBuildings: Array<Maybe<ExtraBuilding>>
   isSubleted: Scalars['Boolean']
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
 }
 
 export type SwedishHouseQuoteDetails = {
@@ -11428,6 +11449,14 @@ export type AvailablePaymentMethodsQuery = { __typename?: 'Query' } & {
   } & Pick<AvailablePaymentMethodsResponse, 'paymentMethodsResponse'>
 }
 
+export type CampaignQueryVariables = Exact<{
+  code: Scalars['String']
+}>
+
+export type CampaignQuery = { __typename?: 'Query' } & {
+  campaign: { __typename?: 'Campaign' } & Pick<Campaign, 'code'>
+}
+
 export type CreateDanishHomeAccidentQuoteMutationVariables = Exact<{
   homeInput: CreateQuoteInput
   accidentInput: CreateQuoteInput
@@ -12632,6 +12661,59 @@ export type AvailablePaymentMethodsQueryResult = ApolloReactCommon.QueryResult<
   AvailablePaymentMethodsQuery,
   AvailablePaymentMethodsQueryVariables
 >
+export const CampaignDocument = gql`
+  query Campaign($code: String!) {
+    campaign(code: $code) {
+      code
+    }
+  }
+`
+
+/**
+ * __useCampaignQuery__
+ *
+ * To run a query within a React component, call `useCampaignQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCampaignQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCampaignQuery({
+ *   variables: {
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useCampaignQuery(
+  baseOptions: Apollo.QueryHookOptions<CampaignQuery, CampaignQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<CampaignQuery, CampaignQueryVariables>(
+    CampaignDocument,
+    options,
+  )
+}
+export function useCampaignLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    CampaignQuery,
+    CampaignQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<CampaignQuery, CampaignQueryVariables>(
+    CampaignDocument,
+    options,
+  )
+}
+export type CampaignQueryHookResult = ReturnType<typeof useCampaignQuery>
+export type CampaignLazyQueryHookResult = ReturnType<
+  typeof useCampaignLazyQuery
+>
+export type CampaignQueryResult = ApolloReactCommon.QueryResult<
+  CampaignQuery,
+  CampaignQueryVariables
+>
 export const CreateDanishHomeAccidentQuoteDocument = gql`
   mutation CreateDanishHomeAccidentQuote(
     $homeInput: CreateQuoteInput!
@@ -13355,7 +13437,7 @@ export type NorwegianBankIdAuthMutationOptions = ApolloReactCommon.BaseMutationO
 >
 export const QuoteBundleDocument = gql`
   query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
-    quoteBundle(input: $input) {
+    quoteBundle(input: $input, locale: $locale) {
       quotes {
         ...QuoteData
       }
@@ -13419,7 +13501,7 @@ export type QuoteBundleQueryResult = ApolloReactCommon.QueryResult<
 >
 export const QuoteBundleVariantsDocument = gql`
   query QuoteBundleVariants($input: QuoteBundleInput!, $locale: Locale!) {
-    quoteBundle(input: $input) {
+    quoteBundle(input: $input, locale: $locale) {
       possibleVariations {
         id
         tag(locale: $locale)
