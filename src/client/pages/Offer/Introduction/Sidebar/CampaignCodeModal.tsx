@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { motion } from 'framer-motion'
-import { Form, Formik } from 'formik'
+import { Form, Formik, FormikHelpers } from 'formik'
 import * as Yup from 'yup'
 import hexToRgba from 'hex-to-rgba'
 import { colorsV3 } from '@hedviginsurance/brand'
@@ -78,6 +78,10 @@ const campaignCodeFormSchema = Yup.object({
   code: Yup.string().required('SIDEBAR_ADD_DISCOUNT_ERROR'),
 })
 
+const intialValues = { code: '' }
+
+type AddCampaignFormValues = typeof intialValues
+
 export type CampaignCodeModalProps = {
   isOpen: boolean
   onClose: () => void
@@ -90,6 +94,25 @@ export const CampaignCodeModal = ({
   onAddCampaignCode,
 }: CampaignCodeModalProps) => {
   const textKeys = useTextKeys()
+
+  const handleSubmit = async (
+    { code }: AddCampaignFormValues,
+    actions: FormikHelpers<AddCampaignFormValues>,
+  ) => {
+    try {
+      const { hasError } = await onAddCampaignCode(code)
+
+      if (hasError) {
+        actions.setFieldError('code', 'SIDEBAR_ADD_DISCOUNT_ERROR')
+      } else {
+        onClose()
+        actions.resetForm()
+        actions.setErrors({})
+      }
+    } catch {
+      actions.setFieldError('code', 'SIDEBAR_ADD_DISCOUNT_ERROR')
+    }
+  }
 
   return (
     <Wrapper isOpen={isOpen}>
@@ -123,22 +146,8 @@ export const CampaignCodeModal = ({
         <Formik
           validateOnBlur
           validationSchema={campaignCodeFormSchema}
-          initialValues={{ code: '' }}
-          onSubmit={async ({ code }, actions) => {
-            try {
-              const { hasError } = await onAddCampaignCode(code)
-
-              if (hasError) {
-                actions.setFieldError('code', 'SIDEBAR_ADD_DISCOUNT_ERROR')
-              } else {
-                onClose()
-                actions.resetForm()
-                actions.setErrors({})
-              }
-            } catch {
-              actions.setFieldError('code', 'SIDEBAR_ADD_DISCOUNT_ERROR')
-            }
-          }}
+          initialValues={intialValues}
+          onSubmit={handleSubmit}
         >
           {({ touched, errors, values, isSubmitting, resetForm }) => (
             <>
