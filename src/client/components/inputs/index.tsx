@@ -4,7 +4,7 @@ import { Field, GenericFieldHTMLAttributes } from 'formik'
 import { FieldInputProps } from 'formik/dist/types'
 import React from 'react'
 import InputMask from 'react-input-mask'
-import { WarningIcon } from 'components/icons/Warning'
+import { WarningTriangle } from 'components/icons/WarningTriangle'
 import { ChevronDown } from 'components/icons/ChevronDown'
 
 export interface Mask {
@@ -51,16 +51,16 @@ interface InputVariant {
 
 export const inputVariants: Record<string, InputVariant> = {
   light: {
-    color: colorsV3.gray900,
+    color: colorsV3.gray500,
     background: colorsV3.white,
-    border: colorsV3.gray500,
+    border: colorsV3.gray300,
     borderFocus: colorsV3.gray900,
     error: colorsV3.red600,
   },
   dark: {
     color: colorsV3.gray100,
     background: colorsV3.gray900,
-    border: colorsV3.gray500,
+    border: colorsV3.gray300,
     borderFocus: colorsV3.gray300,
     error: colorsV3.red500,
   },
@@ -79,14 +79,18 @@ const Wrapper = styled.div<{ errors?: string; variant: variantType }>`
       props.errors
         ? inputVariants[props.variant].error
         : inputVariants[props.variant].border};
-  padding: 0.875rem 1.5rem 0.75rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   transition: all 0.2s;
   color: ${(props) => inputVariants[props.variant].color};
 
+  &:hover {
+    border: 1px solid ${colorsV3.gray700};
+  }
+
   &:focus-within {
+    color: ${colorsV3.gray700};
     border: 1px solid
       ${(props) =>
         props.errors
@@ -119,10 +123,10 @@ const StyledField = styled(Field)`
   z-index: 1;
   background: none;
   border: none;
-  font-size: 1.125rem;
-  line-height: 1.625rem;
+  font-size: 1rem;
+  line-height: 1.5;
   color: inherit;
-  padding: 0 2.5rem 0 0;
+  padding: 1rem 0.875rem;
   margin: 0;
 
   :focus {
@@ -234,14 +238,10 @@ export const RawInputField: React.FC<React.InputHTMLAttributes<
 }) => (
   <InputFieldContainer className={className}>
     <Wrapper errors={errors} variant={variant}>
-      <TextWrapper>
-        {label && <Label htmlFor={props.id}>{label}</Label>}
-        <StyledRawInput {...props} />
-      </TextWrapper>
+      {label && <Label htmlFor={props.id}>{label}</Label>}
+      <StyledRawInput {...props} />
       <SymbolWrapper>
-        {(errors || showErrorIcon) && (
-          <WarningIcon color={inputVariants[variant].error} />
-        )}
+        {(errors || showErrorIcon) && <WarningTriangle />}
       </SymbolWrapper>
     </Wrapper>
     {errors && <ErrorText variant={variant}>{errors}</ErrorText>}
@@ -262,8 +262,8 @@ export const InputField: React.FC<TextInputProps &
 }) => (
   <>
     <Wrapper errors={errors} variant={variant}>
+      <Label>{label}</Label>
       <TextWrapper>
-        <Label>{label}</Label>
         {mask ? (
           <StyledField {...props}>
             {({ field }: any) => (
@@ -293,13 +293,11 @@ export const InputField: React.FC<TextInputProps &
         )}
       </TextWrapper>
       <SymbolWrapper>
-        {options && options.length > 0 ? (
-          <ChevronDown />
-        ) : (
-          errors && <WarningIcon color={inputVariants[variant].error} />
-        )}
+        {options && options.length > 0 && <ChevronDown />}
       </SymbolWrapper>
     </Wrapper>
+
+    {errors && <WarningTriangle />}
     {showErrorMessage && <ErrorText variant={variant}>{errors}</ErrorText>}
   </>
 )
