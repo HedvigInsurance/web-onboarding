@@ -295,6 +295,11 @@ export enum AddressOwnership {
   Rent = 'RENT',
 }
 
+export type Adyen = {
+  __typename?: 'Adyen'
+  availablePaymentOptions: Array<Scalars['PaymentMethodsResponse']>
+}
+
 export type Aggregate = {
   __typename?: 'Aggregate'
   count: Scalars['Int']
@@ -8178,11 +8183,7 @@ export enum Project {
   MemberService = 'MemberService',
 }
 
-export type Provider = {
-  __typename?: 'Provider'
-  name: Scalars['String']
-  availablePaymentOptions: Array<Maybe<Scalars['PaymentMethodsResponse']>>
-}
+export type Provider = Adyen | Trustly
 
 export type ProviderStatus = {
   __typename?: 'ProviderStatus'
@@ -10552,6 +10553,11 @@ export type TriggerClaimChatInput = {
   claimTypeId?: Maybe<Scalars['ID']>
 }
 
+export type Trustly = {
+  __typename?: 'Trustly'
+  _?: Maybe<Scalars['Boolean']>
+}
+
 export enum TypeOfContract {
   SeHouse = 'SE_HOUSE',
   SeApartmentBrf = 'SE_APARTMENT_BRF',
@@ -11453,7 +11459,9 @@ export type AddCampaignCodeMutationVariables = Exact<{
 
 export type AddCampaignCodeMutation = { __typename?: 'Mutation' } & {
   quoteCart_addCampaign:
-    | ({ __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'>)
+    | ({ __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'> & {
+          campaign?: Maybe<{ __typename?: 'Campaign' } & Pick<Campaign, 'code'>>
+        })
     | ({ __typename?: 'BasicError' } & { errorMessage: BasicError['message'] })
 }
 
@@ -12662,6 +12670,9 @@ export const AddCampaignCodeDocument = gql`
     quoteCart_addCampaign(id: $id, code: $code) {
       ... on QuoteCart {
         id
+        campaign {
+          code
+        }
       }
       ... on BasicError {
         errorMessage: message
