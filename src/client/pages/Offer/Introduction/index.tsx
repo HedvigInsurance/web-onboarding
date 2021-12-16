@@ -64,6 +64,7 @@ const ContentContainer = styled.div`
     align-items: flex-start;
   }
 `
+
 const HeroBackgroundImage = styled(BackgroundImage)`
   height: ${HERO_HEIGHT}px;
 
