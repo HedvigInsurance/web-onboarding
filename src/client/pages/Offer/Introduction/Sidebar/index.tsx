@@ -149,29 +149,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const [campaignCodeModalIsOpen, setCampaignCodeModalIsOpen] = useState(false)
   const [isSidebarVisible, setIsSidebarVisible] = useState(true)
 
-  const {
-    data: campaignData,
-    refetch: refetchAppliedCampaign,
-  } = useAppliedCampaignQuery({
+  const { data: campaignData } = useAppliedCampaignQuery({
     variables: { quoteCartId, locale: isoLocale },
   })
 
   const [addCampaignCode] = useAddCampaignCodeMutation()
-  const [removeCampaignCode] = useRemoveCampaignCodeMutation()
-
-  const refetchAll = useCallback(async () => {
-    await refetchOfferData()
-    await refetchAppliedCampaign()
-  }, [refetchOfferData, refetchAppliedCampaign])
+  const [removeCampaignCode] = useRemoveCampaignCodeMutation({
+    refetchQueries: ['QuoteCart'],
+    awaitRefetchQueries: true,
+  })
 
   const campaign = campaignData?.quoteCart.campaign
   const campaignText = campaign?.displayValue ?? ''
-
-  const isNorwegianBundle = isBundle(offerData) && isNorwegian(offerData)
-  const discounts: Array<React.ReactNode> = [
-    ...(isNorwegianBundle ? [textKeys.SIDEBAR_NO_BUNDLE_DISCOUNT_TEXT()] : []),
-    ...(campaignText ? [campaignText] : []),
-  ]
 
   const handleAddCampaignCode = useCallback(
     async (code: string) => {
@@ -180,19 +169,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
       })
       const hasError = result?.quoteCart_addCampaign.__typename === 'BasicError'
 
-      if (!hasError) {
-        await refetchAll()
-      }
-
       return { hasError }
     },
-    [quoteCartId, addCampaignCode, refetchAll],
+    [quoteCartId, addCampaignCode],
   )
 
   const handleRemoveCampaign = useCallback(async () => {
     await removeCampaignCode({ variables: { quoteCartId } })
-    await refetchAll()
-  }, [quoteCartId, removeCampaignCode, refetchAll])
+  }, [quoteCartId, removeCampaignCode])
+
+  const isNorwegianBundle = isBundle(offerData) && isNorwegian(offerData)
+  const discounts: Array<React.ReactNode> = [
+    ...(isNorwegianBundle ? [textKeys.SIDEBAR_NO_BUNDLE_DISCOUNT_TEXT()] : []),
+    ...(campaignText ? [campaignText] : []),
+  ]
 
   const showRemoveCampaignButton =
     campaign && campaign.incentive?.__typename !== 'NoDiscount'
