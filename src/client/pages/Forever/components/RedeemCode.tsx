@@ -92,7 +92,7 @@ const SubmitButton = styled(Button)<{ disabled?: boolean }>`
   height: 3.5rem;
   margin: 0 auto 1rem;
   font-size: 1rem;
-  color: ${(props) => (props.disabled ? colorsV3.gray500 : colorsV3.gray900)};
+  color: ${(props) => (props.disabled ? colorsV3.gray300 : colorsV3.gray900)};
   background-color: ${(props) =>
     props.disabled ? colorsV3.gray800 : colorsV3.purple500};
 
@@ -190,7 +190,6 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
                   placeholder=""
                   touched={touched.code}
                   errors={errors.code ? textKeys[errors.code]() : ''}
-                  variant="dark"
                 />
               </CodeField>
             </Main>
