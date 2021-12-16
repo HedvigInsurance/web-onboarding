@@ -97,7 +97,6 @@ export const Introduction: React.FC<Props> = ({
                 quoteCartId={quoteCartId}
                 offerData={offerData}
                 allQuotes={allQuotes}
-                refetchOfferData={refetch}
               />
               {hasDataCollection && (
                 <InsuranceProviderWrapper>

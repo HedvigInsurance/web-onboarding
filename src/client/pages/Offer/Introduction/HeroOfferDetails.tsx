@@ -17,7 +17,6 @@ type Props = {
   quoteCartId: string
   offerData: OfferData
   allQuotes: BundledQuote[]
-  refetchOfferData: () => Promise<void>
 }
 
 const Wrapper = styled.div`
@@ -108,7 +107,6 @@ export const HeroOfferDetails: React.FC<Props> = ({
   quoteCartId,
   offerData,
   allQuotes,
-  refetchOfferData,
 }) => {
   const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false)
   const { person, quotes } = offerData
@@ -146,7 +144,6 @@ export const HeroOfferDetails: React.FC<Props> = ({
       <DetailsModal
         quoteCartId={quoteCartId}
         allQuotes={allQuotes}
-        refetch={refetchOfferData}
         isVisible={detailsModalIsOpen}
         onClose={() => setDetailsModalIsOpen(false)}
       />

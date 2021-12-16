@@ -90,12 +90,10 @@ const LoadingDimmer = styled.div<{ visible: boolean }>`
 type DetailsModalProps = {
   quoteCartId: string
   allQuotes: BundledQuote[]
-  refetch: () => Promise<void>
 }
 
 export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   quoteCartId,
-  refetch,
   allQuotes,
   isVisible,
   onClose,
@@ -127,15 +125,22 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
 
   if (!selectedQuoteBundle) return null
 
-  const mainQuote = selectedQuoteBundle?.bundle.quotes[0]
+  const {
+    firstName,
+    lastName,
+    birthDate,
+    ssn,
+    data: mainQuoteData,
+  } = selectedQuoteBundle?.bundle.quotes[0]
+  const { type: mainQuoteType, numberCoInsured } = mainQuoteData
   const initialValues = {
-    firstName: mainQuote.firstName,
-    lastName: mainQuote.lastName,
-    birthDate: mainQuote.birthDate,
-    ssn: mainQuote.ssn,
+    firstName,
+    lastName,
+    birthDate,
+    ssn,
     data: {
-      ...mainQuote.data,
-      householdSize: mainQuote.data.numberCoInsured + 1,
+      ...mainQuoteData,
+      householdSize: numberCoInsured + 1,
     },
   } as QuoteInput
 
@@ -147,19 +152,31 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
     return createQuoteBundle({
       variables: {
         quoteCartId,
-        quotes: allQuotes.map(({ data: { type, typeOfContract } }) => {
+        quotes: allQuotes.map(({ data: { id, type, typeOfContract } }) => {
+          const {
+            firstName,
+            lastName,
+            birthDate,
+            ssn,
+            data: { householdSize },
+          } = form
           return {
-            ...form,
+            firstName,
+            lastName,
+            birthDate,
+            ssn,
             data: {
               ...form.data,
-              numberCoInsured:
-                form.data.householdSize && form.data.householdSize - 1,
+              numberCoInsured: householdSize && householdSize - 1,
+              id,
               type,
               typeOfContract,
             },
           }
         }),
       },
+      refetchQueries: ['quoteCart'],
+      awaitRefetchQueries: true,
     })
   }
 
@@ -169,7 +186,6 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
       data?.quoteCart_createQuoteBundle.__typename === 'CreateQuoteBundleError'
 
     if (!isLimitHit) {
-      await refetch()
       onClose()
     }
   }
@@ -180,10 +196,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
       <Container>
         <Formik
           initialValues={initialValues}
-          validationSchema={getValidationSchema(
-            marketLabel,
-            mainQuote.data.type,
-          )}
+          validationSchema={getValidationSchema(marketLabel, mainQuoteType)}
           onSubmit={onSubmit}
         >
           {(formikProps) => (
@@ -191,7 +204,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
               <Headline>{textKeys.DETAILS_MODULE_HEADLINE()}</Headline>
               <Details
                 market={marketLabel}
-                type={mainQuote.data.type}
+                type={mainQuoteType}
                 formikProps={formikProps}
               />
               <Footer>
