@@ -137,6 +137,7 @@ export type AcceptedReferral = {
 
 export type ActionRequired = {
   __typename?: 'ActionRequired'
+  paymentTokenId: Scalars['ID']
   action: Scalars['CheckoutPaymentAction']
 }
 
@@ -2041,6 +2042,11 @@ export type ConcurrentInception = {
   currentInsurer?: Maybe<CurrentInsurer>
 }
 
+export type ConnectPaymentFinished = {
+  __typename?: 'ConnectPaymentFinished'
+  resultCode: Scalars['String']
+}
+
 export type ConnectPaymentInput = {
   paymentMethodDetails: Scalars['PaymentMethodDetails']
   channel: PaymentConnectChannel
@@ -2048,7 +2054,7 @@ export type ConnectPaymentInput = {
   returnUrl: Scalars['String']
 }
 
-export type ConnectPaymentResult = PaymentResultCode | ActionRequired
+export type ConnectPaymentResult = ConnectPaymentFinished | ActionRequired
 
 export type ConnectPositionInput = {
   /** Connect document after specified document */
@@ -2646,7 +2652,7 @@ export type CreateQuoteBundleError = Error & {
   message: Scalars['String']
   /**  The type of the quote that could not be created.  */
   type: Scalars['String']
-  limits: Array<UnderwritingLimit>
+  limits?: Maybe<Array<UnderwritingLimit>>
 }
 
 export type CreateQuoteBundleInput = {
@@ -7600,7 +7606,7 @@ export type Mutation = {
   login_resendOtp: Scalars['ID']
   paymentConnection_connectPayment: ConnectPaymentResult
   paymentConnection_submitAdditionalPaymentDetails: ConnectPaymentResult
-  paymentConnection_submitAdyenRedirection: PaymentResultCode
+  paymentConnection_submitAdyenRedirection: ConnectPaymentFinished
   /**
    * Create a new onboarding session. This is not an authentication session, but rather an object that
    * ties the onboarding journey together.
@@ -7804,12 +7810,12 @@ export type MutationPaymentConnection_ConnectPaymentArgs = {
 }
 
 export type MutationPaymentConnection_SubmitAdditionalPaymentDetailsArgs = {
-  id: Scalars['ID']
+  paymentTokenId: Scalars['ID']
   input: AdditionalPaymentDetailsInput
 }
 
 export type MutationPaymentConnection_SubmitAdyenRedirectionArgs = {
-  id: Scalars['ID']
+  paymentTokenId: Scalars['ID']
   input: SubmitAdyenRedirectionInput
 }
 
@@ -8072,11 +8078,6 @@ export type PaymentConnection = {
   providers: Array<Maybe<Provider>>
 }
 
-export type PaymentResultCode = {
-  __typename?: 'PaymentResultCode'
-  resultCode: Scalars['String']
-}
-
 export enum PayoutMethodStatus {
   Active = 'ACTIVE',
   Pending = 'PENDING',
@@ -8161,13 +8162,6 @@ export type PreviousInsurer = {
   switchable: Scalars['Boolean']
 }
 
-export type Price = {
-  __typename?: 'Price'
-  monthlyGross: MonetaryAmountV2
-  monthlyDiscount: MonetaryAmountV2
-  monthlyNet: MonetaryAmountV2
-}
-
 export enum Project {
   NotificationService = 'NotificationService',
   Underwriter = 'Underwriter',
@@ -8235,8 +8229,7 @@ export type Query = {
   availablePayoutMethods: AvailablePaymentMethodsResponse
   /** Returns the active payout method which the member chose to tokenize */
   activePayoutMethods?: Maybe<ActivePayoutMethodsResponse>
-  /** Returns campaign associated with code */
-  campaign: Campaign
+  campaign?: Maybe<Campaign>
   /** Returns information about the authed member's referralCampaign and referrals */
   referralInformation: Referrals
   /** Returns redeemed campaigns belonging to authedUser */
@@ -8251,17 +8244,11 @@ export type Query = {
   quote: Quote
   lastQuoteOfMember: Quote
   signMethodForQuotes: SignMethod
-  commonClaims: Array<CommonClaim>
   news: Array<News>
   welcome: Array<Welcome>
   perils: Array<PerilV2>
-  insuranceTerms: Array<InsuranceTerm>
-  /** Returns termsAndConditions from promise-cms */
-  termsAndConditions: InsuranceTerm
   insuranceProviders: Array<InsuranceProvider>
-  insurableLimits: Array<InsurableLimit>
   referralTerms: ReferralTerm
-  howClaimsWork: Array<ClaimsExplainerPage>
   /** Used */
   keyGearItems: Array<KeyGearItem>
   keyGearItem?: Maybe<KeyGearItem>
@@ -8305,6 +8292,12 @@ export type Query = {
   availableLocales: Array<Locale>
   /** Returns perils from promise-cms */
   contractPerils: Array<PerilV2>
+  /** Returns termsAndConditions from promise-cms */
+  termsAndConditions: InsuranceTerm
+  insuranceTerms: Array<InsuranceTerm>
+  insurableLimits: Array<InsurableLimit>
+  commonClaims: Array<CommonClaim>
+  howClaimsWork: Array<ClaimsExplainerPage>
   embarkStory?: Maybe<EmbarkStory>
   /** returns names of all available embark stories */
   embarkStoryNames: Array<Scalars['String']>
@@ -8408,10 +8401,6 @@ export type QuerySignMethodForQuotesArgs = {
   input: Array<Scalars['ID']>
 }
 
-export type QueryCommonClaimsArgs = {
-  locale: Locale
-}
-
 export type QueryNewsArgs = {
   platform: Platform
   sinceVersion: Scalars['String']
@@ -8428,36 +8417,11 @@ export type QueryPerilsArgs = {
   locale: Locale
 }
 
-export type QueryInsuranceTermsArgs = {
-  contractType: TypeOfContract
-  locale: Locale
-  date?: Maybe<Scalars['LocalDate']>
-  carrier?: Maybe<Scalars['String']>
-  partner?: Maybe<Scalars['String']>
-}
-
-export type QueryTermsAndConditionsArgs = {
-  contractType: TypeOfContract
-  locale: Locale
-  date?: Maybe<Scalars['LocalDate']>
-  carrier?: Maybe<Scalars['String']>
-  partner?: Maybe<Scalars['String']>
-}
-
 export type QueryInsuranceProvidersArgs = {
   locale: Locale
 }
 
-export type QueryInsurableLimitsArgs = {
-  contractType: TypeOfContract
-  locale: Locale
-}
-
 export type QueryReferralTermsArgs = {
-  locale: Locale
-}
-
-export type QueryHowClaimsWorkArgs = {
   locale: Locale
 }
 
@@ -8514,6 +8478,35 @@ export type QueryAngelStoryArgs = {
 
 export type QueryContractPerilsArgs = {
   contractType: TypeOfContract
+  locale: Locale
+}
+
+export type QueryTermsAndConditionsArgs = {
+  contractType: TypeOfContract
+  locale: Locale
+  date?: Maybe<Scalars['LocalDate']>
+  carrier?: Maybe<Scalars['String']>
+  partner?: Maybe<Scalars['String']>
+}
+
+export type QueryInsuranceTermsArgs = {
+  contractType: TypeOfContract
+  locale: Locale
+  date?: Maybe<Scalars['LocalDate']>
+  carrier?: Maybe<Scalars['String']>
+  partner?: Maybe<Scalars['String']>
+}
+
+export type QueryInsurableLimitsArgs = {
+  contractType: TypeOfContract
+  locale: Locale
+}
+
+export type QueryCommonClaimsArgs = {
+  locale: Locale
+}
+
+export type QueryHowClaimsWorkArgs = {
   locale: Locale
 }
 
@@ -9979,7 +9972,14 @@ export type SwedishApartmentQuoteDetails = {
   zipCode: Scalars['String']
   householdSize: Scalars['Int']
   livingSpace: Scalars['Int']
-  type: ApartmentType
+  type: SwedishApartmentType
+}
+
+export enum SwedishApartmentType {
+  StudentRent = 'STUDENT_RENT',
+  Rent = 'RENT',
+  StudentBrf = 'STUDENT_BRF',
+  Brf = 'BRF',
 }
 
 export type SwedishBankIdExtraInfo = {
@@ -11473,7 +11473,7 @@ export type CampaignQueryVariables = Exact<{
 }>
 
 export type CampaignQuery = { __typename?: 'Query' } & {
-  campaign: { __typename?: 'Campaign' } & Pick<Campaign, 'code'>
+  campaign?: Maybe<{ __typename?: 'Campaign' } & Pick<Campaign, 'code'>>
 }
 
 export type CreateDanishHomeAccidentQuoteMutationVariables = Exact<{
@@ -11591,8 +11591,13 @@ export type CreateQuoteBundleMutation = { __typename?: 'Mutation' } & {
           >
         })
     | ({ __typename?: 'CreateQuoteBundleError' } & {
-        limits: Array<
-          { __typename?: 'UnderwritingLimit' } & Pick<UnderwritingLimit, 'code'>
+        limits?: Maybe<
+          Array<
+            { __typename?: 'UnderwritingLimit' } & Pick<
+              UnderwritingLimit,
+              'code'
+            >
+          >
         >
       })
 }
