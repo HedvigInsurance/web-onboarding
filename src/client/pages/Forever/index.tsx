@@ -142,7 +142,7 @@ const QuoteCartForeverPage: React.FC<ForeverProps> = ({
     const { code } = form
     try {
       const result = await fetchCampaign({ code })
-      if (result.data.campaign.code) {
+      if (result.data.campaign?.code) {
         CampaignCode.save(code)
         history.push({ pathname: `/${pathLocale}/new-member` })
       } else {
