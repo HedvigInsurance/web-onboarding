@@ -8,8 +8,12 @@ import { Button } from 'components/buttons'
 import { InputField } from 'components/inputs'
 import { LoadingDots } from 'components/LoadingDots/LoadingDots'
 import { useTextKeys } from 'utils/textKeys'
-import { LanguagePicker } from '../../Embark/LanguagePicker'
-
+import {
+  LanguagePicker,
+  Divider,
+  LinkOption,
+  ActiveOption,
+} from '../../Embark/LanguagePicker'
 export interface RedeemCodeFormValue {
   code: string
 }
@@ -75,6 +79,20 @@ const Footer = styled.div`
   justify-content: center;
   align-items: center;
   padding: 1rem 0 6rem;
+  color: black;
+
+  ${ActiveOption} {
+    color: ${colorsV3.gray700};
+  }
+  ${LinkOption} {
+    color: ${colorsV3.gray700};
+    &:hover {
+      color: ${colorsV3.gray700};
+    }
+  }
+  ${Divider} {
+    background-color: ${colorsV3.gray700};
+  }
 `
 
 const Paragraph = styled.p`
@@ -117,10 +135,10 @@ const Info = styled.div`
   }
 
   a {
-    color: ${colorsV3.gray100};
+    color: ${colorsV3.gray900};
 
     &:hover {
-      color: ${colorsV3.gray500};
+      color: ${colorsV3.purple500};
     }
   }
 `

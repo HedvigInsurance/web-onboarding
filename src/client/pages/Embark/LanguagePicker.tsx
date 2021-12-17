@@ -11,13 +11,13 @@ const Wrapper = styled.div`
   height: 1.5rem;
 `
 
-const ActiveOption = styled.div`
+export const ActiveOption = styled.div`
   color: ${colorsV3.gray100};
   font-size: 1rem;
   cursor: default;
 `
 
-const LinkOption = styled(Link)`
+export const LinkOption = styled(Link)`
   text-decoration: none;
   color: ${colorsV3.gray100};
   font-size: 1rem;
@@ -34,7 +34,7 @@ const LinkOption = styled(Link)`
   }
 `
 
-const Divider = styled.span`
+export const Divider = styled.span`
   height: 100%;
   width: 1px;
   background-color: ${colorsV3.gray100};
