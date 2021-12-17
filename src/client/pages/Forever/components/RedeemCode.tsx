@@ -8,8 +8,12 @@ import { Button } from 'components/buttons'
 import { InputField } from 'components/inputs'
 import { LoadingDots } from 'components/LoadingDots/LoadingDots'
 import { useTextKeys } from 'utils/textKeys'
-import { LanguagePicker } from '../../Embark/LanguagePicker'
-
+import {
+  LanguagePicker,
+  Divider,
+  LinkOption,
+  ActiveOption,
+} from '../../Embark/LanguagePicker'
 export interface RedeemCodeFormValue {
   code: string
 }
@@ -75,11 +79,24 @@ const Footer = styled.div`
   justify-content: center;
   align-items: center;
   padding: 1rem 0 6rem;
+
+  ${ActiveOption} {
+    color: ${colorsV3.gray700};
+  }
+  ${LinkOption} {
+    color: ${colorsV3.gray700};
+    &:hover {
+      color: ${colorsV3.gray700};
+    }
+  }
+  ${Divider} {
+    background-color: ${colorsV3.gray700};
+  }
 `
 
 const Paragraph = styled.p`
   text-align: center;
-  color: ${colorsV3.gray500};
+  color: ${colorsV3.gray700};
   font-size: 1rem;
 
   @media (min-width: 800px) {
@@ -94,7 +111,7 @@ const SubmitButton = styled(Button)<{ disabled?: boolean }>`
   font-size: 1rem;
   color: ${(props) => (props.disabled ? colorsV3.gray500 : colorsV3.gray900)};
   background-color: ${(props) =>
-    props.disabled ? colorsV3.gray800 : colorsV3.purple500};
+    props.disabled ? colorsV3.gray300 : colorsV3.purple500};
 
   @media (min-width: 480px) {
     max-width: ${INPUT_MAX_WIDTH};
@@ -105,7 +122,7 @@ const Info = styled.div`
   max-width: calc(${INPUT_MAX_WIDTH} + 2 * 2rem);
   margin-top: 0;
   font-size: 0.6875rem;
-  color: ${colorsV3.gray500};
+  color: ${colorsV3.gray700};
   text-align: center;
   line-height: 1.2;
   padding-bottom: 1.5rem;
@@ -117,10 +134,10 @@ const Info = styled.div`
   }
 
   a {
-    color: ${colorsV3.gray100};
+    color: ${colorsV3.purple900};
 
     &:hover {
-      color: ${colorsV3.gray500};
+      color: ${colorsV3.purple900};
     }
   }
 `
@@ -187,10 +204,9 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
                   name="code"
                   type="text"
                   autoComplete="off"
-                  placeholder=""
+                  placeholder="7VEKCAG"
                   touched={touched.code}
                   errors={errors.code ? textKeys[errors.code]() : ''}
-                  variant="dark"
                 />
               </CodeField>
             </Main>
