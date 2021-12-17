@@ -5,9 +5,9 @@ import {
   PerilV2,
   TypeOfContract,
   DanishHomeContentsType,
-  ApartmentType,
   CurrentInsurer,
   InsuranceTerm,
+  SwedishApartmentType,
 } from 'data/graphql'
 import { OfferData } from '../../pages/OfferNew/types'
 
@@ -236,7 +236,7 @@ export const seApartementBrf: OfferData = {
         zipCode: '12345',
         householdSize: 2,
         livingSpace: 42,
-        type: ApartmentType.Brf,
+        type: SwedishApartmentType.Brf,
         __typename: 'SwedishApartmentQuoteDetails',
       },
       dataCollectionId: null,
@@ -296,7 +296,7 @@ export const seApartmentBrfAccident: OfferData = {
         householdSize: 2,
         livingSpace: 42,
 
-        type: ApartmentType.Brf,
+        type: SwedishApartmentType.Brf,
         __typename: 'SwedishApartmentQuoteDetails',
       },
       dataCollectionId: null,

@@ -13,9 +13,9 @@ import {
   TypeOfContract,
   DanishAccidentDetails,
   DanishTravelDetails,
-  ApartmentType,
   QuoteBundleVariant,
   SwedishAccidentDetails,
+  SwedishApartmentType,
 } from 'data/graphql'
 import { LocaleLabel, locales } from 'l10n/locales'
 import { birthDateFormats } from 'l10n/birthDateAndSsnFormats'
@@ -211,12 +211,12 @@ export const hasCurrentInsurer = (quote: OfferQuote): boolean =>
 
 export const isStudent = (details: QuoteDetails) => {
   const studentQuoteTypesSe = [
-    ApartmentType.StudentBrf,
-    ApartmentType.StudentRent,
+    SwedishApartmentType.StudentBrf,
+    SwedishApartmentType.StudentRent,
   ]
   if (
     'type' in details &&
-    studentQuoteTypesSe.includes(details.type as ApartmentType)
+    studentQuoteTypesSe.includes(details.type as SwedishApartmentType)
   ) {
     return true
   }
@@ -237,7 +237,7 @@ export const isSwedishBRF = (
   details: QuoteDetails,
 ): details is SwedishApartmentQuoteDetails =>
   details.__typename === 'SwedishApartmentQuoteDetails' &&
-  details.type === ApartmentType.Brf
+  details.type === SwedishApartmentType.Brf
 
 export const isSwedishHouse = (
   details: QuoteDetails,
