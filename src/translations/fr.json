@@ -315,5 +315,14 @@
   "ACCIDENT_SWEDEN_UPSELL_TITLE": "",
   "ACCIDENT_SWEDEN_UPSELL_DESCRIPTION": "",
   "ACCIDENT_SWEDEN_UPSELL_BUTTON": "",
-  "PHONE_OPENS_AT": ""
+  "PHONE_OPENS_AT": "",
+  "CHECKOUT_SSN_LABEL_GLOBAL": "",
+  "SIDEBAR_ADD_CAMPAIGN_HEADLINE": "Ajouter un code promo",
+  "SIDEBAR_ADD_CAMPAIGN_BODY": "Si vous avez un code promo, Saisissez-le ci-dessous.",
+  "SIDEBAR_ADD_CAMPAIGN_CELL_LABEL": "Code promo",
+  "SIDEBAR_ADD_CAMPAIGN_CELL_PLACEHOLDER": "Votre code",
+  "SIDEBAR_ADD_CAMPAIGN_BUTTON": "Ajouter un code promo",
+  "SIDEBAR_NO_BUNDLE_CAMPAIGN_TEXT": "",
+  "SIDEBAR_REMOVE_CAMPAIGN_BUTTON": "Supprimer le code promo",
+  "SIDEBAR_ADD_CAMPAIGN_ERROR": "Le code promo n'est pas valide."
 }

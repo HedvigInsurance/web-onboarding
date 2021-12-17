@@ -39,6 +39,7 @@ const Container = styled(motion.div)`
   border: 1px solid ${colorsV3.gray300};
   position: relative;
 `
+
 const ButtonWrapper = styled.div`
   position: absolute;
   top: 1rem;
@@ -75,7 +76,7 @@ const ButtonLoadingIndicator = styled(LoadingDots)`
 `
 
 const campaignCodeFormSchema = Yup.object({
-  code: Yup.string().required('SIDEBAR_ADD_DISCOUNT_ERROR'),
+  code: Yup.string().required('SIDEBAR_ADD_CAMPAIGN_ERROR'),
 })
 
 const intialValues = { code: '' }
@@ -103,14 +104,14 @@ export const CampaignCodeModal = ({
       const { hasError } = await onAddCampaignCode(code)
 
       if (hasError) {
-        actions.setFieldError('code', 'SIDEBAR_ADD_DISCOUNT_ERROR')
+        actions.setFieldError('code', 'SIDEBAR_ADD_CAMPAIGN_ERROR')
       } else {
         onClose()
         actions.resetForm()
         actions.setErrors({})
       }
     } catch {
-      actions.setFieldError('code', 'SIDEBAR_ADD_DISCOUNT_ERROR')
+      actions.setFieldError('code', 'SIDEBAR_ADD_CAMPAIGN_ERROR')
     }
   }
 
@@ -141,8 +142,8 @@ export const CampaignCodeModal = ({
           },
         }}
       >
-        <Title>{textKeys.SIDEBAR_ADD_DISCOUNT_HEADLINE()}</Title>
-        <Paragraph>{textKeys.SIDEBAR_ADD_DISCOUNT_BODY()}</Paragraph>
+        <Title>{textKeys.SIDEBAR_ADD_CAMPAIGN_HEADLINE()}</Title>
+        <Paragraph>{textKeys.SIDEBAR_ADD_CAMPAIGN_BODY()}</Paragraph>
         <Formik
           validateOnBlur
           validationSchema={campaignCodeFormSchema}
@@ -162,8 +163,8 @@ export const CampaignCodeModal = ({
 
               <Form>
                 <InputField
-                  label={textKeys.SIDEBAR_ADD_DISCOUNT_CELL_LABEL()}
-                  placeholder={textKeys.SIDEBAR_ADD_DISCOUNT_CELL_PLACEHOLDER()}
+                  label={textKeys.SIDEBAR_ADD_CAMPAIGN_CELL_LABEL()}
+                  placeholder={textKeys.SIDEBAR_ADD_CAMPAIGN_CELL_PLACEHOLDER()}
                   name="code"
                   type="text"
                   autoComplete="off"
@@ -177,7 +178,7 @@ export const CampaignCodeModal = ({
                     fullWidth
                     disabled={!values.code || isSubmitting}
                   >
-                    {textKeys.SIDEBAR_ADD_DISCOUNT_BUTTON()}
+                    {textKeys.SIDEBAR_ADD_CAMPAIGN_BUTTON()}
                     {isSubmitting && <ButtonLoadingIndicator />}
                   </Button>
                 </Footer>

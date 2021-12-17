@@ -130,6 +130,7 @@ const FooterExtraActions = styled.div`
   margin-top: 0.75rem;
   margin-bottom: 0.25rem;
 `
+
 export type SidebarProps = {
   quoteCartId: string
   offerData: OfferData
@@ -180,7 +181,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const isNorwegianBundle = isBundle(offerData) && isNorwegian(offerData)
   const discounts: Array<React.ReactNode> = [
-    ...(isNorwegianBundle ? [textKeys.SIDEBAR_NO_BUNDLE_DISCOUNT_TEXT()] : []),
+    ...(isNorwegianBundle ? [textKeys.SIDEBAR_NO_BUNDLE_CAMPAIGN_TEXT()] : []),
     ...(campaignText ? [campaignText] : []),
   ]
 
@@ -238,7 +239,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     <TextButton
                       onClick={() => setCampaignCodeModalIsOpen(true)}
                     >
-                      {textKeys.SIDEBAR_ADD_DISCOUNT_BUTTON()}
+                      {textKeys.SIDEBAR_ADD_CAMPAIGN_BUTTON()}
                     </TextButton>
                   )}
                   {showRemoveCampaignButton && (
@@ -246,7 +247,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       color={colorsV3.red500}
                       onClick={handleRemoveCampaign}
                     >
-                      {textKeys.SIDEBAR_REMOVE_DISCOUNT_BUTTON()}
+                      {textKeys.SIDEBAR_REMOVE_CAMPAIGN_BUTTON()}
                     </TextButton>
                   )}
                 </FooterExtraActions>
