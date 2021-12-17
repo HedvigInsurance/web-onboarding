@@ -310,7 +310,7 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
         'CreateQuoteBundleError'
       ) {
         setSubmitError(
-          new Error(result.data?.quoteCart_createQuoteBundle.limits[0].code),
+          new Error(result.data?.quoteCart_createQuoteBundle.limits?.[0].code),
         )
       } else {
         await refetch()
