@@ -79,7 +79,6 @@ const Footer = styled.div`
   justify-content: center;
   align-items: center;
   padding: 1rem 0 6rem;
-  color: black;
 
   ${ActiveOption} {
     color: ${colorsV3.gray700};
@@ -123,7 +122,7 @@ const Info = styled.div`
   max-width: calc(${INPUT_MAX_WIDTH} + 2 * 2rem);
   margin-top: 0;
   font-size: 0.6875rem;
-  color: ${colorsV3.gray500};
+  color: ${colorsV3.gray700};
   text-align: center;
   line-height: 1.2;
   padding-bottom: 1.5rem;
@@ -135,10 +134,10 @@ const Info = styled.div`
   }
 
   a {
-    color: ${colorsV3.gray900};
+    color: ${colorsV3.purple900};
 
     &:hover {
-      color: ${colorsV3.purple500};
+      color: ${colorsV3.purple900};
     }
   }
 `
@@ -205,7 +204,7 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
                   name="code"
                   type="text"
                   autoComplete="off"
-                  placeholder=""
+                  placeholder="7VEKCAG"
                   touched={touched.code}
                   errors={errors.code ? textKeys[errors.code]() : ''}
                 />
