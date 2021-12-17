@@ -17,6 +17,7 @@ import { PriceBreakdown } from 'pages/OfferNew/common/PriceBreakdown'
 
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import { CampaignCode } from 'utils/campaignCode'
 
 import {
   LARGE_SCREEN_MEDIA_QUERY,
@@ -170,6 +171,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
       })
       const hasError = result?.quoteCart_addCampaign.__typename === 'BasicError'
 
+      if (!hasError) {
+        CampaignCode.save(code)
+      }
+
       return { hasError }
     },
     [quoteCartId, addCampaignCode],
@@ -177,6 +182,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const handleRemoveCampaign = useCallback(async () => {
     await removeCampaignCode({ variables: { quoteCartId } })
+    CampaignCode.remove()
   }, [quoteCartId, removeCampaignCode])
 
   const isNorwegianBundle = isBundle(offerData) && isNorwegian(offerData)
