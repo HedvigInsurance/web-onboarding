@@ -10,10 +10,10 @@ import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { BundledQuote } from 'src/client/data/graphql'
 import { isBundle } from 'pages/OfferNew/utils'
 
-import { HeroOfferDetails } from '../../OfferNew/Introduction/HeroOfferDetails'
 import { ExternalInsuranceProvider } from '../../OfferNew/Introduction/ExternalInsuranceProvider'
 
 import { Sidebar } from './Sidebar'
+import { HeroOfferDetails } from './HeroOfferDetails'
 
 const HERO_HEIGHT_LARGE_SCREEN = 600
 const HERO_HEIGHT = 400
@@ -99,9 +99,9 @@ export const Introduction: React.FC<IntroductionProps> = ({
           <ContentContainer>
             <HeroOfferDetailsContainer>
               <HeroOfferDetails
+                quoteCartId={quoteCartId}
                 offerData={offerData}
                 allQuotes={allQuotes}
-                refetchOfferData={refetch}
               />
               {hasDataCollection && (
                 <InsuranceProviderWrapper>
