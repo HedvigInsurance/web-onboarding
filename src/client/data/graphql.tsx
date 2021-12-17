@@ -9982,13 +9982,6 @@ export enum SwedishApartmentType {
   Brf = 'BRF',
 }
 
-export enum SwedishApartmentType {
-  StudentRent = 'STUDENT_RENT',
-  Rent = 'RENT',
-  StudentBrf = 'STUDENT_BRF',
-  Brf = 'BRF',
-}
-
 export type SwedishBankIdExtraInfo = {
   __typename?: 'SwedishBankIdExtraInfo'
   autoStartToken?: Maybe<Scalars['ID']>
