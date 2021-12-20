@@ -181,8 +181,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
   )
 
   const handleRemoveCampaign = useCallback(async () => {
-    await removeCampaignCode({ variables: { quoteCartId } })
-    CampaignCode.remove()
+    const { data: result } = await removeCampaignCode({
+      variables: { quoteCartId },
+    })
+    const hasError =
+      result?.quoteCart_removeCampaign.__typename === 'BasicError'
+
+    if (!hasError) {
+      CampaignCode.remove()
+    }
   }, [quoteCartId, removeCampaignCode])
 
   const isNorwegianBundle = isBundle(offerData) && isNorwegian(offerData)
@@ -191,8 +198,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     ...(campaignText ? [campaignText] : []),
   ]
 
-  const showRemoveCampaignButton =
-    campaign && campaign.incentive?.__typename !== 'NoDiscount'
+  const showRemoveCampaignButton = campaign != null
   const isDiscountPrice =
     campaign?.incentive?.__typename === 'MonthlyCostDeduction' ||
     campaign?.incentive?.__typename === 'PercentageDiscountMonths' ||
