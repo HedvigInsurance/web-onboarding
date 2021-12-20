@@ -144,23 +144,17 @@ export const CampaignCodeModal = ({
       >
         <Title>{textKeys.SIDEBAR_ADD_CAMPAIGN_HEADLINE()}</Title>
         <Paragraph>{textKeys.SIDEBAR_ADD_CAMPAIGN_BODY()}</Paragraph>
+        <ButtonWrapper>
+          <CloseButton onClick={onClose} />
+        </ButtonWrapper>
         <Formik
           validateOnBlur
           validationSchema={campaignCodeFormSchema}
           initialValues={intialValues}
           onSubmit={handleSubmit}
         >
-          {({ touched, errors, values, isSubmitting, resetForm }) => (
+          {({ touched, errors, values, isSubmitting }) => (
             <>
-              <ButtonWrapper>
-                <CloseButton
-                  onClick={() => {
-                    onClose()
-                    resetForm()
-                  }}
-                />
-              </ButtonWrapper>
-
               <Form>
                 <InputField
                   label={textKeys.SIDEBAR_ADD_CAMPAIGN_CELL_LABEL()}
