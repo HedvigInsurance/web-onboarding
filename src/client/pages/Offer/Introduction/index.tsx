@@ -7,7 +7,7 @@ import { Section } from 'pages/OfferNew/components'
 
 import { OfferData } from 'pages/OfferNew/types'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
-import { BundledQuote } from 'src/client/data/graphql'
+import { BundledQuote, CampaignDataFragment } from 'src/client/data/graphql'
 import { isBundle } from 'pages/OfferNew/utils'
 
 import { ExternalInsuranceProvider } from '../../OfferNew/Introduction/ExternalInsuranceProvider'
@@ -76,6 +76,7 @@ const HeroBackgroundImage = styled(BackgroundImage)`
 export type IntroductionProps = {
   quoteCartId: string
   offerData: OfferData
+  campaign: CampaignDataFragment | null
   allQuotes: BundledQuote[]
   refetch: () => Promise<void>
   onCheckoutOpen: () => void
@@ -84,6 +85,7 @@ export type IntroductionProps = {
 export const Introduction: React.FC<IntroductionProps> = ({
   quoteCartId,
   offerData,
+  campaign,
   allQuotes,
   refetch,
   onCheckoutOpen,
@@ -115,8 +117,8 @@ export const Introduction: React.FC<IntroductionProps> = ({
               )}
             </HeroOfferDetailsContainer>
             <Sidebar
-              quoteCartId={quoteCartId}
               offerData={offerData}
+              campaign={campaign}
               refetchOfferData={refetch}
               onCheckoutOpen={onCheckoutOpen}
             />

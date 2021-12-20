@@ -77,7 +77,7 @@ export const OfferPage = ({
   })
 
   const bundleData = quoteCartData?.quoteCart.bundle
-  const redeemedCampaigns = [quoteCartData?.quoteCart.campaign]
+  const redeemedCampaign = quoteCartData?.quoteCart.campaign ?? null
 
   if (quoteCartError) {
     throw new Error(`Error fetching quote cart: ${quoteCartId}.`)
@@ -117,7 +117,7 @@ export const OfferPage = ({
     )
     if (offerData) {
       const isReferralCodeUsed =
-        redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction'
+        redeemedCampaign?.incentive?.__typename === 'MonthlyCostDeduction'
       trackOfferGTM(
         EventName.InsuranceSelectionToggle,
         getOfferData(newSelectedBundleVariant.bundle),
@@ -135,7 +135,7 @@ export const OfferPage = ({
     )
     if (offerData) {
       const isReferralCodeUsed =
-        redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction'
+        redeemedCampaign?.incentive?.__typename === 'MonthlyCostDeduction'
       trackOfferGTM(
         EventName.OfferCrossSell,
         getOfferData(newSelectedBundleVariant.bundle),
@@ -146,7 +146,7 @@ export const OfferPage = ({
   }
 
   const isReferralCodeUsed =
-    redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction'
+    redeemedCampaign?.incentive?.__typename === 'MonthlyCostDeduction'
   useEffect(() => {
     if (offerData) {
       trackOfferGTM(EventName.OfferCreated, offerData, isReferralCodeUsed)
@@ -190,6 +190,7 @@ export const OfferPage = ({
                 quoteCartId={quoteCartId}
                 allQuotes={getUniqueQuotesFromVariantList(bundleVariants)}
                 offerData={offerData}
+                campaign={redeemedCampaign}
                 refetch={refetchQuoteCart as () => Promise<any>}
                 onCheckoutOpen={() => {
                   handleCheckoutToggle(true)

@@ -8189,6 +8189,7 @@ export type ProviderStatusV2 = {
   __typename?: 'ProviderStatusV2'
   functional: Scalars['Boolean']
   insuranceProvider: Scalars['String']
+  insuranceProviderDisplayName?: Maybe<Scalars['String']>
   status: InsuranceProviderAvailability
 }
 
@@ -11458,31 +11459,6 @@ export type AddCampaignCodeMutation = { __typename?: 'Mutation' } & {
     | ({ __typename?: 'BasicError' } & { errorMessage: BasicError['message'] })
 }
 
-export type AppliedCampaignQueryVariables = Exact<{
-  quoteCartId: Scalars['ID']
-  locale: Locale
-}>
-
-export type AppliedCampaignQuery = { __typename?: 'Query' } & {
-  quoteCart: { __typename?: 'QuoteCart' } & {
-    campaign?: Maybe<
-      { __typename?: 'Campaign' } & Pick<
-        Campaign,
-        'code' | 'ownerName' | 'displayValue'
-      > & {
-          incentive?: Maybe<
-            | { __typename: 'MonthlyCostDeduction' }
-            | { __typename: 'FreeMonths' }
-            | { __typename?: 'NoDiscount' }
-            | { __typename?: 'VisibleNoDiscount' }
-            | { __typename: 'PercentageDiscountMonths' }
-            | { __typename?: 'IndefinitePercentageDiscount' }
-          >
-        }
-    >
-  }
-}
-
 export type AvailablePaymentMethodsQueryVariables = Exact<{
   [key: string]: never
 }>
@@ -11974,34 +11950,7 @@ export type QuoteCartQuery = { __typename?: 'Query' } & {
           >
         }
       >
-      campaign?: Maybe<
-        { __typename?: 'Campaign' } & Pick<Campaign, 'code' | 'expiresAt'> & {
-            incentive?: Maybe<
-              | ({ __typename?: 'MonthlyCostDeduction' } & {
-                  amount?: Maybe<
-                    { __typename?: 'MonetaryAmountV2' } & Pick<
-                      MonetaryAmountV2,
-                      'amount' | 'currency'
-                    >
-                  >
-                })
-              | { __typename?: 'FreeMonths' }
-              | { __typename?: 'NoDiscount' }
-              | { __typename?: 'VisibleNoDiscount' }
-              | ({ __typename?: 'PercentageDiscountMonths' } & Pick<
-                  PercentageDiscountMonths,
-                  'percentageDiscount' | 'quantity'
-                >)
-              | { __typename?: 'IndefinitePercentageDiscount' }
-            >
-            owner?: Maybe<
-              { __typename?: 'CampaignOwner' } & Pick<
-                CampaignOwner,
-                'displayName' | 'id'
-              >
-            >
-          }
-      >
+      campaign?: Maybe<{ __typename?: 'Campaign' } & CampaignDataFragment>
       checkout?: Maybe<{ __typename?: 'Checkout' } & Pick<Checkout, 'status'>>
     }
 }
@@ -12295,6 +12244,36 @@ export type BundleCostDataFragmentFragment = {
     >
   }
 
+export type CampaignDataFragment = { __typename?: 'Campaign' } & Pick<
+  Campaign,
+  'code' | 'ownerName' | 'expiresAt' | 'displayValue'
+> & {
+    incentive?: Maybe<
+      | ({ __typename?: 'MonthlyCostDeduction' } & {
+          amount?: Maybe<
+            { __typename?: 'MonetaryAmountV2' } & Pick<
+              MonetaryAmountV2,
+              'amount' | 'currency'
+            >
+          >
+        })
+      | { __typename: 'FreeMonths' }
+      | { __typename?: 'NoDiscount' }
+      | { __typename?: 'VisibleNoDiscount' }
+      | ({ __typename?: 'PercentageDiscountMonths' } & Pick<
+          PercentageDiscountMonths,
+          'percentageDiscount'
+        > & { quantityMonths: PercentageDiscountMonths['quantity'] })
+      | { __typename?: 'IndefinitePercentageDiscount' }
+    >
+    owner?: Maybe<
+      { __typename?: 'CampaignOwner' } & Pick<
+        CampaignOwner,
+        'displayName' | 'id'
+      >
+    >
+  }
+
 export type QuoteDataFragmentFragment = { __typename?: 'BundledQuote' } & Pick<
   BundledQuote,
   | 'id'
@@ -12549,6 +12528,33 @@ export const BundleCostDataFragmentFragmentDoc = gql`
     }
   }
 `
+export const CampaignDataFragmentDoc = gql`
+  fragment CampaignData on Campaign {
+    incentive {
+      ... on MonthlyCostDeduction {
+        amount {
+          amount
+          currency
+        }
+      }
+      ... on PercentageDiscountMonths {
+        percentageDiscount
+        quantityMonths: quantity
+      }
+      ... on FreeMonths {
+        __typename
+      }
+    }
+    code
+    owner {
+      displayName
+      id
+    }
+    ownerName
+    expiresAt
+    displayValue(locale: $locale)
+  }
+`
 export const QuoteDataFragmentFragmentDoc = gql`
   fragment QuoteDataFragment on BundledQuote {
     id
@@ -12722,80 +12728,6 @@ export type AddCampaignCodeMutationResult = ApolloReactCommon.MutationResult<
 export type AddCampaignCodeMutationOptions = ApolloReactCommon.BaseMutationOptions<
   AddCampaignCodeMutation,
   AddCampaignCodeMutationVariables
->
-export const AppliedCampaignDocument = gql`
-  query AppliedCampaign($quoteCartId: ID!, $locale: Locale!) {
-    quoteCart(id: $quoteCartId) {
-      campaign {
-        code
-        incentive {
-          ... on FreeMonths {
-            __typename
-          }
-          ... on MonthlyCostDeduction {
-            __typename
-          }
-          ... on PercentageDiscountMonths {
-            __typename
-          }
-        }
-        ownerName
-        displayValue(locale: $locale)
-      }
-    }
-  }
-`
-
-/**
- * __useAppliedCampaignQuery__
- *
- * To run a query within a React component, call `useAppliedCampaignQuery` and pass it any options that fit your needs.
- * When your component renders, `useAppliedCampaignQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAppliedCampaignQuery({
- *   variables: {
- *      quoteCartId: // value for 'quoteCartId'
- *      locale: // value for 'locale'
- *   },
- * });
- */
-export function useAppliedCampaignQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    AppliedCampaignQuery,
-    AppliedCampaignQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<AppliedCampaignQuery, AppliedCampaignQueryVariables>(
-    AppliedCampaignDocument,
-    options,
-  )
-}
-export function useAppliedCampaignLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    AppliedCampaignQuery,
-    AppliedCampaignQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<
-    AppliedCampaignQuery,
-    AppliedCampaignQueryVariables
-  >(AppliedCampaignDocument, options)
-}
-export type AppliedCampaignQueryHookResult = ReturnType<
-  typeof useAppliedCampaignQuery
->
-export type AppliedCampaignLazyQueryHookResult = ReturnType<
-  typeof useAppliedCampaignLazyQuery
->
-export type AppliedCampaignQueryResult = ApolloReactCommon.QueryResult<
-  AppliedCampaignQuery,
-  AppliedCampaignQueryVariables
 >
 export const AvailablePaymentMethodsDocument = gql`
   query AvailablePaymentMethods {
@@ -13785,24 +13717,7 @@ export const QuoteCartDocument = gql`
         }
       }
       campaign {
-        incentive {
-          ... on MonthlyCostDeduction {
-            amount {
-              amount
-              currency
-            }
-          }
-          ... on PercentageDiscountMonths {
-            percentageDiscount
-            quantity
-          }
-        }
-        code
-        owner {
-          displayName
-          id
-        }
-        expiresAt
+        ...CampaignData
       }
       checkoutMethods
       checkout {
@@ -13812,6 +13727,7 @@ export const QuoteCartDocument = gql`
   }
   ${BundleCostDataFragmentFragmentDoc}
   ${QuoteDataFragmentFragmentDoc}
+  ${CampaignDataFragmentDoc}
 `
 
 /**

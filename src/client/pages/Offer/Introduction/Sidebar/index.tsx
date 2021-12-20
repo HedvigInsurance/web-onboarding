@@ -1,12 +1,13 @@
 import React, { useState, useCallback } from 'react'
 import styled from '@emotion/styled'
+import { useParams } from 'react-router-dom'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 import { colorsV3 } from '@hedviginsurance/brand'
 
 import {
-  useAppliedCampaignQuery,
   useAddCampaignCodeMutation,
   useRemoveCampaignCodeMutation,
+  CampaignDataFragment,
 } from 'data/graphql'
 
 import { Button, TextButton } from 'components/buttons'
@@ -16,7 +17,6 @@ import { Price } from 'pages/OfferNew/common/price'
 import { PriceBreakdown } from 'pages/OfferNew/common/PriceBreakdown'
 
 import { useTextKeys } from 'utils/textKeys'
-import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { CampaignCode } from 'utils/campaignCode'
 
 import {
@@ -133,35 +133,33 @@ const FooterExtraActions = styled.div`
 `
 
 export type SidebarProps = {
-  quoteCartId: string
   offerData: OfferData
+  campaign: CampaignDataFragment | null
   refetchOfferData: () => Promise<void>
   onCheckoutOpen: () => void
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
-  quoteCartId,
   offerData,
+  campaign,
   refetchOfferData,
   onCheckoutOpen,
 }) => {
+  const { id: quoteCartId } = useParams<{ id: string }>()
   const textKeys = useTextKeys()
-  const { isoLocale } = useCurrentLocale()
 
   const [campaignCodeModalIsOpen, setCampaignCodeModalIsOpen] = useState(false)
   const [isSidebarVisible, setIsSidebarVisible] = useState(true)
 
-  const { data: campaignData } = useAppliedCampaignQuery({
-    variables: { quoteCartId, locale: isoLocale },
+  const [addCampaignCode] = useAddCampaignCodeMutation({
+    refetchQueries: ['QuoteCart'],
+    awaitRefetchQueries: true,
   })
-
-  const [addCampaignCode] = useAddCampaignCodeMutation()
   const [removeCampaignCode] = useRemoveCampaignCodeMutation({
     refetchQueries: ['QuoteCart'],
     awaitRefetchQueries: true,
   })
 
-  const campaign = campaignData?.quoteCart.campaign
   const campaignText = campaign?.displayValue ?? ''
 
   const handleAddCampaignCode = useCallback(
