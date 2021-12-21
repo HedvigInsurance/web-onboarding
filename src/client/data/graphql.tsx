@@ -8189,6 +8189,7 @@ export type ProviderStatusV2 = {
   __typename?: 'ProviderStatusV2'
   functional: Scalars['Boolean']
   insuranceProvider: Scalars['String']
+  insuranceProviderDisplayName?: Maybe<Scalars['String']>
   status: InsuranceProviderAvailability
 }
 
@@ -11949,34 +11950,7 @@ export type QuoteCartQuery = { __typename?: 'Query' } & {
           >
         }
       >
-      campaign?: Maybe<
-        { __typename?: 'Campaign' } & Pick<Campaign, 'code' | 'expiresAt'> & {
-            incentive?: Maybe<
-              | ({ __typename?: 'MonthlyCostDeduction' } & {
-                  amount?: Maybe<
-                    { __typename?: 'MonetaryAmountV2' } & Pick<
-                      MonetaryAmountV2,
-                      'amount' | 'currency'
-                    >
-                  >
-                })
-              | { __typename?: 'FreeMonths' }
-              | { __typename?: 'NoDiscount' }
-              | { __typename?: 'VisibleNoDiscount' }
-              | ({ __typename?: 'PercentageDiscountMonths' } & Pick<
-                  PercentageDiscountMonths,
-                  'percentageDiscount' | 'quantity'
-                >)
-              | { __typename?: 'IndefinitePercentageDiscount' }
-            >
-            owner?: Maybe<
-              { __typename?: 'CampaignOwner' } & Pick<
-                CampaignOwner,
-                'displayName' | 'id'
-              >
-            >
-          }
-      >
+      campaign?: Maybe<{ __typename?: 'Campaign' } & CampaignDataFragment>
       checkout?: Maybe<{ __typename?: 'Checkout' } & Pick<Checkout, 'status'>>
     }
 }
@@ -12120,6 +12094,16 @@ export type ReferrerNameQuery = { __typename?: 'Query' } & {
   }
 }
 
+export type RemoveCampaignCodeMutationVariables = Exact<{
+  quoteCartId: Scalars['ID']
+}>
+
+export type RemoveCampaignCodeMutation = { __typename?: 'Mutation' } & {
+  quoteCart_removeCampaign:
+    | { __typename?: 'QuoteCart' }
+    | ({ __typename?: 'BasicError' } & { errorMessage: BasicError['message'] })
+}
+
 export type RemoveDiscountCodeMutationVariables = Exact<{
   [key: string]: never
 }>
@@ -12257,6 +12241,36 @@ export type BundleCostDataFragmentFragment = {
     monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
       MonetaryAmountV2,
       'amount' | 'currency'
+    >
+  }
+
+export type CampaignDataFragment = { __typename?: 'Campaign' } & Pick<
+  Campaign,
+  'code' | 'ownerName' | 'expiresAt' | 'displayValue'
+> & {
+    incentive?: Maybe<
+      | ({ __typename?: 'MonthlyCostDeduction' } & {
+          amount?: Maybe<
+            { __typename?: 'MonetaryAmountV2' } & Pick<
+              MonetaryAmountV2,
+              'amount' | 'currency'
+            >
+          >
+        })
+      | { __typename: 'FreeMonths' }
+      | { __typename?: 'NoDiscount' }
+      | { __typename?: 'VisibleNoDiscount' }
+      | ({ __typename?: 'PercentageDiscountMonths' } & Pick<
+          PercentageDiscountMonths,
+          'percentageDiscount'
+        > & { quantityMonths: PercentageDiscountMonths['quantity'] })
+      | { __typename?: 'IndefinitePercentageDiscount' }
+    >
+    owner?: Maybe<
+      { __typename?: 'CampaignOwner' } & Pick<
+        CampaignOwner,
+        'displayName' | 'id'
+      >
     >
   }
 
@@ -12512,6 +12526,33 @@ export const BundleCostDataFragmentFragmentDoc = gql`
       amount
       currency
     }
+  }
+`
+export const CampaignDataFragmentDoc = gql`
+  fragment CampaignData on Campaign {
+    incentive {
+      ... on MonthlyCostDeduction {
+        amount {
+          amount
+          currency
+        }
+      }
+      ... on PercentageDiscountMonths {
+        percentageDiscount
+        quantityMonths: quantity
+      }
+      ... on FreeMonths {
+        __typename
+      }
+    }
+    code
+    owner {
+      displayName
+      id
+    }
+    ownerName
+    expiresAt
+    displayValue(locale: $locale)
   }
 `
 export const QuoteDataFragmentFragmentDoc = gql`
@@ -13676,24 +13717,7 @@ export const QuoteCartDocument = gql`
         }
       }
       campaign {
-        incentive {
-          ... on MonthlyCostDeduction {
-            amount {
-              amount
-              currency
-            }
-          }
-          ... on PercentageDiscountMonths {
-            percentageDiscount
-            quantity
-          }
-        }
-        code
-        owner {
-          displayName
-          id
-        }
-        expiresAt
+        ...CampaignData
       }
       checkoutMethods
       checkout {
@@ -13703,6 +13727,7 @@ export const QuoteCartDocument = gql`
   }
   ${BundleCostDataFragmentFragmentDoc}
   ${QuoteDataFragmentFragmentDoc}
+  ${CampaignDataFragmentDoc}
 `
 
 /**
@@ -14043,6 +14068,59 @@ export type ReferrerNameLazyQueryHookResult = ReturnType<
 export type ReferrerNameQueryResult = ApolloReactCommon.QueryResult<
   ReferrerNameQuery,
   ReferrerNameQueryVariables
+>
+export const RemoveCampaignCodeDocument = gql`
+  mutation RemoveCampaignCode($quoteCartId: ID!) {
+    quoteCart_removeCampaign(id: $quoteCartId) {
+      ... on BasicError {
+        errorMessage: message
+      }
+    }
+  }
+`
+export type RemoveCampaignCodeMutationFn = ApolloReactCommon.MutationFunction<
+  RemoveCampaignCodeMutation,
+  RemoveCampaignCodeMutationVariables
+>
+
+/**
+ * __useRemoveCampaignCodeMutation__
+ *
+ * To run a mutation, you first call `useRemoveCampaignCodeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveCampaignCodeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeCampaignCodeMutation, { data, loading, error }] = useRemoveCampaignCodeMutation({
+ *   variables: {
+ *      quoteCartId: // value for 'quoteCartId'
+ *   },
+ * });
+ */
+export function useRemoveCampaignCodeMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RemoveCampaignCodeMutation,
+    RemoveCampaignCodeMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    RemoveCampaignCodeMutation,
+    RemoveCampaignCodeMutationVariables
+  >(RemoveCampaignCodeDocument, options)
+}
+export type RemoveCampaignCodeMutationHookResult = ReturnType<
+  typeof useRemoveCampaignCodeMutation
+>
+export type RemoveCampaignCodeMutationResult = ApolloReactCommon.MutationResult<
+  RemoveCampaignCodeMutation
+>
+export type RemoveCampaignCodeMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  RemoveCampaignCodeMutation,
+  RemoveCampaignCodeMutationVariables
 >
 export const RemoveDiscountCodeDocument = gql`
   mutation RemoveDiscountCode {

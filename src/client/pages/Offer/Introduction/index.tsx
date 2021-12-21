@@ -1,23 +1,19 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { Section } from 'pages/OfferNew/components'
-import { OfferData } from 'pages/OfferNew/types'
-import { BackgroundImage } from 'components/BackgroundImage'
-import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
-import { BundledQuote } from 'data/graphql'
-import { Sidebar } from '../../OfferNew/Introduction/Sidebar'
-import { ExternalInsuranceProvider } from '../../OfferNew/Introduction/ExternalInsuranceProvider'
-import { isBundle } from '../../OfferNew/utils'
-import { HeroOfferDetails } from './HeroOfferDetails'
 
-type Props = {
-  quoteCartId: string
-  offerData: OfferData
-  allQuotes: BundledQuote[]
-  refetch: () => Promise<void>
-  onCheckoutOpen: () => void
-}
+import { BackgroundImage } from 'components/BackgroundImage'
+import { Section } from 'pages/OfferNew/components'
+
+import { OfferData } from 'pages/OfferNew/types'
+import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import { BundledQuote, CampaignDataFragment } from 'src/client/data/graphql'
+import { isBundle } from 'pages/OfferNew/utils'
+
+import { ExternalInsuranceProvider } from '../../OfferNew/Introduction/ExternalInsuranceProvider'
+
+import { Sidebar } from './Sidebar'
+import { HeroOfferDetails } from './HeroOfferDetails'
 
 const HERO_HEIGHT_LARGE_SCREEN = 600
 const HERO_HEIGHT = 400
@@ -68,6 +64,7 @@ const ContentContainer = styled.div`
     align-items: flex-start;
   }
 `
+
 const HeroBackgroundImage = styled(BackgroundImage)`
   height: ${HERO_HEIGHT}px;
 
@@ -76,9 +73,19 @@ const HeroBackgroundImage = styled(BackgroundImage)`
   }
 `
 
-export const Introduction: React.FC<Props> = ({
+export type IntroductionProps = {
+  quoteCartId: string
+  offerData: OfferData
+  campaign: CampaignDataFragment | null
+  allQuotes: BundledQuote[]
+  refetch: () => Promise<void>
+  onCheckoutOpen: () => void
+}
+
+export const Introduction: React.FC<IntroductionProps> = ({
   quoteCartId,
   offerData,
+  campaign,
   allQuotes,
   refetch,
   onCheckoutOpen,
@@ -111,6 +118,7 @@ export const Introduction: React.FC<Props> = ({
             </HeroOfferDetailsContainer>
             <Sidebar
               offerData={offerData}
+              campaign={campaign}
               refetchOfferData={refetch}
               onCheckoutOpen={onCheckoutOpen}
             />
