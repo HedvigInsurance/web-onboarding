@@ -8,7 +8,7 @@ mutation CreateQuoteBundle($quoteCartId: ID!, $quotes: [JSON!]!) {
         }
       }
     }
-    ... on CreateQuoteBundleError {
+    ... on QuoteBundleError {
       limits {
         code
       }
