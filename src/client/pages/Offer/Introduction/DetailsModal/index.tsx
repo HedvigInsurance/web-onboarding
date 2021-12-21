@@ -146,7 +146,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
 
   const isInvalidCreateQuoteBundleInput =
     createQuoteBundleData?.quoteCart_createQuoteBundle.__typename ===
-    'CreateQuoteBundleError'
+    'QuoteBundleError'
 
   const reCreateQuoteBundle = (form: QuoteInput) => {
     return createQuoteBundle({
@@ -183,7 +183,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   const onSubmit = async (form: QuoteInput) => {
     const { data } = await reCreateQuoteBundle(form)
     const isLimitHit =
-      data?.quoteCart_createQuoteBundle.__typename === 'CreateQuoteBundleError'
+      data?.quoteCart_createQuoteBundle.__typename === 'QuoteBundleError'
 
     if (!isLimitHit) {
       onClose()
