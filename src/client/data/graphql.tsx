@@ -2647,19 +2647,11 @@ export type CreateOnboardingQuoteCartInput = {
   locale: Scalars['String']
 }
 
-export type CreateQuoteBundleError = Error & {
-  __typename?: 'CreateQuoteBundleError'
-  message: Scalars['String']
-  /**  The type of the quote that could not be created.  */
-  type: Scalars['String']
-  limits?: Maybe<Array<UnderwritingLimit>>
-}
-
 export type CreateQuoteBundleInput = {
   payload: Array<Scalars['JSON']>
 }
 
-export type CreateQuoteBundleResult = QuoteCart | CreateQuoteBundleError
+export type CreateQuoteBundleResult = QuoteCart | QuoteBundleError
 
 export type CreateQuoteBundleSuccess = {
   __typename?: 'CreateQuoteBundleSuccess'
@@ -3129,6 +3121,8 @@ export type EditQuoteInput = {
   email?: Maybe<Scalars['String']>
   phoneNumber?: Maybe<Scalars['String']>
 }
+
+export type EditQuoteResult = QuoteCart | QuoteBundleError
 
 export type EditSwedishAccidentInput = {
   street?: Maybe<Scalars['String']>
@@ -7623,6 +7617,8 @@ export type Mutation = {
   quoteCart_addCampaign: AddCampaignResult
   /** Remove the existing campaign. */
   quoteCart_removeCampaign: RemoveCampaignResult
+  /** Edit the cart. Will only update the fields that are present in the payload. */
+  quoteCart_editQuote: EditQuoteResult
   /**
    * Initiate signing of this onboarding, optionally tagging a subset of the quotes if not all of them are wanted.
    *
@@ -7835,6 +7831,12 @@ export type MutationQuoteCart_AddCampaignArgs = {
 
 export type MutationQuoteCart_RemoveCampaignArgs = {
   id: Scalars['ID']
+}
+
+export type MutationQuoteCart_EditQuoteArgs = {
+  id: Scalars['ID']
+  quoteId: Scalars['ID']
+  payload: Scalars['JSON']
 }
 
 export type MutationQuoteCart_StartCheckoutArgs = {
@@ -8578,6 +8580,14 @@ export enum QuoteBundleAppConfigurationStartDateTerminology {
 export enum QuoteBundleAppConfigurationTitle {
   Logo = 'LOGO',
   UpdateSummary = 'UPDATE_SUMMARY',
+}
+
+export type QuoteBundleError = Error & {
+  __typename?: 'QuoteBundleError'
+  message: Scalars['String']
+  /**  The type of the quote that could not be created.  */
+  type: Scalars['String']
+  limits?: Maybe<Array<UnderwritingLimit>>
 }
 
 export type QuoteBundleInception = ConcurrentInception | IndependentInceptions
@@ -11591,7 +11601,7 @@ export type CreateQuoteBundleMutation = { __typename?: 'Mutation' } & {
             }
           >
         })
-    | ({ __typename?: 'CreateQuoteBundleError' } & {
+    | ({ __typename?: 'QuoteBundleError' } & {
         limits?: Maybe<
           Array<
             { __typename?: 'UnderwritingLimit' } & Pick<
@@ -13053,7 +13063,7 @@ export const CreateQuoteBundleDocument = gql`
           }
         }
       }
-      ... on CreateQuoteBundleError {
+      ... on QuoteBundleError {
         limits {
           code
         }
