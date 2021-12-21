@@ -27,17 +27,19 @@ import {
   getInsuranceTypesFromBundleVariant,
 } from '../OfferNew/utils'
 import { AppPromotionSection } from '../OfferNew/AppPromotionSection'
-import { Checkout } from '../OfferNew/Checkout'
 import { FaqSection } from '../OfferNew/FaqSection'
 import { Perils } from '../OfferNew/Perils'
 import { InsuranceSelector } from '../OfferNew/InsuranceSelector'
 import { Introduction } from './Introduction'
+import { Checkout } from './Checkout'
 
-const createToggleCheckout = (history: History<any>, locale?: LocaleLabel) => (
-  isOpen: boolean,
-) => {
+const createToggleCheckout = (
+  history: History<any>,
+  quoteCartId: string,
+  locale?: LocaleLabel,
+) => (isOpen: boolean) => {
   if (isOpen) {
-    history.push(`/${locale}/new-member/sign`)
+    history.push(`/${locale}/new-member/sign/${quoteCartId}`)
   } else {
     history.goBack()
   }
@@ -102,8 +104,10 @@ export const OfferPage = ({
       selectedInsuranceTypes,
     ) || bundleVariants?.[0]
 
-  const checkoutMatch = useRouteMatch(`${localePathPattern}/new-member/sign`)
-  const toggleCheckout = createToggleCheckout(history, pathLocale)
+  const checkoutMatch = useRouteMatch(
+    `${localePathPattern}/new-member/sign/${quoteCartId}`,
+  )
+  const toggleCheckout = createToggleCheckout(history, quoteCartId, pathLocale)
 
   const offerData = selectedBundleVariant
     ? getOfferData(selectedBundleVariant.bundle)
@@ -210,6 +214,7 @@ export const OfferPage = ({
           <AppPromotionSection />
           <FaqSection />
           <Checkout
+            quoteCartId={quoteCartId}
             quoteBundleVariants={bundleVariants}
             selectedQuoteBundleVariant={selectedBundleVariant}
             onUpsellAccepted={handleCheckoutUpsellCardAccepted}

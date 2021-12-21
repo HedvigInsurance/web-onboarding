@@ -509,3 +509,7 @@ export const getInsuranceTypesFromBundleVariant = (
   bundleVariant.bundle.quotes.map<InsuranceType>(
     (quote) => quote.data.type as InsuranceType,
   )
+
+export const getQuoteIdsFromBundleVariant = (
+  bundleVariant: QuoteBundleVariant,
+) => bundleVariant.bundle.quotes.map((quote) => quote.id)

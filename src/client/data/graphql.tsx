@@ -11487,6 +11487,28 @@ export type CampaignQuery = { __typename?: 'Query' } & {
   campaign?: Maybe<{ __typename?: 'Campaign' } & Pick<Campaign, 'code'>>
 }
 
+export type CheckoutStatusQueryVariables = Exact<{
+  quoteCartId: Scalars['ID']
+}>
+
+export type CheckoutStatusQuery = { __typename?: 'Query' } & {
+  quoteCart: { __typename?: 'QuoteCart' } & {
+    checkout?: Maybe<
+      { __typename?: 'Checkout' } & Pick<Checkout, 'status' | 'statusText'>
+    >
+  }
+}
+
+export type CreateAccessTokenMutationVariables = Exact<{
+  quoteCartId: Scalars['ID']
+}>
+
+export type CreateAccessTokenMutation = { __typename?: 'Mutation' } & {
+  quoteCart_createAccessToken: {
+    __typename?: 'CreateQuoteCartAccessTokenResult'
+  } & Pick<CreateQuoteCartAccessTokenResult, 'accessToken'>
+}
+
 export type CreateDanishHomeAccidentQuoteMutationVariables = Exact<{
   homeInput: CreateQuoteInput
   accidentInput: CreateQuoteInput
@@ -11588,17 +11610,72 @@ export type CreateOnboardingQuoteCartMutation = { __typename?: 'Mutation' } & {
 export type CreateQuoteBundleMutationVariables = Exact<{
   quoteCartId: Scalars['ID']
   quotes: Array<Scalars['JSON']> | Scalars['JSON']
+  locale: Locale
 }>
 
 export type CreateQuoteBundleMutation = { __typename?: 'Mutation' } & {
   quoteCart_createQuoteBundle:
-    | ({ __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'> & {
+    | ({ __typename?: 'QuoteCart' } & Pick<
+        QuoteCart,
+        'id' | 'checkoutMethods'
+      > & {
           bundle?: Maybe<
             { __typename?: 'QuoteBundle' } & {
-              quotes: Array<
-                { __typename?: 'BundledQuote' } & Pick<BundledQuote, 'id'>
+              possibleVariations: Array<
+                { __typename?: 'QuoteBundleVariant' } & Pick<
+                  QuoteBundleVariant,
+                  'id' | 'tag'
+                > & {
+                    bundle: { __typename?: 'QuoteBundle' } & Pick<
+                      QuoteBundle,
+                      'displayName'
+                    > & {
+                        bundleCost: {
+                          __typename?: 'InsuranceCost'
+                        } & BundleCostDataFragmentFragment
+                        quotes: Array<
+                          {
+                            __typename?: 'BundledQuote'
+                          } & QuoteDataFragmentFragment
+                        >
+                      }
+                  }
               >
             }
+          >
+          campaign?: Maybe<
+            { __typename?: 'Campaign' } & Pick<
+              Campaign,
+              'code' | 'expiresAt'
+            > & {
+                incentive?: Maybe<
+                  | ({ __typename?: 'MonthlyCostDeduction' } & {
+                      amount?: Maybe<
+                        { __typename?: 'MonetaryAmountV2' } & Pick<
+                          MonetaryAmountV2,
+                          'amount' | 'currency'
+                        >
+                      >
+                    })
+                  | { __typename?: 'FreeMonths' }
+                  | { __typename?: 'NoDiscount' }
+                  | { __typename?: 'VisibleNoDiscount' }
+                  | ({ __typename?: 'PercentageDiscountMonths' } & Pick<
+                      PercentageDiscountMonths,
+                      'percentageDiscount' | 'quantity'
+                    >)
+                  | { __typename?: 'IndefinitePercentageDiscount' }
+                >
+                owner?: Maybe<
+                  { __typename?: 'CampaignOwner' } & Pick<
+                    CampaignOwner,
+                    'displayName' | 'id'
+                  >
+                >
+              }
+          >
+          checkout?: Maybe<
+            { __typename?: 'Checkout' } & Pick<Checkout, 'status'>
           >
         })
     | ({ __typename?: 'QuoteBundleError' } & {
@@ -12181,6 +12258,21 @@ export type SignStatusQuery = { __typename?: 'Query' } & {
         >
       }
   >
+}
+
+export type StartCheckoutMutationVariables = Exact<{
+  quoteCartId: Scalars['ID']
+  quoteIds: Array<Scalars['ID']> | Scalars['ID']
+}>
+
+export type StartCheckoutMutation = { __typename?: 'Mutation' } & {
+  quoteCart_startCheckout:
+    | ({ __typename?: 'QuoteCart' } & {
+        checkout?: Maybe<
+          { __typename?: 'Checkout' } & Pick<Checkout, 'status' | 'statusText'>
+        >
+      })
+    | ({ __typename?: 'BasicError' } & Pick<BasicError, 'message'>)
 }
 
 export type StartDateMutationVariables = Exact<{
@@ -12849,6 +12941,118 @@ export type CampaignQueryResult = ApolloReactCommon.QueryResult<
   CampaignQuery,
   CampaignQueryVariables
 >
+export const CheckoutStatusDocument = gql`
+  query CheckoutStatus($quoteCartId: ID!) {
+    quoteCart(id: $quoteCartId) {
+      checkout {
+        status
+        statusText
+      }
+    }
+  }
+`
+
+/**
+ * __useCheckoutStatusQuery__
+ *
+ * To run a query within a React component, call `useCheckoutStatusQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCheckoutStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCheckoutStatusQuery({
+ *   variables: {
+ *      quoteCartId: // value for 'quoteCartId'
+ *   },
+ * });
+ */
+export function useCheckoutStatusQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    CheckoutStatusQuery,
+    CheckoutStatusQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<CheckoutStatusQuery, CheckoutStatusQueryVariables>(
+    CheckoutStatusDocument,
+    options,
+  )
+}
+export function useCheckoutStatusLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    CheckoutStatusQuery,
+    CheckoutStatusQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<CheckoutStatusQuery, CheckoutStatusQueryVariables>(
+    CheckoutStatusDocument,
+    options,
+  )
+}
+export type CheckoutStatusQueryHookResult = ReturnType<
+  typeof useCheckoutStatusQuery
+>
+export type CheckoutStatusLazyQueryHookResult = ReturnType<
+  typeof useCheckoutStatusLazyQuery
+>
+export type CheckoutStatusQueryResult = ApolloReactCommon.QueryResult<
+  CheckoutStatusQuery,
+  CheckoutStatusQueryVariables
+>
+export const CreateAccessTokenDocument = gql`
+  mutation CreateAccessToken($quoteCartId: ID!) {
+    quoteCart_createAccessToken(id: $quoteCartId) {
+      accessToken
+    }
+  }
+`
+export type CreateAccessTokenMutationFn = ApolloReactCommon.MutationFunction<
+  CreateAccessTokenMutation,
+  CreateAccessTokenMutationVariables
+>
+
+/**
+ * __useCreateAccessTokenMutation__
+ *
+ * To run a mutation, you first call `useCreateAccessTokenMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAccessTokenMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAccessTokenMutation, { data, loading, error }] = useCreateAccessTokenMutation({
+ *   variables: {
+ *      quoteCartId: // value for 'quoteCartId'
+ *   },
+ * });
+ */
+export function useCreateAccessTokenMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateAccessTokenMutation,
+    CreateAccessTokenMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    CreateAccessTokenMutation,
+    CreateAccessTokenMutationVariables
+  >(CreateAccessTokenDocument, options)
+}
+export type CreateAccessTokenMutationHookResult = ReturnType<
+  typeof useCreateAccessTokenMutation
+>
+export type CreateAccessTokenMutationResult = ApolloReactCommon.MutationResult<
+  CreateAccessTokenMutation
+>
+export type CreateAccessTokenMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  CreateAccessTokenMutation,
+  CreateAccessTokenMutationVariables
+>
 export const CreateDanishHomeAccidentQuoteDocument = gql`
   mutation CreateDanishHomeAccidentQuote(
     $homeInput: CreateQuoteInput!
@@ -13053,14 +13257,52 @@ export type CreateOnboardingQuoteCartMutationOptions = ApolloReactCommon.BaseMut
   CreateOnboardingQuoteCartMutationVariables
 >
 export const CreateQuoteBundleDocument = gql`
-  mutation CreateQuoteBundle($quoteCartId: ID!, $quotes: [JSON!]!) {
+  mutation CreateQuoteBundle(
+    $quoteCartId: ID!
+    $quotes: [JSON!]!
+    $locale: Locale!
+  ) {
     quoteCart_createQuoteBundle(id: $quoteCartId, input: { payload: $quotes }) {
       ... on QuoteCart {
         id
         bundle {
-          quotes {
+          possibleVariations {
+            id
+            tag(locale: $locale)
+            bundle {
+              displayName(locale: $locale)
+              bundleCost {
+                ...BundleCostDataFragment
+              }
+              quotes {
+                ...QuoteDataFragment
+              }
+            }
+          }
+        }
+        campaign {
+          incentive {
+            ... on MonthlyCostDeduction {
+              amount {
+                amount
+                currency
+              }
+            }
+            ... on PercentageDiscountMonths {
+              percentageDiscount
+              quantity
+            }
+          }
+          code
+          owner {
+            displayName
             id
           }
+          expiresAt
+        }
+        checkoutMethods
+        checkout {
+          status
         }
       }
       ... on QuoteBundleError {
@@ -13070,6 +13312,8 @@ export const CreateQuoteBundleDocument = gql`
       }
     }
   }
+  ${BundleCostDataFragmentFragmentDoc}
+  ${QuoteDataFragmentFragmentDoc}
 `
 export type CreateQuoteBundleMutationFn = ApolloReactCommon.MutationFunction<
   CreateQuoteBundleMutation,
@@ -13091,6 +13335,7 @@ export type CreateQuoteBundleMutationFn = ApolloReactCommon.MutationFunction<
  *   variables: {
  *      quoteCartId: // value for 'quoteCartId'
  *      quotes: // value for 'quotes'
+ *      locale: // value for 'locale'
  *   },
  * });
  */
@@ -14421,6 +14666,66 @@ export type SignStatusLazyQueryHookResult = ReturnType<
 export type SignStatusQueryResult = ApolloReactCommon.QueryResult<
   SignStatusQuery,
   SignStatusQueryVariables
+>
+export const StartCheckoutDocument = gql`
+  mutation StartCheckout($quoteCartId: ID!, $quoteIds: [ID!]!) {
+    quoteCart_startCheckout(id: $quoteCartId, quoteIds: $quoteIds) {
+      ... on QuoteCart {
+        checkout {
+          status
+          statusText
+        }
+      }
+      ... on Error {
+        message
+      }
+    }
+  }
+`
+export type StartCheckoutMutationFn = ApolloReactCommon.MutationFunction<
+  StartCheckoutMutation,
+  StartCheckoutMutationVariables
+>
+
+/**
+ * __useStartCheckoutMutation__
+ *
+ * To run a mutation, you first call `useStartCheckoutMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStartCheckoutMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [startCheckoutMutation, { data, loading, error }] = useStartCheckoutMutation({
+ *   variables: {
+ *      quoteCartId: // value for 'quoteCartId'
+ *      quoteIds: // value for 'quoteIds'
+ *   },
+ * });
+ */
+export function useStartCheckoutMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    StartCheckoutMutation,
+    StartCheckoutMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    StartCheckoutMutation,
+    StartCheckoutMutationVariables
+  >(StartCheckoutDocument, options)
+}
+export type StartCheckoutMutationHookResult = ReturnType<
+  typeof useStartCheckoutMutation
+>
+export type StartCheckoutMutationResult = ApolloReactCommon.MutationResult<
+  StartCheckoutMutation
+>
+export type StartCheckoutMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  StartCheckoutMutation,
+  StartCheckoutMutationVariables
 >
 export const StartDateDocument = gql`
   mutation StartDate($quoteId: ID!, $date: LocalDate) {

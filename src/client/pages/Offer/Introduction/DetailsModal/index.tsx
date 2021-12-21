@@ -151,6 +151,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   const reCreateQuoteBundle = (form: QuoteInput) => {
     return createQuoteBundle({
       variables: {
+        locale: isoLocale,
         quoteCartId,
         quotes: allQuotes.map(({ data: { id, type, typeOfContract } }) => {
           const {
