@@ -12,6 +12,7 @@ import {
   WithEmailForm,
   WithSsnForm,
   WithFirstAndLastNameForm,
+  WithPhoneForm,
 } from 'pages/OfferNew/types'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
 import { useFeature, Features } from 'utils/hooks/useFeature'
@@ -23,6 +24,7 @@ const HiddenSubmit = styled.input`
 
 type Props = WithEmailForm &
   WithSsnForm &
+  WithPhoneForm &
   WithFirstAndLastNameForm & {
     onSubmit?: () => void
     ssnBackendError: string | null
@@ -34,6 +36,8 @@ export const emailValidation = yup
   .required()
 
 export const nameValidation = yup.string().required()
+
+export const phoneValidation = yup.string().required()
 
 // TODO: replace these with one market agnostic CHECKOUT_SSN_LABEL + currentLocaleData.ssn.formatExample
 export const getSsnLabel = (market: Market, textKeys: TextKeyMap): string => {
@@ -59,9 +63,12 @@ export const UserDetailsForm: React.FC<Props> = ({
   ssnBackendError,
   onSsnChange,
   onSubmit,
+  phoneNumber: initialPhone,
+  onPhoneChange,
 }) => {
   const textKeys = useTextKeys()
   const [email, reallySetEmail] = useState(() => initialEmail)
+  const [phoneNumber, reallySetPhone] = useState(() => initialPhone)
   const [hasFirstNameError, setHasFirstNameError] = useState(false)
   const [hasLastNameError, setHasLastNameError] = useState(false)
   const [hasEmailError, setHasEmailError] = useState(false)
@@ -80,7 +87,6 @@ export const UserDetailsForm: React.FC<Props> = ({
   const currentLocaleData = locales[currentLocale as LocaleLabel]
   const ssnMaxLength = currentLocaleData.ssn.length
   const ssnFormatRegex = currentLocaleData.ssn.formatRegex
-
   const [hasEnabledCreditCheckInfo] = useFeature([
     Features.CHECKOUT_CREDIT_CHECK,
   ])
@@ -149,6 +155,11 @@ export const UserDetailsForm: React.FC<Props> = ({
     )
   }
 
+  const setPhoneDebounced = (phoneNumber: string) => {
+    reallySetPhone(phoneNumber)
+    onPhoneChange(phoneNumber)
+  }
+
   return (
     <form
       onSubmit={(e) => {
@@ -199,6 +210,29 @@ export const UserDetailsForm: React.FC<Props> = ({
           setHasEmailError(false)
         }}
       />
+
+      {currentLocale == 'no' ||
+        (currentLocale === 'no-en' && (
+          <>
+            <RawInputField
+              label={'Phone number'}
+              placeholder={'+47 000 0000'}
+              name="phoneNumber"
+              id="phoneNumber"
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              value={phoneNumber}
+              onChange={(e: React.ChangeEvent<any>) => {
+                setPhoneDebounced(e.target.value)
+                onPhoneChange(e.target.value)
+              }}
+              helperText={
+                'We will only contact you for important communications.'
+              }
+            />
+          </>
+        ))}
 
       <RawInputField
         label={getSsnLabel(market, textKeys)}

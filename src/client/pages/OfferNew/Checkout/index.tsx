@@ -204,7 +204,7 @@ export const Checkout = ({
   const [emailUpdateLoading, setEmailUpdateLoading] = useState(false)
   const [ssnUpdateLoading, setSsnUpdateLoading] = useState(false)
   const [isShowingFailModal, setIsShowingFailModal] = useState(false)
-
+  const [phoneUpdateLoading, setPhoneUpdateLoading] = useState(false)
   const offerData = getOfferData(selectedQuoteBundleVariant.bundle)
   const quoteIds = getQuoteIds(offerData)
 
@@ -304,8 +304,12 @@ export const Checkout = ({
       firstName &&
       lastName &&
       offerData.person.email &&
-      offerData.person.ssn,
+      offerData.person.ssn &&
+      offerData.person.phoneNumber,
   )
+
+  console.log(canInitiateSign)
+  console.log(offerData.person)
 
   const editQuotes = async (
     quoteIds: string[],
@@ -316,6 +320,8 @@ export const Checkout = ({
         editQuote({ variables: { input: { ...input, id } } }),
       ),
     )
+    console.log('refetching here')
+    console.log(input)
     refetch()
   }
 
@@ -335,6 +341,15 @@ export const Checkout = ({
     setSsnUpdateLoading(true)
     await editQuotes(quoteIds, { ssn })
     setSsnUpdateLoading(false)
+  }
+
+  const onPhoneChange = async (phoneNumber: string) => {
+    const { phoneNumber: currentPhone } = offerData.person
+    if (!phoneNumber || currentPhone === phoneNumber) return
+
+    setPhoneUpdateLoading(true)
+    await editQuotes(quoteIds, { phoneNumber })
+    setPhoneUpdateLoading(false)
   }
 
   const startSign = async () => {
@@ -367,6 +382,7 @@ export const Checkout = ({
       },
     })
       .then(({ data }) => {
+        console.log(data)
         if (data?.signQuotes?.__typename === 'FailedToStartSign') {
           if (data?.signQuotes.errorCode === 'MANUAL_REVIEW_REQUIRED') {
             setIsShowingFailModal(true)
@@ -429,6 +445,8 @@ export const Checkout = ({
                     isFirstAndLastNameVisible={
                       !offerData.person.firstName || !offerData.person.lastName
                     }
+                    phoneNumber={offerData.person.phoneNumber ?? ''}
+                    onPhoneChange={onPhoneChange}
                     onSubmit={startSign}
                   />
                   <StartDateWrapper>
@@ -452,9 +470,7 @@ export const Checkout = ({
                 />
               </InnerWrapper>
               <Sign
-                canInitiateSign={
-                  canInitiateSign && !ssnUpdateLoading && !emailUpdateLoading
-                }
+                canInitiateSign={true}
                 signMethod={signMethodData?.signMethodForQuotes}
                 signUiState={signUiState}
                 signStatus={signStatus}
@@ -463,7 +479,8 @@ export const Checkout = ({
                   signUiState === 'STARTED' ||
                   signUiState === 'STARTED_WITH_REDIRECT' ||
                   signUiState === 'PREPARING' ||
-                  emailUpdateLoading
+                  emailUpdateLoading ||
+                  phoneUpdateLoading
                 }
                 onSignStart={startSign}
               />

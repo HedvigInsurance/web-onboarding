@@ -31,7 +31,7 @@ export interface Address {
 
 export type OfferPersonInfo = Pick<
   BundledQuote,
-  'firstName' | 'lastName' | 'email' | 'ssn' | 'birthDate'
+  'firstName' | 'lastName' | 'email' | 'ssn' | 'birthDate' | 'phoneNumber'
 > & {
   householdSize: number
   address: Address | null
@@ -68,6 +68,11 @@ export interface WithEmailForm {
 export interface WithSsnForm {
   ssn: string
   onSsnChange: (ssn: string) => void
+}
+
+export interface WithPhoneForm {
+  phoneNumber: string
+  onPhoneChange: (phoneNumber: string) => void
 }
 
 export interface WithFirstAndLastNameForm {
