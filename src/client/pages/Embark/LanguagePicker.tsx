@@ -5,39 +5,48 @@ import { Link, useLocation } from 'react-router-dom'
 import { useMarket } from 'components/utils/CurrentLocale'
 import { languagePickerData } from './languagePickerData'
 
+type ColorProps = {
+  color: 'black' | 'white'
+}
+
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
   height: 1.5rem;
 `
 
-export const ActiveOption = styled.div`
-  color: ${colorsV3.gray100};
+export const ActiveOption = styled.div<ColorProps>`
+  color: ${({ color }) =>
+    color === 'black' ? colorsV3.gray900 : colorsV3.gray100};
   font-size: 1rem;
   cursor: default;
 `
 
-export const LinkOption = styled(Link)`
+export const LinkOption = styled(Link)<ColorProps>`
   text-decoration: none;
-  color: ${colorsV3.gray100};
+  color: ${({ color }) =>
+    color === 'black' ? colorsV3.gray900 : colorsV3.gray100};
   font-size: 1rem;
   opacity: 0.5;
 
   &:hover {
-    color: ${colorsV3.gray100};
+    color: ${({ color }) =>
+      color === 'black' ? colorsV3.gray900 : colorsV3.gray100};
     opacity: 0.8;
   }
 
   &:active {
-    color: ${colorsV3.gray100};
+    color: ${({ color }) =>
+      color === 'black' ? colorsV3.gray900 : colorsV3.gray100};
     opacity: 1;
   }
 `
 
-export const Divider = styled.span`
+export const Divider = styled.span<ColorProps>`
   height: 100%;
   width: 1px;
-  background-color: ${colorsV3.gray100};
+  background-color: ${({ color }) =>
+    color === 'black' ? colorsV3.gray900 : colorsV3.gray100};
 
   /* Override global Embark styling */
   && {
@@ -45,11 +54,14 @@ export const Divider = styled.span`
   }
 `
 
-interface Props {
+type Props = ColorProps & {
   path?: string
 }
 
-export const LanguagePicker: React.FC<Props> = ({ path = '/new-member' }) => {
+export const LanguagePicker: React.FC<Props> = ({
+  path = '/new-member',
+  color = 'black',
+}) => {
   const location = useLocation()
   const market = useMarket()
 
@@ -58,11 +70,15 @@ export const LanguagePicker: React.FC<Props> = ({ path = '/new-member' }) => {
       {languagePickerData[market].map(({ linkTo, shortTitle }, index) => (
         <React.Fragment key={linkTo}>
           {location.pathname.startsWith(`/${linkTo}/`) ? (
-            <ActiveOption>{shortTitle}</ActiveOption>
+            <ActiveOption color={color}>{shortTitle}</ActiveOption>
           ) : (
-            <LinkOption to={`/${linkTo}${path}`}>{shortTitle}</LinkOption>
+            <LinkOption color={color} to={`/${linkTo}${path}`}>
+              {shortTitle}
+            </LinkOption>
           )}
-          {index < languagePickerData[market].length - 1 && <Divider />}
+          {index < languagePickerData[market].length - 1 && (
+            <Divider color={color} />
+          )}
         </React.Fragment>
       ))}
     </Wrapper>

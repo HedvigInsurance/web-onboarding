@@ -73,6 +73,9 @@ interface EmbarkProps {
 
 const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
   const currentLocale = useCurrentLocale()
+  const [isCustomerServicePhoneNumberEnabled] = useFeature([
+    Features.CUSTOMER_SERVICE_PHONE_NUMBER,
+  ])
 
   const history = useHistory<{
     embarkPassageName: string
@@ -172,13 +175,14 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
                 storyData={state.data}
                 startPageLink={props.startPageLink}
                 customTrailingContent={
+                  isCustomerServicePhoneNumberEnabled &&
                   currentLocale.phoneNumber ? (
                     <PhoneNumber
                       color="black"
-                      onClick={(status) => handleClickPhoneNumber(status)}
+                      onClick={handleClickPhoneNumber}
                     />
                   ) : (
-                    <LanguagePicker />
+                    <LanguagePicker color="black" />
                   )
                 }
               />

@@ -8,7 +8,7 @@ jest.mock('../../apolloClient', () => ({}))
 test('Swedish language picker renders without 💥', () => {
   const { getByText, queryByText, container } = renderComponent(
     <MemoryRouter initialEntries={['/se/new-member']}>
-      <LanguagePicker />
+      <LanguagePicker color="black" />
     </MemoryRouter>,
   )
 
@@ -22,7 +22,7 @@ test('Swedish language picker renders without 💥', () => {
 test('Norwegian language picker renders without 💥', () => {
   const { getByText, queryByText, container } = renderComponent(
     <MemoryRouter initialEntries={['/no/new-member']}>
-      <LanguagePicker />
+      <LanguagePicker color="black" />
     </MemoryRouter>,
   )
 
@@ -36,7 +36,7 @@ test('Norwegian language picker renders without 💥', () => {
 test('Danish language picker renders without 💥', () => {
   const { getByText, queryByText, container } = renderComponent(
     <MemoryRouter initialEntries={['/dk/new-member']}>
-      <LanguagePicker />
+      <LanguagePicker color="black" />
     </MemoryRouter>,
   )
 
