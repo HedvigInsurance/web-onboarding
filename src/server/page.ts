@@ -38,13 +38,13 @@ const clientConfig: ClientConfig = {
 }
 
 const template = (
-  route: ServerSideRoute,
+  serverRouteData: ServerSideRoute,
   locale: string,
   cspNonce: string,
   adtractionTag: string | null,
   code: string | null,
 ) => {
-  const pageMeta = getPageMeta(locale, route, code)
+  const pageMeta = getPageMeta(locale, serverRouteData, code)
 
   return `<!doctype html>
   <html lang="en">
@@ -64,7 +64,7 @@ const template = (
     }
     <meta
         property="og:image"
-        content="${route.ogImage ||
+        content="${serverRouteData.ogImage ||
           'https://www.hedvig.com/f/62762/1920x1080/a8d806bbbf/background.png'}"
      />
      <meta name="google-site-verification" content="AZ5rW7lm8fgkGEsSI8BbV4i45ylXAnGEicXf6HPQE-Q" />
@@ -111,7 +111,7 @@ const template = (
 }
 
 export const getPage = (
-  route: ServerSideRoute,
+  serverRouteData: ServerSideRoute,
 ): Router.IMiddleware<WithRequestUuid, any> => async (ctx) => {
   const serverCookieStorage = new SavingCookieStorage(
     new ServerCookieStorage(ctx),
@@ -143,15 +143,15 @@ export const getPage = (
     })
   }
 
-  if (route.status) {
-    ctx.status = route.status
+  if (serverRouteData.status) {
+    ctx.status = serverRouteData.status
   }
 
   const adtractionScriptSrc =
     locales[ctx.params.locale as LocaleLabel]?.adtractionScriptSrc ?? null
 
   ctx.body = template(
-    route,
+    serverRouteData,
     ctx.params.locale,
     (ctx.res as any).cspNonce,
     adtractionScriptSrc,
