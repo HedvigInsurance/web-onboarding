@@ -13,7 +13,7 @@ import {
 
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { getBundleVariantFromInsuranceTypes } from 'pages/OfferNew/utils'
+import { getBundleVariantFromInsuranceTypesWithFallback } from 'pages/OfferNew/utils'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import { QuoteInput } from './types'
 import { Details, getValidationSchema } from './Details'
@@ -117,11 +117,10 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
 
   const bundleVariants = (data?.quoteCart.bundle?.possibleVariations ??
     []) as Array<QuoteBundleVariant>
-  const selectedQuoteBundle =
-    getBundleVariantFromInsuranceTypes(
-      bundleVariants,
-      selectedInsuranceTypes,
-    ) || bundleVariants[0]
+  const selectedQuoteBundle = getBundleVariantFromInsuranceTypesWithFallback(
+    bundleVariants,
+    selectedInsuranceTypes,
+  )
 
   if (!selectedQuoteBundle) return null
 

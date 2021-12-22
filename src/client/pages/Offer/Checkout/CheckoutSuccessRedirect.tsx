@@ -2,20 +2,20 @@ import React from 'react'
 import { SemanticEvents } from 'quepasa'
 import { Mount } from 'react-lifecycle-components'
 import { Redirect } from 'react-router-dom'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { OfferData } from 'pages/OfferNew/types'
 import {
   getContractType,
   getUtmParamsFromCookie,
   TrackAction,
 } from 'utils/tracking/tracking'
-import { useCurrentLocale } from 'components/utils/CurrentLocale'
 
 type Props = {
   offerData: OfferData
 }
 
 export const CheckoutSuccessRedirect: React.FC<Props> = ({ offerData }) => {
-  const locale = useCurrentLocale()
+  const { path } = useCurrentLocale()
 
   return (
     <TrackAction
@@ -36,7 +36,7 @@ export const CheckoutSuccessRedirect: React.FC<Props> = ({ offerData }) => {
     >
       {({ track: trackAction }) => (
         <Mount on={trackAction}>
-          <Redirect to={`/${locale}/new-member/connect-payment/`} />
+          <Redirect to={`/${path}/new-member/connect-payment/`} />
         </Mount>
       )}
     </TrackAction>

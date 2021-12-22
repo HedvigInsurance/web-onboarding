@@ -23,7 +23,7 @@ import { LanguagePicker } from '../Embark/LanguagePicker'
 import {
   getOfferData,
   getUniqueQuotesFromVariantList,
-  getBundleVariantFromInsuranceTypes,
+  getBundleVariantFromInsuranceTypesWithFallback,
   getInsuranceTypesFromBundleVariant,
 } from '../OfferNew/utils'
 import { AppPromotionSection } from '../OfferNew/AppPromotionSection'
@@ -98,11 +98,10 @@ export const OfferPage = ({
   const isInsuranceSelectorVisible =
     isInsuranceToggleEnabled && bundleVariants.length > 1
 
-  const selectedBundleVariant =
-    getBundleVariantFromInsuranceTypes(
-      bundleVariants,
-      selectedInsuranceTypes,
-    ) || bundleVariants?.[0]
+  const selectedBundleVariant = getBundleVariantFromInsuranceTypesWithFallback(
+    bundleVariants,
+    selectedInsuranceTypes,
+  )
 
   const checkoutMatch = useRouteMatch(
     `${localePathPattern}/new-member/sign/${quoteCartId}`,

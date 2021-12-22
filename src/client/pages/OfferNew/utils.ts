@@ -495,13 +495,13 @@ const isBundleVariantMatchingInsuranceTypes = (
   )
 }
 
-export const getBundleVariantFromInsuranceTypes = (
+export const getBundleVariantFromInsuranceTypesWithFallback = (
   variants: Array<QuoteBundleVariant>,
   insuranceTypes: Array<InsuranceType>,
 ) =>
   variants.find((variant) =>
     isBundleVariantMatchingInsuranceTypes(variant, insuranceTypes),
-  )
+  ) || variants?.[0]
 
 export const getInsuranceTypesFromBundleVariant = (
   bundleVariant: QuoteBundleVariant,

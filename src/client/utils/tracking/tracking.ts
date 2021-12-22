@@ -210,10 +210,10 @@ export const useTrack = ({ offerData, signState }: TrackProps) => {
         parseFloat(offerData.cost.monthlyGross.amount),
         memberId,
         offerData.person.email || '',
+        offerData,
         redeemedCampaigns !== null && redeemedCampaigns.length !== 0
           ? redeemedCampaigns[0].code
-          : null,
-        offerData,
+          : undefined,
       )
     }
 

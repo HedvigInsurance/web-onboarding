@@ -3,6 +3,7 @@ import { useFormik } from 'formik'
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { FetchResult, useApolloClient } from '@apollo/react-hooks'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import {
   QuoteBundleVariant,
@@ -12,27 +13,38 @@ import {
   useCheckoutStatusQuery,
   CheckoutStatus,
   InsuranceTermType,
+  CreateQuoteBundleMutation,
+  useMemberLazyQuery,
 } from 'data/graphql'
 import {
   getOfferData,
   getUniqueQuotesFromVariantList,
   getQuoteIdsFromBundleVariant,
+  getBundleVariantFromInsuranceTypesWithFallback,
 } from 'pages/OfferNew/utils'
 import { PriceBreakdown } from 'pages/OfferNew/common/PriceBreakdown'
+import { useStorage } from 'utils/StorageContainer'
 import { useTextKeys } from 'utils/textKeys'
 import { useLockBodyScroll } from 'utils/hooks/useLockBodyScroll'
 import { useFeature, Features } from 'utils/hooks/useFeature'
+import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { CloseButton } from 'components/CloseButton/CloseButton'
 import { DiscountTag } from 'components/DiscountTag/DiscountTag'
+import { setupQuoteCartSession } from 'containers/SessionContainer'
+import { Variation, useVariation } from 'utils/hooks/useVariation'
+import { handleSignedEvent } from 'utils/tracking/signing'
+import { adtraction } from 'utils/tracking/adtraction'
+import { trackOfferGTM, EventName } from 'utils/tracking/gtm'
+import { trackStudentkortet } from 'utils/tracking/studentkortet'
 import { StartDate } from '../../OfferNew/Introduction/Sidebar/StartDate'
 import { useScrollLock, VisibilityState } from '../../OfferNew/Checkout/hooks'
-
-import { CheckoutSuccessRedirect } from '../../OfferNew/Checkout/CheckoutSuccessRedirect'
 import { SignFailModal } from '../../OfferNew/Checkout/SignFailModal'
 import { InsuranceSummary } from '../../OfferNew/Checkout/InsuranceSummary'
 import { UpsellCard } from '../../OfferNew/Checkout/UpsellCard'
 import { QuoteInput } from '../Introduction/DetailsModal/types'
+import { apolloClient as realApolloClient } from '../../../apolloClient'
+import { CheckoutSuccessRedirect } from './CheckoutSuccessRedirect'
 import {
   CheckoutDetailsForm,
   getCheckoutDetailsValidationSchema,
@@ -203,6 +215,10 @@ export const Checkout = ({
 }: CheckoutProps) => {
   const textKeys = useTextKeys()
   const locale = useCurrentLocale()
+  const client = useApolloClient()
+  const variation = useVariation()
+  const storage = useStorage()
+  const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
   const [isUpsellCardVisible] = useFeature([Features.CHECKOUT_UPSELL_CARD])
 
   const scrollWrapper = useRef<HTMLDivElement>()
@@ -217,6 +233,9 @@ export const Checkout = ({
   })
   const checkoutMethod = quoteCart?.checkoutMethods[0]
   const initialCheckoutStatus = quoteCart?.checkout?.status
+  const discountCode = quoteCart?.campaign?.code
+  const isDiscountMonthlyCostDeduction =
+    quoteCart?.campaign?.incentive?.__typename === 'MonthlyCostDeduction'
 
   const [signUiState, setSignUiState] = useState<SignUiState>(() =>
     getSignUiStateFromCheckoutStatus(initialCheckoutStatus),
@@ -235,6 +254,7 @@ export const Checkout = ({
     createQuoteBundle,
     { loading: isBundleCreationInProgress },
   ] = useCreateQuoteBundleMutation()
+  const [fetchMember, { data: memberData }] = useMemberLazyQuery()
 
   const mainQuote = selectedQuoteBundleVariant.bundle.quotes[0]
   const privacyPolicyLink = mainQuote.insuranceTerms.find(
@@ -248,9 +268,7 @@ export const Checkout = ({
       },
     } as QuoteInput,
     validationSchema: getCheckoutDetailsValidationSchema(locale),
-    onSubmit: async (values) => {
-      await reCreateQuoteBundle(values)
-    },
+    onSubmit: (values) => reCreateQuoteBundle(values),
     validateOnMount: true,
     enableReinitialize: true,
   })
@@ -299,21 +317,69 @@ export const Checkout = ({
     }
   }, [checkoutStatus])
 
-  // @TODO Handle useTrack
-  // useTrack({
-  //   offerData,
-  //   signState: signStatus?.signState,
-  // })
+  useEffect(() => {
+    if (checkoutStatus === CheckoutStatus.Signed) {
+      setupQuoteCartSession({
+        quoteCartId,
+        apolloClientUtils: {
+          client,
+          subscriptionClient: realApolloClient!.subscriptionClient,
+          httpLink: realApolloClient!.httpLink,
+        },
+        storage,
+      })
+    }
+  }, [checkoutStatus, client, quoteCartId, storage])
 
-  // @TODO deal with AVY
-  // useEffect(() => {
-  //   if (checkoutStatus !== CheckoutStatus.Completed) {
-  //     return
-  //   }
-  //   if (variation === Variation.AVY) {
-  //     handleSignedEvent(member.data?.member ?? null)
-  //   }
-  // }, [member.data?.member, signStatus?.signState, variation])
+  useEffect(() => {
+    if (checkoutStatus === CheckoutStatus.Completed) {
+      fetchMember()
+    }
+  }, [checkoutStatus, fetchMember])
+
+  useEffect(() => {
+    if (!memberData?.member.id) return
+
+    const memberId = memberData?.member.id
+
+    // AVY
+    if (variation === Variation.AVY) {
+      handleSignedEvent(memberId)
+    }
+
+    // useTrack()
+    adtraction(
+      parseFloat(
+        selectedQuoteBundleVariant.bundle.bundleCost.monthlyGross.amount,
+      ),
+      memberId,
+      mainQuote.email || '',
+      offerData,
+      discountCode,
+    )
+
+    trackOfferGTM(
+      EventName.SignedCustomer,
+      { ...offerData, memberId: memberId || '' },
+      isDiscountMonthlyCostDeduction,
+    )
+
+    if (
+      discountCode &&
+      ['studentkortet', 'stuk2'].includes(discountCode.toLowerCase()) &&
+      memberId
+    ) {
+      trackStudentkortet(memberId)
+    }
+  }, [
+    memberData?.member.id,
+    discountCode,
+    variation,
+    selectedQuoteBundleVariant.bundle.bundleCost.monthlyGross.amount,
+    mainQuote.email,
+    offerData,
+    isDiscountMonthlyCostDeduction,
+  ])
 
   // useUnderwritingLimitsHitReporter(
   //   createQuoteBundleData.data?.editQuote?.__typename === 'UnderwritingLimitsHit' &&
@@ -330,15 +396,32 @@ export const Checkout = ({
     } = formik
 
     try {
+      let quoteIds = getQuoteIdsFromBundleVariant(selectedQuoteBundleVariant)
       if (
         firstName !== initialValues.firstName ||
         lastName !== initialValues.lastName ||
         email !== initialValues.email ||
         ssn !== initialValues.ssn
-      )
-        await submitForm()
+      ) {
+        const result: FetchResult<CreateQuoteBundleMutation> = await submitForm()
+        const createQuoteBundle = result.data?.quoteCart_createQuoteBundle
+        if (
+          createQuoteBundle?.__typename !== 'QuoteCart' ||
+          !createQuoteBundle?.bundle?.possibleVariations
+        )
+          return setSignUiState('FAILED')
 
-      const quoteIds = getQuoteIdsFromBundleVariant(selectedQuoteBundleVariant)
+        const bundleVariants = createQuoteBundle.bundle.possibleVariations
+        const updatedSelectedQuoteBundleVariant = getBundleVariantFromInsuranceTypesWithFallback(
+          bundleVariants as QuoteBundleVariant[],
+          selectedInsuranceTypes,
+        )
+        quoteIds = getQuoteIdsFromBundleVariant(
+          updatedSelectedQuoteBundleVariant,
+        )
+        console.log('RESULT', result)
+      }
+
       const { data } = await startCheckout({
         variables: {
           quoteIds,
@@ -390,14 +473,11 @@ export const Checkout = ({
           },
         ),
       },
-      refetchQueries: ['quoteCart'],
-      awaitRefetchQueries: true,
     })
   }
 
-  if (checkoutStatus === CheckoutStatus.Completed) {
+  if (memberData?.member.id)
     return <CheckoutSuccessRedirect offerData={offerData} />
-  }
 
   return (
     <>
