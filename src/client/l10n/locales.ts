@@ -57,7 +57,8 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: birthDateFormats.SE,
       backendFormatExample: 'ÅÅÅÅ-MM-DD',
     },
-    phoneNumber: phoneNumbers.SE,
+    // @TODO reverse on 6th of January
+    // phoneNumber: phoneNumbers.SE,
   },
   'se-en': {
     path: 'se-en',
@@ -76,7 +77,8 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: birthDateFormats.SE,
       backendFormatExample: 'YYYY-MM-DD',
     },
-    phoneNumber: phoneNumbers.SE,
+    // @TODO reverse on 6th of January
+    // phoneNumber: phoneNumbers.SE,
   },
   no: {
     path: 'no',
