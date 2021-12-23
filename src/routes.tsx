@@ -36,13 +36,6 @@ enum EmbarkStory {
   SwedenQuoteCartNeeder = 'Web Onboarding SE - Quote Cart Needer',
 }
 
-type ReactPageRoute = {
-  path: string
-  Component?: React.ComponentType<any>
-  render?: (props: RouteComponentProps<any>) => React.ReactNode
-  exact?: boolean
-}
-
 export type ServerSideRoute = {
   titleTextKey: string
   metaDescriptionTextKey?: string
