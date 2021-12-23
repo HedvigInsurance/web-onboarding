@@ -5,15 +5,18 @@ exports[`Danish language picker renders without 💥 1`] = `
   class="css-1prqaxz-Wrapper e1g7xtvp0"
 >
   <div
-    class="css-cddkmz-ActiveOption e1g7xtvp1"
+    class="css-14fi736-ActiveOption e1g7xtvp1"
+    color="black"
   >
     Da
   </div>
   <span
-    class="css-au3ti5-Divider e1g7xtvp3"
+    class="css-1tysqfo-Divider e1g7xtvp3"
+    color="black"
   />
   <a
-    class="css-1odoamw-LinkOption e1g7xtvp2"
+    class="css-s5uyen-LinkOption e1g7xtvp2"
+    color="black"
     href="/dk-en/new-member"
   >
     En
@@ -26,15 +29,18 @@ exports[`Norwegian language picker renders without 💥 1`] = `
   class="css-1prqaxz-Wrapper e1g7xtvp0"
 >
   <div
-    class="css-cddkmz-ActiveOption e1g7xtvp1"
+    class="css-14fi736-ActiveOption e1g7xtvp1"
+    color="black"
   >
     No
   </div>
   <span
-    class="css-au3ti5-Divider e1g7xtvp3"
+    class="css-1tysqfo-Divider e1g7xtvp3"
+    color="black"
   />
   <a
-    class="css-1odoamw-LinkOption e1g7xtvp2"
+    class="css-s5uyen-LinkOption e1g7xtvp2"
+    color="black"
     href="/no-en/new-member"
   >
     En
@@ -47,15 +53,18 @@ exports[`Swedish language picker renders without 💥 1`] = `
   class="css-1prqaxz-Wrapper e1g7xtvp0"
 >
   <div
-    class="css-cddkmz-ActiveOption e1g7xtvp1"
+    class="css-14fi736-ActiveOption e1g7xtvp1"
+    color="black"
   >
     Sv
   </div>
   <span
-    class="css-au3ti5-Divider e1g7xtvp3"
+    class="css-1tysqfo-Divider e1g7xtvp3"
+    color="black"
   />
   <a
-    class="css-1odoamw-LinkOption e1g7xtvp2"
+    class="css-s5uyen-LinkOption e1g7xtvp2"
+    color="black"
     href="/se-en/new-member"
   >
     En

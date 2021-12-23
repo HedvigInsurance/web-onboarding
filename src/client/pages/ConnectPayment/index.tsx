@@ -12,11 +12,15 @@ import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { pushToGTMDataLayer } from 'utils/tracking/gtm'
+import { useFeature, Features } from 'utils/hooks/useFeature'
 import { ConnectPaymentPage } from './sections/ConnectPayment'
 
 export const ConnectPayment: React.FC = () => {
   const textKeys = useTextKeys()
   const currentLocale = useCurrentLocale()
+  const [isCustomerServicePhoneNumberEnabled] = useFeature([
+    Features.CUSTOMER_SERVICE_PHONE_NUMBER,
+  ])
 
   const history = useHistory()
 
@@ -37,10 +41,10 @@ export const ConnectPayment: React.FC = () => {
           <title>{textKeys.ONBOARDING_CONNECT_DD_PAGE_TITLE()}</title>
         </Helmet>
         <TopBar>
-          {currentLocale.phoneNumber ? (
+          {isCustomerServicePhoneNumberEnabled && currentLocale.phoneNumber ? (
             <PhoneNumber color="white" onClick={handleClickPhoneNumber} />
           ) : (
-            <LanguagePicker />
+            <LanguagePicker color="white" />
           )}
         </TopBar>
         <ConnectPaymentPage />
