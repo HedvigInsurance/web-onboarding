@@ -18,8 +18,12 @@ import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useTextKeys } from 'utils/textKeys'
 import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { useCreateOnboardingQuoteCartMutation } from 'data/graphql'
+import {
+  useCreateOnboardingQuoteCartMutation,
+  useAddCampaignCodeMutation,
+} from 'data/graphql'
 import { useFeature, Features } from 'utils/hooks/useFeature'
+import { CampaignCode } from 'utils/campaignCode'
 import { pushToGTMDataLayer } from '../../utils/tracking/gtm'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
@@ -69,6 +73,9 @@ interface EmbarkProps {
 
 const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
   const currentLocale = useCurrentLocale()
+  const [isCustomerServicePhoneNumberEnabled] = useFeature([
+    Features.CUSTOMER_SERVICE_PHONE_NUMBER,
+  ])
 
   const history = useHistory<{
     embarkPassageName: string
@@ -168,13 +175,14 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
                 storyData={state.data}
                 startPageLink={props.startPageLink}
                 customTrailingContent={
+                  isCustomerServicePhoneNumberEnabled &&
                   currentLocale.phoneNumber ? (
                     <PhoneNumber
                       color="black"
-                      onClick={(status) => handleClickPhoneNumber(status)}
+                      onClick={handleClickPhoneNumber}
                     />
                   ) : (
-                    <LanguagePicker />
+                    <LanguagePicker color="black" />
                   )
                 }
               />
@@ -237,11 +245,28 @@ const useCreateQuoteCartId = ({ skip = false }) => {
     { data, error },
   ] = useCreateOnboardingQuoteCartMutation()
 
-  const createQuoteCart = useCallback(() => {
-    createOnboardingQuoteCart({
+  const [addCampaignCode] = useAddCampaignCodeMutation()
+
+  const createQuoteCart = useCallback(async () => {
+    const result = await createOnboardingQuoteCart({
       variables: { market: apiMarket, locale: isoLocale },
     })
-  }, [createOnboardingQuoteCart, apiMarket, isoLocale])
+    const quoteCartId = result.data?.onboardingQuoteCart_create.id
+    const savedCampaignCode = CampaignCode.get()
+
+    if (quoteCartId && savedCampaignCode !== null) {
+      try {
+        await addCampaignCode({
+          variables: {
+            id: quoteCartId,
+            code: savedCampaignCode,
+          },
+        })
+      } catch {
+        CampaignCode.remove()
+      }
+    }
+  }, [createOnboardingQuoteCart, apiMarket, isoLocale, addCampaignCode])
 
   useEffect(() => {
     if (!skip) {
@@ -262,7 +287,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
   const [initialStore, setInitialStore] = React.useState<
     Record<string, string>
   >()
-  const { isoLocale } = useCurrentLocale()
+  const { isoLocale, path: pathLocale } = useCurrentLocale()
 
   const [isQuoteCartApiEnabled] = useFeature([Features.QUOTE_CART_API])
   const {
@@ -408,6 +433,19 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                         })
                       }
                       redirectToOfferPage()
+                    },
+                    QuoteCartOfferRedirect: (
+                      quoteCartId,
+                      selectedInsuranceTypes,
+                    ) => {
+                      const searchParams = new URLSearchParams()
+                      selectedInsuranceTypes.forEach((insuranceType) => {
+                        searchParams.append('type', insuranceType)
+                      })
+
+                      history.push(
+                        `${pathLocale}/new-member/offer/${quoteCartId}?${searchParams.toString()}`,
+                      )
                     },
                     MailingList: () => {
                       location.href = 'https://hedvigapp.typeform.com/to/xiTKWi'

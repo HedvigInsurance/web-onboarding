@@ -137,6 +137,7 @@ export type AcceptedReferral = {
 
 export type ActionRequired = {
   __typename?: 'ActionRequired'
+  paymentTokenId: Scalars['ID']
   action: Scalars['CheckoutPaymentAction']
 }
 
@@ -293,6 +294,11 @@ export enum AddressOwnership {
   Own = 'OWN',
   Brf = 'BRF',
   Rent = 'RENT',
+}
+
+export type Adyen = {
+  __typename?: 'Adyen'
+  availablePaymentOptions: Array<Scalars['PaymentMethodsResponse']>
 }
 
 export type Aggregate = {
@@ -2036,6 +2042,11 @@ export type ConcurrentInception = {
   currentInsurer?: Maybe<CurrentInsurer>
 }
 
+export type ConnectPaymentFinished = {
+  __typename?: 'ConnectPaymentFinished'
+  resultCode: Scalars['String']
+}
+
 export type ConnectPaymentInput = {
   paymentMethodDetails: Scalars['PaymentMethodDetails']
   channel: PaymentConnectChannel
@@ -2043,7 +2054,7 @@ export type ConnectPaymentInput = {
   returnUrl: Scalars['String']
 }
 
-export type ConnectPaymentResult = PaymentResultCode | ActionRequired
+export type ConnectPaymentResult = ConnectPaymentFinished | ActionRequired
 
 export type ConnectPositionInput = {
   /** Connect document after specified document */
@@ -2636,19 +2647,11 @@ export type CreateOnboardingQuoteCartInput = {
   locale: Scalars['String']
 }
 
-export type CreateQuoteBundleError = Error & {
-  __typename?: 'CreateQuoteBundleError'
-  message: Scalars['String']
-  /**  The type of the quote that could not be created.  */
-  type: Scalars['String']
-  limits: Array<UnderwritingLimit>
-}
-
 export type CreateQuoteBundleInput = {
   payload: Array<Scalars['JSON']>
 }
 
-export type CreateQuoteBundleResult = QuoteCart | CreateQuoteBundleError
+export type CreateQuoteBundleResult = QuoteCart | QuoteBundleError
 
 export type CreateQuoteBundleSuccess = {
   __typename?: 'CreateQuoteBundleSuccess'
@@ -3118,6 +3121,8 @@ export type EditQuoteInput = {
   email?: Maybe<Scalars['String']>
   phoneNumber?: Maybe<Scalars['String']>
 }
+
+export type EditQuoteResult = QuoteCart | QuoteBundleError
 
 export type EditSwedishAccidentInput = {
   street?: Maybe<Scalars['String']>
@@ -7595,7 +7600,7 @@ export type Mutation = {
   login_resendOtp: Scalars['ID']
   paymentConnection_connectPayment: ConnectPaymentResult
   paymentConnection_submitAdditionalPaymentDetails: ConnectPaymentResult
-  paymentConnection_submitAdyenRedirection: PaymentResultCode
+  paymentConnection_submitAdyenRedirection: ConnectPaymentFinished
   /**
    * Create a new onboarding session. This is not an authentication session, but rather an object that
    * ties the onboarding journey together.
@@ -7612,6 +7617,8 @@ export type Mutation = {
   quoteCart_addCampaign: AddCampaignResult
   /** Remove the existing campaign. */
   quoteCart_removeCampaign: RemoveCampaignResult
+  /** Edit the cart. Will only update the fields that are present in the payload. */
+  quoteCart_editQuote: EditQuoteResult
   /**
    * Initiate signing of this onboarding, optionally tagging a subset of the quotes if not all of them are wanted.
    *
@@ -7799,12 +7806,12 @@ export type MutationPaymentConnection_ConnectPaymentArgs = {
 }
 
 export type MutationPaymentConnection_SubmitAdditionalPaymentDetailsArgs = {
-  id: Scalars['ID']
+  paymentTokenId: Scalars['ID']
   input: AdditionalPaymentDetailsInput
 }
 
 export type MutationPaymentConnection_SubmitAdyenRedirectionArgs = {
-  id: Scalars['ID']
+  paymentTokenId: Scalars['ID']
   input: SubmitAdyenRedirectionInput
 }
 
@@ -7824,6 +7831,12 @@ export type MutationQuoteCart_AddCampaignArgs = {
 
 export type MutationQuoteCart_RemoveCampaignArgs = {
   id: Scalars['ID']
+}
+
+export type MutationQuoteCart_EditQuoteArgs = {
+  id: Scalars['ID']
+  quoteId: Scalars['ID']
+  payload: Scalars['JSON']
 }
 
 export type MutationQuoteCart_StartCheckoutArgs = {
@@ -8067,11 +8080,6 @@ export type PaymentConnection = {
   providers: Array<Maybe<Provider>>
 }
 
-export type PaymentResultCode = {
-  __typename?: 'PaymentResultCode'
-  resultCode: Scalars['String']
-}
-
 export enum PayoutMethodStatus {
   Active = 'ACTIVE',
   Pending = 'PENDING',
@@ -8156,13 +8164,6 @@ export type PreviousInsurer = {
   switchable: Scalars['Boolean']
 }
 
-export type Price = {
-  __typename?: 'Price'
-  monthlyGross: MonetaryAmountV2
-  monthlyDiscount: MonetaryAmountV2
-  monthlyNet: MonetaryAmountV2
-}
-
 export enum Project {
   NotificationService = 'NotificationService',
   Underwriter = 'Underwriter',
@@ -8178,11 +8179,7 @@ export enum Project {
   MemberService = 'MemberService',
 }
 
-export type Provider = {
-  __typename?: 'Provider'
-  name: Scalars['String']
-  availablePaymentOptions: Array<Maybe<Scalars['PaymentMethodsResponse']>>
-}
+export type Provider = Adyen | Trustly
 
 export type ProviderStatus = {
   __typename?: 'ProviderStatus'
@@ -8194,6 +8191,7 @@ export type ProviderStatusV2 = {
   __typename?: 'ProviderStatusV2'
   functional: Scalars['Boolean']
   insuranceProvider: Scalars['String']
+  insuranceProviderDisplayName?: Maybe<Scalars['String']>
   status: InsuranceProviderAvailability
 }
 
@@ -8234,8 +8232,7 @@ export type Query = {
   availablePayoutMethods: AvailablePaymentMethodsResponse
   /** Returns the active payout method which the member chose to tokenize */
   activePayoutMethods?: Maybe<ActivePayoutMethodsResponse>
-  /** Returns campaign associated with code */
-  campaign: Campaign
+  campaign?: Maybe<Campaign>
   /** Returns information about the authed member's referralCampaign and referrals */
   referralInformation: Referrals
   /** Returns redeemed campaigns belonging to authedUser */
@@ -8250,17 +8247,11 @@ export type Query = {
   quote: Quote
   lastQuoteOfMember: Quote
   signMethodForQuotes: SignMethod
-  commonClaims: Array<CommonClaim>
   news: Array<News>
   welcome: Array<Welcome>
   perils: Array<PerilV2>
-  insuranceTerms: Array<InsuranceTerm>
-  /** Returns termsAndConditions from promise-cms */
-  termsAndConditions: InsuranceTerm
   insuranceProviders: Array<InsuranceProvider>
-  insurableLimits: Array<InsurableLimit>
   referralTerms: ReferralTerm
-  howClaimsWork: Array<ClaimsExplainerPage>
   /** Used */
   keyGearItems: Array<KeyGearItem>
   keyGearItem?: Maybe<KeyGearItem>
@@ -8304,6 +8295,12 @@ export type Query = {
   availableLocales: Array<Locale>
   /** Returns perils from promise-cms */
   contractPerils: Array<PerilV2>
+  /** Returns termsAndConditions from promise-cms */
+  termsAndConditions: InsuranceTerm
+  insuranceTerms: Array<InsuranceTerm>
+  insurableLimits: Array<InsurableLimit>
+  commonClaims: Array<CommonClaim>
+  howClaimsWork: Array<ClaimsExplainerPage>
   embarkStory?: Maybe<EmbarkStory>
   /** returns names of all available embark stories */
   embarkStoryNames: Array<Scalars['String']>
@@ -8407,10 +8404,6 @@ export type QuerySignMethodForQuotesArgs = {
   input: Array<Scalars['ID']>
 }
 
-export type QueryCommonClaimsArgs = {
-  locale: Locale
-}
-
 export type QueryNewsArgs = {
   platform: Platform
   sinceVersion: Scalars['String']
@@ -8427,36 +8420,11 @@ export type QueryPerilsArgs = {
   locale: Locale
 }
 
-export type QueryInsuranceTermsArgs = {
-  contractType: TypeOfContract
-  locale: Locale
-  date?: Maybe<Scalars['LocalDate']>
-  carrier?: Maybe<Scalars['String']>
-  partner?: Maybe<Scalars['String']>
-}
-
-export type QueryTermsAndConditionsArgs = {
-  contractType: TypeOfContract
-  locale: Locale
-  date?: Maybe<Scalars['LocalDate']>
-  carrier?: Maybe<Scalars['String']>
-  partner?: Maybe<Scalars['String']>
-}
-
 export type QueryInsuranceProvidersArgs = {
   locale: Locale
 }
 
-export type QueryInsurableLimitsArgs = {
-  contractType: TypeOfContract
-  locale: Locale
-}
-
 export type QueryReferralTermsArgs = {
-  locale: Locale
-}
-
-export type QueryHowClaimsWorkArgs = {
   locale: Locale
 }
 
@@ -8513,6 +8481,35 @@ export type QueryAngelStoryArgs = {
 
 export type QueryContractPerilsArgs = {
   contractType: TypeOfContract
+  locale: Locale
+}
+
+export type QueryTermsAndConditionsArgs = {
+  contractType: TypeOfContract
+  locale: Locale
+  date?: Maybe<Scalars['LocalDate']>
+  carrier?: Maybe<Scalars['String']>
+  partner?: Maybe<Scalars['String']>
+}
+
+export type QueryInsuranceTermsArgs = {
+  contractType: TypeOfContract
+  locale: Locale
+  date?: Maybe<Scalars['LocalDate']>
+  carrier?: Maybe<Scalars['String']>
+  partner?: Maybe<Scalars['String']>
+}
+
+export type QueryInsurableLimitsArgs = {
+  contractType: TypeOfContract
+  locale: Locale
+}
+
+export type QueryCommonClaimsArgs = {
+  locale: Locale
+}
+
+export type QueryHowClaimsWorkArgs = {
   locale: Locale
 }
 
@@ -8583,6 +8580,14 @@ export enum QuoteBundleAppConfigurationStartDateTerminology {
 export enum QuoteBundleAppConfigurationTitle {
   Logo = 'LOGO',
   UpdateSummary = 'UPDATE_SUMMARY',
+}
+
+export type QuoteBundleError = Error & {
+  __typename?: 'QuoteBundleError'
+  message: Scalars['String']
+  /**  The type of the quote that could not be created.  */
+  type: Scalars['String']
+  limits?: Maybe<Array<UnderwritingLimit>>
 }
 
 export type QuoteBundleInception = ConcurrentInception | IndependentInceptions
@@ -9978,7 +9983,14 @@ export type SwedishApartmentQuoteDetails = {
   zipCode: Scalars['String']
   householdSize: Scalars['Int']
   livingSpace: Scalars['Int']
-  type: ApartmentType
+  type: SwedishApartmentType
+}
+
+export enum SwedishApartmentType {
+  StudentRent = 'STUDENT_RENT',
+  Rent = 'RENT',
+  StudentBrf = 'STUDENT_BRF',
+  Brf = 'BRF',
 }
 
 export type SwedishBankIdExtraInfo = {
@@ -10543,6 +10555,11 @@ export type TranslationWhereUniqueInput = {
 
 export type TriggerClaimChatInput = {
   claimTypeId?: Maybe<Scalars['ID']>
+}
+
+export type Trustly = {
+  __typename?: 'Trustly'
+  _?: Maybe<Scalars['Boolean']>
 }
 
 export enum TypeOfContract {
@@ -11439,6 +11456,19 @@ export type Welcome = {
   paragraph: Scalars['String']
 }
 
+export type AddCampaignCodeMutationVariables = Exact<{
+  id: Scalars['ID']
+  code: Scalars['String']
+}>
+
+export type AddCampaignCodeMutation = { __typename?: 'Mutation' } & {
+  quoteCart_addCampaign:
+    | ({ __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'> & {
+          campaign?: Maybe<{ __typename?: 'Campaign' } & Pick<Campaign, 'code'>>
+        })
+    | ({ __typename?: 'BasicError' } & { errorMessage: BasicError['message'] })
+}
+
 export type AvailablePaymentMethodsQueryVariables = Exact<{
   [key: string]: never
 }>
@@ -11454,7 +11484,7 @@ export type CampaignQueryVariables = Exact<{
 }>
 
 export type CampaignQuery = { __typename?: 'Query' } & {
-  campaign: { __typename?: 'Campaign' } & Pick<Campaign, 'code'>
+  campaign?: Maybe<{ __typename?: 'Campaign' } & Pick<Campaign, 'code'>>
 }
 
 export type CreateDanishHomeAccidentQuoteMutationVariables = Exact<{
@@ -11571,9 +11601,14 @@ export type CreateQuoteBundleMutation = { __typename?: 'Mutation' } & {
             }
           >
         })
-    | ({ __typename?: 'CreateQuoteBundleError' } & {
-        limits: Array<
-          { __typename?: 'UnderwritingLimit' } & Pick<UnderwritingLimit, 'code'>
+    | ({ __typename?: 'QuoteBundleError' } & {
+        limits?: Maybe<
+          Array<
+            { __typename?: 'UnderwritingLimit' } & Pick<
+              UnderwritingLimit,
+              'code'
+            >
+          >
         >
       })
 }
@@ -11925,34 +11960,7 @@ export type QuoteCartQuery = { __typename?: 'Query' } & {
           >
         }
       >
-      campaign?: Maybe<
-        { __typename?: 'Campaign' } & Pick<Campaign, 'code' | 'expiresAt'> & {
-            incentive?: Maybe<
-              | ({ __typename?: 'MonthlyCostDeduction' } & {
-                  amount?: Maybe<
-                    { __typename?: 'MonetaryAmountV2' } & Pick<
-                      MonetaryAmountV2,
-                      'amount' | 'currency'
-                    >
-                  >
-                })
-              | { __typename?: 'FreeMonths' }
-              | { __typename?: 'NoDiscount' }
-              | { __typename?: 'VisibleNoDiscount' }
-              | ({ __typename?: 'PercentageDiscountMonths' } & Pick<
-                  PercentageDiscountMonths,
-                  'percentageDiscount' | 'quantity'
-                >)
-              | { __typename?: 'IndefinitePercentageDiscount' }
-            >
-            owner?: Maybe<
-              { __typename?: 'CampaignOwner' } & Pick<
-                CampaignOwner,
-                'displayName' | 'id'
-              >
-            >
-          }
-      >
+      campaign?: Maybe<{ __typename?: 'Campaign' } & CampaignDataFragment>
       checkout?: Maybe<{ __typename?: 'Checkout' } & Pick<Checkout, 'status'>>
     }
 }
@@ -12096,6 +12104,16 @@ export type ReferrerNameQuery = { __typename?: 'Query' } & {
   }
 }
 
+export type RemoveCampaignCodeMutationVariables = Exact<{
+  quoteCartId: Scalars['ID']
+}>
+
+export type RemoveCampaignCodeMutation = { __typename?: 'Mutation' } & {
+  quoteCart_removeCampaign:
+    | { __typename?: 'QuoteCart' }
+    | ({ __typename?: 'BasicError' } & { errorMessage: BasicError['message'] })
+}
+
 export type RemoveDiscountCodeMutationVariables = Exact<{
   [key: string]: never
 }>
@@ -12233,6 +12251,36 @@ export type BundleCostDataFragmentFragment = {
     monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
       MonetaryAmountV2,
       'amount' | 'currency'
+    >
+  }
+
+export type CampaignDataFragment = { __typename?: 'Campaign' } & Pick<
+  Campaign,
+  'code' | 'ownerName' | 'expiresAt' | 'displayValue'
+> & {
+    incentive?: Maybe<
+      | ({ __typename?: 'MonthlyCostDeduction' } & {
+          amount?: Maybe<
+            { __typename?: 'MonetaryAmountV2' } & Pick<
+              MonetaryAmountV2,
+              'amount' | 'currency'
+            >
+          >
+        })
+      | { __typename: 'FreeMonths' }
+      | { __typename?: 'NoDiscount' }
+      | { __typename?: 'VisibleNoDiscount' }
+      | ({ __typename?: 'PercentageDiscountMonths' } & Pick<
+          PercentageDiscountMonths,
+          'percentageDiscount'
+        > & { quantityMonths: PercentageDiscountMonths['quantity'] })
+      | { __typename?: 'IndefinitePercentageDiscount' }
+    >
+    owner?: Maybe<
+      { __typename?: 'CampaignOwner' } & Pick<
+        CampaignOwner,
+        'displayName' | 'id'
+      >
     >
   }
 
@@ -12490,6 +12538,33 @@ export const BundleCostDataFragmentFragmentDoc = gql`
     }
   }
 `
+export const CampaignDataFragmentDoc = gql`
+  fragment CampaignData on Campaign {
+    incentive {
+      ... on MonthlyCostDeduction {
+        amount {
+          amount
+          currency
+        }
+      }
+      ... on PercentageDiscountMonths {
+        percentageDiscount
+        quantityMonths: quantity
+      }
+      ... on FreeMonths {
+        __typename
+      }
+    }
+    code
+    owner {
+      displayName
+      id
+    }
+    ownerName
+    expiresAt
+    displayValue(locale: $locale)
+  }
+`
 export const QuoteDataFragmentFragmentDoc = gql`
   fragment QuoteDataFragment on BundledQuote {
     id
@@ -12604,6 +12679,66 @@ export const QuoteDataFragmentFragmentDoc = gql`
     }
   }
 `
+export const AddCampaignCodeDocument = gql`
+  mutation AddCampaignCode($id: ID!, $code: String!) {
+    quoteCart_addCampaign(id: $id, code: $code) {
+      ... on QuoteCart {
+        id
+        campaign {
+          code
+        }
+      }
+      ... on BasicError {
+        errorMessage: message
+      }
+    }
+  }
+`
+export type AddCampaignCodeMutationFn = ApolloReactCommon.MutationFunction<
+  AddCampaignCodeMutation,
+  AddCampaignCodeMutationVariables
+>
+
+/**
+ * __useAddCampaignCodeMutation__
+ *
+ * To run a mutation, you first call `useAddCampaignCodeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddCampaignCodeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addCampaignCodeMutation, { data, loading, error }] = useAddCampaignCodeMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useAddCampaignCodeMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AddCampaignCodeMutation,
+    AddCampaignCodeMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    AddCampaignCodeMutation,
+    AddCampaignCodeMutationVariables
+  >(AddCampaignCodeDocument, options)
+}
+export type AddCampaignCodeMutationHookResult = ReturnType<
+  typeof useAddCampaignCodeMutation
+>
+export type AddCampaignCodeMutationResult = ApolloReactCommon.MutationResult<
+  AddCampaignCodeMutation
+>
+export type AddCampaignCodeMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  AddCampaignCodeMutation,
+  AddCampaignCodeMutationVariables
+>
 export const AvailablePaymentMethodsDocument = gql`
   query AvailablePaymentMethods {
     availablePaymentMethods {
@@ -12928,7 +13063,7 @@ export const CreateQuoteBundleDocument = gql`
           }
         }
       }
-      ... on CreateQuoteBundleError {
+      ... on QuoteBundleError {
         limits {
           code
         }
@@ -13592,24 +13727,7 @@ export const QuoteCartDocument = gql`
         }
       }
       campaign {
-        incentive {
-          ... on MonthlyCostDeduction {
-            amount {
-              amount
-              currency
-            }
-          }
-          ... on PercentageDiscountMonths {
-            percentageDiscount
-            quantity
-          }
-        }
-        code
-        owner {
-          displayName
-          id
-        }
-        expiresAt
+        ...CampaignData
       }
       checkoutMethods
       checkout {
@@ -13619,6 +13737,7 @@ export const QuoteCartDocument = gql`
   }
   ${BundleCostDataFragmentFragmentDoc}
   ${QuoteDataFragmentFragmentDoc}
+  ${CampaignDataFragmentDoc}
 `
 
 /**
@@ -13959,6 +14078,59 @@ export type ReferrerNameLazyQueryHookResult = ReturnType<
 export type ReferrerNameQueryResult = ApolloReactCommon.QueryResult<
   ReferrerNameQuery,
   ReferrerNameQueryVariables
+>
+export const RemoveCampaignCodeDocument = gql`
+  mutation RemoveCampaignCode($quoteCartId: ID!) {
+    quoteCart_removeCampaign(id: $quoteCartId) {
+      ... on BasicError {
+        errorMessage: message
+      }
+    }
+  }
+`
+export type RemoveCampaignCodeMutationFn = ApolloReactCommon.MutationFunction<
+  RemoveCampaignCodeMutation,
+  RemoveCampaignCodeMutationVariables
+>
+
+/**
+ * __useRemoveCampaignCodeMutation__
+ *
+ * To run a mutation, you first call `useRemoveCampaignCodeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveCampaignCodeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeCampaignCodeMutation, { data, loading, error }] = useRemoveCampaignCodeMutation({
+ *   variables: {
+ *      quoteCartId: // value for 'quoteCartId'
+ *   },
+ * });
+ */
+export function useRemoveCampaignCodeMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RemoveCampaignCodeMutation,
+    RemoveCampaignCodeMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    RemoveCampaignCodeMutation,
+    RemoveCampaignCodeMutationVariables
+  >(RemoveCampaignCodeDocument, options)
+}
+export type RemoveCampaignCodeMutationHookResult = ReturnType<
+  typeof useRemoveCampaignCodeMutation
+>
+export type RemoveCampaignCodeMutationResult = ApolloReactCommon.MutationResult<
+  RemoveCampaignCodeMutation
+>
+export type RemoveCampaignCodeMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  RemoveCampaignCodeMutation,
+  RemoveCampaignCodeMutationVariables
 >
 export const RemoveDiscountCodeDocument = gql`
   mutation RemoveDiscountCode {

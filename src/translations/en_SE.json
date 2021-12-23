@@ -258,7 +258,7 @@
   "STARTPAGE_DK_CONTENTS_BODY": "",
   "STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_BODY": "",
   "STARTPAGE_DK_CONTENTS_ACCIDENT_BODY": "",
-  "DETAILS_MODULE_TABLE_COINSURED_CELL_LABEL": "",
+  "DETAILS_MODULE_TABLE_COINSURED_CELL_LABEL": "Amount of insured people",
   "CHECKOUT_DETAILS_NAME": "Name",
   "CHECKOUT_DETAILS_BIRTHDATE": "Birthdate",
   "CHECKOUT_DETAILS_STUDENT": "Student",
@@ -315,5 +315,14 @@
   "ACCIDENT_SWEDEN_UPSELL_TITLE": "Accident Insurance",
   "ACCIDENT_SWEDEN_UPSELL_DESCRIPTION": "Covers accidents, injuries outside your home, hospital stays, dental injuries, scarring plus much more. The insurance applies to all co-insured. No deductible.",
   "ACCIDENT_SWEDEN_UPSELL_BUTTON": "Add protection",
-  "PHONE_OPENS_AT": "Opens at"
+  "PHONE_OPENS_AT": "Opens at",
+  "CHECKOUT_SSN_LABEL_GLOBAL": "National identity number (YYYYMMDDXXXX)",
+  "SIDEBAR_ADD_CAMPAIGN_HEADLINE": "Add discount code",
+  "SIDEBAR_ADD_CAMPAIGN_BODY": "Got a discount code? Input it below.",
+  "SIDEBAR_ADD_CAMPAIGN_CELL_LABEL": "Discount code",
+  "SIDEBAR_ADD_CAMPAIGN_CELL_PLACEHOLDER": "Your code",
+  "SIDEBAR_ADD_CAMPAIGN_BUTTON": "Add discount code",
+  "SIDEBAR_NO_BUNDLE_CAMPAIGN_TEXT": "25% discount",
+  "SIDEBAR_REMOVE_CAMPAIGN_BUTTON": "Remove discount code",
+  "SIDEBAR_ADD_CAMPAIGN_ERROR": "The discount code is invalid"
 }

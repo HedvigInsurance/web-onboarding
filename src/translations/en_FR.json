@@ -315,5 +315,14 @@
   "ACCIDENT_SWEDEN_UPSELL_TITLE": "",
   "ACCIDENT_SWEDEN_UPSELL_DESCRIPTION": "",
   "ACCIDENT_SWEDEN_UPSELL_BUTTON": "",
-  "PHONE_OPENS_AT": "Opens at"
+  "PHONE_OPENS_AT": "Opens at",
+  "CHECKOUT_SSN_LABEL_GLOBAL": "",
+  "SIDEBAR_ADD_CAMPAIGN_HEADLINE": "Add discount code",
+  "SIDEBAR_ADD_CAMPAIGN_BODY": "Got a discount code? Input it below.",
+  "SIDEBAR_ADD_CAMPAIGN_CELL_LABEL": "Discount code",
+  "SIDEBAR_ADD_CAMPAIGN_CELL_PLACEHOLDER": "Your code",
+  "SIDEBAR_ADD_CAMPAIGN_BUTTON": "Add discount code",
+  "SIDEBAR_NO_BUNDLE_CAMPAIGN_TEXT": "",
+  "SIDEBAR_REMOVE_CAMPAIGN_BUTTON": "Remove discount code",
+  "SIDEBAR_ADD_CAMPAIGN_ERROR": "The discount code is invalid"
 }

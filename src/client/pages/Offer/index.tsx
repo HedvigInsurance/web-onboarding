@@ -19,6 +19,7 @@ import { Features, useFeature } from 'utils/hooks/useFeature'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { LocaleLabel } from 'l10n/locales'
+import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import {
   getOfferData,
@@ -29,9 +30,9 @@ import {
 import { AppPromotionSection } from '../OfferNew/AppPromotionSection'
 import { Checkout } from '../OfferNew/Checkout'
 import { FaqSection } from '../OfferNew/FaqSection'
-import { Introduction } from '../OfferNew/Introduction'
 import { Perils } from '../OfferNew/Perils'
 import { InsuranceSelector } from '../OfferNew/InsuranceSelector'
+import { Introduction } from './Introduction'
 
 const createToggleCheckout = (history: History<any>, locale?: LocaleLabel) => (
   isOpen: boolean,
@@ -50,11 +51,16 @@ export const OfferPage = ({
     params: { id: quoteCartId },
   },
 }: OfferPageProps) => {
-  const { isoLocale, path: pathLocale } = useCurrentLocale()
+  const { isoLocale, path: pathLocale, phoneNumber } = useCurrentLocale()
   const variation = useVariation()
-  const [isInsuranceToggleEnabled, isQuoteCartEnabled] = useFeature([
+  const [
+    isInsuranceToggleEnabled,
+    isQuoteCartEnabled,
+    isCustomerServicePhoneNumberEnabled,
+  ] = useFeature([
     Features.OFFER_PAGE_INSURANCE_TOGGLE,
     Features.QUOTE_CART_API,
+    Features.CUSTOMER_SERVICE_PHONE_NUMBER,
   ])
 
   const [
@@ -77,7 +83,7 @@ export const OfferPage = ({
   })
 
   const bundleData = quoteCartData?.quoteCart.bundle
-  const redeemedCampaigns = [quoteCartData?.quoteCart.campaign]
+  const redeemedCampaign = quoteCartData?.quoteCart.campaign ?? null
 
   if (quoteCartError) {
     throw new Error(`Error fetching quote cart: ${quoteCartId}.`)
@@ -117,7 +123,7 @@ export const OfferPage = ({
     )
     if (offerData) {
       const isReferralCodeUsed =
-        redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction'
+        redeemedCampaign?.incentive?.__typename === 'MonthlyCostDeduction'
       trackOfferGTM(
         EventName.InsuranceSelectionToggle,
         getOfferData(newSelectedBundleVariant.bundle),
@@ -135,7 +141,7 @@ export const OfferPage = ({
     )
     if (offerData) {
       const isReferralCodeUsed =
-        redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction'
+        redeemedCampaign?.incentive?.__typename === 'MonthlyCostDeduction'
       trackOfferGTM(
         EventName.OfferCrossSell,
         getOfferData(newSelectedBundleVariant.bundle),
@@ -146,7 +152,7 @@ export const OfferPage = ({
   }
 
   const isReferralCodeUsed =
-    redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction'
+    redeemedCampaign?.incentive?.__typename === 'MonthlyCostDeduction'
   useEffect(() => {
     if (offerData) {
       trackOfferGTM(EventName.OfferCreated, offerData, isReferralCodeUsed)
@@ -155,6 +161,18 @@ export const OfferPage = ({
 
   const handleCheckoutToggle = (open: boolean) => {
     toggleCheckout(open)
+  }
+
+  const handleClickPhoneNumber = (status: 'opened' | 'closed') => {
+    if (offerData) {
+      trackOfferGTM(
+        EventName.ClickCallNumber,
+        offerData,
+        quoteCartData?.quoteCart.campaign?.incentive?.__typename ===
+          'MonthlyCostDeduction',
+        { phoneNumberData: { path: history.location.pathname, status } },
+      )
+    }
   }
 
   if (!isQuoteCartEnabled) {
@@ -169,7 +187,14 @@ export const OfferPage = ({
     <Page>
       {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
         <TopBar isTransparent>
-          <LanguagePicker path={`/new-member/offer/${quoteCartId}`} />
+          {isCustomerServicePhoneNumberEnabled && phoneNumber ? (
+            <PhoneNumber color="white" onClick={handleClickPhoneNumber} />
+          ) : (
+            <LanguagePicker
+              color="white"
+              path={`/new-member/offer/${quoteCartId}`}
+            />
+          )}
         </TopBar>
       )}
       {offerData && (
@@ -187,8 +212,10 @@ export const OfferPage = ({
           >
             {({ track }) => (
               <Introduction
+                quoteCartId={quoteCartId}
                 allQuotes={getUniqueQuotesFromVariantList(bundleVariants)}
                 offerData={offerData}
+                campaign={redeemedCampaign}
                 refetch={refetchQuoteCart as () => Promise<any>}
                 onCheckoutOpen={() => {
                   handleCheckoutToggle(true)

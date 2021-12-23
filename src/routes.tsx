@@ -33,6 +33,7 @@ enum EmbarkStory {
   SwedenNeeder = 'Web Onboarding SE - Needer',
   SwedenSwitcher = 'Web Onboarding SE - Switcher',
   SwedenSwitcherWithoutAccident = 'Web Onboarding SE - Switcher Without Accident',
+  SwedenQuoteCartNeeder = 'Web Onboarding SE - Quote Cart Needer',
 }
 
 export interface ServerSideRoute {
@@ -80,16 +81,16 @@ export const serverSideRoutes: ServerSideRoute[] = [
     titleTextKey: 'OFFER_PAGE_TITLE',
   },
   {
-    path: localePathPattern + '/new-member/(offer|sign)/:id',
-    titleTextKey: 'OFFER_PAGE_TITLE',
-  },
-  {
     path: localePathPattern + '/new-member/sign/success',
     titleTextKey: '',
   },
   {
     path: localePathPattern + '/new-member/sign/fail',
     titleTextKey: '',
+  },
+  {
+    path: localePathPattern + '/new-member/(offer|sign)/:id',
+    titleTextKey: 'OFFER_PAGE_TITLE',
   },
   {
     path: localePathPattern + '/new-member/:name?/:id?',
@@ -155,11 +156,6 @@ export const reactPageRoutes: ReactPageRoute[] = [
     exact: true,
   },
   {
-    path: localePathPattern + '/new-member/(offer|sign)/:id',
-    Component: OfferPage,
-    exact: true,
-  },
-  {
     path: localePathPattern + '/new-member/sign/success',
     Component: SignLoading,
     exact: true,
@@ -167,6 +163,11 @@ export const reactPageRoutes: ReactPageRoute[] = [
   {
     path: localePathPattern + '/new-member/sign/fail',
     Component: SignLoading,
+    exact: true,
+  },
+  {
+    path: localePathPattern + '/new-member/(offer|sign)/:id',
+    Component: OfferPage,
     exact: true,
   },
   {
@@ -260,6 +261,16 @@ export const reactPageRoutes: ReactPageRoute[] = [
                 return {
                   baseUrl: `/${locale}/new-member/home-accident-switcher`,
                   name: EmbarkStory.SwedenSwitcher,
+                }
+              case 'home-accident-needer':
+                if (window.hedvigClientConfig.appEnvironment === 'production') {
+                  return {
+                    redirect: `/${locale}/new-member`,
+                  }
+                }
+                return {
+                  baseUrl: `/${locale}/new-member/home-accident-needer`,
+                  name: EmbarkStory.SwedenQuoteCartNeeder,
                 }
             }
             break
