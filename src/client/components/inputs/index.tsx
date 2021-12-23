@@ -84,6 +84,8 @@ const Wrapper = styled.div<{ errors?: string; variant: variantType }>`
   align-items: center;
   transition: all 0.2s;
   color: ${(props) => inputVariants[props.variant].color};
+  padding: 1rem 0.875rem;
+  margin-top: 0.5rem;
 
   &:hover {
     border: 1px solid ${colorsV3.gray700};
@@ -98,12 +100,15 @@ const Wrapper = styled.div<{ errors?: string; variant: variantType }>`
           : inputVariants[props.variant].borderFocus};
   }
 
+  {errors && 
+    <ErrorText ><WarningTriangle />{errors}</ErrorText>
+ }
+
   select {
     cursor: pointer;
     appearance: none;
   }
 `
-
 const TextWrapper = styled.div`
   width: 100%;
   display: flex;
@@ -113,9 +118,8 @@ const TextWrapper = styled.div`
 
 const Label = styled.label`
   font-size: 0.875rem;
-  line-height: 1;
-  color: ${colorsV3.gray500};
-  margin-bottom: 0.25rem;
+  line-height: 1.33;
+  color: ${colorsV3.gray900};
 `
 
 const StyledField = styled(Field)`
@@ -167,13 +171,17 @@ const SymbolWrapper = styled.div`
   }
 `
 
-const ErrorText = styled.div<{ variant: variantType }>`
+const ErrorText = styled.div`
   min-height: 1.375rem;
   font-size: 0.75rem;
   line-height: 1.375rem;
-  text-align: center;
-  color: ${(props) => inputVariants[props.variant].error};
+  color: ${colorsV3.red600};
   margin-top: 0.25rem;
+  svg{
+    vertical-align: middle;
+    margin-right: 0.25rem;
+  }
+
 `
 
 interface CoreInputFieldOptions {
@@ -213,6 +221,7 @@ const StyledRawInput = styled.input`
   color: ${colorsV3.gray900};
   padding: 0;
   margin: 0;
+  width: 100%;
   :focus {
     outline: none;
   }
@@ -237,14 +246,13 @@ export const RawInputField: React.FC<React.InputHTMLAttributes<
   ...props
 }) => (
   <InputFieldContainer className={className}>
+    {label && <Label htmlFor={props.id}>{label}</Label>}
     <Wrapper errors={errors} variant={variant}>
-      {label && <Label htmlFor={props.id}>{label}</Label>}
       <StyledRawInput {...props} />
-      <SymbolWrapper>
-        {(errors || showErrorIcon) && <WarningTriangle />}
-      </SymbolWrapper>
     </Wrapper>
-    {errors && <ErrorText variant={variant}>{errors}</ErrorText>}
+    {errors && 
+       <ErrorText ><WarningTriangle size={13}/>{errors}</ErrorText>
+    }
   </InputFieldContainer>
 )
 
@@ -295,11 +303,12 @@ export const InputField: React.FC<TextInputProps &
       <SymbolWrapper>
         {options && options.length > 0 && <ChevronDown />}
       </SymbolWrapper>
+      {errors && 
+       <ErrorText ><WarningTriangle size={13}/>{errors}</ErrorText>
+      }
     </Wrapper>
 
-    {errors && <WarningTriangle />}
-    {showErrorMessage && <ErrorText variant={variant}>{errors}</ErrorText>}
-  </>
+ </>
 )
 
 export const InputGroupDeleteButton = styled.button`
