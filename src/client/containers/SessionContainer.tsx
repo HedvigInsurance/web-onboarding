@@ -93,19 +93,9 @@ export const setupQuoteCartSession = async ({
   quoteCartId,
   apolloClientUtils,
   storage,
-}: SetupQuoteCartSessionParams): Promise<MemberData> => {
+}: SetupQuoteCartSessionParams): Promise<string> => {
   if (!apolloClientUtils) {
     throw new Error('Missing apollo client')
-  }
-
-  if (storage.session?.getSession()?.token) {
-    const memberResult = await apolloClientUtils.client.query({
-      query: MemberDocument,
-    })
-    return {
-      __typename: 'Member',
-      id: memberResult.data.member.id,
-    }
   }
 
   const accessTokenResult = await apolloClientUtils.client.mutate({
@@ -128,19 +118,17 @@ export const setupQuoteCartSession = async ({
   const memberResult = await apolloClientUtils.client.query({
     query: MemberDocument,
   })
+  const memberId = memberResult.data.member.id
 
   try {
     const castedWindow = window as any
     const segment = castedWindow.analytics as SegmentAnalyticsJs
-    segment.identify(memberResult.data.member.id)
+    segment.identify(memberId)
   } catch (e) {
     captureSentryError(e)
   }
 
-  return {
-    __typename: 'Member',
-    id: memberResult.data.member.id,
-  }
+  return memberId
 }
 
 export const SessionContainer: React.SFC<SessionContainerProps> = ({

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { useFormik } from 'formik'
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
@@ -8,13 +8,14 @@ import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import {
   QuoteBundleVariant,
   useCreateQuoteBundleMutation,
-  useQuoteCartQuery,
   useStartCheckoutMutation,
   useCheckoutStatusQuery,
   CheckoutStatus,
   InsuranceTermType,
   CreateQuoteBundleMutation,
   useMemberLazyQuery,
+  CheckoutMethod,
+  CampaignDataFragment,
 } from 'data/graphql'
 import {
   getOfferData,
@@ -32,11 +33,9 @@ import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { CloseButton } from 'components/CloseButton/CloseButton'
 import { DiscountTag } from 'components/DiscountTag/DiscountTag'
 import { setupQuoteCartSession } from 'containers/SessionContainer'
-import { Variation, useVariation } from 'utils/hooks/useVariation'
-import { handleSignedEvent } from 'utils/tracking/signing'
-import { adtraction } from 'utils/tracking/adtraction'
-import { trackOfferGTM, EventName } from 'utils/tracking/gtm'
-import { trackStudentkortet } from 'utils/tracking/studentkortet'
+import { reportUnderwritingLimits } from 'utils/sentry-client'
+import { trackSignedEvent } from 'utils/tracking/tracking'
+import { useVariation } from 'utils/hooks/useVariation'
 import { StartDate } from '../../OfferNew/Introduction/Sidebar/StartDate'
 import { useScrollLock, VisibilityState } from '../../OfferNew/Checkout/hooks'
 import { SignFailModal } from '../../OfferNew/Checkout/SignFailModal'
@@ -186,6 +185,7 @@ const getSignUiStateFromCheckoutStatus = (
 ): SignUiState => {
   switch (checkoutStatus) {
     case CheckoutStatus.Pending:
+    case CheckoutStatus.Signed:
       return 'STARTED'
     case CheckoutStatus.Failed:
       return 'FAILED'
@@ -197,6 +197,9 @@ const getSignUiStateFromCheckoutStatus = (
 export type CheckoutProps = {
   quoteCartId: string
   quoteBundleVariants: QuoteBundleVariant[]
+  campaign: CampaignDataFragment | null
+  initialCheckoutStatus?: CheckoutStatus
+  checkoutMethod?: CheckoutMethod
   selectedQuoteBundleVariant: QuoteBundleVariant
   onUpsellAccepted: (selectedBundleVariant: QuoteBundleVariant) => void
   isOpen?: boolean
@@ -206,6 +209,9 @@ export type CheckoutProps = {
 
 export const Checkout = ({
   quoteCartId,
+  checkoutMethod,
+  campaign,
+  initialCheckoutStatus,
   quoteBundleVariants,
   selectedQuoteBundleVariant,
   onUpsellAccepted,
@@ -216,8 +222,8 @@ export const Checkout = ({
   const textKeys = useTextKeys()
   const locale = useCurrentLocale()
   const client = useApolloClient()
-  const variation = useVariation()
   const storage = useStorage()
+  const variation = useVariation()
   const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
   const [isUpsellCardVisible] = useFeature([Features.CHECKOUT_UPSELL_CARD])
 
@@ -226,16 +232,11 @@ export const Checkout = ({
   const [windowInnerHeight, setWindowInnerHeight] = useState(window.innerHeight)
   const [visibilityState, setVisibilityState] = useState(VisibilityState.CLOSED)
 
-  const offerData = getOfferData(selectedQuoteBundleVariant.bundle)
-
-  const { data: { quoteCart } = {} } = useQuoteCartQuery({
-    variables: { id: quoteCartId, locale: locale.isoLocale },
-  })
-  const checkoutMethod = quoteCart?.checkoutMethods[0]
-  const initialCheckoutStatus = quoteCart?.checkout?.status
-  const discountCode = quoteCart?.campaign?.code
+  const campaignCode = campaign?.code
   const isDiscountMonthlyCostDeduction =
-    quoteCart?.campaign?.incentive?.__typename === 'MonthlyCostDeduction'
+    campaign?.incentive?.__typename === 'MonthlyCostDeduction'
+
+  const offerData = getOfferData(selectedQuoteBundleVariant.bundle)
 
   const [signUiState, setSignUiState] = useState<SignUiState>(() =>
     getSignUiStateFromCheckoutStatus(initialCheckoutStatus),
@@ -317,9 +318,9 @@ export const Checkout = ({
     }
   }, [checkoutStatus])
 
-  useEffect(() => {
-    if (checkoutStatus === CheckoutStatus.Signed) {
-      setupQuoteCartSession({
+  const completeCheckout = useCallback(async () => {
+    try {
+      const memberId = await setupQuoteCartSession({
         quoteCartId,
         apolloClientUtils: {
           client,
@@ -328,8 +329,31 @@ export const Checkout = ({
         },
         storage,
       })
+      trackSignedEvent({
+        variation,
+        campaignCode,
+        isDiscountMonthlyCostDeduction,
+        memberId,
+        offerData,
+      })
+    } catch (error) {
+      setSignUiState('FAILED')
     }
-  }, [checkoutStatus, client, quoteCartId, storage])
+  }, [
+    campaignCode,
+    client,
+    isDiscountMonthlyCostDeduction,
+    offerData,
+    quoteCartId,
+    storage,
+    variation,
+  ])
+
+  useEffect(() => {
+    if (checkoutStatus === CheckoutStatus.Signed) {
+      completeCheckout()
+    }
+  }, [checkoutStatus, completeCheckout])
 
   useEffect(() => {
     if (checkoutStatus === CheckoutStatus.Completed) {
@@ -337,63 +361,10 @@ export const Checkout = ({
     }
   }, [checkoutStatus, fetchMember])
 
-  useEffect(() => {
-    if (!memberData?.member.id) return
-
-    const memberId = memberData?.member.id
-
-    // AVY
-    if (variation === Variation.AVY) {
-      handleSignedEvent(memberId)
-    }
-
-    // useTrack()
-    adtraction(
-      parseFloat(
-        selectedQuoteBundleVariant.bundle.bundleCost.monthlyGross.amount,
-      ),
-      memberId,
-      mainQuote.email || '',
-      offerData,
-      discountCode,
-    )
-
-    trackOfferGTM(
-      EventName.SignedCustomer,
-      { ...offerData, memberId: memberId || '' },
-      isDiscountMonthlyCostDeduction,
-    )
-
-    if (
-      discountCode &&
-      ['studentkortet', 'stuk2'].includes(discountCode.toLowerCase()) &&
-      memberId
-    ) {
-      trackStudentkortet(memberId)
-    }
-  }, [
-    memberData?.member.id,
-    discountCode,
-    variation,
-    selectedQuoteBundleVariant.bundle.bundleCost.monthlyGross.amount,
-    mainQuote.email,
-    offerData,
-    isDiscountMonthlyCostDeduction,
-  ])
-
-  // useUnderwritingLimitsHitReporter(
-  //   createQuoteBundleData.data?.editQuote?.__typename === 'UnderwritingLimitsHit' &&
-  //     editQuoteResult.data.editQuote.limits.map((limit) => limit.code),
-  //   quoteIds,
-  // )
-
   const startSign = async () => {
     setSignUiState('STARTED')
-    const {
-      values: { firstName, lastName, email, ssn },
-      initialValues,
-      submitForm,
-    } = formik
+    const { values, initialValues, submitForm } = formik
+    const { firstName, lastName, email, ssn } = values
 
     try {
       let quoteIds = getQuoteIdsFromBundleVariant(selectedQuoteBundleVariant)
@@ -404,14 +375,18 @@ export const Checkout = ({
         ssn !== initialValues.ssn
       ) {
         const result: FetchResult<CreateQuoteBundleMutation> = await submitForm()
-        const createQuoteBundle = result.data?.quoteCart_createQuoteBundle
+        const quoteCart = result.data?.quoteCart_createQuoteBundle
         if (
-          createQuoteBundle?.__typename !== 'QuoteCart' ||
-          !createQuoteBundle?.bundle?.possibleVariations
-        )
+          !quoteCart ||
+          quoteCart?.__typename !== 'QuoteCart' ||
+          !quoteCart?.bundle?.possibleVariations
+        ) {
+          if (quoteCart && quoteCart.__typename === 'QuoteBundleError')
+            reportUnderwritingLimits(quoteCart, values)
           return setSignUiState('FAILED')
+        }
 
-        const bundleVariants = createQuoteBundle.bundle.possibleVariations
+        const bundleVariants = quoteCart.bundle.possibleVariations
         const updatedSelectedQuoteBundleVariant = getBundleVariantFromInsuranceTypesWithFallback(
           bundleVariants as QuoteBundleVariant[],
           selectedInsuranceTypes,
@@ -475,9 +450,6 @@ export const Checkout = ({
       },
     })
   }
-
-  if (memberData?.member.id)
-    return <CheckoutSuccessRedirect offerData={offerData} />
 
   return (
     <>

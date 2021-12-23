@@ -20,9 +20,11 @@ import {
   isSwedishApartment,
   isSwedishBRF,
 } from 'pages/OfferNew/utils'
+import { Variation } from 'utils/hooks/useVariation'
 import { trackOfferGTM, EventName } from './gtm'
 import { adtraction } from './adtraction'
 import { trackStudentkortet } from './studentkortet'
+import { handleSignedEvent } from './signing'
 
 const cookie = new CookieStorage()
 
@@ -232,4 +234,39 @@ export const useTrack = ({ offerData, signState }: TrackProps) => {
       trackStudentkortet(memberId)
     }
   }, [redeemedCampaignsData, memberId, offerData, signState])
+}
+
+export type TrackSignedEventParams = {
+  variation: Variation | null
+  memberId: string
+  offerData: OfferData
+  campaignCode?: string
+  isDiscountMonthlyCostDeduction: boolean
+}
+
+export const trackSignedEvent = ({
+  variation,
+  memberId,
+  offerData,
+  campaignCode,
+  isDiscountMonthlyCostDeduction,
+}: TrackSignedEventParams) => {
+  // AVY
+  if (variation === Variation.AVY) {
+    handleSignedEvent(memberId)
+  }
+
+  adtraction(
+    parseFloat(offerData.cost.monthlyGross.amount),
+    memberId,
+    offerData.person.email || '',
+    offerData,
+    campaignCode,
+  )
+
+  trackOfferGTM(
+    EventName.SignedCustomer,
+    { ...offerData, memberId: memberId || '' },
+    isDiscountMonthlyCostDeduction,
+  )
 }

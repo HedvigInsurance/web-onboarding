@@ -10,7 +10,11 @@ import {
 import { LoadingPage } from 'components/LoadingPage'
 import { TopBar } from 'components/TopBar'
 import { Page } from 'components/utils/Page'
-import { useQuoteCartQuery, QuoteBundleVariant } from 'data/graphql'
+import {
+  useQuoteCartQuery,
+  QuoteBundleVariant,
+  CheckoutStatus,
+} from 'data/graphql'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { trackOfferGTM, EventName } from 'utils/tracking/gtm'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
@@ -32,6 +36,7 @@ import { Perils } from '../OfferNew/Perils'
 import { InsuranceSelector } from '../OfferNew/InsuranceSelector'
 import { Introduction } from './Introduction'
 import { Checkout } from './Checkout'
+import { CheckoutSuccessRedirect } from './Checkout/CheckoutSuccessRedirect'
 
 const createToggleCheckout = (
   history: History<any>,
@@ -80,6 +85,8 @@ export const OfferPage = ({
 
   const bundleData = quoteCartData?.quoteCart.bundle
   const redeemedCampaign = quoteCartData?.quoteCart.campaign ?? null
+  const checkoutMethod = quoteCartData?.quoteCart?.checkoutMethods[0]
+  const checkoutStatus = quoteCartData?.quoteCart?.checkout?.status
 
   if (quoteCartError) {
     throw new Error(`Error fetching quote cart: ${quoteCartId}.`)
@@ -168,6 +175,10 @@ export const OfferPage = ({
     return <LoadingPage />
   }
 
+  if (checkoutStatus === CheckoutStatus.Completed) {
+    return <CheckoutSuccessRedirect offerData={offerData} />
+  }
+
   return (
     <Page>
       {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
@@ -214,6 +225,9 @@ export const OfferPage = ({
           <FaqSection />
           <Checkout
             quoteCartId={quoteCartId}
+            checkoutMethod={checkoutMethod}
+            campaign={redeemedCampaign}
+            initialCheckoutStatus={checkoutStatus}
             quoteBundleVariants={bundleVariants}
             selectedQuoteBundleVariant={selectedBundleVariant}
             onUpsellAccepted={handleCheckoutUpsellCardAccepted}

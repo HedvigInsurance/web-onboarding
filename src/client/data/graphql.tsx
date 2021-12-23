@@ -202,6 +202,8 @@ export type AdditionalPaymentsDetailsResponseFinished = {
   tokenizationResult: TokenizationResultType
 }
 
+export type AddPaymentTokenResult = QuoteCart | BasicError
+
 export type AddPhotoToKeyGearItemInput = {
   itemId: Scalars['ID']
   file: S3FileInput
@@ -2052,6 +2054,7 @@ export type ConnectPaymentInput = {
   channel: PaymentConnectChannel
   browserInfo?: Maybe<BrowserInfo>
   returnUrl: Scalars['String']
+  market: Market
 }
 
 export type ConnectPaymentResult = ConnectPaymentFinished | ActionRequired
@@ -7619,6 +7622,8 @@ export type Mutation = {
   quoteCart_removeCampaign: RemoveCampaignResult
   /** Edit the cart. Will only update the fields that are present in the payload. */
   quoteCart_editQuote: EditQuoteResult
+  /** Add a payment token id to the quote cart */
+  quoteCart_addPaymentToken: AddPaymentTokenResult
   /**
    * Initiate signing of this onboarding, optionally tagging a subset of the quotes if not all of them are wanted.
    *
@@ -7801,7 +7806,6 @@ export type MutationLogin_ResendOtpArgs = {
 }
 
 export type MutationPaymentConnection_ConnectPaymentArgs = {
-  onboardingId?: Maybe<Scalars['ID']>
   input: ConnectPaymentInput
 }
 
@@ -7837,6 +7841,11 @@ export type MutationQuoteCart_EditQuoteArgs = {
   id: Scalars['ID']
   quoteId: Scalars['ID']
   payload: Scalars['JSON']
+}
+
+export type MutationQuoteCart_AddPaymentTokenArgs = {
+  id: Scalars['ID']
+  paymentTokenId: Scalars['ID']
 }
 
 export type MutationQuoteCart_StartCheckoutArgs = {
@@ -8623,6 +8632,7 @@ export type QuoteBundleVariantBundleArgs = {
 export type QuoteCart = {
   __typename?: 'QuoteCart'
   id: Scalars['ID']
+  market: Market
   /**  Campaign, if one has been attached by a code  */
   campaign?: Maybe<Campaign>
   /**  The quote bundle "view" of the quotes created as part of this onboarding  */
@@ -11678,16 +11688,19 @@ export type CreateQuoteBundleMutation = { __typename?: 'Mutation' } & {
             { __typename?: 'Checkout' } & Pick<Checkout, 'status'>
           >
         })
-    | ({ __typename?: 'QuoteBundleError' } & {
-        limits?: Maybe<
-          Array<
-            { __typename?: 'UnderwritingLimit' } & Pick<
-              UnderwritingLimit,
-              'code'
+    | ({ __typename?: 'QuoteBundleError' } & Pick<
+        QuoteBundleError,
+        'message' | 'type'
+      > & {
+          limits?: Maybe<
+            Array<
+              { __typename?: 'UnderwritingLimit' } & Pick<
+                UnderwritingLimit,
+                'code'
+              >
             >
           >
-        >
-      })
+        })
 }
 
 export type CreateSwedishHomeAccidentQuoteMutationVariables = Exact<{
@@ -13306,6 +13319,8 @@ export const CreateQuoteBundleDocument = gql`
         }
       }
       ... on QuoteBundleError {
+        message
+        type
         limits {
           code
         }

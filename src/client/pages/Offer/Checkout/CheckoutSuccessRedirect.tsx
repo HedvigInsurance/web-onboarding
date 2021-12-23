@@ -11,11 +11,13 @@ import {
 } from 'utils/tracking/tracking'
 
 type Props = {
-  offerData: OfferData
+  offerData: OfferData | null
 }
 
-export const CheckoutSuccessRedirect: React.FC<Props> = ({ offerData }) => {
+export const CheckoutSuccessRedirect = ({ offerData }: Props) => {
   const { path } = useCurrentLocale()
+
+  if (!offerData) return null
 
   return (
     <TrackAction

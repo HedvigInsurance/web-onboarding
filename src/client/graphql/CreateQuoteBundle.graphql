@@ -43,6 +43,8 @@ mutation CreateQuoteBundle($quoteCartId: ID!, $quotes: [JSON!]!, $locale: Locale
       }
     }
     ... on QuoteBundleError {
+      message
+      type
       limits {
         code
       }
