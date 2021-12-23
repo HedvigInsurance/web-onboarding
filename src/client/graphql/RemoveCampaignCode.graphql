@@ -1,0 +1,7 @@
+mutation RemoveCampaignCode($quoteCartId: ID!) {
+  quoteCart_removeCampaign(id: $quoteCartId) {
+    ... on BasicError {
+      errorMessage: message
+    }
+  }
+}

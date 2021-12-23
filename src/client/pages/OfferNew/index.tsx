@@ -50,8 +50,12 @@ export const OfferNew: React.FC = () => {
   const localeIsoCode = isoLocale
   const variation = useVariation()
 
-  const [isInsuranceToggleEnabled] = useFeature([
+  const [
+    isInsuranceToggleEnabled,
+    isCustomerServicePhoneNumberEnabled,
+  ] = useFeature([
     Features.OFFER_PAGE_INSURANCE_TOGGLE,
+    Features.CUSTOMER_SERVICE_PHONE_NUMBER,
   ])
   const history = useHistory()
   const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
@@ -183,13 +187,10 @@ export const OfferNew: React.FC = () => {
       <SessionTokenGuard>
         {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
           <TopBar isTransparent>
-            {phoneNumber ? (
-              <PhoneNumber
-                color="white"
-                onClick={(status) => handleClickPhoneNumber(status)}
-              />
+            {isCustomerServicePhoneNumberEnabled && phoneNumber ? (
+              <PhoneNumber color="white" onClick={handleClickPhoneNumber} />
             ) : (
-              <LanguagePicker />
+              <LanguagePicker color="white" />
             )}
           </TopBar>
         )}

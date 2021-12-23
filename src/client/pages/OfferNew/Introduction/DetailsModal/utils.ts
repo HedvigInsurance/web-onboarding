@@ -534,6 +534,7 @@ const getInitialSwedishApartmentValues = (
     zipCode: details.zipCode,
     householdSize: details.householdSize,
     livingSpace: details.livingSpace,
+    // @ts-ignore: ApartmentType and SwedishApartmentType are actually identical enums
     type: details.type,
   },
 })

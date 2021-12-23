@@ -1,0 +1,25 @@
+fragment CampaignData on Campaign {
+  incentive {
+    ... on MonthlyCostDeduction {
+      amount {
+        amount
+        currency
+      }
+    }
+    ... on PercentageDiscountMonths {
+      percentageDiscount
+      quantityMonths: quantity
+    }
+    ... on FreeMonths {
+      __typename
+    }
+  }
+  code
+  owner {
+    displayName
+    id
+  }
+  ownerName
+  expiresAt
+  displayValue(locale: $locale)
+}

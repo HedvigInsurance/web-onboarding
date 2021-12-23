@@ -32,8 +32,8 @@ const PageWrapper = styled.div`
   height: 100vh;
   padding-left: 1.625rem;
   padding-right: 1.625rem;
-  color: ${colorsV3.gray500};
-  background-color: ${colorsV3.gray900};
+  color: ${colorsV3.gray900};
+  background-color: ${colorsV3.white};
 
   @media (min-width: 800px) {
     padding-left: 3.75rem;
@@ -54,7 +54,7 @@ const Header = styled.header`
 `
 
 const LogoLink = styled.a`
-  color: ${colorsV3.gray100};
+  color: ${colorsV3.gray900};
 `
 
 export const OldForeverPage: React.FC<ForeverProps> = ({
@@ -142,7 +142,7 @@ const QuoteCartForeverPage: React.FC<ForeverProps> = ({
     const { code } = form
     try {
       const result = await fetchCampaign({ code })
-      if (result.data.campaign.code) {
+      if (result.data.campaign?.code) {
         CampaignCode.save(code)
         history.push({ pathname: `/${pathLocale}/new-member` })
       } else {

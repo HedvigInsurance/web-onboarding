@@ -147,16 +147,6 @@ export const routes: Route[] = [
     },
   },
   {
-    path: localePathPattern + '/new-member/(offer|sign)/:id',
-    serverRouteData: {
-      titleTextKey: 'OFFER_PAGE_TITLE',
-    },
-    clientRouteData: {
-      Component: OfferPage,
-      exact: true,
-    },
-  },
-  {
     path: localePathPattern + '/new-member/sign/success',
     serverRouteData: {
       titleTextKey: '',
@@ -173,6 +163,16 @@ export const routes: Route[] = [
     },
     clientRouteData: {
       Component: SignLoading,
+      exact: true,
+    },
+  },
+  {
+    path: localePathPattern + '/new-member/(offer|sign)/:id',
+    serverRouteData: {
+      titleTextKey: 'OFFER_PAGE_TITLE',
+    },
+    clientRouteData: {
+      Component: OfferPage,
       exact: true,
     },
   },
