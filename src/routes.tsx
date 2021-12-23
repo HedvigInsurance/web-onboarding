@@ -183,6 +183,7 @@ export const routes: Route[] = [
   {
     path: `${onboardingLocaleBaseRoute}/checkout/details`,
     serverRouteData: {
+      // TODO: Add this text key and translations to Lokalise
       titleTextKey: 'CHECKOUT_DETAILS_PAGE_TITLE',
     },
     clientRouteData: {
@@ -193,6 +194,7 @@ export const routes: Route[] = [
   {
     path: `${onboardingLocaleBaseRoute}/checkout/payment`,
     serverRouteData: {
+      // TODO: Add this text key and translations to Lokalise
       titleTextKey: 'CHECKOUT_PAYMENT_PAGE_TITLE',
     },
     clientRouteData: {
