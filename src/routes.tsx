@@ -205,6 +205,7 @@ export const routes: Route[] = [
     clientRouteData: {
       Component: Debugger,
       exact: true,
+      isHiddenInProd: true,
     },
   },
   {
