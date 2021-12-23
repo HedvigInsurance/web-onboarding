@@ -177,6 +177,24 @@ export const routes: Route[] = [
     },
   },
   {
+    path: localePathPattern + '/new-member/checkout/details',
+    serverRouteData: {
+      titleTextKey: 'CHECKOUT_DETAILS_PAGE_TITLE',
+    },
+    clientRouteData: {
+      exact: true,
+    },
+  },
+  {
+    path: localePathPattern + '/new-member/checkout/payment',
+    serverRouteData: {
+      titleTextKey: 'CHECKOUT_PAYMENT_PAGE_TITLE',
+    },
+    clientRouteData: {
+      exact: true,
+    },
+  },
+  {
     path: localePathPattern + '/new-member/debugger',
     clientRouteData: {
       Component: Debugger,
