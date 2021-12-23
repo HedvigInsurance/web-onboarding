@@ -15,6 +15,9 @@ import {
 import { useCurrentLocale } from './l10n/useCurrentLocale'
 import { useGTMTracking } from './utils/tracking/gtm'
 
+const isProductionEnvironment =
+  window.hedvigClientConfig.appEnvironment === 'production'
+
 export const App: React.ComponentType<StorageState> = ({ session }) => {
   const { isoLocale } = useCurrentLocale()
   const history = useHistory()
@@ -38,7 +41,17 @@ export const App: React.ComponentType<StorageState> = ({ session }) => {
                   if (!clientRouteData || !(typeof path === 'string')) {
                     return null
                   }
-                  const { exact, Component, render } = clientRouteData
+                  const {
+                    exact,
+                    Component,
+                    render,
+                    isHiddenInProd,
+                  } = clientRouteData
+
+                  if (isProductionEnvironment && isHiddenInProd) {
+                    return null
+                  }
+
                   return (
                     <Route
                       key={path}

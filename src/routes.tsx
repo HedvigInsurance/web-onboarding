@@ -47,6 +47,7 @@ type ClientSideRoute = {
   Component?: React.ComponentType<any>
   render?: (props: RouteComponentProps<any>) => React.ReactNode
   exact: boolean
+  isHiddenInProd?: boolean
 }
 
 export type Route = {
@@ -55,7 +56,7 @@ export type Route = {
   clientRouteData?: ClientSideRoute
 }
 
-const landingRoute = '/new-member'
+export const landingRoute = '/new-member'
 const onboardingLocaleBaseRoute = `${localePathPattern}${landingRoute}`
 
 export const routes: Route[] = [
@@ -186,6 +187,7 @@ export const routes: Route[] = [
     },
     clientRouteData: {
       exact: true,
+      isHiddenInProd: true,
     },
   },
   {
@@ -195,6 +197,7 @@ export const routes: Route[] = [
     },
     clientRouteData: {
       exact: true,
+      isHiddenInProd: true,
     },
   },
   {
