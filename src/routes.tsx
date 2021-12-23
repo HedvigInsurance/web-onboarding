@@ -17,6 +17,8 @@ import { LoginApp } from './client/pages/LoginApp'
 import { OfferNew } from './client/pages/OfferNew'
 import { SignLoading } from './client/pages/SignLoading'
 import { OfferPage } from './client/pages/Offer'
+import { CheckoutDetails } from './client/pages/CheckoutDetails/CheckoutDetails'
+import { CheckoutPayment } from './client/pages/CheckoutPayment/CheckoutPayment'
 
 enum EmbarkStory {
   DenmarkContentsWithAddressAutocomplete = 'Web Onboarding DK - Contents With Autocomplete',
@@ -187,6 +189,7 @@ export const routes: Route[] = [
       titleTextKey: 'CHECKOUT_DETAILS_PAGE_TITLE',
     },
     clientRouteData: {
+      Component: CheckoutDetails,
       exact: true,
       isHiddenInProd: true,
     },
@@ -198,6 +201,7 @@ export const routes: Route[] = [
       titleTextKey: 'CHECKOUT_PAYMENT_PAGE_TITLE',
     },
     clientRouteData: {
+      Component: CheckoutPayment,
       exact: true,
       isHiddenInProd: true,
     },
