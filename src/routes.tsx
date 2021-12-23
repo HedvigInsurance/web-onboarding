@@ -55,9 +55,12 @@ export type Route = {
   clientRouteData?: ClientSideRoute
 }
 
+const landingRoute = '/new-member'
+const onboardingLocaleBaseRoute = `${localePathPattern}${landingRoute}`
+
 export const routes: Route[] = [
   {
-    path: localePathPattern + '/new-member',
+    path: onboardingLocaleBaseRoute,
     clientRouteData: {
       Component: Landing,
       exact: true,
@@ -77,7 +80,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: localePathPattern + '/new-member/download',
+    path: `${onboardingLocaleBaseRoute}/download`,
     serverRouteData: {
       titleTextKey: 'DOWNLOAD_PAGE_TITLE',
     },
@@ -87,7 +90,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: localePathPattern + '/new-member/connect-payment',
+    path: `${onboardingLocaleBaseRoute}/connect-payment`,
     serverRouteData: {
       titleTextKey: 'ONBOARDING_CONNECT_DD_PAGE_TITLE',
     },
@@ -97,7 +100,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: localePathPattern + '/new-member/connect-payment/direct',
+    path: `${onboardingLocaleBaseRoute}/connect-payment/direct`,
     serverRouteData: {
       titleTextKey: 'ONBOARDING_CONNECT_DD_PAGE_TITLE',
     },
@@ -107,7 +110,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: localePathPattern + '/new-member/connect-payment/success',
+    path: `${onboardingLocaleBaseRoute}/connect-payment/success`,
     serverRouteData: {
       titleTextKey: 'ONBOARDING_CONNECT_DD_PAGE_TITLE',
     },
@@ -117,7 +120,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: localePathPattern + '/new-member/connect-payment/fail',
+    path: `${onboardingLocaleBaseRoute}/connect-payment/fail`,
     serverRouteData: {
       titleTextKey: 'ONBOARDING_CONNECT_DD_PAGE_TITLE',
     },
@@ -127,7 +130,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: localePathPattern + '/new-member/connect-payment/retry',
+    path: `${onboardingLocaleBaseRoute}/connect-payment/retry`,
     serverRouteData: {
       titleTextKey: 'ONBOARDING_CONNECT_DD_PAGE_TITLE',
     },
@@ -137,7 +140,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: localePathPattern + '/new-member/(offer|sign)',
+    path: `${onboardingLocaleBaseRoute}/(offer|sign)`,
     serverRouteData: {
       titleTextKey: 'OFFER_PAGE_TITLE',
     },
@@ -147,7 +150,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: localePathPattern + '/new-member/sign/success',
+    path: `${onboardingLocaleBaseRoute}/sign/success`,
     serverRouteData: {
       titleTextKey: '',
     },
@@ -157,7 +160,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: localePathPattern + '/new-member/sign/fail',
+    path: `${onboardingLocaleBaseRoute}/sign/fail`,
     serverRouteData: {
       titleTextKey: '',
     },
@@ -167,7 +170,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: localePathPattern + '/new-member/(offer|sign)/:id',
+    path: `${onboardingLocaleBaseRoute}/(offer|sign)/:id`,
     serverRouteData: {
       titleTextKey: 'OFFER_PAGE_TITLE',
     },
@@ -177,7 +180,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: localePathPattern + '/new-member/checkout/details',
+    path: `${onboardingLocaleBaseRoute}/checkout/details`,
     serverRouteData: {
       titleTextKey: 'CHECKOUT_DETAILS_PAGE_TITLE',
     },
@@ -186,7 +189,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: localePathPattern + '/new-member/checkout/payment',
+    path: `${onboardingLocaleBaseRoute}/checkout/payment`,
     serverRouteData: {
       titleTextKey: 'CHECKOUT_PAYMENT_PAGE_TITLE',
     },
@@ -195,21 +198,21 @@ export const routes: Route[] = [
     },
   },
   {
-    path: localePathPattern + '/new-member/debugger',
+    path: `${onboardingLocaleBaseRoute}/debugger`,
     clientRouteData: {
       Component: Debugger,
       exact: true,
     },
   },
   {
-    path: localePathPattern + '/new-member/offer-debugger',
+    path: `${onboardingLocaleBaseRoute}/offer-debugger`,
     clientRouteData: {
       Component: OfferDebugger,
       exact: true,
     },
   },
   {
-    path: localePathPattern + '/new-member/:name/:id?',
+    path: `${onboardingLocaleBaseRoute}/:name/:id?`,
     serverRouteData: {
       titleTextKey: 'START_PAGE_TITLE',
     },
