@@ -26,9 +26,9 @@ import {
 import { isBundle, isNorwegian } from 'pages/OfferNew/utils'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 
-import { StartDate } from '../../../OfferNew/Introduction/Sidebar/StartDate'
 import { StickyBottomSidebar } from '../../../OfferNew/Introduction/Sidebar/StickyBottomSidebar'
 import { CampaignCodeModal } from './CampaignCodeModal'
+import { StartDate } from './StartDate'
 
 const SIDEBAR_WIDTH = '26rem'
 const SIDEBAR_SPACING_LEFT = '2rem'
@@ -229,7 +229,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <StartDate
                   offerData={offerData}
                   refetch={refetchOfferData}
-                  modal={true}
+                  modal
                   size="sm"
                 />
               </Body>
