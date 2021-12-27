@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react'
+import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import { useFormik } from 'formik'
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
@@ -234,7 +234,12 @@ export const Checkout = ({
   const isDiscountMonthlyCostDeduction =
     campaign?.incentive?.__typename === 'MonthlyCostDeduction'
 
-  const offerData = getOfferData(selectedQuoteBundleVariant.bundle)
+  const offerData = useMemo(
+    () => getOfferData(selectedQuoteBundleVariant.bundle),
+    // Assumes that we recreate the bundle every time we edit information
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [selectedQuoteBundleVariant.id],
+  )
 
   const [signUiState, setSignUiState] = useState<SignUiState>(() =>
     getSignUiStateFromCheckoutStatus(initialCheckoutStatus),
