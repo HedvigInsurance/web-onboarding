@@ -38,7 +38,7 @@ export const CheckoutSuccessRedirect = ({ offerData }: Props) => {
     >
       {({ track: trackAction }) => (
         <Mount on={trackAction}>
-          <Redirect to={`/${path}/new-member/connect-payment/`} />
+          <Redirect to={`/${path}/new-member/connect-payment`} />
         </Mount>
       )}
     </TrackAction>

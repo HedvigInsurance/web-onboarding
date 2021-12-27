@@ -13,7 +13,6 @@ import {
   CheckoutStatus,
   InsuranceTermType,
   CreateQuoteBundleMutation,
-  useMemberLazyQuery,
   CheckoutMethod,
   CampaignDataFragment,
 } from 'data/graphql'
@@ -36,14 +35,13 @@ import { setupQuoteCartSession } from 'containers/SessionContainer'
 import { reportUnderwritingLimits } from 'utils/sentry-client'
 import { trackSignedEvent } from 'utils/tracking/tracking'
 import { useVariation } from 'utils/hooks/useVariation'
-import { StartDate } from '../../OfferNew/Introduction/Sidebar/StartDate'
-import { useScrollLock, VisibilityState } from '../../OfferNew/Checkout/hooks'
-import { SignFailModal } from '../../OfferNew/Checkout/SignFailModal'
-import { InsuranceSummary } from '../../OfferNew/Checkout/InsuranceSummary'
-import { UpsellCard } from '../../OfferNew/Checkout/UpsellCard'
+import { StartDate } from 'pages/OfferNew/Introduction/Sidebar/StartDate'
+import { useScrollLock, VisibilityState } from 'pages/OfferNew/Checkout/hooks'
+import { SignFailModal } from 'pages/OfferNew/Checkout/SignFailModal'
+import { InsuranceSummary } from 'pages/OfferNew/Checkout/InsuranceSummary'
+import { UpsellCard } from 'pages/OfferNew/Checkout/UpsellCard'
 import { QuoteInput } from '../Introduction/DetailsModal/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
-import { CheckoutSuccessRedirect } from './CheckoutSuccessRedirect'
 import {
   CheckoutDetailsForm,
   getCheckoutDetailsValidationSchema,
@@ -255,7 +253,6 @@ export const Checkout = ({
     createQuoteBundle,
     { loading: isBundleCreationInProgress },
   ] = useCreateQuoteBundleMutation()
-  const [fetchMember, { data: memberData }] = useMemberLazyQuery()
 
   const mainQuote = selectedQuoteBundleVariant.bundle.quotes[0]
   const privacyPolicyLink = mainQuote.insuranceTerms.find(
@@ -354,12 +351,6 @@ export const Checkout = ({
       completeCheckout()
     }
   }, [checkoutStatus, completeCheckout])
-
-  useEffect(() => {
-    if (checkoutStatus === CheckoutStatus.Completed) {
-      fetchMember()
-    }
-  }, [checkoutStatus, fetchMember])
 
   const startSign = async () => {
     setSignUiState('STARTED')
