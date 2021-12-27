@@ -8,8 +8,8 @@ import { Page } from 'components/utils/Page'
 import { useNorwegianBankIdAuthMutation } from 'data/graphql'
 import { captureSentryError } from 'utils/sentry-client'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
-import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { LoginForm, LoginFormValue } from './components/LoginForm'
+import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
 const PageWrapper = styled.div`
   display: flex;
@@ -24,17 +24,18 @@ const PageWrapper = styled.div`
 const Header = styled.header`
   display: flex;
   justify-content: center;
-  padding-top: 1.25rem;
   padding-bottom: 1.15rem;
   background-color: ${colorsV3.white};
+  position: absolute;
+  width: 100%;
 
-  @media (min-width: 800px) {
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
     justify-content: space-between;
     padding-top: 2.5rem;
   }
 `
 
-const LogoLink = styled.a`
+const Logo = styled.div`
   margin: 0 auto;
   color: ${colorsV3.gray900};
 `
@@ -42,7 +43,6 @@ const LogoLink = styled.a`
 export const LoginAppScreen: React.FC = () => {
   const textKeys = useTextKeys()
   const [norwegianBankIdAuthMutation] = useNorwegianBankIdAuthMutation()
-  const { path: pathLocale } = useCurrentLocale()
 
   const handleSubmit = async (
     form: LoginFormValue,
@@ -80,9 +80,9 @@ export const LoginAppScreen: React.FC = () => {
       </Helmet>
       <Page>
         <Header>
-          <LogoLink href={'/' + pathLocale}>
+          <Logo>
             <HedvigLogo width={94} />
-          </LogoLink>
+          </Logo>
         </Header>
         <PageWrapper>
           <LoginForm onSubmit={handleSubmit} />
