@@ -24,6 +24,7 @@ const CheckoutInput: React.FC<CheckoutInputProps &
 
   return field ? (
     <RawInputField
+      {...props}
       label={textKeys[field.label]()}
       placeholder={textKeys[field.placeholder ? field.placeholder : '']()}
       type={field.type}
@@ -31,7 +32,6 @@ const CheckoutInput: React.FC<CheckoutInputProps &
       value={getIn(formikProps.values, props.name)}
       showErrorIcon={getIn(formikProps.errors, props.name)}
       onChange={onChange || formikProps.handleChange}
-      {...props}
     />
   ) : null
 }
