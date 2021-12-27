@@ -1,0 +1,8 @@
+query CheckoutStatus($quoteCartId: ID!) {
+  quoteCart(id: $quoteCartId) {
+    checkout {
+      status
+      statusText
+    }
+  }
+}

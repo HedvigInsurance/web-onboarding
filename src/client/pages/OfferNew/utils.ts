@@ -495,13 +495,13 @@ const isBundleVariantMatchingInsuranceTypes = (
   )
 }
 
-export const getBundleVariantFromInsuranceTypes = (
+export const getBundleVariantFromInsuranceTypesWithFallback = (
   variants: Array<QuoteBundleVariant>,
   insuranceTypes: Array<InsuranceType>,
 ) =>
   variants.find((variant) =>
     isBundleVariantMatchingInsuranceTypes(variant, insuranceTypes),
-  )
+  ) || variants?.[0]
 
 export const getInsuranceTypesFromBundleVariant = (
   bundleVariant: QuoteBundleVariant,
@@ -509,3 +509,7 @@ export const getInsuranceTypesFromBundleVariant = (
   bundleVariant.bundle.quotes.map<InsuranceType>(
     (quote) => quote.data.type as InsuranceType,
   )
+
+export const getQuoteIdsFromBundleVariant = (
+  bundleVariant: QuoteBundleVariant,
+) => bundleVariant.bundle.quotes.map((quote) => quote.id)
