@@ -21,13 +21,13 @@ import {
   getUniqueQuotesFromVariantList,
   getQuoteIdsFromBundleVariant,
   getBundleVariantFromInsuranceTypesWithFallback,
+  getInsuranceTypesFromBundleVariant,
 } from 'pages/OfferNew/utils'
 import { PriceBreakdown } from 'pages/OfferNew/common/PriceBreakdown'
 import { useStorage } from 'utils/StorageContainer'
 import { useTextKeys } from 'utils/textKeys'
 import { useLockBodyScroll } from 'utils/hooks/useLockBodyScroll'
 import { useFeature, Features } from 'utils/hooks/useFeature'
-import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { CloseButton } from 'components/CloseButton/CloseButton'
 import { DiscountTag } from 'components/DiscountTag/DiscountTag'
@@ -221,13 +221,15 @@ export const Checkout = ({
   const client = useApolloClient()
   const storage = useStorage()
   const variation = useVariation()
-  const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
   const [isUpsellCardVisible] = useFeature([Features.CHECKOUT_UPSELL_CARD])
 
   const scrollWrapper = useRef<HTMLDivElement>()
   const [windowInnerHeight, setWindowInnerHeight] = useState(window.innerHeight)
   const [visibilityState, setVisibilityState] = useState(VisibilityState.CLOSED)
 
+  const selectedInsuranceTypes = getInsuranceTypesFromBundleVariant(
+    selectedQuoteBundleVariant,
+  )
   const campaignCode = campaign?.code
   const isDiscountMonthlyCostDeduction =
     campaign?.incentive?.__typename === 'MonthlyCostDeduction'
