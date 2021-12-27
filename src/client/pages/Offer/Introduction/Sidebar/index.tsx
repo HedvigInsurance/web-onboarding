@@ -11,7 +11,7 @@ import {
 } from 'data/graphql'
 
 import { Button, TextButton } from 'components/buttons'
-import { Badge } from 'components/Badge/Badge'
+import { CampaignBadge } from 'components/CampaignBadge/CampaignBadge'
 import { OfferData } from 'pages/OfferNew/types'
 import { Price } from 'pages/OfferNew/common/price'
 import { PriceBreakdown } from 'pages/OfferNew/common/PriceBreakdown'
@@ -23,7 +23,7 @@ import {
   LARGE_SCREEN_MEDIA_QUERY,
   SMALL_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
-import { isBundle, isNorwegian } from 'pages/OfferNew/utils'
+import { isNorwegianBundle } from 'pages/OfferNew/utils'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 
 import { StartDate } from '../../../OfferNew/Introduction/Sidebar/StartDate'
@@ -60,20 +60,8 @@ const Container = styled.div`
   }
 `
 
-const DiscountInfo = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  margin-bottom: 0.5rem;
-`
-
-const DiscountBadge = styled(Badge)`
-  &:not(:last-child) {
-    margin-right: 0.5rem;
-    margin-bottom: 0.5rem;
-  }
+const StyledCampaignBadge = styled(CampaignBadge)`
+  margin-bottom: 1rem;
 `
 
 const Header = styled.div`
@@ -160,8 +148,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
     awaitRefetchQueries: true,
   })
 
-  const campaignText = campaign?.displayValue ?? ''
-
   const handleAddCampaignCode = useCallback(
     async (code: string) => {
       const { data: result } = await addCampaignCode({
@@ -190,17 +176,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
     }
   }, [quoteCartId, removeCampaignCode])
 
-  const isNorwegianBundle = isBundle(offerData) && isNorwegian(offerData)
-  const discounts: Array<React.ReactNode> = [
-    ...(isNorwegianBundle ? [textKeys.SIDEBAR_NO_BUNDLE_CAMPAIGN_TEXT()] : []),
-    ...(campaignText ? [campaignText] : []),
-  ]
-
   const showRemoveCampaignButton = campaign != null
   const isDiscountPrice =
     campaign?.incentive?.__typename === 'MonthlyCostDeduction' ||
     campaign?.incentive?.__typename === 'PercentageDiscountMonths' ||
-    isNorwegianBundle
+    isNorwegianBundle(offerData)
 
   return (
     <>
@@ -208,13 +188,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {() => (
           <Wrapper>
             <Container>
-              {discounts.length > 0 ? (
-                <DiscountInfo>
-                  {discounts.map((text, index) => (
-                    <DiscountBadge key={index}>{text}</DiscountBadge>
-                  ))}
-                </DiscountInfo>
-              ) : null}
+              <StyledCampaignBadge
+                quoteCartId={quoteCartId}
+                offerData={offerData}
+              />
               <Header>
                 <Title>Hedvig</Title>
                 <Price
