@@ -44,7 +44,9 @@ const createToggleCheckout = (
   locale?: LocaleLabel,
 ) => (isOpen: boolean) => {
   if (isOpen) {
-    history.push(`/${locale}/new-member/sign/${quoteCartId}`)
+    history.push(
+      `/${locale}/new-member/sign/${quoteCartId}${history.location.search}`,
+    )
   } else {
     history.goBack()
   }
