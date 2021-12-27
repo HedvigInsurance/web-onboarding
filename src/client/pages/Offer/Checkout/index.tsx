@@ -37,7 +37,6 @@ import { trackSignedEvent } from 'utils/tracking/tracking'
 import { useVariation } from 'utils/hooks/useVariation'
 import { StartDate } from 'pages/OfferNew/Introduction/Sidebar/StartDate'
 import { useScrollLock, VisibilityState } from 'pages/OfferNew/Checkout/hooks'
-import { SignFailModal } from 'pages/OfferNew/Checkout/SignFailModal'
 import { InsuranceSummary } from 'pages/OfferNew/Checkout/InsuranceSummary'
 import { UpsellCard } from 'pages/OfferNew/Checkout/UpsellCard'
 import { QuoteInput } from '../Introduction/DetailsModal/types'
@@ -226,7 +225,6 @@ export const Checkout = ({
   const [isUpsellCardVisible] = useFeature([Features.CHECKOUT_UPSELL_CARD])
 
   const scrollWrapper = useRef<HTMLDivElement>()
-  const [isShowingFailModal, setIsShowingFailModal] = useState(false)
   const [windowInnerHeight, setWindowInnerHeight] = useState(window.innerHeight)
   const [visibilityState, setVisibilityState] = useState(VisibilityState.CLOSED)
 
@@ -508,10 +506,6 @@ export const Checkout = ({
         </ScrollWrapper>
       </OuterWrapper>
       <Backdrop visibilityState={visibilityState} onClick={onClose} />
-      <SignFailModal
-        isVisible={isShowingFailModal}
-        onClose={() => setIsShowingFailModal(false)}
-      />
     </>
   )
 }
