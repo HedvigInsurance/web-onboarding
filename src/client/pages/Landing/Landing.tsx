@@ -198,7 +198,7 @@ export const Landing: React.FC = () => {
             {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
               <>
                 <TopBar isTransparent>
-                  <LanguagePicker />
+                  <LanguagePicker color="white" />
                 </TopBar>
                 <TopBarFiller />
               </>
