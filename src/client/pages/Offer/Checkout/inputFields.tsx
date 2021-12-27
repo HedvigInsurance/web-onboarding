@@ -13,16 +13,12 @@ interface CheckoutInputProps {
   showErrorIcon?: boolean
 }
 
-export const CheckoutInput: React.FC<CheckoutInputProps &
+const CheckoutInput: React.FC<CheckoutInputProps &
   React.InputHTMLAttributes<HTMLInputElement>> = ({
   field,
   formikProps,
-  name,
-  errors,
-  maxLength,
   onChange,
-  onBlur,
-  onFocus,
+  ...props
 }) => {
   const textKeys = useTextKeys()
 
@@ -31,15 +27,11 @@ export const CheckoutInput: React.FC<CheckoutInputProps &
       label={textKeys[field.label]()}
       placeholder={textKeys[field.placeholder ? field.placeholder : '']()}
       type={field.type}
-      name={name}
-      id={name}
-      value={getIn(formikProps.values, name)}
-      maxLength={maxLength}
-      errors={errors}
-      showErrorIcon={getIn(formikProps.errors, name)}
+      id={props.id || props.name}
+      value={getIn(formikProps.values, props.name)}
+      showErrorIcon={getIn(formikProps.errors, props.name)}
       onChange={onChange || formikProps.handleChange}
-      onBlur={onBlur}
-      onFocus={onFocus}
+      {...props}
     />
   ) : null
 }
