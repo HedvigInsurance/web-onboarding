@@ -18,6 +18,7 @@ export interface IsomorphicSessionStorage<T> {
   setSession: (value: T) => void
   getSession: () => T | undefined
   keepAlive: () => void
+  clearSession: () => void
 }
 
 export class SavingCookieStorage implements MinimalStorage {
@@ -88,5 +89,9 @@ export const createSession = <T>(
         secure: true,
       }),
     })
+  },
+  clearSession: () => {
+    storage.removeItem(storageKey)
+    storage.removeItem(KA_SESSION_KEY)
   },
 })
