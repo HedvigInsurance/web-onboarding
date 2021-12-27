@@ -23,6 +23,7 @@ import { Features, useFeature } from 'utils/hooks/useFeature'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { LocaleLabel } from 'l10n/locales'
+import { CheckoutSuccessRedirect } from 'pages/OfferNew/Checkout/CheckoutSuccessRedirect'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import {
   getOfferData,
@@ -36,7 +37,6 @@ import { Perils } from '../OfferNew/Perils'
 import { InsuranceSelector } from '../OfferNew/InsuranceSelector'
 import { Introduction } from './Introduction'
 import { Checkout } from './Checkout'
-import { CheckoutSuccessRedirect } from './Checkout/CheckoutSuccessRedirect'
 
 const createToggleCheckout = (
   history: History<any>,
@@ -175,7 +175,7 @@ export const OfferPage = ({
     return <LoadingPage />
   }
 
-  if (checkoutStatus === CheckoutStatus.Completed) {
+  if (checkoutStatus === CheckoutStatus.Completed && offerData) {
     return <CheckoutSuccessRedirect offerData={offerData} />
   }
 
