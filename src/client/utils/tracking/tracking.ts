@@ -251,7 +251,6 @@ export const trackSignedEvent = ({
   campaignCode,
   isDiscountMonthlyCostDeduction,
 }: TrackSignedEventParams) => {
-  // AVY
   if (variation === Variation.AVY) {
     handleSignedEvent(memberId)
   }

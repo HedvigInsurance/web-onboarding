@@ -321,6 +321,7 @@ export const Checkout = ({
   }, [checkoutStatus])
 
   const completeCheckout = useCallback(async () => {
+    setSignUiState('STARTED')
     try {
       const memberId = await setupQuoteCartSession({
         quoteCartId,
@@ -390,7 +391,6 @@ export const Checkout = ({
         quoteIds = getQuoteIdsFromBundleVariant(
           updatedSelectedQuoteBundleVariant,
         )
-        console.log('RESULT', result)
       }
 
       const { data } = await startCheckout({
@@ -406,6 +406,14 @@ export const Checkout = ({
     } catch (e) {
       setSignUiState('FAILED')
       return
+    }
+  }
+
+  const handleSignStart = () => {
+    if (checkoutStatus === 'SIGNED') {
+      completeCheckout()
+    } else {
+      startSign()
     }
   }
 
@@ -495,7 +503,7 @@ export const Checkout = ({
             }
             checkoutMethod={checkoutMethod}
             signUiState={signUiState}
-            onSignStart={startSign}
+            onSignStart={handleSignStart}
           />
         </ScrollWrapper>
       </OuterWrapper>
