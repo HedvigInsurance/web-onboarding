@@ -292,14 +292,10 @@ export const Checkout = ({
   }, [isOpen])
 
   useEffect(() => {
-    const setWindowHeight = () => {
-      setWindowInnerHeight(window.innerHeight)
-    }
-    window.addEventListener('resize', setWindowHeight)
-    return () => {
-      window.removeEventListener('resize', setWindowHeight)
-    }
-  })
+    const handle = () => setWindowInnerHeight(window.innerHeight)
+    window.addEventListener('resize', handle)
+    return () => window.removeEventListener('resize', handle)
+  }, [])
 
   useEffect(() => {
     if (typeof Intercom === 'undefined') {
