@@ -9,7 +9,6 @@ import { useNorwegianBankIdAuthMutation } from 'data/graphql'
 import { captureSentryError } from 'utils/sentry-client'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
 import { LoginForm, LoginFormValue } from './components/LoginForm'
-import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
 const PageWrapper = styled.div`
   display: flex;
@@ -23,16 +22,11 @@ const PageWrapper = styled.div`
 
 const Header = styled.header`
   display: flex;
-  justify-content: center;
-  padding-bottom: 1.15rem;
   background-color: ${colorsV3.white};
   position: absolute;
+  top: 2.5rem;
   width: 100%;
-
-  ${MEDIUM_SCREEN_MEDIA_QUERY} {
-    justify-content: space-between;
-    padding-top: 2.5rem;
-  }
+  padding-bottom: 1.15rem;
 `
 
 const Logo = styled.div`
