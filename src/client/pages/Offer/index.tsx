@@ -24,6 +24,7 @@ import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { LocaleLabel } from 'l10n/locales'
 import { CheckoutSuccessRedirect } from 'pages/OfferNew/Checkout/CheckoutSuccessRedirect'
+import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import {
   getOfferData,
@@ -59,11 +60,16 @@ export const OfferPage = ({
     params: { id: quoteCartId },
   },
 }: OfferPageProps) => {
-  const { isoLocale, path: pathLocale } = useCurrentLocale()
+  const { isoLocale, path: pathLocale, phoneNumber } = useCurrentLocale()
   const variation = useVariation()
-  const [isInsuranceToggleEnabled, isQuoteCartEnabled] = useFeature([
+  const [
+    isInsuranceToggleEnabled,
+    isQuoteCartEnabled,
+    isCustomerServicePhoneNumberEnabled,
+  ] = useFeature([
     Features.OFFER_PAGE_INSURANCE_TOGGLE,
     Features.QUOTE_CART_API,
+    Features.CUSTOMER_SERVICE_PHONE_NUMBER,
   ])
 
   const [
@@ -169,6 +175,18 @@ export const OfferPage = ({
     toggleCheckout(open)
   }
 
+  const handleClickPhoneNumber = (status: 'opened' | 'closed') => {
+    if (offerData) {
+      trackOfferGTM(
+        EventName.ClickCallNumber,
+        offerData,
+        quoteCartData?.quoteCart.campaign?.incentive?.__typename ===
+          'MonthlyCostDeduction',
+        { phoneNumberData: { path: history.location.pathname, status } },
+      )
+    }
+  }
+
   if (!isQuoteCartEnabled) {
     return <Redirect to={`/${pathLocale}/new-member`} />
   }
@@ -185,7 +203,14 @@ export const OfferPage = ({
     <Page>
       {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
         <TopBar isTransparent>
-          <LanguagePicker path={`/new-member/offer/${quoteCartId}`} />
+          {isCustomerServicePhoneNumberEnabled && phoneNumber ? (
+            <PhoneNumber color="white" onClick={handleClickPhoneNumber} />
+          ) : (
+            <LanguagePicker
+              color="white"
+              path={`/new-member/offer/${quoteCartId}`}
+            />
+          )}
         </TopBar>
       )}
       {offerData && (
