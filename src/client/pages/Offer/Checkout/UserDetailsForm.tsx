@@ -7,7 +7,7 @@ import { CreditCheckInfo } from '../../OfferNew/Checkout/CreditCheckInfo'
 import { QuoteInput } from '../Introduction/DetailsModal/types'
 import { TextInput, SsnInput } from './inputFields'
 
-function debounce(func: (...args: any[]) => any, timeout: number) {
+const debounce = (func: (...args: any[]) => any, timeout: number) => {
   let timer: number
   return function(this: any, ...args: any[]) {
     clearTimeout(timer)
