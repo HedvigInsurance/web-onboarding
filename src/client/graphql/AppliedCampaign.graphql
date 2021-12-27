@@ -1,0 +1,7 @@
+query AppliedCampaignName($id: ID!, $locale: Locale!) {
+  quoteCart(id: $id) {
+    campaign {
+      displayValue(locale: $locale)
+    }
+  }
+}
