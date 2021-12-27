@@ -40,7 +40,6 @@ export const CampaignBadge: React.FC<CampaignBadgeProps> = ({
       id: quoteCartId,
       locale: isoLocale,
     },
-    onCompleted: () => console.log('called applied'),
   })
   const campaignText = campaignData?.quoteCart.campaign?.displayValue ?? ''
 
