@@ -5,7 +5,11 @@ import { SegmentAnalyticsJs } from 'quepasa'
 import React from 'react'
 import { Mount } from 'react-lifecycle-components'
 import { afterTick } from 'pages/Embark/utils'
-import { MemberDocument, UpdatePickedLocaleDocument } from 'data/graphql'
+import {
+  MemberDocument,
+  UpdatePickedLocaleDocument,
+  CreateAccessTokenDocument,
+} from 'data/graphql'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { captureSentryError } from 'utils/sentry-client'
 import { Storage, StorageContainer, StorageState } from 'utils/StorageContainer'
@@ -25,14 +29,6 @@ export const CREATE_SESSION_TOKEN_MUTATION: DocumentNode = gql`
     createSessionV2 {
       token
       memberId
-    }
-  }
-`
-
-const CREATE_ACCESS_TOKEN_MUTATION: DocumentNode = gql`
-  mutation CreateAccessToken($id: ID!) {
-    quoteCart_createAccessToken(id: $id) {
-      accessToken
     }
   }
 `
@@ -99,8 +95,8 @@ export const setupQuoteCartSession = async ({
   }
 
   const accessTokenResult = await apolloClientUtils.client.mutate({
-    mutation: CREATE_ACCESS_TOKEN_MUTATION,
-    variables: { id: quoteCartId },
+    mutation: CreateAccessTokenDocument,
+    variables: { quoteCartId },
   })
 
   await afterTick(() => {
