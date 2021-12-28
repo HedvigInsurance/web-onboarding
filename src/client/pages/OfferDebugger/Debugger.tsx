@@ -1,10 +1,9 @@
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary'
 import { Button } from 'components/buttons'
-import { useCreateOnboardingQuoteCartMutation } from 'data/graphql'
-import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import { useCreateQuoteCart } from 'utils/hooks/useCreateQuoteCart'
 import { QuoteData } from './components/QuoteData'
 
 const Wrapper = styled.div`
@@ -39,23 +38,13 @@ const ErrorFallback: React.FC<FallbackProps> = ({
 )
 
 export const Debugger: React.FC = () => {
-  const { apiMarket, isoLocale } = useCurrentLocale()
-  const [
-    createOnboardingQuoteCart,
-    { data },
-  ] = useCreateOnboardingQuoteCartMutation()
+  const [createQuoteCart, { data }] = useCreateQuoteCart()
   const quoteCartId = data?.onboardingQuoteCart_create.id
-
-  const createNewQuoteCart = useCallback(async () => {
-    await createOnboardingQuoteCart({
-      variables: { market: apiMarket, locale: isoLocale },
-    })
-  }, [createOnboardingQuoteCart, apiMarket, isoLocale])
 
   useEffect(() => {
     // create initial onboarding session
-    createNewQuoteCart()
-  }, [createNewQuoteCart])
+    createQuoteCart()
+  }, [createQuoteCart])
 
   return (
     <Wrapper>
@@ -66,7 +55,7 @@ export const Debugger: React.FC = () => {
         <Button
           background={colorsV3.gray100}
           foreground={colorsV3.gray900}
-          onClick={createNewQuoteCart}
+          onClick={() => createQuoteCart()}
         >
           Create new cart
         </Button>
@@ -76,7 +65,7 @@ export const Debugger: React.FC = () => {
         <Row>
           <ErrorBoundary
             FallbackComponent={ErrorFallback}
-            onReset={createNewQuoteCart}
+            onReset={() => createQuoteCart()}
           >
             <h3>Offer</h3>
             <QuoteData quoteCartId={quoteCartId} />
