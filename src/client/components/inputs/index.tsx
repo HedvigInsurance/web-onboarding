@@ -49,41 +49,25 @@ interface InputVariant {
   error: string
 }
 
-export const inputVariants: Record<string, InputVariant> = {
-  light: {
-    color: colorsV3.gray500,
-    background: colorsV3.white,
-    border: colorsV3.gray300,
-    borderFocus: colorsV3.gray900,
-    error: colorsV3.red600,
-  },
-  dark: {
-    color: colorsV3.gray100,
-    background: colorsV3.gray900,
-    border: colorsV3.gray300,
-    borderFocus: colorsV3.gray300,
-    error: colorsV3.red500,
-  },
-}
-
 const InputFieldContainer = styled.div`
   margin-bottom: 1.5rem;
 `
 
-const Wrapper = styled.div<{ errors?: string; variant: variantType }>`
+const Wrapper = styled.div<{
+  errors?: string
+  variant: variantType
+  disabled?: boolean
+}>`
   position: relative;
-  background-color: ${(props) => inputVariants[props.variant].background};
+  background-color: ${(props) =>
+    props.disabled ? colorsV3.gray300 : colorsV3.white};
   border-radius: 8px;
   border: 1px solid
-    ${(props) =>
-      props.errors
-        ? inputVariants[props.variant].error
-        : inputVariants[props.variant].border};
+    ${(props) => (props.errors ? colorsV3.red600 : colorsV3.gray300)};
   display: flex;
   justify-content: space-between;
   align-items: center;
   transition: all 0.2s;
-  color: ${(props) => inputVariants[props.variant].color};
   padding: 1rem 0.875rem;
   margin-top: 0.5rem;
 
@@ -92,17 +76,14 @@ const Wrapper = styled.div<{ errors?: string; variant: variantType }>`
   }
 
   &:focus-within {
-    color: ${colorsV3.gray700};
+    color: ${(props) => (props.disabled ? colorsV3.gray500 : colorsV3.gray900)};
     border: 1px solid
-      ${(props) =>
-        props.errors
-          ? inputVariants[props.variant].error
-          : inputVariants[props.variant].borderFocus};
+      ${(props) => (props.errors ? colorsV3.red600 : colorsV3.gray900)};
   }
 
-  {errors && 
-    <ErrorText ><WarningTriangle />{errors}</ErrorText>
- }
+  input {
+    color: ${(props) => (props.disabled ? colorsV3.gray500 : colorsV3.gray900)};
+  }
 
   select {
     cursor: pointer;
@@ -174,14 +155,21 @@ const SymbolWrapper = styled.div`
 const ErrorText = styled.div`
   min-height: 1.375rem;
   font-size: 0.75rem;
-  line-height: 1.375rem;
+  line-height: 1.33;
   color: ${colorsV3.red600};
   margin-top: 0.25rem;
-  svg{
+  svg {
     vertical-align: middle;
     margin-right: 0.25rem;
   }
+`
 
+const HelperText = styled.div`
+  min-height: 1.375rem;
+  font-size: 0.75rem;
+  line-height: 1.33;
+  color: ${colorsV3.gray700};
+  margin-top: 0.25rem;
 `
 
 interface CoreInputFieldOptions {
@@ -200,6 +188,7 @@ export interface CoreInputFieldProps {
   type?: string
   options?: CoreInputFieldOptions[]
   mask?: Mask
+  helperText?: string
   onChange?: FieldInputProps<string>['onChange']
   onBlur?: FieldInputProps<string>['onBlur']
 }
@@ -218,7 +207,6 @@ const StyledRawInput = styled.input`
   border: none;
   font-size: 1rem;
   line-height: 1.5;
-  color: ${colorsV3.gray900};
   padding: 0;
   margin: 0;
   width: 100%;
@@ -235,11 +223,15 @@ export const RawInputField: React.FC<React.InputHTMLAttributes<
 > & {
   label?: string
   errors?: string
+  helperText?: string
   variant?: variantType
   showErrorIcon?: boolean
+  disabled?: boolean
 }> = ({
   errors,
+  disabled,
   showErrorIcon = false,
+  helperText,
   label,
   className,
   variant = 'light',
@@ -247,12 +239,16 @@ export const RawInputField: React.FC<React.InputHTMLAttributes<
 }) => (
   <InputFieldContainer className={className}>
     {label && <Label htmlFor={props.id}>{label}</Label>}
-    <Wrapper errors={errors} variant={variant}>
-      <StyledRawInput {...props} />
+    <Wrapper errors={errors} variant={variant} disabled={disabled}>
+      <StyledRawInput disabled={disabled} {...props} />
     </Wrapper>
-    {errors && 
-       <ErrorText ><WarningTriangle size={13}/>{errors}</ErrorText>
-    }
+    {helperText && <HelperText>{helperText}</HelperText>}
+    {errors && (
+      <ErrorText>
+        <WarningTriangle size={13} />
+        {errors}
+      </ErrorText>
+    )}
   </InputFieldContainer>
 )
 
@@ -265,6 +261,7 @@ export const InputField: React.FC<TextInputProps &
   options,
   touched,
   errors,
+  helperText,
   variant = 'light',
   ...props
 }) => (
@@ -303,12 +300,15 @@ export const InputField: React.FC<TextInputProps &
       <SymbolWrapper>
         {options && options.length > 0 && <ChevronDown />}
       </SymbolWrapper>
-      {errors && 
-       <ErrorText ><WarningTriangle size={13}/>{errors}</ErrorText>
-      }
+      {helperText && <HelperText>help text</HelperText>}
+      {errors && (
+        <ErrorText>
+          <WarningTriangle size={13} />
+          {errors}
+        </ErrorText>
+      )}
     </Wrapper>
-
- </>
+  </>
 )
 
 export const InputGroupDeleteButton = styled.button`
