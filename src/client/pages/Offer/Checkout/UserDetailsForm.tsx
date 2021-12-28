@@ -17,7 +17,10 @@ const debounce = (func: (...args: any[]) => any, timeout: number) => {
   }
 }
 
-export const getCheckoutDetailsValidationSchema = (locale: LocaleData) =>
+export const getCheckoutDetailsValidationSchema = (
+  locale: LocaleData,
+  isPhoneNumberRequired?: boolean,
+) =>
   Yup.object().shape({
     firstName: Yup.string().required(),
     lastName: Yup.string().required(),
@@ -28,26 +31,34 @@ export const getCheckoutDetailsValidationSchema = (locale: LocaleData) =>
       .matches(locale.ssn.formatRegex)
       .max(locale.ssn.length)
       .required(),
+    ...(isPhoneNumberRequired
+      ? {
+          phoneNumber: Yup.string()
+            .matches(locale.phoneNumber.formatRegex)
+            .required(),
+        }
+      : {}),
   })
 
 export const CheckoutDetailsForm: React.FC<{
   formikProps: FormikProps<QuoteInput>
 }> = ({ formikProps }) => {
+  console.log(formikProps.values, formikProps.errors)
   const { handleChange } = formikProps
-  const [hasEnabledCreditCheckInfo] = useFeature([
+  const [hasEnabledCreditCheckInfo, isPhoneNumberRequired] = useFeature([
     Features.CHECKOUT_CREDIT_CHECK,
+    Features.COLLECT_PHONE_NUMBER_AT_CHECKOUT,
   ])
   const [isShowingCreditCheckInfo, setIsShowingCreditCheckInfo] = useState(
     false,
   )
 
   const {
-    values: { firstName, lastName, email, ssn },
+    values: { ssn },
     initialValues,
     submitForm,
   } = formikProps
 
-  // eslint-disable-line react-hooks/exhaustive-deps
   const debouncedSubmitForm = useCallback(
     debounce(() => {
       submitForm()
@@ -57,7 +68,7 @@ export const CheckoutDetailsForm: React.FC<{
 
   useEffect(() => {
     if (ssn !== initialValues.ssn) debouncedSubmitForm()
-  }, [firstName, lastName, email, ssn, initialValues, debouncedSubmitForm])
+  }, [ssn, initialValues.ssn, debouncedSubmitForm])
 
   return (
     <form onSubmit={formikProps.handleSubmit}>
@@ -81,6 +92,15 @@ export const CheckoutDetailsForm: React.FC<{
         formikProps={formikProps}
         onChange={handleChange}
       />
+      {isPhoneNumberRequired && (
+        <TextInput
+          label="CHECKOUT_PHONE_NUMBER_LABEL"
+          name="phoneNumber"
+          type="tel"
+          formikProps={formikProps}
+          onChange={handleChange}
+        />
+      )}
       <SsnInput
         name="ssn"
         formikProps={formikProps}

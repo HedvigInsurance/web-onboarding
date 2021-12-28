@@ -324,5 +324,6 @@
   "SIDEBAR_ADD_CAMPAIGN_BUTTON": "Add discount code",
   "SIDEBAR_NO_BUNDLE_CAMPAIGN_TEXT": "25% discount",
   "SIDEBAR_REMOVE_CAMPAIGN_BUTTON": "Remove discount code",
-  "SIDEBAR_ADD_CAMPAIGN_ERROR": "The discount code is invalid"
+  "SIDEBAR_ADD_CAMPAIGN_ERROR": "The discount code is invalid",
+  "CHECKOUT_PHONE_NUMBER_LABEL": "Phone number"
 }

@@ -41,7 +41,7 @@ export const ConnectPayment: React.FC = () => {
           <title>{textKeys.ONBOARDING_CONNECT_DD_PAGE_TITLE()}</title>
         </Helmet>
         <TopBar>
-          {isCustomerServicePhoneNumberEnabled && currentLocale.phoneNumber ? (
+          {isCustomerServicePhoneNumberEnabled && currentLocale.callCenter ? (
             <PhoneNumber color="white" onClick={handleClickPhoneNumber} />
           ) : (
             <LanguagePicker color="white" />

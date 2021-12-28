@@ -60,7 +60,7 @@ export const OfferPage = ({
     params: { id: quoteCartId },
   },
 }: OfferPageProps) => {
-  const { isoLocale, path: pathLocale, phoneNumber } = useCurrentLocale()
+  const { isoLocale, path: pathLocale, callCenter } = useCurrentLocale()
   const variation = useVariation()
   const [
     isInsuranceToggleEnabled,
@@ -203,7 +203,7 @@ export const OfferPage = ({
     <Page>
       {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
         <TopBar isTransparent>
-          {isCustomerServicePhoneNumberEnabled && phoneNumber ? (
+          {isCustomerServicePhoneNumberEnabled && callCenter ? (
             <PhoneNumber color="white" onClick={handleClickPhoneNumber} />
           ) : (
             <LanguagePicker

@@ -46,7 +46,7 @@ const getQuoteIdsFromBundleVariant = (bundleVariant: QuoteBundleVariant) =>
   bundleVariant.bundle.quotes.map((quote) => quote.id)
 
 export const OfferNew: React.FC = () => {
-  const { path: localePath, isoLocale, phoneNumber } = useCurrentLocale()
+  const { path: localePath, isoLocale, callCenter: phoneNumber } = useCurrentLocale()
   const localeIsoCode = isoLocale
   const variation = useVariation()
 

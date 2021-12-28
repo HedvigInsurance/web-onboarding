@@ -324,5 +324,6 @@
   "SIDEBAR_ADD_CAMPAIGN_BUTTON": "Ajouter un code promo",
   "SIDEBAR_NO_BUNDLE_CAMPAIGN_TEXT": "",
   "SIDEBAR_REMOVE_CAMPAIGN_BUTTON": "Supprimer le code promo",
-  "SIDEBAR_ADD_CAMPAIGN_ERROR": "Le code promo n'est pas valide."
+  "SIDEBAR_ADD_CAMPAIGN_ERROR": "Le code promo n'est pas valide.",
+  "CHECKOUT_PHONE_NUMBER_LABEL": "Téléphone"
 }

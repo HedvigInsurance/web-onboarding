@@ -221,7 +221,10 @@ export const Checkout = ({
   const client = useApolloClient()
   const storage = useStorage()
   const variation = useVariation()
-  const [isUpsellCardVisible] = useFeature([Features.CHECKOUT_UPSELL_CARD])
+  const [isUpsellCardVisible, isPhoneNumberRequired] = useFeature([
+    Features.CHECKOUT_UPSELL_CARD,
+    Features.COLLECT_PHONE_NUMBER_AT_CHECKOUT,
+  ])
 
   const scrollWrapper = useRef<HTMLDivElement>()
   const [windowInnerHeight, setWindowInnerHeight] = useState(window.innerHeight)
@@ -263,14 +266,20 @@ export const Checkout = ({
   const privacyPolicyLink = mainQuote.insuranceTerms.find(
     ({ type }) => type === InsuranceTermType.PrivacyPolicy,
   )?.url
+
   const formik = useFormik<QuoteInput>({
     initialValues: {
       ...mainQuote,
+      // @TODO Temprorary hack while backend support is in place
+      phoneNumber: mainQuote.data.phoneNumber,
       data: {
         ...mainQuote.data,
       },
     } as QuoteInput,
-    validationSchema: getCheckoutDetailsValidationSchema(locale),
+    validationSchema: getCheckoutDetailsValidationSchema(
+      locale,
+      isPhoneNumberRequired,
+    ),
     onSubmit: (values) => reCreateQuoteBundle(values),
     validateOnMount: true,
     enableReinitialize: true,
@@ -357,16 +366,17 @@ export const Checkout = ({
   const startSign = async () => {
     setSignUiState('STARTED')
     const { values, initialValues, submitForm } = formik
-    const { firstName, lastName, email, ssn } = values
+    const { firstName, lastName, email, ssn, phoneNumber } = values
+    const isFormDataUpdated =
+      firstName !== initialValues.firstName ||
+      lastName !== initialValues.lastName ||
+      email !== initialValues.email ||
+      phoneNumber !== initialValues.phoneNumber ||
+      ssn !== initialValues.ssn
 
     try {
       let quoteIds = getQuoteIdsFromBundleVariant(selectedQuoteBundleVariant)
-      if (
-        firstName !== initialValues.firstName ||
-        lastName !== initialValues.lastName ||
-        email !== initialValues.email ||
-        ssn !== initialValues.ssn
-      ) {
+      if (isFormDataUpdated) {
         const result: FetchResult<CreateQuoteBundleMutation> = await submitForm()
         const quoteCart = result.data?.quoteCart_createQuoteBundle
         if (

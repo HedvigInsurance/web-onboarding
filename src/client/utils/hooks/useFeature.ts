@@ -9,6 +9,7 @@ export enum Features {
   TEST_FEATURE = 'TEST_FEATURE', // For unit testing purposes
   CHECKOUT_UPSELL_CARD = 'CHECKOUT_UPSELL_CARD',
   CUSTOMER_SERVICE_PHONE_NUMBER = 'CUSTOMER_SERVICE_PHONE_NUMBER',
+  COLLECT_PHONE_NUMBER_AT_CHECKOUT = 'COLLECT_PHONE_NUMBER_AT_CHECKOUT',
 }
 
 type Env = 'staging' | 'production'
@@ -49,6 +50,11 @@ const Config: readonly FeatureConfig[] = [
     name: Features.CUSTOMER_SERVICE_PHONE_NUMBER,
     envs: ['staging', 'production'],
     markets: [],
+  },
+  {
+    name: Features.COLLECT_PHONE_NUMBER_AT_CHECKOUT,
+    envs: ['staging', 'production'],
+    markets: ['NO'],
   },
 ]
 

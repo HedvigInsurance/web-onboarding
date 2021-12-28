@@ -4,7 +4,7 @@ import React from 'react'
 import { format as formatDate, getDay } from 'date-fns'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
-import { PhoneNumberData } from 'l10n/phoneNumbers'
+import { CallCenterData } from 'src/client/l10n/callCenters'
 import { Telephone } from '../icons/Telephone'
 
 const { black, white, gray700, gray500 } = colorsV3
@@ -49,24 +49,24 @@ const Text = styled.p<{ color: Color }>`
   }
 `
 
-const isLunchHour = (currentTime: string, data: PhoneNumberData): boolean =>
+const isLunchHour = (currentTime: string, data: CallCenterData): boolean =>
   currentTime >= data.lunchStartsAt && currentTime < data.lunchEndsAt
 
 const isWeekend = (): boolean => {
   const currentDay = getDay(new Date())
   return currentDay === 6 || currentDay === 0
 }
-const phoneIsOpen = (currentTime: string, data: PhoneNumberData): boolean =>
+const phoneIsOpen = (currentTime: string, data: CallCenterData): boolean =>
   !isLunchHour(currentTime, data) &&
   !isWeekend() &&
   currentTime >= data.opensAt &&
   currentTime < data.closesAt
 
-const getStatus = (currentTime: string, phoneNumber: PhoneNumberData) =>
+const getStatus = (currentTime: string, phoneNumber: CallCenterData) =>
   phoneIsOpen(currentTime, phoneNumber) ? 'opened' : 'closed'
 
 const PhoneOpeningHours: React.FC<{
-  phoneNumber: PhoneNumberData
+  phoneNumber: CallCenterData
   color: Color
 }> = ({ phoneNumber, color }) => {
   const textKeys = useTextKeys()
@@ -114,7 +114,7 @@ export const PhoneNumber: React.FC<{
 }> = ({ color, onClick }) => {
   const currentLocale = useCurrentLocale()
   const currentTime = formatDate(new Date(), 'HH')
-  const { phoneNumber } = currentLocale
+  const { callCenter: phoneNumber } = currentLocale
 
   if (!phoneNumber) return null
 
