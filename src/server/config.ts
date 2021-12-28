@@ -21,11 +21,23 @@ export const ADYEN_ENVIRONMENT = process.env.ADYEN_ENVIRONMENT!
 
 export const APP_ENVIRONMENT = process.env.APP_ENVIRONMENT ?? 'development'
 
+const DEFAULT_FEATURES: FeatureMap = {
+  [Feature.CHECKOUT_CREDIT_CHECK]: ['NO'],
+  [Feature.CHECKOUT_UPSELL_CARD]: ['SE'],
+  [Feature.CUSTOMER_SERVICE_PHONE_NUMBER]: ['SE'],
+  [Feature.OFFER_PAGE_INSURANCE_TOGGLE]: ['SE'],
+  [Feature.QUOTE_CART_API]: [],
+  [Feature.TEST_FEATURE]: [],
+}
+
 export const FEATURES = (Object.keys(Feature) as Array<Feature>).reduce(
   (featureMap, key) => {
-    featureMap[key] = (process.env[`FEATURE_${key}`]?.split(',') ??
-      []) as Array<MarketLabel>
+    const envKey = `FEATURE_${key}`
+    if (envKey in process.env) {
+      const markets = process.env[envKey]?.split(',') ?? []
+      featureMap[key] = markets as Array<MarketLabel>
+    }
     return featureMap
   },
-  {} as FeatureMap,
+  DEFAULT_FEATURES,
 )
