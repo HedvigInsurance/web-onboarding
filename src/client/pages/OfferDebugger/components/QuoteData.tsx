@@ -217,6 +217,7 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
       if (quoteBundleType === QuoteBundleType.SwedishApartmentAccident) {
         result = await createQuoteBundle({
           variables: {
+            locale: isoLocale,
             quoteCartId,
             quotes: [
               {
@@ -233,6 +234,7 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
       } else if (quoteBundleType === QuoteBundleType.DanishHomeAccident) {
         result = await createQuoteBundle({
           variables: {
+            locale: isoLocale,
             quoteCartId,
             quotes: [
               {
@@ -255,6 +257,7 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
       } else if (quoteBundleType === QuoteBundleType.DanishHomeAccidentTravel) {
         result = await createQuoteBundle({
           variables: {
+            locale: isoLocale,
             quoteCartId,
             quotes: [
               {
@@ -284,6 +287,7 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
       } else if (quoteBundleType === QuoteBundleType.SwedishHouse) {
         result = await createQuoteBundle({
           variables: {
+            locale: isoLocale,
             quoteCartId,
             quotes: [getSwedishHouseQuoteValues(input)],
           },
@@ -291,6 +295,7 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
       } else {
         result = await createQuoteBundle({
           variables: {
+            locale: isoLocale,
             quoteCartId,
             quotes: [
               {

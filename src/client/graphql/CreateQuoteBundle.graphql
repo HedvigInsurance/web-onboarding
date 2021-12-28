@@ -1,14 +1,50 @@
-mutation CreateQuoteBundle($quoteCartId: ID!, $quotes: [JSON!]!) {
+mutation CreateQuoteBundle($quoteCartId: ID!, $quotes: [JSON!]!, $locale: Locale!) {
   quoteCart_createQuoteBundle(id: $quoteCartId, input: { payload: $quotes }) {
     ... on QuoteCart {
       id
       bundle {
-        quotes {
+        possibleVariations {
+          id
+          tag(locale: $locale)
+          bundle {
+            displayName(locale: $locale)
+            bundleCost {
+              ...BundleCostDataFragment
+            }
+            quotes {
+              ...QuoteDataFragment
+            }
+          }
+        }
+      }
+      campaign {
+        incentive {
+          ... on MonthlyCostDeduction {
+            amount {
+              amount
+              currency
+            }
+          }
+          ... on PercentageDiscountMonths {
+            percentageDiscount
+            quantity
+          }
+        }
+        code
+        owner {
+          displayName
           id
         }
+        expiresAt
+      }
+      checkoutMethods
+      checkout {
+        status
       }
     }
     ... on QuoteBundleError {
+      message
+      type
       limits {
         code
       }

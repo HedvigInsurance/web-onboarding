@@ -5,15 +5,24 @@ import { SegmentAnalyticsJs } from 'quepasa'
 import React from 'react'
 import { Mount } from 'react-lifecycle-components'
 import { afterTick } from 'pages/Embark/utils'
-import { UpdatePickedLocaleDocument } from 'data/graphql'
+import {
+  MemberDocument,
+  UpdatePickedLocaleDocument,
+  CreateAccessTokenDocument,
+} from 'data/graphql'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { captureSentryError } from 'utils/sentry-client'
-import { Storage, StorageContainer } from 'utils/StorageContainer'
+import { Storage, StorageContainer, StorageState } from 'utils/StorageContainer'
 import {
   apolloClient as realApolloClient,
   ApolloClientUtils,
 } from '../apolloClient'
 import { LocaleData } from '../l10n/locales'
+
+type MemberData = {
+  __typename: 'Member'
+  id: string
+}
 
 export const CREATE_SESSION_TOKEN_MUTATION: DocumentNode = gql`
   mutation CreateSessionToken {
@@ -32,13 +41,7 @@ export const setupSession = async (
   apolloClientUtils: ApolloClientUtils,
   storage: Storage,
   pickedLocale: LocaleData['isoLocale'],
-): Promise<
-  | {
-      id: string
-      __typename: 'Member'
-    }
-  | undefined
-> => {
+): Promise<MemberData | undefined> => {
   if (!apolloClientUtils) {
     throw new Error('Missing apollo client')
   }
@@ -74,6 +77,54 @@ export const setupSession = async (
   }
 
   return sessionResult.data
+}
+
+type SetupQuoteCartSessionParams = {
+  quoteCartId: string
+  apolloClientUtils: ApolloClientUtils
+  storage: StorageState
+}
+
+export const setupQuoteCartSession = async ({
+  quoteCartId,
+  apolloClientUtils,
+  storage,
+}: SetupQuoteCartSessionParams): Promise<string> => {
+  if (!apolloClientUtils) {
+    throw new Error('Missing apollo client')
+  }
+
+  const accessTokenResult = await apolloClientUtils.client.mutate({
+    mutation: CreateAccessTokenDocument,
+    variables: { quoteCartId },
+  })
+
+  await afterTick(() => {
+    const accessToken =
+      accessTokenResult.data.quoteCart_createAccessToken.accessToken
+
+    apolloClientUtils!.subscriptionClient.close(true, true)
+    storage.session.setSession({
+      ...((storage.session.getSession() || {}) as any),
+      token: accessToken,
+    })
+    apolloClientUtils.httpLink.options.headers.authorization = accessToken
+  })
+
+  const memberResult = await apolloClientUtils.client.query({
+    query: MemberDocument,
+  })
+  const memberId = memberResult.data.member.id
+
+  try {
+    const castedWindow = window as any
+    const segment = castedWindow.analytics as SegmentAnalyticsJs
+    segment.identify(memberId)
+  } catch (e) {
+    captureSentryError(e)
+  }
+
+  return memberId
 }
 
 export const SessionContainer: React.SFC<SessionContainerProps> = ({

@@ -1,0 +1,5 @@
+mutation CreateAccessToken($quoteCartId: ID!) {
+  quoteCart_createAccessToken(id: $quoteCartId) {
+    accessToken
+  }
+}
