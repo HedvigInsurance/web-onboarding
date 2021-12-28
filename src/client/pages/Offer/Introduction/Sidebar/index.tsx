@@ -190,7 +190,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <Container>
               <StyledCampaignBadge
                 quoteCartId={quoteCartId}
-                offerData={offerData}
+                isNorwegianBundle={isNorwegianBundle(offerData)}
               />
               <Header>
                 <Title>Hedvig</Title>

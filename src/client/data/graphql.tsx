@@ -11480,7 +11480,7 @@ export type AddCampaignCodeMutation = { __typename?: 'Mutation' } & {
 }
 
 export type AppliedCampaignNameQueryVariables = Exact<{
-  id: Scalars['ID']
+  quoteCartId: Scalars['ID']
   locale: Locale
 }>
 
@@ -12858,8 +12858,8 @@ export type AddCampaignCodeMutationOptions = ApolloReactCommon.BaseMutationOptio
   AddCampaignCodeMutationVariables
 >
 export const AppliedCampaignNameDocument = gql`
-  query AppliedCampaignName($id: ID!, $locale: Locale!) {
-    quoteCart(id: $id) {
+  query AppliedCampaignName($quoteCartId: ID!, $locale: Locale!) {
+    quoteCart(id: $quoteCartId) {
       campaign {
         displayValue(locale: $locale)
       }
@@ -12879,7 +12879,7 @@ export const AppliedCampaignNameDocument = gql`
  * @example
  * const { data, loading, error } = useAppliedCampaignNameQuery({
  *   variables: {
- *      id: // value for 'id'
+ *      quoteCartId: // value for 'quoteCartId'
  *      locale: // value for 'locale'
  *   },
  * });

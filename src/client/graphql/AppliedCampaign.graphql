@@ -1,5 +1,5 @@
-query AppliedCampaignName($id: ID!, $locale: Locale!) {
-  quoteCart(id: $id) {
+query AppliedCampaignName($quoteCartId: ID!, $locale: Locale!) {
+  quoteCart(id: $quoteCartId) {
     campaign {
       displayValue(locale: $locale)
     }

@@ -22,6 +22,7 @@ import {
   getQuoteIdsFromBundleVariant,
   getBundleVariantFromInsuranceTypesWithFallback,
   getInsuranceTypesFromBundleVariant,
+  isNorwegianBundle,
 } from 'pages/OfferNew/utils'
 import { PriceBreakdown } from 'pages/OfferNew/common/PriceBreakdown'
 import { useStorage } from 'utils/StorageContainer'
@@ -464,7 +465,7 @@ export const Checkout = ({
             <Section>
               <StyledCampaignBadge
                 quoteCartId={quoteCartId}
-                offerData={offerData}
+                isNorwegianBundle={isNorwegianBundle(offerData)}
               >
                 <DiscountTag offerData={offerData} />
               </StyledCampaignBadge>
