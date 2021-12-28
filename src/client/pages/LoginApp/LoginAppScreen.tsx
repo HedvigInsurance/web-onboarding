@@ -7,7 +7,7 @@ import { useTextKeys } from 'utils/textKeys'
 import { Page } from 'components/utils/Page'
 import { useNorwegianBankIdAuthMutation } from 'data/graphql'
 import { captureSentryError } from 'utils/sentry-client'
-import { TopBar } from 'components/TopBar'
+import { HedvigLogo } from 'components/icons/HedvigLogo'
 import { LoginForm, LoginFormValue } from './components/LoginForm'
 
 const PageWrapper = styled.div`
@@ -16,8 +16,22 @@ const PageWrapper = styled.div`
   height: 100vh;
   padding-left: 1rem;
   padding-right: 1rem;
-  color: ${colorsV3.gray500};
-  background-color: ${colorsV3.gray900};
+  color: ${colorsV3.gray700};
+  background-color: ${colorsV3.white};
+`
+
+const Header = styled.header`
+  display: flex;
+  background-color: ${colorsV3.white};
+  position: absolute;
+  top: 2.5rem;
+  width: 100%;
+  padding-bottom: 1.15rem;
+`
+
+const Logo = styled.div`
+  margin: 0 auto;
+  color: ${colorsV3.gray900};
 `
 
 export const LoginAppScreen: React.FC = () => {
@@ -59,7 +73,11 @@ export const LoginAppScreen: React.FC = () => {
         <title>{textKeys.LOGIN_APP_PAGE_TITLE()}</title>
       </Helmet>
       <Page>
-        <TopBar centered />
+        <Header>
+          <Logo>
+            <HedvigLogo width={94} />
+          </Logo>
+        </Header>
         <PageWrapper>
           <LoginForm onSubmit={handleSubmit} />
         </PageWrapper>

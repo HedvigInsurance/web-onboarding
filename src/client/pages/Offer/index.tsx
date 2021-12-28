@@ -10,7 +10,11 @@ import {
 import { LoadingPage } from 'components/LoadingPage'
 import { TopBar } from 'components/TopBar'
 import { Page } from 'components/utils/Page'
-import { useQuoteCartQuery, QuoteBundleVariant } from 'data/graphql'
+import {
+  useQuoteCartQuery,
+  QuoteBundleVariant,
+  CheckoutStatus,
+} from 'data/graphql'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { trackOfferGTM, EventName } from 'utils/tracking/gtm'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
@@ -19,26 +23,31 @@ import { Features, useFeature } from 'utils/hooks/useFeature'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { LocaleLabel } from 'l10n/locales'
+import { CheckoutSuccessRedirect } from 'pages/OfferNew/Checkout/CheckoutSuccessRedirect'
 import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import {
   getOfferData,
   getUniqueQuotesFromVariantList,
-  getBundleVariantFromInsuranceTypes,
+  getBundleVariantFromInsuranceTypesWithFallback,
   getInsuranceTypesFromBundleVariant,
 } from '../OfferNew/utils'
 import { AppPromotionSection } from '../OfferNew/AppPromotionSection'
-import { Checkout } from '../OfferNew/Checkout'
 import { FaqSection } from '../OfferNew/FaqSection'
 import { Perils } from '../OfferNew/Perils'
 import { InsuranceSelector } from '../OfferNew/InsuranceSelector'
 import { Introduction } from './Introduction'
+import { Checkout } from './Checkout'
 
-const createToggleCheckout = (history: History<any>, locale?: LocaleLabel) => (
-  isOpen: boolean,
-) => {
+const createToggleCheckout = (
+  history: History<any>,
+  quoteCartId: string,
+  locale?: LocaleLabel,
+) => (isOpen: boolean) => {
   if (isOpen) {
-    history.push(`/${locale}/new-member/sign`)
+    history.push(
+      `/${locale}/new-member/sign/${quoteCartId}${history.location.search}`,
+    )
   } else {
     history.goBack()
   }
@@ -84,6 +93,8 @@ export const OfferPage = ({
 
   const bundleData = quoteCartData?.quoteCart.bundle
   const redeemedCampaign = quoteCartData?.quoteCart.campaign ?? null
+  const checkoutMethod = quoteCartData?.quoteCart?.checkoutMethods[0]
+  const checkoutStatus = quoteCartData?.quoteCart?.checkout?.status
 
   if (quoteCartError) {
     throw new Error(`Error fetching quote cart: ${quoteCartId}.`)
@@ -102,14 +113,15 @@ export const OfferPage = ({
   const isInsuranceSelectorVisible =
     isInsuranceToggleEnabled && bundleVariants.length > 1
 
-  const selectedBundleVariant =
-    getBundleVariantFromInsuranceTypes(
-      bundleVariants,
-      selectedInsuranceTypes,
-    ) || bundleVariants?.[0]
+  const selectedBundleVariant = getBundleVariantFromInsuranceTypesWithFallback(
+    bundleVariants,
+    selectedInsuranceTypes,
+  )
 
-  const checkoutMatch = useRouteMatch(`${localePathPattern}/new-member/sign`)
-  const toggleCheckout = createToggleCheckout(history, pathLocale)
+  const checkoutMatch = useRouteMatch(
+    `${localePathPattern}/new-member/sign/${quoteCartId}`,
+  )
+  const toggleCheckout = createToggleCheckout(history, quoteCartId, pathLocale)
 
   const offerData = selectedBundleVariant
     ? getOfferData(selectedBundleVariant.bundle)
@@ -183,6 +195,10 @@ export const OfferPage = ({
     return <LoadingPage />
   }
 
+  if (checkoutStatus === CheckoutStatus.Completed && offerData) {
+    return <CheckoutSuccessRedirect offerData={offerData} />
+  }
+
   return (
     <Page>
       {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
@@ -235,6 +251,10 @@ export const OfferPage = ({
           <AppPromotionSection />
           <FaqSection />
           <Checkout
+            quoteCartId={quoteCartId}
+            checkoutMethod={checkoutMethod}
+            campaign={redeemedCampaign}
+            initialCheckoutStatus={checkoutStatus}
             quoteBundleVariants={bundleVariants}
             selectedQuoteBundleVariant={selectedBundleVariant}
             onUpsellAccepted={handleCheckoutUpsellCardAccepted}
