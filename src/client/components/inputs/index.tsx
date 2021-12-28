@@ -41,14 +41,6 @@ export const masks: Record<string, Mask> = {
 
 type variantType = 'light' | 'dark'
 
-interface InputVariant {
-  color: string
-  background: string
-  border: string
-  borderFocus: string
-  error: string
-}
-
 const InputFieldContainer = styled.div`
   margin-bottom: 1.5rem;
 `
