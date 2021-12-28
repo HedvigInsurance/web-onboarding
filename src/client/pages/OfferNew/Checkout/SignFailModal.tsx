@@ -2,12 +2,13 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { Modal } from 'components/ModalNew'
-import { useTextKeys } from 'utils/textKeys'
 import { WarningTriangle } from 'components/icons/WarningTriangle'
 
 interface Props {
   onClose: () => void
   isVisible: boolean
+  headerText: string
+  contentText: string
 }
 
 const Container = styled.div`
@@ -39,15 +40,18 @@ const CustomModal = styled(Modal)`
   max-width: 36rem;
 `
 
-export const SignFailModal = ({ isVisible, onClose }: Props) => {
-  const textKeys = useTextKeys()
-
+export const SignFailModal = ({
+  isVisible,
+  onClose,
+  headerText,
+  contentText,
+}: Props) => {
   return (
     <CustomModal isVisible={isVisible} onClose={onClose} dynamicHeight>
       <Container>
         <WarningTriangle />
-        <Header>{textKeys.CHECKOUT_SIGN_FAIL_HEADER()}</Header>
-        <Content>{textKeys.CHECKOUT_SIGN_FAIL_CONTENT()}</Content>
+        <Header>{headerText}</Header>
+        <Content>{contentText}</Content>
       </Container>
     </CustomModal>
   )
