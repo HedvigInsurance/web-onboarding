@@ -67,7 +67,7 @@ export const SignLoading: React.FC = () => {
       return
     }
     if (variation === Variation.AVY) {
-      handleSignedEvent(member.data?.member ?? null)
+      handleSignedEvent(member.data?.member.id ?? null)
     }
   }, [
     signStatusQuery.data?.signStatus?.signState,

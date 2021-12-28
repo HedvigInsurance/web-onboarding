@@ -293,7 +293,7 @@ export const Checkout = ({
       return
     }
     if (variation === Variation.AVY) {
-      handleSignedEvent(member.data?.member ?? null)
+      handleSignedEvent(member.data?.member.id ?? null)
     }
   }, [member.data?.member, signStatus?.signState, variation])
 
