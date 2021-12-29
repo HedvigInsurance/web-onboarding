@@ -12222,6 +12222,38 @@ export type RemoveStartDateMutation = { __typename?: 'Mutation' } & {
     | { __typename?: 'UnderwritingLimitsHit' }
 }
 
+export type SetStartDateMutationVariables = Exact<{
+  quoteCartId: Scalars['ID']
+  quoteId: Scalars['ID']
+  payload: Scalars['JSON']
+}>
+
+export type SetStartDateMutation = { __typename?: 'Mutation' } & {
+  quoteCart_editQuote:
+    | ({ __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'> & {
+          bundle?: Maybe<
+            { __typename?: 'QuoteBundle' } & {
+              possibleVariations: Array<
+                { __typename?: 'QuoteBundleVariant' } & Pick<
+                  QuoteBundleVariant,
+                  'id'
+                > & {
+                    bundle: { __typename?: 'QuoteBundle' } & {
+                      quotes: Array<
+                        { __typename?: 'BundledQuote' } & Pick<
+                          BundledQuote,
+                          'id' | 'startDate'
+                        >
+                      >
+                    }
+                  }
+              >
+            }
+          >
+        })
+    | ({ __typename?: 'QuoteBundleError' } & Pick<QuoteBundleError, 'message'>)
+}
+
 export type SignMethodForQuotesQueryVariables = Exact<{
   input: Array<Scalars['ID']> | Scalars['ID']
 }>
@@ -14494,6 +14526,79 @@ export type RemoveStartDateMutationResult = ApolloReactCommon.MutationResult<
 export type RemoveStartDateMutationOptions = ApolloReactCommon.BaseMutationOptions<
   RemoveStartDateMutation,
   RemoveStartDateMutationVariables
+>
+export const SetStartDateDocument = gql`
+  mutation SetStartDate($quoteCartId: ID!, $quoteId: ID!, $payload: JSON!) {
+    quoteCart_editQuote(
+      id: $quoteCartId
+      quoteId: $quoteId
+      payload: $payload
+    ) {
+      ... on QuoteCart {
+        id
+        bundle {
+          possibleVariations {
+            id
+            bundle {
+              quotes {
+                id
+                startDate
+              }
+            }
+          }
+        }
+      }
+      ... on QuoteBundleError {
+        message
+      }
+    }
+  }
+`
+export type SetStartDateMutationFn = ApolloReactCommon.MutationFunction<
+  SetStartDateMutation,
+  SetStartDateMutationVariables
+>
+
+/**
+ * __useSetStartDateMutation__
+ *
+ * To run a mutation, you first call `useSetStartDateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetStartDateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setStartDateMutation, { data, loading, error }] = useSetStartDateMutation({
+ *   variables: {
+ *      quoteCartId: // value for 'quoteCartId'
+ *      quoteId: // value for 'quoteId'
+ *      payload: // value for 'payload'
+ *   },
+ * });
+ */
+export function useSetStartDateMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SetStartDateMutation,
+    SetStartDateMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    SetStartDateMutation,
+    SetStartDateMutationVariables
+  >(SetStartDateDocument, options)
+}
+export type SetStartDateMutationHookResult = ReturnType<
+  typeof useSetStartDateMutation
+>
+export type SetStartDateMutationResult = ApolloReactCommon.MutationResult<
+  SetStartDateMutation
+>
+export type SetStartDateMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  SetStartDateMutation,
+  SetStartDateMutationVariables
 >
 export const SignMethodForQuotesDocument = gql`
   query SignMethodForQuotes($input: [ID!]!) {
