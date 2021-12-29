@@ -251,6 +251,7 @@ export const OfferPage = ({
           <FaqSection />
           <Checkout
             quoteCartId={quoteCartId}
+            offerData={offerData}
             checkoutMethod={checkoutMethod}
             campaign={redeemedCampaign}
             initialCheckoutStatus={checkoutStatus}
@@ -259,7 +260,6 @@ export const OfferPage = ({
             onUpsellAccepted={handleCheckoutUpsellCardAccepted}
             isOpen={checkoutMatch !== null}
             onClose={() => handleCheckoutToggle(false)}
-            refetch={refetchQuoteCart as () => Promise<any>}
           />
         </>
       )}
