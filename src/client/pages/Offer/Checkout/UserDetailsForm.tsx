@@ -43,7 +43,6 @@ export const getCheckoutDetailsValidationSchema = (
 export const CheckoutDetailsForm: React.FC<{
   formikProps: FormikProps<QuoteInput>
 }> = ({ formikProps }) => {
-  console.log(formikProps.values, formikProps.errors)
   const { handleChange } = formikProps
   const [hasEnabledCreditCheckInfo, isPhoneNumberRequired] = useFeature([
     Features.CHECKOUT_CREDIT_CHECK,

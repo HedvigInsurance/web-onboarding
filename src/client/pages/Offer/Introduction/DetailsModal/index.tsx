@@ -129,14 +129,17 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
     lastName,
     birthDate,
     ssn,
+    email,
     data: mainQuoteData,
   } = selectedQuoteBundle?.bundle.quotes[0]
+
   const { type: mainQuoteType, numberCoInsured } = mainQuoteData
   const initialValues = {
     firstName,
     lastName,
     birthDate,
     ssn,
+    email,
     data: {
       ...mainQuoteData,
       householdSize: numberCoInsured + 1,
@@ -158,13 +161,17 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
             lastName,
             birthDate,
             ssn,
-            data: { householdSize },
+            email,
+            data: { householdSize, phoneNumber },
           } = form
+
           return {
             firstName,
             lastName,
             birthDate,
             ssn,
+            email,
+            phoneNumber,
             data: {
               ...form.data,
               numberCoInsured: householdSize && householdSize - 1,
@@ -198,6 +205,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
           initialValues={initialValues}
           validationSchema={getValidationSchema(marketLabel, mainQuoteType)}
           onSubmit={onSubmit}
+          enableReinitialize
         >
           {(formikProps) => (
             <Form>
