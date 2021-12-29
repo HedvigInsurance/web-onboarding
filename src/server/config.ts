@@ -1,5 +1,7 @@
 import * as dotenv from 'dotenv'
+
 import { Feature, FeatureMap, MarketLabel } from 'shared/clientConfig'
+
 dotenv.config()
 
 export const GIRAFFE_HOST =
@@ -21,15 +23,6 @@ export const ADYEN_ENVIRONMENT = process.env.ADYEN_ENVIRONMENT!
 
 export const APP_ENVIRONMENT = process.env.APP_ENVIRONMENT ?? 'development'
 
-const DEFAULT_FEATURES: FeatureMap = {
-  [Feature.CHECKOUT_CREDIT_CHECK]: ['NO'],
-  [Feature.CHECKOUT_UPSELL_CARD]: ['SE'],
-  [Feature.CUSTOMER_SERVICE_PHONE_NUMBER]: ['SE'],
-  [Feature.OFFER_PAGE_INSURANCE_TOGGLE]: ['SE'],
-  [Feature.QUOTE_CART_API]: [],
-  [Feature.TEST_FEATURE]: [],
-}
-
 export const FEATURES = (Object.keys(Feature) as Array<Feature>).reduce(
   (featureMap, key) => {
     const envKey = `FEATURE_${key}`
@@ -39,5 +32,5 @@ export const FEATURES = (Object.keys(Feature) as Array<Feature>).reduce(
     }
     return featureMap
   },
-  DEFAULT_FEATURES,
+  {} as FeatureMap,
 )
