@@ -78,7 +78,6 @@ export type IntroductionProps = {
   offerData: OfferData
   campaign: CampaignDataFragment | null
   allQuotes: BundledQuote[]
-  refetch: () => Promise<void>
   onCheckoutOpen: () => void
 }
 
@@ -87,7 +86,6 @@ export const Introduction: React.FC<IntroductionProps> = ({
   offerData,
   campaign,
   allQuotes,
-  refetch,
   onCheckoutOpen,
 }) => {
   const hasDataCollection =
@@ -119,7 +117,6 @@ export const Introduction: React.FC<IntroductionProps> = ({
             <Sidebar
               offerData={offerData}
               campaign={campaign}
-              refetchOfferData={refetch}
               onCheckoutOpen={onCheckoutOpen}
             />
           </ContentContainer>

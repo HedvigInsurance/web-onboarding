@@ -232,7 +232,6 @@ export const OfferPage = ({
                 allQuotes={getUniqueQuotesFromVariantList(bundleVariants)}
                 offerData={offerData}
                 campaign={redeemedCampaign}
-                refetch={refetchQuoteCart as () => Promise<any>}
                 onCheckoutOpen={() => {
                   handleCheckoutToggle(true)
                   track()

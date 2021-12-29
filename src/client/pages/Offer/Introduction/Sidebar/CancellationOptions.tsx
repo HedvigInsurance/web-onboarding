@@ -4,7 +4,7 @@ import { format } from 'date-fns'
 import React from 'react'
 import { Switch } from 'components/Switch'
 import { Spinner } from 'components/utils'
-import { useRemoveStartDateMutation, useStartDateMutation } from 'data/graphql'
+import { useSetStartDateMutation } from 'data/graphql'
 import { OfferData, OfferQuote } from 'pages/OfferNew/types'
 import {
   isNorwegianHomeContents,
@@ -42,13 +42,13 @@ const SpinnerWrapper = styled.div`
 `
 
 interface CancellationOptionsProps {
+  quoteCartId: string
   quotes: OfferData['quotes']
   setShowError: (showError: boolean) => void
-  refetch: () => Promise<void>
-  handleFail: (e: Error) => void
 }
 
 export const CancellationOptions: React.FC<CancellationOptionsProps> = ({
+  quoteCartId,
   quotes,
   ...rest
 }) => {
@@ -62,6 +62,7 @@ export const CancellationOptions: React.FC<CancellationOptionsProps> = ({
               {...rest}
               isGenericQuote={quotes.length === 1}
               quote={quote as OfferQuote}
+              quoteCartId={quoteCartId}
             />
           )
         )
@@ -72,47 +73,41 @@ export const CancellationOptions: React.FC<CancellationOptionsProps> = ({
 
 interface QuoteCancellationOptionProps {
   isGenericQuote: boolean
+  quoteCartId: string
   quote: OfferQuote
   setShowError: (showError: boolean) => void
-  refetch: () => Promise<void>
-  handleFail: (e: Error) => void
 }
 const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
   isGenericQuote,
+  quoteCartId,
   quote,
   setShowError,
-  handleFail,
-  refetch,
 }) => {
   const textKeys = useTextKeys()
   const [isLoading, setIsLoading] = React.useState(false)
-  const [setStartDate] = useStartDateMutation()
-  const [removeStartDate] = useRemoveStartDateMutation()
+
+  const [setStartDate] = useSetStartDateMutation()
 
   const checked = !quote.startDate
 
-  const toggle = () => {
-    setShowError(false)
-    setIsLoading(true)
-    if (!checked) {
-      removeStartDate({
+  const toggle = async () => {
+    try {
+      setShowError(false)
+      setIsLoading(true)
+
+      await setStartDate({
         variables: {
+          quoteCartId,
           quoteId: quote.id,
+          payload: {
+            startDate: checked ? format(new Date(), gqlDateFormat) : null,
+          },
         },
       })
-        .then(() => refetch())
-        .catch(handleFail)
-        .finally(() => setIsLoading(false))
-    } else {
-      setStartDate({
-        variables: {
-          quoteId: quote.id,
-          date: format(new Date(), gqlDateFormat),
-        },
-      })
-        .then(() => refetch())
-        .catch(handleFail)
-        .finally(() => setIsLoading(false))
+    } catch (e) {
+      setShowError(true)
+    } finally {
+      setIsLoading(false)
     }
   }
 

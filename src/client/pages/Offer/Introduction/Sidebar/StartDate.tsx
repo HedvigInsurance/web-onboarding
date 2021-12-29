@@ -11,13 +11,10 @@ import {
   getLocaleImport,
 } from 'components/DateInput'
 import { ChevronDown } from 'components/icons/ChevronDown'
-import {
-  Market,
-  useCurrentLocale,
-  useMarket,
-} from 'components/utils/CurrentLocale'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import { MarketLabel } from 'l10n/locales'
 import { LoadingDots } from 'components/LoadingDots/LoadingDots'
-import { useRemoveStartDateMutation, useStartDateMutation } from 'data/graphql'
+import { useSetStartDateMutation } from 'data/graphql'
 import { OfferData, OfferQuote } from 'pages/OfferNew/types'
 import { hasCurrentInsurer, isBundle, isDanish } from 'pages/OfferNew/utils'
 import { useTextKeys } from 'utils/textKeys'
@@ -25,13 +22,6 @@ import { Size } from 'components/types'
 import { gqlDateFormat } from './utils'
 import { StartDateLabelSwitcher } from './StartDateLabelSwitcher'
 import { CancellationOptions } from './CancellationOptions'
-
-interface Props {
-  offerData: OfferData
-  refetch: () => Promise<void>
-  modal?: boolean
-  size?: Size
-}
 
 const DateFormsWrapper = styled.div`
   display: flex;
@@ -109,6 +99,7 @@ const Value = styled.div`
   color: ${colorsV3.gray900};
   text-transform: capitalize;
 `
+
 const LoadingDotsWrapper = styled.div`
   width: 100%;
   display: flex;
@@ -164,81 +155,50 @@ const getDefaultDateValue = (quote: OfferQuote) => {
   return new Date()
 }
 
+const getDateFormat = match<MarketLabel, string>([
+  ['SE', 'dd MMM yyyy'],
+  ['NO', 'dd/MM/yyyy'],
+  ['DK', 'yyyy-MM-dd'],
+])
+
 const DateForm: React.FC<{
+  quoteCartId: string
   quote: OfferQuote
-  offerData?: OfferData
+  offerData: OfferData
   isSingleStartDateBundle?: boolean
   isSplit: boolean
   setShowError: (showError: boolean) => void
   modal?: boolean
-  refetch: () => Promise<void>
   size: Size
 }> = ({
+  quoteCartId,
   quote,
   offerData,
-  isSingleStartDateBundle,
+  isSingleStartDateBundle = false,
   isSplit,
   setShowError,
-  modal,
-  refetch,
+  modal = false,
   size,
 }) => {
-  const [datePickerOpen, setDatePickerOpen] = useState(false)
+  const textKeys = useTextKeys()
+  const { isoLocale, marketLabel } = useCurrentLocale()
 
   const [dateValue, setDateValue] = useState(() => getDefaultDateValue(quote))
   const [dateLocale, setDateLocale] = useState<Locale | null>(null)
   const [isLoadingPickedStartDate, setIsLoadingPickedStartDate] = useState(
     false,
   )
+  const [datePickerOpen, setDatePickerOpen] = useState(false)
 
-  const textKeys = useTextKeys()
-  const [setStartDate] = useStartDateMutation()
-  const [removeStartDate] = useRemoveStartDateMutation()
-
-  const locale = useCurrentLocale()
-  const market = useMarket()
-  const getDateFormat = match([
-    [Market.Se, 'dd MMM yyyy'],
-    [Market.No, 'dd/MM/yyyy'],
-    [Market.Dk, 'yyyy-MM-dd'],
-  ])
+  const [setStartDate] = useSetStartDateMutation()
 
   useEffect(() => {
     setDateValue(getDefaultDateValue(quote))
   }, [quote])
 
   useEffect(() => {
-    getLocaleImport(locale).then((m) => setDateLocale(m.default))
-  })
-
-  const bundleEditStartDate = (startDate: string, offerData: OfferData) => {
-    return Promise.all(
-      offerData.quotes.map((quote) => {
-        return setStartDate({
-          variables: {
-            quoteId: quote.id,
-            date: startDate,
-          },
-        })
-      }),
-    )
-  }
-
-  const bundleRemoveStartDate = (offerData: OfferData) => {
-    return Promise.all(
-      offerData.quotes.map((quote) => {
-        return removeStartDate({
-          variables: {
-            quoteId: quote.id,
-          },
-        })
-      }),
-    )
-  }
-
-  const handleFail = () => {
-    setShowError(true)
-  }
+    getLocaleImport(isoLocale).then((m) => setDateLocale(m.default))
+  }, [isoLocale])
 
   const getDateLabel = () => {
     if (dateValue) {
@@ -246,46 +206,42 @@ const DateForm: React.FC<{
         return textKeys.SIDEBAR_STARTDATE_CELL_VALUE_NEW()
       }
 
-      return format(dateValue, getDateFormat(market)!, { locale: dateLocale! })
+      return format(dateValue, getDateFormat(marketLabel)!, {
+        locale: dateLocale!,
+      })
     }
   }
 
-  const setDate = async (newDateValue: Date | null) => {
-    setDateValue(newDateValue)
-    setShowError(false)
-    setIsLoadingPickedStartDate(true)
-    if (newDateValue === null) {
-      try {
-        isSingleStartDateBundle && offerData
-          ? await bundleRemoveStartDate(offerData)
-          : await removeStartDate({
-              variables: {
-                quoteId: quote.id,
+  const handleSetDate = async (newDateValue: Date | null) => {
+    try {
+      setShowError(false)
+      setIsLoadingPickedStartDate(true)
+
+      const formattedDateValue =
+        newDateValue !== null ? format(newDateValue, gqlDateFormat) : null
+      const quotesToBeUpdated = isSingleStartDateBundle
+        ? offerData.quotes
+        : [quote]
+
+      await Promise.all(
+        quotesToBeUpdated.map((quote) =>
+          setStartDate({
+            variables: {
+              quoteCartId,
+              quoteId: quote.id,
+              payload: {
+                startDate: formattedDateValue,
               },
-            })
-        await refetch()
-      } catch {
-        handleFail()
-      } finally {
-        setIsLoadingPickedStartDate(false)
-      }
-    } else {
-      try {
-        const formattedStartDate = format(newDateValue, gqlDateFormat)
-        isSingleStartDateBundle && offerData
-          ? await bundleEditStartDate(formattedStartDate, offerData)
-          : await setStartDate({
-              variables: {
-                quoteId: quote.id,
-                date: formattedStartDate,
-              },
-            })
-        await refetch()
-      } catch {
-        handleFail()
-      } finally {
-        setIsLoadingPickedStartDate(false)
-      }
+            },
+          }),
+        ),
+      )
+
+      setDateValue(newDateValue)
+    } catch {
+      setShowError(true)
+    } finally {
+      setIsLoadingPickedStartDate(false)
     }
   }
 
@@ -325,9 +281,9 @@ const DateForm: React.FC<{
             open={datePickerOpen}
             setOpen={setDatePickerOpen}
             date={dateValue || new Date()}
-            setDate={setDate}
+            setDate={handleSetDate}
             hasCurrentInsurer={hasCurrentInsurer(quote)}
-            modal={Boolean(modal)}
+            modal={modal}
           />
         </DateInputModalWrapper>
       ) : (
@@ -335,27 +291,34 @@ const DateForm: React.FC<{
           open={datePickerOpen}
           setOpen={setDatePickerOpen}
           date={dateValue || new Date()}
-          setDate={setDate}
+          setDate={handleSetDate}
           hasCurrentInsurer={hasCurrentInsurer(quote)}
-          modal={Boolean(modal)}
+          modal={modal}
         />
       )}
     </RowButtonWrapper>
   )
 }
 
-export const StartDate: React.FC<Props> = ({
+export type StartDateProps = {
+  quoteCartId: string
+  offerData: OfferData
+  modal?: boolean
+  size?: Size
+}
+
+export const StartDate: React.FC<StartDateProps> = ({
+  quoteCartId,
   offerData,
-  refetch,
   modal = false,
   size = 'lg',
 }) => {
   const textKeys = useTextKeys()
+
   const [showError, setShowError] = useState(false)
 
   // TODO: Make this flag more generic. This logic should not live here.
-  const isSingleStartDateBundle = (offerData: OfferData) =>
-    isBundle(offerData) && isDanish(offerData)
+  const isSingleStartDateBundle = isBundle(offerData) && isDanish(offerData)
 
   return (
     <>
@@ -376,15 +339,15 @@ export const StartDate: React.FC<Props> = ({
         {textKeys.SIDEBAR_UPDATE_START_DATE_FAILED()}
       </ErrorMessage>
       <DateFormsWrapper>
-        {isSingleStartDateBundle(offerData) ? (
+        {isSingleStartDateBundle ? (
           <DateForm
             key={offerData.quotes[0].id}
+            quoteCartId={quoteCartId}
             quote={offerData.quotes[0]}
             offerData={offerData}
             setShowError={setShowError}
             modal={modal}
-            refetch={refetch}
-            isSingleStartDateBundle={true}
+            isSingleStartDateBundle
             isSplit={false}
             size={size}
           />
@@ -393,10 +356,11 @@ export const StartDate: React.FC<Props> = ({
             {offerData.quotes.map((quote) => (
               <DateForm
                 key={quote.id}
+                quoteCartId={quoteCartId}
                 quote={quote}
+                offerData={offerData}
                 setShowError={setShowError}
                 modal={modal}
-                refetch={refetch}
                 isSplit={isBundle(offerData)}
                 size={size}
               />
@@ -406,10 +370,9 @@ export const StartDate: React.FC<Props> = ({
       </DateFormsWrapper>
 
       <CancellationOptions
+        quoteCartId={quoteCartId}
         quotes={offerData.quotes}
         setShowError={setShowError}
-        handleFail={() => setShowError(true)}
-        refetch={refetch}
       />
     </>
   )

@@ -135,14 +135,12 @@ const FooterExtraActions = styled.div`
 export type SidebarProps = {
   offerData: OfferData
   campaign: CampaignDataFragment | null
-  refetchOfferData: () => Promise<void>
   onCheckoutOpen: () => void
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   offerData,
   campaign,
-  refetchOfferData,
   onCheckoutOpen,
 }) => {
   const { id: quoteCartId } = useParams<{ id: string }>()
@@ -227,8 +225,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <PriceBreakdown offerData={offerData} />
                 <BodyTitle>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}</BodyTitle>
                 <StartDate
+                  quoteCartId={quoteCartId}
                   offerData={offerData}
-                  refetch={refetchOfferData}
                   modal
                   size="sm"
                 />
