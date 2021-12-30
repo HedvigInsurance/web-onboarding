@@ -82,7 +82,6 @@ export const OfferPage = ({
   const {
     data: quoteCartData,
     loading: isLoadingQuoteCart,
-    refetch: refetchQuoteCart,
     error: quoteCartError,
   } = useQuoteCartQuery({
     variables: {
