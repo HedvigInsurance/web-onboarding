@@ -11479,6 +11479,19 @@ export type AddCampaignCodeMutation = { __typename?: 'Mutation' } & {
     | ({ __typename?: 'BasicError' } & { errorMessage: BasicError['message'] })
 }
 
+export type AppliedCampaignNameQueryVariables = Exact<{
+  quoteCartId: Scalars['ID']
+  locale: Locale
+}>
+
+export type AppliedCampaignNameQuery = { __typename?: 'Query' } & {
+  quoteCart: { __typename?: 'QuoteCart' } & {
+    campaign?: Maybe<
+      { __typename?: 'Campaign' } & Pick<Campaign, 'displayValue'>
+    >
+  }
+}
+
 export type AvailablePaymentMethodsQueryVariables = Exact<{
   [key: string]: never
 }>
@@ -12881,6 +12894,67 @@ export type AddCampaignCodeMutationResult = ApolloReactCommon.MutationResult<
 export type AddCampaignCodeMutationOptions = ApolloReactCommon.BaseMutationOptions<
   AddCampaignCodeMutation,
   AddCampaignCodeMutationVariables
+>
+export const AppliedCampaignNameDocument = gql`
+  query AppliedCampaignName($quoteCartId: ID!, $locale: Locale!) {
+    quoteCart(id: $quoteCartId) {
+      campaign {
+        displayValue(locale: $locale)
+      }
+    }
+  }
+`
+
+/**
+ * __useAppliedCampaignNameQuery__
+ *
+ * To run a query within a React component, call `useAppliedCampaignNameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAppliedCampaignNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAppliedCampaignNameQuery({
+ *   variables: {
+ *      quoteCartId: // value for 'quoteCartId'
+ *      locale: // value for 'locale'
+ *   },
+ * });
+ */
+export function useAppliedCampaignNameQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    AppliedCampaignNameQuery,
+    AppliedCampaignNameQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    AppliedCampaignNameQuery,
+    AppliedCampaignNameQueryVariables
+  >(AppliedCampaignNameDocument, options)
+}
+export function useAppliedCampaignNameLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    AppliedCampaignNameQuery,
+    AppliedCampaignNameQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    AppliedCampaignNameQuery,
+    AppliedCampaignNameQueryVariables
+  >(AppliedCampaignNameDocument, options)
+}
+export type AppliedCampaignNameQueryHookResult = ReturnType<
+  typeof useAppliedCampaignNameQuery
+>
+export type AppliedCampaignNameLazyQueryHookResult = ReturnType<
+  typeof useAppliedCampaignNameLazyQuery
+>
+export type AppliedCampaignNameQueryResult = ApolloReactCommon.QueryResult<
+  AppliedCampaignNameQuery,
+  AppliedCampaignNameQueryVariables
 >
 export const AvailablePaymentMethodsDocument = gql`
   query AvailablePaymentMethods {

@@ -18,12 +18,10 @@ import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useTextKeys } from 'utils/textKeys'
 import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import {
-  useCreateOnboardingQuoteCartMutation,
-  useAddCampaignCodeMutation,
-} from 'data/graphql'
+import { useAddCampaignCodeMutation } from 'data/graphql'
 import { useFeature, Features } from 'utils/hooks/useFeature'
 import { CampaignCode } from 'utils/campaignCode'
+import { useCreateQuoteCart } from 'utils/hooks/useCreateQuoteCart'
 import { pushToGTMDataLayer } from '../../utils/tracking/gtm'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
@@ -238,19 +236,12 @@ interface AngelVariables {
 }
 
 const useCreateQuoteCartId = ({ skip = false }) => {
-  const { isoLocale, apiMarket } = useCurrentLocale()
-
-  const [
-    createOnboardingQuoteCart,
-    { data, error },
-  ] = useCreateOnboardingQuoteCartMutation()
+  const [createQuoteCartMutation, { data, error }] = useCreateQuoteCart()
 
   const [addCampaignCode] = useAddCampaignCodeMutation()
 
   const createQuoteCart = useCallback(async () => {
-    const result = await createOnboardingQuoteCart({
-      variables: { market: apiMarket, locale: isoLocale },
-    })
+    const result = await createQuoteCartMutation()
     const quoteCartId = result.data?.onboardingQuoteCart_create.id
     const savedCampaignCode = CampaignCode.get()
 
@@ -266,19 +257,17 @@ const useCreateQuoteCartId = ({ skip = false }) => {
         CampaignCode.remove()
       }
     }
-  }, [createOnboardingQuoteCart, apiMarket, isoLocale, addCampaignCode])
+  }, [createQuoteCartMutation, addCampaignCode])
+
+  const quoteCartId = data?.onboardingQuoteCart_create.id
 
   useEffect(() => {
-    if (!skip) {
+    if (!skip && !quoteCartId) {
       createQuoteCart()
     }
-  }, [skip, createQuoteCart])
+  }, [skip, quoteCartId, createQuoteCart])
 
-  return {
-    createQuoteCart,
-    quoteCartId: data?.onboardingQuoteCart_create.id,
-    error,
-  }
+  return { createQuoteCart, quoteCartId, error }
 }
 
 export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {

@@ -21,6 +21,7 @@ import {
   getQuoteIdsFromBundleVariant,
   getBundleVariantFromInsuranceTypesWithFallback,
   getInsuranceTypesFromBundleVariant,
+  isNorwegianBundle,
 } from 'pages/OfferNew/utils'
 import { PriceBreakdown } from 'pages/OfferNew/common/PriceBreakdown'
 import { useStorage } from 'utils/StorageContainer'
@@ -29,6 +30,7 @@ import { useLockBodyScroll } from 'utils/hooks/useLockBodyScroll'
 import { useFeature, Features } from 'utils/hooks/useFeature'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { CloseButton } from 'components/CloseButton/CloseButton'
+import { CampaignBadge } from 'components/CampaignBadge/CampaignBadge'
 import { DiscountTag } from 'components/DiscountTag/DiscountTag'
 import { setupQuoteCartSession } from 'containers/SessionContainer'
 import { reportUnderwritingLimits } from 'utils/sentry-client'
@@ -120,7 +122,7 @@ const Section = styled.div`
   width: 100%;
 `
 
-const DiscountTagWrapper = styled.div`
+const StyledCampaignBadge = styled(CampaignBadge)`
   margin-top: 2rem;
 `
 
@@ -454,9 +456,12 @@ export const Checkout = ({
           <InnerWrapper>
             <CloseButton onClick={onClose} />
             <Section>
-              <DiscountTagWrapper>
+              <StyledCampaignBadge
+                quoteCartId={quoteCartId}
+                isNorwegianBundle={isNorwegianBundle(offerData)}
+              >
                 <DiscountTag offerData={offerData} />
-              </DiscountTagWrapper>
+              </StyledCampaignBadge>
               <Heading>{textKeys.CHECKOUT_HEADING()}</Heading>
               <PriceBreakdown
                 offerData={offerData}

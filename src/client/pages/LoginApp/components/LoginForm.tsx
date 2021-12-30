@@ -57,7 +57,6 @@ const SsnField = styled.div`
 const Heading = styled.h1`
   margin-bottom: 1.25rem;
   text-align: center;
-  color: ${colorsV3.gray100};
   font-size: 2rem;
   line-height: 2.5rem;
 `
@@ -69,7 +68,7 @@ const SubmitButton = styled(Button)<{ disabled?: boolean }>`
   font-size: 1rem;
   color: ${(props) => (props.disabled ? colorsV3.gray500 : colorsV3.gray900)};
   background-color: ${(props) =>
-    props.disabled ? colorsV3.gray800 : colorsV3.purple500};
+    props.disabled ? colorsV3.gray300 : colorsV3.purple500};
 `
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
@@ -131,7 +130,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
                   handleInputChange(e, setFieldValue)
                 }
                 onBlur={handleBlur}
-                variant="dark"
               />
             </SsnField>
             <SubmitButton
