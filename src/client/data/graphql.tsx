@@ -12224,6 +12224,7 @@ export type RemoveStartDateMutation = { __typename?: 'Mutation' } & {
 
 export type SetStartDateMutationVariables = Exact<{
   quoteCartId: Scalars['ID']
+  locale: Locale
   quoteId: Scalars['ID']
   payload: Scalars['JSON']
 }>
@@ -12238,14 +12239,19 @@ export type SetStartDateMutation = { __typename?: 'Mutation' } & {
                   QuoteBundleVariant,
                   'id'
                 > & {
-                    bundle: { __typename?: 'QuoteBundle' } & {
-                      quotes: Array<
-                        { __typename?: 'BundledQuote' } & Pick<
-                          BundledQuote,
-                          'id' | 'startDate'
+                    bundle: { __typename?: 'QuoteBundle' } & Pick<
+                      QuoteBundle,
+                      'displayName'
+                    > & {
+                        bundleCost: {
+                          __typename?: 'InsuranceCost'
+                        } & BundleCostDataFragmentFragment
+                        quotes: Array<
+                          {
+                            __typename?: 'BundledQuote'
+                          } & QuoteDataFragmentFragment
                         >
-                      >
-                    }
+                      }
                   }
               >
             }
@@ -14528,7 +14534,12 @@ export type RemoveStartDateMutationOptions = ApolloReactCommon.BaseMutationOptio
   RemoveStartDateMutationVariables
 >
 export const SetStartDateDocument = gql`
-  mutation SetStartDate($quoteCartId: ID!, $quoteId: ID!, $payload: JSON!) {
+  mutation SetStartDate(
+    $quoteCartId: ID!
+    $locale: Locale!
+    $quoteId: ID!
+    $payload: JSON!
+  ) {
     quoteCart_editQuote(
       id: $quoteCartId
       quoteId: $quoteId
@@ -14540,9 +14551,12 @@ export const SetStartDateDocument = gql`
           possibleVariations {
             id
             bundle {
+              displayName(locale: $locale)
+              bundleCost {
+                ...BundleCostDataFragment
+              }
               quotes {
-                id
-                startDate
+                ...QuoteDataFragment
               }
             }
           }
@@ -14553,6 +14567,8 @@ export const SetStartDateDocument = gql`
       }
     }
   }
+  ${BundleCostDataFragmentFragmentDoc}
+  ${QuoteDataFragmentFragmentDoc}
 `
 export type SetStartDateMutationFn = ApolloReactCommon.MutationFunction<
   SetStartDateMutation,
@@ -14573,6 +14589,7 @@ export type SetStartDateMutationFn = ApolloReactCommon.MutationFunction<
  * const [setStartDateMutation, { data, loading, error }] = useSetStartDateMutation({
  *   variables: {
  *      quoteCartId: // value for 'quoteCartId'
+ *      locale: // value for 'locale'
  *      quoteId: // value for 'quoteId'
  *      payload: // value for 'payload'
  *   },

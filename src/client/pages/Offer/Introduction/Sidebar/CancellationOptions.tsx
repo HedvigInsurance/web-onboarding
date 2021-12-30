@@ -5,6 +5,7 @@ import React from 'react'
 import { Switch } from 'components/Switch'
 import { Spinner } from 'components/utils'
 import { useSetStartDateMutation } from 'data/graphql'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { OfferData, OfferQuote } from 'pages/OfferNew/types'
 import {
   isNorwegianHomeContents,
@@ -84,6 +85,8 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
   setShowError,
 }) => {
   const textKeys = useTextKeys()
+  const { isoLocale } = useCurrentLocale()
+
   const [isLoading, setIsLoading] = React.useState(false)
 
   const [setStartDate] = useSetStartDateMutation()
@@ -98,6 +101,7 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
       await setStartDate({
         variables: {
           quoteCartId,
+          locale: isoLocale,
           quoteId: quote.id,
           payload: {
             startDate: checked ? format(new Date(), gqlDateFormat) : null,

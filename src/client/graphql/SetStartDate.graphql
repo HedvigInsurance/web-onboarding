@@ -1,4 +1,9 @@
-mutation SetStartDate($quoteCartId: ID!, $quoteId: ID!, $payload: JSON!) {
+mutation SetStartDate(
+  $quoteCartId: ID!
+  $locale: Locale!
+  $quoteId: ID!
+  $payload: JSON!
+) {
   quoteCart_editQuote(id: $quoteCartId, quoteId: $quoteId, payload: $payload) {
     ... on QuoteCart {
       id
@@ -6,9 +11,12 @@ mutation SetStartDate($quoteCartId: ID!, $quoteId: ID!, $payload: JSON!) {
         possibleVariations {
           id
           bundle {
+            displayName(locale: $locale)
+            bundleCost {
+              ...BundleCostDataFragment
+            }
             quotes {
-              id
-              startDate
+              ...QuoteDataFragment
             }
           }
         }

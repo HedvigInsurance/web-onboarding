@@ -228,6 +228,7 @@ const DateForm: React.FC<{
           setStartDate({
             variables: {
               quoteCartId,
+              locale: isoLocale,
               quoteId: quote.id,
               payload: {
                 startDate: formattedDateValue,
