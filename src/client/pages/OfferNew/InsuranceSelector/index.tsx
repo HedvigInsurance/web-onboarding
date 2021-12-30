@@ -14,7 +14,7 @@ import { Selector } from './Selector'
 
 interface Props {
   variants: QuoteBundleVariant[]
-  selectedQuoteBundle?: QuoteBundleVariant
+  selectedQuoteBundle: QuoteBundleVariant
   onChange: (bundle: QuoteBundleVariant) => void
 }
 
@@ -55,7 +55,7 @@ export const InsuranceSelector: React.FC<Props> = ({
               Number(grossAmount),
             )} ${grossCurrency}${localizedPerMonth}`
           : undefined,
-      selected: selectedQuoteBundle && id === selectedQuoteBundle.id,
+      selected: id === selectedQuoteBundle.id,
     }
   })
 

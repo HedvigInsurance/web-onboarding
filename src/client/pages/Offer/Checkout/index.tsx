@@ -196,7 +196,7 @@ const getSignUiStateFromCheckoutStatus = (
 export type CheckoutProps = {
   quoteCartId: string
   quoteBundleVariants: QuoteBundleVariant[]
-  campaign: CampaignDataFragment | null
+  campaign?: CampaignDataFragment
   initialCheckoutStatus?: CheckoutStatus
   checkoutMethod?: CheckoutMethod
   selectedQuoteBundleVariant: QuoteBundleVariant

@@ -122,7 +122,7 @@ const FooterExtraActions = styled.div`
 
 export type SidebarProps = {
   offerData: OfferData
-  campaign: CampaignDataFragment | null
+  campaign?: CampaignDataFragment
   refetchOfferData: () => Promise<void>
   onCheckoutOpen: () => void
 }
@@ -176,7 +176,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     }
   }, [quoteCartId, removeCampaignCode])
 
-  const showRemoveCampaignButton = campaign != null
+  const showRemoveCampaignButton = campaign?.__typename === 'Campaign'
   const isDiscountPrice =
     campaign?.incentive?.__typename === 'MonthlyCostDeduction' ||
     campaign?.incentive?.__typename === 'PercentageDiscountMonths' ||

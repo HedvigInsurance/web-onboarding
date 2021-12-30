@@ -76,7 +76,7 @@ const HeroBackgroundImage = styled(BackgroundImage)`
 export type IntroductionProps = {
   quoteCartId: string
   offerData: OfferData
-  campaign: CampaignDataFragment | null
+  campaign?: CampaignDataFragment
   allQuotes: BundledQuote[]
   refetch: () => Promise<void>
   onCheckoutOpen: () => void

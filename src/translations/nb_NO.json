@@ -324,5 +324,10 @@
   "SIDEBAR_ADD_CAMPAIGN_BUTTON": "Legg til rabattkode",
   "SIDEBAR_NO_BUNDLE_CAMPAIGN_TEXT": "25 % rabatt",
   "SIDEBAR_REMOVE_CAMPAIGN_BUTTON": "Ta bort rabattkode",
-  "SIDEBAR_ADD_CAMPAIGN_ERROR": "Rabattkoden er ugyldig"
+  "SIDEBAR_ADD_CAMPAIGN_ERROR": "Rabattkoden er ugyldig",
+  "CHECKOUT_PHONE_NUMBER_LABEL": "Telefonnummer",
+  "GENERIC_ERROR_HEADING": "Noe gikk galt",
+  "GENERIC_ERROR_TEXT": "Vennligst prøv igjen eller gå tilbake. Hvis feilen vedvarer, vennligst kontakt oss i chatten eller e-post [hedvig@hedvig.com](mailto:hedvig@hedvig.com).",
+  "GENERIC_ERROR_ACTION_RETRY": "Prøv igjen",
+  "GENERIC_ERROR_ACTION": "Gå tilbake"
 }
