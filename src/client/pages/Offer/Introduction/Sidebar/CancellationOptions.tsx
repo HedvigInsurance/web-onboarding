@@ -11,8 +11,8 @@ import {
   isNorwegianHomeContents,
   isNorwegianTravel,
 } from 'pages/OfferNew/utils'
+import { gqlDateFormat } from 'pages/OfferNew/Introduction/Sidebar/utils'
 import { useTextKeys } from 'utils/textKeys'
-import { gqlDateFormat } from './utils'
 
 const HandleSwitchingWrapper = styled.div`
   margin-bottom: 0.75rem;

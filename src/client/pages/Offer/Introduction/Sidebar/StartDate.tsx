@@ -17,10 +17,10 @@ import { LoadingDots } from 'components/LoadingDots/LoadingDots'
 import { useSetStartDateMutation } from 'data/graphql'
 import { OfferData, OfferQuote } from 'pages/OfferNew/types'
 import { hasCurrentInsurer, isBundle, isDanish } from 'pages/OfferNew/utils'
+import { gqlDateFormat } from 'pages/OfferNew/Introduction/Sidebar/utils'
+import { StartDateLabelSwitcher } from 'pages/OfferNew/Introduction/Sidebar/StartDateLabelSwitcher'
 import { useTextKeys } from 'utils/textKeys'
 import { Size } from 'components/types'
-import { gqlDateFormat } from './utils'
-import { StartDateLabelSwitcher } from './StartDateLabelSwitcher'
 import { CancellationOptions } from './CancellationOptions'
 
 const DateFormsWrapper = styled.div`
