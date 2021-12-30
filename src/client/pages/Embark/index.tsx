@@ -259,17 +259,15 @@ const useCreateQuoteCartId = ({ skip = false }) => {
     }
   }, [createQuoteCartMutation, addCampaignCode])
 
+  const quoteCartId = data?.onboardingQuoteCart_create.id
+
   useEffect(() => {
-    if (!skip) {
+    if (!skip && !quoteCartId) {
       createQuoteCart()
     }
-  }, [skip, createQuoteCart])
+  }, [skip, quoteCartId, createQuoteCart])
 
-  return {
-    createQuoteCart,
-    quoteCartId: data?.onboardingQuoteCart_create.id,
-    error,
-  }
+  return { createQuoteCart, quoteCartId, error }
 }
 
 export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
