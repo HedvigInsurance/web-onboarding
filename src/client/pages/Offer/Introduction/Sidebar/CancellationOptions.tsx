@@ -57,15 +57,13 @@ export const CancellationOptions: React.FC<CancellationOptionsProps> = ({
     <>
       {quotes.map((quote) => {
         return (
-          quote.currentInsurer?.switchable && (
-            <QuoteCancellationOption
-              key={quote.id}
-              {...rest}
-              isGenericQuote={quotes.length === 1}
-              quote={quote as OfferQuote}
-              quoteCartId={quoteCartId}
-            />
-          )
+          <QuoteCancellationOption
+            key={quote.id}
+            {...rest}
+            isGenericQuote={quotes.length === 1}
+            quote={quote as OfferQuote}
+            quoteCartId={quoteCartId}
+          />
         )
       })}
     </>
@@ -93,7 +91,7 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
 
   const isChecked = !quote.startDate
 
-  const toggle = async () => {
+  const handleToggleStartDate = async () => {
     try {
       setShowError(false)
       setIsLoading(true)
@@ -118,7 +116,7 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
   return (
     // TODO: This logic needs some clarification
     <HandleSwitchingWrapper>
-      <HandleSwitchingLabel onClick={toggle}>
+      <HandleSwitchingLabel onClick={handleToggleStartDate}>
         {(() => {
           if (isGenericQuote) {
             return textKeys.SIDEBAR_REQUEST_CANCELLATION_GENERIC_INSURANCE()
@@ -139,7 +137,7 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
           <Spinner />
         </SpinnerWrapper>
       ) : (
-        <Switch value={isChecked} onChange={toggle} />
+        <Switch value={isChecked} onChange={handleToggleStartDate} />
       )}
     </HandleSwitchingWrapper>
   )
