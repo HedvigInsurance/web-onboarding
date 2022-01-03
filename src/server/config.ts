@@ -29,6 +29,8 @@ export const FEATURES = (Object.keys(Feature) as Array<Feature>).reduce(
     if (envKey in process.env) {
       const markets = process.env[envKey]?.split(',') ?? []
       featureMap[key] = markets as Array<MarketLabel>
+    } else {
+      featureMap[key] = []
     }
     return featureMap
   },
