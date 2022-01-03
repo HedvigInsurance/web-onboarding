@@ -39,46 +39,25 @@ export const masks: Record<string, Mask> = {
   },
 }
 
-const InputFieldContainer = styled.div`
-  margin-bottom: 1.5rem;
-`
-
 const Wrapper = styled.div<{
   errors?: string
   disabled?: boolean
 }>`
   position: relative;
-  background-color: ${(props) =>
-    props.disabled ? colorsV3.gray300 : colorsV3.white};
   border-radius: 8px;
-  border: 1px solid
-    ${(props) => (props.errors ? colorsV3.red600 : colorsV3.gray300)};
+  background-color: ${colorsV3.white};
   display: flex;
   justify-content: space-between;
   align-items: center;
   transition: all 0.2s;
-  padding: 1rem 0.875rem;
   margin-top: 0.5rem;
-
-  &:hover {
-    border: 1px solid ${colorsV3.gray700};
-  }
-
-  &:focus-within {
-    color: ${(props) => (props.disabled ? colorsV3.gray500 : colorsV3.gray900)};
-    border: 1px solid
-      ${(props) => (props.errors ? colorsV3.red600 : colorsV3.gray900)};
-  }
-
-  input {
-    color: ${(props) => (props.disabled ? colorsV3.gray500 : colorsV3.gray900)};
-  }
 
   select {
     cursor: pointer;
     appearance: none;
   }
 `
+
 const TextWrapper = styled.div`
   width: 100%;
   display: flex;
@@ -161,6 +140,37 @@ const HelperText = styled.div`
   margin-top: 0.25rem;
 `
 
+const WrapperMask = styled.div<{
+  disabled?: boolean
+  errors?: string
+}>`
+  ${Wrapper} {
+    border: 1px solid
+      ${(props) => (props.errors ? colorsV3.red600 : colorsV3.gray300)};
+    background-color: ${(props) => props.disabled && colorsV3.gray300};
+
+    input {
+      color: ${(props) =>
+        props.disabled ? colorsV3.gray500 : colorsV3.gray900};
+    }
+
+    &:focus-within {
+      color: ${(props) =>
+        props.disabled ? colorsV3.gray500 : colorsV3.gray900};
+      border: 1px solid
+        ${(props) => (props.errors ? colorsV3.red600 : colorsV3.gray900)};
+    }
+
+    &:hover {
+      border-width: 1px;
+      border-color: ${(props) => !props.disabled && colorsV3.gray700};
+    }
+  }
+  ${Label}, ${HelperText} {
+    color: ${(props) => props.disabled && colorsV3.gray500};
+  }
+`
+
 interface CoreInputFieldOptions {
   label: string
   value: string
@@ -188,56 +198,6 @@ export interface TextInputProps extends CoreInputFieldProps {
   errors?: string
 }
 
-const StyledRawInput = styled.input`
-  appearance: none;
-  -moz-appearance: textfield;
-  background: none;
-  border: none;
-  font-size: 1rem;
-  line-height: 1.5;
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  :focus {
-    outline: none;
-  }
-  ::placeholder {
-    color: ${colorsV3.gray500};
-  }
-`
-
-export const RawInputField: React.FC<React.InputHTMLAttributes<
-  HTMLInputElement
-> & {
-  label?: string
-  errors?: string
-  helperText?: string
-  showErrorIcon?: boolean
-  disabled?: boolean
-}> = ({
-  errors,
-  disabled,
-  showErrorIcon = false,
-  helperText,
-  label,
-  className,
-  ...props
-}) => (
-  <InputFieldContainer className={className}>
-    {label && <Label htmlFor={props.id}>{label}</Label>}
-    <Wrapper errors={errors} disabled={disabled}>
-      <StyledRawInput disabled={disabled} {...props} />
-    </Wrapper>
-    {helperText && <HelperText>{helperText}</HelperText>}
-    {errors && (
-      <ErrorText>
-        <WarningTriangle size={13} />
-        {errors}
-      </ErrorText>
-    )}
-  </InputFieldContainer>
-)
-
 export const InputField: React.FC<TextInputProps &
   GenericFieldHTMLAttributes> = ({
   label,
@@ -248,11 +208,12 @@ export const InputField: React.FC<TextInputProps &
   touched,
   errors,
   helperText,
+  disabled,
   ...props
 }) => (
-  <>
-    <Wrapper errors={errors}>
-      <Label>{label}</Label>
+  <WrapperMask disabled={disabled} errors={errors}>
+    <Label>{label}</Label>
+    <Wrapper>
       <TextWrapper>
         {mask ? (
           <StyledField {...props}>
@@ -285,16 +246,16 @@ export const InputField: React.FC<TextInputProps &
       <SymbolWrapper>
         {options && options.length > 0 && <ChevronDown />}
       </SymbolWrapper>
-      {errors ? (
-        <ErrorText>
-          <WarningTriangle size={13} />
-          {errors}
-        </ErrorText>
-      ) : (
-        helperText && <HelperText> {helperText} </HelperText>
-      )}
     </Wrapper>
-  </>
+    {errors ? (
+      <ErrorText>
+        <WarningTriangle size={13} />
+        {errors}
+      </ErrorText>
+    ) : (
+      helperText && <HelperText> {helperText} </HelperText>
+    )}
+  </WrapperMask>
 )
 
 export const InputGroupDeleteButton = styled.button`
