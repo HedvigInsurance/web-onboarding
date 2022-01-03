@@ -318,7 +318,7 @@ export const InputGroupDeleteButton = styled.button`
   }
 
   :hover {
-    /* HEX value with opcaity (1a = 10% transparency) */
+    /* HEX value with opacity (1a = 10% transparency) */
     background-color: ${colorsV3.red500}1a;
   }
 `
