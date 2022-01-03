@@ -1,4 +1,5 @@
 import { Locale as IsoLocale, Market as ApiMarket } from 'data/graphql'
+import { MarketLabel as SharedMarketLabel } from 'shared/clientConfig'
 import {
   ssnLengths,
   ssnFormats,
@@ -17,6 +18,8 @@ export const LOCALE_URL_PARAMS = [
 ] as const
 export type LocaleUrlParams = typeof LOCALE_URL_PARAMS
 export type LocaleLabel = LocaleUrlParams[number]
+
+export type MarketLabel = SharedMarketLabel
 
 export type LocaleData = {
   path: LocaleLabel
@@ -40,8 +43,6 @@ export type LocaleData = {
   }
   callCenter?: CallCenterData
 }
-
-export type MarketLabel = 'SE' | 'NO' | 'DK'
 
 export const locales: Record<LocaleLabel, LocaleData> = {
   se: {
