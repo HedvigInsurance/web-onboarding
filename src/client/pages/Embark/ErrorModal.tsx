@@ -2,6 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { useHistory } from 'react-router'
+import ReactMarkdown from 'react-markdown/with-html'
 import { Modal, ModalProps } from 'components/ModalNew'
 import { WarningTriangle } from 'components/icons/WarningTriangle'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
@@ -68,7 +69,7 @@ export const SetupFailedModal = ({
   return (
     <ErrorModal {...props} dynamicHeight={true} onClose={goToLandingPage}>
       <ErrorHeading>{textKeys.GENERIC_ERROR_HEADING()}</ErrorHeading>
-      <ErrorText>{textKeys.GENERIC_ERROR_TEXT()}</ErrorText>
+      <ReactMarkdown source={textKeys.GENERIC_ERROR_TEXT()} />
       <ButtonContainer>
         <Button onClick={onRetry}>
           {textKeys.GENERIC_ERROR_ACTION_RETRY()}
