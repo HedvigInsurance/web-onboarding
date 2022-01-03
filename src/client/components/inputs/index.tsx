@@ -39,15 +39,12 @@ export const masks: Record<string, Mask> = {
   },
 }
 
-type variantType = 'light' | 'dark'
-
 const InputFieldContainer = styled.div`
   margin-bottom: 1.5rem;
 `
 
 const Wrapper = styled.div<{
   errors?: string
-  variant: variantType
   disabled?: boolean
 }>`
   position: relative;
@@ -189,7 +186,6 @@ export interface TextInputProps extends CoreInputFieldProps {
   showErrorMessage?: boolean
   touched?: boolean
   errors?: string
-  variant?: variantType
 }
 
 const StyledRawInput = styled.input`
@@ -216,7 +212,6 @@ export const RawInputField: React.FC<React.InputHTMLAttributes<
   label?: string
   errors?: string
   helperText?: string
-  variant?: variantType
   showErrorIcon?: boolean
   disabled?: boolean
 }> = ({
@@ -226,12 +221,11 @@ export const RawInputField: React.FC<React.InputHTMLAttributes<
   helperText,
   label,
   className,
-  variant = 'light',
   ...props
 }) => (
   <InputFieldContainer className={className}>
     {label && <Label htmlFor={props.id}>{label}</Label>}
-    <Wrapper errors={errors} variant={variant} disabled={disabled}>
+    <Wrapper errors={errors} disabled={disabled}>
       <StyledRawInput disabled={disabled} {...props} />
     </Wrapper>
     {helperText && <HelperText>{helperText}</HelperText>}
@@ -254,11 +248,10 @@ export const InputField: React.FC<TextInputProps &
   touched,
   errors,
   helperText,
-  variant = 'light',
   ...props
 }) => (
   <>
-    <Wrapper errors={errors} variant={variant}>
+    <Wrapper errors={errors}>
       <Label>{label}</Label>
       <TextWrapper>
         {mask ? (
@@ -292,12 +285,13 @@ export const InputField: React.FC<TextInputProps &
       <SymbolWrapper>
         {options && options.length > 0 && <ChevronDown />}
       </SymbolWrapper>
-      {helperText && <HelperText>help text</HelperText>}
-      {errors && (
+      {errors ? (
         <ErrorText>
           <WarningTriangle size={13} />
           {errors}
         </ErrorText>
+      ) : (
+        helperText && <HelperText> {helperText} </HelperText>
       )}
     </Wrapper>
   </>
