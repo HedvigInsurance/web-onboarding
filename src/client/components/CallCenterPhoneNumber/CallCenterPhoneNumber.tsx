@@ -108,7 +108,7 @@ const PhoneOpeningHours: React.FC<{
   )
 }
 
-export const PhoneNumber: React.FC<{
+export const CallCenterPhoneNumber: React.FC<{
   color: Color
   onClick: (status: 'opened' | 'closed') => void
 }> = ({ color, onClick }) => {

@@ -24,7 +24,7 @@ import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { LocaleLabel } from 'l10n/locales'
 import { CheckoutSuccessRedirect } from 'pages/OfferNew/Checkout/CheckoutSuccessRedirect'
-import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
+import { CallCenterPhoneNumber } from 'src/client/components/CallCenterPhoneNumber/CallCenterPhoneNumber'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import {
   getOfferData,
@@ -204,7 +204,10 @@ export const OfferPage = ({
       {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
         <TopBar isTransparent>
           {isCustomerServicePhoneNumberEnabled && callCenter ? (
-            <PhoneNumber color="white" onClick={handleClickPhoneNumber} />
+            <CallCenterPhoneNumber
+              color="white"
+              onClick={handleClickPhoneNumber}
+            />
           ) : (
             <LanguagePicker
               color="white"

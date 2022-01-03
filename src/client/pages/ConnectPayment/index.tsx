@@ -9,7 +9,7 @@ import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import { LanguagePicker } from 'pages/Embark/LanguagePicker'
 import { useTextKeys } from 'utils/textKeys'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
-import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
+import { CallCenterPhoneNumber } from 'src/client/components/CallCenterPhoneNumber/CallCenterPhoneNumber'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { pushToGTMDataLayer } from 'utils/tracking/gtm'
 import { useFeature, Features } from 'utils/hooks/useFeature'
@@ -42,7 +42,10 @@ export const ConnectPayment: React.FC = () => {
         </Helmet>
         <TopBar>
           {isCustomerServicePhoneNumberEnabled && currentLocale.callCenter ? (
-            <PhoneNumber color="white" onClick={handleClickPhoneNumber} />
+            <CallCenterPhoneNumber
+              color="white"
+              onClick={handleClickPhoneNumber}
+            />
           ) : (
             <LanguagePicker color="white" />
           )}
