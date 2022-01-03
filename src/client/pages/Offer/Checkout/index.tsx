@@ -367,14 +367,7 @@ export const Checkout = ({
 
   const startSign = async () => {
     setSignUiState('STARTED')
-    const { values, initialValues, submitForm } = formik
-    const { firstName, lastName, email, ssn, phoneNumber } = values
-    const isFormDataUpdated =
-      firstName !== initialValues.firstName ||
-      lastName !== initialValues.lastName ||
-      email !== initialValues.email ||
-      phoneNumber !== initialValues.phoneNumber ||
-      ssn !== initialValues.ssn
+    const { values, submitForm, dirty: isFormDataUpdated } = formik
 
     try {
       let quoteIds = getQuoteIdsFromBundleVariant(selectedQuoteBundleVariant)
