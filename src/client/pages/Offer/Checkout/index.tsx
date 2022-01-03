@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { useFormik } from 'formik'
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
@@ -17,7 +17,6 @@ import {
   CampaignDataFragment,
 } from 'data/graphql'
 import {
-  getOfferData,
   getUniqueQuotesFromVariantList,
   getQuoteIdsFromBundleVariant,
   getBundleVariantFromInsuranceTypesWithFallback,
@@ -37,10 +36,11 @@ import { setupQuoteCartSession } from 'containers/SessionContainer'
 import { reportUnderwritingLimits } from 'utils/sentry-client'
 import { trackSignedEvent } from 'utils/tracking/tracking'
 import { useVariation } from 'utils/hooks/useVariation'
-import { StartDate } from 'pages/OfferNew/Introduction/Sidebar/StartDate'
+import { StartDate } from 'pages/Offer/Introduction/Sidebar/StartDate'
 import { useScrollLock, VisibilityState } from 'pages/OfferNew/Checkout/hooks'
 import { InsuranceSummary } from 'pages/OfferNew/Checkout/InsuranceSummary'
 import { UpsellCard } from 'pages/OfferNew/Checkout/UpsellCard'
+import { OfferData } from 'pages/OfferNew/types'
 import { QuoteInput } from '../Introduction/DetailsModal/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import {
@@ -195,6 +195,7 @@ const getSignUiStateFromCheckoutStatus = (
 
 export type CheckoutProps = {
   quoteCartId: string
+  offerData: OfferData
   quoteBundleVariants: QuoteBundleVariant[]
   campaign: CampaignDataFragment | null
   initialCheckoutStatus?: CheckoutStatus
@@ -203,11 +204,11 @@ export type CheckoutProps = {
   onUpsellAccepted: (selectedBundleVariant: QuoteBundleVariant) => void
   isOpen?: boolean
   onClose?: () => void
-  refetch: () => Promise<void>
 }
 
 export const Checkout = ({
   quoteCartId,
+  offerData,
   checkoutMethod,
   campaign,
   initialCheckoutStatus,
@@ -216,7 +217,6 @@ export const Checkout = ({
   onUpsellAccepted,
   isOpen,
   onClose,
-  refetch,
 }: CheckoutProps) => {
   const textKeys = useTextKeys()
   const locale = useCurrentLocale()
@@ -235,13 +235,6 @@ export const Checkout = ({
   const campaignCode = campaign?.code
   const isDiscountMonthlyCostDeduction =
     campaign?.incentive?.__typename === 'MonthlyCostDeduction'
-
-  const offerData = useMemo(
-    () => getOfferData(selectedQuoteBundleVariant.bundle),
-    // Assumes that we recreate the bundle every time we edit information
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [selectedQuoteBundleVariant.id],
-  )
 
   const [signUiState, setSignUiState] = useState<SignUiState>(() =>
     getSignUiStateFromCheckoutStatus(initialCheckoutStatus),
@@ -480,7 +473,7 @@ export const Checkout = ({
                 <StartDateLabel>
                   {textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}
                 </StartDateLabel>
-                <StartDate offerData={offerData} refetch={refetch} />
+                <StartDate quoteCartId={quoteCartId} offerData={offerData} />
               </StartDateWrapper>
               {isUpsellCardVisible && (
                 <UpsellCard

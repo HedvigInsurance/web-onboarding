@@ -26,9 +26,9 @@ import {
 import { isNorwegianBundle } from 'pages/OfferNew/utils'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 
-import { StartDate } from '../../../OfferNew/Introduction/Sidebar/StartDate'
 import { StickyBottomSidebar } from '../../../OfferNew/Introduction/Sidebar/StickyBottomSidebar'
 import { CampaignCodeModal } from './CampaignCodeModal'
+import { StartDate } from './StartDate'
 
 const SIDEBAR_WIDTH = '26rem'
 const SIDEBAR_SPACING_LEFT = '2rem'
@@ -123,14 +123,12 @@ const FooterExtraActions = styled.div`
 export type SidebarProps = {
   offerData: OfferData
   campaign: CampaignDataFragment | null
-  refetchOfferData: () => Promise<void>
   onCheckoutOpen: () => void
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   offerData,
   campaign,
-  refetchOfferData,
   onCheckoutOpen,
 }) => {
   const { id: quoteCartId } = useParams<{ id: string }>()
@@ -204,9 +202,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <PriceBreakdown offerData={offerData} />
                 <BodyTitle>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}</BodyTitle>
                 <StartDate
+                  quoteCartId={quoteCartId}
                   offerData={offerData}
-                  refetch={refetchOfferData}
-                  modal={true}
+                  modal
                   size="sm"
                 />
               </Body>
