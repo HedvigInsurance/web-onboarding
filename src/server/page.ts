@@ -16,6 +16,7 @@ import {
   APP_ENVIRONMENT,
   CONTENT_SERVICE_ENDPOINT,
   GIRAFFE_WS_ENDPOINT,
+  FEATURES,
 } from './config'
 import { favicons } from './favicons'
 import { getPageMeta } from './meta'
@@ -35,6 +36,7 @@ const clientConfig: ClientConfig = {
   giraffeEndpoint: '/new-member/graphql',
   giraffeWsEndpoint: GIRAFFE_WS_ENDPOINT,
   appEnvironment: APP_ENVIRONMENT as ClientConfig['appEnvironment'],
+  features: FEATURES,
 }
 
 const template = (
