@@ -479,8 +479,6 @@ export const Checkout = ({
       <SignFailModal
         isVisible={isShowingFailModal}
         onClose={() => setIsShowingFailModal(false)}
-        headerText={textKeys.CHECKOUT_SIGN_FAIL_HEADER()}
-        contentText={textKeys.CHECKOUT_SIGN_FAIL_CONTENT()}
       />
     </>
   )

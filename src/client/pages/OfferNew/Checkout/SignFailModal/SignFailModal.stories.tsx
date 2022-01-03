@@ -11,12 +11,6 @@ export default {
   },
 }
 
-const errorMessageMock = {
-  headerText: 'Your purchase can’t be completed',
-  contentText:
-    "Unfortunately, we can't offer you to purchase an insurance online. Please contact betaling@hedvig.com and we'll assist you.",
-}
-
 export const Default = () => {
   const [isShowingFailModal, setIsShowingFailModal] = useState(true)
 
@@ -26,8 +20,6 @@ export const Default = () => {
         <SignFailModal
           isVisible={isShowingFailModal}
           onClose={() => setIsShowingFailModal(false)}
-          headerText={errorMessageMock.headerText}
-          contentText={errorMessageMock.contentText}
         />
       </TextKeyProvider>
     </MemoryRouter>
