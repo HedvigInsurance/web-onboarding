@@ -47,9 +47,10 @@ const template = (
   code: string | null,
 ) => {
   const pageMeta = getPageMeta(locale, route, code)
+  const htmlLang = locales[locale as LocaleLabel].htmlLang
 
   return `<!doctype html>
-  <html lang="en">
+  <html lang=${htmlLang}>
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1.0, maximum-scale=1.2, minimum-scale=1.0">
