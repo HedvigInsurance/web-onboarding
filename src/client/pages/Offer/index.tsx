@@ -12,6 +12,7 @@ import {
   useQuoteCartQuery,
   QuoteBundleVariant,
   CheckoutStatus,
+  CheckoutMethod,
 } from 'data/graphql'
 import { trackOfferGTM, EventName } from 'utils/tracking/gtm'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
@@ -33,6 +34,7 @@ import {
   getOfferData,
   getUniqueQuotesFromVariantList,
   getInsuranceTypesFromBundleVariant,
+  isOfferDataAvailable,
 } from '../OfferNew/utils'
 import { AppPromotionSection } from '../OfferNew/AppPromotionSection'
 import { FaqSection } from '../OfferNew/FaqSection'
@@ -42,6 +44,18 @@ import { SetupFailedModal } from '../Embark/ErrorModal'
 import { Introduction } from './Introduction'
 import { Checkout } from './Checkout'
 import { PageWrapper } from './PageWrapper'
+
+function isValidCheckoutMethod(
+  checkoutMethod: CheckoutMethod | undefined,
+): checkoutMethod is CheckoutMethod {
+  return checkoutMethod !== undefined
+}
+
+function isQuoteCartFull(
+  selectedBundleVariant: QuoteBundleVariant | undefined,
+): selectedBundleVariant is QuoteBundleVariant {
+  return selectedBundleVariant !== undefined
+}
 
 const createToggleCheckout = (
   history: History<any>,
@@ -101,7 +115,7 @@ export const OfferPage = ({
     selectedInsuranceTypes,
   )
   const offerData = selectedBundleVariant
-    ? getOfferData(selectedBundleVariant?.bundle)
+    ? getOfferData(selectedBundleVariant.bundle)
     : null
   const isReferralCodeUsed =
     getMonthlyCostDeductionIncentive(quoteCartQueryData) !== undefined
@@ -121,9 +135,9 @@ export const OfferPage = ({
 
   if (
     quoteCartError ||
-    !offerData ||
-    !selectedBundleVariant ||
-    !checkoutMethod
+    !isQuoteCartFull(selectedBundleVariant) ||
+    !isOfferDataAvailable(offerData) ||
+    !isValidCheckoutMethod(checkoutMethod)
   ) {
     return (
       <PageWrapper quoteCartId={quoteCartId}>

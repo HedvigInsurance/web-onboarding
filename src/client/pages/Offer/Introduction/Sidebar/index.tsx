@@ -176,7 +176,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     }
   }, [quoteCartId, removeCampaignCode])
 
-  const showRemoveCampaignButton = campaign?.__typename === 'Campaign'
+  const showRemoveCampaignButton = campaign !== undefined
   const isDiscountPrice =
     campaign?.incentive?.__typename === 'MonthlyCostDeduction' ||
     campaign?.incentive?.__typename === 'PercentageDiscountMonths' ||
