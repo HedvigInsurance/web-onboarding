@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import React, { useState } from 'react'
 import * as yup from 'yup'
 import { LocaleLabel, locales } from 'l10n/locales'
-import { RawInputField } from 'components/inputs'
+import { InputField } from 'components/inputs'
 import {
   Market,
   useCurrentLocale,
@@ -160,24 +160,24 @@ export const UserDetailsForm: React.FC<Props> = ({
     >
       {isFirstAndLastNameVisible && (
         <>
-          <RawInputField
+          <InputField
             label={textKeys.CHECKOUT_FIRSTNAME_LABEL()}
             name="firstName"
             id="firstName"
             value={firstName}
-            showErrorIcon={hasFirstNameError}
+            errors={hasFirstNameError}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               onFirstNameChange(event.target.value)
               validateFirstName(event.target.value)
             }}
           />
 
-          <RawInputField
+          <InputField
             label={textKeys.CHECKOUT_LASTNAME_LABEL()}
             name="lastName"
             id="lastName"
             value={lastName}
-            showErrorIcon={hasLastNameError}
+            errors={hasLastNameError}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               onLastNameChange(event.target.value)
               validateLastName(event.target.value)
@@ -186,7 +186,7 @@ export const UserDetailsForm: React.FC<Props> = ({
         </>
       )}
 
-      <RawInputField
+      <InputField
         label={textKeys.CHECKOUT_EMAIL_LABEL()}
         placeholder={textKeys.CHECKOUT_EMAIL_PLACEHOLDER()}
         name="email"
@@ -200,7 +200,7 @@ export const UserDetailsForm: React.FC<Props> = ({
         }}
       />
 
-      <RawInputField
+      <InputField
         label={getSsnLabel(market, textKeys)}
         placeholder={ssnFormatExample}
         name="ssn"

@@ -142,7 +142,7 @@ const HelperText = styled.div`
 
 const WrapperMask = styled.div<{
   disabled?: boolean
-  errors?: string
+  errors?: string | boolean
 }>`
   ${Wrapper} {
     border: 1px solid
@@ -195,7 +195,7 @@ export interface CoreInputFieldProps {
 export interface TextInputProps extends CoreInputFieldProps {
   showErrorMessage?: boolean
   touched?: boolean
-  errors?: string
+  errors?: string | boolean
 }
 
 export const InputField: React.FC<TextInputProps &
