@@ -47,7 +47,7 @@ const template = (
   code: string | null,
 ) => {
   const pageMeta = getPageMeta(locale, route, code)
-  const htmlLang = locales[locale as LocaleLabel].htmlLang
+  const htmlLang = locales[locale as LocaleLabel]?.htmlLang ?? 'en'
 
   return `<!doctype html>
   <html lang=${htmlLang}>
