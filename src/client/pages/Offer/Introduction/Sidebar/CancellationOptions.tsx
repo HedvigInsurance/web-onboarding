@@ -91,7 +91,7 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
 
   const [setStartDate] = useSetStartDateMutation()
 
-  const checked = !quote.startDate
+  const isChecked = !quote.startDate
 
   const toggle = async () => {
     try {
@@ -104,7 +104,7 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
           locale: isoLocale,
           quoteId: quote.id,
           payload: {
-            startDate: checked ? format(new Date(), gqlDateFormat) : null,
+            startDate: isChecked ? format(new Date(), gqlDateFormat) : null,
           },
         },
       })
@@ -139,7 +139,7 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
           <Spinner />
         </SpinnerWrapper>
       ) : (
-        <Switch value={checked} onChange={toggle} />
+        <Switch value={isChecked} onChange={toggle} />
       )}
     </HandleSwitchingWrapper>
   )
