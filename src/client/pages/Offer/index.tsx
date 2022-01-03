@@ -24,7 +24,7 @@ import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { LocaleLabel } from 'l10n/locales'
 import { CheckoutSuccessRedirect } from 'pages/OfferNew/Checkout/CheckoutSuccessRedirect'
-import { CallCenterPhoneNumber } from 'src/client/components/CallCenterPhoneNumber/CallCenterPhoneNumber'
+import { CallCenterPhoneNumber } from 'components/CallCenterPhoneNumber/CallCenterPhoneNumber'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import {
   getOfferData,
