@@ -1,0 +1,29 @@
+mutation SetStartDate(
+  $quoteCartId: ID!
+  $locale: Locale!
+  $quoteId: ID!
+  $payload: JSON!
+) {
+  quoteCart_editQuote(id: $quoteCartId, quoteId: $quoteId, payload: $payload) {
+    ... on QuoteCart {
+      id
+      bundle {
+        possibleVariations {
+          id
+          bundle {
+            displayName(locale: $locale)
+            bundleCost {
+              ...BundleCostDataFragment
+            }
+            quotes {
+              ...QuoteDataFragment
+            }
+          }
+        }
+      }
+    }
+    ... on QuoteBundleError {
+      message
+    }
+  }
+}
