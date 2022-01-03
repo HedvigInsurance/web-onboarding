@@ -1,15 +1,19 @@
-const CAMPAIGN_CODE_KEY = 'HEDVIG_CAMPAIGN_CODE'
+import { CookieStorage } from 'cookie-storage'
+
+const CAMPAIGN_CODE_COOKIE_KEY = '_hvcode'
+
+const cookieStorage = new CookieStorage()
 
 const getPersistedCampaignCode = () => {
-  return window.sessionStorage.getItem(CAMPAIGN_CODE_KEY)
+  return cookieStorage.getItem(CAMPAIGN_CODE_COOKIE_KEY)
 }
 
 const saveCampaignCode = (campaignCode: string) => {
-  window.sessionStorage.setItem(CAMPAIGN_CODE_KEY, campaignCode)
+  cookieStorage.setItem(CAMPAIGN_CODE_COOKIE_KEY, campaignCode)
 }
 
 const removeCampaignCode = () => {
-  window.sessionStorage.removeItem(CAMPAIGN_CODE_KEY)
+  cookieStorage.removeItem(CAMPAIGN_CODE_COOKIE_KEY)
 }
 
 export const CampaignCode = {
