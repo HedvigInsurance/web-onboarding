@@ -8,20 +8,21 @@ import { Features, useFeature } from 'utils/hooks/useFeature'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
 import { OfferData } from 'pages/OfferNew/types'
-import { LanguagePicker } from '../Embark/LanguagePicker'
+import { LanguagePicker } from 'components/LanguagePicker/LanguagePicker'
 
 type PageWrapperProps = {
   quoteCartId: string
   offerData?: OfferData
   isReferralCodeUsed?: boolean
+  children: React.ReactNode
 }
 
-export const PageWrapper: React.FC<PageWrapperProps> = ({
+export const PageWrapper = ({
   quoteCartId,
   offerData,
   isReferralCodeUsed = false,
   children,
-}) => {
+}: PageWrapperProps) => {
   const history = useHistory()
   const { phoneNumber } = useCurrentLocale()
   const variation = useVariation()

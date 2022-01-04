@@ -69,9 +69,11 @@ export const SetupFailedModal = ({
   return (
     <ErrorModal {...props} dynamicHeight={true} onClose={goToLandingPage}>
       <ErrorHeading>{textKeys.GENERIC_ERROR_HEADING()}</ErrorHeading>
-      <ReactMarkdown source={textKeys.GENERIC_ERROR_TEXT()} />
+      <ErrorText>
+        <ReactMarkdown source={textKeys.GENERIC_ERROR_TEXT()} />
+      </ErrorText>
       <ButtonContainer>
-        <Button onClick={onRetry}>
+        <Button onClick={() => onRetry()}>
           {textKeys.GENERIC_ERROR_ACTION_RETRY()}
         </Button>
         <Button onClick={goToLandingPage}>

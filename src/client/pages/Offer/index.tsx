@@ -143,7 +143,7 @@ export const OfferPage = ({
   ) {
     return (
       <PageWrapper quoteCartId={quoteCartId}>
-        <SetupFailedModal isVisible={true} onRetry={() => refetchQuoteCart()} />
+        <SetupFailedModal isVisible={true} onRetry={refetchQuoteCart} />
       </PageWrapper>
     )
   }
