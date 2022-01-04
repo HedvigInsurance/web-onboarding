@@ -63,11 +63,13 @@ const createToggleCheckout = (
   locale?: LocaleLabel,
 ) => (isOpen: boolean) => {
   if (isOpen) {
-    history.push(
+    history.replace(
       `/${locale}/new-member/sign/${quoteCartId}${history.location.search}`,
     )
   } else {
-    history.goBack()
+    history.replace(
+      `/${locale}/new-member/offer/${quoteCartId}${history.location.search}`,
+    )
   }
 }
 
