@@ -36,9 +36,9 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
   isOpen: boolean,
 ) => {
   if (isOpen) {
-    history.push(`/${locale}/new-member/sign`)
+    history.replace(`/${locale}/new-member/sign`)
   } else {
-    history.goBack()
+    history.replace(`/${locale}/new-member/offer`)
   }
 }
 
