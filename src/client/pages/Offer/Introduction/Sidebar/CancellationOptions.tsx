@@ -57,13 +57,15 @@ export const CancellationOptions: React.FC<CancellationOptionsProps> = ({
     <>
       {quotes.map((quote) => {
         return (
-          <QuoteCancellationOption
-            key={quote.id}
-            {...rest}
-            isGenericQuote={quotes.length === 1}
-            quote={quote as OfferQuote}
-            quoteCartId={quoteCartId}
-          />
+          quote.currentInsurer?.switchable && (
+            <QuoteCancellationOption
+              key={quote.id}
+              {...rest}
+              isGenericQuote={quotes.length === 1}
+              quote={quote as OfferQuote}
+              quoteCartId={quoteCartId}
+            />
+          )
         )
       })}
     </>
