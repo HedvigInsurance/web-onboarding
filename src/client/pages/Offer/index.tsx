@@ -82,7 +82,6 @@ export const OfferPage = ({
   const {
     data: quoteCartData,
     loading: isLoadingQuoteCart,
-    refetch: refetchQuoteCart,
     error: quoteCartError,
   } = useQuoteCartQuery({
     variables: {
@@ -235,7 +234,6 @@ export const OfferPage = ({
                 allQuotes={getUniqueQuotesFromVariantList(bundleVariants)}
                 offerData={offerData}
                 campaign={redeemedCampaign}
-                refetch={refetchQuoteCart as () => Promise<any>}
                 onCheckoutOpen={() => {
                   handleCheckoutToggle(true)
                   track()
@@ -255,6 +253,7 @@ export const OfferPage = ({
           <FaqSection />
           <Checkout
             quoteCartId={quoteCartId}
+            offerData={offerData}
             checkoutMethod={checkoutMethod}
             campaign={redeemedCampaign}
             initialCheckoutStatus={checkoutStatus}
@@ -263,7 +262,6 @@ export const OfferPage = ({
             onUpsellAccepted={handleCheckoutUpsellCardAccepted}
             isOpen={checkoutMatch !== null}
             onClose={() => handleCheckoutToggle(false)}
-            refetch={refetchQuoteCart as () => Promise<any>}
           />
         </>
       )}

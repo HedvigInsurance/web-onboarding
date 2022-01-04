@@ -106,7 +106,7 @@ export const DateInput: React.FC<DateInputProps> = ({
       >
         <CalendarWrapper>
           <Dayzed
-            date={new Date()}
+            date={date}
             firstDayOfWeek={1}
             selected={date}
             minDate={subDays(new Date(), 1)}
