@@ -207,9 +207,6 @@ export const UserDetailsForm: React.FC<Props> = ({
         id="ssn"
         type="text"
         helperText={'info message'}
-        disabled={true}
-        inputMode="numeric"
-        pattern="[0-9]*"
         maxLength={ssnMaxLength}
         onFocus={() => setIsShowingCreditCheckInfo(true)}
         value={ssn}

@@ -47,7 +47,6 @@ export const DetailInput: React.FC<DetailInputProps &
       showErrorMessage={false}
       errors={getIn(formikProps.errors, formikName)}
       touched={getIn(formikProps.touched, formikName)}
-      autoComplete="off"
       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
         const value = field.mask
           ? field.mask.sanitize(e.target.value)

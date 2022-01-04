@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { Field, GenericFieldHTMLAttributes } from 'formik'
 import { FieldInputProps } from 'formik/dist/types'
-import React from 'react'
+import React, { FocusEvent } from 'react'
 import InputMask from 'react-input-mask'
 import { WarningTriangle } from 'components/icons/WarningTriangle'
 import { ChevronDown } from 'components/icons/ChevronDown'
@@ -71,7 +71,7 @@ const Label = styled.label`
   color: ${colorsV3.gray900};
 `
 
-const StyledField = styled(Field)`
+const StyledInput = styled.input`
   position: relative;
   z-index: 1;
   background: none;
@@ -101,7 +101,14 @@ const StyledField = styled(Field)`
   }
 `
 
-const StyledInputMask = StyledField.withComponent(InputMask)
+const StyledSelect = styled(Field)`
+  border: none;
+  font-size: 1rem;
+  line-height: 1.5;
+  padding: 1rem 0.875rem;
+`
+
+const StyledInputMask = StyledInput.withComponent(InputMask)
 
 const SymbolWrapper = styled.div`
   position: absolute;
@@ -120,24 +127,22 @@ const SymbolWrapper = styled.div`
   }
 `
 
-const ErrorText = styled.div`
-  min-height: 1.375rem;
-  font-size: 0.75rem;
-  line-height: 1.33;
-  color: ${colorsV3.red600};
-  margin-top: 0.25rem;
-  svg {
-    vertical-align: middle;
-    margin-right: 0.25rem;
-  }
-`
-
 const HelperText = styled.div`
   min-height: 1.375rem;
   font-size: 0.75rem;
   line-height: 1.33;
   color: ${colorsV3.gray700};
   margin-top: 0.25rem;
+  opacity: 1;
+
+  .red-text {
+    color: ${colorsV3.red600};
+  }
+
+  svg {
+    vertical-align: middle;
+    margin-right: 0.25rem;
+  }
 `
 
 const WrapperMask = styled.div<{
@@ -190,25 +195,31 @@ export interface CoreInputFieldProps {
   helperText?: string
   onChange?: FieldInputProps<string>['onChange']
   onBlur?: FieldInputProps<string>['onBlur']
+  onFocus?: ((e: FocusEvent<HTMLInputElement>) => void) | undefined
 }
 
 export interface TextInputProps extends CoreInputFieldProps {
   showErrorMessage?: boolean
   touched?: boolean
   errors?: string | boolean
+  name?: string
+  disabled?: boolean | undefined
+  id?: string
+  value?: string
+  maxLength?: number
 }
 
-export const InputField: React.FC<TextInputProps &
-  GenericFieldHTMLAttributes> = ({
+export const InputField: React.FC<TextInputProps> = ({
   label,
   mask,
+  name,
   showErrorMessage = true,
   type = 'text',
   options,
   touched,
+  disabled,
   errors,
   helperText,
-  disabled,
   ...props
 }) => (
   <WrapperMask disabled={disabled} errors={errors}>
@@ -216,29 +227,24 @@ export const InputField: React.FC<TextInputProps &
     <Wrapper>
       <TextWrapper>
         {mask ? (
-          <StyledField {...props}>
-            {({ field }: any) => (
-              <StyledInputMask
-                mask={mask.mask}
-                alwaysShowMask={true}
-                maskChar={INVISIBLE_MASK_CHAR}
-                {...field}
-                {...props}
-              />
-            )}
-          </StyledField>
+          <StyledInputMask
+            mask={mask.mask}
+            alwaysShowMask={true}
+            maskChar={INVISIBLE_MASK_CHAR}
+            {...props}
+          />
         ) : (
           <>
             {options && options.length > 0 ? (
-              <StyledField {...props} component="select">
+              <StyledSelect {...props} as="select">
                 {options!.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
-              </StyledField>
+              </StyledSelect>
             ) : (
-              <StyledField type={type} {...props} />
+              <StyledInput type={type} {...props} />
             )}
           </>
         )}
@@ -247,14 +253,16 @@ export const InputField: React.FC<TextInputProps &
         {options && options.length > 0 && <ChevronDown />}
       </SymbolWrapper>
     </Wrapper>
-    {errors ? (
-      <ErrorText>
-        <WarningTriangle size={13} />
-        {errors}
-      </ErrorText>
-    ) : (
-      helperText && <HelperText> {helperText} </HelperText>
-    )}
+    <HelperText>
+      {errors ? (
+        <span className="red-text">
+          <WarningTriangle size={13} />
+          {errors}
+        </span>
+      ) : (
+        helperText
+      )}
+    </HelperText>
   </WrapperMask>
 )
 
