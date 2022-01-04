@@ -276,7 +276,6 @@ export const Checkout = ({
       isPhoneNumberRequired,
     ),
     onSubmit: (values) => reCreateQuoteBundle(values),
-    validateOnMount: true,
     enableReinitialize: true,
   })
 
