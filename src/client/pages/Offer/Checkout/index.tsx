@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { useFormik } from 'formik'
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
@@ -17,11 +17,11 @@ import {
   CampaignDataFragment,
 } from 'data/graphql'
 import {
-  getOfferData,
   getUniqueQuotesFromVariantList,
   getQuoteIdsFromBundleVariant,
   getBundleVariantFromInsuranceTypesWithFallback,
   getInsuranceTypesFromBundleVariant,
+  isNorwegianBundle,
 } from 'pages/OfferNew/utils'
 import { PriceBreakdown } from 'pages/OfferNew/common/PriceBreakdown'
 import { useStorage } from 'utils/StorageContainer'
@@ -30,15 +30,17 @@ import { useLockBodyScroll } from 'utils/hooks/useLockBodyScroll'
 import { useFeature, Features } from 'utils/hooks/useFeature'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { CloseButton } from 'components/CloseButton/CloseButton'
+import { CampaignBadge } from 'components/CampaignBadge/CampaignBadge'
 import { DiscountTag } from 'components/DiscountTag/DiscountTag'
 import { setupQuoteCartSession } from 'containers/SessionContainer'
 import { reportUnderwritingLimits } from 'utils/sentry-client'
 import { trackSignedEvent } from 'utils/tracking/tracking'
 import { useVariation } from 'utils/hooks/useVariation'
-import { StartDate } from 'pages/OfferNew/Introduction/Sidebar/StartDate'
+import { StartDate } from 'pages/Offer/Introduction/Sidebar/StartDate'
 import { useScrollLock, VisibilityState } from 'pages/OfferNew/Checkout/hooks'
 import { InsuranceSummary } from 'pages/OfferNew/Checkout/InsuranceSummary'
 import { UpsellCard } from 'pages/OfferNew/Checkout/UpsellCard'
+import { OfferData } from 'pages/OfferNew/types'
 import { QuoteInput } from '../Introduction/DetailsModal/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import {
@@ -120,7 +122,7 @@ const Section = styled.div`
   width: 100%;
 `
 
-const DiscountTagWrapper = styled.div`
+const StyledCampaignBadge = styled(CampaignBadge)`
   margin-top: 2rem;
 `
 
@@ -193,19 +195,20 @@ const getSignUiStateFromCheckoutStatus = (
 
 export type CheckoutProps = {
   quoteCartId: string
+  offerData: OfferData
   quoteBundleVariants: QuoteBundleVariant[]
-  campaign: CampaignDataFragment | null
+  campaign?: CampaignDataFragment
   initialCheckoutStatus?: CheckoutStatus
   checkoutMethod?: CheckoutMethod
   selectedQuoteBundleVariant: QuoteBundleVariant
   onUpsellAccepted: (selectedBundleVariant: QuoteBundleVariant) => void
   isOpen?: boolean
   onClose?: () => void
-  refetch: () => Promise<void>
 }
 
 export const Checkout = ({
   quoteCartId,
+  offerData,
   checkoutMethod,
   campaign,
   initialCheckoutStatus,
@@ -214,14 +217,16 @@ export const Checkout = ({
   onUpsellAccepted,
   isOpen,
   onClose,
-  refetch,
 }: CheckoutProps) => {
   const textKeys = useTextKeys()
   const locale = useCurrentLocale()
   const client = useApolloClient()
   const storage = useStorage()
   const variation = useVariation()
-  const [isUpsellCardVisible] = useFeature([Features.CHECKOUT_UPSELL_CARD])
+  const [isUpsellCardVisible, isPhoneNumberRequired] = useFeature([
+    Features.CHECKOUT_UPSELL_CARD,
+    Features.COLLECT_PHONE_NUMBER_AT_CHECKOUT,
+  ])
 
   const scrollWrapper = useRef<HTMLDivElement>()
   const [windowInnerHeight, setWindowInnerHeight] = useState(window.innerHeight)
@@ -233,13 +238,6 @@ export const Checkout = ({
   const campaignCode = campaign?.code
   const isDiscountMonthlyCostDeduction =
     campaign?.incentive?.__typename === 'MonthlyCostDeduction'
-
-  const offerData = useMemo(
-    () => getOfferData(selectedQuoteBundleVariant.bundle),
-    // Assumes that we recreate the bundle every time we edit information
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [selectedQuoteBundleVariant.id],
-  )
 
   const [signUiState, setSignUiState] = useState<SignUiState>(() =>
     getSignUiStateFromCheckoutStatus(initialCheckoutStatus),
@@ -263,16 +261,21 @@ export const Checkout = ({
   const privacyPolicyLink = mainQuote.insuranceTerms.find(
     ({ type }) => type === InsuranceTermType.PrivacyPolicy,
   )?.url
+
   const formik = useFormik<QuoteInput>({
     initialValues: {
       ...mainQuote,
+      // @TODO Temprorary hack while backend support is in place
+      phoneNumber: mainQuote.data.phoneNumber,
       data: {
         ...mainQuote.data,
       },
     } as QuoteInput,
-    validationSchema: getCheckoutDetailsValidationSchema(locale),
+    validationSchema: getCheckoutDetailsValidationSchema(
+      locale,
+      isPhoneNumberRequired,
+    ),
     onSubmit: (values) => reCreateQuoteBundle(values),
-    validateOnMount: true,
     enableReinitialize: true,
   })
 
@@ -356,17 +359,11 @@ export const Checkout = ({
 
   const startSign = async () => {
     setSignUiState('STARTED')
-    const { values, initialValues, submitForm } = formik
-    const { firstName, lastName, email, ssn } = values
+    const { values, submitForm, dirty: isFormDataUpdated } = formik
 
     try {
       let quoteIds = getQuoteIdsFromBundleVariant(selectedQuoteBundleVariant)
-      if (
-        firstName !== initialValues.firstName ||
-        lastName !== initialValues.lastName ||
-        email !== initialValues.email ||
-        ssn !== initialValues.ssn
-      ) {
+      if (isFormDataUpdated) {
         const result: FetchResult<CreateQuoteBundleMutation> = await submitForm()
         const quoteCart = result.data?.quoteCart_createQuoteBundle
         if (
@@ -461,9 +458,12 @@ export const Checkout = ({
           <InnerWrapper>
             <CloseButton onClick={onClose} />
             <Section>
-              <DiscountTagWrapper>
+              <StyledCampaignBadge
+                quoteCartId={quoteCartId}
+                isNorwegianBundle={isNorwegianBundle(offerData)}
+              >
                 <DiscountTag offerData={offerData} />
-              </DiscountTagWrapper>
+              </StyledCampaignBadge>
               <Heading>{textKeys.CHECKOUT_HEADING()}</Heading>
               <PriceBreakdown
                 offerData={offerData}
@@ -475,7 +475,7 @@ export const Checkout = ({
                 <StartDateLabel>
                   {textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}
                 </StartDateLabel>
-                <StartDate offerData={offerData} refetch={refetch} />
+                <StartDate quoteCartId={quoteCartId} offerData={offerData} />
               </StartDateWrapper>
               {isUpsellCardVisible && (
                 <UpsellCard

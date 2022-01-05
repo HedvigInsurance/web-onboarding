@@ -1,10 +1,12 @@
 import { Locale as IsoLocale, Market as ApiMarket } from 'data/graphql'
+import { MarketLabel as SharedMarketLabel } from 'shared/clientConfig'
 import {
   ssnLengths,
   ssnFormats,
   birthDateFormats,
-} from './birthDateAndSsnFormats'
-import { PhoneNumberData, phoneNumbers } from './phoneNumbers'
+  phoneNumberFormats,
+} from './inputFormats'
+import { CallCenterData, callCenters } from './callCenters'
 
 export const LOCALE_URL_PARAMS = [
   'se',
@@ -16,6 +18,8 @@ export const LOCALE_URL_PARAMS = [
 ] as const
 export type LocaleUrlParams = typeof LOCALE_URL_PARAMS
 export type LocaleLabel = LocaleUrlParams[number]
+
+export type MarketLabel = SharedMarketLabel
 
 export type LocaleData = {
   path: LocaleLabel
@@ -34,10 +38,11 @@ export type LocaleData = {
     formatRegex: RegExp
     backendFormatExample: string
   }
-  phoneNumber?: PhoneNumberData
+  phoneNumber: {
+    formatRegex: RegExp
+  }
+  callCenter?: CallCenterData
 }
-
-export type MarketLabel = 'SE' | 'NO' | 'DK'
 
 export const locales: Record<LocaleLabel, LocaleData> = {
   se: {
@@ -57,7 +62,10 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: birthDateFormats.SE,
       backendFormatExample: 'ÅÅÅÅ-MM-DD',
     },
-    phoneNumber: phoneNumbers.SE,
+    phoneNumber: {
+      formatRegex: phoneNumberFormats.SE,
+    },
+    callCenter: callCenters.SE,
   },
   'se-en': {
     path: 'se-en',
@@ -76,7 +84,10 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: birthDateFormats.SE,
       backendFormatExample: 'YYYY-MM-DD',
     },
-    phoneNumber: phoneNumbers.SE,
+    phoneNumber: {
+      formatRegex: phoneNumberFormats.SE,
+    },
+    callCenter: callCenters.SE,
   },
   no: {
     path: 'no',
@@ -94,6 +105,9 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatExample: 'DD-MM-ÅÅÅÅ',
       formatRegex: birthDateFormats.NO,
       backendFormatExample: 'ÅÅÅÅ-MM-DD',
+    },
+    phoneNumber: {
+      formatRegex: phoneNumberFormats.NO,
     },
   },
   'no-en': {
@@ -113,6 +127,9 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: birthDateFormats.NO,
       backendFormatExample: 'YYYY-MM-DD',
     },
+    phoneNumber: {
+      formatRegex: phoneNumberFormats.NO,
+    },
   },
   dk: {
     path: 'dk',
@@ -131,6 +148,9 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: birthDateFormats.DK,
       backendFormatExample: 'ÅÅÅÅ-MM-DD',
     },
+    phoneNumber: {
+      formatRegex: phoneNumberFormats.DK,
+    },
   },
   'dk-en': {
     path: 'dk-en',
@@ -148,6 +168,9 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatExample: 'DD-MM-YYYY',
       formatRegex: birthDateFormats.DK,
       backendFormatExample: 'YYYY-MM-DD',
+    },
+    phoneNumber: {
+      formatRegex: phoneNumberFormats.DK,
     },
   },
 }

@@ -11,7 +11,7 @@ import {
 } from 'data/graphql'
 
 import { Button, TextButton } from 'components/buttons'
-import { Badge } from 'components/Badge/Badge'
+import { CampaignBadge } from 'components/CampaignBadge/CampaignBadge'
 import { OfferData } from 'pages/OfferNew/types'
 import { Price } from 'pages/OfferNew/common/price'
 import { PriceBreakdown } from 'pages/OfferNew/common/PriceBreakdown'
@@ -23,12 +23,12 @@ import {
   LARGE_SCREEN_MEDIA_QUERY,
   SMALL_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
-import { isBundle, isNorwegian } from 'pages/OfferNew/utils'
+import { isNorwegianBundle } from 'pages/OfferNew/utils'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 
-import { StartDate } from '../../../OfferNew/Introduction/Sidebar/StartDate'
 import { StickyBottomSidebar } from '../../../OfferNew/Introduction/Sidebar/StickyBottomSidebar'
 import { CampaignCodeModal } from './CampaignCodeModal'
+import { StartDate } from './StartDate'
 
 const SIDEBAR_WIDTH = '26rem'
 const SIDEBAR_SPACING_LEFT = '2rem'
@@ -60,20 +60,8 @@ const Container = styled.div`
   }
 `
 
-const DiscountInfo = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  margin-bottom: 0.5rem;
-`
-
-const DiscountBadge = styled(Badge)`
-  &:not(:last-child) {
-    margin-right: 0.5rem;
-    margin-bottom: 0.5rem;
-  }
+const StyledCampaignBadge = styled(CampaignBadge)`
+  margin-bottom: 1rem;
 `
 
 const Header = styled.div`
@@ -134,15 +122,13 @@ const FooterExtraActions = styled.div`
 
 export type SidebarProps = {
   offerData: OfferData
-  campaign: CampaignDataFragment | null
-  refetchOfferData: () => Promise<void>
+  campaign?: CampaignDataFragment
   onCheckoutOpen: () => void
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   offerData,
   campaign,
-  refetchOfferData,
   onCheckoutOpen,
 }) => {
   const { id: quoteCartId } = useParams<{ id: string }>()
@@ -159,8 +145,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
     refetchQueries: ['QuoteCart'],
     awaitRefetchQueries: true,
   })
-
-  const campaignText = campaign?.displayValue ?? ''
 
   const handleAddCampaignCode = useCallback(
     async (code: string) => {
@@ -190,17 +174,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
     }
   }, [quoteCartId, removeCampaignCode])
 
-  const isNorwegianBundle = isBundle(offerData) && isNorwegian(offerData)
-  const discounts: Array<React.ReactNode> = [
-    ...(isNorwegianBundle ? [textKeys.SIDEBAR_NO_BUNDLE_CAMPAIGN_TEXT()] : []),
-    ...(campaignText ? [campaignText] : []),
-  ]
-
-  const showRemoveCampaignButton = campaign != null
+  const showRemoveCampaignButton = campaign !== undefined
   const isDiscountPrice =
     campaign?.incentive?.__typename === 'MonthlyCostDeduction' ||
     campaign?.incentive?.__typename === 'PercentageDiscountMonths' ||
-    isNorwegianBundle
+    isNorwegianBundle(offerData)
 
   return (
     <>
@@ -208,13 +186,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {() => (
           <Wrapper>
             <Container>
-              {discounts.length > 0 ? (
-                <DiscountInfo>
-                  {discounts.map((text, index) => (
-                    <DiscountBadge key={index}>{text}</DiscountBadge>
-                  ))}
-                </DiscountInfo>
-              ) : null}
+              <StyledCampaignBadge
+                quoteCartId={quoteCartId}
+                isNorwegianBundle={isNorwegianBundle(offerData)}
+              />
               <Header>
                 <Title>Hedvig</Title>
                 <Price
@@ -227,9 +202,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <PriceBreakdown offerData={offerData} />
                 <BodyTitle>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}</BodyTitle>
                 <StartDate
+                  quoteCartId={quoteCartId}
                   offerData={offerData}
-                  refetch={refetchOfferData}
-                  modal={true}
+                  modal
                   size="sm"
                 />
               </Body>

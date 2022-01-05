@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { useHistory } from 'react-router'
+import ReactMarkdown from 'react-markdown/with-html'
 import { ModalProps } from 'components/ModalNew'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { Button } from 'components/buttons'
@@ -32,9 +33,11 @@ export const SetupFailedModal = ({
   return (
     <ErrorModal {...props} dynamicHeight={true} onClose={goToLandingPage}>
       <ErrorHeading>{textKeys.GENERIC_ERROR_HEADING()}</ErrorHeading>
-      <ErrorText>{textKeys.GENERIC_ERROR_TEXT()}</ErrorText>
+      <ErrorText>
+        <ReactMarkdown source={textKeys.GENERIC_ERROR_TEXT()} />
+      </ErrorText>
       <ButtonContainer>
-        <Button onClick={onRetry}>
+        <Button onClick={() => onRetry()}>
           {textKeys.GENERIC_ERROR_ACTION_RETRY()}
         </Button>
         <Button onClick={goToLandingPage}>

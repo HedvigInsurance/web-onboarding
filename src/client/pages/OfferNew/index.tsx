@@ -16,10 +16,10 @@ import { trackOfferGTM, EventName } from 'utils/tracking/gtm'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { Features, useFeature } from 'utils/hooks/useFeature'
-import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
+import { CallCenterPhoneNumber } from 'components/CallCenterPhoneNumber/CallCenterPhoneNumber'
+import { LanguagePicker } from 'components/LanguagePicker/LanguagePicker'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useQuoteIds } from '../../utils/hooks/useQuoteIds'
-import { LanguagePicker } from '../Embark/LanguagePicker'
 import {
   getOfferData,
   getBundleVariantFromQuoteIds,
@@ -36,9 +36,9 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
   isOpen: boolean,
 ) => {
   if (isOpen) {
-    history.push(`/${locale}/new-member/sign`)
+    history.replace(`/${locale}/new-member/sign`)
   } else {
-    history.goBack()
+    history.replace(`/${locale}/new-member/offer`)
   }
 }
 
@@ -46,7 +46,7 @@ const getQuoteIdsFromBundleVariant = (bundleVariant: QuoteBundleVariant) =>
   bundleVariant.bundle.quotes.map((quote) => quote.id)
 
 export const OfferNew: React.FC = () => {
-  const { path: localePath, isoLocale, phoneNumber } = useCurrentLocale()
+  const { path: localePath, isoLocale, callCenter } = useCurrentLocale()
   const localeIsoCode = isoLocale
   const variation = useVariation()
 
@@ -187,8 +187,11 @@ export const OfferNew: React.FC = () => {
       <SessionTokenGuard>
         {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
           <TopBar isTransparent>
-            {isCustomerServicePhoneNumberEnabled && phoneNumber ? (
-              <PhoneNumber color="white" onClick={handleClickPhoneNumber} />
+            {isCustomerServicePhoneNumberEnabled && callCenter ? (
+              <CallCenterPhoneNumber
+                color="white"
+                onClick={handleClickPhoneNumber}
+              />
             ) : (
               <LanguagePicker color="white" />
             )}

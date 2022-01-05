@@ -8,7 +8,7 @@ import { Button } from 'components/buttons'
 import { InputField } from 'components/inputs'
 import { LoadingDots } from 'components/LoadingDots/LoadingDots'
 import { useTextKeys } from 'utils/textKeys'
-import { LanguagePicker } from '../../Embark/LanguagePicker'
+import { LanguagePicker } from 'components/LanguagePicker/LanguagePicker'
 export interface RedeemCodeFormValue {
   code: string
 }
