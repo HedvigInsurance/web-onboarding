@@ -24,7 +24,7 @@ import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { LocaleLabel } from 'l10n/locales'
 import { CheckoutSuccessRedirect } from 'pages/OfferNew/Checkout/CheckoutSuccessRedirect'
-import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
+import { CallCenterPhoneNumber } from 'components/CallCenterPhoneNumber/CallCenterPhoneNumber'
 import { LanguagePicker } from '../Embark/LanguagePicker'
 import {
   getOfferData,
@@ -45,11 +45,13 @@ const createToggleCheckout = (
   locale?: LocaleLabel,
 ) => (isOpen: boolean) => {
   if (isOpen) {
-    history.push(
+    history.replace(
       `/${locale}/new-member/sign/${quoteCartId}${history.location.search}`,
     )
   } else {
-    history.goBack()
+    history.replace(
+      `/${locale}/new-member/offer/${quoteCartId}${history.location.search}`,
+    )
   }
 }
 
@@ -60,7 +62,7 @@ export const OfferPage = ({
     params: { id: quoteCartId },
   },
 }: OfferPageProps) => {
-  const { isoLocale, path: pathLocale, phoneNumber } = useCurrentLocale()
+  const { isoLocale, path: pathLocale, callCenter } = useCurrentLocale()
   const variation = useVariation()
   const [
     isInsuranceToggleEnabled,
@@ -202,8 +204,11 @@ export const OfferPage = ({
     <Page>
       {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
         <TopBar isTransparent>
-          {isCustomerServicePhoneNumberEnabled && phoneNumber ? (
-            <PhoneNumber color="white" onClick={handleClickPhoneNumber} />
+          {isCustomerServicePhoneNumberEnabled && callCenter ? (
+            <CallCenterPhoneNumber
+              color="white"
+              onClick={handleClickPhoneNumber}
+            />
           ) : (
             <LanguagePicker
               color="white"

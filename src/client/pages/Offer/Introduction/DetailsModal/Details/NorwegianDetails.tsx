@@ -2,7 +2,7 @@ import React from 'react'
 import * as Yup from 'yup'
 import { FormikProps } from 'formik'
 import { InputGroup, inputTypes } from 'components/inputs'
-import { birthDateFormats } from 'l10n/birthDateAndSsnFormats'
+import { birthDateFormats } from 'l10n/inputFormats'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 
 import { QuoteInput } from '../types'
