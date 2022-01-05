@@ -18,7 +18,7 @@ import {
   SwedishApartmentType,
 } from 'data/graphql'
 import { LocaleLabel, locales } from 'l10n/locales'
-import { birthDateFormats } from 'l10n/birthDateAndSsnFormats'
+import { birthDateFormats } from 'l10n/inputFormats'
 import { Address, OfferData, OfferQuote } from 'pages/OfferNew/types'
 import { TextKeyMap } from 'utils/textKeys'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'

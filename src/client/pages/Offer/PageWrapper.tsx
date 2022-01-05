@@ -6,7 +6,7 @@ import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { trackOfferGTM, EventName } from 'utils/tracking/gtm'
 import { Features, useFeature } from 'utils/hooks/useFeature'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
+import { CallCenterPhoneNumber } from 'components/CallCenterPhoneNumber/CallCenterPhoneNumber'
 import { OfferData } from 'pages/OfferNew/types'
 import { LanguagePicker } from 'components/LanguagePicker/LanguagePicker'
 
@@ -43,7 +43,10 @@ export const PageWrapper = ({
       {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
         <TopBar isTransparent>
           {isCustomerServicePhoneNumberEnabled && phoneNumber ? (
-            <PhoneNumber color="white" onClick={handleClickPhoneNumber} />
+            <CallCenterPhoneNumber
+              color="white"
+              onClick={handleClickPhoneNumber}
+            />
           ) : (
             <LanguagePicker
               color="white"

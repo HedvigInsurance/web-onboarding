@@ -32,6 +32,7 @@ export type QuoteDetailsInput = {
   student?: boolean | null
   ancillarySpace?: number | null
   isStudent?: boolean | null
+  phoneNumber?: string | null
 }
 
 export type QuoteInput = Partial<QuoteHolderInput> & {

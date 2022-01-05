@@ -16,7 +16,7 @@ import Helmet from 'react-helmet-async'
 import { apolloClient } from 'apolloClient'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useTextKeys } from 'utils/textKeys'
-import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
+import { CallCenterPhoneNumber } from 'components/CallCenterPhoneNumber/CallCenterPhoneNumber'
 import { LanguagePicker } from 'components/LanguagePicker/LanguagePicker'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useAddCampaignCodeMutation } from 'data/graphql'
@@ -175,7 +175,7 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
                 customTrailingContent={
                   isCustomerServicePhoneNumberEnabled &&
                   currentLocale.phoneNumber ? (
-                    <PhoneNumber
+                    <CallCenterPhoneNumber
                       color="black"
                       onClick={handleClickPhoneNumber}
                     />

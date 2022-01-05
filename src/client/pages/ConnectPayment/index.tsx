@@ -9,7 +9,7 @@ import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import { LanguagePicker } from 'components/LanguagePicker/LanguagePicker'
 import { useTextKeys } from 'utils/textKeys'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
-import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
+import { CallCenterPhoneNumber } from 'components/CallCenterPhoneNumber/CallCenterPhoneNumber'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { pushToGTMDataLayer } from 'utils/tracking/gtm'
 import { useFeature, Features } from 'utils/hooks/useFeature'
@@ -41,8 +41,11 @@ export const ConnectPayment: React.FC = () => {
           <title>{textKeys.ONBOARDING_CONNECT_DD_PAGE_TITLE()}</title>
         </Helmet>
         <TopBar>
-          {isCustomerServicePhoneNumberEnabled && currentLocale.phoneNumber ? (
-            <PhoneNumber color="white" onClick={handleClickPhoneNumber} />
+          {isCustomerServicePhoneNumberEnabled && currentLocale.callCenter ? (
+            <CallCenterPhoneNumber
+              color="white"
+              onClick={handleClickPhoneNumber}
+            />
           ) : (
             <LanguagePicker color="white" />
           )}
