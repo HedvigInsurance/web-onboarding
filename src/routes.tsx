@@ -220,6 +220,7 @@ export const routes: Route[] = [
     clientRouteData: {
       Component: OfferDebugger,
       exact: true,
+      isHiddenInProd: true,
     },
   },
   {
