@@ -122,7 +122,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
                 id="ssn"
                 type="text"
                 inputMode="numeric"
-                pattern="[0-9]*"
                 maxLength={ssnMaxLength}
                 touched={touched.ssn}
                 errors={touched.ssn && errors.ssn ? textKeys[errors.ssn]() : ''}

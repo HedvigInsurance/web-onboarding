@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { Field, GenericFieldHTMLAttributes } from 'formik'
+import { Field } from 'formik'
 import { FieldInputProps } from 'formik/dist/types'
 import React, { FocusEvent } from 'react'
 import InputMask from 'react-input-mask'
@@ -133,7 +133,6 @@ const HelperText = styled.div`
   line-height: 1.33;
   color: ${colorsV3.gray700};
   margin-top: 0.25rem;
-  opacity: 1;
 
   .red-text {
     color: ${colorsV3.red600};
@@ -207,6 +206,7 @@ export interface TextInputProps extends CoreInputFieldProps {
   id?: string
   value?: string
   maxLength?: number
+  inputMode?: string
 }
 
 export const InputField: React.FC<TextInputProps> = ({
@@ -220,6 +220,7 @@ export const InputField: React.FC<TextInputProps> = ({
   disabled,
   errors,
   helperText,
+  inputMode,
   ...props
 }) => (
   <WrapperMask disabled={disabled} errors={errors}>

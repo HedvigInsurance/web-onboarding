@@ -159,7 +159,6 @@ export const CampaignCodeModal = ({
                   placeholder={textKeys.SIDEBAR_ADD_CAMPAIGN_CELL_PLACEHOLDER()}
                   name="code"
                   type="text"
-                  autoComplete="off"
                   touched={touched.code}
                   errors={errors.code ? textKeys[errors.code]() : ''}
                 />
