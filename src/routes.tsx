@@ -49,13 +49,13 @@ type ClientSideRoute = {
   Component?: React.ComponentType<any>
   render?: (props: RouteComponentProps<any>) => React.ReactNode
   exact: boolean
-  isHiddenInProd?: boolean
 }
 
 export type Route = {
   path: string | RegExp
   serverRouteData?: ServerSideRoute
   clientRouteData?: ClientSideRoute
+  isHiddenInProd?: boolean
 }
 
 // TODO: Replace all '/new-member' strings throughout the codebase with this variable
@@ -185,6 +185,7 @@ export const routes: Route[] = [
   },
   {
     path: `${onboardingLocaleBaseRoute}/checkout/details/:id`,
+    isHiddenInProd: true,
     serverRouteData: {
       // TODO: Add this text key and translations to Lokalise
       titleTextKey: 'CHECKOUT_DETAILS_PAGE_TITLE',
@@ -192,11 +193,11 @@ export const routes: Route[] = [
     clientRouteData: {
       Component: CheckoutDetails,
       exact: true,
-      isHiddenInProd: true,
     },
   },
   {
     path: `${onboardingLocaleBaseRoute}/checkout/payment/:id`,
+    isHiddenInProd: true,
     serverRouteData: {
       // TODO: Add this text key and translations to Lokalise
       titleTextKey: 'CHECKOUT_PAYMENT_PAGE_TITLE',
@@ -204,23 +205,22 @@ export const routes: Route[] = [
     clientRouteData: {
       Component: CheckoutPayment,
       exact: true,
-      isHiddenInProd: true,
     },
   },
   {
     path: `${onboardingLocaleBaseRoute}/debugger`,
+    isHiddenInProd: true,
     clientRouteData: {
       Component: Debugger,
       exact: true,
-      isHiddenInProd: true,
     },
   },
   {
     path: `${onboardingLocaleBaseRoute}/offer-debugger`,
+    isHiddenInProd: true,
     clientRouteData: {
       Component: OfferDebugger,
       exact: true,
-      isHiddenInProd: true,
     },
   },
   {

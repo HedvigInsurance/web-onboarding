@@ -37,20 +37,15 @@ export const App: React.ComponentType<StorageState> = ({ session }) => {
           <StorageContext.Provider value={{ session }}>
             <AppTokenRetrieval>
               <Switch>
-                {routes.map(({ path, clientRouteData }) => {
-                  if (!clientRouteData || !(typeof path === 'string')) {
+                {routes.map(({ path, isHiddenInProd, clientRouteData }) => {
+                  if (
+                    !clientRouteData ||
+                    !(typeof path === 'string') ||
+                    (isProductionEnvironment && isHiddenInProd)
+                  ) {
                     return null
                   }
-                  const {
-                    exact,
-                    Component,
-                    render,
-                    isHiddenInProd,
-                  } = clientRouteData
-
-                  if (isProductionEnvironment && isHiddenInProd) {
-                    return null
-                  }
+                  const { exact, Component, render } = clientRouteData
 
                   return (
                     <Route
