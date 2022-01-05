@@ -197,7 +197,7 @@ export type CheckoutProps = {
   quoteCartId: string
   offerData: OfferData
   quoteBundleVariants: QuoteBundleVariant[]
-  campaign: CampaignDataFragment | null
+  campaign?: CampaignDataFragment
   initialCheckoutStatus?: CheckoutStatus
   checkoutMethod?: CheckoutMethod
   selectedQuoteBundleVariant: QuoteBundleVariant

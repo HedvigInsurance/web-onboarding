@@ -325,5 +325,9 @@
   "SIDEBAR_NO_BUNDLE_CAMPAIGN_TEXT": "25% discount",
   "SIDEBAR_REMOVE_CAMPAIGN_BUTTON": "Remove discount code",
   "SIDEBAR_ADD_CAMPAIGN_ERROR": "The discount code is invalid",
-  "CHECKOUT_PHONE_NUMBER_LABEL": "Phone number"
+  "CHECKOUT_PHONE_NUMBER_LABEL": "Phone number",
+  "GENERIC_ERROR_HEADING": "Something went wrong",
+  "GENERIC_ERROR_TEXT": "Please try again or go back. If the error persists, please contact us in the chat or email [hedvig@hedvig.com](mailto:hedvig@hedvig.com).",
+  "GENERIC_ERROR_ACTION_RETRY": "Retry",
+  "GENERIC_ERROR_ACTION": "Go back"
 }

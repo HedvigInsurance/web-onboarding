@@ -325,5 +325,9 @@
   "SIDEBAR_NO_BUNDLE_CAMPAIGN_TEXT": "",
   "SIDEBAR_REMOVE_CAMPAIGN_BUTTON": "Slet rabatkode",
   "SIDEBAR_ADD_CAMPAIGN_ERROR": "Rabatkoden er ugyldig",
-  "CHECKOUT_PHONE_NUMBER_LABEL": "Telefonnummeret"
+  "CHECKOUT_PHONE_NUMBER_LABEL": "Telefonnummeret",
+  "GENERIC_ERROR_HEADING": "Der opstod en uventet fejl",
+  "GENERIC_ERROR_TEXT": "Prøv venligst igen eller gå tilbage. Hvis fejlen fortsætter, så kontakt os venligst i chatten eller mail [hedvig@hedvig.com](mailto:hedvig@hedvig.com).",
+  "GENERIC_ERROR_ACTION_RETRY": "Prøv igen",
+  "GENERIC_ERROR_ACTION": "Gå tilbage"
 }
