@@ -8,13 +8,12 @@ import {
   BundledQuote,
   useCreateQuoteBundleMutation,
   useQuoteCartQuery,
-  QuoteBundleVariant,
 } from 'data/graphql'
 
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { getBundleVariantFromInsuranceTypesWithFallback } from 'pages/OfferNew/utils'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
+import { getSelectedBundleVariant } from 'api/quoteCartQuerySelectors'
 import { QuoteInput } from './types'
 import { Details, getValidationSchema } from './Details'
 
@@ -110,15 +109,12 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
     },
   ] = useCreateQuoteBundleMutation()
 
-  const { data } = useQuoteCartQuery({
+  const { data: quoteCartQueryData } = useQuoteCartQuery({
     variables: { id: quoteCartId, locale: isoLocale },
   })
   const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
-
-  const bundleVariants = (data?.quoteCart.bundle?.possibleVariations ??
-    []) as Array<QuoteBundleVariant>
-  const selectedQuoteBundle = getBundleVariantFromInsuranceTypesWithFallback(
-    bundleVariants,
+  const selectedQuoteBundle = getSelectedBundleVariant(
+    quoteCartQueryData,
     selectedInsuranceTypes,
   )
 

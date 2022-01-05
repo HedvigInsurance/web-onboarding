@@ -16,7 +16,7 @@ import {
   MEDIUM_SMALL_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { LanguagePicker } from '../Embark/LanguagePicker'
+import { LanguagePicker } from 'components/LanguagePicker/LanguagePicker'
 import { alternateLinksData, getProductsData } from './landingPageData'
 import { Card, CardHeadline, CardParagraph } from './components/Card'
 

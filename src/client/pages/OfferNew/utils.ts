@@ -52,6 +52,12 @@ export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
   }
 }
 
+export const isOfferDataAvailable = (
+  offerData: OfferData | null,
+): offerData is OfferData => {
+  return offerData !== null
+}
+
 const getHouseholdSizeFromBundledQuotes = (quotes: BundledQuote[]): number => {
   const quoteDetails = quotes.map((quote) => quote.quoteDetails)
 

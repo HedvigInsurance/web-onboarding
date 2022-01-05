@@ -17,9 +17,9 @@ import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { Features, useFeature } from 'utils/hooks/useFeature'
 import { CallCenterPhoneNumber } from 'components/CallCenterPhoneNumber/CallCenterPhoneNumber'
+import { LanguagePicker } from 'components/LanguagePicker/LanguagePicker'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useQuoteIds } from '../../utils/hooks/useQuoteIds'
-import { LanguagePicker } from '../Embark/LanguagePicker'
 import {
   getOfferData,
   getBundleVariantFromQuoteIds,
