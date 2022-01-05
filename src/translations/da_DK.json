@@ -324,5 +324,6 @@
   "SIDEBAR_ADD_CAMPAIGN_BUTTON": "Tilføj rabatkode",
   "SIDEBAR_NO_BUNDLE_CAMPAIGN_TEXT": "",
   "SIDEBAR_REMOVE_CAMPAIGN_BUTTON": "Slet rabatkode",
-  "SIDEBAR_ADD_CAMPAIGN_ERROR": "Rabatkoden er ugyldig"
+  "SIDEBAR_ADD_CAMPAIGN_ERROR": "Rabatkoden er ugyldig",
+  "CHECKOUT_PHONE_NUMBER_LABEL": "Telefonnummeret"
 }

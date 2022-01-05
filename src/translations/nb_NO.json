@@ -324,5 +324,6 @@
   "SIDEBAR_ADD_CAMPAIGN_BUTTON": "Legg til rabattkode",
   "SIDEBAR_NO_BUNDLE_CAMPAIGN_TEXT": "25 % rabatt",
   "SIDEBAR_REMOVE_CAMPAIGN_BUTTON": "Ta bort rabattkode",
-  "SIDEBAR_ADD_CAMPAIGN_ERROR": "Rabattkoden er ugyldig"
+  "SIDEBAR_ADD_CAMPAIGN_ERROR": "Rabattkoden er ugyldig",
+  "CHECKOUT_PHONE_NUMBER_LABEL": "Telefonnummer"
 }

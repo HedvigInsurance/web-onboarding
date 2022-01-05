@@ -21,7 +21,7 @@ import {
 } from 'data/graphql'
 import { OfferQuote, OfferPersonInfo } from 'pages/OfferNew/types'
 import { LocaleData } from 'l10n/locales'
-import { birthDateFormats } from 'l10n/birthDateAndSsnFormats'
+import { birthDateFormats } from 'l10n/inputFormats'
 import {
   isStudent,
   isSwedishQuote,
