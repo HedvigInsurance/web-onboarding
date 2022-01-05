@@ -175,6 +175,7 @@ export const routes: Route[] = [
   },
   {
     path: `${onboardingLocaleBaseRoute}/(offer|sign)/:id`,
+    isHiddenInProd: true,
     serverRouteData: {
       titleTextKey: 'OFFER_PAGE_TITLE',
     },
