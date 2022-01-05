@@ -58,7 +58,8 @@ export type Route = {
   clientRouteData?: ClientSideRoute
 }
 
-export const landingRoute = '/new-member'
+// TODO: Replace all '/new-member' strings throughout the codebase with this variable
+const landingRoute = '/new-member'
 const onboardingLocaleBaseRoute = `${localePathPattern}${landingRoute}`
 
 export const routes: Route[] = [
