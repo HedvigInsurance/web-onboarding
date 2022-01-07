@@ -30,7 +30,7 @@ export const TextContent = styled.div`
   max-width: 40rem;
   padding: 1.5rem;
   font-size: 2rem;
-  color: ${colorsV3.gray100};
+  color: ${colorsV3.gray900};
   opacity: 0;
   animation: ${slideIn} 1500ms forwards, ${fadeIn} 1500ms forwards;
 `
