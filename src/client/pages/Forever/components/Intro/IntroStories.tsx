@@ -110,7 +110,7 @@ const SkipButton = styled(Link)`
   color: ${colorsV3.gray500};
   &:hover,
   &:focus {
-    color: ${colorsV3.gray300};
+    color: ${colorsV3.gray900};
   }
 
   display: none;
