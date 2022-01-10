@@ -1,16 +1,20 @@
 import styled from '@emotion/styled'
-import { colorsV3 } from '@hedviginsurance/brand'
 import { format } from 'date-fns'
 import React from 'react'
 import { Switch } from 'components/Switch'
 import { Spinner } from 'components/utils'
-import { useRemoveStartDateMutation, useStartDateMutation } from 'data/graphql'
+import { Tooltip } from 'components/Tooltip/Tooltip'
+import {
+  useRemoveStartDateMutation,
+  useStartDateMutation,
+  QuoteDetails,
+} from 'data/graphql'
 import { OfferData, OfferQuote } from 'pages/OfferNew/types'
 import {
   isNorwegianHomeContents,
   isNorwegianTravel,
 } from 'pages/OfferNew/utils'
-import { useTextKeys } from 'utils/textKeys'
+import { useTextKeys, TextKeyMap } from 'utils/textKeys'
 import { gqlDateFormat } from './utils'
 
 const HandleSwitchingWrapper = styled.div`
@@ -20,25 +24,22 @@ const HandleSwitchingWrapper = styled.div`
   padding: 0 0.25rem;
 `
 
-const HandleSwitchingLabel = styled.button`
-  font-size: 0.875rem;
-  line-height: 1.2;
-  padding: 0;
-  border: 0;
-  color: ${colorsV3.gray700};
-  width: 75%;
-  background: transparent;
-  text-align: left;
-  cursor: pointer;
+const HandleSwitchingLabel = styled.label`
+  display: inline-flex;
 
-  :focus {
-    outline: 0;
+  &:hover {
+    cursor: pointer;
   }
 `
 
-const SpinnerWrapper = styled.div`
+const StyledSpinner = styled(Spinner)`
+  margin-right: 0.5rem;
   font-size: 1.25rem;
   height: 1.25rem;
+`
+
+const StyledSwitch = styled(Switch)`
+  margin-right: 0.5rem;
 `
 
 interface CancellationOptionsProps {
@@ -70,6 +71,26 @@ export const CancellationOptions: React.FC<CancellationOptionsProps> = ({
   )
 }
 
+const getLabelContent = (
+  textKeys: TextKeyMap,
+  quoteDetails: QuoteDetails,
+  isGenericQuote: boolean,
+) => {
+  if (isGenericQuote) {
+    return textKeys.SIDEBAR_REQUEST_CANCELLATION_GENERIC_INSURANCE()
+  }
+
+  if (isNorwegianHomeContents(quoteDetails)) {
+    return textKeys.SIDEBAR_REQUEST_CANCELLATION_HOME_INSURANCE()
+  }
+
+  if (isNorwegianTravel(quoteDetails)) {
+    return textKeys.SIDEBAR_REQUEST_CANCELLATION_TRAVEL_INSURANCE()
+  }
+
+  return null
+}
+
 interface QuoteCancellationOptionProps {
   isGenericQuote: boolean
   quote: OfferQuote
@@ -85,63 +106,59 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
   refetch,
 }) => {
   const textKeys = useTextKeys()
+
   const [isLoading, setIsLoading] = React.useState(false)
+
   const [setStartDate] = useStartDateMutation()
   const [removeStartDate] = useRemoveStartDateMutation()
 
   const checked = !quote.startDate
+  const labelContent = getLabelContent(
+    textKeys,
+    quote.quoteDetails,
+    isGenericQuote,
+  )
 
-  const toggle = () => {
-    setShowError(false)
-    setIsLoading(true)
-    if (!checked) {
-      removeStartDate({
-        variables: {
-          quoteId: quote.id,
-        },
-      })
-        .then(() => refetch())
-        .catch(handleFail)
-        .finally(() => setIsLoading(false))
-    } else {
-      setStartDate({
-        variables: {
-          quoteId: quote.id,
-          date: format(new Date(), gqlDateFormat),
-        },
-      })
-        .then(() => refetch())
-        .catch(handleFail)
-        .finally(() => setIsLoading(false))
+  const toggle = async () => {
+    try {
+      setShowError(false)
+      setIsLoading(true)
+
+      if (!checked) {
+        await removeStartDate({
+          variables: {
+            quoteId: quote.id,
+          },
+        })
+        await refetch()
+      } else {
+        await setStartDate({
+          variables: {
+            quoteId: quote.id,
+            date: format(new Date(), gqlDateFormat),
+          },
+        })
+        await refetch()
+      }
+    } catch (e) {
+      handleFail(e)
+    } finally {
+      setIsLoading(false)
     }
   }
 
   return (
     // TODO: This logic needs some clarification
     <HandleSwitchingWrapper>
-      <HandleSwitchingLabel onClick={toggle}>
-        {(() => {
-          if (isGenericQuote) {
-            return textKeys.SIDEBAR_REQUEST_CANCELLATION_GENERIC_INSURANCE()
-          }
-
-          if (isNorwegianHomeContents(quote.quoteDetails)) {
-            return textKeys.SIDEBAR_REQUEST_CANCELLATION_HOME_INSURANCE()
-          }
-
-          if (isNorwegianTravel(quote.quoteDetails)) {
-            return textKeys.SIDEBAR_REQUEST_CANCELLATION_TRAVEL_INSURANCE()
-          }
-        })()}
+      <HandleSwitchingLabel>
+        {isLoading ? (
+          <StyledSpinner />
+        ) : (
+          <StyledSwitch value={checked} onChange={toggle} />
+        )}
+        {labelContent}
       </HandleSwitchingLabel>
-
-      {isLoading ? (
-        <SpinnerWrapper>
-          <Spinner />
-        </SpinnerWrapper>
-      ) : (
-        <Switch value={checked} onChange={toggle} />
-      )}
+      <Tooltip body={textKeys.SIDEBAR_REQUEST_CANCELLATION_TOOLTIP()} />
     </HandleSwitchingWrapper>
   )
 }

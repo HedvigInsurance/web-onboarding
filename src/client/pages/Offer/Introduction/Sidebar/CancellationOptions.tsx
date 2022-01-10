@@ -1,10 +1,10 @@
 import styled from '@emotion/styled'
-import { colorsV3 } from '@hedviginsurance/brand'
 import { format } from 'date-fns'
 import React from 'react'
 import { Switch } from 'components/Switch'
 import { Spinner } from 'components/utils'
-import { useSetStartDateMutation } from 'data/graphql'
+import { Tooltip } from 'components/Tooltip/Tooltip'
+import { useSetStartDateMutation, QuoteDetails } from 'data/graphql'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { OfferData, OfferQuote } from 'pages/OfferNew/types'
 import {
@@ -12,7 +12,7 @@ import {
   isNorwegianTravel,
 } from 'pages/OfferNew/utils'
 import { gqlDateFormat } from 'pages/OfferNew/Introduction/Sidebar/utils'
-import { useTextKeys } from 'utils/textKeys'
+import { useTextKeys, TextKeyMap } from 'utils/textKeys'
 
 const HandleSwitchingWrapper = styled.div`
   margin-bottom: 0.75rem;
@@ -21,25 +21,22 @@ const HandleSwitchingWrapper = styled.div`
   padding: 0 0.25rem;
 `
 
-const HandleSwitchingLabel = styled.button`
-  font-size: 0.875rem;
-  line-height: 1.2;
-  padding: 0;
-  border: 0;
-  color: ${colorsV3.gray700};
-  width: 75%;
-  background: transparent;
-  text-align: left;
-  cursor: pointer;
+const HandleSwitchingLabel = styled.label`
+  display: inline-flex;
 
-  :focus {
-    outline: 0;
+  &:hover {
+    cursor: pointer;
   }
 `
 
-const SpinnerWrapper = styled.div`
+const StyledSpinner = styled(Spinner)`
+  margin-right: 0.5rem;
   font-size: 1.25rem;
   height: 1.25rem;
+`
+
+const StyledSwitch = styled(Switch)`
+  margin-right: 0.5rem;
 `
 
 interface CancellationOptionsProps {
@@ -72,6 +69,26 @@ export const CancellationOptions: React.FC<CancellationOptionsProps> = ({
   )
 }
 
+const getLabelContent = (
+  textKeys: TextKeyMap,
+  quoteDetails: QuoteDetails,
+  isGenericQuote: boolean,
+) => {
+  if (isGenericQuote) {
+    return textKeys.SIDEBAR_REQUEST_CANCELLATION_GENERIC_INSURANCE()
+  }
+
+  if (isNorwegianHomeContents(quoteDetails)) {
+    return textKeys.SIDEBAR_REQUEST_CANCELLATION_HOME_INSURANCE()
+  }
+
+  if (isNorwegianTravel(quoteDetails)) {
+    return textKeys.SIDEBAR_REQUEST_CANCELLATION_TRAVEL_INSURANCE()
+  }
+
+  return null
+}
+
 interface QuoteCancellationOptionProps {
   isGenericQuote: boolean
   quoteCartId: string
@@ -92,6 +109,11 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
   const [setStartDate] = useSetStartDateMutation()
 
   const isChecked = !quote.startDate
+  const labelContent = getLabelContent(
+    textKeys,
+    quote.quoteDetails,
+    isGenericQuote,
+  )
 
   const handleToggleStartDate = async () => {
     try {
@@ -118,29 +140,15 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
   return (
     // TODO: This logic needs some clarification
     <HandleSwitchingWrapper>
-      <HandleSwitchingLabel onClick={handleToggleStartDate}>
-        {(() => {
-          if (isGenericQuote) {
-            return textKeys.SIDEBAR_REQUEST_CANCELLATION_GENERIC_INSURANCE()
-          }
-
-          if (isNorwegianHomeContents(quote.quoteDetails)) {
-            return textKeys.SIDEBAR_REQUEST_CANCELLATION_HOME_INSURANCE()
-          }
-
-          if (isNorwegianTravel(quote.quoteDetails)) {
-            return textKeys.SIDEBAR_REQUEST_CANCELLATION_TRAVEL_INSURANCE()
-          }
-        })()}
+      <HandleSwitchingLabel>
+        {isLoading ? (
+          <StyledSpinner />
+        ) : (
+          <StyledSwitch value={isChecked} onChange={handleToggleStartDate} />
+        )}
+        {labelContent}
       </HandleSwitchingLabel>
-
-      {isLoading ? (
-        <SpinnerWrapper>
-          <Spinner />
-        </SpinnerWrapper>
-      ) : (
-        <Switch value={isChecked} onChange={handleToggleStartDate} />
-      )}
+      <Tooltip body={textKeys.SIDEBAR_REQUEST_CANCELLATION_TOOLTIP()} />
     </HandleSwitchingWrapper>
   )
 }
