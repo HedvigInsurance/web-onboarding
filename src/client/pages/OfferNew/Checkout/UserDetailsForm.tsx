@@ -37,7 +37,10 @@ export const emailValidation = yup
 
 export const nameValidation = yup.string().required()
 
-export const phoneValidation = yup.string().required()
+export const phoneValidation = yup
+  .string()
+  .required()
+  .min(10)
 
 // TODO: replace these with one market agnostic CHECKOUT_SSN_LABEL + currentLocaleData.ssn.formatExample
 export const getSsnLabel = (market: Market, textKeys: TextKeyMap): string => {
@@ -72,11 +75,15 @@ export const UserDetailsForm: React.FC<Props> = ({
   const [hasFirstNameError, setHasFirstNameError] = useState(false)
   const [hasLastNameError, setHasLastNameError] = useState(false)
   const [hasEmailError, setHasEmailError] = useState(false)
+  const [hasPhoneError, setHasPhoneError] = useState(false)
   const [ssn, reallySetSsn] = useState(() => initialSsn)
   const [isShowingCreditCheckInfo, setIsShowingCreditCheckInfo] = useState(
     false,
   )
   const [emailChangeTimout, setEmailChangeTimout] = useState<number | null>(
+    null,
+  )
+  const [phoneChangeTimeout, setPhoneChangeTimeout] = useState<number | null>(
     null,
   )
   const [ssnChangeTimout, setSsnChangeTimout] = useState<number | null>(null)
@@ -155,9 +162,24 @@ export const UserDetailsForm: React.FC<Props> = ({
     )
   }
 
-  const setPhoneDebounced = (phoneNumber: string) => {
+  const handlePhoneChange = (event: React.FormEvent<HTMLInputElement>) => {
+    const { value } = event.currentTarget
+    const phoneNumber = value
+    if (phoneChangeTimeout) {
+      window.clearTimeout(phoneChangeTimeout)
+      setPhoneChangeTimeout(null)
+    }
     reallySetPhone(phoneNumber)
-    onPhoneChange(phoneNumber)
+    setPhoneChangeTimeout(
+      window.setTimeout(() => {
+        if (phoneValidation.isValidSync(phoneNumber)) {
+          onPhoneChange(phoneNumber)
+          setHasPhoneError(false)
+        } else {
+          setHasPhoneError(true)
+        }
+      }, 500),
+    )
   }
 
   return (
@@ -211,28 +233,25 @@ export const UserDetailsForm: React.FC<Props> = ({
         }}
       />
 
-      {currentLocale == 'no' ||
-        (currentLocale === 'no-en' && (
-          <>
-            <RawInputField
-              label={'Phone number'}
-              placeholder={'+47 000 0000'}
-              name="phoneNumber"
-              id="phoneNumber"
-              type="text"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              value={phoneNumber}
-              onChange={(e: React.ChangeEvent<any>) => {
-                setPhoneDebounced(e.target.value)
-                onPhoneChange(e.target.value)
-              }}
-              helperText={
-                'We will only contact you for important communications.'
-              }
-            />
-          </>
-        ))}
+      {(currentLocale == 'no' || currentLocale === 'no-en') && (
+        <>
+          <RawInputField
+            label={textKeys.CHECKOUT_PHONE_NUMBER_LABEL()}
+            placeholder={'+47 000 0000'}
+            name="phoneNumber"
+            id="phoneNumber"
+            type="text"
+            inputMode="numeric"
+            maxLength={10}
+            value={phoneNumber}
+            errors={hasPhoneError ? 'This field is required' : undefined}
+            onChange={handlePhoneChange}
+            helperText={
+              'We will only contact you for important communications.'
+            }
+          />
+        </>
+      )}
 
       <RawInputField
         label={getSsnLabel(market, textKeys)}

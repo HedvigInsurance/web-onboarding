@@ -308,9 +308,6 @@ export const Checkout = ({
       offerData.person.phoneNumber,
   )
 
-  console.log(canInitiateSign)
-  console.log(offerData.person)
-
   const editQuotes = async (
     quoteIds: string[],
     input: Omit<EditQuoteInput, 'id'>,
@@ -320,8 +317,6 @@ export const Checkout = ({
         editQuote({ variables: { input: { ...input, id } } }),
       ),
     )
-    console.log('refetching here')
-    console.log(input)
     refetch()
   }
 
@@ -382,7 +377,6 @@ export const Checkout = ({
       },
     })
       .then(({ data }) => {
-        console.log(data)
         if (data?.signQuotes?.__typename === 'FailedToStartSign') {
           if (data?.signQuotes.errorCode === 'MANUAL_REVIEW_REQUIRED') {
             setIsShowingFailModal(true)
