@@ -202,7 +202,7 @@ export interface TextInputProps extends CoreInputFieldProps {
   touched?: boolean
   errors?: string | boolean
   name?: string
-  disabled?: boolean | undefined
+  disabled?: boolean
   id?: string
   value?: string
   maxLength?: number
@@ -229,6 +229,7 @@ export const InputField: React.FC<TextInputProps> = ({
       <TextWrapper>
         {mask ? (
           <StyledInputMask
+            disabled={disabled}
             mask={mask.mask}
             alwaysShowMask={true}
             maskChar={INVISIBLE_MASK_CHAR}
@@ -245,7 +246,7 @@ export const InputField: React.FC<TextInputProps> = ({
                 ))}
               </StyledSelect>
             ) : (
-              <StyledInput type={type} {...props} />
+              <StyledInput type={type} {...props} disabled={disabled} />
             )}
           </>
         )}
