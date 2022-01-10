@@ -309,7 +309,6 @@ export const InputGroup = styled.div`
   }
 
   ${Wrapper as any}, ${InputGroupDeleteButton} {
-    border-radius: 0;
     border-color: ${colorsV3.gray500};
 
     :not(:first-of-type) {
