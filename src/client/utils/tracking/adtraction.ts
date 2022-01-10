@@ -109,8 +109,8 @@ export const adtraction = (
   orderValue: number,
   orderId: string,
   emailAddress: string,
-  couponCode: string | null,
   offerData: OfferData,
+  couponCode?: string,
 ) => {
   try {
     const adt = ADT
@@ -121,7 +121,7 @@ export const adtraction = (
     adt.Tag.ti = orderId
     adt.Tag.xd = md5(emailAddress)
 
-    if (couponCode !== null) {
+    if (couponCode) {
       adt.Tag.cpn = couponCode
     }
 

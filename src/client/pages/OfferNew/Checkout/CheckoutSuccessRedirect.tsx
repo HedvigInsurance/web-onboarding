@@ -8,14 +8,14 @@ import {
   getUtmParamsFromCookie,
   TrackAction,
 } from 'utils/tracking/tracking'
-import { useCurrentLocale } from 'components/utils/CurrentLocale'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 
 type Props = {
   offerData: OfferData
 }
 
 export const CheckoutSuccessRedirect: React.FC<Props> = ({ offerData }) => {
-  const locale = useCurrentLocale()
+  const { path: localePath } = useCurrentLocale()
 
   return (
     <TrackAction
@@ -36,7 +36,7 @@ export const CheckoutSuccessRedirect: React.FC<Props> = ({ offerData }) => {
     >
       {({ track: trackAction }) => (
         <Mount on={trackAction}>
-          <Redirect to={`/${locale}/new-member/connect-payment`} />
+          <Redirect to={`/${localePath}/new-member/connect-payment`} />
         </Mount>
       )}
     </TrackAction>

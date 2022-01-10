@@ -315,5 +315,19 @@
   "ACCIDENT_SWEDEN_UPSELL_TITLE": "Accident Insurance",
   "ACCIDENT_SWEDEN_UPSELL_DESCRIPTION": "Covers accidents, injuries outside your home, hospital stays, dental injuries, scarring plus much more. The insurance applies to all co-insured. No deductible.",
   "ACCIDENT_SWEDEN_UPSELL_BUTTON": "Add protection",
-  "PHONE_OPENS_AT": "Opens at"
+  "PHONE_OPENS_AT": "Opens at",
+  "CHECKOUT_SSN_LABEL_GLOBAL": "National identity number (YYYYMMDDXXXX)",
+  "SIDEBAR_ADD_CAMPAIGN_HEADLINE": "Add discount code",
+  "SIDEBAR_ADD_CAMPAIGN_BODY": "Got a discount code? Input it below.",
+  "SIDEBAR_ADD_CAMPAIGN_CELL_LABEL": "Discount code",
+  "SIDEBAR_ADD_CAMPAIGN_CELL_PLACEHOLDER": "Your code",
+  "SIDEBAR_ADD_CAMPAIGN_BUTTON": "Add discount code",
+  "SIDEBAR_NO_BUNDLE_CAMPAIGN_TEXT": "25% discount",
+  "SIDEBAR_REMOVE_CAMPAIGN_BUTTON": "Remove discount code",
+  "SIDEBAR_ADD_CAMPAIGN_ERROR": "The discount code is invalid",
+  "CHECKOUT_PHONE_NUMBER_LABEL": "Phone number",
+  "GENERIC_ERROR_HEADING": "Something went wrong",
+  "GENERIC_ERROR_TEXT": "Please try again or go back. If the error persists, please contact us in the chat or email [hedvig@hedvig.com](mailto:hedvig@hedvig.com).",
+  "GENERIC_ERROR_ACTION_RETRY": "Retry",
+  "GENERIC_ERROR_ACTION": "Go back"
 }

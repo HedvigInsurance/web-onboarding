@@ -1,4 +1,6 @@
 import { LocalePath, Market } from 'components/utils/CurrentLocale'
+import { checkFeature } from 'utils/checkFeature'
+import { Feature } from 'shared/clientConfig'
 
 type AlternateLinksData = {
   hrefLang: string
@@ -25,11 +27,13 @@ type ProductData = {
 
 type ProductsData = Record<Market, ProductData>
 
-export const productsData: ProductsData = {
+export const getProductsData = (): ProductsData => ({
   SE: [
     {
       id: 'swedishNew',
-      linkSlug: '/new',
+      linkSlug: checkFeature(Feature.QUOTE_CART_API)
+        ? '/home-accident-needer'
+        : '/new',
       headline: 'STARTPAGE_UNINSURED_HEADLINE',
       paragraph: 'STARTPAGE_UNINSURED_BODY',
     },
@@ -78,4 +82,4 @@ export const productsData: ProductsData = {
       badge: 'STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_BADGE',
     },
   ],
-}
+})

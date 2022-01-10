@@ -16,14 +16,13 @@ import Helmet from 'react-helmet-async'
 import { apolloClient } from 'apolloClient'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useTextKeys } from 'utils/textKeys'
-import { PhoneNumber } from 'components/PhoneNumber/PhoneNumber'
+import { CallCenterPhoneNumber } from 'components/CallCenterPhoneNumber/CallCenterPhoneNumber'
+import { LanguagePicker } from 'components/LanguagePicker/LanguagePicker'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import {
-  useCreateOnboardingQuoteCartMutation,
-  useAddCampaignCodeMutation,
-} from 'data/graphql'
+import { useAddCampaignCodeMutation } from 'data/graphql'
 import { useFeature, Features } from 'utils/hooks/useFeature'
 import { CampaignCode } from 'utils/campaignCode'
+import { useCreateQuoteCart } from 'utils/hooks/useCreateQuoteCart'
 import { pushToGTMDataLayer } from '../../utils/tracking/gtm'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
@@ -33,7 +32,6 @@ import {
 } from './externalInsuranceProvider'
 import { graphQLMutation, graphQLQuery } from './graphql'
 import { resolveHouseInformation } from './houseInformation'
-import { LanguagePicker } from './LanguagePicker'
 import { resolvePersonalInformation } from './personalInformation'
 import { resolveAddressAutocomplete } from './addressAutocompleteProvider'
 import { SetupFailedModal } from './ErrorModal'
@@ -73,6 +71,9 @@ interface EmbarkProps {
 
 const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
   const currentLocale = useCurrentLocale()
+  const [isCustomerServicePhoneNumberEnabled] = useFeature([
+    Features.CUSTOMER_SERVICE_PHONE_NUMBER,
+  ])
 
   const history = useHistory<{
     embarkPassageName: string
@@ -172,13 +173,14 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
                 storyData={state.data}
                 startPageLink={props.startPageLink}
                 customTrailingContent={
+                  isCustomerServicePhoneNumberEnabled &&
                   currentLocale.phoneNumber ? (
-                    <PhoneNumber
+                    <CallCenterPhoneNumber
                       color="black"
-                      onClick={(status) => handleClickPhoneNumber(status)}
+                      onClick={handleClickPhoneNumber}
                     />
                   ) : (
-                    <LanguagePicker />
+                    <LanguagePicker color="black" />
                   )
                 }
               />
@@ -234,19 +236,12 @@ interface AngelVariables {
 }
 
 const useCreateQuoteCartId = ({ skip = false }) => {
-  const { isoLocale, apiMarket } = useCurrentLocale()
-
-  const [
-    createOnboardingQuoteCart,
-    { data, error },
-  ] = useCreateOnboardingQuoteCartMutation()
+  const [createQuoteCartMutation, { data, error }] = useCreateQuoteCart()
 
   const [addCampaignCode] = useAddCampaignCodeMutation()
 
   const createQuoteCart = useCallback(async () => {
-    const result = await createOnboardingQuoteCart({
-      variables: { market: apiMarket, locale: isoLocale },
-    })
+    const result = await createQuoteCartMutation()
     const quoteCartId = result.data?.onboardingQuoteCart_create.id
     const savedCampaignCode = CampaignCode.get()
 
@@ -262,19 +257,17 @@ const useCreateQuoteCartId = ({ skip = false }) => {
         CampaignCode.remove()
       }
     }
-  }, [createOnboardingQuoteCart, apiMarket, isoLocale, addCampaignCode])
+  }, [createQuoteCartMutation, addCampaignCode])
+
+  const quoteCartId = data?.onboardingQuoteCart_create.id
 
   useEffect(() => {
-    if (!skip) {
+    if (!skip && !quoteCartId) {
       createQuoteCart()
     }
-  }, [skip, createQuoteCart])
+  }, [skip, quoteCartId, createQuoteCart])
 
-  return {
-    createQuoteCart,
-    quoteCartId: data?.onboardingQuoteCart_create.id,
-    error,
-  }
+  return { createQuoteCart, quoteCartId, error }
 }
 
 export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {

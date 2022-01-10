@@ -24,3 +24,9 @@ export const birthDateFormats: Record<
   NO: dayMonthYearFormat,
   DK: dayMonthYearFormat,
 }
+
+export const phoneNumberFormats: Record<MarketLabel, RegExp> = {
+  SE: /^((0046|\+46|46)|0)7[\d]{8}$/,
+  NO: /^(0047|\+47|47)?[2-9]\d{7}$/,
+  DK: /^(0045|\+45|45)?[\d]{8}$/,
+}

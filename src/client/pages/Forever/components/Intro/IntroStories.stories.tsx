@@ -9,7 +9,7 @@ export default {
   component: IntroStories,
   parameters: {
     backgrounds: {
-      default: 'gray900',
+      default: 'gray100',
     },
   },
   decorators: [withActions()],

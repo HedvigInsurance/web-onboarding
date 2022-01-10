@@ -1,7 +1,7 @@
 import { css, Global } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import React from 'react'
+import React, { useMemo } from 'react'
 import Helmet from 'react-helmet-async'
 import { AnimatePresence, motion } from 'framer-motion'
 import { TopBar, TopBarFiller } from 'components/TopBar'
@@ -16,8 +16,8 @@ import {
   MEDIUM_SMALL_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { LanguagePicker } from '../Embark/LanguagePicker'
-import { alternateLinksData, productsData } from './landingPageData'
+import { LanguagePicker } from 'components/LanguagePicker/LanguagePicker'
+import { alternateLinksData, getProductsData } from './landingPageData'
 import { Card, CardHeadline, CardParagraph } from './components/Card'
 
 const LandingPageContainer = styled.div`
@@ -156,6 +156,7 @@ export const Landing: React.FC = () => {
   const textKeys = useTextKeys()
   const { marketLabel, path: localePath } = useCurrentLocale()
   const variation = useVariation()
+  const productsData = useMemo(getProductsData, [])
 
   return (
     <AnimatePresence>
@@ -198,7 +199,7 @@ export const Landing: React.FC = () => {
             {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
               <>
                 <TopBar isTransparent>
-                  <LanguagePicker />
+                  <LanguagePicker color="white" />
                 </TopBar>
                 <TopBarFiller />
               </>

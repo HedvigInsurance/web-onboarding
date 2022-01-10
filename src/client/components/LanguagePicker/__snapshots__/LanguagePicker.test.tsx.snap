@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Danish language picker renders without 💥 1`] = `
+<div
+  class="css-1prqaxz-Wrapper e1isu63z0"
+>
+  <div
+    class="css-14fi736-ActiveOption e1isu63z1"
+    color="black"
+  >
+    Da
+  </div>
+  <span
+    class="css-1tysqfo-Divider e1isu63z3"
+    color="black"
+  />
+  <a
+    class="css-s5uyen-LinkOption e1isu63z2"
+    color="black"
+    href="/dk-en/new-member"
+  >
+    En
+  </a>
+</div>
+`;
+
+exports[`Norwegian language picker renders without 💥 1`] = `
+<div
+  class="css-1prqaxz-Wrapper e1isu63z0"
+>
+  <div
+    class="css-14fi736-ActiveOption e1isu63z1"
+    color="black"
+  >
+    No
+  </div>
+  <span
+    class="css-1tysqfo-Divider e1isu63z3"
+    color="black"
+  />
+  <a
+    class="css-s5uyen-LinkOption e1isu63z2"
+    color="black"
+    href="/no-en/new-member"
+  >
+    En
+  </a>
+</div>
+`;
+
+exports[`Swedish language picker renders without 💥 1`] = `
+<div
+  class="css-1prqaxz-Wrapper e1isu63z0"
+>
+  <div
+    class="css-14fi736-ActiveOption e1isu63z1"
+    color="black"
+  >
+    Sv
+  </div>
+  <span
+    class="css-1tysqfo-Divider e1isu63z3"
+    color="black"
+  />
+  <a
+    class="css-s5uyen-LinkOption e1isu63z2"
+    color="black"
+    href="/se-en/new-member"
+  >
+    En
+  </a>
+</div>
+`;

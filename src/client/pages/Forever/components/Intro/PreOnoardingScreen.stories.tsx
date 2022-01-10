@@ -8,7 +8,7 @@ export default {
   component: PreOnboardingScreen,
   parameters: {
     backgrounds: {
-      default: 'gray900',
+      default: 'gray100',
     },
   },
 }
