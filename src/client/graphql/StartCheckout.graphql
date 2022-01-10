@@ -1,0 +1,13 @@
+mutation StartCheckout($quoteCartId: ID!, $quoteIds: [ID!]!) {
+  quoteCart_startCheckout(id: $quoteCartId, quoteIds: $quoteIds) {
+    ... on QuoteCart {
+      checkout {
+        status
+        statusText
+      }
+    }
+    ... on Error {
+      message
+    }
+  }
+}

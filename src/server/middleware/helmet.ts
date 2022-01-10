@@ -59,6 +59,7 @@ const defaultSrc = [
   '*.trustly.com',
   'cdn.mxpnl.com',
   'cdn.segment.com',
+  'cdn.cookielaw.org',
   'api.segment.io',
   'https://api-js.mixpanel.com',
   'checkoutshopper-live.adyen.com',

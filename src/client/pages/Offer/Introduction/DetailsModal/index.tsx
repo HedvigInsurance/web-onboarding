@@ -8,13 +8,12 @@ import {
   BundledQuote,
   useCreateQuoteBundleMutation,
   useQuoteCartQuery,
-  QuoteBundleVariant,
 } from 'data/graphql'
 
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { getBundleVariantFromInsuranceTypes } from 'pages/OfferNew/utils'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
+import { getSelectedBundleVariant } from 'api/quoteCartQuerySelectors'
 import { QuoteInput } from './types'
 import { Details, getValidationSchema } from './Details'
 
@@ -110,18 +109,14 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
     },
   ] = useCreateQuoteBundleMutation()
 
-  const { data } = useQuoteCartQuery({
+  const { data: quoteCartQueryData } = useQuoteCartQuery({
     variables: { id: quoteCartId, locale: isoLocale },
   })
   const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
-
-  const bundleVariants = (data?.quoteCart.bundle?.possibleVariations ??
-    []) as Array<QuoteBundleVariant>
-  const selectedQuoteBundle =
-    getBundleVariantFromInsuranceTypes(
-      bundleVariants,
-      selectedInsuranceTypes,
-    ) || bundleVariants[0]
+  const selectedQuoteBundle = getSelectedBundleVariant(
+    quoteCartQueryData,
+    selectedInsuranceTypes,
+  )
 
   if (!selectedQuoteBundle) return null
 
@@ -130,14 +125,17 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
     lastName,
     birthDate,
     ssn,
+    email,
     data: mainQuoteData,
   } = selectedQuoteBundle?.bundle.quotes[0]
+
   const { type: mainQuoteType, numberCoInsured } = mainQuoteData
   const initialValues = {
     firstName,
     lastName,
     birthDate,
     ssn,
+    email,
     data: {
       ...mainQuoteData,
       householdSize: numberCoInsured + 1,
@@ -151,6 +149,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   const reCreateQuoteBundle = (form: QuoteInput) => {
     return createQuoteBundle({
       variables: {
+        locale: isoLocale,
         quoteCartId,
         quotes: allQuotes.map(({ data: { id, type, typeOfContract } }) => {
           const {
@@ -158,13 +157,17 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
             lastName,
             birthDate,
             ssn,
-            data: { householdSize },
+            email,
+            data: { householdSize, phoneNumber },
           } = form
+
           return {
             firstName,
             lastName,
             birthDate,
             ssn,
+            email,
+            phoneNumber,
             data: {
               ...form.data,
               numberCoInsured: householdSize && householdSize - 1,
@@ -198,6 +201,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
           initialValues={initialValues}
           validationSchema={getValidationSchema(marketLabel, mainQuoteType)}
           onSubmit={onSubmit}
+          enableReinitialize
         >
           {(formikProps) => (
             <Form>

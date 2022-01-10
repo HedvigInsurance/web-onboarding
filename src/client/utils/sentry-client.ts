@@ -1,5 +1,6 @@
 import * as Sentry from '@sentry/react'
 import { useEffect } from 'react'
+import { QuoteBundleError } from 'data/graphql'
 
 export const captureSentryError = (
   e: Error | string,
@@ -25,4 +26,19 @@ export const useUnderwritingLimitsHitReporter = (
       )
     }
   }, [hitUnderwritingLimits, quoteIds])
+}
+
+export const reportUnderwritingLimits = (
+  quoteBundleError: QuoteBundleError,
+  updatedValues: Record<string, any>,
+) => {
+  if (quoteBundleError.limits?.length) {
+    const codes = quoteBundleError.limits?.map(({ code }) => code)
+
+    // TODO: Look into GDPR
+    captureSentryError(
+      Error('Underwriting limits hit when editing quote: ' + codes.join(', ')),
+      { updatedValues },
+    )
+  }
 }

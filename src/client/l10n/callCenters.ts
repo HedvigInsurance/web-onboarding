@@ -1,8 +1,8 @@
 import { MarketLabel } from './locales'
 
-type PhoneNumbers = Partial<Record<MarketLabel, PhoneNumberData>>
+type CallCenters = Partial<Record<MarketLabel, CallCenterData>>
 
-export type PhoneNumberData = {
+export type CallCenterData = {
   displayNumber: string
   hrefNumber: string
   opensAt: string
@@ -11,7 +11,7 @@ export type PhoneNumberData = {
   lunchEndsAt: string
 }
 
-export const phoneNumbers: PhoneNumbers = {
+export const callCenters: CallCenters = {
   SE: {
     displayNumber: '075-101 20 00',
     hrefNumber: 'tel:0751012000',

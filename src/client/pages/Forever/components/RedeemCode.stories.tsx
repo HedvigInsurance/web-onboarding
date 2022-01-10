@@ -9,7 +9,7 @@ export default {
   component: RedeemCode,
   parameters: {
     backgrounds: {
-      default: 'gray900',
+      default: 'gray100',
     },
   },
 }

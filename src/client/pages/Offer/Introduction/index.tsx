@@ -76,9 +76,8 @@ const HeroBackgroundImage = styled(BackgroundImage)`
 export type IntroductionProps = {
   quoteCartId: string
   offerData: OfferData
-  campaign: CampaignDataFragment | null
+  campaign?: CampaignDataFragment
   allQuotes: BundledQuote[]
-  refetch: () => Promise<void>
   onCheckoutOpen: () => void
 }
 
@@ -87,7 +86,6 @@ export const Introduction: React.FC<IntroductionProps> = ({
   offerData,
   campaign,
   allQuotes,
-  refetch,
   onCheckoutOpen,
 }) => {
   const hasDataCollection =
@@ -119,7 +117,6 @@ export const Introduction: React.FC<IntroductionProps> = ({
             <Sidebar
               offerData={offerData}
               campaign={campaign}
-              refetchOfferData={refetch}
               onCheckoutOpen={onCheckoutOpen}
             />
           </ContentContainer>

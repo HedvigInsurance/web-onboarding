@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 
-type BadgeProps = {
+export type BadgeProps = {
   children: ReactNode
   disabled?: boolean
   size?: 'sm' | 'lg'
