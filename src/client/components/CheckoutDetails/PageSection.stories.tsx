@@ -25,13 +25,19 @@ export default {
 
 const Template: Story = () => (
   <PageSection>
-    <SubSection>
+    <SubSection headlineText="Your plan">
       <Text>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</Text>
       <Text>Ipsa nulla eaque in libero inventore.</Text>
     </SubSection>
-    <SubSection>
+    <SubSection headlineText="Start date">
       <Text>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</Text>
-      <Text>Ipsa nulla eaque in libero inventore.</Text>
+    </SubSection>
+    <SubSection headlineText="Your home">
+      <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit.</Text>{' '}
+      <Text>
+        Saepe ea dignissimos eveniet modi ipsa id quia? Odio dignissimos nulla
+        consequatur
+      </Text>
     </SubSection>
   </PageSection>
 )
