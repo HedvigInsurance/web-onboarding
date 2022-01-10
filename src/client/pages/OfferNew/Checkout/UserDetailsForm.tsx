@@ -244,11 +244,11 @@ export const UserDetailsForm: React.FC<Props> = ({
             inputMode="numeric"
             maxLength={10}
             value={phoneNumber}
-            errors={hasPhoneError ? 'This field is required' : undefined}
-            onChange={handlePhoneChange}
-            helperText={
-              'We will only contact you for important communications.'
+            errors={
+              hasPhoneError ? textKeys.CHECKOUT_PHONE_NUMBER_ERROR() : undefined
             }
+            onChange={handlePhoneChange}
+            helperText={textKeys.CHECKOUT_PHONE_NUMBER_HELPERTEXT()}
           />
         </>
       )}

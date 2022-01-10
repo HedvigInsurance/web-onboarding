@@ -254,8 +254,11 @@ export const RawInputField: React.FC<React.InputHTMLAttributes<
         )}
       </SymbolWrapper>
     </Wrapper>
-    {helperText && <HelperText> {helperText} </HelperText>}
-    {errors && <ErrorText variant={variant}>{errors}</ErrorText>}
+    {errors ? (
+      <ErrorText variant={variant}>{errors}</ErrorText>
+    ) : (
+      helperText && <HelperText> {helperText} </HelperText>
+    )}
   </InputFieldContainer>
 )
 
