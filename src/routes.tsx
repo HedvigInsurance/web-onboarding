@@ -71,7 +71,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: localePathPattern + '/forever/:code?',
+    path: `${localePathPattern}/forever/:code?`,
     serverRouteData: {
       titleTextKey: 'FOREVER_LANDINGPAGE_TITLE',
       metaDescriptionTextKey: 'FOREVER_LANDINGPAGE_DESCRIPTION',
