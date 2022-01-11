@@ -1,4 +1,4 @@
-mutation SetStartDate(
+mutation EditBundleQuote(
   $quoteCartId: ID!
   $locale: Locale!
   $quoteId: ID!
@@ -10,6 +10,7 @@ mutation SetStartDate(
       bundle {
         possibleVariations {
           id
+          tag(locale: $locale)
           bundle {
             displayName(locale: $locale)
             bundleCost {
@@ -24,6 +25,10 @@ mutation SetStartDate(
     }
     ... on QuoteBundleError {
       message
+      type
+      limits {
+        code
+      }
     }
   }
 }

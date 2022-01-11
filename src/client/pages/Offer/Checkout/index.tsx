@@ -3,24 +3,21 @@ import { useFormik } from 'formik'
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { FetchResult, useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import {
   QuoteBundleVariant,
-  useCreateQuoteBundleMutation,
   useStartCheckoutMutation,
   useCheckoutStatusQuery,
   CheckoutStatus,
   InsuranceTermType,
-  CreateQuoteBundleMutation,
   CheckoutMethod,
   CampaignDataFragment,
+  useEditBundleQuoteMutation,
 } from 'data/graphql'
 import {
   getUniqueQuotesFromVariantList,
   getQuoteIdsFromBundleVariant,
-  getBundleVariantFromInsuranceTypesWithFallback,
-  getInsuranceTypesFromBundleVariant,
   isNorwegianBundle,
 } from 'pages/OfferNew/utils'
 import { PriceBreakdown } from 'pages/OfferNew/common/PriceBreakdown'
@@ -232,9 +229,6 @@ export const Checkout = ({
   const [windowInnerHeight, setWindowInnerHeight] = useState(window.innerHeight)
   const [visibilityState, setVisibilityState] = useState(VisibilityState.CLOSED)
 
-  const selectedInsuranceTypes = getInsuranceTypesFromBundleVariant(
-    selectedQuoteBundleVariant,
-  )
   const campaignCode = campaign?.code
   const isDiscountMonthlyCostDeduction =
     campaign?.incentive?.__typename === 'MonthlyCostDeduction'
@@ -253,29 +247,32 @@ export const Checkout = ({
 
   const [startCheckout] = useStartCheckoutMutation()
   const [
-    createQuoteBundle,
-    { loading: isBundleCreationInProgress },
-  ] = useCreateQuoteBundleMutation()
+    editQuoteMutation,
+    { loading: editQuoteInProgress },
+  ] = useEditBundleQuoteMutation()
 
   const mainQuote = selectedQuoteBundleVariant.bundle.quotes[0]
+  const allQuoteIds = getUniqueQuotesFromVariantList(quoteBundleVariants).map(
+    ({ id }) => id,
+  )
   const privacyPolicyLink = mainQuote.insuranceTerms.find(
     ({ type }) => type === InsuranceTermType.PrivacyPolicy,
   )?.url
 
+  const { firstName, lastName, email, ssn, phoneNumber } = mainQuote
   const formik = useFormik<QuoteInput>({
     initialValues: {
-      ...mainQuote,
-      // @TODO Temprorary hack while backend support is in place
-      phoneNumber: mainQuote.data.phoneNumber,
-      data: {
-        ...mainQuote.data,
-      },
+      firstName,
+      lastName,
+      email,
+      ssn,
+      phoneNumber,
     } as QuoteInput,
     validationSchema: getCheckoutDetailsValidationSchema(
       locale,
       isPhoneNumberRequired,
     ),
-    onSubmit: (values) => reCreateQuoteBundle(values),
+    onSubmit: (values) => updateQuotes(values),
     enableReinitialize: true,
   })
 
@@ -359,33 +356,11 @@ export const Checkout = ({
 
   const startSign = async () => {
     setSignUiState('STARTED')
-    const { values, submitForm, dirty: isFormDataUpdated } = formik
+    const { submitForm, dirty: isFormDataUpdated } = formik
 
     try {
-      let quoteIds = getQuoteIdsFromBundleVariant(selectedQuoteBundleVariant)
-      if (isFormDataUpdated) {
-        const result: FetchResult<CreateQuoteBundleMutation> = await submitForm()
-        const quoteCart = result.data?.quoteCart_createQuoteBundle
-        if (
-          !quoteCart ||
-          quoteCart?.__typename !== 'QuoteCart' ||
-          !quoteCart?.bundle?.possibleVariations
-        ) {
-          if (quoteCart && quoteCart.__typename === 'QuoteBundleError')
-            reportUnderwritingLimits(quoteCart, values)
-          return setSignUiState('FAILED')
-        }
-
-        const bundleVariants = quoteCart.bundle.possibleVariations
-        const updatedSelectedQuoteBundleVariant = getBundleVariantFromInsuranceTypesWithFallback(
-          bundleVariants as QuoteBundleVariant[],
-          selectedInsuranceTypes,
-        )
-        quoteIds = getQuoteIdsFromBundleVariant(
-          updatedSelectedQuoteBundleVariant,
-        )
-      }
-
+      const quoteIds = getQuoteIdsFromBundleVariant(selectedQuoteBundleVariant)
+      if (isFormDataUpdated) await submitForm()
       const { data } = await startCheckout({
         variables: {
           quoteIds,
@@ -410,41 +385,35 @@ export const Checkout = ({
     }
   }
 
-  const reCreateQuoteBundle = (form: QuoteInput) => {
-    const {
-      firstName,
-      lastName,
-      birthDate,
-      email,
-      ssn,
-      startDate,
-      phoneNumber,
-      dataCollectionId,
-    } = form
-    return createQuoteBundle({
-      variables: {
-        locale: locale.isoLocale,
-        quoteCartId,
-        quotes: getUniqueQuotesFromVariantList(quoteBundleVariants).map(
-          ({ data: { type, typeOfContract } }) => {
-            return {
-              firstName,
-              lastName,
-              email,
-              birthDate,
-              ssn,
-              startDate,
-              phoneNumber,
-              dataCollectionId,
-              data: {
-                ...form.data,
-                type,
-                typeOfContract,
-              },
-            }
-          },
-        ),
+  const updateQuotes = async (form: QuoteInput) => {
+    const { firstName, lastName, email, ssn, phoneNumber } = form
+    const editQuoteMutationVariables = {
+      locale: locale.isoLocale,
+      quoteCartId,
+      payload: {
+        firstName,
+        lastName,
+        email,
+        ssn,
+        phoneNumber,
       },
+    }
+    const results = await Promise.all(
+      allQuoteIds.map((id) =>
+        editQuoteMutation({
+          variables: {
+            ...editQuoteMutationVariables,
+            quoteId: id,
+          },
+        }),
+      ),
+    )
+    results.forEach(({ data }) => {
+      const quoteCart = data?.quoteCart_editQuote
+      if (quoteCart?.__typename === 'QuoteBundleError') {
+        reportUnderwritingLimits(quoteCart, allQuoteIds)
+        throw new Error('Quote editing failed')
+      }
     })
   }
 
@@ -468,7 +437,7 @@ export const Checkout = ({
               <PriceBreakdown
                 offerData={offerData}
                 showTotal={true}
-                isLoading={isBundleCreationInProgress}
+                isLoading={editQuoteInProgress}
               />
               <CheckoutDetailsForm formikProps={formik} />
               <StartDateWrapper>
@@ -494,7 +463,7 @@ export const Checkout = ({
           <Sign
             canInitiateSign={
               formik.isValid &&
-              !isBundleCreationInProgress &&
+              !editQuoteInProgress &&
               signUiState !== 'STARTED'
             }
             checkoutMethod={checkoutMethod}
