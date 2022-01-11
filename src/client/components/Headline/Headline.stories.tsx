@@ -11,14 +11,14 @@ export default {
     },
   },
   args: {
-    type: 'xl',
+    variant: 'xl',
     children: 'This is a headline',
   },
 }
 
-const Template: Story<HeadlineProps> = ({ type, children }) => (
+const Template: Story<HeadlineProps> = ({ variant, children }) => (
   <>
-    <Headline type={type}>{children}</Headline>
+    <Headline variant={variant}>{children}</Headline>
   </>
 )
 

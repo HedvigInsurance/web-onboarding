@@ -7,7 +7,7 @@ const { FAVORIT } = fonts
 const { gray900 } = colorsV3
 
 export type Props = {
-  type: 'xl' | 'l' | 'm' | 's' | 'xs' | 'overline'
+  variant: 'xl' | 'l' | 'm' | 's' | 'xs' | 'overline'
   children: React.ReactNode
 }
 
@@ -97,7 +97,10 @@ const HeadlineOverline = styled.h6`
   }
 `
 
-type Headlines = Record<Props['type'], StyledComponent<unknown, unknown, any>>
+type Headlines = Record<
+  Props['variant'],
+  StyledComponent<unknown, unknown, any>
+>
 
 const headlines: Headlines = {
   xl: HeadlineXL,
@@ -108,8 +111,8 @@ const headlines: Headlines = {
   overline: HeadlineOverline,
 }
 
-export const Headline = ({ type, children }: Props) => {
-  const HeadlineComponent = headlines[type]
+export const Headline = ({ variant, children }: Props) => {
+  const HeadlineComponent = headlines[variant]
 
   return <HeadlineComponent>{children}</HeadlineComponent>
 }
