@@ -329,5 +329,7 @@
   "GENERIC_ERROR_HEADING": "Något har gått fel",
   "GENERIC_ERROR_TEXT": "Försök igen eller gå tillbaka. Om felet kvarstår hör av dig till oss i chatten eller mejla [hedvig@hedvig.com](mailto:hedvig@hedvig.com).",
   "GENERIC_ERROR_ACTION_RETRY": "Försök igen",
-  "GENERIC_ERROR_ACTION": "Gå tillbaka"
+  "GENERIC_ERROR_ACTION": "Gå tillbaka",
+  "CHECKOUT_PHONE_NUMBER_ERROR": "Vi kommer endast att kontakta dig för viktig kommunikation.",
+  "CHECKOUT_PHONE_NUMBER_HELPERTEXT": "Vi kommer endast att kontakta dig för viktig kommunikation."
 }
