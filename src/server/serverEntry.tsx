@@ -8,7 +8,7 @@ import { Logger } from 'typescript-logging'
 import proxy from 'koa-server-http-proxy'
 import { notNullable } from 'utils/nullables'
 import { sentryConfig } from 'utils/sentry-server'
-import { serverSideRoutes } from '../routes'
+import { routes } from '../routes'
 import { localePathPattern } from '../client/l10n/localePathPattern'
 import { handleAdyen3dsPostRedirect } from './adyenMiddleware'
 import { GIRAFFE_HOST, GIRAFFE_WS_ENDPOINT } from './config'
@@ -121,8 +121,11 @@ router.post(
   handleAdyen3dsPostRedirect,
 )
 
-serverSideRoutes.forEach((route) => {
-  router.get(route.path, getPage(route))
+routes.forEach((route) => {
+  const { serverRouteData, path } = route
+  if (serverRouteData) {
+    router.get(path, getPage(serverRouteData))
+  }
 })
 
 app.use(router.middleware())
