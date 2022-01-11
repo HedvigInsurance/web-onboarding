@@ -30,3 +30,9 @@ export const phoneNumberFormats: Record<MarketLabel, RegExp> = {
   NO: /^(0047|\+47|47)?[2-9]\d{7}$/,
   DK: /^(0045|\+45|45)?[\d]{8}$/,
 }
+
+export const phoneNumberPlaceholder: Record<MarketLabel, string> = {
+  SE: '+46 00 000 00 00',
+  NO: '+47 000 0000',
+  DK: '+45 00000000',
+}

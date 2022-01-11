@@ -3,11 +3,8 @@ import React, { useState } from 'react'
 import * as yup from 'yup'
 import { LocaleLabel, locales } from 'l10n/locales'
 import { RawInputField } from 'components/inputs'
-import {
-  Market,
-  useCurrentLocale,
-  useMarket,
-} from 'components/utils/CurrentLocale'
+import { Market, useMarket } from 'components/utils/CurrentLocale'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import {
   WithEmailForm,
   WithSsnForm,
@@ -90,19 +87,19 @@ export const UserDetailsForm: React.FC<Props> = ({
 
   const market = useMarket()
 
-  const currentLocale = useCurrentLocale()
-  const currentLocaleData = locales[currentLocale as LocaleLabel]
-  const ssnMaxLength = currentLocaleData.ssn.length
-  const ssnFormatRegex = currentLocaleData.ssn.formatRegex
-  const [hasEnabledCreditCheckInfo] = useFeature([
+  const locale = useCurrentLocale()
+  const ssnMaxLength = locale.ssn.length
+  const ssnFormatRegex = locale.ssn.formatRegex
+  const [hasEnabledCreditCheckInfo, isPhoneNumberRequired] = useFeature([
     Features.CHECKOUT_CREDIT_CHECK,
+    Features.COLLECT_PHONE_NUMBER_AT_CHECKOUT,
   ])
 
   const isValidSsn = (ssn: string) => {
     return ssnFormatRegex.test(ssn)
   }
 
-  const ssnFormatExample = currentLocaleData.ssn.formatExample
+  const ssnFormatExample = locale.ssn.formatExample
 
   const validateFirstName = (firstName: string) => {
     if (!nameValidation.isValidSync(firstName)) {
@@ -233,11 +230,11 @@ export const UserDetailsForm: React.FC<Props> = ({
         }}
       />
 
-      {(currentLocale == 'no' || currentLocale === 'no-en') && (
+      {isPhoneNumberRequired && (
         <>
           <RawInputField
             label={textKeys.CHECKOUT_PHONE_NUMBER_LABEL()}
-            placeholder={'+47 000 0000'}
+            placeholder={locale.phoneNumber.placeholder}
             name="phoneNumber"
             id="phoneNumber"
             type="text"
