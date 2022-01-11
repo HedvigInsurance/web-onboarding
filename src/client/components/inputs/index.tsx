@@ -106,6 +106,7 @@ const StyledSelect = styled(Field)`
   font-size: 1rem;
   line-height: 1.5;
   padding: 1rem 0.875rem;
+  border-radius: 8px;
 `
 
 const StyledInputMask = StyledInput.withComponent(InputMask)
