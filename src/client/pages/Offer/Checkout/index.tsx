@@ -356,10 +356,17 @@ export const Checkout = ({
 
   const startSign = async () => {
     setSignUiState('STARTED')
-    const { submitForm, dirty: isFormDataUpdated } = formik
+    const { submitForm, dirty: isFormDataUpdated, validateForm } = formik
 
     try {
       const quoteIds = getQuoteIdsFromBundleVariant(selectedQuoteBundleVariant)
+      const errors = await validateForm()
+
+      if (Object.keys(errors).length) {
+        setSignUiState('FAILED')
+        return
+      }
+
       if (isFormDataUpdated) await submitForm()
       const { data } = await startCheckout({
         variables: {
