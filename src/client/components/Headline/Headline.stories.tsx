@@ -12,12 +12,19 @@ export default {
   },
   args: {
     variant: 'xl',
+    headingLevel: 'h1',
     children: 'This is a headline',
   },
 }
 
-const Template: Story<HeadlineProps> = ({ variant, children }) => (
-  <Headline variant={variant}>{children}</Headline>
+const Template: Story<HeadlineProps> = ({
+  variant,
+  headingLevel,
+  children,
+}) => (
+  <Headline variant={variant} headingLevel={headingLevel}>
+    {children}
+  </Headline>
 )
 
 export const Default = Template.bind({})

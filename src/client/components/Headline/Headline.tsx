@@ -9,7 +9,12 @@ const { gray900 } = colorsV3
 
 export type Props = {
   variant: 'xl' | 'l' | 'm' | 's' | 'xs' | 'overline'
+  headingLevel: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
   children: React.ReactNode
+}
+
+type StyleProps = {
+  as: Props['headingLevel']
 }
 
 const baseStyles = css`
@@ -17,7 +22,7 @@ const baseStyles = css`
   font-family: ${FAVORIT};
 `
 
-const HeadlineXL = styled.h2`
+const HeadlineXL = styled.span`
   ${baseStyles}
   font-weight: 400;
   font-size: 3.5rem;
@@ -30,7 +35,7 @@ const HeadlineXL = styled.h2`
     line-height: 4.5rem;
   }
 `
-const HeadlineL = styled.h3`
+const HeadlineL = styled.span`
   ${baseStyles}
   font-weight: 400;
   font-size: 2.5rem;
@@ -43,7 +48,7 @@ const HeadlineL = styled.h3`
     line-height: 4rem;
   }
 `
-const HeadlineM = styled.h4`
+const HeadlineM = styled.span`
   ${baseStyles}
   font-weight: 400;
   font-size: 2rem;
@@ -56,7 +61,7 @@ const HeadlineM = styled.h4`
     line-height: 3.5rem;
   }
 `
-const HeadlineS = styled.h5`
+const HeadlineS = styled.span`
   ${baseStyles}
   font-weight: 400;
   font-size: 1.5rem;
@@ -69,7 +74,7 @@ const HeadlineS = styled.h5`
     line-height: 2.5rem;
   }
 `
-const HeadlineXS = styled.h6`
+const HeadlineXS = styled.span`
   ${baseStyles}
   font-weight: 400;
   font-size: 1.25rem;
@@ -82,7 +87,7 @@ const HeadlineXS = styled.h6`
     line-height: 2rem;
   }
 `
-const HeadlineOverline = styled.h6`
+const HeadlineOverline = styled.span`
   ${baseStyles}
   font-weight: 400;
   font-size: 0.875rem;
@@ -99,7 +104,7 @@ const HeadlineOverline = styled.h6`
 
 type Headlines = Record<
   Props['variant'],
-  StyledComponent<unknown, unknown, any>
+  StyledComponent<unknown, StyleProps, any>
 >
 
 const headlines: Headlines = {
@@ -111,8 +116,8 @@ const headlines: Headlines = {
   overline: HeadlineOverline,
 }
 
-export const Headline = ({ variant, children }: Props) => {
+export const Headline = ({ variant, headingLevel, children }: Props) => {
   const HeadlineComponent = headlines[variant]
 
-  return <HeadlineComponent>{children}</HeadlineComponent>
+  return <HeadlineComponent as={headingLevel}>{children}</HeadlineComponent>
 }
