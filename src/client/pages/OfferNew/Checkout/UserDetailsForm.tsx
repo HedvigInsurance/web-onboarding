@@ -238,7 +238,6 @@ export const UserDetailsForm: React.FC<Props> = ({
             id="phoneNumber"
             type="text"
             inputMode="numeric"
-            maxLength={10}
             value={phoneNumber}
             errors={
               hasPhoneError ? textKeys.CHECKOUT_PHONE_NUMBER_ERROR() : undefined

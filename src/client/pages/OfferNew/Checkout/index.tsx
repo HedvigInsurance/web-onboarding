@@ -464,8 +464,9 @@ export const Checkout = ({
                 />
               </InnerWrapper>
               <Sign
-                canInitiateSign={true}
-                signMethod={signMethodData?.signMethodForQuotes}
+                canInitiateSign={
+                  canInitiateSign && !ssnUpdateLoading && !emailUpdateLoading
+                }
                 signUiState={signUiState}
                 signStatus={signStatus}
                 isLoading={

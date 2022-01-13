@@ -167,13 +167,13 @@ const ErrorText = styled.div<{ variant: variantType }>`
   min-height: 1.375rem;
   font-size: 0.75rem;
   line-height: 1.375rem;
-  text-align: center;
+  text-align: left;
   color: ${(props) => inputVariants[props.variant].error};
   margin-top: 0.25rem;
 `
 
 const HelperText = styled.div`
-  color: {colorsV3.gray700};
+  color: ${colorsV3.gray700};
   font-size: 0.75rem;
   line-height: 1.33;
   margin-top: 0.25rem;
