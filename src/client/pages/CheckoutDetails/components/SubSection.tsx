@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { Headline } from '../Headline/Headline'
+import { Headline } from '../../../components/Headline/Headline'
 
 const { white } = colorsV3
 
