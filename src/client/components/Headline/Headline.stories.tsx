@@ -17,9 +17,7 @@ export default {
 }
 
 const Template: Story<HeadlineProps> = ({ variant, children }) => (
-  <>
-    <Headline variant={variant}>{children}</Headline>
-  </>
+  <Headline variant={variant}>{children}</Headline>
 )
 
 export const Default = Template.bind({})
