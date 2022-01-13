@@ -34,6 +34,7 @@ export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
       birthDate: firstQuote.birthDate,
       householdSize: getHouseholdSizeFromBundledQuotes(quoteBundle.quotes),
       address: getAddressFromBundledQuotes(quoteBundle.quotes),
+      phoneNumber: firstQuote.phoneNumber,
     },
     quotes: quoteBundle.quotes.map((bundleQuote) => {
       return {

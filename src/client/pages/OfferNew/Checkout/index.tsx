@@ -296,7 +296,6 @@ export const Checkout = ({
       handleSignedEvent(member.data?.member.id ?? null)
     }
   }, [member.data?.member, signStatus?.signState, variation])
-
   const canInitiateSign = Boolean(
     signUiState !== 'STARTED' &&
       signUiState !== 'STARTED_WITH_REDIRECT' &&
@@ -341,7 +340,6 @@ export const Checkout = ({
   const onPhoneChange = async (phoneNumber: string) => {
     const { phoneNumber: currentPhone } = offerData.person
     if (!phoneNumber || currentPhone === phoneNumber) return
-
     setPhoneUpdateLoading(true)
     await editQuotes(quoteIds, { phoneNumber })
     setPhoneUpdateLoading(false)
@@ -474,8 +472,7 @@ export const Checkout = ({
                   signUiState === 'STARTED' ||
                   signUiState === 'STARTED_WITH_REDIRECT' ||
                   signUiState === 'PREPARING' ||
-                  emailUpdateLoading ||
-                  phoneUpdateLoading
+                  emailUpdateLoading
                 }
                 onSignStart={startSign}
               />
