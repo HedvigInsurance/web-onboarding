@@ -1,5 +1,6 @@
 import React from 'react'
 import styled, { StyledComponent } from '@emotion/styled'
+import { css } from '@emotion/core'
 import { fonts, colorsV3 } from '@hedviginsurance/brand'
 import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
@@ -11,9 +12,13 @@ export type Props = {
   children: React.ReactNode
 }
 
-const HeadlineXL = styled.h2`
+const baseStyles = css`
   margin: 0;
   font-family: ${FAVORIT};
+`
+
+const HeadlineXL = styled.h2`
+  ${baseStyles}
   font-weight: 400;
   font-size: 3.5rem;
   line-height: 4rem;
@@ -26,8 +31,7 @@ const HeadlineXL = styled.h2`
   }
 `
 const HeadlineL = styled.h3`
-  margin: 0;
-  font-family: ${FAVORIT};
+  ${baseStyles}
   font-weight: 400;
   font-size: 2.5rem;
   line-height: 2.75rem;
@@ -40,8 +44,7 @@ const HeadlineL = styled.h3`
   }
 `
 const HeadlineM = styled.h4`
-  margin: 0;
-  font-family: ${FAVORIT};
+  ${baseStyles}
   font-weight: 400;
   font-size: 2rem;
   line-height: 2.5rem;
@@ -54,8 +57,7 @@ const HeadlineM = styled.h4`
   }
 `
 const HeadlineS = styled.h5`
-  margin: 0;
-  font-family: ${FAVORIT};
+  ${baseStyles}
   font-weight: 400;
   font-size: 1.5rem;
   line-height: 2rem;
@@ -68,8 +70,7 @@ const HeadlineS = styled.h5`
   }
 `
 const HeadlineXS = styled.h6`
-  margin: 0;
-  font-family: ${FAVORIT};
+  ${baseStyles}
   font-weight: 400;
   font-size: 1.25rem;
   line-height: 1.75rem;
@@ -82,8 +83,7 @@ const HeadlineXS = styled.h6`
   }
 `
 const HeadlineOverline = styled.h6`
-  margin: 0;
-  font-family: ${FAVORIT};
+  ${baseStyles}
   font-weight: 400;
   font-size: 0.875rem;
   line-height: 1.375rem;
