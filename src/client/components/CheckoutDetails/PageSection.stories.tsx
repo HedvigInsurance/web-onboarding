@@ -8,7 +8,7 @@ import { PageSection } from './PageSection'
 const { gray700 } = colorsV3
 
 const Text = styled.p`
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 20px;
   color: ${gray700};
 `
