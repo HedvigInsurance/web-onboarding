@@ -25,7 +25,9 @@ const Card = styled.div`
 export const SubSection = ({ headlineText, children }: Props) => {
   return (
     <Wrapper>
-      <Headline variant="overline">{headlineText}</Headline>
+      <Headline variant="overline" headingLevel="h2">
+        {headlineText}
+      </Headline>
       <Card>{children}</Card>
     </Wrapper>
   )
