@@ -330,6 +330,6 @@
   "GENERIC_ERROR_TEXT": "Vennligst prøv igjen eller gå tilbake. Hvis feilen vedvarer, vennligst kontakt oss i chatten eller e-post [hedvig@hedvig.com](mailto:hedvig@hedvig.com).",
   "GENERIC_ERROR_ACTION_RETRY": "Prøv igjen",
   "GENERIC_ERROR_ACTION": "Gå tilbake",
-  "CHECKOUT_PHONE_NUMBER_ERROR": "Vi vil kun kontakte deg for viktig kommunikasjon.",
+  "CHECKOUT_PHONE_NUMBER_ERROR": "Dette feltet er obligatorisk",
   "CHECKOUT_PHONE_NUMBER_HELPERTEXT": "Vi vil kun kontakte deg for viktig kommunikasjon."
 }
