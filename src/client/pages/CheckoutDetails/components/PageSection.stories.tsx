@@ -14,7 +14,7 @@ const Text = styled.p`
 `
 
 export default {
-  title: 'Components/CheckoutDetailsPageSections',
+  title: 'Checkout Details/PageSection',
   component: PageSection,
   parameters: {
     backgrounds: {
