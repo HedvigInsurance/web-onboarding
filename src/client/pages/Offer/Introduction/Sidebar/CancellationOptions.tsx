@@ -62,7 +62,7 @@ export const CancellationOptions: React.FC<CancellationOptionsProps> = ({
               key={quote.id}
               {...rest}
               isGenericQuote={quotes.length === 1}
-              quote={quote as OfferQuote}
+              quote={quote}
               quoteCartId={quoteCartId}
             />
           )
