@@ -1,4 +1,4 @@
-mutation EditBundleQuote(
+mutation EditBundledQuote(
   $quoteCartId: ID!
   $locale: Locale!
   $quoteId: ID!

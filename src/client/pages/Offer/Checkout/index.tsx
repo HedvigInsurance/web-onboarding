@@ -13,7 +13,7 @@ import {
   InsuranceTermType,
   CheckoutMethod,
   CampaignDataFragment,
-  useEditBundleQuoteMutation,
+  useEditBundledQuoteMutation,
 } from 'data/graphql'
 import {
   getUniqueQuotesFromVariantList,
@@ -249,7 +249,7 @@ export const Checkout = ({
   const [
     editQuoteMutation,
     { loading: editQuoteInProgress },
-  ] = useEditBundleQuoteMutation()
+  ] = useEditBundledQuoteMutation()
 
   const mainQuote = selectedQuoteBundleVariant.bundle.quotes[0]
   const allQuoteIds = getUniqueQuotesFromVariantList(quoteBundleVariants).map(

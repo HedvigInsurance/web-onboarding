@@ -2047,7 +2047,8 @@ export type ConcurrentInception = {
 
 export type ConnectPaymentFinished = {
   __typename?: 'ConnectPaymentFinished'
-  resultCode: Scalars['String']
+  paymentTokenId: Scalars['ID']
+  status: TokenStatus
 }
 
 export type ConnectPaymentInput = {
@@ -10171,6 +10172,12 @@ export enum TokenizationResultType {
   Failed = 'FAILED',
 }
 
+export enum TokenStatus {
+  Authorised = 'AUTHORISED',
+  Pending = 'PENDING',
+  Failed = 'FAILED',
+}
+
 export type Translation = Node & {
   __typename?: 'Translation'
   /** System stage field */
@@ -11728,14 +11735,14 @@ export type CreateSwedishHomeAccidentQuoteMutation = {
       })
 }
 
-export type EditBundleQuoteMutationVariables = Exact<{
+export type EditBundledQuoteMutationVariables = Exact<{
   quoteCartId: Scalars['ID']
   locale: Locale
   quoteId: Scalars['ID']
   payload: Scalars['JSON']
 }>
 
-export type EditBundleQuoteMutation = { __typename?: 'Mutation' } & {
+export type EditBundledQuoteMutation = { __typename?: 'Mutation' } & {
   quoteCart_editQuote:
     | ({ __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'> & {
           bundle?: Maybe<
@@ -13535,8 +13542,8 @@ export type CreateSwedishHomeAccidentQuoteMutationOptions = ApolloReactCommon.Ba
   CreateSwedishHomeAccidentQuoteMutation,
   CreateSwedishHomeAccidentQuoteMutationVariables
 >
-export const EditBundleQuoteDocument = gql`
-  mutation EditBundleQuote(
+export const EditBundledQuoteDocument = gql`
+  mutation EditBundledQuote(
     $quoteCartId: ID!
     $locale: Locale!
     $quoteId: ID!
@@ -13577,23 +13584,23 @@ export const EditBundleQuoteDocument = gql`
   ${BundleCostDataFragmentFragmentDoc}
   ${QuoteDataFragmentFragmentDoc}
 `
-export type EditBundleQuoteMutationFn = ApolloReactCommon.MutationFunction<
-  EditBundleQuoteMutation,
-  EditBundleQuoteMutationVariables
+export type EditBundledQuoteMutationFn = ApolloReactCommon.MutationFunction<
+  EditBundledQuoteMutation,
+  EditBundledQuoteMutationVariables
 >
 
 /**
- * __useEditBundleQuoteMutation__
+ * __useEditBundledQuoteMutation__
  *
- * To run a mutation, you first call `useEditBundleQuoteMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useEditBundleQuoteMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useEditBundledQuoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditBundledQuoteMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [editBundleQuoteMutation, { data, loading, error }] = useEditBundleQuoteMutation({
+ * const [editBundledQuoteMutation, { data, loading, error }] = useEditBundledQuoteMutation({
  *   variables: {
  *      quoteCartId: // value for 'quoteCartId'
  *      locale: // value for 'locale'
@@ -13602,27 +13609,27 @@ export type EditBundleQuoteMutationFn = ApolloReactCommon.MutationFunction<
  *   },
  * });
  */
-export function useEditBundleQuoteMutation(
+export function useEditBundledQuoteMutation(
   baseOptions?: Apollo.MutationHookOptions<
-    EditBundleQuoteMutation,
-    EditBundleQuoteMutationVariables
+    EditBundledQuoteMutation,
+    EditBundledQuoteMutationVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useMutation<
-    EditBundleQuoteMutation,
-    EditBundleQuoteMutationVariables
-  >(EditBundleQuoteDocument, options)
+    EditBundledQuoteMutation,
+    EditBundledQuoteMutationVariables
+  >(EditBundledQuoteDocument, options)
 }
-export type EditBundleQuoteMutationHookResult = ReturnType<
-  typeof useEditBundleQuoteMutation
+export type EditBundledQuoteMutationHookResult = ReturnType<
+  typeof useEditBundledQuoteMutation
 >
-export type EditBundleQuoteMutationResult = ApolloReactCommon.MutationResult<
-  EditBundleQuoteMutation
+export type EditBundledQuoteMutationResult = ApolloReactCommon.MutationResult<
+  EditBundledQuoteMutation
 >
-export type EditBundleQuoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  EditBundleQuoteMutation,
-  EditBundleQuoteMutationVariables
+export type EditBundledQuoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  EditBundledQuoteMutation,
+  EditBundledQuoteMutationVariables
 >
 export const EditQuoteDocument = gql`
   mutation EditQuote($input: EditQuoteInput!) {

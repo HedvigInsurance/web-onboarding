@@ -14,7 +14,7 @@ import { ChevronDown } from 'components/icons/ChevronDown'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { MarketLabel } from 'l10n/locales'
 import { LoadingDots } from 'components/LoadingDots/LoadingDots'
-import { useEditBundleQuoteMutation } from 'data/graphql'
+import { useEditBundledQuoteMutation } from 'data/graphql'
 import { OfferData, OfferQuote } from 'pages/OfferNew/types'
 import { hasCurrentInsurer, isBundle, isDanish } from 'pages/OfferNew/utils'
 import { gqlDateFormat } from 'pages/OfferNew/Introduction/Sidebar/utils'
@@ -190,7 +190,7 @@ const DateForm: React.FC<{
   )
   const [datePickerOpen, setDatePickerOpen] = useState(false)
 
-  const [editQuote] = useEditBundleQuoteMutation()
+  const [editQuote] = useEditBundledQuoteMutation()
 
   useEffect(() => {
     setDateValue(getDefaultDateValue(quote))
