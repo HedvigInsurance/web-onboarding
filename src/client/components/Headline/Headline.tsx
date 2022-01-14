@@ -6,7 +6,6 @@ import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
 const { FAVORIT } = fonts
 const { gray900, gray100 } = colorsV3
-console.log('🦧 : gray900', gray900)
 
 export type Props = {
   variant: 'xl' | 'l' | 'm' | 's' | 'xs' | 'overline'
