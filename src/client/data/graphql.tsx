@@ -1596,6 +1596,7 @@ export type BundledQuote = {
   startDate?: Maybe<Scalars['LocalDate']>
   expiresAt: Scalars['LocalDate']
   email?: Maybe<Scalars['String']>
+  phoneNumber?: Maybe<Scalars['String']>
   dataCollectionId?: Maybe<Scalars['ID']>
   typeOfContract: TypeOfContract
   initiatedFrom: Scalars['String']
@@ -1799,7 +1800,7 @@ export type ChatState = {
   onboardingDone: Scalars['Boolean']
 }
 
-/** The signing of an onboarding session, that contains information about the current signing status. */
+/** The checkout state of a quote cart, that contains information about the current signing status. */
 export type Checkout = {
   __typename?: 'Checkout'
   /**  Current signing status of the session  */
@@ -1825,7 +1826,7 @@ export enum CheckoutStatus {
    * Synchronous signing methods, like simple sign, immediately produce this state.
    */
   Signed = 'SIGNED',
-  /** This signing is completed, which means the onboarding session has reached its terminal state. */
+  /** This signing is completed, which means the quote cart has reached its terminal state. */
   Completed = 'COMPLETED',
   /** The signing has failed - which means it also can be retried. */
   Failed = 'FAILED',
@@ -2046,7 +2047,8 @@ export type ConcurrentInception = {
 
 export type ConnectPaymentFinished = {
   __typename?: 'ConnectPaymentFinished'
-  resultCode: Scalars['String']
+  paymentTokenId: Scalars['ID']
+  status: TokenStatus
 }
 
 export type ConnectPaymentInput = {
@@ -2652,6 +2654,9 @@ export type CreateOnboardingQuoteCartInput = {
 
 export type CreateQuoteBundleInput = {
   payload: Array<Scalars['JSON']>
+  initiatedFrom?: Maybe<QuoteInitiatedFrom>
+  contractBundleId?: Maybe<Scalars['ID']>
+  numberCoInsured?: Maybe<Scalars['Int']>
 }
 
 export type CreateQuoteBundleResult = QuoteCart | QuoteBundleError
@@ -7604,15 +7609,12 @@ export type Mutation = {
   paymentConnection_connectPayment: ConnectPaymentResult
   paymentConnection_submitAdditionalPaymentDetails: ConnectPaymentResult
   paymentConnection_submitAdyenRedirection: ConnectPaymentFinished
-  /**
-   * Create a new onboarding session. This is not an authentication session, but rather an object that
-   * ties the onboarding journey together.
-   */
+  /** Create a new quote cart, used to tie the onboarding journey together. */
   onboardingQuoteCart_create: CreateQuoteCartResult
-  /** Create a quote as part of this onboarding session. */
+  /** Create a quote and add it to the given cart. */
   quoteCart_createQuoteBundle: CreateQuoteBundleResult
   /**
-   * Add a campaign by its code to this onboarding session. This campaign won't be "redeemed", but rather
+   * Add a campaign by its code to this cart. This campaign won't be "redeemed", but rather
    * left in a pending state on the onboarding until signing occurs and a member is created.
    *
    * Returns an error if there was a problem with redeeming it, or null upon success.
@@ -7622,17 +7624,17 @@ export type Mutation = {
   quoteCart_removeCampaign: RemoveCampaignResult
   /** Edit the cart. Will only update the fields that are present in the payload. */
   quoteCart_editQuote: EditQuoteResult
-  /** Add a payment token id to the quote cart */
+  /** Add a payment token id to the quote cart. */
   quoteCart_addPaymentToken: AddPaymentTokenResult
   /**
-   * Initiate signing of this onboarding, optionally tagging a subset of the quotes if not all of them are wanted.
+   * Initiate checkout, optionally tagging a subset of the quotes if not all of them are wanted.
    *
-   * Note, the session should only be moved into its signing state once the prior things, such as campaign, are
+   * Note, the session should only be moved into its checkout state once the prior things, such as campaign, are
    * considered done.
    */
   quoteCart_startCheckout: StartCheckoutResult
   /**
-   * Once an onboarding session is "signed", it can be finalized/consumed by this method, which will produce
+   * Once an cart is "signed", it can be finalized/consumed by this method, which will produce
    * an access token. This access token will serve as the means of authorization towards the member that was
    * created as part of the onboarding.
    *
@@ -8625,7 +8627,7 @@ export type QuoteBundleVariantBundleArgs = {
 }
 
 /**
- * An onboarding session is a type that exists to guide the client through an onboarding journey,
+ * An quote cart is a type that exists to guide the client through an onboarding journey,
  * as a means of storing intermediate state up until the point where it is "signed" and then flushed
  * into a proper "member".
  */
@@ -8633,9 +8635,9 @@ export type QuoteCart = {
   __typename?: 'QuoteCart'
   id: Scalars['ID']
   market: Market
-  /**  Campaign, if one has been attached by a code  */
+  /**  Campaign, if one has been attached by a code.  */
   campaign?: Maybe<Campaign>
-  /**  The quote bundle "view" of the quotes created as part of this onboarding  */
+  /**  The quote bundle "view" of the quotes created as part of this cart.  */
   bundle?: Maybe<QuoteBundle>
   /**  The ongoing signing state, if it has been initiated - or null if it has not.  */
   checkout?: Maybe<Checkout>
@@ -8645,7 +8647,7 @@ export type QuoteCart = {
 }
 
 /**
- * An onboarding session is a type that exists to guide the client through an onboarding journey,
+ * An quote cart is a type that exists to guide the client through an onboarding journey,
  * as a means of storing intermediate state up until the point where it is "signed" and then flushed
  * into a proper "member".
  */
@@ -8662,6 +8664,11 @@ export type QuoteDetails =
   | DanishHomeContentsDetails
   | DanishAccidentDetails
   | DanishTravelDetails
+
+export enum QuoteInitiatedFrom {
+  CrossSell = 'CROSS_SELL',
+  SelfChange = 'SELF_CHANGE',
+}
 
 export type RedeemedCodeV2Result =
   | SuccessfulRedeemResult
@@ -10169,6 +10176,12 @@ export type TokenizationResponseFinished = {
 
 export enum TokenizationResultType {
   Completed = 'COMPLETED',
+  Pending = 'PENDING',
+  Failed = 'FAILED',
+}
+
+export enum TokenStatus {
+  Authorised = 'AUTHORISED',
   Pending = 'PENDING',
   Failed = 'FAILED',
 }
