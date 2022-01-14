@@ -19,12 +19,13 @@ type StyleProps = {
 
 const baseStyles = css`
   margin: 0;
+  padding: 0;
   font-family: ${FAVORIT};
+  font-weight: 400;
 `
 
 const HeadlineXL = styled.span`
   ${baseStyles}
-  font-weight: 400;
   font-size: 3.5rem;
   line-height: 4rem;
   letter-spacing: -0.02em;
@@ -37,7 +38,6 @@ const HeadlineXL = styled.span`
 `
 const HeadlineL = styled.span`
   ${baseStyles}
-  font-weight: 400;
   font-size: 2.5rem;
   line-height: 2.75rem;
   letter-spacing: -0.02em;
@@ -50,7 +50,6 @@ const HeadlineL = styled.span`
 `
 const HeadlineM = styled.span`
   ${baseStyles}
-  font-weight: 400;
   font-size: 2rem;
   line-height: 2.5rem;
   letter-spacing: -0.02em;
@@ -63,7 +62,6 @@ const HeadlineM = styled.span`
 `
 const HeadlineS = styled.span`
   ${baseStyles}
-  font-weight: 400;
   font-size: 1.5rem;
   line-height: 2rem;
   letter-spacing: -0.02em;
@@ -76,7 +74,6 @@ const HeadlineS = styled.span`
 `
 const HeadlineXS = styled.span`
   ${baseStyles}
-  font-weight: 400;
   font-size: 1.25rem;
   line-height: 1.75rem;
   letter-spacing: -0.02em;
@@ -89,7 +86,6 @@ const HeadlineXS = styled.span`
 `
 const HeadlineOverline = styled.span`
   ${baseStyles}
-  font-weight: 400;
   font-size: 0.875rem;
   line-height: 1.375rem;
   letter-spacing: 0;
