@@ -13,6 +13,7 @@ export default {
   args: {
     variant: 'xl',
     headingLevel: 'h1',
+    colorVariant: 'dark',
     children: 'This is a headline',
   },
 }
@@ -20,9 +21,14 @@ export default {
 const Template: Story<HeadlineProps> = ({
   variant,
   headingLevel,
+  colorVariant,
   children,
 }) => (
-  <Headline variant={variant} headingLevel={headingLevel}>
+  <Headline
+    variant={variant}
+    headingLevel={headingLevel}
+    colorVariant={colorVariant}
+  >
     {children}
   </Headline>
 )
