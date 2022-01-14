@@ -304,6 +304,7 @@ export const routes: Route[] = [
                   return {
                     baseUrl: `/${locale}/new-member/home-accident-switcher`,
                     name: EmbarkStory.SwedenSwitcher,
+                    quoteCart: true,
                   }
                 case 'home-accident-needer':
                   if (
@@ -337,6 +338,7 @@ export const routes: Route[] = [
             language={match.params.locale}
             name={props.name}
             baseUrl={props.baseUrl}
+            isUsingQuoteCart={props.quoteCart === true}
           />
         )
       },
@@ -344,7 +346,7 @@ export const routes: Route[] = [
     },
   },
   {
-    /* 
+    /*
     This route is only used as a web view in the apps
     for markets using Simple Sign, since we're missing some certificates
     */
