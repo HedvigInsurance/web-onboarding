@@ -304,7 +304,6 @@ export const routes: Route[] = [
                   return {
                     baseUrl: `/${locale}/new-member/home-accident-switcher`,
                     name: EmbarkStory.SwedenSwitcher,
-                    quoteCart: true,
                   }
                 case 'home-accident-needer':
                   if (
@@ -317,6 +316,7 @@ export const routes: Route[] = [
                   return {
                     baseUrl: `/${locale}/new-member/home-accident-needer`,
                     name: EmbarkStory.SwedenQuoteCartNeeder,
+                    quoteCart: true,
                   }
               }
               break
