@@ -11528,11 +11528,11 @@ export type CheckoutStatusQueryVariables = Exact<{
 }>
 
 export type CheckoutStatusQuery = { __typename?: 'Query' } & {
-  quoteCart: { __typename?: 'QuoteCart' } & {
-    checkout?: Maybe<
-      { __typename?: 'Checkout' } & Pick<Checkout, 'status' | 'statusText'>
-    >
-  }
+  quoteCart: { __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'> & {
+      checkout?: Maybe<
+        { __typename?: 'Checkout' } & Pick<Checkout, 'status' | 'statusText'>
+      >
+    }
 }
 
 export type CreateAccessTokenMutationVariables = Exact<{
@@ -11679,37 +11679,7 @@ export type CreateQuoteBundleMutation = { __typename?: 'Mutation' } & {
               >
             }
           >
-          campaign?: Maybe<
-            { __typename?: 'Campaign' } & Pick<
-              Campaign,
-              'code' | 'expiresAt'
-            > & {
-                incentive?: Maybe<
-                  | ({ __typename?: 'MonthlyCostDeduction' } & {
-                      amount?: Maybe<
-                        { __typename?: 'MonetaryAmountV2' } & Pick<
-                          MonetaryAmountV2,
-                          'amount' | 'currency'
-                        >
-                      >
-                    })
-                  | { __typename?: 'FreeMonths' }
-                  | { __typename?: 'NoDiscount' }
-                  | { __typename?: 'VisibleNoDiscount' }
-                  | ({ __typename?: 'PercentageDiscountMonths' } & Pick<
-                      PercentageDiscountMonths,
-                      'percentageDiscount' | 'quantity'
-                    >)
-                  | { __typename?: 'IndefinitePercentageDiscount' }
-                >
-                owner?: Maybe<
-                  { __typename?: 'CampaignOwner' } & Pick<
-                    CampaignOwner,
-                    'displayName' | 'id'
-                  >
-                >
-              }
-          >
+          campaign?: Maybe<{ __typename?: 'Campaign' } & CampaignDataFragment>
           checkout?: Maybe<
             { __typename?: 'Checkout' } & Pick<Checkout, 'status'>
           >
@@ -11771,6 +11741,56 @@ export type CreateSwedishHomeAccidentQuoteMutation = {
           { __typename?: 'UnderwritingLimit' } & Pick<UnderwritingLimit, 'code'>
         >
       })
+}
+
+export type EditBundledQuoteMutationVariables = Exact<{
+  quoteCartId: Scalars['ID']
+  locale: Locale
+  quoteId: Scalars['ID']
+  payload: Scalars['JSON']
+}>
+
+export type EditBundledQuoteMutation = { __typename?: 'Mutation' } & {
+  quoteCart_editQuote:
+    | ({ __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'> & {
+          bundle?: Maybe<
+            { __typename?: 'QuoteBundle' } & {
+              possibleVariations: Array<
+                { __typename?: 'QuoteBundleVariant' } & Pick<
+                  QuoteBundleVariant,
+                  'id' | 'tag'
+                > & {
+                    bundle: { __typename?: 'QuoteBundle' } & Pick<
+                      QuoteBundle,
+                      'displayName'
+                    > & {
+                        bundleCost: {
+                          __typename?: 'InsuranceCost'
+                        } & BundleCostDataFragmentFragment
+                        quotes: Array<
+                          {
+                            __typename?: 'BundledQuote'
+                          } & QuoteDataFragmentFragment
+                        >
+                      }
+                  }
+              >
+            }
+          >
+        })
+    | ({ __typename?: 'QuoteBundleError' } & Pick<
+        QuoteBundleError,
+        'message' | 'type'
+      > & {
+          limits?: Maybe<
+            Array<
+              { __typename?: 'UnderwritingLimit' } & Pick<
+                UnderwritingLimit,
+                'code'
+              >
+            >
+          >
+        })
 }
 
 export type EditQuoteMutationVariables = Exact<{
@@ -12248,44 +12268,6 @@ export type RemoveStartDateMutation = { __typename?: 'Mutation' } & {
     | { __typename?: 'UnderwritingLimitsHit' }
 }
 
-export type SetStartDateMutationVariables = Exact<{
-  quoteCartId: Scalars['ID']
-  locale: Locale
-  quoteId: Scalars['ID']
-  payload: Scalars['JSON']
-}>
-
-export type SetStartDateMutation = { __typename?: 'Mutation' } & {
-  quoteCart_editQuote:
-    | ({ __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'> & {
-          bundle?: Maybe<
-            { __typename?: 'QuoteBundle' } & {
-              possibleVariations: Array<
-                { __typename?: 'QuoteBundleVariant' } & Pick<
-                  QuoteBundleVariant,
-                  'id'
-                > & {
-                    bundle: { __typename?: 'QuoteBundle' } & Pick<
-                      QuoteBundle,
-                      'displayName'
-                    > & {
-                        bundleCost: {
-                          __typename?: 'InsuranceCost'
-                        } & BundleCostDataFragmentFragment
-                        quotes: Array<
-                          {
-                            __typename?: 'BundledQuote'
-                          } & QuoteDataFragmentFragment
-                        >
-                      }
-                  }
-              >
-            }
-          >
-        })
-    | ({ __typename?: 'QuoteBundleError' } & Pick<QuoteBundleError, 'message'>)
-}
-
 export type SignMethodForQuotesQueryVariables = Exact<{
   input: Array<Scalars['ID']> | Scalars['ID']
 }>
@@ -12460,6 +12442,7 @@ export type QuoteDataFragmentFragment = { __typename?: 'BundledQuote' } & Pick<
   | 'firstName'
   | 'lastName'
   | 'ssn'
+  | 'phoneNumber'
   | 'birthDate'
   | 'startDate'
   | 'expiresAt'
@@ -12750,6 +12733,7 @@ export const QuoteDataFragmentFragmentDoc = gql`
     firstName
     lastName
     ssn
+    phoneNumber
     birthDate
     startDate
     expiresAt
@@ -13082,6 +13066,7 @@ export type CampaignQueryResult = ApolloReactCommon.QueryResult<
 export const CheckoutStatusDocument = gql`
   query CheckoutStatus($quoteCartId: ID!) {
     quoteCart(id: $quoteCartId) {
+      id
       checkout {
         status
         statusText
@@ -13419,24 +13404,7 @@ export const CreateQuoteBundleDocument = gql`
           }
         }
         campaign {
-          incentive {
-            ... on MonthlyCostDeduction {
-              amount {
-                amount
-                currency
-              }
-            }
-            ... on PercentageDiscountMonths {
-              percentageDiscount
-              quantity
-            }
-          }
-          code
-          owner {
-            displayName
-            id
-          }
-          expiresAt
+          ...CampaignData
         }
         checkoutMethods
         checkout {
@@ -13454,6 +13422,7 @@ export const CreateQuoteBundleDocument = gql`
   }
   ${BundleCostDataFragmentFragmentDoc}
   ${QuoteDataFragmentFragmentDoc}
+  ${CampaignDataFragmentDoc}
 `
 export type CreateQuoteBundleMutationFn = ApolloReactCommon.MutationFunction<
   CreateQuoteBundleMutation,
@@ -13580,6 +13549,95 @@ export type CreateSwedishHomeAccidentQuoteMutationResult = ApolloReactCommon.Mut
 export type CreateSwedishHomeAccidentQuoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
   CreateSwedishHomeAccidentQuoteMutation,
   CreateSwedishHomeAccidentQuoteMutationVariables
+>
+export const EditBundledQuoteDocument = gql`
+  mutation EditBundledQuote(
+    $quoteCartId: ID!
+    $locale: Locale!
+    $quoteId: ID!
+    $payload: JSON!
+  ) {
+    quoteCart_editQuote(
+      id: $quoteCartId
+      quoteId: $quoteId
+      payload: $payload
+    ) {
+      ... on QuoteCart {
+        id
+        bundle {
+          possibleVariations {
+            id
+            tag(locale: $locale)
+            bundle {
+              displayName(locale: $locale)
+              bundleCost {
+                ...BundleCostDataFragment
+              }
+              quotes {
+                ...QuoteDataFragment
+              }
+            }
+          }
+        }
+      }
+      ... on QuoteBundleError {
+        message
+        type
+        limits {
+          code
+        }
+      }
+    }
+  }
+  ${BundleCostDataFragmentFragmentDoc}
+  ${QuoteDataFragmentFragmentDoc}
+`
+export type EditBundledQuoteMutationFn = ApolloReactCommon.MutationFunction<
+  EditBundledQuoteMutation,
+  EditBundledQuoteMutationVariables
+>
+
+/**
+ * __useEditBundledQuoteMutation__
+ *
+ * To run a mutation, you first call `useEditBundledQuoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditBundledQuoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editBundledQuoteMutation, { data, loading, error }] = useEditBundledQuoteMutation({
+ *   variables: {
+ *      quoteCartId: // value for 'quoteCartId'
+ *      locale: // value for 'locale'
+ *      quoteId: // value for 'quoteId'
+ *      payload: // value for 'payload'
+ *   },
+ * });
+ */
+export function useEditBundledQuoteMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    EditBundledQuoteMutation,
+    EditBundledQuoteMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    EditBundledQuoteMutation,
+    EditBundledQuoteMutationVariables
+  >(EditBundledQuoteDocument, options)
+}
+export type EditBundledQuoteMutationHookResult = ReturnType<
+  typeof useEditBundledQuoteMutation
+>
+export type EditBundledQuoteMutationResult = ApolloReactCommon.MutationResult<
+  EditBundledQuoteMutation
+>
+export type EditBundledQuoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  EditBundledQuoteMutation,
+  EditBundledQuoteMutationVariables
 >
 export const EditQuoteDocument = gql`
   mutation EditQuote($input: EditQuoteInput!) {
@@ -14619,90 +14677,6 @@ export type RemoveStartDateMutationResult = ApolloReactCommon.MutationResult<
 export type RemoveStartDateMutationOptions = ApolloReactCommon.BaseMutationOptions<
   RemoveStartDateMutation,
   RemoveStartDateMutationVariables
->
-export const SetStartDateDocument = gql`
-  mutation SetStartDate(
-    $quoteCartId: ID!
-    $locale: Locale!
-    $quoteId: ID!
-    $payload: JSON!
-  ) {
-    quoteCart_editQuote(
-      id: $quoteCartId
-      quoteId: $quoteId
-      payload: $payload
-    ) {
-      ... on QuoteCart {
-        id
-        bundle {
-          possibleVariations {
-            id
-            bundle {
-              displayName(locale: $locale)
-              bundleCost {
-                ...BundleCostDataFragment
-              }
-              quotes {
-                ...QuoteDataFragment
-              }
-            }
-          }
-        }
-      }
-      ... on QuoteBundleError {
-        message
-      }
-    }
-  }
-  ${BundleCostDataFragmentFragmentDoc}
-  ${QuoteDataFragmentFragmentDoc}
-`
-export type SetStartDateMutationFn = ApolloReactCommon.MutationFunction<
-  SetStartDateMutation,
-  SetStartDateMutationVariables
->
-
-/**
- * __useSetStartDateMutation__
- *
- * To run a mutation, you first call `useSetStartDateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSetStartDateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [setStartDateMutation, { data, loading, error }] = useSetStartDateMutation({
- *   variables: {
- *      quoteCartId: // value for 'quoteCartId'
- *      locale: // value for 'locale'
- *      quoteId: // value for 'quoteId'
- *      payload: // value for 'payload'
- *   },
- * });
- */
-export function useSetStartDateMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    SetStartDateMutation,
-    SetStartDateMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    SetStartDateMutation,
-    SetStartDateMutationVariables
-  >(SetStartDateDocument, options)
-}
-export type SetStartDateMutationHookResult = ReturnType<
-  typeof useSetStartDateMutation
->
-export type SetStartDateMutationResult = ApolloReactCommon.MutationResult<
-  SetStartDateMutation
->
-export type SetStartDateMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  SetStartDateMutation,
-  SetStartDateMutationVariables
 >
 export const SignMethodForQuotesDocument = gql`
   query SignMethodForQuotes($input: [ID!]!) {

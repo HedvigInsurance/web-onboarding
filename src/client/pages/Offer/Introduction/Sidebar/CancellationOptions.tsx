@@ -4,7 +4,7 @@ import { format } from 'date-fns'
 import React from 'react'
 import { Switch } from 'components/Switch'
 import { Spinner } from 'components/utils'
-import { useSetStartDateMutation } from 'data/graphql'
+import { useEditBundledQuoteMutation } from 'data/graphql'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { OfferData, OfferQuote } from 'pages/OfferNew/types'
 import {
@@ -89,7 +89,7 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
 
   const [isLoading, setIsLoading] = React.useState(false)
 
-  const [setStartDate] = useSetStartDateMutation()
+  const [editQuote] = useEditBundledQuoteMutation()
 
   const isChecked = !quote.startDate
 
@@ -98,7 +98,7 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
       setShowError(false)
       setIsLoading(true)
 
-      await setStartDate({
+      await editQuote({
         variables: {
           quoteCartId,
           locale: isoLocale,

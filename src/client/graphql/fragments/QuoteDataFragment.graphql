@@ -13,6 +13,7 @@ fragment QuoteDataFragment on BundledQuote {
   firstName
   lastName
   ssn
+  phoneNumber
   birthDate
   startDate
   expiresAt
