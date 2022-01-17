@@ -65,7 +65,7 @@ const TextWrapper = styled.div`
   position: relative;
 `
 
-const Label = styled.label`
+export const Label = styled.label`
   font-size: 0.875rem;
   line-height: 1.33;
   color: ${colorsV3.gray900};
