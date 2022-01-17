@@ -1,14 +1,17 @@
-import styled from '@emotion/styled'
-import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
+import styled from '@emotion/styled'
+import { css } from '@emotion/core'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
+const { white, gray100, gray700, gray900 } = colorsV3
+
 export const TOP_BAR_Z_INDEX = 1000
 export const TOP_BAR_HEIGHT = '4.5rem'
 
-interface Props {
+type Props = {
   isTransparent?: boolean
   textColorVariant?: 'light' | 'dark'
   centered?: boolean
@@ -18,21 +21,23 @@ const Wrapper = styled.div<Props>`
   width: 100%;
   top: 0;
   height: ${TOP_BAR_HEIGHT};
-  background: ${colorsV3.gray900};
+  background-color: ${({ textColorVariant }) =>
+    textColorVariant === 'dark' ? gray100 : gray900};
   position: absolute;
   z-index: ${TOP_BAR_Z_INDEX};
   box-shadow: 0 2px 14px rgba(0, 0, 0, 0.08);
   color: ${({ textColorVariant }) =>
     textColorVariant === 'dark' ? colorsV3.gray900 : colorsV3.white};
+  ${({ isTransparent }) =>
+    isTransparent &&
+    css`
+      background-color: transparent;
+      box-shadow: none;
+    `}
 
   @media (min-width: 420px) {
     height: 5rem;
   }
-`
-
-const TransparentWrapper = styled(Wrapper)`
-  background: transparent;
-  box-shadow: none;
 `
 
 export const TopBarFiller = styled.div`
@@ -70,7 +75,7 @@ const LogoLink = styled.a<Pick<Props, 'textColorVariant'>>`
   &:hover,
   &:focus {
     color: ${({ textColorVariant }) =>
-      textColorVariant === 'dark' ? colorsV3.gray700 : colorsV3.white};
+      textColorVariant === 'dark' ? gray700 : white};
   }
 `
 
@@ -81,16 +86,15 @@ export const TopBar: React.FC<Props> = ({
   children,
 }) => {
   const { path } = useCurrentLocale()
-  const ActualWrapper = isTransparent ? TransparentWrapper : Wrapper
   const ActualContainer = centered ? CenteredContainer : Container
   return (
-    <ActualWrapper textColorVariant={textColorVariant}>
+    <Wrapper textColorVariant={textColorVariant} isTransparent={isTransparent}>
       <ActualContainer>
         <LogoLink href={'/' + path} textColorVariant={textColorVariant}>
           <HedvigLogo width={94} />
         </LogoLink>
         {children}
       </ActualContainer>
-    </ActualWrapper>
+    </Wrapper>
   )
 }
