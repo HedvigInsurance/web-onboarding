@@ -107,6 +107,9 @@ const StyledSelect = styled(Field)`
   line-height: 1.5;
   padding: 1rem 0.875rem;
   border-radius: 8px;
+  :focus {
+    outline: none;
+  }
 `
 
 const StyledInputMask = StyledInput.withComponent(InputMask)
@@ -280,7 +283,6 @@ export const InputGroupDeleteButton = styled.button`
   cursor: pointer;
   transition: all 350ms;
   border: 1px solid ${colorsV3.gray500};
-  border-top: 0;
   border-radius: 8px;
   font-size: 0.875rem;
   line-height: 1.25rem;
@@ -325,11 +327,6 @@ export const InputGroupRow = styled.div`
 
   ${Wrapper as any} {
     width: 50%;
-    border-top: 0;
-
-    :first-of-type {
-      border-right: 0;
-    }
     ${TextWrapper as any} {
       width: calc(100% - 1.5rem);
     }
