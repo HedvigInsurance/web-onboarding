@@ -10,10 +10,11 @@ export const TOP_BAR_HEIGHT = '4.5rem'
 
 interface Props {
   isTransparent?: boolean
+  textColorVariant?: 'light' | 'dark'
   centered?: boolean
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<Props>`
   width: 100%;
   top: 0;
   height: ${TOP_BAR_HEIGHT};
@@ -21,7 +22,8 @@ const Wrapper = styled.div`
   position: absolute;
   z-index: ${TOP_BAR_Z_INDEX};
   box-shadow: 0 2px 14px rgba(0, 0, 0, 0.08);
-  color: ${colorsV3.white};
+  color: ${({ textColorVariant }) =>
+    textColorVariant === 'dark' ? colorsV3.gray900 : colorsV3.white};
 
   @media (min-width: 420px) {
     height: 5rem;
@@ -59,7 +61,7 @@ const CenteredContainer = styled(Container)`
   justify-content: center;
 `
 
-const LogoLink = styled.a`
+const LogoLink = styled.a<Pick<Props, 'textColorVariant'>>`
   display: block;
   color: inherit;
   /* remove extra space under child SVG: https://stackoverflow.com/a/51161925 */
@@ -67,12 +69,14 @@ const LogoLink = styled.a`
 
   &:hover,
   &:focus {
-    color: ${colorsV3.white};
+    color: ${({ textColorVariant }) =>
+      textColorVariant === 'dark' ? colorsV3.gray700 : colorsV3.white};
   }
 `
 
 export const TopBar: React.FC<Props> = ({
   isTransparent,
+  textColorVariant = 'light',
   centered,
   children,
 }) => {
@@ -80,9 +84,9 @@ export const TopBar: React.FC<Props> = ({
   const ActualWrapper = isTransparent ? TransparentWrapper : Wrapper
   const ActualContainer = centered ? CenteredContainer : Container
   return (
-    <ActualWrapper>
+    <ActualWrapper textColorVariant={textColorVariant}>
       <ActualContainer>
-        <LogoLink href={'/' + path}>
+        <LogoLink href={'/' + path} textColorVariant={textColorVariant}>
           <HedvigLogo width={94} />
         </LogoLink>
         {children}
