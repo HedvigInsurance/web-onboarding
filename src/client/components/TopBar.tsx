@@ -11,7 +11,7 @@ const { white, gray100, gray700, gray900 } = colorsV3
 export const TOP_BAR_Z_INDEX = 1000
 export const TOP_BAR_HEIGHT = '4.5rem'
 
-type Props = {
+export type Props = {
   isTransparent?: boolean
   textColorVariant?: 'light' | 'dark'
   centered?: boolean
@@ -20,6 +20,7 @@ type Props = {
 const Wrapper = styled.div<Props>`
   width: 100%;
   top: 0;
+  left: 0;
   height: ${TOP_BAR_HEIGHT};
   background-color: ${({ textColorVariant }) =>
     textColorVariant === 'dark' ? gray100 : gray900};
