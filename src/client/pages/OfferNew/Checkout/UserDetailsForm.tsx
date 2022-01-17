@@ -31,11 +31,6 @@ export const emailValidation = yup
   .email()
   .required()
 
-export const phoneValidation = yup
-  .string()
-  .required()
-  .min(10)
-
 export const nameValidation = yup.string().required()
 
 // TODO: replace these with one market agnostic CHECKOUT_SSN_LABEL + currentLocaleData.ssn.formatExample
@@ -160,16 +155,18 @@ export const UserDetailsForm: React.FC<Props> = ({
   }
 
   const handlePhoneChange = (event: React.FormEvent<HTMLInputElement>) => {
-    const { value } = event.currentTarget
-    const phoneNumber = value
+    const { value: phoneNumber } = event.currentTarget
     if (phoneChangeTimeout) {
       window.clearTimeout(phoneChangeTimeout)
       setPhoneChangeTimeout(null)
     }
     reallySetPhone(phoneNumber)
+    const phoneValidator = yup.string().matches(locale.phoneNumber.formatRegex)
+    const trimmedNumber = phoneNumber.replace(/\s/g, '')
+    const isPhoneValid = phoneValidator.isValidSync(trimmedNumber)
     setPhoneChangeTimeout(
       window.setTimeout(() => {
-        if (phoneValidation.isValidSync(phoneNumber)) {
+        if (isPhoneValid) {
           onPhoneChange(phoneNumber)
           setHasPhoneError(false)
         } else {

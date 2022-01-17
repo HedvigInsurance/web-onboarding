@@ -33,6 +33,6 @@ export const phoneNumberFormats: Record<MarketLabel, RegExp> = {
 
 export const phoneNumberPlaceholder: Record<MarketLabel, string> = {
   SE: '+46 00 000 00 00',
-  NO: '+47 000 0000',
-  DK: '+45 00000000',
+  NO: '+47 000 00 000',
+  DK: '+45 00 00 00 00',
 }

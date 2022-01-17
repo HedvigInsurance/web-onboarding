@@ -11911,6 +11911,7 @@ export type QuoteDataFragment = { __typename?: 'BundledQuote' } & Pick<
   | 'startDate'
   | 'expiresAt'
   | 'email'
+  | 'phoneNumber'
   | 'typeOfContract'
   | 'displayName'
 > & {
@@ -12563,6 +12564,7 @@ export const QuoteDataFragmentDoc = gql`
     startDate
     expiresAt
     email
+    phoneNumber
     typeOfContract
     displayName(locale: $locale)
     contractPerils(locale: $locale) {
