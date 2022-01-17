@@ -65,6 +65,9 @@ const onboardingLocaleBaseRoute = `${localePathPattern}${landingRoute}`
 export const routes: Route[] = [
   {
     path: onboardingLocaleBaseRoute,
+    serverRouteData: {
+      titleTextKey: 'STARTPAGE_PAGE_TITLE',
+    },
     clientRouteData: {
       Component: Landing,
       exact: true,

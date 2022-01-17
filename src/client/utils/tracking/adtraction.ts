@@ -128,6 +128,8 @@ export const adtraction = (
     adt.Tag.tp = getBundleAdtractionProductValue(offerData)
     adt.Tag.doEvent()
   } catch (e) {
-    ;(window as any).Sentry.captureMessage(e)
+    if (typeof window !== 'undefined' && (window as any).Sentry) {
+      ;(window as any).Sentry.captureMessage(e)
+    }
   }
 }
