@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { OfferData, Address } from 'pages/OfferNew/types'
+import { OfferData } from 'pages/OfferNew/types'
+import { getAddress } from 'pages/Offer/utils'
 import { useTextKeys } from 'utils/textKeys'
 import {
   LARGE_SCREEN_MEDIA_QUERY,
@@ -103,35 +104,6 @@ const EditDetailsButton = styled(Button)`
     }
   }
 `
-
-const getAddress = (quotes: BundledQuote[]) => {
-  const hasAddress = (quote: BundledQuote) => {
-    const interestedInFields = ['street', 'zipCode'] as const
-    return interestedInFields.every((field) => quote.data[field] != null)
-  }
-
-  const parseAddress = (address: Address) => {
-    const { street, apartment, floor } = address
-
-    return street
-      .concat(floor ? `, ${floor}.` : '')
-      .concat(apartment ? ` ${apartment}` : '')
-  }
-
-  const quoteWithAddress = quotes.find(hasAddress)
-  if (quoteWithAddress) {
-    const address: Address = {
-      street: quoteWithAddress.data.street,
-      zipCode: quoteWithAddress.data.zipCode,
-      apartment: quoteWithAddress.data.apartment,
-      floor: quoteWithAddress.data.floor,
-    }
-
-    return parseAddress(address)
-  }
-
-  return ''
-}
 
 export const HeroOfferDetails: React.FC<Props> = ({
   quoteCartId,
