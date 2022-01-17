@@ -20,9 +20,7 @@ type StyleProps = {
   as: Props['headingLevel']
 } & ColorProp
 
-type GetBaseStylesParams = ColorProp
-
-const getBaseStyles = ({ colorVariant }: GetBaseStylesParams) => {
+const getBaseStyles = ({ colorVariant }: ColorProp) => {
   const color = colorVariant === 'light' ? gray100 : gray900
 
   return css`
