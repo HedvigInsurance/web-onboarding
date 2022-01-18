@@ -214,6 +214,7 @@ interface EmbarkRootProps {
   name?: string
   baseUrl?: string
   language: string
+  isUsingQuoteCart: boolean
 }
 
 const ANGEL_DATA_QUERY = gql`
@@ -278,14 +279,11 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
   >()
   const { isoLocale, path: pathLocale } = useCurrentLocale()
 
-  const [isQuoteCartApiEnabled] = useFeature([Features.QUOTE_CART_API])
   const {
     createQuoteCart,
     quoteCartId,
     error: quoteCartIdError,
-  } = useCreateQuoteCartId({
-    skip: !isQuoteCartApiEnabled,
-  })
+  } = useCreateQuoteCartId({ skip: !props.isUsingQuoteCart })
 
   const textKeys = useTextKeys()
 
@@ -339,7 +337,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
   }, [props.name, isoLocale])
 
   React.useEffect(() => {
-    if (!props.name || (isQuoteCartApiEnabled && !quoteCartId)) {
+    if (!props.name || (props.isUsingQuoteCart && !quoteCartId)) {
       return
     }
 
@@ -362,7 +360,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
     } catch (err) {
       setInitialStore(defaultStore)
     }
-  }, [props.name, isQuoteCartApiEnabled, quoteCartId])
+  }, [props.name, props.isUsingQuoteCart, quoteCartId])
 
   const redirectToOfferPage = () => {
     history.push(
