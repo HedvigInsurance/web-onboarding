@@ -35,6 +35,7 @@ export type OfferPersonInfo = Pick<
 > & {
   householdSize: number
   address: Address | null
+  phoneNumber?: string | null
 }
 
 export type OfferQuote = Pick<
@@ -76,4 +77,9 @@ export interface WithFirstAndLastNameForm {
   onFirstNameChange: (name: string) => void
   onLastNameChange: (name: string) => void
   isFirstAndLastNameVisible: boolean
+}
+
+export interface WithPhoneForm {
+  phoneNumber: string
+  onPhoneChange: (phoneNumber: string) => void
 }
