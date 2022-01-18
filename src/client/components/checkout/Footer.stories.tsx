@@ -1,9 +1,12 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react'
 import { MemoryRouter } from 'react-router'
+import { TextKeyProvider, TranslationsLocale } from 'utils/textKeys'
 import { Footer, Props as FooterProps } from './Footer'
 
-const storyMeta: Meta<FooterProps> = {
+type StoryProps = { translationsLocale: TranslationsLocale } & FooterProps
+
+const storyMeta: Meta<StoryProps> = {
   title: 'Components/Checkout/Footer',
   component: Footer,
   args: {
@@ -11,6 +14,7 @@ const storyMeta: Meta<FooterProps> = {
     buttonOnClick: () => {
       console.log('👉 Click!')
     },
+    translationsLocale: 'en_NO',
   },
   parameters: {
     backgrounds: {
@@ -21,9 +25,11 @@ const storyMeta: Meta<FooterProps> = {
 
 export default storyMeta
 
-const Template: Story<FooterProps> = (args) => (
+const Template: Story<StoryProps> = (args) => (
   <MemoryRouter initialEntries={['/se-en/new-member/checkout/details']}>
-    <Footer {...args} />
+    <TextKeyProvider locale={args.translationsLocale}>
+      <Footer {...args} />
+    </TextKeyProvider>
   </MemoryRouter>
 )
 

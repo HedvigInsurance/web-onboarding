@@ -1,9 +1,12 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { useTextKeys } from 'utils/textKeys'
 import { Button } from '../buttons'
 
-const { white, purple500, gray900 } = colorsV3
+const PRICE_PLACEHOLDER = '239 NOK/month'
+
+const { white, purple500, gray900, gray700 } = colorsV3
 
 export type Props = {
   buttonText: string
@@ -29,11 +32,31 @@ const InnerWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
 `
+const PaymentInfo = styled.div`
+  display: grid;
+  grid-template-columns: auto;
+`
+const TotalPrice = styled.div`
+  font-size: 1rem;
+  line-height: 1.5rem;
+  color: ${gray900};
+`
+const CancelInfo = styled.div`
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: ${gray700};
+`
 
 export const Footer = ({ buttonText, buttonOnClick }: Props) => {
+  const textKeys = useTextKeys()
+
   return (
     <Wrapper>
       <InnerWrapper>
+        <PaymentInfo>
+          <TotalPrice>{PRICE_PLACEHOLDER}</TotalPrice>
+          <CancelInfo>{textKeys.CHECKOUT_CANCEL_INFO()}</CancelInfo>
+        </PaymentInfo>
         <Button
           background={purple500}
           foreground={gray900}
