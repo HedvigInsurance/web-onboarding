@@ -1,4 +1,3 @@
-import { min as createMinifiedSegmentSnippet } from '@segment/snippet'
 import escapeHTML from 'escape-html'
 import Router from 'koa-router'
 import { ClientConfig } from 'shared/clientConfig'
@@ -22,12 +21,7 @@ import { favicons } from './favicons'
 import { getPageMeta } from './meta'
 import { WithRequestUuid } from './middleware/enhancers'
 import { getClientScripts } from './assets'
-
-const segmentSnippet = createMinifiedSegmentSnippet({
-  apiKey: process.env.SEGMENT_API_KEY || '',
-  page: true,
-  load: true,
-})
+import { allTracking, gtmNoScript } from './tracking'
 
 const clientConfig: ClientConfig = {
   adyenEnvironment: ADYEN_ENVIRONMENT,
@@ -72,19 +66,8 @@ const template = (
      />
      <meta name="google-site-verification" content="AZ5rW7lm8fgkGEsSI8BbV4i45ylXAnGEicXf6HPQE-Q" />
 
-    <script nonce="${cspNonce}">
-      dataLayer = [];
-    </script>
-
-    <!-- Google Tag Manager -->
-    <script id="gtmScript" nonce="${cspNonce}" data-nonce="${cspNonce}">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;j.setAttribute('nonce','${cspNonce}');f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-WWMKHK5');</script>
-    <!-- End Google Tag Manager -->
-
-    <script key="segment-snippet" nonce="${cspNonce}">${segmentSnippet}</script>
+    ${allTracking(cspNonce, clientConfig.appEnvironment)}
+    
     ${
       adtractionTag
         ? `<script nonce="${cspNonce}" defer src="${adtractionTag}"></script>`
@@ -92,10 +75,11 @@ const template = (
     }
   </head>
   <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WWMKHK5"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
+  ${
+    clientConfig.appEnvironment === 'production'
+      ? gtmNoScript.prod
+      : gtmNoScript.dev
+  }
 
     <div id="react-root"></div>
 
