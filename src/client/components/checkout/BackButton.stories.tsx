@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router'
 import { BackButton } from './BackButton'
 
 export default {
-  title: 'Components/Checkout/BackButton',
+  title: 'Components/BackButton',
   component: BackButton,
   parameters: {
     backgrounds: {
