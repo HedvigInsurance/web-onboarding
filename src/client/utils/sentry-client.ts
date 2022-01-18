@@ -30,7 +30,7 @@ export const useUnderwritingLimitsHitReporter = (
 
 export const reportUnderwritingLimits = (
   quoteBundleError: QuoteBundleError,
-  updatedValues: Record<string, any>,
+  quoteIds?: ReadonlyArray<string>,
 ) => {
   if (quoteBundleError.limits?.length) {
     const codes = quoteBundleError.limits?.map(({ code }) => code)
@@ -38,7 +38,7 @@ export const reportUnderwritingLimits = (
     // TODO: Look into GDPR
     captureSentryError(
       Error('Underwriting limits hit when editing quote: ' + codes.join(', ')),
-      { updatedValues },
+      { quoteIds },
     )
   }
 }
