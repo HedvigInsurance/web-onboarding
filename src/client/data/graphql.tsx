@@ -2654,6 +2654,9 @@ export type CreateOnboardingQuoteCartInput = {
 
 export type CreateQuoteBundleInput = {
   payload: Array<Scalars['JSON']>
+  initiatedFrom?: Maybe<QuoteInitiatedFrom>
+  contractBundleId?: Maybe<Scalars['ID']>
+  numberCoInsured?: Maybe<Scalars['Int']>
 }
 
 export type CreateQuoteBundleResult = QuoteCart | QuoteBundleError
@@ -8662,6 +8665,11 @@ export type QuoteDetails =
   | DanishAccidentDetails
   | DanishTravelDetails
 
+export enum QuoteInitiatedFrom {
+  CrossSell = 'CROSS_SELL',
+  SelfChange = 'SELF_CHANGE',
+}
+
 export type RedeemedCodeV2Result =
   | SuccessfulRedeemResult
   | CannotRedeemOwnCampaign
@@ -11903,6 +11911,7 @@ export type QuoteDataFragment = { __typename?: 'BundledQuote' } & Pick<
   | 'startDate'
   | 'expiresAt'
   | 'email'
+  | 'phoneNumber'
   | 'typeOfContract'
   | 'displayName'
 > & {
@@ -12555,6 +12564,7 @@ export const QuoteDataFragmentDoc = gql`
     startDate
     expiresAt
     email
+    phoneNumber
     typeOfContract
     displayName(locale: $locale)
     contractPerils(locale: $locale) {
