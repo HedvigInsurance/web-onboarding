@@ -6,7 +6,7 @@ import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
-const { white, gray100, gray700, gray900 } = colorsV3
+const { gray100, gray700, gray900 } = colorsV3
 
 export const TOP_BAR_Z_INDEX = 1000
 export const TOP_BAR_HEIGHT = '4.5rem'
@@ -28,7 +28,7 @@ const Wrapper = styled.div<Props>`
   z-index: ${TOP_BAR_Z_INDEX};
   box-shadow: 0 2px 14px rgba(0, 0, 0, 0.08);
   color: ${({ textColorVariant }) =>
-    textColorVariant === 'dark' ? colorsV3.gray900 : colorsV3.white};
+    textColorVariant === 'dark' ? gray900 : gray100};
   ${({ isTransparent }) =>
     isTransparent &&
     css`
@@ -76,7 +76,7 @@ const LogoLink = styled.a<Pick<Props, 'textColorVariant'>>`
   &:hover,
   &:focus {
     color: ${({ textColorVariant }) =>
-      textColorVariant === 'dark' ? gray700 : white};
+      textColorVariant === 'dark' ? gray700 : 'inherit'};
   }
 `
 
