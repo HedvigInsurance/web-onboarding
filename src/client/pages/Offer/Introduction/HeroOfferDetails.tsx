@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { OfferData } from 'pages/OfferNew/types'
+import { getAddress } from 'pages/Offer/utils'
 import { useTextKeys } from 'utils/textKeys'
 import {
   LARGE_SCREEN_MEDIA_QUERY,
@@ -9,8 +10,6 @@ import {
 } from 'utils/mediaQueries'
 import { Button } from 'components/buttons'
 import { BundledQuote } from 'data/graphql'
-import { quoteDetailsHasAddress } from '../../OfferNew/utils'
-import { getAddress } from '../../OfferNew/Checkout/InsuranceSummaryDetails'
 import { DetailsModal } from './DetailsModal'
 
 type Props = {
@@ -28,6 +27,7 @@ const Wrapper = styled.div`
     color: ${colorsV3.gray100};
   }
 `
+
 const Headline = styled.h1`
   margin-bottom: 0;
   text-transform: uppercase;
@@ -39,9 +39,11 @@ const Headline = styled.h1`
     line-height: 1.5;
   }
 `
+
 const OfferInfoWrapper = styled.div`
   padding-bottom: 1rem;
 `
+
 const NameAndCoInsured = styled.div`
   font-size: 1.5rem;
   line-height: 1.33;
@@ -63,7 +65,7 @@ const NameAndCoInsured = styled.div`
   }
 `
 
-const Address = styled.div`
+const QuoteAddress = styled.div`
   font-size: 1.5rem;
   line-height: 1.3;
   display: inline-block;
@@ -109,17 +111,10 @@ export const HeroOfferDetails: React.FC<Props> = ({
   allQuotes,
 }) => {
   const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false)
-  const { person, quotes } = offerData
+  const { person } = offerData
   const numberCoInsured = person.householdSize - 1
 
-  // TODO: Address information is present in offerData.address.
-  // We should format that address instead of looking it up again
-  const quoteWithAddress = quotes.find((quote) => {
-    return quoteDetailsHasAddress(quote.quoteDetails)
-  })
-  const address = quoteWithAddress
-    ? getAddress(quoteWithAddress.quoteDetails)
-    : null
+  const address = getAddress(allQuotes)
 
   const textKeys = useTextKeys()
 
@@ -132,7 +127,7 @@ export const HeroOfferDetails: React.FC<Props> = ({
           {numberCoInsured > 0 && ` +${numberCoInsured}`}
         </NameAndCoInsured>
 
-        {address && <Address>{address}</Address>}
+        {address && <QuoteAddress>{address}</QuoteAddress>}
       </OfferInfoWrapper>
       <EditDetailsButton
         background={'none'}

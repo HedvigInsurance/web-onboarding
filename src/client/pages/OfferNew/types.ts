@@ -27,6 +27,8 @@ export type CompleteQuoteWithoutUnknownDetails = CompleteQuote & {
 export interface Address {
   street: string
   zipCode: string
+  apartment?: string
+  floor?: string
 }
 
 export type OfferPersonInfo = Pick<
