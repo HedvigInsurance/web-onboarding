@@ -7,5 +7,5 @@ export const Group = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0.5rem 0;
-  border-top: 1px solid ${gray300};
+  border-bottom: 1px solid ${gray300};
 `
