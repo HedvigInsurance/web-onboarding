@@ -1,5 +1,6 @@
 import { FormikHelpers } from 'formik'
 import { useHistory, useLocation } from 'react-router'
+import { CampaignCode } from 'utils/campaignCode'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { ReferrerNameDocument, useRedeemCodeV2Mutation } from 'data/graphql'
 import { stripTrailingCharacter } from 'utils/misc'
@@ -55,6 +56,7 @@ export const useRedeemCode = () => {
 
       switch (result.data?.redeemCodeV2.__typename) {
         case 'SuccessfulRedeemResult':
+          CampaignCode.save(code)
           if (
             result.data.redeemCodeV2.campaigns[0]?.incentive?.__typename ===
             'MonthlyCostDeduction'

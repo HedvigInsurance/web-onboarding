@@ -65,6 +65,9 @@ const onboardingLocaleBaseRoute = `${localePathPattern}${landingRoute}`
 export const routes: Route[] = [
   {
     path: onboardingLocaleBaseRoute,
+    serverRouteData: {
+      titleTextKey: 'STARTPAGE_PAGE_TITLE',
+    },
     clientRouteData: {
       Component: Landing,
       exact: true,
@@ -313,6 +316,7 @@ export const routes: Route[] = [
                   return {
                     baseUrl: `/${locale}/new-member/home-accident-needer`,
                     name: EmbarkStory.SwedenQuoteCartNeeder,
+                    quoteCart: true,
                   }
               }
               break
@@ -334,6 +338,7 @@ export const routes: Route[] = [
             language={match.params.locale}
             name={props.name}
             baseUrl={props.baseUrl}
+            isUsingQuoteCart={props.quoteCart === true}
           />
         )
       },
@@ -341,7 +346,7 @@ export const routes: Route[] = [
     },
   },
   {
-    /* 
+    /*
     This route is only used as a web view in the apps
     for markets using Simple Sign, since we're missing some certificates
     */

@@ -204,7 +204,7 @@ export const Checkout = ({
   const [emailUpdateLoading, setEmailUpdateLoading] = useState(false)
   const [ssnUpdateLoading, setSsnUpdateLoading] = useState(false)
   const [isShowingFailModal, setIsShowingFailModal] = useState(false)
-
+  const [phoneUpdateLoading, setPhoneUpdateLoading] = useState(false)
   const offerData = getOfferData(selectedQuoteBundleVariant.bundle)
   const quoteIds = getQuoteIds(offerData)
 
@@ -304,7 +304,8 @@ export const Checkout = ({
       firstName &&
       lastName &&
       offerData.person.email &&
-      offerData.person.ssn,
+      offerData.person.ssn &&
+      offerData.person.phoneNumber,
   )
 
   const editQuotes = async (
@@ -335,6 +336,14 @@ export const Checkout = ({
     setSsnUpdateLoading(true)
     await editQuotes(quoteIds, { ssn })
     setSsnUpdateLoading(false)
+  }
+
+  const onPhoneChange = async (phoneNumber: string) => {
+    const { phoneNumber: currentPhone } = offerData.person
+    if (!phoneNumber || currentPhone === phoneNumber) return
+    setPhoneUpdateLoading(true)
+    await editQuotes(quoteIds, { phoneNumber })
+    setPhoneUpdateLoading(false)
   }
 
   const startSign = async () => {
@@ -430,6 +439,8 @@ export const Checkout = ({
                       !offerData.person.firstName || !offerData.person.lastName
                     }
                     onSubmit={startSign}
+                    phoneNumber={offerData.person.phoneNumber ?? ''}
+                    onPhoneChange={onPhoneChange}
                   />
                   <StartDateWrapper>
                     <StartDateLabel>
@@ -453,7 +464,10 @@ export const Checkout = ({
               </InnerWrapper>
               <Sign
                 canInitiateSign={
-                  canInitiateSign && !ssnUpdateLoading && !emailUpdateLoading
+                  canInitiateSign &&
+                  !ssnUpdateLoading &&
+                  !emailUpdateLoading &&
+                  !phoneUpdateLoading
                 }
                 signMethod={signMethodData?.signMethodForQuotes}
                 signUiState={signUiState}
