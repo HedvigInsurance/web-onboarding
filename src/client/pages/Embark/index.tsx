@@ -431,7 +431,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                       })
 
                       history.push(
-                        `${pathLocale}/new-member/offer/${quoteCartId}?${searchParams.toString()}`,
+                        `/${pathLocale}/new-member/offer/${quoteCartId}?${searchParams.toString()}`,
                       )
                     },
                     MailingList: () => {
