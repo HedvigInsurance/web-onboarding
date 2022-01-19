@@ -7,10 +7,6 @@ import { Spinner } from 'components/utils'
 import { useEditBundledQuoteMutation } from 'data/graphql'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { OfferData, OfferQuote } from 'pages/OfferNew/types'
-import {
-  isNorwegianHomeContents,
-  isNorwegianTravel,
-} from 'pages/OfferNew/utils'
 import { gqlDateFormat } from 'pages/OfferNew/Introduction/Sidebar/utils'
 import { useTextKeys } from 'utils/textKeys'
 
@@ -62,7 +58,7 @@ export const CancellationOptions: React.FC<CancellationOptionsProps> = ({
               key={quote.id}
               {...rest}
               isGenericQuote={quotes.length === 1}
-              quote={quote as OfferQuote}
+              quote={quote}
               quoteCartId={quoteCartId}
             />
           )
@@ -124,13 +120,9 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
             return textKeys.SIDEBAR_REQUEST_CANCELLATION_GENERIC_INSURANCE()
           }
 
-          if (isNorwegianHomeContents(quote.quoteDetails)) {
-            return textKeys.SIDEBAR_REQUEST_CANCELLATION_HOME_INSURANCE()
-          }
-
-          if (isNorwegianTravel(quote.quoteDetails)) {
-            return textKeys.SIDEBAR_REQUEST_CANCELLATION_TRAVEL_INSURANCE()
-          }
+          return textKeys.SIDEBAR_REQUEST_CANCELLATION_INSURANCE({
+            INSURANCE_NAME: quote.displayName,
+          })
         })()}
       </HandleSwitchingLabel>
 
