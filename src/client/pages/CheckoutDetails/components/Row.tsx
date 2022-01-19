@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 
 export const Row = styled.div`
-  font-size: 14px;
+  font-size: 1rem;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

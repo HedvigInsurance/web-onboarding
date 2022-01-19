@@ -4,6 +4,7 @@ import styled from '@emotion/styled'
 import { getQuoteDetails } from 'utils/getQuoteDetails'
 import { useTextKeys } from 'utils/textKeys'
 import { TextButton } from 'components/buttons'
+import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
 import { OfferQuote } from '../../OfferNew/types'
 import { Row } from '../components/Row'
 import { Label } from '../components/Label'
@@ -20,8 +21,10 @@ const ButtonWrapper = styled.div`
   padding: 1rem 0 0.5rem;
 `
 
-export const YourHome = ({ mainQuote }: { mainQuote: OfferQuote }) => {
+export const YourHome = () => {
   const textKeys = useTextKeys()
+
+  const { quoteCartQueryData } = useQuoteCartData()
 
   return (
     <SubSection headlineText={textKeys.CHECKOUT_YOUR_HOME_SECTION_TITLE()}>

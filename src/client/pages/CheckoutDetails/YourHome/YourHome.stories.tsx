@@ -1,5 +1,6 @@
 import { Story } from '@storybook/react'
 import React from 'react'
+import { MemoryRouter } from 'react-router'
 import { TextKeyProvider } from 'utils/textKeys'
 import {
   SwedishApartmentType,
@@ -95,11 +96,17 @@ const mockOfferQuote = {
 }
 
 const Template: Story<StoryProps> = () => (
-  <TextKeyProvider locale="en_SE">
-    <PageSection>
-      <YourHome mainQuote={mockOfferQuote} />
-    </PageSection>
-  </TextKeyProvider>
+  <MemoryRouter
+    initialEntries={[
+      '/se-en/new-member/checkout/details/2e824ae5-8792-42f1-8c72-7d0c968ce565',
+    ]}
+  >
+    <TextKeyProvider locale="en_SE">
+      <PageSection>
+        <YourHome />
+      </PageSection>
+    </TextKeyProvider>
+  </MemoryRouter>
 )
 
 export const Default = Template.bind({})
