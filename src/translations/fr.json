@@ -329,5 +329,11 @@
   "GENERIC_ERROR_HEADING": "Un problème est survenu",
   "GENERIC_ERROR_TEXT": "Veuillez réessayer ou revenir en arrière. Si l'erreur persiste, veuillez nous contacter dans le chat ou par e-mail à [hedvig@hedvig.com](mailto:hedvig@hedvig.com).",
   "GENERIC_ERROR_ACTION_RETRY": "Réessayer",
-  "GENERIC_ERROR_ACTION": "Revenir en arrière"
+  "GENERIC_ERROR_ACTION": "Revenir en arrière",
+  "CHECKOUT_PHONE_NUMBER_ERROR": "Ce champ est obligatoire.",
+  "CHECKOUT_PHONE_NUMBER_HELPERTEXT": "Nous ne vous contacterons que pour des communications importantes.",
+  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE": "",
+  "INVALID_FIELD": "Ce champ n'est pas valide.",
+  "CHECKOUT_YOUR_HOME_SECTION_TITLE": "",
+  "CHECKOUT_EDIT_INFORMATION_BUTTON": ""
 }

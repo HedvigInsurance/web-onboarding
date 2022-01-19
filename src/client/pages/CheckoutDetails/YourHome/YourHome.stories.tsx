@@ -95,7 +95,7 @@ const mockOfferQuote = {
 }
 
 const Template: Story<StoryProps> = () => (
-  <TextKeyProvider locale="sv_SE">
+  <TextKeyProvider locale="en_SE">
     <PageSection>
       <YourHome mainQuote={mockOfferQuote} />
     </PageSection>

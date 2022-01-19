@@ -24,7 +24,7 @@ export const YourHome = ({ mainQuote }: { mainQuote: OfferQuote }) => {
   const textKeys = useTextKeys()
 
   return (
-    <SubSection headlineText="Your home">
+    <SubSection headlineText={textKeys.CHECKOUT_YOUR_HOME_SECTION_TITLE()}>
       {getQuoteDetails(mainQuote, textKeys).map((group, index) => (
         <Group key={index}>
           {group.map(({ key, value, label }) => (
@@ -37,7 +37,9 @@ export const YourHome = ({ mainQuote }: { mainQuote: OfferQuote }) => {
         </Group>
       ))}
       <ButtonWrapper>
-        <TextButton color={colorsV3.purple900}>Edit information</TextButton>
+        <TextButton color={colorsV3.purple900}>
+          {textKeys.CHECKOUT_EDIT_INFORMATION_BUTTON()}
+        </TextButton>
       </ButtonWrapper>
     </SubSection>
   )
