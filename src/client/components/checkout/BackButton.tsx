@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { useHistory } from 'react-router'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { UnstyledButton } from '../buttons'
-import { ArrowBack } from '../icons/ArrowBack'
+import { Arrow } from '../icons/Arrow'
 
 const { gray900, gray600 } = colorsV3
 
@@ -25,7 +25,7 @@ export const BackButton = () => {
 
   return (
     <Button onClick={goBack}>
-      <ArrowBack color={gray900} />
+      <Arrow direction="backward" color={gray900} />
     </Button>
   )
 }
