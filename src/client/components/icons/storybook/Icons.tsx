@@ -49,11 +49,11 @@ const IconWrapper = styled.div`
 export const Icons = ({ background }: Props) => {
   return (
     <Container background={background}>
-      <IconWrapper title="Arrow">
-        <Arrow />
+      <IconWrapper title="Arrow, direction 'forward'">
+        <Arrow direction="forward" />
       </IconWrapper>
-      <IconWrapper title="ArrowBack">
-        <div>[back arrow]</div>
+      <IconWrapper title="Arrow, direction 'backward'">
+        <Arrow direction="backward" />
       </IconWrapper>
       <IconWrapper title="ForwardArrow">
         <ForwardArrow />
