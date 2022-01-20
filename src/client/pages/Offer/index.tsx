@@ -1,12 +1,7 @@
 import { History } from 'history'
 import { SemanticEvents } from 'quepasa'
 import React, { useEffect } from 'react'
-import {
-  useHistory,
-  useRouteMatch,
-  RouteComponentProps,
-  Redirect,
-} from 'react-router'
+import { useHistory, useRouteMatch, RouteComponentProps } from 'react-router'
 import { LoadingPage } from 'components/LoadingPage'
 import {
   useQuoteCartQuery,
@@ -85,9 +80,8 @@ export const OfferPage = ({
   },
 }: OfferPageProps) => {
   const { isoLocale, path: pathLocale } = useCurrentLocale()
-  const [isInsuranceToggleEnabled, isQuoteCartEnabled] = useFeature([
+  const [isInsuranceToggleEnabled] = useFeature([
     Features.OFFER_PAGE_INSURANCE_TOGGLE,
-    Features.QUOTE_CART_API,
   ])
   const [
     selectedInsuranceTypes,
@@ -132,7 +126,6 @@ export const OfferPage = ({
     }
   }, [offerData, isReferralCodeUsed])
 
-  if (!isQuoteCartEnabled) return <Redirect to={`/${pathLocale}/new-member`} />
   if (isLoadingQuoteCart) return <LoadingPage loading />
 
   if (

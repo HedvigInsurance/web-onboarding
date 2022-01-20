@@ -1,8 +1,8 @@
 import React from 'react'
-import { Story } from '@storybook/react'
+import { Story, Meta } from '@storybook/react'
 import { Headline, Props as HeadlineProps } from './Headline'
 
-export default {
+const storyMeta: Meta<HeadlineProps> = {
   title: 'Components/Headline',
   component: Headline,
   parameters: {
@@ -13,10 +13,11 @@ export default {
   args: {
     variant: 'xl',
     headingLevel: 'h1',
-    colorVariant: 'dark',
     children: 'This is a headline',
   },
 }
+
+export default storyMeta
 
 const Template: Story<HeadlineProps> = ({
   variant,
@@ -33,4 +34,10 @@ const Template: Story<HeadlineProps> = ({
   </Headline>
 )
 
-export const Default = Template.bind({})
+export const LightBackground = Template.bind({})
+LightBackground.parameters = { backgrounds: { default: 'gray100' } }
+LightBackground.args = { colorVariant: 'dark' }
+
+export const DarkBackground = Template.bind({})
+DarkBackground.parameters = { backgrounds: { default: 'gray900' } }
+DarkBackground.args = { colorVariant: 'light' }

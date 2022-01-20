@@ -1,5 +1,6 @@
 import React from 'react'
+import { CheckoutPageWrapper } from 'components/checkout/CheckoutPageWrapper'
 
 export const CheckoutPayment = () => {
-  return <></>
+  return <CheckoutPageWrapper>{}</CheckoutPageWrapper>
 }
