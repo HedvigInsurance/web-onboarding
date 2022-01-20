@@ -1,11 +1,11 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react'
 
-import { Icons, Props as IconsContainerProps } from './Icons'
+import { IconsOverview, Props as IconsContainerProps } from './IconsOverview'
 
 const storyMeta: Meta<IconsContainerProps> = {
-  title: 'Components/Icons',
-  component: Icons,
+  title: 'Components/Icons/Overview',
+  component: IconsOverview,
   parameters: {
     backgrounds: {
       default: 'gray100',
@@ -15,7 +15,7 @@ const storyMeta: Meta<IconsContainerProps> = {
 }
 
 const Template: Story<IconsContainerProps> = ({ background }) => (
-  <Icons background={background} />
+  <IconsOverview background={background} />
 )
 
 export const Default = Template.bind({})

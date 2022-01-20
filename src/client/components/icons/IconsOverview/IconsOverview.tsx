@@ -46,7 +46,7 @@ const IconWrapper = styled.div`
   justify-content: center;
 `
 
-export const Icons = ({ background }: Props) => {
+export const IconsOverview = ({ background }: Props) => {
   return (
     <Container background={background}>
       <IconWrapper title="Arrow, direction 'forward'">
