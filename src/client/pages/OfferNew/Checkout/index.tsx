@@ -204,7 +204,6 @@ export const Checkout = ({
   const [emailUpdateLoading, setEmailUpdateLoading] = useState(false)
   const [ssnUpdateLoading, setSsnUpdateLoading] = useState(false)
   const [isShowingFailModal, setIsShowingFailModal] = useState(false)
-  const [phoneUpdateLoading, setPhoneUpdateLoading] = useState(false)
   const offerData = getOfferData(selectedQuoteBundleVariant.bundle)
   const quoteIds = getQuoteIds(offerData)
 
@@ -339,9 +338,7 @@ export const Checkout = ({
   const onPhoneChange = async (phoneNumber: string) => {
     const { phoneNumber: currentPhone } = offerData.person
     if (!phoneNumber || currentPhone === phoneNumber) return
-    setPhoneUpdateLoading(true)
     await editQuotes(quoteIds, { phoneNumber })
-    setPhoneUpdateLoading(false)
   }
 
   const startSign = async () => {
