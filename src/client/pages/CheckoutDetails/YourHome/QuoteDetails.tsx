@@ -1,17 +1,15 @@
 import React from 'react'
 import { colorsV3 } from '@hedviginsurance/brand'
 import styled from '@emotion/styled'
-import { getQuoteDetails } from 'utils/getQuoteDetails'
 import { useTextKeys } from 'utils/textKeys'
 import { TextButton } from 'components/buttons'
-import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
-import { OfferQuote } from '../../OfferNew/types'
 import { Row } from '../components/Row'
 import { Label } from '../components/Label'
 import { Value } from '../components/Value'
 import { SubSection } from '../components/SubSection'
 import { Group } from '../components/Group'
 import { HorizontalSpacer } from '../components/HorizontalSpacer'
+import { HomeInsuranceTypeOfContract } from '../../OfferNew/utils'
 
 const ButtonWrapper = styled.div`
   width: 100%;
@@ -21,14 +19,32 @@ const ButtonWrapper = styled.div`
   padding: 1rem 0 0.5rem;
 `
 
-export const YourHome = () => {
-  const textKeys = useTextKeys()
+type MainQuoteDetails = {
+  id: string
+  birthDate: string
+  street: string
+  city: string | null
+  zipCode: string
+  numberCoInsured: number
+  livingSpace: number
+  typeOfContract: HomeInsuranceTypeOfContract
+  isStudent: boolean
+}
 
-  const { quoteCartQueryData } = useQuoteCartData()
+type DetailsGroup = {
+  key: string
+  value: string
+  label: string
+}[]
+
+type Props = { detailsGroups: DetailsGroup[] }
+
+export const QuoteDetails = ({ detailsGroups }: Props) => {
+  const textKeys = useTextKeys()
 
   return (
     <SubSection headlineText={textKeys.CHECKOUT_YOUR_HOME_SECTION_TITLE()}>
-      {getQuoteDetails(mainQuote, textKeys).map((group, index) => (
+      {detailsGroups.map((group, index) => (
         <Group key={index}>
           {group.map(({ key, value, label }) => (
             <Row key={key}>

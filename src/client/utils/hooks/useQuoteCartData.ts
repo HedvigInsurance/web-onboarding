@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom'
 import { useQuoteCartQuery } from 'data/graphql'
-import { useCurrentLocale } from 'src/client/l10n/useCurrentLocale'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 
 export const useQuoteCartData = () => {
   const { id: quoteCartId } = useParams<{ id: string }>()

@@ -11,11 +11,11 @@ import {
 import { perilsMock } from 'utils/testData/offerDataMock'
 import { OfferQuote } from '../../OfferNew/types'
 import { PageSection } from '../components/PageSection'
-import { YourHome } from './YourHome'
+import { QuoteDetails } from './QuoteDetails'
 
 export default {
-  title: 'Checkout Details/YourHome',
-  component: YourHome,
+  title: 'Checkout Details/QuoteDetails',
+  component: QuoteDetails,
   parameters: {
     backgrounds: {
       default: 'gray100',
@@ -103,7 +103,7 @@ const Template: Story<StoryProps> = () => (
   >
     <TextKeyProvider locale="en_SE">
       <PageSection>
-        <YourHome />
+        <QuoteDetails />
       </PageSection>
     </TextKeyProvider>
   </MemoryRouter>
