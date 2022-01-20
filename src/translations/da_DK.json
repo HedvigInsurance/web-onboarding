@@ -329,5 +329,8 @@
   "GENERIC_ERROR_HEADING": "Der opstod en uventet fejl",
   "GENERIC_ERROR_TEXT": "Prøv venligst igen eller gå tilbage. Hvis fejlen fortsætter, så kontakt os venligst i chatten eller mail [hedvig@hedvig.com](mailto:hedvig@hedvig.com).",
   "GENERIC_ERROR_ACTION_RETRY": "Prøv igen",
-  "GENERIC_ERROR_ACTION": "Gå tilbage"
+  "GENERIC_ERROR_ACTION": "Gå tilbage",
+  "CHECKOUT_PHONE_NUMBER_ERROR": "Dette er et obligatorisk felt.",
+  "CHECKOUT_PHONE_NUMBER_HELPERTEXT": "Vi vil kun kontakte dig for vigtige kommunikationer.",
+  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE": "Opsig min gamle {INSURANCE_NAME}"
 }

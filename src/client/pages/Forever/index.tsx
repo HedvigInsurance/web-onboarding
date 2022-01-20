@@ -15,7 +15,6 @@ import { localePathPattern } from 'l10n/localePathPattern'
 import { useTextKeys } from 'utils/textKeys'
 import { useStorage } from 'utils/StorageContainer'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { Features, useFeature } from 'utils/hooks/useFeature'
 import { captureSentryError } from 'utils/sentry-client'
 import { CampaignCode } from 'utils/campaignCode'
 import { RedeemCode, RedeemCodeFormValue } from './components/RedeemCode'
@@ -57,7 +56,7 @@ const LogoLink = styled.a`
   color: ${colorsV3.gray900};
 `
 
-export const OldForeverPage: React.FC<ForeverProps> = ({
+export const Forever: React.FC<ForeverProps> = ({
   match: {
     params: { code },
   },
@@ -124,6 +123,7 @@ export const OldForeverPage: React.FC<ForeverProps> = ({
   )
 }
 
+// @ts-ignore - Switch to this component when we've migrated to Quote Cart API
 const QuoteCartForeverPage: React.FC<ForeverProps> = ({
   match: {
     params: { code },
@@ -192,14 +192,5 @@ const QuoteCartForeverPage: React.FC<ForeverProps> = ({
         </PageWrapper>
       </Page>
     </>
-  )
-}
-
-export const Forever = (props: ForeverProps) => {
-  const [isUsingQuoteCartApi] = useFeature([Features.QUOTE_CART_API])
-  return isUsingQuoteCartApi ? (
-    <QuoteCartForeverPage {...props} />
-  ) : (
-    <OldForeverPage {...props} />
   )
 }
