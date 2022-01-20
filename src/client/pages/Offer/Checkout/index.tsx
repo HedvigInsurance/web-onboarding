@@ -349,10 +349,10 @@ export const Checkout = ({
   ])
 
   useEffect(() => {
-    if (checkoutStatus === CheckoutStatus.Signed) {
+    if (checkoutStatus === CheckoutStatus.Signed && signUiState !== 'STARTED') {
       completeCheckout()
     }
-  }, [checkoutStatus, completeCheckout])
+  }, [checkoutStatus, completeCheckout, signUiState])
 
   const startSign = async () => {
     setSignUiState('STARTED')
@@ -385,7 +385,7 @@ export const Checkout = ({
   }
 
   const handleSignStart = () => {
-    if (checkoutStatus === 'SIGNED') {
+    if (checkoutStatus === CheckoutStatus.Signed) {
       completeCheckout()
     } else {
       startSign()
