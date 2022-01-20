@@ -228,7 +228,6 @@ export const Checkout = ({
   const [lastName, setLastName] = useState(offerData.person.lastName ?? '')
 
   const [isUpsellCardVisible] = useFeature([Features.CHECKOUT_UPSELL_CARD])
-
   useEffect(() => {
     const setWindowHeight = () => {
       setWindowInnerHeight(window.innerHeight)
@@ -304,8 +303,7 @@ export const Checkout = ({
       firstName &&
       lastName &&
       offerData.person.email &&
-      offerData.person.ssn &&
-      offerData.person.phoneNumber,
+      offerData.person.ssn,
   )
 
   const editQuotes = async (
@@ -464,10 +462,7 @@ export const Checkout = ({
               </InnerWrapper>
               <Sign
                 canInitiateSign={
-                  canInitiateSign &&
-                  !ssnUpdateLoading &&
-                  !emailUpdateLoading &&
-                  !phoneUpdateLoading
+                  canInitiateSign && !ssnUpdateLoading && !emailUpdateLoading
                 }
                 signMethod={signMethodData?.signMethodForQuotes}
                 signUiState={signUiState}
