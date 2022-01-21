@@ -1,36 +1,57 @@
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
+import { Meta, Story } from '@storybook/react'
+import styled from '@emotion/styled'
+import { TextKeyProvider } from 'utils/textKeys'
 import { Card, CardHeadline, CardParagraph } from './Card'
 
-export default {
-  title: 'Landing/Card',
-  component: Card,
-  parameters: { layout: '' },
+type StoryProps = {
+  disabled: boolean
+  headline: string
+  paragraph: string
+  badge: string
+  hasBadge: boolean
+  to: string
 }
 
-export const Enabled = () => (
-  <MemoryRouter initialEntries={['/se/new-member']}>
-    <Card to="/se/new-member/offer-1" badge="Best value" key="offer-1">
-      <CardHeadline>Home Contents & Accident</CardHeadline>
-      <CardParagraph>Get both of them</CardParagraph>
-    </Card>
-  </MemoryRouter>
-)
+const Wrapper = styled.div`
+  width: 25rem;
+`
 
-export const Disabled = () => (
-  <MemoryRouter initialEntries={['/se/new-member']}>
-    <Card to="" badge="Coming soon" disabled={true} key="offer-2">
-      <CardHeadline>Home Contents</CardHeadline>
-      <CardParagraph>Available soon</CardParagraph>
-    </Card>
-  </MemoryRouter>
-)
+const storyMeta: Meta<StoryProps> = {
+  title: 'Landing/Card',
+  component: Card,
+  parameters: { layout: 'centered' },
+  args: {
+    disabled: false,
+    headline: 'Home, Accident & Travel',
+    paragraph: 'Get all three of them',
+    badge: '3-1',
+    hasBadge: true,
+    to: '/fake-route',
+  },
+}
 
-export const NoBadge = () => (
-  <MemoryRouter initialEntries={['/se/new-member']}>
-    <Card to="/se/new-member/offer-3" key="offer-3">
-      <CardHeadline>Home Contents, Accident & Travel</CardHeadline>
-      <CardParagraph>Get your price</CardParagraph>
-    </Card>
-  </MemoryRouter>
-)
+export default storyMeta
+
+export const Default: Story<StoryProps> = ({
+  disabled,
+  headline,
+  paragraph,
+  badge,
+  hasBadge,
+  to,
+}) => {
+  return (
+    <MemoryRouter initialEntries={['/dk-en/new-member']}>
+      <TextKeyProvider locale="en_DK">
+        <Wrapper>
+          <Card to={to} badge={hasBadge ? badge : ''} disabled={disabled}>
+            <CardHeadline disabled={disabled}>{headline}</CardHeadline>
+            <CardParagraph>{paragraph}</CardParagraph>
+          </Card>
+        </Wrapper>
+      </TextKeyProvider>
+    </MemoryRouter>
+  )
+}
