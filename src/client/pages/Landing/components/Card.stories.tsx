@@ -11,11 +11,16 @@ type StoryProps = {
   paragraph: string
   badge: string
   hasBadge: boolean
+  wrapperWidth: WrapperProps['width']
   to: string
 }
 
-const Wrapper = styled.div`
-  width: 25rem;
+type WrapperProps = {
+  width: string
+}
+
+const Wrapper = styled.div<WrapperProps>`
+  width: ${({ width }) => width};
 `
 
 const storyMeta: Meta<StoryProps> = {
@@ -28,6 +33,7 @@ const storyMeta: Meta<StoryProps> = {
     paragraph: 'Get all three of them',
     badge: '3-1',
     hasBadge: true,
+    wrapperWidth: '25rem',
     to: '/fake-route',
   },
 }
@@ -40,12 +46,13 @@ export const Default: Story<StoryProps> = ({
   paragraph,
   badge,
   hasBadge,
+  wrapperWidth,
   to,
 }) => {
   return (
     <MemoryRouter initialEntries={['/dk-en/new-member']}>
       <TextKeyProvider locale="en_DK">
-        <Wrapper>
+        <Wrapper width={wrapperWidth}>
           <Card to={to} badge={hasBadge ? badge : ''} disabled={disabled}>
             <CardHeadline disabled={disabled}>{headline}</CardHeadline>
             <CardParagraph>{paragraph}</CardParagraph>
