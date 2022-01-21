@@ -22,6 +22,7 @@ import {
 import { OfferQuote, OfferPersonInfo } from 'pages/OfferNew/types'
 import { LocaleData } from 'l10n/locales'
 import { birthDateFormats } from 'l10n/inputFormats'
+import { TextKeyMap } from 'utils/textKeys'
 import {
   isStudent,
   isSwedishQuote,
@@ -348,18 +349,20 @@ const getDanishSchema = (): DetailsFieldSchema => {
 type GetFieldSchemaParams = {
   offerQuote: OfferQuote
   currentLocaleData: LocaleData
+  textKeys: TextKeyMap
 }
 
 export const getFieldSchema = ({
   offerQuote,
   currentLocaleData,
+  textKeys,
 }: GetFieldSchemaParams): FieldSchema => {
-  const fieldSchemaDetails = getFieldSchemaDetails(offerQuote)
+  const fieldSchemaDetails = getFieldSchemaDetails(offerQuote, textKeys)
   return {
     firstName: {
       label: 'DETAILS_MODULE_TABLE_FIRSTNAME_CELL_LABEL',
       placeholder: '',
-      validation: Yup.string().required(),
+      validation: Yup.string().required(textKeys.CHECKOUT_SSN_LABEL_SE()),
     },
     lastName: {
       label: 'DETAILS_MODULE_TABLE_LASTNAME_CELL_LABEL',
@@ -374,12 +377,15 @@ export const getFieldSchema = ({
     ...fieldSchemaDetails,
   }
 }
-const getFieldSchemaDetails = (offerQuote: OfferQuote): DetailsFieldSchema => {
+const getFieldSchemaDetails = (
+  offerQuote: OfferQuote,
+  textKeys: TextKeyMap,
+): DetailsFieldSchema => {
   const base = {
     street: {
       label: 'DETAILS_MODULE_TABLE_ADDRESS_CELL_LABEL',
       placeholder: '',
-      validation: Yup.string().required(),
+      validation: Yup.string().required(textKeys.CHECKOUT_SSN_LABEL_SE()),
     },
     zipCode: {
       label: 'DETAILS_MODULE_TABLE_POSTALCODE_CELL_LABEL',

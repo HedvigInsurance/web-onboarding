@@ -115,6 +115,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
   const fieldSchema = getFieldSchema({
     offerQuote: mainOfferQuote,
     currentLocaleData,
+    textKeys,
   })
   const validationSchema = getValidationSchema(fieldSchema, mainOfferQuote)
   const initialValues = getInitialInputValues(offerData.person, mainOfferQuote)

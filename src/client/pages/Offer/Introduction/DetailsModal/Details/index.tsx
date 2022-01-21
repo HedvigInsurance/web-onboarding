@@ -2,6 +2,7 @@ import React from 'react'
 import { FormikProps } from 'formik'
 import { MarketLabel } from 'l10n/locales'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
+import { TextKeyMap } from 'utils/textKeys'
 import { QuoteInput } from '../types'
 import {
   SwedishApartmentDetails,
@@ -10,7 +11,7 @@ import {
 
 import {
   SwedishHouseDetails,
-  SwedishHouseValidationSchema,
+  getSwedishHouseValidationSchema,
 } from './SwedishHouseDetails'
 
 import { NorwegianDetails, NorwegianValidationSchema } from './NorwegianDetails'
@@ -20,13 +21,14 @@ import { DanishDetails, DanishValidationSchema } from './DanishDetails'
 export const getValidationSchema = (
   market: MarketLabel,
   type: InsuranceType,
+  textKeys: TextKeyMap,
 ) => {
   const isSwedishHouse = type === InsuranceType.SWEDISH_HOUSE
 
   switch (market) {
     case 'SE':
       return isSwedishHouse
-        ? SwedishHouseValidationSchema
+        ? getSwedishHouseValidationSchema(textKeys)
         : SwedishApartmentValidationSchema
     case 'NO':
       return NorwegianValidationSchema

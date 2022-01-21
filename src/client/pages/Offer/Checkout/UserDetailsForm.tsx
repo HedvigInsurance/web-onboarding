@@ -3,6 +3,7 @@ import * as Yup from 'yup'
 import { FormikProps } from 'formik'
 import { LocaleData } from 'l10n/locales'
 import { useFeature, Features } from 'utils/hooks/useFeature'
+import { TextKeyMap } from 'utils/textKeys'
 import { CreditCheckInfo } from '../../OfferNew/Checkout/CreditCheckInfo'
 import { QuoteInput } from '../Introduction/DetailsModal/types'
 import { TextInput, SsnInput } from './inputFields'
@@ -19,10 +20,11 @@ const debounce = (func: (...args: any[]) => any, timeout: number) => {
 
 export const getCheckoutDetailsValidationSchema = (
   locale: LocaleData,
+  textKeys: TextKeyMap,
   isPhoneNumberRequired?: boolean,
 ) =>
   Yup.object().shape({
-    firstName: Yup.string().required(),
+    firstName: Yup.string().required(textKeys.CHECKOUT_SSN_LABEL_SE()),
     lastName: Yup.string().required(),
     email: Yup.string()
       .email()

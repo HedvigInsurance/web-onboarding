@@ -3,6 +3,7 @@ import * as Yup from 'yup'
 import { FormikProps } from 'formik'
 import { InputGroup, InputGroupRow, inputTypes } from 'components/inputs'
 
+import { TextKeyMap } from 'utils/textKeys'
 import { QuoteInput } from '../types'
 import {
   DetailInput,
@@ -15,39 +16,41 @@ import {
 } from './components/DetailInput'
 import { Content, ContentColumn, ContentRow } from './components/Details.styles'
 
-export const SwedishHouseValidationSchema = Yup.object().shape({
-  firstName: Yup.string().required(),
-  lastName: Yup.string().required(),
-  data: Yup.object({
-    street: Yup.string().required(),
-    zipCode: Yup.string()
-      .matches(/^[0-9]{3}[0-9]{2}$/)
-      .required(),
-    livingSpace: Yup.number()
-      .min(1)
-      .required(),
-    householdSize: Yup.number()
-      .min(1)
-      .required(),
-    ancillaryArea: Yup.number()
-      .min(0)
-      .required(),
-    numberOfBathrooms: Yup.number()
-      .min(0)
-      .required(),
-    yearOfConstruction: Yup.number().required(),
-    isSubleted: Yup.boolean().required(),
-    extraBuildings: Yup.array().of(
-      Yup.object().shape({
-        type: Yup.string().required(),
-        area: Yup.number()
-          .min(1)
-          .required(),
-        hasWaterConnected: Yup.boolean().required(),
-      }),
-    ),
-  }).required(),
-})
+export const getSwedishHouseValidationSchema = (textKeys: TextKeyMap) => {
+  return Yup.object().shape({
+    firstName: Yup.string().required(textKeys.CHECKOUT_SSN_LABEL_SE()),
+    lastName: Yup.string().required(),
+    data: Yup.object({
+      street: Yup.string().required(),
+      zipCode: Yup.string()
+        .matches(/^[0-9]{3}[0-9]{2}$/)
+        .required(),
+      livingSpace: Yup.number()
+        .min(1)
+        .required(),
+      householdSize: Yup.number()
+        .min(1)
+        .required(),
+      ancillaryArea: Yup.number()
+        .min(0)
+        .required(),
+      numberOfBathrooms: Yup.number()
+        .min(0)
+        .required(),
+      yearOfConstruction: Yup.number().required(),
+      isSubleted: Yup.boolean().required(),
+      extraBuildings: Yup.array().of(
+        Yup.object().shape({
+          type: Yup.string().required(),
+          area: Yup.number()
+            .min(1)
+            .required(),
+          hasWaterConnected: Yup.boolean().required(),
+        }),
+      ),
+    }).required(),
+  })
+}
 
 export const SwedishHouseDetails: React.FC<{
   formikProps: FormikProps<QuoteInput>

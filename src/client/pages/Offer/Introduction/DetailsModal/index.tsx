@@ -199,7 +199,11 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
       <Container>
         <Formik
           initialValues={initialValues}
-          validationSchema={getValidationSchema(marketLabel, mainQuoteType)}
+          validationSchema={getValidationSchema(
+            marketLabel,
+            mainQuoteType,
+            textKeys,
+          )}
           onSubmit={onSubmit}
           enableReinitialize
         >
