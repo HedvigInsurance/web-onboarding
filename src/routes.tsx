@@ -32,11 +32,13 @@ enum EmbarkStory {
   NorwayTravelEnglish = 'Web Onboarding NO - English Travel',
   NorwayComboNorwegian = 'Web Onboarding NO - Norwegian Combo',
   NorwayComboEnglish = 'Web Onboarding NO - English Combo',
+  NorwayHomeContentEnglishQuoteCart = 'Web Onboarding NO - English Contents Quote Cart',
 
   SwedenNeeder = 'Web Onboarding SE - Needer',
   SwedenSwitcher = 'Web Onboarding SE - Switcher',
   SwedenSwitcherWithoutAccident = 'Web Onboarding SE - Switcher Without Accident',
   SwedenQuoteCartNeeder = 'Web Onboarding SE - Quote Cart Needer',
+  SwedenQuoteCartSwitcher = 'Web Onboarding SE - Quote Cart Switcher',
 }
 
 export type ServerSideRoute = {
@@ -292,6 +294,19 @@ export const routes: Route[] = [
                         ? EmbarkStory.NorwayComboNorwegian
                         : EmbarkStory.NorwayComboEnglish,
                   }
+                case 'home':
+                  if (
+                    window.hedvigClientConfig.appEnvironment === 'production'
+                  ) {
+                    return {
+                      redirect: `/${locale}/new-member`,
+                    }
+                  }
+                  return {
+                    baseUrl: `/${locale}/new-member/home`,
+                    name: EmbarkStory.NorwayHomeContentEnglishQuoteCart,
+                    quoteCart: true,
+                  }
               }
               break
             case 'se':
@@ -330,6 +345,19 @@ export const routes: Route[] = [
                   return {
                     baseUrl: `/${locale}/new-member/home-accident-needer`,
                     name: EmbarkStory.SwedenQuoteCartNeeder,
+                    quoteCart: true,
+                  }
+                case 'home-switcher':
+                  if (
+                    window.hedvigClientConfig.appEnvironment === 'production'
+                  ) {
+                    return {
+                      redirect: `/${locale}/new-member`,
+                    }
+                  }
+                  return {
+                    baseUrl: `/${locale}/new-member/home-switcher`,
+                    name: EmbarkStory.SwedenQuoteCartSwitcher,
                     quoteCart: true,
                   }
               }
