@@ -203,7 +203,6 @@ export const Checkout = ({
   const [emailUpdateLoading, setEmailUpdateLoading] = useState(false)
   const [ssnUpdateLoading, setSsnUpdateLoading] = useState(false)
   const [isShowingFailModal, setIsShowingFailModal] = useState(false)
-  const [phoneUpdateLoading, setPhoneUpdateLoading] = useState(false)
   const offerData = getOfferData(selectedQuoteBundleVariant.bundle)
   const quoteIds = getQuoteIds(offerData)
 
@@ -227,7 +226,6 @@ export const Checkout = ({
   const [lastName, setLastName] = useState(offerData.person.lastName ?? '')
 
   const [isUpsellCardVisible] = useFeature([Features.CHECKOUT_UPSELL_CARD])
-
   useEffect(() => {
     const setWindowHeight = () => {
       setWindowInnerHeight(window.innerHeight)
@@ -303,8 +301,7 @@ export const Checkout = ({
       firstName &&
       lastName &&
       offerData.person.email &&
-      offerData.person.ssn &&
-      offerData.person.phoneNumber,
+      offerData.person.ssn,
   )
 
   const editQuotes = async (
@@ -340,9 +337,7 @@ export const Checkout = ({
   const onPhoneChange = async (phoneNumber: string) => {
     const { phoneNumber: currentPhone } = offerData.person
     if (!phoneNumber || currentPhone === phoneNumber) return
-    setPhoneUpdateLoading(true)
     await editQuotes(quoteIds, { phoneNumber })
-    setPhoneUpdateLoading(false)
   }
 
   const startSign = async () => {
@@ -463,10 +458,7 @@ export const Checkout = ({
               </InnerWrapper>
               <Sign
                 canInitiateSign={
-                  canInitiateSign &&
-                  !ssnUpdateLoading &&
-                  !emailUpdateLoading &&
-                  !phoneUpdateLoading
+                  canInitiateSign && !ssnUpdateLoading && !emailUpdateLoading
                 }
                 signMethod={signMethodData?.signMethodForQuotes}
                 signUiState={signUiState}
