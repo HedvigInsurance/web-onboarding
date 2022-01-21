@@ -38,6 +38,7 @@ enum EmbarkStory {
   SwedenSwitcher = 'Web Onboarding SE - Switcher',
   SwedenSwitcherWithoutAccident = 'Web Onboarding SE - Switcher Without Accident',
   SwedenQuoteCartNeeder = 'Web Onboarding SE - Quote Cart Needer',
+  SwedenQuoteCartSwitcher = 'Web Onboarding SE - Quote Cart Switcher',
 }
 
 export type ServerSideRoute = {
@@ -344,6 +345,19 @@ export const routes: Route[] = [
                   return {
                     baseUrl: `/${locale}/new-member/home-accident-needer`,
                     name: EmbarkStory.SwedenQuoteCartNeeder,
+                    quoteCart: true,
+                  }
+                case 'home-switcher':
+                  if (
+                    window.hedvigClientConfig.appEnvironment === 'production'
+                  ) {
+                    return {
+                      redirect: `/${locale}/new-member`,
+                    }
+                  }
+                  return {
+                    baseUrl: `/${locale}/new-member/home-switcher`,
+                    name: EmbarkStory.SwedenQuoteCartSwitcher,
                     quoteCart: true,
                   }
               }
