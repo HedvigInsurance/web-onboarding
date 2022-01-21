@@ -236,6 +236,7 @@ export const Checkout = ({
   const [signUiState, setSignUiState] = useState<SignUiState>(() =>
     getSignUiStateFromCheckoutStatus(initialCheckoutStatus),
   )
+  const [isCompletingCheckout, setIsCompletingCheckout] = useState(false)
   const { data: checkoutStatusData } = useCheckoutStatusQuery({
     pollInterval: signUiState === 'STARTED' ? 1000 : 0,
     variables: {
@@ -317,6 +318,7 @@ export const Checkout = ({
   }, [checkoutStatus])
 
   const completeCheckout = useCallback(async () => {
+    setIsCompletingCheckout(true)
     setSignUiState('STARTED')
     try {
       const memberId = await setupQuoteCartSession({
@@ -337,6 +339,8 @@ export const Checkout = ({
       })
     } catch (error) {
       setSignUiState('FAILED')
+    } finally {
+      setIsCompletingCheckout(false)
     }
   }, [
     campaignCode,
@@ -349,10 +353,10 @@ export const Checkout = ({
   ])
 
   useEffect(() => {
-    if (checkoutStatus === CheckoutStatus.Signed && signUiState !== 'STARTED') {
+    if (checkoutStatus === CheckoutStatus.Signed && !isCompletingCheckout) {
       completeCheckout()
     }
-  }, [checkoutStatus, completeCheckout, signUiState])
+  }, [checkoutStatus, completeCheckout, isCompletingCheckout])
 
   const startSign = async () => {
     setSignUiState('STARTED')
