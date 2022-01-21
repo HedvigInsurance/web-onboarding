@@ -2,7 +2,6 @@ import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import { Meta, Story } from '@storybook/react'
 import styled from '@emotion/styled'
-import { TextKeyProvider } from 'utils/textKeys'
 import { Card, CardHeadline, CardParagraph } from './Card'
 
 type StoryProps = {
@@ -48,18 +47,16 @@ export const Default: Story<StoryProps> = ({
 }) => {
   return (
     <MemoryRouter initialEntries={['/dk-en/new-member']}>
-      <TextKeyProvider locale="en_DK">
-        <Wrapper width={wrapperWidth}>
-          <Card
-            to={'/fake-route'}
-            badge={hasBadge ? badge : ''}
-            disabled={disabled}
-          >
-            <CardHeadline disabled={disabled}>{headline}</CardHeadline>
-            <CardParagraph>{paragraph}</CardParagraph>
-          </Card>
-        </Wrapper>
-      </TextKeyProvider>
+      <Wrapper width={wrapperWidth}>
+        <Card
+          to={'/fake-route'}
+          badge={hasBadge ? badge : ''}
+          disabled={disabled}
+        >
+          <CardHeadline disabled={disabled}>{headline}</CardHeadline>
+          <CardParagraph>{paragraph}</CardParagraph>
+        </Card>
+      </Wrapper>
     </MemoryRouter>
   )
 }
