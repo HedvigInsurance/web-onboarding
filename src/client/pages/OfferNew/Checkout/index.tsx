@@ -349,7 +349,7 @@ export const Checkout = ({
   }
 
   const isPhoneNumberGoodToGo = isPhoneNumberRequired
-    ? !isPhoneNumberUpdating && typeof offerData.person.phoneNumber === 'string'
+    ? !isPhoneNumberUpdating && Boolean(offerData.person.phoneNumber)
     : true
 
   const startSign = async () => {
