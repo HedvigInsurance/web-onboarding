@@ -54,6 +54,7 @@ import {
 export const isDanishHomeContentFieldSchema = (
   fieldSchema: DetailsFieldSchema,
   quote: OfferQuote,
+  textKeys?: any,
 ): fieldSchema is DanishHomeContentFieldSchema => {
   return (
     'danishHomeContents' in fieldSchema &&
