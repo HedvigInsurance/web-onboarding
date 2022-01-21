@@ -204,7 +204,6 @@ export const Checkout = ({
   const [emailUpdateLoading, setEmailUpdateLoading] = useState(false)
   const [ssnUpdateLoading, setSsnUpdateLoading] = useState(false)
   const [isShowingFailModal, setIsShowingFailModal] = useState(false)
-
   const offerData = getOfferData(selectedQuoteBundleVariant.bundle)
   const quoteIds = getQuoteIds(offerData)
 
@@ -228,7 +227,6 @@ export const Checkout = ({
   const [lastName, setLastName] = useState(offerData.person.lastName ?? '')
 
   const [isUpsellCardVisible] = useFeature([Features.CHECKOUT_UPSELL_CARD])
-
   useEffect(() => {
     const setWindowHeight = () => {
       setWindowInnerHeight(window.innerHeight)
@@ -337,6 +335,12 @@ export const Checkout = ({
     setSsnUpdateLoading(false)
   }
 
+  const onPhoneChange = async (phoneNumber: string) => {
+    const { phoneNumber: currentPhone } = offerData.person
+    if (!phoneNumber || currentPhone === phoneNumber) return
+    await editQuotes(quoteIds, { phoneNumber })
+  }
+
   const startSign = async () => {
     if (!canInitiateSign) {
       return
@@ -430,6 +434,8 @@ export const Checkout = ({
                       !offerData.person.firstName || !offerData.person.lastName
                     }
                     onSubmit={startSign}
+                    phoneNumber={offerData.person.phoneNumber ?? ''}
+                    onPhoneChange={onPhoneChange}
                   />
                   <StartDateWrapper>
                     <StartDateLabel>

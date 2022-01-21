@@ -1,36 +1,44 @@
-import styled from '@emotion/styled'
-import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
+import styled from '@emotion/styled'
+import { css } from '@emotion/core'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
+const { gray100, gray700, gray900 } = colorsV3
+
 export const TOP_BAR_Z_INDEX = 1000
 export const TOP_BAR_HEIGHT = '4.5rem'
 
-interface Props {
+export type Props = {
   isTransparent?: boolean
+  textColorVariant?: 'light' | 'dark'
   centered?: boolean
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<Props>`
   width: 100%;
   top: 0;
+  left: 0;
   height: ${TOP_BAR_HEIGHT};
-  background: ${colorsV3.gray900};
+  background-color: ${({ textColorVariant }) =>
+    textColorVariant === 'dark' ? gray100 : gray900};
   position: absolute;
   z-index: ${TOP_BAR_Z_INDEX};
   box-shadow: 0 2px 14px rgba(0, 0, 0, 0.08);
-  color: ${colorsV3.white};
+  color: ${({ textColorVariant }) =>
+    textColorVariant === 'dark' ? gray900 : gray100};
+  ${({ isTransparent }) =>
+    isTransparent &&
+    css`
+      background-color: transparent;
+      box-shadow: none;
+    `}
 
   @media (min-width: 420px) {
     height: 5rem;
   }
-`
-
-const TransparentWrapper = styled(Wrapper)`
-  background: transparent;
-  box-shadow: none;
 `
 
 export const TopBarFiller = styled.div`
@@ -59,7 +67,7 @@ const CenteredContainer = styled(Container)`
   justify-content: center;
 `
 
-const LogoLink = styled.a`
+const LogoLink = styled.a<Pick<Props, 'textColorVariant'>>`
   display: block;
   color: inherit;
   /* remove extra space under child SVG: https://stackoverflow.com/a/51161925 */
@@ -67,26 +75,27 @@ const LogoLink = styled.a`
 
   &:hover,
   &:focus {
-    color: ${colorsV3.white};
+    color: ${({ textColorVariant }) =>
+      textColorVariant === 'dark' ? gray700 : 'inherit'};
   }
 `
 
 export const TopBar: React.FC<Props> = ({
   isTransparent,
+  textColorVariant = 'light',
   centered,
   children,
 }) => {
   const { path } = useCurrentLocale()
-  const ActualWrapper = isTransparent ? TransparentWrapper : Wrapper
   const ActualContainer = centered ? CenteredContainer : Container
   return (
-    <ActualWrapper>
+    <Wrapper textColorVariant={textColorVariant} isTransparent={isTransparent}>
       <ActualContainer>
-        <LogoLink href={'/' + path}>
+        <LogoLink href={'/' + path} textColorVariant={textColorVariant}>
           <HedvigLogo width={94} />
         </LogoLink>
         {children}
       </ActualContainer>
-    </ActualWrapper>
+    </Wrapper>
   )
 }

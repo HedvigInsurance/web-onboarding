@@ -167,8 +167,15 @@ const ErrorText = styled.div<{ variant: variantType }>`
   min-height: 1.375rem;
   font-size: 0.75rem;
   line-height: 1.375rem;
-  text-align: center;
+  text-align: left;
   color: ${(props) => inputVariants[props.variant].error};
+  margin-top: 0.25rem;
+`
+
+const HelperText = styled.div`
+  color: ${colorsV3.gray700};
+  font-size: 0.75rem;
+  line-height: 1.33;
   margin-top: 0.25rem;
 `
 
@@ -190,6 +197,7 @@ export interface CoreInputFieldProps {
   mask?: Mask
   onChange?: FieldInputProps<string>['onChange']
   onBlur?: FieldInputProps<string>['onBlur']
+  helperText?: string
 }
 
 export interface TextInputProps extends CoreInputFieldProps {
@@ -224,8 +232,10 @@ export const RawInputField: React.FC<React.InputHTMLAttributes<
   errors?: string
   variant?: variantType
   showErrorIcon?: boolean
+  helperText?: string
 }> = ({
   errors,
+  helperText,
   showErrorIcon = false,
   label,
   className,
@@ -244,7 +254,11 @@ export const RawInputField: React.FC<React.InputHTMLAttributes<
         )}
       </SymbolWrapper>
     </Wrapper>
-    {errors && <ErrorText variant={variant}>{errors}</ErrorText>}
+    {errors ? (
+      <ErrorText variant={variant}>{errors}</ErrorText>
+    ) : (
+      helperText && <HelperText> {helperText} </HelperText>
+    )}
   </InputFieldContainer>
 )
 

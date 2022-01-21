@@ -157,6 +157,9 @@ export const OfferNew: React.FC = () => {
 
   const handleCheckoutToggle = (open: boolean) => {
     toggleCheckout(open)
+    if (offerData) {
+      trackOfferGTM(EventName.CheckoutOpen, offerData, false)
+    }
   }
 
   const offerData = selectedBundleVariant

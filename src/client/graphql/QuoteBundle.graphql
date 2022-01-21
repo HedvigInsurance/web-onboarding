@@ -17,6 +17,7 @@ fragment QuoteData on BundledQuote {
   startDate
   expiresAt
   email
+  phoneNumber
   typeOfContract
   displayName(locale: $locale)
   contractPerils(locale: $locale) {
