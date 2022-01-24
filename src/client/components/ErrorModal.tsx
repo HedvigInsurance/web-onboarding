@@ -11,7 +11,6 @@ type Props = ModalProps & {
 const Container = styled.div`
   padding: 3rem;
   padding-left: 5rem;
-  max-width: 36rem;
   position: relative;
 
   svg {
@@ -34,11 +33,16 @@ export const ErrorText = styled.p`
   margin-bottom: 1rem;
 `
 
+const CustomModal = styled(Modal)`
+  overflow-x: auto;
+  max-width: 36rem;
+`
+
 export const ErrorModal = ({ isVisible, onClose, children }: Props) => (
-  <Modal isVisible={isVisible} onClose={onClose} dynamicHeight>
+  <CustomModal isVisible={isVisible} onClose={onClose} dynamicHeight>
     <Container>
       <WarningTriangle />
       {children}
     </Container>
-  </Modal>
+  </CustomModal>
 )
