@@ -333,5 +333,6 @@
   "CHECKOUT_PHONE_NUMBER_ERROR": "This is a required field.",
   "CHECKOUT_PHONE_NUMBER_HELPERTEXT": "We will only contact you for important communications.",
   "SIDEBAR_REQUEST_CANCELLATION_INSURANCE": "Cancel my old {INSURANCE_NAME}",
-  "CANCEL_ANYTIME": "Cancel anytime"
+  "CANCEL_ANYTIME": "Cancel anytime",
+  "PRICE_SUFFIX_INTERVAL": "\/month"
 }

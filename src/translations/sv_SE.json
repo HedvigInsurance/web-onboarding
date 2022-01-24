@@ -333,5 +333,6 @@
   "CHECKOUT_PHONE_NUMBER_ERROR": "Detta fält är obligatoriskt",
   "CHECKOUT_PHONE_NUMBER_HELPERTEXT": "Vi kommer endast att kontakta dig för viktig kommunikation.",
   "SIDEBAR_REQUEST_CANCELLATION_INSURANCE": "Säg upp min gamla {INSURANCE_NAME}",
-  "CANCEL_ANYTIME": "Säg upp när du vill"
+  "CANCEL_ANYTIME": "Säg upp när du vill",
+  "PRICE_SUFFIX_INTERVAL": "\/mån"
 }

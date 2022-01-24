@@ -333,5 +333,6 @@
   "CHECKOUT_PHONE_NUMBER_ERROR": "Dette er et obligatorisk felt.",
   "CHECKOUT_PHONE_NUMBER_HELPERTEXT": "Vi vil kun kontakte dig for vigtige kommunikationer.",
   "SIDEBAR_REQUEST_CANCELLATION_INSURANCE": "Opsig min gamle {INSURANCE_NAME}",
-  "CANCEL_ANYTIME": "Afmeld når som helst"
+  "CANCEL_ANYTIME": "Afmeld når som helst",
+  "PRICE_SUFFIX_INTERVAL": "\/måned"
 }
