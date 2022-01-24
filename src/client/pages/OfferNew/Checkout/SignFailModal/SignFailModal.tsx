@@ -1,5 +1,5 @@
 import React from 'react'
-
+import ReactMarkdown from 'react-markdown'
 import { useTextKeys } from 'utils/textKeys'
 import { ErrorModal, ErrorHeading, ErrorText } from 'components/ErrorModal'
 
@@ -14,7 +14,9 @@ export const SignFailModal = ({ isVisible, onClose }: Props) => {
   return (
     <ErrorModal isVisible={isVisible} onClose={onClose} dynamicHeight>
       <ErrorHeading>{textKeys.CHECKOUT_SIGN_FAIL_HEADER()}</ErrorHeading>
-      <ErrorText>{textKeys.CHECKOUT_SIGN_FAIL_ERROR_TEXT()}</ErrorText>
+      <ErrorText>
+        <ReactMarkdown source={textKeys.CHECKOUT_SIGN_FAIL_ERROR_TEXT()} />
+      </ErrorText>
     </ErrorModal>
   )
 }

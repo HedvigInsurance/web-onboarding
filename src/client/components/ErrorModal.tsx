@@ -26,7 +26,7 @@ export const ErrorHeading = styled.h2`
   line-height: 1.5rem;
 `
 
-export const ErrorText = styled.p`
+export const ErrorText = styled.div`
   color: ${colorsV3.gray700};
   margin: 0;
   line-height: 1.25rem;
