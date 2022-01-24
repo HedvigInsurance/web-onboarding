@@ -55,7 +55,7 @@ export const Footer = ({ buttonText, buttonOnClick }: Props) => {
       <InnerWrapper>
         <PaymentInfo>
           <TotalPrice>{PRICE_PLACEHOLDER}</TotalPrice>
-          <CancelInfo>{textKeys.CHECKOUT_CANCEL_INFO()}</CancelInfo>
+          <CancelInfo>{textKeys.CANCEL_ANYTIME()}</CancelInfo>
         </PaymentInfo>
         <Button
           background={purple500}

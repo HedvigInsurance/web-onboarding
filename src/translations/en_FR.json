@@ -332,5 +332,6 @@
   "GENERIC_ERROR_ACTION": "Go back",
   "CHECKOUT_PHONE_NUMBER_ERROR": "This is a required field.",
   "CHECKOUT_PHONE_NUMBER_HELPERTEXT": "We will only contact you for important communications.",
-  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE": ""
+  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE": "",
+  "CANCEL_ANYTIME": "Cancel anytime"
 }
