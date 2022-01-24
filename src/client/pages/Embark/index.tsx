@@ -344,22 +344,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
     const defaultStore: Record<string, string> = quoteCartId
       ? { quoteCartId }
       : {}
-
-    const prevStore = window.sessionStorage.getItem(
-      `embark-store-${encodeURIComponent(props.name)}`,
-    )
-
-    if (!prevStore) {
-      setInitialStore(defaultStore)
-      return
-    }
-
-    try {
-      const parsedPrevStore = JSON.parse(prevStore)
-      setInitialStore({ ...parsedPrevStore, ...defaultStore })
-    } catch (err) {
-      setInitialStore(defaultStore)
-    }
+    setInitialStore(defaultStore)
   }, [props.name, props.isUsingQuoteCart, quoteCartId])
 
   const redirectToOfferPage = () => {
@@ -452,13 +437,6 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
                   }}
                   initialStore={initialStore}
                   onStoreChange={(store) => {
-                    const storeKey = `embark-store-${encodeURIComponent(
-                      props.name!,
-                    )}`
-                    window.sessionStorage.setItem(
-                      storeKey,
-                      JSON.stringify(store),
-                    )
                     if (store.quoteId) {
                       storageState.session.setSession({
                         ...storageState.session.getSession(),
