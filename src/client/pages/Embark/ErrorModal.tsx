@@ -6,11 +6,7 @@ import { ModalProps } from 'components/ModalNew'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { Button } from 'components/buttons'
 import { useTextKeys } from 'utils/textKeys'
-import {
-  ErrorModal,
-  ErrorHeading,
-  ErrorText,
-} from 'src/client/components/ErrorModal'
+import { ErrorModal, ErrorHeading, ErrorText } from 'components/ErrorModal'
 
 const ButtonContainer = styled.div`
   display: flex;
