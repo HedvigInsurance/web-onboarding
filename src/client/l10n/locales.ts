@@ -8,6 +8,7 @@ import {
   phoneNumberPlaceholder,
 } from './inputFormats'
 import { CallCenterData, callCenters } from './callCenters'
+import { CurrencyData, currency } from './currency'
 
 export const LOCALE_URL_PARAMS = [
   'se',
@@ -39,6 +40,7 @@ export type LocaleData = {
     formatRegex: RegExp
     backendFormatExample: string
   }
+  currency: CurrencyData
   phoneNumber: {
     formatRegex: RegExp
     placeholder?: string
@@ -64,6 +66,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: birthDateFormats.SE,
       backendFormatExample: 'ÅÅÅÅ-MM-DD',
     },
+    currency: currency.SE,
     phoneNumber: {
       formatRegex: phoneNumberFormats.SE,
       placeholder: phoneNumberPlaceholder.SE,
@@ -87,6 +90,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: birthDateFormats.SE,
       backendFormatExample: 'YYYY-MM-DD',
     },
+    currency: currency.SE,
     phoneNumber: {
       formatRegex: phoneNumberFormats.SE,
       placeholder: phoneNumberPlaceholder.SE,
@@ -110,6 +114,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: birthDateFormats.NO,
       backendFormatExample: 'ÅÅÅÅ-MM-DD',
     },
+    currency: currency.NO,
     phoneNumber: {
       formatRegex: phoneNumberFormats.NO,
       placeholder: phoneNumberPlaceholder.NO,
@@ -132,6 +137,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: birthDateFormats.NO,
       backendFormatExample: 'YYYY-MM-DD',
     },
+    currency: currency.NO,
     phoneNumber: {
       formatRegex: phoneNumberFormats.NO,
       placeholder: phoneNumberPlaceholder.NO,
@@ -154,6 +160,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: birthDateFormats.DK,
       backendFormatExample: 'ÅÅÅÅ-MM-DD',
     },
+    currency: currency.DK,
     phoneNumber: {
       formatRegex: phoneNumberFormats.DK,
       placeholder: phoneNumberPlaceholder.DK,
@@ -176,6 +183,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: birthDateFormats.DK,
       backendFormatExample: 'YYYY-MM-DD',
     },
+    currency: currency.DK,
     phoneNumber: {
       formatRegex: phoneNumberFormats.DK,
       placeholder: phoneNumberPlaceholder.DK,
