@@ -360,7 +360,7 @@ export const Checkout = ({
     if (checkoutStatus === CheckoutStatus.Signed) {
       completeCheckout()
     }
-  }, [checkoutStatus, completeCheckout, isCompletingCheckout])
+  }, [checkoutStatus, completeCheckout])
 
   const startSign = async () => {
     setSignUiState('STARTED')
