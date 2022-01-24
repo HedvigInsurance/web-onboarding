@@ -181,7 +181,11 @@ export const Card: React.FC<Props> = ({
         <CardContent>{children}</CardContent>
         {!disabled && (
           <ArrowWrapper>
-            <Arrow size="1.25rem" color={colorsV3.gray900} />
+            <Arrow
+              direction="forward"
+              size="1.25rem"
+              color={colorsV3.gray900}
+            />
           </ArrowWrapper>
         )}
       </CardContainer>
