@@ -25,10 +25,10 @@ const storyMeta: Meta<StoryProps> = {
 
 export default storyMeta
 
-const Template: Story<StoryProps> = (args) => (
+const Template: Story<StoryProps> = ({ translationsLocale, ...rest }) => (
   <MemoryRouter initialEntries={['/se-en/new-member/checkout/details']}>
-    <TextKeyProvider locale={args.translationsLocale}>
-      <Footer {...args} />
+    <TextKeyProvider locale={translationsLocale}>
+      <Footer {...rest} />
     </TextKeyProvider>
   </MemoryRouter>
 )
