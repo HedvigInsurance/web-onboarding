@@ -15,7 +15,8 @@ const Container = styled.div`
 
   svg {
     position: absolute;
-    left: 3rem;
+    left: 2.5rem;
+    top: 3.25rem;
   }
 `
 
@@ -23,14 +24,17 @@ export const ErrorHeading = styled.h2`
   color: ${colorsV3.gray900};
   margin: 0;
   margin-bottom: 0.5rem;
-  line-height: 1.5rem;
+  line-height: 2rem;
 `
 
 export const ErrorText = styled.div`
   color: ${colorsV3.gray700};
   margin: 0;
-  line-height: 1.25rem;
-  margin-bottom: 1rem;
+  line-height: 1.5rem;
+
+  p {
+    margin: 0;
+  }
 `
 
 const CustomModal = styled(Modal)`
