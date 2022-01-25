@@ -228,6 +228,7 @@ export const useTrack = ({ offerData, signState }: TrackProps) => {
 
 export type TrackSignedEventParams = {
   variation: Variation | null
+  quoteCartId: string
   memberId: string
   offerData: OfferData
   campaignCode?: string
@@ -236,6 +237,7 @@ export type TrackSignedEventParams = {
 
 export const trackSignedEvent = ({
   variation,
+  quoteCartId,
   memberId,
   offerData,
   campaignCode,
@@ -257,5 +259,6 @@ export const trackSignedEvent = ({
     EventName.SignedCustomer,
     { ...offerData, memberId: memberId || '' },
     isDiscountMonthlyCostDeduction,
+    { quoteCartId },
   )
 }
