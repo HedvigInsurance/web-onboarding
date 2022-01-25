@@ -332,5 +332,12 @@
   "GENERIC_ERROR_ACTION": "Gå tilbake",
   "CHECKOUT_PHONE_NUMBER_ERROR": "Dette feltet er obligatorisk",
   "CHECKOUT_PHONE_NUMBER_HELPERTEXT": "Vi vil kun kontakte deg for viktig kommunikasjon.",
-  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE": "Kanseller min gamle {INSURANCE_NAME}"
+  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE": "Kanseller min gamle {INSURANCE_NAME}",
+  "INVALID_FIELD": "Dette feltet er ugyldig.",
+  "CHECKOUT_YOUR_HOME_SECTION_TITLE": "Boligen din ",
+  "CHECKOUT_EDIT_INFORMATION_BUTTON": "",
+  "GENERIC_ERROR_INPUT_REQUIRED": "Dette feltet er obligatorisk",
+  "GENERIC_ERROR_INPUT_FORMAT": "Beklager, feil format.",
+  "SIGN_FAIL_ERROR_HEADING": "Noe gikk galt",
+  "CANCEL_ANYTIME": "Avbryt når som helst"
 }
