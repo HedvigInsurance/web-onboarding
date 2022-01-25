@@ -6,7 +6,7 @@ import { TextKeyMap } from 'utils/textKeys'
 import { QuoteInput } from '../types'
 import {
   SwedishApartmentDetails,
-  SwedishApartmentValidationSchema,
+  getSwedishApartmentValidationSchema,
 } from './SwedishApartmentDetails'
 
 import {
@@ -14,9 +14,12 @@ import {
   getSwedishHouseValidationSchema,
 } from './SwedishHouseDetails'
 
-import { NorwegianDetails, NorwegianValidationSchema } from './NorwegianDetails'
+import {
+  NorwegianDetails,
+  getNorwegianValidationSchema,
+} from './NorwegianDetails'
 
-import { DanishDetails, DanishValidationSchema } from './DanishDetails'
+import { DanishDetails, getDanishValidationSchema } from './DanishDetails'
 
 export const getValidationSchema = (
   market: MarketLabel,
@@ -29,11 +32,11 @@ export const getValidationSchema = (
     case 'SE':
       return isSwedishHouse
         ? getSwedishHouseValidationSchema(textKeys)
-        : SwedishApartmentValidationSchema
+        : getSwedishApartmentValidationSchema(textKeys)
     case 'NO':
-      return NorwegianValidationSchema
+      return getNorwegianValidationSchema(textKeys)
     case 'DK':
-      return DanishValidationSchema
+      return getDanishValidationSchema(textKeys)
     default:
       throw 'Unknown market'
   }

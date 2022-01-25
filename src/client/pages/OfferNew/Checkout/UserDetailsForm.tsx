@@ -220,7 +220,9 @@ export const UserDetailsForm: React.FC<Props> = ({
         id="email"
         type="email"
         value={email}
-        errors={hasEmailError ? textKeys.SIGN_EMAIL_CHECK() : undefined}
+        errors={
+          hasEmailError ? textKeys.GENERIC_ERROR_INPUT_REQUIRED() : undefined
+        }
         onChange={(e: React.ChangeEvent<any>) => {
           setEmailDebounced(e.target.value)
           setHasEmailError(false)
@@ -237,9 +239,7 @@ export const UserDetailsForm: React.FC<Props> = ({
             type="text"
             inputMode="numeric"
             value={phoneNumber}
-            errors={
-              hasPhoneError ? textKeys.CHECKOUT_PHONE_NUMBER_ERROR() : undefined
-            }
+            errors={hasPhoneError ? textKeys.GENERIC_ERROR_INPUT_FORMAT() : ''}
             onChange={handlePhoneChange}
             helperText={textKeys.CHECKOUT_PHONE_NUMBER_HELPERTEXT()}
           />

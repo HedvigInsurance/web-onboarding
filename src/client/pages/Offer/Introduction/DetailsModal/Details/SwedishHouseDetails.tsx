@@ -18,33 +18,38 @@ import { Content, ContentColumn, ContentRow } from './components/Details.styles'
 
 export const getSwedishHouseValidationSchema = (textKeys: TextKeyMap) => {
   return Yup.object().shape({
-    firstName: Yup.string().required(textKeys.CHECKOUT_SSN_LABEL_SE()),
-    lastName: Yup.string().required(),
+    firstName: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+    lastName: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
     data: Yup.object({
-      street: Yup.string().required(),
+      street: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
       zipCode: Yup.string()
-        .matches(/^[0-9]{3}[0-9]{2}$/)
-        .required(),
+        .matches(/^[0-9]{3}[0-9]{2}$/, textKeys.GENERIC_ERROR_INPUT_FORMAT())
+        .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
       livingSpace: Yup.number()
-        .min(1)
-        .required(),
+        .typeError(textKeys.GENERIC_ERROR_INPUT_REQUIRED())
+        .min(1, textKeys.GENERIC_ERROR_INPUT_FORMAT())
+        .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
       householdSize: Yup.number()
-        .min(1)
-        .required(),
+        .min(1, textKeys.GENERIC_ERROR_INPUT_FORMAT())
+        .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
       ancillaryArea: Yup.number()
-        .min(0)
-        .required(),
+        .typeError(textKeys.GENERIC_ERROR_INPUT_REQUIRED())
+        .min(0, textKeys.GENERIC_ERROR_INPUT_FORMAT())
+        .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
       numberOfBathrooms: Yup.number()
-        .min(0)
-        .required(),
-      yearOfConstruction: Yup.number().required(),
+        .typeError(textKeys.GENERIC_ERROR_INPUT_REQUIRED())
+        .min(0, textKeys.GENERIC_ERROR_INPUT_FORMAT())
+        .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+      yearOfConstruction: Yup.number()
+        .typeError(textKeys.GENERIC_ERROR_INPUT_REQUIRED())
+        .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
       isSubleted: Yup.boolean().required(),
       extraBuildings: Yup.array().of(
         Yup.object().shape({
           type: Yup.string().required(),
           area: Yup.number()
-            .min(1)
-            .required(),
+            .min(1, textKeys.GENERIC_ERROR_INPUT_FORMAT())
+            .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
           hasWaterConnected: Yup.boolean().required(),
         }),
       ),
