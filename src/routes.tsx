@@ -26,6 +26,7 @@ enum EmbarkStory {
   DenmarkContentsAccidentTravelWithAddressAutocomplete = 'Web Onboarding DK - Danish Contents-Accident-Travel With Autocomplete',
   DenmarkContentsQuoteCart = 'Web Onboarding DK - Quote Cart Home Content',
   DenmarkContentsAccidentQuoteCart = 'Web Onboarding DK - Quote Cart Home Content Accident',
+  DenmarkContentsAccidentTravelQuoteCart = 'Web Onboarding DK - Quote Cart Home Content Accident Travel',
 
   NorwayContentsNorwegian = 'Web Onboarding NO - Norwegian Contents',
   NorwayContentsEnglish = 'Web Onboarding NO - English Contents',
@@ -285,6 +286,19 @@ export const routes: Route[] = [
                   return {
                     baseUrl: `/${locale}/new-member/home-accident-needer`,
                     name: EmbarkStory.DenmarkContentsAccidentQuoteCart,
+                    quoteCart: true,
+                  }
+                case 'home-accident-travel-needer':
+                  if (
+                    window.hedvigClientConfig.appEnvironment === 'production'
+                  ) {
+                    return {
+                      redirect: `/${locale}/new-member`,
+                    }
+                  }
+                  return {
+                    baseUrl: `/${locale}/new-member/home-accident-travel-needer`,
+                    name: EmbarkStory.DenmarkContentsAccidentTravelQuoteCart,
                     quoteCart: true,
                   }
               }
