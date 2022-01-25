@@ -1,17 +1,14 @@
 import styled from '@emotion/styled'
 import React, { useState } from 'react'
 import * as yup from 'yup'
-import { LocaleLabel, locales } from 'l10n/locales'
 import { RawInputField } from 'components/inputs'
-import {
-  Market,
-  useCurrentLocale,
-  useMarket,
-} from 'components/utils/CurrentLocale'
+import { Market, useMarket } from 'components/utils/CurrentLocale'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import {
   WithEmailForm,
   WithSsnForm,
   WithFirstAndLastNameForm,
+  WithPhoneForm,
 } from 'pages/OfferNew/types'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
 import { useFeature, Features } from 'utils/hooks/useFeature'
@@ -23,6 +20,7 @@ const HiddenSubmit = styled.input`
 
 type Props = WithEmailForm &
   WithSsnForm &
+  WithPhoneForm &
   WithFirstAndLastNameForm & {
     onSubmit?: () => void
     ssnBackendError: string | null
@@ -59,13 +57,17 @@ export const UserDetailsForm: React.FC<Props> = ({
   ssnBackendError,
   onSsnChange,
   onSubmit,
+  phoneNumber: initialPhone,
+  onPhoneChange,
 }) => {
   const textKeys = useTextKeys()
   const [email, reallySetEmail] = useState(() => initialEmail)
   const [hasFirstNameError, setHasFirstNameError] = useState(false)
   const [hasLastNameError, setHasLastNameError] = useState(false)
   const [hasEmailError, setHasEmailError] = useState(false)
+  const [hasPhoneError, setHasPhoneError] = useState(false)
   const [ssn, reallySetSsn] = useState(() => initialSsn)
+  const [phoneNumber, reallySetPhone] = useState(() => initialPhone)
   const [isShowingCreditCheckInfo, setIsShowingCreditCheckInfo] = useState(
     false,
   )
@@ -74,22 +76,25 @@ export const UserDetailsForm: React.FC<Props> = ({
   )
   const [ssnChangeTimout, setSsnChangeTimout] = useState<number | null>(null)
 
+  const [phoneChangeTimeout, setPhoneChangeTimeout] = useState<number | null>(
+    null,
+  )
   const market = useMarket()
 
-  const currentLocale = useCurrentLocale()
-  const currentLocaleData = locales[currentLocale as LocaleLabel]
-  const ssnMaxLength = currentLocaleData.ssn.length
-  const ssnFormatRegex = currentLocaleData.ssn.formatRegex
+  const locale = useCurrentLocale()
+  const ssnMaxLength = locale.ssn.length
+  const ssnFormatRegex = locale.ssn.formatRegex
 
-  const [hasEnabledCreditCheckInfo] = useFeature([
+  const [hasEnabledCreditCheckInfo, isPhoneNumberRequired] = useFeature([
     Features.CHECKOUT_CREDIT_CHECK,
+    Features.COLLECT_PHONE_NUMBER_AT_CHECKOUT,
   ])
 
   const isValidSsn = (ssn: string) => {
     return ssnFormatRegex.test(ssn)
   }
 
-  const ssnFormatExample = currentLocaleData.ssn.formatExample
+  const ssnFormatExample = locale.ssn.formatExample
 
   const validateFirstName = (firstName: string) => {
     if (!nameValidation.isValidSync(firstName)) {
@@ -149,6 +154,28 @@ export const UserDetailsForm: React.FC<Props> = ({
     )
   }
 
+  const handlePhoneChange = (event: React.FormEvent<HTMLInputElement>) => {
+    const { value: phoneNumber } = event.currentTarget
+    if (phoneChangeTimeout) {
+      window.clearTimeout(phoneChangeTimeout)
+      setPhoneChangeTimeout(null)
+    }
+    reallySetPhone(phoneNumber)
+    const phoneValidator = yup.string().matches(locale.phoneNumber.formatRegex)
+    const trimmedNumber = phoneNumber.replace(/\s/g, '')
+    const isPhoneValid = phoneValidator.isValidSync(trimmedNumber)
+    setPhoneChangeTimeout(
+      window.setTimeout(() => {
+        if (isPhoneValid) {
+          onPhoneChange(phoneNumber)
+          setHasPhoneError(false)
+        } else {
+          setHasPhoneError(true)
+        }
+      }, 500),
+    )
+  }
+
   return (
     <form
       onSubmit={(e) => {
@@ -199,6 +226,25 @@ export const UserDetailsForm: React.FC<Props> = ({
           setHasEmailError(false)
         }}
       />
+
+      {isPhoneNumberRequired && (
+        <>
+          <RawInputField
+            label={textKeys.CHECKOUT_PHONE_NUMBER_LABEL()}
+            placeholder={locale.phoneNumber.placeholder}
+            name="phoneNumber"
+            id="phoneNumber"
+            type="text"
+            inputMode="numeric"
+            value={phoneNumber}
+            errors={
+              hasPhoneError ? textKeys.CHECKOUT_PHONE_NUMBER_ERROR() : undefined
+            }
+            onChange={handlePhoneChange}
+            helperText={textKeys.CHECKOUT_PHONE_NUMBER_HELPERTEXT()}
+          />
+        </>
+      )}
 
       <RawInputField
         label={getSsnLabel(market, textKeys)}
