@@ -122,9 +122,11 @@ export const OfferPage = ({
 
   useEffect(() => {
     if (offerData) {
-      trackOfferGTM(EventName.OfferCreated, offerData, isReferralCodeUsed)
+      trackOfferGTM(EventName.OfferCreated, offerData, isReferralCodeUsed, {
+        quoteCartId,
+      })
     }
-  }, [offerData, isReferralCodeUsed])
+  }, [offerData, isReferralCodeUsed, quoteCartId])
 
   if (isLoadingQuoteCart) return <LoadingPage loading />
 
@@ -156,7 +158,7 @@ export const OfferPage = ({
         EventName.InsuranceSelectionToggle,
         offerData,
         isReferralCodeUsed,
-        { switchedFrom: offerData },
+        { quoteCartId, switchedFrom: offerData },
       )
     }
   }
@@ -169,6 +171,7 @@ export const OfferPage = ({
     )
     if (offerData) {
       trackOfferGTM(EventName.OfferCrossSell, offerData, isReferralCodeUsed, {
+        quoteCartId,
         switchedFrom: offerData,
       })
     }
