@@ -24,20 +24,20 @@ export const getCheckoutDetailsValidationSchema = (
   isPhoneNumberRequired?: boolean,
 ) =>
   Yup.object().shape({
-    firstName: Yup.string().required(textKeys.CHECKOUT_SSN_LABEL_SE()),
-    lastName: Yup.string().required(),
+    firstName: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+    lastName: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
     email: Yup.string()
-      .email()
-      .required(),
+      .email(textKeys.GENERIC_ERROR_INPUT_FORMAT())
+      .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
     ssn: Yup.string()
-      .matches(locale.ssn.formatRegex)
-      .max(locale.ssn.length)
-      .required(),
+      .matches(locale.ssn.formatRegex, textKeys.GENERIC_ERROR_INPUT_FORMAT())
+      .max(locale.ssn.length, textKeys.GENERIC_ERROR_INPUT_FORMAT())
+      .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
     ...(isPhoneNumberRequired
       ? {
           phoneNumber: Yup.string()
             .matches(locale.phoneNumber.formatRegex)
-            .required(),
+            .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
         }
       : {}),
   })
