@@ -318,6 +318,10 @@ export const Checkout = ({
   }, [checkoutStatus])
 
   const completeCheckout = useCallback(async () => {
+    if (isCompletingCheckout) {
+      return
+    }
+
     setIsCompletingCheckout(true)
     setSignUiState('STARTED')
     try {
@@ -336,10 +340,10 @@ export const Checkout = ({
         isDiscountMonthlyCostDeduction,
         memberId,
         offerData,
+        quoteCartId,
       })
     } catch (error) {
       setSignUiState('FAILED')
-    } finally {
       setIsCompletingCheckout(false)
     }
   }, [
@@ -350,13 +354,14 @@ export const Checkout = ({
     quoteCartId,
     storage,
     variation,
+    isCompletingCheckout,
   ])
 
   useEffect(() => {
-    if (checkoutStatus === CheckoutStatus.Signed && !isCompletingCheckout) {
+    if (checkoutStatus === CheckoutStatus.Signed) {
       completeCheckout()
     }
-  }, [checkoutStatus, completeCheckout, isCompletingCheckout])
+  }, [checkoutStatus, completeCheckout])
 
   const startSign = async () => {
     setSignUiState('STARTED')

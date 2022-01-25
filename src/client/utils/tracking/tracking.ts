@@ -23,7 +23,6 @@ import {
 import { Variation } from 'utils/hooks/useVariation'
 import { trackOfferGTM, EventName } from './gtm'
 import { adtraction } from './adtraction'
-import { trackStudentkortet } from './studentkortet'
 import { handleSignedEvent } from './signing'
 
 const cookie = new CookieStorage()
@@ -224,20 +223,12 @@ export const useTrack = ({ offerData, signState }: TrackProps) => {
       { ...offerData, memberId: memberId || '' },
       redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction',
     )
-    if (
-      redeemedCampaigns?.length > 0 &&
-      ['studentkortet', 'stuk2'].includes(
-        redeemedCampaigns[0].code.toLowerCase(),
-      ) &&
-      memberId
-    ) {
-      trackStudentkortet(memberId)
-    }
   }, [redeemedCampaignsData, memberId, offerData, signState])
 }
 
 export type TrackSignedEventParams = {
   variation: Variation | null
+  quoteCartId: string
   memberId: string
   offerData: OfferData
   campaignCode?: string
@@ -246,6 +237,7 @@ export type TrackSignedEventParams = {
 
 export const trackSignedEvent = ({
   variation,
+  quoteCartId,
   memberId,
   offerData,
   campaignCode,
@@ -267,5 +259,6 @@ export const trackSignedEvent = ({
     EventName.SignedCustomer,
     { ...offerData, memberId: memberId || '' },
     isDiscountMonthlyCostDeduction,
+    { quoteCartId },
   )
 }
