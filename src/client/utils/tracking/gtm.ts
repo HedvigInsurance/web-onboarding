@@ -37,6 +37,7 @@ type GTMOfferData = {
   initial_offer: string
   current_offer: string
   member_id?: string
+  quote_cart_id?: string
 }
 
 type GTMPageData = {
@@ -114,13 +115,14 @@ export enum EventName {
 type OptionalParameters = {
   switchedFrom?: OfferData
   phoneNumberData?: GTMPhoneNumberData
+  quoteCartId?: string
 }
 
 export const trackOfferGTM = (
   eventName: EventName,
   offerData: OfferData,
   referralCodeUsed: boolean,
-  { switchedFrom, phoneNumberData }: OptionalParameters = {},
+  { switchedFrom, phoneNumberData, quoteCartId }: OptionalParameters = {},
 ) => {
   const contractType = getContractType(offerData)
   const contractCategory = getTrackableContractCategory(contractType)
@@ -147,6 +149,7 @@ export const trackOfferGTM = (
         has_travel: hasTravelQuote(offerData),
         initial_offer: initialOffer ?? contractCategory,
         current_offer: contractCategory,
+        quote_cart_id: quoteCartId,
         ...(switchedFrom && {
           switched_from: getTrackableContractCategory(
             getContractType(switchedFrom),
