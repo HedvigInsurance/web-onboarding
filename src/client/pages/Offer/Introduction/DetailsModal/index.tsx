@@ -184,6 +184,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
     ssn,
     email,
     phoneNumber,
+    startDate,
     data: mainQuoteData,
   } = selectedQuoteBundle?.bundle.quotes[0]
 
@@ -195,6 +196,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
     ssn,
     email,
     phoneNumber,
+    startDate,
     data: {
       ...mainQuoteData,
       householdSize: numberCoInsured + 1,
