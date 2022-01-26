@@ -126,6 +126,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
     birthDate,
     ssn,
     email,
+    startDate,
     data: mainQuoteData,
   } = selectedQuoteBundle?.bundle.quotes[0]
 
@@ -136,6 +137,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
     birthDate,
     ssn,
     email,
+    startDate,
     data: {
       ...mainQuoteData,
       householdSize: numberCoInsured + 1,
@@ -151,32 +153,35 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
       variables: {
         locale: isoLocale,
         quoteCartId,
-        quotes: allQuotes.map(({ data: { id, type, typeOfContract } }) => {
-          const {
-            firstName,
-            lastName,
-            birthDate,
-            ssn,
-            email,
-            data: { householdSize, phoneNumber },
-          } = form
+        quotes: allQuotes.map(
+          ({ startDate, data: { id, type, typeOfContract } }) => {
+            const {
+              firstName,
+              lastName,
+              birthDate,
+              ssn,
+              email,
+              data: { householdSize, phoneNumber },
+            } = form
 
-          return {
-            firstName,
-            lastName,
-            birthDate,
-            ssn,
-            email,
-            phoneNumber,
-            data: {
-              ...form.data,
-              numberCoInsured: householdSize && householdSize - 1,
-              id,
-              type,
-              typeOfContract,
-            },
-          }
-        }),
+            return {
+              firstName,
+              lastName,
+              birthDate,
+              ssn,
+              email,
+              phoneNumber,
+              startDate,
+              data: {
+                ...form.data,
+                numberCoInsured: householdSize && householdSize - 1,
+                id,
+                type,
+                typeOfContract,
+              },
+            }
+          },
+        ),
       },
       refetchQueries: ['quoteCart'],
       awaitRefetchQueries: true,
