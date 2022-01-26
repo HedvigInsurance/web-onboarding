@@ -1,0 +1,20 @@
+{
+  "name": "cypress",
+  "version": "1.0.0",
+  "description": "",
+  "engines": {
+    "node": "^16.13.1"
+  },
+  "scripts": {
+    "cypress": "cypress open"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@faker-js/faker": "^6.0.0-alpha.5",
+    "cypress": "^9.3.1",
+    "eslint": "3",
+    "eslint-plugin-cypress": "^2.12.1"
+  }
+}
