@@ -79,7 +79,7 @@ const StyledInput = styled.input`
   font-size: 1rem;
   line-height: 1.5;
   color: inherit;
-  padding: 1rem 0.875rem;
+  padding: 0.875rem;
   margin: 0;
 
   :focus {
@@ -105,7 +105,7 @@ const StyledSelect = styled(Field)`
   border: none;
   font-size: 1rem;
   line-height: 1.5;
-  padding: 1rem 0.875rem;
+  padding: 0.875rem;
   border-radius: 8px;
   :focus {
     outline: none;
