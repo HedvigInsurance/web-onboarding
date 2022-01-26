@@ -1807,6 +1807,8 @@ export type Checkout = {
   status: CheckoutStatus
   /**  A user-visible text that explains the current status. Useful for async signing like SE BankID.  */
   statusText?: Maybe<Scalars['String']>
+  /**  Url to redirect the user to, in order to complete the checkout. Used for NORWEGIAN_BANK_ID and DANISH_BANK_ID.  */
+  redirectUrl?: Maybe<Scalars['String']>
 }
 
 export enum CheckoutMethod {
@@ -11516,36 +11518,6 @@ export type AvailablePaymentMethodsQuery = { __typename?: 'Query' } & {
   } & Pick<AvailablePaymentMethodsResponse, 'paymentMethodsResponse'>
 }
 
-export type BundleCostQueryVariables = Exact<{
-  id: Scalars['ID']
-}>
-
-export type BundleCostQuery = { __typename?: 'Query' } & {
-  quoteCart: { __typename?: 'QuoteCart' } & {
-    bundle?: Maybe<
-      { __typename?: 'QuoteBundle' } & {
-        bundleCost: { __typename?: 'InsuranceCost' } & Pick<
-          InsuranceCost,
-          'freeUntil'
-        > & {
-            monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
-              MonetaryAmountV2,
-              'amount'
-            >
-            monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
-              MonetaryAmountV2,
-              'amount'
-            >
-            monthlyDiscount: { __typename?: 'MonetaryAmountV2' } & Pick<
-              MonetaryAmountV2,
-              'amount'
-            >
-          }
-      }
-    >
-  }
-}
-
 export type CampaignQueryVariables = Exact<{
   code: Scalars['String']
 }>
@@ -11929,6 +11901,52 @@ export type NorwegianBankIdAuthMutation = { __typename?: 'Mutation' } & {
     NorwegianBankIdAuthResponse,
     'redirectUrl'
   >
+}
+
+export type PriceQueryVariables = Exact<{
+  id: Scalars['ID']
+  locale: Locale
+}>
+
+export type PriceQuery = { __typename?: 'Query' } & {
+  quoteCart: { __typename?: 'QuoteCart' } & {
+    bundle?: Maybe<
+      { __typename?: 'QuoteBundle' } & {
+        possibleVariations: Array<
+          { __typename?: 'QuoteBundleVariant' } & {
+            bundle: { __typename?: 'QuoteBundle' } & {
+              quotes: Array<
+                { __typename?: 'BundledQuote' } & Pick<BundledQuote, 'id'> & {
+                    price: { __typename?: 'MonetaryAmountV2' } & Pick<
+                      MonetaryAmountV2,
+                      'amount' | 'currency'
+                    >
+                  }
+              >
+            }
+          }
+        >
+        bundleCost: { __typename?: 'InsuranceCost' } & Pick<
+          InsuranceCost,
+          'freeUntil'
+        > & {
+            monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
+              MonetaryAmountV2,
+              'amount'
+            >
+            monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
+              MonetaryAmountV2,
+              'amount'
+            >
+            monthlyDiscount: { __typename?: 'MonetaryAmountV2' } & Pick<
+              MonetaryAmountV2,
+              'amount'
+            >
+          }
+      }
+    >
+    campaign?: Maybe<{ __typename?: 'Campaign' } & CampaignDataFragment>
+  }
 }
 
 export type QuoteDataFragment = { __typename?: 'BundledQuote' } & Pick<
@@ -13043,75 +13061,6 @@ export type AvailablePaymentMethodsQueryResult = ApolloReactCommon.QueryResult<
   AvailablePaymentMethodsQuery,
   AvailablePaymentMethodsQueryVariables
 >
-export const BundleCostDocument = gql`
-  query BundleCost($id: ID!) {
-    quoteCart(id: $id) {
-      bundle {
-        bundleCost {
-          monthlyGross {
-            amount
-          }
-          monthlyNet {
-            amount
-          }
-          monthlyDiscount {
-            amount
-          }
-          freeUntil
-        }
-      }
-    }
-  }
-`
-
-/**
- * __useBundleCostQuery__
- *
- * To run a query within a React component, call `useBundleCostQuery` and pass it any options that fit your needs.
- * When your component renders, `useBundleCostQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useBundleCostQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useBundleCostQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    BundleCostQuery,
-    BundleCostQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<BundleCostQuery, BundleCostQueryVariables>(
-    BundleCostDocument,
-    options,
-  )
-}
-export function useBundleCostLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    BundleCostQuery,
-    BundleCostQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<BundleCostQuery, BundleCostQueryVariables>(
-    BundleCostDocument,
-    options,
-  )
-}
-export type BundleCostQueryHookResult = ReturnType<typeof useBundleCostQuery>
-export type BundleCostLazyQueryHookResult = ReturnType<
-  typeof useBundleCostLazyQuery
->
-export type BundleCostQueryResult = ApolloReactCommon.QueryResult<
-  BundleCostQuery,
-  BundleCostQueryVariables
->
 export const CampaignDocument = gql`
   query Campaign($code: String!) {
     campaign(code: $code) {
@@ -14114,6 +14063,83 @@ export type NorwegianBankIdAuthMutationResult = ApolloReactCommon.MutationResult
 export type NorwegianBankIdAuthMutationOptions = ApolloReactCommon.BaseMutationOptions<
   NorwegianBankIdAuthMutation,
   NorwegianBankIdAuthMutationVariables
+>
+export const PriceDocument = gql`
+  query Price($id: ID!, $locale: Locale!) {
+    quoteCart(id: $id) {
+      bundle {
+        possibleVariations {
+          bundle {
+            quotes {
+              id
+              price {
+                amount
+                currency
+              }
+            }
+          }
+        }
+        bundleCost {
+          monthlyGross {
+            amount
+          }
+          monthlyNet {
+            amount
+          }
+          monthlyDiscount {
+            amount
+          }
+          freeUntil
+        }
+      }
+      campaign {
+        ...CampaignData
+      }
+    }
+  }
+  ${CampaignDataFragmentDoc}
+`
+
+/**
+ * __usePriceQuery__
+ *
+ * To run a query within a React component, call `usePriceQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePriceQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePriceQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      locale: // value for 'locale'
+ *   },
+ * });
+ */
+export function usePriceQuery(
+  baseOptions: Apollo.QueryHookOptions<PriceQuery, PriceQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<PriceQuery, PriceQueryVariables>(
+    PriceDocument,
+    options,
+  )
+}
+export function usePriceLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<PriceQuery, PriceQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<PriceQuery, PriceQueryVariables>(
+    PriceDocument,
+    options,
+  )
+}
+export type PriceQueryHookResult = ReturnType<typeof usePriceQuery>
+export type PriceLazyQueryHookResult = ReturnType<typeof usePriceLazyQuery>
+export type PriceQueryResult = ApolloReactCommon.QueryResult<
+  PriceQuery,
+  PriceQueryVariables
 >
 export const QuoteBundleDocument = gql`
   query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {
