@@ -27,8 +27,12 @@ export const getNorwegianValidationSchema = (textKeys: TextKeyMap) => {
       .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
     data: Yup.object({
       street: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
-      zipCode: Yup.string().matches(/^[0-9]{4}$/),
+      zipCode: Yup.string().matches(
+        /^[0-9]{4}$/,
+        textKeys.GENERIC_ERROR_INPUT_FORMAT(),
+      ),
       livingSpace: Yup.number()
+        .typeError(textKeys.GENERIC_ERROR_INPUT_REQUIRED())
         .min(1, textKeys.GENERIC_ERROR_INPUT_FORMAT())
         .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
       householdSize: Yup.number()

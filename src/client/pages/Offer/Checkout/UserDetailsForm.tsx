@@ -30,6 +30,7 @@ export const getCheckoutDetailsValidationSchema = (
       .email(textKeys.GENERIC_ERROR_INPUT_FORMAT())
       .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
     ssn: Yup.string()
+      .typeError(textKeys.GENERIC_ERROR_INPUT_REQUIRED())
       .matches(locale.ssn.formatRegex, textKeys.GENERIC_ERROR_INPUT_FORMAT())
       .max(locale.ssn.length, textKeys.GENERIC_ERROR_INPUT_FORMAT())
       .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
