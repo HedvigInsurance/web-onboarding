@@ -4,13 +4,9 @@ import React from 'react'
 import { Switch } from 'components/Switch'
 import { Spinner } from 'components/utils'
 import { Tooltip } from 'components/Tooltip/Tooltip'
-import { useSetStartDateMutation, QuoteDetails } from 'data/graphql'
+import { useEditBundledQuoteMutation } from 'data/graphql'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { OfferData, OfferQuote } from 'pages/OfferNew/types'
-import {
-  isNorwegianHomeContents,
-  isNorwegianTravel,
-} from 'pages/OfferNew/utils'
 import { gqlDateFormat } from 'pages/OfferNew/Introduction/Sidebar/utils'
 import { useTextKeys, TextKeyMap } from 'utils/textKeys'
 
@@ -59,7 +55,7 @@ export const CancellationOptions: React.FC<CancellationOptionsProps> = ({
               key={quote.id}
               {...rest}
               isGenericQuote={quotes.length === 1}
-              quote={quote as OfferQuote}
+              quote={quote}
               quoteCartId={quoteCartId}
             />
           )
@@ -71,22 +67,16 @@ export const CancellationOptions: React.FC<CancellationOptionsProps> = ({
 
 const getLabelContent = (
   textKeys: TextKeyMap,
-  quoteDetails: QuoteDetails,
+  quote: OfferQuote,
   isGenericQuote: boolean,
 ) => {
   if (isGenericQuote) {
     return textKeys.SIDEBAR_REQUEST_CANCELLATION_GENERIC_INSURANCE()
   }
 
-  if (isNorwegianHomeContents(quoteDetails)) {
-    return textKeys.SIDEBAR_REQUEST_CANCELLATION_HOME_INSURANCE()
-  }
-
-  if (isNorwegianTravel(quoteDetails)) {
-    return textKeys.SIDEBAR_REQUEST_CANCELLATION_TRAVEL_INSURANCE()
-  }
-
-  return null
+  return textKeys.SIDEBAR_REQUEST_CANCELLATION_INSURANCE({
+    INSURANCE_NAME: quote.displayName,
+  })
 }
 
 interface QuoteCancellationOptionProps {
@@ -106,21 +96,17 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
 
   const [isLoading, setIsLoading] = React.useState(false)
 
-  const [setStartDate] = useSetStartDateMutation()
+  const [editQuote] = useEditBundledQuoteMutation()
 
   const isChecked = !quote.startDate
-  const labelContent = getLabelContent(
-    textKeys,
-    quote.quoteDetails,
-    isGenericQuote,
-  )
+  const labelContent = getLabelContent(textKeys, quote, isGenericQuote)
 
   const handleToggleStartDate = async () => {
     try {
       setShowError(false)
       setIsLoading(true)
 
-      await setStartDate({
+      await editQuote({
         variables: {
           quoteCartId,
           locale: isoLocale,

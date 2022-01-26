@@ -3,24 +3,21 @@ import { useFormik } from 'formik'
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { FetchResult, useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import {
   QuoteBundleVariant,
-  useCreateQuoteBundleMutation,
   useStartCheckoutMutation,
   useCheckoutStatusQuery,
   CheckoutStatus,
   InsuranceTermType,
-  CreateQuoteBundleMutation,
   CheckoutMethod,
   CampaignDataFragment,
+  useCreateQuoteBundleMutation,
 } from 'data/graphql'
 import {
   getUniqueQuotesFromVariantList,
   getQuoteIdsFromBundleVariant,
-  getBundleVariantFromInsuranceTypesWithFallback,
-  getInsuranceTypesFromBundleVariant,
   isNorwegianBundle,
 } from 'pages/OfferNew/utils'
 import { PriceBreakdown } from 'pages/OfferNew/common/PriceBreakdown'
@@ -33,7 +30,6 @@ import { CloseButton } from 'components/CloseButton/CloseButton'
 import { CampaignBadge } from 'components/CampaignBadge/CampaignBadge'
 import { DiscountTag } from 'components/DiscountTag/DiscountTag'
 import { setupQuoteCartSession } from 'containers/SessionContainer'
-import { reportUnderwritingLimits } from 'utils/sentry-client'
 import { trackSignedEvent } from 'utils/tracking/tracking'
 import { useVariation } from 'utils/hooks/useVariation'
 import { StartDate } from 'pages/Offer/Introduction/Sidebar/StartDate'
@@ -232,9 +228,6 @@ export const Checkout = ({
   const [windowInnerHeight, setWindowInnerHeight] = useState(window.innerHeight)
   const [visibilityState, setVisibilityState] = useState(VisibilityState.CLOSED)
 
-  const selectedInsuranceTypes = getInsuranceTypesFromBundleVariant(
-    selectedQuoteBundleVariant,
-  )
   const campaignCode = campaign?.code
   const isDiscountMonthlyCostDeduction =
     campaign?.incentive?.__typename === 'MonthlyCostDeduction'
@@ -242,6 +235,7 @@ export const Checkout = ({
   const [signUiState, setSignUiState] = useState<SignUiState>(() =>
     getSignUiStateFromCheckoutStatus(initialCheckoutStatus),
   )
+  const [isCompletingCheckout, setIsCompletingCheckout] = useState(false)
   const { data: checkoutStatusData } = useCheckoutStatusQuery({
     pollInterval: signUiState === 'STARTED' ? 1000 : 0,
     variables: {
@@ -262,11 +256,14 @@ export const Checkout = ({
     ({ type }) => type === InsuranceTermType.PrivacyPolicy,
   )?.url
 
+  const { firstName, lastName, email, ssn, phoneNumber } = mainQuote
   const formik = useFormik<QuoteInput>({
     initialValues: {
-      ...mainQuote,
-      // @TODO Temprorary hack while backend support is in place
-      phoneNumber: mainQuote.data.phoneNumber,
+      firstName,
+      lastName,
+      email,
+      ssn,
+      phoneNumber,
       data: {
         ...mainQuote.data,
       },
@@ -320,6 +317,11 @@ export const Checkout = ({
   }, [checkoutStatus])
 
   const completeCheckout = useCallback(async () => {
+    if (isCompletingCheckout) {
+      return
+    }
+
+    setIsCompletingCheckout(true)
     setSignUiState('STARTED')
     try {
       const memberId = await setupQuoteCartSession({
@@ -337,9 +339,11 @@ export const Checkout = ({
         isDiscountMonthlyCostDeduction,
         memberId,
         offerData,
+        quoteCartId,
       })
     } catch (error) {
       setSignUiState('FAILED')
+      setIsCompletingCheckout(false)
     }
   }, [
     campaignCode,
@@ -349,6 +353,7 @@ export const Checkout = ({
     quoteCartId,
     storage,
     variation,
+    isCompletingCheckout,
   ])
 
   useEffect(() => {
@@ -359,33 +364,18 @@ export const Checkout = ({
 
   const startSign = async () => {
     setSignUiState('STARTED')
-    const { values, submitForm, dirty: isFormDataUpdated } = formik
+    const { submitForm, dirty: isFormDataUpdated, validateForm } = formik
 
     try {
-      let quoteIds = getQuoteIdsFromBundleVariant(selectedQuoteBundleVariant)
-      if (isFormDataUpdated) {
-        const result: FetchResult<CreateQuoteBundleMutation> = await submitForm()
-        const quoteCart = result.data?.quoteCart_createQuoteBundle
-        if (
-          !quoteCart ||
-          quoteCart?.__typename !== 'QuoteCart' ||
-          !quoteCart?.bundle?.possibleVariations
-        ) {
-          if (quoteCart && quoteCart.__typename === 'QuoteBundleError')
-            reportUnderwritingLimits(quoteCart, values)
-          return setSignUiState('FAILED')
-        }
+      const quoteIds = getQuoteIdsFromBundleVariant(selectedQuoteBundleVariant)
+      const errors = await validateForm()
 
-        const bundleVariants = quoteCart.bundle.possibleVariations
-        const updatedSelectedQuoteBundleVariant = getBundleVariantFromInsuranceTypesWithFallback(
-          bundleVariants as QuoteBundleVariant[],
-          selectedInsuranceTypes,
-        )
-        quoteIds = getQuoteIdsFromBundleVariant(
-          updatedSelectedQuoteBundleVariant,
-        )
+      if (Object.keys(errors).length) {
+        setSignUiState('FAILED')
+        return
       }
 
+      if (isFormDataUpdated) await submitForm()
       const { data } = await startCheckout({
         variables: {
           quoteIds,
@@ -403,7 +393,7 @@ export const Checkout = ({
   }
 
   const handleSignStart = () => {
-    if (checkoutStatus === 'SIGNED') {
+    if (checkoutStatus === CheckoutStatus.Signed) {
       completeCheckout()
     } else {
       startSign()
@@ -417,7 +407,6 @@ export const Checkout = ({
       birthDate,
       email,
       ssn,
-      startDate,
       phoneNumber,
       dataCollectionId,
     } = form
@@ -426,7 +415,7 @@ export const Checkout = ({
         locale: locale.isoLocale,
         quoteCartId,
         quotes: getUniqueQuotesFromVariantList(quoteBundleVariants).map(
-          ({ data: { type, typeOfContract } }) => {
+          ({ startDate, data: { type, typeOfContract } }) => {
             return {
               firstName,
               lastName,
@@ -446,6 +435,7 @@ export const Checkout = ({
         ),
       },
     })
+    // TODO: Handle reporting of underwritting limits as part of GRW-705
   }
 
   return (

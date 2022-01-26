@@ -12,6 +12,19 @@ interface ButtonProps {
   disabled?: boolean
 }
 
+type UnstyledButtonProps = {
+  disabled?: boolean
+}
+
+export const UnstyledButton = styled.button<UnstyledButtonProps>`
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: ${({ disabled }) => (disabled ? `default` : `pointer`)};
+`
+
 export const Button = styled.button<ButtonProps>`
   display: inline-block;
   font-size: 1rem;

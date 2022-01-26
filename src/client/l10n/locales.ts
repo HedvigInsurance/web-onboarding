@@ -5,6 +5,7 @@ import {
   ssnFormats,
   birthDateFormats,
   phoneNumberFormats,
+  phoneNumberPlaceholder,
 } from './inputFormats'
 import { CallCenterData, callCenters } from './callCenters'
 
@@ -40,6 +41,7 @@ export type LocaleData = {
   }
   phoneNumber: {
     formatRegex: RegExp
+    placeholder?: string
   }
   callCenter?: CallCenterData
 }
@@ -64,6 +66,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     },
     phoneNumber: {
       formatRegex: phoneNumberFormats.SE,
+      placeholder: phoneNumberPlaceholder.SE,
     },
     callCenter: callCenters.SE,
   },
@@ -86,6 +89,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     },
     phoneNumber: {
       formatRegex: phoneNumberFormats.SE,
+      placeholder: phoneNumberPlaceholder.SE,
     },
     callCenter: callCenters.SE,
   },
@@ -108,6 +112,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     },
     phoneNumber: {
       formatRegex: phoneNumberFormats.NO,
+      placeholder: phoneNumberPlaceholder.NO,
     },
   },
   'no-en': {
@@ -129,6 +134,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     },
     phoneNumber: {
       formatRegex: phoneNumberFormats.NO,
+      placeholder: phoneNumberPlaceholder.NO,
     },
   },
   dk: {
@@ -150,6 +156,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     },
     phoneNumber: {
       formatRegex: phoneNumberFormats.DK,
+      placeholder: phoneNumberPlaceholder.DK,
     },
   },
   'dk-en': {
@@ -171,6 +178,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     },
     phoneNumber: {
       formatRegex: phoneNumberFormats.DK,
+      placeholder: phoneNumberPlaceholder.DK,
     },
   },
 }

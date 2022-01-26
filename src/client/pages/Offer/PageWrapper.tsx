@@ -33,6 +33,7 @@ export const PageWrapper = ({
   const handleClickPhoneNumber = (status: 'opened' | 'closed') => {
     if (offerData) {
       trackOfferGTM(EventName.ClickCallNumber, offerData, isReferralCodeUsed, {
+        quoteCartId,
         phoneNumberData: { path: history.location.pathname, status },
       })
     }

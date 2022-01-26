@@ -18,24 +18,7 @@ mutation CreateQuoteBundle($quoteCartId: ID!, $quotes: [JSON!]!, $locale: Locale
         }
       }
       campaign {
-        incentive {
-          ... on MonthlyCostDeduction {
-            amount {
-              amount
-              currency
-            }
-          }
-          ... on PercentageDiscountMonths {
-            percentageDiscount
-            quantity
-          }
-        }
-        code
-        owner {
-          displayName
-          id
-        }
-        expiresAt
+        ...CampaignData
       }
       checkoutMethods
       checkout {
