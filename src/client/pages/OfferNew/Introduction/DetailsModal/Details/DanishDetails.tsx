@@ -9,11 +9,10 @@ export const DanishDetails: React.FC<DetailsProps> = ({
   fieldSchema,
   formikProps,
   offerQuote,
-  textKeys,
 }) => {
   return (
     <>
-      {isDanishHomeContentFieldSchema(fieldSchema, offerQuote, textKeys) && (
+      {isDanishHomeContentFieldSchema(fieldSchema, offerQuote) && (
         <Content>
           <ContentColumn>
             <InputGroup>

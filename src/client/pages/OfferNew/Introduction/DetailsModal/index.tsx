@@ -183,7 +183,6 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                 fieldSchema={fieldSchema}
                 formikProps={formikProps}
                 offerQuote={mainOfferQuote}
-                textKeys={textKeys}
               />
               <Footer>
                 <Button type="submit" disabled={isUpdating}>

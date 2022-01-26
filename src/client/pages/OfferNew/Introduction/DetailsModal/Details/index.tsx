@@ -9,7 +9,6 @@ export const Details: React.FC<DetailsProps> = ({
   fieldSchema,
   formikProps,
   offerQuote,
-  textKeys,
 }) => {
   const market = useMarket()
   return (
@@ -19,7 +18,6 @@ export const Details: React.FC<DetailsProps> = ({
           fieldSchema={fieldSchema}
           formikProps={formikProps}
           offerQuote={offerQuote}
-          textKeys={textKeys}
         />
       )}
       {market === Market.No && (
@@ -27,7 +25,6 @@ export const Details: React.FC<DetailsProps> = ({
           fieldSchema={fieldSchema}
           formikProps={formikProps}
           offerQuote={offerQuote}
-          textKeys={textKeys}
         />
       )}
       {market === Market.Dk && (
@@ -35,7 +32,6 @@ export const Details: React.FC<DetailsProps> = ({
           fieldSchema={fieldSchema}
           formikProps={formikProps}
           offerQuote={offerQuote}
-          textKeys={textKeys}
         />
       )}
     </>
