@@ -4,45 +4,40 @@ import React from 'react'
 import { Switch } from 'components/Switch'
 import { Spinner } from 'components/utils'
 import { Tooltip } from 'components/Tooltip/Tooltip'
-import {
-  useRemoveStartDateMutation,
-  useStartDateMutation,
-  QuoteDetails,
-} from 'data/graphql'
+import { useRemoveStartDateMutation, useStartDateMutation } from 'data/graphql'
 import { OfferData, OfferQuote } from 'pages/OfferNew/types'
-import {
-  isNorwegianHomeContents,
-  isNorwegianTravel,
-} from 'pages/OfferNew/utils'
 import { useTextKeys, TextKeyMap } from 'utils/textKeys'
 import { gqlDateFormat } from './utils'
 
 const HandleSwitchingWrapper = styled.div`
-  margin-bottom: 0.75rem;
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  margin-bottom: 0.75rem;
   padding: 0 0.25rem;
 `
 
-const HandleSwitchingLabel = styled.label`
-  display: inline-flex;
+const HandleSwitchingLabel = styled.label<{ isClickable: boolean }>`
+  display: flex;
+  align-items: center;
 
   &:hover {
-    cursor: pointer;
+    cursor: ${({ isClickable }) => (isClickable ? 'pointer' : 'initial')};
   }
 `
 
 const StyledSpinner = styled(Spinner)`
-  margin-right: 0.5rem;
-  font-size: 1.25rem;
+  flex: 1 0 auto;
   height: 1.25rem;
+  width: 1.25rem;
+  margin-right: 1rem;
 `
 
 const StyledSwitch = styled(Switch)`
-  margin-right: 0.5rem;
+  margin-right: 1rem;
 `
 
-interface CancellationOptionsProps {
+type CancellationOptionsProps = {
   quotes: OfferData['quotes']
   setShowError: (showError: boolean) => void
   refetch: () => Promise<void>
@@ -61,7 +56,6 @@ export const CancellationOptions: React.FC<CancellationOptionsProps> = ({
             <QuoteCancellationOption
               key={quote.id}
               {...rest}
-              isGenericQuote={quotes.length === 1}
               quote={quote as OfferQuote}
             />
           )
@@ -71,35 +65,27 @@ export const CancellationOptions: React.FC<CancellationOptionsProps> = ({
   )
 }
 
-const getLabelContent = (
-  textKeys: TextKeyMap,
-  quoteDetails: QuoteDetails,
-  isGenericQuote: boolean,
-) => {
-  if (isGenericQuote) {
-    return textKeys.SIDEBAR_REQUEST_CANCELLATION_GENERIC_INSURANCE()
+const getLabelContent = (textKeys: TextKeyMap, quote: OfferQuote) => {
+  if (quote.currentInsurer?.displayName) {
+    return textKeys.SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_PROVIDER_LABEL({
+      INSURANCE_NAME: quote.displayName,
+      INSURANCE_PROVIDER: quote.currentInsurer.displayName,
+    })
   }
 
-  if (isNorwegianHomeContents(quoteDetails)) {
-    return textKeys.SIDEBAR_REQUEST_CANCELLATION_HOME_INSURANCE()
-  }
-
-  if (isNorwegianTravel(quoteDetails)) {
-    return textKeys.SIDEBAR_REQUEST_CANCELLATION_TRAVEL_INSURANCE()
-  }
-
-  return null
+  return textKeys.SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_LABEL({
+    INSURANCE_NAME: quote.displayName,
+  })
 }
 
-interface QuoteCancellationOptionProps {
-  isGenericQuote: boolean
+type QuoteCancellationOptionProps = {
   quote: OfferQuote
   setShowError: (showError: boolean) => void
   refetch: () => Promise<void>
   handleFail: (e: Error) => void
 }
+
 const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
-  isGenericQuote,
   quote,
   setShowError,
   handleFail,
@@ -113,11 +99,7 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
   const [removeStartDate] = useRemoveStartDateMutation()
 
   const checked = !quote.startDate
-  const labelContent = getLabelContent(
-    textKeys,
-    quote.quoteDetails,
-    isGenericQuote,
-  )
+  const labelContent = getLabelContent(textKeys, quote)
 
   const toggle = async () => {
     try {
@@ -150,7 +132,7 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
   return (
     // TODO: This logic needs some clarification
     <HandleSwitchingWrapper>
-      <HandleSwitchingLabel>
+      <HandleSwitchingLabel isClickable={!isLoading}>
         {isLoading ? (
           <StyledSpinner />
         ) : (
@@ -158,7 +140,11 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
         )}
         {labelContent}
       </HandleSwitchingLabel>
-      <Tooltip body={textKeys.SIDEBAR_REQUEST_CANCELLATION_TOOLTIP()} />
+      <Tooltip
+        body={textKeys.SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_TOOLTIP({
+          INSURANCE_NAME: quote.displayName,
+        })}
+      />
     </HandleSwitchingWrapper>
   )
 }

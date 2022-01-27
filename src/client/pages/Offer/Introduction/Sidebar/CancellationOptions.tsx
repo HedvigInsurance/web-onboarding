@@ -11,31 +11,34 @@ import { gqlDateFormat } from 'pages/OfferNew/Introduction/Sidebar/utils'
 import { useTextKeys, TextKeyMap } from 'utils/textKeys'
 
 const HandleSwitchingWrapper = styled.div`
-  margin-bottom: 0.75rem;
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  margin-bottom: 0.75rem;
   padding: 0 0.25rem;
 `
 
-const HandleSwitchingLabel = styled.label`
-  display: inline-flex;
+const HandleSwitchingLabel = styled.label<{ isClickable: boolean }>`
+  display: flex;
+  align-items: center;
 
   &:hover {
-    cursor: pointer;
+    cursor: ${({ isClickable }) => (isClickable ? 'pointer' : 'initial')};
   }
 `
 
 const StyledSpinner = styled(Spinner)`
-  margin-right: 0.5rem;
-  font-size: 1.25rem;
+  flex: 1 0 auto;
   height: 1.25rem;
+  width: 1.25rem;
+  margin-right: 0.5rem;
 `
 
 const StyledSwitch = styled(Switch)`
   margin-right: 0.5rem;
 `
 
-interface CancellationOptionsProps {
+type CancellationOptionsProps = {
   quoteCartId: string
   quotes: OfferData['quotes']
   setShowError: (showError: boolean) => void
@@ -54,7 +57,6 @@ export const CancellationOptions: React.FC<CancellationOptionsProps> = ({
             <QuoteCancellationOption
               key={quote.id}
               {...rest}
-              isGenericQuote={quotes.length === 1}
               quote={quote}
               quoteCartId={quoteCartId}
             />
@@ -65,28 +67,26 @@ export const CancellationOptions: React.FC<CancellationOptionsProps> = ({
   )
 }
 
-const getLabelContent = (
-  textKeys: TextKeyMap,
-  quote: OfferQuote,
-  isGenericQuote: boolean,
-) => {
-  if (isGenericQuote) {
-    return textKeys.SIDEBAR_REQUEST_CANCELLATION_GENERIC_INSURANCE()
+const getLabelContent = (textKeys: TextKeyMap, quote: OfferQuote) => {
+  if (quote.currentInsurer?.displayName) {
+    return textKeys.SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_PROVIDER_LABEL({
+      INSURANCE_NAME: quote.displayName,
+      INSURANCE_PROVIDER: quote.currentInsurer.displayName,
+    })
   }
 
-  return textKeys.SIDEBAR_REQUEST_CANCELLATION_INSURANCE({
+  return textKeys.SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_LABEL({
     INSURANCE_NAME: quote.displayName,
   })
 }
 
-interface QuoteCancellationOptionProps {
-  isGenericQuote: boolean
+type QuoteCancellationOptionProps = {
   quoteCartId: string
   quote: OfferQuote
   setShowError: (showError: boolean) => void
 }
+
 const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
-  isGenericQuote,
   quoteCartId,
   quote,
   setShowError,
@@ -99,7 +99,7 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
   const [editQuote] = useEditBundledQuoteMutation()
 
   const isChecked = !quote.startDate
-  const labelContent = getLabelContent(textKeys, quote, isGenericQuote)
+  const labelContent = getLabelContent(textKeys, quote)
 
   const handleToggleStartDate = async () => {
     try {
@@ -126,7 +126,7 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
   return (
     // TODO: This logic needs some clarification
     <HandleSwitchingWrapper>
-      <HandleSwitchingLabel>
+      <HandleSwitchingLabel isClickable={!isLoading}>
         {isLoading ? (
           <StyledSpinner />
         ) : (
@@ -134,7 +134,11 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
         )}
         {labelContent}
       </HandleSwitchingLabel>
-      <Tooltip body={textKeys.SIDEBAR_REQUEST_CANCELLATION_TOOLTIP()} />
+      <Tooltip
+        body={textKeys.SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_TOOLTIP({
+          INSURANCE_NAME: quote.displayName,
+        })}
+      />
     </HandleSwitchingWrapper>
   )
 }
