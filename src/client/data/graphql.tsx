@@ -11909,44 +11909,44 @@ export type PriceQueryVariables = Exact<{
 }>
 
 export type PriceQuery = { __typename?: 'Query' } & {
-  quoteCart: { __typename?: 'QuoteCart' } & {
-    bundle?: Maybe<
-      { __typename?: 'QuoteBundle' } & {
-        possibleVariations: Array<
-          { __typename?: 'QuoteBundleVariant' } & {
-            bundle: { __typename?: 'QuoteBundle' } & {
-              quotes: Array<
-                { __typename?: 'BundledQuote' } & Pick<BundledQuote, 'id'> & {
-                    price: { __typename?: 'MonetaryAmountV2' } & Pick<
-                      MonetaryAmountV2,
-                      'amount' | 'currency'
-                    >
-                  }
+  quoteCart: { __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'> & {
+      bundle?: Maybe<
+        { __typename?: 'QuoteBundle' } & {
+          possibleVariations: Array<
+            { __typename?: 'QuoteBundleVariant' } & {
+              bundle: { __typename?: 'QuoteBundle' } & {
+                quotes: Array<
+                  { __typename?: 'BundledQuote' } & Pick<BundledQuote, 'id'> & {
+                      price: { __typename?: 'MonetaryAmountV2' } & Pick<
+                        MonetaryAmountV2,
+                        'amount' | 'currency'
+                      >
+                    }
+                >
+              }
+            }
+          >
+          bundleCost: { __typename?: 'InsuranceCost' } & Pick<
+            InsuranceCost,
+            'freeUntil'
+          > & {
+              monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount'
+              >
+              monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount'
+              >
+              monthlyDiscount: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount'
               >
             }
-          }
-        >
-        bundleCost: { __typename?: 'InsuranceCost' } & Pick<
-          InsuranceCost,
-          'freeUntil'
-        > & {
-            monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
-              MonetaryAmountV2,
-              'amount'
-            >
-            monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
-              MonetaryAmountV2,
-              'amount'
-            >
-            monthlyDiscount: { __typename?: 'MonetaryAmountV2' } & Pick<
-              MonetaryAmountV2,
-              'amount'
-            >
-          }
-      }
-    >
-    campaign?: Maybe<{ __typename?: 'Campaign' } & CampaignDataFragment>
-  }
+        }
+      >
+      campaign?: Maybe<{ __typename?: 'Campaign' } & CampaignDataFragment>
+    }
 }
 
 export type QuoteDataFragment = { __typename?: 'BundledQuote' } & Pick<
@@ -14067,6 +14067,7 @@ export type NorwegianBankIdAuthMutationOptions = ApolloReactCommon.BaseMutationO
 export const PriceDocument = gql`
   query Price($id: ID!, $locale: Locale!) {
     quoteCart(id: $id) {
+      id
       bundle {
         possibleVariations {
           bundle {

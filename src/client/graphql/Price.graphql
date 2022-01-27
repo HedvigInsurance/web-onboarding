@@ -1,5 +1,6 @@
 query Price($id: ID!, $locale: Locale!) {
   quoteCart(id: $id) {
+    id
     bundle {
       possibleVariations {
         bundle {
