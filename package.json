@@ -89,7 +89,6 @@
     "nodemon": "^2.0.4",
     "prettier": "^1.14.3",
     "pretty-quick": "^2.0.1",
-    "start-server-and-test": "^1.14.0",
     "storybook-addon-paddings": "^4.0.0",
     "storybook-formik": "^2.1.5",
     "utf-8-validate": "^5.0.2",
