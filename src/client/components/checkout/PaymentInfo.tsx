@@ -1,9 +1,10 @@
 import React from 'react'
+import { useParams } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
-
-const PRICE_PLACEHOLDER = '239 NOK/month'
+import { usePriceQuery } from 'data/graphql'
 
 const { gray900, gray700 } = colorsV3
 
@@ -24,11 +25,27 @@ const CancelInfo = styled.div`
 
 export const PaymentInfo = () => {
   const textKeys = useTextKeys()
+  const { currency, isoLocale } = useCurrentLocale()
+  const { id: quoteCartId } = useParams<{ id: string }>()
+  const { data, loading: isLoading, error } = usePriceQuery({
+    variables: {
+      id: quoteCartId,
+      locale: isoLocale,
+    },
+  })
+
+  const totalMonthlyCost = data?.quoteCart.bundle?.bundleCost.monthlyNet.amount
 
   return (
     <Wrapper>
-      <TotalPrice>{PRICE_PLACEHOLDER}</TotalPrice>
-      <CancelInfo>{textKeys.CANCEL_ANYTIME()}</CancelInfo>
+      {!isLoading && !error && (
+        <>
+          <TotalPrice>{`${totalMonthlyCost} ${
+            currency.currencySymbol
+          }${textKeys.PRICE_SUFFIX_INTERVAL()}`}</TotalPrice>
+          <CancelInfo>{textKeys.CANCEL_ANYTIME()}</CancelInfo>
+        </>
+      )}
     </Wrapper>
   )
 }
