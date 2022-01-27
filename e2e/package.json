@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "engines": {
-    "node": "^16.13.1"
+    "node": "^16.x"
   },
   "scripts": {
     "cypress": "cypress open"
