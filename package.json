@@ -20,7 +20,8 @@
     "codegen": "graphql-codegen --config codegen.yml && yarn prettier --write src/client/data/graphql.tsx",
     "storybook": "start-storybook -p 6008",
     "build-storybook": "build-storybook",
-    "download-translations": "./bin/download-translations.sh"
+    "download-translations": "./bin/download-translations.sh",
+    "cypress": "cypress open"
   },
   "devDependencies": {
     "@babel/core": "^7.1.0",
@@ -30,6 +31,7 @@
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.10.4",
+    "@faker-js/faker": "^6.0.0-alpha.5",
     "@graphql-codegen/cli": "^1.17.10",
     "@graphql-codegen/typescript": "^1.17.10",
     "@graphql-codegen/typescript-operations": "^1.17.8",
@@ -76,9 +78,11 @@
     "bufferutil": "^4.0.1",
     "caniuse-lite": "^1.0.30001099",
     "concurrently": "^5.2.0",
+    "cypress": "^9.3.1",
     "eslint": "^7.10.0",
     "eslint-config-prettier": "^6.12.0",
     "eslint-import-resolver-typescript": "^2.3.0",
+    "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.2",
