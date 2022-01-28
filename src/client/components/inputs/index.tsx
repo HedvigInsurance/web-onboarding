@@ -211,6 +211,7 @@ export interface TextInputProps extends CoreInputFieldProps {
   value?: string
   maxLength?: number
   inputMode?: string
+  pattern?: string
 }
 
 export const InputField: React.FC<TextInputProps> = ({
