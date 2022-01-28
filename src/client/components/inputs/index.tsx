@@ -211,7 +211,7 @@ export interface TextInputProps extends CoreInputFieldProps {
   value?: string
   maxLength?: number
   inputMode?: string
-  pattern?: string
+  pattern?: string //needed for safari desktop as inputMode is not supported
 }
 
 export const InputField: React.FC<TextInputProps> = ({
