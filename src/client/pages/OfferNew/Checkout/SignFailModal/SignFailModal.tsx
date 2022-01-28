@@ -3,7 +3,7 @@ import ReactMarkdown from 'react-markdown'
 import { useTextKeys } from 'utils/textKeys'
 import { ErrorModal, ErrorHeading, ErrorText } from 'components/ErrorModal'
 
-interface Props {
+type Props = {
   onClose: () => void
   isVisible: boolean
 }
