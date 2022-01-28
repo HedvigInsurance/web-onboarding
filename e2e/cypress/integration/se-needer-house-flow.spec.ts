@@ -1,13 +1,12 @@
 import { faker } from '@faker-js/faker'
 
 it('should get a price quote for a Swedish house', async () => {
-  faker.setLocale('sv')
+  const url = '/se-en/new-member/home-accident-needer'
 
-  cy.visit(`/se-en/new-member/home-accident-needer`, {
-    onBeforeLoad: (win) => {
-      win.sessionStorage.clear()
-    },
-  })
+  faker.setLocale('sv')
+  cy.session(url, () => false)
+
+  cy.visit(url)
 
   // insurance-type
   cy.contains('button', 'Accept All Cookies', { timeout: 10000 }).click()
@@ -20,9 +19,9 @@ it('should get a price quote for a Swedish house', async () => {
   cy.contains('button', 'I own it', { timeout: 1000 }).click()
 
   // personal-number-villa
-  cy.contains('All we need now is your personal identity number.', { timeout: 5000 }).should(
-    'be.visible',
-  )
+  cy.contains('All we need now is your personal identity number.', {
+    timeout: 5000,
+  }).should('be.visible')
   cy.focused().type('971023-2068{enter}')
 
   // manual-name-villa
@@ -35,7 +34,9 @@ it('should get a price quote for a Swedish house', async () => {
 
   // manual-address-villa
   const address = faker.address.streetAddress()
-  cy.contains('What address do you want an offer for?', { timeout: 5000 }).should('be.visible')
+  cy.contains('What address do you want an offer for?', {
+    timeout: 5000,
+  }).should('be.visible')
   cy.focused().type(address)
   cy.contains('Postal code')
     .parent()
@@ -43,9 +44,9 @@ it('should get a price quote for a Swedish house', async () => {
     .type(`${faker.address.zipCode('### ##')}{enter}`)
 
   // manual-info-villa
-  cy.contains("We can't fetch any information about your house.", { timeout: 5000 }).should(
-    'be.visible',
-  )
+  cy.contains("We can't fetch any information about your house.", {
+    timeout: 5000,
+  }).should('be.visible')
   cy.focused().type(faker.datatype.number({ min: 30, max: 120 }).toString())
   cy.contains('span', 'Ancillary area')
     .parent()
@@ -65,7 +66,9 @@ it('should get a price quote for a Swedish house', async () => {
   cy.contains('button', 'Four floors or less', { timeout: 1000 }).click()
 
   // household-size-villa
-  cy.contains('How many people should be covered', { timeout: 5000 }).should('be.visible')
+  cy.contains('How many people should be covered', { timeout: 5000 }).should(
+    'be.visible',
+  )
   cy.focused().type(`${faker.datatype.number({ min: 0, max: 6 })}{enter}`)
 
   // subletting
@@ -75,7 +78,9 @@ it('should get a price quote for a Swedish house', async () => {
   cy.contains('button', 'Continue', { timeout: 1000 }).click()
 
   // email-villa
-  cy.contains('OK, we are almost there.', { timeout: 5000 }).should('be.visible')
+  cy.contains('OK, we are almost there.', { timeout: 5000 }).should(
+    'be.visible',
+  )
   cy.focused().type(`${faker.internet.email()}{enter}`)
 
   // offer page

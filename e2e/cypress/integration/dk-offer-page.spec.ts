@@ -59,7 +59,6 @@ describe('DK Offer Page', () => {
       query: QUOTE_CART_MUTATION,
     }).then((response) => {
       const quoteCartId = response.body.data.onboardingQuoteCart_create.id
-      console.log(quoteCartId)
 
       cy.request('POST', 'https://graphql.dev.hedvigit.com/graphql', {
         query: QUOTE_BUNDLE_MUTATION,
@@ -79,9 +78,14 @@ describe('DK Offer Page', () => {
         cy.contains(HOME_CONTENT_QUOTE.data.street).should('be.visible')
 
         cy.contains('button', 'Update details').click()
-        const $form = cy.contains('Your information', { timeout: 5000 }).parent()
+        const $form = cy
+          .contains('Your information', { timeout: 5000 })
+          .parent()
         const newFirstName = faker.name.firstName()
-        $form.find('input[name=firstName]').clear().type(`${newFirstName}{enter}`)
+        $form
+          .find('input[name=firstName]')
+          .clear()
+          .type(`${newFirstName}{enter}`)
         cy.contains(newFirstName).should('be.visible', { timeout: 2000 })
 
         cy.contains('button', 'Add discount code').click()
@@ -93,15 +97,17 @@ describe('DK Offer Page', () => {
 
         // Checkout
         cy.get('input[name=ssn]').type(`${SSN}{enter}`)
-        cy.contains('button', 'Complete purchase', { timeout: 5000 }).should('be.disabled')
+        cy.contains('button', 'Complete purchase', { timeout: 5000 }).should(
+          'be.disabled',
+        )
         cy.contains('button', 'Complete purchase', { timeout: 10000 })
           .should('not.be.disabled')
           .click()
 
         // Connect Payment Page
-        cy.contains('Welcome to Hedvig,your insurance is now active', { timeout: 20000 }).should(
-          'be.visible',
-        )
+        cy.contains('Welcome to Hedvig,your insurance is now active', {
+          timeout: 20000,
+        }).should('be.visible')
         // Cypress doesn't really work well with iFrames so we stop here
         // https://www.cypress.io/blog/2020/02/12/working-with-iframes-in-cypress/
       })

@@ -1,13 +1,12 @@
 import { faker } from '@faker-js/faker'
 
 it('should get a price quote for a Swedish apartment', () => {
-  faker.setLocale('sv')
+  const url = '/se-en/new-member/home-accident-needer'
 
-  cy.visit(`/se-en/new-member/home-accident-needer`, {
-    onBeforeLoad: (win) => {
-      win.sessionStorage.clear()
-    },
-  })
+  faker.setLocale('sv')
+  cy.session(url, () => false)
+
+  cy.visit(url)
 
   // insurance-type
   cy.contains('button', 'Accept All Cookies', { timeout: 10000 }).click()
@@ -20,19 +19,21 @@ it('should get a price quote for a Swedish apartment', () => {
   cy.contains('button', 'I own it', { timeout: 1000 }).click()
 
   // living-space-apartment
-  cy.contains('How big is the apartment?', { timeout: 5000 }).should('be.visible')
+  cy.contains('How big is the apartment?', { timeout: 5000 }).should(
+    'be.visible',
+  )
   cy.focused().type(`${faker.datatype.number({ min: 30, max: 120 })}{enter}`)
 
   // household-size-apartment
-  cy.contains('How many people should be covered by the insurance?', { timeout: 5000 }).should(
-    'be.visible',
-  )
+  cy.contains('How many people should be covered by the insurance?', {
+    timeout: 5000,
+  }).should('be.visible')
   cy.focused().type(`${faker.datatype.number({ min: 1, max: 6 })}{enter}`)
 
   // personal-number-apartment
-  cy.contains('All we need now is your personal identity number.', { timeout: 5000 }).should(
-    'be.visible',
-  )
+  cy.contains('All we need now is your personal identity number.', {
+    timeout: 5000,
+  }).should('be.visible')
   cy.focused().type('021118-8941{enter}')
 
   // name
@@ -46,7 +47,9 @@ it('should get a price quote for a Swedish apartment', () => {
 
   // new-address-apartment
   const address = faker.address.streetAddress()
-  cy.contains('What address do you want an offer for?', { timeout: 5000 }).should('be.visible')
+  cy.contains('What address do you want an offer for?', {
+    timeout: 5000,
+  }).should('be.visible')
   cy.focused().type(address)
   cy.contains('Postal code')
     .parent()
@@ -54,7 +57,9 @@ it('should get a price quote for a Swedish apartment', () => {
     .type(`${faker.address.zipCode('### ##')}{enter}`)
 
   // email-apartment
-  cy.contains('OK, we are almost there.', { timeout: 5000 }).should('be.visible')
+  cy.contains('OK, we are almost there.', { timeout: 5000 }).should(
+    'be.visible',
+  )
   cy.focused().type(`${faker.internet.email()}{enter}`)
 
   // offer page
