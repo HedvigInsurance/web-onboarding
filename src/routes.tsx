@@ -311,7 +311,7 @@ export const routes: Route[] = [
               switch (name) {
                 case 'contents':
                   return {
-                    baseUrl: `/${locale}/new-member/contents`,
+                    baseUrl: `/${locale}/new-member/${name}`,
                     name:
                       locale === 'no'
                         ? EmbarkStory.NorwayContentsNorwegian
@@ -319,7 +319,7 @@ export const routes: Route[] = [
                   }
                 case 'combo':
                   return {
-                    baseUrl: `/${locale}/new-member/combo`,
+                    baseUrl: `/${locale}/new-member/${name}`,
                     name:
                       locale === 'no'
                         ? EmbarkStory.NorwayComboNorwegian
@@ -334,7 +334,7 @@ export const routes: Route[] = [
                     }
                   }
                   return {
-                    baseUrl: `/${locale}/new-member/home`,
+                    baseUrl: `/${locale}/new-member/${name}`,
                     name:
                       locale === 'no'
                         ? EmbarkStory.NorwayHomeContentNorwegianQuoteCart
@@ -350,7 +350,7 @@ export const routes: Route[] = [
                     }
                   }
                   return {
-                    baseUrl: `/${locale}/new-member/home`,
+                    baseUrl: `/${locale}/new-member/${name}`,
                     name:
                       locale === 'no'
                         ? EmbarkStory.NorwayComboNorwegianQuoteCart
