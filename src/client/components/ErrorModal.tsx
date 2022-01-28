@@ -31,7 +31,7 @@ export const ErrorText = styled.div`
   color: ${colorsV3.gray700};
   margin: 0;
   line-height: 1.5rem;
-
+  // Prevent setting unintended margin on markdown children
   p {
     margin: 0;
   }
