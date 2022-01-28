@@ -12,12 +12,12 @@ const Container = styled.div`
   padding: 3rem;
   padding-left: 5rem;
   position: relative;
+`
 
-  svg {
-    position: absolute;
-    left: 2.5rem;
-    top: 3.25rem;
-  }
+const WarningTriangleWrapper = styled.div`
+  position: absolute;
+  left: 2.5rem;
+  top: 3.25rem;
 `
 
 export const ErrorHeading = styled.h2`
@@ -45,7 +45,9 @@ const CustomModal = styled(Modal)`
 export const ErrorModal = ({ isVisible, onClose, children }: Props) => (
   <CustomModal isVisible={isVisible} onClose={onClose} dynamicHeight>
     <Container>
-      <WarningTriangle />
+      <WarningTriangleWrapper>
+        <WarningTriangle />
+      </WarningTriangleWrapper>
       {children}
     </Container>
   </CustomModal>
