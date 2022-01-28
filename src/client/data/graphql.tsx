@@ -3219,6 +3219,13 @@ export type EmbarkApiCreateQuoteData = {
   error: EmbarkLink
 }
 
+export type EmbarkApiGraphQlConstantVariable = {
+  __typename?: 'EmbarkAPIGraphQLConstantVariable'
+  key: Scalars['String']
+  value: Scalars['String']
+  as: EmbarkApiGraphQlSingleVariableCasting
+}
+
 export type EmbarkApiGraphQlError = {
   __typename?: 'EmbarkAPIGraphQLError'
   contains?: Maybe<Scalars['String']>
@@ -3292,6 +3299,7 @@ export type EmbarkApiGraphQlVariable =
   | EmbarkApiGraphQlSingleVariable
   | EmbarkApiGraphQlGeneratedVariable
   | EmbarkApiGraphQlMultiActionVariable
+  | EmbarkApiGraphQlConstantVariable
 
 export enum EmbarkApiGraphQlVariableGeneratedType {
   Uuid = 'uuid',
@@ -11945,7 +11953,31 @@ export type PriceQuery = { __typename?: 'Query' } & {
             }
         }
       >
-      campaign?: Maybe<{ __typename?: 'Campaign' } & CampaignDataFragment>
+      campaign?: Maybe<
+        { __typename?: 'Campaign' } & Pick<
+          Campaign,
+          'code' | 'ownerName' | 'expiresAt' | 'displayValue'
+        > & {
+            incentive?: Maybe<
+              | ({ __typename?: 'MonthlyCostDeduction' } & {
+                  amount?: Maybe<
+                    { __typename?: 'MonetaryAmountV2' } & Pick<
+                      MonetaryAmountV2,
+                      'amount' | 'currency'
+                    >
+                  >
+                })
+              | { __typename: 'FreeMonths' }
+              | { __typename?: 'NoDiscount' }
+              | { __typename?: 'VisibleNoDiscount' }
+              | ({ __typename?: 'PercentageDiscountMonths' } & Pick<
+                  PercentageDiscountMonths,
+                  'percentageDiscount'
+                > & { quantityMonths: PercentageDiscountMonths['quantity'] })
+              | { __typename?: 'IndefinitePercentageDiscount' }
+            >
+          }
+      >
     }
 }
 
@@ -14094,11 +14126,28 @@ export const PriceDocument = gql`
         }
       }
       campaign {
-        ...CampaignData
+        incentive {
+          ... on MonthlyCostDeduction {
+            amount {
+              amount
+              currency
+            }
+          }
+          ... on PercentageDiscountMonths {
+            percentageDiscount
+            quantityMonths: quantity
+          }
+          ... on FreeMonths {
+            __typename
+          }
+        }
+        code
+        ownerName
+        expiresAt
+        displayValue(locale: $locale)
       }
     }
   }
-  ${CampaignDataFragmentDoc}
 `
 
 /**

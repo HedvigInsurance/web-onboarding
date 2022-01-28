@@ -27,7 +27,25 @@ query Price($id: ID!, $locale: Locale!) {
       }
     }
     campaign {
-      ...CampaignData
+      incentive {
+        ... on MonthlyCostDeduction {
+          amount {
+            amount
+            currency
+          }
+        }
+        ... on PercentageDiscountMonths {
+          percentageDiscount
+          quantityMonths: quantity
+        }
+        ... on FreeMonths {
+          __typename
+        }
+      }
+      code
+      ownerName
+      expiresAt
+      displayValue(locale: $locale)
     }
   }
 }
