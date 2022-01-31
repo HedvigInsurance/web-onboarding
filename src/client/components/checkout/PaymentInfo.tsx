@@ -5,6 +5,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
 import { usePriceQuery } from 'data/graphql'
+import { Spinner } from '../utils'
 
 const { gray900, gray700 } = colorsV3
 
@@ -22,6 +23,12 @@ const CancelInfo = styled.div`
   line-height: 1rem;
   color: ${gray700};
 `
+const SpinnerWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 2rem;
+  color: ${gray900};
+`
 
 export const PaymentInfo = () => {
   const textKeys = useTextKeys()
@@ -34,18 +41,28 @@ export const PaymentInfo = () => {
     },
   })
 
-  const totalMonthlyCost = data?.quoteCart.bundle?.bundleCost.monthlyNet.amount
+  const totalMonthlyCost = Math.round(
+    Number(data?.quoteCart.bundle?.bundleCost.monthlyNet.amount),
+  )
+
+  if (isLoading) {
+    return (
+      <SpinnerWrapper>
+        <Spinner />
+      </SpinnerWrapper>
+    )
+  }
+
+  if (error) {
+    return null
+  }
 
   return (
     <Wrapper>
-      {!isLoading && !error && (
-        <>
-          <TotalPrice>{`${totalMonthlyCost} ${
-            currency.currencySymbol
-          }${textKeys.PRICE_SUFFIX_INTERVAL()}`}</TotalPrice>
-          <CancelInfo>{textKeys.CANCEL_ANYTIME()}</CancelInfo>
-        </>
-      )}
+      <TotalPrice>{`${totalMonthlyCost} ${
+        currency.currencySymbol
+      }${textKeys.PRICE_SUFFIX_INTERVAL()}`}</TotalPrice>
+      <CancelInfo>{textKeys.CANCEL_ANYTIME()}</CancelInfo>
     </Wrapper>
   )
 }
