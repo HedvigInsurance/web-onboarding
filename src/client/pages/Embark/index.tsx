@@ -23,6 +23,7 @@ import { useAddCampaignCodeMutation } from 'data/graphql'
 import { useFeature, Features } from 'utils/hooks/useFeature'
 import { CampaignCode } from 'utils/campaignCode'
 import { useCreateQuoteCart } from 'utils/hooks/useCreateQuoteCart'
+import { EmbarkStory } from 'src/client/utils/embarkStory'
 import { pushToGTMDataLayer } from '../../utils/tracking/gtm'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
@@ -367,6 +368,10 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
       (props.language ? `/${props.language}` : '') + '/new-member/offer',
     )
   }
+
+  useEffect(() => {
+    if (props.name) EmbarkStory.set(props.name)
+  }, [props.name])
 
   return (
     <EmbarkStyling>
