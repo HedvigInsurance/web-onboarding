@@ -343,5 +343,8 @@
   "PRICE_SUFFIX_INTERVAL": "\/mnd",
   "CHECKOUT_SIGN_FAIL_ERROR_TEXT": "Vennligst prøv igjen eller kontakt oss i chatten eller send oss en e-post på [hedvig@hedvig.com](mailto:hedvig@hedvig.com) hvis problemet vedvarer.",
   "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_PROVIDER_LABEL": "Avslutt min nåværende  {INSURANCE_NAME} hos {INSURANCE_PROVIDER}",
-  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_TOOLTIP": "Vi hjelper deg gjerne med å avslutte din nåværende {INSURANCE_NAME} for deg. Din nye forsikring hos Hedvig aktiveres når den gamle utløper. Du vil få mer informasjon på mail."
+  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_TOOLTIP": "Vi hjelper deg gjerne med å avslutte din nåværende {INSURANCE_NAME} for deg. Din nye forsikring hos Hedvig aktiveres når den gamle utløper. Du vil få mer informasjon på mail.",
+  "CHECKOUT_FOOTER_CANCELLATION_INFO": "",
+  "CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT": "",
+  "CHECKOUT_FOOTER_COMPLETE_PURCHASE": ""
 }

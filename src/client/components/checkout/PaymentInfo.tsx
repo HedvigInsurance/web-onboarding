@@ -62,7 +62,7 @@ export const PaymentInfo = () => {
       <TotalPrice>{`${totalMonthlyCost} ${
         currency.currencySymbol
       }${textKeys.PRICE_SUFFIX_INTERVAL()}`}</TotalPrice>
-      <CancelInfo>{textKeys.CANCEL_ANYTIME()}</CancelInfo>
+      <CancelInfo>{textKeys.CHECKOUT_FOOTER_CANCELLATION_INFO()}</CancelInfo>
     </Wrapper>
   )
 }
