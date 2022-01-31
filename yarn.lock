@@ -1452,6 +1452,13 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime@^7.14.8":
+  version "7.16.7"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.16.7.tgz#03ff99f64106588c9c403c6ecb8c3bafbbdff1fa"
+  integrity sha512-9E9FJowqAsytyOY6LG+1KuueckRL+aQW+mKvXRXnuFGyRAyepJPmEo9vgMfXUA6O9u3IeEdv9MAkppFcaQwogQ==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/runtime@^7.9.2":
   version "7.14.8"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.14.8.tgz#7119a56f421018852694290b9f9148097391b446"
@@ -2124,29 +2131,30 @@
   resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-4.1.0.tgz#e8de34dbfb826c15dbaeb582585c3a5f720b9ced"
   integrity sha512-TYlxSmMQPiv8+DfgwKrV9B1Xr+vQA5VBx1EdfZR1gZNcc5QDK4Bk90oYC4A5nu3er71RyEHfjlHWJdqfAMGOJQ==
 
-"@hedviginsurance/embark@^2.4.1":
-  version "2.4.1"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-2.4.1.tgz#e392d62d067b0abc485491ee33b57bf0b4f9e96a"
-  integrity sha512-HFR8L+yUfEIelJN/ov0Cq+fnJa/uFFMMa71dH5lr+IaWu3HTwE2witPH6Nn7RtEjxdjsFlU02k6JYJOICLGkvw==
+"@hedviginsurance/brand@^4.2.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-4.2.0.tgz#88fcfe7f3c2caa4b68749e72194426835fb2470a"
+  integrity sha512-812uhERaj+xRyTi/VMjOcYviMwfpc/DFYWBqFKy3LqUyyIBRQONRSJJ9MbPy82n2wKHZAtxG5aB4j74miO051g==
+
+"@hedviginsurance/embark@^2.5.0":
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-2.5.0.tgz#5da450a6853def4218bdf2645a9353c947df56cb"
+  integrity sha512-SXPNdoUnItoX73PCIE21SmgBAqMhg40O7yD2Bxuki+vIsPtd5scqpvfHoR5GRmstniXEXKa1UCdpLmb5k8SrTg==
   dependencies:
     "@emotion/react" "^11.4.1"
     "@emotion/styled" "^11.3.0"
-    "@hedviginsurance/brand" "^4.1.0"
+    "@hedviginsurance/brand" "^4.2.0"
     "@hedviginsurance/textkeyfy" "^2.0.1"
     "@juggle/resize-observer" "^3.3.1"
     "@koa/cors" "^2.2.3"
     "@types/koa" "^2.0.51"
     "@types/koa-graphql" "^0.8.4"
-    "@types/koa-mount" "^4.0.0"
-    "@types/koa-router" "^7.4.1"
-    "@types/koa-static" "^4.0.1"
     "@types/koa__cors" "^3.0.2"
     "@types/node" "14.17.6"
-    "@types/uuid" "^8.3.1"
     animated-scroll-to "^2.0.5"
     axios "^0.21.1"
     date-fns "^2.8.1"
-    downshift "^6.1.3"
+    downshift "^6.1.7"
     eventemitter3 "^4.0.0"
     graphql "^14.6.0"
     graphql-tools "^4.0.7"
@@ -2154,7 +2162,7 @@
     history "^5.0.1"
     ismobilejs "^1.0.3"
     jsdom "^18.0.0"
-    koa "^2.10.0"
+    koa "^2.13.4"
     koa-graphql "^0.8.0"
     koa-mount "^4.0.0"
     koa-router "^9.4.0"
@@ -2169,7 +2177,6 @@
     requestidlecallback "^0.3.0"
     smoothscroll "^0.4.0"
     ts-node "^8.4.1"
-    typescript "^4.4.2"
     uuid "^8.3.2"
 
 "@hedviginsurance/textkeyfy@^2.0.1":
@@ -4090,11 +4097,6 @@
   version "3.4.9"
   resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-3.4.9.tgz#fcf01997bbc9f7c09ae5f91383af076d466594e1"
   integrity sha512-XDwyIlt/47l2kWLTzw/mtrpLdB+GPSskR2n/PIcPn+VYhVO77rGhRncIR5GPU0KRzXuqkDO+J5qqrG0Y8P6jzQ==
-
-"@types/uuid@^8.3.1":
-  version "8.3.1"
-  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-8.3.1.tgz#1a32969cf8f0364b3d8c8af9cc3555b7805df14f"
-  integrity sha512-Y2mHTRAbqfFkpjldbkHGY8JIzRN6XqYRliG8/24FcHm2D2PwW24fl5xMRTVGdrb7iMrwCaIEbLWerGIkXuFWVg==
 
 "@types/webpack-env@^1.16.0":
   version "1.16.0"
@@ -7075,6 +7077,13 @@ debug@^3.0.0, debug@^3.1.0, debug@^3.1.1, debug@^3.2.6:
   dependencies:
     ms "^2.1.1"
 
+debug@^4.3.2:
+  version "4.3.3"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.3.tgz#04266e0b70a98d4462e6e288e38259213332b664"
+  integrity sha512-/zxw5+vh1Tfv+4Qn7a5nsbcJKPaSvCDhojn6FEl9vupwK2VCSDtEiEtqr8DFtzYFOdz63LBkxec7DYuc2jon6Q==
+  dependencies:
+    ms "2.1.2"
+
 debug@~3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
@@ -7536,7 +7545,7 @@ dotenv@^8.0.0, dotenv@^8.2.0:
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.2.0.tgz#97e619259ada750eea3e4ea3e26bceea5424b16a"
   integrity sha512-8sJ78ElpbDJBHNeBzUbUVLsqKdccaa/BXF1uPTw3GrvQTBgrQrtObr2mUrE38vzYd8cEv+m/JBfDLioYcfXoaw==
 
-downshift@^6.0.15, downshift@^6.1.3:
+downshift@^6.0.15:
   version "6.1.3"
   resolved "https://registry.yarnpkg.com/downshift/-/downshift-6.1.3.tgz#e794b7805d24810968f21e81ad6bdd9f3fdc40da"
   integrity sha512-RA1MuaNcTbt0j+sVLhSs8R2oZbBXYAtdQP/V+uHhT3DoDteZzJPjlC+LQVm9T07Wpvo84QXaZtUCePLDTDwGXg==
@@ -7545,6 +7554,17 @@ downshift@^6.0.15, downshift@^6.1.3:
     compute-scroll-into-view "^1.0.17"
     prop-types "^15.7.2"
     react-is "^17.0.2"
+
+downshift@^6.1.7:
+  version "6.1.7"
+  resolved "https://registry.yarnpkg.com/downshift/-/downshift-6.1.7.tgz#fdb4c4e4f1d11587985cd76e21e8b4b3fa72e44c"
+  integrity sha512-cVprZg/9Lvj/uhYRxELzlu1aezRcgPWBjTvspiGTVEU64gF5pRdSRKFVLcxqsZC637cLAGMbL40JavEfWnqgNg==
+  dependencies:
+    "@babel/runtime" "^7.14.8"
+    compute-scroll-into-view "^1.0.17"
+    prop-types "^15.7.2"
+    react-is "^17.0.2"
+    tslib "^2.3.0"
 
 duplexer3@^0.1.4:
   version "0.1.4"
@@ -11532,6 +11552,14 @@ koa-convert@^1.2.0:
     co "^4.6.0"
     koa-compose "^3.0.0"
 
+koa-convert@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/koa-convert/-/koa-convert-2.0.0.tgz#86a0c44d81d40551bae22fee6709904573eea4f5"
+  integrity sha512-asOvN6bFlSnxewce2e/DK3p4tltyfC4VM7ZwuTuepI7dEQVcvpyFuBcEARu1+Hxg8DIwytce2n7jrZtRlPrARA==
+  dependencies:
+    co "^4.6.0"
+    koa-compose "^4.1.0"
+
 koa-graphql@^0.8.0:
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/koa-graphql/-/koa-graphql-0.8.0.tgz#82afc2521bae38db0ed09cdb6c8a73c60136c1bd"
@@ -11606,7 +11634,7 @@ koa2-connect@^1.0.2:
   resolved "https://registry.yarnpkg.com/koa2-connect/-/koa2-connect-1.0.2.tgz#cf196d70a4e6a055f717522768d26cdfc5396f7b"
   integrity sha1-zxltcKTmoFX3F1InaNJs38U5b3s=
 
-koa@^2.10.0, koa@^2.13.0:
+koa@^2.13.0:
   version "2.13.1"
   resolved "https://registry.yarnpkg.com/koa/-/koa-2.13.1.tgz#6275172875b27bcfe1d454356a5b6b9f5a9b1051"
   integrity sha512-Lb2Dloc72auj5vK4X4qqL7B5jyDPQaZucc9sR/71byg7ryoD1NCaCm63CShk9ID9quQvDEi1bGR/iGjCG7As3w==
@@ -11628,6 +11656,35 @@ koa@^2.10.0, koa@^2.13.0:
     is-generator-function "^1.0.7"
     koa-compose "^4.1.0"
     koa-convert "^1.2.0"
+    on-finished "^2.3.0"
+    only "~0.0.2"
+    parseurl "^1.3.2"
+    statuses "^1.5.0"
+    type-is "^1.6.16"
+    vary "^1.1.2"
+
+koa@^2.13.4:
+  version "2.13.4"
+  resolved "https://registry.yarnpkg.com/koa/-/koa-2.13.4.tgz#ee5b0cb39e0b8069c38d115139c774833d32462e"
+  integrity sha512-43zkIKubNbnrULWlHdN5h1g3SEKXOEzoAlRsHOTFpnlDu8JlAOZSMJBLULusuXRequboiwJcj5vtYXKB3k7+2g==
+  dependencies:
+    accepts "^1.3.5"
+    cache-content-type "^1.0.0"
+    content-disposition "~0.5.2"
+    content-type "^1.0.4"
+    cookies "~0.8.0"
+    debug "^4.3.2"
+    delegates "^1.0.0"
+    depd "^2.0.0"
+    destroy "^1.0.4"
+    encodeurl "^1.0.2"
+    escape-html "^1.0.3"
+    fresh "~0.5.2"
+    http-assert "^1.3.0"
+    http-errors "^1.6.3"
+    is-generator-function "^1.0.7"
+    koa-compose "^4.1.0"
+    koa-convert "^2.0.0"
     on-finished "^2.3.0"
     only "~0.0.2"
     parseurl "^1.3.2"
@@ -16774,11 +16831,6 @@ typescript@^3.9.6:
   version "3.9.9"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.9.tgz#e69905c54bc0681d0518bd4d587cc6f2d0b1a674"
   integrity sha512-kdMjTiekY+z/ubJCATUPlRDl39vXYiMV9iyeMuEuXZh2we6zz80uovNN2WlAxmmdE/Z/YQe+EbOEXB5RHEED3w==
-
-typescript@^4.4.2:
-  version "4.4.4"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.4.4.tgz#2cd01a1a1f160704d3101fd5a58ff0f9fcb8030c"
-  integrity sha512-DqGhF5IKoBl8WNf8C1gu8q0xZSInh9j1kJJMqT3a94w1JzVaBU4EXOSMrz9yDqMT0xt3selp83fuFMQ0uzv6qA==
 
 ua-parser-js@^0.7.18:
   version "0.7.24"

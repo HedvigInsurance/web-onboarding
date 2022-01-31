@@ -71,6 +71,37 @@ It also works in staging: `https://www.dev.hedvigit.com/se/new-member/debugger`.
 
 Or, if you have an id of an existing quote you'd like to use it's possible to replace the quote id generated for this session - the existing quote will be fetched as soon as you add the id to the input field.
 
+## E2E Tests
+
+### 1. Prerequisites
+
+[Cypress](https://www.cypress.io/) is installed as a separed package inside `web-onboarding` under `e2e` folder. So first step would be install necessary dependencies:
+
+```sh
+# Access e2e folder
+$ cd e2e
+
+# Install dependencies
+$ yarn install
+```
+
+Additionally, we use `node@16` to run _cypress_ so before actually run the tests one needs to change _node_ version being used. Assuming you have [`nvm`](https://github.com/creationix/nvm) installed just run the following:
+
+```sh
+# Under e2e folder
+$ nvm use
+```
+
+### 2. Runing the tests
+
+Under `e2e` folder run:
+
+```sh
+$ yarn cypress
+```
+
+For more info about _Cypress_, please refer to the [official documentation](https://docs.cypress.io/guides/core-concepts/introduction-to-cypress)
+
 ## Analytics
 
 We use Segment, Mixpanel and Google Tag Manager as our analytics tools. You can read about the setup in [Notion](https://www.notion.so/hedviginsurance/Mixpanel-Setup-iOS-Web-Embark-d1abeb9ba7634adea6155f847d32cd8d)
