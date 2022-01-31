@@ -333,11 +333,16 @@
   "CHECKOUT_PHONE_NUMBER_ERROR": "Dette er et obligatorisk felt.",
   "CHECKOUT_PHONE_NUMBER_HELPERTEXT": "Vi vil kun kontakte dig for vigtige kommunikationer.",
   "SIDEBAR_REQUEST_CANCELLATION_INSURANCE": "Opsig min gamle {INSURANCE_NAME}",
+  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_LABEL": "",
   "INVALID_FIELD": "Dette felt er ugyldigt.",
   "CHECKOUT_YOUR_HOME_SECTION_TITLE": "Din bolig",
   "CHECKOUT_EDIT_INFORMATION_BUTTON": "",
   "GENERIC_ERROR_INPUT_REQUIRED": "Dette er et obligatorisk felt.",
   "GENERIC_ERROR_INPUT_FORMAT": "Beklager, forkert format.",
   "SIGN_FAIL_ERROR_HEADING": "Der opstod en uventet fejl",
-  "CANCEL_ANYTIME": "Afmeld når som helst"
+  "CANCEL_ANYTIME": "Afmeld når som helst",
+  "PRICE_SUFFIX_INTERVAL": "\/måned",
+  "CHECKOUT_SIGN_FAIL_ERROR_TEXT": "Prøv venligst igen eller kontakt os i chatten eller send os en e-mail på [hedvig@hedvig.com](mailto:hedvig@hedvig.com), hvis problemet fortsætter.",
+  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_PROVIDER_LABEL": "",
+  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_TOOLTIP": ""
 }
