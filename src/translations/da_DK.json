@@ -332,7 +332,16 @@
   "GENERIC_ERROR_ACTION": "Gå tilbage",
   "CHECKOUT_PHONE_NUMBER_ERROR": "Dette er et obligatorisk felt.",
   "CHECKOUT_PHONE_NUMBER_HELPERTEXT": "Vi vil kun kontakte dig for vigtige kommunikationer.",
-  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE": "Opsig min gamle {INSURANCE_NAME}",
+  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_LABEL": "Opsig min nuværende {INSURANCE_NAME}",
+  "INVALID_FIELD": "Dette felt er ugyldigt.",
+  "CHECKOUT_YOUR_HOME_SECTION_TITLE": "Din bolig",
+  "CHECKOUT_EDIT_INFORMATION_BUTTON": "",
+  "GENERIC_ERROR_INPUT_REQUIRED": "Dette er et obligatorisk felt.",
+  "GENERIC_ERROR_INPUT_FORMAT": "Beklager, forkert format.",
+  "SIGN_FAIL_ERROR_HEADING": "Der opstod en uventet fejl",
   "CANCEL_ANYTIME": "Afmeld når som helst",
-  "PRICE_SUFFIX_INTERVAL": "\/måned"
+  "PRICE_SUFFIX_INTERVAL": "\/måned",
+  "CHECKOUT_SIGN_FAIL_ERROR_TEXT": "Prøv venligst igen eller kontakt os i chatten eller send os en e-mail på [hedvig@hedvig.com](mailto:hedvig@hedvig.com), hvis problemet fortsætter.",
+  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_PROVIDER_LABEL": "Opsig min nuværende  {INSURANCE_NAME} hos {INSURANCE_PROVIDER}",
+  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_TOOLTIP": "Vi vil gerne hjælpe til med at opsige din nuværende {INSURANCE_NAME} for dig. Din nye forsikring hos Hedvig træder i kraft, samtidig med at den gamle ophører. Du modtager en mail med mere information."
 }
