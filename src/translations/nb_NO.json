@@ -332,6 +332,7 @@
   "GENERIC_ERROR_ACTION": "Gå tilbake",
   "CHECKOUT_PHONE_NUMBER_ERROR": "Dette feltet er obligatorisk",
   "CHECKOUT_PHONE_NUMBER_HELPERTEXT": "Vi vil kun kontakte deg for viktig kommunikasjon.",
+  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE": "Kanseller min gamle {INSURANCE_NAME}",
   "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_LABEL": "",
   "INVALID_FIELD": "Dette feltet er ugyldig.",
   "CHECKOUT_YOUR_HOME_SECTION_TITLE": "Boligen din ",

@@ -25,7 +25,6 @@ export const DetailInput: React.FC<DetailInputProps &
     <InputField
       label={textKeys[field.label]()}
       placeholder={textKeys[field.placeholder ? field.placeholder : '']()}
-      name={formikName}
       mask={field.mask}
       type={field.type}
       options={field.options?.map((o) => ({
@@ -35,7 +34,7 @@ export const DetailInput: React.FC<DetailInputProps &
       showErrorMessage={false}
       errors={getIn(formikProps.errors, formikName)}
       touched={getIn(formikProps.touched, formikName)}
-      autoComplete="off"
+      {...formikProps.getFieldProps(formikName)}
       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
         const value = field.mask
           ? field.mask.sanitize(e.target.value)

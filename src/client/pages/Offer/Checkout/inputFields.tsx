@@ -1,6 +1,6 @@
 import React, { FormEvent } from 'react'
 import { FormikProps, getIn } from 'formik'
-import { CoreInputFieldProps, RawInputField } from 'components/inputs'
+import { CoreInputFieldProps, InputField } from 'components/inputs'
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { QuoteInput } from '../Introduction/DetailsModal/types'
@@ -23,14 +23,14 @@ const CheckoutInput: React.FC<CheckoutInputProps &
   const textKeys = useTextKeys()
 
   return field ? (
-    <RawInputField
+    <InputField
       {...props}
       label={textKeys[field.label]()}
       placeholder={textKeys[field.placeholder ? field.placeholder : '']()}
       type={field.type}
       id={props.id || props.name}
       value={getIn(formikProps.values, props.name)}
-      showErrorIcon={getIn(formikProps.errors, props.name)}
+      errors={getIn(formikProps.errors, props.name)}
       onChange={onChange || formikProps.handleChange}
     />
   ) : null
