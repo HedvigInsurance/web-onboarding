@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import React, { useState } from 'react'
 import * as yup from 'yup'
-import { RawInputField } from 'components/inputs'
+import { InputField } from 'components/inputs'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import {
@@ -187,24 +187,24 @@ export const UserDetailsForm: React.FC<Props> = ({
     >
       {isFirstAndLastNameVisible && (
         <>
-          <RawInputField
+          <InputField
             label={textKeys.CHECKOUT_FIRSTNAME_LABEL()}
             name="firstName"
             id="firstName"
             value={firstName}
-            showErrorIcon={hasFirstNameError}
+            errors={hasFirstNameError}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               onFirstNameChange(event.target.value)
               validateFirstName(event.target.value)
             }}
           />
 
-          <RawInputField
+          <InputField
             label={textKeys.CHECKOUT_LASTNAME_LABEL()}
             name="lastName"
             id="lastName"
             value={lastName}
-            showErrorIcon={hasLastNameError}
+            errors={hasLastNameError}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               onLastNameChange(event.target.value)
               validateLastName(event.target.value)
@@ -213,14 +213,16 @@ export const UserDetailsForm: React.FC<Props> = ({
         </>
       )}
 
-      <RawInputField
+      <InputField
         label={textKeys.CHECKOUT_EMAIL_LABEL()}
         placeholder={textKeys.CHECKOUT_EMAIL_PLACEHOLDER()}
         name="email"
         id="email"
         type="email"
         value={email}
-        errors={hasEmailError ? textKeys.SIGN_EMAIL_CHECK() : undefined}
+        errors={
+          hasEmailError ? textKeys.GENERIC_ERROR_INPUT_REQUIRED() : undefined
+        }
         onChange={(e: React.ChangeEvent<any>) => {
           setEmailDebounced(e.target.value)
           setHasEmailError(false)
@@ -229,7 +231,7 @@ export const UserDetailsForm: React.FC<Props> = ({
 
       {isPhoneNumberRequired && (
         <>
-          <RawInputField
+          <InputField
             label={textKeys.CHECKOUT_PHONE_NUMBER_LABEL()}
             placeholder={locale.phoneNumber.placeholder}
             name="phoneNumber"
@@ -237,23 +239,19 @@ export const UserDetailsForm: React.FC<Props> = ({
             type="text"
             inputMode="numeric"
             value={phoneNumber}
-            errors={
-              hasPhoneError ? textKeys.CHECKOUT_PHONE_NUMBER_ERROR() : undefined
-            }
+            errors={hasPhoneError ? textKeys.GENERIC_ERROR_INPUT_FORMAT() : ''}
             onChange={handlePhoneChange}
             helperText={textKeys.CHECKOUT_PHONE_NUMBER_HELPERTEXT()}
           />
         </>
       )}
 
-      <RawInputField
+      <InputField
         label={getSsnLabel(market, textKeys)}
         placeholder={ssnFormatExample}
         name="ssn"
         id="ssn"
         type="text"
-        inputMode="numeric"
-        pattern="[0-9]*"
         maxLength={ssnMaxLength}
         onFocus={() => setIsShowingCreditCheckInfo(true)}
         value={ssn}

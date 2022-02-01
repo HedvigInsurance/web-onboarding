@@ -8,20 +8,20 @@ export default {
   component: InputField,
   decorators: [withFormik],
   parameters: {
-    formik: {
-      initialValues: {
-        foo: 'Some value',
-      },
+    backgrounds: {
+      default: 'gray100',
     },
   },
   args: {
-    label: '',
+    label: 'Label',
+    disabled: false,
+    helperText: '',
+    errors: '',
+    placeholder: 'Placeholder',
     name: 'foo',
     type: 'text',
     autoComplete: 'off',
-    placeholder: 'Some placeholder',
     touched: false,
-    errors: '',
   },
 }
 
@@ -31,14 +31,4 @@ const Template: Story<TextInputProps> = (args) => (
   </div>
 )
 
-export const Light = Template.bind({})
-Light.parameters = {
-  backgrounds: {
-    default: 'gray100',
-  },
-}
-
-export const Dark = Template.bind({})
-Dark.args = {
-  variant: 'dark',
-}
+export const Default = Template.bind({})

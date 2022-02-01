@@ -4,6 +4,7 @@ import { FormikProps } from 'formik'
 import { InputGroup, inputTypes } from 'components/inputs'
 import { birthDateFormats } from 'l10n/inputFormats'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import { TextKeyMap } from 'utils/textKeys'
 
 import { QuoteInput } from '../types'
 import {
@@ -17,25 +18,31 @@ import {
 } from './components/DetailInput'
 import { Content, ContentColumn } from './components/Details.styles'
 
-export const NorwegianValidationSchema = Yup.object().shape({
-  firstName: Yup.string().required(),
-  lastName: Yup.string().required(),
-  birthDate: Yup.string()
-    .matches(birthDateFormats.backEndDefault)
-    .required(),
-  data: Yup.object({
-    street: Yup.string().required(),
-    zipCode: Yup.string().matches(/^[0-9]{4}$/),
-    livingSpace: Yup.number()
-      .min(1)
-      .required(),
-    householdSize: Yup.number()
-      .min(1)
-      .required(),
-    isYouth: Yup.boolean(),
-    subType: Yup.string().required(),
-  }).required(),
-})
+export const getNorwegianValidationSchema = (textKeys: TextKeyMap) => {
+  return Yup.object().shape({
+    firstName: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+    lastName: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+    birthDate: Yup.string()
+      .matches(birthDateFormats.backEndDefault)
+      .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+    data: Yup.object({
+      street: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+      zipCode: Yup.string().matches(
+        /^[0-9]{4}$/,
+        textKeys.GENERIC_ERROR_INPUT_FORMAT(),
+      ),
+      livingSpace: Yup.number()
+        .typeError(textKeys.GENERIC_ERROR_INPUT_REQUIRED())
+        .min(1, textKeys.GENERIC_ERROR_INPUT_FORMAT())
+        .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+      householdSize: Yup.number()
+        .min(1, textKeys.GENERIC_ERROR_INPUT_FORMAT())
+        .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+      isYouth: Yup.boolean(),
+      subType: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+    }).required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+  })
+}
 
 export const NorwegianDetails: React.FC<{
   formikProps: FormikProps<QuoteInput>
