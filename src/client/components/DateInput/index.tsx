@@ -39,7 +39,7 @@ const ButtonWrapper = styled.div`
 
 const CalendarWrapper = styled.div`
   width: 100%;
-  height: 17.25rem;
+  height: 18rem;
 `
 
 const AtStartDateContainer = styled.div`
