@@ -332,7 +332,6 @@
   "GENERIC_ERROR_ACTION": "Gå tillbaka",
   "CHECKOUT_PHONE_NUMBER_ERROR": "Detta fält är obligatoriskt",
   "CHECKOUT_PHONE_NUMBER_HELPERTEXT": "Vi kommer endast att kontakta dig för viktig kommunikation.",
-  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE": "Säg upp min gamla {INSURANCE_NAME}",
   "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_LABEL": "Säg upp min nuvarande {INSURANCE_NAME}",
   "INVALID_FIELD": "Detta fält är ogiltigt.",
   "CHECKOUT_YOUR_HOME_SECTION_TITLE": "Din bostad",

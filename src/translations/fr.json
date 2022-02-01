@@ -332,7 +332,6 @@
   "GENERIC_ERROR_ACTION": "Revenir en arrière",
   "CHECKOUT_PHONE_NUMBER_ERROR": "Ce champ est obligatoire.",
   "CHECKOUT_PHONE_NUMBER_HELPERTEXT": "Nous ne vous contacterons que pour des communications importantes.",
-  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE": "",
   "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_LABEL": "",
   "INVALID_FIELD": "Ce champ n'est pas valide.",
   "CHECKOUT_YOUR_HOME_SECTION_TITLE": "",
