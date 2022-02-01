@@ -4,6 +4,7 @@ import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { useApolloClient } from '@apollo/react-hooks'
+import { GraphQLError } from 'graphql'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import {
   QuoteBundleVariant,
@@ -37,6 +38,7 @@ import { useScrollLock, VisibilityState } from 'pages/OfferNew/Checkout/hooks'
 import { InsuranceSummary } from 'pages/OfferNew/Checkout/InsuranceSummary'
 import { UpsellCard } from 'pages/OfferNew/Checkout/UpsellCard'
 import { OfferData } from 'pages/OfferNew/types'
+import { SignFailModal } from 'pages/OfferNew/Checkout/SignFailModal/SignFailModal'
 import { QuoteInput } from '../Introduction/DetailsModal/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import {
@@ -175,6 +177,14 @@ const Backdrop = styled('div')<Openable>`
   }};
 `
 
+const isManualReviewRequired = (errors: GraphQLError[]) => {
+  const manualReviewRequiredError = errors.find((error) => {
+    return error?.extensions?.body?.errorCode === 'MANUAL_REVIEW_REQUIRED'
+  })
+
+  return manualReviewRequiredError !== undefined
+}
+
 const getSignUiStateFromCheckoutStatus = (
   checkoutStatus?: CheckoutStatus,
 ): SignUiState => {
@@ -245,6 +255,7 @@ export const Checkout = ({
   const { status: checkoutStatus } =
     checkoutStatusData?.quoteCart.checkout || {}
 
+  const [isShowingFailModal, setIsShowingFailModal] = useState(false)
   const [startCheckout] = useStartCheckoutMutation()
   const [
     createQuoteBundle,
@@ -387,7 +398,13 @@ export const Checkout = ({
         setSignUiState('FAILED')
         return
       }
-    } catch (e) {
+    } catch (error) {
+      if (
+        !isManualReviewRequired((error.graphQLErrors || []) as GraphQLError[])
+      ) {
+        setIsShowingFailModal(true)
+      }
+
       setSignUiState('FAILED')
       return
     }
@@ -495,6 +512,10 @@ export const Checkout = ({
         </ScrollWrapper>
       </OuterWrapper>
       <Backdrop visibilityState={visibilityState} onClick={onClose} />
+      <SignFailModal
+        isVisible={isShowingFailModal}
+        onClose={() => setIsShowingFailModal(false)}
+      />
     </>
   )
 }
