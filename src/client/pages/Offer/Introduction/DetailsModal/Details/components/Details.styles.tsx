@@ -38,7 +38,6 @@ export const ContentColumnTitle = styled.div`
   font-size: 1rem;
   color: ${colorsV3.gray500};
   margin-bottom: 1rem;
-  padding-left: 0.5rem;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
