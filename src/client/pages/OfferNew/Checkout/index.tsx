@@ -117,7 +117,6 @@ const StartDateWrapper = styled.div`
 `
 
 const StartDateLabel = styled.p`
-  margin: 0 0 0.5rem 0.5rem;
   font-size: 0.875rem;
   line-height: 1;
 `
