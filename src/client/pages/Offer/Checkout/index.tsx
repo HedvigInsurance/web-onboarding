@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
-import { useFormik } from 'formik'
+import { useFormik, FormikHelpers } from 'formik'
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
@@ -185,6 +185,14 @@ const isManualReviewRequired = (errors: GraphQLError[]) => {
   return manualReviewRequiredError !== undefined
 }
 
+const isSsnInvalid = (errors: GraphQLError[]) => {
+  const invalidSsnError = errors.find((error) => {
+    return error?.extensions?.body?.errorMessage === 'Invalid SSN'
+  })
+
+  return invalidSsnError !== undefined
+}
+
 const getSignUiStateFromCheckoutStatus = (
   checkoutStatus?: CheckoutStatus,
 ): SignUiState => {
@@ -284,7 +292,18 @@ export const Checkout = ({
       textKeys,
       isPhoneNumberRequired,
     ),
-    onSubmit: (values) => reCreateQuoteBundle(values),
+    onSubmit: async (
+      form: QuoteInput,
+      { setErrors }: FormikHelpers<QuoteInput>,
+    ) => {
+      try {
+        await reCreateQuoteBundle(form)
+      } catch (error) {
+        if (isSsnInvalid(error.graphQLErrors)) {
+          setErrors({ ssn: textKeys.INVALID_FIELD() })
+        }
+      }
+    },
     enableReinitialize: true,
   })
 
