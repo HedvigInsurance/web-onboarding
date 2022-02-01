@@ -3,6 +3,7 @@ import * as Yup from 'yup'
 import { FormikProps } from 'formik'
 import { LocaleData } from 'l10n/locales'
 import { useFeature, Features } from 'utils/hooks/useFeature'
+import { TextKeyMap } from 'utils/textKeys'
 import { CreditCheckInfo } from '../../OfferNew/Checkout/CreditCheckInfo'
 import { QuoteInput } from '../Introduction/DetailsModal/types'
 import { TextInput, SsnInput } from './inputFields'
@@ -19,23 +20,25 @@ const debounce = (func: (...args: any[]) => any, timeout: number) => {
 
 export const getCheckoutDetailsValidationSchema = (
   locale: LocaleData,
+  textKeys: TextKeyMap,
   isPhoneNumberRequired?: boolean,
 ) =>
   Yup.object().shape({
-    firstName: Yup.string().required(),
-    lastName: Yup.string().required(),
+    firstName: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+    lastName: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
     email: Yup.string()
-      .email()
-      .required(),
+      .email(textKeys.GENERIC_ERROR_INPUT_FORMAT())
+      .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
     ssn: Yup.string()
-      .matches(locale.ssn.formatRegex)
-      .max(locale.ssn.length)
-      .required(),
+      .typeError(textKeys.GENERIC_ERROR_INPUT_REQUIRED())
+      .matches(locale.ssn.formatRegex, textKeys.GENERIC_ERROR_INPUT_FORMAT())
+      .max(locale.ssn.length, textKeys.GENERIC_ERROR_INPUT_FORMAT())
+      .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
     ...(isPhoneNumberRequired
       ? {
           phoneNumber: Yup.string()
             .matches(locale.phoneNumber.formatRegex)
-            .required(),
+            .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
         }
       : {}),
   })

@@ -2,6 +2,7 @@ import React from 'react'
 import * as Yup from 'yup'
 import { FormikProps } from 'formik'
 import { InputGroup, inputTypes } from 'components/inputs'
+import { TextKeyMap } from 'utils/textKeys'
 
 import { QuoteInput } from '../types'
 import {
@@ -13,24 +14,26 @@ import {
 } from './components/DetailInput'
 import { Content, ContentColumn } from './components/Details.styles'
 
-export const SwedishApartmentValidationSchema = Yup.object().shape({
-  firstName: Yup.string().required(),
-  lastName: Yup.string().required(),
-  data: Yup.object({
-    street: Yup.string().required(),
-    zipCode: Yup.string()
-      .matches(/^[0-9]{3}[0-9]{2}$/)
-      .required(),
-    livingSpace: Yup.number()
-      .min(1)
-      .required(),
-    householdSize: Yup.number()
-      .min(1)
-      .required(),
-
-    subType: Yup.string().required(),
-  }).required(),
-})
+export const getSwedishApartmentValidationSchema = (textKeys: TextKeyMap) => {
+  return Yup.object().shape({
+    firstName: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+    lastName: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+    data: Yup.object({
+      street: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+      zipCode: Yup.string()
+        .matches(/^[0-9]{3}[0-9]{2}$/, textKeys.GENERIC_ERROR_INPUT_FORMAT())
+        .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+      livingSpace: Yup.number()
+        .typeError(textKeys.GENERIC_ERROR_INPUT_REQUIRED())
+        .min(1, textKeys.GENERIC_ERROR_INPUT_FORMAT())
+        .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+      householdSize: Yup.number()
+        .min(1, textKeys.GENERIC_ERROR_INPUT_FORMAT())
+        .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+      subType: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+    }).required(),
+  })
+}
 
 export const SwedishApartmentDetails: React.FC<{
   formikProps: FormikProps<QuoteInput>

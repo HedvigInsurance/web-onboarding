@@ -33,11 +33,10 @@ export interface Address {
 
 export type OfferPersonInfo = Pick<
   BundledQuote,
-  'firstName' | 'lastName' | 'email' | 'ssn' | 'birthDate'
+  'firstName' | 'lastName' | 'email' | 'ssn' | 'birthDate' | 'phoneNumber'
 > & {
   householdSize: number
   address: Address | null
-  phoneNumber?: string | null
 }
 
 export type OfferQuote = Pick<

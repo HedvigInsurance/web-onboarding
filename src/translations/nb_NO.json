@@ -332,7 +332,7 @@
   "GENERIC_ERROR_ACTION": "Gå tilbake",
   "CHECKOUT_PHONE_NUMBER_ERROR": "Dette feltet er obligatorisk",
   "CHECKOUT_PHONE_NUMBER_HELPERTEXT": "Vi vil kun kontakte deg for viktig kommunikasjon.",
-  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_LABEL": "",
+  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_LABEL": "Avslutt min nåværende  {INSURANCE_NAME} ",
   "INVALID_FIELD": "Dette feltet er ugyldig.",
   "CHECKOUT_YOUR_HOME_SECTION_TITLE": "Boligen din ",
   "CHECKOUT_EDIT_INFORMATION_BUTTON": "",
@@ -342,6 +342,9 @@
   "CANCEL_ANYTIME": "Avbryt når som helst",
   "PRICE_SUFFIX_INTERVAL": "\/mnd",
   "CHECKOUT_SIGN_FAIL_ERROR_TEXT": "Vennligst prøv igjen eller kontakt oss i chatten eller send oss en e-post på [hedvig@hedvig.com](mailto:hedvig@hedvig.com) hvis problemet vedvarer.",
-  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_PROVIDER_LABEL": "",
-  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_TOOLTIP": ""
+  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_PROVIDER_LABEL": "Avslutt min nåværende  {INSURANCE_NAME} hos {INSURANCE_PROVIDER}",
+  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_TOOLTIP": "Vi hjelper deg gjerne med å avslutte din nåværende {INSURANCE_NAME} for deg. Din nye forsikring hos Hedvig aktiveres når den gamle utløper. Du vil få mer informasjon på mail.",
+  "CHECKOUT_FOOTER_CANCELLATION_INFO": "",
+  "CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT": "",
+  "CHECKOUT_FOOTER_COMPLETE_PURCHASE": ""
 }

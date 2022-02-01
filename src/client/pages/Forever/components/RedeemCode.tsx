@@ -185,7 +185,6 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
                   }
                   name="code"
                   type="text"
-                  autoComplete="off"
                   placeholder="7VEKCAG"
                   touched={touched.code}
                   errors={errors.code ? textKeys[errors.code]() : ''}

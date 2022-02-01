@@ -4,6 +4,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { SessionContainer } from 'containers/SessionContainer'
 import { Button } from 'components/buttons'
 import { StorageContainer } from 'utils/StorageContainer'
+import { Label } from 'components/inputs/index'
 import { QuoteData } from './components/QuoteData'
 import { Session } from './components/Session'
 
@@ -11,6 +12,10 @@ const Wrapper = styled.div`
   max-width: 900px;
   margin: 0 auto;
   color: ${colorsV3.gray100};
+
+  ${Label} {
+    color: white;
+  }
 `
 
 const Row = styled.div`
