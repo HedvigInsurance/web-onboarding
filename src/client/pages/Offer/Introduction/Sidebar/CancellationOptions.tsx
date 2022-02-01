@@ -3,7 +3,6 @@ import { format } from 'date-fns'
 import React from 'react'
 import { Switch } from 'components/Switch'
 import { Spinner } from 'components/utils'
-import { Tooltip } from 'components/Tooltip/Tooltip'
 import { useEditBundledQuoteMutation } from 'data/graphql'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { OfferData, OfferQuote } from 'pages/OfferNew/types'
@@ -134,11 +133,6 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
         )}
         {labelContent}
       </HandleSwitchingLabel>
-      <Tooltip
-        body={textKeys.SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_TOOLTIP({
-          INSURANCE_NAME: quote.displayName,
-        })}
-      />
     </HandleSwitchingWrapper>
   )
 }
