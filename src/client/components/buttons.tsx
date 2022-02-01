@@ -31,13 +31,9 @@ export const Button = styled.button<ButtonProps>`
   line-height: ${(props) => (props.size === 'lg' ? `1rem` : `1.25rem`)};
   width: ${(props) => (props.fullWidth ? '100%' : 'auto')};
   padding: ${(props) =>
-    props.size === 'lg' ? `1.5rem 2.5rem` : `0.875rem 1.5rem`};
-  background: ${(props) =>
-    props.disabled
-      ? color(props.background ?? colorsV3.gray700)
-          .lighten(0.1)
-          .toString()
-      : props.background ?? colorsV3.gray900};
+    props.size === 'lg' ? `1.5rem 2.5rem` : `0.75rem 2rem`};
+  background: ${({ disabled, background }) =>
+    disabled ? background && colorsV3.gray300 : background ?? colorsV3.gray900};
   color: ${(props) => props.foreground ?? colorsV3.white};
   border-radius: 8px;
   border: none;
