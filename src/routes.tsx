@@ -35,6 +35,9 @@ enum EmbarkStory {
   NorwayComboNorwegian = 'Web Onboarding NO - Norwegian Combo',
   NorwayComboEnglish = 'Web Onboarding NO - English Combo',
   NorwayHomeContentEnglishQuoteCart = 'Web Onboarding NO - English Contents Quote Cart',
+  NorwayHomeContentNorwegianQuoteCart = 'Web Onboarding NO - Norwegian Contents Quote Cart',
+  NorwayComboEnglishQuoteCart = 'Web Onboarding NO - English Combo Quote Cart',
+  NorwayComboNorwegianQuoteCart = 'Web Onboarding NO - Norwegian Combo Quote Cart',
 
   SwedenNeeder = 'Web Onboarding SE - Needer',
   SwedenSwitcher = 'Web Onboarding SE - Switcher',
@@ -308,7 +311,7 @@ export const routes: Route[] = [
               switch (name) {
                 case 'contents':
                   return {
-                    baseUrl: `/${locale}/new-member/contents`,
+                    baseUrl: `/${locale}/new-member/${name}`,
                     name:
                       locale === 'no'
                         ? EmbarkStory.NorwayContentsNorwegian
@@ -316,7 +319,7 @@ export const routes: Route[] = [
                   }
                 case 'combo':
                   return {
-                    baseUrl: `/${locale}/new-member/combo`,
+                    baseUrl: `/${locale}/new-member/${name}`,
                     name:
                       locale === 'no'
                         ? EmbarkStory.NorwayComboNorwegian
@@ -331,8 +334,27 @@ export const routes: Route[] = [
                     }
                   }
                   return {
-                    baseUrl: `/${locale}/new-member/home`,
-                    name: EmbarkStory.NorwayHomeContentEnglishQuoteCart,
+                    baseUrl: `/${locale}/new-member/${name}`,
+                    name:
+                      locale === 'no'
+                        ? EmbarkStory.NorwayHomeContentNorwegianQuoteCart
+                        : EmbarkStory.NorwayHomeContentEnglishQuoteCart,
+                    quoteCart: true,
+                  }
+                case 'home-travel':
+                  if (
+                    window.hedvigClientConfig.appEnvironment === 'production'
+                  ) {
+                    return {
+                      redirect: `/${locale}/new-member`,
+                    }
+                  }
+                  return {
+                    baseUrl: `/${locale}/new-member/${name}`,
+                    name:
+                      locale === 'no'
+                        ? EmbarkStory.NorwayComboNorwegianQuoteCart
+                        : EmbarkStory.NorwayComboEnglishQuoteCart,
                     quoteCart: true,
                   }
               }

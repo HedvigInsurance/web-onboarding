@@ -270,6 +270,7 @@ export const Checkout = ({
     } as QuoteInput,
     validationSchema: getCheckoutDetailsValidationSchema(
       locale,
+      textKeys,
       isPhoneNumberRequired,
     ),
     onSubmit: (values) => reCreateQuoteBundle(values),

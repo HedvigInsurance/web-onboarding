@@ -1,10 +1,10 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { Field, GenericFieldHTMLAttributes } from 'formik'
+import { Field } from 'formik'
 import { FieldInputProps } from 'formik/dist/types'
-import React from 'react'
+import React, { FocusEvent } from 'react'
 import InputMask from 'react-input-mask'
-import { WarningIcon } from 'components/icons/Warning'
+import { WarningTriangle } from 'components/icons/WarningTriangle'
 import { ChevronDown } from 'components/icons/ChevronDown'
 
 export interface Mask {
@@ -39,60 +39,18 @@ export const masks: Record<string, Mask> = {
   },
 }
 
-type variantType = 'light' | 'dark'
-
-interface InputVariant {
-  color: string
-  background: string
-  border: string
-  borderFocus: string
-  error: string
-}
-
-export const inputVariants: Record<string, InputVariant> = {
-  light: {
-    color: colorsV3.gray900,
-    background: colorsV3.white,
-    border: colorsV3.gray500,
-    borderFocus: colorsV3.gray900,
-    error: colorsV3.red600,
-  },
-  dark: {
-    color: colorsV3.gray100,
-    background: colorsV3.gray900,
-    border: colorsV3.gray500,
-    borderFocus: colorsV3.gray300,
-    error: colorsV3.red500,
-  },
-}
-
-const InputFieldContainer = styled.div`
-  margin-bottom: 1.5rem;
-`
-
-const Wrapper = styled.div<{ errors?: string; variant: variantType }>`
+const Wrapper = styled.div<{
+  errors?: string
+  disabled?: boolean
+}>`
   position: relative;
-  background-color: ${(props) => inputVariants[props.variant].background};
   border-radius: 8px;
-  border: 1px solid
-    ${(props) =>
-      props.errors
-        ? inputVariants[props.variant].error
-        : inputVariants[props.variant].border};
-  padding: 0.875rem 1.5rem 0.75rem 1.5rem;
+  background-color: ${colorsV3.white};
   display: flex;
   justify-content: space-between;
   align-items: center;
   transition: all 0.2s;
-  color: ${(props) => inputVariants[props.variant].color};
-
-  &:focus-within {
-    border: 1px solid
-      ${(props) =>
-        props.errors
-          ? inputVariants[props.variant].error
-          : inputVariants[props.variant].borderFocus};
-  }
+  margin-top: 0.5rem;
 
   select {
     cursor: pointer;
@@ -107,22 +65,21 @@ const TextWrapper = styled.div`
   position: relative;
 `
 
-const Label = styled.label`
+export const Label = styled.label`
   font-size: 0.875rem;
-  line-height: 1;
-  color: ${colorsV3.gray500};
-  margin-bottom: 0.25rem;
+  line-height: 1.33;
+  color: ${colorsV3.gray900};
 `
 
-const StyledField = styled(Field)`
+const StyledInput = styled.input`
   position: relative;
   z-index: 1;
   background: none;
   border: none;
-  font-size: 1.125rem;
-  line-height: 1.625rem;
+  font-size: 1rem;
+  line-height: 1.5;
   color: inherit;
-  padding: 0 2.5rem 0 0;
+  padding: 0.875rem;
   margin: 0;
 
   :focus {
@@ -144,7 +101,18 @@ const StyledField = styled(Field)`
   }
 `
 
-const StyledInputMask = StyledField.withComponent(InputMask)
+const StyledSelect = styled(Field)`
+  border: none;
+  font-size: 1rem;
+  line-height: 1.5;
+  padding: 0.875rem;
+  border-radius: 8px;
+  :focus {
+    outline: none;
+  }
+`
+
+const StyledInputMask = StyledInput.withComponent(InputMask)
 
 const SymbolWrapper = styled.div`
   position: absolute;
@@ -163,20 +131,52 @@ const SymbolWrapper = styled.div`
   }
 `
 
-const ErrorText = styled.div<{ variant: variantType }>`
+const HelperText = styled.div`
   min-height: 1.375rem;
   font-size: 0.75rem;
-  line-height: 1.375rem;
-  text-align: left;
-  color: ${(props) => inputVariants[props.variant].error};
+  line-height: 1.33;
+  color: ${colorsV3.gray700};
   margin-top: 0.25rem;
+
+  .red-text {
+    color: ${colorsV3.red600};
+  }
+
+  svg {
+    vertical-align: middle;
+    margin-right: 0.25rem;
+  }
 `
 
-const HelperText = styled.div`
-  color: ${colorsV3.gray700};
-  font-size: 0.75rem;
-  line-height: 1.33;
-  margin-top: 0.25rem;
+const WrapperMask = styled.div<{
+  disabled?: boolean
+  errors?: string | boolean
+}>`
+  ${Wrapper} {
+    border: 1px solid
+      ${(props) => (props.errors ? colorsV3.red600 : colorsV3.gray300)};
+    background-color: ${(props) => props.disabled && colorsV3.gray300};
+
+    input {
+      color: ${(props) =>
+        props.disabled ? colorsV3.gray500 : colorsV3.gray900};
+    }
+
+    &:focus-within {
+      color: ${(props) =>
+        props.disabled ? colorsV3.gray500 : colorsV3.gray900};
+      border: 1px solid
+        ${(props) => (props.errors ? colorsV3.red600 : colorsV3.gray900)};
+    }
+
+    &:hover {
+      border-width: 1px;
+      border-color: ${(props) => !props.disabled && colorsV3.gray700};
+    }
+  }
+  ${Label}, ${HelperText} {
+    color: ${(props) => props.disabled && colorsV3.gray500};
+  }
 `
 
 interface CoreInputFieldOptions {
@@ -195,127 +195,82 @@ export interface CoreInputFieldProps {
   type?: string
   options?: CoreInputFieldOptions[]
   mask?: Mask
+  helperText?: string
   onChange?: FieldInputProps<string>['onChange']
   onBlur?: FieldInputProps<string>['onBlur']
-  helperText?: string
+  onFocus?: ((e: FocusEvent<HTMLInputElement>) => void) | undefined
 }
 
 export interface TextInputProps extends CoreInputFieldProps {
   showErrorMessage?: boolean
   touched?: boolean
-  errors?: string
-  variant?: variantType
+  errors?: string | boolean
+  name?: string
+  disabled?: boolean
+  id?: string
+  value?: string
+  maxLength?: number
+  inputMode?: string
+  pattern?: string //needed for safari desktop as inputMode is not supported
 }
 
-const StyledRawInput = styled.input`
-  appearance: none;
-  -moz-appearance: textfield;
-  background: none;
-  border: none;
-  font-size: 1rem;
-  line-height: 1.5;
-  color: ${colorsV3.gray900};
-  padding: 0;
-  margin: 0;
-  :focus {
-    outline: none;
-  }
-  ::placeholder {
-    color: ${colorsV3.gray500};
-  }
-`
-
-export const RawInputField: React.FC<React.InputHTMLAttributes<
-  HTMLInputElement
-> & {
-  label?: string
-  errors?: string
-  variant?: variantType
-  showErrorIcon?: boolean
-  helperText?: string
-}> = ({
-  errors,
-  helperText,
-  showErrorIcon = false,
-  label,
-  className,
-  variant = 'light',
-  ...props
-}) => (
-  <InputFieldContainer className={className}>
-    <Wrapper errors={errors} variant={variant}>
-      <TextWrapper>
-        {label && <Label htmlFor={props.id}>{label}</Label>}
-        <StyledRawInput {...props} />
-      </TextWrapper>
-      <SymbolWrapper>
-        {(errors || showErrorIcon) && (
-          <WarningIcon color={inputVariants[variant].error} />
-        )}
-      </SymbolWrapper>
-    </Wrapper>
-    {errors ? (
-      <ErrorText variant={variant}>{errors}</ErrorText>
-    ) : (
-      helperText && <HelperText> {helperText} </HelperText>
-    )}
-  </InputFieldContainer>
-)
-
-export const InputField: React.FC<TextInputProps &
-  GenericFieldHTMLAttributes> = ({
+export const InputField: React.FC<TextInputProps> = ({
   label,
   mask,
+  name,
   showErrorMessage = true,
   type = 'text',
   options,
   touched,
+  disabled,
   errors,
-  variant = 'light',
+  helperText,
+  inputMode,
   ...props
 }) => (
-  <>
-    <Wrapper errors={errors} variant={variant}>
+  <WrapperMask disabled={disabled} errors={errors}>
+    <Label>{label}</Label>
+    <Wrapper>
       <TextWrapper>
-        <Label>{label}</Label>
         {mask ? (
-          <StyledField {...props}>
-            {({ field }: any) => (
-              <StyledInputMask
-                mask={mask.mask}
-                alwaysShowMask={true}
-                maskChar={INVISIBLE_MASK_CHAR}
-                {...field}
-                {...props}
-              />
-            )}
-          </StyledField>
+          <StyledInputMask
+            disabled={disabled}
+            mask={mask.mask}
+            alwaysShowMask={true}
+            maskChar={INVISIBLE_MASK_CHAR}
+            {...props}
+          />
         ) : (
           <>
             {options && options.length > 0 ? (
-              <StyledField {...props} component="select">
+              <StyledSelect {...props} as="select">
                 {options!.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
-              </StyledField>
+              </StyledSelect>
             ) : (
-              <StyledField type={type} {...props} />
+              <StyledInput type={type} {...props} disabled={disabled} />
             )}
           </>
         )}
       </TextWrapper>
       <SymbolWrapper>
-        {options && options.length > 0 ? (
-          <ChevronDown />
-        ) : (
-          errors && <WarningIcon color={inputVariants[variant].error} />
-        )}
+        {options && options.length > 0 && <ChevronDown />}
       </SymbolWrapper>
     </Wrapper>
-    {showErrorMessage && <ErrorText variant={variant}>{errors}</ErrorText>}
-  </>
+    <HelperText>
+      {errors ? (
+        <span className="red-text">
+          <WarningTriangle size={13} />
+          {errors}
+        </span>
+      ) : (
+        helperText
+      )}
+    </HelperText>
+  </WrapperMask>
 )
 
 export const InputGroupDeleteButton = styled.button`
@@ -329,7 +284,6 @@ export const InputGroupDeleteButton = styled.button`
   cursor: pointer;
   transition: all 350ms;
   border: 1px solid ${colorsV3.gray500};
-  border-top: 0;
   border-radius: 8px;
   font-size: 0.875rem;
   line-height: 1.25rem;
@@ -339,7 +293,7 @@ export const InputGroupDeleteButton = styled.button`
   }
 
   :hover {
-    /* HEX value with opcaity (1a = 10% transparency) */
+    /* HEX value with opacity (1a = 10% transparency) */
     background-color: ${colorsV3.red500}1a;
   }
 `
@@ -359,7 +313,6 @@ export const InputGroup = styled.div`
   }
 
   ${Wrapper as any}, ${InputGroupDeleteButton} {
-    border-radius: 0;
     border-color: ${colorsV3.gray500};
 
     :not(:first-of-type) {
@@ -375,11 +328,6 @@ export const InputGroupRow = styled.div`
 
   ${Wrapper as any} {
     width: 50%;
-    border-top: 0;
-
-    :first-of-type {
-      border-right: 0;
-    }
     ${TextWrapper as any} {
       width: calc(100% - 1.5rem);
     }

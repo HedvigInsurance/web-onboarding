@@ -6,7 +6,8 @@
     "node": "^16.x"
   },
   "scripts": {
-    "cypress": "cypress open"
+    "cypress": "cypress open",
+    "cypress:headless": "cypress run"
   },
   "keywords": [],
   "author": "",

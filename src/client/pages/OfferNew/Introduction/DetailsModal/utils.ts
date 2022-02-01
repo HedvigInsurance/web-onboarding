@@ -22,6 +22,7 @@ import {
 import { OfferQuote, OfferPersonInfo } from 'pages/OfferNew/types'
 import { LocaleData } from 'l10n/locales'
 import { birthDateFormats } from 'l10n/inputFormats'
+import { TextKeyMap } from 'utils/textKeys'
 import {
   isStudent,
   isSwedishQuote,
@@ -113,6 +114,7 @@ type BaseFieldSchema = {
 const getSwedishSchema = (
   base: BaseFieldSchema,
   offerQuote: OfferQuote,
+  textKeys: TextKeyMap,
 ): DetailsFieldSchema => {
   const swedishBase = {
     ...base,
@@ -120,7 +122,9 @@ const getSwedishSchema = (
       label: 'DETAILS_MODULE_TABLE_HOUSEHOLD_SIZE_CELL_LABEL',
       placeholder: '',
       type: inputTypes.number,
-      validation: Yup.number().required(),
+      validation: Yup.number()
+        .min(1, textKeys.GENERIC_ERROR_INPUT_FORMAT())
+        .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
     },
   }
   return isSwedishApartment(offerQuote.quoteDetails)
@@ -133,8 +137,9 @@ const getSwedishSchema = (
             mask: masks.area,
             type: inputTypes.number,
             validation: Yup.number()
-              .min(1)
-              .required(),
+              .typeError(textKeys.GENERIC_ERROR_INPUT_REQUIRED())
+              .min(1, textKeys.GENERIC_ERROR_INPUT_FORMAT())
+              .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
           },
           type: {
             label: 'DETAILS_MODULE_TABLE_RESIDENCE_TYPE_CELL_LABEL',
@@ -162,7 +167,9 @@ const getSwedishSchema = (
                     },
                   ]),
             ],
-            validation: Yup.string().required(),
+            validation: Yup.string().required(
+              textKeys.GENERIC_ERROR_INPUT_REQUIRED(),
+            ),
           },
         },
       }
@@ -176,7 +183,7 @@ const getSwedishSchema = (
             type: inputTypes.number,
             validation: Yup.number()
               .min(1)
-              .required(),
+              .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
           },
           ancillarySpace: {
             label: 'DETAILS_MODULE_TABLE_ANCILLARYAREA_CELL_LABEL_HOUSE',
@@ -185,7 +192,7 @@ const getSwedishSchema = (
             type: inputTypes.number,
             validation: Yup.number()
               .min(1)
-              .required(),
+              .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
           },
           numberOfBathrooms: {
             label: 'DETAILS_MODULE_TABLE_BATHROOMS_CELL_LABEL_HOUSE',
@@ -193,14 +200,16 @@ const getSwedishSchema = (
             type: inputTypes.number,
             validation: Yup.number()
               .min(0)
-              .required(),
+              .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
           },
           yearOfConstruction: {
             label: 'DETAILS_MODULE_TABLE_YEARBUILT_CELL_LABEL_HOUSE',
             placeholder: '',
             mask: masks.year,
             type: inputTypes.number,
-            validation: Yup.number().required(),
+            validation: Yup.number().required(
+              textKeys.GENERIC_ERROR_INPUT_REQUIRED(),
+            ),
           },
           isSubleted: {
             label: 'DETAILS_MODULE_TABLE_SUBLETTING_CELL_LABEL_HOUSE',
@@ -209,7 +218,7 @@ const getSwedishSchema = (
               { label: 'YES', value: 'true' },
               { label: 'NO', value: 'false' },
             ],
-            validation: Yup.boolean().required(),
+            validation: Yup.boolean(),
           },
           extraBuildings: {
             arrayValidation: Yup.array(),
@@ -221,7 +230,7 @@ const getSwedishSchema = (
                 label: getExtraBuilding(value),
                 value,
               })),
-              validation: Yup.string().required(),
+              validation: Yup.string(),
             },
             area: {
               label:
@@ -231,7 +240,7 @@ const getSwedishSchema = (
               type: inputTypes.number,
               validation: Yup.number()
                 .min(1)
-                .required(),
+                .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
             },
             hasWaterConnected: {
               label:
@@ -241,7 +250,9 @@ const getSwedishSchema = (
                 { label: 'YES', value: 'true' },
                 { label: 'NO', value: 'false' },
               ],
-              validation: Yup.boolean().required(),
+              validation: Yup.boolean().required(
+                textKeys.GENERIC_ERROR_INPUT_REQUIRED(),
+              ),
             },
           },
         },
@@ -251,13 +262,16 @@ const getSwedishSchema = (
 const getNorwegianSchema = (
   base: BaseFieldSchema,
   offerQuote: OfferQuote,
+  textKeys: TextKeyMap,
 ): DetailsFieldSchema => {
   const commonAttributes = {
     coInsured: {
       label: 'DETAILS_MODULE_TABLE_COINSURED_CELL_LABEL',
       placeholder: '',
       type: inputTypes.number,
-      validation: Yup.number().required(),
+      validation: Yup.number().required(
+        textKeys.GENERIC_ERROR_INPUT_REQUIRED(),
+      ),
     },
     isYouth: {
       label: 'DETAILS_MODULE_TABLE_YOUTH_CELL_LABEL',
@@ -266,7 +280,9 @@ const getNorwegianSchema = (
         { label: 'YES', value: 'true' },
         { label: 'NO', value: 'false' },
       ],
-      validation: Yup.boolean().required(),
+      validation: Yup.boolean().required(
+        textKeys.GENERIC_ERROR_INPUT_REQUIRED(),
+      ),
     },
   }
 
@@ -278,8 +294,11 @@ const getNorwegianSchema = (
           livingSpace: {
             label: 'DETAILS_MODULE_TABLE_LIVINGSPACE_CELL_LABEL_HOUSE',
             placeholder: '',
+            mask: masks.area,
             type: inputTypes.number,
-            validation: Yup.number().required(),
+            validation: Yup.number()
+              .typeError(textKeys.GENERIC_ERROR_INPUT_REQUIRED())
+              .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
           },
           type: {
             label: 'DETAILS_MODULE_TABLE_RESIDENCE_TYPE_CELL_LABEL',
@@ -294,21 +313,25 @@ const getNorwegianSchema = (
                 value: NorwegianHomeContentsType.Rent,
               },
             ],
-            validation: Yup.string().required(),
+            validation: Yup.string().required(
+              textKeys.GENERIC_ERROR_INPUT_REQUIRED(),
+            ),
           },
         },
       }
     : { norwegianTravel: { ...commonAttributes } }
 }
 
-const getDanishSchema = (): DetailsFieldSchema => {
+const getDanishSchema = (textKeys: TextKeyMap): DetailsFieldSchema => {
   return {
     danishHomeContents: {
       coInsured: {
         label: 'DETAILS_MODULE_TABLE_COINSURED_CELL_LABEL',
         placeholder: '',
         type: inputTypes.number,
-        validation: Yup.number().required(),
+        validation: Yup.number().required(
+          textKeys.GENERIC_ERROR_INPUT_REQUIRED(),
+        ),
       },
       isStudent: {
         label: 'DETAILS_MODULE_TABLE_STUDENT_CELL_LABEL',
@@ -317,13 +340,16 @@ const getDanishSchema = (): DetailsFieldSchema => {
           { label: 'YES', value: 'true' },
           { label: 'NO', value: 'false' },
         ],
-        validation: Yup.boolean().required(),
+        validation: Yup.boolean(),
       },
       livingSpace: {
         label: 'DETAILS_MODULE_TABLE_LIVINGSPACE_CELL_LABEL_HOUSE',
         placeholder: '',
+        mask: masks.area,
         type: inputTypes.number,
-        validation: Yup.number().required(),
+        validation: Yup.number()
+          .typeError(textKeys.GENERIC_ERROR_INPUT_REQUIRED())
+          .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
       },
       type: {
         label: 'DETAILS_MODULE_TABLE_RESIDENCE_TYPE_CELL_LABEL',
@@ -347,23 +373,29 @@ const getDanishSchema = (): DetailsFieldSchema => {
 type GetFieldSchemaParams = {
   offerQuote: OfferQuote
   currentLocaleData: LocaleData
+  textKeys: TextKeyMap
 }
 
 export const getFieldSchema = ({
   offerQuote,
   currentLocaleData,
+  textKeys,
 }: GetFieldSchemaParams): FieldSchema => {
-  const fieldSchemaDetails = getFieldSchemaDetails(offerQuote)
+  const fieldSchemaDetails = getFieldSchemaDetails(offerQuote, textKeys)
   return {
     firstName: {
       label: 'DETAILS_MODULE_TABLE_FIRSTNAME_CELL_LABEL',
       placeholder: '',
-      validation: Yup.string().required(),
+      validation: Yup.string().required(
+        textKeys.GENERIC_ERROR_INPUT_REQUIRED(),
+      ),
     },
     lastName: {
       label: 'DETAILS_MODULE_TABLE_LASTNAME_CELL_LABEL',
       placeholder: '',
-      validation: Yup.string().required(),
+      validation: Yup.string().required(
+        textKeys.GENERIC_ERROR_INPUT_REQUIRED(),
+      ),
     },
     birthDate: {
       label: 'DETAILS_MODULE_TABLE_BIRTHDATE_CELL_LABEL',
@@ -373,12 +405,17 @@ export const getFieldSchema = ({
     ...fieldSchemaDetails,
   }
 }
-const getFieldSchemaDetails = (offerQuote: OfferQuote): DetailsFieldSchema => {
+const getFieldSchemaDetails = (
+  offerQuote: OfferQuote,
+  textKeys: TextKeyMap,
+): DetailsFieldSchema => {
   const base = {
     street: {
       label: 'DETAILS_MODULE_TABLE_ADDRESS_CELL_LABEL',
       placeholder: '',
-      validation: Yup.string().required(),
+      validation: Yup.string().required(
+        textKeys.GENERIC_ERROR_INPUT_REQUIRED(),
+      ),
     },
     zipCode: {
       label: 'DETAILS_MODULE_TABLE_POSTALCODE_CELL_LABEL',
@@ -388,18 +425,24 @@ const getFieldSchemaDetails = (offerQuote: OfferQuote): DetailsFieldSchema => {
         : masks.fourDigitZipCode,
       type: inputTypes.string,
       validation: isSwedishQuote(offerQuote)
-        ? Yup.string().matches(/^[0-9]{3}[0-9]{2}$/)
-        : Yup.string().matches(/^[0-9]{4}$/),
+        ? Yup.string().matches(
+            /^[0-9]{3}[0-9]{2}$/,
+            textKeys.GENERIC_ERROR_INPUT_FORMAT(),
+          )
+        : Yup.string().matches(
+            /^[0-9]{4}$/,
+            textKeys.GENERIC_ERROR_INPUT_FORMAT(),
+          ),
     },
   }
   if (isNorwegianQuote(offerQuote)) {
-    return getNorwegianSchema(base, offerQuote)
+    return getNorwegianSchema(base, offerQuote, textKeys)
   }
   if (isDanishQuote(offerQuote)) {
-    return getDanishSchema()
+    return getDanishSchema(textKeys)
   }
 
-  return getSwedishSchema(base, offerQuote)
+  return getSwedishSchema(base, offerQuote, textKeys)
 }
 
 const getMarketFields = (fieldSchema: FieldSchema, offerQuote: OfferQuote) => {
