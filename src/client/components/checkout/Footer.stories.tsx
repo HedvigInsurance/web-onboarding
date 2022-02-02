@@ -6,9 +6,13 @@ import {
   mockedQuoteCartId,
   mockedPriceQueryResponse,
 } from 'utils/testData/priceQueryMock'
-import { TextKeyProvider, TranslationsLocale } from 'utils/textKeys'
+import { TextKeyProvider } from 'utils/textKeys'
 import { PriceDocument, Locale } from 'data/graphql'
 import { localePathPattern } from 'l10n/localePathPattern'
+import {
+  getTranslationsLocale,
+  localeArgTypes,
+} from 'utils/storybook/storyHelpers'
 import { Footer, Props as FooterProps } from './Footer'
 
 type StoryProps = {
@@ -18,6 +22,7 @@ type StoryProps = {
 const storyMeta: Meta<StoryProps> = {
   title: 'Components/Checkout/Footer/Footer',
   component: Footer,
+  argTypes: localeArgTypes,
   args: {
     buttonText: 'Continue to payment',
     buttonOnClick: () => {
@@ -35,27 +40,6 @@ const storyMeta: Meta<StoryProps> = {
 export default storyMeta
 
 export const Default: Story<StoryProps> = ({ localePath, ...rest }) => {
-  const getTranslationsLocale = (
-    localePath: LocaleLabel,
-  ): TranslationsLocale => {
-    switch (localePath) {
-      case 'se':
-        return 'sv_SE'
-      case 'se-en':
-        return 'en_SE'
-      case 'no':
-        return 'nb_NO'
-      case 'no-en':
-        return 'en_NO'
-      case 'dk':
-        return 'da_DK'
-      case 'dk-en':
-        return 'en_DK'
-      default:
-        return 'en'
-    }
-  }
-
   return (
     <TextKeyProvider locale={getTranslationsLocale(localePath)}>
       <MemoryRouter
