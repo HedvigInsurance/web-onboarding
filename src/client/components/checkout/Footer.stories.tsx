@@ -20,7 +20,7 @@ type StoryProps = {
 } & FooterProps
 
 const storyMeta: Meta<StoryProps> = {
-  title: 'Components/Checkout/Footer/Footer',
+  title: 'Checkout/Footer',
   component: Footer,
   argTypes: localeArgTypes,
   args: {
