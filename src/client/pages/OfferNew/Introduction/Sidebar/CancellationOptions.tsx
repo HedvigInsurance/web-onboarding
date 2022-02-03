@@ -95,7 +95,7 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
   const [removeStartDate] = useRemoveStartDateMutation()
 
   const checked = !quote.startDate
-  const labelContent = getLabelContent(textKeys, quote)
+  const checkboxLabel = getLabelContent(textKeys, quote)
 
   const toggle = async () => {
     try {
@@ -126,15 +126,14 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
   }
 
   return (
-    // TODO: This logic needs some clarification
     <HandleSwitchingWrapper>
       <HandleSwitchingLabel isClickable={!isLoading}>
         {isLoading ? (
           <StyledSpinner />
         ) : (
-          <StyledSwitch value={checked} onChange={toggle} />
+          <StyledSwitch checked={checked} onChange={toggle} />
         )}
-        {labelContent}
+        {checkboxLabel}
       </HandleSwitchingLabel>
     </HandleSwitchingWrapper>
   )

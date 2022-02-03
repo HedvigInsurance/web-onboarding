@@ -40,11 +40,11 @@ type CancellationOptionsProps = {
   setShowError: (showError: boolean) => void
 }
 
-export const CancellationOptions: React.FC<CancellationOptionsProps> = ({
+export const CancellationOptions = ({
   quoteCartId,
   quotes,
   ...rest
-}) => {
+}: CancellationOptionsProps) => {
   return (
     <>
       {quotes.map((quote) => {
@@ -82,11 +82,11 @@ type QuoteCancellationOptionProps = {
   setShowError: (showError: boolean) => void
 }
 
-const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
+const QuoteCancellationOption = ({
   quoteCartId,
   quote,
   setShowError,
-}) => {
+}: QuoteCancellationOptionProps) => {
   const textKeys = useTextKeys()
   const { isoLocale } = useCurrentLocale()
 
@@ -95,7 +95,7 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
   const [editQuote] = useEditBundledQuoteMutation()
 
   const isChecked = !quote.startDate
-  const labelContent = getLabelContent(textKeys, quote)
+  const checkboxLabel = getLabelContent(textKeys, quote)
 
   const handleToggleStartDate = async () => {
     try {
@@ -120,15 +120,14 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
   }
 
   return (
-    // TODO: This logic needs some clarification
     <HandleSwitchingWrapper>
       <HandleSwitchingLabel isClickable={!isLoading}>
         {isLoading ? (
           <StyledSpinner />
         ) : (
-          <StyledSwitch value={isChecked} onChange={handleToggleStartDate} />
+          <StyledSwitch checked={isChecked} onChange={handleToggleStartDate} />
         )}
-        {labelContent}
+        {checkboxLabel}
       </HandleSwitchingLabel>
     </HandleSwitchingWrapper>
   )
