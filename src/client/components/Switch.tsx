@@ -24,16 +24,11 @@ const SwitchNobble = styled(Tick)`
 `
 
 /**
- * The idea is to build a custom checkbox component that is accesibible and that
- * provides a good UX when it comes about controlling it: e.g it should possible
- * to bind it with a label e toggle it by clicking on the label.
- * We could solve the accessible part of the problem by using aria-* attributes.
- * However, the UX part would require a bunch of JS to emmit the events properly.
- * With that said, one well adopted solution is to use a hidden checkbox to handle
- * check/unchecked state that's visually hidden along with your custom implmentation
- * of a checkbox (styles, animation, etc)
+ * Makes usage of a visually hidden checkbox for accessiblity reasons like
+ * to make it discoverable for assistence tools and to enable binding it with
+ * a <label> element.
+ * Based on https://css-tricks.com/inclusively-hidden/
  */
-// Based on https://css-tricks.com/inclusively-hidden/
 const InclusiveHiddenCheckbox = styled.input`
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
@@ -44,23 +39,15 @@ const InclusiveHiddenCheckbox = styled.input`
   width: 1px;
 `
 
-interface SwitchProps {
-  className?: string
-  value: boolean
-  onChange: () => void
-}
+type SwitchProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value'>
 
-export const Switch: React.FC<SwitchProps> = ({
-  className,
-  value,
-  onChange,
-}) => (
+export const Switch = ({ className, ...checkboxProps }: SwitchProps) => (
   <>
-    <InclusiveHiddenCheckbox type="checkbox" onChange={onChange} />
+    <InclusiveHiddenCheckbox type="checkbox" {...checkboxProps} />
     <SwitchContainer
       className={className}
-      aria-hidden
-      animate={value ? 'checked' : 'unchecked'}
+      aria-hidden={true}
+      animate={checkboxProps.checked ? 'checked' : 'unchecked'}
       variants={{
         checked: {
           backgroundColor: colorsV3.gray900,
