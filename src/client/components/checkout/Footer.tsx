@@ -14,6 +14,7 @@ export type Props = {
 const Wrapper = styled.div`
   width: 100vw;
   height: 5rem;
+  padding: 1rem;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -24,7 +25,8 @@ const Wrapper = styled.div`
     0px -8px 16px rgba(0, 0, 0, 0.05);
 `
 const InnerWrapper = styled.div`
-  width: 628px;
+  width: 100%;
+  max-width: 628px;
   height: 100%;
   display: flex;
   justify-content: space-between;
