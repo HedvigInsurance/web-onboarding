@@ -3779,6 +3779,7 @@ export type EmbarkStoryMetaDataEntryWebUrlPath = {
 export enum EmbarkStoryType {
   WebOnboarding = 'WEB_ONBOARDING',
   AppOnboarding = 'APP_ONBOARDING',
+  AppOnboardingQuoteCart = 'APP_ONBOARDING_QUOTE_CART',
 }
 
 export type EmbarkSwitchAction = EmbarkActionCore & {
@@ -11924,7 +11925,10 @@ export type PriceQuery = { __typename?: 'Query' } & {
             { __typename?: 'QuoteBundleVariant' } & {
               bundle: { __typename?: 'QuoteBundle' } & {
                 quotes: Array<
-                  { __typename?: 'BundledQuote' } & Pick<BundledQuote, 'id'> & {
+                  { __typename?: 'BundledQuote' } & Pick<
+                    BundledQuote,
+                    'id' | 'displayName'
+                  > & {
                       price: { __typename?: 'MonetaryAmountV2' } & Pick<
                         MonetaryAmountV2,
                         'amount' | 'currency'
@@ -14105,6 +14109,7 @@ export const PriceDocument = gql`
           bundle {
             quotes {
               id
+              displayName(locale: $locale)
               price {
                 amount
                 currency

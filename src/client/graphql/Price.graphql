@@ -6,6 +6,7 @@ query Price($id: ID!, $locale: Locale!) {
         bundle {
           quotes {
             id
+            displayName(locale: $locale)
             price {
               amount
               currency
