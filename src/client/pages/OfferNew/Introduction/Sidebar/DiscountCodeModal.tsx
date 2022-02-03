@@ -85,7 +85,7 @@ export const DiscountCodeModal: React.FC<Props> = ({
 }) => {
   const textKeys = useTextKeys()
   const [redeemCode] = useRedeemCodeMutation()
-  const [codeValue, setCodeValue] = useState(false)
+  const [code, setCode] = useState(false)
 
   return (
     <Wrapper isOpen={isOpen}>
@@ -155,11 +155,11 @@ export const DiscountCodeModal: React.FC<Props> = ({
                 type="text"
                 touched={touched.code}
                 errors={errors.code ? textKeys[errors.code]() : ''}
-                onChange={() => setCodeValue(true)}
+                onChange={() => setCode(true)}
               />
 
               <Footer>
-                <Button type="submit" fullWidth disabled={!codeValue}>
+                <Button type="submit" fullWidth disabled={!code}>
                   {textKeys.SIDEBAR_ADD_DISCOUNT_BUTTON()}
                 </Button>
               </Footer>
