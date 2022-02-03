@@ -4,7 +4,7 @@ import { MemoryRouter, Route, RouterProps } from 'react-router-dom'
 import { LocaleLabel } from 'l10n/locales'
 import {
   mockedQuoteCartId,
-  mockedPriceQueryResponse,
+  getMockedPriceQueryResponse,
 } from 'utils/testData/priceQueryMock'
 import { TextKeyProvider } from 'utils/textKeys'
 import { PriceDocument, Locale } from 'data/graphql'
@@ -71,7 +71,7 @@ Default.parameters = {
             locale: Locale.EnSe,
           },
         },
-        result: mockedPriceQueryResponse,
+        result: getMockedPriceQueryResponse(Locale.EnSe),
       },
       {
         request: {
@@ -81,7 +81,7 @@ Default.parameters = {
             locale: Locale.SvSe,
           },
         },
-        result: mockedPriceQueryResponse,
+        result: getMockedPriceQueryResponse(Locale.SvSe),
       },
       {
         request: {
@@ -91,7 +91,7 @@ Default.parameters = {
             locale: Locale.EnNo,
           },
         },
-        result: mockedPriceQueryResponse,
+        result: getMockedPriceQueryResponse(Locale.EnNo),
       },
       {
         request: {
@@ -101,7 +101,7 @@ Default.parameters = {
             locale: Locale.NbNo,
           },
         },
-        result: mockedPriceQueryResponse,
+        result: getMockedPriceQueryResponse(Locale.NbNo),
       },
       {
         request: {
@@ -111,7 +111,7 @@ Default.parameters = {
             locale: Locale.EnDk,
           },
         },
-        result: mockedPriceQueryResponse,
+        result: getMockedPriceQueryResponse(Locale.EnDk),
       },
       {
         request: {
@@ -121,7 +121,7 @@ Default.parameters = {
             locale: Locale.DaDk,
           },
         },
-        result: mockedPriceQueryResponse,
+        result: getMockedPriceQueryResponse(Locale.DaDk),
       },
     ],
   },
