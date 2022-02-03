@@ -40,8 +40,10 @@ const storyMeta: Meta<StoryProps> = {
 export default storyMeta
 
 export const Default: Story<StoryProps> = ({ localePath, ...rest }) => {
+  const translationsLocale = getTranslationsLocale(localePath)
+
   return (
-    <TextKeyProvider locale={getTranslationsLocale(localePath)}>
+    <TextKeyProvider locale={translationsLocale}>
       <MemoryRouter
         initialEntries={[
           `/${localePath}/new-member/checkout/details/${mockedQuoteCartId}`,
