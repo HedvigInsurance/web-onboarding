@@ -344,7 +344,7 @@
   "CHECKOUT_SIGN_FAIL_ERROR_TEXT": "Prøv venligst igen eller kontakt os i chatten eller send os en e-mail på [hedvig@hedvig.com](mailto:hedvig@hedvig.com), hvis problemet fortsætter.",
   "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_PROVIDER_LABEL": "Opsig min nuværende  {INSURANCE_NAME} hos {INSURANCE_PROVIDER}",
   "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_TOOLTIP": "Vi vil gerne hjælpe til med at opsige din nuværende {INSURANCE_NAME} for dig. Din nye forsikring hos Hedvig træder i kraft, samtidig med at den gamle ophører. Du modtager en mail med mere information.",
-  "CHECKOUT_FOOTER_CANCELLATION_INFO": "",
-  "CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT": "",
-  "CHECKOUT_FOOTER_COMPLETE_PURCHASE": ""
+  "CHECKOUT_FOOTER_CANCELLATION_INFO": "Ingen bindingstid",
+  "CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT": "Fortsæt til betaling",
+  "CHECKOUT_FOOTER_COMPLETE_PURCHASE": "Gennemfør køb"
 }
