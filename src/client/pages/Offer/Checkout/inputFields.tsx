@@ -27,6 +27,7 @@ const CheckoutInput: React.FC<CheckoutInputProps &
       {...props}
       label={textKeys[field.label]()}
       placeholder={textKeys[field.placeholder ? field.placeholder : '']()}
+      helperText={textKeys[field.helperText ? field.helperText : '']()}
       type={field.type}
       id={props.id || props.name}
       value={getIn(formikProps.values, props.name)}
@@ -42,6 +43,7 @@ type TextInputProps = {
   type?: string
   formikProps: FormikProps<QuoteInput>
   placeholder?: string
+  helperText?: string
   onChange?: (e: FormEvent<any>) => void
 }
 
@@ -51,6 +53,7 @@ export const TextInput: React.FC<TextInputProps> = ({
   formikProps,
   type = 'text',
   placeholder = '',
+  helperText = '',
   onChange,
 }) => (
   <CheckoutInput
@@ -59,6 +62,7 @@ export const TextInput: React.FC<TextInputProps> = ({
       label,
       placeholder,
       type,
+      helperText,
     }}
     formikProps={formikProps}
     onChange={onChange}

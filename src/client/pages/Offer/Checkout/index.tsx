@@ -441,7 +441,7 @@ export const Checkout = ({
               birthDate,
               ssn,
               startDate,
-              phoneNumber,
+              phoneNumber: phoneNumber?.replace(/\s/g, ''),
               dataCollectionId,
               data: {
                 ...form.data,
