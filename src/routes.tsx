@@ -66,6 +66,13 @@ export type Route = {
   isHiddenInProd?: boolean
 }
 
+type EmbarkRouteProps = {
+  redirect?: string
+  name?: string
+  quoteCart?: boolean
+  baseUrl?: string
+}
+
 // TODO: Replace all '/new-member' strings throughout the codebase with this variable
 const landingRoute = '/new-member'
 const onboardingLocaleBaseRoute = `${localePathPattern}${landingRoute}`
@@ -242,65 +249,52 @@ export const routes: Route[] = [
     },
     clientRouteData: {
       render: ({ match }: RouteComponentProps<any>) => {
-        const getProps = () => {
+        const getProps = (): EmbarkRouteProps => {
           const { locale, name } = match.params
+          const baseUrl = `/${locale}/new-member/${name}`
+          const landingPageRedirect = { redirect: `/${locale}/new-member` }
+          const isProductionEnvironment =
+            window.hedvigClientConfig.appEnvironment === 'production'
+
           switch (locale) {
             case 'dk':
             case 'dk-en':
               switch (name) {
                 case 'home':
                   return {
-                    baseUrl: `/${locale}/new-member/home`,
+                    baseUrl,
                     name: EmbarkStory.DenmarkContentsWithAddressAutocomplete,
                   }
                 case 'home-accident':
                   return {
-                    baseUrl: `/${locale}/new-member/home-accident`,
+                    baseUrl,
                     name:
                       EmbarkStory.DenmarkContentsAccidentWithAddressAutocomplete,
                   }
                 case 'home-accident-travel':
                   return {
-                    baseUrl: `/${locale}/new-member/home-accident-travel`,
+                    baseUrl,
                     name:
                       EmbarkStory.DenmarkContentsAccidentTravelWithAddressAutocomplete,
                   }
                 case 'home-needer':
-                  if (
-                    window.hedvigClientConfig.appEnvironment === 'production'
-                  ) {
-                    return {
-                      redirect: `/${locale}/new-member`,
-                    }
-                  }
+                  if (isProductionEnvironment) return landingPageRedirect
                   return {
-                    baseUrl: `/${locale}/new-member/home-needer`,
+                    baseUrl,
                     name: EmbarkStory.DenmarkContentsQuoteCart,
                     quoteCart: true,
                   }
                 case 'home-accident-needer':
-                  if (
-                    window.hedvigClientConfig.appEnvironment === 'production'
-                  ) {
-                    return {
-                      redirect: `/${locale}/new-member`,
-                    }
-                  }
+                  if (isProductionEnvironment) return landingPageRedirect
                   return {
-                    baseUrl: `/${locale}/new-member/home-accident-needer`,
+                    baseUrl,
                     name: EmbarkStory.DenmarkContentsAccidentQuoteCart,
                     quoteCart: true,
                   }
                 case 'home-accident-travel-needer':
-                  if (
-                    window.hedvigClientConfig.appEnvironment === 'production'
-                  ) {
-                    return {
-                      redirect: `/${locale}/new-member`,
-                    }
-                  }
+                  if (isProductionEnvironment) return landingPageRedirect
                   return {
-                    baseUrl: `/${locale}/new-member/home-accident-travel-needer`,
+                    baseUrl,
                     name: EmbarkStory.DenmarkContentsAccidentTravelQuoteCart,
                     quoteCart: true,
                   }
@@ -311,7 +305,7 @@ export const routes: Route[] = [
               switch (name) {
                 case 'contents':
                   return {
-                    baseUrl: `/${locale}/new-member/${name}`,
+                    baseUrl,
                     name:
                       locale === 'no'
                         ? EmbarkStory.NorwayContentsNorwegian
@@ -319,22 +313,16 @@ export const routes: Route[] = [
                   }
                 case 'combo':
                   return {
-                    baseUrl: `/${locale}/new-member/${name}`,
+                    baseUrl,
                     name:
                       locale === 'no'
                         ? EmbarkStory.NorwayComboNorwegian
                         : EmbarkStory.NorwayComboEnglish,
                   }
                 case 'home':
-                  if (
-                    window.hedvigClientConfig.appEnvironment === 'production'
-                  ) {
-                    return {
-                      redirect: `/${locale}/new-member`,
-                    }
-                  }
+                  if (isProductionEnvironment) return landingPageRedirect
                   return {
-                    baseUrl: `/${locale}/new-member/${name}`,
+                    baseUrl,
                     name:
                       locale === 'no'
                         ? EmbarkStory.NorwayHomeContentNorwegianQuoteCart
@@ -342,15 +330,9 @@ export const routes: Route[] = [
                     quoteCart: true,
                   }
                 case 'home-travel':
-                  if (
-                    window.hedvigClientConfig.appEnvironment === 'production'
-                  ) {
-                    return {
-                      redirect: `/${locale}/new-member`,
-                    }
-                  }
+                  if (isProductionEnvironment) return landingPageRedirect
                   return {
-                    baseUrl: `/${locale}/new-member/${name}`,
+                    baseUrl,
                     name:
                       locale === 'no'
                         ? EmbarkStory.NorwayComboNorwegianQuoteCart
@@ -364,49 +346,31 @@ export const routes: Route[] = [
               switch (name) {
                 case 'new':
                   return {
-                    baseUrl: `/${locale}/new-member/new`,
+                    baseUrl,
                     name: EmbarkStory.SwedenNeeder,
                   }
                 case 'switch':
                   return {
-                    baseUrl: `/${locale}/new-member/switch`,
+                    baseUrl,
                     name: EmbarkStory.SwedenSwitcherWithoutAccident,
                   }
                 case 'home-accident-switcher':
-                  if (
-                    window.hedvigClientConfig.appEnvironment === 'production'
-                  ) {
-                    return {
-                      redirect: `/${locale}/new-member`,
-                    }
-                  }
+                  if (isProductionEnvironment) return landingPageRedirect
                   return {
-                    baseUrl: `/${locale}/new-member/home-accident-switcher`,
+                    baseUrl,
                     name: EmbarkStory.SwedenSwitcher,
                   }
                 case 'home-accident-needer':
-                  if (
-                    window.hedvigClientConfig.appEnvironment === 'production'
-                  ) {
-                    return {
-                      redirect: `/${locale}/new-member`,
-                    }
-                  }
+                  if (isProductionEnvironment) return landingPageRedirect
                   return {
-                    baseUrl: `/${locale}/new-member/home-accident-needer`,
+                    baseUrl,
                     name: EmbarkStory.SwedenQuoteCartNeeder,
                     quoteCart: true,
                   }
                 case 'home-switcher':
-                  if (
-                    window.hedvigClientConfig.appEnvironment === 'production'
-                  ) {
-                    return {
-                      redirect: `/${locale}/new-member`,
-                    }
-                  }
+                  if (isProductionEnvironment) return landingPageRedirect
                   return {
-                    baseUrl: `/${locale}/new-member/home-switcher`,
+                    baseUrl,
                     name: EmbarkStory.SwedenQuoteCartSwitcher,
                     quoteCart: true,
                   }
@@ -414,9 +378,7 @@ export const routes: Route[] = [
               break
           }
 
-          return {
-            redirect: `/${locale}/new-member`,
-          }
+          return landingPageRedirect
         }
 
         const props = getProps()
