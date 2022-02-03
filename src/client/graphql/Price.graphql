@@ -2,16 +2,12 @@ query Price($id: ID!, $locale: Locale!) {
   quoteCart(id: $id) {
     id
     bundle {
-      possibleVariations {
-        bundle {
-          quotes {
-            id
-            displayName(locale: $locale)
-            price {
-              amount
-              currency
-            }
-          }
+      quotes {
+        id
+        displayName(locale: $locale)
+        price {
+          amount
+          currency
         }
       }
       bundleCost {

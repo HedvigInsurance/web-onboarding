@@ -11921,22 +11921,16 @@ export type PriceQuery = { __typename?: 'Query' } & {
   quoteCart: { __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'> & {
       bundle?: Maybe<
         { __typename?: 'QuoteBundle' } & {
-          possibleVariations: Array<
-            { __typename?: 'QuoteBundleVariant' } & {
-              bundle: { __typename?: 'QuoteBundle' } & {
-                quotes: Array<
-                  { __typename?: 'BundledQuote' } & Pick<
-                    BundledQuote,
-                    'id' | 'displayName'
-                  > & {
-                      price: { __typename?: 'MonetaryAmountV2' } & Pick<
-                        MonetaryAmountV2,
-                        'amount' | 'currency'
-                      >
-                    }
+          quotes: Array<
+            { __typename?: 'BundledQuote' } & Pick<
+              BundledQuote,
+              'id' | 'displayName'
+            > & {
+                price: { __typename?: 'MonetaryAmountV2' } & Pick<
+                  MonetaryAmountV2,
+                  'amount' | 'currency'
                 >
               }
-            }
           >
           bundleCost: { __typename?: 'InsuranceCost' } & Pick<
             InsuranceCost,
@@ -14105,16 +14099,12 @@ export const PriceDocument = gql`
     quoteCart(id: $id) {
       id
       bundle {
-        possibleVariations {
-          bundle {
-            quotes {
-              id
-              displayName(locale: $locale)
-              price {
-                amount
-                currency
-              }
-            }
+        quotes {
+          id
+          displayName(locale: $locale)
+          price {
+            amount
+            currency
           }
         }
         bundleCost {

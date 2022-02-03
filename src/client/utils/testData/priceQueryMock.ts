@@ -23,24 +23,16 @@ export const getMockedPriceQueryResponse = (locale: Locale) => {
       quoteCart: {
         id: mockedQuoteCartId,
         bundle: {
-          possibleVariations: [
+          quotes: [
             {
-              bundle: {
-                quotes: [
-                  {
-                    id: mockedQuoteCartId,
-                    displayName: getLocaleDisplayName(locale),
-                    price: {
-                      amount: '79',
-                      currency: 'NOK',
-                      __typename: 'MonetaryAmountV2',
-                    },
-                    __typename: 'BundledQuote',
-                  },
-                ],
-                __typename: 'QuoteBundle',
+              id: mockedQuoteCartId,
+              displayName: getLocaleDisplayName(locale),
+              price: {
+                amount: '79',
+                currency: 'NOK',
+                __typename: 'MonetaryAmountV2',
               },
-              __typename: 'QuoteBundleVariant',
+              __typename: 'BundledQuote',
             },
           ],
           bundleCost: {
