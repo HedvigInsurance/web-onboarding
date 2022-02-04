@@ -9,7 +9,7 @@ const { white, purple500, gray900 } = colorsV3
 export type Props = {
   buttonText: string
   buttonOnClick?: () => void
-  linkTo?: string
+  buttonLinkTo?: string
 }
 type FooterButtonProps = {
   background: ButtonProps['background']
@@ -38,7 +38,7 @@ const InnerWrapper = styled.div`
   align-items: center;
 `
 
-export const Footer = ({ buttonText, buttonOnClick, linkTo }: Props) => {
+export const Footer = ({ buttonText, buttonOnClick, buttonLinkTo }: Props) => {
   const buttonProps: FooterButtonProps = {
     background: purple500,
     foreground: gray900,
@@ -50,8 +50,8 @@ export const Footer = ({ buttonText, buttonOnClick, linkTo }: Props) => {
         <PaymentInfo />
         {buttonText && (
           <>
-            {linkTo && (
-              <LinkButton {...buttonProps} to={linkTo}>
+            {buttonLinkTo && (
+              <LinkButton {...buttonProps} to={buttonLinkTo}>
                 {buttonText}
               </LinkButton>
             )}

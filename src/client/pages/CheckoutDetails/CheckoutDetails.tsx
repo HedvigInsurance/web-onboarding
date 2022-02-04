@@ -16,7 +16,7 @@ export const CheckoutDetails = () => {
     <CheckoutPageWrapper>
       <Footer
         buttonText={textKeys.CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT()}
-        linkTo={paymentPageLink}
+        buttonLinkTo={paymentPageLink}
       />
     </CheckoutPageWrapper>
   )
