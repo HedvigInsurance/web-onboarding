@@ -1,11 +1,11 @@
 import React from 'react'
 import { colorsV3 } from '@hedviginsurance/brand'
 
-export type Props = {
+export type TickProps = {
   color?: string
 }
 
-export const Tick = ({ color = colorsV3.white }: Props) => (
+export const Tick = ({ color = colorsV3.white }: TickProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="26"

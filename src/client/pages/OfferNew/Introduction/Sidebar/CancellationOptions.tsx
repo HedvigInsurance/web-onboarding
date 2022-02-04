@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { format } from 'date-fns'
+import { format as formatDate } from 'date-fns'
 import React from 'react'
 import { Switch } from 'components/Switch'
 import { Spinner } from 'components/utils'
@@ -113,7 +113,7 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
         await setStartDate({
           variables: {
             quoteId: quote.id,
-            date: format(new Date(), gqlDateFormat),
+            date: formatDate(new Date(), gqlDateFormat),
           },
         })
         await refetch()

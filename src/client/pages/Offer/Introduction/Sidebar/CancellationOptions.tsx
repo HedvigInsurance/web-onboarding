@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { format } from 'date-fns'
+import { format as formatDate } from 'date-fns'
 import React from 'react'
 import { Switch } from 'components/Switch'
 import { Spinner } from 'components/utils'
@@ -108,7 +108,7 @@ const QuoteCancellationOption = ({
           locale: isoLocale,
           quoteId: quote.id,
           payload: {
-            startDate: isChecked ? format(new Date(), gqlDateFormat) : null,
+            startDate: isChecked ? formatDate(new Date(), gqlDateFormat) : null,
           },
         },
       })
