@@ -4,6 +4,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
+import { getFormattedPrice } from 'utils/getFormattedPrice'
 import { usePriceQuery } from 'data/graphql'
 import { Spinner } from '../utils'
 
@@ -32,7 +33,7 @@ const SpinnerWrapper = styled.div`
 
 export const PaymentInfo = () => {
   const textKeys = useTextKeys()
-  const { currency, isoLocale } = useCurrentLocale()
+  const { isoLocale, currencyLocale } = useCurrentLocale()
   const { id: quoteCartId } = useParams<{ id: string }>()
   const { data, loading: isLoading, error } = usePriceQuery({
     variables: {
@@ -40,10 +41,20 @@ export const PaymentInfo = () => {
       locale: isoLocale,
     },
   })
+  const quoteBundle = data?.quoteCart.bundle
 
-  const totalMonthlyCost = Math.round(
-    Number(data?.quoteCart.bundle?.bundleCost.monthlyNet.amount),
-  )
+  if (error || !quoteBundle) {
+    return <div></div>
+  }
+
+  const monthlyNetCost = quoteBundle.bundleCost.monthlyNet.amount
+  const currency = quoteBundle.quotes[0].price.currency
+
+  const formattedPrice = getFormattedPrice({
+    locale: currencyLocale,
+    amount: monthlyNetCost,
+    currency,
+  })
 
   if (isLoading) {
     return (
@@ -53,15 +64,12 @@ export const PaymentInfo = () => {
     )
   }
 
-  if (error) {
-    return null
-  }
-
   return (
     <Wrapper>
-      <TotalPrice>{`${totalMonthlyCost} ${
-        currency.currencySymbol
-      }${textKeys.PRICE_SUFFIX_INTERVAL()}`}</TotalPrice>
+      <TotalPrice>
+        {formattedPrice}
+        {textKeys.PRICE_SUFFIX_INTERVAL()}
+      </TotalPrice>
       <CancelInfo>{textKeys.CHECKOUT_FOOTER_CANCELLATION_INFO()}</CancelInfo>
     </Wrapper>
   )
