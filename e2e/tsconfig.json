@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["ES2017"],
+    "noEmit": true,
+    "types": ["cypress"]
+  },
+  "include": ["./cypress/**/*.spec.ts"]
+}

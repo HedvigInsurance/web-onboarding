@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { Form, Formik } from 'formik'
+import { Form, Formik, FormikHelpers } from 'formik'
 import { colorsV3, fonts } from '@hedviginsurance/brand'
 import { Button } from 'components/buttons'
 import { Modal, ModalProps } from 'components/ModalNew'
@@ -8,12 +8,18 @@ import {
   BundledQuote,
   useCreateQuoteBundleMutation,
   useQuoteCartQuery,
+  UnderwritingLimit,
 } from 'data/graphql'
 
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import { getSelectedBundleVariant } from 'api/quoteCartQuerySelectors'
+import {
+  getLimitsHit,
+  LimitCode,
+  isLimitHit,
+} from 'api/quoteBundleErrorSelectors'
 import { QuoteInput } from './types'
 import { Details, getValidationSchema } from './Details'
 
@@ -86,6 +92,57 @@ const LoadingDimmer = styled.div<{ visible: boolean }>`
   z-index: 2;
 `
 
+type FormErrors = {
+  [key: string]: string
+} & { data: Record<string, string> }
+
+function getFormErrorsFromUnderwritterLimits(
+  limits: UnderwritingLimit[],
+  invalidFieldErrorMessage: string,
+) {
+  const invalidFields = limits.reduce((acc, limit) => {
+    const { code } = limit
+    switch (code as LimitCode) {
+      case LimitCode.INVALID_BIRTHDATE:
+      case LimitCode.UNDERAGE:
+      case LimitCode.STUDENT_OVERAGE:
+        return [...acc, 'birthDate']
+      case LimitCode.TOO_SMALL_LIVING_SPACE:
+      case LimitCode.TOO_MUCH_LIVING_SPACE:
+      case LimitCode.STUDENT_TOO_MUCH_LIVING_SPACE:
+      case LimitCode.YOUTH_TOO_MUCH_LIVING_SPACE:
+        return [...acc, 'data.livingSpace']
+      case LimitCode.NEGATIVE_NUMBER_OF_CO_INSURED:
+      case LimitCode.TOO_HIGH_NUMBER_OF_CO_INSURED:
+      case LimitCode.YOUTH_TOO_HIGH_NUMBER_OF_CO_INSURED:
+      case LimitCode.TOO_SMALL_NUMBER_OF_HOUSE_HOLD_SIZE:
+      case LimitCode.TOO_HIGH_NUMBER_OF_HOUSE_HOLD_SIZE:
+      case LimitCode.STUDENT_TOO_BIG_HOUSE_HOLD_SIZE:
+        return [...acc, 'data.householdSize']
+      case LimitCode.TOO_EARLY_YEAR_OF_CONSTRUCTION:
+        return [...acc, 'data.yearOfConstruction']
+      default:
+        return []
+    }
+  }, [] as string[])
+
+  return invalidFields.reduce(
+    (acc, fieldName) => {
+      if (fieldName.startsWith('data.')) {
+        const subFieldName = fieldName.split('.')[1]
+        acc.data = {
+          ...acc.data,
+          [subFieldName]: invalidFieldErrorMessage,
+        }
+      } else {
+        acc[fieldName] = invalidFieldErrorMessage
+      }
+      return acc
+    },
+    { data: {} } as FormErrors,
+  )
+}
+
 type DetailsModalProps = {
   quoteCartId: string
   allQuotes: BundledQuote[]
@@ -126,6 +183,8 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
     birthDate,
     ssn,
     email,
+    phoneNumber,
+    startDate,
     data: mainQuoteData,
   } = selectedQuoteBundle?.bundle.quotes[0]
 
@@ -136,38 +195,27 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
     birthDate,
     ssn,
     email,
+    phoneNumber,
+    startDate,
     data: {
       ...mainQuoteData,
       householdSize: numberCoInsured + 1,
     },
   } as QuoteInput
 
-  const isInvalidCreateQuoteBundleInput =
-    createQuoteBundleData?.quoteCart_createQuoteBundle.__typename ===
-    'QuoteBundleError'
+  const isInvalidCreateQuoteBundleInput = isLimitHit(createQuoteBundleData)
 
   const reCreateQuoteBundle = (form: QuoteInput) => {
+    const {
+      data: { householdSize },
+    } = form
     return createQuoteBundle({
       variables: {
         locale: isoLocale,
         quoteCartId,
         quotes: allQuotes.map(({ data: { id, type, typeOfContract } }) => {
-          const {
-            firstName,
-            lastName,
-            birthDate,
-            ssn,
-            email,
-            data: { householdSize, phoneNumber },
-          } = form
-
           return {
-            firstName,
-            lastName,
-            birthDate,
-            ssn,
-            email,
-            phoneNumber,
+            ...form,
             data: {
               ...form.data,
               numberCoInsured: householdSize && householdSize - 1,
@@ -178,17 +226,23 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
           }
         }),
       },
-      refetchQueries: ['quoteCart'],
-      awaitRefetchQueries: true,
     })
   }
 
-  const onSubmit = async (form: QuoteInput) => {
+  const onSubmit = async (
+    form: QuoteInput,
+    { setErrors }: FormikHelpers<QuoteInput>,
+  ) => {
     const { data } = await reCreateQuoteBundle(form)
-    const isLimitHit =
-      data?.quoteCart_createQuoteBundle.__typename === 'QuoteBundleError'
+    const limits = getLimitsHit(data)
 
-    if (!isLimitHit) {
+    if (limits.length) {
+      const errors = getFormErrorsFromUnderwritterLimits(
+        limits,
+        textKeys.INVALID_FIELD(),
+      )
+      setErrors(errors)
+    } else {
       onClose()
     }
   }
@@ -199,7 +253,11 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
       <Container>
         <Formik
           initialValues={initialValues}
-          validationSchema={getValidationSchema(marketLabel, mainQuoteType)}
+          validationSchema={getValidationSchema(
+            marketLabel,
+            mainQuoteType,
+            textKeys,
+          )}
           onSubmit={onSubmit}
           enableReinitialize
         >

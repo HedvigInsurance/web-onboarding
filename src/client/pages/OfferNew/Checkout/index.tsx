@@ -31,7 +31,7 @@ import { useScrollLock, VisibilityState, useSsnError } from './hooks'
 import { Sign, SignUiState } from './Sign'
 import { SignDisclaimer } from './SignDisclaimer'
 import { CheckoutSuccessRedirect } from './CheckoutSuccessRedirect'
-import { SignFailModal } from './SignFailModal'
+import { SignFailModal } from './SignFailModal/SignFailModal'
 import { UserDetailsForm } from './UserDetailsForm'
 import { InsuranceSummary } from './InsuranceSummary'
 import { UpsellCard } from './UpsellCard'
@@ -117,7 +117,6 @@ const StartDateWrapper = styled.div`
 `
 
 const StartDateLabel = styled.p`
-  margin: 0 0 0.5rem 0.5rem;
   font-size: 0.875rem;
   line-height: 1;
 `
@@ -204,7 +203,7 @@ export const Checkout = ({
   const [emailUpdateLoading, setEmailUpdateLoading] = useState(false)
   const [ssnUpdateLoading, setSsnUpdateLoading] = useState(false)
   const [isShowingFailModal, setIsShowingFailModal] = useState(false)
-  const [phoneUpdateLoading, setPhoneUpdateLoading] = useState(false)
+  const [isPhoneNumberUpdating, setIsPhoneNumberUpdating] = useState(false)
   const offerData = getOfferData(selectedQuoteBundleVariant.bundle)
   const quoteIds = getQuoteIds(offerData)
 
@@ -229,6 +228,9 @@ export const Checkout = ({
 
   const [isUpsellCardVisible] = useFeature([Features.CHECKOUT_UPSELL_CARD])
 
+  const [isPhoneNumberRequired] = useFeature([
+    Features.COLLECT_PHONE_NUMBER_AT_CHECKOUT,
+  ])
   useEffect(() => {
     const setWindowHeight = () => {
       setWindowInnerHeight(window.innerHeight)
@@ -304,8 +306,7 @@ export const Checkout = ({
       firstName &&
       lastName &&
       offerData.person.email &&
-      offerData.person.ssn &&
-      offerData.person.phoneNumber,
+      offerData.person.ssn,
   )
 
   const editQuotes = async (
@@ -341,10 +342,14 @@ export const Checkout = ({
   const onPhoneChange = async (phoneNumber: string) => {
     const { phoneNumber: currentPhone } = offerData.person
     if (!phoneNumber || currentPhone === phoneNumber) return
-    setPhoneUpdateLoading(true)
+    setIsPhoneNumberUpdating(true)
     await editQuotes(quoteIds, { phoneNumber })
-    setPhoneUpdateLoading(false)
+    setIsPhoneNumberUpdating(false)
   }
+
+  const isPhoneNumberGoodToGo = isPhoneNumberRequired
+    ? !isPhoneNumberUpdating && Boolean(offerData.person.phoneNumber)
+    : true
 
   const startSign = async () => {
     if (!canInitiateSign) {
@@ -467,7 +472,7 @@ export const Checkout = ({
                   canInitiateSign &&
                   !ssnUpdateLoading &&
                   !emailUpdateLoading &&
-                  !phoneUpdateLoading
+                  isPhoneNumberGoodToGo
                 }
                 signMethod={signMethodData?.signMethodForQuotes}
                 signUiState={signUiState}

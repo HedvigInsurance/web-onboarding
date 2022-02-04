@@ -333,7 +333,16 @@
   "CHECKOUT_PHONE_NUMBER_ERROR": "Detta fält är obligatoriskt",
   "CHECKOUT_PHONE_NUMBER_HELPERTEXT": "Vi kommer endast att kontakta dig för viktig kommunikation.",
   "SIDEBAR_REQUEST_CANCELLATION_INSURANCE": "Säg upp min gamla {INSURANCE_NAME}",
+  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_LABEL": "Säg upp min nuvarande {INSURANCE_NAME}",
   "INVALID_FIELD": "Detta fält är ogiltigt.",
   "CHECKOUT_YOUR_HOME_SECTION_TITLE": "Din bostad",
-  "CHECKOUT_EDIT_INFORMATION_BUTTON": ""
+  "CHECKOUT_EDIT_INFORMATION_BUTTON": "Redigera information",
+  "GENERIC_ERROR_INPUT_REQUIRED": "Detta fält är obligatoriskt",
+  "GENERIC_ERROR_INPUT_FORMAT": "Tyvärr, fel format.",
+  "SIGN_FAIL_ERROR_HEADING": "Något har gått fel",
+  "CANCEL_ANYTIME": "Säg upp när du vill",
+  "PRICE_SUFFIX_INTERVAL": "\/mån",
+  "CHECKOUT_SIGN_FAIL_ERROR_TEXT": "Försök igen eller kontakta oss i chatten eller maila oss på [hedvig@hedvig.com](mailto:hedvig@hedvig.com) om problemet kvarstår.",
+  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_PROVIDER_LABEL": "Säg upp min nuvarande {INSURANCE_NAME} hos {INSURANCE_PROVIDER}",
+  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_TOOLTIP": "Vi hjälper dig gärna att säga upp din nuvarande {INSURANCE_NAME} åt dig. Din nya försäkring hos Hedvig aktiveras när den gamla löper ut. Du kommer att få mer information via mail."
 }

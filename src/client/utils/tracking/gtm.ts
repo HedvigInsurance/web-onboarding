@@ -10,6 +10,7 @@ import {
   hasAccidentQuote,
   hasTravelQuote,
 } from 'pages/OfferNew/utils'
+import { EmbarkStory } from 'utils/embarkStory'
 import {
   getContractType,
   getInitialOfferFromSessionStorage,
@@ -37,6 +38,9 @@ type GTMOfferData = {
   initial_offer: string
   current_offer: string
   member_id?: string
+  quote_cart_id?: string
+  flow_type?: string
+  current_insurer?: string
 }
 
 type GTMPageData = {
@@ -114,13 +118,14 @@ export enum EventName {
 type OptionalParameters = {
   switchedFrom?: OfferData
   phoneNumberData?: GTMPhoneNumberData
+  quoteCartId?: string
 }
 
 export const trackOfferGTM = (
   eventName: EventName,
   offerData: OfferData,
   referralCodeUsed: boolean,
-  { switchedFrom, phoneNumberData }: OptionalParameters = {},
+  { switchedFrom, phoneNumberData, quoteCartId }: OptionalParameters = {},
 ) => {
   const contractType = getContractType(offerData)
   const contractCategory = getTrackableContractCategory(contractType)
@@ -147,6 +152,7 @@ export const trackOfferGTM = (
         has_travel: hasTravelQuote(offerData),
         initial_offer: initialOffer ?? contractCategory,
         current_offer: contractCategory,
+        quote_cart_id: quoteCartId,
         ...(switchedFrom && {
           switched_from: getTrackableContractCategory(
             getContractType(switchedFrom),
@@ -154,6 +160,8 @@ export const trackOfferGTM = (
           switched_to: contractCategory,
         }),
         ...(offerData.memberId && { member_id: offerData.memberId }),
+        flow_type: EmbarkStory.get() ?? undefined,
+        current_insurer: offerData.quotes[0].currentInsurer?.id ?? undefined,
       },
       ...phoneNumberData,
     })

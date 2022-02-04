@@ -4,6 +4,7 @@ import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { useApolloClient } from '@apollo/react-hooks'
+import { GraphQLError } from 'graphql'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import {
   QuoteBundleVariant,
@@ -13,7 +14,7 @@ import {
   InsuranceTermType,
   CheckoutMethod,
   CampaignDataFragment,
-  useEditBundledQuoteMutation,
+  useCreateQuoteBundleMutation,
 } from 'data/graphql'
 import {
   getUniqueQuotesFromVariantList,
@@ -30,7 +31,6 @@ import { CloseButton } from 'components/CloseButton/CloseButton'
 import { CampaignBadge } from 'components/CampaignBadge/CampaignBadge'
 import { DiscountTag } from 'components/DiscountTag/DiscountTag'
 import { setupQuoteCartSession } from 'containers/SessionContainer'
-import { reportUnderwritingLimits } from 'utils/sentry-client'
 import { trackSignedEvent } from 'utils/tracking/tracking'
 import { useVariation } from 'utils/hooks/useVariation'
 import { StartDate } from 'pages/Offer/Introduction/Sidebar/StartDate'
@@ -38,6 +38,7 @@ import { useScrollLock, VisibilityState } from 'pages/OfferNew/Checkout/hooks'
 import { InsuranceSummary } from 'pages/OfferNew/Checkout/InsuranceSummary'
 import { UpsellCard } from 'pages/OfferNew/Checkout/UpsellCard'
 import { OfferData } from 'pages/OfferNew/types'
+import { SignFailModal } from 'pages/OfferNew/Checkout/SignFailModal/SignFailModal'
 import { QuoteInput } from '../Introduction/DetailsModal/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import {
@@ -176,6 +177,14 @@ const Backdrop = styled('div')<Openable>`
   }};
 `
 
+const isManualReviewRequired = (errors: GraphQLError[]) => {
+  const manualReviewRequiredError = errors.find((error) => {
+    return error?.extensions?.body?.errorCode === 'MANUAL_REVIEW_REQUIRED'
+  })
+
+  return manualReviewRequiredError !== undefined
+}
+
 const getSignUiStateFromCheckoutStatus = (
   checkoutStatus?: CheckoutStatus,
 ): SignUiState => {
@@ -236,6 +245,7 @@ export const Checkout = ({
   const [signUiState, setSignUiState] = useState<SignUiState>(() =>
     getSignUiStateFromCheckoutStatus(initialCheckoutStatus),
   )
+  const [isCompletingCheckout, setIsCompletingCheckout] = useState(false)
   const { data: checkoutStatusData } = useCheckoutStatusQuery({
     pollInterval: signUiState === 'STARTED' ? 1000 : 0,
     variables: {
@@ -245,16 +255,14 @@ export const Checkout = ({
   const { status: checkoutStatus } =
     checkoutStatusData?.quoteCart.checkout || {}
 
+  const [isShowingFailModal, setIsShowingFailModal] = useState(false)
   const [startCheckout] = useStartCheckoutMutation()
   const [
-    editQuoteMutation,
-    { loading: editQuoteInProgress },
-  ] = useEditBundledQuoteMutation()
+    createQuoteBundle,
+    { loading: isBundleCreationInProgress },
+  ] = useCreateQuoteBundleMutation()
 
   const mainQuote = selectedQuoteBundleVariant.bundle.quotes[0]
-  const allQuoteIds = getUniqueQuotesFromVariantList(quoteBundleVariants).map(
-    ({ id }) => id,
-  )
   const privacyPolicyLink = mainQuote.insuranceTerms.find(
     ({ type }) => type === InsuranceTermType.PrivacyPolicy,
   )?.url
@@ -267,12 +275,16 @@ export const Checkout = ({
       email,
       ssn,
       phoneNumber,
+      data: {
+        ...mainQuote.data,
+      },
     } as QuoteInput,
     validationSchema: getCheckoutDetailsValidationSchema(
       locale,
+      textKeys,
       isPhoneNumberRequired,
     ),
-    onSubmit: (values) => updateQuotes(values),
+    onSubmit: (values) => reCreateQuoteBundle(values),
     enableReinitialize: true,
   })
 
@@ -317,6 +329,11 @@ export const Checkout = ({
   }, [checkoutStatus])
 
   const completeCheckout = useCallback(async () => {
+    if (isCompletingCheckout) {
+      return
+    }
+
+    setIsCompletingCheckout(true)
     setSignUiState('STARTED')
     try {
       const memberId = await setupQuoteCartSession({
@@ -334,9 +351,11 @@ export const Checkout = ({
         isDiscountMonthlyCostDeduction,
         memberId,
         offerData,
+        quoteCartId,
       })
     } catch (error) {
       setSignUiState('FAILED')
+      setIsCompletingCheckout(false)
     }
   }, [
     campaignCode,
@@ -346,6 +365,7 @@ export const Checkout = ({
     quoteCartId,
     storage,
     variation,
+    isCompletingCheckout,
   ])
 
   useEffect(() => {
@@ -378,50 +398,62 @@ export const Checkout = ({
         setSignUiState('FAILED')
         return
       }
-    } catch (e) {
+    } catch (error) {
+      if (
+        !isManualReviewRequired((error.graphQLErrors || []) as GraphQLError[])
+      ) {
+        setIsShowingFailModal(true)
+      }
+
       setSignUiState('FAILED')
       return
     }
   }
 
   const handleSignStart = () => {
-    if (checkoutStatus === 'SIGNED') {
+    if (checkoutStatus === CheckoutStatus.Signed) {
       completeCheckout()
     } else {
       startSign()
     }
   }
 
-  const updateQuotes = async (form: QuoteInput) => {
-    const { firstName, lastName, email, ssn, phoneNumber } = form
-    const editQuoteMutationVariables = {
-      locale: locale.isoLocale,
-      quoteCartId,
-      payload: {
-        firstName,
-        lastName,
-        email,
-        ssn,
-        phoneNumber,
-      },
-    }
-    const results = await Promise.all(
-      allQuoteIds.map((id) =>
-        editQuoteMutation({
-          variables: {
-            ...editQuoteMutationVariables,
-            quoteId: id,
+  const reCreateQuoteBundle = (form: QuoteInput) => {
+    const {
+      firstName,
+      lastName,
+      birthDate,
+      email,
+      ssn,
+      phoneNumber,
+      dataCollectionId,
+    } = form
+    return createQuoteBundle({
+      variables: {
+        locale: locale.isoLocale,
+        quoteCartId,
+        quotes: getUniqueQuotesFromVariantList(quoteBundleVariants).map(
+          ({ startDate, data: { type, typeOfContract } }) => {
+            return {
+              firstName,
+              lastName,
+              email,
+              birthDate,
+              ssn,
+              startDate,
+              phoneNumber: phoneNumber?.replace(/\s/g, ''),
+              dataCollectionId,
+              data: {
+                ...form.data,
+                type,
+                typeOfContract,
+              },
+            }
           },
-        }),
-      ),
-    )
-    results.forEach(({ data }) => {
-      const quoteCart = data?.quoteCart_editQuote
-      if (quoteCart?.__typename === 'QuoteBundleError') {
-        reportUnderwritingLimits(quoteCart, allQuoteIds)
-        throw new Error('Quote editing failed')
-      }
+        ),
+      },
     })
+    // TODO: Handle reporting of underwritting limits as part of GRW-705
   }
 
   return (
@@ -444,7 +476,7 @@ export const Checkout = ({
               <PriceBreakdown
                 offerData={offerData}
                 showTotal={true}
-                isLoading={editQuoteInProgress}
+                isLoading={isBundleCreationInProgress}
               />
               <CheckoutDetailsForm formikProps={formik} />
               <StartDateWrapper>
@@ -470,7 +502,7 @@ export const Checkout = ({
           <Sign
             canInitiateSign={
               formik.isValid &&
-              !editQuoteInProgress &&
+              !isBundleCreationInProgress &&
               signUiState !== 'STARTED'
             }
             checkoutMethod={checkoutMethod}
@@ -480,6 +512,10 @@ export const Checkout = ({
         </ScrollWrapper>
       </OuterWrapper>
       <Backdrop visibilityState={visibilityState} onClick={onClose} />
+      <SignFailModal
+        isVisible={isShowingFailModal}
+        onClose={() => setIsShowingFailModal(false)}
+      />
     </>
   )
 }
