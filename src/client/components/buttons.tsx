@@ -4,7 +4,7 @@ import color from 'color'
 import { Link } from 'react-router-dom'
 import { Size } from './types'
 
-interface ButtonProps {
+export type ButtonProps = {
   background?: string
   foreground?: string
   size?: Size

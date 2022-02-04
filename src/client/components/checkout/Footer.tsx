@@ -1,14 +1,19 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { Button } from '../buttons'
+import { Button, ButtonProps, LinkButton } from '../buttons'
 import { PaymentInfo } from './PaymentInfo'
 
 const { white, purple500, gray900 } = colorsV3
 
 export type Props = {
   buttonText: string
-  buttonOnClick: () => void
+  buttonOnClick?: () => void
+  linkTo?: string
+}
+type FooterButtonProps = {
+  background: ButtonProps['background']
+  foreground: ButtonProps['foreground']
 }
 
 const Wrapper = styled.div`
@@ -33,18 +38,30 @@ const InnerWrapper = styled.div`
   align-items: center;
 `
 
-export const Footer = ({ buttonText, buttonOnClick }: Props) => {
+export const Footer = ({ buttonText, buttonOnClick, linkTo }: Props) => {
+  const buttonProps: FooterButtonProps = {
+    background: purple500,
+    foreground: gray900,
+  }
+
   return (
     <Wrapper>
       <InnerWrapper>
         <PaymentInfo />
-        <Button
-          background={purple500}
-          foreground={gray900}
-          onClick={buttonOnClick}
-        >
-          {buttonText}
-        </Button>
+        {buttonText && (
+          <>
+            {linkTo && (
+              <LinkButton {...buttonProps} to={linkTo}>
+                {buttonText}
+              </LinkButton>
+            )}
+            {buttonOnClick && (
+              <Button {...buttonProps} onClick={buttonOnClick}>
+                {buttonText}
+              </Button>
+            )}
+          </>
+        )}
       </InnerWrapper>
     </Wrapper>
   )
