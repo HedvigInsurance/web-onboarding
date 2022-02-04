@@ -1,4 +1,4 @@
-import { LocaleData } from 'src/client/l10n/locales'
+import { LocaleData } from 'l10n/locales'
 
 type FormatCurrencyParams = {
   locale: LocaleData['currencyLocale']
