@@ -15,14 +15,6 @@ const SwitchContainer = styled(motion.span)`
   cursor: pointer;
 `
 
-const SwitchNobble = styled(Tick)`
-  display: inline-block;
-  height: 6px;
-  width: 6px;
-  border-radius: 6px;
-  background-color: ${colorsV3.white};
-`
-
 /**
  * Makes usage of a visually hidden checkbox for accessiblity reasons like
  * to make it discoverable for assistence tools and to enable binding it with
@@ -60,7 +52,7 @@ export const Switch = ({ className, ...checkboxProps }: SwitchProps) => (
       }}
       transition={{ duration: 0.1 }}
     >
-      <SwitchNobble />
+      <Tick />
     </SwitchContainer>
   </>
 )
