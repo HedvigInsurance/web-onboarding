@@ -145,19 +145,19 @@ export const DiscountCodeModal: React.FC<Props> = ({
               })
           }
         >
-          {({ touched, errors, values }) => (
+          {({ touched, errors, getFieldProps, values }) => (
             <Form>
               <InputField
                 label={textKeys.SIDEBAR_ADD_DISCOUNT_CELL_LABEL()}
                 placeholder={textKeys.SIDEBAR_ADD_DISCOUNT_CELL_PLACEHOLDER()}
-                name="code"
                 type="text"
                 touched={touched.code}
                 errors={errors.code ? textKeys[errors.code]() : ''}
+                {...getFieldProps('code')}
               />
 
               <Footer>
-                <Button type="submit" fullWidth disabled={!values.code}>
+                <Button type="submit" fullWidth disabled={!values.code.trim()}>
                   {textKeys.SIDEBAR_ADD_DISCOUNT_BUTTON()}
                 </Button>
               </Footer>
