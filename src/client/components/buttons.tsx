@@ -7,7 +7,7 @@ import { Size } from './types'
 
 const { white, gray300, gray500, gray900, purple900 } = colorsV3
 
-type ButtonProps = {
+export type ButtonProps = {
   background?: string
   foreground?: string
   size?: Size
