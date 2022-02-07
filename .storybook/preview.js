@@ -1,8 +1,12 @@
 import React from 'react'
-import { GlobalCss } from '../src/client/utils/globalStyles'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { MockedProvider } from '@apollo/client/testing'
+import { GlobalCss } from '../src/client/utils/globalStyles'
 
 export const parameters = {
+  apolloClient: {
+    MockedProvider,
+  },
   backgrounds: {
     default: 'gray900',
     values: [
