@@ -40,7 +40,7 @@ export const SignDisclaimer: React.FC<Props> = ({
 }) => {
   const textKeys = useTextKeys()
   const { path: localePath } = useCurrentLocale()
-  const fallbackPrivacyPolicyLink = `https://www.hedvig.com/${localePath}/privacy`
+  const fallbackPrivacyPolicyLink = `https://www.hedvig.com/${localePath}/privacy-policy`
 
   const signDisclaimer = textKeys.CHECKOUT_SIGN_DISCLAIMER({
     SIGN_BUTTON_LABEL: getSignButtonLabel(textKeys, checkoutMethod),
