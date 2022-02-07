@@ -1600,13 +1600,17 @@ export type BundledQuote = {
   dataCollectionId?: Maybe<Scalars['ID']>
   typeOfContract: TypeOfContract
   initiatedFrom: Scalars['String']
+  displayName: Scalars['String']
   perils: Array<PerilV2>
   contractPerils: Array<PerilV2>
   insurableLimits: Array<InsurableLimit>
   termsAndConditions: InsuranceTerm
   insuranceTerms: Array<InsuranceTerm>
   detailsTable: Table
-  displayName: Scalars['String']
+}
+
+export type BundledQuoteDisplayNameArgs = {
+  locale: Locale
 }
 
 export type BundledQuotePerilsArgs = {
@@ -1632,10 +1636,6 @@ export type BundledQuoteInsuranceTermsArgs = {
 }
 
 export type BundledQuoteDetailsTableArgs = {
-  locale: Locale
-}
-
-export type BundledQuoteDisplayNameArgs = {
   locale: Locale
 }
 
@@ -1807,6 +1807,8 @@ export type Checkout = {
   status: CheckoutStatus
   /**  A user-visible text that explains the current status. Useful for async signing like SE BankID.  */
   statusText?: Maybe<Scalars['String']>
+  /**  Url to redirect the user to, in order to complete the checkout. Used for NORWEGIAN_BANK_ID and DANISH_BANK_ID.  */
+  redirectUrl?: Maybe<Scalars['String']>
 }
 
 export enum CheckoutMethod {
@@ -1993,13 +1995,17 @@ export type CompleteQuote = {
   dataCollectionId?: Maybe<Scalars['ID']>
   typeOfContract: TypeOfContract
   phoneNumber?: Maybe<Scalars['String']>
+  displayName: Scalars['String']
   perils: Array<PerilV2>
   contractPerils: Array<PerilV2>
   insurableLimits: Array<InsurableLimit>
   termsAndConditions: InsuranceTerm
   insuranceTerms: Array<InsuranceTerm>
   detailsTable: Table
-  displayName: Scalars['String']
+}
+
+export type CompleteQuoteDisplayNameArgs = {
+  locale: Locale
 }
 
 export type CompleteQuotePerilsArgs = {
@@ -2025,10 +2031,6 @@ export type CompleteQuoteInsuranceTermsArgs = {
 }
 
 export type CompleteQuoteDetailsTableArgs = {
-  locale: Locale
-}
-
-export type CompleteQuoteDisplayNameArgs = {
   locale: Locale
 }
 
@@ -3217,6 +3219,13 @@ export type EmbarkApiCreateQuoteData = {
   error: EmbarkLink
 }
 
+export type EmbarkApiGraphQlConstantVariable = {
+  __typename?: 'EmbarkAPIGraphQLConstantVariable'
+  key: Scalars['String']
+  value: Scalars['String']
+  as: EmbarkApiGraphQlSingleVariableCasting
+}
+
 export type EmbarkApiGraphQlError = {
   __typename?: 'EmbarkAPIGraphQLError'
   contains?: Maybe<Scalars['String']>
@@ -3290,6 +3299,7 @@ export type EmbarkApiGraphQlVariable =
   | EmbarkApiGraphQlSingleVariable
   | EmbarkApiGraphQlGeneratedVariable
   | EmbarkApiGraphQlMultiActionVariable
+  | EmbarkApiGraphQlConstantVariable
 
 export enum EmbarkApiGraphQlVariableGeneratedType {
   Uuid = 'uuid',
@@ -3769,6 +3779,7 @@ export type EmbarkStoryMetaDataEntryWebUrlPath = {
 export enum EmbarkStoryType {
   WebOnboarding = 'WEB_ONBOARDING',
   AppOnboarding = 'APP_ONBOARDING',
+  AppOnboardingQuoteCart = 'APP_ONBOARDING_QUOTE_CART',
 }
 
 export type EmbarkSwitchAction = EmbarkActionCore & {
@@ -7569,12 +7580,6 @@ export type Mutation = {
   removeDiscountCode: RedemedCodeResult
   removeAllDiscountCodes: RemoveCampaignCodeResult
   updateReferralCampaignCode: UpdateReferralCampaignCodeResult
-  createQuote: CreateQuoteResult
-  editQuote: CreateQuoteResult
-  removeCurrentInsurer: CreateQuoteResult
-  removeStartDate: CreateQuoteResult
-  signQuotes: StartSignResponse
-  approveQuotes?: Maybe<Scalars['Boolean']>
   createKeyGearItem: KeyGearItem
   addPhotoToKeyGearItem: KeyGearItem
   deletePhotoFromKeyGearItem: KeyGearItem
@@ -7641,6 +7646,12 @@ export type Mutation = {
    * This is needed at this stage because the "connecting payments" stage will happen with an actual signed member.
    */
   quoteCart_createAccessToken: CreateQuoteCartAccessTokenResult
+  createQuote: CreateQuoteResult
+  editQuote: CreateQuoteResult
+  removeCurrentInsurer: CreateQuoteResult
+  removeStartDate: CreateQuoteResult
+  signQuotes: StartSignResponse
+  approveQuotes?: Maybe<Scalars['Boolean']>
   logout: Scalars['Boolean']
   createClaim: Scalars['ID']
   createSession: Scalars['String']
@@ -7714,30 +7725,6 @@ export type MutationRemoveAllDiscountCodesArgs = {
 
 export type MutationUpdateReferralCampaignCodeArgs = {
   code: Scalars['String']
-}
-
-export type MutationCreateQuoteArgs = {
-  input: CreateQuoteInput
-}
-
-export type MutationEditQuoteArgs = {
-  input: EditQuoteInput
-}
-
-export type MutationRemoveCurrentInsurerArgs = {
-  input: RemoveCurrentInsurerInput
-}
-
-export type MutationRemoveStartDateArgs = {
-  input: RemoveStartDateInput
-}
-
-export type MutationSignQuotesArgs = {
-  input: SignQuotesInput
-}
-
-export type MutationApproveQuotesArgs = {
-  quoteIds: Array<Scalars['ID']>
 }
 
 export type MutationCreateKeyGearItemArgs = {
@@ -7857,6 +7844,30 @@ export type MutationQuoteCart_StartCheckoutArgs = {
 
 export type MutationQuoteCart_CreateAccessTokenArgs = {
   id: Scalars['ID']
+}
+
+export type MutationCreateQuoteArgs = {
+  input: CreateQuoteInput
+}
+
+export type MutationEditQuoteArgs = {
+  input: EditQuoteInput
+}
+
+export type MutationRemoveCurrentInsurerArgs = {
+  input: RemoveCurrentInsurerInput
+}
+
+export type MutationRemoveStartDateArgs = {
+  input: RemoveStartDateInput
+}
+
+export type MutationSignQuotesArgs = {
+  input: SignQuotesInput
+}
+
+export type MutationApproveQuotesArgs = {
+  quoteIds: Array<Scalars['ID']>
 }
 
 export type MutationCreateClaimArgs = {
@@ -8255,9 +8266,6 @@ export type Query = {
   balance: Balance
   chargeEstimation: ChargeEstimation
   chargeHistory: Array<Charge>
-  quote: Quote
-  lastQuoteOfMember: Quote
-  signMethodForQuotes: SignMethod
   news: Array<News>
   welcome: Array<Welcome>
   perils: Array<PerilV2>
@@ -8282,6 +8290,10 @@ export type Query = {
   quoteBundle: QuoteBundle
   /** Fetch quote cart by its ID. */
   quoteCart: QuoteCart
+  quote: Quote
+  /** @deprecated Legacy concept that should not be used */
+  lastQuoteOfMember: Quote
+  signMethodForQuotes: SignMethod
   /** @deprecated Use `contracts` instead */
   insurance: Insurance
   cashback?: Maybe<Cashback>
@@ -8407,14 +8419,6 @@ export type QueryCampaignArgs = {
   code: Scalars['String']
 }
 
-export type QueryQuoteArgs = {
-  id?: Maybe<Scalars['ID']>
-}
-
-export type QuerySignMethodForQuotesArgs = {
-  input: Array<Scalars['ID']>
-}
-
 export type QueryNewsArgs = {
   platform: Platform
   sinceVersion: Scalars['String']
@@ -8467,6 +8471,14 @@ export type QueryQuoteBundleArgs = {
 
 export type QueryQuoteCartArgs = {
   id: Scalars['ID']
+}
+
+export type QueryQuoteArgs = {
+  id?: Maybe<Scalars['ID']>
+}
+
+export type QuerySignMethodForQuotesArgs = {
+  input: Array<Scalars['ID']>
 }
 
 export type QueryCashbackArgs = {
@@ -8543,19 +8555,19 @@ export type QuoteBundle = {
   __typename?: 'QuoteBundle'
   quotes: Array<BundledQuote>
   bundleCost: InsuranceCost
+  appConfiguration: QuoteBundleAppConfiguration
+  displayName: Scalars['String']
   /** All possible other variations of the current set of bundle ids */
   possibleVariations: Array<QuoteBundleVariant>
   inception: QuoteBundleInception
   frequentlyAskedQuestions: Array<Faq>
-  appConfiguration: QuoteBundleAppConfiguration
-  displayName: Scalars['String']
-}
-
-export type QuoteBundleFrequentlyAskedQuestionsArgs = {
-  locale: Locale
 }
 
 export type QuoteBundleDisplayNameArgs = {
+  locale: Locale
+}
+
+export type QuoteBundleFrequentlyAskedQuestionsArgs = {
   locale: Locale
 }
 
@@ -11900,6 +11912,73 @@ export type NorwegianBankIdAuthMutation = { __typename?: 'Mutation' } & {
   >
 }
 
+export type PriceQueryVariables = Exact<{
+  id: Scalars['ID']
+  locale: Locale
+}>
+
+export type PriceQuery = { __typename?: 'Query' } & {
+  quoteCart: { __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'> & {
+      bundle?: Maybe<
+        { __typename?: 'QuoteBundle' } & {
+          quotes: Array<
+            { __typename?: 'BundledQuote' } & Pick<
+              BundledQuote,
+              'id' | 'displayName'
+            > & {
+                price: { __typename?: 'MonetaryAmountV2' } & Pick<
+                  MonetaryAmountV2,
+                  'amount' | 'currency'
+                >
+              }
+          >
+          bundleCost: { __typename?: 'InsuranceCost' } & Pick<
+            InsuranceCost,
+            'freeUntil'
+          > & {
+              monthlyGross: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount'
+              >
+              monthlyNet: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount'
+              >
+              monthlyDiscount: { __typename?: 'MonetaryAmountV2' } & Pick<
+                MonetaryAmountV2,
+                'amount'
+              >
+            }
+        }
+      >
+      campaign?: Maybe<
+        { __typename?: 'Campaign' } & Pick<
+          Campaign,
+          'code' | 'ownerName' | 'expiresAt' | 'displayValue'
+        > & {
+            incentive?: Maybe<
+              | ({ __typename?: 'MonthlyCostDeduction' } & {
+                  amount?: Maybe<
+                    { __typename?: 'MonetaryAmountV2' } & Pick<
+                      MonetaryAmountV2,
+                      'amount' | 'currency'
+                    >
+                  >
+                })
+              | { __typename: 'FreeMonths' }
+              | { __typename?: 'NoDiscount' }
+              | { __typename?: 'VisibleNoDiscount' }
+              | ({ __typename?: 'PercentageDiscountMonths' } & Pick<
+                  PercentageDiscountMonths,
+                  'percentageDiscount'
+                > & { quantityMonths: PercentageDiscountMonths['quantity'] })
+              | { __typename?: 'IndefinitePercentageDiscount' }
+            >
+          }
+      >
+    }
+}
+
 export type QuoteDataFragment = { __typename?: 'BundledQuote' } & Pick<
   BundledQuote,
   | 'id'
@@ -14014,6 +14093,98 @@ export type NorwegianBankIdAuthMutationResult = ApolloReactCommon.MutationResult
 export type NorwegianBankIdAuthMutationOptions = ApolloReactCommon.BaseMutationOptions<
   NorwegianBankIdAuthMutation,
   NorwegianBankIdAuthMutationVariables
+>
+export const PriceDocument = gql`
+  query Price($id: ID!, $locale: Locale!) {
+    quoteCart(id: $id) {
+      id
+      bundle {
+        quotes {
+          id
+          displayName(locale: $locale)
+          price {
+            amount
+            currency
+          }
+        }
+        bundleCost {
+          monthlyGross {
+            amount
+          }
+          monthlyNet {
+            amount
+          }
+          monthlyDiscount {
+            amount
+          }
+          freeUntil
+        }
+      }
+      campaign {
+        incentive {
+          ... on MonthlyCostDeduction {
+            amount {
+              amount
+              currency
+            }
+          }
+          ... on PercentageDiscountMonths {
+            percentageDiscount
+            quantityMonths: quantity
+          }
+          ... on FreeMonths {
+            __typename
+          }
+        }
+        code
+        ownerName
+        expiresAt
+        displayValue(locale: $locale)
+      }
+    }
+  }
+`
+
+/**
+ * __usePriceQuery__
+ *
+ * To run a query within a React component, call `usePriceQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePriceQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePriceQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      locale: // value for 'locale'
+ *   },
+ * });
+ */
+export function usePriceQuery(
+  baseOptions: Apollo.QueryHookOptions<PriceQuery, PriceQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<PriceQuery, PriceQueryVariables>(
+    PriceDocument,
+    options,
+  )
+}
+export function usePriceLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<PriceQuery, PriceQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<PriceQuery, PriceQueryVariables>(
+    PriceDocument,
+    options,
+  )
+}
+export type PriceQueryHookResult = ReturnType<typeof usePriceQuery>
+export type PriceLazyQueryHookResult = ReturnType<typeof usePriceLazyQuery>
+export type PriceQueryResult = ApolloReactCommon.QueryResult<
+  PriceQuery,
+  PriceQueryVariables
 >
 export const QuoteBundleDocument = gql`
   query QuoteBundle($input: QuoteBundleInput!, $locale: Locale!) {

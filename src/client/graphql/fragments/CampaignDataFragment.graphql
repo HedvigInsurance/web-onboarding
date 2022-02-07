@@ -15,6 +15,7 @@ fragment CampaignData on Campaign {
     }
   }
   code
+  # TODO: Remove owner, since it's deprecated
   owner {
     displayName
     id
