@@ -184,7 +184,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <>
       <ReactVisibilitySensor partialVisibility onChange={setIsSidebarVisible}>
         {() => (
-          <Wrapper>
+          <Wrapper data-testid="offer-sidebar">
             <Container>
               <StyledCampaignBadge
                 quoteCartId={quoteCartId}
