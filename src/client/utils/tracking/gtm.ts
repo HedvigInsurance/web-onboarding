@@ -10,6 +10,7 @@ import {
   hasAccidentQuote,
   hasTravelQuote,
 } from 'pages/OfferNew/utils'
+import { EmbarkStory } from 'utils/embarkStory'
 import {
   getContractType,
   getInitialOfferFromSessionStorage,
@@ -38,6 +39,8 @@ type GTMOfferData = {
   current_offer: string
   member_id?: string
   quote_cart_id?: string
+  flow_type?: string
+  current_insurer?: string
 }
 
 type GTMPageData = {
@@ -157,6 +160,8 @@ export const trackOfferGTM = (
           switched_to: contractCategory,
         }),
         ...(offerData.memberId && { member_id: offerData.memberId }),
+        flow_type: EmbarkStory.get() ?? undefined,
+        current_insurer: offerData.quotes[0].currentInsurer?.id ?? undefined,
       },
       ...phoneNumberData,
     })

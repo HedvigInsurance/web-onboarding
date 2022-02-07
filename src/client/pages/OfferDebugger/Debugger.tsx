@@ -4,6 +4,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary'
 import { Button } from 'components/buttons'
 import { useCreateQuoteCart } from 'utils/hooks/useCreateQuoteCart'
+import { Label } from 'components/inputs/index'
 import { QuoteData } from './components/QuoteData'
 
 const Wrapper = styled.div`
@@ -11,6 +12,9 @@ const Wrapper = styled.div`
   padding: 1rem;
   margin: 0 auto;
   color: ${colorsV3.gray100};
+  ${Label} {
+    color: white;
+  }
 `
 
 const Row = styled.div`
