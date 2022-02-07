@@ -57,6 +57,8 @@ const defaultSrc = [
   'cdn.mxpnl.com',
   'cdn.segment.com',
   'cdn.cookielaw.org',
+  '*.onetrust.com',
+  '*.clarity.ms',
   'api.segment.io',
   'https://api-js.mixpanel.com',
   'checkoutshopper-live.adyen.com',
@@ -128,6 +130,7 @@ export const helmet = koaHelmet({
         'https://px4.ads.linkedin.com',
         'www.linkedin.com',
         'https://bat.bing.com',
+        'c.clarity.ms',
       ],
       reportUri:
         process.env.CSP_REPORT_ENDPOINT || '/new-member/_report-csp-violation',

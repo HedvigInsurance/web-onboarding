@@ -217,7 +217,6 @@ export interface TextInputProps extends CoreInputFieldProps {
 export const InputField: React.FC<TextInputProps> = ({
   label,
   mask,
-  name,
   showErrorMessage = true,
   type = 'text',
   options,

@@ -1,8 +1,11 @@
 import styled from '@emotion/styled'
+import { css } from '@emotion/core'
 import { colorsV3 } from '@hedviginsurance/brand'
 import color from 'color'
 import { Link } from 'react-router-dom'
 import { Size } from './types'
+
+const { white, gray300, gray500, gray900, purple900 } = colorsV3
 
 export type ButtonProps = {
   background?: string
@@ -22,26 +25,19 @@ export const UnstyledButton = styled.button<UnstyledButtonProps>`
   background: none;
   border: none;
   outline: none;
-  cursor: ${({ disabled }) => (disabled ? `default` : `pointer`)};
+  cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
 `
 
-export const Button = styled.button<ButtonProps>`
+export const Button = styled(UnstyledButton)<ButtonProps>`
   display: inline-block;
   font-size: 1rem;
-  line-height: ${(props) => (props.size === 'lg' ? `1rem` : `1.25rem`)};
-  width: ${(props) => (props.fullWidth ? '100%' : 'auto')};
-  padding: ${(props) =>
-    props.size === 'lg' ? `1.5rem 2.5rem` : `0.875rem 1.5rem`};
-  background: ${(props) =>
-    props.disabled
-      ? color(props.background ?? colorsV3.gray700)
-          .lighten(0.1)
-          .toString()
-      : props.background ?? colorsV3.gray900};
-  color: ${(props) => props.foreground ?? colorsV3.white};
+  line-height: ${({ size }) => (size === 'lg' ? '1rem' : '1.25rem')};
+  width: ${({ fullWidth }) => (fullWidth ? '100%' : 'auto')};
+  padding: ${({ size }) => (size === 'lg' ? '1.5rem 2.5rem' : '0.75rem 2rem')};
+  background: ${({ background }) => background ?? gray900};
+  color: ${({ foreground }) => foreground ?? white};
   border-radius: 8px;
   border: none;
-  cursor: ${(props) => (props.disabled ? `default` : `pointer`)};
   transition: all 0.15s ease-in-out;
   text-decoration: none;
   text-align: center;
@@ -50,24 +46,32 @@ export const Button = styled.button<ButtonProps>`
     outline: none;
   }
 
-  ${(props) =>
-    !props.disabled &&
-    `
-    &:hover, &:focus {
-      transform: translateY(-2px);
-      box-shadow: 0 3px 5px rgba(55, 55, 55, 0.15);
-      color: ${props.foreground ?? colorsV3.white};
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      color: ${gray500};
+      background-color: ${gray300};
+    `}
 
-      @media (hover: none) {
-        transform: none;
+  ${({ disabled, foreground }) =>
+    !disabled &&
+    css`
+      &:hover,
+      &:focus {
+        transform: translateY(-2px);
+        box-shadow: 0 3px 5px rgba(55, 55, 55, 0.15);
+        color: ${foreground ?? white};
+
+        @media (hover: none) {
+          transform: none;
+        }
       }
-    }
-  `}
+    `}
 `
 
 export const LinkButton = Button.withComponent(Link)
 
-interface TextButtonProps {
+type TextButtonProps = {
   color?: string
 }
 
@@ -75,7 +79,7 @@ export const TextButton = styled.button<TextButtonProps>`
   background: none;
   padding: 0;
   margin: 0;
-  color: ${(props) => props.color || colorsV3.purple900};
+  color: ${({ color }) => color || purple900};
   font-size: 0.875rem;
   line-height: 1.5rem;
   border: none;
@@ -84,8 +88,8 @@ export const TextButton = styled.button<TextButtonProps>`
   transition: color 0.1s ease;
 
   :hover {
-    color: ${(props) =>
-      color(props.color ?? colorsV3.purple900)
+    color: ${({ color: textColor }) =>
+      color(textColor ?? purple900)
         .darken(0.1)
         .toString()};
   }
