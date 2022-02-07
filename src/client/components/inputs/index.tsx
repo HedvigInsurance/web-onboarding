@@ -72,8 +72,6 @@ export const Label = styled.label`
 `
 
 const StyledInput = styled.input`
-  position: relative;
-  z-index: 1;
   background: none;
   border: none;
   font-size: 1rem;
@@ -124,6 +122,7 @@ const SymbolWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  pointer-events: none;
 
   svg {
     width: 1rem;
