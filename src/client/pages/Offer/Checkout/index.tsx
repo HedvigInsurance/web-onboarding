@@ -388,11 +388,14 @@ export const Checkout = ({
       }
 
       if (isFormDataUpdated) await submitForm()
+
+      // clean up existing auth tokens
+      if (realApolloClient) {
+        realApolloClient.httpLink.options.headers.authorization = undefined
+      }
+
       const { data } = await startCheckout({
-        variables: {
-          quoteIds,
-          quoteCartId,
-        },
+        variables: { quoteIds, quoteCartId },
       })
       if (data?.quoteCart_startCheckout.__typename === 'BasicError') {
         setSignUiState('FAILED')
