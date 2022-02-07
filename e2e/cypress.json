@@ -2,5 +2,7 @@
   "pluginsFile": false,
   "supportFile": false,
   "fixturesFolder": false,
-  "baseUrl": "https://www.dev.hedvigit.com"
+  "baseUrl": "https://www.dev.hedvigit.com",
+  "experimentalSessionSupport": true,
+  "defaultCommandTimeout": 10000
 }
