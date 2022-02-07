@@ -4,7 +4,7 @@ import { CookieStorage } from 'cookie-storage'
 import { Form, Formik } from 'formik'
 import { motion } from 'framer-motion'
 import hexToRgba from 'hex-to-rgba'
-import React, { useState } from 'react'
+import React from 'react'
 import * as Yup from 'yup'
 import { useTextKeys } from 'utils/textKeys'
 import { useRedeemCodeMutation } from 'data/graphql'
@@ -85,7 +85,6 @@ export const DiscountCodeModal: React.FC<Props> = ({
 }) => {
   const textKeys = useTextKeys()
   const [redeemCode] = useRedeemCodeMutation()
-  const [code, setCode] = useState(false)
 
   return (
     <Wrapper isOpen={isOpen}>
@@ -146,20 +145,19 @@ export const DiscountCodeModal: React.FC<Props> = ({
               })
           }
         >
-          {({ touched, errors }) => (
+          {({ touched, errors, getFieldProps, values }) => (
             <Form>
               <InputField
                 label={textKeys.SIDEBAR_ADD_DISCOUNT_CELL_LABEL()}
                 placeholder={textKeys.SIDEBAR_ADD_DISCOUNT_CELL_PLACEHOLDER()}
-                name="code"
                 type="text"
                 touched={touched.code}
                 errors={errors.code ? textKeys[errors.code]() : ''}
-                onChange={() => setCode(true)}
+                {...getFieldProps('code')}
               />
 
               <Footer>
-                <Button type="submit" fullWidth disabled={!code}>
+                <Button type="submit" fullWidth disabled={!values.code.trim()}>
                   {textKeys.SIDEBAR_ADD_DISCOUNT_BUTTON()}
                 </Button>
               </Footer>
