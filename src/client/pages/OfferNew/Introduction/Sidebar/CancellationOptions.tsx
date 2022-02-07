@@ -108,7 +108,6 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
             quoteId: quote.id,
           },
         })
-        await refetch()
       } else {
         await setStartDate({
           variables: {
@@ -116,8 +115,9 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
             date: formatDate(new Date(), gqlDateFormat),
           },
         })
-        await refetch()
       }
+
+      await refetch()
     } catch (e) {
       handleFail(e)
     } finally {
