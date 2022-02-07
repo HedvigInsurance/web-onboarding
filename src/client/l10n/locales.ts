@@ -39,6 +39,7 @@ export type LocaleData = {
     formatRegex: RegExp
     backendFormatExample: string
   }
+  currencyLocale: 'en-SE' | 'sv-SE' | 'en-NO' | 'nb-NO' | 'en-DK' | 'da-DK'
   phoneNumber: {
     formatRegex: RegExp
     placeholder?: string
@@ -64,6 +65,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: birthDateFormats.SE,
       backendFormatExample: 'ÅÅÅÅ-MM-DD',
     },
+    currencyLocale: 'sv-SE',
     phoneNumber: {
       formatRegex: phoneNumberFormats.SE,
       placeholder: phoneNumberPlaceholder.SE,
@@ -87,6 +89,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: birthDateFormats.SE,
       backendFormatExample: 'YYYY-MM-DD',
     },
+    currencyLocale: 'en-SE',
     phoneNumber: {
       formatRegex: phoneNumberFormats.SE,
       placeholder: phoneNumberPlaceholder.SE,
@@ -110,6 +113,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: birthDateFormats.NO,
       backendFormatExample: 'ÅÅÅÅ-MM-DD',
     },
+    currencyLocale: 'nb-NO',
     phoneNumber: {
       formatRegex: phoneNumberFormats.NO,
       placeholder: phoneNumberPlaceholder.NO,
@@ -132,6 +136,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: birthDateFormats.NO,
       backendFormatExample: 'YYYY-MM-DD',
     },
+    currencyLocale: 'en-NO',
     phoneNumber: {
       formatRegex: phoneNumberFormats.NO,
       placeholder: phoneNumberPlaceholder.NO,
@@ -154,6 +159,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: birthDateFormats.DK,
       backendFormatExample: 'ÅÅÅÅ-MM-DD',
     },
+    currencyLocale: 'da-DK',
     phoneNumber: {
       formatRegex: phoneNumberFormats.DK,
       placeholder: phoneNumberPlaceholder.DK,
@@ -176,6 +182,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: birthDateFormats.DK,
       backendFormatExample: 'YYYY-MM-DD',
     },
+    currencyLocale: 'en-DK',
     phoneNumber: {
       formatRegex: phoneNumberFormats.DK,
       placeholder: phoneNumberPlaceholder.DK,

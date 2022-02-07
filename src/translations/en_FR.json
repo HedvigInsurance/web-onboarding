@@ -332,7 +332,6 @@
   "GENERIC_ERROR_ACTION": "Go back",
   "CHECKOUT_PHONE_NUMBER_ERROR": "This is a required field.",
   "CHECKOUT_PHONE_NUMBER_HELPERTEXT": "We will only contact you for important communications.",
-  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE": "",
   "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_LABEL": "",
   "INVALID_FIELD": "This field is invalid.",
   "CHECKOUT_YOUR_HOME_SECTION_TITLE": "Your home",
@@ -344,5 +343,8 @@
   "PRICE_SUFFIX_INTERVAL": "\/month",
   "CHECKOUT_SIGN_FAIL_ERROR_TEXT": "Please try again or contact us in the chat or email us at [hedvig@hedvig.com](mailto:hedvig@hedvig.com) if the problem remains.",
   "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_PROVIDER_LABEL": "Cancel my current {INSURANCE_NAME} with {INSURANCE_PROVIDER}",
-  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_TOOLTIP": "We will gladly help you cancel your current {INSURANCE_NAME} for you. Your new insurance with Hedvig will be activated when your old expires. You’ll receive more info via email."
+  "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_TOOLTIP": "We will gladly help you cancel your current {INSURANCE_NAME} for you. Your new insurance with Hedvig will be activated when your old expires. You’ll receive more info via email.",
+  "CHECKOUT_FOOTER_CANCELLATION_INFO": "Cancel anytime",
+  "CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT": "Continue to payment",
+  "CHECKOUT_FOOTER_COMPLETE_PURCHASE": "Complete purchase"
 }
