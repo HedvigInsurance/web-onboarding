@@ -106,9 +106,9 @@ export const PriceBreakdown: React.FC<{
   const roundedTotalGrossPrice = Math.round(Number(totalGrossPrice))
 
   return (
-    <PriceDetails>
+    <PriceDetails data-testid="price-breakdown">
       {priceBreakdowns.map(({ id, name, price, currency }) => (
-        <PriceRow key={id}>
+        <PriceRow key={id} data-testid="price-breakdown-row">
           <div>{name}</div>
           <Price
             amount={price}
