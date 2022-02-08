@@ -44,7 +44,7 @@ export const PaymentInfo = () => {
   const quoteBundle = data?.quoteCart.bundle
 
   if (error || !quoteBundle) {
-    return <div></div>
+    return null
   }
 
   const monthlyNetCost = quoteBundle.bundleCost.monthlyNet.amount
