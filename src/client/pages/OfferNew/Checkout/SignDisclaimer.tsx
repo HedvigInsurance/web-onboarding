@@ -36,7 +36,7 @@ const getPrivacyPolicyLink = (currentLocale: string, quote: OfferQuote) => {
     return linkFromBackend
   }
 
-  return `https://www.hedvig.com/${currentLocale}/privacy`
+  return `https://www.hedvig.com/${currentLocale}/privacy-policy`
 }
 
 type Props = {
