@@ -107,7 +107,10 @@ const StyledSelect = styled(Field)`
   line-height: 1.5;
   padding: 0.875rem;
   border-radius: 8px;
-  :focus {
+  color: ${colorsV3.gray900};
+  background-color: ${colorsV3.white};
+
+  &:focus {
     outline: none;
   }
 `
@@ -217,7 +220,6 @@ export interface TextInputProps extends CoreInputFieldProps {
 export const InputField: React.FC<TextInputProps> = ({
   label,
   mask,
-  name,
   showErrorMessage = true,
   type = 'text',
   options,

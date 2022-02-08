@@ -1,0 +1,48 @@
+query Price($id: ID!, $locale: Locale!) {
+  quoteCart(id: $id) {
+    id
+    bundle {
+      quotes {
+        id
+        displayName(locale: $locale)
+        price {
+          amount
+          currency
+        }
+      }
+      bundleCost {
+        monthlyGross {
+          amount
+        }
+        monthlyNet {
+          amount
+        }
+        monthlyDiscount {
+          amount
+        }
+        freeUntil
+      }
+    }
+    campaign {
+      incentive {
+        ... on MonthlyCostDeduction {
+          amount {
+            amount
+            currency
+          }
+        }
+        ... on PercentageDiscountMonths {
+          percentageDiscount
+          quantityMonths: quantity
+        }
+        ... on FreeMonths {
+          __typename
+        }
+      }
+      code
+      ownerName
+      expiresAt
+      displayValue(locale: $locale)
+    }
+  }
+}

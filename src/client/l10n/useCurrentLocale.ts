@@ -6,16 +6,18 @@ type LocaleUrlParam = {
   [PARAM_PLACEHOLDER]: LocaleLabel
 }
 
-const FALLBACK_LOCALE: LocaleLabel = 'se-en'
-
 export const getLocaleParamFromPath = (path: string): LocaleLabel => {
   const localeMatch = matchPath<LocaleUrlParam>(path, {
     path: localePathPattern + '/*',
   })
 
+  if (!localeMatch) {
+    throw new Error(`No locale match found in path "${path}"`)
+  }
+
   const localeFromPath = localeMatch?.params[PARAM_PLACEHOLDER]
 
-  return localeFromPath ? localeFromPath : FALLBACK_LOCALE
+  return localeFromPath
 }
 
 export const useCurrentLocale = () => {
