@@ -5,7 +5,6 @@ import { getQuoteDetails } from 'utils/getQuoteDetails'
 import { useTextKeys } from 'utils/textKeys'
 import { OfferQuote } from '../../OfferNew/types'
 import { SubSection } from '../components/SubSection'
-import { HorizontalSpacer } from '../components/HorizontalSpacer'
 
 const { gray500, gray300 } = colorsV3
 
@@ -24,6 +23,10 @@ const Label = styled.div`
 const Value = styled.div`
   color: ${colorsV3.gray700};
   text-align: right;
+`
+
+const HorizontalSpacer = styled.div`
+  width: 48px;
 `
 
 const Group = styled.div`
