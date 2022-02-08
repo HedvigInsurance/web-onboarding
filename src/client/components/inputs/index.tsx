@@ -105,7 +105,10 @@ const StyledSelect = styled(Field)`
   line-height: 1.5;
   padding: 0.875rem;
   border-radius: 8px;
-  :focus {
+  color: ${colorsV3.gray900};
+  background-color: ${colorsV3.white};
+
+  &:focus {
     outline: none;
   }
 `
