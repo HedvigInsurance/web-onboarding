@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
@@ -6,28 +6,27 @@ import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
 import { getFormattedPrice } from 'utils/getFormattedPrice'
 import { usePriceQuery } from 'data/graphql'
-import { SubSection } from '../SubSection'
 import { CampaignBadge } from '../../../../components/CampaignBadge/CampaignBadge'
+import { SubSection } from './SubSection'
 
-const { gray900, gray300 } = colorsV3
+const { gray300 } = colorsV3
 
 const Wrapper = styled.div`
   display: grid;
   grid-template-columns: auto;
 `
 const TotalPrice = styled.div`
-  font-size: 1rem;
-  line-height: 1.5rem;
-  color: ${gray900};
+  font-size: 0.875rem;
+  line-height: 1.4;
 `
 
 export const Row = styled.div`
-  font-size: 14px;
+  font-size: 0.875rem;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   padding: 0.5rem 0;
-  line-height: 1.42;
+  line-height: 1.4;
 `
 
 const Value = styled.div``
@@ -45,6 +44,7 @@ export const YourPlan = () => {
   const textKeys = useTextKeys()
   const { isoLocale, currencyLocale } = useCurrentLocale()
   const { id: quoteCartId } = useParams<{ id: string }>()
+  const [isNorwegianBundle, setIsNorwegianBundle] = useState(false)
   const { data, loading: isLoading, error } = usePriceQuery({
     variables: {
       id: quoteCartId,
@@ -61,6 +61,10 @@ export const YourPlan = () => {
   const currency = quoteBundle.quotes[0].price.currency
   const quotes = quoteBundle.quotes
 
+  if (quotes.length > 1 && currency === 'NOK') {
+    setIsNorwegianBundle(true)
+  }
+
   const formattedPrice = (value: string) => {
     return getFormattedPrice({
       locale: currencyLocale,
@@ -68,8 +72,6 @@ export const YourPlan = () => {
       currency,
     })
   }
-
-  console.log(data)
 
   return (
     <Wrapper>
@@ -84,13 +86,18 @@ export const YourPlan = () => {
               </Value>
             </Row>
           ))}
-          <Row>
-            <StyledCampaignBadge quoteCartId={quoteCartId} />
-            <Value>
-              - {formattedPrice(discount)}
-              {textKeys.PRICE_SUFFIX_INTERVAL()}
-            </Value>
-          </Row>
+          {discount !== '0.00' && (
+            <Row>
+              <StyledCampaignBadge
+                quoteCartId={quoteCartId}
+                isNorwegianBundle={isNorwegianBundle}
+              />
+              <Value>
+                - {formattedPrice(discount)}
+                {textKeys.PRICE_SUFFIX_INTERVAL()}
+              </Value>
+            </Row>
+          )}
         </>
 
         <Total>
