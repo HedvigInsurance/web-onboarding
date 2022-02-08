@@ -11,6 +11,11 @@ import { ErrorModal, ErrorHeading, ErrorText } from 'components/ErrorModal'
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: flex-start;
+  padding-top: 1rem;
+`
+
+const HorizontalSpacer = styled.div`
+  width: 1rem;
 `
 
 type SetupFailedModalProps = Omit<ModalProps, 'onClose'> & {
@@ -36,6 +41,7 @@ export const SetupFailedModal = ({
         <Button onClick={() => onRetry()}>
           {textKeys.GENERIC_ERROR_ACTION_RETRY()}
         </Button>
+        <HorizontalSpacer />
         <Button onClick={goToLandingPage}>
           {textKeys.GENERIC_ERROR_ACTION()}
         </Button>
