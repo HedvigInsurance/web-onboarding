@@ -38,7 +38,7 @@ export const getCheckoutDetailsValidationSchema = (
     ...(isPhoneNumberRequired
       ? {
           phoneNumber: Yup.string()
-            .transform((phone) => phone.replace(/\s/g, ''))
+            .transform((phone) => phone?.replace(/\s/g, ''))
             .matches(
               locale.phoneNumber.formatRegex,
               textKeys.GENERIC_ERROR_INPUT_FORMAT(),
