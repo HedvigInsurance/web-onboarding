@@ -436,7 +436,7 @@ export const Checkout = ({
         locale: locale.isoLocale,
         quoteCartId,
         quotes: getUniqueQuotesFromVariantList(quoteBundleVariants).map(
-          ({ startDate, data: { type, typeOfContract } }) => {
+          ({ startDate, currentInsurer, data: { type, typeOfContract } }) => {
             return {
               firstName,
               lastName,
@@ -444,6 +444,7 @@ export const Checkout = ({
               birthDate,
               ssn,
               startDate,
+              currentInsurer: currentInsurer?.id,
               phoneNumber: phoneNumber?.replace(/\s/g, ''),
               dataCollectionId,
               data: {
