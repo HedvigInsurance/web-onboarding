@@ -213,18 +213,26 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
       variables: {
         locale: isoLocale,
         quoteCartId,
-        quotes: allQuotes.map(({ data: { id, type, typeOfContract } }) => {
-          return {
-            ...form,
-            data: {
-              ...form.data,
-              numberCoInsured: householdSize && householdSize - 1,
-              id,
-              type,
-              typeOfContract,
-            },
-          }
-        }),
+        quotes: allQuotes.map(
+          ({
+            startDate,
+            currentInsurer,
+            data: { id, type, typeOfContract },
+          }) => {
+            return {
+              ...form,
+              startDate,
+              currentInsurer: currentInsurer?.id,
+              data: {
+                ...form.data,
+                numberCoInsured: householdSize && householdSize - 1,
+                id,
+                type,
+                typeOfContract,
+              },
+            }
+          },
+        ),
       },
     })
   }
