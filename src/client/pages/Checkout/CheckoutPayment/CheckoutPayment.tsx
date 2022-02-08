@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTextKeys } from 'utils/textKeys'
-import { CheckoutPageWrapper } from 'components/checkout/CheckoutPageWrapper'
-import { Footer } from 'components/checkout/Footer'
+import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
+import { Footer } from '../shared/Footer'
 
 export const CheckoutPayment = () => {
   const textKeys = useTextKeys()
