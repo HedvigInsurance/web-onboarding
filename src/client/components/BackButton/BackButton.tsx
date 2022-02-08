@@ -2,8 +2,8 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { useHistory } from 'react-router'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { UnstyledButton } from '../buttons'
-import { Arrow } from '../icons/Arrow'
+import { UnstyledButton } from 'components/buttons'
+import { Arrow } from 'components/icons/Arrow'
 
 const { gray900, gray600 } = colorsV3
 
