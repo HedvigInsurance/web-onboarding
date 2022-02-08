@@ -24,7 +24,6 @@ const HandleSwitchingLabel = styled.label<{ isClickable: boolean }>`
 `
 
 const StyledSpinner = styled(Spinner)`
-  flex: 1 0 auto;
   height: 1.25rem;
   width: 1.25rem;
   margin-right: 0.5rem;
