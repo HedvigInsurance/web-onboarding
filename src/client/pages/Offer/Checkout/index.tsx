@@ -39,6 +39,7 @@ import { InsuranceSummary } from 'pages/OfferNew/Checkout/InsuranceSummary'
 import { UpsellCard } from 'pages/OfferNew/Checkout/UpsellCard'
 import { OfferData } from 'pages/OfferNew/types'
 import { SignFailModal } from 'pages/OfferNew/Checkout/SignFailModal/SignFailModal'
+import { LimitCode } from 'api/quoteBundleErrorSelectors'
 import { QuoteInput } from '../Introduction/DetailsModal/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import {
@@ -187,7 +188,7 @@ const isManualReviewRequired = (errors: GraphQLError[]) => {
 
 const isSsnInvalid = (errors: GraphQLError[]) => {
   const invalidSsnError = errors.find((error) => {
-    return error?.extensions?.body?.errorMessage === 'Invalid SSN'
+    return error?.extensions?.body?.errorCode === LimitCode.INVALID_SSN
   })
 
   return invalidSsnError !== undefined

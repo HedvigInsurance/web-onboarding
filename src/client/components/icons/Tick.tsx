@@ -1,6 +1,11 @@
 import React from 'react'
+import { colorsV3 } from '@hedviginsurance/brand'
 
-export const Tick: React.FC<{ color?: string }> = ({ color = '#fff' }) => (
+export type TickProps = {
+  color?: string
+}
+
+export const Tick = ({ color = colorsV3.white }: TickProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="26"
@@ -9,6 +14,8 @@ export const Tick: React.FC<{ color?: string }> = ({ color = '#fff' }) => (
   >
     <g transform="translate(1 1)" fill="none" fillRule="evenodd">
       <path
+        stroke={color}
+        strokeWidth={2}
         fill={color}
         d="M9.646 15.322l-3.32-3.357L5.2 13.104 9.646 17.6 19.2 7.94 18.073 6.8z"
       />
