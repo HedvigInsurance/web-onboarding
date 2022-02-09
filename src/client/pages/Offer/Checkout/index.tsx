@@ -423,7 +423,7 @@ export const Checkout = ({
       }
     } catch (error) {
       if (
-        !isManualReviewRequired((error.graphQLErrors || []) as GraphQLError[])
+        isManualReviewRequired((error.graphQLErrors || []) as GraphQLError[])
       ) {
         setIsShowingFailModal(true)
       }
