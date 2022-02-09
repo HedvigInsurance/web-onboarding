@@ -8,8 +8,8 @@ import {
   InsuranceTermType,
 } from 'data/graphql'
 import { perilsMock } from 'utils/testData/offerDataMock'
-import { OfferQuote } from '../../../OfferNew/types'
-import { PageSection } from '../components/PageSection'
+import { OfferQuote } from '../../../../OfferNew/types'
+import { PageSection } from '../PageSection'
 import { QuoteDetails } from './QuoteDetails'
 
 export default {

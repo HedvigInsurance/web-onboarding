@@ -3,8 +3,8 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import styled from '@emotion/styled'
 import { getQuoteDetails } from 'utils/getQuoteDetails'
 import { useTextKeys } from 'utils/textKeys'
-import { OfferQuote } from '../../../OfferNew/types'
-import { SubSection } from '../components/SubSection'
+import { OfferQuote } from '../../../../OfferNew/types'
+import { SubSection } from '../SubSection'
 
 const { gray900, gray300, gray700 } = colorsV3
 
