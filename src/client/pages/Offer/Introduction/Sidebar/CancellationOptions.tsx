@@ -20,13 +20,14 @@ const HandleSwitchingLabel = styled.label<{ isClickable: boolean }>`
 `
 
 const StyledSpinner = styled(Spinner)`
+  flex: none;
   height: 1.25rem;
   width: 1.25rem;
-  margin-right: 0.5rem;
+  margin-right: 1rem;
 `
 
 const StyledSwitch = styled(Switch)`
-  margin-right: 0.5rem;
+  margin-right: 1rem;
 `
 
 const getLabelContent = (textKeys: TextKeyMap, quote: BundledQuote) => {
