@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { Button, ButtonProps, LinkButton } from '../buttons'
+import { Button, ButtonProps, LinkButton } from 'components/buttons'
 import { PaymentInfo } from './PaymentInfo'
 
 const { white, purple500, gray900 } = colorsV3

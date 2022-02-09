@@ -6,7 +6,7 @@ import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
 import { getFormattedPrice } from 'utils/getFormattedPrice'
 import { usePriceQuery } from 'data/graphql'
-import { Spinner } from '../utils'
+import { Spinner } from 'components/utils'
 
 const { gray900, gray700 } = colorsV3
 
