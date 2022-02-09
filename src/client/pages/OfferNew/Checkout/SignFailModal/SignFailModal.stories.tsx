@@ -1,26 +1,35 @@
 import React, { useState } from 'react'
 import { MemoryRouter } from 'react-router-dom'
-import { Story } from '@storybook/react'
-import { TextKeyProvider, TranslationsLocale } from 'utils/textKeys'
+import { Story, Meta } from '@storybook/react'
+import {
+  localeArgTypes,
+  getTranslationsLocale,
+} from 'utils/storybook/storyHelpers'
+import { LocaleLabel } from 'l10n/locales'
+import { TextKeyProvider } from 'utils/textKeys'
 import { SignFailModal } from './SignFailModal'
 
 type StoryProps = {
-  translationsLocale: TranslationsLocale
+  localePath: LocaleLabel
 }
 
-export default {
+const storyMeta: Meta<StoryProps> = {
   title: 'Checkout/SignFailModal',
   component: SignFailModal,
+  argTypes: localeArgTypes,
   args: {
-    translationsLocale: 'sv_SE',
+    localePath: 'no-en',
   },
   parameters: {
     backgrounds: { default: 'gray100' },
   },
 }
 
-export const Default: Story<StoryProps> = ({ translationsLocale }) => {
+export default storyMeta
+
+export const Default: Story<StoryProps> = ({ localePath }) => {
   const [isShowingFailModal, setIsShowingFailModal] = useState(true)
+  const translationsLocale = getTranslationsLocale(localePath)
 
   return (
     <MemoryRouter initialEntries={['/se/new-member/sign']}>
