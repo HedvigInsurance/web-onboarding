@@ -484,7 +484,7 @@ export const Checkout = ({
                 <StartDateLabel>
                   {textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}
                 </StartDateLabel>
-                <StartDate quoteCartId={quoteCartId} offerData={offerData} />
+                <StartDate quoteCartId={quoteCartId} />
               </StartDateWrapper>
               {isUpsellCardVisible && (
                 <UpsellCard

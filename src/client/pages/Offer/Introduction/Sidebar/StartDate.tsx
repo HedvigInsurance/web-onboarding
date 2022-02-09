@@ -17,7 +17,6 @@ import { LoadingDots } from 'components/LoadingDots/LoadingDots'
 import {
   useCreateQuoteBundleMutation,
   useQuoteCartQuery,
-  BundledQuote,
   CurrentInsurer,
 } from 'data/graphql'
 import { gqlDateFormat } from 'pages/OfferNew/Introduction/Sidebar/utils'
