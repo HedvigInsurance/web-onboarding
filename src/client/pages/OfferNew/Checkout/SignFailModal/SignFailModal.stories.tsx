@@ -11,6 +11,7 @@ import { SignFailModal } from './SignFailModal'
 
 type StoryProps = {
   localePath: LocaleLabel
+  isManualReviewRequired: boolean
 }
 
 const storyMeta: Meta<StoryProps> = {
@@ -19,6 +20,7 @@ const storyMeta: Meta<StoryProps> = {
   argTypes: localeArgTypes,
   args: {
     localePath: 'no-en',
+    isManualReviewRequired: false,
   },
   parameters: {
     backgrounds: { default: 'gray100' },
@@ -27,7 +29,10 @@ const storyMeta: Meta<StoryProps> = {
 
 export default storyMeta
 
-export const Default: Story<StoryProps> = ({ localePath }) => {
+export const Default: Story<StoryProps> = ({
+  localePath,
+  isManualReviewRequired,
+}) => {
   const [isShowingFailModal, setIsShowingFailModal] = useState(true)
   const translationsLocale = getTranslationsLocale(localePath)
 
@@ -37,6 +42,7 @@ export const Default: Story<StoryProps> = ({ localePath }) => {
         <SignFailModal
           isVisible={isShowingFailModal}
           onClose={() => setIsShowingFailModal(false)}
+          isManualReviewRequired={isManualReviewRequired}
         />
       </TextKeyProvider>
     </MemoryRouter>
