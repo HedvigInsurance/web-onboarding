@@ -151,23 +151,23 @@ export const CampaignCodeModal = ({
           initialValues={intialValues}
           onSubmit={handleSubmit}
         >
-          {({ touched, errors, values, isSubmitting }) => (
+          {({ getFieldProps, touched, errors, values, isSubmitting }) => (
             <>
               <Form>
                 <InputField
                   label={textKeys.SIDEBAR_ADD_CAMPAIGN_CELL_LABEL()}
                   placeholder={textKeys.SIDEBAR_ADD_CAMPAIGN_CELL_PLACEHOLDER()}
-                  name="code"
                   type="text"
                   touched={touched.code}
                   errors={errors.code ? textKeys[errors.code]() : ''}
+                  {...getFieldProps('code')}
                 />
 
                 <Footer>
                   <Button
                     type="submit"
                     fullWidth
-                    disabled={!values.code || isSubmitting}
+                    disabled={!values.code.trim() || isSubmitting}
                   >
                     {textKeys.SIDEBAR_ADD_CAMPAIGN_BUTTON()}
                     {isSubmitting && <ButtonLoadingIndicator />}

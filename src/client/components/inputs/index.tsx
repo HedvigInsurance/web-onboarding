@@ -72,8 +72,6 @@ export const Label = styled.label`
 `
 
 const StyledInput = styled.input`
-  position: relative;
-  z-index: 1;
   background: none;
   border: none;
   font-size: 1rem;
@@ -107,7 +105,10 @@ const StyledSelect = styled(Field)`
   line-height: 1.5;
   padding: 0.875rem;
   border-radius: 8px;
-  :focus {
+  color: ${colorsV3.gray900};
+  background-color: ${colorsV3.white};
+
+  &:focus {
     outline: none;
   }
 `
@@ -124,6 +125,7 @@ const SymbolWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  pointer-events: none;
 
   svg {
     width: 1rem;
@@ -217,7 +219,6 @@ export interface TextInputProps extends CoreInputFieldProps {
 export const InputField: React.FC<TextInputProps> = ({
   label,
   mask,
-  name,
   showErrorMessage = true,
   type = 'text',
   options,

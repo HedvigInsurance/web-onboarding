@@ -4,6 +4,7 @@ import { FormikProps } from 'formik'
 import { LocaleData } from 'l10n/locales'
 import { useFeature, Features } from 'utils/hooks/useFeature'
 import { TextKeyMap } from 'utils/textKeys'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { CreditCheckInfo } from '../../OfferNew/Checkout/CreditCheckInfo'
 import { QuoteInput } from '../Introduction/DetailsModal/types'
 import { TextInput, SsnInput } from './inputFields'
@@ -37,7 +38,11 @@ export const getCheckoutDetailsValidationSchema = (
     ...(isPhoneNumberRequired
       ? {
           phoneNumber: Yup.string()
-            .matches(locale.phoneNumber.formatRegex)
+            .transform((phone) => phone?.replace(/\s/g, ''))
+            .matches(
+              locale.phoneNumber.formatRegex,
+              textKeys.GENERIC_ERROR_INPUT_FORMAT(),
+            )
             .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
         }
       : {}),
@@ -46,6 +51,7 @@ export const getCheckoutDetailsValidationSchema = (
 export const CheckoutDetailsForm: React.FC<{
   formikProps: FormikProps<QuoteInput>
 }> = ({ formikProps }) => {
+  const locale = useCurrentLocale()
   const { handleChange } = formikProps
   const [hasEnabledCreditCheckInfo, isPhoneNumberRequired] = useFeature([
     Features.CHECKOUT_CREDIT_CHECK,
@@ -101,6 +107,8 @@ export const CheckoutDetailsForm: React.FC<{
           type="tel"
           formikProps={formikProps}
           onChange={handleChange}
+          placeholder={locale.phoneNumber.placeholder}
+          helperText="CHECKOUT_PHONE_NUMBER_HELPERTEXT"
         />
       )}
       <SsnInput

@@ -3,5 +3,6 @@
   "supportFile": false,
   "fixturesFolder": false,
   "baseUrl": "https://www.dev.hedvigit.com",
-  "experimentalSessionSupport": true
+  "experimentalSessionSupport": true,
+  "defaultCommandTimeout": 10000
 }

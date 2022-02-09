@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { TopBar } from '../TopBar'
-import { BackButton } from './BackButton'
+import { TopBar } from 'components/TopBar'
+import { BackButton } from 'components/BackButton/BackButton'
 
 const { gray100 } = colorsV3
 
