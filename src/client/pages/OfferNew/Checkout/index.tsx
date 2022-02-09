@@ -203,6 +203,7 @@ export const Checkout = ({
   const [emailUpdateLoading, setEmailUpdateLoading] = useState(false)
   const [ssnUpdateLoading, setSsnUpdateLoading] = useState(false)
   const [isShowingFailModal, setIsShowingFailModal] = useState(false)
+  const [isManualReviewRequired, setIsManualReviewRequired] = useState(false)
   const [isPhoneNumberUpdating, setIsPhoneNumberUpdating] = useState(false)
   const offerData = getOfferData(selectedQuoteBundleVariant.bundle)
   const quoteIds = getQuoteIds(offerData)
@@ -383,6 +384,7 @@ export const Checkout = ({
       .then(({ data }) => {
         if (data?.signQuotes?.__typename === 'FailedToStartSign') {
           if (data?.signQuotes.errorCode === 'MANUAL_REVIEW_REQUIRED') {
+            setIsManualReviewRequired(true)
             setIsShowingFailModal(true)
             return
           }
@@ -498,6 +500,7 @@ export const Checkout = ({
       <SignFailModal
         isVisible={isShowingFailModal}
         onClose={() => setIsShowingFailModal(false)}
+        isManualReviewRequired={isManualReviewRequired}
       />
     </>
   )
