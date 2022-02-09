@@ -6,10 +6,10 @@ import { useTextKeys } from 'utils/textKeys'
 import { OfferQuote } from '../../../OfferNew/types'
 import { SubSection } from '../components/SubSection'
 
-const { gray500, gray300 } = colorsV3
+const { gray900, gray300, gray700 } = colorsV3
 
 const Row = styled.div`
-  font-size: 1rem;
+  font-size: 0.874rem;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -18,10 +18,10 @@ const Row = styled.div`
 `
 
 const Label = styled.div`
-  color: ${gray500};
+  color: ${gray900};
 `
 const Value = styled.div`
-  color: ${colorsV3.gray700};
+  color: ${gray700};
   text-align: right;
 `
 
