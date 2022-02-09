@@ -64,8 +64,12 @@ const RowButton = styled.button<{
   cursor: pointer;
   transition: background-color 250ms, border 250ms;
 
-  :active {
+  &:active {
     background-color: ${colorsV3.gray300};
+  }
+
+  &:disabled {
+    cursor: not-allowed;
   }
 
   ${(props) =>
@@ -153,25 +157,29 @@ const getDefaultDateValue = (quote: OfferQuote) => {
   return new Date()
 }
 
-const DateForm: React.FC<{
+type DateFormProps = {
   quote: OfferQuote
   offerData?: OfferData
   isSingleStartDateBundle?: boolean
   isSplit: boolean
   setShowError: (showError: boolean) => void
   modal?: boolean
+  disabled?: boolean
   refetch: () => Promise<void>
   size: Size
-}> = ({
+}
+
+const DateForm = ({
   quote,
   offerData,
   isSingleStartDateBundle,
   isSplit,
   setShowError,
   modal,
+  disabled,
   refetch,
   size,
-}) => {
+}: DateFormProps) => {
   const [datePickerOpen, setDatePickerOpen] = React.useState(false)
 
   const [dateValue, setDateValue] = React.useState(() =>
@@ -287,6 +295,7 @@ const DateForm: React.FC<{
     <RowButtonWrapper isSplit={isSplit}>
       {isSplit && <StartDateRowLabel>{quote.displayName}</StartDateRowLabel>}
       <RowButton
+        disabled={disabled}
         datePickerOpen={datePickerOpen}
         onClick={() => setDatePickerOpen(!datePickerOpen)}
         isSplit={isSplit}
@@ -369,6 +378,7 @@ export const StartDate: React.FC<Props> = ({
         {isSingleStartDateBundle(offerData) ? (
           <DateForm
             key={offerData.quotes[0].id}
+            disabled={!offerData.quotes[0].startDate}
             quote={offerData.quotes[0]}
             offerData={offerData}
             setShowError={setShowError}
@@ -383,6 +393,7 @@ export const StartDate: React.FC<Props> = ({
             {offerData.quotes.map((quote) => (
               <DateForm
                 key={quote.id}
+                disabled={!quote.startDate}
                 quote={quote}
                 setShowError={setShowError}
                 modal={modal}

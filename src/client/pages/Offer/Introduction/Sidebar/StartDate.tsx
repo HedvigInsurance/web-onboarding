@@ -54,8 +54,12 @@ const RowButton = styled.button<{
   cursor: pointer;
   transition: background-color 250ms, border 250ms;
 
-  :active {
+  &:active {
     background-color: ${colorsV3.gray300};
+  }
+
+  &:disabled {
+    cursor: not-allowed;
   }
 
   ${(props) =>
@@ -150,7 +154,7 @@ const getDateFormat = match<MarketLabel, string>([
   ['DK', 'yyyy-MM-dd'],
 ])
 
-const DateForm: React.FC<{
+type DateFormProps = {
   quoteCartId: string
   quote: OfferQuote
   offerData: OfferData
@@ -158,8 +162,11 @@ const DateForm: React.FC<{
   isSplit: boolean
   setShowError: (showError: boolean) => void
   modal?: boolean
+  disabled?: boolean
   size: Size
-}> = ({
+}
+
+const DateForm = ({
   quoteCartId,
   quote,
   offerData,
@@ -167,8 +174,9 @@ const DateForm: React.FC<{
   isSplit,
   setShowError,
   modal = false,
+  disabled,
   size,
-}) => {
+}: DateFormProps) => {
   const textKeys = useTextKeys()
   const { isoLocale, marketLabel } = useCurrentLocale()
 
@@ -241,6 +249,7 @@ const DateForm: React.FC<{
     <RowButtonWrapper isSplit={isSplit}>
       {isSplit && <StartDateRowLabel>{quote.displayName}</StartDateRowLabel>}
       <RowButton
+        disabled={disabled}
         datePickerOpen={datePickerOpen}
         onClick={() => setDatePickerOpen(!datePickerOpen)}
         isSplit={isSplit}
@@ -330,6 +339,7 @@ export const StartDate: React.FC<StartDateProps> = ({
         {isSingleStartDateBundle ? (
           <DateForm
             key={offerData.quotes[0].id}
+            disabled={!offerData.quotes[0].startDate}
             quoteCartId={quoteCartId}
             quote={offerData.quotes[0]}
             offerData={offerData}
@@ -344,6 +354,7 @@ export const StartDate: React.FC<StartDateProps> = ({
             {offerData.quotes.map((quote) => (
               <DateForm
                 key={quote.id}
+                disabled={!quote.startDate}
                 quoteCartId={quoteCartId}
                 quote={quote}
                 offerData={offerData}
