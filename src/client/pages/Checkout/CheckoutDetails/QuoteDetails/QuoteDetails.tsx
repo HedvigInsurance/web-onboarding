@@ -14,7 +14,7 @@ const Row = styled.div`
   flex-direction: row;
   justify-content: space-between;
   padding: 0.5rem 0;
-  line-height: 1;
+  line-height: 1.4;
 `
 
 const Label = styled.div`
@@ -33,11 +33,12 @@ const Group = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0.5rem 0;
-  border-bottom: 1px solid ${gray300};
+`
 
-  :last-of-type {
-    border-bottom: none;
-  }
+const Divider = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: ${gray300};
 `
 
 export const QuoteDetails = ({ mainQuote }: { mainQuote: OfferQuote }) => {
@@ -46,15 +47,18 @@ export const QuoteDetails = ({ mainQuote }: { mainQuote: OfferQuote }) => {
   return (
     <SubSection headlineText={textKeys.CHECKOUT_QUOTE_DETAILS_TITLE()}>
       {getQuoteDetails(mainQuote, textKeys).map((group, index) => (
-        <Group key={index}>
-          {group.map(({ key, value, label }) => (
-            <Row key={key}>
-              <Label>{label}</Label>
-              <HorizontalSpacer />
-              <Value>{value}</Value>
-            </Row>
-          ))}
-        </Group>
+        <>
+          <Group key={index}>
+            {group.map(({ key, value, label }) => (
+              <Row key={key}>
+                <Label>{label}</Label>
+                <HorizontalSpacer />
+                <Value>{value}</Value>
+              </Row>
+            ))}
+          </Group>
+          {index != group.length && <Divider />}
+        </>
       ))}
     </SubSection>
   )
