@@ -338,10 +338,9 @@ export const StartDate: React.FC<StartDateProps> = ({
 }) => {
   const textKeys = useTextKeys()
   const [showError, setShowError] = useState(false)
-  const [
-    isCancellationOptionLoading,
-    setIsCancellationOptionLoading,
-  ] = React.useState(false)
+  const [loadingQuoteId, setLoadingQuoteId] = React.useState<string | null>(
+    null,
+  )
 
   const { isoLocale, marketLabel } = useCurrentLocale()
   const [createQuoteBundle] = useCreateQuoteBundleMutation()
@@ -364,7 +363,8 @@ export const StartDate: React.FC<StartDateProps> = ({
   ) => {
     try {
       setShowError(false)
-      setIsCancellationOptionLoading(true)
+      console.log('setIsLoadingQUoteId', quoteId)
+      setLoadingQuoteId(quoteId)
 
       await createQuoteBundle({
         variables: {
@@ -407,7 +407,7 @@ export const StartDate: React.FC<StartDateProps> = ({
     } catch (e) {
       setShowError(true)
     } finally {
-      setIsCancellationOptionLoading(false)
+      setLoadingQuoteId(null)
     }
   }
 
@@ -470,7 +470,7 @@ export const StartDate: React.FC<StartDateProps> = ({
 
       <CancellationOptions
         quotes={quotes}
-        isLoading={isCancellationOptionLoading}
+        loadingQuoteId={loadingQuoteId}
         onToggleCancellationOption={onToggleCancellationOption}
       />
     </>

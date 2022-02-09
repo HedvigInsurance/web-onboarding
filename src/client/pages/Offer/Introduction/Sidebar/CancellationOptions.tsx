@@ -43,17 +43,19 @@ const getLabelContent = (textKeys: TextKeyMap, quote: BundledQuote) => {
 }
 
 type CancellationOptionsProps = {
-  isLoading: boolean
+  loadingQuoteId: string | null
   quotes: BundledQuote[]
   onToggleCancellationOption: (isChecked: boolean, quoteId: string) => void
 }
 
 export const CancellationOptions = ({
-  isLoading,
+  loadingQuoteId,
   quotes,
   onToggleCancellationOption,
 }: CancellationOptionsProps) => {
   const textKeys = useTextKeys()
+
+  const isDisabled = Boolean(loadingQuoteId)
 
   return (
     <>
@@ -61,11 +63,14 @@ export const CancellationOptions = ({
         const { id, startDate, currentInsurer } = quote
         const isChecked = !startDate
         const checkboxLabel = getLabelContent(textKeys, quote)
+        const isLoading = loadingQuoteId === id
+
+        console.log(loadingQuoteId, id)
 
         return (
           currentInsurer?.switchable && (
             <HandleSwitchingWrapper key={id}>
-              <HandleSwitchingLabel isClickable={!isLoading}>
+              <HandleSwitchingLabel isClickable={isDisabled}>
                 {isLoading ? (
                   <StyledSpinner />
                 ) : (
@@ -83,60 +88,3 @@ export const CancellationOptions = ({
     </>
   )
 }
-
-// type QuoteCancellationOptionProps = {
-//   quoteCartId: string
-//   quote: OfferQuote
-//   setShowError: (showError: boolean) => void
-// }
-
-// const QuoteCancellationOption = ({
-//   quoteCartId,
-//   quote,
-//   setShowError,
-// }: QuoteCancellationOptionProps) => {
-//   const textKeys = useTextKeys()
-//   const { isoLocale } = useCurrentLocale()
-
-//   const [isLoading, setIsLoading] = React.useState(false)
-
-//   const [editQuote] = useEditBundledQuoteMutation()
-
-//   const isChecked = !quote.startDate
-//   const checkboxLabel = getLabelContent(textKeys, quote)
-
-//   const handleToggleStartDate = async () => {
-//     try {
-//       setShowError(false)
-//       setIsLoading(true)
-
-//       await editQuote({
-//         variables: {
-//           quoteCartId,
-//           locale: isoLocale,
-//           quoteId: quote.id,
-//           payload: {
-//             startDate: isChecked ? formatDate(new Date(), gqlDateFormat) : null,
-//           },
-//         },
-//       })
-//     } catch (e) {
-//       setShowError(true)
-//     } finally {
-//       setIsLoading(false)
-//     }
-//   }
-
-//   return (
-//     <HandleSwitchingWrapper>
-//       <HandleSwitchingLabel isClickable={!isLoading}>
-//         {isLoading ? (
-//           <StyledSpinner />
-//         ) : (
-//           <StyledSwitch checked={isChecked} onChange={handleToggleStartDate} />
-//         )}
-//         {checkboxLabel}
-//       </HandleSwitchingLabel>
-//     </HandleSwitchingWrapper>
-//   )
-// }
