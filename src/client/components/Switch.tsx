@@ -15,39 +15,44 @@ const SwitchContainer = styled(motion.span)`
   cursor: pointer;
 `
 
-const SwitchNobble = styled(Tick)`
-  display: inline-block;
-  height: 6px;
-  width: 6px;
-  border-radius: 6px;
-  background-color: ${colorsV3.white};
+/**
+ * Makes usage of a visually hidden checkbox for accessiblity reasons like
+ * to make it discoverable for assistence tools and to enable binding it with
+ * a <label> element.
+ * Based on https://css-tricks.com/inclusively-hidden/
+ */
+const InclusiveHiddenCheckbox = styled.input`
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 `
 
-interface SwitchProps {
-  value: boolean
-  onChange: (newValue: boolean) => void
-}
+type SwitchProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value'>
 
-export const Switch: React.FC<SwitchProps> = ({ value, onChange }) => (
-  <SwitchContainer
-    onTap={() => {
-      onChange(!value)
-    }}
-    animate={value ? 'checked' : 'unchecked'}
-    variants={{
-      checked: {
-        backgroundColor: colorsV3.gray900,
-        borderColor: colorsV3.gray900,
-      },
-      unchecked: {
-        backgroundColor: colorsV3.white,
-        borderColor: colorsV3.gray300,
-      },
-    }}
-    transition={{ duration: 0.1 }}
-    role="checkbox"
-    aria-checked={value}
-  >
-    <SwitchNobble />
-  </SwitchContainer>
+export const Switch = ({ className, ...checkboxProps }: SwitchProps) => (
+  <>
+    <InclusiveHiddenCheckbox type="checkbox" {...checkboxProps} />
+    <SwitchContainer
+      className={className}
+      aria-hidden={true}
+      animate={checkboxProps.checked ? 'checked' : 'unchecked'}
+      variants={{
+        checked: {
+          backgroundColor: colorsV3.gray900,
+          borderColor: colorsV3.gray900,
+        },
+        unchecked: {
+          backgroundColor: colorsV3.white,
+          borderColor: colorsV3.gray300,
+        },
+      }}
+      transition={{ duration: 0.1 }}
+    >
+      <Tick />
+    </SwitchContainer>
+  </>
 )
