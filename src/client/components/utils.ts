@@ -9,7 +9,6 @@ export const Spinner = styled.div`
   display: inline-block;
   width: 1em;
   height: 1em;
-  flex: 1;
   border: 2px solid currentColor;
   border-top-color: transparent;
   border-radius: 4rem;

@@ -43,19 +43,18 @@ const getLabelContent = (textKeys: TextKeyMap, quote: BundledQuote) => {
 }
 
 type CancellationOptionsProps = {
-  loadingQuoteId: string | null
+  loadingQuoteIds: Array<string>
   quotes: BundledQuote[]
   onToggleCancellationOption: (isChecked: boolean, quoteId: string) => void
 }
 
 export const CancellationOptions = ({
-  loadingQuoteId,
+  loadingQuoteIds,
   quotes,
   onToggleCancellationOption,
 }: CancellationOptionsProps) => {
   const textKeys = useTextKeys()
-
-  const isDisabled = Boolean(loadingQuoteId)
+  const isDisabled = loadingQuoteIds.length > 0
 
   return (
     <>
@@ -63,9 +62,7 @@ export const CancellationOptions = ({
         const { id, startDate, currentInsurer } = quote
         const isChecked = !startDate
         const checkboxLabel = getLabelContent(textKeys, quote)
-        const isLoading = loadingQuoteId === id
-
-        console.log(loadingQuoteId, id)
+        const isLoading = loadingQuoteIds.includes(id)
 
         return (
           currentInsurer?.switchable && (
