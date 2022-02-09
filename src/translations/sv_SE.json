@@ -346,5 +346,6 @@
   "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_TOOLTIP": "Vi hjälper dig gärna att säga upp din nuvarande {INSURANCE_NAME} åt dig. Din nya försäkring hos Hedvig aktiveras när den gamla löper ut. Du kommer att få mer information via mail.",
   "CHECKOUT_FOOTER_CANCELLATION_INFO": "Ingen bindningstid",
   "CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT": "Fortsätt till betalning",
-  "CHECKOUT_FOOTER_COMPLETE_PURCHASE": "Genomför köp"
+  "CHECKOUT_FOOTER_COMPLETE_PURCHASE": "Genomför köp",
+  "CHECKOUT_QUOTE_DETAILS_TITLE": "Sammanfattning"
 }
