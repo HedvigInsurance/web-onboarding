@@ -65,8 +65,6 @@ export const YourPlan = () => {
     })
   }
 
-  console.log(data)
-
   return (
     <Wrapper>
       <SubSection headlineText={textKeys.CHECKOUT_YOUR_HOME_SECTION_TITLE()}>
