@@ -21,7 +21,7 @@ export const SignFailModal = ({
       <ErrorHeading>{textKeys.SIGN_FAIL_ERROR_HEADING()}</ErrorHeading>
       <ErrorText>
         {isManualReviewRequired ? (
-          <ReactMarkdown source={textKeys.CHECKOUT_SIGN_FAIL_CONTENT()} />
+          <ReactMarkdown source={textKeys.CHECKOUT_SIGN_FAIL_MANUAL_REVIEW()} />
         ) : (
           <ReactMarkdown source={textKeys.CHECKOUT_SIGN_FAIL_ERROR_TEXT()} />
         )}

@@ -298,7 +298,7 @@
   "CHECKOUT_CREDIT_CHECK_INFO_HEADER": "Nous vérifions la solvabilité de tous nos nouveaux clients.",
   "CHECKOUT_CREDIT_CHECK_INFO_CONTENT": "Dans certains cas, les clients ayant déjà été en défaut de paiement doivent payer à l'avance. Contactez-nous pour savoir si vous êtes concerné.",
   "CHECKOUT_SIGN_FAIL_HEADER": "La transaction n'a pas pu aboutir.",
-  "CHECKOUT_SIGN_FAIL_CONTENT": "",
+  "CHECKOUT_SIGN_FAIL_MANUAL_REVIEW": "",
   "OFFER_BUNDLE_SELECTOR_TITLE": "Choisissez votre formule Hedvig",
   "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "Toutes les assurances vous couvrent, vous et vos co-assurés. Vous pouvez passer à la formule supérieure ou inférieure, ou modifier la date de prise d'effet dans l'application Hedvig.",
   "OFFER_APP_PROMOTION_HEADING": "L'application d'assurance qui résout tous vos problèmes",

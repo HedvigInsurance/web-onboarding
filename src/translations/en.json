@@ -298,7 +298,7 @@
   "CHECKOUT_CREDIT_CHECK_INFO_HEADER": "We perform credit checks on all new customers",
   "CHECKOUT_CREDIT_CHECK_INFO_CONTENT": "Customers with a record of non-payment pay in advance in some cases. If this applies to you, you will be notified by contacting us.",
   "CHECKOUT_SIGN_FAIL_HEADER": "Your purchase can’t be completed",
-  "CHECKOUT_SIGN_FAIL_CONTENT": "Unfortunately, we can't offer you to purchase an insurance online. Please contact [betaling@hedvig.com](mailto:betaling@hedvig.com) and we'll assist you.",
+  "CHECKOUT_SIGN_FAIL_MANUAL_REVIEW": "Unfortunately, we can't offer you to purchase an insurance online. Please contact [betaling@hedvig.com](mailto:betaling@hedvig.com) and we'll assist you.",
   "OFFER_BUNDLE_SELECTOR_TITLE": "Choose your Hedvig-bundle",
   "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "All insurances cover you and your co-insured. You can upgrade or downgrade your bundle or change your start date in the Hedvig-app.",
   "OFFER_APP_PROMOTION_HEADING": "An insurance-app that solves all your problems",
