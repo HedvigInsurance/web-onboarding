@@ -11,11 +11,6 @@ import { SubSection } from './SubSection'
 
 const { gray700, gray300 } = colorsV3
 
-const Wrapper = styled.div`
-  display: grid;
-  grid-template-columns: auto;
-`
-
 export const Row = styled.div`
   font-size: 0.875rem;
   display: flex;
@@ -66,40 +61,38 @@ export const YourPlan = () => {
   }
 
   return (
-    <Wrapper>
-      <SubSection headlineText={textKeys.CHECKOUT_YOUR_HOME_SECTION_TITLE()}>
-        <>
-          {quotes.map(({ displayName, price }, key) => (
-            <Row key={key}>
-              <Label>{displayName}</Label>
-              <Value>
-                {formattedPrice(price.amount)}
-                {textKeys.PRICE_SUFFIX_INTERVAL()}
-              </Value>
-            </Row>
-          ))}
-          {discount !== '0.00' && (
-            <Row>
-              {/* need to handle NO bundle */}
-              <Badge>{campaignName}</Badge>
-              <Value>
-                - {formattedPrice(discount)}
-                {textKeys.PRICE_SUFFIX_INTERVAL()}
-              </Value>
-            </Row>
-          )}
-        </>
-
-        <Total>
-          <Row>
-            <div>{textKeys.CHECKOUT_PRICE_TOTAL()}</div>
+    <SubSection headlineText={textKeys.CHECKOUT_YOUR_HOME_SECTION_TITLE()}>
+      <>
+        {quotes.map(({ displayName, price }, key) => (
+          <Row key={key}>
+            <Label>{displayName}</Label>
             <Value>
-              {formattedPrice(total)}
+              {formattedPrice(price.amount)}
               {textKeys.PRICE_SUFFIX_INTERVAL()}
             </Value>
           </Row>
-        </Total>
-      </SubSection>
-    </Wrapper>
+        ))}
+        {Number(discount) > 0 && (
+          <Row>
+            {/* need to handle NO bundle */}
+            <Badge>{campaignName}</Badge>
+            <Value>
+              - {formattedPrice(discount)}
+              {textKeys.PRICE_SUFFIX_INTERVAL()}
+            </Value>
+          </Row>
+        )}
+      </>
+
+      <Total>
+        <Row>
+          <div>{textKeys.CHECKOUT_PRICE_TOTAL()}</div>
+          <Value>
+            {formattedPrice(total)}
+            {textKeys.PRICE_SUFFIX_INTERVAL()}
+          </Value>
+        </Row>
+      </Total>
+    </SubSection>
   )
 }

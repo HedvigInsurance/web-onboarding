@@ -35,7 +35,7 @@ const storyMeta: Meta<StoryProps> = {
 }
 
 const Wrapper = styled.div`
-  width: 650px;
+  width: 532px;
 `
 
 export default storyMeta
