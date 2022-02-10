@@ -70,6 +70,7 @@ const RowButton = styled.button<{
 
   &:disabled {
     cursor: not-allowed;
+    background-color: ${colorsV3.gray300};
   }
 
   ${(props) =>
