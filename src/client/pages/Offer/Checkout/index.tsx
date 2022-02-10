@@ -49,7 +49,7 @@ import {
 import { Sign } from './Sign'
 import { SignDisclaimer } from './SignDisclaimer'
 
-export type SignUiState = 'NOT_STARTED' | 'STARTED' | 'FAILED'
+export type SignUiState = 'NOT_STARTED' | 'STARTED' | 'FAILED' | 'MANUAL_REVIEW'
 
 type Openable = {
   visibilityState: VisibilityState
@@ -429,6 +429,8 @@ export const Checkout = ({
       if (isManualReviewRequired) {
         setIsManualReviewRequired(isManualReviewRequired)
         setIsShowingFailModal(true)
+        setSignUiState('MANUAL_REVIEW')
+        return
       }
 
       setSignUiState('FAILED')
