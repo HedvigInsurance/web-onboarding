@@ -1,138 +1,88 @@
 import styled from '@emotion/styled'
-import { colorsV3 } from '@hedviginsurance/brand'
-import { format } from 'date-fns'
 import React from 'react'
 import { Switch } from 'components/Switch'
 import { Spinner } from 'components/utils'
-import { useEditBundledQuoteMutation } from 'data/graphql'
-import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { OfferData, OfferQuote } from 'pages/OfferNew/types'
-import { gqlDateFormat } from 'pages/OfferNew/Introduction/Sidebar/utils'
-import { useTextKeys } from 'utils/textKeys'
+import { BundledQuote } from 'data/graphql'
+import { useTextKeys, TextKeyMap } from 'utils/textKeys'
 
 const HandleSwitchingWrapper = styled.div`
   margin-bottom: 0.75rem;
-  display: flex;
-  justify-content: space-between;
   padding: 0 0.25rem;
 `
 
-const HandleSwitchingLabel = styled.button`
-  font-size: 0.875rem;
-  line-height: 1.2;
-  padding: 0;
-  border: 0;
-  color: ${colorsV3.gray700};
-  width: 75%;
-  background: transparent;
-  text-align: left;
-  cursor: pointer;
+const HandleSwitchingLabel = styled.label<{ isClickable: boolean }>`
+  display: flex;
+  align-items: center;
 
-  :focus {
-    outline: 0;
+  &:hover {
+    cursor: ${({ isClickable }) => (isClickable ? 'pointer' : 'initial')};
   }
 `
 
-const SpinnerWrapper = styled.div`
-  font-size: 1.25rem;
+const StyledSpinner = styled(Spinner)`
+  flex: none;
   height: 1.25rem;
+  width: 1.25rem;
+  margin-right: 1rem;
 `
 
-interface CancellationOptionsProps {
-  quoteCartId: string
-  quotes: OfferData['quotes']
-  setShowError: (showError: boolean) => void
+const StyledSwitch = styled(Switch)`
+  margin-right: 1rem;
+`
+
+const getLabelContent = (textKeys: TextKeyMap, quote: BundledQuote) => {
+  if (quote.currentInsurer?.displayName) {
+    return textKeys.SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_PROVIDER_LABEL({
+      INSURANCE_NAME: quote.displayName,
+      INSURANCE_PROVIDER: quote.currentInsurer.displayName,
+    })
+  }
+
+  return textKeys.SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_LABEL({
+    INSURANCE_NAME: quote.displayName,
+  })
 }
 
-export const CancellationOptions: React.FC<CancellationOptionsProps> = ({
-  quoteCartId,
+type CancellationOptionsProps = {
+  loadingQuoteIds: Array<string>
+  quotes: BundledQuote[]
+  onToggleCancellationOption: (isChecked: boolean, quoteId: string) => void
+}
+
+export const CancellationOptions = ({
+  loadingQuoteIds,
   quotes,
-  ...rest
-}) => {
+  onToggleCancellationOption,
+}: CancellationOptionsProps) => {
+  const textKeys = useTextKeys()
+  const isDisabled = loadingQuoteIds.length > 0
+
   return (
     <>
       {quotes.map((quote) => {
+        const { id, startDate, currentInsurer } = quote
+        const isChecked = !startDate
+        const checkboxLabel = getLabelContent(textKeys, quote)
+        const isLoading = loadingQuoteIds.includes(id)
+
         return (
-          quote.currentInsurer?.switchable && (
-            <QuoteCancellationOption
-              key={quote.id}
-              {...rest}
-              isGenericQuote={quotes.length === 1}
-              quote={quote}
-              quoteCartId={quoteCartId}
-            />
+          currentInsurer?.switchable && (
+            <HandleSwitchingWrapper key={id}>
+              <HandleSwitchingLabel isClickable={isDisabled}>
+                {isLoading ? (
+                  <StyledSpinner />
+                ) : (
+                  <StyledSwitch
+                    checked={isChecked}
+                    onChange={() => onToggleCancellationOption(!isChecked, id)}
+                  />
+                )}
+                {checkboxLabel}
+              </HandleSwitchingLabel>
+            </HandleSwitchingWrapper>
           )
         )
       })}
     </>
-  )
-}
-
-interface QuoteCancellationOptionProps {
-  isGenericQuote: boolean
-  quoteCartId: string
-  quote: OfferQuote
-  setShowError: (showError: boolean) => void
-}
-const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
-  isGenericQuote,
-  quoteCartId,
-  quote,
-  setShowError,
-}) => {
-  const textKeys = useTextKeys()
-  const { isoLocale } = useCurrentLocale()
-
-  const [isLoading, setIsLoading] = React.useState(false)
-
-  const [editQuote] = useEditBundledQuoteMutation()
-
-  const isChecked = !quote.startDate
-
-  const handleToggleStartDate = async () => {
-    try {
-      setShowError(false)
-      setIsLoading(true)
-
-      await editQuote({
-        variables: {
-          quoteCartId,
-          locale: isoLocale,
-          quoteId: quote.id,
-          payload: {
-            startDate: isChecked ? format(new Date(), gqlDateFormat) : null,
-          },
-        },
-      })
-    } catch (e) {
-      setShowError(true)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  return (
-    // TODO: This logic needs some clarification
-    <HandleSwitchingWrapper>
-      <HandleSwitchingLabel onClick={handleToggleStartDate}>
-        {(() => {
-          if (isGenericQuote) {
-            return textKeys.SIDEBAR_REQUEST_CANCELLATION_GENERIC_INSURANCE()
-          }
-
-          return textKeys.SIDEBAR_REQUEST_CANCELLATION_INSURANCE({
-            INSURANCE_NAME: quote.displayName,
-          })
-        })()}
-      </HandleSwitchingLabel>
-
-      {isLoading ? (
-        <SpinnerWrapper>
-          <Spinner />
-        </SpinnerWrapper>
-      ) : (
-        <Switch value={isChecked} onChange={handleToggleStartDate} />
-      )}
-    </HandleSwitchingWrapper>
   )
 }
