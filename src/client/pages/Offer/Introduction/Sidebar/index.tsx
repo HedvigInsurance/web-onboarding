@@ -201,12 +201,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <Body>
                 <PriceBreakdown offerData={offerData} />
                 <BodyTitle>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}</BodyTitle>
-                <StartDate
-                  quoteCartId={quoteCartId}
-                  offerData={offerData}
-                  modal
-                  size="sm"
-                />
+                <StartDate quoteCartId={quoteCartId} modal size="sm" />
               </Body>
               <Footer>
                 <Button
