@@ -386,7 +386,6 @@ export const Checkout = ({
           if (data?.signQuotes.errorCode === 'MANUAL_REVIEW_REQUIRED') {
             setIsManualReviewRequired(true)
             setIsShowingFailModal(true)
-            return
           }
           setSignUiState('FAILED')
           return
