@@ -38,8 +38,10 @@ export const ErrorText = styled.div`
 `
 
 const CustomModal = styled(Modal)`
-  overflow-x: auto;
-  max-width: 36rem;
+  && {
+    overflow-x: auto;
+    max-width: min(36rem, 100% - 2rem);
+  }
 `
 
 export const ErrorModal = ({ isVisible, onClose, children }: Props) => (
