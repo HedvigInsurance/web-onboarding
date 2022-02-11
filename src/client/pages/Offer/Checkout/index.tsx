@@ -49,7 +49,7 @@ import {
 import { Sign } from './Sign'
 import { SignDisclaimer } from './SignDisclaimer'
 
-export type SignUiState = 'NOT_STARTED' | 'STARTED' | 'FAILED'
+export type SignUiState = 'NOT_STARTED' | 'STARTED' | 'FAILED' | 'MANUAL_REVIEW'
 
 type Openable = {
   visibilityState: VisibilityState
@@ -178,7 +178,7 @@ const Backdrop = styled('div')<Openable>`
   }};
 `
 
-const isManualReviewRequired = (errors: GraphQLError[]) => {
+const checkIsManualReviewRequired = (errors: GraphQLError[]) => {
   const manualReviewRequiredError = errors.find((error) => {
     return error?.extensions?.body?.errorCode === 'MANUAL_REVIEW_REQUIRED'
   })
@@ -265,6 +265,7 @@ export const Checkout = ({
     checkoutStatusData?.quoteCart.checkout || {}
 
   const [isShowingFailModal, setIsShowingFailModal] = useState(false)
+  const [isManualReviewRequired, setIsManualReviewRequired] = useState(false)
   const [startCheckout] = useStartCheckoutMutation()
   const [
     createQuoteBundle,
@@ -422,10 +423,14 @@ export const Checkout = ({
         return
       }
     } catch (error) {
-      if (
-        !isManualReviewRequired((error.graphQLErrors || []) as GraphQLError[])
-      ) {
+      const isManualReviewRequired = checkIsManualReviewRequired(
+        (error.graphQLErrors || []) as GraphQLError[],
+      )
+      if (isManualReviewRequired) {
+        setIsManualReviewRequired(isManualReviewRequired)
         setIsShowingFailModal(true)
+        setSignUiState('MANUAL_REVIEW')
+        return
       }
 
       setSignUiState('FAILED')
@@ -539,6 +544,7 @@ export const Checkout = ({
       <SignFailModal
         isVisible={isShowingFailModal}
         onClose={() => setIsShowingFailModal(false)}
+        isManualReviewRequired={isManualReviewRequired}
       />
     </>
   )
