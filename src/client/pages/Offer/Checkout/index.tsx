@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
-import { useFormik } from 'formik'
+import { useFormik, FormikHelpers } from 'formik'
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
@@ -39,6 +39,7 @@ import { InsuranceSummary } from 'pages/OfferNew/Checkout/InsuranceSummary'
 import { UpsellCard } from 'pages/OfferNew/Checkout/UpsellCard'
 import { OfferData } from 'pages/OfferNew/types'
 import { SignFailModal } from 'pages/OfferNew/Checkout/SignFailModal/SignFailModal'
+import { LimitCode } from 'api/quoteBundleErrorSelectors'
 import { QuoteInput } from '../Introduction/DetailsModal/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import {
@@ -185,6 +186,14 @@ const isManualReviewRequired = (errors: GraphQLError[]) => {
   return manualReviewRequiredError !== undefined
 }
 
+const isSsnInvalid = (errors: GraphQLError[]) => {
+  const invalidSsnError = errors.find((error) => {
+    return error?.extensions?.body?.errorCode === LimitCode.INVALID_SSN
+  })
+
+  return invalidSsnError !== undefined
+}
+
 const getSignUiStateFromCheckoutStatus = (
   checkoutStatus?: CheckoutStatus,
 ): SignUiState => {
@@ -284,7 +293,18 @@ export const Checkout = ({
       textKeys,
       isPhoneNumberRequired,
     ),
-    onSubmit: (values) => reCreateQuoteBundle(values),
+    onSubmit: async (
+      form: QuoteInput,
+      { setErrors }: FormikHelpers<QuoteInput>,
+    ) => {
+      try {
+        await reCreateQuoteBundle(form)
+      } catch (error) {
+        if (isSsnInvalid(error.graphQLErrors)) {
+          setErrors({ ssn: textKeys.INVALID_FIELD() })
+        }
+      }
+    },
     enableReinitialize: true,
   })
 
@@ -388,11 +408,14 @@ export const Checkout = ({
       }
 
       if (isFormDataUpdated) await submitForm()
+
+      // clean up existing auth tokens
+      if (realApolloClient) {
+        realApolloClient.httpLink.options.headers.authorization = undefined
+      }
+
       const { data } = await startCheckout({
-        variables: {
-          quoteIds,
-          quoteCartId,
-        },
+        variables: { quoteIds, quoteCartId },
       })
       if (data?.quoteCart_startCheckout.__typename === 'BasicError') {
         setSignUiState('FAILED')
@@ -484,7 +507,7 @@ export const Checkout = ({
                 <StartDateLabel>
                   {textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}
                 </StartDateLabel>
-                <StartDate quoteCartId={quoteCartId} offerData={offerData} />
+                <StartDate quoteCartId={quoteCartId} />
               </StartDateWrapper>
               {isUpsellCardVisible && (
                 <UpsellCard
