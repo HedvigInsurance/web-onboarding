@@ -1,6 +1,6 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
 import { useTextKeys } from 'utils/textKeys'
+import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
@@ -8,7 +8,7 @@ import { Footer } from '../shared/Footer'
 export const CheckoutDetails = () => {
   const textKeys = useTextKeys()
   const { path: localePath } = useCurrentLocale()
-  const { id: quoteCartId } = useParams<{ id: string }>()
+  const { quoteCartId } = useQuoteCartIdFromUrl()
 
   const paymentPageLink = `/${localePath}/new-member/checkout/payment/${quoteCartId}`
 
