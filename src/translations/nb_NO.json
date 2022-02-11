@@ -298,7 +298,7 @@
   "CHECKOUT_CREDIT_CHECK_INFO_HEADER": "Vi utfører kredittsjekker på alle nye kunder",
   "CHECKOUT_CREDIT_CHECK_INFO_CONTENT": "Kunder med betalingsnamerkninger betaler i enkelte tilfeller forskuddsvis. Dersom dette gjelder deg vil du få beskjed ved å kontakte  oss.",
   "CHECKOUT_SIGN_FAIL_HEADER": "Kjøpet ditt kunne ikke fullføres. ",
-  "CHECKOUT_SIGN_FAIL_CONTENT": "Vi kan dessverre ikke tilby deg kjøp av forsikring på nett. Vennligst ta kontakt på betaling@hedvig.com så hjelper vi deg videre!",
+  "CHECKOUT_SIGN_FAIL_MANUAL_REVIEW": "Vi kan dessverre ikke tilby deg kjøp av forsikring på nett. Vennligst ta kontakt på [betaling@hedvig.com](mailto:betaling@hedvig.com) så hjelper vi deg videre!",
   "OFFER_BUNDLE_SELECTOR_TITLE": "Forsikringspakken din",
   "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "Velg forsikringsplanen som passer deg best. Forsikringen dekker deg og alle medforsikrede. Du kan alltids legge til ulykkesforsikringen i appen på et senere tidspunkt. ",
   "OFFER_APP_PROMOTION_HEADING": "En forsikrings-app som løser dine problemer",

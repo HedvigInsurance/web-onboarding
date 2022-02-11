@@ -77,6 +77,11 @@ export const Sign: React.FC<Props> = ({
       ? textKeys.CHECKOUT_SIMPLE_SIGN_BUTTON_TEXT()
       : textKeys.CHECKOUT_SIGN_BUTTON_TEXT()
 
+  const hasSignStatusSection =
+    checkoutMethod &&
+    signUiState !== 'NOT_STARTED' &&
+    !(signUiState === 'STARTED' && checkoutMethod === CheckoutMethod.SimpleSign)
+
   return (
     <Wrapper isDesktop={isDesktop}>
       <Button
@@ -99,7 +104,7 @@ export const Sign: React.FC<Props> = ({
         )}
       </Button>
 
-      {signUiState !== 'NOT_STARTED' && checkoutMethod && (
+      {hasSignStatusSection && (
         <SignStatusWrapper
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: 'auto', opacity: 1 }}
