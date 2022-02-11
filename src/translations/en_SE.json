@@ -298,7 +298,7 @@
   "CHECKOUT_CREDIT_CHECK_INFO_HEADER": "",
   "CHECKOUT_CREDIT_CHECK_INFO_CONTENT": "",
   "CHECKOUT_SIGN_FAIL_HEADER": "",
-  "CHECKOUT_SIGN_FAIL_CONTENT": "",
+  "CHECKOUT_SIGN_FAIL_MANUAL_REVIEW": "",
   "OFFER_BUNDLE_SELECTOR_TITLE": "Choose your Hedvig-bundle",
   "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "All insurances cover you and your co-insured. You can upgrade or downgrade your bundle or change your start date in the Hedvig-app.",
   "OFFER_APP_PROMOTION_HEADING": "An insurance-app that solves all your problems",
