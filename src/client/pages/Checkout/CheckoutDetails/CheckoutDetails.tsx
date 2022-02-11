@@ -4,7 +4,6 @@ import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
-import { YourPlan } from './components/YourPlan/YourPlan'
 
 export const CheckoutDetails = () => {
   const textKeys = useTextKeys()
@@ -15,7 +14,6 @@ export const CheckoutDetails = () => {
 
   return (
     <CheckoutPageWrapper>
-      <YourPlan />
       <Footer
         buttonText={textKeys.CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT()}
         buttonLinkTo={paymentPageLink}
