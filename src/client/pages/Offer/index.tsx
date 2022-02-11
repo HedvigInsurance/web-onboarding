@@ -9,13 +9,12 @@ import {
   CheckoutStatus,
   CheckoutMethod,
 } from 'data/graphql'
-import { trackOfferGTM, EventName } from 'utils/tracking/gtm'
+import { EventName } from 'utils/tracking/gtm'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { Features, useFeature } from 'utils/hooks/useFeature'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { CheckoutSuccessRedirect } from 'pages/OfferNew/Checkout/CheckoutSuccessRedirect'
 import { LocaleLabel } from 'l10n/locales'
 import {
   getSelectedBundleVariant,
@@ -25,6 +24,7 @@ import {
   getCampaign,
   getMonthlyCostDeductionIncentive,
 } from 'api/quoteCartQuerySelectors'
+import { trackOfferEvent } from 'utils/tracking/trackOfferEvent'
 import {
   getOfferData,
   getUniqueQuotesFromVariantList,
@@ -39,6 +39,7 @@ import { SetupFailedModal } from '../Embark/ErrorModal'
 import { Introduction } from './Introduction'
 import { Checkout } from './Checkout'
 import { PageWrapper } from './PageWrapper'
+import { CheckoutSuccessRedirect } from './CheckoutSuccessRedirect'
 
 function isValidCheckoutMethod(
   checkoutMethod: CheckoutMethod | undefined,
@@ -121,12 +122,17 @@ export const OfferPage = ({
   const campaign = getCampaign(quoteCartQueryData)
 
   useEffect(() => {
-    if (offerData) {
-      trackOfferGTM(EventName.OfferCreated, offerData, isReferralCodeUsed, {
-        quoteCartId,
-      })
+    if (selectedBundleVariant) {
+      trackOfferEvent(
+        EventName.OfferCreated,
+        selectedBundleVariant.bundle,
+        isReferralCodeUsed,
+        {
+          quoteCartId,
+        },
+      )
     }
-  }, [offerData, isReferralCodeUsed, quoteCartId])
+  }, [selectedBundleVariant, isReferralCodeUsed, quoteCartId])
 
   if (isLoadingQuoteCart) return <LoadingPage loading />
 
@@ -144,7 +150,7 @@ export const OfferPage = ({
   }
 
   if (checkoutStatus === CheckoutStatus.Completed) {
-    return <CheckoutSuccessRedirect offerData={offerData} />
+    return <CheckoutSuccessRedirect bundle={selectedBundleVariant.bundle} />
   }
 
   const onInsuranceSelectorChange = (
@@ -153,14 +159,12 @@ export const OfferPage = ({
     setSelectedInsuranceTypes(
       getInsuranceTypesFromBundleVariant(newSelectedBundleVariant),
     )
-    if (offerData) {
-      trackOfferGTM(
-        EventName.InsuranceSelectionToggle,
-        offerData,
-        isReferralCodeUsed,
-        { quoteCartId, switchedFrom: offerData },
-      )
-    }
+    trackOfferEvent(
+      EventName.InsuranceSelectionToggle,
+      newSelectedBundleVariant.bundle,
+      isReferralCodeUsed,
+      { quoteCartId, switchedFrom: selectedBundleVariant.bundle },
+    )
   }
 
   const handleCheckoutUpsellCardAccepted = (
@@ -169,12 +173,15 @@ export const OfferPage = ({
     setSelectedInsuranceTypes(
       getInsuranceTypesFromBundleVariant(newSelectedBundleVariant),
     )
-    if (offerData) {
-      trackOfferGTM(EventName.OfferCrossSell, offerData, isReferralCodeUsed, {
+    trackOfferEvent(
+      EventName.OfferCrossSell,
+      newSelectedBundleVariant.bundle,
+      isReferralCodeUsed,
+      {
         quoteCartId,
-        switchedFrom: offerData,
-      })
-    }
+        switchedFrom: selectedBundleVariant.bundle,
+      },
+    )
   }
 
   const toggleCheckout = createToggleCheckout(history, quoteCartId, pathLocale)
@@ -189,7 +196,7 @@ export const OfferPage = ({
     <PageWrapper
       quoteCartId={quoteCartId}
       isReferralCodeUsed={isReferralCodeUsed}
-      offerData={offerData}
+      bundle={selectedBundleVariant.bundle}
     >
       <>
         <TrackAction
