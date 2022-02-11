@@ -21,7 +21,7 @@ type StoryProps = {
 }
 
 const storyMeta: Meta<StoryProps> = {
-  title: 'Checkout/YourPlan',
+  title: 'Checkout Details/YourPlan',
   component: YourPlan,
   argTypes: localeArgTypes,
   args: {

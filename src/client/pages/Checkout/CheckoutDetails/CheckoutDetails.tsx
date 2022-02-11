@@ -4,7 +4,7 @@ import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
-import { YourPlan } from './components/YourPlan'
+import { YourPlan } from './components/YourPlan/YourPlan'
 
 export const CheckoutDetails = () => {
   const textKeys = useTextKeys()

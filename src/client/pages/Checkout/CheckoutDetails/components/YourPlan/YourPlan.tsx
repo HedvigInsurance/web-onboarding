@@ -7,7 +7,8 @@ import { useTextKeys } from 'utils/textKeys'
 import { getFormattedPrice } from 'utils/getFormattedPrice'
 import { usePriceQuery } from 'data/graphql'
 import { Badge } from 'components/Badge/Badge'
-import { SubSection } from './SubSection'
+import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import { SubSection } from '../SubSection'
 
 const { gray700, gray300 } = colorsV3
 
@@ -29,6 +30,16 @@ const Total = styled.div`
   border-top: 1px solid ${gray300};
   margin: 0.5rem 0;
   padding-top: 0.5rem;
+`
+
+const StyledBadge = styled(Badge)`
+  max-width: 170px;
+  white-space: nowrap;
+  overflow: hidden;
+
+  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
+    overflow: auto;
+    max-width: 100%;
 `
 
 export const YourPlan = () => {
@@ -66,20 +77,14 @@ export const YourPlan = () => {
         {quotes.map(({ displayName, price }, key) => (
           <Row key={key}>
             <Label>{displayName}</Label>
-            <Value>
-              {formattedPrice(price.amount)}
-              {textKeys.PRICE_SUFFIX_INTERVAL()}
-            </Value>
+            <Value>{formattedPrice(price.amount)}</Value>
           </Row>
         ))}
         {Number(discount) > 0 && (
           <Row>
             {/* need to handle NO bundle */}
-            <Badge>{campaignName}</Badge>
-            <Value>
-              - {formattedPrice(discount)}
-              {textKeys.PRICE_SUFFIX_INTERVAL()}
-            </Value>
+            <StyledBadge>{campaignName}</StyledBadge>
+            <Value>-{formattedPrice(discount)}</Value>
           </Row>
         )}
       </>
@@ -87,10 +92,7 @@ export const YourPlan = () => {
       <Total>
         <Row>
           <div>{textKeys.CHECKOUT_PRICE_TOTAL()}</div>
-          <Value>
-            {formattedPrice(total)}
-            {textKeys.PRICE_SUFFIX_INTERVAL()}
-          </Value>
+          <Value>{formattedPrice(total)}</Value>
         </Row>
       </Total>
     </SubSection>
