@@ -4,8 +4,8 @@ import { Mount } from 'react-lifecycle-components'
 import { Redirect } from 'react-router-dom'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { QuoteBundle } from 'src/client/data/graphql'
-import { quoteBundleTrackingContractType } from 'src/client/api/quoteBundleTrackingContractTypeSelector'
+import { QuoteBundle } from 'data/graphql'
+import { quoteBundleTrackingContractType } from 'api/quoteBundleTrackingContractTypeSelector'
 
 type Props = {
   bundle: QuoteBundle
