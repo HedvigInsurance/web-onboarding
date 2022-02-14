@@ -141,17 +141,6 @@ const DateInputModalWrapper = styled.div<{
   border-radius: 8px;
 `
 
-const StyledDateInput = styled(DateInputForm)<{
-  modal: boolean
-}>`
-  ${(props) =>
-    props.modal &&
-    `
-  top: 50%;
-  transform: translateY(-50%);
-  `}
-`
-
 const getDefaultDateValue = (quote: OfferQuote) => {
   if (quote.startDate) {
     return parse(quote.startDate, 'yyyy-MM-dd', new Date())
@@ -324,23 +313,21 @@ const DateForm: React.FC<{
       </RowButton>
       {modal ? (
         <DateInputModalWrapper isOpen={datePickerOpen}>
-          <StyledDateInput
+          <DateInputForm
             open={datePickerOpen}
             setOpen={setDatePickerOpen}
             date={dateValue || new Date()}
             setDate={setDate}
             hasCurrentInsurer={hasCurrentInsurer(quote)}
-            modal={Boolean(modal)}
           />
         </DateInputModalWrapper>
       ) : (
-        <StyledDateInput
+        <DateInputForm
           open={datePickerOpen}
           setOpen={setDatePickerOpen}
           date={dateValue || new Date()}
           setDate={setDate}
           hasCurrentInsurer={hasCurrentInsurer(quote)}
-          modal={Boolean(modal)}
         />
       )}
     </RowButtonWrapper>

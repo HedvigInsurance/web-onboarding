@@ -1,26 +1,40 @@
 import React, { useState } from 'react'
 import { MemoryRouter } from 'react-router-dom'
-import { Story } from '@storybook/react'
-import { TextKeyProvider, TranslationsLocale } from 'utils/textKeys'
+import { Story, Meta } from '@storybook/react'
+import {
+  localeArgTypes,
+  getTranslationsLocale,
+} from 'utils/storybook/storyHelpers'
+import { LocaleLabel } from 'l10n/locales'
+import { TextKeyProvider } from 'utils/textKeys'
 import { SignFailModal } from './SignFailModal'
 
 type StoryProps = {
-  translationsLocale: TranslationsLocale
+  localePath: LocaleLabel
+  isManualReviewRequired: boolean
 }
 
-export default {
+const storyMeta: Meta<StoryProps> = {
   title: 'Checkout/SignFailModal',
   component: SignFailModal,
+  argTypes: localeArgTypes,
   args: {
-    translationsLocale: 'sv_SE',
+    localePath: 'no-en',
+    isManualReviewRequired: false,
   },
   parameters: {
     backgrounds: { default: 'gray100' },
   },
 }
 
-export const Default: Story<StoryProps> = ({ translationsLocale }) => {
+export default storyMeta
+
+export const Default: Story<StoryProps> = ({
+  localePath,
+  isManualReviewRequired,
+}) => {
   const [isShowingFailModal, setIsShowingFailModal] = useState(true)
+  const translationsLocale = getTranslationsLocale(localePath)
 
   return (
     <MemoryRouter initialEntries={['/se/new-member/sign']}>
@@ -28,6 +42,7 @@ export const Default: Story<StoryProps> = ({ translationsLocale }) => {
         <SignFailModal
           isVisible={isShowingFailModal}
           onClose={() => setIsShowingFailModal(false)}
+          isManualReviewRequired={isManualReviewRequired}
         />
       </TextKeyProvider>
     </MemoryRouter>

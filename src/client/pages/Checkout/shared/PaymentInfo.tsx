@@ -6,7 +6,7 @@ import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
 import { getFormattedPrice } from 'utils/getFormattedPrice'
 import { usePriceQuery } from 'data/graphql'
-import { Spinner } from '../utils'
+import { Spinner } from 'components/utils'
 
 const { gray900, gray700 } = colorsV3
 
@@ -44,7 +44,7 @@ export const PaymentInfo = () => {
   const quoteBundle = data?.quoteCart.bundle
 
   if (error || !quoteBundle) {
-    return <div></div>
+    return null
   }
 
   const monthlyNetCost = quoteBundle.bundleCost.monthlyNet.amount

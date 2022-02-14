@@ -17,8 +17,8 @@ import { LoginApp } from './client/pages/LoginApp'
 import { OfferNew } from './client/pages/OfferNew'
 import { SignLoading } from './client/pages/SignLoading'
 import { OfferPage } from './client/pages/Offer'
-import { CheckoutDetails } from './client/pages/CheckoutDetails/CheckoutDetails'
-import { CheckoutPayment } from './client/pages/CheckoutPayment/CheckoutPayment'
+import { CheckoutDetails } from './client/pages/Checkout/CheckoutDetails/CheckoutDetails'
+import { CheckoutPayment } from './client/pages/Checkout/CheckoutPayment/CheckoutPayment'
 
 enum EmbarkStory {
   DenmarkContentsWithAddressAutocomplete = 'Web Onboarding DK - Contents With Autocomplete',

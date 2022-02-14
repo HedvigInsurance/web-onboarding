@@ -1,7 +1,7 @@
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { format, isToday, Locale, parse } from 'date-fns'
+import { format as formatDate, isToday, Locale, parse } from 'date-fns'
 import { motion } from 'framer-motion'
 import hexToRgba from 'hex-to-rgba'
 import { match } from 'matchly'
@@ -14,13 +14,22 @@ import { ChevronDown } from 'components/icons/ChevronDown'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { MarketLabel } from 'l10n/locales'
 import { LoadingDots } from 'components/LoadingDots/LoadingDots'
-import { useEditBundledQuoteMutation } from 'data/graphql'
-import { OfferData, OfferQuote } from 'pages/OfferNew/types'
-import { hasCurrentInsurer, isBundle, isDanish } from 'pages/OfferNew/utils'
+import {
+  useCreateQuoteBundleMutation,
+  useQuoteCartQuery,
+  CurrentInsurer,
+} from 'data/graphql'
 import { gqlDateFormat } from 'pages/OfferNew/Introduction/Sidebar/utils'
 import { StartDateLabelSwitcher } from 'pages/OfferNew/Introduction/Sidebar/StartDateLabelSwitcher'
 import { useTextKeys } from 'utils/textKeys'
 import { Size } from 'components/types'
+import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
+import { getSelectedBundleVariant } from 'api/quoteCartQuerySelectors'
+import {
+  isSingleStartDateBundle,
+  getQuotes,
+  isMultiQuoteBundle,
+} from 'api/quoteBundleSelectors'
 import { CancellationOptions } from './CancellationOptions'
 
 const DateFormsWrapper = styled.div`
@@ -132,23 +141,15 @@ const DateInputModalWrapper = styled.div<{
   border-radius: 8px;
 `
 
-const StyledDateInput = styled(DateInputForm)<{
-  modal: boolean
-}>`
-  ${(props) =>
-    props.modal &&
-    `
-  top: 50%;
-  transform: translateY(-50%);
-  `}
-`
-
-const getDefaultDateValue = (quote: OfferQuote) => {
-  if (quote.startDate) {
-    return parse(quote.startDate, 'yyyy-MM-dd', new Date())
+const getDefaultDateValue = (
+  startDate: string,
+  currentInsurer?: CurrentInsurer,
+) => {
+  if (startDate) {
+    return parse(startDate, 'yyyy-MM-dd', new Date())
   }
 
-  if (hasCurrentInsurer(quote)) {
+  if (currentInsurer) {
     return null
   }
 
@@ -162,39 +163,39 @@ const getDateFormat = match<MarketLabel, string>([
 ])
 
 const DateForm: React.FC<{
-  quoteCartId: string
-  quote: OfferQuote
-  offerData: OfferData
-  isSingleStartDateBundle?: boolean
+  startDate: any
+  currentInsurer?: CurrentInsurer
+  dataCollectionId?: string
+  quoteDisplayName: string
   isSplit: boolean
-  setShowError: (showError: boolean) => void
   modal?: boolean
   size: Size
+  onChange: (date: Date | null) => void
+  loading: boolean
 }> = ({
-  quoteCartId,
-  quote,
-  offerData,
-  isSingleStartDateBundle = false,
+  startDate,
+  currentInsurer,
+  dataCollectionId,
+  quoteDisplayName,
   isSplit,
-  setShowError,
   modal = false,
   size,
+  onChange,
+  loading,
 }) => {
   const textKeys = useTextKeys()
   const { isoLocale, marketLabel } = useCurrentLocale()
 
-  const [dateValue, setDateValue] = useState(() => getDefaultDateValue(quote))
-  const [dateLocale, setDateLocale] = useState<Locale | null>(null)
-  const [isLoadingPickedStartDate, setIsLoadingPickedStartDate] = useState(
-    false,
+  const [dateValue, setDateValue] = useState(() =>
+    getDefaultDateValue(startDate, currentInsurer),
   )
+  const [dateLocale, setDateLocale] = useState<Locale | null>(null)
+
   const [datePickerOpen, setDatePickerOpen] = useState(false)
 
-  const [editQuote] = useEditBundledQuoteMutation()
-
   useEffect(() => {
-    setDateValue(getDefaultDateValue(quote))
-  }, [quote])
+    setDateValue(getDefaultDateValue(startDate, currentInsurer))
+  }, [startDate, currentInsurer])
 
   useEffect(() => {
     getLocaleImport(isoLocale).then((m) => setDateLocale(m.default))
@@ -206,51 +207,15 @@ const DateForm: React.FC<{
         return textKeys.SIDEBAR_STARTDATE_CELL_VALUE_NEW()
       }
 
-      return format(dateValue, getDateFormat(marketLabel)!, {
+      return formatDate(dateValue, getDateFormat(marketLabel)!, {
         locale: dateLocale!,
       })
     }
   }
 
-  const handleSetDate = async (newDateValue: Date | null) => {
-    try {
-      setShowError(false)
-      setIsLoadingPickedStartDate(true)
-
-      const formattedDateValue =
-        newDateValue !== null ? format(newDateValue, gqlDateFormat) : null
-      const quotesToBeUpdated = isSingleStartDateBundle
-        ? offerData.quotes
-        : [quote]
-
-      await Promise.all(
-        quotesToBeUpdated.map((quote) =>
-          editQuote({
-            variables: {
-              quoteCartId,
-              locale: isoLocale,
-              quoteId: quote.id,
-              payload: {
-                startDate: formattedDateValue,
-              },
-            },
-          }),
-        ),
-      )
-
-      setDateValue(newDateValue)
-    } catch {
-      setShowError(true)
-    } finally {
-      setIsLoadingPickedStartDate(false)
-    }
-  }
-
-  const hasStartDate = Boolean(getDefaultDateValue(quote))
-
   return (
     <RowButtonWrapper isSplit={isSplit}>
-      {isSplit && <StartDateRowLabel>{quote.displayName}</StartDateRowLabel>}
+      {isSplit && <StartDateRowLabel>{quoteDisplayName}</StartDateRowLabel>}
       <RowButton
         datePickerOpen={datePickerOpen}
         onClick={() => setDatePickerOpen(!datePickerOpen)}
@@ -258,19 +223,17 @@ const DateForm: React.FC<{
         size={size}
       >
         <Value>
-          {isLoadingPickedStartDate && (
+          {loading && (
             <LoadingDotsWrapper>
               <LoadingDots color={colorsV3.gray500} />
             </LoadingDotsWrapper>
           )}
-          {!isLoadingPickedStartDate && (
+          {!loading && (
             <>
-              {!hasStartDate && hasCurrentInsurer(quote) && (
-                <StartDateLabelSwitcher
-                  dataCollectionId={quote.dataCollectionId}
-                />
+              {!dateValue && currentInsurer && (
+                <StartDateLabelSwitcher dataCollectionId={dataCollectionId} />
               )}
-              {hasStartDate && getDateLabel()}
+              {dateValue && getDateLabel()}
               <ChevronDown />
             </>
           )}
@@ -278,23 +241,21 @@ const DateForm: React.FC<{
       </RowButton>
       {modal ? (
         <DateInputModalWrapper isOpen={datePickerOpen}>
-          <StyledDateInput
+          <DateInputForm
             open={datePickerOpen}
             setOpen={setDatePickerOpen}
             date={dateValue || new Date()}
-            setDate={handleSetDate}
-            hasCurrentInsurer={hasCurrentInsurer(quote)}
-            modal={modal}
+            setDate={onChange}
+            hasCurrentInsurer={Boolean(currentInsurer)}
           />
         </DateInputModalWrapper>
       ) : (
-        <StyledDateInput
+        <DateInputForm
           open={datePickerOpen}
           setOpen={setDatePickerOpen}
           date={dateValue || new Date()}
-          setDate={handleSetDate}
-          hasCurrentInsurer={hasCurrentInsurer(quote)}
-          modal={modal}
+          setDate={onChange}
+          hasCurrentInsurer={Boolean(currentInsurer)}
         />
       )}
     </RowButtonWrapper>
@@ -303,23 +264,88 @@ const DateForm: React.FC<{
 
 export type StartDateProps = {
   quoteCartId: string
-  offerData: OfferData
   modal?: boolean
   size?: Size
 }
 
 export const StartDate: React.FC<StartDateProps> = ({
   quoteCartId,
-  offerData,
   modal = false,
   size = 'lg',
 }) => {
   const textKeys = useTextKeys()
-
   const [showError, setShowError] = useState(false)
+  const [loadingQuoteIds, setLoadingQuoteIds] = React.useState<Array<string>>(
+    [],
+  )
 
-  // TODO: Make this flag more generic. This logic should not live here.
-  const isSingleStartDateBundle = isBundle(offerData) && isDanish(offerData)
+  const { isoLocale, marketLabel } = useCurrentLocale()
+  const [createQuoteBundle] = useCreateQuoteBundleMutation()
+  const { data: quoteCartQueryData } = useQuoteCartQuery({
+    variables: { id: quoteCartId, locale: isoLocale },
+  })
+  const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
+  const selectedQuoteBundle = getSelectedBundleVariant(
+    quoteCartQueryData,
+    selectedInsuranceTypes,
+  )
+  const singleDate = isSingleStartDateBundle(selectedQuoteBundle, marketLabel)
+  const quotes = getQuotes(selectedQuoteBundle)
+
+  if (quotes.length === 0) throw Error('Selected bundle has no quotes')
+
+  const handleSelectNewStartDate = async (
+    newDateValue: Date | null,
+    quoteIds: Array<string>,
+  ) => {
+    try {
+      setShowError(false)
+      setLoadingQuoteIds(quoteIds)
+
+      const formattedDateValue =
+        newDateValue !== null ? formatDate(newDateValue, gqlDateFormat) : null
+
+      await createQuoteBundle({
+        variables: {
+          locale: isoLocale,
+          quoteCartId,
+          quotes: quotes.map((quote) => {
+            const {
+              id,
+              firstName,
+              lastName,
+              birthDate,
+              email,
+              ssn,
+              phoneNumber,
+              dataCollectionId,
+              currentInsurer,
+              data,
+            } = quote
+
+            return {
+              firstName,
+              lastName,
+              email,
+              birthDate,
+              ssn,
+              currentInsurer: currentInsurer?.id,
+              phoneNumber,
+              dataCollectionId,
+              startDate: quoteIds.includes(id)
+                ? formattedDateValue
+                : quote.startDate,
+              data,
+            }
+          }),
+        },
+      })
+    } catch {
+      setShowError(true)
+    } finally {
+      setLoadingQuoteIds([])
+    }
+  }
 
   return (
     <>
@@ -340,30 +366,39 @@ export const StartDate: React.FC<StartDateProps> = ({
         {textKeys.SIDEBAR_UPDATE_START_DATE_FAILED()}
       </ErrorMessage>
       <DateFormsWrapper>
-        {isSingleStartDateBundle ? (
+        {singleDate ? (
           <DateForm
-            key={offerData.quotes[0].id}
-            quoteCartId={quoteCartId}
-            quote={offerData.quotes[0]}
-            offerData={offerData}
-            setShowError={setShowError}
+            startDate={quotes[0].startDate}
+            currentInsurer={quotes[0].currentInsurer ?? undefined}
+            quoteDisplayName={quotes[0].displayName}
+            dataCollectionId={quotes[0].dataCollectionId ?? undefined}
             modal={modal}
-            isSingleStartDateBundle
             isSplit={false}
             size={size}
+            onChange={(newDate) =>
+              handleSelectNewStartDate(
+                newDate,
+                quotes.map((q) => q.id),
+              )
+            }
+            loading={loadingQuoteIds.length > 0}
           />
         ) : (
           <>
-            {offerData.quotes.map((quote) => (
+            {quotes.map((quote) => (
               <DateForm
                 key={quote.id}
-                quoteCartId={quoteCartId}
-                quote={quote}
-                offerData={offerData}
-                setShowError={setShowError}
+                startDate={quote.startDate}
+                currentInsurer={quote.currentInsurer ?? undefined}
+                quoteDisplayName={quote.displayName}
+                dataCollectionId={quote.dataCollectionId ?? undefined}
                 modal={modal}
-                isSplit={isBundle(offerData)}
+                isSplit={isMultiQuoteBundle(selectedQuoteBundle)}
                 size={size}
+                onChange={(newDate) =>
+                  handleSelectNewStartDate(newDate, [quote.id])
+                }
+                loading={loadingQuoteIds.includes(quote.id)}
               />
             ))}
           </>
@@ -371,9 +406,11 @@ export const StartDate: React.FC<StartDateProps> = ({
       </DateFormsWrapper>
 
       <CancellationOptions
-        quoteCartId={quoteCartId}
-        quotes={offerData.quotes}
-        setShowError={setShowError}
+        quotes={quotes}
+        loadingQuoteIds={loadingQuoteIds}
+        onToggleCancellationOption={(isChecked, quoteId) =>
+          handleSelectNewStartDate(isChecked ? null : new Date(), [quoteId])
+        }
       />
     </>
   )

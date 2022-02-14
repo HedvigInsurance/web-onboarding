@@ -1,47 +1,39 @@
 import styled from '@emotion/styled'
-import { colorsV3 } from '@hedviginsurance/brand'
-import { format } from 'date-fns'
+import { format as formatDate } from 'date-fns'
 import React from 'react'
 import { Switch } from 'components/Switch'
 import { Spinner } from 'components/utils'
 import { useRemoveStartDateMutation, useStartDateMutation } from 'data/graphql'
 import { OfferData, OfferQuote } from 'pages/OfferNew/types'
-import {
-  isNorwegianHomeContents,
-  isNorwegianTravel,
-} from 'pages/OfferNew/utils'
-import { useTextKeys } from 'utils/textKeys'
+import { useTextKeys, TextKeyMap } from 'utils/textKeys'
 import { gqlDateFormat } from './utils'
 
 const HandleSwitchingWrapper = styled.div`
   margin-bottom: 0.75rem;
-  display: flex;
-  justify-content: space-between;
   padding: 0 0.25rem;
 `
 
-const HandleSwitchingLabel = styled.button`
-  font-size: 0.875rem;
-  line-height: 1.2;
-  padding: 0;
-  border: 0;
-  color: ${colorsV3.gray700};
-  width: 75%;
-  background: transparent;
-  text-align: left;
-  cursor: pointer;
+const HandleSwitchingLabel = styled.label<{ isClickable: boolean }>`
+  display: flex;
+  align-items: center;
 
-  :focus {
-    outline: 0;
+  &:hover {
+    cursor: ${({ isClickable }) => (isClickable ? 'pointer' : 'initial')};
   }
 `
 
-const SpinnerWrapper = styled.div`
-  font-size: 1.25rem;
+const StyledSpinner = styled(Spinner)`
+  flex: none;
   height: 1.25rem;
+  width: 1.25rem;
+  margin-right: 1rem;
 `
 
-interface CancellationOptionsProps {
+const StyledSwitch = styled(Switch)`
+  margin-right: 1rem;
+`
+
+type CancellationOptionsProps = {
   quotes: OfferData['quotes']
   setShowError: (showError: boolean) => void
   refetch: () => Promise<void>
@@ -60,7 +52,6 @@ export const CancellationOptions: React.FC<CancellationOptionsProps> = ({
             <QuoteCancellationOption
               key={quote.id}
               {...rest}
-              isGenericQuote={quotes.length === 1}
               quote={quote as OfferQuote}
             />
           )
@@ -70,78 +61,80 @@ export const CancellationOptions: React.FC<CancellationOptionsProps> = ({
   )
 }
 
-interface QuoteCancellationOptionProps {
-  isGenericQuote: boolean
+const getLabelContent = (textKeys: TextKeyMap, quote: OfferQuote) => {
+  if (quote.currentInsurer?.displayName) {
+    return textKeys.SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_PROVIDER_LABEL({
+      INSURANCE_NAME: quote.displayName,
+      INSURANCE_PROVIDER: quote.currentInsurer.displayName,
+    })
+  }
+
+  return textKeys.SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_LABEL({
+    INSURANCE_NAME: quote.displayName,
+  })
+}
+
+type QuoteCancellationOptionProps = {
   quote: OfferQuote
   setShowError: (showError: boolean) => void
   refetch: () => Promise<void>
   handleFail: (e: Error) => void
 }
+
 const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
-  isGenericQuote,
   quote,
   setShowError,
   handleFail,
   refetch,
 }) => {
   const textKeys = useTextKeys()
+
   const [isLoading, setIsLoading] = React.useState(false)
+
   const [setStartDate] = useStartDateMutation()
   const [removeStartDate] = useRemoveStartDateMutation()
 
   const checked = !quote.startDate
+  const checkboxLabel = getLabelContent(textKeys, quote)
 
-  const toggle = () => {
-    setShowError(false)
-    setIsLoading(true)
-    if (!checked) {
-      removeStartDate({
-        variables: {
-          quoteId: quote.id,
-        },
-      })
-        .then(() => refetch())
-        .catch(handleFail)
-        .finally(() => setIsLoading(false))
-    } else {
-      setStartDate({
-        variables: {
-          quoteId: quote.id,
-          date: format(new Date(), gqlDateFormat),
-        },
-      })
-        .then(() => refetch())
-        .catch(handleFail)
-        .finally(() => setIsLoading(false))
+  const toggle = async () => {
+    try {
+      setShowError(false)
+      setIsLoading(true)
+
+      if (!checked) {
+        await removeStartDate({
+          variables: {
+            quoteId: quote.id,
+          },
+        })
+      } else {
+        await setStartDate({
+          variables: {
+            quoteId: quote.id,
+            date: formatDate(new Date(), gqlDateFormat),
+          },
+        })
+      }
+
+      await refetch()
+    } catch (e) {
+      handleFail(e)
+    } finally {
+      setIsLoading(false)
     }
   }
 
   return (
-    // TODO: This logic needs some clarification
     <HandleSwitchingWrapper>
-      <HandleSwitchingLabel onClick={toggle}>
-        {(() => {
-          if (isGenericQuote) {
-            return textKeys.SIDEBAR_REQUEST_CANCELLATION_GENERIC_INSURANCE()
-          }
-
-          if (isNorwegianHomeContents(quote.quoteDetails)) {
-            return textKeys.SIDEBAR_REQUEST_CANCELLATION_HOME_INSURANCE()
-          }
-
-          if (isNorwegianTravel(quote.quoteDetails)) {
-            return textKeys.SIDEBAR_REQUEST_CANCELLATION_TRAVEL_INSURANCE()
-          }
-        })()}
+      <HandleSwitchingLabel isClickable={!isLoading}>
+        {isLoading ? (
+          <StyledSpinner />
+        ) : (
+          <StyledSwitch checked={checked} onChange={toggle} />
+        )}
+        {checkboxLabel}
       </HandleSwitchingLabel>
-
-      {isLoading ? (
-        <SpinnerWrapper>
-          <Spinner />
-        </SpinnerWrapper>
-      ) : (
-        <Switch value={checked} onChange={toggle} />
-      )}
     </HandleSwitchingWrapper>
   )
 }

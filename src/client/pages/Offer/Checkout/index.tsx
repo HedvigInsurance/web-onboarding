@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
-import { useFormik } from 'formik'
+import { useFormik, FormikHelpers } from 'formik'
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
@@ -39,6 +39,7 @@ import { InsuranceSummary } from 'pages/OfferNew/Checkout/InsuranceSummary'
 import { UpsellCard } from 'pages/OfferNew/Checkout/UpsellCard'
 import { OfferData } from 'pages/OfferNew/types'
 import { SignFailModal } from 'pages/OfferNew/Checkout/SignFailModal/SignFailModal'
+import { LimitCode } from 'api/quoteBundleErrorSelectors'
 import { QuoteInput } from '../Introduction/DetailsModal/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import {
@@ -48,7 +49,7 @@ import {
 import { Sign } from './Sign'
 import { SignDisclaimer } from './SignDisclaimer'
 
-export type SignUiState = 'NOT_STARTED' | 'STARTED' | 'FAILED'
+export type SignUiState = 'NOT_STARTED' | 'STARTED' | 'FAILED' | 'MANUAL_REVIEW'
 
 type Openable = {
   visibilityState: VisibilityState
@@ -177,12 +178,20 @@ const Backdrop = styled('div')<Openable>`
   }};
 `
 
-const isManualReviewRequired = (errors: GraphQLError[]) => {
+const checkIsManualReviewRequired = (errors: GraphQLError[]) => {
   const manualReviewRequiredError = errors.find((error) => {
     return error?.extensions?.body?.errorCode === 'MANUAL_REVIEW_REQUIRED'
   })
 
   return manualReviewRequiredError !== undefined
+}
+
+const isSsnInvalid = (errors: GraphQLError[]) => {
+  const invalidSsnError = errors.find((error) => {
+    return error?.extensions?.body?.errorCode === LimitCode.INVALID_SSN
+  })
+
+  return invalidSsnError !== undefined
 }
 
 const getSignUiStateFromCheckoutStatus = (
@@ -256,6 +265,7 @@ export const Checkout = ({
     checkoutStatusData?.quoteCart.checkout || {}
 
   const [isShowingFailModal, setIsShowingFailModal] = useState(false)
+  const [isManualReviewRequired, setIsManualReviewRequired] = useState(false)
   const [startCheckout] = useStartCheckoutMutation()
   const [
     createQuoteBundle,
@@ -284,7 +294,18 @@ export const Checkout = ({
       textKeys,
       isPhoneNumberRequired,
     ),
-    onSubmit: (values) => reCreateQuoteBundle(values),
+    onSubmit: async (
+      form: QuoteInput,
+      { setErrors }: FormikHelpers<QuoteInput>,
+    ) => {
+      try {
+        await reCreateQuoteBundle(form)
+      } catch (error) {
+        if (isSsnInvalid(error.graphQLErrors)) {
+          setErrors({ ssn: textKeys.INVALID_FIELD() })
+        }
+      }
+    },
     enableReinitialize: true,
   })
 
@@ -388,21 +409,28 @@ export const Checkout = ({
       }
 
       if (isFormDataUpdated) await submitForm()
+
+      // clean up existing auth tokens
+      if (realApolloClient) {
+        realApolloClient.httpLink.options.headers.authorization = undefined
+      }
+
       const { data } = await startCheckout({
-        variables: {
-          quoteIds,
-          quoteCartId,
-        },
+        variables: { quoteIds, quoteCartId },
       })
       if (data?.quoteCart_startCheckout.__typename === 'BasicError') {
         setSignUiState('FAILED')
         return
       }
     } catch (error) {
-      if (
-        !isManualReviewRequired((error.graphQLErrors || []) as GraphQLError[])
-      ) {
+      const isManualReviewRequired = checkIsManualReviewRequired(
+        (error.graphQLErrors || []) as GraphQLError[],
+      )
+      if (isManualReviewRequired) {
+        setIsManualReviewRequired(isManualReviewRequired)
         setIsShowingFailModal(true)
+        setSignUiState('MANUAL_REVIEW')
+        return
       }
 
       setSignUiState('FAILED')
@@ -433,7 +461,7 @@ export const Checkout = ({
         locale: locale.isoLocale,
         quoteCartId,
         quotes: getUniqueQuotesFromVariantList(quoteBundleVariants).map(
-          ({ startDate, data: { type, typeOfContract } }) => {
+          ({ startDate, currentInsurer, data: { type, typeOfContract } }) => {
             return {
               firstName,
               lastName,
@@ -441,6 +469,7 @@ export const Checkout = ({
               birthDate,
               ssn,
               startDate,
+              currentInsurer: currentInsurer?.id,
               phoneNumber: phoneNumber?.replace(/\s/g, ''),
               dataCollectionId,
               data: {
@@ -483,7 +512,7 @@ export const Checkout = ({
                 <StartDateLabel>
                   {textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}
                 </StartDateLabel>
-                <StartDate quoteCartId={quoteCartId} offerData={offerData} />
+                <StartDate quoteCartId={quoteCartId} />
               </StartDateWrapper>
               {isUpsellCardVisible && (
                 <UpsellCard
@@ -515,6 +544,7 @@ export const Checkout = ({
       <SignFailModal
         isVisible={isShowingFailModal}
         onClose={() => setIsShowingFailModal(false)}
+        isManualReviewRequired={isManualReviewRequired}
       />
     </>
   )
