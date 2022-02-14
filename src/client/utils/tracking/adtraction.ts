@@ -16,7 +16,7 @@ import {
 import { NoComboTypes, DkBundleTypes, SeBundleTypes } from './tracking'
 
 // Exclude single contract types that are only sold as part of bundles
-type TypeOfContractExcludedUnused = Exclude<
+export type TypeOfContractExcludedUnused = Exclude<
   TypeOfContract | NoComboTypes | DkBundleTypes | SeBundleTypes,
   | TypeOfContract.DkAccident
   | TypeOfContract.DkAccidentStudent
@@ -26,7 +26,7 @@ type TypeOfContractExcludedUnused = Exclude<
   | TypeOfContract.SeAccidentStudent
 >
 
-export const adtractionContractValues: Record<
+export const ADTRACTION_CONTRACT_VALUES: Record<
   TypeOfContractExcludedUnused,
   number
 > = {
@@ -63,44 +63,44 @@ export const getBundleAdtractionProductValue = (offerData: OfferData) => {
     const { quoteDetails: homeQuoteDetails } = getMainQuote(offerData)
 
     if (isSwedishHouse(homeQuoteDetails)) {
-      return adtractionContractValues[SeBundleTypes.SeHomeAccidentBundleHouse]
+      return ADTRACTION_CONTRACT_VALUES[SeBundleTypes.SeHomeAccidentBundleHouse]
     }
 
     if (isSwedishApartment(homeQuoteDetails)) {
       if (isSwedishBRF(homeQuoteDetails)) {
         return isStudentOffer(offerData)
-          ? adtractionContractValues[
+          ? ADTRACTION_CONTRACT_VALUES[
               SeBundleTypes.SeHomeAccidentBundleStudentBrf
             ]
-          : adtractionContractValues[SeBundleTypes.SeHomeAccidentBundleBrf]
+          : ADTRACTION_CONTRACT_VALUES[SeBundleTypes.SeHomeAccidentBundleBrf]
       } else {
         return isStudentOffer(offerData)
-          ? adtractionContractValues[
+          ? ADTRACTION_CONTRACT_VALUES[
               SeBundleTypes.SeHomeAccidentBundleStudentRent
             ]
-          : adtractionContractValues[SeBundleTypes.SeHomeAccidentBundleRent]
+          : ADTRACTION_CONTRACT_VALUES[SeBundleTypes.SeHomeAccidentBundleRent]
       }
     }
 
     if (isNorwegian(offerData)) {
       return isYouth(offerData)
-        ? adtractionContractValues[NoComboTypes.NoComboYouth]
-        : adtractionContractValues[NoComboTypes.NoCombo]
+        ? ADTRACTION_CONTRACT_VALUES[NoComboTypes.NoComboYouth]
+        : ADTRACTION_CONTRACT_VALUES[NoComboTypes.NoCombo]
     }
 
     if (isDanishAccidentBundle(offerData)) {
       return isStudentOffer(offerData)
-        ? adtractionContractValues[DkBundleTypes.DkAccidentBundleStudent]
-        : adtractionContractValues[DkBundleTypes.DkAccidentBundle]
+        ? ADTRACTION_CONTRACT_VALUES[DkBundleTypes.DkAccidentBundleStudent]
+        : ADTRACTION_CONTRACT_VALUES[DkBundleTypes.DkAccidentBundle]
     }
 
     if (isDanishTravelBundle(offerData)) {
       return isStudentOffer(offerData)
-        ? adtractionContractValues[DkBundleTypes.DkTravelBundleStudent]
-        : adtractionContractValues[DkBundleTypes.DkTravelBundle]
+        ? ADTRACTION_CONTRACT_VALUES[DkBundleTypes.DkTravelBundleStudent]
+        : ADTRACTION_CONTRACT_VALUES[DkBundleTypes.DkTravelBundle]
     }
   }
-  return adtractionContractValues[
+  return ADTRACTION_CONTRACT_VALUES[
     getMainQuote(offerData).contractType as TypeOfContractExcludedUnused
   ]
 }

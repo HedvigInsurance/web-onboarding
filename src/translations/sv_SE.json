@@ -298,7 +298,7 @@
   "CHECKOUT_CREDIT_CHECK_INFO_HEADER": "",
   "CHECKOUT_CREDIT_CHECK_INFO_CONTENT": "",
   "CHECKOUT_SIGN_FAIL_HEADER": "",
-  "CHECKOUT_SIGN_FAIL_CONTENT": "",
+  "CHECKOUT_SIGN_FAIL_MANUAL_REVIEW": "",
   "OFFER_BUNDLE_SELECTOR_TITLE": "Välj ditt Hedvig-paket",
   "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "Alla försäkringar gäller för dig och dina medförsäkrade. Du kan när som helst uppgradera eller nedgradera ditt paket eller ändra ditt startdatum i Hedvig-appen.",
   "OFFER_APP_PROMOTION_HEADING": "En försäkrings-app som löser alla dina problem",
@@ -346,5 +346,8 @@
   "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_TOOLTIP": "Vi hjälper dig gärna att säga upp din nuvarande {INSURANCE_NAME} åt dig. Din nya försäkring hos Hedvig aktiveras när den gamla löper ut. Du kommer att få mer information via mail.",
   "CHECKOUT_FOOTER_CANCELLATION_INFO": "Ingen bindningstid",
   "CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT": "Fortsätt till betalning",
-  "CHECKOUT_FOOTER_COMPLETE_PURCHASE": "Genomför köp"
+  "CHECKOUT_FOOTER_COMPLETE_PURCHASE": "Genomför köp",
+  "CHECKOUT_DETAILS_PAGE_TITLE": "Kassa | Hedvig",
+  "CHECKOUT_PAYMENT_PAGE_TITLE": "Betalning | Hedvig",
+  "CHECKOUT_QUOTE_DETAILS_TITLE": "Sammanfattning"
 }

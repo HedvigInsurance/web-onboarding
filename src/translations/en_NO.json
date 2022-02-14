@@ -298,7 +298,7 @@
   "CHECKOUT_CREDIT_CHECK_INFO_HEADER": "We perform credit checks on all new customers",
   "CHECKOUT_CREDIT_CHECK_INFO_CONTENT": "Customers with a record of non-payment pay in advance in some cases. If this applies to you, you will be notified by contacting us.",
   "CHECKOUT_SIGN_FAIL_HEADER": "Your purchase can’t be completed",
-  "CHECKOUT_SIGN_FAIL_CONTENT": "Unfortunately, we can't offer you to purchase an insurance online. Please contact betaling@hedvig.com and we'll assist you.",
+  "CHECKOUT_SIGN_FAIL_MANUAL_REVIEW": "Unfortunately, we can't offer you to purchase an insurance online. Please contact [betaling@hedvig.com](mailto:betaling@hedvig.com) and we'll assist you.",
   "OFFER_BUNDLE_SELECTOR_TITLE": "Your insurance bundle",
   "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "",
   "OFFER_APP_PROMOTION_HEADING": "An insurance-app that solves all your problems",
@@ -346,5 +346,8 @@
   "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_TOOLTIP": "We will gladly help you cancel your current {INSURANCE_NAME} for you. Your new insurance with Hedvig will be activated when your old expires. You’ll receive more info via email.",
   "CHECKOUT_FOOTER_CANCELLATION_INFO": "Cancel anytime",
   "CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT": "Continue to payment",
-  "CHECKOUT_FOOTER_COMPLETE_PURCHASE": "Complete purchase"
+  "CHECKOUT_FOOTER_COMPLETE_PURCHASE": "Complete purchase",
+  "CHECKOUT_DETAILS_PAGE_TITLE": "Checkout | Hedvig",
+  "CHECKOUT_PAYMENT_PAGE_TITLE": "Payment | Hedvig",
+  "CHECKOUT_QUOTE_DETAILS_TITLE": "Summary"
 }
