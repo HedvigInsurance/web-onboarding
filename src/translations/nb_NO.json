@@ -215,7 +215,7 @@
   "SIDEBAR_INSURANCE_TYPE_DK_CONTENTS_STUDENT_RENT": "",
   "FOREVER_CODE_ERROR": "Feil kode.",
   "STARTPAGE_HEADLINE": "Få et prisforslag",
-  "STARTPAGE_PREAMBLE": "Gjør som tusenvis av andre medlemmer. Skaff deg innboforsikring uten bindingstid.",
+  "STARTPAGE_PREAMBLE": "Gjør som tusenvis av andre medlemmer. Skaff deg innboforsikring med uflaks inkluderet.",
   "STARTPAGE_USP_1": "Ti ganger så fornøyde kunder",
   "STARTPAGE_USP_2": "Personlig service-team",
   "STARTPAGE_USP_3": "Enkel skademelding",
@@ -349,5 +349,6 @@
   "CHECKOUT_FOOTER_COMPLETE_PURCHASE": "Gjennomfør kjøp",
   "CHECKOUT_DETAILS_PAGE_TITLE": "Kasse | Hedvig",
   "CHECKOUT_PAYMENT_PAGE_TITLE": "Betaling | Hedvig",
-  "CHECKOUT_QUOTE_DETAILS_TITLE": "Sammendrag"
+  "CHECKOUT_QUOTE_DETAILS_TITLE": "Sammendrag",
+  "CHECKOUT_YOUR_PLAN_TITLE": ""
 }
