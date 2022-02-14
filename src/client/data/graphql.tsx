@@ -12181,6 +12181,22 @@ export type QuoteCartQuery = { __typename?: 'Query' } & {
     }
 }
 
+export type QuoteDetailsDataQueryVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type QuoteDetailsDataQuery = { __typename?: 'Query' } & {
+  quoteCart: { __typename?: 'QuoteCart' } & {
+    bundle?: Maybe<
+      { __typename?: 'QuoteBundle' } & {
+        quotes: Array<
+          { __typename?: 'BundledQuote' } & Pick<BundledQuote, 'data'>
+        >
+      }
+    >
+  }
+}
+
 export type RedeemCodeMutationVariables = Exact<{
   code: Scalars['String']
 }>
@@ -14401,6 +14417,68 @@ export type QuoteCartLazyQueryHookResult = ReturnType<
 export type QuoteCartQueryResult = ApolloReactCommon.QueryResult<
   QuoteCartQuery,
   QuoteCartQueryVariables
+>
+export const QuoteDetailsDataDocument = gql`
+  query QuoteDetailsData($id: ID!) {
+    quoteCart(id: $id) {
+      bundle {
+        quotes {
+          data
+        }
+      }
+    }
+  }
+`
+
+/**
+ * __useQuoteDetailsDataQuery__
+ *
+ * To run a query within a React component, call `useQuoteDetailsDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQuoteDetailsDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQuoteDetailsDataQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useQuoteDetailsDataQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    QuoteDetailsDataQuery,
+    QuoteDetailsDataQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<QuoteDetailsDataQuery, QuoteDetailsDataQueryVariables>(
+    QuoteDetailsDataDocument,
+    options,
+  )
+}
+export function useQuoteDetailsDataLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    QuoteDetailsDataQuery,
+    QuoteDetailsDataQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    QuoteDetailsDataQuery,
+    QuoteDetailsDataQueryVariables
+  >(QuoteDetailsDataDocument, options)
+}
+export type QuoteDetailsDataQueryHookResult = ReturnType<
+  typeof useQuoteDetailsDataQuery
+>
+export type QuoteDetailsDataLazyQueryHookResult = ReturnType<
+  typeof useQuoteDetailsDataLazyQuery
+>
+export type QuoteDetailsDataQueryResult = ApolloReactCommon.QueryResult<
+  QuoteDetailsDataQuery,
+  QuoteDetailsDataQueryVariables
 >
 export const RedeemCodeDocument = gql`
   mutation RedeemCode($code: String!) {
