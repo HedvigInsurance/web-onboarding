@@ -1,10 +1,8 @@
-import { useQuoteDetailsDataQuery, TypeOfContract } from 'data/graphql'
-import { MainQuoteDetails } from 'api/quoteDetailsDataTypes'
+import { useQuoteDetailsDataQuery } from 'data/graphql'
+import { QuoteDetails } from 'api/quoteDetailsDataTypes'
 import { useQuoteCartIdFromUrl } from './useQuoteCartIdFromUrl'
 
-type QuoteDetailsData = {
-  [value in TypeOfContract]?: MainQuoteDetails
-}
+export type QuoteDetailsData = QuoteDetails[]
 
 export const useQuoteDetailsData = () => {
   const { quoteCartId } = useQuoteCartIdFromUrl()
@@ -12,21 +10,35 @@ export const useQuoteDetailsData = () => {
     variables: { id: quoteCartId },
   })
 
-  const quoteDetailsData = data?.quoteCart.bundle?.quotes.reduce(
-    (quoteDetails, currentValue) => {
-      const typeOfContract = currentValue.data.typeOfContract
+  const quotes = data?.quoteCart.bundle?.quotes
 
-      if (!Object.keys(quoteDetails)) {
-        return { [typeOfContract]: currentValue.data }
-      }
+  if (!quotes) {
+    return { quoteDetailsData: null, isLoading, error }
+  }
 
-      return {
-        ...quoteDetails,
-        [typeOfContract]: currentValue.data,
-      }
-    },
-    {} as QuoteDetailsData,
-  )
+  const quoteDetailsData: QuoteDetailsData = quotes.map(({ data }) => {
+    const {
+      id,
+      street,
+      zipCode,
+      numberCoInsured,
+      livingSpace,
+      typeOfContract,
+      isStudent,
+      isYouth,
+    } = data
+
+    return {
+      id,
+      typeOfContract,
+      numberCoInsured,
+      ...('isYouth' in data && { isYouth }),
+      ...('isStudent' in data && { isStudent }),
+      ...(street && { street }),
+      ...(zipCode && { zipCode }),
+      ...(livingSpace && { livingSpace }),
+    }
+  })
 
   return { quoteDetailsData, isLoading, error }
 }

@@ -3,6 +3,7 @@ import { TypeOfContract, ExtraBuilding } from 'data/graphql'
 type QuoteDataCommon = {
   typeOfContract: TypeOfContract
   numberCoInsured: number
+  id: string
 }
 
 type StudentData = {
@@ -19,9 +20,9 @@ type QuoteDataHome = QuoteDataCommon & {
   livingSpace: number
 }
 
-type QuoteDataSEApartment = QuoteDataHome & StudentData
+type QuoteDataSeApartment = QuoteDataHome & StudentData
 
-type QuoteDataSEHouse = QuoteDataHome &
+type QuoteDataSeHouse = QuoteDataHome &
   StudentData & {
     ancillaryArea: number
     yearOfConstruction: number
@@ -30,13 +31,25 @@ type QuoteDataSEHouse = QuoteDataHome &
     isSubleted: boolean
   }
 
-type QuoteDataNOHomeContents = QuoteDataHome & YouthData
+type QuoteDataSeAccident = QuoteDataCommon & StudentData
 
-type QuoteDataDKHomeContents = QuoteDataHome & StudentData
+type QuoteDataNoHomeContents = QuoteDataHome & YouthData
 
-export type MainQuoteDetails =
-  | QuoteDataSEApartment
-  | QuoteDataSEHouse
-  | QuoteDataSEApartment
-  | QuoteDataNOHomeContents
-  | QuoteDataDKHomeContents
+type QuoteDataNoTravel = QuoteDataCommon & YouthData
+
+type QuoteDataDkHomeContents = QuoteDataHome & StudentData
+
+type QuoteDataDkAccident = QuoteDataCommon & StudentData
+
+type QuoteDataDkTravel = QuoteDataCommon & StudentData
+
+export type QuoteDetails =
+  | QuoteDataSeApartment
+  | QuoteDataSeHouse
+  | QuoteDataSeApartment
+  | QuoteDataSeAccident
+  | QuoteDataNoHomeContents
+  | QuoteDataNoTravel
+  | QuoteDataDkHomeContents
+  | QuoteDataDkAccident
+  | QuoteDataDkTravel
