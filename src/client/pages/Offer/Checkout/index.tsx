@@ -31,7 +31,6 @@ import { CloseButton } from 'components/CloseButton/CloseButton'
 import { CampaignBadge } from 'components/CampaignBadge/CampaignBadge'
 import { DiscountTag } from 'components/DiscountTag/DiscountTag'
 import { setupQuoteCartSession } from 'containers/SessionContainer'
-import { trackSignedEvent } from 'utils/tracking/tracking'
 import { useVariation } from 'utils/hooks/useVariation'
 import { StartDate } from 'pages/Offer/Introduction/Sidebar/StartDate'
 import { useScrollLock, VisibilityState } from 'pages/OfferNew/Checkout/hooks'
@@ -40,6 +39,7 @@ import { UpsellCard } from 'pages/OfferNew/Checkout/UpsellCard'
 import { OfferData } from 'pages/OfferNew/types'
 import { SignFailModal } from 'pages/OfferNew/Checkout/SignFailModal/SignFailModal'
 import { LimitCode } from 'api/quoteBundleErrorSelectors'
+import { trackSignedCustomerEvent } from 'utils/tracking/trackSignedCustomerEvent'
 import { QuoteInput } from '../Introduction/DetailsModal/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import {
@@ -366,12 +366,12 @@ export const Checkout = ({
         },
         storage,
       })
-      trackSignedEvent({
+      trackSignedCustomerEvent({
         variation,
         campaignCode,
         isDiscountMonthlyCostDeduction,
         memberId,
-        offerData,
+        bundle: selectedQuoteBundleVariant.bundle,
         quoteCartId,
       })
     } catch (error) {
@@ -382,7 +382,7 @@ export const Checkout = ({
     campaignCode,
     client,
     isDiscountMonthlyCostDeduction,
-    offerData,
+    selectedQuoteBundleVariant.bundle,
     quoteCartId,
     storage,
     variation,
