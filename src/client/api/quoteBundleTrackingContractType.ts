@@ -5,49 +5,44 @@ import {
   NoComboTypes,
   DkBundleTypes,
 } from 'utils/tracking/tracking'
-import { quoteBundleIsDanishAccident } from './quoteBundleIsDanishAccident'
 import * as quoteSelector from './quoteSelector'
-import { quoteBundleIsBundleSelector } from './quoteBundleIsBundleSelector'
-import { quoteBundleMainQuoteSelector } from './quoteBundleMainQuoteSelector'
-import { quoteBundleIsStudentOffer } from './quoteBundleIsStudentOffer'
-import { quoteBundleIsisYouthOffer } from './quoteBundleIsYouthOffer'
-import { quoteBundleIsDanishTravel } from './quoteBundleIsDanishTravel'
+import * as bundleSelecor from './quoteBundleSelectors'
 
 export const quoteBundleTrackingContractType = (
   bundle: QuoteBundle,
 ): TrackableContractType => {
-  const mainQuote = quoteBundleMainQuoteSelector(bundle)
+  const mainQuote = bundleSelecor.getMainQuote(bundle)
 
-  if (quoteBundleIsBundleSelector(bundle)) {
+  if (bundleSelecor.isMultiQuote(bundle)) {
     if (quoteSelector.isSwedishHouse(mainQuote)) {
       return SeBundleTypes.SeHomeAccidentBundleHouse
     }
 
     if (quoteSelector.isSwedishApartment(mainQuote)) {
       if (quoteSelector.isSwedishBRF(mainQuote)) {
-        return quoteBundleIsStudentOffer(bundle)
+        return bundleSelecor.isStudentOffer(bundle)
           ? SeBundleTypes.SeHomeAccidentBundleStudentBrf
           : SeBundleTypes.SeHomeAccidentBundleBrf
       } else {
-        return quoteBundleIsStudentOffer(bundle)
+        return bundleSelecor.isStudentOffer(bundle)
           ? SeBundleTypes.SeHomeAccidentBundleStudentRent
           : SeBundleTypes.SeHomeAccidentBundleRent
       }
     }
     if (quoteSelector.isNorwegianHomeContents(mainQuote)) {
-      return quoteBundleIsisYouthOffer(bundle)
+      return bundleSelecor.isYouthOffer(bundle)
         ? NoComboTypes.NoComboYouth
         : NoComboTypes.NoCombo
     }
 
-    if (quoteBundleIsDanishAccident(bundle)) {
-      return quoteBundleIsStudentOffer(bundle)
+    if (bundleSelecor.isDanishAccident(bundle)) {
+      return bundleSelecor.isStudentOffer(bundle)
         ? DkBundleTypes.DkAccidentBundleStudent
         : DkBundleTypes.DkAccidentBundle
     }
 
-    if (quoteBundleIsDanishTravel(bundle)) {
-      return quoteBundleIsStudentOffer(bundle)
+    if (bundleSelecor.isDanishTravel(bundle)) {
+      return bundleSelecor.isStudentOffer(bundle)
         ? DkBundleTypes.DkTravelBundleStudent
         : DkBundleTypes.DkTravelBundle
     }

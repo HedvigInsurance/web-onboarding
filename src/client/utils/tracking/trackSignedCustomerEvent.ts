@@ -1,6 +1,6 @@
 import { QuoteBundle } from 'data/graphql'
 import { Variation } from 'utils/hooks/useVariation'
-import { quoteBundleMainQuoteSelector } from 'api/quoteBundleMainQuoteSelector'
+import * as quoteBundleSelector from 'api/quoteBundleSelectors'
 import { handleSignedEvent } from './signing'
 import { trackOfferEvent } from './trackOfferEvent'
 import { EventName } from './gtm'
@@ -23,7 +23,7 @@ export const trackSignedCustomerEvent = ({
   campaignCode,
   isDiscountMonthlyCostDeduction,
 }: TrackSignedEventParams) => {
-  const mainQuote = quoteBundleMainQuoteSelector(bundle)
+  const mainQuote = quoteBundleSelector.getMainQuote(bundle)
 
   if (variation === Variation.AVY) {
     handleSignedEvent(memberId)

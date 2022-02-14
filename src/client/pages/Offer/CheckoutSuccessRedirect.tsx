@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom'
 import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { QuoteBundle } from 'data/graphql'
-import { quoteBundleTrackingContractType } from 'api/quoteBundleTrackingContractTypeSelector'
+import { quoteBundleTrackingContractType } from 'api/quoteBundleTrackingContractType'
 
 type Props = {
   bundle: QuoteBundle

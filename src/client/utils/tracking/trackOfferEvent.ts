@@ -1,9 +1,6 @@
-import { quoteBundleTrackingContractType } from 'api/quoteBundleTrackingContractTypeSelector'
+import * as quoteBundleSelector from 'api/quoteBundleSelectors'
 import { QuoteBundle } from 'data/graphql'
-import { quoteBundleMainQuoteSelector } from 'api/quoteBundleMainQuoteSelector'
-import { quoteBundleIsStudentOffer } from 'api/quoteBundleIsStudentOffer'
-import { quoteBundleHasAccident } from 'api/quoteBundleHasAccident'
-import { quoteBundleHasTravel } from 'api/quoteBundleHasTravel'
+import { quoteBundleTrackingContractType } from 'api/quoteBundleTrackingContractType'
 import { EmbarkStory } from '../embarkStory'
 import { captureSentryError } from '../sentry-client'
 import { EventName, GTMPhoneNumberData, pushToGTMDataLayer } from './gtm'
@@ -37,7 +34,7 @@ export const trackOfferEvent = (
     setInitialOfferToSessionStorage(contractCategory)
   }
 
-  const mainQuote = quoteBundleMainQuoteSelector(bundle)
+  const mainQuote = quoteBundleSelector.getMainQuote(bundle)
 
   try {
     pushToGTMDataLayer({
@@ -49,10 +46,10 @@ export const trackOfferEvent = (
         insurance_price: grossPrice,
         ...(grossPrice !== netPrice && { discounted_premium: netPrice }),
         currency: bundle.bundleCost.monthlyNet.currency,
-        is_student: quoteBundleIsStudentOffer(bundle),
+        is_student: quoteBundleSelector.isStudentOffer(bundle),
         has_home: true,
-        has_accident: quoteBundleHasAccident(bundle),
-        has_travel: quoteBundleHasTravel(bundle),
+        has_accident: quoteBundleSelector.hasAccident(bundle),
+        has_travel: quoteBundleSelector.hasTravel(bundle),
         initial_offer: initialOffer ?? contractCategory,
         current_offer: contractCategory,
         quote_cart_id: quoteCartId,
@@ -68,7 +65,7 @@ export const trackOfferEvent = (
       },
       ...phoneNumberData,
     })
-  } catch (e) {
-    captureSentryError(e)
+  } catch (error) {
+    captureSentryError(error)
   }
 }
