@@ -339,7 +339,7 @@ export const ExtraBuildingsInput: React.FC<ExtraBuildingsInputProps> = ({
             (_: any, index: number) => (
               <InputGroup key={index}>
                 <DetailInput
-                  name={`extraBuildings.${index}.type`}
+                  name={`data.extraBuildings.${index}.type`}
                   field={{
                     label:
                       'DETAILS_MODULE_EXTRABUILDINGS_TABLE_BUILDINGTYPE_CELL_LABEL_HOUSE',
@@ -352,12 +352,12 @@ export const ExtraBuildingsInput: React.FC<ExtraBuildingsInputProps> = ({
                   formikProps={formikProps}
                 />
                 <AreaInput
-                  name={`extraBuildings.${index}.area`}
+                  name={`data.extraBuildings.${index}.area`}
                   label="DETAILS_MODULE_EXTRABUILDINGS_TABLE_SIZE_CELL_LABEL_HOUSE"
                   formikProps={formikProps}
                 />
                 <BooleanInput
-                  name={`extraBuildings.${index}.hasWaterConnected`}
+                  name={`data.extraBuildings.${index}.hasWaterConnected`}
                   label="DETAILS_MODULE_EXTRABUILDINGS_TABLE_WATER_CELL_LABEL_HOUSE"
                   formikProps={formikProps}
                 />
