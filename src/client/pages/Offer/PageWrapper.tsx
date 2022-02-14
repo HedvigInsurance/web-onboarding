@@ -3,23 +3,24 @@ import { useHistory } from 'react-router'
 import { TopBar } from 'components/TopBar'
 import { Page } from 'components/utils/Page'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
-import { trackOfferGTM, EventName } from 'utils/tracking/gtm'
+import { EventName } from 'utils/tracking/gtm'
 import { Features, useFeature } from 'utils/hooks/useFeature'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { CallCenterPhoneNumber } from 'components/CallCenterPhoneNumber/CallCenterPhoneNumber'
-import { OfferData } from 'pages/OfferNew/types'
 import { LanguagePicker } from 'components/LanguagePicker/LanguagePicker'
+import { trackOfferEvent } from 'utils/tracking/trackOfferEvent'
+import { QuoteBundle } from 'data/graphql'
 
 type PageWrapperProps = {
   quoteCartId: string
-  offerData?: OfferData
+  bundle?: QuoteBundle
   isReferralCodeUsed?: boolean
   children: React.ReactNode
 }
 
 export const PageWrapper = ({
   quoteCartId,
-  offerData,
+  bundle,
   isReferralCodeUsed = false,
   children,
 }: PageWrapperProps) => {
@@ -31,8 +32,8 @@ export const PageWrapper = ({
   ])
 
   const handleClickPhoneNumber = (status: 'opened' | 'closed') => {
-    if (offerData) {
-      trackOfferGTM(EventName.ClickCallNumber, offerData, isReferralCodeUsed, {
+    if (bundle) {
+      trackOfferEvent(EventName.ClickCallNumber, bundle, isReferralCodeUsed, {
         quoteCartId,
         phoneNumberData: { path: history.location.pathname, status },
       })
