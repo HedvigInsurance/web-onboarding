@@ -347,5 +347,7 @@
   "CHECKOUT_FOOTER_CANCELLATION_INFO": "Ingen bindingstid",
   "CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT": "Fortsett til betaling",
   "CHECKOUT_FOOTER_COMPLETE_PURCHASE": "Gjennomfør kjøp",
+  "CHECKOUT_DETAILS_PAGE_TITLE": "Kasse | Hedvig",
+  "CHECKOUT_PAYMENT_PAGE_TITLE": "Betaling | Hedvig",
   "CHECKOUT_QUOTE_DETAILS_TITLE": "Sammendrag"
 }
