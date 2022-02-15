@@ -72,7 +72,7 @@ export const YourPlan = () => {
   }
 
   return (
-    <SubSection headlineText={textKeys.CHECKOUT_YOUR_HOME_SECTION_TITLE()}>
+    <SubSection headlineText={textKeys.CHECKOUT_INSURANCE_TITLE()}>
       <>
         {quotes.map(({ displayName, price }, key) => (
           <Row key={key}>
