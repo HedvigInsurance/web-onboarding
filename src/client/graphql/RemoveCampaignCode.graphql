@@ -1,5 +1,22 @@
-mutation RemoveCampaignCode($quoteCartId: ID!) {
+mutation RemoveCampaignCode($quoteCartId: ID!, , $locale: Locale!) {
   quoteCart_removeCampaign(id: $quoteCartId) {
+    ... on QuoteCart {
+      id
+      bundle {
+        possibleVariations {
+          id
+          bundle {
+            bundleCost {
+              ...BundleCostDataFragment
+            }
+          }
+        }
+      }
+      campaign {
+        displayValue(locale: $locale)
+        code
+      }
+    }
     ... on BasicError {
       errorMessage: message
     }

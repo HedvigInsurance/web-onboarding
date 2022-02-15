@@ -1,8 +1,19 @@
-mutation AddCampaignCode($id: ID!, $code: String!) {
+mutation AddCampaignCode($id: ID!, $code: String!, $locale: Locale!) {
   quoteCart_addCampaign(id: $id, code: $code) {
     ... on QuoteCart {
       id
+      bundle {
+        possibleVariations {
+          id
+          bundle {
+            bundleCost {
+              ...BundleCostDataFragment
+            }
+          }
+        }
+      }
       campaign {
+        displayValue(locale: $locale)
         code
       }
     }
