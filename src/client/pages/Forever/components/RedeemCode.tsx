@@ -188,6 +188,7 @@ export const RedeemCode: React.FC<RedeemCodeProps> = ({
                   placeholder="7VEKCAG"
                   touched={touched.code}
                   errors={errors.code ? textKeys[errors.code]() : ''}
+                  data-cy="code-input"
                 />
               </CodeField>
             </Main>

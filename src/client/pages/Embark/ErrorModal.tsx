@@ -2,15 +2,31 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { useHistory } from 'react-router'
 import ReactMarkdown from 'react-markdown/with-html'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { ModalProps } from 'components/ModalNew'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { Button } from 'components/buttons'
 import { useTextKeys } from 'utils/textKeys'
 import { ErrorModal, ErrorHeading, ErrorText } from 'components/ErrorModal'
 
+const { gray900, white } = colorsV3
+
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: flex-start;
+  margin-top: 1rem;
+`
+
+const ButtonOutlined = styled(Button)`
+  border: 1px solid ${gray900};
+  background: ${white};
+  color: ${gray900};
+  margin-left: 0.875rem;
+
+  &:hover,
+  &:focus {
+    color: ${gray900};
+  }
 `
 
 type SetupFailedModalProps = Omit<ModalProps, 'onClose'> & {
@@ -36,9 +52,9 @@ export const SetupFailedModal = ({
         <Button onClick={() => onRetry()}>
           {textKeys.GENERIC_ERROR_ACTION_RETRY()}
         </Button>
-        <Button onClick={goToLandingPage}>
+        <ButtonOutlined onClick={goToLandingPage}>
           {textKeys.GENERIC_ERROR_ACTION()}
-        </Button>
+        </ButtonOutlined>
       </ButtonContainer>
     </ErrorModal>
   )
