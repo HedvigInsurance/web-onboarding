@@ -1,5 +1,7 @@
 import faker from '@faker-js/faker'
 
+const GRAPHQL_ENDPOINT = 'https://graphql.dev.hedvigit.com/graphql'
+
 export const getRandomBirthDateDK = () => {
   const pastDate = faker.date.between('1940-01-01', '1990-01-01')
   const date = String(pastDate.getDate()).padStart(2, '0')
@@ -37,8 +39,6 @@ const QUOTE_BUNDLE_MUTATION = /* GraphQL */ `
   }
 `
 
-const GRAPHQL_ENDPOINT = 'https://graphql.dev.hedvigit.com/graphql'
-
 type CreateQuoteBundleParams = {
   quoteCartId: string
   quotes: Array<any>
@@ -48,7 +48,6 @@ export const createQuoteBundle = ({
   quoteCartId,
   quotes,
 }: CreateQuoteBundleParams) => {
-  console.log(quotes)
   return cy.request('POST', GRAPHQL_ENDPOINT, {
     query: QUOTE_BUNDLE_MUTATION,
     variables: {
