@@ -2,13 +2,14 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { WarningTriangleOutlined } from './icons/WarningTriangle'
-import { Modal, ModalProps, ButtonWrapper } from './ModalNew'
+import { Modal, ModalProps } from './ModalNew'
+import { StyledCloseButton } from './CloseButton/CloseButton'
 
 type Props = ModalProps & {
   children: React.ReactNode
 }
 
-const Container = styled.div`
+const ErrorModalContainer = styled.div`
   padding: 3rem;
   padding-left: 5rem;
   position: relative;
@@ -58,20 +59,28 @@ export const ErrorText = styled.div`
   }
 `
 
-const CustomModal = styled(Modal)`
+const StyledErrorModal = styled(Modal)`
   && {
     overflow-x: auto;
     max-width: min(36rem, 100% - 2rem);
+    min-height: auto;
+  }
+
+  @media (max-width: 500px) {
+    ${StyledCloseButton} {
+      width: 1rem;
+      height: 1rem;
+    }
   }
 `
 
 export const ErrorModal = ({ isVisible, onClose, children }: Props) => (
-  <CustomModal isVisible={isVisible} onClose={onClose} dynamicHeight>
-    <Container>
+  <StyledErrorModal isVisible={isVisible} onClose={onClose} dynamicHeight>
+    <ErrorModalContainer>
       <WarningTriangleWrapper>
         <WarningTriangleOutlined />
       </WarningTriangleWrapper>
       {children}
-    </Container>
-  </CustomModal>
+    </ErrorModalContainer>
+  </StyledErrorModal>
 )

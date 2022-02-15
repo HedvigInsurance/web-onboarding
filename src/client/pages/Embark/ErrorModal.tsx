@@ -14,6 +14,7 @@ const { gray900, white } = colorsV3
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: flex-start;
+  flex-wrap: wrap;
   margin-top: 1rem;
 `
 
