@@ -35,9 +35,11 @@ enum QuoteBundleType {
   DanishHomeAccidentTravel = 'danish-home-accident-travel',
   NorwegianHome = 'norwegian-home',
   NorwegianTravel = 'norwegian-travel',
+  NorwegianHomeTravel = 'norwegian-home-travel',
   SwedishApartment = 'swedish-apartment',
   SwedishHouse = 'swedish-house',
   SwedishApartmentAccident = 'swedish-apartment-accident',
+  SwedishHouseAccident = 'swedish-house-accident',
 }
 
 enum QuoteType {
@@ -107,6 +109,11 @@ const quotesByMarket: QuotesByMarket = {
       value: QuoteBundleType.NorwegianTravel,
       initialFormValues: initialNoTravelValues,
     },
+    {
+      label: 'Norwegian Home + Travel',
+      value: QuoteBundleType.NorwegianHomeTravel,
+      initialFormValues: initialNoHomeValues,
+    },
   ],
   SE: [
     {
@@ -122,6 +129,10 @@ const quotesByMarket: QuotesByMarket = {
       label: 'Swedish Apartment + Accident',
       value: QuoteBundleType.SwedishApartmentAccident,
       initialFormValues: initialSeApartmentValues,
+    },
+    {
+      label: 'Swedish House + Accident',
+      value: QuoteBundleType.SwedishHouseAccident,
     },
   ],
 }
@@ -284,12 +295,46 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
             ],
           },
         })
+      } else if (quoteBundleType === QuoteBundleType.NorwegianHomeTravel) {
+        result = await createQuoteBundle({
+          variables: {
+            locale: isoLocale,
+            quoteCartId,
+            quotes: [
+              {
+                ...input,
+                data: {
+                  ...input.data,
+                  type: QuoteType.NorwegianHome,
+                },
+              },
+              {
+                ...input,
+                data: {
+                  ...input.data,
+                  type: QuoteType.NorwegianTravel,
+                },
+              },
+            ],
+          },
+        })
       } else if (quoteBundleType === QuoteBundleType.SwedishHouse) {
         result = await createQuoteBundle({
           variables: {
             locale: isoLocale,
             quoteCartId,
             quotes: [getSwedishHouseQuoteValues(input)],
+          },
+        })
+      } else if (quoteBundleType === QuoteBundleType.SwedishHouseAccident) {
+        result = await createQuoteBundle({
+          variables: {
+            locale: isoLocale,
+            quoteCartId,
+            quotes: [
+              getSwedishHouseQuoteValues(input),
+              getSwedishAccidentQuoteValues(input),
+            ],
           },
         })
       } else {
