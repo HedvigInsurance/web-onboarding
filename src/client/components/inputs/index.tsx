@@ -39,7 +39,7 @@ export const masks: Record<string, Mask> = {
   },
 }
 
-const Wrapper = styled.div<{
+export const Wrapper = styled.div<{
   errors?: string
   disabled?: boolean
 }>`
@@ -150,7 +150,7 @@ const HelperText = styled.div`
   }
 `
 
-const WrapperMask = styled.div<{
+export const WrapperMask = styled.div<{
   disabled?: boolean
   errors?: string | boolean
 }>`
