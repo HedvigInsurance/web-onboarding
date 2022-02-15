@@ -17,7 +17,6 @@ import { Price } from 'pages/OfferNew/common/price'
 import { PriceBreakdown } from 'pages/OfferNew/common/PriceBreakdown'
 
 import { useTextKeys } from 'utils/textKeys'
-import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { CampaignCode } from 'utils/campaignCode'
 
 import {
@@ -134,18 +133,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const { id: quoteCartId } = useParams<{ id: string }>()
   const textKeys = useTextKeys()
-  const { isoLocale: locale } = useCurrentLocale()
 
   const [campaignCodeModalIsOpen, setCampaignCodeModalIsOpen] = useState(false)
   const [isSidebarVisible, setIsSidebarVisible] = useState(true)
 
-  const [addCampaignCode] = useAddCampaignCodeMutation()
-  const [removeCampaignCode] = useRemoveCampaignCodeMutation()
+  const [addCampaignCode] = useAddCampaignCodeMutation({
+    refetchQueries: ['QuoteCart'],
+    awaitRefetchQueries: true,
+  })
+  const [removeCampaignCode] = useRemoveCampaignCodeMutation({
+    refetchQueries: ['QuoteCart'],
+    awaitRefetchQueries: true,
+  })
 
   const handleAddCampaignCode = useCallback(
     async (code: string) => {
       const { data: result } = await addCampaignCode({
-        variables: { id: quoteCartId, code, locale },
+        variables: { id: quoteCartId, code },
       })
       const hasError = result?.quoteCart_addCampaign.__typename === 'BasicError'
 
@@ -155,12 +159,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       return { hasError }
     },
-    [quoteCartId, addCampaignCode, locale],
+    [quoteCartId, addCampaignCode],
   )
 
   const handleRemoveCampaign = useCallback(async () => {
     const { data: result } = await removeCampaignCode({
-      variables: { quoteCartId, locale },
+      variables: { quoteCartId },
     })
     const hasError =
       result?.quoteCart_removeCampaign.__typename === 'BasicError'
@@ -168,7 +172,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     if (!hasError) {
       CampaignCode.remove()
     }
-  }, [quoteCartId, removeCampaignCode, locale])
+  }, [quoteCartId, removeCampaignCode])
 
   const showRemoveCampaignButton = campaign !== undefined
   const isDiscountPrice =

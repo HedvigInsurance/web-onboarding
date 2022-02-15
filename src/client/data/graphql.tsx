@@ -11494,34 +11494,12 @@ export type Welcome = {
 export type AddCampaignCodeMutationVariables = Exact<{
   id: Scalars['ID']
   code: Scalars['String']
-  locale: Locale
 }>
 
 export type AddCampaignCodeMutation = { __typename?: 'Mutation' } & {
   quoteCart_addCampaign:
     | ({ __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'> & {
-          bundle?: Maybe<
-            { __typename?: 'QuoteBundle' } & {
-              possibleVariations: Array<
-                { __typename?: 'QuoteBundleVariant' } & Pick<
-                  QuoteBundleVariant,
-                  'id'
-                > & {
-                    bundle: { __typename?: 'QuoteBundle' } & {
-                      bundleCost: {
-                        __typename?: 'InsuranceCost'
-                      } & BundleCostDataFragmentFragment
-                    }
-                  }
-              >
-            }
-          >
-          campaign?: Maybe<
-            { __typename?: 'Campaign' } & Pick<
-              Campaign,
-              'displayValue' | 'code'
-            >
-          >
+          campaign?: Maybe<{ __typename?: 'Campaign' } & Pick<Campaign, 'code'>>
         })
     | ({ __typename?: 'BasicError' } & { errorMessage: BasicError['message'] })
 }
@@ -12344,35 +12322,11 @@ export type ReferrerNameQuery = { __typename?: 'Query' } & {
 
 export type RemoveCampaignCodeMutationVariables = Exact<{
   quoteCartId: Scalars['ID']
-  locale: Locale
 }>
 
 export type RemoveCampaignCodeMutation = { __typename?: 'Mutation' } & {
   quoteCart_removeCampaign:
-    | ({ __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'> & {
-          bundle?: Maybe<
-            { __typename?: 'QuoteBundle' } & {
-              possibleVariations: Array<
-                { __typename?: 'QuoteBundleVariant' } & Pick<
-                  QuoteBundleVariant,
-                  'id'
-                > & {
-                    bundle: { __typename?: 'QuoteBundle' } & {
-                      bundleCost: {
-                        __typename?: 'InsuranceCost'
-                      } & BundleCostDataFragmentFragment
-                    }
-                  }
-              >
-            }
-          >
-          campaign?: Maybe<
-            { __typename?: 'Campaign' } & Pick<
-              Campaign,
-              'displayValue' | 'code'
-            >
-          >
-        })
+    | { __typename?: 'QuoteCart' }
     | ({ __typename?: 'BasicError' } & { errorMessage: BasicError['message'] })
 }
 
@@ -12960,22 +12914,11 @@ export const QuoteDataFragmentFragmentDoc = gql`
   }
 `
 export const AddCampaignCodeDocument = gql`
-  mutation AddCampaignCode($id: ID!, $code: String!, $locale: Locale!) {
+  mutation AddCampaignCode($id: ID!, $code: String!) {
     quoteCart_addCampaign(id: $id, code: $code) {
       ... on QuoteCart {
         id
-        bundle {
-          possibleVariations {
-            id
-            bundle {
-              bundleCost {
-                ...BundleCostDataFragment
-              }
-            }
-          }
-        }
         campaign {
-          displayValue(locale: $locale)
           code
         }
       }
@@ -12984,7 +12927,6 @@ export const AddCampaignCodeDocument = gql`
       }
     }
   }
-  ${BundleCostDataFragmentFragmentDoc}
 `
 export type AddCampaignCodeMutationFn = ApolloReactCommon.MutationFunction<
   AddCampaignCodeMutation,
@@ -13006,7 +12948,6 @@ export type AddCampaignCodeMutationFn = ApolloReactCommon.MutationFunction<
  *   variables: {
  *      id: // value for 'id'
  *      code: // value for 'code'
- *      locale: // value for 'locale'
  *   },
  * });
  */
@@ -14755,31 +14696,13 @@ export type ReferrerNameQueryResult = ApolloReactCommon.QueryResult<
   ReferrerNameQueryVariables
 >
 export const RemoveCampaignCodeDocument = gql`
-  mutation RemoveCampaignCode($quoteCartId: ID!, $locale: Locale!) {
+  mutation RemoveCampaignCode($quoteCartId: ID!) {
     quoteCart_removeCampaign(id: $quoteCartId) {
-      ... on QuoteCart {
-        id
-        bundle {
-          possibleVariations {
-            id
-            bundle {
-              bundleCost {
-                ...BundleCostDataFragment
-              }
-            }
-          }
-        }
-        campaign {
-          displayValue(locale: $locale)
-          code
-        }
-      }
       ... on BasicError {
         errorMessage: message
       }
     }
   }
-  ${BundleCostDataFragmentFragmentDoc}
 `
 export type RemoveCampaignCodeMutationFn = ApolloReactCommon.MutationFunction<
   RemoveCampaignCodeMutation,
@@ -14800,7 +14723,6 @@ export type RemoveCampaignCodeMutationFn = ApolloReactCommon.MutationFunction<
  * const [removeCampaignCodeMutation, { data, loading, error }] = useRemoveCampaignCodeMutation({
  *   variables: {
  *      quoteCartId: // value for 'quoteCartId'
- *      locale: // value for 'locale'
  *   },
  * });
  */
