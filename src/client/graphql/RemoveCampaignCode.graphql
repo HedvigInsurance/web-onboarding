@@ -1,4 +1,4 @@
-mutation RemoveCampaignCode($quoteCartId: ID!, , $locale: Locale!) {
+mutation RemoveCampaignCode($quoteCartId: ID!, $locale: Locale!) {
   quoteCart_removeCampaign(id: $quoteCartId) {
     ... on QuoteCart {
       id

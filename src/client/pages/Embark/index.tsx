@@ -238,6 +238,7 @@ interface AngelVariables {
 }
 
 const useCreateQuoteCartId = ({ skip = false }) => {
+  const { isoLocale: locale } = useCurrentLocale()
   const [createQuoteCartMutation, { data, error }] = useCreateQuoteCart()
 
   const [addCampaignCode] = useAddCampaignCodeMutation()
@@ -253,6 +254,7 @@ const useCreateQuoteCartId = ({ skip = false }) => {
           variables: {
             id: quoteCartId,
             code: savedCampaignCode,
+            locale,
           },
         })
       } catch {
