@@ -27,6 +27,18 @@ const ButtonOutlined = styled(Button)`
   &:focus {
     color: ${gray900};
   }
+
+  @media (max-width: 500px) {
+    font-size: 0.875rem;
+    padding: 0.375rem 0.75rem;
+  }
+`
+
+const ButtonFilled = styled(Button)`
+  @media (max-width: 500px) {
+    font-size: 0.875rem;
+    padding: 0.375rem 0.75rem;
+  }
 `
 
 type SetupFailedModalProps = Omit<ModalProps, 'onClose'> & {
@@ -49,9 +61,9 @@ export const SetupFailedModal = ({
         <ReactMarkdown source={textKeys.GENERIC_ERROR_TEXT()} />
       </ErrorText>
       <ButtonContainer>
-        <Button onClick={() => onRetry()}>
+        <ButtonFilled onClick={() => onRetry()}>
           {textKeys.GENERIC_ERROR_ACTION_RETRY()}
-        </Button>
+        </ButtonFilled>
         <ButtonOutlined onClick={goToLandingPage}>
           {textKeys.GENERIC_ERROR_ACTION()}
         </ButtonOutlined>

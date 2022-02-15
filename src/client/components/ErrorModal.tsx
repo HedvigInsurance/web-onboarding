@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { WarningTriangle } from './icons/WarningTriangle'
-import { Modal, ModalProps } from './ModalNew'
+import { WarningTriangleOutlined } from './icons/WarningTriangle'
+import { Modal, ModalProps, ButtonWrapper } from './ModalNew'
 
 type Props = ModalProps & {
   children: React.ReactNode
@@ -12,12 +12,25 @@ const Container = styled.div`
   padding: 3rem;
   padding-left: 5rem;
   position: relative;
+
+  @media (max-width: 500px) {
+    padding: 2rem 1rem 1rem 3rem;
+  }
 `
 
 const WarningTriangleWrapper = styled.div`
   position: absolute;
   left: 2.5rem;
   top: 3.25rem;
+
+  svg {
+    fill: ;
+  }
+
+  @media (max-width: 500px) {
+    left: 1rem;
+    top: 2.25rem;
+  }
 `
 
 export const ErrorHeading = styled.h2`
@@ -25,6 +38,10 @@ export const ErrorHeading = styled.h2`
   margin: 0;
   margin-bottom: 0.5rem;
   line-height: 2rem;
+
+  @media (max-width: 500px) {
+    font-size: 1.25rem;
+  }
 `
 
 export const ErrorText = styled.div`
@@ -34,6 +51,10 @@ export const ErrorText = styled.div`
   // Prevent setting unintended margin on markdown children
   p {
     margin: 0;
+  }
+
+  @media (max-width: 500px) {
+    font-size: 0.875rem;
   }
 `
 
@@ -48,7 +69,7 @@ export const ErrorModal = ({ isVisible, onClose, children }: Props) => (
   <CustomModal isVisible={isVisible} onClose={onClose} dynamicHeight>
     <Container>
       <WarningTriangleWrapper>
-        <WarningTriangle />
+        <WarningTriangleOutlined />
       </WarningTriangleWrapper>
       {children}
     </Container>
