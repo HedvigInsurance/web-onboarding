@@ -35,6 +35,7 @@ enum QuoteBundleType {
   DanishHomeAccidentTravel = 'danish-home-accident-travel',
   NorwegianHome = 'norwegian-home',
   NorwegianTravel = 'norwegian-travel',
+  NorwegianHomeTravel = 'norwegian-home-travel',
   SwedishApartment = 'swedish-apartment',
   SwedishHouse = 'swedish-house',
   SwedishApartmentAccident = 'swedish-apartment-accident',
@@ -107,6 +108,11 @@ const quotesByMarket: QuotesByMarket = {
       label: 'Norwegian Travel',
       value: QuoteBundleType.NorwegianTravel,
       initialFormValues: initialNoTravelValues,
+    },
+    {
+      label: 'Norwegian Home + Travel',
+      value: QuoteBundleType.NorwegianHomeTravel,
+      initialFormValues: initialNoHomeValues,
     },
   ],
   SE: [
@@ -284,6 +290,29 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
                 data: {
                   ...input.data,
                   type: QuoteType.DanishTravel,
+                },
+              },
+            ],
+          },
+        })
+      } else if (quoteBundleType === QuoteBundleType.NorwegianHomeTravel) {
+        result = await createQuoteBundle({
+          variables: {
+            locale: isoLocale,
+            quoteCartId,
+            quotes: [
+              {
+                ...input,
+                data: {
+                  ...input.data,
+                  type: QuoteType.NorwegianHome,
+                },
+              },
+              {
+                ...input,
+                data: {
+                  ...input.data,
+                  type: QuoteType.NorwegianTravel,
                 },
               },
             ],
