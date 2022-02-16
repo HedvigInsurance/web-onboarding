@@ -9,37 +9,37 @@ import {
 } from 'utils/testData/offerDataMock'
 import {
   getBundleAdtractionProductValue,
-  adtractionContractValues,
+  ADTRACTION_CONTRACT_VALUES,
 } from './adtraction'
 
 describe('getBundleAdtractionProductValue', () => {
   it('returns correct swedish adTraction Product', () => {
     expect(getBundleAdtractionProductValue(seApartementBrf)).toBe(
-      adtractionContractValues.SE_APARTMENT_BRF,
+      ADTRACTION_CONTRACT_VALUES.SE_APARTMENT_BRF,
     )
     expect(getBundleAdtractionProductValue(seApartmentBrfAccident)).toBe(
-      adtractionContractValues.SE_ACCIDENT_BUNDLE_BRF,
+      ADTRACTION_CONTRACT_VALUES.SE_ACCIDENT_BUNDLE_BRF,
     )
   })
 
   it('returns correct no adTraction Product', () => {
     expect(getBundleAdtractionProductValue(noCombo)).toBe(
-      adtractionContractValues.NO_COMBO,
+      ADTRACTION_CONTRACT_VALUES.NO_COMBO,
     )
     expect(getBundleAdtractionProductValue(noComboYouth)).toBe(
-      adtractionContractValues.NO_COMBO_YOUTH,
+      ADTRACTION_CONTRACT_VALUES.NO_COMBO_YOUTH,
     )
     expect(getBundleAdtractionProductValue(noTravel)).toBe(
-      adtractionContractValues.NO_TRAVEL,
+      ADTRACTION_CONTRACT_VALUES.NO_TRAVEL,
     )
   })
 
   it('returns correct danish adTraction Product', () => {
     expect(getBundleAdtractionProductValue(dkHomeContentOwn)).toBe(
-      adtractionContractValues.DK_HOME_CONTENT_OWN,
+      ADTRACTION_CONTRACT_VALUES.DK_HOME_CONTENT_OWN,
     )
     expect(getBundleAdtractionProductValue(dkHomeContentAccidentTravel)).toBe(
-      adtractionContractValues.DK_TRAVEL_BUNDLE,
+      ADTRACTION_CONTRACT_VALUES.DK_TRAVEL_BUNDLE,
     )
   })
 })

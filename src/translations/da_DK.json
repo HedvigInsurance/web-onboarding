@@ -298,7 +298,7 @@
   "CHECKOUT_CREDIT_CHECK_INFO_HEADER": "",
   "CHECKOUT_CREDIT_CHECK_INFO_CONTENT": "",
   "CHECKOUT_SIGN_FAIL_HEADER": "",
-  "CHECKOUT_SIGN_FAIL_CONTENT": "",
+  "CHECKOUT_SIGN_FAIL_MANUAL_REVIEW": "",
   "OFFER_BUNDLE_SELECTOR_TITLE": "Din forsikringspakke",
   "OFFER_BUNDLE_SELECTOR_DESCRIPTION": "",
   "OFFER_APP_PROMOTION_HEADING": "En forsikrings-app, der løser alle dine problemer",
@@ -346,5 +346,9 @@
   "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_TOOLTIP": "Vi vil gerne hjælpe til med at opsige din nuværende {INSURANCE_NAME} for dig. Din nye forsikring hos Hedvig træder i kraft, samtidig med at den gamle ophører. Du modtager en mail med mere information.",
   "CHECKOUT_FOOTER_CANCELLATION_INFO": "Ingen bindingstid",
   "CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT": "Fortsæt til betaling",
-  "CHECKOUT_FOOTER_COMPLETE_PURCHASE": "Gennemfør køb"
+  "CHECKOUT_FOOTER_COMPLETE_PURCHASE": "Gennemfør køb",
+  "CHECKOUT_DETAILS_PAGE_TITLE": "Checkout | Hedvig",
+  "CHECKOUT_PAYMENT_PAGE_TITLE": "Betaling | Hedvig",
+  "CHECKOUT_QUOTE_DETAILS_TITLE": "Opsummering",
+  "CHECKOUT_YOUR_PLAN_TITLE": ""
 }

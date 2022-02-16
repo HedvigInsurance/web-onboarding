@@ -176,9 +176,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const showRemoveCampaignButton = campaign !== undefined
   const isDiscountPrice =
-    campaign?.incentive?.__typename === 'MonthlyCostDeduction' ||
-    campaign?.incentive?.__typename === 'PercentageDiscountMonths' ||
-    isNorwegianBundle(offerData)
+    offerData.cost.monthlyGross.amount !== offerData.cost.monthlyNet.amount
 
   return (
     <>
@@ -201,12 +199,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <Body>
                 <PriceBreakdown offerData={offerData} />
                 <BodyTitle>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}</BodyTitle>
-                <StartDate
-                  quoteCartId={quoteCartId}
-                  offerData={offerData}
-                  modal
-                  size="sm"
-                />
+                <StartDate quoteCartId={quoteCartId} modal size="sm" />
               </Body>
               <Footer>
                 <Button

@@ -31,17 +31,17 @@ import { CloseButton } from 'components/CloseButton/CloseButton'
 import { CampaignBadge } from 'components/CampaignBadge/CampaignBadge'
 import { DiscountTag } from 'components/DiscountTag/DiscountTag'
 import { setupQuoteCartSession } from 'containers/SessionContainer'
-import { trackSignedEvent } from 'utils/tracking/tracking'
 import { useVariation } from 'utils/hooks/useVariation'
 import { StartDate } from 'pages/Offer/Introduction/Sidebar/StartDate'
 import { useScrollLock, VisibilityState } from 'pages/OfferNew/Checkout/hooks'
-import { InsuranceSummary } from 'pages/OfferNew/Checkout/InsuranceSummary'
 import { UpsellCard } from 'pages/OfferNew/Checkout/UpsellCard'
 import { OfferData } from 'pages/OfferNew/types'
 import { SignFailModal } from 'pages/OfferNew/Checkout/SignFailModal/SignFailModal'
 import { LimitCode } from 'api/quoteBundleErrorSelectors'
+import { trackSignedCustomerEvent } from 'utils/tracking/trackSignedCustomerEvent'
 import { QuoteInput } from '../Introduction/DetailsModal/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
+import { InsuranceSummary } from './InsuranceSummary'
 import {
   CheckoutDetailsForm,
   getCheckoutDetailsValidationSchema,
@@ -49,7 +49,7 @@ import {
 import { Sign } from './Sign'
 import { SignDisclaimer } from './SignDisclaimer'
 
-export type SignUiState = 'NOT_STARTED' | 'STARTED' | 'FAILED'
+export type SignUiState = 'NOT_STARTED' | 'STARTED' | 'FAILED' | 'MANUAL_REVIEW'
 
 type Openable = {
   visibilityState: VisibilityState
@@ -178,7 +178,7 @@ const Backdrop = styled('div')<Openable>`
   }};
 `
 
-const isManualReviewRequired = (errors: GraphQLError[]) => {
+const checkIsManualReviewRequired = (errors: GraphQLError[]) => {
   const manualReviewRequiredError = errors.find((error) => {
     return error?.extensions?.body?.errorCode === 'MANUAL_REVIEW_REQUIRED'
   })
@@ -265,6 +265,7 @@ export const Checkout = ({
     checkoutStatusData?.quoteCart.checkout || {}
 
   const [isShowingFailModal, setIsShowingFailModal] = useState(false)
+  const [isManualReviewRequired, setIsManualReviewRequired] = useState(false)
   const [startCheckout] = useStartCheckoutMutation()
   const [
     createQuoteBundle,
@@ -365,12 +366,12 @@ export const Checkout = ({
         },
         storage,
       })
-      trackSignedEvent({
+      trackSignedCustomerEvent({
         variation,
         campaignCode,
         isDiscountMonthlyCostDeduction,
         memberId,
-        offerData,
+        bundle: selectedQuoteBundleVariant.bundle,
         quoteCartId,
       })
     } catch (error) {
@@ -381,7 +382,7 @@ export const Checkout = ({
     campaignCode,
     client,
     isDiscountMonthlyCostDeduction,
-    offerData,
+    selectedQuoteBundleVariant.bundle,
     quoteCartId,
     storage,
     variation,
@@ -422,10 +423,14 @@ export const Checkout = ({
         return
       }
     } catch (error) {
-      if (
-        !isManualReviewRequired((error.graphQLErrors || []) as GraphQLError[])
-      ) {
+      const isManualReviewRequired = checkIsManualReviewRequired(
+        (error.graphQLErrors || []) as GraphQLError[],
+      )
+      if (isManualReviewRequired) {
+        setIsManualReviewRequired(isManualReviewRequired)
         setIsShowingFailModal(true)
+        setSignUiState('MANUAL_REVIEW')
+        return
       }
 
       setSignUiState('FAILED')
@@ -507,7 +512,7 @@ export const Checkout = ({
                 <StartDateLabel>
                   {textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}
                 </StartDateLabel>
-                <StartDate quoteCartId={quoteCartId} offerData={offerData} />
+                <StartDate quoteCartId={quoteCartId} />
               </StartDateWrapper>
               {isUpsellCardVisible && (
                 <UpsellCard
@@ -539,6 +544,7 @@ export const Checkout = ({
       <SignFailModal
         isVisible={isShowingFailModal}
         onClose={() => setIsShowingFailModal(false)}
+        isManualReviewRequired={isManualReviewRequired}
       />
     </>
   )
