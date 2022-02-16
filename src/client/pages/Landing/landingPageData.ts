@@ -27,59 +27,60 @@ type ProductData = {
 
 type ProductsData = Record<Market, ProductData>
 
-export const getProductsData = (): ProductsData => ({
-  SE: [
-    {
-      id: 'swedishNew',
-      linkSlug: checkFeature(Feature.QUOTE_CART_API)
-        ? '/home-accident-needer'
-        : '/new',
-      headline: 'STARTPAGE_UNINSURED_HEADLINE',
-      paragraph: 'STARTPAGE_UNINSURED_BODY',
-    },
-    {
-      id: 'swedishSwitch',
-      linkSlug: '/switch',
-      headline: 'STARTPAGE_INSURED_HEADLINE',
-      paragraph: 'STARTPAGE_INSURED_BODY',
-      badge: 'STARTPAGE_SE_INSURED_BADGE',
-    },
-  ],
-  NO: [
-    {
-      id: 'norwegianHomeTravel',
-      linkSlug: '/home-travel',
-      headline: 'STARTPAGE_COMBO_HEADLINE',
-      paragraph: 'STARTPAGE_COMBO_BODY',
-      badge: 'STARTPAGE_COMBO_DISCOUNT_TEXT',
-    },
-    {
-      id: 'norwegianHome',
-      linkSlug: '/home',
-      headline: 'STARTPAGE_CONTENTS_HEADLINE',
-      paragraph: 'STARTPAGE_CONTENTS_BODY',
-    },
-  ],
-  DK: [
-    {
-      id: 'danishContents',
-      linkSlug: '/home',
-      headline: 'STARTPAGE_DK_CONTENTS_HEADLINE',
-      paragraph: 'STARTPAGE_DK_CONTENTS_BODY',
-    },
-    {
-      id: 'danishContentsAccident',
-      linkSlug: '/home-accident',
-      headline: 'STARTPAGE_DK_CONTENTS_ACCIDENT_HEADLINE',
-      paragraph: 'STARTPAGE_DK_CONTENTS_ACCIDENT_BODY',
-      badge: 'STARTPAGE_DK_CONTENTS_ACCIDENT_BADGE',
-    },
-    {
-      id: 'danishContentsAccidentTravel',
-      linkSlug: '/home-accident-travel',
-      headline: 'STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_HEADLINE',
-      paragraph: 'STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_BODY',
-      badge: 'STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_BADGE',
-    },
-  ],
-})
+export const getProductsData = (): ProductsData => {
+  const isQuoteCartEnabled = checkFeature(Feature.QUOTE_CART_API)
+  return {
+    SE: [
+      {
+        id: 'swedishNew',
+        linkSlug: isQuoteCartEnabled ? '/home-accident-needer' : '/new',
+        headline: 'STARTPAGE_UNINSURED_HEADLINE',
+        paragraph: 'STARTPAGE_UNINSURED_BODY',
+      },
+      {
+        id: 'swedishSwitch',
+        linkSlug: '/switch',
+        headline: 'STARTPAGE_INSURED_HEADLINE',
+        paragraph: 'STARTPAGE_INSURED_BODY',
+        badge: 'STARTPAGE_SE_INSURED_BADGE',
+      },
+    ],
+    NO: [
+      {
+        id: 'norwegianCombo',
+        linkSlug: isQuoteCartEnabled ? '/home-travel' : '/combo',
+        headline: 'STARTPAGE_COMBO_HEADLINE',
+        paragraph: 'STARTPAGE_COMBO_BODY',
+        badge: 'STARTPAGE_COMBO_DISCOUNT_TEXT',
+      },
+      {
+        id: 'norwegianContents',
+        linkSlug: isQuoteCartEnabled ? '/home' : '/contents',
+        headline: 'STARTPAGE_CONTENTS_HEADLINE',
+        paragraph: 'STARTPAGE_CONTENTS_BODY',
+      },
+    ],
+    DK: [
+      {
+        id: 'danishContents',
+        linkSlug: '/home',
+        headline: 'STARTPAGE_DK_CONTENTS_HEADLINE',
+        paragraph: 'STARTPAGE_DK_CONTENTS_BODY',
+      },
+      {
+        id: 'danishContentsAccident',
+        linkSlug: '/home-accident',
+        headline: 'STARTPAGE_DK_CONTENTS_ACCIDENT_HEADLINE',
+        paragraph: 'STARTPAGE_DK_CONTENTS_ACCIDENT_BODY',
+        badge: 'STARTPAGE_DK_CONTENTS_ACCIDENT_BADGE',
+      },
+      {
+        id: 'danishContentsAccidentTravel',
+        linkSlug: '/home-accident-travel',
+        headline: 'STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_HEADLINE',
+        paragraph: 'STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_BODY',
+        badge: 'STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_BADGE',
+      },
+    ],
+  }
+}
