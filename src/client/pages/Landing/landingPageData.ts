@@ -47,15 +47,15 @@ export const getProductsData = (): ProductsData => ({
   ],
   NO: [
     {
-      id: 'norwegianCombo',
-      linkSlug: '/combo',
+      id: 'norwegianHomeTravel',
+      linkSlug: '/home-travel',
       headline: 'STARTPAGE_COMBO_HEADLINE',
       paragraph: 'STARTPAGE_COMBO_BODY',
       badge: 'STARTPAGE_COMBO_DISCOUNT_TEXT',
     },
     {
-      id: 'norwegianContents',
-      linkSlug: '/contents',
+      id: 'norwegianHome',
+      linkSlug: '/home',
       headline: 'STARTPAGE_CONTENTS_HEADLINE',
       paragraph: 'STARTPAGE_CONTENTS_BODY',
     },
