@@ -143,7 +143,7 @@ const DateInputModalWrapper = styled.div<{
 `
 
 const getDefaultDateValue = (
-  startDate: string,
+  startDate: string | null,
   currentInsurer?: CurrentInsurer,
 ) => {
   if (startDate) {
@@ -164,7 +164,7 @@ const getDateFormat = match<MarketLabel, string>([
 ])
 
 type DateFormProps = {
-  startDate: any
+  startDate: string | null
   currentInsurer?: CurrentInsurer
   dataCollectionId?: string
   quoteDisplayName: string

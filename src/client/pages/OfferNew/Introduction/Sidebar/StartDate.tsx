@@ -165,7 +165,6 @@ type DateFormProps = {
   isSplit: boolean
   setShowError: (showError: boolean) => void
   modal?: boolean
-  disabled?: boolean
   refetch: () => Promise<void>
   size: Size
 }
@@ -177,7 +176,6 @@ const DateForm = ({
   isSplit,
   setShowError,
   modal,
-  disabled,
   refetch,
   size,
 }: DateFormProps) => {
@@ -296,7 +294,7 @@ const DateForm = ({
     <RowButtonWrapper isSplit={isSplit}>
       {isSplit && <StartDateRowLabel>{quote.displayName}</StartDateRowLabel>}
       <RowButton
-        disabled={disabled}
+        disabled={Boolean(quote.currentInsurer && !quote.startDate)}
         datePickerOpen={datePickerOpen}
         onClick={() => setDatePickerOpen(!datePickerOpen)}
         isSplit={isSplit}
@@ -379,7 +377,6 @@ export const StartDate: React.FC<Props> = ({
         {isSingleStartDateBundle(offerData) ? (
           <DateForm
             key={offerData.quotes[0].id}
-            disabled={!offerData.quotes[0].startDate}
             quote={offerData.quotes[0]}
             offerData={offerData}
             setShowError={setShowError}
@@ -394,7 +391,6 @@ export const StartDate: React.FC<Props> = ({
             {offerData.quotes.map((quote) => (
               <DateForm
                 key={quote.id}
-                disabled={!quote.startDate}
                 quote={quote}
                 setShowError={setShowError}
                 modal={modal}
