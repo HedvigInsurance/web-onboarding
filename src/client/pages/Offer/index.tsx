@@ -36,6 +36,7 @@ import { FaqSection } from '../OfferNew/FaqSection'
 import { Perils } from '../OfferNew/Perils'
 import { InsuranceSelector } from '../OfferNew/InsuranceSelector'
 import { SetupFailedModal } from '../Embark/ErrorModal'
+import { apolloClient as realApolloClient } from '../../apolloClient'
 import { Introduction } from './Introduction'
 import { Checkout } from './Checkout'
 import { PageWrapper } from './PageWrapper'
@@ -90,6 +91,13 @@ export const OfferPage = ({
   ] = useSelectedInsuranceTypes()
 
   const history = useHistory()
+
+  useEffect(() => {
+    // clean up existing auth tokens
+    if (realApolloClient) {
+      realApolloClient.httpLink.options.headers.authorization = undefined
+    }
+  }, [])
 
   const {
     data: quoteCartQueryData,
