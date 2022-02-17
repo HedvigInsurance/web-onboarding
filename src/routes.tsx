@@ -318,7 +318,6 @@ export const routes: Route[] = [
                         : EmbarkStory.NorwayComboEnglish,
                   }
                 case 'home':
-                  if (isProductionEnvironment) return landingPageRedirect
                   return {
                     baseUrl,
                     name:
@@ -328,7 +327,6 @@ export const routes: Route[] = [
                     quoteCart: true,
                   }
                 case 'home-travel':
-                  if (isProductionEnvironment) return landingPageRedirect
                   return {
                     baseUrl,
                     name:
