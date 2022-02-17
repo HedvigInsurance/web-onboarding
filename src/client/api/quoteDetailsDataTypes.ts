@@ -27,8 +27,8 @@ type QuoteDataSeHouse = QuoteDataHome &
     ancillaryArea: number
     yearOfConstruction: number
     numberOfBathrooms: number
-    extraBuildings: ExtraBuilding[]
     isSubleted: boolean
+    extraBuildings?: ExtraBuilding[]
   }
 
 type QuoteDataSeAccident = QuoteDataCommon & StudentData
