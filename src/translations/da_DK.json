@@ -347,7 +347,11 @@
   "CHECKOUT_FOOTER_CANCELLATION_INFO": "Ingen bindingstid",
   "CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT": "Fortsæt til betaling",
   "CHECKOUT_FOOTER_COMPLETE_PURCHASE": "Gennemfør køb",
-  "CHECKOUT_DETAILS_PAGE_TITLE": "Kasse | Hedvig",
+  "CHECKOUT_DETAILS_PAGE_TITLE": "Checkout | Hedvig",
   "CHECKOUT_PAYMENT_PAGE_TITLE": "Betaling | Hedvig",
-  "CHECKOUT_QUOTE_DETAILS_TITLE": "Opsummering"
+  "CHECKOUT_QUOTE_DETAILS_TITLE": "Opsummering",
+  "CHECKOUT_INSURANCE_TITLE": "Forsikring",
+  "CHECKOUT_PAYMENT_DETAILS_TITLE": "Betalingsmetode",
+  "CHECKOUT_PAYMENT_DETAILS_DESCRIPTION": "Din betaling bliver trukket fra dit betalingskort sidst på måneden. Vi håndterer alle betalinger sikkert med Adyen.",
+  "CHECKOUT_PAYMENT_DETAILS_TERMS": "Ved at klikke på “Gennemfør køb” bekræfter jeg, at jeg har læst og forstået vilkårene, og giver samtidig Hedvig tilladelse til at håndtere mine personoplysninger."
 }

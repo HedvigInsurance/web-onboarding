@@ -349,5 +349,9 @@
   "CHECKOUT_FOOTER_COMPLETE_PURCHASE": "Genomför köp",
   "CHECKOUT_DETAILS_PAGE_TITLE": "Kassa | Hedvig",
   "CHECKOUT_PAYMENT_PAGE_TITLE": "Betalning | Hedvig",
-  "CHECKOUT_QUOTE_DETAILS_TITLE": "Sammanfattning"
+  "CHECKOUT_QUOTE_DETAILS_TITLE": "Sammanfattning",
+  "CHECKOUT_INSURANCE_TITLE": "Försäkring",
+  "CHECKOUT_PAYMENT_DETAILS_TITLE": "Betalningssätt",
+  "CHECKOUT_PAYMENT_DETAILS_DESCRIPTION": "Din betalning dras från ditt kreditkort i slutet av varje månad. Vi hanterar alla betalningar säkert via Adyen.",
+  "CHECKOUT_PAYMENT_DETAILS_TERMS": "Genom att klicka på \"Genomför köp\" bekräftar jag att jag har läst och förstått villkoren samt godkänner att Hedvig hanterar min personliga information."
 }

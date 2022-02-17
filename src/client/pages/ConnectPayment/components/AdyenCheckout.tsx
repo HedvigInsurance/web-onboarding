@@ -19,7 +19,7 @@ import {
 } from 'data/graphql'
 import { SpinnerWrapper } from './Spinner'
 
-const Wrapper = styled('div')`
+export const Wrapper = styled('div')`
   position: relative;
   width: 100%;
   max-width: 440px;
