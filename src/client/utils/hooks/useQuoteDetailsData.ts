@@ -19,11 +19,11 @@ export const useQuoteDetailsData = () => {
   const quoteDetailsData: QuoteDetailsData = quotes.map(({ data }) => {
     const {
       id,
+      typeOfContract,
+      numberCoInsured,
       street,
       zipCode,
-      numberCoInsured,
       livingSpace,
-      typeOfContract,
       isStudent,
       isYouth,
     } = data
@@ -32,11 +32,11 @@ export const useQuoteDetailsData = () => {
       id,
       typeOfContract,
       numberCoInsured,
-      ...('isYouth' in data && { isYouth }),
-      ...('isStudent' in data && { isStudent }),
       ...(street && { street }),
       ...(zipCode && { zipCode }),
       ...(livingSpace && { livingSpace }),
+      ...('isStudent' in data && { isStudent }),
+      ...('isYouth' in data && { isYouth }),
     }
   })
 
