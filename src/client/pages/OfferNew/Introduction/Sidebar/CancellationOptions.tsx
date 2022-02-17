@@ -13,12 +13,12 @@ const HandleSwitchingWrapper = styled.div`
   padding: 0 0.25rem;
 `
 
-const HandleSwitchingLabel = styled.label<{ isEnable: boolean }>`
+const HandleSwitchingLabel = styled.label<{ isDisabled: boolean }>`
   display: flex;
   align-items: center;
 
   &:hover {
-    cursor: ${({ isEnable }) => (isEnable ? 'pointer' : 'not-allowed')};
+    cursor: ${({ isDisabled }) => (isDisabled ? 'initial' : 'pointer')};
   }
 `
 
@@ -127,7 +127,7 @@ const QuoteCancellationOption: React.FC<QuoteCancellationOptionProps> = ({
 
   return (
     <HandleSwitchingWrapper>
-      <HandleSwitchingLabel isEnable={!isLoading}>
+      <HandleSwitchingLabel isDisabled={isLoading}>
         {isLoading ? (
           <StyledSpinner />
         ) : (
