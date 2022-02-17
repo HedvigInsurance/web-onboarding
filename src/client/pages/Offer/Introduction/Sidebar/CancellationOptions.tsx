@@ -10,12 +10,12 @@ const HandleSwitchingWrapper = styled.div`
   padding: 0 0.25rem;
 `
 
-const HandleSwitchingLabel = styled.label<{ isClickable: boolean }>`
+const HandleSwitchingLabel = styled.label<{ isEnabled: boolean }>`
   display: flex;
   align-items: center;
 
   &:hover {
-    cursor: ${({ isClickable }) => (isClickable ? 'pointer' : 'initial')};
+    cursor: ${({ isEnabled }) => (isEnabled ? 'pointer' : 'not-allowed')};
   }
 `
 
@@ -68,12 +68,13 @@ export const CancellationOptions = ({
         return (
           currentInsurer?.switchable && (
             <HandleSwitchingWrapper key={id}>
-              <HandleSwitchingLabel isClickable={isDisabled}>
+              <HandleSwitchingLabel isEnabled={!isDisabled}>
                 {isLoading ? (
                   <StyledSpinner />
                 ) : (
                   <StyledSwitch
                     checked={isChecked}
+                    disabled={isDisabled}
                     onChange={() => onToggleCancellationOption(!isChecked, id)}
                   />
                 )}
