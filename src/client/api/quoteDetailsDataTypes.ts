@@ -46,10 +46,17 @@ type QuoteDataDkTravel = QuoteDataCommon & StudentData
 export type QuoteDetails =
   | QuoteDataSeApartment
   | QuoteDataSeHouse
-  | QuoteDataSeApartment
   | QuoteDataSeAccident
   | QuoteDataNoHomeContents
   | QuoteDataNoTravel
   | QuoteDataDkHomeContents
   | QuoteDataDkAccident
   | QuoteDataDkTravel
+
+export type HomeQuoteDetails =
+  | QuoteDataSeApartment
+  | QuoteDataSeHouse
+  | QuoteDataNoHomeContents
+  | QuoteDataDkHomeContents
+
+export type HouseQuoteDetails = QuoteDataSeHouse
