@@ -9,8 +9,9 @@ import { usePriceQuery } from 'data/graphql'
 import { Badge } from 'components/Badge/Badge'
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { SubSection } from '../SubSection'
+import { Divider } from '../../../shared/Divider'
 
-const { gray700, gray300 } = colorsV3
+const { gray700 } = colorsV3
 
 export const Row = styled.div`
   font-size: 0.875rem;
@@ -26,12 +27,6 @@ const Value = styled.div`
 `
 const Label = styled.div``
 
-const Total = styled.div`
-  border-top: 1px solid ${gray300};
-  margin: 0.5rem 0;
-  padding-top: 0.5rem;
-`
-
 const StyledBadge = styled(Badge)`
   max-width: 170px;
   white-space: nowrap;
@@ -40,6 +35,10 @@ const StyledBadge = styled(Badge)`
   ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
     overflow: auto;
     max-width: 100%;
+`
+
+const HorizontalDivider = styled(Divider)`
+  margin: 0.5rem 0;
 `
 
 export const YourPlan = () => {
@@ -74,8 +73,8 @@ export const YourPlan = () => {
   return (
     <SubSection headlineText={textKeys.CHECKOUT_INSURANCE_TITLE()}>
       <>
-        {quotes.map(({ displayName, price }, key) => (
-          <Row key={key}>
+        {quotes.map(({ displayName, price }) => (
+          <Row key={displayName}>
             <Label>{displayName}</Label>
             <Value>{formattedPrice(price.amount)}</Value>
           </Row>
@@ -88,13 +87,11 @@ export const YourPlan = () => {
           </Row>
         )}
       </>
-
-      <Total>
-        <Row>
-          <div>{textKeys.CHECKOUT_PRICE_TOTAL()}</div>
-          <Value>{formattedPrice(total)}</Value>
-        </Row>
-      </Total>
+      <HorizontalDivider />
+      <Row>
+        <div>{textKeys.CHECKOUT_PRICE_TOTAL()}</div>
+        <Value>{formattedPrice(total)}</Value>
+      </Row>
     </SubSection>
   )
 }
