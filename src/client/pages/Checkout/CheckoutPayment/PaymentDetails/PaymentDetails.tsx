@@ -1,7 +1,6 @@
 import React from 'react'
 import { colorsV3 } from '@hedviginsurance/brand'
 import styled from '@emotion/styled'
-// import { InputField, Wrapper } from 'components/inputs'
 import { useTextKeys } from 'utils/textKeys'
 import { Headline } from 'components/Headline/Headline'
 import {
