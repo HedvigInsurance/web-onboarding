@@ -3,6 +3,7 @@ query QuoteDetailsData($id: ID!) {
     id
     bundle {
       quotes {
+        id
         data
       }
     }

@@ -12227,7 +12227,7 @@ export type QuoteDetailsDataQuery = { __typename?: 'Query' } & {
       bundle?: Maybe<
         { __typename?: 'QuoteBundle' } & {
           quotes: Array<
-            { __typename?: 'BundledQuote' } & Pick<BundledQuote, 'data'>
+            { __typename?: 'BundledQuote' } & Pick<BundledQuote, 'id' | 'data'>
           >
         }
       >
@@ -14461,6 +14461,7 @@ export const QuoteDetailsDataDocument = gql`
       id
       bundle {
         quotes {
+          id
           data
         }
       }
