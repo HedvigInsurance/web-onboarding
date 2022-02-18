@@ -1,9 +1,15 @@
 import React from 'react'
-import { Story } from '@storybook/react'
-import { colorsV3 } from '@hedviginsurance/brand'
+import { Meta } from '@storybook/react'
+import { MemoryRouter } from 'react-router-dom'
+import { TextKeyProvider } from 'utils/textKeys'
+import { LocaleLabel } from 'l10n/locales'
+
 import { PaymentDetails } from './PaymentDetails'
 
-export default {
+type StoryProps = {
+  localePath: LocaleLabel
+}
+const storyMeta: Meta<StoryProps> = {
   title: 'Checkout Details/Payment Details',
   component: PaymentDetails,
   parameters: {
@@ -13,6 +19,12 @@ export default {
   },
 }
 
-const Template: Story = () => <PaymentDetails></PaymentDetails>
+export default storyMeta
 
-export const Default = Template.bind({})
+export const Default = () => (
+  <MemoryRouter initialEntries={['/no-en/new-member']}>
+    <TextKeyProvider locale="en_NO">
+      <PaymentDetails />
+    </TextKeyProvider>
+  </MemoryRouter>
+)

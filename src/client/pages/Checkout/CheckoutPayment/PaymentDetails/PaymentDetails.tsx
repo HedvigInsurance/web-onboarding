@@ -4,32 +4,11 @@ import styled from '@emotion/styled'
 // import { InputField, Wrapper } from 'components/inputs'
 import { useTextKeys } from 'utils/textKeys'
 import { Headline } from 'components/Headline/Headline'
-import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import {
   AdyenCheckout,
   Wrapper,
 } from '../../../ConnectPayment/components/AdyenCheckout'
 const { gray600, gray700, gray300, gray900 } = colorsV3
-
-const Row = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  & > div {
-    width: 45%;
-  }
-  & > div:first-child {
-    flex: 1 0 100%;
-  }
-  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
-    display: grid;
-    gap: 1.5rem;
-    grid-template-columns: 2fr 140px 140px;
-    & > div {
-      width: auto;
-    }
-  }
-`
 
 const Description = styled.div`
   margin-top: 0.5rem;
