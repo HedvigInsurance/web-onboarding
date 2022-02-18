@@ -159,6 +159,10 @@ export type ActivePaymentMethodsResponse = {
   storedPaymentMethodsDetails: StoredPaymentMethodsDetails
 }
 
+export type ActivePaymentMethodsV2Response =
+  | StoredCardDetails
+  | StoredThirdPartyDetails
+
 export type ActivePayoutMethodsResponse = {
   __typename?: 'ActivePayoutMethodsResponse'
   status: PayoutMethodStatus
@@ -3627,6 +3631,7 @@ export type EmbarkPassage = {
   externalRedirect?: Maybe<EmbarkExternalRedirect>
   offerRedirect?: Maybe<EmbarkOfferRedirect>
   variantedOfferRedirects: Array<EmbarkVariantedOfferRedirect>
+  quoteCartOfferRedirects: Array<EmbarkQuoteCartOfferRedirect>
   action?: Maybe<EmbarkAction>
   response: EmbarkResponse
   tooltips: Array<EmbarkTooltip>
@@ -3653,6 +3658,19 @@ export type EmbarkPreviousInsuranceProviderActionData = {
 export enum EmbarkPreviousInsuranceProviderActionDataProviders {
   Norwegian = 'NORWEGIAN',
   Swedish = 'SWEDISH',
+}
+
+export type EmbarkQuoteCartOfferRedirect = {
+  __typename?: 'EmbarkQuoteCartOfferRedirect'
+  component: Scalars['String']
+  data: EmbarkQuoteCartOfferRedirectData
+}
+
+export type EmbarkQuoteCartOfferRedirectData = {
+  __typename?: 'EmbarkQuoteCartOfferRedirectData'
+  expression: EmbarkExpression
+  id: Scalars['String']
+  selectedInsuranceTypes: Array<Scalars['String']>
 }
 
 export type EmbarkRedirect =
@@ -8249,6 +8267,8 @@ export type Query = {
   availablePaymentMethods: AvailablePaymentMethodsResponse
   /** Returns the active payment method which the member chose to tokenize */
   activePaymentMethods?: Maybe<ActivePaymentMethodsResponse>
+  /** Returns the active payment method which the member chose to tokenize now supporting more payment methods then card */
+  activePaymentMethodsV2?: Maybe<ActivePaymentMethodsV2Response>
   adyenPublicKey: Scalars['String']
   /** Returns all the available payouts methods before the client requests a payout tokenization */
   availablePayoutMethods: AvailablePaymentMethodsResponse
@@ -9870,6 +9890,17 @@ export type StartSignResponse =
   | SimpleSignSession
   | FailedToStartSign
 
+export type StoredCardDetails = {
+  __typename?: 'StoredCardDetails'
+  id: Scalars['String']
+  cardName?: Maybe<Scalars['String']>
+  brand?: Maybe<Scalars['String']>
+  lastFourDigits: Scalars['String']
+  expiryMonth: Scalars['String']
+  expiryYear: Scalars['String']
+  holderName?: Maybe<Scalars['String']>
+}
+
 export type StoredPaymentMethodsDetails = {
   __typename?: 'StoredPaymentMethodsDetails'
   id: Scalars['String']
@@ -9879,6 +9910,12 @@ export type StoredPaymentMethodsDetails = {
   expiryMonth: Scalars['String']
   expiryYear: Scalars['String']
   holderName?: Maybe<Scalars['String']>
+}
+
+export type StoredThirdPartyDetails = {
+  __typename?: 'StoredThirdPartyDetails'
+  name: Scalars['String']
+  type: Scalars['String']
 }
 
 export type SubmitAdyenRedirectionInput = {
@@ -12186,15 +12223,15 @@ export type QuoteDetailsDataQueryVariables = Exact<{
 }>
 
 export type QuoteDetailsDataQuery = { __typename?: 'Query' } & {
-  quoteCart: { __typename?: 'QuoteCart' } & {
-    bundle?: Maybe<
-      { __typename?: 'QuoteBundle' } & {
-        quotes: Array<
-          { __typename?: 'BundledQuote' } & Pick<BundledQuote, 'data'>
-        >
-      }
-    >
-  }
+  quoteCart: { __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'> & {
+      bundle?: Maybe<
+        { __typename?: 'QuoteBundle' } & {
+          quotes: Array<
+            { __typename?: 'BundledQuote' } & Pick<BundledQuote, 'data'>
+          >
+        }
+      >
+    }
 }
 
 export type RedeemCodeMutationVariables = Exact<{
@@ -14421,6 +14458,7 @@ export type QuoteCartQueryResult = ApolloReactCommon.QueryResult<
 export const QuoteDetailsDataDocument = gql`
   query QuoteDetailsData($id: ID!) {
     quoteCart(id: $id) {
+      id
       bundle {
         quotes {
           data
