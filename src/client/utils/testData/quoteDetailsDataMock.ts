@@ -1,5 +1,5 @@
 import { TypeOfContract, ExtraBuildingType } from 'data/graphql'
-import { QuoteDetailsData, HomeQuoteDetails } from 'api/quoteDetailsDataTypes'
+import { HomeQuoteDetails, QuoteDetails } from 'api/quoteDetailsDataTypes'
 
 export const quoteDetailsDataMockRentalSe: HomeQuoteDetails[] = [
   {
@@ -13,7 +13,10 @@ export const quoteDetailsDataMockRentalSe: HomeQuoteDetails[] = [
   },
 ]
 
-export const quoteDetailsDataMockBrfAccidentSe: QuoteDetailsData = [
+export const quoteDetailsDataMockBrfAccidentSe: [
+  HomeQuoteDetails,
+  QuoteDetails,
+] = [
   {
     id: 'QUOTE_ID_SE_APARTMENT_BRF',
     typeOfContract: TypeOfContract.SeApartmentBrf,
@@ -31,7 +34,7 @@ export const quoteDetailsDataMockBrfAccidentSe: QuoteDetailsData = [
   },
 ]
 
-export const quoteDetailsDataMockHouseSe: QuoteDetailsData = [
+export const quoteDetailsDataMockHouseSe: HomeQuoteDetails[] = [
   {
     id: 'QUOTE_ID_SE_HOUSE',
     typeOfContract: TypeOfContract.SeHouse,
