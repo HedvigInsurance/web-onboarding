@@ -2,6 +2,7 @@ import {
   QuoteDetails,
   HomeQuoteDetails,
   HouseQuoteDetails,
+  QuoteDetailsData,
 } from 'api/quoteDetailsDataTypes'
 import {
   typeOfResidenceTextKeys,
@@ -22,7 +23,7 @@ type DetailsGroup = {
 }[]
 
 type MultipleQuoteDetailsParams = {
-  quoteDetailsData: QuoteDetails[]
+  quoteDetailsData: QuoteDetailsData
 }
 type SingleQuoteDetailsParams = {
   quoteDetailsData: QuoteDetails

@@ -1,8 +1,6 @@
 import { useQuoteDetailsDataQuery } from 'data/graphql'
-import { QuoteDetails } from 'api/quoteDetailsDataTypes'
+import { QuoteDetailsData } from 'api/quoteDetailsDataTypes'
 import { useQuoteCartIdFromUrl } from './useQuoteCartIdFromUrl'
-
-type QuoteDetailsData = QuoteDetails[]
 
 export const useQuoteDetailsData = () => {
   const { quoteCartId } = useQuoteCartIdFromUrl()

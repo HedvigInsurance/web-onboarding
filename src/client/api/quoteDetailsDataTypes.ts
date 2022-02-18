@@ -53,6 +53,8 @@ export type QuoteDetails =
   | QuoteDataDkAccident
   | QuoteDataDkTravel
 
+export type QuoteDetailsData = QuoteDetails[]
+
 export type HomeQuoteDetails =
   | QuoteDataSeApartment
   | QuoteDataSeHouse
