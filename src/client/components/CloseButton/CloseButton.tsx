@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { Cross } from '../icons/Cross'
 
-export const StyledCloseButton = styled.button`
+export const Button = styled.button`
   width: 1.5rem;
   height: 1.5rem;
   padding: 0;
@@ -32,8 +32,8 @@ type Props = React.HTMLProps<HTMLButtonElement>
 
 export const CloseButton = ({ onClick }: Props) => {
   return (
-    <StyledCloseButton onClick={onClick}>
+    <Button onClick={onClick}>
       <Cross />
-    </StyledCloseButton>
+    </Button>
   )
 }

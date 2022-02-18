@@ -4,7 +4,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { WarningTriangleOutlined } from './icons/WarningTriangle'
 import { Modal, ModalProps } from './ModalNew'
-import { StyledCloseButton } from './CloseButton/CloseButton'
+import { Button } from './CloseButton/CloseButton'
 
 type Props = ModalProps & {
   children: React.ReactNode
@@ -59,19 +59,19 @@ export const ErrorText = styled.div`
   }
 `
 
-const StyledErrorModal = styled(Modal)`
+const ErrorModalWrapper = styled(Modal)`
   && {
     overflow-x: auto;
     max-width: min(36rem, 100% - 2rem);
     min-height: auto;
   }
-  ${StyledCloseButton} {
+  ${Button} {
     width: 1rem;
     height: 1rem;
   }
 
   ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
-    ${StyledCloseButton} {
+    ${Button} {
       width: 2rem;
       height: 2rem;
     }
@@ -79,12 +79,12 @@ const StyledErrorModal = styled(Modal)`
 `
 
 export const ErrorModal = ({ isVisible, onClose, children }: Props) => (
-  <StyledErrorModal isVisible={isVisible} onClose={onClose} dynamicHeight>
+  <ErrorModalWrapper isVisible={isVisible} onClose={onClose} dynamicHeight>
     <ErrorModalContainer>
       <WarningTriangleWrapper>
         <WarningTriangleOutlined />
       </WarningTriangleWrapper>
       {children}
     </ErrorModalContainer>
-  </StyledErrorModal>
+  </ErrorModalWrapper>
 )
