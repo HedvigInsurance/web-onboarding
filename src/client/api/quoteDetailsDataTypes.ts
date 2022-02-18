@@ -37,7 +37,11 @@ type QuoteDataNoHomeContents = QuoteDataHome & YouthData
 
 type QuoteDataNoTravel = QuoteDataCommon & YouthData
 
-type QuoteDataDkHomeContents = QuoteDataHome & StudentData
+type QuoteDataDkHomeContents = QuoteDataHome &
+  StudentData & {
+    floor?: string | null
+    apartment?: string | null
+  }
 
 type QuoteDataDkAccident = QuoteDataCommon & StudentData
 
