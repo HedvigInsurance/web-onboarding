@@ -17,10 +17,12 @@ export type Value = {
   suffix?: string
 }
 
-type DetailsGroup = {
+type Details = {
   label: string
   value: Value
-}[]
+}
+
+export type DetailsGroup = Details[]
 
 type MultipleQuoteDetailsParams = {
   quoteDetailsData: QuoteDetailsData
@@ -48,11 +50,11 @@ const isHouseQuoteDetailsData = (
   return isHouse
 }
 
-const getHouseDetailsGroup = ({
+const getHouseDetails = ({
   quoteDetailsData,
-}: SingleQuoteDetailsParams): DetailsGroup | null => {
+}: SingleQuoteDetailsParams): DetailsGroup => {
   if (!isHouseQuoteDetailsData(quoteDetailsData)) {
-    return null
+    return []
   }
 
   return [
@@ -60,30 +62,39 @@ const getHouseDetailsGroup = ({
       label: 'CHECKOUT_DETAILS_ANCILLARY_SPACE',
       value: {
         value: quoteDetailsData.ancillaryArea,
-        suffix: 'CHECKOUT_DETAILS_SQM_VALUE',
+        suffix: 'CHECKOUT_DETAILS_SQM_SUFFIX',
       },
     },
     {
       label: 'CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS',
       value: {
         value: quoteDetailsData.numberOfBathrooms,
+        suffix: 'CHECKOUT_DETAILS_BATHROOMS_SUFFIX',
       },
     },
     {
       label: 'CHECKOUT_DETAILS_YEAR_OF_CONSTRUCTION',
       value: { value: quoteDetailsData.yearOfConstruction },
     },
+    {
+      label: 'CHECKOUT_DETAILS_SUBLETED_STATUS',
+      value: {
+        textKey: quoteDetailsData.isSubleted
+          ? 'CHECKOUT_DETAILS_IS_SUBLETED'
+          : 'CHECKOUT_DETAILS_IS_NOT_SUBLETED',
+      },
+    },
   ]
 }
 
 const getExtraBuildingsGroups = ({
   quoteDetailsData,
-}: SingleQuoteDetailsParams): DetailsGroup[] | null => {
+}: SingleQuoteDetailsParams): DetailsGroup[] => {
   if (
     !isHouseQuoteDetailsData(quoteDetailsData) ||
     !quoteDetailsData.extraBuildings
   ) {
-    return null
+    return []
   }
 
   const extraBuildings = quoteDetailsData.extraBuildings.map<DetailsGroup>(
@@ -101,7 +112,7 @@ const getExtraBuildingsGroups = ({
       },
       {
         label: 'CHECKOUT_DETAILS_EXTRA_BUILDINGS_HAS_WATER_CONNECTED',
-        value: { value: extraBuilding.hasWaterConnected ? 'YES' : 'NO' },
+        value: { textKey: extraBuilding.hasWaterConnected ? 'YES' : 'NO' },
       },
     ],
   )
@@ -128,13 +139,13 @@ export const getQuoteDetails = ({
 
   const { typeOfContract, numberCoInsured } = mainQuoteDetailsData
 
-  const commonHomeDetailsGroup: DetailsGroup | null = isHomeQuoteDetailsData(
+  const homeDetailsGroup: DetailsGroup | null = isHomeQuoteDetailsData(
     mainQuoteDetailsData,
   )
     ? [
         {
           label: 'CHECKOUT_DETAILS_ADDRESS',
-          value: { value: getAddress(mainQuoteDetailsData) },
+          value: { value: getAddressValue(mainQuoteDetailsData) },
         },
         {
           label: 'CHECKOUT_DETAILS_ZIPCODE',
@@ -156,33 +167,29 @@ export const getQuoteDetails = ({
               ],
           },
         },
+        ...getHouseDetails({ quoteDetailsData: mainQuoteDetailsData }),
       ]
     : null
 
-  const houseDetailsGroup = getHouseDetailsGroup({
+  const extraBuildingsGroups = getExtraBuildingsGroups({
     quoteDetailsData: mainQuoteDetailsData,
   })
 
-  const extraBuildingsGroups =
-    getExtraBuildingsGroups({
-      quoteDetailsData: mainQuoteDetailsData,
-    }) || []
-
-  const numberOfInsuredGroup = [
+  const commonQuoteDetailsGroup = [
     {
       label: 'CHECKOUT_DETAILS_HOUSEHOLD_SIZE',
       value: {
-        value: numberCoInsured,
-        prefix: 'CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX',
+        value: numberCoInsured + 1,
+        suffix: 'CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX',
       },
     },
+    ...getStudentOrYouth(mainQuoteDetailsData),
   ]
 
   const allGroups = [
-    commonHomeDetailsGroup,
-    houseDetailsGroup,
+    homeDetailsGroup,
     ...extraBuildingsGroups,
-    numberOfInsuredGroup,
+    commonQuoteDetailsGroup,
   ]
 
   const quoteDetailsGroups = allGroups.filter(
@@ -192,7 +199,7 @@ export const getQuoteDetails = ({
   return quoteDetailsGroups
 }
 
-export const getAddress = (quoteDetails: HomeQuoteDetails) => {
+export const getAddressValue = (quoteDetails: HomeQuoteDetails) => {
   const { street } = quoteDetails
 
   if ('floor' in quoteDetails && 'apartment' in quoteDetails) {
@@ -206,4 +213,16 @@ export const getAddress = (quoteDetails: HomeQuoteDetails) => {
   }
 
   return street
+}
+
+const getStudentOrYouth = (quoteDetails: QuoteDetails): DetailsGroup => {
+  if ('isStudent' in quoteDetails && quoteDetails.isStudent) {
+    return [{ label: '+', value: { textKey: 'CHECKOUT_DETAILS_STUDENT' } }]
+  }
+
+  if ('isYouth' in quoteDetails && quoteDetails.isYouth) {
+    return [{ label: '+', value: { textKey: 'CHECKOUT_DETAILS_YOUTH' } }]
+  }
+
+  return []
 }
