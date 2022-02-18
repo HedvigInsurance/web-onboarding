@@ -22,8 +22,15 @@ export const useQuoteDetailsData = () => {
       street,
       zipCode,
       livingSpace,
+      floor,
+      apartment,
       isStudent,
       isYouth,
+      ancillaryArea,
+      yearOfConstruction,
+      numberOfBathrooms,
+      extraBuildings,
+      isSubleted,
     } = data
 
     return {
@@ -33,8 +40,15 @@ export const useQuoteDetailsData = () => {
       ...(street && { street }),
       ...(zipCode && { zipCode }),
       ...(livingSpace && { livingSpace }),
+      ...('floor' in data && { floor }),
+      ...('apartment' in data && { apartment }),
       ...('isStudent' in data && { isStudent }),
       ...('isYouth' in data && { isYouth }),
+      ...('ancillaryArea' in data && { ancillaryArea }),
+      ...('yearOfConstruction' in data && { yearOfConstruction }),
+      ...('numberOfBathrooms' in data && { numberOfBathrooms }),
+      ...('extraBuildings' in data && { extraBuildings }),
+      ...('isSubleted' in data && { isSubleted }),
     }
   })
 
