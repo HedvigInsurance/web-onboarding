@@ -1,11 +1,15 @@
-import { quoteDetailsDataMockHouseSE } from 'utils/testData/quoteDetailsDataMock'
+import {
+  quoteDetailsDataMockHouseSe,
+  quoteDetailsDataMockRentalSe,
+  quoteDetailsDataMockHomeContentStudentOwnDk,
+} from 'utils/testData/quoteDetailsDataMock'
 import { typeOfResidenceTextKeys } from 'pages/OfferNew/utils'
-import { getQuoteDetails } from './getQuoteDetails'
+import { getQuoteDetails, getAddressValue } from './getQuoteDetails'
 
 describe('getQuoteDetails function', () => {
   describe('with Swedish House quote', () => {
     const swedishHouseQuoteDetails = getQuoteDetails({
-      quoteDetailsData: quoteDetailsDataMockHouseSE,
+      quoteDetailsData: quoteDetailsDataMockHouseSe,
     })
     it('returns the correct amount of data', () => {
       expect(swedishHouseQuoteDetails.length).toBe(3)
@@ -23,6 +27,49 @@ describe('getQuoteDetails function', () => {
       )
       expect(isSubleted.value.value).toBe(undefined)
       expect(isSubleted.value.textKey).toBe('CHECKOUT_DETAILS_IS_NOT_SUBLETED')
+    })
+  })
+})
+
+describe('getAddressValue function', () => {
+  describe('with Swedish quote', () => {
+    it('returns street name and street number', () => {
+      const address = getAddressValue(quoteDetailsDataMockRentalSe[0])
+      expect(address).toBe('Hyresvägen 1')
+    })
+  })
+
+  describe('with Danish quotes', () => {
+    it('returns floor and apartment in addition to street name and street number when those properties exist', () => {
+      const address = getAddressValue(
+        quoteDetailsDataMockHomeContentStudentOwnDk[0],
+      )
+      expect(address).toBe('Theodore Roosevelts Vej 3, 2. tv')
+    })
+
+    it('returns only street name and street number when no other properties exist', () => {
+      const danishHomeContentsQuoteDetailsWithoutFloorAndApartment = {
+        ...quoteDetailsDataMockHomeContentStudentOwnDk[0],
+        floor: null,
+        apartment: null,
+      }
+
+      const address = getAddressValue(
+        danishHomeContentsQuoteDetailsWithoutFloorAndApartment,
+      )
+      expect(address).toBe('Theodore Roosevelts Vej 3')
+    })
+
+    it('returns street name, street number and floor when apartment property does not exist', () => {
+      const danishHomeContentsQuoteDetailsWithoutApartment = {
+        ...quoteDetailsDataMockHomeContentStudentOwnDk[0],
+        apartment: null,
+      }
+
+      const address = getAddressValue(
+        danishHomeContentsQuoteDetailsWithoutApartment,
+      )
+      expect(address).toBe('Theodore Roosevelts Vej 3, 2.')
     })
   })
 })

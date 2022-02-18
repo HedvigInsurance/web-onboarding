@@ -1,7 +1,7 @@
 import { TypeOfContract, ExtraBuildingType } from 'data/graphql'
-import { QuoteDetailsData } from 'api/quoteDetailsDataTypes'
+import { QuoteDetailsData, HomeQuoteDetails } from 'api/quoteDetailsDataTypes'
 
-export const quoteDetailsDataMockRentalSE: QuoteDetailsData = [
+export const quoteDetailsDataMockRentalSe: HomeQuoteDetails[] = [
   {
     id: 'QUOTE_ID_SE_APARTMENT_RENT',
     typeOfContract: TypeOfContract.SeApartmentRent,
@@ -13,7 +13,7 @@ export const quoteDetailsDataMockRentalSE: QuoteDetailsData = [
   },
 ]
 
-export const quoteDetailsDataMockBrfAccidentSE: QuoteDetailsData = [
+export const quoteDetailsDataMockBrfAccidentSe: QuoteDetailsData = [
   {
     id: 'QUOTE_ID_SE_APARTMENT_BRF',
     typeOfContract: TypeOfContract.SeApartmentBrf,
@@ -31,7 +31,7 @@ export const quoteDetailsDataMockBrfAccidentSE: QuoteDetailsData = [
   },
 ]
 
-export const quoteDetailsDataMockHouseSE: QuoteDetailsData = [
+export const quoteDetailsDataMockHouseSe: QuoteDetailsData = [
   {
     id: 'QUOTE_ID_SE_HOUSE',
     typeOfContract: TypeOfContract.SeHouse,
@@ -52,5 +52,19 @@ export const quoteDetailsDataMockHouseSE: QuoteDetailsData = [
         hasWaterConnected: false,
       },
     ],
+  },
+]
+
+export const quoteDetailsDataMockHomeContentStudentOwnDk: HomeQuoteDetails[] = [
+  {
+    id: 'QUOTE_ID_DK_HOME_CONTENT_STUDENT_OWN',
+    typeOfContract: TypeOfContract.DkHomeContentStudentOwn,
+    street: 'Theodore Roosevelts Vej 3',
+    zipCode: '2100',
+    apartment: 'tv',
+    floor: '2',
+    livingSpace: 34,
+    numberCoInsured: 0,
+    isStudent: true,
   },
 ]
