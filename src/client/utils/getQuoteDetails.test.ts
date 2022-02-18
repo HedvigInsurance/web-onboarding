@@ -39,7 +39,7 @@ describe('getAddressValue function', () => {
     })
   })
 
-  describe('with Danish quotes', () => {
+  describe('with Danish quote', () => {
     it('returns floor and apartment in addition to street name and street number when those properties exist', () => {
       const address = getAddressValue(
         quoteDetailsDataMockHomeContentStudentOwnDk[0],
