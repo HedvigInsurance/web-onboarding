@@ -39,6 +39,8 @@ import { OfferData } from 'pages/OfferNew/types'
 import { SignFailModal } from 'pages/OfferNew/Checkout/SignFailModal/SignFailModal'
 import { LimitCode } from 'api/quoteBundleErrorSelectors'
 import { trackSignedCustomerEvent } from 'utils/tracking/trackSignedCustomerEvent'
+import * as createQuoteBundleMutationSelector from 'api/createQuoteBundleMutationSelectors'
+import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import { QuoteInput } from '../Introduction/DetailsModal/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import { InsuranceSummary } from './InsuranceSummary'
@@ -254,6 +256,9 @@ export const Checkout = ({
   const [signUiState, setSignUiState] = useState<SignUiState>(() =>
     getSignUiStateFromCheckoutStatus(initialCheckoutStatus),
   )
+
+  const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
+
   const [isCompletingCheckout, setIsCompletingCheckout] = useState(false)
   const { data: checkoutStatusData } = useCheckoutStatusQuery({
     pollInterval: signUiState === 'STARTED' ? 1000 : 0,
@@ -299,11 +304,12 @@ export const Checkout = ({
       { setErrors }: FormikHelpers<QuoteInput>,
     ) => {
       try {
-        await reCreateQuoteBundle(form)
+        return await reCreateQuoteBundle(form)
       } catch (error) {
         if (isSsnInvalid(error.graphQLErrors)) {
           setErrors({ ssn: textKeys.INVALID_FIELD() })
         }
+        return undefined
       }
     },
     enableReinitialize: true,
@@ -400,7 +406,6 @@ export const Checkout = ({
     const { submitForm, dirty: isFormDataUpdated, validateForm } = formik
 
     try {
-      const quoteIds = getQuoteIdsFromBundleVariant(selectedQuoteBundleVariant)
       const errors = await validateForm()
 
       if (Object.keys(errors).length) {
@@ -408,7 +413,18 @@ export const Checkout = ({
         return
       }
 
-      if (isFormDataUpdated) await submitForm()
+      let quoteIds = getQuoteIdsFromBundleVariant(selectedQuoteBundleVariant)
+      if (isFormDataUpdated) {
+        const { data } = await submitForm()
+        const quoteBundleVariant = createQuoteBundleMutationSelector.getSelectedBundleVariant(
+          data,
+          selectedInsuranceTypes,
+        )
+
+        if (quoteBundleVariant) {
+          quoteIds = getQuoteIdsFromBundleVariant(quoteBundleVariant)
+        }
+      }
 
       // clean up existing auth tokens
       if (realApolloClient) {
