@@ -94,7 +94,7 @@ export const QuoteDetails = () => {
               },
             )}
           </Group>
-          {index != group.length && <Divider />}
+          {index < quoteDetails.length - 1 && <Divider />}
         </Fragment>
       ))}
     </SubSection>
