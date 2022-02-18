@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { colorsV3 } from '@hedviginsurance/brand'
 import styled from '@emotion/styled'
-import { getQuoteDetails } from 'utils/getQuoteDetails'
-import { useTextKeys } from 'utils/textKeys'
-import { OfferQuote } from '../../../../OfferNew/types'
+import { getQuoteDetails, Value as ValueType } from 'utils/getQuoteDetails'
+import { useQuoteDetailsData } from 'utils/hooks/useQuoteDetailsData'
+import { useTextKeys, TextKeyMap } from 'utils/textKeys'
 import { SubSection } from '../SubSection'
 
 const { gray900, gray300, gray700 } = colorsV3
@@ -41,24 +41,61 @@ const Divider = styled.div`
   background-color: ${gray300};
 `
 
-export const QuoteDetails = ({ mainQuote }: { mainQuote: OfferQuote }) => {
+const getValueText = ({
+  value,
+  prefix,
+  suffix,
+  textKey,
+  textKeys,
+}: ValueType & { textKeys: TextKeyMap }) => {
+  if (textKey) {
+    return textKeys[textKey]()
+  }
+  if (prefix && value) {
+    return `${textKeys[prefix]()} ${value}`
+  }
+  if (suffix && value) {
+    return `${textKeys[value]()} ${suffix}`
+  }
+  return value
+}
+
+export const QuoteDetails = () => {
   const textKeys = useTextKeys()
+  const { quoteDetailsData } = useQuoteDetailsData()
+
+  if (!quoteDetailsData) {
+    return null // TODO: Do something more sophisticated
+  }
+
+  const quoteDetails = getQuoteDetails({ quoteDetailsData })
 
   return (
     <SubSection headlineText={textKeys.CHECKOUT_QUOTE_DETAILS_TITLE()}>
-      {getQuoteDetails(mainQuote, textKeys).map((group, index) => (
-        <>
-          <Group key={index}>
-            {group.map(({ key, value, label }) => (
-              <Row key={key}>
-                <Label>{label}</Label>
-                <HorizontalSpacer />
-                <Value>{value}</Value>
-              </Row>
-            ))}
+      {quoteDetails.map((group, index) => (
+        <Fragment key={index}>
+          <Group>
+            {group.map(
+              ({ label, value: { value, prefix, suffix, textKey } }) => {
+                const valueText = getValueText({
+                  value,
+                  prefix,
+                  suffix,
+                  textKey,
+                  textKeys,
+                })
+                return (
+                  <Row key={label}>
+                    <Label>{textKeys[label]()}</Label>
+                    <HorizontalSpacer />
+                    <Value>{valueText}</Value>
+                  </Row>
+                )
+              },
+            )}
           </Group>
           {index != group.length && <Divider />}
-        </>
+        </Fragment>
       ))}
     </SubSection>
   )

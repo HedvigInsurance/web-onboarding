@@ -1,142 +1,197 @@
-import React from 'react'
-import { QuoteDetails } from '../data/graphql'
-import { OfferQuote } from '../pages/OfferNew/types'
+import {
+  QuoteDetails,
+  HomeQuoteDetails,
+  HouseQuoteDetails,
+} from 'api/quoteDetailsDataTypes'
 import {
   typeOfResidenceTextKeys,
-  quoteDetailsHasAddress,
-  getHouseholdSize,
   HomeInsuranceTypeOfContract,
-} from '../pages/OfferNew/utils'
-import { TextKeyMap } from './textKeys'
+} from 'pages/OfferNew/utils'
 import { formatPostalNumber } from './postalNumbers'
 
-type DetailsGroup = ReadonlyArray<{
-  key: string
-  label: React.ReactNode
-  value: React.ReactNode
-}>
+export type Value = {
+  value?: string | number
+  textKey?: string
+  prefix?: string
+  suffix?: string
+}
 
-function getHouseSummaryDetailsMaybe(
-  textKeys: TextKeyMap,
-  quoteDetails: QuoteDetails,
-): DetailsGroup {
-  if (quoteDetails.__typename !== 'SwedishHouseQuoteDetails') {
-    return []
+type DetailsGroup = {
+  label: string
+  value: Value
+}[]
+
+type MultipleQuoteDetailsParams = {
+  quoteDetailsData: QuoteDetails[]
+}
+type SingleQuoteDetailsParams = {
+  quoteDetailsData: QuoteDetails
+}
+
+const isHomeQuoteDetailsData = (
+  data: QuoteDetails,
+): data is HomeQuoteDetails => {
+  const isHome = 'street' in data && 'zipCode' in data && 'livingSpace' in data
+  return isHome
+}
+
+const isHouseQuoteDetailsData = (
+  data: QuoteDetails,
+): data is HouseQuoteDetails => {
+  const isHouse =
+    'ancillaryArea' in data &&
+    'yearOfConstruction' in data &&
+    'numberOfBathrooms' in data &&
+    'isSubleted' in data &&
+    'extraBuildings' in data
+  return isHouse
+}
+
+const getHouseDetailsGroup = ({
+  quoteDetailsData,
+}: SingleQuoteDetailsParams): DetailsGroup | null => {
+  if (!isHouseQuoteDetailsData(quoteDetailsData)) {
+    return null
   }
 
   return [
     {
-      key: 'ancillaryarea',
-      label: textKeys.CHECKOUT_DETAILS_ANCILLARY_SPACE(),
-      value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
-        VALUE: quoteDetails.ancillarySpace,
-      }),
+      label: 'CHECKOUT_DETAILS_ANCILLARY_SPACE',
+      value: {
+        value: quoteDetailsData.ancillaryArea,
+        suffix: 'CHECKOUT_DETAILS_SQM_VALUE',
+      },
     },
     {
-      key: 'bathrooms',
-      label: textKeys.CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS(),
-      value: textKeys.CHECKOUT_DETAILS_COUNT_VALUE({
-        VALUE: quoteDetails.numberOfBathrooms,
-      }),
+      label: 'CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS',
+      value: {
+        value: quoteDetailsData.numberOfBathrooms,
+      },
     },
     {
-      key: 'yearOfConstruction',
-      label: textKeys.CHECKOUT_DETAILS_YEAR_OF_CONSTRUCTION(),
-      value: quoteDetails.yearOfConstruction,
+      label: 'CHECKOUT_DETAILS_YEAR_OF_CONSTRUCTION',
+      value: { value: quoteDetailsData.yearOfConstruction },
     },
   ]
 }
 
-const getHouseExtraBuildingsMaybe = (
-  textKeys: TextKeyMap,
-  quoteDetails: QuoteDetails,
-): ReadonlyArray<DetailsGroup> => {
-  if (quoteDetails.__typename !== 'SwedishHouseQuoteDetails') {
-    return []
+const getExtraBuildingsGroups = ({
+  quoteDetailsData,
+}: SingleQuoteDetailsParams): DetailsGroup[] | null => {
+  if (
+    !isHouseQuoteDetailsData(quoteDetailsData) ||
+    !quoteDetailsData.extraBuildings
+  ) {
+    return null
   }
 
-  return quoteDetails.extraBuildings.map<DetailsGroup>((extraBuilding) => [
-    {
-      key: 'buildingType',
-      label: textKeys.CHECKOUT_DETAILS_EXTRA_BUILDINGS_BUILDING_TYPE(),
-      value: extraBuilding.displayName,
-    },
-    {
-      key: 'buildingSize',
-      label: textKeys.CHECKOUT_DETAILS_EXTRA_BUILDINGS_SIZE(),
-      value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
-        VALUE: extraBuilding.area ?? '',
-      }),
-    },
-    {
-      key: 'hasWater',
-      label: textKeys.CHECKOUT_DETAILS_EXTRA_BUILDINGS_HAS_WATER_CONNECTED(),
-      value: extraBuilding.hasWaterConnected ? textKeys.YES() : textKeys.NO(),
-    },
-  ])
+  const extraBuildings = quoteDetailsData.extraBuildings.map<DetailsGroup>(
+    (extraBuilding) => [
+      {
+        label: 'CHECKOUT_DETAILS_EXTRA_BUILDINGS_BUILDING_TYPE',
+        value: { value: extraBuilding.displayName },
+      },
+      {
+        label: 'CHECKOUT_DETAILS_EXTRA_BUILDINGS_SIZE',
+        value: {
+          value: extraBuilding.area,
+          suffix: 'CHECKOUT_DETAILS_SQM_VALUE',
+        },
+      },
+      {
+        label: 'CHECKOUT_DETAILS_EXTRA_BUILDINGS_HAS_WATER_CONNECTED',
+        value: { value: extraBuilding.hasWaterConnected ? 'YES' : 'NO' },
+      },
+    ],
+  )
+
+  return extraBuildings
 }
 
-export const getQuoteDetails = (
-  mainQuote: OfferQuote,
-  textKeys: TextKeyMap,
-): ReadonlyArray<DetailsGroup> => {
-  const { quoteDetails, contractType } = mainQuote
+const getMainQuoteDetailsData = ({
+  quoteDetailsData,
+}: MultipleQuoteDetailsParams): QuoteDetails => {
+  const homeQuoteDetailsData = quoteDetailsData.find((data) => {
+    return isHomeQuoteDetailsData(data)
+  })
 
-  const typeOfResidenceTextKey =
-    typeOfResidenceTextKeys[contractType as HomeInsuranceTypeOfContract]
-
-  const detailsGroups: DetailsGroup[] = []
-
-  if (quoteDetailsHasAddress(quoteDetails)) {
-    detailsGroups.push(
-      [
-        {
-          key: 'address',
-          label: textKeys.CHECKOUT_DETAILS_ADDRESS(),
-          value: getAddress(quoteDetails),
-        },
-        {
-          key: 'zipcode',
-          label: textKeys.CHECKOUT_DETAILS_ZIPCODE(),
-          value: formatPostalNumber(quoteDetails.zipCode),
-        },
-        {
-          key: 'livingspace',
-          label: textKeys.CHECKOUT_DETAILS_LIVING_SPACE(),
-          value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
-            VALUE: quoteDetails.livingSpace,
-          }),
-        },
-        {
-          key: 'residenceType',
-          label: textKeys.CHECKOUT_DETAILS_RESIDENCE_TYPE(),
-          value: typeOfResidenceTextKey
-            ? textKeys[typeOfResidenceTextKey]()
-            : '',
-        },
-        ...getHouseSummaryDetailsMaybe(textKeys, quoteDetails),
-      ],
-
-      ...getHouseExtraBuildingsMaybe(textKeys, quoteDetails),
-    )
-  }
-
-  detailsGroups.push([
-    {
-      key: 'householdSize',
-      label: textKeys.CHECKOUT_DETAILS_HOUSEHOLD_SIZE(),
-      value: getHouseholdSizeValue(getHouseholdSize(quoteDetails), textKeys),
-    },
-  ])
-
-  return detailsGroups
+  return homeQuoteDetailsData ? homeQuoteDetailsData : quoteDetailsData[0]
 }
 
-export const getAddress = (quoteDetails: QuoteDetails) => {
-  if (!quoteDetailsHasAddress(quoteDetails)) {
-    throw new Error('Quote details need to include address field')
-  }
+export const getQuoteDetails = ({
+  quoteDetailsData,
+}: MultipleQuoteDetailsParams): DetailsGroup[] => {
+  const mainQuoteDetailsData = getMainQuoteDetailsData({
+    quoteDetailsData,
+  })
 
+  const { typeOfContract, numberCoInsured } = mainQuoteDetailsData
+
+  const commonHomeDetailsGroup: DetailsGroup | null = isHomeQuoteDetailsData(
+    mainQuoteDetailsData,
+  )
+    ? [
+        {
+          label: 'CHECKOUT_DETAILS_ADDRESS',
+          value: { value: getAddress(mainQuoteDetailsData) },
+        },
+        {
+          label: 'CHECKOUT_DETAILS_ZIPCODE',
+          value: { value: formatPostalNumber(mainQuoteDetailsData.zipCode) },
+        },
+        {
+          label: 'CHECKOUT_DETAILS_LIVING_SPACE',
+          value: {
+            value: mainQuoteDetailsData.livingSpace,
+            suffix: 'CHECKOUT_DETAILS_SQM_SUFFIX',
+          },
+        },
+        {
+          label: 'CHECKOUT_DETAILS_RESIDENCE_TYPE',
+          value: {
+            textKey:
+              typeOfResidenceTextKeys[
+                typeOfContract as HomeInsuranceTypeOfContract
+              ],
+          },
+        },
+      ]
+    : null
+
+  const houseDetailsGroup = getHouseDetailsGroup({
+    quoteDetailsData: mainQuoteDetailsData,
+  })
+
+  const extraBuildingsGroups =
+    getExtraBuildingsGroups({
+      quoteDetailsData: mainQuoteDetailsData,
+    }) || []
+
+  const numberOfInsuredGroup = [
+    {
+      label: 'CHECKOUT_DETAILS_HOUSEHOLD_SIZE',
+      value: {
+        value: numberCoInsured,
+        prefix: 'CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX',
+      },
+    },
+  ]
+
+  const allGroups = [
+    commonHomeDetailsGroup,
+    houseDetailsGroup,
+    ...extraBuildingsGroups,
+    numberOfInsuredGroup,
+  ]
+
+  const quoteDetailsGroups = allGroups.filter(
+    (group): group is DetailsGroup => group !== null,
+  )
+
+  return quoteDetailsGroups
+}
+
+export const getAddress = (quoteDetails: HomeQuoteDetails) => {
   const { street } = quoteDetails
 
   if ('floor' in quoteDetails && 'apartment' in quoteDetails) {
@@ -147,23 +202,7 @@ export const getAddress = (quoteDetails: QuoteDetails) => {
       const apartmentString = apartment ? ` ${apartment}` : ''
       return `${street}, ${formattedFloor}${apartmentString}`
     }
-
-    return street
   }
 
   return street
-}
-
-const getHouseholdSizeValue = (householdSize: number, textKeys: TextKeyMap) => {
-  if (householdSize === 1) {
-    return textKeys.CHECKOUT_DETAILS_SINGLE_PERSON()
-  }
-  if (householdSize > 1) {
-    return textKeys.CHECKOUT_DETAILS_PERSONS_VALUE({
-      VALUE: householdSize,
-    })
-  }
-  throw new Error(
-    'Total number of people covered by the insurance must be at least 1',
-  )
 }
