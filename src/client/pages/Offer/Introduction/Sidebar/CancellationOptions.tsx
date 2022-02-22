@@ -15,7 +15,7 @@ const HandleSwitchingLabel = styled.label<{ isDisabled: boolean }>`
   align-items: center;
 
   &:hover {
-    cursor: ${({ isDisabled }) => (isDisabled ? 'initial' : 'pointer')};
+    cursor: ${({ isDisabled }) => (isDisabled ? 'default' : 'pointer')};
   }
 `
 
