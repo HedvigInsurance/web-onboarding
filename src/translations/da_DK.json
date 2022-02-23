@@ -258,7 +258,7 @@
   "STARTPAGE_DK_CONTENTS_BODY": "Få indboforsikring",
   "STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_BODY": "Få dem alle tre",
   "STARTPAGE_DK_CONTENTS_ACCIDENT_BODY": "Få dem begge",
-  "DETAILS_MODULE_TABLE_COINSURED_CELL_LABEL": "Antal forsikrede mennesker",
+  "DETAILS_MODULE_TABLE_COINSURED_CELL_LABEL": "Antal medforsikrede",
   "CHECKOUT_DETAILS_NAME": "Navn",
   "CHECKOUT_DETAILS_BIRTHDATE": "Fødselsdato",
   "CHECKOUT_DETAILS_STUDENT": "Studerende",
@@ -350,5 +350,8 @@
   "CHECKOUT_DETAILS_PAGE_TITLE": "Checkout | Hedvig",
   "CHECKOUT_PAYMENT_PAGE_TITLE": "Betaling | Hedvig",
   "CHECKOUT_QUOTE_DETAILS_TITLE": "Opsummering",
-  "CHECKOUT_YOUR_PLAN_TITLE": ""
+  "CHECKOUT_INSURANCE_TITLE": "Forsikring",
+  "CHECKOUT_PAYMENT_DETAILS_TITLE": "Betalingsmetode",
+  "CHECKOUT_PAYMENT_DETAILS_DESCRIPTION": "Din betaling bliver trukket fra dit betalingskort sidst på måneden. Vi håndterer alle betalinger sikkert med Adyen.",
+  "CHECKOUT_PAYMENT_DETAILS_TERMS": "Ved at klikke på “Gennemfør køb” bekræfter jeg, at jeg har læst og forstået vilkårene, og giver samtidig Hedvig tilladelse til at håndtere mine personoplysninger."
 }
