@@ -117,6 +117,7 @@
     "@sentry/node": "^6.10.0",
     "@sentry/react": "^6.10.0",
     "@sentry/tracing": "^6.10.0",
+    "@tippyjs/react": "^4.2.6",
     "@types/dayzed": "^2.2.1",
     "@types/escape-html": "^1.0.0",
     "@types/koa-bodyparser": "^4.3.0",
