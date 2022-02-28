@@ -220,7 +220,7 @@ const DateForm = ({
     <RowButtonWrapper isSplit={isSplit}>
       {isSplit && <StartDateRowLabel>{quoteDisplayName}</StartDateRowLabel>}
       <RowButton
-        disabled={currentInsurer && !startDate}
+        disabled={Boolean(currentInsurer && !startDate)}
         datePickerOpen={datePickerOpen}
         onClick={() => setDatePickerOpen(!datePickerOpen)}
         isSplit={isSplit}
