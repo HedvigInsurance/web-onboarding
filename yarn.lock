@@ -2179,6 +2179,14 @@
     ts-node "^8.4.1"
     uuid "^8.3.2"
 
+"@hedviginsurance/hanalytics-client@1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/hanalytics-client/-/hanalytics-client-1.0.6.tgz#ada043f6509c5e5caff9dede2d45ff7a4e2bbde6"
+  integrity sha512-3o1XOZloEBGPpE4kX86fheMEZehcRlFKr1PfK+29kkP5i7h/3MGLZ3CLYCEfoSSIEQtn9qh5Q9ImrdiDKT1tHQ==
+  dependencies:
+    "@types/ua-parser-js" "^0.7.36"
+    ua-parser-js "^1.0.2"
+
 "@hedviginsurance/textkeyfy@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@hedviginsurance/textkeyfy/-/textkeyfy-2.0.1.tgz#70c0eaf8c674bbec0b50f7c88e46567c5390b2e8"
@@ -4075,6 +4083,11 @@
   integrity sha512-Gk9vaXfbzc5zCXI9eYE9BI5BNHEp4D3FWjgqBE/ePGYElLAP+KvxBcsdkwfIVvezs605oiyd/VrpiHe3Oeg+Aw==
   dependencies:
     "@types/jest" "*"
+
+"@types/ua-parser-js@^0.7.36":
+  version "0.7.36"
+  resolved "https://registry.yarnpkg.com/@types/ua-parser-js/-/ua-parser-js-0.7.36.tgz#9bd0b47f26b5a3151be21ba4ce9f5fa457c5f190"
+  integrity sha512-N1rW+njavs70y2cApeIw1vLMYXRwfBy+7trgavGuuTfOd7j1Yh7QTRc/yqsPl6ncokt72ZXuxEU0PiCp9bSwNQ==
 
 "@types/uglify-js@*":
   version "3.13.0"
@@ -16836,6 +16849,11 @@ ua-parser-js@^0.7.18:
   version "0.7.24"
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.24.tgz#8d3ecea46ed4f1f1d63ec25f17d8568105dc027c"
   integrity sha512-yo+miGzQx5gakzVK3QFfN0/L9uVhosXBBO7qmnk7c2iw1IhL212wfA3zbnI54B0obGwC/5NWub/iT9sReMx+Fw==
+
+ua-parser-js@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-1.0.2.tgz#e2976c34dbfb30b15d2c300b2a53eac87c57a775"
+  integrity sha512-00y/AXhx0/SsnI51fTc0rLRmafiGOM4/O+ny10Ps7f+j/b8p/ZY11ytMgznXkOVo4GQ+KwQG5UQLkLGirsACRg==
 
 unbox-primitive@^1.0.0:
   version "1.0.0"

@@ -14,6 +14,7 @@ import {
 } from './utils/StorageContainer'
 import { useCurrentLocale } from './l10n/useCurrentLocale'
 import { useGTMTracking } from './utils/tracking/gtm'
+import { useHAnalytics } from './utils/tracking/hanalytics'
 
 const isProductionEnvironment =
   window.hedvigClientConfig.appEnvironment === 'production'
@@ -22,6 +23,7 @@ export const App: React.ComponentType<StorageState> = ({ session }) => {
   const { isoLocale } = useCurrentLocale()
   const history = useHistory()
   useGTMTracking()
+  useHAnalytics()
 
   return (
     <>

@@ -35,6 +35,7 @@ import { SignFailModal } from './SignFailModal/SignFailModal'
 import { UserDetailsForm } from './UserDetailsForm'
 import { InsuranceSummary } from './InsuranceSummary'
 import { UpsellCard } from './UpsellCard'
+import { hAnalyticsTrackers } from '@hedviginsurance/hanalytics-client'
 
 type Openable = {
   visibilityState: VisibilityState
@@ -292,12 +293,18 @@ export const Checkout = ({
   })
 
   useEffect(() => {
+    hAnalyticsTrackers.receivedQuotes(quoteIds)
+  }, [quoteIds])
+
+  useEffect(() => {
     if (signStatus?.signState !== SignState.Completed) {
       return
     }
     if (variation === Variation.AVY) {
       handleSignedEvent(member.data?.member.id ?? null)
     }
+
+    hAnalyticsTrackers.quotesSigned(quoteIds)
   }, [member.data?.member, signStatus?.signState, variation])
 
   const canInitiateSign = Boolean(
