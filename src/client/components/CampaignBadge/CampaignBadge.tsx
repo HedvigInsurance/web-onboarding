@@ -7,15 +7,17 @@ import { useAppliedCampaignNameQuery } from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 
-const CampaignBadgeStyled = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
+/* https://coryrylan.com/blog/css-gap-space-with-flexbox */
+const InlineFlexGap = styled.div`
+  --gap: 0.5rem;
+  display: inline-flex;
   flex-wrap: wrap;
-  align-items: flex-start;
+  margin-top: calc(-1 * var(--gap));
+  margin-left: calc(-1 * var(--gap));
+  width: calc(100% + var(--gap));
 
-  & > *:not(:last-child) {
-    margin-right: 0.5rem;
+  > * {
+    margin: var(--gap) 0 0 var(--gap);
   }
 `
 
@@ -41,20 +43,20 @@ export const CampaignBadge: React.FC<CampaignBadgeProps> = ({
   })
   const campaignText = campaignData?.quoteCart.campaign?.displayValue ?? ''
 
-  if (loading || !campaignText) return null
-
   const discounts: Array<React.ReactNode> = [
     ...(isNorwegianBundle ? [textKeys.SIDEBAR_NO_BUNDLE_CAMPAIGN_TEXT()] : []),
     ...(campaignText ? [campaignText] : []),
   ]
 
+  if (loading || discounts.length === 0) return null
+
   return (
-    <CampaignBadgeStyled className={className}>
+    <InlineFlexGap className={className}>
       {discounts.map((text, index) => (
         <Badge key={index} {...others}>
           {text}
         </Badge>
       ))}
-    </CampaignBadgeStyled>
+    </InlineFlexGap>
   )
 }

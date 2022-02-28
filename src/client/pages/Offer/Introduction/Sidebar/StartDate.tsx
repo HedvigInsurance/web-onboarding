@@ -25,11 +25,7 @@ import { useTextKeys } from 'utils/textKeys'
 import { Size } from 'components/types'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import { getSelectedBundleVariant } from 'api/quoteCartQuerySelectors'
-import {
-  isSingleStartDateBundle,
-  getQuotes,
-  isMultiQuoteBundle,
-} from 'api/quoteBundleSelectors'
+import * as quoteBundleSelector from 'api/quoteBundleSelectors'
 import { CancellationOptions } from './CancellationOptions'
 
 const DateFormsWrapper = styled.div`
@@ -285,12 +281,13 @@ export const StartDate: React.FC<StartDateProps> = ({
     variables: { id: quoteCartId, locale: isoLocale },
   })
   const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
-  const selectedQuoteBundle = getSelectedBundleVariant(
-    quoteCartQueryData,
-    selectedInsuranceTypes,
+  const { bundle: selectedBundle } =
+    getSelectedBundleVariant(quoteCartQueryData, selectedInsuranceTypes) ?? {}
+  const singleDate = quoteBundleSelector.isSingleStartDate(
+    selectedBundle,
+    marketLabel,
   )
-  const singleDate = isSingleStartDateBundle(selectedQuoteBundle, marketLabel)
-  const quotes = getQuotes(selectedQuoteBundle)
+  const quotes = quoteBundleSelector.getQuotes(selectedBundle)
 
   if (quotes.length === 0) throw Error('Selected bundle has no quotes')
 
@@ -393,7 +390,7 @@ export const StartDate: React.FC<StartDateProps> = ({
                 quoteDisplayName={quote.displayName}
                 dataCollectionId={quote.dataCollectionId ?? undefined}
                 modal={modal}
-                isSplit={isMultiQuoteBundle(selectedQuoteBundle)}
+                isSplit={quoteBundleSelector.isMultiQuote(selectedBundle)}
                 size={size}
                 onChange={(newDate) =>
                   handleSelectNewStartDate(newDate, [quote.id])
