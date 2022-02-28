@@ -55,7 +55,7 @@ const getValueText = ({
     return `${textKeys[prefix]()} ${value}`
   }
   if (suffix && value) {
-    return `${textKeys[value]()} ${suffix}`
+    return `${value} ${textKeys[suffix]()}`
   }
   return value
 }
