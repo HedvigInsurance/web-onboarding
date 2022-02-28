@@ -26,7 +26,7 @@ describe('getQuoteDetails function', () => {
         typeOfResidenceTextKeys.SE_HOUSE,
       )
       expect(isSubleted.value.value).toBe(undefined)
-      expect(isSubleted.value.textKey).toBe('CHECKOUT_DETAILS_IS_NOT_SUBLETED')
+      expect(isSubleted.value.textKey).toBe('NO')
     })
   })
 })

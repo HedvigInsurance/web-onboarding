@@ -69,7 +69,10 @@ const getHouseDetails = ({
       label: 'CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS',
       value: {
         value: quoteDetailsData.numberOfBathrooms,
-        suffix: 'CHECKOUT_DETAILS_BATHROOMS_SUFFIX',
+        suffix:
+          quoteDetailsData.numberOfBathrooms > 1
+            ? 'CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS_SUFFIX_MANY'
+            : 'CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS_SUFFIX_ONE',
       },
     },
     {
@@ -77,11 +80,9 @@ const getHouseDetails = ({
       value: { value: quoteDetailsData.yearOfConstruction },
     },
     {
-      label: 'CHECKOUT_DETAILS_SUBLETED_STATUS',
+      label: 'CHECKOUT_DETAILS_IS_PARTLY_SUBLET',
       value: {
-        textKey: quoteDetailsData.isSubleted
-          ? 'CHECKOUT_DETAILS_IS_SUBLETED'
-          : 'CHECKOUT_DETAILS_IS_NOT_SUBLETED',
+        textKey: quoteDetailsData.isSubleted ? 'YES' : 'NO',
       },
     },
   ]
@@ -175,12 +176,17 @@ export const getQuoteDetails = ({
     quoteDetailsData: mainQuoteDetailsData,
   })
 
+  const householdSize = numberCoInsured + 1
+
   const commonQuoteDetailsGroup = [
     {
       label: 'CHECKOUT_DETAILS_HOUSEHOLD_SIZE',
       value: {
-        value: numberCoInsured + 1,
-        suffix: 'CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX',
+        value: householdSize,
+        suffix:
+          householdSize > 1
+            ? 'CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX_MANY'
+            : 'CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX_ONE',
       },
     },
     ...getStudentOrYouth(mainQuoteDetailsData),
