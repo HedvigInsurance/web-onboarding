@@ -64,7 +64,7 @@ export const Wrapper = styled('div')`
     color: ${colorsV3.gray300};
   }
   .adyen-checkout__input {
-    background: ${colorsV3.white};
+    background: ${colorsV3.gray100};
     border: 1px solid ${colorsV3.gray500};
     padding: 1rem;
     height: 3.5rem;
@@ -256,7 +256,7 @@ const createAdyenCheckout = ({
         styles: {
           base: {
             color: colorsV3.gray700,
-            background: colorsV3.white,
+            background: colorsV3.gray100,
           },
           placeholder: {
             color: colorsV3.gray700,

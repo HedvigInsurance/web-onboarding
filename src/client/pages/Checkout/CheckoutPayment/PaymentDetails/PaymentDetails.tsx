@@ -7,7 +7,7 @@ import {
   AdyenCheckout,
   Wrapper,
 } from '../../../ConnectPayment/components/AdyenCheckout'
-const { gray600, gray700, gray300, gray900 } = colorsV3
+const { gray100, gray600, gray700, gray300, gray900 } = colorsV3
 
 const Description = styled.div`
   margin-top: 0.5rem;
@@ -48,10 +48,10 @@ const AdyenContainer = styled.div`
       color: ${gray900};
     }
     .adyen-checkout__input {
-      background-color: white;
+      background-color: ${gray100};
       border: 1px solid ${gray300};
       border-radius: 8px;
-      color: white;
+      color: ${gray100};
       &:hover {
         border: 1px solid ${gray700};
       }
@@ -61,7 +61,7 @@ const AdyenContainer = styled.div`
     }
 
     js-iframe-input input-field {
-      background: white;
+      background: ${gray100};
     }
   }
 `
