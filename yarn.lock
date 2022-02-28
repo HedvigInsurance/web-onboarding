@@ -2179,10 +2179,10 @@
     ts-node "^8.4.1"
     uuid "^8.3.2"
 
-"@hedviginsurance/hanalytics-client@1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/hanalytics-client/-/hanalytics-client-1.0.6.tgz#ada043f6509c5e5caff9dede2d45ff7a4e2bbde6"
-  integrity sha512-3o1XOZloEBGPpE4kX86fheMEZehcRlFKr1PfK+29kkP5i7h/3MGLZ3CLYCEfoSSIEQtn9qh5Q9ImrdiDKT1tHQ==
+"@hedviginsurance/hanalytics-client@1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/hanalytics-client/-/hanalytics-client-1.0.7.tgz#73944bba2c9fe4816bda455fbb8e79dd6dd52506"
+  integrity sha512-vYUQngbzYEtZdRD81O4lqMLMMGisH5jYkaeM61vt37yxyLadw+bWWTdlv8sWoOqS84X7KLHqM7sTLsYdzhoTnA==
   dependencies:
     "@types/ua-parser-js" "^0.7.36"
     ua-parser-js "^1.0.2"

@@ -28,7 +28,7 @@ export const useHAnalytics = () => {
                 httpHeaders: {
                     Authorization: getAuthorizationHeader()
                 },
-                endpointURL: "https://hanalytics-production.herokuapp.com", // todo resolve correct endpoint
+                endpointURL: "https://hanalytics-staging.herokuapp.com", // todo resolve correct endpoint
                 context: {
                     locale: locale.isoLocale,
                     app: {
@@ -45,8 +45,6 @@ export const useHAnalytics = () => {
                     /// send to google analytics or other tracking partner here
                 }
             })
-
-        console.log("hello from useHAnalytics")
         
         hAnalyticsTrackers.identify()
     }, [locale, environment, storageState])
