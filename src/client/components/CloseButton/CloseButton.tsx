@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { Cross } from '../icons/Cross'
 
-const Button = styled.button`
+export const Button = styled.button`
   width: 1.5rem;
   height: 1.5rem;
   padding: 0;
