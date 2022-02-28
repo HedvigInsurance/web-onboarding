@@ -258,7 +258,7 @@
   "STARTPAGE_DK_CONTENTS_BODY": "",
   "STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_BODY": "",
   "STARTPAGE_DK_CONTENTS_ACCIDENT_BODY": "",
-  "DETAILS_MODULE_TABLE_COINSURED_CELL_LABEL": "Antall forsikrede mennesker",
+  "DETAILS_MODULE_TABLE_COINSURED_CELL_LABEL": "Antall medforsikrede",
   "CHECKOUT_DETAILS_NAME": "Navn",
   "CHECKOUT_DETAILS_BIRTHDATE": "Fødselsdato",
   "CHECKOUT_DETAILS_STUDENT": "",
@@ -350,5 +350,8 @@
   "CHECKOUT_DETAILS_PAGE_TITLE": "Kasse | Hedvig",
   "CHECKOUT_PAYMENT_PAGE_TITLE": "Betaling | Hedvig",
   "CHECKOUT_QUOTE_DETAILS_TITLE": "Sammendrag",
-  "CHECKOUT_YOUR_PLAN_TITLE": ""
+  "CHECKOUT_INSURANCE_TITLE": "Forsikring",
+  "CHECKOUT_PAYMENT_DETAILS_TITLE": "Betalingsmetode",
+  "CHECKOUT_PAYMENT_DETAILS_DESCRIPTION": "Din betaling trekkes fra ditt kredittkort i slutten av hver måned. Vi håndterer alle betalinger på en sikker måte via Adyen.",
+  "CHECKOUT_PAYMENT_DETAILS_TERMS": "Ved å klikke på \"gjennomfør kjøp\" bekrefter jeg at jeg har lest og forstått vilkårene, samt godkjenner at Hedvig håndterer mine personlige opplysninger."
 }
