@@ -54,7 +54,7 @@ type GTMEventData = {
   type: string
 }
 
-type GTMPhoneNumberData = {
+export type GTMPhoneNumberData = {
   path: string
   status: 'opened' | 'closed'
 }

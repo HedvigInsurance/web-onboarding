@@ -193,7 +193,6 @@ export const routes: Route[] = [
   },
   {
     path: `${onboardingLocaleBaseRoute}/(offer|sign)/:id`,
-    isHiddenInProd: true,
     serverRouteData: {
       titleTextKey: 'OFFER_PAGE_TITLE',
     },
@@ -206,7 +205,6 @@ export const routes: Route[] = [
     path: `${onboardingLocaleBaseRoute}/checkout/details/:id`,
     isHiddenInProd: true,
     serverRouteData: {
-      // TODO: Add this text key and translations to Lokalise
       titleTextKey: 'CHECKOUT_DETAILS_PAGE_TITLE',
     },
     clientRouteData: {
@@ -218,7 +216,6 @@ export const routes: Route[] = [
     path: `${onboardingLocaleBaseRoute}/checkout/payment/:id`,
     isHiddenInProd: true,
     serverRouteData: {
-      // TODO: Add this text key and translations to Lokalise
       titleTextKey: 'CHECKOUT_PAYMENT_PAGE_TITLE',
     },
     clientRouteData: {
@@ -320,7 +317,6 @@ export const routes: Route[] = [
                         : EmbarkStory.NorwayComboEnglish,
                   }
                 case 'home':
-                  if (isProductionEnvironment) return landingPageRedirect
                   return {
                     baseUrl,
                     name:
@@ -330,7 +326,6 @@ export const routes: Route[] = [
                     quoteCart: true,
                   }
                 case 'home-travel':
-                  if (isProductionEnvironment) return landingPageRedirect
                   return {
                     baseUrl,
                     name:
