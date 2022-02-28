@@ -7,12 +7,26 @@ export const useHAnalytics = () => {
     const locale = useCurrentLocale()
     const environment = window.hedvigClientConfig.appEnvironment
     const storageState = useStorage()
+
+    const getAuthorizationHeader = () => {
+        if (!storageState) {
+            return ""
+        }
+
+        const sessionToken = storageState.session?.getSession()?.token
+
+        if (sessionToken) {
+            return `Bearer ${sessionToken}`
+        }
+
+        return ""
+    }
     
     useEffect(() => {
         hAnalyticsNetworking.getConfig = () =>
            ({
                 httpHeaders: {
-                    Authorization: `Bearer ${storageState.session.getSession()?.token}`
+                    Authorization: getAuthorizationHeader()
                 },
                 endpointURL: "https://hanalytics-production.herokuapp.com", // todo resolve correct endpoint
                 context: {
@@ -31,7 +45,9 @@ export const useHAnalytics = () => {
                     /// send to google analytics or other tracking partner here
                 }
             })
+
+        console.log("hello from useHAnalytics")
         
         hAnalyticsTrackers.identify()
-    }, [locale, environment])
+    }, [locale, environment, storageState])
 }
