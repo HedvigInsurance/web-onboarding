@@ -11,6 +11,8 @@ import {
 import {
   mockedQuoteCartId,
   mockedQuoteDetailsDataQueryResponseSeHouse,
+  mockedQuoteDetailsDataQueryResponseNoCombo,
+  mockedQuoteDetailsDataQueryResponseDKHomeOwnerStudent,
 } from 'utils/testData/quoteDetailsDataMock'
 import { LocaleLabel } from 'l10n/locales'
 import { localePathPattern } from 'l10n/localePathPattern'
@@ -31,9 +33,6 @@ const storyMeta: Meta<StoryProps> = {
   title: 'Checkout Details/QuoteDetails',
   component: QuoteDetails,
   argTypes: localeArgTypes,
-  args: {
-    localePath: 'se-en',
-  },
   parameters: {
     backgrounds: {
       default: 'gray100',
@@ -68,9 +67,11 @@ const Template: Story<StoryProps> = ({ localePath }) => {
   )
 }
 
-export const SwedishHouse = Template.bind({})
+export const SwedishHouseQuote = Template.bind({})
 
-SwedishHouse.parameters = {
+SwedishHouseQuote.args = { localePath: 'se-en' }
+
+SwedishHouseQuote.parameters = {
   apolloClient: {
     mocks: [
       {
@@ -81,6 +82,48 @@ SwedishHouse.parameters = {
           },
         },
         result: mockedQuoteDetailsDataQueryResponseSeHouse,
+      },
+    ],
+  },
+}
+
+export const NorwegianComboQuote = Template.bind({})
+
+NorwegianComboQuote.args = {
+  localePath: 'no-en',
+}
+
+NorwegianComboQuote.parameters = {
+  apolloClient: {
+    mocks: [
+      {
+        request: {
+          query: QuoteDetailsDataDocument,
+          variables: {
+            id: mockedQuoteCartId,
+          },
+        },
+        result: mockedQuoteDetailsDataQueryResponseNoCombo,
+      },
+    ],
+  },
+}
+
+export const DanishHomeContentsQuoteStudent = Template.bind({})
+
+DanishHomeContentsQuoteStudent.args = { localePath: 'dk-en' }
+
+DanishHomeContentsQuoteStudent.parameters = {
+  apolloClient: {
+    mocks: [
+      {
+        request: {
+          query: QuoteDetailsDataDocument,
+          variables: {
+            id: mockedQuoteCartId,
+          },
+        },
+        result: mockedQuoteDetailsDataQueryResponseDKHomeOwnerStudent,
       },
     ],
   },

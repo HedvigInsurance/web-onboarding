@@ -113,3 +113,98 @@ export const mockedQuoteDetailsDataQueryResponseSeHouse = {
     },
   },
 }
+
+export const mockedQuoteDetailsDataQueryResponseNoCombo = {
+  data: {
+    quoteCart: {
+      id: mockedQuoteCartId,
+      bundle: {
+        quotes: [
+          {
+            id: 'f2fb8c71-f22f-4e2e-8d16-7a65296ea7ca',
+            data: {
+              type: 'NORWEGIAN_HOME_CONTENT',
+              id: '727d1b22-eddc-4556-9656-c1790caeb89b',
+              ssn: null,
+              birthDate: '1990-09-09',
+              firstName: 'Test',
+              lastName: 'Testsen',
+              email: 'test@testsen.no',
+              phoneNumber: null,
+              street: 'Testveien 1',
+              city: null,
+              zipCode: '1111',
+              livingSpace: 50,
+              numberCoInsured: 2,
+              isYouth: false,
+              subType: 'RENT',
+              complete: true,
+              typeOfContract: 'NO_HOME_CONTENT_RENT',
+            },
+            __typename: 'BundledQuote',
+          },
+          {
+            id: 'be21ef31-c851-4f7b-9dc6-802d633b7544',
+            data: {
+              type: 'NORWEGIAN_TRAVEL',
+              id: '41f305c6-284c-46b1-9f71-da57cbabbcdd',
+              ssn: null,
+              birthDate: '1990-09-09',
+              firstName: 'Test',
+              lastName: 'Testsen',
+              email: 'test@testsen.no',
+              phoneNumber: null,
+              numberCoInsured: 2,
+              isYouth: false,
+              complete: true,
+              typeOfContract: 'NO_TRAVEL',
+            },
+            __typename: 'BundledQuote',
+          },
+        ],
+        __typename: 'QuoteBundle',
+      },
+      __typename: 'QuoteCart',
+    },
+  },
+}
+
+export const mockedQuoteDetailsDataQueryResponseDKHomeOwnerStudent = {
+  data: {
+    quoteCart: {
+      id: mockedQuoteCartId,
+      bundle: {
+        quotes: [
+          {
+            id: 'aefe6c90-ff57-44fd-8ccf-776585a2deb4',
+            data: {
+              type: 'DANISH_HOME_CONTENT',
+              id: '99537816-91b9-4cc8-9e5f-2b1b169acf16',
+              ssn: null,
+              birthDate: '1999-08-08',
+              firstName: 'Dansk',
+              lastName: 'Dansksen',
+              email: 'sven.svensson.cihrf@hedvig.com',
+              phoneNumber: null,
+              street: 'Theodore Roosevelts Vej 3',
+              zipCode: '2100',
+              bbrId: null,
+              city: null,
+              apartment: 'tv',
+              floor: '2',
+              livingSpace: 34,
+              numberCoInsured: 0,
+              isStudent: true,
+              subType: 'OWN',
+              typeOfContract: 'DK_HOME_CONTENT_STUDENT_OWN',
+              complete: true,
+            },
+            __typename: 'BundledQuote',
+          },
+        ],
+        __typename: 'QuoteBundle',
+      },
+      __typename: 'QuoteCart',
+    },
+  },
+}
