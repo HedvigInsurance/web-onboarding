@@ -1,9 +1,12 @@
 import {
   QuoteDetails,
   HomeQuoteDetails,
-  HouseQuoteDetails,
   QuoteDetailsData,
 } from 'api/quoteDetailsDataTypes'
+import {
+  isHouseQuoteDetailsData,
+  isHomeQuoteDetailsData,
+} from 'api/quoteDetailsDataSelectors'
 import {
   typeOfResidenceTextKeys,
   HomeInsuranceTypeOfContract,
@@ -29,25 +32,6 @@ type MultipleQuoteDetailsParams = {
 }
 type SingleQuoteDetailsParams = {
   quoteDetailsData: QuoteDetails
-}
-
-const isHomeQuoteDetailsData = (
-  data: QuoteDetails,
-): data is HomeQuoteDetails => {
-  const isHome = 'street' in data && 'zipCode' in data && 'livingSpace' in data
-  return isHome
-}
-
-const isHouseQuoteDetailsData = (
-  data: QuoteDetails,
-): data is HouseQuoteDetails => {
-  const isHouse =
-    'ancillaryArea' in data &&
-    'yearOfConstruction' in data &&
-    'numberOfBathrooms' in data &&
-    'isSubleted' in data &&
-    'extraBuildings' in data
-  return isHouse
 }
 
 const getHouseDetails = ({
