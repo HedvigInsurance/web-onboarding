@@ -14,43 +14,7 @@ export const useQuoteDetailsData = () => {
     return { quoteDetailsData: null, isLoading, error }
   }
 
-  const quoteDetailsData: QuoteDetailsData = quotes.map(({ data }) => {
-    const {
-      id,
-      typeOfContract,
-      numberCoInsured,
-      street,
-      zipCode,
-      livingSpace,
-      floor,
-      apartment,
-      isStudent,
-      isYouth,
-      ancillaryArea,
-      yearOfConstruction,
-      numberOfBathrooms,
-      extraBuildings,
-      isSubleted,
-    } = data
-
-    return {
-      id,
-      typeOfContract,
-      numberCoInsured,
-      ...(street && { street }),
-      ...(zipCode && { zipCode }),
-      ...(livingSpace && { livingSpace }),
-      ...('floor' in data && { floor }),
-      ...('apartment' in data && { apartment }),
-      ...('isStudent' in data && { isStudent }),
-      ...('isYouth' in data && { isYouth }),
-      ...('ancillaryArea' in data && { ancillaryArea }),
-      ...('yearOfConstruction' in data && { yearOfConstruction }),
-      ...('numberOfBathrooms' in data && { numberOfBathrooms }),
-      ...('extraBuildings' in data && { extraBuildings }),
-      ...('isSubleted' in data && { isSubleted }),
-    }
-  })
+  const quoteDetailsData: QuoteDetailsData = quotes.map(({ data }) => data)
 
   return { quoteDetailsData, isLoading, error }
 }
