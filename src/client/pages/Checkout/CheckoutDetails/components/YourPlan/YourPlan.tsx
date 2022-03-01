@@ -1,15 +1,14 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
 import { getFormattedPrice } from 'utils/getFormattedPrice'
-import { usePriceQuery } from 'data/graphql'
 import { Badge } from 'components/Badge/Badge'
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { SubSection } from '../SubSection'
 import { Divider } from '../../../shared/Divider'
+import { useGetPriceData } from '../../../../../utils/hooks/useGetPriceData'
 
 const { gray700 } = colorsV3
 
@@ -42,26 +41,13 @@ const HorizontalDivider = styled(Divider)`
 `
 
 export const YourPlan = () => {
+  const priceData = useGetPriceData()
   const textKeys = useTextKeys()
-  const { isoLocale, currencyLocale } = useCurrentLocale()
-  const { id: quoteCartId } = useParams<{ id: string }>()
-  const { data, error } = usePriceQuery({
-    variables: {
-      id: quoteCartId,
-      locale: isoLocale,
-    },
-  })
-  const quoteBundle = data?.quoteCart.bundle
-
-  if (error || !quoteBundle) {
+  const { currencyLocale } = useCurrentLocale()
+  if (!priceData) {
     return null
   }
-  const total = quoteBundle.bundleCost.monthlyNet.amount
-  const discount = quoteBundle.bundleCost.monthlyDiscount.amount
-  const currency = quoteBundle.quotes[0].price.currency
-  const quotes = quoteBundle.quotes
-  const campaignName = data?.quoteCart?.campaign?.displayValue
-
+  const { quotes, total, discount, currency, campaignName } = priceData
   const formattedPrice = (value: string) => {
     return getFormattedPrice({
       locale: currencyLocale,
