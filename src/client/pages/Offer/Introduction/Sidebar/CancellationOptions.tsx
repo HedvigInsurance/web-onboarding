@@ -1,5 +1,5 @@
+import React, { useState } from 'react'
 import styled from '@emotion/styled'
-import React from 'react'
 import { Switch } from 'components/Switch'
 import { Spinner } from 'components/utils'
 import { BundledQuote } from 'data/graphql'
@@ -43,10 +43,59 @@ const getLabelContent = (textKeys: TextKeyMap, quote: BundledQuote) => {
   })
 }
 
+type CancellationOptionProps = {
+  quote: BundledQuote
+  onToggleCancellationOption: (
+    isChecked: boolean,
+    quoteId: string,
+  ) => Promise<void>
+  isDisabled?: boolean
+}
+
+const CancellationOption = ({
+  quote,
+  onToggleCancellationOption,
+  isDisabled = false,
+}: CancellationOptionProps) => {
+  const textKeys = useTextKeys()
+
+  const [isLoading, setIsLoading] = useState(false)
+
+  const { id, startDate } = quote
+  const isChecked = !startDate
+  const checkboxLabel = getLabelContent(textKeys, quote)
+
+  const handleToggle = async () => {
+    setIsLoading(true)
+    await onToggleCancellationOption(!isChecked, id)
+    setIsLoading(false)
+  }
+
+  return (
+    <HandleSwitchingWrapper>
+      <HandleSwitchingLabel isDisabled={isDisabled}>
+        {isLoading ? (
+          <StyledSpinner />
+        ) : (
+          <StyledSwitch
+            checked={isChecked}
+            disabled={isDisabled}
+            onChange={handleToggle}
+          />
+        )}
+        {checkboxLabel}
+      </HandleSwitchingLabel>
+    </HandleSwitchingWrapper>
+  )
+}
+
 type CancellationOptionsProps = {
   loadingQuoteIds: Array<string>
   quotes: BundledQuote[]
-  onToggleCancellationOption: (isChecked: boolean, quoteId: string) => void
+  onToggleCancellationOption: (
+    isChecked: boolean,
+    quoteId: string,
+  ) => Promise<void>
 }
 
 export const CancellationOptions = ({
@@ -54,33 +103,19 @@ export const CancellationOptions = ({
   quotes,
   onToggleCancellationOption,
 }: CancellationOptionsProps) => {
-  const textKeys = useTextKeys()
   const isDisabled = loadingQuoteIds.length > 0
 
   return (
     <>
       {quotes.map((quote) => {
-        const { id, startDate, currentInsurer } = quote
-        const isChecked = !startDate
-        const checkboxLabel = getLabelContent(textKeys, quote)
-        const isLoading = loadingQuoteIds.includes(id)
-
         return (
-          currentInsurer?.switchable && (
-            <HandleSwitchingWrapper key={id}>
-              <HandleSwitchingLabel isDisabled={isDisabled}>
-                {isLoading ? (
-                  <StyledSpinner />
-                ) : (
-                  <StyledSwitch
-                    checked={isChecked}
-                    disabled={isDisabled}
-                    onChange={() => onToggleCancellationOption(!isChecked, id)}
-                  />
-                )}
-                {checkboxLabel}
-              </HandleSwitchingLabel>
-            </HandleSwitchingWrapper>
+          quote.currentInsurer?.switchable && (
+            <CancellationOption
+              key={quote.id}
+              quote={quote}
+              onToggleCancellationOption={onToggleCancellationOption}
+              isDisabled={isDisabled}
+            />
           )
         )
       })}
