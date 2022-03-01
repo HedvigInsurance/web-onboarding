@@ -64,7 +64,12 @@ const RowButton = styled.button<{
   cursor: pointer;
   transition: background-color 250ms, border 250ms;
 
-  :active {
+  &:active {
+    background-color: ${colorsV3.gray300};
+  }
+
+  &:disabled {
+    cursor: not-allowed;
     background-color: ${colorsV3.gray300};
   }
 
@@ -153,7 +158,7 @@ const getDefaultDateValue = (quote: OfferQuote) => {
   return new Date()
 }
 
-const DateForm: React.FC<{
+type DateFormProps = {
   quote: OfferQuote
   offerData?: OfferData
   isSingleStartDateBundle?: boolean
@@ -162,7 +167,9 @@ const DateForm: React.FC<{
   modal?: boolean
   refetch: () => Promise<void>
   size: Size
-}> = ({
+}
+
+const DateForm = ({
   quote,
   offerData,
   isSingleStartDateBundle,
@@ -171,7 +178,7 @@ const DateForm: React.FC<{
   modal,
   refetch,
   size,
-}) => {
+}: DateFormProps) => {
   const [datePickerOpen, setDatePickerOpen] = React.useState(false)
 
   const [dateValue, setDateValue] = React.useState(() =>
@@ -287,6 +294,7 @@ const DateForm: React.FC<{
     <RowButtonWrapper isSplit={isSplit}>
       {isSplit && <StartDateRowLabel>{quote.displayName}</StartDateRowLabel>}
       <RowButton
+        disabled={Boolean(quote.currentInsurer && !quote.startDate)}
         datePickerOpen={datePickerOpen}
         onClick={() => setDatePickerOpen(!datePickerOpen)}
         isSplit={isSplit}
