@@ -1,16 +1,21 @@
-import styled from '@emotion/styled'
 import React from 'react'
+import styled from '@emotion/styled'
+
 import { Switch } from 'components/Switch'
 import { Spinner } from 'components/utils'
+import { TooltipIcon } from 'components/Tooltip/TooltipIcon'
+
 import { BundledQuote } from 'data/graphql'
 import { useTextKeys, TextKeyMap } from 'utils/textKeys'
 
 const HandleSwitchingWrapper = styled.div`
+  display: flex;
   margin-bottom: 0.75rem;
   padding: 0 0.25rem;
 `
 
 const HandleSwitchingLabel = styled.label<{ isDisabled: boolean }>`
+  flex-grow: 1;
   display: flex;
   align-items: center;
 
@@ -80,6 +85,11 @@ export const CancellationOptions = ({
                 )}
                 {checkboxLabel}
               </HandleSwitchingLabel>
+              <TooltipIcon
+                body={textKeys.SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_TOOLTIP(
+                  { INSURANCE_NAME: quote.displayName },
+                )}
+              />
             </HandleSwitchingWrapper>
           )
         )
