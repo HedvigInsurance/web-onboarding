@@ -2,8 +2,9 @@ import React, { Fragment } from 'react'
 import { colorsV3 } from '@hedviginsurance/brand'
 import styled from '@emotion/styled'
 import { getQuoteDetails, Value as ValueType } from 'utils/getQuoteDetails'
-import { useQuoteDetailsData } from 'utils/hooks/useQuoteDetailsData'
 import { useTextKeys, TextKeyMap } from 'utils/textKeys'
+import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
+import { useQuoteDetailsDataQuery } from 'data/graphql'
 import { SubSection } from '../SubSection'
 
 const { gray900, gray300, gray700 } = colorsV3
@@ -62,7 +63,14 @@ const getValueText = ({
 
 export const QuoteDetails = () => {
   const textKeys = useTextKeys()
-  const { quoteDetailsData } = useQuoteDetailsData()
+  const { quoteCartId } = useQuoteCartIdFromUrl()
+  const { data } = useQuoteDetailsDataQuery({
+    variables: { id: quoteCartId },
+  })
+
+  const quoteDetailsData = data?.quoteCart.bundle?.quotes?.map(
+    ({ data }) => data,
+  )
 
   if (!quoteDetailsData) {
     return null // TODO: Do something more sophisticated
