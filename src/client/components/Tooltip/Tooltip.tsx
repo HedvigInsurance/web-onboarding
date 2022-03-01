@@ -30,8 +30,7 @@ const Arrow = styled.div`
 `
 
 const TooltipPopup = styled.div`
-  min-width: 12.5rem;
-  max-width: 80vw;
+  width: min(12.5rem, 80vw);
   padding: 0.75rem 1rem;
   border-radius: 8px;
   box-shadow: 0px 16px 40px rgba(0, 0, 0, 0.15);
