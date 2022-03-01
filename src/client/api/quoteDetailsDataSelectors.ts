@@ -1,8 +1,13 @@
 import {
   HomeQuoteDetails,
-  QuoteDetails,
   HouseQuoteDetails,
+  QuoteDetails,
+  QuoteDetailsData,
 } from './quoteDetailsDataTypes'
+
+export type MultipleQuotesDetailsData = {
+  quoteDetailsData: QuoteDetailsData
+}
 
 export const isHomeQuoteDetailsData = (
   data: QuoteDetails,
@@ -21,4 +26,14 @@ export const isHouseQuoteDetailsData = (
     'isSubleted' in data &&
     'extraBuildings' in data
   return isHouse
+}
+
+export const getMainQuoteDetailsData = ({
+  quoteDetailsData,
+}: MultipleQuotesDetailsData): QuoteDetails => {
+  const homeQuoteDetailsData = quoteDetailsData.find((data) => {
+    return isHomeQuoteDetailsData(data)
+  })
+
+  return homeQuoteDetailsData ? homeQuoteDetailsData : quoteDetailsData[0]
 }

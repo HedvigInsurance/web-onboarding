@@ -1,11 +1,9 @@
+import { QuoteDetails, HomeQuoteDetails } from 'api/quoteDetailsDataTypes'
 import {
-  QuoteDetails,
-  HomeQuoteDetails,
-  QuoteDetailsData,
-} from 'api/quoteDetailsDataTypes'
-import {
+  getMainQuoteDetailsData,
   isHouseQuoteDetailsData,
   isHomeQuoteDetailsData,
+  MultipleQuotesDetailsData,
 } from 'api/quoteDetailsDataSelectors'
 import {
   typeOfResidenceTextKeys,
@@ -25,13 +23,26 @@ type Details = {
   value: Value
 }
 
-export type DetailsGroup = Details[]
+type DetailsGroup = Details[]
 
-type MultipleQuoteDetailsParams = {
-  quoteDetailsData: QuoteDetailsData
-}
 type SingleQuoteDetailsParams = {
   quoteDetailsData: QuoteDetails
+}
+
+export const getAddressValue = (quoteDetails: HomeQuoteDetails) => {
+  const { street } = quoteDetails
+
+  if ('floor' in quoteDetails && 'apartment' in quoteDetails) {
+    const { floor, apartment } = quoteDetails
+
+    if (floor || apartment) {
+      const formattedFloor = floor ? `${floor}.` : ''
+      const apartmentString = apartment ? ` ${apartment}` : ''
+      return `${street}, ${formattedFloor}${apartmentString}`
+    }
+  }
+
+  return street
 }
 
 const getHouseDetails = ({
@@ -72,7 +83,45 @@ const getHouseDetails = ({
   ]
 }
 
-const getExtraBuildingsGroups = ({
+const getHomeDetails = ({
+  quoteDetailsData,
+}: SingleQuoteDetailsParams): DetailsGroup => {
+  if (!isHomeQuoteDetailsData(quoteDetailsData)) {
+    return []
+  }
+
+  const { typeOfContract } = quoteDetailsData
+
+  return [
+    {
+      label: 'CHECKOUT_DETAILS_ADDRESS',
+      value: { value: getAddressValue(quoteDetailsData) },
+    },
+    {
+      label: 'CHECKOUT_DETAILS_ZIPCODE',
+      value: { value: formatPostalNumber(quoteDetailsData.zipCode) },
+    },
+    {
+      label: 'CHECKOUT_DETAILS_LIVING_SPACE',
+      value: {
+        value: quoteDetailsData.livingSpace,
+        suffix: 'CHECKOUT_DETAILS_SQM_SUFFIX',
+      },
+    },
+    {
+      label: 'CHECKOUT_DETAILS_RESIDENCE_TYPE',
+      value: {
+        textKey:
+          typeOfResidenceTextKeys[
+            typeOfContract as HomeInsuranceTypeOfContract
+          ],
+      },
+    },
+    ...getHouseDetails({ quoteDetailsData }),
+  ]
+}
+
+const getExtraBuildingsDetails = ({
   quoteDetailsData,
 }: SingleQuoteDetailsParams): DetailsGroup[] => {
   if (
@@ -105,106 +154,6 @@ const getExtraBuildingsGroups = ({
   return extraBuildings
 }
 
-const getMainQuoteDetailsData = ({
-  quoteDetailsData,
-}: MultipleQuoteDetailsParams): QuoteDetails => {
-  const homeQuoteDetailsData = quoteDetailsData.find((data) => {
-    return isHomeQuoteDetailsData(data)
-  })
-
-  return homeQuoteDetailsData ? homeQuoteDetailsData : quoteDetailsData[0]
-}
-
-export const getQuoteDetails = ({
-  quoteDetailsData,
-}: MultipleQuoteDetailsParams): DetailsGroup[] => {
-  const mainQuoteDetailsData = getMainQuoteDetailsData({
-    quoteDetailsData,
-  })
-
-  const { typeOfContract, numberCoInsured } = mainQuoteDetailsData
-
-  const homeDetailsGroup: DetailsGroup | null = isHomeQuoteDetailsData(
-    mainQuoteDetailsData,
-  )
-    ? [
-        {
-          label: 'CHECKOUT_DETAILS_ADDRESS',
-          value: { value: getAddressValue(mainQuoteDetailsData) },
-        },
-        {
-          label: 'CHECKOUT_DETAILS_ZIPCODE',
-          value: { value: formatPostalNumber(mainQuoteDetailsData.zipCode) },
-        },
-        {
-          label: 'CHECKOUT_DETAILS_LIVING_SPACE',
-          value: {
-            value: mainQuoteDetailsData.livingSpace,
-            suffix: 'CHECKOUT_DETAILS_SQM_SUFFIX',
-          },
-        },
-        {
-          label: 'CHECKOUT_DETAILS_RESIDENCE_TYPE',
-          value: {
-            textKey:
-              typeOfResidenceTextKeys[
-                typeOfContract as HomeInsuranceTypeOfContract
-              ],
-          },
-        },
-        ...getHouseDetails({ quoteDetailsData: mainQuoteDetailsData }),
-      ]
-    : null
-
-  const extraBuildingsGroups = getExtraBuildingsGroups({
-    quoteDetailsData: mainQuoteDetailsData,
-  })
-
-  const householdSize = numberCoInsured + 1
-
-  const commonQuoteDetailsGroup = [
-    {
-      label: 'CHECKOUT_DETAILS_HOUSEHOLD_SIZE',
-      value: {
-        value: householdSize,
-        suffix:
-          householdSize > 1
-            ? 'CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX_MANY'
-            : 'CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX_ONE',
-      },
-    },
-    ...getStudentOrYouth(mainQuoteDetailsData),
-  ]
-
-  const allGroups = [
-    homeDetailsGroup,
-    ...extraBuildingsGroups,
-    commonQuoteDetailsGroup,
-  ]
-
-  const quoteDetailsGroups = allGroups.filter(
-    (group): group is DetailsGroup => group !== null,
-  )
-
-  return quoteDetailsGroups
-}
-
-export const getAddressValue = (quoteDetails: HomeQuoteDetails) => {
-  const { street } = quoteDetails
-
-  if ('floor' in quoteDetails && 'apartment' in quoteDetails) {
-    const { floor, apartment } = quoteDetails
-
-    if (floor || apartment) {
-      const formattedFloor = floor ? `${floor}.` : ''
-      const apartmentString = apartment ? ` ${apartment}` : ''
-      return `${street}, ${formattedFloor}${apartmentString}`
-    }
-  }
-
-  return street
-}
-
 const getStudentOrYouth = (quoteDetails: QuoteDetails): DetailsGroup => {
   if ('isStudent' in quoteDetails && quoteDetails.isStudent) {
     return [{ label: '+', value: { textKey: 'CHECKOUT_DETAILS_STUDENT' } }]
@@ -215,4 +164,53 @@ const getStudentOrYouth = (quoteDetails: QuoteDetails): DetailsGroup => {
   }
 
   return []
+}
+
+const getPeopleDetails = ({
+  quoteDetailsData,
+}: SingleQuoteDetailsParams): DetailsGroup => {
+  const { numberCoInsured } = quoteDetailsData
+  const householdSize = numberCoInsured + 1
+
+  return [
+    {
+      label: 'CHECKOUT_DETAILS_HOUSEHOLD_SIZE',
+      value: {
+        value: householdSize,
+        suffix:
+          householdSize > 1
+            ? 'CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX_MANY'
+            : 'CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX_ONE',
+      },
+    },
+    ...getStudentOrYouth(quoteDetailsData),
+  ]
+}
+
+export const getQuoteDetails = ({
+  quoteDetailsData,
+}: MultipleQuotesDetailsData): DetailsGroup[] => {
+  const mainQuoteDetailsData = getMainQuoteDetailsData({
+    quoteDetailsData,
+  })
+
+  const homeDetailsGroup: DetailsGroup = getHomeDetails({
+    quoteDetailsData: mainQuoteDetailsData,
+  })
+
+  const extraBuildingsGroups = getExtraBuildingsDetails({
+    quoteDetailsData: mainQuoteDetailsData,
+  })
+
+  const peopleDetailsGroup = getPeopleDetails({
+    quoteDetailsData: mainQuoteDetailsData,
+  })
+
+  const quoteDetailsGroups = [
+    homeDetailsGroup,
+    ...extraBuildingsGroups,
+    peopleDetailsGroup,
+  ]
+
+  return quoteDetailsGroups
 }
