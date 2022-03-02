@@ -9,7 +9,6 @@ import { useTextKeys, TextKeyMap } from 'utils/textKeys'
 
 const HandleSwitchingWrapper = styled.div`
   display: flex;
-  align-items: center;
   gap: 1rem;
   margin-bottom: 0.75rem;
   padding: 0 0.25rem;
