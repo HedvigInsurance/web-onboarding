@@ -19,16 +19,20 @@ export const useGetPriceData = () => {
   }
 
   const quotes = quoteBundle.quotes
-  const total = quoteBundle.bundleCost.monthlyNet.amount
+  const totalBundleCost = quoteBundle.bundleCost.monthlyNet.amount
   const discount = quoteBundle.bundleCost.monthlyDiscount.amount
   const currency = quoteBundle.quotes[0].price.currency
   const campaignName = data?.quoteCart?.campaign?.displayValue
 
   return {
-    quotes,
-    total,
-    discount,
-    currency,
-    campaignName,
+    data: {
+      quotes,
+      totalBundleCost,
+      discount,
+      currency,
+      campaignName,
+    },
+    error,
+    isLoading: data === null,
   }
 }

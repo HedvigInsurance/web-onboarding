@@ -47,7 +47,13 @@ export const YourPlan = () => {
   if (!priceData) {
     return null
   }
-  const { quotes, total, discount, currency, campaignName } = priceData
+  const {
+    quotes,
+    totalBundleCost,
+    discount,
+    currency,
+    campaignName,
+  } = priceData.data
   const formattedPrice = (value: string) => {
     return getFormattedPrice({
       locale: currencyLocale,
@@ -76,7 +82,7 @@ export const YourPlan = () => {
       <HorizontalDivider />
       <Row>
         <div>{textKeys.CHECKOUT_PRICE_TOTAL()}</div>
-        <Value>{formattedPrice(total)}</Value>
+        <Value>{formattedPrice(totalBundleCost)}</Value>
       </Row>
     </SubSection>
   )
