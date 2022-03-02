@@ -1,17 +1,42 @@
 import React from 'react'
-import { Story } from '@storybook/react'
+import { Story, Meta } from '@storybook/react'
 
 import { TooltipIcon, TooltipIconProps } from './TooltipIcon'
 
-export default {
+const storyMeta: Meta<TooltipIconProps> = {
   title: 'Components/TooltipIcon',
   component: TooltipIcon,
+  argTypes: {
+    placement: {
+      name: 'placement',
+      options: [
+        'auto',
+        'auto-start',
+        'auto-end',
+        'top',
+        'top-start',
+        'top-end',
+        'right',
+        'right-start',
+        'right-end',
+        'bottom',
+        'bottom-start',
+        'bottom-end',
+        'left',
+        'left-start',
+        'left-end',
+      ] as Array<TooltipIconProps['placement']>,
+      control: { type: 'select' },
+    },
+  },
   parameters: {
     backgrounds: {
       default: 'gray100',
     },
   },
 }
+
+export default storyMeta
 
 const Template: Story<TooltipIconProps> = (args) => <TooltipIcon {...args} />
 
