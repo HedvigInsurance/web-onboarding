@@ -9,6 +9,8 @@ import { useTextKeys, TextKeyMap } from 'utils/textKeys'
 
 const HandleSwitchingWrapper = styled.div`
   display: flex;
+  align-items: center;
+  gap: 1rem;
   margin-bottom: 0.75rem;
   padding: 0 0.25rem;
 `
@@ -17,6 +19,7 @@ const HandleSwitchingLabel = styled.label<{ isDisabled: boolean }>`
   flex-grow: 1;
   display: flex;
   align-items: center;
+  gap: 1rem;
 
   &:hover {
     cursor: ${({ isDisabled }) => (isDisabled ? 'default' : 'pointer')};
@@ -27,11 +30,6 @@ const StyledSpinner = styled(Spinner)`
   flex: none;
   height: 1.25rem;
   width: 1.25rem;
-  margin-right: 1rem;
-`
-
-const StyledSwitch = styled(Switch)`
-  margin-right: 1rem;
 `
 
 const getLabelContent = (textKeys: TextKeyMap, quote: BundledQuote) => {
@@ -81,7 +79,7 @@ const CancellationOption = ({
         {isLoading ? (
           <StyledSpinner />
         ) : (
-          <StyledSwitch
+          <Switch
             checked={isChecked}
             disabled={isDisabled}
             onChange={handleToggle}
