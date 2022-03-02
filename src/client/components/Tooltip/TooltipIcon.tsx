@@ -16,18 +16,18 @@ const TooltipIconWrapper = styled.div`
 export type TooltipIconProps = Pick<TooltipProps, 'body' | 'placement'>
 
 export const TooltipIcon = (props: TooltipIconProps) => {
-  const [isVisible, setVisible] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
 
   return (
     <Tooltip
       {...props}
       visible={isVisible}
-      onClickOutside={() => setVisible(false)}
+      onClickOutside={() => setIsVisible(false)}
     >
       <TooltipIconWrapper
-        onMouseOver={() => setVisible(true)}
-        onMouseLeave={() => setVisible(false)}
-        onTouchStart={() => setVisible(true)}
+        onMouseOver={() => setIsVisible(true)}
+        onMouseLeave={() => setIsVisible(false)}
+        onTouchStart={() => setIsVisible(true)}
       >
         <InfoIcon
           size={ICON_SIZE}
