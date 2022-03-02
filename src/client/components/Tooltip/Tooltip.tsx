@@ -91,6 +91,18 @@ export const Tooltip = ({
           <Arrow data-popper-arrow="" />
         </TooltipPopup>
       )}
+      popperOptions={{
+        // avoid arrow to reach the very edge of the tooltip popout
+        // https://popper.js.org/docs/v2/modifiers/arrow/#padding
+        modifiers: [
+          {
+            name: 'arrow',
+            options: {
+              padding: 8,
+            },
+          },
+        ],
+      }}
     >
       {children}
     </Tippy>
