@@ -5,7 +5,7 @@ import { Headline } from 'components/Headline/Headline'
 import { InputField } from 'components/inputs'
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { useMarket, Market } from 'components/utils/CurrentLocale'
+import { useFeature, Features } from 'utils/hooks/useFeature'
 const SpacerSmall = styled.div`
   height: 1rem;
 `
@@ -22,8 +22,10 @@ const Divider = styled.div`
 export const ContactInformation = () => {
   const textKeys = useTextKeys()
   const locale = useCurrentLocale()
-  const currentMarket = useMarket()
 
+  const [hasEnabledCreditCheckInfo] = useFeature([
+    Features.CHECKOUT_CREDIT_CHECK,
+  ])
   const ssnFormatExample = locale.ssn.formatExample
 
   return (
@@ -44,12 +46,12 @@ export const ContactInformation = () => {
         label={textKeys.CHECKOUT_CONTACT_INFO_SSN_LABEL()}
         placeholder={ssnFormatExample}
         helperText={
-          currentMarket === Market.No
+          hasEnabledCreditCheckInfo
             ? textKeys.CHECKOUT_CONTACT_INFO_CREDIT_CHECK_HELPER()
             : undefined
         }
       />
-      {currentMarket === Market.No && <Spacer />}
+      {hasEnabledCreditCheckInfo && <Spacer />}
       <InputField
         label={textKeys.CHECKOUT_EMAIL_LABEL()}
         placeholder={textKeys.CHECKOUT_EMAIL_LABEL()}
