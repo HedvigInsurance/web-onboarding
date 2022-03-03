@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { useIsQuoteCartValid } from 'utils/hooks/useIsQuoteCartValid'
+import { hideIntercomLauncher } from 'utils/intercom.helpers'
 import { TopBar } from 'components/TopBar'
 import { BackButton } from 'components/BackButton/BackButton'
 import { CheckoutPageErrorModal } from './CheckoutPageErrorModal'
@@ -23,6 +24,10 @@ const InnerWrapper = styled.div`
 
 export const CheckoutPageWrapper = ({ children }: Props) => {
   const { isQuoteCartValid } = useIsQuoteCartValid()
+
+  useEffect(() => {
+    hideIntercomLauncher()
+  })
 
   return (
     <>
