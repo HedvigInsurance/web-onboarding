@@ -1,13 +1,11 @@
 import React from 'react'
-import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { useTextKeys } from 'utils/textKeys'
+import styled from '@emotion/styled'
 import { Headline } from 'components/Headline/Headline'
 import { InputField } from 'components/inputs'
-
-const ContactInfoInput = styled(InputField)`
-  background-color: ${colorsV3.gray100};
-`
+import { useTextKeys } from 'utils/textKeys'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import { useMarket, Market } from 'components/utils/CurrentLocale'
 const SpacerSmall = styled.div`
   height: 1rem;
 `
@@ -23,6 +21,10 @@ const Divider = styled.div`
 
 export const ContactInformation = () => {
   const textKeys = useTextKeys()
+  const locale = useCurrentLocale()
+  const currentMarket = useMarket()
+
+  const ssnFormatExample = locale.ssn.formatExample
 
   return (
     <>
@@ -30,20 +32,25 @@ export const ContactInformation = () => {
         {textKeys.CHECKOUT_CONTACT_INFO_HEADING()}
       </Headline>
       <SpacerSmall />
-      <ContactInfoInput
+      <InputField
         label={textKeys.CHECKOUT_FIRSTNAME_LABEL()}
         placeholder={textKeys.CHECKOUT_FIRSTNAME_LABEL()}
       />
-      <ContactInfoInput
+      <InputField
         label={textKeys.CHECKOUT_LASTNAME_LABEL()}
         placeholder={textKeys.CHECKOUT_LASTNAME_LABEL()}
       />
-      <ContactInfoInput
+      <InputField
         label={textKeys.CHECKOUT_CONTACT_INFO_SSN_LABEL()}
-        helperText={textKeys.CHECKOUT_CONTACT_INFO_CREDIT_CHECK_HELPER()}
+        placeholder={ssnFormatExample}
+        helperText={
+          currentMarket === Market.No
+            ? textKeys.CHECKOUT_CONTACT_INFO_CREDIT_CHECK_HELPER()
+            : undefined
+        }
       />
-      <Spacer />
-      <ContactInfoInput
+      {currentMarket === Market.No && <Spacer />}
+      <InputField
         label={textKeys.CHECKOUT_EMAIL_LABEL()}
         placeholder={textKeys.CHECKOUT_EMAIL_LABEL()}
         helperText={textKeys.CHECKOUT_CONTACT_INFO_EMAIL_HELPER()}
