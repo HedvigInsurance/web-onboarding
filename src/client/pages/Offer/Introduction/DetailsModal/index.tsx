@@ -162,7 +162,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
     createQuoteBundle,
     {
       data: createQuoteBundleData,
-      error: createQuoteBundleError,
+      error: unexpectedQuoteBundleError,
       loading: isBundleCreationInProgress,
     },
   ] = useCreateQuoteBundleMutation()
@@ -204,7 +204,8 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
     },
   } as QuoteInput
 
-  const isInvalidCreateQuoteBundleInput = isLimitHit(createQuoteBundleData)
+  const isUnderwritingGuidelinesHit = isLimitHit(createQuoteBundleData)
+  const isQuoteCreationFailed = isQuoteBundleError(createQuoteBundleData)
 
   const reCreateQuoteBundle = (form: QuoteInput) => {
     const {
@@ -289,20 +290,22 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                 >
                   {textKeys.DETAILS_MODULE_BUTTON()}
                 </Button>
-                {(createQuoteBundleError ||
-                  isQuoteBundleError(createQuoteBundleData)) && (
-                  <ErrorMessage>
-                    {textKeys.DETAILS_MODULE_BUTTON_ERROR()}
-                  </ErrorMessage>
-                )}
-                {isInvalidCreateQuoteBundleInput && (
+
+                {isUnderwritingGuidelinesHit ? (
                   <ErrorMessage>
                     {textKeys.DETAILS_MODULE_BUTTON_UNDERWRITING_GUIDELINE_HIT()}
                   </ErrorMessage>
+                ) : (
+                  (unexpectedQuoteBundleError || isQuoteCreationFailed) && (
+                    <ErrorMessage>
+                      {textKeys.DETAILS_MODULE_BUTTON_ERROR()}
+                    </ErrorMessage>
+                  )
                 )}
-                {!createQuoteBundleError &&
-                  !isQuoteBundleError(createQuoteBundleData) &&
-                  !isInvalidCreateQuoteBundleInput && (
+
+                {!unexpectedQuoteBundleError &&
+                  !isQuoteCreationFailed &&
+                  !isUnderwritingGuidelinesHit && (
                     <Warning>
                       {textKeys.DETAILS_MODULE_BUTTON_WARNING()}
                     </Warning>
