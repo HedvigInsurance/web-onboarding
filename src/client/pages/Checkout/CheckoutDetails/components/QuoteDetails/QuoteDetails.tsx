@@ -6,8 +6,9 @@ import { useTextKeys, TextKeyMap } from 'utils/textKeys'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { useQuoteDetailsDataQuery } from 'data/graphql'
 import { SubSection } from '../SubSection'
+import { Divider } from '../../../shared/Divider'
 
-const { gray900, gray300, gray700 } = colorsV3
+const { gray900, gray700 } = colorsV3
 
 const Row = styled.div`
   font-size: 0.874rem;
@@ -34,12 +35,6 @@ const Group = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0.5rem 0;
-`
-
-const Divider = styled.div`
-  width: 100%;
-  height: 1px;
-  background-color: ${gray300};
 `
 
 const getValueText = ({
