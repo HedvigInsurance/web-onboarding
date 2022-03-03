@@ -5,8 +5,9 @@ import { getQuoteDetails } from 'utils/getQuoteDetails'
 import { useTextKeys } from 'utils/textKeys'
 import { OfferQuote } from '../../../../OfferNew/types'
 import { SubSection } from '../SubSection'
+import { Divider } from '../../../shared/Divider'
 
-const { gray900, gray300, gray700 } = colorsV3
+const { gray900, gray700 } = colorsV3
 
 const Row = styled.div`
   font-size: 0.874rem;
@@ -33,12 +34,6 @@ const Group = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0.5rem 0;
-`
-
-const Divider = styled.div`
-  width: 100%;
-  height: 1px;
-  background-color: ${gray300};
 `
 
 export const QuoteDetails = ({ mainQuote }: { mainQuote: OfferQuote }) => {
