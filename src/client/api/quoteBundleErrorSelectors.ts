@@ -34,10 +34,19 @@ export enum LimitCode {
   INVALID_STARTDATE = 'INVALID_STARTDATE',
 }
 
-export function isQuoteBundleError(
+function isError(
   quoteCartMutationResult: CreateQuoteBundleMutation['quoteCart_createQuoteBundle'],
 ): quoteCartMutationResult is QuoteBundleError {
   return quoteCartMutationResult.__typename === 'QuoteBundleError'
+}
+
+export function isQuoteBundleError(
+  createQuoteBundleMutation: CreateQuoteBundleMutation | null | undefined,
+) {
+  return (
+    createQuoteBundleMutation?.quoteCart_createQuoteBundle.__typename ===
+    'QuoteBundleError'
+  )
 }
 
 export function getLimitsHit(
@@ -45,7 +54,7 @@ export function getLimitsHit(
 ) {
   if (
     createQuoteBundleMutation &&
-    isQuoteBundleError(createQuoteBundleMutation.quoteCart_createQuoteBundle)
+    isError(createQuoteBundleMutation.quoteCart_createQuoteBundle)
   )
     return createQuoteBundleMutation.quoteCart_createQuoteBundle.limits || []
 
@@ -57,7 +66,7 @@ export function isLimitHit(
 ) {
   if (
     createQuoteBundleMutation &&
-    isQuoteBundleError(createQuoteBundleMutation.quoteCart_createQuoteBundle)
+    isError(createQuoteBundleMutation.quoteCart_createQuoteBundle)
   ) {
     return createQuoteBundleMutation.quoteCart_createQuoteBundle.limits?.length
   }
