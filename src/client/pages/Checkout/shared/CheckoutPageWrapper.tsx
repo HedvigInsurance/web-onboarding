@@ -1,8 +1,10 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { useIsQuoteCartValid } from 'utils/hooks/useIsQuoteCartValid'
 import { TopBar } from 'components/TopBar'
 import { BackButton } from 'components/BackButton/BackButton'
+import { CheckoutPageErrorModal } from './CheckoutPageErrorModal'
 
 const { gray100 } = colorsV3
 
@@ -20,13 +22,18 @@ const InnerWrapper = styled.div`
 `
 
 export const CheckoutPageWrapper = ({ children }: Props) => {
+  const { isQuoteCartValid } = useIsQuoteCartValid()
+
   return (
-    <Wrapper>
-      <InnerWrapper>
-        <TopBar isTransparent textColorVariant="dark" />
-        <BackButton />
-        {children}
-      </InnerWrapper>
-    </Wrapper>
+    <>
+      {!isQuoteCartValid && <CheckoutPageErrorModal />}
+      <Wrapper>
+        <InnerWrapper>
+          <TopBar isTransparent textColorVariant="dark" />
+          <BackButton />
+          {children}
+        </InnerWrapper>
+      </Wrapper>
+    </>
   )
 }
