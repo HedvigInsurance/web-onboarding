@@ -74,7 +74,7 @@ type EmbarkRouteProps = {
 }
 
 // TODO: Replace all '/new-member' strings throughout the codebase with this variable
-const landingRoute = '/new-member'
+export const landingRoute = '/new-member'
 const onboardingLocaleBaseRoute = `${localePathPattern}${landingRoute}`
 
 export const routes: Route[] = [
