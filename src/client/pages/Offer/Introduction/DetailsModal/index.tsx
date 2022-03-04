@@ -227,12 +227,12 @@ export const DetailsModal = ({
               startDate,
               currentInsurer: currentInsurer?.id,
               data: {
+                isStudent,
                 ...form.data,
                 numberCoInsured: householdSize && householdSize - 1,
                 id,
                 type,
                 typeOfContract,
-                isStudent,
               },
             }
           },
