@@ -34,6 +34,14 @@ import {
   SessionContainer,
 } from './SessionContainer'
 
+beforeAll(() => {
+  // @ts-ignore
+  window.hedvigClientConfig = { features: { QUOTE_CART_API: [] } }
+  delete window.location
+  // @ts-ignore
+  window.location = new URL('https://www.hedvig.com/se/new-member')
+})
+
 it('picks up any stored session token in session without actually creating a new session', () => {
   const token = 'abc123'
   const { baseElement } = renderComponent(
@@ -56,7 +64,7 @@ it('picks up any stored session token in session without actually creating a new
         </SessionContainer>
       </Provider>
     </MockedProvider>,
-    { wrapperProps: { location: '/se/new-member' } },
+    { wrapperProps: { location: window.location.pathname } },
   )
 
   expect(baseElement.textContent).toContain(token)
@@ -113,7 +121,7 @@ it('creates a new session', async () => {
         </SessionContainer>
       </Provider>
     </MockedProvider>,
-    { wrapperProps: { location: '/se/new-member' } },
+    { wrapperProps: { location: window.location.pathname } },
   )
 
   expect(baseElement.textContent).not.toContain('abc123')
