@@ -170,6 +170,7 @@ type DateFormProps = {
   quoteDisplayName: string
   isSplit: boolean
   modal?: boolean
+  disabled?: boolean
   size: Size
   onChange: (date: Date | null) => void
   loading: boolean
@@ -182,6 +183,7 @@ const DateForm = ({
   quoteDisplayName,
   isSplit,
   modal = false,
+  disabled = false,
   size,
   onChange,
   loading,
@@ -220,7 +222,7 @@ const DateForm = ({
     <RowButtonWrapper isSplit={isSplit}>
       {isSplit && <StartDateRowLabel>{quoteDisplayName}</StartDateRowLabel>}
       <RowButton
-        disabled={Boolean(currentInsurer && !startDate)}
+        disabled={disabled}
         datePickerOpen={datePickerOpen}
         onClick={() => setDatePickerOpen(!datePickerOpen)}
         isSplit={isSplit}
@@ -378,6 +380,10 @@ export const StartDate = ({
             quoteDisplayName={quotes[0].displayName}
             dataCollectionId={quotes[0].dataCollectionId ?? undefined}
             modal={modal}
+            disabled={
+              loadingQuoteIds.length > 0 ||
+              Boolean(quotes[0].currentInsurer && !quotes[0].startDate)
+            }
             isSplit={false}
             size={size}
             onChange={(newDate) =>
@@ -398,6 +404,10 @@ export const StartDate = ({
                 quoteDisplayName={quote.displayName}
                 dataCollectionId={quote.dataCollectionId ?? undefined}
                 modal={modal}
+                disabled={
+                  loadingQuoteIds.length > 0 ||
+                  Boolean(quote.currentInsurer && !quote.startDate)
+                }
                 isSplit={quoteBundleSelector.isMultiQuote(selectedBundle)}
                 size={size}
                 onChange={(newDate) =>
