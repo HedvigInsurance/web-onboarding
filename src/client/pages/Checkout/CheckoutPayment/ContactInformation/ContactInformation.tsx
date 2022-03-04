@@ -6,6 +6,15 @@ import { InputField } from 'components/inputs'
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useFeature, Features } from 'utils/hooks/useFeature'
+import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+
+const Wrapper = styled.div`
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
+    width: 100%;
+    max-width: 628px;
+  }
+`
+
 const SpacerSmall = styled.div`
   height: 1rem;
 `
@@ -29,7 +38,7 @@ export const ContactInformation = () => {
   const ssnFormatExample = locale.ssn.formatExample
 
   return (
-    <>
+    <Wrapper>
       <Headline variant="xs" headingLevel="h2" colorVariant="dark">
         {textKeys.CHECKOUT_CONTACT_INFO_HEADING()}
       </Headline>
@@ -59,6 +68,6 @@ export const ContactInformation = () => {
       />
       <Spacer />
       <Divider />
-    </>
+    </Wrapper>
   )
 }
