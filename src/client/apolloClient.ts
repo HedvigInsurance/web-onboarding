@@ -9,8 +9,6 @@ import { WebSocketLink } from '@apollo/link-ws'
 import { CookieStorage } from 'cookie-storage'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { getMainDefinition } from '@apollo/client/utilities'
-import { checkFeature } from 'utils/checkFeature'
-import { Feature } from 'shared/clientConfig'
 import possibleTypes from '../../possibleGraphqlTypes.json'
 import { createSession, Session } from '../shared/sessionStorage'
 
@@ -44,15 +42,12 @@ export const apolloClient = (() => {
     },
   )
 
-  const isUsingQuoteCart = checkFeature(Feature.QUOTE_CART_API)
   const httpLink = new HttpLink({
     credentials: 'omit',
     uri: window.hedvigClientConfig.giraffeEndpoint,
-    headers: isUsingQuoteCart
-      ? {}
-      : {
-          authorization: authorizationToken,
-        },
+    headers: {
+      authorization: authorizationToken,
+    },
   })
 
   const client = new ApolloClient({

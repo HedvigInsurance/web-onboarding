@@ -92,6 +92,13 @@ export const OfferPage = ({
 
   const history = useHistory()
 
+  useEffect(() => {
+    // clean up existing auth tokens
+    if (realApolloClient) {
+      delete realApolloClient.httpLink.options.headers.authorization
+    }
+  }, [])
+
   const {
     data: quoteCartQueryData,
     loading: isLoadingQuoteCart,
