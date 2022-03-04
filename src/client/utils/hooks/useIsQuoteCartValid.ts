@@ -1,14 +1,11 @@
-import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { useQuoteCartQuery } from 'data/graphql'
+import { useQuoteCartIdQuery } from 'data/graphql'
 import { useQuoteCartIdFromUrl } from './useQuoteCartIdFromUrl'
 
 export const useIsQuoteCartValid = () => {
   const { quoteCartId } = useQuoteCartIdFromUrl()
-  const { isoLocale } = useCurrentLocale()
-  const { error } = useQuoteCartQuery({
+  const { error } = useQuoteCartIdQuery({
     variables: {
       id: quoteCartId,
-      locale: isoLocale,
     },
   })
 
