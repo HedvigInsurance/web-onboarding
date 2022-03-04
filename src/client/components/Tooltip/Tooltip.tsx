@@ -1,81 +1,60 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { motion } from 'framer-motion'
+
+import Tippy, { TippyProps } from '@tippyjs/react/headless'
+
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
-import { InfoIcon } from '../icons/Info'
 
-const ICON_SIZE = '20px'
+const ARROW_WIDTH = 8
 
-export type TooltipProps = {
-  body: string
-}
+const Arrow = styled.div`
+  &,
+  &::before {
+    position: absolute;
+    width: ${ARROW_WIDTH}px;
+    height: ${ARROW_WIDTH}px;
+    background: inherit;
+  }
 
-const Wrapper = styled.div`
-  position: relative;
+  & {
+    visibility: hidden;
+  }
+
+  &::before {
+    left: 0;
+    visibility: visible;
+    content: '';
+    transform: rotate(45deg);
+  }
 `
 
-const TooltipIcon = styled(motion.div)`
-  /* remove extra space under child SVG: https://stackoverflow.com/a/51161925 */
-  font-size: 0;
-`
-
-const TooltipContainer = styled.div<{ visible: boolean }>`
-  transition: all 0.25s ease;
-
-  background-color: ${colorsV3.gray800};
-  box-shadow: 0px 16px 40px rgba(0, 0, 0, 0.15);
+const TooltipPopup = styled.div`
+  width: min(12.5rem, 80vw);
   padding: 0.75rem 1rem;
   border-radius: 8px;
-
-  opacity: ${(props) => (props.visible ? 1 : 0)};
-  visibility: ${(props) => (props.visible ? 'visible' : 'hidden')};
-
-  position: absolute;
-  z-index: 1000;
-  top: 0;
-  right: 100%;
-  transform: translateY(calc(-50% + ${ICON_SIZE} / 2))
-    ${(props) => (props.visible ? 'translateX(-0.75rem)' : 'translateX(0)')};
-
-  &:after {
-    content: ' ';
-    position: absolute;
-    top: 50%;
-    left: 100%; /* To the right of the tooltip */
-    margin-top: -7px;
-    border-width: 7px;
-    border-style: solid;
-    border-color: transparent transparent transparent ${colorsV3.gray800};
-    pointer-events: none;
-  }
-
-  ${LARGE_SCREEN_MEDIA_QUERY} {
-    left: 50%;
-    right: unset;
-    transform: translateX(-50%)
-      ${(props) =>
-        props.visible
-          ? `translateY(calc(-100% - 0.75rem))`
-          : `translateY(-100%)`};
-
-    &:after {
-      top: 100%; /* At the bottom of the tooltip */
-      left: 50%;
-      margin-left: -7px;
-      margin-top: 0;
-      border-color: ${colorsV3.gray800} transparent transparent transparent;
-    }
-  }
-`
-
-const TooltipText = styled.p`
+  box-shadow: 0px 16px 40px rgba(0, 0, 0, 0.15);
   font-size: 1rem;
   line-height: 1.5;
-  color: ${colorsV3.gray100};
   text-align: center;
-  margin: 0;
-  min-width: 12.5rem;
+  background-color: ${colorsV3.gray800};
+  color: ${colorsV3.gray100};
+
+  &[data-placement^='top'] > ${Arrow} {
+    bottom: -${ARROW_WIDTH / 2}px;
+  }
+
+  &[data-placement^='bottom'] > ${Arrow} {
+    top: -${ARROW_WIDTH / 2}px;
+  }
+
+  &[data-placement^='left'] > ${Arrow} {
+    right: -${ARROW_WIDTH / 2}px;
+  }
+
+  &[data-placement^='right'] > ${Arrow} {
+    left: -${ARROW_WIDTH / 2}px;
+  }
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     width: max-content;
@@ -83,38 +62,49 @@ const TooltipText = styled.p`
   }
 `
 
-export const Tooltip: React.FC<TooltipProps> = ({ body }) => {
-  const ref = useRef<HTMLDivElement>(null)
-  const [isVisible, setVisible] = useState(false)
+export type TooltipProps = { body: string } & Pick<
+  TippyProps,
+  'className' | 'children' | 'placement' | 'visible' | 'onClickOutside'
+>
 
-  useEffect(() => {
-    if (!isVisible) return
-
-    const handleClickOutside = (event: TouchEvent) => {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
-        setVisible(false)
-      }
-    }
-
-    window.addEventListener('touchstart', handleClickOutside)
-    return () => window.removeEventListener('touchstart', handleClickOutside)
-  }, [isVisible])
-
+export const Tooltip = ({
+  className,
+  body,
+  placement,
+  visible,
+  onClickOutside,
+  children,
+}: TooltipProps) => {
   return (
-    <Wrapper>
-      <TooltipContainer visible={isVisible} ref={ref}>
-        <TooltipText>{body}</TooltipText>
-      </TooltipContainer>
-      <TooltipIcon
-        onHoverStart={() => setVisible(true)}
-        onHoverEnd={() => setVisible(false)}
-        onTouchStart={() => setVisible(true)}
-      >
-        <InfoIcon
-          size={ICON_SIZE}
-          color={isVisible ? colorsV3.gray700 : colorsV3.gray900}
-        />
-      </TooltipIcon>
-    </Wrapper>
+    <Tippy
+      placement={placement}
+      visible={visible}
+      onClickOutside={onClickOutside}
+      render={(attrs) => (
+        <TooltipPopup
+          className={className}
+          role="tooltip"
+          tabIndex={-1}
+          {...attrs}
+        >
+          {body}
+          <Arrow data-popper-arrow="" />
+        </TooltipPopup>
+      )}
+      popperOptions={{
+        // avoid arrow to reach the very edge of the tooltip popout
+        // https://popper.js.org/docs/v2/modifiers/arrow/#padding
+        modifiers: [
+          {
+            name: 'arrow',
+            options: {
+              padding: 8,
+            },
+          },
+        ],
+      }}
+    >
+      {children}
+    </Tippy>
   )
 }

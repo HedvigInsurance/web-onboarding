@@ -19,6 +19,7 @@ import {
   getLimitsHit,
   LimitCode,
   isLimitHit,
+  isQuoteBundleError,
 } from 'api/quoteBundleErrorSelectors'
 import { QuoteInput } from './types'
 import { Details, getValidationSchema } from './Details'
@@ -161,7 +162,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
     createQuoteBundle,
     {
       data: createQuoteBundleData,
-      error: createQuoteBundleError,
+      error: unexpectedQuoteBundleError,
       loading: isBundleCreationInProgress,
     },
   ] = useCreateQuoteBundleMutation()
@@ -203,7 +204,8 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
     },
   } as QuoteInput
 
-  const isInvalidCreateQuoteBundleInput = isLimitHit(createQuoteBundleData)
+  const isUnderwritingGuidelinesHit = isLimitHit(createQuoteBundleData)
+  const isQuoteCreationFailed = isQuoteBundleError(createQuoteBundleData)
 
   const reCreateQuoteBundle = (form: QuoteInput) => {
     const {
@@ -217,7 +219,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
           ({
             startDate,
             currentInsurer,
-            data: { id, type, typeOfContract },
+            data: { id, type, typeOfContract, isStudent },
           }) => {
             return {
               ...form,
@@ -229,6 +231,7 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                 id,
                 type,
                 typeOfContract,
+                isStudent,
               },
             }
           },
@@ -242,14 +245,17 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
     { setErrors }: FormikHelpers<QuoteInput>,
   ) => {
     const { data } = await reCreateQuoteBundle(form)
+    const isCreationFailed = isQuoteBundleError(data)
     const limits = getLimitsHit(data)
 
-    if (limits.length) {
-      const errors = getFormErrorsFromUnderwritterLimits(
-        limits,
-        textKeys.INVALID_FIELD(),
-      )
-      setErrors(errors)
+    if (isCreationFailed) {
+      if (limits.length) {
+        const errors = getFormErrorsFromUnderwritterLimits(
+          limits,
+          textKeys.INVALID_FIELD(),
+        )
+        setErrors(errors)
+      }
     } else {
       onClose()
     }
@@ -284,18 +290,22 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
                 >
                   {textKeys.DETAILS_MODULE_BUTTON()}
                 </Button>
-                {createQuoteBundleError && (
-                  <ErrorMessage>
-                    {textKeys.DETAILS_MODULE_BUTTON_ERROR()}
-                  </ErrorMessage>
-                )}
-                {isInvalidCreateQuoteBundleInput && (
+
+                {isUnderwritingGuidelinesHit ? (
                   <ErrorMessage>
                     {textKeys.DETAILS_MODULE_BUTTON_UNDERWRITING_GUIDELINE_HIT()}
                   </ErrorMessage>
+                ) : (
+                  (unexpectedQuoteBundleError || isQuoteCreationFailed) && (
+                    <ErrorMessage>
+                      {textKeys.DETAILS_MODULE_BUTTON_ERROR()}
+                    </ErrorMessage>
+                  )
                 )}
-                {!createQuoteBundleError &&
-                  !isInvalidCreateQuoteBundleInput && (
+
+                {!unexpectedQuoteBundleError &&
+                  !isQuoteCreationFailed &&
+                  !isUnderwritingGuidelinesHit && (
                     <Warning>
                       {textKeys.DETAILS_MODULE_BUTTON_WARNING()}
                     </Warning>

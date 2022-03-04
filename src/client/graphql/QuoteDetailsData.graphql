@@ -1,0 +1,11 @@
+query QuoteDetailsData($id: ID!) {
+  quoteCart(id: $id) {
+    id
+    bundle {
+      quotes {
+        id
+        data
+      }
+    }
+  }
+}
