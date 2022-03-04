@@ -92,20 +92,20 @@ const LoadingDimmer = styled.div<{ visible: boolean }>`
   opacity: ${(props) => (props.visible ? 1 : 0)};
   visibility: ${(props) => (props.visible ? 'visible' : 'hidden')};
 `
-
-type DetailsModalProps = {
-  offerData: OfferData
-  allQuotes: BundledQuote[]
+type DetailsModalProps = Pick<ModalProps, 'isVisible'> & {
   refetch: () => Promise<void>
+  allQuotes: BundledQuote[]
+  offerData: OfferData
+  onClose: () => void
 }
 
-export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
+export const DetailsModal = ({
   refetch,
   offerData,
   allQuotes,
   isVisible,
   onClose,
-}) => {
+}: DetailsModalProps) => {
   const textKeys = useTextKeys()
   const [editQuoteMutation, editQuoteResult] = useEditQuoteMutation()
   const mainOfferQuote = getMainQuote(offerData)
