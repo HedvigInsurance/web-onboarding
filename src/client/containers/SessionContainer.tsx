@@ -13,11 +13,13 @@ import {
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { captureSentryError } from 'utils/sentry-client'
 import { Storage, StorageContainer, StorageState } from 'utils/StorageContainer'
+import { Feature } from 'shared/clientConfig'
 import {
   apolloClient as realApolloClient,
   ApolloClientUtils,
 } from '../apolloClient'
 import { LocaleData } from '../l10n/locales'
+import { checkFeature } from '../utils/checkFeature'
 
 type MemberData = {
   __typename: 'Member'
@@ -44,6 +46,10 @@ export const setupSession = async (
 ): Promise<MemberData | undefined> => {
   if (!apolloClientUtils) {
     throw new Error('Missing apollo client')
+  }
+
+  if (checkFeature(Feature.QUOTE_CART_API)) {
+    return
   }
 
   if (storage.session?.getSession()?.token) {

@@ -95,7 +95,7 @@ export const OfferPage = ({
   useEffect(() => {
     // clean up existing auth tokens
     if (realApolloClient) {
-      realApolloClient.httpLink.options.headers.authorization = undefined
+      delete realApolloClient.httpLink.options.headers.authorization
     }
   }, [])
 
