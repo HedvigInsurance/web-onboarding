@@ -1,10 +1,10 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
 import { getFormattedPrice } from 'utils/getFormattedPrice'
+import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { usePriceQuery } from 'data/graphql'
 import { Spinner } from 'components/utils'
 
@@ -34,7 +34,7 @@ const SpinnerWrapper = styled.div`
 export const PaymentInfo = () => {
   const textKeys = useTextKeys()
   const { isoLocale, currencyLocale } = useCurrentLocale()
-  const { id: quoteCartId } = useParams<{ id: string }>()
+  const { quoteCartId } = useQuoteCartIdFromUrl()
   const { data, loading: isLoading, error } = usePriceQuery({
     variables: {
       id: quoteCartId,

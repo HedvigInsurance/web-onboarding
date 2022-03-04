@@ -353,5 +353,11 @@
   "CHECKOUT_INSURANCE_TITLE": "Försäkring",
   "CHECKOUT_PAYMENT_DETAILS_TITLE": "Betalningssätt",
   "CHECKOUT_PAYMENT_DETAILS_DESCRIPTION": "Din betalning dras från ditt kreditkort i slutet av varje månad. Vi hanterar alla betalningar säkert via Adyen.",
-  "CHECKOUT_PAYMENT_DETAILS_TERMS": "Genom att klicka på \"Genomför köp\" bekräftar jag att jag har läst och förstått villkoren samt godkänner att Hedvig hanterar min personliga information."
+  "CHECKOUT_PAYMENT_DETAILS_TERMS": "Genom att klicka på \"Genomför köp\" bekräftar jag att jag har läst och förstått villkoren samt godkänner att Hedvig hanterar min personliga information.",
+  "CHECKOUT_DETAILS_SQM_SUFFIX": "m²",
+  "CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS_SUFFIX_MANY": "badrum",
+  "CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS_SUFFIX_ONE": "badrum",
+  "CHECKOUT_DETAILS_IS_PARTLY_SUBLET": "Delvis uthyrd",
+  "CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX_MANY": "personer",
+  "CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX_ONE": "person"
 }
