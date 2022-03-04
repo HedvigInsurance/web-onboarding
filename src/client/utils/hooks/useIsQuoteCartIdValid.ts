@@ -1,7 +1,7 @@
 import { useQuoteCartIdQuery } from 'data/graphql'
 import { useQuoteCartIdFromUrl } from './useQuoteCartIdFromUrl'
 
-export const useIsQuoteCartValid = () => {
+export const useIsQuoteCartIdValid = () => {
   const { quoteCartId } = useQuoteCartIdFromUrl()
   const { error } = useQuoteCartIdQuery({
     variables: {
