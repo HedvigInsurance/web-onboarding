@@ -359,5 +359,13 @@
   "CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS_SUFFIX_ONE": "baderom",
   "CHECKOUT_DETAILS_IS_PARTLY_SUBLET": "Delvis utleid",
   "CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX_MANY": "personer",
-  "CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX_ONE": "person"
+  "CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX_ONE": "person",
+  "CHECKOUT_CONTACT_INFO_SSN_LABEL": "Fødselsnummer ",
+  "CHECKOUT_CONTACT_INFO_EMAIL_HELPER": "",
+  "CHECKOUT_CONTACT_INFO_HEADING": "",
+  "CHECKOUT_CONTACT_INFO_CREDIT_CHECK_HELPER": "Vi kredittvurderer nye kunder. De med betalingsnamerkninger betaler i enkelte tilfeller forskuddsvis.",
+  "CHECKOUT_PAGE_ERROR_MODAL_BODY": "Prøv igjen eller start på nytt. Hvis feilen vedvarer, vennligst kontakt oss.",
+  "CHECKOUT_PAGE_ERROR_MODAL_HEADING": "Noe gikk galt",
+  "CHECKOUT_PAGE_ERROR_MODAL_BACK_TO_START_BUTTON": "Tilbake til start",
+  "CHECKOUT_PAGE_ERROR_MODAL_OPEN_CHAT": "Chatt med oss"
 }

@@ -296,6 +296,11 @@ export type AddressHouseExtraBuilding = {
   hasWaterConnected: Scalars['Boolean']
 }
 
+export type AddressInput = {
+  street: Scalars['String']
+  zipCode: Scalars['String']
+}
+
 export enum AddressOwnership {
   Own = 'OWN',
   Brf = 'BRF',
@@ -2723,6 +2728,12 @@ export type CreateSwedishApartmentInput = {
   type: ApartmentType
 }
 
+export type CreateSwedishBundleInput = {
+  ssn: Scalars['String']
+  isStudent: Scalars['Boolean']
+  address?: Maybe<AddressInput>
+}
+
 export type CreateSwedishHouseInput = {
   street: Scalars['String']
   zipCode: Scalars['String']
@@ -3246,6 +3257,7 @@ export type EmbarkApiGraphQlGeneratedVariable = {
 export type EmbarkApiGraphQlMultiActionVariable = {
   __typename?: 'EmbarkAPIGraphQLMultiActionVariable'
   key: Scalars['String']
+  from: Scalars['String']
   variables: Array<EmbarkApiGraphQlVariable>
 }
 
@@ -5226,6 +5238,13 @@ export type InitiateDataCollectionInput = {
   reference: Scalars['ID']
   insuranceProvider: Scalars['String']
   personalNumber: Scalars['String']
+}
+
+export type InitWidgetInput = {
+  requestId: Scalars['String']
+  partnerId: Scalars['String']
+  market: Market
+  locale: Scalars['String']
 }
 
 export type InProgressReferral = {
@@ -7664,6 +7683,10 @@ export type Mutation = {
    * This is needed at this stage because the "connecting payments" stage will happen with an actual signed member.
    */
   quoteCart_createAccessToken: CreateQuoteCartAccessTokenResult
+  /** Create a Swedish quote bundle based on SSN. */
+  quoteCart_createSwedishBundle: CreateQuoteBundleResult
+  /** Initiate widget, widget should send requestId (Avy) and partner name */
+  quoteCart_initWidget: CreateQuoteCartResult
   createQuote: CreateQuoteResult
   editQuote: CreateQuoteResult
   removeCurrentInsurer: CreateQuoteResult
@@ -7862,6 +7885,15 @@ export type MutationQuoteCart_StartCheckoutArgs = {
 
 export type MutationQuoteCart_CreateAccessTokenArgs = {
   id: Scalars['ID']
+}
+
+export type MutationQuoteCart_CreateSwedishBundleArgs = {
+  id: Scalars['ID']
+  input: CreateSwedishBundleInput
+}
+
+export type MutationQuoteCart_InitWidgetArgs = {
+  input?: Maybe<InitWidgetInput>
 }
 
 export type MutationCreateQuoteArgs = {
@@ -12218,6 +12250,14 @@ export type QuoteCartQuery = { __typename?: 'Query' } & {
     }
 }
 
+export type QuoteCartIdQueryVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type QuoteCartIdQuery = { __typename?: 'Query' } & {
+  quoteCart: { __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'>
+}
+
 export type QuoteDetailsDataQueryVariables = Exact<{
   id: Scalars['ID']
 }>
@@ -14454,6 +14494,62 @@ export type QuoteCartLazyQueryHookResult = ReturnType<
 export type QuoteCartQueryResult = ApolloReactCommon.QueryResult<
   QuoteCartQuery,
   QuoteCartQueryVariables
+>
+export const QuoteCartIdDocument = gql`
+  query QuoteCartId($id: ID!) {
+    quoteCart(id: $id) {
+      id
+    }
+  }
+`
+
+/**
+ * __useQuoteCartIdQuery__
+ *
+ * To run a query within a React component, call `useQuoteCartIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQuoteCartIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQuoteCartIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useQuoteCartIdQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    QuoteCartIdQuery,
+    QuoteCartIdQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<QuoteCartIdQuery, QuoteCartIdQueryVariables>(
+    QuoteCartIdDocument,
+    options,
+  )
+}
+export function useQuoteCartIdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    QuoteCartIdQuery,
+    QuoteCartIdQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<QuoteCartIdQuery, QuoteCartIdQueryVariables>(
+    QuoteCartIdDocument,
+    options,
+  )
+}
+export type QuoteCartIdQueryHookResult = ReturnType<typeof useQuoteCartIdQuery>
+export type QuoteCartIdLazyQueryHookResult = ReturnType<
+  typeof useQuoteCartIdLazyQuery
+>
+export type QuoteCartIdQueryResult = ApolloReactCommon.QueryResult<
+  QuoteCartIdQuery,
+  QuoteCartIdQueryVariables
 >
 export const QuoteDetailsDataDocument = gql`
   query QuoteDetailsData($id: ID!) {

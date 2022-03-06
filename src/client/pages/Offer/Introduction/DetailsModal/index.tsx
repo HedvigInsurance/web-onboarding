@@ -144,17 +144,18 @@ function getFormErrorsFromUnderwritterLimits(
   )
 }
 
-type DetailsModalProps = {
+type DetailsModalProps = Pick<ModalProps, 'isVisible'> & {
+  onClose: () => void
   quoteCartId: string
   allQuotes: BundledQuote[]
 }
 
-export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
+export const DetailsModal = ({
   quoteCartId,
   allQuotes,
   isVisible,
   onClose,
-}) => {
+}: DetailsModalProps) => {
   const textKeys = useTextKeys()
   const { isoLocale, marketLabel } = useCurrentLocale()
 
@@ -226,12 +227,12 @@ export const DetailsModal: React.FC<ModalProps & DetailsModalProps> = ({
               startDate,
               currentInsurer: currentInsurer?.id,
               data: {
+                isStudent,
                 ...form.data,
                 numberCoInsured: householdSize && householdSize - 1,
                 id,
                 type,
                 typeOfContract,
-                isStudent,
               },
             }
           },

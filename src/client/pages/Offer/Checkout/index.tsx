@@ -429,11 +429,6 @@ export const Checkout = ({
         }
       }
 
-      // clean up existing auth tokens
-      if (realApolloClient) {
-        realApolloClient.httpLink.options.headers.authorization = undefined
-      }
-
       const { data } = await startCheckout({
         variables: { quoteIds, quoteCartId },
       })
