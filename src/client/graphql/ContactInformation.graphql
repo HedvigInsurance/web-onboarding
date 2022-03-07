@@ -1,0 +1,19 @@
+query ContactInformation($id: ID!, $locale: Locale!) {
+  quoteCart(id: $id) {
+    id
+    bundle {
+      possibleVariations {
+        id
+        tag(locale: $locale)
+        bundle {
+          quotes {
+            firstName
+            lastName
+            ssn
+            email
+          }
+        }
+      }
+    }
+  }
+}

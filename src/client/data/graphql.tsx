@@ -296,6 +296,11 @@ export type AddressHouseExtraBuilding = {
   hasWaterConnected: Scalars['Boolean']
 }
 
+export type AddressInput = {
+  street: Scalars['String']
+  zipCode: Scalars['String']
+}
+
 export enum AddressOwnership {
   Own = 'OWN',
   Brf = 'BRF',
@@ -2723,6 +2728,12 @@ export type CreateSwedishApartmentInput = {
   type: ApartmentType
 }
 
+export type CreateSwedishBundleInput = {
+  ssn: Scalars['String']
+  isStudent: Scalars['Boolean']
+  address?: Maybe<AddressInput>
+}
+
 export type CreateSwedishHouseInput = {
   street: Scalars['String']
   zipCode: Scalars['String']
@@ -3246,6 +3257,7 @@ export type EmbarkApiGraphQlGeneratedVariable = {
 export type EmbarkApiGraphQlMultiActionVariable = {
   __typename?: 'EmbarkAPIGraphQLMultiActionVariable'
   key: Scalars['String']
+  from: Scalars['String']
   variables: Array<EmbarkApiGraphQlVariable>
 }
 
@@ -5226,6 +5238,13 @@ export type InitiateDataCollectionInput = {
   reference: Scalars['ID']
   insuranceProvider: Scalars['String']
   personalNumber: Scalars['String']
+}
+
+export type InitWidgetInput = {
+  requestId: Scalars['String']
+  partnerId: Scalars['String']
+  market: Market
+  locale: Scalars['String']
 }
 
 export type InProgressReferral = {
@@ -7664,6 +7683,10 @@ export type Mutation = {
    * This is needed at this stage because the "connecting payments" stage will happen with an actual signed member.
    */
   quoteCart_createAccessToken: CreateQuoteCartAccessTokenResult
+  /** Create a Swedish quote bundle based on SSN. */
+  quoteCart_createSwedishBundle: CreateQuoteBundleResult
+  /** Initiate widget, widget should send requestId (Avy) and partner name */
+  quoteCart_initWidget: CreateQuoteCartResult
   createQuote: CreateQuoteResult
   editQuote: CreateQuoteResult
   removeCurrentInsurer: CreateQuoteResult
@@ -7862,6 +7885,15 @@ export type MutationQuoteCart_StartCheckoutArgs = {
 
 export type MutationQuoteCart_CreateAccessTokenArgs = {
   id: Scalars['ID']
+}
+
+export type MutationQuoteCart_CreateSwedishBundleArgs = {
+  id: Scalars['ID']
+  input: CreateSwedishBundleInput
+}
+
+export type MutationQuoteCart_InitWidgetArgs = {
+  input?: Maybe<InitWidgetInput>
 }
 
 export type MutationCreateQuoteArgs = {
@@ -11584,6 +11616,35 @@ export type CheckoutStatusQuery = { __typename?: 'Query' } & {
     }
 }
 
+export type ContactInformationQueryVariables = Exact<{
+  id: Scalars['ID']
+  locale: Locale
+}>
+
+export type ContactInformationQuery = { __typename?: 'Query' } & {
+  quoteCart: { __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'> & {
+      bundle?: Maybe<
+        { __typename?: 'QuoteBundle' } & {
+          possibleVariations: Array<
+            { __typename?: 'QuoteBundleVariant' } & Pick<
+              QuoteBundleVariant,
+              'id' | 'tag'
+            > & {
+                bundle: { __typename?: 'QuoteBundle' } & {
+                  quotes: Array<
+                    { __typename?: 'BundledQuote' } & Pick<
+                      BundledQuote,
+                      'firstName' | 'lastName' | 'ssn' | 'email'
+                    >
+                  >
+                }
+              }
+          >
+        }
+      >
+    }
+}
+
 export type CreateAccessTokenMutationVariables = Exact<{
   quoteCartId: Scalars['ID']
 }>
@@ -13258,6 +13319,79 @@ export type CheckoutStatusLazyQueryHookResult = ReturnType<
 export type CheckoutStatusQueryResult = ApolloReactCommon.QueryResult<
   CheckoutStatusQuery,
   CheckoutStatusQueryVariables
+>
+export const ContactInformationDocument = gql`
+  query ContactInformation($id: ID!, $locale: Locale!) {
+    quoteCart(id: $id) {
+      id
+      bundle {
+        possibleVariations {
+          id
+          tag(locale: $locale)
+          bundle {
+            quotes {
+              firstName
+              lastName
+              ssn
+              email
+            }
+          }
+        }
+      }
+    }
+  }
+`
+
+/**
+ * __useContactInformationQuery__
+ *
+ * To run a query within a React component, call `useContactInformationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useContactInformationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useContactInformationQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      locale: // value for 'locale'
+ *   },
+ * });
+ */
+export function useContactInformationQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ContactInformationQuery,
+    ContactInformationQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    ContactInformationQuery,
+    ContactInformationQueryVariables
+  >(ContactInformationDocument, options)
+}
+export function useContactInformationLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ContactInformationQuery,
+    ContactInformationQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    ContactInformationQuery,
+    ContactInformationQueryVariables
+  >(ContactInformationDocument, options)
+}
+export type ContactInformationQueryHookResult = ReturnType<
+  typeof useContactInformationQuery
+>
+export type ContactInformationLazyQueryHookResult = ReturnType<
+  typeof useContactInformationLazyQuery
+>
+export type ContactInformationQueryResult = ApolloReactCommon.QueryResult<
+  ContactInformationQuery,
+  ContactInformationQueryVariables
 >
 export const CreateAccessTokenDocument = gql`
   mutation CreateAccessToken($quoteCartId: ID!) {
