@@ -6,10 +6,10 @@ import { InputField } from 'components/inputs'
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useFeature, Features } from 'utils/hooks/useFeature'
-import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
 const Wrapper = styled.div`
-  ${MEDIUM_SCREEN_MEDIA_QUERY} {
+  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
     width: 100%;
     max-width: 628px;
   }
