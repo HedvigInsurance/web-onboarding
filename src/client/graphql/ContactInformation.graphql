@@ -1,10 +1,9 @@
-query ContactInformation($id: ID!, $locale: Locale!) {
+query ContactInformation($id: ID!) {
   quoteCart(id: $id) {
     id
     bundle {
       possibleVariations {
         id
-        tag(locale: $locale)
         bundle {
           quotes {
             firstName

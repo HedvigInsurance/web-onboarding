@@ -11618,7 +11618,6 @@ export type CheckoutStatusQuery = { __typename?: 'Query' } & {
 
 export type ContactInformationQueryVariables = Exact<{
   id: Scalars['ID']
-  locale: Locale
 }>
 
 export type ContactInformationQuery = { __typename?: 'Query' } & {
@@ -11628,7 +11627,7 @@ export type ContactInformationQuery = { __typename?: 'Query' } & {
           possibleVariations: Array<
             { __typename?: 'QuoteBundleVariant' } & Pick<
               QuoteBundleVariant,
-              'id' | 'tag'
+              'id'
             > & {
                 bundle: { __typename?: 'QuoteBundle' } & {
                   quotes: Array<
@@ -13321,13 +13320,12 @@ export type CheckoutStatusQueryResult = ApolloReactCommon.QueryResult<
   CheckoutStatusQueryVariables
 >
 export const ContactInformationDocument = gql`
-  query ContactInformation($id: ID!, $locale: Locale!) {
+  query ContactInformation($id: ID!) {
     quoteCart(id: $id) {
       id
       bundle {
         possibleVariations {
           id
-          tag(locale: $locale)
           bundle {
             quotes {
               firstName
@@ -13355,7 +13353,6 @@ export const ContactInformationDocument = gql`
  * const { data, loading, error } = useContactInformationQuery({
  *   variables: {
  *      id: // value for 'id'
- *      locale: // value for 'locale'
  *   },
  * });
  */
