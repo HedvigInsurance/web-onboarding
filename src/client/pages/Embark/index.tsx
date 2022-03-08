@@ -383,13 +383,6 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
         />
         <meta property="og:title" content={textKeys.EMBARK_META_OG_TITLE()} />
       </Helmet>
-      <Global
-        styles={css`
-          body {
-            background-color: ${colorsV3.gray100};
-          }
-        `}
-      />
       <AnimatePresence>
         <motion.div
           key="embark"

@@ -17,7 +17,7 @@ const OuterSpinnerWrapper = styled('div')`
   align-items: center;
   height: 100vh;
   width: 100%;
-  background-color: ${colorsV3.gray900};
+  background-color: ${colorsV3.gray100};
 `
 
 const InnerSpinnerWrapper = styled('div')`
@@ -42,7 +42,7 @@ export const LoadingPage: React.FC<LoadingPageProps> = ({
   return (
     <>
       {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
-        <TopBar centered={centeredTopBar} />
+        <TopBar textColorVariant="dark" centered={centeredTopBar} />
       )}
       <OuterSpinnerWrapper>
         <InnerSpinnerWrapper>
