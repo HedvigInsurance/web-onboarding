@@ -7,6 +7,15 @@ import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useFeature, Features } from 'utils/hooks/useFeature'
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import { useContactInformationQuery } from 'data/graphql'
+import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
+
+type ContactInfoData = {
+  firstName?: string
+  lastName?: string
+  ssn?: string
+  email?: string
+}
 
 const Wrapper = styled.div`
   ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
@@ -28,14 +37,29 @@ const Divider = styled.div`
   background-color: ${colorsV3.gray300};
 `
 
+const getContactInfo = (data: ContactInfoData) => {
+  if (!data) {
+    return null
+  }
+
+  return data
+}
+
 export const ContactInformation = () => {
   const textKeys = useTextKeys()
   const locale = useCurrentLocale()
+  const { quoteCartId } = useQuoteCartIdFromUrl()
 
   const [hasEnabledCreditCheckInfo] = useFeature([
     Features.CHECKOUT_CREDIT_CHECK,
   ])
   const ssnFormatExample = locale.ssn.formatExample
+
+  const { data } = useContactInformationQuery({
+    variables: { id: quoteCartId },
+  })
+
+  console.log(data)
 
   return (
     <Wrapper>
