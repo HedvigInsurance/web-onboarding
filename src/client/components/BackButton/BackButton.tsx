@@ -8,6 +8,7 @@ import { Arrow } from 'components/icons/Arrow'
 const { gray900, gray600 } = colorsV3
 
 const Button = styled(UnstyledButton)`
+  height: 100%;
   &:hover,
   &:focus {
     svg {

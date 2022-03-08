@@ -19,7 +19,12 @@ const Wrapper = styled.div`
   background-color: ${gray100};
 `
 const InnerWrapper = styled.div`
+  display: flex;
   padding: 6.5rem 2rem;
+  margin: 0 auto;
+  > div {
+    margin: 0 auto;
+  }
 `
 
 export const CheckoutPageWrapper = ({ children }: Props) => {
@@ -33,8 +38,8 @@ export const CheckoutPageWrapper = ({ children }: Props) => {
     <>
       {!isQuoteCartValid && <CheckoutPageErrorModal />}
       <Wrapper>
+        <TopBar isTransparent textColorVariant="dark" />
         <InnerWrapper>
-          <TopBar isTransparent textColorVariant="dark" />
           <BackButton />
           {children}
         </InnerWrapper>

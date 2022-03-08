@@ -298,7 +298,6 @@ export const StartDate = ({
     marketLabel,
   )
   const quotes = quoteBundleSelector.getQuotes(selectedBundle)
-
   if (quotes.length === 0) throw Error('Selected bundle has no quotes')
 
   const handleSelectNewStartDate = async (
