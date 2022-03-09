@@ -7893,7 +7893,7 @@ export type MutationQuoteCart_CreateSwedishBundleArgs = {
 }
 
 export type MutationQuoteCart_InitWidgetArgs = {
-  input?: Maybe<InitWidgetInput>
+  input: InitWidgetInput
 }
 
 export type MutationCreateQuoteArgs = {
@@ -8339,6 +8339,7 @@ export type Query = {
   contracts: Array<Contract>
   /** Returns whether a member has at least one contract */
   hasContract: Scalars['Boolean']
+  partner: RapioPartner
   quoteBundle: QuoteBundle
   /** Fetch quote cart by its ID. */
   quoteCart: QuoteCart
@@ -8514,6 +8515,10 @@ export type QueryHouseInformationArgs = {
 export type QueryAutoCompleteAddressArgs = {
   input: Scalars['String']
   options?: Maybe<AddressAutocompleteOptions>
+}
+
+export type QueryPartnerArgs = {
+  id: Scalars['ID']
 }
 
 export type QueryQuoteBundleArgs = {
@@ -8732,6 +8737,12 @@ export type QuoteDetails =
 export enum QuoteInitiatedFrom {
   CrossSell = 'CROSS_SELL',
   SelfChange = 'SELF_CHANGE',
+}
+
+export type RapioPartner = {
+  __typename?: 'RapioPartner'
+  id: Scalars['ID']
+  name: Scalars['String']
 }
 
 export type RedeemedCodeV2Result =
@@ -10680,6 +10691,8 @@ export enum TypeOfContract {
   NoHomeContentYouthRent = 'NO_HOME_CONTENT_YOUTH_RENT',
   NoTravel = 'NO_TRAVEL',
   NoTravelYouth = 'NO_TRAVEL_YOUTH',
+  NoAccident = 'NO_ACCIDENT',
+  NoAccidentYouth = 'NO_ACCIDENT_YOUTH',
   DkHomeContentOwn = 'DK_HOME_CONTENT_OWN',
   DkHomeContentRent = 'DK_HOME_CONTENT_RENT',
   DkHomeContentStudentOwn = 'DK_HOME_CONTENT_STUDENT_OWN',
