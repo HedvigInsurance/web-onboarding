@@ -11,6 +11,7 @@ import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { getMainDefinition } from '@apollo/client/utilities'
 import possibleTypes from '../../possibleGraphqlTypes.json'
 import { createSession, Session } from '../shared/sessionStorage'
+import { QuoteBundle } from './data/graphql'
 
 export interface ApolloClientUtils {
   subscriptionClient: SubscriptionClient
@@ -61,6 +62,20 @@ export const apolloClient = (() => {
         },
         InProgressReferral: {
           keyFields: (referral) => referral.name as string,
+        },
+        QuoteBundle: {
+          keyFields: (quoteBundle) => {
+            const quotes = (quoteBundle as QuoteBundle).quotes ?? []
+
+            if (quotes.length === 0) return
+
+            // QuoteBundle:<id>+<id>
+            return quotes.reduce(
+              (id, quote, index) =>
+                (id += `${quote.id}${index < quotes.length - 1 ? '+' : ''}`),
+              'QuoteBundle:',
+            )
+          },
         },
       },
     }),
