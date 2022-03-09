@@ -1,5 +1,6 @@
 import escapeHTML from 'escape-html'
 import Router from 'koa-router'
+import { v4 as uuidv4 } from 'uuid'
 import { ClientConfig } from 'shared/clientConfig'
 import { LocaleLabel, locales } from '../client/l10n/locales'
 import { ServerCookieStorage } from '../client/utils/storage/ServerCookieStorage'
@@ -8,7 +9,9 @@ import {
   createSession,
   SavingCookieStorage,
   Session,
+  DEVICE_ID_KEY,
 } from '../shared/sessionStorage'
+
 import {
   ADYEN_ENVIRONMENT,
   ADYEN_ORIGIN_KEY,
@@ -67,7 +70,7 @@ const template = (
      <meta name="google-site-verification" content="AZ5rW7lm8fgkGEsSI8BbV4i45ylXAnGEicXf6HPQE-Q" />
 
     ${allTracking(cspNonce, clientConfig.appEnvironment)}
-    
+
     ${
       adtractionTag
         ? `<script nonce="${cspNonce}" defer src="${adtractionTag}"></script>`
@@ -127,6 +130,14 @@ export const getPage = (
     session.setSession({
       ...(session.getSession() || ({} as any)),
       code: serverCookieStorage.getItem('_hvcode'),
+    })
+  }
+
+  const deviceId = serverCookieStorage.getItem(DEVICE_ID_KEY)
+  if (!deviceId || deviceId === 'undefined') {
+    serverCookieStorage.setItem(DEVICE_ID_KEY, uuidv4(), {
+      sameSite: 'Lax',
+      secure: true,
     })
   }
 
