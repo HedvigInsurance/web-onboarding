@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import styled from '@emotion/styled'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 import { colorsV3 } from '@hedviginsurance/brand'
@@ -173,6 +173,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
       CampaignCode.remove()
     }
   }, [quoteCartId, removeCampaignCode])
+
+  useEffect(() => {
+    const isMissingCampaignCode = campaign?.code === undefined
+    const savedCampaignCode = CampaignCode.get()
+    if (savedCampaignCode && isMissingCampaignCode) {
+      handleAddCampaignCode(savedCampaignCode)
+    }
+  }, [handleAddCampaignCode, campaign])
 
   const showRemoveCampaignButton = campaign !== undefined
   const isDiscountPrice =
