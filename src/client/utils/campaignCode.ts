@@ -13,7 +13,7 @@ const saveCampaignCode = (campaignCode: string) => {
 }
 
 const removeCampaignCode = () => {
-  cookieStorage.removeItem(CAMPAIGN_CODE_COOKIE_KEY)
+  cookieStorage.removeItem(CAMPAIGN_CODE_COOKIE_KEY, { path: '/' })
 }
 
 export const CampaignCode = {

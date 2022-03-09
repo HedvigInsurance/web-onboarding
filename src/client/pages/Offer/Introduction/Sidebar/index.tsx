@@ -163,15 +163,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   )
 
   const handleRemoveCampaign = useCallback(async () => {
-    const { data: result } = await removeCampaignCode({
-      variables: { quoteCartId },
-    })
-    const hasError =
-      result?.quoteCart_removeCampaign.__typename === 'BasicError'
-
-    if (!hasError) {
-      CampaignCode.remove()
-    }
+    CampaignCode.remove()
+    await removeCampaignCode({ variables: { quoteCartId } })
   }, [quoteCartId, removeCampaignCode])
 
   useEffect(() => {
