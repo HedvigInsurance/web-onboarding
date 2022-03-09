@@ -10,7 +10,7 @@ import { CookieStorage } from 'cookie-storage'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { getMainDefinition } from '@apollo/client/utilities'
 import possibleTypes from '../../possibleGraphqlTypes.json'
-import { createSession, Session } from '../shared/sessionStorage'
+import { createSession, Session, DEVICE_ID_KEY } from '../shared/sessionStorage'
 
 export interface ApolloClientUtils {
   subscriptionClient: SubscriptionClient
@@ -28,9 +28,9 @@ export const apolloClient = (() => {
     throw new Error("typeof WebSocket is undefined, can't connect to remote")
   }
 
-  const authorizationToken = createSession<Session>(
-    new CookieStorage(),
-  ).getSession()!.token
+  const cookieStorage = new CookieStorage()
+  const authorizationToken = createSession<Session>(cookieStorage).getSession()!
+    .token
 
   const subscriptionClient = new SubscriptionClient(
     window.hedvigClientConfig.giraffeWsEndpoint,
@@ -47,6 +47,7 @@ export const apolloClient = (() => {
     uri: window.hedvigClientConfig.giraffeEndpoint,
     headers: {
       authorization: authorizationToken,
+      'hedvig-device-id': cookieStorage.getItem(DEVICE_ID_KEY),
     },
   })
 
