@@ -135,10 +135,7 @@ export const getPage = (
 
   const deviceId = serverCookieStorage.getItem(DEVICE_ID_KEY)
   if (!deviceId || deviceId === 'undefined') {
-    serverCookieStorage.setItem(DEVICE_ID_KEY, uuidv4(), {
-      sameSite: 'Lax',
-      secure: true,
-    })
+    serverCookieStorage.setItem(DEVICE_ID_KEY, uuidv4())
   }
 
   if (serverRouteData.status) {
