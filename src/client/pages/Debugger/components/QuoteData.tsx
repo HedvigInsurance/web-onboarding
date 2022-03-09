@@ -408,8 +408,8 @@ export const QuoteData: React.FC<OfferProps> = ({ sessionToken }) => {
           {data?.quoteBundle && (
             <>
               <LinkButton
-                background={colorsV3.gray100}
-                foreground={colorsV3.gray900}
+                background={colorsV3.gray900}
+                foreground={colorsV3.gray100}
                 to={`/${currentLocale}/new-member/offer`}
               >
                 Go to offer page →
