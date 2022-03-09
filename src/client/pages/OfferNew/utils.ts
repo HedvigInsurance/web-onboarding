@@ -312,6 +312,8 @@ export const isNorwegianBundle = (offerData: OfferData): boolean =>
 export type HomeInsuranceTypeOfContract = Exclude<
   TypeOfContract,
   | TypeOfContract.NoTravel
+  | TypeOfContract.NoAccident
+  | TypeOfContract.NoAccidentYouth
   | TypeOfContract.NoTravelYouth
   | TypeOfContract.DkAccident
   | TypeOfContract.DkAccidentStudent
@@ -364,6 +366,8 @@ type SingleInsuranceTypeOfContract = Exclude<
   | TypeOfContract.DkTravelStudent
   | TypeOfContract.SeAccident
   | TypeOfContract.SeAccidentStudent
+  | TypeOfContract.NoAccident
+  | TypeOfContract.NoAccidentYouth
 >
 
 export const getInsuranceTitle = (
