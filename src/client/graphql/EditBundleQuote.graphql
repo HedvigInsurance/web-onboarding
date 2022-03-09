@@ -8,6 +8,9 @@ mutation EditBundledQuote(
     ... on QuoteCart {
       id
       bundle {
+        quotes {
+          id
+        }
         possibleVariations {
           id
           tag(locale: $locale)

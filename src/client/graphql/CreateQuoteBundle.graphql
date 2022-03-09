@@ -1,8 +1,15 @@
-mutation CreateQuoteBundle($quoteCartId: ID!, $quotes: [JSON!]!, $locale: Locale!) {
+mutation CreateQuoteBundle(
+  $quoteCartId: ID!
+  $quotes: [JSON!]!
+  $locale: Locale!
+) {
   quoteCart_createQuoteBundle(id: $quoteCartId, input: { payload: $quotes }) {
     ... on QuoteCart {
       id
       bundle {
+        quotes {
+          id
+        }
         possibleVariations {
           id
           tag(locale: $locale)
