@@ -361,7 +361,7 @@
   "CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX_MANY": "personer",
   "CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX_ONE": "person",
   "CHECKOUT_CONTACT_INFO_SSN_LABEL": "Personnummer",
-  "CHECKOUT_CONTACT_INFO_EMAIL_HELPER": "",
-  "CHECKOUT_CONTACT_INFO_HEADING": "",
+  "CHECKOUT_CONTACT_INFO_EMAIL_HELPER": "För information från oss. Eller om rabatter och andra fördelaktiga ändringar skulle dyka upp efter att du redan fått din prisuppgift.",
+  "CHECKOUT_CONTACT_INFO_HEADING": "Kontaktuppgifter",
   "CHECKOUT_CONTACT_INFO_CREDIT_CHECK_HELPER": ""
 }

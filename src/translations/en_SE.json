@@ -361,7 +361,7 @@
   "CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX_MANY": "persons",
   "CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX_ONE": "person",
   "CHECKOUT_CONTACT_INFO_SSN_LABEL": "Personal identity number",
-  "CHECKOUT_CONTACT_INFO_EMAIL_HELPER": "Your email will be used for important information.",
+  "CHECKOUT_CONTACT_INFO_EMAIL_HELPER": "For information from us. Or if discounts and other beneficial changes would appear after you’ve already received your offer.",
   "CHECKOUT_CONTACT_INFO_HEADING": "Contact information",
   "CHECKOUT_CONTACT_INFO_CREDIT_CHECK_HELPER": ""
 }
