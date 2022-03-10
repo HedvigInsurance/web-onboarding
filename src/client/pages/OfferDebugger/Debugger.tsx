@@ -4,17 +4,12 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary'
 import { Button } from 'components/buttons'
 import { useCreateQuoteCart } from 'utils/hooks/useCreateQuoteCart'
-import { Label } from 'components/inputs/index'
 import { QuoteData } from './components/QuoteData'
 
 const Wrapper = styled.div`
   max-width: 900px;
   padding: 1rem;
   margin: 0 auto;
-  color: ${colorsV3.gray100};
-  ${Label} {
-    color: white;
-  }
 `
 
 const Row = styled.div`
@@ -57,8 +52,8 @@ export const Debugger: React.FC = () => {
       <Row>
         <h3>Quote Cart: {quoteCartId}</h3>
         <Button
-          background={colorsV3.gray100}
-          foreground={colorsV3.gray900}
+          background={colorsV3.gray900}
+          foreground={colorsV3.gray100}
           onClick={() => createQuoteCart()}
         >
           Create new cart

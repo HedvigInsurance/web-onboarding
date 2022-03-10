@@ -9,11 +9,11 @@ const getPersistedCampaignCode = () => {
 }
 
 const saveCampaignCode = (campaignCode: string) => {
-  cookieStorage.setItem(CAMPAIGN_CODE_COOKIE_KEY, campaignCode)
+  cookieStorage.setItem(CAMPAIGN_CODE_COOKIE_KEY, campaignCode, { path: '/' })
 }
 
 const removeCampaignCode = () => {
-  cookieStorage.removeItem(CAMPAIGN_CODE_COOKIE_KEY)
+  cookieStorage.removeItem(CAMPAIGN_CODE_COOKIE_KEY, { path: '/' })
 }
 
 export const CampaignCode = {

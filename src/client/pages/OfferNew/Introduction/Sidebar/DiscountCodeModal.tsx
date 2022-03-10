@@ -1,6 +1,5 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { CookieStorage } from 'cookie-storage'
 import { Form, Formik } from 'formik'
 import { motion } from 'framer-motion'
 import hexToRgba from 'hex-to-rgba'
@@ -11,6 +10,7 @@ import { useRedeemCodeMutation } from 'data/graphql'
 import { InputField } from 'components/inputs'
 import { Button } from 'components/buttons'
 import { CloseButton } from 'components/CloseButton/CloseButton'
+import { CampaignCode } from 'utils/campaignCode'
 
 interface Props {
   isOpen: boolean
@@ -135,14 +135,11 @@ export const DiscountCodeModal: React.FC<Props> = ({
                 }
               })
               .then(() => refetch())
-              .then(() => {
-                const cookieStorage = new CookieStorage()
-                cookieStorage.setItem('_hvcode', form.code, { path: '/' })
-              })
+              .then(() => CampaignCode.save(form.code))
               .then(() => close())
-              .catch(() => {
-                actions.setFieldError('code', 'SIDEBAR_ADD_DISCOUNT_ERROR')
-              })
+              .catch(() =>
+                actions.setFieldError('code', 'SIDEBAR_ADD_DISCOUNT_ERROR'),
+              )
           }
         >
           {({ touched, errors, getFieldProps, values }) => (
