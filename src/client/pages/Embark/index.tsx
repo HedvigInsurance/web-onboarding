@@ -6,7 +6,7 @@ import {
   useEmbark,
 } from '@hedviginsurance/embark'
 import { AnimatePresence, motion } from 'framer-motion'
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useHistory } from 'react-router'
 
 import { colorsV3 } from '@hedviginsurance/brand'
@@ -69,7 +69,7 @@ interface EmbarkProps {
   startPageLink?: string
 }
 
-const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
+const Embark = (props: EmbarkProps) => {
   const currentLocale = useCurrentLocale()
   const [isCustomerServicePhoneNumberEnabled] = useFeature([
     Features.CUSTOMER_SERVICE_PHONE_NUMBER,
@@ -109,7 +109,7 @@ const Embark: React.FunctionComponent<EmbarkProps> = (props) => {
     (passage: any) => passage.id === state.passageId,
   )
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!currentPassage?.id) {
       return
     }
@@ -271,12 +271,10 @@ const useCreateQuoteCartId = ({ skip = false }) => {
   return { createQuoteCart, quoteCartId, error }
 }
 
-export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
+export const EmbarkRoot = (props: EmbarkRootProps) => {
   const history = useHistory()
-  const [data, setData] = React.useState<[string, any] | null>(null)
-  const [initialStore, setInitialStore] = React.useState<
-    Record<string, string>
-  >()
+  const [data, setData] = useState<[string, any] | null>(null)
+  const [initialStore, setInitialStore] = useState<Record<string, string>>()
   const { isoLocale, path: pathLocale } = useCurrentLocale()
 
   const {
@@ -314,8 +312,8 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
     }
   }
 
-  React.useEffect(() => {
-    ;(async () => {
+  useEffect(() => {
+    async function fetchAngelData() {
       if (!props.name) {
         return
       }
@@ -333,10 +331,12 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
       if (result.data && result.data.angelStory) {
         setData([props.name, JSON.parse(result.data.angelStory.content)])
       }
-    })()
+    }
+
+    fetchAngelData()
   }, [props.name, isoLocale])
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!props.name || (props.isUsingQuoteCart && !quoteCartId)) {
       return
     }
@@ -362,15 +362,15 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
     }
   }, [props.name, props.isUsingQuoteCart, quoteCartId])
 
+  useEffect(() => {
+    if (props.name) EmbarkStory.set(props.name)
+  }, [props.name])
+
   const redirectToOfferPage = () => {
     history.push(
       (props.language ? `/${props.language}` : '') + '/new-member/offer',
     )
   }
-
-  useEffect(() => {
-    if (props.name) EmbarkStory.set(props.name)
-  }, [props.name])
 
   return (
     <EmbarkStyling>
