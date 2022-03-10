@@ -2216,6 +2216,11 @@
     ts-node "^8.4.1"
     uuid "^8.3.2"
 
+"@hedviginsurance/hanalytics-client@0.229.0":
+  version "0.229.0"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/hanalytics-client/-/hanalytics-client-0.229.0.tgz#e989eb12d779dbe77c7c076ed4a5b232f06a2684"
+  integrity sha512-3wVr1rnHWCIvlswZJSA2JQ9yuIlC2ApBJKGxw5Mu8rMlAL2OIFq42w17ZGuPirhGJTq2/GqKJ21P5WCLkKaMKg==
+
 "@hedviginsurance/textkeyfy@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@hedviginsurance/textkeyfy/-/textkeyfy-2.0.1.tgz#70c0eaf8c674bbec0b50f7c88e46567c5390b2e8"

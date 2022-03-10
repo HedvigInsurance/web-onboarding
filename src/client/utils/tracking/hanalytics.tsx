@@ -1,8 +1,11 @@
-import { hAnalyticsNetworking, HAnalyticsProvider } from "@hedviginsurance/hanalytics-client"
+import { Environment, HAnalyticsProvider } from "@hedviginsurance/hanalytics-client"
+import uuid from "uuid"
+import { CookieStorage } from 'cookie-storage'
+
 import React, { useState } from "react"
 import { useCurrentLocale } from "../../l10n/useCurrentLocale"
 import { useStorage } from "../StorageContainer"
-import uuid from "uuid"
+import { DEVICE_ID_KEY } from '../../../shared/sessionStorage'
 
 interface HAnalyticsWrapperProps {
     children: React.ReactNode
@@ -12,7 +15,7 @@ export const HAnalyticsWrapper = (props: HAnalyticsWrapperProps) => {
     const locale = useCurrentLocale()
     const environment = window.hedvigClientConfig.appEnvironment
     const storageState = useStorage()
-    const [sessionID, setSessionID] = useState(uuid.v1())
+    const [sessionID] = useState(uuid.v1())
 
     const getAuthorizationHeader = () => {
         if (!storageState) {
@@ -28,13 +31,16 @@ export const HAnalyticsWrapper = (props: HAnalyticsWrapperProps) => {
         return ""
     }
 
+    const cookieStorage = new CookieStorage()
+
     return (
         <HAnalyticsProvider
         getConfig={() => ({
             httpHeaders: {
                 Authorization: getAuthorizationHeader()
             },
-            endpointURL: "https://hanalytics-staging.herokuapp.com", // todo resolve correct endpoint
+            environment: Environment.STAGING,
+            userAgent: navigator.userAgent,
             context: {
                 locale: locale.isoLocale,
                 app: {
@@ -47,10 +53,10 @@ export const HAnalyticsWrapper = (props: HAnalyticsWrapperProps) => {
                     id: sessionID
                 },
                 device: {
-                    id: "THE_DEVICE_ID"
-                }
+                    id: cookieStorage.getItem(DEVICE_ID_KEY) ?? ""
+                },
             },
-            onSend: (event) => {
+            onSend: () => {
                 /// send to google analytics or other tracking partner here
             }
         })}
