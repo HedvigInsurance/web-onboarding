@@ -22,7 +22,10 @@ export const getDanishValidationSchema = (textKeys: TextKeyMap) => {
     firstName: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
     lastName: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
     birthDate: Yup.string()
-      .matches(birthDateFormats.backEndDefault)
+      .matches(
+        birthDateFormats.backEndDefault,
+        textKeys.GENERIC_ERROR_INPUT_FORMAT(),
+      )
       .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
     data: Yup.object({
       livingSpace: Yup.number()
