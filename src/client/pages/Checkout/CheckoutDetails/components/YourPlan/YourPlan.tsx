@@ -40,8 +40,7 @@ const HorizontalDivider = styled(Divider)`
   margin: 0.5rem 0;
 `
 
-export const YourPlan = () => {
-  const priceData = useGetPriceData()
+export const YourPlan = (priceData: any) => {
   const textKeys = useTextKeys()
   const { currencyLocale } = useCurrentLocale()
   if (!priceData) {
@@ -62,13 +61,15 @@ export const YourPlan = () => {
     })
   }
 
+  console.log(priceData.data)
+
   return (
     <SubSection headlineText={textKeys.CHECKOUT_INSURANCE_TITLE()}>
       <>
-        {quotes.map(({ displayName, price }) => (
-          <Row key={displayName}>
-            <Label>{displayName}</Label>
-            <Value>{formattedPrice(price.amount)}</Value>
+        {quotes.map((item: any) => (
+          <Row key={item.displayName}>
+            <Label>{item.displayName}</Label>
+            <Value>{formattedPrice(item.amount)}</Value>
           </Row>
         ))}
         {Number(discount) > 0 && (
