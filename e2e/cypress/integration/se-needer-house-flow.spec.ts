@@ -9,7 +9,6 @@ it('should get a price quote for a Swedish house', async () => {
   cy.visit(url)
 
   // insurance-type
-  cy.contains('button', 'Accept All Cookies', { timeout: 10000 }).click()
   cy.contains('button', 'Home & Accident Insurance').click()
 
   // home-type

@@ -31,9 +31,6 @@ describe('DK Offer Page', () => {
         createQuoteBundle({ quoteCartId, quotes: [HOME_CONTENT_QUOTE] }).then(
           () => {
             cy.visit(`/dk-en/new-member/offer/${quoteCartId}`)
-            cy.contains('button', 'Accept All Cookies', {
-              timeout: 10000,
-            }).click()
 
             cy.contains('Your price quote').should('be.visible')
             cy.contains(HOME_CONTENT_QUOTE.firstName).should('be.visible')
