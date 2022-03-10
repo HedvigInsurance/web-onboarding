@@ -21,6 +21,7 @@ const Card = styled.div`
   padding: 0.5rem 1rem;
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  position: relative;
 `
 
 export const SubSection = ({ headlineText, children }: Props) => {

@@ -8,7 +8,7 @@ import { Badge } from 'components/Badge/Badge'
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { SubSection } from '../SubSection'
 import { Divider } from '../../../shared/Divider'
-import { useGetPriceData } from '../../../../../utils/hooks/useGetPriceData'
+import { Price } from '../../../shared/types'
 
 const { gray700 } = colorsV3
 
@@ -47,7 +47,7 @@ export const YourPlan = (priceData: any) => {
     return null
   }
   const {
-    quotes,
+    prices,
     totalBundleCost,
     discount,
     currency,
@@ -61,15 +61,13 @@ export const YourPlan = (priceData: any) => {
     })
   }
 
-  console.log(priceData.data)
-
   return (
     <SubSection headlineText={textKeys.CHECKOUT_INSURANCE_TITLE()}>
       <>
-        {quotes.map((item: any) => (
+        {prices.map((item: Price) => (
           <Row key={item.displayName}>
             <Label>{item.displayName}</Label>
-            <Value>{formattedPrice(item.amount)}</Value>
+            <Value>{formattedPrice(item.price)}</Value>
           </Row>
         ))}
         {Number(discount) > 0 && (

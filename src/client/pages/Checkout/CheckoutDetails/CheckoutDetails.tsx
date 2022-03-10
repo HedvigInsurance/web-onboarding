@@ -16,23 +16,27 @@ export const CheckoutDetails = () => {
   const textKeys = useTextKeys()
   const { path: localePath } = useCurrentLocale()
   const { quoteCartId } = useQuoteCartIdFromUrl()
-  const { data: quoteCartQueryData } = useQuoteCartData()
-  console.log(data)
-  console.log(quoteCartQueryData)
+  const data = useQuoteCartData()
+  if (!data) {
+    return null
+  }
+  const priceData = data.priceData
+
   const paymentPageLink = `/${localePath}/new-member/checkout/payment/${quoteCartId}`
   return (
     <CheckoutPageWrapper>
       <PageSection>
-        <YourPlan />
+        <YourPlan data={priceData} />
         <SubSection headlineText="Your plan">
-          {/* <StartDate quoteCartId={quoteCartId} modal /> */}
+          <StartDate quoteCartId={quoteCartId} modal size="sm" />
         </SubSection>
-        <QuoteDetails />
+        {/* <QuoteDetails /> */}
       </PageSection>
 
       <Footer
         buttonText={textKeys.CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT()}
         buttonLinkTo={paymentPageLink}
+        priceData={priceData}
       />
     </CheckoutPageWrapper>
   )

@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { Button, ButtonProps, LinkButton } from 'components/buttons'
 import { PaymentInfo } from './PaymentInfo'
+import { PriceData } from './types'
 
 const { white, purple500, gray900 } = colorsV3
 
@@ -10,6 +11,7 @@ export type Props = {
   buttonText: string
   buttonOnClick?: () => void
   buttonLinkTo?: string
+  priceData: PriceData
 }
 type FooterButtonProps = {
   background: ButtonProps['background']
@@ -45,7 +47,12 @@ const ButtonWrapper = styled.div`
   justify-self: end;
 `
 
-export const Footer = ({ buttonText, buttonOnClick, buttonLinkTo }: Props) => {
+export const Footer = ({
+  buttonText,
+  buttonOnClick,
+  buttonLinkTo,
+  priceData,
+}: Props) => {
   const buttonProps: FooterButtonProps = {
     background: purple500,
     foreground: gray900,
@@ -55,7 +62,7 @@ export const Footer = ({ buttonText, buttonOnClick, buttonLinkTo }: Props) => {
     <Wrapper>
       <InnerWrapper>
         <PaymentInfoWrapper>
-          <PaymentInfo />
+          <PaymentInfo priceData={priceData} />
         </PaymentInfoWrapper>
         {buttonText && (
           <ButtonWrapper>

@@ -1,62 +1,55 @@
 import { useParams } from 'react-router-dom'
 import { useQuoteCartQuery } from 'data/graphql'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { getMainQuote } from 'src/client/api/quoteBundleSelectors'
-
-// interface userData {
-//   firstName: string | undefined
-//   lastName: string | null | undefined
-//   email: string | null | undefined
-// }
+import { getMainQuote } from 'api/quoteBundleSelectors'
+import { getSelectedBundleVariant } from 'api/quoteCartQuerySelectors'
+import { PriceData } from 'src/client/pages/Checkout/shared/types'
+import { useSelectedInsuranceTypes } from './useSelectedInsuranceTypes'
 
 export const useQuoteCartData = () => {
   const { id: quoteCartId } = useParams<{ id: string }>()
   const { isoLocale } = useCurrentLocale()
-
   const { data, loading, error } = useQuoteCartQuery({
-    variables: {
-      id: quoteCartId,
-      locale: isoLocale,
-    },
+    variables: { id: quoteCartId, locale: isoLocale },
   })
-
   console.log(data)
-  // get bundle based on selectedBundleVariant from Offer
-  const bundle = data?.quoteCart.bundle?.possibleVariations[0].bundle
-  const prices = bundle?.quotes.map((item) => {
+
+  const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
+  const selectedQuoteBundle = getSelectedBundleVariant(
+    data,
+    selectedInsuranceTypes,
+  )
+  if (!selectedQuoteBundle) return null
+
+  const prices = selectedQuoteBundle?.bundle.quotes.map((item) => {
     return { displayName: item.displayName, price: item.price.amount }
   })
 
-  if (!bundle) {
-    return null
+  const mainQuote = getMainQuote(selectedQuoteBundle.bundle)
+
+  const getPriceData = (): PriceData => {
+    return {
+      prices: prices,
+      discount: selectedQuoteBundle.bundle.bundleCost.monthlyDiscount.amount,
+      currency: selectedQuoteBundle.bundle.bundleCost.monthlyNet.currency,
+      totalBundleCost: selectedQuoteBundle.bundle.bundleCost.monthlyNet.amount,
+      campaignName: data?.quoteCart.campaign?.displayValue,
+    }
   }
-  // const mainQuote = getMainQuote()
 
-  const priceData = {
-    prices: prices,
-    discount: bundle?.bundleCost.monthlyDiscount.amount,
-    currency: bundle?.bundleCost.monthlyNet.currency,
-    totalBundleCost: bundle?.bundleCost.monthlyNet.amount,
-    campaignName: data?.quoteCart.campaign?.displayValue,
+  const quoteDetails = mainQuote.quoteDetails
+
+  const userDetails = {
+    firstName: mainQuote.firstName ?? undefined,
+    lastName: mainQuote.lastName,
+    email: mainQuote.email,
   }
-
-  const quoteDetails =
-    data?.quoteCart.bundle?.possibleVariations[0].bundle.quotes[0].quoteDetails
-
-  // const userDetails: userData = {
-  //   // firstName: mainQuote.firstName ?? undefined,
-  //   // lastName: mainQuote.lastName,
-  //   // email: mainQuote.email,
-  // }
-
-  console.log(priceData)
 
   return {
-    quoteCartQueryData: data,
-    priceData: priceData,
+    priceData: getPriceData(),
     quoteDetails: quoteDetails,
-    userDetails: '',
-    isLoadingQuoteCart: loading,
-    quoteCartError: error,
+    userDetails: userDetails,
+    loading,
+    error,
   }
 }

@@ -4,9 +4,6 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
 import { getFormattedPrice } from 'utils/getFormattedPrice'
-import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
-import { usePriceQuery } from 'data/graphql'
-import { Spinner } from 'components/utils'
 
 const { gray900, gray700 } = colorsV3
 
@@ -24,45 +21,16 @@ const CancelInfo = styled.div`
   line-height: 1rem;
   color: ${gray700};
 `
-const SpinnerWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: 2rem;
-  color: ${gray900};
-`
 
-export const PaymentInfo = () => {
+export const PaymentInfo = (priceData: any) => {
   const textKeys = useTextKeys()
-  const { isoLocale, currencyLocale } = useCurrentLocale()
-  const { quoteCartId } = useQuoteCartIdFromUrl()
-  const { data, loading: isLoading, error } = usePriceQuery({
-    variables: {
-      id: quoteCartId,
-      locale: isoLocale,
-    },
-  })
-  const quoteBundle = data?.quoteCart.bundle
-
-  if (error || !quoteBundle) {
-    return null
-  }
-
-  const monthlyNetCost = quoteBundle.bundleCost.monthlyNet.amount
-  const currency = quoteBundle.quotes[0].price.currency
-
+  const { currencyLocale } = useCurrentLocale()
+  const currency = priceData.currency
   const formattedPrice = getFormattedPrice({
     locale: currencyLocale,
-    amount: monthlyNetCost,
+    amount: priceData.totalBundleCost,
     currency,
   })
-
-  if (isLoading) {
-    return (
-      <SpinnerWrapper>
-        <Spinner />
-      </SpinnerWrapper>
-    )
-  }
 
   return (
     <Wrapper>
