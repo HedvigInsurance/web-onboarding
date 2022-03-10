@@ -83,6 +83,6 @@ it('should get a price quote for a Swedish house', async () => {
   cy.focused().type(`${faker.internet.email()}{enter}`)
 
   // offer page
-  cy.contains('Your price quote', { timeout: 10000 }).should('be.visible')
+  cy.contains('Your price quote', { timeout: 15000 }).should('be.visible')
   cy.contains(address).should('be.visible')
 })
