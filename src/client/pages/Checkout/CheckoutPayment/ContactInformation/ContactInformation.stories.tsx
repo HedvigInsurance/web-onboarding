@@ -9,12 +9,8 @@ import {
   localeArgTypes,
   getTranslationsLocale,
 } from 'utils/storybook/storyHelpers'
-import { ContactInformationDocument } from 'data/graphql'
-import {
-  quoteCartIdMock,
-  contactInfoResponseMockNO,
-} from 'utils/testData/contactInfoMock'
 import { localePathPattern } from 'l10n/localePathPattern'
+import { mockedQuoteCartId } from 'utils/testData/quoteDetailsDataMock'
 import { ContactInformation } from './ContactInformation'
 
 type StoryProps = {
@@ -22,7 +18,6 @@ type StoryProps = {
 }
 
 const Wrapper = styled.div`
-  width: 100vw;
   display: flex;
   justify-content: center;
 `
@@ -42,18 +37,25 @@ export default storyMeta
 export const Template: Story<StoryProps> = ({ localePath }) => {
   const translationsLocale = getTranslationsLocale(localePath)
 
+  const dataMock = {
+    firstName: 'Sven',
+    lastName: 'Svensson',
+    ssn: '1996030904251',
+    email: 'sven@svensson.no',
+  }
+
   return (
     <TextKeyProvider locale={translationsLocale}>
       <MemoryRouter
         initialEntries={[
-          `/${localePath}/new-member/checkout/details/${quoteCartIdMock}`,
+          `/${localePath}/new-member/checkout/details/${mockedQuoteCartId}`,
         ]}
       >
         <Route
           path={`${localePathPattern}/new-member/checkout/details/:id`}
           component={(routerProps: RouterProps) => (
             <Wrapper {...routerProps}>
-              <ContactInformation />
+              <ContactInformation data={dataMock} />
             </Wrapper>
           )}
         />
@@ -66,20 +68,4 @@ export const NorwegianContactInfo = Template.bind({})
 
 NorwegianContactInfo.args = {
   localePath: 'no-en',
-}
-
-NorwegianContactInfo.parameters = {
-  apolloClient: {
-    mocks: [
-      {
-        request: {
-          query: ContactInformationDocument,
-          variables: {
-            id: quoteCartIdMock,
-          },
-        },
-        result: contactInfoResponseMockNO,
-      },
-    ],
-  },
 }

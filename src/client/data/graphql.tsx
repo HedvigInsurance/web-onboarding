@@ -102,6 +102,8 @@ export enum _MutationKind {
   PublishMany = 'publishMany',
   UnpublishMany = 'unpublishMany',
   DeleteMany = 'deleteMany',
+  SchedulePublish = 'schedulePublish',
+  ScheduleUnpublish = 'scheduleUnpublish',
 }
 
 export enum _OrderDirection {
@@ -2051,7 +2053,9 @@ export type CompleteQuoteDetails =
 /** An inception where all quotes need to have the same startDate and currentInsurer */
 export type ConcurrentInception = {
   __typename?: 'ConcurrentInception'
+  /** @deprecated correspondingQuotes is deprecated, doesn't work with QuoteCart use correspondingQuoteIds instead */
   correspondingQuotes: Array<Quote>
+  correspondingQuoteIds: Array<Scalars['ID']>
   startDate?: Maybe<Scalars['LocalDate']>
   currentInsurer?: Maybe<CurrentInsurer>
 }
@@ -5223,7 +5227,9 @@ export type IndefinitePercentageDiscount = {
 /** An inception that may be switchable and has a single date */
 export type IndependentInception = {
   __typename?: 'IndependentInception'
+  /** @deprecated correspondingQuote is deprecated, doesn't work with QuoteCart use correspondingQuoteId instead */
   correspondingQuote: Quote
+  correspondingQuoteId: Scalars['ID']
   startDate?: Maybe<Scalars['LocalDate']>
   currentInsurer?: Maybe<CurrentInsurer>
 }
@@ -7893,7 +7899,7 @@ export type MutationQuoteCart_CreateSwedishBundleArgs = {
 }
 
 export type MutationQuoteCart_InitWidgetArgs = {
-  input?: Maybe<InitWidgetInput>
+  input: InitWidgetInput
 }
 
 export type MutationCreateQuoteArgs = {
@@ -8024,6 +8030,15 @@ export type Node = {
 export type NoDiscount = {
   __typename?: 'NoDiscount'
   _?: Maybe<Scalars['Boolean']>
+}
+
+export type NorwegianAccidentDetails = {
+  __typename?: 'NorwegianAccidentDetails'
+  coInsured: Scalars['Int']
+  isYouth: Scalars['Boolean']
+  street: Scalars['String']
+  zipCode: Scalars['String']
+  city?: Maybe<Scalars['String']>
 }
 
 export type NorwegianBankIdAuthResponse = {
@@ -8339,6 +8354,7 @@ export type Query = {
   contracts: Array<Contract>
   /** Returns whether a member has at least one contract */
   hasContract: Scalars['Boolean']
+  partner: RapioPartner
   quoteBundle: QuoteBundle
   /** Fetch quote cart by its ID. */
   quoteCart: QuoteCart
@@ -8514,6 +8530,10 @@ export type QueryHouseInformationArgs = {
 export type QueryAutoCompleteAddressArgs = {
   input: Scalars['String']
   options?: Maybe<AddressAutocompleteOptions>
+}
+
+export type QueryPartnerArgs = {
+  id: Scalars['ID']
 }
 
 export type QueryQuoteBundleArgs = {
@@ -8725,6 +8745,7 @@ export type QuoteDetails =
   | SwedishAccidentDetails
   | NorwegianHomeContentsDetails
   | NorwegianTravelDetails
+  | NorwegianAccidentDetails
   | DanishHomeContentsDetails
   | DanishAccidentDetails
   | DanishTravelDetails
@@ -8732,6 +8753,12 @@ export type QuoteDetails =
 export enum QuoteInitiatedFrom {
   CrossSell = 'CROSS_SELL',
   SelfChange = 'SELF_CHANGE',
+}
+
+export type RapioPartner = {
+  __typename?: 'RapioPartner'
+  id: Scalars['ID']
+  name: Scalars['String']
 }
 
 export type RedeemedCodeV2Result =
@@ -10680,6 +10707,8 @@ export enum TypeOfContract {
   NoHomeContentYouthRent = 'NO_HOME_CONTENT_YOUTH_RENT',
   NoTravel = 'NO_TRAVEL',
   NoTravelYouth = 'NO_TRAVEL_YOUTH',
+  NoAccident = 'NO_ACCIDENT',
+  NoAccidentYouth = 'NO_ACCIDENT_YOUTH',
   DkHomeContentOwn = 'DK_HOME_CONTENT_OWN',
   DkHomeContentRent = 'DK_HOME_CONTENT_RENT',
   DkHomeContentStudentOwn = 'DK_HOME_CONTENT_STUDENT_OWN',
@@ -11616,34 +11645,6 @@ export type CheckoutStatusQuery = { __typename?: 'Query' } & {
     }
 }
 
-export type ContactInformationQueryVariables = Exact<{
-  id: Scalars['ID']
-}>
-
-export type ContactInformationQuery = { __typename?: 'Query' } & {
-  quoteCart: { __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'> & {
-      bundle?: Maybe<
-        { __typename?: 'QuoteBundle' } & {
-          possibleVariations: Array<
-            { __typename?: 'QuoteBundleVariant' } & Pick<
-              QuoteBundleVariant,
-              'id'
-            > & {
-                bundle: { __typename?: 'QuoteBundle' } & {
-                  quotes: Array<
-                    { __typename?: 'BundledQuote' } & Pick<
-                      BundledQuote,
-                      'firstName' | 'lastName' | 'ssn' | 'email'
-                    >
-                  >
-                }
-              }
-          >
-        }
-      >
-    }
-}
-
 export type CreateAccessTokenMutationVariables = Exact<{
   quoteCartId: Scalars['ID']
 }>
@@ -11670,6 +11671,7 @@ export type CreateDanishHomeAccidentQuoteMutation = {
             | { __typename: 'SwedishAccidentDetails' }
             | { __typename: 'NorwegianHomeContentsDetails' }
             | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
@@ -11683,6 +11685,7 @@ export type CreateDanishHomeAccidentQuoteMutation = {
             | { __typename: 'SwedishAccidentDetails' }
             | { __typename: 'NorwegianHomeContentsDetails' }
             | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
@@ -11707,6 +11710,7 @@ export type CreateDanishHomeAccidentTravelQuoteMutation = {
             | { __typename: 'SwedishAccidentDetails' }
             | { __typename: 'NorwegianHomeContentsDetails' }
             | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
@@ -11720,6 +11724,7 @@ export type CreateDanishHomeAccidentTravelQuoteMutation = {
             | { __typename: 'SwedishAccidentDetails' }
             | { __typename: 'NorwegianHomeContentsDetails' }
             | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
@@ -11733,6 +11738,7 @@ export type CreateDanishHomeAccidentTravelQuoteMutation = {
             | { __typename: 'SwedishAccidentDetails' }
             | { __typename: 'NorwegianHomeContentsDetails' }
             | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
@@ -11824,6 +11830,7 @@ export type CreateSwedishHomeAccidentQuoteMutation = {
             | { __typename: 'SwedishAccidentDetails' }
             | { __typename: 'NorwegianHomeContentsDetails' }
             | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
@@ -11841,6 +11848,7 @@ export type CreateSwedishHomeAccidentQuoteMutation = {
             | { __typename: 'SwedishAccidentDetails' }
             | { __typename: 'NorwegianHomeContentsDetails' }
             | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
@@ -12163,6 +12171,7 @@ export type QuoteDataFragment = { __typename?: 'BundledQuote' } & Pick<
           NorwegianTravelDetails,
           'coInsured' | 'isYouth'
         >)
+      | { __typename?: 'NorwegianAccidentDetails' }
       | ({ __typename?: 'DanishHomeContentsDetails' } & Pick<
           DanishHomeContentsDetails,
           | 'street'
@@ -12716,6 +12725,7 @@ export type QuoteDataFragmentFragment = { __typename?: 'BundledQuote' } & Pick<
           NorwegianTravelDetails,
           'coInsured' | 'isYouth'
         >)
+      | { __typename?: 'NorwegianAccidentDetails' }
       | ({ __typename?: 'DanishHomeContentsDetails' } & Pick<
           DanishHomeContentsDetails,
           | 'street'
@@ -13318,77 +13328,6 @@ export type CheckoutStatusLazyQueryHookResult = ReturnType<
 export type CheckoutStatusQueryResult = ApolloReactCommon.QueryResult<
   CheckoutStatusQuery,
   CheckoutStatusQueryVariables
->
-export const ContactInformationDocument = gql`
-  query ContactInformation($id: ID!) {
-    quoteCart(id: $id) {
-      id
-      bundle {
-        possibleVariations {
-          id
-          bundle {
-            quotes {
-              firstName
-              lastName
-              ssn
-              email
-            }
-          }
-        }
-      }
-    }
-  }
-`
-
-/**
- * __useContactInformationQuery__
- *
- * To run a query within a React component, call `useContactInformationQuery` and pass it any options that fit your needs.
- * When your component renders, `useContactInformationQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useContactInformationQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useContactInformationQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    ContactInformationQuery,
-    ContactInformationQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<
-    ContactInformationQuery,
-    ContactInformationQueryVariables
-  >(ContactInformationDocument, options)
-}
-export function useContactInformationLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ContactInformationQuery,
-    ContactInformationQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<
-    ContactInformationQuery,
-    ContactInformationQueryVariables
-  >(ContactInformationDocument, options)
-}
-export type ContactInformationQueryHookResult = ReturnType<
-  typeof useContactInformationQuery
->
-export type ContactInformationLazyQueryHookResult = ReturnType<
-  typeof useContactInformationLazyQuery
->
-export type ContactInformationQueryResult = ApolloReactCommon.QueryResult<
-  ContactInformationQuery,
-  ContactInformationQueryVariables
 >
 export const CreateAccessTokenDocument = gql`
   mutation CreateAccessToken($quoteCartId: ID!) {
