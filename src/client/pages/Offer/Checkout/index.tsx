@@ -37,7 +37,7 @@ import { useScrollLock, VisibilityState } from 'pages/OfferNew/Checkout/hooks'
 import { UpsellCard } from 'pages/OfferNew/Checkout/UpsellCard'
 import { OfferData } from 'pages/OfferNew/types'
 import { SignFailModal } from 'pages/OfferNew/Checkout/SignFailModal/SignFailModal'
-import { LimitCode } from 'api/quoteBundleErrorSelectors'
+import { LimitCode, isQuoteBundleError } from 'api/quoteBundleErrorSelectors'
 import { trackSignedCustomerEvent } from 'utils/tracking/trackSignedCustomerEvent'
 import * as createQuoteBundleMutationSelector from 'api/createQuoteBundleMutationSelectors'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
@@ -416,6 +416,9 @@ export const Checkout = ({
       let quoteIds = getQuoteIdsFromBundleVariant(selectedQuoteBundleVariant)
       if (isFormDataUpdated) {
         const { data } = await submitForm()
+        const isUpdateQuotesFailed = isQuoteBundleError(data)
+        if (isUpdateQuotesFailed) throw Error('Updating quotes has failed')
+
         const quoteBundleVariant = createQuoteBundleMutationSelector.getSelectedBundleVariant(
           data,
           selectedInsuranceTypes,
@@ -424,11 +427,6 @@ export const Checkout = ({
         if (quoteBundleVariant) {
           quoteIds = getQuoteIdsFromBundleVariant(quoteBundleVariant)
         }
-      }
-
-      // clean up existing auth tokens
-      if (realApolloClient) {
-        realApolloClient.httpLink.options.headers.authorization = undefined
       }
 
       const { data } = await startCheckout({
@@ -477,7 +475,11 @@ export const Checkout = ({
         locale: locale.isoLocale,
         quoteCartId,
         quotes: getUniqueQuotesFromVariantList(quoteBundleVariants).map(
-          ({ startDate, currentInsurer, data: { type, typeOfContract } }) => {
+          ({
+            startDate,
+            currentInsurer,
+            data: { type, typeOfContract, isStudent },
+          }) => {
             return {
               firstName,
               lastName,
@@ -492,6 +494,7 @@ export const Checkout = ({
                 ...form.data,
                 type,
                 typeOfContract,
+                isStudent,
               },
             }
           },

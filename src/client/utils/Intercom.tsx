@@ -24,7 +24,7 @@ export const Intercom: React.FC = () => {
   const variation = useVariation()
   const isIntercomMatch = useRouteMatch(
     localePathPattern +
-      '/new-member/:place(offer|sign|download|connect-payment)',
+      '/new-member/:place(offer|checkout|sign|download|connect-payment)',
   )
 
   React.useEffect(() => {

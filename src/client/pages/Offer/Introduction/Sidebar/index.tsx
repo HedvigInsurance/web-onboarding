@@ -1,6 +1,5 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import styled from '@emotion/styled'
-import { useParams } from 'react-router-dom'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 import { colorsV3 } from '@hedviginsurance/brand'
 
@@ -18,6 +17,7 @@ import { PriceBreakdown } from 'pages/OfferNew/common/PriceBreakdown'
 
 import { useTextKeys } from 'utils/textKeys'
 import { CampaignCode } from 'utils/campaignCode'
+import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 
 import {
   LARGE_SCREEN_MEDIA_QUERY,
@@ -131,7 +131,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   campaign,
   onCheckoutOpen,
 }) => {
-  const { id: quoteCartId } = useParams<{ id: string }>()
+  const { quoteCartId } = useQuoteCartIdFromUrl()
   const textKeys = useTextKeys()
 
   const [campaignCodeModalIsOpen, setCampaignCodeModalIsOpen] = useState(false)
@@ -163,16 +163,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
   )
 
   const handleRemoveCampaign = useCallback(async () => {
-    const { data: result } = await removeCampaignCode({
-      variables: { quoteCartId },
-    })
-    const hasError =
-      result?.quoteCart_removeCampaign.__typename === 'BasicError'
-
-    if (!hasError) {
-      CampaignCode.remove()
-    }
+    CampaignCode.remove()
+    await removeCampaignCode({ variables: { quoteCartId } })
   }, [quoteCartId, removeCampaignCode])
+
+  useEffect(() => {
+    const isMissingCampaignCode = campaign?.code === undefined
+    const savedCampaignCode = CampaignCode.get()
+    if (savedCampaignCode && isMissingCampaignCode) {
+      handleAddCampaignCode(savedCampaignCode)
+    }
+  }, [handleAddCampaignCode, campaign])
 
   const showRemoveCampaignButton = campaign !== undefined
   const isDiscountPrice =

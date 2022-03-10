@@ -1,0 +1,5 @@
+query QuoteCartId($id: ID!) {
+  quoteCart(id: $id) {
+    id
+  }
+}

@@ -159,6 +159,10 @@ export type ActivePaymentMethodsResponse = {
   storedPaymentMethodsDetails: StoredPaymentMethodsDetails
 }
 
+export type ActivePaymentMethodsV2Response =
+  | StoredCardDetails
+  | StoredThirdPartyDetails
+
 export type ActivePayoutMethodsResponse = {
   __typename?: 'ActivePayoutMethodsResponse'
   status: PayoutMethodStatus
@@ -290,6 +294,11 @@ export type AddressHouseExtraBuilding = {
   type: Scalars['String']
   area: Scalars['Int']
   hasWaterConnected: Scalars['Boolean']
+}
+
+export type AddressInput = {
+  street: Scalars['String']
+  zipCode: Scalars['String']
 }
 
 export enum AddressOwnership {
@@ -2719,6 +2728,12 @@ export type CreateSwedishApartmentInput = {
   type: ApartmentType
 }
 
+export type CreateSwedishBundleInput = {
+  ssn: Scalars['String']
+  isStudent: Scalars['Boolean']
+  address?: Maybe<AddressInput>
+}
+
 export type CreateSwedishHouseInput = {
   street: Scalars['String']
   zipCode: Scalars['String']
@@ -3242,6 +3257,7 @@ export type EmbarkApiGraphQlGeneratedVariable = {
 export type EmbarkApiGraphQlMultiActionVariable = {
   __typename?: 'EmbarkAPIGraphQLMultiActionVariable'
   key: Scalars['String']
+  from: Scalars['String']
   variables: Array<EmbarkApiGraphQlVariable>
 }
 
@@ -3627,6 +3643,7 @@ export type EmbarkPassage = {
   externalRedirect?: Maybe<EmbarkExternalRedirect>
   offerRedirect?: Maybe<EmbarkOfferRedirect>
   variantedOfferRedirects: Array<EmbarkVariantedOfferRedirect>
+  quoteCartOfferRedirects: Array<EmbarkQuoteCartOfferRedirect>
   action?: Maybe<EmbarkAction>
   response: EmbarkResponse
   tooltips: Array<EmbarkTooltip>
@@ -3653,6 +3670,19 @@ export type EmbarkPreviousInsuranceProviderActionData = {
 export enum EmbarkPreviousInsuranceProviderActionDataProviders {
   Norwegian = 'NORWEGIAN',
   Swedish = 'SWEDISH',
+}
+
+export type EmbarkQuoteCartOfferRedirect = {
+  __typename?: 'EmbarkQuoteCartOfferRedirect'
+  component: Scalars['String']
+  data: EmbarkQuoteCartOfferRedirectData
+}
+
+export type EmbarkQuoteCartOfferRedirectData = {
+  __typename?: 'EmbarkQuoteCartOfferRedirectData'
+  expression: EmbarkExpression
+  id: Scalars['String']
+  selectedInsuranceTypes: Array<Scalars['String']>
 }
 
 export type EmbarkRedirect =
@@ -5208,6 +5238,13 @@ export type InitiateDataCollectionInput = {
   reference: Scalars['ID']
   insuranceProvider: Scalars['String']
   personalNumber: Scalars['String']
+}
+
+export type InitWidgetInput = {
+  requestId: Scalars['String']
+  partnerId: Scalars['String']
+  market: Market
+  locale: Scalars['String']
 }
 
 export type InProgressReferral = {
@@ -7646,6 +7683,10 @@ export type Mutation = {
    * This is needed at this stage because the "connecting payments" stage will happen with an actual signed member.
    */
   quoteCart_createAccessToken: CreateQuoteCartAccessTokenResult
+  /** Create a Swedish quote bundle based on SSN. */
+  quoteCart_createSwedishBundle: CreateQuoteBundleResult
+  /** Initiate widget, widget should send requestId (Avy) and partner name */
+  quoteCart_initWidget: CreateQuoteCartResult
   createQuote: CreateQuoteResult
   editQuote: CreateQuoteResult
   removeCurrentInsurer: CreateQuoteResult
@@ -7844,6 +7885,15 @@ export type MutationQuoteCart_StartCheckoutArgs = {
 
 export type MutationQuoteCart_CreateAccessTokenArgs = {
   id: Scalars['ID']
+}
+
+export type MutationQuoteCart_CreateSwedishBundleArgs = {
+  id: Scalars['ID']
+  input: CreateSwedishBundleInput
+}
+
+export type MutationQuoteCart_InitWidgetArgs = {
+  input: InitWidgetInput
 }
 
 export type MutationCreateQuoteArgs = {
@@ -8249,6 +8299,8 @@ export type Query = {
   availablePaymentMethods: AvailablePaymentMethodsResponse
   /** Returns the active payment method which the member chose to tokenize */
   activePaymentMethods?: Maybe<ActivePaymentMethodsResponse>
+  /** Returns the active payment method which the member chose to tokenize now supporting more payment methods then card */
+  activePaymentMethodsV2?: Maybe<ActivePaymentMethodsV2Response>
   adyenPublicKey: Scalars['String']
   /** Returns all the available payouts methods before the client requests a payout tokenization */
   availablePayoutMethods: AvailablePaymentMethodsResponse
@@ -8287,6 +8339,7 @@ export type Query = {
   contracts: Array<Contract>
   /** Returns whether a member has at least one contract */
   hasContract: Scalars['Boolean']
+  partner: RapioPartner
   quoteBundle: QuoteBundle
   /** Fetch quote cart by its ID. */
   quoteCart: QuoteCart
@@ -8462,6 +8515,10 @@ export type QueryHouseInformationArgs = {
 export type QueryAutoCompleteAddressArgs = {
   input: Scalars['String']
   options?: Maybe<AddressAutocompleteOptions>
+}
+
+export type QueryPartnerArgs = {
+  id: Scalars['ID']
 }
 
 export type QueryQuoteBundleArgs = {
@@ -8680,6 +8737,12 @@ export type QuoteDetails =
 export enum QuoteInitiatedFrom {
   CrossSell = 'CROSS_SELL',
   SelfChange = 'SELF_CHANGE',
+}
+
+export type RapioPartner = {
+  __typename?: 'RapioPartner'
+  id: Scalars['ID']
+  name: Scalars['String']
 }
 
 export type RedeemedCodeV2Result =
@@ -9870,6 +9933,17 @@ export type StartSignResponse =
   | SimpleSignSession
   | FailedToStartSign
 
+export type StoredCardDetails = {
+  __typename?: 'StoredCardDetails'
+  id: Scalars['String']
+  cardName?: Maybe<Scalars['String']>
+  brand?: Maybe<Scalars['String']>
+  lastFourDigits: Scalars['String']
+  expiryMonth: Scalars['String']
+  expiryYear: Scalars['String']
+  holderName?: Maybe<Scalars['String']>
+}
+
 export type StoredPaymentMethodsDetails = {
   __typename?: 'StoredPaymentMethodsDetails'
   id: Scalars['String']
@@ -9879,6 +9953,12 @@ export type StoredPaymentMethodsDetails = {
   expiryMonth: Scalars['String']
   expiryYear: Scalars['String']
   holderName?: Maybe<Scalars['String']>
+}
+
+export type StoredThirdPartyDetails = {
+  __typename?: 'StoredThirdPartyDetails'
+  name: Scalars['String']
+  type: Scalars['String']
 }
 
 export type SubmitAdyenRedirectionInput = {
@@ -10611,6 +10691,8 @@ export enum TypeOfContract {
   NoHomeContentYouthRent = 'NO_HOME_CONTENT_YOUTH_RENT',
   NoTravel = 'NO_TRAVEL',
   NoTravelYouth = 'NO_TRAVEL_YOUTH',
+  NoAccident = 'NO_ACCIDENT',
+  NoAccidentYouth = 'NO_ACCIDENT_YOUTH',
   DkHomeContentOwn = 'DK_HOME_CONTENT_OWN',
   DkHomeContentRent = 'DK_HOME_CONTENT_RENT',
   DkHomeContentStudentOwn = 'DK_HOME_CONTENT_STUDENT_OWN',
@@ -12178,6 +12260,30 @@ export type QuoteCartQuery = { __typename?: 'Query' } & {
       >
       campaign?: Maybe<{ __typename?: 'Campaign' } & CampaignDataFragment>
       checkout?: Maybe<{ __typename?: 'Checkout' } & Pick<Checkout, 'status'>>
+    }
+}
+
+export type QuoteCartIdQueryVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type QuoteCartIdQuery = { __typename?: 'Query' } & {
+  quoteCart: { __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'>
+}
+
+export type QuoteDetailsDataQueryVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type QuoteDetailsDataQuery = { __typename?: 'Query' } & {
+  quoteCart: { __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'> & {
+      bundle?: Maybe<
+        { __typename?: 'QuoteBundle' } & {
+          quotes: Array<
+            { __typename?: 'BundledQuote' } & Pick<BundledQuote, 'id' | 'data'>
+          >
+        }
+      >
     }
 }
 
@@ -14401,6 +14507,126 @@ export type QuoteCartLazyQueryHookResult = ReturnType<
 export type QuoteCartQueryResult = ApolloReactCommon.QueryResult<
   QuoteCartQuery,
   QuoteCartQueryVariables
+>
+export const QuoteCartIdDocument = gql`
+  query QuoteCartId($id: ID!) {
+    quoteCart(id: $id) {
+      id
+    }
+  }
+`
+
+/**
+ * __useQuoteCartIdQuery__
+ *
+ * To run a query within a React component, call `useQuoteCartIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQuoteCartIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQuoteCartIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useQuoteCartIdQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    QuoteCartIdQuery,
+    QuoteCartIdQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<QuoteCartIdQuery, QuoteCartIdQueryVariables>(
+    QuoteCartIdDocument,
+    options,
+  )
+}
+export function useQuoteCartIdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    QuoteCartIdQuery,
+    QuoteCartIdQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<QuoteCartIdQuery, QuoteCartIdQueryVariables>(
+    QuoteCartIdDocument,
+    options,
+  )
+}
+export type QuoteCartIdQueryHookResult = ReturnType<typeof useQuoteCartIdQuery>
+export type QuoteCartIdLazyQueryHookResult = ReturnType<
+  typeof useQuoteCartIdLazyQuery
+>
+export type QuoteCartIdQueryResult = ApolloReactCommon.QueryResult<
+  QuoteCartIdQuery,
+  QuoteCartIdQueryVariables
+>
+export const QuoteDetailsDataDocument = gql`
+  query QuoteDetailsData($id: ID!) {
+    quoteCart(id: $id) {
+      id
+      bundle {
+        quotes {
+          id
+          data
+        }
+      }
+    }
+  }
+`
+
+/**
+ * __useQuoteDetailsDataQuery__
+ *
+ * To run a query within a React component, call `useQuoteDetailsDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQuoteDetailsDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQuoteDetailsDataQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useQuoteDetailsDataQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    QuoteDetailsDataQuery,
+    QuoteDetailsDataQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<QuoteDetailsDataQuery, QuoteDetailsDataQueryVariables>(
+    QuoteDetailsDataDocument,
+    options,
+  )
+}
+export function useQuoteDetailsDataLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    QuoteDetailsDataQuery,
+    QuoteDetailsDataQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    QuoteDetailsDataQuery,
+    QuoteDetailsDataQueryVariables
+  >(QuoteDetailsDataDocument, options)
+}
+export type QuoteDetailsDataQueryHookResult = ReturnType<
+  typeof useQuoteDetailsDataQuery
+>
+export type QuoteDetailsDataLazyQueryHookResult = ReturnType<
+  typeof useQuoteDetailsDataLazyQuery
+>
+export type QuoteDetailsDataQueryResult = ApolloReactCommon.QueryResult<
+  QuoteDetailsDataQuery,
+  QuoteDetailsDataQueryVariables
 >
 export const RedeemCodeDocument = gql`
   mutation RedeemCode($code: String!) {

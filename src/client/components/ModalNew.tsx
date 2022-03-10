@@ -8,7 +8,7 @@ import { CloseButton } from './CloseButton/CloseButton'
 export type ModalProps = {
   isVisible: boolean
   dynamicHeight?: boolean
-  onClose: () => void
+  onClose?: () => void
   className?: string
 }
 
@@ -87,6 +87,8 @@ export const Modal: React.FC<ModalProps> = ({
   children,
 }) => {
   useLockBodyScroll({ isLocked: isVisible })
+  const hasOnCloseFunction = Boolean(onClose)
+
   return (
     <Wrapper
       initial={'hidden'}
@@ -146,9 +148,11 @@ export const Modal: React.FC<ModalProps> = ({
         }}
       >
         <ModalInnerContainer>{children}</ModalInnerContainer>
-        <ButtonWrapper>
-          <CloseButton onClick={onClose} />
-        </ButtonWrapper>
+        {hasOnCloseFunction && (
+          <ButtonWrapper>
+            <CloseButton onClick={onClose} />
+          </ButtonWrapper>
+        )}
       </ModalContainer>
     </Wrapper>
   )

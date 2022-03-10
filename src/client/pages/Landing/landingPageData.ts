@@ -39,7 +39,7 @@ export const getProductsData = (): ProductsData => {
       },
       {
         id: 'swedishSwitch',
-        linkSlug: '/switch',
+        linkSlug: isQuoteCartEnabled ? '/home-switcher' : '/switch',
         headline: 'STARTPAGE_INSURED_HEADLINE',
         paragraph: 'STARTPAGE_INSURED_BODY',
         badge: 'STARTPAGE_SE_INSURED_BADGE',
@@ -63,20 +63,24 @@ export const getProductsData = (): ProductsData => {
     DK: [
       {
         id: 'danishContents',
-        linkSlug: '/home',
+        linkSlug: isQuoteCartEnabled ? '/home-needer' : '/home',
         headline: 'STARTPAGE_DK_CONTENTS_HEADLINE',
         paragraph: 'STARTPAGE_DK_CONTENTS_BODY',
       },
       {
         id: 'danishContentsAccident',
-        linkSlug: '/home-accident',
+        linkSlug: isQuoteCartEnabled
+          ? '/home-accident-needer'
+          : '/home-accident',
         headline: 'STARTPAGE_DK_CONTENTS_ACCIDENT_HEADLINE',
         paragraph: 'STARTPAGE_DK_CONTENTS_ACCIDENT_BODY',
         badge: 'STARTPAGE_DK_CONTENTS_ACCIDENT_BADGE',
       },
       {
         id: 'danishContentsAccidentTravel',
-        linkSlug: '/home-accident-travel',
+        linkSlug: isQuoteCartEnabled
+          ? '/home-accident-travel-needer'
+          : '/home-accident-travel',
         headline: 'STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_HEADLINE',
         paragraph: 'STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_BODY',
         badge: 'STARTPAGE_DK_CONTENTS_ACCIDENT_TRAVEL_BADGE',

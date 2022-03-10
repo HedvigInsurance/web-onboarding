@@ -353,5 +353,19 @@
   "CHECKOUT_INSURANCE_TITLE": "Forsikring",
   "CHECKOUT_PAYMENT_DETAILS_TITLE": "Betalingsmetode",
   "CHECKOUT_PAYMENT_DETAILS_DESCRIPTION": "Din betaling bliver trukket fra dit betalingskort sidst på måneden. Vi håndterer alle betalinger sikkert med Adyen.",
-  "CHECKOUT_PAYMENT_DETAILS_TERMS": "Ved at klikke på “Gennemfør køb” bekræfter jeg, at jeg har læst og forstået vilkårene, og giver samtidig Hedvig tilladelse til at håndtere mine personoplysninger."
+  "CHECKOUT_PAYMENT_DETAILS_TERMS": "Ved at klikke på “Gennemfør køb” bekræfter jeg, at jeg har læst og forstået vilkårene, og giver samtidig Hedvig tilladelse til at håndtere mine personoplysninger.",
+  "CHECKOUT_DETAILS_SQM_SUFFIX": "m²",
+  "CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS_SUFFIX_MANY": "badeværelser",
+  "CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS_SUFFIX_ONE": "badeværelse",
+  "CHECKOUT_DETAILS_IS_PARTLY_SUBLET": "Delvist udlejet",
+  "CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX_MANY": "personer",
+  "CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX_ONE": "person",
+  "CHECKOUT_CONTACT_INFO_SSN_LABEL": "CPR nummer",
+  "CHECKOUT_CONTACT_INFO_EMAIL_HELPER": "",
+  "CHECKOUT_CONTACT_INFO_HEADING": "",
+  "CHECKOUT_CONTACT_INFO_CREDIT_CHECK_HELPER": "",
+  "CHECKOUT_PAGE_ERROR_MODAL_BODY": "Prøv igen eller start forfra. Hvis fejlen fortsætter, så kontakt os venligst.",
+  "CHECKOUT_PAGE_ERROR_MODAL_HEADING": "Noget gik galt",
+  "CHECKOUT_PAGE_ERROR_MODAL_BACK_TO_START_BUTTON": "Tilbage til start",
+  "CHECKOUT_PAGE_ERROR_MODAL_OPEN_CHAT": "Chat med os"
 }

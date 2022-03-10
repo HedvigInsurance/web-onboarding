@@ -59,7 +59,12 @@ const RowButton = styled.button<{
   cursor: pointer;
   transition: background-color 250ms, border 250ms;
 
-  :active {
+  &:active {
+    background-color: ${colorsV3.gray300};
+  }
+
+  &:disabled {
+    cursor: not-allowed;
     background-color: ${colorsV3.gray300};
   }
 
@@ -138,7 +143,7 @@ const DateInputModalWrapper = styled.div<{
 `
 
 const getDefaultDateValue = (
-  startDate: string,
+  startDate: string | null,
   currentInsurer?: CurrentInsurer,
 ) => {
   if (startDate) {
@@ -158,27 +163,31 @@ const getDateFormat = match<MarketLabel, string>([
   ['DK', 'yyyy-MM-dd'],
 ])
 
-const DateForm: React.FC<{
-  startDate: any
+type DateFormProps = {
+  startDate: string | null
   currentInsurer?: CurrentInsurer
   dataCollectionId?: string
   quoteDisplayName: string
   isSplit: boolean
   modal?: boolean
+  disabled?: boolean
   size: Size
   onChange: (date: Date | null) => void
   loading: boolean
-}> = ({
+}
+
+const DateForm = ({
   startDate,
   currentInsurer,
   dataCollectionId,
   quoteDisplayName,
   isSplit,
   modal = false,
+  disabled = false,
   size,
   onChange,
   loading,
-}) => {
+}: DateFormProps) => {
   const textKeys = useTextKeys()
   const { isoLocale, marketLabel } = useCurrentLocale()
 
@@ -213,6 +222,7 @@ const DateForm: React.FC<{
     <RowButtonWrapper isSplit={isSplit}>
       {isSplit && <StartDateRowLabel>{quoteDisplayName}</StartDateRowLabel>}
       <RowButton
+        disabled={disabled}
         datePickerOpen={datePickerOpen}
         onClick={() => setDatePickerOpen(!datePickerOpen)}
         isSplit={isSplit}
@@ -264,11 +274,11 @@ export type StartDateProps = {
   size?: Size
 }
 
-export const StartDate: React.FC<StartDateProps> = ({
+export const StartDate = ({
   quoteCartId,
   modal = false,
   size = 'lg',
-}) => {
+}: StartDateProps) => {
   const textKeys = useTextKeys()
   const [showError, setShowError] = useState(false)
   const [loadingQuoteIds, setLoadingQuoteIds] = React.useState<Array<string>>(
@@ -370,6 +380,10 @@ export const StartDate: React.FC<StartDateProps> = ({
             quoteDisplayName={quotes[0].displayName}
             dataCollectionId={quotes[0].dataCollectionId ?? undefined}
             modal={modal}
+            disabled={
+              loadingQuoteIds.length > 0 ||
+              Boolean(quotes[0].currentInsurer && !quotes[0].startDate)
+            }
             isSplit={false}
             size={size}
             onChange={(newDate) =>
@@ -390,6 +404,10 @@ export const StartDate: React.FC<StartDateProps> = ({
                 quoteDisplayName={quote.displayName}
                 dataCollectionId={quote.dataCollectionId ?? undefined}
                 modal={modal}
+                disabled={
+                  loadingQuoteIds.length > 0 ||
+                  Boolean(quote.currentInsurer && !quote.startDate)
+                }
                 isSplit={quoteBundleSelector.isMultiQuote(selectedBundle)}
                 size={size}
                 onChange={(newDate) =>

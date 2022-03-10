@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { CookieStorage } from 'cookie-storage'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 import { Button, TextButton } from 'components/buttons'
 import {
@@ -22,6 +21,7 @@ import {
 } from 'utils/mediaQueries'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import { DiscountTag } from 'components/DiscountTag/DiscountTag'
+import { CampaignCode } from 'utils/campaignCode'
 import { Price } from '../../common/price'
 import { PriceBreakdown } from '../../common/PriceBreakdown'
 
@@ -153,8 +153,7 @@ export const Sidebar: React.FC<Props> = ({
     const campaignCodes = campaignData?.redeemedCampaigns.map(
       (campaign) => campaign.code,
     )
-    const cookieStorage = new CookieStorage()
-    const preRedeemedCode = cookieStorage.getItem('_hvcode')
+    const preRedeemedCode = CampaignCode.get()
     if (
       preRedeemedCode &&
       !campaignCodes?.includes(preRedeemedCode.toUpperCase())
@@ -167,15 +166,10 @@ export const Sidebar: React.FC<Props> = ({
 
   const isNorwegianBundle = isBundle(offerData) && isNorwegian(offerData)
 
-  const clearDiscountCode = () => {
-    removeDiscountCode()
-      .then(() => {
-        const cookieStorage = new CookieStorage()
-        cookieStorage.setItem('_hvcode', '', {
-          path: '/',
-        })
-      })
-      .then(() => refetchAll())
+  const clearDiscountCode = async () => {
+    await removeDiscountCode()
+    CampaignCode.remove()
+    refetchAll()
   }
 
   const hasRedeemedCampaigns = redeemedCampaigns.length > 0

@@ -1,8 +1,10 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+
+import { TooltipIcon } from 'components/Tooltip/TooltipIcon'
+
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
-import { Tooltip } from 'components/Tooltip/Tooltip'
 
 const CONTAINER_PADDING = '0.75rem'
 const DESKTOP_CONTAINER_PADDING = '1rem'
@@ -69,21 +71,17 @@ const TooltipWrapper = styled.div`
 `
 
 type Props = {
+  children?: React.ReactNode
   tooltip?: string
 }
 
-type AmountItemType = React.FC<Props> & {
-  Label: typeof Label
-  Value: typeof Value
-}
-
-export const AmountItem: AmountItemType = ({ children, tooltip }) => {
+export const AmountItem = ({ children, tooltip }: Props) => {
   return (
     <Container>
       {children}
       {tooltip && (
         <TooltipWrapper>
-          <Tooltip body={tooltip} />
+          <TooltipIcon body={tooltip} />
         </TooltipWrapper>
       )}
     </Container>
