@@ -39,7 +39,7 @@ export const HAnalyticsWrapper = (props: HAnalyticsWrapperProps) => {
             httpHeaders: {
                 Authorization: getAuthorizationHeader()
             },
-            environment: Environment.STAGING,
+            environment: environment === "production" ? Environment.PRODUCTION : Environment.STAGING,
             userAgent: navigator.userAgent,
             context: {
                 locale: locale.isoLocale,
