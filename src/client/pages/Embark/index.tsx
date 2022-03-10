@@ -36,7 +36,7 @@ import { resolveHouseInformation } from './houseInformation'
 import { resolvePersonalInformation } from './personalInformation'
 import { resolveAddressAutocomplete } from './addressAutocompleteProvider'
 import { SetupFailedModal } from './ErrorModal'
-import { hAnalyticsTrackers } from '@hedviginsurance/hanalytics-client'
+import { useHAnalytics } from '@hedviginsurance/hanalytics-client'
 
 const EmbarkStyling = styled.div`
   height: 100%;
@@ -280,6 +280,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
     Record<string, string>
   >()
   const { isoLocale, path: pathLocale } = useCurrentLocale()
+  const { trackers } = useHAnalytics()
 
   const {
     createQuoteCart,
@@ -298,7 +299,7 @@ export const EmbarkRoot: React.FunctionComponent<EmbarkRootProps> = (props) => {
       (key) => payloadObject[key] === undefined && delete payloadObject[key],
     )
 
-    hAnalyticsTrackers.embarkTrack(
+    trackers.embarkTrack(
       props.name ?? "",
       eventName,
       payloadObject
