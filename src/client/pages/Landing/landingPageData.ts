@@ -51,7 +51,6 @@ export const getProductsData = (): ProductsData => {
         linkSlug: isQuoteCartEnabled ? '/home-travel' : '/combo',
         headline: 'STARTPAGE_COMBO_HEADLINE',
         paragraph: 'STARTPAGE_COMBO_BODY',
-        badge: 'STARTPAGE_COMBO_DISCOUNT_TEXT',
       },
       {
         id: 'norwegianContents',
