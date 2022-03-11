@@ -82,7 +82,7 @@ const Headline = styled.h1`
   line-height: 2.5rem;
   text-align: center;
   color: ${colorsV3.white};
-  font-family: ${fonts.FAVORIT};
+  font-family: ${fonts.HEDVIG_LETTERS_STANDARD};
   font-weight: 400;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {

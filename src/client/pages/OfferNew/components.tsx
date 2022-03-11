@@ -10,7 +10,7 @@ import { SIDEBAR_WIDTH } from './Introduction/Sidebar/index'
 export * from './common/price'
 
 export const Heading = styled('h2')`
-  font-family: ${fonts.FAVORIT};
+  font-family: ${fonts.HEDVIG_LETTERS_STANDARD};
   font-size: 2rem;
   line-height: 1.25;
   letter-spacing: -0.91px;
@@ -23,7 +23,7 @@ export const Heading = styled('h2')`
 
 export const HeadingXS = styled.h3`
   margin: 0;
-  font-family: ${fonts.FAVORIT};
+  font-family: ${fonts.HEDVIG_LETTERS_STANDARD};
   font-size: 1.25rem;
   line-height: 1.4;
   color: ${colorsV3.gray900};
@@ -39,7 +39,7 @@ export const HeadingBlack = styled(Heading)`
 `
 
 export const SubHeading = styled('h2')`
-  font-family: ${fonts.FAVORIT};
+  font-family: ${fonts.HEDVIG_LETTERS_STANDARD};
   font-size: 1.5rem;
   line-height: 1.5rem;
   letter-spacing: -0.34px;
@@ -54,7 +54,7 @@ export const SubHeadingBlack = styled(SubHeading)`
 `
 
 export const SubSubHeading = styled('h2')`
-  font-family: ${fonts.FAVORIT};
+  font-family: ${fonts.HEDVIG_LETTERS_STANDARD};
   font-size: 1.25rem;
   line-height: 1.25rem;
 `

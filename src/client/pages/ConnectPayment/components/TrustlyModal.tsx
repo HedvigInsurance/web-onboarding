@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colors } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import React, { createRef, useEffect, useState } from 'react'
 import { Redirect } from 'react-router-dom'
 import Modal from 'components/Modal'
@@ -9,11 +9,11 @@ import { useTextKeys } from 'utils/textKeys'
 const Header = styled('div')({
   width: '100%',
   height: 40,
-  background: colors.DARK_GREEN,
+  background: colorsV3.gray900,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  color: colors.WHITE,
+  color: colorsV3.white,
   fontSize: '14px',
   boxShadow: '0 0 11px rgba(0, 0, 0, 0.05)',
 })

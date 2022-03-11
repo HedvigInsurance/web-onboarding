@@ -10,11 +10,11 @@ export const GlobalCss: React.SFC = ({ children }) => (
 
         * {
           box-sizing: border-box;
-          font-family: ${fonts.FAVORIT}, sans-serif;
+          font-family: ${fonts.HEDVIG_LETTERS_STANDARD}, sans-serif;
         }
 
         body {
-          font-family: ${fonts.FAVORIT}, sans-serif;
+          font-family: ${fonts.HEDVIG_LETTERS_STANDARD}, sans-serif;
           font-size: 16px;
           line-height: 1.25;
           margin: 0;
@@ -32,7 +32,7 @@ export const GlobalCss: React.SFC = ({ children }) => (
         h4,
         h5,
         h6 {
-          font-family: ${fonts.FAVORIT}, sans-serif;
+          font-family: ${fonts.HEDVIG_LETTERS_STANDARD}, sans-serif;
           font-kerning: none;
           font-weight: 400;
         }

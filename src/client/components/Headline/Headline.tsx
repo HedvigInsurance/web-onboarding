@@ -4,7 +4,7 @@ import { css } from '@emotion/core'
 import { fonts, colorsV3 } from '@hedviginsurance/brand'
 import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
-const { FAVORIT } = fonts
+const { HEDVIG_LETTERS_STANDARD } = fonts
 const { gray900, gray100 } = colorsV3
 
 export type Props = {
@@ -26,7 +26,7 @@ const getBaseStyles = ({ colorVariant }: ColorProp) => {
   return css`
     margin: 0;
     padding: 0;
-    font-family: ${FAVORIT};
+    font-family: ${HEDVIG_LETTERS_STANDARD};
     font-weight: 400;
     color: ${color};
   `

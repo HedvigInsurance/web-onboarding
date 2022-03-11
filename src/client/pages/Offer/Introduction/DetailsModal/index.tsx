@@ -45,7 +45,7 @@ const Container = styled.div`
 `
 
 const Headline = styled.div`
-  font-family: ${fonts.FAVORIT};
+  font-family: ${fonts.HEDVIG_LETTERS_STANDARD};
   font-size: 2.5rem;
   line-height: 3.5rem;
   color: ${colorsV3.black};
