@@ -9,10 +9,7 @@ import {
   HomeInsuranceTypeOfContract,
 } from 'pages/OfferNew/utils'
 
-import {
-  QuoteDetails,
-  GenericQuoteData,
-} from 'src/client/api/quoteDetailsDataTypes'
+import { GenericQuoteData } from 'src/client/api/quoteDetailsDataTypes'
 import { formatPostalNumber } from '../postalNumbers'
 import { useSelectedInsuranceTypes } from './useSelectedInsuranceTypes'
 
@@ -206,6 +203,8 @@ export const useQuoteCartData = () => {
     lastName: mainQuote.lastName,
     email: mainQuote.email,
   }
+
+  console.log(quoteDetailsGroups)
 
   return {
     priceData: getPriceData(),

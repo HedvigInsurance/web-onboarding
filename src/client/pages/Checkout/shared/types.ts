@@ -1,4 +1,4 @@
-import { ExtraBuildingInput, CreateQuoteInput } from 'data/graphql'
+import { ExtraBuildingInput } from 'data/graphql'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
 
 export type PriceData = {

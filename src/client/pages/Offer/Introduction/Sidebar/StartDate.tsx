@@ -140,6 +140,7 @@ const DateInputModalWrapper = styled.div<{
   display: flex;
   align-items: center;
   border-radius: 8px;
+  z-index: 1;
 `
 
 const getDefaultDateValue = (
