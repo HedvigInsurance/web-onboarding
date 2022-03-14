@@ -45,7 +45,7 @@ const Wrapper = styled.div<{
 }>`
   position: relative;
   border-radius: 8px;
-  background-color: ${colorsV3.gray100};
+  background-color: ${colorsV3.white};
   display: flex;
   justify-content: space-between;
   align-items: center;

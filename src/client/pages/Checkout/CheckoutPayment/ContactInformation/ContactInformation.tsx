@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
-import { colorsV3 } from '@hedviginsurance/brand'
 import styled from '@emotion/styled'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { Headline } from 'components/Headline/Headline'
 import { InputField } from 'components/inputs'
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useFeature, Features } from 'utils/hooks/useFeature'
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import { Divider } from '../../shared/Divider'
 
 type ContactInfoData = {
   data: {
@@ -36,17 +37,17 @@ const InputFieldsWrapper = styled.div`
   }
 `
 
+const StyledInputField = styled(InputField)`
+  ${Wrapper} & {
+    background-color: ${colorsV3.gray100};
+  }
+`
+
 const SpacerSmall = styled.div`
   height: 1rem;
 `
 const Spacer = styled.div`
   height: 1.5rem;
-`
-
-const Divider = styled.div`
-  width: 100%;
-  height: 1px;
-  background-color: ${colorsV3.gray300};
 `
 
 export const ContactInformation = ({ data }: ContactInfoData) => {
@@ -70,7 +71,7 @@ export const ContactInformation = ({ data }: ContactInfoData) => {
       </Headline>
       <SpacerSmall />
       <InputFieldsWrapper>
-        <InputField
+        <StyledInputField
           label={textKeys.CHECKOUT_FIRSTNAME_LABEL()}
           placeholder={textKeys.CHECKOUT_FIRSTNAME_LABEL()}
           value={firstName}
@@ -78,7 +79,7 @@ export const ContactInformation = ({ data }: ContactInfoData) => {
             setFirstName(e.target.value)
           }}
         />
-        <InputField
+        <StyledInputField
           label={textKeys.CHECKOUT_LASTNAME_LABEL()}
           placeholder={textKeys.CHECKOUT_LASTNAME_LABEL()}
           value={lastName}
@@ -87,7 +88,7 @@ export const ContactInformation = ({ data }: ContactInfoData) => {
           }}
         />
         <div>
-          <InputField
+          <StyledInputField
             label={textKeys.CHECKOUT_CONTACT_INFO_SSN_LABEL()}
             placeholder={ssnFormatExample}
             helperText={
@@ -103,7 +104,7 @@ export const ContactInformation = ({ data }: ContactInfoData) => {
           {hasEnabledCreditCheckInfo && <Spacer />}
         </div>
         <div>
-          <InputField
+          <StyledInputField
             label={textKeys.CHECKOUT_EMAIL_LABEL()}
             placeholder={textKeys.CHECKOUT_EMAIL_LABEL()}
             helperText={textKeys.CHECKOUT_CONTACT_INFO_EMAIL_HELPER()}
