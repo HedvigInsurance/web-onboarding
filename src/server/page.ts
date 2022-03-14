@@ -14,7 +14,7 @@ import {
 
 import {
   ADYEN_ENVIRONMENT,
-  ADYEN_ORIGIN_KEY,
+  ADYEN_CLIENT_KEY,
   APP_ENVIRONMENT,
   CONTENT_SERVICE_ENDPOINT,
   GIRAFFE_WS_ENDPOINT,
@@ -28,7 +28,7 @@ import { allTracking, gtmNoScript } from './tracking'
 
 const clientConfig: ClientConfig = {
   adyenEnvironment: ADYEN_ENVIRONMENT,
-  adyenOriginKey: ADYEN_ORIGIN_KEY,
+  adyenClientKey: ADYEN_CLIENT_KEY,
   contentServiceEndpoint: CONTENT_SERVICE_ENDPOINT,
   giraffeEndpoint: '/new-member/graphql',
   giraffeWsEndpoint: GIRAFFE_WS_ENDPOINT,

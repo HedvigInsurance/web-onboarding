@@ -20,7 +20,7 @@
       "required": true
     },
     "ADYEN_ENVIRONMENT": "test",
-    "ADYEN_ORIGIN_KEY": {
+    "ADYEN_CLIENT_KEY": {
       "required": true
     }
   },
