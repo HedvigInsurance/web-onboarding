@@ -32,7 +32,7 @@ const InputFieldsWrapper = styled.div`
 
   ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
     grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
+    gap: 0 1.5rem;
   }
 `
 
