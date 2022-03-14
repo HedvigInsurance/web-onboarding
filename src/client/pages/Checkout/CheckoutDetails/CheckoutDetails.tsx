@@ -2,7 +2,6 @@ import React from 'react'
 import { useTextKeys } from 'utils/textKeys'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { useQuoteDetailsDataQuery, useQuoteCartQuery } from 'data/graphql'
 import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
@@ -21,7 +20,7 @@ export const CheckoutDetails = () => {
     return null
   }
   const priceData = data.priceData
-
+  const quoteDetails = data.quoteDetails
   const paymentPageLink = `/${localePath}/new-member/checkout/payment/${quoteCartId}`
   return (
     <CheckoutPageWrapper>
@@ -30,7 +29,7 @@ export const CheckoutDetails = () => {
         <SubSection headlineText="Your plan">
           <StartDate quoteCartId={quoteCartId} modal size="sm" />
         </SubSection>
-        {/* <QuoteDetails /> */}
+        <QuoteDetails quoteData={quoteDetails} />
       </PageSection>
 
       <Footer

@@ -1,10 +1,8 @@
 import React, { Fragment } from 'react'
 import { colorsV3 } from '@hedviginsurance/brand'
 import styled from '@emotion/styled'
-import { getQuoteDetails, Value as ValueType } from 'utils/getQuoteDetails'
+import { Value as ValueType } from 'utils/getQuoteDetails'
 import { useTextKeys, TextKeyMap } from 'utils/textKeys'
-import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
-import { useQuoteDetailsDataQuery } from 'data/graphql'
 import { SubSection } from '../SubSection'
 import { Divider } from '../../../shared/Divider'
 
@@ -56,26 +54,13 @@ const getValueText = ({
   return value
 }
 
-export const QuoteDetails = () => {
+export const QuoteDetails = (quoteData: any) => {
   const textKeys = useTextKeys()
-  const { quoteCartId } = useQuoteCartIdFromUrl()
-  const { data } = useQuoteDetailsDataQuery({
-    variables: { id: quoteCartId },
-  })
-
-  const quoteDetailsData = data?.quoteCart.bundle?.quotes?.map(
-    ({ data }) => data,
-  )
-
-  if (!quoteDetailsData) {
-    return null // TODO: Do something more sophisticated
-  }
-
-  const quoteDetails = getQuoteDetails({ quoteDetailsData })
+  const quoteDetails: any[] = quoteData.quoteData
 
   return (
     <SubSection headlineText={textKeys.CHECKOUT_QUOTE_DETAILS_TITLE()}>
-      {quoteDetails.map((group, index) => (
+      {quoteDetails.map((group: [], index) => (
         <Fragment key={index}>
           <Group>
             {group.map(
