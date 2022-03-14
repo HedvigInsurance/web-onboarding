@@ -19,7 +19,6 @@ import {
 import {
   getUniqueQuotesFromVariantList,
   getQuoteIdsFromBundleVariant,
-  isNorwegianBundle,
 } from 'pages/OfferNew/utils'
 import { PriceBreakdown } from 'pages/OfferNew/common/PriceBreakdown'
 import { useStorage } from 'utils/StorageContainer'
@@ -29,7 +28,6 @@ import { useFeature, Features } from 'utils/hooks/useFeature'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { CloseButton } from 'components/CloseButton/CloseButton'
 import { CampaignBadge } from 'components/CampaignBadge/CampaignBadge'
-import { DiscountTag } from 'components/DiscountTag/DiscountTag'
 import { setupQuoteCartSession } from 'containers/SessionContainer'
 import { useVariation } from 'utils/hooks/useVariation'
 import { StartDate } from 'pages/Offer/Introduction/Sidebar/StartDate'
@@ -514,12 +512,7 @@ export const Checkout = ({
           <InnerWrapper>
             <CloseButton onClick={onClose} />
             <Section>
-              <StyledCampaignBadge
-                quoteCartId={quoteCartId}
-                isNorwegianBundle={isNorwegianBundle(offerData)}
-              >
-                <DiscountTag offerData={offerData} />
-              </StyledCampaignBadge>
+              <StyledCampaignBadge quoteCartId={quoteCartId} />
               <Heading>{textKeys.CHECKOUT_HEADING()}</Heading>
               <PriceBreakdown
                 offerData={offerData}
