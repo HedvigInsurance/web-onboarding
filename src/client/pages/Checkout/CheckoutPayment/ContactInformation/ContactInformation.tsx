@@ -24,6 +24,18 @@ const Wrapper = styled.div`
   }
 `
 
+const InputFieldsWrapper = styled.div`
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+
+  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+`
+
 const SpacerSmall = styled.div`
   height: 1rem;
 `
@@ -57,46 +69,52 @@ export const ContactInformation = ({ data }: ContactInfoData) => {
         {textKeys.CHECKOUT_CONTACT_INFO_HEADING()}
       </Headline>
       <SpacerSmall />
-      <InputField
-        label={textKeys.CHECKOUT_FIRSTNAME_LABEL()}
-        placeholder={textKeys.CHECKOUT_FIRSTNAME_LABEL()}
-        value={firstName}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          setFirstName(e.target.value)
-        }}
-      />
-      <InputField
-        label={textKeys.CHECKOUT_LASTNAME_LABEL()}
-        placeholder={textKeys.CHECKOUT_LASTNAME_LABEL()}
-        value={lastName}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          setLastName(e.target.value)
-        }}
-      />
-      <InputField
-        label={textKeys.CHECKOUT_CONTACT_INFO_SSN_LABEL()}
-        placeholder={ssnFormatExample}
-        helperText={
-          hasEnabledCreditCheckInfo
-            ? textKeys.CHECKOUT_CONTACT_INFO_CREDIT_CHECK_HELPER()
-            : undefined
-        }
-        value={ssn}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          setSsn(e.target.value)
-        }}
-      />
-      {hasEnabledCreditCheckInfo && <Spacer />}
-      <InputField
-        label={textKeys.CHECKOUT_EMAIL_LABEL()}
-        placeholder={textKeys.CHECKOUT_EMAIL_LABEL()}
-        helperText={textKeys.CHECKOUT_CONTACT_INFO_EMAIL_HELPER()}
-        value={email}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          setEmail(e.target.value)
-        }}
-      />
-      <Spacer />
+      <InputFieldsWrapper>
+        <InputField
+          label={textKeys.CHECKOUT_FIRSTNAME_LABEL()}
+          placeholder={textKeys.CHECKOUT_FIRSTNAME_LABEL()}
+          value={firstName}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setFirstName(e.target.value)
+          }}
+        />
+        <InputField
+          label={textKeys.CHECKOUT_LASTNAME_LABEL()}
+          placeholder={textKeys.CHECKOUT_LASTNAME_LABEL()}
+          value={lastName}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setLastName(e.target.value)
+          }}
+        />
+        <div>
+          <InputField
+            label={textKeys.CHECKOUT_CONTACT_INFO_SSN_LABEL()}
+            placeholder={ssnFormatExample}
+            helperText={
+              hasEnabledCreditCheckInfo
+                ? textKeys.CHECKOUT_CONTACT_INFO_CREDIT_CHECK_HELPER()
+                : undefined
+            }
+            value={ssn}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setSsn(e.target.value)
+            }}
+          />
+          {hasEnabledCreditCheckInfo && <Spacer />}
+        </div>
+        <div>
+          <InputField
+            label={textKeys.CHECKOUT_EMAIL_LABEL()}
+            placeholder={textKeys.CHECKOUT_EMAIL_LABEL()}
+            helperText={textKeys.CHECKOUT_CONTACT_INFO_EMAIL_HELPER()}
+            value={email}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setEmail(e.target.value)
+            }}
+          />
+          <Spacer />
+        </div>
+      </InputFieldsWrapper>
       <Divider />
     </Wrapper>
   )
