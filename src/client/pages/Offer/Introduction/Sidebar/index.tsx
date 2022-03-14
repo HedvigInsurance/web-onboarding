@@ -23,7 +23,6 @@ import {
   LARGE_SCREEN_MEDIA_QUERY,
   SMALL_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
-import { isNorwegianBundle } from 'pages/OfferNew/utils'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 
 import { StickyBottomSidebar } from '../../../OfferNew/Introduction/Sidebar/StickyBottomSidebar'
@@ -185,10 +184,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {() => (
           <Wrapper data-testid="offer-sidebar">
             <Container>
-              <StyledCampaignBadge
-                quoteCartId={quoteCartId}
-                isNorwegianBundle={isNorwegianBundle(offerData)}
-              />
+              <StyledCampaignBadge quoteCartId={quoteCartId} />
               <Header>
                 <Title>Hedvig</Title>
                 <Price
