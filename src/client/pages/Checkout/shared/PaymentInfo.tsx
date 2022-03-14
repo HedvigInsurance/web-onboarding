@@ -4,6 +4,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
 import { getFormattedPrice } from 'utils/getFormattedPrice'
+import { PriceData } from './types'
 
 const { gray900, gray700 } = colorsV3
 
@@ -22,7 +23,7 @@ const CancelInfo = styled.div`
   color: ${gray700};
 `
 
-export const PaymentInfo = (priceData: any) => {
+export const PaymentInfo = (priceData: PriceData) => {
   const textKeys = useTextKeys()
   const { currencyLocale } = useCurrentLocale()
   const currency = priceData.currency
@@ -31,7 +32,6 @@ export const PaymentInfo = (priceData: any) => {
     amount: priceData.totalBundleCost,
     currency,
   })
-
   return (
     <Wrapper>
       <TotalPrice>

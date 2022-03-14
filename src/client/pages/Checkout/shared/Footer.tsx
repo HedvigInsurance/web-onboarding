@@ -62,7 +62,7 @@ export const Footer = ({
     <Wrapper>
       <InnerWrapper>
         <PaymentInfoWrapper>
-          <PaymentInfo priceData={priceData} />
+          <PaymentInfo {...priceData} />
         </PaymentInfoWrapper>
         {buttonText && (
           <ButtonWrapper>

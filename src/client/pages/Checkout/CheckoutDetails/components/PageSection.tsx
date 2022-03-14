@@ -11,6 +11,7 @@ export const PageSection = styled.div`
   padding: 24px 16px;
   display: grid;
   gap: 24px;
+  margin: 0 auto;
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     padding: 48px;

@@ -19,11 +19,12 @@ const Wrapper = styled.div`
   background-color: ${gray100};
 `
 const InnerWrapper = styled.div`
-  display: flex;
   padding: 6.5rem 2rem;
   margin: 0 auto;
-  > div {
-    margin: 0 auto;
+  position: relative;
+  > button {
+    position: absolute;
+    height: 24px;
   }
 `
 
