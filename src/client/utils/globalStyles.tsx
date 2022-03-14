@@ -20,7 +20,7 @@ export const GlobalCss: React.SFC = ({ children }) => (
           margin: 0;
           padding: 0;
           color: ${colorsV3.gray900};
-          background: ${colorsV3.gray900};
+          background-color: ${colorsV3.gray100};
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
           text-rendering: optimizeLegibility;

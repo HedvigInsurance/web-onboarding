@@ -74,7 +74,7 @@ type EmbarkRouteProps = {
 }
 
 // TODO: Replace all '/new-member' strings throughout the codebase with this variable
-const landingRoute = '/new-member'
+export const landingRoute = '/new-member'
 const onboardingLocaleBaseRoute = `${localePathPattern}${landingRoute}`
 
 export const routes: Route[] = [
@@ -275,21 +275,18 @@ export const routes: Route[] = [
                       EmbarkStory.DenmarkContentsAccidentTravelWithAddressAutocomplete,
                   }
                 case 'home-needer':
-                  if (isProductionEnvironment) return landingPageRedirect
                   return {
                     baseUrl,
                     name: EmbarkStory.DenmarkContentsQuoteCart,
                     quoteCart: true,
                   }
                 case 'home-accident-needer':
-                  if (isProductionEnvironment) return landingPageRedirect
                   return {
                     baseUrl,
                     name: EmbarkStory.DenmarkContentsAccidentQuoteCart,
                     quoteCart: true,
                   }
                 case 'home-accident-travel-needer':
-                  if (isProductionEnvironment) return landingPageRedirect
                   return {
                     baseUrl,
                     name: EmbarkStory.DenmarkContentsAccidentTravelQuoteCart,
@@ -356,14 +353,12 @@ export const routes: Route[] = [
                     name: EmbarkStory.SwedenSwitcher,
                   }
                 case 'home-accident-needer':
-                  if (isProductionEnvironment) return landingPageRedirect
                   return {
                     baseUrl,
                     name: EmbarkStory.SwedenQuoteCartNeeder,
                     quoteCart: true,
                   }
                 case 'home-switcher':
-                  if (isProductionEnvironment) return landingPageRedirect
                   return {
                     baseUrl,
                     name: EmbarkStory.SwedenQuoteCartSwitcher,

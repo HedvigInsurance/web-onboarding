@@ -478,8 +478,8 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
       ) : (
         <>
           <LinkButton
-            background={colorsV3.gray100}
-            foreground={colorsV3.gray900}
+            background={colorsV3.gray900}
+            foreground={colorsV3.gray100}
             to={`/${localePath}/new-member/offer/${quoteCartId}`}
           >
             Go to offer page →

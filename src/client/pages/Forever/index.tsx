@@ -1,4 +1,3 @@
-import { css, Global } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import React, { useEffect } from 'react'
@@ -88,13 +87,6 @@ export const Forever: React.FC<ForeverProps> = ({
       <SessionContainer>
         {() => (
           <Page>
-            <Global
-              styles={css`
-                body {
-                  background-color: ${colorsV3.gray900};
-                }
-              `}
-            />
             <PageWrapper>
               <Header>
                 <LogoLink href={'/' + pathLocale}>
@@ -162,13 +154,6 @@ const QuoteCartForeverPage: React.FC<ForeverProps> = ({
         <meta name="robots" content="noindex" />
       </Helmet>
       <Page>
-        <Global
-          styles={css`
-            body {
-              background-color: ${colorsV3.gray900};
-            }
-          `}
-        />
         <PageWrapper>
           <Header>
             <LogoLink href={'/' + pathLocale}>

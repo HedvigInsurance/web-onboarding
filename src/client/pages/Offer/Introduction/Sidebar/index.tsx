@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import styled from '@emotion/styled'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 import { colorsV3 } from '@hedviginsurance/brand'
@@ -23,7 +23,6 @@ import {
   LARGE_SCREEN_MEDIA_QUERY,
   SMALL_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
-import { isNorwegianBundle } from 'pages/OfferNew/utils'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 
 import { StickyBottomSidebar } from '../../../OfferNew/Introduction/Sidebar/StickyBottomSidebar'
@@ -163,16 +162,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
   )
 
   const handleRemoveCampaign = useCallback(async () => {
-    const { data: result } = await removeCampaignCode({
-      variables: { quoteCartId },
-    })
-    const hasError =
-      result?.quoteCart_removeCampaign.__typename === 'BasicError'
-
-    if (!hasError) {
-      CampaignCode.remove()
-    }
+    CampaignCode.remove()
+    await removeCampaignCode({ variables: { quoteCartId } })
   }, [quoteCartId, removeCampaignCode])
+
+  useEffect(() => {
+    const isMissingCampaignCode = campaign?.code === undefined
+    const savedCampaignCode = CampaignCode.get()
+    if (savedCampaignCode && isMissingCampaignCode) {
+      handleAddCampaignCode(savedCampaignCode)
+    }
+  }, [handleAddCampaignCode, campaign])
 
   const showRemoveCampaignButton = campaign !== undefined
   const isDiscountPrice =
@@ -184,10 +184,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {() => (
           <Wrapper data-testid="offer-sidebar">
             <Container>
-              <StyledCampaignBadge
-                quoteCartId={quoteCartId}
-                isNorwegianBundle={isNorwegianBundle(offerData)}
-              />
+              <StyledCampaignBadge quoteCartId={quoteCartId} />
               <Header>
                 <Title>Hedvig</Title>
                 <Price

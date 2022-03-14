@@ -3,7 +3,6 @@ import React from 'react'
 import { useRedeemedCampaignsQuery } from 'data/graphql'
 import { getDiscountText } from 'pages/OfferNew/Introduction/Sidebar/utils'
 import { OfferData } from 'pages/OfferNew/types'
-import { isNorwegianBundle } from 'pages/OfferNew/utils'
 import { useTextKeys } from 'utils/textKeys'
 import { Badge } from '../Badge/Badge'
 
@@ -33,17 +32,11 @@ export const DiscountTag: React.FC<DiscountTagProps> = ({ offerData }) => {
     offerData.cost.monthlyGross.currency,
   )
 
-  const discounts: Array<React.ReactNode> = [
-    ...(isNorwegianBundle(offerData)
-      ? [textKeys.SIDEBAR_NO_BUNDLE_DISCOUNT_TEXT()]
-      : []),
-    ...(discountText ? [discountText] : []),
-  ]
-  return discounts.length > 0 ? (
+  if (!discountText) return null
+
+  return (
     <DiscountInfo>
-      {discounts.map((text, index) => (
-        <Badge key={index}>{text}</Badge>
-      ))}
+      <Badge>{discountText}</Badge>
     </DiscountInfo>
-  ) : null
+  )
 }
