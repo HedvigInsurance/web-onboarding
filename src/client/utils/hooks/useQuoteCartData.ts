@@ -9,7 +9,11 @@ import {
   HomeInsuranceTypeOfContract,
 } from 'pages/OfferNew/utils'
 
-import { GenericQuoteData } from 'src/client/api/quoteDetailsDataTypes'
+import {
+  GenericQuoteData,
+  HouseQuoteDetails,
+} from 'src/client/api/quoteDetailsDataTypes'
+import { isHouseQuoteDetailsData } from 'api/quoteDetailsDataSelectors'
 import { formatPostalNumber } from '../postalNumbers'
 import { useSelectedInsuranceTypes } from './useSelectedInsuranceTypes'
 
@@ -102,8 +106,8 @@ export const useQuoteCartData = () => {
     ]
   }
 
-  const getHouseDetails = (data: GenericQuoteData) => {
-    if (!data.ancillaryArea || !data.numberOfBathrooms) {
+  const getHouseDetails = (data: HouseQuoteDetails) => {
+    if (!isHouseQuoteDetailsData(data)) {
       return []
     }
     return [
@@ -203,8 +207,6 @@ export const useQuoteCartData = () => {
     lastName: mainQuote.lastName,
     email: mainQuote.email,
   }
-
-  console.log(quoteDetailsGroups)
 
   return {
     priceData: getPriceData(),
