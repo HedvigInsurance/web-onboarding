@@ -18,6 +18,7 @@ import {
   useTokenizePaymentDetailsMutation,
 } from 'data/graphql'
 import { SpinnerWrapper } from './Spinner'
+// import {ADYEN_MERCHANT_IDENTIFIER} from "../../../../server/config";
 
 export const Wrapper = styled('div')`
   position: relative;
@@ -266,6 +267,7 @@ const createAdyenCheckout = ({
           },
         },
       },
+      // applepay: applePayConfiguration
     },
     enableStoreDetails: true,
     returnUrl,
@@ -358,9 +360,9 @@ const mountAdyenJs = (setAdyenLoaded: (adyenLoaded: boolean) => void) => () => {
   const script = document.createElement('script')
 
   script.src =
-    'https://checkoutshopper-live.adyen.com/checkoutshopper/sdk/3.6.1/adyen.js'
+    'https://checkoutshopper-live.adyen.com/checkoutshopper/sdk/3.18.2/adyen.js'
   script.integrity =
-    'sha384-hUb/CFxzLJZWUbDBmQfccbVjE3LFxAx3Wt4O37edYVLZmNhcmVUyYLgn6kWk3Hz+'
+    'sha384-/5SuEQKK7mLmDWB+eUPAur02KPkNC7pwAqyPez1TuNjeqRjsNDJdAnrbSxrzua2P'
   script.crossOrigin = 'anonymous'
   script.id = 'adyen-script'
   script.onload = () => setAdyenLoaded(true)
@@ -374,9 +376,9 @@ const mountAdyenCss = () => {
 
   link.rel = 'stylesheet'
   link.href =
-    'https://checkoutshopper-live.adyen.com/checkoutshopper/sdk/3.6.1/adyen.css'
+    'https://checkoutshopper-live.adyen.com/checkoutshopper/sdk/3.18.2/adyen.css'
   link.integrity =
-    'sha384-l5/gSrWMFWCKnEqoG1F21fvhDesLnZt/JlXjkA0FWp6E68Pc/9mxg+nPvvx+uB4G'
+    'sha384-5K4T5NNVv7ZBvNypROEUSjvOL45HszUg/eYfYadY82UF4b+hc+TPQ4SsfTGXufJp'
   link.crossOrigin = 'anonymous'
 
   document.body.append(link)
