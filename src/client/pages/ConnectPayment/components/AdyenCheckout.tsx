@@ -266,7 +266,6 @@ const createAdyenCheckout = ({
           },
         },
       },
-      // applepay: applePayConfiguration
     },
     enableStoreDetails: true,
     returnUrl,
