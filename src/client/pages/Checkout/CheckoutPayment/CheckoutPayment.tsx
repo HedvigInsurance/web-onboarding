@@ -3,6 +3,7 @@ import { useTextKeys } from 'utils/textKeys'
 import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
+import { PaymentInfo } from '../shared/PaymentInfo'
 
 export const CheckoutPayment = () => {
   const textKeys = useTextKeys()
@@ -14,12 +15,13 @@ export const CheckoutPayment = () => {
   return (
     <CheckoutPageWrapper>
       <Footer
-        buttonText={textKeys.CHECKOUT_FOOTER_COMPLETE_PURCHASE()}
+        buttonText={textKeys.CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT()}
         buttonOnClick={() => {
           console.log('click')
         }}
-        priceData={priceData}
-      />
+      >
+        <PaymentInfo {...priceData} />
+      </Footer>
     </CheckoutPageWrapper>
   )
 }

@@ -2,8 +2,6 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { Button, ButtonProps, LinkButton } from 'components/buttons'
-import { PaymentInfo } from './PaymentInfo'
-import { PriceData } from './types'
 
 const { white, purple500, gray900 } = colorsV3
 
@@ -11,7 +9,7 @@ export type Props = {
   buttonText: string
   buttonOnClick?: () => void
   buttonLinkTo?: string
-  priceData: PriceData
+  children: React.ReactNode
 }
 type FooterButtonProps = {
   background: ButtonProps['background']
@@ -40,9 +38,6 @@ const InnerWrapper = styled.div`
   grid-template-columns: repeat(2, 1fr);
   align-items: center;
 `
-const PaymentInfoWrapper = styled.div`
-  justify-self: start;
-`
 const ButtonWrapper = styled.div`
   justify-self: end;
 `
@@ -51,7 +46,7 @@ export const Footer = ({
   buttonText,
   buttonOnClick,
   buttonLinkTo,
-  priceData,
+  children,
 }: Props) => {
   const buttonProps: FooterButtonProps = {
     background: purple500,
@@ -61,9 +56,7 @@ export const Footer = ({
   return (
     <Wrapper>
       <InnerWrapper>
-        <PaymentInfoWrapper>
-          <PaymentInfo {...priceData} />
-        </PaymentInfoWrapper>
+        {children}
         {buttonText && (
           <ButtonWrapper>
             {buttonLinkTo && (

@@ -6,6 +6,7 @@ import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
 import { StartDate } from '../../Offer/Introduction/Sidebar/StartDate'
+import { PaymentInfo } from '../shared/PaymentInfo'
 import { YourPlan } from './components/YourPlan/YourPlan'
 import { QuoteDetails } from './components/QuoteDetails/QuoteDetails'
 import { PageSection } from './components/PageSection'
@@ -29,14 +30,15 @@ export const CheckoutDetails = () => {
         <SubSection headlineText="Your plan">
           <StartDate quoteCartId={quoteCartId} modal size="sm" />
         </SubSection>
-        <QuoteDetails quoteData={quoteDetails} />
+        <QuoteDetails groups={quoteDetails} />
       </PageSection>
 
       <Footer
         buttonText={textKeys.CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT()}
         buttonLinkTo={paymentPageLink}
-        priceData={priceData}
-      />
+      >
+        <PaymentInfo {...priceData} />
+      </Footer>
     </CheckoutPageWrapper>
   )
 }

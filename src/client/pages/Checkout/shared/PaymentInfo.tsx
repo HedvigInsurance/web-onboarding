@@ -23,13 +23,12 @@ const CancelInfo = styled.div`
   color: ${gray700};
 `
 
-export const PaymentInfo = (priceData: PriceData) => {
+export const PaymentInfo = ({ currency, totalBundleCost }: PriceData) => {
   const textKeys = useTextKeys()
   const { currencyLocale } = useCurrentLocale()
-  const currency = priceData.currency
   const formattedPrice = getFormattedPrice({
     locale: currencyLocale,
-    amount: priceData.totalBundleCost,
+    amount: totalBundleCost,
     currency,
   })
   return (

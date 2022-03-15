@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import { colorsV3 } from '@hedviginsurance/brand'
 import styled from '@emotion/styled'
-import { Value as ValueType } from 'utils/getQuoteDetails'
+import { Value as ValueType, QuoteProps } from 'utils/getQuoteDetails'
 import { useTextKeys, TextKeyMap } from 'utils/textKeys'
 import { SubSection } from '../SubSection'
 import { Divider } from '../../../shared/Divider'
@@ -54,35 +54,29 @@ const getValueText = ({
   return value
 }
 
-export const QuoteDetails = (quoteData: any) => {
+export const QuoteDetails = ({ groups }: QuoteProps) => {
   const textKeys = useTextKeys()
-  const quoteDetails: any[] = quoteData.quoteData
 
   return (
     <SubSection headlineText={textKeys.CHECKOUT_QUOTE_DETAILS_TITLE()}>
-      {quoteDetails.map((group: [], index) => (
+      {groups.map((group, index) => (
         <Fragment key={index}>
           <Group>
-            {group.map(
-              ({ label, value: { value, prefix, suffix, textKey } }) => {
-                const valueText = getValueText({
-                  value,
-                  prefix,
-                  suffix,
-                  textKey,
-                  textKeys,
-                })
-                return (
-                  <Row key={label}>
-                    <Label>{textKeys[label]()}</Label>
-                    <HorizontalSpacer />
-                    <Value>{valueText}</Value>
-                  </Row>
-                )
-              },
-            )}
+            {group.map((item) => {
+              const valueText = getValueText({
+                ...item.value,
+                textKeys,
+              })
+              return (
+                <Row key={item.label}>
+                  <Label>{textKeys[item.label]()}</Label>
+                  <HorizontalSpacer />
+                  <Value>{valueText}</Value>
+                </Row>
+              )
+            })}
           </Group>
-          {index < quoteDetails.length - 1 && <Divider />}
+          {index < groups.length - 1 && <Divider />}
         </Fragment>
       ))}
     </SubSection>
