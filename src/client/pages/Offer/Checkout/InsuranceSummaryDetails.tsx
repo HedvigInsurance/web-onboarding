@@ -6,7 +6,7 @@ import {
   OfferQuote,
   GenericQuoteData,
 } from 'pages/OfferNew/types'
-import { getAddressFromGenericQuoteData } from 'pages/Offer/utils'
+import { parseAddress } from 'pages/Offer/utils'
 import {
   getFormattedBirthdate,
   typeOfResidenceTextKeys,
@@ -168,7 +168,12 @@ const getQuoteDetails = (
         {
           key: 'address',
           label: textKeys.CHECKOUT_DETAILS_ADDRESS(),
-          value: getAddressFromGenericQuoteData(data),
+          value: parseAddress({
+            street: homeData.street,
+            zipCode: homeData.zipCode,
+            apartment: data.apartment,
+            floor: data.floor?.toString(),
+          }),
         },
         {
           key: 'zipcode',
@@ -262,6 +267,7 @@ const isStudent = (data: GenericQuoteData) => {
 const getHomeData = (data: GenericQuoteData) => {
   if (data.street && data.zipCode && data.livingSpace) {
     return {
+      street: data.street,
       zipCode: data.zipCode,
       livingSpace: data.livingSpace,
     }
