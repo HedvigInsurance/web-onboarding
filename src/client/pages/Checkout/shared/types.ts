@@ -4,7 +4,7 @@ import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
 export type PriceData = {
   prices: Array<Price>
   totalBundleCost: string
-  discount?: string | null
+  discount?: string
   currency: string
   campaignName?: string | null
 }

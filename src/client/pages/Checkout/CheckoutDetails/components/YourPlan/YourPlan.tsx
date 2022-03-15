@@ -64,7 +64,7 @@ export const YourPlan = (data: PriceData) => {
             <Value>{formattedPrice(item.price)}</Value>
           </Row>
         ))}
-        {Number(discount) > 0 && (
+        {Number(discount) > 0 && discount && (
           <Row>
             {/* need to handle NO bundle */}
             <StyledBadge>{campaignName}</StyledBadge>
