@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { useLocation } from 'react-router'
 import { OfferData } from 'pages/OfferNew/types'
 import { getAddress } from 'pages/Offer/utils'
 import { useTextKeys } from 'utils/textKeys'
@@ -105,12 +106,20 @@ const EditDetailsButton = styled(Button)`
   }
 `
 
+function useQuery() {
+  const { search } = useLocation()
+  return useMemo(() => new URLSearchParams(search), [search])
+}
+
 export const HeroOfferDetails: React.FC<Props> = ({
   quoteCartId,
   offerData,
   allQuotes,
 }) => {
-  const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false)
+  const query = useQuery()
+  const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(() => {
+    return query.get('showEdit') === 'true'
+  })
   const { person } = offerData
   const numberCoInsured = person.householdSize - 1
 
