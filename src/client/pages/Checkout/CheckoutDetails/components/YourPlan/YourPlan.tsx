@@ -8,7 +8,7 @@ import { Badge } from 'components/Badge/Badge'
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { SubSection } from '../SubSection'
 import { Divider } from '../../../shared/Divider'
-import { Price } from '../../../shared/types'
+import { Price, PriceData } from '../../../shared/types'
 
 const { gray700 } = colorsV3
 
@@ -40,19 +40,13 @@ const HorizontalDivider = styled(Divider)`
   margin: 0.5rem 0;
 `
 
-export const YourPlan = (priceData: any) => {
+export const YourPlan = (data: PriceData) => {
   const textKeys = useTextKeys()
   const { currencyLocale } = useCurrentLocale()
-  if (!priceData) {
+  if (!data) {
     return null
   }
-  const {
-    prices,
-    totalBundleCost,
-    discount,
-    currency,
-    campaignName,
-  } = priceData.data
+  const { prices, totalBundleCost, discount, currency, campaignName } = data
   const formattedPrice = (value: string) => {
     return getFormattedPrice({
       locale: currencyLocale,
