@@ -18,7 +18,6 @@ import {
   useTokenizePaymentDetailsMutation,
 } from 'data/graphql'
 import { SpinnerWrapper } from './Spinner'
-// import {ADYEN_MERCHANT_IDENTIFIER} from "../../../../server/config";
 
 export const Wrapper = styled('div')`
   position: relative;
