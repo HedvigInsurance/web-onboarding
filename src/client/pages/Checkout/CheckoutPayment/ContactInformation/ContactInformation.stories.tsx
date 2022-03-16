@@ -11,10 +11,11 @@ import {
 } from 'utils/storybook/storyHelpers'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { mockedQuoteCartId } from 'utils/testData/quoteDetailsDataMock'
-import { ContactInformation } from './ContactInformation'
+import { ContactInformation, ContactInfoData } from './ContactInformation'
 
 type StoryProps = {
   localePath: LocaleLabel
+  data: ContactInfoData
 }
 
 const Wrapper = styled.div`
@@ -32,17 +33,16 @@ const storyMeta: Meta<StoryProps> = {
   },
 }
 
+const dataMock = {
+  firstName: 'Sven',
+  lastName: 'Svensson',
+  ssn: '1996030904251',
+  email: 'sven@svensson.no',
+}
+
 export default storyMeta
-
-export const Template: Story<StoryProps> = ({ localePath }) => {
+const Template: Story<StoryProps> = ({ localePath, data }) => {
   const translationsLocale = getTranslationsLocale(localePath)
-
-  const dataMock = {
-    firstName: 'Sven',
-    lastName: 'Svensson',
-    ssn: '1996030904251',
-    email: 'sven@svensson.no',
-  }
 
   return (
     <TextKeyProvider locale={translationsLocale}>
@@ -55,7 +55,7 @@ export const Template: Story<StoryProps> = ({ localePath }) => {
           path={`${localePathPattern}/new-member/checkout/details/:id`}
           component={(routerProps: RouterProps) => (
             <Wrapper {...routerProps}>
-              <ContactInformation data={dataMock} />
+              <ContactInformation {...data} />
             </Wrapper>
           )}
         />
@@ -68,4 +68,5 @@ export const NorwegianContactInfo = Template.bind({})
 
 NorwegianContactInfo.args = {
   localePath: 'no-en',
+  data: dataMock,
 }
