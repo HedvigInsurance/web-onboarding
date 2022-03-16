@@ -31,7 +31,6 @@ import { CancellationOptions } from './CancellationOptions'
 const DateFormsWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  margin-bottom: 1.5rem;
 `
 
 const RowButtonWrapper = styled.div<{
