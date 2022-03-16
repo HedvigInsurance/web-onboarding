@@ -310,7 +310,6 @@ export type HomeInsuranceTypeOfContract = Exclude<
   TypeOfContract,
   | TypeOfContract.NoTravel
   | TypeOfContract.NoAccident
-  | TypeOfContract.NoAccidentYouth
   | TypeOfContract.NoTravelYouth
   | TypeOfContract.DkAccident
   | TypeOfContract.DkAccidentStudent
@@ -364,7 +363,6 @@ type SingleInsuranceTypeOfContract = Exclude<
   | TypeOfContract.SeAccident
   | TypeOfContract.SeAccidentStudent
   | TypeOfContract.NoAccident
-  | TypeOfContract.NoAccidentYouth
 >
 
 export const getInsuranceTitle = (
