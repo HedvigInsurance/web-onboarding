@@ -310,7 +310,6 @@ export type HomeInsuranceTypeOfContract = Exclude<
   TypeOfContract,
   | TypeOfContract.NoTravel
   | TypeOfContract.NoAccident
-  | TypeOfContract.NoAccidentYouth
   | TypeOfContract.NoTravelYouth
   | TypeOfContract.DkAccident
   | TypeOfContract.DkAccidentStudent
@@ -364,7 +363,6 @@ type SingleInsuranceTypeOfContract = Exclude<
   | TypeOfContract.SeAccident
   | TypeOfContract.SeAccidentStudent
   | TypeOfContract.NoAccident
-  | TypeOfContract.NoAccidentYouth
 >
 
 export const getInsuranceTitle = (
@@ -506,10 +504,20 @@ const isBundleVariantMatchingInsuranceTypes = (
 export const getBundleVariantFromInsuranceTypesWithFallback = (
   variants: Array<QuoteBundleVariant>,
   insuranceTypes: Array<InsuranceType>,
-) =>
-  variants.find((variant) =>
+) => {
+  const matchingVariant = variants.find((variant) =>
     isBundleVariantMatchingInsuranceTypes(variant, insuranceTypes),
-  ) || variants?.[0]
+  )
+
+  if (!matchingVariant) {
+    // Fallback to the variant with the fewest quotes
+    return [...variants].sort(
+      (a, b) => a.bundle.quotes.length - b.bundle.quotes.length,
+    )[0]
+  }
+
+  return matchingVariant
+}
 
 export const getInsuranceTypesFromBundleVariant = (
   bundleVariant: QuoteBundleVariant,
