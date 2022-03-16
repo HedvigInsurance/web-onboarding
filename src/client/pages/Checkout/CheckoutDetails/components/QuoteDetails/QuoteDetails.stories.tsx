@@ -57,7 +57,9 @@ const Template: Story<StoryProps> = ({ localePath }) => {
           component={(routerProps: RouterProps) => (
             <Wrapper {...routerProps}>
               <PageSection>
-                <QuoteDetails />
+                <QuoteDetails
+                  groups={mockedQuoteDetailsDataQueryResponseSeHouse}
+                />
               </PageSection>
             </Wrapper>
           )}
