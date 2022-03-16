@@ -18,7 +18,7 @@ export const CONTENT_SERVICE_ENDPOINT =
     ? process.env.CONTENT_SERVICE_ENDPOINT ?? 'https://graphql.dev.hedvigit.com'
     : process.env.CONTENT_SERVICE_ENDPOINT!
 
-export const ADYEN_ORIGIN_KEY = process.env.ADYEN_ORIGIN_KEY!
+export const ADYEN_CLIENT_KEY = process.env.ADYEN_CLIENT_KEY!
 export const ADYEN_ENVIRONMENT = process.env.ADYEN_ENVIRONMENT!
 
 export const APP_ENVIRONMENT = process.env.APP_ENVIRONMENT ?? 'development'
