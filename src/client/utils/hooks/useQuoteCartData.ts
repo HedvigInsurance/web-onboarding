@@ -8,11 +8,8 @@ import {
   typeOfResidenceTextKeys,
   HomeInsuranceTypeOfContract,
 } from 'pages/OfferNew/utils'
-
-import {
-  GenericQuoteData,
-  HouseQuoteDetails,
-} from 'src/client/api/quoteDetailsDataTypes'
+import { GenericQuoteData } from '/pages/OfferNew/types'
+import { HouseQuoteDetails } from 'src/client/api/quoteDetailsDataTypes'
 import { isHouseQuoteDetailsData } from 'api/quoteDetailsDataSelectors'
 import { formatPostalNumber } from '../postalNumbers'
 import { useSelectedInsuranceTypes } from './useSelectedInsuranceTypes'

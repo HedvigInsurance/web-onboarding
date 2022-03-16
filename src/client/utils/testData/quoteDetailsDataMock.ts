@@ -98,6 +98,22 @@ export const mockedQuoteDetailsDataQueryResponseSeHouse = [
         textKey: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_HOUSE',
       },
     },
+    {
+      label: 'CHECKOUT_DETAILS_ANCILLARY_SPACE',
+      value: {
+        suffix: 'CHECKOUT_DETAILS_SQM_SUFFIX',
+        value: 0,
+      },
+    },
+    {
+      label: 'CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS',
+      value: {
+        value: 2,
+        suffix: 'CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS_SUFFIX_MANY',
+      },
+    },
+    { label: 'CHECKOUT_DETAILS_YEAR_OF_CONSTRUCTION', value: { value: 1977 } },
+    { label: 'CHECKOUT_DETAILS_IS_PARTLY_SUBLET', value: { textKey: 'NO' } },
   ],
   [
     {
