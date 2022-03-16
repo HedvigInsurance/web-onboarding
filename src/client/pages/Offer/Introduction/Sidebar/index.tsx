@@ -9,7 +9,7 @@ import {
   CampaignDataFragment,
 } from 'data/graphql'
 
-import { Button, TextButton } from 'components/buttons'
+import { Button, TextButton, LinkButton } from 'components/buttons'
 import { CampaignBadge } from 'components/CampaignBadge/CampaignBadge'
 import { OfferData } from 'pages/OfferNew/types'
 import { Price } from 'pages/OfferNew/common/price'
@@ -25,6 +25,8 @@ import {
 } from 'utils/mediaQueries'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 
+import { useFeature, Features } from 'utils/hooks/useFeature'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { StickyBottomSidebar } from '../../../OfferNew/Introduction/Sidebar/StickyBottomSidebar'
 import { CampaignCodeModal } from './CampaignCodeModal'
 import { StartDate } from './StartDate'
@@ -132,6 +134,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const { quoteCartId } = useQuoteCartIdFromUrl()
   const textKeys = useTextKeys()
+  const { path: localePath } = useCurrentLocale()
 
   const [campaignCodeModalIsOpen, setCampaignCodeModalIsOpen] = useState(false)
   const [isSidebarVisible, setIsSidebarVisible] = useState(true)
@@ -144,6 +147,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
     refetchQueries: ['QuoteCart'],
     awaitRefetchQueries: true,
   })
+
+  const [isConnectPaymentAtSignEnabled] = useFeature([
+    Features.CONNECT_PAYMENT_AT_SIGN,
+  ])
 
   const handleAddCampaignCode = useCallback(
     async (code: string) => {
@@ -199,16 +206,27 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <StartDate quoteCartId={quoteCartId} modal size="sm" />
               </Body>
               <Footer>
-                <Button
-                  size="sm"
-                  fullWidth
-                  onClick={onCheckoutOpen}
-                  foreground={colorsV3.gray900}
-                  background={colorsV3.purple500}
-                >
-                  {textKeys.SIDEBAR_PROCEED_BUTTON()}
-                </Button>
-
+                {isConnectPaymentAtSignEnabled ? (
+                  <LinkButton
+                    size="sm"
+                    fullWidth
+                    to={`/${localePath}/new-member/checkout/details/${quoteCartId}`}
+                    foreground={colorsV3.gray900}
+                    background={colorsV3.purple500}
+                  >
+                    {textKeys.SIDEBAR_PROCEED_BUTTON()}
+                  </LinkButton>
+                ) : (
+                  <Button
+                    size="sm"
+                    fullWidth
+                    onClick={onCheckoutOpen}
+                    foreground={colorsV3.gray900}
+                    background={colorsV3.purple500}
+                  >
+                    {textKeys.SIDEBAR_PROCEED_BUTTON()}
+                  </Button>
+                )}
                 <FooterExtraActions>
                   {!campaign && (
                     <TextButton
