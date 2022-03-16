@@ -1,9 +1,8 @@
 import { useParams } from 'react-router-dom'
 import { useQuoteCartQuery } from 'data/graphql'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { getMainQuote, getDiscountAmount } from 'api/quoteBundleSelectors'
+import { getMainQuote } from 'api/quoteBundleSelectors'
 import { getSelectedBundleVariant } from 'api/quoteCartQuerySelectors'
-import { PriceData } from 'src/client/pages/Checkout/shared/types'
 import {
   typeOfResidenceTextKeys,
   HomeInsuranceTypeOfContract,
