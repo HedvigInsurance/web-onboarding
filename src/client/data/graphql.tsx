@@ -102,6 +102,8 @@ export enum _MutationKind {
   PublishMany = 'publishMany',
   UnpublishMany = 'unpublishMany',
   DeleteMany = 'deleteMany',
+  SchedulePublish = 'schedulePublish',
+  ScheduleUnpublish = 'scheduleUnpublish',
 }
 
 export enum _OrderDirection {
@@ -309,7 +311,7 @@ export enum AddressOwnership {
 
 export type Adyen = {
   __typename?: 'Adyen'
-  availablePaymentOptions: Array<Scalars['PaymentMethodsResponse']>
+  availablePaymentMethods: Scalars['PaymentMethodsResponse']
 }
 
 export type Aggregate = {
@@ -323,6 +325,7 @@ export type Agreement =
   | SwedishAccidentAgreement
   | NorwegianHomeContentAgreement
   | NorwegianTravelAgreement
+  | NorwegianAccidentAgreement
   | DanishHomeContentAgreement
   | DanishAccidentAgreement
   | DanishTravelAgreement
@@ -2051,7 +2054,9 @@ export type CompleteQuoteDetails =
 /** An inception where all quotes need to have the same startDate and currentInsurer */
 export type ConcurrentInception = {
   __typename?: 'ConcurrentInception'
+  /** @deprecated correspondingQuotes is deprecated, doesn't work with QuoteCart use correspondingQuoteIds instead */
   correspondingQuotes: Array<Quote>
+  correspondingQuoteIds: Array<Scalars['ID']>
   startDate?: Maybe<Scalars['LocalDate']>
   currentInsurer?: Maybe<CurrentInsurer>
 }
@@ -5223,7 +5228,9 @@ export type IndefinitePercentageDiscount = {
 /** An inception that may be switchable and has a single date */
 export type IndependentInception = {
   __typename?: 'IndependentInception'
+  /** @deprecated correspondingQuote is deprecated, doesn't work with QuoteCart use correspondingQuoteId instead */
   correspondingQuote: Quote
+  correspondingQuoteId: Scalars['ID']
   startDate?: Maybe<Scalars['LocalDate']>
   currentInsurer?: Maybe<CurrentInsurer>
 }
@@ -8026,6 +8033,27 @@ export type NoDiscount = {
   _?: Maybe<Scalars['Boolean']>
 }
 
+export type NorwegianAccidentAgreement = AgreementCore & {
+  __typename?: 'NorwegianAccidentAgreement'
+  id: Scalars['ID']
+  activeFrom?: Maybe<Scalars['LocalDate']>
+  activeTo?: Maybe<Scalars['LocalDate']>
+  premium: MonetaryAmountV2
+  certificateUrl?: Maybe<Scalars['String']>
+  status: AgreementStatus
+  numberCoInsured: Scalars['Int']
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
+}
+
+export type NorwegianAccidentDetails = {
+  __typename?: 'NorwegianAccidentDetails'
+  coInsured: Scalars['Int']
+  street: Scalars['String']
+  zipCode: Scalars['String']
+  city?: Maybe<Scalars['String']>
+}
+
 export type NorwegianBankIdAuthResponse = {
   __typename?: 'NorwegianBankIdAuthResponse'
   redirectUrl: Scalars['String']
@@ -8730,6 +8758,7 @@ export type QuoteDetails =
   | SwedishAccidentDetails
   | NorwegianHomeContentsDetails
   | NorwegianTravelDetails
+  | NorwegianAccidentDetails
   | DanishHomeContentsDetails
   | DanishAccidentDetails
   | DanishTravelDetails
@@ -10692,7 +10721,6 @@ export enum TypeOfContract {
   NoTravel = 'NO_TRAVEL',
   NoTravelYouth = 'NO_TRAVEL_YOUTH',
   NoAccident = 'NO_ACCIDENT',
-  NoAccidentYouth = 'NO_ACCIDENT_YOUTH',
   DkHomeContentOwn = 'DK_HOME_CONTENT_OWN',
   DkHomeContentRent = 'DK_HOME_CONTENT_RENT',
   DkHomeContentStudentOwn = 'DK_HOME_CONTENT_STUDENT_OWN',
@@ -11655,6 +11683,7 @@ export type CreateDanishHomeAccidentQuoteMutation = {
             | { __typename: 'SwedishAccidentDetails' }
             | { __typename: 'NorwegianHomeContentsDetails' }
             | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
@@ -11668,6 +11697,7 @@ export type CreateDanishHomeAccidentQuoteMutation = {
             | { __typename: 'SwedishAccidentDetails' }
             | { __typename: 'NorwegianHomeContentsDetails' }
             | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
@@ -11692,6 +11722,7 @@ export type CreateDanishHomeAccidentTravelQuoteMutation = {
             | { __typename: 'SwedishAccidentDetails' }
             | { __typename: 'NorwegianHomeContentsDetails' }
             | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
@@ -11705,6 +11736,7 @@ export type CreateDanishHomeAccidentTravelQuoteMutation = {
             | { __typename: 'SwedishAccidentDetails' }
             | { __typename: 'NorwegianHomeContentsDetails' }
             | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
@@ -11718,6 +11750,7 @@ export type CreateDanishHomeAccidentTravelQuoteMutation = {
             | { __typename: 'SwedishAccidentDetails' }
             | { __typename: 'NorwegianHomeContentsDetails' }
             | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
@@ -11809,6 +11842,7 @@ export type CreateSwedishHomeAccidentQuoteMutation = {
             | { __typename: 'SwedishAccidentDetails' }
             | { __typename: 'NorwegianHomeContentsDetails' }
             | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
@@ -11826,6 +11860,7 @@ export type CreateSwedishHomeAccidentQuoteMutation = {
             | { __typename: 'SwedishAccidentDetails' }
             | { __typename: 'NorwegianHomeContentsDetails' }
             | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
@@ -12148,6 +12183,7 @@ export type QuoteDataFragment = { __typename?: 'BundledQuote' } & Pick<
           NorwegianTravelDetails,
           'coInsured' | 'isYouth'
         >)
+      | { __typename?: 'NorwegianAccidentDetails' }
       | ({ __typename?: 'DanishHomeContentsDetails' } & Pick<
           DanishHomeContentsDetails,
           | 'street'
@@ -12613,12 +12649,6 @@ export type CampaignDataFragment = { __typename?: 'Campaign' } & Pick<
         > & { quantityMonths: PercentageDiscountMonths['quantity'] })
       | { __typename?: 'IndefinitePercentageDiscount' }
     >
-    owner?: Maybe<
-      { __typename?: 'CampaignOwner' } & Pick<
-        CampaignOwner,
-        'displayName' | 'id'
-      >
-    >
   }
 
 export type QuoteDataFragmentFragment = { __typename?: 'BundledQuote' } & Pick<
@@ -12709,6 +12739,7 @@ export type QuoteDataFragmentFragment = { __typename?: 'BundledQuote' } & Pick<
           NorwegianTravelDetails,
           'coInsured' | 'isYouth'
         >)
+      | { __typename?: 'NorwegianAccidentDetails' }
       | ({ __typename?: 'DanishHomeContentsDetails' } & Pick<
           DanishHomeContentsDetails,
           | 'street'
@@ -12895,10 +12926,6 @@ export const CampaignDataFragmentDoc = gql`
       }
     }
     code
-    owner {
-      displayName
-      id
-    }
     ownerName
     expiresAt
     displayValue(locale: $locale)
