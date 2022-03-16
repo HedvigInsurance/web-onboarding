@@ -17,7 +17,7 @@ export type FeatureMap = Record<Feature, Array<MarketLabel>>
 
 export interface ClientConfig {
   adyenEnvironment: string
-  adyenOriginKey: string
+  adyenClientKey: string
   contentServiceEndpoint: string
   giraffeEndpoint: string
   giraffeWsEndpoint: string
