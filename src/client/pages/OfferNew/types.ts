@@ -53,6 +53,38 @@ export type OfferQuote = Pick<
   contractType: TypeOfContract
   insurableLimits: ReadonlyMap<InsurableLimitType, InsurableLimit>
   insuranceTerms: InsuranceTerm[]
+  data: GenericQuoteData
+}
+
+export type GenericQuoteData = {
+  birthDate: string
+  firstName?: string
+  lastName?: string
+
+  type: string
+
+  numberCoInsured: number
+  isStudent?: boolean
+  isYouth?: boolean
+
+  street?: string
+  zipCode?: string
+  livingSpace?: number
+  subType?: string
+  apartment?: string
+  floor?: number
+
+  ancillaryArea?: number
+  numberOfBathrooms?: number
+  yearOfConstruction?: number
+  isSubleted?: boolean
+
+  extraBuildings?: Array<{
+    displayName: string | null
+    type: string
+    area: number
+    hasWaterConnected: boolean
+  }>
 }
 
 export interface OfferData {

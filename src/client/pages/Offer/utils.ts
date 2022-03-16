@@ -1,7 +1,7 @@
 import { BundledQuote } from 'data/graphql'
 import { Address } from 'pages/OfferNew/types'
 
-const parseAddress = (address: Address) => {
+export const parseAddress = (address: Address) => {
   const { street, apartment, floor } = address
 
   return street
@@ -16,16 +16,13 @@ export const getAddress = (quotes: BundledQuote[]) => {
   }
 
   const quoteWithAddress = quotes.find(hasAddress)
-  if (quoteWithAddress) {
-    const address: Address = {
-      street: quoteWithAddress.data.street,
-      zipCode: quoteWithAddress.data.zipCode,
-      apartment: quoteWithAddress.data.apartment,
-      floor: quoteWithAddress.data.floor,
-    }
 
-    return parseAddress(address)
-  }
-
-  return ''
+  return quoteWithAddress
+    ? parseAddress({
+        street: quoteWithAddress.data.street,
+        zipCode: quoteWithAddress.data.zipCode,
+        apartment: quoteWithAddress.data.apartment,
+        floor: quoteWithAddress.data.floor?.toString(),
+      })
+    : ''
 }
