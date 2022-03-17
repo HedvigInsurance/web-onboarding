@@ -1,7 +1,12 @@
 import { useParams } from 'react-router-dom'
 import { useQuoteCartQuery } from 'data/graphql'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { getMainQuote } from 'api/quoteBundleSelectors'
+import {
+  getMainQuote,
+  getDiscountAmount,
+  getTotalBundleCost,
+  getBundleCurrency,
+} from 'api/quoteBundleSelectors'
 import { getSelectedBundleVariant } from 'api/quoteCartQuerySelectors'
 import {
   typeOfResidenceTextKeys,
@@ -49,9 +54,9 @@ export const useQuoteCartData = () => {
 
   const priceData = {
     prices: prices,
-    discount: selectedQuoteBundle.bundle.bundleCost.monthlyDiscount.amount,
-    currency: selectedQuoteBundle.bundle.bundleCost.monthlyNet.currency,
-    totalBundleCost: selectedQuoteBundle.bundle.bundleCost.monthlyNet.amount,
+    discount: getDiscountAmount(selectedQuoteBundle.bundle),
+    currency: getBundleCurrency(selectedQuoteBundle.bundle),
+    totalBundleCost: getTotalBundleCost(selectedQuoteBundle.bundle),
     campaignName: data?.quoteCart.campaign?.displayValue,
   }
   const quoteDetails = mainQuote.data
