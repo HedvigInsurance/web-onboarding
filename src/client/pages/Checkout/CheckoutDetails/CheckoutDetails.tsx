@@ -5,12 +5,11 @@ import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
-import { StartDate } from '../../Offer/Introduction/Sidebar/StartDate'
 import { PaymentInfo } from '../shared/PaymentInfo'
 import { YourPlan } from './components/YourPlan/YourPlan'
 import { QuoteDetails } from './components/QuoteDetails/QuoteDetails'
 import { PageSection } from './components/PageSection'
-import { SubSection } from './components/SubSection'
+import { StartDateSection } from './components/StartDateSection/StartDateSection'
 
 export const CheckoutDetails = () => {
   const textKeys = useTextKeys()
@@ -27,9 +26,7 @@ export const CheckoutDetails = () => {
     <CheckoutPageWrapper>
       <PageSection>
         <YourPlan {...priceData} />
-        <SubSection headlineText={textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}>
-          <StartDate quoteCartId={quoteCartId} modal size="sm" />
-        </SubSection>
+        <StartDateSection />
         <QuoteDetails groups={quoteDetails} />
       </PageSection>
 

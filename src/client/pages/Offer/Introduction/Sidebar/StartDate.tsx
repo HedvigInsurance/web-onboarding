@@ -49,7 +49,7 @@ const RowButton = styled.button<{
   justify-content: space-between;
   height: ${(props) => (props.size === 'lg' ? `4.375rem` : `3rem`)};
   width: 100%;
-  padding: 0 1.5rem;
+  padding: 0 1rem;
   border: 1px solid ${colorsV3.gray300};
   outline: 0;
   background-color: ${colorsV3.white};

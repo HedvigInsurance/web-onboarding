@@ -7,7 +7,10 @@ import {
   getTotalBundleCost,
   getBundleCurrency,
 } from 'api/quoteBundleSelectors'
-import { getSelectedBundleVariant } from 'api/quoteCartQuerySelectors'
+import {
+  getSelectedBundleVariant,
+  getCampaign,
+} from 'api/quoteCartQuerySelectors'
 import {
   typeOfResidenceTextKeys,
   HomeInsuranceTypeOfContract,
@@ -196,7 +199,7 @@ export const useQuoteCartData = () => {
     discount: getDiscountAmount(selectedQuoteBundle.bundle),
     currency: getBundleCurrency(selectedQuoteBundle.bundle),
     totalBundleCost: getTotalBundleCost(selectedQuoteBundle.bundle),
-    campaignName: data?.quoteCart.campaign?.displayValue,
+    campaignName: getCampaign(data)?.displayValue,
   }
   const quoteDetails = mainQuote.data
 

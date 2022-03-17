@@ -32,7 +32,10 @@ const HorizontalSpacer = styled.div`
 const Group = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0.5rem 0;
+`
+
+const HorizontalDivider = styled(Divider)`
+  margin: 0.5rem 0;
 `
 
 const getValueText = ({
@@ -76,7 +79,7 @@ export const QuoteDetails = ({ groups }: QuoteProps) => {
               )
             })}
           </Group>
-          {index < groups.length - 1 && <Divider />}
+          {index < groups.length - 1 && <HorizontalDivider />}
         </Fragment>
       ))}
     </SubSection>
