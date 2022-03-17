@@ -57,8 +57,6 @@ const getValueText = ({
 export const QuoteDetails = ({ groups }: QuoteProps) => {
   const textKeys = useTextKeys()
 
-  console.log(groups)
-
   return (
     <SubSection headlineText={textKeys.CHECKOUT_QUOTE_DETAILS_TITLE()}>
       {groups.map((group, index) => (

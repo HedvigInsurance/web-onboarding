@@ -8,9 +8,10 @@ import { Badge } from 'components/Badge/Badge'
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { SubSection } from '../SubSection'
 import { Divider } from '../../../shared/Divider'
-import { Price, PriceData } from '../../../shared/types'
+import { PriceData } from '../../../shared/types'
 
 const { gray700 } = colorsV3
+type Props = PriceData
 
 export const Row = styled.div`
   font-size: 0.875rem;
@@ -40,13 +41,15 @@ const HorizontalDivider = styled(Divider)`
   margin: 0.5rem 0;
 `
 
-export const YourPlan = (data: PriceData) => {
+export const YourPlan = ({
+  prices,
+  totalBundleCost,
+  discount,
+  currency,
+  campaignName,
+}: Props) => {
   const textKeys = useTextKeys()
   const { currencyLocale } = useCurrentLocale()
-  if (!data) {
-    return null
-  }
-  const { prices, totalBundleCost, discount, currency, campaignName } = data
   const formattedPrice = (value: string) => {
     return getFormattedPrice({
       locale: currencyLocale,
@@ -58,15 +61,14 @@ export const YourPlan = (data: PriceData) => {
   return (
     <SubSection headlineText={textKeys.CHECKOUT_INSURANCE_TITLE()}>
       <>
-        {prices.map((item: Price) => (
-          <Row key={item.displayName}>
-            <Label>{item.displayName}</Label>
-            <Value>{formattedPrice(item.price)}</Value>
+        {prices.map(({ displayName, price }) => (
+          <Row key={displayName}>
+            <Label>{displayName}</Label>
+            <Value>{formattedPrice(price)}</Value>
           </Row>
         ))}
-        {Number(discount) > 0 && discount && (
+        {discount && Number(discount) > 0 && (
           <Row>
-            {/* need to handle NO bundle */}
             <StyledBadge>{campaignName}</StyledBadge>
             <Value>-{formattedPrice(discount)}</Value>
           </Row>
