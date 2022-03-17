@@ -77,7 +77,12 @@ const getHomeDetails = (quoteDetails: GenericQuoteData) => {
 }
 
 const getHouseDetails = (data: GenericQuoteData) => {
-  if (!data) {
+  if (
+    !data.ancillaryArea &&
+    !data.numberOfBathrooms &&
+    !data.yearOfConstruction &&
+    !data.isSubleted
+  ) {
     return []
   }
   return [
