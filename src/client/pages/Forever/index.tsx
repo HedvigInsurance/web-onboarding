@@ -61,25 +61,9 @@ export const Forever: React.FC<ForeverProps> = ({
   const textKeys = useTextKeys()
   const history = useHistory()
 
-  const { refetch: fetchCampaign } = useCampaignQuery({ skip: true })
-
-  const handleSubmit = async (
-    form: RedeemCodeFormValue,
-    actions: FormikHelpers<RedeemCodeFormValue>,
-  ) => {
-    const { code } = form
-    try {
-      const result = await fetchCampaign({ code })
-      if (result.data.campaign?.code) {
-        CampaignCode.save(code)
-        history.push({ pathname: `/${pathLocale}/new-member` })
-      } else {
-        actions.setErrors({ code: 'FOREVER_ERROR_GENERIC' })
-      }
-    } catch (error) {
-      captureSentryError(error)
-      actions.setErrors({ code: 'FOREVER_ERROR_GENERIC' })
-    }
+  const handleSubmit = async () => {
+    CampaignCode.save(code)
+    history.push({ pathname: `/${pathLocale}/new-member` })
   }
 
   return (
