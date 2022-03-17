@@ -13,6 +13,7 @@ type Props = {
 const Wrapper = styled.div`
   display: grid;
   gap: 0.5rem;
+  position: relative;
 `
 const Card = styled.div`
   background-color: ${white};
