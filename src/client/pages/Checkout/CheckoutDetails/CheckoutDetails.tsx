@@ -27,7 +27,7 @@ export const CheckoutDetails = () => {
     <CheckoutPageWrapper>
       <PageSection>
         <YourPlan {...priceData} />
-        <SubSection headlineText="Your plan">
+        <SubSection headlineText={textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}>
           <StartDate quoteCartId={quoteCartId} modal size="sm" />
         </SubSection>
         <QuoteDetails groups={quoteDetails} />
