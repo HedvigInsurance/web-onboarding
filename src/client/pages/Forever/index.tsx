@@ -4,17 +4,14 @@ import React from 'react'
 import Helmet from 'react-helmet-async'
 import { RouteComponentProps, useHistory } from 'react-router'
 import { Route, Switch } from 'react-router-dom'
-import { FormikHelpers } from 'formik'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
 import { Page } from 'components/utils/Page'
-import { useCampaignQuery } from 'data/graphql'
 import { Intro } from 'pages/Forever/components/Intro'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { captureSentryError } from 'utils/sentry-client'
 import { CampaignCode } from 'utils/campaignCode'
-import { RedeemCode, RedeemCodeFormValue } from './components/RedeemCode'
+import { RedeemCode } from './components/RedeemCode'
 
 type ForeverProps = RouteComponentProps<{
   code: string
