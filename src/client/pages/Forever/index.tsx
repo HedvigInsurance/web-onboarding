@@ -4,17 +4,14 @@ import React from 'react'
 import Helmet from 'react-helmet-async'
 import { RouteComponentProps, useHistory } from 'react-router'
 import { Route, Switch } from 'react-router-dom'
-import { FormikHelpers } from 'formik'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
 import { Page } from 'components/utils/Page'
-import { useCampaignQuery } from 'data/graphql'
 import { Intro } from 'pages/Forever/components/Intro'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { captureSentryError } from 'utils/sentry-client'
 import { CampaignCode } from 'utils/campaignCode'
-import { RedeemCode, RedeemCodeFormValue } from './components/RedeemCode'
+import { RedeemCode } from './components/RedeemCode'
 
 type ForeverProps = RouteComponentProps<{
   code: string
@@ -61,25 +58,9 @@ export const Forever: React.FC<ForeverProps> = ({
   const textKeys = useTextKeys()
   const history = useHistory()
 
-  const { refetch: fetchCampaign } = useCampaignQuery({ skip: true })
-
-  const handleSubmit = async (
-    form: RedeemCodeFormValue,
-    actions: FormikHelpers<RedeemCodeFormValue>,
-  ) => {
-    const { code } = form
-    try {
-      const result = await fetchCampaign({ code })
-      if (result.data.campaign?.code) {
-        CampaignCode.save(code)
-        history.push({ pathname: `/${pathLocale}/new-member` })
-      } else {
-        actions.setErrors({ code: 'FOREVER_ERROR_GENERIC' })
-      }
-    } catch (error) {
-      captureSentryError(error)
-      actions.setErrors({ code: 'FOREVER_ERROR_GENERIC' })
-    }
+  const handleSubmit = async () => {
+    CampaignCode.save(code)
+    history.push({ pathname: `/${pathLocale}/new-member` })
   }
 
   return (
