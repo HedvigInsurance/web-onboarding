@@ -311,7 +311,7 @@ export enum AddressOwnership {
 
 export type Adyen = {
   __typename?: 'Adyen'
-  availablePaymentOptions: Array<Scalars['PaymentMethodsResponse']>
+  availablePaymentMethods: Scalars['PaymentMethodsResponse']
 }
 
 export type Aggregate = {
@@ -325,6 +325,7 @@ export type Agreement =
   | SwedishAccidentAgreement
   | NorwegianHomeContentAgreement
   | NorwegianTravelAgreement
+  | NorwegianAccidentAgreement
   | DanishHomeContentAgreement
   | DanishAccidentAgreement
   | DanishTravelAgreement
@@ -8032,10 +8033,22 @@ export type NoDiscount = {
   _?: Maybe<Scalars['Boolean']>
 }
 
+export type NorwegianAccidentAgreement = AgreementCore & {
+  __typename?: 'NorwegianAccidentAgreement'
+  id: Scalars['ID']
+  activeFrom?: Maybe<Scalars['LocalDate']>
+  activeTo?: Maybe<Scalars['LocalDate']>
+  premium: MonetaryAmountV2
+  certificateUrl?: Maybe<Scalars['String']>
+  status: AgreementStatus
+  numberCoInsured: Scalars['Int']
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
+}
+
 export type NorwegianAccidentDetails = {
   __typename?: 'NorwegianAccidentDetails'
   coInsured: Scalars['Int']
-  isYouth: Scalars['Boolean']
   street: Scalars['String']
   zipCode: Scalars['String']
   city?: Maybe<Scalars['String']>
@@ -10708,7 +10721,6 @@ export enum TypeOfContract {
   NoTravel = 'NO_TRAVEL',
   NoTravelYouth = 'NO_TRAVEL_YOUTH',
   NoAccident = 'NO_ACCIDENT',
-  NoAccidentYouth = 'NO_ACCIDENT_YOUTH',
   DkHomeContentOwn = 'DK_HOME_CONTENT_OWN',
   DkHomeContentRent = 'DK_HOME_CONTENT_RENT',
   DkHomeContentStudentOwn = 'DK_HOME_CONTENT_STUDENT_OWN',
@@ -12637,12 +12649,6 @@ export type CampaignDataFragment = { __typename?: 'Campaign' } & Pick<
         > & { quantityMonths: PercentageDiscountMonths['quantity'] })
       | { __typename?: 'IndefinitePercentageDiscount' }
     >
-    owner?: Maybe<
-      { __typename?: 'CampaignOwner' } & Pick<
-        CampaignOwner,
-        'displayName' | 'id'
-      >
-    >
   }
 
 export type QuoteDataFragmentFragment = { __typename?: 'BundledQuote' } & Pick<
@@ -12920,10 +12926,6 @@ export const CampaignDataFragmentDoc = gql`
       }
     }
     code
-    owner {
-      displayName
-      id
-    }
     ownerName
     expiresAt
     displayValue(locale: $locale)
