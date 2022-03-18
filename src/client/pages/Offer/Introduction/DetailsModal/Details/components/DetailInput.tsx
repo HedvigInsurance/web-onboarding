@@ -313,6 +313,8 @@ export const ExtraBuildingsInput: React.FC<ExtraBuildingsInputProps> = ({
   formikProps,
 }) => {
   const textKeys = useTextKeys()
+  const extraBuildings = formikProps.values.data.extraBuildings
+
   return (
     <FieldArray
       name="data.extraBuildings"
@@ -335,56 +337,53 @@ export const ExtraBuildingsInput: React.FC<ExtraBuildingsInputProps> = ({
             </ContentColumnTitleButton>
           </ContentColumnTitle>
 
-          {formikProps.values.data.extraBuildings?.map(
-            (_: any, index: number) => (
-              <InputGroup key={index}>
-                <DetailInput
-                  name={`data.extraBuildings.${index}.type`}
-                  field={{
-                    label:
-                      'DETAILS_MODULE_EXTRABUILDINGS_TABLE_BUILDINGTYPE_CELL_LABEL_HOUSE',
-                    placeholder: '',
-                    options: Object.values(ExtraBuildingType).map((value) => ({
-                      label: getExtraBuilding(value),
-                      value,
-                    })),
-                  }}
-                  formikProps={formikProps}
-                />
-                <AreaInput
-                  name={`data.extraBuildings.${index}.area`}
-                  label="DETAILS_MODULE_EXTRABUILDINGS_TABLE_SIZE_CELL_LABEL_HOUSE"
-                  formikProps={formikProps}
-                />
-                <BooleanInput
-                  name={`data.extraBuildings.${index}.hasWaterConnected`}
-                  label="DETAILS_MODULE_EXTRABUILDINGS_TABLE_WATER_CELL_LABEL_HOUSE"
-                  formikProps={formikProps}
-                />
-                <InputGroupDeleteButton
-                  type="button"
-                  onClick={() => {
-                    const isLastItemLeft =
-                      formikProps.values.data.extraBuildings?.length === 1
+          {extraBuildings?.map((_: any, index: number) => (
+            <InputGroup key={index}>
+              <DetailInput
+                name={`data.extraBuildings.${index}.type`}
+                field={{
+                  label:
+                    'DETAILS_MODULE_EXTRABUILDINGS_TABLE_BUILDINGTYPE_CELL_LABEL_HOUSE',
+                  placeholder: '',
+                  options: Object.values(ExtraBuildingType).map((value) => ({
+                    label: getExtraBuilding(value),
+                    value,
+                  })),
+                }}
+                formikProps={formikProps}
+              />
+              <AreaInput
+                name={`data.extraBuildings.${index}.area`}
+                label="DETAILS_MODULE_EXTRABUILDINGS_TABLE_SIZE_CELL_LABEL_HOUSE"
+                formikProps={formikProps}
+              />
+              <BooleanInput
+                name={`data.extraBuildings.${index}.hasWaterConnected`}
+                label="DETAILS_MODULE_EXTRABUILDINGS_TABLE_WATER_CELL_LABEL_HOUSE"
+                formikProps={formikProps}
+              />
+              <InputGroupDeleteButton
+                type="button"
+                onClick={() => {
+                  const isLastItemLeft = extraBuildings?.length === 1
 
-                    arrayHelpers.remove(index)
+                  arrayHelpers.remove(index)
 
-                    if (isLastItemLeft) {
-                      formikProps.setValues({
-                        ...formikProps.values,
-                        data: {
-                          ...formikProps.values.data,
-                          extraBuildings: [],
-                        },
-                      })
-                    }
-                  }}
-                >
-                  {textKeys.DETAILS_MODULE_EXTRABUILDINGS_TABLE_REMOVE_BUILDING_BUTTON()}
-                </InputGroupDeleteButton>
-              </InputGroup>
-            ),
-          )}
+                  if (isLastItemLeft) {
+                    formikProps.setValues({
+                      ...formikProps.values,
+                      data: {
+                        ...formikProps.values.data,
+                        extraBuildings: [],
+                      },
+                    })
+                  }
+                }}
+              >
+                {textKeys.DETAILS_MODULE_EXTRABUILDINGS_TABLE_REMOVE_BUILDING_BUTTON()}
+              </InputGroupDeleteButton>
+            </InputGroup>
+          ))}
         </>
       )}
     />
