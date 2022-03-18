@@ -72,7 +72,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       placeholder: phoneNumberPlaceholder.SE,
     },
     callCenter: callCenters.SE,
-    currencyCode: "SEK",
+    currencyCode: 'SEK',
   },
   'se-en': {
     path: 'se-en',
@@ -97,7 +97,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       placeholder: phoneNumberPlaceholder.SE,
     },
     callCenter: callCenters.SE,
-    currencyCode: "SEK",
+    currencyCode: 'SEK',
   },
   no: {
     path: 'no',
@@ -121,7 +121,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: phoneNumberFormats.NO,
       placeholder: phoneNumberPlaceholder.NO,
     },
-    currencyCode: "NOK"
+    currencyCode: 'NOK',
   },
   'no-en': {
     path: 'no-en',
@@ -145,7 +145,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: phoneNumberFormats.NO,
       placeholder: phoneNumberPlaceholder.NO,
     },
-    currencyCode: "NOK",
+    currencyCode: 'NOK',
   },
   dk: {
     path: 'dk',
@@ -169,7 +169,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: phoneNumberFormats.DK,
       placeholder: phoneNumberPlaceholder.DK,
     },
-    currencyCode: "DKK",
+    currencyCode: 'DKK',
   },
   'dk-en': {
     path: 'dk-en',
@@ -193,6 +193,6 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: phoneNumberFormats.DK,
       placeholder: phoneNumberPlaceholder.DK,
     },
-    currencyCode: "DKK",
+    currencyCode: 'DKK',
   },
 }

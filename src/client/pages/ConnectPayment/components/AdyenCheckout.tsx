@@ -275,13 +275,13 @@ const createAdyenCheckout = ({
       applepay: {
         amount: {
           currency: currentLocale.currencyCode,
-          value: 0.0
+          value: 0.0,
         },
         configuration: {
-          merchantName: "Hedvig",
-          merchantIdentifier: merchantIdentifier
+          merchantName: 'Hedvig',
+          merchantIdentifier: merchantIdentifier,
         },
-        countryCode: currentLocale.marketLabel
+        countryCode: currentLocale.marketLabel,
       },
     },
     enableStoreDetails: true,
