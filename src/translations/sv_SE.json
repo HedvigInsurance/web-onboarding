@@ -361,11 +361,7 @@
   "CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX_MANY": "personer",
   "CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX_ONE": "person",
   "CHECKOUT_CONTACT_INFO_SSN_LABEL": "Personnummer",
-  "CHECKOUT_CONTACT_INFO_EMAIL_HELPER": "",
-  "CHECKOUT_CONTACT_INFO_HEADING": "",
-  "CHECKOUT_CONTACT_INFO_CREDIT_CHECK_HELPER": "",
-  "CHECKOUT_PAGE_ERROR_MODAL_BODY": "Försök igen eller börja om. Om felet kvarstår, vänligen kontakta oss.",
-  "CHECKOUT_PAGE_ERROR_MODAL_HEADING": "Något gick fel",
-  "CHECKOUT_PAGE_ERROR_MODAL_BACK_TO_START_BUTTON": "Tillbaka till start",
-  "CHECKOUT_PAGE_ERROR_MODAL_OPEN_CHAT": "Chatta med oss"
+  "CHECKOUT_CONTACT_INFO_EMAIL_HELPER": "För information från oss. Eller om rabatter och andra fördelaktiga ändringar skulle dyka upp efter att du redan fått din prisuppgift.",
+  "CHECKOUT_CONTACT_INFO_HEADING": "Kontaktuppgifter",
+  "CHECKOUT_CONTACT_INFO_CREDIT_CHECK_HELPER": ""
 }
