@@ -235,6 +235,12 @@ const createAdyenCheckout = ({
     }
   }
 
+  let merchantIdentifier
+  if (window.hedvigClientConfig.adyenEnvironment === 'test') {
+    merchantIdentifier = 'merchant.com.hedvig.test.app'
+  } else {
+    merchantIdentifier = 'merchant.com.hedvig.app'
+  }
   const configuration = {
     locale,
     translations: {
@@ -269,10 +275,14 @@ const createAdyenCheckout = ({
       applepay: {
         amount: {
           currency: currentLocale.currencyCode,
-          value: 0
+          value: 0.0
+        },
+        configuration: {
+          merchantName: "Hedvig",
+          merchantIdentifier: merchantIdentifier
         },
         countryCode: currentLocale.marketLabel
-      }
+      },
     },
     enableStoreDetails: true,
     returnUrl,
