@@ -85,6 +85,8 @@ export type GenericQuoteData = {
     area: number
     hasWaterConnected: boolean
   }>
+
+  typeOfContract?: string
 }
 
 export interface OfferData {

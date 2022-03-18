@@ -1,10 +1,8 @@
 import React, { Fragment } from 'react'
 import { colorsV3 } from '@hedviginsurance/brand'
 import styled from '@emotion/styled'
-import { getQuoteDetails, Value as ValueType } from 'utils/getQuoteDetails'
+import { Value as ValueType, QuoteProps } from 'utils/getQuoteDetails'
 import { useTextKeys, TextKeyMap } from 'utils/textKeys'
-import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
-import { useQuoteDetailsDataQuery } from 'data/graphql'
 import { SubSection } from '../SubSection'
 import { Divider } from '../../../shared/Divider'
 
@@ -34,7 +32,10 @@ const HorizontalSpacer = styled.div`
 const Group = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0.5rem 0;
+`
+
+const HorizontalDivider = styled(Divider)`
+  margin: 0.5rem 0;
 `
 
 const getValueText = ({
@@ -56,48 +57,29 @@ const getValueText = ({
   return value
 }
 
-export const QuoteDetails = () => {
+export const QuoteDetails = ({ groups }: QuoteProps) => {
   const textKeys = useTextKeys()
-  const { quoteCartId } = useQuoteCartIdFromUrl()
-  const { data } = useQuoteDetailsDataQuery({
-    variables: { id: quoteCartId },
-  })
-
-  const quoteDetailsData = data?.quoteCart.bundle?.quotes?.map(
-    ({ data }) => data,
-  )
-
-  if (!quoteDetailsData) {
-    return null // TODO: Do something more sophisticated
-  }
-
-  const quoteDetails = getQuoteDetails({ quoteDetailsData })
 
   return (
     <SubSection headlineText={textKeys.CHECKOUT_QUOTE_DETAILS_TITLE()}>
-      {quoteDetails.map((group, index) => (
+      {groups.map((group, index) => (
         <Fragment key={index}>
           <Group>
-            {group.map(
-              ({ label, value: { value, prefix, suffix, textKey } }) => {
-                const valueText = getValueText({
-                  value,
-                  prefix,
-                  suffix,
-                  textKey,
-                  textKeys,
-                })
-                return (
-                  <Row key={label}>
-                    <Label>{textKeys[label]()}</Label>
-                    <HorizontalSpacer />
-                    <Value>{valueText}</Value>
-                  </Row>
-                )
-              },
-            )}
+            {group.map((item) => {
+              const valueText = getValueText({
+                ...item.value,
+                textKeys,
+              })
+              return (
+                <Row key={item.label}>
+                  <Label>{textKeys[item.label]()}</Label>
+                  <HorizontalSpacer />
+                  <Value>{valueText}</Value>
+                </Row>
+              )
+            })}
           </Group>
-          {index < quoteDetails.length - 1 && <Divider />}
+          {index < groups.length - 1 && <HorizontalDivider />}
         </Fragment>
       ))}
     </SubSection>

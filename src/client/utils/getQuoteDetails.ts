@@ -11,6 +11,10 @@ import {
 } from 'pages/OfferNew/utils'
 import { formatPostalNumber } from './postalNumbers'
 
+export type QuoteProps = {
+  groups: DetailsGroup[]
+}
+
 export type Value = {
   value?: string | number
   textKey?: string
@@ -18,12 +22,12 @@ export type Value = {
   suffix?: string
 }
 
-type Details = {
+export type Details = {
   label: string
   value: Value
 }
 
-type DetailsGroup = Details[]
+export type DetailsGroup = Details[]
 
 type SingleQuoteDetailsParams = {
   quoteDetailsData: QuoteDetails
