@@ -361,11 +361,7 @@
   "CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX_MANY": "personer",
   "CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX_ONE": "person",
   "CHECKOUT_CONTACT_INFO_SSN_LABEL": "CPR nummer",
-  "CHECKOUT_CONTACT_INFO_EMAIL_HELPER": "",
-  "CHECKOUT_CONTACT_INFO_HEADING": "",
-  "CHECKOUT_CONTACT_INFO_CREDIT_CHECK_HELPER": "",
-  "CHECKOUT_PAGE_ERROR_MODAL_BODY": "Prøv igen eller start forfra. Hvis fejlen fortsætter, så kontakt os venligst.",
-  "CHECKOUT_PAGE_ERROR_MODAL_HEADING": "Noget gik galt",
-  "CHECKOUT_PAGE_ERROR_MODAL_BACK_TO_START_BUTTON": "Tilbage til start",
-  "CHECKOUT_PAGE_ERROR_MODAL_OPEN_CHAT": "Chat med os"
+  "CHECKOUT_CONTACT_INFO_EMAIL_HELPER": "Information fra os inklusive rabatter og fordelagtige ændringer, skulle gerne dukke op, eftersom du allerede har modtaget dit tilbud.",
+  "CHECKOUT_CONTACT_INFO_HEADING": "Kontaktinformation",
+  "CHECKOUT_CONTACT_INFO_CREDIT_CHECK_HELPER": ""
 }

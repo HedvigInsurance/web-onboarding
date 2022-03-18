@@ -72,3 +72,15 @@ export const getMainQuote = (bundle: QuoteBundle) => {
 
   return bundle.quotes[0]
 }
+
+export const getDiscountAmount = (bundle: QuoteBundle) => {
+  return bundle.bundleCost.monthlyDiscount.amount
+}
+
+export const getBundleCurrency = (bundle: QuoteBundle) => {
+  return bundle.bundleCost.monthlyNet.currency
+}
+
+export const getTotalBundleCost = (bundle: QuoteBundle) => {
+  return bundle.bundleCost.monthlyNet.amount
+}
