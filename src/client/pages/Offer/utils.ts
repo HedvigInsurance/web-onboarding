@@ -4,14 +4,14 @@ export interface Address {
   street: string
   zipCode: string
   apartment?: string
-  floor: number
+  floor?: number
 }
 
 export const parseAddress = (address: Address) => {
   const { street, apartment, floor } = address
 
   return street
-    .concat(floor !== 0 ? `, ${floor}.` : '')
+    .concat(floor && floor !== 0 ? `, ${floor}.` : '')
     .concat(apartment ? ` ${apartment}` : '')
 }
 
