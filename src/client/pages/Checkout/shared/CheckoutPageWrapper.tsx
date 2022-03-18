@@ -22,6 +22,7 @@ const Wrapper = styled.div`
   min-height: 100vh;
   background-color: ${gray100};
   position: relative;
+  padding: 0 1rem;
 
   > button {
     position: absolute;

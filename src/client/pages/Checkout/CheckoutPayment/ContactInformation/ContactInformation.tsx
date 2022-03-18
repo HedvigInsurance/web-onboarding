@@ -10,13 +10,14 @@ import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { Divider } from '../../shared/Divider'
 
 export type ContactInfoData = {
-  firstName?: string
-  lastName?: string
-  ssn?: string
-  email?: string
+  firstName?: string | null | undefined
+  lastName?: string | null | undefined
+  ssn?: string | null | undefined
+  email?: string | null | undefined
 }
 
 const Wrapper = styled.div`
+  margin: 0 auto;
   ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
     width: 100%;
     max-width: 628px;
@@ -49,7 +50,19 @@ const Spacer = styled.div`
   height: 1.5rem;
 `
 
-export const ContactInformation = (data: ContactInfoData) => {
+const HorizontalDivider = styled(Divider)`
+  margin: 1.5rem 0;
+  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
+    margin: 3rem 0;
+  }
+`
+
+export const ContactInformation = ({
+  firstName,
+  lastName,
+  email,
+  ssn,
+}: ContactInfoData) => {
   const textKeys = useTextKeys()
   const locale = useCurrentLocale()
 
@@ -69,14 +82,14 @@ export const ContactInformation = (data: ContactInfoData) => {
           label={textKeys.CHECKOUT_FIRSTNAME_LABEL()}
           placeholder={textKeys.CHECKOUT_FIRSTNAME_LABEL()}
           type="text"
-          defaultValue={data.firstName}
+          defaultValue={firstName ?? ''}
           name="firstName"
         />
         <StyledInputField
           label={textKeys.CHECKOUT_LASTNAME_LABEL()}
           placeholder={textKeys.CHECKOUT_LASTNAME_LABEL()}
           type="text"
-          defaultValue={data.lastName}
+          defaultValue={lastName ?? ''}
           name="lastName"
         />
         <div>
@@ -89,7 +102,7 @@ export const ContactInformation = (data: ContactInfoData) => {
                 : undefined
             }
             type="text"
-            defaultValue={data.ssn}
+            defaultValue={ssn ?? ''}
             name="ssn"
           />
           {hasEnabledCreditCheckInfo && <Spacer />}
@@ -100,13 +113,12 @@ export const ContactInformation = (data: ContactInfoData) => {
             placeholder={textKeys.CHECKOUT_EMAIL_LABEL()}
             helperText={textKeys.CHECKOUT_CONTACT_INFO_EMAIL_HELPER()}
             type="text"
-            defaultValue={data.email}
+            defaultValue={email ?? ''}
             name="email"
           />
-          <Spacer />
         </div>
       </InputFieldsWrapper>
-      <Divider />
+      <HorizontalDivider />
     </Wrapper>
   )
 }
