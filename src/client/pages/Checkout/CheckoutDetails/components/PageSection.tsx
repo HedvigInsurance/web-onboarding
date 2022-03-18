@@ -8,7 +8,7 @@ export const PageSection = styled.div`
   background-color: ${gray200};
   width: 100%;
   max-width: 628px;
-  padding: 2rem 0;
+  padding: 2rem 1rem;
   display: grid;
   gap: 24px;
   margin: 0 auto;

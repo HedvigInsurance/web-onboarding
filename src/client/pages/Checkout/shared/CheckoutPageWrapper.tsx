@@ -22,7 +22,8 @@ const Wrapper = styled.div`
   min-height: 100vh;
   background-color: ${gray100};
   position: relative;
-  padding: 0 1rem;
+  padding: 0;
+  margin-bottom: 3rem;
 
   > button {
     position: absolute;
@@ -32,6 +33,7 @@ const Wrapper = styled.div`
   }
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
+    margin-bottom: 0;
     > button {
       top: 6.5rem;
       left: 5rem;

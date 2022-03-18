@@ -18,7 +18,9 @@ export type ContactInfoData = {
 
 const Wrapper = styled.div`
   margin: 0 auto;
+  padding: 0 1rem;
   ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
+    padding: 0;
     width: 100%;
     max-width: 628px;
   }

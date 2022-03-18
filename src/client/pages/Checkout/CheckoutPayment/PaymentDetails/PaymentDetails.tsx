@@ -3,6 +3,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import styled from '@emotion/styled'
 import { useTextKeys } from 'utils/textKeys'
 import { Headline } from 'components/Headline/Headline'
+import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import {
   AdyenCheckout,
   Wrapper as AdyenWrapper,
@@ -12,6 +13,10 @@ const { gray100, gray600, gray700, gray300, gray900 } = colorsV3
 const Wrapper = styled.div`
   margin: 0 auto;
   max-width: 628px;
+  padding: 0 1rem;
+  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
+    padding: 0;
+  }
 `
 
 const Description = styled.div`
