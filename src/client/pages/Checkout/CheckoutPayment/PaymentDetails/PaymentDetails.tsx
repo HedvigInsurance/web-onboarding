@@ -5,9 +5,14 @@ import { useTextKeys } from 'utils/textKeys'
 import { Headline } from 'components/Headline/Headline'
 import {
   AdyenCheckout,
-  Wrapper,
+  Wrapper as AdyenWrapper,
 } from '../../../ConnectPayment/components/AdyenCheckout'
 const { gray100, gray600, gray700, gray300, gray900 } = colorsV3
+
+const Wrapper = styled.div`
+  margin: 0 auto;
+  max-width: 628px;
+`
 
 const Description = styled.div`
   margin-top: 0.5rem;
@@ -28,7 +33,7 @@ const Terms = styled.div`
 `
 
 const AdyenContainer = styled.div`
-  ${Wrapper} {
+  ${AdyenWrapper} {
     .adyen-checkout__payment-method__header {
       display: none;
     }
@@ -70,7 +75,7 @@ export const PaymentDetails = () => {
   const textKeys = useTextKeys()
 
   return (
-    <>
+    <Wrapper>
       <Headline variant="s" headingLevel="h2" colorVariant="dark">
         {textKeys.CHECKOUT_PAYMENT_DETAILS_TITLE()}
       </Headline>
@@ -82,6 +87,6 @@ export const PaymentDetails = () => {
       </AdyenContainer>
 
       <Terms>{textKeys.CHECKOUT_PAYMENT_DETAILS_TERMS()}</Terms>
-    </>
+    </Wrapper>
   )
 }
