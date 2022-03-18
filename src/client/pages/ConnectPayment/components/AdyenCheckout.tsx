@@ -266,6 +266,13 @@ const createAdyenCheckout = ({
           },
         },
       },
+      applepay: {
+        amount: {
+          currency: currentLocale.currencyCode,
+          value: 0
+        },
+        countryCode: currentLocale.marketLabel
+      }
     },
     enableStoreDetails: true,
     returnUrl,
