@@ -277,7 +277,7 @@ const createAdyenCheckout = ({
           {
             label: 'Hedvig',
             amount: '0.0',
-            type: 'pending',
+            type: 'final',
           },
         ],
         amount: {
