@@ -280,10 +280,7 @@ const createAdyenCheckout = ({
             type: 'pending',
           },
         ],
-        amount: {
-          currency: currentLocale.currencyCode,
-          value: 0.0,
-        },
+        buttonType: 'subscribe',
         configuration: {
           merchantName: 'Hedvig',
           merchantIdentifier: merchantIdentifier,
