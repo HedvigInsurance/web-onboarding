@@ -74,45 +74,57 @@ export const quoteDetailsDataMockHomeContentStudentOwnDk: HomeQuoteDetails[] = [
   },
 ]
 
-export const mockedQuoteDetailsDataQueryResponseSeHouse = {
-  data: {
-    quoteCart: {
-      id: mockedQuoteCartId,
-      bundle: {
-        quotes: [
-          {
-            id: '92952f88-d245-4f63-a128-91aa7d4927c3',
-            data: {
-              type: 'SWEDISH_HOUSE',
-              id: 'cd7d54f9-747a-416f-8f5d-fffc23d7174b',
-              ssn: '199006081234',
-              birthDate: '1990-06-08',
-              firstName: 'Ellen',
-              lastName: 'Ellengren',
-              email: 'test@test.test',
-              phoneNumber: null,
-              street: 'Villavägen 1',
-              zipCode: '12345',
-              city: null,
-              livingSpace: 120,
-              numberCoInsured: 1,
-              ancillaryArea: 60,
-              yearOfConstruction: 1977,
-              numberOfBathrooms: 2,
-              extraBuildings: [],
-              isSubleted: false,
-              floor: 0,
-              typeOfContract: 'SE_HOUSE',
-            },
-            __typename: 'BundledQuote',
-          },
-        ],
-        __typename: 'QuoteBundle',
+export const mockedQuoteDetailsDataQueryResponseSeHouse = [
+  [
+    {
+      label: 'CHECKOUT_DETAILS_ADDRESS',
+      value: {
+        value: 'Storgatan 5',
       },
-      __typename: 'QuoteCart',
     },
-  },
-}
+    {
+      label: 'CHECKOUT_DETAILS_ZIPCODE',
+      value: {
+        value: '123 45',
+      },
+    },
+    {
+      label: 'CHECKOUT_DETAILS_LIVING_SPACE',
+      value: { value: 23, suffix: 'CHECKOUT_DETAILS_SQM_SUFFIX' },
+    },
+    {
+      label: 'CHECKOUT_DETAILS_RESIDENCE_TYPE',
+      value: {
+        textKey: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_HOUSE',
+      },
+    },
+    {
+      label: 'CHECKOUT_DETAILS_ANCILLARY_SPACE',
+      value: {
+        suffix: 'CHECKOUT_DETAILS_SQM_SUFFIX',
+        value: 0,
+      },
+    },
+    {
+      label: 'CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS',
+      value: {
+        value: 2,
+        suffix: 'CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS_SUFFIX_MANY',
+      },
+    },
+    { label: 'CHECKOUT_DETAILS_YEAR_OF_CONSTRUCTION', value: { value: 1977 } },
+    { label: 'CHECKOUT_DETAILS_IS_PARTLY_SUBLET', value: { textKey: 'NO' } },
+  ],
+  [
+    {
+      label: 'CHECKOUT_DETAILS_HOUSEHOLD_SIZE',
+      value: {
+        value: 2,
+        suffix: 'CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX_MANY',
+      },
+    },
+  ],
+]
 
 export const mockedQuoteDetailsDataQueryResponseNoCombo = {
   data: {
