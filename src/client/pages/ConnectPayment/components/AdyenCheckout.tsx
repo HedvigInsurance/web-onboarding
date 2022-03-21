@@ -273,7 +273,7 @@ const createAdyenCheckout = ({
         },
       },
       applepay: {
-        lineItem: [
+        lineItems: [
           {
             label: 'Hedvig',
             amount: '0.0',
