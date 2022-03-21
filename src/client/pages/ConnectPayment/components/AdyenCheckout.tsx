@@ -274,6 +274,7 @@ const createAdyenCheckout = ({
       },
       applepay: {
         totalPriceLabel: {
+          label: 'Hedvig',
           amount: '0.00',
           type: 'pending',
         },
