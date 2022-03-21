@@ -23,7 +23,7 @@ const Wrapper = styled.div`
   background-color: ${gray100};
   position: relative;
   padding: 0;
-  margin-bottom: 3rem;
+  margin-bottom: 5rem;
 
   > button {
     position: absolute;
@@ -58,6 +58,8 @@ const LogoLink = styled.a`
   text-align: center;
   padding: 1.25rem;
 `
+
+export const WrapperWidth = 628
 
 export const CheckoutPageWrapper = ({ children }: Props) => {
   const isDesktop = useMediaQuery({ minWidth: BREAKPOINTS.mediumScreen })

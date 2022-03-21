@@ -8,13 +8,8 @@ import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useFeature, Features } from 'utils/hooks/useFeature'
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { Divider } from '../../shared/Divider'
-
-export type ContactInfoData = {
-  firstName?: string | null | undefined
-  lastName?: string | null | undefined
-  ssn?: string | null | undefined
-  email?: string | null | undefined
-}
+import { ContactInfoData } from '../../shared/types'
+import { WrapperWidth } from '../../shared/CheckoutPageWrapper'
 
 const Wrapper = styled.div`
   margin: 0 auto;
@@ -22,7 +17,7 @@ const Wrapper = styled.div`
   ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
     padding: 0;
     width: 100%;
-    max-width: 628px;
+    max-width: ${WrapperWidth}px;
   }
 `
 
