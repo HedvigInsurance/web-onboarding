@@ -283,8 +283,10 @@ const createAdyenCheckout = ({
         amount: {
           currency: currentLocale.currencyCode,
           value: 0.0,
+          type: 'pending'
         },
         buttonType: 'subscribe',
+        buttonColor: 'white',
         configuration: {
           merchantName: 'Hedvig',
           merchantIdentifier: merchantIdentifier,
