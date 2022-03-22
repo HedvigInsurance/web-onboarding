@@ -1,20 +1,26 @@
 import { BundledQuote } from 'data/graphql'
-import { Address } from 'pages/OfferNew/types'
+
+export interface Address {
+  street: string
+  zipCode: string
+  apartment?: string
+  floor?: number
+}
 
 export const parseAddress = (address: Address) => {
   const { street, apartment, floor } = address
 
   return street
-    .concat(floor ? `, ${floor}.` : '')
+    .concat(floor && floor !== 0 ? `, ${floor}.` : '')
     .concat(apartment ? ` ${apartment}` : '')
 }
 
-export const getAddress = (quotes: BundledQuote[]) => {
-  const hasAddress = (quote: BundledQuote) => {
-    const interestedInFields = ['street', 'zipCode'] as const
-    return interestedInFields.every((field) => quote.data[field] != null)
-  }
+const hasAddress = (quote: BundledQuote) => {
+  const interestedInFields = ['street', 'zipCode'] as const
+  return interestedInFields.every((field) => quote.data[field] != null)
+}
 
+export const getAddress = (quotes: BundledQuote[]) => {
   const quoteWithAddress = quotes.find(hasAddress)
 
   return quoteWithAddress
@@ -22,7 +28,7 @@ export const getAddress = (quotes: BundledQuote[]) => {
         street: quoteWithAddress.data.street,
         zipCode: quoteWithAddress.data.zipCode,
         apartment: quoteWithAddress.data.apartment,
-        floor: quoteWithAddress.data.floor?.toString(),
+        floor: quoteWithAddress.data.floor,
       })
     : ''
 }

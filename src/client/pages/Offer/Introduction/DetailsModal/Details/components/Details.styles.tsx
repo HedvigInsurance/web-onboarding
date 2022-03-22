@@ -36,7 +36,7 @@ export const ContentColumnTitle = styled.div`
     padding: 0;
   }
   font-size: 1rem;
-  color: ${colorsV3.gray500};
+  color: ${colorsV3.gray900};
   margin-bottom: 1rem;
   display: flex;
   flex-direction: row;
@@ -48,9 +48,9 @@ export const ContentColumnTitle = styled.div`
 export const ContentColumnTitleButton = styled.button`
   padding: 0.375rem 1rem;
   font-size: 0.875rem;
-  color: ${colorsV3.gray500};
+  color: ${colorsV3.gray900};
   border-radius: 24px;
-  border: 1px solid ${colorsV3.gray500};
+  border: 1px solid ${colorsV3.gray900};
   cursor: pointer;
   transition: all 250ms;
   background: none;
@@ -60,7 +60,7 @@ export const ContentColumnTitleButton = styled.button`
   }
 
   :hover {
-    color: ${colorsV3.gray900};
-    border-color: ${colorsV3.gray900};
+    background-color: ${colorsV3.gray900};
+    color: ${colorsV3.white};
   }
 `
