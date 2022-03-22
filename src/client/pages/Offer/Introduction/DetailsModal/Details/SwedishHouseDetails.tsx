@@ -62,6 +62,9 @@ export const SwedishHouseDetails: React.FC<{
 }> = ({ formikProps }) => {
   return (
     <Content>
+      <ContentRow>
+        <ExtraBuildingsInput formikProps={formikProps} />
+      </ContentRow>
       <ContentColumn>
         <InputGroup>
           <TextInput
@@ -131,9 +134,6 @@ export const SwedishHouseDetails: React.FC<{
           />
         </InputGroup>
       </ContentColumn>
-      <ContentRow>
-        <ExtraBuildingsInput formikProps={formikProps} />
-      </ContentRow>
     </Content>
   )
 }
