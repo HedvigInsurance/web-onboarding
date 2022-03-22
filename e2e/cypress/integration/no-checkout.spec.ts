@@ -41,9 +41,6 @@ describe('NO Offer Page', () => {
         quotes: [HOME_CONTENT_QUOTE, TRAVEL_QUOTE],
       }).then(() => {
         cy.visit(`/no-en/new-member/offer/${quoteCartId}`)
-        cy.contains('button', 'Accept All Cookies', {
-          timeout: 10000,
-        }).click()
 
         cy.contains('button', 'Proceed').click()
 
