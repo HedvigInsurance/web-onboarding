@@ -102,6 +102,8 @@ export enum _MutationKind {
   PublishMany = 'publishMany',
   UnpublishMany = 'unpublishMany',
   DeleteMany = 'deleteMany',
+  SchedulePublish = 'schedulePublish',
+  ScheduleUnpublish = 'scheduleUnpublish',
 }
 
 export enum _OrderDirection {
@@ -309,7 +311,7 @@ export enum AddressOwnership {
 
 export type Adyen = {
   __typename?: 'Adyen'
-  availablePaymentOptions: Array<Scalars['PaymentMethodsResponse']>
+  availablePaymentMethods: Scalars['PaymentMethodsResponse']
 }
 
 export type Aggregate = {
@@ -323,6 +325,7 @@ export type Agreement =
   | SwedishAccidentAgreement
   | NorwegianHomeContentAgreement
   | NorwegianTravelAgreement
+  | NorwegianAccidentAgreement
   | DanishHomeContentAgreement
   | DanishAccidentAgreement
   | DanishTravelAgreement
@@ -2051,7 +2054,9 @@ export type CompleteQuoteDetails =
 /** An inception where all quotes need to have the same startDate and currentInsurer */
 export type ConcurrentInception = {
   __typename?: 'ConcurrentInception'
+  /** @deprecated correspondingQuotes is deprecated, doesn't work with QuoteCart use correspondingQuoteIds instead */
   correspondingQuotes: Array<Quote>
+  correspondingQuoteIds: Array<Scalars['ID']>
   startDate?: Maybe<Scalars['LocalDate']>
   currentInsurer?: Maybe<CurrentInsurer>
 }
@@ -5223,7 +5228,9 @@ export type IndefinitePercentageDiscount = {
 /** An inception that may be switchable and has a single date */
 export type IndependentInception = {
   __typename?: 'IndependentInception'
+  /** @deprecated correspondingQuote is deprecated, doesn't work with QuoteCart use correspondingQuoteId instead */
   correspondingQuote: Quote
+  correspondingQuoteId: Scalars['ID']
   startDate?: Maybe<Scalars['LocalDate']>
   currentInsurer?: Maybe<CurrentInsurer>
 }
@@ -8026,6 +8033,27 @@ export type NoDiscount = {
   _?: Maybe<Scalars['Boolean']>
 }
 
+export type NorwegianAccidentAgreement = AgreementCore & {
+  __typename?: 'NorwegianAccidentAgreement'
+  id: Scalars['ID']
+  activeFrom?: Maybe<Scalars['LocalDate']>
+  activeTo?: Maybe<Scalars['LocalDate']>
+  premium: MonetaryAmountV2
+  certificateUrl?: Maybe<Scalars['String']>
+  status: AgreementStatus
+  numberCoInsured: Scalars['Int']
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
+}
+
+export type NorwegianAccidentDetails = {
+  __typename?: 'NorwegianAccidentDetails'
+  coInsured: Scalars['Int']
+  street: Scalars['String']
+  zipCode: Scalars['String']
+  city?: Maybe<Scalars['String']>
+}
+
 export type NorwegianBankIdAuthResponse = {
   __typename?: 'NorwegianBankIdAuthResponse'
   redirectUrl: Scalars['String']
@@ -8730,6 +8758,7 @@ export type QuoteDetails =
   | SwedishAccidentDetails
   | NorwegianHomeContentsDetails
   | NorwegianTravelDetails
+  | NorwegianAccidentDetails
   | DanishHomeContentsDetails
   | DanishAccidentDetails
   | DanishTravelDetails
@@ -10692,7 +10721,6 @@ export enum TypeOfContract {
   NoTravel = 'NO_TRAVEL',
   NoTravelYouth = 'NO_TRAVEL_YOUTH',
   NoAccident = 'NO_ACCIDENT',
-  NoAccidentYouth = 'NO_ACCIDENT_YOUTH',
   DkHomeContentOwn = 'DK_HOME_CONTENT_OWN',
   DkHomeContentRent = 'DK_HOME_CONTENT_RENT',
   DkHomeContentStudentOwn = 'DK_HOME_CONTENT_STUDENT_OWN',
@@ -11609,14 +11637,6 @@ export type AvailablePaymentMethodsQuery = { __typename?: 'Query' } & {
   } & Pick<AvailablePaymentMethodsResponse, 'paymentMethodsResponse'>
 }
 
-export type CampaignQueryVariables = Exact<{
-  code: Scalars['String']
-}>
-
-export type CampaignQuery = { __typename?: 'Query' } & {
-  campaign?: Maybe<{ __typename?: 'Campaign' } & Pick<Campaign, 'code'>>
-}
-
 export type CheckoutStatusQueryVariables = Exact<{
   quoteCartId: Scalars['ID']
 }>
@@ -11655,6 +11675,7 @@ export type CreateDanishHomeAccidentQuoteMutation = {
             | { __typename: 'SwedishAccidentDetails' }
             | { __typename: 'NorwegianHomeContentsDetails' }
             | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
@@ -11668,6 +11689,7 @@ export type CreateDanishHomeAccidentQuoteMutation = {
             | { __typename: 'SwedishAccidentDetails' }
             | { __typename: 'NorwegianHomeContentsDetails' }
             | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
@@ -11692,6 +11714,7 @@ export type CreateDanishHomeAccidentTravelQuoteMutation = {
             | { __typename: 'SwedishAccidentDetails' }
             | { __typename: 'NorwegianHomeContentsDetails' }
             | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
@@ -11705,6 +11728,7 @@ export type CreateDanishHomeAccidentTravelQuoteMutation = {
             | { __typename: 'SwedishAccidentDetails' }
             | { __typename: 'NorwegianHomeContentsDetails' }
             | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
@@ -11718,6 +11742,7 @@ export type CreateDanishHomeAccidentTravelQuoteMutation = {
             | { __typename: 'SwedishAccidentDetails' }
             | { __typename: 'NorwegianHomeContentsDetails' }
             | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
@@ -11809,6 +11834,7 @@ export type CreateSwedishHomeAccidentQuoteMutation = {
             | { __typename: 'SwedishAccidentDetails' }
             | { __typename: 'NorwegianHomeContentsDetails' }
             | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
@@ -11826,6 +11852,7 @@ export type CreateSwedishHomeAccidentQuoteMutation = {
             | { __typename: 'SwedishAccidentDetails' }
             | { __typename: 'NorwegianHomeContentsDetails' }
             | { __typename: 'NorwegianTravelDetails' }
+            | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
@@ -12148,6 +12175,7 @@ export type QuoteDataFragment = { __typename?: 'BundledQuote' } & Pick<
           NorwegianTravelDetails,
           'coInsured' | 'isYouth'
         >)
+      | { __typename?: 'NorwegianAccidentDetails' }
       | ({ __typename?: 'DanishHomeContentsDetails' } & Pick<
           DanishHomeContentsDetails,
           | 'street'
@@ -12613,12 +12641,6 @@ export type CampaignDataFragment = { __typename?: 'Campaign' } & Pick<
         > & { quantityMonths: PercentageDiscountMonths['quantity'] })
       | { __typename?: 'IndefinitePercentageDiscount' }
     >
-    owner?: Maybe<
-      { __typename?: 'CampaignOwner' } & Pick<
-        CampaignOwner,
-        'displayName' | 'id'
-      >
-    >
   }
 
 export type QuoteDataFragmentFragment = { __typename?: 'BundledQuote' } & Pick<
@@ -12709,6 +12731,7 @@ export type QuoteDataFragmentFragment = { __typename?: 'BundledQuote' } & Pick<
           NorwegianTravelDetails,
           'coInsured' | 'isYouth'
         >)
+      | { __typename?: 'NorwegianAccidentDetails' }
       | ({ __typename?: 'DanishHomeContentsDetails' } & Pick<
           DanishHomeContentsDetails,
           | 'street'
@@ -12895,10 +12918,6 @@ export const CampaignDataFragmentDoc = gql`
       }
     }
     code
-    owner {
-      displayName
-      id
-    }
     ownerName
     expiresAt
     displayValue(locale: $locale)
@@ -13196,59 +13215,6 @@ export type AvailablePaymentMethodsLazyQueryHookResult = ReturnType<
 export type AvailablePaymentMethodsQueryResult = ApolloReactCommon.QueryResult<
   AvailablePaymentMethodsQuery,
   AvailablePaymentMethodsQueryVariables
->
-export const CampaignDocument = gql`
-  query Campaign($code: String!) {
-    campaign(code: $code) {
-      code
-    }
-  }
-`
-
-/**
- * __useCampaignQuery__
- *
- * To run a query within a React component, call `useCampaignQuery` and pass it any options that fit your needs.
- * When your component renders, `useCampaignQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCampaignQuery({
- *   variables: {
- *      code: // value for 'code'
- *   },
- * });
- */
-export function useCampaignQuery(
-  baseOptions: Apollo.QueryHookOptions<CampaignQuery, CampaignQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<CampaignQuery, CampaignQueryVariables>(
-    CampaignDocument,
-    options,
-  )
-}
-export function useCampaignLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    CampaignQuery,
-    CampaignQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<CampaignQuery, CampaignQueryVariables>(
-    CampaignDocument,
-    options,
-  )
-}
-export type CampaignQueryHookResult = ReturnType<typeof useCampaignQuery>
-export type CampaignLazyQueryHookResult = ReturnType<
-  typeof useCampaignLazyQuery
->
-export type CampaignQueryResult = ApolloReactCommon.QueryResult<
-  CampaignQuery,
-  CampaignQueryVariables
 >
 export const CheckoutStatusDocument = gql`
   query CheckoutStatus($quoteCartId: ID!) {
