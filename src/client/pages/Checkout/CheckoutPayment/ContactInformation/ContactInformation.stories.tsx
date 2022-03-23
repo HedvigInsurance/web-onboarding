@@ -11,7 +11,8 @@ import {
 } from 'utils/storybook/storyHelpers'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { mockedQuoteCartId } from 'utils/testData/quoteDetailsDataMock'
-import { ContactInformation, ContactInfoData } from './ContactInformation'
+import { ContactInfoData } from '../../shared/types'
+import { ContactInformation } from './ContactInformation'
 
 type StoryProps = {
   localePath: LocaleLabel

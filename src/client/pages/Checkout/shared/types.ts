@@ -34,3 +34,10 @@ export type Price = {
   displayName: string
   price: string
 }
+
+export type ContactInfoData = {
+  firstName?: string | null
+  lastName?: string | null
+  ssn?: string | null
+  email?: string | null
+}
