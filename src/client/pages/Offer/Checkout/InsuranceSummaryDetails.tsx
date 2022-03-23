@@ -172,7 +172,7 @@ const getQuoteDetails = (
             street: homeData.street,
             zipCode: homeData.zipCode,
             apartment: data.apartment,
-            floor: data.floor?.toString(),
+            floor: data.floor,
           }),
         },
         {

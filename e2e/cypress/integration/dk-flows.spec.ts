@@ -15,7 +15,6 @@ describe('DK Embark Flows', () => {
       cy.visit(flowUrl)
 
       // ownership
-      cy.contains('button', 'Accept All Cookies', { timeout: 10000 }).click()
       cy.contains('button', 'I rent it').click()
 
       // size
