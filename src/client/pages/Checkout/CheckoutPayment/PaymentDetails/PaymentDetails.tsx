@@ -3,11 +3,23 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import styled from '@emotion/styled'
 import { useTextKeys } from 'utils/textKeys'
 import { Headline } from 'components/Headline/Headline'
+import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import {
   AdyenCheckout,
-  Wrapper,
+  Wrapper as AdyenWrapper,
 } from '../../../ConnectPayment/components/AdyenCheckout'
+import { WrapperWidth } from '../../shared/CheckoutPageWrapper'
 const { gray100, gray600, gray700, gray300, gray900 } = colorsV3
+
+const Wrapper = styled.div`
+  margin: 0 auto;
+  max-width: ${WrapperWidth}px;
+  padding: 0 1rem 2rem 1rem;
+
+  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
+    padding: 0;
+  }
+`
 
 const Description = styled.div`
   margin-top: 0.5rem;
@@ -19,7 +31,7 @@ const Description = styled.div`
 
 const Terms = styled.div`
   color: ${gray600};
-  margin-top: 1rem;
+  margin: 1rem 0;
   font-size: 0.75rem;
   line-height: 1.33;
   a {
@@ -28,7 +40,7 @@ const Terms = styled.div`
 `
 
 const AdyenContainer = styled.div`
-  ${Wrapper} {
+  ${AdyenWrapper} {
     .adyen-checkout__payment-method__header {
       display: none;
     }
@@ -70,7 +82,7 @@ export const PaymentDetails = () => {
   const textKeys = useTextKeys()
 
   return (
-    <>
+    <Wrapper>
       <Headline variant="s" headingLevel="h2" colorVariant="dark">
         {textKeys.CHECKOUT_PAYMENT_DETAILS_TITLE()}
       </Headline>
@@ -82,6 +94,6 @@ export const PaymentDetails = () => {
       </AdyenContainer>
 
       <Terms>{textKeys.CHECKOUT_PAYMENT_DETAILS_TERMS()}</Terms>
-    </>
+    </Wrapper>
   )
 }

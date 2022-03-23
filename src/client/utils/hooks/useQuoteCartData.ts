@@ -213,6 +213,7 @@ export const useQuoteCartData = () => {
     firstName: mainQuote.firstName,
     lastName: mainQuote.lastName,
     email: mainQuote.email,
+    ssn: mainQuote.ssn,
   }
 
   return {
