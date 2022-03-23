@@ -2,6 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { Button, ButtonProps, LinkButton } from 'components/buttons'
+import { WrapperWidth } from './CheckoutPageWrapper'
 
 const { white, purple500, gray900 } = colorsV3
 
@@ -21,6 +22,7 @@ const Wrapper = styled.div`
   min-height: 5rem;
   padding: 1rem;
   position: fixed;
+  z-index: 1;
   bottom: 0;
   left: 0;
   display: flex;
@@ -32,7 +34,7 @@ const Wrapper = styled.div`
 `
 const InnerWrapper = styled.div`
   width: 100%;
-  max-width: 628px;
+  max-width: ${WrapperWidth}px;
   height: 100%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);

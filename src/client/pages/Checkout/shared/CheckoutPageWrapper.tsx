@@ -22,6 +22,8 @@ const Wrapper = styled.div`
   min-height: 100vh;
   background-color: ${gray100};
   position: relative;
+  padding: 0;
+  margin-bottom: 5rem;
 
   > button {
     position: absolute;
@@ -31,6 +33,7 @@ const Wrapper = styled.div`
   }
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
+    margin-bottom: 0;
     > button {
       top: 6.5rem;
       left: 5rem;
@@ -55,6 +58,8 @@ const LogoLink = styled.a`
   text-align: center;
   padding: 1.25rem;
 `
+
+export const WrapperWidth = 628
 
 export const CheckoutPageWrapper = ({ children }: Props) => {
   const isDesktop = useMediaQuery({ minWidth: BREAKPOINTS.mediumScreen })
