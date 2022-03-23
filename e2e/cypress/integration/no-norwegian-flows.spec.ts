@@ -13,7 +13,6 @@ describe('NO Norwegian Embark Flows', () => {
       cy.visit(flowUrl)
 
       // start
-      cy.contains('button', 'Godta alle informasjonskapsler').click()
       cy.contains('button', 'Jeg er på flyttefot').click()
 
       // ownership

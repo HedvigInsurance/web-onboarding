@@ -9,7 +9,6 @@ it('should get a price quote for a Swedish house', async () => {
   cy.visit(url)
 
   // insurance-type
-  cy.contains('button', 'Accept All Cookies', { timeout: 10000 }).click()
   cy.contains('button', 'Home & Accident Insurance').click()
 
   // home-type
@@ -84,6 +83,6 @@ it('should get a price quote for a Swedish house', async () => {
   cy.focused().type(`${faker.internet.email()}{enter}`)
 
   // offer page
-  cy.contains('Your price quote', { timeout: 10000 }).should('be.visible')
+  cy.contains('Your price quote', { timeout: 15000 }).should('be.visible')
   cy.contains(address).should('be.visible')
 })
