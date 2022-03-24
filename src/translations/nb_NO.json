@@ -363,5 +363,22 @@
   "CHECKOUT_CONTACT_INFO_SSN_LABEL": "Fødselsnummer ",
   "CHECKOUT_CONTACT_INFO_EMAIL_HELPER": "For informasjon fra oss. Eller om rabatter og andre fordelaktige endringer skulle dukke opp etter at du allerede har fått ditt pristilbud. ",
   "CHECKOUT_CONTACT_INFO_HEADING": "Kontaktinformasjon",
-  "CHECKOUT_CONTACT_INFO_CREDIT_CHECK_HELPER": "Vi kredittvurderer nye kunder. De med betalingsnamerkninger betaler i enkelte tilfeller forskuddsvis."
+  "CHECKOUT_CONTACT_INFO_CREDIT_CHECK_HELPER": "Vi kredittvurderer nye kunder. De med betalingsnamerkninger betaler i enkelte tilfeller forskuddsvis.",
+  "CHECKOUT_PAGE_ERROR_MODAL_BODY": "Prøv igjen eller start på nytt. Hvis feilen vedvarer, vennligst kontakt oss.",
+  "CHECKOUT_PAGE_ERROR_MODAL_HEADING": "Noe gikk galt",
+  "CHECKOUT_PAGE_ERROR_MODAL_BACK_TO_START_BUTTON": "Tilbake til start",
+  "CHECKOUT_PAGE_ERROR_MODAL_OPEN_CHAT": "Chatt med oss",
+  "START_SCREEN_HEADER": "",
+  "START_SCREEN_SUBHEADER": "",
+  "START_SCREEN_OPTION_CURRENT_HEADER": "",
+  "START_SCREEN_OPTION_CURRENT_SUBHEADER": "",
+  "START_SCREEN_OPTION_NEW_HEADER": "",
+  "START_SCREEN_OPTION_NEW_SUBHEADER": "",
+  "START_SCREEN_OPTION_SWITCH_HEADER": "",
+  "START_SCREEN_OPTION_SWITCH_SUBHEADER": "",
+  "START_SCREEN_OPTION_SWITCH_USP_1": "",
+  "START_SCREEN_OPTION_SWITCH_USP_2": "",
+  "START_SCREEN_OPTION_SWITCH_USP_3": "",
+  "START_SCREEN_FOOTER_TOS": "",
+  "START_SCREEN_LOADER": ""
 }

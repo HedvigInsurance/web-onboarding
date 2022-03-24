@@ -363,5 +363,22 @@
   "CHECKOUT_CONTACT_INFO_SSN_LABEL": "",
   "CHECKOUT_CONTACT_INFO_EMAIL_HELPER": "For information from us. Or if discounts and other beneficial changes would appear after you’ve already received your offer.",
   "CHECKOUT_CONTACT_INFO_HEADING": "Contact information",
-  "CHECKOUT_CONTACT_INFO_CREDIT_CHECK_HELPER": ""
+  "CHECKOUT_CONTACT_INFO_CREDIT_CHECK_HELPER": "",
+  "CHECKOUT_PAGE_ERROR_MODAL_BODY": "Try again or start over. If the error persists, please contact us.",
+  "CHECKOUT_PAGE_ERROR_MODAL_HEADING": "Something went wrong",
+  "CHECKOUT_PAGE_ERROR_MODAL_BACK_TO_START_BUTTON": "Back to start",
+  "CHECKOUT_PAGE_ERROR_MODAL_OPEN_CHAT": "Chat with us",
+  "START_SCREEN_HEADER": "Get a quote, compare and switch",
+  "START_SCREEN_SUBHEADER": "Instant help, simple app, switch to a better insurance.",
+  "START_SCREEN_OPTION_CURRENT_HEADER": "Where I live",
+  "START_SCREEN_OPTION_CURRENT_SUBHEADER": "Get a quote for your current address",
+  "START_SCREEN_OPTION_NEW_HEADER": "Where I’m moving",
+  "START_SCREEN_OPTION_NEW_SUBHEADER": "Get a quote for a new address",
+  "START_SCREEN_OPTION_SWITCH_HEADER": "Compare your home insurance price",
+  "START_SCREEN_OPTION_SWITCH_SUBHEADER": "For both apartment and villa",
+  "START_SCREEN_OPTION_SWITCH_USP_1": "We will match the price if we can",
+  "START_SCREEN_OPTION_SWITCH_USP_2": "We’ll handle all the paperwork",
+  "START_SCREEN_OPTION_SWITCH_USP_3": "Fast and easy to switch to Hedvig",
+  "START_SCREEN_FOOTER_TOS": "",
+  "START_SCREEN_LOADER": "Hedvig.\n100% digital.\nFlexible help.\nFast service.\nAll in one app.\nHassle-free."
 }
