@@ -4,6 +4,8 @@ import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
+import { ContactInformation } from './ContactInformation/ContactInformation'
+import { PaymentDetails } from './PaymentDetails/PaymentDetails'
 
 export const CheckoutPayment = () => {
   const textKeys = useTextKeys()
@@ -12,8 +14,12 @@ export const CheckoutPayment = () => {
     return null
   }
   const priceData = data.priceData
+  const userDetails = data.userDetails
+
   return (
     <CheckoutPageWrapper>
+      <ContactInformation {...userDetails} />
+      <PaymentDetails />
       <Footer
         buttonText={textKeys.CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT()}
         buttonOnClick={() => {
