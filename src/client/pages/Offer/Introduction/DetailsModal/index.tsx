@@ -9,6 +9,7 @@ import {
   useCreateQuoteBundleMutation,
   useQuoteCartQuery,
   UnderwritingLimit,
+  ApartmentType,
 } from 'data/graphql'
 
 import { useTextKeys } from 'utils/textKeys'
@@ -21,7 +22,8 @@ import {
   isLimitHit,
   isQuoteBundleError,
 } from 'api/quoteBundleErrorSelectors'
-import { QuoteInput } from './types'
+import { QuoteDetailsInput, QuoteInput } from './types'
+
 import { Details, getValidationSchema } from './Details'
 
 const Container = styled.div`
@@ -144,6 +146,19 @@ function getFormErrorsFromUnderwritterLimits(
   )
 }
 
+const getSubType = (data: QuoteDetailsInput) => {
+  switch (data.subType) {
+    case ApartmentType.Brf:
+    case ApartmentType.StudentBrf:
+      return data.isStudent ? ApartmentType.StudentBrf : ApartmentType.Brf
+    case ApartmentType.Rent:
+    case ApartmentType.StudentRent:
+      return data.isStudent ? ApartmentType.StudentRent : ApartmentType.Rent
+    default:
+      return data.subType
+  }
+}
+
 type DetailsModalProps = Pick<ModalProps, 'isVisible'> & {
   onClose: () => void
   quoteCartId: string
@@ -212,31 +227,27 @@ export const DetailsModal = ({
     const {
       data: { householdSize },
     } = form
+
     return createQuoteBundle({
       variables: {
         locale: isoLocale,
         quoteCartId,
-        quotes: allQuotes.map(
-          ({
+        quotes: allQuotes.map(({ startDate, currentInsurer, data }) => {
+          return {
+            ...form,
             startDate,
-            currentInsurer,
-            data: { id, type, typeOfContract, isStudent },
-          }) => {
-            return {
-              ...form,
-              startDate,
-              currentInsurer: currentInsurer?.id,
-              data: {
-                isStudent,
-                ...form.data,
-                numberCoInsured: householdSize && householdSize - 1,
-                id,
-                type,
-                typeOfContract,
-              },
-            }
-          },
-        ),
+            currentInsurer: currentInsurer?.id,
+            data: {
+              isStudent: data.isStudent,
+              ...form.data,
+              numberCoInsured: householdSize && householdSize - 1,
+              id: data.id,
+              type: data.type,
+              typeOfContract: data.typeOfContract,
+              subType: getSubType(form.data),
+            },
+          }
+        }),
       },
     })
   }
