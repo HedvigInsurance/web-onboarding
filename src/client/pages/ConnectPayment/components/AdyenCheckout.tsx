@@ -283,7 +283,7 @@ const createAdyenCheckout = ({
           value: 0,
         },
         buttonType: 'subscribe',
-        buttonColor: 'white',
+        buttonColor: 'white-with-line',
         configuration: {
           merchantName: 'Hedvig',
           merchantIdentifier: merchantIdentifier,
