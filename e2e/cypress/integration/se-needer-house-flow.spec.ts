@@ -59,7 +59,7 @@ it('should get a price quote for a Swedish house', async () => {
     .type(`${faker.datatype.number({ min: 1930, max: 2010 })}{enter}`)
 
   // baths
-  cy.contains('button', 'Two bathrooms', { timeout: 1000 }).click()
+  cy.contains('button', '2', { timeout: 1000 }).click()
 
   // floors
   cy.contains('button', 'Four floors or less', { timeout: 1000 }).click()
