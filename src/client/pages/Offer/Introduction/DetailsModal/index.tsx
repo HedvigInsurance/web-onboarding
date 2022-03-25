@@ -16,6 +16,8 @@ import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import { getSelectedBundleVariant } from 'api/quoteCartQuerySelectors'
+import * as quoteSelector from 'api/quoteSelector'
+import * as bundleSelector from 'api/quoteBundleSelectors'
 import {
   getLimitsHit,
   LimitCode,
@@ -194,6 +196,7 @@ export const DetailsModal = ({
 
   if (!selectedQuoteBundle) return null
 
+  const mainQuote = bundleSelector.getMainQuote(selectedQuoteBundle.bundle)
   const {
     firstName,
     lastName,
@@ -203,7 +206,7 @@ export const DetailsModal = ({
     phoneNumber,
     startDate,
     data: mainQuoteData,
-  } = selectedQuoteBundle?.bundle.quotes[0]
+  } = mainQuote
 
   const { type: mainQuoteType, numberCoInsured } = mainQuoteData
   const initialValues = {
@@ -216,6 +219,7 @@ export const DetailsModal = ({
     startDate,
     data: {
       ...mainQuoteData,
+      isStudent: quoteSelector.isStudent(mainQuote),
       householdSize: numberCoInsured + 1,
     },
   } as QuoteInput
