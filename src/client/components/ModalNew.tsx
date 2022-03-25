@@ -52,7 +52,7 @@ const ModalContainer = styled(motion.div)<ModalContainerProps>`
     `
   min-height: 25rem;
   max-height: 56rem;`}
-  background: ${colorsV3.white};
+  background: ${colorsV3.gray100};
   border-radius: 8px;
   position: absolute;
   transform: translateX(-50%) translateY(-50%);
@@ -156,4 +156,27 @@ export const Modal: React.FC<ModalProps> = ({
       </ModalContainer>
     </Wrapper>
   )
+}
+
+const Footer = styled.div<ModalFooterProps>`
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  ${({ sticky }) =>
+    !sticky &&
+    `
+    box-shadow: 0px -4px 8px rgba(0, 0, 0, 0.05), 0px -8px 16px rgba(0, 0, 0, 0.05);
+    background: ${colorsV3.white};
+    position: sticky;
+    bottom: 0;
+`}
+`
+type ModalFooterProps = {
+  sticky?: boolean
+}
+
+export const ModalFooter: React.FC<ModalFooterProps> = ({ children }) => {
+  return <Footer>{children}</Footer>
 }
