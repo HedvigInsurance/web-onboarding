@@ -13,6 +13,7 @@ export type ButtonProps = {
   size?: Size
   fullWidth?: boolean
   disabled?: boolean
+  border?: boolean
 }
 
 type UnstyledButtonProps = {
@@ -28,6 +29,18 @@ export const UnstyledButton = styled.button<UnstyledButtonProps>`
   cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
 `
 
+type ButtonGroupProps = {
+  fullWidth?: boolean
+}
+
+export const ButtonGroup = styled.div<ButtonGroupProps>`
+  display: flex;
+  column-gap: 1rem;
+  padding: 0 1rem;
+
+  width: ${({ fullWidth }) => (fullWidth ? '100%' : 'auto')};
+`
+
 export const Button = styled(UnstyledButton)<ButtonProps>`
   display: inline-block;
   font-size: 1rem;
@@ -37,7 +50,10 @@ export const Button = styled(UnstyledButton)<ButtonProps>`
   background: ${({ background }) => background ?? gray900};
   color: ${({ foreground }) => foreground ?? white};
   border-radius: 8px;
-  border: none;
+  ${({ border, foreground }) =>
+    css`
+      border: ${border ? `1px solid ${foreground ?? white}` : 'none'};
+    `}
   transition: all 0.15s ease-in-out;
   text-decoration: none;
   text-align: center;
