@@ -3,6 +3,7 @@ import { useTextKeys } from 'utils/textKeys'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
+import { IntercomCheckoutStyles } from 'utils/Intercom'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
@@ -24,6 +25,7 @@ export const CheckoutDetails = () => {
   const paymentPageLink = `/${localePath}/new-member/checkout/payment/${quoteCartId}`
   return (
     <CheckoutPageWrapper>
+      <IntercomCheckoutStyles />
       <PageSection>
         <YourPlan {...priceData} />
         <StartDateSection />

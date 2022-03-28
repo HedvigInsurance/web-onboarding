@@ -26,7 +26,6 @@ export const Intercom: React.FC = () => {
     localePathPattern +
       '/new-member/:place(offer|checkout|sign|download|connect-payment)',
   )
-
   React.useEffect(() => {
     if (
       [Variation.IOS, Variation.ANDROID, Variation.AVY].includes(variation!)
@@ -47,3 +46,11 @@ export const Intercom: React.FC = () => {
 
   return null
 }
+
+export const IntercomCheckoutStyles: React.FC = () => (
+  <style>
+    {`
+      .intercom-lightweight-app-launcher{bottom: 102px!important;}
+     `}
+  </style>
+)
