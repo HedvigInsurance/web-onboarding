@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { motion } from 'framer-motion'
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { useLockBodyScroll } from '../utils/hooks/useLockBodyScroll'
 import { CloseButton } from './CloseButton/CloseButton'
 
@@ -10,6 +10,7 @@ export type ModalProps = {
   dynamicHeight?: boolean
   onClose?: () => void
   className?: string
+  children?: ReactNode
 }
 
 const Wrapper = styled(motion.div)`
@@ -52,7 +53,7 @@ const ModalContainer = styled(motion.div)<ModalContainerProps>`
     `
   min-height: 25rem;
   max-height: 56rem;`}
-  background: ${colorsV3.white};
+  background: ${colorsV3.gray100};
   border-radius: 8px;
   position: absolute;
   transform: translateX(-50%) translateY(-50%);
@@ -79,13 +80,13 @@ const ModalInnerContainer = styled.div`
   height: 100%;
 `
 
-export const Modal: React.FC<ModalProps> = ({
+export const Modal = ({
   isVisible,
   dynamicHeight,
   className,
   onClose,
   children,
-}) => {
+}: ModalProps) => {
   useLockBodyScroll({ isLocked: isVisible })
   const hasOnCloseFunction = Boolean(onClose)
 
@@ -156,4 +157,29 @@ export const Modal: React.FC<ModalProps> = ({
       </ModalContainer>
     </Wrapper>
   )
+}
+
+type ModalFooterProps = {
+  sticky?: boolean
+  children?: ReactNode
+}
+
+const Footer = styled.div<ModalFooterProps>`
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  ${({ sticky }) =>
+    !sticky &&
+    `
+    box-shadow: 0px -4px 8px rgba(0, 0, 0, 0.05), 0px -8px 16px rgba(0, 0, 0, 0.05);
+    background: ${colorsV3.white};
+    position: sticky;
+    bottom: 0;
+`}
+`
+
+export const ModalFooter = ({ children }: ModalFooterProps) => {
+  return <Footer>{children}</Footer>
 }
