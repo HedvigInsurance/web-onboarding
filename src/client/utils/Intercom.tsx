@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useRouteMatch } from 'react-router'
+import { Variation, useVariation } from 'utils/hooks/useVariation'
+
 import { localePathPattern } from 'l10n/localePathPattern'
-import { useVariation, Variation } from 'utils/hooks/useVariation'
 
 const createIntercom = () => {
   const script = `
@@ -47,10 +48,39 @@ export const Intercom: React.FC = () => {
   return null
 }
 
-export const IntercomCheckoutStyles: React.FC = () => (
-  <style>
-    {`
-      .intercom-lightweight-app-launcher{bottom: 102px!important;}
-     `}
-  </style>
-)
+export const IntercomCheckoutStyles: React.FC = () => {
+  const intercomBtnSelector = '.intercom-lightweight-app-launcher'
+  const intercomTimeout = useRef<null | NodeJS.Timeout>()
+
+  const onInteraction = () => {
+    const buttonEl: HTMLElement | null = document.querySelector(
+      intercomBtnSelector,
+    )
+    if (buttonEl !== null) {
+      if (intercomTimeout.current) {
+        clearTimeout(intercomTimeout.current)
+      }
+      buttonEl.style.opacity = '1'
+      intercomTimeout.current = setTimeout(() => {
+        buttonEl.style.opacity = '0'
+      }, 800)
+    }
+  }
+  useEffect(() => {
+    window.addEventListener('scroll', onInteraction)
+    window.addEventListener('mousemove', onInteraction)
+    // onInteraction()
+  }, [])
+
+  return (
+    <style>
+      {`
+    ${intercomBtnSelector}{
+      bottom: 87px!important;
+      transition: opacity 150ms ease-out;
+      opacity: 1;
+    }
+   `}
+    </style>
+  )
+}
