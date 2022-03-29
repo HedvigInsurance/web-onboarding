@@ -1,16 +1,17 @@
 import React from 'react'
-import { useTextKeys } from 'utils/textKeys'
-import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
+import { IntercomCheckoutPosition, IntercomHideOnScroll } from 'utils/Intercom'
+
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
-import { IntercomCheckoutStyles } from 'utils/Intercom'
+import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
+import { useTextKeys } from 'utils/textKeys'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
-import { YourPlan } from './components/YourPlan/YourPlan'
-import { QuoteDetails } from './components/QuoteDetails/QuoteDetails'
 import { PageSection } from './components/PageSection'
+import { QuoteDetails } from './components/QuoteDetails/QuoteDetails'
 import { StartDateSection } from './components/StartDateSection/StartDateSection'
+import { YourPlan } from './components/YourPlan/YourPlan'
 
 export const CheckoutDetails = () => {
   const textKeys = useTextKeys()
@@ -25,7 +26,8 @@ export const CheckoutDetails = () => {
   const paymentPageLink = `/${localePath}/new-member/checkout/payment/${quoteCartId}`
   return (
     <CheckoutPageWrapper>
-      <IntercomCheckoutStyles />
+      <IntercomCheckoutPosition />
+      <IntercomHideOnScroll />
       <PageSection>
         <YourPlan {...priceData} />
         <StartDateSection />

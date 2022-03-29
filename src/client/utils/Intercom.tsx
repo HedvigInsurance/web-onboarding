@@ -1,8 +1,11 @@
+import { Global, css } from '@emotion/react'
 import React, { useEffect, useRef } from 'react'
 import { useRouteMatch } from 'react-router'
 import { Variation, useVariation } from 'utils/hooks/useVariation'
 
 import { localePathPattern } from 'l10n/localePathPattern'
+
+const intercomBtnSelector = '.intercom-lightweight-app-launcher'
 
 const createIntercom = () => {
   const script = `
@@ -48,9 +51,9 @@ export const Intercom: React.FC = () => {
   return null
 }
 
-export const IntercomCheckoutStyles: React.FC = () => {
-  const intercomBtnSelector = '.intercom-lightweight-app-launcher'
+export const IntercomHideOnScroll: React.FC = () => {
   const intercomTimeout = useRef<null | NodeJS.Timeout>()
+  const paused = useRef<boolean>(false)
 
   const onInteraction = () => {
     const buttonEl: HTMLElement | null = document.querySelector(
@@ -66,21 +69,48 @@ export const IntercomCheckoutStyles: React.FC = () => {
       }, 800)
     }
   }
+
+  const debounce = (fn: () => void, delay: number) => {
+    return () => {
+      if (paused.current) {
+        setTimeout(() => {
+          paused.current = false
+        }, delay)
+      } else {
+        paused.current = true
+        fn()
+      }
+    }
+  }
+
   useEffect(() => {
-    window.addEventListener('scroll', onInteraction)
-    window.addEventListener('mousemove', onInteraction)
-    // onInteraction()
+    const interactionHandler = debounce(onInteraction, 100)
+    window.addEventListener('scroll', interactionHandler)
+    window.addEventListener('mousemove', interactionHandler)
+    return () => {
+      window.removeEventListener('scroll', interactionHandler)
+      window.removeEventListener('mousemove', interactionHandler)
+    }
   }, [])
 
   return (
-    <style>
-      {`
-    ${intercomBtnSelector}{
-      bottom: 87px!important;
-      transition: opacity 150ms ease-out;
-      opacity: 1;
-    }
-   `}
-    </style>
+    <Global
+      styles={css`
+        ${intercomBtnSelector} {
+          transition: opacity 150ms ease-out;
+          opacity: 1;
+        }
+      `}
+    />
   )
 }
+
+export const IntercomCheckoutPosition: React.FC = () => (
+  <Global
+    styles={css`
+      ${intercomBtnSelector} {
+        bottom: 87px !important;
+      }
+    `}
+  />
+)
