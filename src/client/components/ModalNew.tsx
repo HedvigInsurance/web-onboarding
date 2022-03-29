@@ -41,7 +41,7 @@ type ModalContainerProps = {
 }
 
 const ModalContainer = styled(motion.div)<ModalContainerProps>`
-  position: relative;
+  position: absolute;
   left: 50%;
   top: 50%;
   width: 100%;
@@ -55,7 +55,6 @@ const ModalContainer = styled(motion.div)<ModalContainerProps>`
   max-height: 56rem;`}
   background: ${colorsV3.gray100};
   border-radius: 8px;
-  position: absolute;
   transform: translateX(-50%) translateY(-50%);
   box-shadow: 0 0 14px rgba(0, 0, 0, 0.06);
   overflow-y: auto;
@@ -171,7 +170,7 @@ const Footer = styled.div<ModalFooterProps>`
   align-items: center;
   justify-content: center;
   ${({ sticky }) =>
-    !sticky &&
+    sticky &&
     `
     box-shadow: 0px -4px 8px rgba(0, 0, 0, 0.05), 0px -8px 16px rgba(0, 0, 0, 0.05);
     background: ${colorsV3.white};
@@ -180,6 +179,6 @@ const Footer = styled.div<ModalFooterProps>`
 `}
 `
 
-export const ModalFooter = ({ children }: ModalFooterProps) => {
-  return <Footer>{children}</Footer>
+export const ModalFooter = ({ children, sticky = true }: ModalFooterProps) => {
+  return <Footer sticky={sticky}>{children}</Footer>
 }
