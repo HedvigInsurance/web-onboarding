@@ -406,38 +406,46 @@ export const StartDate = ({
           />
         ) : (
           <>
-            {quotes.map((quote, index, arr) => (
-              <DateForm
-                key={quote.id}
-                startDate={quote.startDate}
-                currentInsurer={quote.currentInsurer ?? undefined}
-                quoteDisplayName={quote.displayName}
-                dataCollectionId={quote.dataCollectionId ?? undefined}
-                modal={modal}
-                disabled={
-                  loadingQuoteIds.length > 0 ||
-                  Boolean(quote.currentInsurer && !quote.startDate)
-                }
-                isSplit={
-                  index === 0 && arr.length % 2 !== 0
-                    ? false
-                    : quoteBundleSelector.isMultiQuote(selectedBundle) &&
-                      (index % 2 === 0
-                        ? arr.length % 2 === 0
-                          ? 'left'
-                          : 'right'
-                        : arr.length % 2 === 0
-                        ? 'right'
-                        : 'left')
-                }
-                size={size}
-                onChange={(newDate) =>
-                  handleSelectNewStartDate(newDate, [quote.id])
-                }
-                loading={loadingQuoteIds.includes(quote.id)}
-                displayLabel
-              />
-            ))}
+            {quotes.map((quote, index, arr) => {
+              const isArrayLengthEven = arr.length % 2 === 0
+              const isItemIndexEven = index % 2 === 0
+              const isMultiQuote = quoteBundleSelector.isMultiQuote(
+                selectedBundle,
+              )
+              const isExpandedFirstItem = index === 0 && !isArrayLengthEven
+              return (
+                <DateForm
+                  key={quote.id}
+                  startDate={quote.startDate}
+                  currentInsurer={quote.currentInsurer ?? undefined}
+                  quoteDisplayName={quote.displayName}
+                  dataCollectionId={quote.dataCollectionId ?? undefined}
+                  modal={modal}
+                  disabled={
+                    loadingQuoteIds.length > 0 ||
+                    Boolean(quote.currentInsurer && !quote.startDate)
+                  }
+                  isSplit={
+                    isExpandedFirstItem
+                      ? false
+                      : isMultiQuote &&
+                        (isItemIndexEven
+                          ? isArrayLengthEven
+                            ? 'left'
+                            : 'right'
+                          : isArrayLengthEven
+                          ? 'right'
+                          : 'left')
+                  }
+                  size={size}
+                  onChange={(newDate) =>
+                    handleSelectNewStartDate(newDate, [quote.id])
+                  }
+                  loading={loadingQuoteIds.includes(quote.id)}
+                  displayLabel
+                />
+              )
+            })}
           </>
         )}
       </DateFormsWrapper>
