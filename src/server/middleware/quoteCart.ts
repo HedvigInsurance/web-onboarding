@@ -25,7 +25,7 @@ const readLocaleFromUrl = (path: string) => {
   }
 }
 
-const isQuoteCartActive = async (id: string, market: string) => {
+const isQuoteCartUsable = async (id: string, market: string) => {
   try {
     const response = await httpClient.post(GIRAFFE_URL, {
       operationName: 'QuoteCartStatus',
@@ -42,10 +42,6 @@ const isQuoteCartActive = async (id: string, market: string) => {
       `,
       variables: { id },
     })
-
-    if (response.status !== 200) {
-      throw new Error(`Giraffe returned status ${response.status}`)
-    }
 
     const quoteCart = response.data.data.quoteCart
     return quoteCart.market === market && quoteCart.checkout === null
@@ -66,12 +62,11 @@ export const quoteCartSessionMiddleware: Router.IMiddleware<
   const storage = new ServerCookieStorage(ctx)
   const quoteCartId = storage.getItem(ONBOARDING_QUOTE_CART_COOKIE_KEY)
 
-  const performReset = ctx.query.reset === 'true'
-  if (
-    !performReset &&
-    quoteCartId &&
-    (await isQuoteCartActive(quoteCartId, apiMarket))
-  ) {
+  const forceReset = ctx.query.reset === 'true'
+  const quoteCartIsUsable =
+    quoteCartId && (await isQuoteCartUsable(quoteCartId, apiMarket))
+
+  if (!forceReset && quoteCartIsUsable) {
     ctx.state.getLogger('quoteCart').info(`Found quote cart id ${quoteCartId}`)
     return await next()
   }
@@ -90,13 +85,11 @@ export const quoteCartSessionMiddleware: Router.IMiddleware<
       variables: { market: apiMarket, locale: isoLocale },
     })
 
-    if (result.status !== 200) {
-      throw new Error(`Unable to create new quote cart ${result.status}`)
-    }
-
-    const quoteCartId = result.data.data.onboardingQuoteCart_create.id
-    ctx.state.getLogger('quoteCart').info(`Created quote cart ${quoteCartId}`)
-    storage.setItem(ONBOARDING_QUOTE_CART_COOKIE_KEY, quoteCartId)
+    const newQuoteCartId = result.data.data.onboardingQuoteCart_create.id
+    ctx.state
+      .getLogger('quoteCart')
+      .info(`Created quote cart ${newQuoteCartId}`)
+    storage.setItem(ONBOARDING_QUOTE_CART_COOKIE_KEY, newQuoteCartId)
     await next()
   } catch (e) {
     Sentry.captureException(e)
