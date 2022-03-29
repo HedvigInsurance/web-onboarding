@@ -284,8 +284,8 @@ export const DetailsModal = ({
       >
         {(formikProps) => (
           <>
-            <Container>
-              <Form>
+            <Form>
+              <Container>
                 <Headline>{textKeys.DETAILS_MODULE_HEADLINE()}</Headline>
                 <p>{textKeys.DETAILS_MODULE_BODY()}</p>
                 <Details
@@ -293,46 +293,51 @@ export const DetailsModal = ({
                   type={mainQuoteType}
                   formikProps={formikProps}
                 />
-              </Form>
-            </Container>
-            <ModalFooter>
-              <ButtonGroup fullWidth>
-                <Button
-                  type="submit"
-                  fullWidth
-                  disabled={isBundleCreationInProgress || !formikProps.isValid}
-                >
-                  {textKeys.DETAILS_MODULE_BUTTON()}
-                </Button>
-                <Button
-                  background={colorsV3.white}
-                  foreground={colorsV3.black}
-                  border
-                  fullWidth
-                  onClick={onClose}
-                >
-                  {textKeys.CLOSE()}
-                </Button>
-              </ButtonGroup>
+              </Container>
 
-              {isUnderwritingGuidelinesHit ? (
-                <ErrorMessage>
-                  {textKeys.DETAILS_MODULE_BUTTON_UNDERWRITING_GUIDELINE_HIT()}
-                </ErrorMessage>
-              ) : (
-                (unexpectedQuoteBundleError || isQuoteCreationFailed) && (
+              <ModalFooter>
+                <ButtonGroup fullWidth>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    disabled={
+                      isBundleCreationInProgress || !formikProps.isValid
+                    }
+                  >
+                    {textKeys.DETAILS_MODULE_BUTTON()}
+                  </Button>
+                  <Button
+                    background={colorsV3.white}
+                    foreground={colorsV3.black}
+                    border
+                    fullWidth
+                    onClick={onClose}
+                  >
+                    {textKeys.CLOSE()}
+                  </Button>
+                </ButtonGroup>
+
+                {isUnderwritingGuidelinesHit ? (
                   <ErrorMessage>
-                    {textKeys.DETAILS_MODULE_BUTTON_ERROR()}
+                    {textKeys.DETAILS_MODULE_BUTTON_UNDERWRITING_GUIDELINE_HIT()}
                   </ErrorMessage>
-                )
-              )}
-
-              {!unexpectedQuoteBundleError &&
-                !isQuoteCreationFailed &&
-                !isUnderwritingGuidelinesHit && (
-                  <Warning>{textKeys.DETAILS_MODULE_BUTTON_WARNING()}</Warning>
+                ) : (
+                  (unexpectedQuoteBundleError || isQuoteCreationFailed) && (
+                    <ErrorMessage>
+                      {textKeys.DETAILS_MODULE_BUTTON_ERROR()}
+                    </ErrorMessage>
+                  )
                 )}
-            </ModalFooter>
+
+                {!unexpectedQuoteBundleError &&
+                  !isQuoteCreationFailed &&
+                  !isUnderwritingGuidelinesHit && (
+                    <Warning>
+                      {textKeys.DETAILS_MODULE_BUTTON_WARNING()}
+                    </Warning>
+                  )}
+              </ModalFooter>
+            </Form>
           </>
         )}
       </Formik>
