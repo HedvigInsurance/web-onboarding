@@ -278,10 +278,8 @@ const createAdyenCheckout = ({
           amount: '0.00',
           type: 'pending',
         },
-        amount: {
-          currency: currentLocale.currencyCode,
-          value: 0,
-        },
+        currency: currentLocale.currencyCode,
+        value: 0,
         buttonType: 'subscribe',
         buttonColor: 'white-with-line',
         configuration: {
