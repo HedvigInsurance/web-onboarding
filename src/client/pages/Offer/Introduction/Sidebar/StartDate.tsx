@@ -31,18 +31,23 @@ import { CancellationOptions } from './CancellationOptions'
 const DateFormsWrapper = styled.div`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 `
+type SplitData = 'left' | 'right' | false
 
 const RowButtonWrapper = styled.div<{
-  isSplit: boolean
+  isSplit: SplitData
 }>`
-  width: ${({ isSplit }) => (isSplit ? `50%` : `100%`)};
-  flex: 1;
+  flex: 1 ${({ isSplit }) => (isSplit ? `50%` : `100%`)};
+  margin-top: auto;
+  &:nth-of-type(n + 3) {
+    margin-top: 0.5rem;
+  }
 `
 
 const RowButton = styled.button<{
   datePickerOpen: boolean
-  isSplit: boolean
+  isSplit: SplitData
   size: Size
 }>`
   display: flex;
@@ -76,15 +81,17 @@ const RowButton = styled.button<{
       border-radius: 0;
       border-right-width: 0;
 
-      ${RowButtonWrapper}:first-of-type & {
-        border-top-left-radius: 8px;
-        border-bottom-left-radius: 8px;
-      }
-      ${RowButtonWrapper}:last-of-type & {
-        border-top-right-radius: 8px;
-        border-bottom-right-radius: 8px;
-        border-right-width: 1px;
-      }
+      ${isSplit === 'left' &&
+        `
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
+      `}
+      ${isSplit === 'right' &&
+        `
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+      border-right-width: 1px;
+      `}
     `}
 `
 
@@ -168,12 +175,13 @@ type DateFormProps = {
   currentInsurer?: CurrentInsurer
   dataCollectionId?: string
   quoteDisplayName: string
-  isSplit: boolean
+  isSplit: SplitData
   modal?: boolean
   disabled?: boolean
   size: Size
   onChange: (date: Date | null) => void
   loading: boolean
+  displayLabel?: boolean
 }
 
 const DateForm = ({
@@ -187,6 +195,7 @@ const DateForm = ({
   size,
   onChange,
   loading,
+  displayLabel,
 }: DateFormProps) => {
   const textKeys = useTextKeys()
   const { isoLocale, marketLabel } = useCurrentLocale()
@@ -220,7 +229,9 @@ const DateForm = ({
 
   return (
     <RowButtonWrapper isSplit={isSplit}>
-      {isSplit && <StartDateRowLabel>{quoteDisplayName}</StartDateRowLabel>}
+      {displayLabel && (
+        <StartDateRowLabel>{quoteDisplayName}</StartDateRowLabel>
+      )}
       <RowButton
         disabled={disabled}
         datePickerOpen={datePickerOpen}
@@ -395,7 +406,7 @@ export const StartDate = ({
           />
         ) : (
           <>
-            {quotes.map((quote) => (
+            {quotes.map((quote, index, arr) => (
               <DateForm
                 key={quote.id}
                 startDate={quote.startDate}
@@ -407,12 +418,24 @@ export const StartDate = ({
                   loadingQuoteIds.length > 0 ||
                   Boolean(quote.currentInsurer && !quote.startDate)
                 }
-                isSplit={quoteBundleSelector.isMultiQuote(selectedBundle)}
+                isSplit={
+                  index === 0 && arr.length % 2 !== 0
+                    ? false
+                    : quoteBundleSelector.isMultiQuote(selectedBundle) &&
+                      (index % 2 === 0
+                        ? arr.length % 2 === 0
+                          ? 'left'
+                          : 'right'
+                        : arr.length % 2 === 0
+                        ? 'right'
+                        : 'left')
+                }
                 size={size}
                 onChange={(newDate) =>
                   handleSelectNewStartDate(newDate, [quote.id])
                 }
                 loading={loadingQuoteIds.includes(quote.id)}
+                displayLabel
               />
             ))}
           </>
