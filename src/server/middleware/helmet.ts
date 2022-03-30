@@ -134,6 +134,8 @@ export const helmet = koaHelmet({
         'https://bat.bing.com',
         'c.clarity.ms',
       ],
+      connectSrc: ['https://*.browser-intake-datadoghq.com'],
+      workerSrc: ['blob:;'],
       reportUri:
         process.env.CSP_REPORT_ENDPOINT || '/new-member/_report-csp-violation',
       upgradeInsecureRequests: true,
