@@ -1,11 +1,18 @@
-import { Global, css } from '@emotion/react'
+import { Global, css, CSSObject } from '@emotion/react'
 import React, { useEffect, useRef } from 'react'
 import { useRouteMatch } from 'react-router'
+import styled from '@emotion/styled'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { Variation, useVariation } from 'utils/hooks/useVariation'
 
 import { localePathPattern } from 'l10n/localePathPattern'
-
 const intercomBtnSelector = '.intercom-lightweight-app-launcher'
+
+declare global {
+  interface Window {
+    Intercom?: any
+  }
+}
 
 const createIntercom = () => {
   const script = `
@@ -24,7 +31,7 @@ const createIntercom = () => {
   window.document.body.append(scriptTag)
 }
 
-export const Intercom: React.FC = () => {
+const Intercom = () => {
   const variation = useVariation()
   const isIntercomMatch = useRouteMatch(
     localePathPattern +
@@ -51,15 +58,15 @@ export const Intercom: React.FC = () => {
   return null
 }
 
-export const IntercomHideOnScroll: React.FC = () => {
+const HideOnScrollBehaviour: React.FC = () => {
   const intercomTimeout = useRef<null | NodeJS.Timeout>()
-  const paused = useRef<boolean>(false)
+  const paused = useRef<boolean>()
 
   const onInteraction = () => {
     const buttonEl: HTMLElement | null = document.querySelector(
       intercomBtnSelector,
     )
-    if (buttonEl !== null) {
+    if (buttonEl !== null && buttonEl?.style?.display !== 'none') {
       if (intercomTimeout.current) {
         clearTimeout(intercomTimeout.current)
       }
@@ -94,23 +101,32 @@ export const IntercomHideOnScroll: React.FC = () => {
   }, [])
 
   return (
-    <Global
-      styles={css`
-        ${intercomBtnSelector} {
-          transition: opacity 150ms ease-out;
-          opacity: 1;
-        }
-      `}
+    <InjectedStyles
+      style={{ transition: 'opacity 150ms ease-out', opacity: 1 }}
     />
   )
 }
 
-export const IntercomCheckoutPosition: React.FC = () => (
-  <Global
-    styles={css`
-      ${intercomBtnSelector} {
-        bottom: 87px !important;
-      }
-    `}
-  />
+const InjectedStyles = ({ style }: { style: CSSObject }) => (
+  <Global styles={css({ [intercomBtnSelector]: style })} />
 )
+
+const TextLink = styled.a`
+  font-size: 0.874rem;
+  color: ${colorsV3.purple700};
+  text-align: center;
+`
+const TextLinkVariation = () => {
+  //TO DO: Add textKeys
+  return (
+    <TextLink onClick={() => window?.Intercom('show')}>
+      Need Help? Contact us
+    </TextLink>
+  )
+}
+
+Intercom.HideOnScrollBehaviour = HideOnScrollBehaviour
+Intercom.InjectedStyles = InjectedStyles
+Intercom.TextLinkVariation = TextLinkVariation
+
+export { Intercom }
