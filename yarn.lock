@@ -1599,6 +1599,26 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
+"@datadog/browser-core@4.7.0":
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-core/-/browser-core-4.7.0.tgz#3b890f332c564f26c025c6dce295100808373408"
+  integrity sha512-pzFcyurQGQ/QG/ZdGyel/Lf3hhZAa9WyN0Cxn0KyfSCKnyeISbSss1Xy37pSPPOYStkPSueWfaBM8s4s4Rgkmw==
+
+"@datadog/browser-rum-core@4.7.0":
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-rum-core/-/browser-rum-core-4.7.0.tgz#dc4d9a9718d0a474e8898d633223391b1be3a8e7"
+  integrity sha512-FNd/ZKmw7QshtorqeSkPy5eJte/7UxjFn91TIO671fftcbcov1mvT81Qi6jWmKqfnL0OfUsQUITLyL3rizx4rw==
+  dependencies:
+    "@datadog/browser-core" "4.7.0"
+
+"@datadog/browser-rum@^4.7.0":
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-rum/-/browser-rum-4.7.0.tgz#9cfd75b5d592a4648ce0078fb335685945e4bfc6"
+  integrity sha512-Hy2jTsYKZaeQK3TkFwKzLcKOtlxtQuKTAc43aQfTfFiu7fgzPGIOcb+XvJeL+QIsRZltjs4dlq9Sdsdc7UWVMw==
+  dependencies:
+    "@datadog/browser-core" "4.7.0"
+    "@datadog/browser-rum-core" "4.7.0"
+
 "@discoveryjs/json-ext@^0.5.0":
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.2.tgz#8f03a22a04de437254e8ce8cc84ba39689288752"
