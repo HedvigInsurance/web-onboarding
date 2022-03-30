@@ -11750,18 +11750,6 @@ export type CreateDanishHomeAccidentTravelQuoteMutation = {
     | { __typename: 'UnderwritingLimitsHit' }
 }
 
-export type CreateOnboardingQuoteCartMutationVariables = Exact<{
-  market: Market
-  locale: Scalars['String']
-}>
-
-export type CreateOnboardingQuoteCartMutation = { __typename?: 'Mutation' } & {
-  onboardingQuoteCart_create: { __typename?: 'CreateQuoteCartResult' } & Pick<
-    CreateQuoteCartResult,
-    'id'
-  >
-}
-
 export type CreateQuoteBundleMutationVariables = Exact<{
   quoteCartId: Scalars['ID']
   quotes: Array<Scalars['JSON']> | Scalars['JSON']
@@ -13479,58 +13467,6 @@ export type CreateDanishHomeAccidentTravelQuoteMutationResult = ApolloReactCommo
 export type CreateDanishHomeAccidentTravelQuoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
   CreateDanishHomeAccidentTravelQuoteMutation,
   CreateDanishHomeAccidentTravelQuoteMutationVariables
->
-export const CreateOnboardingQuoteCartDocument = gql`
-  mutation CreateOnboardingQuoteCart($market: Market!, $locale: String!) {
-    onboardingQuoteCart_create(input: { market: $market, locale: $locale }) {
-      id
-    }
-  }
-`
-export type CreateOnboardingQuoteCartMutationFn = ApolloReactCommon.MutationFunction<
-  CreateOnboardingQuoteCartMutation,
-  CreateOnboardingQuoteCartMutationVariables
->
-
-/**
- * __useCreateOnboardingQuoteCartMutation__
- *
- * To run a mutation, you first call `useCreateOnboardingQuoteCartMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateOnboardingQuoteCartMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createOnboardingQuoteCartMutation, { data, loading, error }] = useCreateOnboardingQuoteCartMutation({
- *   variables: {
- *      market: // value for 'market'
- *      locale: // value for 'locale'
- *   },
- * });
- */
-export function useCreateOnboardingQuoteCartMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateOnboardingQuoteCartMutation,
-    CreateOnboardingQuoteCartMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    CreateOnboardingQuoteCartMutation,
-    CreateOnboardingQuoteCartMutationVariables
-  >(CreateOnboardingQuoteCartDocument, options)
-}
-export type CreateOnboardingQuoteCartMutationHookResult = ReturnType<
-  typeof useCreateOnboardingQuoteCartMutation
->
-export type CreateOnboardingQuoteCartMutationResult = ApolloReactCommon.MutationResult<
-  CreateOnboardingQuoteCartMutation
->
-export type CreateOnboardingQuoteCartMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  CreateOnboardingQuoteCartMutation,
-  CreateOnboardingQuoteCartMutationVariables
 >
 export const CreateQuoteBundleDocument = gql`
   mutation CreateQuoteBundle(

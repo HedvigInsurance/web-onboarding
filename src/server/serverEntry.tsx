@@ -27,6 +27,7 @@ import {
   redirectEnLanguageToSweden,
 } from './middleware/redirects'
 import { getPage } from './page'
+import { quoteCartSessionMiddleware } from './middleware/quoteCart'
 
 Sentry.init({
   ...sentryConfig(),
@@ -120,6 +121,8 @@ router.post(
   localePathPattern + '/new-member/connect-payment/adyen-callback',
   handleAdyen3dsPostRedirect,
 )
+
+app.use(quoteCartSessionMiddleware)
 
 routes.forEach((route) => {
   const { serverRouteData, path } = route

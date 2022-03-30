@@ -21,8 +21,8 @@ import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useAddCampaignCodeMutation } from 'data/graphql'
 import { useFeature, Features } from 'utils/hooks/useFeature'
 import { CampaignCode } from 'utils/campaignCode'
-import { useCreateQuoteCart } from 'utils/hooks/useCreateQuoteCart'
 import { EmbarkStory } from 'utils/embarkStory'
+import { useOnboardingQuoteCartId } from 'utils/hooks/useOnboardingQuoteCartId'
 import { pushToGTMDataLayer } from '../../utils/tracking/gtm'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
@@ -34,7 +34,6 @@ import { graphQLMutation, graphQLQuery } from './graphql'
 import { resolveHouseInformation } from './houseInformation'
 import { resolvePersonalInformation } from './personalInformation'
 import { resolveAddressAutocomplete } from './addressAutocompleteProvider'
-import { SetupFailedModal } from './ErrorModal'
 
 const EmbarkStyling = styled.div`
   height: 100%;
@@ -236,17 +235,14 @@ interface AngelVariables {
   locale: string
 }
 
-const useCreateQuoteCartId = ({ skip = false }) => {
-  const [createQuoteCartMutation, { data, error }] = useCreateQuoteCart()
-
+const useInitQuoteCart = ({ skip = false }) => {
+  const quoteCartId = useOnboardingQuoteCartId()
   const [addCampaignCode] = useAddCampaignCodeMutation()
 
-  const createQuoteCart = useCallback(async () => {
-    const result = await createQuoteCartMutation()
-    const quoteCartId = result.data?.onboardingQuoteCart_create.id
+  const initQuoteCart = useCallback(async () => {
     const savedCampaignCode = CampaignCode.get()
 
-    if (quoteCartId && savedCampaignCode !== null) {
+    if (savedCampaignCode !== null) {
       try {
         await addCampaignCode({
           variables: {
@@ -258,17 +254,15 @@ const useCreateQuoteCartId = ({ skip = false }) => {
         CampaignCode.remove()
       }
     }
-  }, [createQuoteCartMutation, addCampaignCode])
-
-  const quoteCartId = data?.onboardingQuoteCart_create.id
+  }, [addCampaignCode, quoteCartId])
 
   useEffect(() => {
-    if (!skip && !quoteCartId) {
-      createQuoteCart()
+    if (!skip) {
+      initQuoteCart()
     }
-  }, [skip, quoteCartId, createQuoteCart])
+  }, [skip, initQuoteCart])
 
-  return { createQuoteCart, quoteCartId, error }
+  return quoteCartId
 }
 
 export const EmbarkRoot = (props: EmbarkRootProps) => {
@@ -277,11 +271,9 @@ export const EmbarkRoot = (props: EmbarkRootProps) => {
   const [initialStore, setInitialStore] = useState<Record<string, string>>()
   const { isoLocale, path: pathLocale } = useCurrentLocale()
 
-  const {
-    createQuoteCart,
-    quoteCartId,
-    error: quoteCartIdError,
-  } = useCreateQuoteCartId({ skip: !props.isUsingQuoteCart })
+  const quoteCartId = useInitQuoteCart({
+    skip: !props.isUsingQuoteCart,
+  })
 
   const textKeys = useTextKeys()
 
@@ -337,11 +329,11 @@ export const EmbarkRoot = (props: EmbarkRootProps) => {
   }, [props.name, isoLocale])
 
   useEffect(() => {
-    if (!props.name || (props.isUsingQuoteCart && !quoteCartId)) {
+    if (!props.name) {
       return
     }
 
-    const defaultStore: Record<string, string> = quoteCartId
+    const defaultStore: Record<string, string> = props.isUsingQuoteCart
       ? { quoteCartId }
       : {}
 
@@ -514,11 +506,6 @@ export const EmbarkRoot = (props: EmbarkRootProps) => {
           )}
         </motion.div>
       </AnimatePresence>
-
-      <SetupFailedModal
-        isVisible={quoteCartIdError !== undefined}
-        onRetry={createQuoteCart}
-      />
     </EmbarkStyling>
   )
 }
