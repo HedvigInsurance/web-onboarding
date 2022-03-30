@@ -72,7 +72,7 @@ const defaultSrc = [
   'https://bat.bing.com',
   'https://analytics.tiktok.com',
   // Datadog RUM
-  'https://*.browser-intake-datadoghq.com',
+  'https://*.browser-intake-datadoghq.eu',
   GIRAFFE_WS_ENDPOINT!,
   CONTENT_SERVICE_ENDPOINT!,
 ]
