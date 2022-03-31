@@ -273,13 +273,8 @@ const createAdyenCheckout = ({
         },
       },
       applepay: {
-        totalPriceLabel: {
-          label: 'Hedvig',
-          amount: '0.00',
-          type: 'pending',
-        },
-        currency: currentLocale.currencyCode,
-        value: 0,
+        currencyCode: currentLocale.currencyCode,
+        amount: 0,
         buttonType: 'subscribe',
         buttonColor: 'white-with-line',
         configuration: {
