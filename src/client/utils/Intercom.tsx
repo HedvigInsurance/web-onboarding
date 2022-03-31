@@ -58,7 +58,7 @@ const Intercom = () => {
   return null
 }
 
-const HideOnScrollBehaviour: React.FC = () => {
+const ShowOnScrollBehaviour: React.FC = () => {
   const intercomTimeout = useRef<null | NodeJS.Timeout>()
   const paused = useRef<boolean>()
 
@@ -125,7 +125,7 @@ const TextLinkVariation = () => {
   )
 }
 
-Intercom.HideOnScrollBehaviour = HideOnScrollBehaviour
+Intercom.ShowOnScrollBehaviour = ShowOnScrollBehaviour
 Intercom.InjectedStyles = InjectedStyles
 Intercom.TextLinkVariation = TextLinkVariation
 

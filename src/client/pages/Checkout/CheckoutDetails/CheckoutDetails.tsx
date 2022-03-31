@@ -23,7 +23,7 @@ const TextLinkContainer = styled.div({
 })
 const IntercomCheckoutVariation = () => (
   <>
-    <Intercom.HideOnScrollBehaviour />
+    <Intercom.ShowOnScrollBehaviour />
     <Intercom.InjectedStyles
       style={{
         bottom: '87px!important',
