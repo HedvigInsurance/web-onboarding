@@ -11,6 +11,7 @@ import {
   AreaInput,
   SwedishApartmentOwnershipTypeInput,
   ZipcodeInput,
+  BooleanInput,
 } from './components/DetailInput'
 import { Content, ContentColumn } from './components/Details.styles'
 
@@ -31,6 +32,7 @@ export const getSwedishApartmentValidationSchema = (textKeys: TextKeyMap) => {
         .min(1, textKeys.GENERIC_ERROR_INPUT_FORMAT())
         .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
       subType: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+      isStudent: Yup.boolean(),
     }).required(),
   })
 }
@@ -42,6 +44,11 @@ export const SwedishApartmentDetails: React.FC<{
     <Content>
       <ContentColumn>
         <InputGroup>
+          <BooleanInput
+            name="data.isStudent"
+            label="DETAILS_MODULE_TABLE_STUDENT_CELL_LABEL"
+            formikProps={formikProps}
+          />
           <TextInput
             name="firstName"
             label="DETAILS_MODULE_TABLE_FIRSTNAME_CELL_LABEL"

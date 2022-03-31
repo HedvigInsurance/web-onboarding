@@ -13,6 +13,7 @@ import {
 } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
+<<<<<<< HEAD
 import { useAdyenCheckout } from '../../ConnectPayment/components/useAdyenCheckout'
 import { ContactInformation } from './ContactInformation/ContactInformation'
 const { gray100, gray600, gray700, gray300, gray900 } = colorsV3
@@ -83,6 +84,10 @@ const Wrapper = styled.div`
     padding: 0;
   }
 `
+=======
+import { ContactInformation } from './ContactInformation/ContactInformation'
+import { PaymentDetails } from './PaymentDetails/PaymentDetails'
+>>>>>>> master
 
 const Description = styled.div`
   margin-top: 0.5rem;
@@ -104,6 +109,7 @@ const Terms = styled.div`
 export const CheckoutPayment = () => {
   const textKeys = useTextKeys()
   const data = useQuoteCartData()
+<<<<<<< HEAD
   const adyenRef = useRef<HTMLDivElement | null>(null)
   const [startCheckout] = useStartCheckoutMutation()
   const quoteIds = data?.quoteIds as string | string[]
@@ -142,6 +148,26 @@ export const CheckoutPayment = () => {
           <PaymentInfo {...data.priceData} />
         </Footer>
       )}
+=======
+  if (!data) {
+    return null
+  }
+  const priceData = data.priceData
+  const userDetails = data.userDetails
+
+  return (
+    <CheckoutPageWrapper>
+      <ContactInformation {...userDetails} />
+      <PaymentDetails />
+      <Footer
+        buttonText={textKeys.CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT()}
+        buttonOnClick={() => {
+          console.log('click')
+        }}
+      >
+        <PaymentInfo {...priceData} />
+      </Footer>
+>>>>>>> master
     </CheckoutPageWrapper>
   )
 }

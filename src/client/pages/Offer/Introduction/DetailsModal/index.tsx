@@ -2,26 +2,30 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { Form, Formik, FormikHelpers } from 'formik'
 import { colorsV3, fonts } from '@hedviginsurance/brand'
-import { Button } from 'components/buttons'
-import { Modal, ModalProps } from 'components/ModalNew'
+import { Button, ButtonGroup } from 'components/buttons'
+import { Modal, ModalFooter, ModalProps } from 'components/ModalNew'
 import {
   BundledQuote,
   useCreateQuoteBundleMutation,
   useQuoteCartQuery,
   UnderwritingLimit,
+  ApartmentType,
 } from 'data/graphql'
 
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import { getSelectedBundleVariant } from 'api/quoteCartQuerySelectors'
+import * as quoteSelector from 'api/quoteSelector'
+import * as bundleSelector from 'api/quoteBundleSelectors'
 import {
   getLimitsHit,
   LimitCode,
   isLimitHit,
   isQuoteBundleError,
 } from 'api/quoteBundleErrorSelectors'
-import { QuoteInput } from './types'
+import { QuoteDetailsInput, QuoteInput } from './types'
+
 import { Details, getValidationSchema } from './Details'
 
 const Container = styled.div`
@@ -54,14 +58,6 @@ const Headline = styled.div`
     font-size: 2rem;
     line-height: 3rem;
   }
-`
-
-const Footer = styled.div`
-  padding: 1rem 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 `
 
 const Warning = styled.div`
@@ -144,6 +140,19 @@ function getFormErrorsFromUnderwritterLimits(
   )
 }
 
+const getSubType = (data: QuoteDetailsInput) => {
+  switch (data.subType) {
+    case ApartmentType.Brf:
+    case ApartmentType.StudentBrf:
+      return data.isStudent ? ApartmentType.StudentBrf : ApartmentType.Brf
+    case ApartmentType.Rent:
+    case ApartmentType.StudentRent:
+      return data.isStudent ? ApartmentType.StudentRent : ApartmentType.Rent
+    default:
+      return data.subType
+  }
+}
+
 type DetailsModalProps = Pick<ModalProps, 'isVisible'> & {
   onClose: () => void
   quoteCartId: string
@@ -179,6 +188,7 @@ export const DetailsModal = ({
 
   if (!selectedQuoteBundle) return null
 
+  const mainQuote = bundleSelector.getMainQuote(selectedQuoteBundle.bundle)
   const {
     firstName,
     lastName,
@@ -188,7 +198,7 @@ export const DetailsModal = ({
     phoneNumber,
     startDate,
     data: mainQuoteData,
-  } = selectedQuoteBundle?.bundle.quotes[0]
+  } = mainQuote
 
   const { type: mainQuoteType, numberCoInsured } = mainQuoteData
   const initialValues = {
@@ -201,6 +211,7 @@ export const DetailsModal = ({
     startDate,
     data: {
       ...mainQuoteData,
+      isStudent: quoteSelector.isStudent(mainQuote),
       householdSize: numberCoInsured + 1,
     },
   } as QuoteInput
@@ -212,31 +223,27 @@ export const DetailsModal = ({
     const {
       data: { householdSize },
     } = form
+
     return createQuoteBundle({
       variables: {
         locale: isoLocale,
         quoteCartId,
-        quotes: allQuotes.map(
-          ({
+        quotes: allQuotes.map(({ startDate, currentInsurer, data }) => {
+          return {
+            ...form,
             startDate,
-            currentInsurer,
-            data: { id, type, typeOfContract, isStudent },
-          }) => {
-            return {
-              ...form,
-              startDate,
-              currentInsurer: currentInsurer?.id,
-              data: {
-                isStudent,
-                ...form.data,
-                numberCoInsured: householdSize && householdSize - 1,
-                id,
-                type,
-                typeOfContract,
-              },
-            }
-          },
-        ),
+            currentInsurer: currentInsurer?.id,
+            data: {
+              isStudent: data.isStudent,
+              ...form.data,
+              numberCoInsured: householdSize && householdSize - 1,
+              id: data.id,
+              type: data.type,
+              typeOfContract: data.typeOfContract,
+              subType: getSubType(form.data),
+            },
+          }
+        }),
       },
     })
   }
@@ -265,32 +272,50 @@ export const DetailsModal = ({
   return (
     <Modal isVisible={isVisible} onClose={onClose} dynamicHeight>
       <LoadingDimmer visible={isBundleCreationInProgress} />
-      <Container>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={getValidationSchema(
-            marketLabel,
-            mainQuoteType,
-            textKeys,
-          )}
-          onSubmit={onSubmit}
-          enableReinitialize
-        >
-          {(formikProps) => (
+      <Formik
+        initialValues={initialValues}
+        validationSchema={getValidationSchema(
+          marketLabel,
+          mainQuoteType,
+          textKeys,
+        )}
+        onSubmit={onSubmit}
+        enableReinitialize
+      >
+        {(formikProps) => (
+          <>
             <Form>
-              <Headline>{textKeys.DETAILS_MODULE_HEADLINE()}</Headline>
-              <Details
-                market={marketLabel}
-                type={mainQuoteType}
-                formikProps={formikProps}
-              />
-              <Footer>
-                <Button
-                  type="submit"
-                  disabled={isBundleCreationInProgress || !formikProps.isValid}
-                >
-                  {textKeys.DETAILS_MODULE_BUTTON()}
-                </Button>
+              <Container>
+                <Headline>{textKeys.DETAILS_MODULE_HEADLINE()}</Headline>
+                <p>{textKeys.DETAILS_MODULE_BODY()}</p>
+                <Details
+                  market={marketLabel}
+                  type={mainQuoteType}
+                  formikProps={formikProps}
+                />
+              </Container>
+
+              <ModalFooter>
+                <ButtonGroup fullWidth>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    disabled={
+                      isBundleCreationInProgress || !formikProps.isValid
+                    }
+                  >
+                    {textKeys.DETAILS_MODULE_BUTTON()}
+                  </Button>
+                  <Button
+                    background={colorsV3.white}
+                    foreground={colorsV3.black}
+                    border
+                    fullWidth
+                    onClick={onClose}
+                  >
+                    {textKeys.CLOSE()}
+                  </Button>
+                </ButtonGroup>
 
                 {isUnderwritingGuidelinesHit ? (
                   <ErrorMessage>
@@ -311,11 +336,11 @@ export const DetailsModal = ({
                       {textKeys.DETAILS_MODULE_BUTTON_WARNING()}
                     </Warning>
                   )}
-              </Footer>
+              </ModalFooter>
             </Form>
-          )}
-        </Formik>
-      </Container>
+          </>
+        )}
+      </Formik>
     </Modal>
   )
 }

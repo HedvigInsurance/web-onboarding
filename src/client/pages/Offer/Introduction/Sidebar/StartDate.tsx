@@ -357,7 +357,7 @@ export const StartDate = ({
     <>
       <ErrorMessage
         aria-hidden={!showError}
-        initial={{ height: 0, opacity: 0 }}
+        initial={{ height: 0, opacity: 0, display: 'none' }}
         animate={
           showError
             ? { height: 'auto', opacity: 1, display: 'block' }

@@ -13,7 +13,6 @@ describe('NO English Embark Flows', () => {
       cy.visit(flowUrl)
 
       // start
-      cy.contains('button', 'Accept All Cookies').click()
       cy.contains('button', 'My current apartment').click()
 
       // ownership

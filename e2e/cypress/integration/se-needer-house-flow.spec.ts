@@ -9,7 +9,6 @@ it('should get a price quote for a Swedish house', async () => {
   cy.visit(url)
 
   // insurance-type
-  cy.contains('button', 'Accept All Cookies', { timeout: 10000 }).click()
   cy.contains('button', 'Home & Accident Insurance').click()
 
   // home-type
@@ -60,7 +59,7 @@ it('should get a price quote for a Swedish house', async () => {
     .type(`${faker.datatype.number({ min: 1930, max: 2010 })}{enter}`)
 
   // baths
-  cy.contains('button', 'Two bathrooms', { timeout: 1000 }).click()
+  cy.contains('button', '2', { timeout: 1000 }).click()
 
   // floors
   cy.contains('button', 'Four floors or less', { timeout: 1000 }).click()
@@ -84,6 +83,6 @@ it('should get a price quote for a Swedish house', async () => {
   cy.focused().type(`${faker.internet.email()}{enter}`)
 
   // offer page
-  cy.contains('Your price quote', { timeout: 10000 }).should('be.visible')
+  cy.contains('Your price quote', { timeout: 15000 }).should('be.visible')
   cy.contains(address).should('be.visible')
 })
