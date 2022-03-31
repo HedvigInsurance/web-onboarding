@@ -21,6 +21,10 @@ export const CONTENT_SERVICE_ENDPOINT =
 export const ADYEN_CLIENT_KEY = process.env.ADYEN_CLIENT_KEY!
 export const ADYEN_ENVIRONMENT = process.env.ADYEN_ENVIRONMENT!
 
+export const HEROKU_SLUG_COMMIT = process.env.HEROKU_SLUG_COMMIT!
+export const DATADOG_APPLICATION_ID = process.env.DATADOG_APPLICATION_ID!
+export const DATADOG_CLIENT_TOKEN = process.env.DATADOG_CLIENT_TOKEN!
+
 export const APP_ENVIRONMENT = process.env.APP_ENVIRONMENT ?? 'development'
 
 export const FEATURES = (Object.keys(Feature) as Array<Feature>).reduce(
