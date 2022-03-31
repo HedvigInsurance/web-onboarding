@@ -380,9 +380,9 @@ const mountAdyenJs = (setAdyenLoaded: (adyenLoaded: boolean) => void) => () => {
   const script = document.createElement('script')
 
   script.src =
-    'https://checkoutshopper-live.adyen.com/checkoutshopper/sdk/3.18.2/adyen.js'
+    'https://checkoutshopper-live.adyen.com/checkoutshopper/sdk/5.12.0/adyen.js'
   script.integrity =
-    'sha384-/5SuEQKK7mLmDWB+eUPAur02KPkNC7pwAqyPez1TuNjeqRjsNDJdAnrbSxrzua2P'
+    'sha384-loTo8lHfaKJW6HMjPTSFZ2pp1sO/Vl+bCxHOW3V4BRyi6E9r3Bt7dZHsQ8zLJYZD'
   script.crossOrigin = 'anonymous'
   script.id = 'adyen-script'
   script.onload = () => setAdyenLoaded(true)
@@ -396,9 +396,9 @@ const mountAdyenCss = () => {
 
   link.rel = 'stylesheet'
   link.href =
-    'https://checkoutshopper-live.adyen.com/checkoutshopper/sdk/3.18.2/adyen.css'
+    'https://checkoutshopper-live.adyen.com/checkoutshopper/sdk/5.12.0/adyen.css'
   link.integrity =
-    'sha384-5K4T5NNVv7ZBvNypROEUSjvOL45HszUg/eYfYadY82UF4b+hc+TPQ4SsfTGXufJp'
+    'sha384-hiEL7oianiQNkOR2NZp5BjJp7146znG8IAcZSbRczANUMzzQMb6k9iozehbIz/m6'
   link.crossOrigin = 'anonymous'
 
   document.body.append(link)
