@@ -7,6 +7,7 @@ import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter } from 'react-router-dom'
 import * as Sentry from '@sentry/react'
 import { Integrations } from '@sentry/tracing'
+import * as Datadog from 'utils/datadog'
 import { PageTracker } from 'containers/PageTracker'
 import { HotApp } from 'App'
 import {
@@ -16,6 +17,8 @@ import {
 } from '../shared/sessionStorage'
 import { apolloClient } from './apolloClient'
 import { MobileContext } from './utils/mobileContext'
+
+Datadog.initRum()
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
