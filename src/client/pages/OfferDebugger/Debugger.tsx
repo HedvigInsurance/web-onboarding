@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary'
+import { useHistory } from 'react-router'
 import { Button } from 'components/buttons'
-import { useCreateQuoteCart } from 'utils/hooks/useCreateQuoteCart'
+import { useOnboardingQuoteCartId } from 'utils/hooks/useOnboardingQuoteCartId'
 import { QuoteData } from './components/QuoteData'
 
 const Wrapper = styled.div`
@@ -37,13 +38,8 @@ const ErrorFallback: React.FC<FallbackProps> = ({
 )
 
 export const Debugger: React.FC = () => {
-  const [createQuoteCart, { data }] = useCreateQuoteCart()
-  const quoteCartId = data?.onboardingQuoteCart_create.id
-
-  useEffect(() => {
-    // create initial onboarding session
-    createQuoteCart()
-  }, [createQuoteCart])
+  const history = useHistory()
+  const quoteCartId = useOnboardingQuoteCartId()
 
   return (
     <Wrapper>
@@ -54,23 +50,27 @@ export const Debugger: React.FC = () => {
         <Button
           background={colorsV3.gray900}
           foreground={colorsV3.gray100}
-          onClick={() => createQuoteCart()}
+          onClick={() => {
+            history.push('?reset=true')
+            window.location.reload()
+          }}
         >
           Create new cart
         </Button>
       </Row>
 
-      {quoteCartId && (
-        <Row>
-          <ErrorBoundary
-            FallbackComponent={ErrorFallback}
-            onReset={() => createQuoteCart()}
-          >
-            <h3>Offer</h3>
-            <QuoteData quoteCartId={quoteCartId} />
-          </ErrorBoundary>
-        </Row>
-      )}
+      <Row>
+        <ErrorBoundary
+          FallbackComponent={ErrorFallback}
+          onReset={() => {
+            history.push('?reset=true')
+            window.location.reload()
+          }}
+        >
+          <h3>Offer</h3>
+          <QuoteData quoteCartId={quoteCartId} />
+        </ErrorBoundary>
+      </Row>
     </Wrapper>
   )
 }
