@@ -1,3 +1,5 @@
+import { RumInitConfiguration } from '@datadog/browser-rum'
+
 export type AppEnvironment = 'development' | 'staging' | 'production'
 
 export type MarketLabel = 'SE' | 'NO' | 'DK'
@@ -19,10 +21,12 @@ export interface ClientConfig {
   adyenEnvironment: string
   adyenClientKey: string
   contentServiceEndpoint: string
+  giraffeHost: string
   giraffeEndpoint: string
   giraffeWsEndpoint: string
   appEnvironment: AppEnvironment
   features: FeatureMap
+  datadog: RumInitConfiguration
 }
 
 declare global {
