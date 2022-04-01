@@ -33,12 +33,12 @@ const DateFormsWrapper = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
 `
-type SplitData = 'left' | 'right' | false
+type TFieldLayout = 'left' | 'right' | 'full'
 
 const RowButtonWrapper = styled.div<{
-  isSplit: SplitData
+  fieldLayout: TFieldLayout
 }>`
-  flex: 1 ${({ isSplit }) => (isSplit ? `50%` : `100%`)};
+  flex: 1 ${({ fieldLayout }) => (fieldLayout ? `50%` : `100%`)};
   margin-top: auto;
   &:nth-of-type(n + 3) {
     margin-top: 0.5rem;
@@ -47,7 +47,7 @@ const RowButtonWrapper = styled.div<{
 
 const RowButton = styled.button<{
   datePickerOpen: boolean
-  isSplit: SplitData
+  fieldLayout: TFieldLayout
   size: Size
 }>`
   display: flex;
@@ -75,18 +75,18 @@ const RowButton = styled.button<{
   ${(props) =>
     props.datePickerOpen && `border: 1px solid ${colorsV3.gray900};`};
 
-  ${({ isSplit }) =>
-    isSplit &&
+  ${({ fieldLayout }) =>
+    fieldLayout &&
     css`
       border-radius: 0;
       border-right-width: 0;
 
-      ${isSplit === 'left' &&
+      ${fieldLayout === 'left' &&
         `
       border-top-left-radius: 8px;
       border-bottom-left-radius: 8px;
       `}
-      ${isSplit === 'right' &&
+      ${fieldLayout === 'right' &&
         `
       border-top-right-radius: 8px;
       border-bottom-right-radius: 8px;
@@ -175,7 +175,7 @@ type DateFormProps = {
   currentInsurer?: CurrentInsurer
   dataCollectionId?: string
   quoteDisplayName: string
-  isSplit: SplitData
+  fieldLayout: TFieldLayout
   modal?: boolean
   disabled?: boolean
   size: Size
@@ -189,7 +189,7 @@ const DateForm = ({
   currentInsurer,
   dataCollectionId,
   quoteDisplayName,
-  isSplit,
+  fieldLayout,
   modal = false,
   disabled = false,
   size,
@@ -228,7 +228,7 @@ const DateForm = ({
   }
 
   return (
-    <RowButtonWrapper isSplit={isSplit}>
+    <RowButtonWrapper fieldLayout={fieldLayout}>
       {displayLabel && (
         <StartDateRowLabel>{quoteDisplayName}</StartDateRowLabel>
       )}
@@ -236,7 +236,7 @@ const DateForm = ({
         disabled={disabled}
         datePickerOpen={datePickerOpen}
         onClick={() => setDatePickerOpen(!datePickerOpen)}
-        isSplit={isSplit}
+        fieldLayout={fieldLayout}
         size={size}
       >
         <Value>
@@ -394,7 +394,7 @@ export const StartDate = ({
               loadingQuoteIds.length > 0 ||
               Boolean(quotes[0].currentInsurer && !quotes[0].startDate)
             }
-            isSplit={false}
+            fieldLayout={'full'}
             size={size}
             onChange={(newDate) =>
               handleSelectNewStartDate(
@@ -409,9 +409,6 @@ export const StartDate = ({
             {quotes.map((quote, index, arr) => {
               const isArrayLengthEven = arr.length % 2 === 0
               const isItemIndexEven = index % 2 === 0
-              const isMultiQuote = quoteBundleSelector.isMultiQuote(
-                selectedBundle,
-              )
               const isExpandedFirstItem = index === 0 && !isArrayLengthEven
               return (
                 <DateForm
@@ -425,17 +422,16 @@ export const StartDate = ({
                     loadingQuoteIds.length > 0 ||
                     Boolean(quote.currentInsurer && !quote.startDate)
                   }
-                  isSplit={
+                  fieldLayout={
                     isExpandedFirstItem
-                      ? false
-                      : isMultiQuote &&
-                        (isItemIndexEven
-                          ? isArrayLengthEven
-                            ? 'left'
-                            : 'right'
-                          : isArrayLengthEven
-                          ? 'right'
-                          : 'left')
+                      ? 'full'
+                      : isItemIndexEven
+                      ? isArrayLengthEven
+                        ? 'left'
+                        : 'right'
+                      : isArrayLengthEven
+                      ? 'right'
+                      : 'left'
                   }
                   size={size}
                   onChange={(newDate) =>
