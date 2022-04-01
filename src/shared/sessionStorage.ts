@@ -4,6 +4,7 @@ import { MinimalStorage } from 'utils/storage/MinimalStorage'
 
 export const SESSION_KEY = '_hvsession'
 export const KA_SESSION_KEY = '_hvsessionexpiry'
+export const ONBOARDING_QUOTE_CART_COOKIE_KEY = '_hv_onboarding_quote_cart'
 const SESSION_EXPIRY_TIMEOUT = 3 * 60 * 60 * 1000
 export const DEVICE_ID_KEY = '_hv_device_id'
 

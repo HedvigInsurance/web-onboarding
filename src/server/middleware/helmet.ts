@@ -71,6 +71,8 @@ const defaultSrc = [
   'snap.licdn.com',
   'https://bat.bing.com',
   'https://analytics.tiktok.com',
+  // Datadog RUM
+  'https://*.browser-intake-datadoghq.eu',
   GIRAFFE_WS_ENDPOINT!,
   CONTENT_SERVICE_ENDPOINT!,
 ]
@@ -134,6 +136,8 @@ export const helmet = koaHelmet({
         'https://bat.bing.com',
         'c.clarity.ms',
       ],
+      // Datadog RUM (Session Replay)
+      workerSrc: ['blob:'],
       reportUri:
         process.env.CSP_REPORT_ENDPOINT || '/new-member/_report-csp-violation',
       upgradeInsecureRequests: true,
