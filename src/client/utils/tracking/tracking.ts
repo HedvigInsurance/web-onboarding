@@ -7,9 +7,7 @@ import {
   useMemberQuery,
   useRedeemedCampaignsQuery,
   ExternalInsuranceDataQuery,
-  ExternalInsuranceDataQueryVariables,
   ExternalInsuranceDataDocument,
-  InsuranceDataCollection,
 } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import {
