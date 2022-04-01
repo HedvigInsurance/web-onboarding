@@ -133,6 +133,7 @@
     "core-js": "2",
     "date-fns": "^2.8.1",
     "dayzed": "^3.1.0",
+    "dd-trace": "^2.4.0",
     "dotenv": "^8.2.0",
     "escape-html": "^1.0.3",
     "eventemitter3": "^4.0.7",

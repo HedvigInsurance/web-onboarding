@@ -1,3 +1,4 @@
+import './datadog'
 import 'source-map-support/register'
 
 import * as Sentry from '@sentry/node'
