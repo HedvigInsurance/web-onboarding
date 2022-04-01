@@ -17,6 +17,7 @@ import {
   getTrackableContractCategory,
   setInitialOfferToSessionStorage,
   TrackableContractType,
+  getExternalInsuranceDataFromGQLCache,
 } from './tracking'
 
 type GTMUserProperties = {
@@ -132,6 +133,10 @@ export const trackOfferGTM = (
   const grossPrice = Math.round(Number(offerData.cost.monthlyGross.amount))
   const netPrice = Math.round(Number(offerData.cost.monthlyNet.amount))
 
+  const currentInsurer = offerData.quotes[0].currentInsurer?.id ?? undefined
+  const externalInsuranceData = getExternalInsuranceDataFromGQLCache(
+    offerData.quotes[0]?.dataCollectionId,
+  )
   const initialOffer = getInitialOfferFromSessionStorage()
   if (!initialOffer) {
     setInitialOfferToSessionStorage(contractCategory)
@@ -161,7 +166,8 @@ export const trackOfferGTM = (
         }),
         ...(offerData.memberId && { member_id: offerData.memberId }),
         flow_type: EmbarkStory.get() ?? undefined,
-        current_insurer: offerData.quotes[0].currentInsurer?.id ?? undefined,
+        current_insurer: currentInsurer,
+        ...(currentInsurer && externalInsuranceData),
       },
       ...phoneNumberData,
     })
