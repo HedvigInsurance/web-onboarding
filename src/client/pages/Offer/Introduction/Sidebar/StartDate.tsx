@@ -38,7 +38,7 @@ type TFieldLayout = 'left' | 'right' | 'full'
 const RowButtonWrapper = styled.div<{
   fieldLayout: TFieldLayout
 }>`
-  flex: 1 ${({ fieldLayout }) => (fieldLayout ? `50%` : `100%`)};
+  flex: 1 ${({ fieldLayout }) => (fieldLayout !== 'full' ? `50%` : `100%`)};
   margin-top: auto;
   &:nth-of-type(n + 3) {
     margin-top: 0.5rem;
@@ -76,7 +76,7 @@ const RowButton = styled.button<{
     props.datePickerOpen && `border: 1px solid ${colorsV3.gray900};`};
 
   ${({ fieldLayout }) =>
-    fieldLayout &&
+    fieldLayout !== 'full' &&
     css`
       border-radius: 0;
       border-right-width: 0;
