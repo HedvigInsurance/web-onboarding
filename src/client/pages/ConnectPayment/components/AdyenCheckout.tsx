@@ -234,7 +234,7 @@ const createAdyenCheckout = ({
       window.setTimeout(() => dropinComponent.setStatus('ready'), 1000)
     }
   }
-  
+
   const configuration = {
     locale,
     translations: {
