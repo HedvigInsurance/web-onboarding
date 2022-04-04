@@ -11,9 +11,18 @@ import {
   SubmitAdditionalPaymentDetialsMutationFn,
   TokenizationChannel,
   TokenizePaymentDetailsMutationFn,
+  useTokenizePaymentDetailsMutation,
   useAvailablePaymentMethodsQuery,
   useSubmitAdditionalPaymentDetialsMutation,
-  useTokenizePaymentDetailsMutation,
+  usePaymentConnection_ConnectPaymentMutation,
+  usePaymentConnection_SubmitAdditionalPaymentDetailsMutation,
+  PaymentConnection_SubmitAdditionalPaymentDetailsMutationVariables,
+  PaymentConnection_ConnectPaymentMutationVariables,
+  AdditionalPaymentDetailsInput,
+  ConnectPaymentInput,
+  PaymentConnectChannel,
+  Market,
+  PaymentConnection_ConnectPaymentMutation,
 } from 'data/graphql'
 
 interface Params {
@@ -32,10 +41,10 @@ export const useAdyenCheckout = ({ onSuccess, adyenRef }: Params) => {
   const availablePaymentMethods = useAvailablePaymentMethodsQuery()
   const [checkoutAPI, setCheckoutAPI] = useState<CheckoutAPI | null>(null)
   const [adyenLoaded, setAdyenLoaded] = useState(false)
-  const [tokenizePaymentMutation] = useTokenizePaymentDetailsMutation()
+  const [connectPaymentMutation] = usePaymentConnection_ConnectPaymentMutation()
   const [
     submitAdditionalPaymentDetails,
-  ] = useSubmitAdditionalPaymentDetialsMutation()
+  ] = usePaymentConnection_SubmitAdditionalPaymentDetailsMutation()
   const history = useHistory()
   const currentLocale = useCurrentLocale()
   const textKeys = useTextKeys()
@@ -50,7 +59,7 @@ export const useAdyenCheckout = ({ onSuccess, adyenRef }: Params) => {
       payButtonText: textKeys.ONBOARDING_CONNECT_DD_CTA(),
       currentLocale,
       paymentMethodsResponse,
-      tokenizePaymentMutation,
+      connectPaymentMutation,
       submitAdditionalPaymentDetails,
       history,
       onSuccess,
@@ -63,7 +72,7 @@ export const useAdyenCheckout = ({ onSuccess, adyenRef }: Params) => {
     adyenLoaded,
     textKeys,
     currentLocale,
-    tokenizePaymentMutation,
+    connectPaymentMutation,
     submitAdditionalPaymentDetails,
     history,
     adyenRef,
@@ -83,8 +92,8 @@ interface AdyenCheckoutProps {
   payButtonText: string
   currentLocale: LocaleData
   paymentMethodsResponse: Scalars['PaymentMethodsResponse']
-  tokenizePaymentMutation: TokenizePaymentDetailsMutationFn
-  submitAdditionalPaymentDetails: SubmitAdditionalPaymentDetialsMutationFn
+  connectPaymentMutation: any
+  submitAdditionalPaymentDetails: any
   history: ReturnType<typeof useHistory>
   onSuccess?: () => void
   setIsCompleted?: () => void
@@ -94,7 +103,7 @@ const createAdyenCheckout = ({
   payButtonText,
   currentLocale,
   paymentMethodsResponse,
-  tokenizePaymentMutation,
+  connectPaymentMutation,
   submitAdditionalPaymentDetails,
   history,
   onSuccess = () => {
@@ -109,14 +118,14 @@ const createAdyenCheckout = ({
   ])(isoLocale)
 
   const returnUrl = getReturnUrl({ currentLocalePath: path })
-
-  const handleResult = (dropinComponent: any, resultCode: string) => {
-    if (['Authorised', 'Pending'].includes(resultCode)) {
+  let paymentTokenId = ''
+  const handleResult = (dropinComponent: any, status: string) => {
+    if (['AUTHORISED', 'PENDING'].includes(status)) {
       // history.push(getOnSuccessRedirectUrl({ currentLocalePath: path }))
       onSuccess()
     } else {
       console.error(
-        `Received unknown or faulty status type "${resultCode}" as request finished from Adyen`,
+        `Received unknown or faulty status type "${status}" as request finished from Adyen`,
       )
       dropinComponent.setStatus('error')
       window.setTimeout(() => dropinComponent.setStatus('ready'), 1000)
@@ -158,12 +167,60 @@ const createAdyenCheckout = ({
     },
     enableStoreDetails: true,
     returnUrl,
+    onSubmit: async (state: any, dropinComponent: any) => {
+      console.log(state.data)
+      dropinComponent.setStatus('loading')
+      const paymentRquest = {
+        browserInfo: state.data.browserInfo || null || undefined,
+        paymentMethodDetails: state.data.paymentMethod,
+        channel: PaymentConnectChannel.Web,
+        market: Market.Denmark,
+        returnUrl,
+      }
+
+      try {
+        const result = await connectPaymentMutation({
+          variables: {
+            input: paymentRquest as ConnectPaymentInput,
+          },
+        })
+        console.log(result)
+        paymentTokenId =
+          result.data.paymentConnection_connectPayment.paymentTokenId
+
+        if (!result) {
+          return
+        }
+
+        if (
+          result.data?.paymentConnection_connectPayment?.__typename ===
+          'ActionRequired'
+        ) {
+          dropinComponent.handleAction(
+            JSON.parse(result.data.paymentConnection_connectPayment.action),
+          )
+          return
+        }
+
+        if (
+          result.data?.paymentConnection_connectPayment?.__typename ===
+          'ConnectPaymentFinished'
+        ) {
+          handleResult(
+            dropinComponent,
+            result.data?.paymentConnection_connectPayment.status,
+          )
+        }
+      } catch (e) {
+        handleResult(dropinComponent, 'error')
+      }
+    },
     onAdditionalDetails: async (state: any, dropinComponent: any) => {
       try {
-        console.log('help')
         const result = await submitAdditionalPaymentDetails({
           variables: {
-            request: {
+            paymentTokenId: paymentTokenId,
+            paymentRequest: {
               paymentsDetailsRequest: JSON.stringify(state.data),
             },
           },
@@ -190,47 +247,6 @@ const createAdyenCheckout = ({
           handleResult(
             dropinComponent,
             result.data?.submitAdditionalPaymentDetails.resultCode,
-          )
-        }
-      } catch (e) {
-        handleResult(dropinComponent, 'error')
-      }
-    },
-    onSubmit: async (state: any, dropinComponent: any) => {
-      dropinComponent.setStatus('loading')
-      try {
-        const result = await tokenizePaymentMutation({
-          variables: {
-            paymentsRequest: {
-              browserInfo: state.data.browserInfo,
-              paymentMethodDetails: JSON.stringify(state.data.paymentMethod),
-              channel: TokenizationChannel.Web,
-              returnUrl,
-            },
-          },
-        })
-
-        if (!result) {
-          return
-        }
-
-        if (
-          result.data?.tokenizePaymentDetails?.__typename ===
-          'TokenizationResponseAction'
-        ) {
-          dropinComponent.handleAction(
-            JSON.parse(result.data.tokenizePaymentDetails.action),
-          )
-          return
-        }
-
-        if (
-          result.data?.tokenizePaymentDetails?.__typename ===
-          'TokenizationResponseFinished'
-        ) {
-          handleResult(
-            dropinComponent,
-            result.data?.tokenizePaymentDetails.resultCode,
           )
         }
       } catch (e) {

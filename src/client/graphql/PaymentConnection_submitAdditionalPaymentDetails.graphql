@@ -1,0 +1,17 @@
+mutation PaymentConnection_submitAdditionalPaymentDetails(
+  $paymentTokenId: ID!
+  $paymentRquest: AdditionalPaymentDetailsInput!
+) {
+  paymentConnection_submitAdditionalPaymentDetails(
+    paymentTokenId: $paymentTokenId
+    input: $paymentRquest
+  ) {
+    ... on ActionRequired {
+      action
+    }
+    ... on ConnectPaymentFinished {
+      paymentTokenId
+      status
+    }
+  }
+}

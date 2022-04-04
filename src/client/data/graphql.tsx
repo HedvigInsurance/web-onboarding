@@ -28,14 +28,17 @@ export type Scalars = {
   /** An ISO-8601 String representation of a `java.time.Instant`, e.g. "2019-07-03T19:07:38.494081Z". */
   Instant: any
   JSONString: any
+  /** Generic type for json values */
   JSON: any
   Object: any
+  /** Adyen payment details type */
   PaymentMethodDetails: any
   /** A String-representation of Adyen's checkout payments action */
   CheckoutPaymentsAction: any
   /** A String-representation of Adyen's payments details request */
   PaymentsDetailsRequest: any
   CheckoutPaymentAction: any
+  /** Adyen additional payment details type, used in 3DS flow */
   PaymentDetailsInput: any
   /** The `Upload` scalar type represents a file upload. */
   Upload: any
@@ -2820,6 +2823,7 @@ export enum CrossSellType {
   Accident = 'ACCIDENT',
   Travel = 'TRAVEL',
   HomeContent = 'HOME_CONTENT',
+  House = 'HOUSE',
 }
 
 export type CurrentInsurer = {
@@ -10714,6 +10718,7 @@ export enum TypeOfContract {
   SeApartmentStudentRent = 'SE_APARTMENT_STUDENT_RENT',
   SeAccident = 'SE_ACCIDENT',
   SeAccidentStudent = 'SE_ACCIDENT_STUDENT',
+  NoHouse = 'NO_HOUSE',
   NoHomeContentOwn = 'NO_HOME_CONTENT_OWN',
   NoHomeContentRent = 'NO_HOME_CONTENT_RENT',
   NoHomeContentYouthOwn = 'NO_HOME_CONTENT_YOUTH_OWN',
@@ -12007,6 +12012,37 @@ export type NorwegianBankIdAuthMutation = { __typename?: 'Mutation' } & {
     NorwegianBankIdAuthResponse,
     'redirectUrl'
   >
+}
+
+export type PaymentConnection_ConnectPaymentMutationVariables = Exact<{
+  input: ConnectPaymentInput
+}>
+
+export type PaymentConnection_ConnectPaymentMutation = {
+  __typename?: 'Mutation'
+} & {
+  paymentConnection_connectPayment:
+    | ({ __typename?: 'ConnectPaymentFinished' } & Pick<
+        ConnectPaymentFinished,
+        'paymentTokenId' | 'status'
+      >)
+    | ({ __typename?: 'ActionRequired' } & Pick<ActionRequired, 'action'>)
+}
+
+export type PaymentConnection_SubmitAdditionalPaymentDetailsMutationVariables = Exact<{
+  paymentTokenId: Scalars['ID']
+  paymentRquest: AdditionalPaymentDetailsInput
+}>
+
+export type PaymentConnection_SubmitAdditionalPaymentDetailsMutation = {
+  __typename?: 'Mutation'
+} & {
+  paymentConnection_submitAdditionalPaymentDetails:
+    | ({ __typename?: 'ConnectPaymentFinished' } & Pick<
+        ConnectPaymentFinished,
+        'paymentTokenId'
+      >)
+    | ({ __typename?: 'ActionRequired' } & Pick<ActionRequired, 'action'>)
 }
 
 export type PriceQueryVariables = Exact<{
@@ -14101,6 +14137,126 @@ export type NorwegianBankIdAuthMutationResult = ApolloReactCommon.MutationResult
 export type NorwegianBankIdAuthMutationOptions = ApolloReactCommon.BaseMutationOptions<
   NorwegianBankIdAuthMutation,
   NorwegianBankIdAuthMutationVariables
+>
+export const PaymentConnection_ConnectPaymentDocument = gql`
+  mutation PaymentConnection_connectPayment($input: ConnectPaymentInput!) {
+    paymentConnection_connectPayment(input: $input) {
+      ... on ActionRequired {
+        action
+      }
+      ... on ConnectPaymentFinished {
+        paymentTokenId
+        status
+      }
+    }
+  }
+`
+export type PaymentConnection_ConnectPaymentMutationFn = ApolloReactCommon.MutationFunction<
+  PaymentConnection_ConnectPaymentMutation,
+  PaymentConnection_ConnectPaymentMutationVariables
+>
+
+/**
+ * __usePaymentConnection_ConnectPaymentMutation__
+ *
+ * To run a mutation, you first call `usePaymentConnection_ConnectPaymentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePaymentConnection_ConnectPaymentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [paymentConnectionConnectPaymentMutation, { data, loading, error }] = usePaymentConnection_ConnectPaymentMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function usePaymentConnection_ConnectPaymentMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    PaymentConnection_ConnectPaymentMutation,
+    PaymentConnection_ConnectPaymentMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    PaymentConnection_ConnectPaymentMutation,
+    PaymentConnection_ConnectPaymentMutationVariables
+  >(PaymentConnection_ConnectPaymentDocument, options)
+}
+export type PaymentConnection_ConnectPaymentMutationHookResult = ReturnType<
+  typeof usePaymentConnection_ConnectPaymentMutation
+>
+export type PaymentConnection_ConnectPaymentMutationResult = ApolloReactCommon.MutationResult<
+  PaymentConnection_ConnectPaymentMutation
+>
+export type PaymentConnection_ConnectPaymentMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  PaymentConnection_ConnectPaymentMutation,
+  PaymentConnection_ConnectPaymentMutationVariables
+>
+export const PaymentConnection_SubmitAdditionalPaymentDetailsDocument = gql`
+  mutation PaymentConnection_submitAdditionalPaymentDetails(
+    $paymentTokenId: ID!
+    $paymentRquest: AdditionalPaymentDetailsInput!
+  ) {
+    paymentConnection_submitAdditionalPaymentDetails(
+      paymentTokenId: $paymentTokenId
+      input: $paymentRquest
+    ) {
+      ... on ActionRequired {
+        action
+      }
+      ... on ConnectPaymentFinished {
+        paymentTokenId
+      }
+    }
+  }
+`
+export type PaymentConnection_SubmitAdditionalPaymentDetailsMutationFn = ApolloReactCommon.MutationFunction<
+  PaymentConnection_SubmitAdditionalPaymentDetailsMutation,
+  PaymentConnection_SubmitAdditionalPaymentDetailsMutationVariables
+>
+
+/**
+ * __usePaymentConnection_SubmitAdditionalPaymentDetailsMutation__
+ *
+ * To run a mutation, you first call `usePaymentConnection_SubmitAdditionalPaymentDetailsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePaymentConnection_SubmitAdditionalPaymentDetailsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [paymentConnectionSubmitAdditionalPaymentDetailsMutation, { data, loading, error }] = usePaymentConnection_SubmitAdditionalPaymentDetailsMutation({
+ *   variables: {
+ *      paymentTokenId: // value for 'paymentTokenId'
+ *      paymentRquest: // value for 'paymentRquest'
+ *   },
+ * });
+ */
+export function usePaymentConnection_SubmitAdditionalPaymentDetailsMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    PaymentConnection_SubmitAdditionalPaymentDetailsMutation,
+    PaymentConnection_SubmitAdditionalPaymentDetailsMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    PaymentConnection_SubmitAdditionalPaymentDetailsMutation,
+    PaymentConnection_SubmitAdditionalPaymentDetailsMutationVariables
+  >(PaymentConnection_SubmitAdditionalPaymentDetailsDocument, options)
+}
+export type PaymentConnection_SubmitAdditionalPaymentDetailsMutationHookResult = ReturnType<
+  typeof usePaymentConnection_SubmitAdditionalPaymentDetailsMutation
+>
+export type PaymentConnection_SubmitAdditionalPaymentDetailsMutationResult = ApolloReactCommon.MutationResult<
+  PaymentConnection_SubmitAdditionalPaymentDetailsMutation
+>
+export type PaymentConnection_SubmitAdditionalPaymentDetailsMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  PaymentConnection_SubmitAdditionalPaymentDetailsMutation,
+  PaymentConnection_SubmitAdditionalPaymentDetailsMutationVariables
 >
 export const PriceDocument = gql`
   query Price($id: ID!, $locale: Locale!) {

@@ -1,9 +1,13 @@
-import React, { useRef, useCallback } from 'react'
+import React, { useRef, useCallback, useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { useTextKeys } from 'utils/textKeys'
 import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
-import { useStartCheckoutMutation } from 'data/graphql'
+import {
+  useStartCheckoutMutation,
+  useCheckoutStatusQuery,
+  useCheckoutStatusLazyQuery,
+} from 'data/graphql'
 
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { Headline } from 'components/Headline/Headline'
@@ -108,14 +112,35 @@ export const CheckoutPayment = () => {
   const [startCheckout] = useStartCheckoutMutation()
   const quoteIds = data?.quoteIds as string | string[]
   const quoteCartId = data?.quoteCartId as string
-  console.log(data)
+  const [getStatus] = useCheckoutStatusLazyQuery({
+    pollInterval: 1000,
+  })
+  const [finishedPayment, setFinishedPayment] = useState(false)
+  useEffect(() => {
+    finishedPayment && finishFlow()
+  }, [finishedPayment])
+
   const onSuccess = useCallback(async () => {
-    const res = await startCheckout({
-      variables: { quoteIds, quoteCartId },
-    })
+    setFinishedPayment(true)
   }, [])
 
-  const checkoutAPI = useAdyenCheckout({ adyenRef, onSuccess })
+  const finishFlow = async () => {
+    const res = await startCheckout({
+      variables: { quoteCartId, quoteIds },
+    })
+    const checkoutStatus = getStatus({
+      variables: {
+        quoteCartId,
+      },
+    })
+  }
+  // handle redirect
+  // add paymenttokenid to quotecart using mutation
+
+  const checkoutAPI = useAdyenCheckout({
+    adyenRef,
+    onSuccess,
+  })
 
   return (
     <CheckoutPageWrapper>

@@ -1,0 +1,11 @@
+mutation PaymentConnection_connectPayment($input: ConnectPaymentInput!) {
+  paymentConnection_connectPayment(input: $input) {
+    ... on ActionRequired {
+      action
+    }
+    ... on ConnectPaymentFinished {
+      paymentTokenId
+      status
+    }
+  }
+}
