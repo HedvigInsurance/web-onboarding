@@ -1,9 +1,7 @@
 import React, { useEffect, useCallback, useState } from 'react'
 import styled from '@emotion/styled'
-import { colorsV3 } from '@hedviginsurance/brand'
 import { FormikProps } from 'formik'
 import { Headline } from 'components/Headline/Headline'
-import { InputField } from 'components/inputs'
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useFeature, Features } from 'utils/hooks/useFeature'
@@ -44,13 +42,6 @@ const InputFieldsWrapper = styled.div`
   }
 `
 
-const StyledInputField = styled(InputField)`
-  ${Wrapper} & {
-    background-color: ${colorsV3.gray100};
-    border-radius: 8px;
-  }
-`
-
 const SpacerSmall = styled.div`
   height: 1rem;
 `
@@ -66,24 +57,27 @@ const HorizontalDivider = styled(Divider)`
   }
 `
 
-export const ContactInformation = (
-  formikProps: FormikProps<QuoteInput>,
-  data,
-) => {
+type Props = {
+  formikProps: FormikProps<QuoteInput>
+}
+
+export const ContactInformation = ({ formikProps }: Props) => {
   const textKeys = useTextKeys()
   const locale = useCurrentLocale()
   const { handleChange } = formikProps
-  console.log(formikProps)
-  const [hasEnabledCreditCheckInfo] = useFeature([
+  const [hasEnabledCreditCheckInfo, isPhoneNumberRequired] = useFeature([
     Features.CHECKOUT_CREDIT_CHECK,
+    Features.COLLECT_PHONE_NUMBER_AT_CHECKOUT,
   ])
-  const ssnFormatExample = locale.ssn.formatExample
   const [isShowingCreditCheckInfo, setIsShowingCreditCheckInfo] = useState(
     false,
   )
-  const { initialValues, submitForm } = formikProps.formikProps
-  console.log(formikProps)
-  const ssn = initialValues ? initialValues.ssn : data.ssn
+  const {
+    values: { ssn },
+    initialValues,
+    submitForm,
+  } = formikProps
+
   const debouncedSubmitForm = useCallback(
     debounce(() => {
       submitForm()
@@ -92,10 +86,8 @@ export const ContactInformation = (
   )
 
   useEffect(() => {
-    if (ssn) {
-      debouncedSubmitForm()
-    }
-  }, [ssn, debouncedSubmitForm])
+    if (ssn !== initialValues.ssn) debouncedSubmitForm()
+  }, [ssn, initialValues.ssn, debouncedSubmitForm])
 
   return (
     <Wrapper>
@@ -112,45 +104,35 @@ export const ContactInformation = (
             name="firstName"
             formikProps={formikProps}
             onChange={handleChange}
-            defaultValue={initialValues.firstName}
           />
           <TextInput
             label={textKeys.CHECKOUT_LASTNAME_LABEL()}
             placeholder={textKeys.CHECKOUT_LASTNAME_LABEL()}
             type="text"
-            // defaultValue={lastName ?? ''}
             name="lastName"
             formikProps={formikProps}
             onChange={handleChange}
           />
-          <div>
+          {isPhoneNumberRequired && (
             <TextInput
-              label={textKeys.CHECKOUT_CONTACT_INFO_SSN_LABEL()}
-              placeholder={ssnFormatExample}
-              helperText={
-                hasEnabledCreditCheckInfo
-                  ? textKeys.CHECKOUT_CONTACT_INFO_CREDIT_CHECK_HELPER()
-                  : undefined
-              }
-              type="text"
-              // defaultValue={ssn ?? ''}
-              name="ssn"
+              label="CHECKOUT_PHONE_NUMBER_LABEL"
+              name="phoneNumber"
+              type="tel"
               formikProps={formikProps}
               onChange={handleChange}
+              placeholder={locale.phoneNumber.placeholder}
+              helperText="CHECKOUT_PHONE_NUMBER_HELPERTEXT"
             />
-            {hasEnabledCreditCheckInfo && <Spacer />}
-          </div>
-          <div>
-            <SsnInput
-              name="ssn"
-              formikProps={formikProps}
-              onFocus={() =>
-                setIsShowingCreditCheckInfo(hasEnabledCreditCheckInfo)
-              }
-              onChange={handleChange}
-            />
-            {isShowingCreditCheckInfo && <CreditCheckInfo />}
-          </div>
+          )}
+          <SsnInput
+            name="ssn"
+            formikProps={formikProps}
+            onFocus={() =>
+              setIsShowingCreditCheckInfo(hasEnabledCreditCheckInfo)
+            }
+            onChange={handleChange}
+          />
+          {isShowingCreditCheckInfo && <CreditCheckInfo />}
         </InputFieldsWrapper>
       </form>
       <HorizontalDivider />
