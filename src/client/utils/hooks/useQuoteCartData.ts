@@ -14,6 +14,7 @@ import {
 import {
   typeOfResidenceTextKeys,
   HomeInsuranceTypeOfContract,
+  getQuoteIdsFromBundleVariant,
 } from 'pages/OfferNew/utils'
 import { GenericQuoteData } from '/pages/OfferNew/types'
 import { formatPostalNumber } from '../postalNumbers'
@@ -192,6 +193,8 @@ export const useQuoteCartData = () => {
     return { displayName: item.displayName, price: item.price.amount }
   })
 
+  const quoteIds = getQuoteIdsFromBundleVariant(selectedQuoteBundle)
+
   const mainQuote = getMainQuote(selectedQuoteBundle.bundle)
 
   const priceData = {
@@ -220,6 +223,9 @@ export const useQuoteCartData = () => {
     priceData: priceData,
     quoteDetails: quoteDetailsGroups,
     userDetails: userDetails,
+    quoteCartId: quoteCartId,
+    quoteIds: quoteIds,
+    quotes: selectedQuoteBundle,
     loading,
     error,
   }
