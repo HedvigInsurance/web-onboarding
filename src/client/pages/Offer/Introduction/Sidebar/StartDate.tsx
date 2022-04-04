@@ -31,18 +31,23 @@ import { CancellationOptions } from './CancellationOptions'
 const DateFormsWrapper = styled.div`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 `
+type TFieldLayout = 'left' | 'right' | 'full'
 
 const RowButtonWrapper = styled.div<{
-  isSplit: boolean
+  fieldLayout: TFieldLayout
 }>`
-  width: ${({ isSplit }) => (isSplit ? `50%` : `100%`)};
-  flex: 1;
+  flex: 1 ${({ fieldLayout }) => (fieldLayout !== 'full' ? `50%` : `100%`)};
+  margin-top: auto;
+  &:nth-of-type(n + 3) {
+    margin-top: 0.5rem;
+  }
 `
 
 const RowButton = styled.button<{
   datePickerOpen: boolean
-  isSplit: boolean
+  fieldLayout: TFieldLayout
   size: Size
 }>`
   display: flex;
@@ -70,21 +75,23 @@ const RowButton = styled.button<{
   ${(props) =>
     props.datePickerOpen && `border: 1px solid ${colorsV3.gray900};`};
 
-  ${({ isSplit }) =>
-    isSplit &&
+  ${({ fieldLayout }) =>
+    fieldLayout !== 'full' &&
     css`
       border-radius: 0;
       border-right-width: 0;
 
-      ${RowButtonWrapper}:first-of-type & {
-        border-top-left-radius: 8px;
-        border-bottom-left-radius: 8px;
-      }
-      ${RowButtonWrapper}:last-of-type & {
-        border-top-right-radius: 8px;
-        border-bottom-right-radius: 8px;
-        border-right-width: 1px;
-      }
+      ${fieldLayout === 'left' &&
+        `
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
+      `}
+      ${fieldLayout === 'right' &&
+        `
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+      border-right-width: 1px;
+      `}
     `}
 `
 
@@ -168,12 +175,13 @@ type DateFormProps = {
   currentInsurer?: CurrentInsurer
   dataCollectionId?: string
   quoteDisplayName: string
-  isSplit: boolean
+  fieldLayout: TFieldLayout
   modal?: boolean
   disabled?: boolean
   size: Size
   onChange: (date: Date | null) => void
   loading: boolean
+  displayLabel?: boolean
 }
 
 const DateForm = ({
@@ -181,12 +189,13 @@ const DateForm = ({
   currentInsurer,
   dataCollectionId,
   quoteDisplayName,
-  isSplit,
+  fieldLayout,
   modal = false,
   disabled = false,
   size,
   onChange,
   loading,
+  displayLabel,
 }: DateFormProps) => {
   const textKeys = useTextKeys()
   const { isoLocale, marketLabel } = useCurrentLocale()
@@ -219,13 +228,15 @@ const DateForm = ({
   }
 
   return (
-    <RowButtonWrapper isSplit={isSplit}>
-      {isSplit && <StartDateRowLabel>{quoteDisplayName}</StartDateRowLabel>}
+    <RowButtonWrapper fieldLayout={fieldLayout}>
+      {displayLabel && (
+        <StartDateRowLabel>{quoteDisplayName}</StartDateRowLabel>
+      )}
       <RowButton
         disabled={disabled}
         datePickerOpen={datePickerOpen}
         onClick={() => setDatePickerOpen(!datePickerOpen)}
-        isSplit={isSplit}
+        fieldLayout={fieldLayout}
         size={size}
       >
         <Value>
@@ -383,7 +394,7 @@ export const StartDate = ({
               loadingQuoteIds.length > 0 ||
               Boolean(quotes[0].currentInsurer && !quotes[0].startDate)
             }
-            isSplit={false}
+            fieldLayout={'full'}
             size={size}
             onChange={(newDate) =>
               handleSelectNewStartDate(
@@ -395,26 +406,42 @@ export const StartDate = ({
           />
         ) : (
           <>
-            {quotes.map((quote) => (
-              <DateForm
-                key={quote.id}
-                startDate={quote.startDate}
-                currentInsurer={quote.currentInsurer ?? undefined}
-                quoteDisplayName={quote.displayName}
-                dataCollectionId={quote.dataCollectionId ?? undefined}
-                modal={modal}
-                disabled={
-                  loadingQuoteIds.length > 0 ||
-                  Boolean(quote.currentInsurer && !quote.startDate)
-                }
-                isSplit={quoteBundleSelector.isMultiQuote(selectedBundle)}
-                size={size}
-                onChange={(newDate) =>
-                  handleSelectNewStartDate(newDate, [quote.id])
-                }
-                loading={loadingQuoteIds.includes(quote.id)}
-              />
-            ))}
+            {quotes.map((quote, index, arr) => {
+              const isArrayLengthEven = arr.length % 2 === 0
+              const isItemIndexEven = index % 2 === 0
+              const isExpandedFirstItem = index === 0 && !isArrayLengthEven
+              return (
+                <DateForm
+                  key={quote.id}
+                  startDate={quote.startDate}
+                  currentInsurer={quote.currentInsurer ?? undefined}
+                  quoteDisplayName={quote.displayName}
+                  dataCollectionId={quote.dataCollectionId ?? undefined}
+                  modal={modal}
+                  disabled={
+                    loadingQuoteIds.length > 0 ||
+                    Boolean(quote.currentInsurer && !quote.startDate)
+                  }
+                  fieldLayout={
+                    isExpandedFirstItem
+                      ? 'full'
+                      : isItemIndexEven
+                      ? isArrayLengthEven
+                        ? 'left'
+                        : 'right'
+                      : isArrayLengthEven
+                      ? 'right'
+                      : 'left'
+                  }
+                  size={size}
+                  onChange={(newDate) =>
+                    handleSelectNewStartDate(newDate, [quote.id])
+                  }
+                  loading={loadingQuoteIds.includes(quote.id)}
+                  displayLabel
+                />
+              )
+            })}
           </>
         )}
       </DateFormsWrapper>
