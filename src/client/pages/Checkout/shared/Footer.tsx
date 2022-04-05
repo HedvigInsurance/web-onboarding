@@ -1,7 +1,9 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { motion } from 'framer-motion'
 import { Button, ButtonProps, LinkButton } from 'components/buttons'
+import { Spinner } from 'components/utils'
 import { WrapperWidth } from './CheckoutPageWrapper'
 
 const { white, purple500, gray900 } = colorsV3
@@ -11,6 +13,7 @@ export type Props = {
   buttonOnClick?: () => void
   buttonLinkTo?: string
   children: React.ReactNode
+  isLoading?: boolean
 }
 type FooterButtonProps = {
   background: ButtonProps['background']
@@ -44,11 +47,16 @@ const ButtonWrapper = styled.div`
   justify-self: end;
 `
 
+const SpinnerWrapper = styled(motion.div)`
+  display: inline-block;
+`
+
 export const Footer = ({
   buttonText,
   buttonOnClick,
   buttonLinkTo,
   children,
+  isLoading,
 }: Props) => {
   const buttonProps: FooterButtonProps = {
     background: purple500,
@@ -58,7 +66,16 @@ export const Footer = ({
   return (
     <Wrapper>
       <InnerWrapper>
-        {children}
+        {isLoading ? (
+          <SpinnerWrapper
+            initial={{ width: 0, opacity: 0 }}
+            animate={{ width: 'auto', opacity: 1 }}
+          >
+            <Spinner />
+          </SpinnerWrapper>
+        ) : (
+          children
+        )}
         {buttonText && (
           <ButtonWrapper>
             {buttonLinkTo && (
@@ -67,7 +84,11 @@ export const Footer = ({
               </LinkButton>
             )}
             {buttonOnClick && (
-              <Button {...buttonProps} onClick={buttonOnClick}>
+              <Button
+                {...buttonProps}
+                onClick={buttonOnClick}
+                disabled={isLoading}
+              >
                 {buttonText}
               </Button>
             )}
