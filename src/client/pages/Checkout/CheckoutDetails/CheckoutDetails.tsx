@@ -3,6 +3,7 @@ import { useTextKeys } from 'utils/textKeys'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
+import { LoadingPage } from 'components/LoadingPage'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
@@ -29,7 +30,7 @@ export const CheckoutDetails = () => {
   }
 
   if (data.loading) {
-    return null // TODO: Use loading component
+    return <LoadingPage loading />
   }
 
   const priceData = data.priceData

@@ -2,6 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { useHistory } from 'react-router'
+import ReactMarkdown from 'react-markdown/with-html'
 import { ErrorModal, ErrorHeading, ErrorText } from 'components/ErrorModal'
 import { Button, TextButton } from 'components/buttons'
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
@@ -47,6 +48,10 @@ const ButtonFilled = styled(Button)`
     padding: 0.75rem 2rem;
   }
 `
+const InlineTextButton = styled(TextButton)`
+  display: inline;
+  font-size: 1rem;
+`
 
 type SetupFailedModalProps = Omit<ModalProps, 'onClose'> & {
   onRetry: () => void
@@ -67,11 +72,14 @@ export const CheckoutErrorModal = ({
   return (
     <ErrorModal {...props}>
       <ErrorHeading>{textKeys.GENERIC_ERROR_HEADING()}</ErrorHeading>
-      <ErrorText>{textKeys.CHECKOUT_ERROR_TEXT_PART_1()}</ErrorText>
-      <TextButton onClick={openIntercomChat}>
-        {textKeys.CHECKOUT_ERROR_TEXT_PART_2()}
-      </TextButton>
-      <ErrorText>{textKeys.CHECKOUT_ERROR_TEXT_PART_3()}</ErrorText>
+      <ErrorText>
+        {textKeys.CHECKOUT_ERROR_TEXT_PART_1()}{' '}
+        <InlineTextButton onClick={openIntercomChat}>
+          {textKeys.CHECKOUT_ERROR_TEXT_PART_2()}
+        </InlineTextButton>{' '}
+        <ReactMarkdown source={textKeys.CHECKOUT_ERROR_TEXT_PART_3()} />
+      </ErrorText>
+
       <ButtonContainer>
         <ButtonFilled onClick={() => onRetry()}>
           {textKeys.GENERIC_ERROR_ACTION_RETRY()}
