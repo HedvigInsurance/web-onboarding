@@ -1,6 +1,7 @@
 import React from 'react'
 import { useFormik, FormikHelpers } from 'formik'
 import { GraphQLError } from 'graphql'
+import styled from '@emotion/styled'
 import { useTextKeys } from 'utils/textKeys'
 import { QuoteInput } from 'pages/Offer/Introduction/DetailsModal/types'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
@@ -44,7 +45,7 @@ export const CheckoutPayment = ({
   const locale = useCurrentLocale()
   const [
     createQuoteBundle,
-    { loading: isBundleCreationInProgress }, // TODO: Fix loading states
+    { loading: isBundleCreationInProgress },
   ] = useCreateQuoteBundleMutation()
 
   const { firstName, lastName, email, ssn, phoneNumber } = mainQuote
@@ -133,6 +134,7 @@ export const CheckoutPayment = ({
         buttonOnClick={() => {
           startSign()
         }}
+        isLoading={isBundleCreationInProgress}
       >
         <PaymentInfo {...priceData} />
       </Footer>
