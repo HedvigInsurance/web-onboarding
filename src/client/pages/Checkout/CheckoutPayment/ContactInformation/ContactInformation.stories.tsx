@@ -2,6 +2,7 @@ import React from 'react'
 import { Meta, Story } from '@storybook/react'
 import { MemoryRouter, Route, RouterProps } from 'react-router-dom'
 import styled from '@emotion/styled'
+import { FormikProps } from 'formik'
 import { TextKeyProvider } from 'utils/textKeys'
 import { LocaleLabel } from 'l10n/locales'
 
@@ -11,12 +12,13 @@ import {
 } from 'utils/storybook/storyHelpers'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { mockedQuoteCartId } from 'utils/testData/quoteDetailsDataMock'
+import { QuoteInput } from 'src/client/pages/Offer/Introduction/DetailsModal/types'
 import { ContactInfoData } from '../../shared/types'
 import { ContactInformation } from './ContactInformation'
 
 type StoryProps = {
   localePath: LocaleLabel
-  data: ContactInfoData
+  data: any
 }
 
 const Wrapper = styled.div`
@@ -56,7 +58,7 @@ const Template: Story<StoryProps> = ({ localePath, data }) => {
           path={`${localePathPattern}/new-member/checkout/details/:id`}
           component={(routerProps: RouterProps) => (
             <Wrapper {...routerProps}>
-              <ContactInformation {...data} />
+              <ContactInformation formikProps={data} />
             </Wrapper>
           )}
         />

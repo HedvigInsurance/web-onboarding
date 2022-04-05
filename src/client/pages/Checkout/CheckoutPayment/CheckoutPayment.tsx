@@ -1,7 +1,6 @@
 import React from 'react'
 import { useFormik, FormikHelpers } from 'formik'
 import { GraphQLError } from 'graphql'
-import styled from '@emotion/styled'
 import { useTextKeys } from 'utils/textKeys'
 import { QuoteInput } from 'pages/Offer/Introduction/DetailsModal/types'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
@@ -10,7 +9,7 @@ import {
   QuoteBundleVariant,
   BundledQuote,
 } from 'data/graphql'
-import { LimitCode } from 'api/quoteBundleErrorSelectors'
+import { LimitCode, isQuoteBundleError } from 'api/quoteBundleErrorSelectors'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
@@ -121,8 +120,12 @@ export const CheckoutPayment = ({
   }
 
   const startSign = async () => {
-    const { submitForm } = formik
-    await submitForm()
+    const { submitForm, dirty: isFormDataUpdated } = formik
+    if (isFormDataUpdated) {
+      const { data } = await submitForm()
+      const isUpdateQuotesFailed = isQuoteBundleError(data)
+      if (isUpdateQuotesFailed) throw Error('Updating quotes has failed')
+    }
   }
 
   return (
