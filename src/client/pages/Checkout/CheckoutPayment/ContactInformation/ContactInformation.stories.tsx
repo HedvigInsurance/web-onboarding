@@ -11,12 +11,11 @@ import {
 } from 'utils/storybook/storyHelpers'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { mockedQuoteCartId } from 'utils/testData/quoteDetailsDataMock'
-import { ContactInfoData } from '../../shared/types'
 import { ContactInformation } from './ContactInformation'
 
 type StoryProps = {
   localePath: LocaleLabel
-  data: ContactInfoData
+  data: any
 }
 
 const Wrapper = styled.div`
@@ -56,7 +55,7 @@ const Template: Story<StoryProps> = ({ localePath, data }) => {
           path={`${localePathPattern}/new-member/checkout/details/:id`}
           component={(routerProps: RouterProps) => (
             <Wrapper {...routerProps}>
-              <ContactInformation {...data} />
+              <ContactInformation formikProps={data} />
             </Wrapper>
           )}
         />
