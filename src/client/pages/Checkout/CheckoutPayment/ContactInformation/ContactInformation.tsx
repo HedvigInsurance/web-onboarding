@@ -1,9 +1,7 @@
 import React, { useEffect, useCallback, useState } from 'react'
 import styled from '@emotion/styled'
-import { colorsV3 } from '@hedviginsurance/brand'
 import { FormikProps } from 'formik'
 import { Headline } from 'components/Headline/Headline'
-import { InputField } from 'components/inputs'
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useFeature, Features } from 'utils/hooks/useFeature'
@@ -44,13 +42,6 @@ const InputFieldsWrapper = styled.div`
   }
 `
 
-const StyledInputField = styled(InputField)`
-  ${Wrapper} & {
-    background-color: ${colorsV3.gray100};
-    border-radius: 8px;
-  }
-`
-
 const SpacerSmall = styled.div`
   height: 1rem;
 `
@@ -66,10 +57,11 @@ const HorizontalDivider = styled(Divider)`
   }
 `
 
-export const ContactInformation = (
-  formikProps: FormikProps<QuoteInput>,
-  data,
-) => {
+type Props = {
+  formikProps: FormikProps<QuoteInput>
+}
+
+export const ContactInformation = ({ formikProps }: Props) => {
   const textKeys = useTextKeys()
   const locale = useCurrentLocale()
   const { handleChange } = formikProps
@@ -81,9 +73,12 @@ export const ContactInformation = (
   const [isShowingCreditCheckInfo, setIsShowingCreditCheckInfo] = useState(
     false,
   )
-  const { initialValues, submitForm } = formikProps.formikProps
-  console.log(formikProps)
-  const ssn = initialValues ? initialValues.ssn : data.ssn
+  const {
+    values: { ssn },
+    initialValues,
+    submitForm,
+  } = formikProps
+
   const debouncedSubmitForm = useCallback(
     debounce(() => {
       submitForm()
@@ -95,7 +90,7 @@ export const ContactInformation = (
     if (ssn) {
       debouncedSubmitForm()
     }
-  }, [ssn, debouncedSubmitForm])
+  }, [ssn, initialValues.ssn, debouncedSubmitForm])
 
   return (
     <Wrapper>
@@ -112,7 +107,6 @@ export const ContactInformation = (
             name="firstName"
             formikProps={formikProps}
             onChange={handleChange}
-            defaultValue={initialValues.firstName}
           />
           <TextInput
             label={textKeys.CHECKOUT_LASTNAME_LABEL()}

@@ -1,15 +1,10 @@
 import React from 'react'
 import { useFormik, FormikHelpers } from 'formik'
-import { useParams } from 'react-router'
 import { useTextKeys } from 'utils/textKeys'
 import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
 import { QuoteInput } from 'pages/Offer/Introduction/DetailsModal/types'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import {
-  useCreateQuoteBundleMutation,
-  useEditQuoteMutation,
-  QuoteBundleVariant,
-} from 'data/graphql'
+import { useCreateQuoteBundleMutation } from 'data/graphql'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
@@ -18,20 +13,36 @@ import { getCheckoutDetailsValidationSchema } from '../../Offer/Checkout/UserDet
 import { ContactInformation } from './ContactInformation/ContactInformation'
 import { PaymentDetails } from './PaymentDetails/PaymentDetails'
 
-export const CheckoutPayment = () => {
+type Props = {
+  data: ReturnType<typeof useQuoteCartData>
+}
+
+export const CheckoutPayment = ({ data }: Props) => {
   const textKeys = useTextKeys()
-  const data = useQuoteCartData()
   const locale = useCurrentLocale()
   const [
     createQuoteBundle,
     { loading: isBundleCreationInProgress },
   ] = useCreateQuoteBundleMutation()
+
   const quoteCartId = data?.quoteCartId as string
   const priceData = data?.priceData
   const userData = data?.userDetails as QuoteInput
   const quotes = data?.quotes
+  const mainQuoteData = data?.mainQuote?.data || {}
   console.log(data)
-  const { firstName, lastName, email, ssn } = userData
+  const { firstName, lastName, email, ssn, phoneNumber } = userData
+
+  console.log('initialvalues', {
+    firstName,
+    lastName,
+    email,
+    ssn,
+    phoneNumber,
+    data: {
+      ...mainQuoteData,
+    },
+  })
 
   const formik = useFormik<QuoteInput>({
     initialValues: {
@@ -39,8 +50,9 @@ export const CheckoutPayment = () => {
       lastName,
       email,
       ssn,
+      phoneNumber,
       data: {
-        ...data,
+        ...mainQuoteData,
       },
     } as QuoteInput,
     validationSchema: getCheckoutDetailsValidationSchema(locale, textKeys),
@@ -113,9 +125,10 @@ export const CheckoutPayment = () => {
     const { res } = await submitForm()
     console.log(res)
   }
+
   return (
     <CheckoutPageWrapper>
-      <ContactInformation formikProps={formik} {...userData} />
+      <ContactInformation formikProps={formik} />
       <PaymentDetails />
       <Footer
         buttonText={textKeys.CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT()}

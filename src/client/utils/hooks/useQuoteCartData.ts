@@ -217,6 +217,7 @@ export const useQuoteCartData = () => {
     lastName: mainQuote.lastName,
     email: mainQuote.email,
     ssn: mainQuote.ssn,
+    phoneNumber: mainQuote.phoneNumber,
   }
 
   return {
@@ -226,6 +227,7 @@ export const useQuoteCartData = () => {
     quoteCartId: quoteCartId,
     quoteIds: quoteIds,
     quotes: selectedQuoteBundle,
+    mainQuote,
     loading,
     error,
   }
