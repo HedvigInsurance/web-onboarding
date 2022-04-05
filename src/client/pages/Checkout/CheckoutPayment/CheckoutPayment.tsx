@@ -1,23 +1,35 @@
 import React, { useRef, useCallback, useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { useFormik, FormikHelpers } from 'formik'
+import { GraphQLError } from 'graphql'
 import { useTextKeys } from 'utils/textKeys'
 import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
 import {
   useStartCheckoutMutation,
   useCheckoutStatusQuery,
   useCheckoutStatusLazyQuery,
+  useCreateQuoteBundleMutation,
+  QuoteBundleVariant,
+  BundledQuote,
 } from 'data/graphql'
 
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { Headline } from 'components/Headline/Headline'
+import { QuoteInput } from 'pages/Offer/Introduction/DetailsModal/types'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
+
+import { LimitCode, isQuoteBundleError } from 'api/quoteBundleErrorSelectors'
+import { useAdyenCheckout } from '../../ConnectPayment/components/useAdyenCheckout'
 import {
   CheckoutPageWrapper,
   WrapperWidth,
 } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
-import { useAdyenCheckout } from '../../ConnectPayment/components/useAdyenCheckout'
+import { getUniqueQuotesFromVariantList } from '../../OfferNew/utils'
+import { getCheckoutDetailsValidationSchema } from '../../Offer/Checkout/UserDetailsForm'
+import { PriceData } from '../shared/types'
 import { ContactInformation } from './ContactInformation/ContactInformation'
 const { gray100, gray600, gray700, gray300, gray900 } = colorsV3
 
@@ -105,35 +117,144 @@ const Terms = styled.div`
     text-decoration: none;
   }
 `
-export const CheckoutPayment = () => {
+
+const isSsnInvalid = (errors: GraphQLError[]) => {
+  const invalidSsnError = errors.find((error) => {
+    return error?.extensions?.body?.errorCode === LimitCode.INVALID_SSN
+  })
+
+  return invalidSsnError !== undefined
+}
+
+type Props = {
+  bundleVariants: QuoteBundleVariant[]
+  quoteCartId: string
+  priceData: PriceData
+  mainQuote: BundledQuote
+  quoteIds: string[]
+}
+
+export const CheckoutPayment = ({
+  bundleVariants,
+  quoteCartId,
+  priceData,
+  mainQuote,
+  quoteIds,
+}: Props) => {
   const textKeys = useTextKeys()
-  const data = useQuoteCartData()
+  const locale = useCurrentLocale()
+  const [
+    createQuoteBundle,
+    { loading: isBundleCreationInProgress },
+  ] = useCreateQuoteBundleMutation()
+
   const adyenRef = useRef<HTMLDivElement | null>(null)
   const [startCheckout] = useStartCheckoutMutation()
-  const quoteIds = data?.quoteIds as string | string[]
-  const quoteCartId = data?.quoteCartId as string
   const [getStatus] = useCheckoutStatusLazyQuery({
     pollInterval: 1000,
   })
   const [finishedPayment, setFinishedPayment] = useState(false)
   useEffect(() => {
-    finishedPayment && finishFlow()
+    finishedPayment && startSign()
   }, [finishedPayment])
 
   const onSuccess = useCallback(async () => {
     setFinishedPayment(true)
   }, [])
 
-  const finishFlow = async () => {
-    const res = await startCheckout({
+  const { firstName, lastName, email, ssn, phoneNumber } = mainQuote
+  const formik = useFormik<QuoteInput>({
+    initialValues: {
+      firstName,
+      lastName,
+      email,
+      ssn,
+      phoneNumber,
+      data: {
+        ...mainQuote.data,
+      },
+    } as QuoteInput,
+    validationSchema: getCheckoutDetailsValidationSchema(locale, textKeys),
+    onSubmit: async (
+      form: QuoteInput,
+      { setErrors }: FormikHelpers<QuoteInput>,
+    ) => {
+      try {
+        return await reCreateQuoteBundle(form)
+      } catch (error) {
+        if (isSsnInvalid(error.graphQLErrors)) {
+          setErrors({ ssn: textKeys.INVALID_FIELD() })
+        }
+        return undefined
+      }
+    },
+    enableReinitialize: true,
+  })
+
+  const reCreateQuoteBundle = (form: QuoteInput) => {
+    const {
+      firstName,
+      lastName,
+      birthDate,
+      email,
+      ssn,
+      phoneNumber,
+      dataCollectionId,
+    } = form
+    return createQuoteBundle({
+      variables: {
+        locale: locale.isoLocale,
+        quoteCartId,
+        quotes: getUniqueQuotesFromVariantList(bundleVariants).map(
+          ({
+            startDate,
+            currentInsurer,
+            data: { type, typeOfContract, isStudent },
+          }) => {
+            return {
+              firstName,
+              lastName,
+              email,
+              birthDate,
+              ssn,
+              startDate,
+              currentInsurer: currentInsurer?.id,
+              phoneNumber: phoneNumber?.replace(/\s/g, ''),
+              dataCollectionId,
+              data: {
+                ...form.data,
+                type,
+                typeOfContract,
+                isStudent,
+              },
+            }
+          },
+        ),
+      },
+    })
+  }
+
+  const startSign = async () => {
+    const { submitForm, dirty: isFormDataUpdated } = formik
+    if (isFormDataUpdated) {
+      const { data } = await submitForm()
+      const isUpdateQuotesFailed = isQuoteBundleError(data)
+      if (isUpdateQuotesFailed) throw Error('Updating quotes has failed')
+    }
+
+    const data = await startCheckout({
       variables: { quoteCartId, quoteIds },
     })
+
+    console.log(data)
+
     const checkoutStatus = getStatus({
       variables: {
         quoteCartId,
       },
     })
   }
+
   // handle redirect
   // add paymenttokenid to quotecart using mutation
 
@@ -144,7 +265,7 @@ export const CheckoutPayment = () => {
 
   return (
     <CheckoutPageWrapper>
-      <ContactInformation {...data?.userDetails} />
+      <ContactInformation formikProps={formik} />
       <AdyenContainer>
         <Wrapper>
           <Headline variant="s" headingLevel="h2" colorVariant="dark">
@@ -157,14 +278,16 @@ export const CheckoutPayment = () => {
           <Terms>{textKeys.CHECKOUT_PAYMENT_DETAILS_TERMS()}</Terms>
         </Wrapper>
       </AdyenContainer>
-      {data && (
+      {mainQuote && (
         <Footer
-          buttonText={textKeys.CHECKOUT_SIMPLE_SIGN_BUTTON_TEXT()}
+          buttonText={textKeys.CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT()}
           buttonOnClick={() => {
             checkoutAPI?.submit()
+            startSign()
           }}
+          isLoading={isBundleCreationInProgress}
         >
-          <PaymentInfo {...data.priceData} />
+          <PaymentInfo {...priceData} />
         </Footer>
       )}
     </CheckoutPageWrapper>
