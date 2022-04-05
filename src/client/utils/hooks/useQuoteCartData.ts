@@ -10,10 +10,12 @@ import {
 import {
   getSelectedBundleVariant,
   getCampaign,
+  getPossibleVariations,
 } from 'api/quoteCartQuerySelectors'
 import {
   typeOfResidenceTextKeys,
   HomeInsuranceTypeOfContract,
+  getQuoteIdsFromBundleVariant,
 } from 'pages/OfferNew/utils'
 import { GenericQuoteData } from '/pages/OfferNew/types'
 import { formatPostalNumber } from '../postalNumbers'
@@ -181,29 +183,32 @@ export const useQuoteCartData = () => {
     variables: { id: quoteCartId, locale: isoLocale },
   })
 
+  const bundleVariants = getPossibleVariations(data)
   const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
 
   if (error) return { error }
   if (loading) return { loading }
 
-  const selectedQuoteBundle = getSelectedBundleVariant(
+  const selectedQuoteBundleVariant = getSelectedBundleVariant(
     data,
     selectedInsuranceTypes,
   )
 
-  if (!selectedQuoteBundle) throw new Error('Invalid state')
+  if (!selectedQuoteBundleVariant) throw new Error('Invalid state')
 
-  const prices = selectedQuoteBundle?.bundle.quotes.map((item) => {
+  const prices = selectedQuoteBundleVariant?.bundle.quotes.map((item) => {
     return { displayName: item.displayName, price: item.price.amount }
   })
 
-  const mainQuote = getMainQuote(selectedQuoteBundle.bundle)
+  const quoteIds = getQuoteIdsFromBundleVariant(selectedQuoteBundleVariant)
+
+  const mainQuote = getMainQuote(selectedQuoteBundleVariant.bundle)
 
   const priceData = {
     prices: prices,
-    discount: getDiscountAmount(selectedQuoteBundle.bundle),
-    currency: getBundleCurrency(selectedQuoteBundle.bundle),
-    totalBundleCost: getTotalBundleCost(selectedQuoteBundle.bundle),
+    discount: getDiscountAmount(selectedQuoteBundleVariant.bundle),
+    currency: getBundleCurrency(selectedQuoteBundleVariant.bundle),
+    totalBundleCost: getTotalBundleCost(selectedQuoteBundleVariant.bundle),
     campaignName: getCampaign(data)?.displayValue,
   }
   const quoteDetails = mainQuote.data
@@ -214,17 +219,13 @@ export const useQuoteCartData = () => {
     getPeopleDetails(quoteDetails),
   ]
 
-  const userDetails = {
-    firstName: mainQuote.firstName,
-    lastName: mainQuote.lastName,
-    email: mainQuote.email,
-    ssn: mainQuote.ssn,
-  }
-
   return {
-    priceData: priceData,
+    priceData,
     quoteDetails: quoteDetailsGroups,
-    userDetails: userDetails,
+    quoteCartId,
+    quoteIds,
+    bundleVariants,
+    mainQuote,
     loading,
     error,
   }
