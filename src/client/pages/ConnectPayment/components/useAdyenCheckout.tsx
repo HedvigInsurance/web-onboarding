@@ -184,10 +184,10 @@ const createAdyenCheckout = ({
             input: paymentRquest as ConnectPaymentInput,
           },
         })
-        console.log(result)
         paymentTokenId =
           result.data.paymentConnection_connectPayment.paymentTokenId
 
+        // once we get the paymentTokenId we should do an quoteCart_addPaymentToken mutation
         if (!result) {
           return
         }

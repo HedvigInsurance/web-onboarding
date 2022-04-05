@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { useFormik, FormikHelpers } from 'formik'
 import { GraphQLError } from 'graphql'
+import { Redirect } from 'react-router'
 import { useTextKeys } from 'utils/textKeys'
 import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
 import {
@@ -12,13 +13,12 @@ import {
   useCreateQuoteBundleMutation,
   QuoteBundleVariant,
   BundledQuote,
+  CheckoutStatus,
 } from 'data/graphql'
-
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { Headline } from 'components/Headline/Headline'
 import { QuoteInput } from 'pages/Offer/Introduction/DetailsModal/types'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-
 import { LimitCode, isQuoteBundleError } from 'api/quoteBundleErrorSelectors'
 import { useAdyenCheckout } from '../../ConnectPayment/components/useAdyenCheckout'
 import {
@@ -147,6 +147,7 @@ export const CheckoutPayment = ({
     createQuoteBundle,
     { loading: isBundleCreationInProgress },
   ] = useCreateQuoteBundleMutation()
+  const { path: currentLocalePath } = useCurrentLocale()
 
   const adyenRef = useRef<HTMLDivElement | null>(null)
   const [startCheckout] = useStartCheckoutMutation()
@@ -242,6 +243,9 @@ export const CheckoutPayment = ({
       if (isUpdateQuotesFailed) throw Error('Updating quotes has failed')
     }
 
+    //submit Adyen
+    checkoutAPI?.submit()
+    console.log(checkoutAPI?.onComplete())
     const data = await startCheckout({
       variables: { quoteCartId, quoteIds },
     })
@@ -253,10 +257,13 @@ export const CheckoutPayment = ({
         quoteCartId,
       },
     })
-  }
 
-  // handle redirect
-  // add paymenttokenid to quotecart using mutation
+    console.log(checkoutStatus)
+    // after the flow has finished we should redirect to the last page
+    // if (checkoutStatus === CheckoutStatus.Signed) {
+    //   return <Redirect to={`/${currentLocalePath}/download`} />
+    // }
+  }
 
   const checkoutAPI = useAdyenCheckout({
     adyenRef,
@@ -282,7 +289,6 @@ export const CheckoutPayment = ({
         <Footer
           buttonText={textKeys.CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT()}
           buttonOnClick={() => {
-            checkoutAPI?.submit()
             startSign()
           }}
           isLoading={isBundleCreationInProgress}
