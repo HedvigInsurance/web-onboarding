@@ -1,53 +1,62 @@
 import React from 'react'
 import { useFormik, FormikHelpers } from 'formik'
+import { GraphQLError } from 'graphql'
 import { useTextKeys } from 'utils/textKeys'
-import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
 import { QuoteInput } from 'pages/Offer/Introduction/DetailsModal/types'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { useCreateQuoteBundleMutation, QuoteBundleVariant } from 'data/graphql'
+import {
+  useCreateQuoteBundleMutation,
+  QuoteBundleVariant,
+  BundledQuote,
+} from 'data/graphql'
+import { LimitCode } from 'api/quoteBundleErrorSelectors'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
 import { getUniqueQuotesFromVariantList } from '../../OfferNew/utils'
 import { getCheckoutDetailsValidationSchema } from '../../Offer/Checkout/UserDetailsForm'
-import { UserData } from '../../OfferNew/types'
 import { PriceData } from '../shared/types'
 import { ContactInformation } from './ContactInformation/ContactInformation'
 import { PaymentDetails } from './PaymentDetails/PaymentDetails'
 
+const isSsnInvalid = (errors: GraphQLError[]) => {
+  const invalidSsnError = errors.find((error) => {
+    return error?.extensions?.body?.errorCode === LimitCode.INVALID_SSN
+  })
+
+  return invalidSsnError !== undefined
+}
+
 type Props = {
-  data: ReturnType<typeof useQuoteCartData>
   bundleVariants: QuoteBundleVariant[]
-  selectedQuoteBundleVariant: QuoteBundleVariant
   quoteCartId: string
   priceData: PriceData
+  mainQuote: BundledQuote
 }
 
 export const CheckoutPayment = ({
-  data,
   bundleVariants,
   quoteCartId,
   priceData,
+  mainQuote,
 }: Props) => {
   const textKeys = useTextKeys()
   const locale = useCurrentLocale()
   const [
     createQuoteBundle,
-    { loading: isBundleCreationInProgress },
+    { loading: isBundleCreationInProgress }, // TODO: Fix loading states
   ] = useCreateQuoteBundleMutation()
-  const mainQuoteData = data?.mainQuote?.data || {}
-  console.log(data)
-  const userData = data?.userDetails as QuoteInput
-  const { firstName, lastName, email, ssn } = userData
 
+  const { firstName, lastName, email, ssn, phoneNumber } = mainQuote
   const formik = useFormik<QuoteInput>({
     initialValues: {
       firstName,
       lastName,
       email,
       ssn,
+      phoneNumber,
       data: {
-        ...mainQuoteData,
+        ...mainQuote.data,
       },
     } as QuoteInput,
     validationSchema: getCheckoutDetailsValidationSchema(locale, textKeys),
@@ -58,7 +67,9 @@ export const CheckoutPayment = ({
       try {
         return await reCreateQuoteBundle(form)
       } catch (error) {
-        console.log(error)
+        if (isSsnInvalid(error.graphQLErrors)) {
+          setErrors({ ssn: textKeys.INVALID_FIELD() })
+        }
         return undefined
       }
     },
@@ -108,10 +119,9 @@ export const CheckoutPayment = ({
     })
   }
 
-  const handleClick = async () => {
+  const startSign = async () => {
     const { submitForm } = formik
-    const { res } = await submitForm()
-    console.log(res)
+    await submitForm()
   }
 
   return (
@@ -121,7 +131,7 @@ export const CheckoutPayment = ({
       <Footer
         buttonText={textKeys.CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT()}
         buttonOnClick={() => {
-          handleClick()
+          startSign()
         }}
       >
         <PaymentInfo {...priceData} />

@@ -215,21 +215,11 @@ export const useQuoteCartData = () => {
     getPeopleDetails(quoteDetails),
   ]
 
-  const userDetails = {
-    firstName: mainQuote.firstName,
-    lastName: mainQuote.lastName,
-    email: mainQuote.email,
-    ssn: mainQuote.ssn,
-    phoneNumber: mainQuote.phoneNumber,
-  }
-
   return {
     priceData,
     quoteDetails: quoteDetailsGroups,
-    userDetails,
     quoteCartId,
     quoteIds,
-    selectedQuoteBundleVariant,
     bundleVariants,
     mainQuote,
     loading,

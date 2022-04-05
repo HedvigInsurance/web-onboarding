@@ -3,7 +3,6 @@ import styled from '@emotion/styled'
 import { FormikProps } from 'formik'
 import { Headline } from 'components/Headline/Headline'
 import { useTextKeys } from 'utils/textKeys'
-import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useFeature, Features } from 'utils/hooks/useFeature'
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { QuoteInput } from 'pages/Offer/Introduction/DetailsModal/types'
@@ -46,10 +45,6 @@ const SpacerSmall = styled.div`
   height: 1rem;
 `
 
-const Spacer = styled.div`
-  height: 1.5rem;
-`
-
 const HorizontalDivider = styled(Divider)`
   margin: 1.5rem 0;
   ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
@@ -63,11 +58,9 @@ type Props = {
 
 export const ContactInformation = ({ formikProps }: Props) => {
   const textKeys = useTextKeys()
-  const locale = useCurrentLocale()
   const { handleChange } = formikProps
-  const [hasEnabledCreditCheckInfo, isPhoneNumberRequired] = useFeature([
+  const [hasEnabledCreditCheckInfo] = useFeature([
     Features.CHECKOUT_CREDIT_CHECK,
-    Features.COLLECT_PHONE_NUMBER_AT_CHECKOUT,
   ])
   const [isShowingCreditCheckInfo, setIsShowingCreditCheckInfo] = useState(
     false,
