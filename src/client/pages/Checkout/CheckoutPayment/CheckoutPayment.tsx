@@ -4,7 +4,11 @@ import { useTextKeys } from 'utils/textKeys'
 import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
 import { QuoteInput } from 'pages/Offer/Introduction/DetailsModal/types'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
+<<<<<<< HEAD
 import { useCreateQuoteBundleMutation } from 'data/graphql'
+=======
+import { useCreateQuoteBundleMutation, QuoteBundleVariant } from 'data/graphql'
+>>>>>>> 69ef3129c812db724371640c0d26a48a107d9b26
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
@@ -15,9 +19,21 @@ import { PaymentDetails } from './PaymentDetails/PaymentDetails'
 
 type Props = {
   data: ReturnType<typeof useQuoteCartData>
+<<<<<<< HEAD
 }
 
 export const CheckoutPayment = ({ data }: Props) => {
+=======
+  bundleVariants: QuoteBundleVariant[]
+  selectedQuoteBundleVariant: QuoteBundleVariant
+}
+
+export const CheckoutPayment = ({
+  data,
+  bundleVariants,
+  selectedBundleVariant,
+}: Props) => {
+>>>>>>> 69ef3129c812db724371640c0d26a48a107d9b26
   const textKeys = useTextKeys()
   const locale = useCurrentLocale()
   const [
@@ -28,7 +44,10 @@ export const CheckoutPayment = ({ data }: Props) => {
   const quoteCartId = data?.quoteCartId as string
   const priceData = data?.priceData
   const userData = data?.userDetails as QuoteInput
+<<<<<<< HEAD
   const quotes = data?.quotes
+=======
+>>>>>>> 69ef3129c812db724371640c0d26a48a107d9b26
   const mainQuoteData = data?.mainQuote?.data || {}
   console.log(data)
   const { firstName, lastName, email, ssn, phoneNumber } = userData
@@ -71,7 +90,6 @@ export const CheckoutPayment = ({ data }: Props) => {
     enableReinitialize: true,
   })
 
-  console.log(formik.initialValues)
   const reCreateQuoteBundle = (form: QuoteInput) => {
     const {
       firstName,
@@ -86,7 +104,7 @@ export const CheckoutPayment = ({ data }: Props) => {
       variables: {
         locale: locale.isoLocale,
         quoteCartId,
-        quotes: getUniqueQuotesFromVariantList(quotes).map(
+        quotes: getUniqueQuotesFromVariantList(bundleVariants).map(
           ({
             startDate,
             currentInsurer,
@@ -113,7 +131,6 @@ export const CheckoutPayment = ({ data }: Props) => {
         ),
       },
     })
-    // TODO: Handle reporting of underwritting limits as part of GRW-705
   }
 
   const handleClick = async () => {

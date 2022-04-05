@@ -4,10 +4,15 @@ import { CheckoutPayment } from './CheckoutPayment'
 
 export const Checkout = () => {
   const data = useQuoteCartData()
+  if (!data) return null
 
-  if (!data) {
-    return null
-  }
+  const { bundleVariants, selectedQuoteBundleVariant } = data
 
-  return <CheckoutPayment data={data} />
+  return (
+    <CheckoutPayment
+      data={data}
+      bundleVariants={bundleVariants}
+      selectedQuoteBundleVariant={selectedQuoteBundleVariant}
+    />
+  )
 }

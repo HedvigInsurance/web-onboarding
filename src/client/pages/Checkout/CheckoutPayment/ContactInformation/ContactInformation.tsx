@@ -65,11 +65,10 @@ export const ContactInformation = ({ formikProps }: Props) => {
   const textKeys = useTextKeys()
   const locale = useCurrentLocale()
   const { handleChange } = formikProps
-  console.log(formikProps)
-  const [hasEnabledCreditCheckInfo] = useFeature([
+  const [hasEnabledCreditCheckInfo, isPhoneNumberRequired] = useFeature([
     Features.CHECKOUT_CREDIT_CHECK,
+    Features.COLLECT_PHONE_NUMBER_AT_CHECKOUT,
   ])
-  const ssnFormatExample = locale.ssn.formatExample
   const [isShowingCreditCheckInfo, setIsShowingCreditCheckInfo] = useState(
     false,
   )
@@ -87,9 +86,7 @@ export const ContactInformation = ({ formikProps }: Props) => {
   )
 
   useEffect(() => {
-    if (ssn) {
-      debouncedSubmitForm()
-    }
+    if (ssn !== initialValues.ssn) debouncedSubmitForm()
   }, [ssn, initialValues.ssn, debouncedSubmitForm])
 
   return (
@@ -112,39 +109,30 @@ export const ContactInformation = ({ formikProps }: Props) => {
             label={textKeys.CHECKOUT_LASTNAME_LABEL()}
             placeholder={textKeys.CHECKOUT_LASTNAME_LABEL()}
             type="text"
-            // defaultValue={lastName ?? ''}
             name="lastName"
             formikProps={formikProps}
             onChange={handleChange}
           />
-          <div>
+          {isPhoneNumberRequired && (
             <TextInput
-              label={textKeys.CHECKOUT_CONTACT_INFO_SSN_LABEL()}
-              placeholder={ssnFormatExample}
-              helperText={
-                hasEnabledCreditCheckInfo
-                  ? textKeys.CHECKOUT_CONTACT_INFO_CREDIT_CHECK_HELPER()
-                  : undefined
-              }
-              type="text"
-              // defaultValue={ssn ?? ''}
-              name="ssn"
+              label="CHECKOUT_PHONE_NUMBER_LABEL"
+              name="phoneNumber"
+              type="tel"
               formikProps={formikProps}
               onChange={handleChange}
+              placeholder={locale.phoneNumber.placeholder}
+              helperText="CHECKOUT_PHONE_NUMBER_HELPERTEXT"
             />
-            {hasEnabledCreditCheckInfo && <Spacer />}
-          </div>
-          <div>
-            <SsnInput
-              name="ssn"
-              formikProps={formikProps}
-              onFocus={() =>
-                setIsShowingCreditCheckInfo(hasEnabledCreditCheckInfo)
-              }
-              onChange={handleChange}
-            />
-            {isShowingCreditCheckInfo && <CreditCheckInfo />}
-          </div>
+          )}
+          <SsnInput
+            name="ssn"
+            formikProps={formikProps}
+            onFocus={() =>
+              setIsShowingCreditCheckInfo(hasEnabledCreditCheckInfo)
+            }
+            onChange={handleChange}
+          />
+          {isShowingCreditCheckInfo && <CreditCheckInfo />}
         </InputFieldsWrapper>
       </form>
       <HorizontalDivider />

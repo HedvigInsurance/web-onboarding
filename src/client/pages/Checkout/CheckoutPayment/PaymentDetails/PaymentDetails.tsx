@@ -89,9 +89,7 @@ export const PaymentDetails = () => {
       <Description>
         {textKeys.CHECKOUT_PAYMENT_DETAILS_DESCRIPTION()}
       </Description>
-      <AdyenContainer>
-        <AdyenCheckout />
-      </AdyenContainer>
+      <AdyenContainer>{/* <AdyenCheckout /> */}</AdyenContainer>
 
       <Terms>{textKeys.CHECKOUT_PAYMENT_DETAILS_TERMS()}</Terms>
     </Wrapper>
