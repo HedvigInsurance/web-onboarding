@@ -113,17 +113,7 @@ export const ContactInformation = ({ formikProps }: Props) => {
             formikProps={formikProps}
             onChange={handleChange}
           />
-          {isPhoneNumberRequired && (
-            <TextInput
-              label="CHECKOUT_PHONE_NUMBER_LABEL"
-              name="phoneNumber"
-              type="tel"
-              formikProps={formikProps}
-              onChange={handleChange}
-              placeholder={locale.phoneNumber.placeholder}
-              helperText="CHECKOUT_PHONE_NUMBER_HELPERTEXT"
-            />
-          )}
+
           <SsnInput
             name="ssn"
             formikProps={formikProps}
@@ -133,6 +123,17 @@ export const ContactInformation = ({ formikProps }: Props) => {
             onChange={handleChange}
           />
           {isShowingCreditCheckInfo && <CreditCheckInfo />}
+
+          <div>
+            <TextInput
+              label={textKeys.CHECKOUT_EMAIL_LABEL()}
+              placeholder={textKeys.CHECKOUT_EMAIL_LABEL()}
+              helperText={textKeys.CHECKOUT_CONTACT_INFO_EMAIL_HELPER()}
+              type="text"
+              name="email"
+              formikProps={formikProps}
+            />
+          </div>
         </InputFieldsWrapper>
       </form>
       <HorizontalDivider />

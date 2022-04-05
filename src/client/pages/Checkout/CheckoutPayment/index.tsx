@@ -6,13 +6,20 @@ export const Checkout = () => {
   const data = useQuoteCartData()
   if (!data) return null
 
-  const { bundleVariants, selectedQuoteBundleVariant } = data
+  const {
+    bundleVariants,
+    selectedQuoteBundleVariant,
+    priceData,
+    quoteCartId,
+  } = data
 
   return (
     <CheckoutPayment
       data={data}
       bundleVariants={bundleVariants}
       selectedQuoteBundleVariant={selectedQuoteBundleVariant}
+      quoteCartId={quoteCartId}
+      priceData={priceData}
     />
   )
 }

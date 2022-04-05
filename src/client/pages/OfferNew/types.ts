@@ -118,3 +118,10 @@ export interface WithPhoneForm {
   phoneNumber: string
   onPhoneChange: (phoneNumber: string) => void
 }
+
+export interface UserData {
+  firstName: string
+  lastName: string
+  ssn: string
+  email: string
+}
