@@ -7,7 +7,6 @@ export const Checkout = () => {
   if (!data) return null
 
   const { bundleVariants, priceData, quoteCartId, mainQuote, quoteIds } = data
-
   return (
     <CheckoutPayment
       bundleVariants={bundleVariants}

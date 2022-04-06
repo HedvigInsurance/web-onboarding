@@ -149,6 +149,8 @@ export const CheckoutPayment = ({
   ] = useCreateQuoteBundleMutation()
   const { path: currentLocalePath } = useCurrentLocale()
 
+  console.log(mainQuote)
+
   const adyenRef = useRef<HTMLDivElement | null>(null)
   const [startCheckout] = useStartCheckoutMutation()
   const [getStatus] = useCheckoutStatusLazyQuery({
@@ -245,12 +247,13 @@ export const CheckoutPayment = ({
 
     //submit Adyen
     checkoutAPI?.submit()
-    console.log(checkoutAPI?.onComplete())
-    const data = await startCheckout({
-      variables: { quoteCartId, quoteIds },
-    })
+    const paymentFinished = await onSuccess()
+    const res = await onSuccess()
+    // find a way to see payment has been succesful and after that start Checkout
 
-    console.log(data)
+    // const data = await startCheckout({
+    //   variables: { quoteCartId, quoteIds },
+    // })
 
     const checkoutStatus = getStatus({
       variables: {
@@ -268,6 +271,7 @@ export const CheckoutPayment = ({
   const checkoutAPI = useAdyenCheckout({
     adyenRef,
     onSuccess,
+    quoteCartId,
   })
 
   return (
