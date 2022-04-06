@@ -2,7 +2,6 @@ import React from 'react'
 import { useFormik, FormikHelpers } from 'formik'
 import { GraphQLError } from 'graphql'
 import { useTextKeys } from 'utils/textKeys'
-import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
 import { QuoteInput } from 'pages/Offer/Introduction/DetailsModal/types'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import {
