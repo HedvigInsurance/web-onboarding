@@ -186,9 +186,6 @@ export const useQuoteCartData = () => {
   const bundleVariants = getPossibleVariations(data)
   const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
 
-  if (error) return { error }
-  if (loading) return { loading }
-
   const selectedQuoteBundleVariant = getSelectedBundleVariant(
     data,
     selectedInsuranceTypes,
