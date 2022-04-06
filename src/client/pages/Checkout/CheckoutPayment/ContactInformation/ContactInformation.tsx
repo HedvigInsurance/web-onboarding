@@ -1,16 +1,25 @@
-import React from 'react'
+import React, { useEffect, useCallback, useState } from 'react'
 import styled from '@emotion/styled'
-import { colorsV3 } from '@hedviginsurance/brand'
+import { FormikProps } from 'formik'
 import { Headline } from 'components/Headline/Headline'
-import { InputField } from 'components/inputs'
 import { useTextKeys } from 'utils/textKeys'
-import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useFeature, Features } from 'utils/hooks/useFeature'
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
-import { Divider } from '../../shared/Divider'
-import { ContactInfoData } from '../../shared/types'
+import { QuoteInput } from 'pages/Offer/Introduction/DetailsModal/types'
+import { CreditCheckInfo } from 'pages/OfferNew/Checkout/CreditCheckInfo'
+import { TextInput, SsnInput } from 'pages/Offer/Checkout/inputFields'
 import { WrapperWidth } from '../../shared/CheckoutPageWrapper'
+import { Divider } from '../../shared/Divider'
 
+const debounce = (func: (...args: any[]) => any, timeout: number) => {
+  let timer: number
+  return function(this: any, ...args: any[]) {
+    clearTimeout(timer)
+    timer = window.setTimeout(() => {
+      func.apply(this, args)
+    }, timeout)
+  }
+}
 const Wrapper = styled.div`
   margin: 0 auto;
   padding: 0 1rem;
@@ -32,19 +41,8 @@ const InputFieldsWrapper = styled.div`
   }
 `
 
-const StyledInputField = styled(InputField)`
-  ${Wrapper} & {
-    background-color: ${colorsV3.gray100};
-    border-radius: 8px;
-  }
-`
-
 const SpacerSmall = styled.div`
   height: 1rem;
-`
-
-const Spacer = styled.div`
-  height: 1.5rem;
 `
 
 const HorizontalDivider = styled(Divider)`
@@ -54,19 +52,35 @@ const HorizontalDivider = styled(Divider)`
   }
 `
 
-export const ContactInformation = ({
-  firstName,
-  lastName,
-  email,
-  ssn,
-}: ContactInfoData) => {
-  const textKeys = useTextKeys()
-  const locale = useCurrentLocale()
+type Props = {
+  formikProps: FormikProps<QuoteInput>
+}
 
+export const ContactInformation = ({ formikProps }: Props) => {
+  const textKeys = useTextKeys()
+  const { handleChange } = formikProps
   const [hasEnabledCreditCheckInfo] = useFeature([
     Features.CHECKOUT_CREDIT_CHECK,
   ])
-  const ssnFormatExample = locale.ssn.formatExample
+  const [isShowingCreditCheckInfo, setIsShowingCreditCheckInfo] = useState(
+    false,
+  )
+  const {
+    values: { ssn },
+    initialValues,
+    submitForm,
+  } = formikProps
+
+  const debouncedSubmitForm = useCallback(
+    debounce(() => {
+      submitForm()
+    }, 500),
+    [],
+  )
+
+  useEffect(() => {
+    if (ssn !== initialValues.ssn) debouncedSubmitForm()
+  }, [ssn, initialValues.ssn, debouncedSubmitForm])
 
   return (
     <Wrapper>
@@ -74,47 +88,47 @@ export const ContactInformation = ({
         {textKeys.CHECKOUT_CONTACT_INFO_HEADING()}
       </Headline>
       <SpacerSmall />
-      <InputFieldsWrapper>
-        <StyledInputField
-          label={textKeys.CHECKOUT_FIRSTNAME_LABEL()}
-          placeholder={textKeys.CHECKOUT_FIRSTNAME_LABEL()}
-          type="text"
-          defaultValue={firstName ?? ''}
-          name="firstName"
-        />
-        <StyledInputField
-          label={textKeys.CHECKOUT_LASTNAME_LABEL()}
-          placeholder={textKeys.CHECKOUT_LASTNAME_LABEL()}
-          type="text"
-          defaultValue={lastName ?? ''}
-          name="lastName"
-        />
-        <div>
-          <StyledInputField
-            label={textKeys.CHECKOUT_CONTACT_INFO_SSN_LABEL()}
-            placeholder={ssnFormatExample}
-            helperText={
-              hasEnabledCreditCheckInfo
-                ? textKeys.CHECKOUT_CONTACT_INFO_CREDIT_CHECK_HELPER()
-                : undefined
-            }
+      <form onSubmit={formikProps.handleSubmit}>
+        <InputFieldsWrapper>
+          <TextInput
+            label={textKeys.CHECKOUT_FIRSTNAME_LABEL()}
+            placeholder={textKeys.CHECKOUT_FIRSTNAME_LABEL()}
             type="text"
-            defaultValue={ssn ?? ''}
+            name="firstName"
+            formikProps={formikProps}
+            onChange={handleChange}
+          />
+          <TextInput
+            label={textKeys.CHECKOUT_LASTNAME_LABEL()}
+            placeholder={textKeys.CHECKOUT_LASTNAME_LABEL()}
+            type="text"
+            name="lastName"
+            formikProps={formikProps}
+            onChange={handleChange}
+          />
+
+          <SsnInput
             name="ssn"
+            formikProps={formikProps}
+            onFocus={() =>
+              setIsShowingCreditCheckInfo(hasEnabledCreditCheckInfo)
+            }
+            onChange={handleChange}
           />
-          {hasEnabledCreditCheckInfo && <Spacer />}
-        </div>
-        <div>
-          <StyledInputField
-            label={textKeys.CHECKOUT_EMAIL_LABEL()}
-            placeholder={textKeys.CHECKOUT_EMAIL_LABEL()}
-            helperText={textKeys.CHECKOUT_CONTACT_INFO_EMAIL_HELPER()}
-            type="text"
-            defaultValue={email ?? ''}
-            name="email"
-          />
-        </div>
-      </InputFieldsWrapper>
+          {isShowingCreditCheckInfo && <CreditCheckInfo />}
+
+          <div>
+            <TextInput
+              label={textKeys.CHECKOUT_EMAIL_LABEL()}
+              placeholder={textKeys.CHECKOUT_EMAIL_LABEL()}
+              helperText={textKeys.CHECKOUT_CONTACT_INFO_EMAIL_HELPER()}
+              type="text"
+              name="email"
+              formikProps={formikProps}
+            />
+          </div>
+        </InputFieldsWrapper>
+      </form>
       <HorizontalDivider />
     </Wrapper>
   )
