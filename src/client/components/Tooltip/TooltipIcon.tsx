@@ -11,6 +11,8 @@ const TooltipIconWrapper = styled.div`
   /* remove extra space under child SVG: https://stackoverflow.com/a/51161925 */
   font-size: 0;
   line-height: 0;
+  display: flex;
+  align-items: center;
 `
 
 export type TooltipIconProps = Pick<TooltipProps, 'body' | 'placement'>
