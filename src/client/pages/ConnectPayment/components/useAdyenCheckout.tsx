@@ -207,7 +207,7 @@ const createAdyenCheckout = ({
           'ActionRequired'
         ) {
           dropinComponent.handleAction(
-            JSON.parse(result.data.paymentConnection_connectPayment.action),
+            result.data.paymentConnection_connectPayment.action,
           )
           return
         }
@@ -250,17 +250,17 @@ const createAdyenCheckout = ({
 
         if (
           result.data?.submitAdditionalPaymentDetails.__typename ===
-          'AdditionalPaymentsDetailsResponseAction'
+          'ActionRequired'
         ) {
           dropinComponent.handleAction(
-            JSON.parse(result.data?.submitAdditionalPaymentDetails.action),
+            result.data?.submitAdditionalPaymentDetails.action,
           )
           return
         }
 
         if (
           result.data?.submitAdditionalPaymentDetails.__typename ===
-          'AdditionalPaymentsDetailsResponseFinished'
+          'ConnectPaymentFinished'
         ) {
           handleResult(
             dropinComponent,
