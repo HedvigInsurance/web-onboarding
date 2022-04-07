@@ -1,6 +1,7 @@
 mutation PaymentConnection_connectPayment($input: ConnectPaymentInput!) {
   paymentConnection_connectPayment(input: $input) {
     ... on ActionRequired {
+      paymentTokenId
       action
     }
     ... on ConnectPaymentFinished {

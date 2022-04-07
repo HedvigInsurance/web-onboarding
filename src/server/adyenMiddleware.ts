@@ -24,29 +24,25 @@ export const handleAdyen3dsPostRedirect: Router.IMiddleware<
 > = async (ctx, _next) => {
   const { MD: md, PaRes: pares } = (ctx.request as any).body as Adyen3dsDetails
   const session = createSession<Session>(new ServerCookieStorage(ctx))
-  const Authorization = session.getSession()?.token
+  const paymentTokenId = session.getSession()?.paymentTokenId
 
   try {
-    const result = await httpClient.post(
-      GIRAFFE_HOST + '/graphql',
-      {
-        operationName: 'SubmitAdyenRedirection',
-        query: `
-          mutation SubmitAdyenRedirection($md: String!, $pares: String!) {
-            submitAdyenRedirection(req: { md: $md, pares: $pares }) {
-              resultCode
+    const result = await httpClient.post(GIRAFFE_HOST + '/graphql', {
+      operationName: 'SubmitAdyenRedirection',
+      query: `
+          mutation SubmitAdyenRedirection($paymentTokenId: ID!, $input: SubmitAdyenRedirectionInput!) {
+            paymentConnection_submitAdyenRedirection(paymentTokenId: $paymentTokenId, input: $input) {
+              status
             }
           }
         `,
-        variables: {
-          md,
-          pares,
-        },
+      variables: {
+        paymentTokenId,
+        input: { md, pares },
       },
-      {
-        headers: { Authorization },
-      },
-    )
+    })
+
+    console.log('result', result)
 
     if (result.status !== 200) {
       throw new Error(
@@ -56,7 +52,7 @@ export const handleAdyen3dsPostRedirect: Router.IMiddleware<
 
     if (
       ['Authorised', 'Pending'].includes(
-        result.data?.data?.submitAdyenRedirection?.resultCode,
+        result.data?.data?.paymentConnection_submitAdyenRedirection?.status,
       )
     ) {
       ctx.redirect(
@@ -78,6 +74,7 @@ export const handleAdyen3dsPostRedirect: Router.IMiddleware<
     )
     ctx.body = 'Loading'
   } catch (e) {
+    // console.log(e)
     Sentry.captureException(e)
     ctx.state.getLogger('ayden').error(e.message)
     throw e

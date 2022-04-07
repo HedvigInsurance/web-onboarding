@@ -8,7 +8,6 @@ import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { LocaleData, LocaleLabel } from 'l10n/locales'
 import {
   Scalars,
-  useAvailablePaymentMethodsQuery,
   usePaymentConnection_ConnectPaymentMutation,
   usePaymentConnection_SubmitAdditionalPaymentDetailsMutation,
   ConnectPaymentInput,
@@ -16,7 +15,9 @@ import {
   Market,
   useAddPaymentTokenMutation,
   usePaymentMethodsQuery,
+  usePaymentMethodsLazyQuery,
 } from 'data/graphql'
+import { useStorage, StorageState } from 'utils/StorageContainer'
 
 interface Params {
   onSuccess?: () => void
@@ -40,6 +41,8 @@ export const useAdyenCheckout = ({
   const [adyenLoaded, setAdyenLoaded] = useState(false)
   const [connectPaymentMutation] = usePaymentConnection_ConnectPaymentMutation()
   const [addPaymentTokenMutation] = useAddPaymentTokenMutation()
+  const storage = useStorage()
+
   const [
     submitAdditionalPaymentDetails,
   ] = usePaymentConnection_SubmitAdditionalPaymentDetailsMutation()
@@ -52,13 +55,19 @@ export const useAdyenCheckout = ({
       id: quoteCartId as string,
     },
   })
+  const [getPaymentMethods] = usePaymentMethodsLazyQuery()
 
   const paymentMethodsResponse =
     paymentMethodsResponseNew?.data?.quoteCart.paymentConnection?.providers[0]
       ?.availablePaymentMethods
 
   useEffect(() => {
-    if (!paymentMethodsResponse || !adyenLoaded || !adyenRef.current) {
+    if (
+      !quoteCartId ||
+      !paymentMethodsResponse ||
+      !adyenLoaded ||
+      !adyenRef.current
+    ) {
       return
     }
     const newCheckoutAPI = createAdyenCheckout({
@@ -71,12 +80,14 @@ export const useAdyenCheckout = ({
       quoteCartId,
       history,
       onSuccess,
+      storage,
     })
 
     newCheckoutAPI.mount(adyenRef.current)
     setCheckoutAPI(newCheckoutAPI)
   }, [
     paymentMethodsResponse,
+    getPaymentMethods,
     adyenLoaded,
     textKeys,
     currentLocale,
@@ -87,6 +98,7 @@ export const useAdyenCheckout = ({
     history,
     adyenRef,
     onSuccess,
+    storage,
   ])
 
   useEffect(() => {
@@ -108,7 +120,8 @@ interface AdyenCheckoutProps {
   history: ReturnType<typeof useHistory>
   onSuccess?: () => void
   setIsCompleted?: () => void
-  quoteCartId?: string
+  quoteCartId: string
+  storage: StorageState
 }
 
 const createAdyenCheckout = ({
@@ -119,6 +132,7 @@ const createAdyenCheckout = ({
   submitAdditionalPaymentDetails,
   addPaymentTokenMutation,
   quoteCartId,
+  storage,
   onSuccess = () => {
     /* noop */
   },
@@ -130,8 +144,7 @@ const createAdyenCheckout = ({
     [match.any(), 'en-US'],
   ])(isoLocale)
 
-  const returnUrl = getReturnUrl({ currentLocalePath: path })
-  let paymentTokenId = ''
+  const returnUrl = getReturnUrl({ currentLocalePath: path, quoteCartId })
   const handleResult = (dropinComponent: any, status: string) => {
     if (['AUTHORISED', 'PENDING'].includes(status)) {
       // history.push(getOnSuccessRedirectUrl({ currentLocalePath: path }))
@@ -183,7 +196,7 @@ const createAdyenCheckout = ({
     returnUrl,
     onSubmit: async (state: any, dropinComponent: any) => {
       dropinComponent.setStatus('loading')
-      const paymentRquest = {
+      const paymentRequest = {
         browserInfo: state.data.browserInfo || null || undefined,
         paymentMethodDetails: state.data.paymentMethod,
         channel: PaymentConnectChannel.Web,
@@ -194,13 +207,21 @@ const createAdyenCheckout = ({
       try {
         const result = await connectPaymentMutation({
           variables: {
-            input: paymentRquest as ConnectPaymentInput,
+            input: paymentRequest as ConnectPaymentInput,
           },
         })
 
         if (!result) {
           return
         }
+
+        const paymentTokenId =
+          result.data.paymentConnection_connectPayment.paymentTokenId
+
+        storage.session.setSession({
+          ...storage.session.getSession(),
+          paymentTokenId,
+        })
 
         if (
           result.data?.paymentConnection_connectPayment?.__typename ===
@@ -216,12 +237,10 @@ const createAdyenCheckout = ({
           result.data?.paymentConnection_connectPayment?.__typename ===
           'ConnectPaymentFinished'
         ) {
-          paymentTokenId =
-            result.data.paymentConnection_connectPayment.paymentTokenId
           addPaymentTokenMutation({
             variables: {
               id: quoteCartId,
-              paymentTokenId: paymentTokenId,
+              paymentTokenId,
             },
           })
           handleResult(
@@ -234,10 +253,13 @@ const createAdyenCheckout = ({
       }
     },
     onAdditionalDetails: async (state: any, dropinComponent: any) => {
+      const paymentTokenId = storage.session.getSession()?.paymentTokenId
+      if (!paymentTokenId) return
+
       try {
         const result = await submitAdditionalPaymentDetails({
           variables: {
-            paymentTokenId: paymentTokenId,
+            paymentTokenId,
             paymentRequest: {
               paymentsDetailsRequest: JSON.stringify(state.data),
             },
@@ -279,10 +301,12 @@ const createAdyenCheckout = ({
 
 const getReturnUrl = ({
   currentLocalePath,
+  quoteCartId,
 }: {
   currentLocalePath: LocaleLabel
+  quoteCartId: string
 }) => {
-  return `${window.location.origin}/${currentLocalePath}/new-member/connect-payment/adyen-callback`
+  return `${window.location.origin}/${currentLocalePath}/new-member/connect-payment/adyen-callback?quoteCartId=${quoteCartId}`
 }
 
 const getOnSuccessRedirectUrl = ({

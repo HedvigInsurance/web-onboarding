@@ -7667,8 +7667,17 @@ export type Mutation = {
   login_verifyOtpAttempt: VerifyOtpLoginAttemptResult
   /** Resends the OTP to the provided credential */
   login_resendOtp: Scalars['ID']
+  /**
+   * Initiates a tokenization request to Adyen. This can either succeed/fail immediately, in which case
+   * ConnectPaymentFinished is returned, or require additional actions, such as 3DS authentication, from the client.
+   */
   paymentConnection_connectPayment: ConnectPaymentResult
+  /** Used by the Adyen UI components inside the 3DS authentication flow. */
   paymentConnection_submitAdditionalPaymentDetails: ConnectPaymentResult
+  /**
+   * Should be used by the web client when the user is redirected back from the 3DS flow. The md and pares values can
+   * be retrieved from the Adyen callback.
+   */
   paymentConnection_submitAdyenRedirection: ConnectPaymentFinished
   /** Create a new quote cart, used to tie the onboarding journey together. */
   onboardingQuoteCart_create: CreateQuoteCartResult
@@ -8752,6 +8761,7 @@ export type QuoteCart = {
   checkout?: Maybe<Checkout>
   /**  The accepted checkout methods.  */
   checkoutMethods: Array<CheckoutMethod>
+  /** Contains payment token currently attached to the quote cart and information about available payment providers */
   paymentConnection?: Maybe<PaymentConnection>
 }
 
@@ -12045,7 +12055,10 @@ export type PaymentConnection_ConnectPaymentMutation = {
         ConnectPaymentFinished,
         'paymentTokenId' | 'status'
       >)
-    | ({ __typename?: 'ActionRequired' } & Pick<ActionRequired, 'action'>)
+    | ({ __typename?: 'ActionRequired' } & Pick<
+        ActionRequired,
+        'paymentTokenId' | 'action'
+      >)
 }
 
 export type PaymentConnection_SubmitAdditionalPaymentDetailsMutationVariables = Exact<{
@@ -14247,6 +14260,7 @@ export const PaymentConnection_ConnectPaymentDocument = gql`
   mutation PaymentConnection_connectPayment($input: ConnectPaymentInput!) {
     paymentConnection_connectPayment(input: $input) {
       ... on ActionRequired {
+        paymentTokenId
         action
       }
       ... on ConnectPaymentFinished {
