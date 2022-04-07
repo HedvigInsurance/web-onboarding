@@ -4,6 +4,7 @@ import { useRouteMatch } from 'react-router'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { Variation, useVariation } from 'utils/hooks/useVariation'
+import { useTextKeys } from 'utils/textKeys'
 
 import { localePathPattern } from 'l10n/localePathPattern'
 const intercomBtnSelector = '.intercom-lightweight-app-launcher'
@@ -117,10 +118,11 @@ const TextLink = styled.a`
   text-align: center;
 `
 const TextLinkVariation = () => {
-  //TO DO: Add textKeys
+  const textKeys = useTextKeys()
+
   return (
     <TextLink onClick={() => window?.Intercom('show')}>
-      Need Help? Contact us
+      {textKeys.CHECKOUT_CONTACT_US_CTA()}
     </TextLink>
   )
 }
