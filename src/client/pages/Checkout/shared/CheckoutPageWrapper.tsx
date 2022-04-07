@@ -13,17 +13,19 @@ import { CheckoutPageErrorModal } from './CheckoutPageErrorModal'
 
 const { gray100 } = colorsV3
 
+type WrapperProps = { footerMargin?: 'small' | 'medium' }
 type Props = {
   children: React.ReactNode
-}
+} & WrapperProps
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<WrapperProps>`
   width: 100vw;
   min-height: 100vh;
   background-color: ${gray100};
   position: relative;
   padding: 0;
-  margin-bottom: 5rem;
+  margin-bottom: ${({ footerMargin }) =>
+    footerMargin === 'small' ? '3rem' : '6rem'};
 
   > button {
     position: absolute;
@@ -61,7 +63,10 @@ const LogoLink = styled.a`
 
 export const WrapperWidth = 628
 
-export const CheckoutPageWrapper = ({ children }: Props) => {
+export const CheckoutPageWrapper = ({
+  children,
+  footerMargin = 'medium',
+}: Props) => {
   const isDesktop = useMediaQuery({ minWidth: BREAKPOINTS.mediumScreen })
   const { isQuoteCartValid } = useIsQuoteCartIdValid()
 
@@ -74,7 +79,7 @@ export const CheckoutPageWrapper = ({ children }: Props) => {
   return (
     <>
       {!isQuoteCartValid && <CheckoutPageErrorModal />}
-      <Wrapper>
+      <Wrapper footerMargin={footerMargin}>
         {isDesktop ? (
           <TopBar textColorVariant="dark" isTransparent />
         ) : (
