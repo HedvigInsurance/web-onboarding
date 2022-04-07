@@ -1,14 +1,12 @@
-import React, { useRef, useCallback, useState, useEffect } from 'react'
+import React, { useRef, useCallback, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { useFormik, FormikHelpers } from 'formik'
 import { GraphQLError } from 'graphql'
-import { Redirect } from 'react-router'
+import { useApolloClient } from '@apollo/client'
 import { useTextKeys } from 'utils/textKeys'
-import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
 import {
   useStartCheckoutMutation,
-  useCheckoutStatusQuery,
   useCheckoutStatusLazyQuery,
   useCreateQuoteBundleMutation,
   QuoteBundleVariant,
@@ -20,6 +18,10 @@ import { Headline } from 'components/Headline/Headline'
 import { QuoteInput } from 'pages/Offer/Introduction/DetailsModal/types'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { LimitCode, isQuoteBundleError } from 'api/quoteBundleErrorSelectors'
+import { setupQuoteCartSession } from 'containers/SessionContainer'
+import { trackSignedCustomerEvent } from 'utils/tracking/trackSignedCustomerEvent'
+import { useStorage } from 'utils/StorageContainer'
+import { useVariation } from 'utils/hooks/useVariation'
 import { useAdyenCheckout } from '../../ConnectPayment/components/useAdyenCheckout'
 import {
   CheckoutPageWrapper,
@@ -30,6 +32,8 @@ import { PaymentInfo } from '../shared/PaymentInfo'
 import { getUniqueQuotesFromVariantList } from '../../OfferNew/utils'
 import { getCheckoutDetailsValidationSchema } from '../../Offer/Checkout/UserDetailsForm'
 import { PriceData } from '../shared/types'
+import { apolloClient as realApolloClient } from '../../../apolloClient'
+import { CheckoutSuccessRedirect } from '../../Offer/CheckoutSuccessRedirect'
 import { ContactInformation } from './ContactInformation/ContactInformation'
 const { gray100, gray600, gray700, gray300, gray900 } = colorsV3
 
@@ -118,6 +122,16 @@ const Terms = styled.div`
   }
 `
 
+// TODO These functions are duplicates
+const checkIsManualReviewRequired = (errors: GraphQLError[]) => {
+  const manualReviewRequiredError = errors.find((error) => {
+    return error?.extensions?.body?.errorCode === 'MANUAL_REVIEW_REQUIRED'
+  })
+
+  return manualReviewRequiredError !== undefined
+}
+
+// TODO These functions are duplicates
 const isSsnInvalid = (errors: GraphQLError[]) => {
   const invalidSsnError = errors.find((error) => {
     return error?.extensions?.body?.errorCode === LimitCode.INVALID_SSN
@@ -131,7 +145,9 @@ type Props = {
   quoteCartId: string
   priceData: PriceData
   mainQuote: BundledQuote
+  selectedQuoteBundleVariant: QuoteBundleVariant
   quoteIds: string[]
+  checkoutStatus?: CheckoutStatus
 }
 
 export const CheckoutPayment = ({
@@ -140,30 +156,54 @@ export const CheckoutPayment = ({
   priceData,
   mainQuote,
   quoteIds,
+  selectedQuoteBundleVariant,
+  checkoutStatus,
 }: Props) => {
   const textKeys = useTextKeys()
   const locale = useCurrentLocale()
+  const client = useApolloClient()
+  const storage = useStorage()
+  const variation = useVariation()
+  const adyenRef = useRef<HTMLDivElement | null>(null)
   const [
     createQuoteBundle,
     { loading: isBundleCreationInProgress },
   ] = useCreateQuoteBundleMutation()
-  const { path: currentLocalePath } = useCurrentLocale()
-
-  console.log(mainQuote)
-
-  const adyenRef = useRef<HTMLDivElement | null>(null)
   const [startCheckout] = useStartCheckoutMutation()
   const [getStatus] = useCheckoutStatusLazyQuery({
     pollInterval: 1000,
   })
-  const [finishedPayment, setFinishedPayment] = useState(false)
-  useEffect(() => {
-    finishedPayment && startSign()
-  }, [finishedPayment])
 
-  const onSuccess = useCallback(async () => {
-    setFinishedPayment(true)
-  }, [])
+  const onConnectPaymentSuccess = useCallback(async () => {
+    try {
+      const { data } = await startCheckout({
+        variables: { quoteIds, quoteCartId },
+      })
+      if (data?.quoteCart_startCheckout.__typename === 'BasicError') {
+        throw new Error('Checkout Failed')
+      }
+      // Poll for Status
+      getStatus({
+        variables: {
+          quoteCartId,
+        },
+      })
+    } catch (error) {
+      const isManualReviewRequired = checkIsManualReviewRequired(
+        (error.graphQLErrors || []) as GraphQLError[],
+      )
+      if (isManualReviewRequired) {
+        throw new Error('Manual Review required')
+      }
+
+      throw new Error('Checkout Failed')
+    }
+  }, [getStatus, quoteCartId, quoteIds, startCheckout])
+  const checkoutAPI = useAdyenCheckout({
+    adyenRef,
+    onSuccess: onConnectPaymentSuccess,
+    quoteCartId,
+  })
 
   const { firstName, lastName, email, ssn, phoneNumber } = mainQuote
   const formik = useFormik<QuoteInput>({
@@ -193,6 +233,45 @@ export const CheckoutPayment = ({
     },
     enableReinitialize: true,
   })
+
+  const completeCheckout = useCallback(async () => {
+    try {
+      const memberId = await setupQuoteCartSession({
+        quoteCartId,
+        apolloClientUtils: {
+          client,
+          subscriptionClient: realApolloClient!.subscriptionClient,
+          httpLink: realApolloClient!.httpLink,
+        },
+        storage,
+      })
+      trackSignedCustomerEvent({
+        variation,
+        campaignCode: priceData.campaignCode,
+        isDiscountMonthlyCostDeduction:
+          priceData.isDiscountMonthlyCostDeduction,
+        memberId,
+        bundle: selectedQuoteBundleVariant.bundle,
+        quoteCartId,
+      })
+    } catch (error) {
+      throw new Error('Setup quote cart session failed')
+    }
+  }, [
+    priceData.campaignCode,
+    priceData.isDiscountMonthlyCostDeduction,
+    client,
+    selectedQuoteBundleVariant.bundle,
+    quoteCartId,
+    storage,
+    variation,
+  ])
+
+  useEffect(() => {
+    if (checkoutStatus === CheckoutStatus.Signed) {
+      completeCheckout()
+    }
+  }, [checkoutStatus, completeCheckout])
 
   const reCreateQuoteBundle = (form: QuoteInput) => {
     const {
@@ -245,34 +324,17 @@ export const CheckoutPayment = ({
       if (isUpdateQuotesFailed) throw Error('Updating quotes has failed')
     }
 
-    //submit Adyen
     checkoutAPI?.submit()
-    const paymentFinished = await onSuccess()
-    const res = await onSuccess()
-    // find a way to see payment has been succesful and after that start Checkout
-
-    // const data = await startCheckout({
-    //   variables: { quoteCartId, quoteIds },
-    // })
-
-    const checkoutStatus = getStatus({
-      variables: {
-        quoteCartId,
-      },
-    })
-
-    console.log(checkoutStatus)
-    // after the flow has finished we should redirect to the last page
-    // if (checkoutStatus === CheckoutStatus.Signed) {
-    //   return <Redirect to={`/${currentLocalePath}/download`} />
-    // }
   }
 
-  const checkoutAPI = useAdyenCheckout({
-    adyenRef,
-    onSuccess,
-    quoteCartId,
-  })
+  if (checkoutStatus === CheckoutStatus.Completed) {
+    return (
+      <CheckoutSuccessRedirect
+        bundle={selectedQuoteBundleVariant.bundle}
+        connectPayment={false}
+      />
+    )
+  }
 
   return (
     <CheckoutPageWrapper>

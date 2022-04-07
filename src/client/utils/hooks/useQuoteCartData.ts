@@ -11,6 +11,7 @@ import {
   getSelectedBundleVariant,
   getCampaign,
   getPossibleVariations,
+  getCheckoutStatus,
 } from 'api/quoteCartQuerySelectors'
 import {
   typeOfResidenceTextKeys,
@@ -206,6 +207,9 @@ export const useQuoteCartData = () => {
     currency: getBundleCurrency(selectedQuoteBundleVariant.bundle),
     totalBundleCost: getTotalBundleCost(selectedQuoteBundleVariant.bundle),
     campaignName: getCampaign(data)?.displayValue,
+    campaignCode: getCampaign(data)?.code,
+    isDiscountMonthlyCostDeduction:
+      getCampaign(data)?.incentive?.__typename === 'MonthlyCostDeduction',
   }
   const quoteDetails = mainQuote.data
 
@@ -218,11 +222,13 @@ export const useQuoteCartData = () => {
   return {
     priceData,
     quoteDetails: quoteDetailsGroups,
+    selectedQuoteBundleVariant,
     quoteCartId,
     quoteIds,
     bundleVariants,
     mainQuote,
     loading,
     error,
+    checkoutStatus: getCheckoutStatus(data),
   }
 }
