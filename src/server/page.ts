@@ -19,6 +19,10 @@ import {
   CONTENT_SERVICE_ENDPOINT,
   GIRAFFE_WS_ENDPOINT,
   FEATURES,
+  HEROKU_SLUG_COMMIT,
+  DATADOG_APPLICATION_ID,
+  DATADOG_CLIENT_TOKEN,
+  GIRAFFE_HOST,
 } from './config'
 import { favicons } from './favicons'
 import { getPageMeta } from './meta'
@@ -30,10 +34,17 @@ const clientConfig: ClientConfig = {
   adyenEnvironment: ADYEN_ENVIRONMENT,
   adyenClientKey: ADYEN_CLIENT_KEY,
   contentServiceEndpoint: CONTENT_SERVICE_ENDPOINT,
+  giraffeHost: GIRAFFE_HOST,
   giraffeEndpoint: '/new-member/graphql',
   giraffeWsEndpoint: GIRAFFE_WS_ENDPOINT,
   appEnvironment: APP_ENVIRONMENT as ClientConfig['appEnvironment'],
   features: FEATURES,
+
+  datadog: {
+    applicationId: DATADOG_APPLICATION_ID,
+    clientToken: DATADOG_CLIENT_TOKEN,
+    version: HEROKU_SLUG_COMMIT,
+  },
 }
 
 const template = (
