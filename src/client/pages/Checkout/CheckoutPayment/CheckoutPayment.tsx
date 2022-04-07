@@ -41,6 +41,7 @@ export const CheckoutPayment = ({
   mainQuote,
 }: Props) => {
   const textKeys = useTextKeys()
+
   const locale = useCurrentLocale()
   const [
     createQuoteBundle,
