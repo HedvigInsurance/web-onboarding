@@ -193,7 +193,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <Container>
               <StyledCampaignBadge quoteCartId={quoteCartId} />
               <Header>
-                <Title>Hedvig</Title>
+                <Title>{textKeys.SIDEBAR_TITLE()}</Title>
                 <Price
                   isDiscountPrice={isDiscountPrice}
                   monthlyGross={offerData.cost.monthlyGross}
