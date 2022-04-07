@@ -396,5 +396,9 @@
   "ADDITIONAL_COVERAGE_DESC_ACCIDENT": "",
   "ADDITIONAL_COVERAGE_TITLE_TRAVEL": "",
   "ADDITIONAL_COVERAGE_DESC_TRAVEL": "",
-  "SIDEBAR_TITLE": "Din Offert"
+  "SIDEBAR_TITLE": "Din Offert",
+  "CHECKOUT_CONTACT_US_CTA": "",
+  "CHECKOUT_ERROR_TEXT_PART_1": "Försök igen eller gå tillbaka. Om felet kvarstår",
+  "CHECKOUT_ERROR_TEXT_PART_2": "hör av dig till oss i chatten",
+  "CHECKOUT_ERROR_TEXT_PART_3": "eller mejla [hedvig@hedvig.com](mailto:hedvig@hedvig.com)."
 }
