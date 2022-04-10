@@ -306,7 +306,7 @@ const getReturnUrl = ({
   currentLocalePath: LocaleLabel
   quoteCartId: string
 }) => {
-  return `${window.location.origin}/${currentLocalePath}/new-member/connect-payment/adyen-callback?quoteCartId=${quoteCartId}`
+  return `${window.location.origin}/${currentLocalePath}/new-member/connect-payment/adyen-newcallback?quoteCartId=${quoteCartId}`
 }
 
 const getOnSuccessRedirectUrl = ({

@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom'
-import { useQuoteCartQuery } from 'data/graphql'
+import { useQuoteCartQuery, BundledQuote } from 'data/graphql'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import {
   getMainQuote,
@@ -36,14 +36,11 @@ type Details = {
 
 type DetailsGroup = Details[]
 
-const getHomeDetails = (quoteDetails: GenericQuoteData) => {
-  const { typeOfContract } = quoteDetails
-
-  const { street } = quoteDetails
-
-  if ('floor' in quoteDetails && 'apartment' in quoteDetails) {
-    const { floor, apartment } = quoteDetails
-
+const getHomeDetails = (mainQuote: BundledQuote) => {
+  const { street, zipCode, livingSpace } = mainQuote.data
+  const { typeOfContract } = mainQuote
+  if ('floor' in mainQuote.data && 'apartment' in mainQuote.data) {
+    const { floor, apartment } = mainQuote.data
     if (floor || apartment) {
       const formattedFloor = floor ? `${floor}.` : ''
       const apartmentString = apartment ? ` ${apartment}` : ''
@@ -58,13 +55,13 @@ const getHomeDetails = (quoteDetails: GenericQuoteData) => {
     {
       label: 'CHECKOUT_DETAILS_ZIPCODE',
       value: {
-        value: quoteDetails.zipCode && formatPostalNumber(quoteDetails.zipCode),
+        value: zipCode && formatPostalNumber(zipCode),
       },
     },
     {
       label: 'CHECKOUT_DETAILS_LIVING_SPACE',
       value: {
-        value: quoteDetails.livingSpace,
+        value: livingSpace,
         suffix: 'CHECKOUT_DETAILS_SQM_SUFFIX',
       },
     },
@@ -78,7 +75,7 @@ const getHomeDetails = (quoteDetails: GenericQuoteData) => {
       },
     },
 
-    ...getHouseDetails(quoteDetails),
+    ...getHouseDetails(mainQuote.data),
   ]
 }
 
@@ -212,9 +209,8 @@ export const useQuoteCartData = () => {
       getCampaign(data)?.incentive?.__typename === 'MonthlyCostDeduction',
   }
   const quoteDetails = mainQuote.data
-
   const quoteDetailsGroups: DetailsGroup[] = [
-    getHomeDetails(quoteDetails),
+    getHomeDetails(mainQuote),
     ...getExtraBuildingsDetails(quoteDetails),
     getPeopleDetails(quoteDetails),
   ]
