@@ -38,6 +38,7 @@ enum EmbarkStory {
   NorwayHomeContentNorwegianQuoteCart = 'Web Onboarding NO - Norwegian Contents Quote Cart',
   NorwayComboEnglishQuoteCart = 'Web Onboarding NO - English Combo Quote Cart',
   NorwayComboNorwegianQuoteCart = 'Web Onboarding NO - Norwegian Combo Quote Cart',
+  NorwayOnboarding = 'onboarding-NO',
 
   SwedenNeeder = 'Web Onboarding SE - Needer',
   SwedenSwitcher = 'Web Onboarding SE - Switcher',
@@ -329,6 +330,12 @@ export const routes: Route[] = [
                       locale === 'no'
                         ? EmbarkStory.NorwayComboNorwegianQuoteCart
                         : EmbarkStory.NorwayComboEnglishQuoteCart,
+                    quoteCart: true,
+                  }
+                case 'onboarding':
+                  return {
+                    baseUrl,
+                    name: EmbarkStory.NorwayOnboarding,
                     quoteCart: true,
                   }
               }

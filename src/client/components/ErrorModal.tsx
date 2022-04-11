@@ -52,6 +52,7 @@ export const ErrorText = styled.div`
   // Prevent setting unintended margin on markdown children
   p {
     margin: 0;
+    display: inline;
   }
 
   ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {

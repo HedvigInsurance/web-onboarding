@@ -162,6 +162,7 @@ export const CheckoutPayment = ({
   checkoutStatus,
 }: Props) => {
   const textKeys = useTextKeys()
+
   const locale = useCurrentLocale()
   const client = useApolloClient()
   const storage = useStorage()
