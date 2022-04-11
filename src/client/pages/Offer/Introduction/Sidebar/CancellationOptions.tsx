@@ -10,7 +10,7 @@ import { useTextKeys, TextKeyMap } from 'utils/textKeys'
 const HandleSwitchingWrapper = styled.div`
   display: flex;
   gap: 1rem;
-  margin-bottom: 0.75rem;
+  margin: 0.75rem 0;
   padding: 0 0.25rem;
 `
 
