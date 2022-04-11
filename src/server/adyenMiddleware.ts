@@ -90,7 +90,7 @@ export const handleNewAdyen3dsPostRedirect: Router.IMiddleware<
   const { MD: md, PaRes: pares } = (ctx.request as any).body as Adyen3dsDetails
   const session = createSession<Session>(new ServerCookieStorage(ctx))
   const paymentTokenId = session.getSession()?.paymentTokenId
-
+  const quoteCartId = session.getSession()?.quoteCartId
   try {
     const result = await httpClient.post(GIRAFFE_HOST + '/graphql', {
       operationName: 'SubmitAdyenRedirection',
@@ -107,8 +107,6 @@ export const handleNewAdyen3dsPostRedirect: Router.IMiddleware<
       },
     })
 
-    console.log('result', result)
-
     if (result.status !== 200) {
       throw new Error(
         `Expected status code from Graphql endpoint to be 200 when submitting adyen redirection, but was really ${result.status}`,
@@ -116,26 +114,26 @@ export const handleNewAdyen3dsPostRedirect: Router.IMiddleware<
     }
 
     if (
-      ['Authorised', 'Pending'].includes(
+      ['AUTHORISED', 'PENDING'].includes(
         result.data?.data?.paymentConnection_submitAdyenRedirection?.status,
       )
     ) {
       ctx.redirect(
         ctx.params.locale
-          ? `/${ctx.params.locale}/new-member/download`
-          : '/new-member/connect-download',
+          ? `/${ctx.params.locale}/new-member/checkout/payment/${quoteCartId}/true`
+          : '/new-member/checkout/payment/${quoteCartId}/true',
       )
       ctx.body = 'Loading'
       return
     }
 
-    const message = `Received error adyen resultCode "${result.data?.data?.submitAdyenRedirection?.resultCode}" when submitting adyen redirection`
+    const message = `Received error adyen resultCode "${result.data?.data?.submitAdyenRedirection?.status}" when submitting adyen redirection`
     Sentry.captureException(new Error(message))
     ctx.state.getLogger('ayden').error(message)
     ctx.redirect(
       ctx.params.locale
-        ? `/${ctx.params.locale}/new-member/connect-payment?error=yes` // todo handle client side
-        : '/new-member/connect-payment?error=yes',
+        ? `/${ctx.params.locale}/new-member/checkout/payment/${quoteCartId}/true?error=yes` // todo handle client side
+        : '/new-member/checkout/payment/${quoteCartId}/true?error=yes',
     )
     ctx.body = 'Loading'
   } catch (e) {

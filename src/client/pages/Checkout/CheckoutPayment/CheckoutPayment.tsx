@@ -4,6 +4,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { useFormik, FormikHelpers } from 'formik'
 import { GraphQLError } from 'graphql'
 import { useApolloClient } from '@apollo/client'
+import { useParams } from 'react-router'
 import { useTextKeys } from 'utils/textKeys'
 import {
   useStartCheckoutMutation,
@@ -12,6 +13,7 @@ import {
   QuoteBundleVariant,
   BundledQuote,
   CheckoutStatus,
+  useAddPaymentTokenMutation,
 } from 'data/graphql'
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { Headline } from 'components/Headline/Headline'
@@ -43,7 +45,7 @@ const AdyenContainer = styled.div`
       display: none;
     }
     .adyen-checkout__payment-method {
-      background: transparent;
+      background: trans ent;
       border: 0;
       &:not(:first-of-type) {
         border-top: 0;
@@ -170,11 +172,21 @@ export const CheckoutPayment = ({
     { loading: isBundleCreationInProgress },
   ] = useCreateQuoteBundleMutation()
   const [startCheckout] = useStartCheckoutMutation()
+  const [addPaymentTokenMutation] = useAddPaymentTokenMutation()
   const [getStatus] = useCheckoutStatusLazyQuery({
     pollInterval: 1000,
   })
 
+  const { payment: is3DsComplete } = useParams<{ payment: string }>()
   const onConnectPaymentSuccess = useCallback(async () => {
+    const paymentTokenId = storage.session.getSession()?.paymentTokenId
+    if (!paymentTokenId) throw new Error('No token payment id')
+    addPaymentTokenMutation({
+      variables: {
+        id: quoteCartId,
+        paymentTokenId,
+      },
+    })
     try {
       const { data } = await startCheckout({
         variables: { quoteIds, quoteCartId },
@@ -198,7 +210,14 @@ export const CheckoutPayment = ({
 
       throw new Error('Checkout Failed')
     }
-  }, [getStatus, quoteCartId, quoteIds, startCheckout])
+  }, [
+    addPaymentTokenMutation,
+    getStatus,
+    quoteCartId,
+    quoteIds,
+    startCheckout,
+    storage,
+  ])
   const checkoutAPI = useAdyenCheckout({
     adyenRef,
     onSuccess: onConnectPaymentSuccess,
@@ -233,6 +252,12 @@ export const CheckoutPayment = ({
     },
     enableReinitialize: true,
   })
+
+  useEffect(() => {
+    if (is3DsComplete === 'true') {
+      onConnectPaymentSuccess()
+    }
+  }, [is3DsComplete, onConnectPaymentSuccess])
 
   const completeCheckout = useCallback(async () => {
     try {

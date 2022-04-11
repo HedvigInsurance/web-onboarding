@@ -13,7 +13,6 @@ import {
   ConnectPaymentInput,
   PaymentConnectChannel,
   Market,
-  useAddPaymentTokenMutation,
   usePaymentMethodsQuery,
   usePaymentMethodsLazyQuery,
 } from 'data/graphql'
@@ -40,7 +39,6 @@ export const useAdyenCheckout = ({
   const [checkoutAPI, setCheckoutAPI] = useState<CheckoutAPI | null>(null)
   const [adyenLoaded, setAdyenLoaded] = useState(false)
   const [connectPaymentMutation] = usePaymentConnection_ConnectPaymentMutation()
-  const [addPaymentTokenMutation] = useAddPaymentTokenMutation()
   const storage = useStorage()
 
   const [
@@ -76,7 +74,6 @@ export const useAdyenCheckout = ({
       paymentMethodsResponse,
       connectPaymentMutation,
       submitAdditionalPaymentDetails,
-      addPaymentTokenMutation,
       quoteCartId,
       history,
       onSuccess,
@@ -93,7 +90,6 @@ export const useAdyenCheckout = ({
     currentLocale,
     connectPaymentMutation,
     submitAdditionalPaymentDetails,
-    addPaymentTokenMutation,
     quoteCartId,
     history,
     adyenRef,
@@ -116,7 +112,6 @@ interface AdyenCheckoutProps {
   paymentMethodsResponse: Scalars['PaymentMethodsResponse']
   connectPaymentMutation: any
   submitAdditionalPaymentDetails: any
-  addPaymentTokenMutation: any
   history: ReturnType<typeof useHistory>
   onSuccess?: () => void
   setIsCompleted?: () => void
@@ -130,7 +125,6 @@ const createAdyenCheckout = ({
   paymentMethodsResponse,
   connectPaymentMutation,
   submitAdditionalPaymentDetails,
-  addPaymentTokenMutation,
   quoteCartId,
   storage,
   onSuccess = () => {
@@ -221,6 +215,7 @@ const createAdyenCheckout = ({
         storage.session.setSession({
           ...storage.session.getSession(),
           paymentTokenId,
+          quoteCartId,
         })
 
         if (
@@ -237,12 +232,6 @@ const createAdyenCheckout = ({
           result.data?.paymentConnection_connectPayment?.__typename ===
           'ConnectPaymentFinished'
         ) {
-          addPaymentTokenMutation({
-            variables: {
-              id: quoteCartId,
-              paymentTokenId,
-            },
-          })
           handleResult(
             dropinComponent,
             result.data?.paymentConnection_connectPayment.status,
@@ -255,7 +244,6 @@ const createAdyenCheckout = ({
     onAdditionalDetails: async (state: any, dropinComponent: any) => {
       const paymentTokenId = storage.session.getSession()?.paymentTokenId
       if (!paymentTokenId) return
-
       try {
         const result = await submitAdditionalPaymentDetails({
           variables: {
@@ -301,20 +289,10 @@ const createAdyenCheckout = ({
 
 const getReturnUrl = ({
   currentLocalePath,
-  quoteCartId,
-}: {
-  currentLocalePath: LocaleLabel
-  quoteCartId: string
-}) => {
-  return `${window.location.origin}/${currentLocalePath}/new-member/connect-payment/adyen-newcallback?quoteCartId=${quoteCartId}`
-}
-
-const getOnSuccessRedirectUrl = ({
-  currentLocalePath,
 }: {
   currentLocalePath: LocaleLabel
 }) => {
-  return `/${currentLocalePath}/new-member/download`
+  return `${window.location.origin}/${currentLocalePath}/new-member/connect-payment/adyen-newcallback`
 }
 
 const mountAdyenJs = (setAdyenLoaded: (adyenLoaded: boolean) => void) => () => {

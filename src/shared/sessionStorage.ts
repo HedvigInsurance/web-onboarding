@@ -15,6 +15,7 @@ export interface Session {
   quoteIds?: ReadonlyArray<string>
   selectedQuoteIds?: ReadonlyArray<string>
   paymentTokenId?: string
+  quoteCartId?: string
 }
 
 export interface IsomorphicSessionStorage<T> {
