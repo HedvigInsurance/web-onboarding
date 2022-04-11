@@ -65,14 +65,14 @@ export const BackgroundImage: React.FC<Props> = ({
       <picture>
         <source
           media="(orientation: portrait)"
-          srcSet="/new-member-assets/landing/hedvig_table_portrait_small.jpg 900w, /new-member-assets/landing/hedvig_table_portrait_medium.jpg 1600w"
+          srcSet="/new-member-assets/landing/hedvig_living_room_portrait_small.jpg 900w, /new-member-assets/landing/hedvig_living_room_portrait_medium.jpg 1600w"
         />
         <source
           media="(orientation: landscape)"
-          srcSet="/new-member-assets/landing/hedvig_table_landscape_small.jpg 1600w, /new-member-assets/landing/hedvig_table_landscape_medium.jpg 2200w"
+          srcSet="/new-member-assets/landing/hedvig_living_room_landscape_small.jpg 1600w, /new-member-assets/landing/hedvig_living_room_landscape_medium.jpg 2200w"
         />
         <Image
-          src="/new-member-assets/landing/hedvig_table_landscape_small.jpg"
+          src="/new-member-assets/landing/hedvig_living_room_landscape_small.jpg"
           onLoad={() => setHasImageLoaded(true)}
           hasLoaded={hasImageLoaded}
           isFullScreen={isFullScreen}
