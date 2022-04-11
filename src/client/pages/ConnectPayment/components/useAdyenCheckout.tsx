@@ -138,7 +138,7 @@ const createAdyenCheckout = ({
     [match.any(), 'en-US'],
   ])(isoLocale)
 
-  const returnUrl = getReturnUrl({ currentLocalePath: path, quoteCartId })
+  const returnUrl = getReturnUrl({ currentLocalePath: path })
   const handleResult = (dropinComponent: any, status: string) => {
     if (['AUTHORISED', 'PENDING'].includes(status)) {
       // history.push(getOnSuccessRedirectUrl({ currentLocalePath: path }))
