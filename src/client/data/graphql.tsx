@@ -7667,6 +7667,8 @@ export type Mutation = {
   login_verifyOtpAttempt: VerifyOtpLoginAttemptResult
   /** Resends the OTP to the provided credential */
   login_resendOtp: Scalars['ID']
+  /** Initiate widget, widget should send requestId, locale, partner id */
+  initWidget: PartnerInitWidgetResult
   /**
    * Initiates a tokenization request to Adyen. This can either succeed/fail immediately, in which case
    * ConnectPaymentFinished is returned, or require additional actions, such as 3DS authentication, from the client.
@@ -7861,6 +7863,10 @@ export type MutationLogin_VerifyOtpAttemptArgs = {
 
 export type MutationLogin_ResendOtpArgs = {
   id: Scalars['ID']
+}
+
+export type MutationInitWidgetArgs = {
+  input: PartnerInitWidgetInput
 }
 
 export type MutationPaymentConnection_ConnectPaymentArgs = {
@@ -8181,6 +8187,21 @@ export type PageInfo = {
   endCursor?: Maybe<Scalars['String']>
   /** Number of items in the current page. */
   pageSize?: Maybe<Scalars['Int']>
+}
+
+export type PartnerInitWidgetInput = {
+  requestId: Scalars['String']
+  partnerId: Scalars['String']
+  market?: Maybe<Market>
+  locale: Scalars['String']
+}
+
+export type PartnerInitWidgetResult = {
+  __typename?: 'PartnerInitWidgetResult'
+  id: Scalars['ID']
+  market: Market
+  partnerName: Scalars['String']
+  partnerDefaultCampaignCode?: Maybe<Scalars['String']>
 }
 
 export enum PayinMethodStatus {

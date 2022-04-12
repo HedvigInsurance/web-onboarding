@@ -19,7 +19,6 @@ export const Checkout = () => {
     selectedQuoteBundleVariant,
     checkoutStatus,
     error,
-    loading,
   } = data
 
   const onRetry = () => {
