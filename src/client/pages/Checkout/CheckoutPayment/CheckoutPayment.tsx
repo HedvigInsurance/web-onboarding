@@ -178,46 +178,40 @@ export const CheckoutPayment = ({
     pollInterval: 1000,
   })
   const { payment: is3DsComplete } = useParams<{ payment: string }>()
-  const onConnectPaymentSuccess = useCallback(async () => {
-    const paymentTokenId = storage.session.getSession()?.paymentTokenId
-    if (!paymentTokenId) throw new Error('No token payment id')
-    await addPaymentTokenMutation({
-      variables: {
-        id: quoteCartId,
-        paymentTokenId,
-      },
-    })
-    try {
-      const { data } = await startCheckout({
-        variables: { quoteIds, quoteCartId },
-      })
-      if (data?.quoteCart_startCheckout.__typename === 'BasicError') {
-        throw new Error('Checkout Failed')
-      }
-      // Poll for Status
-      getStatus({
+  const onConnectPaymentSuccess = useCallback(
+    async (paymentTokenId) => {
+      await addPaymentTokenMutation({
         variables: {
-          quoteCartId,
+          id: quoteCartId,
+          paymentTokenId,
         },
       })
-    } catch (error) {
-      const isManualReviewRequired = checkIsManualReviewRequired(
-        (error.graphQLErrors || []) as GraphQLError[],
-      )
-      if (isManualReviewRequired) {
-        throw new Error('Manual Review required')
-      }
+      try {
+        const { data } = await startCheckout({
+          variables: { quoteIds, quoteCartId },
+        })
+        if (data?.quoteCart_startCheckout.__typename === 'BasicError') {
+          throw new Error('Checkout Failed')
+        }
+        // Poll for Status
+        getStatus({
+          variables: {
+            quoteCartId,
+          },
+        })
+      } catch (error) {
+        const isManualReviewRequired = checkIsManualReviewRequired(
+          (error.graphQLErrors || []) as GraphQLError[],
+        )
+        if (isManualReviewRequired) {
+          throw new Error('Manual Review required')
+        }
 
-      throw new Error('Checkout Failed')
-    }
-  }, [
-    addPaymentTokenMutation,
-    getStatus,
-    quoteCartId,
-    quoteIds,
-    startCheckout,
-    storage.session,
-  ])
+        throw new Error('Checkout Failed')
+      }
+    },
+    [addPaymentTokenMutation, getStatus, quoteCartId, quoteIds, startCheckout],
+  )
   const checkoutAPI = useAdyenCheckout({
     adyenRef,
     onSuccess: onConnectPaymentSuccess,
@@ -255,9 +249,11 @@ export const CheckoutPayment = ({
 
   useEffect(() => {
     if (is3DsComplete === 'true' && checkoutStatus === undefined) {
-      onConnectPaymentSuccess()
+      const paymentTokenId = storage.session.getSession()?.paymentTokenId
+      if (!paymentTokenId) throw new Error('No token payment id')
+      onConnectPaymentSuccess(paymentTokenId)
     }
-  }, [is3DsComplete, onConnectPaymentSuccess, checkoutStatus])
+  }, [is3DsComplete, onConnectPaymentSuccess, checkoutStatus, storage.session])
 
   const completeCheckout = useCallback(async () => {
     try {

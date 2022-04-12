@@ -19,7 +19,7 @@ import {
 import { useStorage, StorageState } from 'utils/StorageContainer'
 
 interface Params {
-  onSuccess?: () => void
+  onSuccess?: (id?: string) => void
   adyenRef: React.MutableRefObject<HTMLDivElement | null>
   quoteCartId: string
 }
