@@ -8219,7 +8219,7 @@ export enum PaymentConnectChannel {
 export type PaymentConnection = {
   __typename?: 'PaymentConnection'
   id?: Maybe<Scalars['ID']>
-  providers: Array<Maybe<Provider>>
+  providers: Array<Provider>
 }
 
 export enum PayoutMethodStatus {
@@ -12114,13 +12114,11 @@ export type PaymentMethodsQuery = { __typename?: 'Query' } & {
       paymentConnection?: Maybe<
         { __typename?: 'PaymentConnection' } & Pick<PaymentConnection, 'id'> & {
             providers: Array<
-              Maybe<
-                | ({ __typename: 'Adyen' } & Pick<
-                    Adyen,
-                    'availablePaymentMethods'
-                  >)
-                | { __typename: 'Trustly' }
-              >
+              | ({ __typename: 'Adyen' } & Pick<
+                  Adyen,
+                  'availablePaymentMethods'
+                >)
+              | { __typename: 'Trustly' }
             >
           }
       >

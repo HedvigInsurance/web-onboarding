@@ -177,7 +177,6 @@ export const CheckoutPayment = ({
   const [getStatus] = useCheckoutStatusLazyQuery({
     pollInterval: 1000,
   })
-
   const { payment: is3DsComplete } = useParams<{ payment: string }>()
   const onConnectPaymentSuccess = useCallback(async () => {
     const paymentTokenId = storage.session.getSession()?.paymentTokenId
@@ -217,7 +216,7 @@ export const CheckoutPayment = ({
     quoteCartId,
     quoteIds,
     startCheckout,
-    storage,
+    storage.session,
   ])
   const checkoutAPI = useAdyenCheckout({
     adyenRef,
@@ -255,10 +254,10 @@ export const CheckoutPayment = ({
   })
 
   useEffect(() => {
-    if (is3DsComplete === 'true') {
+    if (is3DsComplete === 'true' && checkoutStatus === undefined) {
       onConnectPaymentSuccess()
     }
-  }, [is3DsComplete, onConnectPaymentSuccess])
+  }, [is3DsComplete, onConnectPaymentSuccess, checkoutStatus])
 
   const completeCheckout = useCallback(async () => {
     try {
