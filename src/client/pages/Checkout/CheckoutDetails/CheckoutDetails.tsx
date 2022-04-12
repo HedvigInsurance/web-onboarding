@@ -22,7 +22,6 @@ export const CheckoutDetails = () => {
   if (!data || data.loading) {
     return <LoadingPage loading />
   }
-  console.log(data)
   const onRetry = () => {
     window.location.reload()
     return false

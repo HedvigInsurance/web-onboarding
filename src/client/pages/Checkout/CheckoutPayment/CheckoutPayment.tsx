@@ -182,7 +182,7 @@ export const CheckoutPayment = ({
   const onConnectPaymentSuccess = useCallback(async () => {
     const paymentTokenId = storage.session.getSession()?.paymentTokenId
     if (!paymentTokenId) throw new Error('No token payment id')
-    addPaymentTokenMutation({
+    await addPaymentTokenMutation({
       variables: {
         id: quoteCartId,
         paymentTokenId,

@@ -189,7 +189,7 @@ export const useQuoteCartData = () => {
     selectedInsuranceTypes,
   )
 
-  if (!selectedQuoteBundleVariant) throw new Error('Invalid state')
+  if (!selectedQuoteBundleVariant) return null
 
   const prices = selectedQuoteBundleVariant?.bundle.quotes.map((item) => {
     return { displayName: item.displayName, price: item.price.amount }
