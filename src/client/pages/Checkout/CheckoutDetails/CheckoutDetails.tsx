@@ -20,7 +20,9 @@ export const CheckoutDetails = () => {
   const { path: localePath } = useCurrentLocale()
   const { quoteCartId } = useQuoteCartIdFromUrl()
   const data = useQuoteCartData()
-
+  if (!data || data.loading) {
+    return <LoadingPage loading />
+  }
   const onRetry = () => {
     window.location.reload()
     return false
@@ -29,10 +31,6 @@ export const CheckoutDetails = () => {
   if (data.error) {
     console.error('Quote cart data error:', data.error.message, data.error)
     return <CheckoutErrorModal isVisible onRetry={onRetry} />
-  }
-
-  if (data.loading) {
-    return <LoadingPage loading />
   }
 
   const priceData = data.priceData

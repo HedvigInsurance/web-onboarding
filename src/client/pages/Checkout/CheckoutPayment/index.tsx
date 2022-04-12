@@ -6,15 +6,10 @@ import { CheckoutPayment } from './CheckoutPayment'
 
 export const Checkout = () => {
   const data = useQuoteCartData()
-
-  const {
-    bundleVariants,
-    priceData,
-    quoteCartId,
-    mainQuote,
-    error,
-    loading,
-  } = data
+  if (!data || data.loading) {
+    return <LoadingPage loading />
+  }
+  const { bundleVariants, priceData, quoteCartId, mainQuote, error } = data
 
   const onRetry = () => {
     window.location.reload()
@@ -24,10 +19,6 @@ export const Checkout = () => {
   if (error) {
     console.error('Quote cart data error:', error.message, error)
     return <CheckoutErrorModal isVisible onRetry={onRetry} />
-  }
-
-  if (loading) {
-    return <LoadingPage loading />
   }
 
   return (
