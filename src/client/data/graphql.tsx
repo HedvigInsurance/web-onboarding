@@ -12104,13 +12104,6 @@ export type PaymentMethodsQueryVariables = Exact<{
 
 export type PaymentMethodsQuery = { __typename?: 'Query' } & {
   quoteCart: { __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'> & {
-      bundle?: Maybe<
-        { __typename?: 'QuoteBundle' } & {
-          quotes: Array<
-            { __typename?: 'BundledQuote' } & Pick<BundledQuote, 'id'>
-          >
-        }
-      >
       paymentConnection?: Maybe<
         { __typename?: 'PaymentConnection' } & Pick<PaymentConnection, 'id'> & {
             providers: Array<
@@ -14401,11 +14394,6 @@ export const PaymentMethodsDocument = gql`
   query PaymentMethods($id: ID!) {
     quoteCart(id: $id) {
       id
-      bundle {
-        quotes {
-          id
-        }
-      }
       paymentConnection {
         id
         providers {
