@@ -24,8 +24,7 @@ const Wrapper = styled.div<WrapperProps>`
   background-color: ${gray100};
   position: relative;
   padding: 0;
-  margin-bottom: ${({ footerMargin }) =>
-    footerMargin === 'small' ? '3rem' : '6rem'};
+  margin-bottom: 7rem;
 
   > button {
     position: absolute;
