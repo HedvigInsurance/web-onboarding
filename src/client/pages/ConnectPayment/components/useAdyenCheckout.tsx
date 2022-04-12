@@ -123,7 +123,7 @@ interface AdyenCheckoutProps {
   connectPaymentMutation: any
   submitAdditionalPaymentDetails: any
   history: ReturnType<typeof useHistory>
-  onSuccess?: () => void
+  onSuccess?: (paymentTokenId?: string) => void
   setIsCompleted?: () => void
   quoteCartId: string
   storage: StorageState
@@ -149,11 +149,15 @@ const createAdyenCheckout = ({
   ])(isoLocale)
 
   const returnUrl = getReturnUrl({ currentLocalePath: path })
-  const handleResult = (dropinComponent: any, status: string) => {
+  const handleResult = (
+    dropinComponent: any,
+    status: string,
+    paymentTokenId?: string,
+  ) => {
     if (['AUTHORISED', 'PENDING'].includes(status)) {
       // history.push(getOnSuccessRedirectUrl({ currentLocalePath: path }))
       dropinComponent.setStatus('success', { message: 'Payment successful!' })
-      onSuccess()
+      onSuccess(paymentTokenId)
     } else {
       console.error(
         `Received unknown or faulty status type "${status}" as request finished from Adyen`,
@@ -245,6 +249,7 @@ const createAdyenCheckout = ({
           handleResult(
             dropinComponent,
             result.data?.paymentConnection_connectPayment.status,
+            paymentTokenId,
           )
         }
       } catch (e) {

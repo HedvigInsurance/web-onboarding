@@ -36,6 +36,7 @@ import { getCheckoutDetailsValidationSchema } from '../../Offer/Checkout/UserDet
 import { PriceData } from '../shared/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import { CheckoutSuccessRedirect } from '../../Offer/CheckoutSuccessRedirect'
+import { CheckoutErrorModal } from '../shared/ErrorModal'
 import { ContactInformation } from './ContactInformation/ContactInformation'
 const { gray100, gray600, gray700, gray300, gray900 } = colorsV3
 
@@ -180,12 +181,17 @@ export const CheckoutPayment = ({
   const { payment: is3DsComplete } = useParams<{ payment: string }>()
   const onConnectPaymentSuccess = useCallback(
     async (paymentTokenId) => {
-      await addPaymentTokenMutation({
-        variables: {
-          id: quoteCartId,
-          paymentTokenId,
-        },
-      })
+      try {
+        await addPaymentTokenMutation({
+          variables: {
+            id: quoteCartId,
+            paymentTokenId,
+          },
+        })
+      } catch (error) {
+        console.error('Failed to add Payment Token :', error.message, error)
+      }
+
       try {
         const { data } = await startCheckout({
           variables: { quoteIds, quoteCartId },
