@@ -6,6 +6,9 @@ import { CheckoutPayment } from './CheckoutPayment'
 
 export const Checkout = () => {
   const data = useQuoteCartData()
+  if (!data || data.loading) {
+    return <LoadingPage loading />
+  }
 
   const {
     bundleVariants,
@@ -27,10 +30,6 @@ export const Checkout = () => {
   if (error) {
     console.error('Quote cart data error:', error.message, error)
     return <CheckoutErrorModal isVisible onRetry={onRetry} />
-  }
-
-  if (loading) {
-    return <LoadingPage loading />
   }
 
   return (

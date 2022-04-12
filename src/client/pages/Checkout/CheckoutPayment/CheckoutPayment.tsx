@@ -45,7 +45,7 @@ const AdyenContainer = styled.div`
       display: none;
     }
     .adyen-checkout__payment-method {
-      background: trans ent;
+      background: transparent;
       border: 0;
       &:not(:first-of-type) {
         border-top: 0;

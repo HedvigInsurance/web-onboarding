@@ -14,14 +14,14 @@ import {
   PaymentConnectChannel,
   Market,
   usePaymentMethodsQuery,
-  usePaymentMethodsLazyQuery,
+  PaymentMethodsQuery,
 } from 'data/graphql'
 import { useStorage, StorageState } from 'utils/StorageContainer'
 
 interface Params {
   onSuccess?: () => void
   adyenRef: React.MutableRefObject<HTMLDivElement | null>
-  quoteCartId?: string
+  quoteCartId: string
 }
 
 type CheckoutAPI = {
@@ -31,6 +31,18 @@ type CheckoutAPI = {
   onComplete: () => void
 }
 
+const getAvailablePaymentMethods = (
+  paymentMethodsResponseNew: PaymentMethodsQuery,
+) => {
+  if (paymentMethodsResponseNew.quoteCart.paymentConnection) {
+    for (const provider of paymentMethodsResponseNew.quoteCart.paymentConnection
+      .providers) {
+      if (provider?.__typename === 'Adyen') {
+        return provider.availablePaymentMethods
+      }
+    }
+  }
+}
 export const useAdyenCheckout = ({
   onSuccess,
   adyenRef,
@@ -50,14 +62,13 @@ export const useAdyenCheckout = ({
   const textKeys = useTextKeys()
   const paymentMethodsResponseNew = usePaymentMethodsQuery({
     variables: {
-      id: quoteCartId as string,
+      id: quoteCartId,
     },
   })
-  const [getPaymentMethods] = usePaymentMethodsLazyQuery()
 
   const paymentMethodsResponse =
-    paymentMethodsResponseNew?.data?.quoteCart.paymentConnection?.providers[0]
-      ?.availablePaymentMethods
+    paymentMethodsResponseNew.data &&
+    getAvailablePaymentMethods(paymentMethodsResponseNew.data)
 
   useEffect(() => {
     if (
@@ -84,7 +95,6 @@ export const useAdyenCheckout = ({
     setCheckoutAPI(newCheckoutAPI)
   }, [
     paymentMethodsResponse,
-    getPaymentMethods,
     adyenLoaded,
     textKeys,
     currentLocale,
