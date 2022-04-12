@@ -6,9 +6,11 @@ import { CheckoutPayment } from './CheckoutPayment'
 
 export const Checkout = () => {
   const data = useQuoteCartData()
+
   if (!data || data.loading) {
     return <LoadingPage loading />
   }
+
   const { bundleVariants, priceData, quoteCartId, mainQuote, error } = data
 
   const onRetry = () => {
