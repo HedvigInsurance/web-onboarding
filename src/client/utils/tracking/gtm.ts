@@ -134,9 +134,10 @@ export const trackOfferGTM = (
   const netPrice = Math.round(Number(offerData.cost.monthlyNet.amount))
 
   const currentInsurer = offerData.quotes[0].currentInsurer?.id ?? undefined
-  const externalInsuranceData = getExternalInsuranceDataFromGQLCache(
-    offerData.quotes[0]?.dataCollectionId,
-  )
+  const dataCollectionId = offerData.quotes[0]?.dataCollectionId
+  const externalInsuranceData = dataCollectionId
+    ? getExternalInsuranceDataFromGQLCache(dataCollectionId)
+    : {}
   const initialOffer = getInitialOfferFromSessionStorage()
   if (!initialOffer) {
     setInitialOfferToSessionStorage(contractCategory)

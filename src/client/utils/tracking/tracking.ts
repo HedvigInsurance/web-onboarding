@@ -167,9 +167,9 @@ export const setInitialOfferToSessionStorage = (
 }
 
 export const getExternalInsuranceDataFromGQLCache = (
-  dataCollectionId?: string | null,
+  dataCollectionId: string,
 ) => {
-  if (apolloClient && dataCollectionId) {
+  if (apolloClient) {
     const cachedExternalInsuranceQuery: ExternalInsuranceDataQuery | null = apolloClient!.client.readQuery(
       {
         query: ExternalInsuranceDataDocument,
