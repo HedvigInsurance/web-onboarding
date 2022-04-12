@@ -24,6 +24,7 @@ import {
 } from 'pages/OfferNew/utils'
 import { Variation } from 'utils/hooks/useVariation'
 import { apolloClient } from 'apolloClient'
+import { getExternalInsuranceData } from 'api/externalInsuranceQuerySelector'
 import { trackOfferGTM, EventName } from './gtm'
 import { adtraction } from './adtraction'
 import { handleSignedEvent } from './signing'
@@ -169,23 +170,20 @@ export const getExternalInsuranceDataFromGQLCache = (
   dataCollectionId?: string | null,
 ) => {
   if (apolloClient && dataCollectionId) {
-    const cacheResult: ExternalInsuranceDataQuery | null = apolloClient!.client.readQuery(
+    const cachedExternalInsuranceQuery: ExternalInsuranceDataQuery | null = apolloClient!.client.readQuery(
       {
         query: ExternalInsuranceDataDocument,
         variables: { reference: dataCollectionId },
       },
     )
-    const currentCurrency =
-      cacheResult?.externalInsuranceProvider?.dataCollection[0]?.monthlyPremium
-        ?.currency
-    const currentPrice =
-      cacheResult?.externalInsuranceProvider?.dataCollection[0]?.monthlyPremium
-        ?.amount
+    const { currentPrice, currentCurrency } = getExternalInsuranceData(
+      cachedExternalInsuranceQuery,
+    )
     return {
       current_insurance_price: currentPrice,
       current_insurance_currency: currentCurrency,
       insurely_correctly_fetched:
-        currentPrice !== null && currentCurrency !== null,
+        currentPrice !== undefined && currentCurrency !== undefined,
     }
   } else return {}
 }
