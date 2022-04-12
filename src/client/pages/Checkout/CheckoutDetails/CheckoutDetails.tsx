@@ -18,9 +18,11 @@ export const CheckoutDetails = () => {
   const { path: localePath } = useCurrentLocale()
   const { quoteCartId } = useQuoteCartIdFromUrl()
   const data = useQuoteCartData()
+
   if (!data || data.loading) {
     return <LoadingPage loading />
   }
+
   const onRetry = () => {
     window.location.reload()
     return false
