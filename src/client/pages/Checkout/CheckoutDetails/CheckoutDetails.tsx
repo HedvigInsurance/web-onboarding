@@ -40,7 +40,7 @@ export const CheckoutDetails = () => {
   const paymentPageLink = `/${localePath}/new-member/checkout/payment/${quoteCartId}`
 
   return (
-    <CheckoutPageWrapper footerMargin="small">
+    <CheckoutPageWrapper>
       <PageSection>
         <YourPlan {...priceData} />
         <StartDateSection />
