@@ -20,6 +20,9 @@ export const Checkout = () => {
     checkoutStatus,
     error,
   } = data
+  if (!data || data.loading) {
+    return <LoadingPage loading />
+  }
 
   const onRetry = () => {
     window.location.reload()
