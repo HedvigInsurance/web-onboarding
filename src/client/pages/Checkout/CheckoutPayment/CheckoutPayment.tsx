@@ -36,7 +36,6 @@ import { getCheckoutDetailsValidationSchema } from '../../Offer/Checkout/UserDet
 import { PriceData } from '../shared/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import { CheckoutSuccessRedirect } from '../../Offer/CheckoutSuccessRedirect'
-import { CheckoutErrorModal } from '../shared/ErrorModal'
 import { ContactInformation } from './ContactInformation/ContactInformation'
 const { gray100, gray600, gray700, gray300, gray900 } = colorsV3
 
@@ -294,12 +293,6 @@ export const CheckoutPayment = ({
     variation,
   ])
 
-  useEffect(() => {
-    if (checkoutStatus === CheckoutStatus.Signed) {
-      completeCheckout()
-    }
-  }, [checkoutStatus, completeCheckout])
-
   const reCreateQuoteBundle = (form: QuoteInput) => {
     const {
       firstName,
@@ -353,6 +346,12 @@ export const CheckoutPayment = ({
 
     checkoutAPI?.submit()
   }
+
+  useEffect(() => {
+    if (checkoutStatus === CheckoutStatus.Signed) {
+      completeCheckout()
+    }
+  }, [checkoutStatus, completeCheckout])
 
   if (checkoutStatus === CheckoutStatus.Completed) {
     return (
