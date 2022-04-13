@@ -4,7 +4,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { useFormik, FormikHelpers } from 'formik'
 import { GraphQLError } from 'graphql'
 import { useApolloClient } from '@apollo/client'
-import { useParams, useLocation } from 'react-router'
+import { useLocation } from 'react-router'
 import { useTextKeys } from 'utils/textKeys'
 import {
   useStartCheckoutMutation,
