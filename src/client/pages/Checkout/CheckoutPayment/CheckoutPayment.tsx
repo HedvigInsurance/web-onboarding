@@ -4,7 +4,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { useFormik, FormikHelpers } from 'formik'
 import { GraphQLError } from 'graphql'
 import { useApolloClient } from '@apollo/client'
-import { useParams } from 'react-router'
+import { useParams, useLocation } from 'react-router'
 import { useTextKeys } from 'utils/textKeys'
 import {
   useStartCheckoutMutation,
@@ -177,7 +177,8 @@ export const CheckoutPayment = ({
   const [getStatus] = useCheckoutStatusLazyQuery({
     pollInterval: 1000,
   })
-  const { payment: is3DsComplete } = useParams<{ payment: string }>()
+  const { search: is3DsComplete } = useLocation<{ search: string }>()
+  console.log(is3DsComplete)
   const onConnectPaymentSuccess = useCallback(
     async (paymentTokenId) => {
       try {
@@ -253,7 +254,7 @@ export const CheckoutPayment = ({
   })
 
   useEffect(() => {
-    if (is3DsComplete === 'true' && checkoutStatus === undefined) {
+    if (is3DsComplete === '?3dsSuccess' && checkoutStatus === undefined) {
       const paymentTokenId = storage.session.getSession()?.paymentTokenId
       if (!paymentTokenId) throw new Error('No token payment id')
       onConnectPaymentSuccess(paymentTokenId)

@@ -120,8 +120,8 @@ export const handleNewAdyen3dsPostRedirect: Router.IMiddleware<
     ) {
       ctx.redirect(
         ctx.params.locale
-          ? `/${ctx.params.locale}/new-member/checkout/payment/${quoteCartId}/true`
-          : '/new-member/checkout/payment/${quoteCartId}/true',
+          ? `/${ctx.params.locale}/new-member/checkout/payment/${quoteCartId}?3dsSuccess`
+          : '/new-member/checkout/payment/${quoteCartId}?3dsSuccess',
       )
       ctx.body = 'Loading'
       return
@@ -132,8 +132,8 @@ export const handleNewAdyen3dsPostRedirect: Router.IMiddleware<
     ctx.state.getLogger('ayden').error(message)
     ctx.redirect(
       ctx.params.locale
-        ? `/${ctx.params.locale}/new-member/checkout/payment/${quoteCartId}/true?error=yes` // todo handle client side
-        : '/new-member/checkout/payment/${quoteCartId}/true?error=yes',
+        ? `/${ctx.params.locale}/new-member/checkout/payment/${quoteCartId}?error` // todo handle client side
+        : '/new-member/checkout/payment/${quoteCartId}?error',
     )
     ctx.body = 'Loading'
   } catch (e) {

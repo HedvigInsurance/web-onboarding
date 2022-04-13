@@ -307,7 +307,7 @@ const getReturnUrl = ({
 }: {
   currentLocalePath: LocaleLabel
 }) => {
-  return `${window.location.origin}/${currentLocalePath}/new-member/connect-payment/adyen-newcallback`
+  return `${window.location.origin}/${currentLocalePath}/new-member/connect-payment/adyen-cps-callback`
 }
 
 const mountAdyenJs = (setAdyenLoaded: (adyenLoaded: boolean) => void) => () => {
