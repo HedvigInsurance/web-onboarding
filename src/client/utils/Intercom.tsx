@@ -114,8 +114,9 @@ const InjectedStyles = ({ style }: { style: CSSObject }) => (
 
 const TextLink = styled.a`
   font-size: 0.874rem;
-  color: ${colorsV3.purple700};
+  color: ${colorsV3.purple900};
   text-align: center;
+  cursor: pointer;
 `
 const TextLinkVariation = () => {
   const textKeys = useTextKeys()
