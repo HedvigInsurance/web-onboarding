@@ -11,7 +11,6 @@ const TextLinkContainer = styled.div({
 })
 export const CheckoutIntercomVariation = () => (
   <>
-    <Intercom.ShowOnScrollBehaviour />
     <Intercom.InjectedStyles
       style={{
         display: 'none',

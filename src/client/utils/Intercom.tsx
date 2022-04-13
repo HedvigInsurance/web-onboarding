@@ -59,55 +59,6 @@ const Intercom = () => {
   return null
 }
 
-const ShowOnScrollBehaviour: React.FC = () => {
-  const intercomTimeout = useRef<null | NodeJS.Timeout>()
-  const paused = useRef<boolean>()
-
-  const onInteraction = () => {
-    const buttonEl: HTMLElement | null = document.querySelector(
-      intercomBtnSelector,
-    )
-    if (buttonEl !== null && buttonEl?.style?.display !== 'none') {
-      if (intercomTimeout.current) {
-        clearTimeout(intercomTimeout.current)
-      }
-      buttonEl.style.opacity = '1'
-      intercomTimeout.current = setTimeout(() => {
-        buttonEl.style.opacity = '0'
-      }, 800)
-    }
-  }
-
-  const debounce = (fn: () => void, delay: number) => {
-    return () => {
-      if (paused.current) {
-        setTimeout(() => {
-          paused.current = false
-        }, delay)
-      } else {
-        paused.current = true
-        fn()
-      }
-    }
-  }
-
-  useEffect(() => {
-    const interactionHandler = debounce(onInteraction, 100)
-    window.addEventListener('scroll', interactionHandler)
-    window.addEventListener('mousemove', interactionHandler)
-    return () => {
-      window.removeEventListener('scroll', interactionHandler)
-      window.removeEventListener('mousemove', interactionHandler)
-    }
-  }, [])
-
-  return (
-    <InjectedStyles
-      style={{ transition: 'opacity 150ms ease-out', opacity: 1 }}
-    />
-  )
-}
-
 const InjectedStyles = ({ style }: { style: CSSObject }) => (
   <Global styles={css({ [intercomBtnSelector]: style })} />
 )
@@ -128,7 +79,6 @@ const TextLinkVariation = () => {
   )
 }
 
-Intercom.ShowOnScrollBehaviour = ShowOnScrollBehaviour
 Intercom.InjectedStyles = InjectedStyles
 Intercom.TextLinkVariation = TextLinkVariation
 
