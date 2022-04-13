@@ -126,7 +126,7 @@ router.post(
 )
 
 router.post(
-  localePathPattern + '/new-member/connect-payment/adyen-newcallback',
+  localePathPattern + '/new-member/connect-payment/adyen-cps-callback',
   handleNewAdyen3dsPostRedirect,
 )
 
