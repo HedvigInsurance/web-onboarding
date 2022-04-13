@@ -75,7 +75,8 @@ export const useAdyenCheckout = ({
       !quoteCartId ||
       !paymentMethodsResponse ||
       !adyenLoaded ||
-      !adyenRef.current
+      !adyenRef.current ||
+      checkoutAPI !== null
     ) {
       return
     }
@@ -105,6 +106,7 @@ export const useAdyenCheckout = ({
     adyenRef,
     onSuccess,
     storage,
+    checkoutAPI,
   ])
 
   useEffect(() => {

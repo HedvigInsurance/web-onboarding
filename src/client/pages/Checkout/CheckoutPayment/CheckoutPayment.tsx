@@ -178,7 +178,6 @@ export const CheckoutPayment = ({
     pollInterval: 1000,
   })
   const { search: is3DsComplete } = useLocation<{ search: string }>()
-  console.log(is3DsComplete)
   const onConnectPaymentSuccess = useCallback(
     async (paymentTokenId) => {
       try {
