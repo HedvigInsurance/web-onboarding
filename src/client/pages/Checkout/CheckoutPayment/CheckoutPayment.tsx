@@ -36,14 +36,12 @@ import { getCheckoutDetailsValidationSchema } from '../../Offer/Checkout/UserDet
 import { PriceData } from '../shared/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import { CheckoutSuccessRedirect } from '../../Offer/CheckoutSuccessRedirect'
+import { checkIsManualReviewRequired, isSsnInvalid } from '../../Offer/Checkout'
 import { ContactInformation } from './ContactInformation/ContactInformation'
 const { gray100, gray600, gray700, gray300, gray900 } = colorsV3
 
 const AdyenContainer = styled.div`
   #dropin-container {
-    .adyen-checkout__payment-method__header {
-      display: none;
-    }
     .adyen-checkout__payment-method {
       background: transparent;
       border: 0;
@@ -123,24 +121,6 @@ const Terms = styled.div`
     text-decoration: none;
   }
 `
-
-// TODO These functions are duplicates
-const checkIsManualReviewRequired = (errors: GraphQLError[]) => {
-  const manualReviewRequiredError = errors.find((error) => {
-    return error?.extensions?.body?.errorCode === 'MANUAL_REVIEW_REQUIRED'
-  })
-
-  return manualReviewRequiredError !== undefined
-}
-
-// TODO These functions are duplicates
-const isSsnInvalid = (errors: GraphQLError[]) => {
-  const invalidSsnError = errors.find((error) => {
-    return error?.extensions?.body?.errorCode === LimitCode.INVALID_SSN
-  })
-
-  return invalidSsnError !== undefined
-}
 
 type Props = {
   bundleVariants: QuoteBundleVariant[]
