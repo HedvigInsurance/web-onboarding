@@ -1,5 +1,5 @@
 import { Global, css, CSSObject } from '@emotion/react'
-import React, { useEffect, useRef } from 'react'
+import React from 'react'
 import { useRouteMatch } from 'react-router'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
