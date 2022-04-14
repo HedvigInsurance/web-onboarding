@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useEffect } from 'react'
+import React, { useRef, useCallback, useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { useFormik, FormikHelpers } from 'formik'
@@ -38,6 +38,7 @@ import { apolloClient as realApolloClient } from '../../../apolloClient'
 import { CheckoutSuccessRedirect } from '../../Offer/CheckoutSuccessRedirect'
 import { checkIsManualReviewRequired, isSsnInvalid } from '../../Offer/Checkout'
 import { ContactInformation } from './ContactInformation/ContactInformation'
+import { CheckoutErrorModal } from '../shared/ErrorModal'
 const { gray100, gray600, gray700, gray300, gray900 } = colorsV3
 
 const AdyenContainer = styled.div`
@@ -158,6 +159,7 @@ export const CheckoutPayment = ({
     pollInterval: 1000,
   })
   const { search: is3DsComplete } = useLocation<{ search: string }>()
+  const [isLoading, setIsLoading] = useState(false)
   const onConnectPaymentSuccess = useCallback(
     async (paymentTokenId) => {
       try {
@@ -172,6 +174,7 @@ export const CheckoutPayment = ({
       }
 
       try {
+        setIsLoading(true)
         const { data } = await startCheckout({
           variables: { quoteIds, quoteCartId },
         })
@@ -191,7 +194,7 @@ export const CheckoutPayment = ({
         if (isManualReviewRequired) {
           throw new Error('Manual Review required')
         }
-
+        setIsLoading(false)
         throw new Error('Checkout Failed')
       }
     },
@@ -363,7 +366,7 @@ export const CheckoutPayment = ({
           buttonOnClick={() => {
             startSign()
           }}
-          isLoading={isBundleCreationInProgress}
+          isLoading={isBundleCreationInProgress || isLoading}
         >
           <PaymentInfo {...priceData} />
         </Footer>
