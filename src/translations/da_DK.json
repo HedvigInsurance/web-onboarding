@@ -396,9 +396,13 @@
   "ADDITIONAL_COVERAGE_DESC_ACCIDENT": "",
   "ADDITIONAL_COVERAGE_TITLE_TRAVEL": "",
   "ADDITIONAL_COVERAGE_DESC_TRAVEL": "",
-  "SIDEBAR_TITLE": "Dit Tilbud",
+  "SIDEBAR_TITLE": "Din pris",
   "CHECKOUT_CONTACT_US_CTA": "Brug for hjælp? Kontakt os",
   "CHECKOUT_ERROR_TEXT_PART_1": "Prøv venligst igen eller gå tilbage. Hvis fejlen fortsætter, så",
   "CHECKOUT_ERROR_TEXT_PART_2": "kontakt os venligst i chatten",
-  "CHECKOUT_ERROR_TEXT_PART_3": "eller mail [hallo@hedvig.com](mailto:hallo@hedvig.com)."
+  "CHECKOUT_ERROR_TEXT_PART_3": "eller mail [hallo@hedvig.com](mailto:hallo@hedvig.com).",
+  "MAIN_COVERAGE_TITLE_HOUSE": "",
+  "MAIN_COVERAGE_TITLE_ACCIDENT": "",
+  "MAIN_COVERAGE_DESC_HOUSE": "",
+  "MAIN_COVERAGE_DESC_ACCIDENT": ""
 }
