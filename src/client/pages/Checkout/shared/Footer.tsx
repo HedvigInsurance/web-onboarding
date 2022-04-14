@@ -69,7 +69,7 @@ export const Footer = ({
         {isLoading ? (
           <SpinnerWrapper
             initial={{ width: 0, opacity: 0 }}
-            animate={{ width: 'auto', opacity: 1 }}
+            animate={{ width: '100%', opacity: 1 }}
           >
             <Spinner />
           </SpinnerWrapper>
