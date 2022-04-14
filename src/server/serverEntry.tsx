@@ -10,7 +10,10 @@ import { notNullable } from 'utils/nullables'
 import { sentryConfig } from 'utils/sentry-server'
 import { routes } from '../routes'
 import { localePathPattern } from '../client/l10n/localePathPattern'
-import { handleAdyen3dsPostRedirect } from './adyenMiddleware'
+import {
+  handleAdyen3dsPostRedirect,
+  handleNewAdyen3dsPostRedirect,
+} from './adyenMiddleware'
 import { GIRAFFE_HOST, GIRAFFE_WS_ENDPOINT } from './config'
 import { appLogger } from './logging'
 import { configureAssets } from './middleware/assets'
@@ -120,6 +123,11 @@ router.post('/new-member/_report-csp-violation', (ctx) => {
 router.post(
   localePathPattern + '/new-member/connect-payment/adyen-callback',
   handleAdyen3dsPostRedirect,
+)
+
+router.post(
+  localePathPattern + '/new-member/connect-payment/adyen-cps-callback',
+  handleNewAdyen3dsPostRedirect,
 )
 
 app.use(quoteCartSessionMiddleware)

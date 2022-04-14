@@ -1,0 +1,14 @@
+query PaymentMethods($id: ID!) {
+  quoteCart(id: $id) {
+    id
+    paymentConnection {
+      id
+      providers {
+        __typename
+        ... on Adyen {
+          availablePaymentMethods
+        }
+      }
+    }
+  }
+}

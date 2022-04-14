@@ -11,9 +11,8 @@ export class ServerCookieStorage implements MinimalStorage {
       return this.changedItems[item]
     }
 
-    return decodeURIComponent(
-      this.requestCtx.cookies.get(item, { signed: false })!,
-    )
+    const value = this.requestCtx.cookies.get(item, { signed: false })
+    return value ? decodeURIComponent(value) : null
   }
 
   public setItem(item: string, value: string, options?: CookieOptions): void {

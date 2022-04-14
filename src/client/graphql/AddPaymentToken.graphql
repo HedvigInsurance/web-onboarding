@@ -1,0 +1,10 @@
+mutation AddPaymentToken($id: ID!, $paymentTokenId: ID!) {
+  quoteCart_addPaymentToken(id: $id, paymentTokenId: $paymentTokenId) {
+    ... on QuoteCart {
+      id
+    }
+    ... on BasicError {
+      errorMessage: message
+    }
+  }
+}
