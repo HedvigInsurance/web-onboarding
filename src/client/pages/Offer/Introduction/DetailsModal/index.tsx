@@ -298,15 +298,6 @@ export const DetailsModal = ({
               <ModalFooter>
                 <ButtonGroup fullWidth>
                   <Button
-                    type="submit"
-                    fullWidth
-                    disabled={
-                      isBundleCreationInProgress || !formikProps.isValid
-                    }
-                  >
-                    {textKeys.DETAILS_MODULE_BUTTON()}
-                  </Button>
-                  <Button
                     background={colorsV3.white}
                     foreground={colorsV3.black}
                     border
@@ -314,6 +305,15 @@ export const DetailsModal = ({
                     onClick={onClose}
                   >
                     {textKeys.CLOSE()}
+                  </Button>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    disabled={
+                      isBundleCreationInProgress || !formikProps.isValid
+                    }
+                  >
+                    {textKeys.DETAILS_MODULE_BUTTON()}
                   </Button>
                 </ButtonGroup>
 
