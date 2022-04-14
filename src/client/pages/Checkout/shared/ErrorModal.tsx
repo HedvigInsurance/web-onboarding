@@ -73,10 +73,10 @@ export const CheckoutErrorModal = ({
     <ErrorModal {...props}>
       <ErrorHeading>{textKeys.GENERIC_ERROR_HEADING()}</ErrorHeading>
       <ErrorText>
-        {textKeys.CHECKOUT_ERROR_TEXT_PART_1()}{' '}
+        {textKeys.CHECKOUT_ERROR_TEXT_PART_1()}
         <InlineTextButton onClick={openIntercomChat}>
           {textKeys.CHECKOUT_ERROR_TEXT_PART_2()}
-        </InlineTextButton>{' '}
+        </InlineTextButton>
         <ReactMarkdown source={textKeys.CHECKOUT_ERROR_TEXT_PART_3()} />
       </ErrorText>
 

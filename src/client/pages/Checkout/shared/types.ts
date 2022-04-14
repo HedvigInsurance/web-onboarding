@@ -7,6 +7,8 @@ export type PriceData = {
   discount?: string
   currency: string
   campaignName?: string | null
+  campaignCode?: string
+  isDiscountMonthlyCostDeduction: boolean
 }
 
 export type QuoteDetailsInput = {
