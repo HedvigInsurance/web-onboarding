@@ -19,7 +19,7 @@ import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { Headline } from 'components/Headline/Headline'
 import { QuoteInput } from 'pages/Offer/Introduction/DetailsModal/types'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { isQuoteBundleError } from 'api/quoteBundleErrorSelectors'
+import { isQuoteBundleError, LimitCode } from 'api/quoteBundleErrorSelectors'
 import { setupQuoteCartSession } from 'containers/SessionContainer'
 import { trackSignedCustomerEvent } from 'utils/tracking/trackSignedCustomerEvent'
 import { useStorage } from 'utils/StorageContainer'
@@ -36,7 +36,7 @@ import { getCheckoutDetailsValidationSchema } from '../../Offer/Checkout/UserDet
 import { PriceData } from '../shared/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import { CheckoutSuccessRedirect } from '../../Offer/CheckoutSuccessRedirect'
-import { checkIsManualReviewRequired, isSsnInvalid } from '../../Offer/Checkout'
+import { CheckoutErrorModal, onRetry } from '../shared/ErrorModal'
 import { ContactInformation } from './ContactInformation/ContactInformation'
 const { gray100, gray600, gray700, gray300, gray900 } = colorsV3
 
@@ -122,6 +122,22 @@ const Terms = styled.div`
   }
 `
 
+export const checkIsManualReviewRequired = (errors: GraphQLError[]) => {
+  const manualReviewRequiredError = errors.find((error) => {
+    return error?.extensions?.body?.errorCode === 'MANUAL_REVIEW_REQUIRED'
+  })
+
+  return manualReviewRequiredError !== undefined
+}
+
+export const isSsnInvalid = (errors: GraphQLError[]) => {
+  const invalidSsnError = errors.find((error) => {
+    return error?.extensions?.body?.errorCode === LimitCode.INVALID_SSN
+  })
+
+  return invalidSsnError !== undefined
+}
+
 type Props = {
   bundleVariants: QuoteBundleVariant[]
   quoteCartId: string
@@ -159,6 +175,8 @@ export const CheckoutPayment = ({
   })
   const { search: is3DsComplete } = useLocation<{ search: string }>()
   const [isLoading, setIsLoading] = useState(false)
+  const [isError, setIsError] = useState(false)
+
   const onConnectPaymentSuccess = useCallback(
     async (paymentTokenId) => {
       try {
@@ -178,7 +196,8 @@ export const CheckoutPayment = ({
           variables: { quoteIds, quoteCartId },
         })
         if (data?.quoteCart_startCheckout.__typename === 'BasicError') {
-          throw new Error('Checkout Failed')
+          console.error('Could not start checkout')
+          setIsError(true)
         }
         // Poll for Status
         getStatus({
@@ -194,7 +213,8 @@ export const CheckoutPayment = ({
           throw new Error('Manual Review required')
         }
         setIsLoading(false)
-        throw new Error('Checkout Failed')
+        console.error('Could not start checkout')
+        setIsError(true)
       }
     },
     [addPaymentTokenMutation, getStatus, quoteCartId, quoteIds, startCheckout],
@@ -344,6 +364,10 @@ export const CheckoutPayment = ({
     )
   }
 
+  if (isError) {
+    return <CheckoutErrorModal isVisible onRetry={onRetry} />
+  }
+
   return (
     <CheckoutPageWrapper>
       <ContactInformation formikProps={formik} />
@@ -361,7 +385,7 @@ export const CheckoutPayment = ({
       </AdyenContainer>
       {mainQuote && (
         <Footer
-          buttonText={textKeys.CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT()}
+          buttonText={textKeys.CHECKOUT_FOOTER_COMPLETE_PURCHASE()}
           buttonOnClick={() => {
             startSign()
           }}

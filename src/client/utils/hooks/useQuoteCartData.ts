@@ -189,6 +189,8 @@ export const useQuoteCartData = () => {
     selectedInsuranceTypes,
   )
 
+  if (error) return { error }
+
   if (!selectedQuoteBundleVariant) return null
 
   const prices = selectedQuoteBundleVariant?.bundle.quotes.map((item) => {

@@ -7,7 +7,7 @@ import { LoadingPage } from 'components/LoadingPage'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
-import { CheckoutErrorModal } from '../shared/ErrorModal'
+import { CheckoutErrorModal, onRetry } from '../shared/ErrorModal'
 import { YourPlan } from './components/YourPlan/YourPlan'
 import { QuoteDetails } from './components/QuoteDetails/QuoteDetails'
 import { PageSection } from './components/PageSection'
@@ -19,18 +19,12 @@ export const CheckoutDetails = () => {
   const { quoteCartId } = useQuoteCartIdFromUrl()
   const data = useQuoteCartData()
 
+  if (data?.error) {
+    console.error('Quote cart data error: no data')
+    return <CheckoutErrorModal isVisible onRetry={onRetry} />
+  }
   if (!data || data.loading) {
     return <LoadingPage loading />
-  }
-
-  const onRetry = () => {
-    window.location.reload()
-    return false
-  }
-
-  if (data.error) {
-    console.error('Quote cart data error:', data.error.message, data.error)
-    return <CheckoutErrorModal isVisible onRetry={onRetry} />
   }
 
   const priceData = data.priceData
