@@ -38,7 +38,6 @@ import { apolloClient as realApolloClient } from '../../../apolloClient'
 import { CheckoutSuccessRedirect } from '../../Offer/CheckoutSuccessRedirect'
 import { checkIsManualReviewRequired, isSsnInvalid } from '../../Offer/Checkout'
 import { ContactInformation } from './ContactInformation/ContactInformation'
-import { CheckoutErrorModal } from '../shared/ErrorModal'
 const { gray100, gray600, gray700, gray300, gray900 } = colorsV3
 
 const AdyenContainer = styled.div`
