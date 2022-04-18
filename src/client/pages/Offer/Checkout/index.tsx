@@ -178,7 +178,7 @@ const Backdrop = styled('div')<Openable>`
   }};
 `
 
-const checkIsManualReviewRequired = (errors: GraphQLError[]) => {
+export const checkIsManualReviewRequired = (errors: GraphQLError[]) => {
   const manualReviewRequiredError = errors.find((error) => {
     return error?.extensions?.body?.errorCode === 'MANUAL_REVIEW_REQUIRED'
   })
@@ -186,7 +186,7 @@ const checkIsManualReviewRequired = (errors: GraphQLError[]) => {
   return manualReviewRequiredError !== undefined
 }
 
-const isSsnInvalid = (errors: GraphQLError[]) => {
+export const isSsnInvalid = (errors: GraphQLError[]) => {
   const invalidSsnError = errors.find((error) => {
     return error?.extensions?.body?.errorCode === LimitCode.INVALID_SSN
   })
