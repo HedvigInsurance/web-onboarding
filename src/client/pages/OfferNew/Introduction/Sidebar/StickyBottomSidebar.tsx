@@ -1,9 +1,13 @@
 import styled from '@emotion/styled'
-import React from 'react'
-import { Button } from 'components/buttons'
+import React, { useEffect } from 'react'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import { useTextKeys } from 'utils/textKeys'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import { useFeature, Features } from 'utils/hooks/useFeature'
+import { Button, LinkButton } from 'components/buttons'
+import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 
 interface Hidable {
   isVisible: boolean
@@ -36,11 +40,6 @@ const Wrapper = styled.div<Hidable & { displayNone: boolean }>`
 const CtaWrapper = styled.div`
   width: 100%;
 `
-const Cta = styled(Button)`
-  @media (max-width: 374px) {
-    padding: 0.75rem;
-  }
-`
 
 type BooleanSetter = (state: boolean) => void
 const avoidDisplayNoneGlitch = (
@@ -64,19 +63,40 @@ export const StickyBottomSidebar: React.FC<Hidable & {
 }> = ({ isVisible, onCheckoutOpen }) => {
   const [reallyIsVisible, setReallyIsVisible] = React.useState(false)
   const [displayNone, setDisplayNone] = React.useState(false)
-
-  React.useEffect(() => {
+  const { quoteCartId } = useQuoteCartIdFromUrl()
+  const { path: localePath } = useCurrentLocale()
+  const textKeys = useTextKeys()
+  const [isConnectPaymentAtSignEnabled] = useFeature([
+    Features.CONNECT_PAYMENT_AT_SIGN,
+  ])
+  useEffect(() => {
     avoidDisplayNoneGlitch(setReallyIsVisible, setDisplayNone, isVisible)
   }, [isVisible])
-
-  const textKeys = useTextKeys()
 
   return (
     <Wrapper isVisible={reallyIsVisible} displayNone={displayNone}>
       <CtaWrapper>
-        <Cta fullWidth onClick={() => onCheckoutOpen()}>
-          {textKeys.BOTTOMBAR_GETHEDVIG_BUTTON()}
-        </Cta>
+        {isConnectPaymentAtSignEnabled ? (
+          <LinkButton
+            size="sm"
+            fullWidth
+            to={`/${localePath}/new-member/checkout/details/${quoteCartId}`}
+            foreground={colorsV3.gray900}
+            background={colorsV3.purple500}
+          >
+            {textKeys.SIDEBAR_PROCEED_BUTTON()}
+          </LinkButton>
+        ) : (
+          <Button
+            size="sm"
+            fullWidth
+            onClick={onCheckoutOpen}
+            foreground={colorsV3.gray900}
+            background={colorsV3.purple500}
+          >
+            {textKeys.SIDEBAR_PROCEED_BUTTON()}
+          </Button>
+        )}
       </CtaWrapper>
     </Wrapper>
   )
