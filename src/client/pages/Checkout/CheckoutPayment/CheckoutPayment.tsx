@@ -357,7 +357,6 @@ export const CheckoutPayment = ({
   return (
     <CheckoutPageWrapper>
       <ContactInformation formikProps={formik} />
-      <CheckoutIntercomVariation />
       <AdyenContainer>
         <Wrapper>
           <Headline variant="s" headingLevel="h2" colorVariant="dark">
@@ -370,6 +369,7 @@ export const CheckoutPayment = ({
           <Terms>{textKeys.CHECKOUT_PAYMENT_DETAILS_TERMS()}</Terms>
         </Wrapper>
       </AdyenContainer>
+      <CheckoutIntercomVariation />
       {mainQuote && (
         <Footer
           buttonText={textKeys.CHECKOUT_FOOTER_COMPLETE_PURCHASE()}
