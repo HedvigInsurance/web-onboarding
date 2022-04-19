@@ -5,10 +5,9 @@ import { useFormik, FormikHelpers } from 'formik'
 import { GraphQLError } from 'graphql'
 import { useApolloClient } from '@apollo/client'
 import { useLocation } from 'react-router'
-import { QuoteInput } from 'pages/Offer/Introduction/DetailsModal/types'
 import { useTextKeys } from 'utils/textKeys'
 import { QuoteInput } from 'components/DetailsModal/types'
-import { useCurrentLocale, useCurrentLocale } from 'l10n/useCurrentLocale'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import {
   useStartCheckoutMutation,
   useCheckoutStatusLazyQuery,

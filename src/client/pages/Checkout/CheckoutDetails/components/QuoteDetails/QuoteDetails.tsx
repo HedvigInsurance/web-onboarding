@@ -67,17 +67,14 @@ const getValueText = ({
 }
 
 export type QuoteDetailsProps = QuoteProps & {
-  quoteCartId: string
-  allQuotes: BundledQuote[]
+  onEditInfoButtonClick: () => void
 }
 
 export const QuoteDetails = ({
   groups,
-  quoteCartId,
-  allQuotes,
+  onEditInfoButtonClick,
 }: QuoteDetailsProps) => {
   const textKeys = useTextKeys()
-  const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false)
 
   return (
     <SubSection headlineText={textKeys.CHECKOUT_QUOTE_DETAILS_TITLE()}>
@@ -106,15 +103,9 @@ export const QuoteDetails = ({
         <Group>
           <Row>
             <Action>
-              <TextButton onClick={() => setDetailsModalIsOpen(true)}>
+              <TextButton onClick={onEditInfoButtonClick}>
                 Edit information
               </TextButton>
-              <DetailsModal
-                quoteCartId={quoteCartId}
-                allQuotes={allQuotes}
-                isVisible={detailsModalIsOpen}
-                onClose={() => setDetailsModalIsOpen(false)}
-              />
             </Action>
           </Row>
         </Group>

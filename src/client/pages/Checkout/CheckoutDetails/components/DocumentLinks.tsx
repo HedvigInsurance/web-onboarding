@@ -5,6 +5,7 @@ import { BundledQuote, InsuranceTerm, InsuranceTermType } from 'data/graphql'
 import { RawLink } from 'components/RawLink'
 import { useTextKeys } from 'utils/textKeys'
 
+//probably not the best solution
 const UNICODE_ARROW_UP = '↗'
 
 const TermsSection = styled.div`
@@ -44,9 +45,10 @@ const TermLink = ({ term }: { term: InsuranceTerm }) => {
     term.type === InsuranceTermType.TermsAndConditions
       ? 'CHECKOUT_TERMS_FULL'
       : 'CHECKOUT_TERMS_PRE_PURCHASE_INFO'
+  const linkText = textKeys[linkTextKey]
   return (
     <DocumentLink href={term.url}>
-      {textKeys[linkTextKey]} {UNICODE_ARROW_UP}
+      {linkText} {UNICODE_ARROW_UP}
     </DocumentLink>
   )
 }
