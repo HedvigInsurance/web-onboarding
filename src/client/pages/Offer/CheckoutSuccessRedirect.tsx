@@ -9,9 +9,13 @@ import { quoteBundleTrackingContractType } from 'api/quoteBundleTrackingContract
 
 type Props = {
   bundle: QuoteBundle
+  connectPayment?: boolean
 }
 
-export const CheckoutSuccessRedirect: React.FC<Props> = ({ bundle }) => {
+export const CheckoutSuccessRedirect: React.FC<Props> = ({
+  bundle,
+  connectPayment = true,
+}) => {
   const { path: localePath } = useCurrentLocale()
 
   return (
@@ -33,7 +37,11 @@ export const CheckoutSuccessRedirect: React.FC<Props> = ({ bundle }) => {
     >
       {({ track: trackAction }) => (
         <Mount on={trackAction}>
-          <Redirect to={`/${localePath}/new-member/connect-payment`} />
+          {connectPayment ? (
+            <Redirect to={`/${localePath}/new-member/connect-payment`} />
+          ) : (
+            <Redirect to={`/${localePath}/new-member/download`} />
+          )}
         </Mount>
       )}
     </TrackAction>

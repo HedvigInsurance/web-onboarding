@@ -6,6 +6,8 @@ import {
   TypeOfContract,
   useMemberQuery,
   useRedeemedCampaignsQuery,
+  ExternalInsuranceDataQuery,
+  ExternalInsuranceDataDocument,
 } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import {
@@ -21,6 +23,8 @@ import {
   isSwedishBRF,
 } from 'pages/OfferNew/utils'
 import { Variation } from 'utils/hooks/useVariation'
+import { apolloClient } from 'apolloClient'
+import { getExternalInsuranceData } from 'api/externalInsuranceQuerySelector'
 import { trackOfferGTM, EventName } from './gtm'
 import { adtraction } from './adtraction'
 import { handleSignedEvent } from './signing'
@@ -160,6 +164,28 @@ export const setInitialOfferToSessionStorage = (
   contractCategory: TrackableContractCategory,
 ) => {
   sessionStorage.setItem('initial_offer', contractCategory)
+}
+
+export const getExternalInsuranceDataFromGQLCache = (
+  dataCollectionId: string,
+) => {
+  if (apolloClient) {
+    const cachedExternalInsuranceQuery: ExternalInsuranceDataQuery | null = apolloClient!.client.readQuery(
+      {
+        query: ExternalInsuranceDataDocument,
+        variables: { reference: dataCollectionId },
+      },
+    )
+    const { currentPrice, currentCurrency } = getExternalInsuranceData(
+      cachedExternalInsuranceQuery,
+    )
+    return {
+      current_insurance_price: currentPrice,
+      current_insurance_currency: currentCurrency,
+      insurely_correctly_fetched:
+        currentPrice !== undefined && currentCurrency !== undefined,
+    }
+  } else return {}
 }
 
 export enum ApplicationSpecificEvents {

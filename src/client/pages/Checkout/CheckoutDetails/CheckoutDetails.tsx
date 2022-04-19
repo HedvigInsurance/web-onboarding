@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react'
-import { useTextKeys } from 'utils/textKeys'
-import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
+import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
+import { useTextKeys } from 'utils/textKeys'
 import { LoadingPage } from 'components/LoadingPage'
 import { EventName } from 'utils/tracking/gtm'
 import { trackCheckoutEvent } from 'utils/tracking/trackCheckoutEvent'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
+import { CheckoutIntercomVariation } from '../shared/CheckoutIntercomVariation'
 import { CheckoutErrorModal } from '../shared/ErrorModal'
 import { YourPlan } from './components/YourPlan/YourPlan'
 import { QuoteDetails } from './components/QuoteDetails/QuoteDetails'
@@ -27,6 +28,9 @@ export const CheckoutDetails = () => {
     }
   }, [data, quoteCartId])
 
+  if (!data || data.loading) {
+    return <LoadingPage loading />
+  }
   const onRetry = () => {
     window.location.reload()
     return false
@@ -35,10 +39,6 @@ export const CheckoutDetails = () => {
   if (data.error) {
     console.error('Quote cart data error:', data.error.message, data.error)
     return <CheckoutErrorModal isVisible onRetry={onRetry} />
-  }
-
-  if (data.loading) {
-    return <LoadingPage loading />
   }
 
   const priceData = data.priceData
@@ -51,6 +51,7 @@ export const CheckoutDetails = () => {
         <YourPlan {...priceData} />
         <StartDateSection />
         <QuoteDetails groups={quoteDetails} />
+        <CheckoutIntercomVariation />
       </PageSection>
 
       <Footer
