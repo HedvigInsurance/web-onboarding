@@ -40,7 +40,7 @@ type GTMOfferData = {
   member_id?: string
   quote_cart_id?: string
   flow_type?: string
-  current_insurer?: string
+  current_insurer?: string | null
 }
 
 type GTMPageData = {
@@ -113,6 +113,7 @@ export enum EventName {
   ClickCallNumber = 'click_call_number',
   OfferCrossSell = 'offer_cross_sell',
   CheckoutOpen = 'checkout_open',
+  ContactInformationPageOpen = 'contact_information_page_open',
 }
 
 type OptionalParameters = {

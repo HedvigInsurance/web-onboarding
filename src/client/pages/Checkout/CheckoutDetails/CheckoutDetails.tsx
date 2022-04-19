@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTextKeys } from 'utils/textKeys'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
 import { LoadingPage } from 'components/LoadingPage'
+import { EventName } from 'utils/tracking/gtm'
+import { trackCheckoutEvent } from 'utils/tracking/trackCheckoutEvent'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
@@ -18,6 +20,12 @@ export const CheckoutDetails = () => {
   const { path: localePath } = useCurrentLocale()
   const { quoteCartId } = useQuoteCartIdFromUrl()
   const data = useQuoteCartData()
+
+  useEffect(() => {
+    if (data) {
+      trackCheckoutEvent(EventName.CheckoutOpen, data)
+    }
+  }, [data, quoteCartId])
 
   const onRetry = () => {
     window.location.reload()
