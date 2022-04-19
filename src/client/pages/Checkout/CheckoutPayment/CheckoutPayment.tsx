@@ -37,7 +37,8 @@ import { getCheckoutDetailsValidationSchema } from '../../Offer/Checkout/UserDet
 import { PriceData } from '../shared/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import { CheckoutSuccessRedirect } from '../../Offer/CheckoutSuccessRedirect'
-import { checkIsManualReviewRequired, isSsnInvalid } from '../../Offer/Checkout'
+import { CheckoutErrorModal, onRetry } from '../shared/ErrorModal'
+import { checkIsManualReviewRequired, isSsnInvalid } from '../utils'
 import { ContactInformation } from './ContactInformation/ContactInformation'
 const { gray100, gray600, gray700, gray300, gray900 } = colorsV3
 
@@ -160,6 +161,8 @@ export const CheckoutPayment = ({
   })
   const { search: is3DsComplete } = useLocation<{ search: string }>()
   const [isLoading, setIsLoading] = useState(false)
+  const [isError, setIsError] = useState(false)
+
   const onConnectPaymentSuccess = useCallback(
     async (paymentTokenId) => {
       try {
@@ -179,7 +182,8 @@ export const CheckoutPayment = ({
           variables: { quoteIds, quoteCartId },
         })
         if (data?.quoteCart_startCheckout.__typename === 'BasicError') {
-          throw new Error('Checkout Failed')
+          console.error('Could not start checkout')
+          setIsError(true)
         }
         // Poll for Status
         getStatus({
@@ -195,7 +199,8 @@ export const CheckoutPayment = ({
           throw new Error('Manual Review required')
         }
         setIsLoading(false)
-        throw new Error('Checkout Failed')
+        console.error('Could not start checkout')
+        setIsError(true)
       }
     },
     [addPaymentTokenMutation, getStatus, quoteCartId, quoteIds, startCheckout],
@@ -345,10 +350,13 @@ export const CheckoutPayment = ({
     )
   }
 
+  if (isError) {
+    return <CheckoutErrorModal isVisible onRetry={onRetry} />
+  }
+
   return (
     <CheckoutPageWrapper>
       <ContactInformation formikProps={formik} />
-      <CheckoutIntercomVariation />
       <AdyenContainer>
         <Wrapper>
           <Headline variant="s" headingLevel="h2" colorVariant="dark">
@@ -361,9 +369,10 @@ export const CheckoutPayment = ({
           <Terms>{textKeys.CHECKOUT_PAYMENT_DETAILS_TERMS()}</Terms>
         </Wrapper>
       </AdyenContainer>
+      <CheckoutIntercomVariation />
       {mainQuote && (
         <Footer
-          buttonText={textKeys.CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT()}
+          buttonText={textKeys.CHECKOUT_FOOTER_COMPLETE_PURCHASE()}
           buttonOnClick={() => {
             startSign()
           }}

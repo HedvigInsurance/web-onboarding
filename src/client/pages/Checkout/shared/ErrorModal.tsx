@@ -57,6 +57,11 @@ type SetupFailedModalProps = Omit<ModalProps, 'onClose'> & {
   onRetry: () => void
 }
 
+export const onRetry = () => {
+  window.location.reload()
+  return false
+}
+
 export const CheckoutErrorModal = ({
   onRetry,
   ...props
