@@ -41,10 +41,7 @@ import * as createQuoteBundleMutationSelector from 'api/createQuoteBundleMutatio
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import { QuoteInput } from '../Introduction/DetailsModal/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
-import {
-  isSsnInvalid,
-  checkIsManualReviewRequired,
-} from '../../Checkout/CheckoutPayment/CheckoutPayment'
+import { isSsnInvalid, checkIsManualReviewRequired } from '../../Checkout/utils'
 import { InsuranceSummary } from './InsuranceSummary'
 import {
   CheckoutDetailsForm,

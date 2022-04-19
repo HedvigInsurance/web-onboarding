@@ -19,7 +19,7 @@ import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { Headline } from 'components/Headline/Headline'
 import { QuoteInput } from 'pages/Offer/Introduction/DetailsModal/types'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { isQuoteBundleError, LimitCode } from 'api/quoteBundleErrorSelectors'
+import { isQuoteBundleError } from 'api/quoteBundleErrorSelectors'
 import { setupQuoteCartSession } from 'containers/SessionContainer'
 import { trackSignedCustomerEvent } from 'utils/tracking/trackSignedCustomerEvent'
 import { useStorage } from 'utils/StorageContainer'
@@ -38,6 +38,7 @@ import { PriceData } from '../shared/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import { CheckoutSuccessRedirect } from '../../Offer/CheckoutSuccessRedirect'
 import { CheckoutErrorModal, onRetry } from '../shared/ErrorModal'
+import { checkIsManualReviewRequired, isSsnInvalid } from '../utils'
 import { ContactInformation } from './ContactInformation/ContactInformation'
 const { gray100, gray600, gray700, gray300, gray900 } = colorsV3
 
@@ -122,22 +123,6 @@ const Terms = styled.div`
     text-decoration: none;
   }
 `
-
-export const checkIsManualReviewRequired = (errors: GraphQLError[]) => {
-  const manualReviewRequiredError = errors.find((error) => {
-    return error?.extensions?.body?.errorCode === 'MANUAL_REVIEW_REQUIRED'
-  })
-
-  return manualReviewRequiredError !== undefined
-}
-
-export const isSsnInvalid = (errors: GraphQLError[]) => {
-  const invalidSsnError = errors.find((error) => {
-    return error?.extensions?.body?.errorCode === LimitCode.INVALID_SSN
-  })
-
-  return invalidSsnError !== undefined
-}
 
 type Props = {
   bundleVariants: QuoteBundleVariant[]
