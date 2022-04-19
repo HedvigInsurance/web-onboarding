@@ -28,14 +28,17 @@ export type Scalars = {
   /** An ISO-8601 String representation of a `java.time.Instant`, e.g. "2019-07-03T19:07:38.494081Z". */
   Instant: any
   JSONString: any
+  /** Generic type for json values */
   JSON: any
   Object: any
+  /** Adyen payment details type */
   PaymentMethodDetails: any
   /** A String-representation of Adyen's checkout payments action */
   CheckoutPaymentsAction: any
   /** A String-representation of Adyen's payments details request */
   PaymentsDetailsRequest: any
   CheckoutPaymentAction: any
+  /** Adyen additional payment details type, used in 3DS flow */
   PaymentDetailsInput: any
   /** The `Upload` scalar type represents a file upload. */
   Upload: any
@@ -2169,9 +2172,15 @@ export type ContractBundle = {
   potentialCrossSells: Array<CrossSell>
 }
 
+export type ContractBundlePotentialCrossSellsArgs = {
+  locale?: Maybe<Locale>
+}
+
 export type ContractBundleAngelStories = {
   __typename?: 'ContractBundleAngelStories'
+  /** @deprecated use addressChangeV2 */
   addressChange?: Maybe<Scalars['ID']>
+  addressChangeV2?: Maybe<Scalars['ID']>
 }
 
 export type ContractFaq = {
@@ -2777,7 +2786,9 @@ export type CrossSellChat = {
 
 export type CrossSellEmbark = {
   __typename?: 'CrossSellEmbark'
+  /** @deprecated use embarkStoryV2 */
   embarkStory: EmbarkStory
+  embarkStoryV2: EmbarkStory
 }
 
 export type CrossSellEmbarkEmbarkStoryArgs = {
@@ -2820,6 +2831,7 @@ export enum CrossSellType {
   Accident = 'ACCIDENT',
   Travel = 'TRAVEL',
   HomeContent = 'HOME_CONTENT',
+  House = 'HOUSE',
 }
 
 export type CurrentInsurer = {
@@ -7655,8 +7667,19 @@ export type Mutation = {
   login_verifyOtpAttempt: VerifyOtpLoginAttemptResult
   /** Resends the OTP to the provided credential */
   login_resendOtp: Scalars['ID']
+  /** Initiate widget, widget should send requestId, locale, partner id */
+  initWidget: PartnerInitWidgetResult
+  /**
+   * Initiates a tokenization request to Adyen. This can either succeed/fail immediately, in which case
+   * ConnectPaymentFinished is returned, or require additional actions, such as 3DS authentication, from the client.
+   */
   paymentConnection_connectPayment: ConnectPaymentResult
+  /** Used by the Adyen UI components inside the 3DS authentication flow. */
   paymentConnection_submitAdditionalPaymentDetails: ConnectPaymentResult
+  /**
+   * Should be used by the web client when the user is redirected back from the 3DS flow. The md and pares values can
+   * be retrieved from the Adyen callback.
+   */
   paymentConnection_submitAdyenRedirection: ConnectPaymentFinished
   /** Create a new quote cart, used to tie the onboarding journey together. */
   onboardingQuoteCart_create: CreateQuoteCartResult
@@ -7840,6 +7863,10 @@ export type MutationLogin_VerifyOtpAttemptArgs = {
 
 export type MutationLogin_ResendOtpArgs = {
   id: Scalars['ID']
+}
+
+export type MutationInitWidgetArgs = {
+  input: PartnerInitWidgetInput
 }
 
 export type MutationPaymentConnection_ConnectPaymentArgs = {
@@ -8162,6 +8189,21 @@ export type PageInfo = {
   pageSize?: Maybe<Scalars['Int']>
 }
 
+export type PartnerInitWidgetInput = {
+  requestId: Scalars['String']
+  partnerId: Scalars['String']
+  market?: Maybe<Market>
+  locale: Scalars['String']
+}
+
+export type PartnerInitWidgetResult = {
+  __typename?: 'PartnerInitWidgetResult'
+  id: Scalars['ID']
+  market: Market
+  partnerName: Scalars['String']
+  partnerDefaultCampaignCode?: Maybe<Scalars['String']>
+}
+
 export enum PayinMethodStatus {
   Active = 'ACTIVE',
   Pending = 'PENDING',
@@ -8177,7 +8219,7 @@ export enum PaymentConnectChannel {
 export type PaymentConnection = {
   __typename?: 'PaymentConnection'
   id?: Maybe<Scalars['ID']>
-  providers: Array<Maybe<Provider>>
+  providers: Array<Provider>
 }
 
 export enum PayoutMethodStatus {
@@ -8740,6 +8782,7 @@ export type QuoteCart = {
   checkout?: Maybe<Checkout>
   /**  The accepted checkout methods.  */
   checkoutMethods: Array<CheckoutMethod>
+  /** Contains payment token currently attached to the quote cart and information about available payment providers */
   paymentConnection?: Maybe<PaymentConnection>
 }
 
@@ -10714,6 +10757,7 @@ export enum TypeOfContract {
   SeApartmentStudentRent = 'SE_APARTMENT_STUDENT_RENT',
   SeAccident = 'SE_ACCIDENT',
   SeAccidentStudent = 'SE_ACCIDENT_STUDENT',
+  NoHouse = 'NO_HOUSE',
   NoHomeContentOwn = 'NO_HOME_CONTENT_OWN',
   NoHomeContentRent = 'NO_HOME_CONTENT_RENT',
   NoHomeContentYouthOwn = 'NO_HOME_CONTENT_YOUTH_OWN',
@@ -11614,6 +11658,17 @@ export type AddCampaignCodeMutation = { __typename?: 'Mutation' } & {
     | ({ __typename?: 'BasicError' } & { errorMessage: BasicError['message'] })
 }
 
+export type AddPaymentTokenMutationVariables = Exact<{
+  id: Scalars['ID']
+  paymentTokenId: Scalars['ID']
+}>
+
+export type AddPaymentTokenMutation = { __typename?: 'Mutation' } & {
+  quoteCart_addPaymentToken:
+    | ({ __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'>)
+    | ({ __typename?: 'BasicError' } & { errorMessage: BasicError['message'] })
+}
+
 export type AppliedCampaignNameQueryVariables = Exact<{
   quoteCartId: Scalars['ID']
   locale: Locale
@@ -12007,6 +12062,60 @@ export type NorwegianBankIdAuthMutation = { __typename?: 'Mutation' } & {
     NorwegianBankIdAuthResponse,
     'redirectUrl'
   >
+}
+
+export type PaymentConnection_ConnectPaymentMutationVariables = Exact<{
+  input: ConnectPaymentInput
+}>
+
+export type PaymentConnection_ConnectPaymentMutation = {
+  __typename?: 'Mutation'
+} & {
+  paymentConnection_connectPayment:
+    | ({ __typename?: 'ConnectPaymentFinished' } & Pick<
+        ConnectPaymentFinished,
+        'paymentTokenId' | 'status'
+      >)
+    | ({ __typename?: 'ActionRequired' } & Pick<
+        ActionRequired,
+        'paymentTokenId' | 'action'
+      >)
+}
+
+export type PaymentConnection_SubmitAdditionalPaymentDetailsMutationVariables = Exact<{
+  paymentTokenId: Scalars['ID']
+  paymentRquest: AdditionalPaymentDetailsInput
+}>
+
+export type PaymentConnection_SubmitAdditionalPaymentDetailsMutation = {
+  __typename?: 'Mutation'
+} & {
+  paymentConnection_submitAdditionalPaymentDetails:
+    | ({ __typename?: 'ConnectPaymentFinished' } & Pick<
+        ConnectPaymentFinished,
+        'paymentTokenId' | 'status'
+      >)
+    | ({ __typename?: 'ActionRequired' } & Pick<ActionRequired, 'action'>)
+}
+
+export type PaymentMethodsQueryVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type PaymentMethodsQuery = { __typename?: 'Query' } & {
+  quoteCart: { __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'> & {
+      paymentConnection?: Maybe<
+        { __typename?: 'PaymentConnection' } & Pick<PaymentConnection, 'id'> & {
+            providers: Array<
+              | ({ __typename: 'Adyen' } & Pick<
+                  Adyen,
+                  'availablePaymentMethods'
+                >)
+              | { __typename: 'Trustly' }
+            >
+          }
+      >
+    }
 }
 
 export type PriceQueryVariables = Exact<{
@@ -13086,6 +13195,63 @@ export type AddCampaignCodeMutationOptions = ApolloReactCommon.BaseMutationOptio
   AddCampaignCodeMutation,
   AddCampaignCodeMutationVariables
 >
+export const AddPaymentTokenDocument = gql`
+  mutation AddPaymentToken($id: ID!, $paymentTokenId: ID!) {
+    quoteCart_addPaymentToken(id: $id, paymentTokenId: $paymentTokenId) {
+      ... on QuoteCart {
+        id
+      }
+      ... on BasicError {
+        errorMessage: message
+      }
+    }
+  }
+`
+export type AddPaymentTokenMutationFn = ApolloReactCommon.MutationFunction<
+  AddPaymentTokenMutation,
+  AddPaymentTokenMutationVariables
+>
+
+/**
+ * __useAddPaymentTokenMutation__
+ *
+ * To run a mutation, you first call `useAddPaymentTokenMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddPaymentTokenMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addPaymentTokenMutation, { data, loading, error }] = useAddPaymentTokenMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      paymentTokenId: // value for 'paymentTokenId'
+ *   },
+ * });
+ */
+export function useAddPaymentTokenMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AddPaymentTokenMutation,
+    AddPaymentTokenMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    AddPaymentTokenMutation,
+    AddPaymentTokenMutationVariables
+  >(AddPaymentTokenDocument, options)
+}
+export type AddPaymentTokenMutationHookResult = ReturnType<
+  typeof useAddPaymentTokenMutation
+>
+export type AddPaymentTokenMutationResult = ApolloReactCommon.MutationResult<
+  AddPaymentTokenMutation
+>
+export type AddPaymentTokenMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  AddPaymentTokenMutation,
+  AddPaymentTokenMutationVariables
+>
 export const AppliedCampaignNameDocument = gql`
   query AppliedCampaignName($quoteCartId: ID!, $locale: Locale!) {
     quoteCart(id: $quoteCartId) {
@@ -14101,6 +14267,195 @@ export type NorwegianBankIdAuthMutationResult = ApolloReactCommon.MutationResult
 export type NorwegianBankIdAuthMutationOptions = ApolloReactCommon.BaseMutationOptions<
   NorwegianBankIdAuthMutation,
   NorwegianBankIdAuthMutationVariables
+>
+export const PaymentConnection_ConnectPaymentDocument = gql`
+  mutation PaymentConnection_connectPayment($input: ConnectPaymentInput!) {
+    paymentConnection_connectPayment(input: $input) {
+      ... on ActionRequired {
+        paymentTokenId
+        action
+      }
+      ... on ConnectPaymentFinished {
+        paymentTokenId
+        status
+      }
+    }
+  }
+`
+export type PaymentConnection_ConnectPaymentMutationFn = ApolloReactCommon.MutationFunction<
+  PaymentConnection_ConnectPaymentMutation,
+  PaymentConnection_ConnectPaymentMutationVariables
+>
+
+/**
+ * __usePaymentConnection_ConnectPaymentMutation__
+ *
+ * To run a mutation, you first call `usePaymentConnection_ConnectPaymentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePaymentConnection_ConnectPaymentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [paymentConnectionConnectPaymentMutation, { data, loading, error }] = usePaymentConnection_ConnectPaymentMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function usePaymentConnection_ConnectPaymentMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    PaymentConnection_ConnectPaymentMutation,
+    PaymentConnection_ConnectPaymentMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    PaymentConnection_ConnectPaymentMutation,
+    PaymentConnection_ConnectPaymentMutationVariables
+  >(PaymentConnection_ConnectPaymentDocument, options)
+}
+export type PaymentConnection_ConnectPaymentMutationHookResult = ReturnType<
+  typeof usePaymentConnection_ConnectPaymentMutation
+>
+export type PaymentConnection_ConnectPaymentMutationResult = ApolloReactCommon.MutationResult<
+  PaymentConnection_ConnectPaymentMutation
+>
+export type PaymentConnection_ConnectPaymentMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  PaymentConnection_ConnectPaymentMutation,
+  PaymentConnection_ConnectPaymentMutationVariables
+>
+export const PaymentConnection_SubmitAdditionalPaymentDetailsDocument = gql`
+  mutation PaymentConnection_submitAdditionalPaymentDetails(
+    $paymentTokenId: ID!
+    $paymentRquest: AdditionalPaymentDetailsInput!
+  ) {
+    paymentConnection_submitAdditionalPaymentDetails(
+      paymentTokenId: $paymentTokenId
+      input: $paymentRquest
+    ) {
+      ... on ActionRequired {
+        action
+      }
+      ... on ConnectPaymentFinished {
+        paymentTokenId
+        status
+      }
+    }
+  }
+`
+export type PaymentConnection_SubmitAdditionalPaymentDetailsMutationFn = ApolloReactCommon.MutationFunction<
+  PaymentConnection_SubmitAdditionalPaymentDetailsMutation,
+  PaymentConnection_SubmitAdditionalPaymentDetailsMutationVariables
+>
+
+/**
+ * __usePaymentConnection_SubmitAdditionalPaymentDetailsMutation__
+ *
+ * To run a mutation, you first call `usePaymentConnection_SubmitAdditionalPaymentDetailsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePaymentConnection_SubmitAdditionalPaymentDetailsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [paymentConnectionSubmitAdditionalPaymentDetailsMutation, { data, loading, error }] = usePaymentConnection_SubmitAdditionalPaymentDetailsMutation({
+ *   variables: {
+ *      paymentTokenId: // value for 'paymentTokenId'
+ *      paymentRquest: // value for 'paymentRquest'
+ *   },
+ * });
+ */
+export function usePaymentConnection_SubmitAdditionalPaymentDetailsMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    PaymentConnection_SubmitAdditionalPaymentDetailsMutation,
+    PaymentConnection_SubmitAdditionalPaymentDetailsMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    PaymentConnection_SubmitAdditionalPaymentDetailsMutation,
+    PaymentConnection_SubmitAdditionalPaymentDetailsMutationVariables
+  >(PaymentConnection_SubmitAdditionalPaymentDetailsDocument, options)
+}
+export type PaymentConnection_SubmitAdditionalPaymentDetailsMutationHookResult = ReturnType<
+  typeof usePaymentConnection_SubmitAdditionalPaymentDetailsMutation
+>
+export type PaymentConnection_SubmitAdditionalPaymentDetailsMutationResult = ApolloReactCommon.MutationResult<
+  PaymentConnection_SubmitAdditionalPaymentDetailsMutation
+>
+export type PaymentConnection_SubmitAdditionalPaymentDetailsMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  PaymentConnection_SubmitAdditionalPaymentDetailsMutation,
+  PaymentConnection_SubmitAdditionalPaymentDetailsMutationVariables
+>
+export const PaymentMethodsDocument = gql`
+  query PaymentMethods($id: ID!) {
+    quoteCart(id: $id) {
+      id
+      paymentConnection {
+        id
+        providers {
+          __typename
+          ... on Adyen {
+            availablePaymentMethods
+          }
+        }
+      }
+    }
+  }
+`
+
+/**
+ * __usePaymentMethodsQuery__
+ *
+ * To run a query within a React component, call `usePaymentMethodsQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePaymentMethodsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePaymentMethodsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function usePaymentMethodsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    PaymentMethodsQuery,
+    PaymentMethodsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<PaymentMethodsQuery, PaymentMethodsQueryVariables>(
+    PaymentMethodsDocument,
+    options,
+  )
+}
+export function usePaymentMethodsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    PaymentMethodsQuery,
+    PaymentMethodsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<PaymentMethodsQuery, PaymentMethodsQueryVariables>(
+    PaymentMethodsDocument,
+    options,
+  )
+}
+export type PaymentMethodsQueryHookResult = ReturnType<
+  typeof usePaymentMethodsQuery
+>
+export type PaymentMethodsLazyQueryHookResult = ReturnType<
+  typeof usePaymentMethodsLazyQuery
+>
+export type PaymentMethodsQueryResult = ApolloReactCommon.QueryResult<
+  PaymentMethodsQuery,
+  PaymentMethodsQueryVariables
 >
 export const PriceDocument = gql`
   query Price($id: ID!, $locale: Locale!) {

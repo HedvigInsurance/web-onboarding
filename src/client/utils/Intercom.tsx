@@ -1,7 +1,19 @@
+import { Global, css, CSSObject } from '@emotion/react'
 import React from 'react'
 import { useRouteMatch } from 'react-router'
+import styled from '@emotion/styled'
+import { colorsV3 } from '@hedviginsurance/brand'
+import { Variation, useVariation } from 'utils/hooks/useVariation'
+import { useTextKeys } from 'utils/textKeys'
+
 import { localePathPattern } from 'l10n/localePathPattern'
-import { useVariation, Variation } from 'utils/hooks/useVariation'
+const intercomBtnSelector = '.intercom-lightweight-app-launcher'
+
+declare global {
+  interface Window {
+    Intercom?: any
+  }
+}
 
 const createIntercom = () => {
   const script = `
@@ -20,13 +32,12 @@ const createIntercom = () => {
   window.document.body.append(scriptTag)
 }
 
-export const Intercom: React.FC = () => {
+const Intercom = () => {
   const variation = useVariation()
   const isIntercomMatch = useRouteMatch(
     localePathPattern +
       '/new-member/:place(offer|checkout|sign|download|connect-payment)',
   )
-
   React.useEffect(() => {
     if (
       [Variation.IOS, Variation.ANDROID, Variation.AVY].includes(variation!)
@@ -47,3 +58,28 @@ export const Intercom: React.FC = () => {
 
   return null
 }
+
+const InjectedStyles = ({ style }: { style: CSSObject }) => (
+  <Global styles={css({ [intercomBtnSelector]: style })} />
+)
+
+const TextLink = styled.a`
+  font-size: 0.874rem;
+  color: ${colorsV3.purple900};
+  text-align: center;
+  cursor: pointer;
+`
+const TextLinkVariation = () => {
+  const textKeys = useTextKeys()
+
+  return (
+    <TextLink onClick={() => window?.Intercom('show')}>
+      {textKeys.CHECKOUT_CONTACT_US_CTA()}
+    </TextLink>
+  )
+}
+
+Intercom.InjectedStyles = InjectedStyles
+Intercom.TextLinkVariation = TextLinkVariation
+
+export { Intercom }
