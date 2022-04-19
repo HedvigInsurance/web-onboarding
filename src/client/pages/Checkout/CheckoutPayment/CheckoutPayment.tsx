@@ -31,6 +31,7 @@ import {
 } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
+import { CheckoutIntercomVariation } from '../shared/CheckoutIntercomVariation'
 import { getUniqueQuotesFromVariantList } from '../../OfferNew/utils'
 import { getCheckoutDetailsValidationSchema } from '../../Offer/Checkout/UserDetailsForm'
 import { PriceData } from '../shared/types'
@@ -347,6 +348,7 @@ export const CheckoutPayment = ({
   return (
     <CheckoutPageWrapper>
       <ContactInformation formikProps={formik} />
+      <CheckoutIntercomVariation />
       <AdyenContainer>
         <Wrapper>
           <Headline variant="s" headingLevel="h2" colorVariant="dark">

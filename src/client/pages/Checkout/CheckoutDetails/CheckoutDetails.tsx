@@ -1,12 +1,14 @@
 import React from 'react'
-import { useTextKeys } from 'utils/textKeys'
-import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
+
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
+import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
+import { useTextKeys } from 'utils/textKeys'
 import { LoadingPage } from 'components/LoadingPage'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
+import { CheckoutIntercomVariation } from '../shared/CheckoutIntercomVariation'
 import { CheckoutErrorModal } from '../shared/ErrorModal'
 import { YourPlan } from './components/YourPlan/YourPlan'
 import { QuoteDetails } from './components/QuoteDetails/QuoteDetails'
@@ -18,11 +20,9 @@ export const CheckoutDetails = () => {
   const { path: localePath } = useCurrentLocale()
   const { quoteCartId } = useQuoteCartIdFromUrl()
   const data = useQuoteCartData()
-
   if (!data || data.loading) {
     return <LoadingPage loading />
   }
-
   const onRetry = () => {
     window.location.reload()
     return false
@@ -43,6 +43,7 @@ export const CheckoutDetails = () => {
         <YourPlan {...priceData} />
         <StartDateSection />
         <QuoteDetails groups={quoteDetails} />
+        <CheckoutIntercomVariation />
       </PageSection>
 
       <Footer
