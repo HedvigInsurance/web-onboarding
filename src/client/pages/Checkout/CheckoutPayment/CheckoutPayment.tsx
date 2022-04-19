@@ -37,7 +37,8 @@ import { getCheckoutDetailsValidationSchema } from '../../Offer/Checkout/UserDet
 import { PriceData } from '../shared/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import { CheckoutSuccessRedirect } from '../../Offer/CheckoutSuccessRedirect'
-import { checkIsManualReviewRequired, isSsnInvalid } from '../../Offer/Checkout'
+import { CheckoutErrorModal, onRetry } from '../shared/ErrorModal'
+import { checkIsManualReviewRequired, isSsnInvalid } from '../utils'
 import { ContactInformation } from './ContactInformation/ContactInformation'
 const { gray100, gray600, gray700, gray300, gray900 } = colorsV3
 
@@ -160,6 +161,8 @@ export const CheckoutPayment = ({
   })
   const { search: is3DsComplete } = useLocation<{ search: string }>()
   const [isLoading, setIsLoading] = useState(false)
+  const [isError, setIsError] = useState(false)
+
   const onConnectPaymentSuccess = useCallback(
     async (paymentTokenId) => {
       try {
@@ -179,7 +182,8 @@ export const CheckoutPayment = ({
           variables: { quoteIds, quoteCartId },
         })
         if (data?.quoteCart_startCheckout.__typename === 'BasicError') {
-          throw new Error('Checkout Failed')
+          console.error('Could not start checkout')
+          setIsError(true)
         }
         // Poll for Status
         getStatus({
@@ -195,7 +199,8 @@ export const CheckoutPayment = ({
           throw new Error('Manual Review required')
         }
         setIsLoading(false)
-        throw new Error('Checkout Failed')
+        console.error('Could not start checkout')
+        setIsError(true)
       }
     },
     [addPaymentTokenMutation, getStatus, quoteCartId, quoteIds, startCheckout],
@@ -343,6 +348,10 @@ export const CheckoutPayment = ({
         connectPayment={false}
       />
     )
+  }
+
+  if (isError) {
+    return <CheckoutErrorModal isVisible onRetry={onRetry} />
   }
 
   return (
