@@ -13,7 +13,7 @@ const Wrapper = styled.div`
 const Title = styled.div`
   font-size: 1.125rem;
   letter-spacing: -0.23px;
-  font-family: ${fonts.FAVORIT};
+  font-family: ${fonts.HEDVIG_LETTERS_STANDARD};
   padding: 1rem 0;
 `
 

@@ -2183,11 +2183,6 @@
   resolved "https://registry.yarnpkg.com/@graphql-typed-document-node/core/-/core-3.1.0.tgz#0eee6373e11418bfe0b5638f654df7a4ca6a3950"
   integrity sha512-wYn6r8zVZyQJ6rQaALBEln5B1pzxb9shV5Ef97kTvn6yVGrqyXVnDqnU24MXnFubR+rZjBY9NWuxX3FB2sTsjg==
 
-"@hedviginsurance/brand@^4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-4.1.0.tgz#e8de34dbfb826c15dbaeb582585c3a5f720b9ced"
-  integrity sha512-TYlxSmMQPiv8+DfgwKrV9B1Xr+vQA5VBx1EdfZR1gZNcc5QDK4Bk90oYC4A5nu3er71RyEHfjlHWJdqfAMGOJQ==
-
 "@hedviginsurance/brand@^5.0.0":
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-5.0.0.tgz#b070e0031019ed51b664ee2aa0e59752c01bc07f"
