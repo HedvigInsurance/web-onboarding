@@ -1,12 +1,15 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import { colorsV3 } from '@hedviginsurance/brand'
 import styled from '@emotion/styled'
 import { Value as ValueType, QuoteProps } from 'utils/getQuoteDetails'
 import { useTextKeys, TextKeyMap } from 'utils/textKeys'
+import { TextButton } from 'components/buttons'
+import { DetailsModal } from 'components/DetailsModal'
+import { BundledQuote } from 'data/graphql'
 import { SubSection } from '../SubSection'
 import { Divider } from '../../../shared/Divider'
 
-const { gray900, gray700 } = colorsV3
+const { gray900, gray700, purple900 } = colorsV3
 
 const Row = styled.div`
   font-size: 0.874rem;
@@ -23,6 +26,12 @@ const Label = styled.div`
 const Value = styled.div`
   color: ${gray700};
   text-align: right;
+`
+
+const Action = styled.div`
+  color: ${purple900};
+  text-align: center;
+  margin: auto;
 `
 
 const HorizontalSpacer = styled.div`
@@ -57,8 +66,18 @@ const getValueText = ({
   return value
 }
 
-export const QuoteDetails = ({ groups }: QuoteProps) => {
+export type QuoteDetailsProps = QuoteProps & {
+  quoteCartId: string
+  allQuotes: BundledQuote[]
+}
+
+export const QuoteDetails = ({
+  groups,
+  quoteCartId,
+  allQuotes,
+}: QuoteDetailsProps) => {
   const textKeys = useTextKeys()
+  const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false)
 
   return (
     <SubSection headlineText={textKeys.CHECKOUT_QUOTE_DETAILS_TITLE()}>
@@ -82,6 +101,24 @@ export const QuoteDetails = ({ groups }: QuoteProps) => {
           {index < groups.length - 1 && <HorizontalDivider />}
         </Fragment>
       ))}
+      <Fragment>
+        <HorizontalDivider />
+        <Group>
+          <Row>
+            <Action>
+              <TextButton onClick={() => setDetailsModalIsOpen(true)}>
+                Edit information
+              </TextButton>
+              <DetailsModal
+                quoteCartId={quoteCartId}
+                allQuotes={allQuotes}
+                isVisible={detailsModalIsOpen}
+                onClose={() => setDetailsModalIsOpen(false)}
+              />
+            </Action>
+          </Row>
+        </Group>
+      </Fragment>
     </SubSection>
   )
 }
