@@ -11,7 +11,7 @@ import {
 } from 'utils/mediaQueries'
 import { Button } from 'components/buttons'
 import { BundledQuote } from 'data/graphql'
-import { DetailsModal } from './DetailsModal'
+import { DetailsModal } from 'components/DetailsModal'
 
 type Props = {
   quoteCartId: string

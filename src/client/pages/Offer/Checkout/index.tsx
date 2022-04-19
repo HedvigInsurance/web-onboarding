@@ -39,7 +39,7 @@ import { LimitCode, isQuoteBundleError } from 'api/quoteBundleErrorSelectors'
 import { trackSignedCustomerEvent } from 'utils/tracking/trackSignedCustomerEvent'
 import * as createQuoteBundleMutationSelector from 'api/createQuoteBundleMutationSelectors'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
-import { QuoteInput } from '../Introduction/DetailsModal/types'
+import { QuoteInput } from 'components/DetailsModal/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import { InsuranceSummary } from './InsuranceSummary'
 import {
