@@ -1,8 +1,9 @@
 import React from 'react'
-import { useTextKeys } from 'utils/textKeys'
-import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
+
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
+import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
+import { useTextKeys } from 'utils/textKeys'
 import { LoadingPage } from 'components/LoadingPage'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
@@ -37,6 +38,7 @@ export const CheckoutDetails = () => {
         <YourPlan {...priceData} />
         <StartDateSection />
         <QuoteDetails groups={quoteDetails} />
+        <CheckoutIntercomVariation />
       </PageSection>
 
       <Footer
