@@ -5,7 +5,13 @@ import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { useTextKeys } from 'utils/textKeys'
 import { LoadingPage } from 'components/LoadingPage'
 import { EventName } from 'utils/tracking/gtm'
-import { trackCheckoutEvent } from 'utils/tracking/trackCheckoutEvent'
+import {
+  getSelectedBundleVariant,
+  getMonthlyCostDeductionIncentive,
+} from 'api/quoteCartQuerySelectors'
+import { useQuoteCartQuery } from 'data/graphql'
+import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
+import { trackOfferEvent } from 'utils/tracking/trackOfferEvent'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
@@ -18,16 +24,38 @@ import { StartDateSection } from './components/StartDateSection/StartDateSection
 
 export const CheckoutDetails = () => {
   const textKeys = useTextKeys()
-  const { path: localePath } = useCurrentLocale()
+  const { path: localePath, isoLocale } = useCurrentLocale()
   const { quoteCartId } = useQuoteCartIdFromUrl()
   const data = useQuoteCartData()
 
-  useEffect(() => {
-    if (data) {
-      trackCheckoutEvent(EventName.CheckoutOpen, data)
-    }
-  }, [data, quoteCartId])
+  const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
 
+  const { data: quoteCartQueryData } = useQuoteCartQuery({
+    variables: {
+      id: quoteCartId,
+      locale: isoLocale,
+    },
+  })
+
+  const isReferralCodeUsed =
+    getMonthlyCostDeductionIncentive(quoteCartQueryData) !== undefined
+
+  const selectedBundleVariant = getSelectedBundleVariant(
+    quoteCartQueryData,
+    selectedInsuranceTypes,
+  )
+  useEffect(() => {
+    if (selectedBundleVariant) {
+      trackOfferEvent(
+        EventName.CheckoutOpen,
+        selectedBundleVariant.bundle,
+        isReferralCodeUsed,
+        {
+          quoteCartId,
+        },
+      )
+    }
+  }, [selectedBundleVariant, isReferralCodeUsed, quoteCartId])
   if (!data || data.loading) {
     return <LoadingPage loading />
   }

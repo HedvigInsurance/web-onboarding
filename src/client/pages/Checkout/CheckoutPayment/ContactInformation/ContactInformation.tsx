@@ -8,6 +8,16 @@ import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { QuoteInput } from 'pages/Offer/Introduction/DetailsModal/types'
 import { CreditCheckInfo } from 'pages/OfferNew/Checkout/CreditCheckInfo'
 import { TextInput, SsnInput } from 'pages/Offer/Checkout/inputFields'
+import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
+import { useQuoteCartQuery } from 'data/graphql'
+import {
+  getMonthlyCostDeductionIncentive,
+  getSelectedBundleVariant,
+} from 'api/quoteCartQuerySelectors'
+import { trackOfferEvent } from 'utils/tracking/trackOfferEvent'
+import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import { EventName } from 'utils/tracking/gtm'
 import { WrapperWidth } from '../../shared/CheckoutPageWrapper'
 import { Divider } from '../../shared/Divider'
 
@@ -58,6 +68,10 @@ type Props = {
 
 export const ContactInformation = ({ formikProps }: Props) => {
   const textKeys = useTextKeys()
+  const { isoLocale } = useCurrentLocale()
+
+  const { quoteCartId } = useQuoteCartIdFromUrl()
+
   const { handleChange } = formikProps
   const [hasEnabledCreditCheckInfo] = useFeature([
     Features.CHECKOUT_CREDIT_CHECK,
@@ -65,6 +79,36 @@ export const ContactInformation = ({ formikProps }: Props) => {
   const [isShowingCreditCheckInfo, setIsShowingCreditCheckInfo] = useState(
     false,
   )
+
+  const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
+
+  const { data: quoteCartQueryData } = useQuoteCartQuery({
+    variables: {
+      id: quoteCartId,
+      locale: isoLocale,
+    },
+  })
+
+  const isReferralCodeUsed =
+    getMonthlyCostDeductionIncentive(quoteCartQueryData) !== undefined
+
+  const selectedBundleVariant = getSelectedBundleVariant(
+    quoteCartQueryData,
+    selectedInsuranceTypes,
+  )
+  useEffect(() => {
+    if (selectedBundleVariant) {
+      trackOfferEvent(
+        EventName.ContactInformationPageOpen,
+        selectedBundleVariant.bundle,
+        isReferralCodeUsed,
+        {
+          quoteCartId,
+        },
+      )
+    }
+  }, [selectedBundleVariant, isReferralCodeUsed, quoteCartId])
+
   const {
     values: { ssn },
     initialValues,
