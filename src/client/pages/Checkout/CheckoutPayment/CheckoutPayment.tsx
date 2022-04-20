@@ -161,7 +161,7 @@ export const CheckoutPayment = ({
     pollInterval: 1000,
   })
   const { search: is3DsComplete } = useLocation<{ search: string }>()
-  const [isLoading, setIsLoading] = useState(false)
+  const [isDataLoading, setIsDataLoading] = useState(false)
   const [isPageLoading, setIsPageLoading] = useState(false)
   const [isError, setIsError] = useState(false)
 
@@ -179,7 +179,7 @@ export const CheckoutPayment = ({
       }
 
       try {
-        setIsLoading(true)
+        setIsDataLoading(true)
         const { data } = await startCheckout({
           variables: { quoteIds, quoteCartId },
         })
@@ -200,8 +200,7 @@ export const CheckoutPayment = ({
         if (isManualReviewRequired) {
           throw new Error('Manual Review required')
         }
-        setIsPageLoading(false)
-        setIsLoading(false)
+        setIsDataLoading(false)
         console.error('Could not start checkout')
         setIsError(true)
       }
@@ -344,7 +343,6 @@ export const CheckoutPayment = ({
       completeCheckout()
     }
   }, [checkoutStatus, completeCheckout])
-
   if (checkoutStatus === CheckoutStatus.Completed) {
     return (
       <CheckoutSuccessRedirect
@@ -384,7 +382,7 @@ export const CheckoutPayment = ({
           buttonOnClick={() => {
             startSign()
           }}
-          isLoading={isBundleCreationInProgress || isLoading}
+          isLoading={isBundleCreationInProgress || isDataLoading}
         >
           <PaymentInfo {...priceData} />
         </Footer>
