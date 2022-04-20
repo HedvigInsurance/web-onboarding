@@ -1,11 +1,9 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment } from 'react'
 import { colorsV3 } from '@hedviginsurance/brand'
 import styled from '@emotion/styled'
 import { Value as ValueType, QuoteProps } from 'utils/getQuoteDetails'
 import { useTextKeys, TextKeyMap } from 'utils/textKeys'
 import { TextButton } from 'components/buttons'
-import { DetailsModal } from 'components/DetailsModal'
-import { BundledQuote } from 'data/graphql'
 import { SubSection } from '../SubSection'
 import { Divider } from '../../../shared/Divider'
 
