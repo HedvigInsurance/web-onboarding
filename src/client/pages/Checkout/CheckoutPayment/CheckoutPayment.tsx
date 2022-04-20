@@ -182,7 +182,7 @@ export const CheckoutPayment = ({
     [addPaymentTokenMutation, quoteCartId],
   )
 
-  const checkout = useCallback(async () => {
+  const performCheckout = useCallback(async () => {
     try {
       setIsLoading(true)
       const { data } = await startCheckout({
@@ -213,9 +213,9 @@ export const CheckoutPayment = ({
 
   useEffect(() => {
     if (isPaymentConnected && checkoutStatus === undefined) {
-      checkout()
+      performCheckout()
     }
-  }, [isPaymentConnected, checkout, checkoutStatus])
+  }, [isPaymentConnected, performCheckout, checkoutStatus])
 
   const checkoutAPI = useAdyenCheckout({
     adyenRef,
