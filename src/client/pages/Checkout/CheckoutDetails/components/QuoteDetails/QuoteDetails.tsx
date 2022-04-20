@@ -104,7 +104,7 @@ export const QuoteDetails = ({
           <Row>
             <Action>
               <TextButton onClick={onEditInfoButtonClick}>
-                Edit information
+                {textKeys.CHECKOUT_EDIT_INFO()}
               </TextButton>
             </Action>
           </Row>

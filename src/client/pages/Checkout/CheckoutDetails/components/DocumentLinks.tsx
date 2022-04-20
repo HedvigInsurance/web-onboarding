@@ -48,7 +48,7 @@ const TermLink = ({ term }: { term: InsuranceTerm }) => {
   const linkText = textKeys[linkTextKey]
   return (
     <DocumentLink href={term.url}>
-      {linkText} {UNICODE_ARROW_UP}
+      {linkText.call()} {UNICODE_ARROW_UP}
     </DocumentLink>
   )
 }
