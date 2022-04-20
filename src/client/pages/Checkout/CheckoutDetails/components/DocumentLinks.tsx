@@ -40,15 +40,9 @@ const filterTerms = (terms: InsuranceTerm[]) =>
   )
 
 const TermLink = ({ term }: { term: InsuranceTerm }) => {
-  const textKeys = useTextKeys()
-  const linkTextKey =
-    term.type === InsuranceTermType.TermsAndConditions
-      ? 'CHECKOUT_TERMS_FULL'
-      : 'CHECKOUT_TERMS_PRE_PURCHASE_INFO'
-  const linkText = textKeys[linkTextKey]
   return (
     <DocumentLink href={term.url}>
-      {linkText.call()} {UNICODE_ARROW_UP}
+      {term.displayName} {UNICODE_ARROW_UP}
     </DocumentLink>
   )
 }
