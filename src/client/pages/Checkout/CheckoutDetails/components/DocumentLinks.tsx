@@ -3,7 +3,6 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { BundledQuote, InsuranceTerm, InsuranceTermType } from 'data/graphql'
 import { RawLink } from 'components/RawLink'
-import { useTextKeys } from 'utils/textKeys'
 
 //probably not the best solution
 const UNICODE_ARROW_UP = '↗'
