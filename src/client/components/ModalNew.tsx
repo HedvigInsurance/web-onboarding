@@ -1,8 +1,8 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { motion } from 'framer-motion'
-import React, { ReactNode, useState, useRef } from 'react'
-import { useScrollLock, VisibilityState } from 'pages/OfferNew/Checkout/hooks'
+import React, { ReactNode, useRef } from 'react'
+import { useScrollLock, VisibilityState } from 'utils/hooks/useScrollLock'
 import { CloseButton } from './CloseButton/CloseButton'
 
 export type ModalProps = {
