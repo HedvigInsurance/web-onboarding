@@ -35,12 +35,13 @@ import { useScrollLock, VisibilityState } from 'pages/OfferNew/Checkout/hooks'
 import { UpsellCard } from 'pages/OfferNew/Checkout/UpsellCard'
 import { OfferData } from 'pages/OfferNew/types'
 import { SignFailModal } from 'pages/OfferNew/Checkout/SignFailModal/SignFailModal'
-import { LimitCode, isQuoteBundleError } from 'api/quoteBundleErrorSelectors'
+import { isQuoteBundleError } from 'api/quoteBundleErrorSelectors'
 import { trackSignedCustomerEvent } from 'utils/tracking/trackSignedCustomerEvent'
 import * as createQuoteBundleMutationSelector from 'api/createQuoteBundleMutationSelectors'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import { QuoteInput } from 'components/DetailsModal/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
+import { isSsnInvalid, checkIsManualReviewRequired } from '../../Checkout/utils'
 import { InsuranceSummary } from './InsuranceSummary'
 import {
   CheckoutDetailsForm,
@@ -177,22 +178,6 @@ const Backdrop = styled('div')<Openable>`
     `
   }};
 `
-
-export const checkIsManualReviewRequired = (errors: GraphQLError[]) => {
-  const manualReviewRequiredError = errors.find((error) => {
-    return error?.extensions?.body?.errorCode === 'MANUAL_REVIEW_REQUIRED'
-  })
-
-  return manualReviewRequiredError !== undefined
-}
-
-export const isSsnInvalid = (errors: GraphQLError[]) => {
-  const invalidSsnError = errors.find((error) => {
-    return error?.extensions?.body?.errorCode === LimitCode.INVALID_SSN
-  })
-
-  return invalidSsnError !== undefined
-}
 
 const getSignUiStateFromCheckoutStatus = (
   checkoutStatus?: CheckoutStatus,

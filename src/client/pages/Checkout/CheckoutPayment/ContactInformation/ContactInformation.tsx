@@ -1,13 +1,12 @@
-import React, { useEffect, useCallback, useState } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import styled from '@emotion/styled'
 import { FormikProps } from 'formik'
 import { Headline } from 'components/Headline/Headline'
 import { useTextKeys } from 'utils/textKeys'
-import { useFeature, Features } from 'utils/hooks/useFeature'
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import { TextInput } from 'pages/Offer/Checkout/inputFields'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { QuoteInput } from 'components/DetailsModal/types'
-import { CreditCheckInfo } from 'pages/OfferNew/Checkout/CreditCheckInfo'
-import { TextInput, SsnInput } from 'pages/Offer/Checkout/inputFields'
 import { WrapperWidth } from '../../shared/CheckoutPageWrapper'
 import { Divider } from '../../shared/Divider'
 
@@ -59,12 +58,7 @@ type Props = {
 export const ContactInformation = ({ formikProps }: Props) => {
   const textKeys = useTextKeys()
   const { handleChange } = formikProps
-  const [hasEnabledCreditCheckInfo] = useFeature([
-    Features.CHECKOUT_CREDIT_CHECK,
-  ])
-  const [isShowingCreditCheckInfo, setIsShowingCreditCheckInfo] = useState(
-    false,
-  )
+
   const {
     values: { ssn },
     initialValues,
@@ -81,6 +75,7 @@ export const ContactInformation = ({ formikProps }: Props) => {
   useEffect(() => {
     if (ssn !== initialValues.ssn) debouncedSubmitForm()
   }, [ssn, initialValues.ssn, debouncedSubmitForm])
+  const { ssn: ssnFormat } = useCurrentLocale()
 
   return (
     <Wrapper>
@@ -107,15 +102,14 @@ export const ContactInformation = ({ formikProps }: Props) => {
             onChange={handleChange}
           />
 
-          <SsnInput
+          <TextInput
             name="ssn"
             formikProps={formikProps}
-            onFocus={() =>
-              setIsShowingCreditCheckInfo(hasEnabledCreditCheckInfo)
-            }
+            label={textKeys.CHECKOUT_SSN_LABEL_GLOBAL()}
+            placeholder={ssnFormat.formatExample}
             onChange={handleChange}
+            helperText={textKeys.CHECKOUT_CONTACT_INFO_CREDIT_CHECK_HELPER()}
           />
-          {isShowingCreditCheckInfo && <CreditCheckInfo />}
 
           <div>
             <TextInput
