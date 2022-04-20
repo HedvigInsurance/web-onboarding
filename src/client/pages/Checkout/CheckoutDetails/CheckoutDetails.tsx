@@ -44,21 +44,22 @@ export const CheckoutDetails = () => {
     quoteCartQueryData,
     selectedInsuranceTypes,
   )
-  useEffect(() => {
-    if (selectedBundleVariant) {
-      trackOfferEvent(
-        EventName.CheckoutOpen,
-        selectedBundleVariant.bundle,
-        isReferralCodeUsed,
-        {
-          quoteCartId,
-        },
-      )
-    }
-  }, [selectedBundleVariant, isReferralCodeUsed, quoteCartId])
+
+  if (selectedBundleVariant) {
+    trackOfferEvent(
+      EventName.CheckoutOpen,
+      selectedBundleVariant.bundle,
+      isReferralCodeUsed,
+      {
+        quoteCartId,
+      },
+    )
+  }
+
   if (!data || data.loading) {
     return <LoadingPage loading />
   }
+
   const onRetry = () => {
     window.location.reload()
     return false

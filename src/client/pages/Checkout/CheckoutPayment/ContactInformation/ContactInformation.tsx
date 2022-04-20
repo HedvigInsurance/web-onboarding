@@ -69,13 +69,12 @@ type Props = {
 export const ContactInformation = ({ formikProps }: Props) => {
   const textKeys = useTextKeys()
   const { isoLocale } = useCurrentLocale()
-
   const { quoteCartId } = useQuoteCartIdFromUrl()
-
   const { handleChange } = formikProps
   const [hasEnabledCreditCheckInfo] = useFeature([
     Features.CHECKOUT_CREDIT_CHECK,
   ])
+
   const [isShowingCreditCheckInfo, setIsShowingCreditCheckInfo] = useState(
     false,
   )
@@ -96,18 +95,17 @@ export const ContactInformation = ({ formikProps }: Props) => {
     quoteCartQueryData,
     selectedInsuranceTypes,
   )
-  useEffect(() => {
-    if (selectedBundleVariant) {
-      trackOfferEvent(
-        EventName.ContactInformationPageOpen,
-        selectedBundleVariant.bundle,
-        isReferralCodeUsed,
-        {
-          quoteCartId,
-        },
-      )
-    }
-  }, [selectedBundleVariant, isReferralCodeUsed, quoteCartId])
+
+  if (selectedBundleVariant) {
+    trackOfferEvent(
+      EventName.ContactInformationPageOpen,
+      selectedBundleVariant.bundle,
+      isReferralCodeUsed,
+      {
+        quoteCartId,
+      },
+    )
+  }
 
   const {
     values: { ssn },
