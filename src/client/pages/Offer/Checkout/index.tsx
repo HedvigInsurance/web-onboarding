@@ -23,7 +23,6 @@ import {
 import { PriceBreakdown } from 'pages/OfferNew/common/PriceBreakdown'
 import { useStorage } from 'utils/StorageContainer'
 import { useTextKeys } from 'utils/textKeys'
-import { useLockBodyScroll } from 'utils/hooks/useLockBodyScroll'
 import { useFeature, Features } from 'utils/hooks/useFeature'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { CloseButton } from 'components/CloseButton/CloseButton'
@@ -298,7 +297,6 @@ export const Checkout = ({
     enableReinitialize: true,
   })
 
-  useLockBodyScroll({ isLocked: visibilityState === VisibilityState.OPEN })
   useScrollLock(visibilityState, scrollWrapper)
 
   useEffect(() => {

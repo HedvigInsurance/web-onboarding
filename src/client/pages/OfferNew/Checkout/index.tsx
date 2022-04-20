@@ -21,7 +21,6 @@ import { useTextKeys } from 'utils/textKeys'
 import { useTrack } from 'utils/tracking/tracking'
 import { Variation, useVariation } from 'utils/hooks/useVariation'
 import { useUnderwritingLimitsHitReporter } from 'utils/sentry-client'
-import { useLockBodyScroll } from 'utils/hooks/useLockBodyScroll'
 import { useFeature, Features } from 'utils/hooks/useFeature'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { CloseButton } from 'components/CloseButton/CloseButton'
@@ -196,8 +195,6 @@ export const Checkout = ({
       setVisibilityState(VisibilityState.CLOSING)
     }
   }, [isOpen])
-
-  useLockBodyScroll({ isLocked: visibilityState === VisibilityState.OPEN })
 
   const [signUiState, setSignUiState] = useState<SignUiState>('NOT_STARTED')
   const [emailUpdateLoading, setEmailUpdateLoading] = useState(false)
