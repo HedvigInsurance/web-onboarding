@@ -25,6 +25,7 @@ import { setupQuoteCartSession } from 'containers/SessionContainer'
 import { trackSignedCustomerEvent } from 'utils/tracking/trackSignedCustomerEvent'
 import { useStorage } from 'utils/StorageContainer'
 import { useVariation } from 'utils/hooks/useVariation'
+import { LoadingPage } from 'components/LoadingPage'
 import { useAdyenCheckout } from '../../ConnectPayment/components/useAdyenCheckout'
 import {
   CheckoutPageWrapper,
@@ -163,7 +164,8 @@ export const CheckoutPayment = ({
     pollInterval: 1000,
   })
   const { search: is3DsComplete } = useLocation<{ search: string }>()
-  const [isLoading, setIsLoading] = useState(false)
+  const [isDataLoading, setIsDataLoading] = useState(false)
+  const [isPageLoading, setIsPageLoading] = useState(false)
   const [isError, setIsError] = useState(false)
 
   const addPaymentToCart = useCallback(
@@ -185,7 +187,7 @@ export const CheckoutPayment = ({
 
   const performCheckout = useCallback(async () => {
     try {
-      setIsLoading(true)
+      setIsDataLoading(true)
       const { data } = await startCheckout({
         variables: { quoteIds, quoteCartId },
       })
@@ -206,7 +208,7 @@ export const CheckoutPayment = ({
       if (isManualReviewRequired) {
         throw new Error('Manual Review required')
       }
-      setIsLoading(false)
+      setIsDataLoading(false)
       console.error('Could not start checkout')
       setIsError(true)
     }
@@ -255,6 +257,7 @@ export const CheckoutPayment = ({
 
   useEffect(() => {
     if (is3DsComplete === '?3dsSuccess' && checkoutStatus === undefined) {
+      setIsPageLoading(true)
       const paymentTokenId = storage.session.getSession()?.paymentTokenId
       if (!paymentTokenId) throw new Error('No token payment id')
       addPaymentToCart(paymentTokenId)
@@ -353,7 +356,6 @@ export const CheckoutPayment = ({
       completeCheckout()
     }
   }, [checkoutStatus, completeCheckout])
-
   if (checkoutStatus === CheckoutStatus.Completed) {
     return (
       <CheckoutSuccessRedirect
@@ -365,6 +367,10 @@ export const CheckoutPayment = ({
 
   if (isError) {
     return <CheckoutErrorModal isVisible onRetry={onRetry} />
+  }
+
+  if (isPageLoading) {
+    return <LoadingPage loading />
   }
 
   return (
@@ -389,7 +395,7 @@ export const CheckoutPayment = ({
           buttonOnClick={() => {
             startSign()
           }}
-          isLoading={isBundleCreationInProgress || isLoading}
+          isLoading={isBundleCreationInProgress || isDataLoading}
         >
           <PaymentInfo {...priceData} />
         </Footer>
