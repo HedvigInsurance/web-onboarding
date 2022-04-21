@@ -24,7 +24,10 @@ import { StartDateLabelSwitcher } from 'pages/OfferNew/Introduction/Sidebar/Star
 import { useTextKeys } from 'utils/textKeys'
 import { Size } from 'components/types'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
-import { getSelectedBundleVariant } from 'api/quoteCartQuerySelectors'
+import {
+  getSelectedBundleVariant,
+  getAllQuotes,
+} from 'api/quoteCartQuerySelectors'
 import * as quoteBundleSelector from 'api/quoteBundleSelectors'
 import { CancellationOptions } from './CancellationOptions'
 
@@ -308,8 +311,11 @@ export const StartDate = ({
     selectedBundle,
     marketLabel,
   )
-  const quotes = quoteBundleSelector.getQuotes(selectedBundle)
-  if (quotes.length === 0) throw Error('Selected bundle has no quotes')
+
+  const selectedQuotes = quoteBundleSelector.getQuotes(selectedBundle)
+  if (selectedQuotes.length === 0) {
+    throw Error(`Quote Cart doesn't have any quotes`)
+  }
 
   const handleSelectNewStartDate = async (
     newDateValue: Date | null,
@@ -326,7 +332,7 @@ export const StartDate = ({
         variables: {
           locale: isoLocale,
           quoteCartId,
-          quotes: quotes.map((quote) => {
+          quotes: getAllQuotes(quoteCartQueryData).map((quote) => {
             const {
               id,
               firstName,
@@ -385,28 +391,31 @@ export const StartDate = ({
       <DateFormsWrapper>
         {singleDate ? (
           <DateForm
-            startDate={quotes[0].startDate}
-            currentInsurer={quotes[0].currentInsurer ?? undefined}
-            quoteDisplayName={quotes[0].displayName}
-            dataCollectionId={quotes[0].dataCollectionId ?? undefined}
+            startDate={selectedQuotes[0].startDate}
+            currentInsurer={selectedQuotes[0].currentInsurer ?? undefined}
+            quoteDisplayName={selectedQuotes[0].displayName}
+            dataCollectionId={selectedQuotes[0].dataCollectionId ?? undefined}
             modal={modal}
             disabled={
               loadingQuoteIds.length > 0 ||
-              Boolean(quotes[0].currentInsurer && !quotes[0].startDate)
+              Boolean(
+                selectedQuotes[0].currentInsurer &&
+                  !selectedQuotes[0].startDate,
+              )
             }
             fieldLayout={'full'}
             size={size}
             onChange={(newDate) =>
               handleSelectNewStartDate(
                 newDate,
-                quotes.map((q) => q.id),
+                selectedQuotes.map((q) => q.id),
               )
             }
             loading={loadingQuoteIds.length > 0}
           />
         ) : (
           <>
-            {quotes.map((quote, index, arr) => {
+            {selectedQuotes.map((quote, index, arr) => {
               const isArrayLengthEven = arr.length % 2 === 0
               const isItemIndexEven = index % 2 === 0
               const isExpandedFirstItem = index === 0 && !isArrayLengthEven
@@ -447,7 +456,7 @@ export const StartDate = ({
       </DateFormsWrapper>
 
       <CancellationOptions
-        quotes={quotes}
+        quotes={selectedQuotes}
         loadingQuoteIds={loadingQuoteIds}
         onToggleCancellationOption={(isChecked, quoteId) =>
           handleSelectNewStartDate(isChecked ? null : new Date(), [quoteId])

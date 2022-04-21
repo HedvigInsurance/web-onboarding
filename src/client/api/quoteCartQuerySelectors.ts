@@ -1,4 +1,4 @@
-import { QuoteCartQuery, QuoteBundleVariant } from 'data/graphql'
+import { QuoteCartQuery, QuoteBundleVariant, BundledQuote } from 'data/graphql'
 import { getBundleVariantFromInsuranceTypesWithFallback } from 'pages/OfferNew/utils'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
 
@@ -52,4 +52,17 @@ export function getMonthlyCostDeductionIncentive(
 export function isPaymentConnected(quoteCartQuery: QuoteCartQuery | undefined) {
   const id = quoteCartQuery?.quoteCart.paymentConnection?.id
   return id !== undefined && id !== null
+}
+
+export function getAllQuotes(quoteCartQuery: QuoteCartQuery | undefined) {
+  const possibleVariations = getPossibleVariations(quoteCartQuery)
+
+  const quoteMap: Record<string, BundledQuote> = {}
+  possibleVariations.forEach((variation) => {
+    variation.bundle.quotes.forEach((quote) => {
+      quoteMap[quote.id] = quote
+    })
+  })
+
+  return Object.values(quoteMap)
 }
