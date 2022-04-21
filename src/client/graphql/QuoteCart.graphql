@@ -23,5 +23,8 @@ query QuoteCart($id: ID!, $locale: Locale!) {
     checkout {
       status
     }
+    paymentConnection {
+      id
+    }
   }
 }

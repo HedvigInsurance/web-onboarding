@@ -317,6 +317,9 @@ export type HomeInsuranceTypeOfContract = Exclude<
   | TypeOfContract.DkTravelStudent
   | TypeOfContract.SeAccident
   | TypeOfContract.SeAccidentStudent
+  | TypeOfContract.SeCarFull
+  | TypeOfContract.SeCarHalf
+  | TypeOfContract.SeCarTraffic
 >
 
 type TypeOfResidenceTextKeys =
@@ -364,6 +367,9 @@ type SingleInsuranceTypeOfContract = Exclude<
   | TypeOfContract.SeAccident
   | TypeOfContract.SeAccidentStudent
   | TypeOfContract.NoAccident
+  | TypeOfContract.SeCarFull
+  | TypeOfContract.SeCarHalf
+  | TypeOfContract.SeCarTraffic
 >
 
 export const getInsuranceTitle = (

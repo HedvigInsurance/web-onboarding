@@ -25,6 +25,9 @@ export type TypeOfContractExcludedUnused = Exclude<
   | TypeOfContract.SeAccident
   | TypeOfContract.SeAccidentStudent
   | TypeOfContract.NoAccident
+  | TypeOfContract.SeCarFull
+  | TypeOfContract.SeCarHalf
+  | TypeOfContract.SeCarTraffic
 >
 
 export const ADTRACTION_CONTRACT_VALUES: Record<

@@ -22,6 +22,7 @@ export const Checkout = () => {
     quoteIds,
     selectedQuoteBundleVariant,
     checkoutStatus,
+    isPaymentConnected,
   } = data
 
   return (
@@ -33,6 +34,7 @@ export const Checkout = () => {
       quoteIds={quoteIds}
       selectedQuoteBundleVariant={selectedQuoteBundleVariant}
       checkoutStatus={checkoutStatus}
+      isPaymentConnected={isPaymentConnected}
     />
   )
 }
