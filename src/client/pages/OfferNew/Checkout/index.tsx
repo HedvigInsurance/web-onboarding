@@ -21,13 +21,13 @@ import { useTextKeys } from 'utils/textKeys'
 import { useTrack } from 'utils/tracking/tracking'
 import { Variation, useVariation } from 'utils/hooks/useVariation'
 import { useUnderwritingLimitsHitReporter } from 'utils/sentry-client'
-import { useLockBodyScroll } from 'utils/hooks/useLockBodyScroll'
 import { useFeature, Features } from 'utils/hooks/useFeature'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { CloseButton } from 'components/CloseButton/CloseButton'
 import { DiscountTag } from 'components/DiscountTag/DiscountTag'
+import { useScrollLock, VisibilityState } from 'utils/hooks/useScrollLock'
 import { StartDate } from '../Introduction/Sidebar/StartDate'
-import { useScrollLock, VisibilityState, useSsnError } from './hooks'
+import { useSsnError } from './hooks'
 import { Sign, SignUiState } from './Sign'
 import { SignDisclaimer } from './SignDisclaimer'
 import { CheckoutSuccessRedirect } from './CheckoutSuccessRedirect'
@@ -196,8 +196,6 @@ export const Checkout = ({
       setVisibilityState(VisibilityState.CLOSING)
     }
   }, [isOpen])
-
-  useLockBodyScroll({ isLocked: visibilityState === VisibilityState.OPEN })
 
   const [signUiState, setSignUiState] = useState<SignUiState>('NOT_STARTED')
   const [emailUpdateLoading, setEmailUpdateLoading] = useState(false)
