@@ -12,6 +12,7 @@ import {
   getCampaign,
   getPossibleVariations,
   getCheckoutStatus,
+  isPaymentConnected,
 } from 'api/quoteCartQuerySelectors'
 import {
   typeOfResidenceTextKeys,
@@ -229,5 +230,6 @@ export const useQuoteCartData = () => {
     loading,
     error,
     checkoutStatus: getCheckoutStatus(data),
+    isPaymentConnected: isPaymentConnected(data),
   }
 }
