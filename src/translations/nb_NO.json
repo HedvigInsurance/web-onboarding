@@ -335,7 +335,7 @@
   "SIDEBAR_REQUEST_CANCELLATION_INSURANCE_NAME_LABEL": "Avslutt min nåværende  {INSURANCE_NAME} ",
   "INVALID_FIELD": "Dette feltet er ugyldig.",
   "CHECKOUT_YOUR_HOME_SECTION_TITLE": "Boligen din ",
-  "CHECKOUT_EDIT_INFORMATION_BUTTON": "",
+  "CHECKOUT_EDIT_INFORMATION_BUTTON": "Rediger informasjon",
   "GENERIC_ERROR_INPUT_REQUIRED": "Dette feltet er obligatorisk",
   "GENERIC_ERROR_INPUT_FORMAT": "Beklager, feil format.",
   "SIGN_FAIL_ERROR_HEADING": "Noe gikk galt",
