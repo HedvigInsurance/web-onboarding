@@ -1,8 +1,8 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { motion } from 'framer-motion'
-import React, { ReactNode } from 'react'
-import { useLockBodyScroll } from '../utils/hooks/useLockBodyScroll'
+import React, { ReactNode, useRef } from 'react'
+import { useScrollLock, VisibilityState } from 'utils/hooks/useScrollLock'
 import { CloseButton } from './CloseButton/CloseButton'
 
 export type ModalProps = {
@@ -86,7 +86,12 @@ export const Modal = ({
   onClose,
   children,
 }: ModalProps) => {
-  useLockBodyScroll({ isLocked: isVisible })
+  const scrollWrapper = useRef<HTMLDivElement | null>(null)
+  useScrollLock(
+    isVisible ? VisibilityState.OPEN : VisibilityState.CLOSED,
+    scrollWrapper,
+  )
+
   const hasOnCloseFunction = Boolean(onClose)
 
   return (
@@ -119,6 +124,7 @@ export const Modal = ({
         }}
       />
       <ModalContainer
+        ref={scrollWrapper}
         dynamicHeight={dynamicHeight}
         className={className}
         initial={'hidden'}
