@@ -35,56 +35,51 @@ const getBaseStyles = ({ colorVariant }: ColorProp) => {
 const HeadlineXL = styled.span<StyleProps>`
   ${({ colorVariant }) => getBaseStyles({ colorVariant })}
   font-size: 3.5rem;
-  line-height: 4rem;
+  line-height: 1.2;
   letter-spacing: -0.02em;
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     font-size: 4.5rem;
-    line-height: 4.5rem;
   }
 `
 const HeadlineL = styled.span<StyleProps>`
   ${({ colorVariant }) => getBaseStyles({ colorVariant })}
   font-size: 2.5rem;
-  line-height: 2.75rem;
-  letter-spacing: -0.02em;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     font-size: 3.5rem;
-    line-height: 4rem;
+    letter-spacing: -0.02em;
   }
 `
 const HeadlineM = styled.span<StyleProps>`
   ${({ colorVariant }) => getBaseStyles({ colorVariant })}
   font-size: 2rem;
-  line-height: 2.5rem;
-  letter-spacing: -0.02em;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     font-size: 3rem;
-    line-height: 3.5rem;
   }
 `
 const HeadlineS = styled.span<StyleProps>`
   ${({ colorVariant }) => getBaseStyles({ colorVariant })}
   font-size: 1.5rem;
-  line-height: 2rem;
-  letter-spacing: -0.02em;
+  line-height: 1.2;
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     font-size: 2rem;
-    line-height: 2.5rem;
+    letter-spacing: -0.01em;
   }
 `
 const HeadlineXS = styled.span<StyleProps>`
   ${({ colorVariant }) => getBaseStyles({ colorVariant })}
   font-size: 1.25rem;
-  line-height: 1.75rem;
-  letter-spacing: -0.02em;
+  line-height: 1.2;
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     font-size: 1.5rem;
-    line-height: 2rem;
   }
 `
 const HeadlineOverline = styled.span<StyleProps>`
