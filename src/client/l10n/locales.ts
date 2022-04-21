@@ -46,6 +46,7 @@ export type LocaleData = {
   }
   callCenter?: CallCenterData
   currencyCode: 'SEK' | 'NOK' | 'DKK'
+  market: 'SWEDEN' | 'NORWAY' | 'DENMARK'
 }
 
 export const locales: Record<LocaleLabel, LocaleData> = {
@@ -73,6 +74,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     },
     callCenter: callCenters.SE,
     currencyCode: 'SEK',
+    market: 'SWEDEN',
   },
   'se-en': {
     path: 'se-en',
@@ -98,6 +100,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
     },
     callCenter: callCenters.SE,
     currencyCode: 'SEK',
+    market: 'SWEDEN',
   },
   no: {
     path: 'no',
@@ -122,6 +125,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       placeholder: phoneNumberPlaceholder.NO,
     },
     currencyCode: 'NOK',
+    market: 'NORWAY',
   },
   'no-en': {
     path: 'no-en',
@@ -146,6 +150,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       placeholder: phoneNumberPlaceholder.NO,
     },
     currencyCode: 'NOK',
+    market: 'NORWAY',
   },
   dk: {
     path: 'dk',
@@ -170,6 +175,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       placeholder: phoneNumberPlaceholder.DK,
     },
     currencyCode: 'DKK',
+    market: 'DENMARK',
   },
   'dk-en': {
     path: 'dk-en',
@@ -194,5 +200,6 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       placeholder: phoneNumberPlaceholder.DK,
     },
     currencyCode: 'DKK',
+    market: 'DENMARK',
   },
 }
