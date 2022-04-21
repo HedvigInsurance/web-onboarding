@@ -41,7 +41,7 @@ type GTMOfferData = {
   member_id?: string
   quote_cart_id?: string
   flow_type?: string
-  current_insurer?: string | null
+  current_insurer?: string
 }
 
 type GTMPageData = {
