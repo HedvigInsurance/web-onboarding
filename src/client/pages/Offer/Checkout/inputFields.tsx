@@ -3,7 +3,7 @@ import { FormikProps, getIn } from 'formik'
 import { CoreInputFieldProps, InputField } from 'components/inputs'
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { QuoteInput } from '../Introduction/DetailsModal/types'
+import { QuoteInput } from 'components/DetailsModal/types'
 
 interface CheckoutInputProps {
   field?: CoreInputFieldProps
