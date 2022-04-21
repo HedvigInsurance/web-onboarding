@@ -45,16 +45,18 @@ export const CheckoutDetails = () => {
     selectedInsuranceTypes,
   )
 
-  if (selectedBundleVariant) {
-    trackOfferEvent(
-      EventName.CheckoutOpen,
-      selectedBundleVariant.bundle,
-      isReferralCodeUsed,
-      {
-        quoteCartId,
-      },
-    )
-  }
+  useEffect(() => {
+    if (selectedBundleVariant) {
+      trackOfferEvent(
+        EventName.CheckoutOpen,
+        selectedBundleVariant.bundle,
+        isReferralCodeUsed,
+        {
+          quoteCartId,
+        },
+      )
+    }
+  }, [isReferralCodeUsed, quoteCartId, selectedBundleVariant])
 
   if (!data || data.loading) {
     return <LoadingPage loading />

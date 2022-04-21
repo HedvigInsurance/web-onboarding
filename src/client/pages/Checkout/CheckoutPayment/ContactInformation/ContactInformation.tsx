@@ -96,16 +96,18 @@ export const ContactInformation = ({ formikProps }: Props) => {
     selectedInsuranceTypes,
   )
 
-  if (selectedBundleVariant) {
-    trackOfferEvent(
-      EventName.ContactInformationPageOpen,
-      selectedBundleVariant.bundle,
-      isReferralCodeUsed,
-      {
-        quoteCartId,
-      },
-    )
-  }
+  useEffect(() => {
+    if (selectedBundleVariant) {
+      trackOfferEvent(
+        EventName.ContactInformationPageOpen,
+        selectedBundleVariant.bundle,
+        isReferralCodeUsed,
+        {
+          quoteCartId,
+        },
+      )
+    }
+  }, [isReferralCodeUsed, quoteCartId, selectedBundleVariant])
 
   const {
     values: { ssn },
