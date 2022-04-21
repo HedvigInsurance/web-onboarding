@@ -11,6 +11,7 @@ export const GlobalCss: React.SFC = ({ children }) => (
         * {
           box-sizing: border-box;
           font-family: ${fonts.HEDVIG_LETTERS_STANDARD}, sans-serif;
+          font-feature-settings: 'liga';
         }
 
         body {
