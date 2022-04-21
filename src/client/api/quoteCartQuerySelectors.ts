@@ -51,9 +51,5 @@ export function getMonthlyCostDeductionIncentive(
 
 export function isPaymentConnected(quoteCartQuery: QuoteCartQuery | undefined) {
   const id = quoteCartQuery?.quoteCart.paymentConnection?.id
-  console.log(
-    'quoteCartQuery?.quoteCart.paymentConnection?.id',
-    quoteCartQuery?.quoteCart.paymentConnection?.id,
-  )
   return id !== undefined && id !== null
 }
