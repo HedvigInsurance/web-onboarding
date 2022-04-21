@@ -239,6 +239,7 @@ export const CheckoutPayment = ({
       },
     } as QuoteInput,
     validationSchema: getCheckoutDetailsValidationSchema(locale, textKeys),
+    validateOnMount: true,
     onSubmit: async (
       form: QuoteInput,
       { setErrors }: FormikHelpers<QuoteInput>,
@@ -254,7 +255,7 @@ export const CheckoutPayment = ({
     },
     enableReinitialize: true,
   })
-
+  const isFormikError = Object.keys(formik.errors).length > 0
   useEffect(() => {
     if (is3DsComplete === '?3dsSuccess' && checkoutStatus === undefined) {
       setIsPageLoading(true)
@@ -396,6 +397,7 @@ export const CheckoutPayment = ({
             startSign()
           }}
           isLoading={isBundleCreationInProgress || isDataLoading}
+          disabled={isFormikError}
         >
           <PaymentInfo {...priceData} />
         </Footer>

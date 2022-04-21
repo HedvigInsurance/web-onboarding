@@ -14,6 +14,7 @@ export type Props = {
   buttonLinkTo?: string
   children: React.ReactNode
   isLoading?: boolean
+  disabled?: boolean
 }
 type FooterButtonProps = {
   background: ButtonProps['background']
@@ -57,6 +58,7 @@ export const Footer = ({
   buttonLinkTo,
   children,
   isLoading,
+  disabled,
 }: Props) => {
   const buttonProps: FooterButtonProps = {
     background: purple500,
@@ -87,7 +89,7 @@ export const Footer = ({
               <Button
                 {...buttonProps}
                 onClick={buttonOnClick}
-                disabled={isLoading}
+                disabled={isLoading || disabled}
               >
                 {buttonText}
               </Button>
