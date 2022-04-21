@@ -23,7 +23,6 @@ import {
 import { PriceBreakdown } from 'pages/OfferNew/common/PriceBreakdown'
 import { useStorage } from 'utils/StorageContainer'
 import { useTextKeys } from 'utils/textKeys'
-import { useLockBodyScroll } from 'utils/hooks/useLockBodyScroll'
 import { useFeature, Features } from 'utils/hooks/useFeature'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { CloseButton } from 'components/CloseButton/CloseButton'
@@ -31,16 +30,17 @@ import { CampaignBadge } from 'components/CampaignBadge/CampaignBadge'
 import { setupQuoteCartSession } from 'containers/SessionContainer'
 import { useVariation } from 'utils/hooks/useVariation'
 import { StartDate } from 'pages/Offer/Introduction/Sidebar/StartDate'
-import { useScrollLock, VisibilityState } from 'pages/OfferNew/Checkout/hooks'
+import { useScrollLock, VisibilityState } from 'utils/hooks/useScrollLock'
 import { UpsellCard } from 'pages/OfferNew/Checkout/UpsellCard'
 import { OfferData } from 'pages/OfferNew/types'
 import { SignFailModal } from 'pages/OfferNew/Checkout/SignFailModal/SignFailModal'
-import { LimitCode, isQuoteBundleError } from 'api/quoteBundleErrorSelectors'
+import { isQuoteBundleError } from 'api/quoteBundleErrorSelectors'
 import { trackSignedCustomerEvent } from 'utils/tracking/trackSignedCustomerEvent'
 import * as createQuoteBundleMutationSelector from 'api/createQuoteBundleMutationSelectors'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import { QuoteInput } from '../Introduction/DetailsModal/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
+import { isSsnInvalid, checkIsManualReviewRequired } from '../../Checkout/utils'
 import { InsuranceSummary } from './InsuranceSummary'
 import {
   CheckoutDetailsForm,
@@ -178,22 +178,6 @@ const Backdrop = styled('div')<Openable>`
   }};
 `
 
-export const checkIsManualReviewRequired = (errors: GraphQLError[]) => {
-  const manualReviewRequiredError = errors.find((error) => {
-    return error?.extensions?.body?.errorCode === 'MANUAL_REVIEW_REQUIRED'
-  })
-
-  return manualReviewRequiredError !== undefined
-}
-
-export const isSsnInvalid = (errors: GraphQLError[]) => {
-  const invalidSsnError = errors.find((error) => {
-    return error?.extensions?.body?.errorCode === LimitCode.INVALID_SSN
-  })
-
-  return invalidSsnError !== undefined
-}
-
 const getSignUiStateFromCheckoutStatus = (
   checkoutStatus?: CheckoutStatus,
 ): SignUiState => {
@@ -313,7 +297,6 @@ export const Checkout = ({
     enableReinitialize: true,
   })
 
-  useLockBodyScroll({ isLocked: visibilityState === VisibilityState.OPEN })
   useScrollLock(visibilityState, scrollWrapper)
 
   useEffect(() => {

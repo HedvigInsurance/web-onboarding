@@ -37,7 +37,8 @@ import { getCheckoutDetailsValidationSchema } from '../../Offer/Checkout/UserDet
 import { PriceData } from '../shared/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import { CheckoutSuccessRedirect } from '../../Offer/CheckoutSuccessRedirect'
-import { checkIsManualReviewRequired, isSsnInvalid } from '../../Offer/Checkout'
+import { CheckoutErrorModal, onRetry } from '../shared/ErrorModal'
+import { checkIsManualReviewRequired, isSsnInvalid } from '../utils'
 import { ContactInformation } from './ContactInformation/ContactInformation'
 const { gray100, gray600, gray700, gray300, gray900 } = colorsV3
 
@@ -131,6 +132,7 @@ type Props = {
   selectedQuoteBundleVariant: QuoteBundleVariant
   quoteIds: string[]
   checkoutStatus?: CheckoutStatus
+  isPaymentConnected: boolean
 }
 
 export const CheckoutPayment = ({
@@ -141,6 +143,7 @@ export const CheckoutPayment = ({
   quoteIds,
   selectedQuoteBundleVariant,
   checkoutStatus,
+  isPaymentConnected,
 }: Props) => {
   const textKeys = useTextKeys()
 
@@ -160,7 +163,9 @@ export const CheckoutPayment = ({
   })
   const { search: is3DsComplete } = useLocation<{ search: string }>()
   const [isLoading, setIsLoading] = useState(false)
-  const onConnectPaymentSuccess = useCallback(
+  const [isError, setIsError] = useState(false)
+
+  const addPaymentToCart = useCallback(
     async (paymentTokenId) => {
       try {
         await addPaymentTokenMutation({
@@ -168,41 +173,53 @@ export const CheckoutPayment = ({
             id: quoteCartId,
             paymentTokenId,
           },
+          refetchQueries: ['QuoteCart'],
         })
       } catch (error) {
         console.error('Failed to add Payment Token :', error.message, error)
       }
-
-      try {
-        setIsLoading(true)
-        const { data } = await startCheckout({
-          variables: { quoteIds, quoteCartId },
-        })
-        if (data?.quoteCart_startCheckout.__typename === 'BasicError') {
-          throw new Error('Checkout Failed')
-        }
-        // Poll for Status
-        getStatus({
-          variables: {
-            quoteCartId,
-          },
-        })
-      } catch (error) {
-        const isManualReviewRequired = checkIsManualReviewRequired(
-          (error.graphQLErrors || []) as GraphQLError[],
-        )
-        if (isManualReviewRequired) {
-          throw new Error('Manual Review required')
-        }
-        setIsLoading(false)
-        throw new Error('Checkout Failed')
-      }
     },
-    [addPaymentTokenMutation, getStatus, quoteCartId, quoteIds, startCheckout],
+    [addPaymentTokenMutation, quoteCartId],
   )
+
+  const performCheckout = useCallback(async () => {
+    try {
+      setIsLoading(true)
+      const { data } = await startCheckout({
+        variables: { quoteIds, quoteCartId },
+      })
+      if (data?.quoteCart_startCheckout.__typename === 'BasicError') {
+        console.error('Could not start checkout')
+        setIsError(true)
+      }
+      // Poll for Status
+      getStatus({
+        variables: {
+          quoteCartId,
+        },
+      })
+    } catch (error) {
+      const isManualReviewRequired = checkIsManualReviewRequired(
+        (error.graphQLErrors || []) as GraphQLError[],
+      )
+      if (isManualReviewRequired) {
+        throw new Error('Manual Review required')
+      }
+      setIsLoading(false)
+      console.error('Could not start checkout')
+      setIsError(true)
+    }
+  }, [getStatus, quoteCartId, quoteIds, startCheckout])
+
+  useEffect(() => {
+    if (isPaymentConnected && checkoutStatus === undefined) {
+      performCheckout()
+    }
+  }, [isPaymentConnected, performCheckout, checkoutStatus])
+
   const checkoutAPI = useAdyenCheckout({
     adyenRef,
-    onSuccess: onConnectPaymentSuccess,
+    onSuccess: addPaymentToCart,
     quoteCartId,
   })
 
@@ -239,9 +256,9 @@ export const CheckoutPayment = ({
     if (is3DsComplete === '?3dsSuccess' && checkoutStatus === undefined) {
       const paymentTokenId = storage.session.getSession()?.paymentTokenId
       if (!paymentTokenId) throw new Error('No token payment id')
-      onConnectPaymentSuccess(paymentTokenId)
+      addPaymentToCart(paymentTokenId)
     }
-  }, [is3DsComplete, onConnectPaymentSuccess, checkoutStatus, storage.session])
+  }, [is3DsComplete, addPaymentToCart, checkoutStatus, storage.session])
 
   const completeCheckout = useCallback(async () => {
     try {
@@ -345,10 +362,13 @@ export const CheckoutPayment = ({
     )
   }
 
+  if (isError) {
+    return <CheckoutErrorModal isVisible onRetry={onRetry} />
+  }
+
   return (
     <CheckoutPageWrapper>
       <ContactInformation formikProps={formik} />
-      <CheckoutIntercomVariation />
       <AdyenContainer>
         <Wrapper>
           <Headline variant="s" headingLevel="h2" colorVariant="dark">
@@ -361,9 +381,10 @@ export const CheckoutPayment = ({
           <Terms>{textKeys.CHECKOUT_PAYMENT_DETAILS_TERMS()}</Terms>
         </Wrapper>
       </AdyenContainer>
+      <CheckoutIntercomVariation />
       {mainQuote && (
         <Footer
-          buttonText={textKeys.CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT()}
+          buttonText={textKeys.CHECKOUT_FOOTER_COMPLETE_PURCHASE()}
           buttonOnClick={() => {
             startSign()
           }}

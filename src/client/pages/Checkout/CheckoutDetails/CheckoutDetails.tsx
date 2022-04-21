@@ -15,8 +15,8 @@ import { trackOfferEvent } from 'utils/tracking/trackOfferEvent'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
-import { CheckoutIntercomVariation } from '../shared/CheckoutIntercomVariation'
 import { CheckoutErrorModal } from '../shared/ErrorModal'
+import { CheckoutIntercomVariation } from '../shared/CheckoutIntercomVariation'
 import { YourPlan } from './components/YourPlan/YourPlan'
 import { QuoteDetails } from './components/QuoteDetails/QuoteDetails'
 import { PageSection } from './components/PageSection'
@@ -67,9 +67,12 @@ export const CheckoutDetails = () => {
     return false
   }
 
-  if (data.error) {
-    console.error('Quote cart data error:', data.error.message, data.error)
+  if (data?.error) {
+    console.error('Quote cart data error: no data')
     return <CheckoutErrorModal isVisible onRetry={onRetry} />
+  }
+  if (!data || data.loading) {
+    return <LoadingPage loading />
   }
 
   const priceData = data.priceData

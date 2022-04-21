@@ -12,6 +12,7 @@ import {
   getCampaign,
   getPossibleVariations,
   getCheckoutStatus,
+  isPaymentConnected,
 } from 'api/quoteCartQuerySelectors'
 import {
   typeOfResidenceTextKeys,
@@ -189,6 +190,8 @@ export const useQuoteCartData = () => {
     selectedInsuranceTypes,
   )
 
+  if (error) return { error }
+
   if (!selectedQuoteBundleVariant) return null
 
   const prices = selectedQuoteBundleVariant?.bundle.quotes.map((item) => {
@@ -227,5 +230,6 @@ export const useQuoteCartData = () => {
     loading,
     error,
     checkoutStatus: getCheckoutStatus(data),
+    isPaymentConnected: isPaymentConnected(data),
   }
 }
