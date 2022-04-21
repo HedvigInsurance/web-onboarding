@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect, useCallback, useState } from 'react'
 import styled from '@emotion/styled'
 import { FormikProps } from 'formik'
 import { Headline } from 'components/Headline/Headline'
@@ -69,13 +69,6 @@ export const ContactInformation = ({ formikProps }: Props) => {
   const { isoLocale } = useCurrentLocale()
   const { quoteCartId } = useQuoteCartIdFromUrl()
   const { handleChange } = formikProps
-  const [hasEnabledCreditCheckInfo] = useFeature([
-    Features.CHECKOUT_CREDIT_CHECK,
-  ])
-
-  const [isShowingCreditCheckInfo, setIsShowingCreditCheckInfo] = useState(
-    false,
-  )
 
   const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
 
