@@ -239,7 +239,7 @@ export const CheckoutPayment = ({
       },
     } as QuoteInput,
     validationSchema: getCheckoutDetailsValidationSchema(locale, textKeys),
-    validateOnMount: true,
+    validateOnChange: false,
     onSubmit: async (
       form: QuoteInput,
       { setErrors }: FormikHelpers<QuoteInput>,
@@ -341,8 +341,12 @@ export const CheckoutPayment = ({
     })
   }
 
-  const startSign = async () => {
-    const { submitForm, dirty: isFormDataUpdated } = formik
+  const handleClickCompletePurchase = async () => {
+    const { validateForm, submitForm, dirty: isFormDataUpdated } = formik
+
+    const errors = await validateForm()
+    if (Object.keys(errors).length > 0) return
+
     if (isFormDataUpdated) {
       const { data } = await submitForm()
       const isUpdateQuotesFailed = isQuoteBundleError(data)
@@ -393,9 +397,7 @@ export const CheckoutPayment = ({
       {mainQuote && (
         <Footer
           buttonText={textKeys.CHECKOUT_FOOTER_COMPLETE_PURCHASE()}
-          buttonOnClick={() => {
-            startSign()
-          }}
+          buttonOnClick={handleClickCompletePurchase}
           isLoading={isBundleCreationInProgress || isDataLoading}
           disabled={isFormikError}
         >
