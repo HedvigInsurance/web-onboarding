@@ -12,8 +12,8 @@ export * from './common/price'
 export const Heading = styled('h2')`
   font-family: ${fonts.HEDVIG_LETTERS_STANDARD};
   font-size: 2rem;
-  line-height: 1.25;
-  letter-spacing: -0.91px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
   margin: 0;
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
@@ -25,12 +25,11 @@ export const HeadingXS = styled.h3`
   margin: 0;
   font-family: ${fonts.HEDVIG_LETTERS_STANDARD};
   font-size: 1.25rem;
-  line-height: 1.4;
+  line-height: 1.2;
   color: ${colorsV3.gray900};
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     font-size: 1.5rem;
-    line-height: 1.33;
   }
 `
 
@@ -41,8 +40,7 @@ export const HeadingBlack = styled(Heading)`
 export const SubHeading = styled('h2')`
   font-family: ${fonts.HEDVIG_LETTERS_STANDARD};
   font-size: 1.5rem;
-  line-height: 1.5rem;
-  letter-spacing: -0.34px;
+  line-height: 1.2;
 
   @media (max-width: 600px) {
     font-size: 1.25rem;
@@ -56,7 +54,7 @@ export const SubHeadingBlack = styled(SubHeading)`
 export const SubSubHeading = styled('h2')`
   font-family: ${fonts.HEDVIG_LETTERS_STANDARD};
   font-size: 1.25rem;
-  line-height: 1.25rem;
+  line-height: 1.2rem;
 `
 
 export const SubSubHeadingBlack = styled(SubSubHeading)`
@@ -65,8 +63,7 @@ export const SubSubHeadingBlack = styled(SubSubHeading)`
 
 export const PreHeading = styled('div')`
   font-size: 1rem;
-  line-height: 1.5625rem;
-  letter-spacing: 2.67px;
+  line-height: 1.5;
   color: ${colorsV3.gray500};
   text-transform: uppercase;
   margin-bottom: 1.5625rem;

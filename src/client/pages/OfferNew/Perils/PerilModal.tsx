@@ -68,8 +68,7 @@ const PickerItem = styled('button')`
 
 const PickerItemLabel = styled('div')`
   width: 6.25rem;
-  font-size: 0.9375rem;
-  letter-spacing: -0.23px;
+  font-size: 1rem;
   text-align: center;
   white-space: nowrap;
   color: ${colorsV3.gray700};
@@ -185,23 +184,21 @@ const Content = styled('div')`
 const Title = styled.div`
   font-family: ${fonts.HEDVIG_LETTERS_STANDARD};
   font-size: 2.5rem;
-  line-height: 3.5rem;
+  line-height: 1.2;
   color: ${colorsV3.gray900};
   margin-bottom: 1rem;
-  letter-spacing: -0.57px;
+  letter-spacing: -0.01em;
 
   @media (max-width: 600px) {
     font-size: 1.5rem;
-    line-height: 2rem;
     margin-bottom: 0.5rem;
   }
 `
 
 const Description = styled.div`
   font-size: 1.125rem;
-  line-height: 1.625rem;
+  line-height: 1.5;
   color: ${colorsV3.gray900};
-  letter-spacing: -0.26px;
 `
 
 const CoverageWrapper = styled.div`
@@ -241,18 +238,16 @@ const CoverageList = styled.div`
 
 const CoverageListTitle = styled.div`
   font-size: 1rem;
-  line-height: 1.5rem;
+  line-height: 1.5;
   color: ${colorsV3.gray900};
-  letter-spacing: -0.26px;
   font-weight: 600;
   margin-bottom: 0.75rem;
 `
 
 const CoverageListItem = styled.div`
   font-size: 1rem;
-  line-height: 1.5rem;
+  line-height: 1.5;
   color: ${colorsV3.gray700};
-  letter-spacing: -0.26px;
   padding-left: 2rem;
   position: relative;
   margin-bottom: 1rem;
@@ -297,7 +292,6 @@ const InfoBoxTitle = styled.div`
   font-size: 1rem;
   line-height: 1rem;
   color: ${colorsV3.gray900};
-  letter-spacing: -0.26px;
   font-weight: 600;
   margin-bottom: 0.75rem;
 `
@@ -306,7 +300,6 @@ const InfoBoxBody = styled.div`
   font-size: 0.875rem;
   line-height: 1.25rem;
   color: ${colorsV3.gray700};
-  letter-spacing: -0.26px;
 `
 
 export const PerilModal: React.FC<PerilModalProps & ModalProps> = ({
