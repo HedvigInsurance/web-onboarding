@@ -1,4 +1,4 @@
-import { Market, LocalePath } from 'src/client/components/utils/CurrentLocale'
+import { Market, LocalePath } from 'components/utils/CurrentLocale'
 
 const LANGUAGE_TITLES = {
   english: 'English',

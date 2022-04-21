@@ -6,6 +6,8 @@ import { GraphQLError } from 'graphql'
 import { useApolloClient } from '@apollo/client'
 import { useLocation } from 'react-router'
 import { useTextKeys } from 'utils/textKeys'
+import { QuoteInput } from 'components/DetailsModal/types'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import {
   useStartCheckoutMutation,
   useCheckoutStatusLazyQuery,
@@ -17,8 +19,7 @@ import {
 } from 'data/graphql'
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { Headline } from 'components/Headline/Headline'
-import { QuoteInput } from 'pages/Offer/Introduction/DetailsModal/types'
-import { useCurrentLocale } from 'l10n/useCurrentLocale'
+
 import { isQuoteBundleError } from 'api/quoteBundleErrorSelectors'
 import { setupQuoteCartSession } from 'containers/SessionContainer'
 import { trackSignedCustomerEvent } from 'utils/tracking/trackSignedCustomerEvent'
