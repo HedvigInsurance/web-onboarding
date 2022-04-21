@@ -217,7 +217,7 @@ const createAdyenCheckout = ({
         browserInfo: state.data.browserInfo || null || undefined,
         paymentMethodDetails: state.data.paymentMethod,
         channel: PaymentConnectChannel.Web,
-        market: currentLocale.market,
+        market: currentLocale.apiMarket,
         returnUrl,
       }
 
