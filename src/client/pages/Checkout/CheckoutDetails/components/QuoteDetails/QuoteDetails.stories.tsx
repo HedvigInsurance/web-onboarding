@@ -59,6 +59,9 @@ const Template: Story<StoryProps> = ({ localePath }) => {
               <PageSection>
                 <QuoteDetails
                   groups={mockedQuoteDetailsDataQueryResponseSeHouse}
+                  onEditInfoButtonClick={() => {
+                    return
+                  }}
                 />
               </PageSection>
             </Wrapper>

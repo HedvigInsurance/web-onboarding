@@ -3,10 +3,11 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import styled from '@emotion/styled'
 import { Value as ValueType, QuoteProps } from 'utils/getQuoteDetails'
 import { useTextKeys, TextKeyMap } from 'utils/textKeys'
+import { TextButton } from 'components/buttons'
 import { SubSection } from '../SubSection'
 import { Divider } from '../../../shared/Divider'
 
-const { gray900, gray700 } = colorsV3
+const { gray900, gray700, purple900 } = colorsV3
 
 const Row = styled.div`
   font-size: 0.874rem;
@@ -23,6 +24,12 @@ const Label = styled.div`
 const Value = styled.div`
   color: ${gray700};
   text-align: right;
+`
+
+const Action = styled.div`
+  color: ${purple900};
+  text-align: center;
+  margin: auto;
 `
 
 const HorizontalSpacer = styled.div`
@@ -57,7 +64,14 @@ const getValueText = ({
   return value
 }
 
-export const QuoteDetails = ({ groups }: QuoteProps) => {
+export type QuoteDetailsProps = QuoteProps & {
+  onEditInfoButtonClick: () => void
+}
+
+export const QuoteDetails = ({
+  groups,
+  onEditInfoButtonClick,
+}: QuoteDetailsProps) => {
   const textKeys = useTextKeys()
 
   return (
@@ -82,6 +96,18 @@ export const QuoteDetails = ({ groups }: QuoteProps) => {
           {index < groups.length - 1 && <HorizontalDivider />}
         </Fragment>
       ))}
+      <Fragment>
+        <HorizontalDivider />
+        <Group>
+          <Row>
+            <Action>
+              <TextButton onClick={onEditInfoButtonClick}>
+                {textKeys.CHECKOUT_EDIT_INFORMATION_BUTTON()}
+              </TextButton>
+            </Action>
+          </Row>
+        </Group>
+      </Fragment>
     </SubSection>
   )
 }

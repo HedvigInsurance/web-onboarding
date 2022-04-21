@@ -5,8 +5,8 @@ import { LocaleData } from 'l10n/locales'
 import { useFeature, Features } from 'utils/hooks/useFeature'
 import { TextKeyMap } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import { QuoteInput } from 'components/DetailsModal/types'
 import { CreditCheckInfo } from '../../OfferNew/Checkout/CreditCheckInfo'
-import { QuoteInput } from '../Introduction/DetailsModal/types'
 import { TextInput, SsnInput } from './inputFields'
 
 const debounce = (func: (...args: any[]) => any, timeout: number) => {
