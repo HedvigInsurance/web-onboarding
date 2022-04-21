@@ -12,7 +12,6 @@ import {
   usePaymentConnection_SubmitAdditionalPaymentDetailsMutation,
   ConnectPaymentInput,
   PaymentConnectChannel,
-  Market,
   usePaymentMethodsQuery,
   PaymentMethodsQuery,
 } from 'data/graphql'
