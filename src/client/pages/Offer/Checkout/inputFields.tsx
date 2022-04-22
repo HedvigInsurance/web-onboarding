@@ -18,6 +18,7 @@ const CheckoutInput: React.FC<CheckoutInputProps &
   field,
   formikProps,
   onChange,
+  itemRef,
   ...props
 }) => {
   const textKeys = useTextKeys()
@@ -45,6 +46,8 @@ type TextInputProps = {
   placeholder?: string
   helperText?: string
   onChange?: (e: FormEvent<any>) => void
+  onKeyUp?: (e: React.KeyboardEvent<HTMLInputElement>) => void
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void
 }
 
 export const TextInput: React.FC<TextInputProps> = ({
@@ -55,6 +58,8 @@ export const TextInput: React.FC<TextInputProps> = ({
   placeholder = '',
   helperText = '',
   onChange,
+  onKeyUp,
+  onKeyDown,
 }) => (
   <CheckoutInput
     name={name}
@@ -66,6 +71,8 @@ export const TextInput: React.FC<TextInputProps> = ({
     }}
     formikProps={formikProps}
     onChange={onChange}
+    onKeyUp={onKeyUp}
+    onKeyDown={onKeyDown}
   />
 )
 
