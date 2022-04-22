@@ -39,9 +39,3 @@ jobs:
 
       - name: Test
         run: yarn test
-
-      - name: Build client
-        run: yarn build-client
-
-      - name: Build server
-        run: yarn build-server
