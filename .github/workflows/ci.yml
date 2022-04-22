@@ -1,0 +1,41 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - master
+
+  pull_request:
+    branches:
+      - master
+
+  workflow_dispatch:
+
+jobs:
+  test:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      # reports general machine parameters
+      - run: node -p 'os.cpus()'
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install
+        run: yarn
+
+      - name: Typecheck
+        run: yarn typecheck
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Test
+        run: yarn test
+
+      - name: Build client
+        run: yarn build-client
+
+      - name: Build server
+        run: yarn build-server
