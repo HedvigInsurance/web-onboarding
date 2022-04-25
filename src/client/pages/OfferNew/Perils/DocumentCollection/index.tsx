@@ -26,13 +26,11 @@ export const DocumentCollection: React.FC<Props> = ({ offer }) => {
     <Container>
       <HeadingXS>{textKeys.WEB_OFFER_DOCUMENTS_SECTION_TITLE()}</HeadingXS>
       <CollapsingList>
-        {offer.insuranceTerms.map(({ type, url, displayName }) => {
-          return (
-            <ExternalLink key={type} href={url}>
-              {displayName}
-            </ExternalLink>
-          )
-        })}
+        {offer.insuranceTerms.map(({ url, displayName }) => (
+          <ExternalLink key={url} href={url}>
+            {displayName}
+          </ExternalLink>
+        ))}
       </CollapsingList>
     </Container>
   )
