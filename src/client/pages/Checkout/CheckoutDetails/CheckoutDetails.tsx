@@ -64,10 +64,6 @@ export const CheckoutDetails = () => {
     }
   }, [isReferralCodeUsed, quoteCartId, selectedBundleVariant])
 
-  if (!data || data.loading) {
-    return <LoadingPage loading />
-  }
-
   if (data?.error) {
     console.error('Quote cart data error: no data')
     return <CheckoutErrorModal isVisible onRetry={onRetry} />
