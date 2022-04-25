@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react'
+import React, { useRef, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { FormikProps } from 'formik'
 import { Headline } from 'components/Headline/Headline'
@@ -19,15 +19,8 @@ import { EventName } from 'utils/tracking/gtm'
 import { Divider } from '../../shared/Divider'
 import { WrapperWidth } from '../../shared/CheckoutPageWrapper'
 
-const debounce = (func: (...args: any[]) => any, timeout: number) => {
-  let timer: number
-  return function(this: any, ...args: any[]) {
-    clearTimeout(timer)
-    timer = window.setTimeout(() => {
-      func.apply(this, args)
-    }, timeout)
-  }
-}
+const DONE_TYPING_INTERVAL = 1500
+
 const Wrapper = styled.div`
   margin: 0 auto;
   padding: 0 1rem;
@@ -66,7 +59,6 @@ type Props = {
 
 export const ContactInformation = ({ formikProps }: Props) => {
   const textKeys = useTextKeys()
-  const { handleChange } = formikProps
   const { isoLocale } = useCurrentLocale()
   const { quoteCartId } = useQuoteCartIdFromUrl()
 
@@ -102,20 +94,25 @@ export const ContactInformation = ({ formikProps }: Props) => {
 
   const {
     values: { ssn },
+    handleChange,
     initialValues,
     submitForm,
   } = formikProps
 
-  const debouncedSubmitForm = useCallback(
-    debounce(() => {
-      submitForm()
-    }, 500),
-    [],
-  )
+  const timerRef = useRef<number>()
+  const handlePersonalNumberKeyUp = () => {
+    clearTimeout(timerRef.current)
+    timerRef.current = window.setTimeout(() => {
+      if (ssn !== initialValues.ssn) {
+        submitForm()
+      }
+    }, DONE_TYPING_INTERVAL)
+  }
 
-  useEffect(() => {
-    if (ssn !== initialValues.ssn) debouncedSubmitForm()
-  }, [ssn, initialValues.ssn, debouncedSubmitForm])
+  const handlePersonNumberKeyDown = () => {
+    clearTimeout(timerRef.current)
+  }
+
   const { ssn: ssnFormat } = useCurrentLocale()
 
   return (
@@ -150,6 +147,8 @@ export const ContactInformation = ({ formikProps }: Props) => {
             placeholder={ssnFormat.formatExample}
             onChange={handleChange}
             helperText={textKeys.CHECKOUT_CONTACT_INFO_CREDIT_CHECK_HELPER()}
+            onKeyUp={handlePersonalNumberKeyUp}
+            onKeyDown={handlePersonNumberKeyDown}
           />
 
           <div>

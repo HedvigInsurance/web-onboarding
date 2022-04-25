@@ -363,7 +363,7 @@
   "CHECKOUT_CONTACT_INFO_SSN_LABEL": "CPR number",
   "CHECKOUT_CONTACT_INFO_EMAIL_HELPER": "For information from us. Or if discounts and other beneficial changes would appear after you’ve already received your offer.",
   "CHECKOUT_CONTACT_INFO_HEADING": "Contact information",
-  "CHECKOUT_CONTACT_INFO_CREDIT_CHECK_HELPER": "",
+  "CHECKOUT_CONTACT_INFO_CREDIT_CHECK_HELPER": " ",
   "CHECKOUT_PAGE_ERROR_MODAL_BODY": "Try again or start over. If the error persists, please contact us.",
   "CHECKOUT_PAGE_ERROR_MODAL_HEADING": "Something went wrong",
   "CHECKOUT_PAGE_ERROR_MODAL_BACK_TO_START_BUTTON": "Back to start",

@@ -12,7 +12,6 @@ import {
   usePaymentConnection_SubmitAdditionalPaymentDetailsMutation,
   ConnectPaymentInput,
   PaymentConnectChannel,
-  Market,
   usePaymentMethodsQuery,
   PaymentMethodsQuery,
 } from 'data/graphql'
@@ -201,6 +200,14 @@ const createAdyenCheckout = ({
           },
         },
       },
+      applepay: {
+        amount: {
+          value: 0,
+          currency: currentLocale.currencyCode,
+        },
+        buttonType: 'subscribe',
+        countryCode: currentLocale.marketLabel,
+      },
     },
     enableStoreDetails: true,
     returnUrl,
@@ -210,7 +217,7 @@ const createAdyenCheckout = ({
         browserInfo: state.data.browserInfo || null || undefined,
         paymentMethodDetails: state.data.paymentMethod,
         channel: PaymentConnectChannel.Web,
-        market: Market.Denmark,
+        market: currentLocale.apiMarket,
         returnUrl,
       }
 
