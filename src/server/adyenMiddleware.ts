@@ -152,9 +152,17 @@ export const handleVippsRedirect: Router.IMiddleware<
   const session = createSession<Session>(new ServerCookieStorage(ctx))
   const quoteCartId = session.getSession()?.quoteCartId
 
-  ctx.redirect(
-    ctx.params.locale
-      ? `/${ctx.params.locale}/new-member/checkout/payment/${quoteCartId}?3dsSuccess`
-      : '/new-member/checkout/payment/${quoteCartId}?3dsSuccess',
-  )
+  if (ctx.request.url.includes('&resultCode=authorised')) {
+    ctx.redirect(
+      ctx.params.locale
+        ? `/${ctx.params.locale}/new-member/checkout/payment/${quoteCartId}?3dsSuccess`
+        : '/new-member/checkout/payment/${quoteCartId}?3dsSuccess',
+    )
+  } else {
+    ctx.redirect(
+      ctx.params.locale
+        ? `/${ctx.params.locale}/new-member/checkout/payment/${quoteCartId}?error` // todo handle client side
+        : '/new-member/checkout/payment/${quoteCartId}?error',
+    )
+  }
 }
