@@ -13,13 +13,12 @@ import { QuoteBundle } from 'data/graphql'
 import { trackOfferEvent } from 'utils/tracking/trackOfferEvent'
 import { EventName } from 'utils/tracking/gtm'
 import { CheckoutPageErrorModal } from './CheckoutPageErrorModal'
-import { useHistory } from 'react-router'
 
 const { gray100 } = colorsV3
 
 type Props = {
   children: React.ReactNode
-  bundle: QuoteBundle
+  bundle?: QuoteBundle
   quoteCartId: string
   isReferralCodeUsed: boolean
 }

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { FormikProps } from 'formik'
 import { Headline } from 'components/Headline/Headline'
@@ -7,8 +7,17 @@ import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { TextInput } from 'pages/Offer/Checkout/inputFields'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { QuoteInput } from 'components/DetailsModal/types'
-import { WrapperWidth } from '../../shared/CheckoutPageWrapper'
+import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
+import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
+import { useQuoteCartQuery } from 'data/graphql'
+import {
+  getMonthlyCostDeductionIncentive,
+  getSelectedBundleVariant,
+} from 'api/quoteCartQuerySelectors'
+import { trackOfferEvent } from 'utils/tracking/trackOfferEvent'
+import { EventName } from 'utils/tracking/gtm'
 import { Divider } from '../../shared/Divider'
+import { WrapperWidth } from '../../shared/CheckoutPageWrapper'
 
 const DONE_TYPING_INTERVAL = 1500
 
@@ -50,6 +59,38 @@ type Props = {
 
 export const ContactInformation = ({ formikProps }: Props) => {
   const textKeys = useTextKeys()
+  const { isoLocale } = useCurrentLocale()
+  const { quoteCartId } = useQuoteCartIdFromUrl()
+
+  const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
+
+  const { data: quoteCartQueryData } = useQuoteCartQuery({
+    variables: {
+      id: quoteCartId,
+      locale: isoLocale,
+    },
+  })
+
+  const isReferralCodeUsed =
+    getMonthlyCostDeductionIncentive(quoteCartQueryData) !== undefined
+
+  const selectedBundleVariant = getSelectedBundleVariant(
+    quoteCartQueryData,
+    selectedInsuranceTypes,
+  )
+
+  useEffect(() => {
+    if (selectedBundleVariant) {
+      trackOfferEvent(
+        EventName.ContactInformationPageOpen,
+        selectedBundleVariant.bundle,
+        isReferralCodeUsed,
+        {
+          quoteCartId,
+        },
+      )
+    }
+  }, [isReferralCodeUsed, quoteCartId, selectedBundleVariant])
 
   const {
     values: { ssn },

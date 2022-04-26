@@ -115,6 +115,7 @@ export enum EventName {
   OfferCrossSell = 'offer_cross_sell',
   CheckoutOpen = 'checkout_open',
   CheckoutOpenGoBack = 'checkout_open_go_back',
+  ContactInformationPageOpen = 'contact_information_page_open',
 }
 
 type OptionalParameters = {
