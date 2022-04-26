@@ -19,7 +19,7 @@ export const Download: React.FC = () => {
           <Helmet>
             <title>{textKeys.ONBOARDING_DOWNLOAD_PAGE_TITLE()}</title>
           </Helmet>
-          <TopBar />
+          <TopBar textColorVariant="dark" />
           <DownloadPageContent />
           <TrackAction
             event={{

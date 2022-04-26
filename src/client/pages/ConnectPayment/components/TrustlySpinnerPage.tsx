@@ -1,6 +1,6 @@
 import { keyframes } from '@emotion/core'
 import styled from '@emotion/styled'
-import { colors } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
 
 const Wrapper = styled('div')({
@@ -20,7 +20,7 @@ const Spinner = styled('span')({
   display: 'inline-block',
   width: 32,
   height: 32,
-  border: `2px solid ${colors.LIGHT_GRAY}`,
+  border: `2px solid ${colorsV3.gray300}`,
   borderTopColor: 'transparent',
   borderRadius: '1em',
   animation: `${spin} 500ms linear infinite`,

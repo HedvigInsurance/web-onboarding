@@ -10,7 +10,7 @@ const Headline = styled.h1`
   font-size: 2rem;
   line-height: 40px;
   text-align: center;
-  color: ${colorsV3.gray100};
+  color: ${colorsV3.gray900};
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     margin: 0;
