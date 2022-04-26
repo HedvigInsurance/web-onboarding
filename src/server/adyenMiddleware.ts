@@ -91,6 +91,7 @@ export const handleNewAdyen3dsPostRedirect: Router.IMiddleware<
   const session = createSession<Session>(new ServerCookieStorage(ctx))
   const paymentTokenId = session.getSession()?.paymentTokenId
   const quoteCartId = session.getSession()?.quoteCartId
+
   try {
     const result = await httpClient.post(GIRAFFE_HOST + '/graphql', {
       operationName: 'SubmitAdyenRedirection',
@@ -142,4 +143,18 @@ export const handleNewAdyen3dsPostRedirect: Router.IMiddleware<
     ctx.state.getLogger('ayden').error(e.message)
     throw e
   }
+}
+
+export const handleVippsRedirect: Router.IMiddleware<
+  WithLoggerState,
+  any
+> = async (ctx, _next) => {
+  const session = createSession<Session>(new ServerCookieStorage(ctx))
+  const quoteCartId = session.getSession()?.quoteCartId
+
+  ctx.redirect(
+    ctx.params.locale
+      ? `/${ctx.params.locale}/new-member/checkout/payment/${quoteCartId}?3dsSuccess`
+      : '/new-member/checkout/payment/${quoteCartId}?3dsSuccess',
+  )
 }
