@@ -40,7 +40,7 @@ const filterTerms = (terms: InsuranceTerm[]) =>
 
 const TermLink = ({ term }: { term: InsuranceTerm }) => {
   return (
-    <DocumentLink href={term.url}>
+    <DocumentLink href={term.url} target="_blank">
       {term.displayName} {UNICODE_ARROW_UP}
     </DocumentLink>
   )
