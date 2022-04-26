@@ -12,7 +12,7 @@ import { AppImage } from './AppImage'
 const IMAGE_WIDTH = 560
 
 const Page = styled.div`
-  background: ${colorsV3.gray900};
+  background: ${colorsV3.gray100};
   max-width: 100vw;
   min-height: 100vh;
   padding: ${TOP_BAR_HEIGHT} 2rem 8rem;
@@ -30,7 +30,7 @@ const ContentContainer = styled.div`
   justify-content: center;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
-    max-width: 80rem;
+    max-width: 70rem;
     padding-top: 5rem;
     flex-direction: row;
     align-items: flex-start;
@@ -57,7 +57,7 @@ const TextWrapper = styled.div`
 const Paragraph = styled.div`
   font-size: 1.125rem;
   line-height: 1.5rem;
-  color: ${colorsV3.gray500};
+  color: ${colorsV3.gray700};
 
   :not(:last-of-type) {
     margin-bottom: 0.75rem;
