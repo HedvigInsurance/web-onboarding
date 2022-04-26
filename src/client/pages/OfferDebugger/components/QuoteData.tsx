@@ -14,7 +14,11 @@ import { InputField } from 'components/inputs'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { MarketLabel } from 'l10n/locales'
 import { LoadingDots } from '../../../components/LoadingDots/LoadingDots'
-import { initialSeApartmentValues, SwedishApartment } from './QuoteFormSweden'
+import {
+  initialSeApartmentValues,
+  initialSeHouseValues,
+  SwedishApartment,
+} from './QuoteFormSweden'
 import {
   initialNoHomeValues,
   initialNoTravelValues,
@@ -22,6 +26,7 @@ import {
   NorwegianTravel,
 } from './QuoteFormNorway'
 import { DanishQuote, initialDkHomeValues } from './QuoteFormDenmark'
+import { initialSeCarValues, SwedishCar } from './CarFormSweden'
 
 type OfferProps = { quoteCartId: string }
 
@@ -40,6 +45,7 @@ enum QuoteBundleType {
   SwedishHouse = 'swedish-house',
   SwedishApartmentAccident = 'swedish-apartment-accident',
   SwedishHouseAccident = 'swedish-house-accident',
+  SwedishCar = 'swedish-car',
 }
 
 enum QuoteType {
@@ -51,6 +57,7 @@ enum QuoteType {
   SwedishApartment = 'SWEDISH_APARTMENT',
   SwedishHouse = 'SWEDISH_HOUSE',
   SwedishAccident = 'SWEDISH_ACCIDENT',
+  SwedishCar = 'SWEDISH_CAR',
 }
 
 const singleQuoteBundleToQuoteType = (
@@ -67,6 +74,8 @@ const singleQuoteBundleToQuoteType = (
       return QuoteType.SwedishApartment
     case QuoteBundleType.SwedishHouse:
       return QuoteType.SwedishHouse
+    case QuoteBundleType.SwedishCar:
+      return QuoteType.SwedishCar
     default:
       throw new Error(`Unsupported single quote bundle type: ${bundleType}`)
   }
@@ -117,6 +126,11 @@ const quotesByMarket: QuotesByMarket = {
   ],
   SE: [
     {
+      label: 'Swedish Car',
+      value: QuoteBundleType.SwedishCar,
+      initialFormValues: initialSeCarValues,
+    },
+    {
       label: 'Swedish Apartment',
       value: QuoteBundleType.SwedishApartment,
       initialFormValues: initialSeApartmentValues,
@@ -124,6 +138,7 @@ const quotesByMarket: QuotesByMarket = {
     {
       label: 'Swedish House',
       value: QuoteBundleType.SwedishHouse,
+      initialFormValues: initialSeHouseValues,
     },
     {
       label: 'Swedish Apartment + Accident',
@@ -133,6 +148,7 @@ const quotesByMarket: QuotesByMarket = {
     {
       label: 'Swedish House + Accident',
       value: QuoteBundleType.SwedishHouseAccident,
+      initialFormValues: initialSeHouseValues,
     },
   ],
 }
@@ -181,12 +197,11 @@ const getSwedishAccidentQuoteValues = (values: any) => {
 }
 
 const getSwedishHouseQuoteValues = (values: any) => {
-  const { data: swedishApartmentData, ...holderData } = values
-  const { subType: _, ...quoteTypeValues } = swedishApartmentData
+  const { data, ...holderData } = values
   return {
     ...holderData,
     data: {
-      ...quoteTypeValues,
+      ...data,
       type: QuoteType.SwedishHouse,
       ancillaryArea: 0,
       yearOfConstruction: 1977,
@@ -197,12 +212,29 @@ const getSwedishHouseQuoteValues = (values: any) => {
   }
 }
 
+const getSwedishCarQuoteValues = (values: any) => {
+  const { data, ...holderData } = values
+
+  // TODO: should probably not be hard-coded
+  const levels = ['TRAFFIC', 'HALF', 'FULL']
+
+  return levels.map((level) => ({
+    ...holderData,
+    data: {
+      subType: level,
+      ...initialSeCarValues.data,
+      ...data,
+      type: QuoteType.SwedishCar,
+    },
+  }))
+}
+
 const ButtonLoadingIndicator = styled(LoadingDots)`
   display: inline-flex;
   margin-left: 0.5rem;
 `
 
-export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
+export const QuoteData = ({ quoteCartId }: OfferProps) => {
   const { isoLocale, marketLabel, path: localePath } = useCurrentLocale()
 
   const { data, refetch } = useQuoteCartQuery({
@@ -318,6 +350,14 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
             ],
           },
         })
+      } else if (quoteBundleType === QuoteBundleType.SwedishCar) {
+        result = await createQuoteBundle({
+          variables: {
+            locale: isoLocale,
+            quoteCartId,
+            quotes: getSwedishCarQuoteValues(input),
+          },
+        })
       } else if (quoteBundleType === QuoteBundleType.SwedishHouse) {
         result = await createQuoteBundle({
           variables: {
@@ -396,6 +436,8 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
 
       {!data?.quoteCart.bundle ? (
         <Formik
+          // without this, changing quote type will not re-populate initialValues
+          enableReinitialize
           initialValues={
             getCurrentAvailableQuoteData(marketLabel, quoteBundleType)
               ?.initialFormValues || {}
@@ -456,6 +498,9 @@ export const QuoteData: React.FC<OfferProps> = ({ quoteCartId }) => {
                     quoteBundleType ===
                       QuoteBundleType.DanishHomeAccidentTravel) && (
                     <DanishQuote formik={props} />
+                  )}
+                  {quoteBundleType === QuoteBundleType.SwedishCar && (
+                    <SwedishCar formik={props} />
                   )}
                 </>
               )}
