@@ -2188,19 +2188,19 @@
   resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-4.1.0.tgz#e8de34dbfb826c15dbaeb582585c3a5f720b9ced"
   integrity sha512-TYlxSmMQPiv8+DfgwKrV9B1Xr+vQA5VBx1EdfZR1gZNcc5QDK4Bk90oYC4A5nu3er71RyEHfjlHWJdqfAMGOJQ==
 
-"@hedviginsurance/brand@^4.2.0":
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-4.2.0.tgz#88fcfe7f3c2caa4b68749e72194426835fb2470a"
-  integrity sha512-812uhERaj+xRyTi/VMjOcYviMwfpc/DFYWBqFKy3LqUyyIBRQONRSJJ9MbPy82n2wKHZAtxG5aB4j74miO051g==
+"@hedviginsurance/brand@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-5.0.0.tgz#b070e0031019ed51b664ee2aa0e59752c01bc07f"
+  integrity sha512-1Y7s2BeqKuAVc3ASHXPKP1TsosRxWZha8r/J1hbaQ/7/Q2jMCKalXijoA7/MXWsE82yzCbrE5YbxcU9DqXWqfw==
 
-"@hedviginsurance/embark@^2.7.0":
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-2.7.0.tgz#1c83a7645c8878a18ef267fb758fb9e9d63b7dda"
-  integrity sha512-5pkLSJrCBcaUSt8VIThYYlD5N6Aszwba2ws0lU/yI4TcWFSjiIuJJ/2xI3J/X2fDN+cYh3EkG9TX1Rhy5rMWvA==
+"@hedviginsurance/embark@^2.9.1":
+  version "2.9.1"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-2.9.1.tgz#452b36e7f83067d0dad9e5daf2015a4be575770f"
+  integrity sha512-ucmB5LxkMKPFnwbcguwYn4r3HfHpqvWiPU/ugDVJJKx3Xl6UNQrUQaj12B1VMgBv9jKWvxbYbKywL+uga8n2lw==
   dependencies:
     "@emotion/react" "^11.4.1"
     "@emotion/styled" "^11.3.0"
-    "@hedviginsurance/brand" "^4.2.0"
+    "@hedviginsurance/brand" "^5.0.0"
     "@hedviginsurance/textkeyfy" "^2.0.1"
     "@juggle/resize-observer" "^3.3.1"
     "@koa/cors" "^2.2.3"
