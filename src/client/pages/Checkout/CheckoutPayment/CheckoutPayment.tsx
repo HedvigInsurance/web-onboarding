@@ -172,7 +172,7 @@ export const CheckoutPayment = ({
 
   const [isDataLoading, setIsDataLoading] = useState(false)
   const [isPageLoading, setIsPageLoading] = useState(false)
-  const [isError, setIsError] = useState()
+  const [isError, setIsError] = useState(false)
 
   //handle 3ds error redirect
   useEffect(() => {
