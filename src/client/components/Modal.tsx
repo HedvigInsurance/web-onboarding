@@ -1,5 +1,5 @@
 import { css, Global } from '@emotion/core'
-import { colors } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
 import ReactModal from 'react-modal'
 
@@ -48,7 +48,7 @@ const defaultStyle: ReactModal.Styles = {
     left: '50%',
     borderRadius: 10,
     border: 'none',
-    backgroundColor: colors.WHITE,
+    backgroundColor: colorsV3.white,
   },
 }
 

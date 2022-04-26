@@ -66,7 +66,8 @@ const Headline = styled.h1`
   margin-top: 0;
   margin-bottom: 1rem;
   font-size: 2rem;
-  letter-spacing: -0.02em;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     margin-bottom: 0.75rem;
@@ -74,7 +75,6 @@ const Headline = styled.h1`
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     font-size: 3rem;
-    line-height: 3.5rem;
   }
 `
 
@@ -82,13 +82,11 @@ const Preamble = styled.p`
   margin-top: 0;
   margin-bottom: 1.25rem;
   font-size: 1.25rem;
-  line-height: 1.4;
+  line-height: 1.2;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     margin-bottom: 2rem;
     font-size: 1.5rem;
-    line-height: 1.33;
-    letter-spacing: -2%;
   }
 `
 
