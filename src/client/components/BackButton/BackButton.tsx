@@ -16,11 +16,12 @@ const Button = styled(UnstyledButton)`
   }
 `
 
-export const BackButton = () => {
+export const BackButton = (handleClickBackButton: () => void) => {
   const history = useHistory()
 
   const goBack = () => {
     history.goBack()
+    handleClickBackButton()
   }
 
   return (

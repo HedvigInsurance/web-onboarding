@@ -9,12 +9,19 @@ import { BackButton } from 'components/BackButton/BackButton'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
 import { BREAKPOINTS, MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import { QuoteBundle } from 'data/graphql'
+import { trackOfferEvent } from 'utils/tracking/trackOfferEvent'
+import { EventName } from 'utils/tracking/gtm'
 import { CheckoutPageErrorModal } from './CheckoutPageErrorModal'
+import { useHistory } from 'react-router'
 
 const { gray100 } = colorsV3
 
 type Props = {
   children: React.ReactNode
+  bundle: QuoteBundle
+  quoteCartId: string
+  isReferralCodeUsed: boolean
 }
 
 const Wrapper = styled.div`
@@ -61,7 +68,12 @@ const LogoLink = styled.a`
 
 export const WrapperWidth = 628
 
-export const CheckoutPageWrapper = ({ children }: Props) => {
+export const CheckoutPageWrapper = ({
+  children,
+  bundle,
+  quoteCartId,
+  isReferralCodeUsed,
+}: Props) => {
   const isDesktop = useMediaQuery({ minWidth: BREAKPOINTS.mediumScreen })
   const { isQuoteCartValid } = useIsQuoteCartIdValid()
 
@@ -70,6 +82,19 @@ export const CheckoutPageWrapper = ({ children }: Props) => {
   })
 
   const { path } = useCurrentLocale()
+
+  const handleClickBackButton = () => {
+    if (bundle) {
+      trackOfferEvent(
+        EventName.CheckoutOpenGoBack,
+        bundle,
+        isReferralCodeUsed,
+        {
+          quoteCartId,
+        },
+      )
+    }
+  }
 
   return (
     <>
@@ -82,7 +107,7 @@ export const CheckoutPageWrapper = ({ children }: Props) => {
             <HedvigLogo width={94} />
           </LogoLink>
         )}
-        <BackButton />
+        <BackButton handleClickBackButton={handleClickBackButton} />
         <InnerWrapper>{children}</InnerWrapper>
       </Wrapper>
     </>
