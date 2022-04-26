@@ -196,7 +196,7 @@ export const OfferNew: React.FC = () => {
                 onClick={handleClickPhoneNumber}
               />
             ) : (
-              <LanguagePicker color="white" />
+              <LanguagePicker color="white" path="/new-member/offer" />
             )}
           </TopBar>
         )}
