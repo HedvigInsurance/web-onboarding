@@ -65,8 +65,14 @@ const Paragraph = styled.div`
 `
 
 const ImageSection = styled.div`
+  padding: 1rem;
+  background-color: ${colorsV3.gray300};
+  border-radius: 1rem;
+  margin: 0 -1rem;
+
   ${LARGE_SCREEN_MEDIA_QUERY} {
     flex-shrink: 1;
+    margin: 0;
   }
 `
 
