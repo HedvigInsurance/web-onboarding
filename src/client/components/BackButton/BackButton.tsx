@@ -7,6 +7,10 @@ import { Arrow } from 'components/icons/Arrow'
 
 const { gray900, gray600 } = colorsV3
 
+type Props = {
+  onClick?: () => void
+}
+
 const Button = styled(UnstyledButton)`
   &:hover,
   &:focus {
@@ -16,12 +20,15 @@ const Button = styled(UnstyledButton)`
   }
 `
 
-export const BackButton = ({ onClick }: { onClick: () => void }) => {
+export const BackButton = ({ onClick }: Props) => {
   const history = useHistory()
 
   const handleClick = () => {
     history.goBack()
-    onClick()
+
+    if (onClick) {
+      onClick()
+    }
   }
 
   return (
