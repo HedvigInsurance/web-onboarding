@@ -5,7 +5,7 @@ import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { GooglePlayIcon } from './GooglePlayIcon'
 import { AppStoreIcon } from './AppStoreIcon'
 
-const ICON_COLOR = colorsV3.white
+const ICON_COLOR = colorsV3.black
 
 type ButtonData = {
   url: string
@@ -39,7 +39,7 @@ const AnchorLinkButton = styled.a`
   display: inline-flex;
   justify-content: center;
   color: ${ICON_COLOR};
-  transition: 0.15s ease-in-out;
+  transition: 0.1s ease-in-out;
 
   svg {
     width: 100px;
@@ -51,9 +51,8 @@ const AnchorLinkButton = styled.a`
     }
   }
 
-  :hover {
-    background: ${ICON_COLOR};
-    color: ${colorsV3.gray900};
+  &:hover {
+    color: ${colorsV3.gray700};
   }
 `
 
