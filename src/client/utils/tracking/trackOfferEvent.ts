@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react'
+import { useEffect, useCallback, useState } from 'react'
 import * as quoteBundleSelector from 'api/quoteBundleSelectors'
 import { QuoteBundle, useQuoteCartQuery } from 'data/graphql'
 import { quoteBundleTrackingContractType } from 'api/quoteBundleTrackingContractType'
@@ -9,7 +9,6 @@ import {
   getSelectedBundleVariant,
 } from 'api/quoteCartQuerySelectors'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { options } from 'src/server/logging'
 import { EmbarkStory } from '../embarkStory'
 import { captureSentryError } from '../sentry-client'
 import { EventName, GTMPhoneNumberData, pushToGTMDataLayer } from './gtm'
