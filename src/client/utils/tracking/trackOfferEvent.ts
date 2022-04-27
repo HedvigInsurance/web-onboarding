@@ -38,7 +38,6 @@ export const trackOfferEvent = (
   referralCodeUsed: boolean,
   options: OptionalParameters = {},
 ) => {
-  console.log('called', eventName)
   const { switchedFrom, phoneNumberData, quoteCartId, memberId } = options
   const contractType = quoteBundleTrackingContractType(bundle)
   const contractCategory = getTrackableContractCategory(contractType)
