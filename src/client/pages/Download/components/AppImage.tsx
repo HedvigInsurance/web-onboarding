@@ -10,6 +10,9 @@ const Image = styled.img<{ imageWidth: Props['width'] }>`
   width: ${({ imageWidth }) => imageWidth}px;
   max-width: 100%;
   height: auto;
+
+  aspect-ratio: 17 / 20;
+  object-fit: cover;
 `
 
 const getImageProps = (currentLocale: string) => {
@@ -18,33 +21,27 @@ const getImageProps = (currentLocale: string) => {
   switch (currentLocale) {
     case 'se':
       return {
-        src: `${basePath}/hedvig-app-se.png`,
-        width: 1660,
-        height: 1400,
+        src: `${basePath}/app_still-life_daybed_se.png`,
+        width: 1080,
+        height: 652,
       }
     case 'no':
       return {
-        src: `${basePath}/hedvig-app-no.png`,
-        width: 1660,
-        height: 1400,
+        src: `${basePath}/app_still-life_daybed_no.png`,
+        width: 1080,
+        height: 652,
       }
     case 'dk':
       return {
-        src: `${basePath}/hedvig-app-dk.png`,
-        width: 755,
-        height: 761,
-      }
-    case 'dk-en':
-      return {
-        src: `${basePath}/hedvig-app-dk-en.png`,
-        width: 755,
-        height: 761,
+        src: `${basePath}/app_still-life_daybed_dk.png`,
+        width: 1080,
+        height: 652,
       }
     default:
       return {
-        src: `${basePath}/hedvig-app-en.png`,
-        width: 1660,
-        height: 1400,
+        src: `${basePath}/app_still-life_daybed_en.png`,
+        width: 1080,
+        height: 652,
       }
   }
 }
