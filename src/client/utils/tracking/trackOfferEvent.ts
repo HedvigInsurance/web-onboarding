@@ -1,9 +1,19 @@
+import React, { useEffect, useCallback, useState } from 'react'
 import * as quoteBundleSelector from 'api/quoteBundleSelectors'
-import { QuoteBundle } from 'data/graphql'
+import { QuoteBundle, useQuoteCartQuery } from 'data/graphql'
 import { quoteBundleTrackingContractType } from 'api/quoteBundleTrackingContractType'
+import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
+import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
+import {
+  getMonthlyCostDeductionIncentive,
+  getSelectedBundleVariant,
+} from 'api/quoteCartQuerySelectors'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import { options } from 'src/server/logging'
 import { EmbarkStory } from '../embarkStory'
 import { captureSentryError } from '../sentry-client'
 import { EventName, GTMPhoneNumberData, pushToGTMDataLayer } from './gtm'
+
 import {
   getTrackableContractCategory,
   getInitialOfferFromSessionStorage,
@@ -17,12 +27,18 @@ type OptionalParameters = {
   memberId?: string
 }
 
+type EventParameters = {
+  eventName: EventName
+  options?: Partial<OptionalParameters>
+}
+
 export const trackOfferEvent = (
   eventName: EventName,
   bundle: QuoteBundle,
   referralCodeUsed: boolean,
   options: OptionalParameters = {},
 ) => {
+  console.log('called', eventName)
   const { switchedFrom, phoneNumberData, quoteCartId, memberId } = options
   const contractType = quoteBundleTrackingContractType(bundle)
   const contractCategory = getTrackableContractCategory(contractType)
@@ -68,4 +84,63 @@ export const trackOfferEvent = (
   } catch (error) {
     captureSentryError(error)
   }
+}
+
+export const useTrackOfferEvent = () => {
+  const { isoLocale } = useCurrentLocale()
+
+  const { quoteCartId } = useQuoteCartIdFromUrl()
+
+  const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
+
+  const { data: quoteCartQueryData } = useQuoteCartQuery({
+    variables: {
+      id: quoteCartId,
+      locale: isoLocale,
+    },
+  })
+
+  const isReferralCodeUsed =
+    getMonthlyCostDeductionIncentive(quoteCartQueryData) !== undefined
+
+  const selectedBundleVariant = getSelectedBundleVariant(
+    quoteCartQueryData,
+    selectedInsuranceTypes,
+  )
+
+  const [eventQueue, setEventQueue] = useState<EventParameters[]>([])
+
+  const trackOfferCallback = useCallback(
+    ({ eventName, options = {} }: EventParameters) => {
+      trackOfferEvent(
+        eventName,
+        selectedBundleVariant!.bundle,
+        isReferralCodeUsed,
+        {
+          quoteCartId,
+          ...options,
+        },
+      )
+    },
+    [isReferralCodeUsed, quoteCartId, selectedBundleVariant],
+  )
+
+  const trackOfferHandler = useCallback(
+    (eventParams: EventParameters) => {
+      selectedBundleVariant
+        ? trackOfferCallback(eventParams)
+        : setEventQueue(eventQueue.concat([eventParams]))
+    },
+    [selectedBundleVariant, eventQueue, trackOfferCallback],
+  )
+
+  //cleanup the queue
+  useEffect(() => {
+    if (selectedBundleVariant && eventQueue.length) {
+      eventQueue.map(trackOfferCallback)
+      setEventQueue([])
+    }
+  }, [trackOfferCallback, selectedBundleVariant, eventQueue])
+
+  return trackOfferHandler
 }
