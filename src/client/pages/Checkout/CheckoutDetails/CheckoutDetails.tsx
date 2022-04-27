@@ -125,7 +125,7 @@ export const CheckoutDetails = () => {
       <Footer
         buttonText={textKeys.CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT()}
         buttonLinkTo={paymentPageLink}
-        buttonOnClick={handleOnClick}
+        onClick={handleOnClick}
       >
         <PaymentInfo {...priceData} />
       </Footer>
