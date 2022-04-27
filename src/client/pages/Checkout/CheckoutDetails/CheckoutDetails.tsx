@@ -93,6 +93,7 @@ export const CheckoutDetails = () => {
         isReferralCodeUsed,
         {
           quoteCartId,
+          buttonId: 'continue_to_payment',
         },
       )
     }

@@ -15,6 +15,7 @@ type OptionalParameters = {
   phoneNumberData?: GTMPhoneNumberData
   quoteCartId?: string
   memberId?: string
+  buttonId?: string
 }
 
 export const trackOfferEvent = (

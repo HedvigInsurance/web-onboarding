@@ -373,6 +373,7 @@ export const CheckoutPayment = ({
         isReferralCodeUsed,
         {
           quoteCartId,
+          buttonId: 'complete_purchase',
         },
       )
     }
