@@ -117,6 +117,7 @@ export enum EventName {
   ContactInformationPageOpen = 'contact_information_page_open',
   CheckoutOpenGoBack = 'checkout_open_go_back',
   ContactInformationPageGoBack = 'contact_information_page_go_back',
+  ButtonClick = 'button_click',
 }
 
 type OptionalParameters = {

@@ -85,6 +85,19 @@ export const CheckoutDetails = () => {
     }
   }
 
+  const handleOnClick = () => {
+    if (selectedBundleVariant?.bundle) {
+      trackOfferEvent(
+        EventName.ButtonClick,
+        selectedBundleVariant.bundle,
+        isReferralCodeUsed,
+        {
+          quoteCartId,
+        },
+      )
+    }
+  }
+
   const priceData = data.priceData
   const quoteDetails = data.quoteDetails
   const bundleVariants = data.bundleVariants
@@ -111,6 +124,7 @@ export const CheckoutDetails = () => {
       <Footer
         buttonText={textKeys.CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT()}
         buttonLinkTo={paymentPageLink}
+        buttonOnClick={handleOnClick}
       >
         <PaymentInfo {...priceData} />
       </Footer>

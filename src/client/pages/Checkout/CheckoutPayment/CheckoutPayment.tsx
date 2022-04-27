@@ -365,6 +365,17 @@ export const CheckoutPayment = ({
     }
 
     checkoutAPI?.submit()
+
+    if (selectedQuoteBundleVariant?.bundle) {
+      trackOfferEvent(
+        EventName.ButtonClick,
+        selectedQuoteBundleVariant.bundle,
+        isReferralCodeUsed,
+        {
+          quoteCartId,
+        },
+      )
+    }
   }
 
   useEffect(() => {
