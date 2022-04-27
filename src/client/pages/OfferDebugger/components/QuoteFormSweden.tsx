@@ -3,6 +3,22 @@ import { ApartmentType } from 'data/graphql'
 import { InputField } from 'components/inputs'
 import { WithFormikProps } from './QuoteData'
 
+export const initialSeHouseValues = {
+  firstName: 'Sven',
+  lastName: 'Svensson',
+  currentInsurer: '',
+  birthDate: '1995-09-29',
+  ssn: '199509291234',
+  startDate: '',
+  email: 'sven.svensson@hedvig.com',
+  data: {
+    street: 'Storgatan 1',
+    zipCode: '12345',
+    livingSpace: 23,
+    numberCoInsured: 1,
+  },
+}
+
 export const initialSeApartmentValues = {
   firstName: 'Sven',
   lastName: 'Svensson',

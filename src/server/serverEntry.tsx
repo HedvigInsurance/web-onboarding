@@ -13,6 +13,7 @@ import { localePathPattern } from '../client/l10n/localePathPattern'
 import {
   handleAdyen3dsPostRedirect,
   handleNewAdyen3dsPostRedirect,
+  handleVippsRedirect,
 } from './adyenMiddleware'
 import { GIRAFFE_HOST, GIRAFFE_WS_ENDPOINT } from './config'
 import { appLogger } from './logging'
@@ -112,6 +113,11 @@ router.get('/panic-room', async () => {
     'Entered the panic room, this is an expected error. Carry on 👜',
   )
 })
+
+router.get(
+  localePathPattern + '/new-member/connect-payment/adyen-cps-callback',
+  handleVippsRedirect,
+)
 
 router.post('/new-member/_report-csp-violation', (ctx) => {
   ;(ctx.state.getLogger('cspViolation') as Logger).error(
