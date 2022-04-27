@@ -114,8 +114,9 @@ export enum EventName {
   ClickCallNumber = 'click_call_number',
   OfferCrossSell = 'offer_cross_sell',
   CheckoutOpen = 'checkout_open',
-  CheckoutOpenGoBack = 'checkout_open_go_back',
   ContactInformationPageOpen = 'contact_information_page_open',
+  CheckoutOpenGoBack = 'checkout_open_go_back',
+  ContactInformationPageGoBack = 'contact_information_page_go_back',
 }
 
 type OptionalParameters = {

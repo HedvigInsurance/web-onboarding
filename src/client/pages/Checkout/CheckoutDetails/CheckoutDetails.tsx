@@ -72,17 +72,26 @@ export const CheckoutDetails = () => {
     return <LoadingPage loading />
   }
 
+  const handleClickBackButton = () => {
+    if (selectedBundleVariant?.bundle) {
+      trackOfferEvent(
+        EventName.CheckoutOpenGoBack,
+        selectedBundleVariant.bundle,
+        isReferralCodeUsed,
+        {
+          quoteCartId,
+        },
+      )
+    }
+  }
+
   const priceData = data.priceData
   const quoteDetails = data.quoteDetails
   const bundleVariants = data.bundleVariants
   const allQuotes = getUniqueQuotesFromVariantList(bundleVariants)
   const paymentPageLink = `/${localePath}/new-member/checkout/payment/${quoteCartId}`
   return (
-    <CheckoutPageWrapper
-      bundle={selectedBundleVariant?.bundle}
-      quoteCartId={quoteCartId}
-      isReferralCodeUsed
-    >
+    <CheckoutPageWrapper handleClickBackButton={handleClickBackButton}>
       <PageSection>
         <YourPlan {...priceData} />
         <StartDateSection />

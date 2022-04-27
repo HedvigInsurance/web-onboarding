@@ -16,6 +16,7 @@ import {
   BundledQuote,
   CheckoutStatus,
   useAddPaymentTokenMutation,
+  useQuoteCartQuery,
 } from 'data/graphql'
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { Headline } from 'components/Headline/Headline'
@@ -26,6 +27,9 @@ import { trackSignedCustomerEvent } from 'utils/tracking/trackSignedCustomerEven
 import { useStorage } from 'utils/StorageContainer'
 import { useVariation } from 'utils/hooks/useVariation'
 import { LoadingPage } from 'components/LoadingPage'
+import { getMonthlyCostDeductionIncentive } from 'api/quoteCartQuerySelectors'
+import { EventName } from 'utils/tracking/gtm'
+import { trackOfferEvent } from 'utils/tracking/trackOfferEvent'
 import { useAdyenCheckout } from '../../ConnectPayment/components/useAdyenCheckout'
 import {
   CheckoutPageWrapper,
@@ -226,6 +230,13 @@ export const CheckoutPayment = ({
     quoteCartId,
   })
 
+  const { data: quoteCartQueryData } = useQuoteCartQuery({
+    variables: {
+      id: quoteCartId,
+      locale: locale.isoLocale,
+    },
+  })
+
   const { firstName, lastName, email, ssn, phoneNumber } = mainQuote
   const formik = useFormik<QuoteInput>({
     initialValues: {
@@ -378,8 +389,24 @@ export const CheckoutPayment = ({
     return <LoadingPage loading />
   }
 
+  const isReferralCodeUsed =
+    getMonthlyCostDeductionIncentive(quoteCartQueryData) !== undefined
+
+  const handleClickBackButton = () => {
+    if (selectedQuoteBundleVariant?.bundle) {
+      trackOfferEvent(
+        EventName.ContactInformationPageGoBack,
+        selectedQuoteBundleVariant.bundle,
+        isReferralCodeUsed,
+        {
+          quoteCartId,
+        },
+      )
+    }
+  }
+
   return (
-    <CheckoutPageWrapper>
+    <CheckoutPageWrapper handleClickBackButton={handleClickBackButton}>
       <ContactInformation formikProps={formik} />
       <AdyenContainer>
         <Wrapper>

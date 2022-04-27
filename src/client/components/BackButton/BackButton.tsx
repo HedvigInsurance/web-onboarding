@@ -16,16 +16,16 @@ const Button = styled(UnstyledButton)`
   }
 `
 
-export const BackButton = (handleClickBackButton: () => void) => {
+export const BackButton = ({ onClick }: { onClick: () => void }) => {
   const history = useHistory()
 
-  const goBack = () => {
+  const handleClick = () => {
     history.goBack()
-    handleClickBackButton()
+    onClick()
   }
 
   return (
-    <Button onClick={goBack}>
+    <Button onClick={handleClick}>
       <Arrow direction="backward" color={gray900} />
     </Button>
   )
