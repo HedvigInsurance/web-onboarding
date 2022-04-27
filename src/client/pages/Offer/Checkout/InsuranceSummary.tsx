@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV3, fonts } from '@hedviginsurance/brand'
 import React from 'react'
+import { ErrorBoundary } from '@sentry/react'
 import { OfferData } from 'pages/OfferNew/types'
 import { getMainQuote } from 'pages/OfferNew/utils'
 import { useTextKeys } from 'utils/textKeys'
@@ -52,10 +53,14 @@ export const InsuranceSummary: React.FC<Props> = ({ offerData }) => {
     <Wrapper>
       <Title>{textKeys.CHECKOUT_SUMMARY_HEADLINE()}</Title>
       <Table>
-        <InsuranceSummaryDetails
-          personalDetails={offerData.person}
-          mainQuote={mainQuote}
-        />
+        <ErrorBoundary
+          fallback={<p>{textKeys.CONNECT_PAYMENT_ERROR_HEADLINE()}</p>}
+        >
+          <InsuranceSummaryDetails
+            personalDetails={offerData.person}
+            mainQuote={mainQuote}
+          />
+        </ErrorBoundary>
       </Table>
       <Title>{textKeys.CHECKOUT_TERMS_HEADLINE()}</Title>
       <Table>
