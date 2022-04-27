@@ -21,25 +21,25 @@ const getImageProps = (currentLocale: string) => {
   switch (currentLocale) {
     case 'se':
       return {
-        src: `${basePath}/app_still-life_daybed_se.png`,
+        src: `${basePath}/app_still-life_daybed_se.jpg`,
         width: 1080,
         height: 652,
       }
     case 'no':
       return {
-        src: `${basePath}/app_still-life_daybed_no.png`,
+        src: `${basePath}/app_still-life_daybed_no.jpg`,
         width: 1080,
         height: 652,
       }
     case 'dk':
       return {
-        src: `${basePath}/app_still-life_daybed_dk.png`,
+        src: `${basePath}/app_still-life_daybed_dk.jpg`,
         width: 1080,
         height: 652,
       }
     default:
       return {
-        src: `${basePath}/app_still-life_daybed_en.png`,
+        src: `${basePath}/app_still-life_daybed_en.jpg`,
         width: 1080,
         height: 652,
       }
