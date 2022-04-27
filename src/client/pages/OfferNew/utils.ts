@@ -234,6 +234,10 @@ export const isStudent = (details: QuoteDetails) => {
     return details.isStudent
   }
 
+  if ('isYouth' in details) {
+    return details.isYouth
+  }
+
   return false
 }
 
