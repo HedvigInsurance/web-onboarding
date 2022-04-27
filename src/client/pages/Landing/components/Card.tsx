@@ -123,12 +123,10 @@ export const CardHeadline = styled.h2<{ disabled?: boolean }>`
   color: ${(props) => (props.disabled ? colorsV3.gray500 : colorsV3.gray900)};
 
   font-size: 1.25rem;
-  line-height: 1.4;
+  line-height: 1.2;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
     font-size: 1.5rem;
-    line-height: 1.33;
-    letter-spacing: -2%;
   }
 `
 

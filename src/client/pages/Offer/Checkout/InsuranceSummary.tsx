@@ -12,8 +12,7 @@ const Wrapper = styled.div`
 `
 const Title = styled.div`
   font-size: 1.125rem;
-  letter-spacing: -0.23px;
-  font-family: ${fonts.FAVORIT};
+  font-family: ${fonts.HEDVIG_LETTERS_STANDARD};
   padding: 1rem 0;
 `
 
@@ -23,7 +22,6 @@ const Table = styled.div`
   display: flex;
   flex-direction: column;
   font-size: 0.875rem;
-  letter-spacing: -0.2px;
 `
 export const Group = styled.div`
   display: flex;
