@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTextKeys } from 'utils/textKeys'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
@@ -7,13 +7,7 @@ import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
 import { LoadingPage } from 'components/LoadingPage'
 import { getUniqueQuotesFromVariantList } from 'pages/OfferNew/utils'
 import { DetailsModal } from 'components/DetailsModal'
-import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
-import { useQuoteCartQuery } from 'data/graphql'
-import {
-  getMonthlyCostDeductionIncentive,
-  getSelectedBundleVariant,
-} from 'api/quoteCartQuerySelectors'
-import { trackOfferEvent } from 'utils/tracking/trackOfferEvent'
+import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
 import { EventName } from 'utils/tracking/gtm'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
@@ -28,42 +22,18 @@ import { DocumentLinks } from './components/DocumentLinks'
 
 export const CheckoutDetails = () => {
   const textKeys = useTextKeys()
-  const { path: localePath, isoLocale } = useCurrentLocale()
+
   const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false)
 
+  const { path: localePath } = useCurrentLocale()
   const { quoteCartId } = useQuoteCartIdFromUrl()
+
+  const trackOfferEvent = useTrackOfferEvent()
   const data = useQuoteCartData()
 
-  const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
-
-  const { data: quoteCartQueryData } = useQuoteCartQuery({
-    variables: {
-      id: quoteCartId,
-      locale: isoLocale,
-    },
-  })
-
-  const isReferralCodeUsed =
-    getMonthlyCostDeductionIncentive(quoteCartQueryData) !== undefined
-
-  const selectedBundleVariant = getSelectedBundleVariant(
-    quoteCartQueryData,
-    selectedInsuranceTypes,
-  )
-
-  useEffect(() => {
-    if (selectedBundleVariant) {
-      trackOfferEvent(
-        EventName.CheckoutOpen,
-        selectedBundleVariant.bundle,
-        isReferralCodeUsed,
-        {
-          quoteCartId,
-        },
-      )
-    }
-  }, [isReferralCodeUsed, quoteCartId, selectedBundleVariant])
-
+  useEffect(() => trackOfferEvent({ eventName: EventName.CheckoutOpen }), [
+    trackOfferEvent,
+  ])
   if (data?.error) {
     console.error('Quote cart data error: no data')
     return <CheckoutErrorModal isVisible onRetry={onRetry} />
