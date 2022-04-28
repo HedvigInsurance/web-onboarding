@@ -29,6 +29,7 @@ type OptionalParameters = {
   quoteCartId?: string
   memberId?: string
   buttonId?: string
+  error?: Error | unknown
 }
 
 type EventParameters = {
