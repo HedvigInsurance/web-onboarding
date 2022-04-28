@@ -119,7 +119,7 @@ export enum OfferEventName {
 
 export enum ErrorEventName {
   CheckoutErrorPaymentTokenMutation = 'checkout_error_payment_token_mutation',
-  CheckoutErrorPaymentTokenID = 'checkout_error_payment_token_id_missing',
+  CheckoutErrorPaymentTokenIDMissing = 'checkout_error_payment_token_id_missing',
   CheckoutErrorBasicError = 'checkout_error_basic_error',
   CheckoutErrorManualReviewRequired = 'checkout_error_manual_review_required',
   CheckoutErrorCheckoutStart = 'checkout_error_manual_checkout_start',
