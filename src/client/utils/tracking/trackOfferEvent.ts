@@ -83,6 +83,7 @@ export const trackOfferEvent = (
         current_insurer: mainQuote.currentInsurer?.id ?? undefined,
       },
       ...phoneNumberData,
+      ...options,
     })
   } catch (error) {
     captureSentryError(error)
@@ -118,6 +119,7 @@ export const useTrackOfferEvent = () => {
       { eventName, options = {} }: EventParameters,
       selectedBundleVariant: QuoteBundleVariant,
     ) => {
+      console.log('track', eventName, options)
       trackOfferEvent(
         eventName,
         selectedBundleVariant.bundle,
