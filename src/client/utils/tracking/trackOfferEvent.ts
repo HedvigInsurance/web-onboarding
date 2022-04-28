@@ -28,8 +28,7 @@ type OptionalParameters = {
   phoneNumberData?: GTMPhoneNumberData
   quoteCartId?: string
   memberId?: string
-  // TODO Better typedef?
-  error?: Error | any
+  error?: Error | unknown
 }
 
 type EventParameters = {
