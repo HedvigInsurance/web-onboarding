@@ -125,6 +125,7 @@ export enum ErrorEventName {
   CheckoutErrorCheckoutStart = 'checkout_error_manual_checkout_start',
   CheckoutErrorAdyen = 'checkout_error_adyen',
   CheckoutErrorQuoteCartSetup = 'checkout_error_quote_cart_setup',
+  CheckoutError3DS = 'checkout_error_3ds_payment',
 }
 
 export const EventName = { ...OfferEventName, ...ErrorEventName }

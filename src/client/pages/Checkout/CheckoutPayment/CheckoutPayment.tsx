@@ -172,6 +172,15 @@ export const CheckoutPayment = ({
   const [isPageLoading, setIsPageLoading] = useState(false)
   const [isError, setIsError] = useState(false)
 
+  //handle 3ds error redirect
+  useEffect(() => {
+    if (is3DsError) {
+      history.replace('?')
+      trackOfferEvent({ eventName: EventName.CheckoutError3DS })
+      setIsError(true)
+    }
+  }, [is3DsError, history])
+
   const addPaymentToCart = useCallback(
     async (paymentTokenId) => {
       try {
