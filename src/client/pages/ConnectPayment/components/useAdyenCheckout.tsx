@@ -16,6 +16,8 @@ import {
   PaymentMethodsQuery,
 } from 'data/graphql'
 import { useStorage, StorageState } from 'utils/StorageContainer'
+import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
+import { EventName } from 'utils/tracking/gtm'
 
 interface Params {
   onSuccess?: (id?: string) => void
@@ -69,6 +71,8 @@ export const useAdyenCheckout = ({
     paymentMethodsResponseNew.data &&
     getAvailablePaymentMethods(paymentMethodsResponseNew.data)
 
+  const trackOfferEvent = useTrackOfferEvent()
+
   useEffect(() => {
     if (
       !quoteCartId ||
@@ -89,6 +93,11 @@ export const useAdyenCheckout = ({
       history,
       onSuccess,
       storage,
+      onError: (error) =>
+        trackOfferEvent({
+          eventName: EventName.CheckoutErrorAdyen,
+          options: { error },
+        }),
     })
 
     newCheckoutAPI.mount(adyenRef.current)
@@ -106,6 +115,7 @@ export const useAdyenCheckout = ({
     onSuccess,
     storage,
     checkoutAPI,
+    trackOfferEvent,
   ])
 
   useEffect(() => {
@@ -125,6 +135,7 @@ interface AdyenCheckoutProps {
   submitAdditionalPaymentDetails: any
   history: ReturnType<typeof useHistory>
   onSuccess?: (paymentTokenId?: string) => void
+  onError?: (e: Error) => void
   setIsCompleted?: () => void
   quoteCartId: string
   storage: StorageState
@@ -141,6 +152,7 @@ const createAdyenCheckout = ({
   onSuccess = () => {
     /* noop */
   },
+  onError,
 }: AdyenCheckoutProps) => {
   const { isoLocale, path } = currentLocale
   const locale = match<LocaleData['isoLocale'], string>([
@@ -302,6 +314,7 @@ const createAdyenCheckout = ({
           )
         }
       } catch (e) {
+        onError(e)
         handleResult(dropinComponent, 'error')
       }
     },

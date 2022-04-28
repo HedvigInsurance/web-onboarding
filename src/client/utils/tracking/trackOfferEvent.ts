@@ -15,6 +15,8 @@ type OptionalParameters = {
   phoneNumberData?: GTMPhoneNumberData
   quoteCartId?: string
   memberId?: string
+  // TODO Better typedef?
+  error?: Error | any
 }
 
 export const trackOfferEvent = (
