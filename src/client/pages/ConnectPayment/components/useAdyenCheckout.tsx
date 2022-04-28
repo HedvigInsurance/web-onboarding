@@ -135,7 +135,7 @@ interface AdyenCheckoutProps {
   submitAdditionalPaymentDetails: any
   history: ReturnType<typeof useHistory>
   onSuccess?: (paymentTokenId?: string) => void
-  onError?: (e: Error) => void
+  onError: (e: Error) => void
   setIsCompleted?: () => void
   quoteCartId: string
   storage: StorageState
