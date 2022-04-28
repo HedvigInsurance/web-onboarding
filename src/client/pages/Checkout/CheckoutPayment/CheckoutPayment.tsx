@@ -295,7 +295,9 @@ export const CheckoutPayment = ({
       setIsPageLoading(true)
       const paymentTokenId = storage.session.getSession()?.paymentTokenId
       if (!paymentTokenId) {
-        trackOfferEvent({ eventName: EventName.CheckoutErrorPaymentTokenID })
+        trackOfferEvent({
+          eventName: EventName.CheckoutErrorPaymentTokenIDMissing,
+        })
         throw new Error('No token payment id')
       }
       addPaymentToCart(paymentTokenId)
