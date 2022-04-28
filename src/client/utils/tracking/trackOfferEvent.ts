@@ -28,6 +28,7 @@ type OptionalParameters = {
   phoneNumberData?: GTMPhoneNumberData
   quoteCartId?: string
   memberId?: string
+  error?: Error | unknown
 }
 
 type EventParameters = {

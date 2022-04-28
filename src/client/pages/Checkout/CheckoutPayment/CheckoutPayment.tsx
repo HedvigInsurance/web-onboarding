@@ -26,6 +26,8 @@ import { trackSignedCustomerEvent } from 'utils/tracking/trackSignedCustomerEven
 import { useStorage } from 'utils/StorageContainer'
 import { useVariation } from 'utils/hooks/useVariation'
 import { LoadingPage } from 'components/LoadingPage'
+import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
+import { EventName } from 'utils/tracking/gtm'
 import { useAdyenCheckout } from '../../ConnectPayment/components/useAdyenCheckout'
 import {
   CheckoutPageWrapper,
@@ -153,6 +155,8 @@ export const CheckoutPayment = ({
   const client = useApolloClient()
   const storage = useStorage()
   const variation = useVariation()
+  const trackOfferEvent = useTrackOfferEvent()
+
   const adyenRef = useRef<HTMLDivElement | null>(null)
   const [
     createQuoteBundle,
@@ -178,9 +182,10 @@ export const CheckoutPayment = ({
   useEffect(() => {
     if (is3DsError) {
       history.replace('?')
+      trackOfferEvent({ eventName: EventName.CheckoutError3DS })
       setIsError(true)
     }
-  }, [is3DsError, history])
+  }, [is3DsError, history, trackOfferEvent])
 
   const addPaymentToCart = useCallback(
     async (paymentTokenId) => {
@@ -193,10 +198,14 @@ export const CheckoutPayment = ({
           refetchQueries: ['QuoteCart'],
         })
       } catch (error) {
+        trackOfferEvent({
+          eventName: EventName.CheckoutErrorPaymentTokenMutation,
+          options: { error },
+        })
         console.error('Failed to add Payment Token :', error.message, error)
       }
     },
-    [addPaymentTokenMutation, quoteCartId],
+    [addPaymentTokenMutation, quoteCartId, trackOfferEvent],
   )
 
   const performCheckout = useCallback(async () => {
@@ -207,6 +216,9 @@ export const CheckoutPayment = ({
       })
       if (data?.quoteCart_startCheckout.__typename === 'BasicError') {
         console.error('Could not start checkout')
+        trackOfferEvent({
+          eventName: EventName.CheckoutErrorBasicError,
+        })
         setIsError(true)
       }
       // Poll for Status
@@ -220,13 +232,21 @@ export const CheckoutPayment = ({
         (error.graphQLErrors || []) as GraphQLError[],
       )
       if (isManualReviewRequired) {
+        trackOfferEvent({
+          eventName: EventName.CheckoutErrorManualReviewRequired,
+          options: { error },
+        })
         throw new Error('Manual Review required')
       }
       setIsDataLoading(false)
+      trackOfferEvent({
+        eventName: EventName.CheckoutErrorCheckoutStart,
+        options: { error },
+      })
       console.error('Could not start checkout')
       setIsError(true)
     }
-  }, [getStatus, quoteCartId, quoteIds, startCheckout])
+  }, [getStatus, quoteCartId, quoteIds, startCheckout, trackOfferEvent])
 
   useEffect(() => {
     if (isPaymentConnected && checkoutStatus === undefined) {
@@ -274,10 +294,21 @@ export const CheckoutPayment = ({
     if (is3DsComplete && checkoutStatus === undefined) {
       setIsPageLoading(true)
       const paymentTokenId = storage.session.getSession()?.paymentTokenId
-      if (!paymentTokenId) throw new Error('No token payment id')
+      if (!paymentTokenId) {
+        trackOfferEvent({
+          eventName: EventName.CheckoutErrorPaymentTokenIDMissing,
+        })
+        throw new Error('No token payment id')
+      }
       addPaymentToCart(paymentTokenId)
     }
-  }, [is3DsComplete, addPaymentToCart, checkoutStatus, storage.session])
+  }, [
+    is3DsComplete,
+    addPaymentToCart,
+    checkoutStatus,
+    storage.session,
+    trackOfferEvent,
+  ])
 
   const completeCheckout = useCallback(async () => {
     try {
@@ -300,6 +331,7 @@ export const CheckoutPayment = ({
         quoteCartId,
       })
     } catch (error) {
+      trackOfferEvent({ eventName: EventName.CheckoutErrorQuoteCartSetup })
       throw new Error('Setup quote cart session failed')
     }
   }, [
@@ -310,6 +342,7 @@ export const CheckoutPayment = ({
     quoteCartId,
     storage,
     variation,
+    trackOfferEvent,
   ])
 
   const reCreateQuoteBundle = (form: QuoteInput) => {

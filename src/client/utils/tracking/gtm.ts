@@ -107,7 +107,7 @@ export const pushToGTMDataLayer = (obj: DataLayerObject) => {
   castedWindow.dataLayer.push(obj)
 }
 
-export enum EventName {
+export enum OfferEventName {
   OfferCreated = 'offer_created',
   SignedCustomer = 'signed_customer',
   InsuranceSelectionToggle = 'insurance_selection_toggle',
@@ -116,6 +116,20 @@ export enum EventName {
   CheckoutOpen = 'checkout_open',
   ContactInformationPageOpen = 'contact_information_page_open',
 }
+
+export enum ErrorEventName {
+  CheckoutErrorPaymentTokenMutation = 'checkout_error_payment_token_mutation',
+  CheckoutErrorPaymentTokenIDMissing = 'checkout_error_payment_token_id_missing',
+  CheckoutErrorBasicError = 'checkout_error_basic_error',
+  CheckoutErrorManualReviewRequired = 'checkout_error_manual_review_required',
+  CheckoutErrorCheckoutStart = 'checkout_error_manual_checkout_start',
+  CheckoutErrorAdyen = 'checkout_error_adyen',
+  CheckoutErrorQuoteCartSetup = 'checkout_error_quote_cart_setup',
+  CheckoutError3DS = 'checkout_error_3ds_payment',
+}
+
+export const EventName = { ...OfferEventName, ...ErrorEventName }
+export type EventName = OfferEventName | ErrorEventName
 
 type OptionalParameters = {
   switchedFrom?: OfferData
