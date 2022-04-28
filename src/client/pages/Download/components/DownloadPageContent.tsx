@@ -23,7 +23,6 @@ const Page = styled.div`
 const ContentContainer = styled.div`
   width: 100%;
   max-width: 24rem;
-  padding-top: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -70,14 +69,6 @@ const ImageSection = styled.div`
   }
 `
 
-const ButtonsWrapper = styled.div`
-  max-width: 20rem;
-
-  ${LARGE_SCREEN_MEDIA_QUERY} {
-    max-width: 24rem;
-  }
-`
-
 export const DownloadPageContent: React.FC = () => {
   const textKeys = useTextKeys()
 
@@ -99,9 +90,7 @@ export const DownloadPageContent: React.FC = () => {
             <Paragraph>{textKeys.ONBOARDING_DOWNLOAD_PARAGRAPH_1()}</Paragraph>
             <Paragraph>{textKeys.ONBOARDING_DOWNLOAD_PARAGRAPH_2()}</Paragraph>
           </TextWrapper>
-          <ButtonsWrapper>
-            <GetAppButtons />
-          </ButtonsWrapper>
+          <GetAppButtons />
         </div>
         {isLargeScreen && (
           <ImageSection>

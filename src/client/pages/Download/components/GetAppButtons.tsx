@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { GooglePlayIcon } from './GooglePlayIcon'
 import { AppStoreIcon } from './AppStoreIcon'
 
@@ -25,9 +24,10 @@ const buttonData: ButtonData[] = [
 
 const ButtonContainer = styled.div`
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  display: grid;
+  gap: 1rem;
+  grid-auto-flow: column;
+  justify-content: flex-start;
 `
 
 const AnchorLinkButton = styled.a`
@@ -42,13 +42,7 @@ const AnchorLinkButton = styled.a`
   transition: 0.1s ease-in-out;
 
   svg {
-    width: 100px;
-  }
-
-  ${LARGE_SCREEN_MEDIA_QUERY} {
-    svg {
-      width: 120px;
-    }
+    width: 120px;
   }
 
   &:hover {

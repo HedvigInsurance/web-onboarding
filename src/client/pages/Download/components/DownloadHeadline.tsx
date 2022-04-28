@@ -6,10 +6,8 @@ import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
 const Headline = styled.h1`
   width: 100%;
-  margin-bottom: 3rem;
   font-size: 2rem;
   line-height: 40px;
-  text-align: center;
   color: ${colorsV3.gray900};
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
@@ -18,7 +16,6 @@ const Headline = styled.h1`
     flex-direction: column;
     font-size: 3rem;
     line-height: 56px;
-    text-align: left;
   }
 `
 
