@@ -119,7 +119,6 @@ export const useTrackOfferEvent = () => {
       { eventName, options = {} }: EventParameters,
       selectedBundleVariant: QuoteBundleVariant,
     ) => {
-      console.log('track', eventName, options)
       trackOfferEvent(
         eventName,
         selectedBundleVariant.bundle,

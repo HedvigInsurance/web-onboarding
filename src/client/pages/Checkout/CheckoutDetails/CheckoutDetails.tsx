@@ -47,7 +47,6 @@ export const CheckoutDetails = () => {
   }
 
   const handleOnClick = () => {
-    console.log('hello')
     trackOfferEvent({
       eventName: EventName.ButtonClick,
       options: { buttonId: 'continue_to_payment' },
