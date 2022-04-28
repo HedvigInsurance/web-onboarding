@@ -121,7 +121,9 @@ const isHomeQuote = (
 const isAccidentQuote = (
   quoteDetails: QuoteDetails,
 ): quoteDetails is SwedishAccidentDetails | DanishAccidentDetails =>
-  isDanishAccident(quoteDetails) || isSwedishAccident(quoteDetails)
+  isDanishAccident(quoteDetails) ||
+  isSwedishAccident(quoteDetails) ||
+  isNorwegianAccident(quoteDetails)
 
 const isTravelQuote = (
   quoteDetails: QuoteDetails,
@@ -260,6 +262,11 @@ export const isNorwegianHomeContents = (
   details: QuoteDetails,
 ): details is NorwegianHomeContentsDetails =>
   details.__typename === 'NorwegianHomeContentsDetails'
+
+export const isNorwegianAccident = (
+  details: QuoteDetails,
+): details is NorwegianHomeContentsDetails =>
+  details.__typename === 'NorwegianAccidentDetails'
 
 export const isNorwegianTravel = (
   details: QuoteDetails,
