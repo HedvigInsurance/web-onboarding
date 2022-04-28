@@ -87,6 +87,10 @@ export type GenericQuoteData = {
   }>
 
   typeOfContract?: string
+
+  // Car
+  mileage?: number
+  registrationNumber?: string
 }
 
 export interface OfferData {
