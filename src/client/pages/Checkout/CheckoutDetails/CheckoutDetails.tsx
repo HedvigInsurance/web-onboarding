@@ -7,8 +7,8 @@ import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
 import { LoadingPage } from 'components/LoadingPage'
 import { getUniqueQuotesFromVariantList } from 'pages/OfferNew/utils'
 import { DetailsModal } from 'components/DetailsModal'
-import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
 import { EventName } from 'utils/tracking/gtm'
+import { useTrackingContext } from 'utils/tracking/trackingContext'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
@@ -28,7 +28,7 @@ export const CheckoutDetails = () => {
   const { path: localePath } = useCurrentLocale()
   const { quoteCartId } = useQuoteCartIdFromUrl()
 
-  const trackOfferEvent = useTrackOfferEvent()
+  const { trackOfferEvent } = useTrackingContext()
   const data = useQuoteCartData()
 
   useEffect(() => trackOfferEvent({ eventName: EventName.CheckoutOpen }), [
