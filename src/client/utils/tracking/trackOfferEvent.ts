@@ -1,6 +1,10 @@
 import { useEffect, useCallback, useState } from 'react'
 import * as quoteBundleSelector from 'api/quoteBundleSelectors'
-import { QuoteBundle, useQuoteCartQuery } from 'data/graphql'
+import {
+  QuoteBundle,
+  QuoteBundleVariant,
+  useQuoteCartQuery,
+} from 'data/graphql'
 import { quoteBundleTrackingContractType } from 'api/quoteBundleTrackingContractType'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
@@ -109,10 +113,13 @@ export const useTrackOfferEvent = () => {
   const [eventQueue, setEventQueue] = useState<EventParameters[]>([])
 
   const trackOfferCallback = useCallback(
-    ({ eventName, options = {} }: EventParameters) => {
+    (
+      { eventName, options = {} }: EventParameters,
+      selectedBundleVariant: QuoteBundleVariant,
+    ) => {
       trackOfferEvent(
         eventName,
-        selectedBundleVariant!.bundle,
+        selectedBundleVariant.bundle,
         isReferralCodeUsed,
         {
           quoteCartId,
@@ -120,23 +127,21 @@ export const useTrackOfferEvent = () => {
         },
       )
     },
-    [isReferralCodeUsed, quoteCartId, selectedBundleVariant],
+    [isReferralCodeUsed, quoteCartId],
   )
 
-  const trackOfferHandler = useCallback(
-    (eventParams: EventParameters) => {
-      selectedBundleVariant
-        ? trackOfferCallback(eventParams)
-        : setEventQueue(eventQueue.concat([eventParams]))
-    },
-    [selectedBundleVariant, eventQueue, trackOfferCallback],
-  )
+  const trackOfferHandler = useCallback((eventParams: EventParameters) => {
+    setEventQueue((prevQueue) => [...prevQueue, eventParams])
+  }, [])
 
   //cleanup the queue
   useEffect(() => {
-    if (selectedBundleVariant && eventQueue.length) {
-      eventQueue.map(trackOfferCallback)
-      setEventQueue([])
+    if (selectedBundleVariant) {
+      const event = eventQueue[0]
+      if (event) {
+        trackOfferCallback(event, selectedBundleVariant)
+        setEventQueue((prevQueue) => [...prevQueue].splice(1))
+      }
     }
   }, [trackOfferCallback, selectedBundleVariant, eventQueue])
 

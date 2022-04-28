@@ -31,7 +31,9 @@ export const CheckoutDetails = () => {
   const trackOfferEvent = useTrackOfferEvent()
   const data = useQuoteCartData()
 
-  useEffect(() => trackOfferEvent({ eventName: EventName.CheckoutOpen }), [])
+  useEffect(() => trackOfferEvent({ eventName: EventName.CheckoutOpen }), [
+    trackOfferEvent,
+  ])
   if (data?.error) {
     console.error('Quote cart data error: no data')
     return <CheckoutErrorModal isVisible onRetry={onRetry} />
