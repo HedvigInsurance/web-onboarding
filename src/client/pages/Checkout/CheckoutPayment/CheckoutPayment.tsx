@@ -4,7 +4,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { useFormik, FormikHelpers } from 'formik'
 import { GraphQLError } from 'graphql'
 import { useApolloClient } from '@apollo/client'
-import { useLocation } from 'react-router'
+import { useHistory } from 'react-router'
 import { useTextKeys } from 'utils/textKeys'
 import { QuoteInput } from 'components/DetailsModal/types'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
@@ -163,10 +163,24 @@ export const CheckoutPayment = ({
   const [getStatus] = useCheckoutStatusLazyQuery({
     pollInterval: 1000,
   })
-  const { search: is3DsComplete } = useLocation<{ search: string }>()
+  const history = useHistory()
+  const {
+    location: { search },
+  } = history
+  const is3DsError = search.includes('error')
+  const is3DsComplete = search.includes('3dsSuccess')
+
   const [isDataLoading, setIsDataLoading] = useState(false)
   const [isPageLoading, setIsPageLoading] = useState(false)
   const [isError, setIsError] = useState(false)
+
+  //handle 3ds error redirect
+  useEffect(() => {
+    if (is3DsError) {
+      history.replace('?')
+      setIsError(true)
+    }
+  }, [is3DsError, history])
 
   const addPaymentToCart = useCallback(
     async (paymentTokenId) => {
@@ -257,7 +271,7 @@ export const CheckoutPayment = ({
   })
   const isFormikError = Object.keys(formik.errors).length > 0
   useEffect(() => {
-    if (is3DsComplete === '?3dsSuccess' && checkoutStatus === undefined) {
+    if (is3DsComplete && checkoutStatus === undefined) {
       setIsPageLoading(true)
       const paymentTokenId = storage.session.getSession()?.paymentTokenId
       if (!paymentTokenId) throw new Error('No token payment id')
