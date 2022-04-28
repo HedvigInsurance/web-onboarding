@@ -1,9 +1,22 @@
+import { useEffect, useCallback, useState } from 'react'
 import * as quoteBundleSelector from 'api/quoteBundleSelectors'
-import { QuoteBundle } from 'data/graphql'
+import {
+  QuoteBundle,
+  QuoteBundleVariant,
+  useQuoteCartQuery,
+} from 'data/graphql'
 import { quoteBundleTrackingContractType } from 'api/quoteBundleTrackingContractType'
+import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
+import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
+import {
+  getMonthlyCostDeductionIncentive,
+  getSelectedBundleVariant,
+} from 'api/quoteCartQuerySelectors'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { EmbarkStory } from '../embarkStory'
 import { captureSentryError } from '../sentry-client'
 import { EventName, GTMPhoneNumberData, pushToGTMDataLayer } from './gtm'
+
 import {
   getTrackableContractCategory,
   getInitialOfferFromSessionStorage,
@@ -16,6 +29,11 @@ type OptionalParameters = {
   quoteCartId?: string
   memberId?: string
   buttonId?: string
+}
+
+type EventParameters = {
+  eventName: EventName
+  options?: Partial<OptionalParameters>
 }
 
 export const trackOfferEvent = (
@@ -69,4 +87,64 @@ export const trackOfferEvent = (
   } catch (error) {
     captureSentryError(error)
   }
+}
+
+export const useTrackOfferEvent = () => {
+  const { isoLocale } = useCurrentLocale()
+
+  const { quoteCartId } = useQuoteCartIdFromUrl()
+
+  const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
+
+  const { data: quoteCartQueryData } = useQuoteCartQuery({
+    variables: {
+      id: quoteCartId,
+      locale: isoLocale,
+    },
+  })
+
+  const isReferralCodeUsed =
+    getMonthlyCostDeductionIncentive(quoteCartQueryData) !== undefined
+
+  const selectedBundleVariant = getSelectedBundleVariant(
+    quoteCartQueryData,
+    selectedInsuranceTypes,
+  )
+
+  const [eventQueue, setEventQueue] = useState<EventParameters[]>([])
+
+  const trackOfferCallback = useCallback(
+    (
+      { eventName, options = {} }: EventParameters,
+      selectedBundleVariant: QuoteBundleVariant,
+    ) => {
+      trackOfferEvent(
+        eventName,
+        selectedBundleVariant.bundle,
+        isReferralCodeUsed,
+        {
+          quoteCartId,
+          ...options,
+        },
+      )
+    },
+    [isReferralCodeUsed, quoteCartId],
+  )
+
+  const trackOfferHandler = useCallback((eventParams: EventParameters) => {
+    setEventQueue((prevQueue) => [...prevQueue, eventParams])
+  }, [])
+
+  //cleanup the queue
+  useEffect(() => {
+    if (selectedBundleVariant) {
+      const event = eventQueue[0]
+      if (event) {
+        trackOfferCallback(event, selectedBundleVariant)
+        setEventQueue((prevQueue) => [...prevQueue].splice(1))
+      }
+    }
+  }, [trackOfferCallback, selectedBundleVariant, eventQueue])
+
+  return trackOfferHandler
 }
