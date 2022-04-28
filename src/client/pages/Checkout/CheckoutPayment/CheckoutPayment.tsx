@@ -4,7 +4,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { useFormik, FormikHelpers } from 'formik'
 import { GraphQLError } from 'graphql'
 import { useApolloClient } from '@apollo/client'
-import { useLocation } from 'react-router'
+import { useLocation, useHistory } from 'react-router'
 import { useTextKeys } from 'utils/textKeys'
 import { QuoteInput } from 'components/DetailsModal/types'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
@@ -166,11 +166,25 @@ export const CheckoutPayment = ({
   const [getStatus] = useCheckoutStatusLazyQuery({
     pollInterval: 1000,
   })
-  const { search: is3DsComplete } = useLocation<{ search: string }>()
+  const history = useHistory()
+  const {
+    location: { search },
+  } = history
+  const is3DsError = search.includes('error')
+  const is3DsComplete = search.includes('3dsSuccess')
   const [isDataLoading, setIsDataLoading] = useState(false)
   const [isPageLoading, setIsPageLoading] = useState(false)
   const [isError, setIsError] = useState(false)
   const trackOfferEvent = useTrackOfferEvent()
+
+  //handle 3ds error redirect
+  useEffect(() => {
+    if (is3DsError) {
+      history.replace('?')
+      trackOfferEvent({ eventName: EventName.CheckoutError3DS })
+      setIsError(true)
+    }
+  }, [is3DsError, history, trackOfferEvent])
 
   const addPaymentToCart = useCallback(
     async (paymentTokenId) => {
@@ -183,10 +197,14 @@ export const CheckoutPayment = ({
           refetchQueries: ['QuoteCart'],
         })
       } catch (error) {
+        trackOfferEvent({
+          eventName: EventName.CheckoutErrorPaymentTokenMutation,
+          options: { error },
+        })
         console.error('Failed to add Payment Token :', error.message, error)
       }
     },
-    [addPaymentTokenMutation, quoteCartId],
+    [addPaymentTokenMutation, quoteCartId, trackOfferEvent],
   )
 
   const performCheckout = useCallback(async () => {
@@ -197,6 +215,9 @@ export const CheckoutPayment = ({
       })
       if (data?.quoteCart_startCheckout.__typename === 'BasicError') {
         console.error('Could not start checkout')
+        trackOfferEvent({
+          eventName: EventName.CheckoutErrorBasicError,
+        })
         setIsError(true)
       }
       // Poll for Status
@@ -210,13 +231,21 @@ export const CheckoutPayment = ({
         (error.graphQLErrors || []) as GraphQLError[],
       )
       if (isManualReviewRequired) {
+        trackOfferEvent({
+          eventName: EventName.CheckoutErrorManualReviewRequired,
+          options: { error },
+        })
         throw new Error('Manual Review required')
       }
       setIsDataLoading(false)
+      trackOfferEvent({
+        eventName: EventName.CheckoutErrorCheckoutStart,
+        options: { error },
+      })
       console.error('Could not start checkout')
       setIsError(true)
     }
-  }, [getStatus, quoteCartId, quoteIds, startCheckout])
+  }, [getStatus, quoteCartId, quoteIds, startCheckout, trackOfferEvent])
 
   useEffect(() => {
     if (isPaymentConnected && checkoutStatus === undefined) {
@@ -261,13 +290,24 @@ export const CheckoutPayment = ({
   })
   const isFormikError = Object.keys(formik.errors).length > 0
   useEffect(() => {
-    if (is3DsComplete === '?3dsSuccess' && checkoutStatus === undefined) {
+    if (is3DsComplete && checkoutStatus === undefined) {
       setIsPageLoading(true)
       const paymentTokenId = storage.session.getSession()?.paymentTokenId
-      if (!paymentTokenId) throw new Error('No token payment id')
+      if (!paymentTokenId) {
+        trackOfferEvent({
+          eventName: EventName.CheckoutErrorPaymentTokenIDMissing,
+        })
+        throw new Error('No token payment id')
+      }
       addPaymentToCart(paymentTokenId)
     }
-  }, [is3DsComplete, addPaymentToCart, checkoutStatus, storage.session])
+  }, [
+    is3DsComplete,
+    addPaymentToCart,
+    checkoutStatus,
+    storage.session,
+    trackOfferEvent,
+  ])
 
   const completeCheckout = useCallback(async () => {
     try {
@@ -290,6 +330,7 @@ export const CheckoutPayment = ({
         quoteCartId,
       })
     } catch (error) {
+      trackOfferEvent({ eventName: EventName.CheckoutErrorQuoteCartSetup })
       throw new Error('Setup quote cart session failed')
     }
   }, [
@@ -300,6 +341,7 @@ export const CheckoutPayment = ({
     quoteCartId,
     storage,
     variation,
+    trackOfferEvent,
   ])
 
   const reCreateQuoteBundle = (form: QuoteInput) => {
