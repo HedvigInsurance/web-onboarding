@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode, useContext } from 'react'
-import { useTrackOfferEvent } from 'src/client/utils/tracking/trackOfferEvent'
+import { useTrackOfferEvent } from './trackOfferEvent'
 
 type TrackingHooks = {
   trackOfferEvent: ReturnType<typeof useTrackOfferEvent>
