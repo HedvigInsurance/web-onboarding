@@ -4,7 +4,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { useFormik, FormikHelpers } from 'formik'
 import { GraphQLError } from 'graphql'
 import { useApolloClient } from '@apollo/client'
-import { useHistory } from 'react-router'
+import { useLocation } from 'react-router'
 import { useTextKeys } from 'utils/textKeys'
 import { QuoteInput } from 'components/DetailsModal/types'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
@@ -16,7 +16,6 @@ import {
   BundledQuote,
   CheckoutStatus,
   useAddPaymentTokenMutation,
-  useQuoteCartQuery,
 } from 'data/graphql'
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { Headline } from 'components/Headline/Headline'
@@ -27,9 +26,8 @@ import { trackSignedCustomerEvent } from 'utils/tracking/trackSignedCustomerEven
 import { useStorage } from 'utils/StorageContainer'
 import { useVariation } from 'utils/hooks/useVariation'
 import { LoadingPage } from 'components/LoadingPage'
-import { getMonthlyCostDeductionIncentive } from 'api/quoteCartQuerySelectors'
 import { EventName } from 'utils/tracking/gtm'
-import { trackOfferEvent } from 'utils/tracking/trackOfferEvent'
+import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
 import { useAdyenCheckout } from '../../ConnectPayment/components/useAdyenCheckout'
 import {
   CheckoutPageWrapper,
@@ -46,6 +44,7 @@ import { CheckoutSuccessRedirect } from '../../Offer/CheckoutSuccessRedirect'
 import { CheckoutErrorModal, onRetry } from '../shared/ErrorModal'
 import { checkIsManualReviewRequired, isSsnInvalid } from '../utils'
 import { ContactInformation } from './ContactInformation/ContactInformation'
+
 const { gray100, gray600, gray700, gray300, gray900 } = colorsV3
 
 const AdyenContainer = styled.div`
@@ -167,24 +166,11 @@ export const CheckoutPayment = ({
   const [getStatus] = useCheckoutStatusLazyQuery({
     pollInterval: 1000,
   })
-  const history = useHistory()
-  const {
-    location: { search },
-  } = history
-  const is3DsError = search.includes('error')
-  const is3DsComplete = search.includes('3dsSuccess')
-
+  const { search: is3DsComplete } = useLocation<{ search: string }>()
   const [isDataLoading, setIsDataLoading] = useState(false)
   const [isPageLoading, setIsPageLoading] = useState(false)
   const [isError, setIsError] = useState(false)
-
-  //handle 3ds error redirect
-  useEffect(() => {
-    if (is3DsError) {
-      history.replace('?')
-      setIsError(true)
-    }
-  }, [is3DsError, history])
+  const trackOfferEvent = useTrackOfferEvent()
 
   const addPaymentToCart = useCallback(
     async (paymentTokenId) => {
@@ -244,13 +230,6 @@ export const CheckoutPayment = ({
     quoteCartId,
   })
 
-  const { data: quoteCartQueryData } = useQuoteCartQuery({
-    variables: {
-      id: quoteCartId,
-      locale: locale.isoLocale,
-    },
-  })
-
   const { firstName, lastName, email, ssn, phoneNumber } = mainQuote
   const formik = useFormik<QuoteInput>({
     initialValues: {
@@ -282,7 +261,7 @@ export const CheckoutPayment = ({
   })
   const isFormikError = Object.keys(formik.errors).length > 0
   useEffect(() => {
-    if (is3DsComplete && checkoutStatus === undefined) {
+    if (is3DsComplete === '?3dsSuccess' && checkoutStatus === undefined) {
       setIsPageLoading(true)
       const paymentTokenId = storage.session.getSession()?.paymentTokenId
       if (!paymentTokenId) throw new Error('No token payment id')
@@ -380,17 +359,10 @@ export const CheckoutPayment = ({
 
     checkoutAPI?.submit()
 
-    if (selectedQuoteBundleVariant?.bundle) {
-      trackOfferEvent(
-        EventName.ButtonClick,
-        selectedQuoteBundleVariant.bundle,
-        isReferralCodeUsed,
-        {
-          quoteCartId,
-          buttonId: 'complete_purchase',
-        },
-      )
-    }
+    trackOfferEvent({
+      eventName: EventName.ButtonClick,
+      options: { buttonId: 'complete_purchase' },
+    })
   }
 
   useEffect(() => {
@@ -415,20 +387,8 @@ export const CheckoutPayment = ({
     return <LoadingPage loading />
   }
 
-  const isReferralCodeUsed =
-    getMonthlyCostDeductionIncentive(quoteCartQueryData) !== undefined
-
   const handleClickBackButton = () => {
-    if (selectedQuoteBundleVariant?.bundle) {
-      trackOfferEvent(
-        EventName.ContactInformationPageGoBack,
-        selectedQuoteBundleVariant.bundle,
-        isReferralCodeUsed,
-        {
-          quoteCartId,
-        },
-      )
-    }
+    trackOfferEvent({ eventName: EventName.ContactInformationPageGoBack })
   }
 
   return (

@@ -43,30 +43,14 @@ export const CheckoutDetails = () => {
   }
 
   const handleClickBackButton = () => {
-    if (selectedBundleVariant?.bundle) {
-      trackOfferEvent(
-        EventName.CheckoutOpenGoBack,
-        selectedBundleVariant.bundle,
-        isReferralCodeUsed,
-        {
-          quoteCartId,
-        },
-      )
-    }
+    trackOfferEvent({ eventName: EventName.CheckoutOpenGoBack })
   }
 
   const handleOnClick = () => {
-    if (selectedBundleVariant?.bundle) {
-      trackOfferEvent(
-        EventName.ButtonClick,
-        selectedBundleVariant.bundle,
-        isReferralCodeUsed,
-        {
-          quoteCartId,
-          buttonId: 'continue_to_payment',
-        },
-      )
-    }
+    trackOfferEvent({
+      eventName: EventName.ButtonClick,
+      options: { buttonId: 'continue_to_payment' },
+    })
   }
 
   const priceData = data.priceData
