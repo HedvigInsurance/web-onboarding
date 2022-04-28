@@ -121,7 +121,7 @@ export const HeroOfferDetails: React.FC<Props> = ({
     return query.get('showEdit') === 'true'
   })
   const { person } = offerData
-  const numberCoInsured = person.householdSize - 1
+  const numberCoInsured = (person.householdSize ?? 0) - 1
 
   const address = getAddress(allQuotes)
 

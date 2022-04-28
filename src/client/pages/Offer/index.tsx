@@ -28,7 +28,7 @@ import { trackOfferEvent } from 'utils/tracking/trackOfferEvent'
 import {
   getOfferData,
   getUniqueQuotesFromVariantList,
-  getInsuranceTypesFromBundleVariant,
+  getTypeOfContractFromBundleVariant,
   isOfferDataAvailable,
 } from '../OfferNew/utils'
 import { AppPromotionSection } from '../OfferNew/AppPromotionSection'
@@ -165,7 +165,7 @@ export const OfferPage = ({
     newSelectedBundleVariant: QuoteBundleVariant,
   ) => {
     setSelectedInsuranceTypes(
-      getInsuranceTypesFromBundleVariant(newSelectedBundleVariant),
+      getTypeOfContractFromBundleVariant(newSelectedBundleVariant),
     )
     trackOfferEvent(
       EventName.InsuranceSelectionToggle,
@@ -179,7 +179,7 @@ export const OfferPage = ({
     newSelectedBundleVariant: QuoteBundleVariant,
   ) => {
     setSelectedInsuranceTypes(
-      getInsuranceTypesFromBundleVariant(newSelectedBundleVariant),
+      getTypeOfContractFromBundleVariant(newSelectedBundleVariant),
     )
     trackOfferEvent(
       EventName.OfferCrossSell,

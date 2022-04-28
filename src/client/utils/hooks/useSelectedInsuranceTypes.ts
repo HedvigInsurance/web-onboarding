@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { useLocation, useHistory } from 'react-router'
+import { TypeOfContract } from 'data/graphql'
 
 // TODO: we should get this from giraffe schema
 export enum InsuranceType {
@@ -14,7 +15,7 @@ export enum InsuranceType {
   DANISH_TRAVEL = 'DANISH_TRAVEL',
 }
 
-const ALL_INSURANCE_TYPES = Object.values(InsuranceType)
+const ALL_INSURANCE_TYPES = Object.values(TypeOfContract)
 const SEARCH_PARAM_NAME = 'type'
 
 const deserializeSearchParams = (searchParams: URLSearchParams) => {
@@ -26,7 +27,7 @@ const validateInsuranceTypes = (
   rawTypes: Array<string>,
 ): Array<InsuranceType> =>
   rawTypes.filter((type) =>
-    ALL_INSURANCE_TYPES.includes((type as unknown) as InsuranceType),
+    ALL_INSURANCE_TYPES.includes((type as unknown) as TypeOfContract),
   ) as Array<InsuranceType>
 
 export const useSelectedInsuranceTypes = () => {
@@ -40,7 +41,7 @@ export const useSelectedInsuranceTypes = () => {
     searchParams,
   ])
 
-  const changeSelectedInsuranceTypes = (newTypes: Array<InsuranceType>) => {
+  const changeSelectedInsuranceTypes = (newTypes: Array<TypeOfContract>) => {
     searchParams.delete(SEARCH_PARAM_NAME)
 
     for (const type of newTypes) {

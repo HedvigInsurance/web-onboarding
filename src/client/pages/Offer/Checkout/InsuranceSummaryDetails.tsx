@@ -16,6 +16,7 @@ import { formatPostalNumber } from 'utils/postalNumbers'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
+import { TypeOfContract } from 'src/client/data/graphql'
 import { Group, Row } from './InsuranceSummary'
 
 const Label = styled.div`
@@ -150,66 +151,34 @@ const getHouseExtraBuildingsMaybe = (
   ])
 }
 
-const getQuoteDetails = (
-  mainQuote: OfferQuote,
+const getHomeInsuranceDetailsMaybe = (
   textKeys: TextKeyMap,
-): ReadonlyArray<DetailsGroup> => {
-  const { data, contractType } = mainQuote
-
+  data: GenericQuoteData,
+  contractType: TypeOfContract,
+): DetailsGroup => {
   const typeOfResidenceTextKey =
     typeOfResidenceTextKeys[contractType as HomeInsuranceTypeOfContract]
 
-  const detailsGroups: DetailsGroup[] = []
-
-  const homeData = getHomeData(data)
-  if (homeData) {
-    detailsGroups.push(
-      [
-        {
-          key: 'address',
-          label: textKeys.CHECKOUT_DETAILS_ADDRESS(),
-          value: parseAddress({
-            street: homeData.street,
-            zipCode: homeData.zipCode,
-            apartment: data.apartment,
-            floor: data.floor,
-          }),
-        },
-        {
-          key: 'zipcode',
-          label: textKeys.CHECKOUT_DETAILS_ZIPCODE(),
-          value: formatPostalNumber(homeData.zipCode),
-        },
-        {
-          key: 'livingspace',
-          label: textKeys.CHECKOUT_DETAILS_LIVING_SPACE(),
-          value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
-            VALUE: homeData.livingSpace,
-          }),
-        },
-        {
-          key: 'residenceType',
-          label: textKeys.CHECKOUT_DETAILS_RESIDENCE_TYPE(),
-          value: typeOfResidenceTextKey
-            ? textKeys[typeOfResidenceTextKey]()
-            : '',
-        },
-        ...getHouseSummaryDetailsMaybe(textKeys, data),
-      ],
-
-      ...getHouseExtraBuildingsMaybe(textKeys, data),
-    )
-  }
-
-  detailsGroups.push([
-    {
-      key: 'householdSize',
-      label: textKeys.CHECKOUT_DETAILS_HOUSEHOLD_SIZE(),
-      value: getHouseholdSizeValue(data.numberCoInsured + 1, textKeys),
-    },
-  ])
-
-  return detailsGroups
+  return [
+    ...(data.livingSpace
+      ? [
+          {
+            key: 'livingspace',
+            label: textKeys.CHECKOUT_DETAILS_LIVING_SPACE(),
+            value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
+              VALUE: data.livingSpace,
+            }),
+          },
+          {
+            key: 'residenceType',
+            label: textKeys.CHECKOUT_DETAILS_RESIDENCE_TYPE(),
+            value: typeOfResidenceTextKey
+              ? textKeys[typeOfResidenceTextKey]()
+              : '',
+          },
+        ]
+      : []),
+  ]
 }
 
 const getHouseholdSizeValue = (householdSize: number, textKeys: TextKeyMap) => {
@@ -224,6 +193,69 @@ const getHouseholdSizeValue = (householdSize: number, textKeys: TextKeyMap) => {
   throw new Error(
     'Total number of people covered by the insurance must be at least 1',
   )
+}
+
+const getCoInsuredMaybe = (
+  textKeys: TextKeyMap,
+  data: GenericQuoteData,
+): DetailsGroup => {
+  return [
+    ...(data.numberCoInsured
+      ? [
+          {
+            key: 'householdSize',
+            label: textKeys.CHECKOUT_DETAILS_HOUSEHOLD_SIZE(),
+            value: getHouseholdSizeValue(data.numberCoInsured + 1, textKeys),
+          },
+        ]
+      : []),
+  ]
+}
+
+const getAddressDataMaybe = (textKeys: TextKeyMap, data: GenericQuoteData) => {
+  const arr = []
+
+  if (data.street && data.zipCode) {
+    arr.push({
+      key: 'address',
+      label: textKeys.CHECKOUT_DETAILS_ADDRESS(),
+      value: parseAddress({
+        street: data.street,
+        zipCode: data.zipCode,
+        apartment: data.apartment,
+        floor: data.floor,
+      }),
+    })
+  }
+
+  if (data.zipCode) {
+    arr.push({
+      key: 'zipcode',
+      label: textKeys.CHECKOUT_DETAILS_ZIPCODE(),
+      value: formatPostalNumber(data.zipCode),
+    })
+  }
+  return arr
+}
+
+const getQuoteDetails = (
+  mainQuote: OfferQuote,
+  textKeys: TextKeyMap,
+): ReadonlyArray<DetailsGroup> => {
+  const { data, contractType } = mainQuote
+
+  const detailsGroups: DetailsGroup[] = [
+    [
+      ...getAddressDataMaybe(textKeys, data),
+      ...getHomeInsuranceDetailsMaybe(textKeys, data, contractType),
+      ...getHouseSummaryDetailsMaybe(textKeys, data),
+    ],
+
+    ...getHouseExtraBuildingsMaybe(textKeys, data),
+    getCoInsuredMaybe(textKeys, data),
+  ]
+
+  return detailsGroups
 }
 
 type GetPersonalDetailsParams = {
@@ -262,16 +294,4 @@ const getStudentOrYouthLabel = (
 
 const isStudent = (data: GenericQuoteData) => {
   return data.isStudent ?? false
-}
-
-const getHomeData = (data: GenericQuoteData) => {
-  if (data.street && data.zipCode && data.livingSpace) {
-    return {
-      street: data.street,
-      zipCode: data.zipCode,
-      livingSpace: data.livingSpace,
-    }
-  }
-
-  return null
 }
