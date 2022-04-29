@@ -98,7 +98,7 @@ export const useTrackOfferEvent = () => {
 
   const { data: quoteCartQueryData } = useQuoteCartQuery({
     variables: {
-      id: quoteCartId,
+      id: quoteCartId!,
       locale: isoLocale,
     },
   })
