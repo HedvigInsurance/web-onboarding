@@ -28,6 +28,7 @@ import { useVariation } from 'utils/hooks/useVariation'
 import { LoadingPage } from 'components/LoadingPage'
 import { EventName } from 'utils/tracking/gtm'
 import { useTrackingContext } from 'utils/tracking/trackingContext'
+
 import { useAdyenCheckout } from '../../ConnectPayment/components/useAdyenCheckout'
 import {
   CheckoutPageWrapper,
@@ -174,10 +175,10 @@ export const CheckoutPayment = ({
   } = history
   const is3DsError = search.includes('error')
   const is3DsComplete = search.includes('3dsSuccess')
-
   const [isDataLoading, setIsDataLoading] = useState(false)
   const [isPageLoading, setIsPageLoading] = useState(false)
   const [isError, setIsError] = useState(false)
+  const trackOfferEvent = useTrackOfferEvent()
 
   //handle 3ds error redirect
   useEffect(() => {
@@ -402,6 +403,11 @@ export const CheckoutPayment = ({
     }
 
     checkoutAPI?.submit()
+
+    trackOfferEvent({
+      eventName: EventName.ButtonClick,
+      options: { buttonId: 'complete_purchase' },
+    })
   }
 
   useEffect(() => {
@@ -426,8 +432,12 @@ export const CheckoutPayment = ({
     return <LoadingPage loading />
   }
 
+  const handleClickBackButton = () => {
+    trackOfferEvent({ eventName: EventName.ContactInformationPageGoBack })
+  }
+
   return (
-    <CheckoutPageWrapper>
+    <CheckoutPageWrapper handleClickBackButton={handleClickBackButton}>
       <ContactInformation formikProps={formik} />
       <AdyenContainer>
         <Wrapper>

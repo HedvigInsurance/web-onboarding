@@ -28,6 +28,7 @@ type OptionalParameters = {
   phoneNumberData?: GTMPhoneNumberData
   quoteCartId?: string
   memberId?: string
+  buttonId?: string
   error?: Error | unknown
 }
 
@@ -83,6 +84,7 @@ export const trackOfferEvent = (
         current_insurer: mainQuote.currentInsurer?.id ?? undefined,
       },
       ...phoneNumberData,
+      ...options,
     })
   } catch (error) {
     captureSentryError(error)

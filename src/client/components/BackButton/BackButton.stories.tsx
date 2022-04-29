@@ -16,7 +16,7 @@ export default {
 
 const Template: Story = () => (
   <MemoryRouter initialEntries={['/se-en/new-member/checkout/details']}>
-    <BackButton />
+    <BackButton onClick={() => console.log('click')} />
   </MemoryRouter>
 )
 

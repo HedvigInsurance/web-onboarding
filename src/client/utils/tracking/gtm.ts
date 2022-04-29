@@ -115,6 +115,9 @@ export enum OfferEventName {
   OfferCrossSell = 'offer_cross_sell',
   CheckoutOpen = 'checkout_open',
   ContactInformationPageOpen = 'contact_information_page_open',
+  CheckoutOpenGoBack = 'checkout_open_go_back',
+  ContactInformationPageGoBack = 'contact_information_page_go_back',
+  ButtonClick = 'button_click',
 }
 
 export enum ErrorEventName {
