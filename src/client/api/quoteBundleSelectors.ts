@@ -1,4 +1,4 @@
-import { QuoteBundle } from 'data/graphql'
+import { QuoteBundle, TypeOfContract } from 'data/graphql'
 import { MarketLabel } from 'shared/clientConfig'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
 import * as quoteSelector from './quoteSelector'
@@ -43,8 +43,14 @@ export const isNorwegian = (bundle: QuoteBundle) =>
 export const isStudentOffer = (bundle: QuoteBundle) =>
   bundle.quotes.every((quote) => quoteSelector.isStudent(quote))
 
-export const isYouthOffer = (bundle: QuoteBundle): boolean =>
-  bundle.quotes.every((quote) => quote.data.isYouth === true)
+export const isYouthOffer = (bundle: QuoteBundle): boolean => {
+  // there is no youth accident insurance by itself
+  const quotesToBeExcluded = [TypeOfContract.NoAccident]
+
+  return bundle.quotes
+    .filter((quote) => !quotesToBeExcluded.includes(quote.typeOfContract))
+    .every((quote) => quote.data.isYouth === true)
+}
 
 const HOME_HOUSE_INSURANCE_TYPES: Array<InsuranceType> = [
   InsuranceType.DANISH_HOME_CONTENT,

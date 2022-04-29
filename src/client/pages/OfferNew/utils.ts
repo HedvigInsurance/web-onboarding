@@ -219,8 +219,13 @@ export const isDanishAccidentBundle = (offerData: OfferData): boolean =>
 export const isDanishTravelBundle = (offerData: OfferData): boolean =>
   isDanish(offerData) && offerData.quotes.length === 3
 
-export const isStudentOffer = (offerData: OfferData): boolean =>
-  offerData.quotes.every((quote) => isStudent(quote.quoteDetails))
+export const isStudentOffer = (offerData: OfferData): boolean => {
+  const quotesToBeExcluded = [TypeOfContract.NoAccident]
+
+  return offerData.quotes
+    .filter((quote) => !quotesToBeExcluded.includes(quote.contractType))
+    .every((quote) => isStudent(quote.quoteDetails))
+}
 
 export const hasHomeQuote = (offerData: OfferData) =>
   offerData.quotes.some(({ quoteDetails }) => isHomeQuote(quoteDetails))
