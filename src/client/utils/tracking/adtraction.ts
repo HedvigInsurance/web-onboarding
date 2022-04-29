@@ -93,8 +93,8 @@ export const getBundleAdtractionProductValue = (offerData: OfferData) => {
 
     if (isNorwegian(offerData)) {
       return isYouth(offerData)
-        ? ADTRACTION_CONTRACT_VALUES[NoBundleTypes.NoComboYouth]
-        : ADTRACTION_CONTRACT_VALUES[NoBundleTypes.NoCombo]
+        ? ADTRACTION_CONTRACT_VALUES[NoBundleTypes.NoHomeTravelBundleYouth]
+        : ADTRACTION_CONTRACT_VALUES[NoBundleTypes.NoHomeTravelBundle]
     }
 
     if (isDanishAccidentBundle(offerData)) {
