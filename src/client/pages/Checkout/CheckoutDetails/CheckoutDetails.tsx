@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTextKeys } from 'utils/textKeys'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
@@ -7,14 +7,8 @@ import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
 import { LoadingPage } from 'components/LoadingPage'
 import { getUniqueQuotesFromVariantList } from 'pages/OfferNew/utils'
 import { DetailsModal } from 'components/DetailsModal'
-import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
-import { useQuoteCartQuery } from 'data/graphql'
-import {
-  getMonthlyCostDeductionIncentive,
-  getSelectedBundleVariant,
-} from 'api/quoteCartQuerySelectors'
-import { trackOfferEvent } from 'utils/tracking/trackOfferEvent'
 import { EventName } from 'utils/tracking/gtm'
+import { useTrackingContext } from 'utils/tracking/trackingContext'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
@@ -28,42 +22,18 @@ import { DocumentLinks } from './components/DocumentLinks'
 
 export const CheckoutDetails = () => {
   const textKeys = useTextKeys()
-  const { path: localePath, isoLocale } = useCurrentLocale()
+
   const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false)
 
+  const { path: localePath } = useCurrentLocale()
   const { quoteCartId } = useQuoteCartIdFromUrl()
+
+  const { trackOfferEvent } = useTrackingContext()
   const data = useQuoteCartData()
 
-  const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
-
-  const { data: quoteCartQueryData } = useQuoteCartQuery({
-    variables: {
-      id: quoteCartId,
-      locale: isoLocale,
-    },
-  })
-
-  const isReferralCodeUsed =
-    getMonthlyCostDeductionIncentive(quoteCartQueryData) !== undefined
-
-  const selectedBundleVariant = getSelectedBundleVariant(
-    quoteCartQueryData,
-    selectedInsuranceTypes,
-  )
-
-  useEffect(() => {
-    if (selectedBundleVariant) {
-      trackOfferEvent(
-        EventName.CheckoutOpen,
-        selectedBundleVariant.bundle,
-        isReferralCodeUsed,
-        {
-          quoteCartId,
-        },
-      )
-    }
-  }, [isReferralCodeUsed, quoteCartId, selectedBundleVariant])
-
+  useEffect(() => trackOfferEvent({ eventName: EventName.CheckoutOpen }), [
+    trackOfferEvent,
+  ])
   if (data?.error) {
     console.error('Quote cart data error: no data')
     return <CheckoutErrorModal isVisible onRetry={onRetry} />
@@ -72,13 +42,24 @@ export const CheckoutDetails = () => {
     return <LoadingPage loading />
   }
 
+  const handleClickBackButton = () => {
+    trackOfferEvent({ eventName: EventName.CheckoutOpenGoBack })
+  }
+
+  const handleOnClick = () => {
+    trackOfferEvent({
+      eventName: EventName.ButtonClick,
+      options: { buttonId: 'continue_to_payment' },
+    })
+  }
+
   const priceData = data.priceData
   const quoteDetails = data.quoteDetails
   const bundleVariants = data.bundleVariants
   const allQuotes = getUniqueQuotesFromVariantList(bundleVariants)
   const paymentPageLink = `/${localePath}/new-member/checkout/payment/${quoteCartId}`
   return (
-    <CheckoutPageWrapper>
+    <CheckoutPageWrapper handleClickBackButton={handleClickBackButton}>
       <PageSection>
         <YourPlan {...priceData} />
         <StartDateSection />
@@ -98,6 +79,7 @@ export const CheckoutDetails = () => {
       <Footer
         buttonText={textKeys.CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT()}
         buttonLinkTo={paymentPageLink}
+        onClick={handleOnClick}
       >
         <PaymentInfo {...priceData} />
       </Footer>

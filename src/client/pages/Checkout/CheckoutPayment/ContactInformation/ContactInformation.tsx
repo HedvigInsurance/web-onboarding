@@ -7,15 +7,9 @@ import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { TextInput } from 'pages/Offer/Checkout/inputFields'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { QuoteInput } from 'components/DetailsModal/types'
-import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
-import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
-import { useQuoteCartQuery } from 'data/graphql'
-import {
-  getMonthlyCostDeductionIncentive,
-  getSelectedBundleVariant,
-} from 'api/quoteCartQuerySelectors'
-import { trackOfferEvent } from 'utils/tracking/trackOfferEvent'
+
 import { EventName } from 'utils/tracking/gtm'
+import { useTrackingContext } from 'utils/tracking/trackingContext'
 import { Divider } from '../../shared/Divider'
 import { WrapperWidth } from '../../shared/CheckoutPageWrapper'
 
@@ -59,39 +53,12 @@ type Props = {
 
 export const ContactInformation = ({ formikProps }: Props) => {
   const textKeys = useTextKeys()
-  const { isoLocale } = useCurrentLocale()
-  const { quoteCartId } = useQuoteCartIdFromUrl()
+  const { trackOfferEvent } = useTrackingContext()
 
-  const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
-
-  const { data: quoteCartQueryData } = useQuoteCartQuery({
-    variables: {
-      id: quoteCartId,
-      locale: isoLocale,
-    },
-  })
-
-  const isReferralCodeUsed =
-    getMonthlyCostDeductionIncentive(quoteCartQueryData) !== undefined
-
-  const selectedBundleVariant = getSelectedBundleVariant(
-    quoteCartQueryData,
-    selectedInsuranceTypes,
+  useEffect(
+    () => trackOfferEvent({ eventName: EventName.ContactInformationPageOpen }),
+    [trackOfferEvent],
   )
-
-  useEffect(() => {
-    if (selectedBundleVariant) {
-      trackOfferEvent(
-        EventName.ContactInformationPageOpen,
-        selectedBundleVariant.bundle,
-        isReferralCodeUsed,
-        {
-          quoteCartId,
-        },
-      )
-    }
-  }, [isReferralCodeUsed, quoteCartId, selectedBundleVariant])
-
   const {
     values: { ssn },
     handleChange,
