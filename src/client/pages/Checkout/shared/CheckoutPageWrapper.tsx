@@ -15,6 +15,7 @@ const { gray100 } = colorsV3
 
 type Props = {
   children: React.ReactNode
+  handleClickBackButton: () => void
 }
 
 const Wrapper = styled.div`
@@ -61,7 +62,10 @@ const LogoLink = styled.a`
 
 export const WrapperWidth = 628
 
-export const CheckoutPageWrapper = ({ children }: Props) => {
+export const CheckoutPageWrapper = ({
+  children,
+  handleClickBackButton,
+}: Props) => {
   const isDesktop = useMediaQuery({ minWidth: BREAKPOINTS.mediumScreen })
   const { isQuoteCartValid } = useIsQuoteCartIdValid()
 
@@ -82,7 +86,7 @@ export const CheckoutPageWrapper = ({ children }: Props) => {
             <HedvigLogo width={94} />
           </LogoLink>
         )}
-        <BackButton />
+        <BackButton onClick={handleClickBackButton} />
         <InnerWrapper>{children}</InnerWrapper>
       </Wrapper>
     </>

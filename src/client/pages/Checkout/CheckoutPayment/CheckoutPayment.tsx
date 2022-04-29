@@ -26,8 +26,8 @@ import { trackSignedCustomerEvent } from 'utils/tracking/trackSignedCustomerEven
 import { useStorage } from 'utils/StorageContainer'
 import { useVariation } from 'utils/hooks/useVariation'
 import { LoadingPage } from 'components/LoadingPage'
-import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
 import { EventName } from 'utils/tracking/gtm'
+import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
 import { useAdyenCheckout } from '../../ConnectPayment/components/useAdyenCheckout'
 import {
   CheckoutPageWrapper,
@@ -44,6 +44,7 @@ import { CheckoutSuccessRedirect } from '../../Offer/CheckoutSuccessRedirect'
 import { CheckoutErrorModal, onRetry } from '../shared/ErrorModal'
 import { checkIsManualReviewRequired, isSsnInvalid } from '../utils'
 import { ContactInformation } from './ContactInformation/ContactInformation'
+
 const { gray100, gray600, gray700, gray300, gray900 } = colorsV3
 
 const AdyenContainer = styled.div`
@@ -155,8 +156,6 @@ export const CheckoutPayment = ({
   const client = useApolloClient()
   const storage = useStorage()
   const variation = useVariation()
-  const trackOfferEvent = useTrackOfferEvent()
-
   const adyenRef = useRef<HTMLDivElement | null>(null)
   const [
     createQuoteBundle,
@@ -173,10 +172,10 @@ export const CheckoutPayment = ({
   } = history
   const is3DsError = search.includes('error')
   const is3DsComplete = search.includes('3dsSuccess')
-
   const [isDataLoading, setIsDataLoading] = useState(false)
   const [isPageLoading, setIsPageLoading] = useState(false)
   const [isError, setIsError] = useState(false)
+  const trackOfferEvent = useTrackOfferEvent()
 
   //handle 3ds error redirect
   useEffect(() => {
@@ -401,6 +400,11 @@ export const CheckoutPayment = ({
     }
 
     checkoutAPI?.submit()
+
+    trackOfferEvent({
+      eventName: EventName.ButtonClick,
+      options: { buttonId: 'complete_purchase' },
+    })
   }
 
   useEffect(() => {
@@ -425,8 +429,12 @@ export const CheckoutPayment = ({
     return <LoadingPage loading />
   }
 
+  const handleClickBackButton = () => {
+    trackOfferEvent({ eventName: EventName.ContactInformationPageGoBack })
+  }
+
   return (
-    <CheckoutPageWrapper>
+    <CheckoutPageWrapper handleClickBackButton={handleClickBackButton}>
       <ContactInformation formikProps={formik} />
       <AdyenContainer>
         <Wrapper>

@@ -42,13 +42,24 @@ export const CheckoutDetails = () => {
     return <LoadingPage loading />
   }
 
+  const handleClickBackButton = () => {
+    trackOfferEvent({ eventName: EventName.CheckoutOpenGoBack })
+  }
+
+  const handleOnClick = () => {
+    trackOfferEvent({
+      eventName: EventName.ButtonClick,
+      options: { buttonId: 'continue_to_payment' },
+    })
+  }
+
   const priceData = data.priceData
   const quoteDetails = data.quoteDetails
   const bundleVariants = data.bundleVariants
   const allQuotes = getUniqueQuotesFromVariantList(bundleVariants)
   const paymentPageLink = `/${localePath}/new-member/checkout/payment/${quoteCartId}`
   return (
-    <CheckoutPageWrapper>
+    <CheckoutPageWrapper handleClickBackButton={handleClickBackButton}>
       <PageSection>
         <YourPlan {...priceData} />
         <StartDateSection />
@@ -68,6 +79,7 @@ export const CheckoutDetails = () => {
       <Footer
         buttonText={textKeys.CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT()}
         buttonLinkTo={paymentPageLink}
+        onClick={handleOnClick}
       >
         <PaymentInfo {...priceData} />
       </Footer>
