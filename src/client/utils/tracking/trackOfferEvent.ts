@@ -6,7 +6,7 @@ import {
   useQuoteCartQuery,
 } from 'data/graphql'
 import { quoteBundleTrackingContractType } from 'api/quoteBundleTrackingContractType'
-import { useMatchedQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
+import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import {
   getMonthlyCostDeductionIncentive,
@@ -94,13 +94,13 @@ export const trackOfferEvent = (
 export const useTrackOfferEvent = () => {
   const { isoLocale } = useCurrentLocale()
 
-  const { quoteCartId } = useMatchedQuoteCartIdFromUrl()
+  const { quoteCartId } = useQuoteCartIdFromUrl()
 
   const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
 
   const { data: quoteCartQueryData } = useQuoteCartQuery({
     variables: {
-      id: quoteCartId!,
+      id: quoteCartId,
       locale: isoLocale,
     },
   })
@@ -133,9 +133,16 @@ export const useTrackOfferEvent = () => {
     [isReferralCodeUsed, quoteCartId],
   )
 
-  const trackOfferHandler = useCallback((eventParams: EventParameters) => {
-    setEventQueue((prevQueue) => [...prevQueue, eventParams])
-  }, [])
+  const trackOfferHandler = useCallback(
+    (eventParams: EventParameters) => {
+      return (
+        (selectedBundleVariant &&
+          trackOfferCallback(eventParams, selectedBundleVariant)) ||
+        setEventQueue((prevQueue) => [...prevQueue, eventParams])
+      )
+    },
+    [trackOfferCallback, selectedBundleVariant],
+  )
 
   //cleanup the queue
   useEffect(() => {
