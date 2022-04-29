@@ -96,13 +96,14 @@ export const useTrackOfferEvent = () => {
 
   const { quoteCartId } = useMatchedQuoteCartIdFromUrl()
 
+  const isDisabled = quoteCartId === undefined
   const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
-
   const { data: quoteCartQueryData } = useQuoteCartQuery({
     variables: {
-      id: quoteCartId!,
+      id: quoteCartId || '',
       locale: isoLocale,
     },
+    skip: isDisabled,
   })
 
   const isReferralCodeUsed =
@@ -139,14 +140,14 @@ export const useTrackOfferEvent = () => {
 
   //cleanup the queue
   useEffect(() => {
-    if (selectedBundleVariant) {
+    if (selectedBundleVariant && !isDisabled) {
       const event = eventQueue[0]
       if (event) {
         trackOfferCallback(event, selectedBundleVariant)
         setEventQueue((prevQueue) => [...prevQueue].splice(1))
       }
     }
-  }, [trackOfferCallback, selectedBundleVariant, eventQueue])
+  }, [trackOfferCallback, selectedBundleVariant, eventQueue, isDisabled])
 
   return trackOfferHandler
 }
