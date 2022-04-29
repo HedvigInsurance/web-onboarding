@@ -13,11 +13,11 @@ import {
   isSwedishApartment,
   isSwedishBRF,
 } from 'pages/OfferNew/utils'
-import { NoComboTypes, DkBundleTypes, SeBundleTypes } from './tracking'
+import { NoBundleTypes, DkBundleTypes, SeBundleTypes } from './tracking'
 
 // Exclude single contract types that are only sold as part of bundles
 export type TypeOfContractExcludedUnused = Exclude<
-  TypeOfContract | NoComboTypes | DkBundleTypes | SeBundleTypes,
+  TypeOfContract | NoBundleTypes | DkBundleTypes | SeBundleTypes,
   | TypeOfContract.DkAccident
   | TypeOfContract.DkAccidentStudent
   | TypeOfContract.DkTravel
@@ -25,6 +25,8 @@ export type TypeOfContractExcludedUnused = Exclude<
   | TypeOfContract.SeAccident
   | TypeOfContract.SeAccidentStudent
   | TypeOfContract.NoAccident
+  | TypeOfContract.NoTravel
+  | TypeOfContract.NoTravelYouth
   | TypeOfContract.SeCarFull
   | TypeOfContract.SeCarHalf
   | TypeOfContract.SeCarTraffic
@@ -49,10 +51,12 @@ export const ADTRACTION_CONTRACT_VALUES: Record<
   NO_HOME_CONTENT_RENT: 1492623645,
   NO_HOME_CONTENT_YOUTH_OWN: 1492623719,
   NO_HOME_CONTENT_YOUTH_RENT: 1492623719,
-  NO_TRAVEL: 1492623742,
-  NO_TRAVEL_YOUTH: 1492623785,
-  NO_COMBO: 1492623841,
-  NO_COMBO_YOUTH: 1492623841,
+  NO_HOME_TRAVEL_BUNDLE: 1492623841,
+  NO_HOME_TRAVEL_BUNDLE_YOUTH: 1492623841,
+  NO_HOME_ACCIDENT_BUNDLE: 0, //needs updated
+  NO_HOME_ACCIDENT_BUNDLE_YOUTH: 0, //needs updated
+  NO_HOME_TRAVEL_ACCIDENT_BUNDLE: 0, //needs updated
+  NO_HOME_TRAVEL_ACCIDENT_BUNDLE_YOUTH: 0, //needs updated
   DK_HOME_CONTENT_OWN: 1589961514,
   DK_HOME_CONTENT_RENT: 1589961514,
   DK_HOME_CONTENT_STUDENT_OWN: 1589962112,
@@ -89,8 +93,8 @@ export const getBundleAdtractionProductValue = (offerData: OfferData) => {
 
     if (isNorwegian(offerData)) {
       return isYouth(offerData)
-        ? ADTRACTION_CONTRACT_VALUES[NoComboTypes.NoComboYouth]
-        : ADTRACTION_CONTRACT_VALUES[NoComboTypes.NoCombo]
+        ? ADTRACTION_CONTRACT_VALUES[NoBundleTypes.NoComboYouth]
+        : ADTRACTION_CONTRACT_VALUES[NoBundleTypes.NoCombo]
     }
 
     if (isDanishAccidentBundle(offerData)) {

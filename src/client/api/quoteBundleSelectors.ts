@@ -84,3 +84,12 @@ export const getBundleCurrency = (bundle: QuoteBundle) => {
 export const getTotalBundleCost = (bundle: QuoteBundle) => {
   return bundle.bundleCost.monthlyNet.amount
 }
+
+export const includesExactlyAllContracts = (
+  bundle: QuoteBundle,
+  insuranceTypes: InsuranceType[],
+) => {
+  const bundleInsuranceTypes = bundle.quotes.map((quote) => quote.data.type)
+
+  return bundleInsuranceTypes.every((type) => insuranceTypes.includes(type))
+}

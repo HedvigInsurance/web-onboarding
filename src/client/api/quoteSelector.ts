@@ -51,6 +51,7 @@ export const isStudent = (quote: BundledQuote) => {
 const ACCIDENT_INSURANCE_TYPES = [
   InsuranceType.SWEDISH_ACCIDENT,
   InsuranceType.DANISH_ACCIDENT,
+  InsuranceType.NORWEGIAN_ACCIDENT,
 ]
 export const isAccident = (quote: BundledQuote) =>
   ACCIDENT_INSURANCE_TYPES.includes(quote.data.type)
