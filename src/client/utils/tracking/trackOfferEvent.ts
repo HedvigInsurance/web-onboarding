@@ -6,7 +6,7 @@ import {
   useQuoteCartQuery,
 } from 'data/graphql'
 import { quoteBundleTrackingContractType } from 'api/quoteBundleTrackingContractType'
-import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
+import { useMatchedQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import {
   getMonthlyCostDeductionIncentive,
@@ -92,7 +92,7 @@ export const trackOfferEvent = (
 export const useTrackOfferEvent = () => {
   const { isoLocale } = useCurrentLocale()
 
-  const { quoteCartId } = useQuoteCartIdFromUrl()
+  const { quoteCartId } = useMatchedQuoteCartIdFromUrl()
 
   const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
 
