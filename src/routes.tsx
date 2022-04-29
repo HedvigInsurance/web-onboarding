@@ -193,7 +193,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: `${onboardingLocaleBaseRoute}/(offer|sign)/:id`,
+    path: `${onboardingLocaleBaseRoute}/(offer|sign)/:quoteCartId`,
     serverRouteData: {
       titleTextKey: 'OFFER_PAGE_TITLE',
     },
@@ -203,7 +203,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: `${onboardingLocaleBaseRoute}/checkout/details/:id`,
+    path: `${onboardingLocaleBaseRoute}/checkout/details/:quoteCartId`,
     isHiddenInProd: true,
     serverRouteData: {
       titleTextKey: 'CHECKOUT_DETAILS_PAGE_TITLE',
@@ -214,7 +214,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: `${onboardingLocaleBaseRoute}/checkout/payment/:id/:payment?`,
+    path: `${onboardingLocaleBaseRoute}/checkout/payment/:quoteCartId/:payment?`,
     isHiddenInProd: true,
     serverRouteData: {
       titleTextKey: 'CHECKOUT_PAYMENT_PAGE_TITLE',

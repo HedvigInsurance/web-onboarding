@@ -70,7 +70,7 @@ const createToggleCheckout = (
   }
 }
 
-type OfferPageProps = RouteComponentProps<{ id: string }>
+type OfferPageProps = RouteComponentProps<{ quoteCartId: string }>
 
 function getNetAmount(bundleVariant: QuoteBundleVariant) {
   return bundleVariant.bundle.bundleCost.monthlyNet
@@ -78,7 +78,7 @@ function getNetAmount(bundleVariant: QuoteBundleVariant) {
 
 export const OfferPage = ({
   match: {
-    params: { id: quoteCartId },
+    params: { quoteCartId },
   },
 }: OfferPageProps) => {
   const { isoLocale, path: pathLocale } = useCurrentLocale()

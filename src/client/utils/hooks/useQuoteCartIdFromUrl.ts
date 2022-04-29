@@ -2,7 +2,7 @@ import { useParams, useLocation, matchPath } from 'react-router-dom'
 import { routePaths } from '../../../routes'
 
 export const useQuoteCartIdFromUrl = () => {
-  const { id: quoteCartId } = useParams<{ id: string }>()
+  const { quoteCartId } = useParams<{ quoteCartId: string }>()
 
   return { quoteCartId }
 }
@@ -10,9 +10,9 @@ export const useQuoteCartIdFromUrl = () => {
 // use this outside of <Route> components
 export const useMatchedQuoteCartIdFromUrl = () => {
   const location = useLocation()
-  const quoteCartId = matchPath<{ id: string }>(location.pathname, {
+  const quoteCartId = matchPath<{ quoteCartId: string }>(location.pathname, {
     path: routePaths,
     exact: true,
-  })?.params?.id
+  })?.params?.quoteCartId
   return { quoteCartId }
 }
