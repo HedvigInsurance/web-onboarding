@@ -16,8 +16,8 @@ import {
   PaymentMethodsQuery,
 } from 'data/graphql'
 import { useStorage, StorageState } from 'utils/StorageContainer'
-import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
 import { EventName } from 'utils/tracking/gtm'
+import { useTrackingContext } from 'utils/tracking/trackingContext'
 
 interface Params {
   onSuccess?: (id?: string) => void
@@ -71,7 +71,7 @@ export const useAdyenCheckout = ({
     paymentMethodsResponseNew.data &&
     getAvailablePaymentMethods(paymentMethodsResponseNew.data)
 
-  const trackOfferEvent = useTrackOfferEvent()
+  const { trackOfferEvent } = useTrackingContext()
 
   useEffect(() => {
     if (
