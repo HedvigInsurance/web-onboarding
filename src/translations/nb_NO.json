@@ -404,5 +404,8 @@
   "MAIN_COVERAGE_TITLE_HOUSE": "Husforsikring",
   "MAIN_COVERAGE_TITLE_ACCIDENT": "Ulykkeforsikring",
   "MAIN_COVERAGE_DESC_HOUSE": "Trygghet for huset og bygningene dine.",
-  "MAIN_COVERAGE_DESC_ACCIDENT": "Ekstra sikkerhet hvis det skulle skje en ulykke. "
+  "MAIN_COVERAGE_DESC_ACCIDENT": "Ekstra sikkerhet hvis det skulle skje en ulykke. ",
+  "CHECKOUT_DETAILS_REGISTRATION_NUMBER": "",
+  "CHECKOUT_DETAILS_MILEAGE": "",
+  "CHECKOUT_DETAILS_MILEAGE_VALUE": ""
 }
