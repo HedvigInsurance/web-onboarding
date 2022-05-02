@@ -9,7 +9,7 @@ import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { QuoteInput } from 'components/DetailsModal/types'
 
 import { EventName } from 'utils/tracking/gtm'
-import { useTrackingContext } from 'utils/tracking/trackingContext'
+import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
 import { Divider } from '../../shared/Divider'
 import { WrapperWidth } from '../../shared/CheckoutPageWrapper'
 
@@ -53,7 +53,7 @@ type Props = {
 
 export const ContactInformation = ({ formikProps }: Props) => {
   const textKeys = useTextKeys()
-  const { trackOfferEvent } = useTrackingContext()
+  const trackOfferEvent = useTrackOfferEvent()
 
   useEffect(
     () => trackOfferEvent({ eventName: EventName.ContactInformationPageOpen }),

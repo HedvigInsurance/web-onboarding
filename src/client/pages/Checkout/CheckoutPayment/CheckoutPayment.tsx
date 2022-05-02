@@ -27,8 +27,8 @@ import { useStorage } from 'utils/StorageContainer'
 import { useVariation } from 'utils/hooks/useVariation'
 import { LoadingPage } from 'components/LoadingPage'
 import { EventName } from 'utils/tracking/gtm'
-import { useTrackingContext } from 'utils/tracking/trackingContext'
 
+import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
 import { useAdyenCheckout } from '../../ConnectPayment/components/useAdyenCheckout'
 import {
   CheckoutPageWrapper,
@@ -157,7 +157,7 @@ export const CheckoutPayment = ({
   const client = useApolloClient()
   const storage = useStorage()
   const variation = useVariation()
-  const { trackOfferEvent } = useTrackingContext()
+  const trackOfferEvent = useTrackOfferEvent()
 
   const adyenRef = useRef<HTMLDivElement | null>(null)
   const [

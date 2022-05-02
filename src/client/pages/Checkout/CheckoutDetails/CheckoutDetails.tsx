@@ -8,7 +8,7 @@ import { LoadingPage } from 'components/LoadingPage'
 import { getUniqueQuotesFromVariantList } from 'pages/OfferNew/utils'
 import { DetailsModal } from 'components/DetailsModal'
 import { EventName } from 'utils/tracking/gtm'
-import { useTrackingContext } from 'utils/tracking/trackingContext'
+import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
@@ -26,14 +26,16 @@ export const CheckoutDetails = () => {
   const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false)
 
   const { path: localePath } = useCurrentLocale()
-  const { quoteCartId } = useQuoteCartIdFromUrl()
 
-  const { trackOfferEvent } = useTrackingContext()
+  const trackOfferEvent = useTrackOfferEvent()
   const data = useQuoteCartData()
+
+  const { quoteCartId } = useQuoteCartIdFromUrl()
 
   useEffect(() => trackOfferEvent({ eventName: EventName.CheckoutOpen }), [
     trackOfferEvent,
   ])
+
   if (data?.error) {
     console.error('Quote cart data error: no data')
     return <CheckoutErrorModal isVisible onRetry={onRetry} />
