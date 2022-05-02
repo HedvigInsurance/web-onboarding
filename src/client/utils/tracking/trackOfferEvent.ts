@@ -137,11 +137,11 @@ export const useTrackOfferEvent = () => {
 
   const trackOfferHandler = useCallback(
     (eventParams: EventParameters) => {
-      return (
-        (selectedBundleVariant &&
-          trackOfferCallback(eventParams, selectedBundleVariant)) ||
+      if (selectedBundleVariant) {
+        trackOfferCallback(eventParams, selectedBundleVariant)
+      } else {
         setEventQueue((prevQueue) => [...prevQueue, eventParams])
-      )
+      }
     },
     [trackOfferCallback, selectedBundleVariant],
   )
