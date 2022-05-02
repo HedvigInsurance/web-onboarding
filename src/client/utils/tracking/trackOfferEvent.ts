@@ -66,7 +66,9 @@ export const trackOfferEvent = (
         insurance_price: grossPrice,
         ...(grossPrice !== netPrice && { discounted_premium: netPrice }),
         currency: bundle.bundleCost.monthlyNet.currency,
-        is_student: quoteBundleSelector.isStudentOffer(bundle),
+        is_student:
+          quoteBundleSelector.isStudentOffer(bundle) ||
+          quoteBundleSelector.isYouthOffer(bundle),
         has_home: true,
         has_accident: quoteBundleSelector.hasAccident(bundle),
         has_travel: quoteBundleSelector.hasTravel(bundle),

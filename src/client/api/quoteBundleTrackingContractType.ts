@@ -2,47 +2,88 @@ import { QuoteBundle } from 'data/graphql'
 import {
   TrackableContractType,
   SeBundleTypes,
-  NoComboTypes,
+  NoBundleTypes,
   DkBundleTypes,
 } from 'utils/tracking/tracking'
+import { InsuranceType } from '../utils/hooks/useSelectedInsuranceTypes'
 import * as quoteSelector from './quoteSelector'
-import * as bundleSelecor from './quoteBundleSelectors'
+import * as bundleSelector from './quoteBundleSelectors'
 
 export const quoteBundleTrackingContractType = (
   bundle: QuoteBundle,
 ): TrackableContractType => {
-  const mainQuote = bundleSelecor.getMainQuote(bundle)
+  const mainQuote = bundleSelector.getMainQuote(bundle)
 
-  if (bundleSelecor.isMultiQuote(bundle)) {
+  if (bundleSelector.isMultiQuote(bundle)) {
     if (quoteSelector.isSwedishHouse(mainQuote)) {
       return SeBundleTypes.SeHomeAccidentBundleHouse
     }
 
     if (quoteSelector.isSwedishApartment(mainQuote)) {
       if (quoteSelector.isSwedishBRF(mainQuote)) {
-        return bundleSelecor.isStudentOffer(bundle)
+        return bundleSelector.isStudentOffer(bundle)
           ? SeBundleTypes.SeHomeAccidentBundleStudentBrf
           : SeBundleTypes.SeHomeAccidentBundleBrf
       } else {
-        return bundleSelecor.isStudentOffer(bundle)
+        return bundleSelector.isStudentOffer(bundle)
           ? SeBundleTypes.SeHomeAccidentBundleStudentRent
           : SeBundleTypes.SeHomeAccidentBundleRent
       }
     }
-    if (quoteSelector.isNorwegianHomeContents(mainQuote)) {
-      return bundleSelecor.isYouthOffer(bundle)
-        ? NoComboTypes.NoComboYouth
-        : NoComboTypes.NoCombo
+
+    if (
+      bundleSelector.includesExactlyAllContracts(bundle, [
+        InsuranceType.NORWEGIAN_HOME_CONTENT,
+        InsuranceType.NORWEGIAN_TRAVEL,
+      ])
+    ) {
+      return bundleSelector.isYouthOffer(bundle)
+        ? NoBundleTypes.NoHomeTravelBundleYouth
+        : NoBundleTypes.NoHomeTravelBundle
     }
 
-    if (bundleSelecor.isDanishAccident(bundle)) {
-      return bundleSelecor.isStudentOffer(bundle)
+    if (
+      bundleSelector.includesExactlyAllContracts(bundle, [
+        InsuranceType.NORWEGIAN_HOME_CONTENT,
+        InsuranceType.NORWEGIAN_ACCIDENT,
+      ])
+    ) {
+      return bundleSelector.isYouthOffer(bundle)
+        ? NoBundleTypes.NoHomeAccidentBundleYouth
+        : NoBundleTypes.NoHomeAccidentBundle
+    }
+
+    if (
+      bundleSelector.includesExactlyAllContracts(bundle, [
+        InsuranceType.NORWEGIAN_HOME_CONTENT,
+        InsuranceType.NORWEGIAN_ACCIDENT,
+        InsuranceType.NORWEGIAN_TRAVEL,
+      ])
+    ) {
+      return bundleSelector.isYouthOffer(bundle)
+        ? NoBundleTypes.NoHomeTravelAccidentBundleYouth
+        : NoBundleTypes.NoHomeTravelAccidentBundle
+    }
+
+    if (
+      bundleSelector.includesExactlyAllContracts(bundle, [
+        InsuranceType.DANISH_HOME_CONTENT,
+        InsuranceType.DANISH_ACCIDENT,
+      ])
+    ) {
+      return bundleSelector.isStudentOffer(bundle)
         ? DkBundleTypes.DkAccidentBundleStudent
         : DkBundleTypes.DkAccidentBundle
     }
 
-    if (bundleSelecor.isDanishTravel(bundle)) {
-      return bundleSelecor.isStudentOffer(bundle)
+    if (
+      bundleSelector.includesExactlyAllContracts(bundle, [
+        InsuranceType.DANISH_HOME_CONTENT,
+        InsuranceType.DANISH_ACCIDENT,
+        InsuranceType.DANISH_TRAVEL,
+      ])
+    ) {
+      return bundleSelector.isStudentOffer(bundle)
         ? DkBundleTypes.DkTravelBundleStudent
         : DkBundleTypes.DkTravelBundle
     }
