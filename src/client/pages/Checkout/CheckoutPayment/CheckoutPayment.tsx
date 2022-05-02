@@ -179,6 +179,8 @@ export const CheckoutPayment = ({
   const [isPageLoading, setIsPageLoading] = useState(false)
   const [isError, setIsError] = useState(false)
 
+  useEffect(() => window.scrollTo(0, 0), [])
+
   //handle 3ds error redirect
   useEffect(() => {
     if (is3DsError) {

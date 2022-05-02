@@ -32,6 +32,8 @@ export const CheckoutDetails = () => {
 
   const { quoteCartId } = useQuoteCartIdFromUrl()
 
+  useEffect(() => window.scrollTo(0, 0), [])
+
   useEffect(() => trackOfferEvent({ eventName: EventName.CheckoutOpen }), [
     trackOfferEvent,
   ])
@@ -53,7 +55,6 @@ export const CheckoutDetails = () => {
       eventName: EventName.ButtonClick,
       options: { buttonId: 'continue_to_payment' },
     })
-    window.scrollTo(0, 0)
   }
 
   const priceData = data.priceData
