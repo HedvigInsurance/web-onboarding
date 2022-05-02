@@ -1,4 +1,4 @@
-import { QuoteBundle, TypeOfContract } from 'data/graphql'
+import { QuoteBundle, TypeOfContract, BundledQuote } from 'data/graphql'
 import { MarketLabel } from 'shared/clientConfig'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
 import * as quoteSelector from './quoteSelector'
@@ -102,4 +102,8 @@ export const includesExactlyAllContracts = (
 
 export const getFirstInsuranceType = (bundle: QuoteBundle) => {
   return bundle.quotes?.[0]?.data.type
+}
+
+export const hasCar = (bundle: BundledQuote[]) => {
+  return bundle.some((quote) => quote.data.type === 'SWEDISH_CAR')
 }
