@@ -31,9 +31,6 @@ export type DocumentLinksProps = {
   allQuotes: BundledQuote[]
 }
 
-const filterTerms = (terms: InsuranceTerm[]) =>
-  terms.filter(({ type }) => type !== InsuranceTermType.PrivacyPolicy)
-
 const TermLink = ({ term }: { term: InsuranceTerm }) => {
   return (
     <DocumentLink href={term.url} target="_blank">
@@ -43,7 +40,7 @@ const TermLink = ({ term }: { term: InsuranceTerm }) => {
 }
 
 const QuoteTerms = ({ quote }: { quote: BundledQuote }) => {
-  const insuranceTerms = filterTerms(quote.insuranceTerms)
+  const insuranceTerms = quote.insuranceTerms
 
   return (
     <TermsSection>
