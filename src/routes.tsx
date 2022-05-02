@@ -204,7 +204,7 @@ export const routes: Route[] = [
   },
   {
     path: `${onboardingLocaleBaseRoute}/checkout/details/:id`,
-    isHiddenInProd: true,
+    isHiddenInProd: false,
     serverRouteData: {
       titleTextKey: 'CHECKOUT_DETAILS_PAGE_TITLE',
     },
@@ -215,7 +215,7 @@ export const routes: Route[] = [
   },
   {
     path: `${onboardingLocaleBaseRoute}/checkout/payment/:id/:payment?`,
-    isHiddenInProd: true,
+    isHiddenInProd: false,
     serverRouteData: {
       titleTextKey: 'CHECKOUT_PAYMENT_PAGE_TITLE',
     },
