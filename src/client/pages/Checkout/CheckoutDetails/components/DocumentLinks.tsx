@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { BundledQuote, InsuranceTerm, InsuranceTermType } from 'data/graphql'
+import { BundledQuote, InsuranceTerm } from 'data/graphql'
 import { RawLink } from 'components/RawLink'
 
 //probably not the best solution
@@ -40,13 +40,11 @@ const TermLink = ({ term }: { term: InsuranceTerm }) => {
 }
 
 const QuoteTerms = ({ quote }: { quote: BundledQuote }) => {
-  const insuranceTerms = quote.insuranceTerms
-
   return (
     <TermsSection>
       <QuoteName>{quote.displayName}</QuoteName>
       <TermsContainer>
-        {insuranceTerms.map((term) => (
+        {quote.insuranceTerms.map((term) => (
           <TermLink term={term} key={`${quote.id}-${term.displayName}`} />
         ))}
       </TermsContainer>
