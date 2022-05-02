@@ -3,7 +3,6 @@ import {
   seApartmentBrfAccident,
   noCombo,
   noComboYouth,
-  noTravel,
   dkHomeContentOwn,
   dkHomeContentAccidentTravel,
 } from 'utils/testData/offerDataMock'
@@ -24,13 +23,10 @@ describe('getBundleAdtractionProductValue', () => {
 
   it('returns correct no adTraction Product', () => {
     expect(getBundleAdtractionProductValue(noCombo)).toBe(
-      ADTRACTION_CONTRACT_VALUES.NO_COMBO,
+      ADTRACTION_CONTRACT_VALUES.NO_HOME_TRAVEL_BUNDLE,
     )
     expect(getBundleAdtractionProductValue(noComboYouth)).toBe(
-      ADTRACTION_CONTRACT_VALUES.NO_COMBO_YOUTH,
-    )
-    expect(getBundleAdtractionProductValue(noTravel)).toBe(
-      ADTRACTION_CONTRACT_VALUES.NO_TRAVEL,
+      ADTRACTION_CONTRACT_VALUES.NO_HOME_TRAVEL_BUNDLE,
     )
   })
 

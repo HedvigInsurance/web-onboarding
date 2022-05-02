@@ -13,7 +13,9 @@ import { OfferData } from 'pages/OfferNew/types'
 import {
   isBundle,
   isYouth,
-  isNorwegian,
+  isNorwegianHomeTravelBundle,
+  isNorwegianHomeAccidentBundle,
+  isNorwegianHomeTravelAccidentBundle,
   isDanishAccidentBundle,
   isDanishTravelBundle,
   isStudentOffer,
@@ -61,9 +63,13 @@ export enum SeBundleTypes {
   SeHomeAccidentBundleHouse = 'SE_ACCIDENT_BUNDLE_HOUSE',
 }
 
-export enum NoComboTypes {
-  NoCombo = 'NO_COMBO',
-  NoComboYouth = 'NO_COMBO_YOUTH',
+export enum NoBundleTypes {
+  NoHomeTravelBundle = 'NO_HOME_TRAVEL_BUNDLE',
+  NoHomeTravelBundleYouth = 'NO_HOME_TRAVEL_BUNDLE_YOUTH',
+  NoHomeAccidentBundle = 'NO_HOME_ACCIDENT_BUNDLE',
+  NoHomeAccidentBundleYouth = 'NO_HOME_ACCIDENT_BUNDLE_YOUTH',
+  NoHomeTravelAccidentBundle = 'NO_HOME_TRAVEL_ACCIDENT_BUNDLE',
+  NoHomeTravelAccidentBundleYouth = 'NO_HOME_TRAVEL_ACCIDENT_BUNDLE_YOUTH',
 }
 
 export enum DkBundleTypes {
@@ -75,7 +81,7 @@ export enum DkBundleTypes {
 
 export type TrackableContractType =
   | SeBundleTypes
-  | NoComboTypes
+  | NoBundleTypes
   | DkBundleTypes
   | TypeOfContract
 
@@ -98,10 +104,23 @@ export const getContractType = (offerData: OfferData) => {
           : SeBundleTypes.SeHomeAccidentBundleRent
       }
     }
-    if (isNorwegian(offerData)) {
+
+    if (isNorwegianHomeTravelBundle(offerData)) {
       return isYouth(offerData)
-        ? NoComboTypes.NoComboYouth
-        : NoComboTypes.NoCombo
+        ? NoBundleTypes.NoHomeTravelBundle
+        : NoBundleTypes.NoHomeTravelBundleYouth
+    }
+
+    if (isNorwegianHomeAccidentBundle(offerData)) {
+      return isYouth(offerData)
+        ? NoBundleTypes.NoHomeAccidentBundle
+        : NoBundleTypes.NoHomeAccidentBundleYouth
+    }
+
+    if (isNorwegianHomeTravelAccidentBundle(offerData)) {
+      return isYouth(offerData)
+        ? NoBundleTypes.NoHomeTravelAccidentBundle
+        : NoBundleTypes.NoHomeTravelAccidentBundleYouth
     }
 
     if (isDanishAccidentBundle(offerData)) {
@@ -138,19 +157,19 @@ export const getTrackableContractCategory = (
     case SeBundleTypes.SeHomeAccidentBundleStudentRent:
     case DkBundleTypes.DkAccidentBundle:
     case DkBundleTypes.DkAccidentBundleStudent:
+    case NoBundleTypes.NoHomeAccidentBundle:
+    case NoBundleTypes.NoHomeAccidentBundleYouth:
       return TrackableContractCategory.HomeAccident
 
-    case NoComboTypes.NoCombo:
-    case NoComboTypes.NoComboYouth:
+    case NoBundleTypes.NoHomeTravelBundle:
+    case NoBundleTypes.NoHomeTravelBundleYouth:
       return TrackableContractCategory.HomeTravel
 
     case DkBundleTypes.DkTravelBundle:
     case DkBundleTypes.DkTravelBundleStudent:
+    case NoBundleTypes.NoHomeTravelAccidentBundle:
+    case NoBundleTypes.NoHomeTravelAccidentBundleYouth:
       return TrackableContractCategory.HomeAccidentTravel
-
-    case TypeOfContract.NoTravel:
-    case TypeOfContract.NoTravelYouth:
-      return TrackableContractCategory.Travel
     default:
       return TrackableContractCategory.Home
   }
