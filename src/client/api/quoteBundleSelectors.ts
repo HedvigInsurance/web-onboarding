@@ -99,3 +99,7 @@ export const includesExactlyAllContracts = (
 
   return bundleInsuranceTypes.every((type) => insuranceTypes.includes(type))
 }
+
+export const getFirstInsuranceType = (bundle: QuoteBundle) => {
+  return bundle.quotes?.[0]?.data.type
+}

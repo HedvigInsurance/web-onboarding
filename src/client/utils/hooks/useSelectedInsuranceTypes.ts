@@ -15,7 +15,8 @@ export enum InsuranceType {
   DANISH_TRAVEL = 'DANISH_TRAVEL',
 }
 
-const ALL_INSURANCE_TYPES = Object.values(TypeOfContract)
+const ALL_INSURANCE_TYPES = Object.values(InsuranceType)
+const ALL_CONTRACT_TYPES = Object.values(TypeOfContract)
 const SEARCH_PARAM_NAME = 'type'
 
 const deserializeSearchParams = (searchParams: URLSearchParams) => {
@@ -25,9 +26,11 @@ const deserializeSearchParams = (searchParams: URLSearchParams) => {
 
 const validateInsuranceTypes = (
   rawTypes: Array<string>,
-): Array<InsuranceType> =>
-  rawTypes.filter((type) =>
-    ALL_INSURANCE_TYPES.includes((type as unknown) as TypeOfContract),
+): InsuranceType[] | TypeOfContract[] =>
+  rawTypes.filter(
+    (type) =>
+      ALL_INSURANCE_TYPES.includes((type as unknown) as InsuranceType) ||
+      ALL_CONTRACT_TYPES.includes((type as unknown) as TypeOfContract),
   ) as Array<InsuranceType>
 
 export const useSelectedInsuranceTypes = () => {
@@ -41,7 +44,9 @@ export const useSelectedInsuranceTypes = () => {
     searchParams,
   ])
 
-  const changeSelectedInsuranceTypes = (newTypes: Array<TypeOfContract>) => {
+  const changeSelectedInsuranceTypes = (
+    newTypes: Array<InsuranceType | TypeOfContract>,
+  ) => {
     searchParams.delete(SEARCH_PARAM_NAME)
 
     for (const type of newTypes) {

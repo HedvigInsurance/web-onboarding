@@ -23,13 +23,15 @@ import {
   getPossibleVariations,
   getCampaign,
   getMonthlyCostDeductionIncentive,
+  isCarInsuranceType,
 } from 'api/quoteCartQuerySelectors'
 import { trackOfferEvent } from 'utils/tracking/trackOfferEvent'
 import {
   getOfferData,
   getUniqueQuotesFromVariantList,
-  getTypeOfContractFromBundleVariant,
   isOfferDataAvailable,
+  getInsuranceTypesFromBundleVariant,
+  getTypeOfContractFromBundleVariant,
 } from '../OfferNew/utils'
 import { AppPromotionSection } from '../OfferNew/AppPromotionSection'
 import { FaqSection } from '../OfferNew/FaqSection'
@@ -165,7 +167,9 @@ export const OfferPage = ({
     newSelectedBundleVariant: QuoteBundleVariant,
   ) => {
     setSelectedInsuranceTypes(
-      getTypeOfContractFromBundleVariant(newSelectedBundleVariant),
+      isCarInsuranceType(newSelectedBundleVariant)
+        ? getTypeOfContractFromBundleVariant(newSelectedBundleVariant)
+        : getInsuranceTypesFromBundleVariant(newSelectedBundleVariant),
     )
     trackOfferEvent(
       EventName.InsuranceSelectionToggle,
@@ -179,7 +183,9 @@ export const OfferPage = ({
     newSelectedBundleVariant: QuoteBundleVariant,
   ) => {
     setSelectedInsuranceTypes(
-      getTypeOfContractFromBundleVariant(newSelectedBundleVariant),
+      isCarInsuranceType(newSelectedBundleVariant)
+        ? getTypeOfContractFromBundleVariant(newSelectedBundleVariant)
+        : getInsuranceTypesFromBundleVariant(newSelectedBundleVariant),
     )
     trackOfferEvent(
       EventName.OfferCrossSell,

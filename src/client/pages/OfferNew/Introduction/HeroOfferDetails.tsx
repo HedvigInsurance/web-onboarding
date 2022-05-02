@@ -110,7 +110,7 @@ export const HeroOfferDetails: React.FC<Props> = ({
 }) => {
   const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false)
   const { person, quotes } = offerData
-  const numberCoInsured = (person.householdSize ?? 0) - 1
+  const numberCoInsured = (person.householdSize ?? 1) - 1
 
   // TODO: Address information is present in offerData.address.
   // We should format that address instead of looking it up again

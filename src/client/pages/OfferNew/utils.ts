@@ -22,10 +22,10 @@ import { birthDateFormats } from 'l10n/inputFormats'
 import { Address, OfferData, OfferQuote } from 'pages/OfferNew/types'
 import { TextKeyMap } from 'utils/textKeys'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
+import { getFirstInsuranceType } from 'api/quoteBundleSelectors'
 
 export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
   const firstQuote = quoteBundle.quotes[0]
-  const householdSize = getHouseholdSizeFromBundledQuotes(quoteBundle.quotes)
 
   return {
     person: {
@@ -35,7 +35,7 @@ export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
       ssn: firstQuote.ssn,
       phoneNumber: firstQuote.phoneNumber,
       birthDate: firstQuote.birthDate,
-      ...{ householdSize },
+      householdSize: getHouseholdSizeFromBundledQuotes(quoteBundle.quotes),
       address: getAddressFromBundledQuotes(quoteBundle.quotes),
     },
     quotes: quoteBundle.quotes.map((bundleQuote) => {
@@ -534,7 +534,7 @@ const isBundleVariantMatchingInsuranceTypes = (
   variant: QuoteBundleVariant,
   insuranceTypes: Array<InsuranceType>,
 ) => {
-  const variantInsuranceTypes = getTypeOfContractFromBundleVariant(variant)
+  const variantInsuranceTypes = getInsuranceTypesFromBundleVariant(variant)
   return (
     variantInsuranceTypes.sort().join(',') ===
     insuranceTypes
@@ -544,12 +544,42 @@ const isBundleVariantMatchingInsuranceTypes = (
   )
 }
 
+const isBundleVariantMatchingContractTypes = (
+  variant: QuoteBundleVariant,
+  contractTypes: Array<TypeOfContract>,
+) => {
+  const variantContractType = getTypeOfContractFromBundleVariant(variant)
+  return (
+    variantContractType.sort().join(',') ===
+    contractTypes
+      .concat()
+      .sort()
+      .join(',')
+  )
+}
+
 export const getBundleVariantFromInsuranceTypesWithFallback = (
   variants: Array<QuoteBundleVariant>,
-  insuranceTypes: Array<InsuranceType>,
+  insuranceTypes: Array<InsuranceType> | Array<TypeOfContract>,
 ) => {
+  // For some insurances (like Car), all insurance types are the same between TRAFFIC, HALF, and FULL.
+  // In those cases we need to search on TypeOfContract instead.
+  if (allBundleVariantsHaveSameInsuranceType(variants)) {
+    const matchingContractType = variants.find((variant) =>
+      isBundleVariantMatchingContractTypes(
+        variant,
+        (insuranceTypes as unknown) as TypeOfContract[],
+      ),
+    )
+
+    if (matchingContractType) return matchingContractType
+  }
+
   const matchingVariant = variants.find((variant) =>
-    isBundleVariantMatchingInsuranceTypes(variant, insuranceTypes),
+    isBundleVariantMatchingInsuranceTypes(
+      variant,
+      (insuranceTypes as unknown) as InsuranceType[],
+    ),
   )
 
   if (matchingVariant) return matchingVariant
@@ -560,6 +590,13 @@ export const getBundleVariantFromInsuranceTypesWithFallback = (
   )[0]
 }
 
+export const getInsuranceTypesFromBundleVariant = (
+  bundleVariant: QuoteBundleVariant,
+) =>
+  bundleVariant.bundle.quotes.map<InsuranceType>(
+    (quote) => quote.data.type as InsuranceType,
+  )
+
 export const getQuoteIdsFromBundleVariant = (
   bundleVariant: QuoteBundleVariant,
 ) => bundleVariant.bundle.quotes.map((quote) => quote.id)
@@ -567,3 +604,21 @@ export const getQuoteIdsFromBundleVariant = (
 export const getTypeOfContractFromBundleVariant = (
   bundleVariant: QuoteBundleVariant,
 ) => bundleVariant.bundle.quotes.map((quote) => quote.typeOfContract)
+
+const allBundleVariantsHaveSameInsuranceType = (
+  bundleVariants: Array<QuoteBundleVariant>,
+) => {
+  if (bundleVariants.length <= 1) {
+    return false
+  }
+
+  const insuranceType = getFirstInsuranceType(bundleVariants?.[0].bundle)
+
+  if (!insuranceType) return false
+
+  return bundleVariants.every((bundleVariant) =>
+    bundleVariant.bundle.quotes.every(
+      (quote) => quote.data.type === insuranceType,
+    ),
+  )
+}
