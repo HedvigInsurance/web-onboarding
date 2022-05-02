@@ -32,7 +32,9 @@ export const CheckoutDetails = () => {
 
   const { quoteCartId } = useQuoteCartIdFromUrl()
 
-  useEffect(() => trackOfferEvent({ eventName: EventName.CheckoutOpen }), [])
+  useEffect(() => trackOfferEvent({ eventName: EventName.CheckoutOpen }), [
+    trackOfferEvent,
+  ])
 
   if (data?.error) {
     console.error('Quote cart data error: no data')

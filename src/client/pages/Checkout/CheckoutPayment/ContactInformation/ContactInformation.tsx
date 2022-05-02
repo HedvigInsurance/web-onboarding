@@ -57,7 +57,7 @@ export const ContactInformation = ({ formikProps }: Props) => {
 
   useEffect(
     () => trackOfferEvent({ eventName: EventName.ContactInformationPageOpen }),
-    [],
+    [trackOfferEvent],
   )
   const {
     values: { ssn },
