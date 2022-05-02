@@ -93,7 +93,7 @@ type FormErrors = {
   [key: string]: string
 } & { data: Record<string, string> }
 
-function getFormErrorsFromUnderwritterLimits(
+export function getFormErrorsFromUnderwritterLimits(
   limits: UnderwritingLimit[],
   invalidFieldErrorMessage: string,
 ) {
@@ -255,7 +255,6 @@ export const DetailsModal = ({
     const { data } = await reCreateQuoteBundle(form)
     const isCreationFailed = isQuoteBundleError(data)
     const limits = getLimitsHit(data)
-
     if (isCreationFailed) {
       if (limits.length) {
         const errors = getFormErrorsFromUnderwritterLimits(
