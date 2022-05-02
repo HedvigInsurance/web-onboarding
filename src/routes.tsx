@@ -45,6 +45,7 @@ enum EmbarkStory {
   SwedenSwitcherWithoutAccident = 'Web Onboarding SE - Switcher Without Accident',
   SwedenQuoteCartNeeder = 'Web Onboarding SE - Quote Cart Needer',
   SwedenQuoteCartSwitcher = 'Web Onboarding SE - Quote Cart Switcher',
+  SwedenCar = 'SE-onboarding-car',
 }
 
 export type ServerSideRoute = {
@@ -369,6 +370,12 @@ export const routes: Route[] = [
                   return {
                     baseUrl,
                     name: EmbarkStory.SwedenQuoteCartSwitcher,
+                    quoteCart: true,
+                  }
+                case 'car':
+                  return {
+                    baseUrl,
+                    name: EmbarkStory.SwedenCar,
                     quoteCart: true,
                   }
               }
