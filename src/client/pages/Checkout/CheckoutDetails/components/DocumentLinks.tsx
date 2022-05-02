@@ -43,10 +43,8 @@ const TermLink = ({ term }: { term: InsuranceTerm }) => {
 }
 
 const QuoteTerms = ({ quote }: { quote: BundledQuote }) => {
-  console.log('quote', quote)
   const insuranceTerms = filterTerms(quote.insuranceTerms)
 
-  console.log('terms', insuranceTerms)
   return (
     <TermsSection>
       <QuoteName>{quote.displayName}</QuoteName>
