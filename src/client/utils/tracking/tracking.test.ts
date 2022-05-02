@@ -3,7 +3,7 @@ import {
   DkBundleTypes,
   getTrackableContractCategory,
   getUtmParamsFromCookie,
-  NoComboTypes,
+  NoBundleTypes,
   SeBundleTypes,
   TrackableContractCategory,
 } from './tracking'
@@ -59,17 +59,13 @@ describe('getTrackableContractCategory', () => {
       TrackableContractCategory.Home,
     )
 
-    expect(getTrackableContractCategory(TypeOfContract.NoTravel)).toBe(
-      TrackableContractCategory.Travel,
-    )
-
-    expect(getTrackableContractCategory(NoComboTypes.NoCombo)).toBe(
+    expect(getTrackableContractCategory(NoBundleTypes.NoHomeTravelBundle)).toBe(
       TrackableContractCategory.HomeTravel,
     )
 
-    expect(getTrackableContractCategory(NoComboTypes.NoComboYouth)).toBe(
-      TrackableContractCategory.HomeTravel,
-    )
+    expect(
+      getTrackableContractCategory(NoBundleTypes.NoHomeTravelBundleYouth),
+    ).toBe(TrackableContractCategory.HomeTravel)
   })
 
   it('returns correct contract category for danish quotes', () => {

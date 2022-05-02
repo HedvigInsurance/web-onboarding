@@ -181,10 +181,29 @@ export const isSwedish = (offerData: OfferData): boolean =>
 
 export const isNorwegianQuote = (quote: OfferQuote): boolean =>
   isNorwegianHomeContents(quote.quoteDetails) ||
-  isNorwegianTravel(quote.quoteDetails)
+  isNorwegianTravel(quote.quoteDetails) ||
+  isNorwegianAccident(quote.quoteDetails)
 
 export const isNorwegian = (offerData: OfferData): boolean =>
   offerData.quotes.every((quote) => isNorwegianQuote(quote))
+
+export const isNorwegianHomeTravelBundle = (offerData: OfferData): boolean =>
+  isNorwegian(offerData) &&
+  offerData.quotes.length === 2 &&
+  hasTravelQuote(offerData)
+
+export const isNorwegianHomeAccidentBundle = (offerData: OfferData): boolean =>
+  isNorwegian(offerData) &&
+  offerData.quotes.length === 2 &&
+  hasAccidentQuote(offerData)
+
+export const isNorwegianHomeTravelAccidentBundle = (
+  offerData: OfferData,
+): boolean =>
+  isNorwegian(offerData) &&
+  offerData.quotes.length === 3 &&
+  hasTravelQuote(offerData) &&
+  hasAccidentQuote(offerData)
 
 export const isDanishQuote = (quote: OfferQuote): boolean =>
   isDanishHomeContents(quote.quoteDetails) ||
@@ -200,8 +219,13 @@ export const isDanishAccidentBundle = (offerData: OfferData): boolean =>
 export const isDanishTravelBundle = (offerData: OfferData): boolean =>
   isDanish(offerData) && offerData.quotes.length === 3
 
-export const isStudentOffer = (offerData: OfferData): boolean =>
-  offerData.quotes.every((quote) => isStudent(quote.quoteDetails))
+export const isStudentOffer = (offerData: OfferData): boolean => {
+  const quotesToBeExcluded = [TypeOfContract.NoAccident]
+
+  return offerData.quotes
+    .filter((quote) => !quotesToBeExcluded.includes(quote.contractType))
+    .every((quote) => isStudent(quote.quoteDetails))
+}
 
 export const hasHomeQuote = (offerData: OfferData) =>
   offerData.quotes.some(({ quoteDetails }) => isHomeQuote(quoteDetails))
@@ -232,6 +256,10 @@ export const isStudent = (details: QuoteDetails) => {
 
   if ('isStudent' in details) {
     return details.isStudent
+  }
+
+  if ('isYouth' in details) {
+    return details.isYouth
   }
 
   return false
