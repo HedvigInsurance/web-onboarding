@@ -425,5 +425,3 @@ export const routes: Route[] = [
     },
   },
 ]
-
-export const routePaths = routes.map((route) => route.path.toString())

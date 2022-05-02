@@ -6,7 +6,7 @@ import {
   useQuoteCartQuery,
 } from 'data/graphql'
 import { quoteBundleTrackingContractType } from 'api/quoteBundleTrackingContractType'
-import { useMatchedQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
+import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import {
   getMonthlyCostDeductionIncentive,
@@ -66,7 +66,9 @@ export const trackOfferEvent = (
         insurance_price: grossPrice,
         ...(grossPrice !== netPrice && { discounted_premium: netPrice }),
         currency: bundle.bundleCost.monthlyNet.currency,
-        is_student: quoteBundleSelector.isStudentOffer(bundle),
+        is_student:
+          quoteBundleSelector.isStudentOffer(bundle) ||
+          quoteBundleSelector.isYouthOffer(bundle),
         has_home: true,
         has_accident: quoteBundleSelector.hasAccident(bundle),
         has_travel: quoteBundleSelector.hasTravel(bundle),
@@ -94,13 +96,13 @@ export const trackOfferEvent = (
 export const useTrackOfferEvent = () => {
   const { isoLocale } = useCurrentLocale()
 
-  const { quoteCartId } = useMatchedQuoteCartIdFromUrl()
+  const { quoteCartId } = useQuoteCartIdFromUrl()
 
   const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
 
   const { data: quoteCartQueryData } = useQuoteCartQuery({
     variables: {
-      id: quoteCartId!,
+      id: quoteCartId,
       locale: isoLocale,
     },
   })
@@ -133,9 +135,16 @@ export const useTrackOfferEvent = () => {
     [isReferralCodeUsed, quoteCartId],
   )
 
-  const trackOfferHandler = useCallback((eventParams: EventParameters) => {
-    setEventQueue((prevQueue) => [...prevQueue, eventParams])
-  }, [])
+  const trackOfferHandler = useCallback(
+    (eventParams: EventParameters) => {
+      if (selectedBundleVariant) {
+        trackOfferCallback(eventParams, selectedBundleVariant)
+      } else {
+        setEventQueue((prevQueue) => [...prevQueue, eventParams])
+      }
+    },
+    [trackOfferCallback, selectedBundleVariant],
+  )
 
   //cleanup the queue
   useEffect(() => {

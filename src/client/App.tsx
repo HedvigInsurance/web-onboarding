@@ -14,7 +14,6 @@ import {
 } from './utils/StorageContainer'
 import { useCurrentLocale } from './l10n/useCurrentLocale'
 import { useGTMTracking } from './utils/tracking/gtm'
-import { TrackingContextProvider } from './utils/tracking/trackingContext'
 
 const isProductionEnvironment =
   window.hedvigClientConfig.appEnvironment === 'production'
@@ -37,30 +36,28 @@ export const App: React.ComponentType<StorageState> = ({ session }) => {
         >
           <StorageContext.Provider value={{ session }}>
             <AppTokenRetrieval>
-              <TrackingContextProvider>
-                <Switch>
-                  {routes
-                    .filter(
-                      ({ isHiddenInProd }) =>
-                        !(isProductionEnvironment && isHiddenInProd),
+              <Switch>
+                {routes
+                  .filter(
+                    ({ isHiddenInProd }) =>
+                      !(isProductionEnvironment && isHiddenInProd),
+                  )
+                  .map(({ path, clientRouteData }) => {
+                    if (!clientRouteData || !(typeof path === 'string')) {
+                      return
+                    }
+                    const { exact, Component, render } = clientRouteData
+                    return (
+                      <Route
+                        key={path}
+                        path={path}
+                        exact={exact}
+                        component={Component}
+                        render={render}
+                      />
                     )
-                    .map(({ path, clientRouteData }) => {
-                      if (!clientRouteData || !(typeof path === 'string')) {
-                        return
-                      }
-                      const { exact, Component, render } = clientRouteData
-                      return (
-                        <Route
-                          key={path}
-                          path={path}
-                          exact={exact}
-                          component={Component}
-                          render={render}
-                        />
-                      )
-                    })}
-                </Switch>
-              </TrackingContextProvider>
+                  })}
+              </Switch>
             </AppTokenRetrieval>
           </StorageContext.Provider>
         </Provider>
