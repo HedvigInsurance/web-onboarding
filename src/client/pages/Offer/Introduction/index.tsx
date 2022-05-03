@@ -9,6 +9,7 @@ import { OfferData } from 'pages/OfferNew/types'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { BundledQuote, CampaignDataFragment } from 'src/client/data/graphql'
 import { isBundle } from 'pages/OfferNew/utils'
+import { hasCar } from 'api/quoteBundleSelectors'
 
 import { ExternalInsuranceProvider } from '../../OfferNew/Introduction/ExternalInsuranceProvider'
 
@@ -94,7 +95,10 @@ export const Introduction: React.FC<IntroductionProps> = ({
   return (
     <Section>
       <Hero>
-        <HeroBackgroundImage zIndex={0} />
+        <HeroBackgroundImage
+          zIndex={0}
+          variant={hasCar(allQuotes) ? 'car' : 'home'}
+        />
         <HeroContentWrapper>
           <ContentContainer>
             <HeroOfferDetailsContainer>
