@@ -64,16 +64,6 @@ const ButtonWrapper = styled.div`
       padding: 0.75rem 2rem;
     }
   }
-
-  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
-    ${Button} {
-      padding: 0.75rem 2rem;
-    }
-
-    ${LinkButton} {
-      padding: 0.75rem 2rem;
-    }
-  }
 `
 
 const SpinnerWrapper = styled(motion.div)`
