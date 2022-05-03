@@ -93,7 +93,7 @@ type FormErrors = {
   [key: string]: string
 } & { data: Record<string, string> }
 
-export function getFormErrorsFromUnderwritterLimits(
+function getFormErrorsFromUnderwritterLimits(
   limits: UnderwritingLimit[],
   invalidFieldErrorMessage: string,
 ) {
