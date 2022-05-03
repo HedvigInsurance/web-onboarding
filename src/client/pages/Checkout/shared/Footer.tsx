@@ -4,6 +4,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { motion } from 'framer-motion'
 import { Button, ButtonProps, LinkButton } from 'components/buttons'
 import { Spinner } from 'components/utils'
+import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { WrapperWidth } from './CheckoutPageWrapper'
 
 const { white, purple500, gray900 } = colorsV3
@@ -47,6 +48,32 @@ const InnerWrapper = styled.div`
 `
 const ButtonWrapper = styled.div`
   justify-self: end;
+
+  ${Button} {
+    padding: 0.75rem 1rem;
+
+    ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
+      padding: 0.75rem 2rem;
+    }
+  }
+
+  ${LinkButton} {
+    padding: 0.75rem 1rem;
+
+    ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
+      padding: 0.75rem 2rem;
+    }
+  }
+
+  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
+    ${Button} {
+      padding: 0.75rem 2rem;
+    }
+
+    ${LinkButton} {
+      padding: 0.75rem 2rem;
+    }
+  }
 `
 
 const SpinnerWrapper = styled(motion.div)`
