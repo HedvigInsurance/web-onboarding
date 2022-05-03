@@ -8,6 +8,7 @@ import {
   LARGE_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
 import { Spinner } from 'components/utils'
+import { useLocalizeNumber } from 'l10n/useLocalizeNumber'
 
 const PriceDetails = styled.div`
   margin-bottom: 2.5rem;
@@ -66,21 +67,25 @@ const Price: React.FC<{
   timeInterval,
   isLoading = false,
   nonDiscountedPrice,
-}) => (
-  <div>
-    {!isLoading && nonDiscountedPrice && (
-      <OriginalPrice>
-        {nonDiscountedPrice}
-        <OriginalPriceCurrency>{currency}</OriginalPriceCurrency>
-      </OriginalPrice>
-    )}
-    {isLoading ? <Spinner /> : <span>{amount}</span>}
-    <span>
-      {currency}
-      {timeInterval}
-    </span>
-  </div>
-)
+}) => {
+  const localizeNumber = useLocalizeNumber()
+
+  return (
+    <div>
+      {!isLoading && nonDiscountedPrice && (
+        <OriginalPrice>
+          {nonDiscountedPrice}
+          <OriginalPriceCurrency>{currency}</OriginalPriceCurrency>
+        </OriginalPrice>
+      )}
+      {isLoading ? <Spinner /> : <span>{localizeNumber(amount)}</span>}
+      <span>
+        {currency}
+        {timeInterval}
+      </span>
+    </div>
+  )
+}
 
 export const PriceBreakdown: React.FC<{
   offerData: OfferData
