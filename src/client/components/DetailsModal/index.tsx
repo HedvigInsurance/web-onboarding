@@ -255,6 +255,7 @@ export const DetailsModal = ({
     const { data } = await reCreateQuoteBundle(form)
     const isCreationFailed = isQuoteBundleError(data)
     const limits = getLimitsHit(data)
+
     if (isCreationFailed) {
       if (limits.length) {
         const errors = getFormErrorsFromUnderwritterLimits(
