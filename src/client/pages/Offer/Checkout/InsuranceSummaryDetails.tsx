@@ -6,7 +6,11 @@ import {
   OfferQuote,
   GenericQuoteData,
 } from 'pages/OfferNew/types'
-import { parseAddress } from 'pages/Offer/utils'
+import {
+  formatNumber,
+  formatCarRegistrationNumberSE,
+  parseAddress,
+} from 'pages/Offer/utils'
 import {
   getFormattedBirthdate,
   typeOfResidenceTextKeys,
@@ -14,9 +18,10 @@ import {
 } from 'pages/OfferNew/utils'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
-import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
 import { TypeOfContract } from 'src/client/data/graphql'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import { LocaleLabel } from 'l10n/locales'
 import { Group, Row } from './InsuranceSummary'
 
 const Label = styled.div`
@@ -53,7 +58,7 @@ export const InsuranceSummaryDetails: React.FC<Props> = ({
         {getPersonalDetails({
           person: personalDetails,
           textKeys,
-          currentLocale,
+          currentLocale: currentLocale.path,
         }).map(({ key, label, value }) => (
           <Row key={key}>
             <Label>{label}</Label>
@@ -62,17 +67,19 @@ export const InsuranceSummaryDetails: React.FC<Props> = ({
           </Row>
         ))}
       </Group>
-      {getQuoteDetails(mainQuote, textKeys).map((group, index) => (
-        <Group key={index}>
-          {group.map(({ key, value, label }) => (
-            <Row key={key}>
-              <Label>{label}</Label>
-              <HorizontalSpacer />
-              <Value>{value}</Value>
-            </Row>
-          ))}
-        </Group>
-      ))}
+      {getQuoteDetails(mainQuote, textKeys, currentLocale.path).map(
+        (group, index) => (
+          <Group key={index}>
+            {group.map(({ key, value, label }) => (
+              <Row key={key}>
+                <Label>{label}</Label>
+                <HorizontalSpacer />
+                <Value>{value}</Value>
+              </Row>
+            ))}
+          </Group>
+        ),
+      )}
       {studentOrYouthLabel && (
         <Group>
           <Row>
@@ -198,18 +205,16 @@ const getHouseholdSizeValue = (householdSize: number, textKeys: TextKeyMap) => {
 const getCoInsuredMaybe = (
   textKeys: TextKeyMap,
   data: GenericQuoteData,
-): DetailsGroup => {
-  return [
-    ...(data.numberCoInsured
-      ? [
-          {
-            key: 'householdSize',
-            label: textKeys.CHECKOUT_DETAILS_HOUSEHOLD_SIZE(),
-            value: getHouseholdSizeValue(data.numberCoInsured + 1, textKeys),
-          },
-        ]
-      : []),
-  ]
+): DetailsGroup | null => {
+  return data.numberCoInsured
+    ? [
+        {
+          key: 'householdSize',
+          label: textKeys.CHECKOUT_DETAILS_HOUSEHOLD_SIZE(),
+          value: getHouseholdSizeValue(data.numberCoInsured + 1, textKeys),
+        },
+      ]
+    : null
 }
 
 const getAddressDataMaybe = (textKeys: TextKeyMap, data: GenericQuoteData) => {
@@ -238,11 +243,38 @@ const getAddressDataMaybe = (textKeys: TextKeyMap, data: GenericQuoteData) => {
   return arr
 }
 
+const getCarDataMaybe = (
+  textKeys: TextKeyMap,
+  data: GenericQuoteData,
+  currentLocale: LocaleLabel,
+) => {
+  return data.registrationNumber && data.mileage
+    ? [
+        {
+          key: 'registrationNumber',
+          label: textKeys.CHECKOUT_DETAILS_REGISTRATION_NUMBER(),
+          value: formatCarRegistrationNumberSE(data.registrationNumber),
+        },
+        {
+          key: 'mileage',
+          label: textKeys.CHECKOUT_DETAILS_MILEAGE(),
+          value: textKeys.CHECKOUT_DETAILS_MILEAGE_VALUE({
+            VALUE: formatNumber(data.mileage, currentLocale),
+          }),
+        },
+      ]
+    : null
+}
+
 const getQuoteDetails = (
   mainQuote: OfferQuote,
   textKeys: TextKeyMap,
+  currentLocale: LocaleLabel,
 ): ReadonlyArray<DetailsGroup> => {
   const { data, contractType } = mainQuote
+
+  const coInsured = getCoInsuredMaybe(textKeys, data)
+  const carData = getCarDataMaybe(textKeys, data, currentLocale)
 
   const detailsGroups: DetailsGroup[] = [
     [
@@ -252,8 +284,10 @@ const getQuoteDetails = (
     ],
 
     ...getHouseExtraBuildingsMaybe(textKeys, data),
-    getCoInsuredMaybe(textKeys, data),
   ]
+
+  if (coInsured) detailsGroups.push(coInsured)
+  if (carData) detailsGroups.push(carData)
 
   return detailsGroups
 }
