@@ -6,7 +6,11 @@ import {
   OfferQuote,
   GenericQuoteData,
 } from 'pages/OfferNew/types'
-import { parseAddress } from 'pages/Offer/utils'
+import {
+  formatNumber,
+  formatCarRegistrationNumberSE,
+  parseAddress,
+} from 'pages/Offer/utils'
 import {
   getFormattedBirthdate,
   typeOfResidenceTextKeys,
@@ -14,8 +18,10 @@ import {
 } from 'pages/OfferNew/utils'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
-import { useCurrentLocale } from 'components/utils/CurrentLocale'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
+import { TypeOfContract } from 'src/client/data/graphql'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import { LocaleLabel } from 'l10n/locales'
 import { Group, Row } from './InsuranceSummary'
 
 const Label = styled.div`
@@ -52,7 +58,7 @@ export const InsuranceSummaryDetails: React.FC<Props> = ({
         {getPersonalDetails({
           person: personalDetails,
           textKeys,
-          currentLocale,
+          currentLocale: currentLocale.path,
         }).map(({ key, label, value }) => (
           <Row key={key}>
             <Label>{label}</Label>
@@ -61,17 +67,19 @@ export const InsuranceSummaryDetails: React.FC<Props> = ({
           </Row>
         ))}
       </Group>
-      {getQuoteDetails(mainQuote, textKeys).map((group, index) => (
-        <Group key={index}>
-          {group.map(({ key, value, label }) => (
-            <Row key={key}>
-              <Label>{label}</Label>
-              <HorizontalSpacer />
-              <Value>{value}</Value>
-            </Row>
-          ))}
-        </Group>
-      ))}
+      {getQuoteDetails(mainQuote, textKeys, currentLocale.path).map(
+        (group, index) => (
+          <Group key={index}>
+            {group.map(({ key, value, label }) => (
+              <Row key={key}>
+                <Label>{label}</Label>
+                <HorizontalSpacer />
+                <Value>{value}</Value>
+              </Row>
+            ))}
+          </Group>
+        ),
+      )}
       {studentOrYouthLabel && (
         <Group>
           <Row>
@@ -150,66 +158,34 @@ const getHouseExtraBuildingsMaybe = (
   ])
 }
 
-const getQuoteDetails = (
-  mainQuote: OfferQuote,
+const getHomeInsuranceDetailsMaybe = (
   textKeys: TextKeyMap,
-): ReadonlyArray<DetailsGroup> => {
-  const { data, contractType } = mainQuote
-
+  data: GenericQuoteData,
+  contractType: TypeOfContract,
+): DetailsGroup => {
   const typeOfResidenceTextKey =
     typeOfResidenceTextKeys[contractType as HomeInsuranceTypeOfContract]
 
-  const detailsGroups: DetailsGroup[] = []
-
-  const homeData = getHomeData(data)
-  if (homeData) {
-    detailsGroups.push(
-      [
-        {
-          key: 'address',
-          label: textKeys.CHECKOUT_DETAILS_ADDRESS(),
-          value: parseAddress({
-            street: homeData.street,
-            zipCode: homeData.zipCode,
-            apartment: data.apartment,
-            floor: data.floor,
-          }),
-        },
-        {
-          key: 'zipcode',
-          label: textKeys.CHECKOUT_DETAILS_ZIPCODE(),
-          value: formatPostalNumber(homeData.zipCode),
-        },
-        {
-          key: 'livingspace',
-          label: textKeys.CHECKOUT_DETAILS_LIVING_SPACE(),
-          value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
-            VALUE: homeData.livingSpace,
-          }),
-        },
-        {
-          key: 'residenceType',
-          label: textKeys.CHECKOUT_DETAILS_RESIDENCE_TYPE(),
-          value: typeOfResidenceTextKey
-            ? textKeys[typeOfResidenceTextKey]()
-            : '',
-        },
-        ...getHouseSummaryDetailsMaybe(textKeys, data),
-      ],
-
-      ...getHouseExtraBuildingsMaybe(textKeys, data),
-    )
-  }
-
-  detailsGroups.push([
-    {
-      key: 'householdSize',
-      label: textKeys.CHECKOUT_DETAILS_HOUSEHOLD_SIZE(),
-      value: getHouseholdSizeValue(data.numberCoInsured + 1, textKeys),
-    },
-  ])
-
-  return detailsGroups
+  return [
+    ...(data.livingSpace
+      ? [
+          {
+            key: 'livingspace',
+            label: textKeys.CHECKOUT_DETAILS_LIVING_SPACE(),
+            value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
+              VALUE: data.livingSpace,
+            }),
+          },
+          {
+            key: 'residenceType',
+            label: textKeys.CHECKOUT_DETAILS_RESIDENCE_TYPE(),
+            value: typeOfResidenceTextKey
+              ? textKeys[typeOfResidenceTextKey]()
+              : '',
+          },
+        ]
+      : []),
+  ]
 }
 
 const getHouseholdSizeValue = (householdSize: number, textKeys: TextKeyMap) => {
@@ -224,6 +200,96 @@ const getHouseholdSizeValue = (householdSize: number, textKeys: TextKeyMap) => {
   throw new Error(
     'Total number of people covered by the insurance must be at least 1',
   )
+}
+
+const getCoInsuredMaybe = (
+  textKeys: TextKeyMap,
+  data: GenericQuoteData,
+): DetailsGroup | null => {
+  return data.numberCoInsured
+    ? [
+        {
+          key: 'householdSize',
+          label: textKeys.CHECKOUT_DETAILS_HOUSEHOLD_SIZE(),
+          value: getHouseholdSizeValue(data.numberCoInsured + 1, textKeys),
+        },
+      ]
+    : null
+}
+
+const getAddressDataMaybe = (textKeys: TextKeyMap, data: GenericQuoteData) => {
+  const arr = []
+
+  if (data.street && data.zipCode) {
+    arr.push({
+      key: 'address',
+      label: textKeys.CHECKOUT_DETAILS_ADDRESS(),
+      value: parseAddress({
+        street: data.street,
+        zipCode: data.zipCode,
+        apartment: data.apartment,
+        floor: data.floor,
+      }),
+    })
+  }
+
+  if (data.zipCode) {
+    arr.push({
+      key: 'zipcode',
+      label: textKeys.CHECKOUT_DETAILS_ZIPCODE(),
+      value: formatPostalNumber(data.zipCode),
+    })
+  }
+  return arr
+}
+
+const getCarDataMaybe = (
+  textKeys: TextKeyMap,
+  data: GenericQuoteData,
+  currentLocale: LocaleLabel,
+) => {
+  return data.registrationNumber && data.mileage
+    ? [
+        {
+          key: 'registrationNumber',
+          label: textKeys.CHECKOUT_DETAILS_REGISTRATION_NUMBER(),
+          value: formatCarRegistrationNumberSE(data.registrationNumber),
+        },
+        {
+          key: 'mileage',
+          label: textKeys.CHECKOUT_DETAILS_MILEAGE(),
+          value: textKeys.CHECKOUT_DETAILS_MILEAGE_VALUE({
+            VALUE: formatNumber(data.mileage, currentLocale),
+          }),
+        },
+      ]
+    : null
+}
+
+const getQuoteDetails = (
+  mainQuote: OfferQuote,
+  textKeys: TextKeyMap,
+  currentLocale: LocaleLabel,
+): ReadonlyArray<DetailsGroup> => {
+  const { data, contractType } = mainQuote
+
+  const coInsured = getCoInsuredMaybe(textKeys, data)
+  const carData = getCarDataMaybe(textKeys, data, currentLocale)
+
+  const detailsGroups: DetailsGroup[] = [
+    [
+      ...getAddressDataMaybe(textKeys, data),
+      ...getHomeInsuranceDetailsMaybe(textKeys, data, contractType),
+      ...getHouseSummaryDetailsMaybe(textKeys, data),
+    ],
+
+    ...getHouseExtraBuildingsMaybe(textKeys, data),
+  ]
+
+  if (coInsured) detailsGroups.push(coInsured)
+  if (carData) detailsGroups.push(carData)
+
+  return detailsGroups
 }
 
 type GetPersonalDetailsParams = {
@@ -262,16 +328,4 @@ const getStudentOrYouthLabel = (
 
 const isStudent = (data: GenericQuoteData) => {
   return data.isStudent ?? false
-}
-
-const getHomeData = (data: GenericQuoteData) => {
-  if (data.street && data.zipCode && data.livingSpace) {
-    return {
-      street: data.street,
-      zipCode: data.zipCode,
-      livingSpace: data.livingSpace,
-    }
-  }
-
-  return null
 }
