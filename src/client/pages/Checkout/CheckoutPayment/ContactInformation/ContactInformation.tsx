@@ -122,7 +122,6 @@ export const ContactInformation = ({ formikProps }: Props) => {
             <TextInput
               label={textKeys.CHECKOUT_EMAIL_LABEL()}
               placeholder={textKeys.CHECKOUT_EMAIL_LABEL()}
-              helperText={textKeys.CHECKOUT_CONTACT_INFO_EMAIL_HELPER()}
               type="text"
               name="email"
               formikProps={formikProps}
