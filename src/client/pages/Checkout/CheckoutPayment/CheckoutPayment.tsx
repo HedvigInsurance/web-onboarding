@@ -20,7 +20,7 @@ import {
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { Headline } from 'components/Headline/Headline'
 
-import { isQuoteBundleError } from 'api/quoteBundleErrorSelectors'
+import { isQuoteBundleError, getLimitsHit } from 'api/quoteBundleErrorSelectors'
 import { setupQuoteCartSession } from 'containers/SessionContainer'
 import { trackSignedCustomerEvent } from 'utils/tracking/trackSignedCustomerEvent'
 import { useStorage } from 'utils/StorageContainer'
@@ -284,7 +284,13 @@ export const CheckoutPayment = ({
       { setErrors }: FormikHelpers<QuoteInput>,
     ) => {
       try {
-        return await reCreateQuoteBundle(form)
+        const { data } = await reCreateQuoteBundle(form)
+        const isUpdateQuotesFailed = isQuoteBundleError(data)
+        const limits = getLimitsHit(data)
+        if (isUpdateQuotesFailed && limits.length) {
+          setErrors({ ssn: textKeys.INVALID_FIELD() })
+        }
+        return data
       } catch (error) {
         if (isSsnInvalid(error.graphQLErrors)) {
           setErrors({ ssn: textKeys.INVALID_FIELD() })

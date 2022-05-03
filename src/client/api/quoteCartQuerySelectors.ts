@@ -1,10 +1,15 @@
-import { QuoteCartQuery, QuoteBundleVariant, BundledQuote } from 'data/graphql'
+import {
+  QuoteCartQuery,
+  QuoteBundleVariant,
+  BundledQuote,
+  TypeOfContract,
+} from 'data/graphql'
 import { getBundleVariantFromInsuranceTypesWithFallback } from 'pages/OfferNew/utils'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
 
 export function getSelectedBundleVariant(
   quoteCartQuery: QuoteCartQuery | undefined,
-  selectedInsuranceTypes: InsuranceType[],
+  selectedInsuranceTypes: InsuranceType[] | TypeOfContract[],
 ) {
   const bundleVariants = (quoteCartQuery?.quoteCart?.bundle
     ?.possibleVariations ?? []) as Array<QuoteBundleVariant>
@@ -65,4 +70,10 @@ export function getAllQuotes(quoteCartQuery: QuoteCartQuery | undefined) {
   })
 
   return Object.values(quoteMap)
+}
+
+export const isCarInsuranceType = (bundleVariant: QuoteBundleVariant) => {
+  return bundleVariant.bundle.quotes.every(
+    (quote) => quote.data.type === 'SWEDISH_CAR',
+  )
 }

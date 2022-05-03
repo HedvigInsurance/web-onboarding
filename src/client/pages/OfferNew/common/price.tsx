@@ -8,6 +8,7 @@ import {
   LARGE_SCREEN_MEDIA_QUERY,
   SMALL_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
+import { useLocalizeNumber } from 'l10n/useLocalizeNumber'
 
 const PriceWrapper = styled.div`
   display: flex;
@@ -101,17 +102,18 @@ export const Price: React.FC<{
   const netPrice = Math.round(Number(monthlyNet.amount))
   const currency = monthlyGross.currency
   const localizedPerMonth = textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL()
+  const localizeNumber = useLocalizeNumber()
   return (
     <PriceWrapper>
       <PriceNumbers lightAppearance={lightAppearance}>
         {isDiscountPrice && (
           <PriceGross>
-            {grossPrice}
+            {localizeNumber(grossPrice)}
             <OldPriceSuffix>{currency}</OldPriceSuffix>
           </PriceGross>
         )}
         {!loading ? (
-          <PriceNet>{netPrice}</PriceNet>
+          <PriceNet>{localizeNumber(netPrice)}</PriceNet>
         ) : (
           <SpinnerWrapper>
             <Spinner />

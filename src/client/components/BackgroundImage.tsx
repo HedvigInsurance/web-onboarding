@@ -4,11 +4,13 @@ import { css } from '@emotion/core'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 
+type BackgroundImageVariant = 'home' | 'car'
 type Props = {
   height?: number
   isFullScreen?: boolean
   zIndex: number
   className?: string
+  variant?: BackgroundImageVariant
 }
 
 const ImageContainer = styled.div<Props>`
@@ -47,13 +49,52 @@ const Image = styled.img<ImageProps>`
   }
 `
 
-export const BackgroundImage: React.FC<Props> = ({
+type ImageVariantSizes = {
+  small: string
+  medium: string
+}
+
+type ImageVariant = {
+  portrait: ImageVariantSizes
+  landscape: ImageVariantSizes
+}
+
+const variants: Record<BackgroundImageVariant, ImageVariant> = {
+  home: {
+    portrait: {
+      small: '/new-member-assets/landing/hedvig_living_room_portrait_small.jpg',
+      medium:
+        '/new-member-assets/landing/hedvig_living_room_portrait_medium.jpg',
+    },
+    landscape: {
+      small:
+        '/new-member-assets/landing/hedvig_living_room_landscape_small.jpg',
+      medium:
+        '/new-member-assets/landing/hedvig_living_room_landscape_medium.jpg',
+    },
+  },
+  car: {
+    portrait: {
+      small: '/new-member-assets/landing/hedvig_garage_portrait_small.jpg',
+      medium: '/new-member-assets/landing/hedvig_garage_portrait_medium.jpg',
+    },
+    landscape: {
+      small: '/new-member-assets/landing/hedvig_garage_landscape_small.jpg',
+      medium: '/new-member-assets/landing/hedvig_garage_landscape_medium.jpg',
+    },
+  },
+}
+
+export const BackgroundImage = ({
   height,
   isFullScreen = false,
   zIndex,
   className,
-}) => {
+  variant = 'home',
+}: Props) => {
   const [hasImageLoaded, setHasImageLoaded] = useState(false)
+
+  const images = variants[variant]
 
   return (
     <ImageContainer
@@ -65,14 +106,14 @@ export const BackgroundImage: React.FC<Props> = ({
       <picture>
         <source
           media="(orientation: portrait)"
-          srcSet="/new-member-assets/landing/hedvig_living_room_portrait_small.jpg 900w, /new-member-assets/landing/hedvig_living_room_portrait_medium.jpg 1600w"
+          srcSet={`${images.portrait.small} 900w, ${images.portrait.medium} 1600w`}
         />
         <source
           media="(orientation: landscape)"
-          srcSet="/new-member-assets/landing/hedvig_living_room_landscape_small.jpg 1600w, /new-member-assets/landing/hedvig_living_room_landscape_medium.jpg 2200w"
+          srcSet={`${images.landscape.small} 1600w, ${images.landscape.small} 2200w`}
         />
         <Image
-          src="/new-member-assets/landing/hedvig_living_room_landscape_small.jpg"
+          src={images.landscape.small}
           onLoad={() => setHasImageLoaded(true)}
           hasLoaded={hasImageLoaded}
           isFullScreen={isFullScreen}
