@@ -32,7 +32,9 @@ export const CheckoutDetails = () => {
 
   const { quoteCartId } = useQuoteCartIdFromUrl()
 
-  useEffect(() => window.scrollTo(0, 0), [])
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   useEffect(() => trackOfferEvent({ eventName: EventName.CheckoutOpen }), [
     trackOfferEvent,
