@@ -35,7 +35,7 @@ export type OfferPersonInfo = Pick<
   BundledQuote,
   'firstName' | 'lastName' | 'email' | 'ssn' | 'birthDate' | 'phoneNumber'
 > & {
-  householdSize: number
+  householdSize?: number
   address: Address | null
 }
 
