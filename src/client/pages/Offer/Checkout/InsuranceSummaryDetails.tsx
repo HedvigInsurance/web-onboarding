@@ -6,11 +6,7 @@ import {
   OfferQuote,
   GenericQuoteData,
 } from 'pages/OfferNew/types'
-import {
-  formatNumber,
-  formatCarRegistrationNumberSE,
-  parseAddress,
-} from 'pages/Offer/utils'
+import { formatCarRegistrationNumberSE, parseAddress } from 'pages/Offer/utils'
 import {
   getFormattedBirthdate,
   typeOfResidenceTextKeys,
@@ -21,7 +17,7 @@ import { TextKeyMap, useTextKeys } from 'utils/textKeys'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
 import { TypeOfContract } from 'src/client/data/graphql'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { LocaleLabel } from 'l10n/locales'
+import { localizeNumber } from 'l10n/useLocalizeNumber'
 import { Group, Row } from './InsuranceSummary'
 
 const Label = styled.div`
@@ -67,7 +63,7 @@ export const InsuranceSummaryDetails: React.FC<Props> = ({
           </Row>
         ))}
       </Group>
-      {getQuoteDetails(mainQuote, textKeys, currentLocale.path).map(
+      {getQuoteDetails(mainQuote, textKeys, currentLocale.htmlLang).map(
         (group, index) => (
           <Group key={index}>
             {group.map(({ key, value, label }) => (
@@ -246,7 +242,7 @@ const getAddressDataMaybe = (textKeys: TextKeyMap, data: GenericQuoteData) => {
 const getCarDataMaybe = (
   textKeys: TextKeyMap,
   data: GenericQuoteData,
-  currentLocale: LocaleLabel,
+  lang: string,
 ) => {
   return data.registrationNumber && data.mileage
     ? [
@@ -259,7 +255,7 @@ const getCarDataMaybe = (
           key: 'mileage',
           label: textKeys.CHECKOUT_DETAILS_MILEAGE(),
           value: textKeys.CHECKOUT_DETAILS_MILEAGE_VALUE({
-            VALUE: formatNumber(data.mileage, currentLocale),
+            VALUE: localizeNumber(data.mileage, lang),
           }),
         },
       ]
@@ -269,12 +265,12 @@ const getCarDataMaybe = (
 const getQuoteDetails = (
   mainQuote: OfferQuote,
   textKeys: TextKeyMap,
-  currentLocale: LocaleLabel,
+  lang: string,
 ): ReadonlyArray<DetailsGroup> => {
   const { data, contractType } = mainQuote
 
   const coInsured = getCoInsuredMaybe(textKeys, data)
-  const carData = getCarDataMaybe(textKeys, data, currentLocale)
+  const carData = getCarDataMaybe(textKeys, data, lang)
 
   const detailsGroups: DetailsGroup[] = [
     [
