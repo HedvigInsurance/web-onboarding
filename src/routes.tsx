@@ -19,6 +19,8 @@ import { SignLoading } from './client/pages/SignLoading'
 import { OfferPage } from './client/pages/Offer'
 import { CheckoutDetails } from './client/pages/Checkout/CheckoutDetails/CheckoutDetails'
 import { Checkout } from './client/pages/Checkout/CheckoutPayment'
+import { checkFeature } from './client/utils/checkFeature'
+import { Feature } from './shared/clientConfig'
 
 enum EmbarkStory {
   DenmarkContentsWithAddressAutocomplete = 'Web Onboarding DK - Contents With Autocomplete',
@@ -255,6 +257,8 @@ export const routes: Route[] = [
           const isProductionEnvironment =
             window.hedvigClientConfig.appEnvironment === 'production'
 
+          const isCarEnabled = checkFeature(Feature.CAR_V1)
+
           switch (locale) {
             case 'dk':
             case 'dk-en':
@@ -373,11 +377,13 @@ export const routes: Route[] = [
                     quoteCart: true,
                   }
                 case 'car':
-                  return {
-                    baseUrl,
-                    name: EmbarkStory.SwedenCar,
-                    quoteCart: true,
-                  }
+                  return isCarEnabled
+                    ? {
+                        baseUrl,
+                        name: EmbarkStory.SwedenCar,
+                        quoteCart: true,
+                      }
+                    : landingPageRedirect
               }
               break
           }
