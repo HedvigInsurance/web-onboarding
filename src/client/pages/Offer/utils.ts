@@ -1,5 +1,4 @@
 import { BundledQuote } from 'data/graphql'
-import { LocaleLabel, locales } from 'l10n/locales'
 
 export interface Address {
   street: string
@@ -43,10 +42,4 @@ export const formatCarRegistrationNumberSE = (registrationNumber: string) => {
   const letters = registrationNumber.match(/[A-Za-z]{3}/)?.[0] || ''
 
   return registrationNumber.replace(letters, `${letters} `)
-}
-
-export const formatNumber = (number: number, locale: LocaleLabel) => {
-  if (typeof number !== 'number') return number
-
-  return number.toLocaleString(locales[locale].htmlLang)
 }
