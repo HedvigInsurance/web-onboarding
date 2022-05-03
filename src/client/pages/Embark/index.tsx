@@ -70,12 +70,8 @@ interface EmbarkProps {
 
 const Embark = (props: EmbarkProps) => {
   const currentLocale = useCurrentLocale()
-  const [
-    isCustomerServicePhoneNumberEnabled,
-    isLanguageSwitcherAtEmbarkEnabled,
-  ] = useFeature([
+  const [isCustomerServicePhoneNumberEnabled] = useFeature([
     Features.CUSTOMER_SERVICE_PHONE_NUMBER,
-    Features.LANGUAGE_SWITCHER_AT_EMBARK,
   ])
 
   const history = useHistory<{
@@ -155,15 +151,6 @@ const Embark = (props: EmbarkProps) => {
     })
   }
 
-  let customTrailingContent: React.ReactNode = null
-  if (isCustomerServicePhoneNumberEnabled && currentLocale.phoneNumber) {
-    customTrailingContent = (
-      <CallCenterPhoneNumber color="black" onClick={handleClickPhoneNumber} />
-    )
-  } else if (isLanguageSwitcherAtEmbarkEnabled) {
-    customTrailingContent = <LanguagePicker color="black" />
-  }
-
   return (
     <PassageContainer>
       <motion.div
@@ -184,7 +171,17 @@ const Embark = (props: EmbarkProps) => {
                 passage={currentPassage}
                 storyData={state.data}
                 startPageLink={props.startPageLink}
-                customTrailingContent={customTrailingContent}
+                customTrailingContent={
+                  isCustomerServicePhoneNumberEnabled &&
+                  currentLocale.phoneNumber ? (
+                    <CallCenterPhoneNumber
+                      color="black"
+                      onClick={handleClickPhoneNumber}
+                    />
+                  ) : (
+                    <LanguagePicker color="black" />
+                  )
+                }
               />
             )}
           </StorageContainer>
