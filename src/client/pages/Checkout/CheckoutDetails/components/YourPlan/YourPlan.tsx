@@ -31,6 +31,7 @@ const StyledBadge = styled(Badge)`
   max-width: 170px;
   white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
 
   ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
     overflow: auto;
