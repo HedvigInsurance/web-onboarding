@@ -19,6 +19,8 @@ import { SignLoading } from './client/pages/SignLoading'
 import { OfferPage } from './client/pages/Offer'
 import { CheckoutDetails } from './client/pages/Checkout/CheckoutDetails/CheckoutDetails'
 import { Checkout } from './client/pages/Checkout/CheckoutPayment'
+import { checkFeature } from './client/utils/checkFeature'
+import { Feature } from './shared/clientConfig'
 
 enum EmbarkStory {
   DenmarkContentsWithAddressAutocomplete = 'Web Onboarding DK - Contents With Autocomplete',
@@ -45,6 +47,7 @@ enum EmbarkStory {
   SwedenSwitcherWithoutAccident = 'Web Onboarding SE - Switcher Without Accident',
   SwedenQuoteCartNeeder = 'Web Onboarding SE - Quote Cart Needer',
   SwedenQuoteCartSwitcher = 'Web Onboarding SE - Quote Cart Switcher',
+  SwedenCar = 'SE-onboarding-car',
 }
 
 export type ServerSideRoute = {
@@ -254,6 +257,8 @@ export const routes: Route[] = [
           const isProductionEnvironment =
             window.hedvigClientConfig.appEnvironment === 'production'
 
+          const isCarEnabled = checkFeature(Feature.CAR_V1)
+
           switch (locale) {
             case 'dk':
             case 'dk-en':
@@ -371,6 +376,14 @@ export const routes: Route[] = [
                     name: EmbarkStory.SwedenQuoteCartSwitcher,
                     quoteCart: true,
                   }
+                case 'car':
+                  return isCarEnabled
+                    ? {
+                        baseUrl,
+                        name: EmbarkStory.SwedenCar,
+                        quoteCart: true,
+                      }
+                    : landingPageRedirect
               }
               break
           }
