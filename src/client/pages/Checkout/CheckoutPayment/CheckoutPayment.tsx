@@ -227,7 +227,7 @@ export const CheckoutPayment = ({
           eventName: EventName.CheckoutErrorBasicError,
         })
         setIsError(true)
-        setIsCheckoutLoading(true)
+        setIsCheckoutLoading(false)
       }
       // Poll for Status
       getStatus({
@@ -246,7 +246,6 @@ export const CheckoutPayment = ({
         })
         throw new Error('Manual Review required')
       }
-      setIsCheckoutLoading(false)
 
       setIsDataLoading(false)
       trackOfferEvent({
@@ -255,6 +254,8 @@ export const CheckoutPayment = ({
       })
       console.error('Could not start checkout')
       setIsError(true)
+    } finally {
+      setIsCheckoutLoading(false)
     }
   }, [getStatus, quoteCartId, quoteIds, startCheckout, trackOfferEvent])
 
