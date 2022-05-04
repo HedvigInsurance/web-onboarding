@@ -246,7 +246,6 @@ export const CheckoutPayment = ({
         })
         throw new Error('Manual Review required')
       }
-
       setIsDataLoading(false)
       trackOfferEvent({
         eventName: EventName.CheckoutErrorCheckoutStart,
