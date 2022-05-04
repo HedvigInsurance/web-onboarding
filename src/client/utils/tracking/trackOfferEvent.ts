@@ -47,7 +47,8 @@ export const trackOfferEvent = (
   referralCodeUsed: boolean,
   options: OptionalParameters = {},
 ) => {
-  const { switchedFrom, phoneNumberData, quoteCartId, memberId } = options
+  const { quoteCartId, ...optionsWithoutId } = options
+  const { switchedFrom, phoneNumberData, memberId } = optionsWithoutId
   const contractType = quoteBundleTrackingContractType(bundle)
   const contractCategory = getTrackableContractCategory(contractType)
   const grossPrice = Math.round(Number(bundle.bundleCost.monthlyGross.amount))
@@ -90,7 +91,7 @@ export const trackOfferEvent = (
         current_insurer: mainQuote.currentInsurer?.id ?? undefined,
       },
       ...phoneNumberData,
-      ...options,
+      ...optionsWithoutId,
     })
   } catch (error) {
     captureSentryError(error)

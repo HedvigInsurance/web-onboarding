@@ -201,6 +201,7 @@ export const CheckoutPayment = ({
           },
           refetchQueries: ['QuoteCart'],
         })
+        trackOfferEvent({ eventName: EventName.PaymentDetailsConfirmed })
       } catch (error) {
         trackOfferEvent({
           eventName: EventName.SignError,

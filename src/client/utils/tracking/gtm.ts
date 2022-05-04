@@ -119,6 +119,7 @@ export enum EventName {
   ContactInformationPageGoBack = 'contact_information_page_go_back',
   ButtonClick = 'button_click',
   SignError = 'sign_error',
+  PaymentDetailsConfirmed = 'payment_details_confirmed',
 }
 
 export enum ErrorEventType {
