@@ -1,4 +1,5 @@
 import styled from '@emotion/styled'
+import { css } from '@emotion/core'
 import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
@@ -8,6 +9,23 @@ import { languagePickerData } from './languagePickerData'
 type ColorProps = {
   color: 'black' | 'white'
 }
+
+const getLinkStyles = ({ color }: ColorProps) => css`
+  text-decoration: none;
+  color: ${color === 'black' ? colorsV3.gray900 : colorsV3.gray100};
+  font-size: 1rem;
+  opacity: 0.5;
+
+  &:hover {
+    color: ${color === 'black' ? colorsV3.gray900 : colorsV3.gray100};
+    opacity: 0.8;
+  }
+
+  &:active {
+    color: ${color === 'black' ? colorsV3.gray900 : colorsV3.gray100};
+    opacity: 1;
+  }
+`
 
 const Wrapper = styled.div`
   display: flex;
@@ -23,23 +41,11 @@ export const ActiveOption = styled.div<ColorProps>`
 `
 
 export const LinkOption = styled(Link)<ColorProps>`
-  text-decoration: none;
-  color: ${({ color }) =>
-    color === 'black' ? colorsV3.gray900 : colorsV3.gray100};
-  font-size: 1rem;
-  opacity: 0.5;
+  ${(colorProps) => getLinkStyles(colorProps)}
+`
 
-  &:hover {
-    color: ${({ color }) =>
-      color === 'black' ? colorsV3.gray900 : colorsV3.gray100};
-    opacity: 0.8;
-  }
-
-  &:active {
-    color: ${({ color }) =>
-      color === 'black' ? colorsV3.gray900 : colorsV3.gray100};
-    opacity: 1;
-  }
+export const NativeLinkOption = styled('a')<ColorProps>`
+  ${(colorProps) => getLinkStyles(colorProps)}
 `
 
 export const Divider = styled.span<ColorProps>`
@@ -56,11 +62,13 @@ export const Divider = styled.span<ColorProps>`
 
 type Props = ColorProps & {
   path?: string
+  performClientSideNavigation?: boolean
 }
 
 export const LanguagePicker: React.FC<Props> = ({
   path = '/new-member',
   color = 'black',
+  performClientSideNavigation = true,
 }) => {
   const location = useLocation()
   const market = useMarket()
@@ -71,10 +79,14 @@ export const LanguagePicker: React.FC<Props> = ({
         <React.Fragment key={linkTo}>
           {location.pathname.startsWith(`/${linkTo}/`) ? (
             <ActiveOption color={color}>{shortTitle}</ActiveOption>
-          ) : (
+          ) : performClientSideNavigation ? (
             <LinkOption color={color} to={`/${linkTo}${path}`}>
               {shortTitle}
             </LinkOption>
+          ) : (
+            <NativeLinkOption color={color} href={`/${linkTo}${path}`}>
+              {shortTitle}
+            </NativeLinkOption>
           )}
           {index < languagePickerData[market].length - 1 && (
             <Divider color={color} />
