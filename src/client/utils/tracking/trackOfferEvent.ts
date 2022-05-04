@@ -110,7 +110,7 @@ export const useTrackOfferEvent = () => {
       const runQuery = async () => {
         if (apolloClient && quoteCartId) {
           try {
-            const cachedQuoteCartQuery = await apolloClient!.client.query<
+            const quoteCartQuery = await apolloClient!.client.query<
               QuoteCartQuery
             >({
               query: QuoteCartDocument,
@@ -119,7 +119,7 @@ export const useTrackOfferEvent = () => {
                 locale: isoLocale,
               },
             })
-            return cachedQuoteCartQuery.data
+            return quoteCartQuery.data
           } catch (e) {
             return
           }
