@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import * as Yup from 'yup'
 import { FormikProps } from 'formik'
 import { LocaleData } from 'l10n/locales'
@@ -67,12 +67,9 @@ export const CheckoutDetailsForm: React.FC<{
     submitForm,
   } = formikProps
 
-  const debouncedSubmitForm = useCallback(
-    debounce(() => {
-      submitForm()
-    }, 500),
-    [],
-  )
+  const debouncedSubmitForm = debounce(() => {
+    submitForm()
+  }, 500)
 
   useEffect(() => {
     if (ssn !== initialValues.ssn) debouncedSubmitForm()
