@@ -53,7 +53,7 @@ export const TrustlyModal: React.FC<Props> = ({
     if (isSuccess) {
       onSuccess()
     }
-  }, [isSuccess])
+  }, [isSuccess, onSuccess])
 
   useEffect(() => {
     const handler = (e: MessageEvent) => {
