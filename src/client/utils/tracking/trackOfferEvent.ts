@@ -15,7 +15,12 @@ import {
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { EmbarkStory } from '../embarkStory'
 import { captureSentryError } from '../sentry-client'
-import { EventName, GTMPhoneNumberData, pushToGTMDataLayer } from './gtm'
+import {
+  ErrorEventType,
+  EventName,
+  GTMPhoneNumberData,
+  pushToGTMDataLayer,
+} from './gtm'
 
 import {
   getTrackableContractCategory,
@@ -30,9 +35,10 @@ type OptionalParameters = {
   memberId?: string
   buttonId?: string
   error?: Error | unknown
+  errorType?: ErrorEventType
 }
 
-type EventParameters = {
+export type EventParameters = {
   eventName: EventName
   options?: Partial<OptionalParameters>
 }

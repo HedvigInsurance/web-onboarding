@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { match } from 'matchly'
 import { useHistory } from 'react-router'
+import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { LocaleData, LocaleLabel } from 'l10n/locales'
@@ -16,8 +17,7 @@ import {
   PaymentMethodsQuery,
 } from 'data/graphql'
 import { useStorage, StorageState } from 'utils/StorageContainer'
-import { EventName } from 'utils/tracking/gtm'
-import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
+import { EventName, ErrorEventType } from 'utils/tracking/gtm'
 
 interface Params {
   onSuccess?: (id?: string) => void
@@ -95,8 +95,8 @@ export const useAdyenCheckout = ({
       storage,
       onError: (error) =>
         trackOfferEvent({
-          eventName: EventName.CheckoutErrorAdyen,
-          options: { error },
+          eventName: EventName.SignError,
+          options: { error, errorType: ErrorEventType.Adyen },
         }),
     })
 
@@ -314,7 +314,7 @@ const createAdyenCheckout = ({
           )
         }
       } catch (e) {
-        onError(e)
+        onError(e as Error)
         handleResult(dropinComponent, 'error')
       }
     },
