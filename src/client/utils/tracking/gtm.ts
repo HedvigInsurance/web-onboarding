@@ -28,7 +28,7 @@ type GTMUserProperties = {
 type GTMOfferData = {
   insurance_type: TrackableContractType
   referral_code: 'yes' | 'no'
-  number_of_people: number
+  number_of_people?: number
   insurance_price: number
   discounted_premium?: number
   currency: string
