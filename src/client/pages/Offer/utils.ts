@@ -7,6 +7,8 @@ export interface Address {
   floor?: number
 }
 
+const SE_CAR_REGISTRATION_NUMBER_REGEX = /[A-Za-z]{3}[0-9]{2}[A-Za-z0-9]{1}/
+
 export const parseAddress = (address: Address) => {
   const { street, apartment, floor } = address
 
@@ -31,4 +33,13 @@ export const getAddress = (quotes: BundledQuote[]) => {
         floor: quoteWithAddress.data.floor,
       })
     : ''
+}
+
+export const formatCarRegistrationNumberSE = (registrationNumber: string) => {
+  if (!SE_CAR_REGISTRATION_NUMBER_REGEX.test(registrationNumber))
+    return registrationNumber
+
+  const letters = registrationNumber.match(/[A-Za-z]{3}/)?.[0] || ''
+
+  return registrationNumber.replace(letters, `${letters} `)
 }

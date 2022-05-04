@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import { QuoteBundleVariant } from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
+import { useLocalizeNumber } from 'l10n/useLocalizeNumber'
 import {
   ContainerWrapper,
   Container,
@@ -18,13 +19,14 @@ interface Props {
   onChange: (bundle: QuoteBundleVariant) => void
 }
 
-export const InsuranceSelector: React.FC<Props> = ({
+export const InsuranceSelector = ({
   variants,
   selectedQuoteBundle,
   onChange,
-}) => {
+}: Props) => {
   const textKeys = useTextKeys()
   const localizedPerMonth = textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL()
+  const localizeNumber = useLocalizeNumber()
 
   const variantMap = useMemo(
     () =>
@@ -48,7 +50,9 @@ export const InsuranceSelector: React.FC<Props> = ({
       id,
       label: tag ?? undefined,
       name: displayName,
-      price: `${Math.round(Number(amount))} ${currency}${localizedPerMonth}`,
+      price: `${localizeNumber(
+        Math.round(Number(amount)),
+      )} ${currency}${localizedPerMonth}`,
       grossPrice:
         amount !== grossAmount
           ? `${Math.round(

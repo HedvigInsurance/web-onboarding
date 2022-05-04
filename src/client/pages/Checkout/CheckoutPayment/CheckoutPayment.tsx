@@ -20,7 +20,7 @@ import {
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { Headline } from 'components/Headline/Headline'
 
-import { isQuoteBundleError } from 'api/quoteBundleErrorSelectors'
+import { isQuoteBundleError, getLimitsHit } from 'api/quoteBundleErrorSelectors'
 import { setupQuoteCartSession } from 'containers/SessionContainer'
 import { trackSignedCustomerEvent } from 'utils/tracking/trackSignedCustomerEvent'
 import { useStorage } from 'utils/StorageContainer'
@@ -29,6 +29,7 @@ import { LoadingPage } from 'components/LoadingPage'
 import { EventName } from 'utils/tracking/gtm'
 
 import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
+import { useScrollToTop } from 'utils/hooks/useScrollToTop'
 import { useAdyenCheckout } from '../../ConnectPayment/components/useAdyenCheckout'
 import {
   CheckoutPageWrapper,
@@ -184,6 +185,10 @@ export const CheckoutPayment = ({
   const [isError, setIsError] = useState(false)
   const [is3dsError, setIs3dsError] = useState(false)
   //handle 3ds error
+
+  useScrollToTop()
+
+  //handle 3ds error
   useEffect(() => {
     if (is3DsError) {
       history.replace('?')
@@ -284,7 +289,13 @@ export const CheckoutPayment = ({
       { setErrors }: FormikHelpers<QuoteInput>,
     ) => {
       try {
-        return await reCreateQuoteBundle(form)
+        const { data } = await reCreateQuoteBundle(form)
+        const isUpdateQuotesFailed = isQuoteBundleError(data)
+        const limits = getLimitsHit(data)
+        if (isUpdateQuotesFailed && limits.length) {
+          setErrors({ ssn: textKeys.INVALID_FIELD() })
+        }
+        return data
       } catch (error) {
         if (isSsnInvalid(error.graphQLErrors)) {
           setErrors({ ssn: textKeys.INVALID_FIELD() })

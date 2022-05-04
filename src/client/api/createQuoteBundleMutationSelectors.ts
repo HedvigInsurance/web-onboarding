@@ -1,10 +1,14 @@
-import { CreateQuoteBundleMutation, QuoteBundleVariant } from 'data/graphql'
+import {
+  CreateQuoteBundleMutation,
+  QuoteBundleVariant,
+  TypeOfContract,
+} from 'data/graphql'
 import { getBundleVariantFromInsuranceTypesWithFallback } from 'pages/OfferNew/utils'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
 
 export function getSelectedBundleVariant(
   quoteBundleMutation: CreateQuoteBundleMutation | null | undefined,
-  selectedInsuranceTypes: InsuranceType[],
+  selectedInsuranceTypes: InsuranceType[] | TypeOfContract[],
 ) {
   if (
     quoteBundleMutation?.quoteCart_createQuoteBundle.__typename !== 'QuoteCart'
