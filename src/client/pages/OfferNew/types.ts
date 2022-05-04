@@ -35,7 +35,7 @@ export type OfferPersonInfo = Pick<
   BundledQuote,
   'firstName' | 'lastName' | 'email' | 'ssn' | 'birthDate' | 'phoneNumber'
 > & {
-  householdSize: number
+  householdSize?: number
   address: Address | null
 }
 
@@ -87,6 +87,10 @@ export type GenericQuoteData = {
   }>
 
   typeOfContract?: string
+
+  // Car
+  mileage?: number
+  registrationNumber?: string
 }
 
 export interface OfferData {

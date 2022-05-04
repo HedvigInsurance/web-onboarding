@@ -29,6 +29,7 @@ import { LoadingPage } from 'components/LoadingPage'
 import { EventName } from 'utils/tracking/gtm'
 
 import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
+import { useScrollToTop } from 'utils/hooks/useScrollToTop'
 import { useAdyenCheckout } from '../../ConnectPayment/components/useAdyenCheckout'
 import {
   CheckoutPageWrapper,
@@ -179,6 +180,8 @@ export const CheckoutPayment = ({
   const [isPageLoading, setIsPageLoading] = useState(false)
   const [isError, setIsError] = useState(false)
   const [isCheckoutLoading, setIsCheckoutLoading] = useState(false)
+
+  useScrollToTop()
 
   //handle 3ds error redirect
   useEffect(() => {
