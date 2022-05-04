@@ -11,11 +11,11 @@ exports[`Danish language picker renders without 💥 1`] = `
     Da
   </div>
   <span
-    class="css-1tysqfo-Divider e1isu63z3"
+    class="css-1tysqfo-Divider e1isu63z4"
     color="black"
   />
   <a
-    class="css-s5uyen-LinkOption e1isu63z2"
+    class="css-mv8ry2-LinkOption e1isu63z2"
     color="black"
     href="/dk-en/new-member"
   >
@@ -35,11 +35,11 @@ exports[`Norwegian language picker renders without 💥 1`] = `
     No
   </div>
   <span
-    class="css-1tysqfo-Divider e1isu63z3"
+    class="css-1tysqfo-Divider e1isu63z4"
     color="black"
   />
   <a
-    class="css-s5uyen-LinkOption e1isu63z2"
+    class="css-mv8ry2-LinkOption e1isu63z2"
     color="black"
     href="/no-en/new-member"
   >
@@ -59,11 +59,11 @@ exports[`Swedish language picker renders without 💥 1`] = `
     Sv
   </div>
   <span
-    class="css-1tysqfo-Divider e1isu63z3"
+    class="css-1tysqfo-Divider e1isu63z4"
     color="black"
   />
   <a
-    class="css-s5uyen-LinkOption e1isu63z2"
+    class="css-mv8ry2-LinkOption e1isu63z2"
     color="black"
     href="/se-en/new-member"
   >
