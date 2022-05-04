@@ -178,6 +178,7 @@ export const CheckoutPayment = ({
   const [isDataLoading, setIsDataLoading] = useState(false)
   const [isPageLoading, setIsPageLoading] = useState(false)
   const [isError, setIsError] = useState(false)
+  const [isCheckoutLoading, setIsCheckoutLoading] = useState(false)
 
   //handle 3ds error redirect
   useEffect(() => {
@@ -210,6 +211,8 @@ export const CheckoutPayment = ({
   )
 
   const performCheckout = useCallback(async () => {
+    setIsCheckoutLoading(true)
+
     try {
       setIsDataLoading(true)
       const { data } = await startCheckout({
@@ -221,6 +224,7 @@ export const CheckoutPayment = ({
           eventName: EventName.CheckoutErrorBasicError,
         })
         setIsError(true)
+        setIsCheckoutLoading(true)
       }
       // Poll for Status
       getStatus({
@@ -239,6 +243,8 @@ export const CheckoutPayment = ({
         })
         throw new Error('Manual Review required')
       }
+      setIsCheckoutLoading(false)
+
       setIsDataLoading(false)
       trackOfferEvent({
         eventName: EventName.CheckoutErrorCheckoutStart,
@@ -250,10 +256,14 @@ export const CheckoutPayment = ({
   }, [getStatus, quoteCartId, quoteIds, startCheckout, trackOfferEvent])
 
   useEffect(() => {
-    if (isPaymentConnected && checkoutStatus === undefined) {
+    if (
+      isPaymentConnected &&
+      checkoutStatus === undefined &&
+      !isCheckoutLoading
+    ) {
       performCheckout()
     }
-  }, [isPaymentConnected, performCheckout, checkoutStatus])
+  }, [isPaymentConnected, performCheckout, checkoutStatus, isCheckoutLoading])
 
   const checkoutAPI = useAdyenCheckout({
     adyenRef,
