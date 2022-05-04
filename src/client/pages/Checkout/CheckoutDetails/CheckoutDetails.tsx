@@ -9,6 +9,7 @@ import { getUniqueQuotesFromVariantList } from 'pages/OfferNew/utils'
 import { DetailsModal } from 'components/DetailsModal'
 import { EventName } from 'utils/tracking/gtm'
 import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
+import { useScrollToTop } from 'utils/hooks/useScrollToTop'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
@@ -32,9 +33,7 @@ export const CheckoutDetails = () => {
 
   const { quoteCartId } = useQuoteCartIdFromUrl()
 
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
+  useScrollToTop()
 
   useEffect(() => trackOfferEvent({ eventName: EventName.CheckoutOpen }), [
     trackOfferEvent,
