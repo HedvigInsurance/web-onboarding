@@ -3,7 +3,6 @@ import React from 'react'
 import Helmet from 'react-helmet-async'
 import { RouteComponentProps } from 'react-router'
 import { TopBar } from 'components/TopBar'
-import { LazyLottie } from 'components/animations/LazyLottie'
 import { useTextKeys } from 'utils/textKeys'
 
 const FourOhFourWrapper = styled('div')({
@@ -14,13 +13,6 @@ const FourOhFourWrapper = styled('div')({
 
 const LinksWrapper = styled('div')({
   paddingTop: 50,
-})
-
-const LottieWrapper = styled('div')({
-  width: '80%',
-  maxWidth: 300,
-  margin: 'auto',
-  minHeight: 250,
 })
 
 export const FourOhFour: React.FunctionComponent<RouteComponentProps<
@@ -40,18 +32,6 @@ export const FourOhFour: React.FunctionComponent<RouteComponentProps<
       <TopBar />
       <FourOhFourWrapper>
         <h1>{textKeys.FOUR_OH_FOUR_HEADLINE()}</h1>
-        <LottieWrapper>
-          <LazyLottie
-            options={{
-              animationData: import(
-                /* webpackChunkName: 'animation-sad' */ 'components/animations/sad-hedvig.json'
-              ),
-              autoplay: true,
-              loop: false,
-            }}
-            width="100%"
-          />
-        </LottieWrapper>
         <LinksWrapper>
           <div
             dangerouslySetInnerHTML={{ __html: textKeys.FOUR_OH_FOUR_LINKS() }}
