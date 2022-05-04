@@ -201,7 +201,6 @@ export const CheckoutPayment = ({
           },
           refetchQueries: ['QuoteCart'],
         })
-        trackOfferEvent({ eventName: EventName.PaymentDetailsConfirmed })
       } catch (error) {
         trackOfferEvent({
           eventName: EventName.SignError,
@@ -424,6 +423,7 @@ export const CheckoutPayment = ({
     }
   }, [checkoutStatus, completeCheckout])
   if (checkoutStatus === CheckoutStatus.Completed) {
+    trackOfferEvent({ eventName: EventName.PaymentDetailsConfirmed })
     return (
       <CheckoutSuccessRedirect
         bundle={selectedQuoteBundleVariant.bundle}
