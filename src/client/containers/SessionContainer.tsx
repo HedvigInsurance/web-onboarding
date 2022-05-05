@@ -152,9 +152,8 @@ export const SessionContainer: React.SFC<SessionContainerProps> = ({
             ) {
               await setupSession(
                 {
+                  ...realApolloClient!,
                   client,
-                  subscriptionClient: realApolloClient!.subscriptionClient,
-                  httpLink: realApolloClient!.httpLink,
                 },
                 storageState,
                 isoLocale,

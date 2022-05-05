@@ -5,7 +5,6 @@ import {
   InMemoryCache,
   split,
   QueryOptions,
-  ApolloQueryResult,
   OperationVariables,
 } from '@apollo/client'
 import { WebSocketLink } from '@apollo/link-ws'
