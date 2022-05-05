@@ -462,7 +462,10 @@ export const CheckoutPayment = ({
 
   return (
     <CheckoutPageWrapper handleClickBackButton={handleClickBackButton}>
-      <ThreeDSErrorModal isVisible={is3dsError} onClose={() => setIs3dsError(false)} />
+      <ThreeDSErrorModal
+        isVisible={is3dsError}
+        onClose={() => setIs3dsError(false)}
+      />
       <ContactInformation formikProps={formik} />
       <AdyenContainer>
         <Wrapper>
