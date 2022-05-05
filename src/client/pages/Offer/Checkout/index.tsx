@@ -28,17 +28,16 @@ import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { CloseButton } from 'components/CloseButton/CloseButton'
 import { CampaignBadge } from 'components/CampaignBadge/CampaignBadge'
 import { setupQuoteCartSession } from 'containers/SessionContainer'
-import { useVariation } from 'utils/hooks/useVariation'
 import { StartDate } from 'pages/Offer/Introduction/Sidebar/StartDate'
 import { useScrollLock, VisibilityState } from 'utils/hooks/useScrollLock'
 import { UpsellCard } from 'pages/OfferNew/Checkout/UpsellCard'
 import { OfferData } from 'pages/OfferNew/types'
 import { SignFailModal } from 'pages/OfferNew/Checkout/SignFailModal/SignFailModal'
 import { isQuoteBundleError } from 'api/quoteBundleErrorSelectors'
-import { trackSignedCustomerEvent } from 'utils/tracking/trackSignedCustomerEvent'
 import * as createQuoteBundleMutationSelector from 'api/createQuoteBundleMutationSelectors'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import { QuoteInput } from 'components/DetailsModal/types'
+import { useTrackSignedCustomerEvent } from 'utils/tracking/hooks/useTrackSignedCustomerEvent'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import { isSsnInvalid, checkIsManualReviewRequired } from '../../Checkout/utils'
 import { InsuranceSummary } from './InsuranceSummary'
@@ -209,7 +208,6 @@ export const Checkout = ({
   quoteCartId,
   offerData,
   checkoutMethod,
-  campaign,
   initialCheckoutStatus,
   quoteBundleVariants,
   selectedQuoteBundleVariant,
@@ -221,7 +219,9 @@ export const Checkout = ({
   const locale = useCurrentLocale()
   const client = useApolloClient()
   const storage = useStorage()
-  const variation = useVariation()
+
+  const trackSignedCustomerEvent = useTrackSignedCustomerEvent()
+
   const [isUpsellCardVisible, isPhoneNumberRequired] = useFeature([
     Features.CHECKOUT_UPSELL_CARD,
     Features.COLLECT_PHONE_NUMBER_AT_CHECKOUT,
@@ -230,11 +230,6 @@ export const Checkout = ({
   const scrollWrapper = useRef<HTMLDivElement>()
   const [windowInnerHeight, setWindowInnerHeight] = useState(window.innerHeight)
   const [visibilityState, setVisibilityState] = useState(VisibilityState.CLOSED)
-
-  const campaignCode = campaign?.code
-  const isDiscountMonthlyCostDeduction =
-    campaign?.incentive?.__typename === 'MonthlyCostDeduction'
-
   const [signUiState, setSignUiState] = useState<SignUiState>(() =>
     getSignUiStateFromCheckoutStatus(initialCheckoutStatus),
   )
@@ -353,27 +348,17 @@ export const Checkout = ({
         },
         storage,
       })
-      trackSignedCustomerEvent({
-        variation,
-        campaignCode,
-        isDiscountMonthlyCostDeduction,
-        memberId,
-        bundle: selectedQuoteBundleVariant.bundle,
-        quoteCartId,
-      })
+      trackSignedCustomerEvent(memberId)
     } catch (error) {
       setSignUiState('FAILED')
       setIsCompletingCheckout(false)
     }
   }, [
-    campaignCode,
     client,
-    isDiscountMonthlyCostDeduction,
-    selectedQuoteBundleVariant.bundle,
     quoteCartId,
     storage,
-    variation,
     isCompletingCheckout,
+    trackSignedCustomerEvent,
   ])
 
   useEffect(() => {

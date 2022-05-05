@@ -6,6 +6,7 @@ import { GraphQLError } from 'graphql'
 import { useApolloClient } from '@apollo/client'
 import { useHistory } from 'react-router'
 import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
+import { useTrackSignedCustomerEvent } from 'utils/tracking/hooks/useTrackSignedCustomerEvent'
 import { useTextKeys } from 'utils/textKeys'
 import { QuoteInput } from 'components/DetailsModal/types'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
@@ -23,9 +24,7 @@ import { Headline } from 'components/Headline/Headline'
 
 import { isQuoteBundleError, getLimitsHit } from 'api/quoteBundleErrorSelectors'
 import { setupQuoteCartSession } from 'containers/SessionContainer'
-import { trackSignedCustomerEvent } from 'utils/tracking/trackSignedCustomerEvent'
 import { useStorage } from 'utils/StorageContainer'
-import { useVariation } from 'utils/hooks/useVariation'
 import { LoadingPage } from 'components/LoadingPage'
 import { ErrorEventType, EventName } from 'utils/tracking/gtm'
 
@@ -157,8 +156,8 @@ export const CheckoutPayment = ({
   const locale = useCurrentLocale()
   const client = useApolloClient()
   const storage = useStorage()
-  const variation = useVariation()
   const trackOfferEvent = useTrackOfferEvent()
+  const trackSignedCustomerEvent = useTrackSignedCustomerEvent()
 
   const adyenRef = useRef<HTMLDivElement | null>(null)
   const [
@@ -336,15 +335,7 @@ export const CheckoutPayment = ({
         },
         storage,
       })
-      trackSignedCustomerEvent({
-        variation,
-        campaignCode: priceData.campaignCode,
-        isDiscountMonthlyCostDeduction:
-          priceData.isDiscountMonthlyCostDeduction,
-        memberId,
-        bundle: selectedQuoteBundleVariant.bundle,
-        quoteCartId,
-      })
+      trackSignedCustomerEvent(memberId)
     } catch (error) {
       trackOfferEvent({
         eventName: EventName.SignError,
@@ -352,16 +343,7 @@ export const CheckoutPayment = ({
       })
       throw new Error('Setup quote cart session failed')
     }
-  }, [
-    priceData.campaignCode,
-    priceData.isDiscountMonthlyCostDeduction,
-    client,
-    selectedQuoteBundleVariant.bundle,
-    quoteCartId,
-    storage,
-    variation,
-    trackOfferEvent,
-  ])
+  }, [client, quoteCartId, storage, trackOfferEvent, trackSignedCustomerEvent])
 
   const reCreateQuoteBundle = (form: QuoteInput) => {
     const {
