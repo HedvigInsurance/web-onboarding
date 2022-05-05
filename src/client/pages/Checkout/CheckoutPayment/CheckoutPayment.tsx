@@ -258,8 +258,6 @@ export const CheckoutPayment = ({
       })
       console.error('Could not start checkout')
       setIsError(true)
-    } finally {
-      setIsCheckoutLoading(false)
     }
   }, [getStatus, quoteCartId, quoteIds, startCheckout, trackOfferEvent])
 
