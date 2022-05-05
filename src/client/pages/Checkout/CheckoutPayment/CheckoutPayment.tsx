@@ -43,7 +43,11 @@ import { getCheckoutDetailsValidationSchema } from '../../Offer/Checkout/UserDet
 import { PriceData } from '../shared/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import { CheckoutSuccessRedirect } from '../../Offer/CheckoutSuccessRedirect'
-import { CheckoutErrorModal, onRetry } from '../shared/ErrorModal'
+import {
+  CheckoutErrorModal,
+  ThreeDSErrorModal,
+  onRetry,
+} from '../shared/ErrorModal'
 import { checkIsManualReviewRequired, isSsnInvalid } from '../utils'
 import { ContactInformation } from './ContactInformation/ContactInformation'
 
@@ -179,11 +183,12 @@ export const CheckoutPayment = ({
   const [isDataLoading, setIsDataLoading] = useState(false)
   const [isPageLoading, setIsPageLoading] = useState(false)
   const [isError, setIsError] = useState(false)
+  const [is3dsError, setIs3dsError] = useState(false)
   const [isCheckoutLoading, setIsCheckoutLoading] = useState(false)
 
   useScrollToTop()
 
-  //handle 3ds error redirect
+  //handle 3ds error
   useEffect(() => {
     if (is3DsError) {
       history.replace('?')
@@ -191,7 +196,7 @@ export const CheckoutPayment = ({
         eventName: EventName.SignError,
         options: { errorType: ErrorEventType.threeDS },
       })
-      setIsError(true)
+      setIs3dsError(true)
     }
   }, [is3DsError, history, trackOfferEvent])
 
@@ -441,6 +446,7 @@ export const CheckoutPayment = ({
       completeCheckout()
     }
   }, [checkoutStatus, completeCheckout])
+
   if (checkoutStatus === CheckoutStatus.Completed) {
     trackOfferEvent({ eventName: EventName.PaymentDetailsConfirmed })
     return (
@@ -465,6 +471,10 @@ export const CheckoutPayment = ({
 
   return (
     <CheckoutPageWrapper handleClickBackButton={handleClickBackButton}>
+      <ThreeDSErrorModal
+        isVisible={is3dsError}
+        onClose={() => setIs3dsError(false)}
+      />
       <ContactInformation formikProps={formik} />
       <AdyenContainer>
         <Wrapper>
