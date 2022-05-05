@@ -96,3 +96,20 @@ export const CheckoutErrorModal = ({
     </ErrorModal>
   )
 }
+
+export const ThreeDSErrorModal = ({ onClose, ...props }: ModalProps) => {
+  const textKeys = useTextKeys()
+
+  return (
+    <ErrorModal {...props}>
+      <ErrorHeading>{textKeys['3D_SECURE_ERROR_HEADING']()}</ErrorHeading>
+      <ErrorText>{textKeys['3D_SECURE_ERROR_DESCRIPTION']()}</ErrorText>
+
+      <ButtonContainer>
+        <ButtonFilled onClick={onClose}>
+          {textKeys['3D_SECURE_ERROR_BUTTON']()}
+        </ButtonFilled>
+      </ButtonContainer>
+    </ErrorModal>
+  )
+}
