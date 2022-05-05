@@ -1,5 +1,4 @@
 import { CookieStorage } from 'cookie-storage'
-import { SegmentAnalyticsJs, setupTrackers } from 'quepasa'
 import React from 'react'
 import {
   SignState,
@@ -206,27 +205,6 @@ export const getExternalInsuranceDataFromGQLCache = (
     }
   } else return {}
 }
-
-export enum ApplicationSpecificEvents {
-  COMPLETED = 'completed',
-}
-
-const NOOP = () => {
-  return
-}
-
-export const { TrackAction, IdentifyAction } = setupTrackers<
-  ApplicationSpecificEvents
->(
-  () => {
-    if (typeof window !== 'undefined') {
-      const castedWindow = window as any
-      return castedWindow.analytics as SegmentAnalyticsJs
-    }
-    return { track: NOOP, identify: NOOP }
-  },
-  { debug: process.env.NODE_ENV === 'development' },
-)
 interface TrackProps {
   offerData?: OfferData | null
   signState?: SignState | null

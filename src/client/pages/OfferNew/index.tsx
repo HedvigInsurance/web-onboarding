@@ -1,6 +1,6 @@
 import { History } from 'history'
 import { SemanticEvents } from 'quepasa'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Redirect, useHistory, useRouteMatch } from 'react-router'
 import { LoadingPage } from 'components/LoadingPage'
 import { TopBar } from 'components/TopBar'
@@ -13,12 +13,13 @@ import {
 } from 'data/graphql'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { trackOfferGTM, EventName } from 'utils/tracking/gtm'
-import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
+import { getUtmParamsFromCookie } from 'utils/tracking/tracking'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { Features, useFeature } from 'utils/hooks/useFeature'
 import { CallCenterPhoneNumber } from 'components/CallCenterPhoneNumber/CallCenterPhoneNumber'
 import { LanguagePicker } from 'components/LanguagePicker/LanguagePicker'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import { useTrackSegmentEvent } from 'utils/tracking/hooks/useTrackSegmentEvent'
 import { useQuoteIds } from '../../utils/hooks/useQuoteIds'
 import {
   getOfferData,
@@ -141,6 +142,26 @@ export const OfferNew: React.FC = () => {
   const checkoutMatch = useRouteMatch(`${localePathPattern}/new-member/sign`)
   const toggleCheckout = createToggleCheckout(history, localePath)
 
+  const offerData = selectedBundleVariant
+    ? getOfferData(selectedBundleVariant.bundle)
+    : null
+
+  const trackSegmentEvent = useTrackSegmentEvent()
+
+  const trackCheckoutStarted = useCallback(() => {
+    if (offerData) {
+      trackSegmentEvent({
+        name: SemanticEvents.Ecommerce.CheckoutStarted,
+        properties: {
+          value: Number(offerData.cost.monthlyNet.amount),
+          currency: offerData.cost.monthlyNet.currency,
+          label: 'Offer',
+          ...getUtmParamsFromCookie(),
+        },
+      })
+    }
+  }, [offerData, trackSegmentEvent])
+
   if ((loadingQuoteBundle && !data) || quoteIdsIsLoading) {
     return <LoadingPage />
   }
@@ -161,10 +182,6 @@ export const OfferNew: React.FC = () => {
       trackOfferGTM(EventName.CheckoutOpen, offerData, false)
     }
   }
-
-  const offerData = selectedBundleVariant
-    ? getOfferData(selectedBundleVariant.bundle)
-    : null
 
   if (offerData) {
     trackOfferGTM(
@@ -202,29 +219,16 @@ export const OfferNew: React.FC = () => {
         )}
         {offerData && (
           <>
-            <TrackAction
-              event={{
-                name: SemanticEvents.Ecommerce.CheckoutStarted,
-                properties: {
-                  value: Number(offerData.cost.monthlyNet.amount),
-                  currency: offerData.cost.monthlyNet.currency,
-                  label: 'Offer',
-                  ...getUtmParamsFromCookie(),
-                },
+            <Introduction
+              allQuotes={getUniqueQuotesFromVariantList(bundleVariants)}
+              offerData={offerData}
+              refetch={refetch as () => Promise<any>}
+              onCheckoutOpen={() => {
+                handleCheckoutToggle(true)
+                trackCheckoutStarted()
               }}
-            >
-              {({ track }) => (
-                <Introduction
-                  allQuotes={getUniqueQuotesFromVariantList(bundleVariants)}
-                  offerData={offerData}
-                  refetch={refetch as () => Promise<any>}
-                  onCheckoutOpen={() => {
-                    handleCheckoutToggle(true)
-                    track()
-                  }}
-                />
-              )}
-            </TrackAction>
+            />
+
             {isInsuranceSelectorVisible && (
               <InsuranceSelector
                 variants={bundleVariants}
