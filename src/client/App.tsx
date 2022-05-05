@@ -3,7 +3,7 @@ import React from 'react'
 import { hot } from 'react-hot-loader'
 import { Route, Switch, useHistory } from 'react-router-dom'
 import { TextKeyProvider } from 'utils/textKeys'
-import { useGTMTracking } from 'utils/tracking/hooks/useGTMTracking'
+import { useTrackPageViewEvent } from 'src/client/utils/tracking/hooks/useTrackPageViewEvent'
 import { routes } from '../routes'
 import { AppTokenRetrieval } from './utils/AppTokenRetrieval'
 import { GlobalCss } from './utils/globalStyles'
@@ -21,7 +21,7 @@ const isProductionEnvironment =
 export const App: React.ComponentType<StorageState> = ({ session }) => {
   const { isoLocale } = useCurrentLocale()
   const history = useHistory()
-  useGTMTracking()
+  useTrackPageViewEvent()
 
   return (
     <>

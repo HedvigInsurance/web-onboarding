@@ -8,7 +8,7 @@ import { pushToGTMDataLayer } from 'utils/tracking/gtm/dataLayer'
  * Track virtual page view when route changes
  */
 
-export const useGTMTracking = () => {
+export const useTrackPageViewEvent = () => {
   const environment = window.hedvigClientConfig.appEnvironment
   const market = useMarket().toLowerCase()
   const location = useLocation()
