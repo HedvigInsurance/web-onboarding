@@ -3,6 +3,7 @@ import React from 'react'
 import { hot } from 'react-hot-loader'
 import { Route, Switch, useHistory } from 'react-router-dom'
 import { TextKeyProvider } from 'utils/textKeys'
+import { useGTMTracking } from 'utils/tracking/hooks/useGTMTracking'
 import { routes } from '../routes'
 import { AppTokenRetrieval } from './utils/AppTokenRetrieval'
 import { GlobalCss } from './utils/globalStyles'
@@ -13,7 +14,6 @@ import {
   WithStorageProps,
 } from './utils/StorageContainer'
 import { useCurrentLocale } from './l10n/useCurrentLocale'
-import { useGTMTracking } from './utils/tracking/gtm'
 
 const isProductionEnvironment =
   window.hedvigClientConfig.appEnvironment === 'production'

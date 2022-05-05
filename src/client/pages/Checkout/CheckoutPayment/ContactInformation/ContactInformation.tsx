@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { FormikProps } from 'formik'
-import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
+import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
 import { Headline } from 'components/Headline/Headline'
 import { useTextKeys } from 'utils/textKeys'
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'

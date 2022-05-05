@@ -1,8 +1,5 @@
-import { useEffect } from 'react'
-import { useLocation } from 'react-router'
 import { OfferData } from 'pages/OfferNew/types'
 import { captureSentryError } from 'utils/sentry-client'
-import { useMarket } from 'components/utils/CurrentLocale'
 import { AppEnvironment } from 'shared/clientConfig'
 import {
   isStudentOffer,
@@ -68,37 +65,6 @@ type DataLayerObject = {
   passageData?: Record<string, string | undefined>
   eventData?: GTMEventData
   phoneNumberData?: GTMPhoneNumberData
-}
-
-/**
- * Track user properties
- * Track virtual page view when route changes
- */
-export const useGTMTracking = () => {
-  const environment = window.hedvigClientConfig.appEnvironment
-  const market = useMarket().toLowerCase()
-  const location = useLocation()
-
-  useEffect(() => {
-    pushToGTMDataLayer({
-      userProperties: {
-        environment,
-        market,
-      },
-    })
-  }, [environment, market])
-
-  useEffect(() => {
-    pushToGTMDataLayer({
-      event: 'virtual_page_view',
-      pageData: {
-        page: location.pathname,
-        search: location.search,
-        title: document.title,
-        market,
-      },
-    })
-  }, [location, market])
 }
 
 export const pushToGTMDataLayer = (obj: DataLayerObject) => {

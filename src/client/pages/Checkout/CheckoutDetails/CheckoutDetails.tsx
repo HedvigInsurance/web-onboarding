@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
+import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
 import { useTextKeys } from 'utils/textKeys'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
