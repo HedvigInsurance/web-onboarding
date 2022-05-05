@@ -109,7 +109,7 @@ const AdyenContainer = styled.div`
       &:hover {
         background-color: ${colorsV3.purple500};
         transform: translateY(-2px);
-        box-shadow: none;
+        box-shadow: 0 3px 5px rgb(55 55 55 / 15%);
       }
     }
 
