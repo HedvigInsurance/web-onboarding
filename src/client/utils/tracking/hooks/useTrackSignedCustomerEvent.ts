@@ -25,26 +25,16 @@ export const useTrackSignedCustomerEvent = () => {
 
   const trackEventHandler = useCallback(
     (memberId: TrackSignedEventParams['memberId']) => {
-      const runQuery = async () => {
-        if (apolloClient && quoteCartId) {
-          try {
-            const quoteCartQuery = await apolloClient!.client.query<
-              QuoteCartQuery
-            >({
-              query: QuoteCartDocument,
-              variables: {
-                id: quoteCartId,
-                locale: isoLocale,
-              },
-            })
-            return quoteCartQuery.data
-          } catch (e) {
-            return
-          }
-        } else return
-      }
       const trackEventCallback = async () => {
-        const quoteCartQueryData = await runQuery()
+        const quoteCartQueryData = await apolloClient!.runQuery<QuoteCartQuery>(
+          {
+            query: QuoteCartDocument,
+            variables: {
+              id: quoteCartId,
+              locale: isoLocale,
+            },
+          },
+        )
 
         const selectedBundleVariant = getSelectedBundleVariant(
           quoteCartQueryData,
@@ -65,7 +55,9 @@ export const useTrackSignedCustomerEvent = () => {
           })
         }
       }
-      trackEventCallback()
+      if (apolloClient && quoteCartId) {
+        trackEventCallback()
+      }
     },
     [quoteCartId, isoLocale, selectedInsuranceTypes, variation],
   )

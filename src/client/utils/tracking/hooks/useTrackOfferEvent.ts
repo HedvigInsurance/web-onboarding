@@ -22,26 +22,16 @@ export const useTrackOfferEvent = () => {
 
   const trackEventHandler = useCallback(
     ({ eventName, options = {} }: EventParameters) => {
-      const runQuery = async () => {
-        if (apolloClient && quoteCartId) {
-          try {
-            const quoteCartQuery = await apolloClient!.client.query<
-              QuoteCartQuery
-            >({
-              query: QuoteCartDocument,
-              variables: {
-                id: quoteCartId,
-                locale: isoLocale,
-              },
-            })
-            return quoteCartQuery.data
-          } catch (e) {
-            return
-          }
-        } else return
-      }
       const trackEventCallback = async () => {
-        const quoteCartQueryData = await runQuery()
+        const quoteCartQueryData = await apolloClient!.runQuery<QuoteCartQuery>(
+          {
+            query: QuoteCartDocument,
+            variables: {
+              id: quoteCartId,
+              locale: isoLocale,
+            },
+          },
+        )
         const isReferralCodeUsed =
           getMonthlyCostDeductionIncentive(quoteCartQueryData) !== undefined
         const selectedBundleVariant = getSelectedBundleVariant(
@@ -61,7 +51,9 @@ export const useTrackOfferEvent = () => {
           )
         }
       }
-      trackEventCallback()
+      if (apolloClient && quoteCartId) {
+        trackEventCallback()
+      }
     },
     [quoteCartId, isoLocale, selectedInsuranceTypes],
   )

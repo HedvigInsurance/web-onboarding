@@ -329,9 +329,8 @@ export const CheckoutPayment = ({
       const memberId = await setupQuoteCartSession({
         quoteCartId,
         apolloClientUtils: {
+          ...realApolloClient!,
           client,
-          subscriptionClient: realApolloClient!.subscriptionClient,
-          httpLink: realApolloClient!.httpLink,
         },
         storage,
       })
