@@ -24,6 +24,7 @@ import {
   getTrackableContractCategory,
   getInitialOfferFromSessionStorage,
   setInitialOfferToSessionStorage,
+  getExternalInsuranceDataFromGQLCache,
 } from './tracking'
 
 type OptionalParameters = {
@@ -47,19 +48,24 @@ export const trackOfferEvent = (
   referralCodeUsed: boolean,
   options: OptionalParameters = {},
 ) => {
+  const mainQuote = quoteBundleSelector.getMainQuote(bundle)
+
   const { quoteCartId, ...optionsWithoutId } = options
   const { switchedFrom, phoneNumberData, memberId } = optionsWithoutId
   const contractType = quoteBundleTrackingContractType(bundle)
   const contractCategory = getTrackableContractCategory(contractType)
   const grossPrice = Math.round(Number(bundle.bundleCost.monthlyGross.amount))
   const netPrice = Math.round(Number(bundle.bundleCost.monthlyNet.amount))
+  const currentInsurer = mainQuote?.currentInsurer?.id ?? undefined
+  const dataCollectionId = mainQuote?.dataCollectionId
+  const externalInsuranceData = dataCollectionId
+    ? getExternalInsuranceDataFromGQLCache(dataCollectionId)
+    : {}
 
   const initialOffer = getInitialOfferFromSessionStorage()
   if (!initialOffer) {
     setInitialOfferToSessionStorage(contractCategory)
   }
-
-  const mainQuote = quoteBundleSelector.getMainQuote(bundle)
 
   try {
     pushToGTMDataLayer({
@@ -88,7 +94,8 @@ export const trackOfferEvent = (
         }),
         ...(memberId && { member_id: memberId }),
         flow_type: EmbarkStory.get() ?? undefined,
-        current_insurer: mainQuote.currentInsurer?.id ?? undefined,
+        current_insurer: currentInsurer,
+        ...(currentInsurer && externalInsuranceData),
       },
       ...phoneNumberData,
       ...optionsWithoutId,
