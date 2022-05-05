@@ -70,8 +70,12 @@ interface EmbarkProps {
 
 const Embark = (props: EmbarkProps) => {
   const currentLocale = useCurrentLocale()
-  const [isCustomerServicePhoneNumberEnabled] = useFeature([
+  const [
+    isCustomerServicePhoneNumberEnabled,
+    isLanguagePickerClientSideNavigationEnabled,
+  ] = useFeature([
     Features.CUSTOMER_SERVICE_PHONE_NUMBER,
+    Features.LANGUAGE_PICKER_CLIENT_SIDE_NAVIGATION,
   ])
 
   const history = useHistory<{
@@ -179,7 +183,12 @@ const Embark = (props: EmbarkProps) => {
                       onClick={handleClickPhoneNumber}
                     />
                   ) : (
-                    <LanguagePicker color="black" />
+                    <LanguagePicker
+                      color="black"
+                      performClientSideNavigation={
+                        isLanguagePickerClientSideNavigationEnabled
+                      }
+                    />
                   )
                 }
               />
