@@ -42,7 +42,6 @@ export const useTrackSignedCustomerEvent = () => {
         )
 
         if (selectedBundleVariant) {
-          console.log(memberId)
           trackSignedCustomerEvent({
             variation,
             campaignCode: getCampaign(quoteCartQueryData)?.code,
