@@ -179,6 +179,7 @@ export const CheckoutPayment = ({
   const [isDataLoading, setIsDataLoading] = useState(false)
   const [isPageLoading, setIsPageLoading] = useState(false)
   const [isError, setIsError] = useState(false)
+  const [isCheckoutLoading, setIsCheckoutLoading] = useState(false)
 
   useScrollToTop()
 
@@ -216,6 +217,8 @@ export const CheckoutPayment = ({
   )
 
   const performCheckout = useCallback(async () => {
+    setIsCheckoutLoading(true)
+
     try {
       setIsDataLoading(true)
       const { data } = await startCheckout({
@@ -228,6 +231,7 @@ export const CheckoutPayment = ({
           options: { errorType: ErrorEventType.BasicError },
         })
         setIsError(true)
+        setIsCheckoutLoading(false)
       }
       // Poll for Status
       getStatus({
@@ -253,14 +257,20 @@ export const CheckoutPayment = ({
       })
       console.error('Could not start checkout')
       setIsError(true)
+    } finally {
+      setIsCheckoutLoading(false)
     }
   }, [getStatus, quoteCartId, quoteIds, startCheckout, trackOfferEvent])
 
   useEffect(() => {
-    if (isPaymentConnected && checkoutStatus === undefined) {
+    if (
+      isPaymentConnected &&
+      checkoutStatus === undefined &&
+      !isCheckoutLoading
+    ) {
       performCheckout()
     }
-  }, [isPaymentConnected, performCheckout, checkoutStatus])
+  }, [isPaymentConnected, performCheckout, checkoutStatus, isCheckoutLoading])
 
   const checkoutAPI = useAdyenCheckout({
     adyenRef,
