@@ -12,7 +12,7 @@ import { useVariation } from 'utils/hooks/useVariation'
 import {
   trackSignedCustomerEvent,
   TrackSignedEventParams,
-} from 'utils/tracking/trackSignedCustomerEvent'
+} from 'utils/tracking/gtm/trackSignedCustomerEvent'
 
 export const useTrackSignedCustomerEvent = () => {
   const { isoLocale } = useCurrentLocale()

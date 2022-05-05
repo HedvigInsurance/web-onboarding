@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router'
 import { useMarket } from 'components/utils/CurrentLocale'
-import { pushToGTMDataLayer } from 'utils/tracking/gtm'
+import { pushToGTMDataLayer } from 'utils/tracking/gtm/gtm'
 
 /**
  * Track user properties

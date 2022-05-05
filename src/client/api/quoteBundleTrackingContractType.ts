@@ -4,7 +4,7 @@ import {
   SeBundleTypes,
   NoBundleTypes,
   DkBundleTypes,
-} from 'utils/tracking/tracking'
+} from 'utils/tracking/gtm/tracking'
 import { InsuranceType } from '../utils/hooks/useSelectedInsuranceTypes'
 import * as quoteSelector from './quoteSelector'
 import * as bundleSelector from './quoteBundleSelectors'

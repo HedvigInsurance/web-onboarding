@@ -17,7 +17,7 @@ import {
   PaymentMethodsQuery,
 } from 'data/graphql'
 import { useStorage, StorageState } from 'utils/StorageContainer'
-import { EventName, ErrorEventType } from 'utils/tracking/gtm'
+import { EventName, ErrorEventType } from 'utils/tracking/gtm/gtm'
 
 interface Params {
   onSuccess?: (id?: string) => void

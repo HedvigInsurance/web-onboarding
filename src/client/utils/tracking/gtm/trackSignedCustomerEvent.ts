@@ -1,10 +1,10 @@
 import { QuoteBundle } from 'data/graphql'
 import { Variation } from 'utils/hooks/useVariation'
 import * as quoteBundleSelector from 'api/quoteBundleSelectors'
+import { adtractionQuoteCart } from 'utils/tracking/adtraction/adtractionQuoteCart'
 import { handleSignedEvent } from './signing'
 import { trackOfferEvent } from './trackOfferEvent'
 import { EventName } from './gtm'
-import { adtractionQuoteCart } from './adtractionQuoteCart'
 
 export type TrackSignedEventParams = {
   variation: Variation | null

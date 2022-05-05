@@ -1,8 +1,8 @@
 import * as quoteBundleSelector from 'api/quoteBundleSelectors'
 import { QuoteBundle } from 'data/graphql'
 import { quoteBundleTrackingContractType } from 'api/quoteBundleTrackingContractType'
-import { EmbarkStory } from '../embarkStory'
-import { captureSentryError } from '../sentry-client'
+import { EmbarkStory } from 'utils/embarkStory'
+import { captureSentryError } from 'utils/sentry-client'
 
 import {
   ErrorEventType,

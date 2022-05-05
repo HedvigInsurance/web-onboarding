@@ -5,7 +5,7 @@ import { TopBar } from 'components/TopBar'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import { useTextKeys } from 'utils/textKeys'
-import { getUtmParamsFromCookie } from 'utils/tracking/tracking'
+import { getUtmParamsFromCookie } from 'utils/tracking/gtm/tracking'
 import { useTrackSegmentEvent } from 'utils/tracking/hooks/useTrackSegmentEvent'
 import { DownloadPageContent } from './components/DownloadPageContent'
 

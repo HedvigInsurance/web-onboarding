@@ -26,8 +26,8 @@ import {
 import { Variation } from 'utils/hooks/useVariation'
 import { apolloClient } from 'apolloClient'
 import { getExternalInsuranceData } from 'api/externalInsuranceQuerySelector'
+import { adtraction } from 'utils/tracking/adtraction/adtraction'
 import { trackOfferGTM, EventName } from './gtm'
-import { adtraction } from './adtraction'
 import { handleSignedEvent } from './signing'
 
 const cookie = new CookieStorage()

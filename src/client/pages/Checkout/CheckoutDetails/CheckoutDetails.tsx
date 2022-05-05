@@ -8,7 +8,7 @@ import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
 import { LoadingPage } from 'components/LoadingPage'
 import { getUniqueQuotesFromVariantList } from 'pages/OfferNew/utils'
 import { DetailsModal } from 'components/DetailsModal'
-import { EventName } from 'utils/tracking/gtm'
+import { EventName } from 'utils/tracking/gtm/gtm'
 
 import { useScrollToTop } from 'utils/hooks/useScrollToTop'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'

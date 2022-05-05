@@ -1,6 +1,6 @@
 import { OfferData } from 'pages/OfferNew/types'
 import { captureSentryError } from 'utils/sentry-client'
-import { AppEnvironment } from 'shared/clientConfig'
+import { AppEnvironment } from 'src/shared/clientConfig'
 import {
   isStudentOffer,
   hasHomeQuote,

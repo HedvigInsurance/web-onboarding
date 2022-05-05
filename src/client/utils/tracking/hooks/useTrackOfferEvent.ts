@@ -11,7 +11,7 @@ import { apolloClient } from 'apolloClient'
 import {
   EventParameters,
   trackOfferEvent,
-} from 'utils/tracking/trackOfferEvent'
+} from 'utils/tracking/gtm/trackOfferEvent'
 
 export const useTrackOfferEvent = () => {
   const { isoLocale } = useCurrentLocale()

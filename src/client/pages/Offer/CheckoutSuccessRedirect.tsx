@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { SemanticEvents } from 'quepasa'
 import { Redirect } from 'react-router-dom'
-import { getUtmParamsFromCookie } from 'utils/tracking/tracking'
+import { getUtmParamsFromCookie } from 'utils/tracking/gtm/tracking'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { QuoteBundle } from 'data/graphql'
 import { quoteBundleTrackingContractType } from 'api/quoteBundleTrackingContractType'

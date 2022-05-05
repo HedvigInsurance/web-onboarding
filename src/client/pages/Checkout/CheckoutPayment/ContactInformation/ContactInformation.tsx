@@ -9,7 +9,7 @@ import { TextInput } from 'pages/Offer/Checkout/inputFields'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { QuoteInput } from 'components/DetailsModal/types'
 
-import { EventName } from 'utils/tracking/gtm'
+import { EventName } from 'utils/tracking/gtm/gtm'
 import { Divider } from '../../shared/Divider'
 import { WrapperWidth } from '../../shared/CheckoutPageWrapper'
 
