@@ -9,8 +9,8 @@ import {
   CheckoutStatus,
   CheckoutMethod,
 } from 'data/graphql'
-import { EventName } from 'utils/tracking/gtm/gtm'
-import { getUtmParamsFromCookie } from 'utils/tracking/gtm/tracking'
+import { EventName } from 'utils/tracking/gtm/types'
+import { getUtmParamsFromCookie } from 'utils/tracking/gtm/helpers'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { Features, useFeature } from 'utils/hooks/useFeature'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'

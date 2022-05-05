@@ -1,10 +1,5 @@
 import { CookieStorage } from 'cookie-storage'
-import React from 'react'
 import {
-  SignState,
-  TypeOfContract,
-  useMemberQuery,
-  useRedeemedCampaignsQuery,
   ExternalInsuranceDataQuery,
   ExternalInsuranceDataDocument,
 } from 'data/graphql'
@@ -23,12 +18,15 @@ import {
   isSwedishApartment,
   isSwedishBRF,
 } from 'pages/OfferNew/utils'
-import { Variation } from 'utils/hooks/useVariation'
 import { apolloClient } from 'apolloClient'
 import { getExternalInsuranceData } from 'api/externalInsuranceQuerySelector'
-import { adtraction } from 'utils/tracking/adtraction/adtraction'
-import { trackOfferGTM, EventName } from './gtm'
-import { handleSignedEvent } from './signing'
+import {
+  SeBundleTypes,
+  NoBundleTypes,
+  DkBundleTypes,
+  TrackableContractType,
+  TrackableContractCategory,
+} from './types'
 
 const cookie = new CookieStorage()
 
@@ -53,36 +51,6 @@ export const getUtmParamsFromCookie = (): UtmParams | undefined => {
     return undefined
   }
 }
-
-export enum SeBundleTypes {
-  SeHomeAccidentBundleStudentBrf = 'SE_ACCIDENT_BUNDLE_STUDENT_BRF',
-  SeHomeAccidentBundleBrf = 'SE_ACCIDENT_BUNDLE_BRF',
-  SeHomeAccidentBundleStudentRent = 'SE_ACCIDENT_BUNDLE_STUDENT_RENT',
-  SeHomeAccidentBundleRent = 'SE_ACCIDENT_BUNDLE_RENT',
-  SeHomeAccidentBundleHouse = 'SE_ACCIDENT_BUNDLE_HOUSE',
-}
-
-export enum NoBundleTypes {
-  NoHomeTravelBundle = 'NO_HOME_TRAVEL_BUNDLE',
-  NoHomeTravelBundleYouth = 'NO_HOME_TRAVEL_BUNDLE_YOUTH',
-  NoHomeAccidentBundle = 'NO_HOME_ACCIDENT_BUNDLE',
-  NoHomeAccidentBundleYouth = 'NO_HOME_ACCIDENT_BUNDLE_YOUTH',
-  NoHomeTravelAccidentBundle = 'NO_HOME_TRAVEL_ACCIDENT_BUNDLE',
-  NoHomeTravelAccidentBundleYouth = 'NO_HOME_TRAVEL_ACCIDENT_BUNDLE_YOUTH',
-}
-
-export enum DkBundleTypes {
-  DkAccidentBundle = 'DK_ACCIDENT_BUNDLE',
-  DkAccidentBundleStudent = 'DK_ACCIDENT_BUNDLE_STUDENT',
-  DkTravelBundle = 'DK_TRAVEL_BUNDLE',
-  DkTravelBundleStudent = 'DK_TRAVEL_BUNDLE_STUDENT',
-}
-
-export type TrackableContractType =
-  | SeBundleTypes
-  | NoBundleTypes
-  | DkBundleTypes
-  | TypeOfContract
 
 export const getContractType = (offerData: OfferData) => {
   if (isBundle(offerData)) {
@@ -135,14 +103,6 @@ export const getContractType = (offerData: OfferData) => {
     }
   }
   return getMainQuote(offerData).contractType
-}
-
-export enum TrackableContractCategory {
-  Home = 'home',
-  Travel = 'travel',
-  HomeTravel = 'home_travel',
-  HomeAccident = 'home_accident',
-  HomeAccidentTravel = 'home_accident_travel',
 }
 
 export const getTrackableContractCategory = (
@@ -204,84 +164,4 @@ export const getExternalInsuranceDataFromGQLCache = (
         currentPrice !== undefined && currentCurrency !== undefined,
     }
   } else return {}
-}
-interface TrackProps {
-  offerData?: OfferData | null
-  signState?: SignState | null
-}
-export const useTrack = ({ offerData, signState }: TrackProps) => {
-  const { data: redeemedCampaignsData } = useRedeemedCampaignsQuery()
-  const { data: memberData } = useMemberQuery()
-  const memberId = memberData?.member.id
-
-  React.useEffect(() => {
-    const redeemedCampaigns = redeemedCampaignsData?.redeemedCampaigns ?? []
-
-    if (process.env.NODE_ENV === 'test') {
-      return
-    }
-
-    if (signState !== SignState.Completed) {
-      return
-    }
-
-    if (!offerData) {
-      return
-    }
-
-    if (memberId) {
-      adtraction(
-        parseFloat(offerData.cost.monthlyGross.amount),
-        memberId,
-        offerData.person.email || '',
-        offerData,
-        redeemedCampaigns !== null && redeemedCampaigns.length !== 0
-          ? redeemedCampaigns[0].code
-          : undefined,
-      )
-    }
-
-    trackOfferGTM(
-      EventName.SignedCustomer,
-      { ...offerData, memberId: memberId || '' },
-      redeemedCampaigns[0]?.incentive?.__typename === 'MonthlyCostDeduction',
-    )
-  }, [redeemedCampaignsData, memberId, offerData, signState])
-}
-
-export type TrackSignedEventParams = {
-  variation: Variation | null
-  quoteCartId: string
-  memberId: string
-  offerData: OfferData
-  campaignCode?: string
-  isDiscountMonthlyCostDeduction: boolean
-}
-
-export const trackSignedEvent = ({
-  variation,
-  quoteCartId,
-  memberId,
-  offerData,
-  campaignCode,
-  isDiscountMonthlyCostDeduction,
-}: TrackSignedEventParams) => {
-  if (variation === Variation.AVY) {
-    handleSignedEvent(memberId)
-  }
-
-  adtraction(
-    parseFloat(offerData.cost.monthlyGross.amount),
-    memberId,
-    offerData.person.email || '',
-    offerData,
-    campaignCode,
-  )
-
-  trackOfferGTM(
-    EventName.SignedCustomer,
-    { ...offerData, memberId: memberId || '' },
-    isDiscountMonthlyCostDeduction,
-    { quoteCartId },
-  )
 }

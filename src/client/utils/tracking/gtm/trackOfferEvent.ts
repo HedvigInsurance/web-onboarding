@@ -4,19 +4,15 @@ import { quoteBundleTrackingContractType } from 'api/quoteBundleTrackingContract
 import { EmbarkStory } from 'utils/embarkStory'
 import { captureSentryError } from 'utils/sentry-client'
 
-import {
-  ErrorEventType,
-  EventName,
-  GTMPhoneNumberData,
-  pushToGTMDataLayer,
-} from './gtm'
+import { GTMPhoneNumberData, pushToGTMDataLayer } from './dataLayer'
+import { ErrorEventType, EventName } from './types'
 
 import {
   getTrackableContractCategory,
   getInitialOfferFromSessionStorage,
   setInitialOfferToSessionStorage,
   getExternalInsuranceDataFromGQLCache,
-} from './tracking'
+} from './helpers'
 
 export type OptionalParameters = {
   switchedFrom?: QuoteBundle

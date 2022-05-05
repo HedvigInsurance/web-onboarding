@@ -14,7 +14,7 @@ import { PerilRow } from 'pages/OfferNew/Perils/PerilRow'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
-import { pushToGTMDataLayer } from 'utils/tracking/gtm/gtm'
+import { pushToGTMDataLayer } from 'utils/tracking/gtm/dataLayer'
 import { Tabs } from '../Tabs/Tabs'
 
 interface Props {

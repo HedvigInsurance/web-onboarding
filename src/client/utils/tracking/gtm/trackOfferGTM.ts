@@ -1,6 +1,5 @@
 import { OfferData } from 'pages/OfferNew/types'
 import { captureSentryError } from 'utils/sentry-client'
-import { AppEnvironment } from 'src/shared/clientConfig'
 import {
   isStudentOffer,
   hasHomeQuote,
@@ -13,97 +12,20 @@ import {
   getInitialOfferFromSessionStorage,
   getTrackableContractCategory,
   setInitialOfferToSessionStorage,
-  TrackableContractType,
   getExternalInsuranceDataFromGQLCache,
-} from './tracking'
-
-type GTMUserProperties = {
-  market: string
-  environment: AppEnvironment
-}
-
-type GTMOfferData = {
-  insurance_type: TrackableContractType
-  referral_code: 'yes' | 'no'
-  number_of_people?: number
-  insurance_price: number
-  discounted_premium?: number
-  currency: string
-  is_student: boolean
-  has_home: boolean
-  has_accident: boolean
-  has_travel: boolean
-  initial_offer: string
-  current_offer: string
-  member_id?: string
-  quote_cart_id?: string
-  flow_type?: string
-  current_insurer?: string
-}
-
-type GTMPageData = {
-  page: string
-  search?: string
-  title: string
-  market: string
-}
-
-type GTMEventData = {
-  type: string
-}
-
-export type GTMPhoneNumberData = {
-  path: string
-  status: 'opened' | 'closed'
-}
-
-type DataLayerObject = {
-  event?: string
-  userProperties?: GTMUserProperties
-  offerData?: GTMOfferData
-  pageData?: GTMPageData
-  passageData?: Record<string, string | undefined>
-  eventData?: GTMEventData
-  phoneNumberData?: GTMPhoneNumberData
-}
-
-export const pushToGTMDataLayer = (obj: DataLayerObject) => {
-  const castedWindow = window as any
-  castedWindow.dataLayer = castedWindow.dataLayer || []
-  castedWindow.dataLayer.push(obj)
-}
-
-export enum EventName {
-  OfferCreated = 'offer_created',
-  SignedCustomer = 'signed_customer',
-  InsuranceSelectionToggle = 'insurance_selection_toggle',
-  ClickCallNumber = 'click_call_number',
-  OfferCrossSell = 'offer_cross_sell',
-  CheckoutOpen = 'checkout_open',
-  ContactInformationPageOpen = 'contact_information_page_open',
-  CheckoutOpenGoBack = 'checkout_open_go_back',
-  ContactInformationPageGoBack = 'contact_information_page_go_back',
-  ButtonClick = 'button_click',
-  SignError = 'sign_error',
-  PaymentDetailsConfirmed = 'payment_details_confirmed',
-}
-
-export enum ErrorEventType {
-  PaymentTokenMutation = 'payment_token_mutation',
-  PaymentTokenIDMissing = 'payment_token_id_missing',
-  BasicError = 'basic_error',
-  ManualReviewRequired = 'manual_review_required',
-  CheckoutStart = 'manual_checkout_start',
-  Adyen = 'adyen',
-  QuoteCartSetup = 'quote_cart_setup',
-  threeDS = '3ds_payment',
-}
+} from './helpers'
+import { pushToGTMDataLayer, GTMPhoneNumberData } from './dataLayer'
+import { EventName } from './types'
 
 type OptionalParameters = {
   switchedFrom?: OfferData
   phoneNumberData?: GTMPhoneNumberData
   quoteCartId?: string
 }
+
+/**
+ * @deprecated Will be removed
+ */
 
 export const trackOfferGTM = (
   eventName: EventName,

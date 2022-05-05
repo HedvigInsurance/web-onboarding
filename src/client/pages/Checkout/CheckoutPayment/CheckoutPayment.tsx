@@ -26,7 +26,7 @@ import { isQuoteBundleError, getLimitsHit } from 'api/quoteBundleErrorSelectors'
 import { setupQuoteCartSession } from 'containers/SessionContainer'
 import { useStorage } from 'utils/StorageContainer'
 import { LoadingPage } from 'components/LoadingPage'
-import { ErrorEventType, EventName } from 'utils/tracking/gtm/gtm'
+import { ErrorEventType, EventName } from 'utils/tracking/gtm/types'
 
 import { useScrollToTop } from 'utils/hooks/useScrollToTop'
 import { useAdyenCheckout } from '../../ConnectPayment/components/useAdyenCheckout'

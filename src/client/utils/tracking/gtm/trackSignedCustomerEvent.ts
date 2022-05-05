@@ -4,7 +4,7 @@ import * as quoteBundleSelector from 'api/quoteBundleSelectors'
 import { adtractionQuoteCart } from 'utils/tracking/adtraction/adtractionQuoteCart'
 import { handleSignedEvent } from './signing'
 import { trackOfferEvent } from './trackOfferEvent'
-import { EventName } from './gtm'
+import { EventName } from './types'
 
 export type TrackSignedEventParams = {
   variation: Variation | null

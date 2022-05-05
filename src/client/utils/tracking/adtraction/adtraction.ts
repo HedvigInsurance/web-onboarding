@@ -17,7 +17,7 @@ import {
   NoBundleTypes,
   DkBundleTypes,
   SeBundleTypes,
-} from 'utils/tracking/gtm/tracking'
+} from 'utils/tracking/gtm/types'
 
 // Exclude single contract types that are only sold as part of bundles
 export type TypeOfContractExcludedUnused = Exclude<

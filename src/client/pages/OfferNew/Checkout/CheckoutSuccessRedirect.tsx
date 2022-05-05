@@ -5,7 +5,7 @@ import { OfferData } from 'pages/OfferNew/types'
 import {
   getContractType,
   getUtmParamsFromCookie,
-} from 'utils/tracking/gtm/tracking'
+} from 'utils/tracking/gtm/helpers'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTrackSegmentEvent } from 'utils/tracking/hooks/useTrackSegmentEvent'
 

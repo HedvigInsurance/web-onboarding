@@ -12,8 +12,9 @@ import {
   QuoteBundleVariant,
 } from 'data/graphql'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
-import { trackOfferGTM, EventName } from 'utils/tracking/gtm/gtm'
-import { getUtmParamsFromCookie } from 'utils/tracking/gtm/tracking'
+import { EventName } from 'utils/tracking/gtm/types'
+import { trackOfferGTM } from 'utils/tracking/gtm/trackOfferGTM'
+import { getUtmParamsFromCookie } from 'utils/tracking/gtm/helpers'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { Features, useFeature } from 'utils/hooks/useFeature'
 import { CallCenterPhoneNumber } from 'components/CallCenterPhoneNumber/CallCenterPhoneNumber'
