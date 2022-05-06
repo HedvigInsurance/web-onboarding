@@ -347,7 +347,7 @@ export const CheckoutPayment = ({
         },
         storage,
       })
-      trackSignedCustomerEvent(memberId)
+      trackSignedCustomerEvent({ memberId })
     } catch (error) {
       trackOfferEvent({
         eventName: EventName.SignError,

@@ -347,7 +347,7 @@ export const Checkout = ({
         },
         storage,
       })
-      trackSignedCustomerEvent(memberId)
+      trackSignedCustomerEvent({ memberId })
     } catch (error) {
       setSignUiState('FAILED')
       setIsCompletingCheckout(false)

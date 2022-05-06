@@ -24,7 +24,11 @@ export const useTrackSignedCustomerEvent = () => {
   const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
 
   const trackEventHandler = useCallback(
-    (memberId: TrackSignedEventParams['memberId']) => {
+    ({
+      memberId,
+      ...restParams
+    }: Partial<TrackSignedEventParams> &
+      Pick<TrackSignedEventParams, 'memberId'>) => {
       const trackEventCallback = async () => {
         const quoteCartQueryData = await apolloClient!.runQuery<QuoteCartQuery>(
           {
@@ -51,6 +55,7 @@ export const useTrackSignedCustomerEvent = () => {
             memberId,
             bundle: selectedBundleVariant.bundle,
             quoteCartId,
+            ...restParams,
           })
         }
       }
