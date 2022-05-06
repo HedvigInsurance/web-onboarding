@@ -113,6 +113,10 @@ const AdyenContainer = styled.div`
       }
     }
 
+    .adyen-checkout__button__icon {
+      display: none;
+    }
+
     js-iframe-input input-field {
       background: ${gray100};
     }
