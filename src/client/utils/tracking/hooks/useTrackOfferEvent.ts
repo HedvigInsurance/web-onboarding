@@ -7,7 +7,8 @@ import {
   getSelectedBundleVariant,
 } from 'api/quoteCartQuerySelectors'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { apolloClient } from 'apolloClient'
+import { apolloClient, ApolloClientUtils } from 'apolloClient'
+
 import {
   EventParameters,
   trackOfferEvent,
@@ -22,16 +23,14 @@ export const useTrackOfferEvent = () => {
 
   const trackEventHandler = useCallback(
     ({ eventName, options = {} }: EventParameters) => {
-      const trackEventCallback = async () => {
-        const quoteCartQueryData = await apolloClient!.runQuery<QuoteCartQuery>(
-          {
-            query: QuoteCartDocument,
-            variables: {
-              id: quoteCartId,
-              locale: isoLocale,
-            },
+      const trackEventCallback = async (apolloClient: ApolloClientUtils) => {
+        const quoteCartQueryData = await apolloClient.runQuery<QuoteCartQuery>({
+          query: QuoteCartDocument,
+          variables: {
+            id: quoteCartId,
+            locale: isoLocale,
           },
-        )
+        })
         const isReferralCodeUsed =
           getMonthlyCostDeductionIncentive(quoteCartQueryData) !== undefined
         const selectedBundleVariant = getSelectedBundleVariant(
@@ -52,7 +51,7 @@ export const useTrackOfferEvent = () => {
         }
       }
       if (apolloClient && quoteCartId) {
-        trackEventCallback()
+        trackEventCallback(apolloClient)
       }
     },
     [quoteCartId, isoLocale, selectedInsuranceTypes],

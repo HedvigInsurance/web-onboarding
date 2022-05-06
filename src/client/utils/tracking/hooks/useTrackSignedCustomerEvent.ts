@@ -7,7 +7,7 @@ import {
   getCampaign,
 } from 'api/quoteCartQuerySelectors'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { apolloClient } from 'apolloClient'
+import { apolloClient, ApolloClientUtils } from 'apolloClient'
 import { useVariation } from 'utils/hooks/useVariation'
 import {
   trackSignedCustomerEvent,
@@ -29,16 +29,14 @@ export const useTrackSignedCustomerEvent = () => {
       ...restParams
     }: Partial<TrackSignedEventParams> &
       Pick<TrackSignedEventParams, 'memberId'>) => {
-      const trackEventCallback = async () => {
-        const quoteCartQueryData = await apolloClient!.runQuery<QuoteCartQuery>(
-          {
-            query: QuoteCartDocument,
-            variables: {
-              id: quoteCartId,
-              locale: isoLocale,
-            },
+      const trackEventCallback = async (apolloClient: ApolloClientUtils) => {
+        const quoteCartQueryData = await apolloClient.runQuery<QuoteCartQuery>({
+          query: QuoteCartDocument,
+          variables: {
+            id: quoteCartId,
+            locale: isoLocale,
           },
-        )
+        })
 
         const selectedBundleVariant = getSelectedBundleVariant(
           quoteCartQueryData,
@@ -60,7 +58,7 @@ export const useTrackSignedCustomerEvent = () => {
         }
       }
       if (apolloClient && quoteCartId) {
-        trackEventCallback()
+        trackEventCallback(apolloClient)
       }
     },
     [quoteCartId, isoLocale, selectedInsuranceTypes, variation],
