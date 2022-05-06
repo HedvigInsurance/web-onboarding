@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { FormikProps } from 'formik'
+import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
 import { Headline } from 'components/Headline/Headline'
 import { useTextKeys } from 'utils/textKeys'
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
@@ -9,7 +10,6 @@ import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { QuoteInput } from 'components/DetailsModal/types'
 
 import { EventName } from 'utils/tracking/gtm'
-import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
 import { Divider } from '../../shared/Divider'
 import { WrapperWidth } from '../../shared/CheckoutPageWrapper'
 

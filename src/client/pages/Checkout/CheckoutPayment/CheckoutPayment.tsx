@@ -5,6 +5,7 @@ import { useFormik, FormikHelpers } from 'formik'
 import { GraphQLError } from 'graphql'
 import { useApolloClient } from '@apollo/client'
 import { useHistory } from 'react-router'
+import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
 import { useTextKeys } from 'utils/textKeys'
 import { QuoteInput } from 'components/DetailsModal/types'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
@@ -26,9 +27,8 @@ import { trackSignedCustomerEvent } from 'utils/tracking/trackSignedCustomerEven
 import { useStorage } from 'utils/StorageContainer'
 import { useVariation } from 'utils/hooks/useVariation'
 import { LoadingPage } from 'components/LoadingPage'
-import { EventName } from 'utils/tracking/gtm'
+import { ErrorEventType, EventName } from 'utils/tracking/gtm'
 
-import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
 import { useScrollToTop } from 'utils/hooks/useScrollToTop'
 import { useAdyenCheckout } from '../../ConnectPayment/components/useAdyenCheckout'
 import {
@@ -192,7 +192,10 @@ export const CheckoutPayment = ({
   useEffect(() => {
     if (is3DsError) {
       history.replace('?')
-      trackOfferEvent({ eventName: EventName.CheckoutError3DS })
+      trackOfferEvent({
+        eventName: EventName.SignError,
+        options: { errorType: ErrorEventType.threeDS },
+      })
       setIs3dsError(true)
     }
   }, [is3DsError, history, trackOfferEvent])
@@ -209,8 +212,8 @@ export const CheckoutPayment = ({
         })
       } catch (error) {
         trackOfferEvent({
-          eventName: EventName.CheckoutErrorPaymentTokenMutation,
-          options: { error },
+          eventName: EventName.SignError,
+          options: { error, errorType: ErrorEventType.PaymentTokenMutation },
         })
         console.error('Failed to add Payment Token :', error.message, error)
       }
@@ -229,7 +232,8 @@ export const CheckoutPayment = ({
       if (data?.quoteCart_startCheckout.__typename === 'BasicError') {
         console.error('Could not start checkout')
         trackOfferEvent({
-          eventName: EventName.CheckoutErrorBasicError,
+          eventName: EventName.SignError,
+          options: { errorType: ErrorEventType.BasicError },
         })
         setIsError(true)
         setIsCheckoutLoading(false)
@@ -246,15 +250,15 @@ export const CheckoutPayment = ({
       )
       if (isManualReviewRequired) {
         trackOfferEvent({
-          eventName: EventName.CheckoutErrorManualReviewRequired,
-          options: { error },
+          eventName: EventName.SignError,
+          options: { error, errorType: ErrorEventType.ManualReviewRequired },
         })
         throw new Error('Manual Review required')
       }
       setIsDataLoading(false)
       trackOfferEvent({
-        eventName: EventName.CheckoutErrorCheckoutStart,
-        options: { error },
+        eventName: EventName.SignError,
+        options: { error, errorType: ErrorEventType.CheckoutStart },
       })
       console.error('Could not start checkout')
       setIsError(true)
@@ -319,7 +323,8 @@ export const CheckoutPayment = ({
       const paymentTokenId = storage.session.getSession()?.paymentTokenId
       if (!paymentTokenId) {
         trackOfferEvent({
-          eventName: EventName.CheckoutErrorPaymentTokenIDMissing,
+          eventName: EventName.SignError,
+          options: { errorType: ErrorEventType.PaymentTokenIDMissing },
         })
         throw new Error('No token payment id')
       }
@@ -354,7 +359,10 @@ export const CheckoutPayment = ({
         quoteCartId,
       })
     } catch (error) {
-      trackOfferEvent({ eventName: EventName.CheckoutErrorQuoteCartSetup })
+      trackOfferEvent({
+        eventName: EventName.SignError,
+        options: { errorType: ErrorEventType.QuoteCartSetup },
+      })
       throw new Error('Setup quote cart session failed')
     }
   }, [
@@ -438,6 +446,7 @@ export const CheckoutPayment = ({
   }, [checkoutStatus, completeCheckout])
 
   if (checkoutStatus === CheckoutStatus.Completed) {
+    trackOfferEvent({ eventName: EventName.PaymentDetailsConfirmed })
     return (
       <CheckoutSuccessRedirect
         bundle={selectedQuoteBundleVariant.bundle}
