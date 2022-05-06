@@ -210,7 +210,6 @@ const createAdyenCheckout = ({
         payButton: payButtonText,
       },
     },
-    showPayButton: false,
     environment: window.hedvigClientConfig.adyenEnvironment,
     clientKey: window.hedvigClientConfig.adyenClientKey,
     paymentMethodsResponse: paymentMethodsResponse,
