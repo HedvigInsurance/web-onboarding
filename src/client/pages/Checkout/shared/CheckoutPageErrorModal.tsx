@@ -47,7 +47,7 @@ const LoadingDotsContainer = styled.div`
 `
 const InlineTextButton = styled(TextButton)`
   display: inline;
-  font-size: ${bodyFontSize};
+  font-size: inherit;
 `
 
 export const CheckoutPageErrorModal = () => {

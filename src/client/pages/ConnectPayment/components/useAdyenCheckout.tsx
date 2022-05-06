@@ -78,19 +78,18 @@ export const useAdyenCheckout = ({
 
   const trackOfferEvent = useTrackOfferEvent()
 
+  const successMessage = textKeys.CHECKOUT_PAYMENT_ADYEN_SETUP_DONE_MESSAGE()
   // @ts-ignore only need to clean up timeout
   useEffect(() => {
     if (isSuccess && adyenState === 'MOUNTED') {
       // Delay success message until dropin is fully loaded
       const timeout = setTimeout(() => {
-        dropinComponent?.setStatus('success', {
-          message: 'Payment successful!',
-        })
+        dropinComponent?.setStatus('success', { message: successMessage })
       }, 300)
 
       return () => clearTimeout(timeout)
     }
-  }, [isSuccess, dropinComponent, adyenState])
+  }, [isSuccess, dropinComponent, adyenState, successMessage])
 
   useEffect(() => {
     if (
@@ -104,6 +103,7 @@ export const useAdyenCheckout = ({
 
     const dropinApi = createAdyenCheckout({
       payButtonText: textKeys.ONBOARDING_CONNECT_DD_CTA(),
+      successMessage,
       currentLocale,
       paymentMethodsResponse,
       connectPaymentMutation,
@@ -135,6 +135,7 @@ export const useAdyenCheckout = ({
     onSuccess,
     storage,
     trackOfferEvent,
+    successMessage,
   ])
 
   useEffect(() => {
@@ -146,6 +147,7 @@ export const useAdyenCheckout = ({
 
 interface AdyenCheckoutProps {
   payButtonText: string
+  successMessage: string
   currentLocale: LocaleData
   paymentMethodsResponse: Scalars['PaymentMethodsResponse']
   connectPaymentMutation: any
@@ -160,6 +162,7 @@ interface AdyenCheckoutProps {
 
 const createAdyenCheckout = ({
   payButtonText,
+  successMessage,
   currentLocale,
   paymentMethodsResponse,
   connectPaymentMutation,
@@ -186,7 +189,7 @@ const createAdyenCheckout = ({
   ) => {
     if (['AUTHORISED', 'PENDING'].includes(status)) {
       // history.push(getOnSuccessRedirectUrl({ currentLocalePath: path }))
-      dropinComponent.setStatus('success', { message: 'Payment successful!' })
+      dropinComponent.setStatus('success', { message: successMessage })
       onSuccess(paymentTokenId)
     } else {
       console.error(
