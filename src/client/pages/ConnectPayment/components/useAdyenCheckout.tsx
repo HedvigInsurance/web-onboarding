@@ -78,6 +78,7 @@ export const useAdyenCheckout = ({
 
   const trackOfferEvent = useTrackOfferEvent()
 
+  // @ts-ignore only need to clean up timeout
   useEffect(() => {
     if (isSuccess && adyenState === 'MOUNTED') {
       // Delay success message until dropin is fully loaded
