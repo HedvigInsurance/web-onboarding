@@ -110,7 +110,7 @@ export const useTrackOfferEvent = () => {
       const runQuery = async () => {
         if (apolloClient && quoteCartId) {
           try {
-            const quoteCartQuery = await apolloClient!.client.query<
+            const quoteCartQuery = await apolloClient.client.query<
               QuoteCartQuery
             >({
               query: QuoteCartDocument,
