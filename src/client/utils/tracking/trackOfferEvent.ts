@@ -1,10 +1,6 @@
-import { useEffect, useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import * as quoteBundleSelector from 'api/quoteBundleSelectors'
-import {
-  QuoteBundle,
-  QuoteBundleVariant,
-  useQuoteCartQuery,
-} from 'data/graphql'
+import { QuoteBundle, QuoteCartDocument, QuoteCartQuery } from 'data/graphql'
 import { quoteBundleTrackingContractType } from 'api/quoteBundleTrackingContractType'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
@@ -13,9 +9,16 @@ import {
   getSelectedBundleVariant,
 } from 'api/quoteCartQuerySelectors'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import { apolloClient } from 'apolloClient'
 import { EmbarkStory } from '../embarkStory'
 import { captureSentryError } from '../sentry-client'
-import { EventName, GTMPhoneNumberData, pushToGTMDataLayer } from './gtm'
+
+import {
+  ErrorEventType,
+  EventName,
+  GTMPhoneNumberData,
+  pushToGTMDataLayer,
+} from './gtm'
 
 import {
   getTrackableContractCategory,
@@ -30,9 +33,10 @@ type OptionalParameters = {
   memberId?: string
   buttonId?: string
   error?: Error | unknown
+  errorType?: ErrorEventType
 }
 
-type EventParameters = {
+export type EventParameters = {
   eventName: EventName
   options?: Partial<OptionalParameters>
 }
@@ -43,7 +47,8 @@ export const trackOfferEvent = (
   referralCodeUsed: boolean,
   options: OptionalParameters = {},
 ) => {
-  const { switchedFrom, phoneNumberData, quoteCartId, memberId } = options
+  const { quoteCartId, ...optionsWithoutId } = options
+  const { switchedFrom, phoneNumberData, memberId } = optionsWithoutId
   const contractType = quoteBundleTrackingContractType(bundle)
   const contractCategory = getTrackableContractCategory(contractType)
   const grossPrice = Math.round(Number(bundle.bundleCost.monthlyGross.amount))
@@ -86,7 +91,7 @@ export const trackOfferEvent = (
         current_insurer: mainQuote.currentInsurer?.id ?? undefined,
       },
       ...phoneNumberData,
-      ...options,
+      ...optionsWithoutId,
     })
   } catch (error) {
     captureSentryError(error)
@@ -100,62 +105,51 @@ export const useTrackOfferEvent = () => {
 
   const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
 
-  const { data: quoteCartQueryData } = useQuoteCartQuery({
-    variables: {
-      id: quoteCartId,
-      locale: isoLocale,
-    },
-  })
-
-  const isReferralCodeUsed =
-    getMonthlyCostDeductionIncentive(quoteCartQueryData) !== undefined
-
-  const selectedBundleVariant = getSelectedBundleVariant(
-    quoteCartQueryData,
-    selectedInsuranceTypes,
-  )
-
-  const [eventQueue, setEventQueue] = useState<EventParameters[]>([])
-
-  const trackOfferCallback = useCallback(
-    (
-      { eventName, options = {} }: EventParameters,
-      selectedBundleVariant: QuoteBundleVariant,
-    ) => {
-      trackOfferEvent(
-        eventName,
-        selectedBundleVariant.bundle,
-        isReferralCodeUsed,
-        {
-          quoteCartId,
-          ...options,
-        },
-      )
-    },
-    [isReferralCodeUsed, quoteCartId],
-  )
-
   const trackOfferHandler = useCallback(
-    (eventParams: EventParameters) => {
-      if (selectedBundleVariant) {
-        trackOfferCallback(eventParams, selectedBundleVariant)
-      } else {
-        setEventQueue((prevQueue) => [...prevQueue, eventParams])
+    ({ eventName, options = {} }: EventParameters) => {
+      const runQuery = async () => {
+        if (apolloClient && quoteCartId) {
+          try {
+            const quoteCartQuery = await apolloClient.client.query<
+              QuoteCartQuery
+            >({
+              query: QuoteCartDocument,
+              variables: {
+                id: quoteCartId,
+                locale: isoLocale,
+              },
+            })
+            return quoteCartQuery.data
+          } catch (e) {
+            return
+          }
+        } else return
       }
-    },
-    [trackOfferCallback, selectedBundleVariant],
-  )
+      const trackOfferCallback = async () => {
+        const quoteCartQueryData = await runQuery()
+        const isReferralCodeUsed =
+          getMonthlyCostDeductionIncentive(quoteCartQueryData) !== undefined
+        const selectedBundleVariant = getSelectedBundleVariant(
+          quoteCartQueryData,
+          selectedInsuranceTypes,
+        )
 
-  //cleanup the queue
-  useEffect(() => {
-    if (selectedBundleVariant) {
-      const event = eventQueue[0]
-      if (event) {
-        trackOfferCallback(event, selectedBundleVariant)
-        setEventQueue((prevQueue) => [...prevQueue].splice(1))
+        if (selectedBundleVariant) {
+          trackOfferEvent(
+            eventName,
+            selectedBundleVariant.bundle,
+            isReferralCodeUsed,
+            {
+              quoteCartId,
+              ...options,
+            },
+          )
+        }
       }
-    }
-  }, [trackOfferCallback, selectedBundleVariant, eventQueue])
+      trackOfferCallback()
+    },
+    [quoteCartId, isoLocale, selectedInsuranceTypes],
+  )
 
   return trackOfferHandler
 }

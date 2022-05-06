@@ -73,6 +73,7 @@ const defaultSrc = [
   'https://analytics.tiktok.com',
   // Datadog RUM
   'https://*.browser-intake-datadoghq.eu',
+  'https://pay.google.com',
   GIRAFFE_WS_ENDPOINT!,
   CONTENT_SERVICE_ENDPOINT!,
 ]
