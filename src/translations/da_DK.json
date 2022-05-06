@@ -410,5 +410,6 @@
   "CHECKOUT_DETAILS_MILEAGE_VALUE": "",
   "3D_SECURE_ERROR_DESCRIPTION": "Prøv at indtaste dine kortoplysninger igen. Fortsætter problemet, så prøv med et andet kort eller kontakt din betalingskortudbyder.",
   "3D_SECURE_ERROR_BUTTON": "Okay",
-  "3D_SECURE_ERROR_HEADING": "Dit kort kunne ikke godkendes"
+  "3D_SECURE_ERROR_HEADING": "Dit kort kunne ikke godkendes",
+  "CHECKOUT_PAYMENT_ADYEN_SETUP_DONE_MESSAGE": "Betaling er tilknyttet!"
 }
